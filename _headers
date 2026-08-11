@@ -1,0 +1,14 @@
+# Cloudflare Pages headers
+/feed/*
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: public, max-age=900, stale-while-revalidate=300
+  Access-Control-Allow-Origin: *
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: public, max-age=900, stale-while-revalidate=300
+  Access-Control-Allow-Origin: *
+
+/*
+  Cache-Control: public, max-age=300
+  Access-Control-Allow-Origin: *
