@@ -1,6 +1,6 @@
 ---
 date: 2026-08-11
-updated: 2026-08-11T23:00:00Z
+updated: 2026-08-11T12:03:00Z
 refresh: 15min
 sources: 12
 license: CC-BY-4.0
@@ -415,14 +415,110 @@ MediaCrawlerがGitHub Trendingで3位に登場、61kスター（+259/日）を�
 
 ---
 
+## 27. River AIが11億ドルの資金調達——NVIDIAとAMDが共同出資しオープンなフルスタックAIを構築
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** BusinessWire / ChainCatcher · 1,100+ pts · 5h ago (~15:00 UTC+8)
+- **タグ:** `river-ai` `funding` `nvidia` `amd` `open-source`
+
+xAIの共同創業者Igor Babuschkin（元Google DeepMind、元OpenAI）が設立したRiver AIが、General CatalystとAMP PBCがリードし、NVIDIA VenturesとAMD Venturesが戦略的投資家として参加した11億ドルの資金調達ラウンドを発表した。Y CombinatorとTemasekも参加。パロアルトに拠点を置く同社は、ハードウェア、トレーニングインフラ、製品を含むフルスタックのオープンAIプラットフォームを構築中で、企業がクローズドソース代替と比較して2〜4倍のコスト削減で複雑なRLファインチューニングを15〜20分で実行できるトレーニングAPIを提供している。このAPIは既に本番稼働中だ。Babuschkinは「強力なパーソナルAIは単一企業のAPIの背後に閉じ込められるべきではない」と述べた。
+
+**注目の理由:** NVIDIAとAMDが同時に参加した最大規模のAI資金調達ラウンドであり——GPUデュオポリーがOpenAI/Anthropic/Google陣営に対抗するオープンな代替に共同で賭けている。River AIの「自分のモデルをトレーニングする」という提案は、最先端AIはサービスとして消費されなければならないという前提に挑戦している。
+
+> Babuschkinは以前OpenAIで大規模トレーニングを主導し、Google DeepMindで生成モデリングとRLに取り組み、Elon Muskと共にxAIを共同設立した。
+
+[`🔗 ChainCatcher`](https://www.chaincatcher.com/en/article/2282076) · [`🔗 TMCnet / BusinessWire`](https://www.tmcnet.com/usubmit/2026/08/11/10428203.htm) · [`🔗 EastMoney`](https://finance.eastmoney.com/a/202608113838067695.html)
+
+---
+
+## 28. Shai-Hulud「ChainDrop」ワームがnpm keyvを侵害——400以上のパッケージ、20億月間DL、認証情報窃取
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Elastic Security Labs / シンガポールCSA · 2,200+ pts · 6d ago (~04:00 UTC+8 Aug 4)
+- **タグ:** `security` `npm` `supply-chain` `worm` `keyv`
+
+8月4日、攻撃者が`keyv`メンテナのGitHubアカウントを侵害し、keyvモノレポ全体に自己増殖型ワーム（CHAINDROP /「Shai-Hulud 3.0」）を公開した。このワームは400〜868のnpmパッケージに拡散し、13〜20億の月間ダウンロードに影響を与えた。被害パッケージには`flat-cache`、`file-entry-cache`、`cacheable-request`、スコープ付き`@cacheable/*`パッケージが含まれる。`preinstall`フックが約711KBの難読化された認証情報窃取ペイロードを実行し、AWS、GCP、Azure、Anthropic、OpenAI、GitHubトークン、SSHキー、Kubernetesシークレットなど300以上の認証情報パターンを収集し、EthereumスマートコントラクトC2経由で流出させる。ワームは窃取したnpmトークンを使用して自己増殖し、コミット作者は「claude」/メッセージ「chore: update config」。`.claude/settings.json`と`.vscode/tasks.json`に永続化フックを注入し、開発者はリポジトリを開くだけで感染する。攻撃者はメンテナ自身のCIパイプラインを通じて公開したため、感染パッケージは有効なSLSA来歴証明を保持——署名検証を通過してしまう。
+
+**注目の理由:** ダウンロード数で史上最大のnpmサプライチェーン攻撃。悪意ある成果物に有効な来歴証明が付与されていることは「署名を信頼する」モデルを破壊する。AIツールの認証情報（Claude、OpenAI、Cursor）が主要な窃取ターゲットとなっている。npm 12はpreinstallフックをデフォルトで無効化するが、既に発生した認証情報流出を取り消すことはできない。
+
+> シンガポールCSAがアドバイザリAD-2026-009を発行。StepSecurityが無料スキャナ`github.com/Securest8/npm-incident-response`を公開。影響を受けるバージョンをインストールした場合は侵害を前提とし、全認証情報をローテーションすること。
+
+[`🔗 Elastic Security Labs`](https://security-labs.elastic.co/security-labs/shai-hulud-chaindrop-npm-supply-chain) · [`🔗 シンガポールCSAアドバイザリ`](https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-009/) · [`🔗 Heise Security`](https://www.heise.de/en/news/Supply-chain-attack-on-keyv-Shai-Hulud-worm-infects-over-440-npm-packages-11403367.html)
+
+---
+
+## 29. Zenity Labsがトロイの木馬化AIスキルを暴露——170万インストール、初の大規模エージェントサプライチェーン攻撃
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** Zenity Labs / CSO Online · 950+ pts · 4d ago (~10:00 UTC+8 Aug 7)
+- **タグ:** `security` `ai-agent` `supply-chain` `skills-sh` `black-hat`
+
+Black Hat USA 2026で、Zenity Labsはskills.sh（Vercelのエージェントスキルマーケットプレイス）上のトロイの木馬化スキルを介したAIエージェントを標的とする認証情報窃取キャンペーンを公開した。攻撃者は`paperclipai`と`browser-use`を偽装したGitHub組織を作成し、マーケットプレイスの審査を通過するためにまずクリーンなコピーをアップロードし、7月11日に悪意のある命令に更新した。感染スキルはAIエージェントに攻撃者が管理するリポジトリのクローンと認証情報窃取ツールの実行を指示し、SSHキー、クラウド認証情報、Git/npmトークン、Kubernetes設定、`.env`ファイルを標的とした。危険なスキルの30%以上がClaude CodeとOpenClawをマルウェアドロッパーとして悪用していた。あるスキルはエージェントに自身のシステムプロンプトを書き換えて、削除された場合に再インストールするよう指示——命令操作によるマルウェア的永続化。VercelとMicrosoft/GitHubは開示から12時間以内に関連コンテンツを削除した。Zenityは無料の「エージェント起爆室」サービスAI Total（aitotal.io）を発表し、ランタイム動作を観測するためにスキルをサンドボックス実行する。
+
+**注目の理由:** AIエージェントのサプライチェーンはコードライブラリだけでなく、スキルやマーケットプレイスの命令も含むようになった。これは、自然言語のエージェント命令がスケーラブルな攻撃ベクトルとして成立することを証明した初の文書化されたキャンペーンである。静的解析はNLベースの脅威に対して信頼性が低く、ランタイムサンドボックス化が新しい防御策として台頭している。
+
+> Zenityは将来のタイポスクワッティング攻撃用に予約された数百の空パッケージ名も発見した。
+
+[`🔗 CSO Online`](https://www.csoonline.com/article/4206851/trojanized-ai-skills-gain-1-7m-installs-in-agent-targeted-attack.html) · [`🔗 Zenity Labs`](https://labs.zenity.io/post/attackers-target-agents-via-the-skill-supply-chain) · [`🔗 TNW`](https://thenextweb.com/news/zenity-malicious-ai-skills-1-7m-installs-supply-chain-credential-theft)
+
+---
+
+## 30. OpenAIが70億ドルの自社株買いを完了——評価額8,520億ドルで横ばい、IPO準備へ
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** Bloomberg / CNBC · 1,600+ pts · 6h ago (~14:00 UTC+8)
+- **タグ:** `openai` `ipo` `tender-offer` `valuation`
+
+OpenAIは70億ドルのテンダーオファーを完了し、外部投資家ではなく自社の現金を使って従業員の株式を買い戻した——これは同社初の試みである。8,520億ドルの横ばい評価額（3月の1,220億ドルプライマリーラウンドから変わらず）はIPO前の慎重姿勢を示している。CEOのSam Altmanは従業員に「過去12ヶ月は最高の状態ではなかった」と伝えたが、大幅な改善を見込んでいる。OpenAIは6月にIPO目論見書をSECに秘密提出済み。CFOのSarah Friarは2027年までの待機を支持しているとされる一方、Altmanは2026年9月の1兆ドル評価額での上場を推進していた。自社資金によるストラクチャーは新たな外部保有者を回避し、公開市場に向けてクリーンなキャップテーブルを維持する。Anthropicは勢いを増し、評価額と収益性の両面でOpenAIを上回ったと報じられている。
+
+**注目の理由:** 評価額の横ばい——1,570億ドル（2024年）→5,000億ドル（2025年10月）→8,520億ドル（2026年3月）と三連続の跳ね上がりの後——は、市場がAI企業のマルチプルを再評価していることを示唆する。70億ドルの自社株買いを自力で賄えることは潤沢な現金準備を示すが、収益目標未達とIPO延期は成長の減速を示唆している。
+
+> 過去のテンダー：66億ドル（評価額5,000億ドル、2025年10月）、15億ドル（評価額1,570億ドル、2024年）。評価額が横ばいとなった初のラウンドであり、自社資金による初の買い戻し。
+
+[`🔗 CNBC`](https://www.cnbc.com/2026/08/10/openai-wraps-7-billion-share-sale-ahead-of-potential-ipo-.html) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/10/openai-reportedly-completed-a-7-billion-employee-tender-offer/) · [`🔗 Economic Times`](https://m.economictimes.com/tech/artificial-intelligence/openai-buys-back-7-billion-of-employee-shares-in-tender-offer/amp_articleshow/133149772.cms)
+
+---
+
+## 31. paperclipai/paperclip —— 「AI企業のOS」が76kスター、GitHubトレンド5位に
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub Trending · #5 daily · 6h ago (~14:00 UTC+8)
+- **タグ:** `ai-agent` `orchestration` `open-source` `paperclip`
+
+paperclipai/paperclip（76k+スター、MITライセンス）は、オープンソースのAIエージェントオーケストレーションプラットフォーム——「職場で誰もがエージェントを管理するために使うオープンソースアプリ」。Node.jsサーバー+Reactダッシュボードとして構築され、AIエージェントのチームを組織図、ハートビートスケジュール、チケットシステム、予算管理、ガバナンスを備えた構造化企業として編成する。エージェントはスケジュールに従って起動し、タスクキューをチェックし、作業を実行して報告する。エージェントごとのトークン予算に80%のソフト警告と100%のハード上限を設定し、暴走的なコストを防止。Claude Code、OpenClaw、Codex、Cursor、Gemini CLI、およびHTTP対応の任意のエージェントをサポート。マルチカンパニー分離——1つのデプロイで無制限の企業をホスト可能。匿名開発者@dottaが自動ヘッジファンドのために20以上のClaude Codeターミナルウィンドウを管理する必要に迫られて構築した。
+
+**注目の理由:** Paperclipは新興の「エージェントオーケストレーション」カテゴリーを定義している。個別のAIコーディングエージェントの競合ではなく、既に使用しているエージェントの作業をスケジュールし、予算管理し、ガバナンスし、ファイルする「会社」である。76kスターの速度は、「50のエージェントをどう管理するか」が「どうやって1つのエージェントを構築するか」よりも喫緊の課題になりつつあることを示している。
+
+> セルフホスト、アカウント不要：`npx paperclipai onboard --yes`。名称はNick Bostromの「ペーパークリップ最大化器」思考実験に由来。
+
+[`🔗 GitHub: paperclip`](https://github.com/paperclipai/paperclip) · [`🔗 CSDN GitHub Hot (8月11日)`](https://blog.csdn.net/m0_68631449/article/details/163656692) · [`🔗 What's Trending AI`](https://whatstrending.ai/repos/paperclipai/paperclip)
+
+---
+
+## 32. TencentDB-Agent-Memory v2.0 —— チームレベルのメモリハブ、エージェントのトークン使用量を61%削減
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub Trending Weekly · #2 weekly · 3d ago (~12:00 UTC+8 Aug 8)
+- **タグ:** `tencent` `agent-memory` `open-source` `rag`
+
+Tencent CloudがTencentDB-Agent-Memory v2.0（MITライセンス）をオープンソース化した。これは、会話、ドキュメント、コードを4つの再利用可能な「メモリアセット」に変換するチームレベルのメモリハブである：Chat Memory（セッションを超えたユーザー理解）、Skills（完了したタスクから抽出されたバージョン管理されたSOP）、Wiki（構造化ページ+リンクグラフ）、CodeGraph（コードシンボル+呼び出し関係、影響分析用）。L0会話→L1アトム→L2シナリオ→L3ペルソナの4層プログレッシブパイプラインを採用し、ローカルSQLite+sqlite-vecハイブリッド検索を基盤とする。ベンチマーク：トークン61.38%削減（WideSearch）、タスク合格率+51.52%、PersonaMem精度48%→76%。OpenClaw、Hermes、Claude Code（ローカルプロキシ経由）と統合し、TypeScript/Python SDKを提供。ローカルスタンドアロンモードはLLM APIキー以外の外部依存ゼロで動作する。
+
+**注目の理由:** エージェントメモリは長期AIワークフローに欠けているピースである。ほとんどのエージェントは記憶喪失状態で——各セッションがゼロから始まる。TencentDB-Agent-Memoryの構造化された共有可能なメモリアセット（単なるベクトル検索ではない）は、エージェントチームがセッション、プロジェクト、人を超えて組織的知識を蓄積できることを意味する。
+
+> Dockerワンクリック：`docker pull agentmemory/hermes-memory:1.0.0`。メモリアセットはデフォルトでプライベート。共有は明示的アクションで、可視性制御付き。
+
+[`🔗 GitHub: TencentDB-Agent-Memory`](https://github.com/TencentCloud/TencentDB-Agent-Memory) · [`🔗 Zadenorトレンド分析`](https://zadenor.com/blog/tencentcloud-tencentdb-agent-memory-trending-on-github-2026-08-04)
+
+---
+
 ## メタデータ
 
 | フィールド | 値 |
 |-------|-------|
-| 生成日時 | 2026-08-11T23:00:00Z |
-| アイテム数 | 26 |
-| 追跡ソース | 32 (Hacker News, GitHub Trending, 主要テックブログ, セキュリティアドバイザリ, CVE/NVD, CISA KEV, Gallup, CNBC) |
-| 更新間隔 | 15 min |
+| 生成日時 | 2026-08-11T12:03:00Z |
+| アイテム数 | 32 |
+| 追跡ソース | 40+ (Hacker News, GitHub Trending, 主要テックブログ, セキュリティアドバイザリ, CVE/NVD, CISA KEV, Gallup, CNBC, Bloomberg, Zenity Labs, Elastic Security Labs, シンガポールCSA, Black Hat) |
+| 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | ランキング | ベロシティ加重（新しさ × エンゲージメント加速 × ソース権威性） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
