@@ -206,111 +206,109 @@
 
 <script>
 /* ── Minimal Markdown Parser ── */
-let mdCodes, mdInlines;
+const RE_FENCE = /```(\w*)\n([\s\S]*?)```/g;
+const RE_CODE  = /`([^`]+)`/g;
+const RE_BOLD  = /\*\*(.+?)\*\*/g;
+const RE_ITAL  = /\*(.+?)\*/g;
+const RE_IMG   = /!\[([^\]]*)\]\(([^)]+)\)/g;
+const RE_LINK  = /\[([^\]]+)\]\(([^)]+)\)/g;
 
 function parseMD(src) {
-  // Store fenced code blocks
-  mdCodes = [];
-  src = src.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
-    mdCodes.push({ lang, code: code.replace(/^\n|\n$/g, '') });
-    return `\x00CODE${mdCodes.length - 1}\x00`;
+  // Stash fenced code blocks
+  let codes = [];
+  src = src.replace(RE_FENCE, (_, lang, code) => {
+    codes.push({ lang, code: code.replace(/^\n|\n$/g, '') });
+    return `«CODE${codes.length - 1}»`;
   });
-  // Store inline code
-  mdInlines = [];
-  src = src.replace(/`([^`]+)`/g, (_, code) => {
-    mdInlines.push(code);
-    return `\x00INLINE${mdInlines.length - 1}\x00`;
+  // Stash inline code
+  let inlines = [];
+  src = src.replace(RE_CODE, (_, code) => {
+    inlines.push(code);
+    return `«I${inlines.length - 1}»`;
   });
 
-  // Split into blocks
+  function unesc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function _inline(text) {
+    text = text.replace(RE_BOLD, '<strong>$1</strong>');
+    text = text.replace(RE_ITAL, '<em>$1</em>');
+    text = text.replace(RE_IMG, '<img src="$2" alt="$1" loading="lazy">');
+    text = text.replace(RE_LINK, '<a href="$2">$1</a>');
+    text = text.replace(/«I(\d+)»/g, (_, i) => `<code>${unesc(inlines[+i])}</code>`);
+    text = text.replace(/\n/g, '<br>');
+    return text;
+  }
+
+  function _fence(idx) {
+    const c = codes[+idx];
+    return `<pre><code>${unesc(c.code)}</code></pre>`;
+  }
+
+  function _table(block) {
+    const lines = block.split('\n').filter(l => l.includes('|'));
+    if (lines.length < 2) return null;
+    if (!/^[\s|:-]+$/.test(lines[1].replace(/\|/g, ''))) return null;
+    const headers = lines[0].split('|').filter(c => c.trim()).map(c => c.trim());
+    let t = '<table><thead><tr>' + headers.map(h => `<th>${_inline(h)}</th>`).join('') + '</tr></thead><tbody>';
+    for (let i = 2; i < lines.length; i++) {
+      const cells = lines[i].split('|').filter(c => c.trim()).map(c => c.trim());
+      t += '<tr>' + cells.map(c => `<td>${_inline(c)}</td>`).join('') + '</tr>';
+    }
+    return t + '</tbody></table>';
+  }
+
   const blocks = src.split(/\n\n+/);
   let html = '';
-  let inList = false, listType = '';
 
   for (let block of blocks) {
     if (!block.trim()) continue;
 
     // Fenced code placeholder
-    if (/^\x00CODE\d+\x00$/.test(block.trim())) {
-      const idx = parseInt(block.match(/\x00CODE(\d+)\x00/)[1]);
-      const c = mdCodes[idx];
-      html += `<pre><code>${esc(c.code)}</code></pre>`;
-      continue;
-    }
+    let fm = block.trim().match(/^«CODE(\d+)»$/);
+    if (fm) { html += _fence(fm[1]); continue; }
 
     // HR
     if (/^[-*_]{3,}\s*$/.test(block.trim())) { html += '<hr>'; continue; }
 
     // Heading
-    let m = block.match(/^(#{1,6})\s+(.*?)(?:\s+\{#[\w-]+\})?\s*$/m);
-    if (m && !block.includes('\n')) {
-      const level = m[1].length;
-      html += `<h${level}>${inline(m[2])}</h${level}>`;
+    let hm = block.match(/^(#{1,6})\s+(.*?)(?:\s+\{#[\w-]+\})?\s*$/m);
+    if (hm && !block.includes('\n')) {
+      html += `<h${hm[1].length}>${_inline(hm[2])}</h${hm[1].length}>`;
       continue;
     }
 
-    // Blockquote
+    // Blockquote — flatten and render inline (no recursive parseMD, avoids resetting inlines)
     if (/^>\s/.test(block)) {
-      const lines = block.split('\n').map(l => l.replace(/^>\s?/, '')).join('\n');
-      html += `<blockquote>${parseMD(lines)}</blockquote>`;
+      const inner = block.split('\n').map(l => l.replace(/^>\s?/, '')).join('\n');
+      html += `<blockquote><p>${_inline(inner)}</p></blockquote>`;
       continue;
     }
 
     // Unordered list
     if (/^[-*+]\s/.test(block)) {
       const items = block.split('\n').filter(l => /^[-*+]\s/.test(l)).map(l => l.replace(/^[-*+]\s/, ''));
-      html += '<ul>' + items.map(i => `<li>${inline(i)}</li>`).join('') + '</ul>';
+      html += '<ul>' + items.map(i => `<li>${_inline(i)}</li>`).join('') + '</ul>';
       continue;
     }
 
     // Ordered list
     if (/^\d+\.\s/.test(block)) {
       const items = block.split('\n').filter(l => /^\d+\.\s/.test(l)).map(l => l.replace(/^\d+\.\s/, ''));
-      html += '<ol>' + items.map(i => `<li>${inline(i)}</li>`).join('') + '</ol>';
+      html += '<ol>' + items.map(i => `<li>${_inline(i)}</li>`).join('') + '</ol>';
       continue;
     }
 
     // Table
     if (block.includes('|')) {
-      const lines = block.split('\n').filter(l => l.includes('|'));
-      if (lines.length >= 2 && /^[\s|:-]+$/.test(lines[1].replace(/\|/g, ''))) {
-        const headers = lines[0].split('|').filter(c => c.trim()).map(c => c.trim());
-        let t = '<table><thead><tr>' + headers.map(h => `<th>${inline(h)}</th>`).join('') + '</tr></thead><tbody>';
-        for (let i = 2; i < lines.length; i++) {
-          const cells = lines[i].split('|').filter(c => c.trim()).map(c => c.trim());
-          t += '<tr>' + cells.map(c => `<td>${inline(c)}</td>`).join('') + '</tr>';
-        }
-        t += '</tbody></table>';
-        html += t;
-        continue;
-      }
+      const tbl = _table(block);
+      if (tbl) { html += tbl; continue; }
     }
 
     // Paragraph
-    html += `<p>${inline(block)}</p>`;
+    html += `<p>${_inline(block)}</p>`;
   }
 
   return html;
-}
-
-function inline(text) {
-  // Bold
-  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  // Italic
-  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  // Images
-  text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy">');
-  // Links
-  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-  // Inline code (restore)
-  text = text.replace(/\x00INLINE(\d+)\x00/g, (_, i) => `<code>${esc(mdInlines[parseInt(i)])}</code>`);
-  // Line breaks within paragraph
-  text = text.replace(/\n/g, '<br>');
-  return text;
-}
-
-function esc(s) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 /* ── Route & Render ── */
