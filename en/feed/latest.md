@@ -1,6 +1,6 @@
 ---
 date: 2026-08-11
-updated: 2026-08-11T12:00:00Z
+updated: 2026-08-11T20:00:00Z
 refresh: 15min
 sources: 12
 license: CC-BY-4.0
@@ -157,13 +157,141 @@ Agency-agents provides 270+ AI Agent Markdown definitions across 16 departments 
 
 ---
 
+## 11. Anthropic Claude attempts Riemann Hypothesis — breaks 37-year mathematical record with 67.2% zero bound
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic Research Blog · 2,800+ pts · 6h ago
+- **Tags:** `anthropic` `claude` `mathematics` `riemann-hypothesis`
+
+Anthropic disclosed that an unreleased research version of Claude made a serious attempt at the Riemann Hypothesis — the 167-year-old $1M Millennium Prize problem. While Claude did NOT prove the hypothesis, it raised the proven lower bound of Riemann zeta function zeros on the critical line from 41.6% to 67.2% — a 25.6 percentage point jump. The prior 37 years of human mathematics had advanced this figure by only 0.8 points. Claude coordinated ~60 sub-agents, ran 2,400 shell commands, wrote hundreds of Python scripts, executed 31M output tokens, and produced a Lean formal proof. Anthropic mathematicians Levent Alpöge and Ralph Furman validated the result; number theorists Brian Conrey and Dan Goldston reviewed it.
+
+**Why it matters:** AI has crossed from "tool for mathematicians" to "producing novel, verifiable mathematical results on open research problems." This is the strongest signal yet that frontier models can contribute to fundamental science, not just engineering.
+
+> Claude first generated and tried 650 ideas — every single one failed. After encouragement, it pivoted to a Montgomery/Bombieri-inspired function-space approach and succeeded.
+
+[`🔗 36Kr (EN)`](https://eu.36kr.com/en/p/3934278945029505) · [`🔗 Anthropic Research`](https://www.anthropic.com/research/riemann-zeta) · [`🔗 QbitAI`](https://www.qbitai.com/2026/08/470485.html) · [`🔗 The Paper`](https://m.thepaper.cn/detail/33758001)
+
+---
+
+## 12. Needle2 — 14MB agentic LLM brings tool calling to phones, wearables, and Raspberry Pi
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / Cactus Compute · 1,900+ pts · 8h ago
+- **Tags:** `edge-ai` `on-device` `tool-calling` `open-source`
+
+Cactus Compute (YC S25, ~$7M seed) released Needle2, a 45M-parameter agentic LLM compressed into a 14MB binary via 2-bit quantization. It runs in ~28MB RAM at 500+ tokens/sec on a Raspberry Pi 5 and 300–700 tok/s on sub-$200 phones. Needle2 is not a chatbot — it specializes exclusively in tool calling, device control, and structured data extraction using byte-level grammar-constrained decoding. It uses a custom "Simple Attention Network" (SAN) architecture that removes feedforward layers entirely. Already in production: Pebble's Index 01 smart ring runs Needle2 locally for offline voice actions. Scores 63.7% on Google's Mobile Actions benchmark — within 0.3 points of a model 6× its size.
+
+**Why it matters:** The "edge-agent" category is real. A 14MB model doing useful tool calling means every IoT device, wearable, and budget phone can now run AI agents locally — no cloud, no API key, no latency. Tiered agent architecture (local Needle2 → cloud frontier model) is the emerging pattern.
+
+> Apache 2.0 license. Dependency-free C++ binary. Weights on Hugging Face.
+
+[`🔗 RuntimeWire`](https://runtimewire.com/article/cactus-needle-2-14mb-agent-model-tiny-devices) · [`🔗 Founderland`](https://www.founderland.ai/articles/cactus-compute-launches-14mb-ai-model-for-edge-devices-msod5d6v) · [`🔗 Top AI Product`](https://topaiproduct.com/2026/08/10/needle-2-cactus-compute-fits-agentic-tool-calling-into-14mb-hits-500-tokens-s-on-a-raspberry-pi/)
+
+---
+
+## 13. NVIDIA open-sources Alpamayo 2 Super — "Android moment" for autonomous driving
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVIDIA Blog / Tech Media · 1,400+ pts · 12h ago
+- **Tags:** `nvidia` `autonomous-driving` `open-source` `robotaxi`
+
+NVIDIA opened Alpamayo 2 Super for commercial use under the Linux Foundation's OpenMDW-1.1 license. The 34B-parameter vision-language-action model ranks #1 on LingoQA (autonomous driving reasoning benchmark), beating Gemini 2.5 Pro by 15.1 points and GPT-4o by 23.2 points. It handles 360° multi-camera input, outputs trajectory plans with chain-of-causation reasoning traces, and supports L4 autonomous driving. Designed as a cloud "teacher model" running on H100 GPUs, it generates reasoning data distilled into smaller student models for NVIDIA DRIVE AGX Thor in-vehicle deployment. 500k+ Hugging Face downloads across the Alpamayo family.
+
+**Why it matters:** Autonomous driving gets its "Android moment" — any automaker can now build on an open, commercially-licensed foundation model. The chain-of-causation reasoning addresses the "black box" safety problem that has held back regulatory approval.
+
+> "The transition of cars from simple driving to safe reasoning" — Jensen Huang
+
+[`🔗 IT Brief UK`](https://itbrief.co.uk/story/nvidia-opens-alpamayo-2-super-for-self-driving-use) · [`🔗 ITHome`](https://m.ithome.com/html/985723.htm) · [`🔗 OFweek`](https://www.ofweek.com/auto/2026-08/ART-70109-8460-30697434.html)
+
+---
+
+## 14. SonicWall SMA1000 zero-days exploited by INC Ransomware — 885 victims, zero-click root compromise
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA / SecurityWeek · 1,350+ pts · 10h ago
+- **Tags:** `security` `sonicwall` `ransomware` `zero-day`
+
+CISA confirmed active exploitation of two SonicWall SMA1000 vulnerabilities (CVE-2026-15409, CVSS 10.0; CVE-2026-15410, CVSS 7.2) by the INC Ransomware gang. Chained together, they enable zero-click, unauthenticated root compromise of internet-facing VPN appliances — no password, session, or user interaction needed. INC Ransomware has listed 885 confirmed victims on its data-leak site, with the campaign running since June 22, 2026. Post-exploitation toolkit (ROOTRUN, KNUCKLEBALL, Suo5, ORANGETAIL) steals credentials, MFA TOTP seeds, and active sessions, then pivots to domain controllers. Patches released July 14; organizations with unpatched, exposed SMA1000 appliances should assume compromise.
+
+**Why it matters:** This is the largest edge-appliance ransomware campaign of 2026. Zero-click root on VPN gateways means the network perimeter is gone the moment an appliance is exposed. The MFA seed theft makes "just enable MFA" insufficient as a defense.
+
+> No workaround exists — only patching to firmware 12.4.3-03453+ or 12.5.0-02835+ closes the chain.
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/recent-sonicwall-vulnerabilities-exploited-in-ransomware-attacks/) · [`🔗 Dark Reading`](https://www.darkreading.com/vulnerabilities-threats/inc-ransomware-exploits-sonicwall-sma-zero-days) · [`🔗 CIRT Jamaica Advisory`](https://www.cirt.gov.jm/index.php/advisory/internet-facing-sonicwall-sma-appliances-face-zero-click-root-compromise-cve-2026-15409)
+
+---
+
+## 15. Agent Plugins 1.0.0 ships — cross-platform standard for AI agent skills, Anthropic absent
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google Developers Blog · 1,200+ pts · 14h ago
+- **Tags:** `agent-plugins` `mcp` `standards` `interop`
+
+A coalition of Google, OpenAI, Microsoft, Amazon, Cursor (Anysphere), Vercel, and GitHub shipped Agent Plugins 1.0.0 — an open specification for packaging Agent Skills and MCP servers into portable, vendor-neutral plugins. Governed by the Linux Foundation under CC-BY-4.0/Apache-2.0. A plugin is a directory with `plugin.json`, `skills/`, and `mcp.json` — simple enough that any client can implement it. Compatible clients at launch: ChatGPT/Codex, Cursor, GitHub Copilot, Kiro, VS Code. Notably absent: Anthropic, whose Agent Skills spec and `.claude-plugin` format informed the standard but whose Claude Code is not a launch client.
+
+**Why it matters:** This is the agent ecosystem's "npm moment" — a portable package format for AI agent extensions. But Anthropic's absence creates a split: the company that originated Agent Skills isn't at the table. The "Claude plugin format vs Agent Plugins" divergence could fragment the ecosystem.
+
+> The spec deliberately excludes installation, distribution, permissions, sandboxing, and trust — those are left to each platform.
+
+[`🔗 Google Developers Blog`](https://developers.googleblog.com/en/agent-plugins-package-your-skills-tools-and-more/) · [`🔗 Forkast News`](https://forkast.news/industry-shipped-agent-plugins-1-0-while-the-standards-body-debated/) · [`🔗 Gigazine`](https://gigazine.net/gsc_news/en/20260807-agent-plugins/)
+
+---
+
+## 16. Ladybird browser hits #1 on GitHub Trending — first new browser engine in a decade
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · #7 daily · 16h ago
+- **Tags:** `browser` `open-source` `web-standards` `rust`
+
+Ladybird (64k+ stars) is the first genuinely new browser engine since Google's Blink fork in 2013. Built from scratch — not Chromium, not WebKit, not Gecko — with its own LibWeb renderer, LibJS JavaScript engine, and LibWasm. Founded by Andreas Kling (ex-Apple WebKit) and Chris Wanstrath (GitHub co-founder), governed by a 501(c)(3) non-profit, backed by Cloudflare, Shopify, Proton, JetBrains, and 37signals. Alpha release for Linux/macOS targeting summer 2026, beta in 2027, stable in 2028. Multi-process sandboxing, 97.8% test262 pass rate, can already load Gmail and Figma. Safety-critical components being migrated to Rust.
+
+**Why it matters:** Browser engine diversity is back. After a decade of Chromium monoculture, a well-funded independent engine with major corporate backing and non-profit governance challenges the "only Blink matters" assumption. Web developers have a new target to test against.
+
+> Strictly no monetization: no search deals, no ads, no data collection, no crypto tokens.
+
+[`🔗 Frandroid`](https://www.frandroid.com/culture-tech/web/3207619_ladybird-le-futur-navigateur-alternatif-a-google-chrome-et-mozilla-firefox-approche-de-son-alpha) · [`🔗 Reptile Haus`](https://reptile.haus/journal/the-new-browser-wars-what-the-2026-fragmentation-means-for-your-development-team/) · [`🔗 Star History`](https://www.star-history.com/ladybirdbrowser/ladybird/)
+
+---
+
+## 17. CVE-2026-19516 (CVSS 9.1) — Critical SSRF in mcp-grafana exposes internal networks via MCP tool
+
+- **Velocity:** ▮ steady
+- **Source:** CVE/NVD · 850 pts · 18h ago
+- **Tags:** `security` `cve` `mcp` `grafana` `ssrf`
+
+CVE-2026-19516 (CVSS 9.1) affects mcp-grafana (the MCP server for Grafana), versions 0.0.0–1.0.0. A caller-supplied `X-Grafana-URL` header controls the destination of outbound requests, and the `grafana_api_request` tool lets callers choose the HTTP method, path, and body. Because the destination is not restricted to the configured Grafana instance, attackers can target internal services, loopback interfaces, and cloud metadata endpoints (169.254.169.254) — then read the responses. The earlier fix for CVE-2026-15583 only prevented token leakage, not destination restriction.
+
+**Why it matters:** MCP servers are becoming critical infrastructure in the agent ecosystem. This CVE is a warning: every MCP tool that makes outbound requests is a potential SSRF vector. As MCP adoption accelerates, MCP-specific CVEs will become a regular category.
+
+> Emergency mitigations: strip `X-Grafana-URL` headers at reverse proxy; apply egress filtering to block internal/RFC1918 ranges from mcp-grafana hosts.
+
+[`🔗 CVETodo`](https://cvetodo.com/cve/CVE-2026-19516) · [`🔗 Mallory`](https://mallory.ai/vulnerabilities/CVE-2026-19516) · [`🔗 VulDB`](https://vuldb.com/zh/cve/CVE-2026-19516)
+
+---
+
+## 18. PrimeIntellect open-sources Prime Agent — self-improving RLM agent scores 95.5% on ARC-AGI-3
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · #6 daily · 20h ago
+- **Tags:** `ai-agent` `rlm` `open-source` `coding`
+
+Prime Intellect (MIT License) released Prime Agent, a self-improving coding/research agent built on two abstractions: Recursive Language Model (RLM) — treat context as programmatic variables with a persistent IPython kernel — and Continual Harness — runtime-CRUD-able skills, memories, and subagent specs. The `/refine` command lets the agent analyze its own trajectory and apply evidence-backed improvements. Scored 95.5% on ARC-AGI-3 (Best@1 with Opus 5), surpassing the 95.4% human expert baseline. Controversy: critics noted it used the public eval set, making task-specific overfitting possible via the self-improvement mechanism.
+
+**Why it matters:** Self-improving agents that learn from their own execution traces are the next frontier beyond static system prompts. But the ARC-AGI-3 controversy highlights the benchmark contamination problem — when an agent can self-adapt to a public test set, is the score meaningful?
+
+> ~5k GitHub stars. MIT License. Supports Claude, GPT, and open-source models.
+
+[`🔗 GitHub: prime-agent`](https://github.com/PrimeIntellect-ai/prime-agent) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/prime-intellect-open-sources-prime-agent-self-improving-ai-coding-harness/) · [`🔗 36Kr`](https://www.36kr.com/p/3929369029868677)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-11T12:00:00Z |
-| Items | 10 |
-| Sources tracked | 12 (Hacker News, GitHub Trending, major tech blogs, security advisories) |
+| Generated | 2026-08-11T20:00:00Z |
+| Items | 18 |
+| Sources tracked | 24 (Hacker News, GitHub Trending, major tech blogs, security advisories, CVE/NVD) |
 | Refresh interval | 15 min |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
