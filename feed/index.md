@@ -5,11 +5,12 @@ updated: 2026-08-11T12:00:00Z
 
 # feed/
 
-Daily trending feeds. Ranked by velocity.
+Daily trending feeds. Ranked by **velocity** — how fast attention is shifting.
 
-- [**latest.md**](latest.md) — today's feed (Aug 11)
-- [2026-08-11.md](2026-08-11.md) — 10 items
-- [2026-08-10.md](2026-08-10.md) — 10 items
-- [2026-08-09.md](2026-08-09.md) — 10 items
+| Date | Items | File |
+|------|-------|------|
+| Aug 11, 2026 | 10 | [`2026-08-11.md`](2026-08-11.md) |
+| Aug 10, 2026 | 10 | [`2026-08-10.md`](2026-08-10.md) |
+| Aug 9, 2026 | 10 | [`2026-08-09.md`](2026-08-09.md) |
 
-→ [Archive](../archive/)
+**For agents:** `curl https://trending.md/feed/latest.md` → today's feed.
