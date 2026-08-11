@@ -1,14 +1,22 @@
 # trending.md
 A dense trending information listing optimized for agentic web search. Markdown-first. Updated every 15 minutes.
 
-## Feeds
+## Feeds (English)
 - Latest: https://trending.md/feed/latest.md (today's trending items, ranked by velocity)
 - Archive: https://trending.md/feed/2026-08-11.md | https://trending.md/feed/2026-08-10.md | https://trending.md/feed/2026-08-09.md
 
+## Feeds (中文 / Chinese)
+- Latest: https://trending.md/zh/feed/latest.md
+- Archive: https://trending.md/zh/feed/2026-08-11.md | https://trending.md/zh/feed/2026-08-10.md | https://trending.md/zh/feed/2026-08-09.md
+
 ## About
-- https://trending.md/about.md (project description + agent consumption guide)
-- https://trending.md/archive/index.md (full archive listing)
+- EN: https://trending.md/en/about.md (project description + agent consumption guide)
+- ZH: https://trending.md/zh/about.md (项目说明 + 智能体使用指南)
+
+## Archive
+- EN: https://trending.md/en/archive/index.md (full archive listing)
+- ZH: https://trending.md/zh/archive/index.md (全部归档列表)
 
 ## Optional
-- Canonical web render: https://trending.md/
+- Canonical web render: https://trending.md/en/ (English) | https://trending.md/zh/ (中文)
 - GitHub: https://github.com/takoyaki-baron/trending-md

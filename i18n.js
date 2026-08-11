@@ -31,7 +31,7 @@ const strings = {
     navArchive: '归档',
     navGitHub: 'github',
     langSwitch: 'EN',
-    langSwitchHref: '/',
+    langSwitchHref: '/en/',
     langLabel: 'English',
     footerTitle: 'trending.md — Markdown 优先的趋势信号。',
     footerAgent: '智能体：',

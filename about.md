@@ -37,12 +37,17 @@ The goal is to surface *what's moving now*, not *what has the most total attenti
 
 ```
 trending-md/
-├── feed/
-│   ├── latest.md          ← Current feed (canonical)
-│   └── 2026-08-11.md      ← Daily snapshot
-├── archive/               ← Historical daily snapshots
-├── index.html             ← Stylish web renderer
-└── about.md               ← This file
+├── en/                     ← English locale
+│   ├── feed/
+│   │   ├── latest.md       ← Current feed (canonical)
+│   │   └── 2026-08-11.md   ← Daily snapshot
+│   ├── archive/            ← Historical daily snapshots
+│   └── about.md            ← This file
+├── zh/                     ← 中文 (Chinese locale)
+│   ├── feed/
+│   ├── archive/
+│   └── about.md
+└── feed/latest.md          ← Root backward-compat symlink
 ```
 
 ## License
@@ -51,4 +56,4 @@ All content is [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/). Attrib
 
 ---
 
-[`← Back to feed`](/feed/latest.md) · [`GitHub`](https://github.com/takoyaki-baron/trending-md)
+[`← Back to feed`](/en/feed/latest.md) · [`GitHub`](https://github.com/takoyaki-baron/trending-md)
