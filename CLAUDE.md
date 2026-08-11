@@ -7,8 +7,8 @@ Canonical content in Markdown (`.md`) files; web view is a styled HTML render. B
 ## Feed generation workflow (3x daily: 04:00 / 12:00 / 20:00)
 
 The feed file `en/feed/YYYY-MM-DD.md` is built up across 3 runs per day.
-Each run adds up to 10 new items, for a maximum of 30 items per day per language
-(90 across en/zh/jp).
+Each run adds up to 10 new items. Cap is 100 per day per language (safety limit);
+the real constraint is **dedup** — only genuinely new stories get added.
 
 ### MERGE mode (subsequent runs — file already exists)
 
@@ -20,7 +20,7 @@ When `en/feed/YYYY-MM-DD.md` already exists:
    Do NOT rephrase existing items; only add net-new stories.
 4. **If nothing new** — exit cleanly (no edits). Don't force items just to hit a quota.
 5. **If new items found** — append them after the last existing item, renumbering
-   sequentially. Max 30 items total per day. If already at 30 → skip.
+   sequentially (max 100 items total as safety limit; dedup is the real filter).
 6. **Re-translate** — update zh/ and jp/ versions to match the expanded en file.
    Translate all items (old + new) to keep the output consistent.
 7. **Update indices** — refresh `en/feed/latest.md`, `zh/feed/latest.md`,
@@ -81,7 +81,7 @@ license: CC-BY-4.0
 - Velocity is relative to THIS RUN's batch, not the full 30-item list
 
 ### Rules
-- **Up to 10 items per run**, never more than 30 total per day per language
+- **Up to 10 items per run**, 100 max per day per language (safety cap; dedup is the real limiter)
 - Ranked by velocity (recency × engagement acceleration × source authority), NOT total attention
 - Every item MUST have at least 2 source links
 - Tags must be lowercase, backtick-wrapped `<kebab-case>` or `<single-word>`
@@ -135,7 +135,7 @@ en/archive/index.md      ← Archive index (same list, archive context)
 |-----|-------------|------|--------|
 | 1 | 04:03 CST | FRESH or MERGE | Up to 10 items |
 | 2 | 12:03 CST | MERGE | Up to 10 new items (20 max) |
-| 3 | 20:03 CST | MERGE | Up to 10 new items (30 max) |
+| 3 | 20:03 CST | MERGE | Up to 10 new items (dedup-gated, 100 max) |
 
 Launchd triggers `generate-feed.sh` at these times. `deploy-cron.sh` runs at 22:07 as a
 safety-net deploy.

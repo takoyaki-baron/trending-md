@@ -19,7 +19,7 @@ cd "$REPO_DIR"
 git pull origin master --ff-only 2>&1 || echo "(git pull skipped)"
 
 FEED_FILE="en/feed/$TODAY.md"
-MAX_TOTAL=30
+MAX_TOTAL=100
 MAX_PER_RUN=10
 ITEM_COUNT=0
 
