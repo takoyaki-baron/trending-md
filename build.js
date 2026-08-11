@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-/* build.js — Pre-render all .md files to static .html pages with i18n */
+/* build.js — Pre-render all .md files to static .html pages with i18n
+   Fully data-driven: add a language in i18n.js + create <code>/ dir → nothing else changes. */
 const fs = require('fs');
 const path = require('path');
-const { strings } = require('./i18n.js');
+const { strings, langs, defaultLang } = require('./i18n.js');
 
 const ROOT = __dirname;
 
@@ -169,7 +170,7 @@ function extractItems(body) {
 }
 
 function generateJSONLD(items, meta, lang) {
-  const base = lang === 'zh' ? '/zh' : '/en';
+  const base = `/${lang}`;
   return JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -207,32 +208,32 @@ function generateJSONLD(items, meta, lang) {
 
 /* ── Semantic HTML post-processor ── */
 function semanticHTML(html, items) {
-  // Wrap items in <article> with id and data-velocity
   for (const item of items) {
-    // Find the h2 for this item
     const vel = item.velocity;
     html = html.replace(
       new RegExp(`(<h2>${item.id}\\. .+?</h2>)`, ''),
       (_m, h2) => `<article id="item-${item.id}" data-velocity="${vel}" data-points="${item.points}" data-tags="${item.tags.join(',')}">${h2}`
     );
   }
-  // Close articles before next h2 (except first) or before <hr>
   html = html.replace(/<hr>/g, '</article><hr>');
-  // Close last article before Metadata
   html = html.replace(/<h2>Metadata<\/h2>/, '</article><h2>Metadata</h2>');
-  // Wrap intro section
   html = html.replace(/<div class="content">\n/, '<div class="content">\n<article id="intro">');
   html = html.replace(/(<article id="item-1")/, '</article>$1');
   return html;
 }
 
-/* ── HTML shell (i18n-aware) ── */
+/* ── HTML shell (i18n-aware, fully data-driven) ── */
 function shell(title, content, breadcrumbs, meta, activeNav, lang, jsonld) {
   const s = strings[lang] || strings.en;
-  const switchHref = lang === 'zh' ? '/en/' : '/zh/';
-  const base = lang === 'zh' ? '/zh' : '/en';
-  const nav = activeNav || 'feed';
+  const base = `/${lang}`;
 
+  // Language switcher: all languages except current, as inline links
+  const otherLangs = langs.filter(l => l !== lang).map(l => {
+    const ls = strings[l];
+    return `<a href="/${l}/" class="lang-link">${ls.label}</a>`;
+  }).join('');
+
+  const nav = activeNav || 'feed';
   const navLink = (href, label, key) =>
     `<a href="${href}"${key === nav ? ' class="active"' : ''}>${label}</a>`;
 
@@ -272,7 +273,7 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
     background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased;
   }
   header { border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 10; }
@@ -283,8 +284,10 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
   .header-nav a { color: var(--text-secondary); text-decoration: none; }
   .header-nav a:hover, .header-nav a.active { color: var(--accent); }
   .header-nav a.active { font-weight: 600; }
-  .lang-switch { font-size: 0.78rem; padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px; white-space: nowrap; }
-  .lang-switch:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .lang-links { font-size: 0.76rem; display: flex; gap: 6px; margin-left: 4px; }
+  .lang-links a { padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; white-space: nowrap; }
+  .lang-links a:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .lang-links a.current-lang { background: var(--accent); color: #fff !important; border-color: var(--accent); }
   main { max-width: 820px; margin: 0 auto; padding: 0 20px 60px; }
   .breadcrumb { display: flex; gap: 6px; padding: 14px 0 6px; flex-wrap: wrap; font-size: 0.8rem; }
   .breadcrumb a, .breadcrumb span { padding: 4px 10px; border-radius: 4px; text-decoration: none; color: var(--text-secondary); background: var(--tag-bg); }
@@ -331,7 +334,7 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
       ${navLink(`${base}/about`, s.navAbout, 'about')}
       ${navLink(`${base}/archive/`, s.navArchive, 'archive')}
       <a href="https://github.com/takoyaki-baron/trending-md">${s.navGitHub}</a>
-      <a href="${switchHref}" class="lang-switch">${s.langSwitch}</a>
+      <span class="lang-links">${otherLangs}</span>
     </nav>
   </div>
 </header>
@@ -354,137 +357,169 @@ function buildPage(mdPath, htmlPath, title, breadcrumbs, activeNav, lang) {
   const md = fs.readFileSync(path.join(ROOT, mdPath), 'utf8');
   const { meta, body } = parseFrontmatter(md);
   let content = parseMD(body);
-  const l = lang || 'en';
 
-  // Extract structured data and apply semantic markup for feed pages
   let jsonld = null;
   if (mdPath.includes('feed/20')) {  // daily feed pages
     const items = extractItems(body);
-    jsonld = generateJSONLD(items, meta, l);
+    jsonld = generateJSONLD(items, meta, lang);
     content = semanticHTML(content, items);
   }
 
-  const html = shell(title || meta.title || 'trending.md', content, breadcrumbs || '', meta, activeNav || 'feed', l, jsonld);
+  const html = shell(title || meta.title || 'trending.md', content, breadcrumbs || '', meta, activeNav || 'feed', lang, jsonld);
   const dir = path.dirname(htmlPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(htmlPath, html);
   console.log(`  ✓ ${htmlPath}`);
 }
 
-// Clean dist
+/* ── Discover feed days from source directory ── */
+function discoverFeedDays(srcDir) {
+  const dir = path.join(ROOT, srcDir);
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir)
+    .filter(f => /^\d{4}-\d{2}-\d{2}\.md$/.test(f) && f !== 'latest.md')
+    .map(f => f.replace('.md', ''))
+    .sort()
+    .reverse();  // newest first for homepage
+}
+
+/* ── Clean + init dist ── */
 const dist = path.join(ROOT, 'dist');
 if (fs.existsSync(dist)) fs.rmSync(dist, { recursive: true });
 fs.mkdirSync(dist, { recursive: true });
 
-/* ── Build both languages ── */
-for (const lang of ['en', 'zh']) {
+/* ══════════════════════════════════════════════════════════════════════
+   BUILD — data-driven: one iteration per language, all symmetric
+   ══════════════════════════════════════════════════════════════════════ */
+for (const lang of langs) {
   const s = strings[lang];
-  const base = lang === 'zh' ? 'dist/zh' : 'dist/en';
-  const srcPrefix = lang === 'zh' ? 'zh/' : '';
-  const basePath = lang === 'zh' ? '/zh' : '/en';
+  const srcPrefix = `${lang}/`;       // all languages: en/, zh/, jp/
+  const base = `dist/${lang}`;
+  const basePath = `/${lang}`;
+  const days = discoverFeedDays(`${srcPrefix}feed`);
+
   console.log(`\n[${lang}] Building…`);
 
-  // Homepage — latest feed
-  const homeTitle = lang === 'zh' ? '最新趋势信号' : 'Latest Trending Signals';
-  buildPage(`${srcPrefix}feed/2026-08-11.md`, `${base}/index.html`, homeTitle,
+  if (days.length === 0) {
+    console.log('  (no feed days found, skipping)');
+    continue;
+  }
+
+  // Homepage — latest feed (newest day)
+  buildPage(`${srcPrefix}feed/${days[0]}.md`, `${base}/index.html`, s.homeTitle,
     `<span class="current">${s.breadcrumbFeed}</span>`, 'feed', lang);
 
   // Feed index
-  const feedIdxTitle = lang === 'zh' ? '趋势索引' : 'Feed Index';
-  buildPage(`${srcPrefix}feed/index.md`, `${base}/feed/index.html`, feedIdxTitle,
+  buildPage(`${srcPrefix}feed/index.md`, `${base}/feed/index.html`, s.feedIndexTitle,
     `<a href="${basePath}/">${s.breadcrumbFeed}</a> <span class="current">index.md</span>`, 'feed', lang);
 
-  // Individual feed days — directory-based to avoid .md clean-URL clash
-  for (const day of ['2026-08-09', '2026-08-10', '2026-08-11']) {
-    const dayTitle = lang === 'zh' ? `趋势 — ${day}` : `Trending — ${day}`;
+  // Individual feed days
+  for (const day of days) {
+    const dayTitle = `${s.dayTitleMark} — ${day}`;
     buildPage(`${srcPrefix}feed/${day}.md`, `${base}/feed/${day}/index.html`, dayTitle,
       `<a href="${basePath}/">${s.breadcrumbFeed}</a> <a href="${basePath}/feed/">${day}.md</a> <span class="current">${day}.md</span>`, 'feed', lang);
   }
 
   // Archive
-  const archiveTitle = lang === 'zh' ? '归档' : 'Archive';
-  buildPage(`${srcPrefix}archive/index.md`, `${base}/archive/index.html`, archiveTitle,
+  buildPage(`${srcPrefix}archive/index.md`, `${base}/archive/index.html`, s.archiveTitle,
     `<a href="${basePath}/">${s.breadcrumbFeed}</a> <a href="${basePath}/archive/">${s.breadcrumbArchive}</a> <span class="current">index.md</span>`, 'archive', lang);
 
   // About
-  const aboutTitle = lang === 'zh' ? '关于' : 'About';
-  buildPage(`${srcPrefix}about.md`, `${base}/about.html`, aboutTitle,
+  buildPage(`${srcPrefix}about.md`, `${base}/about.html`, s.aboutTitle,
     `<span class="current">about.md</span>`, 'about', lang);
 }
 
-// Root redirect page — / → /en/
+/* ── Root redirect page — dynamic language chooser ── */
+const langLinks = langs.map(l => {
+  const ls = strings[l];
+  return `<a href="/${l}/">${ls.label}</a>`;
+}).join(' &nbsp;·&nbsp; ');
+
 fs.writeFileSync(path.join(dist, 'index.html'), `<!DOCTYPE html>
-<html lang="en">
+<html lang="${defaultLang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>trending.md</title>
-<meta http-equiv="refresh" content="0;url=/en/">
-<link rel="canonical" href="https://trending.md/en/">
+<meta http-equiv="refresh" content="0;url=/${defaultLang}/">
+<link rel="canonical" href="https://trending.md/${defaultLang}/">
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 40px auto; max-width: 400px; text-align: center; line-height: 1.8; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 40px auto; max-width: 400px; text-align: center; line-height: 2; }
   a { color: #2563eb; text-decoration: none; font-size: 1.1rem; }
   a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
-<p><a href="/en/">English</a> &nbsp;·&nbsp; <a href="/zh/">中文</a></p>
+<p>${langLinks}</p>
 </body>
 </html>`);
 console.log('\n  ✓ dist/index.html (root redirect)');
 
-// Copy raw assets (language-agnostic + locale-prefixed sources)
-const assetsRoot = [
-  '_headers', 'llms.txt', 'sitemap.xml',
-];
-// EN locale assets
-const assetsEN = [
-  'about.md',
-  'feed/latest.md', 'feed/2026-08-09.md', 'feed/2026-08-10.md', 'feed/2026-08-11.md', 'feed/index.md',
-  'archive/index.md',
-];
-// ZH locale assets
-const assetsZH = [
-  'zh/about.md',
-  'zh/feed/2026-08-09.md', 'zh/feed/2026-08-10.md', 'zh/feed/2026-08-11.md', 'zh/feed/index.md',
-  'zh/archive/index.md',
-];
+/* ── Copy raw assets ── */
+const assetsRoot = ['_headers', 'llms.txt', 'sitemap.xml'];
 console.log('');
 for (const a of assetsRoot) {
   const dst = path.join(dist, a);
   fs.copyFileSync(path.join(ROOT, a), dst);
   console.log(`  → ${a}`);
 }
-// EN → dist/en/
-for (const a of assetsEN) {
-  const src = path.join(ROOT, a);
-  const dst = path.join(dist, 'en', a);
-  const d = path.dirname(dst);
-  if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
-  fs.copyFileSync(src, dst);
-  console.log(`  → en/${a}`);
-}
-// ZH → dist/zh/
-for (const a of assetsZH) {
-  const src = path.join(ROOT, a);
-  // Strip 'zh/' prefix for dest
-  const dst = path.join(dist, 'zh', a.replace(/^zh\//, ''));
-  const d = path.dirname(dst);
-  if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
-  fs.copyFileSync(src, dst);
-  console.log(`  → ${a}`);
-}
-// ZH feed/latest.md symlink → copy as actual file (resolve symlink)
-fs.copyFileSync(path.join(ROOT, 'zh/feed/2026-08-11.md'), path.join(dist, 'zh/feed/latest.md'));
-console.log('  → zh/feed/latest.md');
-// Backward-compat: also copy EN .md to dist/ (root) so /feed/latest.md still works
-for (const a of assetsEN) {
-  const src = path.join(ROOT, a);
-  const dst = path.join(dist, a);
-  const d = path.dirname(dst);
-  if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
-  fs.copyFileSync(src, dst);
-  console.log(`  → ${a} (backward-compat root)`);
+
+// Per-language raw .md copies + backward-compat root copies for default lang
+for (const lang of langs) {
+  const srcDir = path.join(ROOT, lang);
+  if (!fs.existsSync(srcDir)) continue;
+
+  // Collect all .md files under <lang>/
+  function collectMD(dir, base) {
+    const files = [];
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const e of entries) {
+      const fp = path.join(dir, e.name);
+      const rel = path.join(base, e.name);
+      if (e.isDirectory()) {
+        files.push(...collectMD(fp, rel));
+      } else if (e.name.endsWith('.md')) {
+        files.push(rel);
+      }
+    }
+    return files;
+  }
+
+  const mdFiles = collectMD(srcDir, '');
+  for (const rel of mdFiles) {
+    const src = path.join(ROOT, lang, rel);
+    const dst = path.join(dist, lang, rel);
+    const d = path.dirname(dst);
+    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+    fs.copyFileSync(src, dst);
+    console.log(`  → ${lang}/${rel}`);
+  }
+
+  // latest.md — copy newest day as latest
+  const days = discoverFeedDays(`${lang}/feed`);
+  if (days.length > 0) {
+    const latestDst = path.join(dist, lang, 'feed', 'latest.md');
+    if (!fs.existsSync(path.dirname(latestDst))) fs.mkdirSync(path.dirname(latestDst), { recursive: true });
+    fs.copyFileSync(path.join(ROOT, lang, 'feed', `${days[0]}.md`), latestDst);
+    console.log(`  → ${lang}/feed/latest.md (→ ${days[0]}.md)`);
+  }
+
+  // Backward-compat: also copy default lang to root so /feed/latest.md still works
+  if (lang === defaultLang) {
+    for (const rel of mdFiles) {
+      const src = path.join(ROOT, lang, rel);
+      const dst = path.join(dist, rel);
+      const d = path.dirname(dst);
+      if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+      fs.copyFileSync(src, dst);
+      console.log(`  → ${rel} (backward-compat root)`);
+    }
+    // also copy latest to root
+    if (days.length > 0) {
+      fs.copyFileSync(path.join(ROOT, lang, 'feed', `${days[0]}.md`), path.join(dist, 'feed', 'latest.md'));
+      console.log(`  → feed/latest.md (backward-compat root)`);
+    }
+  }
 }
 
 console.log('\nDone. Deploy-ready static site in dist/');
