@@ -51,7 +51,7 @@ When `en/feed/YYYY-MM-DD.md` does NOT exist:
 ---
 date: 2026-08-11
 updated: 2026-08-11T12:00:00Z
-schedule: 04:03, 12:03, 20:03 CST
+schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 12
 license: CC-BY-4.0
 ---
@@ -62,7 +62,7 @@ license: CC-BY-4.0
 ## N. <Title> — <one-line English subtitle>
 
 - **Velocity:** ▮▮▮ trending  |  ▮▮ rising  |  ▮ steady
-- **Source:** <source name> · <points>+ pts · <Xh ago> (~<HH:MM> CST)
+- **Source:** <source name> · <points>+ pts · <Xh ago> (~<HH:MM> UTC+8)
 - **Tags:** `<tag1>` `<tag2>` `<tag3>`
 
 <2-3 sentence description of what happened>
@@ -98,7 +98,7 @@ license: CC-BY-4.0
 | Generated | 2026-08-11T12:00:00Z |
 | Items | 10 |
 | Sources tracked | 12 (Hacker News, GitHub Trending, major tech blogs, security advisories) |
-| Update schedule | 04:03, 12:03, 20:03 CST (3x daily) |
+| Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 ```
@@ -133,9 +133,9 @@ en/archive/index.md      ← Archive index (same list, archive context)
 
 | Run | Time (local) | Mode | Target |
 |-----|-------------|------|--------|
-| 1 | 04:03 CST | FRESH or MERGE | Up to 10 items |
-| 2 | 12:03 CST | MERGE | Up to 10 new items (20 max) |
-| 3 | 20:03 CST | MERGE | Up to 10 new items (dedup-gated, 100 max) |
+| 1 | 04:03 UTC+8 | FRESH or MERGE | Up to 10 items |
+| 2 | 12:03 UTC+8 | MERGE | Up to 10 new items (20 max) |
+| 3 | 20:03 UTC+8 | MERGE | Up to 10 new items (dedup-gated, 100 max) |
 
 Launchd triggers `generate-feed.sh` at these times. `deploy-cron.sh` runs at 22:07 as a
 safety-net deploy.
