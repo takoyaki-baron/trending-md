@@ -256,37 +256,39 @@ fs.mkdirSync(dist, { recursive: true });
 for (const lang of ['en', 'zh']) {
   const s = strings[lang];
   const base = lang === 'zh' ? 'dist/zh' : 'dist';
+  const srcPrefix = lang === 'zh' ? 'zh/' : '';
   console.log(`\n[${lang}] Building…`);
 
   // Homepage — latest feed
-  buildPage('feed/2026-08-11.md', `${base}/index.html`, 'Latest Trending Signals',
+  buildPage(`${srcPrefix}feed/2026-08-11.md`, `${base}/index.html`, 'Latest Trending Signals',
     `<span class="current">${s.breadcrumbFeed}</span>`, 'feed', lang);
 
   // Feed index
-  buildPage('feed/index.md', `${base}/feed/index.html`, 'Feed Index',
+  buildPage(`${srcPrefix}feed/index.md`, `${base}/feed/index.html`, 'Feed Index',
     `<a href="${lang === 'zh' ? '/zh/' : '/'}">${s.breadcrumbFeed}</a> <span class="current">index.md</span>`, 'feed', lang);
 
   // Individual feed days — directory-based to avoid .md clean-URL clash
   for (const day of ['2026-08-09', '2026-08-10', '2026-08-11']) {
-    buildPage(`feed/${day}.md`, `${base}/feed/${day}/index.html`, `Trending — ${day}`,
+    buildPage(`${srcPrefix}feed/${day}.md`, `${base}/feed/${day}/index.html`, `Trending — ${day}`,
       `<a href="${lang === 'zh' ? '/zh/' : '/'}">${s.breadcrumbFeed}</a> <a href="/feed/">${day}.md</a> <span class="current">${day}.md</span>`, 'feed', lang);
   }
 
   // Archive
-  buildPage('archive/index.md', `${base}/archive/index.html`, 'Archive',
+  buildPage(`${srcPrefix}archive/index.md`, `${base}/archive/index.html`, 'Archive',
     `<a href="${lang === 'zh' ? '/zh/' : '/'}">${s.breadcrumbFeed}</a> <a href="${lang === 'zh' ? '/zh/archive/' : '/archive/'}">${s.breadcrumbArchive}</a> <span class="current">index.md</span>`, 'archive', lang);
 
   // About
-  buildPage('about.md', `${base}/about.html`, 'About',
+  buildPage(`${srcPrefix}about.md`, `${base}/about.html`, 'About',
     `<span class="current">about.md</span>`, 'about', lang);
 }
 
-// Copy raw assets (language-agnostic)
+// Copy raw assets (language-agnostic + zh sources)
 const assets = [
   '_headers', 'llms.txt', 'sitemap.xml',
-  'about.md',
+  'about.md', 'zh/about.md',
   'feed/latest.md', 'feed/2026-08-09.md', 'feed/2026-08-10.md', 'feed/2026-08-11.md', 'feed/index.md',
-  'archive/index.md',
+  'zh/feed/2026-08-09.md', 'zh/feed/2026-08-10.md', 'zh/feed/2026-08-11.md', 'zh/feed/index.md',
+  'archive/index.md', 'zh/archive/index.md',
 ];
 console.log('');
 for (const a of assets) {
