@@ -323,7 +323,9 @@ const DEFAULT_FILE = 'feed/latest.md';
 function getFileFromPath() {
   const p = window.location.pathname;
   if (p === '/' || p === '') return DEFAULT_FILE;
-  return p.replace(/^\//, '');
+  let path = p.replace(/^\//, '');
+  if (path.endsWith('/')) path += 'index.md';
+  return path;
 }
 
 async function loadFile(path) {
