@@ -206,18 +206,20 @@
 
 <script>
 /* ── Minimal Markdown Parser ── */
+let mdCodes, mdInlines;
+
 function parseMD(src) {
   // Store fenced code blocks
-  const codes = [];
+  mdCodes = [];
   src = src.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
-    codes.push({ lang, code: code.replace(/^\n|\n$/g, '') });
-    return `\x00CODE${codes.length - 1}\x00`;
+    mdCodes.push({ lang, code: code.replace(/^\n|\n$/g, '') });
+    return `\x00CODE${mdCodes.length - 1}\x00`;
   });
   // Store inline code
-  const inlines = [];
+  mdInlines = [];
   src = src.replace(/`([^`]+)`/g, (_, code) => {
-    inlines.push(code);
-    return `\x00INLINE${inlines.length - 1}\x00`;
+    mdInlines.push(code);
+    return `\x00INLINE${mdInlines.length - 1}\x00`;
   });
 
   // Split into blocks
@@ -231,7 +233,7 @@ function parseMD(src) {
     // Fenced code placeholder
     if (/^\x00CODE\d+\x00$/.test(block.trim())) {
       const idx = parseInt(block.match(/\x00CODE(\d+)\x00/)[1]);
-      const c = codes[idx];
+      const c = mdCodes[idx];
       html += `<pre><code>${esc(c.code)}</code></pre>`;
       continue;
     }
@@ -301,7 +303,7 @@ function inline(text) {
   // Links
   text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
   // Inline code (restore)
-  text = text.replace(/\x00INLINE(\d+)\x00/g, (_, i) => `<code>${esc(inlines[parseInt(i)])}</code>`);
+  text = text.replace(/\x00INLINE(\d+)\x00/g, (_, i) => `<code>${esc(mdInlines[parseInt(i)])}</code>`);
   // Line breaks within paragraph
   text = text.replace(/\n/g, '<br>');
   return text;
