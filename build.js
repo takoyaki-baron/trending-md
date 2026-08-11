@@ -227,11 +227,13 @@ function shell(title, content, breadcrumbs, meta, activeNav, lang, jsonld) {
   const s = strings[lang] || strings.en;
   const base = `/${lang}`;
 
-  // Language switcher: all languages except current, as inline links
-  const otherLangs = langs.filter(l => l !== lang).map(l => {
+  // Language dropdown: all languages, current one selected
+  const langOptions = langs.map(l => {
     const ls = strings[l];
-    return `<a href="/${l}/" class="lang-link">${ls.label}</a>`;
+    const sel = l === lang ? ' selected' : '';
+    return `<option value="/${l}/"${sel}>${ls.label}</option>`;
   }).join('');
+  const langSelect = `<select class="lang-select" onchange="if(this.value)window.location=this.value" aria-label="Language">${langOptions}</select>`;
 
   const nav = activeNav || 'feed';
   const navLink = (href, label, key) =>
@@ -284,10 +286,8 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
   .header-nav a { color: var(--text-secondary); text-decoration: none; }
   .header-nav a:hover, .header-nav a.active { color: var(--accent); }
   .header-nav a.active { font-weight: 600; }
-  .lang-links { font-size: 0.76rem; display: flex; gap: 6px; margin-left: 4px; }
-  .lang-links a { padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; white-space: nowrap; }
-  .lang-links a:hover { border-color: var(--accent); color: var(--accent) !important; }
-  .lang-links a.current-lang { background: var(--accent); color: #fff !important; border-color: var(--accent); }
+  .lang-select { font-size: 0.76rem; padding: 3px 6px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); color: var(--text-secondary); cursor: pointer; margin-left: 4px; }
+  .lang-select:focus { outline: none; border-color: var(--accent); }
   main { max-width: 820px; margin: 0 auto; padding: 0 20px 60px; }
   .breadcrumb { display: flex; gap: 6px; padding: 14px 0 6px; flex-wrap: wrap; font-size: 0.8rem; }
   .breadcrumb a, .breadcrumb span { padding: 4px 10px; border-radius: 4px; text-decoration: none; color: var(--text-secondary); background: var(--tag-bg); }
@@ -334,7 +334,7 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
       ${navLink(`${base}/about`, s.navAbout, 'about')}
       ${navLink(`${base}/archive/`, s.navArchive, 'archive')}
       <a href="https://github.com/takoyaki-baron/trending-md">${s.navGitHub}</a>
-      <span class="lang-links">${otherLangs}</span>
+      ${langSelect}
     </nav>
   </div>
 </header>
