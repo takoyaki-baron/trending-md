@@ -101,6 +101,13 @@ else
   git commit -m "feed: $TODAY $(date +%H:%M) batch ($NEW_COUNT items)" 2>&1
   git push origin master 2>&1
   echo "Committed and pushed ($NEW_COUNT items)."
+
+  # Build and deploy to Cloudflare Pages
+  echo "Building…"
+  node build.js 2>&1
+  echo "Deploying to Cloudflare Pages…"
+  npx wrangler pages deploy dist/ --project-name=trending-md --commit-dirty=true 2>&1
+  echo "Deployed."
 fi
 
 # Magichand tracking (non-blocking)
