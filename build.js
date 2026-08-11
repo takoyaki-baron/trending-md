@@ -1,11 +1,12 @@
 #!/usr/bin/env node
-/* build.js — Pre-render all .md files to static .html pages */
+/* build.js — Pre-render all .md files to static .html pages with i18n */
 const fs = require('fs');
 const path = require('path');
+const { strings } = require('./i18n.js');
 
 const ROOT = __dirname;
 
-/* ── Markdown parser (same logic as the SPA, now running at build time) ── */
+/* ── Markdown parser ── */
 const RE_FENCE = /```(\w*)\n([\s\S]*?)```/g;
 const RE_CODE  = /`([^`]+)`/g;
 const RE_BOLD  = /\*\*(.+?)\*\*/g;
@@ -111,23 +112,32 @@ function parseFrontmatter(text) {
   return { meta, body };
 }
 
-/* ── HTML shell ── */
-function shell(title, content, breadcrumbs, meta) {
+/* ── HTML shell (i18n-aware) ── */
+function shell(title, content, breadcrumbs, meta, activeNav, lang) {
+  const s = strings[lang] || strings.en;
+  const switchHref = lang === 'zh' ? '/' : '/zh/';
+  const base = lang === 'zh' ? '/zh' : '';
+  const nav = activeNav || 'feed';
+
+  const navLink = (href, label, key) =>
+    `<a href="${href}"${key === nav ? ' class="active"' : ''}>${label}</a>`;
+
   const bc = breadcrumbs || '';
   const dateStr = meta.date ? `<span class="bc-meta">${esc(meta.date)}</span>` : '';
+
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)} — trending.md</title>
-<meta name="description" content="Dense trending signals optimized for agentic web search. Markdown-first.">
+<meta name="description" content="${esc(s.siteDesc)}">
 <meta name="robots" content="index, follow, max-snippet:-1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
 <meta property="og:title" content="${esc(title)}">
-<meta property="og:description" content="Dense trending information optimized for agentic web search. Markdown-first.">
+<meta property="og:description" content="${esc(s.ogDesc)}">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://trending.md">
+<meta property="og:url" content="https://trending.md${base}/">
 <style>
   :root {
     --bg: #fafafa; --surface: #fff; --border: #e5e5e5;
@@ -147,17 +157,19 @@ function shell(title, content, breadcrumbs, meta) {
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
     background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased;
   }
   header { border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 10; }
   .header-inner { max-width: 820px; margin: 0 auto; padding: 16px 20px; display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   .logo { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
   .logo span { color: var(--accent); }
-  .header-nav { display: flex; gap: 14px; font-size: 0.82rem; }
+  .header-nav { display: flex; gap: 14px; font-size: 0.82rem; align-items: baseline; }
   .header-nav a { color: var(--text-secondary); text-decoration: none; }
   .header-nav a:hover, .header-nav a.active { color: var(--accent); }
   .header-nav a.active { font-weight: 600; }
+  .lang-switch { font-size: 0.78rem; padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px; white-space: nowrap; }
+  .lang-switch:hover { border-color: var(--accent); color: var(--accent) !important; }
   main { max-width: 820px; margin: 0 auto; padding: 0 20px 60px; }
   .breadcrumb { display: flex; gap: 6px; padding: 14px 0 6px; flex-wrap: wrap; font-size: 0.8rem; }
   .breadcrumb a, .breadcrumb span { padding: 4px 10px; border-radius: 4px; text-decoration: none; color: var(--text-secondary); background: var(--tag-bg); }
@@ -198,12 +210,13 @@ function shell(title, content, breadcrumbs, meta) {
 <body>
 <header>
   <div class="header-inner">
-    <a href="/" class="logo">trending<span>.md</span></a>
+    <a href="${base}/" class="logo">trending<span>.md</span></a>
     <nav class="header-nav">
-      <a href="/" class="active">feed</a>
-      <a href="/about">about</a>
-      <a href="/archive/">archive</a>
-      <a href="https://github.com/takoyaki-baron/trending-md">github</a>
+      ${navLink(`${base}/`, s.navFeed, 'feed')}
+      ${navLink(`${base}/about`, s.navAbout, 'about')}
+      ${navLink(`${base}/archive/`, s.navArchive, 'archive')}
+      <a href="https://github.com/takoyaki-baron/trending-md">${s.navGitHub}</a>
+      <a href="${switchHref}" class="lang-switch">${s.langSwitch}</a>
     </nav>
   </div>
 </header>
@@ -214,19 +227,20 @@ ${content}
   </div>
 </main>
 <footer>
-  <div><strong>trending.md</strong> — Markdown-first trending signals.<br><span class="agent-hint">🤖 Agents: <code>curl https://trending.md/feed/latest.md</code></span></div>
-  <div><a href="/feed/latest.md">raw md</a> · <a href="/about">about</a> · <a href="https://github.com/takoyaki-baron/trending-md">github</a></div>
+  <div><strong>${s.footerTitle}</strong><br><span class="agent-hint">🤖 ${s.footerAgent} <code>curl https://trending.md/feed/latest.md</code></span></div>
+  <div><a href="/feed/latest.md">${s.footerRaw}</a> · <a href="${base}/about">${s.footerAbout}</a> · <a href="https://github.com/takoyaki-baron/trending-md">github</a></div>
 </footer>
 </body>
 </html>`;
 }
 
 /* ── Build pages ── */
-function buildPage(mdPath, htmlPath, title, breadcrumbs) {
-  const md = fs.readFileSync(mdPath, 'utf8');
+function buildPage(mdPath, htmlPath, title, breadcrumbs, activeNav, lang) {
+  const md = fs.readFileSync(path.join(ROOT, mdPath), 'utf8');
   const { meta, body } = parseFrontmatter(md);
   const content = parseMD(body);
-  const html = shell(title || meta.title || 'trending.md', content, breadcrumbs || '', meta);
+  const l = lang || 'en';
+  const html = shell(title || meta.title || 'trending.md', content, breadcrumbs || '', meta, activeNav || 'feed', l);
   const dir = path.dirname(htmlPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(htmlPath, html);
@@ -238,31 +252,36 @@ const dist = path.join(ROOT, 'dist');
 if (fs.existsSync(dist)) fs.rmSync(dist, { recursive: true });
 fs.mkdirSync(dist, { recursive: true });
 
-console.log('Building static pages…\n');
+/* ── Build both languages ── */
+for (const lang of ['en', 'zh']) {
+  const s = strings[lang];
+  const base = lang === 'zh' ? 'dist/zh' : 'dist';
+  console.log(`\n[${lang}] Building…`);
 
-// Homepage — latest feed
-buildPage('feed/2026-08-11.md', 'dist/index.html', 'Latest Trending Signals',
-  '<span class="current">feed</span>');
+  // Homepage — latest feed
+  buildPage('feed/2026-08-11.md', `${base}/index.html`, 'Latest Trending Signals',
+    `<span class="current">${s.breadcrumbFeed}</span>`, 'feed', lang);
 
-// Feed index
-buildPage('feed/index.md', 'dist/feed/index.html', 'Feed Index',
-  '<a href="/">feed</a> <span class="current">index.md</span>');
+  // Feed index
+  buildPage('feed/index.md', `${base}/feed/index.html`, 'Feed Index',
+    `<a href="${lang === 'zh' ? '/zh/' : '/'}">${s.breadcrumbFeed}</a> <span class="current">index.md</span>`, 'feed', lang);
 
-// Individual feed days
-for (const day of ['2026-08-09', '2026-08-10', '2026-08-11']) {
-  buildPage(`feed/${day}.md`, `dist/feed/${day}.html`, `Trending — ${day}`,
-    `<a href="/">feed</a> <span class="current">${day}.md</span>`);
+  // Individual feed days — directory-based to avoid .md clean-URL clash
+  for (const day of ['2026-08-09', '2026-08-10', '2026-08-11']) {
+    buildPage(`feed/${day}.md`, `${base}/feed/${day}/index.html`, `Trending — ${day}`,
+      `<a href="${lang === 'zh' ? '/zh/' : '/'}">${s.breadcrumbFeed}</a> <a href="/feed/">${day}.md</a> <span class="current">${day}.md</span>`, 'feed', lang);
+  }
+
+  // Archive
+  buildPage('archive/index.md', `${base}/archive/index.html`, 'Archive',
+    `<a href="${lang === 'zh' ? '/zh/' : '/'}">${s.breadcrumbFeed}</a> <a href="${lang === 'zh' ? '/zh/archive/' : '/archive/'}">${s.breadcrumbArchive}</a> <span class="current">index.md</span>`, 'archive', lang);
+
+  // About
+  buildPage('about.md', `${base}/about.html`, 'About',
+    `<span class="current">about.md</span>`, 'about', lang);
 }
 
-// Archive
-buildPage('archive/index.md', 'dist/archive/index.html', 'Archive',
-  '<a href="/">feed</a> <a href="/archive/">archive</a> <span class="current">index.md</span>');
-
-// About
-buildPage('about.md', 'dist/about.html', 'About',
-  '<span class="current">about.md</span>');
-
-// Copy raw assets (markdown feeds, llms.txt, sitemap.xml, _headers)
+// Copy raw assets (language-agnostic)
 const assets = [
   '_headers', 'llms.txt', 'sitemap.xml',
   'about.md',
