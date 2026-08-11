@@ -205,6 +205,8 @@
 </footer>
 
 <script>
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 /* ── Minimal Markdown Parser ── */
 const RE_FENCE = /```(\w*)\n([\s\S]*?)```/g;
 const RE_CODE  = /`([^`]+)`/g;
