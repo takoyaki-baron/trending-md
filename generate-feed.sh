@@ -54,7 +54,7 @@ Max total is $MAX_TOTAL. If no genuinely new stories exist, exit cleanly without
 
 1. Read the existing $FEED_FILE to understand what's already covered. DO NOT rephrase or modify existing items — only add net-new stories (different events, different companies, different CVEs, different repos).
 
-2. Research new trending AI/developer/web topics from Hacker News, GitHub Trending, major tech blogs, and security advisories. Use WebSearch and WebFetch.
+2. Research new trending repos and developer tools from GitHub Trending, Hacker News Show HN, and major open-source releases. Skip corporate news (acquisitions, funding, strategy). At least 7 of 10 items must link to a GitHub repo. Use WebSearch and WebFetch.
 
 3. Dedup against existing items. Skip anything that overlaps with what's already there. Quality > quantity — if only 3 genuinely new items exist, add 3, not 10.
 
@@ -70,9 +70,11 @@ else
   cat > "$PROMPT_FILE" << ENDPROMPT
 Generate today's trending feed for $TODAY (FRESH mode — first run of the day).
 
-1. Research today's trending AI/developer/web topics from Hacker News, GitHub Trending, major tech blogs, and security advisories. Use WebSearch and WebFetch to get current information.
+FOCUS: GitHub repos and open-source projects. At least 7 of 10 items must link to a specific GitHub repo. Check GitHub Trending daily + weekly first, then HN Show HN. Skip corporate news (acquisitions, funding, strategy) unless directly tied to a repo release.
 
-2. Write $FEED_FILE with up to $BATCH items following the exact format in CLAUDE.md. Each item must have: velocity, source with points+time, tags, description, "Why it matters", and at least 2 source links.
+1. Research trending repos and developer tools from GitHub Trending, Hacker News Show HN, and major open-source releases. Use WebSearch and WebFetch.
+
+2. Write $FEED_FILE with up to $BATCH items following the exact format in CLAUDE.md. Each item must have: velocity, source with points+time, tags, description, "Why it matters", and at least 2 source links (include GitHub repo URL).
 
 3. Translate to zh/feed/$TODAY.md (Simplified Chinese) and jp/feed/$TODAY.md (Japanese). Keep tags in English, translate everything else.
 

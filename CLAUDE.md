@@ -29,20 +29,33 @@ When `en/feed/YYYY-MM-DD.md` already exists:
 ### FRESH mode (first run of the day — file doesn't exist yet)
 
 When `en/feed/YYYY-MM-DD.md` does NOT exist:
-1. **Research** — Search for today's trending AI/developer/web topics
+1. **Research** — Search GitHub Trending first (daily + weekly), then HN/Show HN.
+   Every item must center on a specific GitHub repo or open-source project.
+   At least 7 of 10 items must have a GitHub repo URL.
 2. **Write** `en/feed/YYYY-MM-DD.md` with 10 items
 3. **Translate** to zh/ and jp/
 4. **Update** all indices
 
-### Sources
+### Content focus: GitHub repos first
 
-- Hacker News front page
-- GitHub Trending (daily/weekly)
-- Major tech blogs (Meta AI, Anthropic, OpenAI, Google, Cloudflare, etc.)
-- Security advisories (CVE, GHSA, The Hacker News)
-- X/Twitter tech discourse
-- Chinese tech media (36Kr, CSDN, etc.)
-- Japanese tech media
+**Primary (≥70% of items):** GitHub repos — trending projects, new releases, interesting tools,
+libraries, frameworks, open-source AI models. Every item should center on a concrete repo/project.
+
+**Secondary (≤30% of items):** Developer-relevant news that directly impacts how people code —
+new APIs, platform changes, language/ecosystem shifts, major security vulnerabilities with CVEs.
+
+**Avoid unless repo-adjacent:** corporate acquisitions, funding rounds, company strategy,
+non-technical AI policy debates, general tech industry news. If a story doesn't have a repo
+URL or a concrete dev workflow impact, skip it.
+
+### Sources (in priority order)
+
+1. **GitHub Trending** (daily + weekly) — PRIMARY. Check every run.
+2. **Hacker News** — filter for Show HN, project launches, new tools/libraries
+3. **Major repo releases** — check popular orgs (Meta, Google, Anthropic, OpenAI, Cloudflare,
+   Vercel, Shopify, etc.) for new open-source releases
+4. **Chinese open-source** — GitHub trending in Chinese, CSDN GitHub Hot, 36Kr tech
+5. **Security** — only CVSS ≥9.0 or widely-exploited vulnerabilities (CVE, GHSA)
 
 ## Feed file format
 
