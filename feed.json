@@ -1,0 +1,186 @@
+{
+  "feed": "trending.md",
+  "version": "1.0",
+  "description": "Dense trending signals for agentic web search. Ranked by velocity.",
+  "updated": "2026-08-11T07:00:00Z",
+  "refresh_interval_sec": 900,
+  "sources_tracked": 12,
+  "license": "CC-BY-4.0",
+  "docs": {
+    "human": "https://trending.md",
+    "markdown": "https://trending.md/feed/latest.md",
+    "json_schema": "https://trending.md/feed.json"
+  },
+  "ranking": {
+    "method": "velocity",
+    "components": ["recency", "engagement_acceleration", "source_authority"],
+    "note": "Higher velocity = faster-growing attention, not higher absolute volume"
+  },
+  "items": [
+    {
+      "rank": 1,
+      "title": "DeepSeek V4 Flash launches free tier",
+      "velocity": "trending",
+      "velocity_score": 0.97,
+      "source": {"name": "Hacker News", "domain": "news.ycombinator.com"},
+      "engagement": {"points": 2847, "comments": 0},
+      "published": "2026-08-11T04:00:00Z",
+      "tags": ["ai", "llm", "open-source", "deepseek"],
+      "summary": "DeepSeek released V4 Flash with a free tier: 50 req/day, 284B MoE (13B active), 1M context, MIT license. Dev community reaction overwhelmingly positive. Cost comparison: $0.14/$0.28 vs GPT-5.6 Sol at $5/$15 per M tokens (36x cheaper).",
+      "why_it_matters": "First top-tier coding model with a genuinely usable free tier. Changes the economics for indie devs and small teams.",
+      "benchmarks": {
+        "DSBench_FullStack": "68.7% (#1)",
+        "TerminalBench_2_1": "82.7",
+        "DeepSWE": "54.4"
+      },
+      "links": [
+        {"label": "Hacker News", "url": "#"},
+        {"label": "DeepSeek Blog", "url": "#"},
+        {"label": "Benchmarks", "url": "#"}
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Claude Code 3.0 ships with multi-agent orchestration and worktree isolation",
+      "velocity": "trending",
+      "velocity_score": 0.94,
+      "source": {"name": "GitHub", "domain": "github.com"},
+      "engagement": {"stars": 1923},
+      "published": "2026-08-11T01:00:00Z",
+      "tags": ["claude", "devtools", "ai-agent", "cli"],
+      "summary": "Anthropic's CLI agent tool adds native multi-agent workflows, git worktree isolation, and a structured review panel. Early adopters report 3-5x productivity gains on complex refactors and migrations. Built-in token-spike circuit breaker and liveness-aware sweep.",
+      "why_it_matters": "Production-grade multi-agent orchestration in a CLI tool, not just a cloud API. Shift from AI-as-autocomplete to AI-as-foreman.",
+      "links": [
+        {"label": "Changelog", "url": "#"},
+        {"label": "GitHub", "url": "#"}
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Cloudflare Workers adds native Python via Pyodide",
+      "velocity": "rising",
+      "velocity_score": 0.82,
+      "source": {"name": "Cloudflare Blog", "domain": "blog.cloudflare.com"},
+      "engagement": {"points": 1204},
+      "published": "2026-08-10T23:00:00Z",
+      "tags": ["cloudflare", "python", "edge-compute", "serverless"],
+      "summary": "Python now runs natively in Workers via Pyodide: sub-50ms cold starts, native bindings to KV/R2/D1/Queues. No transpilation step needed; import standard library modules directly.",
+      "why_it_matters": "JavaScript's monopoly on edge compute ends. Python's ML/data ecosystem now runs at the edge.",
+      "links": [
+        {"label": "Cloudflare Blog", "url": "#"},
+        {"label": "Docs", "url": "#"}
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "OpenAI GPT-5.6 Sol priced 36x higher than DeepSeek Flash, benchmarks show marginal gap",
+      "velocity": "rising",
+      "velocity_score": 0.78,
+      "source": {"name": "The Verge", "domain": "theverge.com"},
+      "engagement": {"points": 987},
+      "published": "2026-08-10T20:00:00Z",
+      "tags": ["openai", "gpt", "pricing", "benchmarks"],
+      "summary": "GPT-5.6 Sol ships with improved reasoning at $5/$15 per M tokens. Independent benchmarks show only 3-5% quality gap vs DeepSeek V4 Flash ($0.14/$0.28). Pricing pressure mounts as open-weight alternatives close the gap.",
+      "why_it_matters": "LLM pricing is no longer a moat. The cost-quality frontier is being rewritten by open-weight models.",
+      "links": [
+        {"label": "The Verge", "url": "#"},
+        {"label": "Independent Benchmarks", "url": "#"}
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Next.js 16 stable — Turbopack default, RSC by default, PPR GA",
+      "velocity": "rising",
+      "velocity_score": 0.74,
+      "source": {"name": "Vercel Blog", "domain": "vercel.com"},
+      "engagement": {"points": 876},
+      "published": "2026-08-10T17:00:00Z",
+      "tags": ["nextjs", "react", "webdev", "vercel"],
+      "summary": "Next.js 16: Turbopack is now the default bundler (10x faster HMR), React Server Components enabled by default, Partial Prerendering reaches GA. Migration guide covers breaking changes from 14/15.",
+      "why_it_matters": "The React ecosystem's new default. Every Next.js project upgrading this quarter hits these changes.",
+      "links": [
+        {"label": "Vercel Blog", "url": "#"},
+        {"label": "Migration Guide", "url": "#"}
+      ]
+    },
+    {
+      "rank": 6,
+      "title": "Aider v0.80 adds multi-model routing, cuts AI coding costs 60-80%",
+      "velocity": "steady",
+      "velocity_score": 0.61,
+      "source": {"name": "aider.chat", "domain": "aider.chat"},
+      "engagement": {"points": 654},
+      "published": "2026-08-10T13:00:00Z",
+      "tags": ["aider", "ai-coding", "cost-optimization"],
+      "summary": "Aider now auto-routes by task complexity: simple edits use cheap models, architecture decisions use Claude Opus. One API key, automatic switching. Users report 60-80% cost reduction with no quality loss.",
+      "why_it_matters": "AI coding tooling is converging on smart routing as the default pattern. Single-model workflows are becoming legacy.",
+      "links": [
+        {"label": "aider.chat", "url": "#"},
+        {"label": "Changelog", "url": "#"}
+      ]
+    },
+    {
+      "rank": 7,
+      "title": "Zustand v5 — 40% smaller bundle, React 19 optimized",
+      "velocity": "steady",
+      "velocity_score": 0.55,
+      "source": {"name": "npm", "domain": "npmjs.com"},
+      "engagement": {"points": 512},
+      "published": "2026-08-10T11:00:00Z",
+      "tags": ["react", "zustand", "state-management", "javascript"],
+      "summary": "Zustand v5 drops to 1.1 kB gzipped, fixes the long-standing stale-snapshot warnings, adds first-class TanStack Query integration. Migration from v4 is a single import change for most users.",
+      "why_it_matters": "The most-used React state library gets lighter and fixes its most-Googled bug.",
+      "links": [
+        {"label": "npm", "url": "#"},
+        {"label": "Migration Guide", "url": "#"}
+      ]
+    },
+    {
+      "rank": 8,
+      "title": "EU AI Act enforcement begins — first GPAI compliance deadline hits",
+      "velocity": "rising",
+      "velocity_score": 0.72,
+      "source": {"name": "TechCrunch", "domain": "techcrunch.com"},
+      "engagement": {"points": 489},
+      "published": "2026-08-10T09:00:00Z",
+      "tags": ["regulation", "eu", "ai-act", "compliance"],
+      "summary": "First EU AI Act enforcement milestone now active. GPAI providers must document training data, implement watermarking, publish energy reports. Fines up to 3% of global turnover.",
+      "why_it_matters": "The first major AI regulation with real enforcement teeth. Every model provider shipping to EU users is affected.",
+      "links": [
+        {"label": "TechCrunch", "url": "#"},
+        {"label": "EU AI Act Text", "url": "#"}
+      ]
+    },
+    {
+      "rank": 9,
+      "title": "Bun 2.0 lands Windows support, 98% Node.js compat, 2x faster installs",
+      "velocity": "steady",
+      "velocity_score": 0.48,
+      "source": {"name": "bun.sh", "domain": "bun.sh"},
+      "engagement": {"points": 421},
+      "published": "2026-08-10T05:00:00Z",
+      "tags": ["bun", "javascript", "runtime", "nodejs"],
+      "summary": "Bun 2.0 adds full Windows support (x64 + ARM), Node.js compatibility hits 98% (passes Node's own test suite), install speed doubles. Now a viable drop-in replacement for most Node projects.",
+      "why_it_matters": "Cross-platform maturity makes Bun a real production option, not just a fast toy.",
+      "links": [
+        {"label": "bun.sh", "url": "#"},
+        {"label": "Release Notes", "url": "#"}
+      ]
+    },
+    {
+      "rank": 10,
+      "title": "Tesla Optimus Gen-3 walks untethered outdoors — on-board inference at 50Hz",
+      "velocity": "steady",
+      "velocity_score": 0.42,
+      "source": {"name": "X / @Tesla_Optimus", "domain": "x.com"},
+      "engagement": {"points": 387},
+      "published": "2026-08-10T02:00:00Z",
+      "tags": ["robotics", "tesla", "ai", "hardware"],
+      "summary": "Optimus Gen-3 demonstrated untethered outdoor walking on uneven terrain. Full control stack (perception, planning, actuation) runs on-board at 50 Hz with no cloud offload. Manufacturing pilot begins Q4 2026.",
+      "why_it_matters": "Humanoid robots moving from lab demos to real-world locomotion. On-board inference at 50 Hz is the hardware story.",
+      "links": [
+        {"label": "X / @Tesla_Optimus", "url": "#"}
+      ]
+    }
+  ]
+}
