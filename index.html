@@ -409,8 +409,10 @@ document.querySelector('.logo').addEventListener('click', e => {
 });
 navLinks.forEach(a => {
   a.addEventListener('click', e => {
-    e.preventDefault();
     const href = a.getAttribute('href');
+    // External links — let browser handle natively
+    if (href.startsWith('http')) return;
+    e.preventDefault();
     history.pushState(null, '', href);
     loadFile(getFileFromPath());
   });
