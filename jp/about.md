@@ -19,9 +19,7 @@ description: trending.md とは何か、どのように機能し、どのよう�
 | 利用者 | 方法 |
 |--------|------|
 | **AIエージェント（生md）** | `curl https://trending.md/jp/feed/latest.md` |
-| **AIエージェント（構造化）** | `curl -H "Accept: application/json" https://trending.md`（近日公開） |
 | **人間（ウェブ）** | `https://trending.md/jp/` にアクセス——最新トレンドのスタイル付きレンダリング |
-| **人間（RSS）** | RSSフィード（近日公開） |
 | **アーカイブ** | `https://trending.md/jp/archive/` —— 日次スナップショット |
 
 ## ランキング

@@ -19,9 +19,7 @@ description: trending.md 是什么、如何运作以及如何使用
 | 使用者 | 方式 |
 |--------|------|
 | **AI 智能体（原始 md）** | `curl https://trending.md/zh/feed/latest.md` |
-| **AI 智能体（结构化）** | `curl -H "Accept: application/json" https://trending.md`（即将推出） |
 | **人类（网页）** | 访问 `https://trending.md/zh/` —— 最新趋势的样式化渲染 |
-| **人类（RSS）** | RSS 订阅（即将推出） |
 | **归档** | `https://trending.md/zh/archive/` —— 每日快照 |
 
 ## 排名机制
@@ -42,12 +40,16 @@ trending-md/
 │   │   ├── latest.md       ← 当前趋势（规范文件）
 │   │   └── 2026-08-11.md   ← 每日快照
 │   ├── archive/            ← 历史每日快照
+│   └── about.md
+├── zh/                     ← 简体中文
+│   ├── feed/
+│   ├── archive/
 │   └── about.md            ← 本文件
-├── zh/                     ← 中文翻译
+├── jp/                     ← 日本語
 │   ├── feed/
 │   ├── archive/
 │   └── about.md
-└── feed/latest.md          ← 根路径向后兼容
+└── feed/latest.md          ← 根路径向后兼容（→ en/feed/latest.md）
 ```
 
 ## 许可证

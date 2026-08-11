@@ -455,8 +455,83 @@ fs.writeFileSync(path.join(dist, 'index.html'), `<!DOCTYPE html>
 </html>`);
 console.log('\n  ✓ dist/index.html (root redirect)');
 
+/* ── Auto-generated sitemap.xml — always in sync with the build ── */
+const today = new Date().toISOString().slice(0, 10);
+let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://trending.md/</loc>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+  </url>`;
+
+for (const lang of langs) {
+  const base = `/${lang}`;
+  const days = discoverFeedDays(`${lang}/feed`);
+
+  // Homepage
+  sitemap += `
+  <url>
+    <loc>https://trending.md${base}/</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+  </url>`;
+
+  // Daily feed HTML pages
+  for (const day of days) {
+    sitemap += `
+  <url>
+    <loc>https://trending.md${base}/feed/${day}/</loc>
+    <lastmod>${day}</lastmod>
+    <priority>0.8</priority>
+  </url>`;
+  }
+
+  // Daily feed raw .md
+  for (const day of days) {
+    sitemap += `
+  <url>
+    <loc>https://trending.md${base}/feed/${day}.md</loc>
+    <lastmod>${day}</lastmod>
+    <priority>0.7</priority>
+  </url>`;
+  }
+
+  // Feed index, Archive, About
+  sitemap += `
+  <url>
+    <loc>https://trending.md${base}/feed/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trending.md${base}/archive/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://trending.md${base}/about</loc>
+    <priority>0.6</priority>
+  </url>`;
+}
+
+// Backward-compat root raw .md paths (for parity)
+const enDays = discoverFeedDays(`${defaultLang}/feed`);
+for (const day of enDays) {
+  sitemap += `
+  <url>
+    <loc>https://trending.md/feed/${day}.md</loc>
+    <lastmod>${day}</lastmod>
+    <priority>0.7</priority>
+  </url>`;
+}
+
+sitemap += '\n</urlset>\n';
+
+fs.writeFileSync(path.join(dist, 'sitemap.xml'), sitemap);
+console.log('  ✓ dist/sitemap.xml (auto-generated)');
+
 /* ── Copy raw assets ── */
-const assetsRoot = ['_headers', 'llms.txt', 'sitemap.xml'];
+const assetsRoot = ['_headers', 'llms.txt'];
 console.log('');
 for (const a of assetsRoot) {
   const dst = path.join(dist, a);

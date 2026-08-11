@@ -9,7 +9,7 @@ description: What trending.md is, how it works, and how to consume it
 
 ## Why Markdown-first?
 
-1. **AI agents can read it directly.** `curl https://trending.md/feed/latest.md` returns clean, structured markdown — no HTML parsing needed.
+1. **AI agents can read it directly.** `curl https://trending.md/en/feed/latest.md` returns clean, structured markdown — no HTML parsing needed.
 2. **Human-readable raw.** The `.md` files are the source of truth; they read well in any text editor, terminal, or GitHub viewer.
 3. **The domain is the format.** `trending.md` — the TLD is the promise. Content in markdown, rendered for the web.
 4. **Version-control friendly.** `.md` files diff cleanly in git. Every daily snapshot is a commit.
@@ -18,11 +18,9 @@ description: What trending.md is, how it works, and how to consume it
 
 | Consumer | Method |
 |----------|--------|
-| **AI agent (raw md)** | `curl https://trending.md/feed/latest.md` |
-| **AI agent (structured)** | `curl -H "Accept: application/json" https://trending.md` (coming soon) |
-| **Human (web)** | Visit `https://trending.md` — styled render of the latest feed |
-| **Human (RSS)** | RSS feed (coming soon) |
-| **Archive** | `https://trending.md/archive/` — daily snapshots |
+| **AI agent (raw md)** | `curl https://trending.md/en/feed/latest.md` |
+| **Human (web)** | Visit `https://trending.md/en/` — styled render of the latest feed |
+| **Archive** | `https://trending.md/en/archive/` — daily snapshots |
 
 ## Ranking
 
@@ -43,11 +41,15 @@ trending-md/
 │   │   └── 2026-08-11.md   ← Daily snapshot
 │   ├── archive/            ← Historical daily snapshots
 │   └── about.md            ← This file
-├── zh/                     ← 中文 (Chinese locale)
+├── zh/                     ← 简体中文 (Chinese locale)
 │   ├── feed/
 │   ├── archive/
 │   └── about.md
-└── feed/latest.md          ← Root backward-compat symlink
+├── jp/                     ← 日本語 (Japanese locale)
+│   ├── feed/
+│   ├── archive/
+│   └── about.md
+└── feed/latest.md          ← Root backward-compat (→ en/feed/latest.md)
 ```
 
 ## License
