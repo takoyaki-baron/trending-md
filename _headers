@@ -1,9 +1,4 @@
 # Cloudflare Pages headers
-/feed.json
-  Content-Type: application/json; charset=utf-8
-  Cache-Control: public, max-age=900, stale-while-revalidate=300
-  Access-Control-Allow-Origin: *
-
 /feed/*
   Content-Type: text/markdown; charset=utf-8
   Cache-Control: public, max-age=900, stale-while-revalidate=300
@@ -11,11 +6,6 @@
 
 /*.md
   Content-Type: text/markdown; charset=utf-8
-  Cache-Control: public, max-age=900, stale-while-revalidate=300
-  Access-Control-Allow-Origin: *
-
-/*.json
-  Content-Type: application/json; charset=utf-8
   Cache-Control: public, max-age=900, stale-while-revalidate=300
   Access-Control-Allow-Origin: *
 
