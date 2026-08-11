@@ -51,7 +51,7 @@ When `en/feed/YYYY-MM-DD.md` does NOT exist:
 ---
 date: 2026-08-11
 updated: 2026-08-11T12:00:00Z
-refresh: 15min
+schedule: 04:03, 12:03, 20:03 CST
 sources: 12
 license: CC-BY-4.0
 ---
@@ -62,7 +62,7 @@ license: CC-BY-4.0
 ## N. <Title> — <one-line English subtitle>
 
 - **Velocity:** ▮▮▮ trending  |  ▮▮ rising  |  ▮ steady
-- **Source:** <source name> · <points>+ pts · <time> ago
+- **Source:** <source name> · <points>+ pts · <Xh ago> (~<HH:MM> CST)
 - **Tags:** `<tag1>` `<tag2>` `<tag3>`
 
 <2-3 sentence description of what happened>
@@ -98,7 +98,7 @@ license: CC-BY-4.0
 | Generated | 2026-08-11T12:00:00Z |
 | Items | 10 |
 | Sources tracked | 12 (Hacker News, GitHub Trending, major tech blogs, security advisories) |
-| Refresh interval | 15 min |
+| Update schedule | 04:03, 12:03, 20:03 CST (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 ```
