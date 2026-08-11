@@ -1,6 +1,6 @@
 ---
 date: 2026-08-11
-updated: 2026-08-11T20:00:00Z
+updated: 2026-08-11T23:00:00Z
 refresh: 15min
 sources: 12
 license: CC-BY-4.0
@@ -285,13 +285,143 @@ Prime Intellect (MIT License) released Prime Agent, a self-improving coding/rese
 
 ---
 
+---
+
+## 19. NVIDIA partners with Wall Street to mobilize $500B for AI infrastructure — "chips become an investable asset class"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CNBC / NVIDIA Blog · 2,400+ pts · 3h ago
+- **Tags:** `nvidia` `ai-infrastructure` `wall-street` `funding`
+
+NVIDIA signed MOUs with six Wall Street giants — Apollo, Blackstone, BlackRock, Brookfield, Goldman Sachs, and KKR — to create compute-financing platforms mobilizing over $500 billion in third-party capital for AI infrastructure. The model treats GPUs as collateral for debt financing, letting hyperscalers and AI labs secure compute without tapping their own balance sheets. Jensen Huang: "This is the first time technology chips have become an investable asset class." Goldman Sachs will serve as lead bookrunner on public debt deals; NVIDIA may backstop up to $125B.
+
+**Why it matters:** This is the financialization of AI infrastructure. When GPUs become a collateralized asset class — like commercial real estate or toll roads — the funding bottleneck shifts from capital to physics (power, land, cooling). Larry Fink compared it to the creation of mortgage-backed securities in the 1970s.
+
+> All six firms Huang approached said yes. Deals expected within months. Comes as Big Tech's combined AI capex surpasses $730B this year.
+
+[`🔗 CNBC`](https://www.cnbc.com/2026/08/10/nvidia-wall-street-asset-managers-500-billion-ai-push.html) · [`🔗 Business Times`](https://www.businesstimes.com.sg/startups-tech/technology/nvidia-taps-wall-street-us500-billion-ai-funding-commitment) · [`🔗 RTE`](https://www.rte.ie/news/business/2026/0811/1587364-nvidia-finance-funding/)
+
+---
+
+## 20. Ruflo "RufRoot" (CVSS 10.0) — unauthenticated MCP bridge RCE poisons AI agent memory, survives patching
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Noma Security / SecurityWeek · 1,700+ pts · 5h ago
+- **Tags:** `security` `mcp` `ai-agent` `cve` `memory-poisoning`
+
+CVE-2026-59726 "RufRoot" is a CVSS 10.0 unauthenticated RCE in Ruflo (66.5k GitHub stars, ~10M downloads), an open-source AI agent orchestration platform. The default-exposed MCP bridge (`/mcp` endpoint, port 3001) accepted unauthenticated JSON-RPC tool calls — a single HTTP POST invoking `ruflo__terminal_execute` achieved full command execution. Noma Labs demonstrated an eight-step chain: enumerate 233 exposed tools, steal LLM provider API keys, spawn attacker-controlled agent swarms on the victim's paid API access, exfiltrate MongoDB data, and — most critically — poison the persistent AI memory store (AgentDB) with fake policies. These poisoned memories continue influencing agent outputs after the software is patched.
+
+**Why it matters:** This is the first major vulnerability demonstrating that AI agent memory is a security boundary. Persistent agent memory means attacks can survive software patches — organizations must audit AgentDB for injected entries, not just upgrade. Every MCP server that exposes tools over a network inherits this attack surface.
+
+> Fixed in Ruflo 3.16.3. Assume compromise if exposed: rotate all LLM API keys, audit AgentDB for poisoned patterns, rebuild containers from clean images.
+
+[`🔗 Noma Security (RufRoot analysis)`](https://noma.security/blog/rufroot-the-mcp-bridge-vulnerability-that-turns-agents-into-rogue-admins-cve-2026-59726/) · [`🔗 SecurityWeek`](https://www.securityweek.com/critical-ruflo-flaw-lets-attackers-spawn-rogue-ai-swarms/) · [`🔗 Forkast (patch-resistant memory)`](https://forkast.news/rufroot-patching-doesnt-undo-poisoning-the-mcp-flaw-that-persists-inside-ai-memory/)
+
+---
+
+## 21. Amazon finances 7.65 GW off-grid gas plant for Texas AI data center — would be largest US emitter
+
+- **Velocity:** ▮▮ rising
+- **Source:** Data Center Dynamics / SCMP · 1,300+ pts · 9h ago
+- **Tags:** `amazon` `data-center` `energy` `climate`
+
+Amazon is financing the "GW Ranch" — a 35-turbine, 7.65 GW natural gas plant in Pecos County, West Texas — to power its first off-grid AI data center campus. The Texas Commission on Environmental Quality permitted up to 33 million tons of CO₂ annually, which would make it the single largest emissions source in the US, surpassing any coal plant. Built "behind the meter" to bypass ERCOT's clogged interconnection queue, Amazon filed three data center construction permits on the 8,000-acre site in early August. The company cites on-site generation as avoiding cost pass-through to Texas households and notes plans for 750 MW of solar plus 1.8 GW of battery storage.
+
+**Why it matters:** AI's energy appetite is forcing hyperscalers to become power producers. The "behind the meter" model — build your own plant, skip the grid — is accelerating: nearly 60 such gas projects (~90 GW total) have been announced in the US since early 2025. The tension between net-zero pledges and AI-driven fossil fuel expansion is now impossible to ignore.
+
+> First power delivery targeted Q1 2027. Non-potable brackish groundwater for cooling. Microsoft, Google, Meta, and Oracle pursuing similar strategies.
+
+[`🔗 Data Center Dynamics`](https://www.datacenterdynamics.com/en/news/amazon-acquires-8000-acre-site-in-pecos-texas-for-natural-gas-powered-behind-the-meter-data-center-report/) · [`🔗 SCMP`](https://www.scmp.com/news/world/united-states-canada/article/3363393/amazon-finance-huge-us-gas-plant-data-centres) · [`🔗 EdgeNGT`](https://www.edgen.tech/zh/news/post/amazon-backs-765-gw-texas-gas-plant-most-polluting-in-us)
+
+---
+
+## 22. OpenAI upgrades free ChatGPT to GPT-5.6 Luna, adds reasoning-effort slider, removes chat limits
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI Blog · 1,500+ pts · 12h ago
+- **Tags:** `openai` `chatgpt` `gpt-5.6` `free-tier`
+
+OpenAI made GPT-5.6 Luna the default model for free ChatGPT users and removed daily text chat limits entirely. Paid users got an updated GPT-5.6 Sol with a reasoning-effort slider — from quick answers to deep analysis — and 68% fewer factual errors than GPT-5.5. The update unifies the previously separate Instant and Thinking experiences under a single model with consistent tone. Free users also get a "Think" button for harder questions. This follows the July 30 80% API price cut for Luna, which made free unlimited chats economically viable for OpenAI.
+
+**Why it matters:** The commoditization of frontier AI continues. When the default free-tier model has 62% fewer errors than last quarter's paid model, the floor keeps rising. The reasoning slider signals that "how much to think" is now a user-facing product feature, not an implementation detail — and that differentiated reasoning depth is the new pricing lever.
+
+> GPT-5.6 family launched July 9. Luna API price cut 80% on July 30. Updates apply to ChatGPT Chat only — Codex and Work models are unchanged.
+
+[`🔗 OpenAI Blog`](https://openai.com/index/improving-gpt-5-6-sol-in-chatgpt/) · [`🔗 TNW`](https://thenextweb.com/news/chatgpt-free-unlimited-text-chats-gpt-5-6-luna-default) · [`🔗 Times of India`](https://timesofindia.indiatimes.com/technology/tech-news/openai-upgrades-chatgpt-free-users-to-gpt-5-6-luna-adds-unlimited-text-chats/articleshow/133028756.cms)
+
+---
+
+## 23. Anti-AI backlash hits tipping point — 71% oppose local data centers, $156B in projects blocked
+
+- **Velocity:** ▮▮ rising
+- **Source:** Gallup / Entrepreneur / Fortune · 1,200+ pts · 14h ago
+- **Tags:** `ai-backlash` `data-center` `regulation` `public-opinion`
+
+Multiple 2026 polls confirm a decisive shift in American public opinion against AI: 71% oppose a data center in their area (Gallup, higher than nuclear plants at 53%), over 50% believe AI does more harm than good, and 68% say development is moving too fast. The backlash has material consequences: $156 billion in data center projects were blocked or delayed in 2025, 75 more projects worth $130B stalled in Q1 2026 alone, and over 300 cities, towns, and counties have enacted bans or moratoriums on hyperscale data centers. New York became the first state to issue a statewide pause on new hyperscale data centers (July 14). Organized opposition groups doubled to 833 across 49 states. Only 8% of opponents actually live near a data center — opposition has gone national and symbolic.
+
+**Why it matters:** The AI industry's biggest bottleneck may not be chips, power, or capital — it's public consent. With $730B+ in planned 2026 AI capex, a national anti-data-center movement that crosses party lines could constrain the buildout more effectively than any technical limitation. Only ~800 of nearly 4,000 announced US data centers are actually under construction.
+
+> 142 protests across 42 states on July 18. Violence escalating: Molotov cocktails, gunshots at officials' homes, 7x surge in online threats against AI execs.
+
+[`🔗 Entrepreneur`](https://www.entrepreneur.com/business-news/americans-are-furiously-rebelling-against-ai-and-it-cost-the-industry-156-billion-people-feel-like-theyre-under-siege) · [`🔗 Fortune`](https://www.fortune.com/2026/06/22/data-center-opposition-goes-national-despite-only-8-percent-living-near-one/) · [`🔗 AI Weekly`](https://aiweekly.co/alerts/ai-backlash-tops-50-cancels-data-centers)
+
+---
+
+## 24. IBM Langflow under active exploit (CVSS 9.8) — CISA orders emergency patching of AI workflow platform
+
+- **Velocity:** ▮ steady
+- **Source:** CISA / Field Effect · 900 pts · 16h ago
+- **Tags:** `security` `cisa` `langflow` `cve` `ai-workflow`
+
+CISA added CVE-2026-9198 (CVSS 9.8) to its Known Exploited Vulnerabilities catalog on August 4 with Binding Operational Directive 26-04, requiring federal agencies to patch or disconnect by August 7. The flaw affects IBM Langflow OSS 1.0.0–1.10.0 — a popular low-code AI workflow builder integrated into IBM's watsonx.ai portfolio — and chains two default endpoints: `/api/v1/auto_login` (mints SUPERUSER tokens when `LANGFLOW_AUTO_LOGIN=true`, the default configuration) and `/api/v1/validate/code` (executes arbitrary Python via `exec()`). Public PoCs appeared within a week of the July 17 disclosure; active exploitation by Chinese-speaking adversaries followed within days. This is the second Langflow RCE to trigger a CISA emergency order within a month, following CVE-2026-0770 (CVSS 9.8) in late July.
+
+**Why it matters:** AI workflow platforms are becoming a preferred attack vector — they sit at the intersection of code execution, cloud credentials, and data pipelines. The recurring pattern of default-configuration RCEs in AI infrastructure tools (Langflow, Ruflo, mcp-grafana) suggests the ecosystem is prioritizing velocity over security hardening.
+
+> Fixed in Langflow 1.10.1. Set `LANGFLOW_AUTO_LOGIN=false`, restrict network exposure, rotate credentials if compromise suspected.
+
+[`🔗 Field Effect (exploit chain)`](https://fieldeffect.com/blog/langflow-vulnerability-chain-active-exploitation) · [`🔗 CVETodo (CISA KEV)`](https://cvetodo.com/news/cisa-orders-agencies-to-patch-ibm-langflow-n-central-and-apache-tomcat-flaws-under-active-exploitati) · [`🔗 Forkast`](https://forkast.news/critical-rce-in-ibm-langflow-triggers-cisa-emergency-deadline/)
+
+---
+
+## 25. Rosenbridge — researcher documents hidden x86 core backdoor in VIA C3 processors, enabled by default
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News / Christopher Domas · 780 pts · 18h ago
+- **Tags:** `security` `hardware` `x86` `backdoor` `research`
+
+Security researcher Christopher Domas (xoreaxeaxeax) released Rosenbridge, documenting a hidden non-x86 core embedded alongside the main CPU in VIA C3 processors. Activated by an MSR control bit and a launch instruction, the "deeply embedded instruction set" (DEIS) bypasses all memory protections and privilege checks — ring 3 userland code can read and write ring 0 kernel data. The backdoor was found enabled by default on some early C3 generations shipped into industrial automation, ATMs, and POS terminals. Domas believes it was a legitimate embedded-market feature (testing/debugging), not a malicious implant — but its undocumented presence in shipped silicon, enabled and accessible, is the concern.
+
+**Why it matters:** Rosenbridge is a case study in hardware supply-chain trust. As AI drives demand for custom silicon (TPUs, NPUs, inference chips), the attack surface of "hidden features in complex processors" becomes a real concern. The tools Domas released — check utility, fix script, fuzzer, assembler — give defenders a blueprint for auditing processor trustworthiness.
+
+> Affects VIA C3 only (legacy, ~2001-era). Later C3 revisions and all post-C3 CPUs removed the feature. Research builds on Domas's DEF CON 26 "God Mode Unlocked" work.
+
+[`🔗 Hacker News (Rosenbridge discussion)`](https://times.hntrends.net/story/49219508) · [`🔗 LAVX (hardware backdoor analysis)`](https://news.lavx.hu/article/researchers-uncover-hidden-backdoor-in-via-x86-processors) · [`🔗 Linux.org Technical Discussion`](https://www.linux.org/threads/hardware-backdoor-on-some-x86-cpus.69863/)
+
+---
+
+## 26. NanmiCoder/MediaCrawler hits #3 on GitHub Trending — 61k-star Chinese multi-platform social scraper
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · #3 daily · 20h ago
+- **Tags:** `web-scraping` `china` `playwright` `open-source`
+
+MediaCrawler debuted at #3 on GitHub Trending with 61k stars (+259/day), solidifying its position as the de facto standard for scraping Chinese social platforms. Built on Playwright browser automation (CDP mode), it supports seven platforms — Xiaohongshu (RedNote), Douyin, Kuaishou, Bilibili, Weibo, Baidu Tieba, and Zhihu — covering posts, videos, comments, and secondary comments. Key differentiator: it reuses browser login state and obtains signature parameters via JS expressions, requiring no reverse-engineering of complex encryption algorithms. Recent commits added Kuaishou rate-limiting workarounds and a WebUI frontend/backend separation.
+
+**Why it matters:** The "scraper as critical infrastructure" trend continues as AI models consume ever more training data. Tools that extract structured data from walled-garden platforms become essential plumbing for the AI data pipeline. MediaCrawler's multi-platform coverage of Chinese social media fills a gap that Western-focused scrapers don't address — and its 61k stars suggest massive demand for structured access to Chinese-language internet content.
+
+> Apache 2.0. 798 commits, 11k+ forks, 75 contributors. Commercial Pro version available with AI Agent Skill and desktop video downloader.
+
+[`🔗 GitHub: MediaCrawler`](https://github.com/NanmiCoder/MediaCrawler) · [`🔗 CSDN GitHub Hot (Aug 11)`](https://blog.csdn.net/m0_68631449/article/details/163656692) · [`🔗 TrendShift Stats`](https://trendshift.io/repositories/8291)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-11T20:00:00Z |
-| Items | 18 |
-| Sources tracked | 24 (Hacker News, GitHub Trending, major tech blogs, security advisories, CVE/NVD) |
+| Generated | 2026-08-11T23:00:00Z |
+| Items | 26 |
+| Sources tracked | 32 (Hacker News, GitHub Trending, major tech blogs, security advisories, CVE/NVD, CISA KEV, Gallup, CNBC) |
 | Refresh interval | 15 min |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
