@@ -342,8 +342,8 @@ ${content}
   </div>
 </main>
 <footer>
-  <div><strong>${s.footerTitle}</strong><br><span class="agent-hint">🤖 ${s.footerAgent} <code>curl https://trending.md/feed/latest.md</code></span></div>
-  <div><a href="/feed/latest.md">${s.footerRaw}</a> · <a href="${base}/about">${s.footerAbout}</a> · <a href="https://github.com/takoyaki-baron/trending-md">github</a></div>
+  <div><strong>${s.footerTitle}</strong><br><span class="agent-hint">🤖 ${s.footerAgent} <code>curl https://trending.md${base}/feed/latest.md</code></span></div>
+  <div><a href="${base}/feed/latest.md">${s.footerRaw}</a> · <a href="${base}/about">${s.footerAbout}</a> · <a href="https://github.com/takoyaki-baron/trending-md">github</a></div>
 </footer>
 </body>
 </html>`;
