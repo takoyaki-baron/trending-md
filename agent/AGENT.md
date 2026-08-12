@@ -26,8 +26,10 @@ Expand your own capability over time, in these five directions:
 - **`en/agent.md`** is your memory window — distilled notes. It has frontmatter `last_processed`
   plus sections: *Purpose*, *Identity*, *Active theses*, *High-value todos*, *Trend notes*. You
   read and rewrite it every run.
-- **`en/action.md`** is your action page — self-proposed capability-expansion todos + a dated
-  **log** (Plan / Did / Result, newest first). Trilingual (zh/jp translations).
+- **`en/action.md`** is your action page — self-proposed capability-expansion todos + a
+  **log** (newest first). Each log entry is one agent run and opens with its own
+  `### YYYY-MM-DD HH:MM` header (the run's timestamp, UTC+8) followed by Plan / Did / Result
+  bullets. Trilingual (zh/jp translations).
 - **`agent/knowledge/<lang>/`** is your cold-storage library — **trilingual**. Archive a
   `<topic>.md` under `agent/knowledge/en/` (canonical English), translate it to zh + jp, keep the
   `topic:` slug identical across locales, localize only `title:`. Maintain a per-locale `index.md`.
@@ -58,7 +60,9 @@ After learning, advance your own capability by executing your own todos:
 1. Read `en/action.md` — pick 1–3 pending todos you can genuinely advance this run.
 2. Execute them with full repo + web access (this is `claude -p` with your identity + repo).
 3. Record the outcome — new/updated knowledge files, findings, or corrections.
-4. Prepend a new entry at the top of `## Log` in `en/action.md` (newest first), each entry:
+4. Prepend a new entry at the top of `## Log` in `en/action.md` (newest first). Each entry opens
+   with its own `### YYYY-MM-DD HH:MM` header (the run's timestamp, UTC+8) — one header per run,
+   never merge multiple runs under one date — followed by:
    - **Plan:** what you set out to do
    - **Did:** what you actually did
    - **Result:** links to the outcome (new knowledge files as `[[topic]]`)

@@ -50,9 +50,12 @@ rm -f "$PROMPT_FILE"
 # ── Pass 2: act — execute the agent's own capability-expansion todos ──
 if [ -f "en/action.md" ]; then
   ACTION_PROMPT_FILE=$(mktemp /tmp/agent-action-prompt.XXXXXX)
+  NOW="$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
   cat > "$ACTION_PROMPT_FILE" << ENDACTIONPROMPT
 You are the trending.md learnt agent's action executor. Follow agent/AGENT.md — its "Self-execution"
 and "Output contract" sections, and the immutable Purpose.
+
+The current time (UTC+8) is $NOW — use it verbatim for your log entry's "### YYYY-MM-DD HH:MM" header.
 
 Read these files first:
 1. agent/AGENT.md — your identity + operating rules
@@ -63,8 +66,9 @@ Then do exactly what agent/AGENT.md's "Self-execution" section says:
 1. Pick 1–3 pending todos from en/action.md that you can genuinely advance this run.
 2. Execute them with full repo + web access (you may read any file, visit sources, and write
    agent/knowledge/en/*.md + their zh/jp translations as needed).
-3. Prepend a new entry at the top of the "## Log" section in en/action.md (newest first), each
-   with "Plan:", "Did:", and "Result:" lines — link any new knowledge as [[topic]].
+3. Prepend a new entry at the top of the "## Log" section in en/action.md (newest first). Open it
+   with a "### $NOW" header (this run's timestamp, one header per run, never merge under one date),
+   then "Plan:", "Did:", and "Result:" lines — link any new knowledge as [[topic]].
 4. Translate en/action.md → zh/action.md and jp/action.md (keep repo names, URLs, and code
    identifiers untranslated).
 ENDACTIONPROMPT

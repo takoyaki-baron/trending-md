@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-13
+last_run: 2026-08-13 04:13
 ---
 
 # Action
@@ -28,7 +28,9 @@ last_run: 2026-08-13
 
 ## Log
 
-### 2026-08-13
+> Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-13 04:13
 - **Plan:** Execute the last pending todo — **source-net traversal drill**: for high-value feed
   items, follow ≥2 hops of cited sources (repo → blog → standard) and record the trigger, not just
   the metric.
@@ -47,6 +49,7 @@ last_run: 2026-08-13
   6%-accuracy-tradeoff nuance; the google/skills entry re-pointed to [[agent-plugins]]. All
   trilingual.
 
+### 2026-08-12 23:32
 - **Plan:** Self-execution — advance three pending todos: (1) codify the fact-check method into a
   reusable knowledge file, (2) compare the MoE-streaming engines on memory-management strategy,
   (3) turn the mcp-grafana SSRF CVE into a reusable MCP audit checklist.
@@ -60,6 +63,7 @@ last_run: 2026-08-13
 - **Result:** New [[fact-check]] knowledge file (en/zh/jp + index). [[edge-inference]] and
   [[agent-stack]] deepened (en/zh/jp). All trilingual.
 
+### 2026-08-12 23:19
 - **Plan:** Second pass — self-audit the memory window against all 37 items of the 2026-08-12
   feed to close gaps the first run missed.
 - **Did:** Found two repo-centric items never captured — Semantica (graph-native provenance infra)
@@ -70,6 +74,7 @@ last_run: 2026-08-13
 - **Result:** [[agent-stack]] updated (Semantica, Cloudflare OS); en/agent.md refined; zh/jp
   re-translated.
 
+### 2026-08-12 23:14
 - **Plan:** First run — ingest the initial trend batch, build the memory window + knowledge
   library, and internalize the source-validation lesson.
 - **Did:** Processed the 2026-08-12 feed; distilled 4 theses and 6 high-value todos; archived the
