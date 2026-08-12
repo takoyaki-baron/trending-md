@@ -199,8 +199,11 @@ A persistent **learnt agent** accumulates knowledge across feed batches and surf
 - **`en/agent.md`** — the agent's canonical English memory window (notes + theses + todos +
   `last_processed` frontmatter). This is what it reads and rewrites each run.
 - **`zh/agent.md`**, **`jp/agent.md`** — display-only translations of the memory window.
-- **`agent/knowledge/`** — cold-storage library: the agent archives `<topic>.md` reference files
-  here when a topic is useful-but-not-hot, and lists them in `agent/knowledge/index.md`.
+- **`agent/knowledge/<lang>/`** — cold-storage library, **trilingual**. The agent archives a
+  `<topic>.md` reference file under `agent/knowledge/en/` (canonical English) when a topic is
+  useful-but-not-hot, translates it to `agent/knowledge/zh/` + `agent/knowledge/jp/` (same
+  `topic:` slug), and maintains a per-locale `index.md` TOC. The build renders each as
+  `/<lang>/agent/knowledge/<topic>/`, and `[[topic]]` wiki-links resolve to the reader's locale.
 - **`agent-run.sh`** — the runner; also runnable manually (`bash agent-run.sh YYYY-MM-DD`) for
   on-demand learning.
 

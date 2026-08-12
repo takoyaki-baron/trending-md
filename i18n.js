@@ -27,6 +27,8 @@ const strings = {
     archiveTitle: 'Archive',
     aboutTitle: 'About',
     agentTitle: 'Learnt Agent',
+    navKnowledge: 'knowledge',
+    knowledgeTitle: 'Knowledge library',
     dayTitleMark: 'Trending',
   },
 
@@ -53,6 +55,8 @@ const strings = {
     archiveTitle: '归档',
     aboutTitle: '关于',
     agentTitle: '学习智能体',
+    navKnowledge: '知识库',
+    knowledgeTitle: '知识库',
     dayTitleMark: '趋势',
   },
 
@@ -79,6 +83,8 @@ const strings = {
     archiveTitle: 'アーカイブ',
     aboutTitle: '概要',
     agentTitle: '学習エージェント',
+    navKnowledge: 'ナレッジ',
+    knowledgeTitle: 'ナレッジライブラリ',
     dayTitleMark: 'トレンド',
   },
 };

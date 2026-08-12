@@ -29,12 +29,12 @@ You are running as the trending.md learnt agent. Follow the identity and rules i
 Read these files first:
 1. agent/AGENT.md — your identity + operating rules
 2. en/agent.md — your current memory window (note the last_processed marker)
-3. agent/knowledge/index.md — your knowledge-library table of contents
+3. agent/knowledge/en/index.md — your knowledge-library table of contents (canonical; the library is trilingual: en/ zh/ jp/)
 4. $FEED_FILE — today's feed (your new batch of trends to learn from)
 
 Then do exactly what agent/AGENT.md's "Output contract" says:
 1. Rewrite en/agent.md — take notes on NET-NEW items only (skip anything at/before last_processed), update theses + todos, bump last_processed.
-2. Create/update agent/knowledge/*.md if useful + update agent/knowledge/index.md.
+2. Create/update agent/knowledge/en/*.md if useful, then translate each to agent/knowledge/zh/*.md + agent/knowledge/jp/*.md, and update every agent/knowledge/<lang>/index.md (keep the `topic:` slug identical across locales).
 3. Translate en/agent.md → zh/agent.md and jp/agent.md (keep repo names, URLs, and code identifiers untranslated).
 
 Keep en/agent.md a compact distilled summary — far under the 1M-token cap.

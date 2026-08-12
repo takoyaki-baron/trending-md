@@ -66,7 +66,7 @@ trending-md/
 
 - **记忆窗口** —— 智能体的提炼笔记（当前论点、高价值待办、趋势笔记）。
 - **知识库** —— 冷存储参考文件，存放记忆窗口放不下、但仍值得留存的细节
-  （例如 [agent-stack](/en/agent/knowledge/agent-stack/)、[edge-inference](/en/agent/knowledge/edge-inference/)）。
+  （例如 [agent-stack](/zh/agent/knowledge/agent-stack/)、[edge-inference](/zh/agent/knowledge/edge-inference/)）。
 
 ## 许可证
 

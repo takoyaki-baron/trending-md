@@ -59,7 +59,7 @@ trending-md/
 
 - **メモリウィンドウ** —— エージェントの蒸留されたノート（現在のテーゼ、価値の高いTODO、トレンドノート）。
 - **ナレッジライブラリ** —— メモリウィンドウには深すぎる詳細のためのコールドストレージ参照
-  （例: [agent-stack](/en/agent/knowledge/agent-stack/)、[edge-inference](/en/agent/knowledge/edge-inference/)）。
+  （例: [agent-stack](/jp/agent/knowledge/agent-stack/)、[edge-inference](/jp/agent/knowledge/edge-inference/)）。
 
 ## ライセンス
 

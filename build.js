@@ -18,7 +18,7 @@ const RE_WIKI  = /\[\[([^\]]+)\]\]/g;   // [[topic]] → internal knowledge-libr
 
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-function parseMD(src) {
+function parseMD(src, lang) {
   let codes = [];
   src = src.replace(RE_FENCE, (_, lang, code) => {
     codes.push({ lang, code: code.replace(/^\n|\n$/g, '') });
@@ -37,7 +37,7 @@ function parseMD(src) {
     text = text.replace(RE_ITAL, '<em>$1</em>');
     text = text.replace(RE_IMG, '<img src="$2" alt="$1" loading="lazy">');
     text = text.replace(RE_LINK, '<a href="$2">$1</a>');
-    text = text.replace(RE_WIKI, '<a href="/en/agent/knowledge/$1/">$1</a>');
+    text = text.replace(RE_WIKI, (_, t) => `<a href="/${lang}/agent/knowledge/${t}/">${t}</a>`);
     text = text.replace(/«I(\d+)»/g, (_, i) => `<code>${unesc(inlines[+i])}</code>`);
     text = text.replace(/\n/g, '<br>');
     return text;
@@ -85,8 +85,21 @@ function parseMD(src) {
     if (fm) { html += _fence(fm[1]); continue; }
     if (/^[-*_]{3,}\s*$/.test(block.trim())) { html += '<hr>'; continue; }
     let hm = block.match(/^(#{1,6})\s+(.*?)(?:\s+\{#[\w-]+\})?\s*$/m);
-    if (hm && !block.includes('\n')) {
-      html += `<h${hm[1].length}>${_inline(hm[2])}</h${hm[1].length}>`;
+    if (hm && block.indexOf(hm[0]) === 0) {
+      html += `<h${hm[1].length}>${_inline(hm[2].trim())}</h${hm[1].length}>`;
+      const rest = block.slice(hm[0].length).trim();
+      if (rest) {
+        if (/^[-*+]\s/.test(rest)) {
+          html += '<ul>' + _listItems(rest, /^[-*+]\s/).map(i => `<li>${_inline(i)}</li>`).join('') + '</ul>';
+        } else if (/^\d+\.\s/.test(rest)) {
+          html += '<ol>' + _listItems(rest, /^\d+\.\s/).map(i => `<li>${_inline(i)}</li>`).join('') + '</ol>';
+        } else if (rest.includes('|')) {
+          const tbl = _table(rest);
+          html += tbl ? tbl : `<p>${_inline(rest)}</p>`;
+        } else {
+          html += `<p>${_inline(rest)}</p>`;
+        }
+      }
       continue;
     }
     if (/^>\s/.test(block)) {
@@ -372,7 +385,7 @@ ${content}
 function buildPage(mdPath, htmlPath, title, breadcrumbs, activeNav, lang) {
   const md = fs.readFileSync(path.join(ROOT, mdPath), 'utf8');
   const { meta, body } = parseFrontmatter(md);
-  let content = parseMD(body);
+  let content = parseMD(body, lang);
 
   let jsonld = null;
   if (mdPath.includes('feed/20')) {  // daily feed pages
@@ -397,6 +410,16 @@ function discoverFeedDays(srcDir) {
     .map(f => f.replace('.md', ''))
     .sort()
     .reverse();  // newest first for homepage
+}
+
+/* ── Discover knowledge-library topics for a locale (agent/knowledge/<lang>/*.md) ── */
+function discoverKnowledgeTopics(lang) {
+  const dir = path.join(ROOT, 'agent', 'knowledge', lang);
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir)
+    .filter(f => f.endsWith('.md') && f !== 'index.md')
+    .map(f => f.replace(/\.md$/, ''))
+    .sort();
 }
 
 /* ── Clean + init dist ── */
@@ -449,21 +472,20 @@ for (const lang of langs) {
     `<span class="current">${s.navAgent}</span>`, 'agent', lang);
 }
 
-/* ── Knowledge library (learnt agent's cold-storage) — English canonical, linked from all locales ── */
-const knowledgeDir = path.join(ROOT, 'agent', 'knowledge');
-const knowledgeTopics = fs.existsSync(knowledgeDir)
-  ? fs.readdirSync(knowledgeDir).filter(f => f.endsWith('.md') && f !== 'index.md').map(f => f.replace(/\.md$/, ''))
-  : [];
+/* ── Knowledge library (learnt agent's cold-storage) — trilingual, one build per locale ── */
+for (const lang of langs) {
+  const s = strings[lang];
+  const kBase = `${dist}/${lang}/agent/knowledge`;
+  const kTopics = discoverKnowledgeTopics(lang);
+  if (kTopics.length === 0) continue;
 
-if (knowledgeTopics.length > 0) {
-  const kBase = `${dist}/en/agent/knowledge`;
-  buildPage('agent/knowledge/index.md', `${kBase}/index.html`, 'Knowledge library',
-    `<a href="/en/agent/">${strings.en.navAgent}</a> <span class="current">knowledge</span>`, 'agent', 'en');
-  for (const topic of knowledgeTopics) {
-    const src = `agent/knowledge/${topic}.md`;
+  buildPage(`agent/knowledge/${lang}/index.md`, `${kBase}/index.html`, s.knowledgeTitle,
+    `<a href="/${lang}/agent/">${s.navAgent}</a> <span class="current">${s.navKnowledge}</span>`, 'agent', lang);
+  for (const topic of kTopics) {
+    const src = `agent/knowledge/${lang}/${topic}.md`;
     const { meta } = parseFrontmatter(fs.readFileSync(path.join(ROOT, src), 'utf8'));
     buildPage(src, `${kBase}/${topic}/index.html`, meta.title || topic,
-      `<a href="/en/agent/">${strings.en.navAgent}</a> <a href="/en/agent/knowledge/">knowledge</a> <span class="current">${topic}</span>`, 'agent', 'en');
+      `<a href="/${lang}/agent/">${s.navAgent}</a> <a href="/${lang}/agent/knowledge/">${s.navKnowledge}</a> <span class="current">${topic}</span>`, 'agent', lang);
   }
 }
 
@@ -556,17 +578,19 @@ for (const lang of langs) {
   </url>`;
 }
 
-// Knowledge library pages (English canonical, linked from trilingual agent pages)
-if (knowledgeTopics.length > 0) {
+// Knowledge library pages (trilingual)
+for (const lang of langs) {
+  const kTopics = discoverKnowledgeTopics(lang);
+  if (kTopics.length === 0) continue;
   sitemap += `
   <url>
-    <loc>https://trending.md/en/agent/knowledge/</loc>
+    <loc>https://trending.md/${lang}/agent/knowledge/</loc>
     <priority>0.4</priority>
   </url>`;
-  for (const topic of knowledgeTopics) {
+  for (const topic of kTopics) {
     sitemap += `
   <url>
-    <loc>https://trending.md/en/agent/knowledge/${topic}/</loc>
+    <loc>https://trending.md/${lang}/agent/knowledge/${topic}/</loc>
     <priority>0.4</priority>
   </url>`;
   }
