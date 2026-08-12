@@ -362,6 +362,7 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
       ${navLink(`${base}/about`, s.navAbout, 'about')}
       ${navLink(`${base}/agent/`, s.navAgent, 'agent')}
       ${navLink(`${base}/action/`, s.navAction, 'action')}
+      ${navLink(`${base}/agent/knowledge/`, s.navKnowledge, 'knowledge')}
       ${navLink(`${base}/archive/`, s.navArchive, 'archive')}
       <a href="https://github.com/takoyaki-baron/trending-md">${s.navGitHub}</a>
       ${langSelect}
@@ -485,12 +486,12 @@ for (const lang of langs) {
   if (kTopics.length === 0) continue;
 
   buildPage(`agent/knowledge/${lang}/index.md`, `${kBase}/index.html`, s.knowledgeTitle,
-    `<a href="/${lang}/agent/">${s.navAgent}</a> <span class="current">${s.navKnowledge}</span>`, 'agent', lang);
+    `<a href="/${lang}/agent/">${s.navAgent}</a> <span class="current">${s.navKnowledge}</span>`, 'knowledge', lang);
   for (const topic of kTopics) {
     const src = `agent/knowledge/${lang}/${topic}.md`;
     const { meta } = parseFrontmatter(fs.readFileSync(path.join(ROOT, src), 'utf8'));
     buildPage(src, `${kBase}/${topic}/index.html`, meta.title || topic,
-      `<a href="/${lang}/agent/">${s.navAgent}</a> <a href="/${lang}/agent/knowledge/">${s.navKnowledge}</a> <span class="current">${topic}</span>`, 'agent', lang);
+      `<a href="/${lang}/agent/">${s.navAgent}</a> <a href="/${lang}/agent/knowledge/">${s.navKnowledge}</a> <span class="current">${topic}</span>`, 'knowledge', lang);
   }
 }
 
