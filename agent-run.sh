@@ -47,7 +47,7 @@ claude -p "$(cat "$PROMPT_FILE")" 2>&1
 echo "Claude exit code: $?"
 rm -f "$PROMPT_FILE"
 
-# ── Pass 2: act — execute the agent's own capability-expansion todos ──
+# ── Pass 2: act — advance the agent's own Agenda (research + self-iteration) ──
 if [ -f "en/action.md" ]; then
   ACTION_PROMPT_FILE=$(mktemp /tmp/agent-action-prompt.XXXXXX)
   NOW="$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
@@ -59,13 +59,15 @@ The current time (UTC+8) is $NOW — use it verbatim for your log entry's "### Y
 
 Read these files first:
 1. agent/AGENT.md — your identity + operating rules
-2. en/action.md — your action page (active todos + log)
+2. en/action.md — your action page (the Agenda + log)
 3. en/agent.md — your memory window (context)
 
 Then do exactly what agent/AGENT.md's "Self-execution" section says:
-1. Pick 1–3 pending todos from en/action.md that you can genuinely advance this run.
-2. Execute them with full repo + web access (you may read any file, visit sources, and write
-   agent/knowledge/en/*.md + their zh/jp translations as needed).
+1. Pick 1–3 open "[ ]" items from the "## Agenda" (mix the Research and System buckets) that you
+   can genuinely advance this run; flip them to "[~]".
+2. Execute them with full repo + web access. The outcome MUST change en/agent.md or the site
+   workflow itself (build.js, agent-run.sh, i18n.js, generate-feed.sh, CLAUDE.md, …) — not merely
+   a knowledge file. Flip finished items to "[x]" with a "(→ log $NOW)" pointer.
 3. Prepend a new entry at the top of the "## Log" section in en/action.md (newest first). Open it
    with a "### $NOW" header (this run's timestamp, one header per run, never merge under one date),
    then "Plan:", "Did:", and "Result:" lines — link any new knowledge as [[topic]].

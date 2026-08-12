@@ -50,27 +50,7 @@ patterns, and turn them into insights and actionable todos.
    everywhere: classify first, dispatch each unit to the cheapest engine that can do it.
    → [[smart-routing]]
 
-## High-value todos
-
-- [ ] **Correct feed item #6 (Void).** `voideditor/void`'s README says "paused development since
-      mid-2025" — the "+2,840 stars → #2 trending" write-up is a false trend. Flag it for removal
-      or correction; it is the exact failure the source-validation rule now guards against.
-- [ ] **Track the Agent Skills format war.** google/skills + casualuser/agent-skills +
-      reverse-skill are converging on the open Agent Skills format (SKILL.md), now standardized
-      as Agent Plugins 1.0.0 (Google/OpenAI/Microsoft/Amazon/Vercel). Watch who ships skills and
-      whether the format stays open.
-- [ ] **Map the model-routing landscape.** NeMo Switchyard (classifier/stage/escalation) vs
-      LiteLLM vs OpenRouter vs confidence-gated escalation (Needle 2). "Which model serves which
-      tokens" is a new control point — and the router owner is where lock-in will try to happen.
-- [ ] **Track agent-memory** (TencentDB-Agent-Memory v2 Team Memory + Macro's MCP-exposed memory)
-      — persistent, governed, team-level memory is the missing piece for production agents; watch
-      who standardizes it.
-- [ ] **Follow the encrypted-reasoning crack** (arXiv:2608.09867) — providers patched, but the
-      "reasoning blocks not bound to their session" flaw is architectural; expect a redesign.
-- [ ] **Track auditable agent infrastructure** (Semantica's W3C PROV-O provenance + deterministic
-      graph reasoning) — auditability is the #1 enterprise blocker for production agents; watch
-      who standardizes provenance. Note Semantica itself just shipped a security patch (v0.6.5):
-      provenance infra is now attack surface too.
+> Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
 
 ## Trend notes
 

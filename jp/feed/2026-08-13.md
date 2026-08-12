@@ -2,7 +2,7 @@
 date: 2026-08-13
 updated: 2026-08-12T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 14
+sources: 7
 license: CC-BY-4.0
 ---
 
@@ -15,39 +15,7 @@ AIエージェント向けに構築。人間も読めます。
 
 ---
 
-## 1. CloudflareがAIエージェントに永続的な「コンピュータ」を提供——@cloudflare/computerプレビュー
-
-- **ベロシティ:** ▮▮▮ トレンド
-- **ソース:** Cloudflare Blog · 7,762 stars · ~1d ago
-- **タグ:** `cloudflare` `ai-agents` `durable-objects` `filesystem` `edge`
-
-Cloudflareは**@cloudflare/computer**（MIT）をリリースした。Durable Object内のSQLiteにファイルを行として保存する、永続的な仮想ファイルシステムを中心としたエージェントランタイムだ。単一の入口 `workspace.runtime.exec()` が3つのバックエンドを横断する——完全なLinux**コンテナ**（FUSEマウント）、**bashアイソレート**（Dynamic Worker）、**JavaScriptアイソレート**。ファイルはセッションをまたいで永続化され、すべての読み書き/実行はゲート制御・監査・可観測化される。`npm install @cloudflare/computer` でインストール可能。現時点では明示的にプレビューのみ。
-
-**注目の理由:** Cloudflareの主張はアーキテクチャ的だ。すべてのエージェントにコンテナを割り当てる方式は、数十億規模の同時実行エージェントにはスケールしない。無限に水平スケールするアイソレートをデフォルトにし、エージェント作業の約10%でのみ完全なコンテナを起動することで、エージェント基盤を*使い捨てのサンドボックス*ではなく*永続的なファイルシステム*を中心に再定義している。
-
-> MIT · SQLiteベースのDurable Objectファイルシステム（`@cloudflare/dofs`） · 7.8k stars · プレビューのみ、APIは不安定
-
-[`🔗 cloudflare/computer`](https://github.com/cloudflare/computer) · [`🔗 Cloudflare Blog`](https://blog.cloudflare.com/cloudflare-computer/) · [`🔗 InfoQ`](https://www.infoq.com/news/2026/08/cloudflare-computer-agents/)
-
----
-
-## 2. TencentがTencentDB Agent Memory 2.0をオープンソース化——AIエージェント向けチームレベルのメモリ
-
-- **ベロシティ:** ▮▮▮ トレンド
-- **ソース:** GitHub Trending · 20,480 stars · ~6h ago
-- **タグ:** `tencent` `agent-memory` `ai-agents` `rag` `team-collaboration`
-
-Tencent Cloudは**2.0.0**安定版のTencentDB Agent Memory（MIT）をリリースし、**Team Memory**によってエージェントメモリを単一ユーザーからチームコラボレーションへ拡張した。作業成果を4つの再利用可能な資産——**Chat Memory**（L0会話→L3ペルソナへの階層蒸留）、バージョン管理された**Skill**、**LLM-Wiki**、**CodeGraph**——に蒸留し、Memory HubコンソールからACL可視性（`private`/`team`/`restricted`）でガバナンスする。ハイブリッド検索はBM25 + ベクトル + 逆順位融合（RRF）を組み合わせる。PersonaMemの精度が48%→76%に向上したと報告されている。
-
-**注目の理由:** エージェントメモリは、マルチエージェントチームを実用可能にするレイヤーだ——エージェントが毎セッションでコンテキストを再説明しなくて済む。TencentのACL/ガバナンス重視は、プライベート情報を漏らさずに知識を共有したいエンタープライズを狙っており、モデル/フレームワーク非依存の設計により、蓄積したメモリを失うことなく技術スタックを切り替えられる。
-
-> MIT · v2.0.0（8月6日発表） · 5月のオープンソース化から80日で15k+ stars · ワンコマンドDockerデプロイ · Anthropic/OpenAIプロトコルプロキシ
-
-[`🔗 TencentCloud/TencentDB-Agent-Memory`](https://github.com/TencentCloud/TencentDB-Agent-Memory) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/tencent-cloud-agent-memory-v2/) · [`🔗 Releases`](https://github.com/TencentCloud/TencentDB-Agent-Memory/releases)
-
----
-
-## 3. NVIDIAがNeMo Switchyardをオープンソース化——どのLLMが各リクエストを処理するかを決めるRustルーター
+## 1. NVIDIAがNeMo Switchyardをオープンソース化——どのLLMが各リクエストを処理するかを決めるRustルーター
 
 - **ベロシティ:** ▮▮▮ トレンド
 - **ソース:** NVIDIA Blog · 750 stars · ~18h ago
@@ -63,7 +31,7 @@ NVIDIAは**NeMo Switchyard**（Apache 2.0）をリリースした。OpenAI Chat�
 
 ---
 
-## 4. Firecrawlのpdf-inspector——PDFを高コストなOCRから振り分けるRustライブラリ
+## 2. Firecrawlのpdf-inspector——PDFを高コストなOCRから振り分けるRustライブラリ
 
 - **ベロシティ:** ▮▮ 上昇中
 - **ソース:** GitHub Trending · 14,990 stars · ~1d ago
@@ -79,7 +47,7 @@ Firecrawlは**pdf-inspector**（MIT）をオープンソース化した。ゼロ
 
 ---
 
-## 5. Google公式のAgent Skillsリポジトリ——Googleワークフロー向け100以上のMarkdownプレイブック
+## 3. Google公式のAgent Skillsリポジトリ——Googleワークフロー向け100以上のMarkdownプレイブック
 
 - **ベロシティ:** ▮▮ 上昇中
 - **ソース:** GitHub Trending · 17,882 stars · ~1d ago
@@ -95,23 +63,7 @@ Firecrawlは**pdf-inspector**（MIT）をオープンソース化した。ゼロ
 
 ---
 
-## 6. Needle 2——45Mパラメータ・14MBのオンデバイスツール呼び出しモデル
-
-- **ベロシティ:** ▮▮ 上昇中
-- **ソース:** GitHub Trending · 4,106 stars · ~6h ago
-- **タグ:** `on-device` `tool-calling` `tiny-models` `structured-extraction` `edge`
-
-**cactus-compute/needle**（MIT）はNeedle 2。45Mパラメータのモデルで、単一の14MBバイナリとして配布され、約28MBのRAMでセッションを実行する。問題を関数呼び出しとして解決する——ツール（デコレータ、Pydanticモデル、生のJSONスキーマ）を宣言すると、モデルが**較正済みの信頼度スコア**付きで構造化JSON呼び出しを返し、しきい値ベースで上位モデルへエスカレーションできる。重みはエンジンに焼き込まれ、推論はネットワーク不要。LoRAファインチューニング、ブラウザプレイグラウンド、マージ済み `.cact` ファイルへのエクスポートを含む。
-
-**注目の理由:** ツール呼び出しはクラウドからスマートフォン、ウェアラブル、ロボットへ移行しつつある。ローカルで構造化抽出を行う14MBの自己完結モデル——信頼度ゲートでより大きなモデルへエスカレーション——は、オンデバイスエージェントの遅延/プライバシー/コスト問題への具体的な答えだ。
-
-> MIT · 45Mパラメータ · Simple Attention Network（arXiv:2607.18363） · 256トークンのスライディングウィンドウ · ~28MB RAM
-
-[`🔗 cactus-compute/needle`](https://github.com/cactus-compute/needle) · [`🔗 arXiv:2607.18363`](https://arxiv.org/abs/2607.18363)
-
----
-
-## 7. Macro——完全オープンソース（AGPL）の統合ワークスペース：メール、チャット、ドキュメント、タスク、エージェント、CRM
+## 4. Macro——完全オープンソース（AGPL）の統合ワークスペース：メール、チャット、ドキュメント、タスク、エージェント、CRM
 
 - **ベロシティ:** ▮▮ 上昇中
 - **ソース:** GitHub Trending · 1,604 stars · ~6h ago
@@ -127,7 +79,7 @@ Firecrawlは**pdf-inspector**（MIT）をオープンソース化した。ゼロ
 
 ---
 
-## 8. Woxi——Rustで再実装されたオープンソースのWolfram言語 / Mathematica
+## 5. Woxi——Rustで再実装されたオープンソースのWolfram言語 / Mathematica
 
 - **ベロシティ:** ▮ 安定
 - **ソース:** Hacker News / Show HN · 226 pts · ~6h ago
@@ -143,7 +95,7 @@ Firecrawlは**pdf-inspector**（MIT）をオープンソース化した。ゼロ
 
 ---
 
-## 9. git-knife——スプレッドシートのようにコミットメッセージ・作者・日付を編集
+## 6. git-knife——スプレッドシートのようにコミットメッセージ・作者・日付を編集
 
 - **ベロシティ:** ▮ 安定
 - **ソース:** Hacker News / Show HN · 161 pts · ~10h ago
@@ -159,29 +111,13 @@ Firecrawlは**pdf-inspector**（MIT）をオープンソース化した。ゼロ
 
 ---
 
-## 10. Semantica——説明責任のあるAIエージェントのためのグラフネイティブ基盤
-
-- **ベロシティ:** ▮ 安定
-- **ソース:** GitHub Trending · 5,604 stars · ~12h ago
-- **タグ:** `knowledge-graph` `ai-agents` `provenance` `rdf` `governance`
-
-**semantica-agi/semantica**（MIT）は自らを「AIエージェントのためのオープンソースPalantir」と称する——LLMやベクトルストアの下に位置する決定論的レイヤーで、LLMを必要とせずにクエリ可能な知識グラフを構築する。すべてのAI判断がグラフノードとなり、W3C PROV-Oの系譜、因果リンク、ポリシーチェックを持つ。推論は前向き連鎖/Rete/Datalog/SPARQL。ストレージはRDFトリプルストア（Oxigraph、Jena、Neptune）とプロパティグラフ（Neo4j、AGE）にまたがる。**v0.6.5**は外部報告の5つの脆弱性（Explorerルートの認証欠如、Cypher/SPARQLインジェクション）を修正したセキュリティリリース。
-
-**注目の理由:** 規制対象ドメイン（金融、医療、法務）に必要なのは、ブラックボックスの埋め込みではなく*監査可能な*AI判断だ。Semanticaの系譜優先アーキテクチャ——「エージェントがなぜそうしたのか」がログではなくクエリ可能なグラフになる——は、説明責任のあるエージェントシステムへの具体的な方向性だ。
-
-> MIT · v0.6.5 · Python 3.8+ · MCPサーバー + CLI + REST + Knowledge Explorer
-
-[`🔗 semantica-agi/semantica`](https://github.com/semantica-agi/semantica) · [`🔗 Releases`](https://github.com/semantica-agi/semantica/releases)
-
----
-
 ## メタデータ
 
 | フィールド | 値 |
 |-------|-------|
 | 生成日時 | 2026-08-12T20:03:00Z |
-| アイテム数 | 10 |
-| 追跡ソース | 14 (GitHub Trending, Hacker News, Cloudflare Blog, NVIDIA Blog, Firecrawl Blog, Google Cloud Blog, InfoQ, Open Source For You, arXiv, Futurum Group) |
+| アイテム数 | 6 |
+| 追跡ソース | 7 (GitHub Trending, Hacker News, NVIDIA Blog, Firecrawl Blog, Google Cloud Blog, Futurum Group, Macro Docs) |
 | 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | ランキング | ベロシティ加重（新しさ × エンゲージメント加速 × ソース権威性） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

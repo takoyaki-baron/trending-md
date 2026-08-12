@@ -100,6 +100,15 @@ function parseMD(src, lang) {
     return items;
   }
 
+  // Render leading task-list markers (- [ ] / - [~] / - [x]) as styled checkboxes.
+  function _checkbox(s) {
+    return s.replace(/^\[([ xX~])\]\s+/, (_, m) => {
+      const cls = m === ' ' ? 'todo-open' : (m === '~' ? 'todo-doing' : 'todo-done');
+      const glyph = m === ' ' ? '☐' : (m === '~' ? '◐' : '☑');
+      return `<span class="todo ${cls}">${glyph}</span> `;
+    });
+  }
+
   const blocks = src.split(/\n\n+/);
   let html = '';
 
@@ -114,9 +123,9 @@ function parseMD(src, lang) {
       const rest = block.slice(hm[0].length).trim();
       if (rest) {
         if (/^[-*+]\s/.test(rest)) {
-          html += '<ul>' + _listItems(rest, /^[-*+]\s/).map(i => `<li>${_inline(i)}</li>`).join('') + '</ul>';
+          html += '<ul>' + _listItems(rest, /^[-*+]\s/).map(i => `<li>${_inline(_checkbox(i))}</li>`).join('') + '</ul>';
         } else if (/^\d+\.\s/.test(rest)) {
-          html += '<ol>' + _listItems(rest, /^\d+\.\s/).map(i => `<li>${_inline(i)}</li>`).join('') + '</ol>';
+          html += '<ol>' + _listItems(rest, /^\d+\.\s/).map(i => `<li>${_inline(_checkbox(i))}</li>`).join('') + '</ol>';
         } else if (rest.includes('|')) {
           const tbl = _table(rest);
           html += tbl ? tbl : `<p>${_inline(rest)}</p>`;
@@ -132,11 +141,11 @@ function parseMD(src, lang) {
       continue;
     }
     if (/^[-*+]\s/.test(block)) {
-      html += '<ul>' + _listItems(block, /^[-*+]\s/).map(i => `<li>${_inline(i)}</li>`).join('') + '</ul>';
+      html += '<ul>' + _listItems(block, /^[-*+]\s/).map(i => `<li>${_inline(_checkbox(i))}</li>`).join('') + '</ul>';
       continue;
     }
     if (/^\d+\.\s/.test(block)) {
-      html += '<ol>' + _listItems(block, /^\d+\.\s/).map(i => `<li>${_inline(i)}</li>`).join('') + '</ol>';
+      html += '<ol>' + _listItems(block, /^\d+\.\s/).map(i => `<li>${_inline(_checkbox(i))}</li>`).join('') + '</ol>';
       continue;
     }
     if (block.includes('|')) {
@@ -372,6 +381,10 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
   footer a { color: var(--text-secondary); }
   footer a:hover { color: var(--accent); }
   .agent-hint { font-size: 0.72rem; color: var(--text-tertiary); margin-top: 2px; }
+  .content li .todo { display: inline-block; width: 1.2em; text-align: center; font-weight: 700; margin-left: -1.2em; }
+  .todo-open { color: var(--text-tertiary); }
+  .todo-doing { color: var(--accent); }
+  .todo-done { color: var(--velocity-up); }
   .vel-hot { color: var(--velocity-hot); font-weight: 700; }
   .vel-up { color: var(--velocity-up); font-weight: 600; }
   @media (max-width: 600px) { .header-inner { padding: 12px 16px; } main { padding: 0 16px 40px; } .content h1 { font-size: 1.2rem; } .content h2 { font-size: 0.95rem; } }

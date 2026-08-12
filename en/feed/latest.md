@@ -2,7 +2,7 @@
 date: 2026-08-13
 updated: 2026-08-12T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 14
+sources: 7
 license: CC-BY-4.0
 ---
 
@@ -15,39 +15,7 @@ Built for AI agents. Readable by humans.
 
 ---
 
-## 1. Cloudflare gives AI agents a persistent computer — @cloudflare/computer preview
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Cloudflare Blog · 7,762 stars · ~1d ago
-- **Tags:** `cloudflare` `ai-agents` `durable-objects` `filesystem` `edge`
-
-Cloudflare released **@cloudflare/computer** (MIT) — an agent runtime built around a persistent virtual filesystem stored as rows in SQLite inside a Durable Object. One entry point, `workspace.runtime.exec()`, spans three backends: a full Linux **container** (mounted via FUSE), a **bash isolate** (Dynamic Worker), and a **JavaScript isolate**. Files persist across sessions, and every read/write/exec is gated, audited, and observed. Installable via `npm install @cloudflare/computer`; explicitly preview-only.
-
-**Why it matters:** Cloudflare's argument is architectural: assigning a container to every agent won't scale to billions of concurrent agents. By defaulting to infinitely-horizontal isolates and spinning up a full container for only ~10% of agent work, it reframes agent infrastructure around a *durable filesystem* rather than a disposable per-session sandbox.
-
-> MIT · SQLite-backed Durable Object filesystem (`@cloudflare/dofs`) · 7.8k stars · preview-only, APIs unstable
-
-[`🔗 cloudflare/computer`](https://github.com/cloudflare/computer) · [`🔗 Cloudflare Blog`](https://blog.cloudflare.com/cloudflare-computer/) · [`🔗 InfoQ`](https://www.infoq.com/news/2026/08/cloudflare-computer-agents/)
-
----
-
-## 2. Tencent open-sources TencentDB Agent Memory 2.0 — team-level memory for AI agents
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** GitHub Trending · 20,480 stars · ~6h ago
-- **Tags:** `tencent` `agent-memory` `ai-agents` `rag` `team-collaboration`
-
-Tencent Cloud shipped the stable **2.0.0** of TencentDB Agent Memory (MIT), extending agent memory from a single user to team collaboration via **Team Memory**. It distills work into four reusable assets — **Chat Memory** (L0 conversation → L3 persona distillation), versioned **Skills**, **LLM-Wiki**, and **CodeGraph** — governed from a Memory Hub console with ACL visibility (`private`/`team`/`restricted`). Hybrid retrieval combines BM25 + vectors + reciprocal-rank fusion. Reports PersonaMem accuracy up from 48% → 76%.
-
-**Why it matters:** Agent memory is the layer that makes multi-agent teams usable — agents stop re-explaining context every session. Tencent's ACL/governance emphasis targets enterprises that need shared knowledge without leaking private information, and the model/framework-agnostic design lets teams switch stacks without losing accumulated memory.
-
-> MIT · v2.0.0 (announced Aug 6) · 15k+ stars within 80 days of May open-sourcing · one-command Docker deploy · Anthropic/OpenAI protocol proxy
-
-[`🔗 TencentCloud/TencentDB-Agent-Memory`](https://github.com/TencentCloud/TencentDB-Agent-Memory) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/tencent-cloud-agent-memory-v2/) · [`🔗 Releases`](https://github.com/TencentCloud/TencentDB-Agent-Memory/releases)
-
----
-
-## 3. NVIDIA open-sources NeMo Switchyard — a Rust router that decides which LLM handles each request
+## 1. NVIDIA open-sources NeMo Switchyard — a Rust router that decides which LLM handles each request
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** NVIDIA Blog · 750 stars · ~18h ago
@@ -63,7 +31,7 @@ NVIDIA released **NeMo Switchyard** (Apache 2.0), a Rust proxy/library that tran
 
 ---
 
-## 4. Firecrawl's pdf-inspector — a Rust library that routes PDFs away from expensive OCR
+## 2. Firecrawl's pdf-inspector — a Rust library that routes PDFs away from expensive OCR
 
 - **Velocity:** ▮▮ rising
 - **Source:** GitHub Trending · 14,990 stars · ~1d ago
@@ -79,7 +47,7 @@ Firecrawl open-sourced **pdf-inspector** (MIT), a from-scratch Rust library that
 
 ---
 
-## 5. Google's official Agent Skills repo — 100+ markdown playbooks for agentic Google workflows
+## 3. Google's official Agent Skills repo — 100+ markdown playbooks for agentic Google workflows
 
 - **Velocity:** ▮▮ rising
 - **Source:** GitHub Trending · 17,882 stars · ~1d ago
@@ -95,23 +63,7 @@ Firecrawl open-sourced **pdf-inspector** (MIT), a from-scratch Rust library that
 
 ---
 
-## 6. Needle 2 — a 45M-param, 14MB model for on-device tool calling
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · 4,106 stars · ~6h ago
-- **Tags:** `on-device` `tool-calling` `tiny-models` `structured-extraction` `edge`
-
-**cactus-compute/needle** (MIT) is Needle 2, a 45M-parameter model that ships as a single 14MB binary and runs a session in ~28MB of RAM. It solves problems as function calls: declare tools (decorators, Pydantic models, or raw JSON schemas) and the model returns structured JSON calls with a **calibrated confidence score** for threshold-based escalation. Weights are baked into the engine — inference does no network. Includes LoRA fine-tuning, a browser playground, and export to a merged `.cact` file.
-
-**Why it matters:** Tool calling is moving off the cloud to phones, wearables, and robots. A 14MB self-contained model that does structured extraction locally — with confidence-gated escalation to bigger models — is a concrete answer to the latency/privacy/cost problem of on-device agents.
-
-> MIT · 45M params · Simple Attention Network (arXiv:2607.18363) · 256-token sliding window · ~28MB RAM
-
-[`🔗 cactus-compute/needle`](https://github.com/cactus-compute/needle) · [`🔗 arXiv:2607.18363`](https://arxiv.org/abs/2607.18363)
-
----
-
-## 7. Macro — a fully open-source (AGPL) unified workspace: email, chat, docs, tasks, agents, CRM
+## 4. Macro — a fully open-source (AGPL) unified workspace: email, chat, docs, tasks, agents, CRM
 
 - **Velocity:** ▮▮ rising
 - **Source:** GitHub Trending · 1,604 stars · ~6h ago
@@ -127,7 +79,7 @@ Firecrawl open-sourced **pdf-inspector** (MIT), a from-scratch Rust library that
 
 ---
 
-## 8. Woxi — an open-source Wolfram Language / Mathematica reimplementation in Rust
+## 5. Woxi — an open-source Wolfram Language / Mathematica reimplementation in Rust
 
 - **Velocity:** ▮ steady
 - **Source:** Hacker News / Show HN · 226 pts · ~6h ago
@@ -143,7 +95,7 @@ Firecrawl open-sourced **pdf-inspector** (MIT), a from-scratch Rust library that
 
 ---
 
-## 9. git-knife — edit commit messages, authors, and dates like a spreadsheet
+## 6. git-knife — edit commit messages, authors, and dates like a spreadsheet
 
 - **Velocity:** ▮ steady
 - **Source:** Hacker News / Show HN · 161 pts · ~10h ago
@@ -159,29 +111,13 @@ Firecrawl open-sourced **pdf-inspector** (MIT), a from-scratch Rust library that
 
 ---
 
-## 10. Semantica — graph-native infrastructure for accountable AI agents
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · 5,604 stars · ~12h ago
-- **Tags:** `knowledge-graph` `ai-agents` `provenance` `rdf` `governance`
-
-**semantica-agi/semantica** (MIT) bills itself "the open-source Palantir for AI agents" — a deterministic layer under LLMs and vector stores that builds queryable knowledge graphs without requiring an LLM. Every AI decision becomes a graph node with W3C PROV-O lineage, causal links, and policy checks; reasoning is forward-chaining/Rete/Datalog/SPARQL. Storage spans RDF triple stores (Oxigraph, Jena, Neptune) and property graphs (Neo4j, AGE). **v0.6.5** is a security release fixing five externally-reported vulns (missing auth on Explorer routes, Cypher/SPARQL injection).
-
-**Why it matters:** Regulated domains (finance, healthcare, legal) need *auditable* AI decisions, not black-box embeddings. Semantica's provenance-first architecture — where "why did the agent do this" is a queryable graph, not a log — is a concrete direction for accountable agent systems.
-
-> MIT · v0.6.5 · Python 3.8+ · MCP server + CLI + REST + Knowledge Explorer
-
-[`🔗 semantica-agi/semantica`](https://github.com/semantica-agi/semantica) · [`🔗 Releases`](https://github.com/semantica-agi/semantica/releases)
-
----
-
 ## Metadata
 
 | Field | Value |
 |-------|-------|
 | Generated | 2026-08-12T20:03:00Z |
-| Items | 10 |
-| Sources tracked | 14 (GitHub Trending, Hacker News, Cloudflare Blog, NVIDIA Blog, Firecrawl Blog, Google Cloud Blog, InfoQ, Open Source For You, arXiv, Futurum Group) |
+| Items | 6 |
+| Sources tracked | 7 (GitHub Trending, Hacker News, NVIDIA Blog, Firecrawl Blog, Google Cloud Blog, Futurum Group, Macro Docs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

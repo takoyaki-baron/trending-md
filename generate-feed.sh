@@ -20,7 +20,7 @@ git pull origin master --ff-only 2>&1 || echo "(git pull skipped)"
 
 FEED_FILE="en/feed/$TODAY.md"
 MAX_TOTAL=100
-MAX_PER_RUN=10
+MAX_PER_RUN=20
 ITEM_COUNT=0
 
 # Determine mode: FRESH vs MERGE
@@ -42,6 +42,20 @@ else
   MODE="fresh"
 fi
 
+# Build cross-day dedup history: repos + titles already seen in the previous 3 days.
+# A story is a duplicate if its primary GitHub repo already appeared, or it's the same
+# event/CVE/story — this keeps each day's feed net-new so information accumulates, not repeats.
+RECENT_HISTORY=""
+for i in 1 2 3; do
+  D=$(date -v-${i}d +%Y-%m-%d)
+  F="en/feed/$D.md"
+  [ -f "$F" ] || continue
+  RECENT_HISTORY="$RECENT_HISTORY
+### $D
+$(grep -oE 'github.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+' "$F" | sort -u | sed 's/^/- repo: /')
+$(grep -E '^## [0-9]+\.' "$F" | sed 's/^## [0-9]*\. /- story: /')"
+done
+
 # Write prompt to temp file
 PROMPT_FILE=$(mktemp /tmp/trending-prompt.XXXXXX)
 
@@ -54,9 +68,12 @@ Max total is $MAX_TOTAL. If no genuinely new stories exist, exit cleanly without
 
 1. Read the existing $FEED_FILE to understand what's already covered. DO NOT rephrase or modify existing items — only add net-new stories (different events, different companies, different CVEs, different repos).
 
-2. Research new trending repos and developer tools from GitHub Trending, Hacker News Show HN, and major open-source releases. Skip corporate news (acquisitions, funding, strategy). At least 7 of 10 items must link to a GitHub repo. Use WebSearch and WebFetch.
+2. Research new items across five tracks — (a) AI models & research (releases, papers, benchmarks), (b) AI tools & agent infra (repos + products), (c) security & CVEs (new vulns, exploits, patches), (d) developer tools & open-source releases, (e) significant industry news (product launches, safety incidents, policy). Use GitHub Trending, Hacker News (front page + Show HN), security/CVE feeds, and major AI/tech news. Skip pure corporate news (funding rounds, strategy) unless tied to a concrete release. Every item must link to a primary source (GitHub repo, arXiv, vendor blog, or CVE record) — a balanced mix across tracks, not all repos.
 
-3. Dedup against existing items. Skip anything that overlaps with what's already there. Quality > quantity — if only 3 genuinely new items exist, add 3, not 10.
+3. Dedup against existing items AND against the recent-history list below. Skip anything whose primary GitHub repo already appears below, or that is the same event/CVE/story as an item already covered in the last 3 days. Quality > quantity — if only 3 genuinely new items exist, add 3, not 10. A repo is new if (and only if) its slug does NOT appear in the recent-history list.
+
+RECENT HISTORY (previous 3 days — do NOT repeat these repos or stories):
+${RECENT_HISTORY:-"(none — first days of the feed)"}
 
 4. Append new items after existing ones in $FEED_FILE, renumbering sequentially (## $((ITEM_COUNT + 1)). ...). Follow the exact format in CLAUDE.md. Each item must have: velocity, source with points+time, tags, description, "Why it matters", and at least 2 source links.
 
@@ -70,11 +87,16 @@ else
   cat > "$PROMPT_FILE" << ENDPROMPT
 Generate today's trending feed for $TODAY (FRESH mode — first run of the day).
 
-FOCUS: GitHub repos and open-source projects. At least 7 of 10 items must link to a specific GitHub repo. Check GitHub Trending daily + weekly first, then HN Show HN. Skip corporate news (acquisitions, funding, strategy) unless directly tied to a repo release.
+FOCUS: a balanced mix across five tracks — (a) AI models & research (releases, papers, benchmarks), (b) AI tools & agent infra (repos + products), (c) security & CVEs (new vulns, exploits, patches), (d) developer tools & open-source releases, (e) significant industry news (product launches, safety incidents, policy). Check GitHub Trending (daily + weekly), Hacker News (front page + Show HN), security/CVE feeds, and major AI/tech news. Skip pure corporate news (funding rounds, strategy) unless tied to a concrete release.
 
-1. Research trending repos and developer tools from GitHub Trending, Hacker News Show HN, and major open-source releases. Use WebSearch and WebFetch.
+1. Research new items across the five tracks above. Use WebSearch and WebFetch.
 
-2. Write $FEED_FILE with up to $BATCH items following the exact format in CLAUDE.md. Each item must have: velocity, source with points+time, tags, description, "Why it matters", and at least 2 source links (include GitHub repo URL).
+2. Write $FEED_FILE with up to $BATCH items following the exact format in CLAUDE.md. Each item must have: velocity, source with points+time, tags, description, "Why it matters", and at least 2 source links (link to a primary source — GitHub repo, arXiv, vendor blog, or CVE record; a balanced mix, not all repos).
+
+3. Dedup against the recent-history list below — skip anything whose primary GitHub repo already appears there, or that is the same event/CVE/story covered in the last 3 days. Each day's feed must be net-new so information accumulates instead of repeating. A repo is new if (and only if) its slug does NOT appear below.
+
+RECENT HISTORY (previous 3 days — do NOT repeat these repos or stories):
+${RECENT_HISTORY:-"(none — first days of the feed)"}
 
 3. Translate to zh/feed/$TODAY.md (Simplified Chinese) and jp/feed/$TODAY.md (Japanese). Keep tags in English, translate everything else.
 

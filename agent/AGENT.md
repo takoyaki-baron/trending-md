@@ -24,12 +24,16 @@ Expand your own capability over time, in these five directions:
 ## Memory model
 
 - **`en/agent.md`** is your memory window — distilled notes. It has frontmatter `last_processed`
-  plus sections: *Purpose*, *Identity*, *Active theses*, *High-value todos*, *Trend notes*. You
-  read and rewrite it every run.
-- **`en/action.md`** is your action page — self-proposed capability-expansion todos + a
-  **log** (newest first). Each log entry is one agent run and opens with its own
-  `### YYYY-MM-DD HH:MM` header (the run's timestamp, UTC+8) followed by Plan / Did / Result
-  bullets. Trilingual (zh/jp translations).
+  plus sections: *Purpose*, *Identity*, *Active theses*, *Trend notes*. You read and rewrite it
+  every run. It holds what you **know**, not your to-do list.
+- **`en/action.md`** is your action page — the single **Agenda** (your to-do list) + a
+  **log** (newest first). Trilingual (zh/jp translations).
+  - The **Agenda** is the one place your todos live. Two buckets:
+    - `### Research — what I want to know next` — open questions to chase (from your theses).
+    - `### System — self-iteration` — how you improve your own pipeline/site.
+  - Each item carries a status marker: `[ ]` next · `[~]` in-progress · `[x]` done (keep a
+    `(→ log YYYY-MM-DD HH:MM)` pointer so a done item traces to the run that finished it).
+  - The **log** is one entry per run, each opening with `### YYYY-MM-DD HH:MM` (UTC+8).
 - **`agent/knowledge/<lang>/`** is your cold-storage library — **trilingual**. Archive a
   `<topic>.md` under `agent/knowledge/en/` (canonical English), translate it to zh + jp, keep the
   `topic:` slug identical across locales, localize only `title:`. Maintain a per-locale `index.md`.
@@ -41,9 +45,11 @@ Expand your own capability over time, in these five directions:
    a one-line pointer.
 2. **Only learn net-new items.** Compare today's feed against `last_processed`; skip what you've
    seen; bump the marker.
-3. **Produce value, not verbosity.** A few crisp notes, at most a few new/changed theses, and any
-   high-value todos that follow. Do NOT transcribe the feed.
-4. **Insights + high-value todos.** Always end with concrete, actionable todos.
+3. **Produce value, not verbosity.** A few crisp notes, at most a few new/changed theses. Do NOT
+   transcribe the feed.
+4. **Insights become agenda items.** When a note or thesis raises an open question ("who
+   standardizes X?", "does Y hold?"), add it to the agenda's **Research** bucket on
+   `en/action.md` — never leave a bare to-do list in `en/agent.md`.
 5. **Language.** Write en files in English, translate to zh (Simplified Chinese) + jp (Japanese).
    Keep repo names, URLs, code identifiers, and technical terms untranslated where natural.
 6. **Every link must be clickable.** A valid link beats plain text. Reference a knowledge file with
@@ -55,24 +61,29 @@ Expand your own capability over time, in these five directions:
 
 ## Self-execution (every run)
 
-After learning, advance your own capability by executing your own todos:
+After learning, advance the **Agenda** on `en/action.md` — this is your own exploration (what to
+know next) and self-iteration (how to improve your pipeline). The outcome MUST be either a change
+to `en/agent.md` (new notes/theses) or a change to the site workflow itself (`build.js`,
+`agent-run.sh`, `i18n.js`, `generate-feed.sh`, `CLAUDE.md`, …) — not merely a knowledge file.
 
-1. Read `en/action.md` — pick 1–3 pending todos you can genuinely advance this run.
+1. Read `en/action.md` — pick 1–3 open `[ ]` items (mix Research + System) you can genuinely
+   advance this run; flip them to `[~]`.
 2. Execute them with full repo + web access (this is `claude -p` with your identity + repo).
-3. Record the outcome — new/updated knowledge files, findings, or corrections.
+3. Record the outcome; flip finished items to `[x]` with a `(→ log YYYY-MM-DD HH:MM)` pointer.
 4. Prepend a new entry at the top of `## Log` in `en/action.md` (newest first). Each entry opens
    with its own `### YYYY-MM-DD HH:MM` header (the run's timestamp, UTC+8) — one header per run,
    never merge multiple runs under one date — followed by:
    - **Plan:** what you set out to do
-   - **Did:** what you actually did
+   - **Did:** what you actually did (name the files changed)
    - **Result:** links to the outcome (new knowledge files as `[[topic]]`)
 5. Translate `en/action.md` → `zh/action.md` + `jp/action.md`.
 
 ## Output contract (every run)
 
-1. Rewrite `en/agent.md` — update `## Purpose` (keep verbatim), notes + theses + todos, bump
-   `last_processed`.
+1. Rewrite `en/agent.md` — update `## Purpose` (keep verbatim), notes + theses, bump
+   `last_processed`. Open questions go to the action-page Agenda, not here.
 2. Create/update `agent/knowledge/en/*.md`, translate each to zh + jp, update each
    `agent/knowledge/<lang>/index.md`.
 3. Translate `en/agent.md` → `zh/agent.md` + `jp/agent.md`.
-4. Execute todos + prepend a log entry to `en/action.md`, translate it to zh + jp.
+4. Advance the Agenda (flip `[ ]`→`[~]`→`[x]`, add new items) + prepend a log entry to
+   `en/action.md`, translate it to zh + jp.

@@ -7,7 +7,7 @@ Canonical content in Markdown (`.md`) files; web view is a styled HTML render. B
 ## Feed generation workflow (3x daily: 04:00 / 12:00 / 20:00)
 
 The feed file `en/feed/YYYY-MM-DD.md` is built up across 3 runs per day.
-Each run adds up to 10 new items. Cap is 100 per day per language (safety limit);
+Each run adds up to 20 new items. Cap is 100 per day per language (safety limit);
 the real constraint is **dedup** — only genuinely new stories get added.
 
 ### MERGE mode (subsequent runs — file already exists)
@@ -29,24 +29,28 @@ When `en/feed/YYYY-MM-DD.md` already exists:
 ### FRESH mode (first run of the day — file doesn't exist yet)
 
 When `en/feed/YYYY-MM-DD.md` does NOT exist:
-1. **Research** — Search GitHub Trending first (daily + weekly), then HN/Show HN.
-   Every item must center on a specific GitHub repo or open-source project.
-   At least 7 of 10 items must have a GitHub repo URL.
-2. **Write** `en/feed/YYYY-MM-DD.md` with 10 items
+1. **Research** — search across the five tracks below (not just GitHub). Each item must
+   link to a primary source (GitHub repo, arXiv, vendor blog, or CVE record) — a balanced
+   mix, not all repos.
+2. **Write** `en/feed/YYYY-MM-DD.md` with up to 20 items
 3. **Translate** to zh/ and jp/
 4. **Update** all indices
 
-### Content focus: GitHub repos first
+### Content focus: five balanced tracks
 
-**Primary (≥70% of items):** GitHub repos — trending projects, new releases, interesting tools,
-libraries, frameworks, open-source AI models. Every item should center on a concrete repo/project.
+Cover a mix every day; don't let any single track dominate. Each item must link to a primary
+source (GitHub repo, arXiv, vendor blog, or CVE record):
 
-**Secondary (≤30% of items):** Developer-relevant news that directly impacts how people code —
-new APIs, platform changes, language/ecosystem shifts, major security vulnerabilities with CVEs.
+1. **AI models & research** — model releases, papers, benchmarks, training/inference techniques.
+2. **AI tools & agent infra** — repos + products: agent runtimes, memory, skills, MCP, routing.
+3. **Security & CVEs** — new vulnerabilities, exploits, patches; prioritize CVSS ≥9.0 or
+   actively-exploited issues.
+4. **Developer tools & open-source releases** — trending repos, new libraries/frameworks.
+5. **Industry news** — product launches, safety incidents, policy — only when tied to a
+   concrete release or a dev-relevant impact.
 
-**Avoid unless repo-adjacent:** corporate acquisitions, funding rounds, company strategy,
-non-technical AI policy debates, general tech industry news. If a story doesn't have a repo
-URL or a concrete dev workflow impact, skip it.
+**Avoid:** pure funding rounds, corporate strategy, non-technical AI policy debates. If a story
+has no primary source to cite or no concrete impact, skip it.
 
 ### Source validation — VISIT, don't trust aggregates (MANDATORY — 2026-08-12 Void lesson)
 
@@ -76,14 +80,15 @@ underlying pages — this produced a two-layer false signal in a single item.
 - The single root cause: **aggregate metrics were trusted without visiting the actual pages.**
   Star velocity is a signal to INVESTIGATE, not a signal to PUBLISH.
 
-### Sources (in priority order)
+### Sources (check every run)
 
-1. **GitHub Trending** (daily + weekly) — PRIMARY. Check every run.
-2. **Hacker News** — filter for Show HN, project launches, new tools/libraries
-3. **Major repo releases** — check popular orgs (Meta, Google, Anthropic, OpenAI, Cloudflare,
-   Vercel, Shopify, etc.) for new open-source releases
-4. **Chinese open-source** — GitHub trending in Chinese, CSDN GitHub Hot, 36Kr tech
-5. **Security** — only CVSS ≥9.0 or widely-exploited vulnerabilities (CVE, GHSA)
+1. **GitHub Trending** (daily + weekly) — repos + open-source releases
+2. **Hacker News** — front page + Show HN (project launches, tools, discussions)
+3. **Security/CVE feeds** — NVD, CISA KEV, vendor advisories (prioritize CVSS ≥9.0 / actively exploited)
+4. **AI model & research** — arXiv, Hugging Face, vendor blogs (Meta, Google, Anthropic, OpenAI,
+   NVIDIA, Alibaba, etc.)
+5. **Major AI/tech news** — product launches, safety incidents (check the primary source, not just aggregates)
+6. **Chinese open-source** — GitHub trending (zh), CSDN GitHub Hot, 36Kr tech
 
 ## Feed file format
 
@@ -122,7 +127,7 @@ license: CC-BY-4.0
 - Velocity is relative to THIS RUN's batch, not the full 30-item list
 
 ### Rules
-- **Up to 10 items per run**, 100 max per day per language (safety cap; dedup is the real limiter)
+- **Up to 20 items per run**, 100 max per day per language (safety cap; dedup is the real limiter)
 - Ranked by velocity (recency × engagement acceleration × source authority), NOT total attention
 - Every item MUST have at least 2 source links
 - Tags must be lowercase, backtick-wrapped `<kebab-case>` or `<single-word>`
@@ -162,7 +167,7 @@ license: CC-BY-4.0
 
 ## File structure
 ```
-en/feed/YYYY-MM-DD.md    ← English daily feed (canonical, up to 30 items)
+en/feed/YYYY-MM-DD.md    ← English daily feed (canonical, up to 100 items)
 zh/feed/YYYY-MM-DD.md    ← Chinese translation (full mirror)
 jp/feed/YYYY-MM-DD.md    ← Japanese translation (full mirror)
 en/feed/latest.md        ← Copy of today's en feed
@@ -174,9 +179,9 @@ en/archive/index.md      ← Archive index (same list, archive context)
 
 | Run | Time (local) | Mode | Target |
 |-----|-------------|------|--------|
-| 1 | 04:03 UTC+8 | FRESH or MERGE | Up to 10 items |
-| 2 | 12:03 UTC+8 | MERGE | Up to 10 new items (20 max) |
-| 3 | 20:03 UTC+8 | MERGE | Up to 10 new items (dedup-gated, 100 max) |
+| 1 | 04:03 UTC+8 | FRESH or MERGE | Up to 20 items |
+| 2 | 12:03 UTC+8 | MERGE | Up to 20 new items (40 max) |
+| 3 | 20:03 UTC+8 | MERGE | Up to 20 new items (dedup-gated, 100 max) |
 
 Launchd triggers `generate-feed.sh` at these times. `deploy-cron.sh` runs at 22:07 as a
 safety-net deploy.

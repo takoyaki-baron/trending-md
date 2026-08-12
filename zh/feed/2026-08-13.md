@@ -2,7 +2,7 @@
 date: 2026-08-13
 updated: 2026-08-12T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 14
+sources: 7
 license: CC-BY-4.0
 ---
 
@@ -15,39 +15,7 @@ license: CC-BY-4.0
 
 ---
 
-## 1. Cloudflare 为 AI 智能体提供持久化的"计算机" —— @cloudflare/computer 预览版
-
-- **传播速度：** ▮▮▮ 趋势热榜
-- **来源：** Cloudflare Blog · 7,762 stars · ~1d ago
-- **标签：** `cloudflare` `ai-agents` `durable-objects` `filesystem` `edge`
-
-Cloudflare 发布了 **@cloudflare/computer**（MIT）——一个围绕持久化虚拟文件系统构建的智能体运行时，文件以行形式存储在 Durable Object 内的 SQLite 中。单一入口 `workspace.runtime.exec()` 覆盖三种后端：完整的 Linux **容器**（经 FUSE 挂载）、**bash 隔离环境**（Dynamic Worker）和 **JavaScript 隔离环境**。文件跨会话持久化，每次读写/执行都经过门控、审计和观测。可通过 `npm install @cloudflare/computer` 安装；目前明确为预览版。
-
-**值得关注的原因：** Cloudflare 的论证是架构层面的：为每个智能体分配一个容器，无法扩展到数十亿并发智能体的规模。通过默认使用无限水平扩展的隔离环境、仅在约 10% 的智能体工作中才启动完整容器，它将智能体基础设施重新定义为围绕*持久文件系统*而非每次会话即弃的沙箱。
-
-> MIT · 基于 SQLite 的 Durable Object 文件系统（`@cloudflare/dofs`） · 7.8k stars · 预览版，API 不稳定
-
-[`🔗 cloudflare/computer`](https://github.com/cloudflare/computer) · [`🔗 Cloudflare Blog`](https://blog.cloudflare.com/cloudflare-computer/) · [`🔗 InfoQ`](https://www.infoq.com/news/2026/08/cloudflare-computer-agents/)
-
----
-
-## 2. 腾讯开源 TencentDB Agent Memory 2.0 —— 面向 AI 智能体的团队级记忆
-
-- **传播速度：** ▮▮▮ 趋势热榜
-- **来源：** GitHub Trending · 20,480 stars · ~6h ago
-- **标签：** `tencent` `agent-memory` `ai-agents` `rag` `team-collaboration`
-
-腾讯云发布了 **2.0.0** 稳定版的 TencentDB Agent Memory（MIT），通过 **Team Memory** 将智能体记忆从单个用户扩展到团队协作场景。它将工作成果蒸馏为四种可复用资产——**Chat Memory**（L0 对话 → L3 人设分层蒸馏）、带版本管理的 **Skill**、**LLM-Wiki** 和 **CodeGraph**——并在 Memory Hub 控制台中通过 ACL 可见性（`private`/`team`/`restricted`）进行治理。混合检索结合 BM25 + 向量 + 倒数排名融合。据称 PersonaMem 准确率从 48% 提升至 76%。
-
-**值得关注的原因：** 智能体记忆是让多智能体团队真正可用的关键层——智能体不再每次会话都重新解释上下文。腾讯对 ACL/治理的强调瞄准的是那些需要共享知识、又不想泄露私密信息的企业；而模型与框架无关的设计让团队切换技术栈时不会丢失积累的记忆。
-
-> MIT · v2.0.0（8 月 6 日发布） · 5 月开源后 80 天内收获 15k+ stars · 一键 Docker 部署 · 支持 Anthropic/OpenAI 协议代理
-
-[`🔗 TencentCloud/TencentDB-Agent-Memory`](https://github.com/TencentCloud/TencentDB-Agent-Memory) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/tencent-cloud-agent-memory-v2/) · [`🔗 Releases`](https://github.com/TencentCloud/TencentDB-Agent-Memory/releases)
-
----
-
-## 3. NVIDIA 开源 NeMo Switchyard —— 一个决定哪个 LLM 处理每次请求的 Rust 路由器
+## 1. NVIDIA 开源 NeMo Switchyard —— 一个决定哪个 LLM 处理每次请求的 Rust 路由器
 
 - **传播速度：** ▮▮▮ 趋势热榜
 - **来源：** NVIDIA Blog · 750 stars · ~18h ago
@@ -63,7 +31,7 @@ NVIDIA 发布了 **NeMo Switchyard**（Apache 2.0），一个 Rust 代理/库，
 
 ---
 
-## 4. Firecrawl 的 pdf-inspector —— 一个将 PDF 从昂贵 OCR 中分流出去的 Rust 库
+## 2. Firecrawl 的 pdf-inspector —— 一个将 PDF 从昂贵 OCR 中分流出去的 Rust 库
 
 - **传播速度：** ▮▮ 热度上升
 - **来源：** GitHub Trending · 14,990 stars · ~1d ago
@@ -79,7 +47,7 @@ Firecrawl 开源了 **pdf-inspector**（MIT），一个从零编写的 Rust 库�
 
 ---
 
-## 5. Google 官方 Agent Skills 仓库 —— 100+ 个面向 Google 智能体工作流的 Markdown 操作手册
+## 3. Google 官方 Agent Skills 仓库 —— 100+ 个面向 Google 智能体工作流的 Markdown 操作手册
 
 - **传播速度：** ▮▮ 热度上升
 - **来源：** GitHub Trending · 17,882 stars · ~1d ago
@@ -95,23 +63,7 @@ Firecrawl 开源了 **pdf-inspector**（MIT），一个从零编写的 Rust 库�
 
 ---
 
-## 6. Needle 2 —— 一个 45M 参数、14MB 的端侧工具调用模型
-
-- **传播速度：** ▮▮ 热度上升
-- **来源：** GitHub Trending · 4,106 stars · ~6h ago
-- **标签：** `on-device` `tool-calling` `tiny-models` `structured-extraction` `edge`
-
-**cactus-compute/needle**（MIT）是 Needle 2，一个 45M 参数的模型，以单个 14MB 二进制形式发布，仅需约 28MB 内存即可运行会话。它把问题当作函数调用来解决：声明工具（装饰器、Pydantic 模型或原始 JSON schema），模型返回结构化 JSON 调用，并带有**校准后的置信度分数**用于基于阈值的升级。权重烘焙进引擎——推理不联网。包含 LoRA 微调、浏览器 playground，以及导出为合并的 `.cact` 文件。
-
-**值得关注的原因：** 工具调用正在从云端迁移到手机、可穿戴设备和机器人。一个 14MB 自包含模型能在本地完成结构化提取——并可通过置信度门控升级到更大的模型——是对端侧智能体延迟/隐私/成本问题的具体解答。
-
-> MIT · 45M 参数 · Simple Attention Network（arXiv:2607.18363） · 256-token 滑动窗口 · ~28MB 内存
-
-[`🔗 cactus-compute/needle`](https://github.com/cactus-compute/needle) · [`🔗 arXiv:2607.18363`](https://arxiv.org/abs/2607.18363)
-
----
-
-## 7. Macro —— 一个完全开源（AGPL）的一体化工作空间：邮件、聊天、文档、任务、智能体、CRM
+## 4. Macro —— 一个完全开源（AGPL）的一体化工作空间：邮件、聊天、文档、任务、智能体、CRM
 
 - **传播速度：** ▮▮ 热度上升
 - **来源：** GitHub Trending · 1,604 stars · ~6h ago
@@ -127,7 +79,7 @@ Firecrawl 开源了 **pdf-inspector**（MIT），一个从零编写的 Rust 库�
 
 ---
 
-## 8. Woxi —— 用 Rust 重写的开源 Wolfram 语言 / Mathematica 实现
+## 5. Woxi —— 用 Rust 重写的开源 Wolfram 语言 / Mathematica 实现
 
 - **传播速度：** ▮ 稳定关注
 - **来源：** Hacker News / Show HN · 226 pts · ~6h ago
@@ -143,7 +95,7 @@ Firecrawl 开源了 **pdf-inspector**（MIT），一个从零编写的 Rust 库�
 
 ---
 
-## 9. git-knife —— 像电子表格一样编辑提交信息、作者和日期
+## 6. git-knife —— 像电子表格一样编辑提交信息、作者和日期
 
 - **传播速度：** ▮ 稳定关注
 - **来源：** Hacker News / Show HN · 161 pts · ~10h ago
@@ -159,29 +111,13 @@ Firecrawl 开源了 **pdf-inspector**（MIT），一个从零编写的 Rust 库�
 
 ---
 
-## 10. Semantica —— 面向可问责 AI 智能体的图原生基础设施
-
-- **传播速度：** ▮ 稳定关注
-- **来源：** GitHub Trending · 5,604 stars · ~12h ago
-- **标签：** `knowledge-graph` `ai-agents` `provenance` `rdf` `governance`
-
-**semantica-agi/semantica**（MIT）自称"面向 AI 智能体的开源 Palantir"——一个位于 LLM 和向量存储之下的确定性层，无需 LLM 即可构建可查询的知识图谱。每一次 AI 决策都成为一个图节点，带有 W3C PROV-O 溯源、因果链接和策略检查；推理采用前向链/Rete/Datalog/SPARQL。存储横跨 RDF 三元组存储（Oxigraph、Jena、Neptune）和属性图（Neo4j、AGE）。**v0.6.5** 是一个安全版本，修复了五个外部报告的漏洞（Explorer 路由缺少认证、Cypher/SPARQL 注入）。
-
-**值得关注的原因：** 受监管领域（金融、医疗、法律）需要的是*可审计*的 AI 决策，而不是黑箱嵌入。Semantica 以溯源为先的架构——"智能体为何这样做"是可查询的图而非日志——是构建可问责智能体系统的一个具体方向。
-
-> MIT · v0.6.5 · Python 3.8+ · MCP server + CLI + REST + Knowledge Explorer
-
-[`🔗 semantica-agi/semantica`](https://github.com/semantica-agi/semantica) · [`🔗 Releases`](https://github.com/semantica-agi/semantica/releases)
-
----
-
 ## 元数据
 
 | 字段 | 值 |
 |-------|-------|
 | 生成时间 | 2026-08-12T20:03:00Z |
-| 条目数 | 10 |
-| 追踪来源数 | 14（GitHub Trending、Hacker News、Cloudflare Blog、NVIDIA Blog、Firecrawl Blog、Google Cloud Blog、InfoQ、Open Source For You、arXiv、Futurum Group） |
+| 条目数 | 6 |
+| 追踪来源数 | 7（GitHub Trending、Hacker News、NVIDIA Blog、Firecrawl Blog、Google Cloud Blog、Futurum Group、Macro Docs） |
 | 更新时段 | 04:03, 12:03, 20:03 UTC+8（每日3次） |
 | 排序方式 | 传播速度加权（时效性 x 参与度加速度 x 来源权威性） |
 | 许可证 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
