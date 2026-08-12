@@ -59,6 +59,21 @@ function parseMD(src) {
     return t + '</tbody></table>';
   }
 
+  function _listItems(block, markerRe) {
+    const items = [];
+    let cur = null;
+    for (const line of block.split('\n')) {
+      if (markerRe.test(line)) {
+        if (cur !== null) items.push(cur);
+        cur = line.replace(markerRe, '').trim();
+      } else if (cur !== null) {
+        cur += ' ' + line.trim();
+      }
+    }
+    if (cur !== null) items.push(cur);
+    return items;
+  }
+
   const blocks = src.split(/\n\n+/);
   let html = '';
 
@@ -78,13 +93,11 @@ function parseMD(src) {
       continue;
     }
     if (/^[-*+]\s/.test(block)) {
-      const items = block.split('\n').filter(l => /^[-*+]\s/.test(l)).map(l => l.replace(/^[-*+]\s/, ''));
-      html += '<ul>' + items.map(i => `<li>${_inline(i)}</li>`).join('') + '</ul>';
+      html += '<ul>' + _listItems(block, /^[-*+]\s/).map(i => `<li>${_inline(i)}</li>`).join('') + '</ul>';
       continue;
     }
     if (/^\d+\.\s/.test(block)) {
-      const items = block.split('\n').filter(l => /^\d+\.\s/.test(l)).map(l => l.replace(/^\d+\.\s/, ''));
-      html += '<ol>' + items.map(i => `<li>${_inline(i)}</li>`).join('') + '</ol>';
+      html += '<ol>' + _listItems(block, /^\d+\.\s/).map(i => `<li>${_inline(i)}</li>`).join('') + '</ol>';
       continue;
     }
     if (block.includes('|')) {
