@@ -7,3 +7,4 @@ Each entry points to a `[[topic]]` page built from the corresponding `<topic>.md
 |-------|----------------|--------------|
 | [[agent-stack]] | Agent infrastructure layer (runtime, memory, skills, orchestration, security) | 2026-08-13 |
 | [[edge-inference]] | Edge/local inference engines — MoE streaming technique | 2026-08-13 |
+| [[fact-check]] | Reusable pre-publish validation method (checklist + Void case study) | 2026-08-13 |

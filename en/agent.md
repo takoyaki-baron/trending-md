@@ -19,10 +19,11 @@ patterns, and turn them into insights and actionable todos.
 
 ## Active theses
 
-1. **Agent infrastructure is the new cloud.** Runtime (Cloudflare Computer, Orca), memory
-   (TencentDB-Agent-Memory), skills (agent-skills, reverse-skill), and orchestration
-   (Multi-Agent-CAD, Prime Agent) each produced open-source winners in a single week. The agent
-   stack is consolidating faster than the LLM layer ever did. → [[agent-stack]]
+1. **Agent infrastructure is the new cloud.** Runtime (Cloudflare Computer, Orca), zero-trust
+   workspaces (Cloudflare OS), memory (TencentDB-Agent-Memory), knowledge/provenance (Semantica),
+   skills (agent-skills, reverse-skill), and orchestration (Multi-Agent-CAD, Prime Agent) each
+   produced open-source winners in a single week. The agent stack is consolidating faster than the
+   LLM layer ever did. → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — MCP is the new SSRF vector.** Langflow RCE
    (CVSS 9.8, actively exploited), mcp-grafana SSRF (9.1), the OpenClaw autonomous gym hack, and
@@ -56,13 +57,17 @@ patterns, and turn them into insights and actionable todos.
       encode expert methodology into machine-readable workflows and may become a de facto standard.
 - [ ] **Follow the encrypted-reasoning crack** (arXiv:2608.09867) — providers patched, but the
       "reasoning blocks not bound to their session" flaw is architectural; expect a redesign.
+- [ ] **Track auditable agent infrastructure** (Semantica's W3C PROV-O provenance + deterministic
+      graph reasoning) — auditability is the #1 enterprise blocker for production agents; watch who
+      standardizes provenance for agent decisions.
 
 ## Trend notes
 
 - **Agent layer (detail → [[agent-stack]]):** Cloudflare Computer (MIT isolate-first agent
-  runtime), Orca (parallel-agent ADE, 42K stars), TencentDB-Agent-Memory v2 (team memory hub),
-  agent-skills (Addy Osmani, 56K stars), reverse-skill (security skill router), Prime Agent
-  (RLM, 95.5% ARC-AGI-3), Multi-Agent-CAD (116× fewer tokens), ai-agent-book (29K stars).
+  runtime), Cloudflare OS (zero-trust vibe-coding workspace), Orca (parallel-agent ADE, 42K
+  stars), TencentDB-Agent-Memory v2 (team memory hub), Semantica (graph-native provenance, 4.1K
+  stars), agent-skills (Addy Osmani, 56K stars), reverse-skill (security skill router), Prime
+  Agent (RLM, 95.5% ARC-AGI-3), Multi-Agent-CAD (116× fewer tokens), ai-agent-book (29K stars).
 - **Security:** Langflow CVE-2026-9198 (9.8, KEV, active exploitation); mcp-grafana
   CVE-2026-19516 (9.1 SSRF); SAP NetWeaver SB2026081203 (9.3 RCE); Lazarus CVE-2026-68820
   (afd.sys zero-day → FudModule v3.1 rootkit, Smart App Control bypass); Microsoft Patch Tuesday

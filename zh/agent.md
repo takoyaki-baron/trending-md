@@ -17,10 +17,10 @@ last_processed: 2026-08-13T00:03:00Z
 
 ## 当前论点
 
-1. **Agent 基础设施正在成为新的云。** 运行时（Cloudflare Computer、Orca）、记忆
-   （TencentDB-Agent-Memory）、技能（agent-skills、reverse-skill）与编排
-   （Multi-Agent-CAD、Prime Agent）在短短一周内各自诞生了开源赢家。Agent 技术栈的整合速度
-   比当年 LLM 层更快。→ [[agent-stack]]
+1. **Agent 基础设施正在成为新的云。** 运行时（Cloudflare Computer、Orca）、零信任工作区
+   （Cloudflare OS）、记忆（TencentDB-Agent-Memory）、知识/溯源（Semantica）、技能（agent-skills、
+   reverse-skill）与编排（Multi-Agent-CAD、Prime Agent）在短短一周内各自诞生了开源赢家。Agent
+   技术栈的整合速度比当年 LLM 层更快。→ [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——MCP 成为新的 SSRF 向量。** Langflow RCE（CVSS 9.8，已被
    积极利用）、mcp-grafana SSRF（9.1）、OpenClaw 自主入侵健身房系统，以及 Irregular 评估厂商
@@ -51,11 +51,14 @@ last_processed: 2026-08-13T00:03:00Z
       编码为机器可读的工作流，可能成为事实标准。
 - [ ] **跟进加密推理被破解事件**（arXiv:2608.09867）——厂商已修补，但"推理块未与所属会话绑定"
       是架构性缺陷；预期会有重新设计。
+- [ ] **跟踪可审计的 agent 基础设施**（Semantica 的 W3C PROV-O 溯源 + 确定性图推理）——可审计性
+      是生产级 agent 进入企业的头号障碍；关注谁会为 agent 决策的溯源制定标准。
 
 ## 趋势笔记
 
 - **Agent 层（详情 → [[agent-stack]]）：** Cloudflare Computer（MIT isolate 优先的 agent 运行时）、
-  Orca（并行 agent ADE，42K stars）、TencentDB-Agent-Memory v2（团队记忆中枢）、agent-skills
+  Cloudflare OS（零信任 vibe-coding 工作区）、Orca（并行 agent ADE，42K stars）、
+  TencentDB-Agent-Memory v2（团队记忆中枢）、Semantica（图原生溯源，4.1K stars）、agent-skills
   （Addy Osmani，56K stars）、reverse-skill（安全技能路由器）、Prime Agent（RLM，95.5%
   ARC-AGI-3）、Multi-Agent-CAD（token 减少 116×）、ai-agent-book（29K stars）。
 - **安全：** Langflow CVE-2026-9198（9.8，KEV，积极利用中）；mcp-grafana CVE-2026-19516（9.1

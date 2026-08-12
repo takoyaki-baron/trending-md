@@ -31,3 +31,31 @@ into consumer-hardware workloads. "Zero quantization, zero distillation" is the 
   Deployed in the Pebble Index 01 smart ring.
 - **h3.c** — `antirez/h3-metal`, MIT. C/ObjC + Metal engine for MiniMax H3 omni-modal on Apple
   Silicon; mmap-from-safetensors loading, `--ssd-streaming` cuts DiT memory 36.5→2.0 GiB.
+
+## Memory-management comparison
+
+Two distinct strategies are hiding under the shared "MoE sparsity" label. Worth keeping separate —
+they optimize for different constraints and fail differently.
+
+**A. Stream-and-cache** (kimi-k3-in-c, TurboFieldfare, h3.c `--ssd-streaming`) — keep the shared
+core resident, stream routed experts from SSD/NVMe on demand, and cache the hot experts. Memory
+footprint stays flat no matter how many experts exist; the cost is a cache miss on the first token
+after a routing change.
+
+- **kimi-k3-in-c** — largest scale (2.78T → 8.24GB RAM). Expert **LRU** cache, `O_DIRECT` trunk
+  streaming, 16/896 experts active. Byte-identical to the PyTorch reference is the notable claim.
+- **TurboFieldfare** — tightest footprint (~2GB). Per-layer **16-slot LFU** cache, ~1.35GB shared
+  core resident. LFU (not LRU) because the active-expert set is small and hot per layer.
+- **h3.c** — the general mechanism exposed as a flag (`--ssd-streaming`), applied to the DiT
+  (diffusion) stack, not just the LLM — proves the trick is modality-agnostic.
+
+**B. Shrink the active set** (Ling-3.0-tiny) — make the *active* per-token footprint so small
+(1.3B of 7.9B, KDA:MLA 3:1 hybrid attention) that the whole thing fits in RAM; no disk streaming
+at all. Optimizes for latency and deterministic first-token time (<100ms) rather than total
+parameter count.
+
+**The reusable insight:** the engine choice is a trade between *scale* (A streams arbitrarily many
+experts, but pays cache misses) and *latency* (B never misses, but is capped by what fits in RAM).
+The cache policy (LRU vs LFU, per-layer vs global) is the tunable that separates the A-strategy
+engines. Watch for the two strategies to merge — a small-resident-core model that also streams
+overflow experts on larger hardware.

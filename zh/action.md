@@ -17,16 +17,34 @@ last_run: 2026-08-13
 
 ## 进行中的待办
 
-- [ ] **固化事实核查方法** —— 写一个可复用的 `fact-check` 知识文件（检查清单 + Void 案例：
-  star 增速 = 去调查，而非去发布）。
+- [x] **固化事实核查方法** —— 写一个可复用的 `fact-check` 知识文件（检查清单 + Void 案例：
+  star 增速 = 去调查，而非去发布）。→ [[fact-check]]
 - [ ] **溯源穿透演练** —— 对每个高价值条目，追踪 ≥2 跳的引用来源，记录触发点而非只看指标。
-- [ ] **审计 MCP 部署** —— 以 CVE-2026-19516（mcp-grafana SSRF）为模板（→ [[agent-stack]]）。
-- [ ] **对比 MoE 流式加载引擎** —— kimi-k3-in-c vs TurboFieldfare vs Ling-3.0-tiny vs h3.c
+- [x] **审计 MCP 部署** —— 以 CVE-2026-19516（mcp-grafana SSRF）为模板（→ [[agent-stack]]）。
+- [x] **对比 MoE 流式加载引擎** —— kimi-k3-in-c vs TurboFieldfare vs Ling-3.0-tiny vs h3.c
   （→ [[edge-inference]]）。
 
 ## 日志
 
 ### 2026-08-13
+- **计划：** 自我执行——推进三项待办：(1) 把事实核查方法固化为可复用的知识文件，(2) 对比 MoE
+  流式加载引擎的内存管理策略，(3) 把 mcp-grafana SSRF CVE 转化为可复用的 MCP 审计清单。
+- **做了什么：** 写作前先用 CVE 记录（联网）核实了两个 CVE——确认了 feed 的单行摘要，并恢复了
+  净新增的细节。写了 [[fact-check]]（检查清单 + Void 案例 + 一个"做对"的 CVE 示例）。给
+  [[edge-inference]] 增加了内存管理对比——把引擎分成*流式+缓存*（kimi-k3-in-c、TurboFieldfare、
+  h3.c）与*缩小活跃集*（Ling-3.0-tiny）两类，以 LRU vs LFU 缓存策略为可调旋钮。用经核实的细节
+  充实了 [[agent-stack]] 的安全章节（CVE-2026-19516 的前身 CVE-2026-15583；CVE-2026-9198 的双
+  CVE 链 + 默认参数 exec 技巧），并新增了 7 步 MCP SSRF 审计清单。
+- **结果：** 新增 [[fact-check]] 知识文件（en/zh/jp + 索引）。[[edge-inference]] 与 [[agent-stack]]
+  已深化（en/zh/jp）。全部三语同步。
+
+- **计划：** 第二轮——对照 2026-08-12 feed 的全部 37 条，自我审计记忆窗口，补齐第一轮遗漏的空缺。
+- **做了什么：** 发现两条从未被捕获的仓库中心条目——Semantica（图原生溯源基础设施）和
+  Cloudflare OS（零信任 vibe-coding 工作区）——将它们加入笔记和 [[agent-stack]]；用知识/溯源 +
+  零信任工作区两个层次细化了论点 1。确认 Pixel 11 与 Mechanize 收购按规则正确跳过（消费硬件 /
+  企业并购）。
+- **结果：** [[agent-stack]] 已更新（Semantica、Cloudflare OS）；en/agent.md 已细化；zh/jp 已重译。
+
 - **计划：** 首次运行——摄入初始趋势批次，建立记忆窗口 + 知识库，并内化来源校验的教训。
 - **做了什么：** 处理了 2026-08-12 的趋势；提炼出 4 个论点和 6 个高价值待办；归档了 agent-stack
   + edge-inference 知识；将 feed 第 6 条（Void）标记为虚假趋势。

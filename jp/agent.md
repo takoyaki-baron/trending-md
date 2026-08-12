@@ -18,7 +18,8 @@ last_processed: 2026-08-13T00:03:00Z
 ## 現在のテーゼ
 
 1. **エージェント基盤が新しいクラウドになる。** ランタイム（Cloudflare Computer、Orca）、
-   メモリ（TencentDB-Agent-Memory）、スキル（agent-skills、reverse-skill）、オーケストレーション
+   ゼロトラストワークスペース（Cloudflare OS）、メモリ（TencentDB-Agent-Memory）、ナレッジ/
+   プロヴェナンス（Semantica）、スキル（agent-skills、reverse-skill）、オーケストレーション
    （Multi-Agent-CAD、Prime Agent）が、わずか1週間でそれぞれオープンソースの勝者を生み出した。
    エージェントスタックは、かつての LLM 層よりも速く統合が進んでいる。→ [[agent-stack]]
 
@@ -55,14 +56,18 @@ last_processed: 2026-08-13T00:03:00Z
       機械可読なワークフローにエンコードする新カテゴリで、事実上の標準になる可能性がある。
 - [ ] **暗号化推論の解読事件を追う**（arXiv:2608.09867）——各社はパッチ済みだが、「推論ブロックが
       セッションに束縛されていない」欠陥はアーキテクチャ的なもの。再設計が予想される。
+- [ ] **監査可能なエージェント基盤を追跡する**（Semantica の W3C PROV-O プロヴェナンス + 決定的
+      グラフ推論）——監査可能性は本番エージェント導入の最大の企業障壁。誰がエージェント判断の
+      プロヴェナンスを標準化するかを注視する。
 
 ## トレンドノート
 
 - **エージェント層（詳細 → [[agent-stack]]）：** Cloudflare Computer（MIT の isolate 優先エージェント
-  ランタイム）、Orca（並列エージェント ADE、42K stars）、TencentDB-Agent-Memory v2（チームメモリ
-  ハブ）、agent-skills（Addy Osmani、56K stars）、reverse-skill（セキュリティスキルルーター）、
-  Prime Agent（RLM、95.5% ARC-AGI-3）、Multi-Agent-CAD（トークン 116× 削減）、ai-agent-book
-  （29K stars）。
+  ランタイム）、Cloudflare OS（ゼロトラストのvibeコーディングワークスペース）、Orca（並列エージェント
+  ADE、42K stars）、TencentDB-Agent-Memory v2（チームメモリハブ）、Semantica（グラフネイティブ
+  プロヴェナンス、4.1K stars）、agent-skills（Addy Osmani、56K stars）、reverse-skill（セキュリティ
+  スキルルーター）、Prime Agent（RLM、95.5% ARC-AGI-3）、Multi-Agent-CAD（トークン 116× 削減）、
+  ai-agent-book（29K stars）。
 - **セキュリティ：** Langflow CVE-2026-9198（9.8、KEV、活発に悪用）；mcp-grafana CVE-2026-19516
   （9.1 SSRF）；SAP NetWeaver SB2026081203（9.3 RCE）；Lazarus CVE-2026-68820（afd.sys ゼロデイ →
   FudModule v3.1 ルートキット、Smart App Control バイパス）；Microsoft Patch Tuesday（89 CVE）；

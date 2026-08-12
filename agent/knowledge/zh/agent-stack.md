@@ -12,6 +12,9 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
 - **Cloudflare Computer** — `@cloudflare/computer`，MIT。以 SQLite 为后端的持久化虚拟文件系统；
   在快速的 serverless isolate 与完整的 Linux 容器之间编排（容器仅用于 <10% 的 agent 工作）。
   属于 Cloudflare Agents Week 2026。7,300+ stars。
+- **Cloudflare OS** — `cloudflare/cloudflare-os`，开源。基于浏览器的 AI 工作区：用自然语言构建
+  应用；V8 isolate 沙箱，默认零信任（网络关闭，敏感操作需 "Gatekeepers" 人工审批）。属于
+  Cloudflare Agents Week 2026，与 Computer 同期。
 - **Orca** — `stablyai/orca`，MIT，TypeScript。"Agent Development Environment"：并行运行多个 AI
   coding agent，每个都在隔离的 git worktree 中。27+ 个 CLI agent、移动端伴侣、WebGL 终端。42K stars。
 
@@ -19,6 +22,11 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
 - **TencentDB-Agent-Memory v2** — `TencentCloud/TencentDB-Agent-Memory`，MIT。把对话/文档/代码
   转换为 Chat Memory、Skills、LLM-Wiki、CodeGraph。团队治理（ACL），面向 Claude Code/OpenAI 协议
   的 Memory Proxy。15K+ stars。SQLite + sqlite-vec（BM25）。
+
+## 知识 / 溯源
+- **Semantica** — `semantica-agi/semantica`，MIT，4.1K stars。面向 agent 的自托管图原生层：
+  RDF/LPG 双图存储、Rete 推理引擎、对每个衍生事实做 W3C PROV-O 溯源、7 个向量数据库后端。
+  确定性图推理 + LLM 仅用于模糊抽取 → 可审计、可复现的决策。`pip install semantica`。
 
 ## 技能 / 路由
 - **agent-skills** — `casualuser/agent-skills`（Addy Osmani），MIT。24 个 SKILL.md 工作流，
@@ -40,7 +48,38 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   Agent"：10 章，92 个可运行实验，8 种语言。29K stars。
 
 ## 安全（技术栈的另一面）
-- **Langflow** CVE-2026-9198 — CVSS 9.8 RCE，经 `/api/v1/auto_login` + `/api/v1/validate/code`；
-  CISA KEV，正被积极利用。1.10.1+ 已修复。
-- **mcp-grafana** CVE-2026-19516 — CVSS 9.1 SSRF，经调用方可控的 `X-Grafana-URL` 请求头。
-  1.0.1 已修复。
+- **Langflow** CVE-2026-9198 — CVSS 9.8，CWE-94 代码注入，CISA KEV + 正被积极利用。它其实是
+  *两条*独立缺陷的链：`/api/v1/auto_login`（CVE-2026-9103——`AUTO_LOGIN` 默认开启，会给任何未认证
+  调用者发放 SUPERUSER JWT）→ `/api/v1/validate/code`（CVE-2026-8481——无沙箱地 `exec()` 用户
+  Python）。利用方式使用默认参数技巧（`def _v(a=exec('<payload>')): pass`），因为 Python 在函数
+  定义时就求值默认参数。影响 1.0.0–1.10.0，1.10.1 已修复。已有公开 exploit + Nuclei 模板 +
+  Nessus 334529。
+- **mcp-grafana** CVE-2026-19516 — CVSS 9.1，CWE-918 SSRF。调用方可控的 `X-Grafana-URL` 请求头
+  控制了出站请求的*目标地址*，而 `grafana_api_request` 工具还允许调用方选择 method/path/body。
+  目标地址未被钉在已配置的 Grafana 实例上 → 服务器变成一台 SSRF 代理，可直达环回（127.0.0.1）、
+  链路本地/云元数据（169.254.169.254）和 RFC1918 内网段。前身 CVE-2026-15583（混淆代理式 token
+  窃取）的修复方式是阻止 token 被发往攻击者指定的目标——但那次修复留下了*目标地址本身*的缺口，
+  这正是 19516 仍然成立的原因。影响 ≤1.0.0，1.0.1 已修复。验证过程见 [[fact-check]]。
+
+### MCP SSRF 审计清单（模板：CVE-2026-19516）
+
+一套可复用的 MCP 部署扫描——每个带出站 HTTP 的 MCP server 都是潜在的 SSRF 跳板。按顺序执行
+这些检查：
+
+1. **枚举**每个发起出站请求的 MCP server/工具。
+2. **追踪调用方可控的输入**到达了哪里：目标 URL/主机、路径、方法、请求体、请求头。在
+   mcp-grafana 中，目标地址以*请求头*形式传入；method/path/body 经工具参数传入。
+3. **目标地址是否被钉死？** 如果任何调用方输入能到达允许列表*之外*，就是 SSRF。特别要封禁：
+   环回（127.0.0.0/8）、链路本地/元数据（169.254.0.0/16、169.254.169.254）、RFC1918 私网段，
+   以及服务器自身的出口。
+4. **随请求携带了什么凭证？** 混淆代理变体（CVE-2026-15583）会把*服务账号 token* 窃取到攻击者
+   指定的主机。只修目标不修凭证是不完整的——这正是 19516 暴露的双层缺口。
+5. **响应会回到调用方吗？** 读 SSRF = 数据窃取（云元数据 → IMDS 凭证 → 账号接管）。只写 SSRF
+   严重性较低，但仍是跳板。
+6. **出口控制 + 隔离。** 在网络层封禁环回/链路本地/元数据/RFC1918（除非确有必要）；把 MCP
+   server 放在可达范围最小的网段；在代理层剥离/拒绝 `X-Grafana-URL` 这类调用方请求头。
+7. **版本钉住，且每次修复后重审。** 15583 → 19516 的序列说明单次补丁很少能关掉整个缺陷类；
+   把每次修复当作重检的起点，而不是终点。
+
+邻近的观察项：**Langflow** 展示了深一层的同构形态——一个 MCP 相邻的 agent 工具，只要触及
+`exec()`，就无需 SSRF、直通 RCE。
