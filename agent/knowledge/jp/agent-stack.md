@@ -11,7 +11,11 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
 ## ランタイム / 実行基盤
 - **Cloudflare Computer** — `@cloudflare/computer`、MIT。SQLiteをバックエンドとする永続的な仮想
   ファイルシステム。高速なserverless isolateとフルLinuxコンテナの間をオーケストレーション
-  （コンテナが必要なのはエージェント作業の10%未満）。Cloudflare Agents Week 2026の一部。7,300+ stars。
+  （コンテナが必要なのはエージェント作業の10%未満）。単一の入口（`workspace.runtime.exec()`）が
+  3つのバックエンドにまたがる——フルLinux**コンテナ**（FUSEマウント）、**bash isolate**（Dynamic
+  Worker）、**JavaScript isolate**——ファイルは `@cloudflare/dofs`（SQLite Durable Object
+  ファイルシステム）で永続化され、すべてのread/write/execがゲート・監査・観測される。
+  Cloudflare Agents Week 2026の一部。7,300+ stars、preview専用。
 - **Cloudflare OS** — `cloudflare/cloudflare-os`、オープンソース。ブラウザベースのAIワークスペース：
   自然言語からアプリを構築。V8 isolateサンドボックス、ゼロトラストがデフォルト（ネットワーク無効、
   機密操作には「Gatekeepers」による承認）。Cloudflare Agents Week 2026、Computerと同時期。
@@ -19,18 +23,48 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
   エージェントを並列実行し、それぞれを分離されたgit worktreeで動かす。27+のCLIエージェント、
   モバイルコンパニオン、WebGLターミナル。42K stars。
 
+## モデルルーティング
+- **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`、Apache 2.0、Rust。OpenAI Chat / Anthropic
+  Messages / OpenAI Responses の間を翻訳し、各リクエストをモデルのプール（vLLM、NVIDIA NIM、
+  Ollama、任意のOpenAI互換エンドポイント）へルーティングするプロキシ/ライブラリ。アプリの書き
+  換え不要。組み込みルーター：`llm_classifier`、`stage_router`、escalation、`random`、さらに
+  `passthrough`。内部ベンチマーク：Claude Opus 4.8単独の約1/3のコストでフロンティア級の精度。
+  LangChainはフロンティアモデルへ送るのを7%に絞ってコストを74%削減——*6%の精度トレードオフ*を
+  伴う（145件のマルチターン Deep Agents タスク）。pre-alpha（v1.0前にAPI変更あり）。30B-MoEの
+  Nemotron 3.5 Lightningと同時に発表。[[smart-routing]]参照。
+
 ## メモリ
 - **TencentDB-Agent-Memory v2** — `TencentCloud/TencentDB-Agent-Memory`、MIT。会話/ドキュメント/
-  コードをChat Memory、Skills、LLM-Wiki、CodeGraphに変換。チームガバナンス（ACL）、
-  Claude Code/OpenAIプロトコル向けMemory Proxy。15K+ stars。SQLite + sqlite-vec（BM25）。
+  コードをChat Memory、Skills、LLM-Wiki、CodeGraphに変換。v2.0.0で**Team Memory**を追加——
+  4つの再利用可能な資産（L0会話 → L3ペルソナ蒸留を含むChat Memory、バージョン付きSkills、
+  LLM-Wiki、CodeGraph）をMemory HubコンソールのACL可視性（`private`/`team`/`restricted`）で
+  ガバナンス。ハイブリッド検索 = BM25 + ベクトル + 逆順位融合（RRF）。PersonaMem精度は48% →
+  76%と報告。Claude Code/OpenAIプロトコル向けMemory Proxy。80日で15K+ stars。SQLite +
+  sqlite-vec（BM25）。
+
+## オールインワンワークスペース
+- **Macro** — `macro-inc/macro`、AGPL-3.0、SolidJS + Rustバックエンド（167クレート、42のデプロイ
+  可能サービス）。オールインワンのチームワークスペース：Gmail風メール、チャンネル/DM、Linear風
+  タスク、CRDTベースのドキュメント、2Dキャンバス、CRM、通話、エージェント——すべてを共有AI
+  メモリ付きの双方向グラフに@リンク。「完全にオープンソース——オープンコアではない」。チーム
+  メモリはレート制限なしでMCP経由で公開。SOC 2 Type II / ISO 27001。約1.6K stars。
 
 ## ナレッジ / プロヴェナンス
 - **Semantica** — `semantica-agi/semantica`、MIT、4.1K stars。エージェント向けのセルフホスト型
   グラフネイティブレイヤー：RDF/LPGデュアルグラフストレージ、Rete推論エンジン、派生ファクト
   ごとのW3C PROV-Oプロヴェナンス、7つのベクトルDBバックエンド。決定的グラフ推論 + LLMは曖昧な
-  抽出のみ → 監査可能で再現可能な判断。`pip install semantica`。
+  抽出のみ → 監査可能で再現可能な判断。`pip install semantica`。**v0.6.5**はセキュリティリリース
+  で、外部から報告された5件の脆弱性（Explorerルートの認証欠落、Cypher/SPARQLインジェクション）
+  を修正。
 
 ## スキル / ルーティング
+- **google/skills** — `google/skills`、Apache 2.0。約110個のMarkdownベースのスキル（参照ファイル +
+  エージェントがオンデマンドで読み込むコードスニペット）で、GKE、BigQuery、Cloud Run、Gemini
+  API、Firebase、Google AdsなどのGoogleプロダクトとマルチプロダクト「ソリューション」ワーク
+  フローをカバー。`npx skills add google/skills`。Google Cloud Next 2026での発表時は13個で、現在
+  約110に増加。各スキルはAgent Skillsフォーマット（`SKILL.md` + オプションのscripts/references）
+  に従う。オープンなAgent Skillsフォーマットの参照実装で、**Agent Plugins 1.0.0**として標準化
+  ——[[agent-plugins]]参照。約18K stars。
 - **agent-skills** — `casualuser/agent-skills`（Addy Osmani）、MIT。24個のSKILL.mdワークフローが
   シニアエンジニアの規律（コードレビュー、TDD、セキュリティ、CI/CD、リリース）をエンコード。56.9K stars。
 - **reverse-skill** — `zhaoxuya520/reverse-skill`、MIT。20+のセキュリティシナリオ（APK/バイナリRE、
@@ -64,6 +98,9 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
   プロキシになる。前身CVE-2026-15583（混乱した代理人トークン流出）の修正は、トークンが攻撃者の
   指定した宛先へ送られるのを止めた——しかしその修正は*宛先そのもの*を開いたまま残し、それが
   19516が依然として成立する理由。影響は≤1.0.0、1.0.1で修正。検証の経緯は[[fact-check]]参照。
+- **Semantica** v0.6.5 — セキュリティリリース。外部から報告された5件の脆弱性（Explorerルートの
+  認証欠落、Cypher/SPARQLインジェクション）を修正。プロヴェナンス/監査可能性の基盤でさえ今や
+  攻撃面であることの証明——MCPサーバーだけではない。
 
 ### MCP SSRF監査チェックリスト（テンプレート：CVE-2026-19516）
 

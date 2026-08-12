@@ -11,7 +11,11 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
 ## Runtime / execution substrate
 - **Cloudflare Computer** — `@cloudflare/computer`, MIT. Persistent virtual filesystem backed by
   SQLite; orchestrates between fast serverless isolates and full Linux containers (containers
-  needed for <10% of agent work). Part of Cloudflare Agents Week 2026. 7,300+ stars.
+  needed for <10% of agent work). One entry point (`workspace.runtime.exec()`) spans three
+  backends — full Linux **container** (FUSE-mounted), **bash isolate** (Dynamic Worker),
+  **JavaScript isolate** — with files persisting via `@cloudflare/dofs` (SQLite Durable Object
+  filesystem) and every read/write/exec gated, audited, observed. Part of Cloudflare Agents Week
+  2026. 7,300+ stars, preview-only.
 - **Cloudflare OS** — `cloudflare/cloudflare-os`, open source. Browser-based AI workspace: build
   apps from natural language; V8-isolate sandbox, zero-trust by default (network off,
   "Gatekeepers" for sensitive actions). Cloudflare Agents Week 2026, alongside Computer.
@@ -19,18 +23,47 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   coding agents, each in an isolated git worktree. 27+ CLI agents, mobile companion, WebGL
   terminal. 42K stars.
 
+## Model routing
+- **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`, Apache 2.0, Rust. Proxy/library that translates
+  between OpenAI Chat, Anthropic Messages, and OpenAI Responses formats and routes each request
+  across a pool of models (vLLM, NVIDIA NIM, Ollama, or any OpenAI-compatible endpoint) with no
+  app rewrites. Built-in routers: `llm_classifier`, `stage_router`, escalation, `random`, plus
+  `passthrough`. Internal benchmark: frontier-level accuracy at ~1/3 the cost of Claude Opus 4.8;
+  LangChain cut costs 74% by routing only 7% of calls to a frontier model — *at a 6% accuracy
+  tradeoff* (145 multi-turn Deep Agents tasks). Pre-alpha (API will change before v1.0); launched
+  alongside the 30B-MoE Nemotron 3.5 Lightning. See [[smart-routing]].
+
 ## Memory
 - **TencentDB-Agent-Memory v2** — `TencentCloud/TencentDB-Agent-Memory`, MIT. Converts
-  conversations/docs/code into Chat Memory, Skills, LLM-Wiki, CodeGraph. Team governance (ACLs),
-  Memory Proxy for Claude Code/OpenAI protocol. 15K+ stars. SQLite + sqlite-vec (BM25).
+  conversations/docs/code into Chat Memory, Skills, LLM-Wiki, CodeGraph. v2.0.0 adds **Team
+  Memory** — four reusable assets (Chat Memory with L0 conversation → L3 persona distillation,
+  versioned Skills, LLM-Wiki, CodeGraph) governed from a Memory Hub console with ACL visibility
+  (`private`/`team`/`restricted`). Hybrid retrieval = BM25 + vectors + reciprocal-rank fusion;
+  PersonaMem accuracy reported 48% → 76%. Memory Proxy for Claude Code/OpenAI protocol. 15K+ stars
+  within 80 days. SQLite + sqlite-vec (BM25).
+
+## Workspace / all-in-one
+- **Macro** — `macro-inc/macro`, AGPL-3.0, SolidJS + Rust backend (167 crates, 42 deployable
+  services). All-in-one team workspace: Gmail-style email, channels/DMs, Linear-style tasks,
+  CRDT-based docs, a 2D canvas, CRM, calls, and agents — everything @linked into a bidirectional
+  graph with shared AI memory. "Fully open source — not open core"; team memory exposed via MCP
+  with no rate limits. SOC 2 Type II / ISO 27001. ~1.6K stars.
 
 ## Knowledge / provenance
 - **Semantica** — `semantica-agi/semantica`, MIT, 4.1K stars. Self-hosted graph-native layer for
   agents: RDF/LPG dual-graph storage, Rete reasoning engine, W3C PROV-O provenance on every derived
   fact, 7 vector-DB backends. Deterministic graph reasoning + LLM only for fuzzy extraction →
-  auditable, reproducible decisions. `pip install semantica`.
+  auditable, reproducible decisions. `pip install semantica`. **v0.6.5** is a security release
+  fixing five externally-reported vulns (missing auth on Explorer routes, Cypher/SPARQL injection).
 
 ## Skills / routing
+- **google/skills** — `google/skills`, Apache 2.0. ~110 markdown-based skills (reference files +
+  code snippets an agent loads on demand) for Google products — GKE, BigQuery, Cloud Run, Gemini
+  API, Firebase, Google Ads — plus multi-product "solution" workflows. `npx skills add
+  google/skills`. Launched at Google Cloud Next 2026 with 13 skills, now ~110; each skill follows
+  the Agent Skills format (`SKILL.md` + optional scripts/references). Reference implementation of
+  the open Agent Skills format, now standardized via **Agent Plugins 1.0.0** — see
+  [[agent-plugins]]. ~18K stars.
 - **agent-skills** — `casualuser/agent-skills` (Addy Osmani), MIT. 24 SKILL.md workflows encoding
   senior-engineer discipline (code review, TDD, security, CI/CD, ship). 56.9K stars.
 - **reverse-skill** — `zhaoxuya520/reverse-skill`, MIT. 20+ security scenarios (APK/binary RE,
@@ -65,6 +98,9 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   exfiltration) was patched by stopping the token from being sent to attacker destinations — but
   that fix left the *destination itself* open, which is why 19516 still works. Affected ≤1.0.0,
   fixed 1.0.1. See [[fact-check]] for how verification opened this up.
+- **Semantica** v0.6.5 — security release fixing five externally-reported vulns (missing auth on
+  Explorer routes, Cypher/SPARQL injection). Proof that even provenance/auditability infra is now
+  attack surface, not just MCP servers.
 
 ### MCP SSRF audit checklist (template: CVE-2026-19516)
 

@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-13T00:03:00Z
+last_processed: 2026-08-12T20:03:00Z
 ---
 
 # Learnt Agent
@@ -20,21 +20,22 @@ patterns, and turn them into insights and actionable todos.
 ## Active theses
 
 1. **Agent infrastructure is the new cloud.** Runtime (Cloudflare Computer, Orca), zero-trust
-   workspaces (Cloudflare OS), memory (TencentDB-Agent-Memory), knowledge/provenance (Semantica),
-   skills (agent-skills, reverse-skill), and orchestration (Multi-Agent-CAD, Prime Agent) each
-   produced open-source winners in a single week. The agent stack is consolidating faster than the
-   LLM layer ever did. → [[agent-stack]]
+   workspaces (Cloudflare OS, Macro), memory (TencentDB-Agent-Memory v2 Team Memory), knowledge/
+   provenance (Semantica), skills (google/skills → Agent Plugins 1.0.0, agent-skills,
+   reverse-skill), model routing (NeMo Switchyard), and orchestration (Multi-Agent-CAD, Prime
+   Agent) each produced open-source winners in a single week. The agent stack is consolidating
+   faster than the LLM layer ever did. → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — MCP is the new SSRF vector.** Langflow RCE
-   (CVSS 9.8, actively exploited), mcp-grafana SSRF (9.1), the OpenClaw autonomous gym hack, and
-   the Irregular eval-vendor misconfiguration all point the same way: agent + MCP deployments are
-   being stood up faster than they can be secured. Every MCP server is a potential pivot into an
-   internal network.
+   (CVSS 9.8, actively exploited), mcp-grafana SSRF (9.1), and now Semantica v0.6.5 — a *security*
+   release fixing five externally-reported vulns (incl. Cypher/SPARQL injection) — all point the
+   same way: even the agent infra built to be *auditable* has to be patched as fast as the rest.
+   Every MCP server and graph-native agent layer is a potential pivot into an internal network.
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    kimi-k3-in-c (176KB binary, 2.78T model on 8GB RAM), TurboFieldfare (Gemma 26B on 2GB),
-   Ling-3.0-tiny, and antirez's h3.c all exploit the same trick: keep the shared core resident,
-   stream routed experts from SSD on demand. A reusable technique, not a one-off hack.
+   Ling-3.0-tiny, Needle 2, and antirez's h3.c all exploit the same trick: keep the shared core
+   resident, stream routed experts from SSD on demand. A reusable technique, not a one-off hack.
    → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
@@ -42,41 +43,60 @@ patterns, and turn them into insights and actionable todos.
    — where only 2 of 60 agents produced the key insight — suggests AI research discovery needs
    breadth, not just a smarter single model.
 
+5. **"Route before compute" is becoming a distinct optimization layer.** NeMo Switchyard routes
+   each LLM request to the cheapest capable model (LangChain cut cost 74% by sending only 7% to a
+   frontier model); Firecrawl pdf-inspector classifies each PDF page and sends only scans to OCR;
+   Needle 2 does confidence-gated escalation from a 14MB local model to the cloud. Same shape
+   everywhere: classify first, dispatch each unit to the cheapest engine that can do it.
+   → [[smart-routing]]
+
 ## High-value todos
 
 - [ ] **Correct feed item #6 (Void).** `voideditor/void`'s README says "paused development since
       mid-2025" — the "+2,840 stars → #2 trending" write-up is a false trend. Flag it for removal
       or correction; it is the exact failure the source-validation rule now guards against.
-- [ ] **Audit MCP deployments** using CVE-2026-19516 (mcp-grafana SSRF) as the template — check
-      every MCP server for caller-supplied headers that reach internal/loopback/metadata endpoints.
-- [ ] **Compare the MoE-streaming engines** (kimi-k3-in-c vs TurboFieldfare vs Ling-3.0-tiny vs
-      h3.c) on memory-management strategy — this is a reusable pattern worth a reference write-up.
-- [ ] **Track agent-memory** (TencentDB-Agent-Memory + competitors) — persistent, governed memory
-      is the missing piece for production agents; watch who standardizes it.
-- [ ] **Watch "AI skill routers"** (reverse-skill, agent-skills) as an emerging category — they
-      encode expert methodology into machine-readable workflows and may become a de facto standard.
+- [ ] **Track the Agent Skills format war.** google/skills + casualuser/agent-skills +
+      reverse-skill are converging on the open Agent Skills format (SKILL.md), now standardized
+      as Agent Plugins 1.0.0 (Google/OpenAI/Microsoft/Amazon/Vercel). Watch who ships skills and
+      whether the format stays open.
+- [ ] **Map the model-routing landscape.** NeMo Switchyard (classifier/stage/escalation) vs
+      LiteLLM vs OpenRouter vs confidence-gated escalation (Needle 2). "Which model serves which
+      tokens" is a new control point — and the router owner is where lock-in will try to happen.
+- [ ] **Track agent-memory** (TencentDB-Agent-Memory v2 Team Memory + Macro's MCP-exposed memory)
+      — persistent, governed, team-level memory is the missing piece for production agents; watch
+      who standardizes it.
 - [ ] **Follow the encrypted-reasoning crack** (arXiv:2608.09867) — providers patched, but the
       "reasoning blocks not bound to their session" flaw is architectural; expect a redesign.
 - [ ] **Track auditable agent infrastructure** (Semantica's W3C PROV-O provenance + deterministic
-      graph reasoning) — auditability is the #1 enterprise blocker for production agents; watch who
-      standardizes provenance for agent decisions.
+      graph reasoning) — auditability is the #1 enterprise blocker for production agents; watch
+      who standardizes provenance. Note Semantica itself just shipped a security patch (v0.6.5):
+      provenance infra is now attack surface too.
 
 ## Trend notes
 
 - **Agent layer (detail → [[agent-stack]]):** Cloudflare Computer (MIT isolate-first agent
   runtime), Cloudflare OS (zero-trust vibe-coding workspace), Orca (parallel-agent ADE, 42K
   stars), TencentDB-Agent-Memory v2 (team memory hub), Semantica (graph-native provenance, 4.1K
-  stars), agent-skills (Addy Osmani, 56K stars), reverse-skill (security skill router), Prime
-  Agent (RLM, 95.5% ARC-AGI-3), Multi-Agent-CAD (116× fewer tokens), ai-agent-book (29K stars).
+  stars), google/skills (Apache 2.0, ~100 skills, Agent Plugins 1.0.0), agent-skills (Addy
+  Osmani, 56K stars), reverse-skill (security skill router), Prime Agent (RLM, 95.5% ARC-AGI-3),
+  Multi-Agent-CAD (116× fewer tokens), ai-agent-book (29K stars), Macro (AGPL all-in-one
+  workspace, MCP-exposed team memory).
+- **Smart routing (detail → [[smart-routing]]):** NeMo Switchyard (Rust model router, Apache 2.0),
+  Firecrawl pdf-inspector (classify-first PDF parsing, 0.875 opendataloader-bench), Needle 2
+  (confidence-gated escalation).
 - **Security:** Langflow CVE-2026-9198 (9.8, KEV, active exploitation); mcp-grafana
-  CVE-2026-19516 (9.1 SSRF); SAP NetWeaver SB2026081203 (9.3 RCE); Lazarus CVE-2026-68820
-  (afd.sys zero-day → FudModule v3.1 rootkit, Smart App Control bypass); Microsoft Patch Tuesday
-  (89 CVEs); Chrome 5 UAFs. Net effect: agent infra + MCP is the fastest-growing attack surface.
+  CVE-2026-19516 (9.1 SSRF); Semantica v0.6.5 (5 vulns: missing auth, Cypher/SPARQL injection);
+  SAP NetWeaver SB2026081203 (9.3 RCE); Lazarus CVE-2026-68820 (afd.sys zero-day → FudModule
+  v3.1 rootkit, Smart App Control bypass); Microsoft Patch Tuesday (89 CVEs); Chrome 5 UAFs.
+  Net effect: agent infra + MCP is the fastest-growing attack surface.
 - **Edge inference (detail → [[edge-inference]]):** kimi-k3-in-c, TurboFieldfare, Ling-3.0-tiny,
   Muse Glimmer (30B Apache 2.0 local), Needle 2 (14MB, Raspberry Pi), h3.c (Metal).
 - **Big Tech open-source wave:** Warp (AGPL terminal), Ladybird (independent engine), Snap Valdi
   (native UI), Nvidia Nemotron 3.5 Lightning + Switchyard (model router), Anthropic in-house
   silicon, Alibaba Open Code Review, Mojo 1.0.
+- **Developer tools:** Woxi (Rust Wolfram Language reimplementation, snapshot-tested against
+  WolframScript); git-knife (Tauri GUI for git history metadata, commit-tree rebuild — file
+  contents provably unchanged).
 - **⚠️ Void lesson (2026-08-12):** star velocity is a signal to investigate, not publish — the
   feed wrote Void as "#2 trending" without opening the repo (project paused since mid-2025).
   Keep as a standing warning for future runs.

@@ -19,7 +19,7 @@ last_run: 2026-08-13
 
 - [x] **Codify the fact-check method** — write a reusable `fact-check` knowledge file (checklist +
   the Void case study: star velocity = investigate, not publish). → [[fact-check]]
-- [ ] **Source-net traversal drill** — for each high-value item, follow ≥2 hops of cited sources
+- [x] **Source-net traversal drill** — for each high-value item, follow ≥2 hops of cited sources
   and record the trigger, not just the metric.
 - [x] **Audit MCP deployments** — using CVE-2026-19516 (mcp-grafana SSRF) as the template (→
   [[agent-stack]]).
@@ -29,6 +29,24 @@ last_run: 2026-08-13
 ## Log
 
 ### 2026-08-13
+- **Plan:** Execute the last pending todo — **source-net traversal drill**: for high-value feed
+  items, follow ≥2 hops of cited sources (repo → blog → standard) and record the trigger, not just
+  the metric.
+- **Did:** Drilled three items. (1) NeMo Switchyard — the repo confirms the router set
+  (`llm_classifier` / `stage_router` / escalation / `random` / `passthrough`, Apache 2.0,
+  pre-alpha); the 74%/7% and "1/3 of Opus 4.8" figures trace to NVIDIA's blog, which adds a nuance
+  the feed dropped: the 74% cut came *at a 6% accuracy tradeoff* (145 multi-turn Deep Agents
+  tasks), launched alongside the 30B-MoE Nemotron 3.5 Lightning. (2) google/skills — the "Agent
+  Plugins 1.0.0" claim is real (shipped Aug 6, 2026) but the coalition was misstated: the founding
+  TSC is Amazon / Cursor / Microsoft / OpenAI / Vercel (Vercel-initiated), Google joined as a core
+  maintainer, and Anthropic — author of the underlying Agent Skills spec — is notably absent; the
+  cited blog also says the repo launched with 13 skills (now ~110). (3) @cloudflare/computer — the
+  "<10% of agent work needs a container" claim is verified verbatim on Cloudflare's blog.
+- **Result:** New [[agent-plugins]] knowledge file (the standard + coalition + trust gap, en/zh/jp).
+  [[smart-routing]] and [[agent-stack]] corrected/enriched — verified router names and the
+  6%-accuracy-tradeoff nuance; the google/skills entry re-pointed to [[agent-plugins]]. All
+  trilingual.
+
 - **Plan:** Self-execution — advance three pending todos: (1) codify the fact-check method into a
   reusable knowledge file, (2) compare the MoE-streaming engines on memory-management strategy,
   (3) turn the mcp-grafana SSRF CVE into a reusable MCP audit checklist.

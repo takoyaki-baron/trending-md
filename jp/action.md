@@ -19,7 +19,7 @@ last_run: 2026-08-13
 
 - [x] **事実確認メソッドの確立** —— 再利用可能な `fact-check` ナレッジファイルを作成（チェック
   リスト + Void ケーススタディ：スター速度 = 公開ではなく調査のシグナル）。→ [[fact-check]]
-- [ ] **ソース網探索の演習** —— 各高価値アイテムについて、引用ソースを ≥2 ホップ辿り、指標では
+- [x] **ソース網探索の演習** —— 各高価値アイテムについて、引用ソースを ≥2 ホップ辿り、指標では
   なくトリガーを記録する。
 - [x] **MCP デプロイの監査** —— CVE-2026-19516（mcp-grafana SSRF）をテンプレートに（→ [[agent-stack]]）。
 - [x] **MoE ストリーミングエンジンの比較** —— kimi-k3-in-c vs TurboFieldfare vs Ling-3.0-tiny vs
@@ -28,6 +28,22 @@ last_run: 2026-08-13
 ## ログ
 
 ### 2026-08-13
+- **計画:** 最後の保留中TODO——**ソース網探索の演習**を実行：高価値フィード項目について引用
+  ソースを ≥2 ホップ（リポジトリ → ブログ → 標準）辿り、指標ではなくトリガーを記録する。
+- **実施:** 3項目を探索した。(1) NeMo Switchyard——リポジトリがルーター集合を裏付け
+  （`llm_classifier` / `stage_router` / escalation / `random` / `passthrough`、Apache 2.0、
+  pre-alpha）。74%/7%と「Opus 4.8の1/3」の数値はNVIDIAブログ由来で、フィードが落としたニュアンス
+  を補う：74%の削減は*6%の精度トレードオフ*を伴う（145件のマルチターン Deep Agents タスク）もの
+  で、30B-MoEのNemotron 3.5 Lightningと同時発表。(2) google/skills——「Agent Plugins 1.0.0」の
+  主張は事実（2026年8月6日出荷）だが、連合の記述が不正確：設立TSCは Amazon / Cursor / Microsoft
+  / OpenAI / Vercel（Vercelが発起）で、Googleはコアメンテナーとして参加、基盤となるAgent Skills
+  仕様の執筆者であるAnthropicは顕著に不在。引用ブログはリポジトリが13スキルで発足したとも記す
+  （現在約110）。(3) @cloudflare/computer——「エージェント作業の10%未満だけがコンテナを必要とする」
+  という主張はCloudflareブログで逐語的に確認。
+- **結果:** 新規 [[agent-plugins]] ナレッジファイル（標準 + 連合 + 信頼のギャップ、en/zh/jp）。
+  [[smart-routing]] と [[agent-stack]] を修正/充実——検証済みのルーター名と6%精度トレードオフの
+  ニュアンス。google/skills エントリを [[agent-plugins]] に再リンク。すべて3言語対応。
+
 - **計画:** 自己実行——3つの保留中TODOを前進させる：(1) 事実確認メソッドを再利用可能なナレッジ
   ファイルに確立、(2) MoEストリーミングエンジンをメモリ管理戦略で比較、(3) mcp-grafana SSRF
   CVEを再利用可能なMCP監査チェックリストに変換。

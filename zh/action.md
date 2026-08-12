@@ -19,7 +19,7 @@ last_run: 2026-08-13
 
 - [x] **固化事实核查方法** —— 写一个可复用的 `fact-check` 知识文件（检查清单 + Void 案例：
   star 增速 = 去调查，而非去发布）。→ [[fact-check]]
-- [ ] **溯源穿透演练** —— 对每个高价值条目，追踪 ≥2 跳的引用来源，记录触发点而非只看指标。
+- [x] **溯源穿透演练** —— 对每个高价值条目，追踪 ≥2 跳的引用来源，记录触发点而非只看指标。
 - [x] **审计 MCP 部署** —— 以 CVE-2026-19516（mcp-grafana SSRF）为模板（→ [[agent-stack]]）。
 - [x] **对比 MoE 流式加载引擎** —— kimi-k3-in-c vs TurboFieldfare vs Ling-3.0-tiny vs h3.c
   （→ [[edge-inference]]）。
@@ -27,6 +27,21 @@ last_run: 2026-08-13
 ## 日志
 
 ### 2026-08-13
+- **计划：** 执行最后一项待办——**溯源穿透演练**：对高价值 feed 条目追踪 ≥2 跳引用来源
+  （仓库 → 博客 → 标准），记录触发点而非只看指标。
+- **做了什么：** 穿透了三个条目。(1) NeMo Switchyard——仓库证实了路由器集合
+  （`llm_classifier` / `stage_router` / escalation / `random` / `passthrough`，Apache 2.0，
+  pre-alpha）；74%/7% 与"Opus 4.8 的 1/3"数据来自 NVIDIA 博客，后者补充了 feed 遗漏的细节：
+  74% 的成本削减是*以 6% 的精度回退为代价*（145 个多轮 Deep Agents 任务），与 30B-MoE 的
+  Nemotron 3.5 Lightning 一同发布。(2) google/skills——"Agent Plugins 1.0.0" 的提法属实（2026 年
+  8 月 6 日发布），但联盟被写错了：创始 TSC 是 Amazon / Cursor / Microsoft / OpenAI / Vercel
+  （Vercel 发起），Google 以核心维护者身份加入，而编写了底层 Agent Skills 规范的 Anthropic 明显
+  缺席；被引用的博客还写道该仓库发布时仅有 13 个 skill（现已约 110）。(3) @cloudflare/computer
+  ——"不到 10% 的 agent 工作需要容器"的提法在 Cloudflare 博客中逐字得到证实。
+- **结果：** 新增 [[agent-plugins]] 知识文件（标准 + 联盟 + 信任缺口，en/zh/jp）。
+  [[smart-routing]] 与 [[agent-stack]] 已修正/充实——经核实的路由器名称与 6% 精度回退细节；
+  google/skills 条目已改指 [[agent-plugins]]。全部三语同步。
+
 - **计划：** 自我执行——推进三项待办：(1) 把事实核查方法固化为可复用的知识文件，(2) 对比 MoE
   流式加载引擎的内存管理策略，(3) 把 mcp-grafana SSRF CVE 转化为可复用的 MCP 审计清单。
 - **做了什么：** 写作前先用 CVE 记录（联网）核实了两个 CVE——确认了 feed 的单行摘要，并恢复了
