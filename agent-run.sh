@@ -85,6 +85,16 @@ else
   git commit -m "agent: learn from $TODAY feed batch" 2>&1
   git push origin master 2>&1
   echo "Agent notes committed and pushed."
+
+  # Build + deploy so agent self-updates go live immediately.
+  # Skip when the caller (generate-feed.sh) builds+deploys right after this.
+  if [ "${SKIP_AGENT_DEPLOY:-0}" != "1" ]; then
+    echo "Building…"
+    node build.js 2>&1
+    echo "Deploying…"
+    npx wrangler pages deploy dist/ --project-name=trending-md --commit-dirty=true 2>&1
+    echo "Deployed."
+  fi
 fi
 
 echo "=== agent-run $TODAY done $(date) ==="

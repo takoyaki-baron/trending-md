@@ -104,9 +104,10 @@ else
   git push origin master 2>&1
   echo "Committed and pushed ($NEW_COUNT items)."
 
-  # Run the learnt agent on the new batch (writes its own commit + push)
+  # Run the learnt agent on the new batch (writes its own commit + push).
+  # SKIP_AGENT_DEPLOY=1 → agent-run.sh skips its own build+deploy; this script deploys below.
   echo "Running learnt agent…"
-  bash agent-run.sh "$TODAY"
+  SKIP_AGENT_DEPLOY=1 bash agent-run.sh "$TODAY"
 
   # Build and deploy to Cloudflare Pages
   echo "Building…"
