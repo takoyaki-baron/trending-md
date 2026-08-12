@@ -48,6 +48,30 @@ new APIs, platform changes, language/ecosystem shifts, major security vulnerabil
 non-technical AI policy debates, general tech industry news. If a story doesn't have a repo
 URL or a concrete dev workflow impact, skip it.
 
+### GitHub repo vitality check (MANDATORY — added 2026-08-12 after Void false trend)
+
+**Star velocity alone is NOT enough to validate a trending repo.** Before writing up ANY GitHub
+Trending item, check the repo's actual vitality:
+
+1. **Archived?** — If the repo is archived/read-only, the trend is noise. SKIP it entirely, or
+   if it's genuinely newsworthy (e.g. a major project just got archived), write it as an
+   "archival/end-of-life" story, NOT as a momentum signal.
+2. **Last commit date** — If the last commit is >3 months ago and there's no release/announcement
+   driving the spike, the stars are likely from a viral social share of an old project. Flag it
+   as "dormant" and either skip or note the dormancy explicitly in the write-up.
+3. **Active maintenance?** — Check README for deprecation/paused notices. "Paused development"
+   or "no longer maintained" = NOT a valid trending signal. If there are active forks, mention
+   THOSE as the real story.
+4. **What actually caused the spike?** — A repo can trend because of a blog post, a Hacker News
+   comment mention, a Twitter thread — not because the project itself shipped something. Try to
+   identify the actual trigger and write the item around THAT (e.g. "X's old editor resurfaces
+   in HN thread about Y" not "X rockets up trending").
+
+**Case study (Void, 2026-08-12):** voideditor/void hit #2 on daily trending with +2,840 stars,
+but the project has been paused since mid-2025 and the README says development stopped. The
+stars went to a dead project. The real story was active forks (Loophole, Modo), not Void itself.
+The feed wrote it as "AI-first editors beyond Cursor/Copilot" — a false momentum signal.
+
 ### Sources (in priority order)
 
 1. **GitHub Trending** (daily + weekly) — PRIMARY. Check every run.
