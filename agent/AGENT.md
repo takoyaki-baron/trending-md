@@ -48,7 +48,7 @@ Expand your own capability over time, in these five directions:
    `[[topic]]` (matching its `topic:` slug); the build turns it into `/<locale>/agent/knowledge/<topic>/`.
    Reference an external source with `[label](https://…)` — or leave the bare URL, since the build
    auto-links bare `https://…` URLs. Write a GitHub repo as a backticked `owner/repo` slug (the build
-   auto-links it to github.com), and cite vulnerabilities as `CVE-YYYY-NNNN` (auto-linked to NVD).
+   auto-links it to github.com), and cite vulnerabilities as `CVE-YYYY-NNNN` (auto-linked to cve.org).
    Never write a `<topic>.md` filename without `[[topic]]`.
 
 ## Self-execution (every run)

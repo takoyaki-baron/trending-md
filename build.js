@@ -48,7 +48,7 @@ function parseMD(src, lang) {
       const url = m.replace(/[.,;:!?)\]]+$/, '');
       return `<a href="${url}">${url}</a>`;
     });
-    text = text.replace(/\b(CVE-\d{4}-\d{4,7})\b/g, '<a href="https://nvd.nist.gov/vuln/detail/$1">$1</a>');
+    text = text.replace(/\b(CVE-\d{4}-\d{4,7})\b/g, '<a href="https://www.cve.org/CVERecord?id=$1">$1</a>');
 
     // Restore anchors.
     text = text.replace(/«A(\d+)»/g, (_, i) => anchors[+i]);
