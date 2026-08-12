@@ -36,7 +36,7 @@ Read these files first:
 
 Then do exactly what agent/AGENT.md's "Output contract" says:
 1. Rewrite en/agent.md — take notes on NET-NEW items only (skip anything at/before last_processed), update theses + todos, bump last_processed.
-2. Create/update agent/knowledge/en/*.md if useful, then translate each to agent/knowledge/zh/*.md + agent/knowledge/jp/*.md, and update every agent/knowledge/<lang>/index.md (keep the `topic:` slug identical across locales).
+2. Create/update agent/knowledge/en/*.md if useful, then translate each to agent/knowledge/zh/*.md + agent/knowledge/jp/*.md, and update every agent/knowledge/<lang>/index.md (keep the topic: slug identical across locales).
 3. Translate en/agent.md → zh/agent.md and jp/agent.md (keep repo names, URLs, and code identifiers untranslated).
 
 Keep en/agent.md a compact distilled summary — far under the 1M-token cap.
