@@ -1,8 +1,8 @@
 ---
 date: 2026-08-12
-updated: 2026-08-12T20:03:00Z
+updated: 2026-08-13T00:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 41
 license: CC-BY-4.0
 ---
 
@@ -449,13 +449,173 @@ Alibaba's Qwen team released **Qwen-MM-Plugins** (Apache 2.0) — 8 installable 
 
 ---
 
+## 28. antirez ships h3.c — Redis creator builds native Metal engine running MiniMax H3 video generation on Mac
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 380+ pts · ~24h ago (~20:00 UTC+8 Aug 11)
+- **Tags:** `antirez` `h3-metal` `video-generation` `apple-silicon` `metal`
+
+Salvatore Sanfilippo (antirez, creator of Redis) shipped **h3.c** — a from-scratch C/Objective-C + Metal inference engine that runs MiniMax's H3 omni-modal model natively on Apple Silicon (M3 Max, M5 Max). With zero Python dependencies and a single `make -j8` build, it generates 512×512 video+audio in ~3.5 seconds (4-step denoise) on an M5 Max, using direct safetensor mmap and an optional `--ssd-streaming` mode that cuts DiT memory from 36.5 GiB to 2.0 GiB. MiniMax H3 shipped as open weights on Aug 3; antirez's engine landed a week later, hitting 381 HN points and earning MiniMax's response: "You can't hire this, you can only open-source and let it happen."
+
+**Why it matters:** When the creator of Redis chooses bare-metal C + Metal over Python ML frameworks for AI inference, it signals a shift toward systems-level thinking in the AI tooling stack. The mmap-from-safetensors approach eliminates the entire model-loading step, and the SSD-streaming mode proves that even 33GB video generation models can run on consumer hardware — not through quantization, but through intelligent memory management.
+
+> MIT license · M3 Max / M5 Max · text→video+audio · first/last-frame conditioning · Ref2VA ordered references
+
+[`🔗 antirez/h3-metal`](https://github.com/antirez/h3-metal) · [`🔗 AI Weekly`](https://aiweekly.co/alerts/antirez-ships-h3c-minimax-h3-inference-on-apple-silicon) · [`🔗 explainX.ai`](https://explainx.ai/blog/antirez-h3c-minimax-h3-metal-apple-silicon-august-2026)
+
+---
+
+## 29. Mojo 1.0 released — Python-compatible systems language hits stability with backward-compatibility guarantee
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Modular / Hacker News · 390+ pts · ~24h ago (~04:00 UTC+8 Aug 12)
+- **Tags:** `mojo` `programming-language` `python` `ai` `modular`
+
+Modular released **Mojo 1.0** on Aug 11 as part of the Modular 26.5 platform update — the first stable release of the Python-compatible systems language created by Chris Lattner (Swift, LLVM) and Tim Davis. The 1.0 milestone brings a formal backward-compatibility guarantee, stable standard library APIs, Python-style lambda syntax, unified Pointer type, memory-safety diagnostics, and faster Python interop. Following Qualcomm's ~$3.9B acquisition of Modular in mid-2026, Mojo 1.0 anchors the MAX execution platform and Modular Cloud. Nearly 200 contributors have landed 1,100+ PRs since the standard library was open-sourced in 2024; the compiler and toolchain are pledged to be open-sourced later in 2026.
+
+**Why it matters:** Mojo is the most serious attempt to bridge the Python-systems gap since Cython — combining Python's usability with Rust-grade memory safety and MLIR-based hardware portability. The 1.0 stability guarantee means enterprises can now build production AI infrastructure on Mojo, and Qualcomm's backing signals the language will have a hardware-accelerated future across mobile and edge devices.
+
+> Apache 2.0 (stdlib) · `uv pip install --upgrade mojo` · MLIR-based · GPU programming via `max` package · ModCon 2026 Aug 18
+
+[`🔗 Modular Blog`](https://www.modular.com/blog/modular-26-5-mojo-1-0-is-here) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/modular-launches-mojo-language/) · [`🔗 GitHub: modular/modular`](https://github.com/modular/modular)
+
+---
+
+## 30. Nvidia open-sources Nemotron 3.5 Lightning and NeMo Switchyard — fast agent execution model + intelligent model router
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Nvidia Blog / Hacker News · 1,600+ pts · ~28h ago (~16:00 UTC+8 Aug 11)
+- **Tags:** `nvidia` `nemotron` `open-source` `moe` `agent-ai`
+
+Nvidia released two open-source tools on Aug 11: **Nemotron 3.5 Lightning**, a 30B-parameter MoE model (3B active per task) built for high-volume agent execution tasks (code review, tool use, security monitoring), and **NeMo Switchyard**, a model-routing library that directs each request to the most cost-efficient model across open, proprietary, and Nvidia models. Lightning achieves ~4× faster output than comparable models and 86% on PinchBench with ~30% faster task completion than Qwen 3.6-35B. Switchyard routes complex planning to frontier models and routine work to Lightning, cutting costs to ~1/3 of using Opus 4.8 alone. Both released under OpenMDW 1.1 with open weights, training data, and recipes.
+
+**Why it matters:** Nvidia is shifting from selling AI chips to selling the entire AI workflow — models, routing, and orchestration. Switchyard's "systems of models" architecture (multiple specialized models, intelligently routed) is a practical answer to the cost problem of always-on AI agents: you don't need a frontier model for every task. This marks the most aggressive move yet by a hardware company into open-source AI software.
+
+> 30B-A3B MoE · 1M context window · OpenMDW 1.1 · Single GPU (RTX/H100/DGX) · CrowdStrike, Harvey, CodeRabbit adopting
+
+[`🔗 Nvidia Blog`](https://blogs.nvidia.com/blog/nemotron-lightning-switchyard-rtx-dgx/) · [`🔗 36Kr`](https://eu.36kr.com/en/p/3935933902945411) · [`🔗 llm-stats.com`](https://llm-stats.com/blog/research/nemotron-3-5-lightning-launch)
+
+---
+
+## 31. Lazarus exploits Windows WinSock zero-day CVE-2026-68820 — actively used to deploy kernel rootkit
+
+- **Velocity:** ▮▮ rising
+- **Source:** SecurityWeek / Check Point Research · 1,200+ pts · ~10h ago (~10:00 UTC+8)
+- **Tags:** `security` `cve` `windows` `lazarus` `zero-day`
+
+CVE-2026-68820, a use-after-free in the Windows AFD.sys WinSock driver, was patched in Microsoft's August Patch Tuesday but was **already under active exploitation** by the North Korean Lazarus group — contradicting initial reports that no zero-days were exploited. Discovered by Check Point Research, the elevation-of-privilege flaw (CVSS 7.0) is used in the Operation DreamJob campaign targeting defense, aerospace, and aviation sectors, chaining with DLL sideloading and the MISTPEN downloader to deploy **FudModule v3.1**, a kernel-mode rootkit that disables telemetry, minifilters, ETW providers, and Smart App Control. CISA added it to the KEV catalog on Aug 11. No workaround exists — patching is the only mitigation.
+
+**Why it matters:** This is the third afd.sys zero-day exploited in the wild since 2022, suggesting the WinSock driver has become a persistent weak point in the Windows kernel attack surface. The FudModule rootkit's new Smart App Control bypass capability is a significant escalation — it neutralizes a key Windows 11 security feature that was supposed to block untrusted drivers.
+
+> CVSS 7.0 · CISA KEV Aug 11 · afd.sys · FudModule v3.1 disables 90+ ETW providers · Defense/aerospace sectors targeted
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/august-2026-patch-tuesday-microsoft-fixes-421-cves-one-exploited-zero-day/) · [`🔗 CVETodo`](https://cvetodo.com/news/microsoft-patches-actively-exploited-winsock-zero-day-cve-2026-68820-in-398-fix-august-patch-tuesday) · [`🔗 cybersecurity-help.cz`](https://www.cybersecurity-help.cz/blog/5563.html)
+
+---
+
+## 32. kimi-k3-in-c — 176KB C99 binary runs 2.78-trillion-parameter Kimi K3 on a single CPU with 8GB RAM
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 4,900+ stars · ~48h ago (~20:00 UTC+8 Aug 10)
+- **Tags:** `kimi-k3` `c99` `cpu-inference` `moe` `open-source`
+
+Developer FareedKhan-dev released **kimi-k3-in-c** — a pure C99 inference engine that compiles to a single **176KB binary** and runs Moonshot AI's Kimi K3 (2.78 trillion parameters, MoE architecture) on a single CPU with just 8.24 GB of RAM. The engine achieves a ~675× memory reduction with zero quantization, distillation, or weight dropping through four strategies: MXFP4-packed experts streamed from NVMe, routing sparsity (16 of 896 experts active per token), O_DIRECT trunk streaming, and an expert LRU cache. Output is byte-for-byte identical to the PyTorch reference. Speed ranges from ~33 s/token (laptop, 8GB) to ~11 s/token (server, 128GB). Apache 2.0 licensed.
+
+**Why it matters:** This isn't about building a practical chatbot — it's a demonstration that frontier-scale models can be understood, reimplemented, and run on consumer hardware by a single developer. The hand-rolled C implementation reveals the MoE architecture's hidden efficiency: 93% of the checkpoint weight is experts that don't need to be in memory. As AI models grow to multi-trillion-parameter scales, the gap between what labs run and what developers can independently verify becomes a trust issue — projects like this narrow that gap.
+
+> Apache 2.0 · ~7 C source files · Linux x86-64 · 1.7TB NVMe needed · Byte-identical to PyTorch reference · v0.1.0
+
+[`🔗 FareedKhan-dev/kimi-k3-in-c`](https://github.com/FareedKhan-dev/kimi-k3-in-c) · [`🔗 dev.to`](https://dev.to/euk_ela_a3e7ed01aa3f7314e/how-a-176-kb-c-binary-runs-a-278-trillion-parameter-model-on-one-cpu-with-8-gb-of-ram-1ime) · [`🔗 AISignal`](https://aisignal.dev/analysis/fareedkhan-dev-kimi-k3-in-c)
+
+---
+
+## 33. Snap open-sources Valdi — TypeScript-to-native UI framework that powered Snapchat for 8 years
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 16,400+ stars · trending throughout Aug 2026
+- **Tags:** `snapchat` `valdi` `ui-framework` `cross-platform` `typescript`
+
+Snap Inc. open-sourced **Valdi** (MIT license, 16,400+ GitHub stars), the cross-platform UI framework that has powered Snapchat's production iOS and Android apps for 8 years. Developers write declarative TypeScript (TSX syntax, class-based components — not React) and it compiles directly to native views with no web views and no JavaScript bridges. Key features: automatic view recycling, millisecond hot reload, full VS Code debugging, Flexbox layout with RTL support, and the ability to embed Valdi inside existing UIKit/Android hierarchies. Currently in beta pending documentation polish; 75+ contributors. Installed via `npm install -g @snap/valdi`.
+
+**Why it matters:** Valdi is the most significant mobile UI framework open-sourcing since React Native — but with a fundamentally different approach: compilation to native views rather than a bridge architecture. Its 8-year production track record at Snapchat's scale (hundreds of millions of users) means it's not a toy. For teams frustrated with React Native's bridge overhead or Flutter's custom rendering, Valdi offers a third path: TypeScript DX with true native performance.
+
+> MIT license · C++/TypeScript · iOS/Android/macOS · npm: `@snap/valdi` · Class-based components, not React hooks
+
+[`🔗 Snapchat/Valdi`](https://github.com/Snapchat/Valdi) · [`🔗 HelloGitHub`](https://hellogithub.com/en/repository/9b3f71b9861f412fa50f2b1566914966) · [`🔗 Star History`](https://www.star-history.com/snapchat/valdi/)
+
+---
+
+## 34. Prime Agent — self-improving RLM agent harness surpasses human baseline on ARC-AGI-3
+
+- **Velocity:** ▮ steady
+- **Source:** Prime Intellect / Hacker News · 5,000+ stars · ~6d ago (Aug 6)
+- **Tags:** `prime-agent` `rlm` `arc-agi` `self-improving` `ai-agent`
+
+Prime Intellect open-sourced **Prime Agent** (MIT license) — a self-improving AI coding and research harness built around two abstractions: Recursive Language Model (RLM), where context is treated as first-class variables in a persistent IPython REPL, and a Continual Harness that lets agents review their own trajectories and apply evidence-backed refinements to prompts, skills, and subagent specs. Paired with Opus 5, it achieved **95.5% on ARC-AGI-3**, surpassing the reported human expert baseline of 95.4%. In practical tests, it generated working Rust-based SEGA Genesis and Game Boy Colour emulators without reference code. Supports 20+ model providers and runs as a background daemon with session persistence across disconnects.
+
+**Why it matters:** Prime Agent's RLM approach — treating context as mutable variables in a persistent kernel rather than a linear chat history — is a fundamentally different architecture from the "long context window" approach used by most agent harnesses. The ARC-AGI-3 result, while from the developer, suggests this architecture can solve problems requiring sustained multi-step reasoning without losing track of intermediate state.
+
+> MIT license · macOS/Linux · 20+ model providers · Daemon-backed sessions · `curl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh`
+
+[`🔗 PrimeIntellect-ai/prime-agent`](https://github.com/PrimeIntellect-ai/prime-agent) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/prime-intellect-open-sources-prime-agent-self-improving-ai-coding-harness/) · [`🔗 Prime Intellect Blog`](https://www.primeintellect.ai/blog/prime-agent)
+
+---
+
+## 35. Ant Group open-sources Ling-3.0-tiny — 7.9B MoE model runs at 90 tok/s on M4 Pro MacBook
+
+- **Velocity:** ▮ steady
+- **Source:** Ant Group / 36Kr · 1,200+ pts · ~28h ago (~16:00 UTC+8 Aug 11)
+- **Tags:** `ant-group` `ling` `moe` `apple-silicon` `local-ai`
+
+Ant Group's Bailing team open-sourced **Ling-3.0-tiny** (MIT license), a 7.9B-parameter hybrid MoE model (1.3B active per token) that achieves ~86–90 tok/s on an M4 Pro MacBook at 8K context with only 8.34 GiB peak memory. The architecture alternates KDA (Kimi Delta Attention) and MLA (Multi-Head Latent Attention) at a 3:1 ratio across layers, with 128 routed experts (8 active + 1 shared). It scores 25 on the Artificial Analysis Intelligence Index — just 1 point below Gemma 4 26B-A4B — and supports native hybrid reasoning with fast/thinking mode toggling. Available in BF16, FP8, and INT4 on Hugging Face and ModelScope.
+
+**Why it matters:** Ling-3.0-tiny is the strongest MIT-licensed local model optimized specifically for Apple Silicon. Its KDA+MLA hybrid borrows from both Moonshot AI and DeepSeek architectures, and sub-100ms first-token latency makes it viable for interactive local agents rather than just batch inference. The MIT license and Apple Silicon-first design make it a practical building block for offline-first AI applications.
+
+> MIT license · BF16/FP8/INT4 · Hugging Face + ModelScope · KDA:MLA 3:1 ratio · 128 experts · under 100ms first token
+
+[`🔗 inclusionAI/Ling-3.0-tiny`](https://huggingface.co/inclusionAI/Ling-3.0-tiny) · [`🔗 36Kr`](https://eu.36kr.com/en/p/3935123373866371) · [`🔗 The Block Beats`](https://en.theblockbeats.news/flash/360954)
+
+---
+
+## 36. Multi-Agent-CAD — Tsinghua lab's text-to-CAD uses 116× fewer tokens than single-agent approaches
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 733+ stars · ~72h ago (~12:00 UTC+8 Aug 9)
+- **Tags:** `cad` `multi-agent` `text-to-3d` `langgraph` `open-source`
+
+Tsinghua University's IEI Lab released **Multi-Agent-CAD (MAC)** — an MIT-licensed framework that splits text-to-CAD generation across four specialized agents (Spec Planner, Geometric Architect, Python Coder, Autonomous Skill Loop) wired by a LangGraph state machine. Each agent passes only compact structured JSON — not raw conversation history — preventing exponential token growth. Benchmarked against a single-agent baseline on 10 prompts: **13× cheaper, 116× fewer tokens, 26× fewer API calls**, with a higher feature pass rate (99.3% vs 97.9%). A deterministic translator handles 12 common CAD operations with zero token consumption.
+
+**Why it matters:** Most multi-agent research focuses on coding or general reasoning tasks. MAC demonstrates that structured state-passing between specialized agents — rather than dumping full conversation context into every prompt — is the key to cost-efficient multi-agent systems. The 116× token reduction on a real engineering task is a concrete benchmark that other multi-agent frameworks should be measured against.
+
+> MIT license · Python 3.11+ · Claude/OpenAI/DeepSeek/Gemini backends · CLI + Web UI with 3D preview · 4-agent LangGraph pipeline
+
+[`🔗 Pan-Chera/Multi-Agent-CAD`](https://github.com/Pan-Chera/Multi-Agent-CAD) · [`🔗 PullRepo`](https://pullrepo.com/report/todays-ai-frameworks-sdks-fastest-growing-projects-august-12-2026) · [`🔗 3druck.com`](https://3druck.com/zh/%e7%a8%8b%e5%ba%8f/%e6%96%87%e6%9c%ac%e8%bd%ac-cad-%e5%bc%80%e6%ba%90%e5%a4%9a%e6%99%ba%e8%83%bd%e4%bd%93%e7%b3%bb%e7%bb%9f%e4%bb%a5%e6%98%be%e8%91%97%e6%9b%b4%e4%bd%8e%e7%9a%84%e8%ae%a1%e7%ae%97%e5%bc%80%e9%94%80/)
+
+---
+
+## 37. TurboFieldfare — Swift+Metal engine runs Gemma 4 26B on any M-series Mac with just 2GB RAM
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 5,700+ stars · ~4d ago (~20:00 UTC+8 Aug 8)
+- **Tags:** `turbofieldfare` `gemma` `metal` `apple-silicon` `edge-inference`
+
+Developer Andrey Mikhaylov (drumih) released **TurboFieldfare** (Apache 2.0) — a model-specific Swift+Metal inference engine that runs Google's Gemma 4 26B-A4B on any Apple Silicon Mac with ~2 GB of RAM. It exploits the MoE architecture by keeping only a ~1.35 GB shared core resident while streaming routed expert weights from SSD on demand via a per-layer 16-slot LFU cache. On an 8GB M2 MacBook Air, it achieves 5.1–6.3 tok/s; on a 24GB M5 Pro, 31–35 tok/s. Six products included: library, native Mac app, CLI, decode service, OpenAI-compatible server with function tools, and model installer. Requires macOS 26, Xcode 26, Swift 6.2, and Metal 4.
+
+**Why it matters:** TurboFieldfare pushes the boundary of what "can run locally" means — a 26B model on a base 8GB MacBook Air is impossible with conventional loading (MLX needs 14.7–15.3 GB). The SSD-streaming technique demonstrates that MoE architectures are fundamentally more local-deployment-friendly than dense models of comparable capability. The polished app/CLI/server packaging makes it accessible to non-systems programmers.
+
+> Apache 2.0 · Swift 6.2 + Metal 4 · macOS 26 · M1+ · ~2GB RAM · API-compatible Chat Completions server with function tools
+
+[`🔗 drumih/turbo-fieldfare`](https://github.com/drumih/turbo-fieldfare) · [`🔗 EveryDev.ai`](https://www.everydev.ai/tools/turbo-fieldfare) · [`🔗 founderland.ai`](https://founderland.ai/articles/how-an-open-source-engine-runs-26b-ai-models-in-just-2gb-of--ms8uwm83)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-12T20:03:00Z |
-| Items | 27 |
-| Sources tracked | 31 (Hacker News, GitHub Trending, major tech blogs, security advisories, Cloudflare Blog, SAP Patch Day, Warp, Alibaba, Cactus Compute) |
+| Generated | 2026-08-13T00:03:00Z |
+| Items | 37 |
+| Sources tracked | 41 (Hacker News, GitHub Trending, major tech blogs, security advisories, Cloudflare Blog, SAP Patch Day, Warp, Alibaba, Cactus Compute, Modular, Nvidia, Check Point Research, Prime Intellect, Ant Group, Tsinghua IEI Lab) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

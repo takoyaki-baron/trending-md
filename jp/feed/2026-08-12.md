@@ -1,8 +1,8 @@
 ---
 date: 2026-08-12
-updated: 2026-08-12T20:03:00Z
+updated: 2026-08-13T00:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 41
 license: CC-BY-4.0
 ---
 
@@ -447,13 +447,173 @@ AlibabaのQwenチームが**Qwen-MM-Plugins**（Apache 2.0）をリリース—�
 
 ---
 
+## 28. antirezがh3.cをリリース——Redisの作者がMac上でMiniMax H3動画生成を実行するネイティブMetalエンジンを構築
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Hacker News · 380+ pts · ~24h ago (~20:00 UTC+8 Aug 11)
+- **タグ:** `antirez` `h3-metal` `video-generation` `apple-silicon` `metal`
+
+Salvatore Sanfilippo（antirez、Redisの作者）が**h3.c**をリリース——MiniMaxのH3オムニモーダルモデルをApple Silicon（M3 Max、M5 Max）上でネイティブ実行する、ゼロから構築されたC/Objective-C + Metal推論エンジンである。Python依存ゼロ、`make -j8`一発のビルドで、M5 Max上で512×512の動画+音声を約3.5秒（4ステップデノイズ）で生成し、ダイレクトsafetensor mmapと、DiTメモリを36.5GiBから2.0GiBに削減するオプションの`--ssd-streaming`モードを備える。MiniMax H3は8月3日にオープンウェイトで公開され、antirezのエンジンはその1週間後に登場、381 HNポイントを獲得し、MiniMaxは「これは採用できない。オープンソース化して自然に起こるのを待つしかない」と応じた。
+
+**注目の理由:** Redisの作者がAI推論にPython MLフレームワークではなくベアメタルC + Metalを選んだことは、AIツーリングスタックにおけるシステムレベルの思考へのシフトを示している。safetensorsからのmmapアプローチはモデルロード工程全体を排除し、SSDストリーミングモードは、量子化ではなくインテリジェントなメモリ管理によって33GBの動画生成モデルさえもコンシューマハードウェアで実行できることを証明している。
+
+> MITライセンス · M3 Max / M5 Max · テキスト→動画+音声 · 先頭/最終フレーム条件付け · Ref2VA順序付き参照
+
+[`🔗 antirez/h3-metal`](https://github.com/antirez/h3-metal) · [`🔗 AI Weekly`](https://aiweekly.co/alerts/antirez-ships-h3c-minimax-h3-inference-on-apple-silicon) · [`🔗 explainX.ai`](https://explainx.ai/blog/antirez-h3c-minimax-h3-metal-apple-silicon-august-2026)
+
+---
+
+## 29. Mojo 1.0リリース——Python互換のシステム言語が安定版に到達、後方互換性を保証
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Modular / Hacker News · 390+ pts · ~24h ago (~04:00 UTC+8 Aug 12)
+- **タグ:** `mojo` `programming-language` `python` `ai` `modular`
+
+Modularは8月11日、Modular 26.5プラットフォームアップデートの一環として**Mojo 1.0**をリリースした——Chris Lattner（Swift、LLVM）とTim Davisが創造したPython互換システム言語の初の安定版である。1.0マイルストーンは、正式な後方互換性保証、安定版標準ライブラリAPI、Pythonスタイルのラムダ構文、統一Pointer型、メモリ安全性診断、高速化されたPython相互運用をもたらす。2026年半ばのQualcommによるModularの約39億ドルでの買収を受け、Mojo 1.0はMAX実行プラットフォームとModular Cloudの中核を成す。2024年の標準ライブラリのオープンソース化以来、約200人のコントリビューターが1,100以上のPRをマージ。コンパイラとツールチェーンは2026年後半にオープンソース化が予定されている。
+
+**注目の理由:** MojoはCython以来、Pythonとシステムプログラミングのギャップを埋める最も本格的な試みである——Pythonの使いやすさとRust級のメモリ安全性、MLIRベースのハードウェア可搬性を組み合わせている。1.0の安定性保証により、企業はMojo上で本番AIインフラを構築できるようになり、Qualcommの後ろ盾はモバイルおよびエッジデバイス全体でのハードウェアアクセラレーションの未来を約束する。
+
+> Apache 2.0（標準ライブラリ） · `uv pip install --upgrade mojo` · MLIRベース · `max`パッケージによるGPUプログラミング · ModCon 2026 8月18日
+
+[`🔗 Modular Blog`](https://www.modular.com/blog/modular-26-5-mojo-1-0-is-here) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/modular-launches-mojo-language/) · [`🔗 GitHub: modular/modular`](https://github.com/modular/modular)
+
+---
+
+## 30. NvidiaがNemotron 3.5 LightningとNeMo Switchyardをオープンソース化——高速エージェント実行モデルとインテリジェントモデルルーター
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Nvidia Blog / Hacker News · 1,600+ pts · ~28h ago (~16:00 UTC+8 Aug 11)
+- **タグ:** `nvidia` `nemotron` `open-source` `moe` `agent-ai`
+
+Nvidiaは8月11日に2つのオープンソースツールをリリースした：**Nemotron 3.5 Lightning**は、大量のエージェント実行タスク（コードレビュー、ツール使用、セキュリティ監視）向けに構築された30BパラメータのMoEモデル（タスクあたり3Bアクティブ）、**NeMo Switchyard**は、各リクエストをオープン、プロプライエタリ、Nvidiaモデルの中で最もコスト効率の高いモデルにルーティングするモデルルーティングライブラリである。Lightningは同等モデルと比較して約4倍の出力速度を達成し、PinchBenchで86%、Qwen 3.6-35Bより約30%高速なタスク完了を実現。Switchyardは複雑な計画をフロンティアモデルに、定型作業をLightningにルーティングし、Opus 4.8のみを使用する場合の約1/3にコストを削減する。両方ともOpenMDW 1.1の下でオープンウェイト、トレーニングデータ、レシピとともに公開。
+
+**注目の理由:** NvidiaはAIチップの販売から、モデル、ルーティング、オーケストレーションを含むAIワークフロー全体の販売へとシフトしている。Switchyardの「モデルシステム」アーキテクチャ（複数の特化モデルをインテリジェントにルーティング）は、常時稼働AIエージェントのコスト問題に対する実用的な解決策である——すべてのタスクにフロンティアモデルは必要ない。これはハードウェア企業によるオープンソースAIソフトウェアへの最も積極的な進出である。
+
+> 30B-A3B MoE · 1Mコンテキストウィンドウ · OpenMDW 1.1 · シングルGPU（RTX/H100/DGX） · CrowdStrike、Harvey、CodeRabbitが採用
+
+[`🔗 Nvidia Blog`](https://blogs.nvidia.com/blog/nemotron-lightning-switchyard-rtx-dgx/) · [`🔗 36Kr`](https://eu.36kr.com/en/p/3935933902945411) · [`🔗 llm-stats.com`](https://llm-stats.com/blog/research/nemotron-3-5-lightning-launch)
+
+---
+
+## 31. LazarusがWindows WinSockのゼロデイCVE-2026-68820を悪用——カーネルルートキット展開に活発利用
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** SecurityWeek / Check Point Research · 1,200+ pts · ~10h ago (~10:00 UTC+8)
+- **タグ:** `security` `cve` `windows` `lazarus` `zero-day`
+
+CVE-2026-68820は、Windows AFD.sys WinSockドライバにおけるUse-After-Freeであり、Microsoftの8月Patch Tuesdayで修正されたが、**既に北朝鮮のLazarusグループによって活発に悪用されていた**——ゼロデイは悪用されていないという当初の報告と矛盾する。Check Point Researchによって発見されたこの特権昇格の欠陥（CVSS 7.0）は、防衛、航空宇宙、航空セクターを標的とするOperation DreamJobキャンペーンで使用され、DLLサイドローディングおよびMISTPENダウンローダーと連鎖して、テレメトリ、ミニフィルター、ETWプロバイダー、Smart App Controlを無効化するカーネルモードルートキット**FudModule v3.1**を展開する。CISAは8月11日にKEVカタログに追加。回避策は存在せず——パッチ適用が唯一の緩和策である。
+
+**注目の理由:** これは2022年以来、実環境で悪用された3件目のafd.sysゼロデイであり、WinSockドライバがWindowsカーネル攻撃面における永続的な弱点となっていることを示唆する。FudModuleルートキットの新しいSmart App Controlバイパス機能は重大なエスカレーションである——信頼できないドライバをブロックするはずだったWindows 11の主要セキュリティ機能を無効化する。
+
+> CVSS 7.0 · CISA KEV 8月11日 · afd.sys · FudModule v3.1が90以上のETWプロバイダーを無効化 · 防衛/航空宇宙セクターが標的
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/august-2026-patch-tuesday-microsoft-fixes-421-cves-one-exploited-zero-day/) · [`🔗 CVETodo`](https://cvetodo.com/news/microsoft-patches-actively-exploited-winsock-zero-day-cve-2026-68820-in-398-fix-august-patch-tuesday) · [`🔗 cybersecurity-help.cz`](https://www.cybersecurity-help.cz/blog/5563.html)
+
+---
+
+## 32. kimi-k3-in-c——176KBのC99バイナリが2.78兆パラメータのKimi K3を8GB RAMの単一CPUで実行
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** GitHub Trending · 4,900+ stars · ~48h ago (~20:00 UTC+8 Aug 10)
+- **タグ:** `kimi-k3` `c99` `cpu-inference` `moe` `open-source`
+
+開発者FareedKhan-devが**kimi-k3-in-c**をリリース——単一の**176KBバイナリ**にコンパイルされる純粋なC99推論エンジンで、Moonshot AIのKimi K3（2.78兆パラメータ、MoEアーキテクチャ）をわずか8.24GBのRAMで単一CPU上で実行する。このエンジンは、MXFP4パックのエキスパートをNVMeからストリーミング、ルーティングスパース性（トークンあたり896エキスパート中16アクティブ）、O_DIRECTトランクストリーミング、エキスパートLRUキャッシュの4つの戦略により、量子化、蒸留、重み削除なしで約675倍のメモリ削減を達成。出力はPyTorchリファレンスとバイト単位で同一。速度は約33秒/トークン（ラップトップ、8GB）から約11秒/トークン（サーバー、128GB）。Apache 2.0ライセンス。
+
+**注目の理由:** これは実用的なチャットボットの構築ではなく——フロンティアスケールのモデルが単一の開発者によって理解、再実装、コンシューマハードウェアで実行可能であることの実証である。手書きのC実装はMoEアーキテクチャの隠れた効率性を明らかにする：チェックポイントの重みの93%はメモリ上に存在する必要のないエキスパートである。AIモデルが数兆パラメータ規模に成長するにつれ、ラボが実行するものと開発者が独立して検証できるものの間のギャップは信頼の問題となる——このようなプロジェクトはそのギャップを狭める。
+
+> Apache 2.0 · 約7つのCソースファイル · Linux x86-64 · 1.7TB NVMe必要 · PyTorchリファレンスとバイト同一 · v0.1.0
+
+[`🔗 FareedKhan-dev/kimi-k3-in-c`](https://github.com/FareedKhan-dev/kimi-k3-in-c) · [`🔗 dev.to`](https://dev.to/euk_ela_a3e7ed01aa3f7314e/how-a-176-kb-c-binary-runs-a-278-trillion-parameter-model-on-one-cpu-with-8-gb-of-ram-1ime) · [`🔗 AISignal`](https://aisignal.dev/analysis/fareedkhan-dev-kimi-k3-in-c)
+
+---
+
+## 33. SnapがValdiをオープンソース化——Snapchatを8年間支えてきたTypeScript-to-native UIフレームワーク
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** GitHub Trending · 16,400+ stars · 2026年8月中トレンド継続
+- **タグ:** `snapchat` `valdi` `ui-framework` `cross-platform` `typescript`
+
+Snap Inc.が**Valdi**（MITライセンス、GitHubスター16,400+）をオープンソース化した。Snapchatの本番iOSおよびAndroidアプリを8年間支えてきたクロスプラットフォームUIフレームワークである。開発者は宣言的なTypeScript（TSX構文、クラスベースのコンポーネント——Reactではない）を記述し、それがWebViewやJavaScriptブリッジなしで直接ネイティブビューにコンパイルされる。主な機能：自動ビューリサイクル、ミリ秒単位のホットリロード、完全なVS Codeデバッグ、RTLサポート付きFlexboxレイアウト、既存のUIKit/Android階層内へのValdiの埋め込み。現在ドキュメント整備中のベータ版で、75人以上のコントリビューター。`npm install -g @snap/valdi`でインストール。
+
+**注目の理由:** ValdiはReact Native以来最も重要なモバイルUIフレームワークのオープンソース化である——しかし根本的に異なるアプローチを取る：ブリッジアーキテクチャではなくネイティブビューへのコンパイル。Snapchatのスケール（数億ユーザー）での8年間の本番実績は、これが玩具ではないことを意味する。React NativeのブリッジオーバーヘッドやFlutterのカスタムレンダリングに不満を持つチームにとって、Valdiは第三の道を提供する：TypeScript DXと真のネイティブパフォーマンス。
+
+> MITライセンス · C++/TypeScript · iOS/Android/macOS · npm: `@snap/valdi` · Reactフックではなくクラスベースコンポーネント
+
+[`🔗 Snapchat/Valdi`](https://github.com/Snapchat/Valdi) · [`🔗 HelloGitHub`](https://hellogithub.com/en/repository/9b3f71b9861f412fa50f2b1566914966) · [`🔗 Star History`](https://www.star-history.com/snapchat/valdi/)
+
+---
+
+## 34. Prime Agent——自己改善型RLMエージェントハーネスがARC-AGI-3で人間のベースラインを超える
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** Prime Intellect / Hacker News · 5,000+ stars · ~6d ago (Aug 6)
+- **タグ:** `prime-agent` `rlm` `arc-agi` `self-improving` `ai-agent`
+
+Prime Intellectが**Prime Agent**（MITライセンス）をオープンソース化した——2つの抽象化を中心に構築された自己改善型AIコーディング・研究ハーネスである：RLM（Recursive Language Model）では、コンテキストが永続的なIPython REPL内の第一級変数として扱われ、Continual Harnessでは、エージェントが自身の軌跡をレビューし、証拠に裏付けられた改善をプロンプト、スキル、サブエージェント仕様に適用する。Opus 5と組み合わせて**ARC-AGI-3で95.5%**を達成し、報告された人間の専門家ベースライン95.4%を上回った。実用テストでは、参照コードなしでRustベースのSEGA GenesisおよびGame Boy Colourエミュレータを生成。20以上のモデルプロバイダーをサポートし、切断を跨いでセッション永続性を持つバックグラウンドデーモンとして動作する。
+
+**注目の理由:** Prime AgentのRLMアプローチ——コンテキストを線形のチャット履歴ではなく永続的カーネル内の可変変数として扱う——は、ほとんどのエージェントハーネスが使用する「長いコンテキストウィンドウ」アプローチとは根本的に異なるアーキテクチャである。ARC-AGI-3の結果は開発者によるものだが、このアーキテクチャが中間状態を見失うことなく持続的な多段階推論を必要とする問題を解決できることを示唆している。
+
+> MITライセンス · macOS/Linux · 20以上のモデルプロバイダー · デーモンバックのセッション · `curl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh`
+
+[`🔗 PrimeIntellect-ai/prime-agent`](https://github.com/PrimeIntellect-ai/prime-agent) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/prime-intellect-open-sources-prime-agent-self-improving-ai-coding-harness/) · [`🔗 Prime Intellect Blog`](https://www.primeintellect.ai/blog/prime-agent)
+
+---
+
+## 35. Ant GroupがLing-3.0-tinyをオープンソース化——7.9B MoEモデルがM4 Pro MacBookで90 tok/sを達成
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** Ant Group / 36Kr · 1,200+ pts · ~28h ago (~16:00 UTC+8 Aug 11)
+- **タグ:** `ant-group` `ling` `moe` `apple-silicon` `local-ai`
+
+Ant GroupのBailingチームが**Ling-3.0-tiny**（MITライセンス）をオープンソース化した。7.9BパラメータのハイブリッドMoEモデル（トークンあたり1.3Bアクティブ）で、M4 Pro MacBook上で8Kコンテキスト、ピークメモリわずか8.34GiBで約86〜90 tok/sを達成する。アーキテクチャはレイヤー全体でKDA（Kimi Delta Attention）とMLA（Multi-Head Latent Attention）を3:1の比率で交互に配置し、128のルーテッドエキスパート（8アクティブ + 1共有）を持つ。Artificial Analysis Intelligence Indexで25を獲得——Gemma 4 26B-A4Bをわずか1ポイント下回る——高速/思考モードの切り替えによるネイティブハイブリッド推論をサポート。BF16、FP8、INT4でHugging FaceおよびModelScopeで利用可能。
+
+**注目の理由:** Ling-3.0-tinyはApple Silicon向けに特化して最適化された最も強力なMITライセンスのローカルモデルである。そのKDA+MLAハイブリッドはMoonshot AIとDeepSeekの両方のアーキテクチャから借用しており、100ms未満のファーストトークンレイテンシはバッチ推論だけでなくインタラクティブなローカルエージェントに実用的である。MITライセンスとApple Siliconファーストの設計は、オフラインファーストAIアプリケーションの実用的な構成要素となる。
+
+> MITライセンス · BF16/FP8/INT4 · Hugging Face + ModelScope · KDA:MLA 3:1比率 · 128エキスパート · ファーストトークン100ms未満
+
+[`🔗 inclusionAI/Ling-3.0-tiny`](https://huggingface.co/inclusionAI/Ling-3.0-tiny) · [`🔗 36Kr`](https://eu.36kr.com/en/p/3935123373866371) · [`🔗 The Block Beats`](https://en.theblockbeats.news/flash/360954)
+
+---
+
+## 36. Multi-Agent-CAD——清華大学の研究室によるテキストtoCADが単一エージェント手法より116倍少ないトークンで動作
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub Trending · 733+ stars · ~72h ago (~12:00 UTC+8 Aug 9)
+- **タグ:** `cad` `multi-agent` `text-to-3d` `langgraph` `open-source`
+
+清華大学IEI Labが**Multi-Agent-CAD（MAC）**をリリース——LangGraphステートマシンで接続された4つの特化エージェント（Spec Planner、Geometric Architect、Python Coder、Autonomous Skill Loop）にテキストtoCAD生成を分割するMITライセンスのフレームワークである。各エージェントは生の会話履歴ではなくコンパクトな構造化JSONのみを渡し、指数関数的なトークン増加を防ぐ。10のプロンプトで単一エージェントベースラインと比較：**13倍安価、116倍少ないトークン、26倍少ないAPI呼び出し**、より高いフィーチャーパス率（99.3% vs 97.9%）。決定論的トランスレーターが12の一般的なCAD操作をトークン消費ゼロで処理する。
+
+**注目の理由:** ほとんどのマルチエージェント研究はコーディングや一般的な推論タスクに焦点を当てている。MACは、すべてのプロンプトに完全な会話コンテキストをダンプするのではなく、特化エージェント間の構造化された状態受け渡しが、コスト効率の高いマルチエージェントシステムの鍵であることを実証している。実際のエンジニアリングタスクにおける116倍のトークン削減は、他のマルチエージェントフレームワークが評価されるべき具体的なベンチマークである。
+
+> MITライセンス · Python 3.11+ · Claude/OpenAI/DeepSeek/Geminiバックエンド · CLI + 3Dプレビュー付きWeb UI · 4エージェントLangGraphパイプライン
+
+[`🔗 Pan-Chera/Multi-Agent-CAD`](https://github.com/Pan-Chera/Multi-Agent-CAD) · [`🔗 PullRepo`](https://pullrepo.com/report/todays-ai-frameworks-sdks-fastest-growing-projects-august-12-2026) · [`🔗 3druck.com`](https://3druck.com/zh/%e7%a8%8b%e5%ba%8f/%e6%96%87%e6%9c%ac%e8%bd%ac-cad-%e5%bc%80%e6%ba%90%e5%a4%9a%e6%99%ba%e8%83%bd%e4%bd%93%e7%b3%bb%e7%bb%9f%e4%bb%a5%e6%98%be%e8%91%97%e6%9b%b4%e4%bd%8e%e7%9a%84%e8%ae%a1%e7%ae%97%e5%bc%80%e9%94%80/)
+
+---
+
+## 37. TurboFieldfare——Swift+MetalエンジンがGemma 4 26Bを2GB RAMのみであらゆるMシリーズMacで実行
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub Trending · 5,700+ stars · ~4d ago (~20:00 UTC+8 Aug 8)
+- **タグ:** `turbofieldfare` `gemma` `metal` `apple-silicon` `edge-inference`
+
+開発者Andrey Mikhaylov（drumih）が**TurboFieldfare**（Apache 2.0）をリリース——GoogleのGemma 4 26B-A4Bを約2GBのRAMであらゆるApple Silicon Mac上で実行するモデル特化のSwift+Metal推論エンジンである。MoEアーキテクチャを活用し、約1.35GBの共有コアのみを常駐させ、ルーテッドエキスパートの重みをレイヤーごとの16スロットLFUキャッシュを介してSSDからオンデマンドでストリーミングする。8GB M2 MacBook Airで5.1〜6.3 tok/s、24GB M5 Proで31〜35 tok/sを達成。ライブラリ、ネイティブMacアプリ、CLI、デコードサービス、関数ツール付きOpenAI互換サーバー、モデルインストーラーの6製品が含まれる。macOS 26、Xcode 26、Swift 6.2、Metal 4が必要。
+
+**注目の理由:** TurboFieldfareは「ローカルで実行可能」の意味する境界を押し広げる——ベースの8GB MacBook Airでの26Bモデルは従来のローディングでは不可能である（MLXは14.7〜15.3GB必要）。SSDストリーミング技術は、MoEアーキテクチャが同等能力の密なモデルよりも根本的にローカルデプロイメントに向いていることを実証している。洗練されたアプリ/CLI/サーバーのパッケージングにより、非システムプログラマーにもアクセス可能となっている。
+
+> Apache 2.0 · Swift 6.2 + Metal 4 · macOS 26 · M1+ · 約2GB RAM · 関数ツール付きAPI互換Chat Completionsサーバー
+
+[`🔗 drumih/turbo-fieldfare`](https://github.com/drumih/turbo-fieldfare) · [`🔗 EveryDev.ai`](https://www.everydev.ai/tools/turbo-fieldfare) · [`🔗 founderland.ai`](https://founderland.ai/articles/how-an-open-source-engine-runs-26b-ai-models-in-just-2gb-of--ms8uwm83)
+
+---
+
 ## メタデータ
 
 | フィールド | 値 |
 |-------|-------|
-| 生成日時 | 2026-08-12T20:03:00Z |
-| アイテム数 | 27 |
-| 追跡ソース | 31 (Hacker News, GitHub Trending, 主要テックブログ, セキュリティアドバイザリ, Cloudflare Blog, SAP Patch Day, Warp, Alibaba, Cactus Compute) |
+| 生成日時 | 2026-08-13T00:03:00Z |
+| アイテム数 | 37 |
+| 追跡ソース | 41 (Hacker News, GitHub Trending, 主要テックブログ, セキュリティアドバイザリ, Cloudflare Blog, SAP Patch Day, Warp, Alibaba, Cactus Compute, Modular, Nvidia, Check Point Research, Prime Intellect, Ant Group, 清華大学 IEI Lab) |
 | 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | ランキング | ベロシティ加重（新しさ × エンゲージメント加速 × ソース権威性） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

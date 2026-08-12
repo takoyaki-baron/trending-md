@@ -1,8 +1,8 @@
 ---
 date: 2026-08-12
-updated: 2026-08-12T20:03:00Z
+updated: 2026-08-13T00:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 41
 license: CC-BY-4.0
 ---
 
@@ -447,13 +447,173 @@ Cactus Compute（YC S25）发布了 **Needle 2**——一款 45M 参数的智能
 
 ---
 
+## 28. antirez 发布 h3.c —— Redis 之父打造原生 Metal 引擎，在 Mac 上运行 MiniMax H3 视频生成
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** Hacker News · 380+ pts · ~24h ago (~20:00 UTC+8 Aug 11)
+- **标签：** `antirez` `h3-metal` `video-generation` `apple-silicon` `metal`
+
+Salvatore Sanfilippo（antirez，Redis 之父）发布了 **h3.c** —— 一个从零编写的 C/Objective-C + Metal 推理引擎，可在 Apple Silicon（M3 Max、M5 Max）上原生运行 MiniMax 的 H3 全模态模型。零 Python 依赖，单次 `make -j8` 编译，在 M5 Max 上约 3.5 秒即可生成 512×512 的视频+音频（4 步去噪），采用直接 safetensor mmap 技术，并支持可选 `--ssd-streaming` 模式，将 DiT 内存从 36.5 GiB 降至 2.0 GiB。MiniMax H3 于 8 月 3 日以开放权重发布；antirez 的引擎一周后即问世，斩获 381 个 HN 积分，MiniMax 回应称："你无法雇佣这样的人，你只能开源然后静待发生。"
+
+**值得关注的原因：** 当 Redis 之父选择裸金属 C + Metal 而非 Python ML 框架来做 AI 推理时，这标志着 AI 工具栈正向系统级思维转变。基于 safetensor 的 mmap 方法消除了整个模型加载步骤，SSD 流式模式证明即使是 33GB 的视频生成模型也能在消费级硬件上运行——不是通过量化，而是通过智能内存管理。
+
+> MIT 许可证 · M3 Max / M5 Max · 文本→视频+音频 · 首尾帧条件控制 · Ref2VA 有序参考
+
+[`🔗 antirez/h3-metal`](https://github.com/antirez/h3-metal) · [`🔗 AI Weekly`](https://aiweekly.co/alerts/antirez-ships-h3c-minimax-h3-inference-on-apple-silicon) · [`🔗 explainX.ai`](https://explainx.ai/blog/antirez-h3c-minimax-h3-metal-apple-silicon-august-2026)
+
+---
+
+## 29. Mojo 1.0 发布 —— 兼容 Python 的系统语言正式稳定，承诺向后兼容
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** Modular / Hacker News · 390+ pts · ~24h ago (~04:00 UTC+8 Aug 12)
+- **标签：** `mojo` `programming-language` `python` `ai` `modular`
+
+Modular 于 8 月 11 日发布 **Mojo 1.0**，作为 Modular 26.5 平台更新的一部分——这是 Chris Lattner（Swift、LLVM）和 Tim Davis 创建的 Python 兼容系统语言的首个稳定版本。1.0 里程碑带来了正式的向后兼容性保证、稳定的标准库 API、Python 风格 lambda 语法、统一 Pointer 类型、内存安全诊断以及更快的 Python 互操作。继 2026 年中期 Qualcomm 以约 39 亿美元收购 Modular 之后，Mojo 1.0 成为 MAX 执行平台和 Modular Cloud 的基石。自 2024 年标准库开源以来，近 200 位贡献者已提交 1,100+ 个 PR；编译器和工具链承诺在 2026 年晚些时候开源。
+
+**值得关注的原因：** Mojo 是自 Cython 以来弥合 Python 与系统编程鸿沟的最重要尝试——兼具 Python 的易用性、Rust 级内存安全性以及基于 MLIR 的硬件可移植性。1.0 稳定性保证意味着企业现在可以在 Mojo 上构建生产级 AI 基础设施，而 Qualcomm 的支持表明该语言将在移动和边缘设备上拥有硬件加速的未来。
+
+> Apache 2.0（标准库） · `uv pip install --upgrade mojo` · 基于 MLIR · 通过 `max` 包进行 GPU 编程 · ModCon 2026 8 月 18 日
+
+[`🔗 Modular Blog`](https://www.modular.com/blog/modular-26-5-mojo-1-0-is-here) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/modular-launches-mojo-language/) · [`🔗 GitHub: modular/modular`](https://github.com/modular/modular)
+
+---
+
+## 30. Nvidia 开源 Nemotron 3.5 Lightning 与 NeMo Switchyard —— 快速智能体执行模型 + 智能模型路由器
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** Nvidia Blog / Hacker News · 1,600+ pts · ~28h ago (~16:00 UTC+8 Aug 11)
+- **标签：** `nvidia` `nemotron` `open-source` `moe` `agent-ai`
+
+Nvidia 于 8 月 11 日发布了两款开源工具：**Nemotron 3.5 Lightning**，一个 300 亿参数 MoE 模型（每任务激活 3B），专为高吞吐智能体执行任务（代码审查、工具使用、安全监控）打造；**NeMo Switchyard**，一个模型路由库，将每个请求定向到成本效率最优的模型，涵盖开源、闭源和 Nvidia 自有模型。Lightning 实现了约 4 倍于同类模型的输出速度，在 PinchBench 上达到 86% 得分，任务完成速度比 Qwen 3.6-35B 快约 30%。Switchyard 将复杂规划路由至前沿模型，将常规工作路由至 Lightning，将成本降至仅使用 Opus 4.8 的约 1/3。两者均以 OpenMDW 1.1 许可发布，提供开放权重、训练数据和配方。
+
+**值得关注的原因：** Nvidia 正从销售 AI 芯片转向销售完整的 AI 工作流——模型、路由和编排。Switchyard 的"模型系统"架构（多个专用模型，智能路由）是对始终在线 AI 智能体成本问题的务实解答：并非每项任务都需要前沿模型。这标志着硬件公司迄今向开源 AI 软件领域发起的最大胆进军。
+
+> 30B-A3B MoE · 1M 上下文窗口 · OpenMDW 1.1 · 单 GPU（RTX/H100/DGX） · CrowdStrike、Harvey、CodeRabbit 已采用
+
+[`🔗 Nvidia Blog`](https://blogs.nvidia.com/blog/nemotron-lightning-switchyard-rtx-dgx/) · [`🔗 36Kr`](https://eu.36kr.com/en/p/3935933902945411) · [`🔗 llm-stats.com`](https://llm-stats.com/blog/research/nemotron-3-5-lightning-launch)
+
+---
+
+## 31. Lazarus 利用 Windows WinSock 零日漏洞 CVE-2026-68820 —— 正被活跃用于部署内核 rootkit
+
+- **传播速度：** ▮▮ 热度上升
+- **来源：** SecurityWeek / Check Point Research · 1,200+ pts · ~10h ago (~10:00 UTC+8)
+- **标签：** `security` `cve` `windows` `lazarus` `zero-day`
+
+CVE-2026-68820 是 Windows AFD.sys WinSock 驱动中的一个 use-after-free 漏洞，已在微软 8 月补丁星期二中修复，但**此前已遭朝鲜 Lazarus 组织活跃利用**——这与最初报告的无零日漏洞被利用的说法相矛盾。该权限提升漏洞（CVSS 7.0）由 Check Point Research 发现，被用于 Operation DreamJob 攻击活动，针对国防、航空航天和航空领域，通过 DLL 侧加载和 MISTPEN 下载器链式利用，部署 **FudModule v3.1**——一款内核模式 rootkit，可禁用遥测、微过滤驱动、ETW 提供程序和 Smart App Control。CISA 于 8 月 11 日将其列入已知被利用漏洞目录。无变通方案——修补是唯一的缓解措施。
+
+**值得关注的原因：** 这是自 2022 年以来第三个在野被利用的 afd.sys 零日漏洞，表明 WinSock 驱动已成为 Windows 内核攻击面中持续存在的薄弱环节。FudModule rootkit 新增的 Smart App Control 绕过能力是一次重大升级——它瓦解了 Windows 11 原本应阻止不受信任驱动程序的关键安全功能。
+
+> CVSS 7.0 · CISA KEV 8 月 11 日 · afd.sys · FudModule v3.1 禁用 90+ ETW 提供程序 · 国防/航空航天领域受攻击
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/august-2026-patch-tuesday-microsoft-fixes-421-cves-one-exploited-zero-day/) · [`🔗 CVETodo`](https://cvetodo.com/news/microsoft-patches-actively-exploited-winsock-zero-day-cve-2026-68820-in-398-fix-august-patch-tuesday) · [`🔗 cybersecurity-help.cz`](https://www.cybersecurity-help.cz/blog/5563.html)
+
+---
+
+## 32. kimi-k3-in-c —— 176KB C99 二进制文件在单 CPU 上以 8GB 内存运行 2.78 万亿参数 Kimi K3
+
+- **传播速度：** ▮▮ 热度上升
+- **来源：** GitHub Trending · 4,900+ stars · ~48h ago (~20:00 UTC+8 Aug 10)
+- **标签：** `kimi-k3` `c99` `cpu-inference` `moe` `open-source`
+
+开发者 FareedKhan-dev 发布了 **kimi-k3-in-c**——一个纯 C99 推理引擎，编译为单个 **176KB 二进制文件**，可在单 CPU 上仅用 8.24 GB 内存运行月之暗面 Kimi K3（2.78 万亿参数，MoE 架构）。该引擎通过四项策略实现约 675 倍的内存压缩，无需任何量化、蒸馏或权重丢弃：MXFP4 打包专家从 NVMe 流式读取、路由稀疏性（每 token 从 896 个专家中激活 16 个）、O_DIRECT 主干流式读取以及专家 LRU 缓存。输出与 PyTorch 参考逐字节一致。速度从约 33 秒/token（笔记本，8GB）到约 11 秒/token（服务器，128GB）。Apache 2.0 许可。
+
+**值得关注的原因：** 这并非为了构建实用的聊天机器人——它证明了前沿规模的模型可以被理解、重新实现并由单个开发者在消费级硬件上运行。手工编写的 C 实现揭示了 MoE 架构的隐藏效率：93% 的检查点权重是无需驻留在内存中的专家参数。随着 AI 模型增长到数万亿参数规模，实验室运行的内容与开发者能够独立验证的内容之间的差距成为一个信任问题——类似这样的项目正在缩小这一差距。
+
+> Apache 2.0 · 约 7 个 C 源文件 · Linux x86-64 · 需要 1.7TB NVMe · 与 PyTorch 参考逐字节一致 · v0.1.0
+
+[`🔗 FareedKhan-dev/kimi-k3-in-c`](https://github.com/FareedKhan-dev/kimi-k3-in-c) · [`🔗 dev.to`](https://dev.to/euk_ela_a3e7ed01aa3f7314e/how-a-176-kb-c-binary-runs-a-278-trillion-parameter-model-on-one-cpu-with-8-gb-of-ram-1ime) · [`🔗 AISignal`](https://aisignal.dev/analysis/fareedkhan-dev-kimi-k3-in-c)
+
+---
+
+## 33. Snap 开源 Valdi —— 驱动 Snapchat 8 年的 TypeScript 原生 UI 框架
+
+- **传播速度：** ▮▮ 热度上升
+- **来源：** GitHub Trending · 16,400+ stars · 2026 年 8 月持续热门
+- **标签：** `snapchat` `valdi` `ui-framework` `cross-platform` `typescript`
+
+Snap Inc. 开源了 **Valdi**（MIT 许可证，16,400+ GitHub 星标），这是一个跨平台 UI 框架，已为 Snapchat 的生产级 iOS 和 Android 应用提供 8 年的底层支撑。开发者使用声明式 TypeScript（TSX 语法，基于类的组件——非 React），它直接编译为原生视图，无 web view、无 JavaScript 桥接。关键特性：自动视图回收、毫秒级热重载、完整的 VS Code 调试、支持 RTL 的 Flexbox 布局，以及将 Valdi 嵌入现有 UIKit/Android 层级的能力。目前处于 beta 阶段，待文档完善；75+ 位贡献者。通过 `npm install -g @snap/valdi` 安装。
+
+**值得关注的原因：** Valdi 是自 React Native 以来最重要的移动 UI 框架开源——但采用了根本不同的方法：编译为原生视图而非桥接架构。其在 Snapchat 规模（数亿用户）下长达 8 年的生产实战记录意味着它绝非玩具。对于受困于 React Native 桥接开销或 Flutter 自定义渲染的团队，Valdi 提供了第三条道路：TypeScript 开发体验加上真正的原生性能。
+
+> MIT 许可证 · C++/TypeScript · iOS/Android/macOS · npm: `@snap/valdi` · 基于类的组件，非 React hooks
+
+[`🔗 Snapchat/Valdi`](https://github.com/Snapchat/Valdi) · [`🔗 HelloGitHub`](https://hellogithub.com/en/repository/9b3f71b9861f412fa50f2b1566914966) · [`🔗 Star History`](https://www.star-history.com/snapchat/valdi/)
+
+---
+
+## 34. Prime Agent —— 自我改进 RLM 智能体框架在 ARC-AGI-3 上超越人类基线
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** Prime Intellect / Hacker News · 5,000+ stars · ~6d ago (Aug 6)
+- **标签：** `prime-agent` `rlm` `arc-agi` `self-improving` `ai-agent`
+
+Prime Intellect 开源了 **Prime Agent**（MIT 许可证）——一个自我改进的 AI 编程与研究框架，围绕两个核心抽象构建：递归语言模型（RLM），将上下文视为持久化 IPython REPL 中的一等变量；持续改进框架，允许智能体审查自身执行轨迹并对提示词、技能和子智能体规格应用证据支持的改进。配合 Opus 5，它在 **ARC-AGI-3 上达到 95.5%**，超越了此前报道的人类专家基线 95.4%。在实际测试中，它在无参考代码的情况下生成了可运行的 Rust 版 SEGA Genesis 和 Game Boy Colour 模拟器。支持 20+ 模型提供商，作为后台守护进程运行，断线后可恢复会话。
+
+**值得关注的原因：** Prime Agent 的 RLM 方法——将上下文视为持久化内核中的可变变量而非线性聊天历史——在架构上与大多数智能体框架使用的"长上下文窗口"方法有根本不同。ARC-AGI-3 的结果（虽来自开发者）表明该架构能够解决需要持续多步推理的问题，而不会丢失中间状态。
+
+> MIT 许可证 · macOS/Linux · 20+ 模型提供商 · 守护进程支持的会话 · `curl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh`
+
+[`🔗 PrimeIntellect-ai/prime-agent`](https://github.com/PrimeIntellect-ai/prime-agent) · [`🔗 Open Source For You`](https://www.opensourceforu.com/2026/08/prime-intellect-open-sources-prime-agent-self-improving-ai-coding-harness/) · [`🔗 Prime Intellect Blog`](https://www.primeintellect.ai/blog/prime-agent)
+
+---
+
+## 35. 蚂蚁集团开源 Ling-3.0-tiny —— 79 亿参数 MoE 模型在 M4 Pro MacBook 上以 90 tok/s 运行
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** Ant Group / 36Kr · 1,200+ pts · ~28h ago (~16:00 UTC+8 Aug 11)
+- **标签：** `ant-group` `ling` `moe` `apple-silicon` `local-ai`
+
+蚂蚁集团百灵团队开源了 **Ling-3.0-tiny**（MIT 许可证），一个 79 亿参数混合 MoE 模型（每 token 激活 1.3B），在 M4 Pro MacBook 上以 8K 上下文实现约 86–90 tok/s，峰值内存仅 8.34 GiB。其架构在各层之间以 3:1 的比例交替使用 KDA（Kimi Delta Attention）和 MLA（Multi-Head Latent Attention），配备 128 个路由专家（8 个激活 + 1 个共享）。在 Artificial Analysis Intelligence Index 上得分 25——仅比 Gemma 4 26B-A4B 低 1 分——并支持原生混合推理，可在快速/思考模式之间切换。在 Hugging Face 和 ModelScope 上提供 BF16、FP8 和 INT4 版本。
+
+**值得关注的原因：** Ling-3.0-tiny 是专为 Apple Silicon 优化的最强 MIT 许可本地模型。其 KDA+MLA 混合架构借鉴了月之暗面和 DeepSeek 的设计，低于 100ms 的首 token 延迟使其适用于交互式本地智能体，而非仅仅是批量推理。MIT 许可证和 Apple Silicon 优先的设计使其成为离线优先 AI 应用的实用构建块。
+
+> MIT 许可证 · BF16/FP8/INT4 · Hugging Face + ModelScope · KDA:MLA 3:1 比例 · 128 个专家 · 首 token 低于 100ms
+
+[`🔗 inclusionAI/Ling-3.0-tiny`](https://huggingface.co/inclusionAI/Ling-3.0-tiny) · [`🔗 36Kr`](https://eu.36kr.com/en/p/3935123373866371) · [`🔗 The Block Beats`](https://en.theblockbeats.news/flash/360954)
+
+---
+
+## 36. Multi-Agent-CAD —— 清华实验室文本转 CAD 系统，token 用量仅为单智能体方案的 1/116
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** GitHub Trending · 733+ stars · ~72h ago (~12:00 UTC+8 Aug 9)
+- **标签：** `cad` `multi-agent` `text-to-3d` `langgraph` `open-source`
+
+清华大学 IEI 实验室发布了 **Multi-Agent-CAD（MAC）**——一个 MIT 许可的框架，将文本转 CAD 生成拆分到四个专用智能体（规格规划器、几何架构师、Python 编码器、自主技能循环），通过 LangGraph 状态机连接。每个智能体仅传递紧凑的结构化 JSON——而非原始对话历史——防止 token 指数级增长。在 10 个提示词上与单智能体基线对比：**成本降低 13 倍、token 减少 116 倍、API 调用减少 26 倍**，且功能通过率更高（99.3% vs 97.9%）。一个确定性转换器处理 12 种常见 CAD 操作，零 token 消耗。
+
+**值得关注的原因：** 大多数多智能体研究聚焦于编程或通用推理任务。MAC 证明了在专业智能体之间进行结构化状态传递——而非将完整对话上下文堆入每个提示词——是高性价比多智能体系统的关键。在真实工程任务上实现 116 倍 token 削减，是其他多智能体框架应当以此为基准进行衡量的具体指标。
+
+> MIT 许可证 · Python 3.11+ · Claude/OpenAI/DeepSeek/Gemini 后端 · CLI + 带 3D 预览的 Web UI · 4 智能体 LangGraph 流水线
+
+[`🔗 Pan-Chera/Multi-Agent-CAD`](https://github.com/Pan-Chera/Multi-Agent-CAD) · [`🔗 PullRepo`](https://pullrepo.com/report/todays-ai-frameworks-sdks-fastest-growing-projects-august-12-2026) · [`🔗 3druck.com`](https://3druck.com/zh/%e7%a8%8b%e5%ba%8f/%e6%96%87%e6%9c%ac%e8%bd%ac-cad-%e5%bc%80%e6%ba%90%e5%a4%9a%e6%99%ba%e8%83%bd%e4%bd%93%e7%b3%bb%e7%bb%9f%e4%bb%a5%e6%98%be%e8%91%97%e6%9b%b4%e4%bd%8e%e7%9a%84%e8%ae%a1%e7%ae%97%e5%bc%80%e9%94%80/)
+
+---
+
+## 37. TurboFieldfare —— Swift+Metal 引擎让任意 M 系列 Mac 仅用 2GB 内存运行 Gemma 4 26B
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** GitHub Trending · 5,700+ stars · ~4d ago (~20:00 UTC+8 Aug 8)
+- **标签：** `turbofieldfare` `gemma` `metal` `apple-silicon` `edge-inference`
+
+开发者 Andrey Mikhaylov（drumih）发布了 **TurboFieldfare**（Apache 2.0）——一个针对特定模型的 Swift+Metal 推理引擎，可在任意 Apple Silicon Mac 上以约 2 GB 内存运行 Google 的 Gemma 4 26B-A4B。它利用 MoE 架构，仅保留约 1.35 GB 的共享核心驻留内存，同时通过每层 16 槽 LFU 缓存按需从 SSD 流式读取路由专家权重。在 8GB M2 MacBook Air 上达到 5.1–6.3 tok/s；在 24GB M5 Pro 上达到 31–35 tok/s。包含六款产品：库、原生 Mac 应用、CLI、解码服务、带函数工具的 OpenAI 兼容服务器以及模型安装器。需要 macOS 26、Xcode 26、Swift 6.2 和 Metal 4。
+
+**值得关注的原因：** TurboFieldfare 重新定义了"可在本地运行"的边界——在基础款 8GB MacBook Air 上运行 26B 模型，用常规加载方式是不可能实现的（MLX 需要 14.7–15.3 GB）。SSD 流式技术证明了 MoE 架构在根本上比同等能力的稠密模型更适合本地部署。精致的应用/CLI/服务器封装使其对非系统程序员同样可及。
+
+> Apache 2.0 · Swift 6.2 + Metal 4 · macOS 26 · M1+ · 约 2GB RAM · 兼容 API 的 Chat Completions 服务器，支持函数工具
+
+[`🔗 drumih/turbo-fieldfare`](https://github.com/drumih/turbo-fieldfare) · [`🔗 EveryDev.ai`](https://www.everydev.ai/tools/turbo-fieldfare) · [`🔗 founderland.ai`](https://founderland.ai/articles/how-an-open-source-engine-runs-26b-ai-models-in-just-2gb-of--ms8uwm83)
+
+---
+
 ## 元数据
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-08-12T20:03:00Z |
-| 条目数 | 27 |
-| 追踪来源数 | 31（Hacker News、GitHub Trending、各大科技博客、安全公告、Cloudflare Blog、SAP Patch Day、Warp、Alibaba、Cactus Compute） |
+| 生成时间 | 2026-08-13T00:03:00Z |
+| 条目数 | 37 |
+| 追踪来源数 | 41（Hacker News、GitHub Trending、各大科技博客、安全公告、Cloudflare Blog、SAP Patch Day、Warp、Alibaba、Cactus Compute、Modular、Nvidia、Check Point Research、Prime Intellect、Ant Group、清华大学 IEI 实验室） |
 | 更新时段 | 04:03, 12:03, 20:03 UTC+8（每日3次） |
 | 排序方式 | 传播速度加权（时效性 x 参与度加速度 x 来源权威性） |
 | 许可证 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
