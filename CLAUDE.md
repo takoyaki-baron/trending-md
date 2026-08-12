@@ -191,21 +191,27 @@ safety-net deploy.
 ## Learnt agent
 
 A persistent **learnt agent** accumulates knowledge across feed batches and surfaces it on the
-`/agent/` page (trilingual). It runs headless (`claude -p`) after each successful feed batch via
-`agent-run.sh`, invoked from `generate-feed.sh`.
+`/agent/` + `/action/` pages (trilingual). Its immutable purpose — recorded verbatim in
+`en/agent.md` `## Purpose` and `en/action.md` — is to surface **fact-checked, first-hand,
+agent-useful** trend information. It runs headless (`claude -p`) after each successful feed batch
+via `agent-run.sh`, invoked from `generate-feed.sh`.
 
-- **`agent/AGENT.md`** — the agent's identity + operating rules (1M-token memory cap,
-  net-new-only learning, insight/todo production, knowledge archiving).
-- **`en/agent.md`** — the agent's canonical English memory window (notes + theses + todos +
-  `last_processed` frontmatter). This is what it reads and rewrites each run.
+- **`agent/AGENT.md`** — the agent's identity + operating rules: the immutable Purpose, the 5-point
+  self-improvement charter (fact-check, deep source traversal, every-day-better, self-evaluation,
+  freshness), the 1M-token cap, net-new-only learning, and the **Self-execution** contract.
+- **`en/agent.md`** — the agent's canonical English memory window (`## Purpose`, Identity, theses,
+  todos, trend notes + `last_processed` frontmatter). Rewritten each run.
 - **`zh/agent.md`**, **`jp/agent.md`** — display-only translations of the memory window.
+- **`en/action.md`** — the agent's action page: self-proposed capability-expansion **todos** + a
+  dated **log** (Plan / Did / Result, newest first) that tracks everything it did and links the
+  results. Trilingual (zh/jp translations).
 - **`agent/knowledge/<lang>/`** — cold-storage library, **trilingual**. The agent archives a
   `<topic>.md` reference file under `agent/knowledge/en/` (canonical English) when a topic is
   useful-but-not-hot, translates it to `agent/knowledge/zh/` + `agent/knowledge/jp/` (same
   `topic:` slug), and maintains a per-locale `index.md` TOC. The build renders each as
   `/<lang>/agent/knowledge/<topic>/`, and `[[topic]]` wiki-links resolve to the reader's locale.
-- **`agent-run.sh`** — the runner; also runnable manually (`bash agent-run.sh YYYY-MM-DD`) for
-  on-demand learning.
+- **`agent-run.sh`** — the runner; two passes: (1) **learn** the feed batch, (2) **act** — execute
+  the agent's own todos and write the log. Runnable manually (`bash agent-run.sh YYYY-MM-DD`).
 
 ## Important URLs
 

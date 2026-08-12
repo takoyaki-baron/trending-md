@@ -361,6 +361,7 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
       ${navLink(`${base}/`, s.navFeed, 'feed')}
       ${navLink(`${base}/about`, s.navAbout, 'about')}
       ${navLink(`${base}/agent/`, s.navAgent, 'agent')}
+      ${navLink(`${base}/action/`, s.navAction, 'action')}
       ${navLink(`${base}/archive/`, s.navArchive, 'archive')}
       <a href="https://github.com/takoyaki-baron/trending-md">${s.navGitHub}</a>
       ${langSelect}
@@ -470,6 +471,10 @@ for (const lang of langs) {
   // Learnt agent
   buildPage(`${srcPrefix}agent.md`, `${base}/agent/index.html`, s.agentTitle,
     `<span class="current">${s.navAgent}</span>`, 'agent', lang);
+
+  // Action — the agent's self-proposed capability-expansion todos + dated log
+  buildPage(`${srcPrefix}action.md`, `${base}/action/index.html`, s.actionTitle,
+    `<span class="current">${s.navAction}</span>`, 'action', lang);
 }
 
 /* ── Knowledge library (learnt agent's cold-storage) — trilingual, one build per locale ── */
@@ -574,6 +579,10 @@ for (const lang of langs) {
   </url>
   <url>
     <loc>https://trending.md${base}/agent/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trending.md${base}/action/</loc>
     <priority>0.6</priority>
   </url>`;
 }

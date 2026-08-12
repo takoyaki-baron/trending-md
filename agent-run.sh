@@ -1,7 +1,9 @@
 #!/bin/bash
 # Learnt-agent runner — headless claude -p after each feed batch.
-# Reads the agent's identity + memory + knowledge TOC + today's feed,
-# then rewrites the memory window and translates it to zh/jp.
+# Pass 1 (learn): reads identity + memory + knowledge TOC + today's feed, rewrites the memory
+#   window + knowledge library, and translates everything to zh/jp.
+# Pass 2 (act): executes the agent's own capability-expansion todos from en/action.md, writes a
+#   dated log entry (Plan/Did/Result), and translates en/action.md to zh/jp.
 set -euo pipefail
 
 REPO_DIR="/Users/kelong/developer/github/trending-md"
@@ -45,8 +47,38 @@ claude -p "$(cat "$PROMPT_FILE")" 2>&1
 echo "Claude exit code: $?"
 rm -f "$PROMPT_FILE"
 
+# ── Pass 2: act — execute the agent's own capability-expansion todos ──
+if [ -f "en/action.md" ]; then
+  ACTION_PROMPT_FILE=$(mktemp /tmp/agent-action-prompt.XXXXXX)
+  cat > "$ACTION_PROMPT_FILE" << ENDACTIONPROMPT
+You are the trending.md learnt agent's action executor. Follow agent/AGENT.md — its "Self-execution"
+and "Output contract" sections, and the immutable Purpose.
+
+Read these files first:
+1. agent/AGENT.md — your identity + operating rules
+2. en/action.md — your action page (active todos + log)
+3. en/agent.md — your memory window (context)
+
+Then do exactly what agent/AGENT.md's "Self-execution" section says:
+1. Pick 1–3 pending todos from en/action.md that you can genuinely advance this run.
+2. Execute them with full repo + web access (you may read any file, visit sources, and write
+   agent/knowledge/en/*.md + their zh/jp translations as needed).
+3. Prepend a new entry at the top of the "## Log" section in en/action.md (newest first), each
+   with "Plan:", "Did:", and "Result:" lines — link any new knowledge as [[topic]].
+4. Translate en/action.md → zh/action.md and jp/action.md (keep repo names, URLs, and code
+   identifiers untranslated).
+ENDACTIONPROMPT
+
+  echo "Running claude -p (action executor)…"
+  claude -p "$(cat "$ACTION_PROMPT_FILE")" 2>&1
+  echo "Action executor exit code: $?"
+  rm -f "$ACTION_PROMPT_FILE"
+else
+  echo "No en/action.md found — skipping action pass."
+fi
+
 # Commit + push agent files
-git add en/agent.md zh/agent.md jp/agent.md agent/ 2>/dev/null || true
+git add en/agent.md zh/agent.md jp/agent.md en/action.md zh/action.md jp/action.md agent/ 2>/dev/null || true
 if git diff --cached --quiet; then
   echo "No agent changes to commit"
 else
