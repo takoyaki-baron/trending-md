@@ -48,29 +48,33 @@ new APIs, platform changes, language/ecosystem shifts, major security vulnerabil
 non-technical AI policy debates, general tech industry news. If a story doesn't have a repo
 URL or a concrete dev workflow impact, skip it.
 
-### GitHub repo vitality check (MANDATORY — added 2026-08-12 after Void false trend)
+### Source validation — VISIT, don't trust aggregates (MANDATORY — 2026-08-12 Void lesson)
 
-**Star velocity alone is NOT enough to validate a trending repo.** Before writing up ANY GitHub
-Trending item, check the repo's actual vitality:
+**Every cited source MUST be actually visited and validated.** The feed generator's default
+behavior was to trust aggregated metrics (star count, trending rank) without opening the
+underlying pages — this produced a two-layer false signal in a single item.
 
-1. **Archived?** — If the repo is archived/read-only, the trend is noise. SKIP it entirely, or
-   if it's genuinely newsworthy (e.g. a major project just got archived), write it as an
-   "archival/end-of-life" story, NOT as a momentum signal.
-2. **Last commit date** — If the last commit is >3 months ago and there's no release/announcement
-   driving the spike, the stars are likely from a viral social share of an old project. Flag it
-   as "dormant" and either skip or note the dormancy explicitly in the write-up.
-3. **Active maintenance?** — Check README for deprecation/paused notices. "Paused development"
-   or "no longer maintained" = NOT a valid trending signal. If there are active forks, mention
-   THOSE as the real story.
-4. **What actually caused the spike?** — A repo can trend because of a blog post, a Hacker News
-   comment mention, a Twitter thread — not because the project itself shipped something. Try to
-   identify the actual trigger and write the item around THAT (e.g. "X's old editor resurfaces
-   in HN thread about Y" not "X rockets up trending").
+**The rule:** before writing a trending item, OPEN and READ:
+1. **The repo itself** — README, last commit date, archived flag, maintenance status. Star
+   count alone tells you nothing about whether a project is alive, abandoned, or just having
+   a viral moment from an old blog post.
+2. **Every source link you plan to cite** — click through. Does the page actually contain
+   the data point you're attributing to it? A tool's landing page is not a data source. A
+   search results page is not a source for a specific fact. If you can't find the data on
+   the page, don't cite it.
+3. **The trigger, not just the metric** — a repo spikes on trending for a reason (new release?
+   HN mention? Twitter thread? blog post?). Find that trigger and write the item around IT,
+   not around the number. "X's dormant editor resurfaces after HN mention" is accurate;
+   "X rockets to #2 on trending" without context is misleading.
 
-**Case study (Void, 2026-08-12):** voideditor/void hit #2 on daily trending with +2,840 stars,
-but the project has been paused since mid-2025 and the README says development stopped. The
-stars went to a dead project. The real story was active forks (Loophole, Modo), not Void itself.
-The feed wrote it as "AI-first editors beyond Cursor/Copilot" — a false momentum signal.
+**Case study (Void, 2026-08-12 — two failures, one root cause):**
+- The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first
+  editor momentum beyond Cursor/Copilot."
+- **Neither GitHub nor the cited PageCrawl page was actually visited.** Had the repo been
+  opened: README says "paused development since mid-2025" — the project is dead. Had the
+  PageCrawl link been clicked: it's a generic tool signup form with zero Void data.
+- The single root cause: **aggregate metrics were trusted without visiting the actual pages.**
+  Star velocity is a signal to INVESTIGATE, not a signal to PUBLISH.
 
 ### Sources (in priority order)
 
