@@ -1,8 +1,8 @@
 ---
 date: 2026-08-12
-updated: 2026-08-12T12:03:00Z
+updated: 2026-08-12T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -303,13 +303,157 @@ GoogleはChrome安定チャネルアップデート（151.0.7922.137）をリリ
 
 ---
 
+## 19. Ladybird——10年ぶりの新ブラウザエンジンがGitHubスター64Kを獲得
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** GitHub Trending · #1 daily (Aug 11) · ~10h ago (~10:00 UTC+8)
+- **タグ:** `ladybird` `browser` `rust` `web-engine` `open-source`
+
+**LadybirdBrowser/ladybird**がGitHubトレンド1位に急上昇し、64,000以上のスターを獲得。10年以上ぶりに完全にゼロから構築された真に独立したブラウザエンジンとしての地位を確立した。他のすべてのブラウザと異なり、LadybirdはChromium、WebKit、Geckoのフォークではなく、独自のレンダリングエンジン（LibWeb）とJavaScriptエンジン（LibJS）を持ち、現在両方ともC++からRustへ移行中である。元Apple/WebKitエンジニアのAndreas Klingが設立し、Shopify、Cloudflare、Proton、JetBrainsが501(c)(3)非営利団体を通じて支援。すでにWeb Platform Testsで4位、JavaScript適合性テストで2位にランクインしている。
+
+**注目の理由:** ブラウザエンジンの複占（Chromium/WebKit）は10年以上挑戦を受けていない。Ladybirdは現代において独立したレンダリングエンジンを構築する初の信頼できる試みであり、Rustへの迅速な移行はブラウザインフラレベルでのメモリ安全性への賭けを示している。計画通り2026年にアルファ版に到達すれば、WebKit以来最も重要なブラウザエンジンのローンチとなる。
+
+> 64k+スター · BSD-2-Clause · マルチプロセスサンドボックスアーキテクチャ · アルファ版は2026年、安定版は2028年予定
+
+[`🔗 LadybirdBrowser/ladybird`](https://github.com/LadybirdBrowser/ladybird) · [`🔗 Star History`](https://www.star-history.com/ladybirdbrowser/ladybird/) · [`🔗 HelloGitHub`](https://hellogithub.com/en/repository/LadybirdBrowser/ladybird)
+
+---
+
+## 20. Warpターミナルがオープンソース化——5年間のプロプライエタリRustコードがAGPLに
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Warp / The Block Beats · 3,500+ pts · ~8h ago (~12:00 UTC+8)
+- **タグ:** `warp` `terminal` `rust` `open-source` `agpl`
+
+Warpは5年間のクローズド開発を経て、クライアントコードベース全体をGitHubでオープンソース化し、62,900以上のスターを獲得した。Rustで構築されGPUレンダリングを備えたAIファーストのターミナルは、現在デュアルライセンス：コアはAGPL v3.0、UIフレームワーク（warpui）はMIT。OpenAIがこのオープンソースリポジトリの「設立スポンサー」である。Warpはまた、自らを「ターミナルから生まれたエージェンティック開発環境」と再定義し、コミュニティ貢献プロセスはエージェント駆動のオーケストレーションプラットフォームOz（プロプライエタリのまま）によって管理される。
+
+**注目の理由:** Warpのオープンソース化はiTerm2以来最も重要なターミナルインフラのリリースである。AGPLライセンスは派生物がオープンであり続けることを保証し、MITライセンスのUIフレームワークは商用組み込みを可能にする。AIエージェントが仕様とコードを書き、人間がレビューするエージェント駆動の貢献モデルは、大規模プロジェクトがコミュニティ貢献を受け入れる方法を再形成する可能性のある、オープンソースガバナンスの実験である。
+
+> 62.9k+スター · 98.3% Rust · macOS/Linux/Windows · エージェント駆動の貢献モデル
+
+[`🔗 warpdotdev/warp`](https://github.com/warpdotdev/warp) · [`🔗 The Block Beats`](https://en.theblockbeats.news/flash/343465) · [`🔗 Dev.to レビュー`](https://dev.to/jovan_chan_9500711396d4e6/warp-terminal-review-2026-open-source-ade-the-20-build-plan-and-who-should-actually-pay-for-it-5cin)
+
+---
+
+## 21. Orca——並列AIコーディングエージェント艦隊を管理するADEが42Kスターを突破
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** GitHub Trending · #2 daily · ~6h ago (~14:00 UTC+8)
+- **タグ:** `orca` `agent-fleet` `ade` `parallel-agents` `developer-tools`
+
+**stablyai/orca**は「エージェント開発環境（ADE）」と位置付けられ、複数のAIコーディングエージェントを並列実行し、それぞれを独立したgit worktreeで隔離するMITライセンスのTypeScript製オーケストレーターである。27以上のCLIエージェント（Claude Code、Codex、Cursor、Grok、OpenCodeなど）をサポートし、WebGLレンダリングのGhosttyクラスのターミナル分割、夜間のエージェント実行を監視するモバイルコンパニオンアプリ（iOS/Android）、UI要素をクリックしてHTML/CSSをプロンプトに送信するDesign Mode、ネイティブのGitHub/Linear統合を提供する。YC支援のStably AI（W22）が開発、無料でサブスクリプション持ち込み方式。
+
+**注目の理由:** 2026年の開発者ワークフローは、もはや1エージェント1タスクではなく、1つのプロンプトを3〜5のエージェントに展開し最良の結果をマージするものだ。Orcaはこのワークフロー向けの初の洗練されたクロスプラットフォームGUIであり、tmuxのハックや手動のgit-worktreeコマンドを置き換える。長時間実行されるエージェントタスクを監視するモバイルコンパニオンはカテゴリー初である。
+
+> MITライセンス · 27以上のサポートエージェント · macOS/Windows/Linux + iOS/Android · Homebrew: `brew install --cask stablyai/orca/orca`
+
+[`🔗 stablyai/orca`](https://github.com/stablyai/orca) · [`🔗 GitGenius`](https://www.gitgenius.co/repos/stablyai/orca) · [`🔗 SkillsLLM`](https://skillsllm.com/skill/orca)
+
+---
+
+## 22. Semantica——「エージェント向けオープンソースPalantir」と呼ばれるグラフネイティブAIインフラがGitHubトレンド1位に
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** GitHub Trending · #1 daily (Aug 11) · ~24h ago (~20:00 UTC+8 Aug 11)
+- **タグ:** `semantica` `knowledge-graph` `ai-infrastructure` `provenance` `graphrag`
+
+**semantica-agi/semantica**（4,100+スター、MITライセンス）は、AIエージェント向けの自己ホスト型グラフネイティブインフラストラクチャレイヤーを提供し、RDF/LPGデュアルグラフストレージ、Rete推論エンジン、すべての派生ファクトに対するW3C PROV-O来歴追跡、7つのベクトルデータベースバックエンド（FAISS、Qdrant、Weaviate、Milvusなど）を組み合わせている。グラフ構築と推論は決定論的であり——LLMはファジーな抽出タスクにのみ使用される——そのため出力は再現可能で監査可能である。`pip install semantica`でインストールでき、監査可能なAI意思決定トレイルを必要とする規制対象企業をターゲットとしている。
+
+**注目の理由:** 企業がAIエージェントを本番環境にデプロイする際の最大の障壁は監査可能性——「エージェントがなぜこの決定を下したのか？」である。Semanticaの決定論的グラフ推論 + LLM抽出のアプローチは、アカウンタブルなエージェントインフラストラクチャの青写真となる。W3C PROV-O来歴により、すべてのファクトをそのソースまで追跡可能であり、これは規制業界にとって最低条件である。
+
+> MITライセンス · Python 3.8+ · pipインストール可能 · 13モジュール · 時間的知能 + Allen区間代数
+
+[`🔗 semantica-agi/semantica`](https://github.com/semantica-agi/semantica) · [`🔗 CSDN トレンド`](https://blog.csdn.net/m0_68631449/article/details/163656692) · [`🔗 Moclaw AI`](https://moclaw.ai/blog/what-is-semantica)
+
+---
+
+## 23. Cloudflare OS——非開発者が自然言語でアプリを構築できるオープンソースAIワークスペース
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** Ars Technica / SD Times · 2,100+ pts · ~5d ago (Aug 5)
+- **タグ:** `cloudflare` `vibe-coding` `workspace` `no-code` `agents-week`
+
+CloudflareはAgents Week 2026において**Cloudflare OS**をオープンソース化した——もともと自社の従業員向けに構築されたブラウザベースのAIエージェントワークスペースである。非開発者が自然言語でワークフローを記述すると、プラットフォームが独立したデータベース、リアルタイム機能、アクセス制御を備えた動作するアプリを生成する。CloudflareのDynamic Workersサンドボックス（V8 isolate、コンテナより100倍高速）上に構築され、ゼロトラストセキュリティモデルを実施：エージェントはデフォルトでゼロ権限、ネットワークアクセスはデフォルトで無効、機密性の高いアクションには「Gatekeeper」による人間の承認が必要。Cloudflareの営業チームはこのプラットフォームを使用して1ヶ月で10,000時間以上を節約したと報告している。
+
+**注目の理由:** 「Vibeコーディング」は個人の趣味からエンタープライズ展開へと移行しつつある。Cloudflare OSのサンドボックスモデル——AIがネットワークアクセスを持たないため文字通りセキュリティバグを導入できない——は、企業がAI生成コードを安全に大規模展開するためのテンプレートである。オープンソースリリースにより、あらゆる組織がセルフホストできる。
+
+> オープンソース (GitHub: cloudflare/cloudflare-os) · V8 isolateサンドボックス · デフォルトでゼロトラスト · マネージドデプロイメント計画中
+
+[`🔗 Ars Technica`](https://arstechnica.com/ai/2026/08/cloudflare-open-sources-vibe-coding-platform-for-people-who-arent-coders/) · [`🔗 SD Times`](https://sdtimes.com/cloud-integration/cloudflare-announces-open-source-ai-workspace-for-every-employee/) · [`🔗 cloudflare/cloudflare-os`](https://github.com/cloudflare/cloudflare-os)
+
+---
+
+## 24. Addy Osmaniのagent-skills——AIコーディングエージェントに「シニアエンジニアのように働く」ことを教える56Kスターライブラリ
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** GitHub Trending · ~56,900スター · 7月下旬からトレンド継続
+- **タグ:** `agent-skills` `ai-coding` `engineering` `workflow` `best-practices`
+
+Google Chromeのエンジニアリングリード**Addy Osmani**が**agent-skills**を公開——24の本番グレードのエンジニアリングスキルを、AIコーディングエージェントが実行可能なSKILL.mdファイルとしてパッケージ化したMITライセンスのライブラリである。各スキルはシニアエンジニアのワークフロー（コードレビュー、TDD、セキュリティ強化、CI/CD、パフォーマンス最適化、ドキュメント作成、リリース）を段階的なプロセス、エージェントのよくある言い訳に対抗する反合理化テーブル、および交渉不可の検証チェックリストとともにエンコードする。スキルファイルはプレーンMarkdownで、Claude Code、Cursor、Gemini CLI、GitHub Copilot、Windsurf、Codex間で移植可能。1週間で約15,000スターを追加し、合計56,900以上に到達した。
+
+**注目の理由:** 「AIがコードを書ける」ことと「AIがシニアエンジニアのように働ける」ことの間のギャップは、2026年の決定的な品質課題である。agent-skillsは、エンジニアリング規律をエージェントが従わなければならない機械可読なワークフローにエンコードすることでこのギャップを埋める——ベストプラクティスを提案から必須プロセスに変える。そのクロスツール可搬性により、AIコーディングエージェントの行動に関するユニバーサルスタンダードに最も近いものとなっている。
+
+> MITライセンス · 6フェーズ（定義→計画→構築→検証→レビュー→リリース）にわたる24スキル · Claude Code、Cursor、Gemini CLI、Copilot、Codexに対応
+
+[`🔗 casualuser/agent-skills`](https://github.com/casualuser/agent-skills) · [`🔗 Aliyun Developer`](https://developer.aliyun.com/article/1745190) · [`🔗 Tencent Cloud`](https://cloud.tencent.com.cn/developer/article/2666348)
+
+---
+
+## 25. AlibabaがOpen Code Reviewをオープンソース化——社内2万人以上のエンジニアが使用するAIコードレビューツール
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** Alibaba / WonderLab · 19,800+スター · ~3d ago (~12:00 UTC+8 Aug 9)
+- **タグ:** `alibaba` `code-review` `ai` `open-source` `ci-cd`
+
+Alibabaは**Open Code Review**（`ocr`）をオープンソース化した。これはApache 2.0ライセンスのGo CLIツールで、社内で2万人以上のエンジニアが2年間使用し、数百万の欠陥を検出してきた。ハイブリッドアーキテクチャを採用：決定論的パイプラインが正確なファイル選択、git diffグループ化、テンプレートベースのルールマッチング（NPE、スレッドセーフ、XSS、SQLインジェクション）を処理し、LLMエージェントが複雑なクロスファイル推論を処理する。10言語の200の実際のPRで汎用エージェントとベンチマーク比較した結果、より高い適合率とF1スコアを達成しながら、トークン消費量は約1/9。`npm install -g @alibaba-group/open-code-review`でインストール可能。
+
+**注目の理由:** ほとんどのAIコードレビューツールは、汎用エージェント（一貫性がなく高コスト）か静的解析ツール（ルールが脆弱）のいずれかである。Open Code Reviewのハイブリッドアーキテクチャ——可能な限り決定論的、必要な場合のみLLM——は、CI/CDゲートとして十分に低いトークンコストを維持しながら本番グレードの信頼性を達成する実用的な設計パターンである。汎用エージェントの1/9のコストでコミットごとのAIレビューを実現し、経済的に実行可能にする。
+
+> Apache 2.0 · Go · npmインストール可能 · GitHub Actions / GitLab CI / Gerrit統合 · 3段階SLAレビュー
+
+[`🔗 alibaba/open-code-review`](https://github.com/alibaba/open-code-review) · [`🔗 Aliyun Developer`](https://developer.aliyun.com/article/1752926) · [`🔗 Dev.to WonderLab`](https://dev.to/wonderlab/open-source-project-145-open-code-review-alibabas-battle-tested-ai-code-review-tool-19-the-6e4)
+
+---
+
+## 26. Needle 2——Raspberry Pi上で500トークン/秒のツール呼び出しAIを実行する14MBエージェンティックLLM
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** Hacker News · 1,100+ pts · ~48h ago (~20:00 UTC+8 Aug 10)
+- **タグ:** `needle-2` `edge-ai` `llm` `tool-calling` `raspberry-pi`
+
+Cactus Compute（YC S25）が**Needle 2**をリリース——CQ2ビット量子化により14MBに圧縮された45MパラメータのエージェンティックLLMで、依存関係のない単一のC++バイナリとして動作する。Raspberry Pi 5で500〜800トークン/秒、最新のスマートフォンで6,000トークン/秒を達成し、同等モデルと比較してトークンあたりのMFLOPsは1/7〜1/85。アーキテクチャはTransformerのMLP層をWalsh-Hadamard変換で置き換え、学習済み埋め込みの代わりにハッシュ化n-gramテーブルを使用する。チャットではなくツール呼び出しと構造化データ抽出に特化して設計され、すでにPebbleのIndex 01スマートリングにオフライン音声操作向けにデプロイされている。Apache 2.0ライセンス。
+
+**注目の理由:** 支配的なAIの物語は「より大きなモデル、より多くの計算」である。Needle 2はこれを覆す：GPUもクラウドもインストールも不要なデバイス上でツール呼び出しエージェントを実行する14MBのバイナリ。そのアーキテクチャ（MLP層なし、ハッシュ化n-gram、文法制約付きデコード）は根本的に異なるLLM設計アプローチであり、消費者向けウェアラブルでの本番デプロイはエッジエージェントパラダイムが単なるデモではないことを証明している。
+
+> Apache 2.0 · 45Mパラメータ · 14MBバイナリ · 28MB RAM · C++単一バイナリ · クロスプラットフォーム（Cortex-Mからx86、WASM）
+
+[`🔗 cactus-compute/needle`](https://github.com/cactus-compute/needle) · [`🔗 Cactus Compute`](https://cactuscompute.com/needle) · [`🔗 ByteIota`](https://byteiota.com/needle2-a-14mb-llm-runs-ai-agents-on-a-raspberry-pi/)
+
+---
+
+## 27. Qwen-MM-Plugins——AlibabaがあらゆるAIエージェントにマルチモーダルな視覚・動画・CAD機能を付与
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** Runtime Wire / explainX.ai · 1,600+ pts · ~48h ago (~20:00 UTC+8 Aug 10)
+- **タグ:** `qwen` `multimodal` `agent-plugins` `vision` `cad`
+
+AlibabaのQwenチームが**Qwen-MM-Plugins**（Apache 2.0）をリリース——あらゆるAIエージェントハーネスをマルチモーダルネイティブにする8つのインストール可能な機能。プラグインはコアビジョン（動的解像度の画像/動画/3D読み取り、OCR、グラウンディング、セグメンテーション）、動画メモリ（長時間動画QAのための階層的グラフメモリ）、動画/音声編集、Blender（3Dモデリング用22ツール）、FreeCAD（パラメトリックCAD用14ツールとFEM解析）をカバーする。各機能はスキル + オプションのMCPサーバーとしてインストールされ、`uvx`でオンデマンド起動。Claude Code、Codex、Gemini CLI、Qwen Code、OpenClawなどをサポート——競合他社のハーネスをアップグレードしてQwenモデルを呼び出させる戦略的な動き。
+
+**注目の理由:** Qwen-MM-Pluginsは非対称戦略である：Alibabaは新しいエージェントハーネスを構築する代わりに、既存のすべてのハーネスをマルチモーダルにアップグレードするプラグインを提供し——それらのハーネスがQwenモデルを呼び出すようになる。FreeCADのFEM解析機能は特に注目に値する——AIエージェントがデモではなく実際のエンジニアリングシミュレーションを駆動できるようにする。このプラグインベースのマルチモーダルエージェント機能配布アプローチは標準モデルになる可能性がある。
+
+> Apache 2.0 · 8機能 · 9のサポートハーネス · Blender（22ツール）+ FreeCAD（14ツール + FEM） · SAM3 + DashScope
+
+[`🔗 QwenLM/Qwen-MM-Plugins`](https://github.com/QwenLM/Qwen-MM-Plugins) · [`🔗 Runtime Wire`](https://runtimewire.com/article/alibaba-qwen-mm-plugins-multimodal-ai-agent-harnesses) · [`🔗 explainX.ai`](https://explainx.ai/blog/qwen-mm-plugins-multimodal-agent-harness-august-2026)
+
+---
+
 ## メタデータ
 
 | フィールド | 値 |
 |-------|-------|
-| 生成日時 | 2026-08-12T12:03:00Z |
-| アイテム数 | 18 |
-| 追跡ソース | 22 (Hacker News, GitHub Trending, 主要テックブログ, セキュリティアドバイザリ, Cloudflare Blog, SAP Patch Day) |
+| 生成日時 | 2026-08-12T20:03:00Z |
+| アイテム数 | 27 |
+| 追跡ソース | 31 (Hacker News, GitHub Trending, 主要テックブログ, セキュリティアドバイザリ, Cloudflare Blog, SAP Patch Day, Warp, Alibaba, Cactus Compute) |
 | 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | ランキング | ベロシティ加重（新しさ × エンゲージメント加速 × ソース権威性） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

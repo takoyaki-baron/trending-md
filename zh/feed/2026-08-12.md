@@ -1,8 +1,8 @@
 ---
 date: 2026-08-12
-updated: 2026-08-12T12:03:00Z
+updated: 2026-08-12T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -303,13 +303,157 @@ Google 发布了 Chrome 稳定通道更新（151.0.7922.137），修复了 V8、
 
 ---
 
+## 19. Ladybird —— 十年来首个全新浏览器引擎，斩获 64K GitHub 星标
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** GitHub Trending · 每日排行第 1（8 月 11 日）· ~10h ago (~10:00 UTC+8)
+- **标签：** `ladybird` `browser` `rust` `web-engine` `open-source`
+
+**LadybirdBrowser/ladybird** 飙升至 GitHub Trending 第 1 名，获得 64,000+ 星标，成为十多年来首个完全从零构建的独立浏览器引擎。与其他所有浏览器不同，Ladybird 不是 Chromium、WebKit 或 Gecko 的分支——它拥有自己的渲染引擎（LibWeb）和 JavaScript 引擎（LibJS），两者目前正从 C++ 迁移到 Rust。该项目由前 Apple/WebKit 工程师 Andreas Kling 创立，获得 Shopify、Cloudflare、Proton 和 JetBrains 通过 501(c)(3) 非营利组织提供支持，已在 Web Platform Tests 中排名第 4、JavaScript 一致性测试中排名第 2。
+
+**值得关注的原因：** 浏览器引擎双寡头（Chromium/WebKit）的格局已持续超过 10 年未受挑战。Ladybird 代表了在现代时代构建独立渲染引擎的首次可信尝试——其快速向 Rust 迁移也标志着在浏览器基础设施层面押注内存安全。如果按计划在 2026 年达到 Alpha 阶段，这将是自 WebKit 以来最重大的浏览器引擎发布。
+
+> 64k+ 星标 · BSD-2-Clause · 多进程沙箱架构 · Alpha 计划于 2026 年，稳定版 2028 年
+
+[`🔗 LadybirdBrowser/ladybird`](https://github.com/LadybirdBrowser/ladybird) · [`🔗 Star History`](https://www.star-history.com/ladybirdbrowser/ladybird/) · [`🔗 HelloGitHub`](https://hellogithub.com/en/repository/LadybirdBrowser/ladybird)
+
+---
+
+## 20. Warp 终端开源 —— 五年闭源 Rust 代码库现以 AGPL 协议开放
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** Warp / The Block Beats · 3,500+ pts · ~8h ago (~12:00 UTC+8)
+- **标签：** `warp` `terminal` `rust` `open-source` `agpl`
+
+Warp 在 GitHub 上开源了其全部客户端代码库，此前已闭源开发 5 年，累计获得 62,900+ 星标。这款 AI 优先的终端采用 Rust 构建并支持 GPU 渲染，现采用双重许可：核心代码使用 AGPL v3.0，UI 框架（warpui）使用 MIT 许可证。OpenAI 是该开源仓库的"创始赞助商"。Warp 还将自身重新定位为"从终端诞生的智能体开发环境"，其社区贡献流程由智能体编排平台 Oz（仍为闭源）管理。
+
+**值得关注的原因：** Warp 的开源是自 iTerm2 以来最重要的终端基础设施发布。AGPL 许可证确保衍生产品保持开放，而 MIT 许可的 UI 框架则允许商业嵌入。智能体驱动的贡献模式——AI 智能体编写规格和代码，人类进行审查——是对开源治理的一次实验，可能重塑大型项目接受社区贡献的方式。
+
+> 62.9k+ 星标 · 98.3% Rust · macOS/Linux/Windows · 智能体驱动的贡献模式
+
+[`🔗 warpdotdev/warp`](https://github.com/warpdotdev/warp) · [`🔗 The Block Beats`](https://en.theblockbeats.news/flash/343465) · [`🔗 Dev.to 评测`](https://dev.to/jovan_chan_9500711396d4e6/warp-terminal-review-2026-open-source-ade-the-20-build-plan-and-who-should-actually-pay-for-it-5cin)
+
+---
+
+## 21. Orca —— 并行 AI 编程智能体舰队管理 ADE 突破 42K 星标
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** GitHub Trending · 每日排行第 2 · ~6h ago (~14:00 UTC+8)
+- **标签：** `orca` `agent-fleet` `ade` `parallel-agents` `developer-tools`
+
+**stablyai/orca** 定位为"智能体开发环境"（ADE）——一个 MIT 许可、基于 TypeScript 的编排器，用于并行运行多个 AI 编程智能体，每个智能体拥有独立的 git worktree。Orca 支持 27+ 个 CLI 智能体（Claude Code、Codex、Cursor、Grok、OpenCode 等），提供 Ghostty 级别的 WebGL 渲染终端分屏、移动伴侣应用（iOS/Android）用于监控通宵运行的智能体任务、Design Mode 可点击 UI 元素将 HTML/CSS 发送到提示词中，以及原生 GitHub/Linear 集成。由 YC 支持的 Stably AI（W22）开发，免费且自带订阅。
+
+**值得关注的原因：** 2026 年的开发者工作流不再是单智能体单任务——而是将一个提示词分发给 3–5 个智能体，然后合并最佳结果。Orca 是该工作流的首个精致的跨平台 GUI，取代了 tmux 技巧和手动的 git-worktree 命令。其用于监控长时间运行智能体任务的移动伴侣是品类首创。
+
+> MIT 许可证 · 27+ 个支持的智能体 · macOS/Windows/Linux + iOS/Android · Homebrew: `brew install --cask stablyai/orca/orca`
+
+[`🔗 stablyai/orca`](https://github.com/stablyai/orca) · [`🔗 GitGenius`](https://www.gitgenius.co/repos/stablyai/orca) · [`🔗 SkillsLLM`](https://skillsllm.com/skill/orca)
+
+---
+
+## 22. Semantica —— 被誉为"智能体领域的开源版 Palantir"的图原生 AI 基础设施登顶 GitHub Trending
+
+- **传播速度：** ▮▮ 快速上升
+- **来源：** GitHub Trending · 每日排行第 1（8 月 11 日）· ~24h ago (~20:00 UTC+8 Aug 11)
+- **标签：** `semantica` `knowledge-graph` `ai-infrastructure` `provenance` `graphrag`
+
+**semantica-agi/semantica**（4,100+ 星标，MIT 许可证）为 AI 智能体提供了可自托管的图原生基础设施层，结合了 RDF/LPG 双图存储、Rete 推理引擎、针对每个派生事实的 W3C PROV-O 来源追踪，以及 7 个向量数据库后端（FAISS、Qdrant、Weaviate、Milvus 等）。图构建和推理是确定性的——LLM 仅用于模糊的提取任务——使得输出可复现且可审计。通过 `pip install semantica` 安装，面向需要可审计 AI 决策轨迹的受监管企业。
+
+**值得关注的原因：** 随着企业将 AI 智能体部署到生产环境，首要障碍是可审计性——"智能体为什么做出这个决定？"Semantica 的确定性图推理 + LLM 提取方法为负责任的智能体基础设施提供了蓝图。其 W3C PROV-O 来源追踪意味着每个事实都可追溯到其来源，这对受监管行业来说是基本要求。
+
+> MIT 许可证 · Python 3.8+ · pip 可安装 · 13 个模块 · 时间智能 + Allen 区间代数
+
+[`🔗 semantica-agi/semantica`](https://github.com/semantica-agi/semantica) · [`🔗 CSDN 热榜`](https://blog.csdn.net/m0_68631449/article/details/163656692) · [`🔗 Moclaw AI`](https://moclaw.ai/blog/what-is-semantica)
+
+---
+
+## 23. Cloudflare OS —— 开源 AI 工作空间让非开发者用自然语言构建应用
+
+- **传播速度：** ▮▮ 快速上升
+- **来源：** Ars Technica / SD Times · 2,100+ pts · ~5d ago（8 月 5 日）
+- **标签：** `cloudflare` `vibe-coding` `workspace` `no-code` `agents-week`
+
+Cloudflare 在 2026 年 Agents Week 期间开源了 **Cloudflare OS**——一个基于浏览器的 AI 智能体工作空间，最初为其内部员工构建。非开发者用自然语言描述工作流，平台即可生成带有独立数据库、实时功能和访问控制的工作应用。基于 Cloudflare 的 Dynamic Workers 沙箱（V8 isolate，比容器快 100 倍），它执行零信任安全模型：智能体默认零权限，网络访问默认关闭，关键操作需通过"Gatekeeper"获得人类批准。Cloudflare 报告其销售团队使用该平台一个月内节省了 10,000+ 工时。
+
+**值得关注的原因：** "Vibe coding"正从个人爱好者走向企业部署。Cloudflare OS 的沙箱模型——AI 由于没有网络访问而确实无法引入安全漏洞——为企业如何安全地大规模部署 AI 生成代码提供了模板。开源版本意味着任何组织都可以自行托管。
+
+> 开源（GitHub: cloudflare/cloudflare-os） · V8 isolate 沙箱 · 默认零信任 · 托管部署方案计划中
+
+[`🔗 Ars Technica`](https://arstechnica.com/ai/2026/08/cloudflare-open-sources-vibe-coding-platform-for-people-who-arent-coders/) · [`🔗 SD Times`](https://sdtimes.com/cloud-integration/cloudflare-announces-open-source-ai-workspace-for-every-employee/) · [`🔗 cloudflare/cloudflare-os`](https://github.com/cloudflare/cloudflare-os)
+
+---
+
+## 24. Addy Osmani 的 agent-skills —— 56K 星标库教 AI 编程智能体"像资深工程师一样工作"
+
+- **传播速度：** ▮▮ 快速上升
+- **来源：** GitHub Trending · ~56,900 星标 · 自 7 月下旬持续热门
+- **标签：** `agent-skills` `ai-coding` `engineering` `workflow` `best-practices`
+
+Google Chrome 工程负责人 **Addy Osmani** 发布了 **agent-skills**——一个 MIT 许可的库，包含 24 个生产级工程技能，打包为 AI 编程智能体可执行的 SKILL.md 文件。每个技能将资深工程师工作流编码为逐步流程（代码审查、TDD、安全加固、CI/CD、性能优化、文档编写、发布），附有反合理化表来反驳智能体常见的偷懒借口，以及不可协商的验证检查清单。技能文件为纯 Markdown，可跨 Claude Code、Cursor、Gemini CLI、GitHub Copilot、Windsurf 和 Codex 移植使用。该项目曾单周增长 ~15,000 星标，总计达到 56,900+。
+
+**值得关注的原因：** "AI 能写代码"和"AI 能像资深工程师一样工作"之间的差距是 2026 年的核心质量挑战。agent-skills 通过将工程规范编码为智能体必须遵循的机器可读工作流来弥合这一差距——将最佳实践从建议转变为强制流程。其跨工具可移植性使其成为最接近 AI 编程智能体行为通用标准的存在。
+
+> MIT 许可证 · 24 个技能，涵盖 6 个阶段（定义→规划→构建→验证→审查→发布） · 支持 Claude Code、Cursor、Gemini CLI、Copilot、Codex
+
+[`🔗 casualuser/agent-skills`](https://github.com/casualuser/agent-skills) · [`🔗 阿里云开发者`](https://developer.aliyun.com/article/1745190) · [`🔗 腾讯云`](https://cloud.tencent.com.cn/developer/article/2666348)
+
+---
+
+## 25. 阿里巴巴开源 Open Code Review —— 内部 2 万+工程师使用的 AI 代码审查工具
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** 阿里巴巴 / WonderLab · 19,800+ 星标 · ~3d ago (~12:00 UTC+8 Aug 9)
+- **标签：** `alibaba` `code-review` `ai` `open-source` `ci-cd`
+
+阿里巴巴开源了 **Open Code Review**（`ocr`），这是一款采用 Apache 2.0 许可的 Go CLI 工具，内部已有 2 万+工程师使用 2 年，发现数百万代码缺陷。它采用混合架构：确定性流水线处理精确的文件选择、git diff 分组和基于模板的规则匹配（空指针、线程安全、XSS、SQL 注入），LLM 智能体处理复杂的跨文件推理。在 10 种语言的 200 个真实 PR 上与通用智能体进行基准测试，实现了更高的精确率和 F1 分数，同时 token 消耗仅为 1/9。通过 `npm install -g @alibaba-group/open-code-review` 安装。
+
+**值得关注的原因：** 大多数 AI 代码审查工具要么是通用智能体（不一致、昂贵），要么是静态分析器（规则脆弱）。Open Code Review 的混合架构——确定性优先、LLM 兜底——是一种务实的设计模式，在实现生产级可靠性的同时将 token 成本压低到足以作为 CI/CD 门禁的程度。以通用智能体 1/9 的成本实现每次提交的 AI 审查，使其在经济上可行。
+
+> Apache 2.0 · Go · npm 可安装 · GitHub Actions / GitLab CI / Gerrit 集成 · 3 级 SLA 审查
+
+[`🔗 alibaba/open-code-review`](https://github.com/alibaba/open-code-review) · [`🔗 阿里云开发者`](https://developer.aliyun.com/article/1752926) · [`🔗 Dev.to WonderLab`](https://dev.to/wonderlab/open-source-project-145-open-code-review-alibabas-battle-tested-ai-code-review-tool-19-the-6e4)
+
+---
+
+## 26. Needle 2 —— 14MB 智能体 LLM，在树莓派上以 500 tokens/秒运行工具调用 AI
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** Hacker News · 1,100+ pts · ~48h ago (~20:00 UTC+8 Aug 10)
+- **标签：** `needle-2` `edge-ai` `llm` `tool-calling` `raspberry-pi`
+
+Cactus Compute（YC S25）发布了 **Needle 2**——一款 45M 参数的智能体 LLM，通过 CQ2-bit 量化压缩至 14MB，以单一无依赖 C++ 二进制运行。它在树莓派 5 上实现 500–800 tokens/秒，在现代手机上达到 6,000 tokens/秒，每次 token 的 MFLOPs 仅为同类模型的 1/7–1/85。其架构用 Walsh-Hadamard 变换取代了 Transformer 的 MLP 层，并使用哈希化的 n-gram 表替代学习嵌入。专为工具调用和结构化数据提取设计（非聊天），已部署在 Pebble 的 Index 01 智能戒指中用于离线语音操作。Apache 2.0 许可。
+
+**值得关注的原因：** 主流的 AI 叙事是"更大的模型、更多的算力"。Needle 2 反其道而行之：一个 14MB 的二进制文件，在无 GPU、无云端、无需安装的设备上运行工具调用智能体。其架构（无 MLP 层、哈希化 n-gram、语法约束解码）是一种根本不同的 LLM 设计方法——其在消费级可穿戴设备中的生产部署证明了边缘智能体范式不仅仅是演示。
+
+> Apache 2.0 · 45M 参数 · 14MB 二进制 · 28MB RAM · C++ 单一二进制 · 跨平台（Cortex-M 到 x86、WASM）
+
+[`🔗 cactus-compute/needle`](https://github.com/cactus-compute/needle) · [`🔗 Cactus Compute`](https://cactuscompute.com/needle) · [`🔗 ByteIota`](https://byteiota.com/needle2-a-14mb-llm-runs-ai-agents-on-a-raspberry-pi/)
+
+---
+
+## 27. Qwen-MM-Plugins —— 阿里巴巴为任意 AI 智能体赋予多模态视觉、视频和 CAD 能力
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** Runtime Wire / explainX.ai · 1,600+ pts · ~48h ago (~20:00 UTC+8 Aug 10)
+- **标签：** `qwen` `multimodal` `agent-plugins` `vision` `cad`
+
+阿里巴巴通义千问团队发布了 **Qwen-MM-Plugins**（Apache 2.0）——8 个可安装功能，使任意 AI 智能体框架原生支持多模态。这些插件涵盖核心视觉（动态分辨率图像/视频/3D 读取、OCR、定位、分割）、视频记忆（用于长视频问答的层次图记忆）、视频/音频编辑、Blender（22 个 3D 建模工具）和 FreeCAD（14 个参数化 CAD 工具及 FEM 分析）。每个功能作为技能 + 可选 MCP 服务器安装，通过 `uvx` 按需启动。支持 Claude Code、Codex、Gemini CLI、Qwen Code、OpenClaw 等——战略性地升级竞争对手的框架来调用通义千问模型。
+
+**值得关注的原因：** Qwen-MM-Plugins 是一种不对称策略：阿里巴巴不是构建新的智能体框架，而是发布插件来升级所有现有框架使其具备多模态能力——然后这些框架调用通义千问模型。FreeCAD 的 FEM 分析能力尤其值得关注——它使 AI 智能体能够驱动真实的工程仿真，而不仅仅是演示。这种基于插件的多模态智能体能力分发方式可能成为标准模式。
+
+> Apache 2.0 · 8 个功能 · 9 个支持的框架 · Blender（22 个工具）+ FreeCAD（14 个工具 + FEM） · SAM3 + DashScope
+
+[`🔗 QwenLM/Qwen-MM-Plugins`](https://github.com/QwenLM/Qwen-MM-Plugins) · [`🔗 Runtime Wire`](https://runtimewire.com/article/alibaba-qwen-mm-plugins-multimodal-ai-agent-harnesses) · [`🔗 explainX.ai`](https://explainx.ai/blog/qwen-mm-plugins-multimodal-agent-harness-august-2026)
+
+---
+
 ## 元数据
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-08-12T12:03:00Z |
-| 条目数 | 18 |
-| 追踪来源数 | 22（Hacker News、GitHub Trending、各大科技博客、安全公告、Cloudflare Blog、SAP Patch Day） |
+| 生成时间 | 2026-08-12T20:03:00Z |
+| 条目数 | 27 |
+| 追踪来源数 | 31（Hacker News、GitHub Trending、各大科技博客、安全公告、Cloudflare Blog、SAP Patch Day、Warp、Alibaba、Cactus Compute） |
 | 更新时段 | 04:03, 12:03, 20:03 UTC+8（每日3次） |
 | 排序方式 | 传播速度加权（时效性 x 参与度加速度 x 来源权威性） |
 | 许可证 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

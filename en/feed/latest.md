@@ -1,8 +1,8 @@
 ---
 date: 2026-08-12
-updated: 2026-08-12T12:03:00Z
+updated: 2026-08-12T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -305,13 +305,157 @@ Google released a Chrome stable channel update (151.0.7922.137) addressing 5 use
 
 ---
 
+## 19. Ladybird — the first new browser engine in a decade hits 64K GitHub stars
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · #1 daily (Aug 11) · ~10h ago (~10:00 UTC+8)
+- **Tags:** `ladybird` `browser` `rust` `web-engine` `open-source`
+
+**LadybirdBrowser/ladybird** surged to #1 on GitHub Trending with 64,000+ stars, establishing itself as the first truly independent browser engine built from scratch in over a decade. Unlike every other browser, Ladybird is not a fork of Chromium, WebKit, or Gecko — it has its own rendering engine (LibWeb) and JavaScript engine (LibJS), both now being migrated from C++ to Rust. Founded by former Apple/WebKit engineer Andreas Kling and backed by Shopify, Cloudflare, Proton, and JetBrains via a 501(c)(3) nonprofit, it already ranks #4 in Web Platform Tests and #2 in JavaScript conformance.
+
+**Why it matters:** The browser engine duopoly (Chromium/WebKit) has gone unchallenged for over 10 years. Ladybird represents the first credible attempt to build an independent rendering engine in the modern era — and its rapid migration to Rust signals a bet on memory safety at the browser-infrastructure level. If it reaches alpha in 2026 as planned, it would be the most significant browser-engine launch since WebKit itself.
+
+> 64k+ stars · BSD-2-Clause · Multi-process sandboxed architecture · Alpha planned 2026, stable 2028
+
+[`🔗 LadybirdBrowser/ladybird`](https://github.com/LadybirdBrowser/ladybird) · [`🔗 Star History`](https://www.star-history.com/ladybirdbrowser/ladybird/) · [`🔗 HelloGitHub`](https://hellogithub.com/en/repository/LadybirdBrowser/ladybird)
+
+---
+
+## 20. Warp terminal goes open source — 5 years of proprietary Rust code now AGPL
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Warp / The Block Beats · 3,500+ pts · ~8h ago (~12:00 UTC+8)
+- **Tags:** `warp` `terminal` `rust` `open-source` `agpl`
+
+Warp open-sourced its entire client codebase on GitHub after 5 years of closed development, hitting 62,900+ stars. The AI-first terminal, built in Rust with GPU rendering, is now dual-licensed: core under AGPL v3.0, UI frameworks (warpui) under MIT. OpenAI is the "founding sponsor" of the open-source repository. Warp also rebranded itself as an "agentic development environment born out of the terminal," with contributions managed by an agent-driven orchestration platform (Oz, which remains proprietary).
+
+**Why it matters:** Warp's open-sourcing is the most significant terminal infrastructure release since iTerm2. The AGPL license ensures derivatives stay open, while the MIT-licensed UI framework allows commercial embedding. The agent-driven contribution model — where AI agents write specs and code while humans review — is an experiment in open-source governance that could reshape how large projects accept community contributions.
+
+> 62.9k+ stars · 98.3% Rust · macOS/Linux/Windows · Agent-driven contribution model
+
+[`🔗 warpdotdev/warp`](https://github.com/warpdotdev/warp) · [`🔗 The Block Beats`](https://en.theblockbeats.news/flash/343465) · [`🔗 Dev.to Review`](https://dev.to/jovan_chan_9500711396d4e6/warp-terminal-review-2026-open-source-ade-the-20-build-plan-and-who-should-actually-pay-for-it-5cin)
+
+---
+
+## 21. Orca — the ADE for running a fleet of parallel AI coding agents hits 42K stars
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · #2 daily · ~6h ago (~14:00 UTC+8)
+- **Tags:** `orca` `agent-fleet` `ade` `parallel-agents` `developer-tools`
+
+**stablyai/orca** positions itself as the "Agent Development Environment" — an MIT-licensed, TypeScript-based orchestrator for running multiple AI coding agents in parallel, each in its own isolated git worktree. Supporting 27+ CLI agents (Claude Code, Codex, Cursor, Grok, OpenCode, and more), Orca provides Ghostty-class terminal splits with WebGL rendering, a mobile companion app (iOS/Android) for monitoring overnight agent runs, Design Mode for clicking UI elements to send HTML/CSS into prompts, and native GitHub/Linear integration. Developed by YC-backed Stably AI (W22), it is free and BYO-subscription.
+
+**Why it matters:** The 2026 developer workflow is no longer one-agent-one-task — it's fanning one prompt across 3–5 agents and merging the best result. Orca is the first polished, cross-platform GUI for this workflow, replacing tmux hacks and manual git-worktree commands. Its mobile companion for monitoring long-running agent tasks is a category first.
+
+> MIT license · 27+ supported agents · macOS/Windows/Linux + iOS/Android · Homebrew: `brew install --cask stablyai/orca/orca`
+
+[`🔗 stablyai/orca`](https://github.com/stablyai/orca) · [`🔗 GitGenius`](https://www.gitgenius.co/repos/stablyai/orca) · [`🔗 SkillsLLM`](https://skillsllm.com/skill/orca)
+
+---
+
+## 22. Semantica — graph-native AI infrastructure dubbed "open-source Palantir for agents" tops GitHub Trending
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · #1 daily (Aug 11) · ~24h ago (~20:00 UTC+8 Aug 11)
+- **Tags:** `semantica` `knowledge-graph` `ai-infrastructure` `provenance` `graphrag`
+
+**semantica-agi/semantica** (4,100+ stars, MIT license) provides a self-hosted graph-native infrastructure layer for AI agents, combining RDF/LPG dual-graph storage, a Rete reasoning engine, W3C PROV-O provenance tracking for every derived fact, and 7 vector database backends (FAISS, Qdrant, Weaviate, Milvus, etc.). Graph construction and reasoning are deterministic — LLMs are used only for fuzzy extraction tasks — making outputs reproducible and auditable. Installable via `pip install semantica`, it targets regulated enterprises needing auditable AI decision trails.
+
+**Why it matters:** As enterprises deploy AI agents into production, the #1 blocker is auditability — "why did the agent make this decision?" Semantica's approach of deterministic graph reasoning + LLM extraction is a blueprint for accountable agent infrastructure. Its W3C PROV-O provenance means every fact can be traced to its source, which is table stakes for regulated industries.
+
+> MIT license · Python 3.8+ · pip installable · 13 modules · Temporal intelligence + Allen interval algebra
+
+[`🔗 semantica-agi/semantica`](https://github.com/semantica-agi/semantica) · [`🔗 CSDN Trending`](https://blog.csdn.net/m0_68631449/article/details/163656692) · [`🔗 Moclaw AI`](https://moclaw.ai/blog/what-is-semantica)
+
+---
+
+## 23. Cloudflare OS — open-source AI workspace lets non-developers build apps with natural language
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ars Technica / SD Times · 2,100+ pts · ~5d ago (Aug 5)
+- **Tags:** `cloudflare` `vibe-coding` `workspace` `no-code` `agents-week`
+
+Cloudflare open-sourced **Cloudflare OS** during Agents Week 2026 — a browser-based AI agent workspace originally built for its own employees. Non-developers describe workflows in natural language and the platform generates working apps with isolated databases, real-time capabilities, and access controls. Built on Cloudflare's Dynamic Workers sandboxing (V8 isolates, 100× faster than containers), it enforces a zero-trust security model: agents start with zero permissions, network access is disabled by default, and "Gatekeepers" require human sign-off for sensitive actions. Cloudflare reported its sales team saved 10,000+ hours in one month using the platform.
+
+**Why it matters:** "Vibe coding" is moving from individual hobbyists to enterprise deployments. Cloudflare OS's sandbox model — where the AI literally cannot introduce a security bug because it has no network access — is a template for how enterprises can safely deploy AI-generated code at scale. The open-source release means any organization can self-host it.
+
+> Open source (GitHub: cloudflare/cloudflare-os) · V8 isolate sandbox · Zero-trust by default · Managed deployment planned
+
+[`🔗 Ars Technica`](https://arstechnica.com/ai/2026/08/cloudflare-open-sources-vibe-coding-platform-for-people-who-arent-coders/) · [`🔗 SD Times`](https://sdtimes.com/cloud-integration/cloudflare-announces-open-source-ai-workspace-for-every-employee/) · [`🔗 cloudflare/cloudflare-os`](https://github.com/cloudflare/cloudflare-os)
+
+---
+
+## 24. Addy Osmani's agent-skills — 56K-star library that teaches AI coding agents to "work like senior engineers"
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · ~56,900 stars · trending since late July
+- **Tags:** `agent-skills` `ai-coding` `engineering` `workflow` `best-practices`
+
+Google Chrome engineering lead **Addy Osmani** released **agent-skills** — an MIT-licensed library of 24 production-grade engineering skills packaged as SKILL.md files that AI coding agents can execute. Each skill encodes a senior-engineer workflow (code review, TDD, security hardening, CI/CD, performance optimization, documentation, shipping) with step-by-step processes, anti-rationalization tables that counter common agent excuses, and non-negotiable verification checklists. Skills are plain Markdown, making them portable across Claude Code, Cursor, Gemini CLI, GitHub Copilot, Windsurf, and Codex. It added ~15,000 stars in a single week, reaching 56,900+ total.
+
+**Why it matters:** The gap between "AI can write code" and "AI can work like a senior engineer" is the defining quality challenge of 2026. agent-skills bridges it by encoding engineering discipline into machine-readable workflows that agents must follow — transforming best practices from suggestions into mandatory processes. Its cross-tool portability makes it the closest thing to a universal standard for AI coding agent behavior.
+
+> MIT license · 24 skills across 6 phases (Define→Plan→Build→Verify→Review→Ship) · Works with Claude Code, Cursor, Gemini CLI, Copilot, Codex
+
+[`🔗 casualuser/agent-skills`](https://github.com/casualuser/agent-skills) · [`🔗 Aliyun Developer`](https://developer.aliyun.com/article/1745190) · [`🔗 Tencent Cloud`](https://cloud.tencent.com.cn/developer/article/2666348)
+
+---
+
+## 25. Alibaba open-sources Open Code Review — AI code review tool used by 20,000+ engineers internally
+
+- **Velocity:** ▮ steady
+- **Source:** Alibaba / WonderLab · 19,800+ stars · ~3d ago (~12:00 UTC+8 Aug 9)
+- **Tags:** `alibaba` `code-review` `ai` `open-source` `ci-cd`
+
+Alibaba open-sourced **Open Code Review** (`ocr`), an Apache 2.0-licensed Go CLI tool used internally for 2 years by 20,000+ engineers to catch millions of defects. It uses a hybrid architecture: a deterministic pipeline handles precise file selection, git diff grouping, and template-based rule matching (NPE, thread safety, XSS, SQL injection), while an LLM agent handles complex cross-file reasoning. Benchmarked against general-purpose agents on 200 real PRs across 10 languages, it achieves higher precision and F1 score while consuming ~1/9 the tokens. Install via `npm install -g @alibaba-group/open-code-review`.
+
+**Why it matters:** Most AI code review tools are either generic agents (inconsistent, expensive) or static analyzers (brittle rules). Open Code Review's hybrid architecture — deterministic where possible, LLM where necessary — is a pragmatic design pattern that achieves production-grade reliability while keeping token costs low enough for CI/CD gating. At 1/9 the cost of a general agent, it makes per-commit AI review economically viable.
+
+> Apache 2.0 · Go · npm installable · GitHub Actions / GitLab CI / Gerrit integration · 3 SLA review levels
+
+[`🔗 alibaba/open-code-review`](https://github.com/alibaba/open-code-review) · [`🔗 Aliyun Developer`](https://developer.aliyun.com/article/1752926) · [`🔗 Dev.to WonderLab`](https://dev.to/wonderlab/open-source-project-145-open-code-review-alibabas-battle-tested-ai-code-review-tool-19-the-6e4)
+
+---
+
+## 26. Needle 2 — 14MB agentic LLM runs tool-calling AI on a Raspberry Pi at 500 tokens/sec
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 1,100+ pts · ~48h ago (~20:00 UTC+8 Aug 10)
+- **Tags:** `needle-2` `edge-ai` `llm` `tool-calling` `raspberry-pi`
+
+Cactus Compute (YC S25) released **Needle 2** — a 45M-parameter agentic LLM compressed to 14MB via CQ2-bit quantization, running as a single dependency-free C++ binary. It achieves 500–800 tokens/sec on a Raspberry Pi 5 and 6,000 tokens/sec on modern phones, using 7–85× fewer MFLOPs per token than comparable models. The architecture replaces transformer MLP layers with Walsh-Hadamard transforms and uses hashed n-gram tables instead of learned embeddings. Designed specifically for tool calling and structured data extraction (not chat), it's already deployed in Pebble's Index 01 smart ring for offline voice-to-action. Apache 2.0 licensed.
+
+**Why it matters:** The dominant AI narrative is "bigger models, more compute." Needle 2 flips this: a 14MB binary that runs tool-calling agents on devices with no GPU, no cloud, no install. Its architecture (no MLP layers, hashed n-grams, grammar-constrained decoding) is a fundamentally different approach to LLM design — and its production deployment in a consumer wearable proves the edge-agent paradigm isn't just a demo.
+
+> Apache 2.0 · 45M params · 14MB binary · 28MB RAM · C++ single binary · Cross-platform (Cortex-M to x86, WASM)
+
+[`🔗 cactus-compute/needle`](https://github.com/cactus-compute/needle) · [`🔗 Cactus Compute`](https://cactuscompute.com/needle) · [`🔗 ByteIota`](https://byteiota.com/needle2-a-14mb-llm-runs-ai-agents-on-a-raspberry-pi/)
+
+---
+
+## 27. Qwen-MM-Plugins — Alibaba gives any AI agent multimodal vision, video, and CAD capabilities
+
+- **Velocity:** ▮ steady
+- **Source:** Runtime Wire / explainX.ai · 1,600+ pts · ~48h ago (~20:00 UTC+8 Aug 10)
+- **Tags:** `qwen` `multimodal` `agent-plugins` `vision` `cad`
+
+Alibaba's Qwen team released **Qwen-MM-Plugins** (Apache 2.0) — 8 installable capabilities that make any AI agent harness multimodal-native. The plugins cover core vision (dynamic-resolution image/video/3D reading, OCR, grounding, segmentation), video memory (hierarchical graph memory for long-form video QA), video/audio editing, Blender (22 tools for 3D modeling), and FreeCAD (14 tools for parametric CAD with FEM analysis). Each capability is installed as a skill + optional MCP server, launched on demand via `uvx`. Supports Claude Code, Codex, Gemini CLI, Qwen Code, OpenClaw, and more — strategically upgrading competitors' harnesses to call Qwen models.
+
+**Why it matters:** Qwen-MM-Plugins is an asymmetric strategy: instead of building a new agent harness, Alibaba ships plugins that upgrade every existing harness to be multimodal — and those harnesses then call Qwen models. The FreeCAD FEM analysis capability is particularly notable — it enables AI agents to drive real engineering simulation, not just demos. This plugin-based approach to multimodal agent capabilities may become the standard distribution model.
+
+> Apache 2.0 · 8 capabilities · 9 supported harnesses · Blender (22 tools) + FreeCAD (14 tools + FEM) · SAM3 + DashScope
+
+[`🔗 QwenLM/Qwen-MM-Plugins`](https://github.com/QwenLM/Qwen-MM-Plugins) · [`🔗 Runtime Wire`](https://runtimewire.com/article/alibaba-qwen-mm-plugins-multimodal-ai-agent-harnesses) · [`🔗 explainX.ai`](https://explainx.ai/blog/qwen-mm-plugins-multimodal-agent-harness-august-2026)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-12T12:03:00Z |
-| Items | 18 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, major tech blogs, security advisories, Cloudflare Blog, SAP Patch Day) |
+| Generated | 2026-08-12T20:03:00Z |
+| Items | 27 |
+| Sources tracked | 31 (Hacker News, GitHub Trending, major tech blogs, security advisories, Cloudflare Blog, SAP Patch Day, Warp, Alibaba, Cactus Compute) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
