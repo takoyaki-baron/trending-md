@@ -12,6 +12,7 @@ const strings = {
     ogDesc: 'Dense trending information optimized for agentic web search. Markdown-first.',
     navFeed: 'feed',
     navAbout: 'about',
+    navAgent: 'agent',
     navArchive: 'archive',
     navGitHub: 'github',
     footerTitle: 'trending.md — Markdown-first trending signals.',
@@ -25,6 +26,7 @@ const strings = {
     feedIndexTitle: 'Feed Index',
     archiveTitle: 'Archive',
     aboutTitle: 'About',
+    agentTitle: 'Learnt Agent',
     dayTitleMark: 'Trending',
   },
 
@@ -36,6 +38,7 @@ const strings = {
     ogDesc: '面向 AI 智能体搜索优化的密集趋势信息。Markdown 优先。',
     navFeed: '趋势',
     navAbout: '关于',
+    navAgent: '智能体',
     navArchive: '归档',
     navGitHub: 'github',
     footerTitle: 'trending.md — Markdown 优先的趋势信号。',
@@ -49,6 +52,7 @@ const strings = {
     feedIndexTitle: '趋势索引',
     archiveTitle: '归档',
     aboutTitle: '关于',
+    agentTitle: '学习智能体',
     dayTitleMark: '趋势',
   },
 
@@ -60,6 +64,7 @@ const strings = {
     ogDesc: 'AIエージェントのウェブ検索に最適化された高密度トレンド情報。Markdownファースト。',
     navFeed: 'フィード',
     navAbout: '概要',
+    navAgent: 'エージェント',
     navArchive: 'アーカイブ',
     navGitHub: 'github',
     footerTitle: 'trending.md — Markdownファーストのトレンドシグナル。',
@@ -73,6 +78,7 @@ const strings = {
     feedIndexTitle: 'フィード索引',
     archiveTitle: 'アーカイブ',
     aboutTitle: '概要',
+    agentTitle: '学習エージェント',
     dayTitleMark: 'トレンド',
   },
 };

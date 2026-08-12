@@ -332,6 +332,7 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
     <nav class="header-nav">
       ${navLink(`${base}/`, s.navFeed, 'feed')}
       ${navLink(`${base}/about`, s.navAbout, 'about')}
+      ${navLink(`${base}/agent/`, s.navAgent, 'agent')}
       ${navLink(`${base}/archive/`, s.navArchive, 'archive')}
       <a href="https://github.com/takoyaki-baron/trending-md">${s.navGitHub}</a>
       ${langSelect}
@@ -427,6 +428,10 @@ for (const lang of langs) {
   // About
   buildPage(`${srcPrefix}about.md`, `${base}/about.html`, s.aboutTitle,
     `<span class="current">about.md</span>`, 'about', lang);
+
+  // Learnt agent
+  buildPage(`${srcPrefix}agent.md`, `${base}/agent/index.html`, s.agentTitle,
+    `<span class="current">${s.navAgent}</span>`, 'agent', lang);
 }
 
 /* ── Root redirect page — dynamic language chooser ── */
@@ -510,6 +515,10 @@ for (const lang of langs) {
   </url>
   <url>
     <loc>https://trending.md${base}/about</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trending.md${base}/agent/</loc>
     <priority>0.6</priority>
   </url>`;
 }

@@ -188,6 +188,22 @@ safety-net deploy.
 - Each generate run pushes to master, which triggers Cloudflare Pages auto-deploy
 - Cron: launchd runs `deploy-cron.sh` at 22:07 daily (safety-net build + deploy)
 
+## Learnt agent
+
+A persistent **learnt agent** accumulates knowledge across feed batches and surfaces it on the
+`/agent/` page (trilingual). It runs headless (`claude -p`) after each successful feed batch via
+`agent-run.sh`, invoked from `generate-feed.sh`.
+
+- **`agent/AGENT.md`** — the agent's identity + operating rules (1M-token memory cap,
+  net-new-only learning, insight/todo production, knowledge archiving).
+- **`en/agent.md`** — the agent's canonical English memory window (notes + theses + todos +
+  `last_processed` frontmatter). This is what it reads and rewrites each run.
+- **`zh/agent.md`**, **`jp/agent.md`** — display-only translations of the memory window.
+- **`agent/knowledge/`** — cold-storage library: the agent archives `<topic>.md` reference files
+  here when a topic is useful-but-not-hot, and lists them in `agent/knowledge/index.md`.
+- **`agent-run.sh`** — the runner; also runnable manually (`bash agent-run.sh YYYY-MM-DD`) for
+  on-demand learning.
+
 ## Important URLs
 
 - Live site: `https://trending.md/`
