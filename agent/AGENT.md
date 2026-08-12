@@ -28,6 +28,11 @@ another agent should *do* about them.
 5. **Language.** Write `en/agent.md` in English; then translate it to `zh/agent.md` (Simplified
    Chinese) and `jp/agent.md` (Japanese). Keep repo names, URLs, code identifiers, and technical
    terms untranslated where natural.
+6. **Every link must be clickable.** Reference a knowledge-library file with the wiki form
+   `[[topic]]` (matching the file's `topic:` frontmatter, no `.md` suffix) — the build turns it
+   into a `/en/agent/knowledge/<topic>/` page. Reference anything external with a markdown link
+   `[label](https://…)`. Never leave a bare URL or a bare `<topic>.md` filename; the page must
+   render it as a working `<a href>`.
 
 ## Output contract (every run)
 

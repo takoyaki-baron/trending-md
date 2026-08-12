@@ -14,6 +14,7 @@ const RE_BOLD  = /\*\*(.+?)\*\*/g;
 const RE_ITAL  = /\*(.+?)\*/g;
 const RE_IMG   = /!\[([^\]]*)\]\(([^)]+)\)/g;
 const RE_LINK  = /\[([^\]]+)\]\(([^)]+)\)/g;
+const RE_WIKI  = /\[\[([^\]]+)\]\]/g;   // [[topic]] → internal knowledge-library link
 
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -36,6 +37,7 @@ function parseMD(src) {
     text = text.replace(RE_ITAL, '<em>$1</em>');
     text = text.replace(RE_IMG, '<img src="$2" alt="$1" loading="lazy">');
     text = text.replace(RE_LINK, '<a href="$2">$1</a>');
+    text = text.replace(RE_WIKI, '<a href="/en/agent/knowledge/$1/">$1</a>');
     text = text.replace(/«I(\d+)»/g, (_, i) => `<code>${unesc(inlines[+i])}</code>`);
     text = text.replace(/\n/g, '<br>');
     return text;
@@ -447,6 +449,24 @@ for (const lang of langs) {
     `<span class="current">${s.navAgent}</span>`, 'agent', lang);
 }
 
+/* ── Knowledge library (learnt agent's cold-storage) — English canonical, linked from all locales ── */
+const knowledgeDir = path.join(ROOT, 'agent', 'knowledge');
+const knowledgeTopics = fs.existsSync(knowledgeDir)
+  ? fs.readdirSync(knowledgeDir).filter(f => f.endsWith('.md') && f !== 'index.md').map(f => f.replace(/\.md$/, ''))
+  : [];
+
+if (knowledgeTopics.length > 0) {
+  const kBase = `${dist}/en/agent/knowledge`;
+  buildPage('agent/knowledge/index.md', `${kBase}/index.html`, 'Knowledge library',
+    `<a href="/en/agent/">${strings.en.navAgent}</a> <span class="current">knowledge</span>`, 'agent', 'en');
+  for (const topic of knowledgeTopics) {
+    const src = `agent/knowledge/${topic}.md`;
+    const { meta } = parseFrontmatter(fs.readFileSync(path.join(ROOT, src), 'utf8'));
+    buildPage(src, `${kBase}/${topic}/index.html`, meta.title || topic,
+      `<a href="/en/agent/">${strings.en.navAgent}</a> <a href="/en/agent/knowledge/">knowledge</a> <span class="current">${topic}</span>`, 'agent', 'en');
+  }
+}
+
 /* ── Root redirect page — dynamic language chooser ── */
 const langLinks = langs.map(l => {
   const ls = strings[l];
@@ -534,6 +554,22 @@ for (const lang of langs) {
     <loc>https://trending.md${base}/agent/</loc>
     <priority>0.6</priority>
   </url>`;
+}
+
+// Knowledge library pages (English canonical, linked from trilingual agent pages)
+if (knowledgeTopics.length > 0) {
+  sitemap += `
+  <url>
+    <loc>https://trending.md/en/agent/knowledge/</loc>
+    <priority>0.4</priority>
+  </url>`;
+  for (const topic of knowledgeTopics) {
+    sitemap += `
+  <url>
+    <loc>https://trending.md/en/agent/knowledge/${topic}/</loc>
+    <priority>0.4</priority>
+  </url>`;
+  }
 }
 
 // Backward-compat root raw .md paths (for parity)
