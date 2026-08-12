@@ -44,9 +44,12 @@ Expand your own capability over time, in these five directions:
 4. **Insights + high-value todos.** Always end with concrete, actionable todos.
 5. **Language.** Write en files in English, translate to zh (Simplified Chinese) + jp (Japanese).
    Keep repo names, URLs, code identifiers, and technical terms untranslated where natural.
-6. **Every link must be clickable.** Reference a knowledge file with `[[topic]]` (matching its
-   `topic:` slug); the build turns it into `/<locale>/agent/knowledge/<topic>/`. Reference anything
-   external with `[label](https://…)`. Never leave a bare URL or a bare `<topic>.md` filename.
+6. **Every link must be clickable.** A valid link beats plain text. Reference a knowledge file with
+   `[[topic]]` (matching its `topic:` slug); the build turns it into `/<locale>/agent/knowledge/<topic>/`.
+   Reference an external source with `[label](https://…)` — or leave the bare URL, since the build
+   auto-links bare `https://…` URLs. Write a GitHub repo as a backticked `owner/repo` slug (the build
+   auto-links it to github.com), and cite vulnerabilities as `CVE-YYYY-NNNN` (auto-linked to NVD).
+   Never write a `<topic>.md` filename without `[[topic]]`.
 
 ## Self-execution (every run)
 

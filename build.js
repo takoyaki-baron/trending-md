@@ -38,7 +38,31 @@ function parseMD(src, lang) {
     text = text.replace(RE_IMG, '<img src="$2" alt="$1" loading="lazy">');
     text = text.replace(RE_LINK, '<a href="$2">$1</a>');
     text = text.replace(RE_WIKI, (_, t) => `<a href="/${lang}/agent/knowledge/${t}/">${t}</a>`);
-    text = text.replace(/«I(\d+)»/g, (_, i) => `<code>${unesc(inlines[+i])}</code>`);
+
+    // Protect anchors produced above so the auto-linkifiers don't re-wrap them.
+    const anchors = [];
+    text = text.replace(/<a\b[^>]*>.*?<\/a>/g, m => { anchors.push(m); return `«A${anchors.length - 1}»`; });
+
+    // Auto-link bare URLs and CVE IDs — a valid link beats plain text.
+    text = text.replace(/https?:\/\/[^\s<"«»]+/g, (m) => {
+      const url = m.replace(/[.,;:!?)\]]+$/, '');
+      return `<a href="${url}">${url}</a>`;
+    });
+    text = text.replace(/\b(CVE-\d{4}-\d{4,7})\b/g, '<a href="https://nvd.nist.gov/vuln/detail/$1">$1</a>');
+
+    // Restore anchors.
+    text = text.replace(/«A(\d+)»/g, (_, i) => anchors[+i]);
+
+    // Inline code: linkify bare owner/repo slugs to their GitHub repo.
+    text = text.replace(/«I(\d+)»/g, (_, i) => {
+      const c = inlines[+i];
+      if (/^[A-Za-z0-9][A-Za-z0-9_.-]*\/[A-Za-z0-9][A-Za-z0-9_.-]*$/.test(c)
+          && !/\.(md|json|html?|toml|ya?ml|jsx?|tsx?|css|sh|py|jsonc)$/i.test(c)) {
+        return `<a href="https://github.com/${c}"><code>${unesc(c)}</code></a>`;
+      }
+      return `<code>${unesc(c)}</code>`;
+    });
+
     text = text.replace(/\n/g, '<br>');
     return text;
   }
