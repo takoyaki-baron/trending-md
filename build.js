@@ -548,22 +548,25 @@ function sourcesEntries(data, curated) {
   }).sort((a, b) => b.count - a.count || a.host.localeCompare(b.host));
 }
 
-function buildMermaid(entries, cooc, topN, minW) {
-  const top = entries.slice(0, topN);
-  const idx = {};
-  top.forEach((e, i) => { idx[e.host] = i; });
-  const lines = ['flowchart LR'];
-  for (const c of SOURCE_CATEGORIES) lines.push(`  classDef ${c} fill:${SRC_CAT_COLORS[c]},color:#fff`);
-  top.forEach((e, i) => { lines.push(`  d${i}["${e.host} (${e.count})"]`); });
-  top.forEach((e, i) => { lines.push(`  class d${i} ${e.cat}`); });
-  for (const key of Object.keys(cooc)) {
-    const parts = key.split('|');
-    const a = idx[parts[0]], b = idx[parts[1]];
-    if (a === undefined || b === undefined) continue;
-    if (cooc[key] < minW) continue;
-    lines.push(`  d${a} -->|${cooc[key]}| d${b}`);
-  }
-  return lines.join('\n');
+function buildSourceCloud(entries) {
+  const max = entries.length ? entries[0].count : 1;
+  return entries.map(e => {
+    const size = (0.72 + 0.45 * Math.log(e.count + 1) / Math.log(max + 1)).toFixed(2);
+    return `<a class="src-item" style="font-size:${size}rem" href="https://${e.host}" rel="nofollow noopener" target="_blank" title="${e.host} — ${e.count}">${e.host}<sup>${e.count}</sup></a>`;
+  }).join('\n');
+}
+
+function buildCoCitation(cooc, topN) {
+  const pairs = Object.keys(cooc).map(k => {
+    const [a, b] = k.split('|');
+    return { a, b, w: cooc[k] };
+  }).sort((x, y) => y.w - x.w).slice(0, topN);
+  return pairs.map(p =>
+    `<li class="src-pair"><a href="https://${p.a}" rel="nofollow noopener" target="_blank">${p.a}</a>` +
+    `<span class="src-pair-dot">·</span>` +
+    `<a href="https://${p.b}" rel="nofollow noopener" target="_blank">${p.b}</a>` +
+    `<span class="src-pair-w">${p.w}</span></li>`
+  ).join('');
 }
 
 function buildSourcesContent(lang, data, curated) {
@@ -607,7 +610,8 @@ function buildSourcesContent(lang, data, curated) {
     </tr>`;
   }).join('');
 
-  const mermaidSrc = buildMermaid(entries, data.cooc, 30, 2);
+  const cloud = buildSourceCloud(entries);
+  const cocit = buildCoCitation(data.cooc, 15);
 
   return `<style>
   .src-stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
@@ -630,9 +634,17 @@ function buildSourcesContent(lang, data, curated) {
   .rv-none { color: var(--text-tertiary); font-style: italic; }
   .src-reviewcol { white-space: nowrap; }
   .src-reviewlegend { color: var(--text-tertiary); font-size: 0.74rem; margin: 6px 0 10px; }
-  .mermaid-wrap { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 12px; margin: 8px 0 16px; overflow-x: auto; }
-  .mermaid { display: flex; justify-content: center; }
-  .mermaid svg { max-width: 100%; height: auto; }
+  .src-cloud { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 18px; line-height: 1.9; margin: 8px 0 4px; }
+  .src-item { font-family: "SF Mono", Menlo, Consolas, monospace; color: var(--accent); text-decoration: none; white-space: nowrap; }
+  .src-item:hover { text-decoration: underline; }
+  .src-item sup { color: var(--text-tertiary); font-size: 0.6em; margin-left: 1px; }
+  .src-co { list-style: none; margin: 6px 0 4px; padding: 0; columns: 2; column-gap: 28px; }
+  .src-pair { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.78rem; margin: 2px 0; break-inside: avoid; }
+  .src-pair a { color: var(--accent); text-decoration: none; }
+  .src-pair a:hover { text-decoration: underline; }
+  .src-pair-dot { color: var(--text-tertiary); margin: 0 6px; }
+  .src-pair-w { color: var(--text-tertiary); font-size: 0.68rem; margin-left: 6px; }
+  @media (max-width: 600px) { .src-co { columns: 1; } }
   .src-table { font-size: 0.8rem; }
   .src-table td { vertical-align: middle; }
   .src-rank { color: var(--text-tertiary); width: 2em; text-align: right; }
@@ -647,19 +659,12 @@ function buildSourcesContent(lang, data, curated) {
 <h1>${esc(s.sourcesTitle)}</h1>
 <p>${esc(s.srcIntro)}</p>
 <div class="src-stats">${stats.map(x => `<div class="src-stat"><b>${x.v}</b><span>${x.k}</span></div>`).join('')}</div>
-<h2>${esc(s.srcGraphTitle)}</h2>
-<div class="src-legend">${legend}</div>
-<div class="mermaid-wrap"><div class="mermaid">${esc(mermaidSrc)}</div></div>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-<script>
-(function () {
-  if (!window.mermaid) return;
-  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  mermaid.initialize({ securityLevel: 'loose', theme: dark ? 'dark' : 'default', flowchart: { curve: 'linear', nodeSpacing: 50, rankSpacing: 70 } });
-  mermaid.run({ querySelector: '.mermaid' }).catch(function () {});
-})();
-</script>
+<h2>${esc(s.srcCloudTitle)}</h2>
+<div class="src-cloud">${cloud}</div>
+<h2>${esc(s.srcCoTitle)}</h2>
+<ul class="src-co">${cocit}</ul>
 <h2>${esc(s.srcTableTitle)}</h2>
+<div class="src-legend">${legend}</div>
 <p class="src-reviewlegend"><span class="rv rv-high" title="${s.srcCred}">${s.srcHigh}</span><span class="rv rv-med" title="${s.srcCred}">${s.srcMed}</span><span class="rv rv-low" title="${s.srcCred}">${s.srcLow}</span> ${s.srcCred} · <span class="rv rv-cv" title="${s.srcCV}">✓N</span> ${s.srcCV}</p>
 <table class="src-table"><thead><tr><th>#</th><th>domain</th><th>citations</th><th>category</th><th>${s.srcReview}</th><th>note</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
@@ -690,11 +695,18 @@ function buildSourcesMD(lang, data, curated) {
     lines.push(`| ${i + 1} | [${e.host}](https://${e.host}) | ${e.count} | ${e.cat} | ${cred} | ${dens} | ${cv} | ${note} |`);
   });
   lines.push('');
-  lines.push('## Relationship graph');
+  lines.push('## ' + s.srcCloudTitle);
   lines.push('');
-  lines.push('```mermaid');
-  lines.push(buildMermaid(entries, data.cooc, 30, 2));
-  lines.push('```');
+  lines.push(entries.map(e => `[${e.host}](https://${e.host}) (${e.count})`).join(' · '));
+  lines.push('');
+  lines.push('## ' + s.srcCoTitle);
+  lines.push('');
+  Object.keys(data.cooc).map(k => {
+    const [a, b] = k.split('|');
+    return { a, b, w: data.cooc[k] };
+  }).sort((x, y) => y.w - x.w).slice(0, 15).forEach(p => {
+    lines.push(`- [${p.a}](https://${p.a}) · [${p.b}](https://${p.b}) — ${p.w}`);
+  });
   lines.push('');
   return lines.join('\n');
 }

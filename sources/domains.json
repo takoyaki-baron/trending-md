@@ -664,5 +664,464 @@
     "cred": "low",
     "density": "low",
     "cv": 1
+  },
+  "3druck.com": {
+    "cat": "news",
+    "en": "Independent German-language additive manufacturing (3D printing) trade magazine founded 2011, publishing industry news, research and case studies.",
+    "zh": "德语区最大的独立增材制造（3D打印）行业杂志，2011年创立，发布行业新闻、研究与案例。",
+    "jp": "2011年創刊の独立系ドイツ語3Dプリンティング（AM）専門誌。業界ニュース・研究・事例を掲載。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "9to5google.com": {
+    "cat": "news",
+    "en": "Established Google-focused tech news site (9to5 network) with original reporting, APK teardowns and hands-on reviews; secondary but credible.",
+    "zh": "专注 Google 生态的老牌科技新闻站（9to5 网络），含原创报道、APK 拆解与上手评测；二手但可信。",
+    "jp": "Google専門の老舗テックニュースサイト（9to5ネットワーク）。独自報道・APK解析・実機レビューを掲載。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "aiproducthub.cn": {
+    "cat": "data",
+    "en": "Chinese AI-tool directory and roundup site run by an individual blogger, with affiliate links and vendor-supplied descriptions; verify claims upstream.",
+    "zh": "个人博主运营的中文 AI 产品导航与盘点站，含联盟链接与厂商供稿描述；关键信息请核对原始来源。",
+    "jp": "個人運営の中国語AIツールディレクトリ。アフィリエイト中心で説明はベンダー提供が多く、一次情報で要確認。",
+    "cred": "low",
+    "density": "low",
+    "cv": 1
+  },
+  "aisignal.dev": {
+    "cat": "data",
+    "en": "Analytics site tracking GitHub stars and 'signals' for AI/developer open-source projects with a weekly newsletter; proprietary scoring, verify metrics independently.",
+    "zh": "跟踪 AI/开发者开源项目 GitHub 星标与“信号”的分析站，附带周刊；评分为专有，指标请独立核对。",
+    "jp": "AI/OSSプロジェクトのGitHubスターと「シグナル」を追跡する分析サイト。独自スコアのため指標は別途検証を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "businesstimes.com.sg": {
+    "cat": "news",
+    "en": "The Business Times, Singapore's leading financial daily (SPH Media) since 1976; first-hand reporting on business, finance and regional markets.",
+    "zh": "《商业时报》——新加坡主要财经日报（新报业媒体），1976 年创刊，提供一手的商业、金融与区域市场报道。",
+    "jp": "シンガポールを代表する経済紙ビジネス・タイムズ（SPHメディア、1976年創刊）。ビジネス・金融の一次報道。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "byteiota.com": {
+    "cat": "news",
+    "en": "Tech blog by student founders with AI-assisted 'ByteBot' content mixing tutorials and aggregated news; low authority, confirm against primary sources.",
+    "zh": "学生创立的科技博客，内容由 AI 辅助（ByteBot），混合教程与聚合新闻；权威性低，请核对一手来源。",
+    "jp": "学生創業の技術ブログ。AI支援の「ByteBot」記事でチュートリアルとまとめニュースが中心。一次情報で確認を。",
+    "cred": "low",
+    "density": "low",
+    "cv": 1
+  },
+  "cactuscompute.com": {
+    "cat": "vendor",
+    "en": "YC-backed startup (Cactus Compute) building an open-source on-device AI inference engine; vendor marketing site, corroborate benchmark claims independently.",
+    "zh": "YC 支持的初创公司 Cactus Compute，做开源端侧 AI 推理引擎；厂商宣传站，性能声明请独立验证。",
+    "jp": "YC支援のスタートアップCactus Compute。オンデバイスAI推論エンジンを開発するベンダーサイト。性能主張は要検証。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "chaincatcher.com": {
+    "cat": "news",
+    "en": "Chinese Web3/crypto media and research platform (链捕手) founded 2018; aggregates and translates industry news, confirm time-sensitive claims upstream.",
+    "zh": "中文 Web3/加密媒体与研究平台（链捕手），2018 年创立，聚合并翻译行业新闻；时效性信息请核对原始来源。",
+    "jp": "中国語Web3/暗号資産メディア・リサーチ（ChainCatcher、2018年設立）。業界ニュースを集約・翻訳。一次情報で確認を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "cirt.gov.jm": {
+    "cat": "security",
+    "en": "Jamaica Cyber Incident Response Team, an official government division (Office of the Prime Minister) issuing security advisories and incident response.",
+    "zh": "牙买加网络事件响应团队，总理办公室下属的官方政府机构，发布安全公告并负责事件响应。",
+    "jp": "ジャマイカの国家サイバーインシデント対応チーム（首相府管轄の政府機関）。勧告とインシデント対応を発信。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "everydev.ai": {
+    "cat": "community",
+    "en": "Community-driven AI developer directory and social platform founded by solo developer Joe Seifi; aggregated tool reviews and listings, confirm claims against vendor sites.",
+    "zh": "面向 AI 开发者的社区平台与工具目录，个人开发者 Joe Seifi 创立；内容为聚合式评价与收录，需对照官方核实。",
+    "jp": "AI 開発者向けコミュニティ兼ツールディレクトリ（個人開発者 Joe Seifi 運営）。集約型のレビューで、公式情報との照合が必要。",
+    "cred": "low",
+    "density": "med",
+    "cv": 2
+  },
+  "ex.chinadaily.com.cn": {
+    "cat": "news",
+    "en": "China Daily's official content-syndication/exchange subdomain carrying the state-run paper's editorials; authoritative but party-line, confirm against original stories.",
+    "zh": "《中国日报》官方内容分发/交换子域，刊发官媒社论；权威但属官方口径，需对照原文核实。",
+    "jp": "中国日報（国営英字紙）の公式コンテンツ配信・交換用サブドメイン。権威はあるが政府系の論調で、原文との照合が望ましい。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "fortune.com": {
+    "cat": "news",
+    "en": "Established global business news publication known for the Fortune 500 rankings and original reporting; first-hand, high-authority journalism.",
+    "zh": "老牌全球商业新闻媒体，以《财富》500 强榜单和原创报道著称；一手、高权威的新闻源。",
+    "jp": "老舗のグローバル経済メディア。Fortune 500 ランキングと独自報道で知られ、一次情報の高権威ニュースソース。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "frandroid.com": {
+    "cat": "news",
+    "en": "French consumer-tech news and review outlet (published by Humanoid) covering gadgets and EVs with original tests; first-hand reviews mixed with announcement news.",
+    "zh": "法国消费科技媒体（Humanoid 旗下），报道数码与电动汽车并做原创评测；一手测评与新品资讯并存。",
+    "jp": "フランスのコンシューマー向けテックメディア（Humanoid 運営）。独自レビューと新製品ニュースを発信。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "gitgenius.co": {
+    "cat": "vendor",
+    "en": "GitHub repository analytics SaaS tracking stars, issues, and contributors over time; secondary data derived from GitHub, operator unclear.",
+    "zh": "GitHub 仓库分析 SaaS，追踪星标、issue 与贡献者趋势；数据为 GitHub 的二次聚合，运营方不明。",
+    "jp": "GitHub リポジトリ分析 SaaS（スター・issue・貢献者の推移を追跡）。GitHub 由来の二次データで運営元は不透明。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "itbrief.co.uk": {
+    "cat": "news",
+    "en": "UK enterprise-tech trade news site in the TechDay network targeting CIOs; short vendor-focused stories with contributed pieces, confirm against primary vendors.",
+    "zh": "TechDay 网络旗下英国企业科技行业媒体，面向 CIO；多为厂商导向的短讯与供稿，需对照厂商一手信息。",
+    "jp": "TechDay ネットワーク傘下の英国エンタープライズ IT 業界誌（CIO 向け）。ベンダー寄りの短い記事が中心で一次情報との照合が必要。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "ithome.com": {
+    "cat": "news",
+    "en": "Major Chinese tech-news portal (IT之家) for fast IT and consumer-electronics updates; high-volume first-hand domestic coverage, verify rumors separately.",
+    "zh": "中国主流科技媒体门户（IT之家），快速报道 IT 与数码动态；国内一手信息量大，传言类内容需另行核实。",
+    "jp": "中国の大手テックニュースポータル（IT之家）。国内の速報性が高く一次情報も多いが、噂系は別途検証が必要。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "lansweeper.com": {
+    "cat": "vendor",
+    "en": "Belgian IT asset management vendor founded in 2004, providing asset discovery and inventory platform; authoritative on its product but marketing-led.",
+    "zh": "比利时 IT 资产管理厂商（2004 年创立），提供资产发现与盘点平台；对其产品权威，但内容以营销为主。",
+    "jp": "ベルギー発の IT 資産管理ベンダー（2004 年創業）。自社製品に関しては信頼できるが、内容はマーケティング寄り。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "linux.org": {
+    "cat": "community",
+    "en": "Independent community forum for Linux users offering tutorials and support; unaffiliated with the Linux Foundation, user-generated and variable quality.",
+    "zh": "面向 Linux 用户的独立社区论坛，提供教程与互助；与 Linux 基金会无关，内容为用户生成、质量参差。",
+    "jp": "Linux ユーザー向けの独立系コミュニティフォーラム。Linux Foundation とは無関係で、ユーザー生成のため品質はまちまち。",
+    "cred": "low",
+    "density": "med",
+    "cv": 2
+  },
+  "radarai.top": {
+    "cat": "news",
+    "en": "Chinese-language AI news aggregator curating AI releases and open-source updates with AI-generated summaries; secondary aggregation, confirm against original sources.",
+    "zh": "中文 AI 资讯聚合站，精选 AI 动态与开源信息并附 AI 生成摘要；属二手聚合，需对照原始来源核实。",
+    "jp": "AIニュースとオープンソース情報を集約する中国語アグリゲーター。AI要約付きの二次情報のため原典で確認を。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "reptile.haus": {
+    "cat": "vendor",
+    "en": "Dublin-based digital agency marketing web, app and Web3 development services; self-promotional vendor content, verify its claims independently.",
+    "zh": "都柏林数字代理商，宣传网站、应用与 Web3 开发服务；属供应商自我营销内容，主张需独立核实。",
+    "jp": "ダブリン拠点のデジタルエージェンシーでウェブ・アプリ開発を宣伝。自己PR的なベンダー情報のため主張は別途検証を。",
+    "cred": "med",
+    "density": "low",
+    "cv": 2
+  },
+  "rte.ie": {
+    "cat": "news",
+    "en": "Ireland's national public service broadcaster providing first-hand news, sport and cultural coverage; a trusted state media source.",
+    "zh": "爱尔兰国家公共广播机构，提供一手新闻、体育与文化报道，属可信的国有媒体来源。",
+    "jp": "アイルランドの国営公共放送。ニュース・スポーツ・文化を一次情報で発信する信頼できる公共メディア。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "sdtimes.com": {
+    "cat": "news",
+    "en": "SD Times, a software development trade publication since 2001; staff reporting mixed with vendor announcements and sponsored content.",
+    "zh": "SD Times 是 2001 年创刊的软件开发行业媒体，自采报道与厂商通告及赞助内容并存。",
+    "jp": "2001年創刊のソフトウェア開発業界誌。自社報道にベンダー発表やスポンサー記事が混在。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "skillsllm.com": {
+    "cat": "code",
+    "en": "Directory of open-source AI skills for Claude Code and similar tools, with GitHub stats and security scans; community-curated, confirm against repositories.",
+    "zh": "面向 Claude Code 等工具的开源 AI 技能目录，附 GitHub 数据与安全扫描；社区整理，需对照仓库核实。",
+    "jp": "Claude Code向けオープンソースAIスキルのディレクトリ。GitHub統計とセキュリティスキャン付きで、リポジトリでの確認が必要。",
+    "cred": "low",
+    "density": "med",
+    "cv": 2
+  },
+  "techmonitor.ai": {
+    "cat": "news",
+    "en": "Tech Monitor, an enterprise technology news and analysis publication owned by GlobalData plc; solid B2B reporting with some premium content.",
+    "zh": "Tech Monitor 是 GlobalData 旗下企业技术新闻与分析媒体，B2B 报道扎实，部分内容需付费。",
+    "jp": "GlobalData傘下のエンタープライズ技術ニュース・分析メディア。B2B報道が中心で一部プレミアム記事あり。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "thenews.com.pk": {
+    "cat": "news",
+    "en": "The News International, Pakistan's leading English-language daily from the Jang Group; first-hand national reporting with established editorial oversight.",
+    "zh": "巴基斯坦主要英文日报 The News International（Jang 集团旗下），提供一手国内报道并具成熟编辑把关。",
+    "jp": "パキスタン主要英字紙 The News International（Jang Group）。確立した編集体制による一次報道。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "times.hntrends.net": {
+    "cat": "community",
+    "en": "Hacker Times, a third-party Hacker News reader adding LLM summaries and images; aggregator of community content, confirm against HN originals.",
+    "zh": "Hacker Times 是第三方 Hacker News 阅读器，附加 LLM 摘要与配图；属社区内容聚合，需对照 HN 原文。",
+    "jp": "サードパーティのHacker Newsリーダー。LLM要約と画像を付加するコミュニティ情報のアグリゲーターで、HN原文での確認を。",
+    "cred": "low",
+    "density": "med",
+    "cv": 2
+  },
+  "timesofindia.indiatimes.com": {
+    "cat": "news",
+    "en": "India's largest English-language daily newspaper (Times Group/BCCL); mainstream news mixing original reporting with large volumes of syndicated wire copy.",
+    "zh": "印度最大英文日报（时报集团），主流新闻，原创报道与通讯社稿并存且量大。",
+    "jp": "インド最大の英字紙（タイムズ・グループ）。主流ニュースで独自報道と通信社配信が混在。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "tmcnet.com": {
+    "cat": "news",
+    "en": "B2B technology trade-news portal run by TMC (Technology Marketing Corporation); editorial coverage mixed with vendor press releases and lead-generation content.",
+    "zh": "TMC 运营的 B2B 科技行业新闻门户，编辑内容与厂商新闻稿及获客内容混杂。",
+    "jp": "TMC運営のB2Bテック業界ニュースポータル。編集記事とベンダーのプレスリリース/リード獲得コンテンツが混在。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "topaiproduct.com": {
+    "cat": "other",
+    "en": "Fully automated AI-generated blog curating AI product launches from Product Hunt, Hacker News and GitHub; second-hand with no human editing.",
+    "zh": "全自动 AI 生成博客，聚合 Product Hunt、Hacker News、GitHub 的 AI 产品动态，二手内容且无人工编辑。",
+    "jp": "Product HuntやHN、GitHubのAI製品をまとめる全自動AI生成ブログ。二次情報で人手編集なし。",
+    "cred": "low",
+    "density": "low",
+    "cv": 2
+  },
+  "trendshift.io": {
+    "cat": "data",
+    "en": "Community-built GitHub trending ranking and analytics platform, an alternative to GitHub Trending; aggregated repository star and momentum data.",
+    "zh": "社区构建的 GitHub 趋势排名与分析平台（GitHub Trending 替代品），聚合仓库星标与热度数据。",
+    "jp": "GitHub Trendingの代替として作られたコミュニティ運営のリポジトリ順位・分析サイト。スター数と勢いのデータを集約。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "tribune.com.pk": {
+    "cat": "news",
+    "en": "Pakistan's Express Tribune, an English-language daily affiliated with the NYT; original domestic reporting mixed with international wire copy.",
+    "zh": "巴基斯坦《快报论坛报》，与《纽约时报》联营的英文日报，国内报道与国际通讯社稿混合。",
+    "jp": "パキスタンの英字紙エクスプレス・トリビューン（NYT提携）。国内報道と海外通信社配信が混在。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "whatstrending.ai": {
+    "cat": "data",
+    "en": "Automated live dashboard aggregating AI models, repositories, news and funding from primary sources like OpenRouter, Hugging Face and arXiv.",
+    "zh": "自动化实时仪表盘，聚合 OpenRouter、Hugging Face、arXiv 等来源的 AI 模型、仓库、新闻与融资数据。",
+    "jp": "OpenRouterやHugging Face、arXivなど一次ソースからAIモデル・リポジトリ・ニュース・資金調達を集約する自動ライブダッシュボード。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "zadenor.com": {
+    "cat": "vendor",
+    "en": "Self-published marketing site of ZadeNor AI, a Singapore-based AI-agent product studio; first-hand but vendor-authored, verify product claims independently.",
+    "zh": "新加坡 ZadeNor AI 公司的自有营销站点，一手但为厂商自述，需独立核验其产品声明。",
+    "jp": "シンガポールのAIエージェント企業ZadeNor AIの自社マーケティングサイト。一次情報だがベンダー執筆のため主張は要検証。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "community.nasscom.in": {
+    "cat": "community",
+    "en": "NASSCOM Community — official discussion platform of India's IT industry trade body; user-contributed posts and events, secondary signals, confirm against primary sources.",
+    "zh": "印度IT行业协会NASSCOM的官方社区平台，内容多为用户投稿与活动信息，属二手信号，请对照一手来源核实。",
+    "jp": "インドIT業界団体NASSCOMの公式コミュニティ。投稿・イベント中心の二次情報であり、一次情報との照合が必要。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "csa.gov.sg": {
+    "cat": "security",
+    "en": "Cyber Security Agency of Singapore — official government agency publishing first-hand advisories, alerts and guidance; authoritative primary source.",
+    "zh": "新加坡网络安全局（CSA）政府官网，发布一手安全公告、警报与指引，权威一手来源。",
+    "jp": "シンガポール・サイバーセキュリティ庁の公式サイト。勧告・警報・ガイダンスを発信する一次情報源で信頼性が高い。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "cyber.gc.ca": {
+    "cat": "security",
+    "en": "Canadian Centre for Cyber Security — Government of Canada's technical authority (under CSE) publishing first-hand alerts, advisories and guidance; authoritative primary source.",
+    "zh": "加拿大网络安全中心（CSE下属）政府官网，发布一手警报、建议与指引，权威一手来源。",
+    "jp": "カナダ・サイバーセキュリティセンターの公式サイト。CSE傘下で警報・勧告・ガイダンスを発信する一次情報源。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "datacenterdynamics.com": {
+    "cat": "news",
+    "en": "Data Center Dynamics — established B2B trade publication for data center/digital infrastructure; long-form journalism but vendor-influenced, confirm against primary sources.",
+    "zh": "数据中心行业老牌B2B媒体（InfraXmedia旗下），以深度报道见长但受厂商影响，请对照一手来源核实。",
+    "jp": "データセンター業界の老舗B2Bメディア（InfraXmedia傘下）。長文報道が強みだがベンダー寄りの面もあり、一次情報と照合を。",
+    "cred": "med",
+    "density": "high",
+    "cv": 2
+  },
+  "digitaltoday.co.kr": {
+    "cat": "news",
+    "en": "DigitalToday — South Korean IT/tech news outlet (Hecto Media); heavy AI-assisted and machine-translated reporting, confirm against primary sources.",
+    "zh": "韩国IT科技媒体（Hecto Media旗下），大量采用AI辅助生成与机器翻译，请对照一手来源核实。",
+    "jp": "韓国のITテックニュースメディア（Hecto Media）。AI支援・機械翻訳記事が多く、一次情報との照合が必要。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "economictimes.com": {
+    "cat": "news",
+    "en": "The Economic Times — India's leading English-language business daily (Times Group); established mainstream news reporting, generally reliable secondary source.",
+    "zh": "印度《经济时报》，印度领先的英文财经日报（时报集团），成熟的主流新闻报道，总体可靠的二手来源。",
+    "jp": "インドを代表する英文経済紙エコノミック・タイムズ（タイムズ・グループ）。確立された報道機関で概ね信頼できる二次情報源。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "edgen.tech": {
+    "cat": "research",
+    "en": "Edgen — AI-powered investment research and stock-pick platform; self-published AI-synthesized signals with unverified claims, low first-hand value.",
+    "zh": "Edgen——AI驱动的投资研究与选股平台，内容为自营AI合成信号，论断未经独立验证，一手价值低。",
+    "jp": "AI投資リサーチ・銘柄選定プラットフォーム。自社発のAI合成シグナルで主張は未検証、一次情報としての価値は低い。",
+    "cred": "low",
+    "density": "low",
+    "cv": 1
+  },
+  "entrepreneur.com": {
+    "cat": "news",
+    "en": "Entrepreneur — long-running US business magazine and media brand; practical advice and news but heavy listicles and sponsored content, confirm against primary sources.",
+    "zh": "美国老牌商业媒体《Entrepreneur》，提供创业建议与新闻，但列表文与赞助内容较多，请对照一手来源核实。",
+    "jp": "米国の老舗ビジネス誌Entrepreneur。起業ノウハウとニュースが中心だがリスト記事やスポンサー記事が多く、一次情報と照合を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "esecurityplanet.com": {
+    "cat": "security",
+    "en": "eSecurity Planet — cybersecurity news, reviews and comparisons site (TechnologyAdvice); ad-supported with vendor-sponsored content, confirm against primary sources.",
+    "zh": "网络安全新闻与评测对比网站（TechnologyAdvice旗下），广告支持、含厂商赞助内容，请对照一手来源核实。",
+    "jp": "サイバーセキュリティのニュース・レビュー・比較サイト（TechnologyAdvice傘下）。広告・ベンダー協賛が多く、一次情報と照合を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "mallory.ai": {
+    "cat": "security",
+    "en": "AI-native threat and exposure management security vendor; first-hand product claims and threat intel, confirm findings against primary advisories.",
+    "zh": "AI 原生威胁与暴露管理安全厂商，产品宣称与威胁情报为一手内容，结论需与原始漏洞公告核对。",
+    "jp": "AIネイティブの脅威・露出管理セキュリティベンダー。自社製品情報と脅威インテルが中心、一次情報での裏取り推奨。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "mashable.com": {
+    "cat": "news",
+    "en": "Established tech, culture and entertainment media outlet owned by Ziff Davis; mixes original reporting with aggregation, confirm technical claims against primary sources.",
+    "zh": "Ziff Davis 旗下的老牌科技/文化/娱乐媒体，原创报道与聚合内容混合，技术论断需对照原始出处。",
+    "jp": "Ziff Davis傘下の老舗テック・カルチャー・エンタメメディア。独自報道とキュレーションが混在、技術的主張は一次情報で確認を。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "moclaw.ai": {
+    "cat": "vendor",
+    "en": "Small vendor's cloud-hosted AI assistant platform marketing site; self-promotional claims with thin independent verification, treat feature claims cautiously.",
+    "zh": "小型厂商的云端 AI 助手平台营销站，以自我宣传为主、独立验证少，功能宣称需谨慎对待。",
+    "jp": "小規模ベンダーによるクラウド型AIアシスタントのマーケティングサイト。自己宣伝が中心で独立検証は乏しく、機能主張は慎重に。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "news.lavx.hu": {
+    "cat": "news",
+    "en": "LavX's tech news aggregator that curates and rewrites industry coverage while promoting its own developer tools; secondary source, confirm against original outlets.",
+    "zh": "LavX 旗下科技新闻聚合站，转载改写行业报道并推广自家开发工具，属二手来源，需对照原始媒体核实。",
+    "jp": "LavX運営のテックニュースアグリゲーター。他媒体の報道を再編集し自社開発ツールも宣伝する二次情報源、元記事で確認を。",
+    "cred": "low",
+    "density": "low",
+    "cv": 1
+  },
+  "ofweek.com": {
+    "cat": "news",
+    "en": "Long-running Chinese high-tech industry portal covering semiconductors, energy and AI; mixes original analysis with vendor PR, confirm commercial claims separately.",
+    "zh": "中国老牌高科技行业门户，覆盖半导体、能源与 AI，原创分析与厂商软文混杂，商业声明需单独核实。",
+    "jp": "中国の老舗ハイテク業界ポータル。半導体・エネルギー・AIを網羅し独自分析と企業PRが混在、商業的主張は個別確認を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "pagecrawl.io": {
+    "cat": "vendor",
+    "en": "Web change monitoring SaaS vendor; content is product documentation and marketing, feature and customer claims are first-party, verify capabilities independently.",
+    "zh": "网页变更监控 SaaS 厂商，内容为产品文档与营销，功能与客户宣称属单方信息，能力需独立验证。",
+    "jp": "ウェブ変更監視SaaSベンダー。製品ドキュメントとマーケティングが中心で、機能・顧客実績は一次主張、能力は独立検証を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "pathlock.com": {
+    "cat": "security",
+    "en": "Identity and application security vendor for ERP environments; product marketing plus thought leadership, validate security claims against independent audits.",
+    "zh": "面向 ERP 的身份与应用安全厂商，产品营销与观点文章为主，安全声明需对照独立审计验证。",
+    "jp": "ERP向けアイデンティティ・アプリケーションセキュリティベンダー。製品マーケと思想記事が中心、セキュリティ主張は独立監査で検証を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "pullrepo.com": {
+    "cat": "data",
+    "en": "Anonymous aggregator ranking fastest-growing AI GitHub repos from GitHub API data; machine-generated trend lists, verify project claims on GitHub directly.",
+    "zh": "基于 GitHub API 数据的匿名聚合站，排名增长最快的 AI 仓库，属机器生成榜单，项目信息需回 GitHub 核实。",
+    "jp": "GitHub APIデータから急成長中のAIリポジトリをランキングする匿名アグリゲーター。機械生成のリスト、プロジェクト情報はGitHubで確認を。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "qbitai.com": {
+    "cat": "news",
+    "en": "Leading Chinese AI tech media with first-hand reporting and interviews; credible original journalism, still confirm technical specifics against primary sources.",
+    "zh": "中国头部 AI 科技媒体，以一手报道与专访见长，原创可信度高，技术细节仍建议对照原始来源。",
+    "jp": "中国の有力AIテックメディア。独自取材・インタビューが強みで信頼性高く、技術詳細は一次情報での裏取り推奨。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
   }
 }

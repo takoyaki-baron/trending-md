@@ -230,14 +230,14 @@ markdown to drift:
   `csdn.net`), and counts citations. Co-citation (two domains cited in the same item) is recorded
   as graph edges.
 - **Categories + review** — eight categories: `code`, `vendor`, `news`, `security`, `research`,
-  `community`, `data`, `other`. The top ~74 domains are hand-classified **and hand-reviewed** in
-  **`sources/domains.json`**; the long tail is auto-classified by hostname heuristics in
-  `classifyDomain()`. Each curated entry carries a **review**: `cred` (credibility:
-  `high`/`med`/`low`), `density` (info density: `high`/`med`/`low`), and `cv` (cross-validation
-  count). Unreviewed domains render an italic "needs review" marker.
+  `community`, `data`, `other`. Every cited domain (currently 125) is hand-classified **and
+  hand-reviewed** in **`sources/domains.json`**. Each curated entry carries a **review**: `cred`
+  (credibility: `high`/`med`/`low`), `density` (info density: `high`/`med`/`low`), and `cv`
+  (cross-validation count). Unreviewed domains (if any) render an italic "needs review" marker.
 - **Outputs** (all regenerated each build, written straight to `dist/`):
-  - `/<lang>/sources/` — the HTML page (stats, a Mermaid co-citation graph of the top 30 domains,
-    and the full ranked table with category + cred/density/cv badges).
+  - `/<lang>/sources/` — the HTML page (stats, a clickable source cloud sized by citation count,
+    a "most-cited together" co-citation list, and the full ranked table with category +
+    cred/density/cv badges). Layout-is-the-diagram: no external chart library.
   - `/<lang>/sources.md` — a raw Markdown table for agents (`curl …/en/sources.md`).
   - `/sources.json` — canonical trilingual machine-readable dump (domain, citations, category,
     cred, density, crossValidated, en/zh/jp note).
