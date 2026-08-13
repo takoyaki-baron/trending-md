@@ -4,6 +4,10 @@
 # FRESH mode: creates new file from scratch (first run of the day)
 set -euo pipefail
 
+# deepseek-v4-pro isn't in Claude Code's model registry, so auto-compact assumes a 200k window.
+# Disable that enforcement so the API reports the real context window instead.
+export CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1
+
 REPO_DIR="/Users/kelong/developer/github/trending-md"
 TODAY=$(date +%Y-%m-%d)
 LOG_DIR="$REPO_DIR/.cron-logs"

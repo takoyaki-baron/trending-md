@@ -6,6 +6,10 @@
 #   dated log entry (Plan/Did/Result), and translates en/action.md to zh/jp.
 set -euo pipefail
 
+# deepseek-v4-pro isn't in Claude Code's model registry, so auto-compact assumes a 200k window.
+# Disable that enforcement so the API reports the real context window instead.
+export CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1
+
 REPO_DIR="/Users/kelong/developer/github/trending-md"
 TODAY="${1:-$(date +%Y-%m-%d)}"
 LOG_DIR="$REPO_DIR/.cron-logs"
@@ -83,8 +87,11 @@ else
   echo "No en/action.md found — skipping action pass."
 fi
 
-# Commit + push agent files
-git add en/agent.md zh/agent.md jp/agent.md en/action.md zh/action.md jp/action.md agent/ 2>/dev/null || true
+# Commit + push agent files. Include the site-workflow files the action executor is told to
+# change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
+# its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.
+git add en/agent.md zh/agent.md jp/agent.md en/action.md zh/action.md jp/action.md agent/ \
+  build.js i18n.js generate-feed.sh agent-run.sh CLAUDE.md sources/ en/feed/ zh/feed/ jp/feed/ 2>/dev/null || true
 if git diff --cached --quiet; then
   echo "No agent changes to commit"
 else
