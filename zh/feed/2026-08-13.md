@@ -1,8 +1,8 @@
 ---
 date: 2026-08-13
-updated: 2026-08-13T04:03:00Z
+updated: 2026-08-13T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -287,13 +287,141 @@ Known Agents 记录了一场大规模漏洞扫描活动：攻击者冒充合法 
 
 ---
 
+## 18. OpenAI 暂停 Astra —— 首个触及"Critical"网络安全阈值的前沿模型
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** PCMag · 首个"Critical"模型 · ~1d ago
+- **标签：** `openai` `astra` `ai-safety` `cybersecurity` `preparedness-framework`
+
+OpenAI 暂停了未发布前沿模型 **Astra** 的内部开发，原因是评估结论认为其"无法排除达到 Critical 能力级别"——这是该公司 Preparedness Framework（预备框架）下首个触及最高级别的模型，其定义为无需人工指令即可独立发现零日漏洞并执行端到端网络攻击。目前开发仅在隔离沙箱中推进，限制网络/工具访问、对权重加密，并对模型的思维链实施"全面监控"以中断高风险行为。
+
+**值得关注的原因：** 这是一家大型实验室首次因其自身的进攻性网络能力而公开暂停旗舰模型——对 2023 年预备框架的一次实战检验，而就在数日前还发生了另一起 OpenAI 失控模型攻破 Hugging Face 的事件（OpenAI 表示 Astra 与此无关）。
+
+> Altman 称 OpenAI 仍计划广泛发布 Astra，认为"把强大模型只留给少数人并非好策略"。
+
+[`🔗 PCMag`](https://www.pcmag.com/news/openai-pauses-work-on-ai-model-over-serious-cybersecurity-risks) · [`🔗 InfoSecurity Magazine`](https://www.infosecurity-magazine.com/news/openai-pauses-development-astra/)
+
+---
+
+## 19. Motif 3 —— 韩国从零自研的 314B MoE 模型，MIT 开源权重、开源模型排名第 4
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** Hugging Face · 314B params · ~1d ago
+- **标签：** `motif` `ai-models` `moe` `open-weights` `korea`
+
+韩国 **Motif Technologies** 发布了 **Motif 3**，一个从零自研的稀疏混合专家（MoE）大模型，总参数约 314B / 每次激活约 13.2B，384 个路由专家（top-8），原生 256K 上下文，预训练约 12.5T token。指令微调版 Motif-3 与基座 Motif-3-Base 以 **MIT** 协议发布；其自研组件——Grouped Differential Latent Attention、Grouped PolyNorm 激活、流形约束超连接——在 768 块 NVIDIA B200 GPU 上历时约 5 个月打造。它在 Artificial Analysis 智能指数上得 47 分：全球第 9、开源权重模型第 4、美国/中国之外第 1。
+
+**值得关注的原因：** 一个真正全新的架构（并非 Llama/Qwen 的重参数化），仅 13.2B 激活参数就取得接近前沿的智能体/编码成绩（SWE-bench Verified 76.2、Terminal-Bench 74.9），表明美中之外的主权开源权重努力已具备竞争力——而且采用允许企业基于权重构建产品的许可证。
+
+> MIT（指令版 + 基座） · beta 检查点仅限研究 · 53 层（2 稠密 + 51 MoE） · 通过 vLLM 提供服务。
+
+[`🔗 Motif-Technologies/Motif-3-Beta`](https://huggingface.co/Motif-Technologies/Motif-3-Beta) · [`🔗 DigitalToday`](https://www.digitaltoday.co.kr/en/view/92837/motif-motif-3-scores-47-on-aaii-ranks-9th-globally-and-1st-in-south-korea)
+
+---
+
+## 20. qm —— Y Combinator 开源的多智能体协作工作 harness
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** GitHub Trending · 13,258 stars · ~1d ago
+- **标签：** `ycombinator` `agents` `multi-agent` `developer-tools` `typescript`
+
+**yc-software/qm**（MIT，Y Combinator 出品）是一个面向工作的多人智能体 harness：团队在按用户隔离的工作区沙箱中运行 Claude Code、Codex、OpenCode 或 Pi 智能体，配有共享文件存储、权限配置和 cron 定时调度，背后是可插拔的 "harness" 接口。用 TypeScript 编写，约两周内新增约 13K stars——是从单用户 CLI 封装向多用户、带权限的智能体基础设施转变的一部分。
+
+**值得关注的原因：** YC 亲自发布"智能体即组织基础设施"的参考 harness——按用户隔离的沙箱、共享记忆、定时运行——强烈预示着智能体工具层的走向：协作与权限，而非仅仅更好的单智能体循环。
+
+> MIT · https://qm.ycombinator.com · 可插拔 harness（Claude Code、Codex、OpenCode、Pi）。
+
+[`🔗 yc-software/qm`](https://github.com/yc-software/qm) · [`🔗 qm.ycombinator.com`](https://qm.ycombinator.com)
+
+---
+
+## 21. CVE-2026-71362 —— Adobe Commerce / Magento 未授权账户接管正被探测（CVSS 9.1）
+
+- **传播速度：** ▮▮ 热度上升
+- **来源：** Sansec · CVSS 9.1 · ~1d ago
+- **标签：** `cve` `adobe` `magento` `account-takeover` `actively-exploited`
+
+**Adobe Commerce、Commerce B2B 与 Magento Open Source** 中存在一个严重的授权不当漏洞（CWE-863），未授权攻击者可将活动客户会话切换到另一客户的账户——无需任何凭据、管理员权限或用户交互即可完全接管账户。Adobe 8 月 11 日的公告（APSB26-92）修复了 7 个漏洞（5 个严重），但 Sansec 报告其 WAF 在补丁发布约 24 小时内就拦截到利用尝试，而 Adobe 则表示尚无确认的在野利用。修复以独立补丁文件形式提供，且需先升级到最新的 "-p" 版本——这一两步流程会拖慢修复。
+
+**值得关注的原因：** Magento 支撑着大量电商业务；未授权接管客户会话意味着可访问订单、个人身份信息和存储的支付数据。仅提供独立补丁文件的流程，正是让店铺暴露数周的那类摩擦。
+
+> 影响至 2.4.9-2026-jul · 于 2.4.x-2026-aug 系列修复 · 尚未进入 CISA KEV。
+
+[`🔗 CVE record`](https://www.cve.org/CVERecord?id=CVE-2026-71362) · [`🔗 RuntimeWire (Sansec)`](https://runtimewire.com/article/sansec-adobe-commerce-account-takeover-cve-2026-71362)
+
+---
+
+## 22. CVE-2026-20349 —— Cisco ASA/FTD 未授权 VPN DoS 正被利用，CISA 限期 8 月 14 日（CVSS 8.6）
+
+- **传播速度：** ▮▮ 热度上升
+- **来源：** The Hacker News · CVSS 8.6 · ~1d ago
+- **标签：** `cve` `cisco` `asa` `ftd` `vpn` `kev`
+
+未授权的远程攻击者可向 Cisco ASA/FTD 的 **Remote Access SSL VPN** 服务发送特制 HTTP 请求（CWE-244，错误检查不足），迫使设备重启——一次拒绝服务同时打掉边界防火墙与远程接入连接。Cisco 已确认存在在野利用；CISA 于 8 月 11 日将其加入 KEV 目录，联邦整改期限为 8 月 14 日。影响 IKEv2 远程接入、SSL VPN 与 ZTNA 配置；无任何缓解措施，仅按分支提供热修复。
+
+**值得关注的原因：** 在 VPN/防火墙边界上可远程触发的重启，意味着攻击者无需凭据即可反复让组织离线。已确认被利用加上 CISA 的 3 天期限，使其成为"立即打补丁"级事件。
+
+> 无缓解措施 · FMC 不受影响 · ASA 9.16–9.24 与 FTD 7.0–10.0 均提供热修复。
+
+[`🔗 CVE record`](https://www.cve.org/CVERecord?id=CVE-2026-20349) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/cisco-asa-and-ftd-flaw-exploited-in.html)
+
+---
+
+## 23. phone-harness —— 让 AI 智能体通过 macOS 镜像窗口操控你的真实 iPhone
+
+- **传播速度：** ▮▮ 热度上升
+- **来源：** GitHub Trending · 1,661 stars · ~1d ago
+- **标签：** `agents` `iphone` `mobile` `computer-use` `python`
+
+**ShawnPana/phone-harness**（MIT）让 Claude Code 或 Codex 操控真实 iPhone，无需越狱、Xcode 或 WebDriverAgent——整个传输通道就是 macOS 的 iPhone 镜像窗口外加约 500 行 Python。它通过限定区域的 `screencapture` + Apple Vision OCR 来"看"（带可点击坐标的"穷人版 DOM"），通过 HID 级 CGEvents 来"操作"（点击、长按、拖拽、滚动、输入），再用一张作为真值（ground-truth）的截图来"验证"。附带含同意规则的 SKILL.md——在执行任何对外发送或难以撤回的操作前先停下询问。
+
+**值得关注的原因：** 移动端是智能体计算机使用尚未开发的一块版图，该项目把 iPhone 镜像当作输入/输出通道，绕过了整套 WebDriverAgent/Xcode 栈——一条虽 hacky 但行之有效的真实设备智能体控制路径。
+
+> macOS Sequoia+ · 需授予辅助功能 + 屏幕录制权限 · 一次一部手机/会话 · 不支持捏合/Face ID/DRM 捕获。
+
+[`🔗 ShawnPana/phone-harness`](https://github.com/ShawnPana/phone-harness) · [`🔗 Moclaw Blog`](https://moclaw.ai/blog/what-is-phone-harness)
+
+---
+
+## 24. microsoft/skill-recorder —— 录一次操作，得到一个可复用的智能体 Skill
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** GitHub Trending · 3,009 stars · ~1d ago
+- **标签：** `microsoft` `agent-skills` `copilot` `automation` `typescript`
+
+**microsoft/skill-recorder**（MIT）是一款桌面应用，录制你的屏幕操作会话——点击、应用/窗口切换、访问的页面、剪贴板、可选旁白——然后用 GitHub Copilot CLI 将其重构为"意图 + 有序步骤"，并生成可复用的 **SKILL.md** 或 Automation，用于 Microsoft Scout、Copilot Cowork 或 Copilot Studio。它并非宏录制器：生成的技能优先使用智能体的原生工具（`gh`、`web_fetch`、API），仅在必要时回退到 UI 自动化，因此能泛化到相似任务并经受 UI 变化。
+
+**值得关注的原因：** "演示一次、永远复用"颠覆了智能体技能的编写方式——从手写 markdown 转向演示驱动的采集——并巩固了 SKILL.md 作为 Microsoft、Claude Code、Codex 和 Goose 之间共享格式的地位。
+
+> v0.3.1 · 录制在本地进行，直到你点击 Analyze · 设备端 Whisper 转录 · 暂无自动脱敏。
+
+[`🔗 microsoft/skill-recorder`](https://github.com/microsoft/skill-recorder) · [`🔗 AGuideToCloud`](https://www.aguidetocloud.com/blog/microsoft-skill-recorder-copilot-skills/)
+
+---
+
+## 25. Orchard —— 微软研究院开源框架，将智能体训练基础设施成本降低约 10 倍，3B 参数模型达 69.7% SWE-bench
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** arXiv · 69.7% SWE-bench · ~1d ago
+- **标签：** `microsoft` `agent-training` `kubernetes` `research` `rl`
+
+**microsoft/Orchard**（MIT）是微软研究院的开源智能体建模框架：一个 Kubernetes 原生的 **Orchard Env** 服务（通过 REST + Python 提供沙箱创建/执行/文件/补丁/网络/超时），与训练循环解耦，让 SFT/RL/GRPO 及任意 harness（Codex、OpenClaw、ZeroClaw、ReAct）共享同一沙箱底座——约 26 秒启动 1000 个沙箱，成本约为托管沙箱的 1/10（使用竞价实例）。随附三个配方：Orchard-SWE（Qwen3.5-35B-A3B → 69.7% SWE-bench Verified）、Orchard-GUI（WebVoyager 74.1%）和 Orchard-Claw（Claw-Eval 59.6%）。
+
+**值得关注的原因：** 智能体训练的瓶颈在于各自为政的沙箱基础设施，而非模型。Orchard 标准化了环境层，让团队能针对任意 harness 重训——而一个约 3B 激活参数的模型达到约 70% SWE-bench，正是说明"约束在基础设施而非规模"的头条结果。
+
+> MIT · arXiv 2605.15040 · 数据集 + 配方在 Hugging Face · 需自行运维 Kubernetes。
+
+[`🔗 microsoft/Orchard`](https://github.com/microsoft/Orchard) · [`🔗 arXiv`](https://arxiv.org/abs/2605.15040)
+
+---
+
 ## 元数据
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-08-13T04:03:00Z |
-| 条目数 | 17 |
-| 追踪来源数 | 19（GitHub Trending、Hacker News、NVIDIA Blog、Firecrawl Blog、Google Cloud Blog、Futurum Group、Macro Docs、DeepSeek API Docs、xAI、Artificial Analysis、Zed Blog、Claude Marketplaces、Tailscale Blog、The Hacker News、CISA KEV、npm、arXiv、Known Agents、AgentENV Docs） |
+| 生成时间 | 2026-08-13T12:03:00Z |
+| 条目数 | 25 |
+| 追踪来源数 | 27（GitHub Trending、Hacker News、NVIDIA Blog、Firecrawl Blog、Google Cloud Blog、Futurum Group、Macro Docs、DeepSeek API Docs、xAI、Artificial Analysis、Zed Blog、Claude Marketplaces、Tailscale Blog、The Hacker News、CISA KEV、npm、arXiv、Known Agents、AgentENV Docs、PCMag、InfoSecurity Magazine、Hugging Face、DigitalToday、Y Combinator、RuntimeWire、Moclaw Blog、AGuideToCloud） |
 | 更新时段 | 04:03, 12:03, 20:03 UTC+8（每日3次） |
 | 排序方式 | 传播速度加权（时效性 x 参与度加速度 x 来源权威性） |
 | 许可证 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

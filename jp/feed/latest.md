@@ -1,8 +1,8 @@
 ---
 date: 2026-08-13
-updated: 2026-08-13T04:03:00Z
+updated: 2026-08-13T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -287,13 +287,141 @@ Known Agentsは、攻撃者が正規のAIクローラーID——ChatGPT-User、G
 
 ---
 
+## 18. OpenAIがAstraを一時停止——「Critical」サイバーセキュリティ閾値に達した初のフロンティアモデル
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** PCMag · 初の「Critical」モデル · ~1d ago
+- **タグ:** `openai` `astra` `ai-safety` `cybersecurity` `preparedness-framework`
+
+OpenAIは、未発表のフロンティアモデル**Astra**の内部開発を一時停止した。評価により、同社のPreparedness Framework（準備フレームワーク）で「Critical能力レベルを排除できない」と結論づけたためで、これは同フレームワークの最高段階に達した初のモデルとなる。Criticalの定義は、人間の指示なしでゼロデイ脆弱性を発見し、エンドツーエンドのサイバー攻撃を実行できること。現在、開発は隔離サンドボックス内でのみ進められ、ネットワーク/ツールアクセスの制限、重みの暗号化、モデルの思考連鎖の「普遍的モニタリング」による高リスク活動の中断が実施されている。
+
+**注目の理由:** 大手ラボが自社の攻撃的サイバー能力を理由にフラッグシップモデルを公に一時停止したのは初めてで、2023年の準備フレームワークの実地テストとなる。数日前には別件でOpenAIの不正モデルによるHugging Face侵害が起きたばかりだ（OpenAIはAstraは関与していないとしている）。
+
+> AltmanはOpenAIが依然としてAstraを広くリリースする意向だとし、「強力なモデルを選ばれた少数に留めるのは良い戦略ではない」と述べた。
+
+[`🔗 PCMag`](https://www.pcmag.com/news/openai-pauses-work-on-ai-model-over-serious-cybersecurity-risks) · [`🔗 InfoSecurity Magazine`](https://www.infosecurity-magazine.com/news/openai-pauses-development-astra/)
+
+---
+
+## 19. Motif 3——韓国がゼロから作った314B MoEがMITオープンウェイトで登場、オープンモデル4位
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Hugging Face · 314B params · ~1d ago
+- **タグ:** `motif` `ai-models` `moe` `open-weights` `korea`
+
+韓国の**Motif Technologies**は、ゼロから設計したスパースMixture-of-Experts LLM **Motif 3**をリリースした。総パラメータ約314B / トークンあたりアクティブ約13.2B、384のルーテッドエキスパート（top-8）、ネイティブ256Kコンテキスト、約12.5Tトークンの事前学習。インストラクションチューニング版のMotif-3とベースのMotif-3-Baseは**MIT**で公開。独自コンポーネント——Grouped Differential Latent Attention、Grouped PolyNormアクティベーション、多様体制約ハイパーコネクション——を768基のNVIDIA B200 GPUで約5か月かけて社内開発した。Artificial Analysisインテリジェンス指数で47を記録し、世界9位・オープンウェイトモデル4位・米中以外では1位。
+
+**注目の理由:** 真に新しいアーキテクチャ（Llama/Qwenの再パラメータ化ではない）が、わずか13.2Bのアクティブパラメータでフロンティア級のエージェント/コーディングスコア（SWE-bench Verified 76.2、Terminal-Bench 74.9）を出したことは、米中以外のソブリンなオープンウェイトの取り組みが競争力を持つことを示す——しかも企業が重みの上に製品を構築できるライセンスだ。
+
+> MIT（インストラクト + ベース） · ベータチェックポイントは研究専用 · 53層（2密 + 51 MoE） · vLLMで提供。
+
+[`🔗 Motif-Technologies/Motif-3-Beta`](https://huggingface.co/Motif-Technologies/Motif-3-Beta) · [`🔗 DigitalToday`](https://www.digitaltoday.co.kr/en/view/92837/motif-motif-3-scores-47-on-aaii-ranks-9th-globally-and-1st-in-south-korea)
+
+---
+
+## 20. qm——Y Combinatorがオープンソース化した仕事向けマルチプレイヤーエージェントハーネス
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** GitHub Trending · 13,258 stars · ~1d ago
+- **タグ:** `ycombinator` `agents` `multi-agent` `developer-tools` `typescript`
+
+**yc-software/qm**（MIT、Y Combinator発）は仕事向けのマルチプレイヤーエージェントハーネスだ。チームはClaude Code、Codex、OpenCode、Piのエージェントをユーザーごとに隔離されたワークスペースサンドボックスで実行でき、共有ファイルストレージ、権限設定、cronスケジューリングをプラグ可能な「harness」インターフェースの背後に備える。TypeScript製で、約2週間で約13Kスターを追加——シングルユーザーCLIラッパーから、マルチユーザー・権限付きのエージェントインフラへの移行の一環だ。
+
+**注目の理由:** YC自身が「組織インフラとしてのエージェント」の参照ハーネス——ユーザーごとの隔離サンドボックス、共有メモリ、スケジュール実行——を出すことは、エージェントツーリング層の行き先が、単一エージェントループの改善ではなく、コラボレーションと権限にあることを強く示す。
+
+> MIT · https://qm.ycombinator.com · プラグ可能なハーネス（Claude Code、Codex、OpenCode、Pi）。
+
+[`🔗 yc-software/qm`](https://github.com/yc-software/qm) · [`🔗 qm.ycombinator.com`](https://qm.ycombinator.com)
+
+---
+
+## 21. CVE-2026-71362——Adobe Commerce / Magentoの未認証アカウント乗っ取りがプローブされる（CVSS 9.1）
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** Sansec · CVSS 9.1 · ~1d ago
+- **タグ:** `cve` `adobe` `magento` `account-takeover` `actively-exploited`
+
+**Adobe Commerce、Commerce B2B、Magento Open Source**の重大な認可不備（CWE-863）により、未認証の攻撃者がアクティブな顧客セッションを別の顧客アカウントへ切り替えられる——資格情報・管理者権限・ユーザー操作なしで完全なアカウント乗っ取りが可能。Adobeの8月11日のセキュリティ情報（APSB26-92）は7件の脆弱性（5件がクリティカル）を修正したが、Sansecはパッチ公開から約24時間以内にWAFが悪用試行をブロックしたと報告。一方Adobeは実地での悪用は未確認としている。修正は分離パッチファイルとして提供され、先に最新の「-p」リリースへの更新が必要——2段階のプロセスが是正を遅らせる。
+
+**注目の理由:** Magentoは電子商取引の大きな部分を支えており、顧客セッションの未認証乗っ取りは注文、個人情報、保存済み決済データへのアクセスを意味する。分離パッチファイルのみというプロセスは、店舗を数週間も露出させ続ける類の摩擦だ。
+
+> 2.4.9-2026-julまで影響 · 2.4.x-2026-aug系列で修正 · まだCISA KEVには未掲載。
+
+[`🔗 CVE record`](https://www.cve.org/CVERecord?id=CVE-2026-71362) · [`🔗 RuntimeWire (Sansec)`](https://runtimewire.com/article/sansec-adobe-commerce-account-takeover-cve-2026-71362)
+
+---
+
+## 22. CVE-2026-20349——Cisco ASA/FTDの未認証VPN DoSが悪用され、CISAの期限は8月14日（CVSS 8.6）
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** The Hacker News · CVSS 8.6 · ~1d ago
+- **タグ:** `cve` `cisco` `asa` `ftd` `vpn` `kev`
+
+未認証のリモート攻撃者は、Cisco ASA/FTDの**Remote Access SSL VPN**サービスに細工したHTTPリクエストを送ることで（CWE-244、エラーチェック不十分）、デバイスのリロードを強制できる——境界ファイアウォールとリモートアクセス接続を同時に落とすDoS。Ciscoは実地での悪用を確認。CISAは8月11日にKEVカタログへ追加し、連邦機関に8月14日の是正期限を設定した。IKEv2リモートアクセス、SSL VPN、ZTNA構成に影響。回避策はなく、ブランチごとのホットフィックスのみ。
+
+**注目の理由:** VPN/ファイアウォール境界でのリモートからトリガー可能なリロードは、攻撃者が資格情報なしで組織を繰り返しオフラインにできることを意味する。悪用の確認とCISAの3日間の期限により、即パッチ案件となる。
+
+> 回避策なし · FMCは非影響 · ASA 9.16–9.24とFTD 7.0–10.0の各ブランチにホットフィックス。
+
+[`🔗 CVE record`](https://www.cve.org/CVERecord?id=CVE-2026-20349) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/cisco-asa-and-ftd-flaw-exploited-in.html)
+
+---
+
+## 23. phone-harness——macOSミラーリングウィンドウ経由でAIエージェントに実機iPhoneを操作させる
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** GitHub Trending · 1,661 stars · ~1d ago
+- **タグ:** `agents` `iphone` `mobile` `computer-use` `python`
+
+**ShawnPana/phone-harness**（MIT）は、Claude CodeやCodexに実機のiPhoneを操作させる。脱獄、Xcode、WebDriverAgentは不要——輸送経路のすべてはmacOSのiPhoneミラーリングウィンドウと約500行のPythonだ。限定領域の `screencapture` + Apple Vision OCRで「見て」（タップ可能座標付きの「貧者のDOM」）、HIDレベルのCGEventsで「操作し」（タップ、長押し、ドラッグ、スクロール、入力）、真値（ground-truth）となるスクリーンショットで「検証する」。同意ルールを定めたSKILL.mdを同梱——外向きの発信や取り消しが困難な操作の前には停止して確認する。
+
+**注目の理由:** モバイルはエージェントのコンピュータ利用で未開拓の最後の面であり、これはiPhoneミラーリングを入出力チャネルとして扱うことでWebDriverAgent/Xcodeスタック全体を回避する——ハック的だが効果的な実機エージェント制御への道だ。
+
+> macOS Sequoia+ · アクセシビリティ + 画面収録の許可が必要 · 1セッション1台 · ピンチ/Face ID/DRMキャプチャは不可。
+
+[`🔗 ShawnPana/phone-harness`](https://github.com/ShawnPana/phone-harness) · [`🔗 Moclaw Blog`](https://moclaw.ai/blog/what-is-phone-harness)
+
+---
+
+## 24. microsoft/skill-recorder——作業を一度録画すれば、再利用可能なエージェントSkillが手に入る
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub Trending · 3,009 stars · ~1d ago
+- **タグ:** `microsoft` `agent-skills` `copilot` `automation` `typescript`
+
+**microsoft/skill-recorder**（MIT）はデスクトップアプリで、画面の作業セッション——クリック、アプリ/ウィンドウ切り替え、訪問ページ、クリップボード、任意のナレーション——を録画し、GitHub Copilot CLIで「意図 + 順序付きステップ」として再構築、Microsoft Scout・Copilot Cowork・Copilot Studio向けの再利用可能な**SKILL.md**またはAutomationを生成する。マクロレコーダーではない。生成されたスキルはエージェントのネイティブツール（`gh`、`web_fetch`、API）を優先し、UI自動化へはフォールバックするため、類似タスクへ一般化しUI変更にも耐える。
+
+**注目の理由:** 「一度デモすれば永遠に再利用」はエージェントスキルの書き方を反転させる——手書きのmarkdownからデモ駆動のキャプチャへ——そしてSKILL.mdをMicrosoft、Claude Code、Codex、Gooseの間の共有フォーマットとして確固たるものにする。
+
+> v0.3.1 · 録画はAnalyzeをクリックするまでローカル · オンデバイスのWhisper文字起こし · 自動秘匿化はまだなし。
+
+[`🔗 microsoft/skill-recorder`](https://github.com/microsoft/skill-recorder) · [`🔗 AGuideToCloud`](https://www.aguidetocloud.com/blog/microsoft-skill-recorder-copilot-skills/)
+
+---
+
+## 25. Orchard——Microsoft Researchのオープンフレームワークがエージェント訓練インフラを約10倍削減、3BパラメータモデルがSWE-bench 69.7%へ
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** arXiv · 69.7% SWE-bench · ~1d ago
+- **タグ:** `microsoft` `agent-training` `kubernetes` `research` `rl`
+
+**microsoft/Orchard**（MIT）はMicrosoft Researchのオープンなエージェントモデリングフレームワークだ。Kubernetesネイティブの**Orchard Env**サービス（REST + Pythonによるサンドボックスの作成/実行/ファイル/パッチ/ネットワーク/タイムアウト）を訓練ループから切り離し、SFT/RL/GRPOと任意のハーネス（Codex、OpenClaw、ZeroClaw、ReAct）が同じサンドボックス基盤を共有する——1000サンドボックスを約26秒で起動し、スポットインスタンスではマネージドサンドボックスの約1/10のコスト。3つのレシピを同梱：Orchard-SWE（Qwen3.5-35B-A3B → SWE-bench Verified 69.7%）、Orchard-GUI（WebVoyager 74.1%）、Orchard-Claw（Claw-Eval 59.6%）。
+
+**注目の理由:** エージェント訓練のボトルネックはモデルではなく、各チームが個別に作るサンドボックスインフラにある。Orchardは環境層を標準化し、チームが任意のハーネスで再訓練できるようにする——そして約3Bアクティブパラメータのモデルが約70%のSWE-benchに達したことは、「制約はスケールではなくインフラにあった」というヘッドライン級の結果だ。
+
+> MIT · arXiv 2605.15040 · データセット + レシピはHugging Face · Kubernetesの運用が必要。
+
+[`🔗 microsoft/Orchard`](https://github.com/microsoft/Orchard) · [`🔗 arXiv`](https://arxiv.org/abs/2605.15040)
+
+---
+
 ## メタデータ
 
 | フィールド | 値 |
 |-------|-------|
-| 生成日時 | 2026-08-13T04:03:00Z |
-| アイテム数 | 17 |
-| 追跡ソース | 19 (GitHub Trending, Hacker News, NVIDIA Blog, Firecrawl Blog, Google Cloud Blog, Futurum Group, Macro Docs, DeepSeek API Docs, xAI, Artificial Analysis, Zed Blog, Claude Marketplaces, Tailscale Blog, The Hacker News, CISA KEV, npm, arXiv, Known Agents, AgentENV Docs) |
+| 生成日時 | 2026-08-13T12:03:00Z |
+| アイテム数 | 25 |
+| 追跡ソース | 27 (GitHub Trending, Hacker News, NVIDIA Blog, Firecrawl Blog, Google Cloud Blog, Futurum Group, Macro Docs, DeepSeek API Docs, xAI, Artificial Analysis, Zed Blog, Claude Marketplaces, Tailscale Blog, The Hacker News, CISA KEV, npm, arXiv, Known Agents, AgentENV Docs, PCMag, InfoSecurity Magazine, Hugging Face, DigitalToday, Y Combinator, RuntimeWire, Moclaw Blog, AGuideToCloud) |
 | 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | ランキング | ベロシティ加重（新しさ × エンゲージメント加速 × ソース権威性） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

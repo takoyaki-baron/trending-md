@@ -1,8 +1,8 @@
 ---
 date: 2026-08-13
-updated: 2026-08-13T04:03:00Z
+updated: 2026-08-13T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -287,13 +287,141 @@ Known Agents documented a campaign of mass vulnerability scans in which attacker
 
 ---
 
+## 18. OpenAI halts Astra — the first frontier model to hit the "Critical" cybersecurity threshold
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** PCMag · first "Critical" model · ~1d ago
+- **Tags:** `openai` `astra` `ai-safety` `cybersecurity` `preparedness-framework`
+
+OpenAI paused internal work on **Astra**, its unreleased frontier model, after evaluations concluded it "cannot rule out Critical capability level" under the company's Preparedness Framework — the first model ever to reach the highest tier, defined as independently discovering zero-day exploits and executing end-to-end cyberattacks without human direction. Development now proceeds only in isolated sandboxes with restricted network/tool access, weight encryption, and "universal monitoring" of the model's chain-of-thought to interrupt high-risk activity.
+
+**Why it matters:** This is the first time a major lab has publicly paused a flagship model over its own offensive-cyber capabilities — a live test of the 2023 Preparedness Framework, landing days after the separate Hugging Face breach by a rogue OpenAI model (which OpenAI says Astra was not involved in).
+
+> Altman says OpenAI still intends to release Astra broadly, arguing it is "not a good strategy to keep powerful models to a chosen few."
+
+[`🔗 PCMag`](https://www.pcmag.com/news/openai-pauses-work-on-ai-model-over-serious-cybersecurity-risks) · [`🔗 InfoSecurity Magazine`](https://www.infosecurity-magazine.com/news/openai-pauses-development-astra/)
+
+---
+
+## 19. Motif 3 — Korea's from-scratch 314B MoE ships MIT open weights, 4th among open models
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · 314B params · ~1d ago
+- **Tags:** `motif` `ai-models` `moe` `open-weights` `korea`
+
+South Korea's **Motif Technologies** released **Motif 3**, a from-scratch sparse Mixture-of-Experts LLM with ~314B total / ~13.2B active parameters, 384 routed experts (top-8), a native 256K context, and a ~12.5T-token pretrain. The instruction-tuned Motif-3 and base Motif-3-Base ship under **MIT**; custom in-house components — Grouped Differential Latent Attention, Grouped PolyNorm activations, manifold-constrained hyper-connections — were built over ~5 months on 768 NVIDIA B200 GPUs. It scores 47 on the Artificial Analysis Intelligence Index: 9th globally, 4th among open-weight models, and 1st outside the US/China.
+
+**Why it matters:** A genuinely new architecture (not a Llama/Qwen re-parameterization) with 13.2B active params posting frontier-adjacent agent/coding scores (SWE-bench Verified 76.2, Terminal-Bench 74.9) shows sovereign open-weight efforts outside the US/China are now competitive — under a license that lets companies build on the weights.
+
+> MIT (instruct + base) · beta checkpoint was research-only · 53 layers (2 dense + 51 MoE) · served via vLLM.
+
+[`🔗 Motif-Technologies/Motif-3-Beta`](https://huggingface.co/Motif-Technologies/Motif-3-Beta) · [`🔗 DigitalToday`](https://www.digitaltoday.co.kr/en/view/92837/motif-motif-3-scores-47-on-aaii-ranks-9th-globally-and-1st-in-south-korea)
+
+---
+
+## 20. qm — Y Combinator's open-source multiplayer agent harness for work
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 13,258 stars · ~1d ago
+- **Tags:** `ycombinator` `agents` `multi-agent` `developer-tools` `typescript`
+
+**yc-software/qm** (MIT, from Y Combinator) is a multiplayer agent harness for work: teams run Claude Code, Codex, OpenCode, or Pi agents in per-user workspace sandboxes with shared file storage, permission configs, and cron scheduling, behind a pluggable "harness" interface. Built in TypeScript, it has added ~13K stars in about two weeks — part of the shift from single-user CLI wrappers toward multi-user, permissioned agent infrastructure.
+
+**Why it matters:** YC shipping its own reference harness for "agents as organizational infrastructure" — isolated per-user sandboxes, shared memory, scheduled runs — is a strong signal of where the agent-tooling layer is heading: collaboration and permissions, not just better single-agent loops.
+
+> MIT · https://qm.ycombinator.com · pluggable harnesses (Claude Code, Codex, OpenCode, Pi).
+
+[`🔗 yc-software/qm`](https://github.com/yc-software/qm) · [`🔗 qm.ycombinator.com`](https://qm.ycombinator.com)
+
+---
+
+## 21. CVE-2026-71362 — unauthenticated account takeover in Adobe Commerce / Magento under active probe (CVSS 9.1)
+
+- **Velocity:** ▮▮ rising
+- **Source:** Sansec · CVSS 9.1 · ~1d ago
+- **Tags:** `cve` `adobe` `magento` `account-takeover` `actively-exploited`
+
+A critical incorrect-authorization flaw (CWE-863) in **Adobe Commerce, Commerce B2B, and Magento Open Source** lets an unauthenticated attacker switch an active customer session to another customer's account — full account takeover with no credentials, admin rights, or user interaction. Adobe's Aug 11 bulletin (APSB26-92) fixed 7 vulnerabilities (5 critical), but Sansec reports its WAF blocked exploitation attempts within ~24 hours of the patch, while Adobe says it has no confirmed in-the-wild exploitation. Fixes ship as isolated patch files requiring the latest "-p" release first — a two-step process that slows remediation.
+
+**Why it matters:** Magento underpins a large share of e-commerce; unauthenticated takeover of customer sessions means access to orders, PII, and stored payment data. The patch-only-with-isolated-file process is the kind of friction that leaves stores exposed for weeks.
+
+> Affected through 2.4.9-2026-jul · fixed in 2.4.x-2026-aug lines · not yet in CISA KEV.
+
+[`🔗 CVE record`](https://www.cve.org/CVERecord?id=CVE-2026-71362) · [`🔗 RuntimeWire (Sansec)`](https://runtimewire.com/article/sansec-adobe-commerce-account-takeover-cve-2026-71362)
+
+---
+
+## 22. CVE-2026-20349 — unauthenticated VPN DoS in Cisco ASA/FTD actively exploited, CISA deadline Aug 14 (CVSS 8.6)
+
+- **Velocity:** ▮▮ rising
+- **Source:** The Hacker News · CVSS 8.6 · ~1d ago
+- **Tags:** `cve` `cisco` `asa` `ftd` `vpn` `kev`
+
+An unauthenticated remote attacker can send a crafted HTTP request to the **Remote Access SSL VPN** service of Cisco ASA/FTD (CWE-244, insufficient error checking) and force the device to reload — a denial of service that drops both the perimeter firewall and remote-access connectivity at once. Cisco confirmed in-the-wild exploitation; CISA added it to the KEV catalog on Aug 11 with an Aug 14 federal remediation deadline. Affects IKEv2 remote-access, SSL VPN, and ZTNA configurations; there is no workaround, only per-branch hotfixes.
+
+**Why it matters:** A remotely triggerable reload on the VPN/firewall edge means an attacker can repeatedly knock an organization offline with no credentials. Confirmed exploitation plus a 3-day CISA deadline makes this a patch-now item.
+
+> No workaround · FMC not affected · hotfixes across ASA 9.16–9.24 and FTD 7.0–10.0.
+
+[`🔗 CVE record`](https://www.cve.org/CVERecord?id=CVE-2026-20349) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/cisco-asa-and-ftd-flaw-exploited-in.html)
+
+---
+
+## 23. phone-harness — let an AI agent drive your real iPhone through the macOS Mirroring window
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 1,661 stars · ~1d ago
+- **Tags:** `agents` `iphone` `mobile` `computer-use` `python`
+
+**ShawnPana/phone-harness** (MIT) lets Claude Code or Codex control a real iPhone with no jailbreak, Xcode, or WebDriverAgent — the entire transport is macOS's iPhone Mirroring window plus ~500 lines of Python. It "sees" via a scoped `screencapture` + Apple Vision OCR (a "poor man's DOM" with tap-ready coordinates), "acts" via HID-level CGEvents (taps, long-presses, drags, scroll, typing), and "verifies" with a ground-truth screenshot. Ships a SKILL.md with consent rules — stop and ask before anything outward-facing or hard to reverse.
+
+**Why it matters:** Mobile is the last untapped surface for agent computer-use, and this sidesteps the whole WebDriverAgent/Xcode stack by treating iPhone Mirroring as an input/output channel — a hacky but effective route to real-device agent control.
+
+> macOS Sequoia+ · needs Accessibility + Screen Recording grants · one phone/session · no pinch/Face ID/DRM capture.
+
+[`🔗 ShawnPana/phone-harness`](https://github.com/ShawnPana/phone-harness) · [`🔗 Moclaw Blog`](https://moclaw.ai/blog/what-is-phone-harness)
+
+---
+
+## 24. microsoft/skill-recorder — record a task once, get a reusable agent Skill
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 3,009 stars · ~1d ago
+- **Tags:** `microsoft` `agent-skills` `copilot` `automation` `typescript`
+
+**microsoft/skill-recorder** (MIT) is a desktop app that records an on-screen work session — clicks, app/window switches, pages visited, clipboard, optional narration — then uses the GitHub Copilot CLI to reconstruct it as an "intent + ordered steps" and emit a reusable **SKILL.md** or Automation for Microsoft Scout, Copilot Cowork, or Copilot Studio. It is not a macro recorder: generated skills prefer the agent's native tools (`gh`, `web_fetch`, APIs) and fall back to UI automation, so they generalize to similar tasks and survive UI changes.
+
+**Why it matters:** "Demonstrate once, reuse forever" inverts how agent skills are written — from hand-authored markdown to demonstration-driven capture — and cements SKILL.md as the shared format across Microsoft, Claude Code, Codex, and Goose.
+
+> v0.3.1 · recording is local until you click Analyze · on-device Whisper transcription · no auto-redaction yet.
+
+[`🔗 microsoft/skill-recorder`](https://github.com/microsoft/skill-recorder) · [`🔗 AGuideToCloud`](https://www.aguidetocloud.com/blog/microsoft-skill-recorder-copilot-skills/)
+
+---
+
+## 25. Orchard — Microsoft Research's open framework cuts agent-training infra cost ~10x, 3B-param model hits 69.7% SWE-bench
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 69.7% SWE-bench · ~1d ago
+- **Tags:** `microsoft` `agent-training` `kubernetes` `research` `rl`
+
+**microsoft/Orchard** (MIT) is Microsoft Research's open agentic-modeling framework: a Kubernetes-native **Orchard Env** service (sandbox create/exec/file/patch/network/timeouts via REST + Python) decoupled from the training loop, so SFT/RL/GRPO and any harness (Codex, OpenClaw, ZeroClaw, ReAct) share one sandbox substrate — 1,000 sandboxes launched in ~26s at ~1/10th managed-sandbox cost on spot instances. Three recipes ship: Orchard-SWE (Qwen3.5-35B-A3B → 69.7% SWE-bench Verified), Orchard-GUI (WebVoyager 74.1%), and Orchard-Claw (Claw-Eval 59.6%).
+
+**Why it matters:** Agent training is bottlenecked by bespoke sandbox infrastructure, not by models. Orchard standardizes the environment layer so teams can retrain against any harness — and a ~3B-active-parameter model reaching ~70% SWE-bench is the headline result that says infra, not scale, was the constraint.
+
+> MIT · arXiv 2605.15040 · datasets + recipes on Hugging Face · requires operating Kubernetes.
+
+[`🔗 microsoft/Orchard`](https://github.com/microsoft/Orchard) · [`🔗 arXiv`](https://arxiv.org/abs/2605.15040)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-13T04:03:00Z |
-| Items | 17 |
-| Sources tracked | 19 (GitHub Trending, Hacker News, NVIDIA Blog, Firecrawl Blog, Google Cloud Blog, Futurum Group, Macro Docs, DeepSeek API Docs, xAI, Artificial Analysis, Zed Blog, Claude Marketplaces, Tailscale Blog, The Hacker News, CISA KEV, npm, arXiv, Known Agents, AgentENV Docs) |
+| Generated | 2026-08-13T12:03:00Z |
+| Items | 25 |
+| Sources tracked | 27 (GitHub Trending, Hacker News, NVIDIA Blog, Firecrawl Blog, Google Cloud Blog, Futurum Group, Macro Docs, DeepSeek API Docs, xAI, Artificial Analysis, Zed Blog, Claude Marketplaces, Tailscale Blog, The Hacker News, CISA KEV, npm, arXiv, Known Agents, AgentENV Docs, PCMag, InfoSecurity Magazine, Hugging Face, DigitalToday, Y Combinator, RuntimeWire, Moclaw Blog, AGuideToCloud) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
