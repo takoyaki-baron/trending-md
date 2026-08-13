@@ -80,6 +80,23 @@ underlying pages — this produced a two-layer false signal in a single item.
 - The single root cause: **aggregate metrics were trusted without visiting the actual pages.**
   Star velocity is a signal to INVESTIGATE, not a signal to PUBLISH.
 
+### Feed correction convention (when an item is wrong)
+
+When a published item is found to be wrong (Void precedent), correct it **in place** — do not
+renumber or silently drop it:
+
+1. **Fix the body in place** — keep the item's number and position; rewrite the title/description
+   to state what is actually true ("archived and deprecated", not "trending").
+2. **Retract the bogus link** — remove any source that never contained the attributed fact; replace
+   it with a source you have actually visited (the repo itself, the real vendor page).
+3. **Keep ≥2 valid links** — every corrected item still needs at least two visited, working sources.
+4. **Re-derive velocity** — a corrected item's velocity drops to match reality (▮ steady), never
+   keeps its inflated rank.
+5. **Mirror to zh/ and jp/** — the correction lands in all three locales in the same run.
+
+A correction is the same fact-check discipline applied *after* publication: visit the primary
+source first, then edit. Never edit from the aggregate's framing.
+
 ### Sources (check every run)
 
 1. **GitHub Trending** (daily + weekly) — repos + open-source releases

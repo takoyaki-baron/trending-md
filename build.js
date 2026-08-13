@@ -480,6 +480,7 @@ const SOURCE_ALIASES = {
   'tech.yahoo.com': 'yahoo.com', 'finance.yahoo.com': 'yahoo.com',
   'en.theblockbeats.news': 'theblockbeats.news',
   'app.primeintellect.ai': 'primeintellect.ai',
+  'qm.ycombinator.com': 'ycombinator.com',
 };
 
 function normalizeHost(url) {

@@ -1123,5 +1123,41 @@
     "cred": "high",
     "density": "high",
     "cv": 2
+  },
+  "ycombinator.com": {
+    "cat": "vendor",
+    "en": "Y Combinator product sites (e.g. qm.ycombinator.com) — primary source for YC-built tools; verify against the linked GitHub repo.",
+    "zh": "Y Combinator 的产品站（如 qm.ycombinator.com）——YC 自研工具的权威来源；宜与链接的 GitHub 仓库对照核实。",
+    "jp": "Y Combinatorのプロダクトサイト（例: qm.ycombinator.com）——YC製ツールの一次情報源。リンク先GitHubリポジトリとの突合推奨。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "pcmag.com": {
+    "cat": "news",
+    "en": "Long-running consumer/tech outlet; reliable for product and AI-industry coverage — still confirm technical claims against primary sources.",
+    "zh": "老牌消费科技媒体；对产品与 AI 行业报道可靠，技术性论断仍建议对照原始来源。",
+    "jp": "老舗のコンシューマーテックメディア。製品・AI業界の報道で信頼できるが、技術的主張は一次情報で裏取りを。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "infosecurity-magazine.com": {
+    "cat": "security",
+    "en": "Security industry trade publication; solid for vulnerability/incident coverage — cross-check scores against vendor advisories and CVE records.",
+    "zh": "安全行业媒体；对漏洞与事件报道扎实，CVSS/评分建议与厂商公告及 CVE 记录交叉核对。",
+    "jp": "セキュリティ業界誌。脆弱性・インシデント報道に強く、CVSS/スコアはベンダーアドバイザリやCVEレコードと突合を。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "aguidetocloud.com": {
+    "cat": "news",
+    "en": "Cloud/AI tooling blog; useful for the Microsoft Copilot ecosystem, medium authority — confirm against the vendor's repo or docs.",
+    "zh": "云/AI 工具博客；对 Microsoft Copilot 生态报道较有价值，权威性中等——宜对照厂商仓库或文档核实。",
+    "jp": "クラウド/AIツールのブログ。Microsoft Copilotエコシステムの報道に有用だが、権威性は中程度——ベンダーのリポジトリやドキュメントで確認を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }
