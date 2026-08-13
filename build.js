@@ -378,6 +378,8 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
   .content th, .content td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--table-border); }
   .content th { font-weight: 600; color: var(--text); background: var(--table-stripe); }
   .content tr:nth-child(even) td { background: var(--table-stripe); }
+  /* Label column (first) shrinks to fit instead of collapsing narrow — e.g. the Metadata table. */
+  .content th:first-child, .content td:first-child { white-space: nowrap; }
   .content hr { border: none; border-top: 1px solid var(--divider); margin: 20px 0; }
   .content h2 code { font-size: 0.75rem; background: var(--tag-bg); }
   footer { max-width: 820px; margin: 0 auto; padding: 20px; border-top: 1px solid var(--border); font-size: 0.76rem; color: var(--text-tertiary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
