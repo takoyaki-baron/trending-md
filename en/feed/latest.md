@@ -111,7 +111,7 @@ Firecrawl open-sourced **pdf-inspector** (MIT), a from-scratch Rust library that
 
 ---
 
-## 7. DeepSeek V4 Pro graduates to general availability — agentic model within ~5% of Claude Fable 5 at ~1/46th the price
+## 7. DeepSeek V4 Pro graduates to general availability — agentic model within ~5% of Claude Fable 5 at ~1/23rd the price
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Hacker News · 696 pts · ~12h ago

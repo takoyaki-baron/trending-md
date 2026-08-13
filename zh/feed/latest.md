@@ -111,7 +111,7 @@ Firecrawl 开源了 **pdf-inspector**（MIT），一个从零编写的 Rust 库�
 
 ---
 
-## 7. DeepSeek V4 Pro 正式转正 —— 智能体模型逼近 Claude Fable 5（约 5% 差距），价格却只有其 1/46
+## 7. DeepSeek V4 Pro 正式转正 —— 智能体模型逼近 Claude Fable 5（约 5% 差距），价格却只有其 1/23
 
 - **传播速度：** ▮▮▮ 趋势热榜
 - **来源：** Hacker News · 696 pts · ~12h ago

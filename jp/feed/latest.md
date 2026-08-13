@@ -111,7 +111,7 @@ Firecrawlは**pdf-inspector**（MIT）をオープンソース化した。ゼロ
 
 ---
 
-## 7. DeepSeek V4 Proが正式版へ——Claude Fable 5に約5%差まで迫るエージェントモデル、価格は約1/46
+## 7. DeepSeek V4 Proが正式版へ——Claude Fable 5に約5%差まで迫るエージェントモデル、価格は約1/23
 
 - **ベロシティ:** ▮▮▮ トレンド
 - **ソース:** Hacker News · 696 pts · ~12h ago
