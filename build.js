@@ -401,6 +401,7 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
       ${navLink(`${base}/action/`, s.navAction, 'action')}
       ${navLink(`${base}/agent/knowledge/`, s.navKnowledge, 'knowledge')}
       ${navLink(`${base}/archive/`, s.navArchive, 'archive')}
+      ${navLink(`${base}/sources/`, s.navSources, 'sources')}
       <a href="https://github.com/takoyaki-baron/trending-md">${s.navGitHub}</a>
       ${langSelect}
     </nav>
@@ -459,6 +460,327 @@ function discoverKnowledgeTopics(lang) {
     .filter(f => f.endsWith('.md') && f !== 'index.md')
     .map(f => f.replace(/\.md$/, ''))
     .sort();
+}
+
+/* ── Sources aggregation (domain → citation stats + co-citation graph) ── */
+const SOURCE_ALIASES = {
+  'raw.githubusercontent.com': 'github.com',
+  'github.githubassets.com': 'github.com',
+  'blog.csdn.net': 'csdn.net', 'agent.csdn.net': 'csdn.net', 'adg.csdn.net': 'csdn.net',
+  'eu.36kr.com': '36kr.com',
+  'm.thepaper.cn': 'thepaper.cn',
+  'tech.yahoo.com': 'yahoo.com', 'finance.yahoo.com': 'yahoo.com',
+  'en.theblockbeats.news': 'theblockbeats.news',
+  'app.primeintellect.ai': 'primeintellect.ai',
+};
+
+function normalizeHost(url) {
+  try {
+    let h = new URL(url).hostname.toLowerCase().replace(/^www\./, '').replace(/^m\./, '');
+    return SOURCE_ALIASES[h] || h;
+  } catch (e) { return null; }
+}
+
+const SOURCE_CATEGORIES = ['code', 'vendor', 'news', 'security', 'research', 'community', 'data', 'other'];
+const SRC_CAT_COLORS = {
+  code: '#2563eb', vendor: '#16a34a', news: '#ea580c', security: '#dc2626',
+  research: '#9333ea', community: '#0891b2', data: '#ca8a04', other: '#6b7280',
+};
+
+function classifyDomain(host, curated) {
+  const c = curated[host];
+  if (c && c.cat) return c.cat;
+  if (/^(github|gitlab|bitbucket|gitee)\./.test(host) || /(npmjs\.com|pypi\.org|crates\.io|huggingface\.co)$/.test(host)) return 'code';
+  if (host === 'arxiv.org' || /papers\.cool$/.test(host)) return 'research';
+  if (host === 'news.ycombinator.com' || /dev\.to$/.test(host) || /reddit\.com$/.test(host) || /hellogithub/.test(host) || /stackoverflow/.test(host)) return 'community';
+  if (/cve|cisa\.gov|nist|vuldb|security|hackernews|darkreading|csoonline|fieldeffect|msrc|cybersecurity/i.test(host)) return 'security';
+  if (/star|trend|stats|llm-stats|artificialanalysis|analytics|knownagents|whatstrending|topaiproduct|ranking|radar|history/i.test(host)) return 'data';
+  if (/blog|news|daily|weekly|times|post|media|press|journal|techcrunch|thenextweb|cnbc|fortune|arstechnica|36kr|csdn|scmp|pandaily|theblockbeats|gigazine|cnbctv18/i.test(host)) return 'news';
+  return 'other';
+}
+
+function extractSources() {
+  const dir = path.join(ROOT, 'en', 'feed');
+  if (!fs.existsSync(dir)) return { counts: {}, cooc: {}, totalItems: 0, days: 0, latest: '' };
+  const files = fs.readdirSync(dir).filter(f => /^\d{4}-\d{2}-\d{2}\.md$/.test(f)).sort();
+  const counts = {}, cooc = {};
+  let totalItems = 0;
+  const URL_RE = /https?:\/\/[^\s"'<>`)\]]+/g;
+
+  for (const f of files) {
+    const body = parseFrontmatter(fs.readFileSync(path.join(dir, f), 'utf8')).body;
+    const sections = body.split(/\n## \d+\. /);
+    for (let i = 1; i < sections.length; i++) {
+      totalItems++;
+      const hosts = new Set();
+      const urls = sections[i].match(URL_RE) || [];
+      for (const u of urls) {
+        const h = normalizeHost(u.replace(/[.,;:!?»]+$/, ''));
+        if (!h) continue;
+        counts[h] = (counts[h] || 0) + 1;
+        hosts.add(h);
+      }
+      const arr = Array.from(hosts);
+      for (let a = 0; a < arr.length; a++) {
+        for (let b = a + 1; b < arr.length; b++) {
+          const key = [arr[a], arr[b]].sort().join('|');
+          cooc[key] = (cooc[key] || 0) + 1;
+        }
+      }
+    }
+  }
+  return { counts, cooc, totalItems, days: files.length, latest: files[files.length - 1] || '' };
+}
+
+function sourcesEntries(data, curated) {
+  return Object.keys(data.counts).map(host => {
+    const count = data.counts[host];
+    return {
+      host,
+      count,
+      cat: classifyDomain(host, curated),
+      note: (curated[host] && curated[host]) || null,
+    };
+  }).sort((a, b) => b.count - a.count || a.host.localeCompare(b.host));
+}
+
+function buildGraph(entries, cooc, topN) {
+  const top = entries.slice(0, topN);
+  const idx = {};
+  top.forEach((e, i) => { idx[e.host] = i; });
+  const nodes = top.map(e => ({ id: e.host, c: e.count, cat: e.cat }));
+  const edges = [];
+  for (const key of Object.keys(cooc)) {
+    const parts = key.split('|');
+    const a = idx[parts[0]], b = idx[parts[1]];
+    if (a !== undefined && b !== undefined) edges.push({ s: a, t: b, w: cooc[key] });
+  }
+  return { nodes, edges };
+}
+
+function buildSourcesContent(lang, data, curated) {
+  const s = strings[lang];
+  const catLabels = {
+    code: s.catCode, vendor: s.catVendor, news: s.catNews, security: s.catSecurity,
+    research: s.catResearch, community: s.catCommunity, data: s.catData, other: s.catOther,
+  };
+  const entries = sourcesEntries(data, curated);
+  const total = entries.reduce((n, e) => n + e.count, 0);
+  const max = entries.length ? entries[0].count : 1;
+
+  const stats = [
+    { k: s.srcStatDomains, v: entries.length },
+    { k: s.srcStatCitations, v: total },
+    { k: s.srcStatDays, v: data.days },
+    { k: s.srcStatItems, v: data.totalItems },
+  ];
+  const legend = SOURCE_CATEGORIES.map(c => `<span class="src-cat src-cat-${c}">${catLabels[c]}</span>`).join(' ');
+
+  const rows = entries.map((e, i) => {
+    const barW = (e.count / max * 100).toFixed(1);
+    const note = e.note && e.note[lang] ? esc(e.note[lang]) : `<em>${esc(s.srcUnclassified)}</em>`;
+    return `<tr>
+      <td class="src-rank">${i + 1}</td>
+      <td class="src-host"><a href="https://${e.host}" rel="nofollow noopener" target="_blank">${e.host}</a></td>
+      <td class="src-count">${e.count}<span class="src-barwrap"><span class="src-bar" style="width:${barW}%"></span></span></td>
+      <td class="src-catcol"><span class="src-cat src-cat-${e.cat}">${catLabels[e.cat]}</span></td>
+      <td class="src-notecol">${note}</td>
+    </tr>`;
+  }).join('');
+
+  const graph = buildGraph(entries, data.cooc, 40);
+
+  return `<style>
+  .src-stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+  .src-stat { flex: 1 1 120px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+  .src-stat b { display: block; font-size: 1.3rem; color: var(--text); }
+  .src-stat span { font-size: 0.72rem; color: var(--text-tertiary); }
+  .src-cat { display: inline-block; font-size: 0.68rem; padding: 1px 7px; border-radius: 9px; color: #fff; white-space: nowrap; }
+  .src-cat-code { background: #2563eb; } .src-cat-vendor { background: #16a34a; }
+  .src-cat-news { background: #ea580c; } .src-cat-security { background: #dc2626; }
+  .src-cat-research { background: #9333ea; } .src-cat-community { background: #0891b2; }
+  .src-cat-data { background: #ca8a04; } .src-cat-other { background: #6b7280; }
+  .src-legend { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 4px; }
+  #src-graph { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); overflow: hidden; margin: 8px 0 16px; }
+  #src-graph svg { display: block; }
+  #src-graph text { font-family: inherit; }
+  .src-table { font-size: 0.8rem; }
+  .src-table td { vertical-align: middle; }
+  .src-rank { color: var(--text-tertiary); width: 2em; text-align: right; }
+  .src-host a { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.78rem; }
+  .src-count { white-space: nowrap; color: var(--text); font-weight: 600; }
+  .src-barwrap { display: block; width: 70px; height: 4px; background: var(--divider); border-radius: 2px; margin-top: 2px; }
+  .src-bar { display: block; height: 100%; background: var(--accent); border-radius: 2px; }
+  .src-catcol { white-space: nowrap; }
+  .src-notecol { color: var(--text-secondary); font-size: 0.78rem; min-width: 220px; }
+  .src-notecol em { color: var(--text-tertiary); }
+  </style>
+<h1>${esc(s.sourcesTitle)}</h1>
+<p>${esc(s.srcIntro)}</p>
+<div class="src-stats">${stats.map(x => `<div class="src-stat"><b>${x.v}</b><span>${x.k}</span></div>`).join('')}</div>
+<h2>${esc(s.srcGraphTitle)}</h2>
+<div class="src-legend">${legend}</div>
+<div id="src-graph"></div>
+<script>
+(function () {
+  var DATA = ${JSON.stringify(graph)};
+  var COLORS = ${JSON.stringify(SRC_CAT_COLORS)};
+  var el = document.getElementById('src-graph');
+  if (!el || !DATA.nodes.length) return;
+  var W = 800, H = 560, cx = W / 2, cy = H / 2;
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  svg.setAttribute('width', '100%');
+  el.appendChild(svg);
+
+  var N = DATA.nodes.length;
+  var pos = [], vel = [], rad = [];
+  for (var i = 0; i < N; i++) {
+    var ang = (i / N) * Math.PI * 2;
+    var rr = Math.min(W, H) * 0.42;
+    pos.push({ x: cx + Math.cos(ang) * rr * (0.6 + 0.4 * (i % 3)), y: cy + Math.sin(ang) * rr * (0.6 + 0.4 * ((i + 1) % 3)) });
+    vel.push({ x: 0, y: 0 });
+    rad.push(4 + Math.sqrt(DATA.nodes[i].c) * 2.1);
+  }
+
+  var edges = [];
+  for (var e = 0; e < DATA.edges.length; e++) {
+    var ed = DATA.edges[e];
+    var line = document.createElementNS(NS, 'line');
+    line.setAttribute('stroke', 'var(--border)');
+    line.setAttribute('stroke-width', (0.5 + Math.sqrt(ed.w) * 0.7).toFixed(2));
+    line.setAttribute('stroke-opacity', '0.5');
+    svg.appendChild(line);
+    edges.push({ line: line, s: ed.s, t: ed.t });
+  }
+
+  var circles = [], labels = [];
+  for (var i = 0; i < N; i++) {
+    var g = document.createElementNS(NS, 'g');
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('r', rad[i]);
+    c.setAttribute('cx', pos[i].x);
+    c.setAttribute('cy', pos[i].y);
+    c.setAttribute('fill', COLORS[DATA.nodes[i].cat] || COLORS.other);
+    c.setAttribute('fill-opacity', '0.82');
+    c.setAttribute('stroke', 'var(--surface)');
+    c.setAttribute('stroke-width', '1');
+    var t = document.createElementNS(NS, 'text');
+    t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('x', pos[i].x);
+    t.setAttribute('y', pos[i].y + rad[i] + 10);
+    t.setAttribute('font-size', '9');
+    t.setAttribute('style', 'fill:var(--text-secondary)');
+    t.textContent = DATA.nodes[i].id;
+    var title = document.createElementNS(NS, 'title');
+    title.textContent = DATA.nodes[i].id + ' — ' + DATA.nodes[i].c + ' citations';
+    c.appendChild(title);
+    g.appendChild(c); g.appendChild(t);
+    svg.appendChild(g);
+    circles.push(c); labels.push(t);
+  }
+
+  function tick() {
+    var i, j, dx, dy, d2, d, f, fx, fy;
+    for (i = 0; i < N; i++) for (j = i + 1; j < N; j++) {
+      dx = pos[j].x - pos[i].x; dy = pos[j].y - pos[i].y;
+      d2 = dx * dx + dy * dy + 0.01; d = Math.sqrt(d2);
+      f = 300 / d2;
+      fx = dx / d * f; fy = dy / d * f;
+      vel[i].x -= fx; vel[i].y -= fy;
+      vel[j].x += fx; vel[j].y += fy;
+    }
+    for (i = 0; i < edges.length; i++) {
+      var s = edges[i].s, t = edges[i].t;
+      dx = pos[t].x - pos[s].x; dy = pos[t].y - pos[s].y;
+      d = Math.sqrt(dx * dx + dy * dy) + 0.01;
+      f = (d - 60) * 0.03;
+      fx = dx / d * f; fy = dy / d * f;
+      vel[s].x += fx; vel[s].y += fy;
+      vel[t].x -= fx; vel[t].y -= fy;
+    }
+    for (i = 0; i < N; i++) {
+      vel[i].x += (cx - pos[i].x) * 0.01;
+      vel[i].y += (cy - pos[i].y) * 0.01;
+    }
+    for (i = 0; i < N; i++) {
+      vel[i].x *= 0.85; vel[i].y *= 0.85;
+      pos[i].x += vel[i].x; pos[i].y += vel[i].y;
+      pos[i].x = Math.max(rad[i], Math.min(W - rad[i], pos[i].x));
+      pos[i].y = Math.max(rad[i] + 4, Math.min(H - rad[i] - 12, pos[i].y));
+    }
+    for (i = 0; i < edges.length; i++) {
+      edges[i].line.setAttribute('x1', pos[edges[i].s].x);
+      edges[i].line.setAttribute('y1', pos[edges[i].s].y);
+      edges[i].line.setAttribute('x2', pos[edges[i].t].x);
+      edges[i].line.setAttribute('y2', pos[edges[i].t].y);
+    }
+    for (i = 0; i < N; i++) {
+      circles[i].setAttribute('cx', pos[i].x);
+      circles[i].setAttribute('cy', pos[i].y);
+      labels[i].setAttribute('x', pos[i].x);
+      labels[i].setAttribute('y', pos[i].y + rad[i] + 10);
+    }
+  }
+
+  var steps = 260, n = 0;
+  function loop() {
+    tick();
+    if (++n < steps) requestAnimationFrame(loop);
+  }
+  loop();
+})();
+</script>
+<h2>${esc(s.srcTableTitle)}</h2>
+<table class="src-table"><thead><tr><th>#</th><th>domain</th><th>citations</th><th>category</th><th>note</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function buildSourcesMD(lang, data, curated) {
+  const s = strings[lang];
+  const entries = sourcesEntries(data, curated);
+  const total = entries.reduce((n, e) => n + e.count, 0);
+  const lines = [];
+  lines.push('---');
+  lines.push('title: Sources');
+  lines.push(`generated: ${data.latest}`);
+  lines.push(`domains: ${entries.length}`);
+  lines.push(`citations: ${total}`);
+  lines.push('---');
+  lines.push('');
+  lines.push('# Sources');
+  lines.push('');
+  lines.push(s.srcIntro);
+  lines.push('');
+  lines.push('| # | Domain | Citations | Category | Note |');
+  lines.push('|---|--------|-----------|----------|------|');
+  entries.forEach((e, i) => {
+    const note = (e.note && e.note[lang]) ? e.note[lang].replace(/\|/g, '\\|') : '';
+    lines.push(`| ${i + 1} | [${e.host}](https://${e.host}) | ${e.count} | ${e.cat} | ${note} |`);
+  });
+  lines.push('');
+  return lines.join('\n');
+}
+
+function buildSourcesJSON(data, curated) {
+  const entries = sourcesEntries(data, curated).map(e => ({
+    domain: e.host,
+    citations: e.count,
+    category: e.cat,
+    note: {
+      en: (e.note && e.note.en) || '',
+      zh: (e.note && e.note.zh) || '',
+      jp: (e.note && e.note.jp) || '',
+    },
+  }));
+  return {
+    generated: data.latest,
+    days: data.days,
+    items: data.totalItems,
+    totalCitations: entries.reduce((n, e) => n + e.citations, 0),
+    categories: SOURCE_CATEGORIES,
+    domains: entries,
+  };
 }
 
 /* ── Clean + init dist ── */
@@ -531,6 +853,27 @@ for (const lang of langs) {
       `<a href="/${lang}/agent/">${s.navAgent}</a> <a href="/${lang}/agent/knowledge/">${s.navKnowledge}</a> <span class="current">${topic}</span>`, 'knowledge', lang);
   }
 }
+
+/* ── Sources aggregation page (trilingual: HTML + raw .md + canonical JSON) ── */
+const curatedSources = (() => {
+  try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'sources', 'domains.json'), 'utf8')); }
+  catch (e) { return {}; }
+})();
+const srcData = extractSources();
+
+for (const lang of langs) {
+  const s = strings[lang];
+  const srcDir = path.join(dist, lang, 'sources');
+  fs.mkdirSync(srcDir, { recursive: true });
+  fs.writeFileSync(path.join(srcDir, 'index.html'),
+    shell(s.sourcesTitle, buildSourcesContent(lang, srcData, curatedSources),
+      `<span class="current">${s.navSources}</span>`, { date: srcData.latest }, 'sources', lang, null));
+  console.log(`  ✓ ${lang}/sources/index.html`);
+  fs.writeFileSync(path.join(dist, lang, 'sources.md'), buildSourcesMD(lang, srcData, curatedSources));
+  console.log(`  ✓ ${lang}/sources.md`);
+}
+fs.writeFileSync(path.join(dist, 'sources.json'), JSON.stringify(buildSourcesJSON(srcData, curatedSources), null, 2));
+console.log('  ✓ sources.json');
 
 /* ── Root redirect page — dynamic language chooser ── */
 const langLinks = langs.map(l => {
@@ -622,6 +965,10 @@ for (const lang of langs) {
   <url>
     <loc>https://trending.md${base}/action/</loc>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trending.md${base}/sources/</loc>
+    <priority>0.5</priority>
   </url>`;
 }
 
