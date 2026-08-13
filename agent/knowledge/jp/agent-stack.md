@@ -22,6 +22,13 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
 - **Orca** — `stablyai/orca`、MIT、TypeScript。"Agent Development Environment"：複数のAIコーディング
   エージェントを並列実行し、それぞれを分離されたgit worktreeで動かす。27+のCLIエージェント、
   モバイルコンパニオン、WebGLターミナル。42K stars。
+- **AgentENV** — `kvcache-ai/AgentENV`（Moonshot/Kimiチーム）、MIT、約90% Rust。Kimi K3の
+  エージェンティックRLトレーニングを支えた分散プラットフォーム：各サンドボックスは隔離された
+  FirecrackerマイクロVMで、スナップショット/フォークが100ms未満、起動/再開が50ms未満、最大16の
+  子プロセスへフォークして並列エージェントワークフローを実行。ublk + overlaybdのレイヤード
+  イメージ（イメージがディスク容量を超えられる）。E2B互換HTTP API（既存のE2B SDKがそのまま
+  動く）。Kubernetesクラスタでスケール。認証層はまだ無し（信頼できるネットワークで運用）。
+  約1.4K stars。
 
 ## モデルルーティング
 - **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`、Apache 2.0、Rust。OpenAI Chat / Anthropic
@@ -72,6 +79,14 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
 - **Qwen-MM-Plugins** — `QwenLM/Qwen-MM-Plugins`、Apache 2.0。8つのマルチモーダル能力（ビジョン、
   動画メモリ、Blender/FreeCAD CAD）をインストール可能なスキル + MCPとして提供。競合ハーネスを
   アップグレードしてQwenモデルを呼び出せるようにする。
+- **diagram-design** — `cathrynlavery/diagram-design`、MIT。Claude Code、Codex、Pi向けのAgent
+  Skillsパッケージで、27+種のエディトリアル図（アーキテクチャ、シーケンス、ER/データ、ガント、
+  レーダー、メダリオンなど）を自己完結型のHTML + SVGとして生成——ビルドステップなし、JavaScript
+  なし、レンダーサーバーなし。デザインシステムを機械可読ルールとしてエンコード（4pxグリッド、
+  1pxヘアライン、影なし、アクセントカラー1色、3フォントスタック）。60秒のブランドオンボーディング
+  がサイトのパレット/フォントをスクレイピングしてWCAGコントラストチェック。draw.io/Mermaid図も
+  ダイヤル付きで再描画。約10.2K stars、1日で+2,951。スキルが製品ハウツーだけでなく*センス*も
+  エンコードするようになった証拠——[[agent-plugins]]参照。
 
 ## オーケストレーション / ハーネス
 - **Prime Agent** — `PrimeIntellect-ai/prime-agent`、MIT。Recursive Language Model（RLM）：
@@ -83,6 +98,16 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
 ## 教育
 - **ai-agent-book** — `bojieli/ai-agent-book`（Li Bojie）、Apache 2.0。"Deep Understanding of AI
   Agent"：10章、92の実行可能な実験、8言語。29K stars。
+
+## レビュー / コラボレーション
+- **Zed Delta** — `zed-industries/zed`（8月12日発表、プライベートベータ）。AIエージェントでコードを
+  書き、その作業をレビューするためのマルチプレイヤー環境。**DeltaDB**——会話とワークツリーを一緒に
+  リアルタイムで複製するデータベース——の上に構築。コメントは任意のコード行に付き、コードが進化
+  してもアンカーされ続ける。エージェントはスレッドに直接参加。ワークツリーは各チームメイトの
+  マシンへ同期。クラウドランナーがノートPCを閉じた後もエージェントを動かし続ける。Rust → WASM +
+  WebGLのブラウザビュー。Claude Codeを皮切りにエージェントハーネスへ接続。賭けは、エージェント
+  主体のワークフローにはトランスクリプトとdiffを1つの同期ドキュメントとしてレビューする面が必要
+  というもの——「エージェント時代のGitHub」。
 
 ## セキュリティ（スタックの裏側）
 - **Langflow** CVE-2026-9198 — CVSS 9.8、CWE-94コードインジェクション、CISA KEV + 活発な悪用。
@@ -101,6 +126,20 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
 - **Semantica** v0.6.5 — セキュリティリリース。外部から報告された5件の脆弱性（Explorerルートの
   認証欠落、Cypher/SPARQLインジェクション）を修正。プロヴェナンス/監査可能性の基盤でさえ今や
   攻撃面であることの証明——MCPサーバーだけではない。
+- **OpenAI Codex Security** — `openai/codex-security`、Apache 2.0。AppSecエージェント：CLI +
+  TypeScript SDKがコードベース全体を読み、編集可能な脅威モデルを生成し、文脈的AI分析（正規表現
+  ではない）で脆弱性を見つけ、各発見をサンドボックスで検証し、修正パッチを提案。実行をまたいで
+  発見を追跡（`scans list/show/compare`）。最初の30日で120万コミットをスキャンし、792件のクリティ
+  カル + 10,561件の高リスクをフラグ。デフォルトモデルはgpt-5.6-sol、`--provider`でOpenRouter/
+  Fireworks/Bedrockをサポート。約4.3K stars。シグナル：SASTは「lintルール + CVSSトリアージ」から
+  「エクスプロイトが実際に機能するか検証してからフラグする」エージェントへ移行中。
+- **AIクローラーなりすまし** — 攻撃者がChatGPT-User/GPTBot/OAI-SearchBot/PerplexityBot/ClaudeBot/
+  Googlebotを偽装してボットフィルタを回避し、AIコーディングツールがリポジトリ隣接に残す認証情報/
+  設定パス（`/.claude/settings.json`、`/.codex/config.toml`、`/.config/anthropic/credentials/*`、
+  `/.aws/credentials`、`.env`、`docker-compose.yaml`、`terraform.tfstate`）をスキャン。偽装訪問は
+  本物のエージェントの認証（検証済みIPレンジ / Web Bot Auth）を通過できないため検出される。
+  早期警告：「これは本物のクローラーか？」が今やすべてのWAF/CDNの問いであり、エージェントの認証
+  情報ファイルは高価値の獲物。
 
 ### MCP SSRF監査チェックリスト（テンプレート：CVE-2026-19516）
 

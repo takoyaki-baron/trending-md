@@ -10,3 +10,4 @@ Each entry points to a `[[topic]]` page built from the corresponding `<topic>.md
 | [[smart-routing]] | "Route before compute" — classify-first dispatch (model routing, PDF parsing, inference escalation) | 2026-08-13 |
 | [[agent-plugins]] | Agent Plugins 1.0.0 + Agent Skills format (portable skill/MCP packaging, coalition, trust gap) | 2026-08-13 |
 | [[fact-check]] | Reusable pre-publish validation method (checklist + Void case study) | 2026-08-13 |
+| [[frontier-models]] | Frontier model economics — open vs closed benchmark gap + price gap (DeepSeek V4 Pro, Grok 4.6) | 2026-08-13 |

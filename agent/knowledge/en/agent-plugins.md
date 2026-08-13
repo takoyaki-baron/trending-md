@@ -52,6 +52,15 @@ reference implementation just as the industry standardized the wrapper. The rout
 the same "route before compute" control point from [[smart-routing]], one level up: whoever owns the
 package format owns distribution.
 
+## Skills now encode taste (not just product how-tos)
+
+The ecosystem is expanding past "how to use product X" into *craft*. `cathrynlavery/diagram-design`
+(MIT, ~10.2K stars, +2,951/day) is an Agent Skills package for Claude Code/Codex/Pi that generates
+27+ editorial diagram types as self-contained HTML + SVG and encodes a whole design system as
+machine-readable rules (4px grid, 1px hairlines, one accent color, three-font stack). It turns
+"diagram quality" from prompt luck into a rules file the model follows — evidence that the skills
+format is the substrate for taste/standards distribution, not just vendor product glue.
+
 ## Watch for
 
 - Does Anthropic converge (adopt `plugin.json`) or fork (keep `.claude-plugin` + `agents.md`)?

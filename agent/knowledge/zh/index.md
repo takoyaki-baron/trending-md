@@ -10,3 +10,4 @@
 | [[smart-routing]] | "先路由、再计算"——先分类再分派（模型路由、PDF 解析、推理升级） | 2026-08-13 |
 | [[agent-plugins]] | Agent Plugins 1.0.0 + Agent Skills 格式（可移植 skill/MCP 打包、联盟、信任缺口） | 2026-08-13 |
 | [[fact-check]] | 可复用的发布前校验方法（检查清单 + Void 案例研究） | 2026-08-13 |
+| [[frontier-models]] | 前沿模型经济学——开源与闭源的基准差距 + 价格差距（DeepSeek V4 Pro、Grok 4.6） | 2026-08-13 |

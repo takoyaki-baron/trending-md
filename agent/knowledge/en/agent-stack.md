@@ -22,6 +22,12 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
 - **Orca** — `stablyai/orca`, MIT, TypeScript. "Agent Development Environment": runs parallel AI
   coding agents, each in an isolated git worktree. 27+ CLI agents, mobile companion, WebGL
   terminal. 42K stars.
+- **AgentENV** — `kvcache-ai/AgentENV` (Moonshot/Kimi team), MIT, ~90% Rust. Distributed platform
+  that powered Kimi K3's agentic RL training: each sandbox is an isolated Firecracker microVM with
+  snapshot/fork in <100ms, boot/resume in <50ms, fork into up to 16 children for parallel agent
+  workflows; ublk + overlaybd layered images (images can exceed disk capacity); E2B-compatible
+  HTTP API (existing E2B SDKs work unchanged); scales across Kubernetes. No auth layer yet (run on
+  a trusted network). ~1.4K stars.
 
 ## Model routing
 - **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`, Apache 2.0, Rust. Proxy/library that translates
@@ -71,6 +77,13 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
 - **Qwen-MM-Plugins** — `QwenLM/Qwen-MM-Plugins`, Apache 2.0. 8 multimodal capabilities (vision,
   video memory, Blender/FreeCAD CAD) as installable skills + MCP. Upgrades competing harnesses to
   call Qwen models.
+- **diagram-design** — `cathrynlavery/diagram-design`, MIT. An Agent Skills package (Claude Code,
+  Codex, Pi) that generates 27+ editorial diagram types (architecture, sequence, ER/data, Gantt,
+  radar, medallion…) as self-contained HTML + SVG — no build step, no JS, no render server. Encodes
+  a design system as machine-readable rules (4px grid, 1px hairlines, no shadows, one accent color,
+  three-font stack); a 60-second brand-onboarding scrapes palette/fonts + runs WCAG contrast checks;
+  redraws draw.io/Mermaid with dials. ~10.2K stars, +2,951/day. Proof that skills now encode
+  *taste*, not just product how-tos — see [[agent-plugins]].
 
 ## Orchestration / harness
 - **Prime Agent** — `PrimeIntellect-ai/prime-agent`, MIT. Recursive Language Model (RLM): context
@@ -82,6 +95,15 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
 ## Education
 - **ai-agent-book** — `bojieli/ai-agent-book` (Li Bojie), Apache 2.0. "Deep Understanding of AI
   Agent": 10 chapters, 92 runnable experiments, 8 languages. 29K stars.
+
+## Review / collaboration
+- **Zed Delta** — `zed-industries/zed` (announced Aug 12, private beta). Multiplayer environment
+  for coding with AI agents and reviewing their work, built on **DeltaDB** — a database that
+  replicates the conversation and the worktree together in real time. Comments attach to any line
+  and stay anchored as code evolves; agents join threads; worktrees sync across teammates; cloud
+  runners keep agents working after you close the laptop. Rust → WASM + WebGL browser view; connects
+  to agent harnesses starting with Claude Code. Bets that agent-heavy review needs the transcript
+  and the diff as one synchronized document — "the GitHub of the agent era."
 
 ## Security (the other side of the stack)
 - **Langflow** CVE-2026-9198 — CVSS 9.8, CWE-94 code injection, CISA KEV + active exploitation.
@@ -101,6 +123,20 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
 - **Semantica** v0.6.5 — security release fixing five externally-reported vulns (missing auth on
   Explorer routes, Cypher/SPARQL injection). Proof that even provenance/auditability infra is now
   attack surface, not just MCP servers.
+- **OpenAI Codex Security** — `openai/codex-security`, Apache 2.0. AppSec agent: a CLI + TypeScript
+  SDK reads a whole codebase, generates an editable threat model, uses contextual AI analysis (not
+  regex) to find vulns, validates each finding in a sandbox, and proposes fix patches. Tracks
+  findings across runs (`scans list/show/compare`); 1.2M commits scanned in its first 30 days (792
+  critical + 10,561 high). Default model gpt-5.6-sol; `--provider` supports OpenRouter/Fireworks/
+  Bedrock. ~4.3K stars. Signal: SAST is moving from lint-rules + CVSS triage to agents that validate
+  whether an exploit actually works before flagging it.
+- **AI-crawler impersonation** — attackers spoof ChatGPT-User/GPTBot/OAI-SearchBot/PerplexityBot/
+  ClaudeBot/Googlebot to evade bot filters and scan the credential/config paths AI coding tools
+  leave repo-adjacent: `/.claude/settings.json`, `/.codex/config.toml`,
+  `/.config/anthropic/credentials/*`, `/.aws/credentials`, `.env`, `docker-compose.yaml`,
+  `terraform.tfstate`. Detected because spoofed visits fail the real agent's auth (verified IP
+  ranges / Web Bot Auth). Early warning that "is this a real crawler?" is now a WAF/CDN question,
+  and agent credential files are high-value loot.
 
 ### MCP SSRF audit checklist (template: CVE-2026-19516)
 

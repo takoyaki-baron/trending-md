@@ -52,10 +52,43 @@ see the tail of the distribution.** As multi-model and multi-parser workloads pr
 engine serves which unit" becomes its own layer — a new control point that the router owner
 controls.
 
+## Router lock-in map (verified 2026-08-13)
+
+"Where does lock-in form?" — comparing the four routing approaches against what a router controls
+(policy, signal, catalog):
+
+1. **Hosted aggregator — OpenRouter** (SaaS, ~$10B valuation, ~1.5 quadrillion tokens/yr). Default
+   routing is inverse-square price-weighted (with a 30s outage window) plus an "Auto Exacto" step
+   that tiers providers by tool-call quality; a per-request `provider` object overrides it (`order`,
+   `sort`, `only`, `max_price`, `allow_fallbacks`). Pass-through token pricing ("no markup"), with
+   the margin on ~5.5% credit fees + ~5% BYOK. Lock-in = one key, one bill, and a model catalog +
+   routing policy you don't own. Its "Fusion" multi-model fan-out (up to 8 models + a judge) is a
+   proprietary value-add independent testing measured at ~4× a solo frontier call.
+2. **Vendor router — NeMo Switchyard** (NVIDIA, Apache 2.0). Routes *on top of the inference stack*
+   (NIM, vLLM); NVIDIA frames it as "orchestration software on top of the chips." Lock-in = routing
+   coupled to NVIDIA's accelerator/NIM stack.
+3. **Self-hosted OSS gateway — LiteLLM** (MIT, ~40K stars). Router = load balancing across
+   `model_group` deployments, fallback chains, retries, budgets, rate limits, virtual keys. No
+   vendor lock-in — the "lock" shifts to *your own config* being the control point (Postgres +
+   Redis state).
+4. **Confidence-gated escalation — Needle 2** (MIT). The escalate-or-not decision is a calibrated
+   confidence score embedded in the model's output. Lock-in = the escalation *policy* is owned by
+   the confidence model; if proprietary, the "when to pay for the frontier" decision is unauditable.
+
+**Where lock-in forms** — three vectors, all of which are the *router decision itself*:
+(a) ownership of the **policy** (you in LiteLLM; the vendor in OpenRouter/Switchyard),
+(b) ownership of the **signal** (Switchyard's classifier, OpenRouter's Auto Exacto tiers, Needle's
+confidence), (c) ownership of the **catalog + billing** (OpenRouter's 70+ providers + one bill;
+NVIDIA's NIM catalog). There is no shared routing-config standard yet — each has its own DSL
+(LiteLLM YAML, OpenRouter `provider` object, Switchyard router types). That fragmentation *is* the
+lock-in surface: an "MCP for routing" would commoditize it, and nobody has shipped one.
+
 ## Watch for
 
 - Router strategy convergence: classifier vs stage vs escalation vs confidence-gated — do they
   merge into one standard?
+- Router-policy standardization: who ships an open routing-config DSL (an "MCP for routing") to
+  defuse the lock-in vectors above?
 - Who owns the router: NVIDIA positions Switchyard as "orchestration software on top of the
   chips" — the router layer is where vendor lock-in will try to happen.
 - The same classify-first pattern applied to the next expensive step (audio/video transcription,

@@ -20,6 +20,11 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   Cloudflare Agents Week 2026，与 Computer 同期。
 - **Orca** — `stablyai/orca`，MIT，TypeScript。"Agent Development Environment"：并行运行多个 AI
   coding agent，每个都在隔离的 git worktree 中。27+ 个 CLI agent、移动端伴侣、WebGL 终端。42K stars。
+- **AgentENV** — `kvcache-ai/AgentENV`（Moonshot/Kimi 团队），MIT，约 90% Rust。支撑 Kimi K3
+  agentic RL 训练的分布式平台：每个沙箱都是一个隔离的 Firecracker 微虚拟机，快照/fork 不到
+  100ms、启动/恢复不到 50ms，可 fork 出多达 16 个子进程用于并行 agent 工作流；ublk + overlaybd
+  分层镜像（镜像可超出磁盘容量）；E2B 兼容 HTTP API（现有 E2B SDK 无需改动即可使用）；可跨
+  Kubernetes 集群扩展。暂无认证层（需在可信网络中运行）。约 1.4K stars。
 
 ## 模型路由
 - **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`，Apache 2.0，Rust。一个代理/库，在 OpenAI Chat、
@@ -63,6 +68,12 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   CTF、EDR 绕过），41 条路由规则 + 163 个回归测试。22.4K stars。
 - **Qwen-MM-Plugins** — `QwenLM/Qwen-MM-Plugins`，Apache 2.0。8 项多模态能力（视觉、视频记忆、
   Blender/FreeCAD CAD）以可安装 skill + MCP 的形式提供。可升级竞品 harness 来调用 Qwen 模型。
+- **diagram-design** — `cathrynlavery/diagram-design`，MIT。一个 Agent Skills 包（Claude Code、
+  Codex、Pi），把 27+ 种编辑级图表（架构、时序、ER/数据、甘特、雷达、大奖章等）生成为自包含的
+  HTML + SVG——无构建步骤、无 JavaScript、无渲染服务器。把设计系统编码为机器可读规则（4px 网格、
+  1px 细线、无阴影、单一强调色、三字体栈）；60 秒品牌接入会抓取站点调色板/字体并做 WCAG 对比度
+  检查；还能用旋钮重绘 draw.io/Mermaid 图。约 10.2K stars，单日 +2,951。证明 skills 现在也编码
+  *品味*，而不仅是产品操作手册——见 [[agent-plugins]]。
 
 ## 编排 / harness
 - **Prime Agent** — `PrimeIntellect-ai/prime-agent`，MIT。Recursive Language Model（RLM）：
@@ -74,6 +85,14 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
 ## 教育
 - **ai-agent-book** — `bojieli/ai-agent-book`（李博杰），Apache 2.0。"Deep Understanding of AI
   Agent"：10 章，92 个可运行实验，8 种语言。29K stars。
+
+## 评审 / 协作
+- **Zed Delta** — `zed-industries/zed`（8 月 12 日发布，私有 beta）。用 AI agent 写代码并评审其
+  工作的多人环境，构建在 **DeltaDB** 之上——一个实时把会话与工作树一起复制的数据库。评论可附着
+  到任意代码行，并随代码演进保持锚定；agent 直接加入讨论串；工作树同步到每个队友的机器；云运行
+  器让你合上笔记本后 agent 仍继续工作。Rust → WASM + WebGL 浏览器视图；从 Claude Code 开始接入
+  agent harness。押注的是：agent 重度的工作流需要把对话记录与 diff 作为同一份同步文档来评审——
+  "agent 时代的 GitHub"。
 
 ## 安全（技术栈的另一面）
 - **Langflow** CVE-2026-9198 — CVSS 9.8，CWE-94 代码注入，CISA KEV + 正被积极利用。它其实是
@@ -90,6 +109,18 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   这正是 19516 仍然成立的原因。影响 ≤1.0.0，1.0.1 已修复。验证过程见 [[fact-check]]。
 - **Semantica** v0.6.5 — 安全版本，修复五个外部上报的漏洞（Explorer 路由缺失认证、Cypher/SPARQL
   注入）。证明即便是溯源/可审计基础设施如今也是攻击面，而不只是 MCP 服务器。
+- **OpenAI Codex Security** — `openai/codex-security`，Apache 2.0。AppSec 智能体：CLI + TypeScript
+  SDK 读取整个代码库，生成可编辑的威胁模型，用上下文 AI 分析（而非正则）找漏洞，在沙箱中验证每
+  个发现，并提出修复补丁。跨运行跟踪发现（`scans list/show/compare`）；前 30 天扫描了 120 万次
+  commit，标记 792 个严重 + 10,561 个高危发现。默认模型 gpt-5.6-sol；`--provider` 支持
+  OpenRouter/Fireworks/Bedrock。约 4.3K stars。信号：SAST 正从"lint 规则 + CVSS 分级"转向"先验证
+  漏洞能否真正利用、再标记"的智能体。
+- **AI 爬虫冒充** — 攻击者伪造 ChatGPT-User/GPTBot/OAI-SearchBot/PerplexityBot/ClaudeBot/Googlebot
+  以绕过机器人过滤，扫描 AI 编码工具留在仓库旁的高价值凭证/配置路径：`/.claude/settings.json`、
+  `/.codex/config.toml`、`/.config/anthropic/credentials/*`、`/.aws/credentials`、`.env`、
+  `docker-compose.yaml`、`terraform.tfstate`。因为伪造访问通不过真实 agent 的认证（已验证 IP 段 /
+  Web Bot Auth）而被识破。早期警告："这是真爬虫吗？"如今是每个 WAF/CDN 都要回答的问题，而 agent
+  凭证文件是高价值猎物。
 
 ### MCP SSRF 审计清单（模板：CVE-2026-19516）
 
