@@ -27,9 +27,25 @@ the moat; distribution and integration speed are.
 ## The pattern
 
 Three closed-frontier anchors (Claude Fable 5, GPT-5.6 Sol, Grok 4.6) and a fast-rising open-weight
-challenger (DeepSeek V4 Pro) now trade within a few points on agentic benchmarks while spanning a
-huge input-price range. "Reasoning quality is the moat" is failing; the frontier is a multi-way race
-on price + distribution + tooling integration.
+tier (DeepSeek V4 Pro, Motif 3, Qwen-Max-class) now trade within a few points on agentic benchmarks
+while spanning a huge input-price range. "Reasoning quality is the moat" is failing; the frontier is
+a multi-way race on price + distribution + tooling integration.
+
+## Qwen-Max goes open (Aug 14)
+
+**Qwen3.8-2.4T-A95B** — `Qwen/Qwen3.8-2.4T-A95B` — is Alibaba's first fully open-sourced
+Qwen-Max-class (flagship) model. A fine-grained MoE with **2.4T total / ~95B active** parameters,
+512 experts per layer (10 routed + 1 shared), hybrid Gated-DeltaNet + Gated-Attention, and
+multi-token-prediction training. Native 262K context (extensible to ~1M); the open build is
+text-only with thinking forced on. Self-reported: Terminal-Bench 2.1 86.6, PaperBench 93.0, GPQA
+Diamond 92.6, SWE-bench Pro 67.7. Weights (~4.9TB BF16) on Hugging Face + ModelScope under a custom
+Qwen3.8-Max license; NVIDIA's blog shows it served on a GB300 NVL72 rack at 4,000+ tok/s per GPU in
+FP8 via vLLM/SGLang/TokenSpeed.
+
+This closes the open-vs-closed gap at the very top of the curve: a *downloadable* Qwen-Max-class
+model shifts fine-tuning and self-hosting economics for teams that previously could only call
+Alibaba's API. It is the strongest instance yet of the Aug pattern — Chinese labs ship frontier-scale
+open weights (DeepSeek V4 Pro, Qwen-Max-class) while US labs ship smaller, faster closed models.
 
 ## Pricing (verified 2026-08-13)
 
@@ -79,6 +95,37 @@ adds systemic-risk obligations for general-purpose AI. The shared caveat: all th
 "competitor-adjustment clause" — labs may lower safeguards if a peer ships without comparable ones —
 a potential race-to-the-bottom counterweight to the gating.
 
+**Who measures the threshold (answered, Aug 14).** SB 53 is the *Transparency in Frontier AI Act*
+(TFAIA; signed Sep 29 2025, effective Jan 1 2026): a frontier developer's framework must describe
+"using third parties to assess the potential for catastrophic risks and the effectiveness of
+mitigations", and every pre-deployment transparency report must state "the extent to which
+third-party evaluators were involved". So third-party measurement is emerging — but as a *disclosure*
+obligation enforced against each lab's self-published framework (up to $1M/incident civil penalty),
+not a shared external floor. Enforcement asks "did you follow your own framework", not "did you miss
+a shared threshold". The gap that remains is a **cross-lab** measurement standard.
+
+## Hidden reasoning is extractable (Aug 14)
+
+arXiv:2608.09867 — "Stealing Reasoning Traces from Proprietary LLM APIs" (Panfilov et al.) — is a
+frontier-*security* finding, not an economics one, but it lands in the same window: the encrypted
+"reasoning blocks" that proprietary APIs return (to hide chain-of-thought while letting clients
+render it) are **fully interchangeable across sessions, users, and models within a provider**. The
+authors exploit this by injecting a capable model's encrypted trace into a weaker, less-guarded model
+from the same provider and forcing it to decode the trace verbatim — no direct jailbreak of the strong
+model needed. Demonstrated vectors:
+
+- **Anti-distillation bypass** — extracting proprietary reasoning from Anthropic, OpenAI, and Google.
+- **Private-data recovery** — decoding 315,320 reasoning blocks scraped from public repos recovered
+  367 PII artifacts and 182 credentials.
+- **Hazardous-content disclosure** — dangerous reasoning revealed behind a "safe" final refusal.
+- **Invisible prompt injection** — malicious payloads embedded in encrypted blocks to poison agentic
+  systems.
+
+The takeaway is architectural: encrypting reasoning *per block* is meaningless if the block is a
+fungible token any sibling model will decrypt; the fix is to bind reasoning to its session
+(cryptographic + system-level mitigations, per the paper's responsible disclosure). "Hidden CoT" is a
+confidentiality assumption the top three labs all violated, not a protection boundary.
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks
@@ -88,7 +135,11 @@ a potential race-to-the-bottom counterweight to the gating.
 - The price war's second derivative: if ~$0.435/M input becomes the new floor, closed labs must
   justify ~$10/M with distribution and enterprise trust, not raw quality.
 - Whether Motif 3's MIT weights hold up to third-party evaluation (not just its own AA Index cite).
-- Whether "Critical capability" gating (OpenAI/Astra) spreads as a de-facto release standard — the
-  cross-lab frameworks (RSP ASL / FSF CCL / PF Critical) already share the threshold→eval→response
-  shape, so the open question is now *who measures* the threshold and whether SB 53-style statutory
-  gating displaces the voluntary frameworks.
+- Whether "Critical capability" gating (OpenAI/Astra) spreads as a de-facto release standard — SB 53
+  now supplies the "who measures" answer (disclosure-based third-party evaluation); the remaining gap
+  is a *cross-lab* measurement standard, and whether statutory disclosure displaces the voluntary
+  frameworks.
+- Which provider ships the reasoning-block session-binding fix first (arXiv:2608.09867) — and whether
+  it becomes a cross-vendor standard for hidden chain-of-thought.
+- Whether Qwen's custom Qwen3.8-Max license + ~4.9TB weights actually get fine-tuned/downloaded at
+  scale — open weights only shift economics if the ecosystem can run them.

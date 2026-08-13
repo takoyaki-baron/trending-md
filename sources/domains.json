@@ -46,12 +46,12 @@
   },
   "creativecommons.org": {
     "cat": "other",
-    "en": "The license authority; cited for CC-BY terms, not trend content.",
-    "zh": "许可证权威来源；被引用是因其 CC 条款，而非趋势内容。",
-    "jp": "ライセンスの権威。CC条項の引用元であり、トレンド内容ではない。",
+    "en": "The license authority; cited for CC-BY terms, not trend content. (CC-BY-4.0 is the registered SPDX identifier `CC-BY-4.0`.)",
+    "zh": "许可证权威来源；被引用是因其 CC 条款，而非趋势内容。（CC-BY-4.0 为 SPDX 注册标识符 `CC-BY-4.0`。）",
+    "jp": "ライセンスの権威。CC条項の引用元であり、トレンド内容ではない。（CC-BY-4.0はSPDX登録識別子`CC-BY-4.0`。）",
     "cred": "low",
     "density": "low",
-    "cv": 0
+    "cv": 2
   },
   "cve.org": {
     "cat": "security",
@@ -163,12 +163,12 @@
   },
   "dev.to": {
     "cat": "community",
-    "en": "Developer community blog; long-form tutorials and launch posts, mixed quality.",
-    "zh": "开发者社区博客；长篇教程与发布贴，质量参差。",
-    "jp": "開発者コミュニティブログ。長文チュートリアルとローンチ記事、品質は玉石混交。",
+    "en": "Developer community blog/forum running on the open-source Forem platform; long-form tutorials and launch posts, mixed quality.",
+    "zh": "运行于开源 Forem 平台的开发者社区博客/论坛；长篇教程与发布贴，质量参差。",
+    "jp": "オープンソースのForemプラットフォーム上で動く開発者コミュニティブログ/フォーラム。長文チュートリアルとローンチ記事、品質は玉石混交。",
     "cred": "med",
     "density": "med",
-    "cv": 0
+    "cv": 2
   },
   "blogs.nvidia.com": {
     "cat": "vendor",
@@ -181,12 +181,12 @@
   },
   "aiweekly.co": {
     "cat": "news",
-    "en": "AI newsletter/aggregator; breadth over depth — use to spot items worth chasing deeper.",
-    "zh": "AI 简报/聚合；广而不深 —— 用于发现值得深挖的线索。",
-    "jp": "AIニュースレター/集約。広さ重視、深追いすべきネタの発見に使う。",
-    "cred": "low",
+    "en": "Independent human-curated AI newsletter (founded 2015, 480+ issues) that links every story to its primary source; breadth over depth — use to spot items worth chasing deeper.",
+    "zh": "独立人工精选的 AI 简报（2015 年创刊，480+ 期），每篇都链接到一手来源；广而不深——用于发现值得深挖的线索。",
+    "jp": "独立系の人手キュレーションAIニュースレター（2015年創刊、480号超）。各記事を一次情報にリンク。広さ優先、深追いすべきネタの発見に使う。",
+    "cred": "med",
     "density": "med",
-    "cv": 0
+    "cv": 2
   },
   "zed.dev": {
     "cat": "vendor",
@@ -208,12 +208,12 @@
   },
   "wvnews.com": {
     "cat": "news",
-    "en": "Local US news; syndicated tech wire — low authority for tech, contextual only.",
-    "zh": "美国地方新闻；科技内容多为通讯稿 —— 技术权威性低，仅作背景。",
-    "jp": "米地方ニュース。テック記事は配信物が多く、技術的な信頼性は低い。",
+    "en": "WV News — West Virginia's largest multimedia news company (Exponent Telegram, The State Journal); syndicated tech wire — low authority for tech, contextual only.",
+    "zh": "美国西弗吉尼亚州最大的多媒体新闻公司（Exponent Telegram、《州日报》）；科技内容多为通讯稿——技术权威性低，仅作背景。",
+    "jp": "米ウェストバージニア州最大のマルチメディア報道企業（Exponent Telegram、The State Journal）。テック記事は配信物が多く、技術的な信頼性は低い。",
     "cred": "low",
     "density": "low",
-    "cv": 0
+    "cv": 1
   },
   "npmjs.com": {
     "cat": "code",
@@ -252,13 +252,13 @@
     "cv": 2
   },
   "02ship.com": {
-    "cat": "other",
-    "en": "Chinese crypto/Web3 media; niche coverage, low priority for mainstream AI trends.",
-    "zh": "国内加密/Web3 媒体；覆盖小众，对主流 AI 趋势优先级低。",
-    "jp": "中国の暗号資産/Web3メディア。ニッチで、主流AIトレンドには優先度低。",
+    "cat": "community",
+    "en": "English-language community site for Sydney's Claude Builder Community (monthly meetups, member project showcase) — a small local builder group, not a mainstream trend source.",
+    "zh": "悉尼 Claude Builder 社区的英文社区站（月度线下聚会、成员作品展示）——小型本地开发者社群，非主流趋势来源。",
+    "jp": "シドニーのClaude Builderコミュニティの英語サイト（月次ミートアップ、メンバー作品紹介）——小規模なローカル開発者グループで、主流トレンド源ではない。",
     "cred": "low",
     "density": "low",
-    "cv": 0
+    "cv": 1
   },
   "thehackernews.com": {
     "cat": "security",
@@ -297,13 +297,13 @@
     "cv": 1
   },
   "radar.offseq.com": {
-    "cat": "other",
-    "en": "Offseq's radar; niche signal, occasional infrastructure intel.",
-    "zh": "Offseq 雷达；小众信号，偶有基础设施情报。",
-    "jp": "Offseqのレーダー。ニッチなシグナル、時にインフラ情報。",
-    "cred": "low",
-    "density": "low",
-    "cv": 0
+    "cat": "security",
+    "en": "OffSeq Threat Radar — a live threat-intelligence dashboard (Riga, Latvia) aggregating CISA/CIRCL/ThreatFox feeds with AI enrichment; secondary aggregation, cross-check CVEs against NVD/CVE.org.",
+    "zh": "OffSeq Threat Radar——实时威胁情报仪表盘（拉脱维亚里加），聚合 CISA/CIRCL/ThreatFox 情报源并做 AI 增强；属二手聚合，CVE 请与 NVD/CVE.org 交叉核对。",
+    "jp": "OffSeq Threat Radar——リアルタイム脅威インテリジェンスのダッシュボード（ラトビア・リガ）。CISA/CIRCL/ThreatFoxのフィードを集約しAIで強化。二次集約のためCVEはNVD/CVE.orgと突合を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
   },
   "thepaper.cn": {
     "cat": "news",
@@ -325,12 +325,12 @@
   },
   "knownagents.com": {
     "cat": "data",
-    "en": "Agent directory/index; useful for discovering agent tools — verify independently.",
-    "zh": "智能体目录/索引；便于发现智能体工具 —— 需独立核实。",
-    "jp": "エージェントディレクトリ。エージェントツール発見に有用 —— 独自検証を。",
+    "en": "Known Agents (formerly Dark Visitors) — an AI agent/bot directory tracking thousands of agents and crawlers, with an Agentic Web Index; useful for discovering agent tools — verify independently.",
+    "zh": "Known Agents（前身 Dark Visitors）——智能体/机器人目录，追踪数千个智能体与爬虫，并附 Agentic Web Index；便于发现智能体工具——需独立核实。",
+    "jp": "Known Agents（旧Dark Visitors）——数千のエージェント/クローラーを追跡するAIエージェント・ボットディレクトリ。Agentic Web Index付き。エージェントツール発見に有用——独自検証を。",
     "cred": "med",
     "density": "high",
-    "cv": 0
+    "cv": 2
   },
   "huggingface.co": {
     "cat": "code",
@@ -343,12 +343,12 @@
   },
   "futurumgroup.com": {
     "cat": "news",
-    "en": "Analyst firm; good for enterprise-adoption angles and vendor partnerships.",
-    "zh": "分析机构；对企业采用视角与厂商合作较有见地。",
-    "jp": "アナリスト企業。企業導入の視点とベンダー提携に強い。",
+    "en": "The Futurum Group — global technology analyst/research firm (Futurum Research, Signal65); good for enterprise-adoption angles and vendor partnerships.",
+    "zh": "The Futurum Group——全球科技分析/研究机构（Futurum Research、Signal65）；对企业采用视角与厂商合作较有见地。",
+    "jp": "The Futurum Group——グローバルなテックアナリスト/リサーチ企業（Futurum Research、Signal65）。企業導入の視点とベンダー提携に強い。",
     "cred": "med",
     "density": "med",
-    "cv": 0
+    "cv": 2
   },
   "fieldeffect.com": {
     "cat": "security",
@@ -361,21 +361,21 @@
   },
   "explainx.ai": {
     "cat": "other",
-    "en": "AI news aggregator; breadth over depth — a secondary source.",
-    "zh": "AI 新闻聚合；广而不深 —— 二手来源。",
-    "jp": "AIニュース集約。広さ優先の二次ソース。",
+    "en": "AI news aggregator with a daily bulletin, editorial blog, weekly newsletter and an MCP server; breadth over depth — a secondary source.",
+    "zh": "AI 新闻聚合站，含每日简报、编辑博客、每周通讯与 MCP 服务器；广而不深——二手来源。",
+    "jp": "AIニュース集約。日次ブリテン、編集ブログ、週次ニュースレターとMCPサーバーを提供。広さ優先の二次ソース。",
     "cred": "low",
     "density": "low",
-    "cv": 0
+    "cv": 1
   },
   "theblockbeats.news": {
     "cat": "news",
-    "en": "Chinese crypto/Web3 media; coverage of blockchain and AI crossover.",
-    "zh": "国内加密/Web3 媒体；覆盖区块链与 AI 交叉领域。",
-    "jp": "中国の暗号資産/Web3メディア。ブロックチェーンとAIの交差領域をカバー。",
+    "en": "律动 BlockBeats — Chinese crypto/Web3 media (founded 2018), one of the most influential Chinese-language Web3 outlets; covers blockchain and AI crossover.",
+    "zh": "律动 BlockBeats——中文加密/Web3 媒体（2018 年创立），华语世界最具影响力的 Web3 媒体之一；覆盖区块链与 AI 交叉领域。",
+    "jp": "律動 BlockBeats——中国語の暗号資産/Web3メディア（2018年設立）。中国語圏で最も影響力のあるWeb3メディアの一つ。ブロックチェーンとAIの交差領域をカバー。",
     "cred": "med",
     "density": "med",
-    "cv": 0
+    "cv": 2
   },
   "docs.macro.com": {
     "cat": "vendor",
@@ -406,12 +406,12 @@
   },
   "claudemarketplaces.com": {
     "cat": "other",
-    "en": "Claude marketplace index; niche, low-priority aggregator.",
-    "zh": "Claude 市场目录；小众、低优先级聚合。",
-    "jp": "Claudeマーケットプレースのインデックス。ニッチで優先度低。",
+    "en": "Independent third-party directory of Claude Code skills/MCP servers/plugins (NOT Anthropic's official Claude Marketplace) — advertising-supported; verify listings against the repos.",
+    "zh": "Claude Code 技能/MCP 服务器/插件的独立第三方目录（非 Anthropic 官方 Claude Marketplace）——靠广告盈利；条目请对照仓库核实。",
+    "jp": "Claude Codeのスキル/MCPサーバー/プラグインの独立系サードパーティディレクトリ（Anthropic公式Claude Marketplaceではない）——広告収益型。掲載情報はリポジトリで確認を。",
     "cred": "low",
-    "density": "low",
-    "cv": 0
+    "density": "med",
+    "cv": 2
   },
   "arxiv.org": {
     "cat": "research",
@@ -541,12 +541,12 @@
   },
   "papers.cool": {
     "cat": "research",
-    "en": "Paper aggregator/digest; secondary to arXiv but handy for trending research.",
-    "zh": "论文聚合/速览；次于 arXiv，但便于发现热门研究。",
-    "jp": "論文集約/ダイジェスト。arXivに次ぐ、話題の研究発見に便利。",
+    "en": "Cool Papers (bojone) — an open-source immersive arXiv paper-discovery tool with real-time arXiv sync and AI summaries; secondary to arXiv but handy for trending research.",
+    "zh": "Cool Papers（bojone）——开源沉浸式 arXiv 论文发现工具，实时同步 arXiv 并附 AI 摘要；次于 arXiv，但便于发现热门研究。",
+    "jp": "Cool Papers（bojone）——オープンソースの没入型arXiv論文発見ツール。arXivをリアルタイム同期しAI要約付き。arXivに次ぐ、話題の研究発見に便利。",
     "cred": "high",
     "density": "high",
-    "cv": 0
+    "cv": 2
   },
   "llm-stats.com": {
     "cat": "data",
@@ -1159,5 +1159,77 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "developer.nvidia.com": {
+    "cat": "vendor",
+    "en": "NVIDIA's developer blog; first-hand for CUDA/GPU serving guides and model-serving deep dives — vendor bias, verify benchmarks.",
+    "zh": "NVIDIA 开发者博客；CUDA/GPU 服务指南与模型推理深度文章的一手来源——有厂商立场，基准需核实。",
+    "jp": "NVIDIAデベロッパーブログ。CUDA/GPUの配信ガイドやモデル推論の深掘り記事の一次情報——ベンダー寄り、ベンチは要検証。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "donews.com": {
+    "cat": "news",
+    "en": "Chinese tech/business media (DoNews); covers major tech-company releases — treat as a secondary signal, confirm against the primary vendor/repo.",
+    "zh": "国内科技/商业媒体（DoNews）；覆盖大厂发布——宜作为二手信号，需对照厂商/仓库一手来源核实。",
+    "jp": "中国のテック/ビジネスメディア（DoNews）。大手企業のリリースを報道——二次シグナル扱い、一次のベンダー/リポジトリで確認を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "bishopfox.com": {
+    "cat": "security",
+    "en": "Bishop Fox security research; deep first-hand vulnerability writeups — authoritative for the CVEs it discloses, cross-check the score against NVD/CISA.",
+    "zh": "Bishop Fox 安全研究；深入的一手漏洞分析——对其披露的 CVE 权威，评分建议与 NVD/CISA 交叉核对。",
+    "jp": "Bishop Foxのセキュリティ研究。深い一次情報の脆弱性解説——開示したCVEについては権威、スコアはNVD/CISAと突合を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "docs.cline.bot": {
+    "cat": "vendor",
+    "en": "Cline's official docs; first-hand for Cline features (Kanban, CLI flags) — verify against the linked repo.",
+    "zh": "Cline 官方文档；Cline 功能（Kanban、CLI 标志）的一手来源——宜与链接的仓库对照核实。",
+    "jp": "Cline公式ドキュメント。Clineの機能（Kanban、CLIフラグ）の一次情報——リンク先リポジトリとの突合推奨。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "censys.com": {
+    "cat": "security",
+    "en": "Censys internet-scanning intelligence; first-hand exposure telemetry for CVEs (exposed-instance counts) — authoritative on scan data, cross-check exploit detail against vendor/PoC.",
+    "zh": "Censys 互联网扫描情报；CVE 暴露面遥测（暴露实例数）的一手来源——扫描数据权威，利用细节建议与厂商/PoC 交叉核对。",
+    "jp": "Censysのインターネットスキャンインテリジェンス。CVEの露出テレメトリ（露出インスタンス数）の一次情報——スキャンデータは権威、悪用の詳細はベンダー/PoCと突合を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "turso.tech": {
+    "cat": "vendor",
+    "en": "Turso's official blog; first-hand for Limbo (SQLite-in-Rust) engineering deep dives — verify benchmark claims against the repo.",
+    "zh": "Turso 官方博客；Limbo（Rust 版 SQLite）工程深度文章的一手来源——基准声明宜对照仓库核实。",
+    "jp": "Turso公式ブログ。Limbo（Rust版SQLite）の深い技術記事の一次情報——ベンチマーク主張はリポジトリで確認を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "ionix.io": {
+    "cat": "security",
+    "en": "IONIX threat-center research; first-hand vulnerability writeups — confirm the CVE score and affected versions against NVD.",
+    "zh": "IONIX 威胁中心研究；一手漏洞分析——CVE 评分与受影响版本建议与 NVD 核对。",
+    "jp": "IONIXのスレットセンター研究。一次情報の脆弱性解説——CVEスコアと影響範囲はNVDで確認を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "nvd.nist.gov": {
+    "cat": "security",
+    "en": "NIST National Vulnerability Database — the canonical CVE severity/affected-versions reference; authoritative, cross-check vendor writeups against it.",
+    "zh": "NIST 国家漏洞库（NVD）——CVE 严重度与受影响版本的权威参考；厂商分析应以它为准核对。",
+    "jp": "NIST National Vulnerability Database（NVD）——CVEの深刻度・影響範囲の正典リファレンス。ベンダー解説はこれと突合を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 3
   }
 }

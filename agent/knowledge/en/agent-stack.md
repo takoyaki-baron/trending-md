@@ -45,6 +45,16 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   training was bottlenecked by bespoke sandbox infra, not models — a ~3B-active-param model at ~70%
   SWE-bench says infra, not scale, was the constraint.
 
+- **DeepSeek Harness** — `deepseek-ai/deepseek-harness`, MIT, v0.1 developer preview (TypeScript).
+  A coding-and-office agent framework built on the **Cordis** plugin system: models, tools, skills,
+  sessions, sandboxes, storage, scheduling, and UI are all composable plugins — developers extend or
+  replace capabilities at the config layer without touching the core. Four run modes (Standard, PTC
+  programmatic tool-calling, Minimal, Create); append-only session logs + a Trajectory view support
+  resume/fork/retrieve/replay. `npx @deepseek-ai/dsh web`. ~38.9K stars. Signal: DeepSeek extends its
+  "cheap frontier models" play into the harness layer — and "everything is a plugin" means it built
+  its *own* plugin system (Cordis) rather than adopting Agent Plugins 1.0.0, a format-fragmentation
+  watch-item (see [[agent-plugins]]).
+
 ## Model routing
 - **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`, Apache 2.0, Rust. Proxy/library that translates
   between OpenAI Chat, Anthropic Messages, and OpenAI Responses formats and routes each request
@@ -124,6 +134,31 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   permission configs, and cron scheduling, behind a pluggable "harness" interface. TypeScript.
   ~13K stars in ~2 weeks. Signal: the shift from single-user CLI wrappers to multi-user, permissioned
   agent infrastructure — "agents as organizational infrastructure."
+
+- **Cline Kanban** — `cline/kanban`, Apache 2.0, research preview. A local web board that runs CLI
+  coding agents (Cline, Claude Code, Codex, OpenCode — auto-detected) in parallel against one repo.
+  Each card spins up an ephemeral git worktree (sharing git-ignored files like `node_modules` via
+  symlinks), so agents work side-by-side without merge conflicts; cards chain into dependency DAGs
+  and combine with auto-commit/auto-PR toggles into pipelines, while a built-in review loop sends
+  inline diff comments back to the agent. `npx kanban`. Worktree-per-task is now the standard
+  isolation primitive for parallel agent orchestration (Cline CLI v3.0.3 also added `--worktree`).
+- **LoopX** — `huangruiteng/loopx`, MIT (a ByteDance engineer). A provider-neutral **state kernel**
+  for long-running agent teams: objectives, typed todos, claims/leases, evidence logs, quota-aware
+  auto-wake, and verifiable handoffs stay stable while Codex / Claude Code / Cursor execute bounded
+  turns. Explicitly *not* a runtime — it answers "may the loop continue?" and projects into a Kanban
+  (e.g. a Lark/Feishu adapter) that is never the source of truth. Local-first in a `.loopx/` dir, no
+  deps beyond the Python stdlib; dangerous permissions + production writes stay human-gated. ~4.6K
+  stars. Signal: as runs stretch to days, the missing layer is durable state + human gates — "board
+  is a projection, kernel is truth."
+
+### The decomposition: plugin graph + state kernel + isolation primitive
+
+Three new entrants sketch the same architecture from different angles: **DeepSeek Harness** makes
+every component a plugin (the *plugin graph*), **LoopX** separates durable state + human gates from
+the runtime (the *state kernel*), and **Cline Kanban** makes git-worktree-per-task the *isolation
+primitive* for parallel agents (alongside Orca and Cline CLI `--worktree`). The monolithic CLI is
+decomposing into these three separable layers — consolidation is happening *by layer*, not into one
+monolith.
 
 ## Education
 - **ai-agent-book** — `bojieli/ai-agent-book` (Li Bojie), Apache 2.0. "Deep Understanding of AI

@@ -61,6 +61,27 @@ summaries into net-new first-hand detail:
 The takeaway: fact-checking isn't a gate that only removes false items — it's the mechanism that
 converts a thin summary into the detail the feed is supposed to deliver.
 
+## Correcting after publish (the other half of the method)
+
+Fact-checking is not only a pre-publish gate — the same discipline applies *after* an item ships and
+turns out wrong. The feed-correction convention (codified in `CLAUDE.md` after the Void correction,
+2026-08-13) is the post-publication half of this method:
+
+1. **Fix the body in place** — keep the item's number and position; rewrite title/description to
+   state what is actually true ("archived and deprecated", not "trending"). Never renumber or
+   silently drop.
+2. **Retract the bogus link** — remove any source that never contained the attributed fact; replace
+   it with a source you have actually visited (the repo itself, the real vendor page).
+3. **Keep ≥2 valid links** — every corrected item still needs at least two visited, working sources.
+4. **Re-derive velocity** — a corrected item's velocity drops to match reality (▮ steady), never
+   keeps its inflated rank.
+5. **Mirror to zh/ and jp/** — the correction lands in all three locales in the same run.
+
+The unified method: **verify before you publish, correct after you discover.** Both halves start by
+visiting the primary source; neither starts from the aggregate's framing. Void is the standing
+example of the first half (caught before publication), the in-place correction is the standing
+example of the second (caught after).
+
 ## When to apply
 
 Every batch, before publishing: run the checklist on each item. Treat any item where you cannot

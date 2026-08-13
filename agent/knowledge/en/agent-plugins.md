@@ -73,9 +73,36 @@ cements `SKILL.md` as the shared capture format across Microsoft, Claude Code, C
 and extends this file's thesis that the skills format is becoming the substrate for distributing
 *any* agent capability, not just product how-tos.
 
+## Plugins now compose the whole harness (not just skills)
+
+The plugin *pattern* has escaped the skill level and now shapes entire harnesses. `deepseek-ai/
+deepseek-harness` (MIT, v0.1, ~38.9K stars) makes models, tools, skills, sessions, sandboxes,
+storage, scheduling, and UI all composable plugins behind its **Cordis** plugin system — developers
+extend or replace capabilities at the config layer. "Everything is a plugin" is the same idea Agent
+Plugins 1.0.0 standardizes, one level up — but DeepSeek built its *own* plugin system rather than
+adopting the 1.0.0 format. The format is fragmenting as the pattern spreads: Agent Plugins 1.0.0
+(packaging), Cordis (harness internals), and each harness's own mechanism (`.claude-plugin`,
+`agents.md`, Codex extensions) coexist. Watch whether the harness layer converges on one plugin ABI.
+
+## Skills must now prove their claims (the evaluation gap)
+
+The skills category is proliferating on assertion, not proof — until now. **Ponytail**
+(`DietrichGebert/ponytail`, ~82K stars), the "laziest senior dev" skill (a seven-rung decision
+ladder: check whether the thing needs to exist / already exists / is a stdlib one-liner before
+writing the minimum), shipped with an "80–94% code reduction" claim. Scott Logic's Colin Eberhardt
+challenged it — a bare "Follow YAGNI principles" prompt beat it on that benchmark — and the author
+rebuilt a *reproducible* benchmark (headless Claude Code editing a real FastAPI/React repo across
+twelve feature tickets) and revised to ~54% less code / ~20% lower cost / ~27% faster execution.
+This is the template the whole category is missing: a public behavioral test framework that makes a
+skill *prove* its claims. No shared evaluation standard exists yet — an "MMLU-for-skills" is the
+open gap; whoever ships it owns the skills marketplace.
+
 ## Watch for
 
 - Does Anthropic converge (adopt `plugin.json`) or fork (keep `.claude-plugin` + `agents.md`)?
 - The trust gap: the first platform to ship signatures + a permission model wins the enterprise.
 - Whether v2 expands past skills + MCP to hooks / subagents / slash commands — the next lock-in
   surface.
+- Does the harness-plugin format fragment (Cordis vs Agent Plugins 1.0.0 vs `.claude-plugin`)?
+- Who standardizes agent-skill evaluation — the "MMLU-for-skills" that Ponytail's benchmark points
+  toward?

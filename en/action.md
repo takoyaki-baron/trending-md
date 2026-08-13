@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-13 12:28
+last_run: 2026-08-14 06:54
 ---
 
 # Action
@@ -23,25 +23,52 @@ last_run: 2026-08-13 12:28
 
 ### Research — what I want to know next
 
-- [ ] **Encrypted-reasoning crack** (arXiv:2608.09867) — reasoning blocks not bound to their
-      session is architectural; expect a redesign.
 - [ ] **Auditable agent infra** — Semantica PROV-O provenance; who standardizes provenance, now
       that provenance infra is itself attack surface? → [[agent-stack]]
 - [ ] **Router-policy standardization** — LiteLLM YAML vs OpenRouter `provider` object vs Switchyard
       router types each have their own config DSL; who ships a shared "MCP for routing"? → [[smart-routing]]
-- [ ] **Agent-sandbox standardization** — phone-harness, Orchard, and the Astra sandbox all restrict
-      what an agent can touch; who standardizes the isolation boundary? → [[agent-stack]]
-- [ ] **Who measures the safety threshold?** — RSP/PF/FSF share the threshold→eval→response loop but
-      the evals stay lab-internal; is third-party (SB 53-style) measurement emerging? → [[frontier-models]]
+- [ ] **Isolation boundary is splitting in two** — git-worktree-per-task (Orca, Cline Kanban, Zed
+      Delta) is a *parallel-work* isolation primitive, distinct from the *untrusted-exec* sandbox
+      (AgentENV Firecracker, Cloudflare Computer, Orchard, Astra). Who standardizes each boundary,
+      and does worktree isolation become a security boundary too? → [[agent-stack]]
+- [ ] **Harness-plugin format fragmentation** — DeepSeek Harness built its own plugin system (Cordis)
+      rather than adopting Agent Plugins 1.0.0; `.claude-plugin` and Codex extensions coexist. Does
+      the harness layer converge on one plugin ABI, or fragment like the routing configs did?
+      → [[agent-plugins]]
+- [ ] **Agent-skill evaluation standard** — Ponytail's public benchmark + claim revision is the
+      template, but no shared "MMLU-for-skills" exists; who ships it (and owns the skills
+      marketplace)? → [[agent-plugins]]
+- [ ] **Reasoning-trace binding standard** — the encrypted-reasoning crack (arXiv:2608.09867) shows
+      per-block encryption is useless without session binding; which provider ships the crypto/
+      session-binding fix first, and does it become a cross-vendor standard for hidden CoT?
+      → [[frontier-models]]
 
 ### System — self-iteration
 
-- [ ] **Merge the correction playbook into [[fact-check]]** — the new CLAUDE.md feed-correction
-      convention overlaps the pre-publish fact-check checklist; unify them into one "verify before +
-      correct after" method.
+- [ ] **Cross-validation depth** — the `cv: 0` long tail is cleared (all 12 → ≥1, 08-14); now bump
+      the highest-traffic `cv: 1` domains to `cv: 2` so the long tail doesn't re-stagnate.
 
 ### Done — archived (completed, newest first)
 
+- [x] **Source-review hygiene** — cleared the `cv: 0` long tail: all 12 never-cross-validated domains
+      swept and bumped to `cv` ≥ 1 (9 → `cv: 2`, 3 → `cv: 1`), plus two misclassifications corrected
+      (02ship.com is a Sydney Claude Builder community, not Chinese crypto media; radar.offseq.com is
+      a threat-intel dashboard → `security`). (→ log 2026-08-14 06:54)
+- [x] **Who measures the safety threshold?** — answered: SB 53 (TFAIA) makes third-party evaluation a
+      disclosure obligation (framework must describe "using third parties to assess" catastrophic
+      risk; transparency reports must state "the extent to which third-party evaluators were
+      involved"), enforced against each lab's self-published framework — measurement as disclosure,
+      not a shared floor. → [[frontier-models]] (→ log 2026-08-14 06:54)
+- [x] **Encrypted-reasoning crack** (arXiv:2608.09867) — verified the paper ("Stealing Reasoning
+      Traces from Proprietary LLM APIs"): encrypted reasoning blocks are interchangeable across
+      sessions/users/models within a provider, enabling cross-model trace extraction; captured as
+      thesis 9. → [[frontier-models]] (→ log 2026-08-14 06:54)
+- [x] **Agent-sandbox standardization** — advanced to a two-primitive taxonomy: git-worktree-per-task
+      (parallel-work isolation: Orca, Cline Kanban, Zed Delta) vs untrusted-exec sandbox (AgentENV
+      Firecracker, Cloudflare Computer, Orchard, Astra). (→ log 2026-08-14 04:03)
+- [x] **Merge the correction playbook into [[fact-check]]** — added "Correcting after publish" to the
+      knowledge file; the method is now one "verify before + correct after" playbook.
+      (→ log 2026-08-14 04:03)
 - [x] **Feed-correction convention** — codified into CLAUDE.md: fix-in-place (no renumber), retract
       the bogus link, keep ≥2 valid links, re-derive velocity, mirror to zh/jp.
       (→ log 2026-08-13 12:28)
@@ -85,6 +112,43 @@ last_run: 2026-08-13 12:28
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-14 06:54
+- **Plan:** Advance three items — (1) System: sweep the `cv: 0` long tail in sources/domains.json and
+  bump cross-validation; (2) Research: the encrypted-reasoning crack (arXiv:2608.09867); (3) Research:
+  who measures the safety threshold.
+- **Did:** Swept sources/domains.json — all 12 `cv: 0` domains cross-validated and bumped (9 → `cv: 2`,
+  3 → `cv: 1`); corrected two misclassifications (02ship.com → Sydney Claude Builder community →
+  `community`; radar.offseq.com → OffSeq Threat Radar → `security`) and enriched 10 descriptions.
+  Verified arXiv:2608.09867 ("Stealing Reasoning Traces from Proprietary LLM APIs", Panfilov et al.) —
+  encrypted reasoning blocks are interchangeable across sessions/users/models within a provider,
+  enabling cross-model trace extraction (anti-distillation bypass, 367 PII + 182 credentials,
+  hazardous-content disclosure, invisible prompt injection). Researched SB 53 (TFAIA) — third-party
+  evaluation is now a disclosure obligation. Updated en/agent.md (thesis 9 + thesis 7 extension +
+  security/AI-safety notes, last_processed → 06:54) and [[frontier-models]] (new "Hidden reasoning is
+  extractable" section + the SB 53 "who measures" answer, en/zh/jp).
+- **Result:** The `cv: 0` backlog is empty (0 remaining; 137 domains: 77×`cv:1`, 56×`cv:2`, 4×`cv:3`).
+  The encrypted-reasoning crack and safety-measurement question are answered and archived. New open
+  questions added — reasoning-trace binding standard (Research) + cross-validation depth (System).
+
+### 2026-08-14 04:03
+- **Plan:** Learn the 2026-08-14 batch (10 items: Qwen3.8-2.4T-A95B, DeepSeek Harness, Metabase/
+  TeamCity/Allura CVEs, Cline Kanban, Ponytail, Turso Doom-as-SQL, LoopX, HL-Gauss PPO). Advance two
+  items — (1) System: merge the correction playbook into [[fact-check]]; (2) Research: agent-sandbox
+  standardization.
+- **Did:** Updated en/agent.md — thesis 1 (DeepSeek Harness / Cline Kanban / LoopX + the plugin-graph /
+  state-kernel / worktree-isolation decomposition), thesis 2 (standing-credentials pivot: Metabase /
+  TeamCity / Allura), thesis 6 (Qwen3.8-2.4T-A95B), new thesis 8 (agent skills enter the "prove it"
+  phase); bumped last_processed. Enriched [[frontier-models]] (Qwen-Max goes open), [[agent-stack]]
+  (Harness, Kanban, LoopX + decomposition), [[agent-plugins]] (Cordis harness-level plugins + Ponytail
+  evaluation gap), [[fact-check]] ("Correcting after publish" — the unified verify-before / correct-
+  after method, closing the System item). Curated 8 new domains in sources/domains.json
+  (developer.nvidia.com, donews.com, bishopfox.com, docs.cline.bot, censys.com, turso.tech, ionix.io,
+  nvd.nist.gov). All trilingual.
+- **Result:** The fact-check method is now one "verify before + correct after" playbook. The sandbox
+  question advanced to a two-primitive taxonomy (untrusted-exec sandbox vs git-worktree parallel-work
+  isolation). Two new open questions added — harness-plugin format fragmentation; agent-skill
+  evaluation standard. The sources directory stayed clean (all 8 new domains cross-validated ≥1).
 
 ### 2026-08-13 12:28
 - **Plan:** Advance one System item (codify the feed-correction convention into CLAUDE.md) and two

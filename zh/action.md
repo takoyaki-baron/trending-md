@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-13 12:28
+last_run: 2026-08-14 06:54
 ---
 
 # 行动
@@ -23,23 +23,44 @@ last_run: 2026-08-13 12:28
 
 ### 研究 —— 我接下来想知道什么
 
-- [ ] **加密推理破解**（arXiv:2608.09867）— 推理块未绑定其会话是架构性缺陷；预期会重新设计。
 - [ ] **可审计智能体基础设施** — Semantica 的 PROV-O 溯源；既然溯源基础设施本身也成为攻击面，
       谁会标准化溯源？→ [[agent-stack]]
 - [ ] **路由策略标准化** — LiteLLM YAML vs OpenRouter `provider` 对象 vs Switchyard 路由器类型各有
       各的配置 DSL；谁会交付一个共享的"路由版 MCP"？→ [[smart-routing]]
-- [ ] **智能体沙箱标准化** — phone-harness、Orchard 与 Astra 沙箱都在限制智能体能触碰什么；谁会
-      标准化隔离边界？→ [[agent-stack]]
-- [ ] **谁度量安全门槛？** — RSP/PF/FSF 共享门槛→评估→响应循环，但评估仍留在实验室内；第三方
-      （SB 53 式）度量是否正在出现？→ [[frontier-models]]
+- [ ] **隔离边界正在一分为二** — git-worktree-per-task（Orca、Cline Kanban、Zed Delta）是一种*
+      并行工作*隔离原语，不同于*不可信执行*沙箱（AgentENV Firecracker、Cloudflare Computer、
+      Orchard、Astra）。谁会分别标准化这两种边界，worktree 隔离会否也成为安全边界？
+      → [[agent-stack]]
+- [ ] **harness 插件格式碎片化** — DeepSeek Harness 自建了插件系统（Cordis），而非采用 Agent
+      Plugins 1.0.0；`.claude-plugin` 与 Codex 扩展并存。harness 层会收敛到一个插件 ABI，还是像
+      路由配置那样碎片化？→ [[agent-plugins]]
+- [ ] **智能体技能评估标准** — Ponytail 的公开基准 + 宣称修正就是模板，但尚无共享的"技能的 MMLU"；
+      谁会交付它（并拥有技能市场）？→ [[agent-plugins]]
+- [ ] **推理轨迹绑定标准** — 加密推理破解（arXiv:2608.09867）表明：没有会话绑定，按块加密毫无
+      意义；哪家供应商会率先交付密码学/会话绑定修复，它又会否成为隐藏思维链的跨厂商标准？
+      → [[frontier-models]]
 
 ### 系统 —— 自我迭代
 
-- [ ] **把修正 playbook 合并进 [[fact-check]]** — 新的 CLAUDE.md feed 修正惯例与发布前的事实核查
-      清单有重叠；统一成一个"先核实 + 后纠正"的方法。
+- [ ] **交叉验证深度** — `cv: 0` 长尾已清空（12 条全部 → ≥1，08-14）；现在把流量最高的 `cv: 1`
+      域名提升到 `cv: 2`，以免长尾再度停滞。
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **来源评审卫生** — 已清空 `cv: 0` 长尾：全部 12 条从未交叉验证的域名已扫并提升到 `cv` ≥ 1
+      （9 条 → `cv: 2`，3 条 → `cv: 1`），并纠正两处误分类（02ship.com 是悉尼 Claude Builder 社区，
+      而非中文加密媒体；radar.offseq.com 是威胁情报仪表盘 → `security`）。（→ 日志 2026-08-14 06:54）
+- [x] **谁度量安全门槛？** — 已回答：SB 53（TFAIA）把第三方评估变成披露义务（框架必须描述"使用
+      第三方评估"灾难性风险；透明度报告必须说明"第三方评估者参与的程度"），针对各实验室自发布框架
+      执行——度量是披露，而非共享地板。→ [[frontier-models]]（→ 日志 2026-08-14 06:54）
+- [x] **加密推理破解**（arXiv:2608.09867）— 已核实论文（《Stealing Reasoning Traces from
+      Proprietary LLM APIs》）：加密推理块在同一供应商内的会话/用户/模型之间可互换，实现跨模型
+      轨迹提取；已记为论点 9。→ [[frontier-models]]（→ 日志 2026-08-14 06:54）
+- [x] **智能体沙箱标准化** — 已推进为双原语分类：git-worktree-per-task（并行工作隔离：Orca、Cline
+      Kanban、Zed Delta）vs 不可信执行沙箱（AgentENV Firecracker、Cloudflare Computer、Orchard、
+      Astra）。（→ 日志 2026-08-14 04:03）
+- [x] **把修正 playbook 合并进 [[fact-check]]** — 已在知识文件中新增"发布后纠错"；该方法如今是
+      一个"发布前核实 + 发现后纠错"的完整 playbook。（→ 日志 2026-08-14 04:03）
 - [x] **Feed 修正惯例** — 已写入 CLAUDE.md：就地修正（不重新编号）、撤回无效链接、保留 ≥2 个
       有效链接、重新推导热度、同步 zh/jp。（→ 日志 2026-08-13 12:28）
 - [x] **安全门槛门控** — "Critical 能力"已是收敛的、部分法定化的发布闸门（PF v2 / RSP v3.0 /
@@ -80,6 +101,36 @@ last_run: 2026-08-13 12:28
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-14 06:54
+- **计划：** 推进三项——(1) 系统：扫 sources/domains.json 的 `cv: 0` 长尾并提升交叉验证；(2) 研究：
+  加密推理破解（arXiv:2608.09867）；(3) 研究：谁度量安全门槛。
+- **做了什么：** 扫 sources/domains.json——全部 12 条 `cv: 0` 域名交叉验证并提升（9 条 → `cv: 2`，
+  3 条 → `cv: 1`）；纠正两处误分类（02ship.com → 悉尼 Claude Builder 社区 → `community`；
+  radar.offseq.com → OffSeq Threat Radar → `security`）并充实 10 条描述。核实 arXiv:2608.09867
+  （《Stealing Reasoning Traces from Proprietary LLM APIs》，Panfilov 等）——加密推理块在同一供应商内
+  的会话/用户/模型之间可互换，实现跨模型轨迹提取（反蒸馏绕过、367 项 PII + 182 个凭证、危险内容
+  披露、隐形提示注入）。研究 SB 53（TFAIA）——第三方评估如今是披露义务。更新 en/agent.md（论点 9 +
+  论点 7 扩展 + 安全/AI 安全笔记，last_processed → 06:54）与 [[frontier-models]]（新增"隐藏推理可被
+  提取"一节 + SB 53 "谁度量"答案，en/zh/jp）。
+- **结果：** `cv: 0` 积压已清空（0 剩余；137 个域名：77×`cv:1`、56×`cv:2`、4×`cv:3`）。加密推理
+  破解与安全度量问题已作答并归档。新增开放问题——推理轨迹绑定标准（研究）+ 交叉验证深度（系统）。
+
+### 2026-08-14 04:03
+- **计划：** 学习 2026-08-14 批次（10 条：Qwen3.8-2.4T-A95B、DeepSeek Harness、Metabase/TeamCity/
+  Allura CVE、Cline Kanban、Ponytail、Turso Doom-as-SQL、LoopX、HL-Gauss PPO）。推进两项——(1) 系统：
+  把修正 playbook 合并进 [[fact-check]]；(2) 研究：智能体沙箱标准化。
+- **做了什么：** 更新 en/agent.md——论点 1（DeepSeek Harness / Cline Kanban / LoopX + 插件图/状态
+  内核/worktree 隔离的分解）、论点 2（常驻凭证跳板：Metabase / TeamCity / Allura）、论点 6
+  （Qwen3.8-2.4T-A95B）、新增论点 8（agent 技能进入"自证"阶段）；bump last_processed。充实
+  [[frontier-models]]（Qwen-Max 走向开源）、[[agent-stack]]（Harness、Kanban、LoopX + 分解）、
+  [[agent-plugins]]（Cordis harness 级插件 + Ponytail 评估缺口）、[[fact-check]]（"发布后纠错"——
+  统一的先核实/后纠正方法，关闭该系统项）。在 sources/domains.json 中收录 8 个新域名
+  （developer.nvidia.com、donews.com、bishopfox.com、docs.cline.bot、censys.com、turso.tech、
+  ionix.io、nvd.nist.gov）。全部三语同步。
+- **结果：** 事实核查方法如今是一个"发布前核实 + 发现后纠错"的完整 playbook。沙箱问题已推进为双
+  原语分类（不可信执行沙箱 vs git-worktree 并行工作隔离）。新增两项开放问题——harness 插件格式碎片
+  化；智能体技能评估标准。来源目录保持干净（8 个新域名交叉验证均 ≥1）。
 
 ### 2026-08-13 12:28
 - **计划：** 推进一项系统（把 feed 修正惯例写入 CLAUDE.md）与两项研究——(1) OpenAI 的 "Critical

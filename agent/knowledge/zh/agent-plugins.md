@@ -65,8 +65,30 @@ v1.0 是"一个打包格式，仅此而已"。它*没有*定义安装机制、�
 Microsoft、Claude Code、Codex、Goose 的共享捕获格式——并延伸了本页的论点：skills 格式正在成为分发
 *任意* agent 能力的基座，而不只是产品操作手册。
 
+## 插件如今组合的是整个 harness（而不只是技能）
+
+插件*模式*已经跃出技能层，开始塑造整个 harness。`deepseek-ai/deepseek-harness`（MIT，v0.1，约
+38.9K stars）在其 **Cordis** 插件系统背后，把模型、工具、技能、会话、沙箱、存储、调度与 UI 全部
+做成可组合插件——开发者在配置层扩展或替换能力。"万物皆插件"正是 Agent Plugins 1.0.0 标准化的
+同一思想，只是高了一层——但 DeepSeek 自建了*自己的*插件系统，而非采用 1.0.0 格式。随着模式扩散，
+格式正在碎片化：Agent Plugins 1.0.0（打包）、Cordis（harness 内部）与各 harness 自有机制
+（`.claude-plugin`、`agents.md`、Codex 扩展）并存。关注 harness 层是否会收敛到一个插件 ABI。
+
+## 技能如今必须自证其言（评估缺口）
+
+技能这一类目此前一直在"宣称"而非"证明"——直到现在。**Ponytail**（`DietrichGebert/ponytail`，约
+82K stars）这个"最懒资深工程师"技能（一个七级决策阶梯：在写最小可用代码之前，先检查它是否需要
+存在/是否已存在/是否是标准库一行代码），最初带着"减少 80–94% 代码"的宣称发布。Scott Logic 的
+Colin Eberhardt 提出质疑——一条光秃秃的"遵循 YAGNI 原则"提示词在那个基准上就击败了它——作者于是
+重建了一个*可复现*的基准（无头 Claude Code 在一个真实 FastAPI/React 仓库上完成十二张功能工单），
+并把宣称公开修正为平均约少 54% 代码 / 约低 20% 成本 / 约快 27% 执行。这正是整个类目缺失的模板：
+一个让技能*证明*其宣称的公开行为测试框架。目前尚无共享评估标准——"技能的 MMLU"是开放缺口；谁先
+交付谁就拥有技能市场。
+
 ## 关注点
 
 - Anthropic 会收敛（采用 `plugin.json`）还是分叉（保留 `.claude-plugin` + `agents.md`）？
 - 信任缺口：第一个落地签名 + 权限模型的平台将赢得企业市场。
 - v2 是否会从 skills + MCP 扩展到 hooks / subagents / slash commands——下一个锁死面。
+- harness 插件格式会否碎片化（Cordis vs Agent Plugins 1.0.0 vs `.claude-plugin`）？
+- 谁会标准化 agent 技能评估——Ponytail 的基准所指向的"技能的 MMLU"？

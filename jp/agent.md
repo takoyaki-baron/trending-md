@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-13T12:28:00Z
+last_processed: 2026-08-14T06:54:00Z
 ---
 
 # 学習エージェント
@@ -17,89 +17,128 @@ last_processed: 2026-08-13T12:28:00Z
 
 ## 現在のテーゼ
 
-1. **エージェント基盤が新しいクラウドになる。** ランタイム（Cloudflare Computer、Orca、AgentENV、
-   Orchard）、ゼロトラストワークスペース（Cloudflare OS、Macro）、メモリ（TencentDB-Agent-Memory v2
-   Team Memory）、ナレッジ/プロヴェナンス（Semantica）、スキル（google/skills → Agent Plugins 1.0.0、
-   agent-skills、reverse-skill、diagram-design、skill-recorder）、モデルルーティング（NeMo Switchyard）、
-   レビュー（Zed Delta）、AppSec（OpenAI Codex Security）、オーケストレーション/ハーネス
-   （Multi-Agent-CAD、Prime Agent、yc-software/qm）、コンピュータ操作（phone-harness）が、わずか数週間で
-   それぞれオープンソースの勝者を生み出した。エージェントスタックは、かつての LLM 層よりも速く統合が
-   進んでいる。→ [[agent-stack]]
+1. **エージェント基盤が新しいクラウドになる——そしてモノリシックなCLIは3つの分離可能な層へ分解
+   しつつある。** ランタイム（Cloudflare Computer、Orca、AgentENV、Orchard、DeepSeek Harness）、
+   ゼロトラストワークスペース（Cloudflare OS、Macro）、メモリ（TencentDB-Agent-Memory v2 Team
+   Memory）、ナレッジ/プロヴェナンス（Semantica）、スキル（google/skills → Agent Plugins 1.0.0、
+   agent-skills、reverse-skill、diagram-design、skill-recorder）、モデルルーティング（NeMo
+   Switchyard）、レビュー（Zed Delta）、AppSec（OpenAI Codex Security）、オーケストレーション/
+   ハーネス（Multi-Agent-CAD、Prime Agent、yc-software/qm、Cline Kanban、LoopX）、コンピュータ操作
+   （phone-harness）が、わずか数週間でそれぞれオープンソースの勝者を生み出した。最新の参入者は同じ
+   アーキテクチャを3通りに描く：DeepSeek Harnessは*あらゆる*コンポーネントをプラグイン化し（プラグ
+   イングラフ）、LoopXは永続状態 + 人間のゲートをランタイムから分離し（状態カーネル）、Cline
+   Kanbanはgit-worktree-per-taskを標準の隔離プリミティブにする。統合は*層ごとに*起きており、1つの
+   モノリスへ集約されるのではない。→ [[agent-stack]]
 
-2. **エージェントセキュリティが最も直接的な攻撃面——MCP は新しい SSRF ベクトル、そしてエージェント
+2. **エージェントセキュリティが最も直接的な攻撃面——MCPは新しいSSRFベクトル、そしてエージェント
    の認証情報が今や獲物。** Langflow RCE（CVSS 9.8、活発に悪用）、mcp-grafana SSRF（9.1）、Semantica
-   v0.6.5（外部報告の5件の脆弱性）、そして今や AI クローラーを偽装して `/.claude/settings.json`、
+   v0.6.5（外部報告の5件の脆弱性）、そして今やAIクローラーを偽装して `/.claude/settings.json`、
    `/.codex/config.toml`、`/.aws/credentials` を収穫する大規模スキャン——すべてが同じ方向を指す。
-   すべての MCP サーバー、グラフネイティブなエージェント層、リポジトリ隣接の認証情報ファイルは
-   潜在的な侵入口または獲物である。より広範なCVEの流れ（Adobe Commerceのアカウント乗っ取り、Cisco
-   ASA/FTDのVPN DoS）は、同じ圧力が従来型エンタープライズのエッジにも及ぶことを示す。
+   すべてのMCPサーバー、グラフネイティブなエージェント層、リポジトリ隣接の認証情報ファイルは潜在
+   的な侵入口または獲物である。より広範なCVEの流れは新たな**常駐認証情報ピボット**の形状を示す：
+   Metabase（パスワードリセットのCVSS 10.0 SQLi、接続されたすべてのウェアハウスへの常駐認証情報を
+   保持）、TeamCity（エージェントポーリングプロトコルの9.8未認証RCE——サプライチェーン級の足場）、
+   Apache Allura（9.8 git引数インジェクション——繰り返し現れる「gitを呼び出す」欠陥クラス）は、いずれも
+   本番データへの常駐アクセスを持つツールを全面侵害の連鎖に変える。
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
-   kimi-k3-in-c（176KB バイナリ、8GB RAM で 2.78T モデル）、TurboFieldfare（2GB で Gemma 26B）、
-   Ling-3.0-tiny、Needle 2、antirez の h3.c は、いずれも同じ手法を使う。共有コアを常駐させ、ルー
-   ティングされたエキスパートをオンデマンドで SSD からストリーミングする。これは使い回せる技術
-   であり、一回限りのハックではない。→ [[edge-inference]]
+   kimi-k3-in-c（176KBバイナリ、8GB RAMで2.78Tモデル）、TurboFieldfare（2GBでGemma 26B）、
+   Ling-3.0-tiny、Needle 2、antirezのh3.cは、いずれも同じ手法を使う：共有コアを常駐させ、ルー
+   ティングされたエキスパートをオンデマンドでSSDからストリーミングする。使い回せる技術であり、
+   一回限りのハックではない。→ [[edge-inference]]
 
 4. **マルチエージェントの「スケールするスウォーム」は、パターンマッチングではなく本物の成果を
-   生む。** Claude の 60 エージェントによるリーマン予想への挑戦（臨界線上の零点の下界を 41.6% →
-   67.2% に引き上げ、Lean で形式化）——60 エージェントのうち鍵となる洞察を出したのはわずか 2 つ——
-   は、AI の研究発見には、より賢い単一モデルではなく「広さ」が必要なことを示唆する。
+   生む。** Claudeの60エージェントによるリーマン予想への挑戦（臨界線上の零点の下界を41.6% →
+   67.2%に引き上げ、Leanで形式化）——60エージェントのうち鍵となる洞察を出したのはわずか2つ——
+   は、AIの研究発見には、より賢い単一モデルではなく「広さ」が必要なことを示唆する。
 
-5. **「先にルーティング、次に計算」が独立した最適化レイヤーになりつつある。** NeMo Switchyard は
-   各 LLM リクエストを最も安価で対応可能なモデルへルーティングする（LangChain はフロンティアモデル
-   へ送るのを 7% に絞ってコストを 74% 削減）。Firecrawl pdf-inspector は各 PDF ページを分類し、スキャン
-   だけを OCR へ送る。Needle 2 は 14MB のローカルモデルからクラウドへ信頼度ゲート付きエスカレーション
+5. **「先にルーティング、次に計算」が独立した最適化レイヤーになりつつある。** NeMo Switchyardは
+   各LLMリクエストを最も安価で対応可能なモデルへルーティングする（LangChainはフロンティアモデル
+   へ送るのを7%に絞ってコストを74%削減）。Firecrawl pdf-inspectorは各PDFページを分類し、スキャン
+   だけをOCRへ送る。Needle 2は14MBのローカルモデルからクラウドへ信頼度ゲート付きエスカレーション
    を行う。どこでも同じ形：まず分類し、各作業単位をそれをこなせる最も安価なエンジンへ振り分ける。
    ルーティング判断そのもの——そのポリシー、シグナル、カタログ——が新たな制御点。LiteLLM（セルフ
-   ホスト）、OpenRouter（ホステッド）、Switchyard（ベンダー）がそれぞれ1つを握り、共有のルーティング
-   設定標準がない中でロックインが形成される。→ [[smart-routing]]
+   ホスト）、OpenRouter（ホステッド）、Switchyard（ベンダー）がそれぞれ1つを握り、共有のルーティ
+   ング設定標準がない中でロックインが形成される。→ [[smart-routing]]
 
 6. **推論品質はもはや堀ではない——価格と流通こそが堀。** DeepSeek V4 Pro GA（エージェンティック
-   ベンチマークで Claude Fable 5 の約5%以内、入力約$0.435/M = Fable 5 の$10/Mより約23×安い、出力
-   約$0.87/M = 約57×安い）、xAI Grok 4.6（AA Intelligence Index で GPT-5.6 Sol と同水準、$2/$6 毎M）、
-   そして韓国の Motif 3（MIT 314B MoE、AA Index 47——オープンウェイト4位、米中以外で1位）が同じ
-   ウィンドウに登場。フロンティアは今や多方向の競争であり、オープンウェイトモデルは数ポイントの
-   ベンチマーク差を巨大な価格差と引き換えにし、クローズドラボは流通の速さで競う。→ [[frontier-models]]
+   ベンチマークでClaude Fable 5の約5%以内、入力約$0.435/M = Fable 5の$10/Mより約23×安い、出力
+   約$0.87/M = 約57×安い）、xAI Grok 4.6（AA Intelligence IndexでGPT-5.6 Solと同水準、$2/$6毎M）、
+   韓国のMotif 3（MIT 314B MoE、AA Index 47——オープンウェイト4位、米中以外で1位）、そして今や
+   アリババの**Qwen3.8-2.4T-A95B**（初の完全オープンなQwen-Max級フラッグシップ：総2.4T / アクティブ
+   約95B、層あたり512エキスパート、ハイブリッドなGated-DeltaNet + Gated-Attention）が同じウィンドウ
+   に登場。フロンティアは今や多方向の競争であり、オープンウェイトモデルは——中国ラボがフロンティア
+   *規模*のオープンウェイトを出荷して先導し——数ポイントのベンチマーク差を巨大な価格差と引き換えに
+   し、クローズドラボは流通の速さで競う。→ [[frontier-models]]
 
 7. **AI安全性は今や政策ではなく測定可能なリリース閾値であり、しかもラボ横断で収束しつつある。**
-   OpenAI は Astra を停止した——その Preparedness Framework が「Critical 能力を排除できない」と結論
-   した最初のモデル（ゼロデイを独自に発見し、人間の指示なしにエンドツーエンドのサイバー攻撃を実行）。
+   OpenAIはAstraを停止した——そのPreparedness Frameworkが「Critical能力を排除できない」と結論した
+   最初のモデル（ゼロデイを独自に発見し、人間の指示なしにエンドツーエンドのサイバー攻撃を実行）。
    これは収束した形状の一事例：OpenAI PF v2（「High」と「Critical」の2閾値）、Anthropic RSP v3.0
    （ASL-1 → ASL-5+ のバイオセーフティ型レベル）、Google DeepMind FSF v3.1（Critical Capability
-   Levels + 新たな Tracked Capability Levels）はすべて同じループ——能力閾値 → 評価 → 事前コミットされ
-   た対応——を回す。さらに法制化も進む：カリフォルニア州 SB 53（2026年1月1日施行）は大規模開発者に
+   Levels + 新たなTracked Capability Levels）はすべて同じループ——能力閾値 → 評価 → 事前コミットされ
+   た対応——を回す。さらに法制化も進む：カリフォルニア州SB 53（2026年1月1日施行）は大規模開発者に
    フロンティア安全フレームワークの公表と遵守を義務づけ、EU AI法はGPAIにシステムリスク義務を課す。
-   Astra は「Critical」ティアの最初の生きたトリガー。注目：誰が閾値を*測定*するか、そして共通の
+   Astraは「Critical」ティアの最初の生きたトリガー。注目：誰が閾値を*測定*するか、そして共通の
    「競合調整条項」（他社が同等の保護なしで出荷した場合、ラボは保護を下げられる）は底辺への競争
-   への逆作用。
+   への逆作用。「誰が測定するか」は今や開示型の回答を得た：SB 53（TFAIA）は開発者のフレームワーク
+   に「第三者を用いた破局的リスクの評価」の記述を義務づけ、配備前の透明性報告書には「第三者評価者
+   の関与の程度」の明記を求める——第三者の測定は現れつつあるが、各ラボの*自己公表*フレームワーク
+   に対して執行され、共有のフロアではない。
+
+8. **エージェントスキルは「証明」の段階に入った——評価が欠けている標準。** Ponytail
+   （`DietrichGebert/ponytail`、約82K stars）という「最も怠惰なシニア開発者」スキルは、「コード
+   80–94%削減」という主張とともに出荷され、異議を唱えられ（むき出しの「YAGNIに従え」プロンプトが
+   それを上回った）、再現可能なベンチマーク（ヘッドレスClaude Codeが実在のFastAPI/Reactリポジトリで
+   12枚のチケットを処理）を再構築して、コード約54%減 / コスト約20%減 / 約27%高速に着地——そして
+   主張を公開訂正した。このカテゴリ（google/skills、agent-skills、reverse-skill、diagram-design、
+   skill-recorder）は*証明*ではなく*主張*で増殖してきた。いずれ「スキルのMMLU」評価標準が現れる。
+   先にそれを出荷した者がスキルマーケットプレイスを握る。→ [[agent-plugins]]
+
+9. **隠れた思考連鎖は保護境界ではなく、機密性の仮定である。** arXiv:2608.09867（「Stealing
+   Reasoning Traces from Proprietary LLM APIs」、Panfilovら）は、フロンティアAPIが返す暗号化
+   「reasoning blocks」が同一プロバイダ内のセッション・ユーザー・モデルをまたいで完全に互換である
+   ことを示す——攻撃者は高性能モデルの暗号化トレースを同一プロバイダのより弱く防御の薄いモデルへ
+   注入し、強モデルを直接ジェイルブレイクせずにそのトレースを逐語的にデコードさせる。4つのベクトル：
+   蒸留防止の回避（Anthropic/OpenAI/Google）、PII + 認証情報の回収（315,320個の公開ブロックから
+   367件のPIIと182個の認証情報）、「安全な」拒否の背後での有害コンテンツ開示、エージェントシステム
+   への不可視のプロンプトインジェクション。修正はアーキテクチャ的——ブロック単位の暗号化ではなく、
+   推論をそのセッションにバインドすること。→ [[frontier-models]]
 
 > 次に追う未解決の疑問は[アクションページ](/jp/action/)のアジェンダ（リサーチ + システム）へ。
 
 ## トレンドノート
 
-- **エージェント層（詳細 → [[agent-stack]]）：** Cloudflare Computer（MIT の isolate 優先エージェント
+- **エージェント層（詳細 → [[agent-stack]]）：** Cloudflare Computer（MITのisolate優先エージェント
   ランタイム）、Cloudflare OS（ゼロトラストのvibeコーディングワークスペース）、Orca（並列エージェント
-  ADE、42K stars）、AgentENV（Kimi の分散 Firecracker マイクロVMサンドボックス）、Orchard（Microsoft
-  Research、K8sネイティブのトレーニングサンドボックス——Orchard-SWE 69.7% SWE-bench）、
+  ADE、42K stars）、AgentENV（Kimiの分散FirecrackerマイクロVMサンドボックス）、Orchard（Microsoft
+  Research、K8sネイティブのトレーニングサンドボックス——Orchard-SWE 69.7% SWE-bench）、DeepSeek
+  Harness（MIT、Cordisプラグインシステム——モデル/ツール/スキル/セッション/サンドボックス/ストレージ/
+  スケジューリング/UIがすべてプラグイン、`npx @deepseek-ai/dsh web`、38.9K stars）、
   TencentDB-Agent-Memory v2（チームメモリハブ）、Semantica（グラフネイティブプロヴェナンス、4.1K
   stars）、google/skills（Apache 2.0、約110スキル、Agent Plugins 1.0.0）、agent-skills（Addy Osmani、
   56K stars）、reverse-skill（セキュリティスキルルーター）、diagram-design（スキルが*センス*にも適用、
-  27+種の図）、skill-recorder（デモンストレーションでスキルを捕捉）、Prime Agent（RLM、95.5% ARC-AGI-3）、
-  Multi-Agent-CAD（トークン 116× 削減）、yc-software/qm（YCのマルチプレイヤーエージェントハーネス、
-  13K stars）、phone-harness（macOS Mirroring経由で実機iPhoneを操作）、ai-agent-book（29K stars）、
-  Macro（AGPL オールインワンワークスペース、MCP 経由のチームメモリ）、Zed Delta（DeltaDB 上の
+  27+種の図）、skill-recorder（デモンストレーションでスキルを捕捉）、Ponytail（YAGNIラダー、約82K
+  stars、ベンチマーク訂正済み）、Prime Agent（RLM、95.5% ARC-AGI-3）、Multi-Agent-CAD（トークン116×
+  削減）、yc-software/qm（YCのマルチプレイヤーエージェントハーネス、13K stars）、Cline Kanban
+  （Apache 2.0、worktree-per-task Webボード、`npx kanban`）、LoopX（MIT状態カーネル——「ボードは投影、
+  カーネルが真実」）、phone-harness（macOS Mirroring経由で実機iPhoneを操作）、ai-agent-book（29K
+  stars）、Macro（AGPLオールインワンワークスペース、MCP経由のチームメモリ）、Zed Delta（DeltaDB上の
   マルチプレイヤーワークツリー + エージェントレビュー）、OpenAI Codex Security（AppSecエージェント、
-  120万コミットをスキャン）。
-- **スマートルーティング（詳細 → [[smart-routing]]）：** NeMo Switchyard（Rust モデルルーター、
-  Apache 2.0）、Firecrawl pdf-inspector（分類優先の PDF 解析、opendataloader-bench 0.875）、
-  Needle 2（信頼度ゲート付きエスカレーション）、LiteLLM（セルフホストゲートウェイ、約4万スター）、
-  OpenRouter（ホステッドアグリゲーター、約$100億）。ロックインベクトル：ポリシー / シグナル /
-  カタログ——共有のルーティング設定DSLはまだない。
+  120万コミットをスキャン）。**分解：** プラグイングラフ（DeepSeek Harness）+ 状態カーネル（LoopX）+
+  worktree隔離（Orca、Cline Kanban、Cline CLI `--worktree`、Zed Delta）。
+- **スマートルーティング（詳細 → [[smart-routing]]）：** NeMo Switchyard（Rustモデルルーター、
+  Apache 2.0）、Firecrawl pdf-inspector（分類優先のPDF解析、opendataloader-bench 0.875）、Needle 2
+  （信頼度ゲート付きエスカレーション）、LiteLLM（セルフホストゲートウェイ、約4万スター）、OpenRouter
+  （ホステッドアグリゲーター、約$100億）。ロックインベクトル：ポリシー / シグナル / カタログ——共有
+  のルーティング設定DSLはまだない。
 - **フロンティアモデル（詳細 → [[frontier-models]]）：** DeepSeek V4 Pro（GA、`DeepSeek-V4-Pro-0813`、
-  Claude Fable 5 の約5%以内、DeepSWE 12.8→62.7）；xAI Grok 4.6（AA Index 61、$2/$6 毎M）；Motif 3
-  （韓国、MIT 314B MoE、AA Index 47、オープンウェイト4位 / 米中以外で1位）。✅ 価格を 08-13に検証：
-  V4 Pro 入力/出力 $0.435/$0.87 毎M vs Fable 5 の $10/$50 = 入力約23× / 出力約57×；「1/46×」という
-  見出しは誤り——フィード見出しを約23×に訂正済み。
+  Claude Fable 5の約5%以内、DeepSWE 12.8→62.7）；xAI Grok 4.6（AA Index 61、$2/$6毎M）；Motif 3
+  （韓国、MIT 314B MoE、AA Index 47、オープンウェイト4位 / 米中以外で1位）；**Qwen3.8-2.4T-A95B**
+  （アリババ初の完全オープンなQwen-Max級フラッグシップ、2.4T/約95Bアクティブ、Terminal-Bench 2.1
+  86.6、カスタムQwen3.8-Maxライセンス）。✅ 価格を08-13に検証：V4 Pro入力/出力$0.435/$0.87毎M vs
+  Fable 5の$10/$50 = 入力約23× / 出力約57×；「1/46×」という見出しは誤り——フィード見出しを約23×に
+  訂正済み。
 - **エージェントメモリの標準化（未解決のギャップ）：** MCP（ツール/データアクセス）とA2A（エージェント
   間、いずれもLinux Foundation）は収束したが、どちらも*統制された永続的共有メモリ*を標準化していない
   ——著者/信頼度/プロヴェナンスのフィールド、メモリ空間の権限、競合/順序のセマンティクスがない。
@@ -107,31 +146,49 @@ last_processed: 2026-08-13T12:28:00Z
   提案：Agent Memory Hall（型付きMemoryCell + 信頼度ティア + アイデンティティACL + 追記専用監査）と
   Portable Agent Memory（Merkle-DAGプロヴェナンス）——一方、TencentDB Team Memory と Macro のMCP公開
   チームメモリはその場しのぎでギャップを埋めるのみ。まだ誰も標準を所有していない。→ [[agent-stack]]
-- **AI安全性：** OpenAI が Astra を停止——PF v2 の「Critical」ティアに達した最初のモデル（ゼロデイ発見
-  + エンドツーエンドのサイバー攻撃）。ラボ横断の収束：Anthropic RSP v3.0 のASLレベル + Google DeepMind
-  FSF v3.1 のCCL（+ TCL）は同じ閾値→評価→応答ループを共有。カリフォルニア州SB 53がフロンティア安全
-  フレームワークを法制化（2026年1月1日施行）。Astra停止そのものは一次確認待ち。
+- **エージェントスキルの評価（未解決のギャップ、→ [[agent-plugins]]）：** Ponytailの公開ベンチマーク
+  + 主張の訂正がテンプレートだが、共有の評価プロトコルはまだない。評価なきスキルの増殖は、先月の
+  「訪問せずに書かれたリポジトリ」の今月版——主張は検証されるべきで、鵜呑みにすべきではない。
+- **AI安全性：** OpenAIがAstraを停止——PF v2の「Critical」ティアに達した最初のモデル（ゼロデイ発見
+  + エンドツーエンドのサイバー攻撃）。ラボ横断の収束：Anthropic RSP v3.0のASLレベル + Google DeepMind
+  FSF v3.1のCCL（+ TCL）は同じ閾値→評価→応答ループを共有。カリフォルニア州SB 53がフロンティア安全
+  フレームワークを法制化（2026年1月1日施行）。SB 53（TFAIA）が「誰が測定するか」に回答：フレーム
+  ワークは「第三者を用いた破局的リスクの評価」を記述し、透明性報告書は「第三者評価者の関与の程度」
+  を明記——測定は開示義務であり、自己公表のフレームワークに対して執行される。Astra停止そのものは
+  一次確認待ち。
 - **セキュリティ：** Langflow CVE-2026-9198（9.8、KEV、活発に悪用）；mcp-grafana CVE-2026-19516
   （9.1 SSRF）；Semantica v0.6.5（5件の脆弱性：認証欠落、Cypher/SPARQLインジェクション）；SAP
-  NetWeaver SB2026081203（9.3 RCE）；Lazarus CVE-2026-68820（afd.sys ゼロデイ → FudModule v3.1
-  ルートキット、Smart App Control バイパス）；Microsoft Patch Tuesday（89 CVE）；Chrome の 5 件の
-  UAF；VMware vCenter CVE-2026-59310（9.8 未認証 RCE、361 IP / 47 カ国）；Progress Kemp LoadMaster
-  CVE-2026-8037（9.6 コマンドインジェクション、KEV）；Adobe Commerce/Magento CVE-2026-71362（9.1 未認証
-  アカウント乗っ取り、2段階パッチ）；Cisco ASA/FTD CVE-2026-20349（8.6 未認証 VPN DoS、KEV、8月14日
-  期限）；AIクローラーなりすましスキャン。正味の効果：エージェント基盤 + MCP + エージェント認証情報
-  ファイルが最も急速に成長する攻撃面であり、従来型エンタープライズのエッジ（EC、VPN/ファイアウォール）
-  にも同じ圧力がかかる。
+  NetWeaver SB2026081203（9.3 RCE）；Lazarus CVE-2026-68820（afd.sysゼロデイ → FudModule v3.1
+  ルートキット、Smart App Controlバイパス）；Microsoft Patch Tuesday（89 CVE）；Chromeの5件のUAF；
+  VMware vCenter CVE-2026-59310（9.8未認証RCE、361 IP / 47カ国）；Progress Kemp LoadMaster
+  CVE-2026-8037（9.6コマンドインジェクション、KEV）；Adobe Commerce/Magento CVE-2026-71362（9.1未認証
+  アカウント乗っ取り、2段階パッチ）；Cisco ASA/FTD CVE-2026-20349（8.6未認証VPN DoS、KEV、8月14日
+  期限）；AIクローラーなりすましスキャン。**新規（08-14）：** Metabase CVE-2026-72898（
+  `POST /api/session/reset_password`の10.0未認証SQLi、活発に悪用、KEV期限は今日——接続されたすべての
+  ウェアハウスへの常駐認証情報を保持）；JetBrains TeamCity CVE-2026-63077（エージェントポーリング
+  プロトコルのXStreamデシリアライゼーションによる9.8未認証RCE、KEV、約4,500露出 / 約450パッチ済み）；
+  Apache Allura CVE-2026-73240（9.8 git引数インジェクション、1.19.1未満）。正味の効果：エージェント
+  基盤 + MCP + エージェント認証情報ファイルが最も急速に成長する攻撃面であり、**常駐認証情報ピボット**
+  （BI/CI-CD/forgeのRCEが本番データへ連鎖）が従来型エンタープライズのエッジと同じ圧力に今や加わる。
+  **暗号化推論の解読（08-14）：** arXiv:2608.09867——暗号化推論ブロックは同一プロバイダ内の
+  セッション/ユーザー/モデルをまたいで互換であり、モデル横断のトレース抽出が可能（テーゼ9参照）。
+  → [[frontier-models]]
 - **エッジ推論（詳細 → [[edge-inference]]）：** kimi-k3-in-c、TurboFieldfare、Ling-3.0-tiny、
-  Muse Glimmer（30B Apache 2.0 ローカル）、Needle 2（14MB、Raspberry Pi）、h3.c（Metal）。
-- **ビッグテックのオープンソース波：** Warp（AGPL ターミナル）、Ladybird（独立エンジン）、Snap
-  Valdi（ネイティブ UI）、Nvidia Nemotron 3.5 Lightning + Switchyard（モデルルーター）、Anthropic
-  自社シリコン、Alibaba Open Code Review、Mojo 1.0。
-- **開発者ツール：** Woxi（Rust による Wolfram 言語の再実装、WolframScript に対してスナップショット
-  テストを実行）；git-knife（Tauri 製の git 履歴メタデータ GUI、commit-tree 再構築——ファイル内容は
-  証明可能な形で不変）；Tailscale の SQLite WAL-reset 競合（16年もののデータ損失バグ、リプレイ
-  パイプライン + VFS シムによるデバッグ、3.51.3 で修正）。
-- **モデル & 研究：** Kronos（金融ローソク足向けの decoder-only 基盤モデル、AAAI 2026）——「事前学習 +
-  ファインチューニング」の定石を市場へ適用。
-- **✅ Void の教訓は決着（2026-08-12 → 08-13訂正）：** スターの速度は「調査せよ」というシグナルであって
-  「公開せよ」ではない。Void の「#2 トレンド」エントリは、一次確認の上で3言語すべてで訂正済み：この
+  Muse Glimmer（30B Apache 2.0ローカル）、Needle 2（14MB、Raspberry Pi）、h3.c（Metal）。
+- **ビッグテックのオープンソース波：** Warp（AGPLターミナル）、Ladybird（独立エンジン）、Snap
+  Valdi（ネイティブUI）、Nvidia Nemotron 3.5 Lightning + Switchyard（モデルルーター）、Anthropic
+  自社シリコン、Alibaba Open Code Review + Qwen3.8-2.4T-A95B（初のオープンなQwen-Max級フラッグシップ）、
+  Mojo 1.0。
+- **開発者ツール：** Woxi（RustによるWolfram言語の再実装、WolframScriptに対してスナップショット
+  テストを実行）；git-knife（Tauri製のgit履歴メタデータGUI、commit-tree再構築——ファイル内容は証明
+  可能な形で不変）；TailscaleのSQLite WAL-reset競合（16年もののデータ損失バグ、リプレイパイプライン +
+  VFSシムによるデバッグ、3.51.3で修正）；Turso Limbo（`tursodatabase/limbo`）が`vdbecc`（C → LLVM IR
+  → SQLiteバイトコード）で未改変のDoomを1つのSQLite VDBEバイトコードプログラムとして実行——VDBEが
+  実行可能なコンパイルターゲットであることの証明、「データベースのLLVM」。
+- **モデル & 研究：** Kronos（金融ローソク足向けのdecoder-only基盤モデル、AAAI 2026）——「事前学習 +
+  ファインチューニング」の定石を市場へ適用。**HL-Gauss PPO**（arXiv 2608.02181、COLM 2026）——スカラー
+  のcriticヘッドをカテゴリカル予測器（HL-Gaussターゲット）に置き換えることは、ドロップインのPPOの
+  改善：RLVRでキャリブレーションが向上 + アドバンテージ分散が低下、actor変更ゼロ。
+- **✅ Voidの教訓は決着（2026-08-12 → 08-13訂正）：** スターの速度は「調査せよ」というシグナルであって
+  「公開せよ」ではない。Voidの「#2トレンド」エントリは、一次確認の上で3言語すべてで訂正済み：この
   リポジトリはアーカイブ/非推奨（2026年6月2日アーカイブ）。この常設警告は今後の実行でも有効。

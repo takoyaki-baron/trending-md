@@ -40,6 +40,14 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   2605.15040。信号：agent 训练被定制的沙箱基础设施所卡，而非模型——一个约 3B 活跃参数的模型打到约 70%
   SWE-bench，说明瓶颈是基础设施而非规模。
 
+- **DeepSeek Harness** — `deepseek-ai/deepseek-harness`，MIT，v0.1 开发者预览（TypeScript）。
+  一个基于 **Cordis** 插件系统的编程 + 办公 agent 框架：模型、工具、技能、会话、沙箱、存储、调度
+  与 UI 都是可组合的插件——开发者在配置层扩展或替换能力，无需触碰核心。四种运行模式（Standard、
+  PTC 程序化工具调用、Minimal、Create）；只追加的会话日志 + Trajectory 视图支持 resume/fork/
+  retrieve/replay。`npx @deepseek-ai/dsh web`。约 38.9K stars。信号：DeepSeek 把"廉价前沿模型"
+  打法延伸到 harness 层——而"万物皆插件"意味着它自建了*自己的*插件系统（Cordis），而非采用
+  Agent Plugins 1.0.0，这是一个格式碎片化的观察项（见 [[agent-plugins]]）。
+
 ## 模型路由
 - **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`，Apache 2.0，Rust。一个代理/库，在 OpenAI Chat、
   Anthropic Messages、OpenAI Responses 三种格式之间翻译，并把每个请求路由到一池模型（vLLM、
@@ -109,6 +117,27 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   工作区沙箱中运行 Claude Code / Codex / OpenCode / Pi agent，带共享文件存储、权限配置与 cron 调度，
   背后是一个可插拔的 "harness" 接口。TypeScript 编写。约两周 13K stars。信号：从单用户 CLI 包装器
   转向多用户、带权限的 agent 基础设施——"agent 即组织基础设施"。
+
+- **Cline Kanban** — `cline/kanban`，Apache 2.0，研究预览。一个本地 Web 面板，针对同一仓库并行运行
+  CLI coding agent（Cline、Claude Code、Codex、OpenCode——自动检测）。每张卡片拉起一个临时 git
+  worktree（经符号链接共享 `node_modules` 等 git 忽略文件），让 agent 并行工作而互不产生合并冲突；
+  卡片可串成依赖 DAG，配合 auto-commit/auto-PR 开关组成流水线，内置评审循环把行内 diff 评论送回
+  给 agent。`npx kanban`。worktree-per-task 现已成为并行 agent 编排的标准隔离原语（Cline CLI
+  v3.0.3 也新增了 `--worktree`）。
+- **LoopX** — `huangruiteng/loopx`，MIT（一位字节跳动工程师）。面向长时间运行 agent 团队的、厂商
+  中立的 **state kernel**：目标、类型化待办、claim/lease、证据日志、配额感知的自动唤醒与可验证
+  交接，在 Codex / Claude Code / Cursor 执行有界回合时保持稳定。它刻意*不是*运行时——它回答
+  "循环可否继续？"，并投影到一个永远不是事实来源的 Kanban（如 Lark/Feishu 适配器）。本地优先的
+  `.loopx/` 目录，除 Python 标准库外无依赖；危险权限与生产写入保持人工把关。约 4.6K stars。信号：
+  当 agent 运行从分钟拉到数天，缺失的那层是跨回合的持久状态 + 人工闸门——"看板是投影，kernel 才
+  是真相"。
+
+### 分解：插件图 + 状态内核 + 隔离原语
+
+三个新入场者从不同角度勾勒出同一架构：**DeepSeek Harness** 把每个组件都变成插件（*插件图*）、
+**LoopX** 把持久状态 + 人工闸门从运行时中分离出来（*状态内核*）、**Cline Kanban** 把
+git-worktree-per-task 变成并行 agent 的*隔离原语*（与 Orca、Cline CLI `--worktree` 并列）。单体
+CLI 正在分解为这三个可分离的层次——整合是按*层*发生的，而不是汇入一个单体。
 
 ## 教育
 - **ai-agent-book** — `bojieli/ai-agent-book`（李博杰），Apache 2.0。"Deep Understanding of AI

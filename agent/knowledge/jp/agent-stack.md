@@ -47,6 +47,17 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
   個別構築のサンドボックス基盤がボトルネックだった——約3Bアクティブパラメータで約70% SWE-benchに
   達したのは、スケールではなく基盤が制約だったことを示す。
 
+- **DeepSeek Harness** — `deepseek-ai/deepseek-harness`、MIT、v0.1デベロッパープレビュー
+  （TypeScript）。**Cordis**プラグインシステムの上に築かれたコーディング + オフィスエージェント
+  フレームワーク：モデル、ツール、スキル、セッション、サンドボックス、ストレージ、スケジュー
+  リング、UIがすべて組み合わせ可能なプラグイン——開発者は設定レイヤーで能力を拡張・置換し、コア
+  には触れない。4つの実行モード（Standard、PTCプログラム的ツール呼び出し、Minimal、Create）。
+  追記専用のセッションログ + Trajectoryビューがresume/fork/retrieve/replayをサポート。
+  `npx @deepseek-ai/dsh web`。約38.9K stars。シグナル：DeepSeekが「安価なフロンティアモデル」の
+  戦略をハーネス層へ拡張——そして「すべてがプラグイン」とは、Agent Plugins 1.0.0を採用せず*独自*
+  のプラグインシステム（Cordis）を構築したことを意味し、フォーマット断片化のウォッチ項目
+  （[[agent-plugins]]参照）。
+
 ## モデルルーティング
 - **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`、Apache 2.0、Rust。OpenAI Chat / Anthropic
   Messages / OpenAI Responses の間を翻訳し、各リクエストをモデルのプール（vLLM、NVIDIA NIM、
@@ -129,6 +140,30 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
   インターフェースの背後に備える。TypeScript。約2週間で13K stars。シグナル：単一ユーザーのCLI
   ラッパーから、マルチユーザーで権限管理されたエージェント基盤への移行——「組織の基盤としての
   エージェント」。
+
+- **Cline Kanban** — `cline/kanban`、Apache 2.0、リサーチプレビュー。1つのリポジトリに対してCLI
+  コーディングエージェント（Cline、Claude Code、Codex、OpenCode——自動検出）を並列実行するローカル
+  Webボード。各カードは一時的なgit worktreeを起動し（`node_modules`などgit無視ファイルをシンボリッ
+  クリンクで共有）、エージェントがマージ競合なしで並走。カードは依存DAGに連鎖でき、auto-commit/
+  auto-PRトグルと組み合わせてパイプラインに。組み込みレビューループが行内diffコメントをエージェント
+  へ返す。`npx kanban`。worktree-per-taskが並列エージェントオーケストレーションの標準の隔離プリミティ
+  ブになった（Cline CLI v3.0.3も`--worktree`を追加）。
+- **LoopX** — `huangruiteng/loopx`、MIT（ByteDanceのエンジニア）。長時間稼働するエージェントチーム
+  向けの、プロバイダ中立の**状態カーネル**：目的、型付きtodo、claim/lease、エビデンスログ、クォータ
+  認識の自動ウェイク、検証可能な引き継ぎが、Codex / Claude Code / Cursorが有界なターンを実行する間
+  も安定し続ける。意図的に*ランタイムではない*——「ループを続けてよいか？」に答え、決して真実の源
+  ではないKanban（例：Lark/Feishuアダプター）へ投影する。`.loopx/`ディレクトリにローカルファースト、
+  Python標準ライブラリ以外の依存なし。危険な権限と本番書き込みは人間がゲート。約4.6K stars。シグナル：
+  エージェント実行が数日へ伸びるにつれ、欠けている層はターンをまたぐ永続状態 + 人間のゲート——
+  「ボードは投影、カーネルが真実」。
+
+### 分解：プラグイングラフ + 状態カーネル + 隔離プリミティブ
+
+3人の新規参入者が同じアーキテクチャを異なる角度から描く：**DeepSeek Harness**はあらゆるコンポーネ
+ントをプラグイン化し（*プラグイングラフ*）、**LoopX**は永続状態 + 人間のゲートをランタイムから分離
+し（*状態カーネル*）、**Cline Kanban**はgit-worktree-per-taskを並列エージェントの*隔離プリミティブ*
+にする（Orca、Cline CLI `--worktree`と並ぶ）。モノリシックなCLIはこの3つの分離可能な層へ分解され
+つつある——統合は*層ごとに*起きており、1つのモノリスへ集約されるのではない。
 
 ## 教育
 - **ai-agent-book** — `bojieli/ai-agent-book`（Li Bojie）、Apache 2.0。"Deep Understanding of AI
