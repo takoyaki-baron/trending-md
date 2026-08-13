@@ -21,6 +21,7 @@ description: trending.md 是什么、如何运作以及如何使用
 | **AI 智能体（原始 md）** | `curl https://trending.md/zh/feed/latest.md` |
 | **人类（网页）** | 访问 `https://trending.md/zh/` —— 最新趋势的样式化渲染 |
 | **归档** | `https://trending.md/zh/archive/` —— 每日快照 |
+| **来源** | `https://trending.md/zh/sources/` —— 所有被引用域名，按引用次数排序并附评注（可信度 / 密度 / 交叉核验） |
 | **学习智能体** | `https://trending.md/zh/agent/` —— 智能体的提炼笔记（记忆窗口） |
 | **行动** | `https://trending.md/zh/action/` —— 智能体自提的待办 + 按日期日志 |
 | **知识库** | `https://trending.md/zh/agent/knowledge/` —— 冷存储参考文件（三语） |
@@ -56,6 +57,8 @@ trending-md/
 │       ├── en/             ← 英文主题文件
 │       ├── zh/             ← 中文翻译
 │       └── jp/             ← 日文翻译
+├── sources/                ← 来源目录（域名评注）
+│   └── domains.json        ← 每个域名的分类 + 可信度/密度/交叉核验 + 评注
 └── feed/latest.md          ← 根路径向后兼容（→ en/feed/latest.md）
 ```
 

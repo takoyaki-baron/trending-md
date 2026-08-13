@@ -229,20 +229,25 @@ markdown to drift:
   `SOURCE_ALIASES` map — e.g. `raw.githubusercontent.com` → `github.com`, `blog.csdn.net` →
   `csdn.net`), and counts citations. Co-citation (two domains cited in the same item) is recorded
   as graph edges.
-- **Categories** — eight: `code`, `vendor`, `news`, `security`, `research`, `community`, `data`,
-  `other`. The top ~49 domains are hand-classified in **`sources/domains.json`**; the long tail is
-  auto-classified by hostname heuristics in `classifyDomain()`. Unclassified domains render as
-  "— unclassified —".
+- **Categories + review** — eight categories: `code`, `vendor`, `news`, `security`, `research`,
+  `community`, `data`, `other`. The top ~74 domains are hand-classified **and hand-reviewed** in
+  **`sources/domains.json`**; the long tail is auto-classified by hostname heuristics in
+  `classifyDomain()`. Each curated entry carries a **review**: `cred` (credibility:
+  `high`/`med`/`low`), `density` (info density: `high`/`med`/`low`), and `cv` (cross-validation
+  count). Unreviewed domains render an italic "needs review" marker.
 - **Outputs** (all regenerated each build, written straight to `dist/`):
-  - `/<lang>/sources/` — the HTML page (stats, an SVG force-directed co-citation graph of the top
-    40 domains, and the full ranked table).
+  - `/<lang>/sources/` — the HTML page (stats, a Mermaid co-citation graph of the top 30 domains,
+    and the full ranked table with category + cred/density/cv badges).
   - `/<lang>/sources.md` — a raw Markdown table for agents (`curl …/en/sources.md`).
   - `/sources.json` — canonical trilingual machine-readable dump (domain, citations, category,
-    en/zh/jp note).
+    cred, density, crossValidated, en/zh/jp note).
 
 **Maintaining `sources/domains.json`** — when a new domain starts appearing in feeds, add an entry
-`"<host>": {"cat": "<category>", "en": "…", "zh": "…", "jp": "…"}` with a one-sentence
-classification + evaluation. This is the learnt agent's job (see `agent/AGENT.md`).
+`"<host>": {"cat": "<category>", "en": "…", "zh": "…", "jp": "…", "cred": "…", "density": "…",
+"cv": N}` with a one-sentence classification + evaluation and a review. **A new source must be
+cross-validated at least once (`cv` ≥ 1)** — confirm at least one of its facts against an
+independent source before adding it. This is the learnt agent's job (see `agent/AGENT.md`);
+`node build.js` prints a `⚠ N uncurated domains need a review` list each run.
 
 ## Important URLs
 

@@ -535,27 +535,35 @@ function extractSources() {
 function sourcesEntries(data, curated) {
   return Object.keys(data.counts).map(host => {
     const count = data.counts[host];
+    const c = curated[host] || null;
     return {
       host,
       count,
       cat: classifyDomain(host, curated),
-      note: (curated[host] && curated[host]) || null,
+      note: c,
+      cred: (c && c.cred) || null,
+      density: (c && c.density) || null,
+      cv: (c && typeof c.cv === 'number') ? c.cv : null,
     };
   }).sort((a, b) => b.count - a.count || a.host.localeCompare(b.host));
 }
 
-function buildGraph(entries, cooc, topN) {
+function buildMermaid(entries, cooc, topN, minW) {
   const top = entries.slice(0, topN);
   const idx = {};
   top.forEach((e, i) => { idx[e.host] = i; });
-  const nodes = top.map(e => ({ id: e.host, c: e.count, cat: e.cat }));
-  const edges = [];
+  const lines = ['flowchart LR'];
+  for (const c of SOURCE_CATEGORIES) lines.push(`  classDef ${c} fill:${SRC_CAT_COLORS[c]},color:#fff`);
+  top.forEach((e, i) => { lines.push(`  d${i}["${e.host} (${e.count})"]`); });
+  top.forEach((e, i) => { lines.push(`  class d${i} ${e.cat}`); });
   for (const key of Object.keys(cooc)) {
     const parts = key.split('|');
     const a = idx[parts[0]], b = idx[parts[1]];
-    if (a !== undefined && b !== undefined) edges.push({ s: a, t: b, w: cooc[key] });
+    if (a === undefined || b === undefined) continue;
+    if (cooc[key] < minW) continue;
+    lines.push(`  d${a} -->|${cooc[key]}| d${b}`);
   }
-  return { nodes, edges };
+  return lines.join('\n');
 }
 
 function buildSourcesContent(lang, data, curated) {
@@ -567,28 +575,39 @@ function buildSourcesContent(lang, data, curated) {
   const entries = sourcesEntries(data, curated);
   const total = entries.reduce((n, e) => n + e.count, 0);
   const max = entries.length ? entries[0].count : 1;
+  const reviewedCount = entries.filter(e => e.note).length;
+  const cvCount = entries.filter(e => e.cv && e.cv >= 1).length;
 
   const stats = [
     { k: s.srcStatDomains, v: entries.length },
     { k: s.srcStatCitations, v: total },
+    { k: s.srcStatReviewed, v: reviewedCount },
+    { k: s.srcStatCrossValidated, v: cvCount },
     { k: s.srcStatDays, v: data.days },
     { k: s.srcStatItems, v: data.totalItems },
   ];
   const legend = SOURCE_CATEGORIES.map(c => `<span class="src-cat src-cat-${c}">${catLabels[c]}</span>`).join(' ');
+  const lvlWord = { high: s.srcHigh, med: s.srcMed, low: s.srcLow };
 
   const rows = entries.map((e, i) => {
     const barW = (e.count / max * 100).toFixed(1);
-    const note = e.note && e.note[lang] ? esc(e.note[lang]) : `<em>${esc(s.srcUnclassified)}</em>`;
+    const note = e.note && e.note[lang] ? esc(e.note[lang]) : `<em>${esc(s.srcAutoNote.replace('{cat}', catLabels[e.cat]))}</em>`;
+    const review = e.cred
+      ? `<span class="rv rv-${e.cred}" title="${s.srcCred}">${lvlWord[e.cred]}</span>` +
+        `<span class="rv rv-${e.density}" title="${s.srcDensity}">${lvlWord[e.density]}</span>` +
+        `<span class="rv rv-cv${e.cv >= 1 ? '' : ' rv-cv0'}" title="${s.srcCV}">${e.cv >= 1 ? '✓' + e.cv : '·'}</span>`
+      : `<span class="rv rv-none" title="${s.srcCV}">${s.srcUnreviewed}</span>`;
     return `<tr>
       <td class="src-rank">${i + 1}</td>
       <td class="src-host"><a href="https://${e.host}" rel="nofollow noopener" target="_blank">${e.host}</a></td>
       <td class="src-count">${e.count}<span class="src-barwrap"><span class="src-bar" style="width:${barW}%"></span></span></td>
       <td class="src-catcol"><span class="src-cat src-cat-${e.cat}">${catLabels[e.cat]}</span></td>
+      <td class="src-reviewcol">${review}</td>
       <td class="src-notecol">${note}</td>
     </tr>`;
   }).join('');
 
-  const graph = buildGraph(entries, data.cooc, 40);
+  const mermaidSrc = buildMermaid(entries, data.cooc, 30, 2);
 
   return `<style>
   .src-stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
@@ -601,9 +620,19 @@ function buildSourcesContent(lang, data, curated) {
   .src-cat-research { background: #9333ea; } .src-cat-community { background: #0891b2; }
   .src-cat-data { background: #ca8a04; } .src-cat-other { background: #6b7280; }
   .src-legend { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 4px; }
-  #src-graph { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); overflow: hidden; margin: 8px 0 16px; }
-  #src-graph svg { display: block; }
-  #src-graph text { font-family: inherit; }
+  .rv { display: inline-flex; align-items: center; gap: 3px; font-size: 0.66rem; margin-right: 4px; color: var(--text-secondary); }
+  .rv::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--text-tertiary); flex: 0 0 auto; }
+  .rv-high::before { background: #16a34a; }
+  .rv-med::before { background: #ca8a04; }
+  .rv-low::before { background: #dc2626; }
+  .rv-cv::before { background: #6366f1; }
+  .rv-cv0::before { background: transparent; }
+  .rv-none { color: var(--text-tertiary); font-style: italic; }
+  .src-reviewcol { white-space: nowrap; }
+  .src-reviewlegend { color: var(--text-tertiary); font-size: 0.74rem; margin: 6px 0 10px; }
+  .mermaid-wrap { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 12px; margin: 8px 0 16px; overflow-x: auto; }
+  .mermaid { display: flex; justify-content: center; }
+  .mermaid svg { max-width: 100%; height: auto; }
   .src-table { font-size: 0.8rem; }
   .src-table td { vertical-align: middle; }
   .src-rank { color: var(--text-tertiary); width: 2em; text-align: right; }
@@ -620,120 +649,19 @@ function buildSourcesContent(lang, data, curated) {
 <div class="src-stats">${stats.map(x => `<div class="src-stat"><b>${x.v}</b><span>${x.k}</span></div>`).join('')}</div>
 <h2>${esc(s.srcGraphTitle)}</h2>
 <div class="src-legend">${legend}</div>
-<div id="src-graph"></div>
+<div class="mermaid-wrap"><div class="mermaid">${esc(mermaidSrc)}</div></div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script>
 (function () {
-  var DATA = ${JSON.stringify(graph)};
-  var COLORS = ${JSON.stringify(SRC_CAT_COLORS)};
-  var el = document.getElementById('src-graph');
-  if (!el || !DATA.nodes.length) return;
-  var W = 800, H = 560, cx = W / 2, cy = H / 2;
-  var NS = 'http://www.w3.org/2000/svg';
-  var svg = document.createElementNS(NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-  svg.setAttribute('width', '100%');
-  el.appendChild(svg);
-
-  var N = DATA.nodes.length;
-  var pos = [], vel = [], rad = [];
-  for (var i = 0; i < N; i++) {
-    var ang = (i / N) * Math.PI * 2;
-    var rr = Math.min(W, H) * 0.42;
-    pos.push({ x: cx + Math.cos(ang) * rr * (0.6 + 0.4 * (i % 3)), y: cy + Math.sin(ang) * rr * (0.6 + 0.4 * ((i + 1) % 3)) });
-    vel.push({ x: 0, y: 0 });
-    rad.push(4 + Math.sqrt(DATA.nodes[i].c) * 2.1);
-  }
-
-  var edges = [];
-  for (var e = 0; e < DATA.edges.length; e++) {
-    var ed = DATA.edges[e];
-    var line = document.createElementNS(NS, 'line');
-    line.setAttribute('stroke', 'var(--border)');
-    line.setAttribute('stroke-width', (0.5 + Math.sqrt(ed.w) * 0.7).toFixed(2));
-    line.setAttribute('stroke-opacity', '0.5');
-    svg.appendChild(line);
-    edges.push({ line: line, s: ed.s, t: ed.t });
-  }
-
-  var circles = [], labels = [];
-  for (var i = 0; i < N; i++) {
-    var g = document.createElementNS(NS, 'g');
-    var c = document.createElementNS(NS, 'circle');
-    c.setAttribute('r', rad[i]);
-    c.setAttribute('cx', pos[i].x);
-    c.setAttribute('cy', pos[i].y);
-    c.setAttribute('fill', COLORS[DATA.nodes[i].cat] || COLORS.other);
-    c.setAttribute('fill-opacity', '0.82');
-    c.setAttribute('stroke', 'var(--surface)');
-    c.setAttribute('stroke-width', '1');
-    var t = document.createElementNS(NS, 'text');
-    t.setAttribute('text-anchor', 'middle');
-    t.setAttribute('x', pos[i].x);
-    t.setAttribute('y', pos[i].y + rad[i] + 10);
-    t.setAttribute('font-size', '9');
-    t.setAttribute('style', 'fill:var(--text-secondary)');
-    t.textContent = DATA.nodes[i].id;
-    var title = document.createElementNS(NS, 'title');
-    title.textContent = DATA.nodes[i].id + ' — ' + DATA.nodes[i].c + ' citations';
-    c.appendChild(title);
-    g.appendChild(c); g.appendChild(t);
-    svg.appendChild(g);
-    circles.push(c); labels.push(t);
-  }
-
-  function tick() {
-    var i, j, dx, dy, d2, d, f, fx, fy;
-    for (i = 0; i < N; i++) for (j = i + 1; j < N; j++) {
-      dx = pos[j].x - pos[i].x; dy = pos[j].y - pos[i].y;
-      d2 = dx * dx + dy * dy + 0.01; d = Math.sqrt(d2);
-      f = 300 / d2;
-      fx = dx / d * f; fy = dy / d * f;
-      vel[i].x -= fx; vel[i].y -= fy;
-      vel[j].x += fx; vel[j].y += fy;
-    }
-    for (i = 0; i < edges.length; i++) {
-      var s = edges[i].s, t = edges[i].t;
-      dx = pos[t].x - pos[s].x; dy = pos[t].y - pos[s].y;
-      d = Math.sqrt(dx * dx + dy * dy) + 0.01;
-      f = (d - 60) * 0.03;
-      fx = dx / d * f; fy = dy / d * f;
-      vel[s].x += fx; vel[s].y += fy;
-      vel[t].x -= fx; vel[t].y -= fy;
-    }
-    for (i = 0; i < N; i++) {
-      vel[i].x += (cx - pos[i].x) * 0.01;
-      vel[i].y += (cy - pos[i].y) * 0.01;
-    }
-    for (i = 0; i < N; i++) {
-      vel[i].x *= 0.85; vel[i].y *= 0.85;
-      pos[i].x += vel[i].x; pos[i].y += vel[i].y;
-      pos[i].x = Math.max(rad[i], Math.min(W - rad[i], pos[i].x));
-      pos[i].y = Math.max(rad[i] + 4, Math.min(H - rad[i] - 12, pos[i].y));
-    }
-    for (i = 0; i < edges.length; i++) {
-      edges[i].line.setAttribute('x1', pos[edges[i].s].x);
-      edges[i].line.setAttribute('y1', pos[edges[i].s].y);
-      edges[i].line.setAttribute('x2', pos[edges[i].t].x);
-      edges[i].line.setAttribute('y2', pos[edges[i].t].y);
-    }
-    for (i = 0; i < N; i++) {
-      circles[i].setAttribute('cx', pos[i].x);
-      circles[i].setAttribute('cy', pos[i].y);
-      labels[i].setAttribute('x', pos[i].x);
-      labels[i].setAttribute('y', pos[i].y + rad[i] + 10);
-    }
-  }
-
-  var steps = 260, n = 0;
-  function loop() {
-    tick();
-    if (++n < steps) requestAnimationFrame(loop);
-  }
-  loop();
+  if (!window.mermaid) return;
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  mermaid.initialize({ securityLevel: 'loose', theme: dark ? 'dark' : 'default', flowchart: { curve: 'linear', nodeSpacing: 50, rankSpacing: 70 } });
+  mermaid.run({ querySelector: '.mermaid' }).catch(function () {});
 })();
 </script>
 <h2>${esc(s.srcTableTitle)}</h2>
-<table class="src-table"><thead><tr><th>#</th><th>domain</th><th>citations</th><th>category</th><th>note</th></tr></thead><tbody>${rows}</tbody></table>`;
+<p class="src-reviewlegend"><span class="rv rv-high" title="${s.srcCred}">${s.srcHigh}</span><span class="rv rv-med" title="${s.srcCred}">${s.srcMed}</span><span class="rv rv-low" title="${s.srcCred}">${s.srcLow}</span> ${s.srcCred} · <span class="rv rv-cv" title="${s.srcCV}">✓N</span> ${s.srcCV}</p>
+<table class="src-table"><thead><tr><th>#</th><th>domain</th><th>citations</th><th>category</th><th>${s.srcReview}</th><th>note</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function buildSourcesMD(lang, data, curated) {
@@ -752,12 +680,21 @@ function buildSourcesMD(lang, data, curated) {
   lines.push('');
   lines.push(s.srcIntro);
   lines.push('');
-  lines.push('| # | Domain | Citations | Category | Note |');
-  lines.push('|---|--------|-----------|----------|------|');
+  lines.push('| # | Domain | Citations | Category | Cred | Dens | CV | Note |');
+  lines.push('|---|--------|-----------|----------|------|------|----|------|');
   entries.forEach((e, i) => {
-    const note = (e.note && e.note[lang]) ? e.note[lang].replace(/\|/g, '\\|') : '';
-    lines.push(`| ${i + 1} | [${e.host}](https://${e.host}) | ${e.count} | ${e.cat} | ${note} |`);
+    const note = (e.note && e.note[lang]) ? e.note[lang].replace(/\|/g, '\\|') : `(auto: ${e.cat})`;
+    const cred = e.cred || '–';
+    const dens = e.density || '–';
+    const cv = (e.cv != null) ? (e.cv >= 1 ? '✓' + e.cv : '0') : '–';
+    lines.push(`| ${i + 1} | [${e.host}](https://${e.host}) | ${e.count} | ${e.cat} | ${cred} | ${dens} | ${cv} | ${note} |`);
   });
+  lines.push('');
+  lines.push('## Relationship graph');
+  lines.push('');
+  lines.push('```mermaid');
+  lines.push(buildMermaid(entries, data.cooc, 30, 2));
+  lines.push('```');
   lines.push('');
   return lines.join('\n');
 }
@@ -767,6 +704,9 @@ function buildSourcesJSON(data, curated) {
     domain: e.host,
     citations: e.count,
     category: e.cat,
+    cred: e.cred || null,
+    density: e.density || null,
+    crossValidated: e.cv || 0,
     note: {
       en: (e.note && e.note.en) || '',
       zh: (e.note && e.note.zh) || '',
@@ -874,6 +814,15 @@ for (const lang of langs) {
 }
 fs.writeFileSync(path.join(dist, 'sources.json'), JSON.stringify(buildSourcesJSON(srcData, curatedSources), null, 2));
 console.log('  ✓ sources.json');
+
+const unreviewedDomains = Object.keys(srcData.counts)
+  .filter(h => !curatedSources[h])
+  .sort((a, b) => srcData.counts[b] - srcData.counts[a]);
+const mustReview = unreviewedDomains.filter(h => srcData.counts[h] >= 2);
+if (mustReview.length) {
+  console.log(`  ⚠ ${mustReview.length} uncurated domains need a review (≥2 citations) — add to sources/domains.json with cred/density/cv`);
+  mustReview.slice(0, 25).forEach(h => console.log(`      ${h} (${srcData.counts[h]})`));
+}
 
 /* ── Root redirect page — dynamic language chooser ── */
 const langLinks = langs.map(l => {

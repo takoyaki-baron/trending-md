@@ -21,6 +21,7 @@ description: What trending.md is, how it works, and how to consume it
 | **AI agent (raw md)** | `curl https://trending.md/en/feed/latest.md` |
 | **Human (web)** | Visit `https://trending.md/en/` — styled render of the latest feed |
 | **Archive** | `https://trending.md/en/archive/` — daily snapshots |
+| **Sources** | `https://trending.md/en/sources/` — every cited domain, ranked + reviewed (credibility / density / cross-validation) |
 | **Learnt agent** | `https://trending.md/en/agent/` — the agent's distilled notes (memory window) |
 | **Action** | `https://trending.md/en/action/` — the agent's self-proposed todos + dated log |
 | **Knowledge library** | `https://trending.md/en/agent/knowledge/` — cold-storage reference files (trilingual) |
@@ -56,6 +57,8 @@ trending-md/
 │       ├── en/             ← English topic files
 │       ├── zh/             ← Chinese translations
 │       └── jp/             ← Japanese translations
+├── sources/                ← Source directory (curated domain reviews)
+│   └── domains.json        ← Per-domain category + cred/density/cv + note
 └── feed/latest.md          ← Root backward-compat (→ en/feed/latest.md)
 ```
 
