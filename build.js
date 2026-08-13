@@ -368,6 +368,9 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
   .content li { font-size: 0.86rem; margin: 2px 0; color: var(--text-secondary); }
   .content li strong { color: var(--text); }
   .content blockquote { border-left: 3px solid var(--blockquote-border); padding: 4px 14px; margin: 8px 0; background: var(--accent-dim); border-radius: 0 4px 4px 0; font-size: 0.84rem; color: var(--text-secondary); }
+  .epigraph { border-left: 3px solid var(--accent); padding: 10px 16px; margin: 4px 0 20px; background: var(--accent-dim); border-radius: 0 6px 6px 0; }
+  .epigraph p { margin: 0; font-size: 0.95rem; color: var(--text); }
+  .epigraph cite { display: block; margin-top: 6px; font-size: 0.72rem; color: var(--text-tertiary); font-style: normal; }
   .content code { font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace; font-size: 0.8rem; background: var(--code-bg); padding: 1px 5px; border-radius: 3px; color: var(--text); }
   .content pre { background: var(--code-bg); padding: 12px 16px; border-radius: 6px; overflow-x: auto; margin: 8px 0; font-size: 0.8rem; line-height: 1.5; }
   .content pre code { background: none; padding: 0; }
@@ -426,6 +429,11 @@ function buildPage(mdPath, htmlPath, title, breadcrumbs, activeNav, lang) {
   const md = fs.readFileSync(path.join(ROOT, mdPath), 'utf8');
   const { meta, body } = parseFrontmatter(md);
   let content = parseMD(body, lang);
+  const s = strings[lang];
+  const quoteKey = { agent: 'agentQuote', action: 'actionQuote' }[activeNav];
+  if (quoteKey && s[quoteKey]) {
+    content = `<blockquote class="epigraph"><p>${esc(s[quoteKey])}</p><cite>${esc(s[quoteKey + 'Attr'])}</cite></blockquote>` + content;
+  }
 
   let jsonld = null;
   if (mdPath.includes('feed/20')) {  // daily feed pages
@@ -618,6 +626,9 @@ function buildSourcesContent(lang, data, curated) {
   .src-stat { flex: 1 1 120px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
   .src-stat b { display: block; font-size: 1.3rem; color: var(--text); }
   .src-stat span { font-size: 0.72rem; color: var(--text-tertiary); }
+  .src-quote { border-left: 3px solid var(--accent); padding: 10px 16px; margin: 12px 0 18px; background: var(--accent-dim); border-radius: 0 6px 6px 0; }
+  .src-quote p { margin: 0; font-size: 0.95rem; color: var(--text); }
+  .src-quote cite { display: block; margin-top: 6px; font-size: 0.72rem; color: var(--text-tertiary); font-style: normal; }
   .src-cat { display: inline-block; font-size: 0.68rem; padding: 1px 7px; border-radius: 9px; color: #fff; white-space: nowrap; }
   .src-cat-code { background: #2563eb; } .src-cat-vendor { background: #16a34a; }
   .src-cat-news { background: #ea580c; } .src-cat-security { background: #dc2626; }
@@ -658,6 +669,7 @@ function buildSourcesContent(lang, data, curated) {
   </style>
 <h1>${esc(s.sourcesTitle)}</h1>
 <p>${esc(s.srcIntro)}</p>
+<blockquote class="src-quote"><p>${esc(s.srcQuote)}</p><cite>${esc(s.srcQuoteAttr)}</cite></blockquote>
 <div class="src-stats">${stats.map(x => `<div class="src-stat"><b>${x.v}</b><span>${x.k}</span></div>`).join('')}</div>
 <h2>${esc(s.srcCloudTitle)}</h2>
 <div class="src-cloud">${cloud}</div>
@@ -684,6 +696,9 @@ function buildSourcesMD(lang, data, curated) {
   lines.push('# Sources');
   lines.push('');
   lines.push(s.srcIntro);
+  lines.push('');
+  lines.push(`> ${s.srcQuote}`);
+  lines.push(`> ${s.srcQuoteAttr}`);
   lines.push('');
   lines.push('| # | Domain | Citations | Category | Cred | Dens | CV | Note |');
   lines.push('|---|--------|-----------|----------|------|------|----|------|');
