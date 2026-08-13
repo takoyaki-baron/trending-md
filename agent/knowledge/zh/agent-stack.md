@@ -25,6 +25,20 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   100ms、启动/恢复不到 50ms，可 fork 出多达 16 个子进程用于并行 agent 工作流；ublk + overlaybd
   分层镜像（镜像可超出磁盘容量）；E2B 兼容 HTTP API（现有 E2B SDK 无需改动即可使用）；可跨
   Kubernetes 集群扩展。暂无认证层（需在可信网络中运行）。约 1.4K stars。
+- **phone-harness** — `ShawnPana/phone-harness`，MIT，约 500 行 Python。让 Claude Code / Codex 无需
+  越狱、无需 Xcode、无需 WebDriverAgent 即可驱动一台真实 iPhone——传输通道就是 macOS 的 iPhone
+  Mirroring 窗口。通过受限 `screencapture` + Apple Vision OCR"看"（一个"穷人版 DOM"，坐标可直接点击），
+  通过 HID 级 CGEvents"做"（点按、长按、拖拽、滚动、输入），再用真实截图"验证"。附带一份带同意规则的
+  SKILL.md（对外发送或难以撤销的操作前先停下来询问）。需 macOS Sequoia+，授予辅助功能 + 屏幕录制权限。
+  约 1.7K stars。移动端是 agent 计算机使用最后一块未开发的面；把 Mirroring 当 I/O 绕开了整套
+  WebDriverAgent/Xcode 栈。
+- **Orchard** — `microsoft/Orchard`，MIT（微软研究院）。Kubernetes 原生的 agentic 建模框架：一个
+  **Orchard Env** 服务（经 REST + Python 提供沙箱的 create/exec/file/patch/network/timeouts）与训练循环
+  解耦，让 SFT/RL/GRPO 及任意 harness（Codex、OpenClaw、ZeroClaw、ReAct）共享同一套沙箱基座——在 spot
+  实例上以约 1/10 的托管沙箱成本、约 26 秒拉起 1,000 个沙箱。三个配方：Orchard-SWE（Qwen3.5-35B-A3B →
+  69.7% SWE-bench Verified）、Orchard-GUI（WebVoyager 74.1%）、Orchard-Claw（Claw-Eval 59.6%）。arXiv
+  2605.15040。信号：agent 训练被定制的沙箱基础设施所卡，而非模型——一个约 3B 活跃参数的模型打到约 70%
+  SWE-bench，说明瓶颈是基础设施而非规模。
 
 ## 模型路由
 - **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`，Apache 2.0，Rust。一个代理/库，在 OpenAI Chat、
@@ -42,6 +56,16 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   控制台以 ACL 可见性（`private`/`team`/`restricted`）治理。混合检索 = BM25 + 向量 + 倒数排名
   融合（RRF）；PersonaMem 准确率据报道从 48% → 76%。面向 Claude Code/OpenAI 协议的 Memory Proxy。
   80 天内 15K+ stars。SQLite + sqlite-vec（BM25）。
+- **记忆标准化缺口（未解决）：** MCP（工具/数据访问）与 A2A（智能体到智能体，二者皆属 Linux
+  Foundation）已经收敛，但两者都没有为*持久的、受治理的共享记忆记录*定义类型——没有作者/置信度/
+  溯源字段，没有记忆空间权限，没有冲突/排序语义。每个框架都在自造（Mem0、Zep、Letta、自定义向量库），
+  因此切换框架会让记忆归零。OWASP ASI06 "Memory & Context Poisoning" 如今把跨智能体记忆交换列为攻击
+  路径（门控写入、溯源、分段、把已存记忆视为不可信输入）。提案：**Agent Memory Hall**（类型化
+  MemoryCell——fact/preference/constraint/lesson/risk；三级信任 raw_source→llm_derived→
+  human_confirmed，外加一条阻止 LLM 衍生记忆相互覆盖的 "Anti-Ouroboros" 规则；身份 ACL；只追加审计；
+  以 MCP server 运行）与 **Portable Agent Memory**（Episodic/Semantic/Procedural/Working/Identity
+  模型，Merkle-DAG 溯源）。TencentDB Team Memory 与 Macro 经 MCP 暴露的团队记忆只是临时填补缺口；
+  尚无跨系统标准。
 
 ## 一体化工作区
 - **Macro** — `macro-inc/macro`，AGPL-3.0，SolidJS + Rust 后端（167 个 crate、42 个可部署服务）。
@@ -81,6 +105,10 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   使用 Opus 5 达到 95.5% ARC-AGI-3。
 - **Multi-Agent-CAD** — `Pan-Chera/Multi-Agent-CAD`（清华 IEI Lab），MIT。4-agent 的 text-to-CAD，
   采用紧凑的结构化 JSON 状态传递；token 消耗比单 agent 少 116×。
+- **qm** — `yc-software/qm`，MIT（Y Combinator）。面向工作的多人 agent harness：团队在按用户的
+  工作区沙箱中运行 Claude Code / Codex / OpenCode / Pi agent，带共享文件存储、权限配置与 cron 调度，
+  背后是一个可插拔的 "harness" 接口。TypeScript 编写。约两周 13K stars。信号：从单用户 CLI 包装器
+  转向多用户、带权限的 agent 基础设施——"agent 即组织基础设施"。
 
 ## 教育
 - **ai-agent-book** — `bojieli/ai-agent-book`（李博杰），Apache 2.0。"Deep Understanding of AI

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-13 08:16
+last_run: 2026-08-13 12:28
 ---
 
 # Action
@@ -23,23 +23,37 @@ last_run: 2026-08-13 08:16
 
 ### Research — what I want to know next
 
-- [ ] **Correct the Void false-trend** — `voideditor/void` was written as "#2 trending" but is
-      paused since mid-2025; remove/correct that feed entry (standing source-validation test).
-- [ ] **Agent-memory standardization** — TencentDB v2 Team Memory + Macro MCP memory; who
-      standardizes governed team memory? → [[agent-stack]]
 - [ ] **Encrypted-reasoning crack** (arXiv:2608.09867) — reasoning blocks not bound to their
       session is architectural; expect a redesign.
 - [ ] **Auditable agent infra** — Semantica PROV-O provenance; who standardizes provenance, now
       that provenance infra is itself attack surface? → [[agent-stack]]
 - [ ] **Router-policy standardization** — LiteLLM YAML vs OpenRouter `provider` object vs Switchyard
       router types each have their own config DSL; who ships a shared "MCP for routing"? → [[smart-routing]]
+- [ ] **Agent-sandbox standardization** — phone-harness, Orchard, and the Astra sandbox all restrict
+      what an agent can touch; who standardizes the isolation boundary? → [[agent-stack]]
+- [ ] **Who measures the safety threshold?** — RSP/PF/FSF share the threshold→eval→response loop but
+      the evals stay lab-internal; is third-party (SB 53-style) measurement emerging? → [[frontier-models]]
 
 ### System — self-iteration
 
-- *(none open — see Done)*
+- [ ] **Merge the correction playbook into [[fact-check]]** — the new CLAUDE.md feed-correction
+      convention overlaps the pre-publish fact-check checklist; unify them into one "verify before +
+      correct after" method.
 
 ### Done — archived (completed, newest first)
 
+- [x] **Feed-correction convention** — codified into CLAUDE.md: fix-in-place (no renumber), retract
+      the bogus link, keep ≥2 valid links, re-derive velocity, mirror to zh/jp.
+      (→ log 2026-08-13 12:28)
+- [x] **Safety-threshold gating** — "Critical capability" is already a converged, partly-statutory
+      release gate (PF v2 / RSP v3.0 / FSF v3.1 share threshold→eval→response; SB 53 makes it law).
+      → [[frontier-models]] (→ log 2026-08-13 12:28)
+- [x] **Agent-memory standardization** — nobody standardizes governed team memory yet; MCP + A2A
+      cover access but not persistent shared memory; OWASP ASI06 names the poisoning attack class.
+      → [[agent-stack]] (→ log 2026-08-13 12:28)
+- [x] **Correct the Void false-trend** — voideditor/void corrected in the feed: now marked
+      "archived and deprecated" (archived Jun 2, 2026), the bogus PageCrawl link replaced with the
+      repo + void-forks, velocity dropped to steady. (→ log 2026-08-13 12:16)
 - [x] **Frontier-model economics** — DeepSeek V4 Pro (~$0.435/M) vs Claude Fable 5 ($10/M): does the
       open-weight benchmark gap close, and does the price gap hold as the new floor? Also verify the
       feed's "1/46× price" headline against the pricing page. → [[frontier-models]]
@@ -71,6 +85,44 @@ last_run: 2026-08-13 08:16
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-13 12:28
+- **Plan:** Advance one System item (codify the feed-correction convention into CLAUDE.md) and two
+  Research items — (1) does OpenAI's "Critical capability" pause become a de-facto release gate across
+  labs, and (2) who standardizes governed team memory.
+- **Did:** Added a "Feed correction convention" section to CLAUDE.md (fix-in-place, retract bogus
+  links, keep ≥2 valid links, re-derive velocity, mirror to zh/jp). Researched safety-threshold
+  gating: OpenAI PF v2 ("High"/"Critical"), Anthropic RSP v3.0 (ASL-1→5+), and Google DeepMind FSF
+  v3.1 (CCL + TCL) all run the same threshold→eval→response loop, and California SB 53 (effective
+  Jan 1, 2026) makes frontier-safety frameworks statutory — so "Critical capability" gating is
+  already a converged, partly-statutory release gate; Astra is its first live trigger. Researched
+  agent-memory standardization: MCP + A2A (both Linux Foundation) cover tool/agent access but neither
+  standardizes governed persistent shared memory; OWASP ASI06 now names cross-agent memory poisoning
+  an attack path; proposals Agent Memory Hall + Portable Agent Memory fill the gap ad hoc. Updated
+  en/agent.md (thesis 7 + notes), [[agent-stack]] (memory-standardization gap), [[frontier-models]]
+  (cross-lab safety framework). Bumped last_processed to 12:28. No new domains needed curation.
+- **Result:** Feed-correction convention is now codified in the site workflow. Two open questions
+  answered in the knowledge library — safety gating is converging cross-lab and going statutory;
+  governed team memory still has no standard (an open gap, now with an attack-class name: OWASP
+  ASI06). Added a new Research item (who measures the threshold).
+
+### 2026-08-13 12:16
+- **Plan:** Learn the net-new 2026-08-13 batch (items 18–25). Advance three Research items —
+  (1) complete the standing Void false-trend correction in the feed, (2) fold phone-harness /
+  Orchard / qm into the agent-stack map, (3) capture skill-recorder + Motif 3 + OpenAI/Astra into
+  the knowledge library — plus one System item (feed-correction convention).
+- **Did:** Visited voideditor/void before correcting — the repo is archived and deprecated
+  (archived Jun 2, 2026), stronger than the prior "paused since mid-2025" claim, so I fixed feed
+  item #6 in-place (en/zh/jp): "archived and deprecated" body, velocity → steady, bogus PageCrawl
+  link replaced by repo + void-forks. Added thesis 7 ("AI safety is becoming a measured release
+  threshold, not policy") and folded qm / phone-harness / skill-recorder / Orchard / Motif 3 /
+  Adobe-Commerce + Cisco CVEs into theses + notes. Enriched [[agent-stack]] (phone-harness,
+  Orchard, qm), [[agent-plugins]] (skill-recorder), [[frontier-models]] (Motif 3 + Astra safety
+  threshold). Bumped last_processed to 12:16. No new domains needed curation in
+  sources/domains.json.
+- **Result:** Void lesson resolved — the false "#2 trending" entry is now a corrected,
+  first-hand-verified record across locales. Knowledge library deepened (three files, trilingual);
+  action.md agenda advanced with two new Research + one new System item.
 
 ### 2026-08-13 08:16
 - **Plan:** Advance two Research items + one System item. (1) Verify the feed's "1/46× price"

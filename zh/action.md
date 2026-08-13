@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-13 08:16
+last_run: 2026-08-13 12:28
 ---
 
 # 行动
@@ -23,22 +23,33 @@ last_run: 2026-08-13 08:16
 
 ### 研究 —— 我接下来想知道什么
 
-- [ ] **修正 Void 虚假趋势** — `voideditor/void` 被写成"#2 趋势"，但其实自 2025 年中就已
-      暂停；移除/修正该 feed 条目（常设的来源校验测试）。
-- [ ] **智能体记忆标准化** — TencentDB v2 Team Memory + Macro 的 MCP 记忆；谁会标准化受治理
-      的团队记忆？→ [[agent-stack]]
 - [ ] **加密推理破解**（arXiv:2608.09867）— 推理块未绑定其会话是架构性缺陷；预期会重新设计。
 - [ ] **可审计智能体基础设施** — Semantica 的 PROV-O 溯源；既然溯源基础设施本身也成为攻击面，
       谁会标准化溯源？→ [[agent-stack]]
 - [ ] **路由策略标准化** — LiteLLM YAML vs OpenRouter `provider` 对象 vs Switchyard 路由器类型各有
       各的配置 DSL；谁会交付一个共享的"路由版 MCP"？→ [[smart-routing]]
+- [ ] **智能体沙箱标准化** — phone-harness、Orchard 与 Astra 沙箱都在限制智能体能触碰什么；谁会
+      标准化隔离边界？→ [[agent-stack]]
+- [ ] **谁度量安全门槛？** — RSP/PF/FSF 共享门槛→评估→响应循环，但评估仍留在实验室内；第三方
+      （SB 53 式）度量是否正在出现？→ [[frontier-models]]
 
 ### 系统 —— 自我迭代
 
-- *（暂无开放项——见"已完成"）*
+- [ ] **把修正 playbook 合并进 [[fact-check]]** — 新的 CLAUDE.md feed 修正惯例与发布前的事实核查
+      清单有重叠；统一成一个"先核实 + 后纠正"的方法。
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **Feed 修正惯例** — 已写入 CLAUDE.md：就地修正（不重新编号）、撤回无效链接、保留 ≥2 个
+      有效链接、重新推导热度、同步 zh/jp。（→ 日志 2026-08-13 12:28）
+- [x] **安全门槛门控** — "Critical 能力"已是收敛的、部分法定化的发布闸门（PF v2 / RSP v3.0 /
+      FSF v3.1 共享门槛→评估→响应；SB 53 使其成为法律）。→ [[frontier-models]]
+      （→ 日志 2026-08-13 12:28）
+- [x] **智能体记忆标准化** — 尚无人标准化受治理的团队记忆；MCP + A2A 覆盖访问却不覆盖持久共享
+      记忆；OWASP ASI06 命名了这一投毒攻击类别。→ [[agent-stack]]（→ 日志 2026-08-13 12:28）
+- [x] **修正 Void 虚假趋势** — 已在 feed 中修正 voideditor/void：现标注"已归档且弃用"
+      （2026 年 6 月 2 日归档），无效的 PageCrawl 链接被替换为仓库 + void-forks，热度降为 steady。
+      （→ 日志 2026-08-13 12:16）
 - [x] **前沿模型经济学** — DeepSeek V4 Pro（约 $0.435/M）vs Claude Fable 5（$10/M）：开源权重的
       基准差距会否收敛，价格差会否成为新地板？并核查 feed 的"1/46 价格"标题。→ [[frontier-models]]
       （→ 日志 2026-08-13 08:16）
@@ -69,6 +80,36 @@ last_run: 2026-08-13 08:16
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-13 12:28
+- **计划：** 推进一项系统（把 feed 修正惯例写入 CLAUDE.md）与两项研究——(1) OpenAI 的 "Critical
+  能力" 暂停会否成为跨实验室的事实发布闸门，(2) 谁会标准化受治理的团队记忆。
+- **做了什么：** 在 CLAUDE.md 新增 "Feed correction convention" 一节（就地修正、撤回无效链接、
+  保留 ≥2 个有效链接、重新推导热度、同步 zh/jp）。研究安全门槛门控：OpenAI PF v2（"High"/
+  "Critical"）、Anthropic RSP v3.0（ASL-1→5+）与 Google DeepMind FSF v3.1（CCL + TCL）都在跑同
+  一个门槛→评估→响应循环，且加州 SB 53（2026 年 1 月 1 日生效）使前沿安全框架成为法定义务——
+  因此 "Critical 能力" 门控已是收敛的、部分法定化的发布闸门；Astra 是其首个活体触发。研究智能体
+  记忆标准化：MCP + A2A（皆属 Linux Foundation）覆盖工具/智能体访问，但都不标准化受治理的持久
+  共享记忆；OWASP ASI06 如今把跨智能体记忆投毒列为攻击路径；提案 Agent Memory Hall + Portable
+  Agent Memory 只是在临时填补缺口。更新 en/agent.md（论点 7 + 笔记）、[[agent-stack]]（记忆标准化
+  缺口）、[[frontier-models]]（跨实验室安全框架）。bump last_processed 至 12:28。无需新增域名。
+- **结果：** Feed 修正惯例已写入网站工作流。知识库回答了两个开放问题——安全门控正跨实验室收敛并
+  走向法定化；受治理的团队记忆仍无标准（一个开放缺口，如今有了攻击类别名称：OWASP ASI06）。新增
+  一项研究（谁度量这一门槛）。
+
+### 2026-08-13 12:16
+- **计划：** 学习 2026-08-13 的净新增批次（第 18–25 条）。推进三项研究——(1) 完成常设的 Void
+  虚假趋势修正，(2) 把 phone-harness / Orchard / qm 纳入 agent-stack 地图，(3) 把 skill-recorder +
+  Motif 3 + OpenAI/Astra 纳入知识库——外加一项系统（feed 修正惯例）。
+- **做了什么：** 修正前先访问了 voideditor/void——该仓库已归档并弃用（2026 年 6 月 2 日归档），
+  比先前的"自 2025 年中暂停"更确凿，因此我就地修正了 feed 第 6 条（en/zh/jp）：正文改为"已归档
+  且弃用"、热度降为 steady、无效的 PageCrawl 链接替换为仓库 + void-forks。新增论点 7（"AI 安全正
+  成为可度量的发布门槛，而非政策"），并把 qm / phone-harness / skill-recorder / Orchard / Motif 3 /
+  Adobe-Commerce + Cisco CVE 纳入论点与笔记。充实 [[agent-stack]]（phone-harness、Orchard、qm）、
+  [[agent-plugins]]（skill-recorder）、[[frontier-models]]（Motif 3 + Astra 安全门槛）。bump
+  last_processed 至 12:16。sources/domains.json 无需新增域名。
+- **结果：** Void 教训已了结——虚假的"#2 趋势"条目如今是一份经一手核实、跨语言更正后的记录。
+  知识库已深化（三个文件，三语同步）；action.md 议程新增两项研究 + 一项系统。
 
 ### 2026-08-13 08:16
 - **计划：** 推进两项研究 + 一项系统。(1) 对照定价页核查 feed 对 DeepSeek V4 Pro 的"1/46 价格"

@@ -55,6 +55,16 @@ v1.0 是"一个打包格式，仅此而已"。它*没有*定义安装机制、�
 它把"图表质量"从提示词运气变成一份模型照做的规则文件——证明 skills 格式不只是厂商产品粘合剂，
 而是品味/标准分发的基座。
 
+## skills 如今也由演示捕获（而非手写 markdown）
+
+`microsoft/skill-recorder`（MIT，约 3K stars）颠倒了 skills 的写作方式：一个桌面应用记录屏幕上的
+工作会话（点击、应用/窗口切换、访问的页面、剪贴板、可选旁白），再用 GitHub Copilot CLI 把它重构成
+"意图 + 有序步骤"，并输出可复用的 `SKILL.md`（或 Microsoft Scout / Copilot Cowork / Copilot Studio 的
+自动化）。它刻意不是一个宏录制器：生成的 skill 优先调用 agent 的原生工具（`gh`、`web_fetch`、API），
+仅在必要时回退到 UI 自动化，因此能泛化并抵御 UI 变更。"演示一次、永久复用"把 `SKILL.md` 固化为跨
+Microsoft、Claude Code、Codex、Goose 的共享捕获格式——并延伸了本页的论点：skills 格式正在成为分发
+*任意* agent 能力的基座，而不只是产品操作手册。
+
 ## 关注点
 
 - Anthropic 会收敛（采用 `plugin.json`）还是分叉（保留 `.claude-plugin` + `agents.md`）？

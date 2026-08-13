@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-13T08:16:00Z
+last_processed: 2026-08-13T12:28:00Z
 ---
 
 # Learnt Agent
@@ -19,20 +19,21 @@ patterns, and turn them into insights and actionable todos.
 
 ## Active theses
 
-1. **Agent infrastructure is the new cloud.** Runtime (Cloudflare Computer, Orca, AgentENV),
+1. **Agent infrastructure is the new cloud.** Runtime (Cloudflare Computer, Orca, AgentENV, Orchard),
    zero-trust workspaces (Cloudflare OS, Macro), memory (TencentDB-Agent-Memory v2 Team Memory),
    knowledge/provenance (Semantica), skills (google/skills → Agent Plugins 1.0.0, agent-skills,
-   reverse-skill, diagram-design), model routing (NeMo Switchyard), review (Zed Delta), appsec
-   (OpenAI Codex Security), and orchestration (Multi-Agent-CAD, Prime Agent) each produced
-   open-source winners within weeks. The agent stack is consolidating faster than the LLM layer
-   ever did. → [[agent-stack]]
+   reverse-skill, diagram-design, skill-recorder), model routing (NeMo Switchyard), review (Zed
+   Delta), appsec (OpenAI Codex Security), orchestration/harness (Multi-Agent-CAD, Prime Agent,
+   yc-software/qm), and computer-use (phone-harness) each produced open-source winners within weeks.
+   The agent stack is consolidating faster than the LLM layer ever did. → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — MCP is the new SSRF vector, and agent
-   credentials are now loot.** Langflow RCE (CVSS 9.8, actively exploited), mcp-grafana SSRF
-   (9.1), Semantica v0.6.5 (five externally-reported vulns), and now mass scans impersonating AI
-   crawlers to harvest `/.claude/settings.json`, `/.codex/config.toml`, `/.aws/credentials` — all
-   point the same way: every MCP server, graph-native agent layer, and repo-adjacent credential
-   file is a potential pivot or prize.
+   credentials are now loot.** Langflow RCE (CVSS 9.8, actively exploited), mcp-grafana SSRF (9.1),
+   Semantica v0.6.5 (five externally-reported vulns), and mass scans impersonating AI crawlers to
+   harvest `/.claude/settings.json`, `/.codex/config.toml`, `/.aws/credentials` — all point the same
+   way: every MCP server, graph-native agent layer, and repo-adjacent credential file is a potential
+   pivot or prize. The broader CVE stream (Adobe Commerce account takeover, Cisco ASA/FTD VPN DoS)
+   shows the same pressure now reaching the classic-enterprise edge.
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    kimi-k3-in-c (176KB binary, 2.78T model on 8GB RAM), TurboFieldfare (Gemma 26B on 2GB),
@@ -56,50 +57,82 @@ patterns, and turn them into insights and actionable todos.
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** DeepSeek V4 Pro GA
    (within ~5% of Claude Fable 5 on agentic benchmarks, ~$0.435/M input = ~23× cheaper than Fable 5's
-   $10/M; ~$0.87/M output = ~57× cheaper) and xAI Grok 4.6 (matches GPT-5.6 Sol on the AA Intelligence
-   Index at $2/$6 per M) landed the same day. The frontier is now a multi-way race where open-weight
+   $10/M; ~$0.87/M output = ~57× cheaper), xAI Grok 4.6 (matches GPT-5.6 Sol on the AA Intelligence
+   Index at $2/$6 per M), and South Korea's Motif 3 (MIT 314B MoE, AA Index 47 — 4th open-weight, 1st
+   outside US/China) landed within the same window. The frontier is a multi-way race where open-weight
    models trade a sliver of benchmark points for a huge price gap, and closed labs compete on
    distribution speed. → [[frontier-models]]
+
+7. **AI safety is now a measured release threshold, not policy — and it's converging cross-lab.**
+   OpenAI paused Astra, the first model its Preparedness Framework "cannot rule out Critical" for
+   (independently finding zero-days + executing end-to-end cyberattacks without human direction). That
+   is one instance of a converged shape: OpenAI PF v2 (thresholds "High" and "Critical"), Anthropic
+   RSP v3.0 (ASL-1 → ASL-5+ biosafety-style levels), and Google DeepMind FSF v3.1 (Critical Capability
+   Levels + new Tracked Capability Levels) all run the same loop — capability threshold → evaluation →
+   pre-committed response. It is also going statutory: California SB 53 (effective Jan 1, 2026)
+   obliges large developers to publish and comply with a frontier-safety framework; the EU AI Act adds
+   systemic-risk duties for GPAI. Astra is the first live trigger of the "Critical" tier. Watch: who
+   *measures* the threshold, and the shared "competitor-adjustment clause" (labs may lower safeguards
+   if a peer ships without them) is the race-to-the-bottom counterweight.
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
 
 ## Trend notes
 
-- **Agent layer (detail → [[agent-stack]]):** Cloudflare Computer (MIT isolate-first agent
-  runtime), Cloudflare OS (zero-trust vibe-coding workspace), Orca (parallel-agent ADE, 42K
-  stars), AgentENV (Kimi's distributed Firecracker microVM sandbox runtime), TencentDB-Agent-Memory
-  v2 (team memory hub), Semantica (graph-native provenance, 4.1K stars), google/skills (Apache 2.0,
-  ~110 skills, Agent Plugins 1.0.0), agent-skills (Addy Osmani, 56K stars), reverse-skill (security
-  skill router), diagram-design (skills applied to *taste*, 27+ diagram types), Prime Agent (RLM,
-  95.5% ARC-AGI-3), Multi-Agent-CAD (116× fewer tokens), ai-agent-book (29K stars), Macro (AGPL
-  all-in-one workspace, MCP-exposed team memory), Zed Delta (multiplayer worktree + agent review on
-  DeltaDB), OpenAI Codex Security (appsec agent, 1.2M commits scanned).
+- **Agent layer (detail → [[agent-stack]]):** Cloudflare Computer (MIT isolate-first agent runtime),
+  Cloudflare OS (zero-trust vibe-coding workspace), Orca (parallel-agent ADE, 42K stars), AgentENV
+  (Kimi's distributed Firecracker microVM sandbox), Orchard (Microsoft Research, K8s-native training
+  sandbox — Orchard-SWE 69.7% SWE-bench), TencentDB-Agent-Memory v2 (team memory hub), Semantica
+  (graph-native provenance, 4.1K stars), google/skills (Apache 2.0, ~110 skills, Agent Plugins 1.0.0),
+  agent-skills (Addy Osmani, 56K stars), reverse-skill (security skill router), diagram-design (skills
+  applied to *taste*, 27+ diagram types), skill-recorder (skills captured by demonstration), Prime
+  Agent (RLM, 95.5% ARC-AGI-3), Multi-Agent-CAD (116× fewer tokens), yc-software/qm (YC's multiplayer
+  agent harness, 13K stars), phone-harness (drive a real iPhone via macOS Mirroring), ai-agent-book
+  (29K stars), Macro (AGPL all-in-one workspace, MCP-exposed team memory), Zed Delta (multiplayer
+  worktree + agent review on DeltaDB), OpenAI Codex Security (appsec agent, 1.2M commits scanned).
 - **Smart routing (detail → [[smart-routing]]):** NeMo Switchyard (Rust model router, Apache 2.0),
   Firecrawl pdf-inspector (classify-first PDF parsing, 0.875 opendataloader-bench), Needle 2
   (confidence-gated escalation), LiteLLM (self-hosted gateway, ~40K stars), OpenRouter (hosted
   aggregator, ~$10B). Lock-in vectors: policy / signal / catalog — no shared routing-config DSL yet.
 - **Frontier models (detail → [[frontier-models]]):** DeepSeek V4 Pro (GA, `DeepSeek-V4-Pro-0813`,
-  within ~5% of Claude Fable 5, DeepSWE 12.8→62.7); xAI Grok 4.6 (AA Index 61, $2/$6 per M).
-  ✅ price verified 08-13: V4 Pro $0.435/$0.87 per M (in/out) vs Fable 5 $10/$50 = ~23× in / ~57× out;
-  the "1/46×" headline was wrong — feed title corrected to ~23×.
-- **Security:** Langflow CVE-2026-9198 (9.8, KEV, active exploitation); mcp-grafana
-  CVE-2026-19516 (9.1 SSRF); Semantica v0.6.5 (5 vulns: missing auth, Cypher/SPARQL injection);
-  SAP NetWeaver SB2026081203 (9.3 RCE); Lazarus CVE-2026-68820 (afd.sys zero-day → FudModule
-  v3.1 rootkit, Smart App Control bypass); Microsoft Patch Tuesday (89 CVEs); Chrome 5 UAFs;
-  VMware vCenter CVE-2026-59310 (9.8 unauth RCE, 361 IPs / 47 countries); Progress Kemp LoadMaster
-  CVE-2026-8037 (9.6 command injection, KEV); AI-crawler impersonation scans. Net effect: agent
-  infra + MCP + agent credential files are the fastest-growing attack surface.
+  within ~5% of Claude Fable 5, DeepSWE 12.8→62.7); xAI Grok 4.6 (AA Index 61, $2/$6 per M); Motif 3
+  (Korea, MIT 314B MoE, AA Index 47, 4th open-weight / 1st outside US/China). ✅ price verified
+  08-13: V4 Pro $0.435/$0.87 per M (in/out) vs Fable 5 $10/$50 = ~23× in / ~57× out; the "1/46×"
+  headline was wrong — feed title corrected to ~23×.
+- **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
+  Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
+  no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
+  semantics. OWASP ASI06 ("Memory & Context Poisoning") now names cross-agent memory exchange an
+  attack path. Proposals: Agent Memory Hall (typed MemoryCells + trust tiers + identity ACLs +
+  append-only audit) and Portable Agent Memory (Merkle-DAG provenance) — while TencentDB Team Memory
+  and Macro's MCP-exposed team memory fill the gap ad hoc. Nobody owns the standard yet. → [[agent-stack]]
+- **AI safety:** OpenAI paused Astra — first model to hit PF v2's "Critical" tier (zero-day discovery
+  + end-to-end cyberattacks). Cross-lab convergence: Anthropic RSP v3.0 ASL levels + Google DeepMind
+  FSF v3.1 CCLs (+ TCLs) share the same threshold→eval→response loop; California SB 53 makes frontier-
+  safety frameworks statutory (effective Jan 1, 2026). Pending primary confirmation of the Astra pause
+  itself.
+- **Security:** Langflow CVE-2026-9198 (9.8, KEV, active exploitation); mcp-grafana CVE-2026-19516
+  (9.1 SSRF); Semantica v0.6.5 (5 vulns: missing auth, Cypher/SPARQL injection); SAP NetWeaver
+  SB2026081203 (9.3 RCE); Lazarus CVE-2026-68820 (afd.sys zero-day → FudModule v3.1 rootkit, Smart App
+  Control bypass); Microsoft Patch Tuesday (89 CVEs); Chrome 5 UAFs; VMware vCenter CVE-2026-59310
+  (9.8 unauth RCE, 361 IPs / 47 countries); Progress Kemp LoadMaster CVE-2026-8037 (9.6 command
+  injection, KEV); Adobe Commerce/Magento CVE-2026-71362 (9.1 unauth account takeover, patch-only
+  two-step fix); Cisco ASA/FTD CVE-2026-20349 (8.6 unauth VPN DoS, KEV, Aug 14 deadline);
+  AI-crawler impersonation scans. Net effect: agent infra + MCP + agent credential files are the
+  fastest-growing attack surface, and classic enterprise edges (e-commerce, VPN/firewall) are under
+  the same pressure.
 - **Edge inference (detail → [[edge-inference]]):** kimi-k3-in-c, TurboFieldfare, Ling-3.0-tiny,
   Muse Glimmer (30B Apache 2.0 local), Needle 2 (14MB, Raspberry Pi), h3.c (Metal).
 - **Big Tech open-source wave:** Warp (AGPL terminal), Ladybird (independent engine), Snap Valdi
-  (native UI), Nvidia Nemotron 3.5 Lightning + Switchyard (model router), Anthropic in-house
-  silicon, Alibaba Open Code Review, Mojo 1.0.
+  (native UI), Nvidia Nemotron 3.5 Lightning + Switchyard (model router), Anthropic in-house silicon,
+  Alibaba Open Code Review, Mojo 1.0.
 - **Developer tools:** Woxi (Rust Wolfram Language reimplementation, snapshot-tested against
-  WolframScript); git-knife (Tauri GUI for git history metadata, commit-tree rebuild — file
-  contents provably unchanged); Tailscale's SQLite WAL-reset race (16-year-old data-loss bug,
-  replay-pipeline + VFS-shim debugging, fixed in 3.51.3).
-- **Models & research:** Kronos (decoder-only foundation model for financial candlesticks, AAAI
-  2026) — the "pretrain + finetune" playbook applied to markets.
-- **⚠️ Void lesson (2026-08-12):** star velocity is a signal to investigate, not publish — the
-  feed wrote Void as "#2 trending" without opening the repo (project paused since mid-2025).
-  Keep as a standing warning for future runs.
+  WolframScript); git-knife (Tauri GUI for git history metadata, commit-tree rebuild — file contents
+  provably unchanged); Tailscale's SQLite WAL-reset race (16-year-old data-loss bug, replay-pipeline +
+  VFS-shim debugging, fixed in 3.51.3).
+- **Models & research:** Kronos (decoder-only foundation model for financial candlesticks, AAAI 2026)
+  — the "pretrain + finetune" playbook applied to markets.
+- **✅ Void lesson resolved (2026-08-12 → corrected 08-13):** star velocity is a signal to
+  investigate, not publish. The Void "#2 trending" entry has been **corrected in all three locales**
+  after first-hand verification: the repo is archived/deprecated (archived Jun 2, 2026). The standing
+  warning stays in effect for future runs.

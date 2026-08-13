@@ -29,6 +29,23 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
   イメージ（イメージがディスク容量を超えられる）。E2B互換HTTP API（既存のE2B SDKがそのまま
   動く）。Kubernetesクラスタでスケール。認証層はまだ無し（信頼できるネットワークで運用）。
   約1.4K stars。
+- **phone-harness** — `ShawnPana/phone-harness`、MIT、約500行のPython。Claude Code / Codexが、脱獄も
+  XcodeもWebDriverAgentも不要で実機iPhoneを操作できるようにする——トランスポートはmacOSのiPhone
+  Mirroringウィンドウ。スコープ付き `screencapture` + Apple Vision OCRで「見て」（タップ可能な座標を
+  持つ「貧者のDOM」）、HIDレベルのCGEventsで「動き」（タップ、長押し、ドラッグ、スクロール、入力）、
+  グラウンドトゥルースのスクリーンショットで「検証する」。同意ルール付きSKILL.mdを同梱（外向き/取り
+  消し困難な操作の前には停止して確認）。macOS Sequoia+、アクセシビリティ + 画面収録の許可が必要。
+  約1.7K stars。モバイルはエージェントのコンピュータ操作における最後の未開拓面。MirroringをI/Oに
+  することでWebDriverAgent/Xcodeのスタック全体を回避する。
+- **Orchard** — `microsoft/Orchard`、MIT（Microsoft Research）。Kubernetesネイティブのエージェン
+  ティックモデリングフレームワーク：**Orchard Env**サービス（REST + Pythonでサンドボックスのcreate/
+  exec/file/patch/network/timeoutsを提供）を訓練ループから分離し、SFT/RL/GRPOと任意のハーネス
+  （Codex、OpenClaw、ZeroClaw、ReAct）が1つのサンドボックス基盤を共有——スポットインスタンスで
+  管理型サンドボックスの約1/10のコスト、約26秒で1,000サンドボックスを起動。3つのレシピ：
+  Orchard-SWE（Qwen3.5-35B-A3B → 69.7% SWE-bench Verified）、Orchard-GUI（WebVoyager 74.1%）、
+  Orchard-Claw（Claw-Eval 59.6%）。arXiv 2605.15040。シグナル：エージェント訓練はモデルではなく
+  個別構築のサンドボックス基盤がボトルネックだった——約3Bアクティブパラメータで約70% SWE-benchに
+  達したのは、スケールではなく基盤が制約だったことを示す。
 
 ## モデルルーティング
 - **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`、Apache 2.0、Rust。OpenAI Chat / Anthropic
@@ -48,6 +65,18 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
   ガバナンス。ハイブリッド検索 = BM25 + ベクトル + 逆順位融合（RRF）。PersonaMem精度は48% →
   76%と報告。Claude Code/OpenAIプロトコル向けMemory Proxy。80日で15K+ stars。SQLite +
   sqlite-vec（BM25）。
+- **メモリ標準化のギャップ（未解決）：** MCP（ツール/データアクセス）とA2A（エージェント間、いずれも
+  Linux Foundation）は収束したが、どちらも*永続的で統制された共有メモリのレコード*を型定義していない
+  ——著者/信頼度/プロヴェナンスのフィールド、メモリ空間の権限、競合/順序のセマンティクスがない。
+  各フレームワークが独自に実装し（Mem0、Zep、Letta、独自ベクトルストア）、切り替えるとメモリがゼロに
+  戻る。OWASP ASI06「Memory & Context Poisoning」が今やクロスエージェントのメモリ交換を攻撃経路と名指す
+  （書き込みゲート、プロヴェナンス、セグメンテーション、保存済みメモリを信頼できない入力として扱う）。
+  提案：**Agent Memory Hall**（型付きMemoryCell——fact/preference/constraint/lesson/risk；3段階の信頼度
+  raw_source→llm_derived→human_confirmed と、LLM由来メモリ同士の上書きを防ぐ「Anti-Ouroboros」ルール；
+  アイデンティティACL；追記専用監査；MCPサーバーとして動作）と **Portable Agent Memory**
+  （Episodic/Semantic/Procedural/Working/Identity モデル、Merkle-DAGプロヴェナンス）。TencentDB Team
+  Memory と Macro のMCP公開チームメモリはその場しのぎでギャップを埋めるのみ。クロスシステム標準は
+  まだ存在しない。
 
 ## オールインワンワークスペース
 - **Macro** — `macro-inc/macro`、AGPL-3.0、SolidJS + Rustバックエンド（167クレート、42のデプロイ
@@ -94,6 +123,12 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
   Opus 5でARC-AGI-3を95.5%。
 - **Multi-Agent-CAD** — `Pan-Chera/Multi-Agent-CAD`（清華大学IEI Lab）、MIT。4エージェントの
   text-to-CADで、コンパクトな構造化JSON状態受け渡し。シングルエージェントよりトークン116×削減。
+- **qm** — `yc-software/qm`、MIT（Y Combinator）。仕事向けのマルチプレイヤーエージェントハーネス：
+  チームがClaude Code / Codex / OpenCode / Piエージェントをユーザーごとのワークスペースサンドボックス
+  で実行し、共有ファイルストレージ、権限設定、cronスケジューリングを、プラガブルな「ハーネス」
+  インターフェースの背後に備える。TypeScript。約2週間で13K stars。シグナル：単一ユーザーのCLI
+  ラッパーから、マルチユーザーで権限管理されたエージェント基盤への移行——「組織の基盤としての
+  エージェント」。
 
 ## 教育
 - **ai-agent-book** — `bojieli/ai-agent-book`（Li Bojie）、Apache 2.0。"Deep Understanding of AI

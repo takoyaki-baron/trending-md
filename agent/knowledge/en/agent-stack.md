@@ -28,6 +28,22 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   workflows; ublk + overlaybd layered images (images can exceed disk capacity); E2B-compatible
   HTTP API (existing E2B SDKs work unchanged); scales across Kubernetes. No auth layer yet (run on
   a trusted network). ~1.4K stars.
+- **phone-harness** — `ShawnPana/phone-harness`, MIT, ~500 lines of Python. Lets Claude Code / Codex
+  drive a real iPhone with no jailbreak, Xcode, or WebDriverAgent — the transport is macOS's iPhone
+  Mirroring window. "Sees" via scoped `screencapture` + Apple Vision OCR (a "poor man's DOM" with
+  tap-ready coordinates), "acts" via HID-level CGEvents (taps, long-presses, drags, scroll, typing),
+  and "verifies" with a ground-truth screenshot. Ships a SKILL.md with consent rules (stop-and-ask
+  before anything outward-facing / hard-to-reverse). macOS Sequoia+, Accessibility + Screen Recording
+  grants. ~1.7K stars. Mobile is the last untapped computer-use surface; Mirroring-as-I/O sidesteps
+  the whole WebDriverAgent/Xcode stack.
+- **Orchard** — `microsoft/Orchard`, MIT (Microsoft Research). Kubernetes-native agentic-modeling
+  framework: an **Orchard Env** service (sandbox create/exec/file/patch/network/timeouts via REST +
+  Python) decoupled from the training loop, so SFT/RL/GRPO and any harness (Codex, OpenClaw,
+  ZeroClaw, ReAct) share one sandbox substrate — 1,000 sandboxes in ~26s at ~1/10th managed-sandbox
+  cost on spot instances. Recipes: Orchard-SWE (Qwen3.5-35B-A3B → 69.7% SWE-bench Verified),
+  Orchard-GUI (WebVoyager 74.1%), Orchard-Claw (Claw-Eval 59.6%). arXiv 2605.15040. Signal: agent
+  training was bottlenecked by bespoke sandbox infra, not models — a ~3B-active-param model at ~70%
+  SWE-bench says infra, not scale, was the constraint.
 
 ## Model routing
 - **NeMo Switchyard** — `NVIDIA-NeMo/Switchyard`, Apache 2.0, Rust. Proxy/library that translates
@@ -47,6 +63,18 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   (`private`/`team`/`restricted`). Hybrid retrieval = BM25 + vectors + reciprocal-rank fusion;
   PersonaMem accuracy reported 48% → 76%. Memory Proxy for Claude Code/OpenAI protocol. 15K+ stars
   within 80 days. SQLite + sqlite-vec (BM25).
+- **Memory standardization gap (open):** MCP (tool/data access) and A2A (agent-to-agent, both Linux
+  Foundation) have converged, but neither types a *persistent, governed shared-memory record* — no
+  authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
+  semantics. Every framework invents its own (Mem0, Zep, Letta, custom vector stores), so switching
+  frameworks resets memory to zero. OWASP ASI06 "Memory & Context Poisoning" now names cross-agent
+  memory exchange as an attack path (gated writes, provenance, segmentation, treat stored memory as
+  untrusted input). Proposals: **Agent Memory Hall** (typed MemoryCells — fact/preference/constraint/
+  lesson/risk; three-tier trust raw_source→llm_derived→human_confirmed + an "Anti-Ouroboros" rule
+  blocking LLM-derived memories from superseding each other; identity ACLs; append-only audit; runs as
+  an MCP server) and **Portable Agent Memory** (Episodic/Semantic/Procedural/Working/Identity model,
+  Merkle-DAG provenance). TencentDB Team Memory and Macro's MCP-exposed team memory fill the gap ad
+  hoc; no cross-system standard yet.
 
 ## Workspace / all-in-one
 - **Macro** — `macro-inc/macro`, AGPL-3.0, SolidJS + Rust backend (167 crates, 42 deployable
@@ -91,6 +119,11 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   95.5% ARC-AGI-3 with Opus 5.
 - **Multi-Agent-CAD** — `Pan-Chera/Multi-Agent-CAD` (Tsinghua IEI Lab), MIT. 4-agent text-to-CAD
   with compact structured JSON state-passing; 116× fewer tokens than single-agent.
+- **qm** — `yc-software/qm`, MIT (Y Combinator). Multiplayer agent harness for work: teams run Claude
+  Code / Codex / OpenCode / Pi agents in per-user workspace sandboxes with shared file storage,
+  permission configs, and cron scheduling, behind a pluggable "harness" interface. TypeScript.
+  ~13K stars in ~2 weeks. Signal: the shift from single-user CLI wrappers to multi-user, permissioned
+  agent infrastructure — "agents as organizational infrastructure."
 
 ## Education
 - **ai-agent-book** — `bojieli/ai-agent-book` (Li Bojie), Apache 2.0. "Deep Understanding of AI

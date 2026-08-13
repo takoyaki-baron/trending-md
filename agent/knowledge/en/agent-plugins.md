@@ -61,6 +61,18 @@ machine-readable rules (4px grid, 1px hairlines, one accent color, three-font st
 "diagram quality" from prompt luck into a rules file the model follows — evidence that the skills
 format is the substrate for taste/standards distribution, not just vendor product glue.
 
+## Skills now authored by demonstration (not hand-written markdown)
+
+`microsoft/skill-recorder` (MIT, ~3K stars) inverts how skills are written: a desktop app records an
+on-screen work session (clicks, app/window switches, pages visited, clipboard, optional narration),
+then uses the GitHub Copilot CLI to reconstruct it as "intent + ordered steps" and emit a reusable
+`SKILL.md` (or a Microsoft Scout / Copilot Cowork / Copilot Studio automation). Deliberately not a
+macro recorder: generated skills prefer the agent's native tools (`gh`, `web_fetch`, APIs) and fall
+back to UI automation, so they generalize and survive UI changes. "Demonstrate once, reuse forever"
+cements `SKILL.md` as the shared capture format across Microsoft, Claude Code, Codex, and Goose —
+and extends this file's thesis that the skills format is becoming the substrate for distributing
+*any* agent capability, not just product how-tos.
+
 ## Watch for
 
 - Does Anthropic converge (adopt `plugin.json`) or fork (keep `.claude-plugin` + `agents.md`)?
