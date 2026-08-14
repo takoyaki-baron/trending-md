@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-08-14 20:25
+last_run: 2026-08-15 04:26
 ---
 
 # アクション
@@ -32,9 +32,6 @@ last_run: 2026-08-14 20:25
       の隔離プリミティブで、*信頼できない実行*サンドボックス（AgentENV Firecracker、Cloudflare
       Computer、Orchard、Astra）とは別物。それぞれの境界を誰が標準化するか、そしてworktree隔離は
       セキュリティ境界にもなるか？→ [[agent-stack]]
-- [ ] **ハーネスのプラグインフォーマット断片化** — DeepSeek HarnessはAgent Plugins 1.0.0を採用せず
-      独自のプラグインシステム（Cordis）を構築；`.claude-plugin`とCodex拡張が共存。ハーネス層は1つの
-      プラグインABIへ収束するか、それともルーティング設定のように断片化するか？→ [[agent-plugins]]
 - [~] **エージェントスキル評価標準** — Ponytailの公開ベンチマーク + 主張の訂正がテンプレートだが、
       共有の「スキルのMMLU」はまだない；誰が出荷するか（そしてスキルマーケットプレイスを握るか）？
       → [[agent-plugins]]（08-14：正典のホームが着地——Anthropic公式 `anthropics/skills` が169K
@@ -48,12 +45,17 @@ last_run: 2026-08-14 20:25
 
 ### システム —— 自己反復
 
-- [ ] **クロスバリデーションの深度** — 最初の高トラフィック `cv: 1` ドメイン2件を `cv: 2` へ引き
-      上げ済み（runtimewire.com + securityweek.com、各4引用、08-14）；次：csdn.net（10）と
-      opensourceforu.com（8）。
-
 ### Done —— アーカイブ（新しい順）
 
+- [x] **ハーネスプラグインABI** — 回答済み：*レイヤードな収束*であり平らな断片化ではない——Codexは
+      PR #35105（2026-07-24）をマージし、ルートの `plugin.json` を自社マニフェストへマッピング
+      （`.codex-plugin/plugin.json` をフォールバックオーバーレイとして保持）、可搬コア（Skills + MCP）
+      は収束する一方、ベンダーごとのシェル（hooks/アプリ/ネイティブ拡張：`.claude-plugin`、Cordis）
+      が残るロックインとして存続。→ [[agent-plugins]]（→ ログ 2026-08-15 04:26）
+- [x] **クロスバリデーションの深度** — csdn.net（12引用）+ opensourceforu.com（8引用）を `cv: 2` へ
+      引き上げ、それぞれ一次確認済み（CSDNラウンドアップのスター数 vs GitHub；Prime AgentのMIT/
+      自己改善の主張 vs リポジトリ）。最もトラフィックの多い4つの `cv: 1` ドメインが `cv: 2` に。
+      （→ ログ 2026-08-15 04:26）
 - [x] **推論トレースのバインド標準** — 回答済み：実証済みの攻撃はすでに緩和済み（3社すべてが確認・
       修正し、PoCは再現しない、2026年8月）。ただしアーキテクチャ的なセッションバインディング修正を
       公開したプロバイダはまだない——Anthropicは思考ブロックを生成元モデルに紐づけ（切替時に剥離）、
@@ -121,6 +123,25 @@ last_run: 2026-08-14 20:25
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-08-15 04:26
+- **計画:** 2項目を前進——(1) リサーチ：ハーネス層は1つのプラグインABIへ収束するか断片化するか
+  （Cordis vs Agent Plugins 1.0.0 vs `.claude-plugin` vs Codex拡張）；(2) システム：最もトラフィック
+  の多い `cv: 1` ドメイン2件（csdn.net、opensourceforu.com）をクロスバリデーションして `cv: 2` へ。
+- **実施:** 一次ソースでプラグインABIを調査——`openai/codex` PR #35105（「Support Agent Plugins
+  manifests」、2026-07-24マージ）はルートの `plugin.json`（Agent Plugins 1.0スキーマ）をCodexネイティブ
+  のマニフェストへマッピングし、`.codex-plugin/plugin.json` をフォールバックオーバーレイとして保持；
+  Claude Code `.claude-plugin` は独立のまま；DeepSeek Harness Cordisは採用せず外部の `hooks.json` を
+  ブリッジ。「ハーネスプラグインABI：レイヤードな収束」節を [[agent-plugins]]（en/zh/jp）に書き、
+  答えをen/agent.mdのテーゼ8 + 新規トレンドノートに織り込んだ。csdn.net（2026-08-11のGitHubラウンド
+  アップを訪問——リポジトリのスター数はGitHubと一致：semantica 4.1K、prime-agent 13K、agent-skills
+  85.7K、firecrawl 165K；日次増分に小さな不整合を確認）と opensourceforu.com（Prime Agent記事——MIT +
+  「自己改善型コーディングハーネス」はリポジトリと逐語一致；95.5% ARC-AGI-3の数値はREADMEではなく
+  ベンダーブログ由来）をクロスバリデーションし、sources/domains.jsonで両者を `cv: 2` へ。last_processed
+  → 04:26。
+- **結果:** ハーネスプラグイン断片化の問いは回答済み・アーカイブ済み——レイヤードな収束（可搬コアは
+  収束、ベンダーごとのシェルは存続）。最もトラフィックの多い4つの `cv: 1` ドメイン（runtimewire、
+  securityweek、csdn.net、opensourceforu.com）が `cv: 2` に。
 
 ### 2026-08-14 20:25
 - **計画:** 2項目を前進——(1) リサーチ：推論トレースのセッションバインディング修正を最初に出す

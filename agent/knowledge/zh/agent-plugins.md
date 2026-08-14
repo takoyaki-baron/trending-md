@@ -97,10 +97,49 @@ Colin Eberhardt 提出质疑——一条光秃秃的"遵循 YAGNI 原则"提示�
 包装层的参考）与 `anthropics/skills`（规范作者的正典之家）。其他所有 skill 库如今都要对着这两者
 来衡量。
 
+## 分叉定型：联盟 vs Anthropic（8 月 15 日）
+
+**Agent Plugins 1.0.0 联盟**如今已明确：**OpenAI、Microsoft、GitHub、AWS、Vercel 与 Cursor
+（Anysphere）**，加上**以核心维护者身份加入的 Google**——它们标准化的打包规范建立在 **Anthropic
+自己的 MCP + Agent Skills** 之上。Anthropic 却**缺席**，转而为其 **Cowork** 单独交付了一套插件
+系统。该格式如今有三个极点：`google/skills`（标准化包装层的参考）、`anthropics/skills`（规范作者
+的正典之家），以及一个连规范作者本人都不加入的跨厂商打包规范。
+
+**`cursor/plugins`**（MIT，约 2.8K stars）是 Cursor 官方的插件规范 + 市场：每个插件是一个目录，含
+`.cursor-plugin/plugin.json` manifest，可打包六类组件中的任意几种——**rules**（`.mdc`）、**skills**、
+**agents**、**commands**、**MCP servers** 与 **hooks**——带基于文件夹的自动发现，并随附 11 个官方
+插件（每个社区插件都经人工审核）。它收敛到联盟所标准化的同一套 `skills/` + `mcp.json` 原语，因此
+既是 1.0.0 的参考实现，*又*补充了 1.0.0 规范刻意留白的 Cursor 专属扩展（rules、hooks、canvases）。
+密钥使用 `${VAR}` 占位符，在控制面板设置，绝不存进插件。
+
+## Harness 插件 ABI：分层式收敛，而非扁平碎片化（8 月 15 日）
+
+"harness 层会收敛到一个插件 ABI，还是像路由配置那样碎片化？"这个开放问题如今有了更清晰的答案：
+**一种分层式收敛**——可移植核心在收敛，而 harness 外壳仍逐厂商。
+
+- **可移植核心正在代码层面收敛。** OpenAI Codex 合并了 PR #35105（"Support Agent Plugins
+  manifests"，2026-07-24 合并），该 PR 识别根 `plugin.json`（Agent Plugins 1.0 schema），把其可移植
+  元数据 + `skills/` + `mcp.json` 映射进 Codex 的原生 manifest，并把 `.codex-plugin/plugin.json`
+  保留为*回退覆盖层*（保留旧 manifest 优先级；拒绝不支持的 schema 版本）。Codex CLI 0.147.0 的
+  变更日志已列明对可移植 Agent Plugins 的支持——厂商专属的 `.codex-plugin` 格式正被*叠加到*可移植
+  标准之上，而非被其取代。`cursor/plugins` 如出一辙：以 `skills/` + `mcp.json` 为共享核心，以
+  Cursor 专属的 rules/hooks/canvases 为客户端专属扩展。
+- **harness 外壳仍逐厂商。** Claude Code 的 `.claude-plugin/plugin.json` 仍独立（Anthropic 不在
+  TSC 中，也非首发客户端；其 8 月 7 日的 2.1.224 版本扩展了 zip 安装 + SHA-256 锁定）。DeepSeek
+  Harness 的 Cordis 是一张完整的 harness 内部插件图（服务经 Fiber 链上的 Proxy 提供；hook 是类型化
+  拦截扩展点），并且它显式地*桥接*而非采用——一个 bridge 插件指向现有 `hooks.json`，让外部
+  Claude-Code/Codex 风格的外壳 hook 原样运行，而一个"原生 hook"只是一个普通 Cordis 插件。
+- **所以：核心处有一个共享 ABI（`plugin.json` 背后的 Skills + MCP），外壳处的 hooks/apps/原生扩展
+  逐厂商——并以桥接（Codex 的回退覆盖层、DeepSeek 的 hooks.json 桥接、Cursor 的扩展命名空间）在两者
+  之间转译。** 这不是路由配置 DSL 所遭受的那种扁平碎片化；而是操作系统内核的形态：厂商专属运行时
+  之上有一个共享的用户态 ABI。剩余锁定不在打包格式，而在*外壳*（hooks、权限、市场）——恰是 v1.0
+  留白的"信任缺口"。
+
 ## 关注点
 
 - Anthropic 会收敛（采用 `plugin.json`）还是分叉（保留 `.claude-plugin` + `agents.md`）？
 - 信任缺口：第一个落地签名 + 权限模型的平台将赢得企业市场。
 - v2 是否会从 skills + MCP 扩展到 hooks / subagents / slash commands——下一个锁死面。
-- harness 插件格式会否碎片化（Cordis vs Agent Plugins 1.0.0 vs `.claude-plugin`）？
+- harness 插件 ABI：核心已收敛到 `plugin.json`——逐厂商的*外壳*（hooks、权限、市场）如今会否成为锁定
+  面，还是坍缩进 v2？
 - 谁会标准化 agent 技能评估——Ponytail 的基准所指向的"技能的 MMLU"？

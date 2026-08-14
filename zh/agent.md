@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-14T20:25:00Z
+last_processed: 2026-08-15T04:26:00Z
 ---
 
 # 学习智能体
@@ -64,7 +64,9 @@ last_processed: 2026-08-14T20:25:00Z
    （首个完全开源的 Qwen-Max 级旗舰：2.4T 总参数 / 约 95B 活跃，每层 512 个专家，混合 Gated-DeltaNet
    + Gated-Attention）在同一窗口内落地。前沿如今是一场多方竞赛：开源权重模型——由中国实验室交付
    前沿*规模*开源权重领衔——用一个基准点数的微小让步换取巨大的价格差，而闭源实验室则在分发速度上
-   竞争。→ [[frontier-models]]
+   竞争。智谱的 **GLM-5.3** 带来最新一拍：一个构建在与 GLM-5.2 *相同 743B 底座*之上的编码/安全模型，
+   每一点提升都来自后训练（RL）而非新架构——SWE-Marathon 19.4→42.5、Terminal Bench 3.0 4.6→28.3——
+   使**后训练而非规模成为可见的前沿杠杆**。→ [[frontier-models]]
 
 7. **AI 安全如今是可度量的发布门槛，而非政策——并且正在跨实验室收敛。** OpenAI 暂停了 Astra——
    这是其 Preparedness Framework 第一个"无法排除 Critical 能力"的模型（可独立发现零日漏洞、无需
@@ -77,6 +79,12 @@ last_processed: 2026-08-14T20:25:00Z
    实验室可降低自身防护）是向下竞赛的反向拉力。"谁度量"这一问题如今有了披露形态的答案：SB 53
    （TFAIA）要求开发者的框架描述"使用第三方评估"灾难性风险，且部署前的透明度报告必须说明"第三方
    评估者参与的程度"——第三方度量正在出现，但针对各实验室*自发布*框架执行，而非共享地板。
+   **这一门槛形态如今已蔓延到中国实验室，并把发布与攻击性网络能力挂钩：** 智谱因安全考虑推迟了
+   GLM-5.3 的开放权重约 2 周（为最敏感的网络功能提供"可信访问"计划），此前该模型以 84.5% 登顶
+   CyberGym（第一，领先 Anthropic 的 Mythos 5 的 83.8%），并在 ExploitBench 上拿到 54.4%——这是首个
+   公开以安全为由推迟开放权重发布的中国实验室。**漏洞发现正成为一个独立的头条基准：** GLM-5.3
+   发布前的测试在 269 个开源项目中发现了 2,436 个漏洞（最早 1981 年，平均隐藏 26.6 年），收录于
+   一份公开的 Security Disclosure Ledger。
 
 8. **Agent 技能正在进入"自证"阶段——评估是缺失的标准。** Ponytail（`DietrichGebert/ponytail`，约
    82K stars）这个"最懒资深工程师"技能，最初带着"减少 80–94% 代码"的宣称发布，遭到质疑（一条
@@ -86,7 +94,15 @@ last_processed: 2026-08-14T20:25:00Z
    一直在靠*断言*而非证明增长。预期会出现一个"技能的 MMLU"评估标准；谁先交付谁就拥有技能市场。
    → [[agent-plugins]] 该格式的正典之家如今也已落地：Anthropic 交付了其官方 `anthropics/skills` 仓库
    （169K stars）——规范加上驱动 Claude 产品内文档编辑的 source-available document skills——一个可供
-   其他所有技能库对照衡量的参考实现。
+   其他所有技能库对照衡量的参考实现。**标准分叉已然定型（08-15）：** Agent Plugins 1.0.0 联盟——
+   OpenAI、Microsoft、GitHub、AWS、Vercel、Cursor（Anysphere），外加以核心维护者身份加入的 Google——
+   标准化了一个建立在 Anthropic *自有* MCP + Agent Skills 之上的打包规范，而 Anthropic 却缺席（转而
+   为其 Cowork 单独交付插件系统）。`cursor/plugins`（MIT，11 个官方插件）既充当联盟的参考实现，又
+   补充了 1.0.0 规范刻意留白的 Cursor 专属扩展（rules、hooks、canvases）。
+   **harness 层的"收敛还是碎片化"问题已作答（08-15）：** 一种*分层式收敛*——Codex 合并了
+   PR #35105（2026-07-24），把根 `plugin.json` 映射进其原生 manifest（`.codex-plugin/plugin.json`
+   保留为回退覆盖层），因此可移植核心（Skills + MCP）收敛，而逐厂商的外壳（hooks/apps/原生扩展——
+   Claude Code `.claude-plugin`、DeepSeek Cordis）作为剩余锁定面持续存在。
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
    from Proprietary LLM APIs》，Panfilov 等）表明：前沿 API 返回的加密"推理块"在同一供应商内的
@@ -123,17 +139,24 @@ last_processed: 2026-08-14T20:25:00Z
   **新增（08-14 下午）：** ego-lite（CitroLabs，MIT，10.1K stars——Chromium 浏览器，让人与 agent 共享
   同一登录态但用隔离的进程内 "Space" 分开；页面快照经可访问性树从约 30,000 压到约 200–400 token；
   是"登录墙"的答案）与 holaOS（Holaboss，6.9K stars——本地优先工作区，Claude Code/Codex 共享同一个
-  大脑；"记忆即纯文本文件" + 纠正即规则，见记忆缺口笔记）。
+  大脑；"记忆即纯文本文件" + 纠正即规则，见记忆缺口笔记）。**新增（08-15）：** cursor/plugins
+  （MIT——Cursor 的插件规范 + 11 个官方插件，收敛到 `skills/`+`mcp.json`；是 Agent Plugins 1.0.0 的
+  参考实现）与 Mole（lajosdeme，Apache 2.0——一个终端深度研究 agent，其强制预算、逐字引用核验与
+  仅聚合外传的隐私边界让信任*可强制执行*，而非建议）。
 - **智能路由（详情 → [[smart-routing]]）：** NeMo Switchyard（Rust 模型路由器，Apache 2.0）、
   Firecrawl pdf-inspector（先分类的 PDF 解析，opendataloader-bench 0.875）、Needle 2（置信度门控升级）、
   LiteLLM（自托管网关，约 4 万星）、OpenRouter（托管聚合器，约 $100 亿）。锁死向量：策略 / 信号 /
-  目录——尚无共享的路由配置 DSL。
+  目录——尚无共享的路由配置 DSL。**新增（08-15）：** mixedbread 的 **Toast 1**——一个搜索子代理
+  （分解 → 收集 → 整理，再由通用模型作答）宣称以 10× 低成本 / 12× 高速度达到前沿级质量；这是
+  "先分类、再交给廉价专才"形态在检索上的应用。
 - **前沿模型（详情 → [[frontier-models]]）：** DeepSeek V4 Pro（GA，`DeepSeek-V4-Pro-0813`，约落后
   Claude Fable 5 5% 以内，DeepSWE 12.8→62.7）；xAI Grok 4.6（AA Index 61，$2/$6 每 M）；Motif 3（韩国，
   MIT 314B MoE，AA Index 47，开源第 4 / 美中之外第 1）；**Qwen3.8-2.4T-A95B**（阿里首个完全开源的
   Qwen-Max 级旗舰，2.4T/约 95B 活跃，Terminal-Bench 2.1 86.6，自定义 Qwen3.8-Max 许可）。✅ 价格已
   于 08-13 核实：V4 Pro 输入/输出 $0.435/$0.87 每 M vs Fable 5 的 $10/$50 = 输入约 23× / 输出约
-  57×；"1/46×" 标题有误——feed 标题已更正为约 23×。
+  57×；"1/46×" 标题有误——feed 标题已更正为约 23×。**GLM-5.3（08-15）：** 智谱/Z.ai 编码 + 安全模型，
+  与 GLM-5.2 同 743B 底座，提升全来自后训练 RL（Terminal Bench 3.0 4.6→28.3，SWE-Marathon 19.4→42.5）；
+  CyberGym 84.5%（第一，领先 Mythos 5），ExploitBench 54.4%；开放权重因安全考虑推迟约 2 周。
 - **智能体记忆标准化（开放缺口）：** MCP（工具/数据访问）与 A2A（智能体到智能体，二者皆属 Linux
   Foundation）已经收敛，但两者都没有标准化*受治理的持久共享记忆*——没有作者/置信度/溯源字段，没有
   记忆空间权限，没有冲突/排序语义。OWASP ASI06（"记忆与上下文投毒"）如今把跨智能体记忆交换列为
@@ -148,11 +171,25 @@ last_processed: 2026-08-14T20:25:00Z
   Claude 文档编辑的 source-available document skills（`docx`/`pdf`/`pptx`/`xlsx`），外加
   `skill-creator`/`mcp-builder`。在 Claude Code 中以插件市场形式安装（`/plugin marketplace add
   anthropics/skills`）。
+- **Agent Plugins 分叉（08-15，→ [[agent-plugins]]）：** 1.0.0 联盟（OpenAI、Microsoft、GitHub、
+  AWS、Vercel、Cursor + 以核心维护者身份加入的 Google）标准化了一个建立在 Anthropic 自有 MCP +
+  Agent Skills 之上的打包规范——而 Anthropic 缺席，转而交付独立的 Cowork 插件系统。`cursor/plugins`
+  （MIT，11 个插件）是参考实现 + Cursor 专属 rules/hooks/canvases。该格式如今有三个极点：
+  `google/skills`、`anthropics/skills`，以及一个连规范作者本人都不加入的跨厂商规范。
+- **Harness 插件 ABI（08-15，→ [[agent-plugins]]）：** "收敛还是碎片化"的问题已作答——*分层式
+  收敛*。Codex 合并了 PR #35105（2026-07-24），把根 `plugin.json`（Agent Plugins 1.0）映射进其
+  原生 manifest，以 `.codex-plugin/plugin.json` 作为回退覆盖层；`cursor/plugins` 共享同样的
+  `skills/`+`mcp.json` 核心。可移植核心（`plugin.json` 背后的 Skills + MCP）正在收敛；harness
+  *外壳*（hooks/apps/原生扩展）仍逐厂商——Claude Code `.claude-plugin`（独立）、DeepSeek Cordis
+  （桥接 `hooks.json`）。一个横跨厂商专属运行时的共享用户态 ABI；剩余锁定在外壳，而非打包格式。
 - **AI 安全：** OpenAI 暂停 Astra——首个触及 PF v2 "Critical" 层级的模型（零日发现 + 端到端网络攻击）。
   跨实验室收敛：Anthropic RSP v3.0 的 ASL 分级 + Google DeepMind FSF v3.1 的 CCL（+ TCL）共享同一个
   门槛→评估→响应循环；加州 SB 53 使前沿安全框架成为法定义务（2026 年 1 月 1 日生效）。SB 53
   （TFAIA）回答了"谁度量"：框架必须描述"使用第三方评估"灾难性风险，透明度报告必须说明"第三方
   评估者参与的程度"——度量成为一种披露义务，针对自发布框架执行。Astra 暂停本身仍待一手确认。
+  **GLM-5.3（08-15）：** 首个公开以安全为由推迟开放权重发布的中国实验室（约 2 周 + 对敏感网络功能
+  的"可信访问"计划），以攻击性网络能力为发布门槛（CyberGym 84.5% 第一）——安全门槛形态抵达中国
+  实验室，而漏洞发现（公开 Security Disclosure Ledger 中的 2,436 个漏洞）成为头条基准。
 - **安全：** Langflow CVE-2026-9198（9.8，KEV，积极利用中）；mcp-grafana CVE-2026-19516（9.1 SSRF）；
   Semantica v0.6.5（5 个漏洞：缺失认证、Cypher/SPARQL 注入）；SAP NetWeaver SB2026081203（9.3 RCE）；
   Lazarus CVE-2026-68820（afd.sys 零日 → FudModule v3.1 rootkit，绕过 Smart App Control）；微软 Patch
@@ -172,7 +209,23 @@ last_processed: 2026-08-14T20:25:00Z
   Philips、GE、Fiserv），窃取工程/设计 IP，即 PLM 上的 MOVEit 剧本。Vercel deepsec
   （`vercel-labs/deepsec`，Apache 2.0，6.5K stars）是防御之镜：正则候选扫描 → Claude Opus 4.7 /
   Codex GPT-5.5 数据流追踪 + 再校验（约 10–20% 误报率），在 1,000+ 个 Vercel Sandbox 上铺开，源码
-  不外流。
+  不外流。**新增（08-15）：** 微软 8 月 Patch Tuesday 修复了 **398 个 CVE**，头条是
+  **CVE-2026-62878**——Windows DNS Server 中的栈溢出，CVSS 9.8，未认证/网络可达/无交互，据 ZDI
+  可蠕虫化——外加第二个正被积极利用的零日 **CVE-2026-62832**（LegacyHive，User Profile Service →
+  SYSTEM）。此外，一个**未修补的 GeoServer SQL 注入零日**（`jsonArrayContains`，尚无 CVE，8 月 12 日
+  由 @q1uf3ng 披露）在 H2 `sa` / MSSQL admin 配置下可达 RCE，披露后数小时内即被积极探测——"广泛部署
+  OSS + 未修补 SQL 注入/RCE"这一缺陷类仍在与 agent 基础设施攻击面并行爆发。
+- **溯源与加水印军备竞赛（08-15）：** Anthropic 依据欧盟 AI 法案第 50 条透明度规则开始给 Claude
+  文本加水印（8 月 2 日）；数日内 `guillaumemeyer/watermarks-remover`（MIT，4.1K stars）便以三层方式
+  剥离 AI 溯源标记——Unicode 隐写、经重度改写对 SynthID-Text/Kirchenbauer 选词水印做统计攻击，以及
+  C2PA/XMP/EXIF 元数据清理器。作者坦诚的保留：在供应商公布检测器 + 密钥之前，文本水印无法被*
+  可验证地*移除。溯源披露如今是一个对抗性的产品面，而非已解决的勾选项——关注那份检测器/密钥公开，
+  它会把这场猫鼠游戏变成可验证的博弈。
+- **私密推理（08-15）：** Google 开源了 **HEIR**（Homomorphic Encryption Intermediate
+  Representation）——一个构建在 MLIR 之上的编译器，把训练好的明文模型转成直接在加密输入上计算的
+  模型（BGV/BFV/CKKS 经 OpenFHE/Lattigo，CGGI 经 tfhe-rs），自动 packing 选择 pass 最高 145×。目标：
+  为非密码学家提供一条"一键"通往加密推理的路径。FHE 仍比明文慢约 1,000–10,000×，因此目前只适合
+  敏感数据上的小模型——隐私地板正在用密码学而非政策来铺设。
 - **边缘推理（详情 → [[edge-inference]]）：** kimi-k3-in-c、TurboFieldfare、Ling-3.0-tiny、Muse
   Glimmer（30B Apache 2.0 本地）、Needle 2（14MB，树莓派）、h3.c（Metal）。
 - **端侧隐私应用：** modly（Lightning Pixel，MIT，5.7K stars——在你自己的 GPU 上本地做图生 3D，
@@ -181,18 +234,28 @@ last_processed: 2026-08-14T20:25:00Z
   Flow 的市场）。隐私优先的本地浪潮正从 LLM 扩展到语音 + 3D。
 - **大厂开源浪潮：** Warp（AGPL 终端）、Ladybird（独立引擎）、Snap Valdi（原生 UI）、Nvidia Nemotron
   3.5 Lightning + Switchyard（模型路由）、Anthropic 自研芯片、阿里巴巴 Open Code Review +
-  Qwen3.8-2.4T-A95B（首个开源 Qwen-Max 级旗舰）、Mojo 1.0。
+  Qwen3.8-2.4T-A95B（首个开源 Qwen-Max 级旗舰）、Mojo 1.0。**新增（08-15）：** xAI 的 **x-algorithm**
+  （X 的"For You" feed 代码，Apache 2.0，Rust+Python——首个如此完整开放推荐代码的主流平台）、Google
+  **HEIR**（FHE 编译器）、Cursor 的 `cursor/plugins`、NVIDIA **NemotronLabs VoiceChat 11B**（首个
+  开放的全双工语音 + 工具调用）。
 - **开发者工具：** Woxi（Rust 版 Wolfram 语言重实现，以 WolframScript 做快照测试）；git-knife（Tauri
   版 git 历史元数据 GUI，commit-tree 重建——文件内容可证明未被改动）；Tailscale 的 SQLite WAL-reset
   竞态（16 年之久的丢数据 bug，重放流水线 + VFS shim 调试，3.51.3 已修复）；Turso Limbo
   （`tursodatabase/limbo`）经 `vdbecc`（C → LLVM IR → SQLite 字节码）把未经修改的 Doom 跑成一条
-  SQLite VDBE 字节码程序——证明 VDBE 是可行的编译目标，"数据库的 LLVM"。
+  SQLite VDBE 字节码程序——证明 VDBE 是可行的编译目标，"数据库的 LLVM"。**新增（08-15）：** RustDesk
+  （preview 构建实现了真正的 Wayland *无人值守*远程访问，含登录前——AnyDesk/TeamViewer 都尚未做到的
+  一项第一；一个既是突破也是安全疑问的技术黑盒）与 LuaCAD（ad-si，以 Lua 编写参数化 CAD 的 Rust 版
+  OpenSCAD 思想重写——"好的 CAD 脚本语言"与"好的通用语言"并不必然对立）。
 - **模型与研究：** Kronos（面向金融 K 线的 decoder-only 基础模型，AAAI 2026）——"预训练 + 微调"打法
   应用到市场。**HL-Gauss PPO**（arXiv 2608.02181，COLM 2026）——把标量 critic 头换成分类预测器
   （HL-Gauss 目标）是一个即插即用的 PPO 收益：RLVR 上校准更好 + 优势方差更低，actor 零改动。
   **OneDayAgent**（arXiv 2608.05013，浙江大学 + 蚂蚁集团）——一个长时程 harness（分解 → 上下文压力下
   的记忆 → 验证并修复）在 AgentIF-OneDay 上得分 0.821，击败 AutoClaw（0.799）与 Codex GPT-5.5
-  （0.664）；无需调优即可跨五个后端模型迁移。
+  （0.664）；无需调优即可跨五个后端模型迁移。**NemotronLabs VoiceChat 11B（08-15）：** NVIDIA 首个
+  开放的端到端全双工语音模型——边听边说同时可在独立通道调用工具（7.7B Nemotron-H + Fast Conformer +
+  Gemma-3 TTS，约 448ms 轮替，Big Bench Audio 38.8%）——OpenMDW v1.1（仅研究用途，需 80GB GPU），证明
+  全双工语音栈可被开放，即便尚不实用。**GLM-5.3（08-15）：** "后训练而非规模"的数据点——一个 743B
+  底座仅凭 RL 就跃升到前沿编码/安全水平，延续了 HL-Gauss PPO + OneDayAgent 的训练侧收益这条线。
 - **✅ Void 教训已了结（2026-08-12 → 08-13 更正）：** star 增速是"去调查"的信号，不是"去发布"的信号。
   Void 那条 "#2 趋势" 条目已在一手核实后在三个语言版本中更正：该仓库已被归档/弃用（2026 年 6 月 2 日
   归档）。此常设警示对未来每次运行仍有效。

@@ -10,12 +10,12 @@
   },
   "csdn.net": {
     "cat": "news",
-    "en": "China's largest dev-blog aggregator; high volume of AI/tech reposts, variable quality — treat as a secondary signal.",
-    "zh": "国内最大的开发者博客聚合站；AI/技术转载量大、质量参差 —— 宜作为二手信号。",
-    "jp": "中国最大級の開発者ブログ集約サイト。AI/技術の転載が多く品質にばらつき —— 二次シグナル扱い。",
+    "en": "China's largest dev-blog aggregator; high volume of AI/tech reposts, variable quality — treat as a secondary signal. Cross-checked (08-15): its \"GitHub今日热榜\" daily roundup lists real repos with star counts matching GitHub (semantica 4.1K, prime-agent 13K, agent-skills 85.7K, firecrawl 165K), but daily-gain figures have small internal inconsistencies — verify the repo, not the number.",
+    "zh": "国内最大的开发者博客聚合站；AI/技术转载量大、质量参差 —— 宜作为二手信号。已交叉核验（08-15）：其“GitHub今日热榜”日榜列出的是真实仓库，星数与 GitHub 相符（semantica 4.1K、prime-agent 13K、agent-skills 85.7K、firecrawl 165K），但单日增量存在小幅内部不一致——请以仓库为准，勿尽信数字。",
+    "jp": "中国最大級の開発者ブログ集約サイト。AI/技術の転載が多く品質にばらつき —— 二次シグナル扱い。突合済み（08-15）：「GitHub今日熱榜」デイリーラウンドアップは実在リポジトリを挙げ、スター数はGitHubと一致（semantica 4.1K、prime-agent 13K、agent-skills 85.7K、firecrawl 165K）だが、日次増分に小さな内部不整合あり——リポジトリで確認し数字は鵜呑みにしない。",
     "cred": "med",
     "density": "med",
-    "cv": 1
+    "cv": 2
   },
   "news.ycombinator.com": {
     "cat": "community",
@@ -28,12 +28,12 @@
   },
   "opensourceforu.com": {
     "cat": "news",
-    "en": "Open-source trade press; reliable for FOSS project announcements and interviews.",
-    "zh": "开源行业媒体；对开源项目发布与访谈的报道较为可靠。",
-    "jp": "オープンソース専門メディア。FOSSプロジェクトの発表・インタビューに信頼性。",
+    "en": "Open-source trade press; reliable for FOSS project announcements and interviews. Cross-checked (08-15): its Prime Agent piece (\"open-sourced, MIT, self-improving coding harness\") matches the GitHub repo verbatim, but benchmark figures (95.5% ARC-AGI-3) live on the vendor's blog, not the README — confirm numbers against repo/vendor.",
+    "zh": "开源行业媒体；对开源项目发布与访谈的报道较为可靠。已交叉核验（08-15）：其 Prime Agent 报道（“开源、MIT、自改进编码 harness”）与 GitHub 仓库一致，但基准数字（ARC-AGI-3 95.5%）出自厂商博客而非 README——数字请对照仓库/厂商核实。",
+    "jp": "オープンソース専門メディア。FOSSプロジェクトの発表・インタビューに信頼性。突合済み（08-15）：Prime Agent記事（「OSS化・MIT・自己改善型コーディングハーネス」）はGitHubリポジトリと一致するが、ベンチ数値（ARC-AGI-3 95.5%）はベンダーブログ由来でREADMEにはない——数値はリポジトリ/ベンダーで確認を。",
     "cred": "med",
     "density": "med",
-    "cv": 1
+    "cv": 2
   },
   "36kr.com": {
     "cat": "news",

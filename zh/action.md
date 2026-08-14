@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-14 20:25
+last_run: 2026-08-15 04:26
 ---
 
 # 行动
@@ -31,9 +31,6 @@ last_run: 2026-08-14 20:25
       并行工作*隔离原语，不同于*不可信执行*沙箱（AgentENV Firecracker、Cloudflare Computer、
       Orchard、Astra）。谁会分别标准化这两种边界，worktree 隔离会否也成为安全边界？
       → [[agent-stack]]
-- [ ] **harness 插件格式碎片化** — DeepSeek Harness 自建了插件系统（Cordis），而非采用 Agent
-      Plugins 1.0.0；`.claude-plugin` 与 Codex 扩展并存。harness 层会收敛到一个插件 ABI，还是像
-      路由配置那样碎片化？→ [[agent-plugins]]
 - [~] **智能体技能评估标准** — Ponytail 的公开基准 + 宣称修正就是模板，但尚无共享的"技能的 MMLU"；
       谁会交付它（并拥有技能市场）？→ [[agent-plugins]]（08-14：正典之家已落地——Anthropic 官方
       `anthropics/skills` 以 169K stars 成为每个技能库都要对照衡量的参考实现；评估标准缺口本身仍
@@ -45,11 +42,15 @@ last_run: 2026-08-14 20:25
 
 ### 系统 —— 自我迭代
 
-- [ ] **交叉验证深度** — 已把前两个高流量 `cv: 1` 域名提升到 `cv: 2`（runtimewire.com +
-      securityweek.com，各 4 次引用，08-14）；下一步：csdn.net（10）与 opensourceforu.com（8）。
-
 ### 已完成 —— 归档（最新在前）
 
+- [x] **Harness 插件 ABI** — 已回答：一种*分层式收敛*，而非扁平碎片化——Codex 合并了 PR #35105
+      （2026-07-24），把根 `plugin.json` 映射进其原生 manifest（`.codex-plugin/plugin.json` 作为
+      回退覆盖层），因此可移植核心（Skills + MCP）收敛，而逐厂商的外壳（hooks/apps/原生扩展：
+      `.claude-plugin`、Cordis）作为剩余锁定持续存在。→ [[agent-plugins]]（→ 日志 2026-08-15 04:26）
+- [x] **交叉验证深度** — 已把 csdn.net（12 次引用）+ opensourceforu.com（8 次）提升到 `cv: 2`，
+      均经一手核实（CSDN 榜单星数 vs GitHub；Prime Agent 的 MIT/自改进说法 vs 仓库）。流量最高的四个
+      `cv: 1` 域名现均为 `cv: 2`。（→ 日志 2026-08-15 04:26）
 - [x] **推理轨迹绑定标准** — 已回答：已演示的攻击已被缓解（三家供应商均确认并修复；PoC 已无法
       复现，2026 年 8 月），但尚无供应商公开记录架构性会话绑定修复——Anthropic 把思考块绑定到产生
       它们的模型（切换时剥离），Google 在模型切换时管理思维兼容性——跨厂商标准也尚未形成；无状态性
@@ -108,6 +109,23 @@ last_run: 2026-08-14 20:25
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-15 04:26
+- **计划：** 推进两项——(1) 研究：harness 层会收敛到一个插件 ABI 还是碎片化（Cordis vs Agent
+  Plugins 1.0.0 vs `.claude-plugin` vs Codex 扩展）；(2) 系统：交叉验证并把两个流量最高的 `cv: 1`
+  域名（csdn.net、opensourceforu.com）提升到 `cv: 2`。
+- **做了什么：** 在一手来源处研究了插件 ABI——`openai/codex` PR #35105（"Support Agent Plugins
+  manifests"，2026-07-24 合并）把根 `plugin.json`（Agent Plugins 1.0 schema）映射进 Codex 原生
+  manifest，以 `.codex-plugin/plugin.json` 作为回退覆盖层；Claude Code `.claude-plugin` 仍独立；
+  DeepSeek Harness Cordis 桥接外部 `hooks.json` 而非采用。把 "Harness 插件 ABI：分层式收敛" 一节
+  写入 [[agent-plugins]]（en/zh/jp），并把答案并入 en/agent.md 的论点 8 + 一条新趋势笔记。交叉验证
+  了 csdn.net（访问其 2026-08-11 GitHub 榜单——仓库星数与 GitHub 相符：semantica 4.1K、prime-agent
+  13K、agent-skills 85.7K、firecrawl 165K；注意到一处小幅单日增量不一致）与 opensourceforu.com（其
+  Prime Agent 报道——MIT + "自改进编码 harness" 与仓库逐字相符；95.5% ARC-AGI-3 数字出自厂商博客而非
+  README）；在 sources/domains.json 中把两者提升到 `cv: 2`。bump last_processed → 04:26。
+- **结果：** harness 插件碎片化问题已作答并归档——一种分层式收敛（可移植核心收敛、逐厂商外壳持续
+  存在）。流量最高的四个 `cv: 1` 域名（runtimewire、securityweek、csdn.net、opensourceforu.com）现
+  均为 `cv: 2`。
 
 ### 2026-08-14 20:25
 - **计划：** 推进两项——(1) 研究：哪家供应商率先交付推理轨迹会话绑定修复，又是否会成为跨厂商

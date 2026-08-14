@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-14T20:25:00Z
+last_processed: 2026-08-15T04:26:00Z
 ---
 
 # 学習エージェント
@@ -74,7 +74,10 @@ last_processed: 2026-08-14T20:25:00Z
    約95B、層あたり512エキスパート、ハイブリッドなGated-DeltaNet + Gated-Attention）が同じウィンドウ
    に登場。フロンティアは今や多方向の競争であり、オープンウェイトモデルは——中国ラボがフロンティア
    *規模*のオープンウェイトを出荷して先導し——数ポイントのベンチマーク差を巨大な価格差と引き換えに
-   し、クローズドラボは流通の速さで競う。→ [[frontier-models]]
+   し、クローズドラボは流通の速さで競う。Zhipuの**GLM-5.3**が最新の一拍を加える：GLM-5.2と*同じ
+   743Bベース*の上に築かれたコーディング/セキュリティモデルで、あらゆる伸びが新アーキテクチャでは
+   なくポストトレーニング（RL）から来ている——SWE-Marathon 19.4→42.5、Terminal Bench 3.0 4.6→28.3——
+   **スケールではなくポストトレーニングが目に見えるフロンティアのレバーになる**。→ [[frontier-models]]
 
 7. **AI安全性は今や政策ではなく測定可能なリリース閾値であり、しかもラボ横断で収束しつつある。**
    OpenAIはAstraを停止した——そのPreparedness Frameworkが「Critical能力を排除できない」と結論した
@@ -89,7 +92,14 @@ last_processed: 2026-08-14T20:25:00Z
    への逆作用。「誰が測定するか」は今や開示型の回答を得た：SB 53（TFAIA）は開発者のフレームワーク
    に「第三者を用いた破局的リスクの評価」の記述を義務づけ、配備前の透明性報告書には「第三者評価者
    の関与の程度」の明記を求める——第三者の測定は現れつつあるが、各ラボの*自己公表*フレームワーク
-   に対して執行され、共有のフロアではない。
+   に対して執行され、共有のフロアではない。**このゲーティングの形状は今や中国ラボに到達し、リリース
+   を攻撃的サイバー能力に結びつけた：** Zhipuは安全上の理由でGLM-5.3のオープンウェイトを約2週間
+   延期し（最も機微なサイバー機能には「trusted access」プログラムを用意）、その前段階で同モデルは
+   CyberGymで84.5%（1位、AnthropicのMythos 5の83.8%を上回る）を取り、ExploitBenchで54.4%——安全上の
+   理由でオープンウェイト公開を延期したことを公に正当化した最初の中国ラボである。**脆弱性発見がそれ
+   自体で主要なベンチマークになりつつある：** GLM-5.3の公開前テストは269のオープンソースプロジェクト
+   で2,436件の脆弱性（最古は1981年、平均26.6年隠れていた）を発見し、公開のSecurity Disclosure
+   Ledgerに収録。
 
 8. **エージェントスキルは「証明」の段階に入った——評価が欠けている標準。** Ponytail
    （`DietrichGebert/ponytail`、約82K stars）という「最も怠惰なシニア開発者」スキルは、「コード
@@ -101,7 +111,17 @@ last_processed: 2026-08-14T20:25:00Z
    先にそれを出荷した者がスキルマーケットプレイスを握る。→ [[agent-plugins]] このフォーマットの正典の
    ホームも今や着地した：Anthropicが公式 `anthropics/skills` リポジトリ（169K stars）を出荷した——
    仕様と、Claudeの製品内ドキュメント編集を支えるsource-availableなdocument skills——他のあらゆる
-   スキルライブラリを測る参照実装。
+   スキルライブラリを測る参照実装。**標準の分岐は結晶化した（08-15）：** Agent Plugins 1.0.0連合——
+   OpenAI、Microsoft、GitHub、AWS、Vercel、Cursor（Anysphere）、さらにコアメンテナーとして加わった
+   Google——は、Anthropic*自身*のMCP + Agent Skillsの上に築かれたパッケージング仕様を標準化したが、
+   Anthropicは不在（代わりにCowork向けの独自プラグインシステムを出荷）。`cursor/plugins`（MIT、11個
+   の公式プラグイン）は連合の参照実装を兼ねつつ、1.0.0仕様が意図的に残したCursor固有の拡張（rules、
+   hooks、canvases）を追加する。
+   **ハーネス層の「収束か断片化か」は回答済み（08-15）：** *レイヤードな収束*——CodexはPR #35105
+   （2026-07-24）をマージし、ルートの`plugin.json`を自社マニフェストへマッピング
+   （`.codex-plugin/plugin.json`をフォールバックオーバーレイとして保持）、可搬コア（Skills + MCP）は
+   収束する一方、ベンダーごとのシェル（hooks/アプリ/ネイティブ拡張——Claude Code `.claude-plugin`、
+   DeepSeek Cordis）が残るロックイン面として残る。
 
 9. **隠れた思考連鎖は保護境界ではなく、機密性の仮定である。** arXiv:2608.09867（「Stealing
    Reasoning Traces from Proprietary LLM APIs」、Panfilovら）は、フロンティアAPIが返す暗号化
@@ -146,18 +166,27 @@ last_processed: 2026-08-14T20:25:00Z
   アクセシビリティツリーで約30,000→約200–400トークンに圧縮；「ログインの壁」への回答）と holaOS
   （Holaboss、6.9K stars——ローカルファーストワークスペース、Claude Code/Codexが1つの脳を共有；
   「メモリ＝プレーンテキストファイル」 + 修正をルール化、メモリギャップのノート参照）。
+  **新規（08-15）：** cursor/plugins（MIT——Cursorのプラグイン仕様 + 11個の公式プラグイン、
+  `skills/`+`mcp.json`に収束；Agent Plugins 1.0.0の参照実装）と Mole（lajosdeme、Apache 2.0——強制
+  予算、逐語的な引用検証、集計のみ外部送信というプライバシー境界で信頼を*強制可能*にするターミナル
+  のディープリサーチエージェント）。
 - **スマートルーティング（詳細 → [[smart-routing]]）：** NeMo Switchyard（Rustモデルルーター、
   Apache 2.0）、Firecrawl pdf-inspector（分類優先のPDF解析、opendataloader-bench 0.875）、Needle 2
   （信頼度ゲート付きエスカレーション）、LiteLLM（セルフホストゲートウェイ、約4万スター）、OpenRouter
   （ホステッドアグリゲーター、約$100億）。ロックインベクトル：ポリシー / シグナル / カタログ——共有
-  のルーティング設定DSLはまだない。
+  のルーティング設定DSLはまだない。**新規（08-15）：** mixedbreadの **Toast 1**——検索サブエージェント
+  （分解 → 収集 → 整理の後に汎用モデルが回答）が10×低コスト / 12×高速でフロンティア級の品質を主張。
+  「分類してから安価な専門家へ」の形をリトリーバルに適用。
 - **フロンティアモデル（詳細 → [[frontier-models]]）：** DeepSeek V4 Pro（GA、`DeepSeek-V4-Pro-0813`、
   Claude Fable 5の約5%以内、DeepSWE 12.8→62.7）；xAI Grok 4.6（AA Index 61、$2/$6毎M）；Motif 3
   （韓国、MIT 314B MoE、AA Index 47、オープンウェイト4位 / 米中以外で1位）；**Qwen3.8-2.4T-A95B**
   （アリババ初の完全オープンなQwen-Max級フラッグシップ、2.4T/約95Bアクティブ、Terminal-Bench 2.1
   86.6、カスタムQwen3.8-Maxライセンス）。✅ 価格を08-13に検証：V4 Pro入力/出力$0.435/$0.87毎M vs
   Fable 5の$10/$50 = 入力約23× / 出力約57×；「1/46×」という見出しは誤り——フィード見出しを約23×に
-  訂正済み。
+  訂正済み。**GLM-5.3（08-15）：** Zhipu/Z.aiのコーディング + セキュリティモデル、GLM-5.2と同じ743B
+  ベース、伸びはすべてポストトレーニングRLから（Terminal Bench 3.0 4.6→28.3、SWE-Marathon 19.4→
+  42.5）；CyberGym 84.5%（1位、Mythos 5を上回る）、ExploitBench 54.4%；オープンウェイトは安全上の
+  理由で約2週間延期。
 - **エージェントメモリの標準化（未解決のギャップ）：** MCP（ツール/データアクセス）とA2A（エージェント
   間、いずれもLinux Foundation）は収束したが、どちらも*統制された永続的共有メモリ*を標準化していない
   ——著者/信頼度/プロヴェナンスのフィールド、メモリ空間の権限、競合/順序のセマンティクスがない。
@@ -173,13 +202,29 @@ last_processed: 2026-08-14T20:25:00Z
   agentskills.ioの仕様、再利用可能なテンプレート、Claudeのドキュメント編集を支えるsource-available
   なdocument skills（`docx`/`pdf`/`pptx`/`xlsx`）、さらに`skill-creator`/`mcp-builder`。Claude Code
   ではプラグインマーケットプレイスとしてインストール（`/plugin marketplace add anthropics/skills`）。
+- **Agent Pluginsの分岐（08-15、→ [[agent-plugins]]）：** 1.0.0連合（OpenAI、Microsoft、GitHub、
+  AWS、Vercel、Cursor + コアメンテナーとしてGoogle）はAnthropic自身のMCP + Agent Skillsの上に築いた
+  パッケージング仕様を標準化——しかしAnthropicは不在で、独立したCoworkプラグインシステムを出荷。
+  `cursor/plugins`（MIT、11プラグイン）が参照実装 + Cursor固有のrules/hooks/canvases。このフォーマット
+  には今や3つの極がある：`google/skills`、`anthropics/skills`、そして仕様の著者自身が加わらない
+  クロスベンダー仕様。
+- **ハーネスプラグインABI（08-15、→ [[agent-plugins]]）：** 「収束か断片化か」は回答済み——*レイヤード
+  な収束*。CodexはPR #35105（2026-07-24）をマージし、ルートの`plugin.json`（Agent Plugins 1.0）を
+  自社マニフェストへマッピング、`.codex-plugin/plugin.json`をフォールバックオーバーレイとして保持；
+  `cursor/plugins`も同じ`skills/`+`mcp.json`コアを共有。可搬コア（`plugin.json`背後のSkills + MCP）は
+  収束しつつあり、ハーネスの*シェル*（hooks/アプリ/ネイティブ拡張）はベンダーごとのまま——Claude
+  Code `.claude-plugin`（独立）、DeepSeek Cordis（`hooks.json`をブリッジ）。ベンダー固有ランタイムの
+  上に1つの共有ユーザー空間ABI；残るロックインはシェルであり、パッケージ形式ではない。
 - **AI安全性：** OpenAIがAstraを停止——PF v2の「Critical」ティアに達した最初のモデル（ゼロデイ発見
   + エンドツーエンドのサイバー攻撃）。ラボ横断の収束：Anthropic RSP v3.0のASLレベル + Google DeepMind
   FSF v3.1のCCL（+ TCL）は同じ閾値→評価→応答ループを共有。カリフォルニア州SB 53がフロンティア安全
   フレームワークを法制化（2026年1月1日施行）。SB 53（TFAIA）が「誰が測定するか」に回答：フレーム
   ワークは「第三者を用いた破局的リスクの評価」を記述し、透明性報告書は「第三者評価者の関与の程度」
   を明記——測定は開示義務であり、自己公表のフレームワークに対して執行される。Astra停止そのものは
-  一次確認待ち。
+  一次確認待ち。**GLM-5.3（08-15）：** 安全上の理由でオープンウェイト公開を延期したことを公に正当化
+  した最初の中国ラボ（約2週間 + 機微なサイバー機能への「trusted access」プログラム）、攻撃的サイバー
+  能力（CyberGym 84.5%で1位）でリリースをゲート——安全ゲーティングの形状が中国ラボに到達し、脆弱性
+  発見（公開Security Disclosure Ledgerの2,436件）が主要ベンチマークに。
 - **セキュリティ：** Langflow CVE-2026-9198（9.8、KEV、活発に悪用）；mcp-grafana CVE-2026-19516
   （9.1 SSRF）；Semantica v0.6.5（5件の脆弱性：認証欠落、Cypher/SPARQLインジェクション）；SAP
   NetWeaver SB2026081203（9.3 RCE）；Lazarus CVE-2026-68820（afd.sysゼロデイ → FudModule v3.1
@@ -202,7 +247,27 @@ last_processed: 2026-08-14T20:25:00Z
   → JSPウェブシェル）——Cl0pは約50社（Shell、Philips、GE、Fiserv）を主張し、エンジニアリング/設計IP
   を窃取、PLMへのMOVEit再演。Vercel deepsec（`vercel-labs/deepsec`、Apache 2.0、6.5K stars）は防御
   側の鏡：正規表現候補スキャン → Claude Opus 4.7 / Codex GPT-5.5のデータフロー追跡 + 再検証（誤検出
-  率約10–20%）、1,000以上のVercel Sandboxへ展開、ソースは外に出ない。
+  率約10–20%）、1,000以上のVercel Sandboxへ展開、ソースは外に出ない。**新規（08-15）：** Microsoftの
+  8月Patch Tuesdayは**398 CVE**を修正し、目玉は **CVE-2026-62878**——Windows DNS Serverのスタック
+  オーバーフロー、CVSS 9.8、未認証/ネットワーク到達/対話不要、ZDIによれば「ワーム化可能」——さらに
+  活発に悪用される2つ目のゼロデイ **CVE-2026-62832**（LegacyHive、User Profile Service → SYSTEM）。
+  別件で、**未パッチのGeoServer SQLインジェクションゼロデイ**（`jsonArrayContains`、CVE未採番、8月12日
+  に@q1uf3ngが開示）はH2 `sa` / MSSQL admin設定下でRCEに達し、開示から数時間で活発に探索された——
+  「広く展開されたOSS + 未パッチのSQLi/RCE」という欠陥クラスがエージェント基盤の攻撃面と並行して
+  依然として燃え続けている。
+- **プロヴェナンスと透かしの軍拡競争（08-15）：** AnthropicはEU AI法第50条の透明性ルールの下で
+  Claudeのテキストに透かしを入れ始めた（8月2日）。数日以内に `guillaumemeyer/watermarks-remover`
+  （MIT、4.1K stars）がAIプロヴェナンスマークを3層で剥がす——Unicodeステガノグラフィ、重度の言い換え
+  によるSynthID-Text/Kirchenbauerの語彙選択透かしへの統計的攻撃、C2PA/XMP/EXIFメタデータクリーナー。
+  著者の正直な留保：ベンダーが検出器 + キーを公開するまで、テキスト透かしを*検証可能に*除去する
+  ことはできない。プロヴェナンス開示は今や敵対的な製品面であり、解決済みのチェックボックスではない
+  ——この猫と鼠のゲームを検証可能なものにする検出器/キーの公開を注視。
+- **プライベート推論（08-15）：** Googleは **HEIR**（Homomorphic Encryption Intermediate
+  Representation）をオープンソース化——MLIR上に築かれ、学習済みの平文モデルを暗号化入力の上で直接
+  計算するモデルへ変換するコンパイラ（BGV/BFV/CKKSはOpenFHE/Lattigo経由、CGGIはtfhe-rs経由）、
+  自動packing選択パスで最大145×。目標：非暗号学者に「ワンクリック」で暗号化推論への道を提供する
+  こと。FHEは依然として平文より約1,000–10,000×遅く、今は機微なデータ上の小規模モデル向け——プライ
+  バシーの床は政策ではなく暗号技術で築かれつつある。
 - **エッジ推論（詳細 → [[edge-inference]]）：** kimi-k3-in-c、TurboFieldfare、Ling-3.0-tiny、
   Muse Glimmer（30B Apache 2.0ローカル）、Needle 2（14MB、Raspberry Pi）、h3.c（Metal）。
 - **オンデバイスのプライバシーアプリ：** modly（Lightning Pixel、MIT、5.7K stars——自分のGPUでローカル
@@ -213,20 +278,33 @@ last_processed: 2026-08-14T20:25:00Z
 - **ビッグテックのオープンソース波：** Warp（AGPLターミナル）、Ladybird（独立エンジン）、Snap
   Valdi（ネイティブUI）、Nvidia Nemotron 3.5 Lightning + Switchyard（モデルルーター）、Anthropic
   自社シリコン、Alibaba Open Code Review + Qwen3.8-2.4T-A95B（初のオープンなQwen-Max級フラッグシップ）、
-  Mojo 1.0。
+  Mojo 1.0。**新規（08-15）：** xAIの **x-algorithm**（Xの「For You」フィードのコード、Apache 2.0、
+  Rust+Python——主要プラットフォームがここまで完全な形で推薦コードを公開した初の例）、Googleの
+  **HEIR**（FHEコンパイラ）、Cursorの `cursor/plugins`、NVIDIAの **NemotronLabs VoiceChat 11B**（初の
+  オープンな全二重音声 + ツール呼び出し）。
 - **開発者ツール：** Woxi（RustによるWolfram言語の再実装、WolframScriptに対してスナップショット
   テストを実行）；git-knife（Tauri製のgit履歴メタデータGUI、commit-tree再構築——ファイル内容は証明
   可能な形で不変）；TailscaleのSQLite WAL-reset競合（16年もののデータ損失バグ、リプレイパイプライン +
   VFSシムによるデバッグ、3.51.3で修正）；Turso Limbo（`tursodatabase/limbo`）が`vdbecc`（C → LLVM IR
   → SQLiteバイトコード）で未改変のDoomを1つのSQLite VDBEバイトコードプログラムとして実行——VDBEが
-  実行可能なコンパイルターゲットであることの証明、「データベースのLLVM」。
+  実行可能なコンパイルターゲットであることの証明、「データベースのLLVM」。**新規（08-15）：** RustDesk
+  （Waylandで真の*無人*リモートアクセスを実現するプレビュービルド、ログイン前を含む——AnyDesk/
+  TeamViewerもまだ達成していない初の成果；突破口であると同時にセキュリティ上の疑問でもある技術的
+  ブラックボックス）と LuaCAD（ad-si、OpenSCADのアイデアをRustで書き直し、パラメトリックCADをLuaで
+  記述——「良いCADスクリプト」と「良い汎用言語」は必ずしも対立しない）。
 - **モデル & 研究：** Kronos（金融ローソク足向けのdecoder-only基盤モデル、AAAI 2026）——「事前学習 +
   ファインチューニング」の定石を市場へ適用。**HL-Gauss PPO**（arXiv 2608.02181、COLM 2026）——スカラー
   のcriticヘッドをカテゴリカル予測器（HL-Gaussターゲット）に置き換えることは、ドロップインのPPOの
   改善：RLVRでキャリブレーションが向上 + アドバンテージ分散が低下、actor変更ゼロ。
   **OneDayAgent**（arXiv 2608.05013、浙江大学 + Ant Group）——長期的なハーネス（分解 → コンテキスト
   圧力下のメモリ → 検証して修復）がAgentIF-OneDayで0.821を記録し、AutoClaw（0.799）とCodex GPT-5.5
-  （0.664）を上回る；チューニングなしで5つのバックエンドモデルに転用可能。
+  （0.664）を上回る；チューニングなしで5つのバックエンドモデルに転用可能。**NemotronLabs VoiceChat
+  11B（08-15）：** NVIDIA初のオープンなエンドツーエンド全二重音声モデル——聞きながら話し、別チャネル
+  でツールを呼ぶ（7.7B Nemotron-H + Fast Conformer + Gemma-3 TTS、約448msのターンテイキング、Big
+  Bench Audio 38.8%）——OpenMDW v1.1（研究専用、80GB GPU）、全二重音声スタックがオープン化可能である
+  ことの証明（実用はまだ先）。**GLM-5.3（08-15）：** 「スケールではなくポストトレーニング」という
+  データポイント——743BベースがRLだけでフロンティア級のコーディング/セキュリティへ跳ね、HL-Gauss PPO
+  + OneDayAgentの「訓練側の伸び」という流れを延長。
 - **✅ Voidの教訓は決着（2026-08-12 → 08-13訂正）：** スターの速度は「調査せよ」というシグナルであって
   「公開せよ」ではない。Voidの「#2トレンド」エントリは、一次確認の上で3言語すべてで訂正済み：この
   リポジトリはアーカイブ/非推奨（2026年6月2日アーカイブ）。この常設警告は今後の実行でも有効。

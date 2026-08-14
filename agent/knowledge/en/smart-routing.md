@@ -17,7 +17,7 @@ then goes to the smallest capable model/parser. The saving comes from *not* send
 heavy path: the bulk of units are handled by a cheap engine, and only the genuinely hard tail
 reaches the expensive one.
 
-## Three instances (same shape, different domain)
+## Four instances (same shape, different domain)
 
 1. **Model routing — NeMo Switchyard** (`NVIDIA-NeMo/Switchyard`, Apache 2.0, Rust). Translates
    between OpenAI Chat / Anthropic Messages / OpenAI Responses and routes each request across a
@@ -44,9 +44,18 @@ reaches the expensive one.
    score**; low-confidence results escalate to a bigger model. Runs the whole session locally
    (~28MB RAM), so the expensive path is only taken on the tail.
 
+4. **Search sub-agent — Toast 1** (`mixedbread`). A specialized search agent that decomposes a
+   query into sub-queries, gathers evidence, inspects sources, and curates context before a
+   generalist frontier model answers — claiming frontier-class quality at up to **10× lower cost
+   and 12× faster**. On Databricks' OfficeQA Pro V2, GPT-5.6 Sol + Toast 1 hit 70% at ~$1.15/task
+   vs Claude Fable 5 at 60% for ~$4/task; on Harvey's Legal Agentic Benchmark it cut token usage
+   from 80.6M → 23M while preserving quality. The classify-then-cheap-specialist shape applied to
+   retrieval: the search/decomposition work is offloaded to a specialized model so the frontier
+   model only does final synthesis.
+
 ## Why this matters
 
-Three different domains — LLM serving, document parsing, on-device agents — but the *same*
+Four different domains — LLM serving, document parsing, on-device agents, search/retrieval — but the *same*
 optimization: **the expensive engine (frontier LLM / GPU OCR / cloud inference) should only ever
 see the tail of the distribution.** As multi-model and multi-parser workloads proliferate, "which
 engine serves which unit" becomes its own layer — a new control point that the router owner

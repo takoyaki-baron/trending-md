@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-14T20:25:00Z
+last_processed: 2026-08-15T04:26:00Z
 ---
 
 # Learnt Agent
@@ -76,7 +76,10 @@ patterns, and turn them into insights and actionable todos.
    flagship: 2.4T total / ~95B active, 512 experts/layer, hybrid Gated-DeltaNet + Gated-Attention)
    landed within the same window. The frontier is a multi-way race where open-weight models — led by
    Chinese labs shipping frontier-*scale* open weights — trade a sliver of benchmark points for a
-   huge price gap, and closed labs compete on distribution speed. → [[frontier-models]]
+   huge price gap, and closed labs compete on distribution speed. Zhipu's **GLM-5.3** adds the newest
+   beat: a coding/security model on the *same 743B base as GLM-5.2* whose every gain came from
+   post-training (RL), not a new architecture — SWE-Marathon 19.4→42.5, Terminal Bench 3.0 4.6→28.3
+   — making **post-training, not scale, the visible frontier lever**. → [[frontier-models]]
 
 7. **AI safety is now a measured release threshold, not policy — and it's converging cross-lab.**
    OpenAI paused Astra, the first model its Preparedness Framework "cannot rule out Critical" for
@@ -92,7 +95,14 @@ patterns, and turn them into insights and actionable todos.
    now has a disclosure-shaped answer: SB 53 (TFAIA) requires a developer's framework to describe
    "using third parties to assess" catastrophic risk, and pre-deployment transparency reports to state
    "the extent to which third-party evaluators were involved" — third-party measurement is emerging,
-   but enforced against each lab's self-published framework, not a shared floor.
+   but enforced against each lab's self-published framework, not a shared floor. **The gating shape
+   has now reached Chinese labs and tied release to offensive-cyber capability:** Zhipu delayed
+   GLM-5.3's open weights ~2 weeks on safety grounds (a "trusted access" program for the most
+   sensitive cyber functions) after the model topped CyberGym at 84.5% (first, ahead of Anthropic's
+   Mythos 5 at 83.8%) and hit 54.4% on ExploitBench — the first Chinese lab to publicly justify a
+   delayed open-weight release. **Vulnerability discovery is becoming a headline benchmark in its own
+   right:** GLM-5.3's pre-release testing surfaced 2,436 vulns across 269 open-source projects (oldest
+   1981, avg 26.6 years hidden), published in a Security Disclosure Ledger.
 
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** Ponytail
    (`DietrichGebert/ponytail`, ~82K stars), the "laziest senior dev" skill, shipped with an "80–94%
@@ -104,7 +114,17 @@ patterns, and turn them into insights and actionable todos.
    skills marketplace. → [[agent-plugins]] The format's canonical home has now landed: Anthropic
    shipped its official `anthropics/skills` repo (169K stars) — the spec plus the source-available
    document skills that power Claude's in-product document editing — a reference implementation to
-   measure every other skill library against.
+   measure every other skill library against. **The standards fork crystallized (08-15):** the Agent
+   Plugins 1.0.0 coalition — OpenAI, Microsoft, GitHub, AWS, Vercel, Cursor (Anysphere), plus Google
+   as core maintainer — standardized a packaging spec built on Anthropic's *own* MCP + Agent Skills,
+   with Anthropic absent (shipping a separate plugin system for Cowork instead). `cursor/plugins`
+   (MIT, 11 official plugins) doubles as the coalition's reference implementation while adding the
+   Cursor-specific extensions (rules, hooks, canvases) the 1.0.0 spec deliberately left out.
+   **The harness layer's "converge or fragment?" question is answered (08-15):** a *layered
+   convergence* — Codex merged PR #35105 (Jul 24, 2026) mapping the root `plugin.json` into its
+   native manifests (`.codex-plugin/plugin.json` kept as a fallback overlay), so the portable core
+   (Skills + MCP) converges while the per-vendor shell (hooks/apps/native extensions — Claude Code
+   `.claude-plugin`, DeepSeek Cordis) persists as the remaining lock-in surface.
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
    ("Stealing Reasoning Traces from Proprietary LLM APIs", Panfilov et al.) shows the encrypted
@@ -148,17 +168,26 @@ patterns, and turn them into insights and actionable todos.
   in-process "Spaces"; page snapshots compressed ~30,000 → ~200–400 tokens via the accessibility
   tree; the login-wall answer) and holaOS (Holaboss, 6.9K stars — local-first workspace where
   Claude Code/Codex share one brain; "memory as plain-text files" + correction-as-rule, see the
-  memory gap note).
+  memory gap note). **New (08-15):** cursor/plugins (MIT — Cursor's plugin spec + 11 official plugins,
+  converging on `skills/`+`mcp.json`; the Agent Plugins 1.0.0 reference impl) and Mole (lajosdeme,
+  Apache 2.0 — a terminal deep-research agent whose enforced budget, verbatim-quote checks, and
+  aggregate-only privacy boundary make trust *enforceable*, not advisory).
 - **Smart routing (detail → [[smart-routing]]):** NeMo Switchyard (Rust model router, Apache 2.0),
   Firecrawl pdf-inspector (classify-first PDF parsing, 0.875 opendataloader-bench), Needle 2
   (confidence-gated escalation), LiteLLM (self-hosted gateway, ~40K stars), OpenRouter (hosted
   aggregator, ~$10B). Lock-in vectors: policy / signal / catalog — no shared routing-config DSL yet.
+  **New (08-15):** mixedbread's **Toast 1** — a search sub-agent (decompose → gather → curate before
+  a generalist answers) that claims frontier-class quality at 10× lower cost / 12× faster; the
+  classify-then-cheap-specialist shape applied to retrieval.
 - **Frontier models (detail → [[frontier-models]]):** DeepSeek V4 Pro (GA, `DeepSeek-V4-Pro-0813`,
   within ~5% of Claude Fable 5, DeepSWE 12.8→62.7); xAI Grok 4.6 (AA Index 61, $2/$6 per M); Motif 3
   (Korea, MIT 314B MoE, AA Index 47, 4th open-weight / 1st outside US/China); **Qwen3.8-2.4T-A95B**
   (Alibaba's first fully open Qwen-Max-class flagship, 2.4T/~95B active, Terminal-Bench 2.1 86.6,
   custom Qwen3.8-Max license). ✅ price verified 08-13: V4 Pro $0.435/$0.87 per M (in/out) vs Fable 5
   $10/$50 = ~23× in / ~57× out; the "1/46×" headline was wrong — feed title corrected to ~23×.
+  **GLM-5.3 (08-15):** Zhipu/Z.ai coding+security model, same 743B base as GLM-5.2, all gains from
+  post-training RL (Terminal Bench 3.0 4.6→28.3, SWE-Marathon 19.4→42.5); CyberGym 84.5% (first,
+  ahead of Mythos 5), ExploitBench 54.4%; open weights delayed ~2 weeks on safety grounds.
 - **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
   Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
   no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
@@ -175,6 +204,20 @@ patterns, and turn them into insights and actionable todos.
   agentskills.io spec, a reusable template, and the source-available document skills (`docx`/`pdf`/
   `pptx`/`xlsx`) that power Claude's document editing, plus `skill-creator`/`mcp-builder`. In Claude
   Code it installs as a plugin marketplace (`/plugin marketplace add anthropics/skills`).
+- **Agent Plugins fork (08-15, → [[agent-plugins]]):** the 1.0.0 coalition (OpenAI, Microsoft,
+  GitHub, AWS, Vercel, Cursor + Google as core maintainer) standardized a packaging spec built on
+  Anthropic's own MCP + Agent Skills — with Anthropic absent, shipping a separate Cowork plugin
+  system. `cursor/plugins` (MIT, 11 plugins) is the reference impl + Cursor-only rules/hooks/canvases.
+  The format now has three poles: `google/skills`, `anthropics/skills`, and a cross-vendor spec its
+  own author doesn't join.
+- **Harness-plugin ABI (08-15, → [[agent-plugins]]):** the "converge or fragment?" question is
+  answered — *layered convergence*. Codex merged PR #35105 (Jul 24, 2026) mapping root `plugin.json`
+  (Agent Plugins 1.0) into its native manifests, with `.codex-plugin/plugin.json` as a fallback
+  overlay; `cursor/plugins` shares the same `skills/`+`mcp.json` core. The portable core (Skills +
+  MCP behind `plugin.json`) is converging; the harness *shell* (hooks/apps/native extensions) stays
+  per-vendor — Claude Code `.claude-plugin` (separate), DeepSeek Cordis (bridges `hooks.json`). One
+  shared userspace ABI over vendor-specific runtimes; the remaining lock-in is the shell, not the
+  package format.
 - **AI safety:** OpenAI paused Astra — first model to hit PF v2's "Critical" tier (zero-day discovery
   + end-to-end cyberattacks). Cross-lab convergence: Anthropic RSP v3.0 ASL levels + Google DeepMind
   FSF v3.1 CCLs (+ TCLs) share the same threshold→eval→response loop; California SB 53 makes frontier-
@@ -182,6 +225,11 @@ patterns, and turn them into insights and actionable todos.
   must describe "using third parties to assess" catastrophic risk, and transparency reports must state
   "the extent to which third-party evaluators were involved" — measurement as a disclosure obligation,
   enforced against self-published frameworks. Pending primary confirmation of the Astra pause itself.
+  **GLM-5.3 (08-15):** first Chinese lab to publicly justify a delayed open-weight release on safety
+  grounds (~2 weeks + a "trusted access" program for sensitive cyber functions), gating on offensive-
+  cyber capability (CyberGym 84.5% first place) — the safety-gating shape reaches Chinese labs, and
+  vulnerability discovery (2,436 vulns in a public Security Disclosure Ledger) becomes a headline
+  benchmark.
 - **Security:** Langflow CVE-2026-9198 (9.8, KEV, active exploitation); mcp-grafana CVE-2026-19516
   (9.1 SSRF); Semantica v0.6.5 (5 vulns: missing auth, Cypher/SPARQL injection); SAP NetWeaver
   SB2026081203 (9.3 RCE); Lazarus CVE-2026-68820 (afd.sys zero-day → FudModule v3.1 rootkit, Smart App
@@ -205,7 +253,27 @@ patterns, and turn them into insights and actionable todos.
   playbook against PLM. Vercel deepsec (`vercel-labs/deepsec`, Apache 2.0, 6.5K stars) is the
   defensive mirror: regex candidate scan → Claude Opus 4.7 / Codex GPT-5.5 dataflow tracing + a
   revalidation pass (~10–20% FP rate), fanning out over 1,000+ Vercel Sandboxes, source never leaves
-  your infra.
+  your infra. **New (08-15):** Microsoft's August Patch Tuesday fixed **398 CVEs**, headlined by
+  **CVE-2026-62878** — a stack overflow in Windows DNS Server, CVSS 9.8, unauth/network/no-interaction,
+  "wormable" per ZDI — plus a second actively-exploited zero-day **CVE-2026-62832** (LegacyHive, User
+  Profile Service → SYSTEM). Separately, an **unpatched GeoServer SQLi zero-day** (`jsonArrayContains`,
+  no CVE yet, disclosed Aug 12 by @q1uf3ng) reaches RCE under H2 `sa` / MSSQL admin configs and was
+  actively probed within hours — the recurring "widely-deployed OSS + unpatched SQLi/RCE" class keeps
+  firing alongside the agent-infra surface.
+- **Provenance & watermarking arms race (08-15):** Anthropic began watermarking Claude text (Aug 2)
+  under the EU AI Act's Article 50 transparency rules; within days `guillaumemeyer/watermarks-remover`
+  (MIT, 4.1K stars) strips AI-provenance marks in three layers — Unicode steganography, a statistical
+  attack on SynthID-Text/Kirchenbauer word-choice watermarks via heavy paraphrasing, and C2PA/XMP/EXIF
+  metadata cleaners. The author's honest caveat: text watermarks can't be *certifiably* removed until
+  vendors publish detectors + keys. Provenance disclosure is now an adversarial product surface, not a
+  solved checkbox — watch for the detector/key publication that turns this cat-and-mouse into a
+  verifiable game.
+- **Private inference (08-15):** Google open-sourced **HEIR** (Homomorphic Encryption Intermediate
+  Representation) — a compiler on MLIR that turns pre-trained plaintext models into models that
+  compute directly on encrypted inputs (BGV/BFV/CKKS via OpenFHE/Lattigo, CGGI via tfhe-rs), with an
+  auto packing-selection pass up to 145×. Goal: a "one-click" path to encrypted inference for
+  non-cryptographers. FHE is still ~1,000–10,000× slower than plaintext, so today it's small models
+  on sensitive data — the privacy floor is being built with crypto, not policy.
 - **Edge inference (detail → [[edge-inference]]):** kimi-k3-in-c, TurboFieldfare, Ling-3.0-tiny,
   Muse Glimmer (30B Apache 2.0 local), Needle 2 (14MB, Raspberry Pi), h3.c (Metal).
 - **On-device privacy apps:** modly (Lightning Pixel, MIT, 5.7K stars — local image-to-3D on your own
@@ -215,12 +283,19 @@ patterns, and turn them into insights and actionable todos.
 - **Big Tech open-source wave:** Warp (AGPL terminal), Ladybird (independent engine), Snap Valdi
   (native UI), Nvidia Nemotron 3.5 Lightning + Switchyard (model router), Anthropic in-house silicon,
   Alibaba Open Code Review + Qwen3.8-2.4T-A95B (first open Qwen-Max-class flagship), Mojo 1.0.
+  **New (08-15):** xAI's **x-algorithm** (X's "For You" feed code, Apache 2.0, Rust+Python — the first
+  major platform to open recommendation code this complete), Google **HEIR** (FHE compiler), Cursor
+  `cursor/plugins`, NVIDIA **NemotronLabs VoiceChat 11B** (first open full-duplex voice + tool calling).
 - **Developer tools:** Woxi (Rust Wolfram Language reimplementation, snapshot-tested against
   WolframScript); git-knife (Tauri GUI for git history metadata, commit-tree rebuild — file contents
   provably unchanged); Tailscale's SQLite WAL-reset race (16-year-old data-loss bug, replay-pipeline +
   VFS-shim debugging, fixed in 3.51.3); Turso Limbo (`tursodatabase/limbo`) running unmodified Doom
   as a SQLite VDBE bytecode program via `vdbecc` (C → LLVM IR → SQLite bytecode) — proof the VDBE is
-  a viable compile target, "the LLVM of databases."
+  a viable compile target, "the LLVM of databases." **New (08-15):** RustDesk (preview build delivering
+  true *unattended* Wayland remote access, including pre-login — a first AnyDesk/TeamViewer haven't
+  matched; a technical black box that's both a breakthrough and a security question) and LuaCAD
+  (ad-si, Rust rewrite of OpenSCAD's ideas scripting parametric CAD in Lua — "good CAD scripting" and
+  "good general-purpose language" don't have to be in tension).
 - **Models & research:** Kronos (decoder-only foundation model for financial candlesticks, AAAI 2026)
   — the "pretrain + finetune" playbook applied to markets. **HL-Gauss PPO** (arXiv 2608.02181, COLM
   2026) — swapping the scalar critic head for a categorical predictor (HL-Gauss targets) is a drop-in
@@ -228,6 +303,12 @@ patterns, and turn them into insights and actionable todos.
   (arXiv 2608.05013, Zhejiang University + Ant Group) — a long-horizon harness (decompose → memory
   under context pressure → verify-and-repair) scores 0.821 on AgentIF-OneDay, beating AutoClaw
   (0.799) and Codex GPT-5.5 (0.664); transfers across five backends with no tuning.
+  **NemotronLabs VoiceChat 11B (08-15):** NVIDIA's first open end-to-end full-duplex speech model —
+  listen + speak simultaneously while calling tools on a separate channel (7.7B Nemotron-H + Fast
+  Conformer + Gemma-3 TTS, ~448ms turn-taking, 38.8% Big Bench Audio) — under OpenMDW v1.1
+  (research-only, 80GB GPU), proof the full-duplex voice stack is openable even if not yet practical.
+  **GLM-5.3 (08-15):** the "post-training, not scale" data point — a 743B base jumped to frontier
+  coding/security purely on RL, extending the training-side-gains thread from HL-Gauss PPO + OneDayAgent.
 - **✅ Void lesson resolved (2026-08-12 → corrected 08-13):** star velocity is a signal to
   investigate, not publish. The Void "#2 trending" entry has been **corrected in all three locales**
   after first-hand verification: the repo is archived/deprecated (archived Jun 2, 2026). The standing

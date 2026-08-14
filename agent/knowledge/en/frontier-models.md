@@ -149,6 +149,23 @@ session-binding *standard* nowhere — the same per-vendor fragmentation as rout
 ABIs. Open sub-questions: whether any provider publishes its binding scheme, and whether
 already-published blocks in public repos remain decodable.
 
+## Post-training as the lever — GLM-5.3 (Aug 15)
+
+**GLM-5.3** — Zhipu (Z.ai) — is a coding- and cybersecurity-focused model built on the **same
+743B-parameter base as GLM-5.2**, so every gain came from scaled-up post-training (RL), not a new
+architecture. Coding roughly doubled on long-horizon tasks (SWE-Marathon 19.4→42.5; Terminal Bench
+3.0 4.6→28.3, a ~6× leap). On the security side it scored **84.5% on CyberGym** — first among all
+models evaluated, ahead of Anthropic's Mythos 5 (83.8%) — and 54.4% on ExploitBench. Pre-release
+testing with Chinese security teams surfaced **2,436 vulnerabilities across 269 open-source
+projects** (1,097 critical/high, oldest 1981, avg 26.6 years hidden), published in a Security
+Disclosure Ledger. Open weights land **~2 weeks after launch** on safety grounds, with a "trusted
+access" program for the most sensitive cyber functions — the first Chinese lab to publicly justify
+a delayed open-weight release, and the first to gate release on offensive-cyber capability.
+
+Two signals: (1) **post-training, not scale, is now the visible frontier lever** — a 743B base
+jumped to frontier coding/security purely on RL; (2) **vulnerability discovery is becoming a
+headline model benchmark**, with a public ledger as its disclosure artifact.
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks

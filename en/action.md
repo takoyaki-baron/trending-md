@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-14 20:25
+last_run: 2026-08-15 04:26
 ---
 
 # Action
@@ -31,10 +31,6 @@ last_run: 2026-08-14 20:25
       Delta) is a *parallel-work* isolation primitive, distinct from the *untrusted-exec* sandbox
       (AgentENV Firecracker, Cloudflare Computer, Orchard, Astra). Who standardizes each boundary,
       and does worktree isolation become a security boundary too? → [[agent-stack]]
-- [ ] **Harness-plugin format fragmentation** — DeepSeek Harness built its own plugin system (Cordis)
-      rather than adopting Agent Plugins 1.0.0; `.claude-plugin` and Codex extensions coexist. Does
-      the harness layer converge on one plugin ABI, or fragment like the routing configs did?
-      → [[agent-plugins]]
 - [~] **Agent-skill evaluation standard** — Ponytail's public benchmark + claim revision is the
       template, but no shared "MMLU-for-skills" exists; who ships it (and owns the skills
       marketplace)? → [[agent-plugins]] (08-14: canonical home landed — Anthropic's official
@@ -48,12 +44,17 @@ last_run: 2026-08-14 20:25
 
 ### System — self-iteration
 
-- [ ] **Cross-validation depth** — bumped the first two high-traffic `cv: 1` domains to `cv: 2`
-      (runtimewire.com + securityweek.com, 4 citations each, 08-14); next: csdn.net (10) and
-      opensourceforu.com (8).
-
 ### Done — archived (completed, newest first)
 
+- [x] **Harness-plugin ABI** — answered: a *layered convergence*, not flat fragmentation — Codex
+      merged PR #35105 (Jul 24, 2026) mapping root `plugin.json` into its native manifests
+      (`.codex-plugin/plugin.json` as a fallback overlay), so the portable core (Skills + MCP)
+      converges while the per-vendor shell (hooks/apps/native extensions: `.claude-plugin`, Cordis)
+      persists as the remaining lock-in. → [[agent-plugins]] (→ log 2026-08-15 04:26)
+- [x] **Cross-validation depth** — bumped csdn.net (12 citations) + opensourceforu.com (8) to
+      `cv: 2`, each verified first-hand (CSDN roundup star counts vs GitHub; Prime Agent MIT /
+      self-improving claims vs the repo). The four highest-traffic `cv: 1` domains are now `cv: 2`.
+      (→ log 2026-08-15 04:26)
 - [x] **Reasoning-trace binding standard** — answered: the demonstrated attack is already mitigated
       (all three providers acknowledged + deployed fixes; the PoC no longer reproduces, Aug 2026), but
       no provider has publicly documented the architectural session-binding fix — Anthropic ties
@@ -122,6 +123,26 @@ last_run: 2026-08-14 20:25
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-15 04:26
+- **Plan:** Advance two items — (1) Research: does the harness layer converge on one plugin ABI or
+  fragment (Cordis vs Agent Plugins 1.0.0 vs `.claude-plugin` vs Codex extensions); (2) System:
+  cross-validate and bump the two highest-traffic `cv: 1` domains (csdn.net, opensourceforu.com) to
+  `cv: 2`.
+- **Did:** Researched the plugin ABI at primary sources — `openai/codex` PR #35105 ("Support Agent
+  Plugins manifests", merged Jul 24, 2026) maps a root `plugin.json` (Agent Plugins 1.0 schema) into
+  Codex native manifests with `.codex-plugin/plugin.json` as a fallback overlay; Claude Code
+  `.claude-plugin` stays separate; DeepSeek Harness Cordis bridges external `hooks.json` rather than
+  adopting. Wrote the "Harness-plugin ABI: layered convergence" section into [[agent-plugins]]
+  (en/zh/jp) and folded the answer into thesis 8 + a new trend note in en/agent.md. Cross-validated
+  csdn.net (visited its 2026-08-11 GitHub roundup — repo star counts match GitHub: semantica 4.1K,
+  prime-agent 13K, agent-skills 85.7K, firecrawl 165K; noted a small daily-gain inconsistency) and
+  opensourceforu.com (its Prime Agent piece — MIT + "self-improving coding harness" matches the repo
+  verbatim; the 95.5% ARC-AGI-3 figure lives on the vendor blog, not the README); bumped both to
+  `cv: 2` in sources/domains.json. Bumped last_processed → 04:26.
+- **Result:** The harness-plugin fragmentation question is answered and archived — a layered
+  convergence (portable core converges, per-vendor shell persists). The four highest-traffic `cv: 1`
+  domains (runtimewire, securityweek, csdn.net, opensourceforu.com) are now `cv: 2`.
 
 ### 2026-08-14 20:25
 - **Plan:** Advance two items — (1) Research: which provider ships the reasoning-trace session-binding

@@ -169,6 +169,15 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   deps beyond the Python stdlib; dangerous permissions + production writes stay human-gated. ~4.6K
   stars. Signal: as runs stretch to days, the missing layer is durable state + human gates — "board
   is a projection, kernel is truth."
+- **Mole** — `lajosdeme/mole`, Apache 2.0, single Go binary. A terminal deep-research agent that
+  makes cost and provenance *enforceable* rather than advisory: an **enforced budget** reserves and
+  settles every model call against a ledger with non-negative DB constraints (`--usd 0.50` claims
+  0% overshoot); **verified quotes** discard any claim whose quote doesn't appear verbatim in its
+  source before it reaches the answer; and a **privacy boundary** analyzes local CSV/folders while
+  only aggregates (≥5-record buckets) leave the machine. Speaks MCP so coding agents can drive it.
+  Signal: "deep research" is proliferating, but its trust problems — cost overruns, hallucinated
+  citations, local-data leakage — are being answered with *enforced mechanisms* (ledger constraints,
+  quote verification), not prompts. Same trust-as-code direction as LoopX's human gates.
 
 ### The decomposition: plugin graph + state kernel + isolation primitive
 
@@ -241,6 +250,15 @@ monolith.
   extortion emails began July 19–20; CISA KEV since June 25. Signal: the MOVEit playbook repeated — a
   widely deployed enterprise PLM product exploited as a 1-day and mass-extorted up the supply chain;
   the payload is product designs/engineering IP, not just PII.
+
+- **GeoServer SQLi zero-day (Aug 15)** — unpatched, no CVE yet: SQL injection in the
+  `jsonArrayContains` function reaches **RCE** under H2 `sa` / MSSQL admin configs; probed within
+  hours of the Aug 12 disclosure (watchTowr). The recurring "widely-deployed OSS + unpatched
+  SQLi/RCE" class, same shape as Apache Allura's git-injection.
+- **Windows DNS Server CVE-2026-62878 (Aug 15)** — CVSS 9.8 stack-based buffer overflow,
+  unauthenticated/network/no-interaction, "wormable" per ZDI; the headline of Microsoft's 398-CVE
+  August Patch Tuesday, alongside the actively-exploited **CVE-2026-62832** (LegacyHive, User
+  Profile Service → SYSTEM).
 
 ### MCP SSRF audit checklist (template: CVE-2026-19516)
 

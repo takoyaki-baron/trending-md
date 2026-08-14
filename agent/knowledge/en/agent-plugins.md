@@ -111,12 +111,59 @@ format now has *two* reference poles, `google/skills` (the standardized-wrapper 
 `anthropics/skills` (the spec-author's canonical home). Every other skill library is now measured
 against both.
 
+## The fork crystallizes: coalition vs Anthropic (Aug 15)
+
+The **Agent Plugins 1.0.0 coalition** is now explicit: **OpenAI, Microsoft, GitHub, AWS, Vercel,
+and Cursor (Anysphere)**, with **Google joining as a core maintainer** — standardizing a packaging
+spec built on **Anthropic's own MCP + Agent Skills**. Anthropic is **absent**, having shipped a
+separate plugin system for **Cowork** instead. The format now has three poles: `google/skills` (the
+standardized-wrapper reference), `anthropics/skills` (the spec-author's canonical home), and a
+cross-vendor packaging spec that the spec's own author doesn't join.
+
+**`cursor/plugins`** (MIT, ~2.8K stars) is Cursor's official plugin spec + marketplace: each plugin
+is a directory with a `.cursor-plugin/plugin.json` manifest bundling any of six component types —
+**rules** (`.mdc`), **skills**, **agents**, **commands**, **MCP servers**, and **hooks** — with
+automatic folder-based discovery and 11 official plugins (every community plugin manually reviewed).
+It converges on the same `skills/` + `mcp.json` primitives the coalition standardized, so it doubles
+as a reference implementation for 1.0.0 *while adding the Cursor-specific extensions (rules, hooks,
+canvases) that the 1.0.0 spec deliberately left out*. Secrets use `${VAR}` placeholders set in the
+dashboard, never stored in the plugin.
+
+## Harness-plugin ABI: layered convergence, not flat fragmentation (Aug 15)
+
+The open question "does the harness layer converge on one plugin ABI, or fragment like the routing
+configs did?" now has a sharper answer: **a layered convergence** — the portable core is converging
+while the harness shell stays per-vendor.
+
+- **The portable core is converging in code.** OpenAI Codex merged PR #35105 ("Support Agent
+  Plugins manifests", merged Jul 24, 2026) which recognizes a root `plugin.json` (Agent Plugins 1.0
+  schema), maps its portable metadata + `skills/` + `mcp.json` into Codex's native manifests, and
+  keeps `.codex-plugin/plugin.json` as a *fallback overlay* (legacy manifest precedence preserved;
+  unsupported schema versions rejected). Codex CLI 0.147.0's changelog already listed portable
+  Agent Plugins support — the vendor-specific `.codex-plugin` format is being *layered onto* the
+  portable standard, not replaced by it. `cursor/plugins` does the same: `skills/` + `mcp.json` as
+  the shared core, with Cursor-only rules/hooks/canvases as the client-specific extension.
+- **The harness shell stays per-vendor.** Claude Code's `.claude-plugin/plugin.json` remains
+  separate (Anthropic is not on the TSC and is not a launch client; its Aug 7 release 2.1.224
+  extended zip installs + SHA-256 pinning). DeepSeek Harness's Cordis is a full harness-internal
+  plugin graph (services via a Proxy over a Fiber chain; hooks as typed interception extension
+  points), and it explicitly *bridges* rather than adopts — a bridge plugin points at an existing
+  `hooks.json` so external Claude-Code/Codex-style shell hooks run faithfully, and a "native hook"
+  is just an ordinary Cordis plugin.
+- **So: one shared ABI at the core (Skills + MCP behind `plugin.json`), a per-vendor shell for
+  hooks/apps/native extensions — with bridges (Codex's fallback overlay, DeepSeek's hooks.json
+  bridge, Cursor's extension namespace) translating between them.** This is not the flat
+  fragmentation the routing-config DSLs suffered; it's the OS-kernel shape: a shared userspace ABI
+  over vendor-specific runtimes. The remaining lock-in is not the package format but the *shell*
+  (hooks, permissions, marketplaces) — exactly the "trust gap" v1.0 left open.
+
 ## Watch for
 
 - Does Anthropic converge (adopt `plugin.json`) or fork (keep `.claude-plugin` + `agents.md`)?
 - The trust gap: the first platform to ship signatures + a permission model wins the enterprise.
 - Whether v2 expands past skills + MCP to hooks / subagents / slash commands — the next lock-in
   surface.
-- Does the harness-plugin format fragment (Cordis vs Agent Plugins 1.0.0 vs `.claude-plugin`)?
+- Harness-plugin ABI: the core converged on `plugin.json` — does the per-vendor *shell* (hooks,
+  permissions, marketplaces) now become the lock-in surface, or collapse into v2?
 - Who standardizes agent-skill evaluation — the "MMLU-for-skills" that Ponytail's benchmark points
   toward?
