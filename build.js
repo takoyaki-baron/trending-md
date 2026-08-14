@@ -7,6 +7,23 @@ const { strings, langs, defaultLang } = require('./i18n.js');
 
 const ROOT = __dirname;
 
+/* ── Google Analytics (GA4) ──
+   Set GA_MEASUREMENT_ID to your Measurement ID (e.g. G-XXXXXXXXXX). Empty → GA disabled.
+   Env GA_MEASUREMENT_ID overrides at build time so deploys can change it without editing this file. */
+const GA_MEASUREMENT_ID = process.env.GA_MEASUREMENT_ID || 'G-E8TMZYF04Z';
+function gaSnippet(id) {
+  if (!id) return '';
+  return `
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${id}');
+</script>`;
+}
+
 /* ── Markdown parser ── */
 const RE_FENCE = /```(\w*)\n([\s\S]*?)```/g;
 const RE_CODE  = /`([^`]+)`/g;
@@ -394,6 +411,7 @@ ${jsonld ? `<script type="application/ld+json">\n${jsonld}\n</script>` : ''}
   .vel-up { color: var(--velocity-up); font-weight: 600; }
   @media (max-width: 600px) { .header-inner { padding: 12px 16px; } main { padding: 0 16px 40px; } .content h1 { font-size: 1.2rem; } .content h2 { font-size: 0.95rem; } }
 </style>
+${gaSnippet(GA_MEASUREMENT_ID)}
 </head>
 <body>
 <header>
@@ -873,6 +891,7 @@ fs.writeFileSync(path.join(dist, 'index.html'), `<!DOCTYPE html>
   a { color: #2563eb; text-decoration: none; font-size: 1.1rem; }
   a:hover { text-decoration: underline; }
 </style>
+${gaSnippet(GA_MEASUREMENT_ID)}
 </head>
 <body>
 <p>${langLinks}</p>
