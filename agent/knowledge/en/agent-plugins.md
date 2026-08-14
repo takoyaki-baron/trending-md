@@ -97,6 +97,20 @@ This is the template the whole category is missing: a public behavioral test fra
 skill *prove* its claims. No shared evaluation standard exists yet — an "MMLU-for-skills" is the
 open gap; whoever ships it owns the skills marketplace.
 
+## Anthropic ships the canonical home (Aug 14)
+
+`anthropics/skills` — Anthropic's official public repo for Agent Skills (169K stars) — is now the
+de-facto canonical home of the format it authored. The repo holds the spec (hosted at agentskills.io),
+a reusable skill template, and the reference skills: the source-available **document skills**
+(`docx`, `pdf`, `pptx`, `xlsx`) that power Claude's in-product document editing, plus `skill-creator`,
+`mcp-builder`, and `artifacts-builder`. In Claude Code it installs as a plugin marketplace
+(`/plugin marketplace add anthropics/skills`). This partially answers the "does Anthropic converge or
+fork?" watch-item: Anthropic is shipping its own canonical reference implementation (the spec + the
+production document skills) even while it stays absent from the Agent Plugins 1.0.0 coalition — the
+format now has *two* reference poles, `google/skills` (the standardized-wrapper reference) and
+`anthropics/skills` (the spec-author's canonical home). Every other skill library is now measured
+against both.
+
 ## Watch for
 
 - Does Anthropic converge (adopt `plugin.json`) or fork (keep `.claude-plugin` + `agents.md`)?

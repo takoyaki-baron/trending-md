@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-14T06:54:00Z
+last_processed: 2026-08-14T20:25:00Z
 ---
 
 # 学習エージェント
@@ -39,7 +39,12 @@ last_processed: 2026-08-14T06:54:00Z
    Metabase（パスワードリセットのCVSS 10.0 SQLi、接続されたすべてのウェアハウスへの常駐認証情報を
    保持）、TeamCity（エージェントポーリングプロトコルの9.8未認証RCE——サプライチェーン級の足場）、
    Apache Allura（9.8 git引数インジェクション——繰り返し現れる「gitを呼び出す」欠陥クラス）は、いずれも
-   本番データへの常駐アクセスを持つツールを全面侵害の連鎖に変える。
+   本番データへの常駐アクセスを持つツールを全面侵害の連鎖に変える。このサプライチェーンの形状に今や
+   ランサムウェアの実例が加わった：Cl0pはPTC Windchill PDMLink/FlexPLMの1-day RCE（CVE-2026-12569、
+   CVSS 9.8）で約50社（Shell、Philips、GE、Fiserv）を大規模に恐喝した——MOVEitの再演で、奪われるのは
+   エンジニアリングIP。防御側では同じエージェントパターンが問題へ向け直されている：Vercel deepsecが
+   コーディングエージェント（Claude Opus 4.7 + Codex GPT-5.5）にデータフローを追跡させ発見を再検証
+   させ、誤検出率を約10–20%に抑える。
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
    kimi-k3-in-c（176KBバイナリ、8GB RAMで2.78Tモデル）、TurboFieldfare（2GBでGemma 26B）、
@@ -93,7 +98,10 @@ last_processed: 2026-08-14T06:54:00Z
    12枚のチケットを処理）を再構築して、コード約54%減 / コスト約20%減 / 約27%高速に着地——そして
    主張を公開訂正した。このカテゴリ（google/skills、agent-skills、reverse-skill、diagram-design、
    skill-recorder）は*証明*ではなく*主張*で増殖してきた。いずれ「スキルのMMLU」評価標準が現れる。
-   先にそれを出荷した者がスキルマーケットプレイスを握る。→ [[agent-plugins]]
+   先にそれを出荷した者がスキルマーケットプレイスを握る。→ [[agent-plugins]] このフォーマットの正典の
+   ホームも今や着地した：Anthropicが公式 `anthropics/skills` リポジトリ（169K stars）を出荷した——
+   仕様と、Claudeの製品内ドキュメント編集を支えるsource-availableなdocument skills——他のあらゆる
+   スキルライブラリを測る参照実装。
 
 9. **隠れた思考連鎖は保護境界ではなく、機密性の仮定である。** arXiv:2608.09867（「Stealing
    Reasoning Traces from Proprietary LLM APIs」、Panfilovら）は、フロンティアAPIが返す暗号化
@@ -104,6 +112,12 @@ last_processed: 2026-08-14T06:54:00Z
    367件のPIIと182個の認証情報）、「安全な」拒否の背後での有害コンテンツ開示、エージェントシステム
    への不可視のプロンプトインジェクション。修正はアーキテクチャ的——ブロック単位の暗号化ではなく、
    推論をそのセッションにバインドすること。→ [[frontier-models]]
+   **決着（08-14）：** 実証済みの攻撃はすでに緩和済み——3社すべてが報告を確認し修正を展開、研究者の
+   PoCは現在のAPIに対して再現しない（2026年8月）。根本原因はプロバイダファミリーごとの単一グローバル
+   キー（「共有キーによる難読化スキーム」でありセッション単位の機密性ではない）。だがアーキテクチャ
+   的なセッションバインディング修正を公開したプロバイダはまだない——Anthropicは思考ブロックを生成元
+   モデルに紐づけ（切替時に剥離）、Googleはモデル切替時に思考互換性を管理——クロスベンダー標準も
+   未形成。ステートレス性 vs バインディングのトレードオフは業界全体で未解決のまま。
 
 > 次に追う未解決の疑問は[アクションページ](/jp/action/)のアジェンダ（リサーチ + システム）へ。
 
@@ -127,6 +141,11 @@ last_processed: 2026-08-14T06:54:00Z
   マルチプレイヤーワークツリー + エージェントレビュー）、OpenAI Codex Security（AppSecエージェント、
   120万コミットをスキャン）。**分解：** プラグイングラフ（DeepSeek Harness）+ 状態カーネル（LoopX）+
   worktree隔離（Orca、Cline Kanban、Cline CLI `--worktree`、Zed Delta）。
+  **新規（08-14午後）：** ego-lite（CitroLabs、MIT、10.1K stars——人間とエージェントが1つのログイン
+  状態を共有しつつ隔離されたプロセス内「Space」で分かれるChromiumブラウザ；ページスナップショットを
+  アクセシビリティツリーで約30,000→約200–400トークンに圧縮；「ログインの壁」への回答）と holaOS
+  （Holaboss、6.9K stars——ローカルファーストワークスペース、Claude Code/Codexが1つの脳を共有；
+  「メモリ＝プレーンテキストファイル」 + 修正をルール化、メモリギャップのノート参照）。
 - **スマートルーティング（詳細 → [[smart-routing]]）：** NeMo Switchyard（Rustモデルルーター、
   Apache 2.0）、Firecrawl pdf-inspector（分類優先のPDF解析、opendataloader-bench 0.875）、Needle 2
   （信頼度ゲート付きエスカレーション）、LiteLLM（セルフホストゲートウェイ、約4万スター）、OpenRouter
@@ -149,6 +168,11 @@ last_processed: 2026-08-14T06:54:00Z
 - **エージェントスキルの評価（未解決のギャップ、→ [[agent-plugins]]）：** Ponytailの公開ベンチマーク
   + 主張の訂正がテンプレートだが、共有の評価プロトコルはまだない。評価なきスキルの増殖は、先月の
   「訪問せずに書かれたリポジトリ」の今月版——主張は検証されるべきで、鵜呑みにすべきではない。
+- **エージェントスキルの正典のホーム（08-14午後、→ [[agent-plugins]]）：** Anthropic公式の
+  `anthropics/skills` リポジトリ（169K stars）がこのフォーマットの事実上の正典のホームに——
+  agentskills.ioの仕様、再利用可能なテンプレート、Claudeのドキュメント編集を支えるsource-available
+  なdocument skills（`docx`/`pdf`/`pptx`/`xlsx`）、さらに`skill-creator`/`mcp-builder`。Claude Code
+  ではプラグインマーケットプレイスとしてインストール（`/plugin marketplace add anthropics/skills`）。
 - **AI安全性：** OpenAIがAstraを停止——PF v2の「Critical」ティアに達した最初のモデル（ゼロデイ発見
   + エンドツーエンドのサイバー攻撃）。ラボ横断の収束：Anthropic RSP v3.0のASLレベル + Google DeepMind
   FSF v3.1のCCL（+ TCL）は同じ閾値→評価→応答ループを共有。カリフォルニア州SB 53がフロンティア安全
@@ -173,8 +197,19 @@ last_processed: 2026-08-14T06:54:00Z
   **暗号化推論の解読（08-14）：** arXiv:2608.09867——暗号化推論ブロックは同一プロバイダ内の
   セッション/ユーザー/モデルをまたいで互換であり、モデル横断のトレース抽出が可能（テーゼ9参照）。
   → [[frontier-models]]
+  **サプライチェーンランサムウェア + エージェント型AppSec（08-14午後）：** Cl0p CVE-2026-12569
+  （PTC Windchill PDMLink/FlexPLMの9.8未認証RCE、安全でないデシリアライゼーション + WSDL情報漏えい
+  → JSPウェブシェル）——Cl0pは約50社（Shell、Philips、GE、Fiserv）を主張し、エンジニアリング/設計IP
+  を窃取、PLMへのMOVEit再演。Vercel deepsec（`vercel-labs/deepsec`、Apache 2.0、6.5K stars）は防御
+  側の鏡：正規表現候補スキャン → Claude Opus 4.7 / Codex GPT-5.5のデータフロー追跡 + 再検証（誤検出
+  率約10–20%）、1,000以上のVercel Sandboxへ展開、ソースは外に出ない。
 - **エッジ推論（詳細 → [[edge-inference]]）：** kimi-k3-in-c、TurboFieldfare、Ling-3.0-tiny、
   Muse Glimmer（30B Apache 2.0ローカル）、Needle 2（14MB、Raspberry Pi）、h3.c（Metal）。
+- **オンデバイスのプライバシーアプリ：** modly（Lightning Pixel、MIT、5.7K stars——自分のGPUでローカル
+  に画像→3D、Hunyuan3D 2 Mini/TripoSG/Trellis2 GGUF、GLB/OBJ/STL出力、クラウド/アカウント不要）と
+  FluidVoice（Altic、GPLv3、10.1K stars——オンデバイスmacOSディクテーション、ローカルParakeet/
+  Whisper + Fluid-1層、Wispr Flowの市場を侵食）。プライバシー優先のローカル波はLLMを超えて音声 + 3D
+  へ広がる。
 - **ビッグテックのオープンソース波：** Warp（AGPLターミナル）、Ladybird（独立エンジン）、Snap
   Valdi（ネイティブUI）、Nvidia Nemotron 3.5 Lightning + Switchyard（モデルルーター）、Anthropic
   自社シリコン、Alibaba Open Code Review + Qwen3.8-2.4T-A95B（初のオープンなQwen-Max級フラッグシップ）、
@@ -189,6 +224,9 @@ last_processed: 2026-08-14T06:54:00Z
   ファインチューニング」の定石を市場へ適用。**HL-Gauss PPO**（arXiv 2608.02181、COLM 2026）——スカラー
   のcriticヘッドをカテゴリカル予測器（HL-Gaussターゲット）に置き換えることは、ドロップインのPPOの
   改善：RLVRでキャリブレーションが向上 + アドバンテージ分散が低下、actor変更ゼロ。
+  **OneDayAgent**（arXiv 2608.05013、浙江大学 + Ant Group）——長期的なハーネス（分解 → コンテキスト
+  圧力下のメモリ → 検証して修復）がAgentIF-OneDayで0.821を記録し、AutoClaw（0.799）とCodex GPT-5.5
+  （0.664）を上回る；チューニングなしで5つのバックエンドモデルに転用可能。
 - **✅ Voidの教訓は決着（2026-08-12 → 08-13訂正）：** スターの速度は「調査せよ」というシグナルであって
   「公開せよ」ではない。Voidの「#2トレンド」エントリは、一次確認の上で3言語すべてで訂正済み：この
   リポジトリはアーカイブ/非推奨（2026年6月2日アーカイブ）。この常設警告は今後の実行でも有効。

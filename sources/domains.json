@@ -91,12 +91,12 @@
   },
   "securityweek.com": {
     "cat": "security",
-    "en": "Enterprise security news; solid for vuln coverage and vendor advisories.",
-    "zh": "企业安全新闻；对漏洞覆盖与厂商公告较扎实。",
-    "jp": "エンタープライズセキュリティニュース。脆弱性とベンダー勧告に強い。",
+    "en": "Enterprise security news; solid for vuln coverage and vendor advisories — Patch Tuesday counts may differ from Microsoft's own (e.g. \"421 CVEs\" vs ~398 fixes).",
+    "zh": "企业安全新闻；对漏洞覆盖与厂商公告较扎实——补丁日数量可能与微软官方口径不同（如“421 个 CVE” vs 约 398 个修复）。",
+    "jp": "エンタープライズセキュリティニュース。脆弱性とベンダー勧告に強い——Patch Tuesdayの件数はマイクロソフト自身の口径と異なる場合がある（例:「421 CVE」vs 約398修正）。",
     "cred": "med",
     "density": "high",
-    "cv": 1
+    "cv": 2
   },
   "cybersecurity-help.cz": {
     "cat": "security",
@@ -145,12 +145,12 @@
   },
   "runtimewire.com": {
     "cat": "news",
-    "en": "Developer-tools news aggregator; timely on devtools releases.",
-    "zh": "开发者工具新闻聚合；对开发工具发布跟进及时。",
-    "jp": "開発者ツールのニュース集約。devtoolsリリースをタイムリーに追う。",
+    "en": "Developer-tools news aggregator; timely on devtools releases, also covers AI-security stories (e.g. the reasoning-trace theft).",
+    "zh": "开发者工具新闻聚合；对开发工具发布跟进及时，也覆盖 AI 安全新闻（如推理轨迹窃取）。",
+    "jp": "開発者ツールのニュース集約。devtoolsリリースをタイムリーに追い、AIセキュリティ（推論トレース窃取など）も扱う。",
     "cred": "med",
     "density": "med",
-    "cv": 1
+    "cv": 2
   },
   "hellogithub.com": {
     "cat": "community",
@@ -1231,5 +1231,59 @@
     "cred": "high",
     "density": "high",
     "cv": 3
+  },
+  "threats.wiz.io": {
+    "cat": "security",
+    "en": "Wiz Threat Center — cloud-security vendor's incident hub for active exploitation campaigns; first-hand intel, cross-check the CVE score against NVD/CVE.org.",
+    "zh": "Wiz 威胁中心——云安全厂商的主动利用活动事件中心；一手情报，CVE 评分请与 NVD/CVE.org 交叉核对。",
+    "jp": "Wiz Threat Center——クラウドセキュリティベンダーのインシデントハブ。悪用キャンペーンの一次情報で、CVEスコアはNVD/CVE.orgと突合を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "vercel.com": {
+    "cat": "vendor",
+    "en": "Vercel's official site/blog; first-hand for Vercel Labs releases (deepsec) and platform features — vendor bias, verify benchmark claims against the linked repo.",
+    "zh": "Vercel 官网/博客；Vercel Labs 发布（deepsec）与平台功能的一手来源——有厂商立场，基准声明宜对照链接的仓库核实。",
+    "jp": "Vercel公式サイト/ブログ。Vercel Labsの公開（deepsec）やプラットフォーム機能の一次情報——ベンダー寄り、ベンチはリンク先リポジトリで確認を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "agentskills.io": {
+    "cat": "vendor",
+    "en": "The Agent Skills format's official spec site (Anthropic-authored open standard); canonical for the SKILL.md spec — verify adoption claims against the anthropics/skills repo.",
+    "zh": "Agent Skills 格式的官方规范站（Anthropic 编写的开放标准）；SKILL.md 规范的权威来源——采用情况请对照 anthropics/skills 仓库核实。",
+    "jp": "Agent Skillsフォーマットの公式仕様サイト（Anthropic執筆のオープン標準）。SKILL.md仕様の正典——採用状況はanthropics/skillsリポジトリで確認を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "holaos.ai": {
+    "cat": "vendor",
+    "en": "holaOS docs — the product's own documentation; first-hand for features but vendor-authored, corroborate with the GitHub repo.",
+    "zh": "holaOS 文档——产品自有文档；功能为一手来源但属厂商自述，请与 GitHub 仓库相互印证。",
+    "jp": "holaOSの公式ドキュメント。機能の一次情報だがベンダー執筆のため、GitHubリポジトリで裏取りを。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "producthunt.com": {
+    "cat": "community",
+    "en": "Product Hunt — community launch board for new products; useful for launch velocity and maker discussions, but promotional — confirm claims against the repo.",
+    "zh": "Product Hunt——新产品社区发布平台；便于观察发布热度与开发者讨论，但偏推广——声明请对照仓库核实。",
+    "jp": "Product Hunt——新製品のコミュニティローンチボード。ローンチの勢いやメーカーの議論把握に有用だが宣伝寄り——主張はリポジトリで確認を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "openalternative.co": {
+    "cat": "community",
+    "en": "OpenAlternative — a community directory of open-source alternatives to commercial SaaS; useful for positioning (open vs paid), but a directory not a primary source — verify against the repo.",
+    "zh": "OpenAlternative——开源替代品的社区目录（对标商业 SaaS）；便于了解定位（开源 vs 付费），但属目录而非一手来源——请对照仓库核实。",
+    "jp": "OpenAlternative——商用SaaSのオープンソース代替を紹介するコミュニティディレクトリ。位置づけ把握に有用だがディレクトリであり一次情報ではない——リポジトリで確認を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

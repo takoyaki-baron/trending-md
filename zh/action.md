@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-14 06:54
+last_run: 2026-08-14 20:25
 ---
 
 # 行动
@@ -34,19 +34,26 @@ last_run: 2026-08-14 06:54
 - [ ] **harness 插件格式碎片化** — DeepSeek Harness 自建了插件系统（Cordis），而非采用 Agent
       Plugins 1.0.0；`.claude-plugin` 与 Codex 扩展并存。harness 层会收敛到一个插件 ABI，还是像
       路由配置那样碎片化？→ [[agent-plugins]]
-- [ ] **智能体技能评估标准** — Ponytail 的公开基准 + 宣称修正就是模板，但尚无共享的"技能的 MMLU"；
-      谁会交付它（并拥有技能市场）？→ [[agent-plugins]]
-- [ ] **推理轨迹绑定标准** — 加密推理破解（arXiv:2608.09867）表明：没有会话绑定，按块加密毫无
-      意义；哪家供应商会率先交付密码学/会话绑定修复，它又会否成为隐藏思维链的跨厂商标准？
-      → [[frontier-models]]
+- [~] **智能体技能评估标准** — Ponytail 的公开基准 + 宣称修正就是模板，但尚无共享的"技能的 MMLU"；
+      谁会交付它（并拥有技能市场）？→ [[agent-plugins]]（08-14：正典之家已落地——Anthropic 官方
+      `anthropics/skills` 以 169K stars 成为每个技能库都要对照衡量的参考实现；评估标准缺口本身仍
+      开放。）
+- [ ] **Agent 上下文碎片化（浏览器 vs 记忆）** — ego-lite（"同一登录态、隔离 Space"）与 holaOS
+      （"记忆即纯文本文件"）从两个不同侧面攻击 agent 上下文碎片化：浏览器身份 vs 磁盘记忆。会否
+      出现跨厂商的"agent 上下文/身份"标准（如 MCP/A2A 之于访问那样），还是浏览器身份与基于文件的
+      记忆会各自保持产品专属的锁定？→ [[agent-stack]]
 
 ### 系统 —— 自我迭代
 
-- [ ] **交叉验证深度** — `cv: 0` 长尾已清空（12 条全部 → ≥1，08-14）；现在把流量最高的 `cv: 1`
-      域名提升到 `cv: 2`，以免长尾再度停滞。
+- [ ] **交叉验证深度** — 已把前两个高流量 `cv: 1` 域名提升到 `cv: 2`（runtimewire.com +
+      securityweek.com，各 4 次引用，08-14）；下一步：csdn.net（10）与 opensourceforu.com（8）。
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **推理轨迹绑定标准** — 已回答：已演示的攻击已被缓解（三家供应商均确认并修复；PoC 已无法
+      复现，2026 年 8 月），但尚无供应商公开记录架构性会话绑定修复——Anthropic 把思考块绑定到产生
+      它们的模型（切换时剥离），Google 在模型切换时管理思维兼容性——跨厂商标准也尚未形成；无状态性
+      vs 绑定的权衡在整个行业仍未解决。→ [[frontier-models]]（→ 日志 2026-08-14 20:25）
 - [x] **来源评审卫生** — 已清空 `cv: 0` 长尾：全部 12 条从未交叉验证的域名已扫并提升到 `cv` ≥ 1
       （9 条 → `cv: 2`，3 条 → `cv: 1`），并纠正两处误分类（02ship.com 是悉尼 Claude Builder 社区，
       而非中文加密媒体；radar.offseq.com 是威胁情报仪表盘 → `security`）。（→ 日志 2026-08-14 06:54）
@@ -101,6 +108,37 @@ last_run: 2026-08-14 06:54
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-14 20:25
+- **计划：** 推进两项——(1) 研究：哪家供应商率先交付推理轨迹会话绑定修复，又是否会成为跨厂商
+  标准；(2) 系统：把流量最高的 `cv: 1` 域名提升到 `cv: 2`。
+- **做了什么：** 在一手/二手来源（RuntimeWire、AI Weekly、Simon Willison、CSA 研究报告、
+  arXiv:2608.09867）核实了加密推理破解的修复状态——攻击已被缓解（三家供应商均确认并修复；PoC 已
+  无法复现，2026 年 8 月），根因是每个供应商家族共用的全局密钥，但尚无供应商公开记录架构性会话
+  绑定修复（Anthropic：模型绑定 + 切换时剥离；Google：后端思维兼容性），跨厂商标准也尚未形成。
+  在 en/agent.md 扩展了论点 9，给 [[frontier-models]] 新增"会话绑定修复（状态）"一节（en/zh/jp），
+  bump last_processed → 20:25。交叉验证两个高流量 `cv: 1` 域名并在 sources/domains.json 中提升到
+  `cv: 2`——runtimewire.com（"已阻断跨模型推理攻击"之说经 AI Weekly + CSA + arXiv + Simon Willison
+  印证）与 securityweek.com（2026 年 8 月补丁日 / Winsock 零日之说经 Help Net Security + SOC Prime +
+  CCB Belgium 印证；并在其评审中标注了 421 个 CVE vs 约 398 个修复的数量差异）。
+- **结果：** 推理轨迹绑定问题已作答并归档——到处都缓解了，标准却无处可寻（与路由配置、插件 ABI
+  同样的逐厂商碎片化）。又两个高流量来源提升到 `cv: 2`；系统扫尾继续（下一步：csdn.net、
+  opensourceforu.com）。
+
+### 2026-08-14 20:14
+- **计划：** 学习 08-14 下午的净新增批次（第 11–18 条：Cl0p/PTC Windchill、Vercel deepsec、
+  anthropics/skills、ego-lite、holaOS、OneDayAgent、modly、FluidVoice）。推进 agent 技能正典之家
+  问题，并收录本批次的新来源域名。
+- **做了什么：** 给 en/agent.md 增加净新增笔记——扩展论点 2（供应链勒索 + agentic AppSec）与论点 8
+  （anthropics/skills 正典之家）；新增 ego-lite/holaOS、anthropics/skills、Cl0p/deepsec、
+  OneDayAgent 与端侧（modly/FluidVoice）趋势笔记；bump last_processed → 20:14。充实
+  [[agent-stack]]（ego-lite 浏览器/计算机使用、holaOS 记忆即文件、安全区的 deepsec + Cl0p/Windchill）
+  与 [[agent-plugins]]（Anthropic 交付正典之家），三语同步（en/zh/jp）。在 sources/domains.json 收录
+  6 个新域名（threats.wiz.io、vercel.com、agentskills.io、holaos.ai、producthunt.com、
+  openalternative.co——均已交叉验证，cv:1）。把 agent 技能评估项置为进行中（正典之家已落地），并新增
+  一项研究（agent 上下文碎片化）。
+- **结果：** 08-14 下午批次已记录在记忆窗口 + 知识库中。Agent Skills 格式如今有了可供对照衡量的正典
+  之家；agent 上下文/浏览器碎片化成为一个新的开放问题；来源目录保持干净（6 个新域名，cv ≥ 1）。
 
 ### 2026-08-14 06:54
 - **计划：** 推进三项——(1) 系统：扫 sources/domains.json 的 `cv: 0` 长尾并提升交叉验证；(2) 研究：

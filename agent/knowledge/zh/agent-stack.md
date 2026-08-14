@@ -80,6 +80,22 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   一体化团队工作区：Gmail 式邮件、频道/私信、Linear 式任务、CRDT 文档、2D 画布、CRM、通话与
   agent——所有内容通过 @ 链接进一个带共享 AI 记忆的双向图。"完全开源——不是 open core"；团队记忆
   经 MCP 暴露且无速率限制。SOC 2 Type II / ISO 27001。约 1.6K stars。
+- **holaOS** — `holaboss-ai/holaOS`（Holaboss），开源，6.9K stars。一个本地优先的"AI agent 工作区"，
+  让 Claude Code、Codex 或自带 agent 在共享的记忆、工具、文件与真实浏览器之上并行运行。差异点在于
+  **记忆以磁盘上的纯文本文件呈现**——可读、可编辑、跨 agent 与会话共享——外加一种"纠正即规则"机制，
+  把你做的每一次修复都固化成一条持久规则。内置前沿模型（Kimi K3、GLM 5.2、GPT 5.6、Claude Opus 5、
+  Fable 5）或 BYOK；100+ 集成、支持 MCP、"HolaApps" 内嵌实时 UI。信号："记忆即文件"是强大的可调试性
+  /信任选择——但记忆格式的可移植性决定了它是保持开放标准，还是沦为 holaOS 的锁定（与此前的记忆缺口
+  相关）。
+
+## 浏览器 / 计算机使用
+- **ego-lite** — `citrolabs/ego-lite`，MIT（CitroLabs），10.1K stars。一个基于 Chromium 的浏览器，
+  让人与 AI agent 共享同一浏览器而不必争抢标签页：一次性迁移现有 Chrome 数据（登录态/cookie/扩展），
+  然后给每个 agent 一个隔离的进程内 "Space"，你则继续在前面浏览。agent 通过 `ego-browser` 技能层调用
+  JavaScript 函数（把多步任务组合成一段脚本）；页面快照经 Chromium 可访问性树从约 30,000 压缩到约
+  200–400 token。README 宣称复杂工作流比 CLI 浏览器方案快达 2.5×，内存比独立实例省约 94%；目前仅
+  macOS。信号："登录墙"——agent 要么共享你的会话、要么以未登录状态启动——是浏览器自动化摩擦最大的
+  一环；"同一登录态、隔离空间"是一个具体答案。
 
 ## 知识 / 溯源
 - **Semantica** — `semantica-agi/semantica`，MIT，4.1K stars。面向 agent 的自托管图原生层：
@@ -178,6 +194,19 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
   `docker-compose.yaml`、`terraform.tfstate`。因为伪造访问通不过真实 agent 的认证（已验证 IP 段 /
   Web Bot Auth）而被识破。早期警告："这是真爬虫吗？"如今是每个 WAF/CDN 都要回答的问题，而 agent
   凭证文件是高价值猎物。
+- **Vercel deepsec** — `vercel-labs/deepsec`，Apache 2.0（Vercel Labs），6.5K stars。一个由 agent 驱动
+  的安全 harness，把漏洞发现变成多阶段 agent 流水线：纯正则静态扫描先浮出候选，coding agent（Claude
+  Opus 4.7 与 Codex GPT-5.5，满推理）追踪数据流并检查缓解措施，一轮再校验把误报率压到约 10–20%，
+  git 元数据为发现补上责任人。完全跑在你自己的基础设施上（源码不外流）；为 monorepo 可在 1,000+
+  个并发 Vercel Sandbox 上铺开；幂等/可续跑。信号：AppSec 正从签名匹配转向 agentic 调查——与
+  DeepSeek Harness / Cline Kanban 相同的 "harness" 模式被用到安全上，代价是真实算力（大扫描可达数万
+  美元）。与上面的 OpenAI Codex Security 相邻；区别在于铺开的沙箱舰队 + 责任人归因。
+- **Cl0p / PTC Windchill** CVE-2026-12569 — CVSS 9.8 未认证 RCE（PTC Windchill PDMLink/FlexPLM 中
+  的不安全反序列化，11.0 M030 已修复），与 FlexPLM WSDL 端点的预认证信息泄露链式组合，投放十六进制
+  命名的 JSP webshell 并窃取工程/设计数据。俄罗斯关联的 Cl0p 于 8 月 13 日公开宣称从约 50 家企业
+  （Shell、Philips、GE、Fiserv）窃取数据，此前 7 月 19–20 日已开始发送勒索邮件；6 月 25 日起列入
+  CISA KEV。信号：MOVEit 剧本的重演——一个被广泛部署的企业 PLM 产品被当作 1-day 漏洞利用，并沿供应链
+  大规模勒索；战利品是产品设计与工程 IP，而不只是 PII。
 
 ### MCP SSRF 审计清单（模板：CVE-2026-19516）
 

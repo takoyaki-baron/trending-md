@@ -92,6 +92,25 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   CRDT-based docs, a 2D canvas, CRM, calls, and agents — everything @linked into a bidirectional
   graph with shared AI memory. "Fully open source — not open core"; team memory exposed via MCP
   with no rate limits. SOC 2 Type II / ISO 27001. ~1.6K stars.
+- **holaOS** — `holaboss-ai/holaOS` (Holaboss), open source, 6.9K stars. A local-first "AI agent
+  workspace" that runs Claude Code, Codex, or its own built-in agent side-by-side over shared memory,
+  tools, files, and a real browser. The differentiator is **memory as plain-text files** on disk —
+  readable, editable, shared across agents/sessions — plus a "correction-as-rule" mechanism that turns
+  every fix you make into a durable rule. Ships frontier models (Kimi K3, GLM 5.2, GPT 5.6, Claude
+  Opus 5, Fable 5) or BYOK; 100+ integrations, MCP support, "HolaApps" embeds live UIs. Signal:
+  "memory as files" is a strong debuggability/trust choice — but the memory format's portability
+  decides whether it stays an open standard or a holaOS lock-in (ties into the memory gap above).
+
+## Browser / computer-use
+- **ego-lite** — `citrolabs/ego-lite`, MIT (CitroLabs), 10.1K stars. A Chromium-based browser built
+  so humans and AI agents share one browser without fighting over tabs: migrates existing Chrome data
+  (logins/cookies/extensions) once, then gives each agent an isolated in-process "Space" while you
+  keep browsing up front. Agents call JavaScript functions through an `ego-browser` skill layer
+  (composing multi-step tasks into one script); page snapshots compressed ~30,000 → ~200–400 tokens
+  via the Chromium accessibility tree. README claims up to 2.5× faster complex workflows than CLI
+  browser approaches, ~94% less memory than separate instances; macOS-only for now. Signal: the
+  "login wall" — agents either share your session or start logged-out — is browser automation's
+  highest-friction point; "same logged-in state, isolated space" is a concrete answer.
 
 ## Knowledge / provenance
 - **Semantica** — `semantica-agi/semantica`, MIT, 4.1K stars. Self-hosted graph-native layer for
@@ -205,6 +224,23 @@ monolith.
   `terraform.tfstate`. Detected because spoofed visits fail the real agent's auth (verified IP
   ranges / Web Bot Auth). Early warning that "is this a real crawler?" is now a WAF/CDN question,
   and agent credential files are high-value loot.
+- **Vercel deepsec** — `vercel-labs/deepsec`, Apache 2.0 (Vercel Labs), 6.5K stars. An agent-powered
+  security harness that turns vulnerability discovery into a multi-stage agent pipeline: a regex-only
+  static scan surfaces candidates, coding agents (Claude Opus 4.7 and Codex GPT-5.5 at max reasoning)
+  trace dataflows and check mitigations, a revalidation pass cuts the false-positive rate to ~10–20%,
+  and git metadata enriches findings with the responsible authors. Runs on your own infrastructure
+  (source never leaves); fans out across 1,000+ concurrent Vercel Sandboxes for monorepos;
+  idempotent/resumable. Signal: appsec moving from signature matching to agentic investigation — the
+  same "harness" pattern as DeepSeek Harness / Cline Kanban applied to security, at real compute cost
+  (large scans can hit tens of thousands of dollars). Adjacent to OpenAI Codex Security above; the
+  difference is the fan-out sandbox fleet + author attribution.
+- **Cl0p / PTC Windchill** CVE-2026-12569 — CVSS 9.8 unauth RCE (unsafe deserialization in PTC
+  Windchill PDMLink/FlexPLM, fixed 11.0 M030), chained with a pre-auth info-disclosure in the FlexPLM
+  WSDL endpoint to drop hex-named JSP webshells and exfiltrate engineering/design data. Russia-linked
+  Cl0p publicly claimed (Aug 13) data theft from ~50 firms — Shell, Philips, GE, Fiserv — after
+  extortion emails began July 19–20; CISA KEV since June 25. Signal: the MOVEit playbook repeated — a
+  widely deployed enterprise PLM product exploited as a 1-day and mass-extorted up the supply chain;
+  the payload is product designs/engineering IP, not just PII.
 
 ### MCP SSRF audit checklist (template: CVE-2026-19516)
 

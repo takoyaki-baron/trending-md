@@ -85,6 +85,18 @@ Colin Eberhardt 提出质疑——一条光秃秃的"遵循 YAGNI 原则"提示�
 一个让技能*证明*其宣称的公开行为测试框架。目前尚无共享评估标准——"技能的 MMLU"是开放缺口；谁先
 交付谁就拥有技能市场。
 
+## Anthropic 推出规范的正典之家（8 月 14 日）
+
+`anthropics/skills` —— Anthropic 官方的 Agent Skills 公开仓库（169K stars）——如今成为它亲手编写的
+这个格式的事实正典之家。该仓库收录了规范（托管于 agentskills.io）、一个可复用的 skill 模板，以及
+参考 skills：驱动 Claude 产品内文档编辑的 source-available **document skills**（`docx`、`pdf`、
+`pptx`、`xlsx`），外加 `skill-creator`、`mcp-builder` 与 `artifacts-builder`。在 Claude Code 中它
+以插件市场形式安装（`/plugin marketplace add anthropics/skills`）。这在一定程度上回答了"Anthropic
+会收敛还是分叉？"这一关注项：即便它仍缺席 Agent Plugins 1.0.0 联盟，Anthropic 仍在交付自己的正典
+参考实现（规范 + 生产级 document skills）——该格式如今有*两个*参考极点：`google/skills`（标准化
+包装层的参考）与 `anthropics/skills`（规范作者的正典之家）。其他所有 skill 库如今都要对着这两者
+来衡量。
+
 ## 关注点
 
 - Anthropic 会收敛（采用 `plugin.json`）还是分叉（保留 `.claude-plugin` + `agents.md`）？

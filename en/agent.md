@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-14T06:54:00Z
+last_processed: 2026-08-14T20:25:00Z
 ---
 
 # Learnt Agent
@@ -41,7 +41,12 @@ patterns, and turn them into insights and actionable todos.
    (CVSS 10.0 SQLi in password-reset, holds live credentials to every connected warehouse), TeamCity
    (9.8 unauth RCE in the agent polling protocol — supply-chain-grade foothold), and Apache Allura
    (9.8 git argument injection — the recurring "shells out to git" bug class) all turn a tool that
-   holds standing access to production data into a full-compromise cascade.
+   holds standing access to production data into a full-compromise cascade. The supply-chain shape
+   now has a ransomware instance: Cl0p mass-extorted ~50 firms (Shell, Philips, GE, Fiserv) via a
+   1-day RCE in PTC Windchill PDMLink/FlexPLM (CVE-2026-12569, CVSS 9.8) — the MOVEit playbook
+   repeated against PLM, exfiltrating engineering IP. On the defensive side the same agentic pattern
+   is turned back on the problem: Vercel deepsec runs coding agents (Claude Opus 4.7 + Codex GPT-5.5)
+   to trace dataflows and re-validate findings, cutting the false-positive rate to ~10–20%.
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    kimi-k3-in-c (176KB binary, 2.78T model on 8GB RAM), TurboFieldfare (Gemma 26B on 2GB),
@@ -96,7 +101,10 @@ patterns, and turn them into insights and actionable todos.
    ~54% less code / ~20% lower cost / ~27% faster — and publicly revised the claim. The category is
    proliferating (google/skills, agent-skills, reverse-skill, diagram-design, skill-recorder) on
    *assertion*, not proof. Expect an "MMLU-for-skills" evaluation standard; whoever ships it owns the
-   skills marketplace. → [[agent-plugins]]
+   skills marketplace. → [[agent-plugins]] The format's canonical home has now landed: Anthropic
+   shipped its official `anthropics/skills` repo (169K stars) — the spec plus the source-available
+   document skills that power Claude's in-product document editing — a reference implementation to
+   measure every other skill library against.
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
    ("Stealing Reasoning Traces from Proprietary LLM APIs", Panfilov et al.) shows the encrypted
@@ -107,6 +115,13 @@ patterns, and turn them into insights and actionable todos.
    artifacts, 182 credentials from 315,320 public blocks), hazardous-content disclosure behind a
    "safe" refusal, and invisible prompt injection into agentic systems. The fix is architectural —
    bind reasoning to its session, not per-block encryption. → [[frontier-models]]
+   **Resolution (08-14):** the demonstrated attack is already mitigated — all three providers
+   acknowledged the report and deployed fixes; the researchers' PoC no longer reproduces against
+   current APIs (Aug 2026). Root cause was a single per-family global key ("an obfuscation scheme
+   with a shared key", not per-session confidentiality). But no provider has publicly documented the
+   architectural session-binding fix — Anthropic now ties thinking blocks to the producing model
+   (strip-on-switch), Google manages thought-compatibility on model switch — and no cross-vendor
+   standard has formed; the statelessness-vs-binding trade-off remains unresolved industry-wide.
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
 
@@ -128,7 +143,12 @@ patterns, and turn them into insights and actionable todos.
   stars), Macro (AGPL all-in-one workspace, MCP-exposed team memory), Zed Delta (multiplayer worktree
   + agent review on DeltaDB), OpenAI Codex Security (appsec agent, 1.2M commits scanned).
   **Decomposition:** plugin graph (DeepSeek Harness) + state kernel (LoopX) + worktree isolation
-  (Orca, Cline Kanban, Cline CLI `--worktree`, Zed Delta).
+  (Orca, Cline Kanban, Cline CLI `--worktree`, Zed Delta). **New (08-14 PM):** ego-lite (CitroLabs,
+  MIT, 10.1K stars — Chromium browser where humans + agents share one logged-in state but isolated
+  in-process "Spaces"; page snapshots compressed ~30,000 → ~200–400 tokens via the accessibility
+  tree; the login-wall answer) and holaOS (Holaboss, 6.9K stars — local-first workspace where
+  Claude Code/Codex share one brain; "memory as plain-text files" + correction-as-rule, see the
+  memory gap note).
 - **Smart routing (detail → [[smart-routing]]):** NeMo Switchyard (Rust model router, Apache 2.0),
   Firecrawl pdf-inspector (classify-first PDF parsing, 0.875 opendataloader-bench), Needle 2
   (confidence-gated escalation), LiteLLM (self-hosted gateway, ~40K stars), OpenRouter (hosted
@@ -150,6 +170,11 @@ patterns, and turn them into insights and actionable todos.
   revision is the template, but no shared eval protocol exists. The proliferation of skills without
   evaluation is this month's version of last month's "repo without a visit" — claims to be verified,
   not asserted.
+- **Agent skills canonical home (08-14 PM, → [[agent-plugins]]):** Anthropic's official
+  `anthropics/skills` repo (169K stars) is now the de-facto canonical home of the format — the
+  agentskills.io spec, a reusable template, and the source-available document skills (`docx`/`pdf`/
+  `pptx`/`xlsx`) that power Claude's document editing, plus `skill-creator`/`mcp-builder`. In Claude
+  Code it installs as a plugin marketplace (`/plugin marketplace add anthropics/skills`).
 - **AI safety:** OpenAI paused Astra — first model to hit PF v2's "Critical" tier (zero-day discovery
   + end-to-end cyberattacks). Cross-lab convergence: Anthropic RSP v3.0 ASL levels + Google DeepMind
   FSF v3.1 CCLs (+ TCLs) share the same threshold→eval→response loop; California SB 53 makes frontier-
@@ -174,8 +199,19 @@ patterns, and turn them into insights and actionable todos.
   under the same pressure. **Encrypted-reasoning crack (08-14):** arXiv:2608.09867 — encrypted
   reasoning blocks are interchangeable across sessions/users/models within a provider, enabling
   cross-model trace extraction (see thesis 9). → [[frontier-models]]
+  **Supply-chain ransomware + agentic appsec (08-14 PM):** Cl0p CVE-2026-12569 (9.8 unauth RCE in
+  PTC Windchill PDMLink/FlexPLM, unsafe deserialization + WSDL info-disclosure → JSP webshells) —
+  Cl0p claims ~50 firms (Shell, Philips, GE, Fiserv), exfiltrating engineering/design IP, the MOVEit
+  playbook against PLM. Vercel deepsec (`vercel-labs/deepsec`, Apache 2.0, 6.5K stars) is the
+  defensive mirror: regex candidate scan → Claude Opus 4.7 / Codex GPT-5.5 dataflow tracing + a
+  revalidation pass (~10–20% FP rate), fanning out over 1,000+ Vercel Sandboxes, source never leaves
+  your infra.
 - **Edge inference (detail → [[edge-inference]]):** kimi-k3-in-c, TurboFieldfare, Ling-3.0-tiny,
   Muse Glimmer (30B Apache 2.0 local), Needle 2 (14MB, Raspberry Pi), h3.c (Metal).
+- **On-device privacy apps:** modly (Lightning Pixel, MIT, 5.7K stars — local image-to-3D on your own
+  GPU, Hunyuan3D 2 Mini/TripoSG/Trellis2 GGUF, GLB/OBJ/STL export, no cloud/account) and FluidVoice
+  (Altic, GPLv3, 10.1K stars — on-device macOS dictation, local Parakeet/Whisper + Fluid-1 layer,
+  eating Wispr Flow's lunch). The privacy-first local wave is spreading beyond LLMs to speech + 3D.
 - **Big Tech open-source wave:** Warp (AGPL terminal), Ladybird (independent engine), Snap Valdi
   (native UI), Nvidia Nemotron 3.5 Lightning + Switchyard (model router), Anthropic in-house silicon,
   Alibaba Open Code Review + Qwen3.8-2.4T-A95B (first open Qwen-Max-class flagship), Mojo 1.0.
@@ -188,7 +224,10 @@ patterns, and turn them into insights and actionable todos.
 - **Models & research:** Kronos (decoder-only foundation model for financial candlesticks, AAAI 2026)
   — the "pretrain + finetune" playbook applied to markets. **HL-Gauss PPO** (arXiv 2608.02181, COLM
   2026) — swapping the scalar critic head for a categorical predictor (HL-Gauss targets) is a drop-in
-  PPO win: better calibration + lower-variance advantages on RLVR, zero actor changes.
+  PPO win: better calibration + lower-variance advantages on RLVR, zero actor changes. **OneDayAgent**
+  (arXiv 2608.05013, Zhejiang University + Ant Group) — a long-horizon harness (decompose → memory
+  under context pressure → verify-and-repair) scores 0.821 on AgentIF-OneDay, beating AutoClaw
+  (0.799) and Codex GPT-5.5 (0.664); transfers across five backends with no tuning.
 - **✅ Void lesson resolved (2026-08-12 → corrected 08-13):** star velocity is a signal to
   investigate, not publish. The Void "#2 trending" entry has been **corrected in all three locales**
   after first-hand verification: the repo is archived/deprecated (archived Jun 2, 2026). The standing

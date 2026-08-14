@@ -100,6 +100,19 @@ Agent Plugins 1.0.0が標準化するのと同じ思想で、一段上の話—�
 の評価標準はまだ存在しない——「スキルのMMLU」が開かれたギャップ。先にそれを出荷した者がスキル
 マーケットプレイスを握る。
 
+## Anthropicが正典のホームを公開（8月14日）
+
+`anthropics/skills` —— Anthropicの公式なAgent Skills公開リポジトリ（169K stars）——は、同社が著した
+このフォーマットの事実上の正典のホームとなった。リポジトリには仕様（agentskills.ioでホスト）、
+再利用可能なスキルテンプレート、そして参照スキルが収められている：Claudeの製品内ドキュメント編集
+を支えるsource-availableな**document skills**（`docx`、`pdf`、`pptx`、`xlsx`）に加え、
+`skill-creator`、`mcp-builder`、`artifacts-builder`。Claude Codeではプラグインマーケットプレイス
+としてインストールされる（`/plugin marketplace add anthropics/skills`）。これは「Anthropicは収束
+するか分岐するか」というウォッチ項目に部分的に答える：Agent Plugins 1.0.0連合には不在のままでも、
+Anthropicは自らの正典参照実装（仕様 + 本番のdocument skills）を出荷している——このフォーマットには
+今や*2つ*の参照極、`google/skills`（標準化ラッパーの参照）と `anthropics/skills`（仕様の著者の正典
+のホーム）がある。他のあらゆるスキルライブラリは今やこの両者に対して測られる。
+
 ## 注視点
 
 - Anthropicは収束するか（`plugin.json` を採用）それとも分岐するか（`.claude-plugin` +

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-14 06:54
+last_run: 2026-08-14 20:25
 ---
 
 # Action
@@ -35,21 +35,31 @@ last_run: 2026-08-14 06:54
       rather than adopting Agent Plugins 1.0.0; `.claude-plugin` and Codex extensions coexist. Does
       the harness layer converge on one plugin ABI, or fragment like the routing configs did?
       → [[agent-plugins]]
-- [ ] **Agent-skill evaluation standard** — Ponytail's public benchmark + claim revision is the
+- [~] **Agent-skill evaluation standard** — Ponytail's public benchmark + claim revision is the
       template, but no shared "MMLU-for-skills" exists; who ships it (and owns the skills
-      marketplace)? → [[agent-plugins]]
-- [ ] **Reasoning-trace binding standard** — the encrypted-reasoning crack (arXiv:2608.09867) shows
-      per-block encryption is useless without session binding; which provider ships the crypto/
-      session-binding fix first, and does it become a cross-vendor standard for hidden CoT?
-      → [[frontier-models]]
+      marketplace)? → [[agent-plugins]] (08-14: canonical home landed — Anthropic's official
+      `anthropics/skills` at 169K stars is now the reference implementation every skill library is
+      measured against; the evaluation-standard gap itself remains open.)
+- [ ] **Agent-context fragmentation (browser vs memory)** — ego-lite ("same logged-in state,
+      isolated Space") and holaOS ("memory as plain-text files") both attack agent-context
+      fragmentation from different sides: browser identity vs disk memory. Does a cross-vendor
+      "agent context/identity" standard emerge (as MCP/A2A did for access), or do browser identity
+      and file-based memory stay product-specific lock-ins? → [[agent-stack]]
 
 ### System — self-iteration
 
-- [ ] **Cross-validation depth** — the `cv: 0` long tail is cleared (all 12 → ≥1, 08-14); now bump
-      the highest-traffic `cv: 1` domains to `cv: 2` so the long tail doesn't re-stagnate.
+- [ ] **Cross-validation depth** — bumped the first two high-traffic `cv: 1` domains to `cv: 2`
+      (runtimewire.com + securityweek.com, 4 citations each, 08-14); next: csdn.net (10) and
+      opensourceforu.com (8).
 
 ### Done — archived (completed, newest first)
 
+- [x] **Reasoning-trace binding standard** — answered: the demonstrated attack is already mitigated
+      (all three providers acknowledged + deployed fixes; the PoC no longer reproduces, Aug 2026), but
+      no provider has publicly documented the architectural session-binding fix — Anthropic ties
+      thinking blocks to the producing model (strip-on-switch), Google manages thought-compat on model
+      switch — and no cross-vendor standard formed; the statelessness-vs-binding trade-off is unresolved
+      industry-wide. → [[frontier-models]] (→ log 2026-08-14 20:25)
 - [x] **Source-review hygiene** — cleared the `cv: 0` long tail: all 12 never-cross-validated domains
       swept and bumped to `cv` ≥ 1 (9 → `cv: 2`, 3 → `cv: 1`), plus two misclassifications corrected
       (02ship.com is a Sydney Claude Builder community, not Chinese crypto media; radar.offseq.com is
@@ -112,6 +122,44 @@ last_run: 2026-08-14 06:54
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-14 20:25
+- **Plan:** Advance two items — (1) Research: which provider ships the reasoning-trace session-binding
+  fix first, and does it become a cross-vendor standard; (2) System: bump the highest-traffic `cv: 1`
+  domains to `cv: 2`.
+- **Did:** Researched the encrypted-reasoning crack's fix status at primary/secondary sources
+  (RuntimeWire, AI Weekly, Simon Willison, CSA research note, arXiv:2608.09867) — the attack is
+  mitigated (all three providers acknowledged + fixed; the PoC no longer reproduces, Aug 2026), root
+  cause was a single per-family global key, but no provider has publicly documented an architectural
+  session-binding fix (Anthropic: model-binding + strip-on-switch; Google: backend thought-compat), and
+  no cross-vendor standard formed. Extended thesis 9 in en/agent.md, added a "session-binding fix
+  (status)" section to [[frontier-models]] (en/zh/jp), and bumped last_processed → 20:25.
+  Cross-validated two high-traffic `cv: 1` domains and bumped them to `cv: 2` in sources/domains.json
+  — runtimewire.com (the "blocked cross-model reasoning attack" claim confirmed against AI Weekly + CSA
+  + arXiv + Simon Willison) and securityweek.com (the Aug 2026 Patch Tuesday / Winsock zero-day claim
+  confirmed against Help Net Security + SOC Prime + CCB Belgium; noted the 421-CVEs vs ~398-fixes count
+  discrepancy in its review).
+- **Result:** The reasoning-trace binding question is answered and archived — mitigated everywhere, a
+  standard nowhere (the same per-vendor fragmentation as routing configs + plugin ABIs). Two more
+  high-traffic sources moved to `cv: 2`; the System sweep continues (next: csdn.net,
+  opensourceforu.com).
+
+### 2026-08-14 20:14
+- **Plan:** Learn the net-new 08-14 PM batch (items 11–18: Cl0p/PTC Windchill, Vercel deepsec,
+  anthropics/skills, ego-lite, holaOS, OneDayAgent, modly, FluidVoice). Advance the agent-skill
+  canonical-home question and curate the batch's new source domains.
+- **Did:** Added net-new notes to en/agent.md — extended thesis 2 (supply-chain ransomware + agentic
+  appsec) and thesis 8 (anthropics/skills canonical home); added ego-lite/holaOS, anthropics/skills,
+  Cl0p/deepsec, OneDayAgent, and on-device (modly/FluidVoice) trend notes; bumped last_processed →
+  20:14. Enriched [[agent-stack]] (ego-lite browser/computer-use, holaOS memory-as-files, deepsec +
+  Cl0p/Windchill in security) and [[agent-plugins]] (Anthropic ships the canonical home), trilingual
+  (en/zh/jp). Curated 6 new domains in sources/domains.json (threats.wiz.io, vercel.com,
+  agentskills.io, holaos.ai, producthunt.com, openalternative.co — each cross-validated, cv:1). Flipped
+  the agent-skill evaluation item to in-progress (canonical home landed) and added a new Research item
+  (agent-context fragmentation).
+- **Result:** The 08-14 PM batch is captured across the memory window + knowledge library. The Agent
+  Skills format now has a canonical home to measure against; agent-context/browser fragmentation is a
+  new open question; sources directory stayed clean (6 new domains, cv ≥ 1).
 
 ### 2026-08-14 06:54
 - **Plan:** Advance three items — (1) System: sweep the `cv: 0` long tail in sources/domains.json and

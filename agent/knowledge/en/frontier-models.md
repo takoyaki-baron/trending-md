@@ -126,6 +126,29 @@ fungible token any sibling model will decrypt; the fix is to bind reasoning to i
 (cryptographic + system-level mitigations, per the paper's responsible disclosure). "Hidden CoT" is a
 confidentiality assumption the top three labs all violated, not a protection boundary.
 
+## The session-binding fix (status, Aug 14)
+
+"Which provider ships the fix first" resolved — **none publicly, and no standard has formed.** As of
+Aug 2026 the demonstrated attack is already mitigated: all three providers acknowledged the report and
+deployed mitigations, and the researchers' proof-of-concept no longer reproduces against current API
+builds. No CVE and no coordinated disclosure followed. The root cause was a single per-family global
+key (Will Smidlein: "a single global key to encrypt and authenticate all reasoning data sent to the
+client") — an obfuscation scheme with a shared key, not per-session confidentiality.
+
+But the *architectural* fix is still undocumented vendor-by-vendor: researchers did not publish the
+full technical detail of the mitigations, "leaving customers dependent on provider assurances rather
+than independently verifiable guarantees" (CSA research note). Partial signals: Anthropic's docs now
+say thinking blocks are tied to the producing model and must be stripped when switching models;
+Google's backend "manages thought compatibility" on model switch; Anthropic separately removed
+assistant-turn prefilling in the 4.6 models (still present in Claude Haiku 4.5). The paper's
+recommended fix — hash the precise prompt + preceding conversation history into the block's
+authentication tag (true session binding) — must be engineered to not break legitimate multi-turn
+continuity or model-switching. The CSA note calls the underlying trade-off ("client-side statelessness
+vs cryptographic binding") **unresolved industry-wide**. So: mitigation shipped everywhere, a
+session-binding *standard* nowhere — the same per-vendor fragmentation as routing configs and plugin
+ABIs. Open sub-questions: whether any provider publishes its binding scheme, and whether
+already-published blocks in public repos remain decodable.
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks
@@ -139,7 +162,9 @@ confidentiality assumption the top three labs all violated, not a protection bou
   now supplies the "who measures" answer (disclosure-based third-party evaluation); the remaining gap
   is a *cross-lab* measurement standard, and whether statutory disclosure displaces the voluntary
   frameworks.
-- Which provider ships the reasoning-block session-binding fix first (arXiv:2608.09867) — and whether
-  it becomes a cross-vendor standard for hidden chain-of-thought.
+- Which provider ships the reasoning-block session-binding fix first (arXiv:2608.09867) — **answered
+  08-14**: none has publicly documented the architectural fix; all three shipped unannounced
+  mitigations, no cross-vendor standard. Remaining watch: the first provider to publish its binding
+  scheme, and whether already-published reasoning blocks stay decodable.
 - Whether Qwen's custom Qwen3.8-Max license + ~4.9TB weights actually get fine-tuned/downloaded at
   scale — open weights only shift economics if the ecosystem can run them.
