@@ -1,8 +1,8 @@
 ---
 date: 2026-08-14
-updated: 2026-08-14T04:03:00Z
+updated: 2026-08-14T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 15
+sources: 23
 license: CC-BY-4.0
 ---
 
@@ -169,13 +169,141 @@ A critical argument-injection flaw (CWE-88, CVSS 9.8) in **Apache Allura** — t
 
 ---
 
+## 11. Cl0p claims mass data theft from ~50 firms via PTC Windchill RCE (CVE-2026-12569)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** SecurityWeek · CVSS 9.8 · ~1d ago
+- **Tags:** `cve` `rce` `ransomware` `cl0p` `kev` `supply-chain`
+
+Russia-linked ransomware group **Cl0p** publicly claimed it stole data from nearly 50 companies — including **Shell, Philips, GE, and Fiserv** — in one coordinated campaign exploiting **CVE-2026-12569**, a critical (CVSS 9.8) unauthenticated RCE rooted in unsafe deserialization in **PTC Windchill PDMLink and FlexPLM** (fixed in 11.0 M030). The intrusion chains a pre-auth information-disclosure in the FlexPLM WSDL endpoint with the Windchill login-servlet deserialization flaw to drop hex-named JSP webshells and exfiltrate engineering and design data. PTC patched June 17 and CISA added the CVE to KEV June 25; extortion emails began hitting victims July 19–20, and Cl0p went public on Aug 13.
+
+**Why it matters:** This is the MOVEit playbook repeated — Cl0p targets a widely deployed enterprise product (PLM software used across manufacturing, automotive, aerospace, and retail) with a 1-day flaw and mass-extorts the supply chain. Cl0p claims ~89 GB from Shell and ~13.5 GB from Philips (still unverified), and the payload is product designs and engineering IP, not just PII.
+
+> Victims span ~50 orgs; Ransom-ISAC warned as early as July that Cl0p was exploiting the flaw, with extortion notices dating to July 19–20.
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/ptc-windchill-vulnerability-exploited-in-ransomware-campaign/) · [`🔗 Wiz Threat Center`](https://threats.wiz.io/all-incidents/cl0p-exploitation-of-ptc-windchill-and-flexplm-vulnerability)
+
+---
+
+## 12. Vercel open-sources deepsec — an agent-powered security harness that investigates real vulns
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Vercel Blog · 6.5k stars · ~1d ago
+- **Tags:** `security` `agents` `vercel` `appsec` `scanner`
+
+Vercel Labs released **deepsec** (Apache 2.0), a security harness that turns vulnerability discovery into a multi-stage agent pipeline: a regex-only static scan surfaces security-sensitive candidates, coding agents (**Claude Opus 4.7** and **Codex GPT-5.5** at maximum reasoning) trace data flows and check for mitigations, a revalidation pass cuts the false-positive rate to ~10–20%, and git metadata enriches findings with the responsible authors. It runs entirely on your own infrastructure — source code never leaves — and fans out across up to 1,000+ concurrent Vercel Sandboxes for monorepos, with idempotent/resumable runs.
+
+**Why it matters:** This is appsec moving from signature matching to agentic investigation — early adopters (Unkey, dub.co) call it the most thorough scanner they've used with a good true-positive rate. It also shows the "harness" pattern from DeepSeek and Cline being applied to security, at the cost of real compute (large scans can run into tens of thousands of dollars).
+
+> Runs with shell access like a coding agent, so Vercel warns against pointing it at untrusted source (prompt-injection risk); use a sandbox.
+
+[`🔗 Vercel Blog`](https://vercel.com/blog/introducing-deepsec-find-and-fix-vulnerabilities-in-your-code-base) · [`🔗 vercel-labs/deepsec`](https://github.com/vercel-labs/deepsec)
+
+---
+
+## 13. Anthropic's official Agent Skills repo — the 169k-star canonical home of the format — tops trending
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 169k stars · ~1d ago
+- **Tags:** `anthropic` `agent-skills` `spec` `claude` `plugins`
+
+**anthropics/skills** is Anthropic's official public repository for Agent Skills — the "folder of instructions" format it created, specified at agentskills.io. The repo holds the spec, a reusable skill template, and the reference skills: the source-available **document skills** (`docx`, `pdf`, `pptx`, `xlsx`) that power Claude's document editing in production, plus `skill-creator`, `mcp-builder`, and `artifacts-builder`. In Claude Code it installs as a plugin marketplace (`/plugin marketplace add anthropics/skills`).
+
+**Why it matters:** As the agent-skills ecosystem explodes — google/skills, addyosmani/agent-skills, and Ponytail all trended this week — Anthropic's repo is the reference implementation every other skill library is measured against, and at 169k stars it has become the de-facto canonical home of the format.
+
+> The document skills are source-available (not OSI open source), shared as reference for complex production skills; the rest are Apache 2.0.
+
+[`🔗 anthropics/skills`](https://github.com/anthropics/skills) · [`🔗 agentskills.io`](https://agentskills.io/)
+
+---
+
+## 14. ego-lite — a browser where you and your AI agents work in parallel on your real logins
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 10.1k stars · ~1d ago
+- **Tags:** `browser` `agents` `automation` `chromium` `macos`
+
+**ego-lite** (CitroLabs, MIT) is a Chromium-based browser built so humans and AI agents share one browser without fighting over tabs: it migrates your existing Chrome data (logins, cookies, extensions) once, then gives each agent an isolated in-process "Space" while you keep browsing up front. Instead of a command-per-action loop, agents call JavaScript functions through an `ego-browser` skill layer — composing multi-step tasks into a single script — and page snapshots are compressed from ~30,000 tokens to ~200–400 via the Chromium accessibility tree. The README claims up to **2.5× faster** complex workflows than CLI browser approaches.
+
+**Why it matters:** Browser automation is the highest-friction part of agentic work because agents either share your session or start logged-out. ego-lite's "same logged-in state, isolated space" model is a concrete answer to the login wall that blocks most real-world agent browsing, using ~94% less memory than separate browser instances.
+
+> macOS-only for now (Windows/Linux on the roadmap); browsing data stays on-device.
+
+[`🔗 citrolabs/ego-lite`](https://github.com/citrolabs/ego-lite) · [`🔗 dev.to review`](https://dev.to/andrew-ooo/ego-lite-review-a-browser-your-ai-agents-can-share-2afi)
+
+---
+
+## 15. holaOS — an open-source local-first workspace where Claude Code and Codex share one brain
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 6.9k stars · ~1d ago
+- **Tags:** `agents` `workspace` `memory` `local-first` `electron`
+
+**holaOS** (Holaboss) is an open-source, local-first "AI agent workspace" that runs Claude Code, Codex, or its own built-in agent side-by-side over shared memory, tools, files, and a real browser. The differentiator is **memory as plain-text files** on disk — readable, editable, and shared across agents and sessions — plus a "correction-as-rule" mechanism that turns every fix you make into a durable rule. It ships with frontier models (Kimi K3, GLM 5.2, GPT 5.6, Claude Opus 5, Fable 5) or BYOK, 100+ integrations, MCP support, and "HolaApps" that embed live UIs beside the agent.
+
+**Why it matters:** Agent context fragmentation is the core pain holaOS targets — giving a team's agents durable, inspectable shared state in a local format rather than a cloud black box. "Memory as files" is a strong debuggability and trust choice, though the memory format's portability will determine whether it stays an open standard or a holaOS lock-in.
+
+> Beta — one-line install via curl; macOS is the clearest path today.
+
+[`🔗 holaboss-ai/holaOS`](https://github.com/holaboss-ai/holaOS) · [`🔗 holaOS Docs`](https://www.holaos.ai/docs/getting-started/workspaces)
+
+---
+
+## 16. OneDayAgent — a long-horizon harness sets SOTA on the AgentIF-OneDay benchmark
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.05013 · ~1d ago
+- **Tags:** `agents` `long-horizon` `benchmark` `research` `arxiv`
+
+**OneDayAgent** (arXiv 2608.05013, Zhejiang University + Ant Group) is a long-horizon harness for autonomous agents handling open-ended everyday requests across work, study, and life. It decomposes requests into bounded subtasks, maintains execution memory under context pressure, and verifies-and-repairs the final deliverable — and scores **0.821 on AgentIF-OneDay** (104 real-world tasks, 767 binary rubric points), beating AutoClaw (0.799), Codex GPT-5.5 (0.664), Manus (0.645), and ChatGPT-Agent (0.626). The same harness transfers across five backend models with no tuning; code and all execution trajectories are open.
+
+**Why it matters:** Long-horizon autonomy — not single-shot coding — is where agent products now compete, and OneDayAgent's decomposition + memory + verify loop is a clean, reproducible recipe for the drift and state-loss failures that still sink multi-step agents.
+
+> Ablations: decomposition and verify each add ~3.3 points; verify-and-repair is the most time-efficient fix per point.
+
+[`🔗 arXiv`](https://arxiv.org/abs/2608.05013) · [`🔗 xbench-ai/AgentIF-OneDay`](https://github.com/xbench-ai/AgentIF-OneDay)
+
+---
+
+## 17. modly — a local, open-source desktop app that turns any photo into a 3D model on your GPU
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 5.7k stars · ~1d ago
+- **Tags:** `3d` `image-to-3d` `local-ai` `desktop` `mit`
+
+**modly** (Lightning Pixel, MIT) is a desktop app for Windows, Linux, and Apple Silicon macOS that generates 3D meshes from photos entirely on your own GPU — no uploads, no account, no generation limits. It uses an extension system to load open models (Hunyuan3D 2 Mini, TripoSG, Trellis2 GGUF), exports to GLB/OBJ/STL/PLY (STL drops straight into Cura or Bambu Studio), and offers a node-based workflow UI plus a Python CLI (`agent.py`) so agents can drive generation headlessly.
+
+**Why it matters:** Local image-to-3D has been the missing piece for privacy-sensitive 3D-printing, game-asset, and design workflows that can't send reference photos to cloud tools like Meshy or Luma. modly lowers that barrier to a free, GPU-local install — quality is prototyping-grade, but it's a real alternative for the "no cloud" crowd.
+
+> Needs a model extension installed before generating (e.g. Hunyuan3D 2 Mini); 6GB+ VRAM recommended.
+
+[`🔗 lightningpixel/modly`](https://github.com/lightningpixel/modly) · [`🔗 Product Hunt`](https://www.producthunt.com/products/modly-2)
+
+---
+
+## 18. FluidVoice — the open-source on-device macOS dictation app that's eating Wispr Flow's lunch
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 10.1k stars · ~1d ago
+- **Tags:** `dictation` `speech-to-text` `on-device` `macos` `privacy`
+
+**FluidVoice** (Altic, GPLv3) is a macOS dictation app that runs 100% on-device: local speech models (NVIDIA Parakeet/Nemotron, Cohere Transcribe, Apple Speech, Whisper) plus a local "Fluid-1" AI enhancement layer handle transcription and cleanup (capitalization, filler removal, tone) with nothing leaving the Mac. It adds Command Mode for voice-controlling the Mac, Write Mode for dictating into any field, and per-app tone adjustment — positioning itself as the free, privacy-first alternative to Wispr Flow ($12–15/mo, cloud-processed).
+
+**Why it matters:** On-device speech is the next privacy battleground after on-device LLMs, and FluidVoice's "comparable accuracy, zero cloud, zero cost" pitch has already driven a wave of Wispr Flow cancellations. It's rough around the edges (reviewers split on whether it's a full replacement yet), but the momentum and 10k+ stars signal real demand.
+
+> macOS 15+ only; the Fluid-1 enhancement model is closed-source (core dictation is open), ~3.5GB local download.
+
+[`🔗 altic-dev/FluidVoice`](https://github.com/altic-dev/FluidVoice) · [`🔗 OpenAlternative`](https://openalternative.co/fluidvoice)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-14T04:03:00Z |
-| Items | 10 |
-| Sources tracked | 15 (GitHub Trending, Hacker News, Hugging Face, NVIDIA Blog, DoNews, Bishop Fox, CISA KEV, Rapid7, Censys, Cline Docs, Moclaw Blog, Turso Blog, InfoQ, arXiv, IONIX) |
+| Generated | 2026-08-14T20:03:00Z |
+| Items | 18 |
+| Sources tracked | 23 (GitHub Trending, Hacker News, Hugging Face, NVIDIA Blog, DoNews, Bishop Fox, CISA KEV, Rapid7, Censys, Cline Docs, Moclaw Blog, Turso Blog, InfoQ, arXiv, IONIX, SecurityWeek, Wiz, Vercel Blog, agentskills.io, dev.to, holaOS Docs, Product Hunt, OpenAlternative) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

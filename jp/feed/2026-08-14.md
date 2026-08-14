@@ -1,8 +1,8 @@
 ---
 date: 2026-08-14
-updated: 2026-08-14T04:03:00Z
+updated: 2026-08-14T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 15
+sources: 23
 license: CC-BY-4.0
 ---
 
@@ -169,13 +169,141 @@ Turso——SQLiteをRustで書き直すチーム（**Limbo**）——は、無�
 
 ---
 
+## 11. Cl0pがPTC WindchillのRCE（CVE-2026-12569）で約50社のデータ窃取を主張
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** SecurityWeek · CVSS 9.8 · ~1d ago
+- **タグ:** `cve` `rce` `ransomware` `cl0p` `kev` `supply-chain`
+
+ロシア系ランサムウェア集団**Cl0p**は、**Shell、Philips、GE、Fiserv**を含む約50社から、**CVE-2026-12569**（**PTC Windchill PDMLink / FlexPLM**における安全でないデシリアライズに起因する、未認証RCE、CVSS 9.8、11.0 M030で修正）を突いた単一のキャンペーンでデータを窃取したと公表した。侵入はFlexPLM WSDLエンドポイントの事前認証情報開示とWindchillログインサーブレットのデシリアライズ脆弱性を連鎖させ、16進名のJSPウェブシェルを配置してエンジニアリング・設計データを窃取する。PTCは6月17日にパッチ、CISAは6月25日にKEVへ追加。7月19–20日から被害者に恐喝メールが届き始め、Cl0pは8月13日に公表に踏み切った。
+
+**注目の理由:** これはMOVEitの再演だ。Cl0pは広く導入されたエンタープライズ製品（製造・自動車・航空宇宙・小売で使われるPLMソフト）を1-day脆弱性で突き、サプライチェーンを一括恐喝する。Cl0pはShellから約89GB、Philipsから約13.5GBを窃取したと主張する（未検証）。奪われたのはPIIだけでなく製品設計とエンジニアリングIPだ。
+
+> 被害は約50組織。Ransom-ISACは7月の時点でCl0pによる悪用を警告、恐喝通知は7月19–20日に遡る。
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/ptc-windchill-vulnerability-exploited-in-ransomware-campaign/) · [`🔗 Wiz Threat Center`](https://threats.wiz.io/all-incidents/cl0p-exploitation-of-ptc-windchill-and-flexplm-vulnerability)
+
+---
+
+## 12. Vercelがdeepsecをオープンソース化——本物の脆弱性を調査するエージェント型セキュリティハーネス
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Vercel Blog · 6.5k stars · ~1d ago
+- **タグ:** `security` `agents` `vercel` `appsec` `scanner`
+
+Vercel Labsは**deepsec**（Apache 2.0）を公開した。脆弱性発見を多段階のエージェントパイプラインに変えるセキュリティハーネスだ。正規表現のみの静的スキャンでセキュリティ上重要な候補を洗い出し、コーディングエージェント（**Claude Opus 4.7**と**Codex GPT-5.5**、最大推論で）がデータフローを追って緩和策の有無を確認、再検証パスで誤検知率を約10–20%に抑え、gitメタデータで責任者を付記する。完全に自前インフラ上で動作し（ソースコードは外部に出ない）、モノレポでは1000以上の並行Vercel Sandboxへ展開でき、冪等・再開可能に実行できる。
+
+**注目の理由:** これはアプリセキュリティがシグネチャ照合からエージェント型調査へ移る流れだ。初期採用者（Unkey、dub.co）は「これまでで最も徹底したスキャナで、真陽性率も良い」と評する。DeepSeekやClineの「ハーネス」パターンをセキュリティに応用したもので、その代償は本物の計算コスト（大規模スキャンは数万ドル規模に達しうる）。
+
+> コーディングエージェント同様シェルアクセスで動くため、Vercelは信頼できないソースへの適用を警告（プロンプトインジェクションのリスク）。サンドボックスで使うこと。
+
+[`🔗 Vercel Blog`](https://vercel.com/blog/introducing-deepsec-find-and-fix-vulnerabilities-in-your-code-base) · [`🔗 vercel-labs/deepsec`](https://github.com/vercel-labs/deepsec)
+
+---
+
+## 13. Anthropic公式のAgent Skillsリポジトリ——フォーマットの169kスターの本家がトレンド入り
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** GitHub · 169k stars · ~1d ago
+- **タグ:** `anthropic` `agent-skills` `spec` `claude` `plugins`
+
+**anthropics/skills**はAnthropic公式のAgent Skills公開リポジトリだ。同社が生み出しagentskills.ioで仕様化した「命令フォルダ」形式の本家である。仕様、再利用可能なスキルテンプレート、参照スキルを収録し、Claudeのドキュメント編集を本番で支える**ドキュメントスキル**（`docx`、`pdf`、`pptx`、`xlsx`、ソースアベイラブルでオープンソースではない）に加え、`skill-creator`、`mcp-builder`、`artifacts-builder`を含む。Claude Codeではプラグインマーケットプレイスとして導入できる（`/plugin marketplace add anthropics/skills`）。
+
+**注目の理由:** エージェントスキル界が爆発するなか（google/skills、addyosmani/agent-skills、Ponytailが今週相次いでトレンド入り）、Anthropicのリポジトリは他のあらゆるスキルライブラリが比較される参照実装であり、169kスターでこのフォーマットの事実上の本家となっている。
+
+> ドキュメントスキルはソースアベイラブル（OSIオープンソースではない）で、複雑な本番スキルの参照として公開。その他はApache 2.0。
+
+[`🔗 anthropics/skills`](https://github.com/anthropics/skills) · [`🔗 agentskills.io`](https://agentskills.io/)
+
+---
+
+## 14. ego-lite——あなたとAIエージェントが同じログインで並行作業するブラウザ
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** GitHub · 10.1k stars · ~1d ago
+- **タグ:** `browser` `agents` `automation` `chromium` `macos`
+
+**ego-lite**（CitroLabs、MIT）は、人間とAIエージェントがタブを取り合わずに1つのブラウザを共有するChromiumベースのブラウザだ。既存のChromeデータ（ログイン、Cookie、拡張）を一度移行し、各エージェントに隔離されたプロセス内「Space」を与えつつ、あなたは前面でブラウジングを続ける。コマンドごとのループではなく、エージェントは`ego-browser`スキル層を通じてJavaScript関数を直接呼び出し、複数ステップのタスクを1本のスクリプトに合成する。ページスナップショットはChromiumアクセシビリティツリーで約3万トークンから約200–400に圧縮される。READMEは複雑なワークフローがCLIブラウザ方式より最大**2.5倍高速**と主張する。
+
+**注目の理由:** ブラウザ自動化はエージェント作業で最も摩擦が大きい部分だ。エージェントはセッションを共有するか、ログアウト状態から始めるしかないからだ。ego-liteの「同じログイン状態、隔離されたスペース」モデルは、実世界のエージェントブラウジングを阻むログインの壁への具体的な回答で、独立ブラウザインスタンスより約94%省メモリという。
+
+> 現時点ではmacOSのみ（Windows/Linuxはロードマップ）。ブラウジングデータは端末内に留まる。
+
+[`🔗 citrolabs/ego-lite`](https://github.com/citrolabs/ego-lite) · [`🔗 dev.to レビュー`](https://dev.to/andrew-ooo/ego-lite-review-a-browser-your-ai-agents-can-share-2afi)
+
+---
+
+## 15. holaOS——Claude CodeとCodexが1つの頭脳を共有するオープンソースのローカルファーストワークスペース
+
+- **ベロシティ:** ▮▮ 上昇中
+- **ソース:** GitHub · 6.9k stars · ~1d ago
+- **タグ:** `agents` `workspace` `memory` `local-first` `electron`
+
+**holaOS**（Holaboss）はオープンソース・ローカルファーストの「AIエージェントワークスペース」で、Claude Code、Codex、または内蔵エージェントを共有メモリ・ツール・ファイル・実ブラウザの上で並走させる。差別化点は**メモリをディスク上のプレーンテキストファイル**として持つこと——可読・編集可能で、エージェントやセッションをまたいで共有される——に加え、あなたが加えた修正を恒久的なルールに変える「修正＝ルール」機構にある。フロンティアモデル（Kimi K3、GLM 5.2、GPT 5.6、Claude Opus 5、Fable 5）を内蔵するかBYOK、100以上の統合、MCP対応、エージェントの隣に実UIを埋め込む「HolaApps」を備える。
+
+**注目の理由:** エージェントのコンテキスト断片化はholaOSが狙う核心的な痛みだ。チームのエージェントに、クラウドのブラックボックスではなく、ローカル形式で持続的・検査可能な共有状態を与える。「メモリをファイルとして」は優れたデバッグ性と信頼性の選択だが、メモリ形式の可搬性がオープン標準に留まるか、holaOSへのロックインになるかを左右する。
+
+> ベータ——curl 1行で導入可能。現時点でmacOSが最も明確なパス。
+
+[`🔗 holaboss-ai/holaOS`](https://github.com/holaboss-ai/holaOS) · [`🔗 holaOS Docs`](https://www.holaos.ai/docs/getting-started/workspaces)
+
+---
+
+## 16. OneDayAgent——長ホライズンハーネスがAgentIF-OneDayベンチマークでSOTAを達成
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** arXiv · 2608.05013 · ~1d ago
+- **タグ:** `agents` `long-horizon` `benchmark` `research` `arxiv`
+
+**OneDayAgent**（arXiv 2608.05013、浙江大学＋Ant Group）は、仕事・学習・生活にまたがるオープンエンドな日常リクエストを扱う自律エージェント向けの長ホライズンハーネスだ。リクエストを有界なサブタスクに分解し、コンテキスト圧力下で実行メモリを維持し、最終成果物を検証・修復する。**AgentIF-OneDay**（実タスク104件、二値ルーブリック767点）で**0.821**を記録し、AutoClaw（0.799）、Codex GPT-5.5（0.664）、Manus（0.645）、ChatGPT-Agent（0.626）を上回る。同一ハーネスはチューニングなしで5つのバックエンドモデルに移植可能で、コードと全実行軌跡が公開されている。
+
+**注目の理由:** 長ホライズンの自律性——単発のコーディングではない——こそが現在エージェント製品の競争点だ。OneDayAgentの「分解＋メモリ＋検証」ループは、いまだに多段エージェントを沈めるドリフトと状態喪失への、クリーンで再現可能な処方箋である。
+
+> アブレーション：分解と検証はそれぞれ約3.3点を寄与。検証・修復は1点あたり最も時間効率の良い修正。
+
+[`🔗 arXiv`](https://arxiv.org/abs/2608.05013) · [`🔗 xbench-ai/AgentIF-OneDay`](https://github.com/xbench-ai/AgentIF-OneDay)
+
+---
+
+## 17. modly——任意の写真を自分のGPUで3Dモデルにするローカルなオープンソースデスクトップアプリ
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub · 5.7k stars · ~1d ago
+- **タグ:** `3d` `image-to-3d` `local-ai` `desktop` `mit`
+
+**modly**（Lightning Pixel、MIT）はWindows・Linux・Apple Silicon macOS向けのデスクトップアプリで、完全に自分のGPU上で写真から3Dメッシュを生成する——アップロードなし、アカウント不要、生成回数制限なし。拡張システムでオープンモデル（Hunyuan3D 2 Mini、TripoSG、Trellis2 GGUF）を読み込み、GLB/OBJ/STL/PLYへエクスポート（STLはCuraやBambu Studioへ直行）。ノードベースのワークフローUIと、エージェントがヘッドレスで生成を駆動できるPython CLI（`agent.py`）を備える。
+
+**注目の理由:** ローカルの画像→3Dは、参考写真をMeshyやLumaといったクラウドツールに送れない、プライバシー重視の3Dプリント・ゲームアセット・デザインワークフローに欠けていたピースだ。modlyはそれを無料・GPUローカルの導入に引き下げる。品質はプロトタイプ級だが、「クラウドなし」の人々にとって真の代替となる。
+
+> 生成前にモデル拡張の導入が必要（例：Hunyuan3D 2 Mini）。VRAM 6GB以上を推奨。
+
+[`🔗 lightningpixel/modly`](https://github.com/lightningpixel/modly) · [`🔗 Product Hunt`](https://www.producthunt.com/products/modly-2)
+
+---
+
+## 18. FluidVoice——Wispr Flowのユーザーを奪いつつある、オンデバイスのオープンソースmacOSディクテーションアプリ
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub · 10.1k stars · ~1d ago
+- **タグ:** `dictation` `speech-to-text` `on-device` `macos` `privacy`
+
+**FluidVoice**（Altic、GPLv3）は100%オンデバイスで動くmacOSディクテーションアプリだ。ローカル音声モデル（NVIDIA Parakeet/Nemotron、Cohere Transcribe、Apple Speech、Whisper）とローカルの「Fluid-1」AI強化層が転写とクリーンアップ（大文字化、フィラー除去、トーン）を担当し、Macの外に何も出ない。音声でMacを操作するCommand Mode、任意の入力欄へディクテーションするWrite Mode、アプリごとのトーン調整を備え、Wispr Flow（月$12–15、クラウド処理）の無料・プライバシー重視の代替として位置づけられる。
+
+**注目の理由:** オンデバイス音声はオンデバイスLLMに続く次のプライバシー戦場だ。FluidVoiceの「同等の精度、ゼロクラウド、ゼロコスト」という売りは、すでにWispr Flow解約の波を起こしている。粗削りな部分は残るが（完全な代替かはレビュアーで評価が分かれる）、勢いと10k超のスターが実需を示す。
+
+> macOS 15+のみ。Fluid-1強化モデルはクローズドソース（コアのディクテーションはオープン）、ローカルに約3.5GB。
+
+[`🔗 altic-dev/FluidVoice`](https://github.com/altic-dev/FluidVoice) · [`🔗 OpenAlternative`](https://openalternative.co/fluidvoice)
+
+---
+
 ## メタデータ
 
 | フィールド | 値 |
 |-------|-------|
-| 生成日時 | 2026-08-14T04:03:00Z |
-| アイテム数 | 10 |
-| 追跡ソース | 15 (GitHub Trending, Hacker News, Hugging Face, NVIDIA Blog, DoNews, Bishop Fox, CISA KEV, Rapid7, Censys, Cline Docs, Moclaw Blog, Turso Blog, InfoQ, arXiv, IONIX) |
+| 生成日時 | 2026-08-14T20:03:00Z |
+| アイテム数 | 18 |
+| 追跡ソース | 23 (GitHub Trending, Hacker News, Hugging Face, NVIDIA Blog, DoNews, Bishop Fox, CISA KEV, Rapid7, Censys, Cline Docs, Moclaw Blog, Turso Blog, InfoQ, arXiv, IONIX, SecurityWeek, Wiz, Vercel Blog, agentskills.io, dev.to, holaOS Docs, Product Hunt, OpenAlternative) |
 | 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | ランキング | ベロシティ加重（新しさ × エンゲージメント加速 × ソース権威性） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

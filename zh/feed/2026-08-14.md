@@ -1,8 +1,8 @@
 ---
 date: 2026-08-14
-updated: 2026-08-14T04:03:00Z
+updated: 2026-08-14T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 15
+sources: 23
 license: CC-BY-4.0
 ---
 
@@ -169,13 +169,141 @@ Turso——正在用 Rust 重写 SQLite（**Limbo**）的团队——让未经�
 
 ---
 
+## 11. Cl0p 宣称通过 PTC Windchill RCE（CVE-2026-12569）窃取近 50 家企业数据
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** SecurityWeek · CVSS 9.8 · ~1d ago
+- **标签：** `cve` `rce` `ransomware` `cl0p` `kev` `supply-chain`
+
+俄罗斯背景的勒索软件团伙 **Cl0p** 公开宣称在一次协调行动中窃取了近 50 家企业的数据——包括 **Shell、Philips、GE 和 Fiserv**——所利用的是 **CVE-2026-12569**，一个源于 **PTC Windchill PDMLink 与 FlexPLM** 中不安全反序列化的严重（CVSS 9.8）未认证 RCE（已在 11.0 M030 中修复）。攻击链将 FlexPLM WSDL 端点的预认证信息泄露与 Windchill 登录 servlet 的反序列化漏洞组合起来，投放十六进制命名的 JSP webshell 并窃取工程与设计数据。PTC 于 6 月 17 日修复、CISA 于 6 月 25 日将其纳入 KEV；勒索邮件自 7 月 19–20 日起送达受害者，Cl0p 于 8 月 13 日公开。
+
+**值得关注的原因：** 这是 MOVEit 剧本的重演——Cl0p 用 1-day 漏洞攻击一款广泛部署的企业产品（用于制造、汽车、航空航天与零售的 PLM 软件），并对供应链进行大规模勒索。Cl0p 声称从 Shell 窃取约 89 GB、从 Philips 窃取约 13.5 GB（尚未核实），而被窃取的是产品设计与工程 IP，而非仅仅是 PII。
+
+> 受害者约 50 家；Ransom-ISAC 早在 7 月就警告 Cl0p 正在利用该漏洞，勒索通知可追溯至 7 月 19–20 日。
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/ptc-windchill-vulnerability-exploited-in-ransomware-campaign/) · [`🔗 Wiz Threat Center`](https://threats.wiz.io/all-incidents/cl0p-exploitation-of-ptc-windchill-and-flexplm-vulnerability)
+
+---
+
+## 12. Vercel 开源 deepsec —— 一个能深入调查真实漏洞的智能体安全 harness
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** Vercel Blog · 6.5k stars · ~1d ago
+- **标签：** `security` `agents` `vercel` `appsec` `scanner`
+
+Vercel Labs 发布了 **deepsec**（Apache 2.0），一个把漏洞发现变成多阶段智能体流水线的安全 harness：仅用正则的静态扫描先找出安全敏感候选点，编码智能体（**Claude Opus 4.7** 与 **Codex GPT-5.5**，开满推理档位）追踪数据流并核查缓解措施，再经过一轮复核把误报率降到约 10–20%，最后用 git 元数据为发现标注责任作者。它完全运行在你自己基础设施上——源代码不外传——并可在单仓仓库上横向扩展到 1000+ 个并发 Vercel Sandbox，运行幂等、可断点续跑。
+
+**值得关注的原因：** 这是应用安全从签名匹配转向智能体化调查——早期采用者（Unkey、dub.co）称它是他们用过的最彻底的扫描器，真阳性率也很高。它也展示了 DeepSeek 与 Cline 的 "harness" 模式被搬到安全领域，代价是实打实的算力（大规模扫描可能花到数万美元）。
+
+> 像编码智能体一样拥有 shell 访问权限，因此 Vercel 警告不要用它扫描不可信源码（提示注入风险）；请在沙箱中运行。
+
+[`🔗 Vercel Blog`](https://vercel.com/blog/introducing-deepsec-find-and-fix-vulnerabilities-in-your-code-base) · [`🔗 vercel-labs/deepsec`](https://github.com/vercel-labs/deepsec)
+
+---
+
+## 13. Anthropic 官方 Agent Skills 仓库 —— 该格式 169k 星的权威之家 —— 登上热榜
+
+- **传播速度：** ▮▮ 热度上升
+- **来源：** GitHub · 169k stars · ~1d ago
+- **标签：** `anthropic` `agent-skills` `spec` `claude` `plugins`
+
+**anthropics/skills** 是 Anthropic 官方的 Agent Skills 公开仓库——即它首创、并在 agentskills.io 上规范的"指令文件夹"格式。仓库包含规范、可复用的技能模板以及参考技能：为 Claude 生产文档编辑提供动力的**文档技能**（`docx`、`pdf`、`pptx`、`xlsx`，源码可见但非开源），外加 `skill-creator`、`mcp-builder` 和 `artifacts-builder`。在 Claude Code 中可通过插件市场安装（`/plugin marketplace add anthropics/skills`）。
+
+**值得关注的原因：** 在 agent-skills 生态爆发之际——google/skills、addyosmani/agent-skills 和 Ponytail 本周都上了热榜——Anthropic 的仓库是其他所有技能库被拿来对比的参考实现，169k 星让它成为该格式事实上的权威之家。
+
+> 文档技能是源码可见（source-available，非 OSI 开源），作为复杂生产技能的参考公开；其余为 Apache 2.0。
+
+[`🔗 anthropics/skills`](https://github.com/anthropics/skills) · [`🔗 agentskills.io`](https://agentskills.io/)
+
+---
+
+## 14. ego-lite —— 一个让你和 AI 智能体在同一浏览器里、共享真实登录态并行工作的浏览器
+
+- **传播速度：** ▮▮ 热度上升
+- **来源：** GitHub · 10.1k stars · ~1d ago
+- **标签：** `browser` `agents` `automation` `chromium` `macos`
+
+**ego-lite**（CitroLabs，MIT）是一个基于 Chromium 的浏览器，让人与 AI 智能体共享同一个浏览器而不抢标签页：它一次性迁移你现有的 Chrome 数据（登录、cookie、扩展），之后给每个智能体一个隔离的进程内 "Space"，而你继续在前台浏览。智能体不是逐条命令循环，而是通过 `ego-browser` 技能层直接调用 JavaScript 函数——把多步任务合成一段脚本——页面快照经 Chromium 无障碍树从约 30000 token 压缩到约 200–400 token。README 宣称复杂工作流比 CLI 浏览器方案快最高 **2.5 倍**。
+
+**值得关注的原因：** 浏览器自动化是智能体工作中摩擦最高的一环，因为智能体要么共享你的会话、要么从登出状态起步。ego-lite 的"同一登录态、隔离空间"模型，是对挡住大多数真实智能体浏览的登录墙的具体答案，且比独立浏览器实例省约 94% 内存。
+
+> 目前仅 macOS（Windows/Linux 在路线图中）；浏览数据留在本机。
+
+[`🔗 citrolabs/ego-lite`](https://github.com/citrolabs/ego-lite) · [`🔗 dev.to 评测`](https://dev.to/andrew-ooo/ego-lite-review-a-browser-your-ai-agents-can-share-2afi)
+
+---
+
+## 15. holaOS —— 一个开源、本地优先的工作台，让 Claude Code 和 Codex 共享同一个大脑
+
+- **传播速度：** ▮▮ 热度上升
+- **来源：** GitHub · 6.9k stars · ~1d ago
+- **标签：** `agents` `workspace` `memory` `local-first` `electron`
+
+**holaOS**（Holaboss）是一个开源、本地优先的"AI 智能体工作台"，让 Claude Code、Codex 或它内置的智能体在共享内存、工具、文件和真实浏览器之上并行工作。其差异化在于**把内存存为磁盘上的纯文本文件**——可读、可编辑、跨智能体与会话共享——外加一套"纠错即规则"机制，把你做的每一次修正都变成持久规则。它内置前沿模型（Kimi K3、GLM 5.2、GPT 5.6、Claude Opus 5、Fable 5）或支持 BYOK，还有 100+ 集成、MCP 支持，以及把实时 UI 嵌到智能体旁边的 "HolaApps"。
+
+**值得关注的原因：** 智能体上下文碎片化正是 holaOS 要解决的核心痛点——让团队智能体拥有持久、可检视的本地共享状态，而不是云端的黑盒。"内存即文件"是强调试性与强信任感的选择，尽管内存格式的可移植性将决定它是保持开放标准，还是沦为 holaOS 的锁定。
+
+> Beta 版——一行 curl 即可安装；目前 macOS 是最清晰的支持路径。
+
+[`🔗 holaboss-ai/holaOS`](https://github.com/holaboss-ai/holaOS) · [`🔗 holaOS Docs`](https://www.holaos.ai/docs/getting-started/workspaces)
+
+---
+
+## 16. OneDayAgent —— 长程 harness 在 AgentIF-OneDay 基准上刷新 SOTA
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** arXiv · 2608.05013 · ~1d ago
+- **标签：** `agents` `long-horizon` `benchmark` `research` `arxiv`
+
+**OneDayAgent**（arXiv 2608.05013，浙江大学 + 蚂蚁集团）是一个面向自主智能体的长程 harness，处理横跨工作、学习与生活的开放式日常请求。它把请求分解为有界子任务、在上下文压力下维护执行内存，并对最终交付物进行验证与修复——在 **AgentIF-OneDay**（104 个真实任务、767 个二值评分点）上取得 **0.821**，超过 AutoClaw（0.799）、Codex GPT-5.5（0.664）、Manus（0.645）和 ChatGPT-Agent（0.626）。同一 harness 无需调优即可迁移到五个后端模型；代码与全部执行轨迹均已开源。
+
+**值得关注的原因：** 长程自主——而非单次编码——才是智能体产品当前的竞争焦点，OneDayAgent 的"分解 + 内存 + 验证"循环，是对仍在拖垮多步智能体的目标漂移与状态丢失问题的一套干净、可复现的解法。
+
+> 消融：分解与验证各贡献约 3.3 分；验证-修复是单位得分最省时间的手段。
+
+[`🔗 arXiv`](https://arxiv.org/abs/2608.05013) · [`🔗 xbench-ai/AgentIF-OneDay`](https://github.com/xbench-ai/AgentIF-OneDay)
+
+---
+
+## 17. modly —— 一个本地开源的桌面应用，在你的 GPU 上把任意照片变成 3D 模型
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** GitHub · 5.7k stars · ~1d ago
+- **标签：** `3d` `image-to-3d` `local-ai` `desktop` `mit`
+
+**modly**（Lightning Pixel，MIT）是一个面向 Windows、Linux 与 Apple Silicon macOS 的桌面应用，完全在你自己的 GPU 上把照片生成 3D 网格——不上传、无需账号、没有生成次数限制。它通过扩展系统加载开放模型（Hunyuan3D 2 Mini、TripoSG、Trellis2 GGUF），导出 GLB/OBJ/STL/PLY（STL 可直接进 Cura 或 Bambu Studio），并提供节点式工作流 UI，以及一个 Python CLI（`agent.py`）让智能体可无头驱动生成。
+
+**值得关注的原因：** 本地图生 3D 一直是那些不能把参考照片发给 Meshy 或 Luma 等云端工具的、注重隐私的 3D 打印、游戏资产与设计工作流所缺的一环。modly 把它降到一次免费、GPU 本地的安装——质量是原型级，但对"无云"人群是真正的替代。
+
+> 生成前需先安装模型扩展（如 Hunyuan3D 2 Mini）；建议 6GB+ 显存。
+
+[`🔗 lightningpixel/modly`](https://github.com/lightningpixel/modly) · [`🔗 Product Hunt`](https://www.producthunt.com/products/modly-2)
+
+---
+
+## 18. FluidVoice —— 正在抢走 Wispr Flow 用户的本地开源 macOS 听写应用
+
+- **传播速度：** ▮ 稳定关注
+- **来源：** GitHub · 10.1k stars · ~1d ago
+- **标签：** `dictation` `speech-to-text` `on-device` `macos` `privacy`
+
+**FluidVoice**（Altic，GPLv3）是一款 100% 本地运行的 macOS 听写应用：本地语音模型（NVIDIA Parakeet/Nemotron、Cohere Transcribe、Apple Speech、Whisper）加上本地的 "Fluid-1" AI 增强层完成转写与清理（大写、口头禅去除、语气），全程数据不出 Mac。它还加入用语音控制 Mac 的 Command Mode、向任意输入框听写的 Write Mode，以及按应用调整语气——定位为 Wispr Flow（$12–15/月、云端处理）的免费、隐私优先替代。
+
+**值得关注的原因：** 端侧语音是继端侧大模型之后的下一个隐私战场，FluidVoice"精度相当、零云、零费用"的卖点已经引发一波 Wispr Flow 退订潮。它仍有毛边（评测者对其是否已能完全替代意见不一），但势头与 10k+ 星表明需求真实存在。
+
+> 仅 macOS 15+；Fluid-1 增强模型闭源（核心听写开源），本地下载约 3.5GB。
+
+[`🔗 altic-dev/FluidVoice`](https://github.com/altic-dev/FluidVoice) · [`🔗 OpenAlternative`](https://openalternative.co/fluidvoice)
+
+---
+
 ## 元数据
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-08-14T04:03:00Z |
-| 条目数 | 10 |
-| 追踪来源数 | 15（GitHub Trending、Hacker News、Hugging Face、NVIDIA Blog、DoNews、Bishop Fox、CISA KEV、Rapid7、Censys、Cline Docs、Moclaw Blog、Turso Blog、InfoQ、arXiv、IONIX） |
+| 生成时间 | 2026-08-14T20:03:00Z |
+| 条目数 | 18 |
+| 追踪来源数 | 23（GitHub Trending、Hacker News、Hugging Face、NVIDIA Blog、DoNews、Bishop Fox、CISA KEV、Rapid7、Censys、Cline Docs、Moclaw Blog、Turso Blog、InfoQ、arXiv、IONIX、SecurityWeek、Wiz、Vercel Blog、agentskills.io、dev.to、holaOS Docs、Product Hunt、OpenAlternative） |
 | 更新时段 | 04:03, 12:03, 20:03 UTC+8（每日3次） |
 | 排序方式 | 传播速度加权（时效性 x 参与度加速度 x 来源权威性） |
 | 许可证 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,6 +1,6 @@
 ---
 date: 2026-08-14
-updated: 2026-08-14T04:03:00Z
+updated: 2026-08-14T20:03:00Z
 ---
 
 # Archive — trending.md
@@ -9,7 +9,7 @@ All daily trending feeds, ranked by velocity. Click any date for the full styled
 
 | Date | Items | Web (human) | Raw (agent) |
 |------|-------|-------------|-------------|
-| Aug 14, 2026 | 10 | [**View →**](/en/feed/2026-08-14/) | [`2026-08-14.md`](/en/feed/2026-08-14.md) |
+| Aug 14, 2026 | 18 | [**View →**](/en/feed/2026-08-14/) | [`2026-08-14.md`](/en/feed/2026-08-14.md) |
 | Aug 13, 2026 | 25 | [**View →**](/en/feed/2026-08-13/) | [`2026-08-13.md`](/en/feed/2026-08-13.md) |
 | Aug 12, 2026 | 37 | [**View →**](/en/feed/2026-08-12/) | [`2026-08-12.md`](/en/feed/2026-08-12.md) |
 | Aug 11, 2026 | 32 | [**View →**](/en/feed/2026-08-11/) | [`2026-08-11.md`](/en/feed/2026-08-11.md) |
