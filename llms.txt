@@ -1,22 +1,24 @@
 # trending.md
-A dense trending information listing optimized for agentic web search. Markdown-first. Updated every 15 minutes.
+
+> A dense trending information listing optimized for agentic web search. Markdown-first. Updated every 15 minutes. This file tells LLMs how to crawl the site: the canonical data feeds are the `.md` files below; the HTML pages are human-facing renders of the same content.
 
 ## Feeds (English)
-- Latest: https://trending.md/feed/latest.md (today's trending items, ranked by velocity)
-- Archive: https://trending.md/feed/2026-08-11.md | https://trending.md/feed/2026-08-10.md | https://trending.md/feed/2026-08-09.md
+- [Latest feed](https://trending.md/feed/latest.md): today's trending items, ranked by velocity
+- [Archive index](https://trending.md/feed/): all daily feeds
 
 ## Feeds (中文 / Chinese)
-- Latest: https://trending.md/zh/feed/latest.md
-- Archive: https://trending.md/zh/feed/2026-08-11.md | https://trending.md/zh/feed/2026-08-10.md | https://trending.md/zh/feed/2026-08-09.md
+- [最新数据](https://trending.md/zh/feed/latest.md): 今日趋势条目，按热度排序
+- [归档索引](https://trending.md/zh/feed/): 全部每日数据
 
 ## About
-- EN: https://trending.md/en/about.md (project description + agent consumption guide)
-- ZH: https://trending.md/zh/about.md (项目说明 + 智能体使用指南)
+- [English](https://trending.md/en/about.md): project description + agent consumption guide
+- [中文](https://trending.md/zh/about.md): 项目说明 + 智能体使用指南
 
 ## Archive
-- EN: https://trending.md/en/archive/index.md (full archive listing)
-- ZH: https://trending.md/zh/archive/index.md (全部归档列表)
+- [English archive](https://trending.md/en/archive/index.md): full archive listing
+- [中文归档](https://trending.md/zh/archive/index.md): 全部归档列表
 
-## Optional
-- Canonical web render: https://trending.md/en/ (English) | https://trending.md/zh/ (中文)
-- GitHub: https://github.com/takoyaki-baron/trending-md
+## Web
+- [English site](https://trending.md/en/): canonical HTML render (English)
+- [中文站点](https://trending.md/zh/): 网页版
+- [GitHub](https://github.com/takoyaki-baron/trending-md): source repository
