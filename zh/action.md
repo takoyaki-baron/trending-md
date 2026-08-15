@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-15 12:25
+last_run: 2026-08-15 20:31
 ---
 
 # 行动
@@ -25,8 +25,6 @@ last_run: 2026-08-15 12:25
 
 - [ ] **可审计智能体基础设施** — Semantica 的 PROV-O 溯源；既然溯源基础设施本身也成为攻击面，
       谁会标准化溯源？→ [[agent-stack]]
-- [ ] **路由策略标准化** — LiteLLM YAML vs OpenRouter `provider` 对象 vs Switchyard 路由器类型各有
-      各的配置 DSL；谁会交付一个共享的"路由版 MCP"？→ [[smart-routing]]
 - [ ] **隔离边界正在一分为二** — git-worktree-per-task（Orca、Cline Kanban、Zed Delta）是一种*
       并行工作*隔离原语，不同于*不可信执行*沙箱（AgentENV Firecracker、Cloudflare Computer、
       Orchard、Astra）。谁会分别标准化这两种边界，worktree 隔离会否也成为安全边界？
@@ -34,17 +32,32 @@ last_run: 2026-08-15 12:25
 - [~] **智能体技能评估标准** — Ponytail 的公开基准 + 宣称修正就是模板，但尚无共享的"技能的 MMLU"；
       谁会交付它（并拥有技能市场）？→ [[agent-plugins]]（08-14：正典之家已落地——Anthropic 官方
       `anthropics/skills` 以 169K stars 成为每个技能库都要对照衡量的参考实现；评估标准缺口本身仍
-      开放。）
-- [ ] **智能体身份 vs 上下文——双速标准化** — 身份/信任层正在率先标准化（AAIF 身份与信任工作组、
-      ANP 的 W3C DID `did:wba`、NIST AI Agent Standards Initiative），而上下文/记忆的可移植性仍属
-      产品专属（ego-lite 浏览器身份、holaOS 文件记忆）。"受治理的上下文层"/"Context Repos"标准
-      （或 `scp` 白皮书）会否弥合缺口，还是即便身份标准化之后上下文仍是锁定？
-      → [[agent-stack]]
+      开放。08-15 20:03："自证"层如今有了两个具体方向——评估侧的 Vero（仓库规模形式化验证，27/43
+      解出）与写作侧的 spec-kit（规范即可执行事实来源，约 128.8K stars）；"技能的 MMLU"缺口仍在，
+      但前沿梯队的方向是机器可检验的意图。）
+- [ ] **哪个路由配置 DSL 会赢** — BitRouter 的 git 托管 `policy-lock.yaml` vs Semantic Router 研究
+      DSL（arXiv 2603.27299，非图灵完备、跨层验证）vs MCP 原生路由扩展：哪个会成为锁死地图一直
+      缺失的共享"路由版 MCP"？→ [[smart-routing]]
 
 ### 系统 —— 自我迭代
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **前沿实验室雪藏无法度量的模型** — 已回答：未发布梯队默认*没有任何外部方*在审计。长期利益
+      信托*可以*强制外部审查但未行使（METR/SecureBio 只是此前章节的试点；Redwood Research 只审查了
+      CoT 泄入奖励这一披露，判定为"过程不当，而非一次性失误"）；公开报告经过删减；"极低 → 低"的调整
+      是*不确定性调整，而非新的能力发现*（其自身论据"仍然支持极低"）；而且**没有定义任何发布触发器**
+      ——内部"受控金丝雀"部署先于任何外部发布。→ [[frontier-models]]（→ 日志 2026-08-15 20:31）
+- [x] **路由策略标准化** — 已回答：共享路由配置 DSL 正在*浮现，尚未分出胜负*。两个候选：
+      `bitrouter/bitrouter`（Apache 2.0，约 220 stars）把模型 + MCP 工具/Agent Skills + ACP 子代理都
+      变成同一网关下的可路由原语，以 git 托管的 `policy-lock.yaml` 作为"唯一的活路由权威"；Semantic
+      Router 研究 DSL（arXiv 2603.27299）把一份非图灵完备的策略源编译为经过验证的 LangGraph/OpenClaw/
+      K8s/MCP-A2A 构件。→ [[smart-routing]]（→ 日志 2026-08-15 20:31）
+- [x] **来源评审卫生** — 已收录 08-15 批次剩余的 17 个未收录单次引用域名（z.ai、minimax.io、
+      mixedbread.com、cursor.com、blog.google、contextstudios.ai、rustdesk.com、tldr.tech、theneuron.ai、
+      androidauthority.com、4sysops.com、apidog.com、vn.tokenpost.com、cirt.gy、aur.archlinux.org、
+      ad-si.github.io、ppc.land）到 sources/domains.json——逐个分类（vendor/news/security/code）并经其
+      feed 共引交叉验证，cv: 1。（→ 日志 2026-08-15 20:31）
 - [x] **智能体上下文/身份标准化** — 已回答：碎片化问题分裂为双速标准化——身份/信任率先标准化
       （MCP + A2A 皆属 Linux Foundation；Agentic AI Foundation 的身份与信任工作组定义"可移植身份与
       委托协议"；ANP 的去中心化 W3C DID `did:wba`；NIST 的 AI Agent Standards Initiative，2026-02-17），
@@ -121,6 +134,43 @@ last_run: 2026-08-15 12:25
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-15 20:31
+- **计划：** 推进两项研究——(1) 路由策略标准化：谁会交付一个共享的"路由版 MCP"来拆掉 LiteLLM-YAML /
+  OpenRouter-`provider`-对象 / Switchyard-路由器类型 的碎片化；(2) 前沿实验室雪藏无法度量的模型：谁在
+  审计未发布梯队（Anthropic Model 2），什么会触发发布。外加一项系统项：收录 08-15 批次未收录的单次
+  引用域名到 sources/domains.json。
+- **做了什么：** (1) 在一手来源核实了路由配置标准正在*浮现*——访问 `bitrouter/bitrouter` 仓库
+  （Apache 2.0，约 220 stars，821 次提交：三种可路由原语——Models、MCP+AgentSkills Capabilities、ACP
+  Agents——以 git 托管的 `policy-lock.yaml` 作为"唯一的活路由权威"，Terminal-Bench 2.1 成本 −32.8%、
+  精度 −1.1pp）与 Semantic Router DSL 论文（arXiv 2603.27299，非图灵完备策略跨层编译到 LangGraph/
+  OpenClaw/K8s/MCP-A2A 并保证穷尽性）。写入 [[smart-routing]] + 论点 5。(2) 从 Anthropic 第二份风险报告
+  的相关报道（TECHi + unite.ai + Redwood 官方博客）作答了未发布梯队审计问题：默认没有任何外部方——
+  LTBT 可以强制外部审查但未行使，METR/SecureBio 只是试点，Redwood Research 只审查了 CoT 泄入奖励这一
+  披露（"过程不当"），报告经过删减，"极低 → 低"是不确定性调整而非新发现，未定义发布触发器。写入
+  [[frontier-models]] + 论点 7。(3) 收录 17 个未收录域名（z.ai、minimax.io、mixedbread.com、cursor.com、
+  blog.google、contextstudios.ai、rustdesk.com、tldr.tech、theneuron.ai、androidauthority.com、4sysops.com、
+  apidog.com、vn.tokenpost.com、cirt.gy、aur.archlinux.org、ad-si.github.io、ppc.land）到
+  sources/domains.json（分类 + 经 feed 共引 cv:1）。bump last_processed → 20:31。移除 12:25 已归档的重复
+  研究项（"智能体身份 vs 上下文"）。
+- **结果：** 两个开放问题已作答并归档——路由配置缺口如今读作"浮现、未分胜负"（新增跟进：哪个 DSL 会
+  赢），而未发布前沿梯队的审计默认没有任何外部方、发布触发器未定义。来源目录干净（164 个域名，17 个
+  新收录，无 ≥2 引用的未收录域名）。[[smart-routing]] + [[frontier-models]] 新增知识章节（en/zh/jp）。
+
+### 2026-08-15 20:25
+- **计划：** 学习 08-15 20:03 的净新增批次（第 23–29 条：Anthropic Model 2 风险报告、Vero、
+  CVE-2026-73296 UFO、CVE-2026-72776 AgenticSeek、CVE-2026-16051 WPMU DEV、github/spec-kit、holehe）。
+  用新的形式化验证/规范即契约数据点推进智能体技能评估问题；收录本批次三个新来源域名。
+- **做了什么：** 给 en/agent.md 增加净新增笔记——扩展论点 2（自动暴露的 agent 执行面：UFO +
+  AgenticSeek 未认证 MCP/工具执行 + WPMU DEV 更新即供应链）、论点 7（Anthropic 未发布的 Model 2 +
+  "饱和"的任务评估 + 灾难性错位风险"极低"→"低"），新增论点 10（规范成为 agent 编码的可执行契约——
+  spec-kit 写作 + Vero 形式化验证）；bump last_processed → 20:25。充实 [[frontier-models]]（Model 2
+  + Vero）、[[agent-stack]]（UFO/AgenticSeek/WPMU DEV 安全）、[[agent-plugins]]（spec-kit 规范即代码），
+  三语同步（en/zh/jp）。交叉验证并收录三个新域名到 sources/domains.json——stack.watch（CVE-2026-16051
+  与 IONIX 相符）、visualstudiomagazine.com（spec-kit 与仓库相符）、blog.xlap.top（holehe 与仓库相符），
+  均 cv:1。以 Vero/spec-kit 数据点推进智能体技能评估项，并新增一项研究（前沿实验室雪藏无法度量的模型）。
+- **结果：** 08-15 20:03 批次已记录在记忆窗口 + 知识库中。新论点（规范即可执行契约）与新的攻击类别
+  笔记（未认证 MCP/工具执行 = 直接 RCE）已落地。来源目录保持干净（3 个新域名，cv ≥ 1）。
 
 ### 2026-08-15 12:25
 - **计划：** 推进两项——(1) 研究：会否出现跨厂商的"agent 上下文/身份"标准（如 MCP/A2A 之于访问

@@ -89,11 +89,44 @@ LLM配信、ドキュメント解析、オンデバイスエージェント、�
 `provider` オブジェクト、Switchyardのルーター型）。その断片化*こそが*ロックイン面：ルーティングの
 「MCP」がこれをコモディティ化するだろうが、まだ誰も出荷していない。
 
+## 標準が現れつつある（8月15日 20:31）
+
+「共有のルーティング設定DSLを誰が出荷するか」に今や2つの具体的な答えがある——いずれもまだ勝者ではない：
+
+1. **BitRouter**（`bitrouter/bitrouter`、Apache 2.0、約220 stars、821コミット、ローカルファーストの
+   Rustプロキシ）。モデル呼び出しだけでなく**3つのプリミティブ**を1つのゲートウェイの下でルーティング
+   する初のルーター：
+   - **Models** —— クロスプロトコル変換（OpenAI Chat/Responses、Anthropic Messages、Gemini）、
+     マルチアカウントフェイルオーバー、ストリーミング。
+   - **Capabilities** —— **MCPゲートウェイ**（MCPサーバーをプロキシし、エージェントがホスト横断でツールを
+     発見・呼び出し）と **AgentSkillsゲートウェイ**（`agentskills.io` 標準の `SKILL.md` スキルを追跡/公開）；
+     両者は1つの `ToolEntry` 型に統合され、`GET /v1/tools` で公開される。
+   - **Agents** —— **ACP（Agent Client Protocol）ゲートウェイ**がサブエージェントを一等のルーティング
+     可能なプリミティブにする（現状はローカルstdio；リモートはACP v2で）。
+   ポリシーは宣言的：`bitrouter.yaml` がプロバイダー/プリセットを宣言し、**git管理の `policy-lock.yaml`
+   が「唯一の生きたルート権威」**——ティア目標、正規ルート、ケイパビリティガードレール、決定証明書——
+   を、自己改善のact → observe → evaluate → learnループが生成する。ハーネス*の下で*動き（Claude Code、
+   Codex、OpenCode、Pi-Agent）、base-URLの環境変数差し替えで接続する。検証済みの目的はコストのみ：
+   `gpt-5.5` のTerminal-Bench 2.1で**コスト−32.8%、精度−1.1pp**（76.1% vs 77.3%）。リーダーボード提出
+   ではなくメカニズム研究と自ら明記。
+2. **Semantic Router DSL**（arXiv 2603.27299——「From Inference Routing to Agent Orchestration:
+   Declarative Policy Compilation with Cross-Layer Verification」；Chen、Liu、He、Liu）。
+   **非チューリング完全**な宣言的ルーティングポリシー言語：1つのソースファイルが、検証済みのLangGraph/
+   OpenClaw決定ノード、Kubernetesアーティファクト（NetworkPolicy、Sandbox CRD、ConfigMap）、YANG/NETCONF
+   ペイロード、プロトコル境界ゲート（MCP、A2A）へコンパイルされる。ポリシー決定ロジックのみを出力する
+   ため（順序/ループ/副作用なし）、コンパイラは*構造的に*網羅的ルーティング、無衝突分岐、デッドブランチ
+   検出、決定ロジックと結合した監査トレースを保証する。これは**ポジションペーパー**——アーキテクチャ上の
+   主張であり、実測結果はまだない。
+
+形は変わった：問いはもはや「誰かがルーティングのMCPを出荷するか」ではなく「どのDSLが勝つか——BitRouterの
+git管理 `policy-lock.yaml`、研究級の検証コンパイルDSL、それともMCPネイティブなルーティング拡張か」。
+ロックイン面は*標準の不在*から*標準の選択*へ移った。
+
 ## 注視点
 
 - ルーター戦略の収束：classifier vs stage vs escalation vs 信頼度ゲート——一つの標準に統合されるか。
-- ルーター方針の標準化：上記のロックインベクトルを無効化するオープンなルーティング設定DSL
-  （ルーティングの「MCP」）を誰が出荷するか。
+- ルーター方針の標準化：**08-15に前進**——BitRouterとSemantic Router DSLが最初の具体候補。今後は*どの*
+  DSLが勝つか（BitRouterの `policy-lock.yaml`、検証コンパイルの研究DSL、MCPネイティブ拡張）を注視。
 - 誰がルーターを所有するか：NVIDIAはSwitchyardを「チップの上のオーケストレーションソフトウェア」
   と位置づける——ルーター層こそベンダーロックインが起きようとする場所。
 - 同じ「分類優先」パターンの次の高コスト工程への適用（音声/動画の文字起こし、埋め込み、

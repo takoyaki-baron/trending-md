@@ -76,10 +76,39 @@ NVIDIA 的 NIM 目录）。目前还没有共享的路由配置标准——各�
 `provider` 对象、Switchyard 路由器类型）。这种碎片化*本身就是*锁死面：一个"路由版 MCP"将使其商品化，
 而至今无人交付。
 
+## 标准正在浮现（8 月 15 日 20:31）
+
+"谁会交付一个共享的路由配置 DSL？"如今有了两个具体答案——都还未分出胜负：
+
+1. **BitRouter**（`bitrouter/bitrouter`，Apache 2.0，约 220 stars，821 次提交，本地优先的 Rust 代理）。
+   首个把**三种原语**置于同一网关下路由的路由器，而不仅是模型调用：
+   - **Models** —— 跨协议翻译（OpenAI Chat/Responses、Anthropic Messages、Gemini）、多账户故障切换、流式。
+   - **Capabilities** —— 一个 **MCP 网关**（代理 MCP 服务器，让 agent 跨主机发现并调用工具）加上一个
+     **AgentSkills 网关**（按 `agentskills.io` 标准追踪/暴露 `SKILL.md` 技能）；二者合并为一个
+     `ToolEntry` 类型，在 `GET /v1/tools` 上呈现。
+   - **Agents** —— 一个 **ACP（Agent Client Protocol）网关**，把子代理变成一等可路由原语（如今支持本地
+     stdio；远程随 ACP v2 到来）。
+   策略是声明式的：`bitrouter.yaml` 声明提供商/预设，而一个 **git 托管的 `policy-lock.yaml` 是"唯一的活
+   路由权威"** —— 分层目标、规范路由、能力护栏、决策证书 —— 由一个自改进的 act → observe → evaluate →
+   learn 循环产生。它运行在 harness *之下*（Claude Code、Codex、OpenCode、Pi-Agent），通过一个 base-URL
+   环境变量切换接入。其唯一经过验证的目标是成本：`gpt-5.5` 在 Terminal-Bench 2.1 上**成本 −32.8%、精度
+   −1.1pp**（76.1% vs 77.3%），自述为机制研究而非排行榜提交。
+2. **Semantic Router DSL**（arXiv 2603.27299 ——《From Inference Routing to Agent Orchestration:
+   Declarative Policy Compilation with Cross-Layer Verification》；Chen、Liu、He、Liu）。一种
+   **非图灵完备**的声明式路由策略语言：一份源文件编译为经过验证的 LangGraph/OpenClaw 决策节点、
+   Kubernetes 构件（NetworkPolicy、Sandbox CRD、ConfigMap）、YANG/NETCONF 载荷与协议边界门（MCP、A2A）。
+   因为它只输出策略决策逻辑（无顺序/循环/副作用），编译器*在构造上保证*路由穷尽、分支无冲突、死分支
+   检测，以及与决策逻辑结构性耦合的审计轨迹。这是一份**立场论文**——架构性主张，尚无实测结果。
+
+形态已经改变：问题不再是"是否会有人交付一个路由版 MCP"，而是"哪个 DSL 会赢——BitRouter 的 git 托管
+`policy-lock.yaml`、一个研究级的验证编译 DSL，还是一个 MCP 原生的路由扩展？"锁死面从*标准缺失*移到了
+*标准选择*。
+
 ## 关注点
 
 - 路由策略的收敛：classifier vs stage vs escalation vs 置信度门控——它们会合并成同一个标准吗？
-- 路由策略标准化：谁会交付一个开放的路由配置 DSL（"路由版 MCP"）来拆掉上面的锁死向量？
+- 路由策略标准化：**08-15 已推进** —— BitRouter 与 Semantic Router DSL 是首批具体候选；如今关注*哪个*
+  DSL 会赢（BitRouter `policy-lock.yaml`、验证编译研究 DSL，或 MCP 原生路由扩展）。
 - 谁拥有路由器：NVIDIA 把 Switchyard 定位为"芯片之上的编排软件"——路由器层正是厂商锁死
   （lock-in）会试图发生的地方。
 - 同一个"先分类"模式被应用到下一个昂贵步骤（音视频转写、嵌入、微调数据选择）。

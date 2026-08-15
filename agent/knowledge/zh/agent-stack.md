@@ -240,6 +240,20 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
 - **Windows DNS Server CVE-2026-62878（8 月 15 日）**——CVSS 9.8 栈溢出，未认证/网络可达/无交互，
   据 ZDI 可蠕虫化；是微软 398 个 CVE 的 8 月 Patch Tuesday 的头条，与正被积极利用的
   **CVE-2026-62832**（LegacyHive，User Profile Service → SYSTEM）并列。
+- **自动暴露的 agent 执行面（8 月 15 日 20:03）**——一个新类别：agent 框架默认就**无认证**地把网络
+  工具/MCP 执行面暴露出来。**Microsoft UFO** CVE-2026-73296（CVSS 9.4）在 v3.0.8 之前于 TCP
+  **8020/8021 端口以无认证**方式架设 Streamable HTTP MCP 服务器——任何网络邻接攻击者都能对一台 ADB
+  连接的 Android 调用 `capture_screenshot`/`tap`/`swipe`/`type_text`/`launch_app`（IONIX 称之为
+  "RCE 等效"）；修复让 bearer token（`UFO_MCP_API_KEY`，常量时间校验）成为强制项，缺失即拒绝启动。
+  **Fosowl AgenticSeek** CVE-2026-72776（CVSS 9.8）把 `/query` 暴露在 `0.0.0.0:7777` 上，带通配 CORS
+  且无认证，输入直接进入运行 `subprocess.Popen(shell=True)` 的 `BashInterpreter`——`safety.py` 中一个
+  不完整的拦截清单可被绕过（PR #534 已修复）。未认证的 MCP/工具执行是*默认配置就直接 RCE*——比 SSRF
+  跳板更严重一档；修复清单（绑定环回、给端点加闸、去掉 `shell=True`、强制 token）适用于每一个 agent
+  运行时。
+- **WPMU DEV Dashboard** CVE-2026-16051（CVSS 9.8）——`wpmudev-updates` WordPress 插件（5.0.1 之前）
+  在远程 Hub 安装时不校验包完整性，且对已签名的管理请求无防重放保护（CWE-94）。一个被重放或伪造的
+  有效签名请求就能让站点安装并执行任意代码——*更新机制本身*里的供应链 RCE，看起来就像正常的管理流量。
+  修复：5.0.1+（恢复完整性校验 + 重放保护）；轮换 WPMU DEV Hub API 密钥。
 
 ### MCP SSRF 审计清单（模板：CVE-2026-19516）
 

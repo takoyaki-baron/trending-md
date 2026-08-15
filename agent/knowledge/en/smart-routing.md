@@ -92,12 +92,46 @@ NVIDIA's NIM catalog). There is no shared routing-config standard yet — each h
 (LiteLLM YAML, OpenRouter `provider` object, Switchyard router types). That fragmentation *is* the
 lock-in surface: an "MCP for routing" would commoditize it, and nobody has shipped one.
 
+## The standard is emerging (Aug 15 20:31)
+
+"Who ships a shared routing-config DSL?" now has two concrete answers — neither yet the winner:
+
+1. **BitRouter** (`bitrouter/bitrouter`, Apache 2.0, ~220 stars, 821 commits, local-first Rust proxy).
+   The first router to make **three primitives** routable under one gateway, not just model calls:
+   - **Models** — cross-protocol translation (OpenAI Chat/Responses, Anthropic Messages, Gemini),
+     multi-account failover, streaming.
+   - **Capabilities** — an **MCP gateway** (proxy MCP servers so agents discover/call tools across
+     hosts) plus an **AgentSkills gateway** (tracks/exposes `SKILL.md` skills per the `agentskills.io`
+     standard); both fold into one `ToolEntry` type surfaced at `GET /v1/tools`.
+   - **Agents** — an **ACP (Agent Client Protocol) gateway** making sub-agents first-class routable
+     primitives (local stdio today; remote with ACP v2).
+   Policy is declarative: `bitrouter.yaml` declares providers/presets, and a **git-owned
+   `policy-lock.yaml` is "the only live route authority"** — tier targets, canonical routes, capability
+   guardrails, decision certificates — produced by a self-improving act → observe → evaluate → learn loop.
+   Runs *under* the harness (Claude Code, Codex, OpenCode, Pi-Agent) via a base-URL env swap. Its one
+   validated objective is cost: `gpt-5.5` on Terminal-Bench 2.1 **−32.8% cost at −1.1pp accuracy**
+   (76.1% vs 77.3%), self-described as a mechanism study, not a leaderboard entry.
+2. **Semantic Router DSL** (arXiv 2603.27299 — "From Inference Routing to Agent Orchestration:
+   Declarative Policy Compilation with Cross-Layer Verification"; Chen, Liu, He, Liu). A
+   **non-Turing-complete** declarative routing-policy language: one source file compiles into verified
+   decision nodes for LangGraph/OpenClaw, Kubernetes artifacts (NetworkPolicy, Sandbox CRD, ConfigMap),
+   YANG/NETCONF payloads, and protocol-boundary gates (MCP, A2A). Because it emits only policy-decision
+   logic (no sequencing/loops/side effects), the compiler *guarantees* exhaustive routing, conflict-free
+   branching, dead-branch detection, and audit traces structurally coupled to the decision logic. This is
+   a **position paper** — architectural claims, no measured results yet.
+
+The shape has shifted: the question is no longer "will anyone ship an MCP-for-routing?" but "which DSL
+wins — BitRouter's git-owned `policy-lock.yaml`, a research-grade verified-compilation DSL, or an
+MCP-native routing extension?" The lock-in surface moved from *absence of a standard* to *choice of
+standard*.
+
 ## Watch for
 
 - Router strategy convergence: classifier vs stage vs escalation vs confidence-gated — do they
   merge into one standard?
-- Router-policy standardization: who ships an open routing-config DSL (an "MCP for routing") to
-  defuse the lock-in vectors above?
+- Router-policy standardization: **advanced 08-15** — BitRouter + the Semantic Router DSL are the
+  first concrete candidates; now watch *which* DSL wins (BitRouter `policy-lock.yaml`, the verified-
+  compilation research DSL, or an MCP-native routing extension).
 - Who owns the router: NVIDIA positions Switchyard as "orchestration software on top of the
   chips" — the router layer is where vendor lock-in will try to happen.
 - The same classify-first pattern applied to the next expensive step (audio/video transcription,

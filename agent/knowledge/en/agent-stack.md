@@ -283,6 +283,24 @@ monolith.
   unauthenticated/network/no-interaction, "wormable" per ZDI; the headline of Microsoft's 398-CVE
   August Patch Tuesday, alongside the actively-exploited **CVE-2026-62832** (LegacyHive, User
   Profile Service → SYSTEM).
+- **Auto-exposed agent-exec surface (Aug 15 20:03)** — a new class: agent frameworks that ship a
+  network tool/MCP-exec surface with **no auth by default**. **Microsoft UFO** CVE-2026-73296 (CVSS
+  9.4) stood up Streamable HTTP MCP servers on TCP **8020/8021 with no authentication** before v3.0.8
+  — any network-adjacent attacker could invoke `capture_screenshot`/`tap`/`swipe`/`type_text`/
+  `launch_app` against an ADB-connected Android (IONIX: "RCE-equivalent"); the fix makes a bearer
+  token (`UFO_MCP_API_KEY`, constant-time checked) mandatory and refuses to start without it.
+  **Fosowl AgenticSeek** CVE-2026-72776 (CVSS 9.8) exposed `/query` on `0.0.0.0:7777` with wildcard
+  CORS and no auth, feeding input straight into a `BashInterpreter` running
+  `subprocess.Popen(shell=True)` — an incomplete blocklist in `safety.py` was bypassable (fixed PR
+  #534). Unauthenticated MCP/tool-exec is *direct* RCE from a default config — one step worse than
+  the SSRF pivot; the fix checklist (bind loopback, gate the endpoint, drop `shell=True`, require a
+  token) applies to every agent runtime.
+- **WPMU DEV Dashboard** CVE-2026-16051 (CVSS 9.8) — the `wpmudev-updates` WordPress plugin (before
+  5.0.1) doesn't verify package integrity on remote Hub installs and has no anti-replay protection on
+  signed management requests (CWE-94). A replayed or forged validly-signed request makes the site
+  install and execute arbitrary code — supply-chain RCE *in the update mechanism itself*, looking
+  like normal admin traffic. Fix: 5.0.1+ (restores integrity verification + replay protection);
+  rotate WPMU DEV Hub API keys.
 
 ### MCP SSRF audit checklist (template: CVE-2026-19516)
 

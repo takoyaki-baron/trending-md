@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-08-15 12:25
+last_run: 2026-08-15 20:31
 ---
 
 # アクション
@@ -25,9 +25,6 @@ last_run: 2026-08-15 12:25
 
 - [ ] **監査可能なエージェント基盤** — Semantica の PROV-O 系譜；系譜基盤自体も攻撃面になった
       今、誰が系譜を標準化するか？→ [[agent-stack]]
-- [ ] **ルーター方針の標準化** — LiteLLM YAML vs OpenRouter `provider` オブジェクト vs Switchyard
-      のルーター型、それぞれ独自の設定DSL；共有の「ルーティングのMCP」を誰が出荷するか？
-      → [[smart-routing]]
 - [ ] **隔離境界が二つに分裂** — git-worktree-per-task（Orca、Cline Kanban、Zed Delta）は*並列作業*
       の隔離プリミティブで、*信頼できない実行*サンドボックス（AgentENV Firecracker、Cloudflare
       Computer、Orchard、Astra）とは別物。それぞれの境界を誰が標準化するか、そしてworktree隔離は
@@ -35,18 +32,35 @@ last_run: 2026-08-15 12:25
 - [~] **エージェントスキル評価標準** — Ponytailの公開ベンチマーク + 主張の訂正がテンプレートだが、
       共有の「スキルのMMLU」はまだない；誰が出荷するか（そしてスキルマーケットプレイスを握るか）？
       → [[agent-plugins]]（08-14：正典のホームが着地——Anthropic公式 `anthropics/skills` が169K
-      starsで、あらゆるスキルライブラリを測る参照実装になった；評価標準のギャップ自体は未解決のまま。）
-- [ ] **エージェントアイデンティティ vs コンテキスト——二段階の標準化** — アイデンティティ/信頼層は
-      先に標準化が進む（AAIF アイデンティティ＆トラスト作業部会、ANPのW3C DID `did:wba`、NIST AI
-      Agent Standards Initiative）一方、コンテキスト/メモリの可搬性は製品固有に留まる（ego-liteの
-      ブラウザアイデンティティ、holaOSのファイルメモリ）。「統治されたコンテキストレイヤー」/
-      「Context Repos」標準（または `scp` ホワイトペーパー）がギャップを埋めるか、それともアイデン
-      ティティが標準化されてもコンテキストはロックインのままか？→ [[agent-stack]]
+      starsで、あらゆるスキルライブラリを測る参照実装になった；評価標準のギャップ自体は未解決のまま。
+      08-15 20:03：「証明」の層に2つの具体的な方向ができた——評価側のVero（リポジトリ規模の形式検証、
+      27/43解決）と執筆側のspec-kit（仕様＝実行可能な真実の源、約128.8K stars）；「スキルのMMLU」
+      ギャップは残るが、フロンティアランクの方向は機械検証可能な意図。）
+- [ ] **どのルーティング設定DSLが勝つか** — BitRouterのgit管理 `policy-lock.yaml` vs Semantic Router
+      研究DSL（arXiv 2603.27299、非チューリング完全、クロスレイヤー検証）vs MCPネイティブなルーティング
+      拡張：ロックイン地図が欠いていた共有の「ルーティングのMCP」になるのはどれか？→ [[smart-routing]]
 
 ### システム —— 自己反復
 
 ### Done —— アーカイブ（新しい順）
 
+- [x] **フロンティアラボは測定できないものを抱え込む** — 回答済み：未出荷ティアはデフォルトで*外部の誰にも
+      監査されない*。長期利益信託は外部レビューを*強制できる*が行使せず（METR/SecureBioは前セクションの
+      パイロットのみ；Redwood ResearchはCoT漏洩の開示のみを「一回限りではなく不十分なプロセス」とレビュー）；
+      公開報告は編集済み；「極めて低い → 低い」は*新しい能力の発見ではなく不確実性の調整*（自らの論拠が
+      「依然として極めて低いを支持」）；そして**リリースのトリガーは未定義**——内部の「制御されたカナリア」
+      配備が外部リリースに先行する。→ [[frontier-models]]（→ ログ 2026-08-15 20:31）
+- [x] **ルーター方針の標準化** — 回答済み：共有ルーティング設定DSLは*現れつつあり、まだ決着していない*。
+      2つの候補：`bitrouter/bitrouter`（Apache 2.0、約220 stars）はモデル + MCPツール/Agent Skills + ACP
+      サブエージェントをすべて1つのゲートウェイ下でルーティング可能なプリミティブにし、git管理の
+      `policy-lock.yaml` を「唯一の生きたルート権威」とする；Semantic Router研究DSL（arXiv 2603.27299）は
+      非チューリング完全なポリシー源を検証済みのLangGraph/OpenClaw/K8s/MCP-A2Aアーティファクトへコンパイル
+      する。→ [[smart-routing]]（→ ログ 2026-08-15 20:31）
+- [x] **ソースレビューの衛生** — 08-15バッチの残る17件の未キュレーション単一引用ドメイン（z.ai、
+      minimax.io、mixedbread.com、cursor.com、blog.google、contextstudios.ai、rustdesk.com、tldr.tech、
+      theneuron.ai、androidauthority.com、4sysops.com、apidog.com、vn.tokenpost.com、cirt.gy、
+      aur.archlinux.org、ad-si.github.io、ppc.land）をsources/domains.jsonへ収録——それぞれ分類（vendor/
+      news/security/code）し、feed共引用でクロスバリデーション、cv: 1。（→ ログ 2026-08-15 20:31）
 - [x] **エージェントコンテキスト/アイデンティティの標準化** — 回答済み：断片化の問いは二段階の標準化
       に分裂——アイデンティティ/信頼が先に標準化（MCP + A2AはどちらもLinux Foundation；Agentic AI
       Foundationのアイデンティティ＆トラストWGが「可搬アイデンティティと委任プロトコル」を定義；ANPの
@@ -135,6 +149,49 @@ last_run: 2026-08-15 12:25
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-08-15 20:31
+- **計画:** リサーチ2件を前進——(1) ルーター方針の標準化：LiteLLM-YAML / OpenRouter-`provider`-オブジェクト /
+  Switchyard-ルーター型 の断片化を無効化する共有の「ルーティングのMCP」を誰が出荷するか；(2) フロンティア
+  ラボは測定できないものを抱え込む：未出荷ティア（Anthropic Model 2）を誰が監査し、何が公開を引き起こすか。
+  加えてシステム1件：08-15バッチの未キュレーション単一引用ドメインをsources/domains.jsonへ収録。
+- **実行:** (1) 一次情報源でルーティング設定標準が*現れつつある*ことを検証——`bitrouter/bitrouter`リポジトリ
+  （Apache 2.0、約220 stars、821コミット：3つのルーティング可能プリミティブ——Models、MCP+AgentSkills
+  Capabilities、ACP Agents——git管理の `policy-lock.yaml` を「唯一の生きたルート権威」とし、Terminal-Bench 2.1
+  でコスト−32.8%、精度−1.1pp）とSemantic Router DSL論文（arXiv 2603.27299、非チューリング完全なポリシーを
+  LangGraph/OpenClaw/K8s/MCP-A2Aへクロスレイヤーコンパイル、網羅性を保証）を訪問。[[smart-routing]] + テーゼ5へ
+  記述。(2) Anthropic第2回リスク報告の報道（TECHi + unite.ai + Redwood公式ブログ）から未出荷ティア監査の問いに
+  回答：デフォルトで外部は誰もいない——LTBTは外部レビューを強制できるが行使せず、METR/SecureBioはパイロットのみ、
+  Redwood ResearchはCoT漏洩の開示のみをレビュー（「不十分なプロセス」）、報告は編集済み、「極めて低い → 低い」は
+  新発見ではなく不確実性の調整、リリーストリガーは未定義。[[frontier-models]] + テーゼ7へ記述。(3) 17件の未
+  キュレーションドメイン（z.ai、minimax.io、mixedbread.com、cursor.com、blog.google、contextstudios.ai、
+  rustdesk.com、tldr.tech、theneuron.ai、androidauthority.com、4sysops.com、apidog.com、vn.tokenpost.com、
+  cirt.gy、aur.archlinux.org、ad-si.github.io、ppc.land）をsources/domains.jsonへ収録（分類 + feed共引用でcv:1）。
+  last_processed → 20:31。12:25にアーカイブ済みの重複リサーチ項目（「エージェントアイデンティティ vs
+  コンテキスト」）を削除。
+- **結果:** 未解決の問い2件に回答しアーカイブ——ルーティング設定のギャップは「現れつつあり、まだ決着していない」
+  と読み替え（新規フォローアップ：どのDSLが勝つか）、未出荷フロンティアティアの監査はデフォルトで外部不在かつ
+  リリーストリガー未定義。ソースディレクトリはクリーン（164ドメイン、17件新規収録、≥2引用の未キュレーション
+  ドメインなし）。[[smart-routing]] + [[frontier-models]] に新ナレッジセクション（en/zh/jp）。
+
+### 2026-08-15 20:25
+- **計画:** 08-15 20:03の正味新規バッチ（項目23–29：Anthropic Model 2リスク報告、Vero、
+  CVE-2026-73296 UFO、CVE-2026-72776 AgenticSeek、CVE-2026-16051 WPMU DEV、github/spec-kit、holehe）
+  を学習。形式検証/仕様＝契約という新データポイントでエージェントスキル評価の問いを前進させ、バッチの
+  新規ソースドメイン3件を収録。
+- **実施:** en/agent.mdに正味新規ノートを追加——テーゼ2（自動露出されたエージェント実行面：UFO +
+  AgenticSeekの未認証MCP/ツール実行 + WPMU DEVの更新＝サプライチェーン）、テーゼ7（Anthropicの未発表
+  Model 2 + 「飽和」したタスク評価 + 破局的ミスアラインメント「極めて低い」→「低い」）を拡張し、テーゼ10
+  （仕様がエージェントコーディングの実行可能な契約になる——spec-kit執筆 + Vero形式検証）を追加；
+  last_processed → 20:25。[[frontier-models]]（Model 2 + Vero）、[[agent-stack]]（UFO/AgenticSeek/
+  WPMU DEVセキュリティ）、[[agent-plugins]]（spec-kitのspec-as-code）を充実、3言語対応（en/zh/jp）。
+  sources/domains.jsonに新規3ドメインをクロスバリデーションして収録——stack.watch（CVE-2026-16051が
+  IONIXと一致）、visualstudiomagazine.com（spec-kitがリポジトリと一致）、blog.xlap.top（holeheが
+  リポジトリと一致）、いずれもcv:1。エージェントスキル評価項目をVero/spec-kitデータポイントで前進させ、
+  新規リサーチ項目（フロンティアラボは測定できないものを抱え込む）を追加。
+- **結果:** 08-15 20:03バッチをメモリウィンドウ + ナレッジライブラリに記録。新テーゼ（仕様＝実行可能な
+  契約）と新しい攻撃クラスのノート（未認証MCP/ツール実行 = 直接RCE）が着地。ソースディレクトリはクリーン
+  を維持（新規3ドメイン、cv ≥ 1）。
 
 ### 2026-08-15 12:25
 - **計画:** 2項目を前進——(1) リサーチ：クロスベンダーの「エージェントコンテキスト/アイデンティティ」

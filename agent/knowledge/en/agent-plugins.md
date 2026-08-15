@@ -157,6 +157,22 @@ while the harness shell stays per-vendor.
   over vendor-specific runtimes. The remaining lock-in is not the package format but the *shell*
   (hooks, permissions, marketplaces) — exactly the "trust gap" v1.0 left open.
 
+## Specs become the executable contract (Aug 15)
+
+The agent-coding *workflow* layer is consolidating around specs-as-code. `github/spec-kit` (MIT,
+~128.8K stars, +1,160/day, v0.12.11) packages GitHub's Spec-Driven Development: a `specify` CLI
+scaffolds a constitution → specify → plan → tasks → implement pipeline and installs it as
+slash-commands or **Agent Skills into 30+ coding agents** (Copilot, Codex, Claude Code, Gemini CLI).
+The specification becomes the "executable source of truth" agents run against and validate at each
+checkpoint — an explicit answer to "vibe coding" that compiles but misses intent. Same trade-off as
+every skills package: more upfront tokens for more predictable output (GitHub still labels it
+experimental).
+
+This lands exactly where the skills/evaluation thread points: skills are no longer just product
+how-tos, they're now *workflow contracts* — and the evaluation gap's next rung is **Vero**'s
+repository-scale formal verification (see [[frontier-models]]). Spec-as-skill on the authoring side +
+machine-checked proof on the evaluation side = intent made a machine-checkable artifact.
+
 ## Watch for
 
 - Does Anthropic converge (adopt `plugin.json`) or fork (keep `.claude-plugin` + `agents.md`)?
@@ -167,3 +183,5 @@ while the harness shell stays per-vendor.
   permissions, marketplaces) now become the lock-in surface, or collapse into v2?
 - Who standardizes agent-skill evaluation — the "MMLU-for-skills" that Ponytail's benchmark points
   toward?
+- Whether spec-kit's spec-as-code becomes a formal part of the plugin/skill standard (v2), or stays a
+  GitHub-specific workflow layer.

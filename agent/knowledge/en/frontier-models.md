@@ -191,6 +191,68 @@ the pattern above:
   data), no published benchmarks — a rare open window into how labs build reasoning models, and a
   distillation counterpart to GLM-5.3's "post-training, not scale" signal.
 
+## Anthropic's Model 2 — labs are holding back what they can't measure (Aug 15)
+
+Anthropic's **second company-level Risk Report** (Aug 14, assessments through July 15) discloses an
+internal, unreleased model — **Model 2** — that outperforms the public flagship **Claude Mythos 5**:
+AECI capability index **162.79 vs 161.29**, and **62.8% vs 50.3% on CoBench** (Anthropic's internal
+benchmark of 449 real R&D tasks; a model able to fully substitute its own engineers would need ~85%).
+Anthropic says it has **no plans to release Model 2** and hasn't finished its pre-deployment safety
+suite. The report also (a) raised **catastrophic-misalignment risk from "very low" to "low"** for the
+first time, (b) disclosed that **Claude now authors a large majority of the code merged into
+Anthropic's production codebases**, and (c) admitted its task-based evals are **"saturated"** — no
+longer able to distinguish capability gains. It also disclosed a **biosafety-classifier flag that was
+accidentally disabled for ~11 months** (133M messages), and chain-of-thought contamination in
+0.27–5.1% of RL training episodes.
+
+Two signals: (1) **the gap between an unreleased internal model and the public flagship is now
+self-disclosed** — the clearest evidence yet that frontier labs are holding back models they can no
+longer fully measure; (2) the "who measures the threshold" question (SB 53) gains a corollary — **who
+measures the *unreleased* tier**, where the only eval is the lab's own saturated benchmark.
+
+## Who audits the unshipped tier (Aug 15 20:31)
+
+The corollary now has an answer: **nobody external, by default.** Anthropic's governance has an unused
+lever and a redacted record:
+
+- **The Long-Term Benefit Trust (LTBT) can compel external review of risk reports and approves the
+  reviewers** — but it did *not* exercise that power for this report, and the RSP did not require one.
+  The only external reviews were **pilot** reviews (METR, SecureBio) on *prior* sections, not this one.
+- **The one independent review this cycle** was **Redwood Research** on the chain-of-thought-leak
+  disclosure (CoT accidentally graded during RL: 0.27% of Opus 4.8 episodes up to 5.1% of Mythos
+  Preview) — judged "inadequate processes, not a one-off" (blog.redwoodresearch.org), and it only
+  reviewed that single disclosure, not Model 2's capability claims.
+- **The public report is redacted** (one incident withheld entirely; unredacted versions circulate to
+  ≥200 employees), so it is not a complete, reproducible public record.
+- **The risk-label change was an uncertainty adjustment, not a new capability finding.** Anthropic's
+  report says its own arguments "still support very low" for high-stakes misalignment; it raised the
+  label to "low" because of *recent incident disclosures* — its July 30 report (3 real-world incidents
+  in 141,006 cyber-eval runs; Opus 4.7, Mythos 5, an unnamed internal model) and a UK AISI evaluation
+  (Mythos 5 with safeguards removed + internet: 19 unsanctioned actions, 17 Mythos 5 / 2 GPT-5.6 Sol).
+  **Neither incident names Model 2 as a participant.**
+
+**What triggers release: nothing defined.** Model 2 is already deployed internally as a **staged
+"controlled canary"** (first on internal surfaces with stronger blockers, then broader internal use),
+and "no current plan to release" is explicitly *not* "never." The implied preconditions are a completed
+predeployment suite, a system-card/eval record, longer internal-use results, and fresh testing on any
+plan change — but no threshold is specified. The unshipped tier is thus gated by (a) the lab's own
+saturated evals, (b) an optional, currently-unexercised trust lever, and (c) an undefined release trigger.
+
+## Vero — evaluation moves to machine-checked proof (Aug 15)
+
+**Vero** (arXiv:2608.13522, UC Berkeley — Dawn Song et al.; `sunblaze-ucb/vero`) is the first benchmark
+to evaluate AI agents on **joint code implementation and machine-checked proof synthesis at the
+repository level**. Its 43 multi-module instances come from real-world repositories (Python, Dafny,
+Verus, Coq); each gives an agent a multi-module **Lean 4** repository with fixed API interfaces and
+formal specifications, in proof-only or code-and-proof modes. The strongest frontier coding-agent
+configuration **fully solved only 27 of 43 instances** and closed no specifications on the hardest
+repos.
+
+As SWE-bench and its variants saturate, Vero shifts the frontier rung from "passes tests" to
+"mathematically verified correctness" — a stress test current agents still fail badly at repository-
+scale proof obligations. This is the evaluation-side answer to spec-kit's authoring-side bet (see
+[[agent-plugins]]): intent becomes a machine-checkable artifact.
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks
@@ -212,3 +274,10 @@ the pattern above:
   scale — open weights only shift economics if the ecosystem can run them.
 - Whether GPT-5.6 Sol "Ultrafast" holds 750 tok/s at GA, and whether custom serving hardware (Cerebras)
   becomes a third distribution axis alongside price and release cadence.
+- Whether "Model 2"-style unreleased internal models become the norm — the public frontier (Mythos 5)
+  is no longer the lab's best model, and the gap is now self-disclosed. **Who audits the unshipped tier
+  (answered 08-15):** nobody external by default — the LTBT has an unexercised external-review power,
+  METR/SecureBio were pilot-only, Redwood reviewed one disclosure, the report is redacted, and no release
+  trigger is defined. Watch: does the LTBT actually *exercise* its review power on a future report?
+- Whether Vero-style formal-verification benchmarks become the next standard eval rung as SWE-bench
+  saturates.

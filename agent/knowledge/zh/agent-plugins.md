@@ -135,6 +135,19 @@ Colin Eberhardt 提出质疑——一条光秃秃的"遵循 YAGNI 原则"提示�
   之上有一个共享的用户态 ABI。剩余锁定不在打包格式，而在*外壳*（hooks、权限、市场）——恰是 v1.0
   留白的"信任缺口"。
 
+## 规范成为可执行的契约（8 月 15 日）
+
+agent 编码的*工作流*层正围绕 spec-as-code 收敛。`github/spec-kit`（MIT，约 128.8K stars，单日 +1,160，
+v0.12.11）打包了 GitHub 的 Spec-Driven Development：一个 `specify` CLI 脚手架化
+constitution → specify → plan → tasks → implement 流水线，并以 slash 命令或 **Agent Skills 形式装进 30+
+个 coding agent**（Copilot、Codex、Claude Code、Gemini CLI）。规范成为 agent 在每个检查点都要对照并校验的
+"可执行事实来源"——对"能编译却丢了意图的 vibe coding"的明确回应。与每个 skills 包一样的取舍：用更多
+前置 token 换取更可预测的输出（GitHub 仍标注为实验性）。
+
+这正好落在 skills/评估这条线索所指的方向上：skills 不再只是产品操作手册，而是*工作流契约*——而评估缺口
+的下一梯队正是 **Vero** 的仓库规模形式化验证（见 [[frontier-models]]）。写作侧的 spec-as-skill + 评估侧的
+机器检验证明 = 让意图成为机器可检验的工件。
+
 ## 关注点
 
 - Anthropic 会收敛（采用 `plugin.json`）还是分叉（保留 `.claude-plugin` + `agents.md`）？
@@ -143,3 +156,4 @@ Colin Eberhardt 提出质疑——一条光秃秃的"遵循 YAGNI 原则"提示�
 - harness 插件 ABI：核心已收敛到 `plugin.json`——逐厂商的*外壳*（hooks、权限、市场）如今会否成为锁定
   面，还是坍缩进 v2？
 - 谁会标准化 agent 技能评估——Ponytail 的基准所指向的"技能的 MMLU"？
+- spec-kit 的 spec-as-code 会否成为插件/技能标准的正式组成部分（v2），还是停留在 GitHub 专属的工作流层。

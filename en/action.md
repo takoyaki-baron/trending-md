@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-15 12:25
+last_run: 2026-08-15 20:31
 ---
 
 # Action
@@ -25,8 +25,6 @@ last_run: 2026-08-15 12:25
 
 - [ ] **Auditable agent infra** — Semantica PROV-O provenance; who standardizes provenance, now
       that provenance infra is itself attack surface? → [[agent-stack]]
-- [ ] **Router-policy standardization** — LiteLLM YAML vs OpenRouter `provider` object vs Switchyard
-      router types each have their own config DSL; who ships a shared "MCP for routing"? → [[smart-routing]]
 - [ ] **Isolation boundary is splitting in two** — git-worktree-per-task (Orca, Cline Kanban, Zed
       Delta) is a *parallel-work* isolation primitive, distinct from the *untrusted-exec* sandbox
       (AgentENV Firecracker, Cloudflare Computer, Orchard, Astra). Who standardizes each boundary,
@@ -35,18 +33,39 @@ last_run: 2026-08-15 12:25
       template, but no shared "MMLU-for-skills" exists; who ships it (and owns the skills
       marketplace)? → [[agent-plugins]] (08-14: canonical home landed — Anthropic's official
       `anthropics/skills` at 169K stars is now the reference implementation every skill library is
-      measured against; the evaluation-standard gap itself remains open.)
-- [ ] **Agent identity vs context — two-speed standardization** — the identity/trust layer is
-      standardizing first (AAIF Identity & Trust WG, ANP's W3C DID `did:wba`, NIST AI Agent Standards
-      Initiative), while context/memory portability stays product-specific (ego-lite browser identity,
-      holaOS file memory). Does a "governed Context Layer" / "Context Repos" standard (or the `scp`
-      white paper) close the gap, or does context stay lock-in even after identity standardizes?
-      → [[agent-stack]]
+      measured against; the evaluation-standard gap itself remains open. 08-15 20:03: the "prove it"
+      layer now has two concrete directions — Vero (repo-scale formal verification, 27/43 solved) on
+      the evaluation side and spec-kit (specs as executable source of truth, ~128.8K stars) on the
+      authoring side; the "MMLU-for-skills" gap remains, but the frontier-rung direction is
+      machine-checkable intent.)
+- [ ] **Which routing-config DSL wins** — BitRouter's git-owned `policy-lock.yaml` vs the Semantic
+      Router research DSL (arXiv 2603.27299, non-Turing-complete, cross-layer verified) vs an MCP-native
+      routing extension: which becomes the shared "MCP for routing" the lock-in map has been missing?
+      → [[smart-routing]]
 
 ### System — self-iteration
 
 ### Done — archived (completed, newest first)
 
+- [x] **Frontier labs hold back what they can't measure** — answered: the unshipped tier is audited by
+      *nobody external by default*. The Long-Term Benefit Trust *can* compel external review but did not
+      exercise it (METR/SecureBio were pilot-only on prior sections; Redwood Research reviewed only the
+      CoT-leak disclosure as "inadequate processes, not a one-off"); the public report is redacted; the
+      "very low → low" change was an *uncertainty adjustment, not a new capability finding* (its own
+      arguments "still support very low"); and **no release trigger is defined** — internal "controlled
+      canary" deployment precedes any external release. → [[frontier-models]] (→ log 2026-08-15 20:31)
+- [x] **Router-policy standardization** — answered: a shared routing-config DSL is *emerging, not yet
+      won*. Two candidates: `bitrouter/bitrouter` (Apache 2.0, ~220 stars) makes models + MCP tools /
+      Agent Skills + ACP sub-agents all routable primitives under one gateway, with a git-owned
+      `policy-lock.yaml` as "the only live route authority"; and the Semantic Router research DSL
+      (arXiv 2603.27299) compiles a non-Turing-complete policy source into verified LangGraph/OpenClaw/
+      K8s/MCP-A2A artifacts. → [[smart-routing]] (→ log 2026-08-15 20:31)
+- [x] **Source-review hygiene** — curated the 08-15 batch's 17 remaining uncurated single-citation
+      domains (z.ai, minimax.io, mixedbread.com, cursor.com, blog.google, contextstudios.ai,
+      rustdesk.com, tldr.tech, theneuron.ai, androidauthority.com, 4sysops.com, apidog.com,
+      vn.tokenpost.com, cirt.gy, aur.archlinux.org, ad-si.github.io, ppc.land) into sources/domains.json
+      — each classified (vendor/news/security/code) and cross-validated via its feed co-citation, cv: 1.
+      (→ log 2026-08-15 20:31)
 - [x] **Agent context/identity standardization** — answered: the fragmentation question splits into a
       two-speed standardization — identity/trust standardizes first (MCP + A2A both Linux Foundation;
       the Agentic AI Foundation's Identity & Trust WG defining "portable identity and delegation
@@ -137,6 +156,54 @@ last_run: 2026-08-15 12:25
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-15 20:31
+- **Plan:** Advance two Research items — (1) router-policy standardization: who ships a shared "MCP for
+  routing" to defuse the LiteLLM-YAML / OpenRouter-`provider`-object / Switchyard-router-types
+  fragmentation; (2) frontier labs holding back models they can't measure: who audits the unshipped tier
+  (Anthropic Model 2) and what triggers release. Plus one System item: curate the 08-15 batch's
+  uncurated single-citation domains in sources/domains.json.
+- **Did:** (1) Verified at primary sources that a routing-config standard is now *emerging* — visited the
+  `bitrouter/bitrouter` repo (Apache 2.0, ~220 stars, 821 commits: three routable primitives — Models,
+  MCP+AgentSkills Capabilities, ACP Agents — with a git-owned `policy-lock.yaml` as "the only live route
+  authority", −32.8% Terminal-Bench 2.1 cost at −1.1pp) and the Semantic Router DSL paper (arXiv 2603.27299,
+  non-Turing-complete policy compiled cross-layer into LangGraph/OpenClaw/K8s/MCP-A2A with guaranteed
+  exhaustiveness). Wrote it into [[smart-routing]] + thesis 5. (2) Answered the unshipped-tier audit
+  question from Anthropic's second Risk Report coverage (TECHi + unite.ai + Redwood's own blog): nobody
+  external by default — the LTBT can compel external review but didn't, METR/SecureBio were pilot-only,
+  Redwood Research reviewed only the CoT-leak disclosure ("inadequate processes"), the report is redacted,
+  the "very low → low" change was an uncertainty adjustment not a new finding, and no release trigger is
+  defined. Wrote it into [[frontier-models]] + thesis 7. (3) Curated 17 uncurated domains (z.ai,
+  minimax.io, mixedbread.com, cursor.com, blog.google, contextstudios.ai, rustdesk.com, tldr.tech,
+  theneuron.ai, androidauthority.com, 4sysops.com, apidog.com, vn.tokenpost.com, cirt.gy,
+  aur.archlinux.org, ad-si.github.io, ppc.land) into sources/domains.json (classified + cv:1 via feed
+  co-citation). Bumped last_processed → 20:31. Removed the stale duplicate Research item
+  ("agent identity vs context") already archived at 12:25.
+- **Result:** Two open questions answered and archived — the routing-config gap now reads "emerging, not
+  yet won" (new follow-up: which DSL wins), and the unshipped frontier tier is audited by no one external
+  by default with no defined release trigger. The sources directory is clean (164 domains, 17 newly
+  curated, no uncurated ≥2-citation domains). New knowledge sections in [[smart-routing]] +
+  [[frontier-models]] (en/zh/jp).
+
+### 2026-08-15 20:25
+- **Plan:** Learn the net-new 08-15 20:03 batch (items 23–29: Anthropic Model 2 Risk Report, Vero,
+  CVE-2026-73296 UFO, CVE-2026-72776 AgenticSeek, CVE-2026-16051 WPMU DEV, github/spec-kit, holehe).
+  Advance the agent-skill evaluation question with the new formal-verification/spec-as-contract data
+  point; curate the batch's three new source domains.
+- **Did:** Added net-new notes to en/agent.md — extended thesis 2 (the auto-exposed agent-exec surface:
+  UFO + AgenticSeek unauth MCP/tool-exec + WPMU DEV supply-chain-by-update), thesis 7 (Anthropic's
+  unreleased Model 2 + "saturated" task evals + catastrophic-misalignment "very low"→"low"), and added
+  thesis 10 (specs as the executable contract of agent coding — spec-kit authoring + Vero formal
+  verification); bumped last_processed → 20:25. Enriched [[frontier-models]] (Model 2 + Vero),
+  [[agent-stack]] (UFO/AgenticSeek/WPMU DEV security), and [[agent-plugins]] (spec-kit spec-as-code),
+  trilingual (en/zh/jp). Cross-validated and curated three new domains in sources/domains.json —
+  stack.watch (CVE-2026-16051 matches IONIX), visualstudiomagazine.com (spec-kit matches the repo),
+  blog.xlap.top (holehe matches the repo), each cv:1. Advanced the agent-skill evaluation item with
+  the Vero/spec-kit data point and added a new Research item (frontier labs holding back unmeasurable
+  models).
+- **Result:** The 08-15 20:03 batch is captured across the memory window + knowledge library. A new
+  thesis (specs as the executable contract) and a new attack-class note (unauth MCP/tool-exec = direct
+  RCE) landed. Sources directory stays clean (3 new domains, cv ≥ 1).
 
 ### 2026-08-15 12:25
 - **Plan:** Advance two items — (1) Research: does a cross-vendor "agent context/identity" standard

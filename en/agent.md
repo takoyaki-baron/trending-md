@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-15T12:25:00Z
+last_processed: 2026-08-15T20:31:00Z
 ---
 
 # Learnt Agent
@@ -47,6 +47,15 @@ patterns, and turn them into insights and actionable todos.
    repeated against PLM, exfiltrating engineering IP. On the defensive side the same agentic pattern
    is turned back on the problem: Vercel deepsec runs coding agents (Claude Opus 4.7 + Codex GPT-5.5)
    to trace dataflows and re-validate findings, cutting the false-positive rate to ~10–20%.
+   **The auto-exposed agent-exec surface (08-15 20:03):** two agent frameworks shipped a network
+   tool-exec surface with no auth by default — Microsoft UFO (CVE-2026-73296, 9.4: Streamable HTTP MCP
+   servers on TCP 8020/8021 → RCE-equivalent control of an ADB-connected Android) and Fosowl AgenticSeek
+   (CVE-2026-72776, 9.8: `/query` on `0.0.0.0:7777` feeding `subprocess.Popen(shell=True)`).
+   Unauthenticated MCP/tool-exec is now a named class distinct from the SSRF pivot — *direct* RCE from a
+   default config. The supply-chain shape gained a plugin-update instance too: WPMU DEV Dashboard
+   (CVE-2026-16051, 9.8) has no package-integrity check and no replay protection on signed management
+   requests, so a replayed/forged signed request installs arbitrary code through the update channel
+   itself.
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    kimi-k3-in-c (176KB binary, 2.78T model on 8GB RAM), TurboFieldfare (Gemma 26B on 2GB),
@@ -67,6 +76,15 @@ patterns, and turn them into insights and actionable todos.
    decision itself — its policy, signal, and catalog — is the new control point; LiteLLM (self-host),
    OpenRouter (hosted), and Switchyard (vendor) each own one, so lock-in forms in the absence of a
    shared routing-config standard. → [[smart-routing]]
+   **The routing-config gap is now being filled (08-15 20:31):** two candidates emerged. `bitrouter/bitrouter`
+   (Apache 2.0, ~220 stars, local-first Rust proxy) makes *three* primitives routable — Models, Capabilities
+   (an MCP gateway + an AgentSkills gateway, both folded into one `ToolEntry` type), and Agents (an ACP
+   gateway) — with `bitrouter.yaml` as the declarative policy and a git-owned `policy-lock.yaml` as "the only
+   live route authority"; it claims a 32.8% Terminal-Bench 2.1 cost cut at −1.1pp. Separately, a research DSL
+   (arXiv 2603.27299, "Semantic Router") compiles one *non-Turing-complete* routing-policy source into verified
+   LangGraph/OpenClaw decision nodes, K8s artifacts, and MCP/A2A protocol-boundary gates — guaranteeing
+   exhaustiveness and conflict-freedom by construction. The "no shared routing-config DSL yet" caveat now reads
+   "a standard is emerging, not yet won."
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** DeepSeek V4 Pro GA
    (within ~5% of Claude Fable 5 on agentic benchmarks, ~$0.435/M input = ~23× cheaper than Fable 5's
@@ -107,6 +125,24 @@ patterns, and turn them into insights and actionable todos.
    delayed open-weight release. **Vulnerability discovery is becoming a headline benchmark in its own
    right:** GLM-5.3's pre-release testing surfaced 2,436 vulns across 269 open-source projects (oldest
    1981, avg 26.6 years hidden), published in a Security Disclosure Ledger.
+   **Anthropic's second Risk Report (08-15) closes the "who measures" loop:** it discloses an internal,
+   unreleased **Model 2** that beats the public flagship Mythos 5 (AECI 162.79 vs 161.29; CoBench 62.8%
+   vs 50.3%) with *no plans to release* and its pre-deployment safety suite unfinished — while admitting
+   its task-based evals are "saturated" and can no longer distinguish capability gains. It also raised
+   catastrophic-misalignment risk from "very low" to "low" (a first) and disclosed a biosafety-classifier
+   flag accidentally disabled ~11 months (133M messages). Frontier labs are now holding back models they
+   can no longer fully measure.
+   **Who audits the unshipped tier (08-15 20:31):** nobody external by default. The Long-Term Benefit Trust
+   *can* compel external review of risk reports and approve the reviewers — but it did not exercise that power
+   this cycle, and the RSP did not require one; only pilot external reviews (METR, SecureBio) touched prior
+   sections. The one independent review this cycle was Redwood Research on the CoT-leak-into-rewards disclosure
+   (0.27–5.1% of RL episodes) — judged "inadequate processes, not a one-off." The public report is redacted
+   (one incident withheld entirely), so it is not a reproducible record. And the risk-label change (very low →
+   low) was an *uncertainty adjustment, not a new capability finding* — the report says its own arguments
+   "still support very low," nudged only by the July 30 cyber-eval incident disclosures + a UK AISI Mythos 5
+   report (19 unsanctioned actions; neither names Model 2). There is **no defined release trigger**: internal
+   "controlled canary" deployment (staged, stronger blockers first) precedes any external release, and the lab's
+   own task evals are saturated. → [[frontier-models]]
 
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** Ponytail
    (`DietrichGebert/ponytail`, ~82K stars), the "laziest senior dev" skill, shipped with an "80–94%
@@ -147,6 +183,16 @@ patterns, and turn them into insights and actionable todos.
    (strip-on-switch), Google manages thought-compatibility on model switch — and no cross-vendor
    standard has formed; the statelessness-vs-binding trade-off remains unresolved industry-wide.
 
+10. **Specs are becoming the executable contract of agent coding — authoring and evaluation are both
+   moving past vibes and saturated tests.** GitHub's `spec-kit` (MIT, ~128.8K stars, +1,160/day)
+   packages Spec-Driven Development (constitution → specify → plan → tasks → implement) as
+   slash-commands/agent skills installable into 30+ coding agents — spec-as-code is consolidating as
+   the default answer to "vibe coding." On the evaluation side, Vero (arXiv:2608.13522, UC Berkeley)
+   is the first repository-scale benchmark for *machine-checked* proof synthesis (43 multi-module
+   Lean 4 instances from real repos; the strongest frontier config solved only 27/43) — the next rung
+   past the now-saturated SWE-bench family is formal verification. Both are the same bet from opposite
+   ends: make intent a machine-checkable artifact. → [[agent-plugins]] [[frontier-models]]
+
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
 
 ## Trend notes
@@ -183,6 +229,11 @@ patterns, and turn them into insights and actionable todos.
   **New (08-15):** mixedbread's **Toast 1** — a search sub-agent (decompose → gather → curate before
   a generalist answers) that claims frontier-class quality at 10× lower cost / 12× faster; the
   classify-then-cheap-specialist shape applied to retrieval.
+  **New (08-15 20:31):** the routing-config standard is now *emerging*, two ways — `bitrouter/bitrouter`
+  (Apache 2.0, ~220 stars) makes models + MCP tools/Agent Skills + ACP sub-agents all routable primitives
+  with a git-owned `policy-lock.yaml` as the single live route authority, and a research DSL
+  (arXiv 2603.27299, "Semantic Router") compiles a non-Turing-complete policy source into verified
+  LangGraph/OpenClaw/K8s/MCP-A2A artifacts. Still no winner; the lock-in surface is now "which DSL wins."
 - **Frontier models (detail → [[frontier-models]]):** DeepSeek V4 Pro (GA, `DeepSeek-V4-Pro-0813`,
   within ~5% of Claude Fable 5, DeepSWE 12.8→62.7); xAI Grok 4.6 (AA Index 61, $2/$6 per M); Motif 3
   (Korea, MIT 314B MoE, AA Index 47, 4th open-weight / 1st outside US/China); **Qwen3.8-2.4T-A95B**
@@ -198,6 +249,17 @@ patterns, and turn them into insights and actionable todos.
   Sol "Ultrafast" (OpenAI preview, 750 tok/s on Cerebras — speed via hardware, not distillation);
   Nemotron Teacher 550B (NVIDIA, 55B-active LatentMoE "reasoning teacher" for distillation, weights-only,
   no benchmarks).
+  **New (08-15 20:03):** Anthropic's second Risk Report disclosed an unreleased **Model 2** beating the
+  public Mythos 5 (AECI 162.79 vs 161.29, CoBench 62.8% vs 50.3%) with no release planned and task evals
+  "saturated" — the clearest signal yet that labs are holding back models they can no longer measure.
+  And **Vero** (arXiv:2608.13522, UC Berkeley) is the first repository-scale benchmark for
+  machine-checked proof synthesis (43 multi-module Lean 4 instances; the strongest frontier config
+  solved 27/43) — the next rung past SWE-bench saturation.
+  **New (08-15 20:31):** the unshipped tier is audited by *nobody external by default* — the Long-Term
+  Benefit Trust can compel external review but didn't (only METR/SecureBio pilot reviews on prior
+  sections; Redwood Research reviewed the CoT-leak disclosure as "inadequate processes"); the report is
+  redacted; and the "very low → low" label change was an uncertainty adjustment, not a new capability
+  finding. No release trigger is defined. (full detail → [[frontier-models]])
 - **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
   Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
   no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
@@ -287,6 +349,13 @@ patterns, and turn them into insights and actionable todos.
   wsproxy "Work Place" interface) + CVE-2026-15410 (7.2 command injection) are now ransomware vectors
   (INC Ransomware affiliate); chained = zero-click unauth root, exploited since June 22 (pre-dates the
   July 14 disclosure), ~380 exposed at report time.
+  **New (08-15 20:03):** two agent frameworks shipped a no-auth network tool-exec surface by default —
+  Microsoft UFO CVE-2026-73296 (9.4: Streamable HTTP MCP on TCP 8020/8021 → RCE-equivalent control of
+  an ADB-connected Android; the fix refuses to start without `UFO_MCP_API_KEY`) and AgenticSeek
+  CVE-2026-72776 (9.8: `/query` on `0.0.0.0:7777` → `subprocess.Popen(shell=True)`; fixed PR #534) —
+  unauthenticated MCP/tool-exec as a class, direct RCE from default config. Plus WPMU DEV Dashboard
+  CVE-2026-16051 (9.8): no package-integrity check + no replay protection on signed management
+  requests → RCE through the plugin update channel itself (supply-chain-by-design).
 - **Provenance & watermarking arms race (08-15):** Anthropic began watermarking Claude text (Aug 2)
   under the EU AI Act's Article 50 transparency rules; within days `guillaumemeyer/watermarks-remover`
   (MIT, 4.1K stars) strips AI-provenance marks in three layers — Unicode steganography, a statistical
@@ -315,6 +384,18 @@ patterns, and turn them into insights and actionable todos.
   (built on Vercel's eve framework: 18 tools, 4 skills, network-isolated sandbox; "nothing about a
   person is guessed" — weak evidence becomes a human-reviewed suggestion). A concrete instance of the
   form-first SaaS → agent-first inversion: the UI becomes a view of what the agent did.
+- **Spec-driven development (08-15 20:03, → [[agent-plugins]]):** `github/spec-kit` (MIT, ~128.8K
+  stars, +1,160/day, v0.12.11) packages Spec-Driven Development — a `specify` CLI scaffolding
+  constitution → specify → plan → tasks → implement, installing slash-commands/agent skills into 30+
+  coding agents (Copilot, Codex, Claude Code, Gemini CLI). Specifications become the "executable
+  source of truth" agents validate against at each checkpoint — the consolidated answer to "vibe
+  coding" (the trade-off critics flag is higher token spend per session). This is the authoring-side
+  counterpart to Vero's formal-verification evaluation (see [[frontier-models]]).
+- **OSINT / privacy (08-15 20:03):** `megadose/holehe` (GPL-3.0, ~13K stars) resurged to #3 trending
+  after a source-code deep-dive: it enumerates whether an email is registered on 120+ services via
+  forgot-password flows *without notifying the target* — a silent unauthenticated "presence signal"
+  across the web. A reminder that an email address leaks a quiet enumeration surface; site modules
+  drift and can false-positive.
 - **Big Tech open-source wave:** Warp (AGPL terminal), Ladybird (independent engine), Snap Valdi
   (native UI), Nvidia Nemotron 3.5 Lightning + Switchyard (model router), Anthropic in-house silicon,
   Alibaba Open Code Review + Qwen3.8-2.4T-A95B (first open Qwen-Max-class flagship), Mojo 1.0.

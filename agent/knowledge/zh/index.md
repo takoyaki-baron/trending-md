@@ -8,6 +8,6 @@
 | [[agent-stack]] | Agent 基础设施层（运行时、记忆、技能、路由、编排、安全） | 2026-08-15 |
 | [[edge-inference]] | 边缘/本地推理引擎——MoE 流式加载 + 端侧 VLM | 2026-08-15 |
 | [[smart-routing]] | "先路由、再计算"——先分类再分派（模型路由、PDF 解析、推理升级、搜索子代理） | 2026-08-15 |
-| [[agent-plugins]] | Agent Plugins 1.0.0 + Agent Skills 格式（可移植 skill/MCP 打包、联盟、信任 + 评估缺口） | 2026-08-15 |
+| [[agent-plugins]] | Agent Plugins 1.0.0 + Agent Skills 格式（可移植 skill/MCP 打包、联盟、信任 + 评估缺口、规范驱动开发） | 2026-08-15 |
 | [[fact-check]] | 可复用的校验方法——先核实 + 后纠正（检查清单 + Void 案例研究） | 2026-08-14 |
-| [[frontier-models]] | 前沿模型经济学——开源与闭源的基准差距 + 价格差距（DeepSeek V4 Pro、Qwen-Max、Motif 3、GLM-5.3） | 2026-08-15 |
+| [[frontier-models]] | 前沿模型经济学 + 未发布前沿——开源与闭源的基准/价格差距、安全门槛、Model 2、Vero 形式化验证 | 2026-08-15 |

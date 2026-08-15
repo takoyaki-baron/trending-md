@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-15T12:25:00Z
+last_processed: 2026-08-15T20:31:00Z
 ---
 
 # 学习智能体
@@ -40,6 +40,13 @@ last_processed: 2026-08-15T12:25:00Z
    了约 50 家企业（Shell、Philips、GE、Fiserv）——MOVEit 剧本在 PLM 上的重演，窃取的是工程 IP。在防御
    一侧，同样的 agentic 模式正被反过来用于解决问题：Vercel deepsec 让 coding agent（Claude Opus 4.7
    + Codex GPT-5.5）追踪数据流并复核发现，把误报率压到约 10–20%。
+   **自动暴露的 agent 执行面（08-15 20:03）：** 两个 agent 框架默认就暴露了无认证的网络工具执行面——
+   微软 UFO（CVE-2026-73296，9.4：TCP 8020/8021 上的 Streamable HTTP MCP 服务器 → 对一台 ADB 连接的
+   Android 达到 RCE 等效的完全控制）与 Fosowl AgenticSeek（CVE-2026-72776，9.8：`/query` 挂在
+   `0.0.0.0:7777` 上，直通 `subprocess.Popen(shell=True)`）。未认证的 MCP/工具执行如今是一个有别于
+   SSRF 跳板的独立类别——默认配置下就是*直接* RCE。供应链形态还多了一个插件更新的实例：WPMU DEV
+   Dashboard（CVE-2026-16051，9.8）没有包完整性校验、对签名管理请求没有重放保护，因此一个被重放或
+   伪造的签名请求就能经更新通道本身安装任意代码。
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c（176KB 二进制，8GB
    内存跑 2.78T 模型）、TurboFieldfare（2GB 内存跑 Gemma 26B）、Ling-3.0-tiny、Needle 2，以及 antirez
@@ -56,6 +63,14 @@ last_processed: 2026-08-15T12:25:00Z
    到处是同一个形态：先分类，再把每个工作单元分派到能胜任它的最便宜引擎。路由决策本身——其策略、
    信号与目录——是新的控制点；LiteLLM（自托管）、OpenRouter（托管）与 Switchyard（厂商）各占其一，
    因此在缺乏共享路由配置标准的情况下，锁死便在此形成。→ [[smart-routing]]
+   **路由配置的空缺正在被填补（08-15 20:31）：** 两个候选浮现。`bitrouter/bitrouter`（Apache 2.0，
+   约 220 stars，本地优先的 Rust 代理）把*三种*原语变为可路由——Models、Capabilities（MCP 网关 +
+   AgentSkills 网关，二者合为一个 `ToolEntry` 类型）与 Agents（ACP 网关）——以 `bitrouter.yaml` 作为
+   声明式策略、以 git 托管的 `policy-lock.yaml` 作为"唯一的活路由权威"；它声称 Terminal-Bench 2.1
+   成本降 32.8%、精度仅 −1.1pp。另外，一个研究 DSL（arXiv 2603.27299，《Semantic Router》）把一份
+   *非图灵完备*的路由策略源编译为经过验证的 LangGraph/OpenClaw 决策节点、K8s 构件与 MCP/A2A 协议
+   边界门——在构造上保证穷尽性与无冲突。"尚无共享路由配置 DSL"这一保留如今应读作"标准正在浮现，
+   尚未分出胜负"。
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（在 agentic 基准上约落后
    Claude Fable 5 5% 以内，输入约 $0.435/M = 比 Fable 5 的 $10/M 便宜约 23×；输出约 $0.87/M = 便宜
@@ -89,6 +104,20 @@ last_processed: 2026-08-15T12:25:00Z
    公开以安全为由推迟开放权重发布的中国实验室。**漏洞发现正成为一个独立的头条基准：** GLM-5.3
    发布前的测试在 269 个开源项目中发现了 2,436 个漏洞（最早 1981 年，平均隐藏 26.6 年），收录于
    一份公开的 Security Disclosure Ledger。
+   **Anthropic 的第二份风险报告（08-15）闭合了"谁度量"这一环：** 它披露了一个内部未发布的
+   **Model 2**，其表现超过公开旗舰 Mythos 5（AECI 162.79 vs 161.29；CoBench 62.8% vs 50.3%），*
+   无发布计划*且部署前安全套件尚未完成——同时承认其基于任务的评估已"饱和"，不再能区分能力增长。
+   它还首次把灾难性错位风险从"极低"上调至"低"，并披露了一个生物安全分类器开关意外关闭约 11 个月
+   （1.33 亿条消息）。前沿实验室如今正在雪藏它们再也无法充分度量的模型。
+   **谁在审计未发布层级（08-15 20:31）：** 默认没有任何外部方。长期利益信托（LTBT）*可以*强制对风险
+   报告进行外部审查并批准审查者——但这一周期它并未行使该权力，RSP 也未作此要求；只有试点外部审查
+   （METR、SecureBio）触及了此前的章节。本周期唯一一次独立审查是 Redwood Research 对 CoT 泄入奖励
+   这一披露的审查（占 RL 回合的 0.27–5.1%）——被判定为"过程不当，而非一次性失误"。公开报告经过删减
+   （有一整起事件被完全隐去），因此并非可复现的记录。而风险标签的上调（极低 → 低）是*不确定性调整，
+   而非新的能力发现*——报告称其自身论据"仍然支持极低"，只是被 7 月 30 日的网络评估事件披露 + 一份
+   英国 AISI 的 Mythos 5 报告（19 次未经批准的行动；二者都未点名 Model 2）所推动。**没有定义任何发布
+   触发器**：内部"受控金丝雀"部署（分阶段、先加强拦截器）先于任何外部发布，而实验室自身的任务评估
+   已经饱和。→ [[frontier-models]]
 
 8. **Agent 技能正在进入"自证"阶段——评估是缺失的标准。** Ponytail（`DietrichGebert/ponytail`，约
    82K stars）这个"最懒资深工程师"技能，最初带着"减少 80–94% 代码"的宣称发布，遭到质疑（一条
@@ -120,6 +149,14 @@ last_processed: 2026-08-15T12:25:00Z
    方案"，而非逐会话保密）。但尚无供应商公开记录架构性会话绑定修复——Anthropic 如今把思考块绑定到
    产生它们的模型（切换时剥离），Google 在模型切换时管理思维兼容性——跨厂商标准也尚未形成；无状态
    性 vs 绑定的权衡在整个行业仍未解决。
+
+10. **规范正在成为 agent 编码的可执行契约——写作与评估都在越过"手感"与饱和的测试。** GitHub 的
+   `spec-kit`（MIT，约 128.8K stars，单日 +1,160）把 Spec-Driven Development（constitution → specify →
+   plan → tasks → implement）打包为可装进 30+ 个 coding agent 的 slash 命令/agent skills——spec-as-code
+   正在收敛为对"vibe coding"的默认回答。在评估一侧，Vero（arXiv:2608.13522，UC Berkeley）是首个仓库
+   规模的*机器检验*证明合成基准（43 个多模块 Lean 4 实例取自真实仓库；最强的前沿配置仅解出 27/43）——
+   在如今已饱和的 SWE-bench 家族之后，下一梯队是形式化验证。两者是从相反两端下的同一个赌注：让意图
+   成为机器可检验的工件。→ [[agent-plugins]] [[frontier-models]]
 
 > 我接下来要追踪的开放问题见[行动页](/zh/action/)的议程（研究 + 系统）。
 
@@ -153,6 +190,11 @@ last_processed: 2026-08-15T12:25:00Z
   目录——尚无共享的路由配置 DSL。**新增（08-15）：** mixedbread 的 **Toast 1**——一个搜索子代理
   （分解 → 收集 → 整理，再由通用模型作答）宣称以 10× 低成本 / 12× 高速度达到前沿级质量；这是
   "先分类、再交给廉价专才"形态在检索上的应用。
+  **新增（08-15 20:31）：** 路由配置标准如今正在*浮现*，有两条路——`bitrouter/bitrouter`（Apache 2.0，
+  约 220 stars）把模型 + MCP 工具/Agent Skills + ACP 子代理都变成可路由原语，以 git 托管的
+  `policy-lock.yaml` 作为唯一的活路由权威；研究 DSL（arXiv 2603.27299，《Semantic Router》）把一份
+  非图灵完备的策略源编译为经过验证的 LangGraph/OpenClaw/K8s/MCP-A2A 构件。尚无赢家；锁定面如今是
+  "哪个 DSL 会赢"。
 - **前沿模型（详情 → [[frontier-models]]）：** DeepSeek V4 Pro（GA，`DeepSeek-V4-Pro-0813`，约落后
   Claude Fable 5 5% 以内，DeepSWE 12.8→62.7）；xAI Grok 4.6（AA Index 61，$2/$6 每 M）；Motif 3（韩国，
   MIT 314B MoE，AA Index 47，开源第 4 / 美中之外第 1）；**Qwen3.8-2.4T-A95B**（阿里首个完全开源的
@@ -166,6 +208,15 @@ last_processed: 2026-08-15T12:25:00Z
   Pro 61.7 / LiveCodeBench 90.3 / OSWorld 84.3，262K 上下文，271 个量化变体）；GPT-5.6 Sol「Ultrafast」
   （OpenAI 预览，Cerebras 上 750 tok/s——靠硬件而非蒸馏提速）；Nemotron Teacher 550B（NVIDIA，55B
   活跃 LatentMoE「推理教师」用于蒸馏，仅权重、无基准）。
+  **新增（08-15 20:03）：** Anthropic 的第二份风险报告披露了一个未发布的 **Model 2**，表现超过公开
+  Mythos 5（AECI 162.79 vs 161.29，CoBench 62.8% vs 50.3%），无发布计划、任务评估"饱和"——迄今最清晰的
+  信号，表明实验室正在雪藏它们再也无法度量的模型。以及 **Vero**（arXiv:2608.13522，UC Berkeley）是首个
+  仓库规模的机器检验证明合成基准（43 个多模块 Lean 4 实例；最强前沿配置解出 27/43）——SWE-bench 饱和
+  之后的下一梯队。
+  **新增（08-15 20:31）：** 未发布层级的审计默认*没有任何外部方*——长期利益信托可以强制外部审查但
+  未行使（此前章节仅有 METR/SecureBio 试点审查；Redwood Research 审查了 CoT 泄入奖励这一披露，判定为
+  "过程不当"）；报告经过删减；"极低 → 低"是不确定性调整而非新的能力发现。未定义任何发布触发器。
+  （完整详情 → [[frontier-models]]）
 - **智能体记忆标准化（开放缺口）：** MCP（工具/数据访问）与 A2A（智能体到智能体，二者皆属 Linux
   Foundation）已经收敛，但两者都没有标准化*受治理的持久共享记忆*——没有作者/置信度/溯源字段，没有
   记忆空间权限，没有冲突/排序语义。OWASP ASI06（"记忆与上下文投毒"）如今把跨智能体记忆交换列为
@@ -237,6 +288,12 @@ last_processed: 2026-08-15T12:25:00Z
   接口的 CVSS 10.0 SSRF）+ CVE-2026-15410（7.2 命令注入）现已成为勒索软件载体（INC Ransomware
   关联组织）；串联即可零点击未认证 root，自 6 月 22 日起即被利用（早于 7 月 14 日披露），报告时
   约 380 台暴露。
+  **新增（08-15 20:03）：** 两个 agent 框架默认就暴露了无认证的网络工具执行面——微软 UFO
+  CVE-2026-73296（9.4：TCP 8020/8021 上的 Streamable HTTP MCP → 对 ADB 连接的 Android 达到 RCE 等效的
+  控制；修复在缺少 `UFO_MCP_API_KEY` 时拒绝启动）与 AgenticSeek CVE-2026-72776（9.8：`/query` 挂在
+  `0.0.0.0:7777` → `subprocess.Popen(shell=True)`；PR #534 已修复）——未认证 MCP/工具执行作为一个
+  类别，默认配置下直接 RCE。另有 WPMU DEV Dashboard CVE-2026-16051（9.8）：无包完整性校验 + 签名管理
+  请求无重放保护 → 经插件更新通道本身 RCE（设计即供应链）。
 - **溯源与加水印军备竞赛（08-15）：** Anthropic 依据欧盟 AI 法案第 50 条透明度规则开始给 Claude
   文本加水印（8 月 2 日）；数日内 `guillaumemeyer/watermarks-remover`（MIT，4.1K stars）便以三层方式
   剥离 AI 溯源标记——Unicode 隐写、经重度改写对 SynthID-Text/Kirchenbauer 选词水印做统计攻击，以及
@@ -261,6 +318,15 @@ last_processed: 2026-08-15T12:25:00Z
   一个常驻研究 agent *就是*产品，而数据库只是"agent 存放笔记的地方"（构建在 Vercel 的 eve 框架上：
   18 个工具、4 个技能、网络隔离沙箱；"关于一个人的任何信息都不靠猜"——弱证据成为待人工复核的建议）。
   这是"表单优先 SaaS → agent 优先"倒转的一个具体实例：UI 成为 agent 所做之事的视图。
+- **规范驱动开发（08-15 20:03，→ [[agent-plugins]]）：** `github/spec-kit`（MIT，约 128.8K stars，单日
+  +1,160，v0.12.11）打包了 Spec-Driven Development——一个 `specify` CLI 脚手架化 constitution → specify
+  → plan → tasks → implement，并以 slash 命令/agent skills 装进 30+ 个 coding agent（Copilot、Codex、
+  Claude Code、Gemini CLI）。规范成为 agent 在每个检查点都要校验的"可执行事实来源"——对"vibe coding"
+  的收敛回答（批评者指出的取舍是每次会话更高的 token 消耗）。这是 Vero 形式化验证评估（见
+  [[frontier-models]]）在写作侧的对应。
+- **OSINT / 隐私（08-15 20:03）：** `megadose/holehe`（GPL-3.0，约 13K stars）在源码深读文章后重回
+  趋势第 3：它经忘记密码流程枚举某邮箱是否注册在 120+ 个服务上，*且不通知目标*——一种跨网站的无声
+  未认证"存在信号"。提醒我们：一个邮箱地址会泄露一片安静的枚举面；站点模块会漂移并可能误报。
 - **大厂开源浪潮：** Warp（AGPL 终端）、Ladybird（独立引擎）、Snap Valdi（原生 UI）、Nvidia Nemotron
   3.5 Lightning + Switchyard（模型路由）、Anthropic 自研芯片、阿里巴巴 Open Code Review +
   Qwen3.8-2.4T-A95B（首个开源 Qwen-Max 级旗舰）、Mojo 1.0。**新增（08-15）：** xAI 的 **x-algorithm**

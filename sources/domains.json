@@ -1294,5 +1294,185 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "stack.watch": {
+    "cat": "data",
+    "en": "Vulnerability tracking database with per-CVE pages aggregating severity/affected-versions/fixes; secondary to cve.org/NVD. Cross-checked (08-15): its CVE-2026-16051 page matches IONIX — WPMU DEV Dashboard (wpmudev-updates) before 5.0.1, RCE via missing package-integrity verification + no replay protection on signed management requests.",
+    "zh": "漏洞追踪数据库，为每个 CVE 提供聚合严重度/受影响版本/修复的页面；以 cve.org/NVD 为准。已交叉核验（08-15）：其 CVE-2026-16051 页面与 IONIX 一致——WPMU DEV Dashboard（wpmudev-updates）5.0.1 之前版本，因缺失包完整性校验 + 签名管理请求无重放保护而 RCE。",
+    "jp": "CVEごとのページで深刻度/影響バージョン/修正を集約する脆弱性追跡データベース。cve.org/NVDが正。突合済み（08-15）：CVE-2026-16051ページはIONIXと一致——WPMU DEV Dashboard（wpmudev-updates）5.0.1未満、パッケージ整合性検証の欠落 + 署名済み管理リクエストのリプレイ保護なしによるRCE。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "visualstudiomagazine.com": {
+    "cat": "news",
+    "en": "Visual Studio Magazine — Microsoft-ecosystem developer trade publication (1105 Media); solid on .NET/VS/DevOps and now AI-coding tooling. Cross-checked (08-15): its spec-kit (Spec-Driven Development) coverage matches the github/spec-kit repo (MIT, ~128.8K stars, specify CLI → 30+ agents).",
+    "zh": "Visual Studio Magazine——微软生态开发者行业刊物（1105 Media）；对 .NET/VS/DevOps 及如今的 AI 编码工具报道较扎实。已交叉核验（08-15）：其 spec-kit（Spec-Driven Development）报道与 github/spec-kit 仓库一致（MIT，约 128.8K stars，specify CLI → 30+ 个 agent）。",
+    "jp": "Visual Studio Magazine——Microsoftエコシステムの開発者向け業界誌（1105 Media）。.NET/VS/DevOpsと、いまやAIコーディングツールにも強い。突合済み（08-15）：spec-kit（Spec-Driven Development）報道はgithub/spec-kitリポジトリと一致（MIT、約128.8K stars、specify CLI → 30以上のエージェント）。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "blog.xlap.top": {
+    "cat": "community",
+    "en": "Individual developer blog (xlap.top) publishing source-code deep-dives of trending OSS tools; low authority, useful for internals. Cross-checked (08-15): its holehe write-up matches the megadose/holehe repo (GPL-3.0, ~13K stars, 120+ services).",
+    "zh": "个人开发者博客（xlap.top），发布热门开源工具的源码深读；权威性低，但对内部实现较有用。已交叉核验（08-15）：其 holehe 文章与 megadose/holehe 仓库一致（GPL-3.0，约 13K stars，120+ 个服务）。",
+    "jp": "個人開発者ブログ（xlap.top）。話題のOSSツールのソースコード深掘り記事を公開。権威性は低いが内部実装の理解に有用。突合済み（08-15）：holehe記事はmegadose/holeheリポジトリと一致（GPL-3.0、約13K stars、120以上のサービス）。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "z.ai": {
+    "cat": "vendor",
+    "en": "Zhipu AI (Z.ai) official site — primary source for GLM model releases and benchmark claims. Self-reported benchmarks; co-cited with Pandaily for GLM-5.3 (CyberGym 84.5%, ~2-week delayed weights). Verify numbers against third parties.",
+    "zh": "智谱 AI（Z.ai）官网 —— GLM 系列模型发布与基准分数的第一手来源。基准为自报；GLM-5.3 与 Pandaily 同条共引（CyberGym 84.5%、权重延后约 2 周）。数字请以第三方复核。",
+    "jp": "Zhipu AI（Z.ai）公式サイト —— GLMモデル発表とベンチ数値の一次情報源。ベンチは自己申告。GLM-5.3はPandailyと同一項目で共引用（CyberGym 84.5%、重み約2週間遅延）。数値は第三者で確認を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "minimax.io": {
+    "cat": "vendor",
+    "en": "MiniMax official blog — primary source for MiniMax model/music releases (Music 3.0). Quality claims are vendor-reported; co-cited with the Hugging Face model card.",
+    "zh": "MiniMax 官网博客 —— MiniMax 模型/音乐（Music 3.0）发布的第一手来源。质量声明为厂商自报；与 Hugging Face 模型卡同条共引。",
+    "jp": "MiniMax公式ブログ —— MiniMaxモデル/音楽（Music 3.0）発表の一次情報源。品質主張はベンダー自己申告。Hugging Faceモデルカードと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "mixedbread.com": {
+    "cat": "vendor",
+    "en": "mixedbread official blog — primary source for Toast 1 search sub-agent claims (10× cheaper / 12× faster; OfficeQA Pro V2). Vendor-reported benchmarks; co-cited with TokenPost.",
+    "zh": "mixedbread 官网博客 —— Toast 1 搜索子智能体声明（便宜 10 倍 / 快 12 倍；OfficeQA Pro V2）的第一手来源。基准为厂商自报；与 TokenPost 同条共引。",
+    "jp": "mixedbread公式ブログ —— Toast 1検索サブエージェントの主張（10倍安価/12倍高速、OfficeQA Pro V2）の一次情報源。ベンチはベンダー自己申告。TokenPostと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "cursor.com": {
+    "cat": "vendor",
+    "en": "Cursor (Anysphere) docs/blog — primary source for Cursor product and its plugin spec (cursor/plugins). Co-cited with the GitHub repo; product docs are authoritative for Cursor-specific features.",
+    "zh": "Cursor（Anysphere）文档/博客 —— Cursor 产品及其插件规范（cursor/plugins）的第一手来源。与 GitHub 仓库同条共引；产品文档对 Cursor 专属功能具权威性。",
+    "jp": "Cursor（Anysphere）ドキュメント/ブログ —— Cursor製品とそのプラグイン仕様（cursor/plugins）の一次情報源。GitHubリポジトリと同一項目で共引用。Cursor固有機能については公式ドキュメントが権威。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "blog.google": {
+    "cat": "vendor",
+    "en": "Google's official blog — primary source for Google announcements (HEIR FHE compiler). High authority; co-cited with Google Developers Blog for the same HEIR story.",
+    "zh": "Google 官方博客 —— Google 发布（HEIR 同态加密编译器）的第一手来源。权威性高；HEIR 与 Google Developers Blog 同条共引。",
+    "jp": "Google公式ブログ —— Google発表（HEIR同型暗号コンパイラ）の一次情報源。権威は高い。HEIRはGoogle Developers Blogと同一項目で共引用。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "contextstudios.ai": {
+    "cat": "vendor",
+    "en": "Context Studios (Berlin AI dev studio) blog — secondary analysis of the Agent Plugins 1.0.0 spec. Confirms the TSC is Amazon/Cursor/Microsoft/OpenAI/Vercel + Google as core maintainer (Anthropic absent); co-cited with 4sysops.",
+    "zh": "Context Studios（柏林 AI 开发工作室）博客 —— Agent Plugins 1.0.0 规范的二手分析。确认 TSC 为 Amazon/Cursor/Microsoft/OpenAI/Vercel，Google 为核心维护者（Anthropic 缺席）；与 4sysops 同条共引。",
+    "jp": "Context Studios（ベルリンAI開発スタジオ）ブログ —— Agent Plugins 1.0.0仕様の二次分析。TSCはAmazon/Cursor/Microsoft/OpenAI/Vercel＋Google（コアメンテナ、Anthropic不在）と確認。4sysopsと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "rustdesk.com": {
+    "cat": "vendor",
+    "en": "RustDesk official blog — primary source for RustDesk releases (unattended Wayland remote access). Co-cited with the GitHub repo.",
+    "zh": "RustDesk 官网博客 —— RustDesk 发布（无人值守 Wayland 远程访问）的第一手来源。与 GitHub 仓库同条共引。",
+    "jp": "RustDesk公式ブログ —— RustDeskリリース（無人Waylandリモートアクセス）の一次情報源。GitHubリポジトリと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "tldr.tech": {
+    "cat": "news",
+    "en": "TLDR AI — daily AI newsletter roundup; high-volume secondary signal, useful for same-day model-drop aggregation. Co-cited with The Neuron for the Aug 14 model drops.",
+    "zh": "TLDR AI —— 每日 AI 新闻简报；量大，宜作同日模型发布的聚合信号。8/14 模型发布与 The Neuron 同条共引。",
+    "jp": "TLDR AI —— 日次AIニュースレター。同日のモデル発表を集約する二次シグナル。8/14のモデル発表でThe Neuronと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "theneuron.ai": {
+    "cat": "news",
+    "en": "The Neuron — AI newsletter; same-day model-launch aggregation. Co-cited with TLDR AI for the Aug 14 Google/OpenAI/DeepSeek drops.",
+    "zh": "The Neuron —— AI 新闻简报；同日模型发布的聚合。8/14 Google/OpenAI/DeepSeek 发布与 TLDR AI 同条共引。",
+    "jp": "The Neuron —— AIニュースレター。同日モデル発表の集約。8/14のGoogle/OpenAI/DeepSeek発表でTLDR AIと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "androidauthority.com": {
+    "cat": "news",
+    "en": "Android Authority — consumer tech news; reliable for device/app launches (Gemini 3.7 Flash debut). Co-cited with APIDog benchmarks for the same Gemini 3.7 Flash item.",
+    "zh": "Android Authority —— 消费科技媒体；对设备/应用发布（Gemini 3.7 Flash）报道可靠。Gemini 3.7 Flash 与 APIDog 基准同条共引。",
+    "jp": "Android Authority —— 消費者向けテックメディア。デバイス/アプリ発表（Gemini 3.7 Flash）に信頼性。Gemini 3.7 FlashはAPIDogベンチと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "4sysops.com": {
+    "cat": "news",
+    "en": "4sysops — sysadmin/IT ops blog; covers dev-tooling and plugin standards for IT admins. Co-cited with Context Studios for Agent Plugins 1.0.0.",
+    "zh": "4sysops —— 系统管理/IT 运维博客；面向 IT 管理员报道开发工具与插件标准。Agent Plugins 1.0.0 与 Context Studios 同条共引。",
+    "jp": "4sysops —— システム管理/IT運用ブログ。IT管理者向けに開発ツールやプラグイン標準を扱う。Agent Plugins 1.0.0はContext Studiosと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "apidog.com": {
+    "cat": "vendor",
+    "en": "APIDog — API tooling vendor whose blog publishes model benchmark roundups (Gemini 3.7 Flash). Secondary benchmark signal; co-cited with Android Authority.",
+    "zh": "APIDog —— API 工具厂商，其博客发布模型基准盘点（Gemini 3.7 Flash）。二手基准信号；与 Android Authority 同条共引。",
+    "jp": "APIDog —— APIツールベンダー。ブログでモデルベンチまとめ（Gemini 3.7 Flash）を公開。二次ベンチシグナル。Android Authorityと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "vn.tokenpost.com": {
+    "cat": "news",
+    "en": "TokenPost (Vietnam) — blockchain/crypto news; co-cited with mixedbread for Toast 1. Treat tech-model claims as secondary.",
+    "zh": "TokenPost（越南）—— 区块链/加密货币新闻；Toast 1 与 mixedbread 同条共引。技术模型声明宜作二手信号。",
+    "jp": "TokenPost（ベトナム）—— ブロックチェーン/暗号ニュース。Toast 1はmixedbreadと同一項目で共引用。技術モデル主張は二次シグナル扱い。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "cirt.gy": {
+    "cat": "security",
+    "en": "cirt.gy — Cybersecurity Incident Response Team advisories; covers CISA KEV / ransomware exploitation (SonicWall SMA1000). Co-cited with CVETodo for CVE-2026-15409/15410.",
+    "zh": "cirt.gy —— 网络安全应急响应小组（CIRT）公告；覆盖 CISA KEV / 勒索软件利用（SonicWall SMA1000）。CVE-2026-15409/15410 与 CVETodo 同条共引。",
+    "jp": "cirt.gy —— サイバーセキュリティインシデント対応チーム（CIRT）アドバイザリ。CISA KEV/ランサムウェア悪用（SonicWall SMA1000）を扱う。CVE-2026-15409/15410はCVETodoと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "aur.archlinux.org": {
+    "cat": "code",
+    "en": "Arch Linux AUR — user package repository; canonical for package availability/version (mole-research-bin). High authority, low density (package metadata only).",
+    "zh": "Arch Linux AUR —— 用户软件仓库；软件包可用性/版本（mole-research-bin）的权威来源。权威性高、信息密度低（仅包元数据）。",
+    "jp": "Arch Linux AUR —— ユーザーパッケージリポジトリ。パッケージの可用性/バージョン（mole-research-bin）の正規情報源。権威は高いが密度は低い（パッケージメタデータのみ）。",
+    "cred": "high",
+    "density": "low",
+    "cv": 1
+  },
+  "ad-si.github.io": {
+    "cat": "code",
+    "en": "LuaCAD project docs (GitHub Pages) — the project's own documentation; authoritative for LuaCAD's API/usage, not independent. Co-cited with the ad-si/LuaCAD repo.",
+    "zh": "LuaCAD 项目文档（GitHub Pages）—— 项目自身文档；对 LuaCAD API/用法具权威性，但非独立来源。与 ad-si/LuaCAD 仓库同条共引。",
+    "jp": "LuaCADプロジェクトドキュメント（GitHub Pages）—— プロジェクト自身の文書。LuaCADのAPI/用法には権威があるが独立ではない。ad-si/LuaCADリポジトリと同一項目で共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "ppc.land": {
+    "cat": "news",
+    "en": "ppc.land — PPC/ad-tech marketing publication; its x-algorithm deep-dive correctly names the four feed components (Home Mixer, Thunder, Phoenix, Candidate Pipeline) and flags what the code omits (no scoring weights, no ads code).",
+    "zh": "ppc.land —— PPC/广告技术营销刊物；其 x-algorithm 深挖正确列出四大 feed 组件（Home Mixer、Thunder、Phoenix、Candidate Pipeline）并指出代码缺失（无评分权重、无广告代码）。",
+    "jp": "ppc.land —— PPC/アドテックマーケティング媒体。x-algorithm詳細記事は4大フィード構成（Home Mixer、Thunder、Phoenix、Candidate Pipeline）を正しく列挙し、コードの欠落（スコア重みなし、広告コードなし）を指摘。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }
