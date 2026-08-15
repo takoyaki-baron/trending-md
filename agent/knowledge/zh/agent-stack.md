@@ -255,6 +255,8 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
   有效签名请求就能让站点安装并执行任意代码——*更新机制本身*里的供应链 RCE，看起来就像正常的管理流量。
   修复：5.0.1+（恢复完整性校验 + 重放保护）；轮换 WPMU DEV Hub API 密钥。
 
+- **模型判断的工具调用边界（Claude Code Auto Mode，08-16）**——Claude Code 把 Auto Mode 设为默认（8 月 14 日，Pro/Max/Team；Enterprise/API/AWS/Bedrock/GCP/Microsoft Foundry 仍为约一个月的 opt-in）。每次工具调用 + shell 命令都要经过一个**专有两级分类器**（快速过滤器 → 深层分析），只拦截被判定为「不可逆、破坏性或越界」的动作；规则层级 `hard_deny > soft_deny > allow > user_intent`，数据外泄是硬拒绝，权限规则先于分类器触发，但宽泛 allow 规则（`python:*`）在 Auto Mode 下被搁置；连续 3 次 / 会话内累计 20 次拦截 → 回退到人工批准；开销约 200–400ms（如今是「少量额外 token」，不再计费）。Anthropic 数据：人类只抓住 13.6% 的危险命令（50 次提示后降到约 5%）vs Auto Mode 的 89%；人工批准会话有 6.3% 的严重非预期伤害 vs 2.4%。两次*受委托*的第三方评估：**Trajectory Labs**（72 场景 × 10 = 720 次留出攻击，Claude Code v2.1.205 vs Codex v0.144.5——Claude Auto Mode 0/720；Codex Auto-review 5.83% / Full Access 19.03%；只测了 MCP 浏览器 harness 背后的模型，而非第一方防护）与 **Apollo Research**（2 周红队试点，漏检率 12%→7%）。缺口：分类器训练/评估仍不公开、承认的对抗集漏报率 17%，且**没有常设独立审计、没有监管机构**——不同于 SB 53 的法定前沿发布门槛（见 [[frontier-models]]）。「谁守护守护者」仍是 Anthropic。→ 论点 11。
+
 ### MCP SSRF 审计清单（模板：CVE-2026-19516）
 
 一套可复用的 MCP 部署扫描——每个带出站 HTTP 的 MCP server 都是潜在的 SSRF 跳板。按顺序执行
@@ -277,3 +279,34 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
 
 邻近的观察项：**Langflow** 展示了深一层的同构形态——一个 MCP 相邻的 agent 工具，只要触及
 `exec()`，就无需 SSRF、直通 RCE。
+
+## Agent 公司编排 + harness 杠杆（8 月 16 日）
+
+- **Paperclip** — `paperclipai/paperclip`，MIT，TypeScript，72.1K stars（首周 +21K）。"如果 OpenClaw
+  是员工，Paperclip 就是公司"：自带 agent（Claude、Codex、Cursor、Gemini CLI……）按**组织架构图**编排，
+  配目标、预算与治理；**Heartbeat Engine** 按计划唤醒 agent 执行检查/动作/休眠并带崩溃自恢复，按 agent
+  的预算硬性封顶失控的 API 成本，工作以工单形式浮现并附完整不可篡改的审计日志。人类充当"董事会"（批准
+  招聘、暂停 agent）。仍"非常、非常早期"（无沙箱、无多用户）。信号：组织架构图*就是* UI——迄今最字面的
+  agent-公司操作系统；"表单优先 SaaS → agent 优先"的倒转被推到了终点（与 Comp AI CRM 的倒转同构）。
+- **code-graph-rag** — `vitali87/code-graph-rag`，MIT，4.3K stars。用 Tree-sitter 把多语言 monorepo
+  解析为 Memgraph 中的一个语言无关知识图谱，再暴露一个 RAG 层把自然语言转成 **Cypher** 查询并驱动 AI
+  编辑——基于 AST 的外科级修补、ast-grep 结构化搜索/替换、从入口点出发的死代码检测，以及新增的
+  `FLOWS_TO` 污点边（C#/Java/C/Go）。以 **MCP server** 运行，因此任何 MCP 客户端都能查询并编辑代码库。
+  信号：在 monorepo 规模下，平坦的向量嵌入已不够用——一个可查询的*结构*图（谁调用谁、数据如何流动）才能
+  让 agent 在动手改代码之前就推理影响面。
+- **Prime Agent——harness 即可变学习状态** — `PrimeIntellect-ai/prime-agent`，MIT，16.2K stars。
+  Recursive Language Model（RLM）：一个持久化的 IPython kernel（而非固定工具菜单），文件操作、shell、
+  子代理生成（`rlm(...)`）与上下文管理都是 Python 代码。第二层是 **Continual Harness**，把提示词/记忆/
+  可复用子代理规范存储为持久状态，agent 经 `/refine` 精炼它们——小而证据充分的自编辑，永不触碰不可变的
+  系统提示词。95.5% ARC-AGI-3（vs 95.4% 人类基线）；按规范写出了可用的 Sega Genesis / Game Boy Color
+  模拟器。保留：分数为厂商自报；公开仓库未随附 ARC 适配器/提示词；结果随基础模型剧烈摆动——GPT-5.6 Sol
+  上 78.3% → GLM-5.2 上 8.6%。信号：首个高调地把*自己的 harness* 当作可变学习状态的开放 agent——harness
+  如今是优化目标，而非固定外壳。
+- **AutoDesign——meta-harness 优化** — arXiv:2608.13560。一个迭代精炼*harness*（提示词/工具序列）而非
+  训练更好模型的框架，用于长时程设计任务。在其新的 **PosterBench**（100 篇论文 → 海报，五个学科）上
+  得 78.32，比商业的 Claude Design 高 7.45，并以完全自主的循环（253 次工具调用、11 轮编辑、40 分钟）
+  在不到 $3 内完成——达到会议海报平均水平，在系统盲测中获得最高人类偏好。信号：与 Prime Agent 同一个
+  "进化 harness 而非模型"的杠杆，应用于设计；给 agentic 设计一个尚未饱和的基准。
+
+以上四项共同延伸了论点 12：优化目标正从模型转向其周围的 harness/编排层（见记忆窗口）。
+

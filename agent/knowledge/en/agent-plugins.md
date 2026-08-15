@@ -185,3 +185,16 @@ machine-checked proof on the evaluation side = intent made a machine-checkable a
   toward?
 - Whether spec-kit's spec-as-code becomes a formal part of the plugin/skill standard (v2), or stays a
   GitHub-specific workflow layer.
+
+## Skills now ground an agent in a specific book (Aug 16)
+
+`virgiliojr94/book-to-skill` (21.4K stars) distills a technical book, folder, or paper collection into
+a structured **Agent Skill** (`SKILL.md` + per-chapter files + glossary + patterns + cheatsheet) that
+loads on demand in Claude Code, Copilot CLI, or Amp. It's compile-time extraction rather than
+query-time RAG: the author's named frameworks and decision rules become files the agent reads the
+relevant chapter from, so answers stay grounded in your actual copy. Measured on real books it cut
+tokens **24–51×** versus dumping the text into context (a 400-page book ≈ 200K tokens → ~4K core +
+~1K/chapter). Signal: "ground an agent in a specific book" (runbooks, ADRs, onboarding) is a recurring
+need, and the Agent Skills format is absorbing it — the difference between fuzzy retrieval and
+deterministic reasoning over extracted structure. Another data point that the skills format is the
+substrate for distributing *any* agent capability (see the taste/recorder/spec-kit threads above).

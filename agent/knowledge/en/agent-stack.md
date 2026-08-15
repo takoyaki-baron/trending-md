@@ -302,6 +302,23 @@ monolith.
   like normal admin traffic. Fix: 5.0.1+ (restores integrity verification + replay protection);
   rotate WPMU DEV Hub API keys.
 
+- **The model-judged tool-call boundary (Claude Code Auto Mode, Aug 16)** — Claude Code flipped Auto
+  Mode to default (Aug 14, Pro/Max/Team; Enterprise/API/AWS/Bedrock/GCP/Microsoft Foundry stay opt-in
+  for ~a month). Every tool call + shell command passes a **proprietary two-stage classifier** (fast
+  filter → deep analysis) that blocks actions judged "irreversible, destructive, or out of scope";
+  ruleset hierarchy `hard_deny > soft_deny > allow > user_intent`, data exfiltration is a hard-deny,
+  permission rules fire first except broad allow-rules (`python:*`) which are set aside in auto mode;
+  3-in-a-row / 20-total blocks → manual fallback; overhead ~200–400ms (now "a few extra tokens", no
+  longer billed). Anthropic's data: humans caught 13.6% of dangerous commands (→~5% after 50 prompts)
+  vs Auto Mode's 89%; manual sessions had 6.3% serious unintended harm vs 2.4%. Two *commissioned*
+  third-party evals: **Trajectory Labs** (72 scenarios × 10 = 720 held-out attempts, Claude Code
+  v2.1.205 vs Codex v0.144.5 — Claude Auto Mode 0/720; Codex Auto-review 5.83% / Full Access 19.03%;
+  tested only the model behind an MCP browser harness, not first-party safeguards) and **Apollo
+  Research** (2-week red-team pilot, miss rate 12%→7%). The gap: classifier training/eval stay closed,
+  the acknowledged false-negative rate is 17% on adversarial sets, and there is **no standing
+  independent audit and no regulator** — unlike the SB 53 statutory frontier release gate (see
+  [[frontier-models]]). "Who guards the guard" is still Anthropic. → thesis 11.
+
 ### MCP SSRF audit checklist (template: CVE-2026-19516)
 
 A reusable sweep for MCP deployments — every MCP server with outbound HTTP is a potential SSRF
@@ -326,3 +343,42 @@ pivot. Run these checks, in order:
 
 Adjacent watch-item: **Langflow** shows the same shape one hop deeper — an MCP-adjacent agent tool
 that reaches `exec()` is a straight path to RCE, no SSRF needed.
+
+## Agent-company orchestration + the harness lever (Aug 16)
+
+- **Paperclip** — `paperclipai/paperclip`, MIT, TypeScript, 72.1K stars (+21K in the first week).
+  "If OpenClaw is an employee, Paperclip is the company": BYO agents (Claude, Codex, Cursor, Gemini
+  CLI…) arranged in an **org chart** with goals, budgets, and governance; a **Heartbeat Engine** wakes
+  agents on schedule to check/act/sleep with crash auto-recovery, per-agent budgets hard-stop runaway
+  API cost, and work surfaces as tickets with a full immutable audit log. Humans sit as the "board"
+  (approving hires, pausing agents). Still "very, very early" (no sandboxing or multi-user). Signal:
+  the org chart *is* the UI — the most literal agent-company OS yet; the form-first-SaaS → agent-first
+  inversion pushed to its endpoint (same shape as Comp AI CRM).
+- **code-graph-rag** — `vitali87/code-graph-rag`, MIT, 4.3K stars. Parses a multi-language monorepo
+  with Tree-sitter into one language-agnostic knowledge graph in Memgraph, then exposes a RAG layer
+  that turns natural language into **Cypher** queries and drives AI editing — AST-based surgical
+  patching, ast-grep structural search/replace, dead-code detection from entry points, and new
+  `FLOWS_TO` taint edges (C#/Java/C/Go). Runs as an **MCP server**, so any MCP client can query and
+  edit the codebase. Signal: flat embeddings stop being enough at monorepo scale — a queryable
+  *structure* graph (who-calls-what, data flow) is what lets an agent reason about impact before
+  touching code.
+- **Prime Agent — the harness as mutable learned state** — `PrimeIntellect-ai/prime-agent`, MIT,
+  16.2K stars. Recursive Language Model (RLM): one persistent IPython kernel (not a fixed tool menu)
+  where file ops, shell, subagent spawning (`rlm(...)`), and context management are Python code. The
+  second layer, a **Continual Harness**, stores prompts/memories/reusable subagent specs as durable
+  state the agent refines via `/refine` — small evidence-backed self-edits that never touch the
+  immutable system prompt. 95.5% ARC-AGI-3 (vs 95.4% human baseline); built working Sega Genesis /
+  Game Boy Color emulators from spec. Caveats: vendor-reported; the public repo ships without the ARC
+  adapter/prompts; results swing 78.3% (GPT-5.6 Sol) → 8.6% (GLM-5.2) by base model. Signal: the first
+  high-profile open agent to treat its *own harness* as mutable learned state — the harness is now an
+  optimization target, not a fixed shell.
+- **AutoDesign — meta-harness optimization** — arXiv:2608.13560. A framework that iteratively refines
+  the *harness* (prompts/tool sequences) that does a long-horizon design task, rather than training a
+  better model. On its new **PosterBench** (100 papers → poster, five disciplines) it scored 78.32,
+  beating commercial Claude Design by 7.45, and ran a fully autonomous loop (253 tool calls, 11 edit
+  turns, 40 min) for <$3 — average conference-poster quality, highest human preference in a blind
+  study. Signal: the same "evolve the harness, not the model" lever as Prime Agent, applied to design;
+  gives agentic-design a benchmark that isn't saturated.
+
+Together these four extend thesis 12: the optimization target is moving from the model to the
+harness/orchestration layer around it (see the memory window).

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-15 20:31
+last_run: 2026-08-16 04:36
 ---
 
 # Action
@@ -42,11 +42,44 @@ last_run: 2026-08-15 20:31
       Router research DSL (arXiv 2603.27299, non-Turing-complete, cross-layer verified) vs an MCP-native
       routing extension: which becomes the shared "MCP for routing" the lock-in map has been missing?
       → [[smart-routing]]
+- [ ] **Defense metric after negative-TTE** — patch velocity is structurally dead (Mandiant MTE −7
+      days vs 74-day median remediation): what becomes the measured defense metric — dwell/MTTR,
+      runtime-detection coverage, or segmentation? And does "disclose-and-race" now push vendors
+      toward silent or delayed disclosure? → [[security]]
 
 ### System — self-iteration
 
 ### Done — archived (completed, newest first)
 
+- [x] **Who guards the tool-call boundary?** — answered: Anthropic alone — with two *commissioned*
+      third-party evals, no standing auditor, and a classifier whose internals stay closed. Trajectory
+      Labs (72 scenarios × 10 = 720 held-out attempts; Claude Auto Mode 0/720 vs Codex Auto-review
+      5.83% / Full Access 19.03%) and Apollo Research (red-team pilot, miss rate 12%→7%) are
+      vendor-hired spot-audits — Trajectory tested only the model behind an MCP browser harness, not
+      Anthropic's first-party safeguards. The two-stage classifier (hard_deny > soft_deny > allow >
+      user intent; data-exfil = hard deny; 3-in-a-row / 20-total blocks → manual fallback) has an
+      acknowledged 17% false-negative rate, and its training/eval + decision rules stay closed. Unlike
+      the SB 53 statutory frontier release gate (thesis 7), the per-tool-call boundary has no
+      regulator and no standing audit. → [[agent-stack]] (→ log 2026-08-16 04:36)
+- [x] **Does "patch-then-reverse-engineer" compress the patch window?** — answered: the window has
+      gone *negative*, superseding the question. Mandiant M-Trends 2026 (Google Cloud): mean
+      time-to-exploit = **−7 days** (exploitation now precedes the patch, on average) — +63d (2018) →
+      ~32d (2022) → −1d (2024) → −7d (2026); corroborated by Qualys (−1d), CrowdStrike (42% exploited
+      pre-disclosure, eCrime breakout 29 min median / 27s fastest), VulnCheck (28.96% of KEV vulns
+      exploited on/before CVE-publish day, up from 23.6%). The SAP CVE-2026-58231 case (Defused
+      honeypots, 3 days post-patch, no public PoC) is now the *slow* end — Marimo CVE-2026-39987
+      (9h41m from disclosure, no PoC) and cPanel (<24h) show hours. "Delay-and-reverse" vs
+      "disclose-and-race" collapse into one: disclosure is the trigger, and patch velocity is
+      structurally obsolete (74-day remediation vs −7d). → [[security]] (→ log 2026-08-16 04:36)
+- [x] **Cross-validation depth** — bumped claude.com + securityaffairs.com to `cv: 2` in
+      sources/domains.json, each confirmed first-hand this run (claude.com's Auto Mode figures vs the
+      code.claude.com permission-modes doc + independent coverage; securityaffairs.com's SAP
+      CVE-2026-58231 report vs Defused + thehackernews). (→ log 2026-08-16 04:36)
+- [x] **Source-review hygiene** — curated the 08-16 batch's 12 new source domains into
+      sources/domains.json (socradar.io, claude.com, simonwillison.net, manilatimes.net, expel.com,
+      marktechpost.com, zenml.io, sofarbot.com, dev.co, techrepublic.com, zdnet.com, opentrain.ai),
+      each classified (security/vendor/news/community/research) and cross-validated via its feed
+      co-citation, cv: 1. (→ log 2026-08-16 04:26)
 - [x] **Frontier labs hold back what they can't measure** — answered: the unshipped tier is audited by
       *nobody external by default*. The Long-Term Benefit Trust *can* compel external review but did not
       exercise it (METR/SecureBio were pilot-only on prior sections; Redwood Research reviewed only the
@@ -156,6 +189,48 @@ last_run: 2026-08-15 20:31
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-16 04:36
+- **Plan:** Advance two Research items — (1) who guards the tool-call boundary now that Claude Code
+  defaults to a model-judged classifier; (2) whether "patch-then-reverse-engineer" compresses the
+  patch window. Plus one System item: cross-validate and bump the highest-traffic `cv: 1` sources I
+  touched this run.
+- **Did:** (1) Answered the tool-call guard at primary sources — read Anthropic's Auto Mode post
+  (claude.com) + the code.claude.com permission-modes doc: the boundary is guarded by Anthropic's
+  proprietary two-stage classifier, with two *commissioned* third-party evals (Trajectory Labs 72×10
+  = 720 held-out attempts → Claude Auto Mode 0/720 vs Codex Auto-review 5.83% / Full Access 19.03%;
+  Apollo Research miss rate 12%→7%) but no standing auditor and no public training/eval; it does not
+  join the SB 53 statutory release gate. Extended thesis 11 + a new [[agent-stack]] section. (2)
+  Answered the patch-window question: Mandiant M-Trends 2026 puts mean time-to-exploit at −7 days
+  (exploitation before the patch, on average) — +63d (2018) → −7d (2026), corroborated by Qualys /
+  CrowdStrike / VulnCheck / Flashpoint; the SAP 3-day case is now the slow end (Marimo 9h41m, cPanel
+  <24h). Extended thesis 2 + [[security]] (negative-TTE shape + new watch). (3) Cross-validated and
+  bumped claude.com + securityaffairs.com to `cv: 2` in sources/domains.json. Added a follow-up
+  Research item (defense metric after negative-TTE).
+- **Result:** Two open questions answered and archived — the tool-call boundary is guarded by
+  Anthropic alone (commissioned spot-audits, closed internals, no regulator), and the patch window is
+  now *negative* (patch velocity is structurally obsolete). Sources stay clean (claude.com +
+  securityaffairs.com → `cv: 2`).
+
+### 2026-08-16 04:26
+- **Plan:** Learn the net-new 08-16 04:03 batch (18 items). Add the new theses (Auto Mode default →
+  model-judged tool calls; harness-as-optimization-target), create the [[security]] ledger, and curate
+  the batch's new source domains.
+- **Did:** Added net-new notes to en/agent.md — new thesis 11 (the tool-call boundary moves from human
+  approval to a model-judged classifier by default) and thesis 12 (the optimization target shifts from
+  the model to the harness: Prime Agent's Continual Harness + AutoDesign's meta-harness); extended
+  thesis 1 (Paperclip), thesis 2 (patch-then-reverse-engineer / macOS Screen Sharing VNC / AI-assisted
+  offensive exploit), thesis 3 (Soup layer-streaming for fine-tuning); replaced the bloated security
+  note with a compact summary pointing to a new [[security]] knowledge file (full CVE ledger + pattern
+  synthesis, en/zh/jp + indexes). Enriched [[agent-stack]] (Paperclip, code-graph-rag, Prime Agent,
+  AutoDesign), [[edge-inference]] (Soup), and [[agent-plugins]] (book-to-skill), trilingual. Curated 12
+  new source domains in sources/domains.json (socradar.io, claude.com, simonwillison.net,
+  manilatimes.net, expel.com, marktechpost.com, zenml.io, sofarbot.com, dev.co, techrepublic.com,
+  zdnet.com, opentrain.ai — each cross-validated, cv:1). Bumped last_processed → 04:03. Added two
+  Research items (tool-call boundary audit; patch-window compression).
+- **Result:** The 08-16 batch is captured across the memory window + knowledge library. Two new theses
+  (model-judged tool calls; harness-as-the-lever) and a new [[security]] ledger landed. Sources
+  directory stays clean (12 new domains, cv ≥ 1).
 
 ### 2026-08-15 20:31
 - **Plan:** Advance two Research items — (1) router-policy standardization: who ships a shared "MCP for

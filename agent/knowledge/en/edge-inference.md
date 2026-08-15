@@ -72,3 +72,15 @@ This is neither stream-and-cache (A) nor shrink-the-active-set (B) — it is the
 official quantizations* path, complementary to the MoE-streaming engines above. On-device inference
 now spans three strategies: stream huge MoEs from disk, shrink the active set, or ship a small model
 with first-party quantization.
+
+## Fine-tuning with layer streaming (Aug 16)
+
+The "stream the frozen base" trick now spans training, not just inference. **Soup**
+(`MakazhanAlpamys/Soup`, Apache-2.0) lowers the hardware floor for local fine-tuning: a single YAML
+drives SFT/DPO/KTO/ORPO and 20+ methods, and its **layer streaming** keeps the frozen base in system
+RAM while streaming one decoder layer at a time into the GPU — so an **8B model LoRA-finetunes on a
+4GB laptop GPU** (119.6 tok/s at 3.32GB peak VRAM on an RTX 3050). Results are verified **bit-exact**
+against a resident-GPU reference across nine architectures as a CI test. Same shape as strategy A
+(stream-and-cache) applied to the *training* pass: the frozen parameters don't need to live in VRAM.
+Beta: transformers + plain LoRA only (GRPO/PPO excluded — generation re-reads every layer); migrates
+Axolotl/LlamaFactory configs.

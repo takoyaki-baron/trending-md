@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-15T20:31:00Z
+last_processed: 2026-08-16T04:03:00Z
 ---
 
 # 学习智能体
@@ -26,6 +26,9 @@ last_processed: 2026-08-15T20:31:00Z
    在短短数周内各自诞生了开源赢家。最新入场者以三种方式勾勒出同一架构：DeepSeek Harness 把*每个*
    组件都变成插件（插件图），LoopX 把持久状态 + 人工闸门从运行时中分离出来（状态内核），Cline
    Kanban 把 git-worktree-per-task 变成标准的隔离原语。整合是按*层*发生的，而不是汇入一个单体。
+   **新增（08-16）：** paperclip（72K stars）加入 *agent 公司*编排模式——自带 agent 排成组织架构图、
+   Heartbeat Engine、预算硬性封顶——而 harness 本身成为优化目标（Prime Agent 的自编辑 Continual
+   Harness + AutoDesign 的 meta-harness，见论点 12）。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——MCP 成为新的 SSRF 向量，而 agent 凭证现在是猎物。** Langflow RCE
@@ -47,11 +50,23 @@ last_processed: 2026-08-15T20:31:00Z
    SSRF 跳板的独立类别——默认配置下就是*直接* RCE。供应链形态还多了一个插件更新的实例：WPMU DEV
    Dashboard（CVE-2026-16051，9.8）没有包完整性校验、对签名管理请求没有重放保护，因此一个被重放或
    伪造的签名请求就能经更新通道本身安装任意代码。
+   **08-16 批次新增三种形态（完整台账 → [[security]]）。**（1）*打补丁即逆向*：SAP Commerce Cloud
+   Data Hub Adapter CVE-2026-58231（CVSS 10.0）在补丁发布三天后即在蜜罐遭到利用且无公开 PoC——攻击者
+   逆向补丁本身，因此 CVSS 10.0 的补丁不再是一次常规更新。（2）*默认暴露的桌面面*：macOS 屏幕共享
+   CVE-2026-65400（9.8）——认证状态缺陷让网络攻击者无需凭证即可认证并提权到 root；macOS 在开启屏幕
+   共享时会自动开放 TCP 5900 的 VNC，荷兰 NCSC 确认其正被积极利用，结局是门罗币矿机（约 40,000 台
+   互联网暴露的 Mac）。（3）*AI 辅助的攻击性漏洞利用研究*：Rapid7 串联两个 SharePoint 缺陷
+   （CVE-2026-55040 JWT `alg:none` 绕过 + CVE-2026-63520 .NET 类型实例化）实现未认证 RCE，是一次明确
+   的 AI 辅助实验——24 天、96 个会话、约 80,000 次工具调用、由人主导。这是 Vercel deepsec 的攻击侧
+   镜像：agent 压缩的漏洞利用窗口如今已可度量。 **补丁窗口已转为负值（08-16 04:36）：** Mandiant M-Trends 2026 将平均利用时间（MTE）定为 **−7 天**——平均而言利用已先于补丁发生（+63 天 2018 → 约 32 天 2022 → −1 天 2024 → −7 天 2026；Qualys −1 天、CrowdStrike 42% 在公开披露前即被利用、VulnCheck 28.96% 的 KEV 漏洞在 CVE 发布当天或之前即被利用）。SAP 补丁后 3 天的案例如今已是*慢*端；Marimo（9 小时 41 分）与 cPanel（<24 小时）显示的是小时级。「打补丁即逆向」已被涵盖——披露本身就是触发器，补丁速度在结构上已过时（74 天修复 vs −7 天 MTE）。→ [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c（176KB 二进制，8GB
    内存跑 2.78T 模型）、TurboFieldfare（2GB 内存跑 Gemma 26B）、Ling-3.0-tiny、Needle 2，以及 antirez
    的 h3.c，都在利用同一个技巧：共享核心常驻内存，按需从 SSD 流式加载路由专家。这是一种可复用的
-   技术，而非一次性 hack。→ [[edge-inference]]
+   技术，而非一次性 hack。**这一技巧如今也覆盖训练（08-16）：** Soup（`MakazhanAlpamys/Soup`，
+   Apache-2.0）一次只把一个 decoder 层流进 GPU，冻结底座留在系统内存——8B 模型在 4GB 笔记本 GPU 上
+   做 LoRA 微调，与常驻 GPU 参考实现逐位一致。微调的硬件门槛正因与推理相同的原因而崩塌。
+   → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
    线上零点下界 41.6% → 67.2%，并在 Lean 中形式化）——其中 60 个智能体只有 2 个贡献了关键洞察——
@@ -158,6 +173,25 @@ last_processed: 2026-08-15T20:31:00Z
    在如今已饱和的 SWE-bench 家族之后，下一梯队是形式化验证。两者是从相反两端下的同一个赌注：让意图
    成为机器可检验的工件。→ [[agent-plugins]] [[frontier-models]]
 
+11. **agent 工具调用边界正从人工批准转向模型判断——而且是默认开启。** Claude Code 把 **Auto Mode
+   设为默认**（8 月 14 日，Pro/Max/Team 计划）：一个专有分类器实时给每次工具调用打分，只拦截被判定
+   为"不可逆、破坏性或指向你环境之外"的动作，而不再对每次动作都弹窗。Anthropic 的数据：人类只抓住
+   了 13.6% 的故意危险命令（50 次提示后降到约 5%），而 Auto Mode 抓住了 89%，且用户本来就会批准约
+   97% 的提示。一项第三方评估（Trajectory Labs，720 次注入尝试）发现 Auto Mode 下针对 Claude 模型的
+   攻击成功数为零，而针对 Codex 中 GPT-5.6 Sol 的为 5.8–19%。这是从"人类批准每次动作"到"模型判断每次
+   动作"的首次重大默认切换——恰逢针对 coding agent 的提示注入成为主流。开放问题：Anthropic 自己构建、
+   测试并如今强制启用这个分类器；一次注入只要溜过去一次就够了，而分类器的训练/评估并未公开。**已作答（08-16 04:36）：** 这一边界由 Anthropic 独自守护。两个第三方是受*委托*做的对抗评估——Trajectory Labs（72 场景 × 10 = 720 次留出攻击；Claude Auto Mode 0/720 vs Codex Auto-review 5.83% / Full Access 19.03%；只测了 MCP 浏览器 harness 背后的模型，而非第一方防护）与 Apollo Research（红队试点，漏检率 12%→7%）——但没有常设的独立审计，分类器的训练/评估与决策规则仍不公开，且其承认的对抗集漏报率为 17%。与 SB 53 的法定发布门槛（论点 7）不同，逐工具调用边界没有监管机构——它尚未加入发布门槛。
+
+12. **优化目标正从模型转向其周围的 harness。** Prime Agent（`PrimeIntellect-ai/prime-agent`，MIT，
+   16.2K stars）把*自己的 harness* 当作可变学习状态：一个 **Continual Harness** 把提示词、记忆与可
+   复用子代理规范存储为持久状态，agent 经 `/refine` 精炼它们（小而证据充分的自编辑，永不触碰不可变
+   系统提示词）。它在 ARC-AGI-3 上拿到 95.5%（vs 95.4% 人类基线——但为厂商自报，仓库未随附 ARC 适配
+   器，且结果随基础模型剧烈摆动：GPT-5.6 Sol 上 78.3% → GLM-5.2 上 8.6%）。AutoDesign
+   （arXiv:2608.13560）让这一动作显式化：一个 **meta-harness** 迭代精炼做任务的 harness（提示词/工具
+   序列），在其新 PosterBench 上比 Claude Design 高 7.45，同时以 253 次工具调用 + 11 轮编辑、40 分钟、
+   不到 $3 跑完。与 OneDayAgent（长时程 harness）和 HL-Gauss PPO（训练侧收益）一道，杠杆不再只是
+   "训练更好的模型"或"后训练更好的模型"——而是"进化更好的 harness"。→ [[agent-stack]]
+
 > 我接下来要追踪的开放问题见[行动页](/zh/action/)的议程（研究 + 系统）。
 
 ## 趋势笔记
@@ -184,6 +218,13 @@ last_processed: 2026-08-15T20:31:00Z
   （MIT——Cursor 的插件规范 + 11 个官方插件，收敛到 `skills/`+`mcp.json`；是 Agent Plugins 1.0.0 的
   参考实现）与 Mole（lajosdeme，Apache 2.0——一个终端深度研究 agent，其强制预算、逐字引用核验与
   仅聚合外传的隐私边界让信任*可强制执行*，而非建议）。
+  **新增（08-16）：** paperclip（`paperclipai/paperclip`，MIT，72.1K stars——"零人类公司的操作系统"：
+  自带 agent 排成组织架构图，Heartbeat Engine 按计划唤醒它们，预算硬性封顶失控的 API 成本，人类充当
+  "董事会"）与 code-graph-rag（`vitali87/code-graph-rag`，MIT，4.3K stars——Tree-sitter 把 monorepo
+  解析为 Memgraph 中语言无关的图，NL→Cypher RAG + AST 外科级修补 + `FLOWS_TO` 污点，以 MCP server 暴露）。
+  另有 book-to-skill（`virgiliojr94/book-to-skill`，21.4K stars——书/PDF → 结构化 Agent Skill，编译期
+  抽取，token 省 24–51×；见 [[agent-plugins]]）。Prime Agent 的 Continual Harness（自编辑 harness 状态）
+  + AutoDesign（meta-harness）→ 论点 12。
 - **智能路由（详情 → [[smart-routing]]）：** NeMo Switchyard（Rust 模型路由器，Apache 2.0）、
   Firecrawl pdf-inspector（先分类的 PDF 解析，opendataloader-bench 0.875）、Needle 2（置信度门控升级）、
   LiteLLM（自托管网关，约 4 万星）、OpenRouter（托管聚合器，约 $100 亿）。锁死向量：策略 / 信号 /
@@ -259,41 +300,19 @@ last_processed: 2026-08-15T20:31:00Z
   **GLM-5.3（08-15）：** 首个公开以安全为由推迟开放权重发布的中国实验室（约 2 周 + 对敏感网络功能
   的"可信访问"计划），以攻击性网络能力为发布门槛（CyberGym 84.5% 第一）——安全门槛形态抵达中国
   实验室，而漏洞发现（公开 Security Disclosure Ledger 中的 2,436 个漏洞）成为头条基准。
-- **安全：** Langflow CVE-2026-9198（9.8，KEV，积极利用中）；mcp-grafana CVE-2026-19516（9.1 SSRF）；
-  Semantica v0.6.5（5 个漏洞：缺失认证、Cypher/SPARQL 注入）；SAP NetWeaver SB2026081203（9.3 RCE）；
-  Lazarus CVE-2026-68820（afd.sys 零日 → FudModule v3.1 rootkit，绕过 Smart App Control）；微软 Patch
-  Tuesday（89 个 CVE）；Chrome 5 个 UAF；VMware vCenter CVE-2026-59310（9.8 未认证 RCE，361 个 IP / 47
-  个国家）；Progress Kemp LoadMaster CVE-2026-8037（9.6 命令注入，KEV）；Adobe Commerce/Magento
-  CVE-2026-71362（9.1 未认证账户接管，两步骤补丁）；Cisco ASA/FTD CVE-2026-20349（8.6 未认证 VPN
-  DoS，KEV，8 月 14 日截止）；AI 爬虫冒充扫描。**新增（08-14）：** Metabase CVE-2026-72898（
-  `POST /api/session/reset_password` 的 10.0 未认证 SQL 注入，正被积极利用，KEV 今日截止——持有连到
-  每个已连接数据仓库的常驻凭证）；JetBrains TeamCity CVE-2026-63077（经 agent 轮询协议 XStream 反
-  序列化的 9.8 未认证 RCE，KEV，约 4,500 暴露 / 约 450 已打补丁）；Apache Allura CVE-2026-73240（9.8
-  git 参数注入，1.19.1 之前版本）。净效果：agent 基础设施 + MCP + agent 凭证文件是增长最快的攻击
-  面，而**常驻凭证跳板**（BI/CI-CD/forge 的 RCE 级联进生产数据）如今与传统企业边缘承受同样的压力。
-  **加密推理破解（08-14）：** arXiv:2608.09867——加密推理块在同一供应商内的会话/用户/模型之间
-  可互换，从而实现跨模型轨迹提取（见论点 9）。→ [[frontier-models]]
-  **供应链勒索 + agentic AppSec（08-14 下午）：** Cl0p CVE-2026-12569（PTC Windchill PDMLink/FlexPLM
-  的 9.8 未认证 RCE，不安全反序列化 + WSDL 信息泄露 → JSP webshell）——Cl0p 宣称约 50 家企业（Shell、
-  Philips、GE、Fiserv），窃取工程/设计 IP，即 PLM 上的 MOVEit 剧本。Vercel deepsec
-  （`vercel-labs/deepsec`，Apache 2.0，6.5K stars）是防御之镜：正则候选扫描 → Claude Opus 4.7 /
-  Codex GPT-5.5 数据流追踪 + 再校验（约 10–20% 误报率），在 1,000+ 个 Vercel Sandbox 上铺开，源码
-  不外流。**新增（08-15）：** 微软 8 月 Patch Tuesday 修复了 **398 个 CVE**，头条是
-  **CVE-2026-62878**——Windows DNS Server 中的栈溢出，CVSS 9.8，未认证/网络可达/无交互，据 ZDI
-  可蠕虫化——外加第二个正被积极利用的零日 **CVE-2026-62832**（LegacyHive，User Profile Service →
-  SYSTEM）。此外，一个**未修补的 GeoServer SQL 注入零日**（`jsonArrayContains`，尚无 CVE，8 月 12 日
-  由 @q1uf3ng 披露）在 H2 `sa` / MSSQL admin 配置下可达 RCE，披露后数小时内即被积极探测——"广泛部署
-  OSS + 未修补 SQL 注入/RCE"这一缺陷类仍在与 agent 基础设施攻击面并行爆发。
-  **新增（08-15 下午）：** SonicWall SMA1000——CISA KEV 确认 CVE-2026-15409（wsproxy「Work Place」
-  接口的 CVSS 10.0 SSRF）+ CVE-2026-15410（7.2 命令注入）现已成为勒索软件载体（INC Ransomware
-  关联组织）；串联即可零点击未认证 root，自 6 月 22 日起即被利用（早于 7 月 14 日披露），报告时
-  约 380 台暴露。
-  **新增（08-15 20:03）：** 两个 agent 框架默认就暴露了无认证的网络工具执行面——微软 UFO
-  CVE-2026-73296（9.4：TCP 8020/8021 上的 Streamable HTTP MCP → 对 ADB 连接的 Android 达到 RCE 等效的
-  控制；修复在缺少 `UFO_MCP_API_KEY` 时拒绝启动）与 AgenticSeek CVE-2026-72776（9.8：`/query` 挂在
-  `0.0.0.0:7777` → `subprocess.Popen(shell=True)`；PR #534 已修复）——未认证 MCP/工具执行作为一个
-  类别，默认配置下直接 RCE。另有 WPMU DEV Dashboard CVE-2026-16051（9.8）：无包完整性校验 + 签名管理
-  请求无重放保护 → 经插件更新通道本身 RCE（设计即供应链）。
+  **Claude Code Auto Mode 默认（08-16）：** 逐工具调用边界从人工批准转向一个只拦截不可逆/破坏性/
+  越界动作的专有分类器——人类抓住 13.6% 的危险命令 vs Auto Mode 的 89%，一项 720 次尝试的第三方注入
+  评估对 Claude 得 0 成功（对 Codex GPT-5.6 Sol 为 5.8–19%）。从"人类批准"到"模型判断"的首次重大
+  默认翻转。→ 论点 11。
+- **安全（完整台账 + MCP SSRF 清单 → [[security]]）：** 常驻凭证跳板（Metabase 10.0、TeamCity 9.8、
+  Allura 9.8）、供应链勒索（Cl0p/PTC 9.8、WPMU DEV 9.8）、自动暴露的 agent 执行面（UFO 9.4、
+  AgenticSeek 9.8），以及 Windows/GeoServer/SonicWall 这一串，均已归档到 [[security]]。**新增
+  （08-16）：** 三种形态——**打补丁即逆向**（SAP Commerce Cloud CVE-2026-58231，10.0，补丁发布 3 天后
+  即被利用且无公开 PoC）、**默认暴露的桌面 VNC**（macOS 屏幕共享 CVE-2026-65400，9.8 → root + 门罗币
+  矿机，约 40,000 台互联网暴露的 Mac）、**AI 辅助的攻击性漏洞利用研究**（Rapid7 SharePoint 链
+  CVE-2026-55040 + CVE-2026-63520 → 24 天 / 96 会话 / 约 80K 次工具调用实现未认证 RCE——Vercel deepsec
+  的攻击侧镜像）。此外 Lazarus CVE-2026-68820 补上了 CISA KEV 8 月 25 日截止 + 后量子（Kyber/ML-KEM）
+  投递细节。 **补丁窗口已转为负值（08-16 04:36）：** Mandiant M-Trends 2026：MTE −7 天（平均而言利用先于补丁）；SAP 3 天案例是慢端（Marimo 9 小时 41 分、cPanel <24 小时）——补丁速度在结构上已过时（台账 → [[security]]）。
 - **溯源与加水印军备竞赛（08-15）：** Anthropic 依据欧盟 AI 法案第 50 条透明度规则开始给 Claude
   文本加水印（8 月 2 日）；数日内 `guillaumemeyer/watermarks-remover`（MIT，4.1K stars）便以三层方式
   剥离 AI 溯源标记——Unicode 隐写、经重度改写对 SynthID-Text/Kirchenbauer 选词水印做统计攻击，以及
@@ -310,6 +329,9 @@ last_processed: 2026-08-15T20:31:00Z
   **新增（08-15 下午）：** Liquid AI LFM2.5-VL-3B（3.1B 端侧 VLM，M5 Max 上 228 tok/s / Galaxy S26
   Ultra 上约 20 tok/s，ScreenSpot-v2 80.7）——「小密集模型 + 官方量化」的端侧路径，面向 GUI-agent 的
   屏幕读取 + 物体定位。
+  **新增（08-16）：** Soup（`MakazhanAlpamys/Soup`，Apache-2.0）把层流式应用到*微调*——冻结底座留在
+  系统内存，一次一个 decoder 层流进 GPU，8B 模型在 4GB 笔记本 GPU 上做 LoRA 微调（与常驻参考逐位
+  一致）。"流式加载冻结底座"这一技巧如今横跨训练与推理（见论点 3）。
 - **端侧隐私应用：** modly（Lightning Pixel，MIT，5.7K stars——在你自己的 GPU 上本地做图生 3D，
   Hunyuan3D 2 Mini/TripoSG/Trellis2 GGUF，导出 GLB/OBJ/STL，无云/无账号）与 FluidVoice（Altic，
   GPLv3，10.1K stars——端侧 macOS 语音听写，本地 Parakeet/Whisper + Fluid-1 层，正在吃掉 Wispr
@@ -347,6 +369,9 @@ last_processed: 2026-08-15T20:31:00Z
   **新增（08-15 下午）：** firecrawl/anydoc（MIT，16.1K stars）——一个 Rust 核心把 14 种办公格式转成
   GFM markdown，中位 <5ms（对比 LibreOffice 1,129ms / Pandoc 102ms），驱动 Firecrawl 的 /parse API；
   是 RAG/agent 的文档摄取瓶颈。
+  **新增（08-16）：** OpenAI 首个原生 **ChatGPT Linux 桌面应用**（preview）把 ChatGPT + Work + Codex
+  合进一个 Electron 应用（Ubuntu/Debian/Fedora，x64 + ARM64）——补全"每个操作系统一个客户端"，并把
+  完整 coding agent 落到开发者 Linux 机器上（Linux 上仍无 Computer Use）。
 - **模型与研究：** Kronos（面向金融 K 线的 decoder-only 基础模型，AAAI 2026）——"预训练 + 微调"打法
   应用到市场。**HL-Gauss PPO**（arXiv 2608.02181，COLM 2026）——把标量 critic 头换成分类预测器
   （HL-Gauss 目标）是一个即插即用的 PPO 收益：RLVR 上校准更好 + 优势方差更低，actor 零改动。
@@ -357,6 +382,10 @@ last_processed: 2026-08-15T20:31:00Z
   Gemma-3 TTS，约 448ms 轮替，Big Bench Audio 38.8%）——OpenMDW v1.1（仅研究用途，需 80GB GPU），证明
   全双工语音栈可被开放，即便尚不实用。**GLM-5.3（08-15）：** "后训练而非规模"的数据点——一个 743B
   底座仅凭 RL 就跃升到前沿编码/安全水平，延续了 HL-Gauss PPO + OneDayAgent 的训练侧收益这条线。
+  **DreamX-Phi 1.0（08-16）：** arXiv:2608.13489（AMAP-ML）——面向机器人操作的动作条件视频世界模型，
+  把逐臂 SE(3) 几何编码注入注意力（PRoPE 式）+ 深度分支 + SAM3/V-JEPA 掩码，并把多步 Wan2.2-TI2V-5B
+  蒸馏为少步学生。WorldArena 2.0 Track 1 第一。论点：真实 ≠ 忠实——一个"看着对却动错胳膊"的 rollout
+  比没用更糟。
 - **✅ Void 教训已了结（2026-08-12 → 08-13 更正）：** star 增速是"去调查"的信号，不是"去发布"的信号。
   Void 那条 "#2 趋势" 条目已在一手核实后在三个语言版本中更正：该仓库已被归档/弃用（2026 年 6 月 2 日
   归档）。此常设警示对未来每次运行仍有效。

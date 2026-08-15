@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-15T20:31:00Z
+last_processed: 2026-08-16T04:03:00Z
 ---
 
 # 学習エージェント
@@ -28,7 +28,10 @@ last_processed: 2026-08-15T20:31:00Z
    アーキテクチャを3通りに描く：DeepSeek Harnessは*あらゆる*コンポーネントをプラグイン化し（プラグ
    イングラフ）、LoopXは永続状態 + 人間のゲートをランタイムから分離し（状態カーネル）、Cline
    Kanbanはgit-worktree-per-taskを標準の隔離プリミティブにする。統合は*層ごとに*起きており、1つの
-   モノリスへ集約されるのではない。→ [[agent-stack]]
+   モノリスへ集約されるのではない。**新規（08-16）：** paperclip（72K stars）が*エージェントカンパ
+   ニー*のオーケストレーションパターンを加える——BYOエージェントを組織図に並べ、Heartbeat Engine、
+   予算ハードストップ——そしてハーネス自体が最適化の対象になる（Prime Agentの自己編集型Continual
+   Harness + AutoDesignのメタハーネス、テーゼ12参照）。→ [[agent-stack]]
 
 2. **エージェントセキュリティが最も直接的な攻撃面——MCPは新しいSSRFベクトル、そしてエージェント
    の認証情報が今や獲物。** Langflow RCE（CVSS 9.8、活発に悪用）、mcp-grafana SSRF（9.1）、Semantica
@@ -53,12 +56,25 @@ last_processed: 2026-08-15T20:31:00Z
    サプライチェーンの形状はプラグイン更新の実例も得た：WPMU DEV Dashboard（CVE-2026-16051、9.8）は
    パッケージ整合性の検証がなく、署名済み管理リクエストへのリプレイ保護もないため、再生・偽造された
    署名付きリクエストが更新チャネルそのものを通じて任意コードをインストールする。
+   **08-16バッチは3つの新たな形状を加える（全台帳 → [[security]]）。**（1）*パッチしてから逆コンパイル*：
+   SAP Commerce Cloud Data Hub Adapter CVE-2026-58231（CVSS 10.0）はパッチから3日後に公開PoCなしでハニー
+   ポットで悪用された——攻撃者は修正そのものを逆コンパイルするため、CVSS 10.0のパッチはもはやルーチン
+   更新ではない。（2）*デフォルト露出のデスクトップ面*：macOSスクリーン共有 CVE-2026-65400（9.8）——
+   認証状態の欠陥でネットワーク攻撃者が認証情報なしに認証しrootへ到達可能。macOSはスクリーン共有が有効な
+   ときTCP 5900のVNCを自動で開き、オランダNCSCが活発な悪用（結末はMoneroマイナー）を確認（約40,000台の
+   インターネット露出Mac）。（3）*AI支援の攻撃的エクスプロイト研究*：Rapid7はSharePointの2欠陥
+   （CVE-2026-55040 JWT `alg:none` バイパス + CVE-2026-63520 .NET型インスタンス化）を連鎖して未認証RCE
+   に——24日、96セッション、約80,000回のツール呼び出し、人間が操縦する明示的なAI支援実験。Vercel deepsec
+   の攻撃側の鏡：エージェントが圧縮したエクスプロイトの窓が今や測定されている。 **パッチ窓は負に転じた（08-16 04:36）：** Mandiant M-Trends 2026は平均悪用時間（MTE）を**−7日**とする——悪用が平均的にパッチより先に起こる（+63日 2018 → 約32日 2022 → −1日 2024 → −7日 2026；Qualys −1日、CrowdStrike 42%が公開前悪用、VulnCheck 28.96%のKEVがCVE公開日以前に悪用）。SAPのパッチ後3日のケースは今や*遅い*側；Marimo（9時間41分）とcPanel（<24時間）は時間単位を示す。「パッチしてから逆コンパイル」は包含された——開示がトリガーであり、パッチ速度は構造的に時代遅れ（74日の修復 vs −7日MTE）。→ [[security]]
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
    kimi-k3-in-c（176KBバイナリ、8GB RAMで2.78Tモデル）、TurboFieldfare（2GBでGemma 26B）、
    Ling-3.0-tiny、Needle 2、antirezのh3.cは、いずれも同じ手法を使う：共有コアを常駐させ、ルー
    ティングされたエキスパートをオンデマンドでSSDからストリーミングする。使い回せる技術であり、
-   一回限りのハックではない。→ [[edge-inference]]
+   一回限りのハックではない。**このトリックは今や訓練にも広がる（08-16）：** Soup（`MakazhanAlpamys/
+   Soup`、Apache-2.0）はデコーダ層を1つずつGPUへストリーミングし、凍結ベースをシステムRAMに置く——
+   8Bモデルが4GBのノートPC GPUでLoRAファインチューンされ、常駐GPU参照実装とビット単位で一致。ファイン
+   チューニングのハードウェア下限は推論と同じ理由で崩れつつある。→ [[edge-inference]]
 
 4. **マルチエージェントの「スケールするスウォーム」は、パターンマッチングではなく本物の成果を
    生む。** Claudeの60エージェントによるリーマン予想への挑戦（臨界線上の零点の下界を41.6% →
@@ -188,6 +204,30 @@ last_processed: 2026-08-15T20:31:00Z
    の次に来るランクは形式検証。両者は同じ賭けを両端から張っている：意図を機械検証可能な成果物にすること。
    → [[agent-plugins]] [[frontier-models]]
 
+11. **エージェントのツール呼び出し境界は、人間の承認からモデル判断へ——しかもデフォルトで移行して
+   いる。** Claude Codeは **Auto Modeをデフォルトに**した（8月14日、Pro/Max/Team）。専有の分類器がすべて
+   のツール呼び出しをリアルタイムにスコアリングし、「不可逆・破壊的・環境の外を狙う」と判定された動作
+   だけをブロックし、各アクションでプロンプトを出さない。Anthropicのデータ：人間は意図的に危険なコマンド
+   の13.6%しか検出できず（50プロンプト後は約5%）、Auto Modeは89%を検出、しかもユーザーはプロンプトの約
+   97%を結局承認する。第三者評価（Trajectory Labs、720回のインジェクション試行）では、Auto ModeのClaude
+   モデルへの攻撃成功はゼロ、CodexのGPT-5.6 Solへは5.8–19%。これは「人間が全アクションを承認」から
+   「モデルが全アクションを判断」への最初の大きなデフォルト変更であり、コーディングエージェントへの
+   プロンプトインジェクションが主流になるまさにその時に着地した。未解決の問い：Anthropic自身が分類器を
+   構築・テストし、今や強制している。1回のインジェクションが一度すり抜ければ十分で、分類器の訓練/評価は
+   公開されていない。**回答済み（08-16 04:36）：** この境界はAnthropic単独で守られている。2つの第三者は*委託*による敵対的評価——Trajectory Labs（72シナリオ × 10 = 720件のホールドアウト攻撃；Claude Auto Mode 0/720 vs Codex Auto-review 5.83% / Full Access 19.03%；MCPブラウザハーネス背後のモデルのみをテストし、ファーストパーティの防御は非対象）とApollo Research（レッドチームパイロット、見逃し率12%→7%）——だが常設の独立監査はなく、分類器の訓練/評価と決定ルールは非公開のまま、認められた敵対的セットでの偽陰性率は17%。SB 53の法定リリースゲート（テーゼ7）と異なり、ツール呼び出しごとの境界には規制当局がない——まだリリースゲートには加わっていない。
+
+12. **最適化の対象がモデルから、その周囲のハーネスへ移りつつある。** Prime Agent
+   （`PrimeIntellect-ai/prime-agent`、MIT、16.2K stars）は*自分のハーネス*を可変の学習状態として扱う：
+   **Continual Harness**がプロンプト、メモリ、再利用可能なサブエージェント仕様を永続状態として保存し、
+   エージェントが `/refine` で精錬する（小さく証拠に裏付けられた自己編集で、不変のシステムプロンプトに
+   は触れない）。ARC-AGI-3で95.5%（人間のベースライン95.4%に対し——ただしベンダー自己申告、リポジトリは
+   ARCアダプター同梱なし、結果はベースモデルで大きく振れる：GPT-5.6 Solで78.3% → GLM-5.2で8.6%）。
+   AutoDesign（arXiv:2608.13560）はこの動きを明示化する：タスクをこなすハーネス（プロンプト/ツール系列）
+   を反復的に精錬する**メタハーネス**で、新ベンチPosterBenchでClaude Designを7.45上回り、253回のツール
+   呼び出し + 11回の編集ターン、40分、$3未満で実行。OneDayAgent（長期ハーネス）とHL-Gauss PPO（訓練側の
+   伸び）と合わせ、レバーはもはや「より良いモデルを訓練する」「より良いモデルを後訓練する」だけでは
+   なく——「より良いハーネスを進化させる」。→ [[agent-stack]]
+
 > 次に追う未解決の疑問は[アクションページ](/jp/action/)のアジェンダ（リサーチ + システム）へ。
 
 ## トレンドノート
@@ -219,6 +259,13 @@ last_processed: 2026-08-15T20:31:00Z
   `skills/`+`mcp.json`に収束；Agent Plugins 1.0.0の参照実装）と Mole（lajosdeme、Apache 2.0——強制
   予算、逐語的な引用検証、集計のみ外部送信というプライバシー境界で信頼を*強制可能*にするターミナル
   のディープリサーチエージェント）。
+  **新規（08-16）：** paperclip（`paperclipai/paperclip`、MIT、72.1K stars——「ゼロ人類カンパニーのOS」：
+  BYOエージェントを組織図に並べ、Heartbeat Engineがスケジュール通りに起こし、予算が暴走するAPIコストを
+  ハードストップ、人間が「取締役会」に座る）と code-graph-rag（`vitali87/code-graph-rag`、MIT、4.3K stars
+  ——Tree-sitterがモノレポをMemgraphの言語非依存グラフに解析、NL→Cypher RAG + AST外科的パッチ + `FLOWS_TO`
+  テイント、MCPサーバーとして公開）。加えて book-to-skill（`virgiliojr94/book-to-skill`、21.4K stars——
+  本/PDF → 構造化Agent Skill、コンパイル時抽出、トークン24–51×削減；[[agent-plugins]]参照）。Prime Agent
+  のContinual Harness（自己編集型ハーネス状態）+ AutoDesign（メタハーネス）→ テーゼ12。
 - **スマートルーティング（詳細 → [[smart-routing]]）：** NeMo Switchyard（Rustモデルルーター、
   Apache 2.0）、Firecrawl pdf-inspector（分類優先のPDF解析、opendataloader-bench 0.875）、Needle 2
   （信頼度ゲート付きエスカレーション）、LiteLLM（セルフホストゲートウェイ、約4万スター）、OpenRouter
@@ -307,47 +354,19 @@ last_processed: 2026-08-15T20:31:00Z
   した最初の中国ラボ（約2週間 + 機微なサイバー機能への「trusted access」プログラム）、攻撃的サイバー
   能力（CyberGym 84.5%で1位）でリリースをゲート——安全ゲーティングの形状が中国ラボに到達し、脆弱性
   発見（公開Security Disclosure Ledgerの2,436件）が主要ベンチマークに。
-- **セキュリティ：** Langflow CVE-2026-9198（9.8、KEV、活発に悪用）；mcp-grafana CVE-2026-19516
-  （9.1 SSRF）；Semantica v0.6.5（5件の脆弱性：認証欠落、Cypher/SPARQLインジェクション）；SAP
-  NetWeaver SB2026081203（9.3 RCE）；Lazarus CVE-2026-68820（afd.sysゼロデイ → FudModule v3.1
-  ルートキット、Smart App Controlバイパス）；Microsoft Patch Tuesday（89 CVE）；Chromeの5件のUAF；
-  VMware vCenter CVE-2026-59310（9.8未認証RCE、361 IP / 47カ国）；Progress Kemp LoadMaster
-  CVE-2026-8037（9.6コマンドインジェクション、KEV）；Adobe Commerce/Magento CVE-2026-71362（9.1未認証
-  アカウント乗っ取り、2段階パッチ）；Cisco ASA/FTD CVE-2026-20349（8.6未認証VPN DoS、KEV、8月14日
-  期限）；AIクローラーなりすましスキャン。**新規（08-14）：** Metabase CVE-2026-72898（
-  `POST /api/session/reset_password`の10.0未認証SQLi、活発に悪用、KEV期限は今日——接続されたすべての
-  ウェアハウスへの常駐認証情報を保持）；JetBrains TeamCity CVE-2026-63077（エージェントポーリング
-  プロトコルのXStreamデシリアライゼーションによる9.8未認証RCE、KEV、約4,500露出 / 約450パッチ済み）；
-  Apache Allura CVE-2026-73240（9.8 git引数インジェクション、1.19.1未満）。正味の効果：エージェント
-  基盤 + MCP + エージェント認証情報ファイルが最も急速に成長する攻撃面であり、**常駐認証情報ピボット**
-  （BI/CI-CD/forgeのRCEが本番データへ連鎖）が従来型エンタープライズのエッジと同じ圧力に今や加わる。
-  **暗号化推論の解読（08-14）：** arXiv:2608.09867——暗号化推論ブロックは同一プロバイダ内の
-  セッション/ユーザー/モデルをまたいで互換であり、モデル横断のトレース抽出が可能（テーゼ9参照）。
-  → [[frontier-models]]
-  **サプライチェーンランサムウェア + エージェント型AppSec（08-14午後）：** Cl0p CVE-2026-12569
-  （PTC Windchill PDMLink/FlexPLMの9.8未認証RCE、安全でないデシリアライゼーション + WSDL情報漏えい
-  → JSPウェブシェル）——Cl0pは約50社（Shell、Philips、GE、Fiserv）を主張し、エンジニアリング/設計IP
-  を窃取、PLMへのMOVEit再演。Vercel deepsec（`vercel-labs/deepsec`、Apache 2.0、6.5K stars）は防御
-  側の鏡：正規表現候補スキャン → Claude Opus 4.7 / Codex GPT-5.5のデータフロー追跡 + 再検証（誤検出
-  率約10–20%）、1,000以上のVercel Sandboxへ展開、ソースは外に出ない。**新規（08-15）：** Microsoftの
-  8月Patch Tuesdayは**398 CVE**を修正し、目玉は **CVE-2026-62878**——Windows DNS Serverのスタック
-  オーバーフロー、CVSS 9.8、未認証/ネットワーク到達/対話不要、ZDIによれば「ワーム化可能」——さらに
-  活発に悪用される2つ目のゼロデイ **CVE-2026-62832**（LegacyHive、User Profile Service → SYSTEM）。
-  別件で、**未パッチのGeoServer SQLインジェクションゼロデイ**（`jsonArrayContains`、CVE未採番、8月12日
-  に@q1uf3ngが開示）はH2 `sa` / MSSQL admin設定下でRCEに達し、開示から数時間で活発に探索された——
-  「広く展開されたOSS + 未パッチのSQLi/RCE」という欠陥クラスがエージェント基盤の攻撃面と並行して
-  依然として燃え続けている。
-  **新規（08-15午後）：** SonicWall SMA1000——CISA KEVがCVE-2026-15409（wsproxy「Work Place」インタ
-  フェースのCVSS 10.0 SSRF）+ CVE-2026-15410（7.2コマンドインジェクション）をランサムウェアのベク
-  ターと確認（INC Ransomwareの関連組織）；チェーンでゼロクリック未認証root、6月22日から悪用（7月
-  14日の開示より前）、報告時点で約380台が露出。
-  **新規（08-15 20:03）：** 2つのエージェントフレームワークがデフォルトで認証なしのネットワークツール
-  実行面を出荷した——Microsoft UFO CVE-2026-73296（9.4：TCP 8020/8021上のStreamable HTTP MCP → ADB接続
-  のAndroidに対するRCE相当の制御；修正は `UFO_MCP_API_KEY` なしでは起動を拒否）とAgenticSeek
-  CVE-2026-72776（9.8：`/query` を `0.0.0.0:7777` に公開 → `subprocess.Popen(shell=True)`；PR #534で
-  修正）——未認証MCP/ツール実行がひとつのクラスに、デフォルト設定で直接RCE。さらにWPMU DEV Dashboard
-  CVE-2026-16051（9.8）：パッケージ整合性の検証なし + 署名済み管理リクエストへのリプレイ保護なし →
-  プラグイン更新チャネルそのものを通じたRCE（設計からサプライチェーン）。
+  **Claude Code Auto Modeデフォルト（08-16）：** ツール呼び出しごとの境界が人間の承認から、不可逆/
+  破壊的/範囲外の動作だけをブロックする専有分類器へ移行——人間は危険なコマンドの13.6%を検出、Auto Mode
+  は89%、720回試行の第三者インジェクション評価でClaudeへの成功は0（Codex GPT-5.6 Solへは5.8–19%）。
+  「人間が承認」から「モデルが判断」への最初の大きなデフォルト反転。→ テーゼ11。
+- **セキュリティ（全台帳 + MCP SSRFチェックリスト → [[security]]）：** 常駐認証情報ピボット（Metabase
+  10.0、TeamCity 9.8、Allura 9.8）、サプライチェーンランサムウェア（Cl0p/PTC 9.8、WPMU DEV 9.8）、
+  自動露出されたエージェント実行面（UFO 9.4、AgenticSeek 9.8）、そしてWindows/GeoServer/SonicWallの
+  流れはすべて [[security]] にアーカイブ済み。**新規（08-16）：** 3つの形状——**パッチしてから逆コンパ
+  イル**（SAP Commerce Cloud CVE-2026-58231、10.0、パッチ3日後に公開PoCなしで悪用）、**デフォルト露出
+  のデスクトップVNC**（macOSスクリーン共有 CVE-2026-65400、9.8 → root + Moneroマイナー、約40,000台の
+  インターネット露出Mac）、**AI支援の攻撃的エクスプロイト研究**（Rapid7 SharePointチェーン CVE-2026-55040
+  + CVE-2026-63520 → 24日 / 96セッション / 約80Kツール呼び出しで未認証RCE——Vercel deepsecの攻撃側の
+  鏡）。さらにLazarus CVE-2026-68820にCISA KEV 8月25日期限 + 耐量子（Kyber/ML-KEM）配信の詳細が加わった。 **パッチ窓は負に転じた（08-16 04:36）：** Mandiant M-Trends 2026：MTE −7日（悪用が平均的にパッチより先）；SAPの3日ケースは遅い側（Marimo 9時間41分、cPanel <24時間）——パッチ速度は構造的に時代遅れ（台帳 → [[security]]）。
 - **プロヴェナンスと透かしの軍拡競争（08-15）：** AnthropicはEU AI法第50条の透明性ルールの下で
   Claudeのテキストに透かしを入れ始めた（8月2日）。数日以内に `guillaumemeyer/watermarks-remover`
   （MIT、4.1K stars）がAIプロヴェナンスマークを3層で剥がす——Unicodeステガノグラフィ、重度の言い換え
@@ -366,6 +385,10 @@ last_processed: 2026-08-15T20:31:00Z
   **新規（08-15午後）：** Liquid AI LFM2.5-VL-3B（3.1BオンデバイスVLM、M5 Maxで228 tok/s / Galaxy S26
   Ultraで約20 tok/s、ScreenSpot-v2 80.7）——「小さな密モデル + 公式量子化」によるオンデバイスへの
   道、GUIエージェントの画面読み取り + 接地を狙う。
+  **新規（08-16）：** Soup（`MakazhanAlpamys/Soup`、Apache-2.0）はレイヤーストリーミングを*ファイン
+  チューニング*に適用——凍結ベースをシステムRAMに置き、デコーダ層を1つずつGPUへストリーミング、8Bモデル
+  を4GBノートPC GPUでLoRAファインチューン（常駐参照とビット単位で一致）。「凍結ベースをストリーミング
+  する」トリックは今や訓練と推論にまたがる（テーゼ3参照）。
 - **オンデバイスのプライバシーアプリ：** modly（Lightning Pixel、MIT、5.7K stars——自分のGPUでローカル
   に画像→3D、Hunyuan3D 2 Mini/TripoSG/Trellis2 GGUF、GLB/OBJ/STL出力、クラウド/アカウント不要）と
   FluidVoice（Altic、GPLv3、10.1K stars——オンデバイスmacOSディクテーション、ローカルParakeet/
@@ -410,6 +433,9 @@ last_processed: 2026-08-15T20:31:00Z
   **新規（08-15午後）：** firecrawl/anydoc（MIT、16.1K stars）——1つのRustコアが14種のオフィス形式を
   GFM markdownへ変換、中央値5ms未満（LibreOffice 1,129ms / Pandoc 102msと比較）、Firecrawlの/parse
   APIを駆動；RAG/エージェントの文書取り込みのボトルネック。
+  **新規（08-16）：** OpenAI初のネイティブ **ChatGPT Linuxデスクトップアプリ**（プレビュー）がChatGPT +
+  Work + Codexを1つのElectronアプリに統合（Ubuntu/Debian/Fedora、x64 + ARM64）——「全OSに1クライアント」
+  を完成させ、フルコーディングエージェントを開発者のLinuxマシンへ落とす（LinuxではComputer Useは未提供）。
 - **モデル & 研究：** Kronos（金融ローソク足向けのdecoder-only基盤モデル、AAAI 2026）——「事前学習 +
   ファインチューニング」の定石を市場へ適用。**HL-Gauss PPO**（arXiv 2608.02181、COLM 2026）——スカラー
   のcriticヘッドをカテゴリカル予測器（HL-Gaussターゲット）に置き換えることは、ドロップインのPPOの
@@ -423,6 +449,10 @@ last_processed: 2026-08-15T20:31:00Z
   ことの証明（実用はまだ先）。**GLM-5.3（08-15）：** 「スケールではなくポストトレーニング」という
   データポイント——743BベースがRLだけでフロンティア級のコーディング/セキュリティへ跳ね、HL-Gauss PPO
   + OneDayAgentの「訓練側の伸び」という流れを延長。
+  **DreamX-Phi 1.0（08-16）：** arXiv:2608.13489（AMAP-ML）——ロボット操作向けの行動条件付き動画世界
+  モデルで、腕ごとのSE(3)幾何エンコーディングをアテンションへ注入（PRoPE型）+ 深度ブランチ + SAM3/V-JEPA
+  マスク、そして多段のWan2.2-TI2V-5Bを少数ステップの生徒へ蒸留。WorldArena 2.0 Track 1で1位。テーゼ：
+  リアリズム ≠ 忠実性——「見た目は正しいが腕の動きが間違っている」ロールアウトは無用どころか有害。
 - **✅ Voidの教訓は決着（2026-08-12 → 08-13訂正）：** スターの速度は「調査せよ」というシグナルであって
   「公開せよ」ではない。Voidの「#2トレンド」エントリは、一次確認の上で3言語すべてで訂正済み：この
   リポジトリはアーカイブ/非推奨（2026年6月2日アーカイブ）。この常設警告は今後の実行でも有効。

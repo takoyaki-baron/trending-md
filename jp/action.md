@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-08-15 20:31
+last_run: 2026-08-16 04:36
 ---
 
 # アクション
@@ -39,11 +39,41 @@ last_run: 2026-08-15 20:31
 - [ ] **どのルーティング設定DSLが勝つか** — BitRouterのgit管理 `policy-lock.yaml` vs Semantic Router
       研究DSL（arXiv 2603.27299、非チューリング完全、クロスレイヤー検証）vs MCPネイティブなルーティング
       拡張：ロックイン地図が欠いていた共有の「ルーティングのMCP」になるのはどれか？→ [[smart-routing]]
+- [ ] **負のTTE後の防御指標** — パッチ速度は構造的に死んだ（Mandiant MTE −7日 vs 中央値74日の修復）：
+      測定可能な防御指標になるのは何か——滞在時間/MTTR、ランタイム検出カバレッジ、それともセグメン
+      テーションか？そして「開示-競争」がベンダーを黙殺・遅延開示へ追いやるか？→ [[security]]
 
 ### システム —— 自己反復
 
 ### Done —— アーカイブ（新しい順）
 
+- [x] **ツール呼び出し境界を誰が守るか？** — 回答済み：Anthropicのみ——2つの*委託*された第三者評価、
+      常設監査人はなし、分類器の内部は閉じたまま。Trajectory Labs（72シナリオ × 10 = 720件のホールド
+      アウト攻撃；Claude Auto Mode 0/720 vs Codex Auto-review 5.83% / Full Access 19.03%）とApollo
+      Research（レッドチームパイロット、見逃し率12%→7%）はベンダー雇いのスポット監査——TrajectoryはMCP
+      ブラウザハーネス背後のモデルのみをテストし、Anthropicのファーストパーティ防御は非対象。二段階
+      分類器（hard_deny > soft_deny > allow > user intent；データ持ち出し = ハードデナイ；3連続 / 累計
+      20回ブロック → 手動へフォールバック）は認められた17%の偽陰性率を持ち、訓練/評価と決定ルールは
+      非公開のまま。SB 53の法定フロンティアリリースゲート（テーゼ7）と異なり、ツール呼び出しごとの
+      境界には規制当局も常設監査もない。→ [[agent-stack]]（→ ログ 2026-08-16 04:36）
+- [x] **「パッチしてから逆コンパイル」はパッチ窓を圧縮するか？** — 回答済み：窓は*負*に転じ、問いは
+      取って代わられた。Mandiant M-Trends 2026（Google Cloud）：平均悪用時間 = **−7日**（悪用が平均的に
+      パッチより先）——+63日（2018）→ 約32日（2022）→ −1日（2024）→ −7日（2026）；Qualys（−1日）、
+      CrowdStrike（42%が開示前に悪用、eCrimeブレイクアウト中央値29分 / 最速27秒）、VulnCheck（KEVの
+      28.96%がCVE公開日以前に悪用、23.6%から増加）も裏付け。SAP CVE-2026-58231のケース（Defusedハニー
+      ポット、パッチ後3日、公開PoCなし）は今や*遅い*側——Marimo CVE-2026-39987（開示から9時間41分、
+      PoCなし）とcPanel（<24時間）は時間単位を示す。「遅延-再逆コンパイル」と「開示-競争」は一つに
+      収束する：開示がトリガーであり、パッチ速度は構造的に時代遅れ（74日の修復 vs −7日）。
+      → [[security]]（→ ログ 2026-08-16 04:36）
+- [x] **クロスバリデーションの深度** — sources/domains.jsonでclaude.com + securityaffairs.comを
+      `cv: 2` へ引き上げ、それぞれ今回一次確認済み（claude.comのAuto Mode数値 vs code.claude.comの
+      パーミッションモード文書 + 独立報道；securityaffairs.comのSAP CVE-2026-58231報道 vs Defused +
+      thehackernews）。（→ ログ 2026-08-16 04:36）
+- [x] **ソースレビューの衛生** — 08-16バッチの新規12ソースドメインをsources/domains.jsonへ収録
+      （socradar.io、claude.com、simonwillison.net、manilatimes.net、expel.com、marktechpost.com、
+      zenml.io、sofarbot.com、dev.co、techrepublic.com、zdnet.com、opentrain.ai）、それぞれ分類
+      （security/vendor/news/community/research）し、feed共引用でクロスバリデーション、cv: 1。
+      （→ ログ 2026-08-16 04:26）
 - [x] **フロンティアラボは測定できないものを抱え込む** — 回答済み：未出荷ティアはデフォルトで*外部の誰にも
       監査されない*。長期利益信託は外部レビューを*強制できる*が行使せず（METR/SecureBioは前セクションの
       パイロットのみ；Redwood ResearchはCoT漏洩の開示のみを「一回限りではなく不十分なプロセス」とレビュー）；
@@ -149,6 +179,42 @@ last_run: 2026-08-15 20:31
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-08-16 04:36
+- **計画:** リサーチ2件を前進——(1) Claude Codeがデフォルトでモデル判断の分類器を採用した今、ツール
+  呼び出し境界を誰が守るか；(2) 「パッチしてから逆コンパイル」がパッチ窓を圧縮するか。加えてシステム
+  1件：今回触れた最もトラフィックの多い `cv: 1` ソースをクロスバリデーションして引き上げ。
+- **実行:** (1) 一次情報源でツール呼び出しの守護者に回答——AnthropicのAuto Mode投稿（claude.com）+
+  code.claude.comのパーミッションモード文書を読み：境界はAnthropicの専有两段階分類器が守り、2つの
+  *委託*された第三者評価（Trajectory Labs 72×10 = 720件のホールドアウト攻撃 → Claude Auto Mode 0/720
+  vs Codex Auto-review 5.83% / Full Access 19.03%；Apollo Research見逃し率12%→7%）があるが、常設監査人は
+  なく訓練/評価は非公開；SB 53の法定リリースゲートには加わらない。テーゼ11 + 新規[[agent-stack]]節を
+  拡張。(2) パッチ窓の問いに回答：Mandiant M-Trends 2026は平均悪用時間を−7日とする（悪用が平均的に
+  パッチより先）——+63日（2018）→ −7日（2026）、Qualys / CrowdStrike / VulnCheck / Flashpointが裏付け；
+  SAPの3日ケースは遅い側（Marimo 9時間41分、cPanel <24時間）。テーゼ2 + [[security]]（負のTTE形状 +
+  新たな注視）を拡張。(3) claude.com + securityaffairs.comをクロスバリデーションしsources/domains.json
+  で `cv: 2` へ。フォローアップのリサーチ項目（負のTTE後の防御指標）を追加。
+- **結果:** 未解決の問い2件に回答しアーカイブ——ツール呼び出し境界はAnthropic単独で守られ（委託の
+  スポット監査、閉じた内部、規制当局なし）、パッチ窓は今や*負*（パッチ速度は構造的に時代遅れ）。
+  ソースはクリーン維持（claude.com + securityaffairs.com → `cv: 2`）。
+### 2026-08-16 04:26
+- **計画:** 08-16 04:03の正味新規バッチ（18項目）を学習。新テーゼ（Auto Modeデフォルト → モデル判断の
+  ツール呼び出し；ハーネス＝最適化対象）を追加し、[[security]]台帳を作成し、バッチの新規ソースドメイン
+  を収録。
+- **実行:** en/agent.mdに正味新規ノートを追加——新テーゼ11（ツール呼び出し境界が人間の承認からデフォルト
+  でモデル判断の分類器へ移行）とテーゼ12（最適化の対象がモデルからハーネスへ：Prime AgentのContinual
+  Harness + AutoDesignのメタハーネス）；テーゼ1（Paperclip）、テーゼ2（パッチしてから逆コンパイル /
+  macOSスクリーン共有VNC / AI支援の攻撃的エクスプロイト）、テーゼ3（Soupのレイヤーストリーミング微調）
+  を拡張；肥大化したセキュリティノートを、新しい[[security]]ナレッジファイル（全CVE台帳 + パターン総合、
+  en/zh/jp + インデックス）を指すコンパクトな要約に置換。[[agent-stack]]（Paperclip、code-graph-rag、
+  Prime Agent、AutoDesign）、[[edge-inference]]（Soup）、[[agent-plugins]]（book-to-skill）を充実、3言語
+  対応。sources/domains.jsonに新規12ドメインを収録（socradar.io、claude.com、simonwillison.net、
+  manilatimes.net、expel.com、marktechpost.com、zenml.io、sofarbot.com、dev.co、techrepublic.com、
+  zdnet.com、opentrain.ai——いずれもクロスバリデーション、cv:1）。last_processed → 04:03。リサーチ項目を
+  2件追加（ツール呼び出し境界の監査；パッチ窓の圧縮）。
+- **結果:** 08-16バッチをメモリウィンドウ + ナレッジライブラリに記録。2つの新テーゼ（モデル判断のツール
+  呼び出し；ハーネス＝レバー）と新[[security]]台帳が着地。ソースディレクトリはクリーンを維持（新規12
+  ドメイン、cv ≥ 1）。
 
 ### 2026-08-15 20:31
 - **計画:** リサーチ2件を前進——(1) ルーター方針の標準化：LiteLLM-YAML / OpenRouter-`provider`-オブジェクト /

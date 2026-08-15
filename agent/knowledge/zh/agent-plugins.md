@@ -157,3 +157,14 @@ constitution → specify → plan → tasks → implement 流水线，并以 sla
   面，还是坍缩进 v2？
 - 谁会标准化 agent 技能评估——Ponytail 的基准所指向的"技能的 MMLU"？
 - spec-kit 的 spec-as-code 会否成为插件/技能标准的正式组成部分（v2），还是停留在 GitHub 专属的工作流层。
+
+## 技能如今能把 agent 锚定到某一本书（8 月 16 日）
+
+`virgiliojr94/book-to-skill`（21.4K stars）把一本技术书、文件夹或论文集蒸馏成一个结构化的 **Agent
+Skill**（`SKILL.md` + 逐章文件 + 术语表 + 模式 + 速查表），在 Claude Code、Copilot CLI 或 Amp 中按需
+加载。它是编译期抽取而非查询期 RAG：作者点名的框架与决策规则变成文件，agent 按需读取相关章节，因此
+答案始终锚定在你手里那本书上。在真实书籍上实测，相比把全文塞进上下文可省 **24–51×** token（一本
+400 页的书 ≈ 200K token → ~4K 核心 + 每章 ~1K）。信号："把 agent 锚定到某一本书"（runbook、ADR、
+入职资料）是反复出现的需求，Agent Skills 格式正在吸收它——模糊检索与对抽取结构做确定性推理之间的
+区别。这又是"skills 格式是分发*任意* agent 能力的基座"的一个数据点（见上文的品味/录制/spec-kit 各线）。
+

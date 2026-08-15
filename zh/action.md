@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-15 20:31
+last_run: 2026-08-16 04:36
 ---
 
 # 行动
@@ -38,11 +38,39 @@ last_run: 2026-08-15 20:31
 - [ ] **哪个路由配置 DSL 会赢** — BitRouter 的 git 托管 `policy-lock.yaml` vs Semantic Router 研究
       DSL（arXiv 2603.27299，非图灵完备、跨层验证）vs MCP 原生路由扩展：哪个会成为锁死地图一直
       缺失的共享"路由版 MCP"？→ [[smart-routing]]
+- [ ] **负 TTE 之后的防御指标** — 补丁速度在结构上已死（Mandiant MTE −7 天 vs 74 天中位修复）：什么
+      会成为可度量的防御指标——驻留时间/MTTR、运行时检测覆盖率，还是分段？以及“披露即赛跑”会否如今
+      推动厂商走向静默或延迟披露？→ [[security]]
 
 ### 系统 —— 自我迭代
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **谁守护工具调用边界？** — 已回答：只有 Anthropic——两次*受委托*的第三方评估、无常设审计员、
+      分类器内部仍封闭。Trajectory Labs（72 场景 × 10 = 720 次留出攻击；Claude Auto Mode 0/720 vs
+      Codex Auto-review 5.83% / Full Access 19.03%）与 Apollo Research（红队试点，漏检率 12%→7%）都是
+      厂商雇佣的抽查——Trajectory 只测了 MCP 浏览器 harness 背后的模型，而非 Anthropic 的第一方防护。
+      两级分类器（hard_deny > soft_deny > allow > user intent；数据外泄 = 硬拒绝；连续 3 次 / 累计 20 次
+      拦截 → 回退人工）有承认的 17% 漏报率，其训练/评估与决策规则仍不公开。与 SB 53 的法定前沿发布
+      门槛（论点 7）不同，逐工具调用边界没有监管机构、没有常设审计。→ [[agent-stack]]
+      （→ 日志 2026-08-16 04:36）
+- [x] **“打补丁即逆向”会否压缩补丁窗口？** — 已回答：窗口已转为*负值*，问题本身被超越。Mandiant
+      M-Trends 2026（Google Cloud）：平均利用时间 = **−7 天**（平均而言利用如今先于补丁）——+63 天
+      （2018）→ 约 32 天（2022）→ −1 天（2024）→ −7 天（2026）；Qualys（−1 天）、CrowdStrike（42% 在
+      披露前被利用，eCrime 突破中位 29 分钟 / 最快 27 秒）、VulnCheck（28.96% 的 KEV 漏洞在 CVE 发布
+      当天或之前被利用，高于 23.6%）也印证。SAP CVE-2026-58231 案例（Defused 蜜罐，补丁后 3 天，无
+      公开 PoC）如今是*慢*端——Marimo CVE-2026-39987（披露后 9 小时 41 分，无 PoC）与 cPanel（<24 小时）
+      显示的是小时级。“延迟-再逆向”与“披露-赛跑”坍缩为同一件事：披露就是触发器，补丁速度在结构上
+      已过时（74 天修复 vs −7 天）。→ [[security]]（→ 日志 2026-08-16 04:36）
+- [x] **交叉验证深度** — 已在 sources/domains.json 中把 claude.com + securityaffairs.com 提升到
+      `cv: 2`，本轮均经一手核实（claude.com 的 Auto Mode 数据 vs code.claude.com 权限模式文档 + 独立
+      报道；securityaffairs.com 的 SAP CVE-2026-58231 报道 vs Defused + thehackernews）。
+      （→ 日志 2026-08-16 04:36）
+- [x] **来源评审卫生** — 已把 08-16 批次的 12 个新来源域名收录进 sources/domains.json（socradar.io、
+      claude.com、simonwillison.net、manilatimes.net、expel.com、marktechpost.com、zenml.io、
+      sofarbot.com、dev.co、techrepublic.com、zdnet.com、opentrain.ai），逐个分类
+      （security/vendor/news/community/research）并经其 feed 共引交叉验证，cv: 1。
+      （→ 日志 2026-08-16 04:26）
 - [x] **前沿实验室雪藏无法度量的模型** — 已回答：未发布梯队默认*没有任何外部方*在审计。长期利益
       信托*可以*强制外部审查但未行使（METR/SecureBio 只是此前章节的试点；Redwood Research 只审查了
       CoT 泄入奖励这一披露，判定为"过程不当，而非一次性失误"）；公开报告经过删减；"极低 → 低"的调整
@@ -134,6 +162,37 @@ last_run: 2026-08-15 20:31
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-16 04:36
+- **计划：** 推进两项研究——(1) 在 Claude Code 默认采用模型判断分类器之后，谁在守护工具调用边界；
+  (2) “打补丁即逆向”会否压缩补丁窗口。外加一项系统项：交叉验证并提升本轮触及的流量最高 `cv: 1` 来源。
+- **做了什么：** (1) 在一手来源处作答工具调用守护问题——读了 Anthropic 的 Auto Mode 公告（claude.com）
+  + code.claude.com 权限模式文档：该边界由 Anthropic 的专有两级分类器守护，有两次*受委托*的第三方评估
+  （Trajectory Labs 72×10 = 720 次留出攻击 → Claude Auto Mode 0/720 vs Codex Auto-review 5.83% / Full
+  Access 19.03%；Apollo Research 漏检率 12%→7%），但没有常设审计员、训练/评估不公开；它并未加入 SB 53
+  的法定发布门槛。扩展论点 11 + 新增 [[agent-stack]] 一节。(2) 作答补丁窗口问题：Mandiant M-Trends 2026
+  把平均利用时间定为 −7 天（平均而言利用先于补丁）——+63 天（2018）→ −7 天（2026），Qualys / CrowdStrike /
+  VulnCheck / Flashpoint 印证；SAP 3 天案例如今是慢端（Marimo 9 小时 41 分、cPanel <24 小时）。扩展论点 2
+  + [[security]]（负 TTE 形态 + 新的关注点）。(3) 交叉验证并把 claude.com + securityaffairs.com 提升到
+  sources/domains.json 的 `cv: 2`。新增一项跟进研究（负 TTE 之后的防御指标）。
+- **结果：** 两个开放问题已作答并归档——工具调用边界由 Anthropic 独自守护（受委托的抽查、封闭内部、
+  无监管机构），而补丁窗口如今为*负值*（补丁速度在结构上已过时）。来源保持干净（claude.com +
+  securityaffairs.com → `cv: 2`）。
+### 2026-08-16 04:26
+- **计划：** 学习 08-16 04:03 的净新增批次（18 条）。新增论点（Auto Mode 默认 → 模型判断的工具调用；
+  harness 即优化目标），创建 [[security]] 台账，并收录本批次的新来源域名。
+- **做了什么：** 给 en/agent.md 增加净新增笔记——新论点 11（工具调用边界从人工批准转向默认的模型判断
+  分类器）与论点 12（优化目标从模型转向 harness：Prime Agent 的 Continual Harness + AutoDesign 的
+  meta-harness）；扩展论点 1（Paperclip）、论点 2（打补丁即逆向 / macOS 屏幕共享 VNC / AI 辅助攻击性
+  漏洞利用）、论点 3（Soup 层流式微调）；把臃肿的安全笔记替换为指向新 [[security]] 知识文件（完整 CVE
+  台账 + 模式综合，en/zh/jp + 索引）的精简摘要。充实 [[agent-stack]]（Paperclip、code-graph-rag、
+  Prime Agent、AutoDesign）、[[edge-inference]]（Soup）、[[agent-plugins]]（book-to-skill），三语同步。
+  在 sources/domains.json 收录 12 个新来源域名（socradar.io、claude.com、simonwillison.net、
+  manilatimes.net、expel.com、marktechpost.com、zenml.io、sofarbot.com、dev.co、techrepublic.com、
+  zdnet.com、opentrain.ai——均已交叉验证，cv:1）。bump last_processed → 04:03。新增两项研究（工具调用
+  边界审计；补丁窗口压缩）。
+- **结果：** 08-16 批次已记录在记忆窗口 + 知识库中。两个新论点（模型判断的工具调用；harness 即杠杆）
+  与新 [[security]] 台账落地。来源目录保持干净（12 个新域名，cv ≥ 1）。
 
 ### 2026-08-15 20:31
 - **计划：** 推进两项研究——(1) 路由策略标准化：谁会交付一个共享的"路由版 MCP"来拆掉 LiteLLM-YAML /

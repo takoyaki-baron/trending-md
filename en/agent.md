@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-15T20:31:00Z
+last_processed: 2026-08-16T04:03:00Z
 ---
 
 # Learnt Agent
@@ -30,6 +30,10 @@ patterns, and turn them into insights and actionable todos.
    Harness makes *every* component a plugin (the plugin graph), LoopX splits durable state + human
    gates out of the runtime (the state kernel), and Cline Kanban makes git-worktree-per-task the
    standard isolation primitive. Consolidation is happening *by layer*, not into one monolith.
+   **New (08-16):** paperclip (72K stars) adds the *agent-company* orchestration pattern — BYO agents
+   arranged in an org chart, a Heartbeat Engine, budget hard-stops — and the harness itself becomes the
+   optimization target (Prime Agent's self-editing Continual Harness + AutoDesign's meta-harness, see
+   thesis 12).
    → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — MCP is the new SSRF vector, and agent
@@ -56,11 +60,32 @@ patterns, and turn them into insights and actionable todos.
    (CVE-2026-16051, 9.8) has no package-integrity check and no replay protection on signed management
    requests, so a replayed/forged signed request installs arbitrary code through the update channel
    itself.
+   **The 08-16 batch adds three new shapes (full ledger → [[security]]).** (1) *Patch-then-reverse-
+   engineer*: SAP Commerce Cloud Data Hub Adapter CVE-2026-58231 (CVSS 10.0) drew honeypot exploitation
+   three days after the patch with no public PoC — attackers reverse-engineer the fix itself, so a CVSS
+   10.0 patch is no longer a routine update. (2) *Default-exposed desktop surface*: macOS Screen Sharing
+   CVE-2026-65400 (9.8) — an auth-state bug lets a network attacker authenticate with no credentials and
+   reach root; macOS auto-opens VNC on TCP 5900 when Screen Sharing is on, and the Dutch NCSC confirmed
+   active exploitation ending in Monero miners (~40,000 internet-exposed Macs). (3) *AI-assisted offensive
+   exploit research*: Rapid7 chained two SharePoint flaws (CVE-2026-55040 JWT `alg:none` bypass +
+   CVE-2026-63520 .NET type instantiation) into unauth RCE in an explicit AI-assisted experiment — 24
+   days, 96 sessions, ~80,000 tool calls, human-steered. The offensive mirror of Vercel deepsec: the
+   agent-compressed exploit window is now measured. **The patch window went negative (08-16 04:36):**
+   Mandiant M-Trends 2026 puts the mean time-to-exploit at **−7 days** — exploitation now precedes the
+   patch, on average (+63d 2018 → ~32d 2022 → −1d 2024 → −7d 2026; Qualys −1d, CrowdStrike 42%
+   pre-disclosure, VulnCheck 28.96% of KEV exploited on/before CVE-publish day). The SAP 3-days-post-
+   patch case is now the *slow* end; Marimo (9h41m) and cPanel (<24h) show hours. "Patch-then-reverse-
+   engineer" is subsumed — disclosure is the trigger, and patch velocity is structurally obsolete
+   (74-day remediation vs −7d MTE). → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    kimi-k3-in-c (176KB binary, 2.78T model on 8GB RAM), TurboFieldfare (Gemma 26B on 2GB),
    Ling-3.0-tiny, Needle 2, and antirez's h3.c all exploit the same trick: keep the shared core
    resident, stream routed experts from SSD on demand. A reusable technique, not a one-off hack.
+   **The trick now spans training (08-16):** Soup (`MakazhanAlpamys/Soup`, Apache-2.0) streams one
+   decoder layer into the GPU at a time while the frozen base sits in system RAM — an 8B model
+   LoRA-finetunes on a 4GB laptop GPU, bit-exact against a resident-GPU reference. Fine-tuning's
+   hardware floor is collapsing for the same reason inference's did.
    → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
@@ -193,6 +218,39 @@ patterns, and turn them into insights and actionable todos.
    past the now-saturated SWE-bench family is formal verification. Both are the same bet from opposite
    ends: make intent a machine-checkable artifact. → [[agent-plugins]] [[frontier-models]]
 
+11. **The agent tool-call boundary is moving from human approval to model judgment — by default.**
+   Claude Code flipped **Auto Mode to default** (Aug 14, on Pro/Max/Team): a proprietary classifier
+   scores every tool call in real time and blocks only actions judged "irreversible, destructive, or
+   aimed outside your environment," instead of prompting on each action. Anthropic's data: humans
+   caught only 13.6% of deliberately dangerous commands (→ ~5% after 50 prompts) while Auto Mode
+   caught 89%, and users already approve ~97% of prompts anyway. A third-party eval (Trajectory Labs,
+   720 injection attempts) found zero successful attacks against Claude in Auto Mode vs 5.8–19%
+   against GPT-5.6 Sol in Codex. This is the first major default move from "human approves every
+   action" to "model judges every action" — landing exactly as prompt-injection against coding agents
+   goes mainstream. The open question: Anthropic built, tested, and now mandates the classifier
+   itself; a single injection only has to slip past once, and the classifier's training/eval is not
+   public. **Answered (08-16 04:36):** the boundary is guarded by Anthropic alone. Two third parties
+   were *commissioned* for adversarial eval — Trajectory Labs (72 scenarios × 10 = 720 held-out
+   attempts; Claude Auto Mode 0/720 vs Codex Auto-review 5.83% / Full Access 19.03%; tested only the
+   model behind an MCP browser harness, not first-party safeguards) and Apollo Research (red-team
+   pilot, miss rate 12%→7%) — but there is no standing independent audit, the classifier's
+   training/eval and decision rules stay closed, and its acknowledged false-negative rate is 17% on
+   adversarial sets. Unlike the SB 53 statutory release gate (thesis 7), the per-tool-call boundary
+   has no regulator — it does not yet join the release gate.
+
+12. **The optimization target is shifting from the model to the harness around it.** Prime Agent
+   (`PrimeIntellect-ai/prime-agent`, MIT, 16.2K stars) treats its *own harness* as mutable learned
+   state: a **Continual Harness** stores prompts, memories, and reusable subagent specs as durable
+   state the agent refines via `/refine` (small, evidence-backed self-edits that never touch the
+   immutable system prompt). It hit 95.5% ARC-AGI-3 (vs a 95.4% human baseline — but vendor-reported,
+   the repo ships without the ARC adapter, and results swing 78.3% on GPT-5.6 Sol to 8.6% on GLM-5.2
+   by base model). AutoDesign (arXiv:2608.13560) makes the move explicit: a **meta-harness** that
+   iteratively refines the harness (prompts/tool sequences) that does the task, beating Claude Design
+   by 7.45 on its new PosterBench while running 253 tool calls + 11 edit turns in 40 minutes for <$3.
+   Together with OneDayAgent (long-horizon harness) and HL-Gauss PPO (training-side gains), the lever
+   is no longer just "train a better model" or "post-train a better model" — it's "evolve a better
+   harness." → [[agent-stack]]
+
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
 
 ## Trend notes
@@ -222,6 +280,14 @@ patterns, and turn them into insights and actionable todos.
   converging on `skills/`+`mcp.json`; the Agent Plugins 1.0.0 reference impl) and Mole (lajosdeme,
   Apache 2.0 — a terminal deep-research agent whose enforced budget, verbatim-quote checks, and
   aggregate-only privacy boundary make trust *enforceable*, not advisory).
+  **New (08-16):** paperclip (`paperclipai/paperclip`, MIT, 72.1K stars — "OS for a zero-human
+  company": BYO agents arranged in an org chart, Heartbeat Engine wakes them on schedule, budgets
+  hard-stop runaway API cost, humans sit as the "board") and code-graph-rag (`vitali87/code-graph-rag`,
+  MIT, 4.3K stars — Tree-sitter parses a monorepo into one language-agnostic graph in Memgraph,
+  NL→Cypher RAG + AST surgical patching + `FLOWS_TO` taint, exposed as an MCP server). Plus
+  book-to-skill (`virgiliojr94/book-to-skill`, 21.4K stars — a book/PDF → structured Agent Skill,
+  compile-time extraction, 24–51× token cut; see [[agent-plugins]]). Prime Agent's Continual Harness
+  (self-editing harness state) + AutoDesign (meta-harness) → thesis 12.
 - **Smart routing (detail → [[smart-routing]]):** NeMo Switchyard (Rust model router, Apache 2.0),
   Firecrawl pdf-inspector (classify-first PDF parsing, 0.875 opendataloader-bench), Needle 2
   (confidence-gated escalation), LiteLLM (self-hosted gateway, ~40K stars), OpenRouter (hosted
@@ -315,47 +381,24 @@ patterns, and turn them into insights and actionable todos.
   cyber capability (CyberGym 84.5% first place) — the safety-gating shape reaches Chinese labs, and
   vulnerability discovery (2,436 vulns in a public Security Disclosure Ledger) becomes a headline
   benchmark.
-- **Security:** Langflow CVE-2026-9198 (9.8, KEV, active exploitation); mcp-grafana CVE-2026-19516
-  (9.1 SSRF); Semantica v0.6.5 (5 vulns: missing auth, Cypher/SPARQL injection); SAP NetWeaver
-  SB2026081203 (9.3 RCE); Lazarus CVE-2026-68820 (afd.sys zero-day → FudModule v3.1 rootkit, Smart App
-  Control bypass); Microsoft Patch Tuesday (89 CVEs); Chrome 5 UAFs; VMware vCenter CVE-2026-59310
-  (9.8 unauth RCE, 361 IPs / 47 countries); Progress Kemp LoadMaster CVE-2026-8037 (9.6 command
-  injection, KEV); Adobe Commerce/Magento CVE-2026-71362 (9.1 unauth account takeover, patch-only
-  two-step fix); Cisco ASA/FTD CVE-2026-20349 (8.6 unauth VPN DoS, KEV, Aug 14 deadline);
-  AI-crawler impersonation scans. **New (08-14):** Metabase CVE-2026-72898 (10.0 unauth SQLi in
-  `POST /api/session/reset_password`, active exploitation, KEV deadline today — holds standing
-  credentials to every connected warehouse); JetBrains TeamCity CVE-2026-63077 (9.8 unauth RCE via
-  XStream deserialization in the agent polling protocol, KEV, ~4,500 exposed / ~450 patched); Apache
-  Allura CVE-2026-73240 (9.8 git argument injection, pre-1.19.1). Net effect: agent infra + MCP +
-  agent credential files are the fastest-growing attack surface, and the **standing-credentials
-  pivot** (BI/CI-CD/forge RCE cascading into production data) now joins the classic enterprise edge
-  under the same pressure. **Encrypted-reasoning crack (08-14):** arXiv:2608.09867 — encrypted
-  reasoning blocks are interchangeable across sessions/users/models within a provider, enabling
-  cross-model trace extraction (see thesis 9). → [[frontier-models]]
-  **Supply-chain ransomware + agentic appsec (08-14 PM):** Cl0p CVE-2026-12569 (9.8 unauth RCE in
-  PTC Windchill PDMLink/FlexPLM, unsafe deserialization + WSDL info-disclosure → JSP webshells) —
-  Cl0p claims ~50 firms (Shell, Philips, GE, Fiserv), exfiltrating engineering/design IP, the MOVEit
-  playbook against PLM. Vercel deepsec (`vercel-labs/deepsec`, Apache 2.0, 6.5K stars) is the
-  defensive mirror: regex candidate scan → Claude Opus 4.7 / Codex GPT-5.5 dataflow tracing + a
-  revalidation pass (~10–20% FP rate), fanning out over 1,000+ Vercel Sandboxes, source never leaves
-  your infra. **New (08-15):** Microsoft's August Patch Tuesday fixed **398 CVEs**, headlined by
-  **CVE-2026-62878** — a stack overflow in Windows DNS Server, CVSS 9.8, unauth/network/no-interaction,
-  "wormable" per ZDI — plus a second actively-exploited zero-day **CVE-2026-62832** (LegacyHive, User
-  Profile Service → SYSTEM). Separately, an **unpatched GeoServer SQLi zero-day** (`jsonArrayContains`,
-  no CVE yet, disclosed Aug 12 by @q1uf3ng) reaches RCE under H2 `sa` / MSSQL admin configs and was
-  actively probed within hours — the recurring "widely-deployed OSS + unpatched SQLi/RCE" class keeps
-  firing alongside the agent-infra surface.
-  **New (08-15 PM):** SonicWall SMA1000 — CISA KEV confirms CVE-2026-15409 (CVSS 10.0 SSRF in the
-  wsproxy "Work Place" interface) + CVE-2026-15410 (7.2 command injection) are now ransomware vectors
-  (INC Ransomware affiliate); chained = zero-click unauth root, exploited since June 22 (pre-dates the
-  July 14 disclosure), ~380 exposed at report time.
-  **New (08-15 20:03):** two agent frameworks shipped a no-auth network tool-exec surface by default —
-  Microsoft UFO CVE-2026-73296 (9.4: Streamable HTTP MCP on TCP 8020/8021 → RCE-equivalent control of
-  an ADB-connected Android; the fix refuses to start without `UFO_MCP_API_KEY`) and AgenticSeek
-  CVE-2026-72776 (9.8: `/query` on `0.0.0.0:7777` → `subprocess.Popen(shell=True)`; fixed PR #534) —
-  unauthenticated MCP/tool-exec as a class, direct RCE from default config. Plus WPMU DEV Dashboard
-  CVE-2026-16051 (9.8): no package-integrity check + no replay protection on signed management
-  requests → RCE through the plugin update channel itself (supply-chain-by-design).
+  **Claude Code Auto Mode default (08-16):** the per-tool-call boundary moves from human approval to
+  a proprietary classifier that blocks only irreversible/destructive/out-of-scope actions — humans
+  catch 13.6% of dangerous commands vs Auto Mode's 89%, and a 720-attempt third-party injection eval
+  found 0 successful attacks vs Claude (5.8–19% vs Codex GPT-5.6 Sol). The first major default flip
+  from "human approves" to "model judges." → thesis 11.
+- **Security (full ledger + MCP SSRF checklist → [[security]]):** the standing-credentials pivot
+  (Metabase 10.0, TeamCity 9.8, Allura 9.8), supply-chain ransomware (Cl0p/PTC 9.8, WPMU DEV 9.8),
+  the auto-exposed agent-exec surface (UFO 9.4, AgenticSeek 9.8), and the Windows/GeoServer/SonicWall
+  stream are all archived in [[security]]. **New (08-16):** three shapes — **patch-then-reverse-
+  engineer** (SAP Commerce Cloud CVE-2026-58231, 10.0, exploited 3 days post-patch with no public PoC),
+  **default-exposed desktop VNC** (macOS Screen Sharing CVE-2026-65400, 9.8 → root + Monero miners,
+  ~40,000 internet-exposed Macs), and **AI-assisted offensive exploit research** (Rapid7 SharePoint
+  chain CVE-2026-55040 + CVE-2026-63520 → unauth RCE in 24 days / 96 sessions / ~80K tool calls — the
+  offensive mirror of Vercel deepsec). Plus Lazarus CVE-2026-68820 gained its CISA KEV Aug 25 deadline
+  + post-quantum (Kyber/ML-KEM) delivery detail. **Patch window went negative (08-16 04:36):**
+  Mandiant M-Trends 2026: MTE −7 days (exploitation before patch, on average); the SAP 3-day case is
+  the slow end (Marimo 9h41m, cPanel <24h) — patch velocity is structurally obsolete (ledger →
+  [[security]]).
 - **Provenance & watermarking arms race (08-15):** Anthropic began watermarking Claude text (Aug 2)
   under the EU AI Act's Article 50 transparency rules; within days `guillaumemeyer/watermarks-remover`
   (MIT, 4.1K stars) strips AI-provenance marks in three layers — Unicode steganography, a statistical
@@ -375,6 +418,10 @@ patterns, and turn them into insights and actionable todos.
   **New (08-15 PM):** Liquid AI LFM2.5-VL-3B (3.1B on-device VLM, 228 tok/s on M5 Max / ~20 tok/s on
   Galaxy S26 Ultra, ScreenSpot-v2 80.7) — the "small dense model + official quantizations" path to
   on-device, aimed at GUI-agent screen reading + grounding.
+  **New (08-16):** Soup (`MakazhanAlpamys/Soup`, Apache-2.0) applies layer streaming to *fine-tuning*
+  — the frozen base stays in system RAM while one decoder layer streams into the GPU at a time, so an
+  8B model LoRA-finetunes on a 4GB laptop GPU (bit-exact vs a resident reference). The "stream the
+  frozen base" trick now spans training and inference (see thesis 3).
 - **On-device privacy apps:** modly (Lightning Pixel, MIT, 5.7K stars — local image-to-3D on your own
   GPU, Hunyuan3D 2 Mini/TripoSG/Trellis2 GGUF, GLB/OBJ/STL export, no cloud/account) and FluidVoice
   (Altic, GPLv3, 10.1K stars — on-device macOS dictation, local Parakeet/Whisper + Fluid-1 layer,
@@ -418,6 +465,9 @@ patterns, and turn them into insights and actionable todos.
   **New (08-15 PM):** firecrawl/anydoc (MIT, 16.1K stars) — one Rust core turns 14 office formats into
   GFM markdown at <5ms median (vs LibreOffice 1,129ms / Pandoc 102ms), powering Firecrawl's /parse API;
   the RAG/agent document-ingestion bottleneck.
+  **New (08-16):** OpenAI's first native **ChatGPT desktop app for Linux** (preview) bundles ChatGPT +
+  Work + Codex in one Electron app (Ubuntu/Debian/Fedora, x64 + ARM64) — it completes "one client on
+  every OS" and drops a full coding agent onto developer Linux boxes (Computer Use still absent on Linux).
 - **Models & research:** Kronos (decoder-only foundation model for financial candlesticks, AAAI 2026)
   — the "pretrain + finetune" playbook applied to markets. **HL-Gauss PPO** (arXiv 2608.02181, COLM
   2026) — swapping the scalar critic head for a categorical predictor (HL-Gauss targets) is a drop-in
@@ -431,6 +481,11 @@ patterns, and turn them into insights and actionable todos.
   (research-only, 80GB GPU), proof the full-duplex voice stack is openable even if not yet practical.
   **GLM-5.3 (08-15):** the "post-training, not scale" data point — a 743B base jumped to frontier
   coding/security purely on RL, extending the training-side-gains thread from HL-Gauss PPO + OneDayAgent.
+  **DreamX-Phi 1.0 (08-16):** arXiv:2608.13489 (AMAP-ML) — an action-conditioned video world model for
+  robotic manipulation that injects per-arm SE(3) geometry into attention (PRoPE-style) + a depth
+  branch + SAM3/V-JEPA masks, and distills the multi-step Wan2.2-TI2V-5B into a few-step student. First
+  on WorldArena 2.0 Track 1. Thesis: realism ≠ faithfulness — a rollout that "looks right but moves the
+  wrong arm" is worse than useless.
 - **✅ Void lesson resolved (2026-08-12 → corrected 08-13):** star velocity is a signal to
   investigate, not publish. The Void "#2 trending" entry has been **corrected in all three locales**
   after first-hand verification: the repo is archived/deprecated (archived Jun 2, 2026). The standing

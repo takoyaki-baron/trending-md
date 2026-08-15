@@ -505,12 +505,12 @@
   },
   "securityaffairs.com": {
     "cat": "security",
-    "en": "Security news outlet; broad coverage of breaches and cyber campaigns.",
-    "zh": "安全新闻媒体；对入侵与网络攻击活动的覆盖广泛。",
-    "jp": "セキュリティニュース。侵害・サイバー作戦を広くカバー。",
+    "en": "Security news outlet; broad coverage of breaches and cyber campaigns. Cross-checked (08-16): its SAP Commerce Cloud CVE-2026-58231 report (Defused honeypots, 3 days post-patch, no public PoC, CVSS 10.0) matches thehackernews + Defused.",
+    "zh": "安全新闻媒体；对入侵与网络攻击活动的覆盖广泛。已交叉核验（08-16）：其 SAP Commerce Cloud CVE-2026-58231 报道（Defused 蜜罐、补丁后 3 天、无公开 PoC、CVSS 10.0）与 thehackernews + Defused 一致。",
+    "jp": "セキュリティニュース。侵害・サイバー作戦を広くカバー。突合済み（08-16）：SAP Commerce Cloud CVE-2026-58231の報道（Defusedのハニーポット、パッチ後3日、公開PoCなし、CVSS 10.0）はthehackernews + Defusedと一致。",
     "cred": "med",
     "density": "high",
-    "cv": 1
+    "cv": 2
   },
   "security-labs.elastic.co": {
     "cat": "security",
@@ -1471,6 +1471,114 @@
     "en": "ppc.land — PPC/ad-tech marketing publication; its x-algorithm deep-dive correctly names the four feed components (Home Mixer, Thunder, Phoenix, Candidate Pipeline) and flags what the code omits (no scoring weights, no ads code).",
     "zh": "ppc.land —— PPC/广告技术营销刊物；其 x-algorithm 深挖正确列出四大 feed 组件（Home Mixer、Thunder、Phoenix、Candidate Pipeline）并指出代码缺失（无评分权重、无广告代码）。",
     "jp": "ppc.land —— PPC/アドテックマーケティング媒体。x-algorithm詳細記事は4大フィード構成（Home Mixer、Thunder、Phoenix、Candidate Pipeline）を正しく列挙し、コードの欠落（スコア重みなし、広告コードなし）を指摘。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "socradar.io": {
+    "cat": "security",
+    "en": "SOCRadar — threat-intelligence and exposure-management vendor; publishes per-CVE advisories. Cross-checked (08-16): its SAP Commerce Cloud CVE-2026-58231 advisory (CVSS 10.0 Data Hub Adapter, insufficient authorization + weak input validation, unauth RCE) matches The Hacker News's report of honeypot exploitation 3 days post-patch with no public PoC.",
+    "zh": "SOCRadar——威胁情报与暴露管理厂商；发布逐 CVE 的安全公告。已交叉核验（08-16）：其 SAP Commerce Cloud CVE-2026-58231 公告（CVSS 10.0 Data Hub Adapter，授权不足 + 输入校验薄弱，未认证 RCE）与 The Hacker News 关于补丁 3 天后无公开 PoC 即遭蜜罐利用的报道一致。",
+    "jp": "SOCRadar——脅威インテリジェンス/露出管理ベンダー。CVEごとのアドバイザリを公開。突合済み（08-16）：SAP Commerce Cloud CVE-2026-58231アドバイザリ（CVSS 10.0 Data Hub Adapter、認可不足 + 弱い入力検証、未認証RCE）は、The Hacker Newsの「パッチ3日後に公開PoCなしでハニーポット悪用」の報道と一致。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "claude.com": {
+    "cat": "vendor",
+    "en": "Anthropic's product/blog domain (Claude Code, Claude) — first-hand for Claude releases. Cross-checked (08-16): its Auto Mode default announcement matches Simon Willison's independent coverage (Aug 14, Pro/Max/Team, classifier blocks irreversible/destructive/out-of-scope actions); its Trajectory Labs figures (720 held-out attempts, 0/720 vs 5.83%/19.03%) match the code.claude.com permission-modes doc + independent outlets (the-decoder, byteiota).",
+    "zh": "Anthropic 的产品/博客域名（Claude Code、Claude）——Claude 发布的一手来源。已交叉核验（08-16）：其 Auto Mode 默认开启的公告与 Simon Willison 的独立报道一致（8 月 14 日，Pro/Max/Team，分类器拦截不可逆/破坏性/越界动作）；其 Trajectory Labs 数据（720 次留出攻击、0/720 vs 5.83%/19.03%）与 code.claude.com 权限模式文档及独立媒体（the-decoder、byteiota）一致。",
+    "jp": "Anthropicのプロダクト/ブログドメイン（Claude Code、Claude）——Claudeリリースの一次情報。突合済み（08-16）：Auto Modeデフォルトの発表はSimon Willisonの独立報道と一致（8月14日、Pro/Max/Team、分類器が不可逆/破壊的/範囲外の動作をブロック）；Trajectory Labsの数値（720件のホールドアウト攻撃、0/720 vs 5.83%/19.03%）はcode.claude.comのパーミッションモード文書および独立メディア（the-decoder、byteiota）と一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "simonwillison.net": {
+    "cat": "community",
+    "en": "Simon Willison's blog — independent, widely-read practitioner commentary on AI and LLM tooling. Cross-checked (08-16): his Auto Mode coverage (Claude Code flips Auto Mode to default) matches Anthropic's own claude.com blog.",
+    "zh": "Simon Willison 的博客——独立、广为阅读的 AI 与 LLM 工具一线评论。已交叉核验（08-16）：其 Auto Mode 报道（Claude Code 默认开启 Auto Mode）与 Anthropic 官方 claude.com 博客一致。",
+    "jp": "Simon Willisonのブログ——独立系で広く読まれるAI/LLMツールの実務者解説。突合済み（08-16）：Auto Mode報道（Claude CodeがAuto Modeをデフォルトに）はAnthropic公式claude.comブログと一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "manilatimes.net": {
+    "cat": "news",
+    "en": "The Manila Times — Philippine newspaper carrying syndicated PR-newswire copy. Cross-checked (08-16): its TencentDB-Agent-Memory \"20,000 stars in 90 days\" PR item matches the GitHub repo's star trajectory (Team Memory v2.0 launch).",
+    "zh": "《马尼拉时报》——菲律宾报纸，刊发通讯社/PR Newswire 供稿。已交叉核验（08-16）：其 TencentDB-Agent-Memory「90 天破 20,000 stars」PR 稿与 GitHub 仓库星标轨迹（Team Memory v2.0 发布）一致。",
+    "jp": "マニラタイムズ——フィリピンの新聞で、PR Newswire配信を掲載。突合済み（08-16）：TencentDB-Agent-Memory「90日で20,000 stars」のPR記事はGitHubリポジトリのスター推移（Team Memory v2.0公開）と一致。",
+    "cred": "low",
+    "density": "low",
+    "cv": 1
+  },
+  "expel.com": {
+    "cat": "security",
+    "en": "Expel — managed detection and response vendor; its Patch Tuesday roundups add first-hand KEV context. Cross-checked (08-16): its Lazarus afd.sys (CVE-2026-68820) write-up — Operation Dream Job, Troy backdoor, FudModule v3.1, post-quantum delivery — matches CISA KEV's Aug 25 remediation deadline entry.",
+    "zh": "Expel——托管检测与响应厂商；其补丁日盘点补充一手 KEV 背景。已交叉核验（08-16）：其 Lazarus afd.sys（CVE-2026-68820）分析——Operation Dream Job、Troy 后门、FudModule v3.1、后量子投递——与 CISA KEV 的 8 月 25 日修复截止条目一致。",
+    "jp": "Expel——マネージド検知・対応ベンダー。Patch Tuesdayラウンドアップが一次KEV文脈を補う。突合済み（08-16）：Lazarus afd.sys（CVE-2026-68820）の解説——Operation Dream Job、Troyバックドア、FudModule v3.1、耐量子配信——はCISA KEVの8月25日期限エントリと一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "marktechpost.com": {
+    "cat": "news",
+    "en": "MarkTechPost — AI-research news outlet republishing model/paper write-ups. Cross-checked (08-16): its Needle 2 coverage (45M-param, 14MB, single-shot tool calling, Walsh-Hadamard) matches the cactus-compute/needle repo.",
+    "zh": "MarkTechPost——AI 研究新闻媒体，转载模型/论文解读。已交叉核验（08-16）：其 Needle 2 报道（45M 参数、14MB、单次工具调用、Walsh-Hadamard）与 cactus-compute/needle 仓库一致。",
+    "jp": "MarkTechPost——AI研究ニュースメディア。モデル/論文の解説を転載。突合済み（08-16）：Needle 2の報道（45Mパラメータ、14MB、単発ツール呼び出し、Walsh-Hadamard）はcactus-compute/needleリポジトリと一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "zenml.io": {
+    "cat": "vendor",
+    "en": "ZenML — MLOps platform vendor whose LLMOps database catalogs open-source agent tooling. Cross-checked (08-16): its Paperclip entry (agent-company OS, org-chart orchestration, Heartbeat Engine) matches the paperclipai/paperclip repo.",
+    "zh": "ZenML——MLOps 平台厂商，其 LLMOps 数据库收录开源 agent 工具。已交叉核验（08-16）：其 Paperclip 条目（agent 公司操作系统、组织架构图编排、Heartbeat Engine）与 paperclipai/paperclip 仓库一致。",
+    "jp": "ZenML——MLOpsプラットフォームベンダー。LLMOpsデータベースがオープンソースのエージェントツールを収録。突合済み（08-16）：Paperclipのエントリ（エージェントカンパニーOS、組織図オーケストレーション、Heartbeat Engine）はpaperclipai/paperclipリポジトリと一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "sofarbot.com": {
+    "cat": "community",
+    "en": "SoFarBot — Chinese-language open-source roundup site. Cross-checked (08-16): its reverse-skill write-up (security skill router, 42 modules, MASTER-ROUTING layer) matches the zhaoxuya520/reverse-skill repo.",
+    "zh": "SoFarBot——中文开源盘点站。已交叉核验（08-16）：其 reverse-skill 文章（安全技能路由器、42 个模块、MASTER-ROUTING 层）与 zhaoxuya520/reverse-skill 仓库一致。",
+    "jp": "SoFarBot——中国語のオープンソース紹介サイト。突合済み（08-16）：reverse-skillの記事（セキュリティスキルルーター、42モジュール、MASTER-ROUTING層）はzhaoxuya520/reverse-skillリポジトリと一致。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "dev.co": {
+    "cat": "vendor",
+    "en": "DEV.co — software-development company blog; publishes tool explainers with marketing intent. Cross-checked (08-16): its code-graph-rag explainer (Tree-sitter → Memgraph knowledge graph → Cypher RAG MCP) matches the vitali87/code-graph-rag repo.",
+    "zh": "DEV.co——软件开发公司博客；发布带营销意图的工具解读。已交叉核验（08-16）：其 code-graph-rag 解读（Tree-sitter → Memgraph 知识图谱 → Cypher RAG MCP）与 vitali87/code-graph-rag 仓库一致。",
+    "jp": "DEV.co——ソフトウェア開発企業ブログ。マーケティング意図のあるツール解説を公開。突合済み（08-16）：code-graph-ragの解説（Tree-sitter → Memgraphナレッジグラフ → Cypher RAG MCP）はvitali87/code-graph-ragリポジトリと一致。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "techrepublic.com": {
+    "cat": "news",
+    "en": "TechRepublic — established enterprise-tech trade publication. Cross-checked (08-16): its ChatGPT Linux desktop coverage matches ZDNet's (OpenAI's first native Linux app, ChatGPT + Work + Codex in one Electron app, Ubuntu/Debian/Fedora).",
+    "zh": "TechRepublic——老牌企业科技行业媒体。已交叉核验（08-16）：其 ChatGPT Linux 桌面应用报道与 ZDNet 一致（OpenAI 首个原生 Linux 应用，ChatGPT + Work + Codex 合于一个 Electron 应用，Ubuntu/Debian/Fedora）。",
+    "jp": "TechRepublic——老舗エンタープライズIT業界誌。突合済み（08-16）：ChatGPT Linuxデスクトップの報道はZDNetと一致（OpenAI初のネイティブLinuxアプリ、ChatGPT + Work + Codexを1つのElectronアプリに、Ubuntu/Debian/Fedora）。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "zdnet.com": {
+    "cat": "news",
+    "en": "ZDNet — established consumer/enterprise tech publication. Cross-checked (08-16): its ChatGPT Linux desktop coverage matches TechRepublic's (same launch facts, same supported distros).",
+    "zh": "ZDNet——老牌消费/企业科技媒体。已交叉核验（08-16）：其 ChatGPT Linux 桌面应用报道与 TechRepublic 一致（同一发布事实、同一支持发行版）。",
+    "jp": "ZDNet——老舗コンシューマー/エンタープライズテックメディア。突合済み（08-16）：ChatGPT Linuxデスクトップの報道はTechRepublicと一致（同じ公開事実、同じ対応ディストリビューション）。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "opentrain.ai": {
+    "cat": "research",
+    "en": "OpenTrain — AI paper tracker/aggregator. Cross-checked (08-16): its DreamX-Phi 1.0 page (action-conditioned video world model, WorldArena 2.0 Track 1 winner) matches arXiv:2608.13489.",
+    "zh": "OpenTrain——AI 论文追踪/聚合站。已交叉核验（08-16）：其 DreamX-Phi 1.0 页面（动作条件视频世界模型、WorldArena 2.0 Track 1 冠军）与 arXiv:2608.13489 一致。",
+    "jp": "OpenTrain——AI論文トラッカー/アグリゲーター。突合済み（08-16）：DreamX-Phi 1.0のページ（行動条件付き動画世界モデル、WorldArena 2.0 Track 1優勝）はarXiv:2608.13489と一致。",
     "cred": "med",
     "density": "med",
     "cv": 1
