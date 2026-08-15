@@ -1,8 +1,8 @@
 ---
 date: 2026-08-15
-updated: 2026-08-15T12:03:00Z
+updated: 2026-08-15T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 32
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -367,13 +367,125 @@ Firecrawl 的 **anydoc**（MIT）通过单一 Rust 核心（含 Node/Python/WASM
 
 ---
 
+## 23. Anthropic 第二份风险报告披露未发布的 "Model 2"，性能超越 Mythos 5
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** Anthropic · 186 页报告 · ~1d ago
+- **标签：** `anthropic` `risk-report` `model-2` `safety` `responsible-scaling`
+
+Anthropic 发布**第二份公司级风险报告**（8 月 14 日，覆盖截至 7 月 15 日的评估），头号看点是内部未发布模型 **Model 2** 超越了公开旗舰 Claude Mythos 5——**AECI 能力指数 162.79 对 161.29**，**CoBench 62.8% 对 50.3%**（Anthropic 内部 449 个真实研发任务基准；能完全取代其工程师的模型需约 85%）。Anthropic 表示**无计划公开发布 Model 2**，且尚未完成部署前安全测试。报告还**首次将灾难性失控风险从"极低"上调至"低"**，并披露 **Claude 目前已编写 Anthropic 生产代码库中绝大多数被合并的代码**。
+
+**值得关注的原因：** 未发布内部模型与公开旗舰之间的差距，加上 Anthropic 承认其任务型评测已"饱和"、无法再区分能力提升——这是迄今最清晰的信号：前沿实验室正在"压仓"那些它们已无法充分衡量的模型。
+
+> 报告还披露：一个生物安全分类器标志被意外关闭约 11 个月（涉及 1.33 亿条消息），以及 0.27–5.1% 的 RL 训练片段存在思维链污染。
+
+[`🔗 Anthropic Risk Report`](https://www.anthropic.com/aug-2026-risk-report) · [`🔗 Yahoo Tech`](https://tech.yahoo.com/ai/claude/articles/anthropic-model-2-beats-mythos-200055763.html)
+
+---
+
+## 24. Vero —— 首个仓库级、面向形式化验证编程智能体的基准
+
+- **传播速度：** ▮▮ 上升
+- **来源：** arXiv · 43 个实例 · ~1d ago
+- **标签：** `benchmark` `formal-verification` `lean4` `agents` `software-verification`
+
+**Vero**（arXiv:2608.13522，UC Berkeley 的 Dawn Song 等）是首个在**仓库级别**评测智能体"代码实现 + 机器可检查证明合成"的基准。其 43 个多模块实例来自真实仓库，横跨 Python、Dafny、Verus 和 Coq（从密码协议到分布式系统）；每个实例给智能体一个多模块 **Lean 4** 仓库、固定的 API 接口与形式化规范，支持纯证明或代码+证明两种模式。最强前沿编程智能体配置**仅完整解决 43 个实例中的 27 个**，在最难的仓库上一个规范都未能闭合。
+
+**值得关注的原因：** 随着 SWE-bench 及其变体趋于饱和，Vero 将前沿从"通过测试"推向"数学上验证过的正确性"——智能体评测的下一级台阶，也是当前智能体在仓库级证明义务上仍惨败的压力测试。
+
+> 基准、数据管线与评测框架均在 sunblaze-ucb/vero 开源，还提供一种审计模式，让智能体形式化地证明某个规范不可满足。
+
+[`🔗 arXiv:2608.13522`](https://arxiv.org/abs/2608.13522) · [`🔗 sunblaze-ucb/vero`](https://github.com/sunblaze-ucb/vero)
+
+---
+
+## 25. CVE-2026-73296 —— 微软 UFO 智能体框架暴露未认证的 MCP 服务器（CVSS 9.4）
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** NVD · CVSS 9.4 · ~3d ago
+- **标签：** `microsoft` `ufo` `mcp` `cve` `rce`
+
+微软开源的 **UFO** 智能体自动化框架在 **3.0.8** 之前的版本中，在 **TCP 端口 8020/8021** 上启动了无认证的 Streamable HTTP MCP 服务器——任何可网络访问的攻击者都能对一台 ADB 连接的安卓设备调用 `capture_screenshot`、`tap`、`swipe`、`type_text` 和 `launch_app`，实际获得**完全远程控制与屏幕内容泄露**（IONIX 称之为"等效 RCE"）。修复（GHSA-24fq-m9rr-g3mm）强制要求一个 bearer token（`UFO_MCP_API_KEY`，常量时间比较），**没有它则拒绝启动**。
+
+**值得关注的原因：** 这是一类正在快速增长的新攻击面：智能体框架默认把 MCP 工具服务器无认证地暴露到网络。未认证的 MCP 等于直接执行智能体工具——当这些工具控制一台设备时，其危害不亚于 RCE。
+
+> CISA-ADP 评估为"存在 PoC"、可自动化：是、技术影响：完全。切勿将 8020/8021 暴露到回环地址之外。
+
+[`🔗 NVD CVE-2026-73296`](https://nvd.nist.gov/vuln/detail/CVE-2026-73296) · [`🔗 GitHub advisory GHSA-24fq-m9rr-g3mm`](https://github.com/microsoft/UFO/security/advisories/GHSA-24fq-m9rr-g3mm)
+
+---
+
+## 26. CVE-2026-72776 —— AgenticSeek 智能体 /query 端点未认证 RCE（CVSS 9.8）
+
+- **传播速度：** ▮▮ 上升
+- **来源：** IONIX · CVSS 9.8 · ~1d ago
+- **标签：** `cve` `agenticseek` `rce` `ai-agents` `shell-injection`
+
+Fosowl 的开源 **AgenticSeek** 自主智能体框架，在 ≤ **2.41.1** 的版本中，暴露了绑定在 `0.0.0.0:7777` 的 `/query` API（通配 CORS、无认证），将攻击者输入直接喂给运行 `subprocess.Popen(..., shell=True)` 的 `BashInterpreter`。`safety.py` 中不完整的黑名单可被绕过，于是精心构造的 `/query` POST 请求即可以智能体进程权限执行任意 OS 命令（CVSS 9.8）。已在 PR #534 修复。
+
+**值得关注的原因：** 本地"AI 智能体"工具日益默认自带一个网络执行面——任何能连上端口的人都能得到一个未认证的 shell。此修复（绑定回环、对 `/query` 加鉴权、去掉 `shell=True`）应是每个智能体运行时的检查清单。
+
+> 若暂无法修补：不要暴露 7777 端口、限制 CORS、最小权限运行、监控异常的 /query 请求日志。
+
+[`🔗 IONIX CVE-2026-72776`](https://www.ionix.io/threat-center/cve-2026-72776/) · [`🔗 Fosowl/agenticSeek PR #534`](https://github.com/Fosowl/agenticSeek/pull/534)
+
+---
+
+## 27. CVE-2026-16051 —— 签名请求重放导致 WPMU DEV Dashboard 插件 RCE（CVSS 9.8）
+
+- **传播速度：** ▮ 平稳
+- **来源：** IONIX · CVSS 9.8 · ~3d ago
+- **标签：** `wordpress` `wpmu-dev` `rce` `cve` `supply-chain`
+
+**WPMU DEV Dashboard**（`wpmudev-updates`）WordPress 插件在 **5.0.1** 之前的所有版本中，远程 Hub 安装不校验软件包完整性，且签名管理请求**缺乏防重放保护**（CWE-94）。攻击者只要获取或重放一个有效签名的请求，就能让站点安装并执行任意代码——无需认证或用户交互即可完全攻陷站点（CVSS 9.8）。同版本还修复了一个相关的认证绕过，使伪造这些请求更加容易。WPScan 编号为 `8dae5fbf-…`。
+
+**值得关注的原因：** 这是插件*更新机制本身*的供应链 RCE——利用的是合法的签名管理通道而非代码笔误，因此看起来像正常的管理员流量，很容易被忽略。
+
+> 升级到 5.0.1+（恢复完整性校验与重放保护）；同时轮换 WPMU DEV Hub API 密钥。
+
+[`🔗 IONIX CVE-2026-16051`](https://www.ionix.io/threat-center/cve-2026-16051/) · [`🔗 stack.watch`](https://stack.watch/vuln/CVE-2026-16051/)
+
+---
+
+## 28. GitHub 的 spec-kit 随"规格驱动开发"成为智能体编程默认范式而走红
+
+- **传播速度：** ▮▮ 上升
+- **来源：** GitHub · 128.8k stars · ~1d ago
+- **标签：** `github` `spec-driven-development` `ai-coding` `cli` `agents`
+
+**github/spec-kit**（MIT）打包了 GitHub 的**规格驱动开发**工作流：一个 `specify` CLI，脚手架化 constitution → specify → plan → tasks → implement 流水线，并把斜杠命令或智能体技能安装进 **30 多个 AI 编程智能体**（Copilot、Codex、Claude Code、Gemini CLI）。规格成为智能体在每个检查点执行并校验的"可执行事实来源"——是对"能编译却偏离意图"的 vibe coding 的明确回应。该项目 2025 年 9 月开源，如今在 GitHub Trending 上再次飙升（约 128.8k stars，日增 +1,160），背后是最近的 v0.12.11 版本。
+
+**值得关注的原因：** 智能体编程的工作流层正围绕"规格即代码"汇聚，GitHub 的工具包正成为参考实现——值得关注其在团队规模下"以更多前期 token 换取更可预测输出"的权衡如何演绎。
+
+> GitHub 仍将其标注为实验性质；主要批评是每次会话的 token 消耗更高。
+
+[`🔗 github/spec-kit`](https://github.com/github/spec-kit) · [`🔗 Visual Studio Magazine`](https://visualstudiomagazine.com/articles/2025/09/03/github-open-sources-kit-for-spec-driven-ai-development.aspx)
+
+---
+
+## 29. holehe —— 邮箱到账号的 OSINT 枚举工具登上 GitHub Trending 第 3 位
+
+- **传播速度：** ▮ 平稳
+- **来源：** GitHub · 13k stars · ~1d ago
+- **标签：** `osint` `email` `privacy` `python` `recon`
+
+**megadose/holehe**（GPL-3.0）通过探测各网站的忘记密码/注册流程，检查某个邮箱是否注册于 **120 多个服务**（Twitter、Instagram、GitHub、eBay……）——关键是**不会向目标邮箱发送任何通知**，并可选择恢复部分打码的恢复邮箱或手机号。在一篇源码深度解析文章之后，它于 8 月 15 日重新登上 **GitHub Trending 第 3 位**。它提供 CLI（`pip install holehe`）和基于 `trio`/`httpx` 的 Python API。
+
+**值得关注的原因：** 邮箱枚举是一种安静的隐私泄露——全网范围内无需目标任何交互即可获得的未认证"存在信号"。Holehe 的"静默"模式正是它既成为 OSINT 宠儿、又提醒你一个邮箱地址能泄露多少信息的原因。
+
+> "仅供教育用途"；各站点模块会漂移并可能误报，因此应把命中当作"存在信号"而非身份证明。
+
+[`🔗 megadose/holehe`](https://github.com/megadose/holehe) · [`🔗 xlap.top deep-dive`](https://blog.xlap.top/post/tech/2026-08-14/holehe/)
+
+---
+
 ## 元数据
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-08-15T12:03:00Z |
-| 条目数 | 22 |
-| 追踪来源 | 32（GitHub Trending、Hacker News、z.ai、Pandaily、ppc.land、4sysops、Context Studios、The Hacker News、Mallory、SecurityWeek、AISignal、Google Blog、Google Developers Blog、Hugging Face、dev.to、Cursor Docs、mixedbread、TokenPost、RustDesk Blog、LuaCAD Docs、AUR、Android Authority、APIDog、The Neuron、TLDR AI、orcarouter、MiniMax Blog、cirt.gy、CVETodo、llm-stats、Firecrawl Blog、openalternative） |
+| 生成时间 | 2026-08-15T20:03:00Z |
+| 条目数 | 29 |
+| 追踪来源 | 40（GitHub Trending、Hacker News、z.ai、Pandaily、ppc.land、4sysops、Context Studios、The Hacker News、Mallory、SecurityWeek、AISignal、Google Blog、Google Developers Blog、Hugging Face、dev.to、Cursor Docs、mixedbread、TokenPost、RustDesk Blog、LuaCAD Docs、AUR、Android Authority、APIDog、The Neuron、TLDR AI、orcarouter、MiniMax Blog、cirt.gy、CVETodo、llm-stats、Firecrawl Blog、openalternative、Anthropic、Yahoo Tech、arXiv、NVD、IONIX、stack.watch、Visual Studio Magazine、xlap.top） |
 | 更新计划 | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | 排序 | 速度加权（时效性 × 互动加速度 × 来源权威度） |
 | 许可 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

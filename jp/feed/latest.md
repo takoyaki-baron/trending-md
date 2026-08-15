@@ -1,8 +1,8 @@
 ---
 date: 2026-08-15
-updated: 2026-08-15T12:03:00Z
+updated: 2026-08-15T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 32
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -367,13 +367,125 @@ Firecrawlの**anydoc**（MIT）は、単一のRustコア（Node/Python/WASMバ�
 
 ---
 
+## 23. Anthropicの第2回リスク報告が未公開の「Model 2」を開示——Mythos 5を上回る性能
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Anthropic · 186ページの報告 · ~1d ago
+- **タグ:** `anthropic` `risk-report` `model-2` `safety` `responsible-scaling`
+
+Anthropicは**2回目となる会社レベルのリスク報告**（8月14日、7月15日までの評価を対象）を公開した。目玉は、公開フラッグシップのClaude Mythos 5を上回る未公開の内部モデル**Model 2**の存在だ——**AECI能力指数で162.79対161.29**、**CoBench（449件の実R&Dタスクの内部ベンチマーク）で62.8%対50.3%**（自社エンジニアを完全に代替できるモデルには約85%が必要）。Anthropicは**Model 2を公開する計画はない**とし、デプロイ前の安全性テスト一式も未完了だ。報告はまた、**壊滅的ミスアライメントリスクを「非常に低い」から「低い」へ初めて引き上げ**、**Anthropicの本番コードベースにマージされるコードの大半をClaudeが書いている**ことも明かした。
+
+**注目の理由:** 未公開の内部モデルと公開フラッグシップの差、そして「タスク型評価は飽和し能力向上を区別できなくなった」というAnthropic自身の認める事実は、フロンティア研究所がもはや十分に測定できないモデルを温存していることを示す最も明確なシグナルだ。
+
+> さらに開示されたのは、約11か月間誤って無効化されていたバイオセーフティ分類器フラグ（1億3300万メッセージ）と、RL学習エピソードの0.27〜5.1%における思考連鎖の汚染。
+
+[`🔗 Anthropic Risk Report`](https://www.anthropic.com/aug-2026-risk-report) · [`🔗 Yahoo Tech`](https://tech.yahoo.com/ai/claude/articles/anthropic-model-2-beats-mythos-200055763.html)
+
+---
+
+## 24. Vero——形式検証対応コーディングエージェント向け初のリポジトリ規模ベンチマーク
+
+- **ベロシティ:** ▮▮ 上昇
+- **ソース:** arXiv · 43インスタンス · ~1d ago
+- **タグ:** `benchmark` `formal-verification` `lean4` `agents` `software-verification`
+
+**Vero**（arXiv:2608.13522、UC BerkeleyのDawn Songら）は、**リポジトリ規模**での「コード実装と機械検証可能な証明の合成」をエージェントに問う初のベンチマークだ。43の複数モジュール・インスタンスは実在のリポジトリ由来で、Python・Dafny・Verus・Coq（暗号プロトコルから分散システムまで）にまたがる。各インスタンスは、固定APIインターフェースと形式仕様を備えた複数モジュールの**Lean 4**リポジトリをエージェントに与え、証明のみ／コード＋証明の2モードを提供する。最強のフロンティア・コーディングエージェント構成でも**43件中27件しか完全解決できず**、最難関リポジトリでは仕様を一つも閉じられなかった。
+
+**注目の理由:** SWE-benchとその派生が飽和するなか、Veroはフロンティアを「テストに通る」から「数学的に検証された正しさ」へ移す——エージェント評価の次の段であり、現行エージェントがリポジトリ規模の証明義務ではなお大きく失敗することを示すストレステストでもある。
+
+> ベンチマーク・キュレーションパイプライン・評価ハーネスはsunblaze-ucb/veroで公開され、仕様が充足不能であることをエージェントが形式的に証明する監査モードも含む。
+
+[`🔗 arXiv:2608.13522`](https://arxiv.org/abs/2608.13522) · [`🔗 sunblaze-ucb/vero`](https://github.com/sunblaze-ucb/vero)
+
+---
+
+## 25. CVE-2026-73296——Microsoft UFOエージェントフレームワークが未認証のMCPサーバーを公開（CVSS 9.4）
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** NVD · CVSS 9.4 · ~3d ago
+- **タグ:** `microsoft` `ufo` `mcp` `cve` `rce`
+
+Microsoftのオープンソース**UFO**エージェント自動化フレームワークは、**3.0.8**より前のバージョンで、**TCPポート8020/8021**に認証なしのStreamable HTTP MCPサーバーを立ち上げていた。ネットワークから到達可能な攻撃者は、ADB接続されたAndroid端末に対して`capture_screenshot`、`tap`、`swipe`、`type_text`、`launch_app`を呼び出せ、実質的に**完全な遠隔操作と画面情報の漏洩**を許す（IONIXは「RCE相当」と評する）。修正（GHSA-24fq-m9rr-g3mm）はベアラートークン（`UFO_MCP_API_KEY`、定数時間比較）を必須とし、**なければ起動を拒否する**。
+
+**注目の理由:** エージェントフレームワークがMCPツールサーバーを認証なしでネットワークに晒すという、急成長中の新たな攻撃クラスだ。未認証のMCPはツールの直接実行に等しく、ツールが端末を制御する場合その深刻度はRCEに匹敵する。
+
+> CISA-ADPは「PoCあり」、自動化可能：はい、技術的影響：全面的と評価。8020/8021をループバック外に晒さないこと。
+
+[`🔗 NVD CVE-2026-73296`](https://nvd.nist.gov/vuln/detail/CVE-2026-73296) · [`🔗 GitHub advisory GHSA-24fq-m9rr-g3mm`](https://github.com/microsoft/UFO/security/advisories/GHSA-24fq-m9rr-g3mm)
+
+---
+
+## 26. CVE-2026-72776——AgenticSeekエージェントの/queryエンドポイント経由の未認証RCE（CVSS 9.8）
+
+- **ベロシティ:** ▮▮ 上昇
+- **ソース:** IONIX · CVSS 9.8 · ~1d ago
+- **タグ:** `cve` `agenticseek` `rce` `ai-agents` `shell-injection`
+
+Fosowlのオープンソース**AgenticSeek**自律エージェントフレームワークは、バージョン**2.41.1以下**で、`0.0.0.0:7777`にバインドされた`/query` API（ワイルドカードCORS、認証なし）を公開し、攻撃者の入力をそのまま`subprocess.Popen(..., shell=True)`を実行する`BashInterpreter`に渡していた。`safety.py`の不完全なブロックリストは回避可能で、巧妙に作られた`/query`へのPOSTでエージェントプロセスの権限で任意のOSコマンドを実行できる（CVSS 9.8）。PR #534で修正済み。
+
+**注目の理由:** ローカルの「AIエージェント」ツールは、デフォルトでネットワーク実行面を同梱しつつある——ポートに到達できる者には未認証のシェルを提供してしまう。この修正（ループバックへのバインド、`/query`の認証、`shell=True`の排除）は、あらゆるエージェントランタイムのチェックリストであるべきだ。
+
+> すぐにパッチできない場合：7777ポートを公開しない、CORSを制限する、最小権限で実行する、異常な/queryヒットをログ監視する。
+
+[`🔗 IONIX CVE-2026-72776`](https://www.ionix.io/threat-center/cve-2026-72776/) · [`🔗 Fosowl/agenticSeek PR #534`](https://github.com/Fosowl/agenticSeek/pull/534)
+
+---
+
+## 27. CVE-2026-16051——署名付きリクエストのリプレイでWPMU DEV DashboardプラグインにRCE（CVSS 9.8）
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** IONIX · CVSS 9.8 · ~3d ago
+- **タグ:** `wordpress` `wpmu-dev` `rce` `cve` `supply-chain`
+
+**WPMU DEV Dashboard**（`wpmudev-updates`）WordPressプラグインは、**5.0.1**より前の全バージョンで、リモートHubインストールのパッケージ完全性を検証せず、署名付き管理リクエストに**リプレイ保護がない**（CWE-94）。有効な署名付きリクエストを入手またはリプレイできれば、サイトに任意のコードをインストール・実行させられる——認証もユーザー操作も不要でサイトを完全に掌握できる（CVSS 9.8）。同リリースでは関連する認証バイパスも修正され、これによりリクエストの偽造がさらに容易になっていた。WPScanでは`8dae5fbf-…`として追跡される。
+
+**注目の理由:** これはプラグインの*更新メカニズムそのもの*におけるサプライチェーンRCEだ——コードの書き間違いではなく正規の署名付き管理チャネルを悪用するため、通常の管理者トラフィックに見え、見逃しやすい。
+
+> 5.0.1以上へ更新（完全性検証とリプレイ保護を復元）。あわせてWPMU DEV Hub APIキーもローテーションする。
+
+[`🔗 IONIX CVE-2026-16051`](https://www.ionix.io/threat-center/cve-2026-16051/) · [`🔗 stack.watch`](https://stack.watch/vuln/CVE-2026-16051/)
+
+---
+
+## 28. GitHubのspec-kit——「仕様駆動開発」がエージェントコーディングのデフォルトになるなか急浮上
+
+- **ベロシティ:** ▮▮ 上昇
+- **ソース:** GitHub · 128.8k stars · ~1d ago
+- **タグ:** `github` `spec-driven-development` `ai-coding` `cli` `agents`
+
+**github/spec-kit**（MIT）はGitHubの**仕様駆動開発（Spec-Driven Development）**ワークフローをパッケージ化したものだ。`specify` CLIがconstitution → specify → plan → tasks → implementのパイプラインをスキャフォールドし、**30以上のAIコーディングエージェント**（Copilot、Codex、Claude Code、Gemini CLI）にスラッシュコマンドまたはエージェントスキルをインストールする。仕様はエージェントが各チェックポイントで実行・検証する「実行可能な信頼の源」となる——「コンパイルは通るが意図を外す」vibe codingへの明確な回答だ。2025年9月にオープンソース化されたこのプロジェクトは、直近のv0.12.11リリースを背景にGitHub Trendingで再び急上昇している（約128.8kスター、日間+1,160）。
+
+**注目の理由:** エージェントコーディングのワークフロー層は「仕様をコードとして」に収束しつつあり、GitHubのツールキットはそのリファレンス実装になりつつある。チーム規模で「より多くの事前トークンと引き換えにより予測可能な出力」というトレードオフがどう決着するか、注視に値する。
+
+> GitHubは引き続き実験的と位置づける。主な批判はセッションごとのトークン消費が増える点。
+
+[`🔗 github/spec-kit`](https://github.com/github/spec-kit) · [`🔗 Visual Studio Magazine`](https://visualstudiomagazine.com/articles/2025/09/03/github-open-sources-kit-for-spec-driven-ai-development.aspx)
+
+---
+
+## 29. holehe——メールアドレスからアカウントを列挙するOSINTツールがGitHub Trending 3位に
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub · 13k stars · ~1d ago
+- **タグ:** `osint` `email` `privacy` `python` `recon`
+
+**megadose/holehe**（GPL-3.0）は、各サイトのパスワード忘れ・登録フローを調べることで、メールアドレスが**120以上のサービス**（Twitter、Instagram、GitHub、eBay…）に登録されているかを判定する——重要なのは**対象アドレスに一切通知を送らない**点で、部分的にマスクされた復旧用メールや電話番号を復元できることもある。ソースコードの詳細解析記事をきっかけに、8月15日に**GitHub Trending 3位**へ再浮上した。CLI（`pip install holehe`）と`trio`/`httpx`ベースのPython APIを提供する。
+
+**注目の理由:** メール列挙は静かなプライバシー漏洩だ——対象の関与なしにウェブ全体で得られる未認証の「存在シグナル」。holeheの「サイレント」モードこそ、OSINTツールとして愛されると同時に、メールアドレスがどれだけの情報を開示してしまうかを思い起こさせる理由でもある。
+
+> 「教育目的のみ」。サイトモジュールはドリフトして誤検知しうるため、ヒットは身元証明ではなく存在シグナルとして扱うこと。
+
+[`🔗 megadose/holehe`](https://github.com/megadose/holehe) · [`🔗 xlap.top deep-dive`](https://blog.xlap.top/post/tech/2026-08-14/holehe/)
+
+---
+
 ## メタデータ
 
 | フィールド | 値 |
 |-------|-------|
-| 生成日時 | 2026-08-15T12:03:00Z |
-| アイテム数 | 22 |
-| 追跡ソース | 32（GitHub Trending、Hacker News、z.ai、Pandaily、ppc.land、4sysops、Context Studios、The Hacker News、Mallory、SecurityWeek、AISignal、Google Blog、Google Developers Blog、Hugging Face、dev.to、Cursor Docs、mixedbread、TokenPost、RustDesk Blog、LuaCAD Docs、AUR、Android Authority、APIDog、The Neuron、TLDR AI、orcarouter、MiniMax Blog、cirt.gy、CVETodo、llm-stats、Firecrawl Blog、openalternative） |
+| 生成日時 | 2026-08-15T20:03:00Z |
+| アイテム数 | 29 |
+| 追跡ソース | 40（GitHub Trending、Hacker News、z.ai、Pandaily、ppc.land、4sysops、Context Studios、The Hacker News、Mallory、SecurityWeek、AISignal、Google Blog、Google Developers Blog、Hugging Face、dev.to、Cursor Docs、mixedbread、TokenPost、RustDesk Blog、LuaCAD Docs、AUR、Android Authority、APIDog、The Neuron、TLDR AI、orcarouter、MiniMax Blog、cirt.gy、CVETodo、llm-stats、Firecrawl Blog、openalternative、Anthropic、Yahoo Tech、arXiv、NVD、IONIX、stack.watch、Visual Studio Magazine、xlap.top） |
 | 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | ランキング | ベロシティ加重（新しさ × エンゲージメント加速 × ソースの権威性） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

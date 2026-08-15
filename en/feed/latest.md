@@ -1,8 +1,8 @@
 ---
 date: 2026-08-15
-updated: 2026-08-15T12:03:00Z
+updated: 2026-08-15T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 32
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -367,13 +367,125 @@ Firecrawl's **anydoc** (MIT) converts Word, PowerPoint, Excel, OpenDocument, RTF
 
 ---
 
+## 23. Anthropic's second Risk Report discloses an unreleased "Model 2" that beats Mythos 5
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic · 186-page report · ~1d ago
+- **Tags:** `anthropic` `risk-report` `model-2` `safety` `responsible-scaling`
+
+Anthropic published its **second company-level Risk Report** (Aug 14, covering assessments through July 15), and the headline is an internal, unreleased model called **Model 2** that outperforms the public flagship Claude Mythos 5 — scoring **162.79 vs 161.29 on the AECI capability index** and **62.8% vs 50.3% on CoBench**, Anthropic's internal benchmark of 449 real R&D tasks (a model able to fully substitute its own engineers would need ~85%). Anthropic says it has **no plans to release Model 2** and hasn't finished its pre-deployment safety suite. The report also raised **catastrophic-misalignment risk from "very low" to "low"** for the first time, and disclosed that **Claude now authors a large majority of the code merged into Anthropic's production codebases**.
+
+**Why it matters:** The gap between an unreleased internal model and the public flagship — combined with Anthropic's admission that its task-based evals are "saturated" and can no longer distinguish capability gains — is the clearest signal yet that frontier labs are holding back models they can no longer fully measure.
+
+> Also disclosed: a biosafety-classifier flag accidentally disabled for ~11 months (133M messages), and chain-of-thought contamination in 0.27–5.1% of RL training episodes.
+
+[`🔗 Anthropic Risk Report`](https://www.anthropic.com/aug-2026-risk-report) · [`🔗 Yahoo Tech`](https://tech.yahoo.com/ai/claude/articles/anthropic-model-2-beats-mythos-200055763.html)
+
+---
+
+## 24. Vero — the first repository-scale benchmark for formally-verified coding agents
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 43 instances · ~1d ago
+- **Tags:** `benchmark` `formal-verification` `lean4` `agents` `software-verification`
+
+**Vero** (arXiv:2608.13522, UC Berkeley's Dawn Song et al.) is the first benchmark to evaluate AI agents on **joint code implementation and machine-checked proof synthesis at the repository level**. Its 43 multi-module instances come from real-world repositories spanning Python, Dafny, Verus, and Coq (from cryptographic protocols to distributed systems); each gives an agent a multi-module **Lean 4** repository with fixed API interfaces and formal specifications, in proof-only or code-and-proof modes. The strongest frontier coding-agent configuration **fully solved only 27 of 43 instances** and closed no specifications on the hardest repositories.
+
+**Why it matters:** As SWE-bench and its variants saturate, Vero shifts the frontier from "passes tests" to "mathematically verified correctness" — the next rung for agent evaluation, and a stress test that current agents still fail badly on repository-scale proof obligations.
+
+> Ships the benchmark, curation pipeline, and eval harness at sunblaze-ucb/vero, including an audit mode where agents can formally prove a specification unsatisfiable.
+
+[`🔗 arXiv:2608.13522`](https://arxiv.org/abs/2608.13522) · [`🔗 sunblaze-ucb/vero`](https://github.com/sunblaze-ucb/vero)
+
+---
+
+## 25. CVE-2026-73296 — Microsoft UFO agent framework exposed unauthenticated MCP servers (CVSS 9.4)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · CVSS 9.4 · ~3d ago
+- **Tags:** `microsoft` `ufo` `mcp` `cve` `rce`
+
+Microsoft's open-source **UFO** agentic-automation framework, in versions before **3.0.8**, stood up Streamable HTTP MCP servers on **TCP ports 8020/8021 with no authentication** — any network-adjacent attacker could invoke `capture_screenshot`, `tap`, `swipe`, `type_text`, and `launch_app` against an ADB-connected Android device, effectively granting **full remote control and screen disclosure** (IONIX calls it "RCE-equivalent"). The fix (GHSA-24fq-m9rr-g3mm) makes a bearer token (`UFO_MCP_API_KEY`, constant-time checked) mandatory and **refuses to start without it**.
+
+**Why it matters:** This is a new, fast-growing attack class: agent frameworks auto-exposing MCP tool servers to the network with no auth. Unauthenticated MCP = direct agent-tool execution, which is as bad as RCE when the tools control a device.
+
+> CISA-ADP assessed exploitation "poc", automatable: yes, technical impact: total. Do not expose 8020/8021 beyond loopback.
+
+[`🔗 NVD CVE-2026-73296`](https://nvd.nist.gov/vuln/detail/CVE-2026-73296) · [`🔗 GitHub advisory GHSA-24fq-m9rr-g3mm`](https://github.com/microsoft/UFO/security/advisories/GHSA-24fq-m9rr-g3mm)
+
+---
+
+## 26. CVE-2026-72776 — unauthenticated RCE in the AgenticSeek agent via its /query endpoint (CVSS 9.8)
+
+- **Velocity:** ▮▮ rising
+- **Source:** IONIX · CVSS 9.8 · ~1d ago
+- **Tags:** `cve` `agenticseek` `rce` `ai-agents` `shell-injection`
+
+Fosowl's open-source **AgenticSeek** autonomous agent framework, versions ≤ **2.41.1**, exposes a `/query` API bound to `0.0.0.0:7777` with wildcard CORS and no auth, feeding attacker input straight into a `BashInterpreter` that runs `subprocess.Popen(..., shell=True)`. An incomplete blocklist in `safety.py` is bypassable, so a crafted POST to `/query` executes arbitrary OS commands with the agent process's privileges (CVSS 9.8). Fixed in PR #534.
+
+**Why it matters:** Local "AI agent" tools increasingly ship a network exec surface by default — an unauthenticated shell for anyone who can reach the port. The fix (bind loopback, gate `/query`, drop `shell=True`) is the checklist for every agent runtime.
+
+> Mitigations if you can't patch: don't expose port 7777, restrict CORS, run least-privilege, watch logs for anomalous /query hits.
+
+[`🔗 IONIX CVE-2026-72776`](https://www.ionix.io/threat-center/cve-2026-72776/) · [`🔗 Fosowl/agenticSeek PR #534`](https://github.com/Fosowl/agenticSeek/pull/534)
+
+---
+
+## 27. CVE-2026-16051 — signed-request replay enables RCE in WPMU DEV Dashboard plugin (CVSS 9.8)
+
+- **Velocity:** ▮ steady
+- **Source:** IONIX · CVSS 9.8 · ~3d ago
+- **Tags:** `wordpress` `wpmu-dev` `rce` `cve` `supply-chain`
+
+The **WPMU DEV Dashboard** (`wpmudev-updates`) WordPress plugin, in all versions before **5.0.1**, fails to verify package integrity on remote Hub installs and has **no anti-replay protection on signed management requests** (CWE-94). An attacker who obtains or replays a validly-signed request can make the site install and execute arbitrary code — full site compromise with no auth or user interaction (CVSS 9.8). A related authentication bypass (fixed in the same release) makes forging those requests easier. WPScan tracks it under `8dae5fbf-…`.
+
+**Why it matters:** This is a supply-chain RCE in the plugin *update mechanism itself* — exploiting legitimate signed management channels rather than a code typo, which is why it looks like normal admin traffic and is easy to miss.
+
+> Update to 5.0.1+ (restores integrity verification + replay protection); rotate WPMU DEV Hub API keys as well.
+
+[`🔗 IONIX CVE-2026-16051`](https://www.ionix.io/threat-center/cve-2026-16051/) · [`🔗 stack.watch`](https://stack.watch/vuln/CVE-2026-16051/)
+
+---
+
+## 28. GitHub's spec-kit surges as "spec-driven development" becomes the agent-coding default
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 128.8k stars · ~1d ago
+- **Tags:** `github` `spec-driven-development` `ai-coding` `cli` `agents`
+
+**github/spec-kit** (MIT) packages GitHub's **Spec-Driven Development** workflow: a `specify` CLI that scaffolds a constitution → specify → plan → tasks → implement pipeline, installing slash-commands or agent skills into **30+ AI coding agents** (Copilot, Codex, Claude Code, Gemini CLI). Specifications become the "executable source of truth" that agents run against and validate at each checkpoint — an explicit answer to "vibe coding" that compiles but misses intent. The project, open-sourced in Sept 2025, is surging again on GitHub Trending (~128.8k stars, +1,160/day) behind a recent v0.12.11 release.
+
+**Why it matters:** The agent-coding workflow layer is consolidating around specs-as-code, and GitHub's toolkit is becoming the reference implementation — worth watching as the trade-off (more upfront tokens for more predictable output) plays out at team scale.
+
+> Still labeled experimental by GitHub; the main criticism is higher token consumption per session.
+
+[`🔗 github/spec-kit`](https://github.com/github/spec-kit) · [`🔗 Visual Studio Magazine`](https://visualstudiomagazine.com/articles/2025/09/03/github-open-sources-kit-for-spec-driven-ai-development.aspx)
+
+---
+
+## 29. holehe — email-to-account OSINT enumerator hits #3 on GitHub Trending
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 13k stars · ~1d ago
+- **Tags:** `osint` `email` `privacy` `python` `recon`
+
+**megadose/holehe** (GPL-3.0) checks whether an email address is registered on **120+ services** (Twitter, Instagram, GitHub, eBay…) by probing each site's forgot-password/registration flows — critically, **without sending any notification to the target address**, and optionally recovering partially-obfuscated recovery emails or phone numbers. It resurged to **#3 on GitHub Trending** (Aug 15) after a source-code deep-dive article dissected its internals. It ships as a CLI (`pip install holehe`) and a Python API over `trio`/`httpx`.
+
+**Why it matters:** Email enumeration is a quiet privacy leak — an unauthenticated "presence signal" across the web that needs no target interaction. Holehe's "silent" mode is exactly what makes it both a favorite OSINT tool and a reminder of how much your email address discloses.
+
+> "Built for educational purposes only"; site modules drift and can false-positive, so treat hits as presence signals, not identity proof.
+
+[`🔗 megadose/holehe`](https://github.com/megadose/holehe) · [`🔗 xlap.top deep-dive`](https://blog.xlap.top/post/tech/2026-08-14/holehe/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-15T12:03:00Z |
-| Items | 22 |
-| Sources tracked | 32 (GitHub Trending, Hacker News, z.ai, Pandaily, ppc.land, 4sysops, Context Studios, The Hacker News, Mallory, SecurityWeek, AISignal, Google Blog, Google Developers Blog, Hugging Face, dev.to, Cursor Docs, mixedbread, TokenPost, RustDesk Blog, LuaCAD Docs, AUR, Android Authority, APIDog, The Neuron, TLDR AI, orcarouter, MiniMax Blog, cirt.gy, CVETodo, llm-stats, Firecrawl Blog, openalternative) |
+| Generated | 2026-08-15T20:03:00Z |
+| Items | 29 |
+| Sources tracked | 40 (GitHub Trending, Hacker News, z.ai, Pandaily, ppc.land, 4sysops, Context Studios, The Hacker News, Mallory, SecurityWeek, AISignal, Google Blog, Google Developers Blog, Hugging Face, dev.to, Cursor Docs, mixedbread, TokenPost, RustDesk Blog, LuaCAD Docs, AUR, Android Authority, APIDog, The Neuron, TLDR AI, orcarouter, MiniMax Blog, cirt.gy, CVETodo, llm-stats, Firecrawl Blog, openalternative, Anthropic, Yahoo Tech, arXiv, NVD, IONIX, stack.watch, Visual Studio Magazine, xlap.top) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
