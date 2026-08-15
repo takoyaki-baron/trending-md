@@ -1,8 +1,8 @@
 ---
 date: 2026-08-15
-updated: 2026-08-15T04:03:00Z
+updated: 2026-08-15T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 32
 license: CC-BY-4.0
 ---
 
@@ -223,13 +223,157 @@ NVIDIA 的 **NemotronLabs VoiceChat 11B** 是一个端到端、实时的**全双
 
 ---
 
+## 14. 谷歌 Gemini 3.7 Flash —— 三周后再推半价编程/智能体模型
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** Google Blog · ~2d ago
+- **标签：** `google` `gemini` `coding` `agents` `multimodal`
+
+谷歌发布 **Gemini 3.7 Flash**，号称迄今"最智能"的编程与智能体工作流 Flash 模型，距 Gemini 3.6 Flash 仅三周。主要提升集中在智能体编程：**DeepSWE v1.1 49.0→65.3%**、FrontierCode 1.1 34.4→43.6%、WebDev Arena Elo 1538→1588，并具备 100 万 token 输入窗口与多模态输入。发布定价减半至**每百万输入 $0.75、输出 $3.75**（持续到 12 月 31 日，2027 年起涨至 $1.50/$7.50），并在 Gemini API、AI Studio、Android Studio、Antigravity 与 Gemini Enterprise 首发上线——如今还驱动 **Gemini Spark** 智能体。
+
+**值得关注的原因：** 三周的迭代节奏加上半价发布，是直接争夺"廉价智能体主力模型"这一档位的信号；DeepSWE 的跃升也表明，智能体编程评测——而非对话基准——才是如今模型竞赛的真正前线。
+
+> 促销定价同样适用于 3.6 Flash；Gemini Spark 在 160 多个国家为 AI Pro/Ultra 订阅用户运行 3.7 Flash（不含 EEA/英国/瑞士/尼日利亚）。
+
+[`🔗 Android Authority`](https://www.androidauthority.com/gemini-3-7-flash-debut-3698440/) · [`🔗 APIDog 基准`](https://apidog.com/blog/whats-new-in-gemini-3-7-flash/)
+
+---
+
+## 15. 阿里 Qwen3.8-27B —— Apache-2.0 多模态 27B，登顶 SWE-bench Pro
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** Hugging Face · 843 pts · ~1d ago
+- **标签：** `qwen` `alibaba` `multimodal` `open-weights` `coding`
+
+Qwen 团队发布 **Qwen3.8-27B**（Apache 2.0），一款原生多模态的 27B 模型——Gated DeltaNet 与注意力混合架构、支持多 token 预测——具备 262K 原生上下文（经 YaRN 可扩展至 100 万）与原生图像/视频理解能力。它在 **SWE-bench Pro（61.7）**、LiveCodeBench v6（90.3）、OSWorld-Verified（84.3）、WebArena-Verified（64.8）与 AndroidWorld（81.9）上取得同列最佳，支持思考控制（`reasoning_effort` xhigh/medium/low、`preserve_thinking`）。它在 Hacker News 上以 843 分登顶，且已有 271 个量化变体可用于 llama.cpp/Ollama/LM Studio。
+
+**值得关注的原因：** 它是 Qwen3.8-Max（几天前发布的 2.4T-A95B 旗舰）的中尺寸搭档，为本地与边缘部署提供了宽松许可下的、具备前沿竞争力的多模态编程模型——正好填补封闭 API 与全栈智能体工具之间的空白。
+
+> 可在 Transformers/vLLM/SGLang/Docker Model Runner 上运行；MLX 社区版本覆盖 Apple Silicon。
+
+[`🔗 Qwen/Qwen3.8-27B`](https://huggingface.co/Qwen/Qwen3.8-27B) · [`🔗 orcarouter 对比`](https://www.orcarouter.ai/blog/qwen-3-8-27b-vs-muse-glimmer)
+
+---
+
+## 16. MiniMax Music 3.0 —— 开源权重模型，单次生成整首 5 分钟歌曲
+
+- **传播速度：** ▮▮▮ 趋势热榜
+- **来源：** MiniMax Blog · ~2d ago
+- **标签：** `minimax` `music` `audio` `open-weights` `generative`
+
+MiniMax 开源 **MiniMax-Music3**，一个可根据歌词与结构化音乐描述单次生成约 5 分钟完整歌曲（32 kHz、16-bit 立体声 WAV）的音乐模型。它采用混合架构：负责长程结构的 8B"全局"LLM、负责声学细节的 0.6B"局部"LLM、2.4B 流匹配模块，以及基于 8 层 RVQ 分词器的 123M Flow-VAE 解码器。约 24 GB 显存即可运行（配合 CPU 卸载可低至约 8 GB），提供 ComfyUI 支持与 INT8 变体，并接受分段标签（`[Intro]`、`[Chorus]`、`[Bridge]`…）以实现精细的编曲控制。
+
+**值得关注的原因：** 对 BPM、调式、人声细节与结构的可控整曲、可自托管的音乐生成，此前被 Suno、Udio 等封闭 API 垄断。开源权重加 $0.15/首的 API 使其成为最强开源挑战者——尽管质量宣称仍只是厂商自述。
+
+> 发布颇为低调：上线时约 25 次下载，无论文或基准报告——只有权重、README 与一个 demo Space。
+
+[`🔗 MiniMax Blog`](https://www.minimax.io/blog/minimax-music-3-0-next-generation-open-weights-production-ready-versatile-music-model) · [`🔗 MiniMaxAI/MiniMax-Music3`](https://huggingface.co/MiniMaxAI/MiniMax-Music3)
+
+---
+
+## 17. OpenAI 预览 GPT-5.6 Sol "Ultrafast" —— 在 Cerebras 上快 14 倍、每秒 750 token
+
+- **传播速度：** ▮▮ 上升
+- **来源：** OpenAI / Cerebras · preview · ~1d ago
+- **标签：** `openai` `gpt-5.6` `inference` `cerebras` `latency`
+
+OpenAI 预览了 **GPT-5.6 Sol 的"Ultrafast"模式**，通过在 Cerebras 芯片上运行该旗舰模型（而非切换成更小的模型），最高可提速 **14 倍**，生成速度达每秒 **750 token**。它面向欺诈检测、实时客服等实时工作负载，已在 Jane Street、Podium 等公司测试。官方未给出正式发布日期，仅称其为"早期预览"。
+
+**值得关注的原因：** 无需蒸馏即在旗舰模型上实现实时性能，是生产级智能体与流式 AI 用例所缺的一环。若 750 tok/s 在正式发布时依然成立，瓶颈将从推理速度转向编排、安全与成本。
+
+> 它与 DeepSeek V4-Pro 的非高峰时段半价定价、Gemini 3.7 Flash 一同出现在异常密集的 24 小时窗口内。
+
+[`🔗 The Neuron`](https://www.theneuron.ai/newsletter/google-openai-deepseek-dropped-models-today/) · [`🔗 TLDR AI`](https://tldr.tech/ai/2026-08-14)
+
+---
+
+## 18. CISA 确认 SonicWall SMA1000 漏洞已成勒索软件攻击向量（CVE-2026-15409/15410）
+
+- **传播速度：** ▮▮ 上升
+- **来源：** CISA KEV · CVSS 10.0 + 7.2 · ~1d ago
+- **标签：** `cisa` `sonicwall` `ransomware` `ssrf` `kev`
+
+8 月 14 日，CISA 更新其"已知被利用漏洞"（KEV）目录中 **CVE-2026-15409**（SMA1000 "Work Place"/wsproxy 接口中的 SSRF，CVSS 10.0）与 **CVE-2026-15410**（`removehotfix` 进程中的命令注入，CVSS 7.2）条目，确认二者现已被用于勒索软件攻击，Resecurity 将其归因于 **INC Ransomware** 的一个分支。两者串联可对暴露在互联网上的 SMA1000 设备实现零点击、无需认证的 root 级入侵；Volexity 将利用活动追溯到 6 月 22 日，并关联到定制恶意软件（KNUCKLEBALL、Sou5、ROOTRUN、ORANGETAIL）。
+
+**值得关注的原因：** 仅打补丁不够——利用活动比 7 月 14 日的披露早了三周，因此在该窗口期内未打补丁且暴露在互联网上的任何 SMA1000 设备都必须排查是否已被入侵。报告发布时 Shadowserver 追踪到约 380 台暴露设备。
+
+> 已修复于 12.4.3-03453 / 12.5.0-02835，无变通方案。INC Ransomware 还通过电话（"Andrew"，+1 (304) 384-0401）与邮件向受害者施压。
+
+[`🔗 cirt.gy 公告`](https://cirt.gy/article/al2026_27-cisa-warns-sonicwall-sma1000-vulnerabilities-are-being-exploited-by-ransomware-gangs-august-14th-2026/) · [`🔗 CVETodo`](https://cvetodo.com/news/cisa-flags-sonicwall-sma1000-bugs-cve-2026-15409-and-cve-2026-15410-as-ransomware-attack-vectors)
+
+---
+
+## 19. NVIDIA Nemotron Teacher —— 用于蒸馏前沿模型的 550B"推理教师"
+
+- **传播速度：** ▮▮ 上升
+- **来源：** Hugging Face · 550B params · ~1d ago
+- **标签：** `nvidia` `distillation` `reasoning` `openmdw` `teacher`
+
+NVIDIA 发布 **Nemotron-Labs-Teacher-General-Reasoning**，一个 550B 参数（55B 激活）的 LatentMoE Mamba-2 + Transformer 模型，定位为 Nemotron 3 Ultra 流水线中的训练期"教师"——是其多教师策略蒸馏（MOPD）方案中 10 余个领域专精教师之一。它在最难的数学/逻辑/抽象推理问题上生成长推理轨迹，并为自由作答打分，配有推理预算旋钮（`enable_thinking`、`medium_effort`）。这是一次仅权重发布（1.12 TB 下载，最低需 4×B200 / 8×H100），采用 OpenMDW-1.1 许可并公开了后训练数据——且未公布任何基准。
+
+**值得关注的原因：** 它罕见地展示了前沿实验室究竟如何构建推理模型：一个连 NVIDIA 自己都不愿给出基准的专业教师模型。OpenMDW 公开后训练数据，也是超越"仅权重"惯例的一小步。
+
+> 无推理服务商托管；推理质量"除 NVIDIA 外无人验证"。
+
+[`🔗 orcarouter 分析`](https://www.orcarouter.ai/blog/nemotron-labs-teacher-general-reasoning-vs-qwen-3-8-max) · [`🔗 Nemotron Teacher 模型卡`](https://huggingface.co/nvidia/Nemotron-Labs-Teacher-General-Reasoning)
+
+---
+
+## 20. Liquid AI LFM2.5-VL-3B —— 在端侧跑赢更大对手的视觉语言模型
+
+- **传播速度：** ▮ 平稳
+- **来源：** Hugging Face · 3.1B params · ~2d ago
+- **标签：** `liquid-ai` `vision-language` `on-device` `open-weights` `multimodal`
+
+Liquid AI 发布 **LFM2.5-VL-3B**，一个约 3.1B 的视觉语言模型（LFM2.5-2.6B 主干 + SigLIP2 NaFlex 视觉编码器），专为端侧设计：在 Apple M5 Max 上 **228 tok/s**、Galaxy S26 Ultra 上约 20 tok/s，内存占用低于 3.3 GB。它在 ScreenSpot-v2 达 80.7（屏幕理解）、RefCOCO P@1 达 87.9（物体定位）、ChartQA 81.3，支持 16 种语言与实验性结构化 OCR（标签 + 边界框 + LaTeX）。官方提供 GGUF/ONNX/MLX 量化版本。
+
+**值得关注的原因：** 它瞄准 GUI 智能体这一细分场景——在手机与笔记本上本地读屏与定位物体——这正是大多数"电脑使用"智能体实际运行的负载，而这些硬件根本跑不动 27B 模型。
+
+> 许可 lfm1.0；不建议用于长上下文视觉推理（网页设计、蓝图问答）。
+
+[`🔗 LiquidAI/LFM2.5-VL-3B`](https://huggingface.co/LiquidAI/LFM2.5-VL-3B) · [`🔗 llm-stats`](https://llm-stats.com/models/lfm-2.5-vl-3b)
+
+---
+
+## 21. firecrawl/anydoc —— 一个 Rust 引擎把任意办公文档转为 LLM 就绪的 Markdown
+
+- **传播速度：** ▮ 平稳
+- **来源：** GitHub · 16.1k stars · ~3d ago
+- **标签：** `firecrawl` `rust` `markdown` `documents` `rag`
+
+Firecrawl 的 **anydoc**（MIT）通过单一 Rust 核心（含 Node/Python/WASM 绑定），把 Word、PowerPoint、Excel、OpenDocument、RTF、EPUB、CSV 与 PDF 转为干净的 GitHub 风格 Markdown，单文档中位转换时间**低于 5 ms**。它按字节而非扩展名识别格式，保留表格/合并单元格/脚注/演讲者备注，把图片渲染为 alt 文本，并驱动 Firecrawl 的 `/parse` API——同时提供 Agent Skill（`npx skills add firecrawl/anydoc`）。
+
+**值得关注的原因：** 文档摄取是 RAG 与智能体工作流中不起眼却致命的瓶颈，而传统转换器（LibreOffice 1,129 ms、Pandoc 102 ms）要么慢上数个数量级、要么有损。一个快速、一致、单一输出格式的引擎，可以省去一整类预处理代码。
+
+> 基准：中位 4.4 ms，对比 LibreOffice 1,129 ms 与 Pandoc 102 ms；其测试中唯一能处理全部 14 种格式的转换器。
+
+[`🔗 firecrawl/anydoc`](https://github.com/firecrawl/anydoc) · [`🔗 Firecrawl /parse 博客`](https://www.firecrawl.dev/blog/introducing-parse)
+
+---
+
+## 22. Comp AI CRM —— 为 AI 智能体自记笔记而生的 CRM
+
+- **传播速度：** ▮ 平稳
+- **来源：** GitHub · 7.1k stars · ~1w ago
+- **标签：** `crm` `agents` `typescript` `eve` `open-source`
+
+**trycompai/crm**（Comp AI CRM，MIT）颠倒了 CRM 模型：一个持久化的研究智能体才是产品，数据库只是"智能体记笔记的地方"。该智能体拥有自己的部署、日程与工作队列——读取团队收件箱、从邮件线程创建联系人、充实公司资料、自行安排跟进，并在研究预算耗尽前一直消耗预算。它基于 Vercel 的 eve 框架构建（18 个工具、4 项技能、网络隔离沙箱），单租户，且无需任何外部 API 密钥即可运行。核心规则是："绝不臆测个人信息"——弱证据只会变成人工复核的建议，而非既定事实。
+
+**值得关注的原因：** 它是"智能体优先"软件模式取代"表单优先"SaaS 的一个具体实例：界面成了智能体所做之事的视图，而非数据录入界面——由此颠覆了 CRM 乃至大多数商业软件的设计方式。
+
+> 发布约 6 天，v1.0.0；基于 Bun 的 TypeScript Turborepo（Next.js + NestJS/tRPC + Postgres）；支持 Slack 集成；Google 登录 + 白名单即为全部授权模型。
+
+[`🔗 trycompai/crm`](https://github.com/trycompai/crm) · [`🔗 openalternative`](https://openalternative.co/crm)
+
+---
+
 ## 元数据
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-08-15T04:03:00Z |
-| 条目数 | 13 |
-| 追踪来源 | 20（GitHub Trending、Hacker News、z.ai、Pandaily、ppc.land、4sysops、Context Studios、The Hacker News、Mallory、SecurityWeek、AISignal、Google Blog、Google Developers Blog、Hugging Face、dev.to、Cursor Docs、mixedbread、TokenPost、RustDesk Blog、LuaCAD Docs、AUR） |
+| 生成时间 | 2026-08-15T12:03:00Z |
+| 条目数 | 22 |
+| 追踪来源 | 32（GitHub Trending、Hacker News、z.ai、Pandaily、ppc.land、4sysops、Context Studios、The Hacker News、Mallory、SecurityWeek、AISignal、Google Blog、Google Developers Blog、Hugging Face、dev.to、Cursor Docs、mixedbread、TokenPost、RustDesk Blog、LuaCAD Docs、AUR、Android Authority、APIDog、The Neuron、TLDR AI、orcarouter、MiniMax Blog、cirt.gy、CVETodo、llm-stats、Firecrawl Blog、openalternative） |
 | 更新计划 | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | 排序 | 速度加权（时效性 × 互动加速度 × 来源权威度） |
 | 许可 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

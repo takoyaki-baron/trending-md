@@ -1,8 +1,8 @@
 ---
 date: 2026-08-15
-updated: 2026-08-15T04:03:00Z
+updated: 2026-08-15T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 32
 license: CC-BY-4.0
 ---
 
@@ -223,13 +223,157 @@ NVIDIAの**NemotronLabs VoiceChat 11B**は、オープンウェイトで公開�
 
 ---
 
+## 14. GoogleのGemini 3.7 Flash——3.6から3週間で登場した半額のコーディング/エージェントモデル
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Google Blog · ~2d ago
+- **タグ:** `google` `gemini` `coding` `agents` `multimodal`
+
+Googleは**Gemini 3.7 Flash**を公開した。コーディングとエージェントワークフロー向けとして「最もインテリジェント」なFlashで、Gemini 3.6 Flashからわずか3週間での登場となる。主な向上はエージェント的コーディングにあり、**DeepSWE v1.1 49.0→65.3%**、FrontierCode 1.1 34.4→43.6%、WebDev Arena Elo 1538→1588、さらに100万トークンの入力ウィンドウとマルチモーダル入力に対応する。提供価格は**入力$0.75/100万・出力$3.75/100万**へ半減（12月31日まで、2027年から$1.50/$7.50）。Gemini API、AI Studio、Android Studio、Antigravity、Gemini Enterpriseで初日から提供され、**Gemini Spark**エージェントを動かす。
+
+**注目の理由:** 3週間のケイデンスと半額提供は「エージェント向けの安価な主力モデル」という層への直接的な攻めだ。DeepSWEの飛躍は、チャットベンチマークではなくエージェント的コーディング評価こそが今やモデル競争の最前線であることを示す。
+
+> プロモーション価格は3.6 Flashにも適用。Gemini Sparkは160カ国以上でAI Pro/Ultra加入者向けに3.7 Flashを実行（EEA/英国/スイス/ナイジェリアは対象外）。
+
+[`🔗 Android Authority`](https://www.androidauthority.com/gemini-3-7-flash-debut-3698440/) · [`🔗 APIDog ベンチマーク`](https://apidog.com/blog/whats-new-in-gemini-3-7-flash/)
+
+---
+
+## 15. AlibabaのQwen3.8-27B——SWE-bench Proで首位のApache-2.0マルチモーダル27B
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** Hugging Face · 843 pts · ~1d ago
+- **タグ:** `qwen` `alibaba` `multimodal` `open-weights` `coding`
+
+Qwenチームは**Qwen3.8-27B**（Apache 2.0）を公開した。Gated DeltaNetとアテンションのハイブリッド、マルチトークン予測を備えたネイティブ・マルチモーダルの27Bモデルで、262Kのネイティブコンテキスト（YaRNで100万まで拡張）とネイティブの画像/動画理解を備える。**SWE-bench Pro（61.7）**、LiveCodeBench v6（90.3）、OSWorld-Verified（84.3）、WebArena-Verified（64.8）、AndroidWorld（81.9）で同列最高を記録し、思考制御（`reasoning_effort` xhigh/medium/low、`preserve_thinking`）に対応する。Hacker Newsで843ポイントの首位となり、llama.cpp/Ollama/LM Studio向けに271の量子化バリアントがすでに存在する。
+
+**注目の理由:** 数日前に公開されたQwen3.8-Max（2.4T-A95Bフラッグシップ）の中規模な相棒であり、ローカルやエッジ展開に寛容なライセンスでフロンティア級のマルチモーダルコーディングモデルをもたらす——クローズドAPIとフルスタックエージェントツールの間のギャップをちょうど埋める存在だ。
+
+> Transformers/vLLM/SGLang/Docker Model Runnerで動作。MLXコミュニティビルドはApple Siliconをカバー。
+
+[`🔗 Qwen/Qwen3.8-27B`](https://huggingface.co/Qwen/Qwen3.8-27B) · [`🔗 orcarouter 比較`](https://www.orcarouter.ai/blog/qwen-3-8-27b-vs-muse-glimmer)
+
+---
+
+## 16. MiniMax Music 3.0——5分間のフル楽曲を1回で生成するオープンウェイトモデル
+
+- **ベロシティ:** ▮▮▮ トレンド
+- **ソース:** MiniMax Blog · ~2d ago
+- **タグ:** `minimax` `music` `audio` `open-weights` `generative`
+
+MiniMaxは**MiniMax-Music3**をオープンソース化した。歌詞と構造化された音楽説明から、約5分間の完成した楽曲（32 kHz、16-bitステレオWAV）を1回のパスで生成する音楽モデルだ。ハイブリッド構成で、長距離構造を担う8Bの「グローバル」LLM、音響ディテールを担う0.6Bの「ローカル」LLM、2.4Bのフローマッチングモジュール、8層RVQトークナイザー上の123M Flow-VAEデコーダーからなる。約24 GBのVRAMで動作（CPUオフロードで約8 GBまで低減）、ComfyUI対応とINT8バリアントを同梱し、セクションタグ（`[Intro]`、`[Chorus]`、`[Bridge]`…）による細かなアレンジ制御を受け付ける。
+
+**注目の理由:** BPM、キー、ボーカル詳細、構成まで制御できるフルソングの自己ホスト型音楽生成は、SunoやUdioのようなクローズドAPIに閉ざされてきた。オープンウェイトと1曲$0.15のAPIは、これを最強のオープン挑戦者にする——ただし品質の主張は依然としてベンダー報告のみだ。
+
+> 静かなリリースで、公開時のダウンロードは約25件、論文やベンチマーク報告はなし——ウェイト、README、デモSpaceのみ。
+
+[`🔗 MiniMax Blog`](https://www.minimax.io/blog/minimax-music-3-0-next-generation-open-weights-production-ready-versatile-music-model) · [`🔗 MiniMaxAI/MiniMax-Music3`](https://huggingface.co/MiniMaxAI/MiniMax-Music3)
+
+---
+
+## 17. OpenAIがGPT-5.6 Sol「Ultrafast」をプレビュー——Cerebras上で14倍速、750トークン/秒
+
+- **ベロシティ:** ▮▮ 上昇
+- **ソース:** OpenAI / Cerebras · preview · ~1d ago
+- **タグ:** `openai` `gpt-5.6` `inference` `cerebras` `latency`
+
+OpenAIは**GPT-5.6 Solの「Ultrafast」モード**をプレビュー公開した。より小さなモデルに切り替えるのではなく、Cerebrasチップ上でフラッグシップを実行することで最大**14倍**高速化し、**750トークン/秒**を生成する。不正検知やライブカスタマーサポートなどのリアルタイムワークロードを狙い、Jane StreetやPodiumなどの企業でテスト中だ。一般提供の日程は示されず、「早期プレビュー」と位置づけられている。
+
+**注目の理由:** 蒸留なしにフラッグシップモデルでリアルタイム性能を実現することは、本番のエージェント的・ストリーミングAIユースケースに欠けていたピースだ。750 tok/sがGAで維持されれば、ボトルネックは推論速度からオーケストレーション、安全性、コストへ移る。
+
+> DeepSeek V4-Proのオフピーク半額価格、Gemini 3.7 Flashとともに、異例の密度の24時間ウィンドウで登場した。
+
+[`🔗 The Neuron`](https://www.theneuron.ai/newsletter/google-openai-deepseek-dropped-models-today/) · [`🔗 TLDR AI`](https://tldr.tech/ai/2026-08-14)
+
+---
+
+## 18. CISAがSonicWall SMA1000の欠陥をランサムウェア攻撃ベクトルと確認（CVE-2026-15409/15410）
+
+- **ベロシティ:** ▮▮ 上昇
+- **ソース:** CISA KEV · CVSS 10.0 + 7.2 · ~1d ago
+- **タグ:** `cisa` `sonicwall` `ransomware` `ssrf` `kev`
+
+8月14日、CISAは既知の悪用脆弱性（KEV）カタログの**CVE-2026-15409**（SMA1000の「Work Place」/wsproxyインターフェースにおけるSSRF、CVSS 10.0）と**CVE-2026-15410**（`removehotfix`プロセスにおけるコマンドインジェクション、CVSS 7.2）のエントリを更新し、両者がランサムウェア攻撃で悪用されていると確認した。Resecurityはこれを**INC Ransomware**のアフィリエイトに帰属させている。連鎖させることで、インターネットに面したSMA1000アプライアンスへのゼロクリック・未認証のroot侵害が可能になる。Volexityは悪用を6月22日まで遡り、カスタムマルウェア（KNUCKLEBALL、Sou5、ROOTRUN、ORANGETAIL）を関連づけた。
+
+**注目の理由:** パッチ適用だけでは不十分だ——悪用は7月14日の開示より3週間先行しており、その期間に未パッチでインターネットに面していたSMA1000は侵害調査が必須となる。報告時点でShadowserverは約380台の露出アプライアンスを追跡していた。
+
+> 12.4.3-03453 / 12.5.0-02835で修正、回避策なし。INC Ransomwareは電話（「Andrew」、+1 (304) 384-0401）やメールでも被害者に圧力をかける。
+
+[`🔗 cirt.gy アドバイザリ`](https://cirt.gy/article/al2026_27-cisa-warns-sonicwall-sma1000-vulnerabilities-are-being-exploited-by-ransomware-gangs-august-14th-2026/) · [`🔗 CVETodo`](https://cvetodo.com/news/cisa-flags-sonicwall-sma1000-bugs-cve-2026-15409-and-cve-2026-15410-as-ransomware-attack-vectors)
+
+---
+
+## 19. NVIDIAのNemotron Teacher——フロンティアモデルを蒸留する550B「推論ティーチャー」
+
+- **ベロシティ:** ▮▮ 上昇
+- **ソース:** Hugging Face · 550B params · ~1d ago
+- **タグ:** `nvidia` `distillation` `reasoning` `openmdw` `teacher`
+
+NVIDIAは**Nemotron-Labs-Teacher-General-Reasoning**を公開した。550Bパラメータ（55Bアクティブ）のLatentMoE Mamba-2 + Transformerモデルで、Nemotron 3 Ultraパイプラインにおける訓練時の「ティーチャー」——Multi-Teacher On-Policy Distillation（MOPD）レシピにおける10以上の領域特化ティーチャーの1つだ。最難関の数学・論理・抽象推論問題で長い推論トレースを生成し、自由回答の採点も行う。推論バジェットのダイヤル（`enable_thinking`、`medium_effort`）を備える。ウェイトのみのリリース（1.12 TBダウンロード、4×B200 / 8×H100以上が必要）で、OpenMDW-1.1ライセンスの下でポストトレーニングデータを開示——そしてベンチマークは未公表だ。
+
+**注目の理由:** フロンティアラボが実際にどのように推論モデルを構築しているかの貴重な窓だ。NVIDIA自身がベンチマークを拒否した専門ティーチャーという存在。OpenMDWのポストトレーニングデータ開示も、ウェイトのみの慣例を超える小さな一歩だ。
+
+> 推論プロバイダーによるホスティングはなし。推論品質は「NVIDIA外部の誰も検証していない」。
+
+[`🔗 orcarouter 分析`](https://www.orcarouter.ai/blog/nemotron-labs-teacher-general-reasoning-vs-qwen-3-8-max) · [`🔗 Nemotron Teacher モデルカード`](https://huggingface.co/nvidia/Nemotron-Labs-Teacher-General-Reasoning)
+
+---
+
+## 20. Liquid AIのLFM2.5-VL-3B——より大きなライバルを上回るオンデバイス視覚言語モデル
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** Hugging Face · 3.1B params · ~2d ago
+- **タグ:** `liquid-ai` `vision-language` `on-device` `open-weights` `multimodal`
+
+Liquid AIは**LFM2.5-VL-3B**を公開した。約3.1Bの視覚言語モデル（LFM2.5-2.6Bバックボーン + SigLIP2 NaFlexエンコーダー）で、オンデバイス向けに設計され、Apple M5 Maxで**228 tok/s**、Galaxy S26 Ultraで約20 tok/sを3.3 GB未満のメモリで達成する。ScreenSpot-v2 80.7（画面理解）、RefCOCO P@1 87.9（グラウンディング）、ChartQA 81.3、16言語対応、実験的な構造化OCR（ラベル + バウンディングボックス + LaTeX）を記録する。公式のGGUF/ONNX/MLX量子化版が提供される。
+
+**注目の理由:** GUIエージェントのニッチ——スマホやノートPC上でローカルに画面を読み、オブジェクトを位置づける——を狙う。これはほとんどの「コンピュータ使用」エージェントが実際に走らせるワークロードであり、27Bモデルをホストできないハードウェア上での話だ。
+
+> ライセンスはlfm1.0。長文脈の視覚推論（ウェブデザイン、設計図QA）には非推奨。
+
+[`🔗 LiquidAI/LFM2.5-VL-3B`](https://huggingface.co/LiquidAI/LFM2.5-VL-3B) · [`🔗 llm-stats`](https://llm-stats.com/models/lfm-2.5-vl-3b)
+
+---
+
+## 21. firecrawl/anydoc——あらゆるオフィス文書をLLM対応Markdownに変換する単一のRustエンジン
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub · 16.1k stars · ~3d ago
+- **タグ:** `firecrawl` `rust` `markdown` `documents` `rag`
+
+Firecrawlの**anydoc**（MIT）は、単一のRustコア（Node/Python/WASMバインディング付き）でWord、PowerPoint、Excel、OpenDocument、RTF、EPUB、CSV、PDFをクリーンなGitHub風Markdownに変換し、文書あたりの中央値で**5 ms未満**を実現する。拡張子ではなくバイト列からフォーマットを検出し、表・結合セル・脚注・スピーカーノートを保持し、画像をaltテキストとして描画する。Firecrawlの`/parse` APIを支え、Agent Skill（`npx skills add firecrawl/anydoc`）も提供する。
+
+**注目の理由:** 文書取り込みはRAGやエージェントワークフローにおいて地味ながら致命的なボトルネックであり、従来の変換器（LibreOffice 1,129 ms、Pandoc 102 ms）は桁違いに遅いか損失が大きい。高速で一貫した単一出力フォーマットのエンジンは、前処理コードのクラスを丸ごと不要にする。
+
+> ベンチマーク：中央値4.4 ms、LibreOffice 1,129 ms・Pandoc 102 msに対抗。テストで14フォーマットすべてを処理できた唯一の変換器。
+
+[`🔗 firecrawl/anydoc`](https://github.com/firecrawl/anydoc) · [`🔗 Firecrawl /parse ブログ`](https://www.firecrawl.dev/blog/introducing-parse)
+
+---
+
+## 22. Comp AI CRM——AIエージェントが自らメモを取るために作られたCRM
+
+- **ベロシティ:** ▮ 安定
+- **ソース:** GitHub · 7.1k stars · ~1w ago
+- **タグ:** `crm` `agents` `typescript` `eve` `open-source`
+
+**trycompai/crm**（Comp AI CRM、MIT）はCRMモデルを逆転させる。永続的な調査エージェントこそが製品であり、データベースは「エージェントがメモを取る場所」にすぎない。エージェントは独自のデプロイ、スケジュール、ワークキューを走らせ——チームの受信トレイを読み、メールスレッドからコンタクトを作成し、企業情報を充実させ、自らフォローアップを予定し、調査予算が尽きるまで使い切る。Vercelのeveフレームワーク（18ツール、4スキル、ネットワーク分離サンドボックス）上に構築され、シングルテナントで、外部APIキーなしで動作する。中核ルールは「人について推測しない」——弱い証拠は記録された事実ではなく、人間がレビューする提案になる。
+
+**注目の理由:** 「エージェント優先」ソフトウェアパターンが「フォーム優先」SaaSを置き換える具体例だ。UIはエージェントが何をしたかのビューとなり、データ入力画面ではなくなる——CRM、ひいては大半のビジネスソフトウェアの設計方法を反転させる。
+
+> 公開から約6日でv1.0.0。Bun上のTypeScript Turborepo（Next.js + NestJS/tRPC + Postgres）。Slack連携。Googleサインインと許可リストが承認モデルのすべて。
+
+[`🔗 trycompai/crm`](https://github.com/trycompai/crm) · [`🔗 openalternative`](https://openalternative.co/crm)
+
+---
+
 ## メタデータ
 
 | フィールド | 値 |
 |-------|-------|
-| 生成日時 | 2026-08-15T04:03:00Z |
-| アイテム数 | 13 |
-| 追跡ソース | 20（GitHub Trending、Hacker News、z.ai、Pandaily、ppc.land、4sysops、Context Studios、The Hacker News、Mallory、SecurityWeek、AISignal、Google Blog、Google Developers Blog、Hugging Face、dev.to、Cursor Docs、mixedbread、TokenPost、RustDesk Blog、LuaCAD Docs、AUR） |
+| 生成日時 | 2026-08-15T12:03:00Z |
+| アイテム数 | 22 |
+| 追跡ソース | 32（GitHub Trending、Hacker News、z.ai、Pandaily、ppc.land、4sysops、Context Studios、The Hacker News、Mallory、SecurityWeek、AISignal、Google Blog、Google Developers Blog、Hugging Face、dev.to、Cursor Docs、mixedbread、TokenPost、RustDesk Blog、LuaCAD Docs、AUR、Android Authority、APIDog、The Neuron、TLDR AI、orcarouter、MiniMax Blog、cirt.gy、CVETodo、llm-stats、Firecrawl Blog、openalternative） |
 | 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | ランキング | ベロシティ加重（新しさ × エンゲージメント加速 × ソースの権威性） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

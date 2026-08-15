@@ -1,8 +1,8 @@
 ---
 date: 2026-08-15
-updated: 2026-08-15T04:03:00Z
+updated: 2026-08-15T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 32
 license: CC-BY-4.0
 ---
 
@@ -223,13 +223,157 @@ NVIDIA's **NemotronLabs VoiceChat 11B** is an end-to-end, real-time **full-duple
 
 ---
 
+## 14. Google's Gemini 3.7 Flash — half-price coding/agent model lands three weeks after 3.6
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Google Blog · ~2d ago
+- **Tags:** `google` `gemini` `coding` `agents` `multimodal`
+
+Google shipped **Gemini 3.7 Flash**, its "most intelligent" Flash for coding and agent workflows, just three weeks after Gemini 3.6 Flash. Headline gains are on agentic coding: **DeepSWE v1.1 49.0→65.3%**, FrontierCode 1.1 34.4→43.6%, and WebDev Arena Elo 1538→1588, plus a 1M-token input window and multimodal input. Launch pricing is halved to **$0.75/M input and $3.75/M output** through Dec 31 (then $1.50/$7.50 in 2027), and it ships day-one across the Gemini API, AI Studio, Android Studio, Antigravity, and Gemini Enterprise — where it now powers the **Gemini Spark** agent.
+
+**Why it matters:** A three-week cadence plus a half-price launch is a direct bid for the "cheap workhorse for agents" tier, and the DeepSWE jump shows agentic-coding evals — not chat benchmarks — are now where the model race is actually fought.
+
+> Promotional pricing also applies to 3.6 Flash; Gemini Spark runs on 3.7 Flash for AI Pro/Ultra subscribers in 160+ countries (not EEA/UK/Switzerland/Nigeria).
+
+[`🔗 Android Authority`](https://www.androidauthority.com/gemini-3-7-flash-debut-3698440/) · [`🔗 APIDog benchmarks`](https://apidog.com/blog/whats-new-in-gemini-3-7-flash/)
+
+---
+
+## 15. Alibaba's Qwen3.8-27B — an Apache-2.0 multimodal 27B topping SWE-bench Pro
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · 843 pts · ~1d ago
+- **Tags:** `qwen` `alibaba` `multimodal` `open-weights` `coding`
+
+Qwen Team released **Qwen3.8-27B** (Apache 2.0), a natively-multimodal 27B model — a Gated DeltaNet + attention hybrid with multi-token prediction — featuring 262K native context (1M via YaRN) and native image/video understanding. It is best-in-row on **SWE-bench Pro (61.7)**, LiveCodeBench v6 (90.3), OSWorld-Verified (84.3), WebArena-Verified (64.8) and AndroidWorld (81.9), with thinking control (`reasoning_effort` xhigh/medium/low, `preserve_thinking`). It topped Hacker News at 843 points, and 271 quantized variants already exist for llama.cpp/Ollama/LM Studio.
+
+**Why it matters:** It's the mid-size companion to Qwen3.8-Max (the 2.4T-A95B flagship released days earlier), giving local and edge deployments a frontier-competitive multimodal coding model under a permissive license — the exact gap between closed APIs and full-stack agent tooling.
+
+> Runs on Transformers/vLLM/SGLang/Docker Model Runner; MLX community builds cover Apple Silicon.
+
+[`🔗 Qwen/Qwen3.8-27B`](https://huggingface.co/Qwen/Qwen3.8-27B) · [`🔗 orcarouter comparison`](https://www.orcarouter.ai/blog/qwen-3-8-27b-vs-muse-glimmer)
+
+---
+
+## 16. MiniMax Music 3.0 — open-weights model generating full 5-minute songs
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** MiniMax Blog · ~2d ago
+- **Tags:** `minimax` `music` `audio` `open-weights` `generative`
+
+MiniMax open-sourced **MiniMax-Music3**, a music model that generates complete ~5-minute songs in a single pass (32 kHz, 16-bit stereo WAV) from lyrics plus a structured music description. It's a hybrid: an 8B "global" LLM for long-range structure, a 0.6B "local" LLM for acoustic detail, a 2.4B flow-matching module, and a 123M Flow-VAE decoder over an 8-layer RVQ tokenizer. It runs in ~24 GB VRAM (down to ~8 GB with CPU offload), ships ComfyUI support and an INT8 variant, and accepts section tags (`[Intro]`, `[Chorus]`, `[Bridge]`…) for fine-grained arrangement control.
+
+**Why it matters:** Full-song, self-hostable music generation with control over BPM, key, vocal details, and structure was locked behind closed APIs like Suno and Udio. Open weights plus a $0.15/song API make it the strongest open challenger — though quality claims are still vendor-reported.
+
+> Notably quiet release: ~25 downloads at launch, no paper or benchmark report — just weights, a README, and a demo Space.
+
+[`🔗 MiniMax Blog`](https://www.minimax.io/blog/minimax-music-3-0-next-generation-open-weights-production-ready-versatile-music-model) · [`🔗 MiniMaxAI/MiniMax-Music3`](https://huggingface.co/MiniMaxAI/MiniMax-Music3)
+
+---
+
+## 17. OpenAI previews GPT-5.6 Sol "Ultrafast" — 14× faster, 750 tokens/sec on Cerebras
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI / Cerebras · preview · ~1d ago
+- **Tags:** `openai` `gpt-5.6` `inference` `cerebras` `latency`
+
+OpenAI previewed an **"Ultrafast" mode for GPT-5.6 Sol** that runs the flagship up to 14× faster — generating up to **750 tokens/second** — by serving it on Cerebras chips rather than dropping to a smaller model. It's aimed at real-time workloads like fraud detection and live customer support, and is already in testing with firms including Jane Street and Podium. No general-availability date was given; OpenAI called it an "early preview."
+
+**Why it matters:** Real-time performance on a flagship model, without distillation, is the missing piece for production agentic and streaming AI use cases. If 750 tok/s holds at GA, the bottleneck shifts from inference speed to orchestration, safety, and cost.
+
+> Ships in an unusually dense 24-hour window alongside DeepSeek V4-Pro's 50%-cheaper off-peak pricing and Gemini 3.7 Flash.
+
+[`🔗 The Neuron`](https://www.theneuron.ai/newsletter/google-openai-deepseek-dropped-models-today/) · [`🔗 TLDR AI`](https://tldr.tech/ai/2026-08-14)
+
+---
+
+## 18. CISA confirms SonicWall SMA1000 flaws are now ransomware vectors (CVE-2026-15409/15410)
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV · CVSS 10.0 + 7.2 · ~1d ago
+- **Tags:** `cisa` `sonicwall` `ransomware` `ssrf` `kev`
+
+On Aug 14 CISA updated its Known Exploited Vulnerabilities entries for **CVE-2026-15409** (CVSS 10.0 SSRF in the SMA1000 "Work Place"/wsproxy interface) and **CVE-2026-15410** (CVSS 7.2 command injection in the `removehotfix` process) to confirm both are now exploited in ransomware campaigns, linked by Resecurity to an **INC Ransomware** affiliate. Chained, they give zero-click, unauthenticated root compromise of internet-facing SMA1000 appliances; Volexity traced exploitation to June 22 with custom malware (KNUCKLEBALL, Sou5, ROOTRUN, ORANGETAIL).
+
+**Why it matters:** Patching isn't enough — exploitation predates the July 14 disclosure by three weeks, so any internet-facing SMA1000 unpatched in that window must be investigated for compromise. Shadowserver tracked ~380 exposed appliances at report time.
+
+> Fixed in 12.4.3-03453 / 12.5.0-02835, no workaround. INC Ransomware also pressures victims by phone ("Andrew", +1 (304) 384-0401) and email.
+
+[`🔗 cirt.gy advisory`](https://cirt.gy/article/al2026_27-cisa-warns-sonicwall-sma1000-vulnerabilities-are-being-exploited-by-ransomware-gangs-august-14th-2026/) · [`🔗 CVETodo`](https://cvetodo.com/news/cisa-flags-sonicwall-sma1000-bugs-cve-2026-15409-and-cve-2026-15410-as-ransomware-attack-vectors)
+
+---
+
+## 19. NVIDIA's Nemotron Teacher — a 550B "reasoning teacher" for distilling frontier models
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face · 550B params · ~1d ago
+- **Tags:** `nvidia` `distillation` `reasoning` `openmdw` `teacher`
+
+NVIDIA released **Nemotron-Labs-Teacher-General-Reasoning**, a 550B-parameter (55B active) LatentMoE Mamba-2 + Transformer model built as a training-time "teacher" in the Nemotron 3 Ultra pipeline — one of 10+ domain-specialized teachers in its Multi-Teacher On-Policy Distillation (MOPD) recipe. It generates long reasoning traces on the hardest math/logic/abstraction problems and grades free-form answers, with a reasoning-budget dial (`enable_thinking`, `medium_effort`). It's a weights-only release (1.12 TB download, 4×B200 / 8×H100 minimum) under OpenMDW-1.1 with disclosed post-training data — and no published benchmarks.
+
+**Why it matters:** It's a rare window into how frontier labs actually build reasoning models: a specialist teacher whose quality NVIDIA itself declines to benchmark. OpenMDW's post-training-data disclosure is also a small step past the weights-only norm.
+
+> No inference provider hosts it; reasoning quality is "unverified by anyone outside NVIDIA."
+
+[`🔗 orcarouter analysis`](https://www.orcarouter.ai/blog/nemotron-labs-teacher-general-reasoning-vs-qwen-3-8-max) · [`🔗 Nemotron Teacher model card`](https://huggingface.co/nvidia/Nemotron-Labs-Teacher-General-Reasoning)
+
+---
+
+## 20. Liquid AI's LFM2.5-VL-3B — an on-device vision-language model that beats larger rivals
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face · 3.1B params · ~2d ago
+- **Tags:** `liquid-ai` `vision-language` `on-device` `open-weights` `multimodal`
+
+Liquid AI released **LFM2.5-VL-3B**, a ~3.1B vision-language model (LFM2.5-2.6B backbone + SigLIP2 NaFlex encoder) designed for on-device use: **228 tok/s on an Apple M5 Max** and ~20 tok/s on a Galaxy S26 Ultra in under 3.3 GB. It posts ScreenSpot-v2 80.7 (screen understanding), RefCOCO P@1 87.9 (grounding), ChartQA 81.3, 16-language support, and experimental structured-OCR (labels + bounding boxes + LaTeX). Official GGUF/ONNX/MLX quantizations ship.
+
+**Why it matters:** It targets the GUI-agent niche — reading screens and grounding objects locally on phones and laptops — the exact workload most "computer-use" agents run, on hardware that can't host a 27B model.
+
+> License lfm1.0; not recommended for long-context visual reasoning (web design, blueprint Q&A).
+
+[`🔗 LiquidAI/LFM2.5-VL-3B`](https://huggingface.co/LiquidAI/LFM2.5-VL-3B) · [`🔗 llm-stats`](https://llm-stats.com/models/lfm-2.5-vl-3b)
+
+---
+
+## 21. firecrawl/anydoc — one Rust engine turns any office document into LLM-ready Markdown
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 16.1k stars · ~3d ago
+- **Tags:** `firecrawl` `rust` `markdown` `documents` `rag`
+
+Firecrawl's **anydoc** (MIT) converts Word, PowerPoint, Excel, OpenDocument, RTF, EPUB, CSV, and PDF into clean GitHub-Flavored Markdown through a single Rust core with Node/Python/WASM bindings, at a median **under 5 ms per document**. It detects format from bytes (not extensions), preserves tables/merged cells/footnotes/speaker notes, renders images as alt text, and powers Firecrawl's `/parse` API — plus an Agent Skill (`npx skills add firecrawl/anydoc`).
+
+**Why it matters:** Document ingestion is the unglamorous bottleneck for RAG and agent workflows, and legacy converters (LibreOffice 1,129 ms, Pandoc 102 ms) are orders of magnitude slower or lossy. One fast, consistent, single-output-format engine removes a whole class of preprocessing code.
+
+> Benchmark: 4.4 ms median vs 1,129 ms (LibreOffice) and 102 ms (Pandoc); the only converter in its test to handle all 14 formats.
+
+[`🔗 firecrawl/anydoc`](https://github.com/firecrawl/anydoc) · [`🔗 Firecrawl /parse blog`](https://www.firecrawl.dev/blog/introducing-parse)
+
+---
+
+## 22. Comp AI CRM — a CRM built for AI agents to keep their own notes
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 7.1k stars · ~1w ago
+- **Tags:** `crm` `agents` `typescript` `eve` `open-source`
+
+**trycompai/crm** (Comp AI CRM, MIT) inverts the CRM model: a persistent research agent is the product, and the database is just "where the agent keeps its notes." The agent runs its own deployment, schedule, and work queue — reading the team inbox, creating contacts from email threads, enriching companies, scheduling its own follow-ups, and spending a research budget until it runs out. Built on Vercel's eve framework (18 tools, 4 skills, network-isolated sandbox), single-tenant, and runs with zero external API keys. A core rule: "nothing about a person is guessed" — weak evidence becomes a human-reviewed suggestion, not a fact.
+
+**Why it matters:** It's a concrete example of the "agent-first" software pattern replacing form-first SaaS: the UI becomes a view of what the agent did, not a data-entry surface — inverting how CRM and most business software gets designed.
+
+> ~6 days old at v1.0.0; TypeScript Turborepo on Bun (Next.js + NestJS/tRPC + Postgres); Slack integration; Google sign-in with an allow-list as the entire authorization model.
+
+[`🔗 trycompai/crm`](https://github.com/trycompai/crm) · [`🔗 openalternative`](https://openalternative.co/crm)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-15T04:03:00Z |
-| Items | 13 |
-| Sources tracked | 20 (GitHub Trending, Hacker News, z.ai, Pandaily, ppc.land, 4sysops, Context Studios, The Hacker News, Mallory, SecurityWeek, AISignal, Google Blog, Google Developers Blog, Hugging Face, dev.to, Cursor Docs, mixedbread, TokenPost, RustDesk Blog, LuaCAD Docs, AUR) |
+| Generated | 2026-08-15T12:03:00Z |
+| Items | 22 |
+| Sources tracked | 32 (GitHub Trending, Hacker News, z.ai, Pandaily, ppc.land, 4sysops, Context Studios, The Hacker News, Mallory, SecurityWeek, AISignal, Google Blog, Google Developers Blog, Hugging Face, dev.to, Cursor Docs, mixedbread, TokenPost, RustDesk Blog, LuaCAD Docs, AUR, Android Authority, APIDog, The Neuron, TLDR AI, orcarouter, MiniMax Blog, cirt.gy, CVETodo, llm-stats, Firecrawl Blog, openalternative) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
