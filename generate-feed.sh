@@ -144,9 +144,12 @@ else
 fi
 
 # Magichand tracking (non-blocking)
+# status:"done" + doneAt → the record is the COMPLETED automation batch (claude -p
+# already ran above), so it must not be picked up as a new work order and must not
+# render as a multi-day open-ended span on the gantt.
 curl -s -X POST http://localhost:8777/api/feature-todo \
   -H 'Content-Type: application/json' \
-  -d "{\"feature\":\"general\",\"project\":\"trending-md\",\"text\":\"[auto] $TODAY $(date +%H:%M) batch — $MODE mode\",\"taskKind\":\"daily-feed\"}" \
+  -d "{\"feature\":\"general\",\"project\":\"trending-md\",\"text\":\"[auto] $TODAY $(date +%H:%M) batch — $MODE mode\",\"taskKind\":\"daily-feed\",\"status\":\"done\"}" \
   || echo "(magichand portal not reachable)"
 
 echo "=== generate-feed $TODAY done $(date) ==="

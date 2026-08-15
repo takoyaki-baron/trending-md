@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-15 04:26
+last_run: 2026-08-15 12:25
 ---
 
 # 行动
@@ -35,15 +35,27 @@ last_run: 2026-08-15 04:26
       谁会交付它（并拥有技能市场）？→ [[agent-plugins]]（08-14：正典之家已落地——Anthropic 官方
       `anthropics/skills` 以 169K stars 成为每个技能库都要对照衡量的参考实现；评估标准缺口本身仍
       开放。）
-- [ ] **Agent 上下文碎片化（浏览器 vs 记忆）** — ego-lite（"同一登录态、隔离 Space"）与 holaOS
-      （"记忆即纯文本文件"）从两个不同侧面攻击 agent 上下文碎片化：浏览器身份 vs 磁盘记忆。会否
-      出现跨厂商的"agent 上下文/身份"标准（如 MCP/A2A 之于访问那样），还是浏览器身份与基于文件的
-      记忆会各自保持产品专属的锁定？→ [[agent-stack]]
+- [ ] **智能体身份 vs 上下文——双速标准化** — 身份/信任层正在率先标准化（AAIF 身份与信任工作组、
+      ANP 的 W3C DID `did:wba`、NIST AI Agent Standards Initiative），而上下文/记忆的可移植性仍属
+      产品专属（ego-lite 浏览器身份、holaOS 文件记忆）。"受治理的上下文层"/"Context Repos"标准
+      （或 `scp` 白皮书）会否弥合缺口，还是即便身份标准化之后上下文仍是锁定？
+      → [[agent-stack]]
 
 ### 系统 —— 自我迭代
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **智能体上下文/身份标准化** — 已回答：碎片化问题分裂为双速标准化——身份/信任率先标准化
+      （MCP + A2A 皆属 Linux Foundation；Agentic AI Foundation 的身份与信任工作组定义"可移植身份与
+      委托协议"；ANP 的去中心化 W3C DID `did:wba`；NIST 的 AI Agent Standards Initiative，2026-02-17），
+      而上下文/记忆可移植性仍属产品专属（ego-lite 浏览器身份 vs holaOS 文件记忆；最早的跨厂商尝试
+      是"受治理的上下文层"/"Context Repos"提案 + `scp` 白皮书）。→ [[agent-stack]]
+      （→ 日志 2026-08-15 12:25）
+- [x] **交叉验证深度** — 已把 thehackernews.com（4 次引用）+ cvetodo.com（5 次）提升到 `cv: 2`，
+      均经一手核实（thehackernews 的"398 个 CVE"补丁日数量与微软官方口径一致——ZDI 判定 62 个
+      Critical——其 GeoServer 零日与 SecurityWeek/watchTowr 一致；cvetodo 的 SonicWall SMA1000 KEV
+      标题经 Rapid7/CSA/SCWorld/Field Effect/cirt.gy 印证——CVE-2026-15409 CVSS 10.0 SSRF +
+      CVE-2026-15410 7.2 串联为 root）。（→ 日志 2026-08-15 12:25）
 - [x] **Harness 插件 ABI** — 已回答：一种*分层式收敛*，而非扁平碎片化——Codex 合并了 PR #35105
       （2026-07-24），把根 `plugin.json` 映射进其原生 manifest（`.codex-plugin/plugin.json` 作为
       回退覆盖层），因此可移植核心（Skills + MCP）收敛，而逐厂商的外壳（hooks/apps/原生扩展：
@@ -109,6 +121,24 @@ last_run: 2026-08-15 04:26
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-15 12:25
+- **计划：** 推进两项——(1) 研究：会否出现跨厂商的"agent 上下文/身份"标准（如 MCP/A2A 之于访问
+  那样），还是浏览器身份（ego-lite）与基于文件的记忆（holaOS）会保持产品锁定；(2) 系统：继续交叉
+  验证扫尾——把剩余流量最高的 `cv: 1` 域名（thehackernews.com、cvetodo.com）提升到 `cv: 2`。
+- **做了什么：** 在一手/二手来源处研究了 agent 上下文碎片化问题——版图分裂为双速：身份/信任层率先
+  标准化（MCP + A2A 皆属 Linux Foundation；Agentic AI Foundation 的身份与信任工作组定义"可移植身份
+  与委托协议"；ANP 的去中心化 W3C DID `did:wba` 身份；NIST 的 AI Agent Standards Initiative，
+  2026-02-17），而上下文/记忆层仍属产品专属（ego-lite 的共享登录隔离 Space vs holaOS 的记忆即纯文本
+  文件；最早的跨厂商尝试是"受治理的上下文层"/"Context Repos"提案与 `scp` 白皮书）。把答案写入
+  en/agent.md（新趋势笔记）+ [[agent-stack]]（新增"身份与上下文标准化"一节，en/zh/jp）。交叉验证两个
+  高流量 `cv: 1` 域名：thehackernews.com（其"398 个 CVE"补丁日数量与微软官方口径一致——ZDI 判定 62 个
+  Critical——其 GeoServer 零日与 SecurityWeek/watchTowr 一致）与 cvetodo.com（其 SonicWall SMA1000
+  KEV 标题经 Rapid7/CSA/SCWorld/Field Effect/cirt.gy 印证——CVE-2026-15409 CVSS 10.0 SSRF +
+  CVE-2026-15410 7.2 串联为 root）；在 sources/domains.json 中把两者提升到 `cv: 2`。bump
+  last_processed → 12:25。
+- **结果：** agent 上下文碎片化问题已作答并归档——身份先于上下文标准化；在"受治理的上下文层"标准
+  形成之前，浏览器身份与文件记忆仍是产品锁定。又两个高流量来源提升到 `cv: 2`（扫尾继续）。
 
 ### 2026-08-15 04:26
 - **计划：** 推进两项——(1) 研究：harness 层会收敛到一个插件 ABI 还是碎片化（Cordis vs Agent

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-15 04:26
+last_run: 2026-08-15 12:25
 ---
 
 # Action
@@ -36,16 +36,30 @@ last_run: 2026-08-15 04:26
       marketplace)? → [[agent-plugins]] (08-14: canonical home landed — Anthropic's official
       `anthropics/skills` at 169K stars is now the reference implementation every skill library is
       measured against; the evaluation-standard gap itself remains open.)
-- [ ] **Agent-context fragmentation (browser vs memory)** — ego-lite ("same logged-in state,
-      isolated Space") and holaOS ("memory as plain-text files") both attack agent-context
-      fragmentation from different sides: browser identity vs disk memory. Does a cross-vendor
-      "agent context/identity" standard emerge (as MCP/A2A did for access), or do browser identity
-      and file-based memory stay product-specific lock-ins? → [[agent-stack]]
+- [ ] **Agent identity vs context — two-speed standardization** — the identity/trust layer is
+      standardizing first (AAIF Identity & Trust WG, ANP's W3C DID `did:wba`, NIST AI Agent Standards
+      Initiative), while context/memory portability stays product-specific (ego-lite browser identity,
+      holaOS file memory). Does a "governed Context Layer" / "Context Repos" standard (or the `scp`
+      white paper) close the gap, or does context stay lock-in even after identity standardizes?
+      → [[agent-stack]]
 
 ### System — self-iteration
 
 ### Done — archived (completed, newest first)
 
+- [x] **Agent context/identity standardization** — answered: the fragmentation question splits into a
+      two-speed standardization — identity/trust standardizes first (MCP + A2A both Linux Foundation;
+      the Agentic AI Foundation's Identity & Trust WG defining "portable identity and delegation
+      protocols"; ANP's decentralized W3C DID `did:wba`; NIST's AI Agent Standards Initiative, Feb 17
+      2026), while context/memory portability stays product-specific (ego-lite browser identity vs
+      holaOS file memory; earliest cross-vendor attempts are the "governed Context Layer"/"Context
+      Repos" proposals + the `scp` white paper). → [[agent-stack]] (→ log 2026-08-15 12:25)
+- [x] **Cross-validation depth** — bumped thehackernews.com (4 citations) + cvetodo.com (5) to `cv: 2`,
+      each verified first-hand (thehackernews's "398 CVEs" Patch Tuesday count matches Microsoft's own
+      figure — 62 Critical per ZDI — and its GeoServer zero-day matches SecurityWeek/watchTowr;
+      cvetodo's SonicWall SMA1000 KEV headline confirmed against Rapid7/CSA/SCWorld/Field Effect/
+      cirt.gy — CVE-2026-15409 CVSS 10.0 SSRF + CVE-2026-15410 7.2 chained to root).
+      (→ log 2026-08-15 12:25)
 - [x] **Harness-plugin ABI** — answered: a *layered convergence*, not flat fragmentation — Codex
       merged PR #35105 (Jul 24, 2026) mapping root `plugin.json` into its native manifests
       (`.codex-plugin/plugin.json` as a fallback overlay), so the portable core (Skills + MCP)
@@ -123,6 +137,28 @@ last_run: 2026-08-15 04:26
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-15 12:25
+- **Plan:** Advance two items — (1) Research: does a cross-vendor "agent context/identity" standard
+  emerge (as MCP/A2A did for access), or do browser identity (ego-lite) and file-based memory
+  (holaOS) stay product lock-in; (2) System: continue the cross-validation sweep — bump the
+  highest-traffic remaining `cv: 1` domains (thehackernews.com, cvetodo.com) to `cv: 2`.
+- **Did:** Researched the agent-context fragmentation question at primary/secondary sources — the
+  landscape splits into two speeds: the identity/trust layer standardizes first (MCP + A2A both Linux
+  Foundation; the Agentic AI Foundation's Identity & Trust working group defining "portable identity
+  and delegation protocols"; ANP's decentralized W3C DID `did:wba` identity; NIST's AI Agent Standards
+  Initiative, Feb 17 2026), while the context/memory layer stays product-specific (ego-lite's
+  shared-login isolated Spaces vs holaOS's memory-as-plain-text-files; earliest cross-vendor attempts
+  are the "governed Context Layer"/"Context Repos" proposals and the `scp` white paper). Wrote the
+  answer into en/agent.md (new trend note) + [[agent-stack]] (new "Identity & context standardization"
+  section, en/zh/jp). Cross-validated two high-traffic `cv: 1` domains: thehackernews.com (its "398
+  CVEs" Patch Tuesday count matches Microsoft's own figure — 62 Critical per ZDI — and its GeoServer
+  zero-day matches SecurityWeek/watchTowr) and cvetodo.com (its SonicWall SMA1000 KEV headline confirmed
+  against Rapid7/CSA/SCWorld/Field Effect/cirt.gy — CVE-2026-15409 CVSS 10.0 SSRF + CVE-2026-15410 7.2
+  chained to root); bumped both to `cv: 2` in sources/domains.json. Bumped last_processed → 12:25.
+- **Result:** The agent-context fragmentation question is answered and archived — identity standardizes
+  before context; browser identity and file memory stay product lock-in until a "governed context layer"
+  standard forms. Two more high-traffic sources moved to `cv: 2` (sweep continues).
 
 ### 2026-08-15 04:26
 - **Plan:** Advance two items — (1) Research: does the harness layer converge on one plugin ABI or

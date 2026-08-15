@@ -6,7 +6,7 @@ Each entry points to a `[[topic]]` page built from the corresponding `<topic>.md
 | Topic | What it covers | Last touched |
 |-------|----------------|--------------|
 | [[agent-stack]] | Agent infrastructure layer (runtime, memory, skills, routing, orchestration, security) | 2026-08-15 |
-| [[edge-inference]] | Edge/local inference engines — MoE streaming technique | 2026-08-13 |
+| [[edge-inference]] | Edge/local inference engines — MoE streaming + on-device VLM | 2026-08-15 |
 | [[smart-routing]] | "Route before compute" — classify-first dispatch (model routing, PDF parsing, inference escalation, search sub-agents) | 2026-08-15 |
 | [[agent-plugins]] | Agent Plugins 1.0.0 + Agent Skills format (portable skill/MCP packaging, coalition, trust + evaluation gap) | 2026-08-15 |
 | [[fact-check]] | Reusable validation method — verify-before + correct-after (checklist + Void case study) | 2026-08-14 |

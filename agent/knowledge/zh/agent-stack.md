@@ -75,6 +75,24 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   模型，Merkle-DAG 溯源）。TencentDB Team Memory 与 Macro 经 MCP 暴露的团队记忆只是临时填补缺口；
   尚无跨系统标准。
 
+## 身份与上下文标准化（双速分裂）
+
+agent 上下文碎片化问题（ego-lite 的浏览器身份 vs holaOS 的文件记忆）分解为两个以不同速度标准化的层次：
+
+- **身份/信任——率先标准化。** MCP（纵向 agent↔工具/数据）与 A2A（横向 agent↔agent，二者皆属 Linux
+  Foundation）治理访问/连接；**ACP**（Linux Foundation / IBM-BeeAI REST）是内部框架的桥；**ANP** 引入
+  去中心化的 **W3C DID 身份**（`did:wba`，HTTPS 托管的 DID 文档），使不同公司的智能体能以密码学方式互相
+  验证而无共享权威；A2A 的 `AgentCardSignature`（JWS）守护能力卡。**Agentic AI Foundation（AAIF）**——
+  Linux Foundation，2025 年 12 月成立（Anthropic 捐赠 MCP，连同 Block 的 goose 与 OpenAI 的 AGENTS.md），
+  170+ 组织——设有**身份与信任工作组**，"为智能体定义可移植身份与委托协议"。NIST 的 **AI Agent Standards
+  Initiative**（2026 年 2 月 17 日）是首个美国政府主导的智能体互操作/安全项目。
+- **上下文/记忆——仍属产品专属。** ego-lite（隔离 Space 中共享登录态）与 holaOS（记忆即纯文本 Markdown +
+  SQLite vec）是针对同一缺口的两个产品答案；两者都不是跨厂商的。最早的标准化尝试——"受治理的上下文层"/
+  "Context Repos"（版本化的、模型无关的单元，谱系/所有权/认证随每次查询传递）与 `scp` 白皮书（密码学
+  上下文隔离 + 人类问责链 + 基于能力的授权 + 可验证溯源）——仍属前标准阶段。
+
+信号：身份先于上下文标准化；上下文/记忆的可移植性是更难、更晚的一层——与上文记忆标准化缺口相同。
+
 ## 一体化工作区
 - **Macro** — `macro-inc/macro`，AGPL-3.0，SolidJS + Rust 后端（167 个 crate、42 个可部署服务）。
   一体化团队工作区：Gmail 式邮件、频道/私信、Linear 式任务、CRDT 文档、2D 画布、CRM、通话与

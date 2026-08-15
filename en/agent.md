@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-15T04:26:00Z
+last_processed: 2026-08-15T12:25:00Z
 ---
 
 # Learnt Agent
@@ -80,6 +80,10 @@ patterns, and turn them into insights and actionable todos.
    beat: a coding/security model on the *same 743B base as GLM-5.2* whose every gain came from
    post-training (RL), not a new architecture — SWE-Marathon 19.4→42.5, Terminal Bench 3.0 4.6→28.3
    — making **post-training, not scale, the visible frontier lever**. → [[frontier-models]]
+   The next beat (08-15 PM) is a three-way price/speed/distribution push: Google's **Gemini 3.7 Flash**
+   (half-price agent workhorse three weeks after 3.6 — DeepSWE 49.0→65.3%), Alibaba's **Qwen3.8-27B**
+   (Apache-2.0 native-multimodal 27B topping SWE-bench Pro 61.7), and OpenAI's **GPT-5.6 Sol "Ultrafast"**
+   preview (750 tok/s on Cerebras — serving *hardware* as the speed lever, not distillation).
 
 7. **AI safety is now a measured release threshold, not policy — and it's converging cross-lab.**
    OpenAI paused Astra, the first model its Preparedness Framework "cannot rule out Critical" for
@@ -188,6 +192,12 @@ patterns, and turn them into insights and actionable todos.
   **GLM-5.3 (08-15):** Zhipu/Z.ai coding+security model, same 743B base as GLM-5.2, all gains from
   post-training RL (Terminal Bench 3.0 4.6→28.3, SWE-Marathon 19.4→42.5); CyberGym 84.5% (first,
   ahead of Mythos 5), ExploitBench 54.4%; open weights delayed ~2 weeks on safety grounds.
+  **New (08-15 PM):** Gemini 3.7 Flash (Google, half-price $0.75/$3.75 per M through Dec 31, DeepSWE
+  49.0→65.3, 1M ctx, powers Gemini Spark); Qwen3.8-27B (Alibaba, Apache-2.0 native-multimodal 27B,
+  SWE-bench Pro 61.7 / LiveCodeBench 90.3 / OSWorld 84.3, 262K ctx, 271 quantized variants); GPT-5.6
+  Sol "Ultrafast" (OpenAI preview, 750 tok/s on Cerebras — speed via hardware, not distillation);
+  Nemotron Teacher 550B (NVIDIA, 55B-active LatentMoE "reasoning teacher" for distillation, weights-only,
+  no benchmarks).
 - **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
   Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
   no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
@@ -195,6 +205,19 @@ patterns, and turn them into insights and actionable todos.
   attack path. Proposals: Agent Memory Hall (typed MemoryCells + trust tiers + identity ACLs +
   append-only audit) and Portable Agent Memory (Merkle-DAG provenance) — while TencentDB Team Memory
   and Macro's MCP-exposed team memory fill the gap ad hoc. Nobody owns the standard yet. → [[agent-stack]]
+- **Agent context/identity standardization (08-15, → [[agent-stack]]):** the fragmentation question
+  splits into two layers moving at different speeds. **Identity/trust is standardizing first** — MCP
+  (vertical tool/data access) + A2A (horizontal agent↔agent, both Linux Foundation) govern the
+  connection; the Agentic AI Foundation (AAIF, Linux Foundation, Dec 2025, 170+ orgs) runs an
+  **Identity & Trust working group** defining "portable identity and delegation protocols"; ANP adds
+  decentralized **W3C DID (`did:wba`)** identity (cross-company cryptographic verification, no shared
+  authority); NIST's **AI Agent Standards Initiative** (Feb 17, 2026) is the first US-gov program for
+  agent interoperability. **Context/memory lags** — ego-lite (browser identity: shared logged-in
+  state in isolated Spaces) and holaOS (disk memory as plain-text files) are two product answers to
+  the *same* gap, but neither is cross-vendor; the earliest standardization attempts are the
+  "governed Context Layer" / "Context Repos" proposals and the `scp` white paper (cryptographic
+  context isolation + verifiable provenance + capability-based authorization). Identity standardizes
+  before context — context/memory portability is the harder, later layer (the memory gap above).
 - **Agent skills evaluation (open gap, → [[agent-plugins]]):** Ponytail's public benchmark + claim
   revision is the template, but no shared eval protocol exists. The proliferation of skills without
   evaluation is this month's version of last month's "repo without a visit" — claims to be verified,
@@ -260,6 +283,10 @@ patterns, and turn them into insights and actionable todos.
   no CVE yet, disclosed Aug 12 by @q1uf3ng) reaches RCE under H2 `sa` / MSSQL admin configs and was
   actively probed within hours — the recurring "widely-deployed OSS + unpatched SQLi/RCE" class keeps
   firing alongside the agent-infra surface.
+  **New (08-15 PM):** SonicWall SMA1000 — CISA KEV confirms CVE-2026-15409 (CVSS 10.0 SSRF in the
+  wsproxy "Work Place" interface) + CVE-2026-15410 (7.2 command injection) are now ransomware vectors
+  (INC Ransomware affiliate); chained = zero-click unauth root, exploited since June 22 (pre-dates the
+  July 14 disclosure), ~380 exposed at report time.
 - **Provenance & watermarking arms race (08-15):** Anthropic began watermarking Claude text (Aug 2)
   under the EU AI Act's Article 50 transparency rules; within days `guillaumemeyer/watermarks-remover`
   (MIT, 4.1K stars) strips AI-provenance marks in three layers — Unicode steganography, a statistical
@@ -276,16 +303,27 @@ patterns, and turn them into insights and actionable todos.
   on sensitive data — the privacy floor is being built with crypto, not policy.
 - **Edge inference (detail → [[edge-inference]]):** kimi-k3-in-c, TurboFieldfare, Ling-3.0-tiny,
   Muse Glimmer (30B Apache 2.0 local), Needle 2 (14MB, Raspberry Pi), h3.c (Metal).
+  **New (08-15 PM):** Liquid AI LFM2.5-VL-3B (3.1B on-device VLM, 228 tok/s on M5 Max / ~20 tok/s on
+  Galaxy S26 Ultra, ScreenSpot-v2 80.7) — the "small dense model + official quantizations" path to
+  on-device, aimed at GUI-agent screen reading + grounding.
 - **On-device privacy apps:** modly (Lightning Pixel, MIT, 5.7K stars — local image-to-3D on your own
   GPU, Hunyuan3D 2 Mini/TripoSG/Trellis2 GGUF, GLB/OBJ/STL export, no cloud/account) and FluidVoice
   (Altic, GPLv3, 10.1K stars — on-device macOS dictation, local Parakeet/Whisper + Fluid-1 layer,
   eating Wispr Flow's lunch). The privacy-first local wave is spreading beyond LLMs to speech + 3D.
+- **Agent-first software (08-15 PM):** Comp AI CRM (`trycompai/crm`, MIT, 7.1K stars) inverts the CRM —
+  a persistent research agent *is* the product and the database is "where the agent keeps its notes"
+  (built on Vercel's eve framework: 18 tools, 4 skills, network-isolated sandbox; "nothing about a
+  person is guessed" — weak evidence becomes a human-reviewed suggestion). A concrete instance of the
+  form-first SaaS → agent-first inversion: the UI becomes a view of what the agent did.
 - **Big Tech open-source wave:** Warp (AGPL terminal), Ladybird (independent engine), Snap Valdi
   (native UI), Nvidia Nemotron 3.5 Lightning + Switchyard (model router), Anthropic in-house silicon,
   Alibaba Open Code Review + Qwen3.8-2.4T-A95B (first open Qwen-Max-class flagship), Mojo 1.0.
   **New (08-15):** xAI's **x-algorithm** (X's "For You" feed code, Apache 2.0, Rust+Python — the first
   major platform to open recommendation code this complete), Google **HEIR** (FHE compiler), Cursor
   `cursor/plugins`, NVIDIA **NemotronLabs VoiceChat 11B** (first open full-duplex voice + tool calling).
+  **New (08-15 PM):** MiniMax **Music 3.0** (open-weights full-song ~5-min music gen — 8B global + 0.6B
+  local + 2.4B flow-matching + 123M Flow-VAE hybrid, ~24GB VRAM, $0.15/song API — the strongest
+  self-hostable Suno/Udio alternative; quality claims still vendor-reported).
 - **Developer tools:** Woxi (Rust Wolfram Language reimplementation, snapshot-tested against
   WolframScript); git-knife (Tauri GUI for git history metadata, commit-tree rebuild — file contents
   provably unchanged); Tailscale's SQLite WAL-reset race (16-year-old data-loss bug, replay-pipeline +
@@ -296,6 +334,9 @@ patterns, and turn them into insights and actionable todos.
   matched; a technical black box that's both a breakthrough and a security question) and LuaCAD
   (ad-si, Rust rewrite of OpenSCAD's ideas scripting parametric CAD in Lua — "good CAD scripting" and
   "good general-purpose language" don't have to be in tension).
+  **New (08-15 PM):** firecrawl/anydoc (MIT, 16.1K stars) — one Rust core turns 14 office formats into
+  GFM markdown at <5ms median (vs LibreOffice 1,129ms / Pandoc 102ms), powering Firecrawl's /parse API;
+  the RAG/agent document-ingestion bottleneck.
 - **Models & research:** Kronos (decoder-only foundation model for financial candlesticks, AAAI 2026)
   — the "pretrain + finetune" playbook applied to markets. **HL-Gauss PPO** (arXiv 2608.02181, COLM
   2026) — swapping the scalar critic head for a categorical predictor (HL-Gauss targets) is a drop-in

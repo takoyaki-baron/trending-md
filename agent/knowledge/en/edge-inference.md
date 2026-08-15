@@ -59,3 +59,16 @@ experts, but pays cache misses) and *latency* (B never misses, but is capped by 
 The cache policy (LRU vs LFU, per-layer vs global) is the tunable that separates the A-strategy
 engines. Watch for the two strategies to merge — a small-resident-core model that also streams
 overflow experts on larger hardware.
+
+## On-device VLM (a third strategy, Aug 15)
+
+- **LFM2.5-VL-3B** — `LiquidAI/LFM2.5-VL-3B`, lfm1.0 license. A ~3.1B vision-language model
+  (LFM2.5-2.6B backbone + SigLIP2 NaFlex encoder) built for the GUI-agent niche — reading screens and
+  grounding objects locally on phones/laptops that can't host a 27B model. 228 tok/s on Apple M5 Max,
+  ~20 tok/s on a Galaxy S26 Ultra in under 3.3 GB; ScreenSpot-v2 80.7, RefCOCO P@1 87.9, ChartQA 81.3,
+  16 languages. Official GGUF/ONNX/MLX quantizations ship.
+
+This is neither stream-and-cache (A) nor shrink-the-active-set (B) — it is the *small dense model +
+official quantizations* path, complementary to the MoE-streaming engines above. On-device inference
+now spans three strategies: stream huge MoEs from disk, shrink the active set, or ship a small model
+with first-party quantization.

@@ -136,6 +136,27 @@ API 构建复现。没有 CVE，也没有协调披露。根因是每个供应商
 两个信号：(1) **后训练而非规模，如今是可见的前沿杠杆**——一个 743B 底座仅凭 RL 就跃升到前沿
 编码/安全水平；(2) **漏洞发现正成为一个独立的头条模型基准**，而公开账本成为其披露载体。
 
+## 8 月 15 日下午的一拍：价格、速度与开放蒸馏
+
+一个 24 小时窗口又添了三个前沿数据点，全都落在上面形态的价格/分发轴上：
+
+- **Gemini 3.7 Flash** — Google「最智能」的编码/agent 用 Flash，距 Gemini 3.6 Flash 仅三周。DeepSWE
+  v1.1 49.0→65.3%，FrontierCode 1.1 34.4→43.6%，WebDev Arena Elo 1538→1588，1M token 输入。发布价
+  减半至 $0.75/M 输入 / $3.75/M 输出（至 12 月 31 日，之后 $1.50/$7.50）。三周节奏 + 半价发布是对
+  「廉价 agent 工作马」梯队的直接争夺；它驱动 Gemini Spark agent。
+- **Qwen3.8-27B** — `Qwen/Qwen3.8-27B`，Apache 2.0。Qwen3.8-Max 的中等尺寸搭档：一个原生多模态 27B
+  （Gated DeltaNet + attention + 多 token 预测），262K 原生上下文（经 YaRN 可达 1M），原生图像/视频。
+  同列最佳 SWE-bench Pro 61.7、LiveCodeBench v6 90.3、OSWorld-Verified 84.3、WebArena-Verified 64.8、
+  AndroidWorld 81.9；一天内就有 271 个量化变体。以宽松许可填补了闭源 API 与全栈 agent 工具链之间的
+  空缺。
+- **GPT-5.6 Sol「Ultrafast」** — OpenAI 在 **Cerebras** 芯片上服务旗舰模型的预览：最高 750 tok/s，
+  快约 14×，且无需降级到更小模型。无 GA 日期。若成立，推理瓶颈将从原始速度转向编排/安全/成本——
+  服务*硬件*成为与价格、发布节奏并列的分发杠杆。
+- **Nemotron Teacher 550B** — `nvidia/Nemotron-Labs-Teacher-General-Reasoning`，一个 550B 总参数
+  （55B 活跃）LatentMoE Mamba-2 + Transformer 的「推理教师」，用于 NVIDIA 的多教师在线策略蒸馏
+  （MOPD）流水线。仅权重发布（1.12TB，OpenMDW-1.1，披露后训练数据），无公开基准——这是窥见实验室
+  如何构建推理模型的罕见窗口，也是 GLM-5.3「后训练而非规模」信号的蒸馏侧对应。
+
 ## 关注点
 
 - 对 DeepSeek V4 Pro 声明做第三方（非厂商）评估——两个内部基准（DSBench-FullStack/Hard）是保留项。
@@ -150,3 +171,5 @@ API 构建复现。没有 CVE，也没有协调披露。根因是每个供应商
   已发布的推理块是否仍可被解码。
 - Qwen 的自定义 Qwen3.8-Max 许可与约 4.9TB 权重是否真的会被大规模微调/下载——只有当生态能跑得
   动它们时，开源权重才真正改变经济学。
+- GPT-5.6 Sol「Ultrafast」的 750 tok/s 能否在 GA 上成立，以及定制服务硬件（Cerebras）是否会成为
+  与价格、发布节奏并列的第三分发轴。

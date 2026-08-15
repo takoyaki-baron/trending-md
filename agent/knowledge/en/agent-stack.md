@@ -86,6 +86,30 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   Merkle-DAG provenance). TencentDB Team Memory and Macro's MCP-exposed team memory fill the gap ad
   hoc; no cross-system standard yet.
 
+## Identity & context standardization (the two-speed split)
+
+The agent-context fragmentation question (ego-lite's browser identity vs holaOS's file memory) resolves
+into two layers standardizing at different speeds:
+
+- **Identity/trust — standardizing first.** MCP (vertical agent↔tool/data) and A2A (horizontal
+  agent↔agent, both Linux Foundation) govern access/connectivity; **ACP** (Linux Foundation / IBM-BeeAI
+  REST) is the internal-framework bridge; **ANP** adds decentralized **W3C DID identity** (`did:wba`,
+  HTTPS-hosted DID documents) so agents from different companies verify each other cryptographically
+  with no shared authority; A2A's `AgentCardSignature` (JWS) guards capability cards. The **Agentic AI
+  Foundation (AAIF)** — Linux Foundation, formed Dec 2025 (Anthropic donated MCP alongside Block's goose
+  and OpenAI's AGENTS.md), 170+ orgs — runs an **Identity & Trust working group** "defining portable
+  identity and delegation protocols for agents". NIST's **AI Agent Standards Initiative** (Feb 17, 2026)
+  is the first US-government program for agentic interoperability/security.
+- **Context/memory — still product-specific.** ego-lite (shared logged-in state in isolated Spaces) and
+  holaOS (memory as plain-text Markdown + SQLite vec) are two product answers to the same gap; neither
+  is cross-vendor. The earliest standardization attempts — "governed Context Layer" / "Context Repos"
+  (versioned, model-agnostic units where lineage/ownership/certification travel with each query) and the
+  `scp` white paper (cryptographic context isolation + human accountability chains + capability-based
+  authorization + verifiable provenance) — are still pre-standard.
+
+Signal: identity standardizes before context; context/memory portability is the harder, later layer — the
+same open gap as the memory-standardization note above.
+
 ## Workspace / all-in-one
 - **Macro** — `macro-inc/macro`, AGPL-3.0, SolidJS + Rust backend (167 crates, 42 deployable
   services). All-in-one team workspace: Gmail-style email, channels/DMs, Linear-style tasks,

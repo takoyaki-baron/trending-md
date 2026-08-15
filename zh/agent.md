@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-15T04:26:00Z
+last_processed: 2026-08-15T12:25:00Z
 ---
 
 # 学习智能体
@@ -67,6 +67,10 @@ last_processed: 2026-08-15T04:26:00Z
    竞争。智谱的 **GLM-5.3** 带来最新一拍：一个构建在与 GLM-5.2 *相同 743B 底座*之上的编码/安全模型，
    每一点提升都来自后训练（RL）而非新架构——SWE-Marathon 19.4→42.5、Terminal Bench 3.0 4.6→28.3——
    使**后训练而非规模成为可见的前沿杠杆**。→ [[frontier-models]]
+   下一拍（08-15 下午）是价格/速度/分发的三路推进：Google 的 **Gemini 3.7 Flash**（距 3.6 三周后的
+   半价 agent 工作马——DeepSWE 49.0→65.3%）、阿里的 **Qwen3.8-27B**（Apache-2.0 原生多模态 27B，登顶
+   SWE-bench Pro 61.7），以及 OpenAI 的 **GPT-5.6 Sol「Ultrafast」** 预览（Cerebras 上 750 tok/s——
+   服务*硬件*成为速度杠杆，而非蒸馏）。
 
 7. **AI 安全如今是可度量的发布门槛，而非政策——并且正在跨实验室收敛。** OpenAI 暂停了 Astra——
    这是其 Preparedness Framework 第一个"无法排除 Critical 能力"的模型（可独立发现零日漏洞、无需
@@ -157,12 +161,26 @@ last_processed: 2026-08-15T04:26:00Z
   57×；"1/46×" 标题有误——feed 标题已更正为约 23×。**GLM-5.3（08-15）：** 智谱/Z.ai 编码 + 安全模型，
   与 GLM-5.2 同 743B 底座，提升全来自后训练 RL（Terminal Bench 3.0 4.6→28.3，SWE-Marathon 19.4→42.5）；
   CyberGym 84.5%（第一，领先 Mythos 5），ExploitBench 54.4%；开放权重因安全考虑推迟约 2 周。
+  **新增（08-15 下午）：** Gemini 3.7 Flash（Google，半价 $0.75/$3.75 每 M 至 12 月 31 日，DeepSWE
+  49.0→65.3，1M 上下文，驱动 Gemini Spark）；Qwen3.8-27B（阿里，Apache-2.0 原生多模态 27B，SWE-bench
+  Pro 61.7 / LiveCodeBench 90.3 / OSWorld 84.3，262K 上下文，271 个量化变体）；GPT-5.6 Sol「Ultrafast」
+  （OpenAI 预览，Cerebras 上 750 tok/s——靠硬件而非蒸馏提速）；Nemotron Teacher 550B（NVIDIA，55B
+  活跃 LatentMoE「推理教师」用于蒸馏，仅权重、无基准）。
 - **智能体记忆标准化（开放缺口）：** MCP（工具/数据访问）与 A2A（智能体到智能体，二者皆属 Linux
   Foundation）已经收敛，但两者都没有标准化*受治理的持久共享记忆*——没有作者/置信度/溯源字段，没有
   记忆空间权限，没有冲突/排序语义。OWASP ASI06（"记忆与上下文投毒"）如今把跨智能体记忆交换列为
   一条攻击路径。提案：Agent Memory Hall（类型化 MemoryCell + 信任分级 + 身份 ACL + 只追加审计）与
   Portable Agent Memory（Merkle-DAG 溯源）——而 TencentDB Team Memory 与 Macro 经 MCP 暴露的团队记忆
   只是在临时填补缺口。尚无任何人拥有这一标准。→ [[agent-stack]]
+- **智能体上下文/身份标准化（08-15，→ [[agent-stack]]）：** 碎片化问题分裂为以不同速度演进的两个层次。
+  **身份/信任层正在率先标准化**——MCP（纵向工具/数据访问）+ A2A（横向智能体到智能体，二者皆属 Linux
+  Foundation）治理连接；Agentic AI Foundation（AAIF，Linux Foundation，2025 年 12 月，170+ 组织）设有
+  **身份与信任工作组**，定义"可移植身份与委托协议"；ANP 引入去中心化的 **W3C DID（`did:wba`）** 身份
+  （跨公司密码学验证、无共享权威）；NIST 的 **AI Agent Standards Initiative**（2026 年 2 月 17 日）是
+  首个美国政府主导的智能体互操作项目。**上下文/记忆层滞后**——ego-lite（浏览器身份：隔离 Space 中共享
+  登录态）与 holaOS（磁盘记忆即纯文本文件）是针对*同一*缺口的两个产品答案，但都不是跨厂商的；最早的
+  标准化尝试是"受治理的上下文层"/"Context Repos"提案与 `scp` 白皮书（密码学上下文隔离 + 可验证溯源 +
+  基于能力的授权）。身份先于上下文标准化——上下文/记忆的可移植性是更难、更晚的一层（即上文记忆缺口）。
 - **智能体技能评估（开放缺口，→ [[agent-plugins]]）：** Ponytail 的公开基准 + 宣称修正就是模板，
   但尚无共享的评估协议。技能在没有评估的情况下激增，正是上个月"没访问就写仓库"的当月份翻版——
   宣称需要核实，而非照单全收。
@@ -215,6 +233,10 @@ last_processed: 2026-08-15T04:26:00Z
   SYSTEM）。此外，一个**未修补的 GeoServer SQL 注入零日**（`jsonArrayContains`，尚无 CVE，8 月 12 日
   由 @q1uf3ng 披露）在 H2 `sa` / MSSQL admin 配置下可达 RCE，披露后数小时内即被积极探测——"广泛部署
   OSS + 未修补 SQL 注入/RCE"这一缺陷类仍在与 agent 基础设施攻击面并行爆发。
+  **新增（08-15 下午）：** SonicWall SMA1000——CISA KEV 确认 CVE-2026-15409（wsproxy「Work Place」
+  接口的 CVSS 10.0 SSRF）+ CVE-2026-15410（7.2 命令注入）现已成为勒索软件载体（INC Ransomware
+  关联组织）；串联即可零点击未认证 root，自 6 月 22 日起即被利用（早于 7 月 14 日披露），报告时
+  约 380 台暴露。
 - **溯源与加水印军备竞赛（08-15）：** Anthropic 依据欧盟 AI 法案第 50 条透明度规则开始给 Claude
   文本加水印（8 月 2 日）；数日内 `guillaumemeyer/watermarks-remover`（MIT，4.1K stars）便以三层方式
   剥离 AI 溯源标记——Unicode 隐写、经重度改写对 SynthID-Text/Kirchenbauer 选词水印做统计攻击，以及
@@ -228,16 +250,26 @@ last_processed: 2026-08-15T04:26:00Z
   敏感数据上的小模型——隐私地板正在用密码学而非政策来铺设。
 - **边缘推理（详情 → [[edge-inference]]）：** kimi-k3-in-c、TurboFieldfare、Ling-3.0-tiny、Muse
   Glimmer（30B Apache 2.0 本地）、Needle 2（14MB，树莓派）、h3.c（Metal）。
+  **新增（08-15 下午）：** Liquid AI LFM2.5-VL-3B（3.1B 端侧 VLM，M5 Max 上 228 tok/s / Galaxy S26
+  Ultra 上约 20 tok/s，ScreenSpot-v2 80.7）——「小密集模型 + 官方量化」的端侧路径，面向 GUI-agent 的
+  屏幕读取 + 物体定位。
 - **端侧隐私应用：** modly（Lightning Pixel，MIT，5.7K stars——在你自己的 GPU 上本地做图生 3D，
   Hunyuan3D 2 Mini/TripoSG/Trellis2 GGUF，导出 GLB/OBJ/STL，无云/无账号）与 FluidVoice（Altic，
   GPLv3，10.1K stars——端侧 macOS 语音听写，本地 Parakeet/Whisper + Fluid-1 层，正在吃掉 Wispr
   Flow 的市场）。隐私优先的本地浪潮正从 LLM 扩展到语音 + 3D。
+- **Agent 优先软件（08-15 下午）：** Comp AI CRM（`trycompai/crm`，MIT，7.1K stars）倒转了 CRM——
+  一个常驻研究 agent *就是*产品，而数据库只是"agent 存放笔记的地方"（构建在 Vercel 的 eve 框架上：
+  18 个工具、4 个技能、网络隔离沙箱；"关于一个人的任何信息都不靠猜"——弱证据成为待人工复核的建议）。
+  这是"表单优先 SaaS → agent 优先"倒转的一个具体实例：UI 成为 agent 所做之事的视图。
 - **大厂开源浪潮：** Warp（AGPL 终端）、Ladybird（独立引擎）、Snap Valdi（原生 UI）、Nvidia Nemotron
   3.5 Lightning + Switchyard（模型路由）、Anthropic 自研芯片、阿里巴巴 Open Code Review +
   Qwen3.8-2.4T-A95B（首个开源 Qwen-Max 级旗舰）、Mojo 1.0。**新增（08-15）：** xAI 的 **x-algorithm**
   （X 的"For You" feed 代码，Apache 2.0，Rust+Python——首个如此完整开放推荐代码的主流平台）、Google
   **HEIR**（FHE 编译器）、Cursor 的 `cursor/plugins`、NVIDIA **NemotronLabs VoiceChat 11B**（首个
   开放的全双工语音 + 工具调用）。
+  **新增（08-15 下午）：** MiniMax **Music 3.0**（开放权重整曲约 5 分钟音乐生成——8B 全局 + 0.6B 局部
+  + 2.4B flow-matching + 123M Flow-VAE 混合，约 24GB 显存，$0.15/首 API——最强的可自托管 Suno/Udio
+  替代品；质量宣称仍为厂商自报）。
 - **开发者工具：** Woxi（Rust 版 Wolfram 语言重实现，以 WolframScript 做快照测试）；git-knife（Tauri
   版 git 历史元数据 GUI，commit-tree 重建——文件内容可证明未被改动）；Tailscale 的 SQLite WAL-reset
   竞态（16 年之久的丢数据 bug，重放流水线 + VFS shim 调试，3.51.3 已修复）；Turso Limbo
@@ -246,6 +278,9 @@ last_processed: 2026-08-15T04:26:00Z
   （preview 构建实现了真正的 Wayland *无人值守*远程访问，含登录前——AnyDesk/TeamViewer 都尚未做到的
   一项第一；一个既是突破也是安全疑问的技术黑盒）与 LuaCAD（ad-si，以 Lua 编写参数化 CAD 的 Rust 版
   OpenSCAD 思想重写——"好的 CAD 脚本语言"与"好的通用语言"并不必然对立）。
+  **新增（08-15 下午）：** firecrawl/anydoc（MIT，16.1K stars）——一个 Rust 核心把 14 种办公格式转成
+  GFM markdown，中位 <5ms（对比 LibreOffice 1,129ms / Pandoc 102ms），驱动 Firecrawl 的 /parse API；
+  是 RAG/agent 的文档摄取瓶颈。
 - **模型与研究：** Kronos（面向金融 K 线的 decoder-only 基础模型，AAAI 2026）——"预训练 + 微调"打法
   应用到市场。**HL-Gauss PPO**（arXiv 2608.02181，COLM 2026）——把标量 critic 头换成分类预测器
   （HL-Gauss 目标）是一个即插即用的 PPO 收益：RLVR 上校准更好 + 优势方差更低，actor 零改动。

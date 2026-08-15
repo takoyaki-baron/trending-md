@@ -35,6 +35,15 @@
     "density": "med",
     "cv": 2
   },
+  "orcarouter.ai": {
+    "cat": "news",
+    "en": "AI model-router vendor (Orca Router) blog publishing head-to-head model comparisons and benchmark analyses. Cross-checked (08-15): its Qwen3.8-27B write-up matches the Hugging Face model card's own benchmark table (SWE-bench Pro 61.7, LiveCodeBench 90.3) — but treat as secondary analysis, not the vendor's official numbers.",
+    "zh": "AI 模型路由厂商（Orca Router）博客，发布模型横向对比与基准分析。已交叉核验（08-15）：其 Qwen3.8-27B 文章与 Hugging Face 模型卡自带的基准表一致（SWE-bench Pro 61.7、LiveCodeBench 90.3）——但应视为二手分析，而非厂商官方数字。",
+    "jp": "AIモデルルーターベンダー（Orca Router）のブログ。モデル同士の比較・ベンチマーク分析を公開。突合済み（08-15）：Qwen3.8-27Bの記事はHugging Faceモデルカードのベンチ表と一致（SWE-bench Pro 61.7、LiveCodeBench 90.3）——ただしベンダー公式ではなく二次分析として扱う。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
   "36kr.com": {
     "cat": "news",
     "en": "Chinese tech/business media; strong on startup funding and China AI-company moves.",
@@ -73,12 +82,12 @@
   },
   "cvetodo.com": {
     "cat": "data",
-    "en": "CVE tracking/aggregation dashboard; fast, but secondary to cve.org records.",
-    "zh": "CVE 追踪/聚合面板；更新快，但以 cve.org 官方记录为准。",
-    "jp": "CVE追跡・集約ダッシュボード。速いが、cve.orgの公式記録が正。",
+    "en": "CVE tracking/aggregation dashboard; fast, but secondary to cve.org records. Cross-checked (08-15): its \"CISA flags SonicWall SMA1000 as ransomware vectors\" headline is confirmed by Rapid7/CSA/SCWorld/Field Effect/cirt.gy — CVE-2026-15409 (CVSS 10.0 SSRF in wsproxy) + CVE-2026-15410 (7.2 path traversal) chained to unauth root, KEV since Jul 14, exploited since Jun 22.",
+    "zh": "CVE 追踪/聚合面板；更新快，但以 cve.org 官方记录为准。已交叉核验（08-15）：其“CISA 将 SonicWall SMA1000 列为勒索攻击媒介”的标题经 Rapid7/CSA/SCWorld/Field Effect/cirt.gy 印证——CVE-2026-15409（wsproxy 中的 CVSS 10.0 SSRF）+ CVE-2026-15410（7.2 路径遍历）串联为未认证 root，7 月 14 日入 KEV，6 月 22 日起被利用。",
+    "jp": "CVE追跡・集約ダッシュボード。速いが、cve.orgの公式記録が正。突合済み（08-15）：「CISAがSonicWall SMA1000をランサムウェアの攻撃ベクトルと認定」という見出しはRapid7/CSA/SCWorld/Field Effect/cirt.gyで裏付け——CVE-2026-15409（wsproxyのCVSS 10.0 SSRF）+ CVE-2026-15410（7.2パストラバーサル）が連鎖して未認証root、7月14日KEV登載、6月22日から悪用。",
     "cred": "med",
     "density": "high",
-    "cv": 1
+    "cv": 2
   },
   "star-history.com": {
     "cat": "data",
@@ -262,12 +271,12 @@
   },
   "thehackernews.com": {
     "cat": "security",
-    "en": "Cybersecurity news; fast on breaches and exploits, good breadth.",
-    "zh": "网络安全新闻；对入侵与漏洞利用跟进快、覆盖面广。",
-    "jp": "サイバーセキュリティニュース。侵害・エクスプロイトに速く、幅広い。",
+    "en": "Cybersecurity news; fast on breaches and exploits, good breadth. Cross-checked (08-15): its \"398 CVEs\" August Patch Tuesday count matches Microsoft's own figure (62 rated Critical by ZDI), and its unpatched-GeoServer zero-day story matches SecurityWeek/watchTowr (@q1uf3ng disclosure, `jsonArrayContains` SQLi, no CVE yet).",
+    "zh": "网络安全新闻；对入侵与漏洞利用跟进快、覆盖面广。已交叉核验（08-15）：其“398 个 CVE”的 8 月补丁日数量与微软官方口径一致（ZDI 判定 62 个为 Critical），其未修复 GeoServer 零日报道与 SecurityWeek/watchTowr 一致（@q1uf3ng 披露、`jsonArrayContains` SQLi、尚无 CVE）。",
+    "jp": "サイバーセキュリティニュース。侵害・エクスプロイトに速く、幅広い。突合済み（08-15）：「398 CVE」という8月Patch Tuesdayの件数はマイクロソフト自身の数値と一致（ZDI判定で62件がCritical）、未パッチのGeoServerゼロデイ報道はSecurityWeek/watchTowrと一致（@q1uf3ngの開示、`jsonArrayContains`のSQLi、CVE未採番）。",
     "cred": "med",
     "density": "high",
-    "cv": 1
+    "cv": 2
   },
   "techcrunch.com": {
     "cat": "news",

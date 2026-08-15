@@ -166,6 +166,31 @@ Two signals: (1) **post-training, not scale, is now the visible frontier lever**
 jumped to frontier coding/security purely on RL; (2) **vulnerability discovery is becoming a
 headline model benchmark**, with a public ledger as its disclosure artifact.
 
+## The Aug 15 PM beat: price, speed, and open distillation
+
+A single 24-hour window added three more frontier data points, all on the price/distribution axis of
+the pattern above:
+
+- **Gemini 3.7 Flash** — Google's "most intelligent" Flash for coding/agents, three weeks after
+  Gemini 3.6 Flash. DeepSWE v1.1 49.0→65.3%, FrontierCode 1.1 34.4→43.6%, WebDev Arena Elo 1538→1588,
+  1M-token input. Launch pricing halved to $0.75/M in / $3.75/M out through Dec 31 (then $1.50/$7.50).
+  A three-week cadence + half-price launch is a direct bid for the "cheap agent workhorse" tier; it
+  powers the Gemini Spark agent.
+- **Qwen3.8-27B** — `Qwen/Qwen3.8-27B`, Apache 2.0. The mid-size companion to Qwen3.8-Max: a natively
+  multimodal 27B (Gated DeltaNet + attention + multi-token prediction), 262K native context (1M via
+  YaRN), native image/video. Best-in-row SWE-bench Pro 61.7, LiveCodeBench v6 90.3, OSWorld-Verified
+  84.3, WebArena-Verified 64.8, AndroidWorld 81.9; 271 quantized variants within a day. Closes the gap
+  between closed APIs and full-stack agent tooling under a permissive license.
+- **GPT-5.6 Sol "Ultrafast"** — OpenAI preview of the flagship served on **Cerebras** chips: up to
+  750 tok/s, ~14× faster, without dropping to a smaller model. No GA date. If it holds, the inference
+  bottleneck shifts from raw speed to orchestration/safety/cost — serving *hardware* becomes a
+  distribution lever alongside price and release cadence.
+- **Nemotron Teacher 550B** — `nvidia/Nemotron-Labs-Teacher-General-Reasoning`, a 550B-total
+  (55B-active) LatentMoE Mamba-2 + Transformer "reasoning teacher" used in NVIDIA's Multi-Teacher
+  On-Policy Distillation (MOPD) pipeline. Weights-only (1.12TB, OpenMDW-1.1, disclosed post-training
+  data), no published benchmarks — a rare open window into how labs build reasoning models, and a
+  distillation counterpart to GLM-5.3's "post-training, not scale" signal.
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks
@@ -185,3 +210,5 @@ headline model benchmark**, with a public ledger as its disclosure artifact.
   scheme, and whether already-published reasoning blocks stay decodable.
 - Whether Qwen's custom Qwen3.8-Max license + ~4.9TB weights actually get fine-tuned/downloaded at
   scale — open weights only shift economics if the ecosystem can run them.
+- Whether GPT-5.6 Sol "Ultrafast" holds 750 tok/s at GA, and whether custom serving hardware (Cerebras)
+  becomes a third distribution axis alongside price and release cadence.

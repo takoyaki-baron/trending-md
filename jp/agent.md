@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-15T04:26:00Z
+last_processed: 2026-08-15T12:25:00Z
 ---
 
 # 学習エージェント
@@ -78,6 +78,10 @@ last_processed: 2026-08-15T04:26:00Z
    743Bベース*の上に築かれたコーディング/セキュリティモデルで、あらゆる伸びが新アーキテクチャでは
    なくポストトレーニング（RL）から来ている——SWE-Marathon 19.4→42.5、Terminal Bench 3.0 4.6→28.3——
    **スケールではなくポストトレーニングが目に見えるフロンティアのレバーになる**。→ [[frontier-models]]
+   次の一拍（08-15午後）は価格/速度/流通の三方向のプッシュ：Googleの**Gemini 3.7 Flash**（3.6の3週間
+   後の半額エージェント作業馬——DeepSWE 49.0→65.3%）、アリババの**Qwen3.8-27B**（Apache-2.0ネイティブ
+   マルチモーダル27B、SWE-bench Pro 61.7でトップ）、そしてOpenAIの**GPT-5.6 Sol「Ultrafast」**プレ
+   ビュー（Cerebras上で750 tok/s——蒸留ではなく提供*ハードウェア*が速度レバー）。
 
 7. **AI安全性は今や政策ではなく測定可能なリリース閾値であり、しかもラボ横断で収束しつつある。**
    OpenAIはAstraを停止した——そのPreparedness Frameworkが「Critical能力を排除できない」と結論した
@@ -187,6 +191,12 @@ last_processed: 2026-08-15T04:26:00Z
   ベース、伸びはすべてポストトレーニングRLから（Terminal Bench 3.0 4.6→28.3、SWE-Marathon 19.4→
   42.5）；CyberGym 84.5%（1位、Mythos 5を上回る）、ExploitBench 54.4%；オープンウェイトは安全上の
   理由で約2週間延期。
+  **新規（08-15午後）：** Gemini 3.7 Flash（Google、半額$0.75/$3.75毎Mを12月31日まで、DeepSWE 49.0→
+  65.3、1Mコンテキスト、Gemini Sparkを駆動）；Qwen3.8-27B（アリババ、Apache-2.0ネイティブマルチ
+  モーダル27B、SWE-bench Pro 61.7 / LiveCodeBench 90.3 / OSWorld 84.3、262Kコンテキスト、271の量子化
+  バリアント）；GPT-5.6 Sol「Ultrafast」（OpenAIプレビュー、Cerebras上で750 tok/s——蒸留ではなく
+  ハードウェアで高速化）；Nemotron Teacher 550B（NVIDIA、アクティブ55BのLatentMoE「推論教師」、
+  蒸留用、ウェイトのみ、ベンチマークなし）。
 - **エージェントメモリの標準化（未解決のギャップ）：** MCP（ツール/データアクセス）とA2A（エージェント
   間、いずれもLinux Foundation）は収束したが、どちらも*統制された永続的共有メモリ*を標準化していない
   ——著者/信頼度/プロヴェナンスのフィールド、メモリ空間の権限、競合/順序のセマンティクスがない。
@@ -194,6 +204,19 @@ last_processed: 2026-08-15T04:26:00Z
   提案：Agent Memory Hall（型付きMemoryCell + 信頼度ティア + アイデンティティACL + 追記専用監査）と
   Portable Agent Memory（Merkle-DAGプロヴェナンス）——一方、TencentDB Team Memory と Macro のMCP公開
   チームメモリはその場しのぎでギャップを埋めるのみ。まだ誰も標準を所有していない。→ [[agent-stack]]
+- **エージェントコンテキスト/アイデンティティの標準化（08-15、→ [[agent-stack]]）：** 断片化の問いは、
+  異なる速度で動く2つのレイヤーに分裂する。**アイデンティティ/信頼は先に標準化が進む**——MCP（垂直の
+  ツール/データアクセス）+ A2A（水平のエージェント間、いずれもLinux Foundation）が接続を統治；Agentic
+  AI Foundation（AAIF、Linux Foundation、2025年12月、170+組織）は**アイデンティティ＆トラスト作業部会**
+  を運営し「可搬アイデンティティと委任プロトコル」を定義；ANPは分散型の**W3C DID（`did:wba`）**アイデン
+  ティティ（企業間の暗号学的検証、共有権威なし）を追加；NISTの**AI Agent Standards Initiative**（2026年
+  2月17日）はエージェント相互運用に関する米国政府初のプログラム。**コンテキスト/メモリは遅れている**
+  ——ego-lite（ブラウザアイデンティティ：隔離Spaceでの共有ログイン状態）とholaOS（ディスク上のメモリ＝
+  プレーンテキストファイル）は*同じ*ギャップへの2つの製品回答だが、いずれもクロスベンダーではない；
+  最初期の標準化試みは「統治されたコンテキストレイヤー」/「Context Repos」提案と `scp` ホワイトペーパー
+  （暗号学的コンテキスト分離 + 検証可能なプロヴェナンス + ケーパビリティベースの認可）。アイデンティティ
+  はコンテキストより先に標準化される——コンテキスト/メモリの可搬性は、より難しく、より遅いレイヤー
+  （上記のメモリギャップ）。
 - **エージェントスキルの評価（未解決のギャップ、→ [[agent-plugins]]）：** Ponytailの公開ベンチマーク
   + 主張の訂正がテンプレートだが、共有の評価プロトコルはまだない。評価なきスキルの増殖は、先月の
   「訪問せずに書かれたリポジトリ」の今月版——主張は検証されるべきで、鵜呑みにすべきではない。
@@ -255,6 +278,10 @@ last_processed: 2026-08-15T04:26:00Z
   に@q1uf3ngが開示）はH2 `sa` / MSSQL admin設定下でRCEに達し、開示から数時間で活発に探索された——
   「広く展開されたOSS + 未パッチのSQLi/RCE」という欠陥クラスがエージェント基盤の攻撃面と並行して
   依然として燃え続けている。
+  **新規（08-15午後）：** SonicWall SMA1000——CISA KEVがCVE-2026-15409（wsproxy「Work Place」インタ
+  フェースのCVSS 10.0 SSRF）+ CVE-2026-15410（7.2コマンドインジェクション）をランサムウェアのベク
+  ターと確認（INC Ransomwareの関連組織）；チェーンでゼロクリック未認証root、6月22日から悪用（7月
+  14日の開示より前）、報告時点で約380台が露出。
 - **プロヴェナンスと透かしの軍拡競争（08-15）：** AnthropicはEU AI法第50条の透明性ルールの下で
   Claudeのテキストに透かしを入れ始めた（8月2日）。数日以内に `guillaumemeyer/watermarks-remover`
   （MIT、4.1K stars）がAIプロヴェナンスマークを3層で剥がす——Unicodeステガノグラフィ、重度の言い換え
@@ -270,11 +297,20 @@ last_processed: 2026-08-15T04:26:00Z
   バシーの床は政策ではなく暗号技術で築かれつつある。
 - **エッジ推論（詳細 → [[edge-inference]]）：** kimi-k3-in-c、TurboFieldfare、Ling-3.0-tiny、
   Muse Glimmer（30B Apache 2.0ローカル）、Needle 2（14MB、Raspberry Pi）、h3.c（Metal）。
+  **新規（08-15午後）：** Liquid AI LFM2.5-VL-3B（3.1BオンデバイスVLM、M5 Maxで228 tok/s / Galaxy S26
+  Ultraで約20 tok/s、ScreenSpot-v2 80.7）——「小さな密モデル + 公式量子化」によるオンデバイスへの
+  道、GUIエージェントの画面読み取り + 接地を狙う。
 - **オンデバイスのプライバシーアプリ：** modly（Lightning Pixel、MIT、5.7K stars——自分のGPUでローカル
   に画像→3D、Hunyuan3D 2 Mini/TripoSG/Trellis2 GGUF、GLB/OBJ/STL出力、クラウド/アカウント不要）と
   FluidVoice（Altic、GPLv3、10.1K stars——オンデバイスmacOSディクテーション、ローカルParakeet/
   Whisper + Fluid-1層、Wispr Flowの市場を侵食）。プライバシー優先のローカル波はLLMを超えて音声 + 3D
   へ広がる。
+- **エージェントファーストソフトウェア（08-15午後）：** Comp AI CRM（`trycompai/crm`、MIT、7.1K
+  stars）はCRMを反転させる——常駐するリサーチエージェント*が*プロダクトであり、データベースは
+  「エージェントがノートを置く場所」（Vercelのeveフレームワーク上に構築：18ツール、4スキル、
+  ネットワーク隔離サンドボックス；「人のことは何も推測しない」——弱い証拠は人間がレビューする
+  提案になる）。「フォーム優先SaaS → エージェントファースト」の反転の具体例：UIはエージェントが
+  行ったことのビューになる。
 - **ビッグテックのオープンソース波：** Warp（AGPLターミナル）、Ladybird（独立エンジン）、Snap
   Valdi（ネイティブUI）、Nvidia Nemotron 3.5 Lightning + Switchyard（モデルルーター）、Anthropic
   自社シリコン、Alibaba Open Code Review + Qwen3.8-2.4T-A95B（初のオープンなQwen-Max級フラッグシップ）、
@@ -282,6 +318,9 @@ last_processed: 2026-08-15T04:26:00Z
   Rust+Python——主要プラットフォームがここまで完全な形で推薦コードを公開した初の例）、Googleの
   **HEIR**（FHEコンパイラ）、Cursorの `cursor/plugins`、NVIDIAの **NemotronLabs VoiceChat 11B**（初の
   オープンな全二重音声 + ツール呼び出し）。
+  **新規（08-15午後）：** MiniMax **Music 3.0**（オープンウェイトの約5分フルソング音楽生成——8Bグロー
+  バル + 0.6Bローカル + 2.4B flow-matching + 123M Flow-VAEのハイブリッド、約24GB VRAM、$0.15/曲API
+  ——最も強力なセルフホスト可能なSuno/Udio代替；品質の主張は依然ベンダー報告）。
 - **開発者ツール：** Woxi（RustによるWolfram言語の再実装、WolframScriptに対してスナップショット
   テストを実行）；git-knife（Tauri製のgit履歴メタデータGUI、commit-tree再構築——ファイル内容は証明
   可能な形で不変）；TailscaleのSQLite WAL-reset競合（16年もののデータ損失バグ、リプレイパイプライン +
@@ -292,6 +331,9 @@ last_processed: 2026-08-15T04:26:00Z
   TeamViewerもまだ達成していない初の成果；突破口であると同時にセキュリティ上の疑問でもある技術的
   ブラックボックス）と LuaCAD（ad-si、OpenSCADのアイデアをRustで書き直し、パラメトリックCADをLuaで
   記述——「良いCADスクリプト」と「良い汎用言語」は必ずしも対立しない）。
+  **新規（08-15午後）：** firecrawl/anydoc（MIT、16.1K stars）——1つのRustコアが14種のオフィス形式を
+  GFM markdownへ変換、中央値5ms未満（LibreOffice 1,129ms / Pandoc 102msと比較）、Firecrawlの/parse
+  APIを駆動；RAG/エージェントの文書取り込みのボトルネック。
 - **モデル & 研究：** Kronos（金融ローソク足向けのdecoder-only基盤モデル、AAAI 2026）——「事前学習 +
   ファインチューニング」の定石を市場へ適用。**HL-Gauss PPO**（arXiv 2608.02181、COLM 2026）——スカラー
   のcriticヘッドをカテゴリカル予測器（HL-Gaussターゲット）に置き換えることは、ドロップインのPPOの
