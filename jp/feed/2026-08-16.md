@@ -1,8 +1,8 @@
 ---
 date: 2026-08-16
-updated: 2026-08-16T04:03:00Z
+updated: 2026-08-16T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -303,13 +303,109 @@ OpenAI は初の公式 **Linux 版 ChatGPT デスクトップアプリ**（プ�
 
 ---
 
+## 19. watchTowr が Citrix NetScaler のヒープオーバーフローを 3 年ぶりの公開された事前認証 RCE に昇華
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** watchTowr Labs · PoC released · ~1d ago (~12:03 UTC+8)
+- **Tags:** `citrix` `netscaler` `cve` `saml` `pre-auth-rce`
+
+watchTowr Labs は "You're Back In The Room" と題する完全な技術解説と PoC を公開した。対象は **CVE-2026-8452**——**Citrix NetScaler ADC/Gateway**（`nsppe`）の SAML 正準化パスにおけるヒープオーバーフローだ。過大な `<ds:SignedInfo>` `PrefixList` が固定サイズのバッファを溢れさせ、隣接ヒープチャンクのデータポインタを破壊して write-what-where プリミティブを得る。NetScaler は非 PIE でコンパイルされヒープが実行可能であるため、研究者はこれを**未認証の root 権限 RCE** に昇華した——PoC は `/vpn/theme/x.php` に PHP ウェブシェルを配置し、再起動後も生き残るよう pitboss ウォッチドッグのシグナルハンドラを無効化する。**CVE-2023-3519**（2023 年）以来、初の公開された NetScaler 事前認証 RCE となる。
+
+**重要性:** Citrix の 6 月 30 日のセキュリティ情報では「予測不能な挙動」を招くメモリオーバーフローとしか記述されていなかった——その「予測不能」の正体は、ランサムウェアや国家関与の攻撃者が長年狙ってきたネットワーク境界アプライアンス上での確実な root コード実行だった。SAML SP/IdP（または Gateway/AAA vServer）設定時に到達可能で、回避策は存在しない——14.1-72.61 / 13.1-63.18 へのアップグレードが必須。
+
+> すべての PoC オフセットは NetScaler 13.1-30.52 向けにハードコード。JPCERT/CC は 8 月 15 日時点で実際の悪用を未確認と報告。
+
+[`🔗 watchTowr PoC リポジトリ`](https://github.com/watchtowrlabs/watchTowr-vs-Citrix-Netscaler-PreAuth-RCE-CVE-2026-8452) · [`🔗 JPCERT/CC 注意喚起`](https://www.jpcert.or.jp/at/2026/at260024.html)
+
+---
+
+## 20. MindsDB Minds Platform に未認証・プロンプト注入可能な RCE——CVSS 10.0、パッチ未提供
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** IONIX · CVSS 10.0 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `mindsdb` `cve` `prompt-injection` `rce` `ai-agents`
+
+**CVE-2026-73678** は **MindsDB Minds Platform**（≤26.1.0）における最高深刻度の脆弱性だ。`POST /api/v1/responses/` エンドポイントには認証チェックがなく、「bring-your-own-key」攻撃チェーンにより、攻撃者はまず未認証の `PUT /api/v1/settings/` エンドポイントで自身の LLM API キーを登録し、次にプロンプトを送信して内蔵の **Anton** エージェントのスクラッチパッドツールに、サンドボックスのない裸の `exec()` で攻撃者の影響を受けた Python を実行させる。結果はアプリと同じ権限での任意の OS コマンド実行——SSH キー、保存済み資格情報、環境シークレットも含まれる。過度に寛容な CORS（`allow_origins=["*"]` + `allow_credentials=True`）によりブラウザ経由の悪用も可能になる。
+
+**重要性:** これは AI/エージェント境界に現れた新たな脆弱性クラスの最も鮮明な例だ。*エージェント自体*が攻撃対象となり、注入の標的はウェブフォームではなくモデルのコード実行ツールになる。開示時点で**パッチリリースは存在せず**（修正は開発ブランチのみ）、緩和策はアップデートではなくネットワーク/エージェントの堅牢化となる。
+
+> 研究者：Ho Viet Khanh（HK4zCzi）。公開 PoC が存在。アドバイザリ GHSA-jcxw-h8ph-pxpv。
+
+[`🔗 IONIX アドバイザリ`](https://www.ionix.io/threat-center/cve-2026-73678/) · [`🔗 VulnCheck アドバイザリ`](https://www.vulncheck.com/advisories/mindsdb-minds-platform-unauthenticated-rce-via-scratchpad-exec)
+
+---
+
+## 21. Meta が Muse Glimmer でオープンウェイトに復帰——Apache 2.0 の 30B ローカルエージェントモデル
+
+- **Velocity:** ▮▮ rising
+- **Source:** Artificial Analysis · ~3d ago (~04:03 UTC+8)
+- **Tags:** `meta` `muse-glimmer` `open-weights` `on-device` `agents`
+
+Meta は **Muse Glimmer**（約 30B の密なマルチモーダルモデル＋約 2B の ViT ビジョンエンコーダ）を **Apache 2.0** で公開した——Llama 4（2025 年 4 月）以来の初のオープンウェイト公開であり、これまでで最も寛容なライセンスとなる。クローズドな旗艦 **Muse Spark** から logit 蒸留で作られ、エージェント主体の中間訓練と RL ポストトレーニングを経て、常時稼働のローカルエージェントを狙う：131K コンテキスト、100 以上の言語、最大 **3.1× 高速化する DFlash 投機的デコーディング**（RTX 5090 で 74.9→233.4 tok/s）。4-bit GGUF ビルドは 17–20GB で動作し、単一の 24GB コンシューマー GPU に収まる。
+
+**重要性:** これは「個人向けスーパーインテリジェンス」をオフラインで動かすという Meta の明確な提案であり、ローカルエージェントランタイム（Ollama、llama.cpp、MLX）が成熟する中で、オープンウェイトをプライバシー/主権の答えとして位置づけるものだ。Artificial Analysis は Openness Index を 44 と評価し、多くのオープンモデルを上回る——ただし Meta のベンチマーク勝利（Gemma4-31B・Qwen3.6-27B 比）はベンダー報告である。
+
+> Meta 自身のフレームワークでは「フロンティア AI」に該当せずと分類。プロンプト注入成功率 28.4% は Gemma4-31B の 25.6% より弱い。
+
+[`🔗 Artificial Analysis`](https://artificialanalysis.ai/articles/muse-glimmer) · [`🔗 InfoQ`](https://www.infoq.com/news/2026/08/meta-muse-glimmer/)
+
+---
+
+## 22. Xiaohongshu が dots3-note をオープンソース化——長期的エージェントタスク向け 280B MoE
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · ~2d ago (~12:03 UTC+8)
+- **Tags:** `xiaohongshu` `dots3` `moe` `open-weights` `long-horizon`
+
+Xiaohongshu（小紅書）の Dots Model Lab は **dots3-note preview**（Apache 2.0）をオープンソース化した。総パラメータ 280B / アクティブ 16B の **Mixture-of-Experts（MoE）** モデルで、512K のコンテキストウィンドウがテキスト・画像・動画・音声入力をカバーする。Dots が **TEMPO** と呼ぶ新しい強化学習手法により、オープンエンドな**長期的エージェントタスク**（旅行計画、店舗運営、住宅リノベーション）向けに調整され、同系列モデル（dots-note-3.0）は IMO で満点の **42/42** を達成している。**Terminal-Bench 2.1** では 75.1 を記録——SemiAnalysis のチャートによれば米国のトップオープンウェイトモデルを 4.9 ポイント上回る——同日に Huawei が昇騰（Ascend）0 Day 対応を発表した。
+
+**重要性:** 中国の大手消費者プラットフォームの社内ラボによる初のオープンリリースであり、ベンチマークの飽和ではなく*エージェントネイティブ*軸（長期的タスク、環境記憶、自己修正）への具体的な前進だ。ウェイトは Hugging Face/ModelScope で公開され、vLLM/SGLang をネイティブサポートする。
+
+> 単一の 8 カードノード（FP8）にデプロイ可能。デモでは自己更新する "memory.md" メモで ARC-AGI-3 の 6 レベルすべてをクリア。
+
+[`🔗 studio-dots-ai/dots3-note-prev`](https://github.com/studio-dots-ai/dots3-note-prev) · [`🔗 36Kr`](https://eu.36kr.com/en/p/3938759517896072)
+
+---
+
+## 23. 個人開発者が Codex で 232× 高速な GPU QR カーネルを実現——183 人中 12 位
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 373 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `codex` `auto-research` `gpu` `cuda` `agents`
+
+Sankalp の "Auto-research with codex" が HN のトップに立った。内容は GPU Mode / Core Automation の自動研究コンテスト——`torch.geqrf` に一致するようバッチ処理の compact-Householder QR 分解を最適化するというものだ。Codex と Modal GPU、局所最適から脱するための「候補のビーム」（beam of candidates）を使い、「ベンチマーク→プロファイリング→研究→改善」のループを回し、14 日間・1500 回以上の提出で実行時間を約 419,000µs から 1,805µs（**232×**）へ短縮——**183 人中 12 位**となった。決定的だったのはアルゴリズムの変更（WY 表現を用いたブロック化 Householder で、逐次的なリフレクタ更新をテンソルコア向きの GEMM に変換）であり、単なるカーネルチューニングではなかった。
+
+**重要性:** これはエージェント主導の研究が得意とするもの（アルゴリズムの枠内での集中的な探索）と、いまだに敗れるもの（1 位は約 48% 速い CholeskyQR-Householder ハイブリッドという真に異なるアイデア）を示す、率直でデータ豊富なケーススタディだ。ドメイン知識がハーネス設計と人間による誘導を加速した。
+
+> 著者は入力分布や Blackwell の tcgen05 命令を活用せず、ビーム探索を最初から採用しなかったことを後悔していると述べる。
+
+[`🔗 Sankalp の記事`](https://sankalp.bearblog.dev/autoresearch/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49309549)
+
+---
+
+## 24. uBlock Origin が Facebook 広告ブロック戦争で降伏、Sponsored 投稿を「wontfix」に
+
+- **Velocity:** ▮ steady
+- **Source:** hardwareluxx · ~2d ago (~04:03 UTC+8)
+- **Tags:** `adblocking` `ublock-origin` `facebook` `open-source` `cat-and-mouse`
+
+uBlock Origin のメンテナーは **Facebook 広告の専用ブロックを終了**し、同プラットフォーム向けのフィルタを「wontfix」とマークした。長年のいたちごっこはこう決着した：Facebook は「Sponsored」の語を 1 文字ずつコード内にばらまき、不可視の偽装文字を挿入し、要素名を絶えず再生成してパターンマッチングのフィルタを無力化してきた。チームは異例の率直さで Facebook を「不快で反ユーザー的なサイト」と呼び、Google の Manifest V3 と Edge によってすでに弱体化された拡張機能の維持負担は、ボランティアプロジェクトにはもはや持続不可能だと述べた。
+
+**重要性:** クライアント側の広告ブロックがプラットフォーム側の「難読化サービス」に負けつつあることを示す、これまでで最も分かりやすいデータポイントだ。オープンウェブのコミュニティは代替フィルタリストへ——あるいは単に敵対的なサイトを離れる方向へ——動かされる。既存のフィルタは Facebook の次回のコード変更で壊れるまで機能し続ける。
+
+> Firefox と Brave は依然として uBlock Origin をサポート。Facebook 上でのトラッカー遮断は影響を受けない。
+
+[`🔗 racunalniske-novice`](https://www.racunalniske-novice.com/en/facebook-is-too-tough-a-nut-to-crack-ublock-origin-has-given-up/) · [`🔗 hardwareluxx`](https://www.hardwareluxx.de/index.php/news/software/browser-und-internet/70010-ublock-origin-gibt-auf-facebook-werbung-wird-kuenftig-nicht-mehr-gezielt-blockiert.html)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-16T04:03:00Z |
-| Items | 18 |
-| Sources tracked | 24 (GitHub, Prime Intellect, The Hacker News, SOCRadar, Anthropic, Simon Willison, 4sysops, Cloudflare Blog, Manila Times, CISA KEV, Expel, CSO Online, Trendshift, MarkTechPost, ZenML, arXiv, thepaper.cn, SkillsLLM, SoFarBot, Gigazine, DEV.co, TechRepublic, ZDNet, OpenTrain) |
+| Generated | 2026-08-16T12:03:00Z |
+| Items | 24 |
+| Sources tracked | 35 (GitHub, Prime Intellect, The Hacker News, SOCRadar, Anthropic, Simon Willison, 4sysops, Cloudflare Blog, Manila Times, CISA KEV, Expel, CSO Online, Trendshift, MarkTechPost, ZenML, arXiv, thepaper.cn, SkillsLLM, SoFarBot, Gigazine, DEV.co, TechRepublic, ZDNet, OpenTrain, watchTowr Labs, JPCERT/CC, IONIX, VulnCheck, Artificial Analysis, InfoQ, 36Kr, Hacker News, sankalp.bearblog.dev, racunalniske-novice, hardwareluxx) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

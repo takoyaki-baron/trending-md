@@ -1,8 +1,8 @@
 ---
 date: 2026-08-16
-updated: 2026-08-16T04:03:00Z
+updated: 2026-08-16T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -303,13 +303,109 @@ OpenAI released the first official **ChatGPT desktop app for Linux** (preview), 
 
 ---
 
+## 19. watchTowr turns a Citrix NetScaler heap overflow into the first public pre-auth RCE in three years
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** watchTowr Labs · PoC released · ~1d ago (~12:03 UTC+8)
+- **Tags:** `citrix` `netscaler` `cve` `saml` `pre-auth-rce`
+
+watchTowr Labs published "You're Back In The Room," a full write-up plus PoC for **CVE-2026-8452**, a heap overflow in the SAML canonicalization path of **Citrix NetScaler ADC/Gateway** (`nsppe`). An oversized `<ds:SignedInfo>` `PrefixList` overflows a fixed-size buffer and corrupts an adjacent heap chunk's data pointer, yielding a write-what-where primitive — and because NetScaler ships non-PIE with an executable heap, the researchers turned it into **unauthenticated RCE as root**, dropping a PHP webshell at `/vpn/theme/x.php` and disabling the pitboss watchdog's signal handlers to survive reboots. It's the first public NetScaler pre-auth RCE since **CVE-2023-3519** (2023).
+
+**Why it matters:** Citrix's June 30 bulletin described this only as a memory overflow leading to "unpredictable behavior" — the unpredictable part turned out to be reliable root code execution on a network-edge appliance that ransomware and state-sponsored actors have hit for years. Reachable when SAML SP/IdP (or Gateway/AAA vServer) is configured; there is no workaround — upgrade to 14.1-72.61 / 13.1-63.18.
+
+> All PoC offsets are hardcoded for NetScaler 13.1-30.52; JPCERT/CC reported no confirmed in-the-wild exploitation as of Aug 15.
+
+[`🔗 watchTowr PoC repo`](https://github.com/watchtowrlabs/watchTowr-vs-Citrix-Netscaler-PreAuth-RCE-CVE-2026-8452) · [`🔗 JPCERT/CC alert`](https://www.jpcert.or.jp/at/2026/at260024.html)
+
+---
+
+## 20. MindsDB Minds Platform ships an unauthenticated, prompt-injectable RCE — CVSS 10.0, no patch yet
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** IONIX · CVSS 10.0 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `mindsdb` `cve` `prompt-injection` `rce` `ai-agents`
+
+**CVE-2026-73678** is a maximum-severity flaw in **MindsDB Minds Platform** (≤26.1.0): the `POST /api/v1/responses/` endpoint has no authentication check, and a "bring-your-own-key" chain lets an attacker first register their own LLM API key via the unauthenticated `PUT /api/v1/settings/` endpoint, then submit a prompt that drives the built-in **Anton** agent's scratchpad tool to run attacker-influenced Python through a bare `exec()` with no sandboxing. The result is arbitrary OS command execution with the app's privileges — SSH keys, stored credentials, and environment secrets included. Overly permissive CORS (`allow_origins=["*"]` + `allow_credentials=True`) also enables browser-based exploitation.
+
+**Why it matters:** It's the sharpest example yet of the new vulnerability class at the AI/agent boundary, where the *agent* is the attack surface and the injection target is the model's code-execution tool rather than a web form. At disclosure there was **no patched release** (fixes only on dev branches), so mitigation is network/agent hardening, not an update.
+
+> Researcher: Ho Viet Khanh (HK4zCzi); public PoCs exist; advisory GHSA-jcxw-h8ph-pxpv.
+
+[`🔗 IONIX advisory`](https://www.ionix.io/threat-center/cve-2026-73678/) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/mindsdb-minds-platform-unauthenticated-rce-via-scratchpad-exec)
+
+---
+
+## 21. Meta returns to open weights with Muse Glimmer — a 30B local agent model under Apache 2.0
+
+- **Velocity:** ▮▮ rising
+- **Source:** Artificial Analysis · ~3d ago (~04:03 UTC+8)
+- **Tags:** `meta` `muse-glimmer` `open-weights` `on-device` `agents`
+
+Meta released **Muse Glimmer**, a ~30B dense multimodal model (plus a ~2B ViT vision encoder) under **Apache 2.0** — Meta's first open-weights release since Llama 4 (April 2025) and its most permissive license yet. Distilled from the closed **Muse Spark** flagship via logit distillation with agent-heavy mid-training and RL post-training, it targets always-on local agents: 131K context, 100+ languages, and **DFlash speculative decoding** for up to 3.1× faster generation (74.9→233.4 tok/s on an RTX 5090). 4-bit GGUF builds run in 17–20GB, fitting a single 24GB consumer GPU.
+
+**Why it matters:** It's Meta's explicit pitch for "personal superintelligence" that runs offline — open weights as the privacy/sovereignty answer just as local agent runtimes (Ollama, llama.cpp, MLX) mature. Artificial Analysis rates it 44 on the Openness Index, ahead of most open models, though Meta's benchmark wins (vs Gemma4-31B, Qwen3.6-27B) are vendor-reported.
+
+> Meta's own framework classifies it as not "frontier AI"; its 28.4% prompt-injection success rate is weaker than Gemma4-31B's 25.6%.
+
+[`🔗 Artificial Analysis`](https://artificialanalysis.ai/articles/muse-glimmer) · [`🔗 InfoQ`](https://www.infoq.com/news/2026/08/meta-muse-glimmer/)
+
+---
+
+## 22. Xiaohongshu open-sources dots3-note — a 280B MoE built for long-horizon agent tasks
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · ~2d ago (~12:03 UTC+8)
+- **Tags:** `xiaohongshu` `dots3` `moe` `open-weights` `long-horizon`
+
+Xiaohongshu's Dots Model Lab open-sourced **dots3-note preview** (Apache 2.0), a 280B-total / 16B-active **Mixture-of-Experts** model with a 512K context window over text, image, video, and audio input. It's tuned for open-ended **long-horizon agent tasks** (travel planning, store operations, home renovation) via a new RL method Dots calls **TEMPO**, with a same-series model (dots-note-3.0) having scored a perfect **42/42 at the IMO**. On **Terminal-Bench 2.1** it posts 75.1 — 4.9 points above the top US open-weight model per a SemiAnalysis chart — and Huawei announced Ascend 0-day adaptation the same day.
+
+**Why it matters:** It's the first open release from a major Chinese consumer platform's in-house lab and a concrete push on the *agent-native* axis (long-horizon, environment memory, self-correction) rather than raw benchmark saturation. Weights are on Hugging Face/ModelScope with native vLLM/SGLang support.
+
+> Deploys on a single 8-card node (FP8); demos include clearing all 6 ARC-AGI-3 levels using a self-updating "memory.md" notepad.
+
+[`🔗 studio-dots-ai/dots3-note-prev`](https://github.com/studio-dots-ai/dots3-note-prev) · [`🔗 36Kr`](https://eu.36kr.com/en/p/3938759517896072)
+
+---
+
+## 23. A solo dev used Codex to squeeze a 232× faster GPU QR kernel — and placed 12th of 183
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 373 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `codex` `auto-research` `gpu` `cuda` `agents`
+
+Sankalp's "Auto-research with codex" topped HN with a write-up of the GPU Mode / Core Automation auto-research contest: optimize a batched compact-Householder QR factorization to match `torch.geqrf`. Running a benchmark→profile→research→improve loop with Codex, Modal GPUs, and a "beam of candidates" to escape local maxima, he cut runtime from ~419,000µs to 1,805µs (**232×**) over 14 days and 1,500+ submissions — for **12th of 183**. The decisive move was algorithmic — blocked Householder with WY representation, turning serial reflector updates into tensor-core GEMMs — not just kernel tuning.
+
+**Why it matters:** It's a candid, data-rich case study of what agentic research is good at (intense search within an algorithmic frame) and where it still loses: the #1 entry used a CholeskyQR-Householder hybrid that was ~48% faster, a genuinely different idea. Domain expertise accelerated harness design and human steering.
+
+> The author notes he didn't exploit input distributions or Blackwell's tcgen05 instructions, and regrets not adopting beam search from the start.
+
+[`🔗 Sankalp's write-up`](https://sankalp.bearblog.dev/autoresearch/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49309549)
+
+---
+
+## 24. uBlock Origin concedes the Facebook ad-blocking war, marks Sponsored posts "wontfix"
+
+- **Velocity:** ▮ steady
+- **Source:** hardwareluxx · ~2d ago (~04:03 UTC+8)
+- **Tags:** `adblocking` `ublock-origin` `facebook` `open-source` `cat-and-mouse`
+
+The uBlock Origin maintainers announced they're **ending dedicated Facebook ad-blocking**, marking the platform's filters "wontfix" after years of escalation: Facebook scatters the word "Sponsored" letter-by-letter across code, inserts invisible fake characters, and continuously regenerates element names to defeat pattern-matching filters. The team — unusually blunt, calling Facebook a "disgusting, anti-user website" — said the maintenance burden is no longer sustainable for a volunteer project, with Google's Manifest V3 and Edge already having crippled the extension.
+
+**Why it matters:** It's the most visible data point yet that client-side ad-blocking is losing to platform-side obfuscation-as-a-service, pushing the open-web community toward alternative filter lists — or simply abandoning hostile sites. Existing filters keep working until Facebook's next code change breaks them.
+
+> Firefox and Brave still support uBlock Origin; tracker blocking on Facebook remains unaffected.
+
+[`🔗 racunalniske-novice`](https://www.racunalniske-novice.com/en/facebook-is-too-tough-a-nut-to-crack-ublock-origin-has-given-up/) · [`🔗 hardwareluxx`](https://www.hardwareluxx.de/index.php/news/software/browser-und-internet/70010-ublock-origin-gibt-auf-facebook-werbung-wird-kuenftig-nicht-mehr-gezielt-blockiert.html)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-16T04:03:00Z |
-| Items | 18 |
-| Sources tracked | 24 (GitHub, Prime Intellect, The Hacker News, SOCRadar, Anthropic, Simon Willison, 4sysops, Cloudflare Blog, Manila Times, CISA KEV, Expel, CSO Online, Trendshift, MarkTechPost, ZenML, arXiv, thepaper.cn, SkillsLLM, SoFarBot, Gigazine, DEV.co, TechRepublic, ZDNet, OpenTrain) |
+| Generated | 2026-08-16T12:03:00Z |
+| Items | 24 |
+| Sources tracked | 35 (GitHub, Prime Intellect, The Hacker News, SOCRadar, Anthropic, Simon Willison, 4sysops, Cloudflare Blog, Manila Times, CISA KEV, Expel, CSO Online, Trendshift, MarkTechPost, ZenML, arXiv, thepaper.cn, SkillsLLM, SoFarBot, Gigazine, DEV.co, TechRepublic, ZDNet, OpenTrain, watchTowr Labs, JPCERT/CC, IONIX, VulnCheck, Artificial Analysis, InfoQ, 36Kr, Hacker News, sankalp.bearblog.dev, racunalniske-novice, hardwareluxx) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

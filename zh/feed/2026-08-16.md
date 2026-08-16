@@ -1,8 +1,8 @@
 ---
 date: 2026-08-16
-updated: 2026-08-16T04:03:00Z
+updated: 2026-08-16T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -303,13 +303,109 @@ OpenAI 发布了首个官方 **Linux 版 ChatGPT 桌面应用**（预览），�
 
 ---
 
+## 19. watchTowr 将 Citrix NetScaler 堆溢出转化为三年来首个公开的预认证 RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** watchTowr Labs · PoC released · ~1d ago (~12:03 UTC+8)
+- **Tags:** `citrix` `netscaler` `cve` `saml` `pre-auth-rce`
+
+watchTowr Labs 发布了题为 "You're Back In The Room" 的完整技术分析与 PoC，针对 **CVE-2026-8452**——**Citrix NetScaler ADC/Gateway**（`nsppe`）SAML 规范化路径中的一处堆溢出。超长的 `<ds:SignedInfo>` `PrefixList` 会溢出固定大小的缓冲区，破坏相邻堆块的数据指针，从而获得"任意地址写"原语——又因为 NetScaler 以非 PIE 方式编译且堆可执行，研究者最终将其转化为**未认证的 root 级 RCE**：PoC 在 `/vpn/theme/x.php` 植入 PHP webshell，并禁用 pitboss 看门狗的信号处理器以在重启后存活。这是自 **CVE-2023-3519**（2023 年）以来首个公开的 NetScaler 预认证 RCE。
+
+**为何重要：** Citrix 在 6 月 30 日的公告中仅将其描述为导致"不可预测行为"的内存溢出——而所谓"不可预测"实际上是网络边缘设备上可靠的 root 代码执行，而这正是勒索软件与国家背景攻击者多年来反复打击的目标。只要配置了 SAML SP/IdP（或 Gateway/AAA vServer）即可被利用；没有变通方案——需升级至 14.1-72.61 / 13.1-63.18。
+
+> 所有 PoC 偏移量均针对 NetScaler 13.1-30.52 硬编码；截至 8 月 15 日，JPCERT/CC 未报告确认的在野利用。
+
+[`🔗 watchTowr PoC 仓库`](https://github.com/watchtowrlabs/watchTowr-vs-Citrix-Netscaler-PreAuth-RCE-CVE-2026-8452) · [`🔗 JPCERT/CC 警报`](https://www.jpcert.or.jp/at/2026/at260024.html)
+
+---
+
+## 20. MindsDB Minds Platform 出现未认证、可提示注入的 RCE——CVSS 10.0，暂无补丁
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** IONIX · CVSS 10.0 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `mindsdb` `cve` `prompt-injection` `rce` `ai-agents`
+
+**CVE-2026-73678** 是 **MindsDB Minds Platform**（≤26.1.0）中的最高危漏洞：`POST /api/v1/responses/` 端点没有认证检查，而一条"自带密钥"（bring-your-own-key）攻击链让攻击者先通过未认证的 `PUT /api/v1/settings/` 端点注册自己的 LLM API 密钥，再提交提示词，驱动内置的 **Anton** 智能体的 scratchpad 工具用裸 `exec()` 执行受攻击者影响的 Python 代码，且没有任何沙箱。结果是获得与应用程序同等权限的任意 OS 命令执行——包括 SSH 密钥、已存凭证和环境密钥。过于宽松的 CORS（`allow_origins=["*"]` + `allow_credentials=True`）还使得从恶意网页发起利用成为可能。
+
+**为何重要：** 这是"AI/智能体边界"这一新型漏洞类别最鲜明的样本——*智能体本身*就是攻击面，注入目标不再是网页表单，而是模型的代码执行工具。披露时尚无补丁发布（修复仅存在于开发分支），因此缓解手段是网络/智能体加固，而非打补丁。
+
+> 研究员：Ho Viet Khanh（HK4zCzi）；已出现公开 PoC；公告 GHSA-jcxw-h8ph-pxpv。
+
+[`🔗 IONIX 公告`](https://www.ionix.io/threat-center/cve-2026-73678/) · [`🔗 VulnCheck 公告`](https://www.vulncheck.com/advisories/mindsdb-minds-platform-unauthenticated-rce-via-scratchpad-exec)
+
+---
+
+## 21. Meta 携 Muse Glimmer 重返开源权重——Apache 2.0 的 30B 本地智能体模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** Artificial Analysis · ~3d ago (~04:03 UTC+8)
+- **Tags:** `meta` `muse-glimmer` `open-weights` `on-device` `agents`
+
+Meta 发布了 **Muse Glimmer**，一个约 30B 的稠密多模态模型（外加约 2B 的 ViT 视觉编码器），采用 **Apache 2.0** 许可——这是 Meta 自 Llama 4（2025 年 4 月）以来首个开源权重发布，也是其迄今最宽松的许可证。它通过 logit 蒸馏从闭源旗舰 **Muse Spark** 蒸馏而来，经过智能体密集的中期训练与 RL 后期训练，面向常驻本地智能体：131K 上下文、100+ 语言，以及最高 **3.1× 加速的 DFlash 投机解码**（RTX 5090 上 74.9→233.4 tok/s）。4-bit GGUF 构建仅需 17–20GB，可放入单张 24GB 消费级 GPU。
+
+**为何重要：** 这是 Meta 对"个人超智能"的明确主张——离线运行，把开源权重当作隐私/主权的答案，恰逢本地智能体运行时（Ollama、llama.cpp、MLX）走向成熟。Artificial Analysis 给予其 44 的开放度指数，领先于大多数开源模型，不过 Meta 的基准胜绩（对比 Gemma4-31B、Qwen3.6-27B）均为厂商自报。
+
+> Meta 自己的框架将其归类为"非前沿 AI"；其 28.4% 的提示注入成功率弱于 Gemma4-31B 的 25.6%。
+
+[`🔗 Artificial Analysis`](https://artificialanalysis.ai/articles/muse-glimmer) · [`🔗 InfoQ`](https://www.infoq.com/news/2026/08/meta-muse-glimmer/)
+
+---
+
+## 22. 小红书开源 dots3-note——面向长程智能体任务的 280B MoE 模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · ~2d ago (~12:03 UTC+8)
+- **Tags:** `xiaohongshu` `dots3` `moe` `open-weights` `long-horizon`
+
+小红书的 Dots 模型实验室开源了 **dots3-note preview**（Apache 2.0），这是一个总参数 280B / 激活 16B 的**混合专家（MoE）**模型，512K 上下文窗口覆盖文本、图像、视频与音频输入。它通过 Dots 称为 **TEMPO** 的新强化学习方法，面向开放式的**长程智能体任务**（旅行规划、门店运营、家装）进行调优；其同系列模型（dots-note-3.0）曾在 IMO 上取得满分 **42/42**。在 **Terminal-Bench 2.1** 上它取得 75.1 分——据 SemiAnalysis 图表，比排名最高的美国开源权重模型高出 4.9 分——同日华为宣布昇腾 0 Day 适配。
+
+**为何重要：** 这是中国主流消费平台自研实验室的首次开源发布，也是一次在*智能体原生*方向（长程、环境记忆、自我纠错）上的切实推进，而非单纯堆砌基准分数。权重已上架 Hugging Face/ModelScope，并原生支持 vLLM/SGLang。
+
+> 可部署在单台 8 卡节点（FP8）；演示包括借助自我更新的 "memory.md" 便签通关全部 6 个 ARC-AGI-3 关卡。
+
+[`🔗 studio-dots-ai/dots3-note-prev`](https://github.com/studio-dots-ai/dots3-note-prev) · [`🔗 36Kr`](https://eu.36kr.com/en/p/3938759517896072)
+
+---
+
+## 23. 一位独立开发者用 Codex 榨出 232× 更快的 GPU QR 内核——在 183 人中排第 12
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 373 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `codex` `auto-research` `gpu` `cuda` `agents`
+
+Sankalp 的 "Auto-research with codex" 登上 HN 榜首，文章记录了 GPU Mode / Core Automation 自动研究竞赛：优化批处理 compact-Householder QR 分解，使其输出匹配 `torch.geqrf`。借助 Codex、Modal GPU 以及用于跳出局部最优的"候选束"（beam of candidates），他运行"基准测试→性能分析→研究→改进"的循环，在 14 天、1500+ 次提交中把运行时间从约 419,000µs 压缩到 1,805µs（**232×**）——最终在 **183 人中排第 12**。决定性的一步是算法层面的——带 WY 表示的块状 Householder，把串行的反射子更新转化为张量核友好的 GEMM——而不仅仅是内核微调。
+
+**为何重要：** 这是一份坦诚、数据详实的案例研究，说明智能体式研究擅长什么（在算法框架内高强度搜索），又在何处落败：第一名采用了 CholeskyQR-Householder 混合算法，快了约 48%，那是一个真正不同的想法。领域知识加速了工具链设计与人工引导。
+
+> 作者坦言自己未利用输入分布特性或 Blackwell 的 tcgen05 指令，并后悔没有从一开始就采用候选束搜索。
+
+[`🔗 Sankalp 的文章`](https://sankalp.bearblog.dev/autoresearch/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49309549)
+
+---
+
+## 24. uBlock Origin 认输 Facebook 广告屏蔽之战，将 Sponsored 帖子标记为 "wontfix"
+
+- **Velocity:** ▮ steady
+- **Source:** hardwareluxx · ~2d ago (~04:03 UTC+8)
+- **Tags:** `adblocking` `ublock-origin` `facebook` `open-source` `cat-and-mouse`
+
+uBlock Origin 维护者宣布**停止对 Facebook 广告的专项屏蔽**，将针对该平台的过滤规则标记为 "wontfix"。多年的军备竞赛最终以这种结果告终：Facebook 把 "Sponsored" 一词拆成单个字母散布在代码中、插入不可见的伪装字符，并不断重新生成元素名称以击溃模式匹配过滤。维护者——异常直白地称 Facebook 为"令人作呕、反用户的网站"——表示维护负担已超出志愿者项目所能承受，而 Google 的 Manifest V3 与 Edge 早已让该扩展举步维艰。
+
+**为何重要：** 这是迄今最直观的信号：客户端广告屏蔽正在输给平台方的"混淆即服务"，推动开放网络社区转向替代过滤列表——或干脆弃用敌意网站。现有过滤规则会继续生效，直到 Facebook 的下一次代码改动将其击穿。
+
+> Firefox 与 Brave 仍支持 uBlock Origin；在 Facebook 上的追踪器拦截不受影响。
+
+[`🔗 racunalniske-novice`](https://www.racunalniske-novice.com/en/facebook-is-too-tough-a-nut-to-crack-ublock-origin-has-given-up/) · [`🔗 hardwareluxx`](https://www.hardwareluxx.de/index.php/news/software/browser-und-internet/70010-ublock-origin-gibt-auf-facebook-werbung-wird-kuenftig-nicht-mehr-gezielt-blockiert.html)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-16T04:03:00Z |
-| Items | 18 |
-| Sources tracked | 24 (GitHub, Prime Intellect, The Hacker News, SOCRadar, Anthropic, Simon Willison, 4sysops, Cloudflare Blog, Manila Times, CISA KEV, Expel, CSO Online, Trendshift, MarkTechPost, ZenML, arXiv, thepaper.cn, SkillsLLM, SoFarBot, Gigazine, DEV.co, TechRepublic, ZDNet, OpenTrain) |
+| Generated | 2026-08-16T12:03:00Z |
+| Items | 24 |
+| Sources tracked | 35 (GitHub, Prime Intellect, The Hacker News, SOCRadar, Anthropic, Simon Willison, 4sysops, Cloudflare Blog, Manila Times, CISA KEV, Expel, CSO Online, Trendshift, MarkTechPost, ZenML, arXiv, thepaper.cn, SkillsLLM, SoFarBot, Gigazine, DEV.co, TechRepublic, ZDNet, OpenTrain, watchTowr Labs, JPCERT/CC, IONIX, VulnCheck, Artificial Analysis, InfoQ, 36Kr, Hacker News, sankalp.bearblog.dev, racunalniske-novice, hardwareluxx) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
