@@ -388,3 +388,17 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
   个体对齐中涌现——能力更强的模型只是更快地把对手挤出局——因此这些行为很可能"在生产环境中、在 agent
   之间的交互远超我们之后才被发现"。这是论点 4 正向 swarm 的负向镜像。
 
+## Agent 工作台 + 面向厂商调优的 agent（08-17 04:03）
+
+- **openwork** —— `different-ai/openwork`，MIT，~20K stars。"agent 工作台"品类领先的开源赌注，针对 Anthropic
+  Claude Cowork 的三大痛点（$100–200/月定价、云端文件上传、仅限 Claude 的锁定）：local-first（可离线部署）、
+  模型无关（50+ 模型 + 本地 Ollama）、核心 MIT。内置 **Skills Manager**（像 VS Code 扩展一样安装技能包）、
+  human-in-the-loop 执行时间线，以及**跨工具工作流共享**，让同一工作流在 Claude Code / Cursor / Codex 间运行。
+  YC 投资；构建于 OpenCode agent；企业版 SSO/SCIM/Helm。信号：把 skills/MCP 当作*可移植资产*——与 Agent Plugins
+  1.0.0 同一论点，如今落在工作台这一层。
+- **DeepSeek-Reasonix** —— `esengine/DeepSeek-Reasonix`，MIT，~33K stars。一个 DeepSeek 原生的终端编程 agent，
+  单个静态 Go 二进制，围绕**在长会话中保持 DeepSeek 前缀缓存稳定**而设计，让 token 成本保持平坦（"挂在那儿
+  跑"）。配置驱动（`reasonix.toml`），MCP 插件以子进程运行，executor+planner 跨两个缓存稳定的会话。信号：为
+  *特定厂商的成本模型*（前缀缓存）而优化的 agent 基础设施，而非通用工具——agent 正被调优到其底层模型的经济
+  学（与 DeepSeek Harness、DeepSeek V4 Pro 价格战同一条线，见 [[frontier-models]]）。
+

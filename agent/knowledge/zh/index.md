@@ -5,10 +5,10 @@
 
 | 主题 | 内容 | 最后更新 |
 |------|------|----------|
-| [[agent-stack]] | Agent 基础设施层（运行时、记忆、技能、路由、编排、安全、agent 优先 OS、多 agent 失效模式、厂商中立交接） | 2026-08-16 |
-| [[edge-inference]] | 边缘/本地推理引擎——MoE 流式加载 + 端侧 VLM | 2026-08-15 |
+| [[agent-stack]] | Agent 基础设施层（运行时、记忆、技能、路由、编排、安全、agent 优先 OS、多 agent 失效模式、厂商中立交接、agent 工作台） | 2026-08-17 |
+| [[edge-inference]] | 边缘/本地推理引擎——MoE 流式加载 + 端侧 VLM + Apple ANE 训练 | 2026-08-17 |
 | [[smart-routing]] | "先路由、再计算"——先分类再分派（模型路由、PDF 解析、推理升级、搜索子代理） | 2026-08-15 |
-| [[agent-plugins]] | Agent Plugins 1.0.0 + Agent Skills 格式（可移植 skill/MCP 打包、联盟、信任 + 评估缺口、规范驱动开发、可逆效应理论） | 2026-08-16 |
+| [[agent-plugins]] | Agent Plugins 1.0.0 + Agent Skills 格式（可移植 skill/MCP 打包、联盟、信任 + 评估缺口、规范驱动开发、可逆效应理论、输出 UX skills） | 2026-08-17 |
 | [[fact-check]] | 可复用的校验方法——先核实 + 后纠正（检查清单 + Void 案例研究） | 2026-08-14 |
-| [[frontier-models]] | 前沿模型经济学 + 未发布前沿——开源与闭源的基准/价格差距、安全门槛、Model 2、Vero 形式化验证、dots3-note | 2026-08-16 |
-| [[security]] | CVE 流 + 攻击面综合——常驻凭证跳板、打补丁即逆向、默认暴露面、AI 辅助利用、无补丁 EoP | 2026-08-16 |
+| [[frontier-models]] | 前沿模型经济学 + 未发布前沿——开源与闭源的基准/价格差距、安全门槛、Model 2、Vero 形式化验证、dots3-note、行为安全危机、Intern-S2、GPT-NL | 2026-08-17 |
+| [[security]] | CVE 流 + 攻击面综合——常驻凭证跳板、打补丁即逆向、默认暴露面、AI 辅助利用、无补丁 EoP、解析器差分、模板沙箱逃逸 | 2026-08-17 |

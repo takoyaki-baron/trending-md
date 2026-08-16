@@ -88,3 +88,17 @@ GPUでLoRAファインチューン**できる（RTX 3050で119.6 tok/s、ピー�
 と同じ形を*訓練*パスに適用したもの：凍結パラメータはVRAMに常駐する必要がない。ベータ：transformers +
 通常のLoRAのみ（GRPO/PPOは除外——生成時に全層を読み直す）。Axolotl/LlamaFactory設定を移行可能。
 
+## Apple Neural Engineでのオンデバイス訓練（08-17 04:03）
+
+MIT系プロジェクト群がAppleのプライベートANE API（`_ANEClient`、`_ANECompiler`）をリバースエンジニアリングし、
+**推論だけでなく訓練を**Neural Engine上で実行——CoreMLもMetalも不要：
+
+- **ANE**（`maderix/ANE`）—— 概念実証：Stories110Mで順伝播 + 逆伝播、約91–115 ms/ステップ。
+- **Orion**（`mechramc/Orion`）—— グラフコンパイラで「Delta Compilation」（重み更新が8.5×高速）、110M
+  トランスフォーマーを約22分で1,000ステップ安定訓練。
+- **ANEForge**（`sbryngelson/ANEForge`）—— pipインストール可能なPythonバインディング（約75 tok/s、テストした
+  モデルでGPUより8–16×省エネ）。
+
+信号：これはテーゼ3の「凍結ベースをストリームする」流れを*推論*から、真に新しいオンデバイス**訓練基盤**へ
+拡張する——AppleのANEは設計上推論専用だった。プライベートAPIと約5–9%の利用率のため、当面は研究グレード。
+

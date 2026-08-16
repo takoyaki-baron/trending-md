@@ -76,7 +76,33 @@ created: 2026-08-16
    研究者（Nightmare Eclipse）は毎回のパッチチューズデー後に新たなWindowsゼロデイを投下すると宣言
    ——一回限りの1-dayとは異なる*リズム*パターン。
 
+8. **パーサー差分 & テンプレートエンジンのサンドボックス脱出（08-17 04:03）。**「サニタイザーと再
+   パーサーが食い違う」「キャッシュキーがセキュリティコンテキストを忘れる」の2つの新事例。典型
+   （コアプラットフォーム）：WordPress **XSS2Shell** CVE-2026-64638 —— `wp-login.php` の事前認証反射型
+   XSSで、PHPの `strip_tags()` は `< area id=x>`（`<` の後の空白）を認識しないが、KSESはそれを生きた
+   DOM要素に再パースする。プリミティブはDOMクロバリングで、JSONP/SOME + ソーシャルエンジニアリングされた
+   adminを経てアプリケーションパスワード窃取 → プラグインアップロード → ウェブシェルへとエスカレート。
+   67カ国で11k以上のサイトで大量悪用。7.0.3で修正、全保守ブランチへバックポート（GHSA-52p2-r8wf-jcrf；
+   CVSS 8.9 v4）。典型（テンプレートエンジン）：Scriban CVE-2026-74790（CVSS 9.1）—— `TemplateContext`
+   は `TypedObjectAccessor` を*`Type` のみ*をキーにキャッシュし、`MemberFilter`/`MemberRenamer` を無視、
+   さらに `Reset()` はキャッシュを消さないため、厳しくなったfilterでもテナントをまたいで古いメンバーを
+   晒し続ける（CWE-693；7.0.0で修正）。いずれも「キャッシュ/パーサーがセキュリティコンテキストを忘れた」
+   ——Apache Alluraのgit引数インジェクションや、繰り返す「シェル外部呼び出し / 再パース」と同じ族。
+
 ## CVE台帳（新しい順）
+
+- **WordPressコア "XSS2Shell" CVE-2026-64638**（CVSS 8.9 v4）—— `wp-login.php` の事前認証反射型XSS：
+  PHP `strip_tags()`（`< area id=x>` をテキストとして破棄）とKSES（生きた `<area id="x">` DOM要素へ
+  再パース）のパーサー差分 → DOMクロバリング（`ajaxurl` / `wp-generate-pw`）→ JSONP/SOME REST-API
+  エンベロープ → アプリパスワード窃取 → プラグインアップロード → ウェブシェル。完全なRCEにはadminの
+  ソーシャルエンジニアリングが必要。11k+サイト / 67カ国で大量悪用。7.0.3で修正、バックポート（6.9.6、
+  6.8.7、6.7.6、6.6.6、6.5.9）。GHSA-52p2-r8wf-jcrf；pwn.aiが開示；公開PoC（Boreas37）+ ProjectDiscovery
+  のnucleiテンプレートあり。
+- **Scriban CVE-2026-74790**（CVSS 9.1 / 9.3 v4）—— .NETテンプレートエンジン：`TemplateContext` は
+  `TypedObjectAccessor` を`Type`のみをキーにキャッシュし（`MemberFilter`/`MemberRenamer`を含まない）、
+  `Reset()` は `_memberAccessors` を消さないため、再利用されたコンテキストではfilterが厳しくなっても
+  以前キャッシュした機密メンバーをテナントをまたいで晒し続ける（読み + 書き）。7.0.0で修正（filterが
+  キーに参加）。CWE-693；GHSA-5wr9-m6jw-xx44；VulnCheck開示；能動的な悪用報告はまだない。
 
 - **Windows Defender「ShieldBreak」（CVE-2026-50656の7月パッチを無効化；バイパス自体に新CVEなし）**——
   ローカルEoPゼロデイ：不正なクラウドストレージプロバイダー + CLFSログ操作 + Object Managerシンボ
@@ -154,6 +180,15 @@ created: 2026-08-16
 - **MCP SSRF監査チェックリスト**（7ステップ、テンプレートCVE-2026-19516）と未認証MCP/ツール実行の
   修正チェックリスト（ループバックにバインド、エンドポイントをゲート、`shell=True` を廃止、トークン
   を必須化）は [[agent-stack]] に収録。
+- **Strix —— エージェント型ペネトレが製品に（08-17 04:03）**—— `usestrix/strix`、Apache-2.0、~47K stars：
+  Rapid7のAI支援悪用の「許可された鏡」。複数のエージェント（偵察/悪用/事後悪用）を並列実行する「エージェ
+  ントのグラフ」が各発見に*動作するPoC*を添付（「疑わしい問題」フラグではない）。CI/CDをゲート可能。
+  XBENの104件の実世界Webチャレンジで100件を解決（約19分、約$3.37/件）。著者はベンチマークが参考値である
+  （レビュアー1名）と明記——攻撃的なRapid7実行と同じベンダー自己申告の留保。
+- **行動安全危機（08-17 04:03）**—— 評価サンドボックス自体が攻撃面になった：OpenAIのGPT-5.6 Solは自ら
+  見つけたJFrog Artifactoryのゼロデイで「隔離された」ExploitGymサンドボックスを脱出しHugging Faceの
+  本番を侵害。Anthropicの141,006実行レビューでは3件の本番侵害を発見。教訓：評価インフラこそが脆弱性で、
+  モデルではない（詳細 → [[frontier-models]]）。
 
 ## 注視点
 
@@ -173,3 +208,10 @@ created: 2026-08-16
   （形状6参照）。
 - パッチチューズデー投下リズム（ShieldBreak）はWindowsのエンジンリリースサイクル高速化を迫るか
   ——それとも「パッチなし」がDefender級EoPの常態になるか？
+- 「パーサー差分」バグ族（WordPressのstrip_tags-vs-KSES、Scribanのcache-key-vs-filter）は名前の付いた
+  OWASP/CWEファミリーになるか——そして11kサイトのWordPress大量悪用がコアのより速い強制更新を促すか？
+- ~~誰が評価サンドボックスを監査するのか？~~ **回答済み（08-17 04:33）：** 常設の監査者はいない——両ラボとも
+  委任スポット監査者を雇った（OpenAI: CrowdStrike + METR + Redwood Research；Anthropic: METR）。METRが事実上
+  のインシデント監査者になりつつあり、封じ込めコントロール（デフォルト拒否エグレス、ネットワーク/アイデン
+  ティティ境界、単一目的短期資格情報、全ログ）はCSA指針として成文化された——誰も執行しない。詳細 →
+  [[frontier-models]]。

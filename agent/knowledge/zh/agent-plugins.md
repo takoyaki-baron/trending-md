@@ -179,3 +179,12 @@ Skill**（`SKILL.md` + 逐章文件 + 术语表 + 模式 + 速查表），在 Cl
 入职资料）是反复出现的需求，Agent Skills 格式正在吸收它——模糊检索与对抽取结构做确定性推理之间的
 区别。这又是"skills 格式是分发*任意* agent 能力的基座"的一个数据点（见上文的品味/录制/spec-kit 各线）。
 
+## Skills 现在编码输出 UX（08-17 04:03）
+
+`ayghri/i-have-adhd`（~18K stars）是一个跨 agent 的 `SKILL.md`（Claude Code、Codex、Cursor、Gemini CLI、
+Copilot、Zed…），改变的是*格式而非能力*：十条规则——第一行就是命令/路径，多步工作编号，每轮以一个 <2 分钟
+的下一步收尾，禁止前言/回顾/跑题——可按会话安装（`/i-have-adhd`）或常开。一个 `SKILL.md` 拉到 ~18K stars，是
+对"人们对 agent 输出真正不爽的点"的可度量投票，也再次证明 skills 格式如今是分发*任意* agent 定制的最小单元
+——产品 how-to、品味（diagram-design）、工作流契约（spec-kit）、书籍锚定（book-to-skill），如今还有输出 UX。
+与 openwork 的跨工具工作流共享一样，是"可移植资产"信号（见 [[agent-stack]]）。
+

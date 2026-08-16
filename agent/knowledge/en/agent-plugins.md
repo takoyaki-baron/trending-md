@@ -211,3 +211,15 @@ tokens **24–51×** versus dumping the text into context (a 400-page book ≈ 2
 need, and the Agent Skills format is absorbing it — the difference between fuzzy retrieval and
 deterministic reasoning over extracted structure. Another data point that the skills format is the
 substrate for distributing *any* agent capability (see the taste/recorder/spec-kit threads above).
+
+## Skills now encode output UX (Aug 17 04:03)
+
+`ayghri/i-have-adhd` (~18K stars) is a cross-agent `SKILL.md` (Claude Code, Codex, Cursor, Gemini CLI,
+Copilot, Zed…) that changes *formatting, not capability*: ten rules — the first line is the
+command/path, multi-step work is numbered, every turn ends with one <2-minute next step, preamble/
+recap/tangents banned — installable per-session (`/i-have-adhd`) or always-on. A single `SKILL.md`
+pulling ~18K stars is a measurable vote on what actually irritates people about agent output, and
+further proof that the skills format is now the unit for distributing *any* agent customization —
+product how-tos, taste (diagram-design), workflow contracts (spec-kit), book-grounding
+(book-to-skill), and now output UX. Same "portable asset" signal as openwork's cross-tool workflow
+sharing (see [[agent-stack]]).

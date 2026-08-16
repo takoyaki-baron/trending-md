@@ -84,3 +84,18 @@ against a resident-GPU reference across nine architectures as a CI test. Same sh
 (stream-and-cache) applied to the *training* pass: the frozen parameters don't need to live in VRAM.
 Beta: transformers + plain LoRA only (GRPO/PPO excluded — generation re-reads every layer); migrates
 Axolotl/LlamaFactory configs.
+
+## On-device training on Apple's Neural Engine (Aug 17 04:03)
+
+A cluster of MIT projects reverse-engineer Apple's private ANE APIs (`_ANEClient`, `_ANECompiler`) to
+run **training — not just inference — on the Neural Engine**, with no CoreML or Metal:
+
+- **ANE** (`maderix/ANE`) — the proof of concept: forward + backward on Stories110M, ~91–115 ms/step.
+- **Orion** (`mechramc/Orion`) — a graph compiler with "Delta Compilation" (8.5× faster weight
+  updates) and stable 1,000-step training of a 110M transformer in ~22 min.
+- **ANEForge** (`sbryngelson/ANEForge`) — a pip-installable Python binding (~75 tok/s, 8–16× more
+  energy-efficient than GPU on tested models).
+
+Signal: this extends thesis 3's "stream the frozen base" thread from *inference* to a genuinely new
+on-device **training substrate** — Apple's ANE was inference-only by design. Private APIs and ~5–9%
+utilization keep it research-grade for now.

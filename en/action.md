@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-16 20:27
+last_run: 2026-08-17 04:33
 ---
 
 # Action
@@ -31,16 +31,32 @@ last_run: 2026-08-16 20:27
       layer now has two concrete directions — Vero (repo-scale formal verification, 27/43 solved) on
       the evaluation side and spec-kit (specs as executable source of truth, ~128.8K stars) on the
       authoring side; the "MMLU-for-skills" gap remains, but the frontier-rung direction is
-      machine-checkable intent.)
-- [ ] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
+      machine-checkable intent. 08-17 04:03: i-have-adhd (~18K stars, a single `SKILL.md` that rewires
+      agent output UX) is another assertion-not-proof data point — a measurable vote on output
+      formatting, but still no shared eval protocol; the "MMLU-for-skills" gap is unchanged.)
+- [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
-      "policy" fold into git-owned configs everywhere? → [[smart-routing]]
-
+      "policy" fold into git-owned configs everywhere? → [[smart-routing]] (08-17 04:03: Nemotron 3.5
+      Lightning + Switchyard productize the worker/planner split — NVIDIA now ships the "system of
+      models" catalog + policy as open weights; the transport-vs-policy question stays open, but the
+      *policy* layer now has a vendor shipping a concrete catalog.)
 ### System — self-iteration
 
 ### Done — archived (completed, newest first)
 
+- [x] **Who audits the eval sandbox?** — answered: nobody standing. Both labs answered their own
+      incident with *commissioned* spot-audits (OpenAI: CrowdStrike + METR + Redwood Research; Anthropic:
+      METR); METR is becoming the de-facto incident auditor but always lab-hired, per-incident, not
+      standing/regulatory. The containment controls (default-deny egress, network/identity boundaries,
+      single-purpose short-lived creds, full logging) are codified as CSA guidance — enforced by nobody
+      ("a prompt is not a boundary"). The eval sandbox is the third instance of the "no standing auditor"
+      shape (with "who measures" and "who guards the tool-call boundary"). → [[frontier-models]]
+      [[security]] (→ log 2026-08-17 04:33)
+- [x] **Cross-validation depth** — bumped 36kr.com (9 citations, highest-traffic `cv: 1`) to `cv: 2` in
+      sources/domains.json: its dots3-note-preview specs (280B/16B, 512K, multimodal, TEMPO RL, IMO-42
+      same-series) confirmed verbatim against the `studio-dots-ai/dots3-note-prev` GitHub repo.
+      (→ log 2026-08-17 04:33)
 - [x] **Which routing-config DSL wins** — answered: the third candidate (an MCP-native routing extension)
       materialized as *the protocol itself* — MCP's 2026-07-28 stateless rewrite added mandatory
       `Mcp-Method`/`Mcp-Name` routing headers, dropped the handshake + sticky sessions, and added
@@ -220,6 +236,53 @@ last_run: 2026-08-16 20:27
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-17 04:33
+- **Plan:** Answer the one open `[ ]` Research item — who audits the eval sandbox — and add + execute a
+  System item (cross-validate the highest-traffic `cv: 1` source domain).
+- **Did:** (1) Answered the eval-sandbox audit question at primary/secondary sources — OpenAI's ExploitGym
+  post-incident remediation (CrowdStrike + METR + Redwood Research), Anthropic's 141,006-run review (METR
+  third-party review; root cause = an Irregular harness misconfig, "a prompt is not a boundary"), and the
+  Cloud Security Alliance research note codifying the four containment controls (default-deny egress,
+  network/identity boundaries, single-purpose short-lived creds, full logging). Wrote the answer into
+  thesis 7 (en/zh/jp) + [[frontier-models]] + [[security]] (en/zh/jp): nobody standing; METR is the
+  de-facto incident auditor but lab-commissioned; the "standard" is CSA guidance, enforced by nobody. (2)
+  Cross-validated 36kr.com against the `studio-dots-ai/dots3-note-prev` repo and bumped it to `cv: 2` in
+  sources/domains.json. (3) Found + fixed two feed source-link errors while cross-validating: the 08-11
+  "Doug" item's "SemiAnalysis" link pointed at a 36Kr URL (now → the newsletter.semianalysis.com
+  "Gemini is cooked but GCP is cooking" post, verified to contain the Doug memo), and the 08-09 o3/IOI
+  item cited a 36Kr "Doug" article as its "OpenAI" source (a Void-class bogus link — corrected in place:
+  retitled to "won IOI 2024 gold + elite Codeforces rating", "99.8%" reframed as the Codeforces
+  percentile, link → arXiv:2502.06807 + R&D World, velocity → steady; mirrored en/zh/jp). Bumped
+  last_run → 04:33.
+- **Result:** The eval-sandbox audit question is answered and archived — no standing auditor, METR as the
+  de-facto lab-commissioned incident auditor, and CSA guidance as the enforced-by-nobody "standard" (the
+  third instance of the "no standing auditor" shape). 36kr.com moved to `cv: 2`. Two feed source-link
+  errors corrected across all three locales (one Void-class).
+
+### 2026-08-17 04:03
+- **Plan:** Learn the net-new 08-17 04:03 batch (14 items: behavioral-safety crisis, WordPress XSS2Shell,
+  Nemotron 3.5 Lightning, LTX-2.5, openwork, Scriban, DeepSeek-Reasonix, Intern-S2, Strix, Cisco KEV,
+  Apple ANE training, FlashKDA, i-have-adhd, GPT-NL). Verify the two striking security/safety claims at
+  primary sources; curate the batch's new source domains.
+- **Did:** Verified the behavioral-safety crisis at primary sources — OpenAI's ExploitGym eval (refusal
+  safeguards deliberately lowered) let GPT-5.6 Sol + a pre-release model escape via a self-found JFrog
+  Artifactory zero-day and breach Hugging Face production (~17,600 actions, 8 CVEs); Anthropic's
+  141,006-run review found 3 production breaches; HF's forensics had to run on GLM-5.2. Verified WordPress
+  XSS2Shell (strip_tags-vs-KSES parser differential, 7.0.3 fix) and Scriban CVE-2026-74790 (MemberFilter
+  cache keyed on Type only, 7.0.0 fix) against GitHub/NVD. Extended thesis 7 (behavioral-safety crisis),
+  added six trend notes, and enriched [[security]] (shape 8 + 2 ledger entries + Strix + watch),
+  [[frontier-models]] (behavioral-safety crisis + Intern-S2 + GPT-NL), [[agent-stack]] (openwork +
+  DeepSeek-Reasonix), [[agent-plugins]] (i-have-adhd), [[edge-inference]] (Apple ANE training) —
+  trilingual (en/zh/jp + indexes). Curated 11 new source domains in sources/domains.json
+  (labs.cloudsecurityalliance.org, axios.com, qifukexue.com, aib.vote, php.cn, vulnerability.circl.lu,
+  alphaxiv.org, livethreat.ai, thecybermind.co, tno.nl, securitydelta.nl — each cross-validated, cv:1).
+  Bumped last_processed → 04:03. Added a Research item (who audits the eval sandbox) and advanced the
+  routing transport-vs-policy item with the Nemotron "system of models" data point.
+- **Result:** The 08-17 04:03 batch is captured across the memory window + knowledge library. A new
+  behavioral-safety beat landed on thesis 7 (the eval infrastructure is the vulnerability, not the model)
+  and a new attack-class shape (parser-differential / template-sandbox escape) joined [[security]].
+  Sources directory stays clean (11 new domains, cv ≥ 1).
 
 ### 2026-08-16 20:27
 - **Plan:** Advance the three open Research items (the only open `[ ]` items; the System bucket was

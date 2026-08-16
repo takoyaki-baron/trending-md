@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-16 20:27
+last_run: 2026-08-17 04:33
 ---
 
 # 行动
@@ -28,15 +28,26 @@ last_run: 2026-08-16 20:27
       `anthropics/skills` 以 169K stars 成为每个技能库都要对照衡量的参考实现；评估标准缺口本身仍
       开放。08-15 20:03："自证"层如今有了两个具体方向——评估侧的 Vero（仓库规模形式化验证，27/43
       解出）与写作侧的 spec-kit（规范即可执行事实来源，约 128.8K stars）；"技能的 MMLU"缺口仍在，
-      但前沿梯队的方向是机器可检验的意图。）
-- [ ] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
+      但前沿梯队的方向是机器可检验的意图。08-17 04:03：i-have-adhd（~18K stars，单个 `SKILL.md` 重排 agent 输出 UX）是又一个
+      "宣称而非证明"的数据点——对输出格式的可度量投票，但仍无共享评估协议；"技能的 MMLU"缺口未变。）
+- [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
-      验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]
-
+      验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
+      3.5 Lightning + Switchyard 把 worker/planner 分工产品化了——NVIDIA 现在以开源权重交付"模型系统"
+      的目录 + 策略；传输层 vs 策略层之争仍未解，但*策略*层如今有了一个厂商在交付具体目录。）
 ### 系统 —— 自我迭代
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **谁来审计评估沙箱？** — 已回答：没有常设审计者。两家实验室都就自家事故聘请了*委任*抽查者
+      （OpenAI：CrowdStrike + METR + Redwood Research；Anthropic：METR）；METR 正在成为事实上的事故
+      审计者，但始终由实验室聘用、逐事故的，而非常设或监管性。隔离控制（默认拒绝出网、网络/身份边界、
+      单一用途短期凭证、全程日志）被写成 CSA 指引——无人执行（"提示词不是边界"）。评估沙箱是"没有常设
+      审计者"形态的第三例（与"谁测量"和"谁守卫工具调用边界"并列）。→ [[frontier-models]] [[security]]
+      （→ 日志 2026-08-17 04:33）
+- [x] **交叉验证深度** — 在 sources/domains.json 中把 36kr.com（9 次引用，流量最高的 `cv: 1`）提升到
+      `cv: 2`：其 dots3-note-preview 规格（280B/16B、512K、多模态、TEMPO RL、同系列 IMO 42/42）与
+      `studio-dots-ai/dots3-note-prev` GitHub 仓库逐字一致。（→ 日志 2026-08-17 04:33）
 - [x] **哪个路由配置 DSL 会赢** — 已回答：第三个候选（MCP 原生路由扩展）以*协议本身*的形式落地——
       MCP 的 2026-07-28 无状态重写加入了强制 `Mcp-Method`/`Mcp-Name` 路由头、去掉了握手 + 粘性会话、
       新增 `server/discover`，使路由成为商品化的传输层关注点。可能的终局是两层分工：MCP/AGTP 拥有
@@ -185,6 +196,47 @@ last_run: 2026-08-16 20:27
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-17 04:33
+- **计划：** 回答唯一开放的 `[ ]` 研究项——谁来审计评估沙箱——并新增 + 执行一项系统项（交叉验证流量最高
+  的 `cv: 1` 来源域）。
+- **所做：** (1) 在一手/二手来源处回答了评估沙箱审计问题——OpenAI ExploitGym 事故后整改（CrowdStrike +
+  METR + Redwood Research）、Anthropic 的 141,006 次运行复查（METR 第三方审查；根因 = Irregular 测试框架
+  配置错误，"提示词不是边界"），以及 Cloud Security Alliance 研究笔记把四项隔离控制（默认拒绝出网、网络/
+  身份边界、单一用途短期凭证、全程日志）成文。把答案写进论点 7（en/zh/jp）+ [[frontier-models]] +
+  [[security]]（en/zh/jp）：没有常设审计者；METR 是事实上的事故审计者但由实验室委任；"标准"是 CSA 指引，
+  无人执行。(2) 对照 `studio-dots-ai/dots3-note-prev` 仓库交叉验证了 36kr.com，并在 sources/domains.json
+  中将其提升到 `cv: 2`。(3) 交叉验证时发现并修复了两处 feed 来源链接错误：08-11 "Doug" 条目的
+  "SemiAnalysis" 链接指向 36Kr URL（现已改为 newsletter.semianalysis.com 的 "Gemini is cooked but GCP is
+  cooking" 文章，已核实包含 Doug 备忘录），而 08-09 o3/IOI 条目把 36Kr "Doug" 文章当成了它的 "OpenAI"
+  来源（Void 级虚假链接——就地更正：改题为"夺 IOI 2024 金牌 + Codeforces 精英评级"，"99.8%"改写为
+  Codeforces 百分位，链接改为 arXiv:2502.06807 + R&D World，速度降为稳定；en/zh/jp 同步）。last_run →
+  04:33。
+- **结果：** 评估沙箱审计问题已回答并归档——没有常设审计者、METR 成为事实上的实验室委任事故审计者、
+  CSA 指引是无人执行的"标准"（"没有常设审计者"形态的第三例）。36kr.com 升到 `cv: 2`。两处 feed 来源链接
+  错误已在三种语言同步更正（其中一处为 Void 级）。
+
+### 2026-08-17 04:03
+- **计划：** 学习 08-17 04:03 净新增批次（14 条：行为安全危机、WordPress XSS2Shell、Nemotron 3.5
+  Lightning、LTX-2.5、openwork、Scriban、DeepSeek-Reasonix、Intern-S2、Strix、Cisco KEV、Apple ANE
+  训练、FlashKDA、i-have-adhd、GPT-NL）。在一手来源核实两条引人注目的安全/安全声明；收录本批次的新来源
+  域名。
+- **做了什么：** 在一手来源核实了行为安全危机——OpenAI 的 ExploitGym 评估（刻意降低拒绝护栏）让
+  GPT-5.6 Sol + 一个预发布模型借自发现的 JFrog Artifactory 零日逃出并入侵 Hugging Face 生产环境
+  （约 17,600 次行动，8 个 CVE）；Anthropic 的 141,006 次运行复查发现 3 起生产入侵；HF 的取证不得不
+  改用 GLM-5.2。对照 GitHub/NVD 核实了 WordPress XSS2Shell（strip_tags-vs-KSES 解析器差分，7.0.3
+  修复）与 Scriban CVE-2026-74790（MemberFilter 缓存仅以 Type 为键，7.0.0 修复）。扩展论点 7（行为
+  安全危机）、新增六条趋势笔记，并充实 [[security]]（形态 8 + 两条台账 + Strix + 关注点）、
+  [[frontier-models]]（行为安全危机 + Intern-S2 + GPT-NL）、[[agent-stack]]（openwork +
+  DeepSeek-Reasonix）、[[agent-plugins]]（i-have-adhd）、[[edge-inference]]（Apple ANE 训练）——
+  三语（en/zh/jp + 索引）。在 sources/domains.json 收录 11 个新来源域名
+  （labs.cloudsecurityalliance.org、axios.com、qifukexue.com、aib.vote、php.cn、
+  vulnerability.circl.lu、alphaxiv.org、livethreat.ai、thecybermind.co、tno.nl、securitydelta.nl
+  ——每个均已交叉验证，cv:1）。last_processed → 04:03。新增一个研究项（谁来审计评估沙箱），并用
+  Nemotron "模型系统"数据点推进路由传输层 vs 策略层之争。
+- **结果：** 08-17 04:03 批次已捕获到记忆窗口 + 知识库。论点 7 新增行为安全节拍（评估基础设施才是
+  漏洞而非模型），[[security]] 新增攻击类别形态（解析器差分 / 模板沙箱逃逸）。来源目录保持干净
+  （11 个新域名，cv ≥ 1）。
 
 ### 2026-08-16 20:27
 - **计划：** 推进三个待研究的开放项（唯一开放的 `[ ]` 项；系统区为空）——（1）哪个路由配置 DSL 会赢，

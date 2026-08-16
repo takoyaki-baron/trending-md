@@ -46,12 +46,12 @@
   },
   "36kr.com": {
     "cat": "news",
-    "en": "Chinese tech/business media; strong on startup funding and China AI-company moves.",
-    "zh": "国内科技财经媒体；对创业融资与中国AI公司动向覆盖较强。",
-    "jp": "中国のテック/ビジネスメディア。スタートアップ資金調達と中国AI企業の動向に強い。",
+    "en": "Chinese tech/business media; strong on startup funding and China AI-company moves. Cross-checked: its dots3-note-preview specs (280B/16B, 512K, multimodal, TEMPO RL, IMO-42 same-series) match the GitHub repo verbatim.",
+    "zh": "国内科技财经媒体；对创业融资与中国AI公司动向覆盖较强。已交叉核验：其 dots3-note-preview 规格（280B/16B、512K、多模态、TEMPO RL、同系列 IMO 42/42）与 GitHub 仓库一致。",
+    "jp": "中国のテック/ビジネスメディア。スタートアップ資金調達と中国AI企業の動向に強い。クロスチェック済み：dots3-note-previewの仕様（280B/16B、512K、マルチモーダル、TEMPO RL、同シリーズIMO 42/42）はGitHubリポジトリと一致。",
     "cred": "med",
     "density": "med",
-    "cv": 1
+    "cv": 2
   },
   "creativecommons.org": {
     "cat": "other",
@@ -1624,6 +1624,105 @@
     "en": "Hardwareluxx — German hardware/tech-news site; solid on consumer-software and browser news. Cross-checked (08-16): its uBlock Origin Facebook ad-blocking story matches racunalniske-novice.com's report.",
     "zh": "Hardwareluxx——德国硬件/科技新闻站；对消费软件与浏览器新闻较扎实。已交叉核验（08-16）：其 uBlock Origin Facebook 广告拦截报道与 racunalniske-novice.com 的报道一致。",
     "jp": "Hardwareluxx——ドイツのハードウェア/テックニュースサイト。コンシューマーソフトとブラウザのニュースに強い。突合済み（08-16）：uBlock OriginのFacebook広告ブロック報道はracunalniske-novice.comの報道と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "labs.cloudsecurityalliance.org": {
+    "cat": "security",
+    "en": "Cloud Security Alliance research notes — first-hand analyses of AI-safety incidents and agentic-security evaluations (e.g. the AISI evaluation-containment incident); authoritative for the behavioral-safety framing.",
+    "zh": "Cloud Security Alliance 研究笔记——AI 安全事件与 agent 安全评估的一手分析（如 AISI 评估隔离事件）；行为安全叙事的权威来源。",
+    "jp": "Cloud Security Allianceのリサーチノート——AI安全インシデントとエージェント型セキュリティ評価の一次分析（AISI評価封じ込めインシデントなど）。行動安全の枠付けにおいて権威的。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "axios.com": {
+    "cat": "news",
+    "en": "Mainstream US tech/policy news outlet; reliable secondary reporting on AI-safety regulatory fallout and product incidents.",
+    "zh": "美国主流科技/政策新闻媒体；对 AI 安全监管余波与产品事件的可靠二手报道。",
+    "jp": "米国の大手テック/政策ニュース媒体。AI安全の規制上の余波や製品インシデントの信頼できる二次報道。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "qifukexue.com": {
+    "cat": "news",
+    "en": "Chinese tech/security blog; reported the WordPress 7.0.3 fix detail. Low first-hand value — confirm any fix/version claim against WordPress's own advisory.",
+    "zh": "中文科技/安全博客；报道了 WordPress 7.0.3 修复细节。一手价值低——修复/版本类断言需对照 WordPress 官方公告。",
+    "jp": "中国のテック/セキュリティブログ。WordPress 7.0.3修正の詳細を報じた。一次価値は低い——修正/バージョン主張はWordPress公式勧告と照合を。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "aib.vote": {
+    "cat": "news",
+    "en": "AI news/aggregation site (aib.vote); secondary coverage of open-weights model releases. Low first-hand value — confirm against the model vendor's own announcement.",
+    "zh": "AI 新闻聚合站（aib.vote）；对开源权重模型发布的二手报道。一手价值低——需与模型厂商官方公告核对。",
+    "jp": "AIニュース/アグリゲーションサイト（aib.vote）。オープンウェイトモデル発表の二次報道。一次価値は低い——モデルベンダー自身の発表と照合を。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "php.cn": {
+    "cat": "community",
+    "en": "Chinese PHP developer tutorial/news site; secondary coverage of open-source releases. Low first-hand value.",
+    "zh": "中文 PHP 开发者教程/新闻站；对开源发布的二手报道。一手价值低。",
+    "jp": "中国のPHP開発者向けチュートリアル/ニュースサイト。OSSリリースの二次報道。一次価値は低い。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "vulnerability.circl.lu": {
+    "cat": "security",
+    "en": "CIRCL (Luxembourg CERT) vulnerability lookup — a reliable CVE reference front-end over NVD; cross-checked for Scriban CVE-2026-74790.",
+    "zh": "CIRCL（卢森堡 CERT）漏洞查询——基于 NVD 的可靠 CVE 参考前端；已就 Scriban CVE-2026-74790 交叉核对。",
+    "jp": "CIRCL（ルクセンブルクCERT）の脆弱性ルックアップ——NVD上の信頼できるCVE参照フロントエンド。Scriban CVE-2026-74790でクロスチェック済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "alphaxiv.org": {
+    "cat": "research",
+    "en": "AlphaXiv — community discussion/summary layer over arXiv preprints; useful secondary context, confirm against the arXiv abstract.",
+    "zh": "AlphaXiv——arXiv 预印本之上的社区讨论/摘要层；作为二手语境有用，需与 arXiv 摘要核对。",
+    "jp": "AlphaXiv——arXivプレプリント上のコミュニティ議論/要約層。二次的な文脈として有用、arXiv要旨と照合を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "livethreat.ai": {
+    "cat": "security",
+    "en": "Threat-intel dashboard aggregating CISA KEV and vendor advisories; useful for KEV timeline confirmations, confirm against CISA's own catalog.",
+    "zh": "聚合 CISA KEV 与厂商公告的威胁情报面板；适合核对 KEV 时间线，需与 CISA 官方目录核对。",
+    "jp": "CISA KEVやベンダー勧告を集約する脅威インテルダッシュボード。KEVタイムライン確認に有用、CISA公式カタログと照合を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "thecybermind.co": {
+    "cat": "security",
+    "en": "Independent cybersecurity blog with weekly intelligence briefs; secondary coverage, low-to-medium authority.",
+    "zh": "独立网络安全博客，发布每周情报简报；二手报道，权威性中低。",
+    "jp": "独立系サイバーセキュリティブログで週次インテリジェンスブリーフを配信。二次報道で権威は低〜中。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "tno.nl": {
+    "cat": "research",
+    "en": "TNO — the Netherlands' applied-research organization and GPT-NL's lead builder; first-hand for the sovereign Dutch LLM.",
+    "zh": "TNO——荷兰应用研究组织，GPT-NL 的主要构建方；主权荷兰 LLM 的一手来源。",
+    "jp": "TNO——オランダの応用研究機関でGPT-NLの主要な構築者。主権オランダLLMの一次情報。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "securitydelta.nl": {
+    "cat": "news",
+    "en": "Dutch security news outlet; secondary coverage of the GPT-NL sovereign model and national cyber policy.",
+    "zh": "荷兰安全新闻媒体；对 GPT-NL 主权模型与国家网络政策的二手报道。",
+    "jp": "オランダのセキュリティニュース媒体。GPT-NL主権モデルと国家サイバー政策の二次報道。",
     "cred": "med",
     "density": "med",
     "cv": 1

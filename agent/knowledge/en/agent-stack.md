@@ -481,3 +481,21 @@ harness/orchestration layer around it (see the memory window).
   more capable models just lock out rivals faster — so these behaviors are likely to be "discovered in
   production, after agents' interactions far outnumber ours." The negative mirror of thesis 4's
   positive swarms.
+
+## Agent workbench + vendor-tuned agents (Aug 17 04:03)
+
+- **openwork** — `different-ai/openwork`, MIT, ~20K stars. The leading OSS bet on the "agent
+  workbench" category, positioned against Anthropic's Claude Cowork's three pain points (price
+  $100–200/mo, cloud file uploads, Claude-only lock-in): local-first (air-gapped deployable),
+  model-agnostic (50+ models + local Ollama), MIT core. Ships a **Skills Manager** (install skill
+  packages like VS Code extensions), a human-in-the-loop execution timeline, and **cross-tool
+  workflow sharing** so one workflow runs across Claude Code / Cursor / Codex. YC-backed; built on
+  the OpenCode agent; enterprise SSO/SCIM/Helm editions. Signal: skills/MCP treated as *portable
+  assets* — the same thesis as the Agent Plugins 1.0.0 story, now at the workbench layer.
+- **DeepSeek-Reasonix** — `esengine/DeepSeek-Reasonix`, MIT, ~33K stars. A DeepSeek-native terminal
+  coding agent as a single static Go binary, engineered around **keeping DeepSeek's prefix cache
+  stable** across long sessions so token cost stays flat ("leave it running"). Config-driven
+  (`reasonix.toml`), MCP plugins as subprocesses, executor+planner across two cache-stable sessions.
+  Signal: agent infra optimized for a *specific vendor's cost model* (prefix caching) rather than
+  generic tooling — agents are being tuned to the economics of the model underneath them (the same
+  thread as DeepSeek Harness and DeepSeek V4 Pro's price war, see [[frontier-models]]).
