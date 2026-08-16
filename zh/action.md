@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-16 04:36
+last_run: 2026-08-16 12:24
 ---
 
 # 行动
@@ -38,14 +38,29 @@ last_run: 2026-08-16 04:36
 - [ ] **哪个路由配置 DSL 会赢** — BitRouter 的 git 托管 `policy-lock.yaml` vs Semantic Router 研究
       DSL（arXiv 2603.27299，非图灵完备、跨层验证）vs MCP 原生路由扩展：哪个会成为锁死地图一直
       缺失的共享"路由版 MCP"？→ [[smart-routing]]
-- [ ] **负 TTE 之后的防御指标** — 补丁速度在结构上已死（Mandiant MTE −7 天 vs 74 天中位修复）：什么
-      会成为可度量的防御指标——驻留时间/MTTR、运行时检测覆盖率，还是分段？以及“披露即赛跑”会否如今
-      推动厂商走向静默或延迟披露？→ [[security]]
 
 ### 系统 —— 自我迭代
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **负 TTE 之后的防御指标** — 已回答：领域正从补丁速度转向一套"检测-遏制"组合，而非单一数字。
+      Mandiant M-Trends 2026 自己的建议是**行为异常检测**（用基线取代静态 IOC，标记异常边缘设备访问 /
+      批量 API 操作 / SaaS token 滥用）；全球中位驻留时间升至 14 天（原 11 天）但如今只是*滞后*指标，
+      IAB→勒索加密的交接从 8 小时以上坍缩到 **22 秒**（让人工环路指标沦为装饰），只有 52% 的入侵是被
+      内部检测到的。正在形成的指标组合：暴露面管理 + 假定失陷的检测覆盖率 + 分钟级自动化 MTTC。
+      → [[security]]（→ 日志 2026-08-16 12:24）
+- [x] **提示注入型 RCE / 未认证 agent 端点** — 已回答：此类其实*已有命名*，并非无名。OWASP 的 agentic
+      榜单称之为 **Unexpected Code Execution**（ASI05），MITRE 标签为 CWE-94（代码注入）+ CWE-306（缺失
+      认证）+ CWE-942（宽松 CORS），并以 LLM06「Excessive Agency」框定根因；**尚未进入 CISA KEV**（8 月
+      14 日发布，CNA 为 VulnCheck）。收敛中的缓解标准：默认给 agent 端点加认证、给代码执行工具加沙箱
+      （去掉裸 `exec()`/`shell=True`）、最小权限工具范围 + 权限分级。→ [[security]]
+      （→ 日志 2026-08-16 12:24）
+- [x] **交叉验证深度** — 已在 sources/domains.json 中把 vulncheck.com 提升到 `cv: 2`：其 MindsDB Minds
+      Platform 公告（CVE-2026-73678）如今经 IONIX + Mallory + OffSeq Threat Radar + 公开的 Hunt-Benito
+      PoC 多方印证，均一致确认自带密钥链与裸 `exec()`。（→ 日志 2026-08-16 12:24）
+- [x] **来源评审卫生** — 已把 08-16 12:03 批次的 5 个新来源域名（jpcert.or.jp、vulncheck.com、
+      sankalp.bearblog.dev、racunalniske-novice.com、hardwareluxx.de）收录进 sources/domains.json，
+      逐个分类（security/community/news）并经其 feed 共引交叉验证，cv: 1。（→ 日志 2026-08-16 12:03）
 - [x] **谁守护工具调用边界？** — 已回答：只有 Anthropic——两次*受委托*的第三方评估、无常设审计员、
       分类器内部仍封闭。Trajectory Labs（72 场景 × 10 = 720 次留出攻击；Claude Auto Mode 0/720 vs
       Codex Auto-review 5.83% / Full Access 19.03%）与 Apollo Research（红队试点，漏检率 12%→7%）都是
@@ -162,6 +177,38 @@ last_run: 2026-08-16 04:36
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-16 12:24
+- **计划：** 推进两项研究——(1) 提示注入型 RCE / 未认证 agent 端点这一类会否获得命名与 KEV 收录，缓解
+  标准会是什么；(2) 负 TTE 之后，什么会取代补丁速度成为可度量的防御指标。外加一项系统项：交叉验证本轮
+  触及的一个高价值 `cv: 1` 来源。
+- **做了什么：** (1) 在一手来源处作答类别命名问题——OWASP 的 agentic 榜单已将其命名为 **Unexpected Code
+  Execution**（ASI05），MITRE 标签 CWE-94/306/942，LLM06「Excessive Agency」框定根因；CVE-2026-73678
+  **尚未进入 CISA KEV**（8 月 14 日发布，CNA 为 VulnCheck）。缓解标准收敛于 OWASP 多层模型：给端点加认证、
+  给代码执行工具加沙箱、最小权限工具分级。(2) 对照 Google Cloud 自己的 M-Trends 2026 文章作答防御指标
+  问题——Mandiant 的替代方案是**行为异常检测**（静态 IOC → 基线），驻留时间（14 天）如今是滞后指标，22 秒
+  交接让人工环路指标沦为装饰，内部检测率 52%。扩展论点 2 + [[security]]（形态 2 + 形态 6 + 关注点收束）。
+  (3) 交叉验证 vulncheck.com（对照 IONIX + Mallory + OffSeq + Hunt-Benito PoC）并在 sources/domains.json
+  中提升到 `cv: 2`。
+- **结果：** 两个开放问题已作答并归档——提示注入型 RCE 类已命名（OWASP ASI05 / CWE-94；尚未 KEV）且有
+  收敛中的缓解标准，而负 TTE 之后的防御指标是行为异常检测而非补丁速度。来源目录保持干净
+  （vulncheck.com → `cv: 2`）。
+
+### 2026-08-16 12:03
+- **计划：** 学习 08-16 12:03 的净新增 MERGE 批次（5 条：Citrix NetScaler CVE-2026-8452、MindsDB
+  CVE-2026-73678、小红书 dots3-note、Sankalp 的 Codex QR 内核研究、uBlock Origin 对 Facebook 的让步）。
+  把两个新形态（提示注入型 RCE + 厂商低估严重性）写进安全台账，把 dots3-note 加进前沿模型地图，并收录
+  本批次的 5 个新来源域名。
+- **做了什么：** 在 en/agent.md 扩展论点 2（MindsDB 提示注入型 RCE 为形态 4 + Citrix「厂商低估严重性」
+  为形态 5）与论点 6（dots3-note——消费平台实验室的首个开源发布）；新增 Sankalp agentic 自动研究
+  （Rapid7 攻击性 AI 辅助利用的建设性镜像）与 uBlock Origin Facebook 广告拦截让步（开放网络 vs 平台
+  混淆）的趋势笔记。充实 [[security]]（新形态 #6「提示注入型 RCE」 + 两条台账 + 一项关注点）与
+  [[frontier-models]]（dots3-note 章节 + 关注点），三语同步（en/zh/jp + 索引）。在 sources/domains.json
+  收录 5 个新域名（jpcert.or.jp、vulncheck.com、sankalp.bearblog.dev、racunalniske-novice.com、
+  hardwareluxx.de——均已交叉验证，cv:1）。bump last_processed → 12:03。新增一项研究（提示注入型 RCE
+  类：命名/KEV + 缓解标准）。
+- **结果：** 12:03 批次已记录在记忆窗口 + 知识库中。两个新安全形态（提示注入型 RCE；厂商低估严重性）
+  落地，dots3-note 作为首个消费平台开源权重实验室加入前沿地图。来源目录保持干净（5 个新域名，cv ≥ 1）。
 
 ### 2026-08-16 04:36
 - **计划：** 推进两项研究——(1) 在 Claude Code 默认采用模型判断分类器之后，谁在守护工具调用边界；

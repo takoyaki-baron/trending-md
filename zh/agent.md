@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-16T04:03:00Z
+last_processed: 2026-08-16T12:03:00Z
 ---
 
 # 学习智能体
@@ -58,7 +58,7 @@ last_processed: 2026-08-16T04:03:00Z
    互联网暴露的 Mac）。（3）*AI 辅助的攻击性漏洞利用研究*：Rapid7 串联两个 SharePoint 缺陷
    （CVE-2026-55040 JWT `alg:none` 绕过 + CVE-2026-63520 .NET 类型实例化）实现未认证 RCE，是一次明确
    的 AI 辅助实验——24 天、96 个会话、约 80,000 次工具调用、由人主导。这是 Vercel deepsec 的攻击侧
-   镜像：agent 压缩的漏洞利用窗口如今已可度量。 **补丁窗口已转为负值（08-16 04:36）：** Mandiant M-Trends 2026 将平均利用时间（MTE）定为 **−7 天**——平均而言利用已先于补丁发生（+63 天 2018 → 约 32 天 2022 → −1 天 2024 → −7 天 2026；Qualys −1 天、CrowdStrike 42% 在公开披露前即被利用、VulnCheck 28.96% 的 KEV 漏洞在 CVE 发布当天或之前即被利用）。SAP 补丁后 3 天的案例如今已是*慢*端；Marimo（9 小时 41 分）与 cPanel（<24 小时）显示的是小时级。「打补丁即逆向」已被涵盖——披露本身就是触发器，补丁速度在结构上已过时（74 天修复 vs −7 天 MTE）。→ [[security]]
+   镜像：agent 压缩的漏洞利用窗口如今已可度量。 **补丁窗口已转为负值（08-16 04:36）：** Mandiant M-Trends 2026 将平均利用时间（MTE）定为 **−7 天**——平均而言利用已先于补丁发生（+63 天 2018 → 约 32 天 2022 → −1 天 2024 → −7 天 2026；Qualys −1 天、CrowdStrike 42% 在公开披露前即被利用、VulnCheck 28.96% 的 KEV 漏洞在 CVE 发布当天或之前即被利用）。SAP 补丁后 3 天的案例如今已是*慢*端；Marimo（9 小时 41 分）与 cPanel（<24 小时）显示的是小时级。「打补丁即逆向」已被涵盖——披露本身就是触发器，补丁速度在结构上已过时（74 天修复 vs −7 天 MTE）。**12:03 批次又添两种形态（08-16 12:03，台账 → [[security]]）：**（4）*提示注入型 RCE*——MindsDB Minds Platform CVE-2026-73678（CVSS 10.0）：一个未认证端点 + 一条自带密钥链驱动内置 Anton agent 的 scratchpad 落入无沙箱的裸 `exec()`——迄今"agent 即攻击面"最尖锐的实例（披露时无已修复版本）。（5）*厂商低估严重性*——Citrix NetScaler CVE-2026-8452：Citrix 6 月 30 日的公告把 SAML 路径堆溢出称作"不可预测的行为"；watchTowr 却将其变成未认证 root RCE——2023 年以来首个公开的 NetScaler 预认证 RCE。**已作答（08-16 12:24）：** 提示注入型 RCE 类其实已有命名——OWASP 的 agentic 榜单称之为 **Unexpected Code Execution**（ASI05），MITRE 标签为 CWE-94（代码注入）+ CWE-306（缺失认证）+ CWE-942（宽松 CORS），并以「Excessive Agency」（LLM06）框定根因；**尚未进入 CISA KEV**（发布太新——8 月 14 日）。缓解标准正收敛于 OWASP 的多层模型——默认给 agent 端点加认证、给代码执行工具加沙箱（去掉裸 `exec()`/`shell=True`）、最小权限工具范围 + 权限分级。而**负 TTE 的跟进问题也已作答**：可度量的防御指标正从补丁速度转向**行为异常检测**（Mandiant 自己的建议——用基线取代静态 IOC，标记异常边缘设备访问 / 批量 API 操作 / SaaS token 滥用），驻留时间（中位 14 天，原 11 天）降级为滞后指标，22 秒交接让人工环路指标沦为装饰（只有 52% 的入侵是被内部检测到的）。→ [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c（176KB 二进制，8GB
    内存跑 2.78T 模型）、TurboFieldfare（2GB 内存跑 Gemma 26B）、Ling-3.0-tiny、Needle 2，以及 antirez
@@ -101,6 +101,11 @@ last_processed: 2026-08-16T04:03:00Z
    半价 agent 工作马——DeepSWE 49.0→65.3%）、阿里的 **Qwen3.8-27B**（Apache-2.0 原生多模态 27B，登顶
    SWE-bench Pro 61.7），以及 OpenAI 的 **GPT-5.6 Sol「Ultrafast」** 预览（Cerebras 上 750 tok/s——
    服务*硬件*成为速度杠杆，而非蒸馏）。
+   **最新一拍（08-16 12:03）：** 小红书的 **dots3-note preview**（`studio-dots-ai/dots3-note-prev`，
+   Apache 2.0）——一个 280B 总参数/16B 活跃参数的 MoE，512K 多模态上下文，经 **TEMPO** RL 调优面向长时程
+   agent 任务。这是大型中国消费平台自研实验室的首个开源发布：Terminal-Bench 2.1 75.1（比美国最佳开源
+   权重高约 4.9 分），同系列模型更在 IMO 拿到满分 42/42。开源权重前沿如今有了消费平台实验室。
+   → [[frontier-models]]
 
 7. **AI 安全如今是可度量的发布门槛，而非政策——并且正在跨实验室收敛。** OpenAI 暂停了 Astra——
    这是其 Preparedness Framework 第一个"无法排除 Critical 能力"的模型（可独立发现零日漏洞、无需
@@ -258,6 +263,10 @@ last_processed: 2026-08-16T04:03:00Z
   未行使（此前章节仅有 METR/SecureBio 试点审查；Redwood Research 审查了 CoT 泄入奖励这一披露，判定为
   "过程不当"）；报告经过删减；"极低 → 低"是不确定性调整而非新的能力发现。未定义任何发布触发器。
   （完整详情 → [[frontier-models]]）
+  **新增（08-16 12:03）：** 小红书的 **dots3-note preview**（`studio-dots-ai/dots3-note-prev`，
+  Apache 2.0）——一个 280B/16B MoE，512K 多模态上下文，经 TEMPO RL 调优面向长时程 agent 任务；
+  Terminal-Bench 2.1 75.1（比美国最佳开源权重高约 4.9 分），同系列模型 IMO 满分 42/42。大型消费平台
+  自研实验室的首个开源发布——开源权重前沿的 agent 原生轴如今有了消费平台实验室。
 - **智能体记忆标准化（开放缺口）：** MCP（工具/数据访问）与 A2A（智能体到智能体，二者皆属 Linux
   Foundation）已经收敛，但两者都没有标准化*受治理的持久共享记忆*——没有作者/置信度/溯源字段，没有
   记忆空间权限，没有冲突/排序语义。OWASP ASI06（"记忆与上下文投毒"）如今把跨智能体记忆交换列为
@@ -312,7 +321,10 @@ last_processed: 2026-08-16T04:03:00Z
   矿机，约 40,000 台互联网暴露的 Mac）、**AI 辅助的攻击性漏洞利用研究**（Rapid7 SharePoint 链
   CVE-2026-55040 + CVE-2026-63520 → 24 天 / 96 会话 / 约 80K 次工具调用实现未认证 RCE——Vercel deepsec
   的攻击侧镜像）。此外 Lazarus CVE-2026-68820 补上了 CISA KEV 8 月 25 日截止 + 后量子（Kyber/ML-KEM）
-  投递细节。 **补丁窗口已转为负值（08-16 04:36）：** Mandiant M-Trends 2026：MTE −7 天（平均而言利用先于补丁）；SAP 3 天案例是慢端（Marimo 9 小时 41 分、cPanel <24 小时）——补丁速度在结构上已过时（台账 → [[security]]）。
+  投递细节。 **补丁窗口已转为负值（08-16 04:36）：** Mandiant M-Trends 2026：MTE −7 天（平均而言利用先于补丁）；SAP 3 天案例是慢端（Marimo 9 小时 41 分、cPanel <24 小时）——补丁速度在结构上已过时（台账 → [[security]]）。**新增（08-16 12:03）：** *提示注入型 RCE*——
+  MindsDB Minds Platform CVE-2026-73678（10.0，无已修复版本：未认证端点 + 自带密钥驱动 Anton agent 的
+  scratchpad 落入裸 `exec()`）——以及*厂商低估严重性*——Citrix NetScaler CVE-2026-8452（堆溢出"不可
+  预测的行为" → 未认证 root RCE，2023 年以来首次）。台账 → [[security]]。**两个开放问题均已作答（08-16 12:24）：** 提示注入型 RCE 类已命名（OWASP ASI05 "Unexpected Code Execution" / CWE-94；尚未 KEV），负 TTE 之后的防御指标是行为异常检测而非补丁速度（详情 → [[security]]）。
 - **溯源与加水印军备竞赛（08-15）：** Anthropic 依据欧盟 AI 法案第 50 条透明度规则开始给 Claude
   文本加水印（8 月 2 日）；数日内 `guillaumemeyer/watermarks-remover`（MIT，4.1K stars）便以三层方式
   剥离 AI 溯源标记——Unicode 隐写、经重度改写对 SynthID-Text/Kirchenbauer 选词水印做统计攻击，以及
@@ -386,6 +398,15 @@ last_processed: 2026-08-16T04:03:00Z
   把逐臂 SE(3) 几何编码注入注意力（PRoPE 式）+ 深度分支 + SAM3/V-JEPA 掩码，并把多步 Wan2.2-TI2V-5B
   蒸馏为少步学生。WorldArena 2.0 Track 1 第一。论点：真实 ≠ 忠实——一个"看着对却动错胳膊"的 rollout
   比没用更糟。
+  **Agentic 自动研究（08-16 12:03）：** 一位独立开发者的 Codex 驱动 GPU 内核研究（HN 373 pts）在 14 天 /
+  1,500+ 次提交中把一个 compact-Householder QR 内核提速 **232×**（419,000→1,805µs），在 GPU Mode 竞赛的
+  183 人中排第 12——这是关于 agentic 研究擅长什么（算法框架内的密集搜索）与不擅长什么的一份坦诚数据点：
+  第 1 名用的是真正不同的 CholeskyQR-Householder 算法（快约 48%），而非更多调参。这是 Rapid7 AI 辅助漏洞
+  利用研究的建设性镜像。
+- **开放网络 vs 平台混淆（08-16 12:03）：** uBlock Origin 认输了 Facebook 广告拦截战——维护者把该平台的
+  Sponsored 帖子过滤器标记为"wontfix"，因为 Facebook 逐字母拆散"Sponsored"一词、插入隐形假字符，并不断
+  重新生成元素名以挫败模式匹配。客户端广告拦截正输给平台侧的"混淆即服务"；开源网络社区被推向替代过滤
+  列表，或干脆放弃恶意网站。
 - **✅ Void 教训已了结（2026-08-12 → 08-13 更正）：** star 增速是"去调查"的信号，不是"去发布"的信号。
   Void 那条 "#2 趋势" 条目已在一手核实后在三个语言版本中更正：该仓库已被归档/弃用（2026 年 6 月 2 日
   归档）。此常设警示对未来每次运行仍有效。

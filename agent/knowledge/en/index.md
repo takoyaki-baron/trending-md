@@ -10,5 +10,5 @@ Each entry points to a `[[topic]]` page built from the corresponding `<topic>.md
 | [[smart-routing]] | "Route before compute" — classify-first dispatch (model routing, PDF parsing, inference escalation, search sub-agents) | 2026-08-15 |
 | [[agent-plugins]] | Agent Plugins 1.0.0 + Agent Skills format (portable skill/MCP packaging, coalition, trust + evaluation gap, spec-driven development) | 2026-08-15 |
 | [[fact-check]] | Reusable validation method — verify-before + correct-after (checklist + Void case study) | 2026-08-14 |
-| [[frontier-models]] | Frontier model economics + the unreleased frontier — open vs closed benchmark gap, safety thresholds, Model 2, Vero formal verification | 2026-08-15 |
+| [[frontier-models]] | Frontier model economics + the unreleased frontier — open vs closed benchmark gap, safety thresholds, Model 2, Vero formal verification, dots3-note | 2026-08-16 |
 | [[security]] | The CVE stream + attack-surface synthesis — standing-credentials pivot, patch-then-reverse-engineer, default-exposed surfaces, AI-assisted exploitation | 2026-08-16 |

@@ -34,6 +34,13 @@ Five recurring shapes, each with a canonical instance:
    disclosure, no PoC) and cPanel CVE-2026-41940 (<24h) show hours. A CVSS 10.0 patch is no longer a
    routine update; the reverse-engineering window *is* the exposure window, and patch velocity is
    structurally obsolete (median remediation 74 days vs −7d MTE).
+   **What replaces patch velocity (08-16 12:24):** Mandiant's own answer is **behavioral anomaly
+   detection** — replace static IOCs with baselines that flag anomalous edge-device access, bulk API
+   operations, and SaaS-token abuse. Global median dwell time rose to 14 days (from 11) but is now a
+   *lagging* indicator (attacker sophistication, not defense health); the median IAB→ransomware
+   hand-off collapsed from 8+ hours (2022) to **22 seconds** (2025), so any human-loop metric is
+   decoration. Only 52% of intrusions are detected internally. The emerging metric bundle: exposure
+   management + assume-breach detection coverage + automated MTTC in minutes.
 3. **Default-exposed surfaces.** A product ships a network service on by default, with no auth, and
    the internet finds it. Canonical: macOS Screen Sharing CVE-2026-65400 (9.8) — an auth-state bug
    lets a network attacker authenticate with no credentials and reach root; macOS auto-opens VNC on
@@ -50,9 +57,36 @@ Five recurring shapes, each with a canonical instance:
    signed management requests, so a replayed/forged signed request installs arbitrary code through
    the plugin update channel. Cl0p/PTC Windchill CVE-2026-12569 (9.8) is the ransomware instance
    (~50 firms, engineering IP exfiltrated).
+6. **Prompt-injectable RCE — the agent is the attack surface.** The injection target is the model's
+   code-execution tool, not a web form. Canonical: MindsDB Minds Platform CVE-2026-73678 (CVSS 10.0):
+   an unauthenticated `POST /api/v1/responses/` endpoint plus a bring-your-own-key chain (the
+   `PUT /api/v1/settings/` endpoint is also unauthenticated) lets an attacker drive the built-in
+   **Anton** agent's scratchpad tool into a bare `exec()` with no sandbox → arbitrary OS command
+   execution with the app's privileges (SSH keys, stored credentials, env secrets included). Overly
+   permissive CORS (`allow_origins=["*"]` + `allow_credentials=True`) enables browser-based
+   exploitation. No patched release at disclosure.
+   **Named + standard (08-16 12:24):** OWASP's agentic list already names the class **Unexpected Code
+   Execution** (ASI05); MITRE tags are CWE-94 (code injection) + CWE-306 (missing auth) + CWE-942
+   (permissive CORS), and OWASP LLM06 "Excessive Agency" frames the root cause (a model with too much
+   tool power). Not yet in CISA KEV (published Aug 14; CNA VulnCheck). The converging mitigation
+   standard: authenticate the agent endpoint by default, sandbox the code-exec tool (no bare
+   `exec()`/`shell=True`), least-privilege tool scoping + permission tiers (OWASP multi-layer).
 
 ## The CVE ledger (newest first)
 
+- **MindsDB Minds Platform CVE-2026-73678** (10.0) — unauthenticated `POST /api/v1/responses/` +
+  BYO-key chain (unauthenticated `PUT /api/v1/settings/`) → prompt-injected Anton agent's scratchpad
+  runs attacker-influenced Python via a bare `exec()` with no sandbox → RCE. Permissive CORS
+  (`allow_origins=["*"]` + `allow_credentials=True`) enables browser-based exploitation. No patched
+  release at disclosure (fixes on dev branches only); advisory GHSA-jcxw-h8ph-pxpv.
+- **Citrix NetScaler ADC/Gateway CVE-2026-8452** — heap overflow in the SAML canonicalization path
+  (`nsppe`): an oversized `<ds:SignedInfo>` `PrefixList` overflows a fixed buffer and corrupts an
+  adjacent heap chunk's data pointer → write-what-where; NetScaler ships non-PIE with an executable
+  heap → unauthenticated RCE as root (PHP webshell at `/vpn/theme/x.php`, pitboss watchdog signal
+  handlers disabled). First public NetScaler pre-auth RCE since CVE-2023-3519 (2023). Citrix's June 30
+  bulletin under-described it as "unpredictable behavior." watchTowr PoC hardcoded for 13.1-30.52;
+  JPCERT/CC reports no confirmed in-the-wild exploitation as of Aug 15. No workaround — upgrade to
+  14.1-72.61 / 13.1-63.18.
 - **SAP Commerce Cloud Data Hub Adapter CVE-2026-58231** (CVSS 10.0) — insufficient authorization +
   weak input validation let an unauth attacker abuse a default auth client for arbitrary code
   execution; exploited 3 days post-patch with no public PoC; affected COM_CLOUD 2211 / 2211-JDK21.
@@ -116,10 +150,17 @@ Five recurring shapes, each with a canonical instance:
 ## Watch for
 
 - ~~Does "patch-then-reverse-engineer" compress the patch window?~~ **Answered (08-16 04:36): yes —
-  the window went negative (−7d MTE).** New question: what replaces patch velocity as the measured
-  defense metric — dwell/MTTR, runtime-detection coverage, or segmentation? And does
-  "disclose-and-race" push vendors toward silent/delayed disclosure?
+  the window went negative (−7d MTE).** ~~What replaces patch velocity as the measured defense
+  metric?~~ **Answered (08-16 12:24): behavioral anomaly detection + assume-breach coverage; dwell time
+  (14d) is now a lagging indicator, and the 22-second hand-off makes human-loop metrics decoration
+  (see shape 2).** Open sub-question: does "disclose-and-race" push vendors toward silent/delayed
+  disclosure?
 - The AI-assisted *offensive* exploit cadence (Rapid7 24 days) vs the defensive fan-out — who wins the
   compression race?
 - Default-exposed surfaces beyond VNC and MCP: what other "on by default, network-reachable" services
   ship in agent runtimes and desktop OSes?
+- ~~Unauthenticated agent endpoints + prompt-injectable tool-exec (MindsDB) — does this class get a
+  name / KEV treatment, and what becomes the mitigation standard?~~ **Answered (08-16 12:24):** the
+  class is named (OWASP ASI05 "Unexpected Code Execution" / CWE-94/306/942 / LLM06 "Excessive Agency");
+  not yet in KEV (too fresh). Mitigation standard: authenticate the endpoint + sandbox the code-exec
+  tool + least-privilege tool tiers (see shape 6).

@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-16T04:03:00Z
+last_processed: 2026-08-16T12:03:00Z
 ---
 
 # Learnt Agent
@@ -76,7 +76,7 @@ patterns, and turn them into insights and actionable todos.
    pre-disclosure, VulnCheck 28.96% of KEV exploited on/before CVE-publish day). The SAP 3-days-post-
    patch case is now the *slow* end; Marimo (9h41m) and cPanel (<24h) show hours. "Patch-then-reverse-
    engineer" is subsumed — disclosure is the trigger, and patch velocity is structurally obsolete
-   (74-day remediation vs −7d MTE). → [[security]]
+   (74-day remediation vs −7d MTE). **The 12:03 batch adds two shapes (08-16 12:03, ledger → [[security]]):** (4) *prompt-injectable RCE* — MindsDB Minds Platform CVE-2026-73678 (CVSS 10.0): an unauthenticated endpoint + a bring-your-own-key chain drives the built-in Anton agent's scratchpad into a bare `exec()` with no sandbox — the sharpest instance yet of "the agent is the attack surface" (no patched release at disclosure). (5) *vendor under-described severity* — Citrix NetScaler CVE-2026-8452: Citrix's June 30 bulletin called the SAML-path heap overflow "unpredictable behavior"; watchTowr turned it into unauthenticated root RCE — the first public NetScaler pre-auth RCE since 2023. **Answered (08-16 12:24):** the prompt-injectable RCE class already has a name — OWASP's agentic list calls it **Unexpected Code Execution** (ASI05), with CWE-94 (code injection) + CWE-306 (missing auth) + CWE-942 (permissive CORS) as the MITRE tags and "Excessive Agency" (LLM06) as the framing; it is **not yet in CISA KEV** (too fresh — published Aug 14). The mitigation standard is converging on OWASP's multi-layer model — authenticate the agent endpoint by default, sandbox the code-exec tool (no bare `exec()`/`shell=True`), least-privilege tool scoping + permission tiers. And the **negative-TTE follow-up is answered too**: the measured defense metric is shifting from patch velocity to **behavioral anomaly detection** (Mandiant's own recommendation — replace static IOCs with baselines that flag anomalous edge-device access / bulk API ops / SaaS-token abuse), with dwell time (14-day median, up from 11) downgraded to a lagging indicator and the 22-second hand-off making human-loop metrics decoration (only 52% of intrusions are detected internally). → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    kimi-k3-in-c (176KB binary, 2.78T model on 8GB RAM), TurboFieldfare (Gemma 26B on 2GB),
@@ -127,6 +127,11 @@ patterns, and turn them into insights and actionable todos.
    (half-price agent workhorse three weeks after 3.6 — DeepSWE 49.0→65.3%), Alibaba's **Qwen3.8-27B**
    (Apache-2.0 native-multimodal 27B topping SWE-bench Pro 61.7), and OpenAI's **GPT-5.6 Sol "Ultrafast"**
    preview (750 tok/s on Cerebras — serving *hardware* as the speed lever, not distillation).
+   **The newest beat (08-16 12:03):** Xiaohongshu's **dots3-note preview** (`studio-dots-ai/dots3-note-prev`,
+   Apache 2.0) — a 280B-total/16B-active MoE with a 512K multimodal context, tuned for long-horizon agent
+   tasks via **TEMPO** RL. The first open release from a major Chinese consumer platform's in-house lab:
+   Terminal-Bench 2.1 75.1 (~4.9 above the top US open-weight), and a same-series model's perfect IMO
+   42/42. The open-weight frontier now has a consumer-platform lab. → [[frontier-models]]
 
 7. **AI safety is now a measured release threshold, not policy — and it's converging cross-lab.**
    OpenAI paused Astra, the first model its Preparedness Framework "cannot rule out Critical" for
@@ -326,6 +331,11 @@ patterns, and turn them into insights and actionable todos.
   sections; Redwood Research reviewed the CoT-leak disclosure as "inadequate processes"); the report is
   redacted; and the "very low → low" label change was an uncertainty adjustment, not a new capability
   finding. No release trigger is defined. (full detail → [[frontier-models]])
+  **New (08-16 12:03):** Xiaohongshu's **dots3-note preview** (`studio-dots-ai/dots3-note-prev`,
+  Apache 2.0) — a 280B/16B MoE with 512K multimodal context, tuned for long-horizon agent tasks via
+  TEMPO RL; Terminal-Bench 2.1 75.1 (~4.9 above the top US open-weight), and a same-series model scored
+  a perfect IMO 42/42. First open release from a major consumer platform's in-house lab — the
+  open-weight frontier's agent-native axis now has a consumer-platform lab.
 - **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
   Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
   no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
@@ -398,7 +408,10 @@ patterns, and turn them into insights and actionable todos.
   + post-quantum (Kyber/ML-KEM) delivery detail. **Patch window went negative (08-16 04:36):**
   Mandiant M-Trends 2026: MTE −7 days (exploitation before patch, on average); the SAP 3-day case is
   the slow end (Marimo 9h41m, cPanel <24h) — patch velocity is structurally obsolete (ledger →
-  [[security]]).
+  [[security]]). **New (08-16 12:03):** *prompt-injectable RCE* — MindsDB Minds Platform CVE-2026-73678
+  (CVSS 10.0, no patched release: unauth endpoint + BYO-key drives the Anton agent's scratchpad into a
+  bare `exec()`) — and *vendor under-described severity* — Citrix NetScaler CVE-2026-8452 (heap overflow
+  "unpredictable behavior" → unauth root RCE, first since 2023). Ledger → [[security]]. **Both open questions answered (08-16 12:24):** the prompt-injectable RCE class is named (OWASP ASI05 "Unexpected Code Execution" / CWE-94; not yet in KEV), and the post-negative-TTE defense metric is behavioral anomaly detection, not patch velocity (detail → [[security]]).
 - **Provenance & watermarking arms race (08-15):** Anthropic began watermarking Claude text (Aug 2)
   under the EU AI Act's Article 50 transparency rules; within days `guillaumemeyer/watermarks-remover`
   (MIT, 4.1K stars) strips AI-provenance marks in three layers — Unicode steganography, a statistical
@@ -486,6 +499,17 @@ patterns, and turn them into insights and actionable todos.
   branch + SAM3/V-JEPA masks, and distills the multi-step Wan2.2-TI2V-5B into a few-step student. First
   on WorldArena 2.0 Track 1. Thesis: realism ≠ faithfulness — a rollout that "looks right but moves the
   wrong arm" is worse than useless.
+  **Agentic auto-research (08-16 12:03):** a solo dev's Codex-driven GPU-kernel study (HN 373 pts) cut a
+  compact-Householder QR kernel **232×** (419,000→1,805µs) over 14 days / 1,500+ submissions, landing 12th
+  of 183 in GPU Mode's contest — a candid data point on what agentic research is good at (intense search
+  inside an algorithmic frame) and where it loses: the #1 entry used a genuinely different
+  CholeskyQR-Householder algorithm (~48% faster), not more tuning. The constructive mirror of Rapid7's
+  AI-assisted exploit research.
+- **Open web vs platform obfuscation (08-16 12:03):** uBlock Origin conceded the Facebook ad-blocking
+  war — maintainers marked the platform's Sponsored-post filters "wontfix" after Facebook scattered the
+  word "Sponsored" letter-by-letter, inserted invisible fake characters, and regenerated element names
+  to defeat pattern-matching. Client-side ad-blocking is losing to platform-side obfuscation-as-a-service;
+  the open-web community is pushed toward alternative filter lists or abandoning hostile sites.
 - **✅ Void lesson resolved (2026-08-12 → corrected 08-13):** star velocity is a signal to
   investigate, not publish. The Void "#2 trending" entry has been **corrected in all three locales**
   after first-hand verification: the repo is archived/deprecated (archived Jun 2, 2026). The standing

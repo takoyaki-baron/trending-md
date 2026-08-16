@@ -1582,5 +1582,50 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "jpcert.or.jp": {
+    "cat": "security",
+    "en": "JPCERT/CC — Japan's national computer emergency response team; authoritative government advisories on Japan-relevant vulnerabilities and incidents. Cross-checked (08-16): its Citrix NetScaler CVE-2026-8452 alert (upgrade to 14.1-72.61 / 13.1-63.18; no confirmed in-the-wild exploitation as of Aug 15) matches watchTowr Labs' write-up + PoC.",
+    "zh": "JPCERT/CC——日本国家计算机应急响应中心；针对日本相关漏洞与事件的权威政府公告。已交叉核验（08-16）：其 Citrix NetScaler CVE-2026-8452 警报（升级到 14.1-72.61 / 13.1-63.18；截至 8 月 15 日无已确认野外利用）与 watchTowr Labs 的分析 + PoC 一致。",
+    "jp": "JPCERT/CC——日本の国家コンピュータ緊急対応チーム。日本に関連する脆弱性・インシデントの権威ある政府勧告。突合済み（08-16）：Citrix NetScaler CVE-2026-8452の注意喚起（14.1-72.61 / 13.1-63.18へアップグレード、8月15日時点で確認済みの野外悪用なし）はwatchTowr Labsの解説 + PoCと一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "vulncheck.com": {
+    "cat": "security",
+    "en": "VulnCheck — vulnerability-intelligence vendor publishing timely, detailed advisories; secondary to cve.org but fast and well-sourced. Cross-checked (08-16): its MindsDB Minds Platform advisory (CVE-2026-73678, unauthenticated RCE via prompt-injected scratchpad exec, no patched release) matches IONIX's advisory (GHSA-jcxw-h8ph-pxpv). Re-verified (08-16 12:24) against three further independent sources — Mallory, OffSeq Threat Radar, and the public Hunt-Benito PoC — which agree on the BYO-key chain (unauth PUT /api/v1/settings/ + POST /api/v1/responses/), the bare exec(), and CWE-94/306/942.",
+    "zh": "VulnCheck——漏洞情报厂商，发布及时且详尽的公告；次于 cve.org 但更新快、来源扎实。已交叉核验（08-16）：其 MindsDB Minds Platform 公告（CVE-2026-73678，经提示注入的 scratchpad exec 实现未认证 RCE，无已修复版本）与 IONIX 公告（GHSA-jcxw-h8ph-pxpv）一致。复验（08-16 12:24）：另经三个独立来源——Mallory、OffSeq Threat Radar 与公开的 Hunt-Benito PoC——印证，均一致确认自带密钥链（未认证的 PUT /api/v1/settings/ + POST /api/v1/responses/）、裸 exec() 与 CWE-94/306/942。",
+    "jp": "VulnCheck——脆弱性インテリジェンスベンダー。タイムリーで詳細なアドバイザリを公開。cve.orgに次ぐが速く情報源も確か。突合済み（08-16）：MindsDB Minds Platformのアドバイザリ（CVE-2026-73678、プロンプト注入されたスクラッチパッドexecによる未認証RCE、修正済みリリースなし）はIONIXのアドバイザリ（GHSA-jcxw-h8ph-pxpv）と一致。再検証（08-16 12:24）：さらに3つの独立ソース——Mallory、OffSeq Threat Radar、公開されたHunt-BenitoのPoC——で裏取り、いずれも鍵持ち込みチェーン（未認証のPUT /api/v1/settings/ + POST /api/v1/responses/）、裸のexec()、CWE-94/306/942で一致。",
+    "cred": "med",
+    "density": "high",
+    "cv": 2
+  },
+  "sankalp.bearblog.dev": {
+    "cat": "community",
+    "en": "Sankalp's personal Bear Blog — first-hand practitioner write-ups of agentic-research experiments. Cross-checked (08-16): its \"Auto-research with codex\" post (232× QR-kernel speedup, 12th of 183) matches the Hacker News thread (item 49309549).",
+    "zh": "Sankalp 的个人 Bear Blog——agentic 研究实验的一手实践者文章。已交叉核验（08-16）：其「Auto-research with codex」文章（QR 内核 232× 提速、183 人中第 12）与 Hacker News 帖子（item 49309549）一致。",
+    "jp": "Sankalpの個人Bear Blog——エージェンティック研究実験の一次実践記事。突合済み（08-16）：「Auto-research with codex」記事（QRカーネル232×高速化、183人中12位）はHacker Newsスレッド（item 49309549）と一致。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "racunalniske-novice.com": {
+    "cat": "news",
+    "en": "Računalniške novice — Slovenian tech-news outlet; secondary aggregation of OSS/browser news. Cross-checked (08-16): its uBlock Origin Facebook \"wontfix\" story matches hardwareluxx.de's German report.",
+    "zh": "Računalniške novice——斯洛文尼亚科技媒体；对开源/浏览器新闻的二手聚合。已交叉核验（08-16）：其 uBlock Origin Facebook「wontfix」报道与 hardwareluxx.de 的德语报道一致。",
+    "jp": "Računalniške novice——スロベニアのテックニュースメディア。OSS/ブラウザニュースの二次集約。突合済み（08-16）：uBlock OriginのFacebook「wontfix」報道はhardwareluxx.deのドイツ語報道と一致。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "hardwareluxx.de": {
+    "cat": "news",
+    "en": "Hardwareluxx — German hardware/tech-news site; solid on consumer-software and browser news. Cross-checked (08-16): its uBlock Origin Facebook ad-blocking story matches racunalniske-novice.com's report.",
+    "zh": "Hardwareluxx——德国硬件/科技新闻站；对消费软件与浏览器新闻较扎实。已交叉核验（08-16）：其 uBlock Origin Facebook 广告拦截报道与 racunalniske-novice.com 的报道一致。",
+    "jp": "Hardwareluxx——ドイツのハードウェア/テックニュースサイト。コンシューマーソフトとブラウザのニュースに強い。突合済み（08-16）：uBlock OriginのFacebook広告ブロック報道はracunalniske-novice.comの報道と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

@@ -205,6 +205,19 @@ Verus、Coq）；每个实例交给 agent 一个多模块 **Lean 4** 仓库，�
 在仓库规模证明义务上仍严重失败的压力测试。它是 spec-kit 写作侧赌注（见 [[agent-plugins]]）在评估侧的
 呼应：意图变成机器可检验的工件。
 
+## 小红书 dots3-note——消费平台实验室进入开放前沿（8 月 16 日）
+
+**dots3-note preview** — `studio-dots-ai/dots3-note-prev` — 是小红书 Dots Model Lab 的首次开源发布
+（Apache 2.0）：一个 280B 总参数 / 16B 活跃参数的 Mixture-of-Experts，512K 上下文窗口覆盖文本、图像、
+视频与音频输入，经 Dots 称为 **TEMPO** 的新 RL 方法调优，面向开放式的长时程 agent 任务（旅行规划、
+门店运营、家装）。同系列模型（dots-note-3.0）在 IMO 拿到满分 **42/42**；Terminal-Bench 2.1 上得
+**75.1**——据 SemiAnalysis 图表，比美国最佳开源权重模型高约 4.9 分。华为同日宣布 Ascend 0 日适配。
+单台 8 卡节点（FP8）即可部署；演示用一份自我更新的 `memory.md` 记事本清掉全部 6 级 ARC-AGI-3。
+
+信号：开源权重前沿的 *agent 原生*轴（长时程、环境记忆、自我纠错）如今有了一个**消费平台**实验室——
+而不只是云/模型厂商——在交付前沿规模的开源权重。它延续了 GLM-5.3「后训练而非规模」（TEMPO RL）与
+Motif 3「美中之外的主权开源权重」两条线，并加入一个中国国内的消费平台入局者。
+
 ## 关注点
 
 - 对 DeepSeek V4 Pro 声明做第三方（非厂商）评估——两个内部基准（DSBench-FullStack/Hard）是保留项。
@@ -226,3 +239,5 @@ Verus、Coq）；每个实例交给 agent 一个多模块 **Lean 4** 仓库，�
   审查权，METR/SecureBio 只是试点，Redwood 审查了一项披露，报告经过删减，且未定义发布触发器。关注：
   LTBT 是否会在未来的某份报告上*真正行使*其审查权？
 - Vero 式形式化验证基准会否在 SWE-bench 饱和之际成为下一个标准评估梯队。
+- dots3-note 的 TEMPO-RL 长时程声明能否经受第三方评估，以及消费平台实验室（小红书）会否成为与云/模型
+  厂商并列的持久开源权重一极。

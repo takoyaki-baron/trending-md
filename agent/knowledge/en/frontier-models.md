@@ -253,6 +253,22 @@ As SWE-bench and its variants saturate, Vero shifts the frontier rung from "pass
 scale proof obligations. This is the evaluation-side answer to spec-kit's authoring-side bet (see
 [[agent-plugins]]): intent becomes a machine-checkable artifact.
 
+## Xiaohongshu's dots3-note — a consumer-platform lab enters the open frontier (Aug 16)
+
+**dots3-note preview** — `studio-dots-ai/dots3-note-prev` — is the first open release from Xiaohongshu's
+Dots Model Lab (Apache 2.0): a 280B-total / 16B-active Mixture-of-Experts with a 512K context window over
+text, image, video, and audio input, tuned for open-ended long-horizon agent tasks (travel planning,
+store operations, home renovation) via a new RL method Dots calls **TEMPO**. A same-series model
+(dots-note-3.0) scored a perfect **42/42 at the IMO**; on Terminal-Bench 2.1 it posts **75.1** — ~4.9
+points above the top US open-weight model per a SemiAnalysis chart. Huawei announced Ascend 0-day
+adaptation the same day. Deploys on a single 8-card node (FP8); demos clear all 6 ARC-AGI-3 levels using
+a self-updating `memory.md` notepad.
+
+Signal: the open-weight frontier's *agent-native* axis (long-horizon, environment memory,
+self-correction) now has a **consumer-platform** lab — not just cloud/model vendors — shipping
+frontier-scale open weights. It extends the GLM-5.3 "post-training, not scale" thread (TEMPO RL) and the
+Motif 3 "sovereign open-weight beyond US/China" thread with a China-internal consumer-platform entrant.
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks
@@ -281,3 +297,5 @@ scale proof obligations. This is the evaluation-side answer to spec-kit's author
   trigger is defined. Watch: does the LTBT actually *exercise* its review power on a future report?
 - Whether Vero-style formal-verification benchmarks become the next standard eval rung as SWE-bench
   saturates.
+- Whether dots3-note's TEMPO-RL long-horizon claims hold up to third-party eval, and whether
+  consumer-platform labs (Xiaohongshu) become a durable open-weight pole alongside cloud/model vendors.

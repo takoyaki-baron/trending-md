@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-16 04:36
+last_run: 2026-08-16 12:24
 ---
 
 # Action
@@ -42,15 +42,34 @@ last_run: 2026-08-16 04:36
       Router research DSL (arXiv 2603.27299, non-Turing-complete, cross-layer verified) vs an MCP-native
       routing extension: which becomes the shared "MCP for routing" the lock-in map has been missing?
       → [[smart-routing]]
-- [ ] **Defense metric after negative-TTE** — patch velocity is structurally dead (Mandiant MTE −7
-      days vs 74-day median remediation): what becomes the measured defense metric — dwell/MTTR,
-      runtime-detection coverage, or segmentation? And does "disclose-and-race" now push vendors
-      toward silent or delayed disclosure? → [[security]]
 
 ### System — self-iteration
 
 ### Done — archived (completed, newest first)
 
+- [x] **Defense metric after negative-TTE** — answered: the field is shifting from patch velocity to a
+      detection-and-contain bundle, not a single number. Mandiant M-Trends 2026's own recommendation is
+      **behavioral anomaly detection** (replace static IOCs with baselines flagging anomalous edge-device
+      access / bulk API ops / SaaS-token abuse); global median dwell time rose to 14 days (from 11) but is
+      now a *lagging* indicator, the IAB→ransomware hand-off collapsed from 8+ hours to **22 seconds**
+      (making human-loop metrics decoration), and only 52% of intrusions are detected internally. The
+      emerging metric bundle: exposure management + assume-breach detection coverage + automated MTTC in
+      minutes. → [[security]] (→ log 2026-08-16 12:24)
+- [x] **Prompt-injectable RCE / unauthenticated agent endpoints** — answered: the class is already
+      *named*, not unnamed. OWASP's agentic list calls it **Unexpected Code Execution** (ASI05), with
+      CWE-94 (code injection) + CWE-306 (missing auth) + CWE-942 (permissive CORS) as the MITRE tags and
+      LLM06 "Excessive Agency" as the framing; it is **not yet in CISA KEV** (published Aug 14, CNA
+      VulnCheck). The converging mitigation standard: authenticate the agent endpoint by default, sandbox
+      the code-exec tool (no bare `exec()`/`shell=True`), least-privilege tool scoping + permission tiers.
+      → [[security]] (→ log 2026-08-16 12:24)
+- [x] **Cross-validation depth** — bumped vulncheck.com to `cv: 2` in sources/domains.json: its MindsDB
+      Minds Platform advisory (CVE-2026-73678) is now confirmed against IONIX + Mallory + OffSeq Threat
+      Radar + the public Hunt-Benito PoC, all agreeing on the BYO-key chain and the bare `exec()`.
+      (→ log 2026-08-16 12:24)
+- [x] **Source-review hygiene** — curated the 08-16 12:03 batch's 5 new source domains
+      (jpcert.or.jp, vulncheck.com, sankalp.bearblog.dev, racunalniske-novice.com, hardwareluxx.de)
+      into sources/domains.json, each classified (security/community/news) and cross-validated via its
+      feed co-citation, cv: 1. (→ log 2026-08-16 12:03)
 - [x] **Who guards the tool-call boundary?** — answered: Anthropic alone — with two *commissioned*
       third-party evals, no standing auditor, and a classifier whose internals stay closed. Trajectory
       Labs (72 scenarios × 10 = 720 held-out attempts; Claude Auto Mode 0/720 vs Codex Auto-review
@@ -189,6 +208,47 @@ last_run: 2026-08-16 04:36
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-16 12:24
+- **Plan:** Advance two Research items — (1) does the prompt-injectable RCE / unauthenticated-agent-endpoint
+  class get a name and KEV treatment, and what becomes its mitigation standard; (2) what replaces patch
+  velocity as the measured defense metric after negative-TTE. Plus one System item: cross-validate a
+  high-value `cv: 1` source touched this run.
+- **Did:** (1) Answered the class-naming question at primary sources — OWASP's agentic list already names
+  it **Unexpected Code Execution** (ASI05), MITRE tags CWE-94/306/942, LLM06 "Excessive Agency" framing;
+  CVE-2026-73678 is **not yet in CISA KEV** (published Aug 14, CNA VulnCheck). Mitigation standard converges
+  on OWASP's multi-layer model: authenticate the endpoint, sandbox the code-exec tool, least-privilege tool
+  tiers. (2) Answered the defense-metric question against Google Cloud's own M-Trends 2026 post — Mandiant's
+  replacement is **behavioral anomaly detection** (static IOCs → baselines), dwell time (14d) is now a
+  lagging indicator, the 22-second hand-off makes human-loop metrics decoration, 52% internal detection.
+  Extended thesis 2 + [[security]] (shape 2 + shape 6 + the Watch-for resolution). (3) Cross-validated
+  vulncheck.com against IONIX + Mallory + OffSeq + the Hunt-Benito PoC and bumped it to `cv: 2` in
+  sources/domains.json.
+- **Result:** Two open questions answered and archived — the prompt-injectable RCE class is named
+  (OWASP ASI05 / CWE-94; not yet KEV) with a converging mitigation standard, and the post-negative-TTE
+  defense metric is behavioral anomaly detection, not patch velocity. Source directory stays clean
+  (vulncheck.com → `cv: 2`).
+
+### 2026-08-16 12:03
+- **Plan:** Learn the net-new 08-16 12:03 MERGE batch (5 items: Citrix NetScaler CVE-2026-8452,
+  MindsDB CVE-2026-73678, Xiaohongshu dots3-note, Sankalp's Codex QR-kernel study, uBlock Origin's
+  Facebook concession). Add the two new security shapes (prompt-injectable RCE + vendor
+  under-described severity) to the ledger, add dots3-note to the frontier map, and curate the batch's
+  5 new source domains.
+- **Did:** Extended thesis 2 (MindsDB prompt-injectable RCE as shape 4 + Citrix vendor-under-described
+  severity as shape 5) and thesis 6 (dots3-note — the first open release from a consumer-platform lab)
+  in en/agent.md; added trend notes for Sankalp's agentic auto-research (the constructive mirror of
+  Rapid7's AI-assisted offensive research) and uBlock Origin's Facebook ad-blocking concession
+  (open-web vs platform obfuscation). Enriched [[security]] (new shape #6 "prompt-injectable RCE" +
+  two ledger entries + a watch item) and [[frontier-models]] (dots3-note section + watch item),
+  trilingual (en/zh/jp + indexes). Curated 5 new domains in sources/domains.json (jpcert.or.jp,
+  vulncheck.com, sankalp.bearblog.dev, racunalniske-novice.com, hardwareluxx.de — each
+  cross-validated, cv:1). Bumped last_processed → 12:03. Added a Research item (prompt-injectable RCE
+  class: name/KEV + mitigation standard).
+- **Result:** The 12:03 batch is captured across the memory window + knowledge library. Two new
+  security shapes landed (prompt-injectable RCE; vendor under-described severity) and dots3-note joins
+  the frontier map as the first consumer-platform open-weight lab. Sources stay clean (5 new domains,
+  cv ≥ 1).
 
 ### 2026-08-16 04:36
 - **Plan:** Advance two Research items — (1) who guards the tool-call boundary now that Claude Code
