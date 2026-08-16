@@ -120,18 +120,38 @@ lock-in surface: an "MCP for routing" would commoditize it, and nobody has shipp
    branching, dead-branch detection, and audit traces structurally coupled to the decision logic. This is
    a **position paper** — architectural claims, no measured results yet.
 
-The shape has shifted: the question is no longer "will anyone ship an MCP-for-routing?" but "which DSL
-wins — BitRouter's git-owned `policy-lock.yaml`, a research-grade verified-compilation DSL, or an
-MCP-native routing extension?" The lock-in surface moved from *absence of a standard* to *choice of
-standard*.
+3. **MCP-native routing (the protocol itself — 2026-07-28 stateless rewrite).** The Model Context
+   Protocol's July 28 2026 "stateless core" rewrite is, de facto, the *MCP-native routing extension*
+   this question kept predicting — but it arrived as **the protocol, not a third-party DSL**. It drops
+   the `initialize`/`initialized` handshake, `Mcp-Session-Id`, and sticky sessions (a remote server
+   "can now run behind a plain round-robin load balancer"), moves protocol metadata into per-request
+   `_meta`, adds `server/discover` for connection-free capability discovery, and — the routing part —
+   adds two mandatory routing headers, **`Mcp-Method`** and **`Mcp-Name`**, so gateways / WAFs / rate
+   limiters route, throttle, and meter agent traffic *without opening the JSON-RPC body* (tool params
+   can also be copied into headers for fine-grained routing; results carry `ttlMs`/`cacheScope`; Multi
+   Round-Trip Requests put server-initiated state in the payload, not an open SSE stream). It is **not
+   a routing *policy* DSL** — but it makes *routing* a protocol-native, commodity transport concern,
+   which is exactly what would commoditize the BitRouter/DSL lock-in. Two IETF drafts extend the same
+   idea to cross-protocol routing headers (`draft-hood-agtp-composition`: `Authority-Scope` +
+   `Budget-Limit`; `draft-gaikwad-agent-proxy-modes`: proxy gateway routing layers).
+
+The shape has shifted again: the question is no longer "which standalone DSL wins" — it is "does a
+routing-*policy* DSL survive once the *transport* (MCP's stateless core + `Mcp-Method`/`Mcp-Name`
+headers, AGTP for cross-protocol) makes basic routing a commodity?" The likely end-state is a
+**two-layer split, not one winner**: MCP/AGTP own the *how-to-route-a-request* transport layer, while
+the *policy* (what tier gets what call, and who may change it) stays a git-owned artifact (BitRouter's
+`policy-lock.yaml`) or a verified-compiled research DSL (Semantic Router). The lock-in surface moved
+from *absence of a standard* → *choice of standard* → *transport vs policy*.
 
 ## Watch for
 
 - Router strategy convergence: classifier vs stage vs escalation vs confidence-gated — do they
   merge into one standard?
-- Router-policy standardization: **advanced 08-15** — BitRouter + the Semantic Router DSL are the
-  first concrete candidates; now watch *which* DSL wins (BitRouter `policy-lock.yaml`, the verified-
-  compilation research DSL, or an MCP-native routing extension).
+- Router-policy standardization: **advanced 08-16** — the "MCP-native routing extension" candidate
+  materialized as MCP's own 2026-07-28 stateless core + `Mcp-Method`/`Mcp-Name` headers. Now watch
+  *whether the policy DSL survives as a separate layer* (BitRouter `policy-lock.yaml` vs the
+  Semantic Router verified-compilation DSL) once the transport layer is commoditized — i.e. does the
+  split become "MCP/AGTP own transport, a git-owned/verified DSL owns policy"?
 - Who owns the router: NVIDIA positions Switchyard as "orchestration software on top of the
   chips" — the router layer is where vendor lock-in will try to happen.
 - The same classify-first pattern applied to the next expensive step (audio/video transcription,

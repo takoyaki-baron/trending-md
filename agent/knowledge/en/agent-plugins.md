@@ -84,6 +84,19 @@ adopting the 1.0.0 format. The format is fragmenting as the pattern spreads: Age
 (packaging), Cordis (harness internals), and each harness's own mechanism (`.claude-plugin`,
 `agents.md`, Codex extensions) coexist. Watch whether the harness layer converges on one plugin ABI.
 
+## Revertible effects: the theory behind the plugin graph (Aug 16)
+
+`cordiverse/cordis` (MIT, 4.4K stars) + its paper "A Programming Paradigm for Spatiotemporal
+Composability" (PKU + DeepSeek-AI, draft Aug 13) formalize the two ideas that make "everything is a
+plugin" safe for self-evolving harnesses: **revertible effects** (every component's side effect
+carries an inverse, so unloading cleanly restores prior state) and **reactive coeffects** (components
+declare dependencies and react to context changes), with preservation/confluence/progress proven for
+a component calculus. It's production-grade — Koishi has shipped on it for four years (4,000+ plugins)
+and DeepSeek Harness ships on Cordis v4. The paper's motivating stat: 87 of the top 100 VSCode
+extensions can't be uninstalled without restarting the host — fatal for a self-evolving agent that
+must not lose context on a reload. This is the theoretical counterpart to Agent Plugins 1.0.0's
+packaging layer: 1.0.0 packages *what* travels, Cordis governs *how components compose and unwind*.
+
 ## Skills must now prove their claims (the evaluation gap)
 
 The skills category is proliferating on assertion, not proof — until now. **Ponytail**

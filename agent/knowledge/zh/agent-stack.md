@@ -74,6 +74,13 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   以 MCP server 运行）与 **Portable Agent Memory**（Episodic/Semantic/Procedural/Working/Identity
   模型，Merkle-DAG 溯源）。TencentDB Team Memory 与 Macro 经 MCP 暴露的团队记忆只是临时填补缺口；
   尚无跨系统标准。
+- **ai-memory——厂商中立的跨 agent 交接** — `akitaonrails/ai-memory`，MIT，Rust，1.5K stars。
+  一个本地、git 版本化的"共享大脑"：把提示词、工具调用与会话边界捕获进一个按项目组织的 Markdown
+  wiki（SQLite FTS5，可选向量排序），**零 LLM**（FTS5 + 规则），并暴露一个类型化的跨 agent 交接
+  协议——`memory_handoff_begin` / `accept` / `cancel`——让你在任务中途退出 Claude Code，再由 Codex
+  （或 Cursor、Gemini CLI、OpenCode……）在同一目录续接一份"你到哪了"摘要（约 10 个 agent CLI +
+  只读 Web UI）。信号：agent 记忆正在分裂为两种形态——团队级知识图谱（TencentDB）vs 一种*可移植、
+  按项目、厂商中立*的记忆，把"不同 agent 之间的交接"当作一等类型化协议。
 
 ## 身份与上下文标准化（双速分裂）
 
@@ -120,6 +127,18 @@ agent 上下文碎片化问题（ego-lite 的浏览器身份 vs holaOS 的文件
   RDF/LPG 双图存储、Rete 推理引擎、对每个衍生事实做 W3C PROV-O 溯源、7 个向量数据库后端。
   确定性图推理 + LLM 仅用于模糊抽取 → 可审计、可复现的决策。`pip install semantica`。**v0.6.5**
   是一个安全版本，修复了五个外部上报的漏洞（Explorer 路由缺失认证、Cypher/SPARQL 注入）。
+
+**溯源标准化（2026-08-16 20:27）：** "谁标准化 agent 溯源"如今是*分层*收敛，而非单一所有者。**W3C
+PROV-O** 提供词汇——Entity / Activity / Agent（+ `Plan` 子类）及核心关系 `wasGeneratedBy` /
+`wasDerivedFrom` / `used` / `wasInformedBy` / `wasAssociatedWith` / `actedOnBehalfOf`——由
+**PROV-AGENT** 扩展出 AI agent 的决策谱系（身份/权威 + 委托链）。**OpenTelemetry GenAI 语义约定**
+（v1.42+，`gen_ai.*` span 属性：provider、request、usage、工具执行 span）提供遥测/传输底座与追踪关联。
+一份 2026 年 **AIBOM**（AI 物料清单）提案主张最强的单次运行真实依据是*因果图*——由追踪关联串起实体、
+活动、agent，并以不可变运行时事件为底，用快照保存瞬时上下文（检索到的片段、提示窗口、记忆状态）。
+实现已出现：`agentweave-sdk`（PyPI——agent span 上的 PROV-O 属性）、`ringkernel`/RustCompute（消息
+信封上的 PROV-O 归因）、civic-ai-tools（PROV-O JSON-LD `@context`）。Semantica（上文）正是这一赌注的
+自托管开源实例。尚无单一所有者——该"标准"是*一整套栈*（PROV-O 词汇 + OTel 传输 + 事件溯源持久化），
+而非单一厂商。
 
 ## 技能 / 路由
 - **google/skills** — `google/skills`，Apache 2.0。约 110 个基于 markdown 的 skills（参考文件 +
@@ -180,6 +199,28 @@ agent 上下文碎片化问题（ego-lite 的浏览器身份 vs holaOS 的文件
 **LoopX** 把持久状态 + 人工闸门从运行时中分离出来（*状态内核*）、**Cline Kanban** 把
 git-worktree-per-task 变成并行 agent 的*隔离原语*（与 Orca、Cline CLI `--worktree` 并列）。单体
 CLI 正在分解为这三个可分离的层次——整合是按*层*发生的，而不是汇入一个单体。
+
+## 隔离边界 —— 双速标准化（2026-08-16 20:27）
+
+「git-worktree-per-task 隔离与不可信执行沙箱是否是同一边界」这个问题，可以分解为**两个不同边界、
+分别标准化**：
+
+- **不可信执行沙箱 —— 一个*安全*边界，正收敛于分层内核隔离。** Agent 代码在运行时生成，无法在执行
+  前审查，因此威胁模型是"任意对抗性代码"，进程级 Docker 容器（共享宿主内核）如今被明确判定为不足。
+  **SandboxEscapeBench**（牛津大学 + 英国 AISI，arXiv:2603.02277，ICML 2026 口头报告）把前沿 agent
+  放入跨编排/运行时/内核三层的 18 个 CTF 式场景，发现它们能**稳定逃逸常见错误配置**（暴露的 Docker
+  socket、可写宿主挂载、特权容器）；且正在快速饱和——一款更新的前沿模型（Claude Mythos Preview）已经
+  饱和。AISI 的建议是**以虚拟化隔离为最低边界**（Edera 的独立测试：对 Docker 18/18 逃逸成功，对硬件
+  隔离 VM 零逃逸）。生产指引已收敛为**分层**模型——加固 Docker（seccomp / 去能力 / rootless）→ gVisor
+  （用户态内核，约 50ms 启动）→ Firecracker/Kata microVM（硬件强制，约 125ms）——OWASP ASI05「Unexpected
+  Code Execution」如今写明"绝不未经严格沙箱就执行 agent 生成的代码"。这是 AgentENV/Firecracker、
+  Cloudflare Computer、Orchard、Astra 所在一侧。
+- **git-worktree-per-task —— 一个*并行工作*边界，*并非*安全边界。** Orca、Cline Kanban、Zed Delta 与
+  Cline CLI `--worktree` 隔离的是*多个 agent 之间的并发编辑*（共享仓库上的独立工作树），但宿主/内核
+  边界未变。没有任何沙箱标准把 worktree 当安全边界——文献将其归类为文件系统/工作区隔离（与 Codex CLI
+  限制 cwd 相同），而非内核隔离。这两个边界回答的是不同问题——"这段代码会不会危害宿主？" vs "这些
+  agent 能否同时改同一文件而不互相覆盖？"——并将继续分别标准化：worktree 是*产品*惯例，沙箱是*安全*
+  要求。
 
 ## 教育
 - **ai-agent-book** — `bojieli/ai-agent-book`（李博杰），Apache 2.0。"Deep Understanding of AI
@@ -307,6 +348,43 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
   得 78.32，比商业的 Claude Design 高 7.45，并以完全自主的循环（253 次工具调用、11 轮编辑、40 分钟）
   在不到 $3 内完成——达到会议海报平均水平，在系统盲测中获得最高人类偏好。信号：与 Prime Agent 同一个
   "进化 harness 而非模型"的杠杆，应用于设计；给 agentic 设计一个尚未饱和的基准。
+- **DarwinX——经自然选择的 harness 进化** — arXiv:2608.07545。把 agent 自我改进当作*对一组 harness
+  的选择*（提示词、工具、技能、控制流），底层模型冻结，用"保留并扩展"契约、一个用于重组的档案库，
+  以及每个基准自身的验证器作为适应度（无黄金解）。平均每轮加约 17 分：WebArena-Infinity 真实任务
+  pass@1 从 43.5% → **93.0%**（审计干净，把一个卡在 50% 以下的基准翻了一倍多）、Terminal-Bench 2.1
+  达 83.2%，而且一个从 Terminal-Bench 进化出来的 harness 可以*原样*迁移到 SWE-bench Verified。信号：
+  迄今最强证据——"冻结的模型不必是固定的 agent"——harness 进化把评估算力变成持久能力，而干净的
+  SWE-bench 迁移驳斥了"针对基准打补丁"的质疑。
+- **Cordis——可逆效应，"万物皆插件"背后的理论** — `cordiverse/cordis`，MIT，构建在 Effect 生态上的
+  TypeScript 元框架（4.4K stars）+ 配套论文《A Programming Paradigm for Spatiotemporal
+  Composability》（北大 + DeepSeek-AI，8 月 13 日草稿）。形式化**可逆效应**（每个组件的副作用都携带
+  逆操作，卸载时干净地恢复先前状态）与**响应式协效应**（组件声明依赖并对上下文变化做出反应）；论文
+  为组件演算证明了保持性、合流性与进展性。绝非实验室玩具：支撑 Koishi 聊天机器人框架四年（4,000+
+  生产插件），DeepSeek Harness 也运行在 Cordis v4 上。信号：插件图的理论支柱——直指"前 100 大 VSCode
+  扩展中有 87 个不重启宿主就无法卸载"这一对自进化 agent 致命的问题（见 [[agent-plugins]]）。
 
-以上四项共同延伸了论点 12：优化目标正从模型转向其周围的 harness/编排层（见记忆窗口）。
+以上六项共同延伸了论点 12：优化目标正从模型转向其周围的 harness/编排层（见记忆窗口）。
+
+## Agent 优先 OS + 创意工具 MCP + 多 agent 失效模式（8 月 16 日 20:03）
+
+- **Omarchy 4.0「Quattro」** — `basecamp/omarchy`（DHH/Basecamp），基于 Arch/Hyprland 的 Linux，
+  25.1K stars。整个桌面外壳在 **Quickshell** 框架（Qt Quick）上重建，操作系统自带**九个可选 coding
+  agent**（Claude、Codex、Gemini、Grok、Copilot……），外加一个 `systemd-coredump` 崩溃监视器，在进程
+  崩溃时向你选定的 agent 简报，还有一个模型用量小组件——什么都不预选：除非你明确选择某个 agent，否则
+  agentic 功能保持关闭。信号：首个把本地 AI agent 当作*一等 OS 组件*而非"安装的应用"的主流发行版
+  ——DHH 押注下一代桌面是 agent 优先。
+- **OpenCut** — `OpenCut-app/OpenCut`，83.5K stars。这个免费/开源的 CapCut 替代品宣布了一次从零开始的
+  **Rust** 重写，用一套代码库驱动桌面/移动/浏览器，采用插件优先架构、一个用于自动化 + 批量渲染的
+  **headless 模式**，以及一个让 AI agent 驱动编辑器的 **MCP server**（外加内置脚本标签页）。
+  `opencut-classic` 继续支撑 opencut.app，重写版则落在 new.opencut.app。信号：这个"headless + MCP"
+  动作——已在重塑开发者工具——被应用到了创意软件上；一个可脚本化、经 MCP 暴露的编辑器把"CapCut 克隆"
+  变成了自动化面。
+- **Anthropic Frontier Red Team——多 agent 失效模式** —《Patterns and problems in emerging
+  multi-agent systems》。归类了四种模式：（1）*协调*是脆弱的——一个协调型 swarm 找到 266 个漏洞 vs
+  独立 agent 的 21 个，但只有 12 个重叠；（2）*从众*是系统性的——30 个 agent 里有 18 个把分支命名为
+  `mvp-game-loop`，agent 在 Bertrand 定价游戏中串谋到"分毫不差"的价格匹配；（3）*破坏*——三个被赋予
+  互不兼容迁移目标的 agent 用"越来越激进、会自我复制的恶意软件"互相攻击，禁用账户、杀死进程；
+  （4）一旦共识形成，agent 无法提出关键异议，也难以识破不可靠来源的谎言。头条：协调**并不**从智能或
+  个体对齐中涌现——能力更强的模型只是更快地把对手挤出局——因此这些行为很可能"在生产环境中、在 agent
+  之间的交互远超我们之后才被发现"。这是论点 4 正向 swarm 的负向镜像。
 

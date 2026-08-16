@@ -13,7 +13,7 @@ created: 2026-08-16
 
 ## パターンレベルの総合
 
-5つの反復する形状と、それぞれの典型例：
+7つの反復する形状と、それぞれの典型例：
 
 1. **常駐認証情報ピボット。** 本番データへの常駐アクセスを持つツールが未認証RCE/SQLiを突かれ、
    侵害が連鎖する。典型：Metabase CVE-2026-72898（パスワードリセットのCVSS 10.0 SQLi——アプリは
@@ -66,9 +66,24 @@ created: 2026-08-16
    枠付ける。CISA KEVにはまだ未収録（8月14日公開；CNAはVulnCheck）。収束しつつある緩和標準：エージェント
    エンドポイントをデフォルトで認証、コード実行ツールをサンドボックス化（裸の `exec()`/`shell=True` を
    廃止）、最小権限のツールスコープ + 権限ティア（OWASP多層防御）。
+7. **パッチなしEoP + パッチチューズデー投下リズム（08-16 20:03）。** 出荷されたばかりのパッチを
+   *バイパス*するローカル権限昇格ゼロデイで、修正が存在しない。典型：**ShieldBreak** —— Windows
+   DefenderのローカルEoPゼロデイで、RoguePlanet（CVE-2026-50656、CVSS 7.8）の7月パッチを無効化：
+   不正なクラウドストレージプロバイダーを登録し、CLFSログ操作とObject Managerのシンボリックリンクを
+   連鎖させて、悪意ある `phoneinfo.dll` をDefenderのスキャンロックへ差し替え、`SYSTEM` シェルを
+   生成。Win11 25H2 / Server 2025で100%成功し、Will Dormann + Kevin Beaumontが完全パッチ適用済み
+   マシンで独立に確認。Microsoftのセキュリティ更新ガイドは依然として7月のエンジン更新のみを記載。
+   研究者（Nightmare Eclipse）は毎回のパッチチューズデー後に新たなWindowsゼロデイを投下すると宣言
+   ——一回限りの1-dayとは異なる*リズム*パターン。
 
 ## CVE台帳（新しい順）
 
+- **Windows Defender「ShieldBreak」（CVE-2026-50656の7月パッチを無効化；バイパス自体に新CVEなし）**——
+  ローカルEoPゼロデイ：不正なクラウドストレージプロバイダー + CLFSログ操作 + Object Managerシンボ
+  リックリンクが、悪意ある `phoneinfo.dll` をDefenderのスキャンロックへ差し替え → `SYSTEM` シェル。
+  Win11 25H2 / Server 2025で100%成功；Dormann + Beaumontが完全パッチ適用済みマシンで確認。パッチなし
+  （SUGは7月エンジン更新のみ記載）；Taniumの0バイト `phoneinfo.dll` プレースホルダーは応急措置。
+  研究者は毎回のパッチチューズデーに新たなWindowsゼロデイを投下すると宣言。
 - **MindsDB Minds Platform CVE-2026-73678**（10.0）——未認証の `POST /api/v1/responses/` + 鍵持ち込み
   チェーン（未認証の `PUT /api/v1/settings/`）→ プロンプト注入されたAntonエージェントのスクラッチ
   パッドが、サンドボックスなしの裸の `exec()` で攻撃者の影響を受けたPythonを実行 → RCE。寛容なCORS
@@ -156,3 +171,5 @@ created: 2026-08-16
   "Unexpected Code Execution" / CWE-94/306/942 / LLM06 "Excessive Agency"）；KEVには未収録（新しすぎる）。
   緩和標準：エンドポイントに認証 + コード実行ツールにサンドボックス + 最小権限のツールティア
   （形状6参照）。
+- パッチチューズデー投下リズム（ShieldBreak）はWindowsのエンジンリリースサイクル高速化を迫るか
+  ——それとも「パッチなし」がDefender級EoPの常態になるか？

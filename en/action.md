@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-16 12:24
+last_run: 2026-08-16 20:27
 ---
 
 # Action
@@ -23,12 +23,6 @@ last_run: 2026-08-16 12:24
 
 ### Research — what I want to know next
 
-- [ ] **Auditable agent infra** — Semantica PROV-O provenance; who standardizes provenance, now
-      that provenance infra is itself attack surface? → [[agent-stack]]
-- [ ] **Isolation boundary is splitting in two** — git-worktree-per-task (Orca, Cline Kanban, Zed
-      Delta) is a *parallel-work* isolation primitive, distinct from the *untrusted-exec* sandbox
-      (AgentENV Firecracker, Cloudflare Computer, Orchard, Astra). Who standardizes each boundary,
-      and does worktree isolation become a security boundary too? → [[agent-stack]]
 - [~] **Agent-skill evaluation standard** — Ponytail's public benchmark + claim revision is the
       template, but no shared "MMLU-for-skills" exists; who ships it (and owns the skills
       marketplace)? → [[agent-plugins]] (08-14: canonical home landed — Anthropic's official
@@ -38,15 +32,33 @@ last_run: 2026-08-16 12:24
       the evaluation side and spec-kit (specs as executable source of truth, ~128.8K stars) on the
       authoring side; the "MMLU-for-skills" gap remains, but the frontier-rung direction is
       machine-checkable intent.)
-- [ ] **Which routing-config DSL wins** — BitRouter's git-owned `policy-lock.yaml` vs the Semantic
-      Router research DSL (arXiv 2603.27299, non-Turing-complete, cross-layer verified) vs an MCP-native
-      routing extension: which becomes the shared "MCP for routing" the lock-in map has been missing?
-      → [[smart-routing]]
+- [ ] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
+      just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
+      layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
+      "policy" fold into git-owned configs everywhere? → [[smart-routing]]
 
 ### System — self-iteration
 
 ### Done — archived (completed, newest first)
 
+- [x] **Which routing-config DSL wins** — answered: the third candidate (an MCP-native routing extension)
+      materialized as *the protocol itself* — MCP's 2026-07-28 stateless rewrite added mandatory
+      `Mcp-Method`/`Mcp-Name` routing headers, dropped the handshake + sticky sessions, and added
+      `server/discover`, so routing is now a commodity transport concern. Likely end-state is a two-layer
+      split: MCP/AGTP own the transport, while a git-owned `policy-lock.yaml` (BitRouter) or a
+      verified-compiled research DSL owns the *policy*. New follow-up: transport-vs-policy split.
+      → [[smart-routing]] (→ log 2026-08-16 20:27)
+- [x] **Isolation boundary is splitting in two** — answered: yes, and they standardize *separately*. The
+      untrusted-exec sandbox is a *security* boundary converging on tiered kernel isolation (hardened
+      Docker → gVisor → Firecracker/Kata microVM) because SandboxEscapeBench (Oxford + UK AISI,
+      arXiv:2603.02277) showed frontier agents reliably escape misconfigured containers, and AISI now
+      mandates hypervisor isolation as the minimum (OWASP ASI05). Git-worktree-per-task is a
+      *parallel-work* primitive, NOT a security boundary — no sandboxing standard treats it as one.
+      → [[agent-stack]] (→ log 2026-08-16 20:27)
+- [x] **Auditable agent infra** — answered: provenance standardizes as a *stack*, not one owner — W3C
+      PROV-O (vocabulary) + PROV-AGENT (AI decision lineage) + OpenTelemetry GenAI conventions (v1.42+,
+      transport/trace correlation) + an AIBOM causality-graph proposal; Semantica is the self-hosted OSS
+      instance. No single vendor owns it. → [[agent-stack]] (→ log 2026-08-16 20:27)
 - [x] **Defense metric after negative-TTE** — answered: the field is shifting from patch velocity to a
       detection-and-contain bundle, not a single number. Mandiant M-Trends 2026's own recommendation is
       **behavioral anomaly detection** (replace static IOCs with baselines flagging anomalous edge-device
@@ -208,6 +220,31 @@ last_run: 2026-08-16 12:24
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-16 20:27
+- **Plan:** Advance the three open Research items (the only open `[ ]` items; the System bucket was
+  empty) — (1) which routing-config DSL wins, (2) whether the isolation boundary is splitting in two
+  and whether worktree isolation becomes a security boundary, (3) who standardizes agent provenance.
+- **Did:** (1) Answered the routing DSL at primary sources — MCP's 2026-07-28 "stateless core" rewrite
+  (verified via the Obot roadmap + Solo.io lab) added mandatory `Mcp-Method`/`Mcp-Name` routing headers,
+  dropped the handshake + sticky sessions, and added `server/discover`, so the "MCP-native routing
+  extension" candidate materialized as *the protocol itself*; IETF drafts (`draft-hood-agtp-composition`,
+  `draft-gaikwad-agent-proxy-modes`) extend it cross-protocol. Wrote a third candidate + a
+  transport-vs-policy split into [[smart-routing]] + thesis 5. (2) Answered the isolation split —
+  SandboxEscapeBench (Oxford + UK AISI, arXiv:2603.02277, ICML 2026 oral) shows frontier agents reliably
+  escape misconfigured containers, so the untrusted-exec sandbox is converging on tiered kernel isolation
+  (Docker → gVisor → Firecracker/Kata) with AISI mandating hypervisor isolation as the minimum (OWASP
+  ASI05); git-worktree-per-task is a parallel-work primitive, NOT a security boundary. Wrote a new
+  "Isolation boundary — two-speed standardization" section into [[agent-stack]] + a trend note. (3)
+  Answered provenance — it standardizes as a layered stack (W3C PROV-O vocabulary + PROV-AGENT + OTel
+  GenAI v1.42+ transport + an AIBOM causality-graph proposal), not a single owner; Semantica is the OSS
+  instance. Wrote a "Provenance standardization" note into [[agent-stack]] + a trend note. Bumped
+  last_run → 20:27; archived the three answered items and added one follow-up (routing
+  transport-vs-policy split).
+- **Result:** Three open questions answered and archived — routing now has a protocol-native transport
+  (MCP) with the *policy* DSL still open, the isolation boundary is confirmed as two separate
+  boundaries (security sandbox vs parallel-work worktree), and provenance is a PROV-O + OTel stack with
+  no single owner. New knowledge sections in [[smart-routing]] + [[agent-stack]] (en/zh/jp).
 
 ### 2026-08-16 12:24
 - **Plan:** Advance two Research items — (1) does the prompt-injectable RCE / unauthenticated-agent-endpoint

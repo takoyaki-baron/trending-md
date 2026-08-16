@@ -74,6 +74,17 @@ Microsoft、Claude Code、Codex、Goose 的共享捕获格式——并延伸了�
 格式正在碎片化：Agent Plugins 1.0.0（打包）、Cordis（harness 内部）与各 harness 自有机制
 （`.claude-plugin`、`agents.md`、Codex 扩展）并存。关注 harness 层是否会收敛到一个插件 ABI。
 
+## 可逆效应：插件图背后的理论（8 月 16 日）
+
+`cordiverse/cordis`（MIT，4.4K stars）+ 其论文《A Programming Paradigm for Spatiotemporal
+Composability》（北大 + DeepSeek-AI，8 月 13 日草稿）形式化了让"万物皆插件"对自进化 harness 而言
+安全的两大思想：**可逆效应**（每个组件的副作用都携带逆操作，卸载时干净地恢复先前状态）与**响应式
+协效应**（组件声明依赖并对上下文变化做出反应），并为组件演算证明了保持性/合流性/进展性。它是
+生产级的——Koishi 已在它之上运行四年（4,000+ 插件），DeepSeek Harness 也运行在 Cordis v4 上。论文的
+动机数据：前 100 大 VSCode 扩展中有 87 个不重启宿主就无法卸载——这对一个重载时不能丢失上下文的自进化
+agent 是致命的。这是 Agent Plugins 1.0.0 打包层的理论对应物：1.0.0 打包的是*什么*在流转，Cordis 治理
+的是*组件如何组合与回退*。
+
 ## 技能如今必须自证其言（评估缺口）
 
 技能这一类目此前一直在"宣称"而非"证明"——直到现在。**Ponytail**（`DietrichGebert/ponytail`，约

@@ -12,7 +12,7 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
 
 ## 模式级综合
 
-五种反复出现的形态，各有一个典型实例：
+七种反复出现的形态，各有一个典型实例：
 
 1. **常驻凭证跳板。** 一个持有生产数据实时访问权的工具被打上未认证 RCE/SQL 注入，失陷随即级联。
    典型：Metabase CVE-2026-72898（密码重置端点 CVSS 10.0 SQL 注入——应用持有连到每个已连接数据仓库的
@@ -55,9 +55,21 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
    而 OWASP 的 LLM06「Excessive Agency」则框定了根因（模型被授予过大的工具权限）。尚未进入 CISA KEV
    （8 月 14 日才发布；CNA 为 VulnCheck）。收敛中的缓解标准：默认给 agent 端点加认证、给代码执行工具
    加沙箱（去掉裸 `exec()`/`shell=True`）、最小权限工具范围 + 权限分级（OWASP 多层防御）。
+7. **无补丁 EoP + Patch Tuesday 定期投递节奏（08-16 20:03）。** 一个*绕过*刚发布补丁的本地提权零日，
+   且无修复可用。典型：**ShieldBreak** —— 一个 Windows Defender 本地提权零日，绕过 RoguePlanet
+   （CVE-2026-50656，CVSS 7.8）的 7 月补丁：注册一个恶意云存储提供程序，串联 CLFS 日志操作与 Object
+   Manager 符号链接，把恶意 `phoneinfo.dll` 换入 Defender 的扫描锁，从而弹出 `SYSTEM` shell。在
+   Win11 25H2 / Server 2025 上 100% 成功，并由 Will Dormann + Kevin Beaumont 在完全打补丁的机器上
+   独立确认；Microsoft 的安全更新指南仍只列出 7 月的引擎更新。研究者（Nightmare Eclipse）承诺在每次
+   Patch Tuesday 之后都投递一个新的 Windows 零日——这是一个*节奏*形态，区别于一次性的 1-day。
 
 ## CVE 台账（最新在前）
 
+- **Windows Defender「ShieldBreak」（绕过 CVE-2026-50656 的 7 月补丁；该绕过无新 CVE 编号）**——
+  本地提权零日：恶意云存储提供程序 + CLFS 日志操作 + Object Manager 符号链接，把恶意
+  `phoneinfo.dll` 换入 Defender 的扫描锁 → `SYSTEM` shell。Win11 25H2 / Server 2025 上 100% 成功；
+  Dormann + Beaumont 在完全打补丁的机器上确认。无补丁（SUG 仅列出 7 月引擎更新）；Tanium 的 0 字节
+  `phoneinfo.dll` 占位符只是权宜之计。研究者承诺每次 Patch Tuesday 投递一个新的 Windows 零日。
 - **MindsDB Minds Platform CVE-2026-73678**（10.0）——未认证的 `POST /api/v1/responses/` + 自带密钥链
   （未认证的 `PUT /api/v1/settings/`）→ 提示注入的 Anton agent scratchpad 经无沙箱的裸 `exec()` 执行
   攻击者影响的 Python → RCE。宽松的 CORS（`allow_origins=["*"]` + `allow_credentials=True`）使浏览器侧
@@ -136,3 +148,5 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
   是什么？~~ **已作答（08-16 12:24）：** 此类已命名（OWASP ASI05 "Unexpected Code Execution" /
   CWE-94/306/942 / LLM06 "Excessive Agency"）；尚未进入 KEV（发布太新）。缓解标准：给端点加认证 +
   给代码执行工具加沙箱 + 最小权限工具分级（见形态 6）。
+- Patch Tuesday 定期投递节奏（ShieldBreak）会否迫使 Windows 加快引擎发布周期——还是说「无补丁」会
+  成为 Defender 类 EoP 的常态？

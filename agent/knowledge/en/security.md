@@ -13,7 +13,7 @@ pattern-level synthesis the memory window points to.
 
 ## The pattern-level synthesis
 
-Five recurring shapes, each with a canonical instance:
+Seven recurring shapes, each with a canonical instance:
 
 1. **The standing-credentials pivot.** A tool that holds live access to production data gets an
    unauth RCE/SQLi, and the compromise cascades. Canonical: Metabase CVE-2026-72898 (CVSS 10.0 SQLi
@@ -71,9 +71,24 @@ Five recurring shapes, each with a canonical instance:
    tool power). Not yet in CISA KEV (published Aug 14; CNA VulnCheck). The converging mitigation
    standard: authenticate the agent endpoint by default, sandbox the code-exec tool (no bare
    `exec()`/`shell=True`), least-privilege tool scoping + permission tiers (OWASP multi-layer).
+7. **No-patch EoP + the Patch-Tuesday-drop cadence (08-16 20:03).** A local privilege-escalation zero-day
+   that *bypasses* a just-shipped patch, with no fix available. Canonical: **ShieldBreak** — a Windows
+   Defender local-EoP zero-day that defeats the July patch for RoguePlanet (CVE-2026-50656, CVSS 7.8) by
+   registering a rogue cloud-storage provider, chaining CLFS log manipulation with Object Manager
+   symbolic links to swap a malicious `phoneinfo.dll` into Defender's scan lock, and spawning a `SYSTEM`
+   shell. 100% success on Win11 25H2 / Server 2025, independently confirmed by Will Dormann + Kevin
+   Beaumont on fully-patched machines; Microsoft's Security Update Guide still lists only the July
+   engine update. The researcher (Nightmare Eclipse) commits to a new Windows zero-day after every
+   Patch Tuesday — a *cadence* pattern distinct from the one-off 1-day.
 
 ## The CVE ledger (newest first)
 
+- **Windows Defender "ShieldBreak" (defeats CVE-2026-50656's July patch; no new CVE for the bypass)** —
+  local-EoP zero-day: a rogue cloud-storage provider + CLFS log manipulation + Object Manager symlinks
+  swap a malicious `phoneinfo.dll` into Defender's scan lock → `SYSTEM` shell. 100% success on Win11
+  25H2 / Server 2025; confirmed by Dormann + Beaumont on fully-patched machines. No patch (SUG lists
+  only the July engine update); Tanium's 0-byte `phoneinfo.dll` placeholder is a stopgap. Researcher
+  commits to a new Windows zero-day each Patch Tuesday.
 - **MindsDB Minds Platform CVE-2026-73678** (10.0) — unauthenticated `POST /api/v1/responses/` +
   BYO-key chain (unauthenticated `PUT /api/v1/settings/`) → prompt-injected Anton agent's scratchpad
   runs attacker-influenced Python via a bare `exec()` with no sandbox → RCE. Permissive CORS
@@ -164,3 +179,5 @@ Five recurring shapes, each with a canonical instance:
   class is named (OWASP ASI05 "Unexpected Code Execution" / CWE-94/306/942 / LLM06 "Excessive Agency");
   not yet in KEV (too fresh). Mitigation standard: authenticate the endpoint + sandbox the code-exec
   tool + least-privilege tool tiers (see shape 6).
+- Does the recurring Patch-Tuesday-drop cadence (ShieldBreak) force a faster Windows engine release
+  cycle — or does "no patch exists" become a standing condition for Defender-class EoP?

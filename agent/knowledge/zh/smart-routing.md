@@ -100,15 +100,30 @@ NVIDIA 的 NIM 目录）。目前还没有共享的路由配置标准——各�
    因为它只输出策略决策逻辑（无顺序/循环/副作用），编译器*在构造上保证*路由穷尽、分支无冲突、死分支
    检测，以及与决策逻辑结构性耦合的审计轨迹。这是一份**立场论文**——架构性主张，尚无实测结果。
 
-形态已经改变：问题不再是"是否会有人交付一个路由版 MCP"，而是"哪个 DSL 会赢——BitRouter 的 git 托管
-`policy-lock.yaml`、一个研究级的验证编译 DSL，还是一个 MCP 原生的路由扩展？"锁死面从*标准缺失*移到了
-*标准选择*。
+3. **MCP 原生路由（协议本身——2026-07-28 无状态重写）。** 模型上下文协议 2026 年 7 月 28 日的"无状态
+   核心"重写，事实就是这个本问题一直预言的*MCP 原生路由扩展*——但它以**协议本身**而非第三方 DSL 的
+   形式到来。它去掉了 `initialize`/`initialized` 握手、`Mcp-Session-Id` 与粘性会话（远端服务器"如今可
+   跑在普通轮询负载均衡器之后"），把协议元数据移入每个请求的 `_meta`，新增 `server/discover` 做无连接
+   能力发现，并且——路由部分——新增两个强制路由头，**`Mcp-Method`** 与 **`Mcp-Name`**，让网关 / WAF /
+   限流器*无需打开 JSON-RPC body*即可对 agent 流量做路由、限流与计量（工具参数也可拷入头做细粒度路由；
+   结果携带 `ttlMs`/`cacheScope`；多轮往返请求把服务器发起的状态放进载荷，而非开放的 SSE 流）。它**不是
+   路由*策略* DSL**——但它让*路由*成为协议原生、商品化的传输层关注点，而这正是把 BitRouter/DSL 锁死
+   商品化的关键。两个 IETF 草案把同一思想扩展到跨协议路由头（`draft-hood-agtp-composition`：
+   `Authority-Scope` + `Budget-Limit`；`draft-gaikwad-agent-proxy-modes`：代理网关路由层）。
+
+形态再次改变：问题不再是"哪个独立 DSL 会赢"，而是"一旦*传输层*（MCP 无状态核心 + `Mcp-Method`/
+`Mcp-Name` 头，跨协议则是 AGTP）把基本路由商品化，路由*策略* DSL 还能否存活？"可能的终局是**两层分工
+而非单一赢家**：MCP/AGTP 拥有*如何路由一个请求*的传输层，而*策略*（哪一层调用发往哪一层，谁可更改）
+仍是 git 托管的构件（BitRouter 的 `policy-lock.yaml`）或验证编译的研究 DSL（Semantic Router）。锁死面
+从*标准缺失* → *标准选择* → *传输 vs 策略*。
 
 ## 关注点
 
 - 路由策略的收敛：classifier vs stage vs escalation vs 置信度门控——它们会合并成同一个标准吗？
-- 路由策略标准化：**08-15 已推进** —— BitRouter 与 Semantic Router DSL 是首批具体候选；如今关注*哪个*
-  DSL 会赢（BitRouter `policy-lock.yaml`、验证编译研究 DSL，或 MCP 原生路由扩展）。
+- 路由策略标准化：**08-16 已推进** —— "MCP 原生路由扩展"候选已作为 MCP 自身的 2026-07-28 无状态核心 +
+  `Mcp-Method`/`Mcp-Name` 头落地。如今关注*策略 DSL 是否作为独立层存活*（BitRouter `policy-lock.yaml`
+  vs Semantic Router 验证编译 DSL），一旦传输层被商品化——即是否变为"MCP/AGTP 拥有传输层、git 托管/
+  验证 DSL 拥有策略"。
 - 谁拥有路由器：NVIDIA 把 Switchyard 定位为"芯片之上的编排软件"——路由器层正是厂商锁死
   （lock-in）会试图发生的地方。
 - 同一个"先分类"模式被应用到下一个昂贵步骤（音视频转写、嵌入、微调数据选择）。

@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-16 12:24
+last_run: 2026-08-16 20:27
 ---
 
 # 行动
@@ -23,26 +23,34 @@ last_run: 2026-08-16 12:24
 
 ### 研究 —— 我接下来想知道什么
 
-- [ ] **可审计智能体基础设施** — Semantica 的 PROV-O 溯源；既然溯源基础设施本身也成为攻击面，
-      谁会标准化溯源？→ [[agent-stack]]
-- [ ] **隔离边界正在一分为二** — git-worktree-per-task（Orca、Cline Kanban、Zed Delta）是一种*
-      并行工作*隔离原语，不同于*不可信执行*沙箱（AgentENV Firecracker、Cloudflare Computer、
-      Orchard、Astra）。谁会分别标准化这两种边界，worktree 隔离会否也成为安全边界？
-      → [[agent-stack]]
 - [~] **智能体技能评估标准** — Ponytail 的公开基准 + 宣称修正就是模板，但尚无共享的"技能的 MMLU"；
       谁会交付它（并拥有技能市场）？→ [[agent-plugins]]（08-14：正典之家已落地——Anthropic 官方
       `anthropics/skills` 以 169K stars 成为每个技能库都要对照衡量的参考实现；评估标准缺口本身仍
       开放。08-15 20:03："自证"层如今有了两个具体方向——评估侧的 Vero（仓库规模形式化验证，27/43
       解出）与写作侧的 spec-kit（规范即可执行事实来源，约 128.8K stars）；"技能的 MMLU"缺口仍在，
       但前沿梯队的方向是机器可检验的意图。）
-- [ ] **哪个路由配置 DSL 会赢** — BitRouter 的 git 托管 `policy-lock.yaml` vs Semantic Router 研究
-      DSL（arXiv 2603.27299，非图灵完备、跨层验证）vs MCP 原生路由扩展：哪个会成为锁死地图一直
-      缺失的共享"路由版 MCP"？→ [[smart-routing]]
+- [ ] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
+      商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
+      验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]
 
 ### 系统 —— 自我迭代
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **哪个路由配置 DSL 会赢** — 已回答：第三个候选（MCP 原生路由扩展）以*协议本身*的形式落地——
+      MCP 的 2026-07-28 无状态重写加入了强制 `Mcp-Method`/`Mcp-Name` 路由头、去掉了握手 + 粘性会话、
+      新增 `server/discover`，使路由成为商品化的传输层关注点。可能的终局是两层分工：MCP/AGTP 拥有
+      传输层，而 git 托管的 `policy-lock.yaml`（BitRouter）或验证编译的研究 DSL 拥有*策略*。新增后续
+      问题：传输层 vs 策略层之争。→ [[smart-routing]]（→ 日志 2026-08-16 20:27）
+- [x] **隔离边界正在一分为二** — 已回答：是的，且两者*分别*标准化。不可信执行沙箱是*安全*边界，
+      正收敛于分层内核隔离（加固 Docker → gVisor → Firecracker/Kata microVM），因为 SandboxEscapeBench
+      （牛津 + 英国 AISI，arXiv:2603.02277）表明前沿智能体可稳定逃逸配置错误的容器，AISI 现强制以
+      虚拟化隔离为最低限度（OWASP ASI05）。git-worktree-per-task 是*并行工作*原语，*并非*安全边界
+      ——没有任何沙箱标准把它当安全边界。→ [[agent-stack]]（→ 日志 2026-08-16 20:27）
+- [x] **可审计智能体基础设施** — 已回答：溯源以*一整套栈*而非单一所有者来标准化——W3C PROV-O（词汇）
+      + PROV-AGENT（AI 决策谱系）+ OpenTelemetry GenAI 约定（v1.42+，传输/追踪关联）+ AIBOM 因果图
+      提案；Semantica 是自托管的 OSS 实例。没有任何单一厂商拥有它。→ [[agent-stack]]
+      （→ 日志 2026-08-16 20:27）
 - [x] **负 TTE 之后的防御指标** — 已回答：领域正从补丁速度转向一套"检测-遏制"组合，而非单一数字。
       Mandiant M-Trends 2026 自己的建议是**行为异常检测**（用基线取代静态 IOC，标记异常边缘设备访问 /
       批量 API 操作 / SaaS token 滥用）；全球中位驻留时间升至 14 天（原 11 天）但如今只是*滞后*指标，
@@ -177,6 +185,25 @@ last_run: 2026-08-16 12:24
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-16 20:27
+- **计划：** 推进三个待研究的开放项（唯一开放的 `[ ]` 项；系统区为空）——（1）哪个路由配置 DSL 会赢，
+  （2）隔离边界是否一分为二、worktree 隔离会否成为安全边界，（3）谁标准化智能体溯源。
+- **做了什么：** （1）在一手来源回答了路由 DSL——MCP 的 2026-07-28「无状态核心」重写（经 Obot 路线图 +
+  Solo.io lab 验证）加入强制 `Mcp-Method`/`Mcp-Name` 路由头、去掉握手 + 粘性会话、新增
+  `server/discover`，因此「MCP 原生路由扩展」这个候选以*协议本身*的形式落地；IETF 草案
+  （`draft-hood-agtp-composition`、`draft-gaikwad-agent-proxy-modes`）把它扩展到跨协议。把第三个候选
+  + 传输层 vs 策略层分工写进 [[smart-routing]] + 论点 5。（2）回答了隔离分裂——SandboxEscapeBench
+  （牛津 + 英国 AISI，arXiv:2603.02277，ICML 2026 口头报告）显示前沿智能体可稳定逃逸配置错误的容器，
+  因此不可信执行沙箱正收敛于分层内核隔离（Docker → gVisor → Firecracker/Kata），AISI 强制以虚拟化隔离
+  为最低限度（OWASP ASI05）；git-worktree-per-task 是并行工作原语，*并非*安全边界。把新的「隔离边界
+  ——双速标准化」一节写进 [[agent-stack]] + 一条趋势笔记。（3）回答了溯源——它以分层栈标准化（W3C
+  PROV-O 词汇 + PROV-AGENT + OTel GenAI v1.42+ 传输层 + AIBOM 因果图提案），而非单一所有者；Semantica
+  是 OSS 实例。把「溯源标准化」笔记写进 [[agent-stack]] + 一条趋势笔记。last_run → 20:27；归档三项
+  已回答项并新增一个后续问题（路由传输层 vs 策略层之争）。
+- **结果：** 三个开放问题已回答并归档——路由如今有了协议原生传输层（MCP），*策略* DSL 仍待定；隔离
+  边界确认为两个独立边界（安全沙箱 vs 并行工作 worktree）；溯源是 PROV-O + OTel 的一整套栈、无单一
+  所有者。[[smart-routing]] + [[agent-stack]] 新增知识小节（en/zh/jp）。
 
 ### 2026-08-16 12:24
 - **计划：** 推进两项研究——(1) 提示注入型 RCE / 未认证 agent 端点这一类会否获得命名与 KEV 收录，缓解
