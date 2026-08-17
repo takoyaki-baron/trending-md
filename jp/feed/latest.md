@@ -1,8 +1,8 @@
 ---
 date: 2026-08-17
-updated: 2026-08-17T12:03:00Z
+updated: 2026-08-17T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 41
 license: CC-BY-4.0
 ---
 
@@ -345,13 +345,157 @@ DeepSeek は 8 月 17 日北京時間 00:00 に **V4 シリーズ API** を**ピ
 
 ---
 
+## 22. Adobe Commerce CVE-2026-71362——パッチ公開から数時間で悪用される未認証の顧客アカウント乗っ取り
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** SecurityWeek · CVSS 9.1 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cve` `adobe-commerce` `magento` `account-takeover` `exploit`
+
+**CVE-2026-71362**（Adobe APSB26-92、8 月 11 日 Patch Tuesday、CVSS 9.1）は、**Adobe Commerce / Magento Open Source** の顧客セッション処理における不適切な認可の欠陥。`Account\Edit::execute()` は、攻撃者が制御する生の `customer_form_data`（*失敗した* `editPost` リクエストがセッションに残したもの）を `DataObjectHelper::populateWithArray()` に渡し、これが `id` を含む一致するキーすべてを顧客オブジェクトにコピーした上で、`Session::setCustomerData()` 経由で書き戻す。攻撃者は使い捨てアカウントを登録し、`id=<victim_id>` を仕込んだ `editPost` を送ると、そのクッキーが被害者のアカウント——注文履歴、住所、保存済み決済トークン——に解決される。パスワードやトークンの検証は一切ない。Adobe は開示時点で悪用の証拠はないとしていたが、EC セキュリティ企業 **Sansec** の WAF は**数時間以内**に実際の悪用試行のブロックを開始した。
+
+**重要性:** Magento 店舗の「パッチから悪用まで」の時間は今や*日単位ではなく時間単位*であり、店舗アカウントの乗っ取りは PII・注文・決済メタデータの漏えいを意味する。単なる改ざんではない。
+
+> 公開 PoC: `dinosn/cve-2026-71362-magento-lab`——公式パッチの A/B/A ネガティブコントロール付きのワンコマンド Docker ラボ。
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/adobe-commerce-bug-targeted-immediately-after-disclosure/) · [`🔗 dinosn PoC lab`](https://github.com/dinosn/cve-2026-71362-magento-lab)
+
+---
+
+## 23. VMware vCenter CVE-2026-59310——syslog パストラバーサル RCE を ESXi 上の Babuk ランサムウェアへ連鎖
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Hacker News · CVSS 9.8 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cve` `vmware` `vcenter` `ransomware` `apt`
+
+**CVE-2026-59310** は vCenter Server の **syslog** サービスにおける CVSS 9.8 のディレクトリトラバーサル RCE で、Broadcom が 7 月 29 日に修正（VMSA-2026-0006）。ドイツのインシデント対応企業 **QUIRSO** は、*vCenter → root → 認証情報窃取 → ESXi → Babuk 派生ランサムウェア*（`.babyk`）へ連鎖するキャンペーンを記録し、**中国系の脅威アクター**によるものと中程度の確度で評価した。攻撃者は vCSA の syslog サーバーを悪用して `/etc/cron.d` に cron エントリを仕込み非対話型の root 実行を実現し、WebSocket バックドア（"linuxFile"）とオープンソースの **reverse_ssh** を展開、不正な管理者アカウント（`vcenter_admin`、`vcadmin`）を作成した。QUIRSO は **47 か国で 361 の被害 IP**（ドイツ 55、米国 41、トルコ 38）を確認し、ロッカーはテレメトリを破壊するための煙幕だった可能性も指摘している。
+
+**重要性:** vCenter は仮想化基盤の管理プレーンであり、侵害されれば全 ESXi ホストと VM が攻撃者の手に渡る。この連鎖は、エッジアプライアンスの RCE が企業ランサムウェアへ直結することを示す。
+
+> 併存する認証バイパス CVE-2026-59309 も少なくとも 1 台で悪用が観測された。QUIRSO は reverse_ssh ビルド向けの YARA ルールを公開している。
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/08/suspected-china-nexus-actor-exploits.html) · [`🔗 Ampcus Cyber`](https://www.ampcuscyber.com/shadowopsintel/actively-exploited-vmware-vcenter-rce-hits-three-hundred-sixty-one-victims-worldwide/)
+
+---
+
+## 24. Anthropic が claude.ai/モバイルの全システムプロンプトを公開——Fable/Mythos の輸出規制停止を初の一次情報で確認
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 476 pts · ~1d ago (~20:03 UTC+8)
+- **Tags:** `anthropic` `claude` `transparency` `system-prompt` `export-controls`
+
+Anthropic はプラットフォームドキュメント上で claude.ai および iOS/Android アプリの**全システムプロンプト**を公開した（HN で 476+ pts）。**Claude Opus 5** のプロンプトには一次情報として、**Claude Fable 5 と Mythos 5**（6 月 9 日公開）が**米商務省の輸出規制への準拠のため 6 月 12 日に停止**され、6 月 30 日に規制が解除、7 月 1 日にアクセスが復旧したという記述があり、`anthropic.com/news/fable-mythos-access` の声明へのリンクが付く。また **Mythos Preview** は非公開のまま（Project Glasswing）であること、これらのプロンプトは API には適用されないことも明記されている。
+
+**重要性:** システムプロンプトはフロンティアモデルの実際のガードレール指示を知る最も明確な窓であり、これはフラッグシップ版の輸出規制による停止が公式に製品内で確認された初のケース。
+
+> Opus 5 のプロンプトは、Claude に停止を「正確かつ淡々と」説明し、発生を*否定しない*よう指示している。
+
+[`🔗 Claude release notes (system prompts)`](https://platform.claude.com/docs/en/release-notes/system-prompts) · [`🔗 Anthropic statement`](https://www.anthropic.com/news/fable-mythos-access)
+
+---
+
+## 25. mattpocock/skills——現役エンジニアの日々の .agents ディレクトリが 22 万スター突破
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · ~220k stars · ~2d ago (~12:03 UTC+8)
+- **Tags:** `skills` `claude-code` `coding-agent` `workflow` `open-source`
+
+TypeScript 教育者の **Matt Pocock** が個人の `.agents`/skills ディレクトリ **mattpocock/skills**（「Real Engineers のためのスキル… vibe coding ではない」）を公開し、現在 **約 22 万スター**で GitHub Trending 1 位。約 27 の小さく組み合わせ可能なスキルが 4 つの失敗モードを狙う：*意図のずれ*（`/grill-me`、`/grill-with-docs` がコードを書く前に設計インタビューを強制）、*冗長さ*（共有の `CONTEXT.md` ドメイン言語）、*壊れたコード*（`/tdd` の red-green-refactor、`/diagnosing-bugs` の 6 段階ループ）、*アーキテクチャの腐敗*（`/improve-codebase-architecture`）。`claude plugins install mattpocock-skills` または `npx skills@latest add mattpocock/skills` で導入し、Claude Code・Codex などで動作する。
+
+**重要性:** `.claude/`/skills が「新しい dotfiles」であることを示す最強の証拠——個人のワークフローが npm パッケージ規模でプロダクト化・フォークされ、「プロセスを所有する」モノリシックなエージェントフレームワークとの対比が鮮明。
+
+> MIT。Pocock は Total TypeScript の作者。
+
+[`🔗 mattpocock/skills`](https://github.com/mattpocock/skills) · [`🔗 MCP Directory`](https://mcp.directory/blog/matt-pocock-skills-the-npm-moment-explained-2026)
+
+---
+
+## 26. Stripe が OpenRouter を 70 億ドル超で買収へ——モデルルーティングが決済インフラになる
+
+- **Velocity:** ▮▮ rising
+- **Source:** Bloomberg · $7B+ · ~1d ago (~20:03 UTC+8)
+- **Tags:** `stripe` `openrouter` `api` `routing` `industry`
+
+Stripe は **OpenRouter** を **70 億ドル超**で買収することに合意した（Bloomberg、8 月 16 日）。5 月の評価額 13 億ドルのおよそ **5 倍**にあたる。OpenRouter は約 **800 万人の開発者**が **400 以上のモデル**（OpenAI、Anthropic、DeepSeek、Qwen など）へルーティングする統合 API ゲートウェイで、サードパーティの AI モデル API 呼び出しの最大 4 分の 1 を集中課金・フェイルオーバー・ルーティングとともに処理する。同社はすでに Stripe の顧客（Invoicing、Tax、Radar）でもあった。この買収は Stripe を決済から AI 経済の「トランザクションレイヤー」へ広げるもので、1 月の Metronome 買収に続く。
+
+**重要性:** 開発者にとって、モデルルーティングレイヤーの*中立性*は今や問われている——決済大手がゲートウェイを握ることで、ほとんどのエージェントやコーディングツールが暗黙に依存する「交換台」が集中する。
+
+> CNBC の調査では、OpenRouter 上の中国系モデルが米国企業のトークン利用の 46% を占めており、規制面の複雑さが増す。
+
+[`🔗 Yahoo Finance`](https://finance.yahoo.com/technology/ai/articles/stripe-acquires-openrouter-7b-turning-091812340.html) · [`🔗 Economic Times`](https://m.economictimes.com/tech/technology/stripe-clinches-over-7-billion-deal-to-buy-ai-firm-openrouter/amp_articleshow/133285357.cms)
+
+---
+
+## 27. Firefox for iOS が EasyList ベースの組み込み広告ブロッカーを搭載
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 489 pts · ~1d ago (~20:03 UTC+8)
+- **Tags:** `firefox` `mozilla` `ad-blocking` `ios` `privacy`
+
+Mozilla は iOS 版 Firefox にネイティブの**広告ブロッカー**を段階的に展開し始めた（HN で 489 pts）。Apple の iOS では Firefox がデスクトップ/Android でサポートするブラウザ拡張が使えないため、Mozilla は広告ブロックをエンジンに直接組み込み——**EasyList** ベースのフィルタリストを用いて、サードパーティの広告ネットワーク/トラッカーやポップアップ/動画オーバーレイを**ネットワーク層**でブロックする。**デフォルトは無効**（設定 → ブラウジング → コンテンツ → 広告ブロッカー）で、検索エンジン広告（Google、Bing、DuckDuckGo）と Firefox 自身のスポンサータイルは意図的に除外される。
+
+**重要性:** Chrome/MV3 が広告ブロッカーを締め付けるちょうどその時に登場し、Firefox は iOS で第一者製コンテンツブロッカーを提供する唯一の主要ブラウザとなった。検索広告の除外はブラウザの収益インセンティブを正直に示す。
+
+> 「強化型トラッキング防止」（Enhanced Tracking Protection）とは補完関係にあるが別物——後者は広告ではなくトラッキングを対象とする。
+
+[`🔗 Mozilla Support`](https://support.mozilla.org/en-US/kb/block-ads-firefox-ios) · [`🔗 Gigazine`](https://gigazine.net/gsc_news/en/20260817-firefox-for-ios-adblocker/)
+
+---
+
+## 28. MathForm-8B——自然言語の数学を検証可能な Lean 4 に変換する OpenBMB の 8B 自動形式化モデル
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 88.06% Pass@8 (SC) · ~3d ago (~04:03 UTC+8)
+- **Tags:** `formal-math` `lean4` `autoformalization` `openbmb` `arxiv`
+
+**OpenBMB** は **MathForm-8B**（arXiv:2608.14221）を公開した。Qwen3-8B を微調整した Apache-2.0 の 8B モデルで、自然言語の数学問題を機械検証可能な **Lean 4** の定理文（証明は `:= by sorry` として残す）へ変換する。Mathlib の検索プランナーとコンパイラ診断・意味的一貫性の精緻化で構築した約 36.7 万件の検証済みデータセット **FormalVerse** で SFT し、Lean のコンパイル成功を報酬として RL で調整。ベンダー報告の **Pass@8 は 6 ベンチマークで構文チェック 88.06% / 一貫性チェック 72.37%** で、複数の 32B 特化型自動形式化モデルを上回る。難関の FATE-H/FATE-X サブセットでは一貫性 63%/37%。
+
+**重要性:** 自動形式化は LLM と形式証明系の間のボトルネックであり、32B の汎用モデルを上回る専用のオープン 8B は「数学から定理へ」のパイプラインがどこでスケールしているかを示す。
+
+> モデル（`openbmb/MathForm-8B`）、データセット（`openbmb/FormalVerse`）、論文は 8 月 14 日に公式発表なく公開。評価コードは未公開。
+
+[`🔗 arXiv:2608.14221`](https://arxiv.org/abs/2608.14221) · [`🔗 OrcaRouter`](https://www.orcarouter.ai/blog/what-is-mathform-8b)
+
+---
+
+## 29. Assimp CVE-2026-19967——Blender/Unity/Unreal の背後にある 3D アセットライブラリのヒープオーバーフロー
+
+- **Velocity:** ▮ steady
+- **Source:** CVETodo · CVSS 6.3 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cve` `assimp` `3d-assets` `memory-corruption` `open-source`
+
+**CVE-2026-19967**（8 月 17 日公開）は、**Open Asset Import Library（Assimp）** の `Assimp::Compression::decompressBlock`（`code/Common/Compression.cpp`）におけるヒープベースのバッファオーバーフロー。Assimp は Blender、Qt3D、多数のゲーム/エンジンツールチェーンが依存する定番のオープンソース 3D モデルインポーター。実際より大きな非圧縮サイズを宣言した細工ファイルがヒープバッファを超えて書き込む。**公開 PoC が存在**（Issue #6624）し、公開時点でメンテナは未対応。関連する **CVE-2026-19970** は MDL インポーターの `AddBonesToNodeGraph_3DGS_MDL7` でオーバーフローする。
+
+**重要性:** Assimp のパーサーバグは*あらゆる場所の*パーサーバグ——信頼できない 3D アセットをインポートするツール（ゲーム、CAD、AR）はすべてリスクを引き継ぎ、現時点で指し示せるパッチはない。
+
+> 被害者が悪意あるモデルファイルを開く必要がある。Red Hat は RHEL の qt5-qt3d / qt6-qtquick3d に影響すると追跡している。
+
+[`🔗 CVETodo`](https://cvetodo.com/cve/CVE-2026-19967) · [`🔗 OpenCVE`](https://app.opencve.io/cve/CVE-2026-19967)
+
+---
+
+## 30. TANGLE——還元不能な記憶の衝突下における LLM エージェントのベンチマーク
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 541 instances · ~1d ago (~20:03 UTC+8)
+- **Tags:** `benchmark` `memory` `agents` `conflict` `arxiv`
+
+**TANGLE（arXiv:2608.13921）** は、個人記憶が真に**衝突する**——単一の正解が存在しない——状況で LLM エージェントを評価する。**40 のペルソナにわたる 541 インスタンス**と 3 種の衝突タイプ（文脈分割、行動振動、出典矛盾）を対象に、衝突知覚・因果推論・確信度較正・明確化の要求・記憶忠実度の 5 軸で採点する。主要な発見：キュレートされた記憶のもとでは、エージェントは**行動を較正したり的を絞った明確化の質問をしたりするよりも、はるかに確実に衝突を認識する**——「知覚」は「正しい行動」より容易——一方、パイプライン抽出の記憶は下流推論に必要な衝突を担う関係を失う。
+
+**重要性:** 本フィードが繰り返し取り上げる能力——ある事柄が不確実だと「知りながら」あたかも確定しているかのように行動するエージェント——を切り出し、固定ルールではなく**衝突対応行動ポリシー（CAAP）**を提唱する。
+
+> 8 月 14 日投稿。CAAP は利用可能な証拠を用いて各行動を衝突に適合させる。
+
+[`🔗 arXiv:2608.13921`](https://arxiv.org/abs/2608.13921) · [`🔗 SciRate`](https://scirate.com/arxiv/2608.13921)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-17T12:03:00Z |
-| Items | 21 |
-| Sources tracked | 28 (GitHub, Cloud Security Alliance, Edgen, Axios, qifukexue, NVIDIA Blog, NVIDIA Developer, AIB.vote, php.cn, Trendshift, VulDB, CIRCL, arXiv, AlphaXiv, DEV.to, Livethreat, Cybermind, Tencent Cloud, TNO, SecurityDelta, Hacker News, Sploitus, hotmolts, OpenChamber Docs, TechWeb, DoNews, OffSeq, caieglobal) |
+| Generated | 2026-08-17T20:03:00Z |
+| Items | 30 |
+| Sources tracked | 41 (GitHub, Cloud Security Alliance, Edgen, Axios, qifukexue, NVIDIA Blog, NVIDIA Developer, AIB.vote, php.cn, Trendshift, VulDB, CIRCL, arXiv, AlphaXiv, DEV.to, Livethreat, Cybermind, Tencent Cloud, TNO, SecurityDelta, Hacker News, Sploitus, hotmolts, OpenChamber Docs, TechWeb, DoNews, OffSeq, caieglobal, SecurityWeek, The Hacker News, Ampcus Cyber, Anthropic, MCP Directory, Yahoo Finance, Economic Times, Mozilla Support, Gigazine, OrcaRouter, CVETodo, OpenCVE, SciRate) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

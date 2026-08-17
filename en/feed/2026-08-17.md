@@ -1,8 +1,8 @@
 ---
 date: 2026-08-17
-updated: 2026-08-17T12:03:00Z
+updated: 2026-08-17T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 41
 license: CC-BY-4.0
 ---
 
@@ -345,13 +345,157 @@ DeepSeek switched its **V4-series API** to **peak/off-peak (峰谷) pricing** on
 
 ---
 
+## 22. Adobe Commerce CVE-2026-71362 — unauthenticated customer-account takeover exploited within hours of the patch
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** SecurityWeek · CVSS 9.1 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cve` `adobe-commerce` `magento` `account-takeover` `exploit`
+
+**CVE-2026-71362** (Adobe APSB26-92, Aug 11 Patch Tuesday, CVSS 9.1) is an incorrect-authorization flaw in **Adobe Commerce / Magento Open Source** customer-session handling. `Account\Edit::execute()` feeds raw, attacker-controlled `customer_form_data` (left in the session by a *failed* `editPost` request) into `DataObjectHelper::populateWithArray()`, which copies every matching key — including `id` — onto the customer object, then writes it back via `Session::setCustomerData()`. An attacker registers a throwaway account, sends a crafted `editPost` with `id=<victim_id>`, and their cookie then resolves to the victim's account — order history, addresses, and stored payment tokens — with no password or token check. Adobe said it had no evidence of exploitation at disclosure; e-commerce security firm **Sansec**'s WAF began blocking real exploit attempts **within hours**.
+
+**Why it matters:** The patch-to-exploit window for Magento storefronts is now measured in *hours, not days* — and a storefront account takeover means PII, orders, and payment metadata, not just a defacement.
+
+> Public PoC: `dinosn/cve-2026-71362-magento-lab` — a one-command Docker lab with an A/B/A official-patch negative control.
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/adobe-commerce-bug-targeted-immediately-after-disclosure/) · [`🔗 dinosn PoC lab`](https://github.com/dinosn/cve-2026-71362-magento-lab)
+
+---
+
+## 23. VMware vCenter CVE-2026-59310 — syslog path-traversal RCE chained into Babuk ransomware on ESXi
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Hacker News · CVSS 9.8 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cve` `vmware` `vcenter` `ransomware` `apt`
+
+**CVE-2026-59310** is a CVSS 9.8 directory-traversal RCE in the vCenter Server **syslog** service, patched by Broadcom on July 29 (VMSA-2026-0006). German IR firm **QUIRSO** documented a campaign — assessed with moderate confidence as a **China-nexus actor** — that chained it into *vCenter → root → credential theft → ESXi → Babuk-derived ransomware* (`.babyk`). Attackers abused the vCSA syslog server to drop cron entries in `/etc/cron.d` for non-interactive root execution, deployed a WebSocket backdoor ("linuxFile") and the open-source **reverse_ssh** tool, and created rogue admin accounts (`vcenter_admin`, `vcadmin`). QUIRSO counted **361 victim IPs across 47 countries** (Germany 55, US 41, Turkey 38), and suspects the locker was partly a smokescreen to destroy telemetry.
+
+**Why it matters:** vCenter is the management plane for virtualized infrastructure — a compromise there hands an attacker every ESXi host and VM, and this chain shows edge-appliance RCE pivoting straight into enterprise ransomware.
+
+> A companion auth-bypass flaw, CVE-2026-59309, was also observed exploited on at least one appliance; QUIRSO released a YARA rule for the reverse_ssh builds.
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/08/suspected-china-nexus-actor-exploits.html) · [`🔗 Ampcus Cyber`](https://www.ampcuscyber.com/shadowopsintel/actively-exploited-vmware-vcenter-rce-hits-three-hundred-sixty-one-victims-worldwide/)
+
+---
+
+## 24. Anthropic publishes full claude.ai/mobile system prompts — first-party confirmation of the Fable/Mythos export-control pause
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 476 pts · ~1d ago (~20:03 UTC+8)
+- **Tags:** `anthropic` `claude` `transparency` `system-prompt` `export-controls`
+
+Anthropic published the **complete system prompts** for claude.ai and the iOS/Android apps on its platform docs (476+ pts on HN). The **Claude Opus 5** prompt contains a first-party statement that **Claude Fable 5 and Mythos 5** — released June 9 — were **suspended on June 12 to comply with U.S. Department of Commerce export controls**, with controls lifted June 30 and access restored July 1, pointing to an `anthropic.com/news/fable-mythos-access` statement. The docs also confirm the **Mythos Preview** remains non-public (Project Glasswing), and note the prompts do **not** apply to the API.
+
+**Why it matters:** System prompts are the clearest window into a frontier model's actual guardrail instructions — and this is the first official, in-product confirmation of an export-control pause on a flagship release.
+
+> The Opus 5 prompt instructs Claude to describe the suspension "accurately and matter-of-factly" and *not* deny it happened.
+
+[`🔗 Claude release notes (system prompts)`](https://platform.claude.com/docs/en/release-notes/system-prompts) · [`🔗 Anthropic statement`](https://www.anthropic.com/news/fable-mythos-access)
+
+---
+
+## 25. mattpocock/skills — a real engineer's daily .agents directory passes 220k stars
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · ~220k stars · ~2d ago (~12:03 UTC+8)
+- **Tags:** `skills` `claude-code` `coding-agent` `workflow` `open-source`
+
+TypeScript educator **Matt Pocock** published his personal `.agents`/skills directory as **mattpocock/skills** ("Skills for Real Engineers… not vibe coding"), now **~220k stars** and #1 on GitHub Trending. It's ~27 small, composable skills aimed at four failure modes: *misalignment* (`/grill-me`, `/grill-with-docs` force a design interview before any code), *verbosity* (a shared `CONTEXT.md` domain language), *broken code* (`/tdd` red-green-refactor, `/diagnosing-bugs` six-phase loop), and *architecture decay* (`/improve-codebase-architecture`). Installs via `claude plugins install mattpocock-skills` or `npx skills@latest add mattpocock/skills`, and works across Claude Code, Codex, and other agents.
+
+**Why it matters:** It's the strongest proof yet that `.claude/`/skills are "the new dotfiles" — a personal workflow productized and forked at npm-package scale, a pointed contrast to monolithic agent frameworks that "own the process."
+
+> MIT; Pocock is the author of Total TypeScript.
+
+[`🔗 mattpocock/skills`](https://github.com/mattpocock/skills) · [`🔗 MCP Directory`](https://mcp.directory/blog/matt-pocock-skills-the-npm-moment-explained-2026)
+
+---
+
+## 26. Stripe agrees to buy OpenRouter for $7B+ — model routing becomes payments infrastructure
+
+- **Velocity:** ▮▮ rising
+- **Source:** Bloomberg · $7B+ · ~1d ago (~20:03 UTC+8)
+- **Tags:** `stripe` `openrouter` `api` `routing` `industry`
+
+Stripe agreed to acquire **OpenRouter** for **more than $7 billion** (Bloomberg, Aug 16), roughly **5× its $1.3B May valuation**. OpenRouter is the unified API gateway through which ~**8 million developers** route to **400+ models** (OpenAI, Anthropic, DeepSeek, Qwen, …), handling up to a quarter of all third-party AI-model API calls with centralized billing, failover, and routing. It was already a Stripe customer (Invoicing, Tax, Radar). The deal extends Stripe from payments into the "transaction layer" of the AI economy, on top of its January Metronome acquisition.
+
+**Why it matters:** For developers, the *neutrality* of the model-routing layer is now an open question — a payments giant owning the gateway concentrates the switchboard that most agent and coding tooling silently depends on.
+
+> A CNBC investigation found Chinese-origin models captured 46% of US enterprise token usage on OpenRouter, adding regulatory complexity.
+
+[`🔗 Yahoo Finance`](https://finance.yahoo.com/technology/ai/articles/stripe-acquires-openrouter-7b-turning-091812340.html) · [`🔗 Economic Times`](https://m.economictimes.com/tech/technology/stripe-clinches-over-7-billion-deal-to-buy-ai-firm-openrouter/amp_articleshow/133285357.cms)
+
+---
+
+## 27. Firefox for iOS ships a built-in, EasyList-based ad blocker
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 489 pts · ~1d ago (~20:03 UTC+8)
+- **Tags:** `firefox` `mozilla` `ad-blocking` `ios` `privacy`
+
+Mozilla began rolling out a native **Ad Blocker** in Firefox for iOS (489 pts on HN). Because Apple's iOS doesn't allow the browser extensions Firefox supports on desktop/Android, Mozilla built ad-blocking directly into the engine — **network-level** blocking of third-party ad networks/trackers and pop-ups/video overlays using an **EasyList**-based filter list. It ships **disabled by default** (Settings → Browsing → Content → Ad Blocker) and deliberately skips search-engine ads (Google, Bing, DuckDuckGo) and Firefox's own sponsored tiles.
+
+**Why it matters:** It lands exactly as Chrome/MV3 squeezes ad blockers, making Firefox the only major browser shipping a first-party content blocker on iOS — and the search-ad carve-out is an honest look at browser funding incentives.
+
+> Complements — but is distinct from — Enhanced Tracking Protection, which targets tracking rather than ads.
+
+[`🔗 Mozilla Support`](https://support.mozilla.org/en-US/kb/block-ads-firefox-ios) · [`🔗 Gigazine`](https://gigazine.net/gsc_news/en/20260817-firefox-for-ios-adblocker/)
+
+---
+
+## 28. MathForm-8B — OpenBMB's 8B autoformalizer turns natural-language math into verified Lean 4
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 88.06% Pass@8 (SC) · ~3d ago (~04:03 UTC+8)
+- **Tags:** `formal-math` `lean4` `autoformalization` `openbmb` `arxiv`
+
+**OpenBMB** released **MathForm-8B** (arXiv:2608.14221), an Apache-2.0 8B model fine-tuned from Qwen3-8B that translates natural-language math problems into machine-checkable **Lean 4** theorem statements (leaving proofs as `:= by sorry`). It was SFT'd on **FormalVerse**, a ~367k verified-example dataset built with a Mathlib retrieval planner plus compiler-diagnostic and semantic-consistency refinement, then RL-tuned on Lean compilation success. Vendor-reported **Pass@8: 88.06% syntax check / 72.37% consistency check** across six benchmarks, beating several 32B specialized autoformalizers; on the hard FATE-H/FATE-X subsets it hits 63%/37% consistency.
+
+**Why it matters:** Autoformalization is the bottleneck between LLMs and formal proof systems — a purpose-built open 8B that beats 32B generalists points to where the "math-to-theorem" pipeline is actually scaling.
+
+> Model (`openbmb/MathForm-8B`), dataset (`openbmb/FormalVerse`), and paper dropped Aug 14 without a formal announcement; the evaluation code is still pending.
+
+[`🔗 arXiv:2608.14221`](https://arxiv.org/abs/2608.14221) · [`🔗 OrcaRouter`](https://www.orcarouter.ai/blog/what-is-mathform-8b)
+
+---
+
+## 29. Assimp CVE-2026-19967 — heap overflow in the 3D-asset library behind Blender/Unity/Unreal
+
+- **Velocity:** ▮ steady
+- **Source:** CVETodo · CVSS 6.3 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cve` `assimp` `3d-assets` `memory-corruption` `open-source`
+
+**CVE-2026-19967** (published Aug 17) is a heap-based buffer overflow in `Assimp::Compression::decompressBlock` (`code/Common/Compression.cpp`) in the **Open Asset Import Library (Assimp)** — the ubiquitous open-source 3D-model importer behind Blender, Qt3D, and countless game/engine toolchains. A crafted file declaring a larger uncompressed size than is available writes past the heap buffer; a **public PoC exists** (Issue #6624), and maintainers had not responded as of publication. A related flaw, **CVE-2026-19970**, overflows `AddBonesToNodeGraph_3DGS_MDL7` in the MDL importer.
+
+**Why it matters:** A parser bug in Assimp is a parser bug *everywhere* — any tool that imports untrusted 3D assets (games, CAD, AR) inherits the risk, and there's no patch to point to yet.
+
+> Requires the victim to open a malicious model file; Red Hat tracks it as affecting qt5-qt3d / qt6-qtquick3d in RHEL.
+
+[`🔗 CVETodo`](https://cvetodo.com/cve/CVE-2026-19967) · [`🔗 OpenCVE`](https://app.opencve.io/cve/CVE-2026-19967)
+
+---
+
+## 30. TANGLE — a benchmark for LLM agents under irreducible memory conflict
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 541 instances · ~1d ago (~20:03 UTC+8)
+- **Tags:** `benchmark` `memory` `agents` `conflict` `arxiv`
+
+**TANGLE (arXiv:2608.13921)** evaluates LLM agents whose personal memory genuinely **conflicts** — when no single answer is correct. It spans **541 instances across 40 personas** and three conflict types (context-partitioned, behavior-oscillation, source-contradiction), scored on five dimensions: conflict perception, causal reasoning, confidence calibration, clarification seeking, and memory faithfulness. Key finding: with curated memory, agents **recognize conflicts far more reliably than they calibrate actions or ask targeted clarifying questions** — perception is easier than correct action — while pipeline-extracted memory loses the conflict-bearing relations downstream reasoning needs.
+
+**Why it matters:** It isolates a capability the feed keeps circling — agents that "know" something is uncertain but still act as if it's settled — and argues for **conflict-aware action policies (CAAP)** over fixed rules.
+
+> Submitted Aug 14; CAAP adapts each action to the conflict using available evidence.
+
+[`🔗 arXiv:2608.13921`](https://arxiv.org/abs/2608.13921) · [`🔗 SciRate`](https://scirate.com/arxiv/2608.13921)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-17T12:03:00Z |
-| Items | 21 |
-| Sources tracked | 28 (GitHub, Cloud Security Alliance, Edgen, Axios, qifukexue, NVIDIA Blog, NVIDIA Developer, AIB.vote, php.cn, Trendshift, VulDB, CIRCL, arXiv, AlphaXiv, DEV.to, Livethreat, Cybermind, Tencent Cloud, TNO, SecurityDelta, Hacker News, Sploitus, hotmolts, OpenChamber Docs, TechWeb, DoNews, OffSeq, caieglobal) |
+| Generated | 2026-08-17T20:03:00Z |
+| Items | 30 |
+| Sources tracked | 41 (GitHub, Cloud Security Alliance, Edgen, Axios, qifukexue, NVIDIA Blog, NVIDIA Developer, AIB.vote, php.cn, Trendshift, VulDB, CIRCL, arXiv, AlphaXiv, DEV.to, Livethreat, Cybermind, Tencent Cloud, TNO, SecurityDelta, Hacker News, Sploitus, hotmolts, OpenChamber Docs, TechWeb, DoNews, OffSeq, caieglobal, SecurityWeek, The Hacker News, Ampcus Cyber, Anthropic, MCP Directory, Yahoo Finance, Economic Times, Mozilla Support, Gigazine, OrcaRouter, CVETodo, OpenCVE, SciRate) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
