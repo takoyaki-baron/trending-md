@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-18T12:03:00Z
+last_processed: 2026-08-18T20:03:00Z
 ---
 
 # Learnt Agent
@@ -38,6 +38,13 @@ patterns, and turn them into insights and actionable todos.
    component), OpenCut (headless + MCP for a creative tool), ai-memory (vendor-neutral cross-agent
    handoff), and Cordis (the revertible-effects plugin backbone behind DeepSeek Harness, see thesis 12).
    → [[agent-stack]]
+   **New (08-18 20:34):** the *code host* is now being re-architected for agent scale, not just the CLI —
+   Cursor **Origin** launched Aug 17 as "a git forge for the agentic era," but its shipped v1 is a
+   conventional forge (repos/PRs/code browsing) + real-time GitHub sync with GitHub staying source-of-truth;
+   the agent-scale differentiators (Graphite stacked-PR/merge-queue, auto-review, per-line provenance) are
+   announced-not-shipped ("Agent-native features ship soon"). Review/merge/trust is the named bottleneck —
+   Anysphere bought Graphite (Dec 19 2025) explicitly because "write is solved, review is the constraint,"
+   and Cursor says 35% of its internal PRs are already opened by autonomous cloud agents. → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — MCP is the new SSRF vector, and agent
    credentials are now loot.** Langflow RCE (CVSS 9.8, actively exploited), mcp-grafana SSRF (9.1),
@@ -191,6 +198,10 @@ patterns, and turn them into insights and actionable todos.
    **RPMs** (arXiv:2608.13940) add a compute lever: AI Research Preference Models pre-filter *which
    candidate solutions to run*, reaching the unguided agent's 24h score in ~15h at <⅔ the execution
    budget (AIRS-Bench SOTA). → [[frontier-models]]
+   **New (08-18 20:03):** GPT-5.6 Sol's effective price halved — on the *aggregators*, not OpenAI:
+   OpenRouter and Vercel AI Gateway both cut it to $2.50/$15 per M (OpenAI's own $5/$30 unchanged),
+   so **routing platforms, not the lab, now set frontier price** (SemiAnalysis ties the discount to
+   the platforms' public token-usage reporting). → [[smart-routing]]
 
 7. **AI safety is now a measured release threshold, not policy — and it's converging cross-lab.**
    OpenAI paused Astra, the first model its Preparedness Framework "cannot rule out Critical" for
@@ -358,6 +369,14 @@ patterns, and turn them into insights and actionable todos.
    restores state) + reactive coeffects — powers Koishi (4 years, 4,000+ plugins) and DeepSeek Harness
    ships on Cordis v4, targeting the "87/100 VSCode extensions can't uninstall without restart" problem
    that is fatal for self-evolving agents. → [[agent-stack]]
+   **New (08-18 20:03):** **Kozuchi Agent** (arXiv:2608.15579, ASE '26) — a language-agnostic,
+   open-weight repair agent on a locally hosted, *un-finetuned* Qwen3.5-27B with explicit phases +
+   persistent state + deterministic tools resolves **374/500 SWE-bench Verified** (first among
+   open-weight on Multi-SWE-bench Java; ±5pp stable across languages) — a reproducibility-first
+   counterpoint to black-box frontier agents, and more evidence that harness engineering, not model
+   scale, is the lever. Bojie Li's open `bojieli/ai-agent-book` (38.9K stars, 10 chapters / 103
+   runnable experiments) coins the term: "**Harness engineering**" — everything outside the model is
+   the edge. → [[agent-stack]] [[frontier-models]]
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
 
@@ -375,7 +394,7 @@ patterns, and turn them into insights and actionable todos.
   stars, benchmark-corrected), Prime Agent (RLM, 95.5% ARC-AGI-3), Multi-Agent-CAD (116× fewer
   tokens), yc-software/qm (YC's multiplayer agent harness, 13K stars), Cline Kanban (Apache 2.0,
   worktree-per-task web board, `npx kanban`), LoopX (MIT state kernel — "board is a projection,
-  kernel is truth"), phone-harness (drive a real iPhone via macOS Mirroring), ai-agent-book (29K
+  kernel is truth"), phone-harness (drive a real iPhone via macOS Mirroring), ai-agent-book (38.9K
   stars), Macro (AGPL all-in-one workspace, MCP-exposed team memory), Zed Delta (multiplayer worktree
   + agent review on DeltaDB), OpenAI Codex Security (appsec agent, 1.2M commits scanned).
   **Decomposition:** plugin graph (DeepSeek Harness) + state kernel (LoopX) + worktree isolation
@@ -414,6 +433,15 @@ patterns, and turn them into insights and actionable todos.
   tuned to the *economics of the model underneath them*), and i-have-adhd (`ayghri/i-have-adhd`,
   ~18K stars — a single `SKILL.md` that rewires agent output UX: first line = command/path, numbered
   steps, <2-min next step; see [[agent-plugins]]).
+  **New (08-18 20:03):** Cursor **Origin** (a git forge "built for agent scale" — bidirectional real-time
+  GitHub sync with GitHub as source-of-truth, launched Aug 17 to paid plans the same day as GitHub's ~7h
+  outage; the first credible AI-native code host from a major coding-agent vendor, though its Graphite
+  stacked-PR/merge-queue + auto-review layer is announced-not-shipped — "Agent-native features ship soon"),
+  OpenViking (`volcengine/OpenViking`, AGPL-3.0, ~29K stars — agent memory/knowledge/
+  skills unified behind a `viking://` virtual filesystem, auto-tiered L0/L1/L2 + `session.commit()`
+  preference mining; LoCoMo memory 24–57%→80–83% at −34–91% input tokens), and munder-difflin
+  (`chaitanyagiri/munder-difflin`, MIT — a local-first multi-agent harness wrapping real terminal CLIs in
+  `node-pty` with a GOD orchestrator + git-backed "hive" memory + spend/scope/destructive gates).
 - **Multi-agent failure modes (08-16 20:03, → thesis 4):** Anthropic's Frontier Red Team cataloged four
   ways agent swarms break — coordination is brittle (a coordinating swarm found 266 vulns vs 21 for
   independent agents, but only 12 overlapped), conformity is systemic (18/30 agents named a branch
@@ -478,6 +506,13 @@ patterns, and turn them into insights and actionable todos.
   a Content Board returning revenue to rightsholders) hit the HN front page; municipal pilots in
   Utrecht/Rotterdam/Eindhoven. The most concrete European counter-model to US/China frontier
   concentration. → [[frontier-models]]
+  **New (08-18 20:03):** **τ0-VLA** (arXiv:2608.16885, 39 authors) — a hierarchical VLA that spends
+  world-model-guided test-time compute where decisions are hard (a high-level policy searches
+  alternative subtasks before committing, a low-level policy executes across embodiments; 40,115h of
+  heterogeneous real-world data) — test-time-compute scaling reaches robot control. **GPT-5.6 Sol halves
+  on the aggregators** (OpenRouter + Vercel AI Gateway $2.50/$15 per M; OpenAI's $5/$30 unchanged) — the
+  channel-level price cut (thesis 6). **Kozuchi Agent** (arXiv:2608.15579) — the open-weight repair agent
+  (thesis 12).
 - **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
   Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
   no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
@@ -590,6 +625,14 @@ patterns, and turn them into insights and actionable todos.
   DNS-rebinding), Joomla Sourcerer CVE-2026-74253 (10.0), Forminator CVE-2026-15748 (9.8), Adobe
   ColdFusion CVE-2026-48362 (10.0), Gitea CVE-2026-60004 (9.8 git-hook RCE), Glances CVE-2026-68518 (8.8).
   Ledger → [[security]].
+  **New (08-18 20:03):** two forge/gateway data points. *GitLab* CVE-2026-19478 (CVSS 9.4, CWE-94) — an
+  unauthenticated GraphQL directive can modify or delete public projects + user data (out-of-band fix
+  19.2.4/19.1.6/19.0.8/18.11.11; the 18.2–18.10 branches have **no fix**, so those installs must upgrade
+  branches entirely; reported via HackerOne by hiimguardian). *iMonnit Express 4.0.5.5* (CVSS 9.8, no CVE
+  yet, public PoC) — pre-auth **SYSTEM** RCE on Monnit's Windows IoT gateway: an empty security-answer
+  list mints an admin cookie → path-traversal write in the cert-upload endpoint → a plugin loader
+  `Assembly.Load` + `Activator.CreateInstance` *before* the `IExpressPlugin` check runs the constructor
+  as `NT AUTHORITY\SYSTEM` (0day Rubbish). Ledger → [[security]].
 - **Provenance & watermarking arms race (08-15):** Anthropic began watermarking Claude text (Aug 2)
   under the EU AI Act's Article 50 transparency rules; within days `guillaumemeyer/watermarks-remover`
   (MIT, 4.1K stars) strips AI-provenance marks in three layers — Unicode steganography, a statistical
@@ -673,6 +716,11 @@ patterns, and turn them into insights and actionable todos.
   ~10–30% of hand-tuned CUDA on H100/MI250X, with honest "zero-overhead asserted, not demonstrated"
   caveats; `nautechsystems/nautilus_trader` (26.1k stars) heads to a stable 2.x Rust-native trading
   engine API.
+  **New (08-18 20:03):** AERIS-10 (`NawfalMotii79/PLFM_RADAR`, 24.2K stars) — a fully open 10.5 GHz
+  pulse-LFM phased-array radar (CERN-OHL-P hardware, ±45° electronic + 360° mechanical scan, XC7A50T
+  FPGA, STM32, Crowd Supply Q3 2026) — with an independent teardown (`KolesnykMaksym/plfm-radar-analysis`)
+  flagging the headline range as 7–13× overstated for realistic 1 m² targets: the Void lesson applied
+  to open hardware.
 - **Models & research:** Kronos (decoder-only foundation model for financial candlesticks, AAAI 2026)
   — the "pretrain + finetune" playbook applied to markets. **HL-Gauss PPO** (arXiv 2608.02181, COLM
   2026) — swapping the scalar critic head for a categorical predictor (HL-Gauss targets) is a drop-in

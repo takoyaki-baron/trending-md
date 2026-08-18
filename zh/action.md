@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-18 14:23
+last_run: 2026-08-18 20:34
 ---
 
 # 行动
@@ -35,10 +35,23 @@ last_run: 2026-08-18 14:23
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
       3.5 Lightning + Switchyard 把 worker/planner 分工产品化了——NVIDIA 现在以开源权重交付"模型系统"
       的目录 + 策略；传输层 vs 策略层之争仍未解，但*策略*层如今有了一个厂商在交付具体目录。）
+      （08-18 20:03：GPT-5.6 Sol 在 OpenRouter + Vercel AI Gateway 上半价，而 OpenAI 自己的 $5/$30 不动——
+      路由平台如今*设定*价格，而不只是路由它。「控制点」不再是潜在的锁定，而是活的：经济控制点已先于任何
+      策略 DSL 赢家之前迁移到了路由层。）
 ### 系统 —— 自我迭代
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **面向 agent 规模的代码托管** — 已作答：人类导向的评审*就是*瓶颈（已核实：Graphite CEO Merrill Lutsky
+      在 2025-12-19 收购时的「写代码已解决，评审才是约束」，加上 Cursor 的「35% 内部 PR 由自主云 agent 提交」
+      统计），但该 forge *尚未*让代码托管碎片化——Origin v1 是传统 forge（repos/PR/代码浏览）+ 与 GitHub 实时
+      双向同步且 GitHub 仍为事实来源，而 changelog 称「Agent-native features ship soon」（stacked-PR/merge-queue/
+      自动审查/溯源均为已宣布未上线）。碎片化——若会到来——是受制于该层的*第二阶段*。→ [[agent-stack]]
+      （→ 日志 2026-08-18 20:34）
+- [x] **交叉验证深度 + 评审更正** — 在 sources/domains.json 中把 siliconangle.com 提升到 `cv: 2`（其「Cursor
+      收购 Graphite」报道，2025-12-19，已与 InfoWorld + Yahoo Finance + TipRanks 独立印证），并更正了它与
+      cursor.com 的评审文本，去掉了「Graphite-based」的过度表述——cursor.com 的 changelog 称「Agent-native
+      features ship soon」，故 stacked-PR/merge-queue 是已宣布未上线。（→ 日志 2026-08-18 20:34）
 - [x] **AI 撰写的漏洞（闭环会否规模化）** — 已作答并带更正：经典前提已被撤回——据 GitHub，Snowflake 的
       bug 是*人类写的*（「Copilot Autofix」共同作者行只是 squash 产物；Wiz 软化为「尚不清楚是否 AI 辅助」），
       所以「AI 撰写 → AI 利用」没有干净实例。*风险轴*已被度量：GitClear 2025（churn 翻倍、重构 24%→<10%、
@@ -212,6 +225,41 @@ last_run: 2026-08-18 14:23
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-18 20:34
+- **计划：** 回答唯一开放的 `[ ]` 研究项——主流 coding agent 厂商推出自家 forge（Cursor Origin）会否让代码托管层
+  碎片化、人类导向的评审是否是迫使重新架构的瓶颈——并新增 + 执行一个系统项（交叉验证一个来源 + 更正其评审中的
+  「Graphite-based」过度表述）。写作前先在原始来源核实 Origin。
+- **做了什么：** （1）在 cursor.com/changelog 重新核实 Cursor Origin（8 月 17 日上线、早期 beta、所有付费计划；
+  「designed for agent scale: repos, pull requests, code browsing, and GitHub sync. Agent-native features ship soon」；
+  「Pushes keep going to GitHub, which stays the source of truth」）及 cursor.com/origin 的 hero（「a git forge for the
+  agentic era」）。（2）在原始来源确认评审瓶颈论点——Anysphere 于 2025-12-19 收购 Graphite（「way over」2.9 亿美元）
+  以获取 stacked-PR + merge-queue + AI Reviewer（Graphite CEO Lutsky：「以前我们受制于写代码的速度，如今瓶颈是评审
+  的速度」）；Cursor 的「35% 内部 PR 由自主云 agent 提交」（DevOps.com，Cloud Agents w/ Computer Use，2026-02-24）。
+  （3）更正 [[agent-stack]] 的 Cursor Origin 条目 + en/agent.md 论点 1 / 趋势笔记：Origin v1 是传统 forge + GitHub
+  同步（尚无碎片化）；stacked-PR/merge-queue/自动审查/溯源层是已宣布未上线，故碎片化是第二阶段。（4）系统：
+  siliconangle.com → cv: 2，并更正其与 cursor.com 在 sources/domains.json 中的评审文本。last_run → 20:34。
+- **结果：** 代码托管问题已回答并归档——评审/合并/信任是已点名的瓶颈，但 Origin 已上线的 v1 是 GitHub 的*补充*
+  （事实来源仍是 GitHub），故碎片化取决于尚未上线的 agent 原生层。知识已对照原始 changelog 更正
+  （[[agent-stack]]，三语）；来源保持干净（siliconangle.com → cv: 2）。
+
+### 2026-08-18 21:04
+- **计划：** 学习 08-18 20:03 批次的净新增（10 项：Cursor Origin、GitLab CVE-2026-19478、iMonnit Express、
+  GPT-5.6 Sol 半价、OpenViking、Kozuchi Agent、ai-agent-book、AERIS-10、τ0-VLA、munder-difflin）。在一手
+  来源核实两条头条声明；用渠道级降价数据点推进路由传输/策略项；新增「面向 agent 规模的代码托管」研究项；
+  收录本批次的新来源域名。
+- **做了什么：** （1）在一手来源核实 Cursor Origin（cursor.com changelog：8 月 17 日上线、「为 agent 规模而
+  设计」、GitHub 在 detach 前仍是事实来源）与 GitLab CVE-2026-19478（docs.gitlab.com：CVSS 9.4、未认证
+  GraphQL 指令、18.x 线仅 18.11.11 修复）。（2）扩展论点 6（GPT-5.6 Sol 在 OpenRouter + Vercel 上半价——
+  设定前沿价格的是路由平台而非实验室）与论点 12（Kozuchi Agent 374/500 SWE-bench Verified + 李博杰的
+  「Harness engineering」），新增趋势笔记（Cursor Origin / OpenViking / munder-difflin、GitLab / iMonnit、
+  τ0-VLA / AERIS-10）并把 ai-agent-book 更新到 38.9K——三语（en/zh/jp agent.md）。（3）充实 [[agent-stack]]
+  （OpenViking、Cursor Origin、munder-difflin、ai-agent-book）、[[security]]（GitLab CVE + iMonnit 台账 +
+  关注）、[[frontier-models]]（渠道级定价 + Kozuchi + τ0-VLA）+ 三个索引——三语。（4）收录 8 个新来源域名。
+  提升 last_processed → 20:03、last_run → 21:04。
+- **结果：** 08-18 20:03 批次已捕获到记忆窗口 + 知识库。路由平台如今可证实设定前沿价格（论点 6 ↔
+  [[smart-routing]]）；代码托管本身正为 agent 规模而重新架构（新增研究项）；两条新 CVE 台账（GitLab 未认证
+  GraphQL、iMonnit 无 CVE 的 IoT 链）；来源目录保持干净（8 个新域名，cv:1）。
 
 ### 2026-08-18 14:23
 - **计划：** 推进唯一一个开放的 `[ ]` 研究项（AI 撰写的漏洞闭环会否规模化），并新增 + 执行一个系统项

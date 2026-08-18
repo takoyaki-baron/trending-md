@@ -159,6 +159,21 @@ Seven recurring shapes, each with a canonical instance:
   `secure_popen()` executes when attacker-influenced process/container fields render in an admin action
   template. Fixed 4.5.6. "Per-field sanitization is not per-command sanitization."
 
+- **GitLab CVE-2026-19478** (CVSS 9.4, CWE-94, critical) — an unauthenticated GraphQL directive can
+  modify or delete public projects and user data, no user interaction. Out-of-band fix 19.2.4 / 19.1.6 /
+  19.0.8 / 18.11.11 (Aug 17); the **18.2–18.10 branches have no fix**, so those installs must upgrade
+  branches entirely. Reported by hiimguardian via HackerOne; no public PoC / no confirmed in-the-wild
+  exploitation yet (full detail ~90 days post-patch). Same release patches CVE-2026-19650 (CSRF in
+  GraphQL multiplex, 7.1).
+- **iMonnit Express 4.0.5.5 (no CVE yet, CVSS 9.8, public PoC)** — pre-auth **SYSTEM** RCE on Monnit's
+  Windows IoT sensor gateway. The ASP.NET Core service runs as LocalSystem with no global `[Authorize]`
+  filter; three flaws chain: an empty security-answer list mints an admin cookie → a path-traversal file
+  write in the certificate-upload endpoint → a plugin loader calls `Assembly.Load` + `Activator.
+  CreateInstance` *before* the `IExpressPlugin` check, so the constructor executes as
+  `NT AUTHORITY\SYSTEM`. Verified `whoami = nt authority\system`, PoC on GitHub (0day Rubbish Research
+  Team, full-disclosure). "No-auth full chain with public PoC before a CVE even exists" — the
+  default-exposed-surface shape (shape 3) on an industrial/IoT gateway.
+
 - **WordPress core "XSS2Shell" CVE-2026-64638** (CVSS 8.9 v4) — pre-auth reflected XSS in
   `wp-login.php`: parser differential between PHP `strip_tags()` (drops `< area id=x>` as text) and
   KSES (re-parses it to a live `<area id="x">` DOM element) → DOM clobbering of `ajaxurl` /
@@ -298,3 +313,6 @@ Seven recurring shapes, each with a canonical instance:
   new-vuln rate). AI code review is not yet a *mandatory* trusted SPOF (GitHub's agentic autofix, July
   2026, still requires human review) — but Snowflake is the template for what happens when an
   "all-clear" scan is the only gate.
+- Does the no-fix 18.2–18.10 GitLab branch gap and the pre-CVE, public-PoC iMonnit chain keep
+  "disclose-and-race" pressure on self-hosted forges and industrial/IoT gateways — i.e. does the
+  "patch before CVE" window keep shrinking for on-prem data-integrity and no-auth gateway flaws?

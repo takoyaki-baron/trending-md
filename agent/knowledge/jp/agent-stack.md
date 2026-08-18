@@ -98,6 +98,15 @@ AIエージェントスタックの構成要素。2026年8月のトレンドウ�
   ある——チームレベルのナレッジグラフ（TencentDB）と、*可搬・プロジェクト単位・ベンダー中立*のメモリ
   で、「異なるエージェント間の引き継ぎ」を一級の型付きプロトコルとして扱うもの。
 
+- **OpenViking——エージェントメモリをファイルシステムに（08-18 20:03）** — `volcengine/OpenViking`、AGPL-3.0、
+  約29K stars（ByteDance/Volcengine）。エージェントメモリ、ナレッジRAG、スキルを仮想ファイルシステムの背後に統合：
+  コンテンツは `viking://` URIを持ち、エージェントは不透明なベクトルクエリではなく `ls`/`tree`/`find` でブラウズ
+  する。すべてが **L0/L1/L2**（抽象 → 概要 → 全文）に自動階層化されてトークン消費を削減、検索はディレクトリ再帰
+  で軌跡を観測可能、`session.commit()` がユーザー選好 + エージェント経験を非同期に永続的な長期メモリへマイニング。
+  LoCoMoでエージェントメモリ精度をネイティブの24–57%から **80–83%** へ引き上げ、入力トークンを34–91%、レイテンシ
+  を58–66%削減。シグナル：「メモリ＝検査可能で自己改善するファイルシステム」——メモリギャップの第3の形（TencentDB
+  のチームグラフ、ai-memoryの可搬な引き継ぎと並ぶ）、ByteDanceのクラウド部門から。
+
 ## アイデンティティとコンテキストの標準化（二段階の分離）
 
 エージェントコンテキストの断片化（ego-liteのブラウザアイデンティティ vs holaOSのファイルメモリ）は、
@@ -232,6 +241,15 @@ Agent（+ `Plan` サブクラス）と核心関係 `wasGeneratedBy` / `wasDerive
   問題——コスト超過、幻覚の引用、ローカルデータ漏えい——は、プロンプトではなく*強制される仕組み*
   （台帳制約、引用検証）で答えられつつある。LoopXの人間ゲートと同じ「信頼＝コード」の方向。
 
+- **munder-difflin** — `chaitanyagiri/munder-difflin`、MIT。実在のターミナルCLI——Claude Code、Codex、Gemini CLI、
+  Qwen、Kimi、OpenCode、Copilot——を `node-pty` 疑似端末のエージェントとして包み、Pixi.jsの「オフィスフロア」で
+  協調させるローカルファーストのマルチエージェントハーネス。**GODオーケストレーター**がタスクをルーティングし、
+  コスト/スコープ/破壊的な判断だけを人間へエスカレーション。エージェントはgit支援の「ハイブ」（メモリ、メール
+  ボックス、黒板）を共有し、意味的リコール、エージェントごとのワークツリー、トークン/コストテレメトリ、
+  steer→constrain→stopブレーカー、ヒューマンインザループゲートを備える。シグナル：自社マシンで自己管理型の
+  コーディングエージェントチームを動かす、洗練されたTypeScriptネイティブの回答——クラウドオーケストレーターが
+  ユーザーに任せがちな安全レール（コスト/スコープ/破壊ゲート）付き（LoopX/Moleと同じ「信頼＝コード」の方向）。
+
 ### 分解：プラグイングラフ + 状態カーネル + 隔離プリミティブ
 
 3人の新規参入者が同じアーキテクチャを異なる角度から描く：**DeepSeek Harness**はあらゆるコンポーネ
@@ -267,8 +285,10 @@ Agent（+ `Plan` サブクラス）と核心関係 `wasGeneratedBy` / `wasDerive
   され続ける：worktreeは*製品*慣習、サンドボックスは*セキュリティ*要件。
 
 ## 教育
-- **ai-agent-book** — `bojieli/ai-agent-book`（Li Bojie）、Apache 2.0。"Deep Understanding of AI
-  Agent"：10章、92の実行可能な実験、8言語。29K stars。
+- **ai-agent-book** — `bojieli/ai-agent-book`（Li Bojie、元Huawei「天才少年」、現Pine AIチーフサイエンティスト）、
+  Apache 2.0。《深入理解 AI Agent》（"Deep Understanding of AI Agent"）、**Agent = LLM + Context + Tools** の公式に
+  基づく：10章、**103の実行可能な実験**、13のコミュニティ翻訳、コンパイル済みPDF/EPUB。38.9K stars。Liは
+  「**Harness engineering**」を提唱——モデルの外側すべてこそが本当の競争優位（→ テーゼ12）。
 
 ## レビュー / コラボレーション
 - **Zed Delta** — `zed-industries/zed`（8月12日発表、プライベートベータ）。AIエージェントでコードを
@@ -279,6 +299,23 @@ Agent（+ `Plan` サブクラス）と核心関係 `wasGeneratedBy` / `wasDerive
   WebGLのブラウザビュー。Claude Codeを皮切りにエージェントハーネスへ接続。賭けは、エージェント
   主体のワークフローにはトランスクリプトとdiffを1つの同期ドキュメントとしてレビューする面が必要
   というもの——「エージェント時代のGitHub」。
+
+## エージェント規模のためのコードホスティング（08-18 20:03、08-18 20:34回答）
+
+- **Cursor Origin** — Cursorのコードホスティングサービス、「エージェント時代のgit forge」。8月17日に有料プランへ
+  早期ベータ公開（GitHubの約7時間障害と同じ日）。*出荷済みv1*は従来型forge——リポジトリは
+  `cursor.com/codebase/{owner}/{repo}`、PR、コード閲覧、GitHubとの双方向リアルタイム同期（「Pushes keep going to
+  GitHub, which stays the source of truth」）、Vercel/Depot/Buildkite連携。エージェント規模の差別化は**発表済み・
+  未出荷**：changelogは「designed for agent scale: repos, pull requests, code browsing, and GitHub sync. **Agent-native
+  features ship soon**」と書く——したがってGraphiteのstacked-PR + merge-queue + 自動レビュー層（Anysphereが
+  2025-12-19にGraphiteを買収、2.9億ドル評価額を「大幅に上回る」、まさに「書くのは解決済み、レビューが制約」を
+  修復するため）と行単位のプロベナンス/監査証跡はまだ製品に入っていない。レビューボトルネックは仮定ではなく
+  測定されている：**Cursorの社内PRの35%はすでにクラウドVMの自律エージェントによって開かれている**（Cloud Agents
+  w/ Computer Use、2026-02-24；CEO Michael Truell——DevOps.com）。回答：コードホスト層はレビュー/マージ/信頼の
+  スループットを中心に再設計されつつある（テーゼ12の「ハーネスでありモデルではない」レバーを*ホスト*に適用）が、
+  Originの出荷済みv1はGitHubの*補完*であり断片ではない——GitHubが真実の源のまま——したがって断片化は、もし来る
+  なら、エージェントネイティブ層の出荷にかかる*第二段階*（そして行単位プロベナンス——行ごとのモデル/プロンプト/
+  コンテキスト——がGitHubのリポジトリが表現できない堀になるかどうか）にかかる。
 
 ## セキュリティ（スタックの裏側）
 - **Langflow** CVE-2026-9198 — CVSS 9.8、CWE-94コードインジェクション、CISA KEV + 活発な悪用。

@@ -1351,9 +1351,9 @@
   },
   "cursor.com": {
     "cat": "vendor",
-    "en": "Cursor (Anysphere) docs/blog — primary source for Cursor product and its plugin spec (cursor/plugins). Co-cited with the GitHub repo; product docs are authoritative for Cursor-specific features.",
-    "zh": "Cursor（Anysphere）文档/博客 —— Cursor 产品及其插件规范（cursor/plugins）的第一手来源。与 GitHub 仓库同条共引；产品文档对 Cursor 专属功能具权威性。",
-    "jp": "Cursor（Anysphere）ドキュメント/ブログ —— Cursor製品とそのプラグイン仕様（cursor/plugins）の一次情報源。GitHubリポジトリと同一項目で共引用。Cursor固有機能については公式ドキュメントが権威。",
+    "en": "Cursor (Anysphere) docs/blog — primary source for Cursor product and its plugin spec (cursor/plugins). The Origin changelog (Aug 17) is authoritative but explicitly distinguishes shipped (repos/PRs/code-browsing, real-time GitHub sync with GitHub as source-of-truth) from announced-not-shipped ('Agent-native features ship soon' — stacked-PR/merge-queue/auto-review/provenance).",
+    "zh": "Cursor（Anysphere）文档/博客 —— Cursor 产品及其插件规范（cursor/plugins）的第一手来源。Origin 的 changelog（8 月 17 日）具权威性，但明确区分已上线（repos/PR/代码浏览、与 GitHub 实时双向同步且 GitHub 为事实来源）与「即将上线」（\"Agent-native features ship soon\"——stacked-PR/merge-queue/自动审查/溯源）。",
+    "jp": "Cursor（Anysphere）ドキュメント/ブログ —— Cursor製品とそのプラグイン仕様（cursor/plugins）の一次情報源。Originのchangelog（8月17日）は権威があるが、出荷済み（repos/PR/コード閲覧、GitHubを真実の源とするリアルタイム双方向同期）と「未出荷の発表」（\"Agent-native features ship soon\"——stacked-PR/merge-queue/自動レビュー/プロベナンス）を明確に区別している。",
     "cred": "med",
     "density": "med",
     "cv": 1
@@ -1877,6 +1877,78 @@
     "zh": "Hotmolts——Moltbook（一个纯 AI 社交网络）的精选摘要；转发 AI agent 对 arXiv 论文的评论。层层 AI 生成（权威性低）——需与被引论文（arXiv）核对，宜当作“agent 在讨论什么”的信号，而非事实来源。",
     "jp": "Hotmolts——AI専用ソーシャルネットワークMoltbookのキュレーション抜粋。AIエージェント執筆のarXiv論文解説を再公開。各層がAI生成（権威は低い）——引用元論文（arXiv）と照合し、事実源ではなく「エージェントが何を議論しているか」の信号として扱う。",
     "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "siliconangle.com": {
+    "cat": "news",
+    "en": "SiliconANGLE — enterprise-tech news site (theCUBE's publisher); credible secondary reporting on dev-tool and AI launches. Cross-checked twice (08-18): its Cursor Origin launch report (Aug 17, agent-scale positioning) matches cursor.com's changelog — with the caveat that the changelog says 'Agent-native features ship soon' (stacked-PR/merge-queue not yet shipped); its 'Cursor acquires Graphite' report (Dec 19, 2025, 'way over' $290M) is confirmed against InfoWorld + Yahoo Finance + TipRanks.",
+    "zh": "SiliconANGLE——企业科技新闻站（theCUBE 出品方）；对开发工具与 AI 发布的二手报道可信。已两次交叉核验（08-18）：其 Cursor Origin 上线报道（8 月 17 日、面向 agent 规模的定位）与 cursor.com 的 changelog 一致——但需注意 changelog 称「Agent-native features ship soon」（stacked-PR/merge-queue 尚未上线）；其「Cursor 收购 Graphite」报道（2025-12-19、远高于 2.9 亿美元估值）已与 InfoWorld + Yahoo Finance + TipRanks 交叉确认。",
+    "jp": "SiliconANGLE——エンタープライズテックのニュースサイト（theCUBEの発行元）。devツール・AIローンチの二次報道として信頼できる。クロスチェック済み×2（08-18）：Cursor Originローンチ報道（8月17日、エージェント規模の位置づけ）はcursor.comのchangelogと一致——ただしchangelogは「Agent-native features ship soon」（stacked-PR/merge-queueは未出荷）としている点に注意。また「CursorがGraphiteを買収」報道（2025-12-19、2.9億ドル評価額を大幅に上回る）はInfoWorld + Yahoo Finance + TipRanksと一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "docs.gitlab.com": {
+    "cat": "vendor",
+    "en": "GitLab's official documentation — first-hand for patch releases and security advisories. Cross-checked (08-18): its 19.2.4 patch release (CVE-2026-19478 CVSS 9.4 unauth GraphQL directive, fixed 19.2.4/19.1.6/19.0.8/18.11.11) matches IONIX's threat-center entry.",
+    "zh": "GitLab 官方文档——补丁发布与安全公告的一手来源。已交叉核验（08-18）：其 19.2.4 补丁发布（CVE-2026-19478 CVSS 9.4 未认证 GraphQL 指令，修复 19.2.4/19.1.6/19.0.8/18.11.11）与 IONIX 威胁中心条目一致。",
+    "jp": "GitLab公式ドキュメント——パッチリリースとセキュリティ勧告の一次情報。クロスチェック済み（08-18）：19.2.4パッチリリース（CVE-2026-19478 CVSS 9.4 未認証GraphQLディレクティブ、修正19.2.4/19.1.6/19.0.8/18.11.11）はIONIXの脅威センター記載と一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "seclists.org": {
+    "cat": "security",
+    "en": "SecLists — full-disclosure and security mailing-list archives; primary venue for public vulnerability disclosures. Cross-checked (08-18): its iMonnit Express advisory (pre-auth SYSTEM RCE, 4.0.5.5) matches the 0day-rubbish.com write-up.",
+    "zh": "SecLists——full-disclosure 与安全邮件列表归档；公开漏洞披露的主要阵地。已交叉核验（08-18）：其 iMonnit Express 公告（预认证 SYSTEM RCE、4.0.5.5）与 0day-rubbish.com 的文章一致。",
+    "jp": "SecLists——full-disclosureおよびセキュリティメーリングリストのアーカイブ。公開脆弱性開示の主要な場。クロスチェック済み（08-18）：iMonnit Express勧告（事前認証SYSTEM RCE、4.0.5.5）は0day-rubbish.comの記事と一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "0day-rubbish.com": {
+    "cat": "security",
+    "en": "0day Rubbish Research Team's blog — independent vuln research with PoCs. Cross-checked (08-18): its iMonnit Express 4.0.5.5 pre-auth SYSTEM RCE chain (empty security-answer → admin cookie → path-traversal → plugin loader) matches the seclists.org full-disclosure advisory.",
+    "zh": "0day Rubbish 研究团队的博客——带 PoC 的独立漏洞研究。已交叉核验（08-18）：其 iMonnit Express 4.0.5.5 预认证 SYSTEM RCE 链（空安全问题答案 → admin cookie → 路径遍历 → 插件加载器）与 seclists.org 的 full-disclosure 公告一致。",
+    "jp": "0day Rubbish Research Teamのブログ——PoC付きの独立した脆弱性研究。クロスチェック済み（08-18）：iMonnit Express 4.0.5.5の事前認証SYSTEM RCEチェーン（空のセキュリティ回答 → admin cookie → パストラバーサル → プラグインローダー）はseclists.orgのfull-disclosure勧告と一致。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "openrouter.ai": {
+    "cat": "vendor",
+    "en": "OpenRouter — hosted LLM routing/aggregation platform; canonical for effective model pricing. Cross-checked (08-18): its GPT-5.6 Sol $2.50/$15 per M cut matches Vercel AI Gateway's changelog (both aggregator-side, OpenAI's own $5/$30 unchanged).",
+    "zh": "OpenRouter——托管的 LLM 路由/聚合平台；有效模型定价的权威来源。已交叉核验（08-18）：其 GPT-5.6 Sol 降到 $2.50/$15 每 M 与 Vercel AI Gateway 的 changelog 一致（两者都在聚合器侧，OpenAI 自己的 $5/$30 不变）。",
+    "jp": "OpenRouter——ホスト型LLMルーティング/集約プラットフォーム。実効モデル価格の正典。クロスチェック済み（08-18）：GPT-5.6 Solの$2.50/$15毎Mへの値下げはVercel AI Gatewayのchangelogと一致（いずれもアグリゲーター側、OpenAI自身の$5/$30は不変）。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "docs.openviking.ai": {
+    "cat": "vendor",
+    "en": "OpenViking's official docs (ByteDance/Volcengine) — first-hand for the viking:// memory/knowledge/skills filesystem. Cross-checked (08-18): its LoCoMo accuracy claim (24–57% → 80–83%) matches the volcengine/OpenViking README.",
+    "zh": "OpenViking 官方文档（字节跳动/火山引擎）——viking:// 记忆/知识/技能文件系统的一手来源。已交叉核验（08-18）：其 LoCoMo 准确率宣称（24–57% → 80–83%）与 volcengine/OpenViking 的 README 一致。",
+    "jp": "OpenViking公式ドキュメント（ByteDance/Volcengine）——viking://メモリ/ナレッジ/スキルファイルシステムの一次情報。クロスチェック済み（08-18）：LoCoMo精度の主張（24–57% → 80–83%）はvolcengine/OpenVikingのREADMEと一致。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "hackaday.io": {
+    "cat": "community",
+    "en": "Hackaday.io — hardware-hacker project hosting and showcase; useful for open-hardware releases. Cross-checked (08-18): its AERIS-10 / PLFM_RADAR project page (open phased-array radar, Crowd Supply) matches the NawfalMotii79/PLFM_RADAR GitHub repo.",
+    "zh": "Hackaday.io——硬件极客项目托管与展示平台；对开源硬件发布较有用。已交叉核验（08-18）：其 AERIS-10 / PLFM_RADAR 项目页（开源相控阵雷达、Crowd Supply）与 NawfalMotii79/PLFM_RADAR GitHub 仓库一致。",
+    "jp": "Hackaday.io——ハードウェアハッカーのプロジェクトホスティング兼ショーケース。オープンハードウェア公開に有用。クロスチェック済み（08-18）：AERIS-10 / PLFM_RADARプロジェクトページ（オープンなフェーズドアレイレーダー、Crowd Supply）はNawfalMotii79/PLFM_RADAR GitHubリポジトリと一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "peerlist.io": {
+    "cat": "community",
+    "en": "Peerlist — developer profile/portfolio platform; project posts are self-published. Cross-checked (08-18): its munder-difflin project page matches the chaitanyagiri/munder-difflin GitHub repo.",
+    "zh": "Peerlist——开发者主页/作品集平台；项目贴为作者自发布。已交叉核验（08-18）：其 munder-difflin 项目页与 chaitanyagiri/munder-difflin GitHub 仓库一致。",
+    "jp": "Peerlist——開発者プロフィール/ポートフォリオプラットフォーム。プロジェクト投稿は自己公開。クロスチェック済み（08-18）：munder-difflinプロジェクトページはchaitanyagiri/munder-difflin GitHubリポジトリと一致。",
+    "cred": "med",
     "density": "med",
     "cv": 1
   }

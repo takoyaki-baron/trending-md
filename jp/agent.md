@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-18T12:03:00Z
+last_processed: 2026-08-18T20:03:00Z
 ---
 
 # 学習エージェント
@@ -36,6 +36,13 @@ last_processed: 2026-08-18T12:03:00Z
    OSコンポーネントに）、OpenCut（クリエイティブツールのヘッドレス + MCP）、ai-memory（ベンダー中立
    のクロスエージェント引き継ぎ）、Cordis（DeepSeek Harnessの背後にある可逆エフェクトのプラグイン
    バックボーン、テーゼ12参照）。
+   **新規（08-18 20:34）：** 今や再設計されているのはCLIだけでなく*コードホスト*も——Cursor **Origin**が
+   8月17日に「エージェント時代のgit forge」としてローンチしたが、出荷済みv1は従来型forge（repos/PR/コード
+   閲覧）+ GitHubとのリアルタイム同期（GitHubが真実の源のまま）；エージェント規模の差別化（Graphiteの
+   stacked-PR/merge-queue、自動レビュー、行単位プロベナンス）はすべて発表済み・未出荷（"Agent-native features
+   ship soon"）。レビュー/マージ/信頼が名指しされたボトルネック——Anysphereが2025-12-19にGraphiteを買収した
+   のはまさに「書くのは解決済み、レビューが制約」だからで、Cursorは社内PRの35%をすでに自律クラウドエージェント
+   が開いていると述べる。→ [[agent-stack]]
 
 2. **エージェントセキュリティが最も直接的な攻撃面——MCPは新しいSSRFベクトル、そしてエージェント
    の認証情報が今や獲物。** Langflow RCE（CVSS 9.8、活発に悪用）、mcp-grafana SSRF（9.1）、Semantica
@@ -173,6 +180,10 @@ last_processed: 2026-08-18T12:03:00Z
    MRCRは512K–1Mで91.5%→73.8%）。**RPM**（arXiv:2608.13940）が計算レバーを加える：AI研究選好モデルが*どの候補解を
    走らせるか*を事前フィルタし、実行予算3分の2未満・約15時間で非誘導エージェントの24時間スコアに到達
    （AIRS-Bench SOTA）。→ [[frontier-models]]
+   **新規（08-18 20:03）：** GPT-5.6 Solの実効価格が半減——ただしOpenAIではなく*アグリゲーター*側で：OpenRouterと
+   Vercel AI Gatewayがともに$2.50/$15毎Mへ引き下げ（OpenAI自身の$5/$30は不変）。つまり**フロンティア価格を今や設定
+   するのはラボではなくルーティングプラットフォーム**（SemiAnalysisはこの割引をプラットフォームの公開トークン使用量
+   報告に結びつける）。→ [[smart-routing]]
 
 7. **AI安全性は今や政策ではなく測定可能なリリース閾値であり、しかもラボ横断で収束しつつある。**
    OpenAIはAstraを停止した——そのPreparedness Frameworkが「Critical能力を排除できない」と結論した
@@ -325,6 +336,13 @@ last_processed: 2026-08-18T12:03:00Z
    （4年、4,000以上のプラグイン）を支え、DeepSeek HarnessもCordis v4で出荷、「VSCode上位100拡張の
    うち87はホスト再起動なしにアンインストールできない」という自己進化エージェントにとって致命的な
    問題を直撃。→ [[agent-stack]]
+   **新規（08-18 20:03）：** **Kozuchi Agent**（arXiv:2608.15579、ASE '26）——言語非依存・オープンウェイトの修復
+   エージェントで、ローカルホストの*未ファインチューン* Qwen3.5-27B上で、明示的フェーズ + 永続状態 + 決定的ツール
+   により **374/500 SWE-bench Verified** を解決（Multi-SWE-bench Javaでオープンウェイト首位；言語をまたいで±5pp以内
+   で安定）——ブラックボックスのフロンティアエージェントへの「再現性優先」の対抗軸であり、レバーがモデル規模では
+   なくハーネス工学であることのさらなる証拠。Li Bojieのオープンな `bojieli/ai-agent-book`（38.9K stars、10章 / 103
+   実験）がこの用語を生んだ：「**Harness engineering**」——モデルの外側すべてこそが優位。→ [[agent-stack]]
+   [[frontier-models]]
 
 > 次に追う未解決の疑問は[アクションページ](/jp/action/)のアジェンダ（リサーチ + システム）へ。
 
@@ -343,7 +361,7 @@ last_processed: 2026-08-18T12:03:00Z
   stars、ベンチマーク訂正済み）、Prime Agent（RLM、95.5% ARC-AGI-3）、Multi-Agent-CAD（トークン116×
   削減）、yc-software/qm（YCのマルチプレイヤーエージェントハーネス、13K stars）、Cline Kanban
   （Apache 2.0、worktree-per-task Webボード、`npx kanban`）、LoopX（MIT状態カーネル——「ボードは投影、
-  カーネルが真実」）、phone-harness（macOS Mirroring経由で実機iPhoneを操作）、ai-agent-book（29K
+  カーネルが真実」）、phone-harness（macOS Mirroring経由で実機iPhoneを操作）、ai-agent-book（38.9K
   stars）、Macro（AGPLオールインワンワークスペース、MCP経由のチームメモリ）、Zed Delta（DeltaDB上の
   マルチプレイヤーワークツリー + エージェントレビュー）、OpenAI Codex Security（AppSecエージェント、
   120万コミットをスキャン）。**分解：** プラグイングラフ（DeepSeek Harness）+ 状態カーネル（LoopX）+
@@ -382,6 +400,15 @@ last_processed: 2026-08-18T12:03:00Z
   はその*下のモデルの経済性*に合わせてチューニングされる）、i-have-adhd（`ayghri/i-have-adhd`、~18K
   stars——エージェント出力UXを再配線する単一の `SKILL.md`：最初の行がコマンド/パス、番号付きステップ、
   2分未満の次のステップ；[[agent-plugins]]参照）。
+  **新規（08-18 20:03）：** Cursor **Origin**（「エージェント規模のために作られた」git forge——GitHubを真実の源と
+  する双方向リアルタイム同期、8月17日に有料プランへ公開（GitHub約7時間障害と同日）；主要コーディングエージェント
+  ベンダーによる最初の信頼できるAIネイティブコードホスト、ただしそのGraphite stacked-PR/merge-queue + 自動レビュー
+  層は発表済み・未出荷——「Agent-native features ship soon」）、OpenViking
+  （`volcengine/OpenViking`、AGPL-3.0、~29K stars——エージェントメモリ/知識/スキルを `viking://` 仮想ファイルシステム
+  の背後に統一、L0/L1/L2自動階層化 + `session.commit()` 選好マイニング；LoCoMoメモリ24–57%→80–83%、入力トークン
+  −34–91%）、munder-difflin（`chaitanyagiri/munder-difflin`、MIT——実在のターミナルCLIを `node-pty` に包むローカル
+  ファーストのマルチエージェントハーネス、GODオーケストレーター + git支援「ハイブ」メモリ + コスト/スコープ/破壊
+  ゲート）。
 - **マルチエージェントの失敗モード（08-16 20:03、→ テーゼ4）：** AnthropicのFrontier Red Teamはエージェント
   スウォームが壊れる4つの方法を分類——協調は脆い（協調スウォームは266件の脆弱性を発見したのに対し独立
   エージェントは21件、だが重複は12件のみ）、同調はシステム的（30エージェント中18がブランチを
@@ -444,6 +471,11 @@ last_processed: 2026-08-18T12:03:00Z
   **GPT-NL（08-17 04:03）：** TNOの主権オランダLLM（€13.5Mの公的資金、ゼロから訓練、著作権クリーン、収益の
   一部を権利者へ還元するContent Board）がHNのトップページ入り；ユトレヒト/ロッテルダム/アイントホーフェンで
   試行中。米中フロンティア集中への最も具体的な欧州の対抗モデル。 → [[frontier-models]]
+  **新規（08-18 20:03）：** **τ0-VLA**（arXiv:2608.16885、39著者）——階層型VLAで、判断が難しいところに世界モデル誘導
+  のテスト時計算を費やす（高レベルポリシーがコミット前に代替サブタスクを探索、低レベルポリシーがエンボディメント
+  横断で実行；40,115時間の異種実データ）——テスト時計算のスケーリングがロボット制御に到達。**GPT-5.6 Solがアグリ
+  ゲーターで半額**（OpenRouter + Vercel AI Gateway $2.50/$15毎M；OpenAIの$5/$30は不変）——チャネルレベルの値下げ
+  （テーゼ6）。**Kozuchi Agent**（arXiv:2608.15579）——オープンウェイト修復エージェント（テーゼ12）。
 - **エージェントメモリの標準化（未解決のギャップ）：** MCP（ツール/データアクセス）とA2A（エージェント
   間、いずれもLinux Foundation）は収束したが、どちらも*統制された永続的共有メモリ*を標準化していない
   ——著者/信頼度/プロヴェナンスのフィールド、メモリ空間の権限、競合/順序のセマンティクスがない。
@@ -547,6 +579,13 @@ last_processed: 2026-08-18T12:03:00Z
   経由で開示、Snowflakeは同日修正。さらに6つのCVE：Ray CVE-2025-62593（KEV 9.4 DNSリバインディング）、Joomla
   Sourcerer CVE-2026-74253（10.0）、Forminator CVE-2026-15748（9.8）、Adobe ColdFusion CVE-2026-48362（10.0）、
   Gitea CVE-2026-60004（9.8 gitフックRCE）、Glances CVE-2026-68518（8.8）。台帳 → [[security]]。
+  **新規（08-18 20:03）：** 2つのforge/ゲートウェイのデータポイント。*GitLab* CVE-2026-19478（CVSS 9.4、CWE-94）——
+  未認証のGraphQLディレクティブが公開プロジェクト + ユーザーデータを変更・削除できる（帯外修正 19.2.4/19.1.6/
+  19.0.8/18.11.11；**18.2–18.10ブランチには修正がない**ため、それらのインストールはブランチごとアップグレードが
+  必要；HackerOne経由でhiimguardianが報告）。*iMonnit Express 4.0.5.5*（CVSS 9.8、CVE未採番、公開PoC）——Monnitの
+  Windows IoTゲートウェイでの事前認証 **SYSTEM** RCE：空のセキュリティ回答リストがadmin cookieを鋳造 → 証明書アッ
+  プロード端点のパストラバーサル書き込み → プラグインローダーが `IExpressPlugin` チェックの*前に* `Assembly.Load` +
+  `Activator.CreateInstance`、コンストラクタが `NT AUTHORITY\SYSTEM` として実行（0day Rubbish）。台帳 → [[security]]。
 - **プロヴェナンスと透かしの軍拡競争（08-15）：** AnthropicはEU AI法第50条の透明性ルールの下で
   Claudeのテキストに透かしを入れ始めた（8月2日）。数日以内に `guillaumemeyer/watermarks-remover`
   （MIT、4.1K stars）がAIプロヴェナンスマークを3層で剥がす——Unicodeステガノグラフィ、重度の言い換え
@@ -628,6 +667,10 @@ last_processed: 2026-08-18T12:03:00Z
   borrow checkerがホスト↔デバイス転送を分類（`&T` 読み取り専用 / `&mut T` 双方向）——H100/MI250Xで手書きCUDAの
   約10–30%、正直に「ゼロオーバーヘッドは主張であって実証ではない」と明記；`nautechsystems/nautilus_trader`
   （26.1k stars）は安定した2.x Rustネイティブ取引エンジンAPIへ。
+  **新規（08-18 20:03）：** AERIS-10（`NawfalMotii79/PLFM_RADAR`、24.2K stars）——完全オープンな10.5 GHzパルスLFM
+  フェーズドアレイレーダー（CERN-OHL-Pハードウェア、±45°電子 + 360°機械走査、XC7A50T FPGA、STM32、Crowd Supply
+  2026 Q3）——独立した分解（`KolesnykMaksym/plfm-radar-analysis`）が現実的な1 m²目標に対する公称到達距離を7–13×
+  過大と指摘：オープンハードウェアに適用されたVoidの教訓。
 - **モデル & 研究：** Kronos（金融ローソク足向けのdecoder-only基盤モデル、AAAI 2026）——「事前学習 +
   ファインチューニング」の定石を市場へ適用。**HL-Gauss PPO**（arXiv 2608.02181、COLM 2026）——スカラー
   のcriticヘッドをカテゴリカル予測器（HL-Gaussターゲット）に置き換えることは、ドロップインのPPOの

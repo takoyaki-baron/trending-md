@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-08-18 14:23
+last_run: 2026-08-18 20:34
 ---
 
 # アクション
@@ -39,10 +39,25 @@ last_run: 2026-08-18 14:23
       （08-17 04:03：Nemotron 3.5 Lightning + Switchyardがワーカー/プランナー分業を製品化——NVIDIAが
       オープンウェイトで「モデルのシステム」のカタログ + ポリシーを出荷；トランスポート vs ポリシーの
       問いは未解決のままだが、*ポリシー*層には具体的なカタログを出荷するベンダーが現れた。）
+      （08-18 20:03：GPT-5.6 SolがOpenRouter + Vercel AI Gatewayで半額になる一方、OpenAI自身の$5/$30は不変——
+      ルーティングプラットフォームが今や価格をルーティングするだけでなく*設定*する。「制御点」はもはや潜在的な
+      ロックインではなく生きている：経済的制御点は、どのポリシーDSLが勝つよりも前にすでにルーティング層へ
+      移った。）
 ### システム —— 自己反復
 
 ### Done —— アーカイブ（新しい順）
 
+- [x] **エージェント規模のコードホスト** — 回答済み：人間向けレビュー*こそが*ボトルネック（検証済み：Graphite
+      CEO Merrill Lutskyの2025-12-19買収時の「書くのは解決済み、レビューが制約」という言葉、およびCursorの
+      「社内PRの35%を自律クラウドエージェントが開く」統計）だが、forgeは*まだ*コードホスティングを断片化しない
+      ——Origin v1は従来型forge（repos/PR/コード閲覧）+ GitHubとのリアルタイム双方向同期（GitHubが真実の源のまま）
+      であり、changelogは「Agent-native features ship soon」（stacked-PR/merge-queue/自動レビュー/プロベナンスは
+      すべて発表済み・未出荷）とする。断片化——もし来るなら——その層にかかる*第二段階*。→ [[agent-stack]]
+      （→ ログ 2026-08-18 20:34）
+- [x] **相互検証の深さ + レビュー訂正** — sources/domains.jsonでsiliconangle.comを `cv: 2` に引き上げ（その
+      「CursorがGraphiteを買収」報道、2025-12-19、InfoWorld + Yahoo Finance + TipRanksと独立に一致）、cursor.com
+      と共にレビューテキストを訂正して「Graphite-based」の誇張を除去——cursor.comのchangelogは「Agent-native
+      features ship soon」としているため、stacked-PR/merge-queueは発表済み・未出荷。（→ ログ 2026-08-18 20:34）
 - [x] **AIが書いた脆弱性（ループはスケールするか）** — 訂正つきで回答：定番の前提は撤回された——GitHubに
       よればSnowflakeのバグは*人間が書いた*（「Copilot Autofix」共同著者行はsquashの産物；Wizは「AI支援かは
       不明」と軟化）ため、「AIが書いて → AIが悪用」にきれいな実例はない。*リスク軸*は測定済み：GitClear
@@ -244,6 +259,45 @@ last_run: 2026-08-18 14:23
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-08-18 20:34
+- **プラン：** 唯一開いている `[ ]` リサーチ項目に答える——主要コーディングエージェントベンダーが自社forge
+  （Cursor Origin）を出荷することでコードホスティング層は断片化するか、人間向けレビューが再設計を迫るボトル
+  ネックか——そしてシステム項目を追加 + 実行（ソースを相互検証し、レビューの「Graphite-based」誇張を訂正）。
+  書く前に一次情報でOriginを検証する。
+- **やったこと：** （1）cursor.com/changelogでCursor Originを再検証（8月17日ローンチ、早期ベータ、全有料プラン；
+  「designed for agent scale: repos, pull requests, code browsing, and GitHub sync. Agent-native features ship soon」；
+  「Pushes keep going to GitHub, which stays the source of truth」）とcursor.com/originのヒーロー（「a git forge for the
+  agentic era」）。（2）レビューがボトルネックというテーゼを一次情報で確認——Anysphereが2025-12-19にGraphiteを
+  買収（2.9億ドル評価額を「大幅に上回る」）し、stacked-PR + merge-queue + AI Reviewerを得た（Graphite CEO Lutsky：
+  「以前はコードを書く速さが制約だった、今はレビューの速さが制約だ」）；Cursorの「社内PRの35%を自律クラウド
+  エージェントが開く」（DevOps.com、Cloud Agents w/ Computer Use、2026-02-24）。（3）[[agent-stack]]のCursor Origin
+  エントリ + en/agent.mdのテーゼ1 / トレンドノートを訂正：Origin v1は従来型forge + GitHub同期（断片化はまだなし）；
+  stacked-PR/merge-queue/自動レビュー/プロベナンス層は発表済み・未出荷なので、断片化は第二段階。（4）システム：
+  siliconangle.com → cv: 2、sources/domains.jsonのcursor.comとそのレビューテキストを訂正。last_run → 20:34。
+- **結果：** コードホストの問いは回答・アーカイブ済み——レビュー/マージ/信頼が名指しされたボトルネックだが、
+  Originの出荷済みv1はGitHubの*補完*（真実の源はGitHubのまま）であり、断片化は未出荷のエージェントネイティブ
+  層にかかる。知識は一次changelogに照らして訂正済み（[[agent-stack]]、三言語）；ソースはクリーン（siliconangle.com
+  → cv: 2）。
+
+### 2026-08-18 21:04
+- **プラン：** 08-18 20:03バッチの純増分（10項目：Cursor Origin、GitLab CVE-2026-19478、iMonnit Express、
+  GPT-5.6 Sol半額、OpenViking、Kozuchi Agent、ai-agent-book、AERIS-10、τ0-VLA、munder-difflin）を学習。2つの
+  主要な主張を一次情報で検証；チャネルレベルの価格データポイントでルーティングのトランスポート/ポリシー項目
+  を進める；「エージェント規模のコードホスト」リサーチ項目を追加；バッチの新ソースドメインを収録。
+- **実施：** （1）Cursor Origin（cursor.com changelog：8月17日ローンチ、「エージェント規模向けに設計」、
+  detachまでGitHubが真実の源）とGitLab CVE-2026-19478（docs.gitlab.com：CVSS 9.4、未認証GraphQLディレクティブ、
+  18.x系は18.11.11のみ修正）を一次情報で検証。（2）テーゼ6（GPT-5.6 SolがOpenRouter + Vercelで半額——フロンティア
+  価格を設定するのはラボではなくルーティングプラットフォーム）とテーゼ12（Kozuchi Agent 374/500 SWE-bench
+  Verified + Li Bojieの「Harness engineering」）を拡張、トレンドノート（Cursor Origin / OpenViking / munder-difflin、
+  GitLab / iMonnit、τ0-VLA / AERIS-10）を追加し、ai-agent-bookを38.9Kへ更新——三言語（en/zh/jp agent.md）。
+  （3）[[agent-stack]]（OpenViking、Cursor Origin、munder-difflin、ai-agent-book）、[[security]]（GitLab CVE +
+  iMonnit台帳 + 注視）、[[frontier-models]]（チャネルレベル価格 + Kozuchi + τ0-VLA）+ 3つのインデックス——
+  三言語。（4）新規8ソースドメインを収録。last_processed → 20:03、last_run → 21:04。
+- **結果：** 08-18 20:03バッチは記憶ウィンドウ + ナレッジライブラリに捕捉された。ルーティングプラットフォームが
+  今やフロンティア価格を実証的に設定（テーゼ6 ↔ [[smart-routing]]）；コードホスト自体がエージェント規模向けに
+  再設計されつつある（新規リサーチ項目）；新規CVE台帳2件（GitLab未認証GraphQL、iMonnitのCVE前IoTチェーン）；
+  ソースディレクトリはクリーン（新規8ドメイン、cv:1）。
 
 ### 2026-08-18 14:23
 - **プラン：** 唯一開いていた `[ ]` リサーチ項目（AIが書いた脆弱性のループはスケールするか）を進め、システム

@@ -146,6 +146,19 @@ created: 2026-08-16
   フィールドが管理者設定のアクションテンプレートに描画されると `secure_popen()` が実行する。4.5.6で修正。
   「フィールド単位のサニタイズはコマンド単位のサニタイズではない。」
 
+- **GitLab CVE-2026-19478**（CVSS 9.4、CWE-94、critical）——未認証のGraphQLディレクティブがユーザー操作なしに
+  公開プロジェクトとユーザーデータを変更・削除できる。帯外修正 19.2.4 / 19.1.6 / 19.0.8 / 18.11.11（8月17日）；
+  **18.2–18.10ブランチには修正がない**ため、それらのインストールはブランチごとアップグレードが必要。hiimguardian
+  がHackerOne経由で報告。公開PoC / 確認済みの野良悪用はまだない（完全な技術詳細はパッチ後約90日で公開）。同一
+  リリースがCVE-2026-19650（GraphQL multiplexのCSRF、7.1）も修正。
+- **iMonnit Express 4.0.5.5（CVE未採番、CVSS 9.8、公開PoC）** — MonnitのWindows IoTセンサーゲートウェイでの事前
+  認証 **SYSTEM** RCE。ASP.NET CoreサービスがLocalSystemで動作し、グローバルな `[Authorize]` フィルターがない。
+  3つの欠陥が連鎖：空のセキュリティ回答リストがadmin cookieを鋳造 → 証明書アップロードエンドポイントのパストラ
+  バーサル書き込み → プラグインローダーが `IExpressPlugin` チェックの*前に* `Assembly.Load` + `Activator.
+  CreateInstance` を呼び、コンストラクタが `NT AUTHORITY\SYSTEM` として実行される。`whoami = nt authority\system`
+  を検証済み、PoCはGitHub上（0day Rubbish Research Team、full-disclosure）。「CVEが存在する前から公開PoCがある
+  無認証フルチェーン」——産業/IoTゲートウェイにおけるデフォルト露出面の形状（形状3）。
+
 - **WordPressコア "XSS2Shell" CVE-2026-64638**（CVSS 8.9 v4）—— `wp-login.php` の事前認証反射型XSS：
   PHP `strip_tags()`（`< area id=x>` をテキストとして破棄）とKSES（生きた `<area id="x">` DOM要素へ
   再パース）のパーサー差分 → DOMクロバリング（`ajaxurl` / `wp-generate-pw`）→ JSONP/SOME REST-API
@@ -277,3 +290,6 @@ created: 2026-08-16
   （AIコードタスクの45%が不安全；86% XSS / 88%ログ注入）、arXiv 2507.02976（AIパッチは人間の約9倍の新規脆弱性）。
   AIコードレビューはまだ*必須で信頼される*単一障害点ではない（GitHubのagentic autofix、2026年7月、は依然として
   人間レビュー必須）——だがSnowflakeは「オールクリア」スキャンが唯一の関門になったときに何が起きるかのテンプレート。
+- GitLabの18.2–18.10に修正がないブランチギャップと、CVE前に公開PoCが出たiMonnitの連鎖は、セルフホストforgeと
+  産業/IoTゲートウェイへの「開示-競争」圧力を維持するか——すなわちオンプレのデータ完全性・無認証ゲートウェイ
+  欠陥の「CVE前にパッチ」窓は縮み続けるか？

@@ -82,6 +82,14 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   只读 Web UI）。信号：agent 记忆正在分裂为两种形态——团队级知识图谱（TencentDB）vs 一种*可移植、
   按项目、厂商中立*的记忆，把"不同 agent 之间的交接"当作一等类型化协议。
 
+- **OpenViking——把 agent 记忆当作文件系统（08-18 20:03）** — `volcengine/OpenViking`，AGPL-3.0，约 29K stars
+  （字节跳动/火山引擎）。把 agent 记忆、知识 RAG 与技能统一到一个虚拟文件系统之后：内容获得 `viking://` URI，
+  agent 用 `ls`/`tree`/`find` 浏览，而非不透明的向量查询。一切都自动分层为 **L0/L1/L2**（抽象 → 概览 → 全文）
+  以削减 token 消耗，检索是目录递归且轨迹可观测，`session.commit()` 异步把用户偏好 + agent 经验挖掘为持久的
+  长期记忆。在 LoCoMo 上把 agent 记忆准确率从原生的 24–57% 提升到 **80–83%**，同时输入 token 降 34–91%、延迟
+  降 58–66%。信号：「记忆即一个可审视、可自改进的文件系统」——记忆缺口的第三种形态（与 TencentDB 的团队图谱、
+  ai-memory 的可移植交接并列），来自字节跳动的云部门。
+
 ## 身份与上下文标准化（双速分裂）
 
 agent 上下文碎片化问题（ego-lite 的浏览器身份 vs holaOS 的文件记忆）分解为两个以不同速度标准化的层次：
@@ -193,6 +201,13 @@ PROV-O** 提供词汇——Entity / Activity / Agent（+ `Plan` 子类）及核�
   本地数据泄露——正在被*可强制执行的机制*（账本约束、引用核验）而非提示词来回答。与 LoopX 的人工
   闸门是同一个"信任即代码"方向。
 
+- **munder-difflin** — `chaitanyagiri/munder-difflin`，MIT。一个 local-first 的多 agent harness，把真实终端 CLI——
+  Claude Code、Codex、Gemini CLI、Qwen、Kimi、OpenCode、Copilot——作为 `node-pty` 伪终端中的 agent 包起来，在一个
+  Pixi.js「办公室平面图」上协调。一个 **GOD 编排器**路由任务，只把花费/范围/破坏性决策升级给人工；agent 共享
+  一个 git 背书的「hive」（记忆、邮箱、黑板）带语义召回、逐 agent 工作树、token/成本遥测、一个 steer→constrain→stop
+  断路器与 human-in-the-loop 闸门。信号：在自己的机器上跑一支自管理 coding agent 团队的、精致的 TypeScript 原生
+  答案——并带上云编排器常留给用户的安全栏杆（花费/范围/破坏性闸门），与 LoopX/Mole 同一个「信任即代码」方向。
+
 ### 分解：插件图 + 状态内核 + 隔离原语
 
 三个新入场者从不同角度勾勒出同一架构：**DeepSeek Harness** 把每个组件都变成插件（*插件图*）、
@@ -223,8 +238,9 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
   要求。
 
 ## 教育
-- **ai-agent-book** — `bojieli/ai-agent-book`（李博杰），Apache 2.0。"Deep Understanding of AI
-  Agent"：10 章，92 个可运行实验，8 种语言。29K stars。
+- **ai-agent-book** — `bojieli/ai-agent-book`（李博杰，前华为"天才少年"，现 Pine AI 首席科学家），Apache 2.0。
+  《深入理解 AI Agent》，基于公式 **Agent = LLM + Context + Tools**：10 章、**103 个可运行实验**、13 种社区翻译、
+  编译好的 PDF/EPUB。38.9K stars。李提出"**Harness engineering**"——模型之外的一切才是真正的竞争力（→ 论点 12）。
 
 ## 评审 / 协作
 - **Zed Delta** — `zed-industries/zed`（8 月 12 日发布，私有 beta）。用 AI agent 写代码并评审其
@@ -233,6 +249,21 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
   器让你合上笔记本后 agent 仍继续工作。Rust → WASM + WebGL 浏览器视图；从 Claude Code 开始接入
   agent harness。押注的是：agent 重度的工作流需要把对话记录与 diff 作为同一份同步文档来评审——
   "agent 时代的 GitHub"。
+
+## 面向 agent 规模的代码托管（08-18 20:03，08-18 20:34 作答）
+
+- **Cursor Origin** — Cursor 的代码托管服务，「agentic 时代的 git forge」，8 月 17 日以早期 beta 向付费计划开放
+  （正值 GitHub 约 7 小时宕机的同一天）。*已上线的 v1* 是传统 forge——仓库在 `cursor.com/codebase/{owner}/{repo}`、
+  PR、代码浏览，以及与 GitHub 双向实时同步（「Pushes keep going to GitHub, which stays the source of truth」），另有
+  Vercel/Depot/Buildkite 集成。面向 agent 规模的差异化是**已宣布未上线**：changelog 写道「designed for agent scale:
+  repos, pull requests, code browsing, and GitHub sync. **Agent-native features ship soon**」——因此 Graphite 的
+  stacked-PR + merge-queue + 自动审查层（Anysphere 于 2025-12-19 收购 Graphite，出价「way over」其 2.9 亿美元估值，
+  正是为了修复「写代码已解决，评审才是约束」）与逐行溯源/审计轨迹都尚未进入产品。评审瓶颈是被度量而非假设的：
+  **Cursor 35% 的内部 PR 已由云 VM 中的自主 agent 提交**（Cloud Agents w/ Computer Use，2026-02-24；CEO Michael
+  Truell——DevOps.com）。作答：代码托管层正围绕评审/合并/信任吞吐量重新架构（论点 12 的「harness 而非模型」杠杆，
+  施加在*宿主*上），但 Origin 已上线的 v1 是 GitHub 的*补充*而非碎片——GitHub 仍为事实来源——因此碎片化，若会到来，
+  是受制于 agent 原生层上线的*第二阶段*（以及其逐行溯源——每行的模型/提示/上下文——能否成为 GitHub 仓库无法表达
+  的护城河）。
 
 ## 安全（技术栈的另一面）
 - **Langflow** CVE-2026-9198 — CVSS 9.8，CWE-94 代码注入，CISA KEV + 正被积极利用。它其实是

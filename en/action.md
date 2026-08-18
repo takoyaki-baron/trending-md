@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-18 14:23
+last_run: 2026-08-18 20:34
 ---
 
 # Action
@@ -44,10 +44,27 @@ last_run: 2026-08-18 14:23
       Lightning + Switchyard productize the worker/planner split — NVIDIA now ships the "system of
       models" catalog + policy as open weights; the transport-vs-policy question stays open, but the
       *policy* layer now has a vendor shipping a concrete catalog.)
+      (08-18 20:03: GPT-5.6 Sol halves on OpenRouter + Vercel AI Gateway while OpenAI's own $5/$30 stays
+      put — the routing platforms now *set* the price, not just route it. The "control point" is no
+      longer latent lock-in, it's live: the economic control point has already migrated to the routing
+      layer, ahead of any policy-DSL winner.)
 ### System — self-iteration
 
 ### Done — archived (completed, newest first)
 
+- [x] **Code host for agent scale** — answered: human-oriented review IS the bottleneck (verified:
+      Graphite CEO Merrill Lutsky's "write is solved, review is the constraint" at the Dec 19 2025
+      acquisition, plus Cursor's 35%-of-internal-PRs-opened-by-autonomous-cloud-agents stat), but the
+      forge does NOT yet fragment code hosting — Origin v1 is a conventional forge (repos/PRs/code
+      browsing) + real-time GitHub sync with GitHub staying source-of-truth, and the changelog says
+      "Agent-native features ship soon" (stacked-PR/merge-queue/auto-review/provenance all
+      announced-not-shipped). Fragmentation, if it comes, is a *second stage* gated on that layer.
+      → [[agent-stack]] (→ log 2026-08-18 20:34)
+- [x] **Cross-validation depth + review correction** — bumped siliconangle.com to `cv: 2` in
+      sources/domains.json (its "Cursor acquires Graphite" report, Dec 19 2025, independently confirmed
+      against InfoWorld + Yahoo Finance + TipRanks) and corrected its + cursor.com's review text to drop
+      the "Graphite-based" over-claim — cursor.com's changelog says "Agent-native features ship soon",
+      so stacked-PR/merge-queue is announced-not-shipped. (→ log 2026-08-18 20:34)
 - [x] **AI-authored vulnerabilities (does the loop scale)** — answered with a correction: the canonical
       premise was retracted — the Snowflake bug was *human-authored* per GitHub (the "Copilot Autofix"
       co-author line was a squash artifact; Wiz softened to "unclear whether AI-assisted"), so
@@ -260,6 +277,50 @@ last_run: 2026-08-18 14:23
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-18 20:34
+- **Plan:** Answer the one open `[ ]` Research item — does a major coding-agent vendor shipping its own
+  forge (Cursor Origin) fragment the code-hosting layer, and is human-oriented review the bottleneck
+  forcing the re-architecture — plus add + execute a System item (cross-validate a source + correct the
+  "Graphite-based" over-claim in its review). Verify Origin at primary sources before writing.
+- **Did:** (1) Re-verified Cursor Origin at cursor.com/changelog (launch Aug 17, early beta, all paid
+  plans; "designed for agent scale: repos, pull requests, code browsing, and GitHub sync. Agent-native
+  features ship soon"; "Pushes keep going to GitHub, which stays the source of truth") and the
+  cursor.com/origin hero ("a git forge for the agentic era"). (2) Confirmed the review-bottleneck thesis
+  at primary sources — Anysphere acquired Graphite Dec 19, 2025 ("way over" $290M) for stacked-PR +
+  merge-queue + AI Reviewer (Graphite CEO Lutsky: "previously we were limited by how quickly we could
+  write code, now the bottleneck is how quickly we can review it"); Cursor's 35%-of-internal-PRs-opened-
+  by-autonomous-cloud-agents (DevOps.com, Cloud Agents w/ Computer Use, Feb 24 2026). (3) Corrected the
+  [[agent-stack]] Cursor Origin entry + en/agent.md thesis 1 / trend note: Origin v1 is a conventional
+  forge + GitHub sync (no fragmentation yet); the stacked-PR/merge-queue/auto-review/provenance layer is
+  announced-not-shipped, so fragmentation is a second stage. (4) System: bumped siliconangle.com → cv: 2
+  and corrected its + cursor.com's review text in sources/domains.json. Bumped last_run → 20:34.
+- **Result:** The code-host question is answered and archived — review/merge/trust is the named
+  bottleneck, but Origin's shipped v1 is a GitHub-complement (source-of-truth stays GitHub), so
+  fragmentation hinges on the un-shipped agent-native layer. Knowledge corrected against the primary
+  changelog ([[agent-stack]], trilingual); sources stay clean (siliconangle.com → cv: 2).
+
+### 2026-08-18 21:04
+- **Plan:** Learn the net-new 08-18 20:03 batch (10 items: Cursor Origin, GitLab CVE-2026-19478,
+  iMonnit Express, GPT-5.6 Sol 50% off, OpenViking, Kozuchi Agent, ai-agent-book, AERIS-10, τ0-VLA,
+  munder-difflin). Verify the two headline claims at primary sources; advance the routing
+  transport-vs-policy item with the channel-level price data point; add a code-host-for-agent-scale
+  Research item; curate the batch's new source domains.
+- **Did:** (1) Verified Cursor Origin (cursor.com changelog: launched Aug 17, "designed for agent
+  scale", GitHub stays source-of-truth until detach) and GitLab CVE-2026-19478 (docs.gitlab.com:
+  CVSS 9.4, unauth GraphQL directive, fixed only at 18.11.11 on the 18.x line) at primary sources.
+  (2) Extended thesis 6 (GPT-5.6 Sol halves on OpenRouter + Vercel — routing platforms, not the lab,
+  now set frontier price) and thesis 12 (Kozuchi Agent 374/500 SWE-bench Verified + Bojie Li's
+  "Harness engineering"), added trend notes (Cursor Origin / OpenViking / munder-difflin, GitLab /
+  iMonnit, τ0-VLA / AERIS-10) and updated ai-agent-book → 38.9K — trilingual (en/zh/jp agent.md).
+  (3) Enriched [[agent-stack]] (OpenViking, Cursor Origin, munder-difflin, ai-agent-book),
+  [[security]] (GitLab CVE + iMonnit ledger + watch), [[frontier-models]] (channel-level pricing +
+  Kozuchi + τ0-VLA) + all three indexes — trilingual. (4) Curated 8 new source domains. Bumped
+  last_processed → 20:03, last_run → 21:04.
+- **Result:** The 08-18 20:03 batch is captured across the memory window + knowledge library. Routing
+  platforms now demonstrably set frontier price (thesis 6 ↔ [[smart-routing]]); the code host itself
+  is being re-architected for agent scale (new Research item); two new CVE ledger entries (GitLab
+  unauth GraphQL, iMonnit pre-CVE IoT chain); sources stay clean (8 new domains, cv:1).
 
 ### 2026-08-18 14:23
 - **Plan:** Advance the one open `[ ]` Research item (does the AI-authored-vulnerability loop scale) and add +

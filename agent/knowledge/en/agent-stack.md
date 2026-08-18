@@ -94,6 +94,16 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   Signal: agent memory is splitting into two shapes — team-level knowledge graphs (TencentDB) versus a
   *portable, per-project, vendor-neutral* memory that treats "handoff between different agents" as a
   first-class typed protocol.
+- **OpenViking — agent memory as a filesystem (Aug 18 20:03)** — `volcengine/OpenViking`, AGPL-3.0,
+  ~29K stars (ByteDance/Volcengine). Unifies agent memory, knowledge RAG, and skills behind a virtual
+  filesystem: content gets a `viking://` URI and agents browse it with `ls`/`tree`/`find` instead of
+  opaque vector queries. Everything is auto-tiered **L0/L1/L2** (abstract → overview → full detail) to
+  cut token spend, retrieval is directory-recursive with an observable trajectory, and `session.commit()`
+  asynchronously mines user preferences + agent experience into durable long-term memory. On LoCoMo it
+  lifts agent-memory accuracy from 24–57% native to **80–83%** while cutting input tokens 34–91% and
+  latency 58–66%. Signal: "memory as an inspectable, self-improving filesystem" — a third shape for the
+  memory gap (alongside TencentDB's team graph and ai-memory's portable handoff), from ByteDance's cloud
+  arm.
 
 ## Identity & context standardization (the two-speed split)
 
@@ -226,6 +236,15 @@ the self-hosted open-source instance of this exact bet. No single owner yet — 
   Signal: "deep research" is proliferating, but its trust problems — cost overruns, hallucinated
   citations, local-data leakage — are being answered with *enforced mechanisms* (ledger constraints,
   quote verification), not prompts. Same trust-as-code direction as LoopX's human gates.
+- **munder-difflin** — `chaitanyagiri/munder-difflin`, MIT. A local-first multi-agent harness that wraps
+  real terminal CLIs — Claude Code, Codex, Gemini CLI, Qwen, Kimi, OpenCode, Copilot — as agents in
+  `node-pty` pseudo-terminals, coordinated on a Pixi.js "office floor." A **GOD orchestrator** routes
+  tasks and escalates only spend/scope/destructive decisions; agents share a git-backed "hive" (memory,
+  mailboxes, blackboard) with semantic recall, per-agent worktrees, token/cost telemetry, a
+  steer→constrain→stop circuit breaker, and human-in-the-loop gates. Signal: a polished, TypeScript-native
+  answer to running a self-managing team of coding agents on your own machine — with the safety rails
+  (spend/scope/destructive gates) that cloud orchestrators tend to leave to the user (the same
+  trust-as-code direction as LoopX/Mole).
 
 ### The decomposition: plugin graph + state kernel + isolation primitive
 
@@ -265,8 +284,11 @@ resolves into **two different boundaries standardizing separately**:
   worktree is a *product* convention, the sandbox is a *security* requirement.
 
 ## Education
-- **ai-agent-book** — `bojieli/ai-agent-book` (Li Bojie), Apache 2.0. "Deep Understanding of AI
-  Agent": 10 chapters, 92 runnable experiments, 8 languages. 29K stars.
+- **ai-agent-book** — `bojieli/ai-agent-book` (Li Bojie, ex-Huawei "Genius Youth", now Pine AI chief
+  scientist), Apache 2.0. 《深入理解 AI Agent》 ("Deep Understanding of AI Agent"), built on the formula
+  **Agent = LLM + Context + Tools**: 10 chapters, **103 runnable experiments**, 13 community
+  translations, compiled PDF/EPUB. 38.9K stars. Li coins "**Harness engineering**" — everything outside
+  the model is where the real competitive edge is (→ thesis 12).
 
 ## Review / collaboration
 - **Zed Delta** — `zed-industries/zed` (announced Aug 12, private beta). Multiplayer environment
@@ -276,6 +298,26 @@ resolves into **two different boundaries standardizing separately**:
   runners keep agents working after you close the laptop. Rust → WASM + WebGL browser view; connects
   to agent harnesses starting with Claude Code. Bets that agent-heavy review needs the transcript
   and the diff as one synchronized document — "the GitHub of the agent era."
+
+## Code hosting for agent scale (Aug 18 20:03, answered 20:34)
+
+- **Cursor Origin** — Cursor's code-hosting service, "a git forge for the agentic era," launched in
+  early beta to paid plans Aug 17 (the same day as GitHub's ~7h outage). The *shipped v1* is a
+  conventional forge — repos at `cursor.com/codebase/{owner}/{repo}`, pull requests, code browsing, and
+  bidirectional real-time GitHub sync ("Pushes keep going to GitHub, which stays the source of truth for
+  anything started there"), plus Vercel/Depot/Buildkite integrations. The agent-scale differentiators
+  are **announced-not-shipped**: the changelog reads "designed for agent scale: repos, pull requests,
+  code browsing, and GitHub sync. **Agent-native features ship soon**" — so the Graphite stacked-PR +
+  merge-queue + auto-review layer (Anysphere acquired Graphite Dec 19, 2025, "way over" its $290M
+  valuation, explicitly to fix "write is solved, review is the constraint") and the per-line
+  provenance/audit trail are not yet in the product. The review bottleneck is measured, not assumed:
+  **35% of Cursor's internal PRs are already opened by autonomous agents in cloud VMs** (Cloud Agents w/
+  Computer Use, Feb 24 2026; CEO Michael Truell — DevOps.com). Answer: the code-host layer is being
+  re-architected around review/merge/trust throughput (the "harness, not model" lever of thesis 12,
+  applied to the *host*), but Origin's shipped v1 is a GitHub-*complement*, not a fragment — GitHub
+  stays source-of-truth — so fragmentation, if it comes, is a *second stage* gated on the agent-native
+  layer shipping (and on whether its per-line provenance — model/prompt/context per line — becomes a
+  moat GitHub repos can't express).
 
 ## Security (the other side of the stack)
 - **Langflow** CVE-2026-9198 — CVSS 9.8, CWE-94 code injection, CISA KEV + active exploitation.

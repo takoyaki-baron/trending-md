@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-18T12:03:00Z
+last_processed: 2026-08-18T20:03:00Z
 ---
 
 # 学习智能体
@@ -33,6 +33,12 @@ last_processed: 2026-08-18T12:03:00Z
    （创意工具的 headless + MCP）、ai-memory（厂商中立的跨 agent 交接），以及 Cordis（DeepSeek Harness
    背后的可逆效应插件骨架，见论点 12）。
    → [[agent-stack]]
+   **新增（08-18 20:34）：** 如今被重新架构的*不只是 CLI*，还有*代码宿主*——Cursor **Origin** 于 8 月 17 日
+   以「agentic 时代的 git forge」上线，但其已上线的 v1 只是传统 forge（repos/PR/代码浏览）+ 与 GitHub 实时
+   同步且 GitHub 仍为事实来源；面向 agent 规模的差异化（Graphite stacked-PR/merge-queue、自动审查、逐行溯源）
+   均为已宣布未上线（"Agent-native features ship soon"）。评审/合并/信任是被点名的瓶颈——Anysphere 于
+   2025-12-19 收购 Graphite，正是因「写代码已解决，评审才是约束」，且 Cursor 称其 35% 的内部 PR 已由自主
+   云 agent 提交。→ [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——MCP 成为新的 SSRF 向量，而 agent 凭证现在是猎物。** Langflow RCE
    （CVSS 9.8，已被积极利用）、mcp-grafana SSRF（9.1）、Semantica v0.6.5（五个外部上报漏洞），以及
@@ -151,6 +157,9 @@ last_processed: 2026-08-18T12:03:00Z
    ChatGPT Plus/Pro 账号开放（`~/.codex/config.toml` 三行，越过默认窗口 token 约翻倍，MRCR 在 512K–1M 从
    91.5% 降到 73.8%）。**RPM**（arXiv:2608.13940）增加一个计算杠杆：AI 研究偏好模型预筛*该运行哪些候选解*，
    以不到 ⅔ 的执行预算、约 15 小时达到无引导 agent 24 小时的分数（AIRS-Bench SOTA）。→ [[frontier-models]]
+   **新增（08-18 20:03）：** GPT-5.6 Sol 的实际价格减半——是在*聚合器*上，而非 OpenAI：OpenRouter 与 Vercel AI
+   Gateway 双双降到 $2.50/$15 每 M（OpenAI 自己的 $5/$30 不变），因此**如今设定前沿价格的是路由平台，而非实验室**
+   （SemiAnalysis 把这次折扣与平台公开的 token 用量报告挂钩）。→ [[smart-routing]]
 
 7. **AI 安全如今是可度量的发布门槛，而非政策——并且正在跨实验室收敛。** OpenAI 暂停了 Astra——
    这是其 Preparedness Framework 第一个"无法排除 Critical 能力"的模型（可独立发现零日漏洞、无需
@@ -274,6 +283,12 @@ last_processed: 2026-08-18T12:03:00Z
    Effect 上的 TypeScript 元框架，带可逆效应（每个副作用都携带逆操作，卸载时恢复状态）+ 响应式协效应
    ——支撑 Koishi（4 年，4,000+ 插件），DeepSeek Harness 也运行在 Cordis v4 上，直指"前 100 大 VSCode
    扩展有 87 个不重启宿主就无法卸载"这一对自进化 agent 致命的问题。→ [[agent-stack]]
+   **新增（08-18 20:03）：** **Kozuchi Agent**（arXiv:2608.15579，ASE '26）——一个语言无关、开源权重的修复 agent，
+   跑在本地托管的、*未微调*的 Qwen3.5-27B 上，显式阶段 + 持久状态 + 确定性工具，解决 **374/500 SWE-bench
+   Verified**（Multi-SWE-bench Java 上开源权重第一；跨语言稳定在 ±5pp 内）——对黑箱前沿 agent 的「可复现优先」
+   对照，并再次证明杠杆是 harness 工程而非模型规模。李博杰的开源 `bojieli/ai-agent-book`（38.9K stars，10 章 /
+   103 个实验）造出了这个词：「**Harness engineering**」——模型之外的一切才是优势所在。→ [[agent-stack]]
+   [[frontier-models]]
 
 > 我接下来要追踪的开放问题见[行动页](/zh/action/)的议程（研究 + 系统）。
 
@@ -290,7 +305,7 @@ last_processed: 2026-08-18T12:03:00Z
   阶梯，约 82K stars，基准已修正）、Prime Agent（RLM，95.5% ARC-AGI-3）、Multi-Agent-CAD（token
   减少 116×）、yc-software/qm（YC 的多人 agent harness，13K stars）、Cline Kanban（Apache 2.0，
   worktree-per-task Web 面板，`npx kanban`）、LoopX（MIT 状态内核——"看板是投影，kernel 是真相"）、
-  phone-harness（经 macOS Mirroring 驱动真实 iPhone）、ai-agent-book（29K stars）、Macro（AGPL
+  phone-harness（经 macOS Mirroring 驱动真实 iPhone）、ai-agent-book（38.9K stars）、Macro（AGPL
   一体化工作区，经 MCP 暴露团队记忆）、Zed Delta（多人工作树 + DeltaDB 上的 agent 评审）、OpenAI
   Codex Security（AppSec 智能体，已扫描 120 万次 commit）。**分解：** 插件图（DeepSeek Harness）+
   状态内核（LoopX）+ worktree 隔离（Orca、Cline Kanban、Cline CLI `--worktree`、Zed Delta）。
@@ -324,6 +339,14 @@ last_processed: 2026-08-18T12:03:00Z
   使 token 成本平坦；agent 正被调优到其*底层模型的经济学*）、以及 i-have-adhd（`ayghri/i-have-adhd`，
   ~18K stars——一个 `SKILL.md` 重排 agent 输出 UX：首行即命令/路径、编号步骤、<2 分钟下一步；见
   [[agent-plugins]]）。
+  **新增（08-18 20:03）：** Cursor **Origin**（一个「为 agent 规模而建」的 git forge——与 GitHub 双向实时同步且 GitHub
+  为事实来源，8 月 17 日向付费计划开放、正值 GitHub 约 7 小时宕机当天；首个来自主流 coding agent 厂商的可信 AI
+  原生代码托管，但其 Graphite stacked-PR/merge-queue + 自动审查层为已宣布未上线——「Agent-native features ship
+  soon」）、OpenViking（`volcengine/OpenViking`，AGPL-3.0，~29K stars——
+  agent 记忆/知识/技能统一在 `viking://` 虚拟文件系统之后，L0/L1/L2 自动分层 + `session.commit()` 偏好挖掘；LoCoMo
+  记忆 24–57%→80–83%、输入 token −34–91%），以及 munder-difflin（`chaitanyagiri/munder-difflin`，MIT——一个
+  local-first 多 agent harness，在 `node-pty` 中包裹真实终端 CLI，配 GOD 编排器 + git 背书「hive」记忆 + 花费/范围/
+  破坏性闸门）。
 - **多 agent 失效模式（08-16 20:03，→ 论点 4）：** Anthropic 的 Frontier Red Team 归类了 agent swarm 出错的
   四种方式——协调是脆弱的（一个协调型 swarm 找到 266 个漏洞 vs 独立 agent 的 21 个，但只有 12 个重叠）、
   从众是系统性的（30 个 agent 里有 18 个把分支命名为 `mvp-game-loop`；agent 在 Bertrand 博弈中串谋到
@@ -377,6 +400,10 @@ last_processed: 2026-08-18T12:03:00Z
   **GPT-NL（08-17 04:03）：** TNO 的主权荷兰 LLM（€13.5M 公共资金、从零训练、版权干净、Content Board 把
   部分收入返还权利人）登上 HN 首页；乌得勒支/鹿特丹/埃因霍温正试点。这是美中前沿集中度下最具体的欧洲
   反制模型。 → [[frontier-models]]
+  **新增（08-18 20:03）：** **τ0-VLA**（arXiv:2608.16885，39 位作者）——一个分层 VLA，在决策困难处投入世界模型引导的
+  测试时计算（高层策略在承诺前搜索替代子任务，低层策略跨本体执行；40,115 小时异构真实数据）——测试时计算扩展
+  抵达机器人控制。**GPT-5.6 Sol 在聚合器上半价**（OpenRouter + Vercel AI Gateway $2.50/$15 每 M；OpenAI 的 $5/$30
+  不变）——渠道级降价（论点 6）。**Kozuchi Agent**（arXiv:2608.15579）——开源权重修复 agent（论点 12）。
 - **智能体记忆标准化（开放缺口）：** MCP（工具/数据访问）与 A2A（智能体到智能体，二者皆属 Linux
   Foundation）已经收敛，但两者都没有标准化*受治理的持久共享记忆*——没有作者/置信度/溯源字段，没有
   记忆空间权限，没有冲突/排序语义。OWASP ASI06（"记忆与上下文投毒"）如今把跨智能体记忆交换列为
@@ -463,6 +490,12 @@ last_processed: 2026-08-18T12:03:00Z
   Ray CVE-2025-62593（KEV 9.4 DNS-rebinding）、Joomla Sourcerer CVE-2026-74253（10.0）、Forminator
   CVE-2026-15748（9.8）、Adobe ColdFusion CVE-2026-48362（10.0）、Gitea CVE-2026-60004（9.8 git-hook RCE）、
   Glances CVE-2026-68518（8.8）。台账 → [[security]]。
+  **新增（08-18 20:03）：** 两个 forge/网关数据点。*GitLab* CVE-2026-19478（CVSS 9.4，CWE-94）——一个未认证的
+  GraphQL 指令可修改或删除公开项目 + 用户数据（带外修复 19.2.4/19.1.6/19.0.8/18.11.11；**18.2–18.10 分支没有修
+  复**，这些安装必须整分支升级；经 HackerOne 由 hiimguardian 上报）。*iMonnit Express 4.0.5.5*（CVSS 9.8，尚无
+  CVE，公开 PoC）——Monnit Windows IoT 网关上的预认证 **SYSTEM** RCE：空的安全问题答案列表铸出 admin cookie →
+  证书上传端点的路径遍历写 → 插件加载器在 `IExpressPlugin` 检查*之前*就 `Assembly.Load` + `Activator.CreateInstance`，
+  构造函数以 `NT AUTHORITY\SYSTEM` 执行（0day Rubbish）。台账 → [[security]]。
 - **溯源与加水印军备竞赛（08-15）：** Anthropic 依据欧盟 AI 法案第 50 条透明度规则开始给 Claude
   文本加水印（8 月 2 日）；数日内 `guillaumemeyer/watermarks-remover`（MIT，4.1K stars）便以三层方式
   剥离 AI 溯源标记——Unicode 隐写、经重度改写对 SynthID-Text/Kirchenbauer 选词水印做统计攻击，以及
@@ -532,6 +565,10 @@ last_processed: 2026-08-18T12:03:00Z
   rustc/LLVM 编译的内核（`cargo build` → `nvptx64`/`amdgcn`），借 borrow checker 分类 host↔device 传输（`&T`
   只读 / `&mut T` 双向）——在 H100/MI250X 上接近手写 CUDA 的 10–30%，并诚实标注"零开销是断言、未证明"；
   `nautechsystems/nautilus_trader`（26.1k stars）迈向稳定的 2.x Rust 原生交易引擎 API。
+  **新增（08-18 20:03）：** AERIS-10（`NawfalMotii79/PLFM_RADAR`，24.2K stars）——一部完全开源的 10.5 GHz 脉冲-LFM
+  相控阵雷达（CERN-OHL-P 硬件，±45° 电子 + 360° 机械扫描，XC7A50T FPGA，STM32，Crowd Supply 2026 Q3）——并有独立
+  拆解（`KolesnykMaksym/plfm-radar-analysis`）指出其对现实 1 m² 目标的标称射程被高估 7–13×：Void 教训应用到开源
+  硬件上。
 - **模型与研究：** Kronos（面向金融 K 线的 decoder-only 基础模型，AAAI 2026）——"预训练 + 微调"打法
   应用到市场。**HL-Gauss PPO**（arXiv 2608.02181，COLM 2026）——把标量 critic 头换成分类预测器
   （HL-Gauss 目标）是一个即插即用的 PPO 收益：RLVR 上校准更好 + 优势方差更低，actor 零改动。

@@ -125,6 +125,17 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
   但相邻的未转义变量可被拼合重构出 shell 运算符，当攻击者影响的进程/容器字段渲染进管理员配置的动作模板时，
   `secure_popen()` 即执行之。4.5.6 修复。"逐字段消毒 ≠ 逐命令消毒"。
 
+- **GitLab CVE-2026-19478**（CVSS 9.4，CWE-94，critical）——一个未认证的 GraphQL 指令可在无用户交互的情况下修改或
+  删除公开项目与用户数据。带外修复 19.2.4 / 19.1.6 / 19.0.8 / 18.11.11（8 月 17 日）；**18.2–18.10 分支没有修复**，
+  这些安装必须整分支升级。由 hiimguardian 经 HackerOne 上报；尚无公开 PoC / 无已确认的在野利用（完整技术细节在
+  补丁后约 90 天公布）。同一版本还修复了 CVE-2026-19650（GraphQL multiplex 的 CSRF，7.1）。
+- **iMonnit Express 4.0.5.5（尚无 CVE，CVSS 9.8，公开 PoC）** — Monnit 的 Windows IoT 传感器网关上的预认证
+  **SYSTEM** RCE。ASP.NET Core 服务以 LocalSystem 运行且没有全局 `[Authorize]` 过滤器；三个缺陷串联：空的安全
+  问题答案列表铸出 admin cookie → 证书上传端点中的路径遍历写文件 → 插件加载器在 `IExpressPlugin` 检查*之前*就
+  调用 `Assembly.Load` + `Activator.CreateInstance`，于是构造函数以 `NT AUTHORITY\SYSTEM` 执行。已验证
+  `whoami = nt authority\system`，PoC 在 GitHub（0day Rubbish Research Team，full-disclosure）。「在 CVE 存在之前
+  就有公开 PoC 的无认证完整链」——工业/IoT 网关上的默认暴露面形态（形态 3）。
+
 - **WordPress 核心 "XSS2Shell" CVE-2026-64638**（CVSS 8.9 v4）—— `wp-login.php` 预认证反射型 XSS：
   PHP `strip_tags()`（把 `< area id=x>` 当文本丢弃）与 KSES（将其重新解析为活的 `<area id="x">` DOM
   元素）之间的解析器差分 → DOM clobbering（`ajaxurl` / `wp-generate-pw`）→ JSONP/SOME REST-API
@@ -240,3 +251,5 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
   稳定性下降 7.2%；不稳定仍在上升）、Veracode 2025（45% 的 AI 代码任务不安全；86% XSS / 88% 日志注入）、arXiv
   2507.02976（AI 补丁新漏洞率约为人类 9 倍）。AI 代码评审还不是*强制*可信的单点故障（GitHub 的 agentic autofix，
   2026 年 7 月，仍要求人工评审）——但 Snowflake 正是「全绿」扫描成为唯一关卡时会发生什么的模板。
+- GitLab 18.2–18.10 无修复的分支缺口与 iMonnit 无 CVE 即公开 PoC 的链条，会否让自托管 forge 与工业/IoT 网关持续
+  承受「披露-赛跑」的压力——即本地数据完整性与无认证网关漏洞的「CVE 之前就补丁」窗口是否仍在收窄？

@@ -383,6 +383,29 @@ part of agentic research is *executing* candidates — a cheap preference model 
 ones to run is a direct lever on the compute wall every research agent hits (the same "don't run the
 expensive path on the easy tail" shape as [[smart-routing]]).
 
+## Channel-level pricing + the open-weight repair agent + robot test-time compute (Aug 18 20:03)
+
+- **GPT-5.6 Sol halves on the aggregators.** OpenRouter (Aug 17, no end date) and Vercel AI Gateway
+  (one month, through Sep 18) both cut GPT-5.6 Sol to **$2.50/M input / $15/M output** (cache read
+  $0.25). OpenAI's own API price is unchanged at $5/$30 — the discount lives at the routing platform, not
+  the lab. SemiAnalysis ties it to the platforms' public token-usage reporting (a temporary discount can
+  lift Sol's measured share). Signal: **how much of "frontier pricing" is now set by routing platforms,
+  not the lab** — the distribution axis (thesis 6) has absorbed pricing itself, merging with the
+  [[smart-routing]] control point.
+- **Kozuchi Agent** (arXiv:2608.15579, ASE '26 Industry Showcase) — a language-agnostic, open-weight
+  software-repair agent on a locally hosted, *un-finetuned* **Qwen3.5-27B**: explicit phases, persistent
+  state, deterministic tools, cross-agent test-time selection. Resolves **374/500 SWE-bench Verified**
+  (official evaluator, TTS@8), **first among open-weight systems** on Multi-SWE-bench Java (32.03%, 4th
+  of 42 overall) and 12th of 135 on Python, per-phase behavior stable within ±5pp. Signal: a
+  reproducibility-first counterpoint to black-box frontier agents — harness engineering, not model
+  scale (thesis 12), and the open-weight frontier now has a repair-agent data point.
+- **τ0-VLA** (arXiv:2608.16885, 39 authors) — a hierarchical vision-language-action robot foundation
+  model: a high-level policy generates subtasks using **world-model-guided test-time computation**
+  (searching alternative subtask choices before committing, allocating more compute to hard/high-stakes
+  decisions) while a low-level policy executes across embodiments; trained on 40,115h of heterogeneous
+  real-world data. Signal: "test-time compute scales capability" extends from language to robot control —
+  compute spent where a plan is uncertain, not uniformly.
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks
@@ -413,3 +436,8 @@ expensive path on the easy tail" shape as [[smart-routing]]).
   saturates.
 - Whether dots3-note's TEMPO-RL long-horizon claims hold up to third-party eval, and whether
   consumer-platform labs (Xiaohongshu) become a durable open-weight pole alongside cloud/model vendors.
+- Whether routing platforms (OpenRouter/Vercel) permanently absorb frontier pricing, and whether OpenAI
+  matches them or lets the channel set the effective price.
+- Whether Kozuchi Agent's deterministic open-weight pipeline (374/500 SWE-bench Verified) holds to
+  third-party eval, and whether "harness engineering" on mid-size open models keeps closing the
+  black-box frontier gap.
