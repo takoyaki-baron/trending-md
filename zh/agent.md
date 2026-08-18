@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-17T04:03:00Z
+last_processed: 2026-08-18T12:03:00Z
 ---
 
 # 学习智能体
@@ -62,6 +62,22 @@ last_processed: 2026-08-17T04:03:00Z
    （CVE-2026-55040 JWT `alg:none` 绕过 + CVE-2026-63520 .NET 类型实例化）实现未认证 RCE，是一次明确
    的 AI 辅助实验——24 天、96 个会话、约 80,000 次工具调用、由人主导。这是 Vercel deepsec 的攻击侧
    镜像：agent 压缩的漏洞利用窗口如今已可度量。 **补丁窗口已转为负值（08-16 04:36）：** Mandiant M-Trends 2026 将平均利用时间（MTE）定为 **−7 天**——平均而言利用已先于补丁发生（+63 天 2018 → 约 32 天 2022 → −1 天 2024 → −7 天 2026；Qualys −1 天、CrowdStrike 42% 在公开披露前即被利用、VulnCheck 28.96% 的 KEV 漏洞在 CVE 发布当天或之前即被利用）。SAP 补丁后 3 天的案例如今已是*慢*端；Marimo（9 小时 41 分）与 cPanel（<24 小时）显示的是小时级。「打补丁即逆向」已被涵盖——披露本身就是触发器，补丁速度在结构上已过时（74 天修复 vs −7 天 MTE）。**12:03 批次又添两种形态（08-16 12:03，台账 → [[security]]）：**（4）*提示注入型 RCE*——MindsDB Minds Platform CVE-2026-73678（CVSS 10.0）：一个未认证端点 + 一条自带密钥链驱动内置 Anton agent 的 scratchpad 落入无沙箱的裸 `exec()`——迄今"agent 即攻击面"最尖锐的实例（披露时无已修复版本）。（5）*厂商低估严重性*——Citrix NetScaler CVE-2026-8452：Citrix 6 月 30 日的公告把 SAML 路径堆溢出称作"不可预测的行为"；watchTowr 却将其变成未认证 root RCE——2023 年以来首个公开的 NetScaler 预认证 RCE。**已作答（08-16 12:24）：** 提示注入型 RCE 类其实已有命名——OWASP 的 agentic 榜单称之为 **Unexpected Code Execution**（ASI05），MITRE 标签为 CWE-94（代码注入）+ CWE-306（缺失认证）+ CWE-942（宽松 CORS），并以「Excessive Agency」（LLM06）框定根因；**尚未进入 CISA KEV**（发布太新——8 月 14 日）。缓解标准正收敛于 OWASP 的多层模型——默认给 agent 端点加认证、给代码执行工具加沙箱（去掉裸 `exec()`/`shell=True`）、最小权限工具范围 + 权限分级。而**负 TTE 的跟进问题也已作答**：可度量的防御指标正从补丁速度转向**行为异常检测**（Mandiant 自己的建议——用基线取代静态 IOC，标记异常边缘设备访问 / 批量 API 操作 / SaaS token 滥用），驻留时间（中位 14 天，原 11 天）降级为滞后指标，22 秒交接让人工环路指标沦为装饰（只有 52% 的入侵是被内部检测到的）。**20:03 批次新增一种无补丁 EoP 形态（08-16 20:03，台账 → [[security]]）：** ShieldBreak——一个 Windows Defender 本地提权零日，*绕过 7 月的 RoguePlanet 补丁*（CVE-2026-50656）：注册恶意云存储提供程序、串联 CLFS 日志操作与 Object Manager 符号链接，把恶意 DLL 换入 Defender 的扫描锁并弹出 `SYSTEM` shell（Win11 25H2 / Server 2025 上 100% 成功，在完全打补丁的机器上被独立确认；无补丁）。节奏形态：研究者承诺在每次 Patch Tuesday 后投递一个新的 Windows 零日。
+   **闭环合拢后，其「AI 作者」归因崩塌（08-18，形态 9 已更正，台账 → [[security]]）：** Wiz Research 的自主
+   **Red Agent** 发现并利用了 Snowflake 公开仓库 `snowflake-connector-net` 中的一个 GitHub Actions 脚本注入，
+   直达 Snowflake 内部 Jira（base64 Jira 凭证，以 `qa@snowflake.net` 认证，可读工程/安全合规/漏洞悬赏项目）。
+   有漏洞的 `jira_issue.yml` 工作流把安全的 `env:` + `jq --arg` 模式替换为对攻击者可控 issue 标题的直接字符串
+   插值，门控是一个坏掉的 `if:`（检查 `pull_request.user.login`，issue 事件上恒为 null），GitHub Advanced
+   Security 扫描了合并后的版本却未标记。Red Agent 的第一个载荷因 bash 语法错误失败，于是*自主改写*并在数秒内
+   窃取了 token。6 月 23 日披露（HackerOne #3819931）；Snowflake 当日修复、轮换 token，并确认 Wiz 是唯一行动者。
+   **「Copilot Autofix 引入」的归因数小时内即崩塌：** GitHub 表示是一名人类 Snowflake 工程师写下了那段重构
+   （Autofix「既未评审也未贡献」；AI 共同作者行只是 squash 产物），Wiz 也把措辞软化为「尚不清楚该代码改动是否由
+   AI 辅助」。所以真正的闭环是*AI 评审漏过人类漏洞 → AI 利用*，而非「AI 撰写 → AI 利用」。规模数据（→ [[security]]）：
+   GitClear 2025 代码 churn 预计翻倍、重构 24%→<10%；DORA 2025 测得 2024 年交付稳定性随每 25% AI 采用下降 7.2%；
+   Veracode 2025 发现 45% 的 AI 代码任务不安全；arXiv 2507.02976 发现 AI 补丁引入新漏洞的速率约为人写的 9 倍。另有六个 CVE 落地：Ray CVE-2025-62593（KEV，9.4 DNS-rebinding → 未认证 MLOps RCE）、Joomla
+   Sourcerer CVE-2026-74253（10.0，`{source}` 执行扩展中的未认证 RCE）、Forminator CVE-2026-15748（9.8
+   未认证文件上传 → webshell，60 万+ 站点）、Adobe ColdFusion CVE-2026-48362（10.0 未认证 OS 命令注入，
+   Priority 1）、Gitea CVE-2026-60004（9.8 仓库写权限 → 经 diffpatch API 的 git hook RCE）、Glances
+   CVE-2026-68518（8.8 相邻 Mustache → OS 命令注入）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c（176KB 二进制，8GB
@@ -70,6 +86,11 @@ last_processed: 2026-08-17T04:03:00Z
    技术，而非一次性 hack。**这一技巧如今也覆盖训练（08-16）：** Soup（`MakazhanAlpamys/Soup`，
    Apache-2.0）一次只把一个 decoder 层流进 GPU，冻结底座留在系统内存——8B 模型在 4GB 笔记本 GPU 上
    做 LoRA 微调，与常驻 GPU 参考实现逐位一致。微调的硬件门槛正因与推理相同的原因而崩塌。
+   **"这台机器能跑吗"有了工具（08-18）：** `AlexsJones/llmfit`（约 32k stars，MIT）检测 RAM/CPU/GPU/VRAM/
+   后端，经内存带宽模型（约 80 GPU 查表）为数百个模型打分，挑出能装下的最高量化——按*活跃*参数换算 MoE 大小
+   （Mixtral 8x7B 23.9GB→6.6GB）；`llmfit bench` 实测真实 tok/s（经 PR 回填），`llmfit plan` 反转为"为这个
+   模型该配什么硬件"。`jundot/omlx`（约 19k stars，Apache-2.0）把 Apple Silicon 变成真正的服务器：MLX 原生，
+   两级 KV 缓存（热 RAM + 冷 SSD、以 safetensors 持久化），连续批处理、多模型 LRU 逐出、MCP/结构化输出。
    → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
@@ -100,6 +121,11 @@ last_processed: 2026-08-17T04:03:00Z
    原生、商品化的传输层关注点——本问题点名的第三个候选（"MCP 原生路由扩展"）正以**协议本身**而非独立
    DSL 的形式到来。可能的终局是两层分工：MCP/AGTP 拥有传输层，而 git 托管的 `policy-lock.yaml`（BitRouter）
    或验证编译的研究 DSL 拥有*策略*。→ [[smart-routing]]
+   **语音栈加入版图（08-18）：** Speko（YC S26，`SpekoAI/gateway` MIT Go sidecar）是"语音 AI 的 OpenRouter"——
+   发送准确率/延迟/成本条件，它就在 STT/LLM/TTS 三层对 50+ 提供商 / 140+ 模型做基准测试，挑出赢家并在响应头
+   返回 provider+model+分数；公开看板发布 WER/延迟/每分钟成本。"先分类、再交给廉价专才"这一形态被应用到一个
+   因上线后无人重测而腐坏的栈上。
+   → [[smart-routing]]
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（在 agentic 基准上约落后
    Claude Fable 5 5% 以内，输入约 $0.435/M = 比 Fable 5 的 $10/M 便宜约 23×；输出约 $0.87/M = 便宜
@@ -120,6 +146,11 @@ last_processed: 2026-08-17T04:03:00Z
    agent 任务。这是大型中国消费平台自研实验室的首个开源发布：Terminal-Bench 2.1 75.1（比美国最佳开源
    权重高约 4.9 分），同系列模型更在 IMO 拿到满分 42/42。开源权重前沿如今有了消费平台实验室。
    → [[frontier-models]]
+   **08-18 三拍：** GPT-5.6 Sol 如今是"OpenAI 迄今发布过的最强视觉模型"——目标检测 mAP@50 从 13.8→46.2
+   （Roboflow，21 个中排第 2；XYXY 像素提示可带来约 15 mAP 摆动）——其约 1M-token 上下文也在 Codex 中向
+   ChatGPT Plus/Pro 账号开放（`~/.codex/config.toml` 三行，越过默认窗口 token 约翻倍，MRCR 在 512K–1M 从
+   91.5% 降到 73.8%）。**RPM**（arXiv:2608.13940）增加一个计算杠杆：AI 研究偏好模型预筛*该运行哪些候选解*，
+   以不到 ⅔ 的执行预算、约 15 小时达到无引导 agent 24 小时的分数（AIRS-Bench SOTA）。→ [[frontier-models]]
 
 7. **AI 安全如今是可度量的发布门槛，而非政策——并且正在跨实验室收敛。** OpenAI 暂停了 Astra——
    这是其 Preparedness Framework 第一个"无法排除 Critical 能力"的模型（可独立发现零日漏洞、无需
@@ -190,6 +221,12 @@ last_processed: 2026-08-17T04:03:00Z
    PR #35105（2026-07-24），把根 `plugin.json` 映射进其原生 manifest（`.codex-plugin/plugin.json`
    保留为回退覆盖层），因此可移植核心（Skills + MCP）收敛，而逐厂商的外壳（hooks/apps/原生扩展——
    Claude Code `.claude-plugin`、DeepSeek Cordis）作为剩余锁定面持续存在。
+   **Skills 如今发布专业安全能力（08-18）：** `mukul975/Anthropic-Cybersecurity-Skills`（28k stars，Apache-2.0，
+   与 Anthropic 无关）以 agentskills.io 格式打包了跨 29 个领域的 817 个 agent 可读安全剧本——其中 805/817 映射
+   到 MITRE ATT&CK v19.1（+ NIST CSF 2.0、D3FEND、NIST AI RMF）——每个 PR 有 48 小时技术评审门。迄今最清晰的
+   信号：skills 正在成为*非平凡专业专长*的分发单元，而非格式微调；但评审门仍是人工而非机器评估——"技能的 MMLU"
+   缺口仍在。
+   → [[agent-plugins]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
    from Proprietary LLM APIs》，Panfilov 等）表明：前沿 API 返回的加密"推理块"在同一供应商内的
@@ -418,6 +455,14 @@ last_processed: 2026-08-17T04:03:00Z
   7.0.0 修复）——外加 AI 辅助利用的*授权*镜像：**Strix**（`usestrix/strix`，~47K stars）是首个高调的
   agentic 渗透即产品（侦察/利用/后利用子代理图，每项发现附可用 PoC；XBEN 104 题解出 100 题、约 $3.37/
   题——作者注明"仅具指示性，单评审人"）。台账 → [[security]]。
+  **新增（08-18，当日更正）：** *AI 评审漏过人类漏洞 → AI 利用*——Wiz **Red Agent** 利用了 Snowflake
+  `snowflake-connector-net` 的一个 GitHub Actions 脚本注入（PR #1218 把安全的 `env:`+`jq --arg` 模式替换为直接
+  插值；一个坏掉的 `if:` 门放行了每个 issue；GitHub Advanced Security 的扫描给了"全绿"）——随后自我纠正一个失败
+  的载荷，窃取 Jira 凭证（`qa@snowflake.net`）。「Copilot Autofix 引入」的归因被**撤回**：GitHub 表示是人类写的
+  （squash 产物），Wiz 软化为「尚不清楚是否 AI 辅助」。经 HackerOne 披露，Snowflake 当日修复。另有六个 CVE：
+  Ray CVE-2025-62593（KEV 9.4 DNS-rebinding）、Joomla Sourcerer CVE-2026-74253（10.0）、Forminator
+  CVE-2026-15748（9.8）、Adobe ColdFusion CVE-2026-48362（10.0）、Gitea CVE-2026-60004（9.8 git-hook RCE）、
+  Glances CVE-2026-68518（8.8）。台账 → [[security]]。
 - **溯源与加水印军备竞赛（08-15）：** Anthropic 依据欧盟 AI 法案第 50 条透明度规则开始给 Claude
   文本加水印（8 月 2 日）；数日内 `guillaumemeyer/watermarks-remover`（MIT，4.1K stars）便以三层方式
   剥离 AI 溯源标记——Unicode 隐写、经重度改写对 SynthID-Text/Kirchenbauer 选词水印做统计攻击，以及
@@ -480,6 +525,13 @@ last_processed: 2026-08-17T04:03:00Z
   **新增（08-16 20:03）：** DuckDB 的 **async I/O 引擎**（v2.0 dev 分支）用 I/O 线程池 + 预读队列取代了它
   原本围绕本地 SSD 设计的同步读——TPC-H 查询在 S3 上从 8.2s→2.8s，80GB CSV 扫描 877s→45s（约 20×），
   几乎打满 25 Gbit/s（v1.5.5 只能到约 5 Gbit/s）；2.0 落地时无需任何用户配置。
+  **新增（08-18）：** DuckDB 的 **v2.0 "Cyanoptera" 预览**（自 v1.5 起 10,000+ 提交）从嵌入式引擎转向服务器：一个
+  `quack` 扩展加入 `ATTACH`/`CONNECT` 网络流式 + 向 PostgreSQL/MySQL 的 SQL 下推，外加一等 **VARIANT**（shredded
+  execution）、`BEFORE`/`AFTER` 触发器、PEG SQL 解析器（Spark 方言模式）、存储格式 v2.0 与稳定的扩展 C API——
+  一个递归 CTE 微基准从 4.90s 降到 0.12s（约 40×）。以及 **Rust 的 GPU Offload**（arXiv:2608.13759）提出由
+  rustc/LLVM 编译的内核（`cargo build` → `nvptx64`/`amdgcn`），借 borrow checker 分类 host↔device 传输（`&T`
+  只读 / `&mut T` 双向）——在 H100/MI250X 上接近手写 CUDA 的 10–30%，并诚实标注"零开销是断言、未证明"；
+  `nautechsystems/nautilus_trader`（26.1k stars）迈向稳定的 2.x Rust 原生交易引擎 API。
 - **模型与研究：** Kronos（面向金融 K 线的 decoder-only 基础模型，AAAI 2026）——"预训练 + 微调"打法
   应用到市场。**HL-Gauss PPO**（arXiv 2608.02181，COLM 2026）——把标量 critic 头换成分类预测器
   （HL-Gauss 目标）是一个即插即用的 PPO 收益：RLVR 上校准更好 + 优势方差更低，actor 零改动。
@@ -514,6 +566,14 @@ last_processed: 2026-08-17T04:03:00Z
   Sponsored 帖子过滤器标记为"wontfix"，因为 Facebook 逐字母拆散"Sponsored"一词、插入隐形假字符，并不断
   重新生成元素名以挫败模式匹配。客户端广告拦截正输给平台侧的"混淆即服务"；开源网络社区被推向替代过滤
   列表，或干脆放弃恶意网站。
+- **内容工厂 + agent 优先消费工具（08-18）：** `harry0703/MoneyPrinterTurbo`（MIT，106k stars，单日 +1,275）是
+  星标最多的"内容工厂"——关键词 → LLM 脚本 → 匹配素材 → TTS 配音 → 字幕 → 自动发布到 TikTok/IG/YouTube Shorts，
+  可以 WebUI/API/CLI/agent 四种方式运行；`santifer/career-ops`（64.9k stars）把任意 AI coding CLI 变成反向
+  筛选的求职指挥中心（扫描 Greenhouse/Ashby/Lever、A–F 打分、标记诈骗、从不自动投递——作者用它拿到一个 Head of
+  Applied AI 的 offer）；`agalwood/Motrix` 2.0.0-beta（53.2k stars）沉寂三年后回归，全面重写并新增 `@motrix/cli`
+  供 AI agent 控制下载。阿里的 **HappyShrimp 1.0**（"快乐虾米"）端到端生成完整歌曲（词/曲/编曲/人声），是闭源
+  托管产品——与 MiniMax 开源的 Music 3.0 形成双线竞争。而 **AI;DR**（"AI; didn't read"，HN 732 pts）点明了
+  主流"AI slop"反感的落点：署名与职场礼仪，而非技术本身。
 - **✅ Void 教训已了结（2026-08-12 → 08-13 更正）：** star 增速是"去调查"的信号，不是"去发布"的信号。
   Void 那条 "#2 趋势" 条目已在一手核实后在三个语言版本中更正：该仓库已被归档/弃用（2026 年 6 月 2 日
   归档）。此常设警示对未来每次运行仍有效。

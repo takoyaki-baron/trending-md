@@ -1726,5 +1726,158 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "wiz.io": {
+    "cat": "security",
+    "en": "Wiz Research's blog — a top-tier cloud-security vendor; first-hand, deep technical disclosures. Cross-checked (08-18): the Red Agent vs Snowflake exploit (an autonomous agent found + exploited + self-corrected a GitHub Actions script-injection, exfiltrating Jira creds `qa@snowflake.net`) verified first-hand; the initial \"Copilot Autofix introduced it\" attribution was later softened by Wiz itself to \"unclear whether AI-assisted\" and disputed by GitHub (human author, squash artifact).",
+    "zh": "Wiz Research 博客——顶级云安全厂商；一手、深入的技术披露。已交叉核验（08-18）：Red Agent 对 Snowflake 的利用（自主 agent 发现、利用并自我纠正一个 GitHub Actions 脚本注入，窃取 Jira 凭证 `qa@snowflake.net`）已一手核实；其最初的「Copilot Autofix 引入」归因后来被 Wiz 自己软化为「尚不清楚是否 AI 辅助」，并遭 GitHub 反驳（人类作者、squash 产物）。",
+    "jp": "Wiz Researchのブログ——トップクラスのクラウドセキュリティベンダー。一次情報で技術的に深い開示。突合済み（08-18）：Red Agent対Snowflakeのエクスプロイト（自律エージェントがGitHub Actionsスクリプトインジェクションを発見・悪用・自己修正し、Jira認証情報 `qa@snowflake.net` を窃取）を一次確認。当初の「Copilot Autofixが導入した」という帰属はWiz自身が「AI支援かは不明」と軟化し、GitHubが反論（人間の作者、squashの産物）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "theregister.com": {
+    "cat": "news",
+    "en": "The Register — long-running UK enterprise-tech publication; reliable secondary coverage of security incidents and vendor news. Cross-checked (08-18): its Snowflake/Red Agent correction (\"an AI failed to detect a bug… then another AI agent exploited it\") matches Wiz's softened blog and GitHub's statement via TheNextWeb (human author, squash artifact).",
+    "zh": "The Register——老牌英国企业科技媒体；对安全事件与厂商新闻的二手报道可靠。已交叉核验（08-18）：其 Snowflake/Red Agent 更正（「一个 AI 未能检测到漏洞……然后另一个 AI agent 利用了它」）与 Wiz 软化后的博文及 GitHub 经 TheNextWeb 的声明（人类作者、squash 产物）一致。",
+    "jp": "The Register——英国の老舗エンタープライズテック媒体。セキュリティインシデントとベンダーニュースの信頼できる二次報道。突合済み（08-18）：Snowflake/Red Agentの訂正（「あるAIがバグを検出できず……別のAIエージェントが悪用」）はWizの軟化したブログおよびGitHubのTheNextWeb経由の声明（人間の作者、squashの産物）と一致。",
+    "cred": "med",
+    "density": "high",
+    "cv": 2
+  },
+  "suriq.io": {
+    "cat": "security",
+    "en": "Suriq — security vendor/research blog; deep DNS-rebinding and MLOps attack writeups (Ray dashboard RCE CVE-2025-62593 analysis).",
+    "zh": "Suriq——安全厂商/研究博客；深入的 DNS-rebinding 与 MLOps 攻击分析（Ray dashboard RCE CVE-2025-62593 分析）。",
+    "jp": "Suriq——セキュリティベンダー/リサーチブログ。DNSリバインディングとMLOps攻撃の深い解説（RayダッシュボードRCE CVE-2025-62593分析）。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "duckdb.org": {
+    "cat": "vendor",
+    "en": "DuckDB's official site/docs; first-hand for the v2.0 'Cyanoptera' preview and engine release notes.",
+    "zh": "DuckDB 官网/文档；v2.0「Cyanoptera」预览与引擎发布说明的一手来源。",
+    "jp": "DuckDBの公式サイト/ドキュメント。v2.0「Cyanoptera」プレビューとエンジンリリースノートの一次情報。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "mintlify.wiki": {
+    "cat": "other",
+    "en": "Mintlify docs hosting (mintlify.wiki) — generated documentation for open-source tools (e.g. llmfit); second-hand to the repo, verify against GitHub.",
+    "zh": "Mintlify 文档托管（mintlify.wiki）——开源工具（如 llmfit）的生成式文档；以仓库为准，需与 GitHub 核对。",
+    "jp": "Mintlifyドキュメントホスティング（mintlify.wiki）——オープンソースツール（例：llmfit）の生成ドキュメント。リポジトリが正、GitHubと照合を。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "leiphone.com": {
+    "cat": "news",
+    "en": "Leiphone (雷锋网) — Chinese tech media; covers Chinese AI product launches (Alibaba HappyShrimp) and industry news.",
+    "zh": "雷锋网——中文科技媒体；覆盖中国 AI 产品发布（阿里 HappyShrimp）与行业新闻。",
+    "jp": "雷鋒網——中国のテックメディア。中国AI製品ローンチ（アリババHappyShrimp）と業界ニュースをカバー。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "scirate.com": {
+    "cat": "research",
+    "en": "SciRate — an arXiv paper-discovery/comment site; secondary to arXiv but handy for trending research signals.",
+    "zh": "SciRate——arXiv 论文发现/评论站；次于 arXiv，但便于发现热门研究信号。",
+    "jp": "SciRate——arXiv論文の発見/コメントサイト。arXivに次ぐが、話題の研究シグナル発見に便利。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "rickmanelius.com": {
+    "cat": "community",
+    "en": "Rick Manelius's personal blog — author of the AI;DR ('AI; didn't read') essay; primary source for the AI-slop-backlash cultural signal.",
+    "zh": "Rick Manelius 个人博客——AI;DR（「AI; didn't read」）文章作者；AI slop 反弹这一文化信号的一手来源。",
+    "jp": "Rick Maneliusの個人ブログ——AI;DR（「AI; didn't read」）エッセイの著者。AIスロップ反発という文化的シグナルの一次情報。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "wordfence.com": {
+    "cat": "security",
+    "en": "Wordfence — WordPress security vendor; first-hand plugin-vuln disclosures (Forminator Forms CVE-2026-15748).",
+    "zh": "Wordfence——WordPress 安全厂商；插件漏洞披露的一手来源（Forminator Forms CVE-2026-15748）。",
+    "jp": "Wordfence——WordPressセキュリティベンダー。プラグイン脆弱性開示の一次情報（Forminator Forms CVE-2026-15748）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "criminalip.io": {
+    "cat": "security",
+    "en": "Criminal IP — threat-intel platform's blog; technical CVE analysis (Adobe ColdFusion CVE-2026-48362), secondary to the vendor bulletin.",
+    "zh": "Criminal IP——威胁情报平台博客；CVE 技术分析（Adobe ColdFusion CVE-2026-48362），次于厂商公告。",
+    "jp": "Criminal IP——脅威インテルプラットフォームのブログ。CVE技術分析（Adobe ColdFusion CVE-2026-48362）、ベンダー勧告に次ぐ。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "blog.gitea.com": {
+    "cat": "vendor",
+    "en": "Gitea's official blog; first-hand for release/security notes (the 1.27.1 fix of CVE-2026-60004).",
+    "zh": "Gitea 官方博客；发布/安全说明的一手来源（CVE-2026-60004 的 1.27.1 修复）。",
+    "jp": "Giteaの公式ブログ。リリース/セキュリティノートの一次情報（CVE-2026-60004の1.27.1修正）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "roboflow.com": {
+    "cat": "vendor",
+    "en": "Roboflow — computer-vision platform; its blog/playground run independent vision-model evals (GPT-5.6 Sol mAP@50 13.8→46.2). Third-party to OpenAI, vendor-of-record for its own evals.",
+    "zh": "Roboflow——计算机视觉平台；其博客/playground 做独立视觉模型评估（GPT-5.6 Sol mAP@50 13.8→46.2）。对 OpenAI 而言是第三方评估。",
+    "jp": "Roboflow——コンピュータビジョンプラットフォーム。ブログ/playgroundで独立した視覚モデル評価（GPT-5.6 Sol mAP@50 13.8→46.2）を実施。OpenAIにとっては第三者評価。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "speko.ai": {
+    "cat": "vendor",
+    "en": "Speko — YC-backed voice-AI routing startup; first-hand for the voice-stack router (STT/LLM/TTS benchmarking) and the SpekoAI/gateway repo.",
+    "zh": "Speko——YC 支持的语音 AI 路由初创；语音栈路由器（STT/LLM/TTS 基准）与 SpekoAI/gateway 仓库的一手来源。",
+    "jp": "Speko——YC支援の音声AIルーティングスタートアップ。音声スタックルーター（STT/LLM/TTSベンチ）とSpekoAI/gatewayリポジトリの一次情報。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "nautilustrader.io": {
+    "cat": "vendor",
+    "en": "NautilusTrader's official site; first-hand docs for the Rust-native trading engine (v2 release-candidate line).",
+    "zh": "NautilusTrader 官网；Rust 原生交易引擎（v2 候选发布线）文档的一手来源。",
+    "jp": "NautilusTraderの公式サイト。Rustネイティブ取引エンジン（v2リリース候補ライン）ドキュメントの一次情報。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "meta.appinn.net": {
+    "cat": "community",
+    "en": "Appinn (小众软件) forum — Chinese software-enthusiast community; covers desktop-app releases (Motrix 2.0 beta), user-generated.",
+    "zh": "小众软件（Appinn）论坛——中文软件爱好者社区；覆盖桌面应用发布（Motrix 2.0 beta），用户生成内容。",
+    "jp": "Appinn（小众软件）フォーラム——中国のソフトウェア愛好家コミュニティ。デスクトップアプリ公開（Motrix 2.0 beta）をカバー、ユーザー生成。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "cloud.tencent.cn": {
+    "cat": "vendor",
+    "en": "Tencent Cloud CN developer channel (alternate domain to cloud.tencent.com.cn); first-hand for Tencent cloud/AI open-source releases.",
+    "zh": "腾讯云开发者频道（cloud.tencent.com.cn 的备用域名）；腾讯云/AI 开源发布的一手来源。",
+    "jp": "Tencent Cloud CN開発者チャネル（cloud.tencent.com.cnの代替ドメイン）。テンセントクラウド/AI OSS公開の一次情報。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "hotmolts.com": {
+    "cat": "community",
+    "en": "Hotmolts — a curated digest of Moltbook, an AI-only social network; republishes AI-agent-authored commentary on arXiv papers. Secondary and AI-generated at every layer (low authority) — cross-check against the cited paper (arXiv) and treat it as a signal of what agents are discussing, not a fact source.",
+    "zh": "Hotmolts——Moltbook（一个纯 AI 社交网络）的精选摘要；转发 AI agent 对 arXiv 论文的评论。层层 AI 生成（权威性低）——需与被引论文（arXiv）核对，宜当作“agent 在讨论什么”的信号，而非事实来源。",
+    "jp": "Hotmolts——AI専用ソーシャルネットワークMoltbookのキュレーション抜粋。AIエージェント執筆のarXiv論文解説を再公開。各層がAI生成（権威は低い）——引用元論文（arXiv）と照合し、事実源ではなく「エージェントが何を議論しているか」の信号として扱う。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
   }
 }

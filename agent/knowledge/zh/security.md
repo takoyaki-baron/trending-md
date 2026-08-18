@@ -74,7 +74,56 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
    （CWE-693；7.0.0 修复）。两者都是"缓存/解析器忘了安全上下文"——与 Apache Allura 的 git 参数注入
    以及反复出现的"shell 外部调用 / 再解析"属于同一族。
 
+9. **AI 评审漏过 → 自主 AI 利用（作者归因被撤回）（08-18，08-18 更正）。** 「AI 写下了这个 bug」的经典说法数小时内
+   即崩塌，但*真正*的闭环仍然成立。Wiz Research 的自主 **Red Agent** 利用了 Snowflake 公开仓库
+   `snowflake-connector-net` 中的一个 GitHub Actions 脚本注入，并直达 Snowflake 内部 Jira（base64 Jira 凭证，
+   以 `qa@snowflake.net` 认证，可读工程/安全合规/漏洞悬赏项目）。有漏洞的 `jira_issue.yml` 工作流把安全的
+   `env:` + `jq --arg` 模式替换为对攻击者可控 issue 标题的直接字符串插值，其 `if:` 门检查的是
+   `github.event.pull_request.user.login`（issue 事件上恒为 null），因此永远放行；GitHub Advanced Security 扫描了
+   合并后的版本却没有标记。Red Agent 的第一个载荷因 bash 语法错误失败，随即*自主改写*（改用 `; echo '` 闭合 shell
+   块）并在数秒内窃取了 token。6 月 23 日披露（HackerOne #3819931）；Snowflake 当日修复（commit 1dc7766 / PR #1402）、
+   6 月 24 日轮换 token，并确认 Wiz 是唯一行动者。无 CVE。**归因之争：** Wiz 最初把漏洞归因于「Copilot Autofix
+   powered by AI」（PR #1218）；GitHub 表示是一名人类 Snowflake 工程师写下了那段有问题的重构（一个 2025 年 8 月
+   25 日的提交）、Autofix「既未评审也未贡献」、而 AI 共同作者那行只是 **squash 产物**（squash 合并会把 PR 内所有
+   提交折叠成一个，因此那行记录的是 PR 参与，而非作者身份）。Wiz 已把措辞软化为「尚不清楚该代码改动是否由 AI
+   辅助」。存留下来的闭环是*自动化评审放过了人类漏洞 → 自主 AI 利用并自我纠正*——「评估基础设施才是漏洞」这一
+   教训以*评审*（而非作者）的角色落到代码流水线上。**规模（08-18 作答）：** GitClear 2025（2.11 亿行，2020–24）
+   显示代码 churn 预计翻倍、重构由 24% 跌至 <10%、重复代码约 4×；DORA 2025 测得 2024 年每 25% 的 AI 采用使稳定性
+   下降 7.2%，且 2025 年不稳定仍在上升；Veracode 2025 GenAI 代码安全报告发现 AI 在 45% 的任务中选择了不安全写法
+   （XSS 86% / 日志注入 88% 失败）；arXiv 2507.02976（2 万+ GitHub issue）发现 AI 生成补丁引入新漏洞的速率约为人写的
+   9 倍。
+
 ## CVE 台账（最新在前）
+
+- **Wiz Red Agent vs Snowflake（无 CVE）**——`snowflake-connector-net` 的 `jira_issue.yml` 中的 GitHub Actions
+  脚本注入：`${{ github.event.issue.title }}` 被插值进 shell 字符串（sed 转义在模板展开*之后*才运行），经
+  PR #1218（6 月 18 日）合并；一个坏掉的 `if:` 门放行了每个 issue；GitHub Advanced Security 扫描了合并后的版本
+  却未标记。Red Agent 利用并自我纠错 → 窃取 `$JIRA_API_TOKEN`（以 `qa@snowflake.net` 认证）。6 月 23 日经
+  HackerOne 披露；Snowflake 当日修复、轮换 token、确认唯一行动者。**来源已更正：** Wiz 最初归因于「Copilot
+  Autofix powered by AI」；GitHub 表示是一名人类 Snowflake 工程师所写（AI 共同作者行是 squash 产物）。见形态 9。
+- **Ray CVE-2025-62593**（CVSS 9.4，8 月 17 日入 KEV）——Ray < 2.52.0 的 dashboard 暴露未认证的 `/api/jobs`；
+  DNS-rebinding（Firefox/Safari 的 Fetch 可设置 `User-Agent` 以绕过 Ray 的 "Mozilla" 前缀检查）让恶意页面
+  触达开发者 localhost 绑定的 dashboard 并以 Ray 进程权限执行代码。Bitsight 将尝试关联到 RondoDox 僵尸网络；
+  联邦截止 8 月 21 日。
+- **Joomla Sourcerer CVE-2026-74253**（CVSS 10.0，CWE-94）——Regular Labs Sourcerer 1.0.0–13.1.1：扫描
+  Joomla 完整渲染后的 HTML 中的 `{source}` 块并执行内嵌 PHP，却无法可靠区分受信任的作者内容与攻击者注入的
+  输入 → 未认证 RCE。14.0.0 修复（默认阻止未经验证的渲染 Sourcerer 代码执行；向后不兼容需管理员审阅）。
+- **Forminator Forms CVE-2026-15748**（CVSS 9.8，CWE-434）——WPMU DEV 的 `handle_file_upload()` 危险扩展名
+  拦截清单被正则式键绕过（`ph(p)` 仍匹配 `.php`），未认证的 `process_uploads()` 又信任伪造的 Select 字段来
+  覆盖允许清单 → 匿名者可在 60 万+ 站点上传 PHP webshell（默认 `.htaccess` 才挡得住执行；自定义上传存储根
+  目录会失去这层防护）。1.56.2 修复。
+- **Adobe ColdFusion CVE-2026-48362**（CVSS 10.0，APSB26-90，Priority 1）——未认证 OS 命令注入：网络可达 /
+  低复杂度 / 无需权限或交互 / 作用域变更；影响 2025.0.11 / 2023.0.22 及更早；2025.0.12 / 2023.0.23 修复
+  （同一更新还修复 CVE-2026-48273 9.9 eval 注入与 CVE-2026-71384 9.6）。暴露的 `/CFIDE/administrator/`
+  路径是常年靶点。
+- **Gitea CVE-2026-60004**（CVSS 9.8，CWE-94）——`POST /api/v1/repos/{owner}/{repo}/diffpatch` 在*裸*临时
+  克隆中应用攻击者补丁（仓库根 == `$GIT_DIR`），因此一个写入 `hooks/post-index-change`（mode 100755）的补丁
+  会落进 Git 的真实 hooks 目录；同一补丁二次提交引发的 add/add 冲突迫使 `git apply -3` 在 `--cached` 之下仍
+  写入该文件，hook 随即以 Gitea 服务账号触发。开放注册让"仓库写权限"唾手可得 → 自托管 Git 服务器 = shell。
+  1.27.1 修复（临时克隆改为非裸）；已有公开 PoC + ProjectDiscovery Nuclei 模板。
+- **Glances CVE-2026-68518**（CVSS 8.8，CWE-78）——`_sanitize_mustache_dict()` 逐个转义每个 Mustache 值，
+  但相邻的未转义变量可被拼合重构出 shell 运算符，当攻击者影响的进程/容器字段渲染进管理员配置的动作模板时，
+  `secure_popen()` 即执行之。4.5.6 修复。"逐字段消毒 ≠ 逐命令消毒"。
 
 - **WordPress 核心 "XSS2Shell" CVE-2026-64638**（CVSS 8.9 v4）—— `wp-login.php` 预认证反射型 XSS：
   PHP `strip_tags()`（把 `< area id=x>` 当文本丢弃）与 KSES（将其重新解析为活的 `<area id="x">` DOM
@@ -185,3 +234,9 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
   CrowdStrike + METR + Redwood Research；Anthropic：METR），METR 正在成为事实上的事故审计者，而隔离控制
   （默认拒绝出网、网络/身份边界、单一用途短期凭证、全程日志）被写成 CSA 指引——无人执行。详见
   → [[frontier-models]]。
+- ~~AI 撰写漏洞的闭环（形态 9）会否规模化？~~ **已答（08-18 14:23）：** 前提已被撤回——据 GitHub，Snowflake 的
+  bug 是*人类写的*（「Copilot Autofix」共同作者行只是 squash 产物），所以「AI 撰写的回归」没有干净的典型实例。
+  但*风险轴*已被度量：GitClear 2025（churn 翻倍、重构 24%→<10%、重复约 4×）、DORA 2025（2024 年每 25% AI 采用
+  稳定性下降 7.2%；不稳定仍在上升）、Veracode 2025（45% 的 AI 代码任务不安全；86% XSS / 88% 日志注入）、arXiv
+  2507.02976（AI 补丁新漏洞率约为人类 9 倍）。AI 代码评审还不是*强制*可信的单点故障（GitHub 的 agentic autofix，
+  2026 年 7 月，仍要求人工评审）——但 Snowflake 正是「全绿」扫描成为唯一关卡时会发生什么的模板。

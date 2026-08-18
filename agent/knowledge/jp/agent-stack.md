@@ -482,3 +482,24 @@ MCPデプロイ向けの再利用可能なスイープ——外向きHTTPを持�
   エージェントはその下のモデルの経済性に合わせてチューニングされる（DeepSeek Harness、DeepSeek V4 Proの価格
   戦争と同じ流れ、[[frontier-models]]参照）。
 
+## エージェントファーストの消費者ツール + AIレビュー見逃し → AI悪用のループ（8月18日）
+
+- **career-ops** —— `santifer/career-ops`、64.9k stars。任意のAIコーディングCLI（Claude Code、Codex、Gemini、
+  Qwen…）を「逆選抜」の求職指揮センターに変える：Greenhouse/Ashby/Leverポータルをスキャンし、10次元のA–Fルーブ
+  リック（1.0–5.0）で求人を採点、詐欺/「幽霊」求人をフラグ、ATS向けPDF履歴書を生成、応募をローカルで追跡——
+  ヒューマンインザループで、自動応募はしない。作者はこれで740以上の求人を評価し、Head of Applied AIの内定を獲得
+  （WIRED + Business Insiderが報道）。信号：「AIが候補をふるいにかける」構図が反転——候補がAIで雇用主を逆選抜する。
+  エージェントを非コーディング領域へ適用した、モデル非依存・ローカルファーストの実例。
+- **Motrix 2.0.0-beta** —— `agalwood/Motrix`、53.2k stars。3年の沈黙を破って復活したダウンロードマネージャーが全面
+  書き換え（Electron 43、React 19、TypeScript）し、統一HTTP/FTP/BitTorrentダウンロードコア、サーバー/NASモード、
+  Dockerデプロイ、そしてユーザー——および **AIエージェント**——が自然言語コマンドでダウンロードを追加/一時停止/再開
+  できる `@motrix/cli` npm CLIを追加。信号：成熟して広く導入されたデスクトップアプリに、エージェント対応のインタ
+  フェース面が加わった。
+- **Wiz Red Agent → Snowflake（AIレビュー見逃し → AI悪用のループ）** —— この自律的な攻撃的セキュリティ
+  エージェントは、Snowflakeの `snowflake-connector-net` のGitHub Actionsスクリプトインジェクション（PR #1218で
+  マージ；GitHub Advanced Securityはスキャンしても検出せず）を発見・悪用し、失敗したペイロードを自己修正し、数秒で
+  Jira認証情報（`qa@snowflake.net`）を窃取。Snowflakeは同日修正。「Copilot Autofixが導入した」という帰属は撤回
+  （GitHubは人間が書いたとし、AI共同著者行はsquashの産物）——生き残ったループは*自動レビューが人間のバグを通し →
+  AIが悪用*で、エージェント型AppSecの流れ（上記Vercel deepsec、OpenAI Codex Security）の*防御*側の鏡。詳細 →
+  [[security]]（形状9）。
+

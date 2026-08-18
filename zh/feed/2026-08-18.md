@@ -15,19 +15,19 @@ license: CC-BY-4.0
 
 ---
 
-## 1. Wiz 的 Red Agent 利用 Copilot Autofix 引入的 Snowflake 工作流漏洞——随后自己修正了攻击载荷
+## 1. Wiz 的 Red Agent 利用一个被自动化评审漏过的 Snowflake 工作流漏洞——随后自己修正了攻击载荷
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Wiz Research · 242 pts (HN) · ~1d ago (~04:03 UTC+8)
 - **Tags:** `security` `ai-agents` `github-actions` `copilot` `supply-chain`
 
-Wiz Research 的自主攻击性安全智能体 **Red Agent** 在 Snowflake 公开仓库 `snowflake-connector-net` 中发现并利用了一个 GitHub Actions 脚本注入漏洞，打进了 Snowflake 内部 Jira。这个漏洞是 6 月 18 日由一段标注为 **「Copilot Autofix powered by AI」** 的提交（PR #1218）引入的：它把安全的 `env:` + `jq --arg` 模式替换为对攻击者可控 issue 标题的直接字符串插值——并且一个本应起保护作用的 `if:` 门检查的是 `pull_request.user.login`，而该字段在 issue 事件中恒为 `null`。Red Agent 的第一个载荷因 bash 语法错误而失败，随后**自主重写载荷**，几秒内就窃取了 Jira 凭据（以 `qa@snowflake.net` 身份认证）。
+Wiz Research 的自主攻击性安全智能体 **Red Agent** 在 Snowflake 公开仓库 `snowflake-connector-net` 中发现并利用了一个 GitHub Actions 脚本注入漏洞，打进了 Snowflake 内部 Jira。有漏洞的 `jira_issue.yml` 工作流把安全的 `env:` + `jq --arg` 模式替换为对攻击者可控 issue 标题的直接字符串插值——并且一个本应起保护作用的 `if:` 门检查的是 `pull_request.user.login`，而该字段在 issue 事件中恒为 `null`——GitHub Advanced Security 扫描了合并后的版本却没有标记该注入。**「Copilot Autofix 引入该漏洞」的说法在数小时内就站不住了：Wiz 最初把漏洞归因于「Copilot Autofix powered by AI」（PR #1218），但 GitHub 现已表示是一名人类 Snowflake 工程师写下了那段有问题的重构（Autofix「既未评审也未贡献」；AI 共同作者那行只是 squash 产物），Wiz 也把博文措辞软化为「尚不清楚该代码改动是否由 AI 辅助」。** Red Agent 的第一个载荷因 bash 语法错误而失败，随后**自主重写载荷**，几秒内就窃取了 Jira 凭据（以 `qa@snowflake.net` 身份认证）。
 
-**为何重要：** 这是一次 AI 对 AI 的闭环——一个 AI 引入了安全回归，另一个 AI 在几天内找到、利用并自我修正地打通了它——同时预示了风险与自动化漏洞发现的速度。
+**为何重要：** 这个闭环在*评审者*而非*作者*一侧：一个（据 GitHub）人类写下的漏洞溜过了自动化评审，随后一个自主 AI 在几秒内找到、利用并自我修正地打通了它。这次更正本身就是一堂课——git 的共同作者行只是 squash 产物，并非作者证据；而 AI 评审的「全绿」也不是安全边界。
 
 > 6 月 23 日通过 Snowflake 的 HackerOne 项目披露；Snowflake 当天修复、轮换令牌，并确认曝光窗口内 Wiz 是唯一行动者。
 
-[`🔗 Wiz 博客`](https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug) · [`🔗 The Register`](https://www.theregister.com/security/2026/08/17/an-ai-broke-snowflakes-code-then-another-ai-agent-exploited-it/5288666)
+[`🔗 Wiz 博客`](https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug) · [`🔗 The Register`](https://www.theregister.com/security/2026/08/17/an-ai-failed-to-detect-a-bug-in-snowflakes-code-then-another-ai-agent-exploited-it/5288666) · [`🔗 GitHub（经 TNW）`](https://thenextweb.com/news/snowflake-copilot-autofix-wiz-red-agent-github-dispute)
 
 ---
 

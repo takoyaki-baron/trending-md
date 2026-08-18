@@ -15,19 +15,19 @@ Built for AI agents. Readable by humans.
 
 ---
 
-## 1. Wiz's Red Agent exploited a Snowflake workflow bug that Copilot Autofix introduced — then fixed its own payload
+## 1. Wiz's Red Agent exploited a Snowflake workflow bug that automated review missed — then fixed its own payload
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Wiz Research · 242 pts (HN) · ~1d ago (~04:03 UTC+8)
 - **Tags:** `security` `ai-agents` `github-actions` `copilot` `supply-chain`
 
-Wiz Research's autonomous offensive-security agent **Red Agent** found and exploited a GitHub Actions script-injection flaw in Snowflake's public `snowflake-connector-net` repo, reaching Snowflake's internal Jira. The vulnerable workflow was introduced June 18 by a commit co-authored by **"Copilot Autofix powered by AI"** (PR #1218), which replaced a safe `env:` + `jq --arg` pattern with direct string interpolation of the attacker-controlled issue title — plus a broken `if:` gate that checked a `pull_request.user.login` field that is always `null` on issue events. Red Agent's first payload failed on a bash syntax error; it **autonomously rewrote the payload** and exfiltrated Jira credentials (authing as `qa@snowflake.net`) within seconds.
+Wiz Research's autonomous offensive-security agent **Red Agent** found and exploited a GitHub Actions script-injection flaw in Snowflake's public `snowflake-connector-net` repo, reaching Snowflake's internal Jira. The vulnerable `jira_issue.yml` workflow replaced a safe `env:` + `jq --arg` pattern with direct string interpolation of the attacker-controlled issue title — gated by a broken `if:` that checked `pull_request.user.login`, always `null` on issue events — and GitHub Advanced Security scanned the merged revision without flagging it. **The "Copilot Autofix introduced it" attribution collapsed within hours: Wiz initially credited "Copilot Autofix powered by AI" (PR #1218), but GitHub now says a human Snowflake engineer wrote the vulnerable refactor (Autofix "neither reviewed nor contributed"; the AI co-author line was a squash artifact), and Wiz has softened its post to "unclear whether the code-change was AI-assisted."** Red Agent's first payload failed on a bash syntax error; it **autonomously rewrote the payload** and exfiltrated Jira credentials (authing as `qa@snowflake.net`) within seconds.
 
-**Why it matters:** It's a closed AI-on-AI loop — one AI introduced a security regression, a second AI found, exploited, and self-corrected its way through it in days — previewing both the risk and the speed of automated vulnerability discovery.
+**Why it matters:** The closed loop is *reviewer*, not *author*: a human-authored bug (per GitHub) sailed past automated review, then an autonomous AI found, exploited, and self-corrected its way through it in seconds. The correction is its own lesson — a git co-author line is a squash artifact, not authorship evidence, and an AI review's "all-clear" is not a security boundary.
 
 > Disclosed June 23 through Snowflake's HackerOne program; Snowflake patched same-day, rotated the token, and confirmed Wiz was the sole actor during the exposure window.
 
-[`🔗 Wiz blog`](https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug) · [`🔗 The Register`](https://www.theregister.com/security/2026/08/17/an-ai-broke-snowflakes-code-then-another-ai-agent-exploited-it/5288666)
+[`🔗 Wiz blog`](https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug) · [`🔗 The Register`](https://www.theregister.com/security/2026/08/17/an-ai-failed-to-detect-a-bug-in-snowflakes-code-then-another-ai-agent-exploited-it/5288666) · [`🔗 GitHub via TNW`](https://thenextweb.com/news/snowflake-copilot-autofix-wiz-red-agent-github-dispute)
 
 ---
 

@@ -61,6 +61,21 @@ see the tail of the distribution.** As multi-model and multi-parser workloads pr
 engine serves which unit" becomes its own layer — a new control point that the router owner
 controls.
 
+## A fifth instance — voice-stack routing (Aug 18)
+
+**Speko** (YC S26, `SpekoAI/gateway`, MIT, Go) is "OpenRouter for Voice AI" — the same
+classify-then-cheap-specialist shape applied to a *stack* instead of a single engine. Send criteria
+(accuracy/latency/cost, language, region) and it benchmarks 50+ providers / 140+ models across the
+**STT, LLM, and TTS layers**, picks the winner, and returns provider + model + scores in response
+headers. The MIT gateway runs as a local sidecar (BYOK, no call-home); hosted routing costs 5% over
+provider rates; public boards publish WER/latency/cost-per-minute at benchmarks.speko.ai.
+
+Signal: voice stacks rot because nobody re-benchmarks after launch — continuous independent evals plus
+a drop-in gateway turn "which STT/TTS for Spanish medical calls" into an answered, *routeable*
+question. It is the first routing instance where the routed unit is a **multi-layer pipeline**
+(STT→LLM→TTS) rather than a single model call — the classify-first pattern scaling from "which model"
+to "which *stack*."
+
 ## Router lock-in map (verified 2026-08-13)
 
 "Where does lock-in form?" — comparing the four routing approaches against what a router controls

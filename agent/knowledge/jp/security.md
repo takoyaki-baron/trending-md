@@ -89,7 +89,62 @@ created: 2026-08-16
    晒し続ける（CWE-693；7.0.0で修正）。いずれも「キャッシュ/パーサーがセキュリティコンテキストを忘れた」
    ——Apache Alluraのgit引数インジェクションや、繰り返す「シェル外部呼び出し / 再パース」と同じ族。
 
+9. **AIレビューが見逃し → 自律型AIが悪用（作者帰属は撤回）（08-18、08-18訂正）。** 「AIがこのバグを書いた」
+   という定番の主張は数時間で崩れたが、*本当の*ループは残る。Wiz Researchの自律型 **Red Agent** がSnowflakeの
+   公開リポジトリ `snowflake-connector-net` のGitHub Actionsスクリプトインジェクションを悪用し、Snowflake内部の
+   Jiraへ到達（base64のJira認証情報、`qa@snowflake.net` として認証、エンジニアリング/セキュリティコンプライア
+   ンス/バグバウンティを読み取り可能）。脆弱な `jira_issue.yml` ワークフローは安全な `env:` + `jq --arg` パターン
+   を攻撃者制御のissueタイトルの直接文字列補間に置き換え、その `if:` ゲートは
+   `github.event.pull_request.user.login`（issueイベントでは常にnull）を検査したため常に通過；GitHub Advanced
+   Securityはマージ後のリビジョンをスキャンしても検出しなかった。Red Agentの最初のペイロードはbash構文エラーで
+   失敗し、*自律的に書き直し*（`; echo '` でシェルブロックを閉じる）て数秒でトークンを窃取。6月23日開示
+   （HackerOne #3819931）。Snowflakeは同日修正（commit 1dc7766 / PR #1402）、6月24日にトークンをローテーションし、
+   Wizが唯一のアクターだったと確認。CVEなし。**帰属の争い：** Wizは当初「Copilot Autofix powered by AI」（PR
+   #1218）のせいとしたが、GitHubは人間のSnowflakeエンジニアが問題のリファクタリングを書いたとし（2025年8月25日
+   のコミット）、Autofixは「レビューも貢献もしていない」、AI共同著者行は **squashの産物**（squashマージはPR内の
+   全コミットを1つに畳むため、その行はPRへの参加を示すだけで作者ではない）とした。Wizは「このコード変更がAI
+   支援だったかは不明」と軟化。生き残ったループは*自動レビューが人間のバグを通し → 自律型AIが悪用・自己修正*——
+   「評価インフラこそが脆弱性」という教訓は*レビュー*（作者ではない）としてコードパイプラインに落ちる。**規模
+   （08-18回答）：** GitClear 2025（2.11億行、2020–24）はコードチャーン倍増、リファクタリング24%→<10%、重複約
+   4×；DORA 2025は2024年のAI採用25%ごとに安定性−7.2%、2025年も不安定が上昇；Veracode 2025 GenAIコードセキュリティ
+   レポートはAIがタスクの45%で不安全な選択（XSS 86% / ログ注入88%失敗）；arXiv 2507.02976（2万+ GitHub issue）は
+   AI生成パッチが人間の約9倍の新規脆弱性を導入。
+
 ## CVE台帳（新しい順）
+
+- **Wiz Red Agent vs Snowflake（CVEなし）**——`snowflake-connector-net` の `jira_issue.yml` のGitHub Actions
+  スクリプトインジェクション：`${{ github.event.issue.title }}` がシェル文字列に補間される（sedエスケープはテンプ
+  レート展開の*後*に走る）。PR #1218（6月18日）でマージ。壊れた `if:` ゲートが全issueを通す。GitHub Advanced
+  Securityはマージ後のリビジョンをスキャンしても検出しなかった。Red Agentが悪用 + 自己修正 → `$JIRA_API_TOKEN`
+  （`qa@snowflake.net` として認証）を窃取。6月23日にHackerOne経由で開示。Snowflakeは同日修正、トークンを
+  ローテーション、唯一のアクターと確認。**出所訂正：** Wizは当初「Copilot Autofix powered by AI」のせいとしたが、
+  GitHubは人間のSnowflakeエンジニアが書いたとしている（AI共同著者行はsquashの産物）。形状9参照。
+- **Ray CVE-2025-62593**（CVSS 9.4、8月17日KEV）——Ray < 2.52.0のダッシュボードが未認証の `/api/jobs` を公開。
+  DNSリバインディング（Firefox/SafariのFetchは `User-Agent` を設定できRayの「Mozilla」プレフィックス検査を回避）
+  で悪意あるページが開発者のlocalhostバインドのダッシュボードへ到達し、Rayプロセスとしてコード実行。Bitsightが
+  試行をRondoDoxボットネットへ関連付け。連邦締切8月21日。
+- **Joomla Sourcerer CVE-2026-74253**（CVSS 10.0、CWE-94）——Regular Labs Sourcerer 1.0.0–13.1.1：Joomlaの完全
+  レンダリング済みHTMLをスキャンして `{source}` ブロック内のPHPを実行するが、信頼できる著者コンテンツと攻撃者の
+  注入入力を確実に区別しない → 未認証RCE。14.0.0で修正（未検証のレンダリング済みSourcererコードの実行をデフォルト
+  でブロック。後方非互換は管理者が要確認）。
+- **Forminator Forms CVE-2026-15748**（CVSS 9.8、CWE-434）——WPMU DEVの `handle_file_upload()` の危険拡張子
+  ブロックリストを正規表現型キーで回避（`ph(p)` が依然 `.php` に一致）、未認証の `process_uploads()` が偽造Select
+  フィールドを信頼して許可リストを上書き → 匿名訪問者が60万+サイトにPHPウェブシェルをアップロード（デフォルトの
+  `.htaccess` だけが実行を防ぐ；カスタムアップロード保存ルートはこれを失う）。1.56.2で修正。
+- **Adobe ColdFusion CVE-2026-48362**（CVSS 10.0、APSB26-90、Priority 1）——未認証OSコマンドインジェクション：
+  ネットワーク/低複雑度/権限・対話不要/スコープ変更。2025.0.11 / 2023.0.22以前が影響。2025.0.12 / 2023.0.23で
+  修正（同じ更新でCVE-2026-48273 9.9 evalインジェクションとCVE-2026-71384 9.6も修正）。露出した
+  `/CFIDE/administrator/` パスは常連の標的。
+- **Gitea CVE-2026-60004**（CVSS 9.8、CWE-94）——`POST /api/v1/repos/{owner}/{repo}/diffpatch` が攻撃者のパッチを
+  *ベア*一時クローン内に適用（リポジトリルート == `$GIT_DIR`）するため、`hooks/post-index-change`（mode 100755）を
+  書き込むパッチがGitの実フックディレクトリに着地。同じパッチの二重提出によるadd/add競合が `git apply -3` に
+  `--cached` でも書き込ませ、フックがGiteaサービスアカウントとして発火。オープン登録が「リポジトリ書き込み」を
+  容易にする → セルフホストGitサーバー = シェル。1.27.1で修正（一時クローンを非ベアに）。公開PoC + ProjectDiscovery
+  のNucleiテンプレートあり。
+- **Glances CVE-2026-68518**（CVSS 8.8、CWE-78）——`_sanitize_mustache_dict()` が各Mustache値を個別にエスケープする
+  が、隣接する未エスケープ変数を組み合わせてシェル演算子を再構成でき、攻撃者の影響を受けたプロセス/コンテナ
+  フィールドが管理者設定のアクションテンプレートに描画されると `secure_popen()` が実行する。4.5.6で修正。
+  「フィールド単位のサニタイズはコマンド単位のサニタイズではない。」
 
 - **WordPressコア "XSS2Shell" CVE-2026-64638**（CVSS 8.9 v4）—— `wp-login.php` の事前認証反射型XSS：
   PHP `strip_tags()`（`< area id=x>` をテキストとして破棄）とKSES（生きた `<area id="x">` DOM要素へ
@@ -215,3 +270,10 @@ created: 2026-08-16
   のインシデント監査者になりつつあり、封じ込めコントロール（デフォルト拒否エグレス、ネットワーク/アイデン
   ティティ境界、単一目的短期資格情報、全ログ）はCSA指針として成文化された——誰も執行しない。詳細 →
   [[frontier-models]]。
+- ~~AIが書いた脆弱性のループ（形状9）はスケールするか？~~ **回答済み（08-18 14:23）：** 前提は撤回された——
+  GitHubによればSnowflakeのバグは*人間が書いた*（「Copilot Autofix」共同著者行はsquashの産物）ため、「AIが書いた
+  リグレッション」にきれいな典型例はない。しかし*リスク軸*は測定済み：GitClear 2025（チャーン倍増、リファクタ
+  リング24%→<10%、重複約4×）、DORA 2025（2024年のAI採用25%ごとに安定性−7.2%；不安定はなお上昇）、Veracode 2025
+  （AIコードタスクの45%が不安全；86% XSS / 88%ログ注入）、arXiv 2507.02976（AIパッチは人間の約9倍の新規脆弱性）。
+  AIコードレビューはまだ*必須で信頼される*単一障害点ではない（GitHubのagentic autofix、2026年7月、は依然として
+  人間レビュー必須）——だがSnowflakeは「オールクリア」スキャンが唯一の関門になったときに何が起きるかのテンプレート。

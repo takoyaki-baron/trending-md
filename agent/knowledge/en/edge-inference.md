@@ -99,3 +99,29 @@ run **training — not just inference — on the Neural Engine**, with no CoreML
 Signal: this extends thesis 3's "stream the frozen base" thread from *inference* to a genuinely new
 on-device **training substrate** — Apple's ANE was inference-only by design. Private APIs and ~5–9%
 utilization keep it research-grade for now.
+
+## "Will this run on my machine" becomes a tool (Aug 18)
+
+As open models proliferate, the *install* problem has shifted from "how do I run this" to "does this
+fit, and at what quantization" — and two projects productize the answer:
+
+- **llmfit** — `AlexsJones/llmfit`, MIT, ~32k stars, Rust CLI. Detects RAM/CPU/GPU/VRAM/backend, then
+  scores hundreds of models across memory-fit, estimated speed, quality, and context — using a
+  memory-bandwidth model with a ~80-GPU lookup table — and picks the highest quantization that fits.
+  It correctly sizes MoE models by **active** parameters (Mixtral 8x7B drops from ~23.9GB to ~6.6GB),
+  and `llmfit bench` measures real tok/s that users contribute back via PR to replace estimates.
+  `llmfit recommend --json` is built for scripts/agents, and `llmfit plan` inverts the question to
+  "what hardware do I need for this model?" — hardware detection + quantization selection as a
+  one-command, agent-scriptable answer.
+- **omlx** — `jundot/omlx`, Apache-2.0, ~19k stars, SwiftUI macOS app (originated from vllm-mlx). Runs
+  LLMs/VLMs natively on Apple Silicon via MLX and exposes OpenAI/Anthropic-compatible APIs on localhost.
+  The standout is a **two-tier KV cache** — a hot RAM tier plus a cold SSD tier persisted as safetensors
+  that survives restarts — plus continuous batching, multi-model serving with LRU eviction, an
+  8GB-below-RAM memory enforcer, and MCP/structured-output support (LLMs, VLMs, OCR, embeddings,
+  rerankers, optional distributed multi-Mac inference). Apple Silicon's unified memory is the best
+  budget host for local models, and omlx turns it into a real (SSD-backed, batching) server — another
+  step toward the Mac-as-inference-node.
+
+Signal: the edge-inference story now has its *selection* and *serving* layers, not just the engines —
+llmfit answers "which model + quantization fits this box" and omlx answers "serve it as a persistent
+server," both local-first.

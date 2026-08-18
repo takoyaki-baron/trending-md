@@ -501,6 +501,7 @@ const SOURCE_ALIASES = {
   'en.theblockbeats.news': 'theblockbeats.news',
   'app.primeintellect.ai': 'primeintellect.ai',
   'qm.ycombinator.com': 'ycombinator.com',
+  'blog.roboflow.com': 'roboflow.com', 'playground.roboflow.com': 'roboflow.com',
 };
 
 function normalizeHost(url) {

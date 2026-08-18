@@ -355,6 +355,34 @@ running these evals is the CSA checklist, not a waiting regulator.
   (~140 pts). The most concrete European counter-model to US/China frontier concentration — its scale
   is a fraction of the leading open models, but it is copyright-clean and publicly governed.
 
+## GPT-5.6 Sol: vision + a consumer 1M context (Aug 18)
+
+Two more frontier data points on the distribution axis:
+
+- **Vision.** Roboflow's evaluation finds **GPT-5.6 Sol** is "clearly the best vision model OpenAI has
+  released": object-detection mAP@50 jumps from 13.8 (GPT-5.5) to **46.2**, with counting at 73.0%. It
+  ranks #2 of 21 on Roboflow Vision Evals (68.2%) — still behind Claude Fable 5 and Muse Spark on
+  overall averages/identification, and ~50× pricier per sample than Luna, but dominant on detection/
+  counting. Prompt format matters: absolute **XYXY pixel coordinates**, not normalized boxes, swing
+  ~15 mAP. Detection/counting are the production use cases for image-to-data pipelines.
+- **Context.** OpenAI's Codex lead announced the ~1M-token context window for GPT-5.6 Sol is now open
+  to ChatGPT Plus/Pro accounts (previously API-key-only): three lines in `~/.codex/config.toml`
+  (`model_context_window = 1000000`, `model_auto_compact_token_limit = 900000`). OpenAI cautions it
+  roughly doubles token burn past the default window, and long-context scores drop from 91.5% (MRCR v2,
+  256K–512K) to 73.8% at 512K–1M — context length is the hard ceiling on what a coding agent can keep
+  in view, and consumer accounts just got it (with the cost/quality caveats spelled out).
+
+## RPMs — preference models as a compute lever (Aug 18)
+
+**AI Research Preference Models (RPMs)** (arXiv:2608.13940) predict *which candidate solutions are
+worth executing* without running them all, using frozen pretrained language models in inference-only
+and agentic forms integrated into the AIRA-dojo search agent. On AIRS-Bench, RPMs raised the average
+normalized score from 0.684 to 0.729 (agentic) while reaching the unguided agent's 24-hour performance
+in ~15 hours at under two-thirds the execution budget, and set a new SOTA on two tasks. The expensive
+part of agentic research is *executing* candidates — a cheap preference model that pre-filters which
+ones to run is a direct lever on the compute wall every research agent hits (the same "don't run the
+expensive path on the easy tail" shape as [[smart-routing]]).
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks

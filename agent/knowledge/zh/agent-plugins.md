@@ -188,3 +188,16 @@ Copilot、Zed…），改变的是*格式而非能力*：十条规则——第�
 ——产品 how-to、品味（diagram-design）、工作流契约（spec-kit）、书籍锚定（book-to-skill），如今还有输出 UX。
 与 openwork 的跨工具工作流共享一样，是"可移植资产"信号（见 [[agent-stack]]）。
 
+## Skills 现在发布专业安全能力（8 月 18 日）
+
+`mukul975/Anthropic-Cybersecurity-Skills`（28k stars，Apache-2.0，与 Anthropic 无关）是一个**跨 29 个领域、
+817 个结构化网络安全技能**的库，每个都遵循 agentskills.io 标准（YAML frontmatter + When-to-Use/Prerequisites/
+Workflow/Verification），让 coding agent 照着资深分析师的剧本走，而不是瞎猜工具命令。**其中 805/817 映射到
+MITRE ATT&CK v19.1**，并有 NIST CSF 2.0、D3FEND 与 NIST AI RMF 映射，兼容 26+ 个 agent 平台；每个 PR 都在
+48 小时内接受技术准确性与 agentskills.io 合规性评审。
+
+信号：这是迄今最清晰的实例，证明 skills 格式是*非平凡专业专长*的分发单元——编码了 MITRE ATT&CK 映射的安全
+规程，而非格式微调。它也让评估缺口论点（本页的"技能的 MMLU"关注项）更加尖锐：这里的评审门槛是*人工*的
+（48 小时技术评审），而非机器评估——因此这一类别仍在靠*断言 + 人工评审*发布，而非可复现的基准。第一个给
+安全剧本装上自动化、可基准化评估（Ponytail 的模板）的技能库，将拥有那个缺口。
+

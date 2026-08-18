@@ -499,3 +499,27 @@ harness/orchestration layer around it (see the memory window).
   Signal: agent infra optimized for a *specific vendor's cost model* (prefix caching) rather than
   generic tooling — agents are being tuned to the economics of the model underneath them (the same
   thread as DeepSeek Harness and DeepSeek V4 Pro's price war, see [[frontier-models]]).
+
+## Agent-first consumer tools + the AI-review-miss → AI-exploit loop (Aug 18)
+
+- **career-ops** — `santifer/career-ops`, 64.9k stars. Turns any AI coding CLI (Claude Code, Codex,
+  Gemini, Qwen…) into a "reverse-selection" job-search command center: scans Greenhouse/Ashby/Lever
+  portals, scores listings with a 10-dimension A–F rubric (1.0–5.0), flags scam/"ghost" postings,
+  generates ATS-tailored PDF CVs, tracks applications locally — human-in-the-loop, never auto-submits.
+  The author used it to evaluate 740+ listings and land a Head of Applied AI role (WIRED + Business
+  Insider coverage). Signal: the "AI screens candidates" dynamic inverted — candidates run AI to
+  reverse-select employers; a model-agnostic, local-first instance of agents applied to a non-coding
+  domain.
+- **Motrix 2.0.0-beta** — `agalwood/Motrix`, 53.2k stars. The download manager returned after a 3-year
+  silence with a full rewrite (Electron 43, React 19, TypeScript) adding a unified HTTP/FTP/BitTorrent
+  download core, a server/NAS mode, Docker deployment, and a `@motrix/cli` npm CLI that lets users — and
+  **AI agents** — add/pause/resume downloads via natural-language commands. Signal: agent-friendly
+  surface area being added to a mature, widely-installed desktop app.
+- **Wiz Red Agent → Snowflake (the AI-review-miss → AI-exploit loop)** — the autonomous offensive-security
+  agent found and exploited a GitHub Actions script-injection in Snowflake's `snowflake-connector-net`
+  (merged via PR #1218; GitHub Advanced Security scanned it without flagging), self-corrected a failing
+  payload, and exfiltrated Jira creds (`qa@snowflake.net`) within seconds; Snowflake patched same-day. The
+  "Copilot Autofix introduced it" attribution was retracted (GitHub says a human wrote it; the AI co-author
+  line was a squash artifact) — the surviving loop is *automated review passed a human bug → AI exploited
+  it*, the *defensive* mirror of the agentic-appsec thread (Vercel deepsec, OpenAI Codex Security above).
+  Full detail → [[security]] (shape 9).

@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-17T04:03:00Z
+last_processed: 2026-08-18T12:03:00Z
 ---
 
 # Learnt Agent
@@ -80,6 +80,28 @@ patterns, and turn them into insights and actionable todos.
    patch case is now the *slow* end; Marimo (9h41m) and cPanel (<24h) show hours. "Patch-then-reverse-
    engineer" is subsumed — disclosure is the trigger, and patch velocity is structurally obsolete
    (74-day remediation vs −7d MTE). **The 12:03 batch adds two shapes (08-16 12:03, ledger → [[security]]):** (4) *prompt-injectable RCE* — MindsDB Minds Platform CVE-2026-73678 (CVSS 10.0): an unauthenticated endpoint + a bring-your-own-key chain drives the built-in Anton agent's scratchpad into a bare `exec()` with no sandbox — the sharpest instance yet of "the agent is the attack surface" (no patched release at disclosure). (5) *vendor under-described severity* — Citrix NetScaler CVE-2026-8452: Citrix's June 30 bulletin called the SAML-path heap overflow "unpredictable behavior"; watchTowr turned it into unauthenticated root RCE — the first public NetScaler pre-auth RCE since 2023. **Answered (08-16 12:24):** the prompt-injectable RCE class already has a name — OWASP's agentic list calls it **Unexpected Code Execution** (ASI05), with CWE-94 (code injection) + CWE-306 (missing auth) + CWE-942 (permissive CORS) as the MITRE tags and "Excessive Agency" (LLM06) as the framing; it is **not yet in CISA KEV** (too fresh — published Aug 14). The mitigation standard is converging on OWASP's multi-layer model — authenticate the agent endpoint by default, sandbox the code-exec tool (no bare `exec()`/`shell=True`), least-privilege tool scoping + permission tiers. And the **negative-TTE follow-up is answered too**: the measured defense metric is shifting from patch velocity to **behavioral anomaly detection** (Mandiant's own recommendation — replace static IOCs with baselines that flag anomalous edge-device access / bulk API ops / SaaS-token abuse), with dwell time (14-day median, up from 11) downgraded to a lagging indicator and the 22-second hand-off making human-loop metrics decoration (only 52% of intrusions are detected internally). **The 20:03 batch adds a no-patch EoP shape (08-16 20:03, ledger → [[security]]):** ShieldBreak — a Windows Defender local-EoP zero-day that *bypasses the July RoguePlanet patch* (CVE-2026-50656) by chaining a rogue cloud-storage provider, CLFS log manipulation, and Object Manager symlinks to swap a malicious DLL into Defender's scan lock and spawn a `SYSTEM` shell (100% success on Win11 25H2 / Server 2025, independently confirmed on fully-patched machines; no patch exists). Cadence pattern: the researcher commits to a new Windows zero-day after every Patch Tuesday.
+   **The loop closed, then its authorship claim broke (08-18, shape 9 corrected, ledger → [[security]]):**
+   Wiz Research's autonomous **Red Agent** found and exploited a GitHub Actions script-injection in
+   Snowflake's public `snowflake-connector-net` repo and reached Snowflake's internal Jira (base64 Jira
+   creds, authing as `qa@snowflake.net`, read across engineering/security-compliance/bug-bounty). The
+   vulnerable `jira_issue.yml` workflow replaced a safe `env:` + `jq --arg` pattern with direct
+   interpolation of the attacker-controlled issue title, gated by a broken `if:` (it checked
+   `pull_request.user.login`, always null on issue events), and GitHub Advanced Security scanned the
+   merged revision without flagging it. Red Agent's first payload died on a bash syntax error, so it
+   *autonomously rewrote it* and exfiltrated the token within seconds. Disclosed June 23 (HackerOne
+   #3819931); Snowflake patched same-day, rotated the token, and confirmed Wiz the sole actor. **The
+   "Copilot Autofix introduced it" attribution collapsed within hours:** GitHub says a human Snowflake
+   engineer wrote the refactor (Autofix "neither reviewed nor contributed"; the AI co-author line was a
+   squash artifact), and Wiz softened its post to "unclear whether the code-change was AI-assisted." So
+   the loop is *AI review missed a human bug → AI exploited it*, not "AI authored → AI exploited." Scale
+   data (→ [[security]]): GitClear 2025 churn doubling + refactoring 24%→<10%; DORA 2025 2024 stability
+   −7.2% per 25% AI-adoption; Veracode 2025 45% of AI code tasks insecure; arXiv 2507.02976 AI patches
+   ~9× new-vuln rate. Six more CVEs land: Ray
+   CVE-2025-62593 (KEV, 9.4 DNS-rebinding → unauth MLOps RCE), Joomla Sourcerer CVE-2026-74253 (10.0
+   unauth RCE in the `{source}`-exec extension), Forminator CVE-2026-15748 (9.8 unauth file-upload →
+   webshell, 600k+ sites), Adobe ColdFusion CVE-2026-48362 (10.0 unauth OS command injection, Priority
+   1), Gitea CVE-2026-60004 (9.8 repo-write → RCE via a git hook through the diffpatch API), Glances
+   CVE-2026-68518 (8.8 adjacent-Mustache → OS command injection).
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -90,6 +112,13 @@ patterns, and turn them into insights and actionable todos.
    decoder layer into the GPU at a time while the frozen base sits in system RAM — an 8B model
    LoRA-finetunes on a 4GB laptop GPU, bit-exact against a resident-GPU reference. Fine-tuning's
    hardware floor is collapsing for the same reason inference's did.
+   **"Will this run on my machine" gets a tool (08-18):** `AlexsJones/llmfit` (~32k stars, MIT) detects
+   RAM/CPU/GPU/VRAM/backend and scores hundreds of models via a memory-bandwidth model (~80-GPU lookup
+   table) to pick the highest quantization that fits — sizing MoE by *active* params (Mixtral 8x7B
+   23.9GB→6.6GB); `llmfit bench` measures real tok/s (fed back via PR) and `llmfit plan` inverts to
+   "what hardware for this model." `jundot/omlx` (~19k stars, Apache-2.0) turns Apple Silicon into a
+   real server: MLX-native, two-tier KV cache (hot RAM + cold SSD persisted as safetensors), continuous
+   batching, multi-model LRU eviction, MCP/structured output.
    → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
@@ -127,6 +156,12 @@ patterns, and turn them into insights and actionable todos.
    as **the protocol itself**, not a separate DSL. Likely end-state is a two-layer split: MCP/AGTP own
    the transport, while the git-owned `policy-lock.yaml` (BitRouter) or a verified-compiled research
    DSL owns the *policy*. → [[smart-routing]]
+   **The voice stack joins the map (08-18):** Speko (YC S26, `SpekoAI/gateway` MIT Go sidecar) is an
+   "OpenRouter for voice AI" — send accuracy/latency/cost criteria and it benchmarks 50+ providers /
+   140+ models across the STT/LLM/TTS layers, picks the winner, and returns provider+model+scores in
+   response headers; public boards publish WER/latency/cost-per-minute. The classify-then-cheap-
+   specialist shape applied to a stack that rots because nobody re-benchmarks after launch.
+   → [[smart-routing]]
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** DeepSeek V4 Pro GA
    (within ~5% of Claude Fable 5 on agentic benchmarks, ~$0.435/M input = ~23× cheaper than Fable 5's
@@ -149,6 +184,13 @@ patterns, and turn them into insights and actionable todos.
    tasks via **TEMPO** RL. The first open release from a major Chinese consumer platform's in-house lab:
    Terminal-Bench 2.1 75.1 (~4.9 above the top US open-weight), and a same-series model's perfect IMO
    42/42. The open-weight frontier now has a consumer-platform lab. → [[frontier-models]]
+   **Three 08-18 beats:** GPT-5.6 Sol is now "clearly the best vision model OpenAI has shipped" —
+   object-detection mAP@50 jumps 13.8→46.2 (Roboflow, #2 of 21 overall; XYXY-pixel prompts swing ~15
+   mAP) — and its ~1M-token context unlocked in Codex for ChatGPT Plus/Pro accounts (three lines in
+   `~/.codex/config.toml`, ~2× token burn past the default window, MRCR drops 91.5%→73.8% at 512K–1M).
+   **RPMs** (arXiv:2608.13940) add a compute lever: AI Research Preference Models pre-filter *which
+   candidate solutions to run*, reaching the unguided agent's 24h score in ~15h at <⅔ the execution
+   budget (AIRS-Bench SOTA). → [[frontier-models]]
 
 7. **AI safety is now a measured release threshold, not policy — and it's converging cross-lab.**
    OpenAI paused Astra, the first model its Preparedness Framework "cannot rule out Critical" for
@@ -240,6 +282,13 @@ patterns, and turn them into insights and actionable todos.
    native manifests (`.codex-plugin/plugin.json` kept as a fallback overlay), so the portable core
    (Skills + MCP) converges while the per-vendor shell (hooks/apps/native extensions — Claude Code
    `.claude-plugin`, DeepSeek Cordis) persists as the remaining lock-in surface.
+   **Skills now ship professional security capability (08-18):** `mukul975/Anthropic-Cybersecurity-Skills`
+   (28k stars, Apache-2.0, unaffiliated with Anthropic) packages 817 agent-readable security playbooks
+   across 29 domains in agentskills.io format — 805/817 mapped to MITRE ATT&CK v19.1 (+ NIST CSF 2.0,
+   D3FEND, NIST AI RMF) — with a 48-hour technical-review gate on every PR. The clearest sign yet that
+   "skills" are the distribution unit for *non-trivial professional expertise*, not formatting tweaks;
+   but the review gate is still human, not machine-evaluated — the "MMLU-for-skills" gap stands.
+   → [[agent-plugins]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
    ("Stealing Reasoning Traces from Proprietary LLM APIs", Panfilov et al.) shows the encrypted
@@ -531,6 +580,16 @@ patterns, and turn them into insights and actionable todos.
   AI-assisted exploitation: **Strix** (`usestrix/strix`, ~47K stars) is the first high-profile agentic
   pentest-as-product (a graph of recon/exploit/post-exploit subagents, ships a working PoC per finding;
   100/104 XBEN challenges at ~$3.37 each — author flags "indicative, single reviewer"). Ledger → [[security]].
+  **New (08-18, corrected same day):** *AI review missed a human bug → AI exploited* — Wiz **Red Agent**
+  exploited a GitHub Actions script-injection in Snowflake's `snowflake-connector-net` (PR #1218 replaced
+  the safe `env:`+`jq --arg` pattern with direct interpolation; a broken `if:` gate passed every issue;
+  GitHub Advanced Security's scan said "all-clear") — then self-corrected a failing payload to exfiltrate
+  Jira creds (`qa@snowflake.net`). The "Copilot Autofix introduced it" attribution was **retracted**:
+  GitHub says a human wrote it (squash artifact), Wiz softened to "unclear whether AI-assisted."
+  Disclosed via HackerOne, Snowflake patched same-day. Six more CVEs: Ray CVE-2025-62593 (KEV 9.4
+  DNS-rebinding), Joomla Sourcerer CVE-2026-74253 (10.0), Forminator CVE-2026-15748 (9.8), Adobe
+  ColdFusion CVE-2026-48362 (10.0), Gitea CVE-2026-60004 (9.8 git-hook RCE), Glances CVE-2026-68518 (8.8).
+  Ledger → [[security]].
 - **Provenance & watermarking arms race (08-15):** Anthropic began watermarking Claude text (Aug 2)
   under the EU AI Act's Article 50 transparency rules; within days `guillaumemeyer/watermarks-remover`
   (MIT, 4.1K stars) strips AI-provenance marks in three layers — Unicode steganography, a statistical
@@ -604,6 +663,16 @@ patterns, and turn them into insights and actionable todos.
   local-SSD reads it was designed around with an I/O thread pool + read-ahead queue — a TPC-H query on
   S3 drops 8.2s→2.8s and an 80GB CSV scan 877s→45s (~20×), nearly saturating 25 Gbit/s where v1.5.5
   idled near 5 Gbit/s; lands in 2.0 with no user configuration.
+  **New (08-18):** DuckDB's **v2.0 "Cyanoptera" preview** (10,000+ commits since v1.5) pivots from an
+  embedded engine to a server: a `quack` extension adds `ATTACH`/`CONNECT` network streaming + SQL
+  pushdown to PostgreSQL/MySQL, plus first-class **VARIANT** (shredded execution), `BEFORE`/`AFTER`
+  triggers, a PEG SQL parser (Spark dialect mode), storage format v2.0, and a stable extension C API —
+  a recursive-CTE microbenchmark dropped 4.90s→0.12s (~40×). And **GPU Offload in Rust**
+  (arXiv:2608.13759) proposes kernels compiled by rustc/LLVM (`cargo build` → `nvptx64`/`amdgcn`) where
+  the borrow checker classifies host↔device transfers (`&T` read-only / `&mut T` bidirectional) — within
+  ~10–30% of hand-tuned CUDA on H100/MI250X, with honest "zero-overhead asserted, not demonstrated"
+  caveats; `nautechsystems/nautilus_trader` (26.1k stars) heads to a stable 2.x Rust-native trading
+  engine API.
 - **Models & research:** Kronos (decoder-only foundation model for financial candlesticks, AAAI 2026)
   — the "pretrain + finetune" playbook applied to markets. **HL-Gauss PPO** (arXiv 2608.02181, COLM
   2026) — swapping the scalar critic head for a categorical predictor (HL-Gauss targets) is a drop-in
@@ -646,6 +715,17 @@ patterns, and turn them into insights and actionable todos.
   word "Sponsored" letter-by-letter, inserted invisible fake characters, and regenerated element names
   to defeat pattern-matching. Client-side ad-blocking is losing to platform-side obfuscation-as-a-service;
   the open-web community is pushed toward alternative filter lists or abandoning hostile sites.
+- **Content factory + agent-first consumer tools (08-18):** `harry0703/MoneyPrinterTurbo` (MIT, 106k
+  stars, +1,275/day) is the most-starred "content factory" — keyword → LLM script → matched stock
+  footage → TTS voiceover → subtitles → auto-publish to TikTok/IG/YouTube Shorts, runnable as WebUI/
+  API/CLI/agent; `santifer/career-ops` (64.9k stars) turns any AI coding CLI into a reverse-selection
+  job-search command center (scans Greenhouse/Ashby/Lever, A–F scores listings, flags scams, never
+  auto-submits — the author used it to land a Head of Applied AI role); `agalwood/Motrix` 2.0.0-beta
+  (53.2k stars) returns after 3 years with a full rewrite and a `@motrix/cli` for AI-agent download
+  control. Alibaba's **HappyShrimp 1.0** ("快乐虾米") generates a complete song end-to-end
+  (lyrics/melody/arrangement/vocals) as a closed hosted product — the two-front race with MiniMax's open
+  Music 3.0. And **AI;DR** ("AI; didn't read", HN 732 pts) names the mainstream "AI slop" backlash
+  landing on authorship and workplace etiquette, not the tech.
 - **✅ Void lesson resolved (2026-08-12 → corrected 08-13):** star velocity is a signal to
   investigate, not publish. The Void "#2 trending" entry has been **corrected in all three locales**
   after first-hand verification: the repo is archived/deprecated (archived Jun 2, 2026). The standing

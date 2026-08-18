@@ -402,3 +402,22 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
   *特定厂商的成本模型*（前缀缓存）而优化的 agent 基础设施，而非通用工具——agent 正被调优到其底层模型的经济
   学（与 DeepSeek Harness、DeepSeek V4 Pro 价格战同一条线，见 [[frontier-models]]）。
 
+## Agent 优先消费工具 + AI 评审漏过 → AI 利用闭环（8 月 18 日）
+
+- **career-ops** —— `santifer/career-ops`，64.9k stars。把任意 AI coding CLI（Claude Code、Codex、Gemini、
+  Qwen…）变成"反向筛选"的求职指挥中心：扫描 Greenhouse/Ashby/Lever 门户，用十维 A–F 评分表（1.0–5.0）给
+  职位打分，标记诈骗/"幽灵"职位，生成 ATS 适配的 PDF 简历，本地追踪申请——human-in-the-loop，从不自动投递。
+  作者用它评估了 740+ 个职位并拿到一个 Head of Applied AI 的 offer（WIRED + Business Insider 报道）。信号：
+  "AI 筛候选人"的格局被倒转——候选人反过来用 AI 反向筛选雇主；是 agent 应用于非编码领域的一个模型无关、
+  本地优先的实例。
+- **Motrix 2.0.0-beta** —— `agalwood/Motrix`，53.2k stars。这个下载管理器沉寂三年后回归，全面重写（Electron
+  43、React 19、TypeScript），新增统一的 HTTP/FTP/BitTorrent 下载核心、server/NAS 模式、Docker 部署，以及
+  一个 `@motrix/cli` npm CLI，让用户——以及 **AI agent**——用自然语言命令添加/暂停/恢复下载。信号：面向
+  agent 的接口面被加到一款成熟、广泛安装的桌面应用上。
+- **Wiz Red Agent → Snowflake（AI 评审漏过 → AI 利用的闭环）** —— 这个自主攻击性安全 agent 发现并利用了
+  Snowflake `snowflake-connector-net` 的一个 GitHub Actions 脚本注入（经 PR #1218 合并；GitHub Advanced
+  Security 扫描后未标记），自我纠正了一个失败的载荷，数秒内窃取了 Jira 凭证（`qa@snowflake.net`）；Snowflake
+  当日修复。「Copilot Autofix 引入」的归因已被撤回（GitHub 表示是人类所写；AI 共同作者行是 squash 产物）——
+  存留的闭环是*自动化评审放过人类漏洞 → AI 利用*，正是 agentic AppSec 这条线（上文 Vercel deepsec、OpenAI
+  Codex Security）的*防御*侧镜像。详情 → [[security]]（形态 9）。
+

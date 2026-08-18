@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-08-17 04:33
+last_run: 2026-08-18 14:23
 ---
 
 # アクション
@@ -31,7 +31,7 @@ last_run: 2026-08-17 04:33
       27/43解決）と執筆側のspec-kit（仕様＝実行可能な真実の源、約128.8K stars）；「スキルのMMLU」
       ギャップは残るが、フロンティアランクの方向は機械検証可能な意図。08-17 04:03：i-have-adhd（~18K stars、エージェント出力UXを再配線する単一の
       `SKILL.md`）は「主張であって証明でない」もう一つのデータポイント——出力フォーマットへの測定可能な
-      投票だが、共有の評価プロトコルは依然なく、「スキルのMMLU」ギャップは不変。）
+      投票だが、共有の評価プロトコルは依然なく、「スキルのMMLU」ギャップは不変。08-18：Anthropic-Cybersecurity-Skills（28k stars、817個のMITRE ATT&CKマッピング済みセキュリティプレイブック、48時間の人的レビューゲート）は「スキル＝プロフェッショナル能力」だが、ゲートは依然として人間であって機械評価ではない——ギャップは残る。）
 - [~] **ルーティング：トランスポート vs ポリシー層の分裂** — MCPのステートレスコア + `Mcp-Method`/
       `Mcp-Name` ヘッダがルーティング*トランスポート*をコモディティ化したばかり；ルーティング*ポリシー*
       DSLは独立した層として生き残るか（BitRouter `policy-lock.yaml` vs Semantic Routerの検証済みコンパイル
@@ -43,6 +43,24 @@ last_run: 2026-08-17 04:33
 
 ### Done —— アーカイブ（新しい順）
 
+- [x] **AIが書いた脆弱性（ループはスケールするか）** — 訂正つきで回答：定番の前提は撤回された——GitHubに
+      よればSnowflakeのバグは*人間が書いた*（「Copilot Autofix」共同著者行はsquashの産物；Wizは「AI支援かは
+      不明」と軟化）ため、「AIが書いて → AIが悪用」にきれいな実例はない。*リスク軸*は測定済み：GitClear
+      2025（チャーン倍増、リファクタリング24%→<10%、重複約4×）、DORA 2025（2024年のAI採用25%ごとに安定性
+      −7.2%；2025年も不安定が上昇）、Veracode 2025（AIコードタスクの45%が不安全；86% XSS / 88%ログ注入）、
+      arXiv 2507.02976（AIパッチは人間の約9倍の新規脆弱性）。AIコードレビューはまだ*必須で信頼される*単一
+      障害点ではない（GitHub agentic autofixは依然として人間レビュー必須）——だがSnowflakeは「オールクリア」
+      スキャンが唯一の関門になったときに何が起きるかのテンプレート。→ [[security]]（→ ログ 2026-08-18 14:23）
+- [x] **相互検証の深さ** — sources/domains.jsonでtheregister.com（cv: 1）を `cv: 2` に引き上げ：その
+      Snowflake/Red Agent訂正（「あるAIがバグを検出できず……別のAIエージェントが悪用」）はWizの軟化した
+      ブログおよびGitHubのTheNextWeb経由の声明（人間の作者、squashの産物）と独立に一致。wiz.ioのレビュー
+      テキスト（撤回された「Copilot Autofix導入」をなお含む）も訂正。（→ ログ 2026-08-18 14:23）
+- [x] **ソースレビューの衛生** — 08-18バッチの新規16ソースドメインをsources/domains.jsonへ収録（wiz.io、
+      theregister.com、suriq.io、duckdb.org、mintlify.wiki、leiphone.com、scirate.com、rickmanelius.com、
+      wordfence.com、criminalip.io、blog.gitea.com、roboflow.com、speko.ai、nautilustrader.io、
+      meta.appinn.net、cloud.tencent.cn）——それぞれ分類しクロスバリデーション、cv: 1（wiz.io → cv: 2、
+      一次確認 + The Register）。build.jsに別名blog/playground.roboflow.com → roboflow.comを追加。
+      （→ ログ 2026-08-18 13:56）
 - [x] **評価サンドボックスを誰が監査するか？** — 回答済み：常設の監査者はいない。両ラボとも自らの
       インシデントに*委任*スポット監査者を雇った（OpenAI: CrowdStrike + METR + Redwood Research；
       Anthropic: METR）。METRは事実上のインシデント監査者になりつつあるが、常にラボに雇われ、インシデ
@@ -226,6 +244,48 @@ last_run: 2026-08-17 04:33
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-08-18 14:23
+- **プラン：** 唯一開いていた `[ ]` リサーチ項目（AIが書いた脆弱性のループはスケールするか）を進め、システム
+  項目（今ラウンドで触れたソースの相互検証）を追加 + 実行する。書く前にSnowflake/Red Agentを一次ソースで検証。
+- **実施：**（1）Snowflake/Red Agentを一次ソースで検証——前ラウンドの見出し主張（「Copilot Autofixがバグを
+  導入した」）は**撤回**された：Wizのブログ（8月17日更新）は「このコード変更がAI支援だったかは不明」とし、
+  GitHubは人間のSnowflakeエンジニアが書いたとし（Autofixは「レビューも貢献もしていない」；AI共同著者行は
+  squashの産物）、The Registerは見出しを「あるAIがバグを検出できず……別のAIエージェントが悪用」に変更。その場で
+  訂正：feed第1条（en/zh/jp）、thesis 2形状9 + セキュリティトレンドノート（en/zh/jp agent.md）、[[security]]の
+  形状9 + 台帳 + ウォッチ（en/zh/jp）。（2）4つの一次データポイントで規模の問いに回答（GitClear 2025、DORA
+  2025、Veracode 2025、arXiv 2507.02976）——撤回後「AIが書いたリグレッション」にきれいな典型例はないが、リスク
+  軸は測定済み；AIコードレビューはまだ必須で信頼される単一障害点ではない。（3）システム：sources/domains.jsonで
+  theregister.comを `cv: 2` に引き上げ、wiz.ioの古いレビューを訂正。last_run → 14:23。
+- **結果：** Void級の事実確認のキャッチ——08-18 13:56ラウンドの「AIが書いて → AIが悪用」形状は撤回された帰属に
+  基づいており、feed + メモリウィンドウ + [[security]]（en/zh/jp）にわたり「自動レビューが人間のバグを見逃し →
+  自律型AIが悪用」へ訂正。リサーチ項目は回答済み（撤回 + 4つの規模データポイント）；ソースはクリーン
+  （theregister.com → cv: 2）。
+
+### 2026-08-18 13:56
+- **プラン：** 08-18の正味新規バッチ（22件）を学習。ヘッドラインのAI-on-AIストーリー（Wiz Red Agent vs
+  Snowflake）を一次情報で検証；AIが書いてAIが悪用する形状 + 6つのCVEを[[security]]へ追加；バッチの新規
+  ソースドメインを収録；Anthropic-Cybersecurity-Skillsのデータポイントでエージェントスキル評価項目を前進。
+- **実施：** (1) wiz.ioでWiz Red Agentストーリーを検証——Snowflakeの `snowflake-connector-net`
+  `jira_issue.yml` のGitHub ActionsスクリプトインジェクションはPR #1218（6月18日）で導入され、共同執筆者は
+  "Copilot Autofix powered by AI"（安全な `env:`+`jq --arg` パターンを直接補間に置換、壊れた `if:` でゲート；
+  GitHubのAIレビューは「オールクリア」）。Red Agentの最初のペイロードはbash構文エラーで失敗し、自律的に書き
+  直してJira認証情報（`qa@snowflake.net`）を窃取。6月23日にHackerOne経由で開示、Snowflakeは同日修正 + トークン
+  ローテーション + 唯一のアクターと確認。形状9（AIが書いて → AIが悪用）としてen/agent.md + [[security]]
+  （en/zh/jp）に記述、さらに6件のCVE台帳（Ray CVE-2025-62593 KEV、Joomla Sourcerer CVE-2026-74253、
+  Forminator CVE-2026-15748、Adobe ColdFusion CVE-2026-48362、Gitea CVE-2026-60004、Glances CVE-2026-68518）。
+  (2) テーゼ3（llmfit + omlx → [[edge-inference]]）、テーゼ5（Speko音声スタックルーティング →
+  [[smart-routing]]）、テーゼ6（GPT-5.6 Sol視覚/コンテキスト + RPM → [[frontier-models]]）、テーゼ8
+  （Anthropic-Cybersecurity-Skills → [[agent-plugins]]）を拡張し、トレンドノートを追加（DuckDB v2.0、Rust
+  GPUオフロード、MoneyPrinterTurbo、career-ops、Motrix、HappyShrimp、AI;DR）——3言語対応。(3)
+  sources/domains.jsonに新規16ドメインを収録（cv: 1、wiz.io → cv: 2）+ build.jsに別名2件
+  （blog/playground.roboflow.com → roboflow.com）。(4) エージェントスキル評価項目を
+  Anthropic-Cybersecurity-Skillsのデータポイントで前進させ、リサーチ項目を追加（AIが書いた脆弱性のループは
+  スケールするか）。last_processed → 12:03、last_run → 13:56。
+- **結果：** 08-18バッチをメモリウィンドウ + ナレッジライブラリに取り込み。形状9（AIが書いて → AIが悪用、
+  閉ループ）が6つのCVEとともに[[security]]へ、llmfit/omlxが[[edge-inference]]へ、Spekoが[[smart-routing]]へ、
+  Anthropic-Cybersecurity-Skillsがスキルの「MMLU」ギャップを際立たせ、ソースディレクトリはクリーンを維持
+  （新規16ドメイン、cv ≥ 1）。
 
 ### 2026-08-17 04:33
 - **プラン：** 唯一の未解決 `[ ]` リサーチ項目——評価サンドボックスを誰が監査するか——に答え、システム項目

@@ -8,6 +8,12 @@ set -euo pipefail
 # Disable that enforcement so the API reports the real context window instead.
 export CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1
 
+# Authenticate git as the repo owner (takoyaki-baron). gh's git-credential helper answers
+# with the globally-active account by default (currently wohaoshuai), which has NO write
+# access to takoyaki-baron/trending-md — so `git push` 403s. Setting GH_TOKEN forces the
+# helper to hand back the owner's token instead. Inherited by agent-run.sh via export.
+export GH_TOKEN="$(gh auth token --hostname github.com --user takoyaki-baron)"
+
 REPO_DIR="/Users/kelong/developer/github/trending-md"
 TODAY=$(date +%Y-%m-%d)
 LOG_DIR="$REPO_DIR/.cron-logs"

@@ -95,7 +95,69 @@ Seven recurring shapes, each with a canonical instance:
    the security context" — the same family as Apache Allura's git-argument injection and the
    recurring "shells out / re-parses" class.
 
+9. **AI-review miss → autonomous AI exploit (authorship retracted) (08-18, corrected 08-18).** The
+   canonical "AI authored the bug" claim collapsed within hours, but the *real* loop stands. Wiz
+   Research's autonomous **Red Agent** exploited a GitHub Actions script-injection in Snowflake's public
+   `snowflake-connector-net` repo and reached Snowflake's internal Jira (base64 Jira creds authing as
+   `qa@snowflake.net`, read across engineering/security-compliance/bug-bounty). The vulnerable
+   `jira_issue.yml` workflow replaced a safe `env:` + `jq --arg` pattern with direct interpolation of
+   the attacker-controlled issue title, gated by a broken `if:` (`github.event.pull_request.user.login`,
+   always null on issue events) that always passed; GitHub Advanced Security scanned the merged revision
+   and did not flag it. Red Agent's first payload failed on a bash syntax error, then *autonomously
+   rewrote it* (`; echo '` to close the shell block) and exfiltrated the token within seconds. Disclosed
+   June 23 (HackerOne #3819931); Snowflake patched same-day (commit 1dc7766 / PR #1402), rotated the
+   token June 24, and confirmed Wiz the sole actor. No CVE. **The attribution fight:** Wiz initially
+   credited "Copilot Autofix powered by AI" (PR #1218); GitHub says a human Snowflake engineer wrote the
+   vulnerable refactor (a commit dated Aug 25 2025), Autofix "neither reviewed nor contributed," and the
+   AI co-author line was a **squash artifact** (squash-merging folds all PR commits into one, so the
+   line records PR participation, not authorship). Wiz softened its post to "unclear whether the
+   code-change was AI-assisted." The surviving loop is *automated review passed a human bug → an
+   autonomous AI exploited + self-corrected it* — the "eval infra is the vuln" lesson lands on the code
+   pipeline as **review**, not authorship. **Scale (answered 08-18):** GitClear 2025 (211M lines,
+   2020–24) shows code churn projected to double, refactoring collapsed 24%→<10%, duplication ~4×; DORA
+   2025 measured a 7.2% stability drop per 25% AI-adoption in 2024 with instability still rising in
+   2025; Veracode's 2025 GenAI Code Security Report found AI chose the insecure option in 45% of tasks
+   (86% XSS / 88% log-injection failures); and arXiv 2507.02976 (20k+ GitHub issues) found AI-generated
+   patches introduce new vulnerabilities at ~9× the human rate.
+
 ## The CVE ledger (newest first)
+
+- **Wiz Red Agent vs Snowflake (no CVE)** — GitHub Actions script-injection in
+  `snowflake-connector-net`'s `jira_issue.yml`: `${{ github.event.issue.title }}` interpolated into a
+  shell string (sed escaping ran *after* template expansion), merged via PR #1218 (Jun 18); a broken
+  `if:` gate passed every issue; GitHub Advanced Security scanned the merged revision without flagging it.
+  Red Agent exploited + self-corrected → exfiltrated `$JIRA_API_TOKEN` (authing as `qa@snowflake.net`).
+  Disclosed Jun 23 via HackerOne; Snowflake patched same-day, rotated the token, confirmed sole-actor.
+  **Origin corrected:** Wiz initially credited "Copilot Autofix powered by AI"; GitHub says a human
+  Snowflake engineer wrote it (the AI co-author line was a squash artifact). See shape 9.
+- **Ray CVE-2025-62593** (CVSS 9.4, KEV Aug 17) — Ray < 2.52.0 dashboard exposes unauthenticated
+  `/api/jobs`; DNS-rebinding (Firefox/Safari Fetch can set `User-Agent` to defeat Ray's "Mozilla" prefix
+  check) lets a malicious page reach a developer's localhost-bound dashboard and execute code as the Ray
+  process. Bitsight ties attempts to the RondoDox botnet; federal deadline Aug 21. "A localhost-bound
+  service is not an access control when a browser can reach it."
+- **Joomla Sourcerer CVE-2026-74253** (CVSS 10.0, CWE-94) — Regular Labs Sourcerer 1.0.0–13.1.1: scans
+  Joomla's fully rendered HTML for `{source}` blocks and executes embedded PHP without reliably
+  distinguishing trusted authored content from attacker-injected input → unauth RCE. Fixed 14.0.0
+  (blocks unverified rendered Sourcerer code by default; backward-compat breaks admins must review).
+- **Forminator Forms CVE-2026-15748** (CVSS 9.8, CWE-434) — WPMU DEV's `handle_file_upload()`
+  dangerous-extension blocklist bypassed via a regex-style key (`ph(p)` still matches `.php`), and the
+  unauth `process_uploads()` trusts a forged Select field to override the allowlist → anonymous PHP
+  webshell on 600k+ sites (only the default `.htaccess` blocks execution; custom upload-storage roots
+  lose it). Fixed 1.56.2.
+- **Adobe ColdFusion CVE-2026-48362** (CVSS 10.0, APSB26-90, Priority 1) — unauth OS command injection:
+  network / low complexity / no privileges or interaction / changed scope; 2025.0.11 / 2023.0.22 and
+  earlier; fixed 2025.0.12 / 2023.0.23 (same update also patches CVE-2026-48273 9.9 eval injection and
+  CVE-2026-71384 9.6). The exposed `/CFIDE/administrator/` path is a perennial target.
+- **Gitea CVE-2026-60004** (CVSS 9.8, CWE-94) — `POST /api/v1/repos/{owner}/{repo}/diffpatch` applies
+  attacker patches inside a *bare* temp clone (repo root == `$GIT_DIR`), so a patch writing
+  `hooks/post-index-change` (mode 100755) lands in Git's real hooks dir; an add/add conflict on a
+  twice-submitted patch forces `git apply -3` to write it despite `--cached`, and the hook fires as the
+  Gitea service account. Open registration makes "repo write" trivial → self-hosted Git server = shell.
+  Fixed 1.27.1 (temp clone made non-bare); public PoCs + a ProjectDiscovery Nuclei template.
+- **Glances CVE-2026-68518** (CVSS 8.8, CWE-78) — `_sanitize_mustache_dict()` escapes each Mustache value
+  individually, but adjacent unescaped variables can be combined to reconstruct shell operators that
+  `secure_popen()` executes when attacker-influenced process/container fields render in an admin action
+  template. Fixed 4.5.6. "Per-field sanitization is not per-command sanitization."
 
 - **WordPress core "XSS2Shell" CVE-2026-64638** (CVSS 8.9 v4) — pre-auth reflected XSS in
   `wp-login.php`: parser differential between PHP `strip_tags()` (drops `< area id=x>` as text) and
@@ -227,3 +289,12 @@ Seven recurring shapes, each with a canonical instance:
   becoming the de-facto incident auditor, and the containment controls (default-deny egress,
   network/identity boundaries, single-purpose short-lived creds, full logging) are codified as CSA
   guidance — enforced by nobody. Full detail → [[frontier-models]].
+- ~~Does the AI-authored-vulnerability loop (shape 9) scale?~~ **Answered (08-18 14:23):** the premise
+  was retracted — the Snowflake bug was *human-authored* per GitHub (the "Copilot Autofix" co-author
+  line was a squash artifact), so "AI-authored regressions" has no clean canonical instance. But the
+  *risk axis* is measured: GitClear 2025 (churn doubling, refactoring 24%→<10%, duplication ~4×), DORA
+  2025 (7.2% stability drop per 25% AI-adoption in 2024; instability still rising), Veracode 2025 (45%
+  of AI code tasks insecure; 86% XSS / 88% log-injection), arXiv 2507.02976 (AI patches ~9× human
+  new-vuln rate). AI code review is not yet a *mandatory* trusted SPOF (GitHub's agentic autofix, July
+  2026, still requires human review) — but Snowflake is the template for what happens when an
+  "all-clear" scan is the only gate.

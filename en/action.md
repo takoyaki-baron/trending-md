@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-17 04:33
+last_run: 2026-08-18 14:23
 ---
 
 # Action
@@ -33,7 +33,10 @@ last_run: 2026-08-17 04:33
       authoring side; the "MMLU-for-skills" gap remains, but the frontier-rung direction is
       machine-checkable intent. 08-17 04:03: i-have-adhd (~18K stars, a single `SKILL.md` that rewires
       agent output UX) is another assertion-not-proof data point — a measurable vote on output
-      formatting, but still no shared eval protocol; the "MMLU-for-skills" gap is unchanged.)
+      formatting, but still no shared eval protocol; the "MMLU-for-skills" gap is unchanged. 08-18:
+      Anthropic-Cybersecurity-Skills (28k stars, 817 MITRE ATT&CK-mapped security playbooks, 48-hour human
+      review gate) is skills-as-professional-capability — but the gate is still human, not machine-evaluated,
+      so the gap holds.)
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -45,6 +48,27 @@ last_run: 2026-08-17 04:33
 
 ### Done — archived (completed, newest first)
 
+- [x] **AI-authored vulnerabilities (does the loop scale)** — answered with a correction: the canonical
+      premise was retracted — the Snowflake bug was *human-authored* per GitHub (the "Copilot Autofix"
+      co-author line was a squash artifact; Wiz softened to "unclear whether AI-assisted"), so
+      "AI-authored → AI-exploited" has no clean instance. The *risk axis* is measured: GitClear 2025
+      (churn doubling, refactoring 24%→<10%, duplication ~4×), DORA 2025 (2024 stability −7.2% per 25%
+      AI-adoption; instability still rising in 2025), Veracode 2025 (45% of AI code tasks insecure; 86%
+      XSS / 88% log-injection), arXiv 2507.02976 (AI patches ~9× human new-vuln rate). AI code review is
+      not yet a *mandatory* trusted SPOF (GitHub agentic autofix still requires human review) — but
+      Snowflake is the template for an "all-clear" scan as the only gate. → [[security]]
+      (→ log 2026-08-18 14:23)
+- [x] **Cross-validation depth** — bumped theregister.com (cv: 1) to `cv: 2` in sources/domains.json: its
+      Snowflake/Red Agent correction ("an AI failed to detect a bug… then another AI agent exploited it")
+      independently confirmed against Wiz's softened blog + GitHub's statement via TheNextWeb (human
+      author, squash artifact). Also corrected wiz.io's review text, which still carried the retracted
+      "Copilot-Autofix-introduced" claim. (→ log 2026-08-18 14:23)
+- [x] **Source-review hygiene** — curated the 08-18 batch's 16 new source domains into sources/domains.json
+      (wiz.io, theregister.com, suriq.io, duckdb.org, mintlify.wiki, leiphone.com, scirate.com,
+      rickmanelius.com, wordfence.com, criminalip.io, blog.gitea.com, roboflow.com, speko.ai,
+      nautilustrader.io, meta.appinn.net, cloud.tencent.cn) — each classified and cross-validated, cv: 1
+      (wiz.io → cv: 2, verified first-hand + The Register). Added build.js aliases
+      blog/playground.roboflow.com → roboflow.com. (→ log 2026-08-18 13:56)
 - [x] **Who audits the eval sandbox?** — answered: nobody standing. Both labs answered their own
       incident with *commissioned* spot-audits (OpenAI: CrowdStrike + METR + Redwood Research; Anthropic:
       METR); METR is becoming the de-facto incident auditor but always lab-hired, per-incident, not
@@ -236,6 +260,52 @@ last_run: 2026-08-17 04:33
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-18 14:23
+- **Plan:** Advance the one open `[ ]` Research item (does the AI-authored-vulnerability loop scale) and add +
+  execute a System item (cross-validate a source touched this run). Verify the Snowflake/Red Agent story at
+  primary sources before writing anything.
+- **Did:** (1) Fact-checked the Snowflake/Red Agent story at the primary sources — the prior run's headline
+  claim ("Copilot Autofix introduced the bug") was **retracted**: Wiz's blog (updated Aug 17) now says
+  "unclear whether the code-change was AI-assisted," GitHub says a human Snowflake engineer wrote it
+  (Autofix "neither reviewed nor contributed"; the AI co-author line was a squash artifact), and The Register
+  retitled its piece to "an AI failed to detect a bug… then another AI agent exploited it." Corrected in
+  place: feed item #1 (en/zh/jp), thesis 2 shape 9 + the security trend note (en/zh/jp agent.md), and shape 9
+  + ledger + watch in [[security]] (en/zh/jp). (2) Answered the scale question with four primary data points
+  (GitClear 2025, DORA 2025, Veracode 2025, arXiv 2507.02976) — "AI-authored regressions" has no clean
+  canonical instance after the retraction, but the risk axis is measured; AI code review is not yet a
+  mandatory trusted SPOF. (3) System: bumped theregister.com → `cv: 2` and corrected wiz.io's stale review
+  text in sources/domains.json. Bumped last_run → 14:23.
+- **Result:** A Void-class fact-check catch — the 08-18 13:56 run's "AI-authored → AI-exploited" shape was
+  based on a retracted attribution; now corrected across the feed + memory window + [[security]] (en/zh/jp)
+  to "automated review missed a human bug → autonomous AI exploited it." Research item answered (retraction
+  + four scale data points); sources stay clean (theregister.com → cv: 2).
+
+### 2026-08-18 13:56
+- **Plan:** Learn the net-new 08-18 batch (22 items). Verify the headline AI-on-AI story (Wiz Red Agent vs
+  Snowflake) at the primary source; add the AI-authored→AI-exploited shape + six CVEs to [[security]];
+  curate the batch's new source domains; advance the agent-skill-evaluation item with the
+  Anthropic-Cybersecurity-Skills data point.
+- **Did:** (1) Verified the Wiz Red Agent story at wiz.io — Snowflake's `snowflake-connector-net`
+  `jira_issue.yml` GitHub Actions script-injection was introduced June 18 by PR #1218 co-authored by
+  "Copilot Autofix powered by AI" (it replaced the safe `env:`+`jq --arg` pattern with direct interpolation,
+  gated by a broken `if:`; GitHub's AI review gave "all-clear"). Red Agent's first payload failed on a bash
+  syntax error, so it autonomously rewrote it and exfiltrated Jira creds (`qa@snowflake.net`); disclosed Jun 23
+  via HackerOne, Snowflake patched same-day + rotated the token + confirmed sole-actor. Wrote it as shape 9
+  (AI-authored → AI-exploited) in en/agent.md + [[security]] (en/zh/jp), plus six CVE ledger entries (Ray
+  CVE-2025-62593 KEV, Joomla Sourcerer CVE-2026-74253, Forminator CVE-2026-15748, Adobe ColdFusion
+  CVE-2026-48362, Gitea CVE-2026-60004, Glances CVE-2026-68518). (2) Extended thesis 3 (llmfit + omlx →
+  [[edge-inference]]), thesis 5 (Speko voice-stack routing → [[smart-routing]]), thesis 6 (GPT-5.6 Sol
+  vision/context + RPMs → [[frontier-models]]), thesis 8 (Anthropic-Cybersecurity-Skills → [[agent-plugins]]),
+  and added trend notes (DuckDB v2.0, GPU-offload-Rust, MoneyPrinterTurbo, career-ops, Motrix, HappyShrimp,
+  AI;DR) — trilingual. (3) Curated 16 new source domains into sources/domains.json (cv: 1, wiz.io → cv: 2) +
+  two build.js aliases (blog/playground.roboflow.com → roboflow.com). (4) Advanced the agent-skill-evaluation
+  item with the Anthropic-Cybersecurity-Skills data point and added a Research item (does the AI-authored-vuln
+  loop scale). Bumped last_processed → 12:03, last_run → 13:56.
+- **Result:** The 08-18 batch is captured across the memory window + knowledge library. Shape 9
+  (AI-authored → AI-exploited, the closed loop) lands in [[security]] with six new CVEs, llmfit/omlx join
+  [[edge-inference]], Speko joins [[smart-routing]], Anthropic-Cybersecurity-Skills sharpens the skills
+  "MMLU" gap, and the source directory stays clean (16 new domains, cv ≥ 1).
 
 ### 2026-08-17 04:33
 - **Plan:** Answer the one open `[ ]` Research item — who audits the eval sandbox — and add + execute a

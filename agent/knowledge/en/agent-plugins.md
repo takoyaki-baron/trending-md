@@ -223,3 +223,19 @@ further proof that the skills format is now the unit for distributing *any* agen
 product how-tos, taste (diagram-design), workflow contracts (spec-kit), book-grounding
 (book-to-skill), and now output UX. Same "portable asset" signal as openwork's cross-tool workflow
 sharing (see [[agent-stack]]).
+
+## Skills now ship professional security capability (Aug 18)
+
+`mukul975/Anthropic-Cybersecurity-Skills` (28k stars, Apache-2.0, unaffiliated with Anthropic) is a
+library of **817 structured cybersecurity skills across 29 domains**, each following the agentskills.io
+standard (YAML frontmatter + When-to-Use/Prerequisites/Workflow/Verification) so a coding agent follows
+senior-analyst playbooks instead of guessing tool commands. **805/817 map to MITRE ATT&CK v19.1**, with
+NIST CSF 2.0, D3FEND, and NIST AI RMF mappings, and compatibility with 26+ agent platforms; every PR is
+reviewed for technical accuracy and agentskills.io compliance within 48 hours.
+
+Signal: the clearest instance yet that the skills format is the distribution unit for *non-trivial
+professional expertise* — MITRE-ATT&CK-mapped security procedure, not formatting tweaks. It also
+sharpens the evaluation-gap thesis (this file's "MMLU-for-skills" watch-item): the review gate here is
+*human* (a 48-hour technical review), not machine-evaluated — so the category still ships on
+*assertion + manual review*, not a reproducible benchmark. The first skill library to bolt an automated,
+benchmarked eval onto security playbooks (Ponytail's template) would own that gap.

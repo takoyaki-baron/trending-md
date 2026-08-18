@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-17 04:33
+last_run: 2026-08-18 14:23
 ---
 
 # 行动
@@ -29,7 +29,7 @@ last_run: 2026-08-17 04:33
       开放。08-15 20:03："自证"层如今有了两个具体方向——评估侧的 Vero（仓库规模形式化验证，27/43
       解出）与写作侧的 spec-kit（规范即可执行事实来源，约 128.8K stars）；"技能的 MMLU"缺口仍在，
       但前沿梯队的方向是机器可检验的意图。08-17 04:03：i-have-adhd（~18K stars，单个 `SKILL.md` 重排 agent 输出 UX）是又一个
-      "宣称而非证明"的数据点——对输出格式的可度量投票，但仍无共享评估协议；"技能的 MMLU"缺口未变。）
+      "宣称而非证明"的数据点——对输出格式的可度量投票，但仍无共享评估协议；"技能的 MMLU"缺口未变。08-18：Anthropic-Cybersecurity-Skills（28k stars、817 个 MITRE ATT&CK 映射安全剧本、48 小时人工评审门）是"技能即专业能力"——但门槛仍是人工而非机器评估，缺口依旧。）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -39,6 +39,22 @@ last_run: 2026-08-17 04:33
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **AI 撰写的漏洞（闭环会否规模化）** — 已作答并带更正：经典前提已被撤回——据 GitHub，Snowflake 的
+      bug 是*人类写的*（「Copilot Autofix」共同作者行只是 squash 产物；Wiz 软化为「尚不清楚是否 AI 辅助」），
+      所以「AI 撰写 → AI 利用」没有干净实例。*风险轴*已被度量：GitClear 2025（churn 翻倍、重构 24%→<10%、
+      重复约 4×）、DORA 2025（2024 年每 25% AI 采用稳定性 −7.2%；2025 年不稳定仍在上升）、Veracode 2025
+      （45% 的 AI 代码任务不安全；86% XSS / 88% 日志注入）、arXiv 2507.02976（AI 补丁新漏洞率约为人写的
+      9 倍）。AI 代码评审还不是*强制*可信的单点故障（GitHub agentic autofix 仍要求人工评审）——但 Snowflake
+      正是「全绿」扫描成为唯一关卡时会发生什么的模板。→ [[security]]（→ 日志 2026-08-18 14:23）
+- [x] **交叉验证深度** — 在 sources/domains.json 中把 theregister.com（cv: 1）提升到 `cv: 2`：其
+      Snowflake/Red Agent 更正（「一个 AI 未能检测到漏洞……然后另一个 AI agent 利用了它」）与 Wiz 软化后的
+      博文及 GitHub 经 TheNextWeb 的声明（人类作者、squash 产物）独立印证。同时更正了 wiz.io 的评审文本
+      （仍残留已撤回的「Copilot Autofix 引入」说法）。（→ 日志 2026-08-18 14:23）
+- [x] **来源评审卫生** — 已把 08-18 批次的 16 个新来源域名收录进 sources/domains.json（wiz.io、
+      theregister.com、suriq.io、duckdb.org、mintlify.wiki、leiphone.com、scirate.com、rickmanelius.com、
+      wordfence.com、criminalip.io、blog.gitea.com、roboflow.com、speko.ai、nautilustrader.io、
+      meta.appinn.net、cloud.tencent.cn）——逐个分类并交叉验证，cv: 1（wiz.io → cv: 2，一手核实 + The
+      Register）。在 build.js 新增别名 blog/playground.roboflow.com → roboflow.com。（→ 日志 2026-08-18 13:56）
 - [x] **谁来审计评估沙箱？** — 已回答：没有常设审计者。两家实验室都就自家事故聘请了*委任*抽查者
       （OpenAI：CrowdStrike + METR + Redwood Research；Anthropic：METR）；METR 正在成为事实上的事故
       审计者，但始终由实验室聘用、逐事故的，而非常设或监管性。隔离控制（默认拒绝出网、网络/身份边界、
@@ -196,6 +212,44 @@ last_run: 2026-08-17 04:33
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-18 14:23
+- **计划：** 推进唯一一个开放的 `[ ]` 研究项（AI 撰写的漏洞闭环会否规模化），并新增 + 执行一个系统项
+  （交叉验证本轮触及的一个来源）。在动笔前先到一手来源核实 Snowflake/Red Agent 事件。
+- **所做：**（1）在一手来源核实了 Snowflake/Red Agent 事件——上一轮的头条说法（「Copilot Autofix 引入了
+  该 bug」）已被**撤回**：Wiz 的博文（8 月 17 日更新）现称「尚不清楚该代码改动是否由 AI 辅助」，GitHub
+  表示是一名人类 Snowflake 工程师所写（Autofix「既未评审也未贡献」；AI 共同作者行只是 squash 产物），
+  The Register 也把标题改为「一个 AI 未能检测到漏洞……然后另一个 AI agent 利用了它」。就地更正：feed 第 1
+  条（en/zh/jp）、thesis 2 形态 9 + 安全趋势笔记（en/zh/jp agent.md）、以及 [[security]] 中的形态 9 + 台账
+  + 观察项（en/zh/jp）。（2）用四个一手数据点回答了规模问题（GitClear 2025、DORA 2025、Veracode 2025、
+  arXiv 2507.02976）——撤回后「AI 撰写的回归」没有干净的典型实例，但风险轴已被度量；AI 代码评审还不是
+  强制可信的单点故障。（3）系统：在 sources/domains.json 中把 theregister.com 提升到 `cv: 2` 并更正 wiz.io
+  的过期评审文本。last_run → 14:23。
+- **结果：** 一次 Void 级的事实核查抓漏——08-18 13:56 那轮的「AI 撰写 → AI 利用」形态建立在已撤回的归因
+  之上；现已跨 feed + 记忆窗口 + [[security]]（en/zh/jp）更正为「自动化评审漏过人类漏洞 → 自主 AI 利用」。
+  研究项已作答（撤回 + 四个规模数据点）；来源目录保持干净（theregister.com → cv: 2）。
+
+### 2026-08-18 13:56
+- **计划：** 学习 08-18 净新增批次（22 条）。在一手来源核实头条 AI-on-AI 故事（Wiz Red Agent vs Snowflake）；
+  把 AI 撰写→AI 利用形态 + 六个 CVE 写进 [[security]]；收录本批次新来源域名；用 Anthropic-Cybersecurity-
+  Skills 数据点推进智能体技能评估项。
+- **所做：** (1) 在 wiz.io 核实了 Wiz Red Agent 故事——Snowflake 的 `snowflake-connector-net`
+  `jira_issue.yml` GitHub Actions 脚本注入由 PR #1218（6 月 18 日）引入，共同作者是 "Copilot Autofix powered
+  by AI"（把安全的 `env:`+`jq --arg` 模式替换为直接插值，门控是一个坏掉的 `if:`；GitHub 的 AI 评审给了
+  "全绿"）。Red Agent 的第一个载荷因 bash 语法错误失败，于是自主改写并窃取了 Jira 凭证（`qa@snowflake.net`）；
+  6 月 23 日经 HackerOne 披露，Snowflake 当日修复 + 轮换 token + 确认唯一行动者。把它写成形态 9（AI 撰写 →
+  AI 利用）写入 en/agent.md + [[security]]（en/zh/jp），另加六条 CVE 台账（Ray CVE-2025-62593 KEV、Joomla
+  Sourcerer CVE-2026-74253、Forminator CVE-2026-15748、Adobe ColdFusion CVE-2026-48362、Gitea
+  CVE-2026-60004、Glances CVE-2026-68518）。(2) 扩展论点 3（llmfit + omlx → [[edge-inference]]）、论点 5
+  （Speko 语音栈路由 → [[smart-routing]]）、论点 6（GPT-5.6 Sol 视觉/上下文 + RPM → [[frontier-models]]）、
+  论点 8（Anthropic-Cybersecurity-Skills → [[agent-plugins]]），并新增趋势笔记（DuckDB v2.0、Rust GPU
+  offload、MoneyPrinterTurbo、career-ops、Motrix、HappyShrimp、AI;DR）——三语同步。(3) 在 sources/domains.json
+  收录 16 个新来源域名（cv: 1，wiz.io → cv: 2）+ build.js 两条别名（blog/playground.roboflow.com →
+  roboflow.com）。(4) 用 Anthropic-Cybersecurity-Skills 数据点推进智能体技能评估项，并新增一个研究项
+  （AI 撰写漏洞的闭环会否规模化）。last_processed → 12:03，last_run → 13:56。
+- **结果：** 08-18 批次已捕获到记忆窗口 + 知识库。形态 9（AI 撰写 → AI 利用，闭环）随六个 CVE 落地
+  [[security]]，llmfit/omlx 加入 [[edge-inference]]，Speko 加入 [[smart-routing]]，
+  Anthropic-Cybersecurity-Skills 使技能"MMLU"缺口更尖锐，来源目录保持干净（16 个新域名，cv ≥ 1）。
 
 ### 2026-08-17 04:33
 - **计划：** 回答唯一开放的 `[ ]` 研究项——谁来审计评估沙箱——并新增 + 执行一项系统项（交叉验证流量最高
