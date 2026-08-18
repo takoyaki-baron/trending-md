@@ -1,8 +1,8 @@
 ---
 date: 2026-08-18
-updated: 2026-08-18T04:03:00Z
+updated: 2026-08-18T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -197,13 +197,155 @@ Alibaba released **HappyShrimp 1.0** ("快乐虾米") on Aug 17: describe an emo
 
 ---
 
+## 13. AI;DR (AI; Didn't Read) — the "AI slop" backlash goes viral
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 732 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `ai-content` `culture` `industry` `writing` `slop`
+
+Rick Manelius's Aug 17 essay popularized **AI;DR** ("AI; didn't read") — "if you're not bothered enough to review and edit it... then I'm not going to bother reading it." The acronym started as a seclilc tweet (346K views, 16.6K likes) and the HN thread reached ~732 points. It names a now-mainstream frustration: colleagues pasting raw, unedited model output — Slack walls, newsletters, Jira tickets — and shifting the editing, fact-checking, and tone-fixing burden onto whoever reads it.
+
+**Why it matters:** It's a concrete signal of where the "AI slop" backlash is landing — on authorship and workplace etiquette, not just on the tech — and it's actively reshaping norms around what counts as acceptable agent-assisted writing.
+
+> The author is explicit that he's "about as pro-AI as you can be"; his line is about unedited output passed off under a human's name, not about AI writing itself.
+
+[`🔗 Rick Manelius — AI;DR`](https://www.rickmanelius.com/p/aidr-ai-didnt-read) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49336573)
+
+---
+
+## 14. Forminator Forms CVE-2026-15748 — unauthenticated file upload → RCE across 600k+ WordPress sites
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wordfence · CVSS 9.8 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `wordpress` `rce` `file-upload` `plugin`
+
+Wordfence disclosed **CVE-2026-15748** (CVSS 9.8, CWE-434) on Aug 17 in **Forminator Forms** (WPMU DEV, 600k+ active installs). `handle_file_upload()`'s dangerous-extension blocklist is bypassed with a regex-style key (`ph(p)` still matches `.php`), and the unauthenticated `process_uploads()` handler trusts a **forged Select field** to override the allowlist — so any anonymous visitor can upload a PHP webshell when a form has both a File Upload and a Select field. Fixed in **1.56.2**.
+
+**Why it matters:** A default `.htaccess` usually blocks PHP execution in the upload dir, but sites with a **custom upload-storage root** lose that safeguard — turning a form plugin into a full site shell with zero authentication.
+
+[`🔗 Wordfence blog`](https://www.wordfence.com/blog/2026/08/600000-wordpress-sites-affected-by-arbitrary-file-upload-vulnerability-in-forminator-forms-wordpress-plugin/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/forminator-wordpress-flaw-can-enable.html)
+
+---
+
+## 15. Adobe ColdFusion CVE-2026-48362 — unauthenticated OS command injection (CVSS 10.0, Priority 1)
+
+- **Velocity:** ▮▮ rising
+- **Source:** Criminal IP · CVSS 10.0 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `adobe` `coldfusion` `command-injection` `rce`
+
+Adobe's August bulletin (**APSB26-90**) fixed **CVE-2026-48362**, an unauthenticated OS command injection in ColdFusion rated **CVSS 10.0** (network, low complexity, no privileges or interaction, changed scope) and assigned Adobe's **Priority 1**. It affects ColdFusion **2025.0.11 / 2023.0.22** and earlier; fixes land in **2025.0.12 / 2023.0.23**. The same update also patches CVE-2026-48273 (CVSS 9.9 eval injection) and CVE-2026-71384 (CVSS 9.6).
+
+**Why it matters:** ColdFusion's exposed `/CFIDE/administrator/` paths have been a perennial target, and a no-auth, no-interaction command injection is the worst-case class for any still-deployed legacy CF server — Adobe's 72-hour install guidance reflects it.
+
+[`🔗 Criminal IP analysis`](https://www.criminalip.io/knowledge-hub/blog/37257) · [`🔗 CVE record`](https://www.cve.org/CVERecord?id=CVE-2026-48362)
+
+---
+
+## 16. Gitea CVE-2026-60004 — repo-write escalates to RCE via a git hook planted through the diffpatch API
+
+- **Velocity:** ▮▮ rising
+- **Source:** Gitea Blog · CVSS 9.8 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `gitea` `git-hooks` `rce` `self-hosted`
+
+**CVE-2026-60004** (CVSS 9.8, CWE-94) in Gitea ≤ 1.27.0: the `POST /api/v1/repos/{owner}/{repo}/diffpatch` endpoint applies attacker patches inside a **bare temp clone** (repo root == `$GIT_DIR`), so a patch that writes `hooks/post-index-change` (mode 100755) lands in Git's real hooks directory. An add/add conflict on a twice-submitted patch forces `git apply -3` to write the file despite `--cached`, and the hook then fires as the Gitea service account. Fixed in **1.27.1** (temp clone made non-bare); multiple public PoCs and a ProjectDiscovery Nuclei template automate the chain.
+
+**Why it matters:** Gitea's default **open registration** makes "repo write access" trivial to obtain, turning a self-hosted Git server into a shell for anyone who can sign up — the fix matters across the whole Gitea/Forgejo ecosystem.
+
+[`🔗 Gitea 1.27.1 release blog`](https://blog.gitea.com/release-of-1.27.1/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/07/new-gitea-rce-lets-repository-writers.html)
+
+---
+
+## 17. GPT-5.6 Sol — the best vision model OpenAI has shipped (object detection jumps 13.8 → 46.2 mAP)
+
+- **Velocity:** ▮▮ rising
+- **Source:** Roboflow · 319 pts (HN) · ~1d ago (~12:03 UTC+8)
+- **Tags:** `openai` `vision` `object-detection` `vlm` `benchmark`
+
+Roboflow's evaluation finds **GPT-5.6 Sol** is "clearly the best vision model OpenAI has released," with object-detection mAP@50 jumping from 13.8 (GPT-5.5) to **46.2** and counting to 73.0%. Sol ranks #2 of 21 on Roboflow Vision Evals (68.2%) — still behind Claude Fable 5 and Muse Spark on overall averages and identification, and ~50× pricier per sample than Luna, but dominant on detection/counting. Prompt format matters: absolute **XYXY pixel coordinates**, not normalized boxes (~15 mAP swing).
+
+**Why it matters:** Detection and counting are the production use cases for image-to-data pipelines; a flagship that finally clears that bar — plus a ~1.5M-token context — changes what's practical for document/VLM extraction at scale.
+
+[`🔗 Roboflow blog`](https://blog.roboflow.com/openai-gpt-5-6/) · [`🔗 Roboflow playground`](https://playground.roboflow.com/models/openai/gpt-5-6-sol)
+
+---
+
+## 18. GPU Offload in Rust (arXiv:2608.13759) — a rustc/LLVM-native, borrow-checked path to CUDA/AMD kernels
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 184 pts (HN) · ~1d ago (~12:03 UTC+8)
+- **Tags:** `rust` `gpu` `compilers` `hpc` `arxiv`
+
+A preprint (Drehwald et al.) proposes GPU offload built into **rustc and LLVM** rather than as a library or DSL: host code compiles kernels to `nvptx64`/`amdgcn` with a plain `cargo build`, and Rust's borrow checker is reused to classify host↔device transfers (`&T` → read-only, `&mut T` → bidirectional), catching transfer bugs at compile time. On RAJAPerf, Rust kernels land within ~10–30% of hand-tuned CUDA on H100/MI250X. Community review flags honest caveats: "zero-overhead" is asserted not demonstrated, register pressure runs higher, and a naive interface can trigger a ~400× slowdown on AMD.
+
+**Why it matters:** If memory safety reaches GPU kernels through the compiler instead of `unsafe` raw pointers or vendor DSLs, it attacks one of the last bastions of `unsafe` in systems programming — with benchmarks that show the remaining gap rather than hiding it.
+
+[`🔗 arXiv:2608.13759`](https://arxiv.org/abs/2608.13759) · [`🔗 Byteiota analysis`](https://byteiota.com/rust-gpu-offload-hits-rustc-safe-portable-kernels-now/)
+
+---
+
+## 19. career-ops — the 64.9k-star "reverse-selection" job-search command center for AI coding CLIs
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · +218 stars today · ~12h ago (~12:03 UTC+8)
+- **Tags:** `ai-tools` `job-search` `agents` `cli` `open-source`
+
+**santifer/career-ops** (64.9k stars) turns any AI coding CLI (Claude Code, Codex, Gemini, Qwen…) into a job-search command center: it scans Greenhouse/Ashby/Lever portals, scores listings with a 10-dimension A–F rubric into a 1.0–5.0 score, flags scam/"ghost" postings, generates ATS-tailored PDF CVs, and tracks applications locally — human-in-the-loop, never auto-submits. The author used it to evaluate 740+ listings and land a Head of Applied AI role; WIRED and Business Insider have covered it.
+
+**Why it matters:** It inverts the "AI screens candidates" dynamic — candidates now run AI to reverse-select employers — and it's a model-agnostic, local-first example of agents applied to a non-coding domain.
+
+[`🔗 santifer/career-ops`](https://github.com/santifer/career-ops) · [`🔗 Tencent Cloud (中文)`](https://cloud.tencent.cn/developer/article/2696242)
+
+---
+
+## 20. Speko (YC S26) — an "OpenRouter for voice AI" that benchmarks and routes STT/LLM/TTS stacks
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 99 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `voice-ai` `routing` `benchmark` `agents` `open-source`
+
+Speko's Launch HN ("OpenRouter for Voice AI") introduces a router for production voice agents: send criteria (accuracy/latency/cost, language, region), and it benchmarks 50+ providers / 140+ models across the STT, LLM, and TTS layers, picks the winner, and returns provider + model + scores in response headers. Its MIT-licensed gateway (**SpekoAI/gateway**, Go) runs as a local sidecar with BYOK and no call-home; hosted routing costs 5% over provider rates. Public boards publish WER, latency, and cost-per-minute at benchmarks.speko.ai.
+
+**Why it matters:** Voice stacks go stale because nobody re-benchmarks after launch; independent, continuously-updated evals plus a drop-in gateway turn "which STT/TTS for Spanish medical calls" into an answered, routeable question.
+
+[`🔗 speko.ai`](https://speko.ai) · [`🔗 SpekoAI/gateway`](https://github.com/SpekoAI/gateway)
+
+---
+
+## 21. NautilusTrader v2 — a Rust-native, nanosecond event-driven trading engine heads to 2.0
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 26k stars · ~12h ago (~12:03 UTC+8)
+- **Tags:** `trading` `rust` `backtesting` `open-source` `fintech`
+
+**nautechsystems/nautilus_trader** (26.1k stars) is a Rust-native, Python-strategy engine for multi-asset, multi-venue trading with a deterministic event-driven core shared between backtest and live (research-to-live parity). It's in its v2 release-candidate line (`2.0.0rc` wheels) with ~18 venue adapters (Binance, Interactive Brokers, Deribit, Polymarket, Betfair…), nanosecond-resolution simulation, and Redis-backed state persistence.
+
+**Why it matters:** Rust is absorbing the "performance + correctness" niche in trading infrastructure, and a stable 2.x API for a production-grade open engine lowers the barrier from hobby backtesting to real deployment.
+
+[`🔗 nautechsystems/nautilus_trader`](https://github.com/nautechsystems/nautilus_trader) · [`🔗 nautilustrader.io`](https://nautilustrader.io/)
+
+---
+
+## 22. Motrix 2.0.0-beta — the download manager returns after 3 years with an AI-agent-controllable CLI
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · +344 stars today · ~12h ago (~12:03 UTC+8)
+- **Tags:** `download-manager` `cli` `ai-agents` `open-source` `electron`
+
+**agalwood/Motrix** (53.2k stars) broke a three-year silence with **Motrix 2.0.0-beta** ("Motrix Turbo"), a full rewrite (Electron 43, React 19, TypeScript) adding a unified HTTP/FTP/BitTorrent download core shared with a new server/NAS mode, Docker deployment, and a `@motrix/cli` npm CLI that lets users — and **AI agents** — add/pause/resume downloads via natural-language commands.
+
+**Why it matters:** A dormant, widely-installed tool resurfacing with an explicit "AI Agent control" CLI is a clean example of agent-friendly surface area being added to a mature desktop app.
+
+[`🔗 agalwood/Motrix`](https://github.com/agalwood/Motrix) · [`🔗 Appinn (中文)`](https://meta.appinn.net/t/topic/90130)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-18T04:03:00Z |
-| Items | 12 |
-| Sources tracked | 19 (GitHub, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Hacker News) |
+| Generated | 2026-08-18T12:03:00Z |
+| Items | 22 |
+| Sources tracked | 29 (GitHub, Hacker News, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Rickmanelius, Wordfence, The Hacker News, Criminal IP, Gitea Blog, Roboflow, Byteiota, Speko, NautilusTrader, Appinn) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

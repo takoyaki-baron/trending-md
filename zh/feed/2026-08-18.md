@@ -1,8 +1,8 @@
 ---
 date: 2026-08-18
-updated: 2026-08-18T04:03:00Z
+updated: 2026-08-18T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -197,13 +197,155 @@ OpenAI Codex 负责人 Tibo 宣布，GPT-5.6 Sol 在 Codex 中的 **约 100 万 
 
 ---
 
+## 13. AI;DR（AI; 没空读）——「AI 垃圾内容」反弹病毒式传播
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 732 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `ai-content` `culture` `industry` `writing` `slop`
+
+Rick Manelius 8 月 17 日的文章让 **AI;DR**（「AI; 没空读」）走红——「如果你都懒得审阅和编辑……那我也不打算费劲去读。」这个缩写最初是一条 seclilc 的推文（34.6 万浏览、1.66 万赞），HN 讨论帖冲到约 732 分。它点明了一种已成主流的挫败感：同事把未经编辑的原始模型输出——Slack 大段消息、newsletter、Jira 工单——直接贴出来，把编辑、查证、润色的负担转嫁给阅读者。
+
+**为何重要：** 这是「AI 垃圾内容」反弹落地在哪里的具体信号——落在署名与职场礼仪上，而不只是技术本身——它正在重塑「AI 辅助写作可以接受什么」的规范。
+
+> 作者明确表示自己「要多支持 AI 就有多支持」；他的底线是未经编辑的输出以人的名义发出，而非反对 AI 写作本身。
+
+[`🔗 Rick Manelius — AI;DR`](https://www.rickmanelius.com/p/aidr-ai-didnt-read) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49336573)
+
+---
+
+## 14. Forminator Forms CVE-2026-15748——60 万+ WordPress 站点遭未认证文件上传 → RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wordfence · CVSS 9.8 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `wordpress` `rce` `file-upload` `plugin`
+
+Wordfence 于 8 月 17 日披露 **CVE-2026-15748**（CVSS 9.8，CWE-434），影响 **Forminator Forms**（WPMU DEV，60 万+ 活跃安装）。`handle_file_upload()` 的危险扩展名黑名单可被正则式键名绕过（`ph(p)` 仍能匹配 `.php`），而未认证的 `process_uploads()` 处理器信任**伪造的 Select 字段**来覆盖白名单——因此当表单同时包含「文件上传」与「下拉选择」字段时，任何匿名访客都能上传 PHP webshell。已在 **1.56.2** 修复。
+
+**为何重要：** 默认的 `.htaccess` 通常会阻止上传目录执行 PHP，但配置了**自定义上传存储根目录**的站点会失去这层保护——把表单插件变成无需认证的整站 shell。
+
+[`🔗 Wordfence 博客`](https://www.wordfence.com/blog/2026/08/600000-wordpress-sites-affected-by-arbitrary-file-upload-vulnerability-in-forminator-forms-wordpress-plugin/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/forminator-wordpress-flaw-can-enable.html)
+
+---
+
+## 15. Adobe ColdFusion CVE-2026-48362——未认证 OS 命令注入（CVSS 10.0，Priority 1）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Criminal IP · CVSS 10.0 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `adobe` `coldfusion` `command-injection` `rce`
+
+Adobe 的 8 月公告（**APSB26-90**）修复了 **CVE-2026-48362**——ColdFusion 中的未认证 OS 命令注入，评级 **CVSS 10.0**（网络、低复杂度、无需权限或交互、作用域改变），并被 Adobe 列为 **Priority 1**。影响 ColdFusion **2025.0.11 / 2023.0.22** 及更早版本；修复版本为 **2025.0.12 / 2023.0.23**。同一更新还修复了 CVE-2026-48273（CVSS 9.9 eval 注入）与 CVE-2026-71384（CVSS 9.6）。
+
+**为何重要：** ColdFusion 暴露的 `/CFIDE/administrator/` 路径一直是长期攻击目标，而无需认证、无需交互的命令注入，对任何仍在运行的遗留 CF 服务器都是最坏的一类漏洞——Adobe 给出的 72 小时安装指引正说明了这一点。
+
+[`🔗 Criminal IP 分析`](https://www.criminalip.io/knowledge-hub/blog/37257) · [`🔗 CVE 记录`](https://www.cve.org/CVERecord?id=CVE-2026-48362)
+
+---
+
+## 16. Gitea CVE-2026-60004——仓库写权限经 diffpatch API 植入 git hook 升级为 RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** Gitea Blog · CVSS 9.8 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `gitea` `git-hooks` `rce` `self-hosted`
+
+**CVE-2026-60004**（CVSS 9.8，CWE-94）影响 Gitea ≤ 1.27.0：`POST /api/v1/repos/{owner}/{repo}/diffpatch` 端点在**裸临时克隆**（仓库根目录 == `$GIT_DIR`）内应用攻击者补丁，因此写入 `hooks/post-index-change`（mode 100755）的补丁会落到 Git 真正的 hooks 目录。重复提交同一恶意补丁触发 add/add 冲突，迫使 `git apply -3` 无视 `--cached` 写出该文件，随后 hook 以 Gitea 服务账号触发。已在 **1.27.1** 修复（临时克隆改为非裸）；多个公开 PoC 与一个 ProjectDiscovery Nuclei 模板已实现全链路自动化。
+
+**为何重要：** Gitea 默认**开放注册**让「仓库写权限」变得极易获取，把自托管 Git 服务器变成任何能注册者都可打穿的 shell——该修复对整个 Gitea/Forgejo 生态都至关重要。
+
+[`🔗 Gitea 1.27.1 发布博客`](https://blog.gitea.com/release-of-1.27.1/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/07/new-gitea-rce-lets-repository-writers.html)
+
+---
+
+## 17. GPT-5.6 Sol——OpenAI 迄今最好的视觉模型（目标检测 13.8 → 46.2 mAP）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Roboflow · 319 pts (HN) · ~1d ago (~12:03 UTC+8)
+- **Tags:** `openai` `vision` `object-detection` `vlm` `benchmark`
+
+Roboflow 的评测认为 **GPT-5.6 Sol** 是「OpenAI 迄今发布的最好的视觉模型」：目标检测 mAP@50 从 13.8（GPT-5.5）跃升至 **46.2**，计数达 73.0%。Sol 在 Roboflow Vision Evals 上排名 21 个模型中的第 2（68.2%）——在总体均值与识别任务上仍落后于 Claude Fable 5 和 Muse Spark，且单样本成本约为 Luna 的 50 倍，但在检测/计数上占据主导。提示词格式很关键：使用**绝对 XYXY 像素坐标**而非归一化框（约 15 mAP 的差距）。
+
+**为何重要：** 检测与计数是图像到数据流水线的生产场景；旗舰模型终于迈过这道坎——再加上约 150 万 token 的上下文——将改变文档/VLM 大规模抽取的可行性。
+
+[`🔗 Roboflow 博客`](https://blog.roboflow.com/openai-gpt-5-6/) · [`🔗 Roboflow playground`](https://playground.roboflow.com/models/openai/gpt-5-6-sol)
+
+---
+
+## 18. Rust 中的 GPU Offload（arXiv:2608.13759）——rustc/LLVM 原生、经借用检查的通向 CUDA/AMD 内核之路
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 184 pts (HN) · ~1d ago (~12:03 UTC+8)
+- **Tags:** `rust` `gpu` `compilers` `hpc` `arxiv`
+
+一篇预印本（Drehwald 等）提出把 GPU offload 内建于 **rustc 与 LLVM** 而非作为库或 DSL：宿主代码用一次普通的 `cargo build` 即可把内核编译到 `nvptx64`/`amdgcn`，并复用 Rust 的借用检查器对主机↔设备数据传输分类（`&T` → 只读、`&mut T` → 双向），在编译期就抓住传输 bug。在 RAJAPerf 上，Rust 内核在 H100/MI250X 上达到手写 CUDA 的约 10–30% 以内。社区评审如实列出保留意见：「零开销」只有断言没有证明、寄存器压力更高、朴素接口在 AMD 上可能触发约 400× 的减速。
+
+**为何重要：** 如果内存安全能经编译器而不是 `unsafe` 裸指针或厂商 DSL 覆盖到 GPU 内核，它就攻下了系统编程中 `unsafe` 的最后堡垒之一——而且基准如实展示了剩下的差距。
+
+[`🔗 arXiv:2608.13759`](https://arxiv.org/abs/2608.13759) · [`🔗 Byteiota 分析`](https://byteiota.com/rust-gpu-offload-hits-rustc-safe-portable-kernels-now/)
+
+---
+
+## 19. career-ops——64.9k 星的「反向选择」求职指挥中心，为 AI 编码 CLI 而生
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 今日 +218 星 · ~12h ago (~12:03 UTC+8)
+- **Tags:** `ai-tools` `job-search` `agents` `cli` `open-source`
+
+**santifer/career-ops**（64.9k 星）把任意 AI 编码 CLI（Claude Code、Codex、Gemini、Qwen……）变成求职指挥中心：扫描 Greenhouse/Ashby/Lever 招聘门户，用 10 维 A–F 评分体系把职位打分为 1.0–5.0，标记诈骗/「幽灵」职位，生成针对 ATS 优化的 PDF 简历，并在本地跟踪求职进展——人在回路、绝不自动投递。作者用它评估了 740+ 个职位并拿下一份 Head of Applied AI 岗位；WIRED 与 Business Insider 均有报道。
+
+**为何重要：** 它反转了「AI 筛候选人」的格局——现在候选人用 AI 反向筛选雇主——也是智能体应用于非编程领域的模型无关、本地优先范例。
+
+[`🔗 santifer/career-ops`](https://github.com/santifer/career-ops) · [`🔗 Tencent Cloud（中文）`](https://cloud.tencent.cn/developer/article/2696242)
+
+---
+
+## 20. Speko（YC S26）——「语音 AI 界的 OpenRouter」，对 STT/LLM/TTS 栈做基准评测与路由
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 99 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `voice-ai` `routing` `benchmark` `agents` `open-source`
+
+Speko 的 Launch HN（「语音 AI 界的 OpenRouter」）带来一个面向生产语音智能体的路由器：传入标准（准确率/延迟/成本、语言、地区），它就在 STT、LLM、TTS 三层对 50+ 提供商 / 140+ 模型做基准评测，选出胜者，并在响应头里返回提供商 + 模型 + 得分。其 MIT 许可的网关（**SpekoAI/gateway**，Go）作为本地 sidecar 运行，支持 BYOK、无回传；托管路由按提供商价格的 5% 收费。公开看板在 benchmarks.speko.ai 发布 WER、延迟与每分钟成本。
+
+**为何重要：** 语音栈之所以陈旧，是因为发布后没人重新做基准评测；独立、持续更新的评测加上即插即用的网关，把「西班牙语医疗电话该用哪套 STT/TTS」变成了一个可回答、可路由的问题。
+
+[`🔗 speko.ai`](https://speko.ai) · [`🔗 SpekoAI/gateway`](https://github.com/SpekoAI/gateway)
+
+---
+
+## 21. NautilusTrader v2——Rust 原生、纳秒级事件驱动交易引擎迈向 2.0
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 26k 星 · ~12h ago (~12:03 UTC+8)
+- **Tags:** `trading` `rust` `backtesting` `open-source` `fintech`
+
+**nautechsystems/nautilus_trader**（26.1k 星）是 Rust 原生、Python 写策略的多资产、多场所交易引擎，回测与实盘共享同一个确定性事件驱动核心（研究-实盘一致）。它已进入 v2 候选版（`2.0.0rc` wheels），提供约 18 个场所适配器（Binance、Interactive Brokers、Deribit、Polymarket、Betfair……）、纳秒级仿真与 Redis 状态持久化。
+
+**为何重要：** Rust 正在承接交易基础设施中「性能 + 正确性」的细分领域，而一个生产级开源引擎的稳定 2.x API，能把门槛从「业余回测」降到「真实部署」。
+
+[`🔗 nautechsystems/nautilus_trader`](https://github.com/nautechsystems/nautilus_trader) · [`🔗 nautilustrader.io`](https://nautilustrader.io/)
+
+---
+
+## 22. Motrix 2.0.0-beta——时隔 3 年回归的下载管理器，带来可被 AI 智能体控制的 CLI
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 今日 +344 星 · ~12h ago (~12:03 UTC+8)
+- **Tags:** `download-manager` `cli` `ai-agents` `open-source` `electron`
+
+**agalwood/Motrix**（53.2k 星）打破了三年沉默，发布 **Motrix 2.0.0-beta**（「Motrix Turbo」）——一次全量重写（Electron 43、React 19、TypeScript），新增统一的 HTTP/FTP/BitTorrent 下载核心，与新的服务器/NAS 模式、Docker 部署共享，并提供一个 `@motrix/cli` npm CLI，让用户——以及 **AI 智能体**——用自然语言命令添加/暂停/恢复下载。
+
+**为何重要：** 一个沉寂已久、装机量巨大的工具重新出现，并显式加入「AI Agent 控制」的 CLI，是为成熟桌面应用增加智能体友好接口的清晰范例。
+
+[`🔗 agalwood/Motrix`](https://github.com/agalwood/Motrix) · [`🔗 Appinn（中文）`](https://meta.appinn.net/t/topic/90130)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-18T04:03:00Z |
-| Items | 12 |
-| Sources tracked | 19 (GitHub, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Hacker News) |
+| Generated | 2026-08-18T12:03:00Z |
+| Items | 22 |
+| Sources tracked | 29 (GitHub, Hacker News, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Rickmanelius, Wordfence, The Hacker News, Criminal IP, Gitea Blog, Roboflow, Byteiota, Speko, NautilusTrader, Appinn) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

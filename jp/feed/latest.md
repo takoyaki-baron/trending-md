@@ -1,8 +1,8 @@
 ---
 date: 2026-08-18
-updated: 2026-08-18T04:03:00Z
+updated: 2026-08-18T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -197,13 +197,155 @@ Alibaba は 8 月 17 日に **HappyShrimp 1.0**（「快乐虾米」）をリリ
 
 ---
 
+## 13. AI;DR（AI; Didn't Read）——「AI スロップ」への反発がバイラル化
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 732 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `ai-content` `culture` `industry` `writing` `slop`
+
+Rick Manelius の 8 月 17 日の記事が **AI;DR**（「AI; 読まなかった」）を広めた——「レビューして編集する気がないなら……私も読む気にならない」。この頭字語は seclilc のツイート（34.6 万ビュー、1.66 万いいね）に端を発し、HN スレッドは約 732 ポイントに達した。これは今や主流となった苛立ちを名付けたものだ：同僚が未編集の生のモデル出力——Slack の長文、ニュースレター、Jira チケット——をそのまま貼り付け、編集・ファクトチェック・トーン調整の負担を読み手に押し付ける。
+
+**重要性:** 「AI スロップ」への反発がどこに着地したかを示す具体的なシグナル——テクノロジーそのものではなく、オーサーシップと職場の作法に——であり、エージェントによる文章作成の「許容される使い方」の規範を再形成しつつある。
+
+> 筆者は「これ以上ないほど AI 推進派」だと明言しており、彼の線引きは AI による文章そのものではなく、人間の名前で出される未編集の出力に対してである。
+
+[`🔗 Rick Manelius — AI;DR`](https://www.rickmanelius.com/p/aidr-ai-didnt-read) · [`🔗 Hacker News ディスカッション`](https://news.ycombinator.com/item?id=49336573)
+
+---
+
+## 14. Forminator Forms CVE-2026-15748——60 万以上の WordPress サイトで未認証ファイルアップロード → RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wordfence · CVSS 9.8 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `wordpress` `rce` `file-upload` `plugin`
+
+Wordfence は 8 月 17 日、**Forminator Forms**（WPMU DEV、60 万以上のアクティブインストール）に **CVE-2026-15748**（CVSS 9.8、CWE-434）を開示した。`handle_file_upload()` の危険な拡張子ブロックリストは正規表現風のキーで回避でき（`ph(p)` は依然 `.php` にマッチ）、未認証の `process_uploads()` ハンドラーは**偽造された Select フィールド**を信頼して許可リストを上書きする——そのため、フォームに「ファイルアップロード」と「Select」フィールドの両方があれば、任意の匿名訪問者が PHP ウェブシェルをアップロードできる。**1.56.2** で修正。
+
+**重要性:** デフォルトの `.htaccess` は通常アップロード先での PHP 実行をブロックするが、**カスタムのアップロード保存ルート**を設定したサイトはその保護を失う——フォームプラグインが認証不要のサイト全体シェルに変わる。
+
+[`🔗 Wordfence ブログ`](https://www.wordfence.com/blog/2026/08/600000-wordpress-sites-affected-by-arbitrary-file-upload-vulnerability-in-forminator-forms-wordpress-plugin/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/forminator-wordpress-flaw-can-enable.html)
+
+---
+
+## 15. Adobe ColdFusion CVE-2026-48362——未認証の OS コマンドインジェクション（CVSS 10.0、Priority 1）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Criminal IP · CVSS 10.0 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `adobe` `coldfusion` `command-injection` `rce`
+
+Adobe の 8 月セキュリティ情報（**APSB26-90**）は **CVE-2026-48362** を修正——ColdFusion における未認証の OS コマンドインジェクションで、**CVSS 10.0**（ネットワーク、低複雑性、権限・操作不要、スコープ変更）と評価され、Adobe の **Priority 1** に指定された。ColdFusion **2025.0.11 / 2023.0.22** 以前が対象で、修正は **2025.0.12 / 2023.0.23**。同じ更新では CVE-2026-48273（CVSS 9.9 の eval インジェクション）と CVE-2026-71384（CVSS 9.6）も修正された。
+
+**重要性:** ColdFusion の露出した `/CFIDE/administrator/` パスは長年の攻撃対象であり、認証不要・操作不要のコマンドインジェクションは、今なお稼働するレガシー CF サーバーにとって最悪の部類——Adobe の 72 時間以内の適用指示がそれを物語る。
+
+[`🔗 Criminal IP 分析`](https://www.criminalip.io/knowledge-hub/blog/37257) · [`🔗 CVE レコード`](https://www.cve.org/CVERecord?id=CVE-2026-48362)
+
+---
+
+## 16. Gitea CVE-2026-60004——diffpatch API 経由で git フックを仕込み、リポジトリ書き込み権限が RCE へエスカレート
+
+- **Velocity:** ▮▮ rising
+- **Source:** Gitea Blog · CVSS 9.8 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `gitea` `git-hooks` `rce` `self-hosted`
+
+**CVE-2026-60004**（CVSS 9.8、CWE-94）は Gitea ≤ 1.27.0 に存在する：`POST /api/v1/repos/{owner}/{repo}/diffpatch` エンドポイントは攻撃者のパッチを**ベアの一時クローン**（リポジトリルート == `$GIT_DIR`）内で適用するため、`hooks/post-index-change`（mode 100755）を書き込むパッチが Git の実際の hooks ディレクトリに配置される。同一の悪意あるパッチを 2 回送ると add/add 衝突が発生し、`git apply -3` が `--cached` を無視してファイルを書き出し、その後フックが Gitea サービスアカウントとして発火する。**1.27.1** で修正（一時クローンを非ベアに変更）。複数の公開 PoC と ProjectDiscovery の Nuclei テンプレートがチェーンを自動化している。
+
+**重要性:** Gitea のデフォルトの**オープン登録**により「リポジトリ書き込み権限」の取得は容易で、セルフホストの Git サーバーが誰でもサインアップできる者にシェルを渡すことになる——この修正は Gitea/Forgejo エコシステム全体にとって重要。
+
+[`🔗 Gitea 1.27.1 リリースブログ`](https://blog.gitea.com/release-of-1.27.1/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/07/new-gitea-rce-lets-repository-writers.html)
+
+---
+
+## 17. GPT-5.6 Sol——OpenAI がこれまで出した最高のビジョンモデル（物体検出が 13.8 → 46.2 mAP に向上）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Roboflow · 319 pts (HN) · ~1d ago (~12:03 UTC+8)
+- **Tags:** `openai` `vision` `object-detection` `vlm` `benchmark`
+
+Roboflow の評価は **GPT-5.6 Sol** を「OpenAI がこれまでリリースした中で最高のビジョンモデル」と評する：物体検出の mAP@50 は 13.8（GPT-5.5）から **46.2** に跳ね上がり、カウンティングは 73.0%。Sol は Roboflow Vision Evals で 21 モデル中 2 位（68.2%）——総合平均と識別では Claude Fable 5 と Muse Spark に及ばず、サンプルあたりのコストは Luna の約 50 倍だが、検出/カウンティングでは優勢。プロンプト形式が重要：正規化ボックスではなく**絶対 XYXY ピクセル座標**を使う（約 15 mAP の差）。
+
+**重要性:** 検出とカウンティングは画像からデータへのパイプラインの本番ユースケースであり、フラッグシップがついにその水準をクリアしたこと——約 150 万トークンのコンテキストと合わせて——大規模な文書/VLM 抽出の実用性を変える。
+
+[`🔗 Roboflow ブログ`](https://blog.roboflow.com/openai-gpt-5-6/) · [`🔗 Roboflow プレイグラウンド`](https://playground.roboflow.com/models/openai/gpt-5-6-sol)
+
+---
+
+## 18. Rust での GPU オフロード（arXiv:2608.13759）——rustc/LLVM ネイティブで借用チェックを通る CUDA/AMD カーネルへの道
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 184 pts (HN) · ~1d ago (~12:03 UTC+8)
+- **Tags:** `rust` `gpu` `compilers` `hpc` `arxiv`
+
+プレプリント（Drehwald ら）は、ライブラリや DSL としてではなく **rustc と LLVM** に組み込む形の GPU オフロードを提案する：ホストコードは通常の `cargo build` でカーネルを `nvptx64`/`amdgcn` にコンパイルし、Rust の借用チェッカーを再利用してホスト↔デバイス間の転送を分類する（`&T` → 読み取り専用、`&mut T` → 双方向）。これにより転送バグをコンパイル時に検出する。RAJAPerf では、Rust カーネルは H100/MI250X 上で手書き CUDA の約 10–30% 以内に収まる。コミュニティのレビューは率直な注意点を挙げる：「ゼロオーバーヘッド」は主張のみで実証されておらず、レジスタ圧は高めで、素朴なインターフェースは AMD で約 400× の低速化を起こし得る。
+
+**重要性:** メモリ安全性が `unsafe` の生ポインタやベンダー DSL ではなくコンパイラを通じて GPU カーネルに及ぶなら、システムプログラミングに残る `unsafe` の最後の砦の一つが崩れる——そして残るギャップを隠さず示すベンチマーク付きで。
+
+[`🔗 arXiv:2608.13759`](https://arxiv.org/abs/2608.13759) · [`🔗 Byteiota 分析`](https://byteiota.com/rust-gpu-offload-hits-rustc-safe-portable-kernels-now/)
+
+---
+
+## 19. career-ops——AI コーディング CLI 向けの 64.9k スター「逆選抜」ジョブ検索コマンドセンター
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 本日 +218 スター · ~12h ago (~12:03 UTC+8)
+- **Tags:** `ai-tools` `job-search` `agents` `cli` `open-source`
+
+**santifer/career-ops**（64.9k スター）は、あらゆる AI コーディング CLI（Claude Code、Codex、Gemini、Qwen…）をジョブ検索のコマンドセンターに変える：Greenhouse/Ashby/Lever の求人ポータルをスキャンし、10 次元の A–F ルーブリックで求人を 1.0–5.0 に採点し、詐欺/「ゴースト」求人をフラグ付けし、ATS 最適化された PDF 履歴書を生成し、応募をローカルで追跡する——ヒューマン・イン・ザ・ループで、自動応募はしない。作者はこれで 740 件以上の求人を評価し、Head of Applied AI の職を得た。WIRED と Business Insider が取り上げている。
+
+**重要性:** 「AI が候補者をふるいにかける」構図を逆転させる——候補者が AI を使って雇用主を逆選抜する——とともに、非コーディング領域にエージェントを適用した、モデル非依存・ローカルファーストの好例でもある。
+
+[`🔗 santifer/career-ops`](https://github.com/santifer/career-ops) · [`🔗 Tencent Cloud（中国語）`](https://cloud.tencent.cn/developer/article/2696242)
+
+---
+
+## 20. Speko（YC S26）——STT/LLM/TTS スタックをベンチマークしてルーティングする「音声 AI の OpenRouter」
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 99 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `voice-ai` `routing` `benchmark` `agents` `open-source`
+
+Speko の Launch HN（「音声 AI の OpenRouter」）は、本番音声エージェント向けのルーターを導入する：基準（精度/レイテンシ/コスト、言語、地域）を送ると、STT・LLM・TTS の 3 層で 50+ プロバイダー / 140+ モデルをベンチマークし、勝者を選び、プロバイダー + モデル + スコアをレスポンスヘッダーで返す。MIT ライセンスのゲートウェイ（**SpekoAI/gateway**、Go）はローカル sidecar として動き、BYOK 対応でコールバックなし。ホスト型ルーティングはプロバイダー料金の 5% 上乗せ。benchmarks.speko.ai で WER・レイテンシ・分あたりコストを公開している。
+
+**重要性:** 音声スタックが陳腐化するのは、リリース後に誰も再ベンチマークしないから。独立した継続更新の評価とドロップインのゲートウェイが、「スペイン語の医療電話にどの STT/TTS を使うか」を答えられ、ルーティング可能な問いに変える。
+
+[`🔗 speko.ai`](https://speko.ai) · [`🔗 SpekoAI/gateway`](https://github.com/SpekoAI/gateway)
+
+---
+
+## 21. NautilusTrader v2——Rust ネイティブ、ナノ秒イベント駆動のトレーディングエンジンが 2.0 へ
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 26k スター · ~12h ago (~12:03 UTC+8)
+- **Tags:** `trading` `rust` `backtesting` `open-source` `fintech`
+
+**nautechsystems/nautilus_trader**（26.1k スター）は、Rust ネイティブ・Python 戦略型のマルチアセット・マルチベニューのトレーディングエンジンで、バックテストとライブで同一の決定的イベント駆動コアを共有する（リサーチからライブへのパリティ）。v2 リリース候補（`2.0.0rc` ホイール）に移行しており、約 18 のベニューアダプター（Binance、Interactive Brokers、Deribit、Polymarket、Betfair…）、ナノ秒解像度のシミュレーション、Redis ベースの状態永続化を備える。
+
+**重要性:** Rust はトレーディングインフラの「性能 + 正確性」のニッチを吸収しつつあり、本番級オープンエンジンの安定した 2.x API は「趣味のバックテスト」から「実運用」へのハードルを下げる。
+
+[`🔗 nautechsystems/nautilus_trader`](https://github.com/nautechsystems/nautilus_trader) · [`🔗 nautilustrader.io`](https://nautilustrader.io/)
+
+---
+
+## 22. Motrix 2.0.0-beta——3 年ぶりに復活したダウンロードマネージャー、AI エージェントが操作できる CLI を搭載
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 本日 +344 スター · ~12h ago (~12:03 UTC+8)
+- **Tags:** `download-manager` `cli` `ai-agents` `open-source` `electron`
+
+**agalwood/Motrix**（53.2k スター）は 3 年の沈黙を破り、**Motrix 2.0.0-beta**（「Motrix Turbo」）をリリース——フルリライト（Electron 43、React 19、TypeScript）で、新しいサーバー/NAS モードや Docker デプロイと共有される統一 HTTP/FTP/BitTorrent ダウンロードコアを追加し、ユーザー——そして **AI エージェント**——が自然言語コマンドでダウンロードを追加/一時停止/再開できる `@motrix/cli` npm CLI を提供する。
+
+**重要性:** 休眠状態で広くインストールされていたツールが、明示的な「AI Agent 制御」CLI を備えて再登場したことは、成熟したデスクトップアプリにエージェントフレンドリーな操作面を追加する明確な一例。
+
+[`🔗 agalwood/Motrix`](https://github.com/agalwood/Motrix) · [`🔗 Appinn（中国語）`](https://meta.appinn.net/t/topic/90130)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-18T04:03:00Z |
-| Items | 12 |
-| Sources tracked | 19 (GitHub, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Hacker News) |
+| Generated | 2026-08-18T12:03:00Z |
+| Items | 22 |
+| Sources tracked | 29 (GitHub, Hacker News, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Rickmanelius, Wordfence, The Hacker News, Criminal IP, Gitea Blog, Roboflow, Byteiota, Speko, NautilusTrader, Appinn) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
