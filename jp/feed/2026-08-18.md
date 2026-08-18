@@ -1,8 +1,8 @@
 ---
 date: 2026-08-18
-updated: 2026-08-18T12:03:00Z
+updated: 2026-08-18T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -339,13 +339,155 @@ Speko の Launch HN（「音声 AI の OpenRouter」）は、本番音声エー�
 
 ---
 
+## 23. Cursor が Origin を公開——「エージェント規模」のために構築された git forge、GitHub の 7 時間障害の直後に
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Cursor Changelog · early beta · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cursor` `code-hosting` `git` `agents` `developer-tools`
+
+Cursor は **Origin**（「エージェント規模のために構築された git forge」と位置づけられるクラウドコードホスティング）を出荷し、8 月 17 日に全有料プランへ早期ベータを段階展開した——同日、GitHub は PR・Issues・Actions・Copilot に及ぶ約 7 時間の大規模障害に見舞われた。Origin は新しい「Codebase」タブに存在し、リポジトリは `cursor.com/codebase/{owner}/{repo}` で提供、GitHub との双方向リアルタイム同期（「Detach from GitHub」するまで GitHub が source of truth）、双方向コメント/リアクション同期付きの完全な PR、Vercel（プレビューデプロイ）・Depot・Buildkite とのローンチ統合を備える。Graphite の stacked-PR + merge-queue 技術（Cursor は 2025 年 12 月に Graphite を買収）の上に構築され、Cursor は**社内 PR の 35% がすでにクラウド VM 内の自律エージェントによって開かれている**と報告する。
+
+**重要性:** 大手コーディングエージェントベンダーによる初の信頼できる AI ネイティブなコードホストであり——「エージェント規模」という表現はマーケティングではなく実測テレメトリに裏打ちされている。人間向けのレビューワークフローこそが、AI 生成コードが今ぶつかるボトルネックなのだ。
+
+> エージェントネイティブ機能（リポジトリについてエディタに尋ねる、クラウドエージェントが Origin リモートへ PR を開く）は順次展開中。無料プランと企業向けオプトアウトはゲートされている。
+
+[`🔗 Cursor changelog`](https://cursor.com/changelog/origin-code-hosting) · [`🔗 SiliconAngle`](https://siliconangle.com/2026/08/17/cursor-launches-origin-code-hosting-service-to-compete-with-github/)
+
+---
+
+## 24. GitLab CVE-2026-19478——未認証の GraphQL ディレクティブで公開プロジェクトを変更・削除可能（CVSS 9.4）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitLab · CVSS 9.4 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cve` `gitlab` `graphql` `code-injection` `self-hosted`
+
+GitLab は 8 月 17 日、帯域外の緊急パッチ（**19.2.4、19.1.6、19.0.8、18.11.11**）をリリースし、**CVE-2026-19478**（CVSS 9.4、CWE-94）を修正した：GraphQL ディレクティブの不適切な検証により、**未認証**の攻撃者がユーザー操作なしで公開プロジェクトやユーザーデータを変更・削除できる。HackerOne 経由で「hiimguardian」が報告。公開 PoC や確認済みの実悪用はまだないが、完全な技術詳細はパッチから約 90 日後に公開される；**18.2–18.10 ブランチには修正がない**ため、それらの環境はブランチごとアップグレードする必要がある。同リリースは CVE-2026-19650（GraphQL マルチプレックスクエリの CSRF、CVSS 7.1）も修正する。
+
+**重要性:** セルフマネージド GitLab は、ソースをクラウドに置きたくない組織のオンプレ標準である——GraphQL レイヤーでの未認証のデータ整合性欠陥は、「あなたのコード、あなたのサーバー」が価値のすべてである forge にとって最悪のケースだ。
+
+[`🔗 GitLab patch release`](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-2-4-released/) · [`🔗 IONIX threat center`](https://www.ionix.io/threat-center/cve-2026-19478/)
+
+---
+
+## 25. iMonnit Express 4.0.5.5——空のセキュリティ回答リストと性急なプラグインローダーによる事前認証 SYSTEM RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** Full Disclosure (0day Rubbish) · CVSS 9.8 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `cve` `imonnit` `rce` `auth-bypass` `iot`
+
+**0day Rubbish Research Team** は、**iMonnit Express 4.0.5.5**（Monnit の Windows ベース IoT センサー監視ゲートウェイ）における事前認証 **SYSTEM RCE**（CVSS 9.8、CVE 未割当）を公開した。この ASP.NET Core サービスは LocalSystem 権限で動作し、グローバルな `[Authorize]` フィルタを持たない。3 つの欠陥が連鎖する：**空のセキュリティ回答リストが有効な admin クッキーを発行** → 証明書アップロードエンドポイントでの**パストラバーサルファイル書き込み** → **`IExpressPlugin` チェックの前に `Assembly.Load` + `Activator.CreateInstance` を呼び出すプラグインローダー**。これによりコンストラクタが `NT AUTHORITY\SYSTEM` として実行される。チームは `whoami = nt authority\system` を確認し、PoC を GitHub で公開した。
+
+**重要性:** Monnit ゲートウェイは産業/環境センサーフリートに設置される；認証も操作も不要で公開 PoC 付きの完全な連鎖は、CVE すら存在しないうちに監視アプライアンスを Windows ドメインの踏み台に変える。
+
+[`🔗 Full Disclosure advisory`](https://seclists.org/fulldisclosure/2026/Aug/54) · [`🔗 0day Rubbish blog`](https://0day-rubbish.com/blog/imonnit-express-unauth-plugin-rce)
+
+---
+
+## 26. GPT-5.6 Sol が OpenRouter と Vercel で 50% オフ——OpenAI の値下げではなくチャネル単位の値下げ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Vercel Changelog · 499 pts (HN) · ~8h ago (~20:03 UTC+8)
+- **Tags:** `openai` `pricing` `gpt-5-6-sol` `openrouter` `vercel`
+
+GPT-5.6 Sol の実効価格は 2 大ルーティングプラットフォームで半額になった：**OpenRouter**（8 月 17 日発表、期限なし）と **Vercel AI Gateway**（1 か月、9 月 18 日まで、standard + Fast モード）がともにフラッグシップを**入力 $2.50/M、出力 $15/M**（キャッシュ読み取り $0.25）に引き下げた。OpenAI 自身の API 価格は $5/$30 のまま変更なし——値下げはアグリゲーター側にあり、SemiAnalysis は、これらのプラットフォームがトークン使用量を公開していることこそ、一時的な割引が Sol の測定シェアを押し上げる理由だと指摘する。7 月 30 日の Luna/Terra 階層の値下げに続く動きだ。
+
+**重要性:** GPT-5.6 ファミリーで最も有能なモデルが半額になることで、エージェントのトークン経済は大きく変わる——同時に、「フロンティア価格」のどれほどが今やラボではなくルーティングプラットフォームによって決められているかを静かに示している。
+
+[`🔗 Vercel changelog`](https://vercel.com/changelog/gpt-5-6-sol-is-50-off-on-ai-gateway-for-the-next-month) · [`🔗 OpenRouter pricing`](https://openrouter.ai/openai/gpt-5.6-sol)
+
+---
+
+## 27. OpenViking——Volcengine の自己進化コンテキストデータベースがエージェント記憶を `viking://` ファイルシステムとして扱う
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 29k スター · ~12h ago (~20:03 UTC+8)
+- **Tags:** `agent-memory` `context-database` `rag` `volcengine` `open-source`
+
+**volcengine/OpenViking**（AGPL-3.0、約 29k スター）は、エージェント記憶・知識 RAG・スキルを仮想ファイルシステムの背後に統合する：コンテンツは `viking://` URI を持ち、エージェントは不透明なベクトルクエリではなく `ls`/`tree`/`find` でブラウズする。すべては書き込み時に **L0/L1/L2**（要約 → 概要 → 詳細）へ自動階層化されてトークン消費を削減し、検索はディレクトリ再帰的で軌跡が観測可能、`session.commit()` はユーザー好みとエージェント経験を非同期に抽出して永続的な長期記憶へ蓄積する。LoCoMo ベンチマークでは、エージェント記憶精度をネイティブの 24–57% から **80–83%** に引き上げつつ、入力トークンを 34–91%、レイテンシを 58–66% 削減した。
+
+**重要性:** エージェントのコンテキスト基盤全体を観測可能かつ自己改善可能にすることで「コンテキスト断片化」とトークン浪費を攻撃する——ブラックボックスのベクトルストアではなく、記憶のためのファイルシステムであり、ByteDance のクラウド部門による。
+
+[`🔗 volcengine/OpenViking`](https://github.com/volcengine/OpenViking) · [`🔗 OpenViking docs`](https://docs.openviking.ai/en/faq/faq)
+
+---
+
+## 28. Kozuchi Agent——言語非依存のオープンウェイト修復エージェントが Qwen3.5-27B で SWE-bench Verified 374/500
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · ASE '26 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `research` `software-repair` `swe-bench` `open-weight` `agent`
+
+**Kozuchi Agent**（arXiv:2608.15579、ASE '26 Industry Showcase 採録）は、言語非依存・オープンウェイトのソフトウェア修復エージェントで、ローカルホストの **Qwen3.5-27B をファインチューニングなし**で用いる——明示的なフェーズ、永続状態、決定的ツール、クロスエージェントのテスト時選択により、すべての実行が監査可能に保たれる。公式評価器で **374/500 の SWE-bench Verified** を解決（TTS@8）し、Multi-SWE-bench Java では**オープンウェイトシステム中 1 位**（32.03%、全体 42 中 4 位）、Python では 135 中 12 位、フェーズ別の挙動は言語間で ±5pp 以内に安定する。
+
+**重要性:** 中型オープンモデルを中心とした決定的パイプラインがフロンティア修復結果に迫る——ブラックボックスのフロンティアエージェントへの「再現性優先」の対抗軸であり、レバーはモデル規模ではなくハーネス工学にあるという証拠。
+
+[`🔗 arXiv:2608.15579`](https://arxiv.org/abs/2608.15579) · [`🔗 SciRate`](https://scirate.com/arxiv/2608.15579)
+
+---
+
+## 29. ai-agent-book——李博杰が 38.9k star・全 10 章の AI エージェント工学教科書を 103 の実行可能な実験付きでオープンソース化
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 38.9k スター · ~12h ago (~20:03 UTC+8)
+- **Tags:** `ai-agents` `book` `open-source` `chinese` `education`
+
+**bojieli/ai-agent-book**（Apache-2.0）は、李博杰（Bojie Li）による完全オープンソースの教科書《深入理解 AI Agent》（AI エージェントを理解する）で、**Agent = LLM + Context + Tools** という公式を軸に展開する：本文全文・図版、そして全 10 章にわたる **103 の実行可能な付属実験**——コンテキスト工学、記憶/RAG、ツールと MCP、コーディングエージェント、評価、ポストトレーニング、自己進化、マルチエージェント協調——に加え、13 言語のコミュニティ翻訳とコンパイル済み PDF/EPUB ビルドを備える。李（元 Huawei「天才少年」、現 Pine AI チーフサイエンティスト）は「ハーネス工学」を提唱する：モデルの外側にあるすべての工学的な能力こそ、真の競争力の源泉である。
+
+**重要性:** 実行可能な実験付きの本番級エージェントカリキュラムを無料・オープンで提供——原理からマルチエージェントシステムまでを貫く、実務家自身による稀有な道筋であり、いま最もスターを集めるエージェント教育リポジトリとなった。
+
+[`🔗 bojieli/ai-agent-book`](https://github.com/bojieli/ai-agent-book) · [`🔗 CSDN（中国語）`](https://blog.csdn.net/aiwording/article/details/163452714)
+
+---
+
+## 30. AERIS-10——オープンな 10.5 GHz フェーズドアレイレーダー、24k stars、独立分析が測距の主張に異議
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 24.2k スター · ~12h ago (~20:03 UTC+8)
+- **Tags:** `hardware` `radar` `fpga` `sdr` `open-source`
+
+**NawfalMotii79/PLFM_RADAR**（「AERIS-10」）は、完全にオープンで低コストの **10.5 GHz パルス LFM フェーズドアレイレーダー**である：±45° の電子ビームステアリング + 360° の機械走査、16 チャネルの GaN PA、パルス圧縮/ドップラー FFT/MTI/CFAR を担う **XC7A50T FPGA**、STM32 制御——3 km（Nexus）と 20 km（Extended）の 2 バリアント。ハードウェアは CERN-OHL-P、ファームウェア/ソフトウェアは MIT で、**Crowd Supply に採択**され 2026 年 Q3 のキャンペーンを予定する。独立分析（KolesnykMaksym/plfm-radar-analysis）は留保を指摘する：現実的な 1 m² ターゲットに対して公称レンジは **7–13 倍も過大**である可能性（約 0.4 km / 1.6 km）があり、README の XC7A100T は回路図の XC7A50T と一致しない。
+
+**重要性:** レーダーは閉鎖的で防衛規制に縛られた領域だった；オープンな BOM + FPGA + ファームウェア設計は、SDR/ロボティクス/ドローン研究に門戸を開く——そしてこの誠実な独立検証こそ、野心的なハードウェア主張に必要な精査である。
+
+[`🔗 NawfalMotii79/PLFM_RADAR`](https://github.com/NawfalMotii79/PLFM_RADAR) · [`🔗 Hackaday.io project`](https://hackaday.io/project/205190-open-source-plfm-radar-up-to-20km-range)
+
+---
+
+## 31. τ0-VLA——意思決定が難しい場面にテスト時計算を費やす階層型ロボット基盤モデル
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 39 authors · ~12h ago (~20:03 UTC+8)
+- **Tags:** `robotics` `vla` `foundation-model` `world-model` `arxiv`
+
+**τ0-VLA**（arXiv:2608.16885）は、階層型の視覚-言語-行動（VLA）ロボット基盤モデルである：**高レベル方策**が**世界モデル誘導のテスト時計算**を用いてサブタスクを生成し——コミット前に代替サブタスクを探索し、困難・高リスクな意思決定により多くの計算を割り当て——**低レベル方策**が各サブタスクを複数のエンボディメントにわたって実行する。**40,115 時間の異種実世界データ**でマルチモーダル共訓練され、追加のテスト時計算がドメイン内・分布シフト下の双方で次サブタスク予測精度を大幅に向上させ、長距離操作のクローズドループ成功率の向上につながることを示す。
+
+**重要性:** 「テスト時計算が能力をスケールさせる」という発見を言語モデルからロボット制御へ拡張する——プランが不確かな場所に計算を費やし、タスク全体に均一に費やすのではない。
+
+[`🔗 arXiv:2608.16885`](https://arxiv.org/abs/2608.16885) · [`🔗 SciRate`](https://scirate.com/arxiv/2608.16885)
+
+---
+
+## 32. munder-difflin——本物のターミナル CLI から「自分のクローンのオフィス」を動かすローカルマルチエージェントハーネス
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 1.7k スター · ~12h ago (~20:03 UTC+8)
+- **Tags:** `multi-agent` `local-first` `electron` `claude-code` `open-source`
+
+**chaitanyagiri/munder-difflin**（MIT）は、ローカルファーストのマルチエージェントハーネスで、本物のターミナル CLI——Claude Code、Codex、Gemini CLI、Qwen、Kimi、OpenCode、Copilot——を `node-pty` 疑似端末のエージェントとしてラップし、Pixi.js の「オフィスフロア」上で協調させる。**GOD オーケストレータ**がタスクをルーティングし、コスト/スコープ/破壊的操作のみを人間へエスカレーションする；エージェントは git ベースの「hive」（記憶・メールボックス・黒板）を共有し、意味的リコール、エージェントごとのワークツリー、トークン/コストテレメトリ、steer→constrain→stop のサーキットブレーカー、ヒューマンインザループゲートを備える。
+
+**重要性:** 自分のマシンで自己管理型のコーディングエージェントチームを動かすための、洗練された TypeScript ネイティブな答え——クラウドオーケストレータがユーザーに丸投げしがちな安全レール（コスト/スコープ/破壊的ゲート）を備えている。
+
+[`🔗 chaitanyagiri/munder-difflin`](https://github.com/chaitanyagiri/munder-difflin) · [`🔗 Peerlist`](https://peerlist.io/chaitanyagiri/project/munder-difflin-free-local-multiagent-harness)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-18T12:03:00Z |
-| Items | 22 |
-| Sources tracked | 29 (GitHub, Hacker News, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Rickmanelius, Wordfence, The Hacker News, Criminal IP, Gitea Blog, Roboflow, Byteiota, Speko, NautilusTrader, Appinn) |
+| Generated | 2026-08-18T20:03:00Z |
+| Items | 32 |
+| Sources tracked | 40 (GitHub, Hacker News, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Rickmanelius, Wordfence, The Hacker News, Criminal IP, Gitea Blog, Roboflow, Byteiota, Speko, NautilusTrader, Appinn, Cursor, SiliconAngle, GitLab, Full Disclosure, 0day Rubbish, Vercel, OpenRouter, OpenViking Docs, CSDN, Hackaday.io, Peerlist) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

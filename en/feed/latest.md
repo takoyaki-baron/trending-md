@@ -1,8 +1,8 @@
 ---
 date: 2026-08-18
-updated: 2026-08-18T12:03:00Z
+updated: 2026-08-18T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -339,13 +339,155 @@ Speko's Launch HN ("OpenRouter for Voice AI") introduces a router for production
 
 ---
 
+## 23. Cursor launches Origin — a git forge "built for agent scale," days after GitHub's 7-hour outage
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Cursor Changelog · early beta · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cursor` `code-hosting` `git` `agents` `developer-tools`
+
+Cursor shipped **Origin**, a cloud code-hosting service positioned as "a git forge built for agent scale," rolling out in early beta to all paid plans on Aug 17 — the same day GitHub suffered a ~7-hour outage affecting PRs, Issues, Actions, and Copilot. Origin lives in a new "Codebase" tab: repos at `cursor.com/codebase/{owner}/{repo}`, bidirectional real-time GitHub sync (GitHub stays the source of truth until you "Detach from GitHub"), full PRs with two-way comment/reaction sync, and launch integrations with Vercel (preview deploys), Depot, and Buildkite. It's built on Graphite's stacked-PR + merge-queue tech (Cursor acquired Graphite in Dec 2025), and Cursor reports **35% of its own internal PRs are already opened by autonomous agents** in cloud VMs.
+
+**Why it matters:** The first credible AI-native code host from a major coding-agent vendor — and the "agent scale" framing is backed by real telemetry, not marketing: human-oriented review workflows are the bottleneck AI-generated code now hits.
+
+> Agent-native features (asking the editor about a repo, cloud agents opening PRs against Origin remotes) are still rolling out; free plans and enterprise opt-out are gated.
+
+[`🔗 Cursor changelog`](https://cursor.com/changelog/origin-code-hosting) · [`🔗 SiliconAngle`](https://siliconangle.com/2026/08/17/cursor-launches-origin-code-hosting-service-to-compete-with-github/)
+
+---
+
+## 24. GitLab CVE-2026-19478 — unauthenticated GraphQL directive can modify or delete public projects (CVSS 9.4)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitLab · CVSS 9.4 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cve` `gitlab` `graphql` `code-injection` `self-hosted`
+
+GitLab released out-of-band critical patches (**19.2.4, 19.1.6, 19.0.8, 18.11.11**) on Aug 17 for **CVE-2026-19478** (CVSS 9.4, CWE-94): improper validation of a GraphQL directive lets an **unauthenticated** attacker modify or delete public projects and user data, with no user interaction. Reported by "hiimguardian" via HackerOne. There's no public PoC or confirmed in-the-wild exploitation yet, but full technical details drop ~90 days after the patch; the **18.2–18.10 branches have no fix**, so those installs must upgrade branches entirely. The same release patches CVE-2026-19650 (CSRF in GraphQL multiplex queries, CVSS 7.1).
+
+**Why it matters:** Self-managed GitLab is the on-prem default for orgs that won't host source in the cloud — an unauthenticated data-integrity flaw in the GraphQL layer is the worst case for a forge whose whole value is "your code, your server."
+
+[`🔗 GitLab patch release`](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-2-4-released/) · [`🔗 IONIX threat center`](https://www.ionix.io/threat-center/cve-2026-19478/)
+
+---
+
+## 25. iMonnit Express 4.0.5.5 — pre-auth SYSTEM RCE via an empty security-answer list and an eager plugin loader
+
+- **Velocity:** ▮▮ rising
+- **Source:** Full Disclosure (0day Rubbish) · CVSS 9.8 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `cve` `imonnit` `rce` `auth-bypass` `iot`
+
+The **0day Rubbish Research Team** publicly disclosed a pre-authentication **SYSTEM RCE** (CVSS 9.8, no CVE assigned yet) in **iMonnit Express 4.0.5.5**, Monnit's Windows-based IoT sensor-monitoring gateway. The ASP.NET Core service runs as LocalSystem with no global `[Authorize]` filter, and three flaws chain together: an **empty security-answer list mints a valid admin cookie** → a **path-traversal file write** in the certificate-upload endpoint → a **plugin loader that calls `Assembly.Load` + `Activator.CreateInstance` before the `IExpressPlugin` check**, so the constructor executes as `NT AUTHORITY\SYSTEM`. The team verified `whoami = nt authority\system` and published the PoC on GitHub.
+
+**Why it matters:** Monnit gateways sit on industrial/environmental sensor fleets; a no-auth, no-interaction full chain with public PoC turns a monitoring appliance into a Windows domain pivot before a CVE even exists.
+
+[`🔗 Full Disclosure advisory`](https://seclists.org/fulldisclosure/2026/Aug/54) · [`🔗 0day Rubbish blog`](https://0day-rubbish.com/blog/imonnit-express-unauth-plugin-rce)
+
+---
+
+## 26. GPT-5.6 Sol goes 50% off on OpenRouter and Vercel — a channel-level price cut, not an OpenAI cut
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Vercel Changelog · 499 pts (HN) · ~8h ago (~20:03 UTC+8)
+- **Tags:** `openai` `pricing` `gpt-5-6-sol` `openrouter` `vercel`
+
+GPT-5.6 Sol's effective price halved on the two biggest routing platforms: **OpenRouter** (announced Aug 17, no end date) and **Vercel AI Gateway** (one month, through Sep 18, standard + Fast modes) both cut the flagship to **$2.50/M input and $15/M output** (cache read $0.25). OpenAI's own API price is unchanged at $5/$30 — the discount lives at the aggregator, and SemiAnalysis floated that the platforms' public token-usage reporting is exactly why a temporary discount could lift Sol's measured share. It follows the July 30 cut on the cheaper Luna/Terra tiers.
+
+**Why it matters:** The most capable model in the GPT-5.6 family at half price meaningfully shifts agent token economics — while quietly showing how much of "frontier pricing" is now set by routing platforms, not the lab.
+
+[`🔗 Vercel changelog`](https://vercel.com/changelog/gpt-5-6-sol-is-50-off-on-ai-gateway-for-the-next-month) · [`🔗 OpenRouter pricing`](https://openrouter.ai/openai/gpt-5.6-sol)
+
+---
+
+## 27. OpenViking — Volcengine's self-evolving context database treats agent memory as a `viking://` filesystem
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 29k stars · ~12h ago (~20:03 UTC+8)
+- **Tags:** `agent-memory` `context-database` `rag` `volcengine` `open-source`
+
+**volcengine/OpenViking** (AGPL-3.0, ~29k stars) unifies agent memory, knowledge RAG, and skills behind a virtual filesystem: content gets a `viking://` URI and agents browse it with `ls`/`tree`/`find` instead of opaque vector queries. Everything is auto-tiered **L0/L1/L2** (abstract → overview → full details) to cut token spend, retrieval is directory-recursive with an observable trajectory, and `session.commit()` asynchronously mines user preferences + agent experience into durable long-term memory. On the LoCoMo benchmark it lifts agent memory accuracy from 24–57% native to **80–83%** while cutting input tokens 34–91% and latency 58–66%.
+
+**Why it matters:** It attacks "context fragmentation" and token waste by making an agent's entire context base inspectable and self-improving — a filesystem for memory rather than a black-box vector store, from ByteDance's cloud arm.
+
+[`🔗 volcengine/OpenViking`](https://github.com/volcengine/OpenViking) · [`🔗 OpenViking docs`](https://docs.openviking.ai/en/faq/faq)
+
+---
+
+## 28. Kozuchi Agent — a language-agnostic open-weight repair agent hits 374/500 SWE-bench Verified on Qwen3.5-27B
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · ASE '26 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `research` `software-repair` `swe-bench` `open-weight` `agent`
+
+**Kozuchi Agent** (arXiv:2608.15579, accepted at ASE '26 Industry Showcase) is a language-agnostic, open-weight software-repair agent built on a locally hosted **Qwen3.5-27B with no fine-tuning** — explicit phases, persistent state, deterministic tools, and cross-agent test-time selection keep every run auditable. It resolves **374/500 SWE-bench Verified** on the official evaluator (TTS@8), ranks **first among open-weight systems** on Multi-SWE-bench Java (32.03%, 4th of 42 overall) and 12th of 135 on Python, with per-phase behavior stable within ±5pp across languages.
+
+**Why it matters:** A deterministic pipeline around a mid-size open model that approaches frontier repair results — a reproducibility-first counterpoint to black-box frontier agents, and evidence that harness engineering, not model scale, is the lever.
+
+[`🔗 arXiv:2608.15579`](https://arxiv.org/abs/2608.15579) · [`🔗 SciRate`](https://scirate.com/arxiv/2608.15579)
+
+---
+
+## 29. ai-agent-book — 李博杰 open-sources a 38.9k-star, 10-chapter AI-agent engineering textbook with 103 runnable experiments
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 38.9k stars · ~12h ago (~20:03 UTC+8)
+- **Tags:** `ai-agents` `book` `open-source` `chinese` `education`
+
+**bojieli/ai-agent-book** (Apache-2.0) is 李博杰 (Bojie Li)'s fully open textbook 《深入理解 AI Agent》(Understanding AI Agents), organized around the formula **Agent = LLM + Context + Tools**: full text, figures, and **103 runnable companion experiments** across 10 chapters — context engineering, memory/RAG, tools & MCP, coding agents, evaluation, post-training, self-evolution, and multi-agent collaboration — plus community translations in 13 languages and compiled PDF/EPUB builds. Li (ex-Huawei "Genius Youth", now Pine AI chief scientist) coined "Harness engineering": everything outside the model is where the real competitive edge is.
+
+**Why it matters:** A production-grade agent curriculum with executable experiments, free and open — the rare practitioner-authored path from principles to multi-agent systems, now the most-starred agent-education repo.
+
+[`🔗 bojieli/ai-agent-book`](https://github.com/bojieli/ai-agent-book) · [`🔗 CSDN (中文)`](https://blog.csdn.net/aiwording/article/details/163452714)
+
+---
+
+## 30. AERIS-10 — an open 10.5 GHz phased-array radar, 24k stars, with independent analysis disputing its range claims
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 24.2k stars · ~12h ago (~20:03 UTC+8)
+- **Tags:** `hardware` `radar` `fpga` `sdr` `open-source`
+
+**NawfalMotii79/PLFM_RADAR** ("AERIS-10") is a fully open, low-cost **10.5 GHz pulse-LFM phased-array radar**: ±45° electronic beam steering + 360° mechanical scan, 16× GaN PA channels, an **XC7A50T FPGA** handling pulse compression/Doppler FFT/MTI/CFAR, and an STM32 controller — in 3 km (Nexus) and 20 km (Extended) variants. Hardware is CERN-OHL-P, firmware/software MIT, and it's been **accepted by Crowd Supply** for a Q3 2026 campaign. Independent analysis (KolesnykMaksym/plfm-radar-analysis) flags caveats: the headline ranges may be **overstated 7–13×** for realistic 1 m² targets (~0.4 km / ~1.6 km), and the README's XC7A100T doesn't match the XC7A50T in the schematics.
+
+**Why it matters:** Radar has been a closed, defense-gated domain; an open BOM + FPGA + firmware design democratizes it for SDR/robotics/drone research — while the honest independent teardown is exactly the scrutiny an ambitious hardware claim needs.
+
+[`🔗 NawfalMotii79/PLFM_RADAR`](https://github.com/NawfalMotii79/PLFM_RADAR) · [`🔗 Hackaday.io project`](https://hackaday.io/project/205190-open-source-plfm-radar-up-to-20km-range)
+
+---
+
+## 31. τ0-VLA — a hierarchical robot foundation model that spends test-time compute where decisions are hard
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 39 authors · ~12h ago (~20:03 UTC+8)
+- **Tags:** `robotics` `vla` `foundation-model` `world-model` `arxiv`
+
+**τ0-VLA** (arXiv:2608.16885) is a hierarchical vision-language-action robot foundation model: a **high-level policy** generates subtasks using **world-model-guided test-time computation** — searching alternative subtask choices before committing, allocating more compute to difficult or high-stakes decisions — while a **low-level policy** executes each subtask across embodiments. Trained on **40,115 hours of heterogeneous real-world data** with multimodal co-training, it shows that extra test-time compute substantially improves next-subtask accuracy in-domain and distribution-shifted, translating to higher closed-loop success on long-horizon manipulation.
+
+**Why it matters:** It extends the "test-time compute scales capability" finding from language models to robot control — compute spent where a plan is uncertain, not uniformly across a task.
+
+[`🔗 arXiv:2608.16885`](https://arxiv.org/abs/2608.16885) · [`🔗 SciRate`](https://scirate.com/arxiv/2608.16885)
+
+---
+
+## 32. munder-difflin — a local multi-agent harness that runs "an office of your clones" from real terminal CLIs
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 1.7k stars · ~12h ago (~20:03 UTC+8)
+- **Tags:** `multi-agent` `local-first` `electron` `claude-code` `open-source`
+
+**chaitanyagiri/munder-difflin** (MIT) is a local-first multi-agent harness that wraps real terminal CLIs — Claude Code, Codex, Gemini CLI, Qwen, Kimi, OpenCode, Copilot — as agents in `node-pty` pseudo-terminals, then coordinates them on a Pixi.js "office floor." A **GOD orchestrator** routes tasks and escalates only spend/scope/destructive decisions; agents share a git-backed "hive" (memory, mailboxes, blackboard) with semantic recall, per-agent worktrees, token/cost telemetry, a steer→constrain→stop circuit breaker, and human-in-the-loop gates.
+
+**Why it matters:** A polished, TypeScript-native answer to running a self-managing team of coding agents on your own machine — with the safety rails (spend/scope/destructive gates) that cloud orchestrators tend to leave to the user.
+
+[`🔗 chaitanyagiri/munder-difflin`](https://github.com/chaitanyagiri/munder-difflin) · [`🔗 Peerlist`](https://peerlist.io/chaitanyagiri/project/munder-difflin-free-local-multiagent-harness)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-18T12:03:00Z |
-| Items | 22 |
-| Sources tracked | 29 (GitHub, Hacker News, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Rickmanelius, Wordfence, The Hacker News, Criminal IP, Gitea Blog, Roboflow, Byteiota, Speko, NautilusTrader, Appinn) |
+| Generated | 2026-08-18T20:03:00Z |
+| Items | 32 |
+| Sources tracked | 40 (GitHub, Hacker News, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Rickmanelius, Wordfence, The Hacker News, Criminal IP, Gitea Blog, Roboflow, Byteiota, Speko, NautilusTrader, Appinn, Cursor, SiliconAngle, GitLab, Full Disclosure, 0day Rubbish, Vercel, OpenRouter, OpenViking Docs, CSDN, Hackaday.io, Peerlist) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

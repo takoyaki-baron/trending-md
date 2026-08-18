@@ -1,8 +1,8 @@
 ---
 date: 2026-08-18
-updated: 2026-08-18T12:03:00Z
+updated: 2026-08-18T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -339,13 +339,155 @@ Speko 的 Launch HN（「语音 AI 界的 OpenRouter」）带来一个面向生�
 
 ---
 
+## 23. Cursor 推出 Origin——「为智能体规模打造」的 git 托管，GitHub 宕机 7 小时后上场
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Cursor Changelog · early beta · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cursor` `code-hosting` `git` `agents` `developer-tools`
+
+Cursor 上线了 **Origin**，一个定位为「为智能体规模打造的 git forge」的云端代码托管服务，于 8 月 17 日向所有付费用户开放早期 beta——就在同一天，GitHub 遭遇了约 7 小时的大规模宕机，波及 PR、Issues、Actions 与 Copilot。Origin 位于新的「Codebase」标签页中：仓库地址为 `cursor.com/codebase/{owner}/{repo}`，支持与 GitHub 的双向实时同步（在「Detach from GitHub」之前，GitHub 仍是唯一事实源），完整的 PR 及双向评论/回应同步，并与 Vercel（预览部署）、Depot、Buildkite 首发集成。它构建在 Graphite 的 stacked-PR + merge-queue 技术之上（Cursor 于 2025 年 12 月收购 Graphite），Cursor 称其**内部已有 35% 的 PR 由云虚拟机中的自主智能体发起**。
+
+**为何重要：** 这是主流编码智能体厂商推出的第一个可信的 AI 原生代码托管平台——「智能体规模」的说法有真实遥测数据背书，而非营销话术：面向人类的评审工作流，正是 AI 生成代码现在撞上的瓶颈。
+
+> 智能体原生功能（向编辑器询问仓库、云智能体对 Origin 远端发起 PR）仍在逐步推出；免费版与企业版退出机制暂未开放。
+
+[`🔗 Cursor changelog`](https://cursor.com/changelog/origin-code-hosting) · [`🔗 SiliconAngle`](https://siliconangle.com/2026/08/17/cursor-launches-origin-code-hosting-service-to-compete-with-github/)
+
+---
+
+## 24. GitLab CVE-2026-19478——未认证的 GraphQL 指令可修改或删除公开项目（CVSS 9.4）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitLab · CVSS 9.4 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `cve` `gitlab` `graphql` `code-injection` `self-hosted`
+
+GitLab 于 8 月 17 日发布带外紧急补丁（**19.2.4、19.1.6、19.0.8、18.11.11**），修复 **CVE-2026-19478**（CVSS 9.4，CWE-94）：GraphQL 指令校验不当，使得**未认证**攻击者无需任何用户交互即可修改或删除公开项目与用户数据。该漏洞由「hiimguardian」通过 HackerOne 上报。目前尚无公开 PoC 或确认的在野利用，但完整技术细节将在补丁发布约 90 天后公开；**18.2–18.10 分支没有修复**，这些部署必须整体升级到已修复分支。同一次发布还修复了 CVE-2026-19650（GraphQL multiplex 查询中的 CSRF，CVSS 7.1）。
+
+**为何重要：** 自托管 GitLab 是不愿把源码放上云的组织的默认本地选择——GraphQL 层出现无需认证的数据完整性漏洞，对一个价值主张是「你的代码，你的服务器」的托管平台而言是最坏情况。
+
+[`🔗 GitLab patch release`](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-2-4-released/) · [`🔗 IONIX threat center`](https://www.ionix.io/threat-center/cve-2026-19478/)
+
+---
+
+## 25. iMonnit Express 4.0.5.5——空安全答案列表 + 急切的插件加载器，成就无需认证的 SYSTEM RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** Full Disclosure (0day Rubbish) · CVSS 9.8 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `cve` `imonnit` `rce` `auth-bypass` `iot`
+
+**0day Rubbish 研究团队**公开披露了 **iMonnit Express 4.0.5.5**（Monnit 的 Windows 版 IoT 传感器监控网关）中的无需认证 **SYSTEM RCE**（CVSS 9.8，尚未分配 CVE）。该 ASP.NET Core 服务以 LocalSystem 权限运行，且没有全局 `[Authorize]` 过滤器，三个缺陷串联成链：**空的安全答案列表铸造出有效 admin cookie** → 证书上传端点中的**路径遍历文件写入** → **插件加载器在 `IExpressPlugin` 检查之前就调用 `Assembly.Load` + `Activator.CreateInstance`**，因此构造函数以 `NT AUTHORITY\SYSTEM` 执行。团队验证了 `whoami = nt authority\system`，并在 GitHub 上公开了 PoC。
+
+**为何重要：** Monnit 网关部署在工业/环境传感器机群上；一条无需认证、无需交互、附带公开 PoC 的完整利用链，在 CVE 尚未分配之前就把监控设备变成了 Windows 域渗透的跳板。
+
+[`🔗 Full Disclosure advisory`](https://seclists.org/fulldisclosure/2026/Aug/54) · [`🔗 0day Rubbish blog`](https://0day-rubbish.com/blog/imonnit-express-unauth-plugin-rce)
+
+---
+
+## 26. GPT-5.6 Sol 在 OpenRouter 与 Vercel 上五折——是渠道层面的降价，而非 OpenAI 降价
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Vercel Changelog · 499 pts (HN) · ~8h ago (~20:03 UTC+8)
+- **Tags:** `openai` `pricing` `gpt-5-6-sol` `openrouter` `vercel`
+
+GPT-5.6 Sol 在两大路由平台上的实际价格腰斩：**OpenRouter**（8 月 17 日宣布，未设截止日期）与 **Vercel AI Gateway**（为期一个月，至 9 月 18 日，覆盖 standard + Fast 模式）都把这款旗舰降到**输入 $2.50/M、输出 $15/M**（缓存读取 $0.25）。OpenAI 自身的 API 价格未变，仍为 $5/$30——折扣停留在聚合平台层面，SemiAnalysis 猜测，正因这些平台公开报告 token 用量，临时折扣才能抬高 Sol 的测量份额。此前 7 月 30 日已对更便宜的 Luna/Terra 档位降过价。
+
+**为何重要：** GPT-5.6 系列中最强模型半价，显著改变智能体的 token 经济学——同时悄然揭示「前沿模型定价」有多大程度如今由路由平台而非实验室决定。
+
+[`🔗 Vercel changelog`](https://vercel.com/changelog/gpt-5-6-sol-is-50-off-on-ai-gateway-for-the-next-month) · [`🔗 OpenRouter pricing`](https://openrouter.ai/openai/gpt-5.6-sol)
+
+---
+
+## 27. OpenViking——火山引擎的「自进化上下文数据库」，把智能体记忆当作 `viking://` 文件系统
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 29k 星 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `agent-memory` `context-database` `rag` `volcengine` `open-source`
+
+**volcengine/OpenViking**（AGPL-3.0，约 29k 星）把智能体记忆、知识 RAG 与技能统一到一个虚拟文件系统背后：内容获得 `viking://` URI，智能体用 `ls`/`tree`/`find` 浏览，而不是黑盒向量查询。所有内容在写入时自动分层为 **L0/L1/L2**（摘要 → 概览 → 完整细节）以削减 token 开销；检索是目录递归式的、轨迹可观测；`session.commit()` 会异步挖掘用户偏好 + 智能体经验，沉淀为长期记忆。在 LoCoMo 基准上，它把智能体记忆准确率从原生 24–57% 提升到 **80–83%**，同时把输入 token 削减 34–91%、延迟降低 58–66%。
+
+**为何重要：** 它让智能体的整个上下文库变得可观测、可自我改进，以此直击「上下文碎片化」与 token 浪费——是记忆的文件系统，而非黑盒向量库，出自字节跳动云。
+
+[`🔗 volcengine/OpenViking`](https://github.com/volcengine/OpenViking) · [`🔗 OpenViking docs`](https://docs.openviking.ai/en/faq/faq)
+
+---
+
+## 28. Kozuchi Agent——语言无关的开源权重修复智能体，在 Qwen3.5-27B 上拿下 SWE-bench Verified 374/500
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · ASE '26 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `research` `software-repair` `swe-bench` `open-weight` `agent`
+
+**Kozuchi Agent**（arXiv:2608.15579，入选 ASE '26 Industry Showcase）是一个语言无关、开源权重的软件修复智能体，基于本地托管的 **Qwen3.5-27B、零微调**构建——显式阶段、持久状态、确定性工具与跨智能体测试时选择，让每次运行都可审计。它在官方评测器上解决了 **374/500 个 SWE-bench Verified**（TTS@8），在 Multi-SWE-bench Java 上**位列开源权重系统第一**（32.03%，42 个系统中第 4），Python 上 135 个系统中第 12，各阶段行为跨语言稳定在 ±5pp 以内。
+
+**为何重要：** 围绕一个中型开源模型构建的确定性流水线，逼近前沿修复水平——是对黑盒前沿智能体的「可复现优先」反例，也证明杠杆在 Harness 工程而非模型规模。
+
+[`🔗 arXiv:2608.15579`](https://arxiv.org/abs/2608.15579) · [`🔗 SciRate`](https://scirate.com/arxiv/2608.15579)
+
+---
+
+## 29. ai-agent-book——李博杰开源一本 38.9k star、十章 AI 智能体工程教材，附 103 个可运行实验
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 38.9k 星 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `ai-agents` `book` `open-source` `chinese` `education`
+
+**bojieli/ai-agent-book**（Apache-2.0）是李博杰（Bojie Li）完全开源的教材《深入理解 AI Agent》，围绕公式 **Agent = LLM + Context + Tools** 展开：全书正文、配图，以及跨 10 章的 **103 个可运行配套实验**——上下文工程、记忆/RAG、工具与 MCP、编码智能体、评估、后训练、自我进化与多智能体协作——还有 13 种语言的社区翻译与编译好的 PDF/EPUB。李博杰（前华为「天才少年」，现 Pine AI 首席科学家）提出「Harness 工程」：模型之外的一切工程能力，才是真正的竞争力所在。
+
+**为何重要：** 一部附可执行实验的生产级智能体课程，免费且开源——罕见的实践者亲笔路径，从原理一路到多智能体系统，如今是最多星的智能体教育仓库。
+
+[`🔗 bojieli/ai-agent-book`](https://github.com/bojieli/ai-agent-book) · [`🔗 CSDN（中文）`](https://blog.csdn.net/aiwording/article/details/163452714)
+
+---
+
+## 30. AERIS-10——开源 10.5 GHz 相控阵雷达，24k stars，独立分析质疑其测程宣称
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 24.2k 星 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `hardware` `radar` `fpga` `sdr` `open-source`
+
+**NawfalMotii79/PLFM_RADAR**（「AERIS-10」）是一套完全开源、低成本的 **10.5 GHz 脉冲 LFM 相控阵雷达**：±45° 电扫 + 360° 机械扫描，16 路 GaN 功放通道，**XC7A50T FPGA** 负责脉冲压缩/多普勒 FFT/MTI/CFAR，STM32 控制——分 3 km（Nexus）与 20 km（Extended）两个版本。硬件采用 CERN-OHL-P，固件/软件 MIT，且已被 **Crowd Supply 接纳**，计划 2026 年 Q3 众筹。独立分析（KolesnykMaksym/plfm-radar-analysis）指出几点存疑：对现实的 1 m² 目标，官方测程可能**高估 7–13 倍**（约 0.4 km / 1.6 km），且 README 中的 XC7A100T 与原理图里的 XC7A50T 不符。
+
+**为何重要：** 雷达一直是封闭、受国防管控的领域；一套开放的 BOM + FPGA + 固件设计使其对 SDR/机器人/无人机研究大众化——而这份诚实的独立拆解，恰是一个雄心勃勃的硬件宣称所需要的审视。
+
+[`🔗 NawfalMotii79/PLFM_RADAR`](https://github.com/NawfalMotii79/PLFM_RADAR) · [`🔗 Hackaday.io project`](https://hackaday.io/project/205190-open-source-plfm-radar-up-to-20km-range)
+
+---
+
+## 31. τ0-VLA——分层机器人基础模型，把测试时算力花在决策最难的环节
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 39 authors · ~12h ago (~20:03 UTC+8)
+- **Tags:** `robotics` `vla` `foundation-model` `world-model` `arxiv`
+
+**τ0-VLA**（arXiv:2608.16885）是一个分层视觉-语言-动作（VLA）机器人基础模型：**高层策略**用**世界模型引导的测试时计算**来生成子任务——在做出决定前搜索替代子任务选项，为困难或高风险的决策分配更多算力——而**低层策略**则跨多个本体执行每个子任务。它用 **40,115 小时异构真实世界数据**训练、多模态协同训练，结果显示额外的测试时计算能显著提升域内与分布偏移下的下一步子任务准确率，进而转化为长程操作更高的闭环成功率。
+
+**为何重要：** 它把「测试时算力可扩展能力」的发现从语言模型延伸到机器人控制——把算力花在计划不确定的地方，而非均匀摊在任务上。
+
+[`🔗 arXiv:2608.16885`](https://arxiv.org/abs/2608.16885) · [`🔗 SciRate`](https://scirate.com/arxiv/2608.16885)
+
+---
+
+## 32. munder-difflin——本地多智能体编排框架，用真实终端 CLI 运行「你的克隆人办公室」
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 1.7k 星 · ~12h ago (~20:03 UTC+8)
+- **Tags:** `multi-agent` `local-first` `electron` `claude-code` `open-source`
+
+**chaitanyagiri/munder-difflin**（MIT）是一个本地优先的多智能体编排框架，把真实终端 CLI——Claude Code、Codex、Gemini CLI、Qwen、Kimi、OpenCode、Copilot——包装成 `node-pty` 伪终端里的智能体，然后在 Pixi.js 的「办公室楼层」上协调它们。一个 **GOD 编排者**负责任务路由，只在花费/范围/破坏性操作上才升级给人类；智能体通过一个 git 托管的「hive」（记忆、邮箱、黑板）共享状态，支持语义召回、每个智能体独立 worktree、token/成本遥测、steer→constrain→stop 熔断机制与人在环门禁。
+
+**为何重要：** 一个精致、TypeScript 原生的方案，用来在你自己的机器上运行一支自我管理的编码智能体团队——并带有云端编排器常留给用户自己去补的安全护栏（花费/范围/破坏性门禁）。
+
+[`🔗 chaitanyagiri/munder-difflin`](https://github.com/chaitanyagiri/munder-difflin) · [`🔗 Peerlist`](https://peerlist.io/chaitanyagiri/project/munder-difflin-free-local-multiagent-harness)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-18T12:03:00Z |
-| Items | 22 |
-| Sources tracked | 29 (GitHub, Hacker News, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Rickmanelius, Wordfence, The Hacker News, Criminal IP, Gitea Blog, Roboflow, Byteiota, Speko, NautilusTrader, Appinn) |
+| Generated | 2026-08-18T20:03:00Z |
+| Items | 32 |
+| Sources tracked | 40 (GitHub, Hacker News, Wiz, The Register, DuckDB, CISA, Suriq, IONIX, CVE.org, Tencent Cloud, OffSeq, Mintlify, agentskills.io, ITHome, The Block Beats, RuntimeWire, Leiphone, arXiv, SciRate, Rickmanelius, Wordfence, The Hacker News, Criminal IP, Gitea Blog, Roboflow, Byteiota, Speko, NautilusTrader, Appinn, Cursor, SiliconAngle, GitLab, Full Disclosure, 0day Rubbish, Vercel, OpenRouter, OpenViking Docs, CSDN, Hackaday.io, Peerlist) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
