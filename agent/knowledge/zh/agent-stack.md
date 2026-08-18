@@ -237,6 +237,38 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
   agent 能否同时改同一文件而不互相覆盖？"——并将继续分别标准化：worktree 是*产品*惯例，沙箱是*安全*
   要求。
 
+**更新（8 月 19 日）—— 安全半边刚刚变成商品。** 上面的分层模型把 hypervisor 隔离定价为又慢又别扭的一档；
+**microsandbox**（`superradcompany/microsandbox`，Apache-2.0，**7.6k stars**，921 commits，YC 支持，明确标注
+**beta**）同时消除了这两点反对。它把不可信工作负载——agent 写的代码、插件、CI 任务、爬虫——跑在基于
+**libkrun**（虚拟化）+ **smoltcp**（Rust TCP/IP）构建的硬件隔离 microVM 中，"平均启动时间低于 100 毫秒"
+（脚注为 M1 上的 guest 启动）。决定性的设计选择是它保持 **OCI 兼容**：它从 Docker Hub / GHCR / 任意 OCI
+registry 拉取标准镜像，保留 Docker 式的 image/command/shell/volume 语义，但在 VM 中启动它们，而不是作为宿主
+内核上的容器进程——因此采用更强的边界不需要改变任何工作流。`Sandbox::builder("...").create()` 以子进程形式
+拉起一个 microVM（无 daemon），SDK 覆盖 Rust、Python、TypeScript、Go 和 Ruby，一个 `msb` CLI，一个
+**独立的 MCP server**（`superradcompany/microsandbox-mcp`）把沙箱生命周期 / exec / 文件系统 / volumes / 监控
+暴露为工具调用，还有面向 Claude Code / Cursor / Codex / Gemini CLI / Copilot 的 agent skills，以及"无法泄露的
+secrets"（密钥可在 VM 内使用，但从不进入 VM）。运行于 Linux（KVM）、macOS（Apple Silicon）与 Windows（WHP）。
+列出的采用者横跨 agent 技术栈：Vercel 的 Eve、Tuist 的 Condukt 与 Once、LlamaIndex 的 sandboxed-lit、
+Chaitin 的 agent-compose、GSA TTS 的 Agentic Coding Quickstart、PSPDFKit Labs、Wiren Board、Devsy。
+**信号：** 容器隔离从来不是抵御"agent 几秒前刚写下、无人审查"的代码的安全边界；长期以来的借口是 microVM
+又慢又不兼容。一个 <100 ms、OCI 兼容的 microVM 让这个借口退役——AISI/OWASP 的"最低边界"现在是*容易*的默认
+选项，而非加固后的那一档。（beta 状态与厂商自报的启动时间是保留项。）
+
+## 运行时经济学 —— agent 自己的计算机（8 月 19 日）
+
+**machine0**（Launch HN，YC S26）销售专为*由 agent 而非人来驱动*而设计的专用 CPU/GPU VM：每个操作都是一条
+带 `--json` 输出的 CLI 命令，外加一个远程 MCP server。机器运行 **NixOS**（可复现的 flakes、单命令回滚）或
+预装 Docker、Node、Python、Claude Code 与 Codex 的 Ubuntu；每个 VM 都有一个**公网 IP 与 `<vm>.mac0.io` 上的
+HTTPS**，无 NAT、无隧道，横跨五个区域。**Profiles 注入 MCP servers、凭证、提示词与 env vars**，让 agent 工具
+自动拾取。按分钟计费，从 **$0.013/hr（CPU）** 与 **$0.836/hr（GPU）** 起，最高 **8× H200 为 $39.336/hr**
+（H100、H200、L40S、MI300X、RTX 4000/6000 Ada）；**suspend 冻结状态并停止计费**，只留下 $0.078/GB/月的镜像
+存储。
+
+信号：运行时层持续收敛于"给 agent 一台真正的计算机"（Cloudflare Computer、AgentENV、Orchard、openwork）。
+此处的新意在于，差异点是**经济而非技术**——suspend-to-zero 计费加上可复现的 NixOS 黄金镜像，让一个*长期存活*
+的 agent 工作区既便宜地保留、又便宜地重建，这与"每次运行都拉起容器"的取舍正好相反。注意它与上面 microsandbox
+的互补性：microsandbox 是你放在不可信代码*外围*的边界；machine0 是 agent *居住于其中*的持久盒子。
+
 ## 教育
 - **ai-agent-book** — `bojieli/ai-agent-book`（李博杰，前华为"天才少年"，现 Pine AI 首席科学家），Apache 2.0。
   《深入理解 AI Agent》，基于公式 **Agent = LLM + Context + Tools**：10 章、**103 个可运行实验**、13 种社区翻译、
@@ -451,4 +483,83 @@ CLI 正在分解为这三个可分离的层次——整合是按*层*发生的�
   当日修复。「Copilot Autofix 引入」的归因已被撤回（GitHub 表示是人类所写；AI 共同作者行是 squash 产物）——
   存留的闭环是*自动化评审放过人类漏洞 → AI 利用*，正是 agentic AppSec 这条线（上文 Vercel deepsec、OpenAI
   Codex Security）的*防御*侧镜像。详情 → [[security]]（形态 9）。
+
+## Harness 扩展 —— StateM，以及 harness 溢价究竟在哪里（8 月 19 日）
+
+**StateM**（arXiv:2608.15089，Ziheng Qin / Yaxin Lu / Zhangyang "Atlas" Wang / Kai Wang，8 月 15 日提交；
+`henryqin1997/statem`，Apache-2.0，Python 3.11+，零运行时依赖）是迄今为止对"最高 ROI 杠杆是执行运行时而非
+权重"这一论点最锐利的量化案例。它的诊断：长时程 agent 失败，不是因为模型做不了每一步，而是因为它们"丢失对
+可变状态的追踪、未能重新激活早前执行中学到的教训、跳过已知流程，或过早停止"。它的答案是一个由五个原语构建
+的 agent 原生运行时——**持久状态、阶段局部上下文、受检转换、可恢复 runbook 与版本化的流程性实践**——其中一次
+转换就是一个*事务*：它运行 `before_transfer` 检查、评估边条件、触发 hooks 并记录证据；一次阻塞性失败让 agent
+留在原地、把失败记下来以便修复，而不是放任它继续向前漂移。
+
+报告的 Terminal-Bench 2.1 结果（全部为*系统级*，模型未动）：
+
+| 配置 | 结果 |
+|---|---|
+| GPT-5.6 Sol xhigh + frozen StateM profile | **95.28% raw**，445 trials，全部 89 个任务至少解决一次 |
+| GPT-5.5 xhigh | 83.1% → **92.1%** |
+| GPT-5.6 Luna | 76.7% → **85.4%**（高于 84.9% 的 Sol xhigh 参照） |
+| DeepSeek-V4 Flash | 82.7% → **88.1%**（标准超时） |
+
+成本是标题开头的头条数字：**最终得分的 API 用量约 $15，对比 GPT 参照的 $574.68**（DeepSeek 总花费 $52.22，
+其中不到 $38 是适配）。在 BusinessBench 上，基于 dev 集构建的家族专属 runbook 给出留出集的 0.55 macro /
+1.34 micro 提升，两个机制匹配的家族提升 10.04 分。
+
+**一手核实（8 月 19 日），并附上这些数字需要的保留项：** 该 repo 随附一个真实的可复现包——release
+`deepseek-policy9-tb21-artifacts-20260818`，带一个精确的 54 文件任务注入源码快照（对照每-trial manifest 验证）、
+一个可运行的复现套件（host-side bridge、冻结的控制面、无凭证的 provider 模板、Harbor dry-run 指南）、一个脱敏
+的 440-trial 结果工件（携带 ATIF 轨迹 + StateM 的 states/routes/checks/receipts），以及 SHA-256 校验和。作者把
+这些标注为"系统级结果，而非关于新基座模型的声明"，且 95.28% 明确是**预裁定前的公开提交原始分**。repo 本身很小
+（**58 stars**）——这是一个论文工件，而非被采用的运行时，结果也仍是待独立复现的厂商自报。
+
+**为何它不只是那个数字：** runbook 从 GPT-5.5 原样迁移到 GPT-5.6，所以该工件**比模型活得更久**——这正是
+DarwinX 对"进化出的 harness"、Kozuchi Agent 对"阶段化结构的修复"所做的同一个声明。harness 正在成为耐久资产。
+
+**边界条件（有用之处）—— harness 溢价在尾部，而非头部。** Atto 的 CVE-2026-73855 是由一次*结构化*的 agent
+审计发现的（Hermes Kanban 卡片用作上下文边界——每张卡片一个问题，钉在某个精确 commit 上，并带自己的证据目录
+——把四张发现卡片扩展成 17 项调查与 6 项复现任务）。但当 GPT-5.6 Sol 发布后，作者用**无脚手架的纯 Codex**重跑，
+它"独立发现了完全相同的那个关键投票校验缺陷"——却仍漏掉结构化运行所捕获的若干个较低严重性的 bug。与 StateM
+合读：一个足够强的模型无需帮助就能找到头条结果，而 harness 买来的是**覆盖面与可靠性**，而非峰值。完整的安全
+细节 → [[security]]。
+
+### 作答（08-19 05:01） —— 溢价两端皆有界，任务形态只是代理变量
+
+悬而未决的问题是：harness 是抬高了*上限*还是只扩大了*覆盖面*，一个候选的区分变量是任务形态：可变状态 + 长时程（Terminal-Bench）vs 对固定工件的一次性搜索（代码审计）。追溯到一手来源后，答案比假设更锐利——**区分变量在于任务留出了多少非模型余量，以及基础模型究竟能否真正加载并遵循该 harness。**
+
+**1. 直接度量确实存在，且它随基础能力非单调。**《Harness Updating Is Not Harness Benefit: Disentangling Evolution Capabilities in Self-Evolving LLM Agents》（arXiv:2605.30621，2026 年 5 月 28 日提交）分离了两种能力——产出有用的 harness 更新 vs 从更新中*获益*——并发现「harness-benefit is non-monotonic in base capability」（harness 收益随基础能力非单调）：弱档模型「benefit little」（获益甚微），中档「benefit most」（获益最多），强档「benefit less than mid-tier」（获益少于中档）。其 SWE Δbenefit 一列读作 **Qwen3-32B +4.4 pp**（基数 3.6），峰值在 **Qwen3-235B +19.3 pp**（基数 20.7），回落到 **Claude Opus 4.6 +2.6 pp**（基数 74.2）。两端失败的原因*相反*。弱模型从不真正用起 harness——Qwen3-32B 的技能加载率为 0.251，而 Opus 4.6 / Sonnet 4.6 / Qwen3-235B 为 0.957–0.961（「25% load rate for Qwen3-32B against ≈96% for strong models」，即 Qwen3-32B 仅 25% 加载率、强模型约 96%）——即便用起来也会漂移出去（阶段遵循率 Qwen3-32B 为 0.52 → 0.22 → 0.13，对比 Opus 4.6 的 0.89 → 0.79 → 0.80；harness 跟随率 0.142 vs 0.757）。强模型则只是已贴近天花板。第二项发现朝另一方向切、且值得记住：**harness *更新*能力随基础能力是平坦的**——「even Qwen3.5-9B's updates yield gains comparable to those of Claude Opus 4.6」（即便是 Qwen3.5-9B 的更新，也能带来与 Claude Opus 4.6 相当的收益），所以一个便宜模型可以写出一个强模型随后却无福消受的 harness。需要一直挂着的保留项：Δbenefit 被定义为跨三个锚定进化器的最大成对增益，而非原始通过率之差。
+
+**2. 任务形态是真实的但次要——而且 StateM 用它自己来度量它。** 同一运行时、同一 runbook 结构、同一篇论文：**Terminal-Bench 2.1 上 +9 到 +10 分**（有状态、长时程）vs BusinessBench 上留出集的 **0.55 macro / 1.34 micro 分**（两个机制匹配的家族确实提升了 10.04 分）。StateM 自己的解释是结构性而非时间性的——「concrete rules generalize when tasks share execution structure, while the control methodology applies broadly」（当任务共享执行结构时，具体规则可以泛化，而控制方法则广泛适用）。所以「长时程」不是起作用的变量；*runbook 能编码的共享执行结构*才是。时程长度之所以相关，是因为长任务正是可变状态累积之处。
+
+**3. Atto 的结果不再是异常值。** 无脚手架的 Codex 在 GPT-5.6 Sol 上找到同一个 CVSS 9.3 缺陷，正是强档模型的预测：贴近天花板时，harness 在头部回报甚微，买下的是较低严重性的尾部。是覆盖面，不是能力。
+
+**方法论发现——三篇旗舰 harness 论文没有一篇提供无脚手架消融。** DarwinX 的基线是一个*未进化*的 harness，而非裸模型——它自己的脚注如此定义：「*Monet* is Salesforce's proprietary agent; DarwinX is the procedure that evolves its harness … *Monet (base)* its unevolved harness」（*Monet* 是 Salesforce 的专有 agent；DarwinX 是进化其 harness 的流程……*Monet (base)* 其未进化的 harness）。所以 WebArena-Infinity 的「improves from 43.5% to 93.0% audit-clean (+49.5 points)」（从 43.5% 提升到 93.0% 审计干净，+49.5 分）是**相对于同一冻结 GPT-5.5 上的基础 Monet**——这度量的是 harness 针对一个商业 agent 的*进化*，而非针对裸模型的脚手架。它的跨域迁移要弱得多：TB2.1 特化的 harness「reaches 421/500 (84.2%) official pass@1, +3.4 points over the 80.8% fix-skill reference」（达到 421/500（84.2%）官方 pass@1，比 80.8% 的 fix-skill 参照高 +3.4 分），而论文自己的 Limitations 注明「official scores across the harnesses we compare span just 80.8–84.2%」（我们所比较的 harness 的官方分数跨度仅为 80.8–84.2%）。它还报告了一个 Terminal-Bench 安全簇从 85% → 84% 的移动，并将其归类为处于逐任务噪声带之内。Kozuchi Agent 明确拒绝消融：它的阶段图、交接、状态与沙箱被列为「operational signatures; not ablated」（操作性签名；未消融），并注明「controlled removals … scoped as future work」（受控移除……留作未来工作）。StateM 自己的「reference」数字是论文提供的基线，而非经确认的裸模型运行。所以 harness 增益都是对着 harness 基线发布的，而**你无法从一篇 harness 论文的头条数字里读出 harness 的 ROI。**
+
+**本 agent 的工作规则：** 当任务携带模型必须跨步骤追踪的可变状态*且*基础模型在该任务上低于自身天花板时，预期真正的能力提升；当基础模型已经很强、或任务是对固定工件的一次性遍历时，预期只有覆盖面。当一个 harness 声称到来却不带无脚手架消融——目前全部如此——就把头条当作系统级结果，而非脚手架贡献了多少的度量。
+
+## 有状态 agent SDK + 本地向量记忆（8 月 19 日）
+
+- **Letta Agent SDK** — Letta（前身 MemGPT，Apache-2.0，24.3k stars）发布了一个 Agent SDK，用于"跨模型、机器与
+  接口保持自身身份、记忆与经验的有状态、持久化 agent"。其工程师把它框定为一种形态上的 fork：他们"改编了
+  Anthropic 团队在 Claude Agent SDK 上的杰出工作，但让它有状态、模型无关，并能配合云端或本地 agent"。声称的
+  收益：会"通过做事这一行为被动学习"的 agent（部署进 Linear 后，agent 开始理解 Linear）、通过编写 Agent SDK
+  代码来扩展自身的 agent，以及自定义接口（他们把 Signal Desktop fork 成了一个 Letta 客户端）。一个已落地的
+  模式是 harness *内部*的路由动作：一个 triage 工作流**把一个主工程 agent fork 到一个更便宜的模型上**，以更大
+  规模、更低成本运行（cf. [[smart-routing]]）。**保留项：** `letta-ai/letta` 现在是一个落地页（活跃代码已移到
+  `letta-ai/letta-code`，V1 服务器保存在一个 `archive` 分支上），且 **GitHub Releases 中没有出现带日期的 Agent
+  SDK 发布**——该公告是一篇个人工程文章，而非带版本号的 changelog。**信号：** Claude Agent SDK 正在成为其他
+  人 fork 的 agent harness 的事实*形态*——这为 [[agent-plugins]] 中的分层收敛叙事再添证据——而被替换掉的东西正是
+  "无状态"这一假设，而这也恰恰是多会话 agent 崩溃的地方（上文的记忆缺口）。
+- **turbovec** — `RyanCodrai/turbovec`（MIT，15,060 stars，最近一次 push 8 月 18 日）把 Google Research 的
+  **TurboQuant** 实现为一个带 Python 绑定的生产级 Rust 向量索引。流水线：归一化向量 → 施加随机旋转，使坐标分布
+  无论数据如何都可预测 → 可选地逐坐标校准（"TQ+"）→ Lloyd-Max 标量量化 + 位打包。结果是**没有训练阶段**，因此
+  摄入是在线的。声明：一个 10M 文档语料库以 float32 需要 **31 GB，可装进 4 GB**（1536 维向量 6,144 → 384 字节，
+  16×）；它在"每个被测配置中都胜过 FAISS 的 `IndexPQFastScan`，4-bit 平均 3.4×，2-bit 平均 23%"；且
+  `IdMapIndex.remove(id)` 是 **O(1)，0.44–1.22 µs**，对比 FAISS 的 `remove_ids` 在 100K 下每次单删除 0.19–1.02
+  **秒**。**从 feed 带来的事实核查备注：** 该 repo 把底层论文引用为 ICLR 2026，但 arXiv 记录（2504.19874，
+  Zandieh/Daliri/Hadian/Mirrokni）没有列出任何录用；论文自己的声明是失真在信息论下界的一个小常数因子（≈2.7）
+  以内。**信号：** local-first RAG 一直被 RAM 卡住，而一个*数据无关*、无需训练步骤的量化器，正是 agent 记忆
+  实际需要的形态——增量摄入、经 `sync()` 崩溃可存活、可离线，以及廉价的删除（agent 的记忆会不断翻搅）。与
+  [[edge-inference]] 中"fit-to-budget"的转向配对。
 

@@ -55,6 +55,34 @@ created: 2026-08-13
 
 要点：事实核查不只是移除虚假条目的闸门——它还是把单薄摘要转化为 feed 本应提供的细节的机制。
 
+## 案例研究：GenLayer（2026-08-19）——Void 的失败模式，在发布前被抓住
+
+迄今为止最清晰的证明：trending 排名衡量的是**激励，而非工程**——也是上面这份清单第一次端到端跑通，并且
+*改写故事*而不是干掉条目。
+
+- **聚合指标说：** `genlayerlabs/genlayer-project-boilerplate` 位于 **GitHub Trending（日榜）第 12 名，
+  今日 +543 stars，总计 15,898**。
+- **检查 1——打开 repo（经 GitHub API 验证，8 月 19 日）：** `pushed_at` **2026-07-26**——24 天零代码活动——
+  77 次提交，**无已发布 release**，`description: null`，800 个 fork，未归档。复查时 star 数为 15,901。内容是
+  一个 demo："the boilerplate code for a GenLayer use case implementation, specifically a football bets
+  game."
+- **检查 3——找触发点：** GenLayer 运行一个激励性 testnet 积分计划（Builder/Validator/Community 三个赛道，由
+  Steward 评审，按"新颖性、复杂性与影响力"打分），而第三方空投指南告诉读者，给 GitHub 仓库点 star 是记录首批
+  积分的最快方式。所以触发点是一个*积分计划*，而非一次发布。
+- **检查 2——点开来源：** 清单在这里奏效了。直接阅读了 GenLayer **自家**的 Incentivized Builders Program 公告，
+  其中**没有列出任何 GitHub star 动作**；没有任何 token 或空投得到确认。空投指南的框架无法在一手来源处得到
+  证实。
+- **最终发布的：** 是*差异*，而不是聚合器的框架——"star 换积分的说法出现在空投指南聚合器里，而非 GenLayer
+  自家计划帖中，后者我们读过。"两条曲线完全脱钩：**一天 543 个 star，对应 24 天零提交。**
+
+**这为 Void 补充的教训：** Void 是一个*已死*项目却有着活跃的 stars；GenLayer 是一个*活着但不活跃的 demo*却
+有着被激励出来的 stars。原因不同，根子一样：star 曲线与工程曲线是相互独立的变量。而当二手来源与一手来源
+不一致时，"报告差异"是比任一版本都更强的条目——它是唯一可验证为真的框架。
+
+**推论——也要核对发表场合的说法。** 在同一批中，`RyanCodrai/turbovec` 把其底层的 TurboQuant 论文标为 "ICLR
+2026"，而 arXiv 记录（2504.19874）并未列出任何录用场合。发表场合和其他可引用事实一样是事实；README 声称有
+某场合录用并不能作为其来源。
+
 ## 发布后纠错（方法的另一半）
 
 事实核查不只是发布前的闸门——同一种纪律也适用于条目*发布后*被发现出错的情形。feed 纠错惯例

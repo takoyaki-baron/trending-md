@@ -125,3 +125,65 @@ fit, and at what quantization" — and two projects productize the answer:
 Signal: the edge-inference story now has its *selection* and *serving* layers, not just the engines —
 llmfit answers "which model + quantization fits this box" and omlx answers "serve it as a persistent
 server," both local-first.
+
+## Fit-to-measured-budget replaces preset compression — as RAM stops being cheap (Aug 19)
+
+Three independent projects converged on the *same* reframing within a fortnight: stop choosing a
+compression preset, and solve an allocation problem against the bytes you actually measured.
+
+- **Shoehorn** (MIT, Rust, created Aug 13) — inverts quantization selection. Instead of picking a
+  preset that ignores the machine, it "starts from the memory you actually have, subtracts what
+  inference itself needs, and solves a per-tensor mixed-precision assignment" against the remainder.
+  Reported fits are extreme: "routinely using **99.99%** of the budget, sometimes to the byte," with a
+  worked example of **519.2 MiB of a 519.2 MiB budget — 99.998% used, 13 KB slack** for
+  `unsloth/Qwen3-4B-GGUF`. The quantizer is written from scratch in Rust (no llama.cpp code linked)
+  and emits standard **GGUF v3**, with llama.cpp only as the inference backend, so nothing downstream
+  changes; `shoehorn ui` measures the machine, streams the fit, and reports the perplexity cost before
+  you chat. Targets macOS Apple Silicon, Linux x86-64 (NVIDIA/AMD), Windows x86-64 (NVIDIA), profiles
+  from 8 GB to 128 GB, contexts 4k–32k. **Very young — 37 stars at time of check**, so treat the
+  99.998% figure as an author demo, not an independent result.
+- **Linux VRAM overcommit** — Valve contractor **Natalie Vock** shipped work stopping Linux from
+  evicting a foreground game's VRAM to system RAM under GPU memory pressure. It builds on the **`dmem`
+  cgroup controller** (`dmemcg`, co-developed with Maarten Lankhorst/Intel + Maxime Ripard/Red Hat,
+  already mainline) and adds six kernel patches plus two userspace helpers — `dmemcg-booster` and a KDE
+  Plasma "Foreground Booster" fork — so the foreground app wins VRAM and background apps are evicted
+  first. Covers AMD `amdgpu` and Intel `xe`; **NVIDIA has no equivalent mechanism**. Worked example:
+  background apps left only **6.1 GB of an 8 GB card** for a title needing **7.4 GB**; the patches hand
+  over 1 GB back. Available now via CachyOS (Linux 7.0rc7-2+) and the `linux-dmemcg` AUR package.
+- **llmfit** (above) — the same shape one level up: measure the box, then pick the highest
+  quantization that fits, sizing MoE by *active* parameters.
+
+**The counterweight that makes this urgent — memory stopped getting cheaper.** TrendForce (Aug 17):
+Germany's DDR5 retail price index climbed from **445% to 486% year-over-year in August** — a typical
+kit at ~**4.9× last year's price** — while Shenzhen's Huaqiangbei market saw **DDR5 24Gb +14.29%
+week-over-week to $48**, 16Gb to $40, and **DDR4 8Gb 3200 +12.82% WoW to $22**. TrendForce forecasts
+**server DRAM contract prices up 13–18% QoQ in 3Q26**, calls the market undersupplied, and expects the
+server DRAM shortage to run into 2027; Tom's Hardware's retail datapoint is **128 GB of DDR5 for
+$3,399** (headline only — its article body is paywalled). Cause: AI-datacenter and HBM demand pulling
+fab capacity off commodity parts.
+
+Signal — the two halves of this file now pull against each other. **MoE sparsity + disk streaming
+lowered the model's floor** (thesis 3's original claim); **DRAM pricing just raised the machine's
+floor**. So the optimization pressure has moved from "make the model smaller" to "**spend the exact
+bytes you have**" — which is why fit-solvers (Shoehorn, llmfit) and OS-level device-memory QoS
+(`dmemcg`) showed up in the same window. The cgroup work matters beyond gaming for the same reason:
+it is the first mainline primitive for arbitrating VRAM between a local model and everything else on
+the desktop.
+
+## Unsloth becomes a desktop app — run and train collapse into one local tool (Aug 19)
+
+`unslothai/unsloth` (Apache-2.0, **73,546 stars**, pushed Aug 18) quietly changed category: the repo
+description now reads "Local UI to run and train LLMs and diffusion models," and **Unsloth Desktop**
+shipped for Windows/macOS/Linux across a fast release train (v0.1.70-beta → v0.1.800-beta, Aug 11–14)
+with no-code training, RAG, MCP, and remote Cloudflare access. The newest release runs **Qwen3.8-27B
+locally in ~17 GB RAM** via Dynamic GGUFs plus NVFP4 quants, claims ~10% faster GGUF inference at
+lower VRAM, and "Fast FP8 10× faster MiniMax-H3 inference (3 minutes vs 30)" with model splitting to
+fit smaller GPUs; also landed AMD RDNA 3/4 + Strix Halo support, memory-based context sizing on Mac,
+per-model `llama-server` arguments, and tool calling + web search for external providers.
+
+The trigger is a stack of three model drops landing in one tool inside a fortnight — Desktop's launch
+(Aug 11–13), Meta Muse Glimmer support (Aug 10), Qwen3.8 support (Aug 14). Signal: Unsloth was a
+fine-tuning *library you imported*; it is now the local-first GUI for running **and** adapting a model
+on the same hardware, with MCP wired in — collapsing the gap between "try a model" and "adapt a model"
+for people who never open a notebook. Together with Shoehorn and llmfit, the local stack now has
+selection, fitting, serving, and adaptation as ordinary desktop software.

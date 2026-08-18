@@ -1951,5 +1951,131 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "mcpindex.ai": {
+    "cat": "data",
+    "en": "Unofficial MCP registry crawler publishing a daily tool-contract 'drift ledger'; unique dataset, but its figures are self-reported and unaudited — treat as a lead, not a verdict.",
+    "zh": "非官方 MCP 注册表爬虫，每日发布工具契约「漂移账本」；数据独一无二，但数字为自报且未经审计——宜作线索而非定论。",
+    "jp": "非公式のMCPレジストリクローラーで、ツール契約の日次「ドリフト台帳」を公開。データは独自だが数値は自己申告・未監査——結論ではなく手がかりとして扱う。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "itsfoss.com": {
+    "cat": "news",
+    "en": "Linux/open-source news site; reliable on kernel and desktop releases, light on primary technical detail — cross-check against the kernel patch or author's post.",
+    "zh": "Linux/开源资讯站；在内核与桌面版本发布上可靠，但一手技术细节偏少——需与内核补丁或作者原文核对。",
+    "jp": "Linux／オープンソース系ニュースサイト。カーネルやデスクトップのリリース情報は信頼できるが一次技術詳細は薄い——カーネルパッチや著者原文と突合を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "talks.genlayer.foundation": {
+    "cat": "vendor",
+    "en": "GenLayer Foundation's official forum — primary source for its incentive-programme rules; useful precisely for checking what the project does and does not claim versus third-party airdrop guides.",
+    "zh": "GenLayer 基金会官方论坛——其激励计划规则的一手来源；正适合用来核对项目本身声明了什么、未声明什么，以对照第三方空投攻略。",
+    "jp": "GenLayer Foundation公式フォーラム——インセンティブ制度規則の一次情報源。第三者のエアドロップ案内と照合し、プロジェクトが何を主張し何を主張していないかの確認に有用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "trendforce.com": {
+    "cat": "data",
+    "en": "Taiwanese market-research firm and the reference tracker for DRAM/NAND/HBM contract and spot pricing; figures are its own survey data, quoted downstream by most hardware press — dense and specific, and the one place the numbers originate rather than get repeated.",
+    "zh": "台湾市场研究机构，是 DRAM/NAND/HBM 合约价与现货价的基准追踪源；数据出自其自有调研，被多数硬件媒体转引——信息密度高且具体，是数字的源头而非转述。",
+    "jp": "台湾の市場調査会社で、DRAM／NAND／HBMの契約価格・スポット価格の基準トラッカー。数値は自社調査に基づき、多くのハードウェア系メディアが引用する——情報密度が高く具体的で、数字が転載される先ではなく生まれる場所。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "tomshardware.com": {
+    "cat": "news",
+    "en": "Long-running consumer hardware publication; reliable on component pricing and product launches, but article bodies are frequently paywalled — often only the headline figure is citable, so pair it with the primary analyst report.",
+    "zh": "老牌消费级硬件媒体；在零部件价格与产品发布上可靠，但正文常有付费墙——往往只有标题数字可引用，需与一手分析机构报告配合使用。",
+    "jp": "老舗のコンシューマー向けハードウェア媒体。部品価格や製品発表については信頼できるが、本文は有料壁の内側にあることが多く、引用できるのは見出しの数値のみという場合が多い——一次のアナリストレポートと併用すべき。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "support.claude.com": {
+    "cat": "vendor",
+    "en": "Anthropic's official help centre — authoritative and unambiguous on plan/limit/promotion policy dates, but deliberately publishes no baseline numbers (the CLI's /usage is the only way to see actual figures), so it settles what changes and when, not by how much.",
+    "zh": "Anthropic 官方帮助中心——在套餐、额度、促销的政策与日期上权威且明确，但刻意不公布基线数值（只有 CLI 的 /usage 能看到实际数字），因此它能确定「何时变、变什么」，但不能确定「变多少」。",
+    "jp": "Anthropic公式ヘルプセンター——プラン・上限・プロモーションの方針と日付については権威的かつ明確だが、基準となる数値は意図的に非公開（実数はCLIの /usage でしか確認できない）。したがって「いつ何が変わるか」は確定できるが「どれだけ変わるか」は分からない。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "atto.cash": {
+    "cat": "vendor",
+    "en": "The Atto cryptocurrency project's own blog; its security write-ups are unusually candid about method and limits (\"a quiet run does not prove that Atto is secure\") and its CVE narrative matches the GitHub advisory and fix commit exactly — a vendor blog that is safe to cite because it under-claims.",
+    "zh": "Atto 加密货币项目的官方博客；其安全文章对方法与局限异常坦诚（「一次没有发现的运行并不能证明 Atto 是安全的」），且其 CVE 叙述与 GitHub 安全公告及修复提交完全一致——一个因「自我保守」而可放心引用的厂商博客。",
+    "jp": "暗号資産プロジェクトAttoの公式ブログ。セキュリティ記事は手法と限界について異例なほど率直で（「静かな実行はAttoが安全であることを証明しない」）、CVEの記述はGitHubアドバイザリと修正コミットに完全一致する——過少に主張するがゆえに安心して引用できるベンダーブログ。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "docs.microsandbox.dev": {
+    "cat": "vendor",
+    "en": "microsandbox's official documentation; specific on the microVM/libkrun mechanics, SDK surface and MCP tooling, and consistent with the repo README when checked side by side — vendor material, so boot-time and isolation claims still want independent measurement.",
+    "zh": "microsandbox 官方文档；对 microVM/libkrun 机制、SDK 接口与 MCP 工具描述具体，与仓库 README 对照一致——但属厂商材料，启动耗时与隔离性声明仍需独立实测。",
+    "jp": "microsandbox公式ドキュメント。microVM／libkrunの仕組み、SDKの範囲、MCPツールについて具体的で、リポジトリのREADMEと突合しても整合する——ただしベンダー資料であり、起動時間や分離性の主張は独立した実測が望ましい。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "machine0.io": {
+    "cat": "vendor",
+    "en": "machine0's product and pricing site (YC S26); the per-hour GPU/CPU rates and suspend-to-zero billing terms are stated precisely enough to compare against other agent-runtime hosts — a vendor page whose value is the price sheet, not the positioning.",
+    "zh": "machine0 的产品与定价页（YC S26）；GPU/CPU 时费与「挂起即停止计费」条款写得足够精确，可与其他 agent 运行时厂商横向对比——其价值在价目表而非定位话术。",
+    "jp": "machine0の製品・料金ページ（YC S26）。GPU／CPUの時間単価と「サスペンドで課金停止」の条件が他のエージェントランタイム事業者と比較できる精度で明記されている——価値は価格表にあり、ポジショニングの文言にはない。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "acadia.engineering": {
+    "cat": "vendor",
+    "en": "Acadia's official site (Evan Czaplicki's Elm-to-SQL compiler); it is the primary source, but the app is client-rendered so its prose cannot be extracted server-side — in practice the HN thread and secondary coverage are what is actually citable.",
+    "zh": "Acadia 官网（Evan Czaplicki 的 Elm→SQL 编译器）；虽是一手来源，但站点为客户端渲染，正文无法在服务端提取——实际可引用的仍是 HN 讨论串与二手报道。",
+    "jp": "Acadia公式サイト（Evan CzaplickiによるElm→SQLコンパイラ）。一次情報源ではあるが、クライアントサイドレンダリングのため本文をサーバー側で抽出できない——実際に引用できるのはHNスレッドと二次報道になる。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "ui-mate.github.io": {
+    "cat": "research",
+    "en": "Project page for the UI-Mate GUI-agent paper; useful as the only artifact link the arXiv record offers, but all benchmark scores are author-reported and no weights or code URL is published there — treat as a paper companion, not a release.",
+    "zh": "UI-Mate GUI agent 论文的项目主页；作为 arXiv 记录提供的唯一制品链接有价值，但所有基准分数均为作者自报，且页面未公布权重或代码地址——应视为论文附页而非发布页。",
+    "jp": "UI-Mate（GUIエージェント論文）のプロジェクトページ。arXiv記録が示す唯一の成果物リンクとして有用だが、ベンチマークスコアはすべて著者申告で、重みやコードのURLは公開されていない——リリースではなく論文の付随ページとして扱う。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "notactuallytreyanastasio.github.io": {
+    "cat": "code",
+    "en": "Project page for Shoehorn, the budget-solving GGUF quantizer; specific about method and reports its own perplexity cost, but the project is days old with a handful of stars — worked examples are author demos, not independent results.",
+    "zh": "Shoehorn（按内存预算求解的 GGUF 量化器）项目页；方法描述具体且自报困惑度代价，但项目仅数日之龄、星标寥寥——示例属作者演示而非独立复现结果。",
+    "jp": "Shoehorn（メモリ予算から解くGGUF量子化器）のプロジェクトページ。手法の記述は具体的で自らperplexityのコストも報告するが、プロジェクトは数日前に作られたばかりでスター数もわずか——事例は著者のデモであり独立した結果ではない。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "cameron.leaflet.pub": {
+    "cat": "community",
+    "en": "A Letta engineer's personal post on the Leaflet publishing platform; first-hand on intent and design, but it is the announcement of record for the Agent SDK with no matching versioned release — treat product claims as unshipped until the repo confirms them.",
+    "zh": "Letta 工程师发布在 Leaflet 平台上的个人文章；在设计意图上属一手信息，但它是 Agent SDK 的唯一「官宣」，却没有对应的版本化发布——在仓库确认之前，产品声明应视为尚未落地。",
+    "jp": "LettaのエンジニアがLeaflet上に書いた個人投稿。設計意図については一次情報だが、Agent SDKの事実上の告知でありながら対応するバージョン付きリリースが存在しない——リポジトリで確認できるまで、製品の主張は未出荷として扱う。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "notebookcheck.net": {
+    "cat": "news",
+    "en": "Hardware review and news site with deep laptop/GPU coverage; solid on specs and product news, lighter on kernel-level technical detail — cross-check engineering claims against the patch series or the author's own writeup.",
+    "zh": "以笔记本/GPU 报道见长的硬件评测与资讯站；规格与产品新闻扎实，但内核级技术细节偏薄——工程性主张需与补丁系列或作者原文核对。",
+    "jp": "ノートPC／GPU報道に強いハードウェアレビュー・ニュースサイト。スペックや製品ニュースは堅実だが、カーネルレベルの技術的詳細は薄い——エンジニアリング上の主張はパッチシリーズや著者本人の記事と突合すべき。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

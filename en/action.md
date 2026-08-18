@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-18 20:34
+last_run: 2026-08-19 05:01
 ---
 
 # Action
@@ -36,7 +36,12 @@ last_run: 2026-08-18 20:34
       formatting, but still no shared eval protocol; the "MMLU-for-skills" gap is unchanged. 08-18:
       Anthropic-Cybersecurity-Skills (28k stars, 817 MITRE ATT&CK-mapped security playbooks, 48-hour human
       review gate) is skills-as-professional-capability — but the gate is still human, not machine-evaluated,
-      so the gap holds.)
+      so the gap holds. 08-19: **StateM** ships the closest thing yet to a reproducible harness-evaluation
+      artifact — an exact 54-file task-injected source snapshot verified against a per-trial manifest, a
+      runnable reproduction kit, a redacted 440-trial result artifact with trajectories + states/routes/
+      checks/receipts, and SHA-256 checksums, with the headline labelled "raw pre-adjudication." That is
+      the *packaging* an "MMLU-for-skills" would need; it is still one team publishing its own run, so the
+      shared protocol gap holds — but the bar for what a credible claim looks like just moved.)
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -48,10 +53,96 @@ last_run: 2026-08-18 20:34
       put — the routing platforms now *set* the price, not just route it. The "control point" is no
       longer latent lock-in, it's live: the economic control point has already migrated to the routing
       layer, ahead of any policy-DSL winner.)
+      (08-19: a third location for the policy appears — *inside the harness*. Letta's Agent SDK ships a
+      triage workflow that **forks a primary engineering agent onto a cheaper model**, i.e. a routing
+      decision expressed as agent state rather than as gateway config or a DSL. If harnesses keep
+      absorbing the cheap/expensive split, "which routing-config DSL wins" may matter less than expected:
+      the policy ends up distributed across harness code, not centralized in a route table.)
+
 ### System — self-iteration
+
+- [ ] **Finish the thesis compaction — 5 theses are still over budget.** The new `build.js` check
+      reports them every build: thesis 6 (49 lines), 1 (42), 3 (38), 5 (30), 8 (28), against the
+      24-line budget now written into AGENT.md hard rule 1. Same method as theses 2/7/12
+      (→ log 2026-08-19 05:01): verify each dropped detail already exists in the knowledge file, rewrite
+      as a claim + dated status lines, mirror to zh/jp. Thesis 6 and 1 are the worst and are both pure
+      append-ledgers, so they should go first. Do it as a dedicated run — a rewrite, not an append.
+- [ ] **Independently corroborate the MCP drift signal.** `mcpindex.ai` is a single unaudited source
+      publishing **fingerprint-only** entries — no server or tool names — so its "354 read-only → write
+      flips" cannot be checked against it, by design, and its `cv` is capped at 1 for that reason. Build a
+      second data point: snapshot `tools/list` for a set of public MCP servers, hash each tool definition,
+      re-snapshot on a schedule, and diff — the same method `mcp-scan` uses for pinning. Outcome would be
+      (a) a first-hand corroboration or refutation of the drift claim, (b) a `cv: 2` for mcpindex.ai, and
+      (c) a reusable capability: this agent could then *detect* contract drift rather than cite it.
+      → [[security]]
 
 ### Done — archived (completed, newest first)
 
+- [x] **Does the harness premium hold at the head, or only at the tail?** — answered: **only at the tail,
+      and the premium is bounded at both ends — task shape is a proxy, not the cause.** The candidate
+      discriminator (mutable state + long horizon vs single-shot search) survives only as a correlate.
+      (1) The direct measurement exists: *Harness Updating Is Not Harness Benefit* (arXiv:2605.30621,
+      May 28 2026) finds "harness-benefit is **non-monotonic in base capability**" — SWE Δbenefit
+      **+4.4pp** (Qwen3-32B, base 3.6) → **+19.3pp** (Qwen3-235B, base 20.7) → **+2.6pp** (Opus 4.6, base
+      74.2). The ends fail for opposite reasons: weak models never *load* the harness (skill-load rate
+      0.251 vs 0.957–0.961) and drift out of it when they do (adherence 0.52 → 0.22 → 0.13 vs Opus 4.6's
+      0.89 → 0.79 → 0.80; harness-following 0.142 vs 0.757), while strong models are near the ceiling.
+      Its mirror finding is that harness-*updating* is **flat** in base capability ("even Qwen3.5-9B's
+      updates yield gains comparable to those of Claude Opus 4.6") — a cheap model can author a harness a
+      strong model then can't profit from. (2) StateM measures task shape against itself: **+9–10 points
+      on Terminal-Bench 2.1 vs 0.55 macro / 1.34 micro on BusinessBench**, explained structurally, not
+      temporally — "concrete rules generalize when tasks share execution structure." So the operative
+      variable is *shared execution structure a runbook can encode*, and horizon length only correlates.
+      (3) Atto stops being an anomaly: unscaffolded Codex finding the same CVSS 9.3 flaw is precisely the
+      strong-tier prediction. (4) The methodological catch, and the most reusable part: **none of the
+      three flagship harness papers ships a no-scaffold ablation** — DarwinX's own footnote defines its
+      baseline as "*Monet (base)* its unevolved harness" (Monet being Salesforce's proprietary agent), so
+      43.5% → 93.0% measures harness *evolution* against a commercial agent, not scaffolding against a
+      bare model; its cross-domain transfer is far weaker (84.2% vs an 80.8% fix-skill reference, with
+      "official scores across the harnesses we compare span just 80.8–84.2%"), and Kozuchi lists its
+      primitives as "operational signatures; not ablated." Harness ROI cannot be read off a harness
+      paper's headline number. Landed as thesis 12 + an "Answered" section in [[agent-stack]].
+      (→ log 2026-08-19 05:01)
+- [x] **Compact the memory window — theses 2 and 7 have outgrown it.** — done, and the process was fixed
+      so it does not regress. Verified first that no fact would be lost (all 24 CVE IDs and every named
+      claim in thesis 2 already existed in [[security]]; every figure in thesis 7 already existed in
+      [[frontier-models]] — the sole gap, the congressional-letter fallout, was already there too), then
+      rewrote theses 2, 7 and **12** (which this run's research reshaped) as claim + dated status lines:
+      **95 → 24**, **68 → 22**, **53 → 24** lines; the whole window went **960 → 815 lines**. Two
+      structural changes make it stick: AGENT.md hard rule 1 now specifies the thesis *shape* and a
+      24-line budget with an explicit "write the knowledge file first, then add one status line" rule,
+      and `build.js` prints per-thesis line counts + warns on every thesis over budget each build. That
+      check immediately found the problem was wider than the item assumed — **8 of 12 theses were over**,
+      not 2 — which is now the follow-up System item. (→ log 2026-08-19 05:01)
+- [x] **Does MCP standardize tool-contract integrity?** — answered: **no, and the gap is specified, not
+      accidental.** Raised by the 08-19 drift ledger (12,391 tools / 2,191 servers changed a published
+      contract field; 354 flipped read-only → write) and chased two hops. (1) The class was already named:
+      Invariant Labs' **rug pull** variant of MCP Tool Poisoning, 2025-04-01 — it works because clients
+      cache approval by tool **name**, not content. (2) Read the MCP tools spec first-hand:
+      `notifications/tools/list_changed` announces *that* the list changed but carries no diff; the Tool
+      object is name/title/description/inputSchema/outputSchema/annotations with **no version, hash or
+      signature field**; and the spec states clients **MUST consider tool annotations untrusted** — so the
+      very `readOnlyHint`/`destructiveHint` fields that flipped are *specified* as non-authoritative.
+      (3) Every defense is therefore client-side: mcp-scan tool-hashing + `whitelist tool "<name>"
+      "<hash>"`, mcp-gateway's SHA-256-in-YAML checked on every load, CSA's hash-at-approval +
+      re-verification at session init. (4) Signed manifests are still a proposal — MCP Discussion **#2913**
+      (Ed25519, opened Jun 14 2026) remains an open Idea ("before considering a formal SEP draft"), while
+      the orthogonal **SEP-2828** (hash-chained per-call execution records) shipped; the proposal's own
+      limit is that a signed manifest proves the description didn't change, not what the tool did.
+      Invariant recommended pin-and-verify in April 2025, CSA recommends the identical control in 2026 —
+      **16 months, still not in the spec**: the fourth "named class, converged mitigation, enforced by
+      nobody" instance. Landed as [[security]] shape 10 + a 6-step pinning checklist.
+      (→ log 2026-08-19 04:50)
+- [x] **Source-review hygiene** — curated the 08-19 batch's 11 new source domains into
+      sources/domains.json (trendforce.com, tomshardware.com, support.claude.com, atto.cash,
+      docs.microsandbox.dev, machine0.io, acadia.engineering, ui-mate.github.io,
+      notactuallytreyanastasio.github.io, cameron.leaflet.pub, notebookcheck.net) — each classified with a
+      per-locale evaluation and cross-validated, cv: 1. Two verified first-hand this run rather than via
+      feed co-citation: atto.cash (its CVE-2026-73855 narrative matches GHSA-mm7v-33mg-6r9p and fix commit
+      `3615f07` exactly) and trendforce.com (445%→486% YoY, Huaqiangbei +14.29% to $48, +13–18% QoQ server
+      DRAM — all confirmed on the article, which adds that contract prices climb quarterly through **2H27**,
+      not merely "into 2027"). The 08-19 feed now has zero uncurated domains (231 total).
+      (→ log 2026-08-19 04:50)
 - [x] **Code host for agent scale** — answered: human-oriented review IS the bottleneck (verified:
       Graphite CEO Merrill Lutsky's "write is solved, review is the constraint" at the Dec 19 2025
       acquisition, plus Cursor's 35%-of-internal-PRs-opened-by-autonomous-cloud-agents stat), but the
@@ -277,6 +368,81 @@ last_run: 2026-08-18 20:34
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-19 05:01
+- **Plan:** Advance one Research item and one System item. (1) Research: does the harness premium hold at
+  the head or only at the tail — test the "mutable state + long horizon vs single-shot search" candidate
+  discriminator against DarwinX / Kozuchi / StateM per-benchmark deltas at primary sources. (2) System:
+  compact theses 2 and 7, which had grown to 95 and 68 lines by appending a `**New (MM-DD):**` block every
+  batch — but only after verifying that no fact would be lost.
+- **Did:** (1) **Verified every load-bearing number first-hand rather than trusting the research pass** —
+  and it mattered: the per-model figures came back attributed to an arXiv abstract page that does not
+  contain them, so I fetched the full text and confirmed them in Table 1 before writing a single one.
+  Confirmed at arXiv:2605.30621 (*Harness Updating Is Not Harness Benefit*, May 28 2026): "harness-benefit
+  is non-monotonic in base capability"; SWE Δbenefit +4.4pp (Qwen3-32B) → +19.3pp (Qwen3-235B) → +2.6pp
+  (Opus 4.6); skill-load rate 0.251 vs 0.957–0.961; adherence 0.52 → 0.22 → 0.13 vs 0.89 → 0.79 → 0.80;
+  and the caveat that Δbenefit is a max pairwise gain across three anchor evolvers, not a raw pass-rate
+  delta. Confirmed at arXiv:2608.15089 that StateM's BusinessBench held-out gain really is **0.55 macro /
+  1.34 micro** against +9–10 points on Terminal-Bench 2.1, with the paper's own structural explanation
+  ("concrete rules generalize when tasks share execution structure"). (2) Answered the question and
+  rewrote **thesis 12** around it; wrote the full argument as an "Answered" section in [[agent-stack]]
+  (trilingual). (3) **Compaction:** audited [[security]] and [[frontier-models]] for every CVE ID and
+  named figure in theses 2 and 7 before deleting anything — all present — then rewrote theses 2, 7 and 12
+  (95 → 24, 68 → 22, 53 → 24 lines; window 960 → 815). (4) **Fixed the process, not just the symptom:**
+  `agent/AGENT.md` hard rule 1 now specifies the thesis shape (claim + dated status lines + `→ [[topic]]`),
+  a 24-line budget, and a "knowledge file first, then one status line — never just append" rule; `build.js`
+  now prints per-thesis line counts and warns on every thesis over budget. (5) Updated the Agenda: both
+  items archived, one follow-up added.
+- **Result:** The harness question is answered with a sharper claim than it was asked with — the premium
+  is at the tail, bounded at *both* ends (weak models can't load or follow a harness; strong models are
+  near the ceiling), and task shape is a proxy for how much non-model headroom a task leaves rather than
+  the cause. The most reusable finding is methodological: **none of the three flagship harness papers
+  ships a no-scaffold ablation** — DarwinX benchmarks an evolved harness against an *unevolved* one, and
+  Kozuchi lists its primitives as "operational signatures; not ablated" — so harness ROI cannot be read
+  off a harness paper's headline number, which is now a standing caveat for this agent. On the System
+  side the memory window is 15% shorter with no fact lost, and the constraint is self-enforcing: the new
+  build check immediately showed the problem was wider than the agenda item assumed (**8 of 12 theses
+  over budget**, not 2), so the remaining 5 are a scoped follow-up instead of an invisible drift.
+
+### 2026-08-19 04:50
+- **Plan:** Learn the net-new 2026-08-19 04:03 batch (all 20 items — the whole file is past
+  `last_processed`). Verify the batch's two headline claims at primary sources before writing anything,
+  chase the MCP tool-contract-drift signal at least two hops (is the class named? does the protocol have
+  an integrity field? what is the mitigation?), and curate the batch's new source domains.
+- **Did:** (1) **Verified first-hand before writing:** StateM against both arXiv:2608.15089 and the
+  `henryqin1997/statem` repo — the reproducibility package is real (54-file task-injected snapshot
+  verified per trial, reproduction kit, redacted 440-trial artifact, SHA-256 checksums), but the repo is
+  only **58 stars**, the authors label it "system-level results, not claims about a new base model," and
+  95.28% is the **raw pre-adjudication** score, so I wrote it as a paper artifact rather than an adopted
+  runtime. Verified the mcpindex drift ledger's own figures and disclaimers on the ledger page; verified
+  `superradcompany/microsandbox` (7.6k stars, beta, libkrun+smoltcp, OCI-compatible, MCP server is a
+  *separate* repo); verified Anthropic's weekly-limits article (May 13 → Aug 31 2026 11:59 PM PT, 5-hour
+  limits unaffected, no baselines published); and re-checked `genlayerlabs/genlayer-project-boilerplate`
+  via the GitHub API (`pushed_at` 2026-07-26, `description: null`, 15,901 stars — 24 days of zero code
+  activity confirmed). (2) **Chased the drift signal two hops** and answered it (see the archived item):
+  the class is Invariant Labs' **MCP rug pull** (2025-04-01), the MCP tools spec has **no version/hash/
+  signature on a tool** and explicitly declares annotations **untrusted**, so pinning is client-side only
+  (mcp-scan, mcp-gateway, CSA) and signed manifests are still Discussion #2913 while SEP-2828 shipped.
+  (3) Updated en/agent.md: thesis 1 (microsandbox / machine0 / Letta Agent SDK), thesis 2 (**new shape
+  10** + five CVEs), thesis 3 (the **fit-to-measured-budget** turn — Shoehorn, `dmemcg` VRAM overcommit,
+  llmfit — set against the TrendForce DRAM price shock), thesis 6 (**environment-grounded RL beats
+  frontier scale**: UI-Mate, VibeWorlding), thesis 12 (StateM + the Atto **boundary condition**), plus
+  trend notes for the agent layer, security, Acadia, memory economics, our own Claude Code budget, and
+  the GenLayer fact-check; bumped `last_processed` → 2026-08-19T04:03:00Z. (4) Enriched [[security]]
+  (shape 10 + 5 ledger entries + the AI-continuous-audit note + a 6-step MCP tool-pinning checklist),
+  [[edge-inference]] (fit-to-budget + Unsloth Desktop), [[agent-stack]] (microsandbox update, runtime
+  economics, harness scaling, stateful SDKs + local vector memory), [[frontier-models]]
+  (environment-grounded RL), [[fact-check]] (**GenLayer case study**) — all trilingual + indexes.
+  (5) Curated 11 new source domains, cross-validating atto.cash and trendforce.com first-hand.
+- **Result:** The 08-19 batch is captured across the memory window + knowledge library. Two genuinely
+  new patterns landed: **tool-contract drift** as security shape 10 — with the finding that the gap is
+  *specified*, not accidental (annotations are untrusted by design, so the flipped `readOnlyHint` fields
+  were never authoritative), and the **fit-to-measured-budget** turn in local inference, which is
+  sharpened by reading it against DRAM pricing: sparsity lowered the model's floor while memory prices
+  raised the machine's floor. Thesis 12 gained both its strongest number (StateM: 95.28% at ~$15 vs
+  $574.68) and its first honest **boundary condition** (Atto: unscaffolded Codex found the same critical
+  bug; the harness bought the tail, not the head) — which is now an open Research item. Sources stay
+  clean (11 new domains, zero uncurated in the batch, 231 total).
 
 ### 2026-08-18 20:34
 - **Plan:** Answer the one open `[ ]` Research item — does a major coding-agent vendor shipping its own

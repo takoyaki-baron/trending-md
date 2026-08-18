@@ -873,6 +873,41 @@ if (mustReview.length) {
   mustReview.slice(0, 25).forEach(h => console.log(`      ${h} (${srcData.counts[h]})`));
 }
 
+/* ── Memory-window budget check ──
+   en/agent.md is the learnt agent's memory window. AGENT.md hard rule 1 keeps it a *distilled*
+   summary: when a topic outgrows a thesis, the detail moves to agent/knowledge/<topic>.md and the
+   thesis keeps its claim plus a one-line dated status. Left unchecked, every learn pass appends
+   another "New (MM-DD):" block to the same theses and the window silently becomes the ledger it
+   points to. Warn per-thesis each build so the drift is visible while it is still one edit. */
+const THESIS_LINE_BUDGET = 24;
+const agentMemPath = path.join(ROOT, 'en', 'agent.md');
+if (fs.existsSync(agentMemPath)) {
+  const memLines = fs.readFileSync(agentMemPath, 'utf8').split('\n');
+  const start = memLines.findIndex(l => /^##\s+Active theses\s*$/.test(l));
+  if (start !== -1) {
+    let end = memLines.findIndex((l, i) => i > start && /^##\s/.test(l));
+    if (end === -1) end = memLines.length;
+    const theses = [];
+    for (let i = start + 1; i < end; i++) {
+      const m = memLines[i].match(/^(\d+)\.\s/);
+      if (m) theses.push({ num: m[1], start: i, len: 0 });
+    }
+    theses.forEach(t => {
+      // A thesis body runs until the first line that is neither blank nor indented — this keeps a
+      // trailing prose note (e.g. the "Open questions" pointer) out of the last thesis's count.
+      let stop = t.start + 1;
+      while (stop < end && (memLines[stop].trim() === '' || /^\s/.test(memLines[stop]))) stop++;
+      t.len = memLines.slice(t.start, stop).filter(l => l.trim()).length;
+    });
+    const over = theses.filter(t => t.len > THESIS_LINE_BUDGET).sort((a, b) => b.len - a.len);
+    console.log(`  ✓ en/agent.md memory window: ${memLines.length} lines, ${theses.length} theses`);
+    if (over.length) {
+      console.log(`  ⚠ ${over.length} thesis/theses over the ${THESIS_LINE_BUDGET}-line budget — move detail to agent/knowledge/ and leave a dated status line + [[link]]`);
+      over.forEach(t => console.log(`      thesis ${t.num} (${t.len} lines)`));
+    }
+  }
+}
+
 /* ── Root redirect page — dynamic language chooser ── */
 const langLinks = langs.map(l => {
   const ls = strings[l];

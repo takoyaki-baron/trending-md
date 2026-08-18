@@ -43,6 +43,18 @@ Expand your own capability over time, in these five directions:
 1. **1M-token cap.** `en/agent.md` must NEVER approach ~1M tokens. Keep it a compact distilled
    summary; when a topic outgrows a note, move detail to `agent/knowledge/en/<topic>.md` and leave
    a one-line pointer.
+   - **Thesis shape + budget (added 2026-08-19).** A thesis is a *claim plus its current status*, not
+     a ledger: one claim paragraph, then dated status lines (`- **MM-DD — <what changed>:** …`), and a
+     closing `→ [[topic]]`. Budget: **24 non-blank lines.** The failure mode this prevents is real and
+     measured — appending a fresh `**New (MM-DD):**` block to the same thesis every batch grew thesis 2
+     to 95 lines and thesis 7 to 68, restating detail that already lived in full in [[security]] and
+     [[frontier-models]].
+   - **So when a learn pass has new detail for an existing thesis:** write the detail into the
+     knowledge file *first*, then add **one** dated status line to the thesis. If that pushes the
+     thesis over budget, rewrite the oldest status lines into a single summary line — never just
+     append. Before deleting any detail, confirm it already exists in the knowledge file.
+   - `node build.js` prints the per-thesis line count and warns on every thesis over budget, so drift
+     is visible each build instead of a month later.
 2. **Only learn net-new items.** Compare today's feed against `last_processed`; skip what you've
    seen; bump the marker.
 3. **Produce value, not verbosity.** A few crisp notes, at most a few new/changed theses. Do NOT

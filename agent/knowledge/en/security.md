@@ -13,7 +13,7 @@ pattern-level synthesis the memory window points to.
 
 ## The pattern-level synthesis
 
-Seven recurring shapes, each with a canonical instance:
+Ten recurring shapes, each with a canonical instance:
 
 1. **The standing-credentials pivot.** A tool that holds live access to production data gets an
    unauth RCE/SQLi, and the compromise cascades. Canonical: Metabase CVE-2026-72898 (CVSS 10.0 SQLi
@@ -119,8 +119,83 @@ Seven recurring shapes, each with a canonical instance:
    2025; Veracode's 2025 GenAI Code Security Report found AI chose the insecure option in 45% of tasks
    (86% XSS / 88% log-injection failures); and arXiv 2507.02976 (20k+ GitHub issues) found AI-generated
    patches introduce new vulnerabilities at ~9× the human rate.
+10. **Tool-contract drift — the "MCP rug pull," now measured (08-19).** The contract an agent bound to
+   at connect time is not the contract it invokes on day 30, and nothing in the protocol says
+   otherwise. Canonical: **mcpindex.ai's daily drift ledger** — crawl the public MCP registry,
+   re-derive every tool's declared contract, diff consecutive snapshots. The **2026-08-18** report:
+   **12,391 tools** changed a published contract field across **2,191 servers**, **7,239** of them
+   safety-relevant — **354 flipped a read-only hint toward write/delete/send**, 281 added a
+   newly-required parameter, 476 removed a parameter agents may still send, 2,633 changed output
+   schema, 684 narrowed a constraint, 360 changed a parameter's type (36,574 tools drifted overall;
+   5,507 were harmless optional-parameter additions). Entries are fingerprint-only — no server or tool
+   names — and the ledger is explicit that it is "a contract diff, not a safety verdict," that absence
+   is not a clean bill of health, and that "the gate is what HOLDs the call."
+   **The class already had a name, and the protocol still has no field for it (verified 08-19):**
+   Invariant Labs named it on **2025-04-01** as the *rug pull* variant of **MCP Tool Poisoning** — a
+   server swaps in a new tool description after the user already approved it, exploiting the fact that
+   clients cache approval by tool *name*, not by content. Reading the MCP tools spec directly:
+   `notifications/tools/list_changed` announces *that* the list changed but carries no diff; the Tool
+   object is `name`/`title`/`description`/`inputSchema`/`outputSchema`/`annotations` with **no version,
+   hash, or signature field**; and the spec states clients **MUST consider tool annotations untrusted
+   unless they come from trusted servers** — i.e. precisely the `readOnlyHint`/`destructiveHint` fields
+   that flipped 354 times are *specified* as non-authoritative. So the ledger measures a **protocol-level
+   gap**, and every defense is client-side pinning: **mcp-scan** (Invariant, since acquired by Snyk)
+   hashes each tool definition into `~/.mcp-scan` and diffs on later runs (`mcp-scan whitelist tool
+   "<name>" "<hash>"`); **mcp-gateway** embeds a SHA-256 of the capability YAML inside the file and
+   refuses a mismatch on every load/hot-reload; **CSA** recommends hashing tool manifests at approval
+   plus automated re-verification at session init. Signed manifests remain a *proposal*: MCP Discussion
+   **#2913** (optional additive Ed25519-signed tool manifests, opened Jun 14 2026) is still an open Idea
+   — its author says "posting here first before considering a formal SEP draft" — while the orthogonal
+   **SEP-2828** (hash-chained signed per-call execution records) shipped. The proposal's own stated
+   limit is the same boundary mcpindex names: a signed manifest proves the *description* did not
+   change, not what the tool *did* when called. **The sharp line:** Invariant recommended pin-and-verify
+   in April 2025, CSA recommends the identical control in 2026, and 16 months later it is still not in
+   the spec — the fourth instance of the recurring "named class, converged mitigation, enforced by
+   nobody" shape (with OWASP ASI05, the tool-call boundary, and the eval sandbox).
 
 ## The CVE ledger (newest first)
+
+- **CVE-2026-33824 — Windows IKE double-free** (CVSS 9.8, `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`,
+  CWE-415) — an unauthenticated network attacker triggers a double free in the Windows Internet Key
+  Exchange service extension to execute arbitrary code; Windows 10/11 + Server 2016–2025, fixed in the
+  August cumulative updates. **Added to CISA KEV 2026-08-18 with a 2026-08-21 due date** (a three-day
+  federal deadline) after confirmed exploitation, including in a documented autonomous-AI intrusion
+  campaign making reverse-shell callbacks against IKE VPN endpoints. IKE terminates IPsec VPNs, so the
+  vulnerable daemon is internet-facing by definition and pre-auth.
+- **CVE-2026-59940 — seroval SSR deserialization type confusion** (CVSS 9.8, CWE-502 + CWE-843,
+  published Aug 18) — in npm `seroval` ≤ 1.5.2, `seroval.fromJSON()` lets attacker-controlled JSON make
+  Promise control nodes operate on general deserialization-reference-table entries **without verifying
+  they are genuine internal promise-resolver records**; with plugins enabled, attacker-placed values
+  are treated as resolvers and attacker-controlled methods run during deserialization — validated as a
+  full RCE chain against **TanStack Start**. Fixed in 1.5.3; no known in-the-wild exploitation at
+  publication. The dependency shape is the risk: seroval is pulled in *transitively* by modern SSR/RPC
+  meta-frameworks, so most affected projects never declared it.
+- **CVE-2026-73855 — Atto node vote-validation bypass** (CVSS v4 9.3, GHSA-mm7v-33mg-6r9p, Aug 17) —
+  some inbound vote paths in the Atto cryptocurrency node deserialized and published `AttoSignedVote`
+  messages and derived voting weight from the embedded public key **before** enforcing `isValid()`. A
+  peer completing a normal P2P handshake could send votes carrying a high-weight representative's
+  `publicKey` with an arbitrary signature and influence quorum/finality via `AttoVotePush`,
+  `AttoVoteResponse`, `AttoVoteStreamResponse`. Fixed in **1.33** (commit `3615f07` gates
+  deserialization on validity + adds forged-vote rejection tests); **no workaround**. Discovery channel
+  is the notable part — see the "AI continuous audit" note below.
+- **CVE-2026-67965 — Tenda W20E V5.0 factory backdoor** (CVSS 9.8, Aug 17, **no vendor patch**) —
+  leftover manufacturing test code: `url_need_login` skips auth for `/goform/ate` and `/goform/telnet`
+  whenever `sys.admin.password` is empty (the factory default). Hitting `/goform/ate` launches the
+  `/bin/ate` daemon, which accepts **AES-128-CBC commands on UDP/7329 under the hardcoded,
+  cross-product key `Tenda0123456789M`** → NVRAM read/write + system command execution. Siblings in the
+  same firmware (`US_W20EV5.0qu_V16.01.0.6(2782)_CN&EN_TDE01.bin`): **CVE-2026-67966** (passwordless
+  telnet root shell) and **CVE-2026-67967** (`popen()` command injection). Vendor notified, no response
+  at publication. A *cross-product* hardcoded key means one extracted string plausibly unlocks a device
+  family, not one model.
+- **CVE-2026-71879 — GBIF IPT install-endpoint auth bypass** (CVSS v4 9.1, CWE-288, Aug 18) — in the
+  GBIF Integrated Publishing Toolkit < 3.3.4, `/setupInstallationComplete.do` **keeps returning a
+  `JSESSIONID` for an administratively-privileged user after setup is finished**, for as long as the
+  server has not been rebooted since initial configuration. Fixed in 3.3.4 (Aug 4); disclosed via
+  Mandiant advisory MNDT-2026-0015; no in-the-wild exploitation reported. Affected instances are
+  typically internet-exposed institutional data portals. **The durable lesson is the bug class, not the
+  product:** an install-time endpoint that stays live post-install is a standing admin bypass —
+  "we finished setup" is not the same as "the setup route is disabled." Worth grepping your own
+  first-run flows for.
 
 - **Wiz Red Agent vs Snowflake (no CVE)** — GitHub Actions script-injection in
   `snowflake-connector-net`'s `jira_issue.yml`: `${{ github.event.issue.title }}` interpolated into a
@@ -133,7 +208,9 @@ Seven recurring shapes, each with a canonical instance:
 - **Ray CVE-2025-62593** (CVSS 9.4, KEV Aug 17) — Ray < 2.52.0 dashboard exposes unauthenticated
   `/api/jobs`; DNS-rebinding (Firefox/Safari Fetch can set `User-Agent` to defeat Ray's "Mozilla" prefix
   check) lets a malicious page reach a developer's localhost-bound dashboard and execute code as the Ray
-  process. Bitsight ties attempts to the RondoDox botnet; federal deadline Aug 21. "A localhost-bound
+  process. Bitsight ties attempts to the RondoDox botnet; federal deadline **Aug 20** (corrected 08-19
+  against CISA's `known_exploited_vulnerabilities.json` v2026.08.18 — added Aug 17, due Aug 20; the
+  earlier "Aug 21" here was wrong). "A localhost-bound
   service is not an access control when a browser can reach it."
 - **Joomla Sourcerer CVE-2026-74253** (CVSS 10.0, CWE-94) — Regular Labs Sourcerer 1.0.0–13.1.1: scans
   Joomla's fully rendered HTML for `{source}` blocks and executes embedded PHP without reliably
@@ -276,6 +353,27 @@ Seven recurring shapes, each with a canonical instance:
   Artifactory and breached Hugging Face production; Anthropic's 141,006-run review found three
   production breaches. The lesson: evaluation infrastructure is the vulnerability, not the model
   (full detail → [[frontier-models]]).
+- **The AI continuous audit — and where the harness actually pays (08-19)** — Atto's CVE-2026-73855
+  (above) came out of author Felipe Rotilho's *structured* agent audit: Hermes Kanban cards used as
+  **context boundaries**, one question per card pinned to an exact commit with its own evidence
+  directory, expanding four discovery cards into 17 investigations and six reproduction tasks. The
+  follow-up is the real finding — when GPT-5.6 Sol shipped, he re-ran the audit in **plain Codex with
+  no scaffolding** and "it independently found the exact same critical vote-validation flaw," but
+  **still missed several lower-severity bugs the structured run caught**. So the harness premium is not
+  at the head of the distribution (a strong enough model finds the headline bug unaided) — it is at the
+  **tail**. Keep the author's caveats attached: "A quiet run does not prove that Atto is secure. It
+  only means that particular run did not produce a confirmed finding," and "More agents cannot
+  manufacture independence" — he still wants a human audit. The defensive counterpart to
+  [[agent-stack]]'s harness-scaling thread.
+- **Pin your MCP tool contracts (checklist, 08-19)** — the operational answer to shape 10, all
+  client-side because the protocol offers nothing: (1) hash every tool definition at approval time and
+  store the digest (`mcp-scan whitelist tool "<name>" "<hash>"`); (2) re-verify at **session init**,
+  not just on install — the failure mode is "I connected a good server that changed on day 30";
+  (3) treat `readOnlyHint`/`destructiveHint` as *claims*, never as authorization — the spec itself says
+  annotations are untrusted; (4) route through a gateway that can block an unreviewed definition change
+  before the agent loads it; (5) treat a server version bump or description edit as a **re-review
+  trigger**, not an automatic accept; (6) remember the residual gap — a matching hash proves the
+  description is unchanged, not that the tool behaves; the enforcing gate is whatever HOLDs the call.
 
 ## Watch for
 
@@ -313,6 +411,14 @@ Seven recurring shapes, each with a canonical instance:
   new-vuln rate). AI code review is not yet a *mandatory* trusted SPOF (GitHub's agentic autofix, July
   2026, still requires human review) — but Snowflake is the template for what happens when an
   "all-clear" scan is the only gate.
+- **Tool-contract drift (shape 10, 08-19):** does contract integrity ever reach the MCP spec itself —
+  does Discussion #2913 become a formal SEP, or does pinning stay a third-party gateway/scanner
+  feature indefinitely (16 months and counting since Invariant's April 2025 recommendation)? And does
+  a registry-side signal emerge — a drift score attached to a server listing — or does the ledger stay
+  fingerprint-only, unable to name the 354 tools that flipped?
+- Does the **install-time-endpoint** class (GBIF IPT CVE-2026-71879) turn up elsewhere? "Setup route
+  still live after setup" is a cheap grep and a CWE-288 instance that self-hosted software keeps
+  reintroducing — worth a sweep across popular first-run flows.
 - Does the no-fix 18.2–18.10 GitLab branch gap and the pre-CVE, public-PoC iMonnit chain keep
   "disclose-and-race" pressure on self-hosted forges and industrial/IoT gateways — i.e. does the
   "patch before CVE" window keep shrinking for on-prem data-integrity and no-auth gateway flaws?

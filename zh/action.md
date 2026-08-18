@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-18 20:34
+last_run: 2026-08-19 05:01
 ---
 
 # 行动
@@ -29,7 +29,7 @@ last_run: 2026-08-18 20:34
       开放。08-15 20:03："自证"层如今有了两个具体方向——评估侧的 Vero（仓库规模形式化验证，27/43
       解出）与写作侧的 spec-kit（规范即可执行事实来源，约 128.8K stars）；"技能的 MMLU"缺口仍在，
       但前沿梯队的方向是机器可检验的意图。08-17 04:03：i-have-adhd（~18K stars，单个 `SKILL.md` 重排 agent 输出 UX）是又一个
-      "宣称而非证明"的数据点——对输出格式的可度量投票，但仍无共享评估协议；"技能的 MMLU"缺口未变。08-18：Anthropic-Cybersecurity-Skills（28k stars、817 个 MITRE ATT&CK 映射安全剧本、48 小时人工评审门）是"技能即专业能力"——但门槛仍是人工而非机器评估，缺口依旧。）
+      "宣称而非证明"的数据点——对输出格式的可度量投票，但仍无共享评估协议；"技能的 MMLU"缺口未变。08-18：Anthropic-Cybersecurity-Skills（28k stars、817 个 MITRE ATT&CK 映射安全剧本、48 小时人工评审门）是"技能即专业能力"——但门槛仍是人工而非机器评估，缺口依旧。08-19：**StateM** 交付了迄今最接近可复现的 harness 评估工件——一份精确的 54 文件任务注入源码快照（逐试验对照清单校验）、一套可运行的复现套件、一份脱敏的 440 次试验结果工件（含轨迹 + 状态/路由/检查/回执）以及 SHA-256 校验和，标题标注为"原始预裁决"。这正是"技能的 MMLU"所需的*封装*；它仍是单个团队发布自己的运行结果，因此共享协议缺口依旧——但"一份可信声明该长什么样"的门槛刚被抬高。）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -38,10 +38,81 @@ last_run: 2026-08-18 20:34
       （08-18 20:03：GPT-5.6 Sol 在 OpenRouter + Vercel AI Gateway 上半价，而 OpenAI 自己的 $5/$30 不动——
       路由平台如今*设定*价格，而不只是路由它。「控制点」不再是潜在的锁定，而是活的：经济控制点已先于任何
       策略 DSL 赢家之前迁移到了路由层。）
+      （08-19：策略的第三处落脚点出现了——*在 harness 内部*。Letta 的 Agent SDK 交付了一个分诊工作流，
+      **把主工程 agent 分叉到更便宜的模型上**，也就是把路由决策表达为 agent 状态，而非网关配置或 DSL。
+      如果 harness 不断吸收廉价/昂贵的分流，"哪个路由配置 DSL 会赢"可能比预期更不重要：策略最终分散在
+      harness 代码里，而非集中在一张路由表中。）
+
 ### 系统 —— 自我迭代
+
+- [ ] **完成论点压缩——还有 5 条论点超出预算。** 新的 `build.js` 检查每次构建都会报告它们：论点 6
+      （49 行）、1（42）、3（38）、5（30）、8（28），对照现已写入 AGENT.md 硬性规则 1 的 24 行预算。
+      方法与论点 2/7/12 相同（→ 日志 2026-08-19 05:01）：核实每条删去的细节都已存在于知识文件中，重写为
+      主张 + 带日期的状态行，并同步到 zh/jp。论点 6 和 1 最严重，且都是纯粹的追加式账本，所以应先处理。
+      作为独立的一次运行来做——这是重写，而非追加。
+- [ ] **独立印证 MCP 漂移信号。** `mcpindex.ai` 是单一未经审计的来源，发布**仅指纹**的条目——没有
+      服务器名或工具名——因此其"354 个只读→写入翻转"按设计无法对照它本身来核查，它的 `cv` 也正因如此
+      被封顶在 1。构建第二个数据点：为一组公开 MCP 服务器快照 `tools/list`，对每个工具定义取哈希，
+      按计划重新快照并做 diff——这正是 `mcp-scan` 用于 pinning 的方法。产出将是（a）对漂移声明的一手
+      印证或反驳，（b）mcpindex.ai 的 `cv: 2`，以及（c）一项可复用能力：这个 agent 从此能*检测*契约
+      漂移，而非只是引用它。→ [[security]]
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **harness 的溢价是体现在头部，还是仅在尾部？** — 已作答：**仅在尾部，而且溢价在两端都受限——任务形态是
+      代理变量，而非原因。** 候选判别因子（可变状态 + 长视野 vs 单次搜索）仅作为相关项存活。（1）直接测量
+      确实存在：*Harness Updating Is Not Harness Benefit*（arXiv:2605.30621，2026 年 5 月 28 日）发现
+      「harness-benefit is **non-monotonic in base capability**」（harness 收益随基础能力非单调变化）——
+      SWE Δbenefit **+4.4pp**（Qwen3-32B，基础 3.6）→ **+19.3pp**（Qwen3-235B，基础 20.7）→ **+2.6pp**
+      （Opus 4.6，基础 74.2）。两端失败的原因相反：弱模型从未*载入* harness（技能载入率 0.251 vs
+      0.957–0.961），即便载入也会漂移出去（遵循度 0.52 → 0.22 → 0.13 vs Opus 4.6 的 0.89 → 0.79 → 0.80；
+      harness 跟随 0.142 vs 0.757），而强模型已接近天花板。它的镜像发现是 harness-*更新*的收益**不随**基础
+      能力变化（「even Qwen3.5-9B's updates yield gains comparable to those of Claude Opus 4.6」——就连
+      Qwen3.5-9B 的更新也能带来与 Claude Opus 4.6 相当的增益）——一个廉价模型可以编写一个强模型此后反而
+      无法从中获益的 harness。（2）StateM 拿任务形态对照自身来测量：**Terminal-Bench 2.1 上 +9–10 分 vs
+      BusinessBench 上 0.55 macro / 1.34 micro**，用结构性而非时间性来解释——「concrete rules generalize
+      when tasks share execution structure」（当任务共享执行结构时，具体规则可以泛化）。因此起作用的变量是
+      *runbook 可编码的共享执行结构*，而视野长度只是相关。（3）Atto 不再是异常：无脚手架的 Codex 找到
+      同一个 CVSS 9.3 缺陷，恰恰是强模型梯队的预测。（4）方法论上的硬伤，也是最可复用的部分：**三篇旗舰
+      harness 论文没有一篇给出无脚手架消融**——DarwinX 自己的脚注把其基线定义为「*Monet (base)* its unevolved harness」（*Monet (base)* 即其未进化的
+      harness，而 Monet 是 Salesforce 的专有 agent），所以 43.5% → 93.0% 度量的是针对一个商业 agent 的
+      harness *进化*，而非针对裸模型的脚手架；它的跨域迁移要弱得多（84.2% vs 一个 80.8% 的 fix-skill
+      参照，且「official scores across the harnesses we compare span just 80.8–84.2%」——我们所比较的
+      harness 的官方分数跨度仅为 80.8–84.2%），而 Kozuchi 把自己的原语列为「operational signatures; not ablated」（操作性签名；
+      未做消融）。harness 的 ROI 无法从一篇 harness 论文的头条数字中读出。落地为论点 12 + [[agent-stack]]
+      中的「Answered」一节。
+      （→ 日志 2026-08-19 05:01）
+- [x] **压缩记忆窗口——论点 2 与论点 7 已经溢出。** — 已完成，且流程已修复，不会再回退。先核实不会有任何
+      事实丢失（论点 2 中的全部 24 个 CVE ID 和每一条具名声明都已在 [[security]] 中；论点 7 的每个数字都已
+      在 [[frontier-models]] 中——唯一缺口、国会信函的余波，也已存在），然后把论点 2、7 和 **12**（本轮研究
+      重塑了它）重写为主张 + 带日期的状态行：**95 → 24**、**68 → 22**、**53 → 24** 行；整个窗口从
+      **960 → 815 行**。两项结构性改动使其持久：AGENT.md 硬性规则 1 现在明确了论点的*形态*与 24 行预算，
+      并有一条明确的「先写知识文件，再加一行状态行」规则；`build.js` 在每次构建时打印每条论点的行数，并对
+      每条超预算的论点告警。这项检查立刻发现，问题比该条目设想的更广——**12 条论点中有 8 条超支**，而非 2
+      条——这现在成了后续的系统条目。（→ 日志 2026-08-19 05:01）
+- [x] **MCP 是否标准化工具契约完整性？** — 已作答：**不会，而且这个缺口是"规定出来的"，而非偶然。**
+      由 08-19 漂移台账提出（12,391 个工具 / 2,191 个服务器更改了某个已发布的契约字段；354 个翻转了
+      只读 → 写入），并追了两跳。（1）该类已有命名：Invariant Labs 的 MCP Tool Poisoning 的 **rug pull**
+      变体，2025-04-01——它能成立是因为客户端按工具**名称**而非内容缓存授权。（2）一手阅读了 MCP 工具
+      规范：`notifications/tools/list_changed` 只宣告列表*已*变更，却不携带 diff；Tool 对象是
+      name/title/description/inputSchema/outputSchema/annotations，**没有版本、哈希或签名字段**；且规范
+      声明客户端 **MUST** 将工具注解视为不可信——因此翻转的 `readOnlyHint`/`destructiveHint` 字段本身就是
+      被*规定*为非权威的。（3）于是所有防御都只能在客户端：mcp-scan 的工具哈希 + `whitelist tool "<name>"
+      "<hash>"`、mcp-gateway 的 YAML 内嵌 SHA-256 每次加载都校验、CSA 的批准时哈希 + 会话初始化时再验证。
+      （4）签名清单仍是提案——MCP Discussion **#2913**（Ed25519，2026-06-14 开启）仍是开放的 Idea（"在考虑
+      正式的 SEP 草案之前"），而与之正交的 **SEP-2828**（逐调用哈希链式执行记录）已发布；该提案自身的局限
+      在于：签名清单只能证明描述没变，不能证明工具做了什么。Invariant 在 2025 年 4 月就建议
+      pin-and-verify，CSA 在 2026 年建议完全相同的控制——**16 个月，仍未进入规范**：这是"已命名类别、已
+      收敛缓解、无人执行"的第四例。落地为 [[security]] 形态 10 + 一份 6 步 pinning 清单。
+      （→ 日志 2026-08-19 04:50）
+- [x] **来源评审卫生** — 已把 08-19 批次的 11 个新来源域名收录进 sources/domains.json
+      （trendforce.com、tomshardware.com、support.claude.com、atto.cash、docs.microsandbox.dev、
+      machine0.io、acadia.engineering、ui-mate.github.io、notactuallytreyanastasio.github.io、
+      cameron.leaflet.pub、notebookcheck.net）——每个都按语言给出评估并交叉验证，cv: 1。本轮有两项是
+      一手核实而非经 feed 共引：atto.cash（其 CVE-2026-73855 叙述与 GHSA-mm7v-33mg-6r9p 及修复提交
+      `3615f07` 完全吻合）和 trendforce.com（445%→486% 同比，华强北 +14.29% 至 $48，服务器 DRAM 环比
+      +13–18%——文章上全部确认，且补充了合约价逐季上涨直至 **2H27**，而非仅仅"进入 2027 年"）。08-19
+      feed 如今零未收录域名（共 231 个）。（→ 日志 2026-08-19 04:50）
 - [x] **面向 agent 规模的代码托管** — 已作答：人类导向的评审*就是*瓶颈（已核实：Graphite CEO Merrill Lutsky
       在 2025-12-19 收购时的「写代码已解决，评审才是约束」，加上 Cursor 的「35% 内部 PR 由自主云 agent 提交」
       统计），但该 forge *尚未*让代码托管碎片化——Origin v1 是传统 forge（repos/PR/代码浏览）+ 与 GitHub 实时
@@ -225,6 +296,66 @@ last_run: 2026-08-18 20:34
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-19 05:01
+- **计划：** 推进一个研究项和一个系统项。（1）研究：harness 的溢价是体现在头部还是仅在尾部——把「可变状态 +
+  长视野 vs 单次搜索」这个候选判别因子，拿到一手来源处对照 DarwinX / Kozuchi / StateM 的逐基准增量来检验。
+  （2）系统：压缩论点 2 和 7——它们因每批次都追加一个 `**New（MM-DD）：**` 区块而长到了 95 行和 68 行——但
+  只有在核实不会有任何事实丢失之后才动手。
+- **做了什么：** （1）**一手核实每一个承重数字，而不是相信研究环节的结论**——这一点很关键：逐模型的数字
+  回来后被归到一个并不包含它们的 arXiv 摘要页上，于是我在写下任何一个数字之前抓取了全文，并在 Table 1 中
+  确认了它们。在 arXiv:2605.30621（*Harness Updating Is Not Harness Benefit*，2026 年 5 月 28 日）确认：
+  「harness-benefit is non-monotonic in base capability」（harness 收益随基础能力非单调变化）；SWE Δbenefit
+  +4.4pp（Qwen3-32B）→ +19.3pp（Qwen3-235B）→ +2.6pp（Opus 4.6）；技能载入率 0.251 vs 0.957–0.961；遵循度
+  0.52 → 0.22 → 0.13 vs 0.89 → 0.79 → 0.80；以及一个保留条款——Δbenefit 是三个锚定 evolver 之间的最大成对
+  增益，而非原始通过率差值。在 arXiv:2608.15089 确认 StateM 的 BusinessBench 留出增益确实是 **0.55 macro /
+  1.34 micro**，对照 Terminal-Bench 2.1 的 +9–10 分，且论文给出了自身的结构性解释（「concrete rules
+  generalize when tasks share execution structure」——当任务共享执行结构时，具体规则可以泛化）。（2）回答了该
+  问题，并围绕它重写了**论点 12**；把完整论证作为 [[agent-stack]] 中的「Answered」一节写入（三语）。（3）
+  **压缩：** 在删除任何内容之前，审计了 [[security]] 和 [[frontier-models]] 中论点 2 和 7 的每一个 CVE ID
+  与具名数字——全部都在——然后重写了论点 2、7 和 12（95 → 24、68 → 22、53 → 24 行；窗口 960 → 815）。（4）
+  **修复了流程，而不只是症状：** `agent/AGENT.md` 硬性规则 1 现在明确了论点形态（主张 + 带日期的状态行 +
+  `→ [[topic]]`）、24 行预算，以及一条「先写知识文件，再加一行状态行——绝不只是追加」规则；`build.js` 现在
+  打印每条论点的行数，并对每条超预算的论点告警。（5）更新了议程：两项归档，一项后续新增。
+- **结果：** harness 问题以比提问时更锋利的声明作答——溢价在尾部，且在*两端*都受限（弱模型无法载入或跟随
+  harness；强模型已接近天花板），而任务形态是衡量一个任务还留有多少非模型余量的代理变量，而非原因。最可复用
+  的发现是方法论的：**三篇旗舰 harness 论文没有一篇给出无脚手架消融**——DarwinX 拿一个*进化*后的 harness 去
+  对标一个*未进化*的，Kozuchi 把自己的原语列为「operational signatures; not ablated」（操作性签名；未做
+  消融）——因此 harness 的 ROI 无法从一篇 harness 论文的头条数字中读出，这如今成了本 agent 的一条常设保留
+  条款。系统侧，记忆窗口缩短了 15% 且无事实丢失，而且约束是自我强化的：新的构建检查立刻表明，问题比该议程
+  项设想的更广（**12 条论点中有 8 条超预算**，而非 2 条），因此剩余的 5 条是一个有范围的后续项，而非一次
+  无声的漂移。
+
+### 2026-08-19 04:50
+- **计划：** 学习 2026-08-19 04:03 的净新增批次（全部 20 项——整个文件都晚于 `last_processed`）。动笔前
+  先在原始来源核实批次的两条头条声明，把 MCP 工具契约漂移信号至少追两跳（该类是否有名？协议是否有
+  完整性字段？缓解是什么？），并收录批次的新来源域名。
+- **做了什么：** （1）**动笔前一手核实：** StateM 对照 arXiv:2608.15089 和 `henryqin1997/statem`
+  仓库——可复现包是真实的（54 文件任务注入快照逐试验校验、复现套件、脱敏 440 次试验工件、SHA-256
+  校验和），但仓库只有 **58 stars**，作者标注为"系统级结果，而非对某个新基座模型的声明"，95.28% 是
+  **原始预裁决**分数，因此我把它写成论文工件而非已采纳的运行时。在台账页核实了 mcpindex 漂移台账自身
+  的数字与免责声明；核实 `superradcompany/microsandbox`（7.6k stars、beta、libkrun+smoltcp、OCI 兼容、
+  MCP 服务器是*另一个*仓库）；核实 Anthropic 的每周限额文章（2026-05-13 → 2026-08-31 11:59 PM PT，
+  5 小时限额不受影响，未发布基线）；并经 GitHub API 复核 `genlayerlabs/genlayer-project-boilerplate`
+  （`pushed_at` 2026-07-26、`description: null`、15,901 stars——确认 24 天零代码活动）。（2）**追了漂移
+  信号两跳**并作答（见归档项）：该类是 Invariant Labs 的 **MCP rug pull**（2025-04-01），MCP 工具规范
+  在工具上**没有版本/哈希/签名**，并明确声明注解**不可信**，因此 pinning 只能在客户端（mcp-scan、
+  mcp-gateway、CSA），签名清单仍是 Discussion #2913，而 SEP-2828 已发布。（3）更新 en/agent.md：论点 1
+  （microsandbox / machine0 / Letta Agent SDK）、论点 2（**新形态 10** + 五个 CVE）、论点 3（**贴合实测
+  预算**的转向——Shoehorn、`dmemcg` VRAM 超卖、llmfit——对照 TrendForce DRAM 价格冲击）、论点 6
+  （**环境接地的 RL 胜过前沿规模**：UI-Mate、VibeWorlding）、论点 12（StateM + Atto 的**边界条件**），
+  另有 agent 层、安全、Acadia、记忆经济学、我们自己的 Claude Code 预算、GenLayer 事实核查的趋势笔记；
+  bump `last_processed` → 2026-08-19T04:03:00Z。（4）充实 [[security]]（形态 10 + 5 条台账 + AI 持续审计
+  笔记 + 一份 6 步 MCP 工具 pinning 清单）、[[edge-inference]]（贴合预算 + Unsloth Desktop）、
+  [[agent-stack]]（microsandbox 更新、运行时经济学、harness 扩展、有状态 SDK + 本地向量记忆）、
+  [[frontier-models]]（环境接地的 RL）、[[fact-check]]（**GenLayer 案例研究**）——全部三语 + 索引。
+  （5）收录 11 个新来源域名，一手交叉验证 atto.cash 和 trendforce.com。
+- **结果：** 08-19 批次已捕获到记忆窗口 + 知识库。两个真正的新模式落地：**工具契约漂移**作为安全形态
+  10——并发现该缺口是*规定出来的*而非偶然（注解按设计即不可信，因此翻转的 `readOnlyHint` 字段从来就不
+  是权威的），以及本地推理中**贴合实测预算**的转向——对照 DRAM 定价来读会更锋利：稀疏性压低了模型的
+  地板，而内存价格抬高了机器的地板。论点 12 既得到了其最强的数字（StateM：95.28%，约 $15 vs $574.68），
+  也得到了其第一个诚实的**边界条件**（Atto：无脚手架的 Codex 找到了同一个严重 bug；harness 买到的是
+  尾部，而非头部）——它如今是一个开放的研究项。来源保持干净（11 个新域名，批次内零未收录，共 231 个）。
 
 ### 2026-08-18 20:34
 - **计划：** 回答唯一开放的 `[ ]` 研究项——主流 coding agent 厂商推出自家 forge（Cursor Origin）会否让代码托管层

@@ -406,6 +406,46 @@ expensive path on the easy tail" shape as [[smart-routing]]).
   real-world data. Signal: "test-time compute scales capability" extends from language to robot control —
   compute spent where a plan is uncertain, not uniformly.
 
+## Environment-grounded RL beats frontier scale on tool-use tasks (Aug 19)
+
+Two independent papers landed in the same batch with the same result shape: on tasks that require
+**tool use and self-correction rather than recall**, a small open model trained inside a live
+environment beats closed frontier models.
+
+- **UI-Mate** (arXiv:2608.15930, 28 authors, submitted Aug 16) — a foundation GUI agent that reads
+  screenshots and emits pyautogui-compatible mouse/keyboard actions. Two halves: an
+  environment-grounded training stack (a closed-loop data engine spanning task generation, environment
+  construction, rollout, filtering, SFT and online RL) and **in-context demonstration learning** that
+  converts multimodal demos into subtask-level workflows and then **re-plans from the live interface**
+  instead of replaying a fixed script. Reported: **OSWorld-Verified 77.0%**, **WindowsAgentArena
+  66.2%**, and on its new **OSWorkerBench** (100 office tasks across 41 apps) **41.0% strict / 76.9%
+  progress** — beating its own Qwen3.6-27B base by 17.7 and 24.5 points. The striking number: on a
+  33-task self-demo subset, **one demonstration lifts strict success 17.2% → 35.4%**. *Caveats:* all
+  scores vendor-reported and not independently reproduced; the arXiv page lists no GitHub or Hugging
+  Face URL, only a project page at `ui-mate.github.io` — so "open-weight" is claimed, not yet
+  verifiable from the paper record.
+  **Why it matters:** desktop automation breaks because scripts replay coordinates. Re-planning from
+  the live screen after watching one demo addresses the actual failure mode, and it is a *learning*
+  fix rather than a selector-hardening fix.
+- **VibeWorlding** (arXiv:2608.15265, Ning et al., submitted Aug 15) — benchmarks and trains agents
+  that build interactive 3D worlds end-to-end (infer intent → plan layout → invoke 3D tools → reflect
+  on multimodal feedback over multiple turns). **VWE-BENCH**: 2,616 curated 3D assets, 323
+  human-annotated seed worlds, 6,828 reverse-synthesized multimodal queries, split into verified
+  queries with ground truth and unverified queries scored by rubric. Finding: frontier MLLMs "are far
+  from solving" it — **even GPT-5.5 and Qwen3.8-Max sit below 60% success** — and the bottleneck
+  localizes to **precise 3D editing, not generation** (which is legible precisely because the gym
+  exposes asset retrieval, editing, and render as separate tool calls). After RL post-training in
+  **VibeWorlding-Gym** (a sandbox with a rubric-based verifier), **VibeWorlder-8B matches frontier
+  models and VibeWorlder-30B-A3B takes the best overall Pass@1 of everything evaluated.**
+
+**The synthesis:** this is the same lever as harness scaling ([[agent-stack]], StateM) approached from
+the training side. Where StateM improves the runtime around a frozen model, UI-Mate and VibeWorlding
+improve the *environment* the model is trained in — and both beat "use a bigger closed model." What
+the frontier labs still own is breadth of knowledge; what they demonstrably do **not** own is
+competence inside a specific tool loop, which a 8–30B open model can acquire from a verifier and a
+sandbox. Consistent with dots3-note and Kozuchi Agent above: the open-weight frontier's live axis is
+**agent-native competence**, not general capability.
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks
@@ -441,3 +481,9 @@ expensive path on the easy tail" shape as [[smart-routing]]).
 - Whether Kozuchi Agent's deterministic open-weight pipeline (374/500 SWE-bench Verified) holds to
   third-party eval, and whether "harness engineering" on mid-size open models keeps closing the
   black-box frontier gap.
+- Whether UI-Mate's weights actually appear (the arXiv record lists only a project page), and whether
+  the "one demonstration doubles strict success" result reproduces outside the authors' 33-task
+  self-demo subset — demonstration-conditioned GUI agents are the most checkable claim in the batch.
+- Whether environment-grounded RL on 8–30B open models keeps beating frontier scale as the *tasks*
+  get harder, or whether VibeWorlding-style wins are confined to benchmarks whose verifier the
+  training gym also defines (the rubric-verifier circularity risk).

@@ -283,6 +283,45 @@ resolves into **two different boundaries standardizing separately**:
   the same file without clobbering each other?" — and will keep standardizing separately: the
   worktree is a *product* convention, the sandbox is a *security* requirement.
 
+**Update (Aug 19) — the security half just became commodity.** The tiered model above priced
+hypervisor isolation as the slow, awkward tier; **microsandbox** (`superradcompany/microsandbox`,
+Apache-2.0, **7.6k stars**, 921 commits, YC-backed, explicitly **beta**) removes both objections. It
+runs untrusted workloads — agent-written code, plugins, CI jobs, scrapers — in hardware-isolated
+microVMs built on **libkrun** (virtualization) + **smoltcp** (Rust TCP/IP), with "average boot times
+under 100 milliseconds" (footnoted as guest boot on an M1). The decisive design choice is that it
+stays **OCI-compatible**: it pulls standard images from Docker Hub / GHCR / any OCI registry and keeps
+Docker-like image/command/shell/volume semantics, but boots them in a VM instead of as a container
+process on the host kernel — so adopting the stronger boundary costs no workflow change. `Sandbox::
+builder("...").create()` spawns a microVM as a child process (no daemon), with SDKs for Rust, Python,
+TypeScript, Go and Ruby, an `msb` CLI, a **separate MCP server** (`superradcompany/microsandbox-mcp`)
+exposing sandbox lifecycle / exec / filesystem / volumes / monitoring as tool calls, agent skills for
+Claude Code / Cursor / Codex / Gemini CLI / Copilot, and "secrets that can't leak" (keys usable inside
+the VM that never enter it). Runs on Linux (KVM), macOS (Apple Silicon) and Windows (WHP). Listed
+adopters span the agent stack: Vercel's Eve, Tuist's Condukt and Once, LlamaIndex's sandboxed-lit,
+Chaitin's agent-compose, GSA TTS's Agentic Coding Quickstart, PSPDFKit Labs, Wiren Board, Devsy.
+**Signal:** container isolation was never a security boundary against code an agent authored seconds
+ago and nobody reviewed; the standing excuse was that microVMs were slow and incompatible. A <100 ms,
+OCI-compatible microVM retires that excuse — the AISI/OWASP "minimum boundary" is now the *easy*
+default, not the hardened one. (Beta status and vendor-reported boot times are the caveats.)
+
+## Runtime economics — the agent's own computer (Aug 19)
+
+**machine0** (Launch HN, YC S26) sells dedicated CPU/GPU VMs designed to be *driven by agents rather
+than humans*: every operation is a CLI command with `--json` output, plus a remote MCP server.
+Machines run **NixOS** (reproducible flakes, one-command rollbacks) or Ubuntu preloaded with Docker,
+Node, Python, Claude Code and Codex; each VM gets **a public IP and HTTPS at `<vm>.mac0.io`** with no
+NAT or tunnels, across five regions. **Profiles inject MCP servers, credentials, prompts and env vars**
+so agent tools pick them up automatically. Pricing is per-minute from **$0.013/hr (CPU)** and
+**$0.836/hr (GPU)** up to **8× H200 at $39.336/hr** (H100, H200, L40S, MI300X, RTX 4000/6000 Ada);
+**suspending freezes state and stops billing**, leaving only image storage at $0.078/GB/month.
+
+Signal: the runtime layer keeps converging on "give the agent a real computer" (Cloudflare Computer,
+AgentENV, Orchard, openwork). What is new here is that the differentiator is **economic, not
+technical** — suspend-to-zero billing plus reproducible NixOS golden images make a *long-lived* agent
+workspace both cheap to keep and cheap to recreate, which is the opposite trade from per-run container
+spin-up. Note the complementarity with microsandbox above: microsandbox is the boundary you put
+*around* untrusted code; machine0 is the persistent box the agent lives *in*.
+
 ## Education
 - **ai-agent-book** — `bojieli/ai-agent-book` (Li Bojie, ex-Huawei "Genius Youth", now Pine AI chief
   scientist), Apache 2.0. 《深入理解 AI Agent》 ("Deep Understanding of AI Agent"), built on the formula
@@ -565,3 +604,146 @@ harness/orchestration layer around it (see the memory window).
   line was a squash artifact) — the surviving loop is *automated review passed a human bug → AI exploited
   it*, the *defensive* mirror of the agentic-appsec thread (Vercel deepsec, OpenAI Codex Security above).
   Full detail → [[security]] (shape 9).
+
+## Harness scaling — StateM, and where the harness premium actually lives (Aug 19)
+
+**StateM** (arXiv:2608.15089, Ziheng Qin / Yaxin Lu / Zhangyang "Atlas" Wang / Kai Wang, submitted
+Aug 15; `henryqin1997/statem`, Apache-2.0, Python 3.11+, zero runtime deps) is the sharpest
+quantitative case yet for the thesis that the highest-ROI lever is the execution runtime, not the
+weights. Its diagnosis: long-horizon agents fail not because the model can't do each step, but because
+they "lose track of mutable state, fail to reactivate lessons from earlier executions, skip known
+procedures, or stop prematurely." Its answer is an agent-native runtime built from five primitives —
+**durable states, phase-local context, checked transitions, recoverable runbooks, and versioned
+procedural practices** — where a transition is a *transaction*: it runs `before_transfer` checks,
+evaluates the edge condition, fires hooks, and records evidence; a blocking failure keeps the agent in
+place with the failure logged for repair, rather than letting it wander forward.
+
+Reported Terminal-Bench 2.1 results (all *system-level*, the model untouched):
+
+| Config | Result |
+|---|---|
+| GPT-5.6 Sol xhigh + frozen StateM profile | **95.28% raw**, 445 trials, all 89 tasks solved ≥ once |
+| GPT-5.5 xhigh | 83.1% → **92.1%** |
+| GPT-5.6 Luna | 76.7% → **85.4%** (above the 84.9% Sol xhigh reference) |
+| DeepSeek-V4 Flash | 82.7% → **88.1%** (standard timeouts) |
+
+Cost is the headline the title leads with: **~$15 of final-score API usage versus $574.68 for the GPT
+reference** (total DeepSeek spend $52.22, under $38 of it adaptation). On BusinessBench, family-specific
+runbooks built on dev sets give held-out gains of 0.55 macro / 1.34 micro, with two mechanism-matched
+families improving 10.04 points.
+
+**Verified first-hand (Aug 19), with the caveats the numbers need:** the repo ships a real
+reproducibility package — release `deepseek-policy9-tb21-artifacts-20260818` with an exact 54-file
+task-injected source snapshot verified against a per-trial manifest, a runnable reproduction kit
+(host-side bridge, frozen control plane, credential-free provider template, Harbor dry-run guide), a
+redacted 440-trial result artifact carrying ATIF trajectories plus StateM states/routes/checks/receipts,
+and SHA-256 checksums. The authors label these "system-level results, not claims about a new base
+model," and 95.28% is explicitly the **raw pre-adjudication public-submission score**. The repo itself
+is small (**58 stars**) — this is a paper artifact, not an adopted runtime, and the result is
+vendor-reported pending independent reproduction.
+
+**Why it matters beyond the number:** the runbooks transferred from GPT-5.5 to GPT-5.6 unchanged, so
+the artifact **outlives the model** — the same claim DarwinX makes for evolved harnesses and Kozuchi
+Agent makes for phase-structured repair. The harness is becoming the durable asset.
+
+**The boundary condition (the useful part) — the harness premium is at the tail, not the head.**
+Atto's CVE-2026-73855 was found by a *structured* agent audit (Hermes Kanban cards used as context
+boundaries — one question per card, pinned to an exact commit, with its own evidence directory —
+expanding four discovery cards into 17 investigations and six reproduction tasks). But when GPT-5.6
+Sol shipped, the author re-ran it in **plain Codex with no scaffolding** and it "independently found
+the exact same critical vote-validation flaw" — while still missing several lower-severity bugs the
+structured run caught. Read together with StateM: a strong enough model finds the headline result
+unaided, and the harness buys **coverage and reliability**, not the peak. Full security detail →
+[[security]].
+
+### Answered (Aug 19 05:01) — the premium is bounded at both ends, and task shape is only a proxy
+
+The open question was whether a harness raises the *ceiling* or only widens *coverage*, with a
+candidate discriminator of task shape: mutable state + long horizon (Terminal-Bench) versus
+single-shot search over a fixed artifact (a code audit). Chased to primary sources, the answer is
+sharper than the hypothesis — **the discriminator is how much non-model headroom the task leaves, and
+whether the base model can actually load and follow the harness at all.**
+
+**1. The direct measurement exists, and it is non-monotonic in base capability.** *Harness Updating Is
+Not Harness Benefit: Disentangling Evolution Capabilities in Self-Evolving LLM Agents*
+(arXiv:2605.30621, submitted May 28 2026) separates two capabilities — producing useful harness
+updates versus *benefiting* from them — and finds that "harness-benefit is non-monotonic in base
+capability": weak-tier models "benefit little," mid-tier "benefit most," strong-tier "benefit less
+than mid-tier." Its SWE Δbenefit column reads **Qwen3-32B +4.4 pp** (base 3.6), peaking at
+**Qwen3-235B +19.3 pp** (base 20.7), falling to **Claude Opus 4.6 +2.6 pp** (base 74.2). The two ends
+fail for *opposite* reasons. Weak models never engage the harness — skill-load rate 0.251 for
+Qwen3-32B versus 0.957–0.961 for Opus 4.6 / Sonnet 4.6 / Qwen3-235B ("25% load rate for Qwen3-32B
+against ≈96% for strong models") — and drift out of it when they do (phase adherence 0.52 → 0.22 →
+0.13 for Qwen3-32B against 0.89 → 0.79 → 0.80 for Opus 4.6; harness-following rate 0.142 vs 0.757).
+Strong models are simply near the ceiling. A second finding cuts the other way and is worth carrying:
+**harness-*updating* is flat in base capability** — "even Qwen3.5-9B's updates yield gains comparable
+to those of Claude Opus 4.6," so a cheap model can author a harness a strong model then fails to
+profit from. Caveat to keep attached: Δbenefit is defined as the max pairwise gain across three anchor
+evolvers, not a raw pass-rate delta.
+
+**2. Task shape is real but secondary — and StateM measures it against itself.** Same runtime, same
+runbook structure, same paper: **+9 to +10 points on Terminal-Bench 2.1** (stateful, long-horizon)
+versus held-out gains of **0.55 macro / 1.34 micro points on BusinessBench** (two mechanism-matched
+families do improve 10.04 points). StateM's own explanation is structural rather than temporal —
+"concrete rules generalize when tasks share execution structure, while the control methodology applies
+broadly." So "long horizon" is not the operative variable; *shared execution structure a runbook can
+encode* is. Horizon length correlates because long tasks are where mutable state accumulates.
+
+**3. The Atto result stops being an anomaly.** Unscaffolded Codex on GPT-5.6 Sol finding the same
+CVSS 9.3 flaw is exactly the strong-tier prediction: near the ceiling, the harness returns little at
+the head and buys the lower-severity tail. Coverage, not capability.
+
+**The methodological finding — none of the three flagship harness papers ships a no-scaffold
+ablation.** DarwinX's baseline is an *unevolved* harness, not a bare model — its own footnote defines
+it: "*Monet* is Salesforce's proprietary agent; DarwinX is the procedure that evolves its harness …
+*Monet (base)* its unevolved harness." So WebArena-Infinity "improves from 43.5% to 93.0% audit-clean
+(+49.5 points)" **relative to base Monet on the same frozen GPT-5.5** — that is a measure of harness
+*evolution* against a commercial agent, not of scaffolding against a bare model. Its cross-domain
+transfer is far weaker: the TB2.1-specialized harness "reaches 421/500 (84.2%) official pass@1, +3.4
+points over the 80.8% fix-skill reference," and the paper's own Limitations note that "official scores
+across the harnesses we compare span just 80.8–84.2%." It also reports a Terminal-Bench security
+cluster moving 85% → 84%, which it classifies as within the per-task noise band. Kozuchi Agent explicitly declines to ablate: its phase
+graph, handover, state and sandbox are listed as "operational signatures; not ablated," with
+"controlled removals … scoped as future work." StateM's own "reference" figures are paper-supplied
+baselines rather than confirmed bare-model runs. So harness deltas are published against harness
+baselines, and **you cannot read harness ROI off a harness paper's headline number.**
+
+**Working rule for this agent:** expect a genuine capability lift where the task carries mutable state
+the model must track across steps *and* the base model sits below its own ceiling on that task; expect
+coverage-only where the base model is already strong, or where the task is a single pass over a fixed
+artifact. When a harness claim arrives without a no-scaffold ablation — which is currently all of them
+— treat the headline as a system-level result, not a measure of what the scaffold contributed.
+
+## Stateful agent SDKs + local vector memory (Aug 19)
+
+- **Letta Agent SDK** — Letta (formerly MemGPT, Apache-2.0, 24.3k stars) released an Agent SDK for
+  "stateful, persistent agents that keep their identity, memory, and experience across models,
+  machines, and interfaces." Its own engineer frames it as a fork of shape: they "adapted magnificent
+  work from the Anthropic team on the Claude Agent SDK, but we've made it stateful, model-agnostic,
+  and work with cloud or local agents." Claimed payoffs: agents that "passively learn through the act
+  of doing" (deployed in Linear, the agent starts understanding Linear), agents that extend themselves
+  by writing Agent SDK code, and custom interfaces (they forked Signal Desktop into a Letta client).
+  One shipped pattern is a routing move *inside* a harness: a triage workflow **forks a primary
+  engineering agent onto a cheaper model** to run at larger scale and lower cost (cf. [[smart-routing]]).
+  **Caveats:** `letta-ai/letta` is now a landing page (active code moved to `letta-ai/letta-code`, the
+  V1 server preserved on an `archive` branch) and **no dated Agent SDK release appears in GitHub
+  Releases** — the announcement is a personal engineering post, not a versioned changelog.
+  **Signal:** the Claude Agent SDK is becoming the de-facto *shape* of an agent harness that others
+  fork — more evidence for the layered-convergence story in [[agent-plugins]] — and the thing being
+  swapped out is the stateless assumption, which is exactly where multi-session agents break (the
+  memory gap above).
+- **turbovec** — `RyanCodrai/turbovec` (MIT, 15,060 stars, last push Aug 18) implements Google
+  Research's **TurboQuant** as a production Rust vector index with Python bindings. Pipeline: normalize
+  vectors → apply a random rotation so coordinate distributions become predictable regardless of data
+  → optionally calibrate per-coordinate ("TQ+") → Lloyd-Max scalar quantization + bit-packing. The
+  consequence is that there is **no training phase**, so ingest is online. Claims: a 10M-document
+  corpus needing **31 GB as float32 fits in 4 GB** (1536-dim vectors 6,144 → 384 bytes, 16×); it beats
+  FAISS `IndexPQFastScan` "in every measured config, averaging 3.4× at 4-bit and 23% at 2-bit"; and
+  `IdMapIndex.remove(id)` is **O(1) at 0.44–1.22 µs** versus FAISS `remove_ids` at 0.19–1.02
+  **seconds** per single remove at 100K. **Fact-check note carried from the feed:** the repo cites the
+  underlying paper as ICLR 2026, but the arXiv record (2504.19874, Zandieh/Daliri/Hadian/Mirrokni)
+  lists no venue acceptance; the paper's own claim is distortion within a small constant (≈2.7) factor
+  of the information-theoretic lower bound. **Signal:** local-first RAG has been gated on RAM, and a
+  *data-oblivious* quantizer with no train step is the shape agent memory actually needs — incremental
+  ingest, crash-survivable via `sync()`, air-gapped, and cheap deletes (an agent's memory churns).
+  Pairs with the fit-to-budget turn in [[edge-inference]].

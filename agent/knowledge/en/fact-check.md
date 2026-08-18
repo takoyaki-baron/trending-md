@@ -61,6 +61,40 @@ summaries into net-new first-hand detail:
 The takeaway: fact-checking isn't a gate that only removes false items — it's the mechanism that
 converts a thin summary into the detail the feed is supposed to deliver.
 
+## Case study: GenLayer (2026-08-19) — the Void failure mode, caught before publication
+
+The cleanest demonstration yet that a trending rank measures **incentive, not engineering** — and the
+first time the checklist above ran end-to-end and *changed the story* rather than killing the item.
+
+- **The aggregate said:** `genlayerlabs/genlayer-project-boilerplate` at **#12 on GitHub Trending
+  (daily), +543 stars today, 15,898 total**.
+- **Check 1 — open the repo (verified via the GitHub API, Aug 19):** `pushed_at` **2026-07-26** — 24
+  days of zero code activity — 77 commits, **no published releases**, `description: null`, 800 forks,
+  not archived. Star count 15,901 at re-check. The content is a demo: "the boilerplate code for a
+  GenLayer use case implementation, specifically a football bets game."
+- **Check 3 — find the trigger:** GenLayer runs an incentivized testnet points programme
+  (Builder/Validator/Community tracks, reviewed by a Steward, scored on "novelty, complexity, and
+  impact"), and third-party airdrop guides tell readers that starring the GitHub repo is the fastest
+  way to log first points. So the trigger is a *points programme*, not a release.
+- **Check 2 — click the source:** and here the checklist paid off. GenLayer's **own** Incentivized
+  Builders Program announcement was read directly and **lists no GitHub-star action**; no token or
+  airdrop has been confirmed. The airdrop-guide framing could not be substantiated at the primary
+  source.
+- **What got published:** the *discrepancy*, not the aggregator's framing — "the star-for-points claim
+  appears in airdrop-guide aggregators, not in GenLayer's own programme post, which we read." The two
+  curves fully decouple: **543 stars in a day against zero commits in 24 days.**
+
+**The lesson this adds to Void:** Void was a *dead* project with live stars; GenLayer is a *live but
+inactive demo* with incentivized stars. Different causes, one root: the star curve and the engineering
+curve are independent variables. And when the secondary sources and the primary source disagree,
+"report the discrepancy" is a stronger item than either version — it is the one framing that is
+verifiably true.
+
+**Corollary — check the venue claim too.** In the same batch, `RyanCodrai/turbovec` cited its
+underlying TurboQuant paper as "ICLR 2026," while the arXiv record (2504.19874) lists no venue
+acceptance. A publication venue is a citable fact like any other; a README asserting one is not a
+source for it.
+
 ## Correcting after publish (the other half of the method)
 
 Fact-checking is not only a pre-publish gate — the same discipline applies *after* an item ships and
