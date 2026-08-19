@@ -446,6 +446,79 @@ competence inside a specific tool loop, which a 8–30B open model can acquire f
 sandbox. Consistent with dots3-note and Kozuchi Agent above: the open-weight frontier's live axis is
 **agent-native competence**, not general capability.
 
+## Post-training, evaluation, and efficiency data points (Aug 19 20:03)
+
+- **Agent Lightning v1.0** (arXiv:2608.17528, Microsoft) — "the harness participates in training" as a
+  post-training architecture: the deploy-time agent harness owns the environment loop during RL, so the
+  trainer sees only LLM request/response pairs. Qwen3.5-9B on 6K examples lifts SWE-bench Verified
+  41.8% → 56.4% (+14.6); adopted by verl Uni-Agent, AReaL 2.0, slime, Polar. The harness is now a
+  training-time participant (full detail → [[agent-stack]]).
+- **Palmyra x6** (arXiv:2608.16620, Writer) — a tool-use model post-trained on **626 trajectories, a
+  single epoch, a low LR, and a KL anchor to the frozen base** ("Anchored SFT," Muon + Adam hybrid).
+  Reports the highest BFCL Core (0.785) and the top six-benchmark mean of its cohort. **Signal:** a
+  clean "less is more" data point for post-training — a KL anchor + a few hundred *verified*
+  trajectories beating data-hungry recipes — extending GLM-5.3's "post-training, not scale" thread to
+  the *data-efficiency* axis (competent tool-calling reachable without a trajectory farm).
+- **HarnessEval-W** (arXiv:2608.16859) — world-model evaluation rebuilt as an **evidence tree** instead
+  of a scalar score: interpret the case → decompose into measurable subproblems → dispatch specialized
+  sub-agents with diagnostic tools → a parent agent validates the evidence and summarizes a verdict.
+  Applied to 18 world models over 330 cases; the pipeline is open-sourced. **Signal:** the next rung of
+  the evaluation thread (Vero's machine-checked proof, this file) — "a benchmark should deliver more
+  than a scalar score," because judging a world-model rollout requires knowing *why* physics/causality
+  went wrong, which brute-force metrics can't say.
+- **Abra** (arXiv:2608.17286, Luma AI) — diffusion scaling laws from a controlled family of flow-matching
+  transformers (~10¹⁹–10²² FLOPs): the compute-optimal point is **~200 image tokens per parameter —
+  ~10× the Chinchilla prescription for LLMs** — and because diffusion is robust to overtraining, spend
+  on **more data, not larger models**. Loss, CFG settings, and training-curve shape all collapse onto a
+  universal form. **Signal:** "Chinchilla for diffusion" — a concrete decision rule for allocating an
+  image/video training budget where the field previously guessed.
+- **MoNe** (arXiv:2608.17616) — modular neural memory bolted onto any frozen pretrained Transformer:
+  context is read in fixed-size segments via test-time-learned fast-weight memory, and at inference the
+  memory generates keys/values from query tokens alone (context never re-read). At **128K tokens** it
+  cuts compute and peak GPU memory **~80%** vs in-context learning at only **6.4% parameter overhead**,
+  with O(N) preprocessing and O(1) query cost, staying strong on RULER past the backbone's native
+  window. **Signal:** decouples inference cost from context length for the long-context agent workloads
+  that dominate this feed — no fine-tuning, no base-model change (the same efficiency axis as
+  [[edge-inference]] but from the memory side).
+
+## Self-improving curriculum, ES fine-tuning, and the autonomous-science gradient (Aug 20 04:03)
+
+- **Ornith-1.5** (Ornith AI, Aug 19) — a three-size open family — **397B MoE**, **35B MoE-A3B** (3B
+  active), **9B dense** + a quantized mobile build — extending Ornith-1.0's "self-scaffolding" into a
+  *closed self-improvement loop*: the model proposes its own progressively harder tasks, generates
+  task-specific scaffolds, and produces solution rollouts, with GRPO reward split across task quality
+  (validity × frontier difficulty × novelty), harness quality (alignment × reward fidelity ×
+  hack-resistance) and rollout success. Reported: **Terminal-Bench 2.1 86.1** and **DeepSWE 56.0** for
+  the 397B ("on par with Claude Opus 4.8"), **68.5 / 79.0 SWE-bench Verified** for the 35B, **70.6
+  SWE-bench Verified** for the 9B. The case-making number is DeepSWE jumping **8.0 → 56.0** from the
+  1.0 line — self-generated curriculum beating hand-curated trajectory farms — and the 9B's 70.6 shows
+  the recipe's returns survive down to phone-scale. *Caveat:* vendor-reported against Ornith's own
+  chosen baselines; Opus 4.8 still leads DeepSWE 59.0 vs 56.0; training compute / rejection rates
+  undisclosed; the community has flagged the 1.0 line as "benchmaxxed" Qwen/Gemma variants. Signal:
+  self-generated curriculum is a third post-training axis, alongside GLM-5.3's RL-only gains and
+  Palmyra x6's "less is more" data efficiency.
+- **Agentic ESOpt** (arXiv:2608.17310, NUS/SUSTech/Oxford, submitted Aug 18; #1 HF Papers of the day)
+  — argues RL is the wrong tool for long-horizon agent fine-tuning (backprop needs heavy GPU memory,
+  long trajectories make credit assignment intractable) and swaps in **Evolution Strategies**: sample
+  perturbations around current parameters, evaluate the resulting agents, apply an online
+  reward-weighted update with a cosine-decayed perturbation scale — enabling **full-parameter
+  fine-tuning at inference-level memory** (Qwen3.5-27B on four H100s). Results: **+6.69%** over the
+  no-skill baseline on WebArena-Lite, **+12.50%** over RL baselines on long-horizon Sudoku, and online
+  prompt-parameter co-evolution beating its matched baseline in 28 of 36 settings. Signal: a
+  no-backprop path that scales full-parameter adaptation of a 27B model — the GPU-memory wall is why
+  most teams can't fine-tune large agent models at all — and it composes with prompt-space skill search.
+- **ASI-Bench** (arXiv:2608.17271, 40+ experts / 31,000 human-hours; Tsinghua, MIT, Harvard, CMU,
+  Microsoft Research) — a benchmark for **project-level autonomous scientific research**: 60 tasks
+  across 11 domains with a **B1→B4 guidance gradient** that progressively withdraws human
+  methodological instruction while keeping objective, data and scoring fixed. Across 18 SOTA
+  agent-model configurations, average scores fall **50.91 (full guidance) → 29.10 (method only) →
+  26.62 (self-determined method)**; the sharpest drop is B1→B2 (−21.8) — systems can pick a method but
+  can't turn it into a complete, executable research procedure. Harness effects are stark: MiMo V2.5
+  Pro scored 16.17 in MiMo Code vs 23.25 in Claude Code, and higher spend didn't reliably buy
+  performance. Signal: relocates "how far from autonomous science" from vibes to a measured gradient
+  — *method selection* is not the bottleneck, *procedural execution* is, which reframes where
+  agent-research effort should go.
+
 ## Watch for
 
 - Third-party (non-vendor) evaluation of DeepSeek V4 Pro's claims — the two internal benchmarks
@@ -487,3 +560,8 @@ sandbox. Consistent with dots3-note and Kozuchi Agent above: the open-weight fro
 - Whether environment-grounded RL on 8–30B open models keeps beating frontier scale as the *tasks*
   get harder, or whether VibeWorlding-style wins are confined to benchmarks whose verifier the
   training gym also defines (the rubric-verifier circularity risk).
+- Whether Ornith-1.5's self-generated-curriculum numbers survive third-party eval (the 1.0 line's
+  "benchmaxxed" flag is the standing caveat), and whether self-curriculum + ES fine-tuning scale past
+  27B without the task/harness-quality reward terms silently overfitting.
+- Whether ASI-Bench's B1→B2 procedural-execution gap closes as harness scaffolding improves — the
+  benchmark's own signal is that the gap is not a model-capability problem.

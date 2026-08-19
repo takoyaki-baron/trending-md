@@ -121,6 +121,48 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
 
 ## CVE 台账（最新在前）
 
+### 8 月 19 日 20:03 批次
+
+- **Oracle 2026 年 8 月关键安全补丁更新**（8 月 18 日）——**单日发布 943 个新安全补丁**。其中最突出的是
+  **CVE-2026-70926**，位于 Oracle Workflow 的 Workflow Notification Mailer——**CVSS 9.8**、攻击向量 **SMTP**、
+  可**无需认证**远程利用，影响 E-Business Suite 12.2.3–12.2.15。与之并列的是 **CVE-2026-60782**（Oracle
+  Payments File Transmission，HTTP，9.8，预认证，同版本）和 **CVE-2026-71065**（Helidon Imperative Web Server
+  3.2.18，9.3，changed scope）。在 120 个 EBS 补丁中，**27 个可无需凭据远程利用**；Fusion Middleware 占 262 个，
+  Hyperion 占 262 个（107 个可远程利用）。*来源备注：* 第三方流传的计数（"925 个 CVE / 154 个严重"）与 Oracle
+  自己声明的 943 **不一致**——以公告为准。**形态：** 常驻凭证跳板（形态 1）——EBS 承载财务/HR/采购，而一个经
+  *邮件*路径的预认证 9.8，是大多数团队从未建模为攻击面的监听器。
+- **OpenZFS "OZ-1" —— 命名空间局部 CAP_SYS_ADMIN 被当作宿主机权限接受（无 CVE，未修复）** —— Erica Windisch
+  在 oss-security 上完全披露（周日 8 月 16 日），此前已于 8/12 通知 CERT。核心缺陷：OpenZFS 的
+  `zfs_secpolicy_config()` 使用 **`ns_capable(cr->user_ns, CAP_SYS_ADMIN)`** ——"将命名空间局部的 `CAP_SYS_ADMIN`
+  当作宿主池操作的权限接受。正确的检查应是在**初始**用户命名空间中的 `CAP_SYS_ADMIN`。"任何用户只需创建用户
+  命名空间并把自身映射为内部 uid 0，即可获得命名空间局部的 CAP_SYS_ADMIN。报告覆盖两组相互作用的缺陷——授权
+  （OZ-1、OZ-2）与信任攻击者控制的磁盘长度/索引/图结构的解析器缺陷（OZ-3…OZ-8）——其上游审计"确认每个 OZ 发现
+  在上游 master HEAD `3020c18c` 处仍**未修复**"，只有 OZ-7 有一个开放且存争议的 PR（#18620）。**无 CVE**
+  （OpenZFS 是 out-of-tree；"CVE 决定权属于 OpenZFS 项目及其厂商/CNA"）。已在 TrueNAS SCALE 25.04.2.4、Proxmox
+  VE 8.x、IncusOS、Unraid 上复现。*前置条件：* Docker 默认能力集不含 `CAP_SYS_ADMIN`，因此仅
+  `--device /dev/zfs` 会以 EPERM 失败；`--privileged` 或 `--cap-add SYS_ADMIN` 可复现。**形态：** 默认暴露/权限面
+  的新变体——一个*内核级*授权缺陷，其门槛正是容器化本身让获取变得轻而易举的命名空间逃逸原语。
+- **Chrome 151.0.7922.169/.170（8 月 18 日）——15 项修复，其中一项署名 "OpenAI Codex Security"** —— 两个
+  Critical（CVE-2026-76034 WebGL 缓冲区溢出、CVE-2026-76036 Dawn 缓冲区溢出，均由 Google 报告）、两个 V8 类型
+  混淆（CVE-2026-76047、CVE-2026-76038——是 High 而非 Critical）、一个 ANGLE 缓冲区溢出、一个 Browser UAF、一个
+  USB 竞争、一个 Skia 信息泄露——以及 **CVE-2026-76045，WebGL 中的 use-after-free，"由 OpenAI Codex Security
+  (amyb) 于 2026-08-05 报告。"** **信号：** AI 实验室的安全团队出现在 Chrome 的致谢名单里，且是一个真实的
+  UAF——这是"agent 运行的审计已进入厂商公告"这一说法的具体版本，与 Atto 的 AI 持续审计发现同形，如今落在
+  Google 自己的公告里。
+- **Confluence CVE-2026-21580**（CVSS 8.6，存储型 XSS + 提权 + 安全配置错误，8 月 18 日发布）——**未认证**
+  攻击者可在受害者浏览器中执行 HTML/JS，并以更高权限用户身份行动。引入跨越一长串版本（7.1.1…10.2.0），在
+  **9.2.21+** / **10.2.13+** 修复。Confluence 存放着 runbook 与邻近凭据的笔记；管理员会话中的未认证存储型 XSS，
+  是从"内部 wiki"到"管理接管"的捷径。
+- **FUXA CVE-2026-67443**（CVSS v4 9.2，8 月 18 日，修复于 1.3.3）——开源 SCADA/HMI 平台中的授权缺失：
+  `/nodered` 的 `allowDashboard` 门校验 JWT 却从不检查解码后的身份，因此在 Node-RED 集成 + 安全模式 +
+  `nodeRedAuthMode: secure` 全部开启时，未认证攻击者从 `POST /api/heartbeat` 获得签名 **guest token**，并到达
+  Node-RED 编辑器 + 流程部署 API → `fuxa.runScript` → 在 `nodeRedUnsafeModules` 开启时实现操作系统命令执行。
+  工业/OT 软件上的零交互、零凭据代码执行——是设计上的绕过。
+- **n8n CVE-2026-71539**（CVSS v4 8.9，CWE-367 TOCTOU，8 月 18 日，修复于 1.123.64 / 2.29.8 / 2.30.1）——
+  Git-clone 节点的"先检查后使用"竞争：已认证的工作流用户在克隆前把已验证目录换成符号链接，把精心构造的 repo
+  植入 community-node 目录，重启后作为自定义 JS 节点加载 → 以服务器身份执行代码。"检查后使用"竞争的典型实例，
+  而该工具的本职就是携带机密运行半可信自动化。
+
 - **CVE-2026-33824 — Windows IKE 双重释放**（CVSS 9.8，`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`，
   CWE-415）——未认证的网络攻击者在 Windows Internet Key Exchange 服务扩展中触发双重释放（double free）
   以执行任意代码；影响 Windows 10/11 + Server 2016–2025，已在 8 月累积更新中修复。**2026-08-18 被列入
@@ -329,6 +371,9 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
   正式 SEP，还是说固定（pinning）会无限期地停留在第三方网关/扫描器的功能（自 Invariant 2025 年 4 月的
   建议起已 16 个月有余）？注册表侧会否出现信号——附在服务器列表上的漂移评分——还是台账继续只保留指纹，
   永远无法点名那 354 个翻转的工具？
+  **一手探测器已建（08-20）：** `agent/tools/mcp-snapshot.mjs` 现在对公开 MCP 服务器快照 `tools/list`、对每个
+  工具定义做哈希并跨运行 diff（t0 = filesystem/memory/everything 三个参考服务器共 36 个工具），并作为每次运行的
+  尽力而为步骤接入 `agent-run.sh`。t1 的 diff 将成为足以给 mcpindex.ai 定 `cv: 2` 的独立佐证或反驳。
 - **安装时端点**这一类（GBIF IPT CVE-2026-71879）会否在别处出现？「安装后安装路由仍存活」是一个廉价的
   grep 目标，也是自托管软件不断重新引入的 CWE-288 实例——值得在流行的首次运行流程中做一次扫查。
 - GitLab 18.2–18.10 无修复的分支缺口与 iMonnit 无 CVE 即公开 PoC 的链条，会否让自托管 forge 与工业/IoT 网关持续

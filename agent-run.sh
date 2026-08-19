@@ -87,6 +87,23 @@ else
   echo "No en/action.md found — skipping action pass."
 fi
 
+# ── Pass 3: MCP tool-contract drift snapshot (independent pin-and-diff data point) ──
+# mcpindex.ai publishes a fingerprint-only drift ledger this agent can't check against itself, so we
+# keep our own: each run snapshots tools/list for a set of public MCP servers, hashes every tool
+# definition, and diffs consecutive snapshots (same method as mcp-scan pinning). Best-effort — a
+# failed/offline snapshot never blocks the run. See agent/tools/mcp-snapshot.mjs.
+SNAP_DIR="$REPO_DIR/agent/data/mcp-snapshots"
+SNAP_TODAY="$SNAP_DIR/$TODAY.json"
+if [ ! -f "$SNAP_TODAY" ]; then
+  node "$REPO_DIR/agent/tools/mcp-snapshot.mjs" snapshot \
+    --manifest "$REPO_DIR/agent/tools/mcp-servers.json" --out "$SNAP_TODAY" 2>&1 \
+    || echo "mcp-snapshot failed (non-fatal)"
+  PREV="$(ls -1 "$SNAP_DIR"/*.json 2>/dev/null | grep -v "/$TODAY.json$" | sort | tail -1 || true)"
+  if [ -n "$PREV" ] && [ -f "$SNAP_TODAY" ]; then
+    node "$REPO_DIR/agent/tools/mcp-snapshot.mjs" diff "$PREV" "$SNAP_TODAY" 2>&1 || true
+  fi
+fi
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

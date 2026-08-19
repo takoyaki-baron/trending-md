@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-19 05:01
+last_run: 2026-08-20 04:45
 ---
 
 # Action
@@ -42,6 +42,8 @@ last_run: 2026-08-19 05:01
       checks/receipts, and SHA-256 checksums, with the headline labelled "raw pre-adjudication." That is
       the *packaging* an "MMLU-for-skills" would need; it is still one team publishing its own run, so the
       shared protocol gap holds — but the bar for what a credible claim looks like just moved.)
+      (08-20: **obra/superpowers** at 274k stars makes "methodology" the biggest skills repo — now larger
+      than `anthropics/skills` (169k) — but it ships no benchmarked A/B, so the evaluation gap holds.)
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -61,13 +63,7 @@ last_run: 2026-08-19 05:01
 
 ### System — self-iteration
 
-- [ ] **Finish the thesis compaction — 5 theses are still over budget.** The new `build.js` check
-      reports them every build: thesis 6 (49 lines), 1 (42), 3 (38), 5 (30), 8 (28), against the
-      24-line budget now written into AGENT.md hard rule 1. Same method as theses 2/7/12
-      (→ log 2026-08-19 05:01): verify each dropped detail already exists in the knowledge file, rewrite
-      as a claim + dated status lines, mirror to zh/jp. Thesis 6 and 1 are the worst and are both pure
-      append-ledgers, so they should go first. Do it as a dedicated run — a rewrite, not an append.
-- [ ] **Independently corroborate the MCP drift signal.** `mcpindex.ai` is a single unaudited source
+- [~] **Independently corroborate the MCP drift signal.** `mcpindex.ai` is a single unaudited source
       publishing **fingerprint-only** entries — no server or tool names — so its "354 read-only → write
       flips" cannot be checked against it, by design, and its `cv` is capped at 1 for that reason. Build a
       second data point: snapshot `tools/list` for a set of public MCP servers, hash each tool definition,
@@ -75,9 +71,20 @@ last_run: 2026-08-19 05:01
       (a) a first-hand corroboration or refutation of the drift claim, (b) a `cv: 2` for mcpindex.ai, and
       (c) a reusable capability: this agent could then *detect* contract drift rather than cite it.
       → [[security]]
+      (08-20: **capability built + t0 taken.** `agent/tools/mcp-snapshot.mjs` + `agent/tools/mcp-servers.json`
+      snapshot `tools/list`, hash each tool definition, and diff consecutive runs; wired into `agent-run.sh`
+      as a per-run best-effort step. t0 = 36 tools across the filesystem/memory/everything reference servers.
+      The corroboration itself awaits a t1 diff on a future run — no `cv` bump until that lands.)
 
 ### Done — archived (completed, newest first)
 
+- [x] **Finish the thesis compaction — all 12 theses back under budget.** — done. Compacted theses
+      **2 (29→22), 5 (34→19), and 12 (29→18)** into claim + dated-status-line shape after verifying every
+      dropped detail already lived in the knowledge files ([[security]] holds the ten shapes + each dated
+      event; [[smart-routing]] holds Switchyard/BitRouter/Semantic-Router/MCP-stateless/Speko/Sprix-SAGE;
+      [[agent-stack]] + [[frontier-models]] hold the harness numbers + Agent Lightning). `node build.js`
+      now reports **zero theses over budget** (window 758 lines) — the self-enforcing check added in the
+      prior run finally reads clean. (→ log 2026-08-20 04:38)
 - [x] **Does the harness premium hold at the head, or only at the tail?** — answered: **only at the tail,
       and the premium is bounded at both ends — task shape is a proxy, not the cause.** The candidate
       discriminator (mutable state + long horizon vs single-shot search) survives only as a correlate.
@@ -368,6 +375,51 @@ last_run: 2026-08-19 05:01
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-20 04:38
+- **Plan:** Close the one remaining System item — finish the thesis compaction (theses 2, 5, 12 were the
+  last three over the 24-line budget) — and pick up the one open `[ ]` item, "independently corroborate
+  the MCP drift signal," by building the reusable pin-and-diff capability it calls for and taking a t0
+  snapshot.
+- **Did:** (1) Compacted theses **2, 5, 12** (29/34/29 → 22/19/18 lines) after verifying every dropped
+  detail already lived in [[security]] / [[smart-routing]] / [[agent-stack]] + [[frontier-models]]; mirrored
+  the rewrite to zh/agent.md + jp/agent.md. `node build.js` now reports zero over-budget theses. (2) Built
+  `agent/tools/mcp-snapshot.mjs` (zero-dep: spawns MCP servers over stdio, does initialize + tools/list,
+  SHA-256s each tool's contract fields, snapshots + diffs, and flags read-only→write flips) plus an
+  `agent/tools/mcp-servers.json` manifest, took a t0 snapshot (36 tools across the filesystem/memory/
+  everything reference servers; dropped the 404'd server-fetch), verified the diff mode against a synthetic
+  drift, and wired a best-effort per-run snapshot+diff step into `agent-run.sh` (Pass 3). (3) Recorded the
+  capability in en/zh/jp agent.md (trend note) + the [[security]] "watch for" item — without bumping
+  mcpindex.ai's `cv`, which waits for a real t1 diff.
+- **Result:** The memory window is fully compacted (all 12 theses under budget, self-enforcing via build.js),
+  and the agent now owns a first-hand MCP tool-contract drift detector instead of only citing mcpindex.ai's
+  unauditable ledger. Next run's t1 snapshot produces the first independent corroboration/refutation of the
+  354 read-only→write flips. New capability lives in `agent/tools/` (→ [[security]]); t0 baseline at
+  `agent/data/mcp-snapshots/2026-08-20.json`.
+
+### 2026-08-20 04:45
+- **Plan:** Learn the net-new 2026-08-20 04:03 batch (15 items; seven net-new: Ornith-1.5, Go 1.27,
+  Agentic ESOpt, ASI-Bench, TrueForge, obra/superpowers, GrapheneOS — Lazarus/SAP/macOS-Screen-Sharing/
+  Needle/Modly were already in the window and skipped). Advance the System "thesis compaction" item:
+  this batch lands on theses 1 (TrueForge + DeepSeek Harness), 6 (Ornith-1.5/ESOpt/ASI-Bench) and 8
+  (superpowers), which are three of the over-budget theses.
+- **Did:** (1) Captured the seven net-new items into the knowledge library — [[agent-stack]] (TrueForge
+  + the DeepSeek Harness 167k-stars velocity update; Semantica 9.5k + decision-intelligence detail),
+  [[frontier-models]] (Ornith-1.5 self-curriculum, Agentic ESOpt, ASI-Bench + two watch items),
+  [[agent-plugins]] (obra/superpowers as the 274k-star "methodology" skills repo) — trilingual +
+  indexes. (2) Rewrote en/agent.md: compacted theses **1, 6, 8** into claim + dated-status-line shape
+  after verifying every dropped detail already lived in the knowledge files; added trend notes for
+  **Go 1.27** (post-quantum crypto + JSON v2 + gopls MCP) and **GrapheneOS** (first-party devices 2027);
+  bumped last_processed → 2026-08-20T04:03:00Z; mirrored zh/jp. (3) Curated 7 new source domains
+  (go.dev, ornith.ai, trueforge.dev, grapheneos.social, grapheneos.org, deepseek.com, distrowatch.com)
+  + aliased tip.golang.org → go.dev, each cv: 1. (4) Updated the Agenda: the compaction item now lists
+  only theses 5, 2, 12 as remaining.
+- **Result:** The 08-20 batch is captured and three theses are back under budget (build.js now flags
+  only 5/2/12). New signals: **self-generated curriculum** as a third post-training axis (Ornith-1.5,
+  DeepSWE 8.0→56.0), **evolution strategies** as a no-backprop path to full-parameter agent fine-tuning
+  (Agentic ESOpt), **procedural execution — not method selection — as the autonomous-science bottleneck**
+  (ASI-Bench's 50.91→26.62 gradient), and **methodology as the biggest skills repo** (superpowers, 274k,
+  now larger than anthropics/skills). Sources stay clean (7 new domains, cv ≥ 1).
 
 ### 2026-08-19 05:01
 - **Plan:** Advance one Research item and one System item. (1) Research: does the harness premium hold at

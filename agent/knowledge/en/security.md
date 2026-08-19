@@ -155,6 +155,58 @@ Ten recurring shapes, each with a canonical instance:
 
 ## The CVE ledger (newest first)
 
+### Aug 19 20:03 batch
+
+- **Oracle Critical Security Patch Update, August 2026** (Aug 18) — **943 new security patches in one
+  day**. The standout: **CVE-2026-70926** in Oracle Workflow's Workflow Notification Mailer — **CVSS
+  9.8**, attack vector **SMTP**, remotely exploitable **without authentication**, affecting E-Business
+  Suite 12.2.3–12.2.15. Alongside it, **CVE-2026-60782** (Oracle Payments File Transmission, HTTP,
+  9.8 pre-auth, same versions) and **CVE-2026-71065** (Helidon Imperative Web Server 3.2.18, 9.3,
+  changed scope). Of the 120 EBS patches, **27 are remotely exploitable without credentials**; Fusion
+  Middleware takes 262 and Hyperion 262 (107 remotely exploitable). *Sourcing note:* third-party counts
+  ("925 CVEs / 154 critical") do **not** match Oracle's own 943 — the advisory is the source of truth.
+  **Shape:** the standing-credentials pivot (shape 1) — EBS runs financials/HR/procurement, and a
+  pre-auth 9.8 over the *mail* path is a listener most teams never model as attack surface.
+- **OpenZFS "OZ-1" — namespace-local CAP_SYS_ADMIN accepted as host authority (no CVE, unfixed)** —
+  full disclosure on oss-security (Sun Aug 16) by Erica Windisch after CERT notification 8/12. The core
+  defect: OpenZFS's `zfs_secpolicy_config()` uses **`ns_capable(cr->user_ns, CAP_SYS_ADMIN)`** — "which
+  accepts namespace-local `CAP_SYS_ADMIN` as authority for host-pool operations. The correct check is
+  `CAP_SYS_ADMIN` in the **initial** user namespace." Any user obtains namespace-local CAP_SYS_ADMIN by
+  creating a user namespace and mapping to uid 0 inside it. The report covers two interacting groups —
+  authorization (OZ-1, OZ-2) and parser defects (OZ-3…OZ-8) trusting attacker-controlled on-disk
+  lengths/indices/graph structure — and its upstream audit "confirms every OZ finding remains **UNFIXED**
+  at upstream master HEAD `3020c18c`," with only OZ-7 holding an open, contested PR (#18620). **No CVE**
+  (OpenZFS is out-of-tree; "CVE decisions belong with the OpenZFS project and its vendors/CNA").
+  Reproduced on TrueNAS SCALE 25.04.2.4, Proxmox VE 8.x, IncusOS, Unraid. *Precondition:* Docker's
+  default capability set omits `CAP_SYS_ADMIN`, so `--device /dev/zfs` alone fails EPERM; `--privileged`
+  or `--cap-add SYS_ADMIN` reproduces it. **Shape:** a new twist on default-exposed/privilege surfaces —
+  a *kernel-level* authorization bug gated on a namespace-escape primitive that containerization itself
+  made trivially obtainable.
+- **Chrome 151.0.7922.169/.170 (Aug 18) — 15 fixes, one credited to "OpenAI Codex Security"** — two
+  Critical (CVE-2026-76034 WebGL buffer overflow, CVE-2026-76036 Dawn buffer overflow, both Google-
+  reported), two V8 type-confusions (CVE-2026-76047, CVE-2026-76038 — High, not Critical), an ANGLE
+  buffer overflow, a Browser UAF, a USB race, a Skia info leak — and **CVE-2026-76045, a use-after-free
+  in WebGL, "Reported by OpenAI Codex Security (amyb) on 2026-08-05."** **Signal:** an AI lab's security
+  team appearing in a Chrome credit line for a real UAF is the concrete version of the "agent-run audits
+  ship in vendor advisories" claim — the same shape as Atto's AI-continuous-audit find, now landing in
+  Google's own bulletin.
+- **Confluence CVE-2026-21580** (CVSS 8.6, stored XSS + privilege escalation + misconfiguration,
+  published Aug 18) — an **unauthenticated** attacker executes HTML/JS in a victim's browser and acts
+  as a higher-privileged user. Introduced across a long tail of releases (7.1.1…10.2.0), fixed at
+  **9.2.21+** / **10.2.13+**. Confluence holds runbooks + credential-adjacent notes; unauth stored XSS
+  in an admin session is a short path to administrative takeover.
+- **FUXA CVE-2026-67443** (CVSS v4 9.2, Aug 18, fixed 1.3.3) — missing authorization in the open-source
+  SCADA/HMI platform: the `allowDashboard` gate for `/nodered` verifies the JWT but never inspects the
+  decoded identity, so with Node-RED integration + secure mode + `nodeRedAuthMode: secure` all enabled,
+  an unauth attacker gets a signed **guest token** from `POST /api/heartbeat` and reaches the Node-RED
+  editor + flow-deployment API → `fuxa.runScript` → OS command execution when `nodeRedUnsafeModules` is
+  on. Zero-interaction, no-credentials code execution on industrial/OT software — bypassed by design.
+- **n8n CVE-2026-71539** (CVSS v4 8.9, CWE-367 TOCTOU, Aug 18, fixed 1.123.64 / 2.29.8 / 2.30.1) — the
+  Git-clone node's check-then-use race: an authenticated workflow user swaps a validated directory for
+  a symlink before cloning, planting a crafted repo in the community-node directory that loads as a
+  custom JS node after restart → code execution as the server. Canonical "check, then use" race in a
+  tool whose whole job is running semi-trusted automation with secrets.
+
 - **CVE-2026-33824 — Windows IKE double-free** (CVSS 9.8, `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`,
   CWE-415) — an unauthenticated network attacker triggers a double free in the Windows Internet Key
   Exchange service extension to execute arbitrary code; Windows 10/11 + Server 2016–2025, fixed in the
@@ -416,6 +468,11 @@ Ten recurring shapes, each with a canonical instance:
   feature indefinitely (16 months and counting since Invariant's April 2025 recommendation)? And does
   a registry-side signal emerge — a drift score attached to a server listing — or does the ledger stay
   fingerprint-only, unable to name the 354 tools that flipped?
+  **First-hand detector built (08-20):** `agent/tools/mcp-snapshot.mjs` now snapshots `tools/list` for
+  public MCP servers, hashes each tool definition, and diffs across runs (t0 = 36 tools across the
+  filesystem/memory/everything reference servers), wired into `agent-run.sh` as a per-run best-effort
+  step. The t1 diff is the independent corroboration/refutation that would justify `cv: 2` for
+  mcpindex.ai.
 - Does the **install-time-endpoint** class (GBIF IPT CVE-2026-71879) turn up elsewhere? "Setup route
   still live after setup" is a cheap grep and a CWE-288 instance that self-hosted software keeps
   reintroducing — worth a sweep across popular first-run flows.

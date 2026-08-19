@@ -44,7 +44,7 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   一个基于 **Cordis** 插件系统的编程 + 办公 agent 框架：模型、工具、技能、会话、沙箱、存储、调度
   与 UI 都是可组合的插件——开发者在配置层扩展或替换能力，无需触碰核心。四种运行模式（Standard、
   PTC 程序化工具调用、Minimal、Create）；只追加的会话日志 + Trajectory 视图支持 resume/fork/
-  retrieve/replay。`npx @deepseek-ai/dsh web`。约 38.9K stars。信号：DeepSeek 把"廉价前沿模型"
+  retrieve/replay。`npx @deepseek-ai/dsh web`。**截至 8 月 19 日约 167K stars / 17.8K forks**——GitHub 史上最快涨星的项目（30 分钟约 10K、90 分钟 22K；五天内 5,100+ 个 `dsh-plugin` 社区仓库）。信号：DeepSeek 把"廉价前沿模型"
   打法延伸到 harness 层——而"万物皆插件"意味着它自建了*自己的*插件系统（Cordis），而非采用
   Agent Plugins 1.0.0，这是一个格式碎片化的观察项（见 [[agent-plugins]]）。
 
@@ -131,9 +131,9 @@ agent 上下文碎片化问题（ego-lite 的浏览器身份 vs holaOS 的文件
   一环；"同一登录态、隔离空间"是一个具体答案。
 
 ## 知识 / 溯源
-- **Semantica** — `semantica-agi/semantica`，MIT，4.1K stars。面向 agent 的自托管图原生层：
+- **Semantica** — `semantica-agi/semantica`，MIT，9.5K stars。面向 agent 的自托管图原生层：
   RDF/LPG 双图存储、Rete 推理引擎、对每个衍生事实做 W3C PROV-O 溯源、7 个向量数据库后端。
-  确定性图推理 + LLM 仅用于模糊抽取 → 可审计、可复现的决策。`pip install semantica`。**v0.6.5**
+  确定性图推理 + LLM 仅用于模糊抽取 → 可审计、可复现的决策。其上还有：决策智能（每个 AI 决策都是一等公民的可追溯记录）、确定性推理（Rete/Datalog/SPARQL——无需 LLM）、SHACL/OWL 本体治理、冲突检测（标记而非静默覆盖）；一个 MCP server 及 Claude Code/Cursor/VS Code 插件。`pip install semantica`。**v0.6.5**
   是一个安全版本，修复了五个外部上报的漏洞（Explorer 路由缺失认证、Cypher/SPARQL 注入）。
 
 **溯源标准化（2026-08-16 20:27）：** "谁标准化 agent 溯源"如今是*分层*收敛，而非单一所有者。**W3C
@@ -562,4 +562,63 @@ DarwinX 对"进化出的 harness"、Kozuchi Agent 对"阶段化结构的修复"�
   以内。**信号：** local-first RAG 一直被 RAM 卡住，而一个*数据无关*、无需训练步骤的量化器，正是 agent 记忆
   实际需要的形态——增量摄入、经 `sync()` 崩溃可存活、可离线，以及廉价的删除（agent 的记忆会不断翻搅）。与
   [[edge-inference]] 中"fit-to-budget"的转向配对。
+
+## BYOA 团队聊天 + 轻量 computer-use + 买方主导商务（8 月 19 日 20:03）
+
+- **Cumora** — `yetone/cumora`，MIT，TypeScript，8 月 17 日创建，**两天内 2,469 stars / 272 forks**（yetone 也
+  写了 `avante.nvim`，所以自带受众）。跨平台团队聊天，AI agent 是一等参与者——"同一份花名册、同一批 DM、同一个
+  群聊、同一块 Kanban 看板和日历"——拥有 persona、记忆、认领工作、互不冲突地协作，以及真实邮件。两条大脑路径：
+  **Cumora Cloud** 在托管的每-agent pod 上跑一个基于 OpenAI Responses API 的多跳工具调用循环；而 **BYOA**
+  （`npx cumora agent computer`）接入你自己的 Mac 或 VPS，让 agent 的大脑变成**你本地订阅上的 Claude Code 或
+  Codex CLI——服务器永远看不到你的 provider key**。技术栈：Electron/PWA/mobile，后端 Express + Postgres +
+  Redis。**信号：** 用你已有的模型开销自托管 agent 协作（BYOA），而非让厂商在中间计量 token——与下方
+  NorthCinder 同一种"你的密钥、你的机器"的信任姿态。仅两天、邀请制。
+- **macOS Harness** — `browser-use/macos-harness`，MIT，Python，8 月 17 日创建/推送，428 stars。browser-use 团队
+  出品的最薄 computer-use 层："agent 在任务中途补写缺失的部分。没有框架、没有配方、没有护栏。一个 Python 进程
+  直接连到 macOS、你的真实浏览器和你的文件。"模型拿到一个很小的原语集——see、key、type、click，外加辅助功能与
+  脚本访问——当没有现成 helper 时，它在运行中**用普通 Python 补写缺失逻辑**，而不是等一个 app 专用工具。入职是
+  一段粘贴进 Codex 或 Claude Code 的 prompt（经 `uv` 安装、注册 skill、跑 `macos-harness doctor`、通过捕获运行中
+  的 app 验证）。**信号：** 与 UI-Mate（[[frontier-models]]）同一条"从实时界面重新规划"的论点，但以约 400 行
+  配置交付而非一个训练模型——"无护栏"同时也是安全姿态（它继承整个 macOS 辅助功能 + AppleScript 权限面）。
+- **NorthCinder** — `cinderline/northcinder`，MIT，1.2k stars（npm 上 `northcinder@0.1.2`）。一个自托管 MCP 服务器，
+  面向 AI*购物*agent：搜索配置好的店铺适配器（Shopify、WooCommerce、eBay/Etsy 经 API、Amazon 经用户控制的浏览器
+  配置只读），返回带机器可读的*入选*与*落选*理由的排序短名单，并在任何结账前要求一份**独立、签名、一次性、带
+  消费上限的授权令**。排序只按买方标准（"卖家付款不是输入"），赞助结果始终标注在每条自然结果之下，并保留本地
+  审计轨迹。**信号：** agent 化商务正带着赞助排序与遥测嵌入经纪人路径而来；一个买方自跑排序、自持签名密钥、
+  自留审计日志的服务器，正是这一类别缺失的信任模型——对"agent 用你的卡买错东西"这一失败模式的直接对冲。
+- **OwnMem** — `grpcer/ownmem`，Apache-2.0，JavaScript，Node ≥20，8 月 16 日创建，53 stars（`ownmem@0.2.0`，
+  四个版本）。以副标题"**面向 AI 编码 agent 的 Git 原生项目记忆：仓库所有。确定性。可评审。**"反转标准 agent
+  记忆栈。经整理的决策/约束/调试教训以 Markdown 形式存在*仓库内部*，因此记忆在 PR 中可 diff、随 clone 迁移、
+  随代码回滚。召回跑在一个确定性 **BM25 族排序器**上而非嵌入——仓库自己的徽章宣称召回 P95 2.46 ms、**模型调用：
+  0**——并声称一套记忆集可服务 Claude Code、Codex、Antigravity、Cursor、Gemini CLI、Grok CLI。**信号：** 与
+  turbovec（上文）*相反*的赌注——大多数 agent 记忆挂载一个嵌入模型 + 向量库（不透明、不确定、不可评审）；纯文本
+  + 确定性排序器是能经受代码评审的形态。记忆缺口如今有第五种形态：团队图（TencentDB）、可移植交接（ai-memory）、
+  文件系统（OpenViking）、向量索引（turbovec），以及现在的 **git 原生、确定性 Markdown**（OwnMem）。
+
+## harness 参与训练（8 月 19 日 20:03）
+
+**Agent Lightning v1.0**（arXiv:2608.17528，Microsoft，8 月 18 日提交；约 3,500 行）让**部署期的 agent harness
+在 RL 期间拥有环境循环**，训练器只看到 LLM 请求/响应对——处理重分词、样本合并、优势计算、损失归一化以及跨任意
+harness 的后端调度。头条结果：在 **6K 样本上微调 Qwen3.5-9B**，把 **SWE-bench Verified 从 41.8% 提升到 56.4%**
+（+14.6 分），计算开销适中，且流水线已发布。摘要自己的话就是信号：该模式"后来被 verl Uni-Agent、AReaL 2.0、
+slime 和 Polar 采纳"。这是 thesis 12"harness 是杠杆"的训练侧对应物：它不再只是一个*执行*冻结模型的运行时包装，
+而是一个*训练期参与者*，塑造模型被优化所针对的请求/响应对。harness 如今是真实 agent 模型的标准架构，而这就是
+可复现的参考实现。
+
+## 厂商中立 harness + 史上最快涨星的仓库（8 月 20 日 04:03）
+
+- **TrueForge** — `truefoundry/trueforge`，MIT，8 月 19 日发布，1.8k stars / 413 commits，Node ≥22.13。
+  一个开源、厂商中立的 agent harness，定位为"把 LLM 变成可工作 agent 的运行时层"，对标封闭托管 agent 产品，
+  运营成本低约 50%。它运行执行循环——模型调用、MCP 工具、skills、沙箱、审批、上下文、会话状态——并暴露三个
+  接口：聊天 UI、HTTP API + TypeScript SDK、可嵌入 UI SDK。模型与 MCP 无关（OpenAI、Anthropic、20+ 模型、
+  40+ 工具），带人工检查点、sandbox-as-a-tool（Daytona）、subagents，以及从本地 SQLite 扩展到 Postgres+Redis
+  的 YAML 目录配置。只有你选择加入时，调用才经 TrueFoundry 网关（预算/限流/护栏）。**信号：** harness 层正在
+  快速收敛——DeepSeek Harness（本批 #1）是同一赌注的不同高度；TrueForge 的角度（厂商中立、沙箱化、人工审批门）
+  直指企业"托管 agent = 租来的黑箱"这一异议。
+
+- **DeepSeek Harness 涨星速度（更新）** — `deepseek-ai/deepseek-harness` 在 8 月 19 日前达到 **167k stars /
+  17.8k forks**，成为 GitHub 史上最快涨星的项目（30 分钟约 10k，90 分钟 22k）。星速是*需求*信号而非成熟度信号：
+  它是明确的 v0.1 开发者预览版，标注了"破坏性变更"，且 DeepSeek 尚未接受外部核心贡献，将生态工作路由到
+  **5,100+ 个 `dsh-plugin` 社区仓库**（五天）与 Discussions。信号：开发者注意力正集中在 *harness 层*而非权重
+  ——这是 thesis 1"注意力集中在 harness 而非模型"迄今最清晰的需求信号。
 

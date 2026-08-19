@@ -239,3 +239,44 @@ sharpens the evaluation-gap thesis (this file's "MMLU-for-skills" watch-item): t
 *human* (a 48-hour technical review), not machine-evaluated — so the category still ships on
 *assertion + manual review*, not a reproducible benchmark. The first skill library to bolt an automated,
 benchmarked eval onto security playbooks (Ponytail's template) would own that gap.
+
+## Skills with measured results (Aug 19 20:03)
+
+The "MMLU-for-skills" gap (this file's standing watch-item) is starting to fill from the vendor side —
+two skills now ship a *measured* number, not an assertion:
+
+- **JetBrains/benjamin-plus-skill** (MIT, ~745-token ruleset) changes *how* a coding agent looks things
+  up and waits — one-pass recon, 50-line "keyhole reads" instead of whole files, probing the
+  environment once, treating the task's own verification command as the definition of done — without
+  changing what it builds. In a paired A/B on 80 SkillsBench tasks (Claude Code + Sonnet 5), the
+  injected skill produced a **−17.9% cost median with quality unchanged** (7 better / 5 worse / 68
+  ties); a Codex SWE-bench run showed −4.4% cost and −20% tool calls. **The delivery-method finding is
+  the directly-actionable part:** injected, it saves; installed as a discoverable folder, "it saves
+  nothing." A vendor publishing a measured skill result is rare — this is the template Ponytail
+  pointed at, from a real tool vendor.
+- **Spielewoy/autoprompt-skill** (MIT, v1.0.0) wraps six coding agents (Claude Code, Codex, OpenCode,
+  Kilo Code, VS Code, Prime Agent) in a layered multi-agent hierarchy — coordination / management /
+  execution / independent-judgment — so one agent never plans, approves, *and* verifies its own work.
+  On Terminal-Bench 2.1 with OpenCode 1.18.7 it raised solves from **60/89 to 73/89 — 45% fewer
+  failures** — at a disclosed ~3× time / ~2× tokens trade-off (a single measured run, not a sweep).
+  **Signal:** "separate plan/approve/verify across agents" is the governance pattern everyone agrees on
+  but few skills ship as a number — the multi-agent mirror of the evaluation-gap thread (and of thesis
+  4's coordination findings: the fix for "one agent grading its own homework" is structural separation).
+
+## Methodology becomes the biggest skills repo (Aug 20 04:03)
+
+**obra/superpowers** (MIT, Jesse Vincent) is the most-starred "agentic skills framework" on GitHub at
+**274k stars**, sitting high on daily trending. It packages a software-development *methodology* for
+coding agents as composable skills plus startup instructions that make agents actually use them:
+brainstorming, implementation planning, **TDD**, systematic debugging, parallel execution, code
+review, and finish-the-branch workflows. Installs as a plugin from Anthropic's marketplace and is also
+listed for Codex; works across Claude Code, Copilot, Cursor, Windsurf and Gemini CLI. Includes a
+Subagent-Driven Development (SDD) workflow — v6.0.3 moved SDD scratch files out of `.git/` because
+Claude Code denies agent writes there (a small sign of how deeply skills now reach into the agent's
+working tree).
+
+Signal: superpowers is the reference point for the "methodology, not just prompts" school — and at
+274k stars it is now *larger than* `anthropics/skills` (169k), so the biggest skills repo is a
+*methodology*, not a vendor's product how-tos. It sharpens this file's standing evaluation-gap
+watch-item rather than closing it: a methodology shipped as skills is still an *assertion* —
+superpowers ships no benchmarked A/B of its own claims the way Ponytail or benjamin-plus-skill did.

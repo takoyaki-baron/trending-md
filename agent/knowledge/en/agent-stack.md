@@ -50,7 +50,9 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   sessions, sandboxes, storage, scheduling, and UI are all composable plugins — developers extend or
   replace capabilities at the config layer without touching the core. Four run modes (Standard, PTC
   programmatic tool-calling, Minimal, Create); append-only session logs + a Trajectory view support
-  resume/fork/retrieve/replay. `npx @deepseek-ai/dsh web`. ~38.9K stars. Signal: DeepSeek extends its
+  resume/fork/retrieve/replay. `npx @deepseek-ai/dsh web`. **~167K stars / 17.8K forks by Aug 19** — the
+  fastest-starring repo in GitHub history (~10K in 30 min, 22K in 90 min; 5,100+ `dsh-plugin` community
+  repos in five days). Signal: DeepSeek extends its
   "cheap frontier models" play into the harness layer — and "everything is a plugin" means it built
   its *own* plugin system (Cordis) rather than adopting Agent Plugins 1.0.0, a format-fragmentation
   watch-item (see [[agent-plugins]]).
@@ -156,10 +158,13 @@ same open gap as the memory-standardization note above.
   highest-friction point; "same logged-in state, isolated space" is a concrete answer.
 
 ## Knowledge / provenance
-- **Semantica** — `semantica-agi/semantica`, MIT, 4.1K stars. Self-hosted graph-native layer for
+- **Semantica** — `semantica-agi/semantica`, MIT, 9.5K stars. Self-hosted graph-native layer for
   agents: RDF/LPG dual-graph storage, Rete reasoning engine, W3C PROV-O provenance on every derived
   fact, 7 vector-DB backends. Deterministic graph reasoning + LLM only for fuzzy extraction →
-  auditable, reproducible decisions. `pip install semantica`. **v0.6.5** is a security release
+  auditable, reproducible decisions. On top: decision intelligence (every AI decision a first-class
+  traceable record), deterministic reasoning (Rete/Datalog/SPARQL — no LLM required), SHACL/OWL
+  ontology governance, and conflict detection that flags rather than silently overwrites; an MCP
+  server + plugins for Claude Code/Cursor/VS Code. `pip install semantica`. **v0.6.5** is a security release
   fixing five externally-reported vulns (missing auth on Explorer routes, Cypher/SPARQL injection).
 
 **Provenance standardization (Aug 16 20:27):** "who standardizes agent provenance" is now a *layered*
@@ -747,3 +752,87 @@ artifact. When a harness claim arrives without a no-scaffold ablation — which 
   *data-oblivious* quantizer with no train step is the shape agent memory actually needs — incremental
   ingest, crash-survivable via `sync()`, air-gapped, and cheap deletes (an agent's memory churns).
   Pairs with the fit-to-budget turn in [[edge-inference]].
+
+## BYOA team chat + thin computer-use + buyer-run commerce (Aug 19 20:03)
+
+- **Cumora** — `yetone/cumora`, MIT, TypeScript, created Aug 17, **2,469 stars / 272 forks in two days**
+  (yetone also wrote `avante.nvim`, so it arrived with an audience). Cross-platform team chat where AI
+  agents are first-class participants — "same roster, same DMs, same group conversations, same Kanban
+  board and calendar" — with personas, memory, work-claiming, coordination-without-colliding, and real
+  email. Two brain paths: **Cumora Cloud** runs each agent in a managed per-agent pod on a multi-hop
+  tool-calling loop over the OpenAI Responses API, while **BYOA** (`npx cumora agent computer`) pairs
+  your own Mac or VPS so the agent's brain is **your local Claude Code or Codex CLI on your own
+  subscription — the server never sees your provider keys**. Stack: Electron/PWA/mobile over Express +
+  Postgres + Redis. **Signal:** agent collaboration you self-host against your existing model spend
+  (BYOA), rather than a vendor metering tokens in the middle — the same "your keys, your machine" trust
+  move as NorthCinder below. Two days old and invite-only.
+- **macOS Harness** — `browser-use/macos-harness`, MIT, Python, created/pushed Aug 17, 428 stars. The
+  thinnest possible computer-use layer from the org behind browser-use: "The agent writes what is
+  missing, mid-task. No framework, no recipes, no rails. One Python process connected directly to
+  macOS, your real browser, and your files." The model gets a small primitive set — see, key, type,
+  click, plus accessibility and script access — and when no helper exists it **writes the missing logic
+  in ordinary Python during the run** instead of waiting for an app-specific tool. Onboarding is a
+  single paste-into-Codex-or-Claude-Code prompt (installs via `uv`, registers a skill, runs
+  `macos-harness doctor`, verifies by capturing a running app). **Signal:** the same "re-plan from the
+  live interface" thesis as UI-Mate ([[frontier-models]]), shipped as a ~400-line setup instead of a
+  trained model — "no rails" is the security posture too (it inherits the full macOS Accessibility +
+  AppleScript surface).
+- **NorthCinder** — `cinderline/northcinder`, MIT, 1.2k stars (`northcinder@0.1.2` on npm). A
+  self-hosted MCP server for AI *shopping* agents: it searches configured store adapters (Shopify,
+  WooCommerce, eBay/Etsy via API, Amazon read-only via a user-controlled browser profile), returns a
+  ranked shortlist with machine-readable reasons for inclusion *and* rejection, and requires a
+  **separate, signed, single-use approval mandate with a spending cap** before any checkout. Ranking is
+  buyer-criteria-only ("seller payment is not an input"), sponsored offers stay labeled below every
+  organic result, and a local audit trail is kept. **Signal:** agentic commerce is arriving with
+  sponsored ranking and telemetry baked into the broker path; a server where the buyer runs the
+  ranker, holds the signing key, and keeps the audit log is the trust model the category is missing —
+  a direct counter to "the agent buys the wrong thing on your card."
+- **OwnMem** — `grpcer/ownmem`, Apache-2.0, JavaScript, Node ≥20, created Aug 16, 53 stars
+  (`ownmem@0.2.0`, four versions). Inverts the standard agent-memory stack with the subtitle
+  "**Git-Native Project Memory for AI Coding Agents: Repo-owned. Deterministic. Reviewable.**" Curated
+  decisions/constraints/debugging lessons live as Markdown *inside the repository*, so memory is
+  diffed in PRs, travels with a clone, and rolls back with the code. Recall runs on a deterministic
+  **BM25-family ranker** rather than embeddings — the repo's own badges advertise recall P95 2.46 ms
+  and **model calls: 0** — and one memory set is claimed to serve Claude Code, Codex, Antigravity,
+  Cursor, Gemini CLI, Grok CLI. **Signal:** the *opposite* bet from turbovec (above) — most agent
+  memory bolts on an embedding model + vector store (opaque, non-deterministic, unreviewable);
+  plaintext + a deterministic ranker is the shape that survives code review. The memory gap now has a
+  fifth shape: team graph (TencentDB), portable handoff (ai-memory), filesystem (OpenViking), vector
+  index (turbovec), and now **git-native, deterministic Markdown** (OwnMem).
+
+## The harness participates in training (Aug 19 20:03)
+
+**Agent Lightning v1.0** (arXiv:2608.17528, Microsoft, submitted Aug 18; ~3,500 lines) makes the
+**deploy-time agent harness own the environment loop during RL**, so the trainer only ever sees LLM
+request/response pairs — addressing retokenization, sample merging, advantage calculation, loss
+normalization, and backend scheduling across arbitrary harnesses. Headline: fine-tuning **Qwen3.5-9B
+on 6K examples** lifts **SWE-bench Verified 41.8% → 56.4%** (+14.6 points) with modest compute, and
+the pipeline is released. The abstract's own line is the signal: the pattern was "later adopted by
+verl Uni-Agent, AReaL 2.0, slime, and Polar." This is the training-side counterpart to thesis 12's
+"the harness is the lever": it is no longer just a runtime wrapper that *executes* a frozen model —
+it is a *training-time participant* that shapes which request/response pairs the model is optimized
+against. The harness is now the standard architecture for real agent models, and this is the
+reproducible reference implementation.
+
+## Vendor-neutral harness + the fastest-starring repo ever (Aug 20 04:03)
+
+- **TrueForge** — `truefoundry/trueforge`, MIT, released Aug 19, 1.8k stars / 413 commits, Node
+  ≥22.13. An open-source, vendor-neutral agent harness pitched as "the runtime layer that turns an
+  LLM into a working agent," against closed managed-agent products at ~50% lower operating cost. It
+  runs the execution loop — model calls, MCP tools, skills, sandboxing, approvals, context, session
+  state — and exposes three interfaces: a chat UI, an HTTP API + TypeScript SDK, and an embeddable UI
+  SDK. Model- and MCP-agnostic (OpenAI, Anthropic, 20+ models, 40+ tools), with human checkpoints,
+  sandbox-as-a-tool (Daytona), subagents, and YAML-catalog config scaling from local SQLite to
+  Postgres+Redis. Routes calls through TrueFoundry's gateway (budgets/rate limits/guardrails) only if
+  you opt in. **Signal:** the harness layer is consolidating fast — DeepSeek Harness (this batch's #1)
+  is the same bet at a different altitude; TrueForge's angle (vendor-neutral, sandboxed, human approval
+  gates) targets the enterprise objection that a managed agent is a black box you rent.
+
+- **DeepSeek Harness velocity (update)** — `deepseek-ai/deepseek-harness` reached **167k stars /
+  17.8k forks by Aug 19**, becoming the fastest-starring project in GitHub's history (~10k stars in 30
+  minutes, 22k in 90). The star velocity is a *demand* signal, not a maturity one: it is an explicit
+  v0.1 developer preview with "compatibility-breaking changes" flagged, and DeepSeek is not yet
+  accepting external core contributions, routing ecosystem work to **5,100+ `dsh-plugin` community
+  repos** (five days) and Discussions. Signal: developer attention is concentrating on the *harness
+  layer*, not the weights — the clearest demand signal yet for thesis 1's "the harness, not the model,
+  is where attention concentrates."

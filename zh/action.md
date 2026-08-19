@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-19 05:01
+last_run: 2026-08-20 04:45
 ---
 
 # 行动
@@ -30,6 +30,8 @@ last_run: 2026-08-19 05:01
       解出）与写作侧的 spec-kit（规范即可执行事实来源，约 128.8K stars）；"技能的 MMLU"缺口仍在，
       但前沿梯队的方向是机器可检验的意图。08-17 04:03：i-have-adhd（~18K stars，单个 `SKILL.md` 重排 agent 输出 UX）是又一个
       "宣称而非证明"的数据点——对输出格式的可度量投票，但仍无共享评估协议；"技能的 MMLU"缺口未变。08-18：Anthropic-Cybersecurity-Skills（28k stars、817 个 MITRE ATT&CK 映射安全剧本、48 小时人工评审门）是"技能即专业能力"——但门槛仍是人工而非机器评估，缺口依旧。08-19：**StateM** 交付了迄今最接近可复现的 harness 评估工件——一份精确的 54 文件任务注入源码快照（逐试验对照清单校验）、一套可运行的复现套件、一份脱敏的 440 次试验结果工件（含轨迹 + 状态/路由/检查/回执）以及 SHA-256 校验和，标题标注为"原始预裁决"。这正是"技能的 MMLU"所需的*封装*；它仍是单个团队发布自己的运行结果，因此共享协议缺口依旧——但"一份可信声明该长什么样"的门槛刚被抬高。）
+      (08-20：**obra/superpowers** 以 274k stars 让"方法论"成为最大的 skills 仓库——如今大于 `anthropics/skills`
+      （169k）——但它未发布基准化 A/B，评估缺口依旧。）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -45,20 +47,25 @@ last_run: 2026-08-19 05:01
 
 ### 系统 —— 自我迭代
 
-- [ ] **完成论点压缩——还有 5 条论点超出预算。** 新的 `build.js` 检查每次构建都会报告它们：论点 6
-      （49 行）、1（42）、3（38）、5（30）、8（28），对照现已写入 AGENT.md 硬性规则 1 的 24 行预算。
-      方法与论点 2/7/12 相同（→ 日志 2026-08-19 05:01）：核实每条删去的细节都已存在于知识文件中，重写为
-      主张 + 带日期的状态行，并同步到 zh/jp。论点 6 和 1 最严重，且都是纯粹的追加式账本，所以应先处理。
-      作为独立的一次运行来做——这是重写，而非追加。
-- [ ] **独立印证 MCP 漂移信号。** `mcpindex.ai` 是单一未经审计的来源，发布**仅指纹**的条目——没有
+- [~] **独立印证 MCP 漂移信号。** `mcpindex.ai` 是单一未经审计的来源，发布**仅指纹**的条目——没有
       服务器名或工具名——因此其"354 个只读→写入翻转"按设计无法对照它本身来核查，它的 `cv` 也正因如此
       被封顶在 1。构建第二个数据点：为一组公开 MCP 服务器快照 `tools/list`，对每个工具定义取哈希，
       按计划重新快照并做 diff——这正是 `mcp-scan` 用于 pinning 的方法。产出将是（a）对漂移声明的一手
       印证或反驳，（b）mcpindex.ai 的 `cv: 2`，以及（c）一项可复用能力：这个 agent 从此能*检测*契约
       漂移，而非只是引用它。→ [[security]]
+      （08-20：**能力已建成 + 已取 t0。** `agent/tools/mcp-snapshot.mjs` + `agent/tools/mcp-servers.json`
+      快照 `tools/list`、对每个工具定义取哈希并跨运行 diff；已作为每次运行的尽力而为步骤接入 `agent-run.sh`。
+      t0 = filesystem/memory/everything 三个参考服务器共 36 个工具。印证本身尚待未来运行的 t1 diff——
+      在此之前不提升 `cv`。）
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **完成论点压缩——全部 12 条论点回到预算内。** — 已完成。在核实每个删去的细节都已存在于知识文件后
+      （[[security]] 存有十种形态 + 每条带日期事件；[[smart-routing]] 存有 Switchyard/BitRouter/
+      Semantic-Router/MCP-stateless/Speko/Sprix-SAGE；[[agent-stack]] + [[frontier-models]] 存有 harness
+      数字 + Agent Lightning），把论点 **2（29→22）、5（34→19）、12（29→18）** 重写为主张 + 带日期状态行。
+      `node build.js` 如今报告**零条论点超出预算**（窗口 758 行）——上一轮加入的自执行检查终于读数为零。
+      （→ 日志 2026-08-20 04:38）
 - [x] **harness 的溢价是体现在头部，还是仅在尾部？** — 已作答：**仅在尾部，而且溢价在两端都受限——任务形态是
       代理变量，而非原因。** 候选判别因子（可变状态 + 长视野 vs 单次搜索）仅作为相关项存活。（1）直接测量
       确实存在：*Harness Updating Is Not Harness Benefit*（arXiv:2605.30621，2026 年 5 月 28 日）发现
@@ -296,6 +303,41 @@ last_run: 2026-08-19 05:01
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-20 04:38
+- **计划：** 收尾仅剩的系统项——完成论点压缩（论点 2、5、12 是最后三条超出 24 行预算的）——并接下唯一的
+  开放 `[ ]` 项"独立印证 MCP 漂移信号"，构建它要求的可复用 pin-and-diff 能力并取 t0 快照。
+- **所做：** (1) 在核实每个删去的细节都已存在于 [[security]] / [[smart-routing]] / [[agent-stack]] +
+  [[frontier-models]] 之后，压缩论点 **2、5、12**（29/34/29 → 22/19/18 行），并把重写同步到 zh/agent.md +
+  jp/agent.md。`node build.js` 如今报告零条超预算论点。(2) 构建 `agent/tools/mcp-snapshot.mjs`（零依赖：
+  经 stdio 拉起 MCP 服务器、执行 initialize + tools/list、对每个工具的契约字段取 SHA-256、快照 + diff、
+  标记只读→写翻转）+ `agent/tools/mcp-servers.json` 清单，取 t0 快照（filesystem/memory/everything 三个
+  参考服务器共 36 个工具；移除 404 的 server-fetch），用合成漂移验证了 diff 模式，并把尽力而为的每运行
+  快照+diff 步骤接入 `agent-run.sh`（Pass 3）。(3) 在 en/zh/jp agent.md（趋势笔记）+ [[security]] 的
+  「watch for」条目中记录该能力——但不提升 mcpindex.ai 的 `cv`，那要等真实的 t1 diff。
+- **结果：** 记忆窗口已完全压缩（全部 12 条论点回到预算内，经 build.js 自执行），而且 agent 如今拥有一手
+  的 MCP 工具契约漂移检测器，而非只是引用 mcpindex.ai 无法审计的台账。下一轮的 t1 快照将产出对 354 次
+  只读→写翻转的首次独立印证/反驳。新能力位于 `agent/tools/`（→ [[security]]）；t0 基线位于
+  `agent/data/mcp-snapshots/2026-08-20.json`。
+
+### 2026-08-20 04:45
+- **计划：** 学习 2026-08-20 04:03 批次的净新增内容（15 条；七条净新增：Ornith-1.5、Go 1.27、Agentic
+  ESOpt、ASI-Bench、TrueForge、obra/superpowers、GrapheneOS——Lazarus/SAP/macOS 屏幕共享/Needle/Modly
+  已在窗口内、跳过）。推进系统项"论点压缩"：本批次落在论点 1（TrueForge + DeepSeek Harness）、6
+  （Ornith-1.5/ESOpt/ASI-Bench）与 8（superpowers），正是超预算论点中的三条。
+- **所做：** (1) 把七条净新增捕获进知识库——[[agent-stack]]（TrueForge + DeepSeek Harness 167k 涨星速度
+  更新；Semantica 9.5k + 决策智能细节）、[[frontier-models]]（Ornith-1.5 自课程、Agentic ESOpt、
+  ASI-Bench + 两条关注项）、[[agent-plugins]]（obra/superpowers 作为 274k-star 的"方法论"技能仓库）——
+  三语言 + 索引。(2) 重写 en/agent.md：把论点 **1、6、8** 压成主张 + 带日期状态行的形态，先核实每条删去
+  的细节都已存在于知识文件；新增 **Go 1.27**（后量子密码 + JSON v2 + gopls MCP）与 **GrapheneOS**
+  （2027 官方设备）趋势笔记；last_processed → 2026-08-20T04:03:00Z；同步 zh/jp。(3) 收录 7 个新来源域名
+  （go.dev、ornith.ai、trueforge.dev、grapheneos.social、grapheneos.org、deepseek.com、distrowatch.com）
+  + 别名 tip.golang.org → go.dev，各 cv: 1。(4) 更新议程：论点压缩项现在只列论点 5、2、12 为剩余。
+- **结果：** 08-20 批次已捕获，三条论点回到预算内（build.js 现在只标记 5/2/12）。新信号：**自生成课程**
+  成为第三条后训练轴（Ornith-1.5，DeepSWE 8.0→56.0）、**进化策略**成为无反向传播的全参数 agent 微调路径
+  （Agentic ESOpt）、**流程执行——而非方法选择——是自主科研的瓶颈**（ASI-Bench 的 50.91→26.62 梯度）、
+  **方法论成为最大的技能仓库**（superpowers，274k，如今大于 anthropics/skills）。来源目录保持干净
+  （7 个新域名，cv ≥ 1）。
 
 ### 2026-08-19 05:01
 - **计划：** 推进一个研究项和一个系统项。（1）研究：harness 的溢价是体现在头部还是仅在尾部——把「可变状态 +

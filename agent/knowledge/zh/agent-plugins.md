@@ -201,3 +201,34 @@ MITRE ATT&CK v19.1**，并有 NIST CSF 2.0、D3FEND 与 NIST AI RMF 映射，兼
 （48 小时技术评审），而非机器评估——因此这一类别仍在靠*断言 + 人工评审*发布，而非可复现的基准。第一个给
 安全剧本装上自动化、可基准化评估（Ponytail 的模板）的技能库，将拥有那个缺口。
 
+## 有量化结果的 skills（8 月 19 日 20:03）
+
+"技能的 MMLU"缺口（本文件的常驻关注项）正从厂商一侧开始被填补——两个 skill 如今交付的是*量化*数字，而非断言：
+
+- **JetBrains/benjamin-plus-skill**（MIT，约 745 token 规则集）改变编码 agent *查找与等待的方式*——一次通关侦察、
+  50 行的"锁孔读取"而非整文件、环境只探测一次、把任务自身的验证命令当作 done 的定义——而不改变它构建的东西。
+  在 80 个 SkillsBench 任务（Claude Code + Sonnet 5）的配对 A/B 中，注入的 skill 实现了**成本中位数 −17.9%、
+  质量不变**（7 更好 / 5 更差 / 68 持平）；一次 Codex SWE-bench 运行显示 −4.4% 成本、−20% 工具调用。**交付方式
+  的发现是可直接落地的部分：** 注入时它省钱；作为可发现文件夹安装时，"它什么也省不了"。厂商发布有量化结果的
+  skill 十分罕见——这正是 Ponytail 所指的模板，出自真正的工具厂商。
+- **Spielewoy/autoprompt-skill**（MIT，v1.0.0）把六个编码 agent（Claude Code、Codex、OpenCode、Kilo Code、VS
+  Code、Prime Agent）包进一个分层多 agent 层级——协调 / 管理 / 执行 / 独立判断——使单一 agent 永远无法既规划、
+  又批准、还验证自己的工作。在 OpenCode 1.18.7 的 Terminal-Bench 2.1 上，把解题从 **60/89 提升到 73/89 —— 失败
+  减少 45%**——代价是约 3× 时间 / ~2× token（单次量化运行，而非扫描）。**信号：**"跨 agent 分离规划/批准/验证"
+  是人人认同的治理模式，却很少有 skill 以数字交付——这是评估缺口线索（以及 thesis 4 协调发现的）多 agent 镜像：
+  对"一个 agent 给自己的作业打分"的修复是结构性分离。
+
+## 方法论成为最大的 skills 仓库（8 月 20 日 04:03）
+
+**obra/superpowers**（MIT，Jesse Vincent）以 **274k stars** 成为 GitHub 上星数最多的"agentic skills 框架"，
+高居日榜前列。它把一套软件开发*方法论*打包成可组合 skills 加启动指令，让 agent 真正使用它们：头脑风暴、
+实现规划、**TDD**、系统化调试、并行执行、代码评审与收尾分支工作流。可作为插件从 Anthropic 的 marketplace
+安装，也面向 Codex 列出；跨 Claude Code、Copilot、Cursor、Windsurf 与 Gemini CLI 工作。含 Subagent-Driven
+Development（SDD）工作流——v6.0.3 把 SDD 草稿文件移出 `.git/`，因为 Claude Code 拒绝 agent 在那里写文件
+（skills 深入 agent 工作树程度之深的一个小信号）。
+
+信号：superpowers 是"方法论，而非提示词"学派的参照点——且以 274k stars 如今*大于* `anthropics/skills`
+（169k），因此最大的 skills 仓库是一套*方法论*，而非厂商的产品 how-to。它让本文件常设的评估缺口关注项更
+尖锐而非收口：以 skills 形式发布的方法论仍是*断言*——superpowers 并未像 Ponytail 或 benjamin-plus-skill 那样
+发布自身主张的基准化 A/B。
+

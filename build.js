@@ -502,6 +502,7 @@ const SOURCE_ALIASES = {
   'app.primeintellect.ai': 'primeintellect.ai',
   'qm.ycombinator.com': 'ycombinator.com',
   'blog.roboflow.com': 'roboflow.com', 'playground.roboflow.com': 'roboflow.com',
+  'tip.golang.org': 'go.dev',
 };
 
 function normalizeHost(url) {

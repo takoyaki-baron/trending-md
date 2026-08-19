@@ -2077,5 +2077,122 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "app.opencve.io": {
+    "cat": "security",
+    "en": "OpenCVE's web UI — a CVE aggregator that mirrors and re-renders NVD/NIST records. Convenient for advisory links and version ranges, but it is a downstream mirror: confirm severity, affected versions, and fix releases against the NVD record it cites (this feed does for FUXA/n8n).",
+    "zh": "OpenCVE 的 Web 界面——镜像并重渲染 NVD/NIST 记录的 CVE 聚合站。便于链接公告与版本区间，但它只是下游镜像：严重度、受影响版本与修复版本务必对照其引用的 NVD 记录核实（本 feed 对 FUXA/n8n 即如此）。",
+    "jp": "OpenCVEのWeb UI——NVD/NISTレコードをミラーして再描画するCVEアグリゲーター。アドバイザリのリンクやバージョン範囲の参照に便利だが、下流のミラーにすぎない：深刻度・影響バージョン・修正リリースは必ず引用元のNVDレコードと突合せよ（本フィードはFUXA/n8nでそうしている）。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "phoronix.com": {
+    "cat": "news",
+    "en": "Long-running Linux/hardware news site (Michael Larabel); first-rate on kernel releases, schedulers, and driver work — the feed's Linux 7.2 and -ck items cite it alongside kernel.org. Cross-check headline features against the kernel.org front page or the release notes.",
+    "zh": "历史悠久的 Linux/硬件资讯站（Michael Larabel）；内核发布、调度器与驱动方面的报道一流——本 feed 的 Linux 7.2 与 -ck 条目在引用 kernel.org 的同时引用它。头条特性请与 kernel.org 首页或发布说明核对。",
+    "jp": "老舗のLinux/ハードウェアニュースサイト（Michael Larabel）。カーネルリリース・スケジューラ・ドライバ関連は一級——本フィードのLinux 7.2と-ck記事はkernel.orgと並べて引用する。主要機能はkernel.orgトップページやリリースノートと突合せよ。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "openwall.com": {
+    "cat": "security",
+    "en": "Home of the oss-security mailing list — the canonical venue for full-disclosure of Linux/open-source kernel and userspace flaws (OpenZFS OZ-1 was disclosed here). Primary and dense, but a disclosure post is the reporter's claim: reproduction is documented by the reporter, not independently audited.",
+    "zh": "oss-security 邮件列表所在地——Linux/开源内核与用户态漏洞完全披露的正典场所（OpenZFS OZ-1 即在此披露）。一手且密集，但披露帖是报告者的一家之言：复现由报告者记录，而非独立审计。",
+    "jp": "oss-securityメーリングリストの本拠——Linux/オープンソースのカーネル・ユーザー空間の脆弱性の完全開示の正典の場（OpenZFS OZ-1はここで開示された）。一次情報で密度が高いが、開示投稿は報告者の主張であり、再現は報告者が記すもので独立監査ではない。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "ai.google.dev": {
+    "cat": "vendor",
+    "en": "Google's official Gemini API documentation — the authoritative source for model deprecations, shutdown dates, and endpoint replacement mappings (Imagen 4 → gemini-3.1-flash-image). Vendor self-report, so canonical for Google's own surfaces but not for third-party pricing/parameter claims.",
+    "zh": "Google 官方 Gemini API 文档——模型弃用、关停日期与端点替换映射的权威来源（Imagen 4 → gemini-3.1-flash-image）。属厂商自述，对 Google 自身界面是正典，但第三方定价/参数声明不在此列。",
+    "jp": "Google公式のGemini APIドキュメント——モデルの非推奨・シャットダウン日・エンドポイント置換マッピングの権威ある情報源（Imagen 4 → gemini-3.1-flash-image）。ベンダー自己申告のため、Google自身の面については正典だが、第三者の価格・パラメータ主張にはあたらない。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "registry.npmjs.org": {
+    "cat": "data",
+    "en": "The npm registry API — ground truth for package existence, versions, and publish dates (verified ownmem@0.2.0 and northcinder@0.1.2 here). Authoritative and machine-checkable, but it records what was published, not whether the code is safe or maintained.",
+    "zh": "npm registry API——包是否存在、版本与发布日期的真值来源（本 feed 在此核验了 ownmem@0.2.0 与 northcinder@0.1.2）。权威且可机器核验，但它记录的是发布过什么，而非代码是否安全或在维护。",
+    "jp": "npmレジストリAPI——パッケージの存在・バージョン・公開日の真実の源（ownmem@0.2.0とnorthcinder@0.1.2をここで検証した）。権威的で機械検証可能だが、記録されるのは何が公開されたかであり、コードが安全か保守されているかではない。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "pypi.org": {
+    "cat": "data",
+    "en": "The Python Package Index — ground truth for package existence, versions, and publish dates (verified cactus-needle and semantica here). Authoritative and machine-checkable, but it records what was published, not whether the code is safe or maintained.",
+    "zh": "Python 包索引（PyPI）——包是否存在、版本与发布日期的真值来源（本 feed 在此核验了 cactus-needle 与 semantica）。权威且可机器核验，但它记录的是发布过什么，而非代码是否安全或在维护。",
+    "jp": "Python Package Index（PyPI）——パッケージの存在・バージョン・公開日の真実の源（cactus-needleとsemanticaをここで検証した）。権威的で機械検証可能だが、記録されるのは何が公開されたかであり、コードが安全か保守されているかではない。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "go.dev": {
+    "cat": "vendor",
+    "en": "Go's official site (Google) — canonical for Go language releases and the Go blog (the Go 1.27 announcement). Cross-validated against the tip.golang.org release notes + Phoronix (08-20).",
+    "zh": "Go 官方站点（Google）——Go 语言发布与 Go 博客的权威来源（Go 1.27 公告）。已与 tip.golang.org 发布说明 + Phoronix 交叉核验（08-20）。",
+    "jp": "Go公式サイト（Google）——Go言語リリースとGoブログの正規情報源（Go 1.27発表）。tip.golang.orgのリリースノート + Phoronixと突合済み（08-20）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "ornith.ai": {
+    "cat": "vendor",
+    "en": "Ornith AI's official site — first-hand for the Ornith-1.5 model family. Benchmark figures are vendor-reported against Ornith's own chosen baselines, so treat scores as self-published. Cross-validated against RuntimeWire coverage (08-20).",
+    "zh": "Ornith AI 官网——Ornith-1.5 模型家族的一手来源。基准数字为厂商自报、对照 Ornith 自选基线，故评分应视为自发布。已与 RuntimeWire 报道交叉核验（08-20）。",
+    "jp": "Ornith AI公式サイト——Ornith-1.5モデルファミリーの一次情報。ベンチマーク数値はベンダー自己申告でOrnith自身が選んだベースラインとの比較のため、スコアは自社公開扱い。RuntimeWire報道と突合済み（08-20）。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "trueforge.dev": {
+    "cat": "vendor",
+    "en": "TrueFoundry's TrueForge docs — first-hand for the TrueForge agent harness and its interfaces; corroborates the truefoundry/trueforge repo (08-20).",
+    "zh": "TrueFoundry 的 TrueForge 文档——TrueForge agent harness 及其接口的一手来源；与 truefoundry/trueforge 仓库相互印证（08-20）。",
+    "jp": "TrueFoundryのTrueForgeドキュメント——TrueForgeエージェントハーネスとそのインターフェースの一次情報；truefoundry/trueforgeリポジトリと相互確認（08-20）。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "grapheneos.social": {
+    "cat": "community",
+    "en": "GrapheneOS's official Mastodon — primary for project announcements (the 2027 first-party-device post). Cross-validated against grapheneos.org (08-20).",
+    "zh": "GrapheneOS 官方 Mastodon——项目公告的一手来源（2027 年官方设备帖子）。已与 grapheneos.org 交叉核验（08-20）。",
+    "jp": "GrapheneOS公式Mastodon——プロジェクト発表の一次情報（2027年ファーストパーティデバイス投稿）。grapheneos.orgと突合済み（08-20）。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "grapheneos.org": {
+    "cat": "community",
+    "en": "GrapheneOS's official site — the privacy-hardened Android project's canonical home. Cross-validated against the project's Mastodon (08-20).",
+    "zh": "GrapheneOS 官网——强化隐私的 Android 项目的权威主页。已与项目 Mastodon 交叉核验（08-20）。",
+    "jp": "GrapheneOS公式サイト——プライバシー強化Androidプロジェクトの正規ホーム。プロジェクトのMastodonと突合済み（08-20）。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "deepseek.com": {
+    "cat": "vendor",
+    "en": "DeepSeek's main site — product pages (DeepSeek Harness) and first-hand announcements; sibling to api-docs.deepseek.com. Cross-validated against the deepseek-ai/deepseek-harness repo (08-20).",
+    "zh": "DeepSeek 主站——产品页（DeepSeek Harness）与一手公告；是 api-docs.deepseek.com 的姊妹域名。已与 deepseek-ai/deepseek-harness 仓库交叉核验（08-20）。",
+    "jp": "DeepSeekのメインサイト——製品ページ（DeepSeek Harness）と一次発表；api-docs.deepseek.comの姉妹ドメイン。deepseek-ai/deepseek-harnessリポジトリと突合済み（08-20）。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "distrowatch.com": {
+    "cat": "community",
+    "en": "DistroWatch — the Linux-distro tracker; useful for distro availability/ratings (Omarchy). A secondary/community signal, not a primary source for technical claims. Cross-validated against the basecamp/omarchy repo (08-20).",
+    "zh": "DistroWatch——Linux 发行版追踪站；对发行版可用性/评分（Omarchy）有用。属二手/社区信号，非技术论断的一手来源。已与 basecamp/omarchy 仓库交叉核验（08-20）。",
+    "jp": "DistroWatch——Linuxディストロのトラッカー；ディストロの可用性/評価（Omarchy）に有用。二次/コミュニティシグナルであり、技術的主張の一次情報源ではない。basecamp/omarchyリポジトリと突合済み（08-20）。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

@@ -121,3 +121,18 @@ example of the second (caught after).
 Every batch, before publishing: run the checklist on each item. Treat any item where you cannot
 complete all three checks as "not yet verified" — either finish the check or drop the item. Keep
 the Void lesson as a standing warning; it is the exact failure mode this method exists to prevent.
+
+## Corollaries from the Aug 19 20:03 batch
+
+Three more "check the source, not the aggregate" instances, one per item:
+
+- **Oracle's patch count — report the vendor's number.** The August CSPU item circulates as "925 CVEs /
+  154 critical," but Oracle's own advisory states **943 new security patches**. The vendor's number is
+  the one cited; third-party counts don't match it.
+- **OpenZFS OZ-1 — cite the list we read.** The `hotmolts.com` write-up circulating alongside is
+  client-rendered and served none of the technical content server-side, so the item cites the
+  oss-security mailing-list post that was actually read.
+- **Mojo's license — the detector is not the source.** GitHub's license detector reports
+  `NOASSERTION` on `modular/modular` (the LLVM exceptions defeat auto-detection); the "Apache-2.0"
+  claim is Modular's own, stated in the announcement that was read. A license claim needs the vendor's
+  statement, not the detector — same shape as the turbovec "ICLR 2026" venue corollary.

@@ -171,3 +171,20 @@ from *absence of a standard* → *choice of standard* → *transport vs policy*.
   chips" — the router layer is where vendor lock-in will try to happen.
 - The same classify-first pattern applied to the next expensive step (audio/video transcription,
   embeddings, fine-tuning data selection).
+
+## A sixth instance — A2A agent-network routing (Aug 19 20:03)
+
+**Sprix SAGE Router** (`wang2122/sprix-sage-router`, MIT, Python, 362 stars, v0.2 research preview) is a
+decision layer that sits between **A2A protocol discovery and task execution**, choosing mid-run
+whether the incumbent agent should continue alone (**SELF**), recruit collaborators while keeping
+ownership (**COLLABORATE**), or transfer full ownership (**HANDOFF**). It composes task-DAG roles,
+schedules dependencies, and updates trust from execution evidence under permission/budget/deadline
+constraints, using a learned outcome model plus beam-search team composition. The README's 2,500-task
+simulation (0.634 vs 0.507 incumbent-only quality) is flagged synthetic.
+
+**Signal:** as A2A (now a Linux Foundation protocol) matures, the open problem shifts from "can agents
+talk" to "when should they collaborate vs hand off" — the missing middle layer between discovery and
+execution. This is "route before compute" applied one level *above* the model router: the routed unit
+isn't a model call but a *whole sub-task's ownership*. The learned, evidence-based SELF/COLLABORATE/
+HANDOFF decision is the A2A-era answer to the "who owns the router decision" lock-in question — with
+the same caveat as every learned router (the outcome model is a black box and the eval is synthetic).
