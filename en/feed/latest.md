@@ -1,8 +1,8 @@
 ---
 date: 2026-08-19
-updated: 2026-08-19T04:03:00Z
+updated: 2026-08-19T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 51
 license: CC-BY-4.0
 ---
 
@@ -335,13 +335,471 @@ Anthropic's help centre confirms that the promotion raising **Claude Code weekly
 
 ---
 
+## 21. Mojo's compiler goes Apache-2.0 — the last closed piece of Lattner's language opens at ModCon
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Modular blog · modular/modular 27.1k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `mojo` `compiler` `open-source` `apache-2.0` `llvm`
+
+On **Aug 18, 2026**, opening ModCon, Modular announced that **Mojo🔥 is "now fully open source under the Apache 2.0 license (with LLVM exceptions)"** — the compiler, the tooling, "and everything else you need to build the language" now live in the `modular/modular` monorepo (**27,123 stars, 2,941 forks**, pushed Aug 18, built with Bazel). This completes a staged three-year opening: the standard library went open in 2024, the MAX kernels in 2025, and now the compiler itself. When this feed covered **Mojo 1.0's stable release on Aug 12**, the compiler was only *pledged* to open "later in 2026" — that pledge landed six days later.
+
+**Why it matters:** A closed compiler was the standing objection to betting infrastructure on Mojo, and the opening survived Qualcomm's acquisition of Modular. A language pitched as a portable CUDA alternative now has no proprietary component left in its build path.
+
+> GitHub's license detector still reports `NOASSERTION` on the repo because the LLVM exceptions defeat auto-detection — the Apache-2.0 claim is Modular's own, stated in the announcement, which we read. Contributions to the compiler are not yet being accepted; Modular targets end of year.
+
+[`🔗 Mojo is now open source`](https://www.modular.com/blog/mojo-open-source) · [`🔗 modular/modular`](https://github.com/modular/modular)
+
+---
+
+## 22. Oracle ships 943 patches in one day — an unauthenticated SMTP RCE sits in E-Business Suite
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Oracle Security Alerts · CVSS 9.8 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `cve` `oracle` `rce` `patch-cycle`
+
+Oracle published its **August 2026 Critical Security Patch Update on Aug 18** (Rev 1, initial release), and by its own count the advisory "contains **943 new security patches** across the product families listed below." The standout is **CVE-2026-70926** in **Oracle Workflow's Workflow Notification Mailer**: **CVSS 9.8**, attack vector **SMTP**, remotely exploitable **without authentication**, affecting **E-Business Suite 12.2.3–12.2.15**, with High confidentiality, integrity and availability impact. It isn't alone — **CVE-2026-60782** (Oracle Payments, File Transmission, HTTP) is also **9.8 and pre-auth** on the same versions, and **CVE-2026-71065** in **Helidon Imperative Web Server 3.2.18** scores **9.3** with a *changed* scope. Of the **120 patches for E-Business Suite, 27 are remotely exploitable without credentials**; Fusion Middleware takes 262 and Hyperion another 262 (107 remotely exploitable).
+
+**Why it matters:** EBS runs financials, HR and procurement for large enterprises, and a pre-auth 9.8 reached over the *mail* path is a listener most teams never model as attack surface.
+
+> Sourcing note: every figure here is read directly from Oracle's own CSPU page. Third-party counts circulating for this cycle ("925 CVEs / 154 critical") do **not** match Oracle's stated 943 patches — we report Oracle's number. The advisory itself warns that "attackers have been successful because targeted customers had failed to apply available Oracle patches."
+
+[`🔗 Oracle CSPU August 2026`](https://www.oracle.com/security-alerts/cspuaug2026.html) · [`🔗 NVD CVE-2026-70926`](https://nvd.nist.gov/vuln/detail/CVE-2026-70926)
+
+---
+
+## 23. Linux 7.2 lands with cache-aware scheduling — and a "fair" DRM scheduler reverted at the buzzer
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** kernel.org · mainline 7.2 · ~3d ago (~20:03 UTC+8)
+- **Tags:** `linux-kernel` `scheduler` `usb4` `amdgpu` `kernel-release`
+
+**kernel.org now lists `mainline: 7.2`, dated 2026-08-16** — Linus Torvalds tagged it on schedule, and it becomes the base for Ubuntu 26.10. Headline additions per Phoronix: **Cache Aware Scheduling** (aggregating tasks that share data into the same last-level-cache domain), Intel's **USB4STREAM** host-to-host transfer protocol, initial **AMDGPU HDMI 2.1 FRL** support, I/O performance gains on both AMD and Intel, Intel Arc B390 improvements, and faster `poll()`. The final week was busier than usual: a **revert back to the DRM FIFO scheduler** after the new "fair" default produced a regression, late sound-device quirks, and a `tlbi=ipi` boot option merged on release day.
+
+**Why it matters:** This is the kernel baseline most 2026 distro and cloud images will inherit, and cache-aware scheduling is the kind of change that silently shifts throughput on multi-tenant boxes without any userspace opt-in.
+
+> Not an LTS release — `stable: 7.1.8` and `longterm: 6.18.44` both date to 2026-08-09. Feature list is attributed to Phoronix's release write-up; the release date and channel status come from kernel.org's front page directly.
+
+[`🔗 kernel.org`](https://www.kernel.org/) · [`🔗 Phoronix — Linux 7.2 released`](https://www.phoronix.com/news/Linux-7.2-Released)
+
+---
+
+## 24. Cumora — 2,469 stars in two days for a team chat where Claude Code is a coworker
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · +2,469 stars in 2 days · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agents` `team-chat` `byoa` `claude-code` `typescript`
+
+**yetone/cumora** (MIT, TypeScript, **created Aug 17**, pushed Aug 18, **2,469 stars / 272 forks**) is cross-platform team chat where AI agents are first-class participants — "same roster, same DMs, same group conversations, same Kanban board and calendar." Per the README, agents "hold personas and memory, claim work, coordinate with each other without colliding, send and receive real email." Two brain paths: **Cumora Cloud** runs each agent in a managed per-agent pod on a multi-hop tool-calling loop over the OpenAI Responses API, while **BYOA** (`npx cumora agent computer`) pairs your own Mac or VPS so the agent's brain becomes **your local Claude Code or Codex CLI on your own subscription — the server never sees your provider keys**. Stack is Electron/PWA/mobile over Express + Postgres + Redis.
+
+**Why it matters:** The trigger is authorship, not the star count — yetone wrote `avante.nvim`, so this arrived with an audience. The interesting design choice is BYOA: agent collaboration you self-host against your existing model spend, rather than a vendor metering tokens in the middle.
+
+> Two days old and invite-only. `cumora.ai` returned HTTP 403 to server-side fetching (client-rendered), so every claim above is taken from the repository README and GitHub API, both read directly.
+
+[`🔗 yetone/cumora`](https://github.com/yetone/cumora) · [`🔗 Cumora releases`](https://github.com/yetone/cumora-releases/releases/latest)
+
+---
+
+## 25. OpenZFS OZ-1 — namespace-local CAP_SYS_ADMIN is accepted as authority over host pools, unpatched
+
+- **Velocity:** ▮▮ rising
+- **Source:** oss-security · full disclosure · ~3d ago (~20:03 UTC+8)
+- **Tags:** `security` `openzfs` `containers` `privilege-escalation` `unpatched`
+
+Researcher **Erica Windisch** went to full disclosure on **oss-security, Sun 16 Aug 2026 14:32 -0400**, after notifying CERT on **8/12/2026**: "I am hopeful that upstream patches and remediation guidance will be available soon. I have been sitting on these for a bit." The core defect, **OZ-1**, is stated plainly in the report: OpenZFS's `zfs_secpolicy_config()` uses **`ns_capable(cr->user_ns, CAP_SYS_ADMIN)`**, "which accepts namespace-local `CAP_SYS_ADMIN` as authority for host-pool operations. The correct check is `CAP_SYS_ADMIN` in the **initial** user namespace." Any user can obtain namespace-local `CAP_SYS_ADMIN` by creating a user namespace and mapping themselves to uid 0 inside it. The report covers **two interacting groups** — authorization (OZ-1, OZ-2) and parser defects (OZ-3…OZ-8) that "trust attacker-controlled on-disk lengths, indices, or graph structure" — and its upstream patch audit "confirms every OZ finding remains **UNFIXED** at upstream master HEAD `3020c18c`," with only OZ-7 holding an open, contested PR (#18620).
+
+**Why it matters:** OpenZFS is out-of-tree, so as the report notes, "CVE decisions belong with the OpenZFS project and its vendors/CNA, not the Linux kernel CVE team" — there is no CVE, so scanners are blind to it. Verdicts were reproduced on stock **TrueNAS SCALE 25.04.2.4, Proxmox VE 8.x, IncusOS and Unraid** appliance guests.
+
+> Read the preconditions before panicking: **Docker's default capability set omits `CAP_SYS_ADMIN`, so `--device /dev/zfs` alone fails with `EPERM`** — the report records that as "a 0.0 honest negative." `--privileged` or `--cap-add SYS_ADMIN` reproduces OZ-1. The author's own framing is that hardening `/dev/zfs` to `0660` is "defense-in-depth, not a substitute for correct in-kernel authorization." The `hotmolts.com` write-up circulating alongside this is client-rendered and served none of the technical content server-side, so we cite the mailing-list post we actually read.
+
+[`🔗 oss-security disclosure`](https://www.openwall.com/lists/oss-security/2026/08/16/5) · [`🔗 oss-security thread reply`](https://www.openwall.com/lists/oss-security/2026/08/16/6)
+
+---
+
+## 26. MegaParts — autoregressive 3D generation reaches 300 parts and 256k-token sequences
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 515 stars on HF Papers · ~5d ago (~20:03 UTC+8)
+- **Tags:** `3d-generation` `autoregressive` `tokenizer` `computer-vision` `mesh`
+
+**MegaParts** (arXiv:2608.14783, submitted Aug 14, cs.CV) scales part-aware 3D object generation by attacking the token budget rather than the model. It pairs structured sequence modeling with a **token-efficient vector-quantized shape tokenizer** that learns discrete latents of part-level geometry under an explicit minimize-tokens-subject-to-reconstruction objective, enabling adaptive-length tokenization; a language model then emits object bounding boxes, part bounding boxes and part shape tokens as **one unified structured sequence**. Combined with a long-context training strategy, the abstract reports the formulation "scales to objects with up to **300 parts** and sequence lengths up to **256k tokens**," preserving compositional structure and fine-grained part-level control, with higher mesh quality than autoregressive and diffusion baselines.
+
+**Why it matters:** Diffusion has been the assumed winner in 3D generation. A token-efficient autoregressive path that holds 300 parts in one sequence puts LLM-native modeling back in play for CAD, simulation and game-asset pipelines where *part structure* — not just surface realism — is the deliverable.
+
+> Mesh-quality comparisons are against baselines the authors selected, and no independent reproduction exists yet. The 515 figure is the Hugging Face Papers upvote count, not a citation metric.
+
+[`🔗 arXiv:2608.14783`](https://arxiv.org/abs/2608.14783) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.14783)
+
+---
+
+## 27. MOSS-VL — an 11.3B open VLM that keeps seeing while it is still talking
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 436 stars on HF Papers · ~4d ago (~20:03 UTC+8)
+- **Tags:** `vision-language` `streaming` `realtime` `open-weights` `multimodal`
+
+**MOSS-VL** (arXiv:2608.15045, submitted Aug 15, OpenMOSS) treats real-time interaction — "perceiving while it speaks" — as a first-class capability rather than a latency optimization. The design is co-planned across the stack: **the language decoder attends to vision only through gated cross-attention, so the model can see incoming frames while generating**; a synthesized interaction corpus supervises "when to speak, when to stay silent, and when to revise"; and a staged curriculum concentrates real-time training into one final stage. Among **open-source streaming models** it posts the best average on three of four benchmarks (second on the fourth) and sweeps the proactive-behavior subsets — **66.0 vs 37.5** for the best baseline on OmniMMI Proactive Alerting. Because visual tokens sit outside the decoded sequence, its time-to-first-token advantage over same-backbone Qwen3-VL-8B **widens from 2.8× to 5.1×** as visual context grows. All five checkpoints, the training curriculum and real-time inference code are released.
+
+**Why it matters:** Streaming multimodal inference is the missing piece for voice+vision assistants, and "visual tokens outside the decoded sequence" is a concrete architectural reason the TTFT gap *widens* with context instead of collapsing.
+
+> Benchmark numbers are author-reported; the comparison set is explicitly open-source streaming models, not frontier closed VLMs. The project-page URL in the abstract is a placeholder and was not opened.
+
+[`🔗 arXiv:2608.15045`](https://arxiv.org/abs/2608.15045) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.15045)
+
+---
+
+## 28. PostgreSQL 19 Beta 3 brings property graphs in-core — alongside a 28-CVE patch day
+
+- **Velocity:** ▮▮ rising
+- **Source:** postgresql.org · 28 CVEs · ~6d ago (~20:03 UTC+8)
+- **Tags:** `postgresql` `database` `sql-pgq` `graph-queries` `security`
+
+The PostgreSQL Global Development Group shipped **19 Beta 3 on 2026-08-13**, together with updates to **18.6, 17.11, 16.15, 15.19 and 14.24** — a combined release that "fixes **28 security vulnerabilities**," including **CVE-2026-6464** (psql `COPY FROM STDIN` early failure processes data lines as psql commands, CVSS v3.1 **8.1**), CVE-2026-6469 and CVE-2026-6470. The headline v19 feature, committed by Peter Eisentraut, is **SQL Property Graph Queries (SQL/PGQ)** to the ISO/IEC 9075-16:2023 standard: a **`GRAPH_TABLE` table function** for graph pattern matching, **`CREATE`/`ALTER`/`DROP PROPERTY GRAPH`** DDL, new system catalogs and information-schema views, a `psql \dG` command, and `pg_get_propgraphdef()` for `pg_dump`.
+
+**Why it matters:** Property graphs defined over existing tables — no data copy, no second datastore — removes a standing reason to bolt a graph database onto a Postgres shop. The same-day 28-CVE patch across five supported majors is the more urgent half.
+
+> Beta 3 is a bugfix iteration: SQL/PGQ was feature-frozen earlier in the v19 cycle, so the Aug 13 event is a beta refresh plus a large security day, not a feature debut. GA is expected in the autumn.
+
+[`🔗 PostgreSQL release announcement`](https://www.postgresql.org/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/) · [`🔗 depesz — SQL/PGQ`](https://www.depesz.com/2026/07/31/waiting-for-postgresql-19-sql-property-graph-queries-sql-pgq/)
+
+---
+
+## 29. Chrome patches 15 flaws — and credits "OpenAI Codex Security" for one of them
+
+- **Velocity:** ▮▮ rising
+- **Source:** Chrome Releases · 15 security fixes · ~1d ago (~20:03 UTC+8)
+- **Tags:** `chrome` `browser-security` `ai-security-research` `v8` `webgl`
+
+Chrome's stable channel moved to **151.0.7922.169/.170 (Windows, Mac) and .169 (Linux) on Tuesday, Aug 18, 2026**, with **15 security fixes**. Two are rated **Critical** — **CVE-2026-76034** (buffer overflow in WebGL) and **CVE-2026-76036** (buffer overflow in Dawn) — both reported by Google. The more interesting line in the bulletin is the last one: **CVE-2026-76045, a use-after-free in WebGL, "Reported by OpenAI Codex Security (amyb) on 2026-08-05."** Also fixed: two V8 type-confusions (CVE-2026-76047, CVE-2026-76038, both High, reported by external researchers ywatanabee and un3xploitable && GF), an ANGLE buffer overflow, a use-after-free in Browser, a USB race condition, and a Skia information leak.
+
+**Why it matters:** An AI lab's security team appearing in a Chrome credit line — for a real use-after-free in a memory-unsafe graphics path — is the concrete version of a claim usually made in blog posts. It also rhymes with item 7 in this feed: agent-run audits are now producing findings that ship in vendor advisories.
+
+> Correcting a figure in circulation: the two V8 type-confusions are rated **High**, not Critical — the Critical pair are the WebGL and Dawn buffer overflows. Severities and credits here are quoted from Google's own bulletin, not a third-party CVSS mapping. No exploitation in the wild was flagged at publication.
+
+[`🔗 Chrome Releases — Stable Channel Update`](https://chromereleases.googleblog.com/2026/08/stable-channel-update-for-desktop_0826575033.html) · [`🔗 Chrome security page`](https://www.google.com/chrome/browser/privacy/#security)
+
+---
+
+## 30. macOS Harness — six primitives, one Python process, and the agent writes the rest
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · +428 stars in 2 days · ~2d ago (~20:03 UTC+8)
+- **Tags:** `computer-use` `macos` `agents` `python` `harness`
+
+**browser-use/macos-harness** (MIT, Python, **created and pushed Aug 17**, **428 stars / 26 forks**) is deliberately the thinnest possible computer-use layer, from the org behind browser-use. The README's framing: "The agent writes what is missing, mid-task. No framework, no recipes, no rails. One Python process connected directly to macOS, your real browser, and your files." The model gets a small primitive set — see, key, type, click, plus accessibility and script access — and when no helper exists for a task it **writes the missing logic in ordinary Python during the run** rather than waiting for an app-specific tool to be added. Onboarding is a single paste-into-Codex-or-Claude-Code prompt that installs via `uv` on Python 3.12, registers a skill via `macos-harness skill`, runs `macos-harness doctor` for permission checks, and verifies by capturing a running app.
+
+**Why it matters:** Desktop automation keeps breaking because per-app recipes rot. Composing raw primitives and generating glue at runtime is the structural fix for the long tail of GUI work that has no API — and it's the same "re-plan from the live interface" thesis as UI-Mate (item 9), shipped as a 400-line-of-setup tool instead of a trained model.
+
+> Two days old, no published benchmarks, and "no rails" is the security posture as well as the design: it inherits the full macOS Accessibility and AppleScript permission surface. Claims are from the README and GitHub API, both read directly.
+
+[`🔗 browser-use/macos-harness`](https://github.com/browser-use/macos-harness) · [`🔗 browser-use`](https://browser-use.com)
+
+---
+
+## 31. OpenAI's Assistants API shuts down Aug 26 — seven days, and no automated migration
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI platform docs · 7-day deadline · ~ongoing (~20:03 UTC+8)
+- **Tags:** `openai` `api` `deprecation` `migration` `breaking-change`
+
+OpenAI's migration guide states it plainly: "After achieving feature parity in the Responses API, we've deprecated the Assistants API. **It will shut down on August 26, 2026.**" The object model does not map mechanically — the docs' own before/after table renames **`Assistants` → `Prompts`** ("Prompts hold configuration (model, tools, instructions) and are easier to version and update"), **`Threads` → `Conversations`**, `Runs` → `Responses`, and `Run steps` → `Items`, and the change "lets you manage conversations instead of passing back `previous_response_id`."
+
+**Why it matters:** Seven days out, this is the most concrete deadline on any developer calendar this week. A rename table is not a codemod: Threads carry live conversation state, and there is no backfill tool that moves it into Conversations for you.
+
+> Long-scheduled rather than freshly announced — the deprecation dates to 2025. Its news value is the deadline, now inside the window where an unmigrated integration breaks in production.
+
+[`🔗 OpenAI Assistants migration guide`](https://developers.openai.com/platform/assistants/migration) · [`🔗 platform.openai.com`](https://platform.openai.com/docs/assistants/migration)
+
+---
+
+## 32. Google shut off all three Imagen 4 endpoints on Aug 17 — the replacement is a different API shape
+
+- **Velocity:** ▮ steady
+- **Source:** Gemini API docs · 3 models retired · ~2d ago (~20:03 UTC+8)
+- **Tags:** `google` `gemini-api` `deprecation` `image-generation` `breaking-change`
+
+Google's Gemini API deprecation table now lists **`imagen-4.0-generate-001`, `imagen-4.0-ultra-generate-001` and `imagen-4.0-fast-generate-001`** — all released June 24, 2025 — with a **shutdown date of August 17, 2026** and **`gemini-3.1-flash-image` as the recommended replacement** for all three. The replacement is not a model-ID swap: `gemini-3.1-flash-image` is a general Gemini image model reached through the current image-generation surface rather than the dedicated Imagen endpoint, so request and response shapes differ.
+
+**Why it matters:** This one already fired. Any app still calling an Imagen 4 endpoint is failing at runtime right now, and the fix is a code migration rather than a config line — the least forgiving kind of deprecation.
+
+> Sourcing note: third-party write-ups claim specific removed parameters (`negativePrompt`, `numberOfImages`, `personGeneration`) and higher per-image token pricing. We could not confirm those on Google's own pages and therefore do not assert them; the shutdown dates and replacement mapping come straight from the deprecations table.
+
+[`🔗 Gemini API deprecations`](https://ai.google.dev/gemini-api/docs/deprecations) · [`🔗 Gemini API image generation`](https://ai.google.dev/gemini-api/docs/image-generation)
+
+---
+
+## 33. Con Kolivas revives -ck after a decade — linux-7.2-ck1 ships MuQSS v0.31
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · tag v7.2-ck1 · ~2d ago (~20:03 UTC+8)
+- **Tags:** `linux-kernel` `muqss` `scheduler` `desktop-latency` `out-of-tree`
+
+**`ckolivas/linux` published tag `v7.2-ck1` ("linux-7.2-ck1") on 2026-08-17** — the -ck desktop-latency patchset rebased onto the mainline kernel released the day before. The release notes list **"MultiQueue Skiplist Scheduler v0.31"** alongside a set of latency-oriented defaults: **default Hz set to 100 in combination with MuQSS and -ck patches**, **preemptible kernel made the default**, hrtimer granularity and minimum hrtimeout made configurable via sysctl (default granularity 100µs, minimum timeout 500µs), high-resolution timeout variants of `schedule_timeout`, and `nohz_full` no longer picked up as a default config option. A `v7.1-ck3` tag landed the same day.
+
+**Why it matters:** MuQSS was the best-known argument that mainline's scheduler optimizes throughput at the desktop's expense, and it went quiet for years. Its return as a maintained rebase against a current kernel gives that argument a testbed again.
+
+> Explicitly out-of-tree and not aimed at mainline; -ck has historically regressed server and many-core workloads. Details above are quoted from the GitHub release notes, which we read — we have not verified secondary claims about I/O-aware scheduling or LLM-assisted development, and MuQSS is a skiplist scheduler, not an EEVDF derivative as some coverage states.
+
+[`🔗 ckolivas/linux — v7.2-ck1`](https://github.com/ckolivas/linux/releases) · [`🔗 Phoronix — Con Kolivas patches`](https://www.phoronix.com/news/Con-Kolivas-Linux-Patches-2026)
+
+---
+
+## 34. CVE-2026-21580 — unauthenticated stored XSS in Confluence escalates to a higher-privileged user
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVSS 8.6 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `cve` `atlassian` `confluence` `stored-xss`
+
+**CVE-2026-21580** (published Aug 18) is a combined **Stored XSS, privilege escalation and security misconfiguration** flaw in **Confluence Data Center and Server**, carrying a **CVSS score of 8.6**. Per the NVD description, it "allows an **unauthenticated attacker** to execute arbitrary HTML or JavaScript code on a victims browser, perform actions as a higher-privileged user, and to get into the system utilizing loopholes exposed from security best-practices being overlooked." It was introduced across a long tail of releases — 7.1.1, 7.4.0, 7.13.0, 7.17.0, 7.19.0, 8.0.0, 8.5.0, 8.9.0, 9.0.1, 9.1.0, 9.2.0, 9.3.1, 9.4.0, 9.5.1, 10.0.2, 10.1.0 and 10.2.0 — with fixes at **9.2.21 or greater** and **10.2.13 or greater**.
+
+**Why it matters:** Confluence is where organizations keep runbooks, credentials-adjacent notes and architecture docs. Unauthenticated stored XSS that executes in an admin's session is a short path from "internal wiki" to "administrative takeover."
+
+> Reported through Atlassian's bug bounty; no public exploit at disclosure. Note the affected-version list enumerates *introduction* points across many branches, not a contiguous range — check your exact build against the fixed versions rather than eyeballing it.
+
+[`🔗 NVD CVE-2026-21580`](https://nvd.nist.gov/vuln/detail/CVE-2026-21580) · [`🔗 OpenCVE CVE-2026-21580`](https://app.opencve.io/cve/CVE-2026-21580)
+
+---
+
+## 35. Palmyra x6 — a tool-use model post-trained on 626 trajectories and a single epoch
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · v2 Aug 18 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agentic` `tool-use` `post-training` `moe` `benchmarks`
+
+**Palmyra x6** (arXiv:2608.16620, Writer, submitted Aug 17, v2 Aug 18) is an agentic tool-use model built by post-training a Mixture-of-Experts base with **Anchored Supervised Fine-Tuning** on "a compact corpus of verified, synthetic tool-use trajectories, optimized with a Muon + Adam hybrid." The recipe is the finding: the paper calls it "deliberately conservative and deliberately controlled — **626 trajectories, a single epoch, a low learning rate, and a KL anchor to the frozen base**." It reports substantial gains over Writer's previous default agent model and "scoring the highest on BFCL Core at **0.785** and posts the highest six-benchmark mean of the cohort," with competitive-or-leading bias and safety evaluations.
+
+**Why it matters:** It is a clean data point for the "less is more" direction in post-training — a KL anchor plus a few hundred *verified* trajectories beating data-hungry recipes, which makes competent tool-calling reachable without a trajectory farm.
+
+> A 12-page vendor technical report. "Highest in cohort" is relative to a comparison set the authors chose, and no independent reproduction exists.
+
+[`🔗 arXiv:2608.16620`](https://arxiv.org/abs/2608.16620) · [`🔗 Writer`](https://writer.com)
+
+---
+
+## 36. HarnessEval-W — world-model benchmarking rebuilt as an evidence tree instead of a score
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 132 stars on HF Papers · ~2d ago (~20:03 UTC+8)
+- **Tags:** `world-models` `evaluation` `benchmarks` `agents` `llm-judge`
+
+**HarnessEval-W** (arXiv:2608.16859, submitted Aug 17) argues that "a benchmark should deliver more than a scalar score: what makes an evaluation trustworthy is the reasoning that justifies the score" — especially for world models, "where judging a rollout requires understanding whether physics, causality, and world state evolve correctly," something humans spot naturally but existing metrics compute brute-force. It replaces the fixed rubric with an agentic workflow: interpret the case, decompose it into measurable subproblems, dispatch specialized sub-agents with diagnostic tools, then have a parent agent validate the gathered evidence and summarize a verdict — turning "every evaluation into a transparent **evidence tree** whose complete reasoning chain justifies the result." Applied to **18 representative world models over 330 evaluation cases**, with the full pipeline open-sourced as a live benchmark.
+
+**Why it matters:** Generated video and robotic simulators are judged today by scores that can't say *why* a rollout is wrong. Making physics and causality violations auditable is the precondition for trusting either in a pipeline.
+
+> "Closely align with human preferences" is the authors' own characterization; the alignment study is not independently replicated. The project-page URL in the abstract is a placeholder and was not opened.
+
+[`🔗 arXiv:2608.16859`](https://arxiv.org/abs/2608.16859) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.16859)
+
+---
+
+## 37. SoLo — let a static musl binary dlopen the host's glibc GPU driver
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 74 pts · ~4d ago (~20:03 UTC+8)
+- **Tags:** `linux` `static-binaries` `elf` `vulkan` `musl`
+
+**pg83/solo** (MIT, C++, **created Aug 14**, pushed Aug 17, **283 stars**) attacks a specific, long-standing wall in static Linux deployment. Its README states the problem exactly: "Static binaries are a wonderfully boring way to deploy software on Linux: one file, no dependencies, nothing to break… The boredom ends the moment the application needs the GPU: Vulkan and OpenGL drivers are supplied by the host as shared objects, usually built against glibc, and **a fully static musl binary cannot normally `dlopen()` them**." SoLo crosses that boundary by providing "a `dlfcn`-style source API backed by its own **ELF loader (x86-64 and aarch64)** and a **glibc ABI bridge implemented on top of musl**" — no container, no AppImage, and no second libc in the process.
+
+**Why it matters:** "Ship one boring static file" has been available to everything except GPU software. Removing that exception matters for reproducible builds and supply-chain-legible distribution, where a container image is a much larger thing to trust than a single binary.
+
+> Five days old with no tagged release, and it depends on the author's own IX source-first build system. Description and mechanism are quoted from the README, read directly.
+
+[`🔗 pg83/solo`](https://github.com/pg83/solo) · [`🔗 IX build system`](https://github.com/pg83/ix)
+
+---
+
+## 38. OwnMem — agent memory as reviewable Markdown, with zero model calls at recall
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · npm `ownmem@0.2.0` · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agent-memory` `git` `bm25` `local-first` `coding-agents`
+
+**grpcer/ownmem** (Apache-2.0, JavaScript, Node ≥20, **created Aug 16**, pushed Aug 18, 53 stars) inverts the standard agent-memory stack. Its subtitle is the thesis — "**Git-Native Project Memory for AI Coding Agents: Repo-owned. Deterministic. Reviewable.**" Curated decisions, constraints and debugging lessons live as Markdown inside the repository, so memory is diffed in pull requests, travels with a clone and rolls back with the code. Recall runs on a deterministic BM25-family ranker rather than embeddings: the repo's own badges advertise **recall P95 of 2.46 ms and model calls: 0**. One memory set is claimed to serve Claude Code, Codex, Antigravity, Cursor, Gemini CLI and Grok CLI. The npm registry confirms **`ownmem@0.2.0`**, first published 2026-08-16, four versions to date.
+
+**Why it matters:** Most agent memory bolts on an embedding model and a vector store, which makes it opaque, non-deterministic and impossible to review. Plaintext plus a deterministic ranker is the shape that survives code review — and it is the exact opposite bet from this morning's vector-index item (turbovec, item 3).
+
+> Very young and single-maintainer: 53 stars, 1 fork, four days old. The 2.46 ms P95 is the project's own published benchmark, not independently reproduced — we verified the package and version on the npm registry and the claims in the README, not the timing.
+
+[`🔗 grpcer/ownmem`](https://github.com/grpcer/ownmem) · [`🔗 npm registry — ownmem`](https://registry.npmjs.org/ownmem)
+
+---
+
+## 39. OpenLogi — a Rust, local-first Logitech Options+ replacement tops Hacker News
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 908 pts · #1 front page (~20:03 UTC+8)
+- **Tags:** `rust` `hidpp` `peripherals` `local-first` `open-source`
+
+**AprilNEA/OpenLogi** (9,500 stars, 809 commits, dual MIT/Apache-2.0) is a native, local-first replacement for Logitech Options+ — it talks to HID++ peripherals directly over Logi Bolt, Unifying, Bluetooth or USB, with no account and no telemetry. Three Rust components do the work: a GPUI desktop app (interactive device diagram, per-button action picker, DPI and SmartShift control, RGB, per-app profiles), a background agent that owns the OS input hook and device I/O, and a CLI for headless inventory and diagnostics — with all configuration stored in a single version-controllable TOML file. It hit **#1 on Hacker News with 908 points** and 250 comments.
+
+**Why it matters:** The HN surge is a live signal of appetite for native-Rust replacements for bloated vendor utilities — and OpenLogi treats Linux as a first-class platform that Options+ never supported, shipping `.deb`/`.rpm`/`.pkg.tar.zst` with udev rules and a NixOS module.
+
+> Cross-platform macOS 13+/Linux/Windows; Windows 11 is the newest port and the README flags it as having "more rough edges" than the other builds.
+
+[`🔗 AprilNEA/OpenLogi`](https://github.com/AprilNEA/OpenLogi) · [`🔗 HN discussion (908 pts)`](https://news.ycombinator.com/item?id=49355606)
+
+---
+
+## 40. Cerebras CS-4 — the first multi-wafer inference rack ships this quarter, "30× faster than GPUs"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Next Web · ~325 pts HN · ~1d ago (~20:03 UTC+8)
+- **Tags:** `ai-hardware` `inference` `cerebras` `hpc` `wafer-scale`
+
+Cerebras unveiled the **CS-4** at its Supernova event on Aug 18: its first **multi-wafer** inference system — three **WSE-3 Turbo** wafers in one rack delivering **750 PFLOPS of sparse FP16** and **129.6 PB/s** of memory bandwidth, supporting models above 50T parameters, with wafer-to-wafer latency cut from 5 to 2 µs and ~120–140 kW per rack (roughly half a comparable AMD/Nvidia rack). First shipments are due before the end of the quarter. The headline "up to **30× faster than GPU-based systems**" is a **single-user** metric — tokens/sec per user on `gpt-oss-120b` against unnamed GPU systems — and per The Register's analysis the WSE-3 Turbo is **not new silicon**: it's the same 4T-transistor / 900k-core / 44 GB SRAM die clocked from ~1.4 to ~2.8 GHz, with a genuinely new generation slated for 2027.
+
+**Why it matters:** It's Cerebras's first hardware since its $5.55bn Nasdaq debut and lands five days after OpenAI's "Ultrafast" GPT-5.6 Sol mode went live on Cerebras silicon — a direct, inference-focused challenge to Nvidia, but one whose headline speed claim only holds under a narrow benchmark and a clock-bump die.
+
+[`🔗 The Next Web — CS-4`](https://thenextweb.com/news/cerebras-cs-4-wafer-scale-ai-inference-system) · [`🔗 HN discussion (325 pts)`](https://news.ycombinator.com/item?id=49354949)
+
+---
+
+## 41. CVE-2026-67443 — FUXA's guest-JWT bypass reaches the Node-RED editor for unauthenticated RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenCVE · CVSS 9.2 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `cve` `scada` `ot` `node-red`
+
+**CVE-2026-67443** (**CVSS v4 9.2**, published Aug 18, fixed in FUXA **1.3.3**) is a missing-authorization flaw in **FUXA**, the open-source SCADA/HMI process-visualization platform. The `allowDashboard` gate for `/nodered` verifies the JWT but never inspects the decoded identity, so when Node-RED integration, secure mode and `nodeRedAuthMode: secure` are all enabled, an unauthenticated attacker obtains a signed **guest token** from `POST /api/heartbeat` and uses it to reach the Node-RED editor and flow-deployment API — deploying function nodes, invoking `fuxa.runScript`, and reaching OS-command execution when `nodeRedUnsafeModules` is on.
+
+**Why it matters:** Zero-interaction, no-credentials code execution on software that sits on industrial/OT networks, where the secure-mode gate was the primary protection — and it's bypassed by design, not by exploit.
+
+[`🔗 NVD CVE-2026-67443`](https://nvd.nist.gov/vuln/detail/CVE-2026-67443) · [`🔗 OpenCVE CVE-2026-67443`](https://app.opencve.io/cve/CVE-2026-67443)
+
+---
+
+## 42. CVE-2026-71539 — n8n's Git-clone race plants a custom node that runs as the server
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenCVE · CVSS 8.9 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `cve` `n8n` `race-condition` `rce`
+
+**CVE-2026-71539** (**CVSS v4 8.9**, published Aug 18, fixed in **1.123.64 / 2.29.8 / 2.30.1**) is a TOCTOU race (CWE-367) in n8n's Git clone node: an authenticated workflow user swaps a validated directory for a symlink before cloning, planting a crafted repository in the community-node directory that loads as a custom JavaScript node after a server restart — executing arbitrary code on the host. n8n is widely self-hosted, and workflow editors are typically low-privileged but hold service credentials, so the escalation path is short.
+
+**Why it matters:** It's a canonical "check, then use" race in a tool whose whole job is running semi-trusted automation with secrets — a reminder that the file-system boundary between a workflow and the host is an isolation surface, not decoration.
+
+[`🔗 NVD CVE-2026-71539`](https://nvd.nist.gov/vuln/detail/CVE-2026-71539) · [`🔗 OpenCVE CVE-2026-71539`](https://app.opencve.io/cve/CVE-2026-71539)
+
+---
+
+## 43. Agent Lightning v1.0 — Microsoft's harnessed agentic RL lifts Qwen3.5-9B 41.8% → 56.4% on SWE-bench
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · v1 Aug 18 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `rl` `agents` `post-training` `coding-agents` `framework`
+
+**Agent Lightning v1.0** (arXiv:2608.17528, Microsoft, submitted Aug 18) makes the **deploy-time agent harness** own the environment loop during RL, so the trainer only ever sees LLM request/response pairs — ~3,500 lines addressing retokenization, sample merging, advantage calculation, loss normalization and backend scheduling across arbitrary harnesses. The headline result: fine-tuning **Qwen3.5-9B on 6K examples** lifts **SWE-bench Verified from 41.8% to 56.4%** (+14.6 points) with modest compute, and the pipeline is released.
+
+**Why it matters:** "The harness participates in training" is emerging as the standard architecture for real agent models — the abstract notes the pattern was later adopted by verl Uni-Agent, AReaL 2.0, slime and Polar — so this is the reproducible reference implementation for that shift.
+
+[`🔗 arXiv:2608.17528`](https://arxiv.org/abs/2608.17528) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.17528)
+
+---
+
+## 44. Abra — Luma's diffusion scaling laws: compute-optimal at ~200 image tokens/param, ~10× Chinchilla
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · v1 Aug 18 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `diffusion` `scaling-laws` `image-generation` `compute-optimal` `research`
+
+**Abra** (arXiv:2608.17286, Luma AI, submitted Aug 18) is a controlled family of flow-matching transformers trained across ~10¹⁹–10²² FLOPs to derive scaling laws for text-to-image diffusion. The findings: diffusion scales as predictably as language models, but the compute-optimal point is roughly **200 image tokens per parameter — ~10× the Chinchilla prescription for LLMs** — and because diffusion is robust to overtraining, the authors advise spending on **more data rather than larger models**. Loss, CFG settings, representation quality and training-curve shape all collapse onto a universal form.
+
+**Why it matters:** This is the closest thing to "Chinchilla for diffusion," and it directly changes how image/video teams allocate a training budget — a concrete decision rule where the field previously guessed.
+
+[`🔗 arXiv:2608.17286`](https://arxiv.org/abs/2608.17286) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.17286)
+
+---
+
+## 45. MoNe — modular neural memory cuts long-context compute and memory ~80% with no retraining
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · v1 Aug 18 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `long-context` `memory` `transformers` `efficiency` `research`
+
+**MoNe** (arXiv:2608.17616, submitted Aug 18) bolts a lightweight **modular neural memory** onto any frozen pretrained Transformer: context is read in fixed-size segments via test-time-learned fast-weight memory, and at inference the memory generates keys/values from the query tokens alone — so context is never re-read. At **128K tokens** it reduces compute and peak GPU memory by **~80%** versus in-context learning at only **6.4% parameter overhead**, with O(N) preprocessing and O(1) query cost, and it stays strong on RULER tasks even beyond the backbone's native window.
+
+**Why it matters:** It decouples inference cost from context length for the long-context agent workloads that dominate this feed — an efficiency win that requires no fine-tuning and no change to the base model.
+
+[`🔗 arXiv:2608.17616`](https://arxiv.org/abs/2608.17616) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.17616)
+
+---
+
+## 46. NorthCinder — a buyer-run shopping-agent MCP server with a signed purchase mandate
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 1.2k stars · ~2d ago (~20:03 UTC+8)
+- **Tags:** `mcp` `agents` `shopping-agent` `local-first` `commerce`
+
+**cinderline/northcinder** (MIT, 1.2k stars, `northcinder@0.1.2` on npm) is a self-hosted MCP server for AI shopping agents: it searches configured store adapters (Shopify, WooCommerce, eBay/Etsy via API, Amazon read-only via a user-controlled browser profile), returns a ranked shortlist with machine-readable reasons for inclusion *and* rejection, and requires a **separate, signed, single-use approval mandate with a spending cap** before any checkout. Ranking is buyer-criteria-only — "seller payment is not an input" — and sponsored offers stay labeled below every organic result, with a local audit trail.
+
+**Why it matters:** Agentic commerce is arriving with sponsored ranking and telemetry baked into the broker path. A server where the buyer runs the ranker, holds the signing key and keeps the audit log is the trust model the category is missing — and a direct counter to the "agent buys the wrong thing on your card" failure mode.
+
+[`🔗 cinderline/northcinder`](https://github.com/cinderline/northcinder) · [`🔗 npm registry — northcinder`](https://registry.npmjs.org/northcinder)
+
+---
+
+## 47. Mureka V9.5 — Kunlun Wanwei's MusiCoT music model claims 97% prompt-control yield
+
+- **Velocity:** ▮▮ rising
+- **Source:** PingWest · Aug 18 release · ~1d ago (~20:03 UTC+8)
+- **Tags:** `music-generation` `model-release` `multimodal` `chain-of-thought` `audio`
+
+**Kunlun Wanwei** released **Mureka V9.5** on Aug 18, its AI music-generation model built on the **MusiCoT** (music chain-of-thought) framework, which constructs full musical logic — structure from whole-song down to local expression — *before* audio generation. The vendor's internal evals report a **61.0%** vocal-quality yield, **97.0%** prompt-control yield, and **95.7%** genre/style-fidelity ratio, refined from **25,000+** user-feedback items, with notable improvements to guofeng (Chinese traditional) lyric articulation and harmony layering.
+
+**Why it matters:** A concrete model release with published metrics from a major Chinese AI-music vendor — a day after Alibaba's HappyShrimp made the same track, showing text-to-music is becoming a contested, shipped category rather than a demo.
+
+[`🔗 PingWest — Mureka V9.5`](https://www.pingwest.com/w/316546) · [`🔗 Mureka`](https://www.mureka.ai/)
+
+---
+
+## 48. Sprix SAGE Router — SELF/COLLABORATE/HANDOFF routing for A2A agent networks
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 362 stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `routing` `agents` `a2a` `multi-agent` `orchestration`
+
+**wang2122/sprix-sage-router** (MIT, Python, 362 stars) is a decision layer that sits between A2A protocol discovery and task execution, choosing mid-run whether the incumbent agent should continue alone (SELF), recruit collaborators while keeping ownership (COLLABORATE), or transfer full ownership (HANDOFF). It composes task-DAG roles, schedules dependencies, and updates trust from execution evidence under permission/budget/deadline constraints, using a learned outcome model plus beam-search team composition. It's an early research preview (v0.2, 12 commits); the README's 2,500-task simulation (0.634 vs 0.507 incumbent-only quality) is flagged as synthetic.
+
+**Why it matters:** As A2A (now a Linux Foundation protocol) matures, the open problem shifts from "can agents talk" to "when should they collaborate vs hand off" — a learned, evidence-based answer to that is the missing middle layer between discovery and execution.
+
+[`🔗 wang2122/sprix-sage-router`](https://github.com/wang2122/sprix-sage-router) · [`🔗 a2aproject/A2A`](https://github.com/a2aproject/A2A)
+
+---
+
+## 49. Benjamin-Plus — JetBrains' measured token-efficiency skill cuts coding-agent cost 17.9%
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · JetBrains · ~2d ago (~20:03 UTC+8)
+- **Tags:** `coding-agents` `skills` `token-efficiency` `cost` `benchmark`
+
+**JetBrains/benjamin-plus-skill** (MIT, ~745-token ruleset) changes *how* a coding agent looks things up and waits — one-pass recon, 50-line "keyhole reads" instead of whole files, probing the environment once, treating the task's own verification command as the definition of done — without changing what it builds. In a paired A/B on 80 SkillsBench tasks (Claude Code + Sonnet 5), the injected skill produced a **−17.9% cost median with quality unchanged** (7 better / 5 worse / 68 ties), and a Codex SWE-bench run showed −4.4% cost and −20% tool calls. The README's key harness detail: injected, it saves; installed as a discoverable folder, "it saves nothing."
+
+**Why it matters:** It's the rare skill with a measured result published by a real vendor, and its delivery-method finding is directly actionable for anyone shipping agent skills.
+
+[`🔗 JetBrains/benjamin-plus-skill`](https://github.com/JetBrains/benjamin-plus-skill) · [`🔗 benchflow-ai/skillsbench`](https://github.com/benchflow-ai/skillsbench)
+
+---
+
+## 50. Autoprompt — a multi-agent skill that cuts Terminal-Bench failures 45% (60/89 → 73/89)
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 138 stars · ~2d ago (~20:03 UTC+8)
+- **Tags:** `coding-agents` `skills` `multi-agent` `terminal-bench` `orchestration`
+
+**Spielewoy/autoprompt-skill** (MIT, v1.0.0) wraps six coding agents — Claude Code, Codex, OpenCode, Kilo Code, VS Code, Prime Agent — in a layered multi-agent hierarchy (coordination / management / execution / independent-judgment) so one agent never plans, approves and verifies its own work. On Terminal-Bench 2.1 with OpenCode 1.18.7 it raised solves from **60/89 to 73/89 — 45% fewer failures** — at a disclosed trade-off of ~3× time and ~2× tokens. The README is explicit that this is a single measured run, not a sweep.
+
+**Why it matters:** "Separate plan/approve/verify across agents" is the governance pattern everyone agrees on but few skills ship as a number; 45% fewer failures on a public benchmark, with the cost trade-off disclosed, is exactly the evidence-first claim this feed tracks.
+
+[`🔗 Spielewoy/autoprompt-skill`](https://github.com/Spielewoy/autoprompt-skill) · [`🔗 harbor-framework/terminal-bench`](https://github.com/harbor-framework/terminal-bench-1)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-19T04:03:00Z |
-| Items | 20 |
-| Sources tracked | 36 (GitHub, Hacker News, arXiv, NVD, CISA, Hugging Face, mcpindex.ai, atto.cash, acadia.engineering, TrendForce, Tom's Hardware, It's FOSS, Notebookcheck, Anthropic Support, machine0, GenLayer Foundation, Lavx, Mandiant, GitHub Advisories, docs.microsandbox.dev, ui-mate.github.io, leaflet.pub, and vendor advisories) |
+| Generated | 2026-08-19T20:03:00Z |
+| Items | 50 |
+| Sources tracked | 51 (GitHub, Hacker News, arXiv, NVD, CISA, Hugging Face, kernel.org, Oracle Security Alerts, Chrome Releases, openwall oss-security, postgresql.org, depesz, Phoronix, Modular, ai.google.dev, OpenAI Platform Docs, OpenCVE, npm registry, mcpindex.ai, atto.cash, acadia.engineering, TrendForce, Tom's Hardware, It's FOSS, Notebookcheck, Anthropic Support, machine0, GenLayer Foundation, Lavx, Mandiant, GitHub Advisories, docs.microsandbox.dev, ui-mate.github.io, leaflet.pub, browser-use.com, pingwest.com, mureka.ai, thenextweb.com, and vendor advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-08-19
-updated: 2026-08-19T04:03:00Z
+updated: 2026-08-19T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 51
 license: CC-BY-4.0
 ---
 
@@ -335,13 +335,471 @@ Anthropic 帮助中心确认，把 **Claude Code 每周用量额度提升 50%** 
 
 ---
 
+## 21. Mojo 编译器转用 Apache-2.0——Lattner 语言的最后一块封闭拼图在 ModCon 上开源
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Modular blog · modular/modular 27.1k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `mojo` `compiler` `open-source` `apache-2.0` `llvm`
+
+**2026 年 8 月 18 日**，在为 ModCon 开幕之际，Modular 宣布 **Mojo🔥 已「在 Apache 2.0 许可证（含 LLVM 例外）下完全开源」**——编译器、工具链、「以及构建这门语言所需的一切」如今都存放在 `modular/modular` 单一仓库中（**27,123 星，2,941 fork**，8 月 18 日推送，用 Bazel 构建）。这完成了分三阶段、历时三年的开源进程：标准库于 2024 年开源，MAX 内核于 2025 年开源，如今轮到了编译器本身。本 feed 此前在 8 月 12 日报道 **Mojo 1.0 稳定版**时，编译器还只是*承诺*「2026 年晚些时候」开源——这一承诺六天后就落地了。
+
+**为何重要：** 封闭的编译器一直是押注 Mojo 基础设施的最大障碍，而这次开源挺过了 Qualcomm 收购 Modular。一门被定位为可移植 CUDA 替代品的语言，如今构建路径中已不再有任何专有组件。
+
+> GitHub 的许可证检测器仍把该仓库标为 `NOASSERTION`，因为 LLVM 例外让自动检测失效——Apache-2.0 是 Modular 自己在公告中给出的说法，我们已读过原文。编译器的贡献通道尚未开放；Modular 目标是年底。
+
+[`🔗 Mojo 现已开源`](https://www.modular.com/blog/mojo-open-source) · [`🔗 modular/modular`](https://github.com/modular/modular)
+
+---
+
+## 22. Oracle 一天发布 943 个补丁——一个未经认证的 SMTP RCE 潜伏在 E-Business Suite
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Oracle Security Alerts · CVSS 9.8 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `cve` `oracle` `rce` `patch-cycle`
+
+Oracle 于 **8 月 18 日**发布 **2026 年 8 月关键安全补丁更新（CSPU）**（Rev 1，初版），按其自己的统计，这份公告「在下列产品系列中**包含 943 个新安全补丁**。」最引人注目的是 **Oracle Workflow 的 Workflow Notification Mailer 中的 CVE-2026-70926**：**CVSS 9.8**，攻击向量为 **SMTP**，可**在无需认证的情况下**远程利用，影响 **E-Business Suite 12.2.3–12.2.15**，机密性、完整性与可用性影响均为 High。它并非孤例——**CVE-2026-60782**（Oracle Payments，File Transmission，HTTP）在相同版本上同样是 **9.8 且认证前可利用**，而 **Helidon Imperative Web Server 3.2.18** 中的 **CVE-2026-71065** 评分为 **9.3**，且作用域为*改变*。在面向 E-Business Suite 的 **120 个补丁中，27 个无需凭据即可远程利用**；Fusion Middleware 分到 262 个，Hyperion 另有 262 个（其中 107 个可远程利用）。
+
+**为何重要：** EBS 承载着大型企业的财务、HR 与采购系统，而一个经*邮件*路径到达的认证前 9.8 漏洞，是一个大多数团队从未当作攻击面建模的监听器。
+
+> 来源注：这里的每个数字都直接读取自 Oracle 自己的 CSPU 页面。本轮在市面上流传的第三方统计（「925 个 CVE / 154 个严重」）与 Oracle 声明的 943 个补丁**并不一致**——我们采用 Oracle 的数字。该公告自身也警告，「攻击者之所以得逞，是因为目标客户未能应用可用的 Oracle 补丁。」
+
+[`🔗 Oracle CSPU 2026 年 8 月`](https://www.oracle.com/security-alerts/cspuaug2026.html) · [`🔗 NVD CVE-2026-70926`](https://nvd.nist.gov/vuln/detail/CVE-2026-70926)
+
+---
+
+## 23. Linux 7.2 发布，带来缓存感知调度——以及一个在最后关头被回退的「公平」DRM 调度器
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** kernel.org · mainline 7.2 · ~3d ago (~20:03 UTC+8)
+- **Tags:** `linux-kernel` `scheduler` `usb4` `amdgpu` `kernel-release`
+
+**kernel.org 现已列出 `mainline: 7.2`，日期为 2026-08-16**——Linus Torvalds 按计划打了 tag，它将成为 Ubuntu 26.10 的基础。据 Phoronix 汇总的主要新增：**缓存感知调度（Cache Aware Scheduling）**（把共享数据的任务聚合到同一末级缓存域）、Intel 的 **USB4STREAM** 主机到主机传输协议、初步的 **AMDGPU HDMI 2.1 FRL** 支持、AMD 与 Intel 双平台的 I/O 性能提升、Intel Arc B390 改进，以及更快的 `poll()`。最后一周比往常更忙碌：在新「公平」默认调度器产生回归后**回退到 DRM FIFO 调度器**、迟到的声卡设备 quirk，以及在发布当日合并的 `tlbi=ipi` 启动选项。
+
+**为何重要：** 这是大多数 2026 年发行版与云镜像将要继承的内核基线，而缓存感知调度是那种无需任何用户态选择加入、就会静默改变多租户机器吞吐量的改动。
+
+> 不是 LTS 版本——`stable: 7.1.8` 与 `longterm: 6.18.44` 均标注为 2026-08-09。功能列表归因于 Phoronix 的发布综述；发布日期与通道状态直接取自 kernel.org 首页。
+
+[`🔗 kernel.org`](https://www.kernel.org/) · [`🔗 Phoronix——Linux 7.2 发布`](https://www.phoronix.com/news/Linux-7.2-Released)
+
+---
+
+## 24. Cumora——两天 2,469 星，一个让 Claude Code 当同事的团队聊天
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · +2,469 stars in 2 days · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agents` `team-chat` `byoa` `claude-code` `typescript`
+
+**yetone/cumora**（MIT，TypeScript，**8 月 17 日创建**，8 月 18 日推送，**2,469 星 / 272 fork**）是一个跨平台团队聊天工具，AI 智能体在其中是一等公民——「同一份花名册、同样的私聊、同样的群聊、同一块 Kanban 看板和日历。」据 README 所述，智能体「拥有人设与记忆，认领工作，彼此协调而不冲突，收发真实的电子邮件。」两条大脑路径：**Cumora Cloud** 在 OpenAI Responses API 上以多跳工具调用循环、为每个智能体运行一个托管的独立 pod；而 **BYOA**（`npx cumora agent computer`）接入你自己的 Mac 或 VPS，让智能体的大脑成为**运行在你自有订阅上的本地 Claude Code 或 Codex CLI——服务器永远看不到你的提供商密钥**。技术栈是在 Express + Postgres + Redis 之上的 Electron/PWA/移动端。
+
+**为何重要：** 触发因素是作者，而非星数——yetone 写了 `avante.nvim`，所以这是带着观众来的。有趣的设计选择是 BYOA：在你既有的模型开销上自托管智能体协作，而不是让厂商在中间计量 token。
+
+> 才两天大、且仅限邀请。`cumora.ai` 对服务端抓取返回 HTTP 403（客户端渲染），因此上述所有说法均取自仓库 README 与 GitHub API，两者都直接读取过。
+
+[`🔗 yetone/cumora`](https://github.com/yetone/cumora) · [`🔗 Cumora 发布页`](https://github.com/yetone/cumora-releases/releases/latest)
+
+---
+
+## 25. OpenZFS OZ-1——命名空间局部的 CAP_SYS_ADMIN 被当作宿主池的权限，且未修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** oss-security · full disclosure · ~3d ago (~20:03 UTC+8)
+- **Tags:** `security` `openzfs` `containers` `privilege-escalation` `unpatched`
+
+研究员 **Erica Windisch** 在 8/12/2026 通知 CERT 之后，于 **oss-security（2026 年 8 月 16 日星期日 14:32 -0400）** 进行了完全披露：「我希望上游补丁与补救指引很快就能出来。这些我已经压了一段时间了。」报告直截了当地陈述了核心缺陷 **OZ-1**：OpenZFS 的 `zfs_secpolicy_config()` 使用了 **`ns_capable(cr->user_ns, CAP_SYS_ADMIN)`**，「它把命名空间局部的 `CAP_SYS_ADMIN` 当作宿主池操作的权限。正确的检查应是**初始**用户命名空间中的 `CAP_SYS_ADMIN`。」任何用户都可以通过创建一个用户命名空间、并在其中把自己映射为 uid 0，来获得命名空间局部的 `CAP_SYS_ADMIN`。报告涵盖**两组相互作用的缺陷**——授权类（OZ-1、OZ-2）与解析器缺陷（OZ-3…OZ-8，它们「信任攻击者控制的磁盘上的长度、索引或图结构」）——其上游补丁审计「确认每一项 OZ 发现在上游 master HEAD `3020c18c` 处**均仍为未修复**」，只有 OZ-7 留着一个开放且存在争议的 PR（#18620）。
+
+**为何重要：** OpenZFS 是树外模块，所以正如报告所言，「CVE 的判定属于 OpenZFS 项目及其厂商/CNA，而非 Linux 内核 CVE 团队」——没有 CVE，扫描器就对此视而不见。相关结论已在原装的 **TrueNAS SCALE 25.04.2.4、Proxmox VE 8.x、IncusOS 和 Unraid** 设备客户机上复现。
+
+> 惊慌之前请先读前置条件：**Docker 的默认 capability 集合省略了 `CAP_SYS_ADMIN`，所以仅 `--device /dev/zfs` 会以 `EPERM` 失败**——报告把这一点记为「一个 0.0 的诚实阴性结果。」`--privileged` 或 `--cap-add SYS_ADMIN` 才能复现 OZ-1。作者自己的框架是：把 `/dev/zfs` 加固为 `0660` 属于「纵深防御，而非替代正确的内核内授权。」与本文一起流传的 `hotmolts.com` 综述是客户端渲染的，服务端没有提供任何技术内容，因此我们只引用实际读过的邮件列表帖子。
+
+[`🔗 oss-security 披露`](https://www.openwall.com/lists/oss-security/2026/08/16/5) · [`🔗 oss-security 回复帖`](https://www.openwall.com/lists/oss-security/2026/08/16/6)
+
+---
+
+## 26. MegaParts——自回归 3D 生成达到 300 个部件与 256k token 序列
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 515 stars on HF Papers · ~5d ago (~20:03 UTC+8)
+- **Tags:** `3d-generation` `autoregressive` `tokenizer` `computer-vision` `mesh`
+
+**MegaParts**（arXiv:2608.14783，8 月 14 日提交，cs.CV）通过攻克 token 预算而非模型本身，来扩展部件感知的 3D 物体生成。它把结构化序列建模与一个**高 token 效率的向量量化形状分词器**配对，后者在一个显式的「在重建约束下最小化 token 数」目标下学习部件级几何的离散隐表示，从而实现自适应长度的分词；随后一个语言模型把物体包围盒、部件包围盒与部件形状 token 作为**一个统一的结构化序列**一并输出。结合一种长上下文训练策略，摘要报告该方案「可扩展到最多 **300 个部件**、序列长度最长 **256k token** 的物体」，同时保留组合结构与细粒度部件级控制，网格质量高于自回归与扩散基线。
+
+**为何重要：** 扩散一直被视为 3D 生成的默认赢家。一条能在单一序列中容纳 300 个部件的 token 高效自回归路径，让 LLM 原生建模重新回到 CAD、仿真与游戏资产管线的赛场上——在这些场景中，*部件结构*（而不仅是表面逼真度）才是交付物。
+
+> 网格质量对比是针对作者自行选择的基线，目前尚无独立复现。515 这个数字是 Hugging Face Papers 的点赞数，而非引用指标。
+
+[`🔗 arXiv:2608.14783`](https://arxiv.org/abs/2608.14783) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.14783)
+
+---
+
+## 27. MOSS-VL——一个 11.3B 开源 VLM，说话的同时仍在看
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 436 stars on HF Papers · ~4d ago (~20:03 UTC+8)
+- **Tags:** `vision-language` `streaming` `realtime` `open-weights` `multimodal`
+
+**MOSS-VL**（arXiv:2608.15045，8 月 15 日提交，OpenMOSS）把实时交互——「边说边感知」——当作一等能力，而非延迟优化。其设计贯穿全栈协同规划：**语言解码器仅通过门控交叉注意力来关注视觉信息，因此模型能在生成的同时看到新到的帧**；一个合成的交互语料监督「何时说话、何时保持沉默、何时修正」；而一个分阶段课程把实时训练集中到最后一步。在**开源流式模型**中，它在四个基准中的三个上取得最佳平均分（第四个居第二），并在主动行为子集上横扫——在 OmniMMI Proactive Alerting 上以 **66.0 对 37.5** 领先最佳基线。由于视觉 token 位于被解码序列之外，它相对同骨架 Qwen3-VL-8B 的首 token 延迟优势随视觉上下文增长而**从 2.8 倍扩大到 5.1 倍**。全部五个 checkpoint、训练课程与实时推理代码均已发布。
+
+**为何重要：** 流式多模态推理是语音+视觉助手缺失的那块拼图，而「视觉 token 位于被解码序列之外」是一个具体的架构理由，解释了为何 TTFT 差距会随上下文*扩大*而非收敛。
+
+> 基准数字为作者自报；对比集合明确是开源流式模型，而非前沿闭源 VLM。摘要中的项目主页 URL 是占位符，未被打开。
+
+[`🔗 arXiv:2608.15045`](https://arxiv.org/abs/2608.15045) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.15045)
+
+---
+
+## 28. PostgreSQL 19 Beta 3 将属性图引入内核——同场还有 28 个 CVE 的补丁日
+
+- **Velocity:** ▮▮ rising
+- **Source:** postgresql.org · 28 CVEs · ~6d ago (~20:03 UTC+8)
+- **Tags:** `postgresql` `database` `sql-pgq` `graph-queries` `security`
+
+PostgreSQL 全球开发组于 **2026-08-13 发布 19 Beta 3**，同时更新 **18.6、17.11、16.15、15.19 与 14.24**——这是一次「修复 **28 个安全漏洞**」的联合发布，其中包括 **CVE-2026-6464**（psql `COPY FROM STDIN` 提前失败时会把数据行当作 psql 命令处理，CVSS v3.1 **8.1**）、CVE-2026-6469 与 CVE-2026-6470。v19 的头号特性由 Peter Eisentraut 提交，是符合 ISO/IEC 9075-16:2023 标准的 **SQL 属性图查询（SQL/PGQ）**：用于图模式匹配的 **`GRAPH_TABLE` 表函数**、**`CREATE`/`ALTER`/`DROP PROPERTY GRAPH`** DDL、新的系统目录与 information-schema 视图、`psql \dG` 命令，以及供 `pg_dump` 使用的 `pg_get_propgraphdef()`。
+
+**为何重要：** 在现有表之上定义属性图——无需复制数据、无需第二个数据存储——消除了在 Postgres 商店里再挂一个图数据库的常备理由。而同日跨五个受支持大版本发布的 28 个 CVE 补丁，才是更紧迫的那一半。
+
+> Beta 3 是一次 bug 修复迭代：SQL/PGQ 早在 v19 周期就已特性冻结，因此 8 月 13 日的事件是一次 beta 刷新加一个大安全日，而非特性首发。GA 预计在秋季。
+
+[`🔗 PostgreSQL 发布公告`](https://www.postgresql.org/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/) · [`🔗 depesz——SQL/PGQ`](https://www.depesz.com/2026/07/31/waiting-for-postgresql-19-sql-property-graph-queries-sql-pgq/)
+
+---
+
+## 29. Chrome 修补 15 个漏洞——并把其中一个记在「OpenAI Codex Security」名下
+
+- **Velocity:** ▮▮ rising
+- **Source:** Chrome Releases · 15 security fixes · ~1d ago (~20:03 UTC+8)
+- **Tags:** `chrome` `browser-security` `ai-security-research` `v8` `webgl`
+
+Chrome 稳定通道于 **2026 年 8 月 18 日星期二**推进到 **151.0.7922.169/.170（Windows、Mac）与 .169（Linux）**，共 **15 个安全修复**。其中两个被评为 **Critical**——**CVE-2026-76034**（WebGL 中的缓冲区溢出）与 **CVE-2026-76036**（Dawn 中的缓冲区溢出）——均由 Google 报告。公告里更有意思的是最后一条：**CVE-2026-76045，一个 WebGL 中的释放后使用，「由 OpenAI Codex Security (amyb) 于 2026-08-05 报告。」** 同样修复的还有：两个 V8 类型混淆（CVE-2026-76047、CVE-2026-76038，均为 High，由外部研究员 ywatanabee 与 un3xploitable && GF 报告）、一个 ANGLE 缓冲区溢出、一个 Browser 中的释放后使用、一个 USB 竞态条件，以及一个 Skia 信息泄漏。
+
+**为何重要：** 一家人工智能实验室的安全团队出现在 Chrome 的致谢行里——为一个内存不安全图形路径中的真实释放后使用——这是通常只在博客里出现的那类说法的具体版本。它也与此 feed 中的第 7 条遥相呼应：智能体主导的审计如今正在产出写进厂商公告的发现。
+
+> 纠正一个流传中的数字：两个 V8 类型混淆被评为 **High**，而非 Critical——Critical 的那对是 WebGL 与 Dawn 的缓冲区溢出。这里的严重度与致谢均引自 Google 自己的公告，而非第三方 CVSS 映射。发布时未标记任何在野利用。
+
+[`🔗 Chrome Releases——稳定通道更新`](https://chromereleases.googleblog.com/2026/08/stable-channel-update-for-desktop_0826575033.html) · [`🔗 Chrome 安全页面`](https://www.google.com/chrome/browser/privacy/#security)
+
+---
+
+## 30. macOS Harness——六个原语、一个 Python 进程，其余由智能体自己写
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · +428 stars in 2 days · ~2d ago (~20:03 UTC+8)
+- **Tags:** `computer-use` `macos` `agents` `python` `harness`
+
+**browser-use/macos-harness**（MIT，Python，**8 月 17 日创建并推送**，**428 星 / 26 fork**）刻意做成最薄的一层 computer-use 层，出自 browser-use 背后的组织。README 的定位：「缺什么，智能体就在任务中途自己写。没有框架、没有配方、没有围栏。一个 Python 进程直接连接到 macOS、你真实的浏览器和你的文件。」模型拿到一个很小的原语集——see、key、type、click，外加辅助功能与脚本访问——而当某个任务没有现成助手时，它会在运行期间**用普通 Python 现场补写缺失的逻辑**，而不是等待为特定应用添加工具。上手只需要把一段提示词粘贴进 Codex 或 Claude Code：它在 Python 3.12 上通过 `uv` 安装，经 `macos-harness skill` 注册技能，运行 `macos-harness doctor` 做权限检查，并通过抓取一个运行中的应用来验证。
+
+**为何重要：** 桌面自动化之所以不断失效，是因为按应用定制的配方会腐烂。组合原始原语、在运行时生成胶水代码，是针对没有 API 的长尾 GUI 工作的结构性修复——而且这与 UI-Mate（第 9 条）「从实时界面重新规划」的论点是同一套，只是被做成一个 400 行安装量的工具，而非一个训练好的模型。
+
+> 才两天大、没有已发布的基准，而「没有围栏」既是设计也是安全姿态：它继承了 macOS 辅助功能与 AppleScript 的全部权限面。说法来自 README 与 GitHub API，两者都直接读取过。
+
+[`🔗 browser-use/macos-harness`](https://github.com/browser-use/macos-harness) · [`🔗 browser-use`](https://browser-use.com)
+
+---
+
+## 31. OpenAI 的 Assistants API 将于 8 月 26 日关停——只剩七天，且没有自动迁移
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI platform docs · 7-day deadline · ~ongoing (~20:03 UTC+8)
+- **Tags:** `openai` `api` `deprecation` `migration` `breaking-change`
+
+OpenAI 的迁移指南说得直白：「在 Responses API 达成功能对等后，我们已弃用 Assistants API。**它将于 2026 年 8 月 26 日关停。**」对象模型并非机械对应——文档自己的前后对照表把 **`Assistants` → `Prompts`**（「Prompts 承载配置（模型、工具、指令），更易于版本化与更新」）、**`Threads` → `Conversations`**、`Runs` → `Responses`、`Run steps` → `Items` 重新命名，而这一变化「让你管理对话，而无需回传 `previous_response_id`。」
+
+**为何重要：** 只剩七天，这是本周任何开发者日历上最具体的截止日期。一张重命名表不是 codemod：Threads 承载着活的对话状态，也没有任何回填工具替你把它搬进 Conversations。
+
+> 这是早已排定、而非刚刚宣布的——弃用可追溯到 2025 年。它的新闻价值在于这个截止日期，如今已进入「未迁移的集成会在生产中崩坏」的窗口期。
+
+[`🔗 OpenAI Assistants 迁移指南`](https://developers.openai.com/platform/assistants/migration) · [`🔗 platform.openai.com`](https://platform.openai.com/docs/assistants/migration)
+
+---
+
+## 32. Google 于 8 月 17 日关停全部三个 Imagen 4 端点——替代品是另一种 API 形态
+
+- **Velocity:** ▮ steady
+- **Source:** Gemini API docs · 3 models retired · ~2d ago (~20:03 UTC+8)
+- **Tags:** `google` `gemini-api` `deprecation` `image-generation` `breaking-change`
+
+Google 的 Gemini API 弃用表如今列出了 **`imagen-4.0-generate-001`、`imagen-4.0-ultra-generate-001` 与 `imagen-4.0-fast-generate-001`**——均于 2025 年 6 月 24 日发布——**关停日期为 2026 年 8 月 17 日**，并指定 **`gemini-3.1-flash-image` 作为三者的推荐替代品**。替代并非换个模型 ID 那么简单：`gemini-3.1-flash-image` 是一个通用 Gemini 图像模型，需经当前的图像生成入口（而非专用的 Imagen 端点）访问，因此请求与响应形态都不同。
+
+**为何重要：** 这一个已经触发了。任何仍在调用 Imagen 4 端点的应用此刻都在运行时失败，而修复是一次代码迁移而非改一行配置——这是最不宽容的那类弃用。
+
+> 来源注：第三方综述声称移除了特定参数（`negativePrompt`、`numberOfImages`、`personGeneration`）并提高了单图 token 价格。我们无法在 Google 自己的页面上确认这些，因此不予采信；关停日期与替代映射直接来自弃用表。
+
+[`🔗 Gemini API 弃用页`](https://ai.google.dev/gemini-api/docs/deprecations) · [`🔗 Gemini API 图像生成`](https://ai.google.dev/gemini-api/docs/image-generation)
+
+---
+
+## 33. Con Kolivas 十年后复活 -ck——linux-7.2-ck1 搭载 MuQSS v0.31
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · tag v7.2-ck1 · ~2d ago (~20:03 UTC+8)
+- **Tags:** `linux-kernel` `muqss` `scheduler` `desktop-latency` `out-of-tree`
+
+**`ckolivas/linux` 于 2026-08-17 发布了 tag `v7.2-ck1`（"linux-7.2-ck1"）**——即把 -ck 桌面延迟补丁集重新基于前一天发布的主线内核。发布说明列出了 **「MultiQueue Skiplist Scheduler v0.31」**，外加一组面向延迟的默认配置：**配合 MuQSS 与 -ck 补丁将默认 Hz 设为 100**、**抢占式内核成为默认**、hrtimer 粒度与最小 hrtimeout 改为可通过 sysctl 配置（默认粒度 100µs、最小超时 500µs）、`schedule_timeout` 的高分辨率超时变体，以及 `nohz_full` 不再作为默认配置选项被采用。同一天还落了一个 `v7.1-ck3` tag。
+
+**为何重要：** MuQSS 曾是「主线调度器以桌面为代价优化吞吐」这一论点最知名的论据，此后沉寂多年。它作为针对当前内核的持续维护 rebase 回归，让这一论点重新有了试验场。
+
+> 明确是树外补丁、不瞄准主线；-ck 历史上会在服务器与多核工作负载上回退。以上细节引自我们读过的 GitHub 发布说明——我们未核实关于 I/O 感知调度或 LLM 辅助开发的二手说法，且 MuQSS 是一个跳跃表调度器，而非某些报道所称的 EEVDF 衍生。
+
+[`🔗 ckolivas/linux——v7.2-ck1`](https://github.com/ckolivas/linux/releases) · [`🔗 Phoronix——Con Kolivas 补丁`](https://www.phoronix.com/news/Con-Kolivas-Linux-Patches-2026)
+
+---
+
+## 34. CVE-2026-21580——Confluence 中未经认证的存储型 XSS 可提权到更高权限用户
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVSS 8.6 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `cve` `atlassian` `confluence` `stored-xss`
+
+**CVE-2026-21580**（8 月 18 日发布）是 **Confluence Data Center 与 Server** 中一处集**存储型 XSS、权限提升与安全配置错误**于一体的漏洞，**CVSS 评分为 8.6**。据 NVD 描述，它「允许**未经认证的攻击者**在受害者的浏览器上执行任意 HTML 或 JavaScript 代码、以更高权限用户身份执行操作，并利用因忽视安全最佳实践而暴露的漏洞进入系统。」它横跨一长串版本引入——7.1.1、7.4.0、7.13.0、7.17.0、7.19.0、8.0.0、8.5.0、8.9.0、9.0.1、9.1.0、9.2.0、9.3.1、9.4.0、9.5.1、10.0.2、10.1.0 与 10.2.0——修复版本为 **9.2.21 及以上**与 **10.2.13 及以上**。
+
+**为何重要：** Confluence 是组织存放 runbook、接近凭据的笔记与架构文档的地方。能在管理员会话中执行的未经认证存储型 XSS，是从「内部 wiki」到「接管管理权限」的捷径。
+
+> 经 Atlassian 漏洞赏金计划报告；披露时无公开利用。注意：受影响版本列表枚举的是跨多个分支的*引入*点，而非连续区间——请对照修复版本核对你的具体构建，而不是凭目测。
+
+[`🔗 NVD CVE-2026-21580`](https://nvd.nist.gov/vuln/detail/CVE-2026-21580) · [`🔗 OpenCVE CVE-2026-21580`](https://app.opencve.io/cve/CVE-2026-21580)
+
+---
+
+## 35. Palmyra x6——一个用 626 条轨迹、单轮 epoch 后训练的工具使用模型
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · v2 Aug 18 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agentic` `tool-use` `post-training` `moe` `benchmarks`
+
+**Palmyra x6**（arXiv:2608.16620，Writer，8 月 17 日提交，v2 于 8 月 18 日）是一个 agentic 工具使用模型，通过对一个专家混合（MoE）基座做**锚定监督微调（Anchored Supervised Fine-Tuning）**、在「一个紧凑的、经核验的合成工具使用轨迹语料上，用 Muon + Adam 混合优化器」后训练而成。配方本身才是发现：论文称其「刻意保守、刻意受控——**626 条轨迹、单个 epoch、低学习率，外加一个锚定到冻结基座的 KL 项**。」它报告相比 Writer 此前默认的智能体模型有显著提升，并「在 BFCL Core 上取得 **0.785** 的最高分，同时在该队列中取得最高的六基准平均分」，偏置与安全评估也具备竞争力或领先。
+
+**为何重要：** 这是后训练「少即是多」方向的一个干净数据点——一个 KL 锚点加上几百条*经核验*的轨迹，胜过数据饥渴的配方，让称职的工具调用无需轨迹农场也能达成。
+
+> 一份 12 页的厂商技术报告。「队列最高」是相对作者自行选择的对比集合而言的，且尚无独立复现。
+
+[`🔗 arXiv:2608.16620`](https://arxiv.org/abs/2608.16620) · [`🔗 Writer`](https://writer.com)
+
+---
+
+## 36. HarnessEval-W——把世界模型评测重建为证据树，而非一个分数
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 132 stars on HF Papers · ~2d ago (~20:03 UTC+8)
+- **Tags:** `world-models` `evaluation` `benchmarks` `agents` `llm-judge`
+
+**HarnessEval-W**（arXiv:2608.16859，8 月 17 日提交）主张「一个基准应当交付的远不止一个标量分数：让评测可信的是为分数辩护的推理」——尤其对于世界模型而言，「评判一次 rollout 需要理解物理、因果与世界状态是否正确演化」，人类对此天然敏感，而现有指标只能用蛮力计算。它用一个 agentic 工作流取代固定评分标准：解读案例、把它分解为可测量的子问题、派遣带有诊断工具的专用子智能体，再由一个父智能体验证收集到的证据并总结裁决——从而把「每一次评测变成一棵透明的**证据树**，其完整推理链为结果辩护。」该方法已应用于 **18 个代表性世界模型、330 个评测案例**，整套流水线作为实时基准开源。
+
+**为何重要：** 生成式视频与机器人模拟器如今由那些无法说出 rollout *为何*出错的分数来评判。让物理与因果违规变得可审计，是在管线中信任它们的前提。
+
+> 「与人类偏好高度一致」是作者自己的表述；一致性研究尚未被独立复现。摘要中的项目主页 URL 是占位符，未被打开。
+
+[`🔗 arXiv:2608.16859`](https://arxiv.org/abs/2608.16859) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.16859)
+
+---
+
+## 37. SoLo——让静态 musl 二进制能 dlopen 宿主机的 glibc GPU 驱动
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 74 pts · ~4d ago (~20:03 UTC+8)
+- **Tags:** `linux` `static-binaries` `elf` `vulkan` `musl`
+
+**pg83/solo**（MIT，C++，**8 月 14 日创建**，8 月 17 日推送，**283 星**）攻克的是静态 Linux 部署中一道具体而久远的墙。其 README 精确陈述了问题：「静态二进制是在 Linux 上部署软件的一种绝妙而平淡的方式：一个文件、无依赖、无可破坏……一旦应用需要 GPU，这份平淡就到头了：Vulkan 与 OpenGL 驱动由宿主机以共享对象形式提供，通常针对 glibc 构建，而**一个完全静态的 musl 二进制通常无法 `dlopen()` 它们**。」SoLo 通过提供「一个 `dlfcn` 风格的源码 API，底层是自己的 **ELF 加载器（x86-64 与 aarch64）** 和一个**实现在 musl 之上的 glibc ABI 桥**」来跨越这道边界——无需容器、无需 AppImage，进程里也不会有第二个 libc。
+
+**为何重要：** 「发布一个平淡的静态文件」对除 GPU 软件之外的一切都是可用的。消除这一例外，对可复现构建与供应链透明的分发意义重大——在这些场景里，一个容器镜像远比单个二进制更难被信任。
+
+> 才五天大、没有打过 tag 的 release，且依赖作者自己的 IX 源码优先构建系统。描述与机制引自 README，已直接读取。
+
+[`🔗 pg83/solo`](https://github.com/pg83/solo) · [`🔗 IX 构建系统`](https://github.com/pg83/ix)
+
+---
+
+## 38. OwnMem——智能体记忆做成可评审的 Markdown，召回时零模型调用
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · npm `ownmem@0.2.0` · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agent-memory` `git` `bm25` `local-first` `coding-agents`
+
+**grpcer/ownmem**（Apache-2.0，JavaScript，Node ≥20，**8 月 16 日创建**，8 月 18 日推送，53 星）颠覆了标准的智能体记忆栈。它的副标题就是论点——「**Git 原生的 AI 编码智能体项目记忆：归仓库所有。确定性。可评审。**」精心整理的决策、约束与调试经验以 Markdown 形式存于仓库内，因此记忆可以在 pull request 中被 diff、随 clone 一起迁移、并随代码一起回滚。召回运行在一个确定性的 BM25 族排序器上，而非嵌入向量：仓库自己的徽章宣传**召回 P95 为 2.46 ms、模型调用数：0**。据称同一套记忆可服务于 Claude Code、Codex、Antigravity、Cursor、Gemini CLI 与 Grok CLI。npm 注册表确认 **`ownmem@0.2.0`**，首次发布于 2026-08-16，至今共四个版本。
+
+**为何重要：** 大多数智能体记忆都要外挂一个嵌入模型和向量库，这让它变得不透明、不确定、且无法评审。纯文本加确定性排序器，是经得起代码评审的形态——而且它与今早的向量索引条目（turbovec，第 3 条）恰好是相反的赌注。
+
+> 非常年轻、单人维护：53 星、1 fork、四天大。2.46 ms 的 P95 是项目自己发布的基准，未经独立复现——我们在 npm 注册表上核实了包与版本，在 README 中核实了各项说法，但没有核实这个计时。
+
+[`🔗 grpcer/ownmem`](https://github.com/grpcer/ownmem) · [`🔗 npm 注册表——ownmem`](https://registry.npmjs.org/ownmem)
+
+---
+
+## 39. OpenLogi——Rust 原生、本地优先的 Logitech Options+ 替代品登顶 Hacker News
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 908 pts · #1 首页 (~20:03 UTC+8)
+- **Tags:** `rust` `hidpp` `peripherals` `local-first` `open-source`
+
+**AprilNEA/OpenLogi**（9,500 星、809 次提交、MIT/Apache-2.0 双许可）是 Logitech Options+ 的原生、本地优先替代品——它通过 Logi Bolt、Unifying、蓝牙或 USB 直接与 HID++ 外设通信，无需账号、无遥测。三个 Rust 组件各司其职：GPUI 桌面应用（交互式设备图示、逐键动作选择器、DPI 与 SmartShift 控制、RGB、按应用配置文件）、掌控系统输入钩子与设备 I/O 的后台代理，以及用于无头设备盘点与诊断的 CLI——所有配置都存储在单个可纳入版本控制的 TOML 文件中。它以 **908 分登上 Hacker News 榜首**，收获 250 条评论。
+
+**Why it matters:** 这波 HN 热度是对「用原生 Rust 替代臃肿厂商工具」这一诉求的实时信号——而且 OpenLogi 把 Linux 当作一等公民（Options+ 从未支持），提供 `.deb`/`.rpm`/`.pkg.tar.zst`、udev 规则和 NixOS 模块。
+
+> 跨平台支持 macOS 13+/Linux/Windows；Windows 11 是最新移植，README 标注其相比其他构建「毛边更多」。
+
+[`🔗 AprilNEA/OpenLogi`](https://github.com/AprilNEA/OpenLogi) · [`🔗 HN 讨论 (908 pts)`](https://news.ycombinator.com/item?id=49355606)
+
+---
+
+## 40. Cerebras CS-4——首个多晶圆推理机架本季度出货，「比 GPU 快 30 倍」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Next Web · ~325 pts HN · ~1d ago (~20:03 UTC+8)
+- **Tags:** `ai-hardware` `inference` `cerebras` `hpc` `wafer-scale`
+
+Cerebras 于 8 月 18 日的 Supernova 活动上发布了 **CS-4**：其首款**多晶圆**推理系统——三块 **WSE-3 Turbo** 晶圆组成一个机架，提供 **750 PFLOPS 稀疏 FP16** 算力与 **129.6 PB/s** 内存带宽，支持 50T 参数以上的模型，晶圆间延迟从 5 降到 2 µs，每机架功耗约 120–140 kW（约为同类 AMD/Nvidia 机架的一半）。首批出货定于本季度末。那个「比 GPU 系统快至多 **30 倍**」的卖点其实是**单用户**指标——`gpt-oss-120b` 上每用户每秒 token 数，对比对象是未具名的 GPU 系统——而据 The Register 分析，WSE-3 Turbo **并非新芯片**：它与 WSE-3 是同一颗 4T 晶体管/90 万核心/44 GB SRAM 的 die，只是把频率从约 1.4 提到 2.8 GHz，真正的新一代要等到 2027 年。
+
+**Why it matters:** 这是 Cerebras 在 55.5 亿美元纳斯达克上市后的首款硬件，且在 OpenAI 的「Ultrafast」GPT-5.6 Sol 模式上线 Cerebras 芯片五天后推出——一次直指推理、正面对抗 Nvidia 的出击，但那个头条速度声明只在窄基准和一颗「超频」die 上成立。
+
+[`🔗 The Next Web — CS-4`](https://thenextweb.com/news/cerebras-cs-4-wafer-scale-ai-inference-system) · [`🔗 HN 讨论 (325 pts)`](https://news.ycombinator.com/item?id=49354949)
+
+---
+
+## 41. CVE-2026-67443——FUXA 的 guest-JWT 绕过直达 Node-RED 编辑器，实现未认证 RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenCVE · CVSS 9.2 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `cve` `scada` `ot` `node-red`
+
+**CVE-2026-67443**（**CVSS v4 9.2**，8 月 18 日公开，FUXA **1.3.3** 修复）是开源 SCADA/HMI 过程可视化平台 **FUXA** 中的缺失授权缺陷。`/nodered` 的 `allowDashboard` 门禁验证了 JWT 却从不检查解码后的身份，因此当 Node-RED 集成、安全模式与 `nodeRedAuthMode: secure` 全部开启时，未认证攻击者从 `POST /api/heartbeat` 获取签名 **guest token**，即可抵达 Node-RED 编辑器与流程部署 API——部署函数节点、调用 `fuxa.runScript`，并在 `nodeRedUnsafeModules` 开启时实现操作系统命令执行。
+
+**Why it matters:** 在部署于工业/OT 网络的软件上实现零交互、无凭据的代码执行，而安全模式门禁本是主要防护——它是被设计绕过，而非被漏洞利用。
+
+[`🔗 NVD CVE-2026-67443`](https://nvd.nist.gov/vuln/detail/CVE-2026-67443) · [`🔗 OpenCVE CVE-2026-67443`](https://app.opencve.io/cve/CVE-2026-67443)
+
+---
+
+## 42. CVE-2026-71539——n8n 的 Git 克隆竞态植入一个以服务器身份运行的自定义节点
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenCVE · CVSS 8.9 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `cve` `n8n` `race-condition` `rce`
+
+**CVE-2026-71539**（**CVSS v4 8.9**，8 月 18 日公开，**1.123.64 / 2.29.8 / 2.30.1** 修复）是 n8n Git 克隆节点中的 TOCTOU 竞态（CWE-367）：已认证的工作流用户在克隆前把已校验的目录换成符号链接，从而在 community-node 目录植入一个构造好的仓库，该仓库在服务器重启后作为自定义 JavaScript 节点加载——在主机上执行任意代码。n8n 广泛自托管，工作流编辑者通常权限较低却持有服务凭据，因此提权路径很短。
+
+**Why it matters:** 这是「先检查、后使用」竞态在这样一个工具中的典型样本——它的职责就是带着密钥运行半可信的自动化，这提醒我们：工作流与主机之间的文件系统边界是一道隔离面，而不是装饰。
+
+[`🔗 NVD CVE-2026-71539`](https://nvd.nist.gov/vuln/detail/CVE-2026-71539) · [`🔗 OpenCVE CVE-2026-71539`](https://app.opencve.io/cve/CVE-2026-71539)
+
+---
+
+## 43. Agent Lightning v1.0——微软的 harnessed agentic RL 把 Qwen3.5-9B 的 SWE-bench 从 41.8% 提到 56.4%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · v1 8 月 18 日 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `rl` `agents` `post-training` `coding-agents` `framework`
+
+**Agent Lightning v1.0**（arXiv:2608.17528，微软，8 月 18 日提交）让**部署时的 agent harness** 在 RL 过程中掌控环境循环，训练器只看到 LLM 的请求/响应对——约 3,500 行代码处理重新分词、样本合并、优势计算、损失归一化与后端调度，可适配任意 harness。头号结果：仅用 **6K 样本**微调 **Qwen3.5-9B**，就把 **SWE-bench Verified 从 41.8% 提到 56.4%**（+14.6 分），计算开销适中，且流水线已开源。
+
+**Why it matters:** 「让 harness 参与训练」正成为真正 agent 模型的标准架构——摘要指出该范式后来被 verl Uni-Agent、AReaL 2.0、slime 和 Polar 采用——所以这是这一转向的可复现参考实现。
+
+[`🔗 arXiv:2608.17528`](https://arxiv.org/abs/2608.17528) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.17528)
+
+---
+
+## 44. Abra——Luma 的扩散 scaling law：计算最优约 200 image tokens/参数，约为 Chinchilla 的 10 倍
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · v1 8 月 18 日 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `diffusion` `scaling-laws` `image-generation` `compute-optimal` `research`
+
+**Abra**（arXiv:2608.17286，Luma AI，8 月 18 日提交）是一组受控的 flow-matching Transformer，在约 10¹⁹–10²² FLOPs 上训练，用于推导文生图扩散模型的 scaling law。结论：扩散模型像语言模型一样可预测地扩展，但计算最优点约为**每个参数 200 image tokens——约是 LLM Chinchilla 配方的 10 倍**——且扩散模型对过训练鲁棒，因此作者建议把预算花在**更多数据而非更大的模型**上。损失、CFG 设置、表征质量与训练曲线形状都坍缩到一个普适形式上。
+
+**Why it matters:** 这是最接近「扩散版的 Chinchilla」的成果，直接改变图像/视频团队如何分配训练预算——在业界此前只能靠猜的地方给出了一条具体决策规则。
+
+[`🔗 arXiv:2608.17286`](https://arxiv.org/abs/2608.17286) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.17286)
+
+---
+
+## 45. MoNe——模块化神经记忆无需重训练，把长上下文推理的计算与内存砍掉约 80%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · v1 8 月 18 日 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `long-context` `memory` `transformers` `efficiency` `research`
+
+**MoNe**（arXiv:2608.17616，8 月 18 日提交）把轻量的**模块化神经记忆**挂接到任意冻结的预训练 Transformer 上：上下文以固定大小的分段读取，通过测试时学习的快速权重记忆存储；推理时记忆仅从 query token 生成 key/value——因此上下文无需重读。在 **128K token** 下，相比上下文学习，它把计算与峰值 GPU 内存都降低约 **80%**，参数开销仅 **6.4%**，预处理 O(N)、查询 O(1)，且在 RULER 任务上即便超出骨干模型原生窗口也表现强劲。
+
+**Why it matters:** 它把推理成本与上下文长度解耦——正是本 feed 追踪的长上下文 agent 工作负载所需——且无需微调、不改动基座模型。
+
+[`🔗 arXiv:2608.17616`](https://arxiv.org/abs/2608.17616) · [`🔗 HF Papers`](https://huggingface.co/papers/2608.17616)
+
+---
+
+## 46. NorthCinder——一个买家主导的购物 agent MCP 服务器，带签名购买授权
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 1.2k 星 · ~2d ago (~20:03 UTC+8)
+- **Tags:** `mcp` `agents` `shopping-agent` `local-first` `commerce`
+
+**cinderline/northcinder**（MIT，1.2k 星，npm 上为 `northcinder@0.1.2`）是一个自托管的购物 agent MCP 服务器：它搜索已配置的商店适配器（Shopify、WooCommerce、eBay/Etsy 通过 API、Amazon 通过用户控制的浏览器配置只读访问），返回带机器可读的「入选与拒绝理由」的排序短名单，并在任何结账前要求一份**单独的、签名的、单次使用且带消费上限**的授权。排序只按买家标准——「卖家付款不是输入项」——赞助商品会被标注并排在所有自然结果之下，全程留本地审计痕迹。
+
+**Why it matters:** 智能体商务正带着内嵌于经纪路径的赞助排序与遥测到来。一个由买家运行排序器、持有签名密钥并保留审计日志的服务器，正是这一品类缺失的信任模型——也直接对冲了「agent 用你的卡买错东西」这一失败模式。
+
+[`🔗 cinderline/northcinder`](https://github.com/cinderline/northcinder) · [`🔗 npm registry — northcinder`](https://registry.npmjs.org/northcinder)
+
+---
+
+## 47. Mureka V9.5——昆仑万维的 MusiCoT 音乐模型宣称 97% 控制良品率
+
+- **Velocity:** ▮▮ rising
+- **Source:** PingWest · 8 月 18 日发布 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `music-generation` `model-release` `multimodal` `chain-of-thought` `audio`
+
+**昆仑万维**于 8 月 18 日发布 **Mureka V9.5**，其 AI 音乐生成模型基于 **MusiCoT**（音乐思维链）框架，在生成音频*之前*先构建完整音乐逻辑——从整曲结构到局部表达。厂商内部评测显示**人声表现良品率 61.0%**、**控制良品率 97.0%**、**曲风完全体现比例 95.7%**，并由 **25,000+** 条用户反馈打磨，在国风歌词咬字与和声层次上也有显著提升。
+
+**Why it matters:** 一个来自头部中文 AI 音乐厂商、带公开指标的具体模型发布——就在阿里巴巴 HappyShrimp 进军同赛道一天之后，说明文生音乐正在从 demo 变成多方角力的已出货品类。
+
+[`🔗 PingWest — Mureka V9.5`](https://www.pingwest.com/w/316546) · [`🔗 Mureka`](https://www.mureka.ai/)
+
+---
+
+## 48. Sprix SAGE Router——A2A agent 网络的 SELF/COLLABORATE/HANDOFF 路由
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 362 星 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `routing` `agents` `a2a` `multi-agent` `orchestration`
+
+**wang2122/sprix-sage-router**（MIT，Python，362 星）是一个介于 A2A 协议发现与任务执行之间的决策层，在运行中途决定现任 agent 是独自继续（SELF）、招募协作者但保留主导权（COLLABORATE），还是完全移交主导权（HANDOFF）。它在权限/预算/截止时间约束下，编排任务 DAG 角色、调度依赖，并用学习的 outcome 模型加 beam-search 团队组合、根据执行证据更新信任。目前是早期研究预览（v0.2，12 次提交）；README 中的 2,500 任务仿真（0.634 vs 0.507 仅现任 agent 的质量）被明确标注为合成数据。
+
+**Why it matters:** 随着 A2A（现为 Linux Foundation 协议）成熟，开放问题从「agent 能否对话」转向「何时协作、何时移交」——一个基于证据学习的答案是发现与执行之间缺失的中间层。
+
+[`🔗 wang2122/sprix-sage-router`](https://github.com/wang2122/sprix-sage-router) · [`🔗 a2aproject/A2A`](https://github.com/a2aproject/A2A)
+
+---
+
+## 49. Benjamin-Plus——JetBrains 实测的 token 效率技能，把编程 agent 成本降低 17.9%
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · JetBrains · ~2d ago (~20:03 UTC+8)
+- **Tags:** `coding-agents` `skills` `token-efficiency` `cost` `benchmark`
+
+**JetBrains/benjamin-plus-skill**（MIT，约 745 token 规则集）改变的是编程 agent *如何*查找信息与等待——一次性侦察、50 行的「钥匙孔读取」代替整文件读取、只探测环境一次、把任务自带的验证命令当作完成标准——而不改变它构建什么。在 80 个 SkillsBench 任务的配对 A/B（Claude Code + Sonnet 5）中，注入该技能带来**成本中位数 −17.9% 且质量不变**（7 更好/5 更差/68 持平）；Codex 的 SWE-bench 运行则显示成本 −4.4%、工具调用 −20%。README 的关键 harness 细节：以注入方式生效；作为可发现文件夹安装时「毫无节省」。
+
+**Why it matters:** 这是罕见的、由真实厂商（JetBrains）发布实测结果的技能，而且其「交付方式」结论对任何发布 agent 技能的人都能直接落地。
+
+[`🔗 JetBrains/benjamin-plus-skill`](https://github.com/JetBrains/benjamin-plus-skill) · [`🔗 benchflow-ai/skillsbench`](https://github.com/benchflow-ai/skillsbench)
+
+---
+
+## 50. Autoprompt——一个多 agent 技能，把 Terminal-Bench 失败率降低 45%（60/89 → 73/89）
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 138 星 · ~2d ago (~20:03 UTC+8)
+- **Tags:** `coding-agents` `skills` `multi-agent` `terminal-bench` `orchestration`
+
+**Spielewoy/autoprompt-skill**（MIT，v1.0.0）把六个编程 agent——Claude Code、Codex、OpenCode、Kilo Code、VS Code、Prime Agent——包进一个分层多 agent 层级（协调/管理/执行/独立判断层），让单个 agent 不再自己计划、批准并验证自己的工作。在 Terminal-Bench 2.1 上用 OpenCode 1.18.7，它把解出数从 **60/89 提升到 73/89——失败减少 45%**——代价是约 3× 时间与约 2× token，README 明确说明这是单次实测而非扫描。
+
+**Why it matters:** 「跨 agent 分离计划/批准/验证」是人人都认同、却少有技能给出数字的治理范式；在公开基准上失败减少 45%，并公开了成本代价，正是本 feed 追踪的那种证据优先的技能声明。
+
+[`🔗 Spielewoy/autoprompt-skill`](https://github.com/Spielewoy/autoprompt-skill) · [`🔗 harbor-framework/terminal-bench`](https://github.com/harbor-framework/terminal-bench-1)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-19T04:03:00Z |
-| Items | 20 |
-| Sources tracked | 36 (GitHub, Hacker News, arXiv, NVD, CISA, Hugging Face, mcpindex.ai, atto.cash, acadia.engineering, TrendForce, Tom's Hardware, It's FOSS, Notebookcheck, Anthropic Support, machine0, GenLayer Foundation, Lavx, Mandiant, GitHub Advisories, docs.microsandbox.dev, ui-mate.github.io, leaflet.pub, and vendor advisories) |
+| Generated | 2026-08-19T20:03:00Z |
+| Items | 50 |
+| Sources tracked | 51 (GitHub, Hacker News, arXiv, NVD, CISA, Hugging Face, kernel.org, Oracle Security Alerts, Chrome Releases, openwall oss-security, postgresql.org, depesz, Phoronix, Modular, ai.google.dev, OpenAI Platform Docs, OpenCVE, npm registry, mcpindex.ai, atto.cash, acadia.engineering, TrendForce, Tom's Hardware, It's FOSS, Notebookcheck, Anthropic Support, machine0, GenLayer Foundation, Lavx, Mandiant, GitHub Advisories, docs.microsandbox.dev, ui-mate.github.io, leaflet.pub, browser-use.com, pingwest.com, mureka.ai, thenextweb.com, and vendor advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
