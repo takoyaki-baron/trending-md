@@ -622,3 +622,65 @@ slime 和 Polar 采纳"。这是 thesis 12"harness 是杠杆"的训练侧对应�
   **5,100+ 个 `dsh-plugin` 社区仓库**（五天）与 Discussions。信号：开发者注意力正集中在 *harness 层*而非权重
   ——这是 thesis 1"注意力集中在 harness 而非模型"迄今最清晰的需求信号。
 
+
+## 运行时层第三轮——密度、体积与凭证边界（08-20 20:03）
+
+运行时层的竞争轴在一周内挪了两次。先是**能力**（你能不能隔离不可信代码？），继而是**经济性**
+（machine0 的「挂起即停止计费」，08-19），如今则有三位入场者同时优化三种不同的稀缺资源。
+它们没有一个在比拼「智能体能做什么」。
+
+### Agent Substrate——把「闲置」当作首要设计约束
+
+`agent-substrate/substrate`（Apache-2.0，1.3k stars，246 forks）。以下取自 README 的第一手阅读：
+
+- **Instant Actor Teleport**——把一个 actor 亚秒级挂起/恢复到池中任意可用 worker 上，
+  完整状态快照可跨休眠存活。
+- **Agent Swarm Multiplexing**——一个「把约 250 个有状态 actor 复用到仅 8 个物理 pod 上」的演示，
+  官方描述为 **30 倍以上超额订阅**。
+- **Request Parking**——在超额订阅的池中，路由器会**扣住**入站请求直到有 worker 空出，而不是返回 `503`。
+- Kubernetes 原生（WorkerPool + ActorTemplate CRD，`cmd/atecontroller`），
+  由 `cmd/ateom-gvisor` 驱动 `runsc` 的 checkpoint/restore，`cmd/ateom-microvm` 则把 actor 跑成
+  cloud-hypervisor 虚拟机。
+- 明确**与框架、harness 无关**——它在内核层面管理标准 OCI 容器，因此 ADK、LangChain、Claude Code、
+  Codex 与 MCP 服务器都能作为 actor 运行。
+
+**状态（已核实）：** README 写明「**这不是 Google 官方支持的产品**」，且尚未可用于
+「生产环境，API 几乎必然会变」。`google/ax`（「一个开源分布式智能体运行时」，1.9k stars）构建于其上。
+
+**值得借走的那层框定。** README 自述的目标比演示更大：面向
+「横跨 agentic、推理与训练周期的 RL 场景」的整体基础设施优化。这意味着**部署与训练共用同一套 substrate**
+——正是 Agent Lightning 把部署期 harness 塞进 RL 循环的基础设施对应物（→ [[frontier-models]]，论点 12）。
+若此事成立，「你用来训练的 harness」与「你用来服务的 pod」将不再是两套系统。
+
+### fx——从下方进攻重型 TUI
+
+`vercel-labs/fx`（Apache-2.0，1.4k stars，创建于 2026-08-11，v0.0.4，README 徽章：
+「Status: Experimental. Use at your own risk.」）。一个用 **Zig** 写的编码智能体 harness，
+「为研究与作为更大系统的可嵌入组件而优化」：类 shell 的 CLI 而非「终端里的 IDE」，
+面向编辑器客户端的 stdio **ACP** 服务（`fx acp`），以及把智能体变成库的 WebAssembly 构建——
+`createFxAgent()` 配 `fx-core.wasm`、`createFxTerminal()` 配 `fx-term.wasm`。
+模型无关，通过 skills、MCP 与子智能体扩展。从源码构建需 Zig 0.16.0+。
+
+> **第一手发现的时效性警告。** feed 引用的是 **~6.39 MiB**（v0.0.4），而 HEAD 上的 README 已写作
+> **7.8 MiB**。两者都不算错；二进制在固定发行版与分支之间长大了。引用体积数字时**务必带上版本号**
+> ——这是一个一天之内就会变的指标，其错误性质与「引用 star 数却不注明日期」完全同类。
+
+其自陈的代价：推理默认经由 Vercel AI Gateway（有人视之为锁定），且完整的 OS 沙箱目前仅限 macOS。
+
+### OneCLI——把凭证边界本身做成产品
+
+`onecli/onecli`（Apache-2.0 附企业例外条款，3.2k stars，YC S26，Launch HN）。为每位员工在隔离沙箱中
+配置一个智能体，并把所有出站流量导过一个 Rust 网关，该网关**只在授权之后**才注入凭证——
+机密在请求时刻解密（AES-256-GCM），从不进入智能体上下文。此外提供基于 IdP 的开通、集中式团队策略、
+**绑定到确切 method + URL + body** 的确定性人工审批，以及可在 NAT 后工作的纯出站 runner。
+最初是一个 Rust 凭证保险库，后转向团队 harness 这一缺口。
+
+这是用**结构**而非**合同**回答企业方的质疑：不是「请信任我们托管的智能体」，而是
+「该智能体从未持有过机密」。它与工具调用边界问题（论点 11）相配：
+把审批绑定到具体的请求体，是一种远比「批准这个工具」更窄的授权，也比模型裁决式分类器所决定的更窄。
+
+### 综合
+
+Substrate 回答**每个 pod 能跑多少智能体**，fx 回答**harness 能做到多小**，
+OneCLI 回答**谁持有机密**。三种稀缺资源——算力密度、二进制体积、凭证爆炸半径——
+没有一个是模型能力。当「能力」不再是区分度所在时，一个层就长成这个样子。

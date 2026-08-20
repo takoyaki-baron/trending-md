@@ -2194,5 +2194,167 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "fx.sh": {
+    "cat": "vendor",
+    "en": "Official site of Vercel Labs' fx — a tiny Zig coding-agent harness/CLI. Primary source for the ~6.39 MiB binary / 10µs cold-start / Wasm claims. Cross-validated against the vercel-labs/fx repo and independent write-ups (08-20).",
+    "zh": "Vercel Labs 旗下 fx 的官网——一个用 Zig 写的小型编码智能体 harness/CLI。是「约 6.39 MiB 二进制 / 10µs 冷启动 / Wasm」等声明的一手来源。已与 vercel-labs/fx 仓库及独立报道交叉核验（08-20）。",
+    "jp": "Vercel Labs の fx 公式サイト——Zig 製の小型コーディングエージェントハーネス/CLI。「約6.39 MiB バイナリ / 10µs コールドスタート / Wasm」等の一次情報源。vercel-labs/fx リポジトリおよび独立記事と突合済み（08-20）。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "rapid7.com": {
+    "cat": "security",
+    "en": "Rapid7's research blog + vulnerability disclosures (AttackerKB, Metasploit). Primary source for the CVE-2026-55040 SharePoint JWT bypass and its agentic-research writeup. Read first-hand 08-20 and cross-validated: its own figures (24 active days, 96 sessions, 256 prompts, ~80,000 tool calls) match The Hacker News + the CSA research note — but note the advisory page does NOT carry the agent-\"cheated\" detail, which lives in secondary reporting.",
+    "zh": "Rapid7 的研究博客与漏洞披露（AttackerKB、Metasploit）。是 CVE-2026-55040 SharePoint JWT 绕过及其智能体研究复盘的一手来源。08-20 第一手阅读并交叉核验：其自述数字（24 个活跃日、96 会话、256 提示、约 80,000 次工具调用）与 The Hacker News 及 CSA 研究简报一致——但请注意，公告页**不含**智能体「作弊」这一细节，该细节存在于二手报道中。",
+    "jp": "Rapid7の研究ブログと脆弱性開示（AttackerKB、Metasploit）。CVE-2026-55040 SharePoint JWTバイパスとそのエージェント研究記録の一次情報源。08-20に一次読解し突合済み: 自身の数字（24稼働日、96セッション、256プロンプト、約80,000ツール呼び出し）はThe Hacker NewsおよびCSAリサーチノートと一致する——ただしアドバイザリページにエージェントの「カンニング」の詳細は**載っておらず**、それは二次報道にある。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "moje.cert.pl": {
+    "cat": "security",
+    "en": "CERT Polska's official advisory portal (NASK, Poland's national CERT). Primary source for the actively-exploited Zimbra CVE-2026-73570. Read first-hand 08-20: confirms unauthenticated OS command injection as the zimbra user via swatchdog/snmp_notify, fix in ZCS 10.1.20, and gives concrete /var/log/zimbra.log detection strings. Notably carries NO CVSS score — the widely-quoted 8.9 is from secondary reporting.",
+    "zh": "CERT Polska 官方公告门户（NASK，波兰国家级 CERT）。是正被活跃利用的 Zimbra CVE-2026-73570 的一手来源。08-20 第一手阅读：确认经 swatchdog/snmp_notify 以 zimbra 用户身份实现的未认证 OS 命令注入、修复版本 ZCS 10.1.20，并给出具体的 /var/log/zimbra.log 检测特征串。值得注意的是它**未给出 CVSS 分数**——广为引用的 8.9 来自二手报道。",
+    "jp": "CERT Polskaの公式アドバイザリポータル（NASK、ポーランドの国家CERT）。活発に悪用中のZimbra CVE-2026-73570の一次情報源。08-20に一次読解: swatchdog/snmp_notify経由でzimbraユーザー権限の未認証OSコマンドインジェクションであること、ZCS 10.1.20での修正、具体的な/var/log/zimbra.logの検知文字列を確認。特筆すべきはCVSSスコアが**記載されていない**点——広く引用される8.9は二次報道由来である。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "securityonline.info": {
+    "cat": "security",
+    "en": "Independent security-news aggregator covering CVEs, PoCs and vendor advisories. Fast and broad, but derivative — it restates primary advisories rather than adding analysis, and supplies CVSS numbers that the primary advisory sometimes omits (the Zimbra 8.9). Cross-validated 08-20: its Pixel-kernel-source report matches Android Authority and the CERT Polska Zimbra facts match the primary advisory. Treat as corroboration, not as a primary source.",
+    "zh": "独立安全新闻聚合站，覆盖 CVE、PoC 与厂商公告。快而广，但属于转述型——它复述一手公告而非补充分析，并会给出一手公告有时未提供的 CVSS 数值（如 Zimbra 的 8.9）。08-20 交叉核验：其 Pixel 内核源码报道与 Android Authority 一致，其 CERT Polska Zimbra 事实与一手公告一致。宜作佐证使用，不宜当作一手来源。",
+    "jp": "CVE、PoC、ベンダーアドバイザリを扱う独立系セキュリティニュースアグリゲータ。速く広いが二次的——一次アドバイザリを言い換えるもので分析は加えず、一次アドバイザリが省略することのあるCVSS値（Zimbraの8.9）を補う。08-20に突合: Pixelカーネルソースの報道はAndroid Authorityと、CERT PolskaのZimbraの事実は一次アドバイザリと一致。一次情報源ではなく裏づけとして扱うこと。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "socprime.com": {
+    "cat": "security",
+    "en": "SOC Prime's threat-research blog — CVE writeups paired with detection content (Sigma rules, hunting queries). Read first-hand 08-20 on CVE-2026-68820 and it holds up: AFD.sys use-after-free from improper synchronization, Lazarus/Operation Dream Job attribution to Check Point, CVSS 7.0, patched Aug 11 2026, disclosure timeline (reported Jul 28, CVE assigned Aug 5). Agrees with the independently-recorded 08-16 account. Caveat: it does NOT carry the FudModule v3.1 version or the 94-ETW-provider count — do not attribute those to it.",
+    "zh": "SOC Prime 的威胁研究博客——CVE 复盘搭配检测内容（Sigma 规则、狩猎查询）。08-20 就 CVE-2026-68820 第一手阅读并成立：AFD.sys 因同步不当导致的释放后使用、Check Point 对 Lazarus/Operation Dream Job 的归因、CVSS 7.0、2026 年 8 月 11 日修复、披露时间线（7 月 28 日报告、8 月 5 日分配 CVE）。与 08-16 独立记录的说法一致。注意：它**不含** FudModule v3.1 版本号与「94 个 ETW 提供程序」这一数字——不要把这两项归因于它。",
+    "jp": "SOC Primeの脅威リサーチブログ——CVE解説と検知コンテンツ（Sigmaルール、ハンティングクエリ）を対にして提供。08-20にCVE-2026-68820を一次読解し、内容は妥当: 不適切な同期に起因するAFD.sysのuse-after-free、Check PointによるLazarus/Operation Dream Job帰属、CVSS 7.0、2026年8月11日修正、開示タイムライン（7月28日報告、8月5日CVE採番）。08-16に独立記録した内容と一致する。注意: FudModule v3.1というバージョンや「94のETWプロバイダ」という数字は**含まれていない**——それらを本サイトに帰属させないこと。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "thecyberexpress.com": {
+    "cat": "news",
+    "en": "Cyble-affiliated security news outlet; Patch Tuesday roundups and breach coverage. Cited for the August 2026 Patch Tuesday zero-day framing around CVE-2026-68820. Derivative rather than primary — it aggregates vendor advisories and research posts. Cross-validated 08-20 via co-citation: its CVE-2026-68820 account is consistent with SOC Prime's first-hand-verified facts (AFD.sys UAF, Lazarus, Aug 11 patch). Prefer the vendor advisory or Check Point for the technical detail.",
+    "zh": "隶属 Cyble 的安全新闻站；擅长 Patch Tuesday 汇总与入侵事件报道。因围绕 CVE-2026-68820 的 2026 年 8 月 Patch Tuesday 零日框定而被引用。属转述型而非一手——它聚合厂商公告与研究文章。08-20 通过共同引用交叉核验：其 CVE-2026-68820 叙述与 SOC Prime 经第一手核实的事实（AFD.sys UAF、Lazarus、8 月 11 日补丁）一致。技术细节请优先采用厂商公告或 Check Point。",
+    "jp": "Cyble系列のセキュリティニュースサイト。Patch Tuesdayのまとめや侵害報道を扱う。CVE-2026-68820をめぐる2026年8月Patch Tuesdayのゼロデイという枠組みで引用された。一次ではなく二次的——ベンダーアドバイザリや研究記事を集約する。08-20に共引用で突合: そのCVE-2026-68820の記述は、SOC Primeで一次確認した事実（AFD.sys UAF、Lazarus、8月11日パッチ）と整合する。技術的詳細はベンダーアドバイザリまたはCheck Pointを優先すること。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "oracle.com": {
+    "cat": "vendor",
+    "en": "Oracle's official site — first-hand for the quarterly Critical Patch Updates. Cross-checked (08-20): its August 2026 CSPU (943 patches, incl. CVE-2026-70926, a 9.8 pre-auth SMTP RCE in Oracle EBS Workflow) is independently confirmed by NVD, IONIX, VulDB and SecurityWeek.",
+    "zh": "Oracle 官网 —— 季度 Critical Patch Update 的一手来源。已交叉核验（08-20）：其 2026 年 8 月 CSPU（943 个补丁，含 CVE-2026-70926，Oracle EBS Workflow 中 9.8 分预认证 SMTP RCE）经 NVD、IONIX、VulDB 与 SecurityWeek 独立确认。",
+    "jp": "Oracle公式サイト —— 四半期Critical Patch Updateの一次情報。突合済み（08-20）：2026年8月CSPU（943パッチ、CVE-2026-70926＝Oracle EBS Workflowの認証前SMTP RCE 9.8を含む）はNVD、IONIX、VulDB、SecurityWeekで独立に確認。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "kernel.org": {
+    "cat": "code",
+    "en": "The Linux kernel's canonical home — first-hand for release dates and channel status. Cross-checked first-hand (08-20): `mainline: 7.2` tagged 2026-08-16; stable/longterm have since advanced to 7.1.9 / 6.18.45. Use it for the version fact; use Phoronix for feature summaries.",
+    "zh": "Linux 内核的权威主页 —— 发行日期与通道状态的一手来源。已第一手核验（08-20）：`mainline: 7.2` 标记为 2026-08-16；stable/longterm 现已推进到 7.1.9 / 6.18.45。版本事实以此为准；特性摘要用 Phoronix。",
+    "jp": "Linuxカーネルの正典ホーム —— リリース日とチャンネル状態の一次情報。一次突合済み（08-20）：`mainline: 7.2` は2026-08-16にタグ付け；stable/longtermはその後7.1.9 / 6.18.45へ進んだ。バージョン事実はこれ、機能要約はPhoronixを。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "postgresql.org": {
+    "cat": "code",
+    "en": "The PostgreSQL project's official site — first-hand for release announcements and the CVE list. Cross-checked first-hand (08-20): the 19 Beta 3 announcement confirms the 28-CVE security release; SQL/PGQ (GRAPH_TABLE / CREATE PROPERTY GRAPH) is part of the v19 feature set per the release notes and depesz's independent write-up.",
+    "zh": "PostgreSQL 项目官网 —— 发行公告与 CVE 列表的一手来源。已第一手核验（08-20）：19 Beta 3 公告确认了含 28 个 CVE 的安全发行；SQL/PGQ（GRAPH_TABLE / CREATE PROPERTY GRAPH）属于 v19 特性集（依据发行说明与 depesz 的独立文章）。",
+    "jp": "PostgreSQLプロジェクト公式サイト —— リリース発表とCVEリストの一次情報。一次突合済み（08-20）：19 Beta 3の発表は28-CVEのセキュリティリリースを確認；SQL/PGQ（GRAPH_TABLE / CREATE PROPERTY GRAPH）はリリースノートとdepeszの独立記事によりv19機能セットの一部。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "depesz.com": {
+    "cat": "community",
+    "en": "Hubert \"depesz\" Lubaczewski's PostgreSQL blog — deep, first-hand patch-review write-ups. Its SQL/PGQ post ('Waiting for PostgreSQL 19 — SQL/PGQ') matches the project release notes (committed by Peter Eisentraut, ISO/IEC 9075-16:2023); opinionated but technically authoritative.",
+    "zh": "Hubert \"depesz\" Lubaczewski 的 PostgreSQL 博客 —— 深入的一手补丁审阅文章。其 SQL/PGQ 文（《Waiting for PostgreSQL 19 — SQL/PGQ》）与项目发行说明一致（Peter Eisentraut 提交，ISO/IEC 9075-16:2023）；观点鲜明但技术上权威。",
+    "jp": "Hubert \"depesz\" LubaczewskiのPostgreSQLブログ —— 深い一次パッチレビュー記事。SQL/PGQの記事（『Waiting for PostgreSQL 19 — SQL/PGQ』）はプロジェクトのリリースノートと一致（Peter Eisentrautコミット、ISO/IEC 9075-16:2023）；意見は強いが技術的に信頼できる。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "chromereleases.googleblog.com": {
+    "cat": "vendor",
+    "en": "Google's official Chrome release-notes channel — first-hand for version numbers, fix counts and credit lines. Cross-checked (08-20): its 151.0.7922.169/.170 bulletin (15 fixes; CVE-2026-76045, a WebGL UAF \"Reported by OpenAI Codex Security (amyb) on 2026-08-05\") is confirmed by Tenable, VulDB and OffSeq.",
+    "zh": "Google 官方 Chrome 发行说明频道 —— 版本号、修复数与致谢行的一手来源。已交叉核验（08-20）：其 151.0.7922.169/.170 公告（15 个修复；CVE-2026-76045，一个 WebGL UAF，\"Reported by OpenAI Codex Security (amyb) on 2026-08-05\"）经 Tenable、VulDB 与 OffSeq 确认。",
+    "jp": "Google公式のChromeリリースノートチャンネル —— バージョン番号、修正件数、クレジット行の一次情報。突合済み（08-20）：151.0.7922.169/.170の公報（15件の修正；CVE-2026-76045＝WebGLのUAF、「Reported by OpenAI Codex Security (amyb) on 2026-08-05」）はTenable、VulDB、OffSeqで確認。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "google.com": {
+    "cat": "vendor",
+    "en": "Cited here only as the host of Google's Chrome security page (www.google.com/chrome/browser/privacy/#security) — a vendor security reference for the browser's exploit-reward and sandbox posture, not the search engine.",
+    "zh": "此处仅作为 Google Chrome 安全页（www.google.com/chrome/browser/privacy/#security）的主机被引用 —— 这是关于浏览器漏洞奖励与沙箱态势的厂商安全参考，而非搜索引擎。",
+    "jp": "ここではGoogleのChromeセキュリティページ（www.google.com/chrome/browser/privacy/#security）のホストとしてのみ引用 —— ブラウザの報奨金・サンドボックス体制に関するベンダーのセキュリティ参照であり、検索エンジンではない。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "mureka.ai": {
+    "cat": "vendor",
+    "en": "Kunlun Wanwei's Mureka music-generation product site. Cross-checked (08-20): its V9.5 launch (MusiCoT 'think first, then write'; 97% prompt-control / 61% vocal / 95.7% style-fidelity pass rates) is corroborated by PingWest, aibase and other independent outlets; the metric claims remain vendor-reported.",
+    "zh": "昆仑万维 Mureka 音乐生成产品官网。已交叉核验（08-20）：其 V9.5 发布（MusiCoT「先想后写」；97% 提示控制 / 61% 人声 / 95.7% 曲风还原良品率）经品玩、aibase 等独立媒体佐证；指标声明仍为厂商自报。",
+    "jp": "Kunlun WanweiのMureka音楽生成製品サイト。突合済み（08-20）：V9.5の発表（MusiCoT「先に考えてから書く」；97%プロンプト制御 / 61%ボーカル / 95.7%曲風再現の良品率）はPingWest、aibaseなど独立メディアで裏付け；指標はベンダー自己申告のまま。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "pingwest.com": {
+    "cat": "news",
+    "en": "PingWest (品玩), Chinese tech media. Its Mureka V9.5 report matches the vendor's own site and multiple independent Chinese outlets (the 97% prompt-control figure); fast on Chinese consumer-AI launches, moderate depth.",
+    "zh": "品玩，中国科技媒体。其 Mureka V9.5 报道与厂商官网及多家独立中文媒体一致（97% 提示控制数字）；对中国消费级 AI 发布跟进快，深度中等。",
+    "jp": "PingWest（品玩）、中国のテックメディア。Mureka V9.5の報道はベンダー自身のサイトと複数の独立した中国メディアと一致（97%プロンプト制御の数字）；中国のコンシューマーAIローンチに速く、深さは中程度。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "browser-use.com": {
+    "cat": "vendor",
+    "en": "Browser Use's product site — the org behind the browser-use/macos-harness repo (github.com/browser-use/macos-harness) cited in the same item; first-hand for their computer-use product line, but verify repo-level claims against GitHub.",
+    "zh": "Browser Use 产品官网 —— 与同条目引用的 browser-use/macos-harness 仓库（github.com/browser-use/macos-harness）同属一组织；其计算机使用产品线的一手来源，但仓库层面的声明请以 GitHub 为准核对。",
+    "jp": "Browser Useの製品サイト —— 同一記事で引用されるbrowser-use/macos-harnessリポジトリ（github.com/browser-use/macos-harness）の組織；コンピューター使用製品ラインの一次情報だが、リポジトリレベルの主張はGitHubで確認を。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "writer.com": {
+    "cat": "vendor",
+    "en": "Writer's company site — the lab behind the Palmyra x6 agentic tool-use model (arXiv:2608.16620, cited in the same item); first-hand for product releases, but research claims should be read against the paper.",
+    "zh": "Writer 公司官网 —— 与同条目引用的 Palmyra x6 智能体工具使用模型（arXiv:2608.16620）同属一实验室；产品发布的一手来源，但研究声明应以论文为准核对。",
+    "jp": "Writerの企業サイト —— 同一記事で引用されるPalmyra x6エージェントツール使用モデル（arXiv:2608.16620）のラボ；製品リリースの一次情報だが、研究上の主張は論文で確認を。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "developers.openai.com": {
+    "cat": "vendor",
+    "en": "OpenAI's developer-docs domain. Cross-checked (08-20): its Assistants→Responses migration guide (Assistants API shuts down Aug 26, 2026; Assistants→Prompts, Threads→Conversations, Runs→Responses) is corroborated by the OpenAI developer community, Zoho, Microsoft Q&A and dev.to.",
+    "zh": "OpenAI 开发者文档域名。已交叉核验（08-20）：其 Assistants→Responses 迁移指南（Assistants API 于 2026 年 8 月 26 日关停；Assistants→Prompts、Threads→Conversations、Runs→Responses）经 OpenAI 开发者社区、Zoho、Microsoft Q&A 与 dev.to 佐证。",
+    "jp": "OpenAIの開発者ドキュメントドメイン。突合済み（08-20）：Assistants→Responses移行ガイド（Assistants APIは2026年8月26日シャットダウン；Assistants→Prompts、Threads→Conversations、Runs→Responses）はOpenAIデベロッパーコミュニティ、Zoho、Microsoft Q&A、dev.toで裏付け。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "platform.openai.com": {
+    "cat": "vendor",
+    "en": "OpenAI's API platform docs (mirrors developers.openai.com for the migration guide). Cross-checked (08-20): same Aug 26, 2026 Assistants sunset as the developers.openai.com guide.",
+    "zh": "OpenAI API 平台文档（迁移指南与 developers.openai.com 互为镜像）。已交叉核验（08-20）：与 developers.openai.com 指南同为 2026 年 8 月 26 日 Assistants 关停。",
+    "jp": "OpenAIのAPIプラットフォームドキュメント（移行ガイドはdevelopers.openai.comとミラー）。突合済み（08-20）：developers.openai.comのガイドと同じ2026年8月26日のAssistants終了。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
   }
 }

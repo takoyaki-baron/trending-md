@@ -136,3 +136,66 @@ Three more "check the source, not the aggregate" instances, one per item:
   `NOASSERTION` on `modular/modular` (the LLVM exceptions defeat auto-detection); the "Apache-2.0"
   claim is Modular's own, stated in the announcement that was read. A license claim needs the vendor's
   statement, not the detector — same shape as the turbovec "ICLR 2026" venue corollary.
+
+## Corrections come in two species — and they have opposite velocity consequences (08-20)
+
+Applying this checklist to *my own* feed caught two errors in one batch. They look alike — both are
+"an item was wrong, fix it in place" — but treating them identically produces a worse ledger. The
+distinction is now part of the method, and `CLAUDE.md`'s correction convention was amended to match.
+
+### Species 1 — a claim error (framing was wrong)
+
+**Case: `akitaonrails/ai-memory` attributed to DHH (2026-08-20, item 21).** The feed titled it "DHH's
+Rust agent memory." The GitHub owner profile says **Fabio Akita** — Codeminer 42, Brazil, 19.5k
+followers. DHH is `dhh` (David Heinemeier Hansson, 37signals), who authors **Omarchy — item 9 of the
+same feed**. Two prominent Rails-community figures collapsed into one, inside a single file.
+
+Why it earns a velocity re-derivation: the false attribution was doing *work*. "DHH shipped an agent
+memory" is a story because of who DHH is; "a well-known Brazilian Rails developer shipped an agent
+memory" is a smaller one. The rank was partly bought by the error, so the rank has to go back —
+▮▮ rising → ▮ steady, alongside the title and body fix.
+
+**The detection rule that would have caught it earlier:** an `owner/repo` slug is a *checkable claim
+about a person*. One API call (`/users/<owner>`) settles it. Never infer authorship from a project's
+community, its language ecosystem, or another item in the same batch.
+
+### Species 2 — a citation error (the link was wrong, the story was right)
+
+**Case: the GrapheneOS Mastodon permalink (2026-08-20, item 18).** The cited post returns **404** —
+confirmed twice, via the HTML page and the Mastodon status API (`/api/v1/statuses/<id>` →
+`{"error":"Not Found"}`). But the *story* — Google replacing Pixel kernel and userspace-driver Git
+tags with a Google Form → human approval → history-stripped tarball on Drive — is real and
+independently corroborated by Android Authority (Aug 10), securityonline.info, ITHome, OSChina and
+others. Sibling item 15's GrapheneOS permalink, checked the same way, resolves fine and turned out to
+contain *more* than the coverage did.
+
+Why it must **not** get a velocity re-derivation: nothing about the item's prominence rested on that
+URL. The HN thread's 647 points are real; the story is real. Dropping its velocity would make the feed
+under-report a genuine trend as punishment for a dead link — an error in the opposite direction.
+
+The fix is narrower: retract the bogus link, replace it with a source **actually opened** (Android
+Authority), keep ≥2 valid links, and say so in the item.
+
+### The rule
+
+| | Claim/framing correction | Citation correction |
+|---|---|---|
+| What was wrong | the fact or the framing | only the pointer |
+| Fix | rewrite title + body | swap the link |
+| Velocity | **re-derive** (usually → ▮ steady) | **keep** |
+| Rationale | the inflated framing drove the rank | the rank was never about the link |
+
+Mechanically applying "corrected items drop to steady" to both would have quietly degraded the ledger.
+The convention exists to stop *inflated* ranks surviving a correction — not to punish every edit.
+
+### Two habits this adds to the checklist
+
+1. **Resolve every permalink, not just article URLs.** Social-media permalinks (Mastodon, X) are the
+   most fragile citations in the feed — posts get deleted, IDs get transcribed wrong, instances move.
+   A status API is a one-call check and returns an unambiguous answer.
+2. **Read the primary account's own timeline, not only the aggregator's excerpt.** Checking the
+   *working* GrapheneOS permalink returned material the coverage omitted — the 2027 devices will be
+   flagships "higher end hardware than Pixels at a higher price," gated on Qualcomm and on getting
+   Motorola to pay for longer updates — plus the project's own pushback on the framing: "It isn't
+   really news that the devices will be in 2027." Verification and reporting are the same action; a
+   check that only returns pass/fail is being under-used.

@@ -299,7 +299,9 @@ Google は **Pixel カーネルおよびユーザー空間ドライバーのソ�
 
 > GPLv2 は技術的には「書面による提供」を認めるが、GNU GPL FAQ は「合理的なアクセス」が配布者の恣意的な遅延を意味し得ないとする——Software Freedom Conservancy による執行の論点になり得る。
 
-[`🔗 GrapheneOS アナウンス`](https://grapheneos.social/@GrapheneOS/117058057995588782) · [`🔗 Byteiota 分析`](https://byteiota.com/google-kills-aosp-git-access-custom-rom-devs-must-act/)
+> **訂正（2026-08-20）:** 当初引用した GrapheneOS の Mastodon パーマリンクは **404** を返すため撤回した。内容自体は変わらず、独立に裏取り済み——Android Authority（8月10日）が同じ「フォーム + Drive」手順、数週間の待ち時間、そして「Google が Pixel 向けの代替 Android 構築を極めて困難にしたからこそ Motorola 提携が存在する」という GrapheneOS の発言を報じている。
+
+[`🔗 Android Authority`](https://www.androidauthority.com/google-pixel-kernel-code-forms-3696441/) · [`🔗 Byteiota 分析`](https://byteiota.com/google-kills-aosp-git-access-custom-rom-devs-must-act/)
 
 ---
 
@@ -335,15 +337,17 @@ Google は **Pixel カーネルおよびユーザー空間ドライバーのソ�
 
 ---
 
-## 21. ai-memory——Claude Code と Codex の間を引き継ぐ DHH の Rust エージェントメモリ
+## 21. ai-memory——Claude Code と Codex の間を引き継ぐ Fabio Akita の Rust エージェントメモリ
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** GitHub Trending · 3.4k stars · ~1d ago (~20:03 UTC+8)
 - **Tags:** `agent-memory` `rust` `handoff` `mcp` `coding-agents`
 
-**akitaonrails/ai-memory**（MIT、Rust、3.4k stars）は DHH によるコーディングエージェント CLI 向けの長期メモリ。単一の Rust バイナリが MCP/HTTP サーバーを動かし、サニタイズされたライフサイクル観測（プロンプト、ツール呼び出し、セッション境界）を **git バージョン管理された Markdown の「wiki」** にまとめる。Claude Code を途中で終了し、同じディレクトリで Codex を起動すると、次のエージェントがアーキテクチャ・失敗したアプローチ・未解決の疑問を引き継ぐ——ベクトル DB なし、手動のコンテキスト読み込みなし、LLM は**オプション**（FTS5 + エンティティ/グラフ検索は LLM なしで動く）。
+**akitaonrails/ai-memory**（MIT、Rust、3.4k stars）は **Fabio Akita** によるコーディングエージェント CLI 向けの長期メモリ。単一の Rust バイナリが MCP/HTTP サーバーを動かし、サニタイズされたライフサイクル観測（プロンプト、ツール呼び出し、セッション境界）を **git バージョン管理された Markdown の「wiki」** にまとめる。Claude Code を途中で終了し、同じディレクトリで Codex を起動すると、次のエージェントがアーキテクチャ・失敗したアプローチ・未解決の疑問を引き継ぐ——ベクトル DB なし、手動のコンテキスト読み込みなし、LLM は**オプション**（FTS5 + エンティティ/グラフ検索は LLM なしで動く）。
 
 **重要性:** エージェントメモリは「全部ベクトル DB」と「自分でメモを書く」に分断されてきた。ai-memory の賭け——素朴で grep 可能、git 追跡可能な Markdown、ベンダーをまたぐ引き継ぎ、想起時のモデル呼び出しゼロ——は監査可能な中間道であり、README は Claude Code と協働で構築中だと記す。
+
+> **訂正（2026-08-20）:** 本項目は当初このプロジェクトを DHH に帰していた。正しくは **Fabio Akita**（`akitaonrails`、Codeminer 42）の作品である——GitHub のオーナープロフィールと突合して確認した。DHH（`dhh`、37signals）の作品は本フィード9番の Omarchy であり、両者が混同されていた。ベロシティは実態に合わせて steady に再導出。
 
 > 1,325 commits。UUID によるプロジェクト単位の分離、v0.8 でマルチユーザー帰属、読み取り専用の `/web` ブラウザ UI。ループバック限定・無認証が安全なデフォルト。
 

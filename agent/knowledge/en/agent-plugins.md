@@ -280,3 +280,26 @@ Signal: superpowers is the reference point for the "methodology, not just prompt
 *methodology*, not a vendor's product how-tos. It sharpens this file's standing evaluation-gap
 watch-item rather than closing it: a methodology shipped as skills is still an *assertion* —
 superpowers ships no benchmarked A/B of its own claims the way Ponytail or benjamin-plus-skill did.
+
+## Evidence tiers — the cheapest partial answer to the "prove it" gap (08-20)
+
+The skills layer has been waiting for an "MMLU-for-skills" that nobody has shipped. `JuliusBrussee/caveman`
+(99.4k stars) does something cheaper and, for now, more useful: it grades its own claims. Every number
+it publishes carries a tier — `inferred` (local runtime estimates), `benchmark_counterfactual`
+(controlled results against a pinned baseline), or `verified` (real traffic with signed receipts) —
+plus the standing disclaimer that "offline caveman never says `verified`" and that neither of the first
+two "is a provider invoice."
+
+It pairs that with an unusually candid limits section: the skill shrinks output tokens only, adds
+~1–1.5k input tokens per turn, can go net-negative on already-terse workloads, and — the detail that
+matters most — its published 65% table **predates** the terse control arm the author has since added,
+which is conceded in the README rather than discovered by a critic.
+
+This does not resolve the evaluation gap: it is still one team publishing its own numbers, with no
+shared protocol and no third-party replication. But it changes what over-claiming costs. A benchmark
+requires consensus before it can exist; a provenance vocabulary requires only that an author label the
+strength of their own evidence, and it makes the gap between "we measured this" and "we think this"
+legible to a reader who has no way to re-run the test. If a second skills repo adopts it, that is a
+more plausible path to a shared standard than waiting for a benchmark authority to appear.
+
+Full detail, tables and open questions → [[token-economics]].

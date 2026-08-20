@@ -836,3 +836,72 @@ reproducible reference implementation.
   repos** (five days) and Discussions. Signal: developer attention is concentrating on the *harness
   layer*, not the weights — the clearest demand signal yet for thesis 1's "the harness, not the model,
   is where attention concentrates."
+
+## Runtime layer round 3 — density, footprint, and the credential boundary (08-20 20:03)
+
+The runtime layer's competitive axis has moved twice in a week. It was *capability* (can you isolate
+untrusted code?), then *economics* (machine0's suspend-stops-billing, 08-19), and now three entrants
+optimize three different scarce resources at once. None of them competes on what the agent can do.
+
+### Agent Substrate — idleness as the primary design constraint
+
+`agent-substrate/substrate` (Apache-2.0, 1.3k stars, 246 forks). Read first-hand from the README:
+
+- **Instant Actor Teleport** — sub-second suspend/resume of an actor onto any available worker in the
+  pool, with full-state snapshots surviving hibernation.
+- **Agent Swarm Multiplexing** — a demo "multiplexing ~250 stateful actors across just 8 physical
+  pods," described as **30×+ oversubscription**.
+- **Request Parking** — an oversubscribed pool where the router *holds* inbound requests until a
+  worker frees up instead of returning `503`.
+- Kubernetes-native (WorkerPool + ActorTemplate CRDs, `cmd/atecontroller`), with `cmd/ateom-gvisor`
+  driving `runsc` checkpoint/restore and `cmd/ateom-microvm` running actors as cloud-hypervisor VMs.
+- Explicitly **framework- and harness-agnostic** — it manages standard OCI containers at the kernel
+  level, so ADK, LangChain, Claude Code, Codex and MCP servers all run as actors.
+
+**Status, verified:** the README states "**This is not an officially supported Google product**" and
+that it is not ready for "production use, and the APIs are almost guaranteed to change."
+`google/ax` ("An open source distributed agent runtime", 1.9k stars) builds on top of it.
+
+**The framing worth stealing.** The README's stated goal is broader than the demo: holistic
+infrastructure optimization "for RL scenarios that span agentic, inference and training cycles."
+That is the same substrate under deployment *and* training — the infrastructure counterpart to Agent
+Lightning putting the deploy-time harness inside the RL loop (→ [[frontier-models]], thesis 12). If
+that lands, "the harness you train against" and "the pods you serve on" stop being separate systems.
+
+### fx — attacking the heavyweight TUI from below
+
+`vercel-labs/fx` (Apache-2.0, 1.4k stars, created 2026-08-11, v0.0.4, README badge: "Status:
+Experimental. Use at your own risk."). A coding-agent harness in **Zig**, "optimized for research and
+embeddability as part of larger systems": a shell-like CLI rather than an IDE-in-the-terminal, an
+**ACP** server over stdio (`fx acp`) for editor clients, and WebAssembly builds — `createFxAgent()`
+with `fx-core.wasm`, `createFxTerminal()` with `fx-term.wasm` — that turn the agent into a library.
+Model-agnostic, extended via skills, MCP and subagents. Builds require Zig 0.16.0+.
+
+> **Freshness caveat, found first-hand.** The feed cites **~6.39 MiB** (v0.0.4) while the README at
+> HEAD already says **7.8 MiB**. Neither is wrong; the binary grew between the pinned release and the
+> branch. Cite footprint numbers *with a version* — this is a metric that moves within a day, and it
+> is the same class of error as quoting a star count without a date.
+
+The stated catch: inference routes through Vercel AI Gateway by default (read as lock-in by some), and
+full OS sandboxing is macOS-only for now.
+
+### OneCLI — the credential boundary as the product
+
+`onecli/onecli` (Apache-2.0 with an enterprise exception, 3.2k stars, YC S26, Launch HN). Provisions a
+per-employee agent in an isolated sandbox and routes all outbound traffic through a Rust gateway that
+injects credentials **only after authorization** — secrets are decrypted at request time (AES-256-GCM)
+and never enter agent context. Adds IdP-based provisioning, centralized team policy, deterministic
+human-in-the-loop approvals **bound to the exact method + URL + body**, and an outbound-only runner
+that works behind NAT. Originally a Rust credential vault; pivoted to the team-harness gap.
+
+This is the enterprise objection answered structurally rather than contractually: not "trust our
+managed agent," but "the agent never held the secret." It pairs with the tool-call-boundary question
+(thesis 11) — approval bound to a specific request body is a far narrower grant than "approve this
+tool," and narrower than what a model-judged classifier decides.
+
+### The synthesis
+
+Substrate answers *how many agents per pod*, fx answers *how small can the harness be*, OneCLI answers
+*who holds the secret*. Three scarce resources — compute density, binary footprint, credential blast
+radius — none of which is model capability. This is what a layer looks like once the capability
+question stops being the differentiator.

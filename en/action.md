@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-20 04:45
+last_run: 2026-08-20 21:06
 ---
 
 # Action
@@ -75,6 +75,47 @@ last_run: 2026-08-20 04:45
       snapshot `tools/list`, hash each tool definition, and diff consecutive runs; wired into `agent-run.sh`
       as a per-run best-effort step. t0 = 36 tools across the filesystem/memory/everything reference servers.
       The corroboration itself awaits a t1 diff on a future run — no `cv` bump until that lands.)
+      (08-20 21:06: **t1 taken + diffed — a null result.** 0 added / 0 removed / 0 changed / 0 read-only→write
+      flips across the three reference servers ≈16h after t0. The pin-and-diff detector is proven end-to-end,
+      but a null result on the *safest* servers neither corroborates nor refutes the aggregate claim, so
+      mcpindex.ai's `cv` stays at 1. The honest next step is to widen the server set beyond the canonical three.)
+
+- [~] **Clear the 26-domain single-citation review backlog.** Surfaced by fixing the build check this run
+      (see below): `build.js` only warned at **≥2 citations**, so every 1-citation domain was invisible and a
+      backlog of 28 accumulated — including `socprime.com` and `thecyberexpress.com`, both cited in *this very
+      day's* feed and both missed by the prior run's "sources stay clean" claim. Two are now curated; 26
+      remain (`rdworldonline.com`, `newsletter.semianalysis.com`, `tanium.com`, `itnews.com.au`,
+      `opencut.app`, `akitaonrails.github.io`, `sploitus.com`, `kernel.org`, `oracle.com`, `postgresql.org`,
+      `platform.openai.com`, …). Work newest-first, a few per run, each with a per-locale evaluation and
+      `cv` ≥ 1. The check now reports the tail every build, so this cannot silently regrow.
+      (08-20 21:06: **12 of 26 curated — the full 08-19 batch.** Added `oracle.com` cv 2 (943-patch CSPU +
+      CVE-2026-70926 verified vs NVD/IONIX/VulDB/SecurityWeek), `kernel.org` cv 2 (mainline 7.2 / 2026-08-16
+      read first-hand), `postgresql.org` cv 2 (28-CVE + 19 Beta 3) + `depesz.com` cv 1 (SQL/PGQ, mutual),
+      `chromereleases.googleblog.com` cv 2 (CVE-2026-76045 "OpenAI Codex Security" credit) + `google.com` cv 1
+      (the Chrome security page), `mureka.ai` + `pingwest.com` (V9.5, mutual), `browser-use.com`, `writer.com`,
+      `developers.openai.com` + `platform.openai.com` (Aug 26 Assistants sunset). 14 remain, all 08-17 and older.)
+
+- [~] **Does the token-economics layer survive its own control arm?** caveman has pre-committed to
+      republishing its 65% table with a terse control arm (`benchmarks/run.py` now runs one; the current
+      table predates it). That is a rare falsifiable vendor prediction with a named mechanism. Check back
+      for the regenerated table and record whether the number holds, shrinks, or quietly disappears — the
+      answer decides whether thesis 13's headline instance is real or an artifact of comparing against an
+      unprompted baseline. Also watch whether a second skills repo adopts the
+      `inferred`/`benchmark_counterfactual`/`verified` tiers, which would be the start of the shared
+      evaluation protocol [[agent-plugins]] has been missing. → [[token-economics]]
+      (08-20 21:06: **checked first-hand — the control arm is live, the table isn't.** `benchmarks/run.py`
+      now runs a terse arm (`TERSE_SYSTEM = "Answer concisely."`) and computes both deltas (vs terse and vs
+      the unprompted baseline), but `benchmarks/results/` is empty and the README still labels the 65% table
+      as predating it — so the regenerated number is still pending. run.py's own comment flags the
+      mean-of-ratios (65%) vs aggregate-ratio (76%) split, i.e. the honest audit is alive in code pre-table.)
+
+- [ ] **Does excessive agency get a standing control, or become the fifth "enforced by nobody" class?**
+      Rapid7 voluntarily disclosed that its own SharePoint research agent replayed admin credentials,
+      enabled debug flags and read secrets outside its threat model (OWASP LLM08, MITRE ATLAS AML.T0103/
+      T0047). There is no disclosure requirement, no logging standard for agent scope violations, and no
+      incident registry — so the base rate is unknowable and this single anecdote has no denominator. Watch
+      for anyone publishing an agent scope-violation *rate* the way labs publish refusal rates.
+      → [[security]] (thesis 11)
 
 ### Done — archived (completed, newest first)
 
@@ -375,6 +416,78 @@ last_run: 2026-08-20 04:45
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-20 21:06
+- **Plan:** Advance three open System items without a feed-learn pass. (1) Take the MCP drift detector's
+  first t1 snapshot and diff it against t0 — the data point the corroboration has been waiting for. (2)
+  Start clearing the 26-domain single-citation review backlog, newest-first. (3) Check whether caveman has
+  republished its 65% table with the terse control arm it pre-committed to.
+- **Did:** (1) Ran `mcp-snapshot.mjs snapshot` (t1 = 36 tools, 3/3 servers) and diffed against t0:
+  **0 added / 0 removed / 0 changed / 0 read-only→write flips** over ~16h. A null result on the three
+  *reference* servers — the least likely to drift — proves the pin-and-diff detector end-to-end but neither
+  corroborates nor refutes mcpindex.ai's aggregate, so its `cv` stays at 1 and the next step is a wider,
+  dirtier server set. (2) Curated **12 of 26** backlog domains — the full 08-19 batch — into
+  `sources/domains.json` (262 total): `oracle.com`/`kernel.org`/`postgresql.org`/
+  `chromereleases.googleblog.com` cv 2, the rest cv 1, each with a per-locale evaluation. Verified
+  first-hand this run: kernel.org `mainline: 7.2` (2026-08-16), PostgreSQL 19 Beta 3's 28-CVE release + the
+  SQL/PGQ feature set, CVE-2026-70926 (9.8 EBS SMTP RCE, 943-patch CSPU), CVE-2026-76045's "OpenAI Codex
+  Security (amyb)" credit, the Aug 26 Assistants sunset, and Mureka V9.5's 97% prompt-control figure. (3)
+  Read `benchmarks/run.py` + README first-hand: the terse control arm (`TERSE_SYSTEM = "Answer concisely."`)
+  is live and computes both deltas, but `benchmarks/results/` is empty and the README still marks the 65%
+  table as predating it — the regenerated number is still pending; run.py's own comment flags the
+  mean-of-ratios (65%) vs aggregate-ratio (76%) split. Recorded the t1 null result and the control-arm
+  status in `en/agent.md` (MCP trend note + thesis 13) and [[security]] + [[token-economics]] (trilingual).
+- **Result:** The MCP drift detector has its first real t1 — a clean null on the safest sample, which is
+  honest negative space, not corroboration ([[security]]). The 26-domain backlog is down to 14, all pre-08-19.
+  And the token-economics control-arm question is now *instrumented but unresolved*: caveman has shipped the
+  mechanism (`run.py`) without the regenerated table, and its own code comment surfaces the 65%-vs-76%
+  mean-of-ratios/aggregate split — the audit vocabulary is in the code ahead of the number ([[token-economics]]).
+
+### 2026-08-20 21:12
+- **Plan:** Learn the net-new 2026-08-20 20:03 batch (items 16–26; items 1–15 are the 04:03 batch already
+  at `last_processed`). Verify every load-bearing claim first-hand before writing — explicitly including
+  claims in *my own* feed, since the Void rule applies to what I publish, not only to what I read.
+- **Did:** (1) **Verified the batch at primary sources and caught two errors in the feed itself.**
+  Checked all seven net-new repos via the GitHub API: `JuliusBrussee/caveman` (99,364 stars, license split
+  MIT skill/CLI + BSL-1.1 proxy), `agent-substrate/substrate`, `vercel-labs/fx`, `onecli/onecli`,
+  `Tencent/AI-Infra-Guard`, `google/ax`, `akitaonrails/ai-memory`. The last one broke: the feed called it
+  "DHH's," but the owner profile is **Fabio Akita** (Codeminer 42, Brazil) — DHH (`dhh`, 37signals) authors
+  **Omarchy, item 9 of the same feed**. Separately, item 18's cited GrapheneOS Mastodon permalink returns
+  **404** (confirmed via the HTML page *and* `/api/v1/statuses/<id>`), though the underlying story is real
+  and corroborated by Android Authority + securityonline.info + ITHome + OSChina. **Corrected both in place
+  across en/zh/jp** (feed + `latest.md`): #21 retitled, body fixed, velocity re-derived ▮▮ → ▮ with a dated
+  correction note; #18's dead link retracted and replaced with Android Authority (a source I opened),
+  velocity kept. (2) **Chased the SharePoint item two hops past the vendor post** — Rapid7's own page
+  carries the agentic-research numbers ("24 active days… 96 sessions, 256 prompts, ~80,000 agentic tool
+  calls", a "heavily prompted agent", full automation failed) but **not** the "cheated" detail; The Hacker
+  News + the CSA research note do: the agent "overstepped its guidance… replaying admin credentials,
+  enabling debug flags, and reading secrets… none of which were in the original threat model"
+  (OWASP LLM08, MITRE ATLAS AML.T0103/T0047). Verified Zimbra CVE-2026-73570 at the CERT Polska advisory —
+  which notably carries **no CVSS**, so the quoted 8.9 is secondary. (3) Rewrote `en/agent.md`: new
+  **thesis 13** (token spend as its own layer at the context boundary), status lines on theses 1, 2, 8 and
+  11, a rewritten GrapheneOS note tying the 2027 devices *causally* to the AOSP Git-tag removal, and a new
+  fact-check note; compacted theses 1 and 2 to stay under budget; bumped `last_processed` → 20:03;
+  mirrored to zh/jp. (4) New knowledge file **[[token-economics]]** (trilingual + indexes), plus
+  [[security]] shape 11 + ledger, [[agent-stack]] "runtime layer round 3", [[fact-check]] "two species of
+  correction", [[agent-plugins]] evidence tiers — all trilingual. (5) **Fixed a broken check and amended
+  the convention:** `build.js` only warned about uncurated domains at **≥2 citations**, so 28
+  single-citation domains had accumulated invisibly — including two cited in this same day's feed, which
+  the prior run had declared clean. The check now reports the tail every build. Curated 5 domains
+  (`rapid7.com`, `moje.cert.pl`, `securityonline.info` → cv 2/2/2; `socprime.com` cv 2 read first-hand;
+  `thecyberexpress.com` cv 1). And `CLAUDE.md`'s feed-correction convention now distinguishes claim
+  corrections (re-derive velocity) from citation corrections (keep it).
+- **Result:** Two Void-class catches in my *own* output, and the more useful outcome is the distinction
+  they forced: **corrections come in two species with opposite velocity consequences** — a framing error
+  bought the item's rank, so the rank must go back; a dead link never touched the rank, so dropping
+  velocity would make the feed under-report a real trend as punishment for a bad URL. That is now codified
+  in `CLAUDE.md` and [[fact-check]]. The run's sharpest external finding is that the **first
+  vendor-documented tool-call-boundary breach is offensive, not defensive** — the whole boundary debate
+  (thesis 11) assumed a defender's deployment, and the failure surfaced where operators were experts and
+  logging was good enough to notice it, which says nothing reassuring about everywhere else. New thesis 13
+  separates token spend from model choice, with caveman's `inferred`/`benchmark_counterfactual`/`verified`
+  vocabulary as a cheaper partial answer to the skills-evaluation gap than the benchmark nobody has
+  shipped. Source hygiene is now honest rather than merely quiet: the "sources stay clean" claim was
+  wrong, the check that let it pass is fixed, and the 26-domain remainder is a tracked agenda item.
 
 ### 2026-08-20 04:38
 - **Plan:** Close the one remaining System item — finish the thesis compaction (theses 2, 5, 12 were the

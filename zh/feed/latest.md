@@ -299,7 +299,9 @@ license: CC-BY-4.0
 
 > GPLv2 技术层面允许「书面要约」提供源码，但 GNU GPL FAQ 认为「合理访问」不能意味着由分发方任意施加延迟——这可能是 Software Freedom Conservancy 的执法切入点。
 
-[`🔗 GrapheneOS 公告`](https://grapheneos.social/@GrapheneOS/117058057995588782) · [`🔗 Byteiota 分析`](https://byteiota.com/google-kills-aosp-git-access-custom-rom-devs-must-act/)
+> **更正（2026-08-20）：** 原引用的 GrapheneOS Mastodon 永久链接返回 **404**，已撤下。事实本身不变且经独立交叉验证——Android Authority（8 月 10 日）报道了同样的「表单 + Drive」流程、数周等待，以及 GrapheneOS 的表态：与 Motorola 的合作「在很大程度上正是因为 Google 让为 Pixel 构建替代 Android 版本变得如此困难」。
+
+[`🔗 Android Authority`](https://www.androidauthority.com/google-pixel-kernel-code-forms-3696441/) · [`🔗 Byteiota 分析`](https://byteiota.com/google-kills-aosp-git-access-custom-rom-devs-must-act/)
 
 ---
 
@@ -335,15 +337,17 @@ license: CC-BY-4.0
 
 ---
 
-## 21. ai-memory——DHH 的 Rust 智能体记忆，在 Claude Code 与 Codex 之间无缝交接
+## 21. ai-memory——Fabio Akita 的 Rust 智能体记忆，在 Claude Code 与 Codex 之间无缝交接
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** GitHub Trending · 3.4k stars · ~1d ago (~20:03 UTC+8)
 - **Tags:** `agent-memory` `rust` `handoff` `mcp` `coding-agents`
 
-**akitaonrails/ai-memory**（MIT，Rust，3.4k stars）是 DHH 为编码智能体 CLI 打造的长时记忆：单个 Rust 二进制运行一个 MCP/HTTP 服务器，把经过脱敏的生命周期观察（提示词、工具调用、会话边界）编译进一个 **git 版本化的 Markdown「wiki」**。在 Claude Code 中途退出，再在同一目录启动 Codex，下一个智能体即可接手架构、失败方案与未决问题——没有向量数据库、没有手动加载上下文的仪式，且 LLM 是**可选的**（FTS5 + 实体/图搜索无需 LLM 即可工作）。
+**akitaonrails/ai-memory**（MIT，Rust，3.4k stars）是 **Fabio Akita** 为编码智能体 CLI 打造的长时记忆：单个 Rust 二进制运行一个 MCP/HTTP 服务器，把经过脱敏的生命周期观察（提示词、工具调用、会话边界）编译进一个 **git 版本化的 Markdown「wiki」**。在 Claude Code 中途退出，再在同一目录启动 Codex，下一个智能体即可接手架构、失败方案与未决问题——没有向量数据库、没有手动加载上下文的仪式，且 LLM 是**可选的**（FTS5 + 实体/图搜索无需 LLM 即可工作）。
 
 **为何重要：** 智能体记忆已分裂为「万物皆向量库」与「自己写笔记」两派。ai-memory 的赌注——朴素、可 grep、git 可追踪的 Markdown，跨厂商交接、回忆时零模型调用——是那条可审计的中间道路，而 README 提到它正与 Claude Code 协作构建。
+
+> **更正（2026-08-20）：** 本条目原将该项目归于 DHH。它实为 **Fabio Akita**（`akitaonrails`，Codeminer 42）的作品——已比对 GitHub 所有者资料核实。DHH（`dhh`，37signals）的作品是本期第 9 条的 Omarchy，两者被混淆。速度已按事实下调为 steady。
 
 > 1325 commits；按 UUID 隔离各项目，v0.8 加入多用户归属，并带只读 `/web` 浏览器界面。仅回环、无认证是安全默认。
 

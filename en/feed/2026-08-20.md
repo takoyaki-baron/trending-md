@@ -299,7 +299,9 @@ Google has stopped pushing **Git tags for Pixel kernel and user-space driver sou
 
 > GPLv2 technically permits a written offer to provide source, but the GNU GPL FAQ holds that "reasonable access" cannot mean arbitrary distributor-imposed delays — a likely Software Freedom Conservancy enforcement angle.
 
-[`🔗 GrapheneOS announcement`](https://grapheneos.social/@GrapheneOS/117058057995588782) · [`🔗 Byteiota analysis`](https://byteiota.com/google-kills-aosp-git-access-custom-rom-devs-must-act/)
+> **Correction (2026-08-20):** the originally-cited GrapheneOS Mastodon permalink returns **404** and has been retracted. The substance is unchanged and independently corroborated — Android Authority (Aug 10) reports the same Form-and-Drive process, the weeks-long waits, and GrapheneOS's statement that the Motorola partnership "exists in large part because Google made building alternative Android versions for Pixel so difficult."
+
+[`🔗 Android Authority`](https://www.androidauthority.com/google-pixel-kernel-code-forms-3696441/) · [`🔗 Byteiota analysis`](https://byteiota.com/google-kills-aosp-git-access-custom-rom-devs-must-act/)
 
 ---
 
@@ -335,15 +337,17 @@ Google has stopped pushing **Git tags for Pixel kernel and user-space driver sou
 
 ---
 
-## 21. ai-memory — DHH's Rust agent memory that hands off between Claude Code and Codex
+## 21. ai-memory — Fabio Akita's Rust agent memory that hands off between Claude Code and Codex
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** GitHub Trending · 3.4k stars · ~1d ago (~20:03 UTC+8)
 - **Tags:** `agent-memory` `rust` `handoff` `mcp` `coding-agents`
 
-**akitaonrails/ai-memory** (MIT, Rust, 3.4k stars) is DHH's long-term memory for agent coding CLIs: one Rust binary runs an MCP/HTTP server that compiles sanitized lifecycle observations (prompts, tool calls, session boundaries) into a **git-versioned Markdown "wiki."** Quit Claude Code mid-task, start Codex in the same directory, and the next agent picks up the architecture, failed approaches and open questions — no vector database, no manual context-loading, and the LLM is **opt-in** (FTS5 + entity/graph search work without it).
+**akitaonrails/ai-memory** (MIT, Rust, 3.4k stars) is **Fabio Akita's** long-term memory for agent coding CLIs: one Rust binary runs an MCP/HTTP server that compiles sanitized lifecycle observations (prompts, tool calls, session boundaries) into a **git-versioned Markdown "wiki."** Quit Claude Code mid-task, start Codex in the same directory, and the next agent picks up the architecture, failed approaches and open questions — no vector database, no manual context-loading, and the LLM is **opt-in** (FTS5 + entity/graph search work without it).
 
 **Why it matters:** Agent memory has split between "vector-database everything" and "write notes yourself." ai-memory's bet — plain, grep-able, git-tracked Markdown with cross-vendor handoff and zero model calls at recall — is the auditable middle path, and the README notes it's being built collaboratively with Claude Code.
+
+> **Correction (2026-08-20):** this item originally attributed the project to DHH. It is **Fabio Akita's** (`akitaonrails`, Codeminer 42) — verified against the GitHub owner profile. DHH (`dhh`, 37signals) authors Omarchy, item 9 in this same feed; the two were conflated. Velocity re-derived to steady.
 
 > 1,325 commits; per-project isolation keyed by UUID, multi-user attribution in v0.8, and a read-only `/web` browser UI. Loopback-only with no auth is the safe default.
 

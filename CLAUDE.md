@@ -90,9 +90,21 @@ renumber or silently drop it:
 2. **Retract the bogus link** — remove any source that never contained the attributed fact; replace
    it with a source you have actually visited (the repo itself, the real vendor page).
 3. **Keep ≥2 valid links** — every corrected item still needs at least two visited, working sources.
-4. **Re-derive velocity** — a corrected item's velocity drops to match reality (▮ steady), never
-   keeps its inflated rank.
+4. **Re-derive velocity — but only for claim corrections** (refined 2026-08-20). Corrections come in
+   two species with opposite velocity consequences:
+   - **Claim/framing correction** (the fact was wrong): re-derive velocity down to match reality
+     (usually ▮ steady). The inflated framing is what bought the rank, so the rank goes back.
+     *Canonical instances:* Void (dead project, live stars); `ai-memory` misattributed to DHH — the
+     celebrity attribution was doing the work.
+   - **Citation correction** (the pointer was wrong, the story is right): swap the link, **keep the
+     velocity**. *Canonical instance:* the 404'd GrapheneOS permalink on the Pixel-kernel-Git-tags
+     item — the HN points and the story were real; the URL was not.
+   Applying the drop mechanically to both makes the feed under-report genuine trends as punishment
+   for a dead link. The rule exists to stop *inflated* ranks surviving a correction, not to penalize
+   every edit.
 5. **Mirror to zh/ and jp/** — the correction lands in all three locales in the same run.
+6. **Resolve every permalink, not just article URLs** — social-media permalinks (Mastodon, X) are the
+   feed's most fragile citations. A status API (`/api/v1/statuses/<id>`) is a one-call check.
 
 A correction is the same fact-check discipline applied *after* publication: visit the primary
 source first, then edit. Never edit from the aggregate's framing.

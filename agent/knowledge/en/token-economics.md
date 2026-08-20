@@ -1,0 +1,110 @@
+---
+title: Token economics
+topic: token-economics
+created: 2026-08-20
+---
+
+# Token economics — cost optimization at the context boundary
+
+The layer that answers **"how many bytes cross the wire per turn?"** — as distinct from
+[[smart-routing]], which answers "which engine runs this?", and from [[agent-stack]]'s harness layer,
+which answers "what executes the loop?". It appeared as a set of unrelated hacks and is consolidating
+into an optimization surface with its own tools, its own benchmarks, and — newly — its own vocabulary
+for grading evidence.
+
+## Why it separated from routing
+
+Routing lowers the *unit price* of a call. Token economics lowers the *number of units*, and it does so
+without touching the model, the provider, or the route. The two compose: a routed-to-cheap model still
+reads a bloated context, and a compressed context still has to pick an engine. They are now measured by
+different teams with different numbers, which is the practical sign that a layer has separated.
+
+The pressure driving it is structural. Agents re-read context every turn, so token spend scales with
+*conversation length × tool output size*, not with task difficulty. Any workload where the agent reads
+more than it writes — code search, log triage, browser automation, repo Q&A — is dominated by input
+tokens that no model choice can reduce.
+
+## The instances
+
+| Tool | What it compresses | Reported effect |
+|------|-------------------|-----------------|
+| caveman skill (`JuliusBrussee/caveman`) | what the agent **writes** | −65% output tokens (avg, 1,214 → 294) |
+| caveman proxy (Caveman Engine) | what the agent **reads**, byte-exact recovery | −33.2% provider-reported input tokens |
+| caveman `--pixel` | dense text → PNG pages for vision models | skill itself 1,069 → 415 est. tokens (−61%) |
+| caveman `browse` | browser state vs Playwright ARIA | 15,704 → 121 tokens (129.8×) on a 200-row table |
+| DeepSeek-Reasonix | prefix-cache stability across long sessions | flat cost over session length |
+| JetBrains benjamin-plus-skill | injected-not-installed skill payload | −17.9% cost, quality unchanged |
+| i-have-adhd | output UX (first line = command/path) | assertion only |
+| StateM | runbooks replacing exploration | Terminal-Bench 2.1 at ~$15 vs $574.68 |
+| fx (`vercel-labs/fx`) | the harness binary itself | ~6–8 MiB, ~10µs cold start |
+
+## caveman — read first-hand, 2026-08-20
+
+99,364 stars / 5,760 forks at check; GitHub reports the license as `NOASSERTION` because it is split:
+**MIT** for the skill and CLI, **BSL-1.1** for the proxy runtime (Caveman Engine). Two independent
+mechanisms ship under one name, and conflating them is the easiest way to misreport it:
+
+- **The skill** (the original, MIT, 30+ agents) makes the agent answer in terse "caveman" style while
+  code, commands and errors stay byte-for-byte exact.
+- **The proxy** (`caveman wrap`, BSL) shrinks what the agent reads before each provider call, with
+  byte-exact recovery via a content-addressed store and per-type compressors for JSON, logs, code
+  (tree-sitter), diffs and search results.
+
+**Pixel mode** renders dense text slabs to PNG pages for models with measured render legibility
+(`claude-fable-5`, `gpt-5.6` by default). Its own README is careful here: "Pixel only pays on dense,
+long-line content. Sparse code with short lines is honestly *not* profitable" — a profitability gate
+declines the conversion and passes bytes through untouched.
+
+### The honest-numbers section is the reason to care
+
+The README carries a block headed **"Honest number warning"** that concedes what a marketing page
+would bury:
+
+> "The skill only shrinks **output** tokens. Input and reasoning tokens are untouched, and the skill
+> itself adds ~1–1.5k input tokens per turn. Whole-session savings run smaller than the output number,
+> and on already-terse workloads they can go net-negative."
+
+And, on the benchmark's missing control arm:
+
+> "'Normal' above means an unprompted assistant, not a terse one. Some of that 65% is what any 'answer
+> concisely' instruction would buy you. `benchmarks/run.py` now runs a terse control arm alongside the
+> other two, so the next regenerated table splits the two apart; **the numbers above predate it**."
+
+It also publishes a case where it *loses*: on a small checkout form its browse output is larger than
+the Playwright baseline (67 → 111 tokens) because it additionally returns action UIDs and a recovery
+handle.
+
+## The transferable idea: evidence tiers
+
+caveman labels every claim with the strength of evidence behind it:
+
+- **`inferred`** — local runtime results (estimates from its own accounting).
+- **`benchmark_counterfactual`** — controlled benchmark results against a pinned baseline.
+- **`verified`** — reserved for real traffic with signed receipts; "**offline caveman never says
+  `verified`**," and neither of the first two "is a provider invoice."
+
+This matters beyond one repo. The [[agent-plugins]] "prove it" gap has been waiting for an
+MMLU-for-skills that nobody has shipped. A claim-provenance vocabulary is a *cheaper* partial answer:
+it does not tell you whether a skill is good, but it tells you what kind of evidence the author is
+standing on — and it makes over-claiming visible without requiring a shared benchmark first. It is
+worth borrowing regardless of whether caveman's specific numbers survive their control arm.
+
+## Open questions
+
+- Does the terse control arm survive contact with the 65% headline? The author has pre-committed to
+  publishing the split; the next regenerated table is the test, and it is a rare case of a falsifiable
+  prediction with a named mechanism and a date.
+  **Checked 08-20 21:06:** the control arm is now live in code — `benchmarks/run.py` runs a terse arm
+  (`TERSE_SYSTEM = "Answer concisely."`) and computes *both* deltas (caveman vs terse, and vs the
+  unprompted baseline) — but `benchmarks/results/` is empty and the README still labels the 65% table as
+  predating it, so the regenerated number is still pending. One signal surfaced anyway: run.py's own
+  comment flags the mean-of-ratios (65%) vs aggregate-ratio (76%) split — the honest audit is alive in
+  the code before the table lands.
+- Does pixel-mode billing hold? It depends on providers pricing image tokens below the text they
+  replace — a pricing-policy dependency, not a technical one, and therefore revocable by a vendor
+  changing a rate card.
+- Byte-exact recovery is the security-relevant claim: a proxy that rewrites what an agent reads is a
+  prompt-injection surface and a correctness surface at once. No third party has audited the recovery
+  path (→ [[security]]).
+- Do evidence tiers spread? If a second skills repo adopts `inferred`/`benchmark_counterfactual`/
+  `verified`, that is the start of the shared protocol the skills layer has been missing.

@@ -873,6 +873,14 @@ if (mustReview.length) {
   console.log(`  ⚠ ${mustReview.length} uncurated domains need a review (≥2 citations) — add to sources/domains.json with cred/density/cv`);
   mustReview.slice(0, 25).forEach(h => console.log(`      ${h} (${srcData.counts[h]})`));
 }
+/* Single-citation domains were previously silent, so a backlog of them grew invisibly (28 found on
+   2026-08-20, including two cited in that same day's feed). CLAUDE.md requires a review + cv ≥ 1 for
+   *every* cited domain, so report the tail as a visible count rather than hiding it below a threshold. */
+const tailReview = unreviewedDomains.filter(h => srcData.counts[h] === 1);
+if (tailReview.length) {
+  console.log(`  ⚠ ${tailReview.length} uncurated single-citation domains — curate the newest first (CLAUDE.md: every cited domain needs a review + cv ≥ 1)`);
+  console.log(`      ${tailReview.slice(0, 12).join(', ')}${tailReview.length > 12 ? `, +${tailReview.length - 12} more` : ''}`);
+}
 
 /* ── Memory-window budget check ──
    en/agent.md is the learnt agent's memory window. AGENT.md hard rule 1 keeps it a *distilled*
