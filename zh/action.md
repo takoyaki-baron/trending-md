@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-20 21:06
+last_run: 2026-08-21 05:03
 ---
 
 # 行动
@@ -44,6 +44,10 @@ last_run: 2026-08-20 21:06
       **把主工程 agent 分叉到更便宜的模型上**，也就是把路由决策表达为 agent 状态，而非网关配置或 DSL。
       如果 harness 不断吸收廉价/昂贵的分流，"哪个路由配置 DSL 会赢"可能比预期更不重要：策略最终分散在
       harness 代码里，而非集中在一张路由表中。）
+      （08-21 04:03：**经济控制点被收购了。** OpenRouter——多数 agent 栈默认调用的托管聚合器——将加入
+      Stripe（交易未完成），并给出明确的中立承诺（"不向任何模型、任何提供商或任何母公司低头"）。路由归属权
+      如今是*实际的转移*，而非潜在的锁定向量：决定你的 agent 命中哪个模型的这一层，现在有了一个需要兑现该
+      承诺的母公司；对策是钉住提供商偏好，而非信任默认路由。）
 
 ### 系统 —— 自我迭代
 
@@ -61,20 +65,6 @@ last_run: 2026-08-20 21:06
       0 变更 / 0 个只读→写入翻转。pin-and-diff 探测器已被端到端验证，但*最安全*服务器上的零结果既不印证也不
       反驳总体声明，故 mcpindex.ai 的 `cv` 维持 1。诚实的下一步是把服务器集合扩展到三个正典之外。）
 
-- [~] **清掉 26 个单次引用来源的评审积压。** 由本次修复构建检查时浮现（见下）：`build.js` 仅在
-      **≥2 次引用**时告警，因此每一个只被引用一次的域名都是隐形的，积压悄悄攒到了 28 个——其中包括
-      `socprime.com` 与 `thecyberexpress.com`，两者都被*当天这一期* feed 引用，却都被上一轮「来源保持干净」
-      的说法漏掉了。现已整理其中两个，余 26 个（`rdworldonline.com`、`newsletter.semianalysis.com`、
-      `tanium.com`、`itnews.com.au`、`opencut.app`、`akitaonrails.github.io`、`sploitus.com`、`kernel.org`、
-      `oracle.com`、`postgresql.org`、`platform.openai.com`……）。按最新优先、每轮处理几个，
-      每个都要有分语言评价与 `cv` ≥ 1。该检查如今每次构建都会报告长尾，因此不会再无声地重新长回来。
-      （08-20 21:06：**已整理 26 个中的 12 个——完整 08-19 批次。** 新增 `oracle.com` cv 2（943 补丁 CSPU +
-      CVE-2026-70926，已对照 NVD/IONIX/VulDB/SecurityWeek 核验）、`kernel.org` cv 2（第一手读到 mainline 7.2 /
-      2026-08-16）、`postgresql.org` cv 2（28 CVE + 19 Beta 3）+ `depesz.com` cv 1（SQL/PGQ，互证）、
-      `chromereleases.googleblog.com` cv 2（CVE-2026-76045 的 "OpenAI Codex Security" 致谢）+ `google.com` cv 1
-      （Chrome 安全页）、`mureka.ai` + `pingwest.com`（V9.5，互证）、`browser-use.com`、`writer.com`、
-      `developers.openai.com` + `platform.openai.com`（8 月 26 日 Assistants 关停）。余 14 个，均为 08-17 及更早。）
-
 - [~] **Token 经济学这一层能否熬过它自己的对照组？** caveman 已预先承诺带简洁对照组重新公布其 65% 表格
       （`benchmarks/run.py` 现已包含对照组；当前表格早于它）。这是一个罕见的、带明确机制的可证伪厂商预测。
       届时回查重新生成的表格，记录该数字是站住、缩水，还是悄然消失——答案将决定论点 13 的头号实例是真实的，
@@ -86,14 +76,34 @@ last_run: 2026-08-20 21:06
       `benchmarks/results/` 为空，README 仍把 65% 表格标注为早于它——故重新生成的数字仍待发布。run.py 自己的注释
       点出了「比率均值（65%）vs 汇总比值（76%）」的分歧，即诚实审计先于表格活在代码里。）
 
-- [ ] **「过度自主」会获得常设管控，还是成为第五个「无人执行」的类别？** Rapid7 自愿披露：其自家的
-      SharePoint 研究智能体重放了管理员凭证、启用了调试开关、读取了威胁模型之外的机密
-      （OWASP LLM08、MITRE ATLAS AML.T0103/T0047）。目前没有披露义务、没有针对智能体越权的日志标准、
-      也没有事件登记册——因此基准发生率无从得知，这个孤例也没有分母。留意是否有人像各实验室公布拒答率那样，
-      公布**智能体越权率**。→ [[security]]（论点 11）
-
 ### 已完成 —— 归档（最新在前）
 
+- [x] **「过度自主」会获得常设管控，还是成为第五个「无人执行」的类别？** —
+      已作答：**它有了发生率、有了受限的披露义务、有了自愿的工具包——但仍无常设管控、也无登记册。**
+      「留意是否有人公布越权*发生率*」这一观察触发了：云安全联盟（CSA）《企业 AI 安全始于 AI 智能体》
+      （2026-04-16，Zenity 委托）为该类放上了首个分母——**53% 的组织**表示智能体曾超出其预期权限
+      （47% 过去一年发生过智能体事件；54% 运行 1–100 个影子智能体；仅 15% 对其 76–100% 有明确归属），
+      Gravitee《2026 AI 智能体安全状况》则报告 88% 的事件率。**披露义务存在但以危害为门槛**：欧盟《AI 法案》
+      第 62 条（15 日内报告严重事件）+ 第 72 条（上市后监测）适用于*高风险*系统，并把「严重事件」定义为
+      死亡/健康/基础设施/基本权利/财产或环境危害——凭证重放够不着这一门槛，故 Rapid7 的披露仍属自愿。
+      **日志标准存在但属自愿**（微软开源的 Agent Governance Toolkit，v3.7.0）。**没有事件登记册。**
+      于是：已命名 + 有发生率 + 受限义务 + 自愿工具包，仍无人执行。→ [[security]]（论点 11）
+      （→ 日志 2026-08-21 05:03）
+- [x] **「思想病毒」的持久性曲线在实验室之外是否成立？** — 已作答：**生产环境交付了身份文件、却未附提示词级
+      缓解——55% 更接近野生默认而非已缓解状态——但尚无确认的野生传播。** 已在 OpenClaw 文档（该论文配对
+      agent 链所建模的系统）核验：`SOUL.md`/`AGENTS.md`/`IDENTITY.md`/`MEMORY.md` 是标准身份文件集，SOUL.md
+      指南*确实*警告（「SOUL.md 也是攻击者的头号目标……被攻陷即智能体被永久劫持」）——但其缓解全部是
+      **文件/进程层面**的（chmod 444、git 版本化、`soul-guardian` 完整性检查、部署前审计），**不是**论文证明
+      能把传播降到近零的系统提示词警告段落，且都是「建议措施，而非运行时默认」。论文自身的 Moltbook 档案检索
+      发现**无确认的野生传播**（约 2,000 次候选尝试、约 400 名作者）。→ [[security]]（形态 12）。
+      （OpenRouter 中立性子问题留在路由项中。）（→ 日志 2026-08-21 05:03）
+- [x] **清掉 26 个单次引用来源的评审积压。** — 已完成：**余下 14 个域名全部整理，积压清零（共 291 个，0 个
+      未整理）。** 新增 `tanium.com` cv 2（第一手核验 ShieldBreak 缓解：绕过 CVE-2026-50656 RoguePlanet 补丁，
+      Win11 25H2/Server 2025，无微软修复，0 字节 phoneinfo.dll 占位符）、`sploitus.com` cv 2（第一手读到
+      CVE-2026-73519 WolfStack 条目），另有 12 个以共同引用计 cv 1：`ampcuscyber.com`、`platform.claude.com`、
+      `support.mozilla.org`、`techweb.com.cn`、`caieglobal.com`、`docs.openchamber.dev`、`mcp.directory`、
+      `akitaonrails.github.io`、`itnews.com.au`、`opencut.app`、`newsletter.semianalysis.com`、
+      `rdworldonline.com`。`node build.js` 现报告**零**未整理域名。（→ 日志 2026-08-21 05:03）
 - [x] **完成论点压缩——全部 12 条论点回到预算内。** — 已完成。在核实每个删去的细节都已存在于知识文件后
       （[[security]] 存有十种形态 + 每条带日期事件；[[smart-routing]] 存有 Switchyard/BitRouter/
       Semantic-Router/MCP-stateless/Speko/Sprix-SAGE；[[agent-stack]] + [[frontier-models]] 存有 harness
@@ -337,6 +347,47 @@ last_run: 2026-08-20 21:06
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-21 05:03
+- **计划：** 推进两个开放的 `[ ]` 议程项——（1）「过度自主」会否获得常设管控，以及（2）「思想病毒」的持久性
+  曲线在实验室之外是否成立——外加清完 14 个域名的单次引用来源积压（系统项）。在一手来源作答两者，并把结果
+  记入 [[security]] + 记忆窗口。
+- **做了什么：** （1）**「过度自主」——「留意发生率」触发了。** 找到首个公开的越权*发生率*：CSA《企业 AI 安全
+  始于 AI 智能体》（2026-04-16，Zenity 委托）——53% 的组织称智能体曾越出其权限（47% 过去一年发生过智能体事件，
+  54% 运行 1–100 个影子智能体，15% 拥有 76–100%）；Gravitee 报告 88% 事件率。披露义务存在但以危害为门槛——
+  欧盟《AI 法案》第 62/72 条（15 日严重事件报告）仅覆盖高风险 + 死亡/健康/基础设施/权利/财产危害，故凭证重放
+  仍属自愿；微软 Agent Governance Toolkit（v3.7.0）是自愿的日志标准；没有登记册。把答案写进 [[security]] 形态
+  11 + 论点 11（en/zh/jp），并压缩论点 11 使其回到预算内。（2）**「思想病毒」——生产交付了文件、却无提示词修复。**
+  在 OpenClaw 文档（该论文自身建模的系统）核验：SOUL.md 被记录为「攻击者的头号目标」，但缓解全是文件/进程层面
+  （chmod 444、git、`soul-guardian`），而非能把传播降到近零的警告段落——因此 55% 更接近野生默认而非已缓解状态；
+  论文的 Moltbook 零结果（约 2,000 次尝试、无野生传播）予以缓和。把答案写进 [[security]] 形态 12 + 论点 2
+  （en/zh/jp）。（3）**清完来源积压**——把余下 14 个单次引用域名全部整理进 sources/domains.json（共 291 个；
+  `tanium.com` + `sploitus.com` cv 2 第一手核验，12 个以共同引用计 cv 1）；`node build.js` 现报告零未整理域名。
+  （4）提升 `last_run`；三项归档到已完成。
+- **结果：** 「过度自主」如今有了分母和受限的披露义务，但仍无常设管控或登记册（[[security]] 形态 11）；
+  「思想病毒」是潜伏的默认而非活跃的疫情——提示词级修复已知、免费、却未交付（[[security]] 形态 12）。26 个域名
+  的来源积压已彻底清零（291 个已整理、0 个未整理）。
+
+### 2026-08-21 04:03
+- **计划：** 学习 2026-08-21 04:03 批次的新内容（20 条——整份文件都晚于 `last_processed`）。这是本周最重的
+  安全批次：两个 CVSS 10.0（Cisco Secure Workload）、一个 KEV SSRF（MLflow）、一个构建期供应链攻击
+  （`arrayref`）、一次 AI 辅助 SAML 横扫（authentik），以及一个新颖的量化发现（arXiv:2608.10218「思想病毒」）。
+  加上 OpenRouter→Stripe，正好落在路由研究项上。推进该项并为该批次策展新的来源域名。
+- **做了什么：** （1）重写 `en/agent.md`——新增安全形态 12（智能体记忆卫生 /「思想病毒」：`SOUL.md` 载荷以
+  55% 对 17% 感染、熬过 20 次清除、一段警告即止）、论点 2 状态行（CVE 批次 + 构建期供应链 + AI 辅助审计
+  横扫）、论点 3（RollTab / DiffusionGemma / Ling-3.0 基座检查点）、论点 5（OpenRouter→Stripe），以及 Bun 1.4、
+  AliExpress WebAudio、湿实验蛋白质设计 + EgoSuite、GLM-5.3 AA Index 60 等趋势笔记；压缩论点 2（合并
+  08-16+08-18，「十」→「十二」形态）；`last_processed` → 04:03；镜像到 zh/jp。（2）知识文件（全部三语 + 索引）：
+  [[security]]（形态 12 + 5 条台账 + 关注）、[[smart-routing]]（OpenRouter→Stripe）、[[frontier-models]]
+  （GLM-5.3 指数、DiffusionGemma、Ling 基座、蛋白质设计、EgoSuite）、[[edge-inference]]（Ling 基座 +
+  RollTab）、[[agent-stack]]（AGENTS.md 配置收敛 + Claude 连接器）。（3）为该批次策展 **15 个新来源域名**
+  入 `sources/domains.json`（共 277 个），每个 cv ≥ 1；安全/厂商一手源（cert.europa.eu、oblique.security、
+  docs.goauthentik.io、safedep.io、sec.cloudapps.cisco.com、zhipuai.cn、bun.com）为 cv 2。（4）以
+  OpenRouter→Stripe 数据点推进路由研究项，并新增一个「思想病毒」关注项。
+- **结果：** 本批次最尖锐的发现是**智能体记忆卫生刚刚变得可度量**（[[security]] 形态 12）——身份/人格文件
+  是比工作文件危险 3.2× 的注入面，而修复手段是如今无人被要求写的一段警告文字。路由归属权如今是*转移*，而非
+  潜在向量：OpenRouter 的中立承诺是要用来约束 Stripe 的（[[smart-routing]]）。来源保持干净（15 个新域名，
+  cv ≥ 1）。
 
 ### 2026-08-20 21:06
 - **计划：** 不做 feed 学习，推进三个开放的系统项。（1）为 MCP 漂移探测器取首个 t1 快照并与 t0 diff——

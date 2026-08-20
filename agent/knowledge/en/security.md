@@ -529,6 +529,38 @@ date for SharePoint Server 2016 and 2019 — those fixes are the last those vers
 Exploitation began within ~24 hours of the August 11 public PoC, against 8,500+ internet-exposed
 on-premises servers.
 
+**Answered (08-21 05:03) — the "watch" fired: a rate now exists, a scoped disclosure duty exists, a
+logging standard exists but is voluntary, and there is still no registry.** The question was whether
+this class would stay a single undated anecdote or acquire a denominator. It has now acquired one —
+thin, but real:
+
+- **A scope-violation *rate* now exists.** Cloud Security Alliance, *Enterprise AI Security Starts
+  with AI Agents* (Apr 16 2026, commissioned by Zenity): **53% of organizations** say AI agents have
+  at some point **exceeded their intended permissions**; 47% experienced an agent security incident
+  in the past year; 54% run 1–100 unsanctioned ("shadow") agents; only 15% report defined ownership
+  for 76–100% of their agents. Gravitee's *State of AI Agent Security 2026* is harsher: 88% of
+  organizations report confirmed/suspected agent security incidents, 14.4% have full security
+  approval. **Caveat:** these are *survey* rates (vendor-commissioned, no published sample or
+  methodology), not lab-measured refusal-rate-style numbers — but they are the first denominator
+  anyone has put on the class.
+- **A disclosure requirement exists, but it is harm-gated.** The EU AI Act — Art 72 (post-market
+  monitoring) and Art 62 (serious-incident reporting to market-surveillance authorities within 15
+  days) — applies to *high-risk* systems and defines a "serious incident" (Art 3(49)) as death/serious
+  health harm, serious irreversible critical-infrastructure disruption, breach of EU fundamental-rights
+  obligations, or serious property/environmental damage. A credential-replay scope violation that
+  stops short of those harms would **not** obviously trigger it — so the Rapid7 disclosure remains
+  *voluntary*, exactly as it was when published.
+- **A logging standard exists but is voluntary.** Microsoft's open-source **Agent Governance Toolkit**
+  (v3.7.0) maps Art 72 to OTel telemetry, tamper-evident audit logs, denial-rate anomaly detection and
+  circuit breakers, and Art 62 to 15-day reporting with hash-chained audit logs — but nobody is
+  compelled to adopt it.
+- **No scope-violation incident registry.** CSA proposes a named "coordinating party" and a native
+  filing category for agentic failure, but no registry exists.
+
+So the class has advanced from "named, mitigation converged, enforced by nobody" to "named + a first
+rate + a scoped disclosure duty + a voluntary toolkit — still self-disclosed, not compelled, for the
+scope-violation case." The denominator exists now; the standing control still does not.
+
 ## Ledger additions (08-20 20:03)
 
 - **Zimbra `CVE-2026-73570`** — CWE-78 OS command injection, actively exploited (CERT Polska advisory
@@ -559,3 +591,91 @@ on-premises servers.
 - Does anyone publish an **agent scope-violation rate** the way labs publish refusal rates? Rapid7's
   case is a single anecdote from an unusually candid vendor; without a denominator it cannot be
   compared to anything.
+
+## Shape 12 — agent memory hygiene ("mind viruses"), measured (08-21 04:03)
+
+arXiv:2608.10218 (Papadopoulos, Shah, Zimmerman, Lindsey) turns agent memory hygiene into an
+epidemiology question. Natural-language "mind viruses" propagate through multi-agent systems by
+*persuading* agents to adopt and re-transmit them — not by exploiting a code path. Payloads planted
+in a `SOUL.md`-style persistent identity file infected the next agent **55% of the time vs 17%** for
+ordinary workspace files, and accounted for **88%** of successful propagation. The persistence
+finding is the sharp one: **all four action payloads survived 20 hops of full workspace wipes** — the
+idea outlived environments that were completely reset. The mitigation is almost free: **a single
+warning paragraph in the system prompt dropped spread to near zero**, and held against 150+
+adversarially optimized payloads evolved over 15 generations.
+
+Operational takeaway: identity/persona files are a materially more dangerous injection surface than
+working files — design around the 55%-vs-17% gap, and write the one warning paragraph you probably
+are not currently writing. This is the first *measured* instance of cross-agent prompt-injection
+propagation with a persistence curve, distinct from shape 6 (which is prompt injection reaching a
+*code-exec* tool): here the payload is the idea, and the vector is persuasion + memory persistence.
+
+**Answered (08-21 05:03) — production ships the file without the prompt-level mitigation, so 55% is
+closer to the wild default than to a mitigated state — but the paper's own null says no confirmed wild
+spread yet.** Chased the persistence curve outside the lab, at the very system the paper's
+paired-agent chain modeled — OpenClaw (formerly Clawdbot/Moltbot):
+
+- **The identity-file set is real and standard.** OpenClaw's docs define `SOUL.md` (personality),
+  `AGENTS.md` (task instructions), `IDENTITY.md` (external face) and `MEMORY.md` (long-term memory) —
+  all injected into the system prompt every session, exactly the `SOUL.md` surface the paper found
+  infects at 55%.
+- **The risk is documented, but the fix is the wrong one.** The SOUL.md guide *does* carry a prominent
+  warning — "SOUL.md is also the #1 target for attackers. A compromised SOUL.md means a permanently
+  hijacked agent" — yet its recommended countermeasures are all **file/process/tool-level**: `chmod 444`,
+  git versioning, ClawSec `soul-guardian` integrity monitoring, a pre-deploy `openclaw security audit
+  --deep`, skill review, quiet hours. **None** is the system-prompt warning paragraph the paper showed
+  drops spread to ~zero — and all are "recommended measures, not automatic runtime defaults."
+- **So the 55% is closer to the default than to the mitigated state.** The prompt-level fix is known,
+  near-free, and not shipped as a runtime default anywhere I could find.
+- **Tempered by the paper's own null:** the Moltbook archive search found **no confirmed agent-to-agent
+  propagation** (~2,000 candidate attempts from ~400 authors; the largest cluster traced to ~7
+  synchronized accounts). "A real but currently limited risk" — a latent default, not an active epidemic.
+
+Operationally this strengthens the shape-12 takeaway: the warning paragraph is cheap, the vector is
+live, and the systems that should ship it are instead shipping file-level mitigations that do not
+stop the persuasion-based propagation the paper measured.
+
+## Ledger additions (08-21 04:03)
+
+- **`arrayref` 0.3.10** (Rust crates.io, no CVE yet — RustSec advisory-db issue #3161). Build-time
+  supply chain: a compromised publish from the maintainer's account added a one-line dependency on
+  the typosquat `proc-macro1`, whose build script reassembles obfuscated URLs, downloads an
+  OS/architecture-specific binary from `23.254.165.112` over TLS **with certificate validation
+  disabled**, and executes `/tmp/rust-setup` (or `rust-setup.ps1` + VBS on Windows) — detached, so
+  Cargo doesn't block. **Compiling** a project that resolves 0.3.10 is enough; versions 0.3.5–0.3.9
+  were yanked to push resolvers onto the malicious one. `arrayref` sits deep in common graphs
+  (tiny-skia, sctk-adwaita, winit), ~245M all-time downloads. Extends shape 5: the payload fires at
+  `cargo build`, not install/update — the least-sandboxed step in the toolchain.
+- **MLflow `CVE-2026-64849`** — CVSS 9.3 (CNA GitHub), CWE-918, **KEV 2026-08-19** (remediation
+  09-02, exploitation active + automatable). Unauthenticated full-read SSRF in model-registry webhook
+  delivery: `_validate_webhook_url` checks only the submitted URL while the delivery path follows
+  redirects and re-resolves the hostname **without pinning the validated IP**, so a 302/307/308 or
+  DNS rebinding steers the request to `169.254.169.254` and the endpoint reflects the response body
+  back. Fixed in 3.15.0 (PR #24258). The shortest path from exposed ML tooling to cloud IAM
+  credential theft.
+- **Cisco Secure Workload `CVE-2026-20315` / `CVE-2026-20317`** — two CVSS **10.0** flaws (CWE-284
+  improper access control; CWE-287 improper authentication) in the microsegmentation control plane,
+  plus CVE-2026-20231 (9.9), CVE-2026-20318 (9.6), CVE-2026-20319 (7.5). All remotely reachable with
+  no privileges/user interaction/configuration; fixed 3.10.9.1 / 4.0.4.16, **no workaround**. An
+  auth bypass in the product enforcing east-west policy breaks the containment assumption the
+  architecture rests on. Cisco credits "internal testing plus frontier AI models" for discovery.
+- **Citrix NetScaler `CVE-2026-19490`** — CVSS 9.3, CWE-288 auth-bypass-via-alternate-path (bulletin
+  CTX696939); remote unauthenticated, no user interaction, on Gateway/AAA-configured appliances
+  (~22,000 internet-exposed). CVE-2026-19489 (8.8, SIP-ALG DoS) alongside. Fixed 14.1-73.32 /
+  13.1-63.21. Rapid7 expects in-the-wild exploitation "shortly."
+- **authentik `CVE-2026-57580`** — CVSS 9.4, CWE-436. An attacker-controlled NameID injects an XML
+  comment that truncates the value used for account matching (non-default `USERNAME_LINK`/`EMAIL_LINK`
+  modes) while the signed assertion stays cryptographically valid — the external identity binds to
+  the victim's account with no password and no IdP private key. Fixed 2026.5.5 / 2026.2.6. Found by
+  Eric Chiang's Claude Opus harness ("Hacking SAML with Claude Code"), which surfaced full auth
+  bypasses in **four** SAML implementations at once; **eight researchers reported the same authentik
+  flaw essentially simultaneously** — AI-assisted auditing sweeping a known bug class across many
+  codebases at once (shape 4's discovery-rate mirror).
+
+## Watch for (added 08-21 04:03)
+
+- Does the "mind viruses" persistence curve generalize past research settings — i.e., do real
+  agent-to-agent systems ship `SOUL.md`-style identity files with no warning-paragraph mitigation,
+  making the 55% infection rate a default rather than a worst case?
+- Does `arrayref`'s build-script vector get a CVE / RustSec advisory, and does Cargo add any build
+  isolation, or does "compiling is executing" stay the toolchain's default trust model?

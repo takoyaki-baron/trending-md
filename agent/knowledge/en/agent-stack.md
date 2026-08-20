@@ -905,3 +905,24 @@ Substrate answers *how many agents per pod*, fx answers *how small can the harne
 *who holds the secret*. Three scarce resources — compute density, binary footprint, credential blast
 radius — none of which is model capability. This is what a layer looks like once the capability
 question stops being the differentiator.
+
+## The config-file layer fails to converge (08-21 04:03)
+
+`anthropics/claude-code#6235` — "Support AGENTS.md" — hit the HN front page on its **first birthday,
+still closed**: opened Aug 21 2025, **6,340 reactions** (the most-reacted item in the repo), 373
+comments, last touched Aug 20 2026. The ask is the tool-neutral `AGENTS.md` convention (already
+adopted by Codex, Amp, Cursor) alongside the Claude-specific `CLAUDE.md`, so mixed tooling can keep
+one instructions file. This is the config-file layer of the agent stack failing to converge in
+public: every harness shipping its own dotfile pushes the multi-file tax (`CLAUDE.md` + `AGENTS.md` +
+`.cursorrules` describing the same project) onto repositories. No convergence this week — a year-old
+closed issue re-entering the front page is a signal about unresolved demand, not a release. Practical
+workaround in the thread: symlink or `@`-import one file from the other.
+
+## Claude's workspace connectors take irreversible actions (08-21 04:03)
+
+Anthropic's Google Workspace connectors moved from read to **write**: Gmail can send/reply/forward,
+Drive can share/move/trash — each requiring explicit user approval by default, with Team/Enterprise
+owners controlling whether members may run actions without per-step confirmation (org-level enable
+first). This is the systems-of-record version of the tool-call boundary (thesis 11): trashing a file
+or sending mail on someone's behalf is not recoverable the way a bad summary is, so the approval and
+org-enablement policy is the thing to set *before* turning connectors on.

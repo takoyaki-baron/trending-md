@@ -565,3 +565,40 @@ sandbox. Consistent with dots3-note and Kozuchi Agent above: the open-weight fro
   27B without the task/harness-quality reward terms silently overfitting.
 - Whether ASI-Bench's B1→B2 procedural-execution gap closes as harness scaffolding improves — the
   benchmark's own signal is that the gap is not a model-capability problem.
+
+## GLM-5.3 gets a third-party number (08-21 04:03)
+
+Zhipu's GLM-5.3 — same 743B base as GLM-5.2, all gains from post-training — now has a third-party
+anchor: on Artificial Analysis it enters at an **Intelligence Index of 60**, tying **Kimi K3** at the
+top of the open-weight field. The API went live **Aug 19** with a 1M-token context, 128K max output,
+always-on reasoning at three effort levels; weights staged for **~Aug 28** (held for security
+hardening on the vendor's own dual-use argument — CyberGym/ExploitBench). Vendor deltas:
+Terminal-Bench 3.0 4.6→28.3, DeepSWE v1.1 46.2→66.9, Agents' Last Exam 23.8→28.5, CyberGym 77.2→84.5.
+The "post-training, not scale" lever (thesis 6) now has a frontier-scale open-weight name with an
+independent index ranking.
+
+## Diffusion LM + base checkpoints (08-21 04:03)
+
+- **DiffusionGemma** (arXiv:2608.00146, Google, 43 authors) — an experimental open-weight
+  discrete-diffusion LM: fine-tune the MoE **Gemma 4** (3.8B active / 25.2B total) with **<10% of the
+  base AR model's token budget** to iteratively refine 256-token blocks in parallel, ~20 tokens per
+  forward pass and ~1,500 tok/s on one H100 — *and* it retains AR generation with minor degradation,
+  pointing at hybrid diffusion-AR decoding (pick the strategy per request, not per model).
+- **Ling-3.0 base checkpoints under MIT** — Ant Group/inclusionAI released `Ling-3.0-tiny-base`
+  (7.9B/1.3B active) and `Ling-3.0-flash-base` (124B/5.1B active) plus **six checkpoints spanning
+  pre-training, mid-training and WSM-merged stages**, all MIT. Base checkpoints with intermediate
+  stages are the rare artifact: continued pre-training and MoE-ablation work on a frontier-adjacent
+  model, not a single post-trained chat artifact.
+
+## Wet-lab AI + embodied data (08-21 04:03)
+
+- **Claude designs protein binders** — Anthropic ran Mythos Preview + Opus 4.8 over existing tools
+  (RFdiffusion, ProteinMPNN, ESMFold2) with no human design intervention: **354/1,320 candidates
+  bound 14 of 15 targets (~26.8% hit rate** vs 10–15% typical), validated by two independent labs
+  (Adaptyv Bio, Twist Bioscience). Notably the capability is **blocked on Fable 5 over dual-use** —
+  the safety posture is itself part of the announcement (→ [[security]], thesis 7).
+- **EgoSuite-Open100K** — Beijing's Guanglun/Lightwheel announced a 100k-hour egocentric human-
+  behaviour dataset (head+wrist dual-view, whole-body/hand pose, depth, semantics; 7 environment
+  categories) at WRC 2026, publishing on AtomGit as EgoDemo/EgoStandard/EgoPro. Only ~10k hours are
+  actually uploaded so far and the licence is unstated — read the number carefully. Embodied learning
+  is bottlenecked on real physical-interaction data far more than architectures.

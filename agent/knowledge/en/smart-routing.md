@@ -188,3 +188,21 @@ execution. This is "route before compute" applied one level *above* the model ro
 isn't a model call but a *whole sub-task's ownership*. The learned, evidence-based SELF/COLLABORATE/
 HANDOFF decision is the A2A-era answer to the "who owns the router decision" lock-in question — with
 the same caveat as every learned router (the outcome model is a black box and the eval is synthetic).
+
+## A seventh instance — the router's ownership becomes a supply-chain question (08-21 04:03)
+
+**OpenRouter is joining Stripe** (announced Aug 19; the sale has not closed). The multi-provider
+router a large share of agent stacks call instead of talking to vendors now has a parent company —
+and the post is explicit about what that means: "same mission, same name, same product, same
+roadmap," "if you build on OpenRouter today, nothing about your integration changes," and the
+neutrality pledge that actually matters for a router — routing decisions stay "driven by one thing:
+what's best for you, the user," a neutrality that "doesn't bend to any model, any provider, or any
+parent company." No API, pricing, or model-catalog changes announced.
+
+This closes the loop on this file's standing "who owns the router" watch-item: ownership is now an
+*actual transfer*, not a latent lock-in vector. Routing decides which model your agent actually hits,
+so the router's parent is a supply-chain fact, not a business-page one. The pledge is now the thing
+to hold Stripe to — and the operational advice follows from the lock-in map: **pin your provider
+preferences explicitly** (the `provider` object / `policy-lock.yaml` / LiteLLM config) rather than
+relying on default routing, so a future ownership-driven default change doesn't silently retarget
+your traffic.

@@ -2356,5 +2356,266 @@
     "cred": "high",
     "density": "high",
     "cv": 1
+  },
+  "agents.md": {
+    "cat": "community",
+    "en": "The AGENTS.md convention's own site — the tool-neutral agent-instructions standard (adopted by Codex/Amp/Cursor). A spec page, not a news source.",
+    "zh": "AGENTS.md 约定自己的站点——工具中立的 agent 指令标准（Codex/Amp/Cursor 已采纳）。是规范页，非新闻源。",
+    "jp": "AGENTS.md規約自身のサイト——ツール中立のエージェント指示標準（Codex/Amp/Cursorが採用）。仕様ページでありニュース源ではない。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "akitaonrails.github.io": {
+    "cat": "community",
+    "en": "Fabio Akita's personal blog (GitHub Pages) — the author of ai-memory (akitaonrails/ai-memory). Cited for the 'ai-memory: emergent architecture, malleable software' post. This is the *correct* owner attribution (the 08-20 feed briefly mis-attributed ai-memory to DHH; corrected). Corroborated by the co-cited GitHub repo.",
+    "zh": "Fabio Akita 的个人博客（GitHub Pages）——ai-memory（akitaonrails/ai-memory）的作者。因《ai-memory: emergent architecture, malleable software》一文被引用。这是*正确*的所有者归属（08-20 的 feed 曾将 ai-memory 误归于 DHH，已更正）。由共同引用的 GitHub 仓库佐证。",
+    "jp": "Fabio Akitaの個人ブログ（GitHub Pages）——ai-memory（akitaonrails/ai-memory）の作者。「ai-memory: emergent architecture, malleable software」の記事で引用。これは*正しい*所有者帰属（08-20のfeedがai-memoryをDHHに誤帰属し、修正済み）。共引用のGitHubリポジトリが裏付け。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "ampcuscyber.com": {
+    "cat": "security",
+    "en": "Ampcus Cyber's ShadowOpsIntel threat-research blog. Cited for the VMware vCenter CVE-2026-59310 campaign (syslog path-traversal RCE → Babuk ransomware, 361 victims across 47 countries). Co-cited with The Hacker News in the same item; the underlying numbers trace to German IR firm QUIRSO's report. Treat as a secondary recap of QUIRSO's findings rather than the primary source.",
+    "zh": "Ampcus Cyber 的 ShadowOpsIntel 威胁研究博客。因 VMware vCenter CVE-2026-59310 攻击活动（syslog 路径遍历 RCE → Babuk 勒索，47 国 361 个受害者）被引用。同一条目与 The Hacker News 共同引用；底层数字源自德国应急响应公司 QUIRSO 的报告。宜作为 QUIRSO 结论的二手转述，而非一手来源。",
+    "jp": "Ampcus CyberのShadowOpsIntel脅威リサーチブログ。VMware vCenter CVE-2026-59310キャンペーン（syslogパストラバーサルRCE→Babukランサム、47カ国361被害者）で引用。同一項目でThe Hacker Newsと共引用；基になる数字はドイツのIR会社QUIRSOの報告に遡る。QUIRSO所見の二次まとめとして扱い、一次情報とは見なさない。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "atomgit.com": {
+    "cat": "code",
+    "en": "AtomGit — Alibaba's open-source code-hosting platform; hosts the Lightwheel EgoSuite-Open100K repos. Org page understates what's actually uploaded (licence unstated).",
+    "zh": "AtomGit——阿里开源代码托管平台；托管光轮智能 EgoSuite-Open100K 仓库。组织页对实际上传量的表述偏小（许可证未注明）。",
+    "jp": "AtomGit——Alibabaのオープンソースコードホスティング。Lightwheel の EgoSuite-Open100K リポジトリをホスト。組織ページは実際のアップロード量を過小表記（ライセンス未記載）。",
+    "cred": "high",
+    "density": "low",
+    "cv": 1
+  },
+  "blog.laserphile.com": {
+    "cat": "community",
+    "en": "Personal blog — single-author WebAudio/Bluetooth reverse-engineering writeup; reproducible but unconfirmed by the vendor (one-machine observation).",
+    "zh": "个人博客——单作者的 WebAudio/蓝牙逆向分析；可复现但未经厂商确认（单机观察）。",
+    "jp": "個人ブログ——単著者によるWebAudio/Bluetoothのリバースエンジニアリング記事。再現可能だがベンダー未確認（単一マシンの観測）。",
+    "cred": "low",
+    "density": "high",
+    "cv": 1
+  },
+  "bun.com": {
+    "cat": "vendor",
+    "en": "Bun — the Zig→Rust JS runtime's own release blog; authoritative for its own perf numbers (verify against independent benchmarks). Cross-checked (08-21): its Bun 1.4 Rust-rewrite claims match the HN discussion + tipiirai.com's critique.",
+    "zh": "Bun——Zig→Rust JS 运行时自己的发布博客；对其自身性能数字具有权威性（请对照独立基准核验）。已交叉核验（08-21）：Bun 1.4 Rust 重写的说法与 HN 讨论及 tipiirai.com 的批评一致。",
+    "jp": "Bun——Zig→RustのJSランタイム自身のリリースブログ。自社性能数値については権威（独立ベンチでの裏取りを）。クロスチェック済み（08-21）：Bun 1.4 Rust書き換えの主張はHNの議論と tipiirai.com の批判に一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "caieglobal.com": {
+    "cat": "news",
+    "en": "CAIE Global (中国 AI 媒体) — a Chinese-language AI news site. Cited for the diagram-design Claude Code skill (27 diagram types, ~17.1k stars). Co-cited with the cathrynlavery/diagram-design repo; treat as a Chinese-language secondary recap of a GitHub repo — verify stars/features against the repo itself.",
+    "zh": "CAIE Global（中国 AI 媒体）——中文 AI 资讯站。因 diagram-design Claude Code 技能（27 种图表类型、约 17.1k stars）被引用。与 cathrynlavery/diagram-design 仓库共同引用；宜作为对 GitHub 仓库的中文二手转述——星数与特性请以仓库为准。",
+    "jp": "CAIE Global（中国AIメディア）——中国語のAIニュースサイト。diagram-design Claude Codeスキル（27種の図、約17.1kスター）で引用。cathrynlavery/diagram-designリポジトリと共引用；GitHubリポジトリの中国語二次まとめとして扱い、スター数・機能はリポジトリで確認を。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "cathrynlavery.github.io": {
+    "cat": "code",
+    "en": "diagram-design's gallery site — renders the repo's 38 editorial diagram types; mirror of the GitHub repo.",
+    "zh": "diagram-design 的图库站点——渲染仓库的 38 种编辑图表类型；GitHub 仓库的镜像。",
+    "jp": "diagram-designのギャラリーサイト——リポジトリの38種の編集図表タイプをレンダリング。GitHubリポジトリのミラー。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "cert.europa.eu": {
+    "cat": "security",
+    "en": "CERT-EU — the EU institutions' official CERT; authoritative reproduction of vendor advisories (its NetScaler 2026-010 bulletin mirrors Citrix CTX696939). Cross-checked vs SecurityWeek (08-21).",
+    "zh": "CERT-EU——欧盟机构官方 CERT；权威转载厂商公告（其 NetScaler 2026-010 公告与 Citrix CTX696939 一致）。已对照 SecurityWeek 交叉核验（08-21）。",
+    "jp": "CERT-EU——EU機関の公式CERT。ベンダーアドバイザリの権威ある再掲（NetScaler 2026-010 は Citrix CTX696939 を反映）。SecurityWeek とクロスチェック済み（08-21）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "docs.goauthentik.io": {
+    "cat": "vendor",
+    "en": "authentik's official docs/security pages — canonical for its own CVEs (CVE-2026-57580). Cross-checked vs Oblique Security (08-21).",
+    "zh": "authentik 官方文档/安全页——其自身 CVE（CVE-2026-57580）的权威来源。已对照 Oblique Security 交叉核验（08-21）。",
+    "jp": "authentikの公式ドキュメント/セキュリティページ——自社CVE（CVE-2026-57580）の正典。Oblique Security とクロスチェック済み（08-21）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "docs.openchamber.dev": {
+    "cat": "code",
+    "en": "OpenChamber's official documentation site. Cited for the openchamber/openchamber agentic dev workspace (Session Goals, Multi-run/Fuse, Changes Walkthrough). First-party docs for an MIT open-source project; corroborated by the co-cited GitHub repo.",
+    "zh": "OpenChamber 官方文档站。因 openchamber/openchamber 智能体开发工作区（Session Goals、Multi-run/Fuse、Changes Walkthrough）被引用。属 MIT 开源项目的一手文档；由共同引用的 GitHub 仓库佐证。",
+    "jp": "OpenChamberの公式ドキュメントサイト。openchamber/openchamberエージェンティック開発ワークスペース（Session Goals、Multi-run/Fuse、Changes Walkthrough）で引用。MITオープンソースプロジェクトの一次ドキュメント；共引用のGitHubリポジトリが裏付け。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "docs.z.ai": {
+    "cat": "vendor",
+    "en": "Z.ai docs — GLM-5.3 API/context/effort-level details; complements zhipuai.cn's research post.",
+    "zh": "Z.ai 文档——GLM-5.3 API/上下文/努力水平细节；补充 zhipuai.cn 的研究文章。",
+    "jp": "Z.aiドキュメント——GLM-5.3のAPI/コンテキスト/努力レベルの詳細。zhipuai.cn の研究記事を補完。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "itnews.com.au": {
+    "cat": "news",
+    "en": "iTnews — Australian enterprise IT news. Cited for the ShieldBreak Windows zero-day story ('vengeful researcher drops ShieldBreak on Patch Wednesday'). Co-cited with Tanium's mitigation post; the ShieldBreak facts were independently confirmed (Will Dormann / Kevin Beaumont). Secondary news coverage of a first-hand-confirmed story.",
+    "zh": "iTnews——澳大利亚企业 IT 媒体。因 ShieldBreak Windows 零日故事（“复仇研究员在 Patch Wednesday 发布 ShieldBreak”）被引用。与 Tanium 的缓解文章共同引用；ShieldBreak 事实经独立确认（Will Dormann / Kevin Beaumont）。属经一手确认故事的二手新闻报道。",
+    "jp": "iTnews——オーストラリアの企業ITメディア。ShieldBreak Windowsゼロデイ記事（「復讐の研究者がPatch WednesdayにShieldBreakを公開」）で引用。Taniumの緩和記事と共引用；ShieldBreakの事実は独立に確認済み（Will Dormann / Kevin Beaumont）。一次確認済みストーリーの二次ニュース報道。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "macro.com": {
+    "cat": "vendor",
+    "en": "Macro — the AGPL workspace product's site; mirrors the macro-inc/macro repo's claims.",
+    "zh": "Macro——AGPL 工作区产品的站点；与 macro-inc/macro 仓库的说法一致。",
+    "jp": "Macro——AGPLワークスペース製品のサイト。macro-inc/macro リポジトリの主張を反映。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "mcp.directory": {
+    "cat": "data",
+    "en": "MCP Directory — a directory/registry of MCP servers plus a blog. Cited for its mattpocock/skills write-up ('the npm moment'). Corroborated by the co-cited mattpocock/skills repo (~220k stars). A community-curated index + commentary; fine for discovery, verify against the repo.",
+    "zh": "MCP Directory——MCP 服务器目录/登记处，附带博客。因 mattpocock/skills 文章（“npm 时刻”）被引用。由共同引用的 mattpocock/skills 仓库（约 220k stars）佐证。属社区维护的索引 + 评论；适合用于发现，请对照仓库核实。",
+    "jp": "MCP Directory——MCPサーバーのディレクトリ/レジストリ＋ブログ。mattpocock/skillsの記事（「npmモーメント」）で引用。共引用のmattpocock/skillsリポジトリ（約220kスター）が裏付け。コミュニティ管理のインデックス＋解説；発見用途に適するが、リポジトリで確認を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "newsletter.semianalysis.com": {
+    "cat": "research",
+    "en": "SemiAnalysis's Substack newsletter. Cited for 'Gemini is cooked but GCP is cooking' — verified 08-17 first-hand to contain the 'Doug' memo (the internal Google memo). Deep industry analysis, some posts subscription-gated; treat as analyst opinion with strong sourcing, not primary data.",
+    "zh": "SemiAnalysis 的 Substack 通讯。因《Gemini is cooked but GCP is cooking》被引用——08-17 已第一手核验其中含“Doug”备忘录（谷歌内部备忘录）。深度产业分析，部分文章需订阅；宜作为有据可依的分析师观点，而非一手数据。",
+    "jp": "SemiAnalysisのSubstackニュースレター。「Gemini is cooked but GCP is cooking」で引用——08-17に一次確認し「Doug」メモ（Google内部メモ）を含むことを確認。深い業界分析で、一部記事は購読制；一次データではなく、裏付けの強いアナリスト見解として扱う。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "oblique.security": {
+    "cat": "security",
+    "en": "Oblique Security (Eric Chiang) — first-hand AI-assisted SAML audit writeup; its authentik CVE-2026-57580 finding is mirrored by docs.goauthentik.io. Cross-checked (08-21).",
+    "zh": "Oblique Security（Eric Chiang）——AI 辅助 SAML 审计的一手记录；其 authentik CVE-2026-57580 发现与 docs.goauthentik.io 相互印证。已交叉核验（08-21）。",
+    "jp": "Oblique Security（Eric Chiang）——AI支援SAML監査の一次記録。authentik CVE-2026-57580 の発見は docs.goauthentik.io と相互に裏付け。クロスチェック済み（08-21）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "opencut.app": {
+    "cat": "code",
+    "en": "OpenCut's official site (opencut.app powers the current opencut-classic build; the Rust rewrite lives at new.opencut.app). Cited for the OpenCut rewrite announcement (Rust core, headless mode, MCP server). Corroborated by the co-cited OpenCut-app/OpenCut repo (83.5k stars).",
+    "zh": "OpenCut 官网（opencut.app 运行当前的 opencut-classic 构建；Rust 重写版在 new.opencut.app）。因 OpenCut 重写公告（Rust 核心、无头模式、MCP 服务器）被引用。由共同引用的 OpenCut-app/OpenCut 仓库（83.5k stars）佐证。",
+    "jp": "OpenCutの公式サイト（opencut.appが現行のopencut-classicビルドを配信；Rust書き換え版はnew.opencut.app）。OpenCut書き換え発表（Rustコア、ヘッドレスモード、MCPサーバー）で引用。共引用のOpenCut-app/OpenCutリポジトリ（83.5kスター）が裏付け。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "platform.claude.com": {
+    "cat": "vendor",
+    "en": "Anthropic's platform-docs domain (distinct from claude.com, the consumer site). Cited for the published claude.ai/mobile system prompts, whose Claude Opus 5 prompt carries the first-party confirmation of the Fable 5 / Mythos 5 export-control suspension (June 12, lifted June 30). First-party documentation; corroborated by the anthropic.com/news/fable-mythos-access statement co-cited in the same item.",
+    "zh": "Anthropic 的平台文档域（区别于面向消费者的 claude.com）。因发布的 claude.ai/移动端系统提示词被引用，其 Claude Opus 5 提示词含 Fable 5 / Mythos 5 出口管制暂停（6 月 12 日，6 月 30 日解除）的一手确认。属一手文档；由同一条目共同引用的 anthropic.com/news/fable-mythos-access 声明佐证。",
+    "jp": "Anthropicのプラットフォームドキュメントドメイン（コンシューマー向けclaude.comとは別）。公開されたclaude.ai/モバイルのシステムプロンプトで引用され、Claude Opus 5のプロンプトがFable 5 / Mythos 5の輸出管理による一時停止（6月12日、6月30日解除）の一次確認を含む。一次ドキュメント；同一項目で共引用のanthropic.com/news/fable-mythos-access声明が裏付け。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "rdworldonline.com": {
+    "cat": "news",
+    "en": "R&D World — an R&D/innovation trade magazine. Cited (08-09) for OpenAI's o3 IOI/Codeforces coverage; this was the *corrected* replacement link after the 08-17 fix retitled the item around the Codeforces percentile (the original 36Kr 'Doug' link was a Void-class mismatch). Co-cited with arXiv:2502.06807.",
+    "zh": "R&D World——研发/创新行业杂志。因 OpenAI o3 的 IOI/Codeforces 报道被引用（08-09）；这是 08-17 更正后替换的链接，当时该条目围绕 Codeforces 百分位重新拟题（原 36Kr “Doug”链接属 Void 类错配）。与 arXiv:2502.06807 共同引用。",
+    "jp": "R&D World——研究開発/イノベーション業界誌。OpenAI o3のIOI/Codeforces報道で引用（08-09）；これは08-17の修正でCodeforcesパーセンタイルを軸に項目を改題した際の*差し替え*リンク（元の36Kr「Doug」リンクはVoid級の不整合）。arXiv:2502.06807と共引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "safedep.io": {
+    "cat": "security",
+    "en": "SafeDep — supply-chain security vendor; its arrayref/proc-macro1 build-time malware analysis matches RustSec advisory-db issue #3161. Cross-checked (08-21).",
+    "zh": "SafeDep——供应链安全厂商；其 arrayref/proc-macro1 构建期恶意软件分析与 RustSec advisory-db issue #3161 一致。已交叉核验（08-21）。",
+    "jp": "SafeDep——サプライチェーンセキュリティベンダー。arrayref/proc-macro1 のビルド時マルウェア分析は RustSec advisory-db issue #3161 と一致。クロスチェック済み（08-21）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "sec.cloudapps.cisco.com": {
+    "cat": "security",
+    "en": "Cisco Security Advisories — canonical for Cisco CVEs (Secure Workload CVE-2026-20315/-20317). Cross-checked vs SecurityWeek (08-21).",
+    "zh": "Cisco Security Advisories——Cisco CVE（Secure Workload CVE-2026-20315/-20317）的权威来源。已对照 SecurityWeek 交叉核验（08-21）。",
+    "jp": "Cisco Security Advisories——Cisco CVE（Secure Workload CVE-2026-20315/-20317）の正典。SecurityWeek とクロスチェック済み（08-21）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "simedw.com": {
+    "cat": "community",
+    "en": "Personal blog — the RollTab on-device MIDI transformer writeup; a clean technical walkthrough, vendor-reported metrics.",
+    "zh": "个人博客——RollTab 端侧 MIDI transformer 的技术文章；清晰的技术走读，指标为作者自报。",
+    "jp": "個人ブログ——RollTab オンデバイスMIDI transformerの技術記事。明快な技術解説、指標は著者自己申告。",
+    "cred": "low",
+    "density": "high",
+    "cv": 1
+  },
+  "sploitus.com": {
+    "cat": "security",
+    "en": "Sploitus — an exploit/vulnerability aggregator indexing Exploit-DB, GitHub PoCs and 0day.today. Cited for its CVE-2026-73519 entry; verified first-hand 08-21 that the entry is the squeeze440 WolfStack PoC (hardcoded X-WolfStack-Secret, CWE-798, CVSS 9.8, fixed v25.9.2/.3), matching the co-cited GitHub PoC repo. A secondary index — confirm the CVE/number against the underlying PoC or advisory, not Sploitus alone.",
+    "zh": "Sploitus——漏洞/利用代码聚合站，索引 Exploit-DB、GitHub PoC 与 0day.today。因 CVE-2026-73519 条目被引用；08-21 第一手核验：该条目即 squeeze440 的 WolfStack PoC（硬编码 X-WolfStack-Secret，CWE-798，CVSS 9.8，修复于 v25.9.2/.3），与共同引用的 GitHub PoC 仓库一致。属二手索引——请对照底层 PoC 或公告核实 CVE/数字，勿仅凭 Sploitus。",
+    "jp": "Sploitus——Exploit-DB、GitHub PoC、0day.todayを集約するエクスプロイト/脆弱性アグリゲータ。CVE-2026-73519のエントリで引用。08-21に一次確認：このエントリはsqueeze440のWolfStack PoC（ハードコードされたX-WolfStack-Secret、CWE-798、CVSS 9.8、v25.9.2/.3で修正）であり、共引用のGitHub PoCリポジトリと一致する。二次インデックス——CVE/数値は基になるPoCまたはアドバイザリで確認すること。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "support.mozilla.org": {
+    "cat": "vendor",
+    "en": "Mozilla's official support knowledge base. Cited for the Firefox for iOS built-in Ad Blocker article (network-level EasyList-based blocking, shipped disabled by default, skips search-engine ads). First-party documentation of a product feature; corroborated by the Gigazine report co-cited in the same item.",
+    "zh": "Mozilla 官方支持知识库。因 Firefox for iOS 内置广告拦截器文章被引用（基于 EasyList 的网络级拦截，默认关闭，跳过搜索引擎广告）。属产品特性的一手文档；由同一条目共同引用的 Gigazine 报道佐证。",
+    "jp": "Mozilla公式サポートナレッジベース。Firefox for iOSの内蔵広告ブロッカー記事（EasyListベースのネットワークレベル遮断、デフォルト無効、検索エンジン広告は除外）で引用。製品機能の一次ドキュメント；同一項目で共引用のGigazine報道が裏付け。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "tanium.com": {
+    "cat": "security",
+    "en": "Tanium's security blog (Guardian). Cited for its ShieldBreak mitigation write-up. Verified first-hand 08-21: the post confirms the PoC bypasses the July RoguePlanet patch (CVE-2026-50656, CVSS 7.8, mpengine.dll), affects Win11 25H2 / Server 2025, has no Microsoft fix, and recommends a 0-byte phoneinfo.dll placeholder via the Guardian dashboard — matching the independently-confirmed ShieldBreak account (Will Dormann / Kevin Beaumont). A vendor advisory with a product-specific interim fix; use it for mitigation guidance, not the vulnerability's first report.",
+    "zh": "Tanium 的安全博客（Guardian）。因 ShieldBreak 缓解措施文章被引用。08-21 第一手核验：该文确认此 PoC 绕过了 7 月的 RoguePlanet 补丁（CVE-2026-50656，CVSS 7.8，mpengine.dll），影响 Win11 25H2 / Server 2025，微软暂无修复，并建议通过 Guardian 仪表盘部署 0 字节 phoneinfo.dll 占位符——与经独立确认的 ShieldBreak 叙述（Will Dormann / Kevin Beaumont）一致。属厂商公告、附带产品专属的临时缓解；宜用于缓解指引，而非漏洞的首报来源。",
+    "jp": "Taniumのセキュリティブログ（Guardian）。ShieldBreak緩和策の記事で引用。08-21に一次確認：このPoCが7月のRoguePlanetパッチ（CVE-2026-50656、CVSS 7.8、mpengine.dll）を回避し、Win11 25H2 / Server 2025に影響、Microsoft修正は未提供、Guardianダッシュボード経由の0バイトphoneinfo.dllプレースホルダーを推奨——独立に確認されたShieldBreakの記述（Will Dormann / Kevin Beaumont）と一致する。製品固有の暫定緩和を伴うベンダーアドバイザリ；脆弱性の一次報告ではなく緩和策の参考に。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "techweb.com.cn": {
+    "cat": "news",
+    "en": "TechWeb (China) — mainstream Chinese tech/IT news. Cited for DeepSeek's Aug 17 peak/off-peak (峰谷) API pricing switch (V4-Pro cache-hit input up +1,100% at peak). Co-cited with DoNews in the same item, which agree on the pricing table; figures trace to DeepSeek's own announcement, so confirm against the vendor where possible.",
+    "zh": "TechWeb（中国）——主流中文科技/IT 媒体。因 DeepSeek 8 月 17 日峰谷 API 定价切换（峰值时段 V4-Pro 缓存命中输入最高涨 1,100%）被引用。同一条目与 DoNews 共同引用，两者定价表一致；数字源自 DeepSeek 官方公告，条件允许时请对照厂商核实。",
+    "jp": "TechWeb（中国）——中国の主流テック/ITメディア。DeepSeekの8月17日ピーク/オフピーク（峰谷）API料金切り替え（ピーク時のV4-Proキャッシュヒット入力最大+1,100%）で引用。同一項目でDoNewsと共引用し、料金表は一致；数字はDeepSeek自身の発表に遡るため、可能ならベンダーで確認を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "tipiirai.com": {
+    "cat": "community",
+    "en": "Tero Piirainen's blog — an experienced JS-runtime author's first-person engineering critique; independent of Bun's own numbers.",
+    "zh": "Tero Piirainen 的博客——资深 JS 运行时作者的一手工程批评；独立于 Bun 自身的数字。",
+    "jp": "Tero Piirainenのブログ——経験豊富なJSランタイム作者による一人称の工学批判。Bun自身の数値から独立。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "zhipuai.cn": {
+    "cat": "vendor",
+    "en": "Zhipu (Z.ai) — GLM series vendor research posts; canonical for GLM-5.3's same-base/post-training claim (vendor-reported benchmarks). Cross-checked vs docs.z.ai (08-21).",
+    "zh": "智谱（Z.ai）——GLM 系列厂商研究文章；GLM-5.3 同底座/纯后训练说法（厂商自报基准）的权威来源。已对照 docs.z.ai 交叉核验（08-21）。",
+    "jp": "Zhipu（Z.ai）——GLMシリーズのベンダー研究記事。GLM-5.3の同一ベース/ポストトレーニングのみという主張（ベンダー発表ベンチ）の正典。docs.z.ai とクロスチェック済み（08-21）。",
+    "cred": "med",
+    "density": "high",
+    "cv": 2
   }
 }

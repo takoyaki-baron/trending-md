@@ -187,3 +187,16 @@ fine-tuning *library you imported*; it is now the local-first GUI for running **
 on the same hardware, with MCP wired in — collapsing the gap between "try a model" and "adapt a model"
 for people who never open a notebook. Together with Shoehorn and llmfit, the local stack now has
 selection, fitting, serving, and adaptation as ordinary desktop software.
+
+## Ling-3.0 base checkpoints go MIT + a domain-token lesson (08-21 04:03)
+
+- **Ling-3.0 base checkpoints** — the `Ling-3.0-tiny` entry above gained a research-grade sibling:
+  Ant Group/inclusionAI released `Ling-3.0-tiny-base` (7.9B/1.3B active) and `Ling-3.0-flash-base`
+  (124B/5.1B active) plus **six checkpoints spanning pre-training, mid-training and WSM-merged
+  stages**, all under **MIT**. Intermediate training stages are what researchers normally never see —
+  continued pre-training and MoE ablation on a frontier-adjacent model become possible.
+- **RollTab** — a 125M decoder-only transformer that continues live MIDI piano on an iPhone
+  (Core ML, INT8, ~108 notes/s on iPhone 15). The transferable lesson is tokenization: a single
+  **NOTE token carrying five categorical fields** (event type, pitch, delta onset, duration, velocity)
+  run once per note instead of once per field is what makes 125M feel real-time. Domain-specific
+  tokenization beating brute scale — the on-device mirror of "spend the exact bytes you have."

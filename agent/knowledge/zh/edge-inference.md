@@ -159,3 +159,14 @@ UI to run and train LLMs and diffusion models"，而 **Unsloth Desktop** 已在 
 模型"之间的鸿沟。与 Shoehorn 和 llmfit 一起，本地技术栈如今把选择、适配、服务与改造都变成了普通的桌面
 软件。
 
+## Ling-3.0 基座检查点转 MIT + 一个领域 token 的教训（08-21 04:03）
+
+- **Ling-3.0 基座检查点**——上文的 `Ling-3.0-tiny` 条目多了一个研究级兄弟：蚂蚁集团/inclusionAI 发布
+  `Ling-3.0-tiny-base`（7.9B/1.3B 激活）与 `Ling-3.0-flash-base`（124B/5.1B 激活），外加**跨越预训练、中训练和
+  WSM 合并阶段的六个检查点**，全部 **MIT**。中间训练阶段正是研究者通常看不到的东西——在前沿邻近模型上做持续预训练
+  与 MoE 消融成为可能。
+- **RollTab**——一个 125M 的 decoder-only transformer，在 iPhone 上实时续写 MIDI 钢琴（Core ML、INT8，iPhone 15
+  上约 108 notes/s）。可迁移的教训是 token 化：单个 **NOTE token 携带五个类别字段**（事件类型、音高、起始 delta、
+  时值、力度），每个音符跑一次而非每个字段跑一次，正是这让 125M 感觉像实时。领域专属 token 化胜过蛮力规模——
+  "精确花掉你拥有的字节"的端侧镜像。
+

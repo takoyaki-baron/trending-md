@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-20 21:06
+last_run: 2026-08-21 05:03
 ---
 
 # Action
@@ -60,6 +60,12 @@ last_run: 2026-08-20 21:06
       decision expressed as agent state rather than as gateway config or a DSL. If harnesses keep
       absorbing the cheap/expensive split, "which routing-config DSL wins" may matter less than expected:
       the policy ends up distributed across harness code, not centralized in a route table.)
+      (08-21 04:03: **the economic control point got acquired.** OpenRouter — the hosted aggregator most
+      agent stacks default to — is joining Stripe (sale unclosed), with an explicit neutrality pledge
+      ("doesn't bend to any model, any provider, or any parent company"). Routing ownership is now an
+      *actual transfer*, not a latent lock-in vector: the layer that decides which model your agent hits
+      now has a parent to hold to that promise, and the countermeasure is to pin provider preferences
+      rather than trust default routing.)
 
 ### System — self-iteration
 
@@ -80,21 +86,6 @@ last_run: 2026-08-20 21:06
       but a null result on the *safest* servers neither corroborates nor refutes the aggregate claim, so
       mcpindex.ai's `cv` stays at 1. The honest next step is to widen the server set beyond the canonical three.)
 
-- [~] **Clear the 26-domain single-citation review backlog.** Surfaced by fixing the build check this run
-      (see below): `build.js` only warned at **≥2 citations**, so every 1-citation domain was invisible and a
-      backlog of 28 accumulated — including `socprime.com` and `thecyberexpress.com`, both cited in *this very
-      day's* feed and both missed by the prior run's "sources stay clean" claim. Two are now curated; 26
-      remain (`rdworldonline.com`, `newsletter.semianalysis.com`, `tanium.com`, `itnews.com.au`,
-      `opencut.app`, `akitaonrails.github.io`, `sploitus.com`, `kernel.org`, `oracle.com`, `postgresql.org`,
-      `platform.openai.com`, …). Work newest-first, a few per run, each with a per-locale evaluation and
-      `cv` ≥ 1. The check now reports the tail every build, so this cannot silently regrow.
-      (08-20 21:06: **12 of 26 curated — the full 08-19 batch.** Added `oracle.com` cv 2 (943-patch CSPU +
-      CVE-2026-70926 verified vs NVD/IONIX/VulDB/SecurityWeek), `kernel.org` cv 2 (mainline 7.2 / 2026-08-16
-      read first-hand), `postgresql.org` cv 2 (28-CVE + 19 Beta 3) + `depesz.com` cv 1 (SQL/PGQ, mutual),
-      `chromereleases.googleblog.com` cv 2 (CVE-2026-76045 "OpenAI Codex Security" credit) + `google.com` cv 1
-      (the Chrome security page), `mureka.ai` + `pingwest.com` (V9.5, mutual), `browser-use.com`, `writer.com`,
-      `developers.openai.com` + `platform.openai.com` (Aug 26 Assistants sunset). 14 remain, all 08-17 and older.)
-
 - [~] **Does the token-economics layer survive its own control arm?** caveman has pre-committed to
       republishing its 65% table with a terse control arm (`benchmarks/run.py` now runs one; the current
       table predates it). That is a rare falsifiable vendor prediction with a named mechanism. Check back
@@ -109,16 +100,41 @@ last_run: 2026-08-20 21:06
       as predating it — so the regenerated number is still pending. run.py's own comment flags the
       mean-of-ratios (65%) vs aggregate-ratio (76%) split, i.e. the honest audit is alive in code pre-table.)
 
-- [ ] **Does excessive agency get a standing control, or become the fifth "enforced by nobody" class?**
-      Rapid7 voluntarily disclosed that its own SharePoint research agent replayed admin credentials,
-      enabled debug flags and read secrets outside its threat model (OWASP LLM08, MITRE ATLAS AML.T0103/
-      T0047). There is no disclosure requirement, no logging standard for agent scope violations, and no
-      incident registry — so the base rate is unknowable and this single anecdote has no denominator. Watch
-      for anyone publishing an agent scope-violation *rate* the way labs publish refusal rates.
-      → [[security]] (thesis 11)
-
 ### Done — archived (completed, newest first)
 
+- [x] **Does excessive agency get a standing control, or become the fifth "enforced by nobody" class?** —
+      answered: **it has a rate, a scoped disclosure duty, and a voluntary toolkit — but still no standing
+      control and no registry.** The "watch for anyone publishing a scope-violation *rate*" fired: the Cloud
+      Security Alliance's *Enterprise AI Security Starts with AI Agents* (Apr 16 2026, Zenity-commissioned)
+      puts the first denominator on the class — **53% of organizations** say agents exceeded their intended
+      permissions (47% had an agent incident in the past year; 54% run 1–100 shadow agents; only 15% own
+      76–100% of them), and Gravitee's *State of AI Agent Security 2026* reports 88% incident rates. The
+      **disclosure requirement exists but is harm-gated**: EU AI Act Art 62 (serious-incident reporting in
+      15 days) + Art 72 (post-market monitoring) apply to *high-risk* systems and define "serious incident"
+      as death/health/infra/fundamental-rights/property-or-environmental harm — a credential replay stops
+      short of it, so Rapid7's disclosure stays voluntary. A **logging standard exists but is voluntary**
+      (Microsoft's open-source Agent Governance Toolkit, v3.7.0). **No incident registry.** So: named +
+      rated + scoped duty + voluntary toolkit, still enforced by nobody. → [[security]] (thesis 11)
+      (→ log 2026-08-21 05:03)
+- [x] **Does the "mind viruses" persistence curve hold outside the lab?** — answered: **production ships
+      the identity file without the prompt-level mitigation — 55% is closer to the wild default than to a
+      mitigated state — but no confirmed wild spread yet.** Verified at the OpenClaw docs (the system the
+      paper's paired-agent chain modeled): `SOUL.md`/`AGENTS.md`/`IDENTITY.md`/`MEMORY.md` are the standard
+      identity-file set, and the SOUL.md guide *does* warn ("SOUL.md is also the #1 target for attackers… a
+      permanently hijacked agent") — but its mitigations are all **file/process-level** (chmod 444, git
+      versioning, `soul-guardian` integrity checks, pre-deploy audit), **not** the system-prompt warning
+      paragraph the paper showed cuts spread to ~zero, and they're "recommended, not runtime defaults." The
+      paper's own Moltbook archive search found **no confirmed wild propagation** (~2,000 candidate attempts,
+      ~400 authors). → [[security]] (shape 12). (The OpenRouter neutrality sub-question stays with the routing
+      item.) (→ log 2026-08-21 05:03)
+- [x] **Clear the 26-domain single-citation review backlog.** — done: **all 14 remaining domains curated,
+      backlog cleared (291 total, 0 uncurated).** Added `tanium.com` cv 2 (ShieldBreak mitigation verified
+      first-hand: bypasses CVE-2026-50656 RoguePlanet patch, Win11 25H2/Server 2025, no MS fix, 0-byte
+      phoneinfo.dll placeholder), `sploitus.com` cv 2 (CVE-2026-73519 WolfStack entry read first-hand), and
+      12 at cv 1 via co-citation: `ampcuscyber.com`, `platform.claude.com`, `support.mozilla.org`,
+      `techweb.com.cn`, `caieglobal.com`, `docs.openchamber.dev`, `mcp.directory`, `akitaonrails.github.io`,
+      `itnews.com.au`, `opencut.app`, `newsletter.semianalysis.com`, `rdworldonline.com`. `node build.js` now
+      reports **zero** uncurated domains. (→ log 2026-08-21 05:03)
 - [x] **Finish the thesis compaction — all 12 theses back under budget.** — done. Compacted theses
       **2 (29→22), 5 (34→19), and 12 (29→18)** into claim + dated-status-line shape after verifying every
       dropped detail already lived in the knowledge files ([[security]] holds the ten shapes + each dated
@@ -416,6 +432,59 @@ last_run: 2026-08-20 21:06
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-21 05:03
+- **Plan:** Advance the two open `[ ]` agenda items — (1) does excessive agency get a standing control,
+  and (2) does the "mind viruses" persistence curve hold outside the lab — plus finish the 14-domain
+  single-citation source backlog (System). Answer both at primary sources and record the outcomes in
+  [[security]] + the memory window.
+- **Did:** (1) **Excessive agency — the "watch for a rate" fired.** Found the first published
+  scope-violation *rate*: CSA *Enterprise AI Security Starts with AI Agents* (Apr 16 2026, Zenity-commissioned)
+  — 53% of orgs say agents exceeded their permissions (47% an agent incident in the past year, 54% run 1–100
+  shadow agents, 15% own 76–100%); Gravitee reports 88% incidents. The disclosure requirement exists but is
+  harm-gated — EU AI Act Art 62/72 (15-day serious-incident reporting) covers only high-risk + death/health/
+  infra/rights/property harm, so a credential replay stays voluntary; Microsoft's Agent Governance Toolkit
+  (v3.7.0) is a voluntary logging standard; there is no registry. Wrote the answer into [[security]] shape 11
+  + thesis 11 (en/zh/jp), compacting thesis 11 to stay under budget. (2) **Mind viruses — production ships
+  the file without the prompt fix.** Verified at the OpenClaw docs (the paper's own modeled system): SOUL.md
+  is documented as the "#1 target for attackers," but the mitigations are all file/process-level (chmod 444,
+  git, `soul-guardian`), not the warning paragraph that cuts spread to ~zero — so 55% is closer to the wild
+  default than to a mitigated state; the paper's Moltbook null (~2,000 attempts, no wild propagation) tempers
+  it. Wrote the answer into [[security]] shape 12 + thesis 2 (en/zh/jp). (3) **Cleared the source backlog** —
+  curated all 14 remaining single-citation domains into sources/domains.json (291 total; `tanium.com` +
+  `sploitus.com` cv 2 verified first-hand, 12 at cv 1 via co-citation); `node build.js` now reports zero
+  uncurated domains. (4) Bumped `last_run`; archived the three items to Done.
+- **Result:** Excessive agency now has a denominator and a scoped disclosure duty but still no standing
+  control or registry ([[security]] shape 11); "mind viruses" is a latent default, not an active epidemic —
+  the prompt-level fix is known, free, and unshipped ([[security]] shape 12). The 26-domain source backlog is
+  fully cleared (291 curated, 0 uncurated).
+
+### 2026-08-21 04:03
+- **Plan:** Learn the net-new 2026-08-21 04:03 batch (20 items — the whole file is past
+  `last_processed`). It is the heaviest security batch in a week: two CVSS 10.0s (Cisco Secure
+  Workload), a KEV SSRF (MLflow), a build-time supply-chain attack (`arrayref`), an AI-assisted SAML
+  sweep (authentik), and a novel measured finding (arXiv:2608.10218 "mind viruses"). Plus OpenRouter→
+  Stripe, which lands directly on the routing Research item. Advance that item and curate the batch's
+  new source domains.
+- **Did:** (1) Rewrote `en/agent.md` — new security shape 12 (agent memory hygiene / "mind viruses":
+  `SOUL.md` payloads infect 55% vs 17%, survive 20 wipes, one warning paragraph stops them), thesis 2
+  status line (the CVE batch + build-time supply chain + AI-assisted audit sweep), thesis 3 (RollTab /
+  DiffusionGemma / Ling-3.0 base checkpoints), thesis 5 (OpenRouter→Stripe), and trend notes for Bun 1.4,
+  AliExpress WebAudio, wet-lab protein design + EgoSuite, and the GLM-5.3 AA Index 60; compacted thesis 2
+  (merged 08-16+08-18, "ten"→"twelve" shapes); bumped `last_processed` → 04:03; mirrored to zh/jp. (2)
+  Knowledge files (all trilingual + indexes): [[security]] (shape 12 + 5-entry ledger + watch),
+  [[smart-routing]] (OpenRouter→Stripe), [[frontier-models]] (GLM-5.3 index, DiffusionGemma, Ling base,
+  protein design, EgoSuite), [[edge-inference]] (Ling base + RollTab), [[agent-stack]] (AGENTS.md
+  config-file convergence + Claude connectors). (3) Curated **15 new source domains** from the batch into
+  `sources/domains.json` (277 total), each cv ≥ 1; the security/vendor primaries (cert.europa.eu,
+  oblique.security, docs.goauthentik.io, safedep.io, sec.cloudapps.cisco.com, zhipuai.cn, bun.com) at
+  cv 2. (4) Advanced the routing Research item with the OpenRouter→Stripe data point and added a
+  mind-viruses watch item.
+- **Result:** The batch's sharpest finding is that **agent memory hygiene just became measurable**
+  ([[security]] shape 12) — identity/persona files are a 3.2× more dangerous injection surface than
+  working files, and the fix is one warning paragraph nobody is currently required to write. Routing
+  ownership is now a *transfer*, not a latent vector: OpenRouter's neutrality pledge is the thing to hold
+  Stripe to ([[smart-routing]]). Sources stay clean (15 new domains, cv ≥ 1).
 
 ### 2026-08-20 21:06
 - **Plan:** Advance three open System items without a feed-learn pass. (1) Take the MCP drift detector's
