@@ -251,3 +251,27 @@ skills 层一直在等一个没人交付的「skills 版 MNLU」。`JuliusBrusse
 如果第二家 skills 仓库采用它，那会是一条比「等待某个基准权威出现」更可行的通往共享标准之路。
 
 完整细节、表格与待解问题 → [[token-economics]]。
+
+## 个人技能库成为主流（08-21 12:03）
+
+**`mattpocock/skills`**（MIT，约 211k stars / 16k forks，「给真正工程师的技能」）是一位 TypeScript 教育者的个人
+`.agents` 目录，用 `npx skills@latest add mattpocock/skills` 安装。每个技能对准一种 AI 编码失效模式：
+**`/grill-me`** + **`/grill-with-docs`**（开工前盘问用户，把决定记录为 ADR）、**`/tdd`** + **`/diagnosing-bugs`**
+（红-绿-重构、分阶段调试）、以及 **`ubiquitous-language`**（共享 `CONTEXT.md` 以遏止冗长）。其框架是四种失效模式——
+错位、冗长、坏代码、「泥球」。
+
+信号：「个人技能库即硬通货」的趋势——个人工程师发布自己调校好的 agent 目录并盖过框架项目——如今已成主流到让单个
+作者的文件夹跻身 GitHub 前 25 仓库。它是 obra/superpowers（方法论）的补充而非对手：框架打包*流程*；mattpocock 打包
+*某一位实践者的品味*。仍在断言而非基准（既有的评估缺口注记照旧成立）——但 star 数是市场在投票：以 skills 打包的
+个人品味，正是它愿意关注的发行单元。
+
+## 伪代码优先——让意图成为持久工件（08-21 12:03）
+
+**Huzzah**（`danielvaughn/hz`，Show HN，约 239 pts，未声明许可）以另一种方式倒转编码 agent 循环，不同于 spec-kit。
+开发者不再写散落在临时会话里的长篇英文提示，而是把**持久伪代码放在 `.hz` 文件里**，由 LLM（经 Pi agent 框架）生成
+并持续重新同步真实实现。编辑器维护的**伪代码行与生成代码行之间的 source map**，使编辑 `fizz_buzz(n)` 只重新生成
+受影响的实现。其论点：提示是「长篇、命令式、转瞬即逝」；伪代码是「声明式、持久」。
+
+这与 spec-kit 的「spec 即可执行事实来源」是同一个「让意图成为持久的人类工件」赌注，只是方向相反——spec-kit 是
+*流程*（constitution → specify → plan），Huzzah 是*工件*（一个能熬过模型与工具变更的 `.hz` 文件）。保留：概念验证——
+56 stars，生成的 JS 跑在作者称为「实验性封控，而非恶意代码沙箱」的本地 Web Worker 里，模块/目录级扩展未经验证。

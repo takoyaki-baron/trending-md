@@ -33,6 +33,7 @@ created: 2026-08-20
 | i-have-adhd | 输出 UX（首行 = 命令/路径） | 仅为断言 |
 | StateM | 用 runbook 取代探索 | Terminal-Bench 2.1 约 $15 vs $574.68 |
 | fx（`vercel-labs/fx`） | harness 二进制本身 | 约 6–8 MiB，约 10µs 冷启动 |
+| vomit（`zachahn/vomit`） | 经本地「风格过滤器」压缩前沿模型的冗长输出 | 仅断言（GPLv3，Go） |
 
 ## caveman——2026-08-20 第一手阅读
 
@@ -86,9 +87,20 @@ caveman 为每一条声明标注其背后的证据强度：
   （`TERSE_SYSTEM = "Answer concisely."`）并计算*两种*差值（caveman vs 简洁、以及 vs 未加提示基线）——但
   `benchmarks/results/` 为空，README 仍将 65% 表格标注为早于对照组，因此重新生成的数字仍待发布。一个有用信号
   已浮现：run.py 自己的注释点出了「比率均值（65%）vs 汇总比值（76%）」的分歧——诚实审计在表格落地前就已活在代码里。
+  **08-22 04:43 复查：** 仍无重新生成的表格——README 的 65% 输出数字未变、`benchmarks/results/` 仍为空，故作者
+  预先承诺的简洁对照组拆分仍待第三次核查。
 - Pixel 模式的计费逻辑能否持续？它依赖于供应商把图像 token 定价压在其所替代的文本之下——
   这是一个**定价政策**依赖，而非技术依赖，因此供应商改一次价目表就能推翻。
 - 字节级还原是与安全相关的那条声明：一个改写智能体所读内容的代理，同时是提示注入面与正确性面。
   尚无第三方审计过其还原路径（→ [[security]]）。
 - 证据分级会扩散吗？如果第二家 skills 仓库采用
   `inferred`/`benchmark_counterfactual`/`verified`，那就是 skills 层一直缺失的共享协议的开端。
+
+## vomit——针对冗长的本地风格过滤器（08-21 12:03）
+
+`zachahn/vomit`（Go，GPLv3）经 MessageDisplay 钩子拦截 Claude Code / Claude 5 的输出，在显示前把它交给**另一个本地
+LLM**（作者用 `gpt-oss:20b`）重写，标语是「省省你的 token，Claude 5 没救了」。完全本地（无遥测），支持 Ollama、
+Llama.app 或任意 OpenAI 兼容端点。它带点戏谑，但却是这一层的真实实例：前沿模型会用重复的叙述与过度装饰的注释填充
+输出，而把一个模型的输出经一个小模型当作「风格过滤器」过滤，是一种廉价、可组合的模式——一种其他实例（caveman、
+DeepSeek-Reasonix、benjamin-plus-skill）都不针对的*输出质量*压缩。作者保留：本地模型只看到 Claude 说的话（因此
+「会有点幻觉」）、「相当慢」、「纯 vibe-coding」、只在 Mac 上测过。

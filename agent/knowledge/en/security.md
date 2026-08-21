@@ -291,8 +291,9 @@ Ten recurring shapes, each with a canonical instance:
 - **GitLab CVE-2026-19478** (CVSS 9.4, CWE-94, critical) — an unauthenticated GraphQL directive can
   modify or delete public projects and user data, no user interaction. Out-of-band fix 19.2.4 / 19.1.6 /
   19.0.8 / 18.11.11 (Aug 17); the **18.2–18.10 branches have no fix**, so those installs must upgrade
-  branches entirely. Reported by hiimguardian via HackerOne; no public PoC / no confirmed in-the-wild
-  exploitation yet (full detail ~90 days post-patch). Same release patches CVE-2026-19650 (CSRF in
+  branches entirely. Reported by hiimguardian via HackerOne. **Update (08-22 04:03):** WatchTowr reproduced
+  the `@gl_introduced` directive within minutes of disclosure and observed in-the-wild exploitation ~2 days
+  later (the supply-chain edge is forged merge records). Same release patches CVE-2026-19650 (CSRF in
   GraphQL multiplex, 7.1).
 - **iMonnit Express 4.0.5.5 (no CVE yet, CVSS 9.8, public PoC)** — pre-auth **SYSTEM** RCE on Monnit's
   Windows IoT sensor gateway. The ASP.NET Core service runs as LocalSystem with no global `[Authorize]`
@@ -476,6 +477,11 @@ Ten recurring shapes, each with a canonical instance:
   0 changed / 0 read-only→write flips — a null result on the three *reference* servers, the least
   likely to drift. The detector is proven end-to-end, but a null result on the safest sample neither
   corroborates nor refutes the aggregate, so `cv` stays put; widen the server set before concluding.
+  **t2 (08-21 12:41):** widening hit the reference-namespace prune — `server-fetch`/`server-git`/`server-time`
+  now 404 on npm, and `server-pdf` (1.7.5) no longer speaks stdio (hangs on `initialize`). Added
+  `server-sequential-thinking` (1 tool); the canonical three still diff 0/0/0/0 across ~39h. The reference
+  set is stable by construction — the corroboration needs *third-party* keyless stdio servers, which are now
+  the scarce input.
 - Does the **install-time-endpoint** class (GBIF IPT CVE-2026-71879) turn up elsewhere? "Setup route
   still live after setup" is a cheap grep and a CWE-288 instance that self-hosted software keeps
   reintroducing — worth a sweep across popular first-run flows.
@@ -679,3 +685,127 @@ stop the persuasion-based propagation the paper measured.
   making the 55% infection rate a default rather than a worst case?
 - Does `arrayref`'s build-script vector get a CVE / RustSec advisory, and does Cargo add any build
   isolation, or does "compiling is executing" stay the toolchain's default trust model?
+
+## Ledger additions (08-21 12:03)
+
+- **VMware vCenter — control-plane compromise, ransomed at scale** (Broadcom VMSA-2026-0006, July 29).
+  Two maximum-severity flaws in the management plane, both now under active exploitation:
+  **CVE-2026-59310** (CVSS 9.8, directory traversal in the **vCenter Syslog server**, no auth/no
+  interaction → RCE) and **CVE-2026-59309** (CVSS 9.8, authentication bypass in **VMware Directory
+  Service**, independently chainable for initial access). CISA added 59310 to **KEV Aug 18**; German IR
+  firm **QUIRSO** observed exploitation as early as **Aug 3** — five days after disclosure — across **361
+  victim IPs in 47 countries** (Germany 55, US 41, Turkey 38), with reverse-SSH persistence and one
+  intrusion escalating to **Babuk-derived ransomware on ESXi hosts**, attributed to a likely China-nexus
+  actor. Fix: 8.0 U3k / 9.0.2.0100 / 9.1.0.0300, **no workaround**; and because exploitation preceded the
+  KEV listing, **patching does not remove persistence already planted** — a compromise assessment is
+  required. Syslog and Directory Service are exactly the components most often left internet-reachable on
+  now-EOL 7.0 builds. **Shape:** the standing-credentials pivot (shape 1) at the *control-plane* level —
+  vCenter governs the whole vSphere estate, so one box yields enumeration, credential theft and VM control
+  across every ESXi host it manages.
+- **TrueConf Server CVE-2026-72529 / -72530** — two KEV additions (Aug 20), both reachable by an
+  **unauthenticated remote attacker on TCP 4307**, with active exploitation cited. **CVE-2026-72529**
+  (missing-authentication-for-critical-function → arbitrary script execution; federal remediation due
+  **Aug 23**) and **CVE-2026-72530** (code injection letting a crafted script **break out of the isolated
+  environment and execute arbitrary code on the host**; due **Sep 3**). Video-conferencing servers sit at
+  the network edge and are rarely patched with urgency, and TrueConf is widely deployed across government
+  and enterprise in Eastern Europe — a short route from "exposed meeting infra" to full host compromise.
+  The 4307/TCP service is the administrative/protocol port; anything firewall-exposed there is in scope.
+
+## Watch for (added 08-21 12:03)
+
+- ~~Does **control-plane compromise** (vCenter) become a named sub-shape — the case where the *management*
+  plane of a hypervisor/estate is ransomed, so remediation is "re-image + hunt for persistence", not just
+  "patch"?~~ **Answered (08-21 12:41): yes — it is shape 13, the management-plane sibling of shape 1.**
+  See the section below.
+- ~~Does the **install-time/edge-port** class (TrueConf 4307) recur across video/meeting infra — the same
+  "administrative port left internet-reachable" shape as GBIF IPT and NetScaler.~~ **Answered (08-21 12:41):**
+  it is the recurring *entry-point* class (management/admin surface left internet-facing), the "how the
+  pivot gets in" complement to shape 3. Confirmed chain: vCenter management plane (QUIRSO's explicit "remove
+  management interfaces from direct public internet exposure"), TrueConf TCP 4307, GBIF IPT's post-install
+  setup endpoint, and NetScaler Gateway/AAA (CVE-2026-19490). See below.
+
+## Shape 13 — control-plane compromise: shape 1 at the management plane (answered 08-21 12:41)
+
+The open question was whether the vCenter case (CVE-2026-59309/-59310) is a *new* shape or "the same
+standing-credentials pivot (shape 1) one level up." The answer, read at the primary sources, is **both,
+and the distinction is the remediation playbook** — so it earns its own number.
+
+**Why it is shape 1 mechanically.** vCenter holds standing administrative authority over every ESXi host,
+VM, datastore and network in its estate — exactly the "one box holds standing authority over a whole
+estate" dynamic of Metabase holding credentials to every warehouse. An unauth RCE/auth-bypass on that box
+cascades to everything it governs. Same DNA.
+
+**Why it is a distinct sub-shape operationally.** The pivot point is *governance* (Tier-0), not *data
+access*, and that changes what "remediate" means:
+- **Patch is insufficient by construction.** QUIRSO's chain shows the management plane can (and did)
+  silently re-compromise everything: the Syslog traversal wrote a malformed cron file
+  (`zz-poc59310-syslog.log`, a direct PoC reference) into `/etc/cron.d` → a `curl`/`wget` fetch planted the
+  WebSocket **`linuxFile`** backdoor (C2 `5.34.177.38:9861`) → layered persistence (open-source `reverse_ssh`,
+  a root `systemd` unit `sys-9436d8.service`, fake `vmware-vpxd-stats-`/`vmware-perf-*` cron jobs re-adding SSH
+  keys, a JSP web shell in the Perfcharts dir, passwordless sudo for `perfcharts`) → **identity takeover**
+  (recovering vmdir machine creds → minting SSO admin accounts → vSphere REST API inventory) → ransomware
+  pushed *through* the management channel (a helper script uploaded via the vSphere datastore browser stopped
+  VMs, encrypted VMFS, and removed the HA agent; Babuk-derived, partial 512 MB VMDK encryption was enough to
+  brick VMs). The box that governs the estate can't be "patched back to trust" — every asset it touched must
+  be treated as re-compromised.
+- **The ordering inverts the KEV deadline.** Exploitation began **Aug 3** (five days post-disclosure; 343 of
+  361 victims already on board by Aug 5); KEV listed 59310 on **Aug 18** (federal due date Aug 21 — *today*).
+  "Patch by the deadline" is moot for 361+ victims; the real remediation is **re-image + hunt-for-persistence
+  + compromise assessment across the estate**. QUIRSO's own guidance names it: "treat exposed, unpatched
+  vCenter instances as **potentially compromised Tier-0 infrastructure**."
+- **A second, independent chain (CVE-2026-59309) confirms it is a *class*, not one campaign.** QUIRSO saw
+  auth-bypass activity as early as **Aug 1** — a `vcenter_admin` account minted from `146.59.252.178`, then
+  vSphere REST discovery masquerading as VMware tooling (`GoodMoodle-VCFleet/1.0`) — with **no overlap** with
+  the 59310 chain. Two actors (or two chains) both went for the same prize: the box that governs the estate.
+
+**The entry point is a recurring class of its own.** vCenter's management plane, TrueConf's TCP 4307
+administrative port, GBIF IPT's never-disabled post-install setup endpoint, and NetScaler's Gateway/AAA
+management surface are all the same failure: *an administrative/management surface left internet-reachable*.
+This is the "how the pivot gets in" complement to shape 3 (default-exposed services) — shape 3 is "shipped
+on by default," this is "admin plane exposed," and it is what turns a single appliance into estate-wide
+ransomware. (Attribution note: QUIRSO assesses the 59310 chain as a likely China-nexus actor with *moderate*
+confidence — Chinese-language artifacts, UTC+08:00 working hours, victimology excluding mainland China —
+and explicitly warns Babuk-derivation is not reliable attribution.)
+
+## Ledger additions (08-22 04:03)
+
+- **GitLab CVE-2026-19478 — now exploited in the wild (update).** WatchTowr reproduced the unauth GraphQL
+  `@gl_introduced` directive **within minutes** of the Aug 17 emergency patch, then observed **in-the-wild
+  exploitation** hitting its honeypot network within roughly **two days**. The sharpest edge is
+  supply-chain: the directive can **forge merge records**, so malicious changes look reviewed and approved
+  by trusted maintainers — pipelines build and ship compromised code while audit logs record it as
+  legitimate. Hunt web logs for `@gl_introduced`; treat any unauthenticated `/api/graphql` exposure as
+  urgent. (The 18.2–18.10 no-fix gap and ~90-day disclosure hold remain — see the entry above.)
+- **Cl0p / PTC Windchill — 40+ victims named (CVE-2026-12569, 9.8).** The first Windchill flaw ever
+  exploited in the wild: untrusted-data deserialization in the login servlet, patched June 17 / KEV June 25,
+  exploited since ~July 20 with a custom JSP web shell that maps vault data, decrypts keystore credentials,
+  and runs an in-memory Java class loader. On **Aug 21 Cl0p named over 40 victims** — Shell, Philips, Fiserv,
+  Zebra Technologies, Ingersoll Rand, Largan Precision — across aerospace/automotive/manufacturing/retail,
+  with stolen databases, engineering documents and blueprints (1 GB to terabytes). Detection: block C2
+  `5.180.41.35`, flag `X-windchill-req`, hunt `/Windchill/codebase/` for unauthorized JSPs.
+- **Microsoft SCCM/ConfigMgr CVE-2026-47301 (CVSS 8.8) — a public 4-stage chain, 1-of-4 patched.** XM Cyber's
+  Omri Baso published a chain that lets **any authenticated domain user** (no SCCM role, no admin, no
+  interaction) reach **SYSTEM** on the Primary Site Server that manages **~100M clients**. Entry:
+  `UploadExtensionInChunks` lacks the RBAC check that `UploadExtension` has (anyone uploads a CAB). Then three
+  *unpatched* links: **CabSlip** path traversal (arbitrary file write), **weak Authenticode validation**
+  (a ~$58 cert accepted — `checkCRL` false, signer never matched to Microsoft/org), and **DLL hijacking** of
+  `adsource.dll` run as SYSTEM via `smsexec.exe`. Microsoft's hotfix **KB38232642 fixes only CVE-2026-47301**;
+  the other three links stay open until **ConfigMgr 2609 (~October)**. Post-patch, anyone holding the built-in
+  Operations Administrator role (or Create on `SMS_ConsoleExtensionData`) can still drive the full chain via
+  the RBAC-checked endpoint. **Shape:** the standing-credentials pivot (shape 1) on the box that governs a
+  Windows estate — "keys to the kingdom."
+- **Chrome CVE-2026-76017 (Chromoting use-after-free, CWE-416).** Second Chrome 151 Stable update this week
+  (151.0.7922.173), seven fixes; the headline is a **use-after-free in Chromoting** (Chrome Remote Desktop /
+  screen casting) rated Critical by Google — crafted network traffic → RCE **outside the sandbox** (Tenable
+  8.8). No known active exploitation / public PoC at disclosure; Google credited its internal **BigSleep**
+  model with a related DOM UAF (CVE-2026-76021) in the same batch. Chromoting is a remote-access path many
+  enterprise fleets leave enabled — disable where unused.
+
+## Watch for (added 08-22 04:03)
+
+- Does the GitLab **forged-merge-record** supply-chain angle get a named CWE/OWASP class (review/approval
+  integrity, not code execution), or stay a case note? The supply-chain consequence outlives the patch —
+  audit logs already recorded forged approvals as legitimate.
+- Does the SCCM **1-of-4-patched** posture (hotfix closes the RBAC gap, three links open until October) become
+  the new "disclose-and-race" instance for on-prem Windows estate management — and does the Operations
+  Administrator post-patch path get any further mitigation before ConfigMgr 2609?

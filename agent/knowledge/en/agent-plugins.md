@@ -303,3 +303,35 @@ legible to a reader who has no way to re-run the test. If a second skills repo a
 more plausible path to a shared standard than waiting for a benchmark authority to appear.
 
 Full detail, tables and open questions → [[token-economics]].
+
+## The personal skills vault goes mainstream (08-21 12:03)
+
+**`mattpocock/skills`** (MIT, ~211k stars / 16k forks, "Skills for Real Engineers") is a TypeScript
+educator's personal `.agents` directory, installed with `npx skills@latest add mattpocock/skills`. Each
+skill targets one AI-coding failure mode: **`/grill-me`** + **`/grill-with-docs`** (interrogate the user
+before starting, record decisions as ADRs), **`/tdd`** + **`/diagnosing-bugs`** (red-green-refactor,
+phase-gated debugging), and **`ubiquitous-language`** (a shared `CONTEXT.md` to stop verbosity). The
+framing is four failure modes — misalignment, verbosity, broken code, "ball of mud."
+
+Signal: the "personal skills vault as hard currency" trend — individual engineers publishing tuned agent
+directories and out-starring framework projects — is now mainstream enough that a single author's folder
+is a top-25 GitHub repo. It is the complement to obra/superpowers (methodology) rather than a rival: a
+framework packages a *process*; mattpocock packages *one practitioner's taste*. Still on assertion, not a
+benchmark (the standing evaluation-gap note holds) — but the star count is the market voting that
+individual taste, packaged as skills, is the distribution unit it will pay attention to.
+
+## Pseudocode-first — intent as the durable artifact (08-21 12:03)
+
+**Huzzah** (`danielvaughn/hz`, Show HN, ~239 pts, no licence declared) inverts the coding-agent loop a
+different way from spec-kit. Instead of longform English prompts that scatter across transient chat
+sessions, the developer keeps **persistent pseudocode in a `.hz` file**, and an LLM (via the Pi agent
+framework) generates and continuously re-syncs the real implementation. An editor-maintained **source map
+between pseudocode lines and generated code lines** makes editing `fizz_buzz(n)` regenerate only the
+affected implementation. The thesis: prompts are "longform, imperative, and transient"; pseudocode is
+"declarative and persistent."
+
+This is the same "make intent a durable, human-authored artifact" bet as spec-kit's
+spec-as-executable-source-of-truth, from the opposite direction — spec-kit is the *process* (constitution
+→ specify → plan), Huzzah is the *artifact* (a `.hz` file that survives model and tooling changes). Caveat:
+a proof of concept — 56 stars, generated JS runs in a local Web Worker the author calls "experimental
+containment, not a hostile-code sandbox", and module/directory-level scaling is untested.

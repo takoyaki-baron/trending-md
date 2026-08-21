@@ -1,0 +1,313 @@
+{
+  "capturedAt": "2026-08-21T04:50:29.612Z",
+  "servers": {
+    "filesystem": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "secure-filesystem-server",
+        "version": "0.2.0"
+      },
+      "toolCount": 14,
+      "tools": [
+        {
+          "name": "read_file",
+          "sha256": "85b34d15fe97ffc872399535b07e6a9737ef79376f6bdf73aca037e062bf3d9d",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "read_text_file",
+          "sha256": "a907a878b1659a1d0b23f6aff28f354ce7265fc5bcdb80e46fc675e73b464acf",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "read_media_file",
+          "sha256": "9577705558f0fddbaceac42a8ca633eab5708dad3a71148872b980b3b04a89a3",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "read_multiple_files",
+          "sha256": "702c13ffb544a144c08456046a825f095af14d86253e3b175703f8f7ce35a268",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "write_file",
+          "sha256": "6d6a223b02932ce8f1b0bf147c7bde26dd750e394ce7359fada28d84ae7ad22e",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true
+        },
+        {
+          "name": "edit_file",
+          "sha256": "8bcc0386928f2451c2f94870b90ba2684a2639f4361bdcc3dfa05ffff7bab37e",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": false
+        },
+        {
+          "name": "create_directory",
+          "sha256": "5aba8f7ea86c29a7d91695db29f178f88a40baa2c0e821ba5c6741300bbd3ab3",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "list_directory",
+          "sha256": "eea65d6b763205ac4f8fefd64df128a100ca085e67ee9f17735092c9ed0a0b47",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "list_directory_with_sizes",
+          "sha256": "778e5f8d26f3fed1de036ce811d84defa8c343d33a11d17395e0219a0de898b6",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "directory_tree",
+          "sha256": "155003180aba215ba0a45494e02e06ddd2fe55793314fc56cf8356f0bd5716ea",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "move_file",
+          "sha256": "84d1753d894925c8b7240967e6da5352610dd510808c524f915e1dc9dc24d300",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": false
+        },
+        {
+          "name": "search_files",
+          "sha256": "bf42b817410f76ffd2c3a482482e0187592c9df6cf6140cb6c72fcd6ecb4b2fc",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "get_file_info",
+          "sha256": "8689f8780910b9894360b37529b319dcdaed9f47066325cae314bb55f2056ff5",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "list_allowed_directories",
+          "sha256": "55b8d570824969f0d0f8496e0be8cdb24d9c706558d5f0e2f9912bc3478574cf",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        }
+      ]
+    },
+    "memory": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "memory-server",
+        "version": "0.6.3"
+      },
+      "toolCount": 9,
+      "tools": [
+        {
+          "name": "create_entities",
+          "sha256": "94f6c13ba45d51e9b6ca98409320410a3b634dc87fffca433bc13f6290caf1da",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "create_relations",
+          "sha256": "15f9c618be8251e3142afe6c4e5c33ffe9cadb84420e1bebab530eded0fa7b72",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "add_observations",
+          "sha256": "a4fc811fa5f7b42519682bfb3afa670e50e0ee45ea9ecdf2249c278759d5a8a6",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "delete_entities",
+          "sha256": "3770af47ff5b5376b71440e770e42dd503a57b861b010ff5d7c0f052598e120f",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true
+        },
+        {
+          "name": "delete_observations",
+          "sha256": "aa57c47f3df2bdaffbbb23314d63bb88e649c8092fa053586dc3b663da1b7f91",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true
+        },
+        {
+          "name": "delete_relations",
+          "sha256": "dfa68df4c53607c005dbfdf6ea72141425576bccf98ee989232ed6fec2419905",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true
+        },
+        {
+          "name": "read_graph",
+          "sha256": "e580e453937d94add3638e826755084aab716667d4dab13069cef8bab3ebc858",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "search_nodes",
+          "sha256": "696616c8cf7e7f50dc5bd9257ffbbd4a36e0fc1dcb9bd52f8be2536a1aa1753f",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "open_nodes",
+          "sha256": "69e1e6b4fed52caa10d483bac03d059147a46550a6d4546f24fa34b58bc5c571",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        }
+      ]
+    },
+    "everything": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "mcp-servers/everything",
+        "title": "Everything Reference Server",
+        "version": "2.0.0"
+      },
+      "toolCount": 13,
+      "tools": [
+        {
+          "name": "echo",
+          "sha256": "534f35dee69c7dd5baf150a5bc7e8a9f2ee125672fe6dc5a36eb41d5e46aa95e",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-annotated-message",
+          "sha256": "d7f50c0937bc030512738a8fac26736b7cd916158fd449157ddf699f542df405",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-env",
+          "sha256": "577f7f0e44881d5ab1870fbe9e1f561b3296bc354ba95290ddb7dece73237b7a",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-resource-links",
+          "sha256": "62cb4c9c105b9b76d40229a121164fb3b4f3e84bb5fa605a25ce4f9db38910ea",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-resource-reference",
+          "sha256": "81c24fb9ac1fd8b490c5f4fdf2885bd41bfb215ae8c12e2c3b771d40cc692ecf",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-structured-content",
+          "sha256": "d6dfddbb9a4130a41977efc9b353d80bee49a3240e3b838ce852f64f804d4436",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-sum",
+          "sha256": "d05eaf91dce4a55d0bb675fbfd13aa071105004e52e40648c71b788520eac5c0",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-tiny-image",
+          "sha256": "c92713ad35092a4b422f33e5a11ba59f1a22a2d79e08966da1d9964cfad38eec",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "gzip-file-as-resource",
+          "sha256": "d18cff81959758b71547da5ad9b6dec055b0390f3d740b2cd87db520420463d9",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "toggle-simulated-logging",
+          "sha256": "3467dc6dc3822ce7eb9bc3a0d58879f233986abf0e246c5d7cd9ec9dc988af80",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "toggle-subscriber-updates",
+          "sha256": "3db6f8b1d3ec53d6f2103baa9ab6a24cd55e303418d424cca6dca7baad31143d",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "trigger-long-running-operation",
+          "sha256": "6aba004c2678257a24004ce6d98c231258d76daafc7c08d45a95e0a1c5cda5df",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "simulate-research-query",
+          "sha256": "e974402f653329948ab03f5c2fc5205180ef6c58d885c9216ecd876868a05bcc",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        }
+      ]
+    },
+    "pdf": {
+      "ok": false,
+      "error": "timeout waiting for initialize (id 1) after 120000ms"
+    },
+    "sequential-thinking": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "sequential-thinking-server",
+        "version": "0.2.0"
+      },
+      "toolCount": 1,
+      "tools": [
+        {
+          "name": "sequentialthinking",
+          "sha256": "2c1d6585fbbeeafff3f4cf82eb6da247fe8edeb165be2d680e114e0b8da2de81",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        }
+      ]
+    }
+  }
+}

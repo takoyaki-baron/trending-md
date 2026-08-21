@@ -926,3 +926,34 @@ owners controlling whether members may run actions without per-step confirmation
 first). This is the systems-of-record version of the tool-call boundary (thesis 11): trashing a file
 or sending mail on someone's behalf is not recoverable the way a bad summary is, so the approval and
 org-enablement policy is the thing to set *before* turning connectors on.
+
+## OpenAI open-sources the Codex harness (08-21 12:03)
+
+**`openai/codex`** (Apache-2.0, ~108.7k stars / 16.6k forks) is now the full Codex **agent harness** —
+the execution framework powering the Codex app, CLI and IDE extensions — where since April 2025 only the
+CLI frontend was public. Three integration surfaces ship together: **`codex exec`** (a non-interactive
+CLI for CI and batch jobs), the **Codex SDK** (TypeScript/Python) for embedding agent tasks in application
+code, and **`codex app-server`** (a JSON-RPC client protocol) for products where a persistent agent loop
+is a first-class feature. The Rust core (`codex-rs`) handles conversation state, context compaction, tool
+calls, sandboxed execution and approval flows. What stays closed: model access, the IDE plugins, Codex
+Web, and hosted cloud products — the open layer is the *integration surface*, not the service.
+
+The signal is OpenAI's own harness-lift number: on **ARC-AGI-3**, harness-level optimizations (retained
+reasoning + compaction) lifted **GPT-5.6 Sol from 13.3% to 38.3%** while cutting output tokens **6×** —
+the lab's own evidence that the harness, not just the model, sets the performance ceiling (thesis 12).
+Strategically it is the mirror of DeepSeek's MIT-licensed harness: "our way to run an agent" becomes a
+reusable, self-hostable substrate (swap in any OpenAI-compatible model, run unattended loops in CI), and
+agent competition is reframed as **harness engineering rather than model weights** (thesis 1). It joins
+DeepSeek Harness and TrueForge as the third vendor-or-lab harness to go open within a week — the harness
+layer is consolidating by going open, not by staying proprietary.
+
+## OpenViking paper + munder-difflin Electron + career-ops (08-22 04:03)
+
+- **OpenViking — grounded in a real paper.** The tiered `viking://` context database is the product of
+  **VikingMem** (VLDB 2026, arXiv:2605.29640); 31.6k stars. License split confirmed: core **AGPL-3.0**,
+  CLI + examples Apache-2.0 (commercial users who avoid copyleft use the managed/self-managed editions).
+- **munder-difflin — Electron + a Pixi.js office.** The local multi-agent harness is a free **Electron**
+  app rendering its agents as a **2D office floor in Pixi.js**; v0.4.4's notable fix was a Windows
+  `cmd.exe` newline bug that stopped agents messaging each other. License carve-out: bundled LimeZu pixel
+  art is **non-commercial-only**, so the effective license is MIT-for-code with a carve-out.
+- **career-ops → 67.4k stars** (12.9k forks) — still human-in-the-loop, draft-only, local.

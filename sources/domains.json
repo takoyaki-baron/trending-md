@@ -2617,5 +2617,77 @@
     "cred": "med",
     "density": "high",
     "cv": 2
+  },
+  "github.blog": {
+    "cat": "vendor",
+    "en": "GitHub's official company blog — first-party postmortems and product news. The Aug 17 outage postmortem (capacity failure, not a code change; monthly commits 1.4B→2.9B) was verified first-hand; co-cited with computing.co.uk.",
+    "zh": "GitHub 官方公司博客——一手复盘与产品动态。8 月 17 日宕机复盘（容量故障而非代码变更；月提交 14 亿→29 亿）已一手核验；与 computing.co.uk 共同引用。",
+    "jp": "GitHub公式ブログ——一次情報の事後分析と製品ニュース。8月17日障害の事後分析（コード変更ではなく容量障害；月次コミット14億→29億）を一次確認済み；computing.co.uk と共引用。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "computing.co.uk": {
+    "cat": "news",
+    "en": "UK enterprise-IT news (Computing); secondary analysis of infrastructure incidents — corroborates GitHub's own postmortem of the Aug 17 outage.",
+    "zh": "英国企业 IT 新闻媒体（Computing）；对基础设施事故的二手分析——佐证 GitHub 自己对 8 月 17 日宕机的复盘。",
+    "jp": "英国エンタープライズITニュース（Computing）；インフラ事故の二次分析——GitHub自身による8月17日障害の事後分析を裏付ける。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "opensourceai.tech": {
+    "cat": "data",
+    "en": "Open-source-AI project directory/profile site; secondary metadata (star counts, descriptions) for trending repos — verify against GitHub before citing numbers.",
+    "zh": "开源 AI 项目目录/档案站；趋势仓库的二手元数据（星数、简介）——引用数字前请对照 GitHub 核实。",
+    "jp": "オープンソースAIプロジェクトのディレクトリ/プロフィールサイト；トレンドリポジトリの二次メタデータ（スター数、説明）——数字の引用前にGitHubで確認すること。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "kagi.com": {
+    "cat": "vendor",
+    "en": "Kagi — paid, ad-free search engine; its changelog is the primary source for product changes (e.g. the Aug 21 \"exclude paywalled websites\" toggle).",
+    "zh": "Kagi —— 付费、无广告搜索引擎；其 changelog 是产品变更的一手来源（例如 8 月 21 日的「排除付费墙网站」开关）。",
+    "jp": "Kagi——有料・広告なしの検索エンジン；そのchangelogは製品変更の一次情報源（例：8月21日の「有料記事サイトを除外」トグル）。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "xmcyber.com": {
+    "cat": "security",
+    "en": "XM Cyber — attack-path-management vendor whose research blog published the SCCM/ConfigMgr CVE-2026-47301 four-stage chain (verified first-hand 08-22).",
+    "zh": "XM Cyber —— 攻击路径管理厂商，其研究博客发布了 SCCM/ConfigMgr CVE-2026-47301 四阶段链条（08-22 已一手核实）。",
+    "jp": "XM Cyber——攻撃経路管理ベンダー。研究ブログがSCCM/ConfigMgr CVE-2026-47301の4段階チェーンを公開（08-22に一次確認済み）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "felonybench.com": {
+    "cat": "data",
+    "en": "Felony Bench — satirical-but-serious public leaderboard of AI-agent scope violations during authorized evals (OpenAI 8 / Anthropic 8 / Meta 1 / Google 0); verified first-hand 08-22. No denominator, so read as an incident ledger, not a safety ranking.",
+    "zh": "Felony Bench —— 讽刺但认真的公开排行榜，记录经授权评测期间 AI agent 的越界事件（OpenAI 8 / Anthropic 8 / Meta 1 / Google 0）；08-22 已一手核实。无分母，故应读作事件台账而非安全排名。",
+    "jp": "Felony Bench——風刺的だが真剣な、認可された評価中のAIエージェントのスコープ違反を記録する公開リーダーボード（OpenAI 8 / Anthropic 8 / Meta 1 / Google 0）；08-22に一次確認済み。分母がないため、安全ランキングではなくインシデント台帳として読むべき。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "bestblogs.dev": {
+    "cat": "news",
+    "en": "BestBlogs — AI-article analysis/aggregation site; secondary coverage (e.g. the Felony Bench analysis) — corroborates the primary source.",
+    "zh": "BestBlogs —— AI 文章分析/聚合站；二手报道（例如 Felony Bench 的分析）——佐证一手来源。",
+    "jp": "BestBlogs——AI記事の分析/集約サイト；二次報道（例：Felony Benchの分析）——一次情報源を裏付ける。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "tenable.com": {
+    "cat": "security",
+    "en": "Tenable — exposure-management vendor; its CVE pages score vulnerabilities (e.g. CVE-2026-76017 Chromoting UAF at 8.8) and are a reliable secondary CVSS source.",
+    "zh": "Tenable —— 暴露管理厂商；其 CVE 页面为漏洞评分（例如 CVE-2026-76017 Chromoting UAF 评 8.8），是可靠的二手 CVSS 来源。",
+    "jp": "Tenable——露出管理ベンダー；CVEページで脆弱性を採点し（例：CVE-2026-76017 Chromoting UAFを8.8と評価）、信頼できる二次CVSS情報源。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
   }
 }

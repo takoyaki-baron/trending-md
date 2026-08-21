@@ -37,6 +37,7 @@ tokens that no model choice can reduce.
 | i-have-adhd | output UX (first line = command/path) | assertion only |
 | StateM | runbooks replacing exploration | Terminal-Bench 2.1 at ~$15 vs $574.68 |
 | fx (`vercel-labs/fx`) | the harness binary itself | ~6–8 MiB, ~10µs cold start |
+| vomit (`zachahn/vomit`) | a frontier model's verbose output, via a local "style filter" | assertion only (GPLv3, Go) |
 
 ## caveman — read first-hand, 2026-08-20
 
@@ -100,6 +101,9 @@ worth borrowing regardless of whether caveman's specific numbers survive their c
   predating it, so the regenerated number is still pending. One signal surfaced anyway: run.py's own
   comment flags the mean-of-ratios (65%) vs aggregate-ratio (76%) split — the honest audit is alive in
   the code before the table lands.
+  **Re-checked 08-22 04:43:** still no regenerated table — the README's 65% output figure is unchanged
+  and `benchmarks/results/` remains empty, so the terse-arm split the author pre-committed to is still
+  pending a third check.
 - Does pixel-mode billing hold? It depends on providers pricing image tokens below the text they
   replace — a pricing-policy dependency, not a technical one, and therefore revocable by a vendor
   changing a rate card.
@@ -108,3 +112,15 @@ worth borrowing regardless of whether caveman's specific numbers survive their c
   path (→ [[security]]).
 - Do evidence tiers spread? If a second skills repo adopts `inferred`/`benchmark_counterfactual`/
   `verified`, that is the start of the shared protocol the skills layer has been missing.
+
+## vomit — a local style filter for verbosity (08-21 12:03)
+
+`zachahn/vomit` (Go, GPLv3) intercepts Claude Code / Claude 5's output via a MessageDisplay hook and
+rewrites it through a **separate local LLM** (the author uses `gpt-oss:20b`) before display, under the
+tagline "Save your tokens, Claude 5 is hopeless." Fully local (no telemetry), works with Ollama,
+Llama.app or any OpenAI-compatible endpoint. It is tongue-in-cheek but a real instance of the layer:
+frontier models pad output with repetitive narration and over-decorated comments, and piping one model's
+output through a smaller one as a "style filter" is a cheap, composable pattern — a *quality-of-output*
+compress that none of the other instances (caveman, DeepSeek-Reasonix, benjamin-plus-skill) target.
+Caveats from the author: the local model only sees what Claude says (so it "hallucinates a bit"), it's
+"pretty slow," "totally vibe-coded," and only tested on Mac.

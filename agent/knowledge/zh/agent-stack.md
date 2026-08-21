@@ -700,3 +700,30 @@ Anthropic 的 Google Workspace 连接器从读转向**写**：Gmail 可发送/�
 默认要求显式用户批准，Team/Enterprise 管理员可控制成员是否可在无逐步确认的情况下执行操作（须先在组织层面启用）。
 这是系统记录版本的 tool-call 边界（论点 11）：删除文件或以他人名义发邮件不像糟糕的摘要那样可恢复，因此批准与
 组织启用策略应在*打开*连接器之前就设定好。
+
+## OpenAI 开源 Codex harness（08-21 12:03）
+
+**`openai/codex`**（Apache-2.0，约 108.7k stars / 16.6k forks）如今是完整的 Codex **agent harness**——
+驱动 Codex 应用、CLI 与 IDE 扩展的执行框架，而自 2025 年 4 月以来只有 CLI 前端是公开的。三个集成面一并发布：
+**`codex exec`**（面向 CI 与批处理作业的非交互 CLI）、**Codex SDK**（TypeScript/Python，用于把 agent 任务嵌入
+应用代码），以及 **`codex app-server`**（JSON-RPC 客户端协议），面向把常驻 agent 循环作为一等特性的产品。Rust 核心
+（`codex-rs`）处理会话状态、上下文压缩、工具调用、沙箱执行与审批流。保持闭源的部分：模型访问、IDE 插件、
+Codex Web 与托管云产品——开放层是*集成面*，而非服务。
+
+信号是 OpenAI 自报的 harness 增益数字：在 **ARC-AGI-3** 上，harness 级优化（保留推理 + 压缩）把 **GPT-5.6 Sol
+从 13.3% 提到 38.3%**，同时把输出 token 削减 **6×**——这是实验室自己的证据，说明设定性能天花板的不是模型而是
+harness（论点 12）。战略上它是 DeepSeek MIT 许可 harness 的镜像：「我们运行 agent 的方式」成为可复用、可自托管的
+基座（换入任意 OpenAI 兼容模型，在 CI 中跑无人值守循环），agent 竞争被重新框定为**harness 工程而非模型权重**
+（论点 1）。它与 DeepSeek Harness、TrueForge 一起成为一周内第三个走向开源的厂商/实验室 harness——harness 层正在
+通过*开放*而非保持专有来完成整合。
+
+## OpenViking 论文 + munder-difflin Electron + career-ops（08-22 04:03）
+
+- **OpenViking——有真实论文背书。** 分层 `viking://` 上下文数据库是 **VikingMem**（VLDB 2026，arXiv:2605.29640）
+  的产物；31.6k stars。许可证拆分已确认：核心 **AGPL-3.0**，CLI + 示例 Apache-2.0（不愿承担 copyleft 的商业用户
+  使用托管/自托管商业版）。
+- **munder-difflin——Electron + Pixi.js 办公室。** 这个本地多 agent harness 是一个免费的 **Electron** 应用，把
+  其 agent 渲染为 **Pixi.js 的 2D 办公室平面图**；v0.4.4 值得注意的修复是一个 Windows `cmd.exe` 换行 bug，它此前
+  阻止了 agent 之间互发消息。许可证附加条款：捆绑的 LimeZu 像素美术**仅限非商业用途**，因此有效许可是"代码 MIT +
+  附加条款"。
+- **career-ops → 67.4k stars**（12.9k forks）——仍是 human-in-the-loop、仅草稿、本地运行。
