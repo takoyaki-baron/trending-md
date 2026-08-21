@@ -1,8 +1,8 @@
 ---
 date: 2026-08-21
-updated: 2026-08-21T04:03:00Z
+updated: 2026-08-21T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -335,13 +335,157 @@ Beijing embodied-data firm **Guanglun (光轮智能 / Lightwheel)** announced **
 
 ---
 
+## 21. VMware vCenter is being actively ransomed through two chained CVSS 9.8 flaws
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Rapid7 · CVSS 9.8 · ~3d ago (~12:03 UTC+8)
+- **Tags:** `cve` `vmware` `vcenter` `kev` `ransomware`
+
+Broadcom's **VMSA-2026-0006** (July 29) fixed two maximum-severity flaws in the vCenter management plane, and both are now confirmed under active exploitation: **CVE-2026-59310**, a directory traversal in the **vCenter Syslog server** (CVSS **9.8**, no auth, no interaction) yielding remote code execution, and **CVE-2026-59309**, an authentication bypass in **VMware Directory Service** (also CVSS 9.8) that is independently chainable for initial access. CISA added 59310 to the **KEV catalog on Aug 18**; German IR firm **QUIRSO** observed exploitation as early as **Aug 3** — five days after disclosure — across **361 victim IPs in 47 countries** (Germany 55, US 41, Turkey 38), with reverse-SSH persistence and one intrusion escalating to **Babuk-derived ransomware on ESXi hosts**, attributed to a likely China-nexus actor.
+
+**Why it matters:** vCenter is the control plane for an entire vSphere estate — a compromise there grants enumeration, credential theft and VM control across every ESXi host it manages. With **no workaround**, the only lever is patching to 8.0 U3k / 9.0.2.0100 / 9.1.0.0300 — plus a compromise assessment, since patching won't remove persistence already planted.
+
+> The two flaws were briefly assessed "no in-the-wild exploitation" at disclosure; QUIRSO's campaign data overturns that. Syslog and Directory Service are exactly the components most often left internet-reachable on older 7.0 builds, which are now end-of-support.
+
+[`🔗 Rapid7 analysis (CVE-2026-59309/-59310)`](https://www.rapid7.com/blog/post/etr-critical-vmware-vcenter-vulnerabilities-allow-authentication-bypass-and-remote-code-execution-cve-2026-59309-cve-2026-59310/) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 22. OpenAI open-sources the Codex agent harness — exec, SDK and app-server
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** developers.openai.com · vendor release · ~2d ago (~12:03 UTC+8)
+- **Tags:** `openai` `codex` `agent-harness` `open-source` `apache-2.0`
+
+OpenAI announced (Aug 19) that the **Codex agent harness** — the execution framework powering the Codex app, CLI and IDE extensions — is now fully open source at `github.com/openai/codex` under **Apache-2.0**. Since April 2025 only the CLI frontend was public; what's new is the app-server protocol and SDK. Three integration surfaces ship together: **`codex exec`** (a non-interactive CLI for CI and batch jobs), the **Codex SDK** (TypeScript/Python) for embedding agent tasks in application code, and **`codex app-server`** (a JSON-RPC client protocol) for products where a persistent agent loop is a first-class feature. The Rust core (`codex-rs`) handles conversation state, context compaction, tool calls, sandboxed execution and approval flows. On **ARC-AGI-3**, harness-level optimizations (retained reasoning + compaction) lifted GPT-5.6 Sol from **13.3% to 38.3%** while cutting output tokens **6×** — OpenAI's own evidence that the harness, not just the model, sets the performance ceiling.
+
+**Why it matters:** This makes "OpenAI's way to run an agent" a reusable, self-hostable substrate — swap in any OpenAI-compatible model and run unattended agent loops in CI. It's the same strategic move DeepSeek made with its MIT-licensed harness, and it reframes agent competition as harness engineering rather than model weights.
+
+> What stays closed: model access, the IDE plugins, Codex Web, and hosted cloud products — the open layer is the integration surface, not the service. Repo is ~108.7k stars / 16.6k forks.
+
+[`🔗 Codex as a platform`](https://developers.openai.com/blog/codex-as-a-platform) · [`🔗 openai/codex`](https://github.com/openai/codex)
+
+---
+
+## 23. Xiaohongshu ships its first open model — dots3-note, a 280B multimodal MoE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · model release · ~1d ago (~12:03 UTC+8)
+- **Tags:** `open-weights` `moe` `multimodal` `xiaohongshu` `tempo`
+
+Xiaohongshu's **dots.studio** (RedNote HiLab) released **dots3-note Preview**, the company's first open-source model, under **Apache-2.0**. It's a sparse MoE with **280B total / 16B active** parameters, a **512K-token** context, and native text + image + video + audio input (a MoE ViT vision encoder plus an 800M audio encoder), with hybrid attention mixing 13 **DSA** and 33 **SWA** layers. The differentiator is its RL recipe, **TEMPO** (test-time-scaled value estimation with macro-step policy optimization): the model periodically flips from actor to critic, decomposing long tasks into macro-steps and estimating the remaining return — the lab's argument that *evaluation is easier than generation*, and that self-evaluation is what unlocks days-long agents. It ships with two new evals, **VibeSearchBench** and **VibeLifeBench**, and reports **75.1 on Terminal-Bench 2.1**.
+
+**Why it matters:** A content platform — not a model lab — releasing a 280B multimodal MoE with a novel RL method and full deployment recipes (vLLM/SGLang, FP8 on 8×H100) signals that agent-optimized open weights are now table stakes. The 512K context is aimed squarely at long-horizon agent state.
+
+> Read the reception honestly: the top model-card discussion is titled **"The model is very weak,"** and all benchmarks are self-reported — no independent Artificial Analysis/SWE-bench/LMSYS numbers had circulated as of writing. Weights went up ~Aug 14–15; the "first open-source model" news wave and Trending spike are Aug 20–21. Positioned as the *lightweight* member of a planned note/jazz/aria family.
+
+[`🔗 dots3-note-prev (Hugging Face)`](https://huggingface.co/dots-studio/dots3-note-prev) · [`🔗 Transformers support PR #47844`](https://github.com/huggingface/transformers/pull/47844)
+
+---
+
+## 24. CVE-2026-72529 / -72530 — TrueConf Server joins KEV, unauthenticated RCE on port 4307
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV · active exploitation · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `trueconf` `kev` `video-conferencing` `rce`
+
+CISA added two TrueConf Server vulnerabilities to the **KEV catalog on Aug 20**, both reachable by an **unauthenticated remote attacker on TCP port 4307**, with active exploitation cited as the basis. **CVE-2026-72529** is a missing-authentication-for-critical-function flaw allowing arbitrary script execution (federal remediation due **Aug 23**); **CVE-2026-72530** is a code-injection flaw letting a crafted script **break out of the isolated environment and execute arbitrary code on the host** (due **Sep 3**). Ransomware-use status is listed as unknown.
+
+**Why it matters:** Video-conferencing servers sit at the network edge and are rarely patched with urgency, and TrueConf is widely deployed across government and enterprise in Eastern Europe. A chained script-exec → sandbox-escape path to host RCE on an unauthenticated port is a short route from "exposed meeting infra" to full host compromise.
+
+> The 4307/TCP service is the administrative/protocol port — anything firewall-exposed there is in scope. Both flaws carry the KEV "active exploitation" flag, so treat the two-day and two-week deadlines as real.
+
+[`🔗 CISA KEV alert (Aug 20)`](https://www.cisa.gov/news-events/alerts/2026/08/20/cisa-adds-two-known-exploited-vulnerabilities-catalog) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 25. GitHub's postmortem: the Aug 17 outage was capacity, a misconfig, and a VS Code retry bug
+
+- **Velocity:** ▮▮ rising
+- **Source:** github.blog · 383 pts HN · ~1d ago (~12:03 UTC+8)
+- **Tags:** `github` `outage` `postmortem` `infrastructure` `resilience`
+
+GitHub published *"The August 17 outage, and the work ahead,"* a 7h47m-incident postmortem (13:28–21:15 UTC) whose root cause was a **capacity failure, not a code change**. A traffic peak saturated load balancers; an **Istio sidecar hit its concurrency limit**, but a **misconfigured autoscaling policy** monitored only the host service and never added capacity, cascading until **four HAProxy nodes exhausted their flow limits** and the gateway auth path degraded. Two amplifiers followed: GitHub's optimistic retry logic produced a retry storm, and a **latent retry bug in VS Code** multiplied Copilot token traffic **~10×** (7–9k → 70–100k RPS) once traffic rerouted. Context: monthly commits grew **1.4B (April) → 2.9B (August)**.
+
+**Why it matters:** The failure chain — an autoscaler watching the wrong metric, then a client retry bug amplifying load 10× — is the canonical pattern for "the platform didn't break, it saturated" outages, and it's instructive precisely because GitHub is the best-resourced host in the world. The fix list (retry budgets, sidecar-aware autoscaling, the VS Code bug) is a checklist anyone running agent-heavy infra should steal.
+
+> Second significant incident in August after the Aug 6 Actions failure. GitHub's remediation: correct autoscaling, audit Istio limits, consistent retry budgets, fix the VS Code bug, and keep expanding (3M+ cores, ~58% of load now on Azure).
+
+[`🔗 GitHub postmortem`](https://github.blog/news-insights/company-news/the-august-17-outage-and-the-work-ahead/) · [`🔗 Computing.co.uk analysis`](https://www.computing.co.uk/news/2026/security/github-outage-exposes-flaws-in-autoscaling-and-retry-systems)
+
+---
+
+## 26. Huzzah — an editor where the source of truth is the pseudocode, not the code
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 239 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `ai-coding` `pseudocode` `editor` `show-hn` `agent-tools`
+
+Daniel Vaughn's **Huzzah** (`danielvaughn/hz`) inverts the coding-agent loop: instead of longform English prompts that scatter across transient chat sessions, the developer keeps **persistent pseudocode in a `.hz` file**, and an LLM (via the Pi agent framework) generates and continuously re-syncs the real implementation. The editor maintains a **source map between pseudocode lines and generated code lines**, so editing `fizz_buzz(n)` regenerates only the affected implementation. The thesis is explicit: prompts are "longform, imperative, and transient"; pseudocode is "declarative and persistent."
+
+**Why it matters:** Most AI-coding tools treat the generated source as the durable artifact and the intent as disposable. Huzzah's bet is the opposite — a durable, human-authored distillation of intent that survives model and tooling changes — and the pseudocode↔code source map is the mechanism that makes "why does this code exist?" answerable later.
+
+> Caveat: a proof of concept — no licence declared, 56 stars, and generated JavaScript runs in a local Web Worker the author calls "experimental containment, not a hostile-code sandbox." Module/directory-level scaling is untested.
+
+[`🔗 danielvaughn/hz`](https://github.com/danielvaughn/hz) · [`🔗 HN discussion (239 pts)`](https://news.ycombinator.com/item?id=49378768)
+
+---
+
+## 27. vomit — a Go tool that has a local LLM clean up Claude 5's "token vomit"
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 162 pts HN · ~1d ago (~12:03 UTC+8)
+- **Tags:** `claude` `token-efficiency` `local-llm` `go` `agent-tools`
+
+`zachahn/vomit` is a Go utility that intercepts Claude Code / Claude 5's output and rewrites it through a **separate local LLM** before display, under the tagline *"Save your tokens, Claude 5 is hopeless."* It buffers Claude's messages via a MessageDisplay hook, forwards them to a local model (the author uses **gpt-oss:20b**), and shows the compressed version instead of the verbose original. It's fully local (no telemetry), GPLv3, and works with Ollama, Llama.app or any OpenAI-compatible endpoint.
+
+**Why it matters:** It's a tongue-in-cheek but real remedy to a widely-felt cost — frontier models that pad output with repetitive narration and over-decorated comments. Piping one model's output through a smaller one as a "style filter" is a cheap, composable pattern, and one HN commenter's "found vomit with a small LLM much better than anything Opus 5 ever wrote" is the honest review.
+
+> Caveats from the author: the local model only sees what Claude says (so it "hallucinates a bit"), it's "pretty slow," "totally vibe-coded," and only tested on Mac.
+
+[`🔗 zachahn/vomit`](https://github.com/zachahn/vomit) · [`🔗 HN discussion (162 pts)`](https://news.ycombinator.com/item?id=49375996)
+
+---
+
+## 28. mattpocock/skills — a TypeScript educator's `.agents` directory hits 211k stars
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 211k stars · ~1d ago (~12:03 UTC+8)
+- **Tags:** `agent-skills` `claude-code` `codex` `developer-tooling` `typescript`
+
+Matt Pocock open-sourced his personal `.agents` directory as **`mattpocock/skills`** — "Skills for Real Engineers" — a MIT-licensed collection of small, composable `SKILL.md` files for Claude Code and Codex, installed with `npx skills@latest add mattpocock/skills`. Each skill targets a specific AI-coding failure mode: **`/grill-me`** and **`/grill-with-docs`** force the agent to interrogate you before starting (and record decisions as ADRs); **`/tdd`** and **`/diagnosing-bugs`** enforce red-green-refactor and a phase-gated debugging loop; **`ubiquitous-language`** builds a shared `CONTEXT.md` to stop agents being "too verbose." It has reached roughly **211k stars / 16k forks**.
+
+**Why it matters:** The "personal skills vault as hard currency" trend — individual engineers publishing their tuned agent directories and watching them out-star framework projects — is now mainstream enough that a single author's folder is a top-25 GitHub repo. It's the complement to frameworks like obra/superpowers: opinionated process distilled to files, not a runtime.
+
+> Framed as fixes for four failure modes: misalignment, verbosity, broken code, and "ball of mud." Star counts vary by tracker (188k–226k); all agree it's the week's fastest-growing skills repo.
+
+[`🔗 mattpocock/skills`](https://github.com/mattpocock/skills) · [`🔗 opensourceai.tech profile`](https://opensourceai.tech/project/mattpocock-skills.html)
+
+---
+
+## 29. google-timeline-visualizer — turn your Google Location History into a travel film
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 953 stars · ~1d ago (~12:03 UTC+8)
+- **Tags:** `open-source` `kotlin` `visualization` `privacy` `data-portability`
+
+`mahlernim/google-timeline-visualizer` converts an exported Google Location History **`Timeline.json`** into an animated travel-recap MP4 — moving map points, drawn routes and a zooming camera — entirely **on-device** (Android APK, iPhone web app, or a Python/FFmpeg generator), with no login and no upload. It uses Web Mercator projection, Haversine distances and great-circle (slerp) interpolation so long-haul flights animate as smooth arcs rather than teleporting across the map, and it's **MIT-licensed Kotlin**, ~953 stars at v2.2.x. The developer built it with AI coding tools (Antigravity and Codex).
+
+**Why it matters:** It's a tidy, concrete example of **data portability colliding with AI-assisted development**: Google Takeout gives you your data, a lone developer plus a coding agent turns it into something delightful, and the whole thing runs locally so the privacy-sensitive location data never leaves your device. The same pattern — personal-data exports re-rendered by on-device tools — is spreading fast.
+
+> Includes long-trip compression for pacing and a privacy mode (in testing) to exclude sensitive places like home and work from the video.
+
+[`🔗 mahlernim/google-timeline-visualizer`](https://github.com/mahlernim/google-timeline-visualizer) · [`🔗 Technical breakdown (zh)`](https://blog.xlap.top/post/tech/2026-08-21/google-timeline-visualizer/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-21T04:03:00Z |
-| Items | 20 |
-| Sources tracked | 28 (GitHub, Hacker News, arXiv, Hugging Face, alphaXiv, NVD, CISA KEV, CERT-EU, Cisco, SecurityWeek, SafeDep, Oblique Security, goauthentik, bun.com, tipiirai.com, openrouter.ai, anthropic.com, support.claude.com, The Next Web, PCMag, laserphile, simedw.com, zhipuai.cn, docs.z.ai, AtomGit, PingWest, macro.com, agents.md) |
+| Generated | 2026-08-21T12:03:00Z |
+| Items | 29 |
+| Sources tracked | 35 (GitHub, Hacker News, arXiv, Hugging Face, alphaXiv, NVD, CISA KEV, cisa.gov, CERT-EU, Cisco, SecurityWeek, SafeDep, Oblique Security, goauthentik, bun.com, tipiirai.com, openrouter.ai, anthropic.com, support.claude.com, developers.openai.com, The Next Web, PCMag, laserphile, simedw.com, zhipuai.cn, docs.z.ai, AtomGit, PingWest, macro.com, agents.md, Rapid7, github.blog, computing.co.uk, opensourceai.tech, blog.xlap.top) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

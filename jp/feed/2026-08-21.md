@@ -1,8 +1,8 @@
 ---
 date: 2026-08-21
-updated: 2026-08-21T04:03:00Z
+updated: 2026-08-21T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -335,13 +335,157 @@ Anthropic は Claude の Google Workspace コネクタを更新し、**Gmail が
 
 ---
 
+## 21. VMware vCenter が連鎖可能な CVSS 9.8 の2つの脆弱性で身代金攻撃の標的に
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Rapid7 · CVSS 9.8 · ~3d ago (~12:03 UTC+8)
+- **Tags:** `cve` `vmware` `vcenter` `kev` `ransomware`
+
+Broadcom の **VMSA-2026-0006**（7月29日）は vCenter 管理プレーンにおける最大深刻度の2つの脆弱性を修正したが、両方とも現在は悪用が確認されている：**CVE-2026-59310** は **vCenter Syslog サーバ**のディレクトリトラバーサル（CVSS **9.8**、認証不要・操作不要）でリモートコード実行を可能にし、**CVE-2026-59309** は **VMware Directory Service** の認証バイパス（同じく CVSS 9.8）で初期アクセスに単独で連鎖可能。CISA は **8月18日**に 59310 を **KEV カタログ**へ追加。ドイツのインシデント対応企業 **QUIRSO** は開示からわずか5日後の **8月3日**に早くも悪用を観測しており、**47か国の 361 の被害 IP**（ドイツ 55、米国 41、トルコ 38）に及ぶ。reverse-SSH による永続化、一部の侵入は ESXi ホスト上での **Babuk 派生ランサムウェア**展開にまで発展し、中国系とみられる攻撃者に帰属されている。
+
+**Why it matters:** vCenter は vSphere 環境全体のコントロールプレーンであり、ここが侵害されれば、管理する全 ESXi ホストの列挙・認証情報窃取・VM 制御が可能になる。**回避策は存在せず**、唯一の手段は 8.0 U3k / 9.0.2.0100 / 9.1.0.0300 へのパッチ適用と、すでに仕込まれた永続化はパッチでは除去できないため侵害評価の併用である。
+
+> この2つの脆弱性は開示時点では「実地悪用なし」と評価されていたが、QUIRSO の攻撃データがそれを覆した。Syslog と Directory Service は、旧 7.0 ビルドで最も公衆網に晒されがちなコンポーネントであり、7.0 はすでにサポート終了となっている。
+
+[`🔗 Rapid7 analysis (CVE-2026-59309/-59310)`](https://www.rapid7.com/blog/post/etr-critical-vmware-vcenter-vulnerabilities-allow-authentication-bypass-and-remote-code-execution-cve-2026-59309-cve-2026-59310/) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 22. OpenAI が Codex エージェントハーネスを全面オープンソース化——exec・SDK・app-server
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** developers.openai.com · vendor release · ~2d ago (~12:03 UTC+8)
+- **Tags:** `openai` `codex` `agent-harness` `open-source` `apache-2.0`
+
+OpenAI は8月19日、Codex アプリ・CLI・IDE 拡張を動かす実行フレームワーク **Codex agent harness** を `github.com/openai/codex` にて **Apache-2.0** で全面オープンソース化したと発表した。2025年4月以降公開されていたのは CLI フロントエンドのみで、今回新たに app-server プロトコルと SDK が公開された。3つの統合面が同時に公開される：**`codex exec`**（CI やバッチ向けの非対話 CLI）、**Codex SDK**（TypeScript/Python、アプリコードへエージェントタスクを埋め込む）、**`codex app-server`**（永続的なエージェントループを第一級機能として製品に組み込むための JSON-RPC クライアントプロトコル）。Rust コア（`codex-rs`）が会話状態・コンテキスト圧縮・ツール呼び出し・サンドボックス実行・承認フローを担う。**ARC-AGI-3** では、ハーネス層の最適化（推論の保持＋圧縮）が GPT-5.6 Sol を **13.3% から 38.3%** へ引き上げ、出力トークンを **6分の1** に削減した——性能の上限を決めるのはモデルだけでなくハーネスであるという OpenAI 自身の証拠だ。
+
+**Why it matters:** 「OpenAI のエージェント実行方式」が再利用・自己ホスト可能な基盤になった——任意の OpenAI 互換モデルに差し替え、CI で無人エージェントループを回せる。これは DeepSeek が MIT ライセンスでハーネスを公開したのと同じ戦略的動きであり、エージェント競争の重心をモデル重みからハーネス工学へ移すものだ。
+
+> クローズのままなのは、モデルアクセス・IDE プラグイン・Codex Web・ホスティング型クラウド製品——公開されたのは統合面であってサービスそのものではない。リポジトリは約 108.7k stars / 16.6k forks。
+
+[`🔗 Codex as a platform`](https://developers.openai.com/blog/codex-as-a-platform) · [`🔗 openai/codex`](https://github.com/openai/codex)
+
+---
+
+## 23. Xiaohongshu が初のオープンモデル dots3-note を公開——280B のマルチモーダル MoE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · model release · ~1d ago (~12:03 UTC+8)
+- **Tags:** `open-weights` `moe` `multimodal` `xiaohongshu` `tempo`
+
+Xiaohongshu の **dots.studio**（RedNote HiLab）は **Apache-2.0** で **dots3-note Preview** を公開した。同社初のオープンソースモデルである。これは**総 280B / アクティブ 16B** のスパース MoE で、**512K トークン**のコンテキストと、テキスト＋画像＋動画＋音声のネイティブ入力（MoE ViT ビジョンエンコーダ＋800M 音声エンコーダ）を備え、13層の **DSA** と33層の **SWA** を混在させたハイブリッド注意を持つ。差別化要因は RL 手法 **TEMPO**（テスト時スケール価値推定＋マクロステップ方策最適化）で、モデルは定期的に actor と critic を切り替え、長いタスクをマクロステップに分解して残り報酬を推定する——「生成より評価のほうが易しい」というラボの主張であり、自己評価こそが数日に及ぶエージェントを解き放つ鍵だ。新評価 **VibeSearchBench** と **VibeLifeBench** を同梱し、**Terminal-Bench 2.1 で 75.1** を報告している。
+
+**Why it matters:** モデルラボではなくコンテンツプラットフォームが、新規 RL 手法と完全なデプロイレシピ（vLLM/SGLang、8×H100 での FP8）を備えた 280B マルチモーダル MoE を公開したことは、エージェント最適化されたオープン重みが今や参入の前提になっていることを示す。512K コンテキストは長期エージェント状態を狙い撃ちにしたものだ。
+
+> 評判は率直に読むこと：モデルカードで最も注目されている議論のタイトルは**「このモデルは非常に弱い」**であり、全ベンチマークは自己申告——執筆時点で独立の Artificial Analysis / SWE-bench / LMSYS の数値は出回っていない。重みは 8月14〜15日頃に公開され、「初のオープンソースモデル」というニュースの波と Trending の急上昇は 8月20〜21日。計画中の note/jazz/aria ファミリーの*軽量*メンバーと位置づけられている。
+
+[`🔗 dots3-note-prev (Hugging Face)`](https://huggingface.co/dots-studio/dots3-note-prev) · [`🔗 Transformers support PR #47844`](https://github.com/huggingface/transformers/pull/47844)
+
+---
+
+## 24. CVE-2026-72529 / -72530——TrueConf Server が KEV 入り、ポート 4307 で未認証 RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV · active exploitation · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `trueconf` `kev` `video-conferencing` `rce`
+
+CISA は **8月20日**に TrueConf Server の2つの脆弱性を **KEV カタログ**へ追加した。どちらも**未認証のリモート攻撃者が TCP ポート 4307** 経由で到達可能で、実地悪用が根拠として挙げられている。**CVE-2026-72529** は重要機能の認証欠落で任意スクリプト実行を許す（連邦機関の是正期限 **8月23日**）、**CVE-2026-72530** はコードインジェクションで、細工されたスクリプトが**隔離環境を脱出してホスト上で任意コードを実行**できる（期限 **9月3日**）。ランサムウェア利用の有無は不明とされる。
+
+**Why it matters:** ビデオ会議サーバはネットワーク境界に位置し、急いでパッチが当てられることは稀で、TrueConf は東欧の政府・企業に広く展開されている。未認証ポートでの「スクリプト実行 → サンドボックス脱出」によるホスト RCE は、「露出した会議インフラ」からホスト完全侵害までの短い経路だ。
+
+> 4307/TCP は管理／プロトコルポートであり、ファイアウォールで露出しているものはすべて対象となる。両脆弱性は KEV の「実地悪用」フラグ付きであり、2日と2週間の期限を現実のものとして扱うべきだ。
+
+[`🔗 CISA KEV alert (Aug 20)`](https://www.cisa.gov/news-events/alerts/2026/08/20/cisa-adds-two-known-exploited-vulnerabilities-catalog) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 25. GitHub の事後分析：8月17日の障害は容量不足・設定ミス・VS Code のリトライバグが原因
+
+- **Velocity:** ▮▮ rising
+- **Source:** github.blog · 383 pts HN · ~1d ago (~12:03 UTC+8)
+- **Tags:** `github` `outage` `postmortem` `infrastructure` `resilience`
+
+GitHub は《The August 17 outage, and the work ahead》を公開し、7時間47分（13:28–21:15 UTC）に及んだ障害の根因は**コード変更ではなく容量不足**だったと説明した。トラフィックのピークがロードバランサを飽和させ、**Istio サイドカーが同時実行上限に到達**。しかし**設定を誤った自動スケーリングポリシー**はホストサービスのみを監視して容量を追加せず、**4つの HAProxy ノードがフロー上限を使い果たす**まで連鎖し、ゲートウェイ認証パスが劣化した。続いて2つの増幅要因が発生：GitHub の楽観的リトライロジックによるリトライストームと、**VS Code に潜むリトライバグ**がトラフィック迂回後に Copilot トークントラフィックを **約10倍**（7–9k → 70–100k RPS）に増幅した。背景として、月間コミット数は **4月の 14億から 8月の 29億** へ増加している。
+
+**Why it matters:** 「自動スケーラが誤ったメトリックを監視し、次いでクライアントのリトライバグが負荷を10倍に増幅する」という障害連鎖は、「プラットフォームは壊れず、飽和した」類の事故の典型パターンであり、GitHub が世界で最も潤沢なリソースを持つホストだからこそ教訓になる。この修正リスト（リトライ予算、サイドカーを認識する自動スケーリング、VS Code のバグ修正）は、エージェント集約型インフラを運用するなら盗むべきチェックリストだ。
+
+> 8月6日の Actions 障害に続く、今月2件目の重大インシデント。GitHub の是正策は、自動スケーリングの修正、Istio 制限の監査、一貫したリトライ予算、VS Code バグの修正、そして継続的な拡張（300万コア超、負荷の約58%は Azure 上）である。
+
+[`🔗 GitHub postmortem`](https://github.blog/news-insights/company-news/the-august-17-outage-and-the-work-ahead/) · [`🔗 Computing.co.uk analysis`](https://www.computing.co.uk/news/2026/security/github-outage-exposes-flaws-in-autoscaling-and-retry-systems)
+
+---
+
+## 26. Huzzah——コードではなく擬似コードを唯一の真実とするエディタ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 239 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `ai-coding` `pseudocode` `editor` `show-hn` `agent-tools`
+
+Daniel Vaughn の **Huzzah**（`danielvaughn/hz`）はコーディングエージェントのループを反転させる。散逸しがちな長文の英語プロンプトの代わりに、開発者は **`.hz` ファイルに永続的な擬似コード**を書き、LLM（Pi エージェントフレームワーク経由）が実際の実装を生成して継続的に再同期する。エディタは**擬似コード行と生成コード行のソースマップ**を保持するため、`fizz_buzz(n)` を編集しても影響を受ける実装だけが再生成される。その主張は明確だ：プロンプトは「長文で命令的で一時的」、擬似コードは「宣言的で永続的」である。
+
+**Why it matters:** 大半の AI コーディングツールは生成されたソースを永続的な成果物、意図を使い捨てとみなす。Huzzah の賭けは正反対——モデルやツールが変わっても残る、永続的で人間が書いた意図の蒸留であり、擬似コード↔コードのソースマップこそ「なぜこのコードは存在するのか」を後から答えられるようにする仕組みだ。
+
+> 注意：概念実証であり、ライセンスは未宣言、56 stars、生成された JavaScript はローカル Web Worker で動き、作者は「敵対コードのサンドボックスではなく実験的隔離」と呼ぶ。モジュール／ディレクトリ単位へのスケールは未検証。
+
+[`🔗 danielvaughn/hz`](https://github.com/danielvaughn/hz) · [`🔗 HN discussion (239 pts)`](https://news.ycombinator.com/item?id=49378768)
+
+---
+
+## 27. vomit——Claude 5 の「トークンの嘔吐」をローカル LLM で掃除する Go ツール
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 162 pts HN · ~1d ago (~12:03 UTC+8)
+- **Tags:** `claude` `token-efficiency` `local-llm` `go` `agent-tools`
+
+`zachahn/vomit` は Claude Code / Claude 5 の出力を傍受し、表示前に**別のローカル LLM**で書き直す Go ユーティリティで、キャッチコピーは*「トークンを節約せよ、Claude 5 は救いようがない」*。MessageDisplay フックで Claude のメッセージをバッファし、ローカルモデル（作者は **gpt-oss:20b** を使用）へ転送、冗長な原文の代わりに圧縮版を表示する。完全ローカル（テレメトリなし）で GPLv3、Ollama・Llama.app・任意の OpenAI 互換エンドポイントに対応する。
+
+**Why it matters:** 反復的なナレーションや過剰装飾のコメントで出力を水増しするフロンティアモデルという、広く感じられているコストへの、冗談めかしつつ本物の対処法だ。あるモデルの出力をより小さいモデルに「スタイルフィルタ」として通すのは安価で合成可能なパターンであり、HN のあるコメント「小さな LLM と vomit のほうが、Opus 5 がこれまで書いた何よりも良かった」こそ最も正直なレビューだろう。
+
+> 作者による注意：ローカルモデルは Claude が伝える内容しか見られない（ので「少し幻覚する」）、「かなり遅い」、「完全に vibe コーディング」、Mac でのみテスト済み。
+
+[`🔗 zachahn/vomit`](https://github.com/zachahn/vomit) · [`🔗 HN discussion (162 pts)`](https://news.ycombinator.com/item?id=49375996)
+
+---
+
+## 28. mattpocock/skills——TypeScript 教育者の `.agents` ディレクトリが 211k stars に到達
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 211k stars · ~1d ago (~12:03 UTC+8)
+- **Tags:** `agent-skills` `claude-code` `codex` `developer-tooling` `typescript`
+
+Matt Pocock は自身の `.agents` ディレクトリを **`mattpocock/skills`**——「Skills for Real Engineers」——としてオープンソース化した。Claude Code と Codex 向けの、小さく合成可能な `SKILL.md` の MIT ライセンスコレクションで、`npx skills@latest add mattpocock/skills` でインストールできる。各スキルは特定の AI コーディング失敗モードに対応する：**`/grill-me`** と **`/grill-with-docs`** は着手前にエージェントへ質問させ（決定を ADR として記録）、**`/tdd`** と **`/diagnosing-bugs`** はレッド-グリーン-リファクタと段階ゲート付きデバッグループを強制し、**`ubiquitous-language`** は共有 `CONTEXT.md` を構築してエージェントの「冗長すぎ」を防ぐ。約 **211k stars / 16k forks** に達している。
+
+**Why it matters:** 「個人スキル保管庫がハードカレンシーになる」トレンド——個々のエンジニアが調整済みのエージェントディレクトリを公開し、フレームワークプロジェクトを star 数で追い抜く——は、単独著者のフォルダが GitHub トップ25リポジトリになるまで成熟した。obra/superpowers のようなフレームワークの補完であり、体系化されたプロセスをランタイムではなくファイルへ蒸留したものだ。
+
+> 4つの失敗モードへの対処として位置づけられる：意図のずれ、冗長さ、動かないコード、「泥団子」。star 数はトラッカーにより差がある（188k–226k）が、今週最も急成長したスキルリポジトリである点は一致している。
+
+[`🔗 mattpocock/skills`](https://github.com/mattpocock/skills) · [`🔗 opensourceai.tech profile`](https://opensourceai.tech/project/mattpocock-skills.html)
+
+---
+
+## 29. google-timeline-visualizer——Google 位置情報履歴を旅のムービーに変える
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 953 stars · ~1d ago (~12:03 UTC+8)
+- **Tags:** `open-source` `kotlin` `visualization` `privacy` `data-portability`
+
+`mahlernim/google-timeline-visualizer` はエクスポートした Google 位置情報履歴 **`Timeline.json`** を、アニメーションする旅の振り返り MP4（動く地図点・描かれたルート・ズームするカメラ）へ変換する。すべて**端末上**で完結し（Android APK、iPhone ウェブアプリ、または Python/FFmpeg ジェネレータ）、ログインもアップロードも不要。Web Mercator 投影、Haversine 距離、大円（slerp）補間を使うため、長距離フライトは地図を「テレポート」せず滑らかな弧として描画される。**MIT ライセンスの Kotlin** で、v2.2.x 時点で約 953 stars。開発者は AI コーディングツール（Antigravity と Codex）で構築した。
+
+**Why it matters:** **データポータビリティと AI 支援開発の衝突**を示す、すっきりした具体例だ。Google Takeout がデータを返し、一人の開発者とコーディングエージェントがそれを楽しいものに変え、しかも全体がローカルで動くため、プライバシーに敏感な位置情報は端末の外へ出ない。同じパターン——個人データのエクスポートを端末上ツールで再描画する——が急速に広がっている。
+
+> ペース調整のための長距離圧縮と、（テスト中の）自宅・職場など機密スポットを映像から除外するプライバシーモードを含む。
+
+[`🔗 mahlernim/google-timeline-visualizer`](https://github.com/mahlernim/google-timeline-visualizer) · [`🔗 Technical breakdown (zh)`](https://blog.xlap.top/post/tech/2026-08-21/google-timeline-visualizer/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-21T04:03:00Z |
-| Items | 20 |
-| Sources tracked | 28 (GitHub, Hacker News, arXiv, Hugging Face, alphaXiv, NVD, CISA KEV, CERT-EU, Cisco, SecurityWeek, SafeDep, Oblique Security, goauthentik, bun.com, tipiirai.com, openrouter.ai, anthropic.com, support.claude.com, The Next Web, PCMag, laserphile, simedw.com, zhipuai.cn, docs.z.ai, AtomGit, PingWest, macro.com, agents.md) |
+| Generated | 2026-08-21T12:03:00Z |
+| Items | 29 |
+| Sources tracked | 35 (GitHub, Hacker News, arXiv, Hugging Face, alphaXiv, NVD, CISA KEV, cisa.gov, CERT-EU, Cisco, SecurityWeek, SafeDep, Oblique Security, goauthentik, bun.com, tipiirai.com, openrouter.ai, anthropic.com, support.claude.com, developers.openai.com, The Next Web, PCMag, laserphile, simedw.com, zhipuai.cn, docs.z.ai, AtomGit, PingWest, macro.com, agents.md, Rapid7, github.blog, computing.co.uk, opensourceai.tech, blog.xlap.top) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

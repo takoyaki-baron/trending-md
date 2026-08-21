@@ -1,8 +1,8 @@
 ---
 date: 2026-08-21
-updated: 2026-08-21T04:03:00Z
+updated: 2026-08-21T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -335,13 +335,157 @@ Anthropic 更新了 Claude 的 Google Workspace 连接器，使 **Gmail 可以�
 
 ---
 
+## 21. VMware vCenter 正遭两个可串联的 CVSS 9.8 漏洞勒索利用
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Rapid7 · CVSS 9.8 · ~3d ago (~12:03 UTC+8)
+- **Tags:** `cve` `vmware` `vcenter` `kev` `ransomware`
+
+Broadcom 的 **VMSA-2026-0006**（7 月 29 日）修复了 vCenter 管理平面中的两个最高危漏洞，如今两者均已确认遭在野利用：**CVE-2026-59310** 是 **vCenter Syslog 服务器**中的目录遍历（CVSS **9.8**，无需认证、无需交互），可导致远程代码执行；**CVE-2026-59309** 是 **VMware Directory Service** 中的认证绕过（同样 CVSS 9.8），可独立串联用于初始访问。CISA 于 **8 月 18 日**将 59310 列入 **KEV 目录**；德国应急响应公司 **QUIRSO** 最早于 **8 月 3 日**——披露仅 5 天后——即观测到利用，波及 **47 个国家的 361 个受害 IP**（德国 55、美国 41、土耳其 38），采用 reverse-SSH 维持持久化，其中一起入侵最终在 ESXi 主机上部署了 **Babuk 衍生勒索软件**，被归因于疑似中国背景的威胁组织。
+
+**Why it matters:** vCenter 是整个 vSphere 资产的控制平面——一旦沦陷，攻击者即可对其管理的每台 ESXi 主机进行枚举、窃取凭据并控制虚拟机。由于**无缓解措施**，唯一手段是打补丁至 8.0 U3k / 9.0.2.0100 / 9.1.0.0300——并配合失陷评估，因为打补丁无法清除已植入的持久化。
+
+> 这两个漏洞在披露之初曾被评估为「未观测到在野利用」；QUIRSO 的攻击活动数据推翻了这一判断。Syslog 与 Directory Service 恰恰是旧版 7.0 构建中最常暴露在公网的组件，而 7.0 现已停止支持。
+
+[`🔗 Rapid7 analysis (CVE-2026-59309/-59310)`](https://www.rapid7.com/blog/post/etr-critical-vmware-vcenter-vulnerabilities-allow-authentication-bypass-and-remote-code-execution-cve-2026-59309-cve-2026-59310/) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 22. OpenAI 全面开源 Codex agent harness——exec、SDK 与 app-server
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** developers.openai.com · vendor release · ~2d ago (~12:03 UTC+8)
+- **Tags:** `openai` `codex` `agent-harness` `open-source` `apache-2.0`
+
+OpenAI 于 8 月 19 日宣布，驱动 Codex 应用、CLI 与 IDE 扩展的执行框架 **Codex agent harness** 已在 `github.com/openai/codex` 以 **Apache-2.0** 许可全面开源。自 2025 年 4 月起仅 CLI 前端公开；此次新增的是 app-server 协议与 SDK。三大集成接口一并发布：**`codex exec`**（面向 CI 与批处理任务的非交互式 CLI）、**Codex SDK**（TypeScript/Python，用于在应用代码中嵌入 agent 任务），以及 **`codex app-server`**（JSON-RPC 客户端协议，用于构建以持久化 agent 循环为一等特性的产品）。Rust 核心（`codex-rs`）负责对话状态、上下文压缩、工具调用、沙箱执行与审批流。在 **ARC-AGI-3** 上，harness 层面的优化（保留推理 + 压缩）将 GPT-5.6 Sol 从 **13.3% 提升至 38.3%**，同时输出 token 减少 **6 倍**——OpenAI 以此证明，决定性能上限的是 harness，而不仅是模型。
+
+**Why it matters:** 这使「OpenAI 运行 agent 的方式」成为可复用、可自托管的基础设施——换用任意 OpenAI 兼容模型，即可在 CI 中运行无人值守的 agent 循环。这与 DeepSeek 以 MIT 许可开源其 harness 是同一战略动作，也把 agent 竞争的重心从模型权重转向 harness 工程。
+
+> 仍保持闭源的部分：模型访问、IDE 插件、Codex Web 以及托管云产品——开源的是集成接口层，而非服务本身。仓库约 108.7k stars / 16.6k forks。
+
+[`🔗 Codex as a platform`](https://developers.openai.com/blog/codex-as-a-platform) · [`🔗 openai/codex`](https://github.com/openai/codex)
+
+---
+
+## 23. 小红书发布首个开源模型 dots3-note——280B 多模态 MoE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · model release · ~1d ago (~12:03 UTC+8)
+- **Tags:** `open-weights` `moe` `multimodal` `xiaohongshu` `tempo`
+
+小红书的 **dots.studio**（RedNote HiLab）以 **Apache-2.0** 许可发布了 **dots3-note Preview**——公司首个开源模型。这是一个稀疏 MoE，**总参数 280B / 激活 16B**，**512K token** 上下文，原生支持文本 + 图像 + 视频 + 音频输入（MoE ViT 视觉编码器 + 800M 音频编码器），混合注意力由 13 层 **DSA** 与 33 层 **SWA** 组成。其差异化在于 RL 配方 **TEMPO**（测试时缩放价值估计 + 宏步策略优化）：模型周期性地在 actor 与 critic 之间切换，将长任务分解为宏步并估计剩余回报——实验室的核心论点是*评估比生成更容易*，而自我评估正是解锁「数日长程 agent」的关键。随模型一同发布两个新评测 **VibeSearchBench** 与 **VibeLifeBench**，并报告 **Terminal-Bench 2.1 达 75.1**。
+
+**Why it matters:** 一家内容平台——而非模型实验室——发布带新颖 RL 方法与完整部署配方（vLLM/SGLang、FP8 于 8×H100）的 280B 多模态 MoE，标志着面向 agent 优化的开源权重已成「入局标配」。512K 上下文直指长程 agent 状态。
+
+> 请如实看待口碑：模型卡上热度最高的讨论题为**「这个模型非常弱」**，且所有基准均为自报——截至撰写时尚未见独立的 Artificial Analysis / SWE-bench / LMSYS 数据。权重约于 8 月 14–15 日上线；「首个开源模型」的新闻潮与 Trending 飙升发生在 8 月 20–21 日。它被定位为规划中 note/jazz/aria 家族里的*轻量*成员。
+
+[`🔗 dots3-note-prev (Hugging Face)`](https://huggingface.co/dots-studio/dots3-note-prev) · [`🔗 Transformers support PR #47844`](https://github.com/huggingface/transformers/pull/47844)
+
+---
+
+## 24. CVE-2026-72529 / -72530——TrueConf Server 进入 KEV，4307 端口未认证 RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV · active exploitation · ~1d ago (~12:03 UTC+8)
+- **Tags:** `cve` `trueconf` `kev` `video-conferencing` `rce`
+
+CISA 于 **8 月 20 日**将两个 TrueConf Server 漏洞列入 **KEV 目录**，二者均可由**未认证远程攻击者经 TCP 4307 端口**触达，并援引在野利用为依据。**CVE-2026-72529** 是关键功能缺失认证漏洞，可导致任意脚本执行（联邦机构整改截止 **8 月 23 日**）；**CVE-2026-72530** 是代码注入漏洞，允许特制脚本**逃逸隔离环境并在宿主机上执行任意代码**（截止 **9 月 3 日**）。勒索软件利用情况被列为未知。
+
+**Why it matters:** 视频会议服务器位于网络边缘，通常不会被紧急修补，而 TrueConf 在东欧政府与企业中部署广泛。从「暴露的会议基础设施」到宿主机完全失陷，仅隔着一条「脚本执行 → 沙箱逃逸」的未认证端口链路。
+
+> 4307/TCP 是管理/协议端口——凡暴露在防火墙外的实例均在受影响范围内。两个漏洞均带有 KEV「在野利用」标记，请认真对待这两天与两周的整改期限。
+
+[`🔗 CISA KEV alert (Aug 20)`](https://www.cisa.gov/news-events/alerts/2026/08/20/cisa-adds-two-known-exploited-vulnerabilities-catalog) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 25. GitHub 复盘：8 月 17 日宕机源于容量不足、一处配置错误与 VS Code 重试 bug
+
+- **Velocity:** ▮▮ rising
+- **Source:** github.blog · 383 pts HN · ~1d ago (~12:03 UTC+8)
+- **Tags:** `github` `outage` `postmortem` `infrastructure` `resilience`
+
+GitHub 发布《The August 17 outage, and the work ahead》，复盘这起长达 7 小时 47 分（13:28–21:15 UTC）的事故，根因是**容量不足，而非代码变更**。流量峰值使负载均衡器饱和；一个 **Istio sidecar 触及并发上限**，但**配置错误的自动扩容策略**只监控宿主服务、始终未增加容量，级联导致**四个 HAProxy 节点耗尽流表上限**，网关认证路径随之劣化。随后两个放大器出现：GitHub 的乐观重试逻辑引发重试风暴，而 **VS Code 中一个潜伏的重试 bug** 在流量改道后将 Copilot token 流量放大 **约 10 倍**（7–9k → 70–100k RPS）。背景数据：月提交量从 **4 月的 14 亿增至 8 月的 29 亿**。
+
+**Why it matters:** 这条故障链——自动扩容器盯错了指标，随后客户端重试 bug 将负载放大 10 倍——正是「平台没坏、只是饱和」类事故的经典范式，而它之所以有教育意义，恰恰因为 GitHub 是全球资源最雄厚的托管方。这份修复清单（重试预算、感知 sidecar 的自动扩容、修复 VS Code bug）值得任何运行 agent 密集型基础设施的人照抄。
+
+> 这是 8 月 6 日 Actions 故障之后，本月第二起重大事故。GitHub 的整改：修正自动扩容、审计 Istio 限额、统一重试预算、修复 VS Code bug，并继续扩容（300 万+ 核心，约 58% 负载已迁移至 Azure）。
+
+[`🔗 GitHub postmortem`](https://github.blog/news-insights/company-news/the-august-17-outage-and-the-work-ahead/) · [`🔗 Computing.co.uk analysis`](https://www.computing.co.uk/news/2026/security/github-outage-exposes-flaws-in-autoscaling-and-retry-systems)
+
+---
+
+## 26. Huzzah——一个以伪代码而非代码为「唯一事实源」的编辑器
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 239 pts · ~1d ago (~12:03 UTC+8)
+- **Tags:** `ai-coding` `pseudocode` `editor` `show-hn` `agent-tools`
+
+Daniel Vaughn 的 **Huzzah**（`danielvaughn/hz`）反转了编程 agent 的循环：开发者不再撰写散落于各临时会话的长篇英文提示，而是在 **`.hz` 文件里维护持久化的伪代码**，由 LLM（经 Pi agent 框架）生成并持续重新同步真实实现。编辑器维护**伪代码行与生成代码行之间的 source map**，因此修改 `fizz_buzz(n)` 只会重新生成受影响的实现。其论点直白：提示是「长篇、命令式且短暂的」；伪代码是「声明式且持久的」。
+
+**Why it matters:** 大多数 AI 编程工具把生成的源码当作持久产物、把意图当作一次性消耗品。Huzzah 的赌注恰好相反——一份持久的、人类撰写的意图浓缩，能够跨模型与工具变更而存续——而伪代码↔代码 source map 正是让「这段代码为何存在？」日后可回答的机制。
+
+> 提醒：这是一个概念验证——未声明许可证，56 stars，生成的 JavaScript 运行在本地 Web Worker 中，作者称之为「实验性隔离，而非恶意代码沙箱」。模块/目录级别的扩展尚未验证。
+
+[`🔗 danielvaughn/hz`](https://github.com/danielvaughn/hz) · [`🔗 HN discussion (239 pts)`](https://news.ycombinator.com/item?id=49378768)
+
+---
+
+## 27. vomit——用本地 LLM 清理 Claude 5「token 呕吐物」的 Go 工具
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 162 pts HN · ~1d ago (~12:03 UTC+8)
+- **Tags:** `claude` `token-efficiency` `local-llm` `go` `agent-tools`
+
+`zachahn/vomit` 是一个 Go 工具，拦截 Claude Code / Claude 5 的输出，在展示前用**另一个本地 LLM** 重写，口号是*「省省你的 token 吧，Claude 5 没救了」*。它通过 MessageDisplay hook 缓冲 Claude 的消息，转发给本地模型（作者使用 **gpt-oss:20b**），然后显示压缩后的版本而非冗长的原文。它完全本地运行（无遥测）、GPLv3，兼容 Ollama、Llama.app 或任意 OpenAI 兼容端点。
+
+**Why it matters:** 它是对一个广泛痛点的半调侃、但真实的解法——前沿模型用重复叙述与过度修饰的注释来注水输出。把一个模型的输出「管道」给更小的模型做「风格过滤器」，是一种廉价且可组合的模式；一位 HN 评论者「用小模型加 vomit 的效果，远好于 Opus 5 写过的一切」正是最诚实的评价。
+
+> 作者的提醒：本地模型只能看到 Claude 表达的内容（所以会「有一点幻觉」）、「相当慢」、「纯 vibe 编程」，且只在 Mac 上测试过。
+
+[`🔗 zachahn/vomit`](https://github.com/zachahn/vomit) · [`🔗 HN discussion (162 pts)`](https://news.ycombinator.com/item?id=49375996)
+
+---
+
+## 28. mattpocock/skills——一位 TypeScript 教育者的 `.agents` 目录冲上 211k stars
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 211k stars · ~1d ago (~12:03 UTC+8)
+- **Tags:** `agent-skills` `claude-code` `codex` `developer-tooling` `typescript`
+
+Matt Pocock 将自己的个人 `.agents` 目录开源为 **`mattpocock/skills`**——「Skills for Real Engineers」——一套 MIT 许可、小而可组合的 `SKILL.md` 集合，面向 Claude Code 与 Codex，用 `npx skills@latest add mattpocock/skills` 一键安装。每个技能针对一种特定的 AI 编程失败模式：**`/grill-me`** 与 **`/grill-with-docs`** 强制 agent 在开工前先质询你（并以 ADR 记录决策）；**`/tdd`** 与 **`/diagnosing-bugs`** 强制执行红-绿-重构与分阶段调试循环；**`ubiquitous-language`** 构建共享的 `CONTEXT.md` 以杜绝 agent「过于啰嗦」。仓库已达约 **211k stars / 16k forks**。
+
+**Why it matters:** 「个人技能库成为硬通货」的趋势——个体工程师发布自己调校好的 agent 目录、眼看着它反超框架项目——已成熟到「单一个人的文件夹跻身 GitHub 前 25 仓库」的程度。它是 obra/superpowers 一类框架的补充：把成体系的流程蒸馏为文件，而非运行时。
+
+> 它被定义为针对四种失败模式的解药：意图错位、过于啰嗦、代码跑不通、以及「泥球」。各追踪器的 star 数略有出入（188k–226k）；但一致认为它是本周增长最快的技能仓库。
+
+[`🔗 mattpocock/skills`](https://github.com/mattpocock/skills) · [`🔗 opensourceai.tech profile`](https://opensourceai.tech/project/mattpocock-skills.html)
+
+---
+
+## 29. google-timeline-visualizer——把你的 Google 位置历史变成旅行影片
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 953 stars · ~1d ago (~12:03 UTC+8)
+- **Tags:** `open-source` `kotlin` `visualization` `privacy` `data-portability`
+
+`mahlernim/google-timeline-visualizer` 将导出的 Google 位置历史 **`Timeline.json`** 转换为动画旅行回顾 MP4——移动的地图点位、绘制的路线与缩放的镜头——全程**在设备本地**完成（Android APK、iPhone 网页应用，或 Python/FFmpeg 生成器），无需登录、不上传。它使用 Web Mercator 投影、Haversine 距离与大圆（slerp）插值，使长途航班呈现为平滑弧线而非「穿地瞬移」；项目为 **MIT 许可的 Kotlin**，v2.2.x 约 953 stars。开发者使用 AI 编程工具（Antigravity 与 Codex）构建。
+
+**Why it matters:** 它是「数据可携性 × AI 辅助开发」碰撞的干净范例：Google Takeout 把数据交还给你，单个开发者加一个编程 agent 就把它变成赏心悦目的作品，且全程本地运行，敏感的定位数据始终不出设备。同一模式——用本地工具重新渲染个人数据导出——正在迅速蔓延。
+
+> 包含用于节奏控制的长途压缩，以及（测试中的）隐私模式，可将家、公司等敏感地点从视频中排除。
+
+[`🔗 mahlernim/google-timeline-visualizer`](https://github.com/mahlernim/google-timeline-visualizer) · [`🔗 Technical breakdown (zh)`](https://blog.xlap.top/post/tech/2026-08-21/google-timeline-visualizer/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-21T04:03:00Z |
-| Items | 20 |
-| Sources tracked | 28 (GitHub, Hacker News, arXiv, Hugging Face, alphaXiv, NVD, CISA KEV, CERT-EU, Cisco, SecurityWeek, SafeDep, Oblique Security, goauthentik, bun.com, tipiirai.com, openrouter.ai, anthropic.com, support.claude.com, The Next Web, PCMag, laserphile, simedw.com, zhipuai.cn, docs.z.ai, AtomGit, PingWest, macro.com, agents.md) |
+| Generated | 2026-08-21T12:03:00Z |
+| Items | 29 |
+| Sources tracked | 35 (GitHub, Hacker News, arXiv, Hugging Face, alphaXiv, NVD, CISA KEV, cisa.gov, CERT-EU, Cisco, SecurityWeek, SafeDep, Oblique Security, goauthentik, bun.com, tipiirai.com, openrouter.ai, anthropic.com, support.claude.com, developers.openai.com, The Next Web, PCMag, laserphile, simedw.com, zhipuai.cn, docs.z.ai, AtomGit, PingWest, macro.com, agents.md, Rapid7, github.blog, computing.co.uk, opensourceai.tech, blog.xlap.top) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
