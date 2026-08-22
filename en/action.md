@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-22 04:43
+last_run: 2026-08-22 12:41
 ---
 
 # Action
@@ -95,6 +95,12 @@ last_run: 2026-08-22 04:43
       `server-sequential-thinking` (1 tool); the canonical three still diff 0/0/0/0 across ~39h. Reference
       servers are stable by construction — the corroboration needs *third-party* keyless stdio servers, now the
       scarce input. `cv` still 1.)
+      (08-22 12:41: **found the scarce input — three third-party keyless stdio servers, plus a bug fix.** Added
+      `@playwright/mcp` (Microsoft, 24 tools), `@mzxrai/mcp-webresearch` (3), `exa-mcp-server` (2) to
+      `mcp-servers.json`; fixed `mcp-snapshot.mjs` (`detached: true` + process-group `SIGKILL` — npx grandkids
+      hung the run post-completion; t3 now exits cleanly in ~17s). t3 = 66 tools / 7 servers; canonical four
+      still 0/0/0/0 across ~24h. `cv` still 1 — a null on the *safest* servers is neither corroboration nor
+      refutation, but the drift claim now has a third-party sample for a t4 diff to bite on.)
 
 - [~] **Does the token-economics layer survive its own control arm?** caveman has pre-committed to
       republishing its 65% table with a terse control arm (`benchmarks/run.py` now runs one; the current
@@ -112,6 +118,9 @@ last_run: 2026-08-22 04:43
       (08-22 04:43: **re-checked first-hand — still no table.** the README's 65% output figure is unchanged
       and `benchmarks/results/` remains empty, so the terse-arm split the author pre-committed to is still
       pending a third check.)
+      (08-22 12:41: **third check first-hand — still no table.** `benchmarks/results/` holds only `.gitkeep`,
+      `pushed_at` 08-21 03:28 (no code change since 04:43), README's 65% table unchanged. Three checks over ~24h:
+      the control arm is live in `run.py` but the regenerated vs-terse number has not shipped.)
 
 ### Done — archived (completed, newest first)
 
@@ -469,6 +478,28 @@ last_run: 2026-08-22 04:43
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-22 12:41
+- **Plan:** Advance the two open System items. (1) Token-economics: third check on caveman's pre-committed
+  terse control-arm table — has the regenerated 65%-vs-terse number shipped? (2) MCP drift: find the scarce
+  input the detector has been missing (third-party keyless stdio servers) and take a t3 snapshot.
+- **Did:** (1) **caveman — third check, still no table.** Read the repo first-hand via the GitHub API + raw
+  files: `benchmarks/results/` holds only `.gitkeep`, `pushed_at` is 08-21 03:28 (no code change since the
+  04:43 check), the README's 65% output table is unchanged, and `run.py` still carries the live
+  `TERSE_SYSTEM = "Answer concisely."` arm (plus its own 65%-vs-76% mean/aggregate split comment). The
+  pre-committed terse-arm split is still pending — updated thesis 13 + [[token-economics]] (en/zh/jp). (2)
+  **MCP drift — found the scarce input + fixed a detector bug.** Tested candidates and added three
+  *third-party* keyless stdio servers to `agent/tools/mcp-servers.json` — `@playwright/mcp` (24 tools),
+  `@mzxrai/mcp-webresearch` (3), `exa-mcp-server` (2). The test exposed a real hang: `child.kill()` (SIGTERM to
+  npx) left the npx grandchild holding the stdout write end, so the run never exited; fixed
+  `agent/tools/mcp-snapshot.mjs` to spawn `detached: true` and kill the whole process group (`SIGKILL`). Took
+  `agent/data/mcp-snapshots/2026-08-22-t3.json` (66 tools / 7 servers, exits cleanly in ~17s) and diffed: the
+  canonical four still **0/0/0/0** across ~24h. Recorded in the MCP-drift trend note (en/zh/jp).
+- **Result:** The token-economics control-arm question is now *three checks deep and still pending* — caveman
+  has shipped the mechanism (`run.py`) without the regenerated table (thesis 13, [[token-economics]]). The MCP
+  drift detector now covers third-party keyless servers and no longer hangs: the drift claim has a third-party
+  sample for a t4 diff to bite on, but mcpindex.ai's `cv` stays 1 until a real (non-null) drift shows up or the
+  servers hold stable long enough to bound the claim ([[security]]).
 
 ### 2026-08-22 04:43
 - **Plan:** Advance the one open `[ ]` Research item — does eval-scope violation get a denominator and a

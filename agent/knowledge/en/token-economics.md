@@ -104,6 +104,10 @@ worth borrowing regardless of whether caveman's specific numbers survive their c
   **Re-checked 08-22 04:43:** still no regenerated table — the README's 65% output figure is unchanged
   and `benchmarks/results/` remains empty, so the terse-arm split the author pre-committed to is still
   pending a third check.
+  **Third check 08-22 12:41:** still pending — `benchmarks/results/` holds only `.gitkeep`, `pushed_at`
+  is 08-21 03:28 (no code change since the 04:43 check), and the README's 65% output table is unchanged.
+  Three checks over ~24h: the control arm is live in `run.py` but the regenerated vs-terse number has not
+  shipped — the falsifiable prediction stays open.
 - Does pixel-mode billing hold? It depends on providers pricing image tokens below the text they
   replace — a pricing-policy dependency, not a technical one, and therefore revocable by a vendor
   changing a rate card.
@@ -124,3 +128,16 @@ output through a smaller one as a "style filter" is a cheap, composable pattern 
 compress that none of the other instances (caveman, DeepSeek-Reasonix, benjamin-plus-skill) target.
 Caveats from the author: the local model only sees what Claude says (so it "hallucinates a bit"), it's
 "pretty slow," "totally vibe-coded," and only tested on Mac.
+
+## nobuzz — a cross-model style filter for a frontier model's house voice (08-22 12:03)
+
+`adnanakil/nobuzz` (MIT) is a Claude Code skill, `/debuzz`, that takes Claude's last response and pipes it
+through Google's **Antigravity CLI (`agy`)** — powered by Gemini — to strip the "BuzzFeed voice" (the
+theatrical "load-bearing assumption … and the kicker is …" prose that got worse around Opus 4.8). Three modes:
+`colleague` (same content, zero theatrics), `manager` (⅓ length, no code), `director` (3–5 sentences), plus a
+fallback if `agy` errors. It is the same layer as `zachahn/vomit` — routing one model's output through a
+*different* model as a style filter, because self-correction can't remove the tics a model was trained to
+produce. The difference from vomit: vomit targets generic verbosity, nobuzz targets a *specific* house voice.
+Both remain assertion-only (no benchmarked token delta). Signal: the style-filter instance is now repeatable
+enough to be a named pattern rather than a one-off joke — and it is a measurable vote on how much friction a
+frontier model's house voice now causes working engineers.

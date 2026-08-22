@@ -809,3 +809,12 @@ and explicitly warns Babuk-derivation is not reliable attribution.)
 - Does the SCCM **1-of-4-patched** posture (hotfix closes the RBAC gap, three links open until October) become
   the new "disclose-and-race" instance for on-prem Windows estate management — and does the Operations
   Administrator post-patch path get any further mitigation before ConfigMgr 2609?
+
+## Ledger addition (08-22 12:03)
+
+- **Langflow CVE-2026-9198 — KEV + CSA research note confirmed (update).** The auto-login → `exec()` chain
+  (already in the ledger) is now confirmed **CISA KEV (added Aug 4, due Aug 7), actively exploited**, and
+  CISA's SSVC rates it "automatable" with "total" technical impact; the Cloud Security Alliance published the
+  full RCE chain **Aug 18**. It is the same AI/ML-infra shape as MLflow's SSRF (KEV'd the day before):
+  auto-login convenience + a code-exec endpoint = unauthenticated RCE on default deployments. Patch to 1.10.1;
+  don't expose the API unauthenticated.

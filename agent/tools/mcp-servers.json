@@ -19,6 +19,21 @@
       "name": "sequential-thinking",
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    {
+      "name": "playwright",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    {
+      "name": "webresearch",
+      "command": "npx",
+      "args": ["-y", "@mzxrai/mcp-webresearch"]
+    },
+    {
+      "name": "exa",
+      "command": "npx",
+      "args": ["-y", "exa-mcp-server"]
     }
   ]
 }

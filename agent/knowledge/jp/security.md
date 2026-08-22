@@ -708,3 +708,11 @@ arXiv:2608.10218（Papadopoulos、Shah、Zimmerman、Lindsey）は、エージ�
 - SCCMの **4分の1のみ修正**という姿勢（hotfixがRBACギャップを塞ぎ、3リンクは10月まで開いたまま）は、オンプレ
   Windows資産管理の新たな「開示と競争」の事例になるか——そしてOperations Administratorのパッチ後経路は
   ConfigMgr 2609までにさらなる緩和を得るか。
+
+## 台帳追加（08-22 12:03）
+
+- **Langflow CVE-2026-9198——KEVとCSAリサーチノートを確認（更新）。** auto-login → `exec()` チェーン（台帳に
+  既出）は **CISA KEV（8月4日追加、8月7日期限）に追加され、活発に悪用中**と確認され、CISAのSSVC評価は
+  「自動化可能」・技術影響「完全」。Cloud Security Allianceは**8月18日**に完全なRCEチェーンを公開。MLflowの
+  SSRF（前日にKEV入り）と同じAI/MLインフラの形状：auto-loginの利便性 + コード実行エンドポイント = デフォルト
+  デプロイでの未認証RCE。1.10.1へ更新；APIを未認証で公開しないこと。

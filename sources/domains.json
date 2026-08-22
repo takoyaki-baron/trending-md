@@ -2689,5 +2689,32 @@
     "cred": "high",
     "density": "high",
     "cv": 1
+  },
+  "ai-primer.com": {
+    "cat": "news",
+    "en": "ai-primer.com — AI-news coverage site. Its ox-alpha story (anonymous stealth/ox-alpha on OpenRouter, free ~1-week preview, 1M ctx) matches the OpenRouter model page first-hand; the 80%-vs-65% DeepSWE smoke test is a small-sample community run, not a published benchmark.",
+    "zh": "ai-primer.com——AI 新闻聚合网站。其 ox-alpha 报道（OpenRouter 上的匿名 stealth/ox-alpha、约一周免费预览、1M 上下文）与 OpenRouter 模型页一手核实一致；80%-vs-65% 的 DeepSWE 冒烟测试是小样本社区跑分，并非正式基准。",
+    "jp": "ai-primer.com——AIニュース報道サイト。ox-alpha記事（OpenRouter上の匿名 stealth/ox-alpha、約1週間の無料プレビュー、1Mコンテキスト）はOpenRouterのモデルページと一次照合で一致；80%-vs-65%のDeepSWEスモークテストは小標本のコミュニティ実行であり公刊ベンチマークではない。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "incubator.apache.org": {
+    "cat": "code",
+    "en": "incubator.apache.org — Apache Software Foundation's official incubator status pages (primary source for a project's incubation date and roster). Verified first-hand: maka's page records 2026-08-13 as the incubation entry date, matching the apache/maka repo's local-first AI agent runtime framing.",
+    "zh": "incubator.apache.org——Apache 软件基金会的官方孵化器状态页（项目孵化日期与名单的一手来源）。已一手核实：maka 的页面记载 2026-08-13 为孵化入项日期，与 apache/maka 仓库的「本地优先 AI 智能体运行时」定位一致。",
+    "jp": "incubator.apache.org——Apache Software Foundationの公式インキュベーター状況ページ（プロジェクトの孵化日と名簿の一次情報源）。一次確認済み：makaのページは2026-08-13を孵化入所日と記し、apache/makaリポジトリの「ローカルファーストAIエージェントランタイム」という位置づけと一致。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "rust-glancer.github.io": {
+    "cat": "code",
+    "en": "rust-glancer.github.io — project site for Rust Glancer, a memory-efficient Rust LSP (doesn't eat memory for breakfast). Self-published primary source; its frozen-workspace/instant-restart tradeoff and ~100× less RAM than rust-analyzer are the author's claims, corroborated as a project by the HN discussion but not independently benchmarked.",
+    "zh": "rust-glancer.github.io——Rust Glancer 的项目站，一个省内存的 Rust LSP（doesn't eat memory for breakfast）。自发布的一手来源；其「冻结工作区/即时重启」取舍与「比 rust-analyzer 省约 100× 内存」是作者主张，作为项目经 HN 讨论佐证，但未经独立基准验证。",
+    "jp": "rust-glancer.github.io——Rust Glancerのプロジェクトサイト。省メモリのRust LSP（doesn't eat memory for breakfast）。自己公開の一次情報源；「凍結ワークスペース/即時再起動」のトレードオフと「rust-analyzerより約100×少ないRAM」は作者の主張であり、HNの議論でプロジェクトとして裏付けられるが、独立ベンチマークでは未検証。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

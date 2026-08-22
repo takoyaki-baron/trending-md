@@ -607,3 +607,11 @@ setup 端点、NetScaler 的 Gateway/AAA 管理面，都是同一种失败：*�
   笔记？供应链后果比补丁更持久——审计日志已经把伪造的批准记为合法。
 - SCCM 的 **1-of-4-已修补**姿态（hotfix 闭合 RBAC 缺口，三个环节开放到 10 月）会否成为本地 Windows 资产管理的新
   "披露即竞速"实例——以及 Operations Administrator 的补丁后路径在 ConfigMgr 2609 之前会否获得进一步缓解？
+
+## 台账新增（08-22 12:03）
+
+- **Langflow CVE-2026-9198——KEV 与 CSA 研究报告确认（更新）。** auto-login → `exec()` 链条（已在台账中）现已确认
+  **入 CISA KEV（8 月 4 日加入，8 月 7 日到期）、正被积极利用**，且 CISA 的 SSVC 评定为"可自动化"、技术影响
+  "完全"；Cloud Security Alliance 于 **8 月 18 日**发布了完整 RCE 链条。它与 MLflow 的 SSRF（前一天入 KEV）是
+  同一 AI/ML 基础设施形态：auto-login 便利性 + 代码执行端点 = 默认部署上的未认证 RCE。升级到 1.10.1；不要
+  把 API 暴露为未认证。

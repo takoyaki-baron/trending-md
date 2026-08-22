@@ -727,3 +727,18 @@ harness（论点 12）。战略上它是 DeepSeek MIT 许可 harness 的镜像�
   阻止了 agent 之间互发消息。许可证附加条款：捆绑的 LimeZu 像素美术**仅限非商业用途**，因此有效许可是"代码 MIT +
   附加条款"。
 - **career-ops → 67.4k stars**（12.9k forks）——仍是 human-in-the-loop、仅草稿、本地运行。
+
+## 242k 星的 workflow-as-code + 日志即运行时（08-22 12:03）
+
+- **ECC** — `affaan-m/ECC`，MIT，约 242k stars（不足一年，GitHub 涨星最快的仓库之一）。一个跨 harness 的
+  "agent 性能优化系统"：一套代码适配 Claude Code、Codex、OpenCode、Cursor、Gemini、Zed、Kimi 等，施加
+  **plan → test → implement → review → verify → remember → improve** 循环，外加 skills、记忆持久化、安全扫描器
+  （"AgentShield"）与持续学习。自带 **68 个 agent 与 286 个 skills**；在 MIT 核心之上叠加托管的 "ECC Pro"
+  GitHub App。信号：当前"workflow-as-code、而非提示词调优"的最纯粹实例——价值在于被强制的工程循环，无论你
+  接入哪个模型/harness 都能存活（论点 1/12 的 harness，打包成可移植、跨 harness 的工作流）。
+- **Apache Maka** — `apache/maka`，Apache 孵化器（8 月 13 日进入）。一个本地优先的 AI agent 运行时与工作区，
+  其中每条模型消息、工具调用、结果、权限决策与终止事件都被记录为**只追加日志**——会话、UI、上下文与恢复
+  都是对该日志的*投影*（"日志即运行时"）。Electron + React 桌面应用、TUI/CLI 与 eval harness；存储为 SQLite
+  + 制品，凭证放在本地 vault，用户自选模型连接。macOS Apple Silicon 是早期公开构建（Windows 为未签名预览）。
+  信号："上下文不是历史"——为下一次推理剪掉工具结果、同时保留完整证据日志，是对 agent 记忆的一种干净、可
+  审查的回答；也是 LoopX "kernel 即真相 / board 是投影"这一想法如今由 Apache 项目而非创业公司承载。

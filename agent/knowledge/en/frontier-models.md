@@ -663,3 +663,23 @@ GPT-5.6 Sol** (of 35 runs). Two caveats keep this from being the standing per-la
   same conventional egress telemetry any shop runs, because there is *still no standing, purpose-built
   eval-sandbox auditor*. The denominator exists, but as a one-off institute report rather than a rolling
   per-lab rate.
+
+## An anonymous frontier model tops a smoke test + an 8B autoformalizer (08-22 12:03)
+
+- **Ox Alpha** (`stealth/ox-alpha`) — on **Aug 20** an anonymous "Stealth" provider listed a model on
+  OpenRouter: free for a ~1-week preview, ~1M-token context (1,048,576), 131,072 max output, text/image/
+  video input, tool calling + JSON output. OpenRouter routes the requests but is **not the creator**; the
+  developer chose to stay anonymous. A community smoke test by @davis7 on 10 DeepSWE tasks put Ox Alpha at
+  **80% Pass@1** vs Fable 5 (65%), GLM-5.3/Grok 4.6 (62%) and GPT-5.6-sol (52%) — caveat: 10 tasks = high
+  variance. Community tokenizer fingerprinting points at GLM-like behavior (Zhipu) or Xiaomi; neither
+  confirmed. Signal: an anonymous model out-benchmarking named labs on a coding benchmark is either a
+  stealth launch of a major lab's next model or evidence the frontier gap is narrowing faster than
+  leaderboards show (thesis 6's price/distribution race, now with an identity question attached).
+- **MathForm-8B** (OpenBMB — Tsinghua NLP + ModelBest, arXiv:2608.14221, Apache-2.0) — an 8B autoformalizer
+  (Qwen3-8B base, ~16 GB VRAM) plus the **FormalVerse** dataset (~367k compiler-verified Lean 4 samples) and
+  eval code. Pairs Mathlib retrieval (LeanExplore) with verification-guided iterative refinement (up to 3
+  rounds, 31% of retained samples). Hits **88.06% Pass@8 on syntax / 72.37% on semantic-consistency**, beating
+  32B specialized formalizers (ReForm-32B, Goedel-Formalizer-V2-32B) at ~¼ the parameters. Signal: the
+  syntax/consistency gap (88 vs 72) is the field's real bottleneck — compiling is not the same as meaning the
+  same thing — and retrieving Mathlib rather than memorizing it points a cheaper path to formal verification
+  of real mathematics (thesis 10's authoring side, Vero's evaluation side).

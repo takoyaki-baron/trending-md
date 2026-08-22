@@ -74,7 +74,14 @@ function ask(child, id, method, params, timeoutMs) {
 
 async function snapshotServer(spec) {
   const { name, command, args = [], env = {} } = spec;
-  const child = spawn(command, args, { stdio: ['pipe', 'pipe', 'inherit'], env: { ...process.env, ...env } });
+  // detached:true puts the child in its own process group. npx wraps the real server in a grandchild
+  // and doesn't always forward SIGTERM, so killing only npx leaves the server alive holding the stdout
+  // write end — the parent then hangs waiting for EOF. Killing the whole group closes every write end.
+  const child = spawn(command, args, {
+    stdio: ['pipe', 'pipe', 'inherit'],
+    env: { ...process.env, ...env },
+    detached: true,
+  });
   try {
     const init = await ask(child, 1, 'initialize', {
       protocolVersion: PROTOCOL,
@@ -100,7 +107,11 @@ async function snapshotServer(spec) {
       })),
     };
   } finally {
-    child.kill();
+    try {
+      process.kill(-child.pid, 'SIGKILL'); // kill the whole process group (npx + any grandchildren)
+    } catch {
+      try { child.kill('SIGKILL'); } catch {}
+    }
   }
 }
 

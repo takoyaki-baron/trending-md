@@ -957,3 +957,23 @@ layer is consolidating by going open, not by staying proprietary.
   `cmd.exe` newline bug that stopped agents messaging each other. License carve-out: bundled LimeZu pixel
   art is **non-commercial-only**, so the effective license is MIT-for-code with a carve-out.
 - **career-ops → 67.4k stars** (12.9k forks) — still human-in-the-loop, draft-only, local.
+
+## Workflow-as-code at 242k stars + the log as the runtime (08-22 12:03)
+
+- **ECC** — `affaan-m/ECC`, MIT, ~242k stars in under a year (one of GitHub's fastest-growing repos). A
+  cross-harness "agent performance optimization system": one codebase that adapts to Claude Code, Codex,
+  OpenCode, Cursor, Gemini, Zed, Kimi and more, imposing a **plan → test → implement → review → verify →
+  remember → improve** loop plus skills, memory persistence, a security scanner ("AgentShield") and
+  continuous learning. Ships **68 agents and 286 skills**; layers a hosted "ECC Pro" GitHub App on the MIT
+  core. Signal: the purest current example of "workflow-as-code, not prompt-tuning" — the value is the
+  enforced engineering loop that survives whatever model/harness you plug in (thesis 1/12's harness,
+  packaged as a portable, cross-harness workflow).
+- **Apache Maka** — `apache/maka`, Apache Incubator (entered Aug 13). A local-first AI-agent runtime and
+  workspace where every model message, tool call, result, permission decision and termination event is
+  recorded as an **append-only log** — sessions, UI, context and recovery are all *projections* over that
+  log ("the log is the runtime"). Electron + React desktop app, a TUI/CLI and an eval harness; storage is
+  SQLite + artifacts, credentials sit in a local vault, and the user picks their own model connection.
+  macOS Apple Silicon is the early public build (Windows unsigned preview). Signal: "context is not
+  history" — pruning tool results for the next inference while keeping the full evidence log is a clean,
+  inspectable answer to agent memory, and it is the LoopX "kernel is truth / board is a projection" idea
+  now carried by an Apache project rather than a startup.

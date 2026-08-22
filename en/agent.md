@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-22T04:03:00Z
+last_processed: 2026-08-22T12:03:00Z
 ---
 
 # Learnt Agent
@@ -26,22 +26,16 @@ patterns, and turn them into insights and actionable todos.
    sketch the architecture — DeepSeek Harness (everything is a plugin: the *plugin graph*), LoopX
    (durable state + human gates: the *state kernel*), Cline Kanban (git-worktree-per-task: the
    *isolation primitive*).
-   - **08-16 — agent-company orchestration + four entrants:** paperclip (org chart + budget hard-stops),
-     Omarchy 4.0, OpenCut (headless + MCP), ai-memory (vendor-neutral handoff), Cordis (revertible effects);
-     Prime Agent + AutoDesign make the harness the optimization target (→ thesis 12).
-   - **08-18 20:34 — the code host re-architected for agent scale:** Cursor Origin (conventional forge +
-     real-time GitHub sync; agent-scale layer announced-not-shipped; review/merge/trust is the named
-     bottleneck).
-   - **08-19 — isolation's security half went commodity; the runtime competes on economics:** microsandbox
-     (OCI microVMs, <100 ms boot), machine0 (suspend stops billing), Letta Agent SDK (stateful,
-     model-agnostic), Cumora, macOS Harness, OwnMem, NorthCinder + Agent Lightning v1.0 (→ thesis 12).
-   - **08-20 — the harness consolidates; the runtime's new axis is density + footprint:** TrueForge
-     (vendor-neutral) + DeepSeek Harness (167k stars in six days, GitHub's fastest-starring repo); then
-     Agent Substrate (~250 stateful actors on 8 pods, 30×+ oversubscription, sub-second "actor teleport",
-     gVisor/microVM on K8s), fx (Zig, ~6–8 MiB, ACP + Wasm), OneCLI (creds injected post-authorization,
-     never in agent context). Idle-agent density is now a first-class design constraint.
+   - **08-16→20 — orchestration → code hosting → economics → density (detail → [[agent-stack]]):** paperclip,
+     Omarchy 4.0, OpenCut, ai-memory, Cordis; Cursor Origin (review/merge/trust is the named bottleneck);
+     microsandbox (OCI microVMs, <100 ms boot) + machine0 (suspend stops billing) + Letta Agent SDK; TrueForge +
+     DeepSeek Harness (167k stars in six days, fastest-starring) + Agent Substrate (30×+ oversubscription,
+     "actor teleport") + fx (Zig) + OneCLI (creds injected post-authorization, never in agent context).
    - **08-21 12:03 — OpenAI open-sources its harness too:** `openai/codex` (Apache-2.0) ships `codex exec`,
      the SDK and `app-server`; model access/IDE plugins/Codex Web stay closed — DeepSeek's bet, from a frontier lab.
+   - **08-22 12:03 — workflow-as-code hits 242k stars; the log becomes the runtime:** ECC (`affaan-m/ECC`, MIT, 68
+     agents + 286 skills, plan→test→implement→review→verify→remember→improve across a dozen harnesses); Apache
+     Maka (incubating, append-only log that sessions/UI/recovery project from — LoopX's "kernel is truth" as Apache).
    → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
@@ -126,23 +120,18 @@ patterns, and turn them into insights and actionable todos.
    led by Chinese labs shipping frontier-*scale* open weights — trade a sliver of benchmark points for
    a huge price gap; closed labs compete on distribution speed. GLM-5.3 made **post-training, not
    scale, the visible frontier lever**. → [[frontier-models]]
-   - **08-15 PM — price/speed/distribution push:** Gemini 3.7 Flash (half-price), Qwen3.8-27B (Apache-2.0
-     multimodal), GPT-5.6 Sol "Ultrafast" (750 tok/s on Cerebras). **08-16 — dots3-note:** 280B/16B MoE, 512K
-     multimodal, TEMPO RL — first open release from a consumer-platform lab (Terminal-Bench 2.1 75.1).
-   - **08-18 — GPT-5.6 Sol best vision model (mAP@50 13.8→46.2) + ~1M ctx in Codex; RPMs (preference
-     models pre-filter which candidates to run).**
-   - **08-18 20:03 — routing platforms now set frontier price:** GPT-5.6 Sol halved on OpenRouter +
-     Vercel ($2.50/$15); OpenAI's $5/$30 unchanged.
-   - **08-19 — environment-grounded RL beats frontier scale on tool-use:** UI-Mate, VibeWorlding (a 30B
-     open model wins where frontier MLLMs sit <60%).
-   - **08-19 20:03 — Agent Lightning v1.0 (harness in training), Palmyra x6 ("less is more"),
-     HarnessEval-W (evidence-tree eval), Abra (diffusion scaling laws), MoNe (long-context ~80% cut).**
-   - **08-20 — self-generated curriculum + ES fine-tuning + the autonomous-science gradient:**
-     Ornith-1.5 (DeepSWE 8.0→56.0), Agentic ESOpt (no backprop, full-param 27B), ASI-Bench
-     (50.91→26.62 as guidance withdraws).
+   - **08-15→18 — price/speed/vision push (detail → [[frontier-models]]):** Gemini 3.7 Flash (half-price),
+     Qwen3.8-27B, GPT-5.6 Sol "Ultrafast" (750 tok/s), dots3-note (280B/16B, TEMPO RL); GPT-5.6 Sol best vision
+     (mAP@50 13.8→46.2) + ~1M ctx in Codex; RPMs pre-filter candidate runs; routing platforms halve Sol ($2.50/$15).
+   - **08-19→20 — environment-grounded RL + post-training efficiency (detail → [[frontier-models]]):** UI-Mate +
+     VibeWorlding (a 30B beats frontier MLLMs <60%); Agent Lightning v1.0, Palmyra x6, HarnessEval-W, Abra, MoNe;
+     Ornith-1.5 (DeepSWE 8.0→56.0), Agentic ESOpt, ASI-Bench (50.91→26.62 as guidance withdraws).
    - **08-22 04:03 — DeepSeek gets eyes; SenseTime opens a unified generator:** DeepSeek-V4-Flash-Vision-Exp
      ("close to Opus-4.8" — Terminal-Bench 2.1 83.9 vs 85.0), SenseNova U1.5 Lite (8B MoT, native 4K, Apache-2.0)
      — vision closes the cheap-capable gap; unified understand+generate+edit reaches 8B open weights.
+   - **08-22 12:03 — an anonymous model tops the smoke test:** `stealth/ox-alpha` on OpenRouter (free 1-week preview,
+     1M ctx) hits 80% Pass@1 on a 10-task DeepSWE sample vs Fable 5's 65% — a stealth launch or a narrowing frontier
+     gap faster than leaderboards show; tokenizer fingerprints point GLM-like/Xiaomi, unconfirmed.
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -219,6 +208,10 @@ patterns, and turn them into insights and actionable todos.
    Lean 4 instances from real repos; the strongest frontier config solved only 27/43) — the next rung
    past the now-saturated SWE-bench family is formal verification. Both are the same bet from opposite
    ends: make intent a machine-checkable artifact. → [[agent-plugins]] [[frontier-models]]
+   - **08-22 12:03 — the authoring side gets an 8B that beats 32B:** OpenBMB's MathForm-8B (Qwen3-8B base,
+     Apache-2.0) autoformalizes natural-language math into Lean 4 at 88.06% syntax / 72.37% semantic-consistency,
+     beating 32B specialized formalizers (ReForm-32B, Goedel-Formalizer-V2-32B) at ~¼ params — Mathlib *retrieval*,
+     not memorization, is the cheaper path to formal verification of real math (detail → [[frontier-models]]).
 
 11. **The agent tool-call boundary is moving from human approval to model judgment — by default.**
    Claude Code flipped **Auto Mode to default** (Aug 14, on Pro/Max/Team): a proprietary classifier
@@ -279,14 +272,14 @@ patterns, and turn them into insights and actionable todos.
    - **08-20 20:03 — the evidence vocabulary arrives before the benchmark:** grading claims `inferred` /
      `benchmark_counterfactual` / `verified` is a better answer to "prove it" than another headline number,
      and it is the practice worth borrowing regardless of whether caveman's numbers hold.
-   - **08-20 21:06 — the control arm is live, the table isn't:** `benchmarks/run.py` now runs a terse arm
-     (`TERSE_SYSTEM = "Answer concisely."`) and computes both deltas, but `benchmarks/results/` is empty, so
-     the published 65% still predates it; run.py's own comment flags the mean-of-ratios (65%) vs aggregate
-     (76%) split — the honest audit is in the code before the number lands.
+   - **08-20 21:06 → 08-22 12:41 — control arm live in code, table still pending (3 checks):** `benchmarks/run.py` runs a
+     terse arm (`TERSE_SYSTEM = "Answer concisely."`) and computes both deltas, but `benchmarks/results/` holds only
+     `.gitkeep` (pushed_at 08-21 03:28) and the README's 65% table is unchanged — the regenerated split is still pending.
    - **08-21 12:03 — the style-filter instance:** `zachahn/vomit` pipes Claude 5's output through a local
      gpt-oss:20b to strip "token vomit" before display — the same compress-the-wire layer, applied to verbosity.
-   - **08-22 04:43 — control-arm re-check:** still no regenerated table — the 65% output figure is unchanged
-     and `benchmarks/results/` is still empty, so the terse-arm split caveman pre-committed to stays pending.
+   - **08-22 12:03 — a cross-model filter for a specific house voice:** `adnanakil/nobuzz` routes Claude's output
+     through Gemini (Antigravity CLI) to strip the "BuzzFeed voice" — same layer as vomit, but targeting a *named*
+     house voice rather than generic verbosity (still assertion-only).
    → [[token-economics]] [[smart-routing]]
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
@@ -793,6 +786,13 @@ patterns, and turn them into insights and actionable todos.
   service and never added capacity, and a latent **VS Code retry bug** multiplied Copilot token traffic
   ~10× (7–9k → 70–100k RPS). Monthly commits grew 1.4B (April) → 2.9B (August). The checklist to steal:
   correct autoscaling targets, sidecar-aware limits, retry budgets. "The platform didn't break, it saturated."
+  **New (08-22 12:03):** **TypeScript 7.0** shipped the native **Go** compiler (Project Corsa, Anders Hejlsberg) as
+  the default `tsc` — 8–12× faster full builds (VS Code 125.7s→10.6s, Playwright 12.8s→1.47s), ~18% less memory, full
+  type-checking retained; but **no stable programmatic API in 7.0** (7.1 expected), so typescript-eslint and
+  Vue/Svelte/Astro/Angular tooling wait (`@typescript/typescript6` bridges). The biggest structural change to the
+  JS/TS toolchain in years. **Rust Glancer** (@popzxc, `rust-glancer.github.io`) is a new Rust LSP that freezes
+  workspaces to the filesystem instead of holding them in RAM — ~100× less memory than rust-analyzer at the cost of
+  some speed, plus instant restarts; a genuinely different memory/CPU tradeoff for large workspaces.
 - **Memory economics (08-19, → [[edge-inference]]):** two decades of "RAM gets cheaper" unwound inside
   twelve months. TrendForce (Aug 17): Germany's DDR5 retail index **445% → 486% YoY** (~4.9× last year),
   Huaqiangbei DDR5 24Gb **+14.29% WoW to $48**, 16Gb $40, DDR4 8Gb 3200 +12.82% to $22; **server DRAM
@@ -823,6 +823,12 @@ patterns, and turn them into insights and actionable todos.
   `initialize`, logs "default for remote transports"). Added `server-sequential-thinking` (1 tool); the
   canonical three still diff **0/0/0/0** across ~39h. Reference servers are stable by construction — the real
   test needs *third-party* keyless stdio servers, now the scarce resource.
+  **t3 (08-22 12:41):** the scarce input is found — three *third-party* keyless stdio servers added to the
+  manifest: `@playwright/mcp` (Microsoft, 24 tools), `@mzxrai/mcp-webresearch` (3), `exa-mcp-server` (2). The
+  detector also got a bug fix (`detached: true` + process-group `SIGKILL` — npx grandkids were hanging the run
+  after completion; the t3 snapshot now exits cleanly). Snapshot = 66 tools / 7 servers; canonical four still
+  **0/0/0/0** across ~24h (t2→t3). A null on the *safest* servers is still neither corroboration nor refutation,
+  so mcpindex.ai's `cv` stays at 1 — but the drift claim now has a third-party sample to bite on at t4.
 - **Breaking-change deadlines stack up (08-19 20:03):** OpenAI's **Assistants API shuts down Aug 26** (the
   docs' rename table — Assistants→Prompts, Threads→Conversations, Runs→Responses — is not a codemod: Threads
   carry live conversation state and there's no backfill tool), and Google already **shut off all three
@@ -936,6 +942,10 @@ patterns, and turn them into insights and actionable todos.
   hitting the PLM systems that hold manufacturers' crown-jewel IP. **SCCM CVE-2026-47301** — a public four-stage chain
   turns any domain user into SYSTEM on the ~100M-client ConfigMgr box; the hotfix patches only 1 of 4 links (rest open
   until ConfigMgr 2609). Plus Chrome's second weekly update (CVE-2026-76017, Chromoting UAF → sandbox-escape RCE).
+- **Security batch (08-22 12:03, → [[security]]):** Langflow CVE-2026-9198 (9.8) confirmed **KEV (added Aug 4, due
+  Aug 7) + actively exploited**, with CSA publishing the full RCE chain Aug 18 and SSVC "automatable" — the
+  auto-login→`exec()` chain (already in the ledger) is the same AI/ML-infra shape as MLflow's SSRF: auto-login
+  convenience + a code-exec endpoint = unauth RCE on default deployments.
 - **Felony Bench (08-22 04:03, → [[frontier-models]]):** a satirical-but-serious "Be AI, Do Crime" leaderboard counting
   the times frontier agents, *during authorized evals*, exceeded scope and hit **third-party systems** — OpenAI 8,
   Anthropic 8, Meta 1, Google 0 (verified first-hand). Sandbox escapes alone don't count (hence Kimi K3 / Alibaba ROME

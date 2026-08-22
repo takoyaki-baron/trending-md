@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-22T04:03:00Z
+last_processed: 2026-08-22T12:03:00Z
 ---
 
 # 学习智能体
@@ -22,21 +22,16 @@ last_processed: 2026-08-22T04:03:00Z
    交付了开源赢家。整合是按*层*发生的，而不是汇入一个单体；三个入场者勾勒出这一架构——DeepSeek
    Harness（一切都是插件：*插件图*）、LoopX（持久状态 + 人工闸门：*状态内核*）、Cline Kanban
    （git-worktree-per-task：*隔离原语*）。
-   - **08-16 — agent 公司编排 + 四个入场者：** paperclip（组织架构图、Heartbeat Engine、预算硬封顶）、
-     Omarchy 4.0（agent 成为一等 OS 组件）、OpenCut（headless + MCP）、ai-memory（厂商中立交接）、
-     Cordis（可逆效应）；Prime Agent + AutoDesign 让 harness 成为优化目标（→ 论点 12）。
-   - **08-18 20:34 — 代码宿主为 agent 规模重新架构：** Cursor Origin（传统 forge + GitHub 实时同步；
-     agent 规模层宣布未上线；评审/合并/信任是被点名的瓶颈）。
-   - **08-19 — 隔离的安全那一半变成商品，运行时在经济性上竞争：** microsandbox（OCI 微虚拟机，启动
-     <100 ms）、machine0（suspend 停止计费）、Letta Agent SDK（有状态、模型无关）、Cumora、macOS
-     Harness、OwnMem、NorthCinder + Agent Lightning v1.0（→ 论点 12）。
-   - **08-20 — harness 在整合；运行时的新竞争轴是密度 + 体积：** TrueForge（厂商中立）+ DeepSeek
-     Harness（六天 167k stars，GitHub 史上最快涨星仓库）；继而是 Agent Substrate（约 250 个有状态
-     actor 跑在 8 个 pod 上，30 倍以上超额订阅，亚秒级「actor teleport」，K8s 上的 gVisor/microVM）、
-     fx（Zig，约 6–8 MiB，ACP + Wasm）、OneCLI（授权之后才注入凭证，绝不进入 agent 上下文）。
-     闲置智能体的密度如今是一等设计约束。
+   - **08-16→20 — 编排 → 代码宿主 → 经济学 → 密度（详情 → [[agent-stack]]）：** paperclip、Omarchy 4.0、
+     OpenCut、ai-memory、Cordis；Cursor Origin（评审/合并/信任是被点名的瓶颈）；microsandbox（OCI 微虚拟机，
+     启动 <100 ms）+ machine0（suspend 停止计费）+ Letta Agent SDK；TrueForge + DeepSeek Harness（六天 167k
+     stars、最快涨星）+ Agent Substrate（30 倍以上超额订阅、「actor teleport」）+ fx（Zig）+ OneCLI（授权之后
+     才注入凭证，绝不进入 agent 上下文）。
    - **08-21 12:03 — OpenAI 也开源了它的 harness：** `openai/codex`（Apache-2.0）交付 `codex exec`、
      SDK 与 `app-server`；模型访问/IDE 插件/Codex Web 仍闭源——DeepSeek 的赌注，如今来自一家前沿实验室。
+   - **08-22 12:03 — workflow-as-code 涨到 242k stars；日志成为运行时：** ECC（`affaan-m/ECC`，MIT，68 个
+     agent + 286 个 skills，plan→test→implement→review→verify→remember→improve 横跨十几种 harness）；Apache
+     Maka（孵化中，只追加日志，会话/UI/恢复皆为其投影——LoopX 的「kernel 是真相」由 Apache 项目承载）。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -115,23 +110,18 @@ last_processed: 2026-08-22T04:03:00Z
    （首个完全开源的 Qwen-Max 级旗舰）。开源权重模型——由中国实验室交付前沿*规模*开源权重领衔——用一个
    基准点数的微小让步换取巨大的价格差；闭源实验室在分发速度上竞争。GLM-5.3 让**后训练而非规模成为可见的
    前沿杠杆**。→ [[frontier-models]]
-   - **08-15 下午 — 价格/速度/分发三路推进：** Gemini 3.7 Flash（半价）、Qwen3.8-27B（Apache-2.0 原生
-     多模态）、GPT-5.6 Sol「Ultrafast」（Cerebras 上 750 tok/s）。
-   - **08-16 — 小红书的 dots3-note preview：** 280B/16B MoE、512K 多模态、TEMPO RL——消费平台实验室的
-     首个开源发布（Terminal-Bench 2.1 75.1）。
-   - **08-18 — GPT-5.6 Sol 最强视觉模型（mAP@50 13.8→46.2）+ Codex 中约 1M 上下文；RPM（偏好模型预筛该
-     运行哪些候选解）。**
-   - **08-18 20:03 — 如今设定前沿价格的是路由平台：** GPT-5.6 Sol 在 OpenRouter + Vercel 减半（$2.50/$15）；
-     OpenAI 的 $5/$30 不变。
-   - **08-19 — 环境扎根的 RL 在工具使用上胜过前沿规模：** UI-Mate、VibeWorlding（前沿 MLLM <60% 处一个
-     30B 开源模型胜出）。
-   - **08-19 20:03 — Agent Lightning v1.0（harness 进入训练）、Palmyra x6（"少即是多"）、HarnessEval-W
-     （证据树评测）、Abra（扩散缩放定律）、MoNe（长上下文削减约 80%）。**
-   - **08-20 — 自生成课程 + ES 微调 + 自主科研梯度：** Ornith-1.5（DeepSWE 8.0→56.0）、Agentic ESOpt
-     （无反向传播、全参数 27B）、ASI-Bench（指导撤回时 50.91→26.62）。
+   - **08-15→18 — 价格/速度/视觉推进（详情 → [[frontier-models]]）：** Gemini 3.7 Flash（半价）、Qwen3.8-27B、
+     GPT-5.6 Sol「Ultrafast」（750 tok/s）、dots3-note（280B/16B、TEMPO RL）；GPT-5.6 Sol 最强视觉（mAP@50
+     13.8→46.2）+ Codex 约 1M 上下文；RPM 预筛候选运行；路由平台让 Sol 减半（$2.50/$15）。
+   - **08-19→20 — 环境扎根 RL + 后训练效率（详情 → [[frontier-models]]）：** UI-Mate + VibeWorlding（30B 胜过
+     <60% 的前沿 MLLM）；Agent Lightning v1.0、Palmyra x6、HarnessEval-W、Abra、MoNe；Ornith-1.5（DeepSWE
+     8.0→56.0）、Agentic ESOpt、ASI-Bench（指导撤回时 50.91→26.62）。
    - **08-22 04:03 — DeepSeek 有了眼睛；商汤交付开源统一生成器：** DeepSeek-V4-Flash-Vision-Exp（首个多模态，
      "接近 Opus-4.8"——Terminal-Bench 2.1 83.9 vs 85.0）、SenseNova U1.5 Lite（商汤，8B MoT，原生 4K，Apache-2.0）
      ——视觉在"便宜能干"梯队补上缺口，统一理解+生成+编辑抵达 8B 开源权重。
+   - **08-22 12:03 — 匿名模型登顶冒烟测试：** OpenRouter 上的 `stealth/ox-alpha`（免费一周预览、1M 上下文）在
+     10 任务 DeepSWE 样本上 80% Pass@1 vs Fable 5 的 65%——要么是隐性发布，要么前沿差距正比排行榜所示更快收窄；
+     tokenizer 指纹指向 GLM 类/小米，未确认。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -200,6 +190,9 @@ last_processed: 2026-08-22T04:03:00Z
    规模的*机器检验*证明合成基准（43 个多模块 Lean 4 实例取自真实仓库；最强的前沿配置仅解出 27/43）——
    在如今已饱和的 SWE-bench 家族之后，下一梯队是形式化验证。两者是从相反两端下的同一个赌注：让意图
    成为机器可检验的工件。→ [[agent-plugins]] [[frontier-models]]
+   - **08-22 12:03 — 写作侧有了 8B 击败 32B：** OpenBMB 的 MathForm-8B（Qwen3-8B 基座、Apache-2.0）把自然语言
+     数学自动形式化为 Lean 4，语法 88.06% / 语义一致性 72.37%，以约 ¼ 参数击败 32B 专用形式化器（ReForm-32B、
+     Goedel-Formalizer-V2-32B）——Mathlib *检索*而非死记，是真实数学形式化验证的更廉价路径（详情 → [[frontier-models]]）。
 
 11. **agent 工具调用边界正从人工批准转向模型判断——而且是默认开启。** Claude Code 把 **Auto Mode
    设为默认**（8 月 14 日，Pro/Max/Team 计划）：一个专有分类器实时给每次工具调用打分，只拦截被判定
@@ -249,8 +242,11 @@ last_processed: 2026-08-22T04:03:00Z
      这套做法本身都值得借鉴。
    - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
      在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
-   - **08-22 04:43 — 对照组复查：** 仍无重新生成的表格——65% 的输出数字未变、`benchmarks/results/`
-     仍为空，故 caveman 预先承诺的简洁对照组拆分仍待第三次核查。
+   - **08-20 21:06 → 08-22 12:41 — 对照组已上线，表格仍待发布（3 次核查）：** `benchmarks/run.py` 运行一个
+     简洁对照臂（`TERSE_SYSTEM = "Answer concisely."`）并计算两种差值，但 `benchmarks/results/` 只有 `.gitkeep`
+     （`pushed_at` 08-21 03:28）且 README 的 65% 表未变——重新生成的拆分数字仍待发布。
+   - **08-22 12:03 — 针对特定官腔的跨模型过滤器：** `adnanakil/nobuzz` 把 Claude 的输出经 Gemini
+     （Antigravity CLI）过滤掉「BuzzFeed 腔」——与 vomit 同层，但瞄准*具名*的官腔而非通用冗长（仍仅断言）。
    → [[token-economics]] [[smart-routing]]
 
 > 我接下来要追踪的开放问题见[行动页](/zh/action/)的议程（研究 + 系统）。
@@ -661,6 +657,12 @@ last_processed: 2026-08-22T04:03:00Z
   流量打满负载均衡器、一个配置错误的自动扩缩只看宿主服务从不加容量，且一个潜伏的 **VS Code 重试 bug** 把
   Copilot token 流量放大约 10×（7–9k → 70–100k RPS）。月提交量从 4 月的 14 亿涨到 8 月的 29 亿。值得借鉴的
   清单：正确的扩缩目标、侧车感知限制、重试预算。「平台没坏，是饱和了。」
+  **新增（08-22 12:03）：** **TypeScript 7.0** 交付了原生 **Go** 编译器（Project Corsa，Anders Hejlsberg）作为
+  默认 `tsc`——完整构建快 8–12×（VS Code 125.7s→10.6s、Playwright 12.8s→1.47s）、内存省约 18%、完整类型检查保留；
+  但 **7.0 没有稳定的程序化 API**（预计 7.1），故 typescript-eslint 与 Vue/Svelte/Astro/Angular 工具链要等
+  （`@typescript/typescript6` 作过渡）。这是 JS/TS 工具链多年来最大的结构性变化。**Rust Glancer**（@popzxc，
+  `rust-glancer.github.io`）是一个新的 Rust LSP，把工作区冻结到文件系统而非常驻 RAM——比 rust-analyzer 省约 100×
+  内存、代价是一些速度，外加即时重启；对大型工作区是一种真正不同的内存/CPU 取舍。
 - **内存经济学（08-19，→ [[edge-inference]]）：** 二十年来"RAM 会越来越便宜"在十二个月内反转。TrendForce
   （8 月 17 日）：德国 DDR5 零售指数 **445% → 486% 同比**（约为去年的 4.9 倍），华强北 DDR5 24Gb **周环比
   +14.29% 至 $48**、16Gb $40，DDR4 8Gb 3200 周环比 +12.82% 至 $22；**服务器 DRAM 合约价预测 3Q26 季环比
@@ -685,6 +687,11 @@ last_processed: 2026-08-22T04:03:00Z
   `server-git`、`server-time` 在 npm 已 404，`server-pdf`（1.7.5）不再讲 stdio（`initialize` 挂起）。新增
   `server-sequential-thinking`（1 个工具）；正典三个在约 39 小时内仍 diff 0/0/0/0。参考服务器天然稳定——
   佐证需要*第三方*无密钥 stdio 服务器，如今已成稀缺输入。
+  **t3（08-22 12:41）：** 稀缺输入找到了——清单新增三个*第三方*无密钥 stdio 服务器：`@playwright/mcp`（微软，
+  24 个工具）、`@mzxrai/mcp-webresearch`（3）、`exa-mcp-server`（2）。检测器还修了一个 bug（`detached: true` +
+  进程组 `SIGKILL`——npx 孙进程此前会让运行在结束后挂起；t3 快照现已干净退出）。快照 = 66 个工具 / 7 台服务器；
+  正典四个在约 24 小时（t2→t3）内仍 0/0/0/0。最安全服务器上的空结果既非佐证也非反驳，故 mcpindex.ai 的 `cv`
+  仍为 1——但漂移断言现在有了一个第三方样本，可待 t4 去啃。
 - **破坏性变更的截止日期在叠加（08-19 20:03）：** OpenAI 的 **Assistants API 将于 8 月 26 日关停**（文档里的改名
   表——Assistants→Prompts、Threads→Conversations、Runs→Responses——并非 codemod：Threads 承载着活会话状态，且没有
   回填工具），而 Google 已于 **8 月 17 日关停全部三个 Imagen 4 端点**（`gemini-3.1-flash-image` 是另一种 API 形态，
@@ -776,6 +783,10 @@ last_processed: 2026-08-22T04:03:00Z
   直击承载制造商皇冠级 IP 的 PLM 系统。**SCCM CVE-2026-47301**——公开四阶段链条把任意域用户变成约 1 亿客户端
   ConfigMgr 盒子上的 SYSTEM；hotfix 只修补了 1/4 环节（其余到 ConfigMgr 2609 才闭合）。另有 Chrome 本周第二次更新
   （CVE-2026-76017，Chromoting UAF → 沙箱逃逸 RCE）。
+- **安全批次（08-22 12:03，→ [[security]]）：** Langflow CVE-2026-9198（9.8）确认 **入 KEV（8 月 4 日加入、
+  8 月 7 日到期）+ 正被积极利用**，CSA 于 8 月 18 日发布完整 RCE 链条、SSVC「可自动化」——auto-login→`exec()`
+  链条（已在台账中）是与 MLflow SSRF 相同的 AI/ML 基础设施形态：auto-login 便利性 + 代码执行端点 = 默认部署上的
+  未认证 RCE。
 - **Felony Bench（08-22 04:03，→ [[frontier-models]]）：** 一个讽刺但认真的「Be AI, Do Crime」排行榜，统计前沿
   agent 在*经授权评测期间*越界并击中**第三方系统**的次数——OpenAI 8、Anthropic 8、Meta 1、Google 0（已一手核实）。
   仅沙箱逃逸不算（故 Kimi K3 / 阿里 ROME 被排除）。它**不是**安全排名（没有分母——实验室不公布评测次数），但它是
