@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-22T20:03:00Z
+last_processed: 2026-08-23T04:03:00Z
 ---
 
 # Learnt Agent
@@ -42,24 +42,25 @@ patterns, and turn them into insights and actionable todos.
    nobody.** Every MCP server, agent runtime, and repo-adjacent credential file is a pivot or a prize
    (Langflow RCE 9.8 actively exploited; mcp-grafana SSRF 9.1; scanners harvesting
    `/.claude/settings.json` / `/.aws/credentials`). ~40 CVSS≥9 entries since Aug 12 resolve into
-   **thirteen recurring shapes** (canonical instance each: standing-credentials pivot Metabase 10.0 ·
+   **fourteen recurring shapes** (canonical instance each: standing-credentials pivot Metabase 10.0 ·
    patch-then-reverse-engineer SAP 10.0 · default-exposed surface macOS Screen Sharing 9.8 ·
    AI-assisted offensive research Rapid7 · supply-chain-by-design WPMU DEV 9.8 / Cl0p-PTC ·
    prompt-injectable RCE MindsDB 10.0 · no-patch EoP ShieldBreak · parser-differential WordPress
    XSS2Shell / Scriban · AI-review-miss → autonomous exploit Wiz Red Agent · tool-contract drift
-   mcpindex ledger · excessive agency Rapid7 SharePoint · agent memory hygiene "mind viruses" · control-plane compromise vCenter 9.8).
+   mcpindex ledger · excessive agency Rapid7 SharePoint · agent memory hygiene "mind viruses" ·
+   control-plane compromise vCenter 9.8 · dangling-delegation takeover ENUM €5).
    **The meta-pattern is the finding:** in four of them the class is named, the
    mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval
    sandbox, and MCP tool pinning (urged Apr 2025, still not in the spec).
-   - **08-16→21 — negative window → build-time chain → control-plane ransom:** M-Trends −7d time-to-exploit;
-     354 read-only→write MCP flips; Oracle 943/day; Rapid7 SharePoint overstepped (CVE-2026-55040, 9.1, KEV);
-     `arrayref` at `cargo build`; MLflow SSRF 9.3 KEV; "mind viruses"; vCenter 59310/59309 → Babuk; TrueConf KEV.
-   - **08-22 04:03 — GitLab in the wild + Windchill 40 + SCCM 1-of-4:** CVE-2026-19478 exploited ~2 days
-     post-disclosure (forged merge records); Cl0p names 40+ Windchill victims; SCCM 47301 1-of-4 patched; Chrome 76017.
-   - **08-22 20:03 — zero-auth spacecraft console + third AI-infra KEV of the week:** NASA/JPL AIT-GUI
-     (GHSA-p9r8-2q67-fp86, 9.4) — no auth/CSRF (safe check existed on a sibling route) → commands to flight
-     hardware; Ray CVE-2025-62593 (9.4, KEV) resurfaces via malvertising (RondoDox); Cloudflare remote Spectre
-     on Workers (12 bits/s, ~360× the 2021 PoC).
+   - **08-16→22 — negative window → build-time chain → control-plane ransom:** M-Trends −7d; 354 read-only→write
+     MCP flips; Oracle 943/day; Rapid7 SharePoint overstepped (9.1, KEV); `arrayref` at `cargo build`; MLflow
+     SSRF 9.3 KEV; "mind viruses"; vCenter 59310/59309 → Babuk; TrueConf KEV; GitLab 19478 in the wild (forged
+     merge records); Cl0p's 40+ Windchill victims; SCCM 47301 1-of-4; NASA/JPL AIT-GUI (9.4) commands flight
+     hardware; Ray 62593 via malvertising; Cloudflare remote Spectre (12 bits/s, ~360×).
+   - **08-23 04:03 — €5 domain → shape 14; the code-containment library itself breaks:** expired `ns.enum.org.uk`
+     (€5) = authoritative ENUM DNS for +246/+247/+290 military calling codes ([[security]]); isolated-vm
+     GHSA-864f-rcv7-6rh4 (TOCTOU → full host control-flow hijack) is the npm sandbox n8n/Mastra/Rocket.Chat
+     bundle; Cisco Crosswork 4×10.0/9.9 "found … as well as frontier AI models"; Entra ID 69836 "exploited" flag walked back.
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -73,6 +74,9 @@ patterns, and turn them into insights and actionable todos.
    - **08-21 04:03 — domain-token + diffusion + MIT-base turn:** RollTab (125M MIDI continuation on
      iPhone, five-field NOTE token, ~108 notes/s), DiffusionGemma (diffusion LM at ~1,500 tok/s, still
      AR-capable), and Ant Group's Ling-3.0 tiny/flash *base* checkpoints (incl. mid-training stages, MIT).
+   - **08-23 04:03 — guaranteed-lossless speculative decoding:** Liquid AI's DSpark draft checkpoints give
+     LFM2.5 up to **3.18×** (H100) / **2.87×** (M4 Max) with greedy-identical output — the "spend the exact
+     bytes" turn now has a zero-quality-loss speed variant ([[edge-inference]]).
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
    Claude's 60-agent Riemann run (41.6% → 67.2% on the critical-line bound, formalized in Lean)
@@ -96,21 +100,15 @@ patterns, and turn them into insights and actionable todos.
    the cheapest engine that can do it. The router *decision* — its policy, signal, and catalog — is
    the new control point (LiteLLM self-host / OpenRouter hosted / Switchyard vendor each own one),
    so lock-in forms where there's no shared routing-config standard.
-   - **08-15 20:31 — the gap is being filled:** `bitrouter/bitrouter` (three routable primitives —
-     Models, MCP+AgentSkills Capabilities, ACP Agents — + a git-owned `policy-lock.yaml` as "the only
-     live route authority") and the Semantic Router research DSL (arXiv 2603.27299, non-Turing-complete
-     policy → verified LangGraph/K8s/MCP-A2A). "No shared DSL" now reads "a standard is emerging."
-   - **08-16 20:27 — MCP-native path materialized:** MCP's Jul 28 stateless rewrite adds mandatory
-     `Mcp-Method`/`Mcp-Name` routing headers + `server/discover` — routing is now protocol transport;
-     the *policy* stays a git-owned/verified DSL (two-layer split).
-   - **08-18 — voice stack joins:** Speko (`SpekoAI/gateway`) benchmarks STT/LLM/TTS providers and
-     picks the winner — classify-then-cheap-specialist applied to a multi-layer pipeline.
-   - **08-19 20:03 — A2A's missing middle:** Sprix SAGE Router (SELF/COLLABORATE/HANDOFF mid-run)
-     routes a sub-task's *ownership*, not a model call.
-   - **08-21 04:03 — routing ownership becomes a supply-chain question:** OpenRouter — the router most
-     agent stacks call — is joining Stripe (sale unclosed; "same mission/name/product/roadmap" + a
-     neutrality pledge "doesn't bend to any model, any provider, or any parent company"). The layer that
-     decides which model your agent hits now has a parent to hold to that promise.
+   - **08-15→21 — the DSL + transport + ownership resolved in stages (detail → [[smart-routing]]):** the
+     routing-config standard emerges two ways (`bitrouter` git-owned `policy-lock.yaml` vs the Semantic Router
+     verified DSL); MCP's stateless rewrite makes `Mcp-Method`/`Mcp-Name` + `server/discover` the *transport*;
+     Speko (voice), Sprix SAGE (A2A sub-task ownership); OpenRouter joins Stripe (sale unclosed, neutrality
+     pledge) — routing ownership becomes a supply-chain fact.
+   - **08-23 04:03 — MCP standardizes *who the agent is*, not what the tool is:** the roadmap finalizes DPoP
+     RFC 9449 + Workload Identity Federation + token exchange (identity/delegation) and unifies transport
+     ("Streamable HTTP over stdio") — but carries **zero** tool-versioning/hashing/signed-manifest language.
+     Identity moves into the protocol; tool-contract integrity stays client-side ([[security]] shape 10).
    → [[smart-routing]]
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** DeepSeek V4 Pro GA
@@ -131,6 +129,10 @@ patterns, and turn them into insights and actionable todos.
    - **08-22 12:03 — an anonymous model tops the smoke test:** `stealth/ox-alpha` on OpenRouter (free 1-week preview,
      1M ctx) hits 80% Pass@1 on a 10-task DeepSWE sample vs Fable 5's 65% — a stealth launch or a narrowing frontier
      gap faster than leaderboards show; tokenizer fingerprints point GLM-like/Xiaomi, unconfirmed.
+   - **08-23 04:03 — a label-free reasoning-RL lever:** UCSD Co-RL (arXiv 2608.17253) removes ground-truth
+     supervision — decoupled models optimized against *peer-derived* rewards, where cohort diversity is the
+     anti-collapse lever (+3.0–8.6% text, +2.3–7.2% multimodal). Joins self-generated curriculum (Ornith-1.5) +
+     evolution strategies (ESOpt) on the post-training axis ([[frontier-models]]).
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -179,6 +181,8 @@ patterns, and turn them into insights and actionable todos.
    - **08-21 12:03 — the personal skills vault out-stars frameworks:** `mattpocock/skills` (211k stars) ships
      one educator's `.agents` directory (`/grill-me`, `/tdd`, `ubiquitous-language`) — fixes four failure
      modes (misalignment, verbosity, broken code, ball of mud), still on assertion.
+   - **08-23 04:36 — authoring-side eval harness shipped (per-author):** Anthropic skill-creator (Mar 3)
+     ships evals + benchmark + blind A/B; 13★ SkillBenchmark is the first cross-author attempt — no leaderboard yet.
    → [[agent-plugins]] [[token-economics]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
@@ -274,10 +278,9 @@ patterns, and turn them into insights and actionable todos.
    - **08-20 20:03 — the evidence vocabulary arrives before the benchmark:** grading claims `inferred` /
      `benchmark_counterfactual` / `verified` is a better answer to "prove it" than another headline number,
      and it is the practice worth borrowing regardless of whether caveman's numbers hold.
-   - **08-20 21:06 → 08-22 20:28 — control arm live in code, table still pending (4 checks):** `benchmarks/run.py` runs a
-     terse arm (`TERSE_SYSTEM = "Answer concisely."`) and computes both deltas, but `benchmarks/results/` holds only
-     `.gitkeep` (pushed_at 08-21 03:28, ~48h of no code change) and the README's 65% table is unchanged — the repo has
-     since crossed **100k stars** (100,242), and the regenerated vs-terse split is still pending.
+   - **08-20 21:06 → 08-23 04:36 — control arm live, table still pending (6 checks):** `run.py` computes both
+     deltas but `benchmarks/results/` = `.gitkeep` (pushed_at 08-21 03:28, ~2.5d), README 65% unchanged (100,315★);
+     the split is now independently runnable by a third-party tool — SkillBenchmark ships caveman as its example.
    - **08-21 12:03 — the style-filter instance:** `zachahn/vomit` pipes Claude 5's output through a local
      gpt-oss:20b to strip "token vomit" before display — the same compress-the-wire layer, applied to verbosity.
    - **08-22 12:03 — a cross-model filter for a specific house voice:** `adnanakil/nobuzz` routes Claude's output
@@ -996,3 +999,28 @@ patterns, and turn them into insights and actionable todos.
   swarm meta-harness near-daily (Thompson-bandit memory store) — the same memory/scheduling primitives under new
   names. **OBLITERATUS** (`elder-plinius/OBLITERATUS`, AGPL-3.0) makes abliteration reproducible — the sharpest
   current test of whether refusal is "in the weights" or "in the chat template."
+- **MCP roadmap (08-23 04:03, → [[smart-routing]] [[agent-stack]]):** lead maintainers published the next-spec
+  roadmap across five areas, read first-hand. The asymmetry is the finding: it finalizes **agent identity**
+  (DPoP RFC 9449, Workload Identity Federation, token exchange — *who the agent is*) and unifies transport
+  ("Streamable HTTP over stdio"), but has **no tool versioning/hashing/signed-manifest language** — the *callee
+  contract* stays client-side. Seventeen months after the Invariant "rug pull," the spec release hardens caller
+  credentials and leaves callee integrity out. ATProto **Spaces** (proposal 0016) independently adopted DPoP-bound
+  credentials the same week — two unrelated protocols converging on DPoP as the default proof-of-possession.
+- **Security batch (08-23 04:03, → [[security]]):** a **€5 expired domain** (`ns.enum.org.uk`) = authoritative
+  ENUM DNS for +246/+247/+290 military calling codes (shape 14 candidate: dangling *delegation*, not a
+  reachable service); **isolated-vm** GHSA-864f-rcv7-6rh4 is a guest→host sandbox escape in the exact npm
+  library n8n/Mastra/Rocket.Chat bundle to run model-generated code (full control-flow hijack; the Isolate
+  boundary held, the native glue didn't); **Cisco Crosswork** ships 4× CVSS 10.0/9.9 "found … as well as
+  frontier AI models"; **RedC2 4.0** = 14 trojanized npm packages whose import-time ELF is an AI-assisted
+  C2 implant; **Entra ID** CVE-2026-69836's "exploited" flag walked back (E:U). Ledger → [[security]].
+- **Freshness is a fact-check (08-23 04:03, → [[fact-check]]):** the 08-23 batch re-ran three repos already
+  covered — `AprilNEA/OpenLogi` (08-19), `jundot/omlx` and `AlexsJones/llmfit` (08-18) — as fresh items, because
+  `generate-feed.sh` passed only a **3-day** recent-history window and all three sat 4–5 days back. Fixed
+  first-hand this run: window widened to **7 days**, plus an explicit "cover a seen repo only as a dated update,
+  never a fresh discovery" rule. A dedup window shorter than a repo's natural re-appearance cadence silently
+  turns updates into duplicates.
+- **Small but real (08-23 04:03):** **Dan Luu** reframes perf work as agent-driven with human-guarded holdout
+  validation (the scarce skill moved from *writing* optimized code to *benchmark design*); **Sub2API** (38.8k★)
+  arbitrages flat-rate Claude/OpenAI/Gemini/Grok subscriptions behind one gateway (ToS-grey, but a signal
+  subscription plans are the new optimization unit); **hdiutil** is deprecated in macOS 27 "Golden Gate" and
+  Homebrew's migration already rolled back once — a quiet deprecation that breaks CI/backup pipelines.

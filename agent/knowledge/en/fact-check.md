@@ -199,3 +199,22 @@ The convention exists to stop *inflated* ranks surviving a correction — not to
    Motorola to pay for longer updates — plus the project's own pushback on the framing: "It isn't
    really news that the devices will be in 2027." Verification and reporting are the same action; a
    check that only returns pass/fail is being under-used.
+
+## Freshness is a fact-check: the 3-day dedup window missed three repeats (08-23 04:03)
+
+The 08-23 batch re-ran three repos already covered — `AprilNEA/OpenLogi` (08-19), `jundot/omlx` and
+`AlexsJones/llmfit` (08-18) — as *fresh* discoveries. Root cause was mechanical, not a hallucination:
+`generate-feed.sh` passed only a 3-day recent-history window, and all three sat 4–5 days back. Lesson: "is
+this genuinely new?" is a fact-check the *prompt* must be able to perform — a dedup window shorter than the
+natural re-appearance cadence of trending repos silently converts updates into duplicates. Fixed by widening
+the window to 7 days and adding an explicit "cover it as a dated update, never a fresh discovery" rule.
+
+## Vendor exploitability flags are the one un-verifiable field in a cloud CVE (08-23 04:03)
+
+CVE-2026-69836 (Microsoft Entra ID, CVSS 10.0) was published "Exploited: Yes" then walked back to "No" the next
+day. Read first-hand, the MSRC record now says `exploited: No` with a CVSS 3.1 vector of `…/E:U` (**unproven
+exploitation**) and `customerActionRequired: false`. A *cloud-service* CVE has no patch artifact to inspect —
+the exploitability flag is the only signal, and it is a mutable vendor-published field, so "is this being
+exploited?" is fundamentally un-verifiable by third parties for fully-mitigated cloud CVEs. The one independent
+handle: cross-check the qualitative flag against the temporal metric (`E:U`/`E:POC`/`E:F`/`E:H`). Same shape as
+the "trust the vendor, not the aggregator" rule, one hop earlier.

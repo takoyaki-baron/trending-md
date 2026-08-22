@@ -751,3 +751,47 @@ arXiv:2608.10218（Papadopoulos、Shah、Zimmerman、Lindsey）は、エージ�
   （どちらの isolate も彼ら自身のもの）。**シグナル：**投機的サイドチャネルは、強化されたマルチテナント serverless
   プラットフォームの*共置*テナント間で依然悪用可能；緩和策（V8 サンドボックス統合、MPK ベースのプロセス内分離）は
   特定のガジェットを塞ぐのであって、クラス全体ではない。
+
+## 台帳追加（08-23 04:03）
+
+- **形状14候補——放棄/ぶら下がり委譲の乗っ取り。**研究者が期限切れの `ns.enum.org.uk` を **€5** で購入し、
+  `e164.arpa` **ENUM** ゾーンの +246（ディエゴガルシア）、+247（アセンション島）、+290（セントヘレナ）の権威 DNS を
+  獲得——通信事業者が電話ルーティングに使う NAPTR レコード。約20.9万件のログに米軍基地への通話番号と時刻が記録
+  されていた。サーバーは NXDOMAIN を返したため通話は PSTN にフォールバックし、傍受はされなかった。イランの 2026年3月
+  ディエゴガルシア攻撃後、英 NCSC がゾーン移管を受け入れた。形状13（管理面が*到達可能*）と異なり、これは*放置された*
+  委譲——ぶら下がっているのは*サーバー*ではなく*登録*であり、攻撃予算は **€5 + 登録イベント1回** のみ。再現可能な
+  教訓：放棄されたインフラ*資格情報*（権威委譲を保持する期限切れドメイン）は、設定ミスのサービスとは独立した生きた
+  攻撃面である。
+- **isolated-vm サンドボックス脱出——エージェントエコシステムがコード封じ込めに使うまさにそのライブラリ（GHSA-864f-rcv7-6rh4）。**
+  `ExternalCopy` の型混乱 TOCTOU（`transferList` を2回走査；ステートフルゲッターが検証走査では正当な `ArrayBuffer` を、
+  未検証の2回目では任意の値を返す → 攻撃者影響下のポインタ逆参照）。露出した `ivm.Reference` 1つで guest は isolate
+  内部から悪意ある transferList を構築できる。研究者は制御可能なクラッシュを**完全な制御フローハイジャック**へ昇格
+  （ASLR 回復 + 偽制御ブロック/vtable + 選択 libc 関数への間接呼び出し）——V8 Isolate 境界自体は持ちこたえた。問題は
+  ネイティブグルーコード。**下流：**n8n、Activepieces、Mastra、Budibase、Sim.ai、Directus、Rocket.Chat（ドキュメント
+  では Screeps、Fly.io、Algolia、TripAdvisor も）——週間約100万ダウンロード。**7.0.1 / 6.2.0 で修正済み**（8月8日）、
+  複製を `DisallowJavascriptExecutionScope` で包む方式。**CVE は保留。**信号：言語レベルのサンドボックスは*便利さ*で
+  あって主要な封じ込め境界ではない——SandboxEscapeBench と同じ教訓が、AIエージェント生態系が最初に手に取る npm
+  パッケージに降りかかった。
+- **Cisco Crosswork——1回のハードニングリリースで CVSS 10.0/10.0/10.0/9.9 が4件。**CVE-2026-20030（SQLi）、
+  CVE-2026-20357（認証欠如）、CVE-2026-20358（外部ファイルシステム制御）、CVE-2026-20359（資格情報露出）——いずれも
+  認証不要・ネットワーク到達可能・回避策なし。アドバイザリの Source 行（一次読み）は「found during internal security
+  testing using existing testing processes **as well as frontier AI models**」。形状4（Rapid7 の AI 支援*攻撃*研究）の
+  *防御*鏡像：フロンティア AI 支援の*発見*は、Cisco が売り文句ではなくアドバイザリ本文で述べるほど日常化した。初回修正
+  は `7.2.1-SP` / `2.1.1-SP` ハードニングリリース。
+- **RedC2 4.0——14個のトロイ化 npm パッケージが import 時に AI 支援 Linux インプラントを落とす。**`streak-metrics-math`、
+  `kit-map-vim`、`map-streak-kit` などがカレンダー/習慣ユーティリティを装う。裸の `import`（インストールフックなしのため
+  `--ignore-scripts` では止まらない）で `dist/index.mjs` が同梱 ELF を chmod して起動。ペイロードは商用 **RedC2 4.0** C2
+  フレームワークの **RedShell** Linux ビーコンで、自然言語プロンプトを C2 コマンドへ変える AI「Red Agent」を備える。
+  サプライチェーンの教訓は*自前公開パッケージ*の経済学：独立パッケージは構造上 2FA/来歴証明に盲目（何もハイジャックされて
+  いないので来歴証明は拒否対象がない）であり、import 時実行のみで発火する。
+- **Microsoft Entra ID CVE-2026-69836——CVSS 10.0 の「悪用」フラグが撤回。**MSRC API を一次読み：現行レコードは
+  `exploited: No`、`publiclyDisclosed: No`、CVSS 3.1 ベクトル `…/E:U/RL:O/RC:C`（**E:U = 悪用未実証**）、
+  `latestRevisionDate 2026-08-21`、Critical 10.0、CWE-502、`customerActionRequired: false`（「既に Microsoft が完全に
+  緩和」）。フィードの話——一度「Exploited: Yes」となり、The Hacker News の問い合わせ後に「No」へ戻った——は**検査可能な
+  パッチ成果物が存在しない**クラウドサービス CVE：悪用フラグが*唯一*の信号であり、それはベンダー発行の可変フィールド。
+  `E:U` 時間メトリクスとの突合が唯一の独立した手がかり——[[fact-check]] 参照。
+- **DPoP 収束（プロトコル横断）。**MCP ロードマップ（「Agent identity and enterprise security」）は **DPoP（RFC 9449）**
+  + Workload Identity Federation + token exchange を最終化。同じ週に ATProto **Spaces**（提案0016）がゲート付きデータに
+  「short-lived DPoP-bound credentials」を採用。無関係な2つのプロトコルが同じ週に、委譲アクセスのデフォルト*所有証明*
+  プリミティブとして DPoP バインドの短命資格情報へ収束——本物の横断的収束であり、注視に値する：共有プリミティブこそ、
+  次にプロトコル横断攻撃研究が狙う場所になる。

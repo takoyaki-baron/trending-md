@@ -761,3 +761,41 @@ harness（论点 12）。战略上它是 DeepSeek MIT 许可 harness 的镜像�
   就三版（MessageBus 重试上界、混合搜索开关、折扣 Thompson-bandit 记忆存储）。**信号：**又是「专精 agent swarm +
   共享记忆总线」模式——其节奏（一天数版、changelog 读起来像 RL 调参笔记）提醒我们，这些 harness 正在以不同名字
   收敛到相同的记忆与调度原语。
+
+## MCP 路线图——身份在标准化，工具契约仍未定义（08-23 04:03）
+
+主维护者 David Soria Parra + Den Delimarsky 发布了下一版规范的路线图（8 月 22 日），一手读到的五大领域：**agentic 消息
+原语**（服务端发起事件/webhook，让客户端不再轮询；把 Tasks 扩展 SEP-2663 成熟化纳入核心规范）；**HTTP 原生传输统一**
+（"Streamable HTTP over stdio"）；**agent 身份与企业安全**（定稿 **DPoP RFC 9449**、Workload Identity Federation、用
+token exchange 取代粘贴 API key）；**原语改进**（单一 `tools/call` 结果契约 + 大工具目录的"渐进式发现"）；以及 SDK DX。
+
+不对称性才是发现：路线图标准化的**是 agent 是谁**（身份、持有证明、委托），却**不含任何工具版本化/哈希/签名清单的表述**
+——被调用方契约原封未动。距 Invariant Labs 的 MCP "rug pull"（2025-04-01）与 mcpindex 测得的 354 次只读→写入翻转已
+17 个月，下一版规范加固的是*调用方*凭证，却把*被调用方*完整性继续留给客户端自行处理。这同时锐化了 [[security]] 形态 10
+与 transport-vs-policy 的分层：身份正在进入协议；工具契约完整性明确不在路线图上。
+
+## Hister——经 MCP 的个人语料（08-23 04:03）
+
+`asciimoo/hister`（AGPL-3.0，Go）为你看过/保留的一切构建私有全文索引（浏览器扩展、历史导入、爬虫、文件监视），并经
+Web UI、CLI、HTTP API 与一个 **MCP server** 暴露，让助手查询个人语料而非开放网络。形态：个人知识 = 自托管索引 + MCP
+作为查询面——"你的数据、你的索引"，而让 agent 真正感兴趣的是 MCP 钩子（而非搜索本身）。
+
+## Coding agent 压低性能工程成本；基准设计成为新的稀缺技能（08-23 04:03）
+
+Dan Luu 的文章：LLM coding agent 把针对工作负载的优化*人工*成本压低"好几个数量级"（几分钟做出一个 AOT 正则变体、~2
+分钟一个 ripgrep 调优、靠 agent 驱动的多线程/native/MCTS 把一个桌游 AI 做到世界最强）——但 SOTA 模型"不太擅长实验设计"，
+且一段刷基准的历史（声称 1.4×，实际在隐藏 holdout 上*慢*了 10×）意味着稀缺技能已从*写*优化代码转向**基准设计 + holdout
+验证**。这是 thesis 12 harness-ROI 教训的建设性镜像：agent 负责写优化；人必须守住 holdout。
+
+## ATProto Spaces——访问控制，而非机密性（08-23 04:03）
+
+Bluesky 提案 0016 把 atproto 扩展到门控/非公开数据（私有书签、门控论坛、订阅发布）：space 作用域仓库 + LtHash 集合哈希
+摘要、短时 **DPoP-bound** 凭证、单次委托 token、OAuth `space:` 作用域。帖子明说它提供**访问控制而非机密性**（非 E2E
+加密），且 alpha 语义会变。尚属预规范，却是该协议去向迄今最清晰的信号——也是一周内第二次独立的 DPoP 采用（与 MCP 并列）。
+
+## 去重窗口 3 → 7 天（System，08-23）
+
+08-23 04:03 批次把 `AprilNEA/OpenLogi`（08-19 已覆盖）、`jundot/omlx` 与 `AlexsJones/llmfit`（08-18 已覆盖）当作新
+条目重发——三者都落在 4–5 天前，刚好超出 `generate-feed.sh` 传给研究提示词的 3 天近期历史窗口。窗口现改为 **7 天**，并
+新增一条明确规则：窗口内的仓库只能作为带日期的更新覆盖（"since we covered X on <date>…"），绝不能当作新发现。见
+[[fact-check]]。

@@ -52,11 +52,13 @@ else
   MODE="fresh"
 fi
 
-# Build cross-day dedup history: repos + titles already seen in the previous 3 days.
+# Build cross-day dedup history: repos + titles already seen in the previous 7 days.
 # A story is a duplicate if its primary GitHub repo already appeared, or it's the same
 # event/CVE/story — this keeps each day's feed net-new so information accumulates, not repeats.
+# Window widened 3 → 7 days on 2026-08-23: the 08-23 batch re-ran OpenLogi (08-19), llmfit and
+# omlx (08-18) as fresh items because all three sat 4–5 days back, just outside a 3-day window.
 RECENT_HISTORY=""
-for i in 1 2 3; do
+for i in 1 2 3 4 5 6 7; do
   D=$(date -v-${i}d +%Y-%m-%d)
   F="en/feed/$D.md"
   [ -f "$F" ] || continue
@@ -80,9 +82,9 @@ Max total is $MAX_TOTAL. If no genuinely new stories exist, exit cleanly without
 
 2. Research new items across five tracks — (a) AI models & research (releases, papers, benchmarks), (b) AI tools & agent infra (repos + products), (c) security & CVEs (new vulns, exploits, patches), (d) developer tools & open-source releases, (e) significant industry news (product launches, safety incidents, policy). Use GitHub Trending, Hacker News (front page + Show HN), security/CVE feeds, and major AI/tech news. Skip pure corporate news (funding rounds, strategy) unless tied to a concrete release. Every item must link to a primary source (GitHub repo, arXiv, vendor blog, or CVE record) — a balanced mix across tracks, not all repos.
 
-3. Dedup against existing items AND against the recent-history list below. Skip anything whose primary GitHub repo already appears below, or that is the same event/CVE/story as an item already covered in the last 3 days. Quality > quantity — if only 3 genuinely new items exist, add 3, not 10. A repo is new if (and only if) its slug does NOT appear in the recent-history list.
+3. Dedup against existing items AND against the recent-history list below. Skip anything whose primary GitHub repo already appears below, or that is the same event/CVE/story as an item already covered in the last 7 days. Quality > quantity — if only 3 genuinely new items exist, add 3, not 10. A repo is new if (and only if) its slug does NOT appear in the recent-history list. If a repo DOES appear below but has since shipped a genuinely new development (a release, a measured result, a security fix), you may cover that development — but write it as an explicit update ("since we covered X on <date>, it has …"), never as a fresh discovery, and never re-describe what the earlier item already said.
 
-RECENT HISTORY (previous 3 days — do NOT repeat these repos or stories):
+RECENT HISTORY (previous 7 days — do NOT repeat these repos or stories):
 ${RECENT_HISTORY:-"(none — first days of the feed)"}
 
 4. Append new items after existing ones in $FEED_FILE, renumbering sequentially (## $((ITEM_COUNT + 1)). ...). Follow the exact format in CLAUDE.md. Each item must have: velocity, source with points+time, tags, description, "Why it matters", and at least 2 source links.
@@ -103,9 +105,9 @@ FOCUS: a balanced mix across five tracks — (a) AI models & research (releases,
 
 2. Write $FEED_FILE with up to $BATCH items following the exact format in CLAUDE.md. Each item must have: velocity, source with points+time, tags, description, "Why it matters", and at least 2 source links (link to a primary source — GitHub repo, arXiv, vendor blog, or CVE record; a balanced mix, not all repos).
 
-3. Dedup against the recent-history list below — skip anything whose primary GitHub repo already appears there, or that is the same event/CVE/story covered in the last 3 days. Each day's feed must be net-new so information accumulates instead of repeating. A repo is new if (and only if) its slug does NOT appear below.
+3. Dedup against the recent-history list below — skip anything whose primary GitHub repo already appears there, or that is the same event/CVE/story covered in the last 7 days. Each day's feed must be net-new so information accumulates instead of repeating. A repo is new if (and only if) its slug does NOT appear below. If a repo DOES appear below but has since shipped a genuinely new development (a release, a measured result, a security fix), you may cover that development — but write it as an explicit update ("since we covered X on <date>, it has …"), never as a fresh discovery.
 
-RECENT HISTORY (previous 3 days — do NOT repeat these repos or stories):
+RECENT HISTORY (previous 7 days — do NOT repeat these repos or stories):
 ${RECENT_HISTORY:-"(none — first days of the feed)"}
 
 3. Translate to zh/feed/$TODAY.md (Simplified Chinese) and jp/feed/$TODAY.md (Japanese). Keep tags in English, translate everything else.

@@ -165,3 +165,15 @@ NVIDIA 的 NIM 目录）。目前还没有共享的路由配置标准——各�
 你的智能体真正命中哪个模型，所以路由器的母公司是一个供应链事实，而非商业版面的事实。这一承诺现在成了要用来
 约束 Stripe 的东西——而操作建议也由锁定地图得出：**明确钉住你的提供商偏好**（`provider` 对象 /
 `policy-lock.yaml` / LiteLLM 配置），而不是依赖默认路由，以免未来由归属驱动的默认变更悄悄改道你的流量。
+
+## 订阅额度套利 + embedder-vs-LLM 成本分流（08-23 04:03）
+
+- **Sub2API**（`Wei-Shaw/sub2api`，LGPL-3.0，Go + Vue，~38.8k stars）把 Claude/OpenAI/Gemini/Grok 的*订阅额度*整合到
+  一个 API-key 网关后面（多账号、token 计费、智能调度，还有"国内供应商自适应协议"，让一个 Kimi/GLM/DeepSeek 账号同时
+  服务 Chat Completions + Anthropic Messages + OpenAI Responses）。README 自己标注可能违反上游 ToS。这是路由层的灰色
+  市场近亲：不是"哪个引擎最便宜且够用"，而是"哪个*包月订阅*未被充分利用"——把固定额度套利成计量 API 定价。这是一个活跃
+  信号：订阅套餐（而不只是每 token 价格）正在成为 agent 优化的单位。
+- **Embedder 两难**（COLM 2026，arXiv 2608.12875）是"LLM vs embedder"的成本感知版：最佳 LLM（Gemini 3.1 Pro 77.6）与
+  最佳 embedder（77.2）总体打平，但 LLM 在推理密集型检索上领先、embedder 在分类上领先，且一个 LLM 成本可高 **1,431×**
+  （每遍 USD 154 vs 0.11，其中 28–81% 是推理 token）。其路由处方就是检索层的"route before compute"论：相似度/分类/聚类用
+  embedder，推理密集型检索才用 LLM——而且只有**一个** LLM 站在 Pareto 前沿上。

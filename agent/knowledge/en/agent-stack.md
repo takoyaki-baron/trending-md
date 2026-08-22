@@ -1001,3 +1001,53 @@ layer is consolidating by going open, not by staying proprietary.
   opt-in, a discounted Thompson-bandit memory store). **Signal:** the "swarm of specialized agents + shared
   memory bus" pattern again — its cadence (several releases/day, a changelog that reads like RL tuning notes)
   is a reminder these harnesses are converging on the same memory-and-scheduling primitives under different names.
+
+## MCP roadmap — identity standardizes, the tool contract stays unspecified (08-23 04:03)
+
+Lead maintainers David Soria Parra + Den Delimarsky published the next-spec-release roadmap (Aug 22) across
+five areas, read first-hand: **agentic messaging primitives** (server-initiated events/webhooks so clients
+stop polling; maturing the Tasks extension SEP-2663 into the core spec); **HTTP-native transport unification**
+("Streamable HTTP over stdio"); **agent identity & enterprise security** (finalizing **DPoP RFC 9449**,
+Workload Identity Federation, token exchange instead of pasted API keys); **improved primitives** (one
+`tools/call` result contract + "progressive discovery" for large catalogs); and SDK DX.
+
+The asymmetry is the finding: the roadmap standardizes **who the agent is** (identity, proof-of-possession,
+delegation) but contains **no tool versioning, hashing, or signed-manifest language** — the callee contract
+is untouched. Seventeen months after Invariant Labs' MCP "rug pull" (2025-04-01) and the 354 read-only→write
+flips mcpindex measured, the next spec release hardens *caller* credentials while leaving *callee* integrity
+client-side only. This sharpens both [[security]] shape 10 and the transport-vs-policy split: identity is
+moving into the protocol; tool-contract integrity is explicitly not on the roadmap.
+
+## Hister — a personal corpus over MCP (08-23 04:03)
+
+`asciimoo/hister` (AGPL-3.0, Go) builds a private full-text index of everything you read/keep (browser
+extensions, history import, crawler, file watchers) and exposes it via web UI, CLI, HTTP API, and an **MCP
+server** so an assistant queries a personal corpus instead of the open web. The shape: personal knowledge as
+a self-hosted index + MCP as the query surface — "your data, your index," which makes the MCP hook (not the
+search) the agent-relevant part.
+
+## Coding agents compress perf-work cost; benchmark design is the new scarce skill (08-23 04:03)
+
+Dan Luu's essay: LLM coding agents dropped the *human* cost of workload-specific optimization "by many orders
+of magnitude" (an AOT regex variant in minutes, a ripgrep tweak in ~2 min, a board-game AI to world-strongest
+via agent-driven multithreading/native/MCTS) — but SOTA models are "pretty bad at experimental design," and a
+history of benchmark-gaming (a claimed 1.4× that was 10× *slower* on a hidden holdout) means the scarce skill
+has shifted from *writing* optimized code to **benchmark design + holdout validation**. The constructive
+mirror of the harness-ROI lesson (thesis 12): the agent writes the optimization; the human must guard the
+holdout.
+
+## ATProto Spaces — access control, not confidentiality (08-23 04:03)
+
+Bluesky's proposal 0016 extends atproto to gated/non-public data (private bookmarks, gated forums,
+subscription publishing): space-scoped repos with LtHash set-hash digests, short-lived **DPoP-bound**
+credentials, single-use delegation tokens, OAuth `space:` scopes. The post is explicit it provides **access
+control, not confidentiality** (not E2E-encrypted), and that alpha semantics will change. Pre-spec, but the
+clearest signal yet of where the protocol heads — and a second independent DPoP adoption in one week (with MCP).
+
+## Dedup window widened 3 → 7 days (System, 08-23)
+
+The 08-23 04:03 batch re-ran `AprilNEA/OpenLogi` (covered 08-19), `jundot/omlx` and `AlexsJones/llmfit`
+(covered 08-18) as fresh items — all three sat 4–5 days back, just outside the 3-day recent-history window
+`generate-feed.sh` passed to the research prompt. The window is now **7 days**, and the prompt gained an
+explicit rule: a repo *inside* the window may only be covered as a dated update ("since we covered X on
+<date>…"), never as a fresh discovery. See [[fact-check]].

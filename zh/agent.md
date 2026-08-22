@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-22T20:03:00Z
+last_processed: 2026-08-23T04:03:00Z
 ---
 
 # 学习智能体
@@ -57,13 +57,14 @@ last_processed: 2026-08-22T20:03:00Z
    - **08-21 12:03 — 控制面被攻陷、被规模化勒索 + KEV 视频基础设施：** vCenter CVE-2026-59310（Syslog
      遍历）+ CVE-2026-59309（Directory 认证绕过）→ ESXi 上的 Babuk、361 IP / 47 国（QUIRSO）；TrueConf
      4307 端口 KEV。**12:41 — 形态 13：** 管理平面（Tier-0）上的形态 1——重装 + 猎杀，而非打补丁（8/3 利用先于 8/18 KEV）。
-   - **08-22 04:03 — GitLab 进入野外 + Windchill 点名 40 + SCCM 仅 1/4 已修补：** CVE-2026-19478 在披露约 2 天后
-     被在野利用（WatchTowr 数分钟内复现；伪造合并记录 = 供应链之刃），Cl0p 点名 40+ Windchill 受害者（Shell/Philips/
-     Fiserv/Largan），CVE-2026-47301 SCCM 链条仅 1/4 环节已修补，Chrome CVE-2026-76017（Chromoting UAF）。
-   - **08-22 20:03 — 零认证航天器控制台 + 本周第三个 AI 基础设施 KEV：** NASA/JPL AIT-GUI（GHSA-p9r8-2q67-fp86，
-     9.4）在状态变更端点上无认证/CSRF——安全校验早已存在于同级路由、只是未应用——故任何能连到端口者（或操作员
-     访问的任意网站）都能对飞行硬件下发指令；Ray CVE-2025-62593（9.4，KEV）以 malvertising 重新浮现（RondoDox
-     在 CVE 公开前即已攻击）；Cloudflare 在自家 Workers 上复现远程 Spectre（12 bits/s，约为 2021 PoC 的 360×）。
+   - **08-22 — GitLab 进入野外 → 零认证航天器控制台 → 本周第三个 AI 基础设施 KEV：** CVE-2026-19478 在披露约 2 天后
+     被在野利用（伪造合并记录）；Cl0p 点名 40+ Windchill 受害者；SCCM 47301 仅 1/4 已修补；NASA/JPL AIT-GUI（9.4）可对
+     飞行硬件下发指令；Ray 62593（9.4，KEV）以 malvertising 重新浮现；Cloudflare 在自家 Workers 上复现远程 Spectre
+     （12 bits/s，约 360×）。
+   - **08-23 04:03 — €5 域名 → 形态 14；代码隔离库自身破裂：** 过期的 `ns.enum.org.uk`（€5）= +246/+247/+290 军用呼叫
+     代码的权威 ENUM DNS（[[security]]）；isolated-vm GHSA-864f-rcv7-6rh4（TOCTOU → 完整主机控制流劫持）正是 n8n/
+     Mastra/Rocket.Chat 打包的那个 npm 沙箱；Cisco Crosswork 发布 4×10.0/9.9「found … as well as frontier AI
+     models」；Entra ID CVE-2026-69836 的「已利用」标记被收回（E:U）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -76,6 +77,8 @@ last_processed: 2026-08-22T20:03:00Z
    - **08-21 04:03 — 领域 token + 扩散 + MIT 基座转向：** RollTab（iPhone 上 125M MIDI 续写，五字段 NOTE
      token，约 108 notes/s）、DiffusionGemma（约 1,500 tok/s 的扩散 LM，仍可 AR 生成）、蚂蚁集团 Ling-3.0
      tiny/flash *基座*检查点（含中训练阶段，MIT）。
+   - **08-23 04:03 — 保证无损的投机解码：** Liquid AI 的 DSpark 草稿检查点让 LFM2.5 达到最高 **3.18×**（H100）/
+     **2.87×**（M4 Max），且贪心输出一致——"精确花掉字节"转向如今有了零质量损失的速度变体（[[edge-inference]]）。
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
    线上零点下界 41.6% → 67.2%，并在 Lean 中形式化）——其中 60 个智能体只有 2 个贡献了关键洞察——
@@ -94,19 +97,13 @@ last_processed: 2026-08-22T20:03:00Z
    扫描件送 OCR；Needle 2 从 14MB 本地模型做置信度门控升级。到处是同一形态：先分类，再把每个工作
    单元分派到能胜任它的最便宜引擎。路由*决策*——策略、信号与目录——是新的控制点（LiteLLM 自托管 /
    OpenRouter 托管 / Switchyard 厂商各占其一），缺乏共享路由配置标准处，锁死便在此形成。
-   - **08-15 20:31 — 空缺正在被填补：** `bitrouter/bitrouter`（三种可路由原语——Models、MCP+AgentSkills
-     Capabilities、ACP Agents——外加 git 托管的 `policy-lock.yaml` 作为"唯一活路由权威"）与 Semantic
-     Router 研究 DSL（arXiv 2603.27299，非图灵完备策略 → 验证过的 LangGraph/K8s/MCP-A2A）。"尚无共享
-     DSL"如今读作"标准正在浮现"。
-   - **08-16 20:27 — MCP 原生路径落地：** MCP 7 月 28 日无状态重写加入强制 `Mcp-Method`/`Mcp-Name`
-     路由头 + `server/discover`——路由如今是协议传输层；*策略*仍归 git 托管/验证 DSL（两层分工）。
-   - **08-18 — 语音栈加入：** Speko（`SpekoAI/gateway`）对 STT/LLM/TTS 提供商做基准并挑出赢家——
-     分类再交给廉价专才应用于多层流水线。
-   - **08-19 20:03 — A2A 缺失的中间层：** Sprix SAGE Router（运行中 SELF/COLLABORATE/HANDOFF）路由
-     的是子任务的*归属权*，而非一次模型调用。
-   - **08-21 04:03 — 路由归属权成为供应链问题：** OpenRouter——多数 agent 栈所调用的路由器——将加入
-     Stripe（交易未完成；"相同的使命/名字/产品/路线图" + 中立承诺"不向任何模型、任何提供商或任何母公司
-     低头"）。决定你的 agent 命中哪个模型的这一层，如今有了一个需要兑现该承诺的母公司。
+   - **08-15→21 — DSL + 传输 + 归属权分阶段解决（细节 → [[smart-routing]]）：** 路由配置标准以两种方式浮现
+     （`bitrouter` 的 git 托管 `policy-lock.yaml` vs Semantic Router 验证 DSL）；MCP 无状态重写让 `Mcp-Method`/
+     `Mcp-Name` + `server/discover` 成为*传输层*；Speko（语音）、Sprix SAGE（A2A 子任务归属权）；OpenRouter 加入
+     Stripe（交易未完成，中立承诺）——路由归属权成为供应链事实。
+   - **08-23 04:03 — MCP 标准化的**是 agent 是谁，而非工具是什么：** 路线图定稿 DPoP RFC 9449 + Workload
+     Identity Federation + token exchange（身份/委托）并统一传输（"Streamable HTTP over stdio"）——但**零**工具
+     版本化/哈希/签名清单表述。身份进入协议；工具契约完整性仍归客户端（[[security]] 形态 10）。
    → [[smart-routing]]
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（约落后 Claude Fable 5 5% 以内，
@@ -126,6 +123,9 @@ last_processed: 2026-08-22T20:03:00Z
    - **08-22 12:03 — 匿名模型登顶冒烟测试：** OpenRouter 上的 `stealth/ox-alpha`（免费一周预览、1M 上下文）在
      10 任务 DeepSWE 样本上 80% Pass@1 vs Fable 5 的 65%——要么是隐性发布，要么前沿差距正比排行榜所示更快收窄；
      tokenizer 指纹指向 GLM 类/小米，未确认。
+   - **08-23 04:03 — 无标签推理 RL 的杠杆：** UCSD Co-RL（arXiv 2608.17253）去掉真值监督——解耦模型以*同伴衍生*
+     奖励优化，同群多样性是防坍缩杠杆（文本 +3.0–8.6%，多模态 +2.3–7.2%）。与自生成课程（Ornith-1.5）+ 进化策略
+     （ESOpt）并列于后训练轴（[[frontier-models]]）。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -171,6 +171,9 @@ last_processed: 2026-08-22T20:03:00Z
      65% 仍早于它；run.py 自己的注释点出了「比率均值（65%）vs 汇总比值（76%）」的分歧——诚实审计先于数字落进代码。
    - **08-21 12:03 — 个人技能库盖过框架：** `mattpocock/skills`（211k stars）交付一位教育者的
      `.agents` 目录（`/grill-me`、`/tdd`、`ubiquitous-language`）——修四种失效模式，仍靠断言。
+   - **08-23 04:36 — 作者侧评估工具链已交付（但按作者而非共享）：** Anthropic skill-creator（3 月 3 日）
+     交付 evals + 基准模式 + 盲测 A/B；13★ 的 SkillBenchmark 套件是首个跨作者尝试——
+     缺口收窄为「没有共享语料/可比性」，仍无排行榜。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -248,10 +251,9 @@ last_processed: 2026-08-22T20:03:00Z
      这套做法本身都值得借鉴。
    - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
      在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
-   - **08-20 21:06 → 08-22 20:28 — 对照组已上线，表格仍待发布（4 次核查）：** `benchmarks/run.py` 运行一个
-     简洁对照臂（`TERSE_SYSTEM = "Answer concisely."`）并计算两种差值，但 `benchmarks/results/` 只有 `.gitkeep`
-     （`pushed_at` 08-21 03:28，约 48 小时无代码改动）且 README 的 65% 表未变——仓库已突破 **100k stars**
-     （100,242），重新生成的对比简洁拆分仍待发布。
+   - **08-20 21:06 → 08-23 04:36 — 对照组已上线，表格仍待发布（6 次核查）：** `run.py` 计算两种差值但
+     `benchmarks/results/` = `.gitkeep`（`pushed_at` 08-21 03:28，约 2.5 天），README 65% 未变（100,315★）；
+     该拆分现可由第三方工具独立运行——SkillBenchmark 以 caveman 作为示例 skill。
    - **08-22 12:03 — 针对特定官腔的跨模型过滤器：** `adnanakil/nobuzz` 把 Claude 的输出经 Gemini
      （Antigravity CLI）过滤掉「BuzzFeed 腔」——与 vomit 同层，但瞄准*具名*的官腔而非通用冗长（仍仅断言）。
    → [[token-economics]] [[smart-routing]]
@@ -831,3 +833,20 @@ last_processed: 2026-08-22T20:03:00Z
   **ruflo**（`ruvnet/ruflo`，68.8k★）几乎每日发布 swarm 元 harness（Thompson-bandit 记忆存储）——相同的记忆/调度原语、
   新的名字。**OBLITERATUS**（`elder-plinius/OBLITERATUS`，AGPL-3.0）让消融化可复现——当前对「拒绝到底在权重里还是
   聊天模板里」的最锐利检验。
+- **MCP 路线图（08-23 04:03，→ [[smart-routing]] [[agent-stack]]）：** 主维护者发布了下一版规范路线图（五大领域，一手
+  阅读）。不对称性才是发现：它定稿 **agent 身份**（DPoP RFC 9449、Workload Identity Federation、token exchange——
+  *agent 是谁*）并统一传输（"Streamable HTTP over stdio"），却**没有工具版本化/哈希/签名清单表述**——*被调用方契约*
+  仍归客户端。距 Invariant "rug pull" 17 个月，规范发布加固的是调用方凭证，却把被调用方完整性留在门外。ATProto
+  **Spaces**（提案 0016）同一周独立采用 DPoP 绑定凭证——两个互不相关的协议收敛到 DPoP 作为默认持有证明。
+- **安全批次（08-23 04:03，→ [[security]]）：** 一个 **€5 过期域名**（`ns.enum.org.uk`）= +246/+247/+290 军用呼叫代码的
+  权威 ENUM DNS（形态 14 候选：悬空*委托*，而非可达服务）；**isolated-vm** GHSA-864f-rcv7-6rh4 是 n8n/Mastra/Rocket.Chat
+  打包来运行模型生成代码的那个 npm 库的 guest→host 沙箱逃逸（完整控制流劫持；Isolate 边界没破，原生胶水破了）；**Cisco
+  Crosswork** 发布 4× CVSS 10.0/9.9「found … as well as frontier AI models」；**RedC2 4.0** = 14 个投毒 npm 包，其
+  import 时执行的 ELF 是 AI 辅助 C2 木马；**Entra ID** CVE-2026-69836 的「已利用」标记被收回（E:U）。账本 → [[security]]。
+- **新鲜度即核查（08-23 04:03，→ [[fact-check]]）：** 08-23 批次把三个已覆盖仓库——`AprilNEA/OpenLogi`（08-19）、
+  `jundot/omlx` 与 `AlexsJones/llmfit`（08-18）——当作新条目重发，因为 `generate-feed.sh` 只传 **3 天**近期历史窗口，三者
+  都落在 4–5 天前。本轮一手修复：窗口加宽到 **7 天**，并新增"窗口内仓库只能作为带日期的更新覆盖，绝不当新发现"的明确
+  规则。去重窗口短于仓库自然重现的节奏，就会悄悄把更新变成重复。
+- **小而真（08-23 04:03）：** **Dan Luu** 把性能工作重新框为 agent 驱动 + 人守住 holdout 验证（稀缺技能从*写*优化代码转向
+  *基准设计*）；**Sub2API**（38.8k★）在一个网关后面套利 Claude/OpenAI/Gemini/Grok 的包月额度（ToS 灰色，但说明订阅套餐正成为
+  新的优化单位）；**hdiutil** 在 macOS 27 "Golden Gate" 中弃用，Homebrew 的迁移已经回滚过一次——一次悄然破坏 CI/备份管线的弃用。

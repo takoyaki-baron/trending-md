@@ -2716,5 +2716,86 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "lina.sh": {
+    "cat": "community",
+    "en": "Personal security-research blog (lina.sh) — first-hand writeups of infra/DNS security; primary source for the e164.arpa ENUM hijack.",
+    "zh": "个人安全研究博客（lina.sh）——基础设施/DNS 安全的一手记录；e164.arpa ENUM 劫持的原始出处。",
+    "jp": "個人セキュリティ研究ブログ（lina.sh）——インフラ/DNSセキュリティの一次資料。e164.arpa ENUMハイジャックの一次情報源。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "modelcontextprotocol.io": {
+    "cat": "vendor",
+    "en": "Official MCP spec/blog — canonical for the protocol roadmap and SEPs; cross-check blog claims against the modelcontextprotocol GitHub repo.",
+    "zh": "MCP 官方规范/博客——协议路线图与 SEP 的权威出处；博客表述应与 modelcontextprotocol GitHub 仓库核对。",
+    "jp": "MCP公式仕様/ブログ——プロトコルロードマップとSEPの正典。ブログの主張はmodelcontextprotocol GitHubリポジトリと突合を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "endorlabs.com": {
+    "cat": "security",
+    "en": "Application security vendor — GHSA-level vuln disclosures with real exploit writeups; confirmed the isolated-vm escape against SecurityWeek.",
+    "zh": "应用安全厂商——GHSA 级漏洞披露，带真实利用分析；isolated-vm 逃逸已与 SecurityWeek 相互印证。",
+    "jp": "アプリケーションセキュリティベンダー——実エクスプロイト分析付きのGHSA級開示。isolated-vmエスケープはSecurityWeekと相互確認済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "danluu.com": {
+    "cat": "community",
+    "en": "Dan Luu's engineering blog — careful, data-heavy posts on performance and systems; cited for the coding-agent perf-opt essay.",
+    "zh": "Dan Luu 的工程博客——严谨、数据密集的性能/系统文章；本 feed 引其 coding-agent 性能优化长文。",
+    "jp": "Dan Luuのエンジニアリングブログ——性能・システムの丁寧でデータ重視の記事。コーディングエージェント性能最適化の論考を引用。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "liquid.ai": {
+    "cat": "vendor",
+    "en": "Liquid AI — vendor blog for LFM model + DSpark speculative-decoding releases; benchmark figures are vendor-reported.",
+    "zh": "Liquid AI——LFM 模型与 DSpark 投机解码发布的厂商博客；基准数据为厂商自报。",
+    "jp": "Liquid AI——LFMモデルとDSpark投機的デコード発表のベンダーブログ。ベンチマーク数値はベンダー報告。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "trendaisecurity.com": {
+    "cat": "security",
+    "en": "Trend Micro's TrendAI threat blog — primary for the RedC2 trojanized-npm-packages disclosure; cross-check with The Hacker News.",
+    "zh": "趋势科技 TrendAI 威胁博客——RedC2 投毒 npm 包披露的原始出处；与 The Hacker News 相互印证。",
+    "jp": "トレンドマイクロTrendAIの脅威ブログ——RedC2トロイ化npmパッケージ開示の一次情報源。The Hacker Newsと突合を。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "hister.org": {
+    "cat": "code",
+    "en": "Home page for the asciimoo/hister self-hosted search project; product docs, cite the GitHub repo for facts.",
+    "zh": "asciimoo/hister 自托管搜索项目的官网；产品文档，事实以 GitHub 仓库为准。",
+    "jp": "asciimoo/histerセルフホスト検索プロジェクトの公式サイト。事実はGitHubリポジトリを参照。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "atproto.com": {
+    "cat": "vendor",
+    "en": "Official AT Protocol blog (Bluesky) — primary for protocol proposals (Spaces 0016) and spec changes.",
+    "zh": "AT Protocol 官方博客（Bluesky）——协议提案（Spaces 0016）与规范变更的原始出处。",
+    "jp": "AT Protocol公式ブログ（Bluesky）——プロトコル提案（Spaces 0016）と仕様変更の一次情報源。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "lapcatsoftware.com": {
+    "cat": "community",
+    "en": "Independent macOS developer blog — primary source for the hdiutil deprecation benchmark and Homebrew rollback detail.",
+    "zh": "独立 macOS 开发者博客——hdiutil 弃用基准与 Homebrew 回滚细节的原始出处。",
+    "jp": "独立系macOS開発者ブログ——hdiutil非推奨化ベンチマークとHomebrewロールバック詳細の一次情報源。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
   }
 }

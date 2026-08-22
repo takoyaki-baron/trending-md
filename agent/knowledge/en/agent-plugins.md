@@ -335,3 +335,29 @@ spec-as-executable-source-of-truth, from the opposite direction — spec-kit is 
 → specify → plan), Huzzah is the *artifact* (a `.hz` file that survives model and tooling changes). Caveat:
 a proof of concept — 56 stars, generated JS runs in a local Web Worker the author calls "experimental
 containment, not a hostile-code sandbox", and module/directory-level scaling is untested.
+
+## The authoring-side eval harness ships — per-author, not shared (08-23 04:36)
+
+The "MMLU-for-skills" watch-item moved this run: the *machinery* for skill evaluation shipped in March,
+but as a per-author tool, not a shared protocol. Two first-hand findings:
+
+- **Anthropic's skill-creator update (Mar 3 2026, verified at claude.com/blog)** brings software-engineering
+  rigor to skill authoring: **evals** (tests that check Claude does what you expect for a prompt),
+  **benchmark mode** (a standardized run over your evals tracking pass rate / elapsed time / token usage),
+  **A/B testing with blind comparator agents** ("judge outputs without knowing which is which"), and
+  multi-agent parallel eval in clean contexts — restructured from 3 to 9 scripts with Grader/Comparator/
+  Analyzer sub-agents, and new Create/Eval/Improve/Benchmark modes. But it is explicitly *per-author*:
+  "Your evals and results stay with you." Its "Looking ahead" points at the end-state — "Evals already
+  describe the 'what.' Eventually, that description may be the skill itself." The spec's own author shipped
+  the authoring-side eval *harness* while leaving cross-author comparability out.
+- **`TiesPetersen/SkillBenchmark`** (MIT, 13★, created+pushed May 26 2026) is a tiny third-party attempt at
+  the *shared* suite: each task runs N times, two outputs per run (skill vs no-skill as the system prompt),
+  blind judge-LLM scoring against a prompt-blind rubric, and Welch's-t confidence intervals on the delta.
+  v1 is single-turn text only ("the next major milestone is full agent environment support"). Its shipped
+  example skill **is caveman** — so the evaluation-gap thread and the token-economics control-arm thread
+  ([[token-economics]]) now converge on the same reference skill.
+
+Net: the gap narrows from "no eval machinery at all" to "no *shared* benchmark corpus + cross-author
+comparability." The harness exists (Anthropic), a third-party suite exists (SkillBenchmark, 13★), but
+neither is a leaderboard an author can be measured against — the "whoever ships it owns the marketplace"
+half is still open.

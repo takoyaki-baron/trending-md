@@ -206,3 +206,19 @@ to hold Stripe to — and the operational advice follows from the lock-in map: *
 preferences explicitly** (the `provider` object / `policy-lock.yaml` / LiteLLM config) rather than
 relying on default routing, so a future ownership-driven default change doesn't silently retarget
 your traffic.
+
+## Subscription-quota arbitrage + the embedder-vs-LLM cost split (08-23 04:03)
+
+- **Sub2API** (`Wei-Shaw/sub2api`, LGPL-3.0, Go + Vue, ~38.8k stars) consolidates Claude/OpenAI/Gemini/Grok
+  *subscription quotas* behind one API-key gateway (multi-account, token billing, smart scheduling, a
+  "domestic provider adaptive protocol" so one Kimi/GLM/DeepSeek account serves Chat Completions + Anthropic
+  Messages + OpenAI Responses at once). The README itself flags that use may violate upstream ToS. This is the
+  routing layer's grey-market sibling: not "which engine is cheapest capable" but "which *flat-rate subscription*
+  is under-utilized," arbitraging fixed quotas against metered API pricing. A live signal that subscription
+  plans (not just per-token prices) are becoming the unit agents optimize against.
+- **The Embedder's Dilemma** (COLM 2026, arXiv 2608.12875) is the cost-aware version of "LLM vs embedder":
+  best LLM (Gemini 3.1 Pro 77.6) and best embedder (77.2) tie overall, but LLMs lead on reasoning-heavy
+  retrieval while embedders lead on classification, and an LLM can cost **up to 1,431×** more (USD 154 vs
+  0.11/pass, 28–81% of it reasoning tokens). The routing prescription is the "route before compute" thesis at
+  the retrieval layer: embedders for similarity/classification/clustering, LLMs reserved for
+  reasoning-intensive retrieval — and only one LLM sits on the Pareto frontier.

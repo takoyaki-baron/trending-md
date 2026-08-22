@@ -275,3 +275,21 @@ skills 层一直在等一个没人交付的「skills 版 MNLU」。`JuliusBrusse
 这与 spec-kit 的「spec 即可执行事实来源」是同一个「让意图成为持久的人类工件」赌注，只是方向相反——spec-kit 是
 *流程*（constitution → specify → plan），Huzzah 是*工件*（一个能熬过模型与工具变更的 `.hz` 文件）。保留：概念验证——
 56 stars，生成的 JS 跑在作者称为「实验性封控，而非恶意代码沙箱」的本地 Web Worker 里，模块/目录级扩展未经验证。
+
+## 作者侧评估工具链已交付——按作者而非共享（08-23 04:36）
+
+「MMLU-for-skills」这一观察项本轮前移了：技能评估的*机制*已于 3 月交付，但作为按作者的工具，而非共享协议。两项一手发现：
+
+- **Anthropic 的 skill-creator 更新（2026 年 3 月 3 日，于 claude.com/blog 核实）** 把软件工程严谨性带进技能创作：
+  **evals**（检查 Claude 对给定提示是否做预期之事的测试）、**基准模式**（对你的 evals 做标准化运行，追踪通过率 / 耗时 /
+  token 用量）、**盲测 A/B 对照 agent**（"在不被告知哪个是哪个的情况下评判输出"），以及在干净上下文中的多 agent 并行评测——
+  从 3 个脚本重构为 9 个，新增 Grader/Comparator/Analyzer 子 agent 与 Create/Eval/Improve/Benchmark 模式。但它明确*按作者*：
+  "你的 evals 和结果只属于你。"其「展望」指向终点态——"Evals 已描述了'是什么'。最终，那份描述可能就是技能本身。"
+  Agent Skills 规范的作者交付了作者侧评估*harness*，却把跨作者可比性留在了外面。
+- **`TiesPetersen/SkillBenchmark`**（MIT，13★，2026 年 5 月 26 日创建并提交）是一次微型的第三方*共享*套件尝试：每个任务
+  跑 N 次、每次产生两个输出（有 skill vs 无 skill 作为系统提示）、对不盲任务提示的评分标准做盲测裁判 LLM 评分，并对差值
+  做 Welch-t 置信区间。v1 仅单轮文本（"下一个主要里程碑是完整的 agent 环境支持"）。其随附示例 skill **正是 caveman**——
+  于是评估缺口这条线索与 [[token-economics]] 的对照臂线索如今汇聚在同一个参考技能上。
+
+净结论：缺口从「完全没有评估机制」收窄为「没有*共享*基准语料 + 跨作者可比性」。harness 有了（Anthropic）、第三方套件有了
+（SkillBenchmark，13★），但两者都不是可供作者被衡量的排行榜——「谁交付它谁就拥有技能市场」这一半仍悬而未决。

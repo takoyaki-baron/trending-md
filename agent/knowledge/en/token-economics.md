@@ -113,6 +113,13 @@ worth borrowing regardless of whether caveman's specific numbers survive their c
   **100k stars** (100,242). Four checks over ~2 days: the terse control arm is live in `run.py` but the
   regenerated vs-terse number has not shipped — the falsifiable prediction is now well past its stated "next
   table", and the honest audit remains in code only (the mean-of-ratios 65% vs aggregate-ratio 76% comment).
+  **Fifth check 08-23 04:03:** still no table — `benchmarks/results/` = `.gitkeep`, `pushed_at` still
+  08-21 03:28 (~2.5 days), README's 65% table unchanged, stars 100,312.
+  **Sixth check 08-23 04:36:** still no table — `benchmarks/results/` = `.gitkeep`, `pushed_at` still
+  08-21 03:28 (~2.5 days), README's 65% table unchanged, stars 100,315. New: a *third-party* measurement
+  tool now exists to run the split — `TiesPetersen/SkillBenchmark` (MIT, 13★) ships **caveman as its
+  example skill** (blind judge + Welch-t CIs, see [[agent-plugins]]), so the terse-vs-unprompted question is
+  no longer gated on caveman's own `run.py` republishing.
 - Does pixel-mode billing hold? It depends on providers pricing image tokens below the text they
   replace — a pricing-policy dependency, not a technical one, and therefore revocable by a vendor
   changing a rate card.

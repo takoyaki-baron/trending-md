@@ -200,3 +200,20 @@ selection, fitting, serving, and adaptation as ordinary desktop software.
   **NOTE token carrying five categorical fields** (event type, pitch, delta onset, duration, velocity)
   run once per note instead of once per field is what makes 125M feel real-time. Domain-specific
   tokenization beating brute scale — the on-device mirror of "spend the exact bytes you have."
+
+## Speculative decoding + sparse long-context (08-23 04:03)
+
+- **Liquid AI DSpark** — self-contained speculative-decoding draft checkpoints (1.2B/2.6B/8B-A1B) that
+  accelerate LFM2.5 with **guaranteed-identical greedy output** (draft tokens accepted only when they match
+  the target distribution): up to **3.18×** H100 throughput (428→1362 tok/s on MATH500), **2.87×** on M4 Max
+  (136→389 tok/s), 57% average latency cut on multi-tool function calling, day-one llama.cpp + SGLang. A pure
+  ~3× speedup with zero quality loss, spanning data-center to MacBook — the "spend the exact bytes you have"
+  optimization now has a *guaranteed-lossless* speculative variant (thesis 3).
+- **KeysAndValues** (AWS, arXiv 2608.19920) — a fine-tuning method for long-context **sparse attention** that
+  works for any KV-cache policy on a single A100 40GB, letting the model co-adapt with the policy and often
+  beating exact sequence-parallel attention; ships H2O kernels + an OSS library. Removes the
+  sequence-parallel requirement that made long-context sparse fine-tuning impractical on modest hardware.
+- **Known repos, new facts.** `jundot/omlx` (~20.3k stars) added a DeepSeek-V4-Flash M2-Ultra kernel and cut
+  ANE compilation memory 35.8GB→4.7GB (0.6.3rc2); `AlexsJones/llmfit` (~33.6k) continues its "measure and
+  share" tok/s PR loop. Both were covered 08-18 — the dedup-window widening (see [[agent-stack]]) is what
+  should have framed these as updates, not fresh discoveries.

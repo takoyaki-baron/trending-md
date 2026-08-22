@@ -708,3 +708,13 @@ GPT-5.6 Sol** (of 35 runs). Two caveats keep this from being the standing per-la
   That is precisely why the gate lives on the weights rather than the policy: "delay open weights" is the only
   control that survives a reproducible abliteration toolkit. The chat template is the *secondary, weaker*
   refusal layer (system-prompt/steering refusals) — removing it is a prompt edit, not weight surgery.
+
+## Co-RL — unsupervised reasoning from cohort diversity (08-23 04:03)
+
+UC San Diego's Co-RL (arXiv 2608.17253) removes the ground-truth-supervision cost of reasoning-model RL:
+multiple decoupled models, sharing no parameters, are optimized simultaneously using rewards derived from
+their *peers*. Increasing cohort diversity (heterogeneous families, sizes, rephrased samples) suppresses the
+correlated errors behind self-rewarding collapse. Results: +3.0–8.6% across 7 text benchmarks, +2.3–7.2% across
+4 multimodal. A label-free path to reasoning training whose only lever is cohort diversity — another post-training
+axis joining self-generated curriculum (Ornith-1.5) and evolution strategies (Agentic ESOpt) on the "post-training,
+not scale" frontier (thesis 6).

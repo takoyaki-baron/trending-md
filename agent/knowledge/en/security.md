@@ -844,6 +844,59 @@ and explicitly warns Babuk-derivation is not reliable attribution.)
   template for hunting this class.
 - **Ray CVE-2025-62593 (update — resurfaces with a malvertising framing).** The ledger entry above already
   holds the DNS-rebinding + RondoDox + KEV facts; the 08-22 20:03 feed re-surfaced it as a *browser-driven*
+
+## Ledger additions (08-23 04:03)
+
+- **Shape 14 candidate — abandoned/dangling-delegation takeover.** A researcher bought the *expired*
+  `ns.enum.org.uk` domain for **€5** and gained authoritative DNS of the `e164.arpa` **ENUM** zones for
+  +246 (Diego Garcia), +247 (Ascension Island) and +290 (Saint Helena) — the NAPTR records carriers use to
+  route phone calls. ~209k logged queries contained phone numbers + timestamps of calls to US military bases;
+  the server answered NXDOMAIN so calls fell back to the PSTN and nothing was intercepted; the UK NCSC
+  accepted transfer after Iran's March 2026 strike on Diego Garcia. Unlike shape 13 (an admin surface left
+  *reachable*), this is a delegation left *orphaned* — the registration, not the server, was the dangling
+  credential, and **€5 + a registration event** is the whole attack budget. A reproducible lesson: abandoned
+  infrastructure *credentials* (expired domains holding authoritative delegation) are a live attack surface
+  independent of any misconfigured service.
+- **isolated-vm sandbox escape — the exact library the agent ecosystem uses for code containment (GHSA-864f-rcv7-6rh4).**
+  A type-confusion TOCTOU in `ExternalCopy` (the `transferList` is walked twice; a stateful getter returns a
+  valid `ArrayBuffer` on the validating walk and an arbitrary value on the unchecked second walk → an
+  attacker-influenced pointer dereference). One exposed `ivm.Reference` is enough for a guest to build the
+  malicious transferList from inside the isolate; researchers escalated a controlled crash to **full
+  control-flow hijack** (ASLR recovery + forged control block/vtable + indirect call to a chosen libc function)
+  — the V8 Isolate boundary itself held; the bug is in the native glue. **Downstream:** n8n, Activepieces,
+  Mastra, Budibase, Sim.ai, Directus, Rocket.Chat (plus Screeps, Fly.io, Algolia, TripAdvisor per docs) —
+  ~1M weekly npm downloads. **Fixed 7.0.1 / 6.2.0** (Aug 8) by wrapping the copy in
+  `DisallowJavascriptExecutionScope`; **CVE pending.** Signal: a language-level sandbox is a *convenience*, not
+  the primary containment boundary — the same lesson as SandboxEscapeBench, now landing in the exact npm
+  package the AI-agent ecosystem reaches for first.
+- **Cisco Crosswork — four CVSS 10.0/10.0/10.0/9.9 flaws in one hardening drop.** CVE-2026-20030 (SQLi),
+  CVE-2026-20357 (missing auth), CVE-2026-20358 (external filesystem control), CVE-2026-20359 (exposed
+  credentials) — all pre-auth, network-reachable, no workarounds. The advisory's own Source line, read
+  first-hand: "found during internal security testing using existing testing processes **as well as frontier
+  AI models**." The *defensive* mirror of shape 4 (Rapid7's AI-assisted offensive research): frontier-AI-
+  assisted *discovery* is now routine enough that Cisco states it in the advisory rather than bragging about
+  it. First fixed in the `7.2.1-SP` / `2.1.1-SP` hardening drops.
+- **RedC2 4.0 — 14 trojanized npm packages drop an AI-assisted Linux implant on import.** `streak-metrics-math`,
+  `kit-map-vim`, `map-streak-kit` etc. masquerade as calendar/streak utilities; on a bare `import` (no install
+  hook, so `--ignore-scripts` does not stop it) `dist/index.mjs` chmods + spawns a bundled ELF. The payload is
+  the **RedShell** beacon of the commercial **RedC2 4.0** framework, whose AI "Red Agent" turns natural-language
+  prompts into C2 commands. The supply-chain lesson is the *publish-your-own-package* economics: standalone
+  packages are 2FA/provenance-blind by construction (nothing is hijacked, so provenance attestation has nothing
+  to reject), and only import-time execution is needed to trigger them.
+- **Microsoft Entra ID CVE-2026-69836 — the CVSS 10.0 whose "exploited" flag was walked back.** Read the MSRC
+  API first-hand: current record says `exploited: No`, `publiclyDisclosed: No`, CVSS 3.1 vector
+  `…/E:U/RL:O/RC:C` (**E:U = unproven exploitation**), `latestRevisionDate 2026-08-21`, severity Critical 10.0,
+  CWE-502, and `customerActionRequired: false` ("already fully mitigated by Microsoft"). The feed's story — a
+  brief "Exploited: Yes" flipped to "No" after The Hacker News inquired — is a cloud-service CVE with **no patch
+  artifact to inspect**: the exploitability flag is the *only* signal, and it is a mutable vendor-published
+  field. Cross-checking it against the `E:U` temporal metric is the one independent handle available — see
+  [[fact-check]].
+- **DPoP convergence (cross-protocol).** The MCP roadmap ("Agent identity and enterprise security") finalizes
+  **DPoP (RFC 9449)** + Workload Identity Federation + token exchange; in the same week ATProto **Spaces**
+  (proposal 0016) uses "short-lived DPoP-bound credentials" for gated data. Two unrelated protocols settling on
+  DPoP-bound short-lived credentials as the default *proof-of-possession* primitive for delegated access is a
+  genuine cross-cutting convergence — worth watching, since a shared primitive is where cross-protocol attack
+  research will focus next.
   story — "the developer doesn't have to run anything, only load a page" — with two new specifics: GitHub's CNA
   scores it **9.4** (NIST 8.8), and RondoDox reportedly started hitting boxes **two days before** the CVE went
   public. Same theme as MLflow SSRF / Langflow: the local ML stack is a pivot point.

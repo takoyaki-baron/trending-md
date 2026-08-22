@@ -503,6 +503,8 @@ const SOURCE_ALIASES = {
   'qm.ycombinator.com': 'ycombinator.com',
   'blog.roboflow.com': 'roboflow.com', 'playground.roboflow.com': 'roboflow.com',
   'tip.golang.org': 'go.dev',
+  'blog.modelcontextprotocol.io': 'modelcontextprotocol.io',
+  'api.msrc.microsoft.com': 'msrc.microsoft.com',
 };
 
 function normalizeHost(url) {

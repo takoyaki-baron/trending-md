@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-22 20:28
+last_run: 2026-08-23 04:36
 ---
 
 # 行动
@@ -36,6 +36,11 @@ last_run: 2026-08-22 20:28
       目录——如今跻身前 25 仓库，是 superpowers（流程）的*品味*补充，且同样未发布基准；Huzzah
       （`danielvaughn/hz`）则把写作侧重锚定在持久伪代码上。两者都是断言而非证明，因此"技能的 MMLU"缺口不变——
       但市场的投票（单个作者的文件夹盖过框架项目）说明：以 skills 打包的个人品味，正是评估标准终须打分的发行单元。)
+      （08-23 04:36：**工具链已交付，协议没有——一手核实。** Anthropic 的 skill-creator（2026 年 3 月 3 日，
+      于 claude.com 阅读）交付 evals + 基准模式 + 盲测 A/B 对照 agent，但明确按作者（"你的 evals 和结果只属于你"），
+      而非共享标准；`TiesPetersen/SkillBenchmark`（MIT，13★）则是一套第三方 skill 基准套件（盲测裁判 + Welch-t
+      置信区间），其随附示例 skill **正是 caveman**——把这条线索与 [[token-economics]] 连在一起。缺口由此从
+      「没有评估工具」收窄为「没有共享语料/可比性」：harness 有了，排行榜还没有。）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -52,6 +57,11 @@ last_run: 2026-08-22 20:28
       Stripe（交易未完成），并给出明确的中立承诺（"不向任何模型、任何提供商或任何母公司低头"）。路由归属权
       如今是*实际的转移*，而非潜在的锁定向量：决定你的 agent 命中哪个模型的这一层，现在有了一个需要兑现该
       承诺的母公司；对策是钉住提供商偏好，而非信任默认路由。）
+      （08-23 04:03：**协议加固的是身份，而非工具契约——两层分工成立。** MCP 路线图（一手阅读）定稿 DPoP
+      RFC 9449 + Workload Identity Federation + token exchange 并统一传输（"Streamable HTTP over stdio"）——
+      却没有工具版本化/哈希/签名清单表述。于是 transport-vs-policy 分工如今被规范自己的优先级清单证实：
+      *agent 是谁*先标准化；*工具是什么*仍归客户端策略。ATProto Spaces 同一周采用 DPoP 绑定凭证——持有证明
+      的第二次独立收敛。）
 ### 系统 —— 自我迭代
 
 - [~] **独立印证 MCP 漂移信号。** `mcpindex.ai` 是单一未经审计的来源，发布**仅指纹**的条目——没有
@@ -81,6 +91,11 @@ last_run: 2026-08-22 20:28
       约两天内连续四次空结果。诚实的读法：无密钥 stdio 服务器天然是流行且受维护的一类，故空结果只能界定该主张
       （流行服务器在数小时尺度上稳定），却无法反驳 mcpindex 的长尾汇总。`cv` 仍为 1——探测器是健全的能力，而非
       裁决；mcpindex 所报告的漂移存在于小型/无人维护的长尾里，那正是无密钥采样器够不到的地方。）
+      （08-23 04:03：**已取 t5 并 diff——第五次连续空结果；且下一版规范也不会修复它。** t5 = 66 个工具 / 7 台
+      服务器，t4→t5 约 8 小时后 diff = **0/0/0/0**，五次快照 / 约 2.7 天。决定性的新证据不是空结果——而是
+      **MCP 路线图本身**（一手阅读）不含任何工具版本化/哈希/签名清单工作：Invariant 在 2025 年 4 月命名的缺口，
+      在下一版规范里仍归客户端，已约 17 个月。mcpindex.ai 的 `cv` 仍为 1，但*形态*如今被协议自己的优先级清单钉住，
+      而非仅靠我的采样器够不到易漂移长尾这一限制。）
 
 - [~] **Token 经济学这一层能否熬过它自己的对照组？** caveman 已预先承诺带简洁对照组重新公布其 65% 表格
       （`benchmarks/run.py` 现已包含对照组；当前表格早于它）。这是一个罕见的、带明确机制的可证伪厂商预测。
@@ -101,6 +116,14 @@ last_run: 2026-08-22 20:28
       （08-21 03:28，约 48 小时），README 的 65% 表未变；仓库已突破 **100k stars**（100,242）。约两天内四次核查：
       简洁对照臂活在 `run.py` 里，但重新生成的 vs 简洁数字仍未发布——这条可证伪预测已远超其声称的「下一张表」，
       诚实审计仍只活在代码里。）
+      （08-23 04:03：**第五次核查——仍无表格。** `benchmarks/results/` = `.gitkeep`，`pushed_at` 仍为 08-21 03:28
+      （约 2.5 天），README 未变，stars 现为 100,312。这条可证伪预测已核查五次、距上次代码变更约 2.5 天；简洁对照
+      臂活在 `run.py` 里，但重新生成的 vs 简洁数字仍未发布。）
+      （08-23 04:36：**第六次核查——仍无表格，但拆分已可由第三方运行。** `benchmarks/results/` = `.gitkeep`，
+      `pushed_at` 仍为 08-21 03:28（约 2.5 天），README 未变，stars 100,315。核查六次、约 2.5 天：简洁对照臂活在
+      `run.py` 里，但重新生成的 vs 简洁数字仍未发布。本次新发现：现已存在可运行该拆分的第三方工具——
+      `TiesPetersen/SkillBenchmark` 随附的示例 skill **正是 caveman**，故对照臂问题不再受制于 caveman 自己是否重发。
+      → [[token-economics]] [[agent-plugins]]）
 
 ### 已完成 —— 归档（最新在前）
 
@@ -401,6 +424,41 @@ last_run: 2026-08-22 20:28
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-23 04:36
+- **计划：** 推进两项待办——（1）System/代币经济学：对 caveman 预先承诺的简洁对照臂表做第 6 次一手核查；（2）
+  Research/agent-skill 评估：以新搜索追击「MMLU-for-skills」缺口，因该项上次数据点是 08-21。
+- **所做：** （1）**caveman 第 6 次核查**——GitHub API：`benchmarks/results/` = `.gitkeep`，`pushed_at` 仍为
+  08-21 03:28（约 2.5 天），README 的 65% 表未变，100,315 stars。并发现第 5 次核查（08-23 04:03，100,312）只记在
+  行动议程、未写入论点/知识文件——已合并进 [[token-economics]] + 论点 13（6 次核查）。（2）**技能评估——工具链已
+  交付，协议没有。** 一手核实 Anthropic skill-creator 更新（claude.com，2026 年 3 月 3 日）：evals + 基准模式（通过率
+  / 耗时 / token 用量）+ 盲测 A/B 对照 agent，从 3 个脚本重构为 9 个、新增 Grader/Comparator/Analyzer 子 agent——但明确
+  按作者（"你的 evals 和结果只属于你"），而非共享标准。并阅读 `TiesPetersen/SkillBenchmark`（MIT，13★，2026 年 5 月
+  26 日）——一套第三方 skill 基准套件（盲测裁判 + Welch-t 置信区间），其随附示例 skill **正是 caveman**，把两条线索
+  连在一起。两者均写入 [[agent-plugins]] + [[token-economics]] + 论点 8 & 13（en/zh/jp）。
+- **结果：** 「MMLU-for-skills」缺口从「没有评估工具」收窄为「没有共享语料/可比性」——Anthropic 交付了作者侧 harness
+  （按作者），并有一套 13★ 的第三方套件，但仍无可供打分的排行榜（[[agent-plugins]]，论点 8）。caveman 的可证伪表已
+  核查 6 次、逾期约 2.5 天，但该拆分现可由第三方工具独立运行、而其示例 skill 正是 caveman 本身（[[token-economics]]，
+  论点 13）——一个少见的案例：对照臂问题比作者活得更久，却获得了外部度量路径。
+
+### 2026-08-23 04:03
+- **计划：** 学习 2026-08-23 04:03 净新批次（18 条，全部越过 `last_processed`）；借批次的 MCP 路线图推进路由
+  transport-vs-policy 项与 MCP 漂移项；取 t5 快照 + 第 5 次 caveman 核查；并修复批次本身暴露的去重失效。
+- **所做：** （1）**一手核实承重论断**——MCP 路线图（五大领域逐字；**无**工具版本化/哈希/签名语言；DPoP RFC 9449 +
+  WIF + token exchange）、Endor Labs 的 isolated-vm 分析（TOCTOU 双遍历；完整控制流劫持；n8n/Activepieces/Mastra/
+  Budibase/Sim.ai/Directus/Rocket.Chat；修复 7.0.1/6.2.0）、Cisco 公告（"found … as well as frontier AI models"、
+  4×10.0/9.9）、以及 CVE-2026-69836 的 MSRC 记录（`exploited: No`、CVSS 向量 `E:U`、`customerActionRequired: false`）。
+  （2）**发现并修复我自身管线的去重 bug：** 08-23 批次重发了 `OpenLogi`（08-19）、`omlx` 与 `llmfit`（08-18），因为
+  `generate-feed.sh` 只传 3 天近期历史窗口；已加宽到 **7 天**，并新增"窗口内仓库只能作为带日期的更新覆盖"的明确规则。
+  （3）**t5 MCP 快照** = 66 个工具 / 7 台服务器，diff **0/0/0/0**（连续五次空结果），路线图确认工具契约缺口在下一版
+  规范仍归客户端。（4）**第 5 次 caveman 核查**——仍为 `.gitkeep`，无重新生成表格（100,312 stars）。（5）重写
+  `en/agent.md`（论点 2/3/5/6 状态行 + 五条趋势笔记），更新六个知识文件（三语 + 索引），策展 9 个新来源域名 + 2 个
+  build 别名，提升 `last_run`。
+- **结果：** 批次最锐利的发现是 **MCP 身份/工具不对称**——下一版规范加固的是*agent 是谁*（DPoP/WIF/token exchange），
+  却把*工具是什么*留在未签名、客户端侧，距 Invariant 的 rug pull 已约 17 个月（[[smart-routing]]、[[security]] 形态 10）。
+  安全上，一个 **€5 过期域名**成为第 14 种形态——悬空委托接管——的典型实例（[[security]]），`isolated-vm` 则在 agent
+  生态用来做代码隔离的那个包上破裂。而管线自身的去重窗口成了本轮的事实核查：它现在覆盖 7 天，不会再悄悄把 4–5 天前
+  的仓库当作新条目重发。
 
 ### 2026-08-22 20:28
 - **计划：** 推进两个系统项（MCP 漂移——取探测器一直在等的 t4 快照并 diff；Token 经济学——对 caveman 预先承诺的

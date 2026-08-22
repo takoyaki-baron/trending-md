@@ -644,3 +644,40 @@ setup 端点、NetScaler 的 Gateway/AAA 管理面，都是同一种失败：*�
   仅在调用结束后触发、把分支误预测信号淹没在 WebSocket I/O 噪声中来绕过 **DyPrIs**。未触碰任何客户数据（两个
   isolate 都是他们自己的）。**信号：**投机侧信道在加固的多租户 serverless 平台上仍可跨*共置*租户利用；缓解措施
   （V8 沙箱集成、基于 MPK 的进程内隔离）封住的是特定 gadget，而非整个类别。
+
+## 账本新增（08-23 04:03）
+
+- **候选形态 14——被弃置/悬空委托接管。**一位研究者花 **€5** 买下已过期的 `ns.enum.org.uk` 域名，随之获得
+  `e164.arpa` **ENUM** 区域中 +246（迪戈加西亚）、+247（阿森松岛）、+290（圣赫勒拿）的权威 DNS——即运营商用于路由
+  电话的 NAPTR 记录。约 20.9 万条日志查询里含拨往美军基地的电话号码与时间戳；服务器应答 NXDOMAIN，电话回退到
+  PSTN，因此并未被截获；伊朗 2026 年 3 月空袭迪戈加西亚后，英国 NCSC 接手了该区域。与形态 13（管理面*可达*）不同，
+  这是*悬空*的委托——被弃置的是*注册*而非服务器，整个攻击预算 = **€5 + 一次注册事件**。可复现的教训：被弃置的
+  基础设施*凭证*（持有权威委托的过期域名）是独立于任何错误配置服务的活跃攻击面。
+- **isolated-vm 沙箱逃逸——正是 agent 生态用来做代码隔离的那个库（GHSA-864f-rcv7-6rh4）。**`ExternalCopy` 中
+  类型混淆的 TOCTOU（`transferList` 被遍历两次；有状态 getter 在验证遍历时返回合法 `ArrayBuffer`，在未校验的第二次
+  遍历时返回任意值 → 攻击者可控指针解引用）。一个暴露的 `ivm.Reference` 就足以让 guest 在 isolate 内构造恶意
+  transferList；研究者把可控崩溃升级为**完全控制流劫持**（ASLR 恢复 + 伪造控制块/vtable + 间接调用选定 libc 函数）
+  ——V8 Isolate 边界本身没破，问题在原生胶水代码。**下游：**n8n、Activepieces、Mastra、Budibase、Sim.ai、Directus、
+  Rocket.Chat（文档另提及 Screeps、Fly.io、Algolia、TripAdvisor）——周下载约 100 万次。**已在 7.0.1 / 6.2.0 修复**
+  （8 月 8 日），方式是把复制包进 `DisallowJavascriptExecutionScope`；**CVE 待定。**信号：语言级沙箱是*便利*，不是
+  主要隔离边界——与 SandboxEscapeBench 同一课，这次落在 AI agent 生态首先拿起的那个 npm 包上。
+- **Cisco Crosswork——一次加固发布里的四个 CVSS 10.0/10.0/10.0/9.9。**CVE-2026-20030（SQLi）、CVE-2026-20357
+  （缺认证）、CVE-2026-20358（外部文件系统控制）、CVE-2026-20359（暴露凭证）——均无需认证、网络可达、无缓解方案。
+  公告 Source 行（一手读取）写的是："found during internal security testing using existing testing processes
+  **as well as frontier AI models**"。这是形态 4（Rapid7 的 AI 辅助*攻击*研究）的*防御*镜像：前沿 AI 辅助的*发现*已
+  经常规到 Cisco 直接在公告里说明，而非当作卖点。首个修复在 `7.2.1-SP` / `2.1.1-SP` 加固发布中。
+- **RedC2 4.0——14 个投毒 npm 包在 import 时植入 AI 辅助的 Linux 木马。**`streak-metrics-math`、`kit-map-vim`、
+  `map-streak-kit` 等伪装成日历/打卡工具；一次裸 `import`（无安装钩子，故 `--ignore-scripts` 拦不住）
+  `dist/index.mjs` 即 chmod 并拉起捆绑的 ELF。载荷是商业 **RedC2 4.0** C2 框架的 **RedShell** Linux beacon，其
+  AI"Red Agent"能把自然语言指令转成 C2 命令。供应链的教训是*自发布包*的经济学：独立包天然对 2FA/来源证明免疫
+  （没有任何账户被劫持，来源证明无从拒绝），且只需 import 时执行即可触发。
+- **Microsoft Entra ID CVE-2026-69836——CVSS 10.0 的"已利用"标记被收回。**一手读取 MSRC API：当前记录为
+  `exploited: No`、`publiclyDisclosed: No`，CVSS 3.1 向量 `…/E:U/RL:O/RC:C`（**E:U = 利用未经证实**），
+  `latestRevisionDate 2026-08-21`，Critical 10.0、CWE-502，且 `customerActionRequired: false`（"已由微软完全
+  缓解"）。feed 的故事——先是"Exploited: Yes"、被 The Hacker News 问询后又翻回"No"——是一类**无补丁工件可查**的云
+  服务 CVE：可利用性标记是*唯一*信号，且是厂商发布的可变字段。与 `E:U` 时间度量交叉核对是唯一独立的抓手——见
+  [[fact-check]]。
+- **DPoP 收敛（跨协议）。**MCP 路线图（"Agent identity and enterprise security"）定稿 **DPoP（RFC 9449）** +
+  Workload Identity Federation + token exchange；同一周 ATProto **Spaces**（提案 0016）也采用"short-lived
+  DPoP-bound credentials"来做门控数据。两个互不相关的协议在同一周收敛到 DPoP 绑定的短时凭证，作为委托访问的默认
+  *持有证明*原语——这是真实的跨领域收敛，值得盯住：共享原语正是跨协议攻击研究下一个会聚焦的地方。
