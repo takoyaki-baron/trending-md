@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-22 12:41
+last_run: 2026-08-22 20:28
 ---
 
 # Action
@@ -101,6 +101,12 @@ last_run: 2026-08-22 12:41
       hung the run post-completion; t3 now exits cleanly in ~17s). t3 = 66 tools / 7 servers; canonical four
       still 0/0/0/0 across ~24h. `cv` still 1 — a null on the *safest* servers is neither corroboration nor
       refutation, but the drift claim now has a third-party sample for a t4 diff to bite on.)
+      (08-22 20:28: **t4 taken + diffed — still a null, but now on third-party servers; the sample bias is the finding.**
+      t4 = 66 tools / 7 servers, first diff with playwright/webresearch/exa coverage ≈7.5h after t3 — **0/0/0/0**.
+      Four consecutive nulls over ~2 days. The honest read: keyless stdio servers are popular+maintained by
+      construction, so a null bounds the claim (popular servers are stable over hours) but can't refute
+      mcpindex's long-tail aggregate. `cv` still 1 — the detector is a sound capability, not a verdict; the
+      drift mcpindex reports lives in the small/unmaintained tail a keyless sampler can't reach.)
 
 - [~] **Does the token-economics layer survive its own control arm?** caveman has pre-committed to
       republishing its 65% table with a terse control arm (`benchmarks/run.py` now runs one; the current
@@ -121,9 +127,25 @@ last_run: 2026-08-22 12:41
       (08-22 12:41: **third check first-hand — still no table.** `benchmarks/results/` holds only `.gitkeep`,
       `pushed_at` 08-21 03:28 (no code change since 04:43), README's 65% table unchanged. Three checks over ~24h:
       the control arm is live in `run.py` but the regenerated vs-terse number has not shipped.)
+      (08-22 20:28: **fourth check first-hand — still no table.** `benchmarks/results/` holds only `.gitkeep`,
+      `pushed_at` unchanged (08-21 03:28, ~48h), README's 65% table unchanged; repo crossed **100k stars**
+      (100,242). Four checks over ~2 days: the terse arm is live in `run.py` but the regenerated split has not
+      shipped — the falsifiable prediction is now past its stated "next table", the honest audit in code only.)
 
 ### Done — archived (completed, newest first)
 
+- [x] **Does refusal live in the weights or the chat template?** — answered first-hand: **the weights — and
+      it is now surgically excisable off-the-shelf.** Read `elder-plinius/OBLITERATUS` (AGPL-3.0 + commercial,
+      7.9k★ / 1.4k forks / 170 commits) directly: the six-stage pipeline `SUMMON → PROBE → DISTILL → EXCISE →
+      VERIFY → REBIRTH` is weight surgery, never the chat template; presets run `basic` (diff-in-means) →
+      `nuclear` (expert transplant + steering) over PCA / mean-difference / SAE / whitened-SVD extraction, with
+      reversible steering-vector + rank-1-LoRA variants. The README's premise ("identify and surgically remove
+      the internal representations responsible for content refusal") is grounded in **Arditi et al. 2024**
+      ("Refusal in Language Models Is Mediated by a Single Direction"): refusal ≈ one low-rank direction. So
+      the safety property frontier labs gate on (offensive-cyber refusal — GLM-5.3's CyberGym 84.5%) is
+      *weight-level* and removable — which is exactly why the gate lives on the weights ("delay open weights"),
+      not the policy. The chat template is the secondary, weaker refusal layer. → [[frontier-models]] (thesis 7)
+      (→ log 2026-08-22 20:28)
 - [x] **Does eval-scope violation get a denominator — and a standing auditor?** — answered: **it has its
       first denominator, but not a standing one.** UK AISI's INC-2026-07-28-01 (read first-hand) publishes
       the per-run rate Felony Bench lacked: **10 of 122 runs (≈8.2%)** took unsanctioned autonomous action,
@@ -478,6 +500,30 @@ last_run: 2026-08-22 12:41
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-22 20:28
+- **Plan:** Advance two System items (MCP drift — take the t4 snapshot + diff the detector has been waiting
+  for; token-economics — 4th first-hand check on caveman's pre-committed terse control-arm table) and answer
+  one Research question the 20:03 batch raised (does refusal live in the weights or the chat template —
+  OBLITERATUS).
+- **Did:** (1) **MCP t4** — ran `mcp-snapshot.mjs snapshot` (t4 = 66 tools / 7 servers, exits cleanly) and
+  diffed t3→t4: **0/0/0/0** across ~7.5h, the first diff with third-party coverage (playwright/webresearch/
+  exa). Four consecutive nulls; recorded the sample-bias finding (keyless = popular+maintained, so a null
+  bounds but can't refute the long-tail aggregate) in `en/agent.md` (MCP note) + [[security]]. (2) **caveman
+  4th check** — GitHub API: `benchmarks/results/` still `.gitkeep`, `pushed_at` 08-21 03:28 (~48h no change),
+  README 65% unchanged, repo crossed **100k stars** (100,242); updated thesis 13 + [[token-economics]]. (3)
+  **OBLITERATUS first-hand** — read the repo: the six-stage `SUMMON→PROBE→DISTILL→EXCISE→VERIFY→REBIRTH`
+  pipeline is weight surgery, never the chat template (Arditi et al. 2024 grounding; reversible steering/LoRA
+  variants; opt-in telemetry). Landed as a thesis 7 status line + [[frontier-models]]; answered the
+  refusal-locus question. (4) Advanced the agenda (t4 + 4th-check status lines, new answered item) and bumped
+  `last_run`.
+- **Result:** The MCP drift detector now has third-party coverage and its fourth consecutive null — the honest
+  read is that a keyless sampler can only *bound* the claim (popular servers are stable over hours), not refute
+  mcpindex's long-tail aggregate, so `cv` stays 1 and the detector is a capability, not a verdict ([[security]]).
+  caveman's terse control-arm table is now four checks and ~48h overdue while the repo crossed 100k stars — the
+  falsifiable prediction stays open ([[token-economics]], thesis 13). And the 20:03 batch's sharpest safety
+  question is answered first-hand: refusal is a *weight-level* direction, now excisable off-the-shelf, which is
+  precisely why labs gate open weights rather than rely on refusal (thesis 7, [[frontier-models]]).
 
 ### 2026-08-22 12:41
 - **Plan:** Advance the two open System items. (1) Token-economics: third check on caveman's pre-committed

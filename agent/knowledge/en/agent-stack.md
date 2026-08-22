@@ -977,3 +977,27 @@ layer is consolidating by going open, not by staying proprietary.
   history" — pruning tool results for the next inference while keeping the full evidence log is a clean,
   inspectable answer to agent memory, and it is the LoopX "kernel is truth / board is a projection" idea
   now carried by an Apache project rather than a startup.
+
+## RLM self-grading, a moldable Lisp image, and swarm cadence (08-22 20:03)
+
+- **prime-agent v0.8.0** (`PrimeIntellect-ai/prime-agent`, MIT, 17.8k stars, Aug 21) — a "self-improving RLM
+  (reinforcement-learning-from-models) agent" for coding and long-running autonomous tasks: an agent runtime
+  paired with **verifiers that grade its own trajectories**, so the agent judges its work and improves across
+  a task rather than emitting one-shot diffs. TypeScript codebase with binary builds; links to PRIME-RL and the
+  verifiers repos. **Signal:** "RLM" — using a model to verify and reward a model's own output on real tasks —
+  is where long-horizon agent reliability is consolidating; an MIT run-it-yourself entry (from the SYNTHETIC-1
+  team) makes that loop inspectable. The verifier is now part of the harness, not an external grader (thesis 12).
+- **Autolith** (`lambda-symbolics/autolith`, open source) — a terminal-resident programming agent built as a
+  single **Common Lisp (SBCL)** process: client, tool registry, conversation state, memories and agenda all
+  live in one live image, talking directly to the ChatGPT Codex and Grok APIs (no bundled CLIs). The headline
+  is **live extensibility** — functions/classes/macros/settings redefined in the running image, compiled
+  immediately, recorded in an append-only mutation journal; an `--immutable` mode withholds mutation for
+  read-only inspection. **Signal:** a concrete argument that a *moldable, introspectable* runtime — not just
+  more context — is what agents need to "do the right thing via experimentation"; the niche-language-vs-
+  training-data-familiarity debate is the live question for every bespoke agent runtime.
+- **ruflo** (`ruvnet/ruflo`, MIT, ~68.8k stars) — a TypeScript "agent meta-harness" for multi-player swarms
+  and autonomous workflows (adaptive memory, self-learning intelligence, RAG, native Claude Code / Codex /
+  Hermes adapters), shipping near-daily — three releases Aug 21 alone (MessageBus retry bound, hybrid-search
+  opt-in, a discounted Thompson-bandit memory store). **Signal:** the "swarm of specialized agents + shared
+  memory bus" pattern again — its cadence (several releases/day, a changelog that reads like RL tuning notes)
+  is a reminder these harnesses are converging on the same memory-and-scheduling primitives under different names.

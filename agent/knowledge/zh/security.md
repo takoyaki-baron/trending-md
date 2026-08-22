@@ -381,6 +381,14 @@ agent 执行面机制）也收录在 [[agent-stack]] 的安全章节；本文件
   **t2（08-21 12:41）：** 扩大时撞上参考命名空间的缩减——`server-fetch`/`server-git`/`server-time` 在 npm 已 404，
   `server-pdf`（1.7.5）不再讲 stdio（`initialize` 挂起）。新增 `server-sequential-thinking`（1 个工具）；正典三个
   在约 39 小时内仍 diff 0/0/0/0。参考服务器天然稳定——佐证需要*第三方*无密钥 stdio 服务器，如今已成稀缺输入。
+  **t3（08-22 12:41）：** 稀缺输入找到了——清单新增三个*第三方*无密钥 stdio 服务器：`@playwright/mcp`（微软，
+  24 个工具）、`@mzxrai/mcp-webresearch`（3）、`exa-mcp-server`（2）。修复了一个挂起问题（`detached: true` +
+  进程组 `SIGKILL`——npx 孙进程在运行结束后持有 stdout 写端）。快照 = 66 个工具 / 7 台服务器；正典四个在约 24 小时内仍 diff 0/0/0/0。
+  **t4（08-22 20:28）：** 首次含*第三方*覆盖的 diff（距 t3 约 7.5 小时）——仍是 **0/0/0/0**，共 66 个工具 /
+  7 台服务器。至此约两天内已连续四次空结果，**样本偏差本身成了发现**：无密钥 stdio 服务器天然就是*流行、活跃维护*
+  的那一类——正是最不可能改动已发布契约的子集。这里的空结果只能**界定**该主张（流行服务器在数小时尺度上稳定），
+  却无法反驳 mcpindex 的长尾汇总，故 `cv` 仍为 1。探测器是一个健全的能力，而非裁决——mcpindex 所报告的漂移
+  存在于小型/无人维护的长尾里，那正是无密钥采样器够不到的地方。
 - **安装时端点**这一类（GBIF IPT CVE-2026-71879）会否在别处出现？「安装后安装路由仍存活」是一个廉价的
   grep 目标，也是自托管软件不断重新引入的 CWE-288 实例——值得在流行的首次运行流程中做一次扫查。
 - GitLab 18.2–18.10 无修复的分支缺口与 iMonnit 无 CVE 即公开 PoC 的链条，会否让自托管 forge 与工业/IoT 网关持续
@@ -615,3 +623,24 @@ setup 端点、NetScaler 的 Gateway/AAA 管理面，都是同一种失败：*�
   "完全"；Cloud Security Alliance 于 **8 月 18 日**发布了完整 RCE 链条。它与 MLflow 的 SSRF（前一天入 KEV）是
   同一 AI/ML 基础设施形态：auto-login 便利性 + 代码执行端点 = 默认部署上的未认证 RCE。升级到 1.10.1；不要
   把 API 暴露为未认证。
+
+## 台账新增（08-22 20:03）
+
+- **NASA/JPL AIT-GUI GHSA-p9r8-2q67-fp86（CVSS 9.4）——零认证的航天器控制台。** Cycode 发现 NASA/JPL 开源的
+  **AMMOS Instrument Toolkit**（`AIT-GUI`，用于向航天器仪器发指令）的 Web 操作控制台在其状态变更端点上
+  **无认证、无会话检查、无 CSRF 保护**；服务器无视配置绑定到 `0.0.0.0`，且 `/seq` 与 `/script/run` 上的路径
+  遍历让任何能连到该端口的人——或操作员仅仅访问的任意网站——都能对连接的飞行硬件下发任意指令。已在
+  AIT-GUI 2.5.2 修复。**形态：**「安全模式早已写好、只是未一致应用」——正确的路径限制检查早已存在于同级的
+  `/scripts/load` 路由——却落在*航天器指挥*软件里，其爆炸半径是飞行仪器而非数据库。Cycode 的 AI 辅助分析 +
+  一个真实的 headless 浏览器 CSRF PoC，也成了猎捕此类缺陷的模板。
+- **Ray CVE-2025-62593（更新——以 malvertising 视角重新浮现）。** 上方的台账条目已含 DNS-rebinding + RondoDox +
+  KEV 事实；08-22 20:03 的 feed 以*浏览器驱动*故事重新呈现——「开发者什么都不用运行，只需加载一个页面」——并带来
+  两个新细节：GitHub 的 CNA 评分 **9.4**（NIST 8.8），且据报道 RondoDox 在 CVE 公开**前两天**就开始攻击。与
+  MLflow SSRF / Langflow 同主题：本地 ML 栈是一个跳板。
+- **Cloudflare 在自家 Workers 上复现远程 Spectre（研究，无 CVE）。** Cloudflare 自己的研究员在生产 Workers 平台上
+  复现了远程 Spectre 攻击，以**最高 12 bits/s、99.16% 准确率**从一个共置的受害者 Worker 中渗出刻意放置的 JWT——
+  约为 2021 PoC 的 360× 快。技巧：用 **WebSocket 作远程计时器**（本地计时器被粗化）、通过 **Durable Objects**
+  重置 30 秒 CPU 上限让 isolate 存活 5–20+ 小时、利用 CPU 的 PLRU 策略放大缓存时序差异，并借由把隔离时机设为
+  仅在调用结束后触发、把分支误预测信号淹没在 WebSocket I/O 噪声中来绕过 **DyPrIs**。未触碰任何客户数据（两个
+  isolate 都是他们自己的）。**信号：**投机侧信道在加固的多租户 serverless 平台上仍可跨*共置*租户利用；缓解措施
+  （V8 沙箱集成、基于 MPK 的进程内隔离）封住的是特定 gadget，而非整个类别。

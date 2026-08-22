@@ -482,6 +482,17 @@ Ten recurring shapes, each with a canonical instance:
   `server-sequential-thinking` (1 tool); the canonical three still diff 0/0/0/0 across ~39h. The reference
   set is stable by construction — the corroboration needs *third-party* keyless stdio servers, which are now
   the scarce input.
+  **t3 (08-22 12:41):** the scarce input is found — three *third-party* keyless stdio servers added:
+  `@playwright/mcp` (Microsoft, 24 tools), `@mzxrai/mcp-webresearch` (3), `exa-mcp-server` (2). Fixed a hang
+  (`detached: true` + process-group `SIGKILL` — npx grandkids held the stdout write end after completion).
+  Snapshot = 66 tools / 7 servers; the canonical four still diff 0/0/0/0 across ~24h.
+  **t4 (08-22 20:28):** the first diff with *third-party* coverage (≈7.5h after t3) — still **0/0/0/0** across
+  66 tools / 7 servers. That is now four consecutive nulls over ~2 days, and the **sample bias is now the
+  finding**: keyless stdio servers are *popular, actively-maintained* ones by construction — the exact subset
+  least likely to churn a published contract. A null here bounds the claim (popular servers are stable over
+  hours) but cannot refute mcpindex's long-tail aggregate, so `cv` stays 1. The detector is a sound capability,
+  not a verdict — the drift mcpindex reports lives in the small/unmaintained tail, which a keyless sampler
+  cannot reach.
 - Does the **install-time-endpoint** class (GBIF IPT CVE-2026-71879) turn up elsewhere? "Setup route
   still live after setup" is a cheap grep and a CWE-288 instance that self-hosted software keeps
   reintroducing — worth a sweep across popular first-run flows.
@@ -818,3 +829,31 @@ and explicitly warns Babuk-derivation is not reliable attribution.)
   full RCE chain **Aug 18**. It is the same AI/ML-infra shape as MLflow's SSRF (KEV'd the day before):
   auto-login convenience + a code-exec endpoint = unauthenticated RCE on default deployments. Patch to 1.10.1;
   don't expose the API unauthenticated.
+
+## Ledger additions (08-22 20:03)
+
+- **NASA/JPL AIT-GUI GHSA-p9r8-2q67-fp86 (CVSS 9.4) — a zero-auth spacecraft console.** Cycode found the
+  web-based operator console of NASA/JPL's open-source **AMMOS Instrument Toolkit** (`AIT-GUI`, used to command
+  spacecraft instruments) shipped with **no authentication, no session checks, no CSRF protection** on its
+  state-changing endpoints; the server binds to `0.0.0.0` regardless of config, and a path-traversal on `/seq`
+  and `/script/run` lets anyone who can reach the port — or any website an operator merely visits — issue
+  arbitrary commands against connected flight hardware. Fixed in AIT-GUI 2.5.2. **Shape:** "the safe pattern
+  was already written, just not applied consistently" — a correct path-confinement check already existed on the
+  sibling `/scripts/load` route — landing in *spacecraft command* software, where the blast radius is a flight
+  instrument, not a database. Cycode's AI-assisted analysis + a real headless-browser CSRF PoC doubles as a
+  template for hunting this class.
+- **Ray CVE-2025-62593 (update — resurfaces with a malvertising framing).** The ledger entry above already
+  holds the DNS-rebinding + RondoDox + KEV facts; the 08-22 20:03 feed re-surfaced it as a *browser-driven*
+  story — "the developer doesn't have to run anything, only load a page" — with two new specifics: GitHub's CNA
+  scores it **9.4** (NIST 8.8), and RondoDox reportedly started hitting boxes **two days before** the CVE went
+  public. Same theme as MLflow SSRF / Langflow: the local ML stack is a pivot point.
+- **Cloudflare re-ran remote Spectre against its own Workers (research, no CVE).** Cloudflare's own researchers
+  reproduced a remote Spectre attack against the production Workers platform, exfiltrating a deliberately placed
+  JWT from a co-located victim Worker at **up to 12 bits/s at 99.16% accuracy** — ~360× faster than the 2021 PoC.
+  Tricks: a **WebSocket as a remote timer** (local timers are coarsened), keeping an isolate alive 5–20+ hours
+  via **Durable Objects** resetting the 30 s CPU limit, amplifying cache-timing via the CPU's PLRU policy, and
+  slipping past **DyPrIs** by timing isolation to fire only after an invocation ends + drowning the branch-
+  misprediction signal in WebSocket I/O noise. No customer data touched (both isolates were theirs). **Signal:**
+  speculative side-channels remain exploitable across *co-located* tenants in a hardened multi-tenant serverless
+  platform; the mitigations (V8 sandbox integration, MPK-based in-process isolation) close specific gadgets, not
+  the class.

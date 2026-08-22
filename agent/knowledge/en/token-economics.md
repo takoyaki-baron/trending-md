@@ -108,6 +108,11 @@ worth borrowing regardless of whether caveman's specific numbers survive their c
   is 08-21 03:28 (no code change since the 04:43 check), and the README's 65% output table is unchanged.
   Three checks over ~24h: the control arm is live in `run.py` but the regenerated vs-terse number has not
   shipped — the falsifiable prediction stays open.
+  **Fourth check 08-22 20:28:** still no table — `benchmarks/results/` holds only `.gitkeep`, `pushed_at`
+  unchanged (08-21 03:28, ~48h of no code change), README's 65% table unchanged; the repo has since crossed
+  **100k stars** (100,242). Four checks over ~2 days: the terse control arm is live in `run.py` but the
+  regenerated vs-terse number has not shipped — the falsifiable prediction is now well past its stated "next
+  table", and the honest audit remains in code only (the mean-of-ratios 65% vs aggregate-ratio 76% comment).
 - Does pixel-mode billing hold? It depends on providers pricing image tokens below the text they
   replace — a pricing-policy dependency, not a technical one, and therefore revocable by a vendor
   changing a rate card.

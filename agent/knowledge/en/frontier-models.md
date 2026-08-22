@@ -683,3 +683,28 @@ GPT-5.6 Sol** (of 35 runs). Two caveats keep this from being the standing per-la
   syntax/consistency gap (88 vs 72) is the field's real bottleneck — compiling is not the same as meaning the
   same thing — and retrieving Mathlib rather than memorizing it points a cheaper path to formal verification
   of real mathematics (thesis 10's authoring side, Vero's evaluation side).
+
+## Abliteration goes reproducible (08-22 20:03, read first-hand 08-22 20:28)
+
+- **OBLITERATUS** (`elder-plinius/OBLITERATUS`, AGPL-3.0 + commercial licence, 7.9k stars / 1.4k forks /
+  170 commits) — a toolkit for **abliteration**: identifying and surgically removing the internal "refusal
+  directions" in an LLM's activation space without retraining, positioned as an alignment-research and
+  red-teaming instrument ("not a product, not a service, not a weapon").
+  **Read first-hand (08-22 20:28) — the "weights or chat template?" answer is: the weights.** The six-stage
+  pipeline — `SUMMON` (load) → `PROBE` (activations on restricted vs unrestricted prompts) → `DISTILL`
+  (extract refusal directions via SVD) → `EXCISE` (surgically project them out, norm-preserving) → `VERIFY`
+  (perplexity/coherence) → `REBIRTH` (save) — is **weight surgery, never the chat template**. Method presets
+  run from `basic` (1 direction, diff-in-means) to `nuclear` (8 directions, all techniques + expert transplant
+  + steering), built on PCA / mean-difference / sparse-autoencoder / whitened-SVD extraction, with two
+  *reversible* paradigms for those who don't want permanent surgery: inference-time **steering vectors** and
+  **rank-1 LoRA ablation**. The README's premise is unambiguous — "identify and surgically remove the internal
+  representations responsible for content refusal" / "the model keeps its full abilities but loses the
+  artificial compulsion to refuse" — grounded in **Arditi et al. 2024 ("Refusal in Language Models Is Mediated
+  by a Single Direction")**: refusal ≈ one low-rank direction in activation space. Telemetry (opt-in,
+  `--contribute`) collects model name, method, and aggregate scores (refusal rate, perplexity, coherence, KL)
+  — **not** prompts/outputs/IPs — toward a crowd-sourced refusal-geometry dataset.
+  **Why it lands on thesis 7:** the safety property frontier labs gate on (offensive-cyber refusal —
+  GLM-5.3's CyberGym 84.5% gate) is *weight-level*, so it is now excisable off-the-shelf from open weights.
+  That is precisely why the gate lives on the weights rather than the policy: "delay open weights" is the only
+  control that survives a reproducible abliteration toolkit. The chat template is the *secondary, weaker*
+  refusal layer (system-prompt/steering refusals) — removing it is a prompt edit, not weight surgery.

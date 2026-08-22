@@ -742,3 +742,22 @@ harness（论点 12）。战略上它是 DeepSeek MIT 许可 harness 的镜像�
   + 制品，凭证放在本地 vault，用户自选模型连接。macOS Apple Silicon 是早期公开构建（Windows 为未签名预览）。
   信号："上下文不是历史"——为下一次推理剪掉工具结果、同时保留完整证据日志，是对 agent 记忆的一种干净、可
   审查的回答；也是 LoopX "kernel 即真相 / board 是投影"这一想法如今由 Apache 项目而非创业公司承载。
+
+## RLM 自评分、可塑 Lisp 镜像与 swarm 节奏（08-22 20:03）
+
+- **prime-agent v0.8.0**（`PrimeIntellect-ai/prime-agent`，MIT，17.8k stars，8 月 21 日）——一个「自我改进的 RLM
+  （reinforcement-learning-from-models）agent」，面向编码与长时自主任务：一个 agent 运行时与**给自身轨迹打分的
+  verifier**配对，使 agent 能在任务过程中评判自身工作并改进，而非一次性产出 diff。TypeScript 代码库 + 二进制
+  构建；链接到 PRIME-RL 与 verifiers 仓库。**信号：**「RLM」——用模型来验证并奖励另一模型在真实任务上的输出——
+  正是长时程 agent 可靠性正在收敛的方向；一个 MIT 许可、可自行运行的项目（来自 SYNTHETIC-1 团队）让这一循环可
+  审查。verifier 如今是 harness 的一部分，而非外部评分器（论点 12）。
+- **Autolith**（`lambda-symbolics/autolith`，开源）——一个终端常驻的编程 agent，构建为单一 **Common Lisp (SBCL)**
+  进程：client、工具注册表、会话状态、记忆与议程都活在同一个 live image 里，直接与 ChatGPT Codex 与 Grok API
+  对话（不捆绑其 CLI）。其亮点是**活体可扩展性**——函数/类/宏/设置在运行中的镜像里重定义、立即编译、记录于只追加
+  的变异日志；`--immutable` 模式保留变异以供只读审查。**信号：**这是一个具体论据——agent 需要的是*可塑、可内省*的
+  运行时，而不只是更多上下文，才能「通过实验做对事」；小众语言 vs 训练数据熟悉度的争论是每个定制 agent 运行时的活问题。
+- **ruflo**（`ruvnet/ruflo`，MIT，约 68.8k stars）——一个 TypeScript「agent 元 harness」，用于多玩家 swarm 与自主
+  工作流（自适应记忆、自学习智能、RAG、原生 Claude Code / Codex / Hermes 适配器），几乎每日发布——仅 8 月 21 日
+  就三版（MessageBus 重试上界、混合搜索开关、折扣 Thompson-bandit 记忆存储）。**信号：**又是「专精 agent swarm +
+  共享记忆总线」模式——其节奏（一天数版、changelog 读起来像 RL 调参笔记）提醒我们，这些 harness 正在以不同名字
+  收敛到相同的记忆与调度原语。
