@@ -1,8 +1,8 @@
 ---
 date: 2026-08-22
-updated: 2026-08-22T12:03:00Z
+updated: 2026-08-22T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -329,13 +329,113 @@ Google 本周 Chrome 151 稳定版的第二次更新（**151.0.7922.173**）修�
 
 ---
 
+## 22. GHSA-p9r8-2q67-fp86 — NASA/JPL 的开源航天器控制台竟然完全没有身份认证
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Cycode · CVSS 9.4 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `nasa` `spacecraft` `rce` `csrf` `open-source`
+
+Cycode 的研究人员发现，**AIT-GUI**——NASA/JPL 开源 **AMMOS 仪器工具包**（用于指挥航天器仪器）的基于 Web 的操作员控制台——在其所有改变状态的端点上**既没有身份认证、也没有会话检查、更没有 CSRF 防护**。服务器绑定到 `0.0.0.0` 而非配置的主机，加上 `/seq` 与 `/script/run` 上的路径遍历，意味着任何能访问该端口的人——或者操作员仅仅在浏览器里访问了某个网站——都能对相连的飞行硬件下发任意命令、执行命令序列。该漏洞编号为 **GHSA-p9r8-2q67-fp86**（CVSS **9.4**），已在 **AIT-GUI 2.5.2** 中修复。
+
+**Why it matters:** 这是一个典型的"安全写法其实早就写过、只是没有一致地套用"的漏洞——正确的路径限制检查其实已经存在于同源的 `/scripts/load` 路由上——而它落在*航天器指挥*软件里，爆炸半径不是数据库，而是飞行仪器本身。Cycode 用 AI 辅助分析加上真实的 headless 浏览器 CSRF PoC，也为此类漏洞的排查提供了一个模板。
+
+> 运维方应立即升级，确认控制台端口不可从不受信任的网络访问，并在已暴露实例修复前审计命令/序列历史。
+
+[`🔗 GitHub advisory GHSA-p9r8-2q67-fp86`](https://github.com/NASA-AMMOS/AIT-GUI/security/advisories/GHSA-p9r8-2q67-fp86) · [`🔗 Security Affairs — Cycode report`](https://www.securityaffairs.com/197689/hacking/critical-flaw-in-nasa-jpl-open-source-spacecraft-command-software.html)
+
+---
+
+## 23. CVE-2025-62593 — 一个恶意广告页面就能 RCE 你笔记本上的 Ray 集群，现已进入 KEV
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV · CVSS 9.4 · ~5d ago (~20:03 UTC+8)
+- **Tags:** `cve` `ray` `kev` `dns-rebinding` `rce` `ml-infra`
+
+**CVE-2025-62593** 是 **Ray**（Anyscale 的分布式计算引擎）中的代码注入 RCE，影响 2.52.0 之前的所有版本。Ray 的本地 dashboard 靠检查请求的 `User-Agent` 是否以 "Mozilla" 开头来防御自己——但 fetch 规范允许页面自行设置该头，因此一次 **DNS 重绑定 + 恶意广告** 攻击意味着：开发者只要在 Firefox/Safari 里打开一个恶意网站、同时本地运行着 `ray`，攻击者就能对集群（端口 8265）执行任意命令。GitHub 的 CNA 评分为 **CVSS 9.4 critical**；NIST 为 8.8。CISA 于 **8 月 17 日**将其加入 **KEV** 并确认正被积极利用——已记录的幕后黑手是 RondoDox 加密挖矿僵尸网络，据报它在 CVE 公开前两天就已开始攻陷主机。
+
+**Why it matters:** Ray 是大量内部 AI 工具链底层的默认 ML 基础设施，而这是一个无需登录、由浏览器驱动的 RCE——开发者什么都不用运行，只需加载一个页面。这与本周 MLflow、Langflow 被加入 KEV 的条目同属一个主题："你的本地 ML 栈就是跳板"。
+
+[`🔗 NVD CVE-2025-62593`](https://nvd.nist.gov/vuln/detail/CVE-2025-62593) · [`🔗 GitHub advisory GHSA-q279-jhrf-cc6v`](https://github.com/ray-project/ray/security/advisories/GHSA-q279-jhrf-cc6v)
+
+---
+
+## 24. Cloudflare 自己的研究员重跑了针对 Workers 的远程 Spectre 攻击，以每秒 12 比特泄露了 JWT
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare blog · 57 pts HN · ~3d ago (~20:03 UTC+8)
+- **Tags:** `spectre` `side-channel` `cloudflare` `workers` `security-research`
+
+Cloudflare 安全研究员**在自己的生产 Workers 平台上复现了远程 Spectre 攻击**，以最高**每秒 12 比特、99.16% 的准确率**从同一宿主上的受害者 Worker 中窃取了一个刻意放置的 JWT——大约比 2021 年的概念验证快 360 倍。关键技巧包括：用 **WebSocket 作为远程计时器**（本地计时器已被粗化）、借助 **Durable Objects** 重置 30 秒 CPU 限额让隔离实例存活 5 到 20 小时以上，以及利用 CPU 的 PLRU 替换策略放大缓存时序差异。他们还展示了如何绕过 **DyPrIs**（动态进程隔离）：让隔离只在调用结束后才触发，并用 WebSocket I/O 噪声淹没分支预测失败信号。
+
+**Why it matters:** 没有触及任何客户数据——两个隔离实例都是他们自己的——但这重新确立了：在加固过的多租户 serverless 平台上，跨*同宿主*租户的推测执行侧信道依然可利用，同时记录了对应用来关闭具体 gadget 的缓解措施（V8 沙箱集成、基于 MPK 的进程内隔离）。
+
+[`🔗 Cloudflare blog`](https://blog.cloudflare.com/revisiting-spectre-attacks-on-workers/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/cloudflare-workers-spectre-attack-leaks.html)
+
+---
+
+## 25. Prime Intellect 发布 prime-agent v0.8.0 —— 一个会给自己的输出打分的自改进 RLM 智能体
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 17.8k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agent` `reinforcement-learning` `self-improving` `coding-agent` `open-source`
+
+**PrimeIntellect-ai/prime-agent**（MIT）于 8 月 21 日发布 **v0.8.0**——一个面向编码工作流与长时自主任务的"自改进 RLM（从模型强化学习）智能体"。它把智能体运行时与**验证器（verifiers）** 结合，让智能体能给自己生成的轨迹打分，从而在一个任务过程中不断自我评判、自我改进，而不是只吐出一份一次性 diff；它以 TypeScript 代码库形式发布，附带二进制构建，并链接到 Prime Intellect 的 **PRIME-RL** 与验证器仓库。自 5 月发布以来已有 17.8k stars。
+
+**Why it matters:** "RLM"——用模型去验证并奖励另一个模型在真实任务上的输出——正是长时智能体可靠性正在汇聚的方向，而来自 Prime Intellect 团队（SYNTHETIC-1）的 MIT 许可、可自行运行的实现，让这个闭环可以端到端地被审视。
+
+[`🔗 PrimeIntellect-ai/prime-agent`](https://github.com/PrimeIntellect-ai/prime-agent) · [`🔗 v0.8.0 release`](https://github.com/PrimeIntellect-ai/prime-agent/releases)
+
+---
+
+## 26. Autolith —— 一个活在一个可自修改 Common Lisp 镜像里的编程智能体
+
+- **Velocity:** ▮ steady
+- **Source:** lambda-symbolics.com · 72 pts HN · ~1d ago (~20:03 UTC+8)
+- **Tags:** `common-lisp` `live-image` `programming-agent` `sbcl` `open-source`
+
+**lambda-symbolics/autolith** 是一个驻留终端的编程智能体，构建为单个 **Common Lisp（SBCL）** 进程——其客户端、工具注册表、对话状态、记忆与议程都存在于同一个 live 镜像里，直接与 ChatGPT Codex（及 Grok）API 通信，不捆绑它们的 CLI。其招牌是**实时可扩展性**：函数、类、宏与设置可以在运行中的镜像里被重新定义、立即编译，并记录到只追加的变更日志中，因此智能体可以无需重启地更新。文件系统、shell、搜索（进程内通过 FFF）与 Lisp 操作都作为显式工具暴露；`--immutable` 模式则收回变更工具，仅供只读检查。
+
+**Why it matters:** 这是一个具体的论点：智能体要"通过实验做正确的事"，需要的是一种*可塑、可自省*的运行时，而不只是更多的上下文。HN 线程里的真正争论（小众语言 vs. 训练数据熟悉度）正是每一个定制智能体运行时都要面对的现实问题。
+
+[`🔗 lambda-symbolics/autolith`](https://github.com/lambda-symbolics/autolith) · [`🔗 HN discussion (72 pts)`](https://news.ycombinator.com/item?id=49376197)
+
+---
+
+## 27. OBLITERATUS —— elder-plinius 开源了 ablution（拒绝方向消融）工具包，每次运行都更聪明
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 7.9k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `abliteration` `alignment` `red-teaming` `interpretability` `open-source`
+
+**elder-plinius/OBLITERATUS**（AGPL-3.0）是一个 **abliteration**（拒绝方向消融）工具包——在不重新训练的前提下，识别并外科手术式地移除 LLM 激活空间中的"拒绝方向"——定位为对齐研究与红队工具。它实现了多种提取策略（PCA、均值差、稀疏自编码器分解、白化 SVD），让你可视化拒绝在各层中的位置，并在 Hugging Face Spaces 上提供 Gradio 应用、在 Python API 中暴露每一个中间产物。它的特别之处在于：启用遥测后，每次运行都会向一个众包数据集贡献匿名基准数据，作者将其表述为"共同书写"拒绝几何这门科学。
+
+**Why it matters:** Abliteration 是当前最尖锐的检验：安全到底是"在权重里"还是"在聊天模板里"；一个可复现、可观测的工具包，降低了红队与可解释性工作的门槛，而更好的防御最终正依赖这些工作。它是双用途的——README 也直言这正是研究的意义所在。
+
+[`🔗 elder-plinius/OBLITERATUS`](https://github.com/elder-plinius/OBLITERATUS) · [`🔗 Hugging Face Space`](https://huggingface.co/spaces/pliny-the-prompter/obliteratus)
+
+---
+
+## 28. ruflo —— 面向多智能体集群的"元祖 agent meta-harness"达到 68k stars
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 68.8k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agent-harness` `multi-agent` `swarm` `memory` `open-source`
+
+**ruvnet/ruflo**（MIT）是一个 TypeScript 的"agent 元框架"，用于部署多智能体 swarm 并协调自主工作流，具备自适应记忆、自学习智能、RAG 集成，以及原生的 Claude Code / Codex / Hermes 适配器。它几乎每天发版——仅 8 月 21 日一天就发了三个版本（`v3.38.14`–`.16`，新增 MessageBus 重试上限、hybrid-search 可选开关、以及一个带折扣的 Thompson 采样记忆存储）——并以约 68.8k stars 登上今天的 GitHub Trending。
+
+**Why it matters:** ruflo 又是"共享记忆总线上的专家 swarm"模式，但它的发版节奏——一天数个版本、变更日志读起来像 RL 调参笔记——提醒我们：这些框架正在以不同的名字收敛到同一套记忆与调度原语上。
+
+[`🔗 ruvnet/ruflo`](https://github.com/ruvnet/ruflo) · [`🔗 Releases`](https://github.com/ruvnet/ruflo/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-22T12:03:00Z |
-| Items | 21 |
-| Sources tracked | 26 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome, OpenRouter, InfoQ, Microsoft, OpenBMB, Apache Incubator, Google/Antigravity, Cloud Security Alliance, Rust Glancer) |
+| Generated | 2026-08-22T20:03:00Z |
+| Items | 28 |
+| Sources tracked | 31 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome, OpenRouter, InfoQ, Microsoft, OpenBMB, Apache Incubator, Google/Antigravity, Cloud Security Alliance, Rust Glancer, Security Affairs, Cloudflare, The Hacker News, Prime Intellect, Lambda Symbolics) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 按速度加权（时效性 × 互动加速度 × 来源权威性） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

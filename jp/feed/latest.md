@@ -1,8 +1,8 @@
 ---
 date: 2026-08-22
-updated: 2026-08-22T12:03:00Z
+updated: 2026-08-22T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -329,13 +329,113 @@ Google の今週 2 度目の Chrome 151 安定版更新（**151.0.7922.173**）�
 
 ---
 
+## 22. GHSA-p9r8-2q67-fp86 — NASA/JPL のオープンソース宇宙機制御コンソールに認証が一切なかった
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Cycode · CVSS 9.4 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `nasa` `spacecraft` `rce` `csrf` `open-source`
+
+Cycode の研究者らは、**AIT-GUI**——NASA/JPL のオープンソース **AMMOS Instrument Toolkit**（宇宙機の計器を制御するために使われる）の Web ベースのオペレーターコンソール——が、状態を変更するエンドポイントに**認証もセッションチェックも CSRF 保護も一切持たず**に出荷されていることを発見した。サーバーは設定されたホストではなく `0.0.0.0` にバインドし、`/seq` と `/script/run` のパストラバーサルにより、そのポートに到達できる者なら誰でも——あるいはオペレーターがブラウザで訪れただけの任意の Web サイトから——接続された飛行ハードウェアに対して任意のコマンドを発行し、コマンドシーケンスを実行できる。**GHSA-p9r8-2q67-fp86**（CVSS **9.4**）として追跡され、**AIT-GUI 2.5.2** で修正済み。
+
+**Why it matters:** これは「安全な書き方はすでに書いてあった、ただ一貫して適用されていなかっただけ」というバグの典型で——正しいパス制限チェックは姉妹ルート `/scripts/load` にすでに存在していた——しかもそれが*宇宙機制御*ソフトに潜んでおり、影響範囲はデータベースではなく飛行計器そのものだ。Cycode の AI 支援解析と実際のヘッドレスブラウザ CSRF PoC は、この種の欠陥を狩るためのテンプレートでもある。
+
+> 運用者は直ちにアップグレードし、コンソールポートが信頼できないネットワークから到達不能であることを確認し、修正前に公開されていたインスタンスのコマンド／シーケンス履歴を監査すべきだ。
+
+[`🔗 GitHub advisory GHSA-p9r8-2q67-fp86`](https://github.com/NASA-AMMOS/AIT-GUI/security/advisories/GHSA-p9r8-2q67-fp86) · [`🔗 Security Affairs — Cycode report`](https://www.securityaffairs.com/197689/hacking/critical-flaw-in-nasa-jpl-open-source-spacecraft-command-software.html)
+
+---
+
+## 23. CVE-2025-62593 — マルバタイジングページが開発者ノート PC 上の Ray クラスタを RCE、KEV 入り
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV · CVSS 9.4 · ~5d ago (~20:03 UTC+8)
+- **Tags:** `cve` `ray` `kev` `dns-rebinding` `rce` `ml-infra`
+
+**CVE-2025-62593** は **Ray**（Anyscale の分散計算エンジン）におけるコードインジェクション RCE で、**2.52.0** より前の全バージョンに影響する。Ray のローカルダッシュボードは、リクエストの `User-Agent` が "Mozilla" で始まることをチェックして自衛している——しかし fetch 仕様ではそのヘッダーをページから設定できるため、**DNS リバインディング＋マルバタイジング**攻撃によって、`ray` をローカルで実行している開発者が Firefox/Safari で悪意あるサイトを訪れただけで、クラスタ（ポート 8265）に対して任意のコマンドが実行される。GitHub の CNA は **CVSS 9.4 critical**、NIST は 8.8 と評価。CISA は **8 月 17 日**に **KEV** へ追加し、活発な悪用を確認——記録された攻撃者は RondoDox クリプトマイニングボットネットで、CVE 公開の 2 日前からマシンを侵害し始めていたと報じられている。
+
+**Why it matters:** Ray は大量の内部 AI ツールチェーンの基盤となるデフォルトの ML インフラであり、これはログイン不要のブラウザ駆動 RCE——開発者は何かを実行する必要すらなく、ページを読み込むだけでよい。今週の MLflow や Langflow の KEV 登録と同じ「ローカル ML スタックがピボットポイントになる」というテーマだ。
+
+[`🔗 NVD CVE-2025-62593`](https://nvd.nist.gov/vuln/detail/CVE-2025-62593) · [`🔗 GitHub advisory GHSA-q279-jhrf-cc6v`](https://github.com/ray-project/ray/security/advisories/GHSA-q279-jhrf-cc6v)
+
+---
+
+## 24. Cloudflare 自社研究者が Workers へのリモート Spectre を再現、毎秒 12 ビットで JWT を漏出
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare blog · 57 pts HN · ~3d ago (~20:03 UTC+8)
+- **Tags:** `spectre` `side-channel` `cloudflare` `workers` `security-research`
+
+Cloudflare のセキュリティ研究者は**自社の本番 Workers プラットフォームに対してリモート Spectre 攻撃を再現**し、意図的に配置した JWT を同一ホスト上の被害者 Worker から**毎秒最大 12 ビット、99.16% の精度**で抽出した——2021 年の概念実証よりおよそ 360 倍速い。鍵となるテクニックは、**WebSocket をリモートタイマーとして使う**こと（ローカルタイマーは粗くされている）、**Durable Objects** で 30 秒の CPU 制限をリセットしてアイソレートを 5〜20 時間以上生存させること、CPU の PLRU 置換ポリシーでキャッシュタイミング差を増幅すること。さらに、呼び出し終了後にのみ隔離が発火するタイミングと、WebSocket I/O ノイズで分岐予測ミス信号を埋もれさせることで **DyPrIs**（動的プロセス隔離）をすり抜ける方法も示した。
+
+**Why it matters:** 顧客データには一切触れていない——両方のアイソレートは彼ら自身のものだ——しかしこれは、強化されたマルチテナント serverless プラットフォームでも、*同一ホスト*のテナント間で投機的実行サイドチャネルが依然として悪用可能であることを再確認させ、特定のガジェットを塞ぐ緩和策（V8 サンドボックス統合、MPK ベースのプロセス内隔離）を文書化している。
+
+[`🔗 Cloudflare blog`](https://blog.cloudflare.com/revisiting-spectre-attacks-on-workers/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/cloudflare-workers-spectre-attack-leaks.html)
+
+---
+
+## 25. Prime Intellect が prime-agent v0.8.0 を公開——自らの出力を採点する自己改善 RLM エージェント
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 17.8k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agent` `reinforcement-learning` `self-improving` `coding-agent` `open-source`
+
+**PrimeIntellect-ai/prime-agent**（MIT）は 8 月 21 日に **v0.8.0** をリリース——コーディングワークフローと長時間の自律タスク向けの「自己改善 RLM（モデルからの強化学習）エージェント」。エージェントランタイムと**検証器（verifiers）**を組み合わせ、自分自身の軌道を採点させることで、1 ショットの diff を吐くのではなく、タスクを通じて自らの作業を評価し改善していく。TypeScript のコードベースとして出荷され、バイナリビルドを備え、Prime Intellect の **PRIME-RL** と検証器リポジトリにリンクしている。5 月のローンチ以来 17.8k スター。
+
+**Why it matters:** 「RLM」——モデルを使って実タスク上で別のモデルの出力を検証し報酬を与える——は、長時間エージェントの信頼性が収束しつつある方向性であり、Prime Intellect チーム（SYNTHETIC-1）による MIT ライセンスの自前実行可能な実装が、そのループを端から端まで検証可能にする。
+
+[`🔗 PrimeIntellect-ai/prime-agent`](https://github.com/PrimeIntellect-ai/prime-agent) · [`🔗 v0.8.0 release`](https://github.com/PrimeIntellect-ai/prime-agent/releases)
+
+---
+
+## 26. Autolith — 自己改変可能な Common Lisp イメージの中に生きるプログラミングエージェント
+
+- **Velocity:** ▮ steady
+- **Source:** lambda-symbolics.com · 72 pts HN · ~1d ago (~20:03 UTC+8)
+- **Tags:** `common-lisp` `live-image` `programming-agent` `sbcl` `open-source`
+
+**lambda-symbolics/autolith** は端末常駐のプログラミングエージェントで、単一の **Common Lisp（SBCL）** プロセスとして構築されている——クライアント、ツールレジストリ、会話状態、記憶、アジェンダがすべて 1 つのライブイメージ内に存在し、CLI をバンドルせずに ChatGPT Codex（および Grok）API と直接通信する。目玉は**ライブ拡張性**だ。関数・クラス・マクロ・設定を実行中のイメージ内で再定義し、即座にコンパイルし、追記専用のミューテーションジャーナルに記録できるため、エージェントを再起動なしで更新できる。ファイルシステム、シェル、検索（FFF によるプロセス内実行）、Lisp 操作は明示的なツールとして公開され、`--immutable` モードではミューテーションツールを差し控えて読み取り専用の検査を行う。
+
+**Why it matters:** これは、エージェントが「実験によって正しいことをする」ために必要なのは、より多くのコンテキストではなく*可塑的で自己観察可能な*ランタイムだという具体的な主張だ。HN スレッドの本質的な議論（ニッチ言語 vs. 学習データへの親和性）は、あらゆる独自エージェントランタイムが直面する現実の問いでもある。
+
+[`🔗 lambda-symbolics/autolith`](https://github.com/lambda-symbolics/autolith) · [`🔗 HN discussion (72 pts)`](https://news.ycombinator.com/item?id=49376197)
+
+---
+
+## 27. OBLITERATUS — elder-plinius が毎回の実行で賢くなる abliteration ツールキットをオープンソース化
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 7.9k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `abliteration` `alignment` `red-teaming` `interpretability` `open-source`
+
+**elder-plinius/OBLITERATUS**（AGPL-3.0）は **abliteration**（再学習なしで LLM の活性空間にある「拒否方向」を特定し外科的に除去する）のためのツールキットで、アラインメント研究およびレッドチーミングの道具として位置づけられている。複数の抽出戦略（PCA、平均差、スパースオートエンコーダ分解、白色化 SVD）を実装し、拒否が各層のどこに存在するかを可視化でき、Hugging Face Spaces 上の Gradio アプリと、すべての中間成果物を公開する Python API を同梱する。その特徴は、テレメトリを有効にすると各実行が匿名のベンチマークデータをクラウドソースデータセットに貢献し、著者はこれを拒否幾何学という科学の「共同執筆」と位置づけている点だ。
+
+**Why it matters:** abliteration は、安全性が「重みの中」にあるのか「チャットテンプレートの中」にあるのかを問う現在最も鋭いテストであり、再現可能で観察可能なツールキットは、より優れた防御が最終的に依存するレッドチーミングと解釈可能性の作業の敷居を下げる。これはデュアルユースであり——README はそれが研究の要点だと明言している。
+
+[`🔗 elder-plinius/OBLITERATUS`](https://github.com/elder-plinius/OBLITERATUS) · [`🔗 Hugging Face Space`](https://huggingface.co/spaces/pliny-the-prompter/obliteratus)
+
+---
+
+## 28. ruflo — マルチプレイヤースウォーム向け「元祖エージェントメタハーネス」が 68k スター到達
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 68.8k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agent-harness` `multi-agent` `swarm` `memory` `open-source`
+
+**ruvnet/ruflo**（MIT）は、マルチプレイヤーのエージェントスウォームを展開し自律ワークフローを調整するための TypeScript 製「エージェントメタハーネス」で、適応記憶、自己学習インテリジェンス、RAG 統合、ネイティブの Claude Code / Codex / Hermes アダプターを備える。ほぼ毎日リリースされており——8 月 21 日だけで 3 リリース（`v3.38.14`〜`.16`、MessageBus のリトライ上限、hybrid-search のオプトイン、割引付き Thompson バンディット記憶ストアを追加）——今日の GitHub Trending に約 68.8k スターで載っている。
+
+**Why it matters:** ruflo は「共有メモリバス上の専門家スウォーム」パターンの再来だが、そのケイデンス——1 日数リリース、RL のチューニングノートのようなチェンジログ——は、これらのハーネスが異なる名前の下で同じ記憶とスケジューリングのプリミティブに収束しつつあることを思い出させる。
+
+[`🔗 ruvnet/ruflo`](https://github.com/ruvnet/ruflo) · [`🔗 Releases`](https://github.com/ruvnet/ruflo/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-22T12:03:00Z |
-| Items | 21 |
-| Sources tracked | 26 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome, OpenRouter, InfoQ, Microsoft, OpenBMB, Apache Incubator, Google/Antigravity, Cloud Security Alliance, Rust Glancer) |
+| Generated | 2026-08-22T20:03:00Z |
+| Items | 28 |
+| Sources tracked | 31 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome, OpenRouter, InfoQ, Microsoft, OpenBMB, Apache Incubator, Google/Antigravity, Cloud Security Alliance, Rust Glancer, Security Affairs, Cloudflare, The Hacker News, Prime Intellect, Lambda Symbolics) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | ベロシティ加重（新しさ × エンゲージメント加速 × ソース権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

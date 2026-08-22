@@ -1,8 +1,8 @@
 ---
 date: 2026-08-22
-updated: 2026-08-22T12:03:00Z
+updated: 2026-08-22T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -329,13 +329,113 @@ On **Aug 20** an anonymous "Stealth" provider listed **`stealth/ox-alpha`** on O
 
 ---
 
+## 22. GHSA-p9r8-2q67-fp86 — NASA/JPL's open-source spacecraft console shipped with zero authentication
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Cycode · CVSS 9.4 · ~1d ago (~20:03 UTC+8)
+- **Tags:** `security` `nasa` `spacecraft` `rce` `csrf` `open-source`
+
+Cycode researchers found that **AIT-GUI**, the web-based operator console of NASA/JPL's open-source **AMMOS Instrument Toolkit** (used to command spacecraft instruments), shipped with **no authentication, no session checks, and no CSRF protection** on its state-changing endpoints. The server binds to `0.0.0.0` instead of the configured host, and a path-traversal on `/seq` and `/script/run` means anyone who can reach the port — or any website an operator merely visits in a browser — can issue arbitrary commands and run command sequences against connected flight hardware. Tracked as **GHSA-p9r8-2q67-fp86** (CVSS **9.4**), fixed in **AIT-GUI 2.5.2**.
+
+**Why it matters:** This is the "the safe pattern was already written, just not applied consistently" bug — a correct path-confinement check already existed on the sibling `/scripts/load` route — and it lands in *spacecraft command* software, where the blast radius isn't a database but a flight instrument. Cycode's AI-assisted analysis plus a real headless-browser CSRF PoC is also a template for how to hunt this class of flaw.
+
+> Operators should upgrade immediately, confirm the console port isn't reachable from untrusted networks, and audit command/sequence history if an instance ran exposed.
+
+[`🔗 GitHub advisory GHSA-p9r8-2q67-fp86`](https://github.com/NASA-AMMOS/AIT-GUI/security/advisories/GHSA-p9r8-2q67-fp86) · [`🔗 Security Affairs — Cycode report`](https://www.securityaffairs.com/197689/hacking/critical-flaw-in-nasa-jpl-open-source-spacecraft-command-software.html)
+
+---
+
+## 23. CVE-2025-62593 — a malvertising page can RCE the Ray cluster on any developer's laptop, now in KEV
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV · CVSS 9.4 · ~5d ago (~20:03 UTC+8)
+- **Tags:** `cve` `ray` `kev` `dns-rebinding` `rce` `ml-infra`
+
+**CVE-2025-62593** is a code-injection RCE in **Ray** (Anyscale's distributed compute engine) affecting all versions before **2.52.0**. Ray's local dashboard defends itself by checking that requests carry a `User-Agent` starting with "Mozilla" — but the fetch spec lets that header be set from a page, so a **DNS-rebinding + malvertising** attack means a developer who merely visits a malicious site in Firefox/Safari while `ray` runs locally gets arbitrary commands executed against the cluster (port 8265). GitHub's CNA scores it **CVSS 9.4 critical**; NIST 8.8. CISA added it to **KEV on Aug 17** with active exploitation confirmed — the RondoDox cryptomining botnet is the documented actor, and it reportedly started hitting boxes two days before the CVE went public.
+
+**Why it matters:** Ray is the default ML-infra layer under a huge share of internal AI tooling, and this is a browser-driven RCE with no login required — the developer doesn't have to run anything, only load a page. It's the same "your local ML stack is a pivot point" theme as the MLflow and Langflow KEV entries this week.
+
+[`🔗 NVD CVE-2025-62593`](https://nvd.nist.gov/vuln/detail/CVE-2025-62593) · [`🔗 GitHub advisory GHSA-q279-jhrf-cc6v`](https://github.com/ray-project/ray/security/advisories/GHSA-q279-jhrf-cc6v)
+
+---
+
+## 24. Cloudflare's own researchers re-ran remote Spectre against Workers and leaked a JWT at 12 bits/second
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare blog · 57 pts HN · ~3d ago (~20:03 UTC+8)
+- **Tags:** `spectre` `side-channel` `cloudflare` `workers` `security-research`
+
+Cloudflare security researchers **reproduced a remote Spectre attack against their own production Workers platform**, exfiltrating a deliberately placed JWT from a co-located victim Worker at up to **12 bits per second with 99.16% accuracy** — roughly 360× faster than the 2021 proof-of-concept. The key tricks: using a **WebSocket as a remote timer** (local timers are coarsened), keeping an isolate alive 5–20+ hours via **Durable Objects** resetting the 30-second CPU limit, and amplifying cache-timing differences through the CPU's PLRU replacement policy. They also showed how to slip past **DyPrIs** (Dynamic Process Isolation) by timing isolation to fire only after an invocation ends and by drowning the branch-misprediction signal in WebSocket I/O noise.
+
+**Why it matters:** No customer data was touched — both isolates were theirs — but this re-establishes that speculative side-channels remain exploitable across *co-located* tenants in a hardened, multi-tenant serverless platform, and documents the mitigations (V8 sandbox integration, MPK-based in-process isolation) that close the specific gadgets.
+
+[`🔗 Cloudflare blog`](https://blog.cloudflare.com/revisiting-spectre-attacks-on-workers/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/cloudflare-workers-spectre-attack-leaks.html)
+
+---
+
+## 25. Prime Intellect ships prime-agent v0.8.0 — a self-improving RLM agent that grades its own output
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 17.8k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agent` `reinforcement-learning` `self-improving` `coding-agent` `open-source`
+
+**PrimeIntellect-ai/prime-agent** (MIT) released **v0.8.0** on Aug 21 — a "self-improving RLM (reinforcement-learning-from-models) agent" for coding workflows and long-running autonomous tasks. It pairs an agent runtime with **verifiers** that grade its own trajectories, so the agent can judge its work and improve across a task rather than emit one-shot diffs; it ships as a TypeScript codebase with binary builds and links to Prime Intellect's **PRIME-RL** and verifiers repos. 17.8k stars since its May launch.
+
+**Why it matters:** "RLM" — using a model to verify and reward a model's own output on real tasks — is the direction long-horizon agent reliability is consolidating toward, and an MIT-licensed, run-it-yourself entry from the Prime Intellect team (SYNTHETIC-1) makes that loop inspectable end to end.
+
+[`🔗 PrimeIntellect-ai/prime-agent`](https://github.com/PrimeIntellect-ai/prime-agent) · [`🔗 v0.8.0 release`](https://github.com/PrimeIntellect-ai/prime-agent/releases)
+
+---
+
+## 26. Autolith — a programming agent that lives in a self-modifying Common Lisp image
+
+- **Velocity:** ▮ steady
+- **Source:** lambda-symbolics.com · 72 pts HN · ~1d ago (~20:03 UTC+8)
+- **Tags:** `common-lisp` `live-image` `programming-agent` `sbcl` `open-source`
+
+**lambda-symbolics/autolith** is a terminal-resident programming agent built as a single **Common Lisp (SBCL)** process — its client, tool registry, conversation state, memories and agenda all live inside one live image, talking directly to the ChatGPT Codex (and Grok) APIs without bundling their CLIs. The headline is **live extensibility**: functions, classes, macros and settings can be redefined in the running image, compiled immediately, and recorded in an append-only mutation journal, so the agent can be updated without restarting. Filesystem, shell, search (in-process via FFF), and Lisp operations are exposed as explicit tools; an `--immutable` mode withholds mutation for read-only inspection.
+
+**Why it matters:** It's a concrete argument that a *moldable, introspectable* runtime — not just more context — is what agents need to "do the right thing via experimentation." The HN thread's real debate (niche language vs. training-data familiarity) is the live question for every bespoke agent runtime.
+
+[`🔗 lambda-symbolics/autolith`](https://github.com/lambda-symbolics/autolith) · [`🔗 HN discussion (72 pts)`](https://news.ycombinator.com/item?id=49376197)
+
+---
+
+## 27. OBLITERATUS — elder-plinius open-sources an abliteration toolkit that gets smarter with every run
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 7.9k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `abliteration` `alignment` `red-teaming` `interpretability` `open-source`
+
+**elder-plinius/OBLITERATUS** (AGPL-3.0) is a toolkit for **abliteration** — identifying and surgically removing the internal "refusal directions" in an LLM's activation space without retraining — positioned as an alignment-research and red-teaming instrument. It implements multiple extraction strategies (PCA, mean-difference, sparse-autoencoder decomposition, whitened SVD), lets you visualize where refusal lives across layers, and ships a Gradio app on Hugging Face Spaces plus a Python API exposing every intermediate artifact. Its twist: with telemetry enabled, each run contributes anonymous benchmark data to a crowd-sourced dataset the author frames as "co-authoring the science" of refusal geometry.
+
+**Why it matters:** Abliteration is the sharpest current test of whether safety is "in the weights" or "in the chat template," and a reproducible, observable toolkit lowers the barrier for the red-teaming and interpretability work that better defenses ultimately depend on. It's dual-use — and the README is explicit that that's the point of the research.
+
+[`🔗 elder-plinius/OBLITERATUS`](https://github.com/elder-plinius/OBLITERATUS) · [`🔗 Hugging Face Space`](https://huggingface.co/spaces/pliny-the-prompter/obliteratus)
+
+---
+
+## 28. ruflo — the "original agent meta-harness" for multi-player swarms hits 68k stars
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 68.8k stars · ~1d ago (~20:03 UTC+8)
+- **Tags:** `agent-harness` `multi-agent` `swarm` `memory` `open-source`
+
+**ruvnet/ruflo** (MIT) is a TypeScript "agent meta-harness" for deploying multi-player agent swarms and coordinating autonomous workflows, with adaptive memory, self-learning intelligence, RAG integration, and native Claude Code / Codex / Hermes adapters. It has been shipping near-daily — three releases on Aug 21 alone (`v3.38.14`–`.16`, adding a MessageBus retry bound, hybrid-search opt-in, and a discounted Thompson-bandit memory store) — and sits on today's GitHub Trending at ~68.8k stars.
+
+**Why it matters:** ruflo is the "swarm of specialized agents with a shared memory bus" pattern again, but its cadence — several releases a day with a changelog that reads like RL tuning notes — is a reminder that these harnesses are converging on the same memory-and-scheduling primitives under different names.
+
+[`🔗 ruvnet/ruflo`](https://github.com/ruvnet/ruflo) · [`🔗 Releases`](https://github.com/ruvnet/ruflo/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-22T12:03:00Z |
-| Items | 21 |
-| Sources tracked | 26 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome, OpenRouter, InfoQ, Microsoft, OpenBMB, Apache Incubator, Google/Antigravity, Cloud Security Alliance, Rust Glancer) |
+| Generated | 2026-08-22T20:03:00Z |
+| Items | 28 |
+| Sources tracked | 31 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome, OpenRouter, InfoQ, Microsoft, OpenBMB, Apache Incubator, Google/Antigravity, Cloud Security Alliance, Rust Glancer, Security Affairs, Cloudflare, The Hacker News, Prime Intellect, Lambda Symbolics) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
