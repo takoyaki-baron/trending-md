@@ -1,8 +1,8 @@
 ---
 date: 2026-08-22
-updated: 2026-08-22T04:03:00Z
+updated: 2026-08-22T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -217,13 +217,125 @@ Google の今週 2 度目の Chrome 151 安定版更新（**151.0.7922.173**）�
 
 ---
 
+## 14. Ox Alpha — OpenRouter に現れた匿名フロンティアモデル、DeepSWE スモークテストで Fable 5 超え
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenRouter · free preview · ~2d ago (~12:03 UTC+8)
+- **Tags:** `model-release` `openrouter` `frontier-model` `benchmark` `anonymous`
+
+**8 月 20 日**、匿名の「Stealth」プロバイダーが OpenRouter に **`stealth/ox-alpha`** を公開した——約 1 週間の無料プレビュー、約 100 万トークンのコンテキスト（1,048,576）、最大出力 131,072、テキスト／画像／動画入力、ツール呼び出しと JSON 出力に対応。OpenRouter はリクエストをルーティングするだけで**作成者ではない**。開発者は匿名のまま。コミュニティの @davis7 が 10 件の DeepSWE タスクでスモークテストし、Ox Alpha は **80% Pass@1** を記録、**Fable 5（65%）**、GLM-5.3／Grok 4.6（62%）、GPT-5.6-sol（52%）を上回った——ただし 10 タスクの標本は分散が大きい。
+
+**Why it matters:** 匿名モデルがコーディングベンチで有名フロンティア研究所を上回るのは本物のシグナルだ——大手の次期モデルのステルス投入か、あるいはフロンティアの差がランキングより速く縮まっている証拠か。コミュニティのトークナイザー指紋は GLM 的な挙動（Zhipu）か Xiaomi を示すが、いずれも未確認。
+
+[`🔗 OpenRouter — stealth/ox-alpha`](https://openrouter.ai/stealth/ox-alpha) · [`🔗 ai-primer 報道`](https://www.ai-primer.com/engineer/stories/ox-alpha-openrouter-release)
+
+---
+
+## 15. TypeScript 7.0 — ネイティブ Go コンパイラが安定版に、ビルドが 8〜12 倍高速化
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Microsoft · microsoft/TypeScript trending · ~3d ago (~12:03 UTC+8)
+- **Tags:** `typescript` `go` `compiler` `developer-tools` `performance`
+
+**TypeScript 7.0** はネイティブコンパイラ——ツールセット全体を TypeScript から **Go** へ忠実に移植したもの（「Project Corsa」、Anders Hejlsberg 主導）——をデフォルトの `tsc` として出荷し、8 月中旬には **7.0.2** パッチ、リポジトリは本日の GitHub Trending 入り。Microsoft は実コードベースで **8〜12 倍のフルビルド高速化**を報告（VS Code 125.7s → 10.6s、Sentry 139.8s → 15.7s、Playwright 12.8s → 1.47s）、完全な型チェックは維持し、メモリは約 18% 削減。ただし **7.0 には安定したプログラム API がない**（7.1 で予定）ため、typescript-eslint や Vue/Svelte/Astro/Angular のツールは待機となり、`@typescript/typescript6` が互換ブリッジとして提供される。
+
+**Why it matters:** これは JS/TS ツールチェーンにおける近年最大の構造変化——型安全を失わずに約 10 倍のビルド高速化——であり、業界のフロントエンド／フルスタックの大部分で CI 予算とエディタ応答性を塗り替える。
+
+[`🔗 microsoft/typescript-go`](https://github.com/microsoft/typescript-go) · [`🔗 InfoQ — TypeScript 7.0`](https://www.infoq.com/news/2026/08/typescript-7-released/)
+
+---
+
+## 16. MathForm-8B — OpenBMB の 8B 自動形式化モデル、Lean 4 で 32B 勢を凌駕
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenBMB · arXiv 2608.14221 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `lean4` `autoformalization` `open-weights` `apache-2.0` `math`
+
+**OpenBMB**（清華 NLP + 面壁智能）は **MathForm** をオープンソース化した。**Lean 4** への数学自動形式化の完全パイプラインで、**MathForm-8B** モデル（Qwen3-8B ベース、Apache-2.0、約 16 GB VRAM）、**FormalVerse** データセット（約 36.7 万件のコンパイラ検証済み Lean 4 サンプル）、評価コードで構成。Mathlib 検索（LeanExplore）と検証誘導の反復精錬を組み合わせ、最大 3 ラウンド（保留サンプルの 31% を寄与）。MathForm-8B は**構文で Pass@8 88.06%**、**意味一貫性で 72.37%** を達成し、約 1/4 のパラメータで 32B 専用形式化モデル（ReForm-32B、Goedel-Formalizer-V2-32B）を上回る。
+
+**Why it matters:** 構文と一貫性のギャップ（88 対 72）こそこの分野の真のボトルネック——コンパイルが通ることは意味が同じことを意味しない——そして 8B が Mathlib を*記憶*せず*検索*することで 32B 専門家を上回るのは、実数学の形式検証へのより安価な道を示す。
+
+[`🔗 OpenBMB/MathForm (GitHub)`](https://github.com/OpenBMB/MathForm) · [`🔗 MathForm-8B (HF)`](https://huggingface.co/openbmb/MathForm-8B)
+
+---
+
+## 17. ECC — 12 以上のコーディングエージェントに工学ワークフローを注入する 242k stars ハーネス
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 242k stars · ~1d ago (~12:03 UTC+8)
+- **Tags:** `agent-harness` `claude-code` `codex` `workflow` `mit-license`
+
+**affaan-m/ECC**（MIT）はクロスハーネスな「エージェント性能最適化システム」——Claude Code、Codex、OpenCode、Cursor、Gemini、Zed、Kimi などに適応する単一コードベースで、**plan → test → implement → review → verify → remember → improve** ループに加え、スキル、記憶の永続化、セキュリティスキャナー（"AgentShield"）、継続学習を強制する。**68 のエージェントと 286 のスキル**を同梱し、1 年足らずで約 242k stars に到達（GitHub で最も急成長するリポジトリの一つ）、MIT コアの上にホスト型「ECC Pro」GitHub App を重ねる。
+
+**Why it matters:** ECC は「プロンプト調整ではなくワークフロー・アズ・コード」という命題の最も純粋な現在形——価値は強制される工学ループにあり、どんなモデルやハーネスを差しても生き残る。エージェントツールが収束しつつある方向そのものだ。
+
+[`🔗 affaan-m/ECC`](https://github.com/affaan-m/ECC) · [`🔗 Releases`](https://github.com/affaan-m/ECC/releases)
+
+---
+
+## 18. Apache Maka — 「ログこそランタイム」というインキュベーション中のローカルファースト AI エージェントワークスペース
+
+- **Velocity:** ▮▮ rising
+- **Source:** Apache Incubator · entered Aug 13 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `agent-workspace` `local-first` `apache` `append-only-log` `ai-infra`
+
+**apache/maka** は Apache インキュベーションに新規参入したプロジェクト（8 月 13 日参入）：**ローカルファーストの AI エージェントランタイム兼ワークスペース**で、すべてのモデルメッセージ・ツール呼び出し・結果・権限決定・終了イベントを**追記専用ログ**として記録する——セッション、UI、コンテキスト、復旧はすべてそのログの投影（「ログこそランタイム」）。Electron + React デスクトップアプリ、TUI/CLI、評価ハーネスを提供。ストレージは SQLite と成果物ファイル、資格情報はローカル vault、モデル接続はユーザーが選択。macOS Apple Silicon が早期公開ビルドで、Windows は未署名プレビュー。
+
+**Why it matters:** 「コンテキストは履歴ではない」——次の推論のためにツール結果を刈り込みつつ完全な証跡ログを保持する——はエージェント記憶へのクリーンで検証可能な回答であり、Apache が後援する（スタートアップではない）ローカルファーストのワークスペースはクラウドエージェントへの有意義な対抗軸になる。
+
+[`🔗 apache/maka`](https://github.com/apache/maka) · [`🔗 Apache Incubator status`](https://incubator.apache.org/projects/maka.html)
+
+---
+
+## 19. nobuzz — Claude の「BuzzFeed 口調」を Gemini に通して除去する Claude Code スキル
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 221 pts HN · ~1d ago (~12:03 UTC+8)
+- **Tags:** `claude-code` `skill` `writing-style` `gemini` `mit-license`
+
+**adnanakil/nobuzz**（MIT）は Claude Code スキル `/debuzz`。Claude の直前の応答を Google の **Antigravity CLI（`agy`）**——Gemini 駆動——に通し、「BuzzFeed 口調」（「load-bearing assumption……そして肝心なのは……」という芝居がかった文体。Opus 4.8 あたりで悪化）を除去する。Gemini の書き直しを逐語的に出力する（Claude に「整え」させるとその文体が再混入するため）。3 つのモード——`colleague`（内容はそのまま、芝居ゼロ）、`manager`（約 1/3 に短縮、コードなし）、`director`（3〜5 文）——を備え、`agy` がエラーならフォールバックを提供。本日の HN フロントページで 221 ポイント。
+
+**Why it matters:** これは中に本物のテクニックを含むジョークだ——あるモデルの出力を*別の*モデルに通して文体フィルタにするのは、自己修正では訓練で刷り込まれた癖そのものを除去できないからだ——そして Claude の「ハウスボイス」が現場のエンジニアにどれほどの摩擦を生んでいるかのシグナルでもある。
+
+[`🔗 adnanakil/nobuzz`](https://github.com/adnanakil/nobuzz) · [`🔗 HN discussion (221 pts)`](https://news.ycombinator.com/item?id=49388752)
+
+---
+
+## 20. CVE-2026-9198 — Langflow の自動ログイン端点が任意の呼び出し元に SUPERUSER トークンを発行、未認証 RCE へ
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVSS 9.8 · ~2d ago (~12:03 UTC+8)
+- **Tags:** `cve` `langflow` `rce` `kev` `ai-infra` `code-injection`
+
+**CVE-2026-9198** は **Langflow OSS**（1.0.0–1.10.0；1.10.1 で修正）の CVSS **9.8** コードインジェクション。`/api/v1/auto_login`（任意のネットワーク呼び出し元に SUPERUSER トークンを発行）と `/api/v1/validate/code`（`exec()` でユーザーコードを実行）を連結することで、デフォルト構成のまま未認証リモートコード実行に至る。**CISA KEV** に登録済み（8 月 4 日追加、8 月 7 日期限）で実悪用中。CISA SSVC は「自動化可能」、技術影響「完全」と評価。Cloud Security Alliance は 8 月 18 日にこの RCE チェーンを公開した。
+
+**Why it matters:** Langflow は多くの AI チームでデフォルトのローコードエージェントビルダーであり、前日に KEV 入りした MLflow SSRF と同じパターン——AI/ML インフラ（自動ログインの利便性 + コード実行端点）が未認証 RCE とクラウド資格情報窃取の最優先標的になっている。1.10.1 へ更新し、API を未認証で晒さないこと。
+
+[`🔗 NVD CVE-2026-9198`](https://nvd.nist.gov/vuln/detail/CVE-2026-9198) · [`🔗 CSA research note`](https://labs.cloudsecurityalliance.org/research/csa-research-note-langflow-cve-2026-9198-rce-20260818-csa-st/)
+
+---
+
+## 21. Rust Glancer — わずかな速度と引き換えに rust-analyzer の 100 分の 1 のメモリで動く Rust LSP
+
+- **Velocity:** ▮ steady
+- **Source:** rust-glancer.github.io · 71 pts HN · ~3d ago (~12:03 UTC+8)
+- **Tags:** `rust` `lsp` `memory` `developer-tools` `open-source`
+
+**Rust Glancer** は rust-analyzer のメモリ効率の高い代替として位置づけられる新しい Rust 言語サーバー（「朝食にメモリを食べない Rust LSP」）。すべてをメモリに保持してオンデマンドで再計算する代わりに、**ファイルシステムへオフロードした凍結ワークスペース**を使い、「若干の性能ペナルティ」と引き換えに極端なメモリ効率と即時再起動を得る。「Hello, world!」記事は 8 月 19 日付、作者は @popzxc、HN では 71 ポイントで議論された。
+
+**Why it matters:** rust-analyzer の RAM 消費は大規模ワークスペースや低メモリマシンにとって長年の悩みであり、「ワークスペースを凍結して RAM に保持しない」は本質的に異なるメモリ／CPU トレードオフで、代替 LSP バックエンドとして注目に値する。
+
+[`🔗 Rust Glancer`](https://rust-glancer.github.io/) · [`🔗 HN discussion (71 pts)`](https://news.ycombinator.com/item?id=49393052)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-22T04:03:00Z |
-| Items | 13 |
-| Sources tracked | 18 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome) |
+| Generated | 2026-08-22T12:03:00Z |
+| Items | 21 |
+| Sources tracked | 26 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome, OpenRouter, InfoQ, Microsoft, OpenBMB, Apache Incubator, Google/Antigravity, Cloud Security Alliance, Rust Glancer) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | ベロシティ加重（新しさ × エンゲージメント加速 × ソース権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

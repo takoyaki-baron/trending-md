@@ -1,8 +1,8 @@
 ---
 date: 2026-08-22
-updated: 2026-08-22T04:03:00Z
+updated: 2026-08-22T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -217,13 +217,125 @@ Google's second Chrome 151 Stable update this week (**151.0.7922.173**) fixed **
 
 ---
 
+## 14. Ox Alpha — an anonymous frontier model on OpenRouter beats Fable 5 in a DeepSWE smoke test
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenRouter · free preview · ~2d ago (~12:03 UTC+8)
+- **Tags:** `model-release` `openrouter` `frontier-model` `benchmark` `anonymous`
+
+On **Aug 20** an anonymous "Stealth" provider listed **`stealth/ox-alpha`** on OpenRouter — free for a ~1-week preview, ~1M-token context (1,048,576), 131,072 max output, text/image/video input, tool calling and JSON output. OpenRouter routes the requests but is **not the creator**; the developer chose to stay anonymous. A community smoke test by @davis7 on 10 DeepSWE tasks put Ox Alpha at **80% Pass@1**, ahead of **Fable 5 (65%)**, GLM-5.3/Grok 4.6 (62%) and GPT-5.6-sol (52%) — with the caveat that a 10-task sample has high variance.
+
+**Why it matters:** An anonymous model out-benchmarking named frontier labs on a coding benchmark is a real signal — either a stealth launch of a major lab's next model, or evidence the frontier gap is narrowing faster than leaderboards show. Community tokenizer fingerprinting points at GLM-like behavior (Zhipu) or Xiaomi, but neither has confirmed.
+
+[`🔗 OpenRouter — stealth/ox-alpha`](https://openrouter.ai/stealth/ox-alpha) · [`🔗 ai-primer coverage`](https://www.ai-primer.com/engineer/stories/ox-alpha-openrouter-release)
+
+---
+
+## 15. TypeScript 7.0 — the native Go compiler ships stable, 8–12× faster builds
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Microsoft · microsoft/TypeScript trending · ~3d ago (~12:03 UTC+8)
+- **Tags:** `typescript` `go` `compiler` `developer-tools` `performance`
+
+**TypeScript 7.0** shipped the native compiler — a faithful port of the toolset from TypeScript into **Go** ("Project Corsa", led by Anders Hejlsberg) — as the default `tsc`, with a mid-August **7.0.2** patch and the repo on today's GitHub Trending. Microsoft reports **8–12× faster full builds** on real codebases (VS Code 125.7s → 10.6s, Sentry 139.8s → 15.7s, Playwright 12.8s → 1.47s) with full type-checking retained, and ~18% less memory. The catch: there's **no stable programmatic API in 7.0** (expected in 7.1), so typescript-eslint and Vue/Svelte/Astro/Angular tooling must wait, with `@typescript/typescript6` offered as a compatibility bridge.
+
+**Why it matters:** This is the biggest structural change to the JS/TS toolchain in years — a ~10× build-speed jump without losing type safety — and it reshapes CI budgets and editor responsiveness for a huge share of the industry's frontend and full-stack work.
+
+[`🔗 microsoft/typescript-go`](https://github.com/microsoft/typescript-go) · [`🔗 InfoQ — TypeScript 7.0`](https://www.infoq.com/news/2026/08/typescript-7-released/)
+
+---
+
+## 16. MathForm-8B — OpenBMB's 8B autoformalizer out-formalizes 32B rivals for Lean 4
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenBMB · arXiv 2608.14221 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `lean4` `autoformalization` `open-weights` `apache-2.0` `math`
+
+**OpenBMB** (Tsinghua NLP + ModelBest) open-sourced **MathForm**, a complete pipeline for automatic math formalization into **Lean 4**: the **MathForm-8B** model (Qwen3-8B base, Apache-2.0, ~16 GB VRAM), the **FormalVerse** dataset (~367k compiler-verified Lean 4 samples), and eval code. It pairs Mathlib retrieval (LeanExplore) with verification-guided iterative refinement — up to 3 rounds, which contributed 31% of retained samples. MathForm-8B hits **88.06% Pass@8 on syntax** and **72.37% on semantic-consistency checks**, beating 32B specialized formalizers (ReForm-32B, Goedel-Formalizer-V2-32B) at ~¼ the parameters.
+
+**Why it matters:** The syntax/consistency gap (88 vs 72) is the field's real bottleneck — compiling is not the same as meaning the same thing — and an 8B beating 32B specialists by *retrieving* rather than memorizing Mathlib points a cheaper path to formal verification of real mathematics.
+
+[`🔗 OpenBMB/MathForm (GitHub)`](https://github.com/OpenBMB/MathForm) · [`🔗 MathForm-8B (HF)`](https://huggingface.co/openbmb/MathForm-8B)
+
+---
+
+## 17. ECC — a 242k-star agent harness that installs an engineering workflow into a dozen coding agents
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 242k stars · ~1d ago (~12:03 UTC+8)
+- **Tags:** `agent-harness` `claude-code` `codex` `workflow` `mit-license`
+
+**affaan-m/ECC** (MIT) is a cross-harness "agent performance optimization system" — one codebase that adapts to Claude Code, Codex, OpenCode, Cursor, Gemini, Zed, Kimi and more, imposing a **plan → test → implement → review → verify → remember → improve** loop plus skills, memory persistence, a security scanner ("AgentShield") and continuous learning. It ships **68 agents and 286 skills**, reached ~242k stars in under a year (one of the fastest-growing repos on GitHub), and layers a hosted "ECC Pro" GitHub App on the MIT core.
+
+**Why it matters:** ECC is the purest current example of the "workflow-as-code, not prompt-tuning" thesis — the value is the enforced engineering loop that survives across whatever model or harness you plug in, which is the direction agent tooling is consolidating around.
+
+[`🔗 affaan-m/ECC`](https://github.com/affaan-m/ECC) · [`🔗 Releases`](https://github.com/affaan-m/ECC/releases)
+
+---
+
+## 18. Apache Maka — an incubating local-first AI agent workspace where "the log is the runtime"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Apache Incubator · entered Aug 13 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `agent-workspace` `local-first` `apache` `append-only-log` `ai-infra`
+
+**apache/maka** is a new Apache-incubating project (entered incubation Aug 13): a **local-first AI agent runtime and workspace** where every model message, tool call, result, permission decision and termination event is recorded as an **append-only log** — sessions, UI, context and recovery are all projections over that log ("the log is the runtime"). It ships an Electron + React desktop app, a TUI/CLI and an eval harness; storage is SQLite plus artifacts, credentials sit in a local vault, and the user picks their own model connection. macOS Apple Silicon is the early public build; Windows is an unsigned preview.
+
+**Why it matters:** "Context is not history" — pruning tool results for the next inference while keeping the full evidence log — is a clean, inspectable answer to agent memory, and an Apache-backed (not a startup's) take on the local-first agent workspace is a meaningful counterweight to cloud agents.
+
+[`🔗 apache/maka`](https://github.com/apache/maka) · [`🔗 Apache Incubator status`](https://incubator.apache.org/projects/maka.html)
+
+---
+
+## 19. nobuzz — a Claude Code skill that pipes Claude's "BuzzFeed voice" through Gemini
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 221 pts HN · ~1d ago (~12:03 UTC+8)
+- **Tags:** `claude-code` `skill` `writing-style` `gemini` `mit-license`
+
+**adnanakil/nobuzz** (MIT) is a Claude Code skill, `/debuzz`, that takes Claude's last response and pipes it through Google's **Antigravity CLI (`agy`)** — powered by Gemini — to strip the "BuzzFeed voice" (the theatrical "load-bearing assumption … and the kicker is …" prose that got worse around Opus 4.8). It prints Gemini's rewrite verbatim (letting Claude "tidy up" would reintroduce the style) and offers three modes — `colleague` (same content, zero theatrics), `manager` (⅓ length, no code), `director` (3–5 sentences) — plus a fallback if `agy` errors. It hit today's HN front page at 221 points.
+
+**Why it matters:** It's a joke with a real technique inside — routing one model's output through a *different* model as a style filter, because self-correction can't remove the very tics a model was trained to produce — and a signal of how much friction Claude's house voice now causes working engineers.
+
+[`🔗 adnanakil/nobuzz`](https://github.com/adnanakil/nobuzz) · [`🔗 HN discussion (221 pts)`](https://news.ycombinator.com/item?id=49388752)
+
+---
+
+## 20. CVE-2026-9198 — Langflow's auto-login endpoint mints SUPERUSER tokens for unauthenticated RCE
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVSS 9.8 · ~2d ago (~12:03 UTC+8)
+- **Tags:** `cve` `langflow` `rce` `kev` `ai-infra` `code-injection`
+
+**CVE-2026-9198** is a CVSS **9.8** code-injection flaw in **Langflow OSS** (1.0.0–1.10.0; fixed in 1.10.1): chaining `/api/v1/auto_login` (which mints SUPERUSER tokens to any network caller) with `/api/v1/validate/code` (which executes user code via `exec()`) yields unauthenticated remote code execution on default deployments. It's in **CISA KEV** (added Aug 4, due Aug 7), actively exploited, and CISA's SSVC rates it "automatable" with "total" technical impact; the Cloud Security Alliance published the RCE chain on Aug 18.
+
+**Why it matters:** Langflow is a default low-code agent-builder across a lot of AI teams, and this is the same pattern as the MLflow SSRF in KEV the day before — AI/ML infrastructure (auto-login convenience + code-exec endpoint) is now the primary target for unauthenticated RCE and cloud-credential theft. Patch to 1.10.1 and don't expose the API unauthenticated.
+
+[`🔗 NVD CVE-2026-9198`](https://nvd.nist.gov/vuln/detail/CVE-2026-9198) · [`🔗 CSA research note`](https://labs.cloudsecurityalliance.org/research/csa-research-note-langflow-cve-2026-9198-rce-20260818-csa-st/)
+
+---
+
+## 21. Rust Glancer — a Rust LSP that trades a little speed for 100× less RAM than rust-analyzer
+
+- **Velocity:** ▮ steady
+- **Source:** rust-glancer.github.io · 71 pts HN · ~3d ago (~12:03 UTC+8)
+- **Tags:** `rust` `lsp` `memory` `developer-tools` `open-source`
+
+**Rust Glancer** is a new Rust language server positioned as a memory-efficient alternative to rust-analyzer ("a Rust LSP that doesn't eat memory for breakfast"). Instead of keeping everything in memory and recomputing on demand, it uses **frozen workspaces offloaded to the filesystem**, accepting "some performance penalty" in exchange for extreme memory efficiency and instant restarts. The "Hello, world!" post is dated Aug 19, it's by @popzxc, and HN discussed it at 71 points.
+
+**Why it matters:** rust-analyzer's RAM appetite is a long-standing pain for large workspaces and low-memory machines, and "freeze the workspace, don't hold it in RAM" is a genuinely different memory/CPU tradeoff worth watching as an alternative LSP backend.
+
+[`🔗 Rust Glancer`](https://rust-glancer.github.io/) · [`🔗 HN discussion (71 pts)`](https://news.ycombinator.com/item?id=49393052)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-22T04:03:00Z |
-| Items | 13 |
-| Sources tracked | 18 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome) |
+| Generated | 2026-08-22T12:03:00Z |
+| Items | 21 |
+| Sources tracked | 26 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome, OpenRouter, InfoQ, Microsoft, OpenBMB, Apache Incubator, Google/Antigravity, Cloud Security Alliance, Rust Glancer) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

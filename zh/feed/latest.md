@@ -1,8 +1,8 @@
 ---
 date: 2026-08-22
-updated: 2026-08-22T04:03:00Z
+updated: 2026-08-22T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -217,13 +217,125 @@ Google 本周 Chrome 151 稳定版的第二次更新（**151.0.7922.173**）修�
 
 ---
 
+## 14. Ox Alpha — 匿名前沿模型空降 OpenRouter，DeepSWE 冒烟测试超越 Fable 5
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenRouter · free preview · ~2d ago (~12:03 UTC+8)
+- **Tags:** `model-release` `openrouter` `frontier-model` `benchmark` `anonymous`
+
+**8 月 20 日**，一个匿名的 "Stealth" 供应商在 OpenRouter 上架了 **`stealth/ox-alpha`**——约一周免费预览、约 100 万 token 上下文（1,048,576）、最大输出 131,072、支持文本/图像/视频输入、工具调用与 JSON 输出。OpenRouter 只负责路由请求，**并非创建者**；开发者选择保持匿名。社区 @davis7 用 10 个 DeepSWE 任务做了冒烟测试，Ox Alpha 取得 **80% Pass@1**，领先 **Fable 5（65%）**、GLM-5.3/Grok 4.6（62%）与 GPT-5.6-sol（52%）——但需注意 10 个任务的样本方差很大。
+
+**Why it matters:** 一款匿名模型在编码基准上超越具名前沿实验室，是一个真实信号——要么是大厂下一代模型的隐秘发布，要么说明前沿差距比排行榜显示的收窄得更快。社区 tokenizer 指纹指向 GLM 类行为（智谱）或小米，但双方均未确认。
+
+[`🔗 OpenRouter — stealth/ox-alpha`](https://openrouter.ai/stealth/ox-alpha) · [`🔗 ai-primer 报道`](https://www.ai-primer.com/engineer/stories/ox-alpha-openrouter-release)
+
+---
+
+## 15. TypeScript 7.0 — 原生 Go 编译器发布稳定版，构建提速 8–12 倍
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Microsoft · microsoft/TypeScript trending · ~3d ago (~12:03 UTC+8)
+- **Tags:** `typescript` `go` `compiler` `developer-tools` `performance`
+
+**TypeScript 7.0** 发布了原生编译器——把整套工具从 TypeScript 移植到 **Go**（"Project Corsa"，由 Anders Hejlsberg 领衔）——成为默认的 `tsc`，8 月中旬又发布了 **7.0.2** 补丁，仓库目前位列今日 GitHub Trending。微软报告在真实代码库上实现 **8–12 倍全量构建提速**（VS Code 125.7s → 10.6s，Sentry 139.8s → 15.7s，Playwright 12.8s → 1.47s），并保留完整类型检查，内存降低约 18%。代价是：**7.0 没有稳定的编程 API**（预计 7.1 提供），因此 typescript-eslint 与 Vue/Svelte/Astro/Angular 工具链需等待，官方提供 `@typescript/typescript6` 作为兼容过渡。
+
+**Why it matters:** 这是 JS/TS 工具链多年来的最大结构性变革——在不损失类型安全的前提下实现约 10 倍构建提速——将重塑大量前端与全栈工作的 CI 预算与编辑器响应速度。
+
+[`🔗 microsoft/typescript-go`](https://github.com/microsoft/typescript-go) · [`🔗 InfoQ — TypeScript 7.0`](https://www.infoq.com/news/2026/08/typescript-7-released/)
+
+---
+
+## 16. MathForm-8B — OpenBMB 的 8B 自动形式化模型，Lean 4 上胜过 32B 对手
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenBMB · arXiv 2608.14221 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `lean4` `autoformalization` `open-weights` `apache-2.0` `math`
+
+**OpenBMB**（清华 NLP + 面壁智能）开源了 **MathForm**，一套面向 **Lean 4** 的数学自动形式化完整流水线：**MathForm-8B** 模型（Qwen3-8B 基座，Apache-2.0，约 16 GB 显存）、**FormalVerse** 数据集（约 36.7 万条经编译器验证的 Lean 4 样本）与评估代码。它把 Mathlib 检索（LeanExplore）与验证引导的迭代精炼结合——最多 3 轮，贡献了保留样本的 31%。MathForm-8B 取得 **88.06% 的 Pass@8 语法通过率**与 **72.37% 的语义一致性通过率**，以约 1/4 参数量击败 32B 专用形式化模型（ReForm-32B、Goedel-Formalizer-V2-32B）。
+
+**Why it matters:** 语法/一致性之间的差距（88 vs 72）才是该领域真正的瓶颈——编译通过不等于语义一致——而 8B 能靠*检索*而非记忆 Mathlib 击败 32B 专家，为真实数学的形式化验证指出了一条更廉价的路径。
+
+[`🔗 OpenBMB/MathForm (GitHub)`](https://github.com/OpenBMB/MathForm) · [`🔗 MathForm-8B (HF)`](https://huggingface.co/openbmb/MathForm-8B)
+
+---
+
+## 17. ECC — 一个 242k stars 的智能体 harness，把工程工作流装进十多个编码智能体
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 242k stars · ~1d ago (~12:03 UTC+8)
+- **Tags:** `agent-harness` `claude-code` `codex` `workflow` `mit-license`
+
+**affaan-m/ECC**（MIT）是一个跨 harness 的"智能体性能优化系统"——一套代码适配 Claude Code、Codex、OpenCode、Cursor、Gemini、Zed、Kimi 等，强制推行 **plan → test → implement → review → verify → remember → improve** 循环，外加技能、记忆持久化、安全扫描器（"AgentShield"）与持续学习。它内置 **68 个智能体与 286 个技能**，不到一年冲到约 242k stars（GitHub 增长最快的仓库之一），并在 MIT 内核之上叠加了托管的 "ECC Pro" GitHub App。
+
+**Why it matters:** ECC 是"工作流即代码、而非调 prompt"论点的最纯粹当下范例——价值在于被强制执行的工程循环，无论你接入什么模型或 harness 都能存续，而这正是智能体工具正在收敛的方向。
+
+[`🔗 affaan-m/ECC`](https://github.com/affaan-m/ECC) · [`🔗 Releases`](https://github.com/affaan-m/ECC/releases)
+
+---
+
+## 18. Apache Maka — 一个孵化中的本地优先 AI 智能体工作区，"日志即运行时"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Apache Incubator · entered Aug 13 · ~1d ago (~12:03 UTC+8)
+- **Tags:** `agent-workspace` `local-first` `apache` `append-only-log` `ai-infra`
+
+**apache/maka** 是一个新进入 Apache 孵化的项目（8 月 13 日进入孵化）：一个**本地优先的 AI 智能体运行时与工作区**，把每条模型消息、工具调用、结果、权限决策与终止事件都记录为**追加式日志**——会话、UI、上下文与恢复都只是该日志的投影（"日志即运行时"）。它提供 Electron + React 桌面应用、TUI/CLI 与评估 harness；存储用 SQLite 加产物文件，凭据放在本地 vault 中，用户自行选择模型连接。macOS Apple Silicon 是早期公开构建；Windows 为未签名预览版。
+
+**Why it matters:** "上下文不是历史"——为下一次推理裁剪工具结果、同时保留完整证据日志——是对智能体记忆的一个干净、可检视的回答，而一个由 Apache 背书（而非创业公司）的本地优先智能体工作区，是对云端智能体的有意义制衡。
+
+[`🔗 apache/maka`](https://github.com/apache/maka) · [`🔗 Apache Incubator status`](https://incubator.apache.org/projects/maka.html)
+
+---
+
+## 19. nobuzz — 一个把 Claude 的"BuzzFeed 腔"交给 Gemini 过滤的 Claude Code 技能
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 221 pts HN · ~1d ago (~12:03 UTC+8)
+- **Tags:** `claude-code` `skill` `writing-style` `gemini` `mit-license`
+
+**adnanakil/nobuzz**（MIT）是一个 Claude Code 技能 `/debuzz`，它把 Claude 的上一段回复交给 Google 的 **Antigravity CLI（`agy`）**——由 Gemini 驱动——来去掉"BuzzFeed 腔"（那种"load-bearing assumption……而关键在于……"的戏剧化文风，在 Opus 4.8 之后愈发明显）。它逐字输出 Gemini 的重写（让 Claude"润色"会重新引入那种文风），并提供三种模式——`colleague`（内容不变、零戏剧化）、`manager`（缩减到约 1/3、不含代码）、`director`（3–5 句）——并在 `agy` 报错时提供回退。它今日登上 HN 首页，221 分。
+
+**Why it matters:** 这是一个内含真实技巧的玩笑——把某个模型的输出交给*另一个*模型做文风过滤，因为自我纠错无法去除模型被训练出的那些腔调——也说明 Claude 的"官腔"如今给一线工程师带来多大摩擦。
+
+[`🔗 adnanakil/nobuzz`](https://github.com/adnanakil/nobuzz) · [`🔗 HN discussion (221 pts)`](https://news.ycombinator.com/item?id=49388752)
+
+---
+
+## 20. CVE-2026-9198 — Langflow 的自动登录端点给任意调用方发放 SUPERUSER 令牌，实现未认证 RCE
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVSS 9.8 · ~2d ago (~12:03 UTC+8)
+- **Tags:** `cve` `langflow` `rce` `kev` `ai-infra` `code-injection`
+
+**CVE-2026-9198** 是 **Langflow OSS**（1.0.0–1.10.0；1.10.1 修复）中的一个 CVSS **9.8** 代码注入漏洞：把 `/api/v1/auto_login`（给任意网络调用方发放 SUPERUSER 令牌）与 `/api/v1/validate/code`（通过 `exec()` 执行用户代码）串联起来，即可在默认部署上实现未认证远程代码执行。该漏洞已列入 **CISA KEV**（8 月 4 日加入，8 月 7 日到期），正被野外利用，CISA SSVC 评级为"可自动化"、技术影响"完全"；云安全联盟（CSA）于 8 月 18 日公开了该 RCE 链。
+
+**Why it matters:** Langflow 是大量 AI 团队默认使用的低代码智能体构建器，这与前一天进入 KEV 的 MLflow SSRF 是同一模式——AI/ML 基础设施（自动登录便利 + 代码执行端点）如今成为未认证 RCE 与云凭据窃取的首要目标。请升级到 1.10.1，且勿未认证暴露 API。
+
+[`🔗 NVD CVE-2026-9198`](https://nvd.nist.gov/vuln/detail/CVE-2026-9198) · [`🔗 CSA research note`](https://labs.cloudsecurityalliance.org/research/csa-research-note-langflow-cve-2026-9198-rce-20260818-csa-st/)
+
+---
+
+## 21. Rust Glancer — 一个用少许速度换取比 rust-analyzer 省 100 倍内存的 Rust LSP
+
+- **Velocity:** ▮ steady
+- **Source:** rust-glancer.github.io · 71 pts HN · ~3d ago (~12:03 UTC+8)
+- **Tags:** `rust` `lsp` `memory` `developer-tools` `open-source`
+
+**Rust Glancer** 是一个新的 Rust 语言服务器，定位为 rust-analyzer 的内存高效替代（"一个不吃内存当早餐的 Rust LSP"）。它不再把一切保存在内存中按需重算，而是使用**卸载到文件系统的冻结工作区**，以"些许性能损失"换取极致的内存效率与即时重启。"Hello, world!" 文章日期为 8 月 19 日，作者是 @popzxc，HN 讨论 71 分。
+
+**Why it matters:** rust-analyzer 的内存胃口是大型工作区与低内存机器长期以来的痛点，而"冻结工作区、别放在 RAM 里"是一种真正不同的内存/CPU 权衡，值得作为替代 LSP 后端关注。
+
+[`🔗 Rust Glancer`](https://rust-glancer.github.io/) · [`🔗 HN discussion (71 pts)`](https://news.ycombinator.com/item?id=49393052)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-22T04:03:00Z |
-| Items | 13 |
-| Sources tracked | 18 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome) |
+| Generated | 2026-08-22T12:03:00Z |
+| Items | 21 |
+| Sources tracked | 26 (Hacker News, GitHub, NVD, GitLab, SecurityWeek, DeepSeek, ITHome, Kagi, Hugging Face, SenseTime, XM Cyber, Felony Bench, BandarLabs, Tenable, arXiv, ByteDance/Volcengine, Google Chrome, OpenRouter, InfoQ, Microsoft, OpenBMB, Apache Incubator, Google/Antigravity, Cloud Security Alliance, Rust Glancer) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 按速度加权（时效性 × 互动加速度 × 来源权威性） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
