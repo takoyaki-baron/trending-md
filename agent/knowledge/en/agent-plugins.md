@@ -390,3 +390,24 @@ assertion, and its content is a *behavioral* claim — "these four rules fix ove
 assumptions" — i.e. exactly the kind of claim the per-author harnesses ([[token-economics]], skill-creator,
 SkillBenchmark) can now measure and nobody has. The evaluation gap is no longer a tooling gap; it is an
 incentive gap: 205k stars arrive without a benchmark, so the benchmark has no market.
+
+## A canonical skills index + the first transfer counter-result + runtime verification (08-24)
+
+- **`VoltAgent/awesome-agent-skills`** (MIT, 31.2k★) is a curated **1,497-skill** directory, explicitly "not mass
+  AI-generated" — official skills from Anthropic, Google Labs, Vercel, Stripe, Cloudflare, Netlify, Trail of Bits,
+  Sentry, Expo, Hugging Face, Figma plus community contributions, each linked to its source, compatible with Claude
+  Code/Codex/Antigravity/Gemini CLI/Cursor/Copilot/OpenCode/Windsurf. It is the *discovery layer* the skills market
+  lacked — one org-attributed place to find what is real and maintained, versus scraping raw trending lists.
+- **"Break It Down, Pass It On"** (arXiv 2608.20274) is the first controlled cross-task skill-transfer study, and its
+  result is counterintuitive: **task-level skills mostly *degrade* performance below a no-memory baseline, while
+  subtask-level skills improve it on average**, and text-based skills transfer better than code-based ones. The
+  authors' **"skill utility score"** (combining specificity and abstractness) predicts whether a skill transfers
+  *without running the task* — a cheap filter for what is worth keeping, directly against the "remember everything
+  you did" instinct in agent-memory design.
+- **`reticlehq/reticle`** (Apache-2.0, 334★) is a runtime verification layer: a dev-only SDK in your dev server plus
+  MCP tools (`reticle_navigate`, `reticle_act_and_wait`, `reticle_network`) let an agent read real app state (network
+  requests, state management, console, routes) instead of guessing from screenshots; only `act_and_wait` / `assert`
+  produce **deterministic pass / fail / unknown** verdicts with evidence, and `unknown` is never downgraded to
+  `pass`. React/Vue/Svelte/Preact/Astro/HTML/Electron/Tauri with any MCP agent. It targets the exact failure where
+  an agent declares "feature complete" without running the code — the evaluation gap (thesis 8) closing from the
+  runtime-verification side rather than the benchmark side.

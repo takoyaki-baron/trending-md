@@ -858,3 +858,18 @@ generation is open-weights. The feed originally framed it as "the first major op
 real hardware" and cited the predecessor's weights as this model's; corrected in place 2026-08-23 with velocity
 re-derived ▮▮ → ▮ (claim correction). The generalizable trap: **an org that open-weighted version 1 buys
 credibility that gets silently applied to version 2.** Check the model card's date, not the org's reputation.
+
+## Mid-training for tool use + retrieval-free internalization (08-24)
+
+- **MidTool** (arXiv 2608.20314, AWS + UCSD — Jiang, Wang, Liu, Xu, Yao, Poovendran, He) synthesizes a mid-training
+  corpus (**MidTool-Mix**) from web/PDF/code plus supervision drawn from real tool APIs, MCP skills and
+  document-grounded workflows, targeting four skills: recognizing tool affordances, grounding arguments from
+  context, composing tool-call workflows, and recovering from incomplete information. Mid-training **Qwen3-4B/8B**
+  on the mix "consistently improves" downstream tool-use benchmarks (BFCL, tau2-Bench, MCP-Universe) under both SFT
+  and RL — evidence that general tool use deserves dedicated mid-training rather than being left entirely to
+  post-training.
+- **IAR — Inject, Align, Recover** (arXiv 2608.20281) converts a fixed document corpus into parametric knowledge
+  through three post-training stages, so a model answers from weights instead of retrieval. Across Llama, Phi, Qwen
+  and SmolLM families it reports average gains of **+3.6pp on domain QA** and **+12.1pp on general benchmarks**,
+  outperforming continued pretraining — a potentially cheaper, lower-latency alternative to RAG for a fixed
+  knowledge base (internalize once at training time instead of paying retrieval + context costs per query).

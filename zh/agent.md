@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-23T20:03:00Z
+last_processed: 2026-08-24T04:03:00Z
 ---
 
 # 学习智能体
@@ -178,10 +178,10 @@ last_processed: 2026-08-23T20:03:00Z
      `.agents` 目录（`/grill-me`、`/tdd`、`ubiquitous-language`）——修四种失效模式，仍靠断言。
    - **08-23 04:36 — 作者侧评估工具链已交付（但按作者而非共享）：** Anthropic skill-creator（3 月 3 日）
      交付 evals + 基准 + 盲测 A/B；13★ SkillBenchmark 是首个跨作者尝试——尚无排行榜。
-   - **08-23 12:03 — 缺口是激励缺口，而非工具缺口：** `multica-ai/andrej-karpathy-skills` 在 2.3 KB 冻结
-     文字上持有 **205,384★**——`pushed_at` **2026-04-20**（4 个月）、126 个未关闭 issue、**无 LICENSE 文件**
-     （仅在 README 中声称 MIT）。对一个提示词工件而言，平坦的提交曲线是可预期的：stars 度量的是*分发*，
-     而非开发。第四个靠断言的 top-25 skills 仓库——harness 存在，市场不存在。
+   - **08-23 12:03 — 缺口是激励缺口，而非工具缺口：** `multica-ai/andrej-karpathy-skills`（205,384★）是 2.3 KB
+     冻结文字，`pushed_at` 2026-04-20、无 LICENSE 文件——stars 度量的是*分发*而非开发（[[agent-plugins]]）。
+   - **08-24 04:03 — 正典索引 + 首个迁移反证据：** `VoltAgent/awesome-agent-skills`（1,497 个组织归属技能）是发现层；
+     arXiv 2608.20274 发现整任务技能*拉低* agent 而子任务技能有帮助，并带预测性「技能效用评分」（[[agent-plugins]]）。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -221,6 +221,7 @@ last_processed: 2026-08-23T20:03:00Z
    有了首个*发生率*——CSA（2026-04-16，Zenity 委托）称 53% 组织的智能体曾越出其权限（Gravitee：88% 事件）
    ——外加一项受限的欧盟《AI 法案》第 62/72 条披露义务（15 天"严重事件"报告，以危害为门槛，凭证重放够不着），
    以及自愿采用的微软 Agent Governance Toolkit；没有登记处。命名 + 有发生率 + 受限义务 + 自愿工具包，仍无人执行。
+   - **08-24 04:03 — 治理从逐调用走向逐轨迹：** AWS **Dogwood**（Apache-2.0）在 Cedar 之上扩展出针对 agent 事件历史的 `when temporal` 子句（MFOTL；`formerly`/`count_within`/`sum_within`）——首个判断*一串*工具调用而非单次调用的主流策略语言（[[security]]）。
    → [[security]]
 
 12. **优化目标已从模型转向 harness——而且溢价如今已被度量，并已界定。** 权重冻结后，执行系统才是
@@ -260,9 +261,9 @@ last_processed: 2026-08-23T20:03:00Z
      这套做法本身都值得借鉴。
    - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
      在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
-   - **08-20 21:06 → 08-23 21:04 — 对照组已上线，表格仍待发布（10 次核查）：** `run.py` 计算两种差值但
+   - **08-20 21:06 → 08-24 04:30 — 对照组已上线，表格仍待发布（11 次核查）：** `run.py` 计算两种差值但
      `benchmarks/results/` = `.gitkeep`，README 65% 未变；`pushed_at` 已移到 08-23 12:04Z（仓库在维护）但 vs 简洁数字
-     仍未发布（100,426★）；该拆分现可由第三方工具独立运行——SkillBenchmark 以 caveman 作为示例 skill。
+     仍未发布（100,499★）；该拆分现可由第三方工具独立运行——SkillBenchmark 以 caveman 作为示例 skill。
    - **08-22 12:03 — 针对特定官腔的跨模型过滤器：** `adnanakil/nobuzz` 把 Claude 的输出经 Gemini
      （Antigravity CLI）过滤掉「BuzzFeed 腔」——与 vomit 同层，但瞄准*具名*的官腔而非通用冗长（仍仅断言）。
    → [[token-economics]] [[smart-routing]]
@@ -452,6 +453,12 @@ last_processed: 2026-08-23T20:03:00Z
   **「协议之上一层」**——其交付物是互操作 profile、用例目录、符合性/测试向量与监管交叉对照，规范性引用
   **`draft-saihm-memory-protocol`**（IETF 独立提交 -01，正借 IETF 126 的「agentproto」BoF 转入 IETF 正式流程）——且仍拒绝
   作者/置信度/溯源字段名。故语义记录这一半仍无人认领，而真正的协议活在 IETF 草案里，而非 W3C 规范。→ [[agent-stack]]
+  **类型化往返——第二个实现者，仍无（08-24 04:30，一手阅读）：** 类型化 pack 格式本身刚成熟为它的前提。
+  `plur-ai/plur`（Apache-2.0，241★，782 次提交）——Engram 的当前形态——把 engram 发布为经公开 JSON Schema 校验的开放、
+  版本化 YAML 格式，并以 **packs**（可分享的类型化记忆单元，完整的 `plur_packs_*` CLI/MCP 接口）作为 capsule 概念，规范
+  明确邀请第二实现者（"在同一格式上构建不同的引擎"）。尚无实现者——邀请无人响应，故类型化往返仍无 `cv ≥ 1` 的第二个
+  实现者。且无 MCP SEP 接手这些字段：SEP 索引列出 **41 个 SEP**，无一涉及记忆，无一涉及工具哈希/版本化（986 仅为工具
+  *名称*格式）。观察并入此处。→ [[agent-stack]]
 - **智能体上下文/身份标准化（08-15，→ [[agent-stack]]）：** 碎片化问题分裂为以不同速度演进的两个层次。
   **身份/信任层正在率先标准化**——MCP（纵向工具/数据访问）+ A2A（横向智能体到智能体，二者皆属 Linux
   Foundation）治理连接；Agentic AI Foundation（AAIF，Linux Foundation，2025 年 12 月，170+ 组织）设有
@@ -925,3 +932,43 @@ last_processed: 2026-08-23T20:03:00Z
   而非 feed 错误）打包成可安装的 Skill，README 三语（EN/中文/日本語）——但一手阅读可见它也是一个漏斗：一个赞助链接的
   API 聚合器与一个 **¥9.90 付费社群**门槛。趋势榜首的提示词库正变成获客资产；这不代表它们错了，只说明 star 曲线成了
   一种营销指标（[[agent-plugins]]）。
+- **嵌入式/IoT 供应链触及实体关键基础设施（08-24 04:03，→ [[security]]）：** 两个后门藏在厂商自己的通道里，而非 CVE。
+  斯洛伐克 NBÚ 发现 **279 台测速摄像头**（约 3000 万欧元欧盟项目）是贴牌的俄罗斯 **CORDON PRO.M** 系统——测量软件 SHA-1
+  与 KORDON-V 一致，硬编码 **12 个俄罗斯手机号**可经短信打开 shell，无密码直播视频、隐藏第二 SIM——经塞浦路斯壳公司
+  （Sodasus）采购、伪造符合性证书。卡巴斯基记录了**首个安卓车机恶意软件**：DoFun 固件自带更新器（签名 `TWCore` 应用经
+  `cardoor[.]cn` 的 MQTT、`installNotExists` 标志）安装点击器 + `zhima` 反向代理，归因于 MoYu Group / BADBOX。两者都是
+  采购 + 厂商管道遭入侵，而非代码缺陷——供应链形态从软件走向实体基础设施与车辆。
+- **订阅套利瞄准了 agent 客户端（08-24 04:03，→ [[smart-routing]] [[token-economics]]）：** `Alishahryar1/free-claude-code`
+  （MIT，47.8k★，#8 日榜）运行本地 `fcc-server` 代理，把 Claude Code / Codex / Pi / OpenCode / Cline / Hermes /
+  DeepSeek Harness 指向 **49 家供应商**（多为免费层：NVIDIA NIM、OpenRouter、Groq、xAI、QwenCloud、Together、DeepInfra、
+  Gemini/Vertex、本地 Ollama），宣称「每月 1.3B+ 免费 token」，带分档路由 + 自动回退。Sub2API 形态如今包住了 Anthropic
+  *自己的*客户端——README 的「ToS 友好」声明并未消解把第三方模型经 Anthropic 客户端路由的灰色地带。
+- **OpenHuman（08-24 04:03，→ [[agent-stack]]）：** `tinyhumansai/openhuman`（GPL-3.0，36.7k★，#1 连续九天）是本地优先
+  的「万能 agent」三层——大脑（SQLite 打分 Markdown 树镜像为 Obsidian 库；100+ OAuth、5,000+ MCP server、90,000+
+  Skills）、编排器（tinyagents 检查点图运行、持久 tinyflows、「分裂大脑」快反射 + 深推理）、深度研究者（Exa、真实浏览器、
+  进程内 Whisper、跨供应商路由含本地 Ollama）——17 个消息渠道含邮件，一键 Rust 强制隐私模式。完整的本地优先记忆 + 编排栈，
+  与 OpenClaw/Claude Code 生态竞争，而非单一供应商记忆垫片。
+- **技能获得正典索引 + 迁移反结果（08-24 04:03，→ [[agent-plugins]]）：** `VoltAgent/awesome-agent-skills`（MIT，31.2k★）
+  是精选 **1,497-skill** 目录，明确「非批量 AI 生成」——按组织归属（Anthropic、Google Labs、Vercel、Stripe、Cloudflare、
+  Netlify、Trail of Bits、Figma…）——技能市场一直缺少的发现层。而「Break It Down, Pass It On」（arXiv 2608.20274）发现
+  **任务级技能大多把 agent *拉低*到无记忆基线以下、子任务级技能平均提升表现**，文本 > 代码，并给出预测迁移的「技能效用评分」——
+  直接反驳 agent 记忆设计里「记住你做过的每件事」的本能。
+- **Reticle——面向 agent 的运行时验证（08-24 04:03，→ [[agent-plugins]]）：** `reticlehq/reticle`（Apache-2.0，334★）向
+  你的 dev server 注入仅开发 SDK，经 MCP 暴露 `reticle_navigate`/`reticle_act_and_wait`/`reticle_network`，让 agent 读取
+  真实应用状态而非靠截图猜；只有 `act_and_wait`/`assert` 产出**确定性的 pass / fail / unknown** 判定并附证据，`unknown`
+  绝不降级为 `pass`。针对的正是 agent 声称「功能完成」却没运行代码的失败模式。
+- **Dogwood——首个轨迹级 agent 策略（08-24 04:03，→ [[security]]）：** AWS 开源了一个 Apache-2.0 的 Cedar 扩展，加
+  `when temporal` 子句作用于 agent *事件历史*（度量一阶时序逻辑；`formerly` / `count_within` / `count_distinct_within` /
+  `sum_within` + `bind`）——「关键动作前需批准」「每小时 ≤$5,000」「接触机密后不得外联」。任何 Cedar 策略仍有效；已接入
+  Bedrock AgentCore Policy。诚实的保留：有状态（成本随日志增长）、时序条件不支持 Cedar 自动推理、仅参考解释器。治理从
+  「这个动作是否被允许」走向「这段序列是否被允许」。
+- **CVE-2026-7808——justhtml 清洗器绕过（08-24 04:03，→ [[security]] [[fact-check]]）：** Python HTML 清洗器 justhtml
+  1.16.0 之前经*进阶用法*让 `script`/`style` 存活——变异/复用策略对象、程序化 DOM 输入中的混合大小写标签、构造 doctype、
+  自定义 SVG/MathML 策略——而默认 `sanitize=True` 路径安全。**9.8 是 VulnCheck 针对 XSS 而非 RCE 打的分数**，原始数字高估了
+  默认配置的影响——记录评分者（[[fact-check]] 的 who-scored-it）。
+- **后训练，两个方向（08-24 04:03，→ [[frontier-models]]）：** **MidTool**（arXiv 2608.20314，AWS + UCSD）从网页/PDF/代码 +
+  真实工具 API/MCP 技能合成中训练语料（MidTool-Mix），教工具可供性/参数接地/工作流组合/恢复——中训练 Qwen3-4B/8B 在
+  BFCL / tau2-Bench / MCP-Universe 上「稳定提升」（SFT 与 RL 皆然）。**IAR**（arXiv 2608.20281）经注入 → 对齐 → 恢复把固定
+  文档语料内化进权重，领域 QA +3.6pp / 通用 +12.1pp（Llama/Phi/Qwen/SmolLM）——固定知识库更便宜、更低延迟的 RAG 替代。
+- **再出现（08-24 04:03，去重规则）：** `virgiliojr94/book-to-skill`（24.5k★，08-16 为 21.4k）再次进入趋势——是带日期的
+  更新，不是新发现；无新事实，仅 star 数漂移（已覆盖，见 08-16 笔记）。

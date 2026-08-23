@@ -120,6 +120,10 @@ worth borrowing regardless of whether caveman's specific numbers survive their c
   tool now exists to run the split — `TiesPetersen/SkillBenchmark` (MIT, 13★) ships **caveman as its
   example skill** (blind judge + Welch-t CIs, see [[agent-plugins]]), so the terse-vs-unprompted question is
   no longer gated on caveman's own `run.py` republishing.
+  **Seventh–eleventh checks (08-23 12:38 → 08-24 04:30):** still no table — `benchmarks/results/` = `.gitkeep`
+  throughout; `pushed_at` moved once (to 08-23 12:04Z, the first code change after ~2.6 days) and has held
+  since; README's 65% table unchanged; stars 100,357 → 100,499. Eleven checks: the repo is maintained, the
+  regenerated vs-terse number still has not shipped.
 - Does pixel-mode billing hold? It depends on providers pricing image tokens below the text they
   replace — a pricing-policy dependency, not a technical one, and therefore revocable by a vendor
   changing a rate card.

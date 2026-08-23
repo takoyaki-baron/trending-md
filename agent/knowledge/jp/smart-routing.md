@@ -213,3 +213,15 @@ LiteLLM 設定）し、デフォルトルーティングに頼らず、将来の
   **1,431×** のコストになりうる（1パス USD 154 vs 0.11、うち28–81%が推論トークン）。そのルーティング処方は検索層の
   「route before compute」論：類似度/分類/クラスタリングは embedder、推論集中の検索のみ LLM——そして Pareto フロンティアに
   立つ LLM は**1つだけ**。
+
+## サブスク裁定がエージェントクライアントそのものを標的に（08-24 04:03）
+
+- **free-claude-code**（`Alishahryar1/free-claude-code`、MIT、47.8k★、デイリー#8）はローカルの `fcc-server` プロキシ +
+  管理UIを走らせ、既存のコーディングエージェント——Claude Code、Codex、Pi、OpenCode、Cline、Hermes、DeepSeek Harness、
+  Grok Build、Muse Code——を **49プロバイダ**のカタログへ向ける。多くは無料枠あり（NVIDIA NIM、OpenRouter、Groq、xAI、
+  QwenCloud、Together、DeepInfra、Gemini/Vertex、ローカルOllama/LM Studio）。「49のToSフレンドリープロバイダ、毎月
+  1.3B+の無料トークン」を謳い、ティア別モデルルーティング（Opus/Sonnet/Haiku/Fable）、推論レベル制御、自動フォールバックを
+  備える。Sub2APIの形が一歩進んだもの：定額サブスクを1つのゲートウェイの背後で裁定するだけでなく、Anthropic*自身の*
+  クライアントを無料枠ルーターで包む——READMEの「ToSフレンドリー」という主張は、Anthropicクライアント経由でサードパーティ
+  モデルをルーティングするグレーゾーンを解消しない。ルーティング層のグレーマーケットの兄弟は、今やAPIゲートウェイだけで
+  なくエージェントクライアント自体を出荷する。

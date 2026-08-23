@@ -74,6 +74,11 @@ AI agent 技术栈的各个组成部分，在 2026 年 8 月的趋势窗口中�
   以 MCP server 运行）与 **Portable Agent Memory**（Episodic/Semantic/Procedural/Working/Identity
   模型，Merkle-DAG 溯源）。TencentDB Team Memory 与 Macro 经 MCP 暴露的团队记忆只是临时填补缺口；
   尚无跨系统标准。
+  **类型化往返——第二个实现者，仍无（08-24 04:30，一手阅读）：** `plur-ai/plur`（Apache-2.0，241★，782 次提交）是 Engram
+  的当前形态——engram 是经公开 JSON Schema 校验的开放、版本化 YAML 格式，并以 **packs**（可分享的类型化记忆单元，一个
+  `plur_packs_*` CLI/MCP 接口）作为 capsule 概念；规范明确邀请第二实现者（"在同一格式上构建不同的引擎"）但尚无实现者——
+  类型化往返仍无 `cv ≥ 1` 的第二个实现者。MCP 的 SEP 索引（41 个 SEP）无记忆字段 SEP、也无工具哈希/版本化 SEP（986 仅为
+  工具*名称*格式），故作者/置信度/溯源字段仍无人认领。
 - **ai-memory——厂商中立的跨 agent 交接** — `akitaonrails/ai-memory`，MIT，Rust，1.5K stars。
   一个本地、git 版本化的"共享大脑"：把提示词、工具调用与会话边界捕获进一个按项目组织的 Markdown
   wiki（SQLite FTS5，可选向量排序），**零 LLM**（FTS5 + 规则），并暴露一个类型化的跨 agent 交接
@@ -899,3 +904,13 @@ Code、Codex、Gemini CLI、Qwen Code 与 DeepSeek Harness。它自己的标语�
 收敛，而 harness 外壳仍按厂商各自为政。Qwen-MM-Plugins 正是一个押注于此的前沿*模型*实验室：它不把用户拉进 Qwen
 Code，而是经可移植核心把能力分发到竞争对手的 harness 里，把付费面（DashScope）留在可选的那一半之后。经对手的运行
 时来分发，如今已成为第一方战略——本文件大部分内容一直在追踪的锁定形态的反面。
+
+## OpenHuman——本地优先的「万能 agent」（08-24）
+
+`tinyhumansai/openhuman`（GPL-3.0，「Early Beta」，36.7k★，GitHub trending 第一连续九天）是一个分三层的个人 AI agent：
+**大脑**（数据压缩为 SQLite 中的打分 Markdown 树，镜像为可编辑的 Obsidian 库；100+ OAuth 集成、5,000+ MCP server、
+90,000+ Skills）、**编排器**（经 tinyagents 在检查点图运行上的 agent 群、持久化且触发驱动/审批门控的 tinyflows、
+快反射 + 深推理核心的「分裂大脑」），以及**深度研究者**（Exa 搜索、真实浏览器、进程内 Whisper 语音、跨供应商模型路由，
+含完全本地的 Ollama）——17 个消息渠道含原生邮件，带一键 Rust 强制的隐私模式。它以完整的本地优先记忆 + 编排栈与
+OpenClaw/Claude Code 生态正面竞争，而非单一供应商的记忆垫片——与 Hermes Agent 相同的「单仓库全栈」形态，但本地优先，
+且把隐私边界做成了一等开关。

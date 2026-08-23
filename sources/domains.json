@@ -2896,5 +2896,41 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "risky.biz": {
+    "cat": "security",
+    "en": "Risky.Biz — Patrick Gray's long-running security-news newsletter; the Slovakia camera-backdoor bulletin is first-hand and sourced, corroborated by Tom's Hardware.",
+    "zh": "Risky.Biz——Patrick Gray 的资深安全新闻通讯；斯洛伐克摄像头后门简报为一手且有出处，与 Tom's Hardware 相互印证。",
+    "jp": "Risky.Biz——Patrick Gray の長寿セキュリティニュースレター。スロバキアのカメラバックドア速報は一次情報で出典があり、Tom's Hardware と相互に裏付けられる。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "securelist.com": {
+    "cat": "security",
+    "en": "Kaspersky Securelist — the vendor's threat-research blog; the Android car-head-unit malware writeup is first-hand, corroborated by The Hacker News.",
+    "zh": "卡巴斯基 Securelist——厂商威胁研究博客；安卓车机恶意软件分析为一手，与 The Hacker News 相互印证。",
+    "jp": "Kaspersky Securelist——ベンダーの脅威リサーチブログ。Androidカーヘッドユニットのマルウェア解析は一次情報で、The Hacker News と相互に裏付けられる。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "gentic.news": {
+    "cat": "news",
+    "en": "gentic.news — AI/dev-tools writeups; its Reticle piece is a secondary writeup of the reticlehq/reticle repo (co-cited).",
+    "zh": "gentic.news——AI/开发工具评测；其 Reticle 文章是对 reticlehq/reticle 仓库的二次报道（共同引用）。",
+    "jp": "gentic.news——AI/開発ツールの紹介記事。Reticle の記事は reticlehq/reticle リポジトリの二次紹介（共引用）。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "aws.amazon.com": {
+    "cat": "vendor",
+    "en": "AWS Blog — first-party vendor blog; the Dogwood runtime-verification post is the primary source, corroborated by InfoQ.",
+    "zh": "AWS 博客——第一方厂商博客；Dogwood 运行时验证文章为第一来源，与 InfoQ 相互印证。",
+    "jp": "AWSブログ——ファーストパーティのベンダーブログ。Dogwoodのランタイム検証記事が一次ソースで、InfoQ と相互に裏付けられる。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
   }
 }

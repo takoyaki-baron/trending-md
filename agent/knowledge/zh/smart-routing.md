@@ -177,3 +177,13 @@ NVIDIA 的 NIM 目录）。目前还没有共享的路由配置标准——各�
   最佳 embedder（77.2）总体打平，但 LLM 在推理密集型检索上领先、embedder 在分类上领先，且一个 LLM 成本可高 **1,431×**
   （每遍 USD 154 vs 0.11，其中 28–81% 是推理 token）。其路由处方就是检索层的"route before compute"论：相似度/分类/聚类用
   embedder，推理密集型检索才用 LLM——而且只有**一个** LLM 站在 Pareto 前沿上。
+
+## 订阅套利瞄准了 agent 客户端（08-24 04:03）
+
+- **free-claude-code**（`Alishahryar1/free-claude-code`，MIT，47.8k★，#8 日榜）运行一个本地 `fcc-server` 代理 + 管理 UI，
+  把现有 coding agent——Claude Code、Codex、Pi、OpenCode、Cline、Hermes、DeepSeek Harness、Grok Build、Muse Code——
+  指向一个 **49 家供应商**目录，许多有免费层（NVIDIA NIM、OpenRouter、Groq、xAI、QwenCloud、Together、DeepInfra、
+  Gemini/Vertex、本地 Ollama/LM Studio），宣称「49 家 ToS 友好供应商、每月 1.3B+ 免费 token」，带分档模型路由
+  （Opus/Sonnet/Haiku/Fable）、推理级控制与自动回退。它是 Sub2API 形态又进了一步：不再只是把包月订阅套利到一个网关背后，
+  而是把 Anthropic *自己的*客户端包进一个免费层路由器——README 的「ToS 友好」声明并不能消解把第三方模型经 Anthropic
+  客户端路由的灰色地带。路由层的灰色市场近亲，如今交付的是 agent 客户端本身，而非仅仅一个 API 网关。

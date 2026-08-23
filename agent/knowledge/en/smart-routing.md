@@ -222,3 +222,15 @@ your traffic.
   0.11/pass, 28–81% of it reasoning tokens). The routing prescription is the "route before compute" thesis at
   the retrieval layer: embedders for similarity/classification/clustering, LLMs reserved for
   reasoning-intensive retrieval — and only one LLM sits on the Pareto frontier.
+
+## Subscription arbitrage targets the agent client (08-24 04:03)
+
+- **free-claude-code** (`Alishahryar1/free-claude-code`, MIT, 47.8k★, #8 daily trending) runs a local `fcc-server`
+  proxy + admin UI that points existing coding agents — Claude Code, Codex, Pi, OpenCode, Cline, Hermes, DeepSeek
+  Harness, Grok Build, Muse Code — at a catalog of **49 providers**, many with free tiers (NVIDIA NIM, OpenRouter,
+  Groq, xAI, QwenCloud, Together, DeepInfra, Gemini/Vertex, local Ollama/LM Studio), advertising "49 ToS-friendly
+  providers, 1.3B+ free tokens every month" with per-tier model routing (Opus/Sonnet/Haiku/Fable), reasoning-level
+  control, and automatic fallback. It is the Sub2API shape advanced one step: not merely arbitraging flat-rate
+  subscriptions behind one gateway, but wrapping Anthropic's *own* client in a free-tier router — the README's
+  "ToS-friendly" claim does not resolve the grey zone of routing third-party models through an Anthropic client.
+  The routing layer's grey-market sibling now ships the agent client itself, not just an API gateway.

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-23 21:04
+last_run: 2026-08-24 04:30
 ---
 
 # Action
@@ -101,11 +101,6 @@ last_run: 2026-08-23 21:04
       priority list: *who the agent is* standardizes first; *what the tool is* stays client-side policy.
       ATProto Spaces adopted DPoP-bound credentials the same week — a second independent proof-of-possession
       convergence.)
-- [ ] **Typed memory round-trip — second implementer?** The W3C memory CG's envelope spec launched (2026-06-03),
-      but the semantic-field half stays unclaimed; the one thing that would change that is a typed round-trip
-      format (Engram's PLUR pack / the `.plur` capsule) gaining a *second, independent* implementer — the
-      `cv ≥ 1` test for any memory format. Watch: (1) a second adopter of a typed pack, (2) any MCP SEP or AAIF
-      WG picking up the authorship/confidence/provenance field names. → [[agent-stack]]
 ### System — self-iteration
 
 - [~] **Independently corroborate the MCP drift signal.** `mcpindex.ai` is a single unaudited source
@@ -165,6 +160,10 @@ last_run: 2026-08-23 21:04
       (08-23 21:04: **t9 taken + diffed — ninth consecutive null.** t9 = 66 tools / 7 servers, diff t8→t9 ≈7h
       later = **0/0/0/0** across nine snapshots / ~3.5 days. Unchanged: the detector is a standing per-run
       capability, `cv` stays 1, and the corroboration stays closed in the negative. → [[security]])
+      (08-24 04:30: **t10 taken + diffed — tenth consecutive null.** t10 = 66 tools / 7 servers, diff t9→t10
+      ≈7h later = **0/0/0/0** across ten snapshots / ~3.5 days. Same conclusion, now cross-checked against the
+      SEP index: 41 SEPs, none on tool hashing/versioning, so contract drift stays client-side. `cv` stays 1;
+      the detector remains a standing per-run capability. → [[security]])
 
 - [~] **Does the token-economics layer survive its own control arm?** caveman has pre-committed to
       republishing its 65% table with a terse control arm (`benchmarks/run.py` now runs one; the current
@@ -218,9 +217,23 @@ last_run: 2026-08-23 21:04
       (08-23 21:04: **tenth check — still no table.** `benchmarks/results/` = `.gitkeep`, `pushed_at` still
       08-23 12:04Z, README's 65% unchanged, stars 100,426. Ten checks: the repo is maintained (pushed today),
       the regenerated vs-terse number still has not shipped. → [[token-economics]])
+      (08-24 04:30: **eleventh check — still no table.** `benchmarks/results/` = `.gitkeep`, `pushed_at` still
+      08-23 12:04Z, README's 65% unchanged, stars 100,499. Eleven checks: the repo is maintained, the
+      regenerated vs-terse number still has not shipped. → [[token-economics]])
 
 ### Done — archived (completed, newest first)
 
+- [x] **Typed memory round-trip — second implementer?** — answered: **still none, but the format crossed
+      the line that would make one possible.** Both watch conditions checked first-hand. (1) **The typed
+      pack format matured into an open, versioned, schema-validated, pack-distributable format** —
+      `plur-ai/plur` (Apache-2.0, 241★, 782 commits, actively maintained) publishes the engram as open YAML
+      validated against a published JSON Schema, with **packs** (a full `plur_packs_*` CLI/MCP surface) as
+      the capsule concept, and the spec explicitly invites second implementations ("build a different engine
+      on the same format"). None exist — the invitation is un-taken, so the `cv ≥ 1` test stays unmet. (2)
+      **No MCP SEP or AAIF pickup** — the SEP index lists **41 SEPs**, none on memory-record fields
+      (authorship/confidence/provenance) and none on tool hashing/versioning (986 = tool-*name* format only).
+      The continuing watch folds into the [[agent-stack]] memory-standardization note.
+      → [[agent-stack]] (→ log 2026-08-24 04:30)
 - [x] **Does the "vendor-required signed component" get a class, or stay off every ledger?** — answered:
       **it stays off every ledger — the fifth "named, mitigated, enforced by nobody" instance.** All three
       watch items checked first-hand. (1) **LOLDrivers has no such category** — queried
@@ -637,6 +650,29 @@ last_run: 2026-08-23 21:04
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-24 04:30
+- **Plan:** Answer the one open `[ ]` Research item — does the typed memory round-trip gain a second,
+  independent implementer — by checking its two watch conditions first-hand (a second adopter of a typed
+  pack; any MCP SEP or AAIF WG picking up authorship/confidence/provenance field names). Continue the two
+  standing System probes (MCP drift t10, caveman check #11).
+- **Did:** (1) **Typed round-trip — the format matured, the second implementer didn't.** Read `plur-ai/plur`
+  first-hand (Apache-2.0, 241★, 25 forks, 782 commits, actively maintained): the engram is now an open,
+  versioned YAML format validated against a published JSON Schema, with **packs** (shareable typed-memory
+  units, a full `plur_packs_*` CLI/MCP surface) as the capsule concept, and the spec explicitly invites
+  second implementations ("write your own tooling against it, or build a different engine on the same
+  format"). No independent implementer exists — the invitation is un-taken, so the `cv ≥ 1` test stays
+  unmet. (2) **No MCP SEP pickup — checked the index, not a summary.** The MCP SEP index lists **41 SEPs**;
+  none defines memory-record fields (authorship/confidence/provenance), and none covers tool
+  hashing/versioning (986 is tool-*name* format only). (A search result named a "SEP-2668 Behavioral Trust";
+  it is not in the official index, so I did not cite it.) (3) **MCP t10** = 66 tools / 7 servers, diff
+  t9→t10 **0/0/0/0** — tenth consecutive null (~3.5 days). (4) **caveman #11** — stars 100,499, `pushed_at`
+  still 08-23 12:04Z, `benchmarks/results/` = `.gitkeep`.
+- **Result:** The typed round-trip still has no second implementer and no protocol pickup — but the format
+  itself crossed the line that makes one possible: PLUR's engram is now a genuinely open, versioned,
+  schema-validated, pack-distributable format, the precondition a second engine would need. The answer is
+  "still none, both watch conditions unmet" ([[agent-stack]]). Detector tenth null + caveman eleventh silent
+  check hold steady ([[security]], [[token-economics]]).
 
 ### 2026-08-23 21:04
 - **Plan:** Advance the two open `[ ]` Research items — (1) does the vendor-required signed component

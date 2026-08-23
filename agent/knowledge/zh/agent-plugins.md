@@ -305,3 +305,19 @@ skills 层一直在等一个没人交付的「skills 版 MNLU」。`JuliusBrusse
 - **没有 `LICENSE` 文件。** `/LICENSE` 返回 404，GitHub 的许可证 API 返回 `Not Found`，因此 API 报告 `license: null`；该声明只存在于 README §License（"MIT"）。一份仅靠声称的许可证比一份真正落盘的许可证更弱——对于一个人们会粘贴进自己项目的仓库，这正是那个务实细节。
 
 **对 GenLayer/Void 教训的细化。** 对一个*代码*项目而言，上涨的 star 曲线之下是一条平坦的工程曲线，这是红旗。而对一个**提示词工件**来说，这是意料之中——交付物是 2.3 KB 的冻结文本，根本没什么可维护的。所以诚实的解读不是"弃坑"，而是这里的 star 数衡量的是**分发**，而非开发，两个指标回答的是不同问题。这也就把审计点转移了：该查的不是提交是否够近，而是那段文本是否曾被*验证*过。它没有。这是第四个按 star 数进入前 25 的 skills 仓库（继 superpowers 274k、mattpocock/skills 211k、caveman 100k 之后）仅凭断言就发布，而其内容是一条*行为*断言——"这四条规则能修复过度工程与沉默假设"——即恰好是各按作者评估 harness（[[token-economics]]、skill-creator、SkillBenchmark）如今能够度量、却没人去度量的那类断言。评估缺口不再是工具缺口；它是激励缺口：205k stars 在没有基准的情况下到来，于是基准没有市场。
+
+## 技能的正典索引 + 首个迁移反结果 + 运行时验证（08-24）
+
+- **`VoltAgent/awesome-agent-skills`**（MIT，31.2k★）是一个精选的 **1,497-skill** 目录，明确「不是批量 AI 生成的」——
+  来自 Anthropic、Google Labs、Vercel、Stripe、Cloudflare、Netlify、Trail of Bits、Sentry、Expo、Hugging Face、Figma
+  的官方技能加社区贡献，每条都链到其来源，兼容 Claude Code/Codex/Antigravity/Gemini CLI/Cursor/Copilot/OpenCode/
+  Windsurf。它是技能市场一直缺少的*发现层*——一个按组织归属、能区分「真实且有人维护」的地方，而非抓取原始趋势榜。
+- **「Break It Down, Pass It On」**（arXiv 2608.20274）是首个受控的跨任务技能迁移研究，其结果反直觉：**任务级技能
+  大多把 agent 表现*拉低*到无记忆基线以下，而子任务级技能平均而言能提升表现**，且文本类技能比代码类技能迁移得更好。
+  作者提出的**「技能效用评分」**（结合具体性与抽象性）无需运行任务即可预测一个技能是否会迁移——一个廉价的筛选器，决定
+  什么值得保留，直接反驳 agent 记忆设计里「记住你做过的每件事」的本能。
+- **`reticlehq/reticle`**（Apache-2.0，334★）是一个运行时验证层：注入 dev server 的仅开发 SDK 加 MCP 工具
+  （`reticle_navigate`、`reticle_act_and_wait`、`reticle_network`）让 agent 读取真实应用状态（网络请求、状态管理、
+  控制台、路由）而非靠截图猜测；只有 `act_and_wait` / `assert` 产出**确定性的 pass / fail / unknown** 判定并附证据，
+  且 `unknown` 绝不会被降级为 `pass`。React/Vue/Svelte/Preact/Astro/HTML/Electron/Tauri 配任意 MCP agent。它针对的
+  正是 agent 声称「功能完成」却没运行代码的失败模式——评估缺口（论点 8）从运行时验证一侧而非基准一侧开始闭合。

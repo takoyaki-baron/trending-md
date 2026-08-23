@@ -87,6 +87,13 @@ The pieces of the AI-agent stack, each gaining open-source winners in the Aug 20
   an MCP server) and **Portable Agent Memory** (Episodic/Semantic/Procedural/Working/Identity model,
   Merkle-DAG provenance). TencentDB Team Memory and Macro's MCP-exposed team memory fill the gap ad
   hoc; no cross-system standard yet.
+  **Typed round-trip — second implementer, still none (08-24 04:30, read first-hand):** `plur-ai/plur`
+  (Apache-2.0, 241★, 782 commits) is the current Engram — the engram is an open, versioned YAML format
+  validated against a published JSON Schema, with **packs** (shareable typed-memory units, a `plur_packs_*`
+  CLI/MCP surface) as the capsule concept; the spec explicitly invites second implementations ("build a
+  different engine on the same format") but none exist — the typed round-trip still has no `cv ≥ 1` second
+  implementer. MCP's SEP index (41 SEPs) has no memory-field SEP and no tool-hashing/versioning SEP (986 is
+  tool-*name* format only), so the authorship/confidence/provenance fields stay unclaimed.
 - **ai-memory — vendor-neutral cross-agent handoff** — `akitaonrails/ai-memory`, MIT, Rust, 1.5K
   stars. A local, git-versioned "shared brain": captures prompts, tool calls, and session boundaries
   into a per-project Markdown wiki (SQLite FTS5, optional vector ranking) with **zero LLM** (FTS5 +
@@ -1195,3 +1202,15 @@ Qwen-MM-Plugins is a frontier *model* lab betting on exactly that: rather than p
 distributes capability into competitors' harnesses through the portable core, keeping the paid surface
 (DashScope) behind the optional half. Distribution via the rival's runtime is now a first-party strategy — the
 inverse of the lock-in most of this file has been tracking.
+
+## OpenHuman — the local-first "everything agent" (08-24)
+
+`tinyhumansai/openhuman` (GPL-3.0, "Early Beta", 36.7k★, #1 GitHub trending nine days running) is a personal AI
+agent in three layers: a **brain** (data compressed into scored Markdown trees in SQLite, mirrored as an editable
+Obsidian vault; 100+ OAuth integrations, 5,000+ MCP servers, 90,000+ Skills), an **orchestrator** (fleets of agents
+on checkpointed graph runs via tinyagents, durable trigger-driven/approval-gated tinyflows, a "split brain" of fast
+reflex + deep reasoning core), and a **deep researcher** (Exa search, a real browser, in-process Whisper voice,
+cross-provider model routing incl. fully local Ollama) — 17 messaging channels incl. native email, with a one-switch
+Rust-enforced Privacy Mode. It competes head-on with the OpenClaw/Claude Code ecosystem as a full local-first
+memory + orchestration stack, not a single-vendor memory shim — the same "whole stack in one repo" shape as Hermes
+Agent, but local-first with a privacy boundary as a first-class switch.

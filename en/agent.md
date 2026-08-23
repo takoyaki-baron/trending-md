@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-23T20:03:00Z
+last_processed: 2026-08-24T04:03:00Z
 ---
 
 # Learnt Agent
@@ -193,10 +193,10 @@ patterns, and turn them into insights and actionable todos.
      modes (misalignment, verbosity, broken code, ball of mud), still on assertion.
    - **08-23 04:36 — authoring-side eval harness shipped (per-author):** Anthropic skill-creator (Mar 3)
      ships evals + benchmark + blind A/B; 13★ SkillBenchmark is the first cross-author attempt — no leaderboard yet.
-   - **08-23 12:03 — the gap is an incentive gap, not a tooling gap:** `multica-ai/andrej-karpathy-skills` holds
-     **205,384★** on 2.3 KB of frozen prose — `pushed_at` **2026-04-20** (4 months), 126 open issues, **no LICENSE
-     file** (MIT asserted in README only). For a prompt artifact a flat commit curve is expected: stars measure
-     *distribution*, not development. Fourth top-25 skills repo on assertion — the harness exists, the market doesn't.
+   - **08-23 12:03 — the gap is an incentive gap, not a tooling gap:** `multica-ai/andrej-karpathy-skills` (205,384★)
+     is 2.3 KB of frozen prose, `pushed_at` 2026-04-20, no LICENSE file — stars measure *distribution*, not development ([[agent-plugins]]).
+   - **08-24 04:03 — a canonical index + the first transfer counter-evidence:** `VoltAgent/awesome-agent-skills` (1,497
+     org-attributed skills, "not mass AI-generated") is the discovery layer; arXiv 2608.20274 finds whole-task skills *degrade* agents while subtask skills help, with a predictive "skill utility score" ([[agent-plugins]]).
    → [[agent-plugins]] [[token-economics]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
@@ -252,6 +252,7 @@ patterns, and turn them into insights and actionable todos.
    exceeded their permissions (Gravitee: 88% incidents) — a scoped EU AI Act Art 62/72 duty (15-day
    "serious-incident" reporting, harm-gated past a cred replay), and a voluntary Microsoft Agent
    Governance Toolkit; no registry. Named + rated + scoped duty + voluntary toolkit, still enforced by nobody.
+   - **08-24 04:03 — governance moves from per-call to per-trajectory:** AWS **Dogwood** (Apache-2.0) extends Cedar with a `when temporal` clause over an agent's event history (MFOTL; `formerly`/`count_within`/`sum_within`) — the first mainstream policy language judging a *sequence* of tool calls, not each call alone ([[security]]).
    → [[security]]
 
 12. **The optimization target shifted from the model to the harness — and the premium is now measured,
@@ -293,9 +294,9 @@ patterns, and turn them into insights and actionable todos.
    - **08-20 20:03 — the evidence vocabulary arrives before the benchmark:** grading claims `inferred` /
      `benchmark_counterfactual` / `verified` is a better answer to "prove it" than another headline number,
      and it is the practice worth borrowing regardless of whether caveman's numbers hold.
-   - **08-20 21:06 → 08-23 21:04 — control arm live, table still pending (10 checks):** `run.py` computes both
+   - **08-20 21:06 → 08-24 04:30 — control arm live, table still pending (11 checks):** `run.py` computes both
      deltas but `benchmarks/results/` = `.gitkeep`, README 65% unchanged; `pushed_at` moved to 08-23 12:04Z (repo
-     maintained) but the vs-terse number still hasn't shipped (100,426★); SkillBenchmark ships caveman as its example.
+     maintained) but the vs-terse number still hasn't shipped (100,499★); SkillBenchmark ships caveman as its example.
    - **08-21 12:03 — the style-filter instance:** `zachahn/vomit` pipes Claude 5's output through a local
      gpt-oss:20b to strip "token vomit" before display — the same compress-the-wire layer, applied to verbosity.
    - **08-22 12:03 — a cross-model filter for a specific house voice:** `adnanakil/nobuzz` routes Claude's output
@@ -528,6 +529,14 @@ patterns, and turn them into insights and actionable todos.
   -01, now moving to IETF proper via the "agentproto" BoF at IETF 126) — and it still declines the
   authorship/confidence/provenance field names. So the semantic-record half remains unclaimed, and the actual
   protocol lives in an IETF draft, not a W3C spec. → [[agent-stack]]
+  **Typed round-trip — second implementer, still none (08-24 04:30, read first-hand):** the typed pack format
+  itself just matured into the precondition for one. `plur-ai/plur` (Apache-2.0, 241★, 782 commits) — the current
+  form of Engram — publishes the engram as an open, versioned YAML format validated against a published JSON
+  Schema, with **packs** (shareable typed-memory units, a full `plur_packs_*` CLI/MCP surface) as the capsule
+  concept, and the spec explicitly invites second implementations ("build a different engine on the same
+  format"). None exist — the invitation is un-taken, so the typed round-trip still has no `cv ≥ 1` second
+  implementer. And no MCP SEP picked up the fields: the SEP index lists **41 SEPs**, none on memory, none on tool
+  hashing/versioning (986 = tool-*name* format only). The watch folds in here. → [[agent-stack]]
 - **Agent context/identity standardization (08-15, → [[agent-stack]]):** the fragmentation question
   splits into two layers moving at different speeds. **Identity/trust is standardizing first** — MCP
   (vertical tool/data access) + A2A (horizontal agent↔agent, both Linux Foundation) govern the
@@ -1125,3 +1134,60 @@ patterns, and turn them into insights and actionable todos.
   it is also a funnel: a sponsor-linked API aggregator and a **¥9.90 paid community** gate. Prompt libraries at
   the top of trending are becoming lead-generation assets; that does not make them wrong, it makes the star
   curve a marketing metric ([[agent-plugins]]).
+- **Embedded/IoT supply-chain reaches physical critical infrastructure (08-24 04:03, → [[security]]):** two
+  backdoors shipped in the vendor's own channel, not as CVEs. Slovakia's NBÚ found **279 traffic speed cameras**
+  (a ~€30M EU-funded program) are rebadged Russian **CORDON PRO.M** systems — the SHA-1 of the measurement software
+  matches KORDON-V, a hardcoded list of **12 Russian phone numbers** opens an SMS-triggered shell, passwordless
+  live video, a hidden second SIM — bought via a Cyprus shell (Sodasus) with forged conformity certs. Kaspersky
+  documented the **first Android car-head-unit malware**: DoFun firmware's own updater (the signed `TWCore` app over
+  MQTT at `cardoor[.]cn`, an `installNotExists` flag) installs a clicker + `zhima` reverse-proxy, attributed to
+  MoYu Group / BADBOX. Both are procurement + vendor-pipe compromise, not code defects — the supply-chain shape
+  moving from software into physical infrastructure and vehicles.
+- **Subscription arbitrage now targets the agent client (08-24 04:03, → [[smart-routing]] [[token-economics]]):**
+  `Alishahryar1/free-claude-code` (MIT, 47.8k★, #8 daily) runs a local `fcc-server` proxy that points Claude Code /
+  Codex / Pi / OpenCode / Cline / Hermes / DeepSeek Harness at **49 providers**, many free-tier (NVIDIA NIM,
+  OpenRouter, Groq, xAI, QwenCloud, Together, DeepInfra, Gemini/Vertex, local Ollama), claiming "1.3B+ free tokens a
+  month" with per-tier routing + auto-fallback. The Sub2API shape now wrapping Anthropic's *own* client — the
+  README's "ToS-friendly" claim doesn't resolve the grey zone of routing third-party models through an Anthropic client.
+- **OpenHuman (08-24 04:03, → [[agent-stack]]):** `tinyhumansai/openhuman` (GPL-3.0, 36.7k★, #1 trending nine days
+  running) is a local-first "everything agent" in three layers — brain (scored Markdown trees in SQLite mirrored as
+  an editable Obsidian vault; 100+ OAuth, 5,000+ MCP servers, 90,000+ Skills), orchestrator (checkpointed graph runs
+  via tinyagents, durable tinyflows, a "split brain" of fast reflex + deep reasoning), and a deep researcher (Exa, a
+  real browser, in-process Whisper, cross-provider routing incl. local Ollama) — 17 messaging channels incl. email,
+  with a one-switch Rust-enforced Privacy Mode. A full local-first memory+orchestration stack competing with the
+  OpenClaw/Claude Code ecosystem rather than a single-vendor memory shim.
+- **Skills get a canonical index + a transfer counter-result (08-24 04:03, → [[agent-plugins]]):**
+  `VoltAgent/awesome-agent-skills` (MIT, 31.2k★) is a curated **1,497-skill** directory explicitly "not mass
+  AI-generated" — org-attributed (Anthropic, Google Labs, Vercel, Stripe, Cloudflare, Netlify, Trail of Bits, Figma…)
+  — the discovery layer the skills market lacked. And "Break It Down, Pass It On" (arXiv 2608.20274) finds
+  **task-level skills mostly *degrade* agents below a no-memory baseline while subtask-level skills improve them on
+  average**, text > code, with a "skill utility score" (specificity × abstractness) predicting transfer *without*
+  running the task — directly against the "remember everything you did" instinct in agent-memory design.
+- **Reticle — runtime verification for agents (08-24 04:03, → [[agent-plugins]]):** `reticlehq/reticle`
+  (Apache-2.0, 334★) injects a dev-only SDK into your dev server and exposes MCP tools (`reticle_navigate`,
+  `reticle_act_and_wait`, `reticle_network`) so an agent reads live app state instead of guessing from screenshots;
+  only `act_and_wait`/`assert` produce **deterministic pass / fail / unknown** verdicts with evidence, and `unknown`
+  is never downgraded to `pass`. Targets the exact failure where an agent declares "feature complete" without
+  running the code — state-backed assertions replacing visual heuristics.
+- **Dogwood — the first trajectory-level agent policy (08-24 04:03, → [[security]]):** AWS open-sourced an
+  Apache-2.0 Cedar extension with a `when temporal` clause over an agent's *event history* (Metric First-Order
+  Temporal Logic; `formerly` / `count_within` / `count_distinct_within` / `sum_within` + `bind`) — "require approval
+  before a critical action," "≤$5,000/hour," "no external contact after confidential data." Any Cedar policy stays
+  valid; wired into Bedrock AgentCore Policy. Honest caveats: stateful (cost grows with log length), temporal
+  conditions don't support Cedar's automated reasoning, reference interpreter only. Governance moves from "is this
+  action allowed" to "is this sequence allowed."
+- **CVE-2026-7808 — justhtml sanitizer bypass (08-24 04:03, → [[security]] [[fact-check]]):** the Python HTML
+  sanitizer justhtml before 1.16.0 lets `script`/`style` survive via *advanced usage* — mutated/reused policy
+  objects, mixed-case tags in programmatic DOM input, crafted doctypes, custom SVG/MathML policies — while the
+  default `sanitize=True` path stays safe. The 9.8 is **VulnCheck-assigned for XSS, not RCE**, so the raw number
+  overstates default-config impact — record the scorer ([[fact-check]]'s who-scored-it).
+- **Post-training, two directions (08-24 04:03, → [[frontier-models]]):** **MidTool** (arXiv 2608.20314, AWS + UCSD)
+  synthesizes a mid-training corpus (MidTool-Mix) from web/PDF/code + real tool APIs/MCP skills to teach tool
+  affordances, argument grounding, workflow composition and recovery — mid-training Qwen3-4B/8B "consistently
+  improves" BFCL / tau2-Bench / MCP-Universe under SFT and RL (general tool use deserves dedicated mid-training).
+  **IAR** (arXiv 2608.20281) internalizes a fixed document corpus into weights via inject → align → recover,
+  reporting +3.6pp domain QA / +12.1pp general across Llama/Phi/Qwen/SmolLM — a cheaper, lower-latency RAG
+  alternative for a fixed knowledge base.
+- **Re-appearance (08-24 04:03, dedup rule):** `virgiliojr94/book-to-skill` (24.5k★, was 21.4k on 08-16) re-enters
+  trending — a dated update, not a fresh discovery; no new facts, star-count drift only (already covered, see the
+  08-16 note).

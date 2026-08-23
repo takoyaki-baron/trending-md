@@ -493,6 +493,10 @@ Ten recurring shapes, each with a canonical instance:
   hours) but cannot refute mcpindex's long-tail aggregate, so `cv` stays 1. The detector is a sound capability,
   not a verdict — the drift mcpindex reports lives in the small/unmaintained tail, which a keyless sampler
   cannot reach.
+  **t5–t10 (08-23 04:03 → 08-24 04:30):** six more snapshots, each **0/0/0/0** across 66 tools / 7 servers —
+  ten consecutive nulls over ~3.5 days. Unchanged conclusion, now sharpened by the protocol's own priority
+  list: the MCP SEP index (41 SEPs) still has no tool-hashing/versioning SEP (986 = tool-*name* format only),
+  so contract drift stays client-side. `cv` stays 1; the detector is a standing per-run capability.
 - Does the **install-time-endpoint** class (GBIF IPT CVE-2026-71879) turn up elsewhere? "Setup route
   still live after setup" is a cheap grep and a CWE-288 instance that self-hosted software keeps
   reintroducing — worth a sweep across popular first-run flows.
@@ -1060,3 +1064,34 @@ Attribution is deliberately hedged: a toolkit assembled from at least six upstre
 predating the campaign by a year, an operator Windows username of `SystemX`, and a moderate-confidence read that
 access was being packaged for a third party (transferable recovery codes, SMART PSS enterprise-format exports).
 Hunt.io's own caution is the quotable part: "Running these tools establishes use, not authorship."
+
+## Embedded/IoT supply-chain reaches physical infrastructure + the first trajectory-level policy (08-24)
+
+**Two backdoors in the vendor's own channel, not CVEs.** Slovakia's National Security Authority (NBÚ) found that
+**279 traffic speed cameras** bought in a ~€30M EU-funded program are rebadged Russian **CORDON PRO.M** systems from
+St. Petersburg's Simicon — the SHA-1 of the measurement software matches KORDON-V exactly, the firmware hardcodes
+**12 Russian phone numbers** (an SMS from one + a password opens a remote shell), exposes passwordless live video,
+hides a second SIM slot, and ships disabled Secure Boot. Procured without tender via a Cyprus shell (Sodasus) with
+forged conformity certificates. Kaspersky documented the **first Android car-head-unit malware** targeting DoFun
+firmware (30M+ vehicles): the signed `TWCore` (`com.tw.core`) system app receives APK instructions over MQTT at
+`cardoor[.]cn`, and an `installNotExists` flag installs a UI-less `JarService` dropper → C2 loader → clicker +
+`zhima` reverse-proxy (the same `zhima` as in TV boxes, per Nokia Deepfield), attributed to **MoYu Group** / BADBOX.
+Two versions of one shape: **the backdoor is the vendor's own signed update pipe or a rebadged procurement** — no
+malicious sideload, no exploited code defect — so the audit that matters is firmware provenance + the update channel,
+not CVE patching.
+
+**Dogwood (AWS, Apache-2.0) — the first trajectory-level agent policy.** Extends Cedar with a `when temporal` clause
+over an agent's event history, built on **MFOTL** (Metric First-Order Temporal Logic) from runtime verification.
+Four stdlib operators — `formerly`, `count_within`, `count_distinct_within`, `sum_within` — plus `bind` encode rules
+like "approval before a critical action," "≤$5,000/hour," "no external contact after confidential data." Any valid
+Cedar policy remains valid; wired into Amazon Bedrock AgentCore Policy. AWS's own caveats: stateful (cost grows with
+log length), temporal conditions don't support Cedar's automated-reasoning tools, reference interpreter for
+exploration not production authorization. For the ledger: agent authorization gains its first *sequence-level*
+primitive — "is this trajectory allowed," not "is this call allowed" — the natural next rung after the
+existence-not-ownership per-call authz shape (Nezha / GBIF IPT).
+
+**CVE-2026-7808 (justhtml, GHSA-4p64-v8f5-r2gx).** The Python sanitizer justhtml before 1.16.0 has multiple bypasses
+that let `script`/`style` survive into XSS via *advanced usage* — mutating/reusing policy objects, mixed-case tags
+(`ScRiPt`) in programmatic DOM, crafted doctypes, custom SVG/MathML policies — while the default `sanitize=True`
+path stays safe. **9.8 is VulnCheck-assigned for XSS, not RCE** — the default-config risk is materially lower than
+the number; record the scorer with the score ([[fact-check]]).
