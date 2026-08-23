@@ -1,8 +1,8 @@
 ---
 date: 2026-08-23
-updated: 2026-08-23T12:03:00Z
+updated: 2026-08-23T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -383,13 +383,195 @@ Prime Intellect の **NanoGPT Speedrun Frontier** リーダーボードは、各
 
 ---
 
+## 27. FreeToken——284B パラメータの MoE をゲーミングデスクトップ 1 台の GPU で実行
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv · 2608.16157 · ~6d ago（8 月 22 日オープンソース化）
+- **Tags:** `moe` `inference` `edge-ai` `llm` `open-source`
+
+UC Berkeley / MIT / UT Austin の研究者（Song Han、Matei Zaharia、Ion Stoica、Kurt Keutzer ら）が **FreeToken**（Apache-2.0）をオープンソース化した。PC 全体（GPU・CPU・RAM・PCIe・ディスク）を 1 つの弾力的なプラットフォームとして扱う帯域適応型の推論エンジン。MoE のスパース性を活かし、20 以上の MoE モデルを配信。8GB ノート PC GPU 上の 35B モデルから、**ゲーミングデスクトップ 1 台の 284B モデル**、そして**ワークステーション 1 台の 753B GLM-5.2** までスケールし、最強のローカルベースライン（llama.cpp、Ollama、KTransformers、MoE-Infinity）比で平均 1.3–2.1× のデコードスループットを報告している。
+
+**Why it matters:** フロンティア規模の MoE モデルが民生ハードウェアで動くようになり、オープンウェイトモデルにまつわる「クラスタ必須」という前提を直接覆す。
+
+[`🔗 arXiv 2608.16157`](https://arxiv.org/abs/2608.16157) · [`🔗 FlashML-org/FreeToken`](https://github.com/FlashML-org/FreeToken)
+
+---
+
+## 28. NVIDIA AVO——モデルではなくハーネスが ARC-AGI-3 を満点の 100 に押し上げた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVIDIA blog · ~2d ago (~20:03 UTC+8)
+- **Tags:** `agents` `benchmark` `arc-agi` `harness` `nvidia`
+
+NVIDIA の **AVO**（Agentic Variation Operators）エージェントアーキテクチャが、ARC-AGI-3 **公開セット**で **100.00 RHAE** を達成し、6,624 の環境アクションで 25 環境・183 レベルすべてをクリアした。ベースモデルは Claude Opus 5（単体で約 30%、最高の個別モデル）だが、NVIDIA はこの結果が*ハーネス*——永続メモリと、行き詰まりからエージェントを脱出させるスーパーバイザー——を測ったものでモデルではないこと、公開セットのみで私的コンペセットは対象外であることを明言している。同じループは CUDA カーネル最適化で 7 日間自律稼働し、FlashAttention-4 より最大 10.5% 速いアテンションカーネルを生み出した。
+
+**Why it matters:** 「生のモデルではなくスキャフォールディングが長期的なエージェント性能を駆動する」ことを定量化したもので、エージェントハーネスを組む誰にとってもシステム設計上の示唆を持つデータポイント。
+
+[`🔗 NVIDIA developer blog`](https://developer.nvidia.com/blog/nvidia-avo-reaches-100-on-arc-agi-3-demonstrating-a-frontier-level-general-purpose-architecture-for-long-horizon-autonomous-agents/) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/21/nvidia-just-showed-that-the-harness-not-the-ai-model-is-now-the-real-hero/)
+
+---
+
+## 29. Hermes Agent——「共に成長する」Nous Research の自己改善エージェント
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 234.6k stars · #2 trending
+- **Tags:** `agents` `memory` `self-improving` `open-source` `gateway`
+
+**NousResearch/hermes-agent**（MIT）は、経験からスキルを作り、使うほど改善する学習ループを中心に構築された汎用エージェント。FTS5 検索 + LLM 要約によるエージェントキュレーション型リコールと Honcho ユーザーモデリングを備えたセッション横断メモリを持つ。単一のゲートウェイプロセスが Telegram / Discord / Slack / WhatsApp / Signal / CLI をつなぎ、7 つのターミナルバックエンド（ローカル、Docker、SSH、Singularity、Modal、Daytona、Vercel Sandbox）でコードを実行。組み込みの cron スケジューラが自然言語の定期タスクを処理する。約 23.46 万スター / 約 2.47 万コミットで急上昇中、最近 OpenClaw 移行ツールも追加。
+
+**Why it matters:** 「記憶とスキルを蓄積するエージェント」領域で広く採用される MIT ライセンスの有力作——OpenClaw / Claude Code エコシステムと正面から競合する。
+
+[`🔗 NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent) · [`🔗 hermes-agent.nousresearch.com`](https://hermes-agent.nousresearch.com)
+
+---
+
+## 30. CVE-2026-32475——空ファイル検証の欠陥が Elementor Pro を未認証 RCE に晒す
+
+- **Velocity:** ▮▮ rising
+- **Source:** Patchstack / NVD · CVSS 9.0 · ~4d ago (~20:03 UTC+8)
+- **Tags:** `cve` `wordpress` `rce` `file-upload` `elementor`
+
+**CVE-2026-32475** は **Elementor Pro**（≤4.2.1）における CVSS **9.0** の CWE-434 無制限アップロード欠陥。Forms モジュールのファイルアップロード検証ループは空のファイルエントリで早期 `return` する一方、処理ループは `continue` する——そのため、空のファイル名パートの後に PHP ペイロードを続けた細工済み multipart リクエストが、認証・nonce・Cookie なしで拡張子ブロックリストをすり抜け、`wp-content/uploads/elementor/forms/` にウェブシェルを落とす。**4.2.2**（8 月 19 日）で修正済み。Patchstack のバグ報奨金で発見され、現時点で実悪用は未確認。
+
+**Why it matters:** 数百万のアクティブインストールを持つプラグインでの未認証 RCE がデフォルトのフォーム設定で悪用可能——公開解析が大規模スキャンに先行しており、パッチ適用の猶予は狭い。
+
+[`🔗 Patchstack アドバイザリ`](https://patchstack.com/articles/critical-unauthenticated-file-upload-to-rce-in-elementor-pro-plugin/) · [`🔗 NVD CVE-2026-32475`](https://nvd.nist.gov/vuln/detail/CVE-2026-32475)
+
+---
+
+## 31. BTR Reforged——Check Point が Defender 自身の BTR.sys をカーネルのファイル/レジストリ操作原語に転用
+
+- **Velocity:** ▮▮ rising
+- **Source:** Check Point Research · Black Hat 2026 · ~3d ago (~20:03 UTC+8)
+- **Tags:** `windows` `defender` `loldriver` `kernel` `edr-bypass`
+
+Check Point の研究者 **Jiří Vinopal** は **BTR.sys**——Defender の Microsoft 署名付きブート時修復ドライバ——とその RC4 暗号化トランザクションプロトコルを逆解析した。256 バイトのハードコードされた鍵は 18 ビルド・15 年以上にわたり不変。公開された **BTR_CLI**（MIT）は有効な暗号化トランザクションを生成し、このドライバを Ring-0 の任意ファイル/レジストリ操作原語に変え、Defender 起動前の約 34 秒間の「ゴールデンウィンドウ」で `WdFilter.sys` / `MsMpEng.exe` を削除する——タンパープロテクションを迂回。MSRC は修正を拒否（既存の `SeLoadDriverPrivilege` が必要）し、CVE は未採番。必須の Windows コンポーネントのためブロックリストにも載せられない。実悪用はまだ確認されていない。
+
+**Why it matters:** Microsoft 署名・組み込みドライバを、メモリ破壊なしに EDR/AV 回避の原語へ転用したもの——最小権限の強化と Sysmon 検知（Event ID 15/23）だけが残された防御。
+
+[`🔗 Check Point Research`](https://research.checkpoint.com/2026/btr-reforged-weaponizing-defenders-remediation-driver-as-a-kernel-operation-primitive/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/microsoft-defenders-own-driver-can-be.html)
+
+---
+
+## 32. Qwen-UI-Agent——実機 100 台超で訓練した Alibaba の GUI エージェント基盤モデル
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 2.2k stars · ~2d ago (~20:03 UTC+8)
+- **Tags:** `gui-agent` `open-weights` `alibaba` `computer-use` `mobile`
+
+Alibaba の Tongyi-MAI チームが **Qwen-UI-Agent**（Apache-2.0、`Tongyi-MAI/MAI-UI`、ウェイト `MAI-UI-8B`/`MAI-UI-2B`）をオープンソース化。モバイル・デスクトップ・ブラウザ・DeepSearch を単一モデルに統合し、GUI アクションと直接の Bash/CLI 実行を混在させる GUI エージェント基盤モデル。**100 台超の実スマートフォン・150 以上のアプリ**からなる機材群と自前の実機ベンチマーク（**MobileWorld-Real**）で訓練・評価し、**MobileWorld-Real 92.2%**、MobileWorld 82.1%、OSWorld-Verified 79.5%、WebArena 73.6% を報告。
+
+**Why it matters:** シミュレータではなく実ハードウェアで訓練された初の主要なオープンウェイト GUI エージェント——「computer-use」エージェントをデモ止まりにしている sim-to-real ギャップへの直接的な回答。
+
+[`🔗 Tongyi-MAI/MAI-UI`](https://github.com/Tongyi-MAI/MAI-UI) · [`🔗 MAI-UI-8B (HF)`](https://huggingface.co/Tongyi-MAI/MAI-UI-8B)
+
+---
+
+## 33. FlashPrefill V2——ブロックスパース事前充填アテンションが 128K コンテキストの事前充填を最大 47× 高速化
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.19758 · ~2d ago (~20:03 UTC+8)
+- **Tags:** `inference` `long-context` `attention` `cuda` `open-source`
+
+**FlashPrefill V2**（Fan、Huang、Wu、Wang、He）は長文脈サーブ向けのブロックスパース事前充填アテンション。極端なスパース性での近似誤差を抑える平均補正項と、ワープ特殊化・ピンポンパイプライニングを備えた PackGQA スパースアテンション演算子（FP8/BF16）を追加。NVIDIA H20・128K コンテキストで **FlashAttention-2 比最大 47.26×（FP8）**、27.19×（BF16）を報告し、ネイティブのページド KV キャッシュ、連続バッチング、ドロップインの **SGLang** バックエンド（`qhfan/FlashPrefillv2`）を備える。
+
+**Why it matters:** 事前充填は長文脈サーブの支配的コスト。約 47× のカーネル高速化は 128K コンテキスト推論を生産経済性へ大きく近づける。
+
+[`🔗 arXiv 2608.19758`](https://arxiv.org/abs/2608.19758) · [`🔗 qhfan/FlashPrefillv2`](https://github.com/qhfan/FlashPrefillv2)
+
+---
+
+## 34. SWE-bench Science——最強のコーディングエージェントでも実科学タスクの半分は解けない
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.19799 · ~3d ago (~20:03 UTC+8)
+- **Tags:** `benchmark` `coding-agents` `scientific-software` `research`
+
+復旦大学の Zhipeng Xu、Xipeng Qiu らが **SWE-bench Science** を公開。**98 の GitHub リポジトリ、20 の科学分野にまたがる 119 タスク**からなるリポジトリレベルのベンチマークで、科学コードへの誤った修正はプログラムだけでなく証拠そのものを損なうという観点に立つ。最良のエージェント——**Claude Code + Opus-5 (max)**——でも **pass@1 は 50% 未満**。著者らは 4 つの反復的な失敗メカニズムを特定し、アブレーションでは根拠のある科学的ガイダンスは助けになる一方、ミスアラインなガイダンスはアンカリングを誘発することを示す。
+
+**Why it matters:** 科学という「正しさが最も重要」な領域におけるエージェントコーディングの具体的なフロンティアギャップを暴き、過学習を防ぐ私的テストスイートを備える。
+
+[`🔗 arXiv 2608.19799`](https://arxiv.org/abs/2608.19799) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.19799)
+
+---
+
+## 35. Qwen-MM-Plugins——あらゆるエージェントハーネスをマルチモーダルネイティブにする Alibaba の Skills + MCP 群
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 2.8k stars · ~2d ago (~20:03 UTC+8)
+- **Tags:** `multimodal` `mcp` `skills` `alibaba` `agent-infra`
+
+**QwenLM/Qwen-MM-Plugins**（Apache-2.0）は、8 つの独立インストール可能なマルチモーダル機能——画像/動画/文書/3D の読み取り（`core`、API キー不要）、DashScope の VL/Omni/OCR/ASR、ウェブ検索、長尺動画メモリ、動画編集、Blender、FreeCAD CAD、中国語 edu-agent——を、それぞれ **Skill とオプションの MCP サーバー**として提供する。ガイド付きインストーラが Claude Code、Codex、Gemini CLI、Qwen Code、DeepSeek Harness などに接続する。
+
+**Why it matters:** フロンティアラボによる「あらゆるエージェントをマルチモーダル化する」ファーストパーティツール——エージェントハーネス/スキルエコシステムへの直接参入であり、8 月 22 日の追跡で最も成長が速い LLM プロジェクト。
+
+[`🔗 QwenLM/Qwen-MM-Plugins`](https://github.com/QwenLM/Qwen-MM-Plugins) · [`🔗 Releases`](https://github.com/QwenLM/Qwen-MM-Plugins/releases)
+
+---
+
+## 36. Buzz——人間とエージェントが 1 本の署名付きログを共有する Block のセルフホストワークスペース
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 29.9k stars · v0.5.18 Aug 21
+- **Tags:** `agents` `workspace` `nostr` `self-hosted` `open-source`
+
+**block/buzz**（Apache-2.0）は Block Inc. のセルフホスト型チームワークスペースで、**Nostr リレー**の上に構築される。すべてのメッセージ・リアクション・ワークフローステップ・レビュー承認・git イベントが 1 本のログ内の署名付きイベントとなり、エージェントは自前の鍵と監査証跡を持つ一級メンバーになる。`buzz-cli`（LLM ツール呼び出し向け JSON 入出力）、`buzz-acp`（Goose/Codex/Claude Code 向け ACP ハーネス）、YAML ワークフロー、git イベント対応、Tauri デスクトップ + Flutter モバイルクライアントを同梱しつつ、README は「未完成」と明言する。
+
+**Why it matters:** チャット・CI・エージェントが 1 本のイベントログに属すべきだという、稀有なエンタープライズ級の賭け——エージェント基盤がコミュニケーション基盤と融合している。
+
+[`🔗 block/buzz`](https://github.com/block/buzz) · [`🔗 Releases`](https://github.com/block/buzz/releases)
+
+---
+
+## 37. Operation CameraSwarm——何年も前の CVE を利用し Dahua 製 IP カメラ 14,500 台超を乗っ取り
+
+- **Velocity:** ▮ steady
+- **Source:** Hunt.io / SecurityWeek · ~3d ago (~20:03 UTC+8)
+- **Tags:** `iot` `botnet` `surveillance` `security`
+
+Hunt.io は 35 日間（6 月 17 日–7 月 22 日）のキャンペーンを復元し、ロシア/ウクライナ/CIS の **Dahua 製 IP カメラ 14,530 台超**が侵害されたことを明らかにした。3 つの手法：TCP 37777 での **12,324 IP** へのブルートフォース、2021 年の認証バイパス CVE（**CVE-2021-33044/33045**）と **CVE-2024-39943** を連鎖させる Go バイナリによる永続バックドアアカウント `p2pwn/p2password` の植え付け（パスワード変更や多くのファームウェアでの工場出荷時リセット後も残存）、そして Dahua のクラウドリレーを悪用してシリアル番号だけで NAT 配下のカメラへ到達する手口。
+
+**Why it matters:** 何年も前の既知 CVE とデフォルト認証情報だけで成り立つ大規模・永続的な IoT 侵害——未パッチの 2021 年頃のカメラ脆弱性が今も生きたスケーラブルな攻撃面であることを示す。
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/threat-actor-hacks-14000-ip-cameras-in-ukraine-and-russia/) · [`🔗 Hunt.io レポート`](https://hunt.io/blog/operation-cameraswarm-dahua-cameras-compromised)
+
+---
+
+## 38. MartyPC——サイクル精度の Rust 製 IBM PC エミュレータが洗練されたブラウザ版を公開
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 127 pts · ~1d ago (~20:03 UTC+8)
+- **Tags:** `emulation` `rust` `retro-computing` `webassembly` `open-source`
+
+**dbalsom/martypc** は Rust 製のサイクル精度 8088/IBM PC-XT エミュレータで、8088 V2 テストスイートを **99.9997%** の精度で通過し、Area 5150 の全エフェクトを再現できる最初の PC エミュレータ。新しい **WebAssembly ウェブ版**（martypc.net）では 8088 MPH と Area 5150 のデモをブラウザ内でプレイでき、CGA コンポジット/モニターシミュレーション、AdLib/PC スピーカー音声、デバッグ GUI を備える。
+
+**Why it matters:** 精度重視で定評のあるエミュレータが、真に洗練されたウェブデモへと踏み出した——好感度の高い、低リスクなオープンソース/開発者ツールの話題。
+
+[`🔗 dbalsom/martypc`](https://github.com/dbalsom/martypc) · [`🔗 martypc.net`](https://martypc.net)
+
+---
+
+## 39. awesome-gpt-image-2——GPT-Image2 の逆解析プロンプト 532 件を「Prompt as Code」ライブラリに
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 12.4k stars · +628 today
+- **Tags:** `prompt-engineering` `image-generation` `gpt-image` `open-source` `skills`
+
+**freestylefly/awesome-gpt-image-2**（MIT）は OpenAI の GPT-Image2 向け「Prompt as Code」ライブラリ——**13 カテゴリにわたる逆解析プロンプト 532 件**（UI、チャート、ポスター、写真、キャラクター、中国古典テーマなど）と 20 以上の産業テンプレートを収録し、Claude Code/Codex/Cursor 向けのインストール可能な `gpt-image-2-style-library` Skill も提供。README は 3 言語（英語/簡体字中国語/日本語）で、gpt-image2.canghe.ai のギャラリーを併設する。
+
+**Why it matters:** GPT-Image2 以降の「画像を作れるか」から「安定して再利用可能な、エージェント駆動の画像を作れるか」への移行を捉えている——今日のデイリートレンドで唯一の中国語リポジトリ。
+
+[`🔗 freestylefly/awesome-gpt-image-2`](https://github.com/freestylefly/awesome-gpt-image-2) · [`🔗 ギャラリー`](https://gpt-image2.canghe.ai)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-23T12:03:00Z |
-| Items | 26 |
-| Sources tracked | 27 (Hacker News, GitHub, Reuters, iTnews, Harvey AI, Oracle, NVD, OpenCVE, Prime Intellect, SemiAnalysis, ozbrain, lina.sh, Model Context Protocol, Endor Labs, SecurityWeek, danluu.com, Cisco PSIRT, Liquid AI, Hugging Face, TrendAI, arXiv, ATProto, lapcatsoftware) |
+| Generated | 2026-08-23T20:03:00Z |
+| Items | 39 |
+| Sources tracked | 29 (Hacker News, GitHub, Reuters, iTnews, Harvey AI, Oracle, NVD, OpenCVE, Prime Intellect, SemiAnalysis, ozbrain, lina.sh, Model Context Protocol, Endor Labs, SecurityWeek, danluu.com, Cisco PSIRT, Liquid AI, Hugging Face, TrendAI, The Hacker News, arXiv, ATProto, lapcatsoftware, NVIDIA, TechCrunch, Patchstack, Check Point Research, Hunt.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

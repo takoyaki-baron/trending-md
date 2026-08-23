@@ -1,8 +1,8 @@
 ---
 date: 2026-08-23
-updated: 2026-08-23T12:03:00Z
+updated: 2026-08-23T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -383,13 +383,195 @@ Prime Intellect 的 **NanoGPT Speedrun Frontier** 排行榜给每个前沿模型
 
 ---
 
+## 27. FreeToken——在单个游戏台式机 GPU 上跑 284B 参数 MoE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv · 2608.16157 · ~6d ago（8 月 22 日开源）
+- **Tags:** `moe` `inference` `edge-ai` `llm` `open-source`
+
+UC Berkeley、MIT 与 UT Austin 的研究者（Song Han、Matei Zaharia、Ion Stoica、Kurt Keutzer 等）开源了 **FreeToken**（Apache-2.0），一个带宽自适应的推理引擎，把整台 PC——GPU、CPU、RAM、PCIe 与磁盘——当作一个弹性平台。利用 MoE 稀疏性，它可服务 20+ 个 MoE 模型，从 8 GB 笔记本 GPU 上的 35B 模型，一路扩展到**单块游戏台式机 GPU 上的 284B 模型**与**单块工作站 GPU 上的 753B GLM-5.2**，据报告较最强本地基线（llama.cpp、Ollama、KTransformers、MoE-Infinity）有 1.3–2.1× 的平均解码吞吐。
+
+**Why it matters:** 前沿规模的 MoE 模型变得能在消费级硬件上运行，直接削弱了开放权重模型"必须上集群"的假设。
+
+[`🔗 arXiv 2608.16157`](https://arxiv.org/abs/2608.16157) · [`🔗 FlashML-org/FreeToken`](https://github.com/FlashML-org/FreeToken)
+
+---
+
+## 28. NVIDIA AVO——是 harness 而非模型，把 ARC-AGI-3 推到满分 100
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVIDIA blog · ~2d ago (~20:03 UTC+8)
+- **Tags:** `agents` `benchmark` `arc-agi` `harness` `nvidia`
+
+NVIDIA 的 **AVO**（Agentic Variation Operators）智能体架构在 ARC-AGI-3 **公开集**上取得了 **100.00 RHAE** 的成绩，用 6,624 次环境动作完成了全部 25 个环境中的 183 个关卡。底座模型是 Claude Opus 5（独立得分约 30%，已是最高单模型），但 NVIDIA 明确表示该结果衡量的是 *harness*——持久记忆外加一个把智能体从死胡同里推出来的监督者——而非模型本身，且只覆盖公开集而非私密竞赛集。同一个循环此前曾在 CUDA 内核优化上自主运行 7 天，产出比 FlashAttention-4 快最多 10.5% 的注意力内核。
+
+**Why it matters:** 它量化了"脚手架（而非原始模型）驱动长程智能体性能"这一事实——对任何构建智能体 harness 的人都是有实际系统设计意义的数据点。
+
+[`🔗 NVIDIA developer blog`](https://developer.nvidia.com/blog/nvidia-avo-reaches-100-on-arc-agi-3-demonstrating-a-frontier-level-general-purpose-architecture-for-long-horizon-autonomous-agents/) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/21/nvidia-just-showed-that-the-harness-not-the-ai-model-is-now-the-real-hero/)
+
+---
+
+## 29. Hermes Agent——Nous Research 的"与你共同成长"的自改进智能体
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 234.6k stars · #2 trending
+- **Tags:** `agents` `memory` `self-improving` `open-source` `gateway`
+
+**NousResearch/hermes-agent**（MIT）是一个通用智能体，围绕一个从经验中创建技能、并在使用中不断改进技能的学习循环构建，具备跨会话记忆（经 FTS5 搜索 + LLM 摘要做智能体筛选式回忆，外加 Honcho 用户建模）。单个网关进程打通 Telegram、Discord、Slack、WhatsApp、Signal 与 CLI；七个终端后端（本地、Docker、SSH、Singularity、Modal、Daytona、Vercel Sandbox）运行其代码；内置 cron 调度器处理自然语言周期性任务。它约 234.6k stars / 约 24.7k commits，仍在快速攀升，近期加入了 OpenClaw 迁移工具。
+
+**Why it matters:** "积累记忆与技能的智能体"赛道中一个被广泛采用、MIT 许可的选手——与 OpenClaw/Claude Code 生态正面竞争。
+
+[`🔗 NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent) · [`🔗 hermes-agent.nousresearch.com`](https://hermes-agent.nousresearch.com)
+
+---
+
+## 30. CVE-2026-32475——一个空文件校验缺陷让 Elementor Pro 未授权 RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** Patchstack / NVD · CVSS 9.0 · ~4d ago (~20:03 UTC+8)
+- **Tags:** `cve` `wordpress` `rce` `file-upload` `elementor`
+
+**CVE-2026-32475** 是 **Elementor Pro**（≤4.2.1）中一个 CVSS **9.0** 的 CWE-434 无限制上传缺陷。Forms 模块的文件上传校验循环在遇到空文件项时提前 `return`，而处理循环却 `continue`——于是精心构造的 multipart 请求（先放一个空文件名部分，再跟 PHP 载荷）无需鉴权、nonce 或 cookie 即可绕过扩展名黑名单，把 webshell 落到 `wp-content/uploads/elementor/forms/`。已在 **4.2.2**（8 月 19 日）修复；经 Patchstack 漏洞赏金发现，目前尚未见在野利用。
+
+**Why it matters:** 在拥有数百万活跃安装量的插件上实现未授权 RCE，默认表单配置即可利用——公开技术分析先于大规模扫描，补丁窗口很窄。
+
+[`🔗 Patchstack 公告`](https://patchstack.com/articles/critical-unauthenticated-file-upload-to-rce-in-elementor-pro-plugin/) · [`🔗 NVD CVE-2026-32475`](https://nvd.nist.gov/vuln/detail/CVE-2026-32475)
+
+---
+
+## 31. BTR Reforged——Check Point 把 Defender 自家的 BTR.sys 变成内核文件/注册表原语
+
+- **Velocity:** ▮▮ rising
+- **Source:** Check Point Research · Black Hat 2026 · ~3d ago (~20:03 UTC+8)
+- **Tags:** `windows` `defender` `loldriver` `kernel` `edr-bypass`
+
+Check Point 研究员 **Jiří Vinopal** 逆向分析了 **BTR.sys**——Windows Defender 微软签名的开机修复驱动——及其 RC4 加密事务协议：一个硬编码的 256 字节密钥，跨 18 个构建版本、15 年以上从未更换。公开的 **BTR_CLI**（MIT）可构造合法加密事务，把该驱动变成 Ring-0 任意文件/注册表原语，在 Defender 启动前约 34 秒的"黄金窗口"内删除 `WdFilter.sys`/`MsMpEng.exe`——绕过防篡改保护。MSRC 拒绝修复（需已具备 `SeLoadDriverPrivilege`），未分配 CVE，且因它是 Windows 必需组件而无法加入黑名单；目前尚无在野滥用。
+
+**Why it matters:** 一个微软签名、系统内置的驱动被无内存破坏地转化为 EDR/AV 绕过原语——只剩下最小权限加固与 Sysmon 检测（Event ID 15/23）作为唯一防线。
+
+[`🔗 Check Point Research`](https://research.checkpoint.com/2026/btr-reforged-weaponizing-defenders-remediation-driver-as-a-kernel-operation-primitive/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/microsoft-defenders-own-driver-can-be.html)
+
+---
+
+## 32. Qwen-UI-Agent——阿里基于 100+ 台真机训练的 GUI 智能体底座模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 2.2k stars · ~2d ago (~20:03 UTC+8)
+- **Tags:** `gui-agent` `open-weights` `alibaba` `computer-use` `mobile`
+
+阿里 Tongyi-MAI 团队开源了 **Qwen-UI-Agent**（Apache-2.0，`Tongyi-MAI/MAI-UI`；权重 `MAI-UI-8B`/`MAI-UI-2B`），一个把手机、桌面、浏览器与 DeepSearch 统一进单一模型的 GUI 智能体基础模型，并混合 GUI 动作与直接的 Bash/CLI 执行。它在一支 **100+ 台实体手机、150+ 个应用**的机群上训练与评测，外加自建的实体设备基准（**MobileWorld-Real**），报告 **MobileWorld-Real 92.2%**、MobileWorld 82.1%、OSWorld-Verified 79.5%、WebArena 73.6%。
+
+**Why it matters:** 首个在真实硬件而非模拟器上训练的主流开放权重 GUI 智能体——直接回应了让"computer-use"智能体止步于演示的 sim-to-real 差距。
+
+[`🔗 Tongyi-MAI/MAI-UI`](https://github.com/Tongyi-MAI/MAI-UI) · [`🔗 MAI-UI-8B (HF)`](https://huggingface.co/Tongyi-MAI/MAI-UI-8B)
+
+---
+
+## 33. FlashPrefill V2——块稀疏预填充注意力把 128K 上下文预填充提速最高 47×
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.19758 · ~2d ago (~20:03 UTC+8)
+- **Tags:** `inference` `long-context` `attention` `cuda` `open-source`
+
+**FlashPrefill V2**（Fan、Huang、Wu、Wang、He）是面向长上下文服务的块稀疏预填充注意力系统，加入均值修正项以在极端稀疏下抑制近似误差，并采用带 warp 特化与乒乓流水线的 PackGQA 稀疏注意力算子（FP8/BF16）。在 NVIDIA H20 上、128K 上下文下，它报告**相对 FlashAttention-2 最高 47.26×（FP8）**与 27.19×（BF16）的加速，具备原生 paged KV 缓存、连续批处理，以及即插即用的 **SGLang** 后端（`qhfan/FlashPrefillv2`）。
+
+**Why it matters:** 预填充是长上下文服务的主要成本；约 47× 的内核加速让 128K 上下文推理切实更接近生产经济性。
+
+[`🔗 arXiv 2608.19758`](https://arxiv.org/abs/2608.19758) · [`🔗 qhfan/FlashPrefillv2`](https://github.com/qhfan/FlashPrefillv2)
+
+---
+
+## 34. SWE-bench Science——最强编码智能体在真实科研任务上仍有一半做不对
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.19799 · ~3d ago (~20:03 UTC+8)
+- **Tags:** `benchmark` `coding-agents` `scientific-software` `research`
+
+复旦的 Zhipeng Xu、Xipeng Qiu 等发布了 **SWE-bench Science**，一个仓库级基准，含**来自 98 个 GitHub 仓库、跨越 20 个科学领域的 119 个任务**，其出发点在于：对科学代码的错误修复损害的是证据，而不只是一个程序。表现最好的智能体——**Claude Code + Opus-5 (max)**——**pass@1 不足 50%**；作者还归纳出四种反复出现的失败机制，消融显示扎实的科学引导有帮助，而失配的引导会引发锚定。
+
+**Why it matters:** 它暴露了智能体编码在科学这一"正确性最要紧"的领域里的具体前沿缺口，并用私有测试集来防止过拟合。
+
+[`🔗 arXiv 2608.19799`](https://arxiv.org/abs/2608.19799) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.19799)
+
+---
+
+## 35. Qwen-MM-Plugins——阿里的 Skills + MCP 套件让任意智能体 harness 原生多模态
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 2.8k stars · ~2d ago (~20:03 UTC+8)
+- **Tags:** `multimodal` `mcp` `skills` `alibaba` `agent-infra`
+
+**QwenLM/Qwen-MM-Plugins**（Apache-2.0）打包了八个可独立安装的多模态能力——图像/视频/文档/3D 读取（`core`，无需 API key）、DashScope VL/Omni/OCR/ASR、网页搜索、长视频记忆、视频编辑、Blender、FreeCAD CAD 与中文教育智能体——每个都以**Skill 外加可选 MCP 服务器**形式提供。一个引导式安装器可将其接入 Claude Code、Codex、Gemini CLI、Qwen Code、DeepSeek Harness 等。
+
+**Why it matters:** 来自前沿实验室的"让任意智能体多模态化"的第一方工具——直接切入智能体 harness/技能生态，是 8 月 22 日增长最快的 LLM 项目。
+
+[`🔗 QwenLM/Qwen-MM-Plugins`](https://github.com/QwenLM/Qwen-MM-Plugins) · [`🔗 Releases`](https://github.com/QwenLM/Qwen-MM-Plugins/releases)
+
+---
+
+## 36. Buzz——Block 的自托管工作区，让人与智能体共享同一条签名日志
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 29.9k stars · v0.5.18 Aug 21
+- **Tags:** `agents` `workspace` `nostr` `self-hosted` `open-source`
+
+**block/buzz**（Apache-2.0）是 Block Inc. 的自托管团队工作区，构建在 **Nostr 中继**之上：每条消息、反应、工作流步骤、评审通过与 git 事件都是同一条日志里的签名事件，让智能体成为拥有自己密钥与审计轨迹的一等成员。它提供 `buzz-cli`（面向 LLM 工具调用的 JSON 进出）、`buzz-acp`（面向 Goose/Codex/Claude Code 的 ACP harness）、YAML 工作流、git 事件支持，以及 Tauri 桌面 + Flutter 移动客户端——同时 README 明确表示它"尚未完成"。
+
+**Why it matters:** 一次罕见的企业级押注：聊天、CI 与智能体应当归属同一条事件日志——智能体基础设施与沟通平台正在融合。
+
+[`🔗 block/buzz`](https://github.com/block/buzz) · [`🔗 Releases`](https://github.com/block/buzz/releases)
+
+---
+
+## 37. Operation CameraSwarm——利用多年陈旧的 CVE 劫持 14,500+ 台大华 IP 摄像头
+
+- **Velocity:** ▮ steady
+- **Source:** Hunt.io / SecurityWeek · ~3d ago (~20:03 UTC+8)
+- **Tags:** `iot` `botnet` `surveillance` `security`
+
+Hunt.io 还原了一场持续 35 天（6 月 17 日–7 月 22 日）的行动，在俄罗斯/乌克兰/独联体地区攻陷 **14,530+ 台大华 IP 摄像头**。三种手法：在 TCP 37777 上爆破 **12,324 个 IP**；用 Go 二进制串接 2021 年认证绕过 CVE（**CVE-2021-33044/33045**）与 **CVE-2024-39943** 植入持久化后门账号 `p2pwn/p2password`（改密码甚至多数固件的恢复出厂都无法清除）；以及滥用大华云中继、仅凭序列号触达 NAT 后的摄像头。
+
+**Why it matters:** 一场完全建立在多年陈旧 CVE 与默认口令之上的大规模持久化 IoT 攻陷——提醒人们未修补的 2021 年代摄像头漏洞仍是活生生的、可规模化的攻击面。
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/threat-actor-hacks-14000-ip-cameras-in-ukraine-and-russia/) · [`🔗 Hunt.io 报告`](https://hunt.io/blog/operation-cameraswarm-dahua-cameras-compromised)
+
+---
+
+## 38. MartyPC——逐周期精确的 Rust IBM PC 模拟器推出打磨精良的浏览器版
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 127 pts · ~1d ago (~20:03 UTC+8)
+- **Tags:** `emulation` `rust` `retro-computing` `webassembly` `open-source`
+
+**dbalsom/martypc** 是一个用 Rust 编写的逐周期精确 8088/IBM PC-XT 模拟器，以 **99.9997%** 的精度通过 8088 V2 测试套件，也是首个能跑完 Area 5150 全部效果的 PC 模拟器。全新的 **WebAssembly 网页版**（martypc.net）现在可在浏览器内直接游玩 8088 MPH 与 Area 5150 演示，并带 CGA 复合/显示器模拟、AdLib/PC 喇叭音频与调试 GUI。
+
+**Why it matters:** 一个以精度著称的模拟器跨界进入真正打磨精致的网页演示——一个不错、低风险的开源/开发者工具故事。
+
+[`🔗 dbalsom/martypc`](https://github.com/dbalsom/martypc) · [`🔗 martypc.net`](https://martypc.net)
+
+---
+
+## 39. awesome-gpt-image-2——532 条逆向工程 GPT-Image2 提示词组成的"Prompt as Code"库
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 12.4k stars · +628 today
+- **Tags:** `prompt-engineering` `image-generation` `gpt-image` `open-source` `skills`
+
+**freestylefly/awesome-gpt-image-2**（MIT）是面向 OpenAI GPT-Image2 的"Prompt as Code"库——**532 条逆向工程的提示词案例、覆盖 13 个类别**（UI、图表、海报、摄影、人物、国风主题等），另有 20+ 工业模板，并为 Claude Code/Codex/Cursor 提供可安装的 `gpt-image-2-style-library` Skill。README 三语（英文/简体中文/日文），并附 gpt-image2.canghe.ai 画廊。
+
+**Why it matters:** 它记录了 GPT-Image2 之后从"能不能生成一张图"到"能不能生成稳定、可复用、由智能体驱动的图"的转变——也是今日日榜上唯一的简体中文仓库。
+
+[`🔗 freestylefly/awesome-gpt-image-2`](https://github.com/freestylefly/awesome-gpt-image-2) · [`🔗 画廊`](https://gpt-image2.canghe.ai)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-23T12:03:00Z |
-| Items | 26 |
-| Sources tracked | 27 (Hacker News, GitHub, Reuters, iTnews, Harvey AI, Oracle, NVD, OpenCVE, Prime Intellect, SemiAnalysis, ozbrain, lina.sh, Model Context Protocol, Endor Labs, SecurityWeek, danluu.com, Cisco PSIRT, Liquid AI, Hugging Face, TrendAI, arXiv, ATProto, lapcatsoftware) |
+| Generated | 2026-08-23T20:03:00Z |
+| Items | 39 |
+| Sources tracked | 29 (Hacker News, GitHub, Reuters, iTnews, Harvey AI, Oracle, NVD, OpenCVE, Prime Intellect, SemiAnalysis, ozbrain, lina.sh, Model Context Protocol, Endor Labs, SecurityWeek, danluu.com, Cisco PSIRT, Liquid AI, Hugging Face, TrendAI, The Hacker News, arXiv, ATProto, lapcatsoftware, NVIDIA, TechCrunch, Patchstack, Check Point Research, Hunt.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

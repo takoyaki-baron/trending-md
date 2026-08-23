@@ -1,8 +1,8 @@
 ---
 date: 2026-08-23
-updated: 2026-08-23T12:03:00Z
+updated: 2026-08-23T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -383,13 +383,195 @@ Prime Intellect's **NanoGPT Speedrun Frontier** leaderboard gives each frontier 
 
 ---
 
+## 27. FreeToken — serving a 284B-parameter MoE on a single gaming-desktop GPU
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv · 2608.16157 · ~6d ago (open-sourced Aug 22)
+- **Tags:** `moe` `inference` `edge-ai` `llm` `open-source`
+
+UC Berkeley, MIT, and UT Austin researchers (Song Han, Matei Zaharia, Ion Stoica, Kurt Keutzer et al.) open-sourced **FreeToken** (Apache-2.0), a bandwidth-adaptive inference engine that treats the entire PC — GPU, CPU, RAM, PCIe, and disk — as one elastic platform. Exploiting MoE sparsity, it serves 20+ MoE models, scaling from a 35B model on an 8 GB laptop GPU up to a **284B model on a single gaming desktop** and the **753B GLM-5.2 on one workstation GPU**, with a reported 1.3–2.1× mean decode throughput over the strongest local baselines (llama.cpp, Ollama, KTransformers, MoE-Infinity).
+
+**Why it matters:** Frontier-scale MoE models become runnable on consumer hardware, directly undercutting the "cluster-only" assumption for open-weight models.
+
+[`🔗 arXiv 2608.16157`](https://arxiv.org/abs/2608.16157) · [`🔗 FlashML-org/FreeToken`](https://github.com/FlashML-org/FreeToken)
+
+---
+
+## 28. NVIDIA AVO — a harness, not a model, pushes ARC-AGI-3 to a perfect 100
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVIDIA blog · ~2d ago (~20:03 UTC+8)
+- **Tags:** `agents` `benchmark` `arc-agi` `harness` `nvidia`
+
+NVIDIA's **AVO** (Agentic Variation Operators) agent architecture reached a **100.00 RHAE** score on the ARC-AGI-3 **public set**, completing all 183 levels across 25 environments in 6,624 environment actions. The base model is Claude Opus 5 (~30% standalone, the top individual model), but NVIDIA is explicit that the result measures the *harness* — persistent memory plus a supervisor that nudges the agent off dead ends — not the model, and that it covers only the public set, not the private competition sets. The same loop earlier ran 7 days autonomously on CUDA-kernel optimization, producing attention kernels up to 10.5% faster than FlashAttention-4.
+
+**Why it matters:** It quantifies that scaffolding — not the raw model — drives long-horizon agent performance, a data point with real system-design consequences for anyone building agent harnesses.
+
+[`🔗 NVIDIA developer blog`](https://developer.nvidia.com/blog/nvidia-avo-reaches-100-on-arc-agi-3-demonstrating-a-frontier-level-general-purpose-architecture-for-long-horizon-autonomous-agents/) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/21/nvidia-just-showed-that-the-harness-not-the-ai-model-is-now-the-real-hero/)
+
+---
+
+## 29. Hermes Agent — Nous Research's self-improving agent that "grows with you"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 234.6k stars · #2 trending
+- **Tags:** `agents` `memory` `self-improving` `open-source` `gateway`
+
+**NousResearch/hermes-agent** (MIT) is a general-purpose agent built around a learning loop that creates skills from experience and improves them in use, with cross-session memory (agent-curated recall via FTS5 search + LLM summarization, plus Honcho user modeling). A single gateway process bridges Telegram, Discord, Slack, WhatsApp, Signal, and CLI; seven terminal backends (local, Docker, SSH, Singularity, Modal, Daytona, Vercel Sandbox) run its code; and a built-in cron scheduler handles natural-language recurring tasks. It's at ~234.6k stars / ~24.7k commits and climbing fast, with recent OpenClaw migration tooling.
+
+**Why it matters:** A heavily-adopted, MIT-licensed entry in the "agent that accumulates memory and skills" space — competing head-on with the OpenClaw/Claude Code ecosystem.
+
+[`🔗 NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent) · [`🔗 hermes-agent.nousresearch.com`](https://hermes-agent.nousresearch.com)
+
+---
+
+## 30. CVE-2026-32475 — an empty-file validation bug opens Elementor Pro to unauthenticated RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** Patchstack / NVD · CVSS 9.0 · ~4d ago (~20:03 UTC+8)
+- **Tags:** `cve` `wordpress` `rce` `file-upload` `elementor`
+
+**CVE-2026-32475** is a CVSS **9.0** CWE-434 unrestricted-upload flaw in **Elementor Pro** (≤4.2.1). The Forms module's file-upload validation loop `return`s early on an empty file entry while the processing loop `continue`s — so a crafted multipart request with an empty filename part followed by a PHP payload slips past the extension blocklist with no authentication, nonce, or cookies, landing a webshell in `wp-content/uploads/elementor/forms/`. Fixed in **4.2.2** (Aug 19); found via the Patchstack bug bounty, and not yet seen exploited in the wild.
+
+**Why it matters:** Unauthenticated RCE on a plugin with millions of active installs, exploitable on the default forms configuration — and the public writeup precedes mass scanning, so the patch window is narrow.
+
+[`🔗 Patchstack advisory`](https://patchstack.com/articles/critical-unauthenticated-file-upload-to-rce-in-elementor-pro-plugin/) · [`🔗 NVD CVE-2026-32475`](https://nvd.nist.gov/vuln/detail/CVE-2026-32475)
+
+---
+
+## 31. BTR Reforged — Check Point turns Defender's own BTR.sys into a kernel file/registry primitive
+
+- **Velocity:** ▮▮ rising
+- **Source:** Check Point Research · Black Hat 2026 · ~3d ago (~20:03 UTC+8)
+- **Tags:** `windows` `defender` `loldriver` `kernel` `edr-bypass`
+
+Check Point researcher **Jiří Vinopal** reverse-engineered **BTR.sys**, Windows Defender's Microsoft-signed boot-time remediation driver, and its RC4-encrypted transaction protocol — a hard-coded 256-byte key unchanged across 18 builds spanning 15+ years. The released **BTR_CLI** (MIT) crafts valid encrypted transactions that turn the driver into a Ring-0 arbitrary file/registry primitive, deleting `WdFilter.sys`/`MsMpEng.exe` in a ~34-second "Golden Window" before Defender starts — bypassing Tamper Protection. MSRC declined to service it (it requires existing `SeLoadDriverPrivilege`), no CVE was assigned, and it can't be blocklisted because it's a required Windows component; no in-the-wild abuse yet.
+
+**Why it matters:** A Microsoft-signed, built-in driver converted into an EDR/AV-bypass primitive with no memory corruption — leaving least-privilege hardening and Sysmon detection (Event IDs 15/23) as the only defenses.
+
+[`🔗 Check Point Research`](https://research.checkpoint.com/2026/btr-reforged-weaponizing-defenders-remediation-driver-as-a-kernel-operation-primitive/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/microsoft-defenders-own-driver-can-be.html)
+
+---
+
+## 32. Qwen-UI-Agent — Alibaba's GUI-agent base model trained on 100+ real phones
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 2.2k stars · ~2d ago (~20:03 UTC+8)
+- **Tags:** `gui-agent` `open-weights` `alibaba` `computer-use` `mobile`
+
+Alibaba's Tongyi-MAI team open-sourced **Qwen-UI-Agent** (Apache-2.0, `Tongyi-MAI/MAI-UI`; weights `MAI-UI-8B`/`MAI-UI-2B`), a GUI-agent foundation model that unifies mobile, desktop, browser, and DeepSearch in one model and mixes GUI actions with direct Bash/CLI execution. Trained and evaluated on a fleet of **100+ physical smartphones across 150+ apps** plus a self-built real-device benchmark (**MobileWorld-Real**), it reports **92.2% on MobileWorld-Real**, 82.1% MobileWorld, 79.5% OSWorld-Verified, and 73.6% WebArena.
+
+**Why it matters:** The first major open-weights GUI agent trained on real hardware rather than simulators — a direct answer to the sim-to-real gap that keeps "computer-use" agents stuck in demos.
+
+[`🔗 Tongyi-MAI/MAI-UI`](https://github.com/Tongyi-MAI/MAI-UI) · [`🔗 MAI-UI-8B (HF)`](https://huggingface.co/Tongyi-MAI/MAI-UI-8B)
+
+---
+
+## 33. FlashPrefill V2 — block-sparse prefill attention speeds 128K-context prefill up to 47×
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.19758 · ~2d ago (~20:03 UTC+8)
+- **Tags:** `inference` `long-context` `attention` `cuda` `open-source`
+
+**FlashPrefill V2** (Fan, Huang, Wu, Wang, He) is a block-sparse prefill attention system for long-context serving, adding a mean-correction term that suppresses approximation error at extreme sparsity, plus a PackGQA sparse-attention operator with warp specialization and pingpong pipelining (FP8/BF16). On NVIDIA H20 at 128K context it reports **up to 47.26× over FlashAttention-2 (FP8)** and 27.19× (BF16), with native paged KV cache, continuous batching, and a drop-in **SGLang** backend (`qhfan/FlashPrefillv2`).
+
+**Why it matters:** Prefill is the dominant cost of long-context serving; a ~47× kernel speedup moves 128K-context inference materially closer to production economics.
+
+[`🔗 arXiv 2608.19758`](https://arxiv.org/abs/2608.19758) · [`🔗 qhfan/FlashPrefillv2`](https://github.com/qhfan/FlashPrefillv2)
+
+---
+
+## 34. SWE-bench Science — the best coding agent still fails half of real scientific tasks
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.19799 · ~3d ago (~20:03 UTC+8)
+- **Tags:** `benchmark` `coding-agents` `scientific-software` `research`
+
+Fudan's Zhipeng Xu, Xipeng Qiu et al. released **SWE-bench Science**, a repository-level benchmark of **119 tasks from 98 GitHub repos across 20 scientific domains**, framed around the idea that a wrong fix to scientific code undermines evidence, not just a program. The best agent — **Claude Code with Opus-5 (max)** — scores **pass@1 below 50%**, and the authors isolate four recurring failure mechanisms; an ablation shows well-grounded scientific guidance helps while misaligned guidance induces anchoring.
+
+**Why it matters:** It exposes a concrete frontier gap in agentic coding specifically for science — the domain where correctness matters most — and uses a private test suite to catch overfitting.
+
+[`🔗 arXiv 2608.19799`](https://arxiv.org/abs/2608.19799) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.19799)
+
+---
+
+## 35. Qwen-MM-Plugins — Alibaba's Skills + MCP suite makes any agent harness multimodal-native
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 2.8k stars · ~2d ago (~20:03 UTC+8)
+- **Tags:** `multimodal` `mcp` `skills` `alibaba` `agent-infra`
+
+**QwenLM/Qwen-MM-Plugins** (Apache-2.0) packages eight independently-installable multimodal capabilities — image/video/document/3D reading (`core`, no API key needed), DashScope VL/Omni/OCR/ASR, web search, long-video memory, video editing, Blender, FreeCAD CAD, and a Chinese edu-agent — each as a **Skill plus an optional MCP server**. A guided installer wires them into Claude Code, Codex, Gemini CLI, Qwen Code, DeepSeek Harness, and others.
+
+**Why it matters:** First-party "make any agent multimodal" tooling from a frontier lab — a direct move into the agent-harness/skills ecosystem, and the fastest-growing LLM project in Aug 22 tracking.
+
+[`🔗 QwenLM/Qwen-MM-Plugins`](https://github.com/QwenLM/Qwen-MM-Plugins) · [`🔗 Releases`](https://github.com/QwenLM/Qwen-MM-Plugins/releases)
+
+---
+
+## 36. Buzz — Block's self-hostable workspace where humans and agents share one signed log
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 29.9k stars · v0.5.18 Aug 21
+- **Tags:** `agents` `workspace` `nostr` `self-hosted` `open-source`
+
+**block/buzz** (Apache-2.0) is Block Inc.'s self-hostable team workspace built on a **Nostr relay**: every message, reaction, workflow step, review approval, and git event is a signed event in one log, making agents first-class members with their own keys and audit trails. It ships `buzz-cli` (JSON-in/out for LLM tool calls), `buzz-acp` (an ACP harness for Goose/Codex/Claude Code), YAML workflows, git-event support, and Tauri desktop + Flutter mobile clients — while the README is explicit that it's "not finished."
+
+**Why it matters:** A rare enterprise-grade bet that chat, CI, and agents belong in one event log — agent infrastructure converging with a communications platform.
+
+[`🔗 block/buzz`](https://github.com/block/buzz) · [`🔗 Releases`](https://github.com/block/buzz/releases)
+
+---
+
+## 37. Operation CameraSwarm — 14,500+ Dahua IP cameras hijacked via years-old CVEs
+
+- **Velocity:** ▮ steady
+- **Source:** Hunt.io / SecurityWeek · ~3d ago (~20:03 UTC+8)
+- **Tags:** `iot` `botnet` `surveillance` `security`
+
+Hunt.io reconstructed a 35-day campaign (June 17–July 22) that compromised **14,530+ Dahua IP cameras** in Russia/Ukraine/CIS. Three methods: brute-forcing **12,324 IPs** on TCP 37777; a Go binary chaining the 2021 auth-bypass CVEs (**CVE-2021-33044/33045**) and **CVE-2024-39943** to plant a persistent `p2pwn/p2password` backdoor account (surviving password changes and, on most firmware, factory reset); and abusing Dahua's cloud relay to reach NAT'd cameras via serial number.
+
+**Why it matters:** A mass, persistent IoT compromise built entirely on years-old known CVEs and default credentials — a reminder that unpatched 2021-era camera flaws remain a live, scalable attack surface.
+
+[`🔗 SecurityWeek`](https://www.securityweek.com/threat-actor-hacks-14000-ip-cameras-in-ukraine-and-russia/) · [`🔗 Hunt.io report`](https://hunt.io/blog/operation-cameraswarm-dahua-cameras-compromised)
+
+---
+
+## 38. MartyPC — a cycle-accurate Rust IBM PC emulator lands a polished in-browser web edition
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 127 pts · ~1d ago (~20:03 UTC+8)
+- **Tags:** `emulation` `rust` `retro-computing` `webassembly` `open-source`
+
+**dbalsom/martypc** is a cycle-accurate 8088/IBM PC-XT emulator in Rust that passes the 8088 V2 test suite at **99.9997%** accuracy and is the first PC emulator to run every Area 5150 effect. A new **WebAssembly web edition** (martypc.net) now ships the 8088 MPH and Area 5150 demos playable in-browser, with CGA composite/monitor simulation, AdLib/PC-speaker audio, and a debugging GUI.
+
+**Why it matters:** A well-regarded accuracy-first emulator crossing into a genuinely polished web demo — a nice, low-risk open-source/developer-tool story.
+
+[`🔗 dbalsom/martypc`](https://github.com/dbalsom/martypc) · [`🔗 martypc.net`](https://martypc.net)
+
+---
+
+## 39. awesome-gpt-image-2 — 532 reverse-engineered GPT-Image2 prompts as a "Prompt as Code" library
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 12.4k stars · +628 today
+- **Tags:** `prompt-engineering` `image-generation` `gpt-image` `open-source` `skills`
+
+**freestylefly/awesome-gpt-image-2** (MIT) is a "Prompt as Code" library for OpenAI's GPT-Image2 — **532 reverse-engineered prompt cases across 13 categories** (UI, charts, posters, photography, characters, classical-Chinese themes, and more) plus 20+ industrial templates, with an installable `gpt-image-2-style-library` Skill for Claude Code/Codex/Cursor. The README is trilingual (EN/简体中文/日本語) and ships a gallery at gpt-image2.canghe.ai.
+
+**Why it matters:** Captures the post-GPT-Image2 shift from "can it make an image" to "can it make stable, reusable, agent-driven images" — and the only Chinese-language repo on today's daily trending.
+
+[`🔗 freestylefly/awesome-gpt-image-2`](https://github.com/freestylefly/awesome-gpt-image-2) · [`🔗 Gallery`](https://gpt-image2.canghe.ai)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-23T12:03:00Z |
-| Items | 26 |
-| Sources tracked | 27 (Hacker News, GitHub, Reuters, iTnews, Harvey AI, Oracle, NVD, OpenCVE, Prime Intellect, SemiAnalysis, ozbrain, lina.sh, Model Context Protocol, Endor Labs, SecurityWeek, danluu.com, Cisco PSIRT, Liquid AI, Hugging Face, TrendAI, arXiv, ATProto, lapcatsoftware) |
+| Generated | 2026-08-23T20:03:00Z |
+| Items | 39 |
+| Sources tracked | 29 (Hacker News, GitHub, Reuters, iTnews, Harvey AI, Oracle, NVD, OpenCVE, Prime Intellect, SemiAnalysis, ozbrain, lina.sh, Model Context Protocol, Endor Labs, SecurityWeek, danluu.com, Cisco PSIRT, Liquid AI, Hugging Face, TrendAI, The Hacker News, arXiv, ATProto, lapcatsoftware, NVIDIA, TechCrunch, Patchstack, Check Point Research, Hunt.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
