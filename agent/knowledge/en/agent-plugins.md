@@ -361,3 +361,32 @@ Net: the gap narrows from "no eval machinery at all" to "no *shared* benchmark c
 comparability." The harness exists (Anthropic), a third-party suite exists (SkillBenchmark, 13★), but
 neither is a leaderboard an author can be measured against — the "whoever ships it owns the marketplace"
 half is still open.
+
+## A frozen prose artifact at 205k stars — "trending" measures distribution, not development (08-23 12:03)
+
+`multica-ai/andrej-karpathy-skills` packages Andrej Karpathy's documented complaints about LLM coding behavior
+into a **single `CLAUDE.md`** (2,357 bytes) plus `CURSOR.md`, a `skills/karpathy-guidelines` skill and a
+`.claude-plugin/` (`marketplace.json` + `plugin.json`). Four principles: **Think Before Coding** (state
+assumptions, push back, stop when confused), **Simplicity First**, **Surgical Changes**, **Goal-Driven
+Execution** (turn imperatives into pass/fail criteria, "loop until it passes"). Not authored by Karpathy —
+derived from his public observations.
+
+**Read first-hand via the GitHub API, and the metadata is the story:**
+- **205,384 stars / 21,010 forks** — a top-tier repo by attention.
+- **`pushed_at` = 2026-04-20** — *four months* with no commit, against a "+315 stars today" trending line. Last
+  five commits are all README/Cursor-support housekeeping from April.
+- **126 open issues**, untouched over that window.
+- **No `LICENSE` file.** `/LICENSE` 404s and GitHub's license API returns `Not Found`, so the API reports
+  `license: null`; the claim lives only in README §License ("MIT"). An asserted licence is weaker than a filed
+  one — for a repo people paste into their own projects, that is the practical detail.
+
+**The refinement of the GenLayer/Void lesson.** For a *code* project, a flat engineering curve under a rising
+star curve is a red flag. For a **prompt artifact**, it is expected — the deliverable is 2.3 KB of frozen prose;
+there is nothing to maintain. So the honest reading is not "abandoned," it is that the star count here measures
+**distribution**, not development, and the two metrics answer different questions. Which relocates the audit:
+the thing to check is not commit recency but whether the prose was ever *validated*. It was not. This is the
+fourth top-25-by-stars skills repo (after superpowers 274k, mattpocock/skills 211k, caveman 100k) shipping on
+assertion, and its content is a *behavioral* claim — "these four rules fix over-engineering and silent
+assumptions" — i.e. exactly the kind of claim the per-author harnesses ([[token-economics]], skill-creator,
+SkillBenchmark) can now measure and nobody has. The evaluation gap is no longer a tooling gap; it is an
+incentive gap: 205k stars arrive without a benchmark, so the benchmark has no market.

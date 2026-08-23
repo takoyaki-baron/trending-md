@@ -946,3 +946,63 @@ space スコープのリポジトリ + LtHash 集合ハッシュダイジェス�
 三者とも4〜5日前で、`generate-feed.sh` が研究プロンプトに渡す3日間の直近履歴ウィンドウのちょうど外だった。ウィンドウは
 **7日** に拡大し、「ウィンドウ内のリポジトリは日付付き更新としてのみ扱う（"since we covered X on <date>…"）、新発見としては
 扱わない」という明示ルールを追加。[[fact-check]] 参照。
+
+## OzBrain——メモリ標準化のギャップが、専有製品として実装される（08-23 12:03）
+
+本ファイルで長く続く**エージェントメモリ標準化**のギャップは、欠けている部品を正確に名指ししている：著者/信頼度/プロヴェナンスのフィールドがなく、メモリ空間の権限がなく、競合/順序のセマンティクスがない。**OzBrain**（Show HN、81 pts）はその3つをすべて実装し——そしてどれも標準化しない。ozbrain.com で一次読み：
+
+- **単一の MCP エンドポイント**（`https://ozbrain.com/api/mcp`）をカスタムコネクタとして追加；Claude、ChatGPT、Claude Code、Cursor、Gemini Spark、OpenClaw、Hermes Agent、「any client that speaks the protocol」（プロトコルを話す任意のクライアント）。
+- **著者 + 順序：** 各バージョンが、どのエージェントがいつ書いたかを記録する（v14 `claude-code`、v13 `chatgpt`、v12 `cursor`）。履歴は可視。
+- **競合セマンティクス：** 「When a write disagrees with what the brain already holds, the write pauses and the conflict surfaces」（書き込みが脳に既にある内容と一致しないとき、書き込みは一時停止し、競合が表面化する）。書き込みはステージングされ、正しい記事へルーティングされる；スケジュールされたチェックが古い記事をフラグ；大きすぎる記事は書き込み時に自動分割され、pull を小さく保つ。
+- **権限 + 監査：** Postgres に強制された行レベルセキュリティ（「no app-code path around it」（これを迂回するアプリコード経路はない））、アカウントごとのエンベロープ暗号化（盗まれたダンプは暗号文）、完全なエージェント/クライアント/記事ごとの読み書き監査ログ（CSV エクスポート可能）、コネクタごとの失効、markdown エクスポート、完全削除。
+- **ポジショニング：** プラットフォームメモリは「preferences, chat scraps, and thin daily summaries」（好み、チャットの切れ端、薄い日次サマリー）を保持し；OzBrain は「projects, decisions, research」（プロジェクト、決定、研究）を保持する——「OzBrain is the layer under all of them」（OzBrain はそれらすべての下にある層）。
+- **ホストのみ・クローズドソース。** 無料 50 記事 / Pro $20 300 / Max $99 600 / Company カスタム。
+
+**構造上の要点。** MCP が*接続*を標準化するからこそ、メモリ層は誰もメモリ*フォーマット*に合意することなく製品によって埋められる——de-jure な仕様ではなく、採用による de-facto な層。これは上記の MCP ロードマップ節が記録したのと同じ非対称性である：プロトコルは**エージェントが誰か**（DPoP、WIF、token exchange）を固める一方、**ツールが何か**と**メモリが何を意味するか**を実装者に委ねる。採用する者にとっての実務的な帰結：共有メモリを統治可能にするフィールド（著者、競合解決、監査）はここでは*製品機能*として存在するため、可搬性はエクスポートボタンであって相互運用可能なスキーマではない——「コンテキスト/メモリの可搬性は、より難しくより遅いレイヤー」という注記が予言した、まさにそのロックインの形。本ファイルに既にあるローカルファーストの回答（`ai-memory` の型付きクロスエージェント `memory_handoff_*` プロトコル、holaOS のプレーンテキストファイル、OpenViking の `viking://` 階層）と対比せよ：同じギャップが信頼スペクトルの両端で埋められ、両者の間に共有スキーマは依然ない。
+
+## メモリに仕様ができる——MCP ではなく W3C で、そしてエンベロープのみ（08-23 13:03、回答済み）
+
+「クロスベンダーのエージェントメモリに仕様はできるのか、それとも MCP が製品を de-facto 標準にするのか」という開かれた問いは、
+3 つの下位質問に対応する 3 部構成で第一手検証により回答された。
+
+1. **MCP SEP はメモリセマンティクスに触れない。** `docs/seps/` インデックスは約 44 の SEP を列挙するが、永続化やメモリを
+   扱うものはない。2026-07-28 のステートレス書き換え（SEP-2575「Make MCP Stateless」、SEP-2567「Sessionless MCP via
+   Explicit State Handles」）はサーバー側セッション状態を*削除*し、呼び出しをまたぐ永続化は「明示的状態ハンドル」パターンに
+   なった——作成ツールが不透明な `basket_id` を返し、クライアントは後続の呼び出しでそれを通常の引数として渡す。これは*ツール
+   設計パターンであって、プロトコル拡張ではない*。メモリは今やアーキテクチャ上 MCP の外部にある。
+
+2. **仕様の努力は存在する——MCP ではなく W3C に、そして未発足。** **AI Agent Memory Interoperability Community Group**
+   （2026-05-18 に Russell Jackson が提案、「発足には 5 人のサポーターが必要」）は可搬エージェントメモリのプロトコルレベル
+   仕様を提案する：**メモリセル形状**（正準メタデータ付きの暗号化単位）、**アイデンティティ束縛**（ポスト量子 ML-DSA-65 /
+   FIPS-204）、**暗号化エンベロープ**（セルごとの DEK、ウォレット派生 KEK、ローテーションのバージョン管理）、**監査アンカー**
+   （公開チェーン受領証、運用者を信頼せず検証可能）、**共有契約**（一時的/恒久/シンジケート + 失効）、**暗号的消去**（DEK 破壊
+   + トゥームストーン + コンテンツアドレスブラックリスト、GDPR 第 17 条）。MCP / AAIF / NIST AI RMF / ISO 42001 / EU AI
+   法とクロスウォーク。範囲外：ベクトル DB セマンティクス、エージェントランタイムセマンティクス（AAIF goose）、ツールルーティ
+   ング（MCP）。**決定的な注意点：** 標準化されるのは*暗号エンベロープ*——誰がセルを書いたか、証明できるか、誰が読めるか——
+   であって、上のメモリギャップ注記が欠落と列挙する意味フィールド名（著者/信頼度/プロヴェナンス）**ではない**。
+
+3. **オープンな対応物はフィールドレベルで相互に非互換のまま。** 第一手で検証したフィールド名：
+   - **ai-memory** — `memory_handoff_begin/accept/cancel` ツール、`scope: "global"` / `_global` スコープ、`entities:`
+     フロントマター（≤10 名詞）、権威タグ（`canonical`/`active`/`source-of-truth`/`superseded`/`historical`/
+     `test-fixture`/`do-not-answer-from`）、可視性スコープ（private/team/unit/org/collective）；git リポジトリ内の
+     プレーン markdown。
+   - **Engram 仕様**（PLUR、Apache-2.0、2026 年 3 月、v2.1）— `id, statement, type, scope, status`；タイプ
+     `procedural/behavioral/terminological/architectural`；ACT-R 減衰活性化モデル；4 操作（learn, recall, inject,
+     feedback）。
+   - **Open Memory Protocol**（SMJAI、77★）— `omp_remember` / `omp_recall` / `omp_list` MCP ツール + ブラウザ拡張の
+     ハンドオフブリーフ（ChatGPT → Claude）。
+   - **OpenViking** — `viking://` URI、L0/L1/L2 ティア、`session.commit()`。
+   - **OzBrain** — 著者フィールド付きのバージョン管理された記事（v14 `claude-code`）、markdown エクスポート。
+   *実際に*収束する概念——スコープ/可視性（ai-memory の `scope`、Engram の `scope`、TencentDB ACL、OzBrain RLS）と
+   権威/信頼ティア（ai-memory の権威タグ、TencentDB raw→llm→human、Portable Agent Memory の信頼ティア）——は異なる名前
+   で収束する。唯一共有される基盤は git 内の人間可読な markdown/YAML（ai-memory、holaOS、OwnMem、Engram、OzBrain エクス
+   ポート）であり、それは*非可逆*である：markdown としてエクスポートされた型付きレコードは次のシステムでは散文として着地し、
+   型付きの往復は存在しない。
+
+**回答。** メモリはアイデンティティと同じ 2 速度で標準化する（上のアイデンティティ節参照）：*エンベロープ*（暗号的アイデン
+ティティ / 暗号化 / 監査）が先に標準化され——MCP ではなく W3C で——一方*意味レコード*（著者/信頼度/プロヴェナンス/競合の
+フィールド名）は製品固有のままであり、おそらく長期的にそうである。MCP が理由である：接続だけを標準化することで、メモリを
+*製品*層に変えたため、フィールドレベルの仕様は MCP 以外の機関から来るしかない——それがまさに W3C CG の開幕である。
+**監視：** (1) W3C CG は発足するか（5 人のサポーターが必要）、(2) いずれかの MCP SEP または AAIF が意味フィールドの側面を
+引き受けるか、(3) 型付き往復フォーマット（engram pack / `.plur` capsule）が第 2 の独立した実装者に採用されるか——これが
+いずれの記憶仕様にも課される `cv ≥ 1` テストである。

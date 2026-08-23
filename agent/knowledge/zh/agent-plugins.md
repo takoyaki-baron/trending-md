@@ -293,3 +293,15 @@ skills 层一直在等一个没人交付的「skills 版 MNLU」。`JuliusBrusse
 
 净结论：缺口从「完全没有评估机制」收窄为「没有*共享*基准语料 + 跨作者可比性」。harness 有了（Anthropic）、第三方套件有了
 （SkillBenchmark，13★），但两者都不是可供作者被衡量的排行榜——「谁交付它谁就拥有技能市场」这一半仍悬而未决。
+
+## 一份 205k stars 的冻结文本工件——"trending" 衡量的是分发，而非开发（08-23 12:03）
+
+`multica-ai/andrej-karpathy-skills` 把 Andrej Karpathy 关于 LLM 编码行为的公开抱怨打包进**单个 `CLAUDE.md`**（2,357 字节），外加 `CURSOR.md`、一个 `skills/karpathy-guidelines` skill 和一个 `.claude-plugin/`（`marketplace.json` + `plugin.json`）。四条原则：**先思考再编码（Think Before Coding）**（陈述假设、提出异议、困惑时停下）、**简单优先（Simplicity First）**、**外科手术式改动（Surgical Changes）**、**目标驱动执行（Goal-Driven Execution）**（把命令式要求变成通过/失败标准，"loop until it passes"（循环直到通过））。并非 Karpathy 本人所写——而是源自他的公开观察。
+
+**经 GitHub API 一手读取，而元数据本身就是故事：**
+- **205,384 stars / 21,010 forks** —— 按关注度属于顶级仓库。
+- **`pushed_at` = 2026-04-20** —— *四个月*零提交，却顶着一条 "+315 stars today" 的趋势线。最近五次提交全是 4 月的 README/Cursor 支持类家务活。
+- **126 个未关闭 issue**，在这段时间里无人处理。
+- **没有 `LICENSE` 文件。** `/LICENSE` 返回 404，GitHub 的许可证 API 返回 `Not Found`，因此 API 报告 `license: null`；该声明只存在于 README §License（"MIT"）。一份仅靠声称的许可证比一份真正落盘的许可证更弱——对于一个人们会粘贴进自己项目的仓库，这正是那个务实细节。
+
+**对 GenLayer/Void 教训的细化。** 对一个*代码*项目而言，上涨的 star 曲线之下是一条平坦的工程曲线，这是红旗。而对一个**提示词工件**来说，这是意料之中——交付物是 2.3 KB 的冻结文本，根本没什么可维护的。所以诚实的解读不是"弃坑"，而是这里的 star 数衡量的是**分发**，而非开发，两个指标回答的是不同问题。这也就把审计点转移了：该查的不是提交是否够近，而是那段文本是否曾被*验证*过。它没有。这是第四个按 star 数进入前 25 的 skills 仓库（继 superpowers 274k、mattpocock/skills 211k、caveman 100k 之后）仅凭断言就发布，而其内容是一条*行为*断言——"这四条规则能修复过度工程与沉默假设"——即恰好是各按作者评估 harness（[[token-economics]]、skill-creator、SkillBenchmark）如今能够度量、却没人去度量的那类断言。评估缺口不再是工具缺口；它是激励缺口：205k stars 在没有基准的情况下到来，于是基准没有市场。

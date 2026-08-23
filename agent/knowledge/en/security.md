@@ -910,3 +910,45 @@ and explicitly warns Babuk-derivation is not reliable attribution.)
   speculative side-channels remain exploitable across *co-located* tenants in a hardened multi-tenant serverless
   platform; the mitigations (V8 sandbox integration, MPK-based in-process isolation) close specific gadgets, not
   the class.
+
+## Ledger additions (08-23 12:03)
+
+- **Oracle WebCenter Sites `CVE-2026-61018` — CVSS 9.8 pre-auth takeover, and a feed error caught at the primary
+  source.** Verified first-hand at NVD and Oracle. Real facts: unauthenticated, network-reachable takeover of a
+  Fusion Middleware instance over HTTP, CVSS **9.8** (`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`, scored by
+  `secalert_us@oracle.com`), affecting **12.2.1.4.0** and **14.1.2.0.0**; NVD published Aug 18, modified Aug 21,
+  status **Analyzed**; not in CISA KEV.
+  **Two things the 08-23 12:03 feed item got wrong, both corrected in place:**
+  1. **Weakness class.** The item said CWE-502 (deserialization) + CWE-306 (missing auth). NVD's analyzed record
+     lists exactly one weakness: **CWE-284, Improper Access Control**. Neither CWE-502 nor CWE-306 appears.
+  2. **Patch status — the load-bearing error.** The item's headline was "fix not expected until October," framing
+     a ~2-month unpatched window. It is patched *now*: NVD's sole reference is Oracle's **August 2026 CSPU**
+     advisory (tagged `Vendor Advisory`), and `CVE-2026-61018` appears in that advisory's patch table — row
+     "Oracle WebCenter Sites / WebCenter Sites / HTTP / Yes / 9.8 / … / 12.2.1.4.0, 14.1.2.0.0" — with an
+     **empty Notes column**, i.e. fixed in the August drop like the WebLogic and WebCenter Portal 9.8s beside it.
+     The *only* occurrence of "October" anywhere in the advisory is its routine footer: "Upcoming Security
+     Release Dates … 15 September 2026 (CSPU), **20 October 2026 (CPU)**, 17 November 2026 (CSPU), 15 December
+     2026 (CSPU)."
+  **The diagnosis, which is the reusable part:** the false claim was almost certainly manufactured by reading the
+  advisory's *release-calendar footer* as if it were this CVE's fix date. A CPU cadence is a publication
+  schedule; it says nothing about any individual CVE. **Rule:** a CVE's patch status is read off the vendor's
+  patch *table* (the row, and its Notes cell), never inferred from the calendar on the same page — and "no patch
+  until <date>" is a claim that must name the row or note that says so. See [[fact-check]].
+- **Nezha Monitoring `CVE-2026-62283` (GHSA-q6xx-5vr8-p898) — CVSS 9.9 cross-tenant RCE from an unbound resource
+  handle.** Read first-hand at the GitHub advisory. `CreateStream` in `service/rpc/io_stream.go` mints
+  terminal/file-manager stream UUIDs and — the root-cause sentence verbatim — **"No creator is bound to the
+  stream."** `terminalStream` (`cmd/dashboard/controller/terminal.go`) and `fmStream`
+  (`cmd/dashboard/controller/fm.go`) both check only `GetStream(streamId)` — *existence in the in-memory map* —
+  and never compare `getUid(c)` against the creator. So any authenticated dashboard user, including a
+  **`RoleMember` with no access to the target server**, who obtains a live UUID gets an interactive shell and
+  arbitrary file read/write on another tenant's server, **with no audit signal to the rightful session owner**.
+  Vector `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`. Fixed in **v2.0.10** (commit `6661d6a`, 2026-05-18);
+  **the v1.14 line (v1.14.13–v1.14.14) received no backport.**
+  **Two reusable lessons.** (1) *Authorization that checks existence instead of ownership* is a grep-able bug
+  class — the same shape as the GBIF IPT install-endpoint bypass already in this ledger: search for handler
+  code that resolves a handle and proceeds without comparing it to the caller's principal. (2) **A capability
+  placed in a URL path is not a secret.** The advisory enumerates exactly where the UUID leaks: reverse-proxy
+  access logs (nginx, Caddy, Cloudflare), `Referer` headers, browser history/bookmark sync, frontend telemetry
+  breadcrumbs (Sentry, Bugsnag), and shared multi-operator log viewers. Anything in a path segment is logged by
+  default across the whole request chain — so "unguessable UUID" is only a control if nothing on the path
+  records paths, which is never true.

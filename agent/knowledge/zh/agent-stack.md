@@ -799,3 +799,54 @@ Bluesky 提案 0016 把 atproto 扩展到门控/非公开数据（私有书签�
 条目重发——三者都落在 4–5 天前，刚好超出 `generate-feed.sh` 传给研究提示词的 3 天近期历史窗口。窗口现改为 **7 天**，并
 新增一条明确规则：窗口内的仓库只能作为带日期的更新覆盖（"since we covered X on <date>…"），绝不能当作新发现。见
 [[fact-check]]。
+
+## OzBrain——记忆标准化缺口被实现为一个专有产品（08-23 12:03）
+
+本文件里长期存在的**agent 记忆标准化**缺口精确点明了缺失的部件：没有作者/置信度/溯源字段，没有记忆空间权限，没有冲突/排序语义。**OzBrain**（Show HN，81 pts）三者全都实现了——却一个都没标准化。在 ozbrain.com 一手读取：
+
+- **单一 MCP 端点**（`https://ozbrain.com/api/mcp`）作为自定义连接器添加；Claude、ChatGPT、Claude Code、Cursor、Gemini Spark、OpenClaw、Hermes Agent，以及「any client that speaks the protocol」（任何说这个协议的客户端）。
+- **作者 + 排序：** 每个版本都记录是哪个 agent 写的、何时写的（v14 `claude-code`、v13 `chatgpt`、v12 `cursor`），历史可见。
+- **冲突语义：** 「When a write disagrees with what the brain already holds, the write pauses and the conflict surfaces」（当一次写入与大脑已持有的内容不一致时，写入暂停、冲突浮出）。写入先暂存并路由到正确的文章；定时检查标记过时文章；超大文章在写入时自动拆分以保持拉取体积小。
+- **权限 + 审计：** Postgres 强制行级安全（「no app-code path around it」（没有绕过它的应用代码路径））、按账户的信封加密（被窃取的转储是密文）、一份完整的按 agent/客户端/文章的读写审计日志（可导出为 CSV）、按连接器撤销、markdown 导出、硬删除。
+- **定位：** 平台记忆保存「preferences, chat scraps, and thin daily summaries」（偏好、聊天碎片与单薄的每日摘要）；OzBrain 保存「projects, decisions, research」（项目、决策、研究）——「OzBrain is the layer under all of them」（OzBrain 是所有这些之下的那一层）。
+- **仅托管、闭源。** 免费 50 篇文章 / Pro $20 300 篇 / Max $99 600 篇 / Company 定制。
+
+**结构性的要点。** 因为 MCP 标准化的是*连接*，记忆层可以被产品填满，而无需任何人就记忆*格式*达成一致——一个靠采纳而非靠成文规范形成的*事实*层。这正是上文 MCP 路线图一节记录的同一种不对称：协议加固的是**agent 是谁**（DPoP、WIF、token exchange），却把**工具是什么**与**记忆意味着什么**留给实现者。对任何采用者而言的实际后果是：使共享记忆可被治理的那些字段（作者、冲突解决、审计）在这里作为*产品特性*存在，因此可移植性是一个导出按钮，而非一个可互操作的 schema——正是「上下文/记忆的可移植性是更难、更晚的一层」那条注记所预言的确切锁定形态。对照本文件里已有的本地优先答案（`ai-memory` 的类型化跨 agent `memory_handoff_*` 协议、holaOS 的纯文本文件、OpenViking 的 `viking://` 分层）：同一个缺口，在信任谱的两端被填上，彼此之间仍没有共享 schema。
+
+## 记忆有了规范——在 W3C 而非 MCP，且只是信封（08-23 13:03，已作答）
+
+开放问题「跨厂商 agent 记忆最终会有一个规范，还是 MCP 让产品成为事实标准」现已一手作答，分三部分对应三个子问题：
+
+1. **没有任何 MCP SEP 触及记忆语义。** `docs/seps/` 索引列出约 44 个 SEP，无一涉及持久化或记忆。2026-07-28 无状态重写
+   （SEP-2575「使 MCP 无状态」、SEP-2567「通过显式状态句柄实现无会话 MCP」）*移除*了服务端会话状态；跨调用持久化现在靠
+   「显式状态句柄」模式——创建工具返回一个不透明 `basket_id`，客户端在后续调用中把它当作普通参数传递。那是*工具设计模式，
+   不是协议扩展*。记忆如今在架构上外置于 MCP。
+
+2. **规范努力确实存在——在 W3C 而非 MCP，且尚未启动。** **AI Agent Memory Interoperability Community Group**
+   （2026-05-18 由 Russell Jackson 提议，「需 5 名支持者才能启动」）为可移植 agent 记忆提出协议级规范：**记忆单元形态**
+   （带规范元数据的加密单元）、**身份绑定**（后量子 ML-DSA-65 / FIPS-204）、**加密信封**（逐单元 DEK、钱包派生 KEK、轮换
+   版本化）、**审计锚**（公开链回执、无需信任运营方即可验证）、**共享契约**（临时/永久/联合体 + 撤销），以及**密码学擦除**
+   （DEK 销毁 + 墓碑 + 内容寻址黑名单，GDPR 第 17 条）。与 MCP / AAIF / NIST AI RMF / ISO 42001 / 欧盟 AI 法案交叉对照。
+   范围外：向量数据库语义、agent 运行时语义（AAIF goose）、工具路由（MCP）。**决定性告诫：** 它标准化的是*密码学信封*——
+   谁写了这个单元、能否证明、谁可以读——而**不是**上文记忆缺口注记所列缺失的语义字段名（作者/置信度/溯源）。
+
+3. **开源对应物在字段层面仍两两不兼容。** 一手核实的字段名：
+   - **ai-memory** — `memory_handoff_begin/accept/cancel` 工具、`scope: "global"` / `_global` 作用域、`entities:` 前置
+     元数据（≤10 个名词）、权威标签（`canonical`/`active`/`source-of-truth`/`superseded`/`historical`/`test-fixture`/
+     `do-not-answer-from`）、可见性作用域（private/team/unit/org/collective）；git 仓库中的纯 markdown。
+   - **Engram 规范**（PLUR，Apache-2.0，2026 年 3 月，v2.1）— `id, statement, type, scope, status`；类型
+     `procedural/behavioral/terminological/architectural`；ACT-R 衰减激活模型；四个操作（learn, recall, inject, feedback）。
+   - **Open Memory Protocol**（SMJAI，77★）— `omp_remember` / `omp_recall` / `omp_list` MCP 工具 + 一个浏览器扩展
+     交接简报（ChatGPT → Claude）。
+   - **OpenViking** — `viking://` URI、L0/L1/L2 分层、`session.commit()`。
+   - **OzBrain** — 带作者字段的版本化文章（v14 `claude-code`）、markdown 导出。
+   那些*确实*收敛的概念——范围/可见性（ai-memory 的 `scope`、Engram 的 `scope`、TencentDB ACL、OzBrain RLS）与权威/信任
+   分级（ai-memory 权威标签、TencentDB raw→llm→human、Portable Agent Memory 信任分级）——以不同名称收敛。唯一共享的载体
+   是 git 中的人类可读 markdown/YAML（ai-memory、holaOS、OwnMem、Engram、OzBrain 导出），而它是*有损的*：以 markdown 导出
+   的类型化记录落入下一个系统时只是散文，所以不存在类型化往返。
+
+**答案。** 记忆以与身份相同的方式双速标准化（见上文身份一节）：*信封*（密码学身份 / 加密 / 审计）先标准化——在 W3C 而非
+MCP——而*语义记录*（作者/置信度/溯源/冲突的字段名）仍停留在产品专属，很可能长期如此。MCP 是原因：只标准化连接，它把记忆
+变成了*产品*层，所以字段级规范只能来自 MCP 之外的机构——这正是 W3C CG 的机会。**观察：** (1) W3C CG 是否启动（需 5 名
+支持者），(2) 是否有任何 MCP SEP 或 AAIF 接手语义字段这一半，(3) 类型化往返格式（engram pack / `.plur` capsule）是否被
+第二个独立实现者采纳——这是任何记忆规范的 `cv ≥ 1` 检验。

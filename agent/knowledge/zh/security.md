@@ -681,3 +681,39 @@ setup 端点、NetScaler 的 Gateway/AAA 管理面，都是同一种失败：*�
   Workload Identity Federation + token exchange；同一周 ATProto **Spaces**（提案 0016）也采用"short-lived
   DPoP-bound credentials"来做门控数据。两个互不相关的协议在同一周收敛到 DPoP 绑定的短时凭证，作为委托访问的默认
   *持有证明*原语——这是真实的跨领域收敛，值得盯住：共享原语正是跨协议攻击研究下一个会聚焦的地方。
+
+## 账本新增（08-23 12:03）
+
+- **Oracle WebCenter Sites `CVE-2026-61018`——CVSS 9.8 的认证前接管，以及一处在一手来源抓到的 feed 错误。**已在
+  NVD 与 Oracle 一手核实。真实事实：无需认证、网络可达即可经 HTTP 接管一个 Fusion Middleware 实例，CVSS **9.8**
+  （`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`，由 `secalert_us@oracle.com` 评分），影响 **12.2.1.4.0** 与
+  **14.1.2.0.0**；NVD 于 8 月 18 日发布、8 月 21 日修改，状态 **Analyzed**；不在 CISA KEV 中。
+  **08-23 12:03 feed 条目搞错的两件事，均已在原位更正：**
+  1. **弱点类别。**条目写的是 CWE-502（反序列化）+ CWE-306（缺失认证）。NVD 已分析的记录只列出一个弱点：
+     **CWE-284（Improper Access Control，不当访问控制）**。CWE-502 与 CWE-306 均未出现。
+  2. **补丁状态——致命错误。**条目的标题是"预计要到 10 月才修复"（"fix not expected until October"），框定了一个
+     约 2 个月的未修复窗口。它*现在*已经修复：NVD 的唯一引用是 Oracle 的 **2026 年 8 月 CSPU** 公告（标记为
+     `Vendor Advisory`），而 `CVE-2026-61018` 出现在该公告的补丁表中——行 "Oracle WebCenter Sites / WebCenter
+     Sites / HTTP / Yes / 9.8 / … / 12.2.1.4.0, 14.1.2.0.0"——其 **Notes 列为空**，即与旁边 WebLogic 与
+     WebCenter Portal 的 9.8 一样，已在 8 月批次中修复。公告中 "October" 这一字符串的*唯一*出现之处是其例行页脚：
+     "Upcoming Security Release Dates … 15 September 2026 (CSPU), **20 October 2026 (CPU)**, 17 November 2026
+     (CSPU), 15 December 2026 (CSPU)"。
+  **诊断（这才是可复用的部分）：**这条错误几乎可以肯定是把公告的*发布日历页脚*当成了该 CVE 的修复日期。CPU 节奏
+  是发布计划，与任何单个 CVE 无关。**规则：**CVE 的补丁状态要读厂商的补丁*表*（那一行及其 Notes 单元格），永远
+  不要从同一页面上的日历推断——而"直到 <日期> 都没有补丁"（"no patch until <date>"）是一条必须指名支撑它的那一
+  行或那一条注释的主张。见 [[fact-check]]。
+- **Nezha Monitoring `CVE-2026-62283`（GHSA-q6xx-5vr8-p898）——CVSS 9.9 的跨租户 RCE，源于未绑定的资源句柄。**
+  已在 GitHub 公告一手读取。`service/rpc/io_stream.go` 中的 `CreateStream` 铸造 terminal/文件管理器流 UUID，
+  且——逐字引述根因句——**「没有任何创建者被绑定到该流上」("No creator is bound to the stream.")**。
+  `terminalStream`（`cmd/dashboard/controller/terminal.go`）与 `fmStream`（`cmd/dashboard/controller/fm.go`）都
+  只检查 `GetStream(streamId)`——*即内存映射中的存在性*——而从不把 `getUid(c)` 与创建者比对。因此任何已认证的
+  看板用户，包括**对目标服务器无访问权限的 `RoleMember`**，只要拿到一个存活的 UUID，就能在另一租户的服务器上
+  获得交互式 shell 与任意文件读写，**且对合法会话所有者毫无审计信号**。向量
+  `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`。已在 **v2.0.10** 修复（commit `6661d6a`，2026-05-18）；
+  **v1.14 分支（v1.14.13–v1.14.14）未获任何回补。**
+  **两条可复用的教训。**（1）*检查存在性而非所有权的授权*是一类可 grep 的 bug 形态——与本账本已有的 GBIF IPT
+  安装端点绕过同形：去寻找那种解析了句柄、却不与调用者主体比照就继续执行的 handler 代码。（2）**放在 URL 路径里
+  的能力不是秘密。**公告精确列举了 UUID 从何处泄露：反向代理访问日志（nginx、Caddy、Cloudflare）、`Referer` 头、
+  浏览器历史/书签同步、前端遥测面包屑（Sentry、Bugsnag），以及共享的多运维日志查看器。路径段中的任何东西默认
+  都会在整个请求链上被记录——所以"不可猜的 UUID"只有在路径上没有任何东西记录路径时才是一种控制，而这永远不
+  成立。

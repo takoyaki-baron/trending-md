@@ -1051,3 +1051,85 @@ The 08-23 04:03 batch re-ran `AprilNEA/OpenLogi` (covered 08-19), `jundot/omlx` 
 `generate-feed.sh` passed to the research prompt. The window is now **7 days**, and the prompt gained an
 explicit rule: a repo *inside* the window may only be covered as a dated update ("since we covered X on
 <date>…"), never as a fresh discovery. See [[fact-check]].
+
+## OzBrain — the memory-standardization gap gets implemented, as a proprietary product (08-23 12:03)
+
+The long-running **agent memory standardization** gap in this file names the missing pieces precisely: no
+authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering semantics. **OzBrain**
+(Show HN, 81 pts) implements all three — and standardizes none of them. Read first-hand at ozbrain.com:
+
+- **One MCP endpoint** (`https://ozbrain.com/api/mcp`) added as a custom connector; Claude, ChatGPT, Claude Code,
+  Cursor, Gemini Spark, OpenClaw, Hermes Agent, "any client that speaks the protocol."
+- **Authorship + ordering:** every version records which agent wrote it and when (v14 `claude-code`, v13
+  `chatgpt`, v12 `cursor`), with visible history.
+- **Conflict semantics:** "When a write disagrees with what the brain already holds, the write pauses and the
+  conflict surfaces." Writes are staged and routed to the right article; scheduled checks flag stale articles;
+  oversized articles are auto-split at write time to keep pulls small.
+- **Permissions + audit:** Postgres with forced row-level security ("no app-code path around it"), per-account
+  envelope encryption (a stolen dump is ciphertext), a full per-agent/client/article read-write audit log
+  exportable as CSV, per-connector revoke, markdown export, hard delete.
+- **Positioning:** platform memory holds "preferences, chat scraps, and thin daily summaries"; OzBrain holds
+  "projects, decisions, research" — "OzBrain is the layer under all of them."
+- **Hosted-only, closed source.** Free 50 articles / Pro $20 300 / Max $99 600 / Company custom.
+
+**The structural point.** Because MCP standardizes the *connection*, the memory layer can be filled by products
+without anyone agreeing on a memory *format* — a de-facto layer by adoption rather than a de-jure spec. That is
+the same asymmetry recorded in the MCP-roadmap section above: the protocol hardens **who the agent is** (DPoP,
+WIF, token exchange) and leaves **what the tool is** and **what the memory means** to implementers. The
+practical consequence for anyone adopting one: the fields that make shared memory governable (authorship,
+conflict resolution, audit) exist here as *product features*, so portability is an export button, not an
+interoperable schema — the exact lock-in shape the "context/memory portability is the harder, later layer" note
+predicted. Contrast the local-first answers already in this file (`ai-memory`'s typed cross-agent
+`memory_handoff_*` protocol, holaOS plain-text files, OpenViking's `viking://` tiers): the same gap, filled at
+opposite ends of the trust spectrum, still with no shared schema between them.
+
+## Memory gets a spec — at W3C, not MCP, and the envelope only (08-23 13:03, answered)
+
+The open question "does cross-vendor agent memory ever get a spec, or does MCP make products the de-facto
+standard" is answered first-hand, in three parts matching the three sub-questions:
+
+1. **No MCP SEP touches memory semantics.** The `docs/seps/` index lists ~44 SEPs; none cover persistence or
+   memory. The 2026-07-28 stateless rewrite (SEP-2575 "Make MCP Stateless", SEP-2567 "Sessionless MCP via
+   Explicit State Handles") *removed* server-side session state; cross-call persistence is now the "explicit
+   state handles" pattern — a creation tool returns an opaque `basket_id` and the client threads it through
+   later calls as an ordinary argument. That is a *tool-design pattern, not a protocol extension*. Memory is
+   now architecturally external to MCP.
+
+2. **A spec effort exists — at W3C, not MCP, and pre-launch.** The **AI Agent Memory Interoperability
+   Community Group** (proposed 2026-05-18 by Russell Jackson, "needs 5 supporters to launch") proposes a
+   protocol-level spec for portable agent memory: **memory cell shape** (encrypted unit with canonical
+   metadata), **identity binding** (post-quantum ML-DSA-65 / FIPS-204), **encryption envelope** (per-cell DEK,
+   wallet-derived KEK, rotation versioning), **audit anchors** (public-chain receipts, verifiable without
+   trusting the operator), **sharing contracts** (temporary/permanent/syndicate + revocation), and
+   **cryptographic erasure** (DEK destruction + tombstone + content-address blacklist, GDPR Art 17).
+   Crosswalked to MCP / AAIF / NIST AI RMF / ISO 42001 / EU AI Act. Out of scope: vector-DB semantics,
+   agent-runtime semantics (AAIF goose), tool-routing (MCP). **The decisive caveat:** it standardizes the
+   *crypto envelope* — who wrote the cell, can we prove it, who may read it — **not** the semantic field names
+   (authorship/confidence/provenance) that the memory-gap note above lists as missing.
+
+3. **The open counterparts stay pairwise-incompatible at the field level.** Field names, verified first-hand:
+   - **ai-memory** — `memory_handoff_begin/accept/cancel` tools, `scope: "global"` / `_global` scope,
+     `entities:` frontmatter (≤10 nouns), authority tags (`canonical`/`active`/`source-of-truth`/
+     `superseded`/`historical`/`test-fixture`/`do-not-answer-from`), visibility scopes (private/team/unit/
+     org/collective); plain markdown in a git repo.
+   - **Engram Spec** (PLUR, Apache-2.0, Mar 2026, v2.1) — `id, statement, type, scope, status`; types
+     `procedural/behavioral/terminological/architectural`; ACT-R decay activation model; four ops (learn,
+     recall, inject, feedback).
+   - **Open Memory Protocol** (SMJAI, 77★) — `omp_remember` / `omp_recall` / `omp_list` MCP tools + a
+     browser-extension handoff brief (ChatGPT → Claude).
+   - **OpenViking** — `viking://` URIs, L0/L1/L2 tiers, `session.commit()`.
+   - **OzBrain** — versioned articles with an author field (v14 `claude-code`), markdown export.
+   The concepts that *do* converge — scope/visibility (ai-memory `scope`, Engram `scope`, TencentDB ACL,
+   OzBrain RLS) and authority/trust tier (ai-memory authority tags, TencentDB raw→llm→human, Portable Agent
+   Memory trust tiers) — do so under different names. The one shared substrate is human-readable markdown/YAML
+   in git (ai-memory, holaOS, OwnMem, Engram, OzBrain export), and it is *lossy*: a typed record exported as
+   markdown lands in the next system as prose, so there is no typed round-trip.
+
+**Answer.** Memory standardizes in the same two-speed way identity did (see the identity section above): the
+*envelope* (crypto identity / encryption / audit) is standardizing first — at W3C, not MCP — while the
+*semantic record* (field names for authorship/confidence/provenance/conflict) stays product-specific, likely
+indefinitely. MCP is the reason: by standardizing only the connection, it turned memory into a *product* layer,
+so the field-level spec would have to come from a body other than MCP — which is exactly the W3C CG's opening.
+**Watch:** (1) does the W3C CG launch (needs 5 supporters), (2) does any MCP SEP or the AAIF pick up the
+semantic-field half, (3) does a typed round-trip format (engram pack / `.plur` capsule) get adopted by a second,
+independent implementer — the `cv ≥ 1` test for any of these proposals.

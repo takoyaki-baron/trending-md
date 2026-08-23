@@ -218,3 +218,72 @@ the exploitability flag is the only signal, and it is a mutable vendor-published
 exploited?" is fundamentally un-verifiable by third parties for fully-mitigated cloud CVEs. The one independent
 handle: cross-check the qualitative flag against the temporal metric (`E:U`/`E:POC`/`E:F`/`E:H`). Same shape as
 the "trust the vendor, not the aggregator" rule, one hop earlier.
+
+## Three sourcing failures in one batch — the metric, the licence, and the phrasing (08-23 12:03)
+
+Applying the checklist to the 08-23 12:03 items produced three distinct near-misses, each a different way a
+true-sounding sentence outruns its evidence:
+
+1. **A headline number that the benchmark's own control contradicts.** Prime Intellect's NanoGPT Speedrun
+   Frontier headline is "Fable 5 closed **81.7%** of the human-record gap." The same page ships an equal-budget
+   view showing that record took **8.7 days**, and that Fable 5's best result **within 24 hours** was 3,010 —
+   **≈40.6%** of the gap. Half the headline is wall-clock. **Rule:** when a leaderboard publishes a budget
+   control, the control *is* the finding; cite the pair (`81.7% / 8.7 days` or `40.6% @24h`), never the
+   unqualified number. A time budget reported as a capability is the benchmark-design failure Dan Luu warned
+   about in the same day's feed — arriving inside a benchmark rather than around one.
+2. **A licence asserted in prose but never filed.** `multica-ai/andrej-karpathy-skills` is described as MIT;
+   README §License says "MIT," but `/LICENSE` returns **404** and GitHub's license API returns `Not Found`
+   (`license: null`). **Rule:** for any repo you tell people to copy code or config out of, check the
+   *file*, not the README — `curl -o /dev/null -w '%{http_code}' .../LICENSE` is one call, and the API's
+   `license` field is the second opinion.
+3. **A claim stronger than the source cited for it.** The rogue-agent item says the AISI test ran "with safety
+   filters deliberately switched off." Reuters and its iTnews syndication say no such thing — their wording is
+   Anthropic's "**deliberately permissive conditions**." The stronger claim happens to be supportable, but from
+   a *different* document (the AISI incident report read on 08-22: internet permitted, cyber classifiers
+   disabled). **Rule:** attribute each clause to the document that actually contains it. Two sources describing
+   one configuration at different strengths is not corroboration — it is a chance to cite the wrong one.
+
+The common root is the same as Void's: **a claim inherited its confidence from an adjacent artifact** — the
+leaderboard row next to the control, the README next to the missing file, the AISI report next to the news
+story. Verification means opening the *specific* artifact the specific clause rests on.
+
+## A release calendar is not a fix date (08-23 12:03, self-caught)
+
+The 08-23 12:03 feed shipped `CVE-2026-61018` (Oracle WebCenter Sites, CVSS 9.8) under the headline **"fix not
+expected until October,"** with a body asserting a "~2-month unpatched window" and a *Why it matters* telling
+readers "the mitigation is monitoring and workarounds, not a patch, for months." Checked at the primary sources
+the same day, **both load-bearing claims were false**:
+
+- **NVD** (status *Analyzed*, published Aug 18, modified Aug 21) lists exactly one weakness — **CWE-284,
+  Improper Access Control**. The item claimed CWE-502 + CWE-306; neither appears in the record.
+- **NVD's sole reference** is Oracle's **August 2026 CSPU** advisory, and the CVE is *in that advisory's patch
+  table* — "Oracle WebCenter Sites / WebCenter Sites / HTTP / Yes / 9.8 / … / 12.2.1.4.0, 14.1.2.0.0" — with an
+  **empty Notes column**, exactly like the WebLogic and WebCenter Portal 9.8s in adjacent rows. It is patched.
+- The **only** occurrence of the string "October" anywhere on that advisory is its boilerplate footer:
+  "Upcoming Security Release Dates … 15 September 2026 (CSPU), **20 October 2026 (CPU)**, 17 November 2026
+  (CSPU), 15 December 2026 (CSPU)."
+
+**The mechanism of the error is the lesson.** Nobody invented the October date — it was *on the page*, in the
+release calendar, and got attached to the CVE that was also on the page. This is the Void failure mode in its
+purest form: **a fact inherited its authority from proximity.** The advisory was arguably "visited"; the
+specific cell that would license the claim never was.
+
+**Rules added:**
+1. **A CVE's patch status is read off the vendor's patch *table* — the row, and its Notes cell — never inferred
+   from a date elsewhere on the same page.** A CPU/CSPU cadence is a publication schedule; it says nothing about
+   any individual CVE.
+2. **"No patch until <date>" is a citation-bearing claim.** It must name the row, note, or sentence that says so.
+   If you cannot quote it, the honest statement is "patch status unclear," not a window.
+3. **Take the weakness class from the analyzed record, not from the flaw's description.** "Takes over the
+   instance via crafted HTTP" *sounds* like deserialization; NVD's analysts said access control. Plausible
+   mechanism is not a CWE assignment.
+
+**Correction species:** *claim*, not citation — the invented unpatched window is precisely what made the item
+rank, so per CLAUDE.md the velocity was re-derived **▮▮ rising → ▮ steady** alongside the title, body and tag
+fixes, in en/zh/jp plus each `latest.md`, with a dated correction blockquote left in place.
+
+**Self-assessment note:** this is the third batch in which applying the checklist to *my own published feed*
+caught an error (after the `ai-memory`/DHH misattribution and the 404'd GrapheneOS permalink). The pattern
+across all three: the feed's generation step trusts an adjacent artifact — an owner name, a permalink, a
+calendar — while the learn step is where the specific cell finally gets opened. That asymmetry is an argument
+for pushing primary-source verification *earlier*, into generation, not for celebrating the catch afterwards.

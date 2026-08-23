@@ -2797,5 +2797,50 @@
     "cred": "high",
     "density": "high",
     "cv": 1
+  },
+  "reuters.com": {
+    "cat": "news",
+    "en": "Global wire service; the batch's rogue-AI-agent story was original first-hand reporting (it named the student and obtained GitHub's and Anthropic's statements), and its claims held up against the iTnews syndication — but note its wording is Anthropic's \"deliberately permissive conditions\", NOT the stronger \"safety filters switched off\" that secondary coverage added.",
+    "zh": "全球通讯社；本批次的“失控 AI 代理”报道属一手原创（点名当事学生，并取得 GitHub 与 Anthropic 的回应），其说法与 iTnews 转载版一致——但请注意其原文措辞是 Anthropic 的“刻意宽松的条件”，而非二手报道追加的更强说法“安全过滤器被关闭”。",
+    "jp": "国際通信社。本バッチの「暴走AIエージェント」記事は一次取材（学生を実名で特定し、GitHubとAnthropicの声明を取得）で、iTnews転載版とも整合。ただし原文の表現はAnthropicの「意図的に緩い条件」であり、二次報道が付け足した「セーフティフィルタを切った」という強い表現ではない点に注意。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "harvey.ai": {
+    "cat": "vendor",
+    "en": "Legal-AI vendor blog; its Tenet post is unusually specific for a vendor (Kimi K3 base, GSPO, rank-64 LoRA over the full MoE, ~1,750 environments, ~150 B300s over 2 months, \"no customer data\") and states its own second-place LAB rank alongside the SOTA-on-LAB-Contracts headline — self-limiting claims are a credibility signal, but LAB is Harvey's own benchmark.",
+    "zh": "法律 AI 厂商博客；其 Tenet 文章对厂商而言异常具体（Kimi K3 基座、GSPO、覆盖整个 MoE 的 rank-64 LoRA、约 1,750 个环境、约 150 张 B300 训练两个月、“未使用任何客户数据”），并在“LAB Contracts 达到 SOTA”的标题旁主动写明自身在 LAB 总榜仅列第二——自我设限的表述是可信度信号，但 LAB 是 Harvey 自家基准。",
+    "jp": "リーガルAIベンダーのブログ。Tenetの記事はベンダーとしては異例に具体的（Kimi K3ベース、GSPO、MoE全体へのrank-64 LoRA、約1,750環境、B300約150基で2か月、「顧客データ不使用」）で、「LAB ContractsでSOTA」という見出しの横にLAB総合では2位という自己限定も明記——自己抑制的な記述は信頼性の signal だが、LABはHarvey自身のベンチマーク。",
+    "cred": "med",
+    "density": "high",
+    "cv": 2
+  },
+  "artificiallawyer.com": {
+    "cat": "news",
+    "en": "Legal-tech trade publication; useful as the independent echo of vendor legal-AI announcements, but largely restates vendor claims — treat as corroboration that an announcement happened, not that its numbers hold.",
+    "zh": "法律科技行业媒体；可用作厂商法律 AI 公告的独立回声，但多为复述厂商说法——只宜佐证“确有此发布”，不足以佐证其数据成立。",
+    "jp": "リーガルテック業界誌。ベンダーのリーガルAI発表に対する独立した反響として有用だが、内容はベンダー主張の再掲が中心——「発表があった」ことの裏取りには使えるが、数値の裏取りにはならない。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "inferencex.com": {
+    "cat": "data",
+    "en": "SemiAnalysis's live inference-benchmark dashboard (the hosted face of SemiAnalysisAI/InferenceX, Apache-2.0). Rare in this feed: a continuously-run, forkable, multi-vendor harness (SGLang/vLLM/TensorRT-LLM across GB300/GB200/MI355X/B300/B200/H200) rather than a vendor-reported one-off — but AMD and NVIDIA contribute hardware, so read hardware-vs-hardware comparisons with that in mind.",
+    "zh": "SemiAnalysis 的实时推理基准看板（开源仓库 SemiAnalysisAI/InferenceX 的托管前端，Apache-2.0）。在本信息流中较为少见：持续运行、可复刻、跨厂商的测试装置（SGLang/vLLM/TensorRT-LLM，覆盖 GB300/GB200/MI355X/B300/B200/H200），而非厂商自报的一次性数字——但 AMD 与 NVIDIA 提供硬件，故硬件对比结果需带此背景阅读。",
+    "jp": "SemiAnalysisのライブ推論ベンチマークダッシュボード（OSSリポジトリ SemiAnalysisAI/InferenceX のホスト版、Apache-2.0）。本フィードでは希少な、継続実行・フォーク可能・マルチベンダーのハーネス（SGLang/vLLM/TensorRT-LLMをGB300/GB200/MI355X/B300/B200/H200上で）であり、ベンダー自己申告の単発値ではない——ただしAMDとNVIDIAがハードを提供しているため、ハード同士の比較はその前提で読むこと。",
+    "cred": "med",
+    "density": "high",
+    "cv": 2
+  },
+  "ozbrain.com": {
+    "cat": "vendor",
+    "en": "Hosted cross-vendor agent-memory product behind one MCP endpoint. Its marketing page is unusually precise about mechanism (per-version agent attribution, write-pauses-on-conflict, forced Postgres RLS, per-account envelope encryption, exportable audit log, 50/300/600-article tiers) — verified first-hand — but it is closed and hosted-only, so every governance property is a product claim, not an inspectable one.",
+    "zh": "托管型跨厂商 Agent 记忆产品，统一以一个 MCP 端点接入。其官网对机制的描述异常精确（逐版本记录写入方 Agent、冲突时暂停写入、强制 Postgres 行级安全、按账户信封加密、可导出审计日志、50/300/600 篇文章档位）——已一手核验——但产品闭源且仅托管，故所有治理特性都只是厂商声明，无法独立查验。",
+    "jp": "単一のMCPエンドポイント経由で使うホスト型・ベンダー横断のエージェントメモリ製品。紹介ページは仕組みの記述が異例に具体的（バージョンごとの書き込みエージェント記録、衝突時の書き込み一時停止、Postgres行レベルセキュリティの強制、アカウント単位のエンベロープ暗号化、エクスポート可能な監査ログ、50/300/600記事のプラン）——一次確認済み——だがクローズドかつホスト専用のため、ガバナンス特性はいずれも検証不能なベンダー主張にとどまる。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }
