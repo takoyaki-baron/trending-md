@@ -403,9 +403,11 @@ UC Berkeley / MIT / UT Austin の研究者（Song Han、Matei Zaharia、Ion Stoi
 - **Source:** NVIDIA blog · ~2d ago (~20:03 UTC+8)
 - **Tags:** `agents` `benchmark` `arc-agi` `harness` `nvidia`
 
-NVIDIA の **AVO**（Agentic Variation Operators）エージェントアーキテクチャが、ARC-AGI-3 **公開セット**で **100.00 RHAE** を達成し、6,624 の環境アクションで 25 環境・183 レベルすべてをクリアした。ベースモデルは Claude Opus 5（単体で約 30%、最高の個別モデル）だが、NVIDIA はこの結果が*ハーネス*——永続メモリと、行き詰まりからエージェントを脱出させるスーパーバイザー——を測ったものでモデルではないこと、公開セットのみで私的コンペセットは対象外であることを明言している。同じループは CUDA カーネル最適化で 7 日間自律稼働し、FlashAttention-4 より最大 10.5% 速いアテンションカーネルを生み出した。
+NVIDIA の **AVO**（Agentic Variation Operators）エージェントアーキテクチャは、ARC-AGI-3 **公開セット**で **100.00 RHAE** を達成し、6,624 の環境アクションで 25 環境・183 レベルすべてをクリアした（同一レベルの VISTA の 7,542 より約 12% 少ない）。永続メモリと、停滞を監視してエージェントを方向転換させるスーパーバイザーを使う。ベースモデルは Claude Opus 5 で、ARC Prize は単体では約 30% と別途報告している。観測はテキストのみの 64×64 グリッドで、画像は使わない。同じループは先に CUDA カーネル最適化で **7 日間**自律稼働し——500 以上の最適化方向、コミットされた 40 のカーネル版——DGX B200 上で cuDNN を最大 3.5%、FlashAttention-4 を最大 10.5% 上回った。
 
-**Why it matters:** 「生のモデルではなくスキャフォールディングが長期的なエージェント性能を駆動する」ことを定量化したもので、エージェントハーネスを組む誰にとってもシステム設計上の示唆を持つデータポイント。
+**Why it matters:** NVIDIA 自身の投稿はアブレーションとしての読み方を退ける：30% → 100.00 という差は「AVO の性能寄与の直接測定と解釈すべきではない」とし、VISTA との比較も「統制されたアブレーションと解釈すべきではない」（バックエンド・観測・メモリ・コンテキスト管理が異なる）。承重の主張はより狭いが、ハーネスを組む者にとっては依然として正しい——「モデルを評価することはエージェントを評価することと同じではない」のであり、転移するのは「ドメイン知識ではなく、持続的な自律進歩のための機構」である。
+
+> **訂正（2026-08-23）：** 本項目は当初、この結果を「生のモデルではなくスキャフォールディングが長期的なエージェント性能を駆動することを定量化したもの」と読んでいた。NVIDIA は同じ投稿でその読み方を二度明示的に否定している。本文と分析をベンダー自身の留保を載せる形に訂正した。100.00 の公開セットスコアと 7 日間の CUDA 実行は不変で一次確認済みのため、velocity は据え置く。
 
 [`🔗 NVIDIA developer blog`](https://developer.nvidia.com/blog/nvidia-avo-reaches-100-on-arc-agi-3-demonstrating-a-frontier-level-general-purpose-architecture-for-long-horizon-autonomous-agents/) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/21/nvidia-just-showed-that-the-harness-not-the-ai-model-is-now-the-real-hero/)
 
@@ -453,17 +455,19 @@ Check Point の研究者 **Jiří Vinopal** は **BTR.sys**——Defender の Mi
 
 ---
 
-## 32. Qwen-UI-Agent——実機 100 台超で訓練した Alibaba の GUI エージェント基盤モデル
+## 32. Qwen-UI-Agent——Alibaba の実機 GUI エージェントはウェイトではなく技術レポートとして公開された
 
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub · 2.2k stars · ~2d ago (~20:03 UTC+8)
-- **Tags:** `gui-agent` `open-weights` `alibaba` `computer-use` `mobile`
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 2,166 stars · リポジトリ push 2026-08-19 · 発表 2026-07-30
+- **Tags:** `gui-agent` `alibaba` `computer-use` `mobile` `report-only`
 
-Alibaba の Tongyi-MAI チームが **Qwen-UI-Agent**（Apache-2.0、`Tongyi-MAI/MAI-UI`、ウェイト `MAI-UI-8B`/`MAI-UI-2B`）をオープンソース化。モバイル・デスクトップ・ブラウザ・DeepSearch を単一モデルに統合し、GUI アクションと直接の Bash/CLI 実行を混在させる GUI エージェント基盤モデル。**100 台超の実スマートフォン・150 以上のアプリ**からなる機材群と自前の実機ベンチマーク（**MobileWorld-Real**）で訓練・評価し、**MobileWorld-Real 92.2%**、MobileWorld 82.1%、OSWorld-Verified 79.5%、WebArena 73.6% を報告。
+Alibaba の Tongyi-MAI チームが **Qwen-UI-Agent** を公開した。モバイル・コンピュータ・ブラウザ・DeepSearch を単一モデルに統合する GUI エージェント基盤モデルで、GUI アクションと直接の Bash/CLI 実行を混在させ（アクション出力の約 40% をバッチ化）、約 1 万の並列環境にまたがる 100 ステップ以上の軌跡でオンライン RL により訓練。訓練と評価は **150 以上のアプリをカバーする実スマートフォン 100 台超**と、自前の実機ベンチマーク **MobileWorld-Real**（400 以上のタスク / 100 以上のアプリ）で行われた：**MobileWorld-Real 92.2%**、MobileWorld 82.1%、AndroidDaily 97.5%、OSWorld-Verified 79.5%、WebArena 73.6%、ScreenSpot-Pro 81.5%。`Tongyi-MAI/MAI-UI` で一次確認したところ、実際に公開されているのは**技術レポート PDF・README・アセットのみで、コードもウェイトもない**。
 
-**Why it matters:** シミュレータではなく実ハードウェアで訓練された初の主要なオープンウェイト GUI エージェント——「computer-use」エージェントをデモ止まりにしている sim-to-real ギャップへの直接的な回答。
+**Why it matters:** 実機での訓練は、computer-use エージェントをデモ止まりにしている sim-to-real ギャップへの真の回答である——ただし Alibaba 外部の誰にも再現・セルフホストできる状態ではない。ベンチマーク表は実行できる成果物としてではなく、ベンダー報告として読むべきである。
 
-[`🔗 Tongyi-MAI/MAI-UI`](https://github.com/Tongyi-MAI/MAI-UI) · [`🔗 MAI-UI-8B (HF)`](https://huggingface.co/Tongyi-MAI/MAI-UI-8B)
+> **訂正（2026-08-23）：** 本項目は当初、Qwen-UI-Agent を「オープンソース化（Apache-2.0）」で「ウェイト `MAI-UI-8B`/`MAI-UI-2B`」付きとし、「実ハードウェアで訓練された初の主要なオープンウェイト GUI エージェント」と位置づけていた。一次確認したところ：GitHub リポジトリには **LICENSE ファイルがなく**（Apache-2.0 は README でのみ主張）、その `Qwen-UI-Agent/` ディレクトリには技術レポートのみ。唯一公開されているウェイト `MAI-UI-8B`（HF、最終更新 2026-01-09）と `MAI-UI-2B`（2025-12-29）は、本モデルではなく**前身の MAI-UI 1.0** のものである。またこの成果は今週ではなく 2026-07-30 に発表されていた。主張の訂正のため、velocity を ▮▮ → ▮ に再導出した。
+
+[`🔗 Tongyi-MAI/MAI-UI`](https://github.com/Tongyi-MAI/MAI-UI) · [`🔗 MAI-UI-8B (HF) — 前身モデルのウェイト`](https://huggingface.co/Tongyi-MAI/MAI-UI-8B)
 
 ---
 
@@ -489,7 +493,9 @@ Alibaba の Tongyi-MAI チームが **Qwen-UI-Agent**（Apache-2.0、`Tongyi-MAI
 
 復旦大学の Zhipeng Xu、Xipeng Qiu らが **SWE-bench Science** を公開。**98 の GitHub リポジトリ、20 の科学分野にまたがる 119 タスク**からなるリポジトリレベルのベンチマークで、科学コードへの誤った修正はプログラムだけでなく証拠そのものを損なうという観点に立つ。最良のエージェント——**Claude Code + Opus-5 (max)**——でも **pass@1 は 50% 未満**。著者らは 4 つの反復的な失敗メカニズムを特定し、アブレーションでは根拠のある科学的ガイダンスは助けになる一方、ミスアラインなガイダンスはアンカリングを誘発することを示す。
 
-**Why it matters:** 科学という「正しさが最も重要」な領域におけるエージェントコーディングの具体的なフロンティアギャップを暴き、過学習を防ぐ私的テストスイートを備える。
+**Why it matters:** 科学——正しさが最も重要となる領域——に特化したエージェントコーディングの、具体的なフロンティアギャップを暴く。そしてそのガイダンスアブレーションは、ハーネスを組む者にとってより有用な教訓を運ぶ：注入されたコンテキストは一律に良いわけではない。根拠のある科学情報は修復を制約しトークン効率を改善する一方、ミスアラインなガイダンスはアンカリングを誘発し、正確な修復成功率を必ずしも改善しない。
+
+> **訂正（2026-08-23）：** 本項目は当初、このベンチマークを「過学習を防ぐ私的テストスイートを備える」としていた。その主張は引用した arXiv ページのどこにも現れず（一次情報で再読）、アブストラクトが実際に述べているガイダンスアブレーションに置き換えた。119 タスク / 98 リポジトリ / 20 分野というスコープと、Claude Code + Opus-5 (max) の 50% 未満の pass@1 は確認済みのため、velocity は据え置く。
 
 [`🔗 arXiv 2608.19799`](https://arxiv.org/abs/2608.19799) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.19799)
 
@@ -529,9 +535,11 @@ Alibaba の Tongyi-MAI チームが **Qwen-UI-Agent**（Apache-2.0、`Tongyi-MAI
 - **Source:** Hunt.io / SecurityWeek · ~3d ago (~20:03 UTC+8)
 - **Tags:** `iot` `botnet` `surveillance` `security`
 
-Hunt.io は 35 日間（6 月 17 日–7 月 22 日）のキャンペーンを復元し、ロシア/ウクライナ/CIS の **Dahua 製 IP カメラ 14,530 台超**が侵害されたことを明らかにした。3 つの手法：TCP 37777 での **12,324 IP** へのブルートフォース、2021 年の認証バイパス CVE（**CVE-2021-33044/33045**）と **CVE-2024-39943** を連鎖させる Go バイナリによる永続バックドアアカウント `p2pwn/p2password` の植え付け（パスワード変更や多くのファームウェアでの工場出荷時リセット後も残存）、そして Dahua のクラウドリレーを悪用してシリアル番号だけで NAT 配下のカメラへ到達する手口。
+Hunt.io は 35 日間（6 月 17 日–7 月 22 日）のキャンペーンを復元し、**Dahua 製 IP カメラ 14,530 台超**——主にウクライナ・ロシア・CIS の通信レンジ——が侵害されたことを明らかにした。3 つの手法：TCP 37777 での **12,324 IP** へのブルートフォース（asyncio、最大 4,000 ワーカー）；2021 年の認証バイパスのペア **CVE-2021-33044**（パスワードフィールドが評価されない）と **CVE-2021-33045**（ループバック送信元アドレスの詐称）を連鎖させる Go バイナリが、管理者パスワードとは独立して保存される `p2pwn`/`p2password` バックドアアカウントを植え付ける——パスワード変更後も、多くのファームウェアでは工場出荷時リセット後も残存する；そして Dahua の Easy4IP クラウドリレーを悪用し、シリアル番号だけで NAT 配下のカメラへ到達する手口——**生存するシリアルの 89.4% は認証不要**で、オフライン回復コードがデバイス資格情報とは独立したクラウドレベルの管理者リセットを付与する。
 
-**Why it matters:** 何年も前の既知 CVE とデフォルト認証情報だけで成り立つ大規模・永続的な IoT 侵害——未パッチの 2021 年頃のカメラ脆弱性が今も生きたスケーラブルな攻撃面であることを示す。
+**Why it matters:** 何年も前の既知 CVE とデフォルト認証情報だけで成り立つ大規模・永続的な IoT 侵害——そしてその永続性は、所有者が手を伸ばすであろう両方の修復手段よりも長生きする。NAT 配下のカメラをそもそも到達可能にしているのは CVE ではなく、ベンダー自身のクラウドの利便機能である。
+
+> **訂正（2026-08-23）：** 本項目は当初、エクスプロイトチェーンの一部として **CVE-2024-39943** を挙げていた。Hunt.io のレポート——一次情報で再読——は、この識別子が流布している解説で誤ってラベル付けされていると明示しており（無関係の Rejetto HFS の欠陥）、同様に CVE-2025-31702 のアドバイザリは、観測されたリレー悪用より狭い認証後の問題を記述していると述べる。誤った CVE は削除し、出典のあるクラウドリレーの詳細を加えた。この項目はもともとバッチ最低の velocity であり、それは据え置く。
 
 [`🔗 SecurityWeek`](https://www.securityweek.com/threat-actor-hacks-14000-ip-cameras-in-ukraine-and-russia/) · [`🔗 Hunt.io レポート`](https://hunt.io/blog/operation-cameraswarm-dahua-cameras-compromised)
 

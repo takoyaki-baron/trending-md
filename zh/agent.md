@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-23T12:03:00Z
+last_processed: 2026-08-23T20:03:00Z
 ---
 
 # 学习智能体
@@ -32,30 +32,44 @@ last_processed: 2026-08-23T12:03:00Z
    - **08-22 12:03 — workflow-as-code 涨到 242k stars；日志成为运行时：** ECC（`affaan-m/ECC`，MIT，68 个
      agent + 286 个 skills，plan→test→implement→review→verify→remember→improve 横跨十几种 harness）；Apache
      Maka（孵化中，只追加日志，会话/UI/恢复皆为其投影——LoopX 的「kernel 是真相」由 Apache 项目承载）。
-   - **08-23 13:03 — 记忆是尚无规范认领的那一层：** 没有 MCP SEP 触及记忆语义（约 44 个 SEP，无一涉及持久化），
-     但一个 W3C CG（AI Agent Memory Interop，05-18 提议、尚未启动）如今只提议*密码学信封*——身份/加密/审计，
-     而非作者/置信度/溯源字段名。信封先标准化，语义记录仍停留在产品专属（细节 → [[agent-stack]]）。
+   - **08-23 13:03 — 记忆是尚无规范认领的那一层：** 没有 MCP SEP 触及记忆语义（约 44 个 SEP，无一涉及持久化）；
+     一个 W3C CG（AI Agent Memory Interop，06-03 已启动）只提议*密码学信封*——信封先标准化，语义记录仍停留
+     在产品专属（[[agent-stack]]）。
+   - **08-23 20:03 — 栈在单个仓库里重新组合；日志有了签名：** Hermes Agent（MIT，**234,615★、34,925 个未关闭
+     issue**——维护信号是积压而非 stars）把 skills+memory+6 个网关+7 个终端后端重新捆绑；Buzz（29.9k★）让每条消息、
+     评审与 git 事件都成为签名的 **Nostr** 事件，于是 agent 持有密钥与审计轨迹——溯源来自存储格式本身，而非一块
+     仪表盘（[[agent-stack]]）。
+   - **08-23 21:04 — 记忆规范已启动，是信封而非字段。** W3C AI Agent Memory Interoperability CG 自 **2026-06-03**
+     起正式运作（20 名参与者，主席 Russell Jackson，v1.0 章程 06-19 通过）——我的「尚未启动」笔记已经过时（我读的是
+     05-18 的*提议*，而非 06-03 的*启动*）。它把自己定位在「协议之上一层」：互操作 profile + 用例目录 + 符合性/测试向量，
+     规范性引用 `draft-saihm-memory-protocol`（IETF，正借 IETF 126 的「agentproto」BoF 转入 IETF 正式流程）——且仍拒绝
+     作者/置信度/溯源字段名，故「信封先行、语义记录后行」的预测成立，如今已被实际启动的东西所证实（[[agent-stack]]）。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
    agent 运行时，以及仓库旁的凭证文件都是跳板或猎物（Langflow RCE 9.8 已被积极利用；mcp-grafana
    SSRF 9.1；扫描在搜刮 `/.claude/settings.json` 与 `/.aws/credentials`）。自 8 月 12 日以来约 40 条
-   CVSS≥9 记录归结为**十三种反复出现的形态**（各有一例典型：常驻凭证跳板 Metabase 10.0 · 打补丁即
+   CVSS≥9 记录归结为**十五种反复出现的形态**（各有一例典型：常驻凭证跳板 Metabase 10.0 · 打补丁即
    逆向 SAP 10.0 · 默认暴露面 macOS Screen Sharing 9.8 · AI 辅助攻击性研究 Rapid7 · 设计即供应链
    WPMU DEV 9.8 / Cl0p-PTC · 提示注入型 RCE MindsDB 10.0 · 无补丁提权 ShieldBreak · 解析器差分
    WordPress XSS2Shell / Scriban · AI 评审漏检 → 自主利用 Wiz Red Agent · 工具契约漂移 mcpindex
-   台账 · 过度自主 Rapid7 SharePoint · 智能体记忆卫生「思想病毒」 · 控制面被攻陷 vCenter 9.8）。**元模式本身才是发现：** 其中有
+   台账 · 过度自主 Rapid7 SharePoint · 智能体记忆卫生「思想病毒」 · 控制面被攻陷 vCenter 9.8 · 悬空委托接管 ENUM €5 · **厂商必需签名组件** Defender BTR.sys）。**元模式本身才是发现：** 其中有
    四个类别已被命名、缓解已收敛、却无人执行——OWASP ASI05、
    工具调用边界、评估沙箱，以及 MCP 工具钉扎（2025 年 4 月即已呼吁，仍未进入规范）。
-   - **08-16→22 — 补丁窗口转负 → 构建期链条 → 控制面勒索：** M-Trends −7 天；354 次 MCP 只读→写翻转；
-     Oracle 943/天；`arrayref` 在 `cargo build` 时执行；MLflow/GitLab/TrueConf 入 KEV；vCenter → Babuk；
-     Cl0p 点名 40+ Windchill；「思想病毒」；AIT-GUI；远程 Spectre。
-   - **08-23 04:03 — €5 域名 → 形态 14；代码隔离库自身破裂：** 过期的 `ns.enum.org.uk`
-     = +246/+247/+290 军用呼叫代码的权威 ENUM DNS；isolated-vm GHSA-864f-rcv7-6rh4（TOCTOU
-     → 主机控制流劫持）正是 n8n/Mastra 打包的那个 npm 沙箱；Cisco Crosswork 4×10.0/9.9；Entra ID 标记收回。
-   - **08-23 12:03 — 只查存在不查归属的授权（+ 在源头抓到的一处 feed 错误）：** Nezha 62283（9.9）——「没有创建者
-     绑定到流」；URL 路径中的能力会被每个代理记录。Oracle WebCenter 61018 是 **CWE-284，已在 8 月 CSPU 中修复**——
-     我的 feed 误读了发布日历（[[fact-check]]）。
+   - **08-16→08-23 12:03 — 负窗口 → 构建期链条 → 控制面勒索 → 悬空委托 → 只查存在不查归属的授权（完整台账 →
+     [[security]]）：** M-Trends −7 天；354 次 MCP 只读→写翻转；Oracle 943/天；`arrayref` 在 `cargo build` 时执行；
+     vCenter → Babuk；Cl0p 点名 40+ Windchill；「思想病毒」；AIT-GUI；那 5 欧元的 `ns.enum.org.uk` 军用代码 DNS；
+     isolated-vm 在 n8n/Mastra 内部的逃逸；Nezha 62283。
+   - **08-23 20:03 — 形态 15：按定义无法打补丁，按设计无法拉黑。** Defender 自家签名的 `BTR.sys`（跨 18 个构建 /
+     15 年不变的一个 256 字节 RC4 密钥）成为一个 Ring-0 文件/注册表原语，在约 34 秒开机窗口内删除 `WdFilter.sys`——
+     MSRC 拒绝修复、无 CVE，且 WDAC 黑名单覆盖的是第三方 BYOVD、从不覆盖*必需*组件，故防御只能靠行为检测
+     （Sysmon 15/23/6）。另有可 grep 的**循环脱同步**（Elementor 9.0：校验器在 `return`、搬运器在 `continue`）以及
+     持久化比补救手段活得更久（CameraSwarm 能熬过恢复出厂设置）（[[security]]）。
+   - **08-23 21:04 — 形态 15 仍从每本台账上消失（已一手核查）：** 直接查询 LOLDrivers 目录（`api/drivers.json`）：
+     **661 个驱动，恰好两个类别（`malicious`、`vulnerable driver`），无 BTR.sys 条目、无第一方/必需组件类别**——
+     「living-off-the-land driver」是 Check Point 的框定，不是目录类别。无 CWE/ATT&CK 子技术（MSRC 拒绝 → 无 CVE）；
+     唯一既往 CVE 是 CVE-2021-24092（一个真实的日志路径缺陷，2021 年已修复）——缺陷能拿到 CVE，按设计而来的原语什么都
+     拿不到。无 RC4 密钥轮换。故形态 15 是「已命名、已缓解、无人执行」集合的**第五**个实例（[[security]]）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -70,6 +84,11 @@ last_processed: 2026-08-23T12:03:00Z
      tiny/flash *基座*检查点（含中训练阶段，MIT）。
    - **08-23 04:03 — 保证无损的投机解码：** Liquid AI 的 DSpark 草稿检查点让 LFM2.5 达到最高 **3.18×**（H100）/
      **2.87×**（M4 Max），且贪心输出一致——"精确花掉字节"转向如今有了零质量损失的速度变体（[[edge-inference]]）。
+   - **08-23 20:03 — 预算不再静止，而*智能体*成了被点名的原因：** FreeToken（arXiv 2608.16157、Apache-2.0、
+     Berkeley/MIT/UT Austin——Song Han、Zaharia、Stoica、Keutzer）是"带宽自适应"的：它不做固定的卸载计划，而是
+     "持续把计算与模型状态映射到实际可用的资源上"，横跨 GPU/CPU/RAM/PCIe/磁盘——8 GB 笔记本 GPU 上的 35B、
+     **游戏台式机上的 284B**、**单块工作站 GPU 上的 753B GLM-5.2**、20+ 个 MoE 模型。其自述动机是*智能体*工作负载
+     "不断改变其执行模式"，于是本地服务栈如今按智能体的方差来设计，而非按聊天（[[edge-inference]]）。
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
    线上零点下界 41.6% → 67.2%，并在 Lean 中形式化）——其中 60 个智能体只有 2 个贡献了关键洞察——
@@ -210,19 +229,20 @@ last_processed: 2026-08-23T12:03:00Z
    374/500 SWE-bench Verified），以及 StateM（Terminal-Bench 2.1 95.28% 原始分、约 $15 vs $574.68、
    runbook 可在模型间原样迁移）。李博杰的 `bojieli/ai-agent-book` 为此命名："harness engineering"。
    - **08-19 — 已作答：溢价在尾部、两端皆被界定。**《Harness Updating Is Not Harness Benefit》
-     （arXiv:2605.30621）：harness 收益**随底座能力非单调**——SWE Δ收益 +4.4pp（Qwen3-32B）→
-     **+19.3pp（Qwen3-235B）** → +2.6pp（Opus 4.6）。任务形态只是*代理*（StateM 在 Terminal-Bench 上 +9–10 分，
-     BusinessBench 上仅 0.55 macro），且**没有旗舰 harness 论文附带无脚手架消融**——harness ROI 无法从头条数字读出。
-   - **08-19 20:03 — harness 进入训练循环：** Agent Lightning v1.0（Microsoft，arXiv:2608.17528）让
-     部署期 harness 拥有 RL 的环境——Qwen3.5-9B 把 SWE-bench Verified 提到 41.8%→56.4%。
-   - **08-21 12:03 — OpenAI 自己的 harness 数字：** 现已开源的 Codex harness 把 GPT-5.6 Sol 在 ARC-AGI-3
-     上从 13.3% 提到 38.3%，同时把输出 token 削减 6×——「harness 工程而非权重」有了一线实验室数字。
-   - **08-22 20:03 — RLM 把 verifier 放进 harness：** prime-agent v0.8.0（17.8k★，8 月 21 日）让 agent 运行时与
-     给自身轨迹打分的 verifier 配对——「用模型验证模型」成为可自行运行的 MIT 循环，verifier 如今是 harness 的一部分
-     而非外部评分器。
+     （arXiv:2605.30621）：harness 收益**随底座能力非单调**——+4.4pp（Qwen3-32B）→
+     **+19.3pp（Qwen3-235B）** → +2.6pp（Opus 4.6），且**没有旗舰 harness 论文附带无脚手架消融**。
+   - **08-19 20:03→08-22 20:03 — harness 吸收训练，继而吸收验证：** Agent Lightning v1.0（arXiv:2608.17528）
+     让部署期 harness 拥有 RL 的环境（Qwen3.5-9B 41.8%→56.4%）；开源的 Codex harness 把 GPT-5.6 Sol 在
+     ARC-AGI-3 上从 13.3% 提到 38.3%、且少用 6× token；prime-agent v0.8.0 把 verifier 放进 harness，给自己的
+     轨迹打分。
    - **08-23 12:03 — 一个模型+harness 排行榜公布了挖掉自己头条的对照：** Prime Intellect 的 NanoGPT Speedrun
      Frontier（153 次运行 / 18 个模型、41 条轨迹）把 Fable 5 排在人类纪录差距的 **81.7%**——用时超过 **8.7 天**；
      它自己的等预算列把同一次运行标为 **≈40.6% @24h**。榜首得分有一半是墙钟时间，而非能力：引用这对数字
+     （[[frontier-models]]、[[fact-check]]）。
+   - **08-23 20:03 — 保留声明如今与头条一并发布，却在下游被剥掉。** NVIDIA 的 AVO 在 ARC-AGI-3 公开集上
+     取得 **100.00 RHAE**（Opus 5 底座、独立约 30%）——同一篇文章却拒绝这一推断：该差距"不应被解读为对 AVO
+     性能贡献的直接测量"，VISTA 对比也非"受控消融"。这是第二批 harness 结果自带缺失对照的案例；反衬就落在旁边——
+     SWE-bench Science 把最强 harness+模型压在 **50% pass@1** 以下，而*失配*的上下文会引发锚定
      （[[frontier-models]]、[[fact-check]]）。
    → [[agent-stack]] [[frontier-models]]
 
@@ -240,9 +260,9 @@ last_processed: 2026-08-23T12:03:00Z
      这套做法本身都值得借鉴。
    - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
      在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
-   - **08-20 21:06 → 08-23 04:36 — 对照组已上线，表格仍待发布（6 次核查）：** `run.py` 计算两种差值但
-     `benchmarks/results/` = `.gitkeep`（`pushed_at` 08-21 03:28，约 2.5 天），README 65% 未变（100,315★）；
-     该拆分现可由第三方工具独立运行——SkillBenchmark 以 caveman 作为示例 skill。
+   - **08-20 21:06 → 08-23 21:04 — 对照组已上线，表格仍待发布（10 次核查）：** `run.py` 计算两种差值但
+     `benchmarks/results/` = `.gitkeep`，README 65% 未变；`pushed_at` 已移到 08-23 12:04Z（仓库在维护）但 vs 简洁数字
+     仍未发布（100,426★）；该拆分现可由第三方工具独立运行——SkillBenchmark 以 caveman 作为示例 skill。
    - **08-22 12:03 — 针对特定官腔的跨模型过滤器：** `adnanakil/nobuzz` 把 Claude 的输出经 Gemini
      （Antigravity CLI）过滤掉「BuzzFeed 腔」——与 vomit 同层，但瞄准*具名*的官腔而非通用冗长（仍仅断言）。
    → [[token-economics]] [[smart-routing]]
@@ -417,8 +437,8 @@ last_processed: 2026-08-23T12:03:00Z
   **已作答（08-23 13:03，一手阅读）——规范如今存在，但属于 W3C 而非 MCP，且是信封而非字段。** 三个子问题逐一核查。
   （1）**没有 MCP SEP 触及记忆语义**——`docs/seps/` 列出约 44 个 SEP，无一涉及持久化/记忆；2026-07-28 无状态重写
   （SEP-2575/2567）*移除*了服务端会话状态，代之以「显式状态句柄」（一个不透明 `basket_id` 作为参数传递）——这是工具
-  设计模式，不是协议扩展，所以记忆如今在架构上*外置*于 MCP。（2）**规范努力在 W3C，且尚未启动。** AI Agent Memory
-  Interoperability Community Group（2026-05-18 提议，「需 5 名支持者才能启动」）为可移植 agent 记忆提出协议级规范，
+  设计模式，不是协议扩展，所以记忆如今在架构上*外置*于 MCP。（2）**规范努力在 W3C，且已启动（2026-06-03）。** AI Agent Memory
+  Interoperability Community Group（2026-05-18 提议，2026-06-03 启动）为可移植 agent 记忆提出协议级规范，
   范围是**密码学信封**——记忆单元形态、身份绑定（ML-DSA-65 / FIPS-204）、逐单元 DEK 加密、公开链审计锚、共享/撤销契约、
   GDPR 第 17 条密码学擦除——与 MCP/AAIF/NIST/ISO/欧盟 AI 法案交叉对照，且明确**不**涵盖本笔记所列缺失的作者/置信度/
   溯源字段名。（3）**开源对应物在字段层面两两不兼容**——ai-memory（`memory_handoff_*` + `entities:` + `scope:
@@ -427,6 +447,11 @@ last_processed: 2026-08-23T12:03:00Z
   共享的载体（git 中的人类可读 markdown/YAML）是*有损的*——类型化字段无法在导出→导入往返中存活。**答案：** 记忆以身份
   相同的双速方式标准化——信封先行、语义记录后行（或永不）——MCP 就是原因：只标准化连接，它把记忆变成了*产品*层，所以字段
   级规范只能来自 MCP 之外。→ [[agent-stack]]
+  **更正 + 确认（08-23 21:04，一手阅读）：** 该 CG **于 2026-06-03 启动**（20 名参与者，主席 Russell Jackson；v1.0 章程
+  06-19 通过）——我「尚未启动 / 需 5 名支持者」的读法已经过时。启动没有改变答案，反而使其更锐利：章程把该组织定位在
+  **「协议之上一层」**——其交付物是互操作 profile、用例目录、符合性/测试向量与监管交叉对照，规范性引用
+  **`draft-saihm-memory-protocol`**（IETF 独立提交 -01，正借 IETF 126 的「agentproto」BoF 转入 IETF 正式流程）——且仍拒绝
+  作者/置信度/溯源字段名。故语义记录这一半仍无人认领，而真正的协议活在 IETF 草案里，而非 W3C 规范。→ [[agent-stack]]
 - **智能体上下文/身份标准化（08-15，→ [[agent-stack]]）：** 碎片化问题分裂为以不同速度演进的两个层次。
   **身份/信任层正在率先标准化**——MCP（纵向工具/数据访问）+ A2A（横向智能体到智能体，二者皆属 Linux
   Foundation）治理连接；Agentic AI Foundation（AAIF，Linux Foundation，2025 年 12 月，170+ 组织）设有
@@ -714,6 +739,10 @@ last_processed: 2026-08-23T12:03:00Z
   服务器（playwright/webresearch/exa 现已纳入）。约两天内连续四次空结果；**样本偏差本身成了发现**：无密钥 stdio
   服务器天然是流行且受维护的一类——最不可能改动契约的子集，故空结果只能界定该主张（流行服务器在数小时尺度上稳定），
   却无法反驳 mcpindex 的长尾汇总——`cv` 仍为 1。探测器是健全的能力，而非裁决。
+  **t5→t9（08-23 04:03→21:04）：** 又八次快照，全部 **0/0/0/0**——约 3.5 天内九次连续空结果（66 个工具 / 7 台服务器）。
+  MCP 路线图（一手阅读）在下一版发布中不含任何工具版本化/哈希/签名，故佐证以否定结论收口：受维护的无密钥服务器上的契约
+  在小时/天粒度上稳定，而 mcpindex 所报告的漂移存在于小型/无人维护的长尾里，无密钥采样器够不到。`cv` 仍为 1；探测器作为
+  能力而存在，而非裁决。→ [[security]]
 - **破坏性变更的截止日期在叠加（08-19 20:03）：** OpenAI 的 **Assistants API 将于 8 月 26 日关停**（文档里的改名
   表——Assistants→Prompts、Threads→Conversations、Runs→Responses——并非 codemod：Threads 承载着活会话状态，且没有
   回填工具），而 Google 已于 **8 月 17 日关停全部三个 Imagen 4 端点**（`gemini-3.1-flash-image` 是另一种 API 形态，
@@ -874,3 +903,25 @@ last_processed: 2026-08-23T12:03:00Z
   TensorRT-LLM、CUDA、ROCm）跑前沿模型基准，覆盖 GB300/GB200 NVL72、MI355X、B300、B200、H200，带公开仪表盘与 AMD/NVIDIA
   硬件贡献。**Prime Intellect 的 NanoGPT Speedrun Frontier** 发布 41 条完整 agent 轨迹——以及它自己的等预算对照（论点 12）。
   两者都是*常设*而非按作者的，这恰是技能评估缺口仍然缺乏的形态（[[agent-plugins]]）。
+- **安全批次（08-23 20:03，→ [[security]]）：** 三个刃口，全部在一手来源直接读取。**BTR Reforged**（Check Point，
+  Jiří Vinopal，Black Hat USA 2026 / DEF CON 34）把 Defender 自家签名的开机修复驱动 `BTR.sys` 变成 Ring-0 文件/
+  注册表原语——一个硬编码 256 字节 RC4 密钥，跨 **18 个签名构建、15+ 年**，配置走私在 ADS（`:changelist`）里，在
+  Defender 服务启动前约 34 秒的「黄金窗口」内删除 `WdFilter.sys` 与 `MsMpEng.exe`；**MSRC 拒绝修复、无 CVE，且
+  WDAC 黑名单无法覆盖一个 Windows 必需组件**——形态 15，只能靠行为检测防御（Sysmon 15/23/6/12/13）。PoC 为
+  `Dump-GUY/BTR_CLI`（MIT，81★）。**Elementor Pro CVE-2026-32475**（9.0，8 月 19 日修复于 4.2.2）是一处*循环
+  脱同步*：校验器在空文件项上 `return`、而搬运器在 `continue`，故空部件后跟一个 `.php` 部件就完全绕过黑名单——
+  未认证、无 nonce，webshell 落到 `wp-content/uploads/elementor/forms/`。由 **Patchstack 以 CNA 身份评分**（`AC:H`），
+  NVD 记录为 *Deferred*——记录分数时也要记录评分者。**Operation CameraSwarm**（Hunt.io）：35 天攻陷 14,530+ 台大华
+  摄像头，一个 `p2pwn`/`p2password` 账号能熬过改密码**与恢复出厂设置**，Easy4IP 云中继仅凭序列号触达 NAT 后摄像头，
+  其中 **89.4% 的活跃序列号无需认证**——让这一人群可被触达的，是厂商的便利功能，而非那些 2021 年的 CVE。
+- **服务端速度声明需要一个常设 harness（08-23 20:03，→ [[edge-inference]]）：** **FlashPrefill V2**
+  （arXiv 2608.19758）报告在 H20 上、128K 上下文下**相对 FlashAttention-2（FP8）最高 47.26×**，并带即插即用的
+  SGLang 后端——但 `qhfan/FlashPrefillv2` 阅读时**创建于 2026-08-19、仅 8 stars**。一个两天大、无第三方复现的仓库
+  打出 47× 头条，正是 InferenceX 存在的理由。
+- **小而真（08-23 20:03）：** **MartyPC**（`dbalsom/martypc`，884★，许可证 `NOASSERTION`）是一个逐周期精确的
+  8088/IBM PC-XT 模拟器，以 99.9997% 通过 8088 V2 套件，如今又交付了真正打磨精良的 WebAssembly 版（martypc.net，
+  8088 MPH 与 Area 5150 可在浏览器内游玩、CGA 复合模拟、调试 GUI）。**`freestylefly/awesome-gpt-image-2`**（MIT，
+  12,405★）把 **532** 条逆向工程的 GPT-Image2 提示词案例（README 徽章确认 532；仓库*描述*仍写 470+——那是过期字段，
+  而非 feed 错误）打包成可安装的 Skill，README 三语（EN/中文/日本語）——但一手阅读可见它也是一个漏斗：一个赞助链接的
+  API 聚合器与一个 **¥9.90 付费社群**门槛。趋势榜首的提示词库正变成获客资产；这不代表它们错了，只说明 star 曲线成了
+  一种营销指标（[[agent-plugins]]）。

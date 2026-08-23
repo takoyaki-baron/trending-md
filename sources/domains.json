@@ -2842,5 +2842,59 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "patchstack.com": {
+    "cat": "security",
+    "en": "WordPress-ecosystem vulnerability database and CNA that publishes plugin advisories with root-cause code walkthroughs; it assigns its own CVSS/CWE, so cite it as CNA-scored rather than NVD-analysed.",
+    "zh": "WordPress 生态漏洞库与 CNA，发布带根因代码分析的插件公告；CVSS/CWE 由其自行评分，引用时应注明为 CNA 评分而非 NVD 分析。",
+    "jp": "WordPress エコシステムの脆弱性データベース兼 CNA。根本原因のコード解説付きでプラグイン勧告を公開するが、CVSS/CWE は自社採番のため NVD 分析済みではなく CNA 採点として引用すべき。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "research.checkpoint.com": {
+    "cat": "security",
+    "en": "Check Point Research's technical blog — long-form reverse-engineering write-ups (driver internals, protocol crypto) that ship concrete detection guidance alongside the offensive finding.",
+    "zh": "Check Point Research 技术博客——长篇逆向分析（驱动内部、协议加密），在给出攻击面发现的同时提供具体检测建议。",
+    "jp": "Check Point Research の技術ブログ。ドライバ内部やプロトコル暗号の長編リバースエンジニアリング記事で、攻撃手法と併せて具体的な検知指針を示す。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "hunt.io": {
+    "cat": "security",
+    "en": "Threat-intelligence vendor publishing campaign reconstructions from its own infrastructure scanning; notably corrects CVE mislabels circulating in coverage and hedges attribution explicitly.",
+    "zh": "威胁情报厂商，基于自有基础设施扫描重建攻击活动；会主动纠正传播中的 CVE 误标，并明确说明归因的不确定性。",
+    "jp": "独自のインフラスキャンからキャンペーンを再構成する脅威インテリジェンス企業。報道で出回る CVE の誤ラベルを訂正し、帰属の断定を明示的に避ける。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "hermes-agent.nousresearch.com": {
+    "cat": "vendor",
+    "en": "Product site for Nous Research's Hermes Agent — install docs and feature claims for the MIT agent runtime; vendor-authored, so cross-check capability claims against the GitHub repo.",
+    "zh": "Nous Research 旗下 Hermes Agent 的产品站——MIT 许可 agent 运行时的安装文档与功能说明；属厂商自述，能力主张需与 GitHub 仓库互相印证。",
+    "jp": "Nous Research の Hermes Agent 製品サイト。MIT ライセンスのエージェントランタイムの導入手順と機能説明を掲載するベンダー自身の情報源で、能力の主張は GitHub リポジトリと突き合わせるべき。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "martypc.net": {
+    "cat": "code",
+    "en": "Web edition of the MartyPC cycle-accurate IBM PC-XT emulator — a runnable WebAssembly build rather than a claims page, so the artifact itself is the evidence.",
+    "zh": "MartyPC 周期精确 IBM PC-XT 模拟器的网页版——可直接运行的 WebAssembly 构建而非宣传页，产物本身即证据。",
+    "jp": "サイクル精度の IBM PC-XT エミュレータ MartyPC のウェブ版。宣伝ページではなく実行可能な WebAssembly ビルドそのものが証拠になる。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "gpt-image2.canghe.ai": {
+    "cat": "community",
+    "en": "Gallery site for the awesome-gpt-image-2 prompt library; useful as a prompt index but commercially entangled — it fronts a sponsor API aggregator and a paid community gate.",
+    "zh": "awesome-gpt-image-2 提示词库的展示站；作为提示词索引有用，但带商业属性——同时导流至赞助的 API 聚合平台与付费社群。",
+    "jp": "プロンプト集 awesome-gpt-image-2 のギャラリーサイト。プロンプト索引としては有用だが、スポンサーの API アグリゲータと有料コミュニティへの導線を兼ねる商業的な性格を持つ。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

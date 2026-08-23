@@ -217,3 +217,31 @@ selection, fitting, serving, and adaptation as ordinary desktop software.
   ANE compilation memory 35.8GB→4.7GB (0.6.3rc2); `AlexsJones/llmfit` (~33.6k) continues its "measure and
   share" tok/s PR loop. Both were covered 08-18 — the dedup-window widening (see [[agent-stack]]) is what
   should have framed these as updates, not fresh discoveries.
+- **FreeToken** (arXiv **2608.16157**, submitted 2026-08-17; `FlashML-org/FreeToken`, Apache-2.0, 2,824★,
+  created 2026-07-20, pushed daily) — *"Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution"*
+  (Shuo Yang, Xiaoze Fan, Melissa Pan, Haocheng Xi, Zhe Wang, Shanlin Sun, Kurt Keutzer, Song Han, Matei
+  Zaharia, Chenfeng Xu, Ion Stoica). The strongest instance yet of this file's thesis, and it generalizes it.
+  Where the earlier work streamed experts against a *fixed* plan, FreeToken treats the whole personal machine —
+  GPU, CPU, RAM, PCIe, disk — as "a unified, elastic inference platform" and, instead of a fixed offloading
+  strategy, "continuously maps computation and model state onto the resources actually available," co-designing
+  model layout/loading, expert residency, CPU–GPU execution, agentic state reuse and runtime memory management.
+  Verified on the abstract page: **35B on an 8 GB laptop GPU**, **284B on a gaming desktop**, **the 753B GLM-5.2
+  on a single workstation GPU**, and **20+ MoE models**. *Read the speedup carefully:* the 1.3–2.1× mean decode
+  gain over llama.cpp / Ollama / KTransformers / MoE-Infinity is **not on the abstract page** — it lives in the
+  PDF, so cite it as a paper claim, not an abstract-verified figure.
+  **The sharpest line is the motivation, not the numbers.** FreeToken justifies adaptivity by arguing that agent
+  workloads "continuously change their execution pattern" — prefill-heavy tool reads, decode-heavy reasoning,
+  bursts of state reuse — so a static offloading plan is wrong most of the time by construction. Local serving
+  is now being designed against *agentic* variance rather than chat, which is why the optimization target moved
+  again: 08-19 was fit-to-a-measured-budget (static), this is fit-to-the-budget-you-have-right-now (dynamic).
+  It closes the arc that started with the DRAM price shock — if you cannot buy the bytes, schedule them.
+- **FlashPrefill V2** (arXiv 2608.19758; `qhfan/FlashPrefillv2`, Apache-2.0) — block-sparse prefill attention
+  with a mean-correction term that suppresses approximation error at extreme sparsity, plus a PackGQA sparse
+  operator with warp specialization and pingpong pipelining (FP8/BF16), paged KV cache, continuous batching and
+  a drop-in **SGLang** backend. Reports **up to 47.26× over FlashAttention-2 (FP8)** / 27.19× (BF16) at 128K
+  context on an H20. **Freshness/credibility caveat, checked first-hand:** the repo was created 2026-08-19 and
+  had **8 stars** when read — a two-day-old artifact with a 47× headline and no third-party replication. The
+  right posture is the InferenceX one (see [[frontier-models]]): a kernel claim this large belongs on a
+  standing, continuously-run harness before it is treated as a fact. Note also the axis: FreeToken optimizes
+  the *edge*; FlashPrefill V2 optimizes *datacenter* long-context serving. Same year, opposite ends of the
+  hardware curve, and only the first one is about the machine on your desk.

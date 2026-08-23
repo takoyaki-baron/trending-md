@@ -952,3 +952,111 @@ and explicitly warns Babuk-derivation is not reliable attribution.)
   breadcrumbs (Sentry, Bugsnag), and shared multi-operator log viewers. Anything in a path segment is logged by
   default across the whole request chain — so "unguessable UUID" is only a control if nothing on the path
   records paths, which is never true.
+
+## Shape 15 — the vendor-required signed component (BTR Reforged, 2026-08-23, read first-hand)
+
+The fifteenth recurring shape is the one with no remediation path at all, because nothing in it is a bug.
+
+**The artifact.** `BTR.sys` is Windows Defender's **Boot-Time Removal** driver — Microsoft-signed, shipped as a
+PE resource inside `MpEngine.dll`, and dropped under a randomized filename during legitimate remediation.
+Check Point's Jiří Vinopal reverse-engineered its RC4-encrypted transaction protocol and found a **hard-coded
+256-byte key in `.rdata`, identical across all 18 signed 64-bit versions analysed** — unchanged from Windows 7
+through Windows 11 25H2, i.e. **over 15 years**.
+
+**The primitive.** `Dump-GUY/BTR_CLI` (MIT, 81★, created 2026-07-20; supporting material for Black Hat USA 2026 /
+DEF CON 34) extracts the driver from the local `MpEngine.dll`, builds RC4 transactions with correct CRC32
+checksums and padding, writes the config to an **alternate data stream** (`:changelist`), and loads the driver
+via service creation + `NtLoadDriver` or `Start=1` boot scheduling, self-cleaning afterwards. Because `BTR.sys`
+loads in the **Boot Bus Extender** group — after `Ntfs.sys` is ready but ~34 seconds before Defender's own
+service starts — there is a "**Golden Window**" in which it will delete `WdFilter.sys`, `MsMpEng.exe` and
+`WdNisDrv.sys`, and preempt `UCPD.sys` to rewrite protected user-choice registry keys. Tamper Protection is
+bypassed at runtime because the operations originate from a signed Microsoft kernel driver.
+
+**Why it is a distinct shape, not another no-patch EoP (shape 7).** ShieldBreak was an unfixed *vulnerability*.
+This is not classified as one:
+1. **MSRC declined to service it** — it "does not meet the criteria for immediate servicing," because it
+   presupposes `SeLoadDriverPrivilege`, i.e. existing admin. No CVE was assigned.
+2. **It cannot be blocklisted.** The Microsoft Vulnerable Driver Blocklist (WDAC) exists for third-party BYOVD.
+   `BTR.sys` is a *required, functionally intended* Windows component, so it "remains fully allowed and
+   operational." The standard mitigation is structurally unavailable.
+3. **There is nothing to patch** — the behaviour is the driver's purpose. Rotating the 15-year-old key would
+   help, but the primitive survives it.
+
+**So the defence is behavioural, which closes a loop this ledger opened on 08-16.** When time-to-exploit went
+negative (M-Trends −7d), the conclusion was that patch velocity is structurally obsolete and behavioural anomaly
+detection is the replacement metric. BTR is the pure case: there is no patch to be fast about. Check Point's
+detection guidance is entirely behavioural — Sysmon **Event ID 15** (ADS creation, `TargetFilename` ending
+`.sys:changelist`), **23** (file deletion by `System`/PID 4 right after a DriverLoad, especially security
+binaries), **6** (Microsoft-signed driver load where the dropper sits outside the Defender ecosystem), **12/13**
+(service key with `:changelist` in `Args` and group "Boot Bus Extender" and no matching 7045), and **11/23**
+(rapid create/delete of `\SystemRoot\Temp\BootClean.log`). No in-the-wild abuse observed as of publication.
+
+**The grep for defenders:** inventory the signed components your own product *requires* and ask what each one
+can do to the filesystem or registry before your protection agent is running. Load order is a privilege.
+
+**Watch items answered (08-23 21:04, checked first-hand):** the three "does anyone give it a class" questions all
+resolve to **no** — shape 15 stays off every ledger, which makes it the **fifth** "named, mitigated, enforced by
+nobody" instance. (1) **LOLDrivers has no first-party/required-component category.** Queried
+`www.loldrivers.io/api/drivers.json` directly: 661 drivers, exactly two categories — `malicious` and `vulnerable
+driver` — and **no BTR.sys entry**. Check Point's "living-off-the-land driver (LOLDrivers)" label is a conceptual
+framing in the research write-up, not a catalog class. (2) **No CWE or ATT&CK sub-technique** is assigned; MSRC
+declined to service, so there is no CVE either. The instructive contrast: the only prior CVE on BTR.sys was
+**CVE-2021-24092** (SentinelLabs, 2021) — a *real* log-path hardlink-overwrite bug, patched 2021-02-09. An actual
+defect got a CVE; a by-design primitive gets nothing, by the exact logic that makes it dangerous. (3) **No RC4 key
+rotation or load-order change** has been announced — Microsoft's position is "architectural trust boundary," no
+patch planned. So the class is named (LOLDrivers framing), the mitigation is converged (behavioural Sysmon 15/23/6
+detection), and nobody enforces anything — the fifth instance of the meta-pattern in [[security]] thesis 2.
+
+## Loop desync — the parser differential's control-flow twin (Elementor Pro, CVE-2026-32475)
+
+Shape 8 (parser differential) has been about two *parsers* disagreeing — `strip_tags()` vs KSES in WordPress
+XSS2Shell, Scriban's `Type`-keyed member cache. **CVE-2026-32475** is the same class expressed in control flow,
+and it is cleaner to grep for.
+
+In `modules/forms/fields/upload.php`, two loops walk the same uploaded-file array. On an empty entry
+(`UPLOAD_ERR_NO_FILE`) the **validator uses `return`** — leaving the whole method, so every later entry goes
+unchecked — while the **mover uses `continue`**, skipping only that entry and carrying on. Submitting two file
+parts for one field — an empty `[0]` followed by a `.php` `[1]` — skips the extension blocklist for the payload
+while the move step still processes it, landing a webshell in the web-accessible
+`wp-content/uploads/elementor/forms/<uniqid>.php`. No cookies and no nonce: the request goes through the
+`elementor_pro_forms_send_form` AJAX action **unauthenticated**. The only prerequisite is a published page with
+a Form widget containing a File Upload field, and the "Required" toggle off is the default. Fixed in **4.2.2**
+(2026-08-19) by aligning both loops *and* re-checking the extension inside `process_field()` immediately before
+the move — belt and braces, because the desync is the kind of thing that regrows.
+
+**Reusable audit rule:** wherever a validation pass and a processing pass iterate the same collection, they must
+agree on the skip semantics. Grep for a `return` inside a validation `foreach` whose consumer `continue`s. The
+sibling rule already in this ledger — *authorization that checks existence instead of ownership* (Nezha, GBIF
+IPT) — is the same family: two code paths that were supposed to agree about one input, and don't.
+
+**Scoring footnote (a [[fact-check]] habit):** the 9.0 is **CNA-scored by Patchstack** (`audit@patchstack.com`
+supplied both the CVSS vector `AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H` and CWE-434); the NVD record's status is
+*Deferred*, i.e. not independently analysed. Note also `AC:H` — the multipart-ordering trick is what keeps an
+unauthenticated RCE off a 9.8. Always check *who* scored a CVE, as the Oracle WebCenter correction taught.
+
+## Operation CameraSwarm — persistence that outlives the owner's remediations
+
+Hunt.io reconstructed a 35-day campaign (2026-06-17 → 07-22) in which a **single operator** compromised
+**14,530+ Dahua IP cameras** — 12,324 unique IPs by Easy4IP credential brute-force on **TCP/37777** (asyncio, up
+to 4,000 workers), 1,923 by an auth-bypass chain, 283 by cloud relay — concentrated in Ukraine, Russia and CIS
+telecom netblocks.
+
+Three details make it worth keeping:
+1. **The persistence beats both remediations a camera owner has.** The `p2pwn`/`p2password` account is installed
+   over RPC and "stored independently of the admin password," so it survives a password change and, on most
+   firmware, **a factory reset**. This joins vCenter's planted reverse-SSH surviving the patch: *remediation and
+   eviction are separate operations*, and most runbooks only do the first.
+2. **The vendor's cloud convenience feature is the reachability.** NAT'd cameras are addressable by **serial
+   number alone** through `easy4ipcloud[.]com:8800`, and **89.4% of live serials required no authentication**;
+   offline recovery codes grant cloud-level admin reset independent of device credentials. The CVEs get you the
+   session; the vendor cloud gets you the population.
+3. **The report corrects the CVE record it is cited for.** The chain is **CVE-2021-33044** (NetKeyboard hardware
+   trust — the password field is never evaluated) + **CVE-2021-33045** (loopback source-address spoof). Hunt.io
+   explicitly flags **CVE-2024-39943** as a mislabel circulating in coverage — it is an unrelated Rejetto HFS
+   flaw — and notes CVE-2025-31702's Dahua advisory describes a narrower post-auth issue than the relay abuse
+   observed. My own feed had repeated the mislabel; corrected 2026-08-23 (see [[fact-check]]).
+
+Attribution is deliberately hedged: a toolkit assembled from at least six upstream developers, infrastructure
+predating the campaign by a year, an operator Windows username of `SystemX`, and a moderate-confidence read that
+access was being packaged for a third party (transferable recovery codes, SMART PSS enterprise-format exports).
+Hunt.io's own caution is the quotable part: "Running these tools establishes use, not authorship."

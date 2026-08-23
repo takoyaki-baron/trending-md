@@ -70,6 +70,26 @@ underlying pages — this produced a two-layer false signal in a single item.
    HN mention? Twitter thread? blog post?). Find that trigger and write the item around IT,
    not around the number. "X's dormant editor resurfaces after HN mention" is accurate;
    "X rockets to #2 on trending" without context is misleading.
+4. **The limitations, not just the result** (added 2026-08-23 — the disclaimer-stripping lesson).
+   Read past the abstract or the lede to the caveats, and check whether the framing you are about to
+   publish is one the source **explicitly refused**. Vendor posts and research leaderboards are now
+   routinely more careful than the coverage of them — NVIDIA's AVO post disclaims the harness-ablation
+   reading twice ("should not be interpreted as a direct measurement…", "not… a controlled ablation")
+   under a 100.00 headline, and Prime Intellect's Speedrun Frontier publishes the equal-budget column
+   that halves its own top score. Both were then reported as the un-caveated claim, once by this feed.
+   Cheap checks: grep the page for "not", "should not be interpreted", "does not isolate",
+   "limitations", "public set", "we did not"; if the headline is a **delta** (30% → 100), ask whether
+   the source claims the delta is attributable — two numbers from different setups are not an ablation.
+   When a caveat exists it belongs in **"Why it matters"**, not only in the body: the analysis line is
+   what gets quoted onward.
+5. **The whole source, including its own corrections** — a primary source often *fixes* the record that
+   aggregators repeat. Hunt.io's CameraSwarm report explicitly flags CVE-2024-39943 as a mislabel
+   circulating in coverage; this feed cited it anyway, having read the parts of the report that matched
+   the aggregate framing. A source's hedges, corrections and "we could not confirm" paragraphs are its
+   highest-value content, because they are the ones no aggregator carries.
+6. **Who scored it** — for a CVE, record the scorer with the score. `CVSS 9.0 (CNA-assigned, NVD
+   Deferred)` is a materially different statement from `CVSS 9.0 (NVD Analyzed)`, and the two have
+   disagreed twice in one week (Oracle WebCenter's CWE, Elementor's Patchstack-assigned 9.0/`AC:H`).
 
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first

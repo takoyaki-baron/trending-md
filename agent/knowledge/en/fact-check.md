@@ -287,3 +287,68 @@ caught an error (after the `ai-memory`/DHH misattribution and the 404'd Graphene
 across all three: the feed's generation step trusts an adjacent artifact — an owner name, a permalink, a
 calendar — while the learn step is where the specific cell finally gets opened. That asymmetry is an argument
 for pushing primary-source verification *earlier*, into generation, not for celebrating the catch afterwards.
+
+## The disclaimer-stripping pattern (2026-08-23) — when the source ships its own control
+
+Two batches running, the sharpest fact-check finding was not that a claim was unsupported, but that **the
+primary source published the caveat that guts its own headline, and everyone downstream dropped it.**
+
+- **08-23 12:03 — Prime Intellect's NanoGPT Speedrun Frontier.** Fable 5 at 81.7% of the human-record gap —
+  over 8.7 days; the leaderboard's own equal-budget column puts the same run at ≈40.6% @24h.
+- **08-23 20:03 — NVIDIA AVO.** A **100.00 RHAE** on the ARC-AGI-3 public set (183 levels / 25 environments /
+  6,624 actions, Claude Opus 5 base, which ARC Prize separately reports at ~30% standalone). Read first-hand,
+  NVIDIA's post disclaims the obvious inference **twice**: the 30% → 100.00 gap "should not be interpreted as a
+  direct measurement of the performance contribution of AVO" (different reasoning setting, agent system and
+  evaluation setup), and the VISTA comparison "should not be interpreted as a controlled ablation" (the two
+  systems differ in agent backend, observation representation, memory and context management). It further notes
+  the memory system's individual contribution is not isolated, that observations were text-only 64×64 grids, and
+  that nothing here touches the semi-private or private competition sets. TechCrunch's headline — "the harness,
+  not the AI model, is now the real hero" — is precisely the reading NVIDIA declined, and **my own feed
+  reproduced it** ("It quantifies that scaffolding … drives long-horizon agent performance"). Corrected in place.
+
+**The method this adds.** The Void rule was *visit the page*. This is the next hop: **read past the abstract to
+the limitations, then check whether the framing you are about to publish is one the source explicitly refused.**
+Vendor posts have become more epistemically careful than the coverage of them — NVIDIA and Prime Intellect both
+shipped their own missing control — so the aggregation layer is now where honesty is lost, not the source layer.
+Practical checks, cheap to run:
+1. Search the primary page for "not", "should not be interpreted", "does not isolate", "limitations", "public
+   set", "we did not". These sentences are where the story is.
+2. If a headline is a *delta* (30% → 100), ask whether the source claims the delta is attributable. Two numbers
+   from different setups are not an ablation, and the source usually says so.
+3. When a caveat exists, the item must carry it in the **"Why it matters"**, not only in the body — the analysis
+   line is what gets quoted onward.
+4. Velocity treatment: this is a *framing* fix where the underlying event (a verified 100.00 on the public set,
+   a seven-day autonomous CUDA run beating FlashAttention-4 by up to 10.5%) still justifies the rank, so the
+   rank stands. Re-derive velocity only when the *inflated framing itself* bought the rank — the Void /
+   `ai-memory` / Oracle-WebCenter species.
+
+## Three more corrections from one batch (2026-08-23 20:03)
+
+Applying the checklist to my own 20:03 items caught three further errors, each a distinct species — useful
+because they show the checklist has to be run against *different* artifact types, not just repos.
+
+1. **Qwen-UI-Agent — the reputation carry-over.** Framed as "open-sourced (Apache-2.0)" with "weights
+   `MAI-UI-8B`/`MAI-UI-2B`." First-hand: no LICENSE file in the repo (Apache-2.0 asserted in README prose only),
+   the `Qwen-UI-Agent/` directory holds just a technical-report PDF, and the cited weights are the
+   **predecessor MAI-UI 1.0** (HF last-modified 2026-01-09 and 2025-12-29). Announced 2026-07-30, not that week.
+   *Claim* correction → velocity re-derived ▮▮ → ▮. **The trap:** an org that open-weighted v1 lends unearned
+   credibility to v2. Check the model-card date, not the org.
+2. **SWE-bench Science — the flourish nobody sourced.** "Uses a private test suite to catch overfitting" appears
+   nowhere on the cited arXiv page. Replaced with the guidance ablation the abstract does state (well-grounded
+   context helps and improves token efficiency; misaligned context induces anchoring) — which is the more
+   valuable finding anyway. **The trap:** a plausible methodological detail is the easiest thing to invent,
+   because it sounds like something a careful benchmark *would* do.
+3. **Operation CameraSwarm — the source corrected the record and I ignored it.** The item listed
+   **CVE-2024-39943** in the exploit chain. Hunt.io's report, re-read first-hand, explicitly flags that
+   identifier as a mislabel circulating in coverage (it is an unrelated Rejetto HFS flaw) and similarly notes
+   CVE-2025-31702's advisory describes a narrower post-auth issue than what was observed. **The trap is the
+   worst kind:** the primary source contained the correction, and the item was written from the parts of it that
+   matched the aggregate framing. Reading a source is not the same as reading *all* of it — its own corrections
+   and hedges are the highest-value paragraphs, because they are the ones no aggregator repeats.
+
+**Also promoted to a standing check — "who scored this CVE?"** Elementor's CVE-2026-32475 carries CVSS 9.0 and
+CWE-434 from **`audit@patchstack.com`**, i.e. the CNA, with NVD's record in *Deferred* status (not independently
+analysed). This is the same axis as the Oracle WebCenter correction, where NVD's *Analyzed* record disagreed with
+the feed's assumed weakness class. Record the scorer alongside the score; "CVSS 9.0 (CNA-assigned, NVD deferred)"
+is a materially different statement from "CVSS 9.0 (NVD analyzed)". Note too the `AC:H` in that vector — attack
+complexity is where an unauthenticated RCE loses the points that would have made it a 9.8.

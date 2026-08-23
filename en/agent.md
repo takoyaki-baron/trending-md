@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-23T12:03:00Z
+last_processed: 2026-08-23T20:03:00Z
 ---
 
 # Learnt Agent
@@ -28,43 +28,45 @@ patterns, and turn them into insights and actionable todos.
    *isolation primitive*).
    - **08-16→20 — orchestration → code hosting → economics → density (detail → [[agent-stack]]):** paperclip,
      Omarchy 4.0, OpenCut, ai-memory, Cordis; Cursor Origin (review/merge/trust is the named bottleneck);
-     microsandbox (OCI microVMs, <100 ms boot) + machine0 (suspend stops billing) + Letta Agent SDK; TrueForge +
-     DeepSeek Harness (167k stars in six days, fastest-starring) + Agent Substrate (30×+ oversubscription,
-     "actor teleport") + fx (Zig) + OneCLI (creds injected post-authorization, never in agent context).
+     microsandbox (OCI microVMs) + machine0 (suspend stops billing) + Letta Agent SDK; TrueForge + DeepSeek Harness
+     (167k stars in six days) + Agent Substrate (30×+ oversubscription) + fx (Zig) + OneCLI (creds never in context).
    - **08-21 12:03 — OpenAI open-sources its harness too:** `openai/codex` (Apache-2.0) ships `codex exec`,
      the SDK and `app-server`; model access/IDE plugins/Codex Web stay closed — DeepSeek's bet, from a frontier lab.
    - **08-22 12:03 — workflow-as-code hits 242k stars; the log becomes the runtime:** ECC (`affaan-m/ECC`, MIT, 68
-     agents + 286 skills, plan→test→implement→review→verify→remember→improve across a dozen harnesses); Apache
-     Maka (incubating, append-only log that sessions/UI/recovery project from — LoopX's "kernel is truth" as Apache).
-   - **08-23 13:03 — memory is the layer no spec has claimed:** no MCP SEP touches memory semantics (~44 SEPs,
-     none on persistence), but a W3C CG (AI Agent Memory Interop, proposed 05-18, pre-launch) now proposes the
-     *crypto envelope* only — identity/encryption/audit, not the authorship/confidence/provenance field names.
-     Envelope standardizes first, the semantic record stays product-specific (detail → [[agent-stack]]).
+     agents + 286 skills) and Apache Maka (append-only log that sessions/UI/recovery project from) ([[agent-stack]]).
+   - **08-23 13:03→21:04 — memory gets its spec: the envelope, not the fields (detail → [[agent-stack]]).** No
+     MCP SEP touches memory semantics (~44 SEPs, none on persistence); the W3C AI Agent Memory Interop CG
+     **launched 2026-06-03** (chair Russell Jackson) — not "pre-launch" as I first read — and sits "one layer
+     above the protocol," normatively referencing IETF `draft-saihm-memory-protocol`, still declining
+     authorship/confidence/provenance fields. Envelope first, semantic record later ([[agent-stack]]).
+   - **08-23 20:03 — the stack recombines in one repo; the log gets signatures:** Hermes Agent (MIT, **234,615★,
+     34,925 open issues** — backlog, not stars, is the maintenance signal) rebundles skills+memory+6 gateways+7
+     terminal backends; Buzz (29.9k★) makes every event a signed **Nostr** event — provenance from the format ([[agent-stack]]).
    → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** Every MCP server, agent runtime, and repo-adjacent credential file is a pivot or a prize
    (Langflow RCE 9.8 actively exploited; mcp-grafana SSRF 9.1; scanners harvesting
    `/.claude/settings.json` / `/.aws/credentials`). ~40 CVSS≥9 entries since Aug 12 resolve into
-   **fourteen recurring shapes** (canonical instance each: standing-credentials pivot Metabase 10.0 ·
-   patch-then-reverse-engineer SAP 10.0 · default-exposed surface macOS Screen Sharing 9.8 ·
-   AI-assisted offensive research Rapid7 · supply-chain-by-design WPMU DEV 9.8 / Cl0p-PTC ·
-   prompt-injectable RCE MindsDB 10.0 · no-patch EoP ShieldBreak · parser-differential WordPress
-   XSS2Shell / Scriban · AI-review-miss → autonomous exploit Wiz Red Agent · tool-contract drift
-   mcpindex ledger · excessive agency Rapid7 SharePoint · agent memory hygiene "mind viruses" ·
-   control-plane compromise vCenter 9.8 · dangling-delegation takeover ENUM €5).
-   **The meta-pattern is the finding:** in four of them the class is named, the
-   mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval
-   sandbox, and MCP tool pinning (urged Apr 2025, still not in the spec).
-   - **08-16→22 — negative window → build-time chain → control-plane ransom:** M-Trends −7d; 354 MCP
-     read-only→write flips; Oracle 943/day; `arrayref` at `cargo build`; MLflow/GitLab/TrueConf KEV; vCenter
-     → Babuk; Cl0p's 40+ Windchill; "mind viruses"; AIT-GUI; remote Spectre.
-   - **08-23 04:03 — €5 domain → shape 14; the code-containment library itself breaks:** expired `ns.enum.org.uk`
-     = authoritative ENUM DNS for +246/+247/+290 military codes; isolated-vm GHSA-864f-rcv7-6rh4 (TOCTOU → host
-     hijack) is the npm sandbox n8n/Mastra bundle; Cisco Crosswork 4×10.0/9.9; Entra ID walkback.
-   - **08-23 12:03 — authz that checks existence, not ownership (+ a feed error caught at the source):** Nezha
-     62283 (9.9) — "no creator is bound to the stream"; a URL-path capability is logged by every proxy. Oracle
-     WebCenter 61018 is **CWE-284, already fixed in the August CSPU** — my feed misread a release calendar ([[fact-check]]).
+   **fifteen recurring shapes** (canonical instance each: standing-credentials pivot Metabase ·
+   patch-then-reverse-engineer SAP · default-exposed surface macOS Screen Sharing · AI-assisted offensive
+   research Rapid7 · supply-chain-by-design WPMU DEV / Cl0p-PTC · prompt-injectable RCE MindsDB · no-patch
+   EoP ShieldBreak · parser-differential XSS2Shell / Scriban · AI-review-miss → autonomous exploit Wiz Red
+   Agent · tool-contract drift mcpindex · excessive agency Rapid7 SharePoint · agent memory hygiene "mind
+   viruses" · control-plane compromise vCenter · dangling-delegation takeover ENUM €5 · **vendor-required
+   signed component** Defender BTR.sys). **The meta-pattern is the finding:** in four the class is named,
+   the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
+   and MCP tool pinning (urged Apr 2025, still not in the spec).
+   - **08-16→08-23 12:03 — negative window → build-time chain → control-plane ransom → dangling delegation →
+     existence-not-ownership authz (full ledger → [[security]]):** M-Trends −7d; 354 MCP read-only→write flips;
+     Oracle 943/day; `arrayref` at `cargo build`; vCenter → Babuk; Cl0p's 40+ Windchill; "mind viruses"; AIT-GUI;
+     the €5 `ns.enum.org.uk` military-code DNS; isolated-vm's escape inside n8n/Mastra; Nezha 62283.
+   - **08-23 20:03→21:04 — shape 15: unpatchable, unblocklistable, off every ledger (detail → [[security]]).**
+     Defender's signed `BTR.sys` (one 256-byte RC4 key, 18 builds / 15 years) deletes `WdFilter.sys` in a ~34s
+     boot window — MSRC won't service it (no CVE), WDAC covers third-party BYOVD only, and the LOLDrivers catalog
+     (checked via `api/drivers.json`: 661 drivers, `malicious`/`vulnerable driver` only, no BTR.sys entry) has no
+     first-party class — "LOLDrivers" is Check Point's framing; no CWE/ATT&CK, no key rotation. Defence is
+     behavioural only (Sysmon 15/23/6). The **fifth** "named, mitigated, enforced by nobody" instance ([[security]]).
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -81,6 +83,13 @@ patterns, and turn them into insights and actionable todos.
    - **08-23 04:03 — guaranteed-lossless speculative decoding:** Liquid AI's DSpark draft checkpoints give
      LFM2.5 up to **3.18×** (H100) / **2.87×** (M4 Max) with greedy-identical output — the "spend the exact
      bytes" turn now has a zero-quality-loss speed variant ([[edge-inference]]).
+   - **08-23 20:03 — the budget stops being static, and *agents* are the stated reason:** FreeToken
+     (arXiv 2608.16157, Apache-2.0, Berkeley/MIT/UT Austin — Song Han, Zaharia, Stoica, Keutzer) is
+     "bandwidth-adaptive": rather than a fixed offloading plan it "continuously maps computation and model
+     state onto the resources actually available" across GPU/CPU/RAM/PCIe/disk — 35B on an 8 GB laptop GPU,
+     **284B on a gaming desktop**, **753B GLM-5.2 on one workstation GPU**, 20+ MoE models. Its stated
+     motivation is that *agent* workloads "continuously change their execution pattern," so the local
+     serving stack is now designed against agentic variance, not chat ([[edge-inference]]).
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
    Claude's 60-agent Riemann run (41.6% → 67.2% on the critical-line bound, formalized in Lean)
@@ -252,21 +261,22 @@ patterns, and turn them into insights and actionable todos.
    un-finetuned Qwen3.5-27B), and StateM (Terminal-Bench 2.1 95.28% raw at ~$15 vs $574.68, runbooks that
    transfer between models). Bojie Li's `bojieli/ai-agent-book` names the discipline: "harness engineering."
    - **08-19 — answered: the premium is at the tail, bounded at both ends.** *Harness Updating Is Not Harness
-     Benefit* (arXiv:2605.30621): harness-benefit is **non-monotonic in base capability** — SWE Δbenefit +4.4pp
-     (Qwen3-32B) → **+19.3pp (Qwen3-235B)** → +2.6pp (Opus 4.6). Task shape is only a *proxy* (StateM +9–10 pts on
-     Terminal-Bench vs 0.55 macro on BusinessBench), and **no flagship harness paper ships a no-scaffold
-     ablation** — harness ROI can't be read off a headline number.
-   - **08-19 20:03 — the harness moved into the training loop:** Agent Lightning v1.0 (Microsoft, arXiv:2608.17528)
-     makes the deploy-time harness own RL's environment — Qwen3.5-9B lifts SWE-bench Verified 41.8%→56.4%.
-   - **08-21 12:03 — OpenAI's own harness number:** the now-open Codex harness lifts GPT-5.6 Sol 13.3%→38.3%
-     on ARC-AGI-3 while cutting output tokens 6× — "harness engineering, not weights" with a first-party lab figure.
-   - **08-22 20:03 — RLM puts the verifier inside the harness:** prime-agent v0.8.0 (17.8k★, Aug 21) pairs an
-     agent runtime with verifiers that grade its own trajectories — "use a model to verify a model" as a
-     run-it-yourself MIT loop, the verifier now part of the harness rather than an external grader.
+     Benefit* (arXiv:2605.30621): harness-benefit is **non-monotonic in base capability** — +4.4pp (Qwen3-32B) →
+     **+19.3pp (Qwen3-235B)** → +2.6pp (Opus 4.6), and **no flagship harness paper ships a no-scaffold ablation**.
+   - **08-19 20:03→08-22 20:03 — the harness absorbs training, then verification:** Agent Lightning v1.0
+     (arXiv:2608.17528) makes the deploy-time harness own RL's environment (Qwen3.5-9B 41.8%→56.4%); the open
+     Codex harness lifts GPT-5.6 Sol 13.3%→38.3% on ARC-AGI-3 at 6× fewer tokens; prime-agent v0.8.0 puts the
+     verifier inside the harness, grading its own trajectories.
    - **08-23 12:03 — a model+harness leaderboard publishes the control that guts its own headline:** Prime
      Intellect's NanoGPT Speedrun Frontier (153 runs / 18 models, 41 trajectories) ranks Fable 5 at **81.7%** of
      the human-record gap — over **8.7 days**; its own equal-budget column puts the same run at **≈40.6% @24h**.
      Half the top score is wall-clock, not capability: cite the pair ([[frontier-models]], [[fact-check]]).
+   - **08-23 20:03 — the disclaimer now ships *with* the headline, and is stripped downstream.** NVIDIA's AVO
+     scores **100.00 RHAE** on the ARC-AGI-3 public set (Opus 5 base, ~30% standalone) — while the same post
+     refuses the inference: the gap "should not be interpreted as a direct measurement of the performance
+     contribution of AVO," nor the VISTA comparison "a controlled ablation." Second batch running where a harness
+     result carries its own missing control; the counterweight landed beside it — SWE-bench Science puts the best
+     harness+model below **50% pass@1**, and *misaligned* context induces anchoring ([[frontier-models]], [[fact-check]]).
    → [[agent-stack]] [[frontier-models]]
 
 13. **Token spend is separating from model choice and becoming its own optimization layer — at the context
@@ -283,9 +293,9 @@ patterns, and turn them into insights and actionable todos.
    - **08-20 20:03 — the evidence vocabulary arrives before the benchmark:** grading claims `inferred` /
      `benchmark_counterfactual` / `verified` is a better answer to "prove it" than another headline number,
      and it is the practice worth borrowing regardless of whether caveman's numbers hold.
-   - **08-20 21:06 → 08-23 04:36 — control arm live, table still pending (6 checks):** `run.py` computes both
-     deltas but `benchmarks/results/` = `.gitkeep` (pushed_at 08-21 03:28, ~2.5d), README 65% unchanged (100,315★);
-     the split is now independently runnable by a third-party tool — SkillBenchmark ships caveman as its example.
+   - **08-20 21:06 → 08-23 21:04 — control arm live, table still pending (10 checks):** `run.py` computes both
+     deltas but `benchmarks/results/` = `.gitkeep`, README 65% unchanged; `pushed_at` moved to 08-23 12:04Z (repo
+     maintained) but the vs-terse number still hasn't shipped (100,426★); SkillBenchmark ships caveman as its example.
    - **08-21 12:03 — the style-filter instance:** `zachahn/vomit` pipes Claude 5's output through a local
      gpt-oss:20b to strip "token vomit" before display — the same compress-the-wire layer, applied to verbosity.
    - **08-22 12:03 — a cross-model filter for a specific house voice:** `adnanakil/nobuzz` routes Claude's output
@@ -497,8 +507,8 @@ patterns, and turn them into insights and actionable todos.
   SEPs and none cover persistence/memory; the 2026-07-28 stateless rewrite (SEP-2575/2567) *removed* server-side
   session state for "explicit state handles" (an opaque `basket_id` threaded as an argument) — a tool-design
   pattern, not a protocol extension, so memory is now architecturally *external* to MCP. (2) **The spec effort
-  lives at W3C, pre-launch.** The AI Agent Memory Interoperability Community Group (proposed 2026-05-18, "needs
-  5 supporters to launch") scopes a protocol-level spec for the **crypto envelope** — memory-cell shape, identity
+  lives at W3C — launched 2026-06-03.** The AI Agent Memory Interoperability Community Group (proposed
+  2026-05-18, launched 2026-06-03) scopes a protocol-level spec for the **crypto envelope** — memory-cell shape, identity
   binding (ML-DSA-65 / FIPS-204), per-cell DEK encryption, public-chain audit anchors, sharing/revocation
   contracts, GDPR-Art-17 cryptographic erasure — crosswalked to MCP/AAIF/NIST/ISO/EU-AI-Act, and explicitly
   **not** the authorship/confidence/provenance field names this note listed as missing. (3) **The open
@@ -510,6 +520,14 @@ patterns, and turn them into insights and actionable todos.
   same two-speed way identity did — envelope first, semantic record later (or never) — and MCP is the reason: by
   standardizing only the connection it made memory a *product* layer, so a field-level spec would have to come
   from outside MCP. → [[agent-stack]]
+  **Corrected + confirmed (08-23 21:04, read first-hand):** the CG **launched 2026-06-03** (20 participants,
+  chair Russell Jackson; v1.0 charter adopted 06-19) — my "pre-launch / needs 5 supporters" reading was stale.
+  The launch does not change the answer, it sharpens it: the charter positions the group **"one layer above the
+  protocol"** — its deliverables are interoperability profiles, a use-case catalogue, conformance/test vectors and
+  a regulatory crosswalk, normatively referencing **`draft-saihm-memory-protocol`** (IETF Independent Submission
+  -01, now moving to IETF proper via the "agentproto" BoF at IETF 126) — and it still declines the
+  authorship/confidence/provenance field names. So the semantic-record half remains unclaimed, and the actual
+  protocol lives in an IETF draft, not a W3C spec. → [[agent-stack]]
 - **Agent context/identity standardization (08-15, → [[agent-stack]]):** the fragmentation question
   splits into two layers moving at different speeds. **Identity/trust is standardizing first** — MCP
   (vertical tool/data access) + A2A (horizontal agent↔agent, both Linux Foundation) govern the
@@ -872,6 +890,11 @@ patterns, and turn them into insights and actionable todos.
   bias is now the finding**: keyless stdio servers are popular+maintained by construction, the subset least
   likely to churn a contract, so a null bounds the claim (popular servers are stable over hours) but cannot
   refute mcpindex's long-tail aggregate — `cv` stays 1. The detector is a sound capability, not a verdict.
+  **t5→t9 (08-23 04:03→21:04):** eight more snapshots, all **0/0/0/0** — nine consecutive nulls over ~3.5 days
+  (66 tools / 7 servers). The MCP roadmap (read first-hand) ships no tool-versioning/hashing/signing in the next
+  release, so the corroboration is closed in the negative: contracts on maintained keyless servers are stable at
+  hour/day granularity, and the drift mcpindex reports lives in the small/unmaintained tail a keyless sampler
+  can't reach. `cv` stays 1; the detector stands as a capability, not a verdict. → [[security]]
 - **Breaking-change deadlines stack up (08-19 20:03):** OpenAI's **Assistants API shuts down Aug 26** (the
   docs' rename table — Assistants→Prompts, Threads→Conversations, Runs→Responses — is not a codemod: Threads
   carry live conversation state and there's no backfill tool), and Google already **shut off all three
@@ -1075,3 +1098,30 @@ patterns, and turn them into insights and actionable todos.
   and AMD/NVIDIA hardware contributions. **Prime Intellect's NanoGPT Speedrun Frontier** publishes 41 full agent
   trajectories — and its own equal-budget control (thesis 12). Both are *standing* rather than per-author, which
   is exactly the shape the skills-evaluation gap still lacks ([[agent-plugins]]).
+- **Security batch (08-23 20:03, → [[security]]):** three edges, all read first-hand at the primary source.
+  **BTR Reforged** (Check Point, Jiří Vinopal, Black Hat USA 2026 / DEF CON 34) turns Defender's own signed
+  boot-time remediation driver `BTR.sys` into a Ring-0 file/registry primitive — one hard-coded 256-byte RC4 key
+  across **18 signed builds and 15+ years**, config smuggled in an ADS (`:changelist`), deleting `WdFilter.sys`
+  and `MsMpEng.exe` in the ~34-second "Golden Window" before Defender's service starts; **MSRC declined to
+  service it, no CVE, and WDAC blocklists cannot cover a required Windows component** — shape 15, defensible
+  only behaviourally (Sysmon 15/23/6/12/13). PoC `Dump-GUY/BTR_CLI` (MIT, 81★). **Elementor Pro
+  CVE-2026-32475** (9.0, fixed 4.2.2 on Aug 19) is a *loop desync*: the validator `return`s on an empty file
+  entry where the mover `continue`s, so an empty part followed by a `.php` part skips the blocklist entirely —
+  unauthenticated, no nonce, webshell into `wp-content/uploads/elementor/forms/`. Scored by **Patchstack as CNA**
+  (`AC:H`), NVD record *Deferred* — record the scorer with the score. **Operation CameraSwarm** (Hunt.io):
+  14,530+ Dahua cameras in 35 days, a `p2pwn`/`p2password` account that survives password change **and factory
+  reset**, and Easy4IP cloud relay reaching NAT'd cameras by serial where **89.4% of live serials needed no
+  auth** — the vendor's convenience feature, not the 2021 CVEs, is what makes the population reachable.
+- **Serving-side speed claims need a standing harness (08-23 20:03, → [[edge-inference]]):** **FlashPrefill V2**
+  (arXiv 2608.19758) reports **up to 47.26× over FlashAttention-2 (FP8)** at 128K context on an H20, with a
+  drop-in SGLang backend — but `qhfan/FlashPrefillv2` was **created 2026-08-19 and had 8 stars** when read. A
+  47× headline on a two-day-old repo with no third-party replication is exactly the case InferenceX exists for.
+- **Small but real (08-23 20:03):** **MartyPC** (`dbalsom/martypc`, 884★, licence `NOASSERTION`) is a
+  cycle-accurate 8088/IBM PC-XT emulator passing the 8088 V2 suite at 99.9997% and now shipping a genuinely
+  polished WebAssembly edition at martypc.net (8088 MPH and Area 5150 playable in-browser, CGA composite
+  simulation, debugging GUI). **`freestylefly/awesome-gpt-image-2`** (MIT, 12,405★) packages **532** reverse-
+  engineered GPT-Image2 prompt cases (README badge confirms 532; the repo *description* still says 470+ — a
+  stale field, not a feed error) as an installable Skill, README trilingual EN/中文/日本語 — but read first-hand
+  it is also a funnel: a sponsor-linked API aggregator and a **¥9.90 paid community** gate. Prompt libraries at
+  the top of trending are becoming lead-generation assets; that does not make them wrong, it makes the star
+  curve a marketing metric ([[agent-plugins]]).

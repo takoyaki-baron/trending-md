@@ -182,4 +182,26 @@ UI to run and train LLMs and diffusion models"，而 **Unsloth Desktop** 已在 
 - **已知仓库，新事实。**`jundot/omlx`（~20.3k stars）新增 DeepSeek-V4-Flash M2-Ultra 内核，并把 ANE 编译内存从 35.8GB 降到
   4.7GB（0.6.3rc2）；`AlexsJones/llmfit`（~33.6k）延续"测量并分享"的 tok/s PR 循环。两者 08-18 已覆盖——去重窗口的加宽
   （见 [[agent-stack]]）本应把它们框成更新而非新发现。
+- **FreeToken**（arXiv **2608.16157**，2026-08-17 提交；`FlashML-org/FreeToken`，Apache-2.0，2,824★，创建于
+  2026-07-20，每日推送）——*"Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution"*（Shuo Yang、
+  Xiaoze Fan、Melissa Pan、Haocheng Xi、Zhe Wang、Shanlin Sun、Kurt Keutzer、Song Han、Matei Zaharia、Chenfeng Xu、
+  Ion Stoica）。这是本文件论点迄今最强、且将其一般化的实例。早先的工作是针对一个*固定*计划流式加载专家，而
+  FreeToken 把整台个人机器——GPU、CPU、RAM、PCIe、磁盘——当作「一个统一、有弹性的推理平台」，并且不是采用固定
+  卸载策略，而是「持续把计算与模型状态映射到实际可用的资源上」，协同设计模型布局/加载、专家驻留、CPU–GPU 执行、
+  agentic 状态复用与运行时内存管理。在摘要页已核实：**8 GB 笔记本 GPU 上的 35B**、**游戏台式机上的 284B**、
+  **单块工作站 GPU 上的 753B GLM-5.2**，以及 **20+ 个 MoE 模型**。*仔细读加速比：*相比 llama.cpp / Ollama /
+  KTransformers / MoE-Infinity 的 1.3–2.1× 平均解码增益**不在摘要页上**——它在 PDF 里，所以引用它时要当作论文声明，
+  而非摘要已核实的数字。
+  **最锋利的一句是动机，而非数字。**FreeToken 为自适应辩护的论据是：agent 工作负载「不断改变其执行模式」——
+  prefill 密集的工具读取、decode 密集的推理、状态复用的突发——所以静态卸载计划在构造上大多数时候就是错的。本地服务
+  现在正针对 *agentic* 的变异而非聊天来设计，这正是优化目标再次移动的原因：08-19 是适配一个已测得的预算（静态），
+  这个是适配你*此刻*拥有的预算（动态）。它闭合了始于 DRAM 价格冲击的弧——如果买不起字节，就去调度字节。
+- **FlashPrefill V2**（arXiv 2608.19758；`qhfan/FlashPrefillv2`，Apache-2.0）——块稀疏 prefill 注意力，带一个均值
+  修正项，在极端稀疏度下抑制近似误差，外加一个带 warp 专业化与乒乓流水线（FP8/BF16）的 PackGQA 稀疏算子、分页
+  KV cache、连续批处理，以及一个即插即用的 **SGLang** 后端。报告在 H20 上 128K 上下文时**最高达 FlashAttention-2
+  的 47.26×（FP8）** / 27.19×（BF16）。**新鲜度/可信度告诫，已一手核查：**该仓库创建于 2026-08-19，读到时有
+  **8 stars**——一个才两天大的工件，顶着 47× 的头条，却没有任何第三方复现。正确姿态是 InferenceX 那种（见
+  [[frontier-models]]）：这么大的内核声明，在被当作事实之前，理应挂在一个常设、持续运行的 harness 上。还要注意
+  轴线：FreeToken 优化的是*边缘*；FlashPrefill V2 优化的是*数据中心*长上下文服务。同一年份，硬件曲线的两端，而
+  只有前一个才是关于你桌上的那台机器。
 

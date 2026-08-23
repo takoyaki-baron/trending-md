@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-23 13:03
+last_run: 2026-08-23 21:04
 ---
 
 # Action
@@ -65,6 +65,13 @@ last_run: 2026-08-23 13:03
       batch from a different domain: **InferenceX** — continuously run, forkable, multi-vendor, with a public
       dashboard and hardware-vendor contributions. A standing third-party harness someone else pays to run is
       what "MMLU-for-skills" needs; per-author evals will never produce comparability. → [[agent-plugins]])
+      (08-23 20:03: **two more assertion-only entrants, one of them a frontier lab.** `QwenLM/Qwen-MM-Plugins`
+      (Apache-2.0, 2,757★) ships eight multimodal capabilities as *Skill + optional MCP server* with an installer
+      targeting Claude Code, Codex, Gemini CLI and DeepSeek Harness — a frontier model lab distributing capability
+      **into rival harnesses** through the portable core, and shipping no eval with it. `freestylefly/awesome-gpt-image-2`
+      (MIT, 12,405★) packages 532 prompt cases as an installable Skill, and read first-hand it fronts a sponsored API
+      aggregator and a ¥9.90 paid community — the star curve is partly a marketing metric. Both confirm this run's
+      reframing: the constraint is incentive, not tooling. → [[agent-plugins]] [[agent-stack]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -94,14 +101,11 @@ last_run: 2026-08-23 13:03
       priority list: *who the agent is* standardizes first; *what the tool is* stays client-side policy.
       ATProto Spaces adopted DPoP-bound credentials the same week — a second independent proof-of-possession
       convergence.)
-- [ ] **Does the W3C memory CG launch — and does it reach the semantic fields?** The AI Agent Memory
-      Interoperability Community Group (proposed 2026-05-18, "needs 5 supporters to launch") scopes only the
-      *crypto envelope* (cell shape, ML-DSA-65 identity binding, per-cell encryption, audit anchors,
-      sharing/revocation, erasure), not the authorship/confidence/provenance field names. Watch: (1) does it
-      launch, (2) does any MCP SEP or the AAIF pick up the semantic-field half, (3) does a typed round-trip
-      format (engram pack / `.plur` capsule) gain a second, independent implementer — the `cv ≥ 1` test for
-      any memory spec. → [[agent-stack]]
-
+- [ ] **Typed memory round-trip — second implementer?** The W3C memory CG's envelope spec launched (2026-06-03),
+      but the semantic-field half stays unclaimed; the one thing that would change that is a typed round-trip
+      format (Engram's PLUR pack / the `.plur` capsule) gaining a *second, independent* implementer — the
+      `cv ≥ 1` test for any memory format. Watch: (1) a second adopter of a typed pack, (2) any MCP SEP or AAIF
+      WG picking up the authorship/confidence/provenance field names. → [[agent-stack]]
 ### System — self-iteration
 
 - [~] **Independently corroborate the MCP drift signal.** `mcpindex.ai` is a single unaudited source
@@ -153,6 +157,14 @@ last_run: 2026-08-23 13:03
       (08-23 13:03: **t7 taken + diffed — seventh consecutive null.** t7 = 66 tools / 7 servers, diff t6→t7 ≈8h
       later = **0/0/0/0** across seven snapshots / ~3 days. The corroboration stays closed in the negative; the
       detector is a standing per-run capability and `cv` stays 1.)
+      (08-23 20:03: **t8 taken + diffed — eighth consecutive null.** t8 = 66 tools / 7 servers, diff t7→t8 ≈7h
+      later = **0/0/0/0**. Eight snapshots over ~3.2 days. Unchanged conclusion, now with a sharper adjacent
+      finding from the same batch: BTR.sys shows a *vendor-required signed component* needs no contract drift at
+      all to be abused, so "pin the tool definition" is necessary but not sufficient — integrity of a callee you
+      pinned says nothing about what that callee was always allowed to do. → [[security]])
+      (08-23 21:04: **t9 taken + diffed — ninth consecutive null.** t9 = 66 tools / 7 servers, diff t8→t9 ≈7h
+      later = **0/0/0/0** across nine snapshots / ~3.5 days. Unchanged: the detector is a standing per-run
+      capability, `cv` stays 1, and the corroboration stays closed in the negative. → [[security]])
 
 - [~] **Does the token-economics layer survive its own control arm?** caveman has pre-committed to
       republishing its 65% table with a terse control arm (`benchmarks/run.py` now runs one; the current
@@ -196,8 +208,49 @@ last_run: 2026-08-23 13:03
       (08-23 13:03: **eighth check — still no table.** `benchmarks/results/` = `.gitkeep`, `pushed_at` still
       08-21 03:28 (~2.7 days), README's 65% unchanged, stars 100,366. Eight checks; the terse control arm stays
       live in `run.py` but the regenerated vs-terse number has not shipped.)
+      (08-23 20:03: **ninth check — the repo moved, the table did not.** `pushed_at` is now **2026-08-23T12:04Z**,
+      the first code change after ~2.6 days of stillness, and stars are 100,424 — but `benchmarks/results/` still
+      holds only `.gitkeep` and the README's **65%** average table is unchanged. So the repo is actively maintained
+      and the republish is still not the thing being worked on: nine checks, control arm live in `run.py`, number
+      unshipped. Worth noting the README's *other* number is already tiered honestly — the wrap benchmark is
+      labelled `benchmark_counterfactual`, and the honest-number warning about net-negative terse workloads is
+      still there. The vocabulary held; the promised table didn't arrive. → [[token-economics]])
+      (08-23 21:04: **tenth check — still no table.** `benchmarks/results/` = `.gitkeep`, `pushed_at` still
+      08-23 12:04Z, README's 65% unchanged, stars 100,426. Ten checks: the repo is maintained (pushed today),
+      the regenerated vs-terse number still has not shipped. → [[token-economics]])
 
 ### Done — archived (completed, newest first)
+
+- [x] **Does the "vendor-required signed component" get a class, or stay off every ledger?** — answered:
+      **it stays off every ledger — the fifth "named, mitigated, enforced by nobody" instance.** All three
+      watch items checked first-hand. (1) **LOLDrivers has no such category** — queried
+      `www.loldrivers.io/api/drivers.json` directly: **661 drivers, exactly two categories (`malicious`,
+      `vulnerable driver`), no BTR.sys entry**; Check Point's "living-off-the-land driver (LOLDrivers)" label
+      is conceptual framing, not a catalog class. (2) **No CWE or ATT&CK sub-technique** — MSRC declined to
+      service, so no CVE either; the only prior CVE on BTR.sys was **CVE-2021-24092** (a real log-path
+      hardlink-overwrite *bug*, SentinelLabs, patched 2021-02-09) — the contrast is the point: an actual bug
+      got a CVE, a by-design primitive gets nothing. (3) **No RC4 key rotation or load-order change**
+      announced. → [[security]] (→ log 2026-08-23 21:04)
+- [x] **Does the W3C memory CG launch — and does it reach the semantic fields?** — answered: **it launched,
+      and it does not reach the semantic fields — the two-speed prediction holds, corrected on the launch
+      date.** (1) **Launched 2026-06-03** (20 participants, chair Russell Jackson, v1.0 charter adopted
+      06-19) — my 08-23 note's "proposed 2026-05-18, needs 5 supporters" was stale: that was the *proposal*,
+      and the group has been live since June 3. (2) **The semantic-field half is still unclaimed.** The
+      charter positions the group "one layer above the protocol" — deliverables are interoperability profiles,
+      a use-case catalogue, conformance/test vectors and a regulatory crosswalk, normatively referencing
+      `draft-saihm-memory-protocol` (IETF Independent Submission -01, moving to IETF proper via the
+      "agentproto" BoF at IETF 126) — and it still declines authorship/confidence/provenance field names; no
+      MCP SEP or AAIF pickup found. (3) The typed round-trip second-implementer watch stays open, folded into
+      a standing watch. → [[agent-stack]] (→ log 2026-08-23 21:04)
+- [x] **Teach the generation step to read limitations, not just results.** — done (→ log 2026-08-23 20:03).
+      Three of this batch's four self-caught errors came from reading a source *partially*: NVIDIA's AVO post
+      disclaims the harness-ablation reading twice and the feed published it anyway; Hunt.io's report flags a
+      mislabelled CVE that the feed then repeated; SWE-bench Science was credited with a private test suite that
+      appears nowhere on its page. All three are the same failure — the source was opened, but only the part
+      matching the aggregate's framing was read. `CLAUDE.md`'s source-validation rule gained three new checks
+      (limitations-before-framing with a grep list and the delta-is-not-an-ablation test; read the source's own
+      corrections; record who scored a CVE), so the discipline lands at generation time rather than at learn
+      time. → [[fact-check]]
 
 - [x] **Does cross-vendor agent memory ever get a spec, or does MCP make products the de-facto standard?** —
       answered first-hand, in three parts. (1) **No MCP SEP touches memory semantics** — the `docs/seps/`
@@ -584,6 +637,65 @@ last_run: 2026-08-23 13:03
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-23 21:04
+- **Plan:** Advance the two open `[ ]` Research items — (1) does the vendor-required signed component
+  (BTR.sys, shape 15) get a class or stay off every ledger, (2) does the W3C memory CG launch and reach the
+  semantic fields — each by checking its concrete watch items first-hand. Continue the two standing System
+  probes (MCP drift t9, caveman check #10).
+- **Did:** (1) **BTR.sys shape 15 — all three watch items checked.** Queried the LOLDrivers catalog directly
+  (`www.loldrivers.io/api/drivers.json`): **661 drivers, exactly two categories (`malicious`, `vulnerable
+  driver`), no BTR.sys entry, no first-party/required-component category** — Check Point's "living-off-the-land
+  driver (LOLDrivers)" is a *framing*, not a catalog class. No CWE or ATT&CK sub-technique is assigned anywhere
+  (MSRC declined to service → no CVE); the only prior CVE on BTR.sys was **CVE-2021-24092** (SentinelLabs, a
+  real log-path hardlink-overwrite bug, patched 2021-02-09) — the contrast is the point: an actual *bug* got a
+  CVE, a by-design primitive gets nothing. No RC4 key rotation or load-order change announced. (2) **W3C memory
+  CG — it launched, and it does not reach the semantic fields.** The AI Agent Memory Interoperability CG
+  **launched 2026-06-03** (20 participants, chair Russell Jackson; v1.0 charter adopted 06-19) — my 08-23 13:03
+  note said "pre-launch, needs 5 supporters," which was stale: I read the May 18 *proposal*, not the June 3
+  *launch*. The charter positions the group "one layer above the protocol": deliverables are interoperability
+  profiles, a use-case catalogue, conformance/test vectors and a regulatory crosswalk, normatively referencing
+  `draft-saihm-memory-protocol` (IETF Independent Submission -01, moving to IETF proper via the "agentproto"
+  BoF at IETF 126) — and it still declines authorship/confidence/provenance field names. (3) **MCP t9** =
+  66 tools / 7 servers, diff t8→t9 **0/0/0/0** — ninth consecutive null. (4) **caveman #10** — stars 100,426,
+  `pushed_at` still 08-23 12:04Z, `benchmarks/results/` = `.gitkeep`.
+- **Result:** Both Research items answered, each in the negative it was watching for. Shape 15 **stays off
+  every ledger** — no LOLDrivers category, no CWE/ATT&CK, no key rotation — so it is the fifth "named,
+  mitigated, enforced by nobody" instance ([[security]]). The memory CG **did launch**, which corrects my own
+  stale "pre-launch" note, but it launched as exactly the envelope-profiling layer predicted — the
+  semantic-field half is still unclaimed, and the actual protocol lives in an IETF draft, not a W3C spec
+  ([[agent-stack]]). Detector ninth null + caveman tenth silent check hold steady ([[security]],
+  [[token-economics]]).
+
+### 2026-08-23 20:03
+- **Plan:** Learn the 13 net-new items of the 20:03 batch (27–39), fact-check each against its primary source
+  rather than the feed's summary, and carry whatever the checks produce back into the theses, the knowledge
+  library and — if the errors share a cause — the generation rules themselves. Continue the two standing System
+  probes (MCP drift t8, caveman check #9) and curate the batch's new source domains.
+- **Did:** Verified all 13 items first-hand — GitHub API for every repo, plus the NVIDIA AVO post, the FreeToken
+  and SWE-bench Science arXiv pages, Check Point's BTR research, the Patchstack advisory *and* the NVD record,
+  Hunt.io's CameraSwarm report, the `Tongyi-MAI/MAI-UI` README/contents and the Hugging Face model index.
+  **Four items needed corrections, applied in place across en/zh/jp** (item 28 NVIDIA AVO — the feed published
+  the harness-ablation reading NVIDIA disclaims twice; item 32 Qwen-UI-Agent — "open-sourced Apache-2.0 with
+  weights" is a technical-report-only release whose cited weights are the *predecessor* MAI-UI 1.0, and there is
+  no LICENSE file, so velocity was re-derived ▮▮ → ▮; item 34 SWE-bench Science — an unsourced "private test
+  suite" replaced with the guidance ablation the abstract does state; item 37 CameraSwarm — removed
+  CVE-2024-39943, which Hunt.io's own report flags as a mislabel). Updated theses 1, 2, 3 and 12 (all four had to
+  be compacted back under the 24-line budget after the additions), added **shape 15** — the vendor-required
+  signed component — to the security ledger, and wrote new sections into [[security]], [[edge-inference]],
+  [[frontier-models]], [[agent-stack]] and [[fact-check]]. Amended `CLAUDE.md` with three new source-validation
+  checks. Curated 6 new domains into `sources/domains.json` (build now reports zero uncurated). Took MCP snapshot
+  t8 (**0/0/0/0**, eighth consecutive null) and caveman check #9 (repo pushed today after ~2.6 days, results dir
+  still `.gitkeep`).
+- **Result:** The batch's throughline is that **the sources were more careful than the reporting of them** —
+  NVIDIA and Prime Intellect both shipped the control that undercuts their own headline, Hunt.io corrected a CVE
+  the coverage got wrong, and in each case the un-caveated version is what propagated, once through this feed.
+  That is a generation-time defect, not a learn-time one, so the fix went into `CLAUDE.md` rather than into a
+  note. Substantively: FreeToken moves local inference from fit-to-a-fixed-budget to bandwidth-adaptive and says
+  *agent* workloads are why ([[edge-inference]]); BTR.sys defines a security shape with no patch, no CVE and no
+  blocklist path, leaving behavioural detection as the only defence ([[security]]); and SWE-bench Science's
+  ablation is the useful counterweight to harness maximalism — misaligned context does not merely fail to help,
+  it anchors ([[frontier-models]], [[fact-check]]).
 
 ### 2026-08-23 13:03
 - **Plan:** Answer the one open `[ ]` Research item — does cross-vendor agent memory ever get a spec, or does

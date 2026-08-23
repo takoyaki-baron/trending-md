@@ -403,9 +403,11 @@ UC Berkeley、MIT 与 UT Austin 的研究者（Song Han、Matei Zaharia、Ion St
 - **Source:** NVIDIA blog · ~2d ago (~20:03 UTC+8)
 - **Tags:** `agents` `benchmark` `arc-agi` `harness` `nvidia`
 
-NVIDIA 的 **AVO**（Agentic Variation Operators）智能体架构在 ARC-AGI-3 **公开集**上取得了 **100.00 RHAE** 的成绩，用 6,624 次环境动作完成了全部 25 个环境中的 183 个关卡。底座模型是 Claude Opus 5（独立得分约 30%，已是最高单模型），但 NVIDIA 明确表示该结果衡量的是 *harness*——持久记忆外加一个把智能体从死胡同里推出来的监督者——而非模型本身，且只覆盖公开集而非私密竞赛集。同一个循环此前曾在 CUDA 内核优化上自主运行 7 天，产出比 FlashAttention-4 快最多 10.5% 的注意力内核。
+NVIDIA 的 **AVO**（Agentic Variation Operators）智能体架构在 ARC-AGI-3 **公开集**上取得了 **100.00 RHAE** 的成绩，以 6,624 次环境动作完成了 25 个环境中的全部 183 个关卡（比 VISTA 在相同关卡上的 7,542 次动作少了约 12%），采用持久记忆外加一个监视停滞并重新引导智能体的监督者。底座模型是 Claude Opus 5，ARC Prize 单独报告的其独立得分约为 30%。观测仅为纯文本 64×64 网格，不含图像。同一循环此前曾在 CUDA 内核优化上自主运行**七天**——500+ 个优化方向、40 个已提交的内核版本——在 DGX B200 上最多超过 cuDNN 3.5%、超过 FlashAttention-4 10.5%。
 
-**Why it matters:** 它量化了"脚手架（而非原始模型）驱动长程智能体性能"这一事实——对任何构建智能体 harness 的人都是有实际系统设计意义的数据点。
+**Why it matters:** NVIDIA 自己的文章明确拒绝这种消融式解读：30% → 100.00 的差距"不应被解读为对 AVO 性能贡献的直接测量"，VISTA 对比"也不应被解读为受控消融"（后端、观测、记忆、上下文管理均不同）。真正承重的论断更窄，但对 harness 构建者而言仍是正确的——"评估一个模型不等于评估一个智能体"，而真正可迁移的"不是领域知识，而是持续自主进步的那套机制"。
+
+> **更正（2026-08-23）：** 本条目原先将该结果解读为量化了"是脚手架——而非原始模型——驱动长程智能体性能"。NVIDIA 在同一篇文章中两次明确否认了这种解读。正文与分析已更正，以携带厂商自己的保留声明；100.00 公开集得分与七天 CUDA 运行保持不变且已一手核实，因此 velocity 维持不变。
 
 [`🔗 NVIDIA developer blog`](https://developer.nvidia.com/blog/nvidia-avo-reaches-100-on-arc-agi-3-demonstrating-a-frontier-level-general-purpose-architecture-for-long-horizon-autonomous-agents/) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/21/nvidia-just-showed-that-the-harness-not-the-ai-model-is-now-the-real-hero/)
 
@@ -453,17 +455,19 @@ Check Point 研究员 **Jiří Vinopal** 逆向分析了 **BTR.sys**——Window
 
 ---
 
-## 32. Qwen-UI-Agent——阿里基于 100+ 台真机训练的 GUI 智能体底座模型
+## 32. Qwen-UI-Agent——阿里的真机 GUI 智能体以技术报告而非权重形式发布
 
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub · 2.2k stars · ~2d ago (~20:03 UTC+8)
-- **Tags:** `gui-agent` `open-weights` `alibaba` `computer-use` `mobile`
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 2,166 stars · 仓库推送于 2026-08-19 · 宣布于 2026-07-30
+- **Tags:** `gui-agent` `alibaba` `computer-use` `mobile` `report-only`
 
-阿里 Tongyi-MAI 团队开源了 **Qwen-UI-Agent**（Apache-2.0，`Tongyi-MAI/MAI-UI`；权重 `MAI-UI-8B`/`MAI-UI-2B`），一个把手机、桌面、浏览器与 DeepSearch 统一进单一模型的 GUI 智能体基础模型，并混合 GUI 动作与直接的 Bash/CLI 执行。它在一支 **100+ 台实体手机、150+ 个应用**的机群上训练与评测，外加自建的实体设备基准（**MobileWorld-Real**），报告 **MobileWorld-Real 92.2%**、MobileWorld 82.1%、OSWorld-Verified 79.5%、WebArena 73.6%。
+阿里 Tongyi-MAI 团队发布了 **Qwen-UI-Agent**，一个把移动、桌面、浏览器与 DeepSearch 统一进单一模型的 GUI 智能体底座模型，混合 GUI 动作与直接的 Bash/CLI 执行（约 40% 的动作输出被批处理），并通过在线 RL 在约 10,000 个并行环境中训练 100+ 步轨迹。训练与评测在 **100+ 台覆盖 150+ 个应用的实体手机上**进行，外加自建的实体设备基准 **MobileWorld-Real**（400+ 任务 / 100+ 应用）：**92.2%** MobileWorld-Real、82.1% MobileWorld、97.5% AndroidDaily、79.5% OSWorld-Verified、73.6% WebArena、81.5% ScreenSpot-Pro。经一手核实，`Tongyi-MAI/MAI-UI` 仓库实际发布的是**技术报告 PDF、README 与资源文件——没有代码，也没有权重**。
 
-**Why it matters:** 首个在真实硬件而非模拟器上训练的主流开放权重 GUI 智能体——直接回应了让"computer-use"智能体止步于演示的 sim-to-real 差距。
+**Why it matters:** 真机训练确实回应了让 computer-use 智能体止步于演示的 sim-to-real 差距——但阿里之外的任何人都还无法复现或自托管它。请把这张基准表当作厂商报告来读，而非一个你能运行的人工产物。
 
-[`🔗 Tongyi-MAI/MAI-UI`](https://github.com/Tongyi-MAI/MAI-UI) · [`🔗 MAI-UI-8B (HF)`](https://huggingface.co/Tongyi-MAI/MAI-UI-8B)
+> **更正（2026-08-23）：** 本条目原先称 Qwen-UI-Agent"开源（Apache-2.0）"、并带有"权重 `MAI-UI-8B`/`MAI-UI-2B`"，还将其框定为"首个在真实硬件上训练的主流开放权重 GUI 智能体"。经一手核实：GitHub 仓库**没有 LICENSE 文件**（Apache-2.0 仅在 README 中声称），其 `Qwen-UI-Agent/` 目录下只有一份技术报告；唯一已发布的权重 `MAI-UI-8B`（HF，最后修改于 2026-01-09）与 `MAI-UI-2B`（2025-12-29）属于**前身 MAI-UI 1.0**，而非本模型。该工作也早在 2026-07-30 就宣布了，并非本周。属于声明更正，因此 velocity 由 ▮▮ 重新推导为 ▮。
+
+[`🔗 Tongyi-MAI/MAI-UI`](https://github.com/Tongyi-MAI/MAI-UI) · [`🔗 MAI-UI-8B (HF) — 前身权重`](https://huggingface.co/Tongyi-MAI/MAI-UI-8B)
 
 ---
 
@@ -489,7 +493,9 @@ Check Point 研究员 **Jiří Vinopal** 逆向分析了 **BTR.sys**——Window
 
 复旦的 Zhipeng Xu、Xipeng Qiu 等发布了 **SWE-bench Science**，一个仓库级基准，含**来自 98 个 GitHub 仓库、跨越 20 个科学领域的 119 个任务**，其出发点在于：对科学代码的错误修复损害的是证据，而不只是一个程序。表现最好的智能体——**Claude Code + Opus-5 (max)**——**pass@1 不足 50%**；作者还归纳出四种反复出现的失败机制，消融显示扎实的科学引导有帮助，而失配的引导会引发锚定。
 
-**Why it matters:** 它暴露了智能体编码在科学这一"正确性最要紧"的领域里的具体前沿缺口，并用私有测试集来防止过拟合。
+**Why it matters:** 它暴露了智能体编码在科学——这一"正确性最要紧"的领域——里的具体前沿缺口；其引导消融实验给 harness 构建者带来了更有用的教训：注入的上下文并非一律有益。扎实的科学信息会约束修复、提升 token 效率，而失配的引导会引发锚定，且未必能提升精确修复的成功率。
+
+> **更正（2026-08-23）：** 本条目原先称该基准"配有私有测试集以防止过拟合"。经一手重读所引用的 arXiv 页面，该说法在页面上并不存在；已替换为摘要中确实陈述的引导消融实验。119 个任务 / 98 个仓库 / 20 个领域的范围，以及 Claude Code + Opus-5 (max) 不足 50% 的 pass@1，均已确认，因此 velocity 维持不变。
 
 [`🔗 arXiv 2608.19799`](https://arxiv.org/abs/2608.19799) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.19799)
 
@@ -529,9 +535,11 @@ Check Point 研究员 **Jiří Vinopal** 逆向分析了 **BTR.sys**——Window
 - **Source:** Hunt.io / SecurityWeek · ~3d ago (~20:03 UTC+8)
 - **Tags:** `iot` `botnet` `surveillance` `security`
 
-Hunt.io 还原了一场持续 35 天（6 月 17 日–7 月 22 日）的行动，在俄罗斯/乌克兰/独联体地区攻陷 **14,530+ 台大华 IP 摄像头**。三种手法：在 TCP 37777 上爆破 **12,324 个 IP**；用 Go 二进制串接 2021 年认证绕过 CVE（**CVE-2021-33044/33045**）与 **CVE-2024-39943** 植入持久化后门账号 `p2pwn/p2password`（改密码甚至多数固件的恢复出厂都无法清除）；以及滥用大华云中继、仅凭序列号触达 NAT 后的摄像头。
+Hunt.io 还原了一场持续 35 天（6 月 17 日–7 月 22 日）的行动，攻陷 **14,530+ 台大华 IP 摄像头**，主要集中在乌克兰、俄罗斯与独联体电信网段。三种手法：在 TCP 37777 上爆破 **12,324 个 IP**（asyncio，最多 4,000 个并发工作线程）；用 Go 二进制串接 2021 年的认证绕过组合 **CVE-2021-33044**（密码字段从不校验）与 **CVE-2021-33045**（环回源地址伪造），植入独立于管理员密码存储的 `p2pwn`/`p2password` 后门账号——改密码、甚至在多数固件上恢复出厂设置都无法清除；以及滥用大华的 Easy4IP 云中继，仅凭序列号即可触达 NAT 后的摄像头，其中 **89.4% 的活跃序列号无需任何认证**，而离线恢复码可授予云端级管理员重置权限，且独立于设备凭据。
 
-**Why it matters:** 一场完全建立在多年陈旧 CVE 与默认口令之上的大规模持久化 IoT 攻陷——提醒人们未修补的 2021 年代摄像头漏洞仍是活生生的、可规模化的攻击面。
+**Why it matters:** 一场完全建立在多年陈旧 CVE 与默认口令之上的大规模、持久化 IoT 攻陷——而且其持久性超过了机主能想到的两种补救手段。让 NAT 后摄像头可被触达的，正是厂商自家的云便利功能，而非这些 CVE。
+
+> **更正（2026-08-23）：** 本条目原先将 **CVE-2024-39943** 列为利用链的一环。经一手重读 Hunt.io 的报告，其明确指出该编号在流传的分析中被标错（它其实是一个不相关的 Rejetto HFS 缺陷），并同样指出 CVE-2025-31702 的公告描述的是一个比所观测到的中继滥用更窄的认证后问题。错误的 CVE 已移除，并补上了有出处的云中继细节；本条原本就处于本批次最低 velocity，维持不变。
 
 [`🔗 SecurityWeek`](https://www.securityweek.com/threat-actor-hacks-14000-ip-cameras-in-ukraine-and-russia/) · [`🔗 Hunt.io 报告`](https://hunt.io/blog/operation-cameraswarm-dahua-cameras-compromised)
 

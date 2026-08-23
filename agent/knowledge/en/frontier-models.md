@@ -805,3 +805,56 @@ presets, an AgentX long-context multi-turn benchmark, and hardware-vendor contri
 GB200 via OCI). **Why both matter together:** the feed's inference and model numbers are overwhelmingly
 vendor-reported; a continuously-run, forkable, multi-vendor harness is the structural answer, and it is exactly
 the shape the "MMLU-for-skills" gap in [[agent-plugins]] still lacks — standing, not per-author.
+
+## SWE-bench Science — the next rung, and a warning about context injection (arXiv 2608.19799)
+
+Zhipeng Xu, Jiahao Lu, Yining Zheng, Yuxin Wang and Xipeng Qiu (submitted 2026-08-20, 26 pp, CC BY 4.0)
+published **SWE-bench Science**: *"Can Coding Agents Resolve Engineering Tasks in Science?"* — **119 tasks from
+98 GitHub repositories across 20 scientific domains**, organized into three paradigms (Issue-driven,
+Expert-exploratory, Engineering-integration). The framing is that a wrong fix to scientific code corrupts
+*evidence*, not just a program.
+
+**The headline:** the best agent, **Claude Code with Opus-5 (max)**, achieves **pass@1 below 50%**. The abstract
+gives no more precise figure. Four recurring failure mechanisms are named: deficits in scientific knowledge or
+abstraction; misguided exploration or surface-level repair; incomplete repair coverage or system integration;
+and failure to generalize scientific knowledge beyond observed cases.
+
+**The finding worth keeping is the ablation, not the leaderboard.** A paired ablation removed explicit
+scientific guidance while holding repository and executable context constant. Scientific knowledge turned out
+**not to be uniformly beneficial**: well-grounded information "can constrain repair," improving average
+performance *and* token efficiency, whereas poorly aligned guidance "can induce anchoring" and "does not
+necessarily improve exact repair success." That is a direct, measured counterexample to the prevailing harness
+instinct that more retrieved context is always better — bad context is not neutral, it steers. Pair it with the
+NVIDIA AVO result in [[fact-check]]: the same week produced both "the harness is everything" and "the best
+harness plus the best model still fails half of real scientific tasks."
+
+**Fact-check note.** The feed's original write-up credited the benchmark with "a private test suite to catch
+overfitting." That claim is **not on the arXiv abstract page**, which was re-read first-hand; the item was
+corrected 2026-08-23 to state the guidance ablation instead. Verified: 119/98/20, the sub-50% pass@1, the four
+mechanisms, the anchoring result.
+
+## Qwen-UI-Agent — real-device GUI training, published as a report (not weights)
+
+Alibaba's Tongyi-MAI team's **Qwen-UI-Agent** (announced **2026-07-30**; repo `Tongyi-MAI/MAI-UI`, pushed
+2026-08-19, 2,166★) unifies mobile, computer, browser and DeepSearch in one GUI-agent foundation model. The
+substantive contribution is that training and evaluation run on **100+ physical smartphones covering 150+ apps**,
+with a self-built real-device benchmark **MobileWorld-Real** (400+ tasks / 100+ apps) — plus a hybrid GUI+CLI
+action space (~40% of action outputs batched), online RL over 100+-step trajectories with ~10,000 concurrent
+environments, and an AutoResearch-style data flywheel where agents construct tasks, environments and verifiers.
+Reported: **92.2%** MobileWorld-Real, 82.1% MobileWorld, 97.5% AndroidDaily, 79.5% OSWorld-Verified, 73.6%
+WebArena, 81.5% ScreenSpot-Pro, claimed competitive with Claude Opus 4.8 / Gemini 3.1 Pro / GPT-5.6 Sol.
+
+**What is actually downloadable, verified first-hand (2026-08-23):**
+- The repo root holds `MAI-UI/`, `Qwen-UI-Agent/`, `README.md` — **no LICENSE file**; GitHub's licence detector
+  returns null. Apache-2.0 is asserted in the README's License section only (the `NOTICE` is under
+  `./MAI-UI/`, archived). Same *asserted-vs-filed licence* pattern as `andrej-karpathy-skills`.
+- `Qwen-UI-Agent/` contains a **technical-report PDF, a README and assets** — no code, no weights.
+- The only published weights under the org are **MAI-UI-8B** (HF, last modified **2026-01-09**, 2,706 downloads,
+  199 likes) and **MAI-UI-2B** (2025-12-29) — these are **MAI-UI 1.0**, the *predecessor*, released 2025-12-29.
+  A HF search for "Qwen-UI-Agent" returns no Tongyi-MAI model.
+
+So the correct reading is: a vendor technical report with a strong real-device methodology, whose *previous*
+generation is open-weights. The feed originally framed it as "the first major open-weights GUI agent trained on
+real hardware" and cited the predecessor's weights as this model's; corrected in place 2026-08-23 with velocity
+re-derived ▮▮ → ▮ (claim correction). The generalizable trap: **an org that open-weighted version 1 buys
+credibility that gets silently applied to version 2.** Check the model card's date, not the org's reputation.

@@ -1095,8 +1095,9 @@ standard" is answered first-hand, in three parts matching the three sub-question
    later calls as an ordinary argument. That is a *tool-design pattern, not a protocol extension*. Memory is
    now architecturally external to MCP.
 
-2. **A spec effort exists — at W3C, not MCP, and pre-launch.** The **AI Agent Memory Interoperability
-   Community Group** (proposed 2026-05-18 by Russell Jackson, "needs 5 supporters to launch") proposes a
+2. **A spec effort exists — at W3C, not MCP, and it has launched.** The **AI Agent Memory Interoperability
+   Community Group** (proposed 2026-05-18 by Russell Jackson, **launched 2026-06-03**; 20 participants, v1.0
+   charter adopted 2026-06-19) proposes a
    protocol-level spec for portable agent memory: **memory cell shape** (encrypted unit with canonical
    metadata), **identity binding** (post-quantum ML-DSA-65 / FIPS-204), **encryption envelope** (per-cell DEK,
    wallet-derived KEK, rotation versioning), **audit anchors** (public-chain receipts, verifiable without
@@ -1106,6 +1107,15 @@ standard" is answered first-hand, in three parts matching the three sub-question
    agent-runtime semantics (AAIF goose), tool-routing (MCP). **The decisive caveat:** it standardizes the
    *crypto envelope* — who wrote the cell, can we prove it, who may read it — **not** the semantic field names
    (authorship/confidence/provenance) that the memory-gap note above lists as missing.
+
+   **Launch + positioning (verified first-hand 08-23 21:04).** The CG's charter positions it **"one layer above
+   the protocol"**: it does not normatively re-specify the wire format, crypto constructions, key derivation,
+   identity binding or erasure. Its deliverables are interoperability profiles, a use-case catalogue,
+   conformance/test vectors and a regulatory crosswalk, and the normative protocol is **`draft-saihm-memory-protocol`**
+   (IETF Independent Submission, -01) — the IETF ISE concluded consideration and the work is moving to IETF proper
+   via an "agentproto" BoF held at IETF 126 (Vienna); the chair intends to re-point the charter's normative
+   reference once a citable IETF document exists. No Community Group Report or spec is published yet. The decisive
+   caveat holds: even the launched group still declines the authorship/confidence/provenance field names.
 
 3. **The open counterparts stay pairwise-incompatible at the field level.** Field names, verified first-hand:
    - **ai-memory** — `memory_handoff_begin/accept/cancel` tools, `scope: "global"` / `_global` scope,
@@ -1130,6 +1140,58 @@ standard" is answered first-hand, in three parts matching the three sub-question
 *semantic record* (field names for authorship/confidence/provenance/conflict) stays product-specific, likely
 indefinitely. MCP is the reason: by standardizing only the connection, it turned memory into a *product* layer,
 so the field-level spec would have to come from a body other than MCP — which is exactly the W3C CG's opening.
-**Watch:** (1) does the W3C CG launch (needs 5 supporters), (2) does any MCP SEP or the AAIF pick up the
-semantic-field half, (3) does a typed round-trip format (engram pack / `.plur` capsule) get adopted by a second,
-independent implementer — the `cv ≥ 1` test for any of these proposals.
+**Watch (updated 08-23 21:04):** (1) ✓ **launched 2026-06-03** — answered. (2) does any MCP SEP or the AAIF
+pick up the semantic-field half — still unclaimed; the launched CG explicitly declines it. (3) does a typed
+round-trip format (engram pack / `.plur` capsule) get adopted by a second, independent implementer — the
+`cv ≥ 1` test for any of these proposals.
+
+## Hermes Agent — the whole stack in one MIT repo, and a backlog as the new metric (08-23)
+
+`NousResearch/hermes-agent` (MIT, verified first-hand 2026-08-23: **234,615★**, 47,236 forks, **34,925 open
+issues**, created 2025-07-22, pushed the same day) is the clearest single-repo instance of this file's thesis:
+every layer that decomposed over the last month is bundled back together by one project. A learning loop that
+creates skills from experience and refines them in use; cross-session memory (agent-curated recall over FTS5
+search plus LLM summarization, with Honcho user modeling); **one gateway process** bridging Telegram, Discord,
+Slack, WhatsApp, Signal and CLI; **seven terminal backends** (local, Docker, SSH, Singularity, Modal, Daytona,
+Vercel Sandbox) covering the isolation axis; and a cron scheduler taking natural-language recurring tasks. It
+also ships OpenClaw migration tooling — the competitive posture is explicit.
+
+**The number to actually watch is 34,925 open issues.** At this scale the star count says distribution and
+nothing else (the `andrej-karpathy-skills` lesson in [[agent-plugins]]). An issue backlog of that size against
+~24.7k commits is a different signal: it measures how much *unresolved contact with reality* a project has
+accumulated. For an agent runtime — where every backend, every chat platform and every model is a separate
+failure surface — the backlog-to-commit ratio is a better maintenance proxy than stars, and it is cheap to pull
+from the API. Worth adopting as a standing check for any "agent stack in a box" repo.
+
+## Buzz — the append-only log gets signatures, and agents get keys (08-23)
+
+`block/buzz` (Apache-2.0, **29,891★**, 3,802 forks, created 2026-03-06, v0.5.18 Aug 21) is Block Inc.'s
+self-hostable team workspace built on a **Nostr relay**: every message, reaction, workflow step, review approval
+and git event is a **signed event in one log**. Agents are first-class members with their own keypairs and
+therefore their own audit trail. It ships `buzz-cli` (JSON in/out for LLM tool calls), `buzz-acp` (an ACP harness
+for Goose/Codex/Claude Code), YAML workflows, git-event support, and Tauri desktop + Flutter mobile clients —
+with a README that is explicit it is "not finished."
+
+Two threads in this file converge here. **(1) The append-only log as runtime** — Apache Maka's "sessions, UI and
+recovery are projections of the log" and LoopX's "kernel is truth," now with cryptographic authorship per event.
+**(2) The provenance gap** — the memory-standardization note keeps listing *authorship*, *audit* and *identity
+binding* as the fields nobody standardizes; a Nostr event has all three by construction, because the signature
+is the identity and the relay is the audit log. It is a product answer, not a spec (the W3C memory CG's envelope
+is the spec-shaped version), but it is the first mainstream workspace where "which agent did this, provably" is
+answered by the storage format rather than by a vendor's dashboard. The open question is whether signed-event
+workspaces interoperate at all, or whether each relay becomes another silo with better receipts.
+
+## Qwen-MM-Plugins — a frontier lab ships into *other* vendors' harnesses (08-23)
+
+`QwenLM/Qwen-MM-Plugins` (Apache-2.0, 2,757★, created 2026-07-29) packages eight independently-installable
+multimodal capabilities — image/video/document/3D reading (`core`, no API key), DashScope VL/Omni/OCR/ASR, web
+search, long-video memory, video editing, Blender, FreeCAD, and a Chinese edu-agent — each as **a Skill plus an
+optional MCP server**, with a guided installer that wires them into Claude Code, Codex, Gemini CLI, Qwen Code and
+DeepSeek Harness. Its own tagline is the thesis: "Make any agent harness multimodal-native."
+
+This is the *harness-plugin ABI* conclusion arriving from a new direction. The layered-convergence finding was
+that the portable core (Skills + MCP behind `plugin.json`) converges while the harness shell stays per-vendor.
+Qwen-MM-Plugins is a frontier *model* lab betting on exactly that: rather than pulling users into Qwen Code, it
+distributes capability into competitors' harnesses through the portable core, keeping the paid surface
+(DashScope) behind the optional half. Distribution via the rival's runtime is now a first-party strategy — the
+inverse of the lock-in most of this file has been tracking.

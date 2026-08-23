@@ -403,9 +403,11 @@ UC Berkeley, MIT, and UT Austin researchers (Song Han, Matei Zaharia, Ion Stoica
 - **Source:** NVIDIA blog · ~2d ago (~20:03 UTC+8)
 - **Tags:** `agents` `benchmark` `arc-agi` `harness` `nvidia`
 
-NVIDIA's **AVO** (Agentic Variation Operators) agent architecture reached a **100.00 RHAE** score on the ARC-AGI-3 **public set**, completing all 183 levels across 25 environments in 6,624 environment actions. The base model is Claude Opus 5 (~30% standalone, the top individual model), but NVIDIA is explicit that the result measures the *harness* — persistent memory plus a supervisor that nudges the agent off dead ends — not the model, and that it covers only the public set, not the private competition sets. The same loop earlier ran 7 days autonomously on CUDA-kernel optimization, producing attention kernels up to 10.5% faster than FlashAttention-4.
+NVIDIA's **AVO** (Agentic Variation Operators) agent architecture reached a **100.00 RHAE** score on the ARC-AGI-3 **public set**, completing all 183 levels across 25 environments in 6,624 environment actions (~12% fewer than VISTA's 7,542 on the same levels), using persistent memory plus a supervisor that watches for stagnation and redirects the agent. The base model is Claude Opus 5, which ARC Prize separately reports at ~30% standalone. Observations were text-only 64×64 grids, no images. The same loop earlier ran **seven days** autonomously on CUDA-kernel optimization — 500+ optimization directions, 40 committed kernel versions — beating cuDNN by up to 3.5% and FlashAttention-4 by up to 10.5% on DGX B200.
 
-**Why it matters:** It quantifies that scaffolding — not the raw model — drives long-horizon agent performance, a data point with real system-design consequences for anyone building agent harnesses.
+**Why it matters:** NVIDIA's own post declines the ablation reading: the 30% → 100.00 gap "should not be interpreted as a direct measurement of the performance contribution of AVO," and the VISTA comparison "should not be interpreted as a controlled ablation" (different backend, observations, memory, context management). The load-bearing claim is narrower but still the right one for harness builders — "evaluating a model is not the same as evaluating an agent," and what transfers is "not domain knowledge, but the machinery for sustained autonomous progress."
+
+> **Correction (2026-08-23):** this item originally read the result as quantifying "that scaffolding — not the raw model — drives long-horizon agent performance." NVIDIA explicitly disclaims that reading twice in the same post. Body and analysis corrected to carry the vendor's own caveats; the 100.00 public-set score and the seven-day CUDA run are unchanged and verified first-hand, so velocity stands.
 
 [`🔗 NVIDIA developer blog`](https://developer.nvidia.com/blog/nvidia-avo-reaches-100-on-arc-agi-3-demonstrating-a-frontier-level-general-purpose-architecture-for-long-horizon-autonomous-agents/) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/21/nvidia-just-showed-that-the-harness-not-the-ai-model-is-now-the-real-hero/)
 
@@ -453,17 +455,19 @@ Check Point researcher **Jiří Vinopal** reverse-engineered **BTR.sys**, Window
 
 ---
 
-## 32. Qwen-UI-Agent — Alibaba's GUI-agent base model trained on 100+ real phones
+## 32. Qwen-UI-Agent — Alibaba's real-device GUI agent ships as a technical report, not as weights
 
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub · 2.2k stars · ~2d ago (~20:03 UTC+8)
-- **Tags:** `gui-agent` `open-weights` `alibaba` `computer-use` `mobile`
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 2,166 stars · repo pushed 2026-08-19 · announced 2026-07-30
+- **Tags:** `gui-agent` `alibaba` `computer-use` `mobile` `report-only`
 
-Alibaba's Tongyi-MAI team open-sourced **Qwen-UI-Agent** (Apache-2.0, `Tongyi-MAI/MAI-UI`; weights `MAI-UI-8B`/`MAI-UI-2B`), a GUI-agent foundation model that unifies mobile, desktop, browser, and DeepSearch in one model and mixes GUI actions with direct Bash/CLI execution. Trained and evaluated on a fleet of **100+ physical smartphones across 150+ apps** plus a self-built real-device benchmark (**MobileWorld-Real**), it reports **92.2% on MobileWorld-Real**, 82.1% MobileWorld, 79.5% OSWorld-Verified, and 73.6% WebArena.
+Alibaba's Tongyi-MAI team published **Qwen-UI-Agent**, a GUI-agent foundation model unifying mobile, computer, browser and DeepSearch in one model, mixing GUI actions with direct Bash/CLI execution (~40% of action outputs batched) and trained with online RL over 100+-step trajectories across ~10,000 parallel environments. Training and evaluation ran on **100+ physical smartphones covering 150+ apps**, plus a self-built real-device benchmark, **MobileWorld-Real** (400+ tasks / 100+ apps): **92.2%** MobileWorld-Real, 82.1% MobileWorld, 97.5% AndroidDaily, 79.5% OSWorld-Verified, 73.6% WebArena, 81.5% ScreenSpot-Pro. What shipped in `Tongyi-MAI/MAI-UI`, verified first-hand, is a **technical-report PDF, README and assets — no code and no weights**.
 
-**Why it matters:** The first major open-weights GUI agent trained on real hardware rather than simulators — a direct answer to the sim-to-real gap that keeps "computer-use" agents stuck in demos.
+**Why it matters:** Real-device training is a genuine answer to the sim-to-real gap that keeps computer-use agents in demos — but it is not yet reproducible or self-hostable by anyone outside Alibaba. Read the benchmark table as a vendor report, not as an artifact you can run.
 
-[`🔗 Tongyi-MAI/MAI-UI`](https://github.com/Tongyi-MAI/MAI-UI) · [`🔗 MAI-UI-8B (HF)`](https://huggingface.co/Tongyi-MAI/MAI-UI-8B)
+> **Correction (2026-08-23):** this item originally called Qwen-UI-Agent "open-sourced (Apache-2.0)" with "weights `MAI-UI-8B`/`MAI-UI-2B`," and framed it as "the first major open-weights GUI agent trained on real hardware." Verified first-hand: the GitHub repo carries **no LICENSE file** (Apache-2.0 is asserted in the README only) and its `Qwen-UI-Agent/` directory holds only a technical report; the sole published weights, `MAI-UI-8B` (HF, last modified 2026-01-09) and `MAI-UI-2B` (2025-12-29), belong to the **predecessor MAI-UI 1.0**, not to this model. The work was also announced 2026-07-30, not this week. Claim correction, so velocity was re-derived ▮▮ → ▮.
+
+[`🔗 Tongyi-MAI/MAI-UI`](https://github.com/Tongyi-MAI/MAI-UI) · [`🔗 MAI-UI-8B (HF) — predecessor weights`](https://huggingface.co/Tongyi-MAI/MAI-UI-8B)
 
 ---
 
@@ -489,7 +493,9 @@ Alibaba's Tongyi-MAI team open-sourced **Qwen-UI-Agent** (Apache-2.0, `Tongyi-MA
 
 Fudan's Zhipeng Xu, Xipeng Qiu et al. released **SWE-bench Science**, a repository-level benchmark of **119 tasks from 98 GitHub repos across 20 scientific domains**, framed around the idea that a wrong fix to scientific code undermines evidence, not just a program. The best agent — **Claude Code with Opus-5 (max)** — scores **pass@1 below 50%**, and the authors isolate four recurring failure mechanisms; an ablation shows well-grounded scientific guidance helps while misaligned guidance induces anchoring.
 
-**Why it matters:** It exposes a concrete frontier gap in agentic coding specifically for science — the domain where correctness matters most — and uses a private test suite to catch overfitting.
+**Why it matters:** It exposes a concrete frontier gap in agentic coding specifically for science — the domain where correctness matters most — and its guidance ablation carries the more useful lesson for harness builders: injected context is not uniformly good. Well-grounded scientific information constrains the repair and improves token efficiency, while poorly aligned guidance induces anchoring and does not necessarily improve exact repair success.
+
+> **Correction (2026-08-23):** this item originally credited the benchmark with "a private test suite to catch overfitting." That claim appears nowhere on the cited arXiv page, which was re-read first-hand; it has been replaced with the guidance ablation the abstract does state. The 119-task / 98-repo / 20-domain scope and the sub-50% pass@1 for Claude Code with Opus-5 (max) are confirmed, so velocity stands.
 
 [`🔗 arXiv 2608.19799`](https://arxiv.org/abs/2608.19799) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.19799)
 
@@ -529,9 +535,11 @@ Fudan's Zhipeng Xu, Xipeng Qiu et al. released **SWE-bench Science**, a reposito
 - **Source:** Hunt.io / SecurityWeek · ~3d ago (~20:03 UTC+8)
 - **Tags:** `iot` `botnet` `surveillance` `security`
 
-Hunt.io reconstructed a 35-day campaign (June 17–July 22) that compromised **14,530+ Dahua IP cameras** in Russia/Ukraine/CIS. Three methods: brute-forcing **12,324 IPs** on TCP 37777; a Go binary chaining the 2021 auth-bypass CVEs (**CVE-2021-33044/33045**) and **CVE-2024-39943** to plant a persistent `p2pwn/p2password` backdoor account (surviving password changes and, on most firmware, factory reset); and abusing Dahua's cloud relay to reach NAT'd cameras via serial number.
+Hunt.io reconstructed a 35-day campaign (June 17–July 22) that compromised **14,530+ Dahua IP cameras**, mostly in Ukraine, Russia and CIS telecom ranges. Three methods: brute-forcing **12,324 IPs** on TCP 37777 (asyncio, up to 4,000 workers); a Go binary chaining the 2021 auth-bypass pair **CVE-2021-33044** (password field never evaluated) and **CVE-2021-33045** (loopback source-address spoof) to plant a `p2pwn`/`p2password` backdoor account stored independently of the admin password — surviving a password change and, on most firmware, a factory reset; and abusing Dahua's Easy4IP cloud relay to reach NAT'd cameras by serial number alone, where **89.4% of live serials required no authentication** and offline recovery codes grant cloud-level admin reset independent of device credentials.
 
-**Why it matters:** A mass, persistent IoT compromise built entirely on years-old known CVEs and default credentials — a reminder that unpatched 2021-era camera flaws remain a live, scalable attack surface.
+**Why it matters:** A mass, persistent IoT compromise built entirely on years-old known CVEs and default credentials — and the persistence outlives both remediations an owner would reach for. The vendor's own cloud convenience feature, not the CVEs, is what makes NAT'd cameras reachable at all.
+
+> **Correction (2026-08-23):** this item originally listed **CVE-2024-39943** as part of the exploit chain. Hunt.io's report — re-read first-hand — explicitly flags that identifier as mislabeled in circulating write-ups (it is an unrelated Rejetto HFS flaw), and similarly notes CVE-2025-31702's advisory describes a narrower post-auth issue than the relay abuse observed. The bogus CVE has been removed and the sourced cloud-relay detail added; the item was already at the batch's lowest velocity, which stands.
 
 [`🔗 SecurityWeek`](https://www.securityweek.com/threat-actor-hacks-14000-ip-cameras-in-ukraine-and-russia/) · [`🔗 Hunt.io report`](https://hunt.io/blog/operation-cameraswarm-dahua-cameras-compromised)
 
