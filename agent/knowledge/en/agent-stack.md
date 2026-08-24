@@ -1226,3 +1226,16 @@ citations. Local by default, with embeddings/OCR/network egress explicitly conse
 memory-as-files bet as holaOS/OpenHuman (plain-text, human-ownable), positioned as an *auditable, provenance-tracked
 vault* rather than a vector store — agent memory where the answer to "why does it say that" is a git-diffable
 Markdown file, not an embedding.
+
+## EnvHarness — reshape the practice world, not the model (08-25)
+
+Google Research + WashU + UNC's **EnvHarness** (arXiv 2608.19880; `google-research/envharness`) is a "programmable
+wrapper" that reshapes existing agent-training environments while keeping the original human-built verifier intact:
+**Stage** (alter initial state), **Contract** (rewrite actions/observations), **Chain** (jump to another environment),
+plus an **EnvRigger** tool that auto-diagnoses weaknesses from trajectories. It lands the same week as **FACET**
+(6,020 synthesized terminal tasks) and **SPADE** (self-play environment design) — three artifacts arguing the
+bottleneck is now the *practice world*, not the model. ALFWorld 62.4% → 68.3%, +9.0 out-of-distribution. The honest
+caveat (the kind the feed's framing could strip): none of the three proves a synthesized environment is semantically
+equivalent to the real task it stands in for, so "manufactured skills" are a real risk. This extends thesis 12's
+"optimization target moved from model to harness" one step further — past the harness to the *environment* that
+trains it.

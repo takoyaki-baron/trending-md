@@ -923,3 +923,13 @@ YouTube，15 个技能（`wiki`、`save`、`wiki-ingest`、`wiki-query`、`wiki-
 日志化备份、冲突检测（绝不静默覆盖）——并按声明追踪出处，宁可接地拒绝也不编造引用。默认本地，embedding/OCR/网络出站
 显式征得同意。它与 holaOS/OpenHuman 是同一「记忆即文件」的赌注（纯文本、人可拥有），但定位为*可审计、可追踪出处*的
 保险库而非向量库——在 agent 记忆里，「它为什么这么说」的答案是可 git diff 的 Markdown 文件，而非一个 embedding。
+
+## EnvHarness —— 重塑练习世界，而非模型（08-25）
+
+Google Research + WashU + UNC 的 **EnvHarness**（arXiv 2608.19880；`google-research/envharness`）是一个「可编程
+包装器」，在保留原有人工构建验证器的前提下重塑既有 agent 训练环境：**Stage**（改初始状态）、**Contract**（重写动作/
+观测）、**Chain**（跳转到另一环境），外加一个自动从轨迹诊断弱点的 **EnvRigger** 工具。它与 **FACET**（合成 6,020 个
+终端任务）和 **SPADE**（自对弈环境设计）同周落地——三件作品共同论证瓶颈如今在*练习世界*，而非模型。ALFWorld 62.4% →
+68.3%，分布外 +9.0。诚实的保留（正是 feed 框架可能剥掉的那种）：三者均未证明一个合成环境在语义上等价于它所替代的真实
+任务，所以「制造出来的技能」确为风险。这把论点 12 的「优化目标从模型转向 harness」再推进一步——越过 harness，指向
+*训练它的环境*本身。

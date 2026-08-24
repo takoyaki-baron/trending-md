@@ -187,3 +187,30 @@ NVIDIA 的 NIM 目录）。目前还没有共享的路由配置标准——各�
   （Opus/Sonnet/Haiku/Fable）、推理级控制与自动回退。它是 Sub2API 形态又进了一步：不再只是把包月订阅套利到一个网关背后，
   而是把 Anthropic *自己的*客户端包进一个免费层路由器——README 的「ToS 友好」声明并不能消解把第三方模型经 Anthropic
   客户端路由的灰色地带。路由层的灰色市场近亲，如今交付的是 agent 客户端本身，而非仅仅一个 API 网关。
+
+## 策略 DSL 获得生产级支持（08-25 04:29）
+
+长久悬而未决的问题——"传输层商品化后，路由*策略* DSL 还能作为独立层存活吗，还是策略会折进到处可见的 git 托管配置里？"——如今有了一个具体、经核实的答案：**策略层存活并增厚，但它碎片化成一片 YAML+表达式 DSL 领域，而非收敛到一个标准。** 而本文最初作为*立场论文*追踪的那个 DSL（Semantic Router，arXiv 2603.27299），如今已随主导 OSS 推理栈交付。
+
+1. **vLLM Semantic Router v0.3 "Themis"**（`vllm-project/semantic-router`，2026-06-05 发布）。arXiv 的 Semantic
+   Router DSL，由 vLLM Semantic Router 团队产品化（80+ 贡献者身份，外加 MBZUAI / McGill / Mila / Rice）。策略是一份
+   可审查的 YAML 程序——`version`、`listeners`、`providers`、`routing`（嵌套 `signals` / `projections` / `decisions`）
+   ——带 `SIGNAL_GROUP`、`TEST`、`TIER` 编写构造、自然语言到 DSL 的流水线以及 `EMIT` 保留。其头条是 **Session-Aware
+   Agentic Routing（SAAR）**：路由自有的会话记忆、工具循环的硬锁（工具结果回到发起请求的模型；continuation ID 不会发给
+   另一后端）、供应商状态可移植性检查与"切换经济学"——路由成为模型选择外围的*有状态护栏*，而非逐轮的轻状态决策。一手读过，
+   该文自身的保留声明才是最有用的部分："不可替代发布测试"（RouterArena 只是外部快照）、"目标并非让每个供应商看起来一模一样"
+   （协议翻译明确是有损的，用响应头解释何时有损），以及 pre-1.0 的破坏性变更框架。所以"验证编译"的理想（穷尽性/无冲突由构造
+   保证）并非交付之物——交付的是一个带审查/测试的*实用* YAML DSL。
+
+2. **OrcaRouter Routing DSL**（Continuum-AI-Corp/OrcaRouter-Lite，2026-06-15 公布）。YAML + CEL：规则集是"版本、规则列表
+   与必需默认"，自上而下求值（首个 `when:` 命中即胜），带沙箱化 CEL（`no loops, no I/O`、仅 RE2 正则、全规则集 5 ms 截止）
+   与硬性规模护栏（≤30 条规则、≤16 KiB、每条 `when:` ≤200 字符）。其头条是一种新的路由*目标*：**融合面板**——`parallel:`
+   扇出 2–5 个次前沿模型加一个仲裁器（`first`/`majority`/`best_of_n`/`tests_pass`）——"前沿并非单一检查点，而是面板"；
+   三个面板仅用 Fable 5 之下的模型就超过 Fable 5 单独（~65.5%）。一手读到的保留声明：融合是"预览版，非 GA"（藏在服务端标志后）、
+   基准"仅示意……不可引用为官方分数"、融合"每个腿都计费"。
+
+**为何重要：** 路由策略不再只是"每个请求最便宜模型"（本文开篇的先分类形态）。它现在承担两项新工作——*有状态 agent 连续性*
+（SAAR）与*以拓扑换智能*（融合面板）——而每个入场者都在交付*自己的* YAML+表达式 DSL（`SIGNAL_GROUP`/`TEST`/`TIER` vs CEL
+vs BitRouter 策略 spec vs PolicyAware YAML vs `routing.yaml`），互不互通。本文早先预测的锁死面（"哪个 DSL 胜出"）仍然开放
+——但这场竞赛如今包含了 OSS 推理栈（vLLM），而非仅网关。待观察：一个共享的路由策略 schema/交换格式（能将上述全部商品化的
+"路由之 MCP"），以及融合面板路由是否得到无面板消融（它每个腿都计费，所以"超过 Fable 5"在成为成本主张前需要一个等预算对照）。

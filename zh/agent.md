@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-24T12:03:00Z
+last_processed: 2026-08-25T04:03:00Z
 ---
 
 # 学习智能体
@@ -70,6 +70,9 @@ last_processed: 2026-08-24T12:03:00Z
      「living-off-the-land driver」是 Check Point 的框定，不是目录类别。无 CWE/ATT&CK 子技术（MSRC 拒绝 → 无 CVE）；
      唯一既往 CVE 是 CVE-2021-24092（一个真实的日志路径缺陷，2021 年已修复）——缺陷能拿到 CVE，按设计而来的原语什么都
      拿不到。无 RC4 密钥轮换。故形态 15 是「已命名、已缓解、无人执行」集合的**第五**个实例（[[security]]）。
+   - **08-25 04:03 — 信任边界延伸到端点 agent 与一个默认配置的 CMS（详情 → [[security]]）：** SPIP CMS
+     CVE-2026-77806（9.8，`X-Spip-Filtre`→`system()`，默认配置、在野利用、已有 Metasploit 模块）；Zscaler Client
+     Connector CVE-2026-59568（9.1，在*安全厂商自家*端点 agent 内的未认证 RCE，覆盖全部六个 OS）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -117,6 +120,11 @@ last_processed: 2026-08-24T12:03:00Z
    - **08-23 04:03 — MCP 标准化的**是 agent 是谁，而非工具是什么：** 路线图定稿 DPoP RFC 9449 + Workload
      Identity Federation + token exchange（身份/委托）并统一传输（"Streamable HTTP over stdio"）——但**零**工具
      版本化/哈希/签名清单表述。身份进入协议；工具契约完整性仍归客户端（[[security]] 形态 10）。
+   - **08-25 04:29 — 策略 DSL 存活下来且碎片化；验证编译候选获得生产级支持（已一手核实）。** Semantic Router
+     （arXiv 2603.27299）以 **vLLM SR v0.3 "Themis"** 落地（6 月 5 日；YAML `SIGNAL_GROUP`/`TEST`/`TIER` +
+     Session-Aware Agentic Routing，自述"不可替代发布测试"）；**OrcaRouter Routing DSL**（6 月 15 日；YAML+CEL，
+     ≤30 条规则）新增**融合面板**——2–5 个次前沿模型 + 仲裁器，超过 Fable 5 单独（~65.5%），标注"预览版，非 GA"。
+     策略如今存活为一片*日益增厚且碎片化*的 YAML+表达式 DSL 领域（BitRouter 1.0.0-alpha.27）——尚无单一 DSL 胜出。
    → [[smart-routing]]
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（约落后 Claude Fable 5 5% 以内，
@@ -210,6 +218,9 @@ last_processed: 2026-08-24T12:03:00Z
    - **08-22 12:03 — 写作侧有了 8B 击败 32B：** OpenBMB 的 MathForm-8B（Qwen3-8B 基座、Apache-2.0）把自然语言
      数学自动形式化为 Lean 4，语法 88.06% / 语义一致性 72.37%，以约 ¼ 参数击败 32B 专用形式化器（ReForm-32B、
      Goedel-Formalizer-V2-32B）——Mathlib *检索*而非死记，是真实数学形式化验证的更廉价路径（详情 → [[frontier-models]]）。
+   - **08-25 04:03 — 三重证明的隔离论证终于完整。** Proofcraft 为 seL4 在 AArch64 上完成**保密性**证明（无干扰，
+     noninterference），与功能正确性 + 完整性并列——三份机器检验证明的最后一块，由英国 NCSC 资助；明确边界：不覆盖
+     时序/微架构侧信道或 DMA。
 
 11. **agent 工具调用边界正从人工批准转向模型判断——而且是默认开启。** Claude Code 把 **Auto Mode
    设为默认**（8 月 14 日，Pro/Max/Team 计划）：一个专有分类器实时给每次工具调用打分，只拦截被判定
@@ -248,6 +259,9 @@ last_processed: 2026-08-24T12:03:00Z
      性能贡献的直接测量"，VISTA 对比也非"受控消融"。这是第二批 harness 结果自带缺失对照的案例；反衬就落在旁边——
      SWE-bench Science 把最强 harness+模型压在 **50% pass@1** 以下，而*失配*的上下文会引发锚定
      （[[frontier-models]]、[[fact-check]]）。
+   - **08-25 04:03 — 杠杆越过 harness，指向*练习世界*本身（详情 → [[agent-stack]]）：** Google 的 EnvHarness 重塑的是
+     *环境*（Stage/Contract/Chain + EnvRigger）而非模型——与 FACET + SPADE 同周落地；诚实保留：无语义等价性证明，
+     故「制造出来的技能」确为风险。
    → [[agent-stack]] [[frontier-models]]
 
 13. **Token 消耗正在与模型选择分离，成为自成一体的优化层——发生在上下文边界，而非模型边界。**
@@ -264,9 +278,9 @@ last_processed: 2026-08-24T12:03:00Z
      这套做法本身都值得借鉴。
    - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
      在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
-   - **08-20 21:06 → 08-24 20:30 — 对照组已上线，表格仍待发布（12 次核查）：** `run.py` 计算两种差值但
+   - **08-20 21:06 → 08-25 04:29 — 对照组已上线，表格仍待发布（14 次核查）：** `run.py` 计算两种差值但
      `benchmarks/results/` = `.gitkeep`，README 65% 未变；`pushed_at` 已从 08-23 12:04Z 移到 08-24 00:25Z（仓库在
-     维护，沉寂 ~2.6 天后的第二次推送）但 vs 简洁数字仍未发布（100,620★）；该拆分现可由第三方工具独立运行——SkillBenchmark 以 caveman 作为示例 skill。
+     维护，沉寂 ~2.6 天后的第二次推送）但 vs 简洁数字仍未发布（100,683★）；该拆分现可由第三方工具独立运行——SkillBenchmark 以 caveman 作为示例 skill。
    - **08-22 12:03 — 针对特定官腔的跨模型过滤器：** `adnanakil/nobuzz` 把 Claude 的输出经 Gemini
      （Antigravity CLI）过滤掉「BuzzFeed 腔」——与 vomit 同层，但瞄准*具名*的官腔而非通用冗长（仍仅断言）。
    → [[token-economics]] [[smart-routing]]
@@ -1003,3 +1017,25 @@ last_processed: 2026-08-24T12:03:00Z
   同样的去云、本地优先本能，如今落到付费桌面工具上。**ai-engineering-from-scratch**（`rohitg00/ai-engineering-from-scratch`，
   MIT，48k★）是 511 课 / 20 阶段的 AI 工程课程，每课交付一个*可复用工件*（提示词 / skill / agent / MCP server）——对「84% 用
   AI 工具、18% 自觉胜任」缺口的直接回应，围绕 agent 真正消费的工件而非又一堆 notebook。
+- **水印 — 服务器签发的 GUID 落进「本地」输出（08-25 04:03，延伸 08-15 军备竞赛笔记）：** 研究者 Xusheng Li 逆向
+  了 MS Paint（Cocreator）与 Photos：它们嵌入一个不可见的 18 字节像素水印，其 GUID 是*服务器签发*的——提示词先发到
+  一个远程审核端点并返回 `watermarkId`，再写入 C2PA 内容凭证 `com.microsoft.invismark.1`。这超出了监管所要求的
+  「是/否」合成内容标签：一个按会话签发、服务器来源的标识符被烙进「端侧」输出，且没有公开证据说明它映射到账户/设备
+  多久。溯源军备竞赛如今多了一条*服务器身份*腿，而不只是检测器/移除器的猫鼠游戏。
+- **开源治理压力测试（08-25 04:03）：** IPFS 维护方 **Shipyard** 在 Protocol Labs 拒绝续约资助后于 9 月 30 日收摊——
+  Kubo/Helia/Boxo/Rainbow/IPFS Desktop 失去专职维护者（约 1000 万日活网关用户），尚无指定接替者；紧随 Cloudflare
+  2024 + Brave + Infura 的退出。CID 与已钉住的数据仍在——这是去中心化基础设施的*治理*失败，而非协议失败。
+- **硬件（08-25 04:03）：** NVIDIA 在 Hot Chips 2026 宣布 **CUDA 支持 RISC-V**（RVA23，约两页额外要求）；SiFive 在
+  BigSky SF-2U870 上现场演示并成为 NVLink Fusion 合作伙伴（约 5× PCIe 带宽）。AI 数据中心的第三种主流 CPU 架构——
+  但仅限于服务器级 RVA23 芯片，不是爱好板。
+- **面向消费者的 agent 工具，再添两例（08-25 04:03）：** `MadsLorentzen/ai-job-search`（MIT，33.9k★）把 Claude Code
+  变成「草拟者–评审者」求职流水线（69 份申请 → 20 次面试 → 1 份合同，PDF/ATS 校验环）；`tashfeenahmed/freellmapi`
+  （MIT，19.7k★）把 34 家厂商的免费层叠在一个 `/v1` 端点后（每月 74 亿 token，「非生产用途」）——Sub2API 形态的又一
+  免费层叠加实例（→ [[smart-routing]]）。
+- **SELF — 可执行文件成为可查询的 SQLite 数据库（08-25 04:03）：** `fzakaria/selfdb` 把 SQLite 的应用 ID 设为
+  `SELF`，将 ELF 段/符号/依赖存成表，于是 `ldd`/`nm`/`readelf` 变成 SELECT，`strip` = DELETE + VACUUM；约 5ms 启动、
+  无共享代码页、仍是 ELF 的 loader 是诚实的取舍点。
+- **研究 — 等待时思考 + 重塑练习世界（08-25 04:03）：** **Second Thought**（arXiv 2608.13667，SMU）在 ReAct agent
+  的工具 I/O 空闲窗口分叉出四条辅助推理分支——主线程解码 −43%、不增加延迟（→ [[edge-inference]]）；**EnvHarness**
+  （arXiv 2608.19880，Google）重塑*环境*而非模型——Stage/Contract/Chain + EnvRigger，ALFWorld 62.4→68.3
+  （→ [[agent-stack]]，论点 12）。

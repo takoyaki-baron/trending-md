@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-24T12:03:00Z
+last_processed: 2026-08-25T04:03:00Z
 ---
 
 # Learnt Agent
@@ -62,11 +62,11 @@ patterns, and turn them into insights and actionable todos.
      Oracle 943/day; `arrayref` at `cargo build`; vCenter → Babuk; Cl0p's 40+ Windchill; "mind viruses"; AIT-GUI;
      the €5 `ns.enum.org.uk` military-code DNS; isolated-vm's escape inside n8n/Mastra; Nezha 62283.
    - **08-23 20:03→21:04 — shape 15: unpatchable, unblocklistable, off every ledger (detail → [[security]]).**
-     Defender's signed `BTR.sys` (one 256-byte RC4 key, 18 builds / 15 years) deletes `WdFilter.sys` in a ~34s
-     boot window — MSRC won't service it (no CVE), WDAC covers third-party BYOVD only, and the LOLDrivers catalog
-     (checked via `api/drivers.json`: 661 drivers, `malicious`/`vulnerable driver` only, no BTR.sys entry) has no
-     first-party class — "LOLDrivers" is Check Point's framing; no CWE/ATT&CK, no key rotation. Defence is
-     behavioural only (Sysmon 15/23/6). The **fifth** "named, mitigated, enforced by nobody" instance ([[security]]).
+     Defender's signed `BTR.sys` deletes `WdFilter.sys` in a ~34s boot window — no CVE, no WDAC coverage, no
+     LOLDrivers category, no key rotation; the **fifth** "named, mitigated, enforced by nobody" instance.
+   - **08-25 04:03 — the trust boundary reaches the endpoint agent + a default-config CMS (detail → [[security]]).**
+     SPIP CVE-2026-77806 (9.8, `X-Spip-Filtre`→`system()`, exploited in the wild, Metasploit module); Zscaler Client
+     Connector CVE-2026-59568 (9.1, unauth RCE in a *security vendor's own* endpoint agent, all six OSes).
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -125,6 +125,12 @@ patterns, and turn them into insights and actionable todos.
      RFC 9449 + Workload Identity Federation + token exchange (identity/delegation) and unifies transport
      ("Streamable HTTP over stdio") — but carries **zero** tool-versioning/hashing/signed-manifest language.
      Identity moves into the protocol; tool-contract integrity stays client-side ([[security]] shape 10).
+   - **08-25 04:29 — the policy DSL survives and fragments; the verified-compilation candidate got a production
+     backer (verified first-hand).** Semantic Router (arXiv 2603.27299) shipped as **vLLM SR v0.3 "Themis"**
+     (Jun 5; YAML `SIGNAL_GROUP`/`TEST`/`TIER` + Session-Aware Agentic Routing, disclaimed "not a substitute for
+     release testing"); **OrcaRouter Routing DSL** (Jun 15; YAML+CEL, ≤30 rules) adds the **fusion panel** — 2–5
+     sub-frontier models + arbiter cross Fable 5 solo (~65.5%), "preview, not GA." Policy survives as a
+     *thickening, fragmenting* field of YAML+expression DSLs (BitRouter 1.0.0-alpha.27) — no single DSL owns it.
    → [[smart-routing]]
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** DeepSeek V4 Pro GA
@@ -232,6 +238,9 @@ patterns, and turn them into insights and actionable todos.
      Apache-2.0) autoformalizes natural-language math into Lean 4 at 88.06% syntax / 72.37% semantic-consistency,
      beating 32B specialized formalizers (ReForm-32B, Goedel-Formalizer-V2-32B) at ~¼ params — Mathlib *retrieval*,
      not memorization, is the cheaper path to formal verification of real math (detail → [[frontier-models]]).
+   - **08-25 04:03 — the three-proof isolation argument completes.** Proofcraft's **confidentiality** proof for seL4
+     on AArch64 (noninterference) joins functional correctness + integrity — the final of three machine-checked proofs,
+     funded by the UK NCSC; explicit boundary: no timing/microarchitectural side-channel or DMA coverage.
 
 11. **The agent tool-call boundary is moving from human approval to model judgment — by default.**
    Claude Code flipped **Auto Mode to default** (Aug 14, on Pro/Max/Team): a proprietary classifier
@@ -276,11 +285,11 @@ patterns, and turn them into insights and actionable todos.
      the human-record gap — over **8.7 days**; its own equal-budget column puts the same run at **≈40.6% @24h**.
      Half the top score is wall-clock, not capability: cite the pair ([[frontier-models]], [[fact-check]]).
    - **08-23 20:03 — the disclaimer now ships *with* the headline, and is stripped downstream.** NVIDIA's AVO
-     scores **100.00 RHAE** on the ARC-AGI-3 public set (Opus 5 base, ~30% standalone) — while the same post
-     refuses the inference: the gap "should not be interpreted as a direct measurement of the performance
-     contribution of AVO," nor the VISTA comparison "a controlled ablation." Second batch running where a harness
-     result carries its own missing control; the counterweight landed beside it — SWE-bench Science puts the best
-     harness+model below **50% pass@1**, and *misaligned* context induces anchoring ([[frontier-models]], [[fact-check]]).
+     scores **100.00 RHAE** on ARC-AGI-3 public set (~30% standalone) while the same post refuses the inference
+     ("not a direct measurement", "not a controlled ablation"); SWE-bench Science puts the best harness+model below
+     **50% pass@1**, and *misaligned* context induces anchoring ([[frontier-models]], [[fact-check]]).
+   - **08-25 04:03 — the lever moves past the harness to the *practice world* (detail → [[agent-stack]]):** Google's
+     EnvHarness reshapes *environments* (Stage/Contract/Chain + EnvRigger), not models — beside FACET + SPADE; caveat: no semantic-equivalence proof ("manufactured skills").
    → [[agent-stack]] [[frontier-models]]
 
 13. **Token spend is separating from model choice and becoming its own optimization layer — at the context
@@ -297,10 +306,10 @@ patterns, and turn them into insights and actionable todos.
    - **08-20 20:03 — the evidence vocabulary arrives before the benchmark:** grading claims `inferred` /
      `benchmark_counterfactual` / `verified` is a better answer to "prove it" than another headline number,
      and it is the practice worth borrowing regardless of whether caveman's numbers hold.
-   - **08-20 21:06 → 08-24 20:30 — control arm live, table still pending (12 checks):** `run.py` computes both
+   - **08-20 21:06 → 08-25 04:29 — control arm live, table still pending (14 checks):** `run.py` computes both
      deltas but `benchmarks/results/` = `.gitkeep`, README 65% unchanged; `pushed_at` moved 08-23 12:04Z → 08-24
      00:25Z (repo maintained, second push after ~2.6d stillness) but the vs-terse number still hasn't shipped
-     (100,620★); SkillBenchmark ships caveman as its example.
+     (100,683★); SkillBenchmark ships caveman as its example.
    - **08-21 12:03 — the style-filter instance:** `zachahn/vomit` pipes Claude 5's output through a local
      gpt-oss:20b to strip "token vomit" before display — the same compress-the-wire layer, applied to verbosity.
    - **08-22 12:03 — a cross-model filter for a specific house voice:** `adnanakil/nobuzz` routes Claude's output
@@ -1235,3 +1244,28 @@ patterns, and turn them into insights and actionable todos.
   is a 511-lesson / 20-phase AI-engineering curriculum where every lesson ships a *reusable artifact* (prompt / skill /
   agent / MCP server) — a direct answer to the "84% use AI tools, 18% feel ready" gap, built around the artifacts agents
   consume rather than another pile of notebooks.
+- **Watermarking — a server-issued GUID lands in "local" output (08-25 04:03, extends the 08-15 arms-race note):**
+  researcher Xusheng Li reverse-engineered MS Paint (Cocreator) + Photos: they embed an invisible 18-byte pixel
+  watermark whose GUID is *server-issued* — the prompt hits a remote moderation endpoint that returns a
+  `watermarkId`, written into C2PA credentials as `com.microsoft.invismark.1`. Beyond the yes/no synthetic-content
+  label regulators asked for: a per-session, server-issued identifier in "on-device" output, with no public proof of
+  how long it maps to an account/device. The provenance arms race now has a *server-identity* leg, not just the
+  detector/remover cat-and-mouse.
+- **Open-source governance stress-test (08-25 04:03):** IPFS maintainer **Shipyard** winds down Sept 30 after
+  Protocol Labs declined to renew funding — Kubo/Helia/Boxo/Rainbow/IPFS Desktop lose dedicated maintainers
+  (~10M daily gateway users), no named successor; follows Cloudflare 2024 + Brave + Infura exits. CIDs + pinned data
+  survive — this is a *governance* failure of decentralized infra, not a protocol one.
+- **Hardware (08-25 04:03):** NVIDIA announced **CUDA on RISC-V** (RVA23, ~2 pages of extra requirements) at Hot Chips
+  2026; SiFive demoed it live on BigSky SF-2U870 and became an NVLink Fusion partner (~5× PCIe bandwidth). A third
+  mainstream CPU architecture for the AI datacenter — gated to server-class RVA23 silicon, not hobbyist boards.
+- **Consumer-agent tools, two more instances (08-25 04:03):** `MadsLorentzen/ai-job-search` (MIT, 33.9k★) runs Claude
+  Code as a drafter–reviewer job-application pipeline (69 apps → 20 interviews → 1 contract, PDF/ATS verification
+  loops); `tashfeenahmed/freellmapi` (MIT, 19.7k★) stacks 34 providers' free tiers behind one `/v1` endpoint (7.4B
+  tok/month, "not for production") — another free-tier-stacking instance of the Sub2API shape (→ [[smart-routing]]).
+- **SELF — the executable as a queryable SQLite database (08-25 04:03):** `fzakaria/selfdb` sets SQLite's app-ID to
+  `SELF` and stores ELF segments/symbols/deps as tables, so `ldd`/`nm`/`readelf` become SELECTs and `strip` = DELETE +
+  VACUUM; ~5ms startup, no shared code pages, still-ELF loader are the honest dealbreakers.
+- **Research — think-while-you-wait + reshape-the-practice-world (08-25 04:03):** **Second Thought** (arXiv
+  2608.13667, SMU) forks four auxiliary reasoning branches during a ReAct agent's tool-I/O idle window — −43%
+  main-thread decoding, no added latency (→ [[edge-inference]]); **EnvHarness** (arXiv 2608.19880, Google) reshapes
+  *environments*, not models — Stage/Contract/Chain + EnvRigger, ALFWorld 62.4→68.3 (→ [[agent-stack]], thesis 12).

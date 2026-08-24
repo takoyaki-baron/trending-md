@@ -1115,3 +1115,21 @@ command execution on the database host. watchTowr observed active exploitation w
 GeoTools 33.6/34.5/35.1 (GeoServer 2.27.6/2.28.5/3.0.1). The shape: **a textbook regression — a patched 9.8
 reintroduced by a new filter function — on a server routinely internet-exposed for public maps**; exploitation is
 observed, not theoretical.
+
+## SPIP + Zscaler — the trust boundary reaches the endpoint agent + a default-config CMS (08-25)
+
+**CVE-2026-77806 (SPIP, CWE-94, CVSS 9.8).** Unauthenticated RCE in the SPIP CMS — the French public-sector standard —
+affecting every version before 4.4.21. `analyse_resultat_skel()` mishandles the `X-Spip-Filtre` HTTP header, and a
+known chain injects `intval|_request|system` to run an arbitrary shell command via `system()` in the *default*
+configuration — no credentials, no user interaction. Exploited in the wild in August 2026, with a public PoC and a
+Metasploit module (PR #21790) lowering the mass-scanning barrier. Fixed in 4.4.21 (Debian DSA-6456-1, Aug 21). Shape:
+**default-exposed surface** (shape 3) — a default-on, no-auth code-exec path in a CMS the public sector runs at scale.
+
+**CVE-2026-59568 (Zscaler Client Connector, CWE-20, CVSS 9.1).** Unauthenticated, unprivileged remote code execution
+in Zscaler's *own endpoint agent* (ZCC) across Windows, macOS, Linux, Android, iOS and ChromeOS — improper input
+validation reachable over the network, and because ZCC runs elevated, exploitation grants host control. Fixed Aug 24
+(per-platform versions, e.g. Windows before 4.6.0.457 / 4.7.0.317 / 4.8.0.232 / 4.9.0.372). The shape is the
+trust-boundary failure in its purest form: **the tool you installed to protect the device is the attack surface** —
+the same "vendor's own component" theme as Defender `BTR.sys` (shape 15), but here as a patchable CVE rather than a
+by-design primitive. Both reinforce the meta-pattern: the protection plane itself (endpoint agent, CMS default config)
+keeps showing up as the entry point.

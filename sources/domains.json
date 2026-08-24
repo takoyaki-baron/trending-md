@@ -2941,5 +2941,86 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "ipshipyard.com": {
+    "cat": "vendor",
+    "en": "Shipyard's own blog — the IPFS maintainer organisation's first-party announcement (the 'end of IPFS at Shipyard' post); authoritative on its own wind-down, corroborated by Runtime Wire.",
+    "zh": "Shipyard 自己的博客——IPFS 维护组织的官方公告（「Shipyard 的 IPFS 终结」一文）；对其自身收摊最具权威，与 Runtime Wire 相互印证。",
+    "jp": "Shipyard 自身のブログ——IPFS メンテナー組織の公式発表（「Shipyard での IPFS 終了」記事）；自らの終了について最も権威があり、Runtime Wire と相互に裏付けられる。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "xusheng.dev": {
+    "cat": "community",
+    "en": "Individual security researcher's blog — the MS Paint/Photos invisible-watermark reverse-engineering writeup; first-hand technical analysis, corroborated by byteiota.",
+    "zh": "个人安全研究者的博客——MS Paint/Photos 不可见水印的逆向工程长文；一手技术分析，与 byteiota 相互印证。",
+    "jp": "個人セキュリティ研究者のブログ——MS Paint/Photos の不可視ウォーターマークのリバースエンジニアリング記事；一次技術分析で、byteiota と相互に裏付けられる。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "chipsandcheese.com": {
+    "cat": "research",
+    "en": "Deep-dive CPU/GPU architecture analysis site — the Hot Chips 2026 CUDA-on-RISC-V report; high-density first-hand conference coverage, corroborated by HotHardware.",
+    "zh": "深度 CPU/GPU 架构分析站点——Hot Chips 2026 的 CUDA-on-RISC-V 报道；高密度一手会议报道，与 HotHardware 相互印证。",
+    "jp": "CPU/GPU アーキテクチャの深掘り分析サイト——Hot Chips 2026 の CUDA-on-RISC-V 報道；高密度の一次会議取材で、HotHardware と相互に裏付けられる。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "hothardware.com": {
+    "cat": "news",
+    "en": "Hardware news outlet — the SiFive BigSky / RISC-V datacenter coverage; secondary to Chips and Cheese but consistent on the demo facts.",
+    "zh": "硬件新闻媒体——SiFive BigSky / RISC-V 数据中心报道；相对 Chips and Cheese 属二手，但演示事实一致。",
+    "jp": "ハードウェアニュース媒体——SiFive BigSky / RISC-V データセンター報道；Chips and Cheese に対しては二次情報だが、デモの事実は一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "sel4.discourse.group": {
+    "cat": "community",
+    "en": "seL4 Foundation's community forum — the AArch64 confidentiality-proof announcement; first-hand from the project, corroborated by Proofcraft.",
+    "zh": "seL4 基金会的社区论坛——AArch64 保密性证明公告；项目方一手来源，与 Proofcraft 相互印证。",
+    "jp": "seL4 Foundation のコミュニティフォーラム——AArch64 機密性証明の発表；プロジェクトからの一次情報で、Proofcraft と相互に裏付けられる。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "proofcraft.systems": {
+    "cat": "vendor",
+    "en": "Proofcraft — the seL4 formal-verification vendor; primary source for the confidentiality-proof milestone, corroborated by the seL4 forum.",
+    "zh": "Proofcraft——seL4 形式化验证厂商；保密性证明里程碑的第一来源，与 seL4 论坛相互印证。",
+    "jp": "Proofcraft——seL4 形式検証ベンダー；機密性証明マイルストーンの一次ソースで、seL4 フォーラムと相互に裏付けられる。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "envharness.com": {
+    "cat": "research",
+    "en": "Project page for Google Research's EnvHarness (arXiv 2608.19880); self-published but cross-checks against the arXiv abstract.",
+    "zh": "Google Research EnvHarness（arXiv 2608.19880）的项目页；自发布，但可与 arXiv 摘要交叉核对。",
+    "jp": "Google Research の EnvHarness（arXiv 2608.19880）のプロジェクトページ；自己発表情報だが arXiv 要旨と照合可能。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "lists.debian.org": {
+    "cat": "security",
+    "en": "Debian security-announce mailing list — the DSA-6456-1 advisory for SPIP; authoritative distro security source, corroborated by NVD.",
+    "zh": "Debian 安全公告邮件列表——SPIP 的 DSA-6456-1 公告；权威发行版安全来源，与 NVD 相互印证。",
+    "jp": "Debian セキュリティアナウンスのメーリングリスト——SPIP の DSA-6456-1 アドバイザリ；権威あるディストロのセキュリティ情報源で、NVD と相互に裏付けられる。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "help.zscaler.com": {
+    "cat": "vendor",
+    "en": "Zscaler's official documentation/help portal — the per-platform ZCC fix versions; first-party vendor source, corroborated by Rapid7.",
+    "zh": "Zscaler 官方文档/帮助门户——各平台 ZCC 修复版本；第一方厂商来源，与 Rapid7 相互印证。",
+    "jp": "Zscaler の公式ドキュメント/ヘルプポータル——プラットフォーム別 ZCC 修正バージョン；ファーストパーティのベンダー情報源で、Rapid7 と相互に裏付けられる。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
   }
 }

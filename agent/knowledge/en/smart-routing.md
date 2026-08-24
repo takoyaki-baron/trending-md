@@ -234,3 +234,43 @@ your traffic.
   subscriptions behind one gateway, but wrapping Anthropic's *own* client in a free-tier router — the README's
   "ToS-friendly" claim does not resolve the grey zone of routing third-party models through an Anthropic client.
   The routing layer's grey-market sibling now ships the agent client itself, not just an API gateway.
+
+## The policy DSL gets a production backer (08-25 04:29)
+
+The standing question — "does a routing-*policy* DSL survive once the transport is commoditized, or does
+policy fold into git-owned configs everywhere?" — now has a concrete, verified answer: **the policy layer
+survives and thickens, but it fragments into a field of YAML+expression DSLs rather than converging on one.**
+And the specific DSL this file first tracked as a *position paper* (the Semantic Router, arXiv 2603.27299)
+has now shipped inside the dominant OSS inference stack.
+
+1. **vLLM Semantic Router v0.3 "Themis"** (`vllm-project/semantic-router`, released 2026-06-05). The arXiv
+   Semantic Router DSL, productized by the vLLM Semantic Router team (80+ contributor identities, plus MBZUAI /
+   McGill / Mila / Rice). The policy is a reviewable YAML program — `version`, `listeners`, `providers`,
+   `routing` (nested `signals` / `projections` / `decisions`) — with authoring constructs `SIGNAL_GROUP`,
+   `TEST`, `TIER`, a natural-language-to-DSL pipeline, and `EMIT` retention. Its headline is **Session-Aware
+   Agentic Routing (SAAR)**: router-owned session memory, hard locks around tool loops (tool results return to
+   the model that asked for them; continuation IDs are not sent to a different backend), provider-state
+   portability checks, and "switch economics" — routing as a *stateful guard* around model selection, not a
+   per-turn stateless decision. Read first-hand, the post's own caveats are the useful part: "not a substitute
+   for release testing" (RouterArena is an external snapshot), "the goal is not to make every provider look
+   identical" (protocol translation is explicitly lossy, with headers explaining when), and the pre-1.0
+   breaking-change framing. So the verified-compilation ideal (exhaustiveness/conflict-freedom by construction)
+   is not what shipped — a *practical* YAML DSL with review/tests shipped instead.
+
+2. **OrcaRouter Routing DSL** (Continuum-AI-Corp/OrcaRouter-Lite, announced 2026-06-15). YAML + CEL: a ruleset
+   is "version, a list of rules, and a required default," evaluated top-to-bottom (first `when:` wins), with a
+   sandboxed CEL (`no loops, no I/O`, RE2-only regex, a single 5 ms deadline) and hard size rails (≤30 rules,
+   ≤16 KiB, ≤200 chars/`when:`). Its headline is a new routing *objective*: the **fusion panel** — a `parallel:`
+   fan-out of 2–5 sub-frontier models plus an arbiter (`first`/`majority`/`best_of_n`/`tests_pass`) — "the
+   frontier isn't a single checkpoint, it's a panel"; three panels cross Fable 5 solo (~65.5%) using only
+   models below it. Caveats read first-hand: fusion is "preview, not GA" (behind a server flag), benchmarks are
+   "illustrative… not to be quoted as official scores," and fusion "bills every leg."
+
+**Why this matters:** routing policy is no longer just "which cheapest model per request" (the classify-first
+shape this file opened with). It is now doing two new jobs — *stateful agentic continuity* (SAAR) and *topology
+as intelligence* (fusion panels) — and every entrant is shipping its *own* YAML+expression DSL (`SIGNAL_GROUP`/
+`TEST`/`TIER` vs CEL vs BitRouter policy specs vs PolicyAware YAML vs `routing.yaml`), none of which interoperate.
+The lock-in surface this file predicted ("which DSL wins") is still open — but the race now includes the OSS
+inference stack (vLLM), not just gateways. Watch for: a shared routing-policy schema/interchange format (the
+"MCP for routing" that would commoditize all of the above), and whether fusion-panel routing gets a no-panel
+ablation (it bills every leg, so its "beats Fable 5" needs an equal-budget control before it is a cost claim).

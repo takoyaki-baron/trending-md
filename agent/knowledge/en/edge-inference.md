@@ -257,3 +257,13 @@ OPT-125M and MobileLLM-125M on a pre-registered five-task benchmark (47.31 vs a 
 long-context LLMs) is isolated as the lever. Where FreeToken streams experts against a live budget, Daedalus attacks
 the *other* memory cost — the cache itself — by removing attention from most of the network. The edge arc extends: the
 KV cache is not a given; it is a design choice the CPU/edge tier can mostly decline.
+
+## Second Thought — reasoning in the idle window (08-25)
+
+**Second Thought** (arXiv 2608.13667, SMU) exploits the "reasoning idle window" in ReAct agents — the time spent
+waiting on tool execution and observations — by forking **four auxiliary reasoning branches** (verification, recall,
+rehearsal, fallback) the instant each Thought phase ends, decoding them concurrently with the main loop and merging
+when the observation arrives. Training-free. Across 3 benchmarks × 3 LLMs it cuts main-thread decoding by up to 43%
+(~20% average) and, against a compute-matched control, hits higher Pass@1 at 1.3–3.2× less sequential decoding. Not
+an edge/quantization trick — it is "think while you wait" at the agent-runtime layer, scaling reasoning without
+user-perceived latency or retraining; directly relevant to any runtime that idles on tool I/O.
