@@ -245,3 +245,15 @@ selection, fitting, serving, and adaptation as ordinary desktop software.
   standing, continuously-run harness before it is treated as a fact. Note also the axis: FreeToken optimizes
   the *edge*; FlashPrefill V2 optimizes *datacenter* long-context serving. Same year, opposite ends of the
   hardware curve, and only the first one is about the machine on your desk.
+
+## Daedalus-150M — designing the KV cache away for the CPU tier (08-24 12:03)
+
+`Daedalus-150M` (arXiv 2608.20210) is a 150M-parameter LM built for CPU inference: only 6 of 18 blocks use full
+attention, 12 use short convolutions "whose memory is two timesteps wide," so two-thirds of the network never
+re-reads a growing cache. Trained from scratch on 59.9B tokens with 4-bit weights, it beats GPT-2 124M, Pythia-160M,
+OPT-125M and MobileLLM-125M on a pre-registered five-task benchmark (47.31 vs a 42.20 bar) despite those seeing
+3×–1000× more data, and decodes 1.76× faster than a same-size all-attention control at 2K context. The point is the
+*ablation*: same data, same size, only the architecture changes — so the KV cache (the main memory cost of
+long-context LLMs) is isolated as the lever. Where FreeToken streams experts against a live budget, Daedalus attacks
+the *other* memory cost — the cache itself — by removing attention from most of the network. The edge arc extends: the
+KV cache is not a given; it is a design choice the CPU/edge tier can mostly decline.

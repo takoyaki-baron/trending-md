@@ -2932,5 +2932,14 @@
     "cred": "high",
     "density": "high",
     "cv": 1
+  },
+  "aiengineeringfromscratch.com": {
+    "cat": "community",
+    "en": "Official companion site for the open-source \"AI Engineering from Scratch\" curriculum (rohitg00/ai-engineering-from-scratch) — 20 phases / 511 lessons, each shipping a reusable artifact. Self-published; cross-check curriculum claims against the GitHub repo.",
+    "zh": "开源「AI Engineering from Scratch」课程（rohitg00/ai-engineering-from-scratch）的官方配套网站——20 阶段 / 511 课，每课产出一个可复用工件。自发布内容；课程声明请对照 GitHub 仓库交叉核实。",
+    "jp": "オープンソース「AI Engineering from Scratch」カリキュラム（rohitg00/ai-engineering-from-scratch）の公式コンパニオンサイト——20フェーズ / 511レッスン、各レッスンが再利用可能な成果物を生成。自己発表情報のため、カリキュラムの主張はGitHubリポジトリと照合のこと。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

@@ -914,3 +914,12 @@ Code，而是经可移植核心把能力分发到竞争对手的 harness 里，�
 含完全本地的 Ollama）——17 个消息渠道含原生邮件，带一键 Rust 强制的隐私模式。它以完整的本地优先记忆 + 编排栈与
 OpenClaw/Claude Code 生态正面竞争，而非单一供应商的记忆垫片——与 Hermes Agent 相同的「单仓库全栈」形态，但本地优先，
 且把隐私边界做成了一等开关。
+
+## claude-obsidian——可审计保险库形态的 agent 记忆（08-24 12:03）
+
+`AgriciDaniel/claude-obsidian`（MIT，v2.1.0，11.5k★）把 Obsidian + Claude Code 变成自组织的知识系统：丢进文件/URL/
+YouTube，15 个技能（`wiki`、`save`、`wiki-ingest`、`wiki-query`、`wiki-lint`、`autoresearch` 等）读取、链接并把来源
+归档进你拥有的纯 Markdown，遵循 Karpathy 的 LLM-Wiki 模式。信任是事务性的——SHA-256 哈希、进程生命周期的保险库锁、
+日志化备份、冲突检测（绝不静默覆盖）——并按声明追踪出处，宁可接地拒绝也不编造引用。默认本地，embedding/OCR/网络出站
+显式征得同意。它与 holaOS/OpenHuman 是同一「记忆即文件」的赌注（纯文本、人可拥有），但定位为*可审计、可追踪出处*的
+保险库而非向量库——在 agent 记忆里，「它为什么这么说」的答案是可 git diff 的 Markdown 文件，而非一个 embedding。

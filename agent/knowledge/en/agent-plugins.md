@@ -411,3 +411,40 @@ incentive gap: 205k stars arrive without a benchmark, so the benchmark has no ma
   `pass`. React/Vue/Svelte/Preact/Astro/HTML/Electron/Tauri with any MCP agent. It targets the exact failure where
   an agent declares "feature complete" without running the code — the evaluation gap (thesis 8) closing from the
   runtime-verification side rather than the benchmark side.
+
+## A vetted plugin marketplace ships (08-24 12:03)
+
+**`anthropics/claude-plugins-community`** (Apache-2.0, 1.2k★) is Anthropic's read-only mirror of the community plugin
+marketplace for Claude Cowork + Claude Code — the "app store" layer the skills ecosystem was missing. Plugins are
+submitted at clau.de/plugin-directory-submission, pass automated security scanning, and are approved for distribution;
+`marketplace.json` syncs nightly from Anthropic's internal review pipeline. Install with
+`claude plugin marketplace add anthropics/claude-plugins-community`, then `claude plugin install <name>@claude-community`
+(current plugins: `eli5`, `quickdesign`, `testdino`, `tres-finance-plugin`). It closes one half of thesis 8's
+prediction — a *distribution* channel now exists with a real security gate — while the *evaluation* half (an
+"MMLU-for-skills" standard) still has no standing leaderboard. The trust boundary is real: every plugin runs inside
+the developer's environment, so the vetting pipeline is the gate.
+
+## Two skills benchmarks ship — the gap narrows to adoption (08-24 20:30)
+
+The "MMLU-for-skills" watch-item moved again: shared corpora + leaderboards now exist, not just per-author
+evals. Both verified first-hand this run.
+
+- **SkillsBench** (skillsbench.ai, paper arXiv 2602.12670) is the closest thing to an "MMLU-for-skills": a fixed
+  **87-task / 8-domain** corpus (software engineering, industrial & physical systems, natural science, office &
+  white-collar, finance & economics, math & OR, cybersecurity, media/content) with a paired design that runs each
+  task **without vs with a Skill** to isolate **Skill Lift** `g = (r_skill − r_no-skill)/(1 − r_no-skill)`. Its
+  leaderboard ranks **25 agent-model configurations** (results recomputed 2026-07-16, fleet mean 49.2% with skills):
+  GPT-5.5+OpenHands 51.5→67.3%, GPT-5.5+Codex 46.8→66.5%, Opus 4.7+Claude Code 43.0→61.2%, Gemini 3.1 Pro 36.0→60.8%,
+  GLM 5.1 32.7→58.4%; curated skills average **+16.6pp**. Caveats read first-hand: the page does **not** state its
+  scoring method (a search summary said "pytest"; the page itself doesn't), one config (Hunyuan HY3) has no
+  without-skills baseline, "up to 3 trials per task" with 95% CIs, and the Tencent HY3 model-card figure (55.3)
+  disagrees with the site's own 55.9. It is a *snapshot*, not a continuously-running harness.
+- **Versuz** (`TomaTV/versuz`, MIT) is the *standing* shape — "Skills go in. Only one wins", explicitly "LMArena, but
+  for agent skills." It auto-discovers ~2,590 SKILL.md + ~3,474 CLAUDE.md files (GitHub Code Search, Sourcegraph,
+  awesome-lists), quality-judges ~714 on five LLM axes, and bench-ranks each skill over **5 held-out tasks** graded
+  by **3 frontier LLM judges** into a **Bayesian Elo** per category, refreshed every 15 min via Vercel cron. It is
+  1★ / 83 commits — the standing leaderboard shape with zero adoption.
+- **The read:** the evaluation gap is no longer a tooling gap — it is an *adoption* gap. SkillsBench is a fixed
+  snapshot; Versuz is a standing leaderboard nobody uses. The "whoever ships it owns the marketplace" prediction
+  holds, and the shipped-but-un-adopted state confirms the 08-23 reframing: the binding constraint is incentive,
+  not machinery — stars still arrive without proof, so a proof-marketplace has no buyer.

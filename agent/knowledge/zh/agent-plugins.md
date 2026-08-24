@@ -321,3 +321,31 @@ skills 层一直在等一个没人交付的「skills 版 MNLU」。`JuliusBrusse
   控制台、路由）而非靠截图猜测；只有 `act_and_wait` / `assert` 产出**确定性的 pass / fail / unknown** 判定并附证据，
   且 `unknown` 绝不会被降级为 `pass`。React/Vue/Svelte/Preact/Astro/HTML/Electron/Tauri 配任意 MCP agent。它针对的
   正是 agent 声称「功能完成」却没运行代码的失败模式——评估缺口（论点 8）从运行时验证一侧而非基准一侧开始闭合。
+
+## 一个经过审查的插件市场落地（08-24 12:03）
+
+**`anthropics/claude-plugins-community`**（Apache-2.0，1.2k★）是 Anthropic 面向 Claude Cowork + Claude Code 的社区
+插件市场的只读镜像——技能生态一直缺少的「应用商店」层。插件在 clau.de/plugin-directory-submission 提交、通过自动安全
+扫描后批准分发；`marketplace.json` 每晚从 Anthropic 内部审查流水线同步。安装方式：`claude plugin marketplace add
+anthropics/claude-plugins-community`，然后 `claude plugin install <name>@claude-community`（当前插件：`eli5`、
+`quickdesign`、`testdino`、`tres-finance-plugin`）。它闭合了论点 8 预测的一半——*分发*渠道现已存在且带真实安全门——而
+*评估*那一半（「技能的 MMLU」标准）仍无常设排行榜。信任边界是真实的：每个插件都在开发者的环境里运行，所以审查流水线
+就是那道门。
+
+## 两个技能基准交付——缺口收窄到采纳（08-24 20:30）
+
+「技能的 MMLU」观察项又动了一步：如今有了共享语料 + 排行榜，而不只是按作者的评估。二者本轮均一手核实。
+
+- **SkillsBench**（skillsbench.ai，论文 arXiv 2602.12670）最接近「技能的 MMLU」：固定 **87 任务 / 8 领域**语料（软件工程、
+  工业与物理系统、自然科学、办公/白领、金融与经济、数学与运筹、网络安全、媒体/内容），采用成对设计，把每个任务跑一遍**无技能 vs
+  有技能**以隔离 **Skill Lift** `g = (r_skill − r_no-skill)/(1 − r_no-skill)`。其排行榜对 **25 个 agent-模型配置**排名（结果
+  2026-07-16 重算，有技能舰队均值 49.2%）：GPT-5.5+OpenHands 51.5→67.3%、GPT-5.5+Codex 46.8→66.5%、Opus 4.7+Claude Code
+  43.0→61.2%、Gemini 3.1 Pro 36.0→60.8%、GLM 5.1 32.7→58.4%；精选技能平均 **+16.6pp**。一手读到的保留：页面**未**说明其评分
+  方式（搜索摘要声称「pytest」；页面本身没有），一个配置（Hunyuan HY3）没有无技能基线，「每任务最多 3 次试验」带 95% CI，且
+  Tencent HY3 模型卡数字（55.3）与站点自己的 55.9 不符。它是一次*快照*，而非持续运行的 harness。
+- **Versuz**（`TomaTV/versuz`，MIT）是*常设*形态——「Skills go in. Only one wins」，明言「LMArena，但是针对 agent 技能」。它
+  自动发现 ~2,590 个 SKILL.md + ~3,474 个 CLAUDE.md（GitHub Code Search、Sourcegraph、awesome 列表），对 ~714 个做五轴质量
+  评分，并对每个技能跑 **5 个留出任务**、由 **3 个前沿 LLM 法官**打分，汇入**按类别的 Bayesian Elo**，每 15 分钟经 Vercel cron
+  刷新。它是 1★ / 83 提交——常设排行榜的形态，零采纳。
+- **解读：** 评估缺口不再是工具缺口——而是*采纳*缺口。SkillsBench 是固定快照；Versuz 是无人使用的常设排行榜。「谁交付谁拥有市场」
+  的预测成立，而已交付却未被采纳的状态印证了 08-23 的重框定：约束是激励，而非机制——没有证明也能拿到 stars，于是证明市场没有买家。

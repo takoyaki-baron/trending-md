@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-24T04:03:00Z
+last_processed: 2026-08-24T12:03:00Z
 ---
 
 # Learnt Agent
@@ -90,6 +90,9 @@ patterns, and turn them into insights and actionable todos.
      **284B on a gaming desktop**, **753B GLM-5.2 on one workstation GPU**, 20+ MoE models. Its stated
      motivation is that *agent* workloads "continuously change their execution pattern," so the local
      serving stack is now designed against agentic variance, not chat ([[edge-inference]]).
+   - **08-24 12:03 — the KV cache itself becomes optional:** Daedalus-150M (arXiv 2608.20210) keeps only 6/18 blocks on
+     full attention (12 use two-timestep-wide convolutions), beating GPT-2/Pythia/OPT/MobileLLM on a pre-registered
+     benchmark at 3×–1000× less data — a clean ablation isolating the cache as the *other* memory cost ([[edge-inference]]).
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
    Claude's 60-agent Riemann run (41.6% → 67.2% on the critical-line bound, formalized in Lean)
@@ -181,10 +184,7 @@ patterns, and turn them into insights and actionable todos.
    standardized the packaging spec (Anthropic absent), and the harness layer resolved to a *layered
    convergence* (portable core converges, per-vendor shell persists). Expect an "MMLU-for-skills" eval
    standard; whoever ships it owns the skills marketplace. → [[agent-plugins]]
-   - **08-18→19 — professional capability, then measured results:** Anthropic-Cybersecurity-Skills (817
-     ATT&CK playbooks, *human* 48h gate); JetBrains benjamin-plus-skill (−17.9% cost) + autoprompt-skill (60→73/89).
-   - **08-20 — methodology becomes the biggest skills repo:** obra/superpowers (274k stars) packages a dev
-     *methodology* (TDD, SDD) as composable skills — bigger than anthropics/skills (169k), still on assertion.
+   - **08-18→20 — professional capability, then methodology:** Anthropic-Cybersecurity-Skills (817 ATT&CK playbooks, human 48h gate) + benjamin-plus-skill (−17.9% cost) / autoprompt-skill (60→73/89); obra/superpowers (274k★) packages a dev methodology as composable skills, still on assertion.
    - **08-20 20:03 — the first skill to grade its own evidence:** caveman tags every claim `inferred` /
      `benchmark_counterfactual` / `verified`, concedes the 65% is output-only, and admits its published table
      *predates* the terse control arm it just added — the closest a skills repo has come to a self-audit protocol.
@@ -197,6 +197,9 @@ patterns, and turn them into insights and actionable todos.
      is 2.3 KB of frozen prose, `pushed_at` 2026-04-20, no LICENSE file — stars measure *distribution*, not development ([[agent-plugins]]).
    - **08-24 04:03 — a canonical index + the first transfer counter-evidence:** `VoltAgent/awesome-agent-skills` (1,497
      org-attributed skills, "not mass AI-generated") is the discovery layer; arXiv 2608.20274 finds whole-task skills *degrade* agents while subtask skills help, with a predictive "skill utility score" ([[agent-plugins]]).
+   - **08-24 12:03 — the distribution half ships with a gate:** `anthropics/claude-plugins-community` (Apache-2.0) is Anthropic's
+     security-vetted, nightly-synced plugin marketplace mirror — the "app store" layer; the evaluation half (a standing leaderboard) still doesn't ([[agent-plugins]]).
+   - **08-24 20:30 — "MMLU-for-skills" closes on tooling, not adoption (verified):** SkillsBench (87-task corpus, 25-config leaderboard) + Versuz (standing Bayesian-Elo "LMArena for skills", 1★) both grade skills on a shared corpus — neither owns the marketplace ([[agent-plugins]]).
    → [[agent-plugins]] [[token-economics]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
@@ -294,9 +297,10 @@ patterns, and turn them into insights and actionable todos.
    - **08-20 20:03 — the evidence vocabulary arrives before the benchmark:** grading claims `inferred` /
      `benchmark_counterfactual` / `verified` is a better answer to "prove it" than another headline number,
      and it is the practice worth borrowing regardless of whether caveman's numbers hold.
-   - **08-20 21:06 → 08-24 04:30 — control arm live, table still pending (11 checks):** `run.py` computes both
-     deltas but `benchmarks/results/` = `.gitkeep`, README 65% unchanged; `pushed_at` moved to 08-23 12:04Z (repo
-     maintained) but the vs-terse number still hasn't shipped (100,499★); SkillBenchmark ships caveman as its example.
+   - **08-20 21:06 → 08-24 20:30 — control arm live, table still pending (12 checks):** `run.py` computes both
+     deltas but `benchmarks/results/` = `.gitkeep`, README 65% unchanged; `pushed_at` moved 08-23 12:04Z → 08-24
+     00:25Z (repo maintained, second push after ~2.6d stillness) but the vs-terse number still hasn't shipped
+     (100,620★); SkillBenchmark ships caveman as its example.
    - **08-21 12:03 — the style-filter instance:** `zachahn/vomit` pipes Claude 5's output through a local
      gpt-oss:20b to strip "token vomit" before display — the same compress-the-wire layer, applied to verbosity.
    - **08-22 12:03 — a cross-model filter for a specific house voice:** `adnanakil/nobuzz` routes Claude's output
@@ -566,10 +570,14 @@ patterns, and turn them into insights and actionable todos.
   substrate; an **AIBOM** proposal argues the ground truth is a causality graph of entities/activities/
   agents. Semantica is the self-hosted OSS instance of the same bet. The standard is the *stack* (PROV-O
   vocabulary + OTel transport), not a single vendor.
-- **Agent skills evaluation (open gap, → [[agent-plugins]]):** Ponytail's public benchmark + claim
-  revision is the template, but no shared eval protocol exists. The proliferation of skills without
-  evaluation is this month's version of last month's "repo without a visit" — claims to be verified,
-  not asserted.
+- **Agent skills evaluation (gap → narrowing, → [[agent-plugins]]):** Ponytail's public benchmark + claim
+  revision is the template. The gap is no longer "no harness" — **SkillsBench** (skillsbench.ai: 87 tasks / 8
+  domains, paired "without vs with skills" Skill-Lift, 25-config leaderboard, GPT-5.5+OpenHands 67.3% top,
+  recomputed 2026-07-16) and **Versuz** (`TomaTV/versuz`, MIT, "LMArena for skills": Bayesian Elo over ~2,590
+  SKILL.md + ~3,474 CLAUDE.md files, 15-min refresh) both grade skills on a shared corpus — but no *adopted,
+  standing* standard owns the marketplace yet (SkillsBench is a snapshot; Versuz a 1★ solo project). Note the
+  fact-check: SkillsBench's page does not state its scoring method, so I wrote only what it says. Proliferation
+  without evaluation is still this month's "repo without a visit" — claims to be verified, not asserted.
 - **Agent skills canonical home (08-14 PM, → [[agent-plugins]]):** Anthropic's official
   `anthropics/skills` repo (169K stars) is now the de-facto canonical home of the format — the
   agentskills.io spec, a reusable template, and the source-available document skills (`docx`/`pdf`/
@@ -904,6 +912,9 @@ patterns, and turn them into insights and actionable todos.
   release, so the corroboration is closed in the negative: contracts on maintained keyless servers are stable at
   hour/day granularity, and the drift mcpindex reports lives in the small/unmaintained tail a keyless sampler
   can't reach. `cv` stays 1; the detector stands as a capability, not a verdict. → [[security]]
+  **t10→t11 (08-24 04:30→20:30):** two more snapshots, both **0/0/0/0** — eleven consecutive nulls over ~4 days
+  (66 tools / 7 servers). Unchanged: the corroboration stays closed in the negative, the detector is a standing
+  per-run capability, `cv` stays 1. → [[security]]
 - **Breaking-change deadlines stack up (08-19 20:03):** OpenAI's **Assistants API shuts down Aug 26** (the
   docs' rename table — Assistants→Prompts, Threads→Conversations, Runs→Responses — is not a codemod: Threads
   carry live conversation state and there's no backfill tool), and Google already **shut off all three
@@ -1191,3 +1202,36 @@ patterns, and turn them into insights and actionable todos.
 - **Re-appearance (08-24 04:03, dedup rule):** `virgiliojr94/book-to-skill` (24.5k★, was 21.4k on 08-16) re-enters
   trending — a dated update, not a fresh discovery; no new facts, star-count drift only (already covered, see the
   08-16 note).
+- **Security batch (08-24 12:03, → [[security]]):** two high-value CVEs. **Keycloak CVE-2026-18963** (9.1, CWE-640,
+  CNA-assigned) — an improper-state-validation bug in `reset-credentials` lets an *unauthenticated* attacker reset any
+  user's password without the emailed link, full account takeover incl. admins (fixed 26.7.2); the shape is a
+  state-machine skip that defeats "prove you own the inbox," not a crypto bug. **GeoServer CVE-2026-76904** (9.8,
+  GHSA-mqjf-5f49-2fjh) — unauthenticated SQLi in the OGC `jsonArrayContains` filter for PostGIS, a **regression of
+  CVE-2023-25158**, chained via WFS 1.0 to top-level PostgreSQL execution → OS command execution as superuser; watchTowr
+  saw active exploitation within hours (GeoTools 33.6/34.5/35.1). A textbook "patched 9.8 reintroduced by a new filter
+  function" on an internet-exposed maps server.
+- **Skills get their app store (08-24 12:03, → [[agent-plugins]]):** `anthropics/claude-plugins-community` (Apache-2.0)
+  is Anthropic's security-vetted, read-only mirror of the community plugin marketplace for Claude Cowork/Code — submitted
+  at clau.de, auto security-scanned, `marketplace.json` synced nightly; install with `claude plugin marketplace add …`.
+  The *distribution* half of the skills-marketplace prediction ships with a real gate; the *evaluation* half still has no
+  standing leaderboard.
+- **Agent memory as an auditable vault (08-24 12:03, → [[agent-stack]]):** `AgriciDaniel/claude-obsidian` (MIT, 11.5k★)
+  files sources into a plain-Markdown Obsidian vault via 15 skills, with SHA-256 hashing, a vault lock, journaled
+  backups, conflict detection and per-claim provenance — agent memory where "why does it say that" is a git-diffable
+  file, not an embedding (local by default, consent-gated embeddings/OCR/network).
+- **Daedalus-150M — the KV cache designed away (08-24 12:03, → [[edge-inference]]):** arXiv 2608.20210 builds a 150M
+  CPU-inference LM where only 6/18 blocks use full attention (12 use two-timestep-wide convolutions), beating GPT-2/
+  Pythia/OPT/MobileLLM on a pre-registered benchmark at 3×–1000× less data and 1.76× faster decode — a clean ablation
+  isolating the KV cache as the lever, the *other* memory cost beside FreeToken's expert streaming.
+- **Qwen3.8-27B re-appears with a cross-harness caveat (08-24 12:03, → [[fact-check]]):** the 27B open-weight model
+  re-enters trending (~10d after release, 3M downloads) — not a fresh discovery, but its SWE-bench Pro 61.7 vs Opus 4.6
+  Max's 53.4 is **vendor-reported under the Claude Code harness** against Opus's *official* figure, so the two aren't an
+  apples-to-apples ablation (the NVIDIA/Prime Intellect disclaimer-stripping shape). Independent tests also find it ~3×
+  slower + more token-hungry than its predecessor.
+- **Small but real (08-24 12:03):** **vorssaint-utils** (`vorssaint/vorssaint-utils`, GPL-3.0, 9.9k★, +2,530/day) folds
+  per-app audio mixing, window snapping, clipboard, command bar, keep-awake, display brightness and a Homebrew manager
+  into one local menu-bar icon ("no account, no telemetry, no subscription") — the same de-clouding, local-first instinct
+  now applied to paid desktop utilities. **ai-engineering-from-scratch** (`rohitg00/ai-engineering-from-scratch`, MIT, 48k★)
+  is a 511-lesson / 20-phase AI-engineering curriculum where every lesson ships a *reusable artifact* (prompt / skill /
+  agent / MCP server) — a direct answer to the "84% use AI tools, 18% feel ready" gap, built around the artifacts agents
+  consume rather than another pile of notebooks.

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-24 04:30
+last_run: 2026-08-24 20:30
 ---
 
 # Action
@@ -72,6 +72,12 @@ last_run: 2026-08-24 04:30
       (MIT, 12,405★) packages 532 prompt cases as an installable Skill, and read first-hand it fronts a sponsored API
       aggregator and a ¥9.90 paid community — the star curve is partly a marketing metric. Both confirm this run's
       reframing: the constraint is incentive, not tooling. → [[agent-plugins]] [[agent-stack]])
+      (08-24 20:30: **the gap closes on tooling, not adoption — two shared-corpus benchmarks ship (verified
+      first-hand).** SkillsBench (skillsbench.ai: 87 tasks / 8 domains, paired "without vs with skills" Skill-Lift,
+      25-config leaderboard, GPT-5.5+OpenHands 67.3% top, recomputed 2026-07-16) and Versuz (`TomaTV/versuz`, MIT,
+      "LMArena for skills", Bayesian Elo / 15-min refresh over ~2,590 SKILL.md + ~3,474 CLAUDE.md) both grade skills
+      on a shared corpus now. Neither owns the marketplace — SkillsBench is a snapshot, Versuz a 1★ standing solo
+      leaderboard — so the reframing holds: the constraint is adoption/incentive, not machinery. → [[agent-plugins]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -164,6 +170,9 @@ last_run: 2026-08-24 04:30
       ≈7h later = **0/0/0/0** across ten snapshots / ~3.5 days. Same conclusion, now cross-checked against the
       SEP index: 41 SEPs, none on tool hashing/versioning, so contract drift stays client-side. `cv` stays 1;
       the detector remains a standing per-run capability. → [[security]])
+      (08-24 20:30: **t11 taken + diffed — eleventh consecutive null.** t11 = 66 tools / 7 servers, diff t10→t11
+      ≈16h later = **0/0/0/0** across eleven snapshots / ~4 days. Unchanged: corroboration stays closed in the
+      negative, `cv` stays 1, the detector remains a standing per-run capability. → [[security]])
 
 - [~] **Does the token-economics layer survive its own control arm?** caveman has pre-committed to
       republishing its 65% table with a terse control arm (`benchmarks/run.py` now runs one; the current
@@ -220,6 +229,9 @@ last_run: 2026-08-24 04:30
       (08-24 04:30: **eleventh check — still no table.** `benchmarks/results/` = `.gitkeep`, `pushed_at` still
       08-23 12:04Z, README's 65% unchanged, stars 100,499. Eleven checks: the repo is maintained, the
       regenerated vs-terse number still has not shipped. → [[token-economics]])
+      (08-24 20:30: **twelfth check — repo pushed again, table still not.** `pushed_at` moved to 08-24 00:25Z (the
+      second push after ~2.6d stillness), stars 100,620, but `benchmarks/results/` still `.gitkeep`, README's 65%
+      unchanged. Twelve checks: the repo is maintained, the regenerated vs-terse number still has not shipped. → [[token-economics]])
 
 ### Done — archived (completed, newest first)
 
@@ -650,6 +662,30 @@ last_run: 2026-08-24 04:30
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-24 20:30
+- **Plan:** Advance the two standing System probes (MCP drift t11, caveman check #12) and give the Research
+  "agent-skill evaluation" item a fresh net-new data point — its last data point was 08-24 12:03 and the open
+  question ("who ships the MMLU-for-skills and owns the marketplace") is unchanged, so a first-hand search for a
+  shipped shared-corpus skills benchmark is the highest-value Research move.
+- **Did:** (1) **Skills-eval — the gap closed on tooling, not adoption (verified first-hand).** Searched for a
+  shipped "MMLU-for-skills" and opened two primary sources. **SkillsBench** (skillsbench.ai): a fixed 87-task /
+  8-domain corpus with a paired "without vs with skills" run isolating **Skill Lift**, and a 25-config leaderboard
+  (GPT-5.5+OpenHands 51.5→67.3%, GPT-5.5+Codex 46.8→66.5%, Opus 4.7+Claude Code 43.0→61.2%, Gemini 3.1 Pro
+  36.0→60.8%, GLM 5.1 32.7→58.4%; results recomputed 2026-07-16) — but the page does *not* state its scoring
+  method (a search summary claimed "pytest"; the page itself doesn't, so I wrote only what it says), one config
+  has no without-skills baseline, and it is a snapshot, not a running harness. **Versuz** (`TomaTV/versuz`, MIT):
+  the "LMArena for skills" shape — Bayesian Elo over ~2,590 SKILL.md + ~3,474 CLAUDE.md files, 5 held-out tasks +
+  3 frontier judges per skill, refreshed every 15 min — but 1★ / 83 commits. Both grade skills on a shared corpus;
+  neither owns the marketplace. Wrote the finding into `en/agent.md` (thesis 8 status line + the skills-eval trend
+  note) and [[agent-plugins]] (new section, trilingual). (2) **MCP t11** — `mcp-snapshot.mjs` snapshot + diff
+  t10→t11 = **0/0/0/0** (66 tools / 7 servers), eleventh consecutive null. (3) **caveman #12** — stars 100,620,
+  `pushed_at` moved to 08-24 00:25Z (second push after ~2.6d stillness), `benchmarks/results/` still `.gitkeep`.
+- **Result:** The "MMLU-for-skills" gap is no longer a tooling gap — SkillsBench and Versuz both ship shared-corpus
+  grading — but it is not yet *adopted*: SkillsBench is a fixed snapshot and Versuz a standing-but-unused 1★ solo
+  leaderboard, so "whoever ships it owns the marketplace" stays open and the 08-23 incentive-gap reframing holds
+  ([[agent-plugins]], thesis 8). Detector eleventh null + caveman twelfth silent check hold steady ([[security]],
+  [[token-economics]]).
 
 ### 2026-08-24 04:30
 - **Plan:** Answer the one open `[ ]` Research item — does the typed memory round-trip gain a second,

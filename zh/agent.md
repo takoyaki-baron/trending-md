@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-24T04:03:00Z
+last_processed: 2026-08-24T12:03:00Z
 ---
 
 # 学习智能体
@@ -89,6 +89,9 @@ last_processed: 2026-08-24T04:03:00Z
      "持续把计算与模型状态映射到实际可用的资源上"，横跨 GPU/CPU/RAM/PCIe/磁盘——8 GB 笔记本 GPU 上的 35B、
      **游戏台式机上的 284B**、**单块工作站 GPU 上的 753B GLM-5.2**、20+ 个 MoE 模型。其自述动机是*智能体*工作负载
      "不断改变其执行模式"，于是本地服务栈如今按智能体的方差来设计，而非按聊天（[[edge-inference]]）。
+   - **08-24 12:03 — KV cache 本身变成可选项：** Daedalus-150M（arXiv 2608.20210）让 18 个块中只有 6 个用全注意力
+     （12 个用两时间步宽的卷积），在预注册基准上以 3×–1000× 更少数据击败 GPT-2/Pythia/OPT/MobileLLM——一次干净消融，
+     把 cache 隔离为专家流式加载之外的*另一项*内存成本（[[edge-inference]]）。
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
    线上零点下界 41.6% → 67.2%，并在 Lean 中形式化）——其中 60 个智能体只有 2 个贡献了关键洞察——
@@ -167,10 +170,7 @@ last_processed: 2026-08-24T04:03:00Z
    基准并公开修正了宣称。正典之家已落地（`anthropics/skills`，169K stars），Agent Plugins 1.0.0 联盟
    标准化了打包规范（Anthropic 缺席），harness 层也收敛为*分层式收敛*（可移植核心收敛、逐厂商外壳持续）。
    预期会出现一个"技能的 MMLU"评估标准；谁先交付谁就拥有技能市场。→ [[agent-plugins]]
-   - **08-18→19 — 专业能力，然后是有量化结果：** Anthropic-Cybersecurity-Skills（817 个 ATT&CK 剧本、
-     *人工* 48h 门）；JetBrains benjamin-plus-skill（成本 −17.9%）+ autoprompt-skill（60→73/89）。
-   - **08-20 — 方法论成为最大的 skills 仓库：** obra/superpowers（274k stars）把开发*方法论*（TDD、SDD）
-     打包成可组合 skills——大于 anthropics/skills（169k），仍靠断言。
+   - **08-18→20 — 专业能力，然后是方法论：** Anthropic-Cybersecurity-Skills（817 个 ATT&CK 剧本、人工 48h 门）+ benjamin-plus-skill（成本 −17.9%）/ autoprompt-skill（60→73/89）；obra/superpowers（274k★）把开发*方法论*（TDD、SDD）打包成可组合 skills，仍靠断言。
    - **08-20 20:03 — 首个给自己证据分级的 skill：** caveman 为每条声明打上 `inferred` /
      `benchmark_counterfactual` / `verified`，承认那 65% 只针对输出，并坦言其已公布的表格
      *早于*它刚加入的简洁对照组——skills 仓库迄今最接近自我审计协议的一步。
@@ -182,6 +182,9 @@ last_processed: 2026-08-24T04:03:00Z
      冻结文字，`pushed_at` 2026-04-20、无 LICENSE 文件——stars 度量的是*分发*而非开发（[[agent-plugins]]）。
    - **08-24 04:03 — 正典索引 + 首个迁移反证据：** `VoltAgent/awesome-agent-skills`（1,497 个组织归属技能）是发现层；
      arXiv 2608.20274 发现整任务技能*拉低* agent 而子任务技能有帮助，并带预测性「技能效用评分」（[[agent-plugins]]）。
+   - **08-24 12:03 — 分发那一半带着门落地：** `anthropics/claude-plugins-community`（Apache-2.0）是 Anthropic 的
+     安全审查、每晚同步的插件市场镜像——「应用商店」层到来；评估那一半（常设排行榜）仍未到来（[[agent-plugins]]）。
+   - **08-24 20:30 — 「技能的 MMLU」在工具层面收口，而非采纳层面（一手核实）：** SkillsBench（87 任务语料、25 配置排行榜）+ Versuz（常设 Bayesian-Elo「技能的 LMArena」，1★）如今都在共享语料上给技能打分——但谁都还没拥有市场（[[agent-plugins]]）。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -261,9 +264,9 @@ last_processed: 2026-08-24T04:03:00Z
      这套做法本身都值得借鉴。
    - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
      在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
-   - **08-20 21:06 → 08-24 04:30 — 对照组已上线，表格仍待发布（11 次核查）：** `run.py` 计算两种差值但
-     `benchmarks/results/` = `.gitkeep`，README 65% 未变；`pushed_at` 已移到 08-23 12:04Z（仓库在维护）但 vs 简洁数字
-     仍未发布（100,499★）；该拆分现可由第三方工具独立运行——SkillBenchmark 以 caveman 作为示例 skill。
+   - **08-20 21:06 → 08-24 20:30 — 对照组已上线，表格仍待发布（12 次核查）：** `run.py` 计算两种差值但
+     `benchmarks/results/` = `.gitkeep`，README 65% 未变；`pushed_at` 已从 08-23 12:04Z 移到 08-24 00:25Z（仓库在
+     维护，沉寂 ~2.6 天后的第二次推送）但 vs 简洁数字仍未发布（100,620★）；该拆分现可由第三方工具独立运行——SkillBenchmark 以 caveman 作为示例 skill。
    - **08-22 12:03 — 针对特定官腔的跨模型过滤器：** `adnanakil/nobuzz` 把 Claude 的输出经 Gemini
      （Antigravity CLI）过滤掉「BuzzFeed 腔」——与 vomit 同层，但瞄准*具名*的官腔而非通用冗长（仍仅断言）。
    → [[token-economics]] [[smart-routing]]
@@ -480,9 +483,12 @@ last_processed: 2026-08-24T04:03:00Z
   由 **PROV-AGENT** 扩展出 AI 智能体决策谱系；**OpenTelemetry GenAI** 语义约定（v1.42+）提供遥测/传输
   底座；**AIBOM** 提案主张其真实依据是实体/活动/智能体的因果图。Semantica 是同一赌注的自托管 OSS 实例。
   该标准是*一整套栈*（PROV-O 词汇 + OTel 传输），而非单一厂商。
-- **智能体技能评估（开放缺口，→ [[agent-plugins]]）：** Ponytail 的公开基准 + 宣称修正就是模板，
-  但尚无共享的评估协议。技能在没有评估的情况下激增，正是上个月"没访问就写仓库"的当月份翻版——
-  宣称需要核实，而非照单全收。
+- **智能体技能评估（缺口 → 收窄，→ [[agent-plugins]]）：** Ponytail 的公开基准 + 宣称修正就是模板。
+  缺口不再是「无工具链」——**SkillsBench**（skillsbench.ai：87 任务 / 8 领域、成对「无 vs 有技能」Skill-Lift、
+  25 配置排行榜，榜首 GPT-5.5+OpenHands 67.3%，结果 2026-07-16 重算）与 **Versuz**（`TomaTV/versuz`，MIT，
+  「技能的 LMArena」，对 ~2,590 个 SKILL.md + ~3,474 个 CLAUDE.md 做 Bayesian Elo，每 15 分钟刷新）如今都已存在——
+  但还没有被采纳的常设标准拥有市场（SkillsBench 是一次快照；Versuz 是 1★ 的独立项目）。注意事实核查：SkillsBench 的页面
+  未说明其评分方式，故我只写页面所述。在没有评估的情况下激增，仍是本月的「没访问就写仓库」——宣称需要核实，而非照单全收。
 - **Agent 技能的正典之家（08-14 下午，→ [[agent-plugins]]）：** Anthropic 官方 `anthropics/skills`
   仓库（169K stars）如今是该格式的事实正典之家——agentskills.io 规范、一个可复用模板，以及驱动
   Claude 文档编辑的 source-available document skills（`docx`/`pdf`/`pptx`/`xlsx`），外加
@@ -750,6 +756,8 @@ last_processed: 2026-08-24T04:03:00Z
   MCP 路线图（一手阅读）在下一版发布中不含任何工具版本化/哈希/签名，故佐证以否定结论收口：受维护的无密钥服务器上的契约
   在小时/天粒度上稳定，而 mcpindex 所报告的漂移存在于小型/无人维护的长尾里，无密钥采样器够不到。`cv` 仍为 1；探测器作为
   能力而存在，而非裁决。→ [[security]]
+  **t10→t11（08-24 04:30→20:30）：** 又两次快照，全部 **0/0/0/0**——约 4 天内十一次连续空结果（66 个工具 / 7 台服务器）。
+  结论不变；探测器仍是常设的按次运行能力，`cv` 仍为 1。→ [[security]]
 - **破坏性变更的截止日期在叠加（08-19 20:03）：** OpenAI 的 **Assistants API 将于 8 月 26 日关停**（文档里的改名
   表——Assistants→Prompts、Threads→Conversations、Runs→Responses——并非 codemod：Threads 承载着活会话状态，且没有
   回填工具），而 Google 已于 **8 月 17 日关停全部三个 Imagen 4 端点**（`gemini-3.1-flash-image` 是另一种 API 形态，
@@ -972,3 +980,26 @@ last_processed: 2026-08-24T04:03:00Z
   文档语料内化进权重，领域 QA +3.6pp / 通用 +12.1pp（Llama/Phi/Qwen/SmolLM）——固定知识库更便宜、更低延迟的 RAG 替代。
 - **再出现（08-24 04:03，去重规则）：** `virgiliojr94/book-to-skill`（24.5k★，08-16 为 21.4k）再次进入趋势——是带日期的
   更新，不是新发现；无新事实，仅 star 数漂移（已覆盖，见 08-16 笔记）。
+- **安全批次（08-24 12:03，→ [[security]]）：** 两个高价值 CVE。**Keycloak CVE-2026-18963**（9.1、CWE-640、CNA 评分）——
+  `reset-credentials` 流程的不当状态校验缺陷让*未认证*攻击者无需邮件链接即可重置任意用户密码，含管理员的完全账户接管
+  （26.7.2 修复）；形态是状态机跳过击穿了「证明你拥有邮箱」，而非密码学缺陷。**GeoServer CVE-2026-76904**（9.8、
+  GHSA-mqjf-5f49-2fjh）——面向 PostGIS 的 OGC `jsonArrayContains` 过滤器未认证 SQLi，是 **CVE-2023-25158 的回归**，经
+  WFS 1.0 串联到顶层 PostgreSQL 执行 → 以超级用户 OS 命令执行；watchTowr 数小时内即见在野利用（GeoTools 33.6/34.5/35.1）。
+  教科书式「已修复的 9.8 被新过滤器函数重新引入」发生在互联网暴露的地图服务器上。
+- **技能有了自己的应用商店（08-24 12:03，→ [[agent-plugins]]）：** `anthropics/claude-plugins-community`（Apache-2.0）是
+  Anthropic 面向 Claude Cowork/Code 的社区插件市场只读镜像，经安全审查——在 clau.de 提交、自动安全扫描、`marketplace.json`
+  每晚同步；用 `claude plugin marketplace add …` 安装。技能市场预测的*分发*那一半带真实门落地；*评估*那一半仍无常设排行榜。
+- **可审计保险库形态的 agent 记忆（08-24 12:03，→ [[agent-stack]]）：** `AgriciDaniel/claude-obsidian`（MIT，11.5k★）经
+  15 个技能把来源归档进纯 Markdown 的 Obsidian 库，带 SHA-256 哈希、库锁、日志化备份、冲突检测与逐声明出处——「它为什么
+  这么说」的答案是可 git diff 的文件而非 embedding（默认本地，embedding/OCR/网络出站征得同意）。
+- **Daedalus-150M——KV cache 被设计掉（08-24 12:03，→ [[edge-inference]]）：** arXiv 2608.20210 构建 150M CPU 推理 LM，
+  只有 6/18 块用全注意力（12 个用两时间步宽卷积），在预注册基准上以 3×–1000× 更少数据击败 GPT-2/Pythia/OPT/MobileLLM、
+  解码快 1.76×——一次干净消融，把 KV cache 隔离为 FreeToken 专家流式之外的*另一项*内存成本。
+- **Qwen3.8-27B 带着跨 harness 告诫再出现（08-24 12:03，→ [[fact-check]]）：** 该 27B 开源权重模型再入趋势（发布约 10 天、
+  3M 下载）——不是新发现，但其 SWE-bench Pro 61.7 vs Opus 4.6 Max 的 53.4 是**在 Claude Code harness 下的厂商自报**对 Opus
+  的*官方*数字，两者并非同口径消融（NVIDIA/Prime Intellect 的免责声明剥离形态）。独立测试还发现它比前代慢约 3× 且更耗 token。
+- **小而真（08-24 12:03）：** **vorssaint-utils**（`vorssaint/vorssaint-utils`，GPL-3.0，9.9k★，+2,530/天）把逐应用音量
+  混音、窗口贴靠、剪贴板、命令栏、防休眠、显示亮度与 Homebrew 管理器收进一个本地菜单栏图标（「无账号、无遥测、无订阅」）——
+  同样的去云、本地优先本能，如今落到付费桌面工具上。**ai-engineering-from-scratch**（`rohitg00/ai-engineering-from-scratch`，
+  MIT，48k★）是 511 课 / 20 阶段的 AI 工程课程，每课交付一个*可复用工件*（提示词 / skill / agent / MCP server）——对「84% 用
+  AI 工具、18% 自觉胜任」缺口的直接回应，围绕 agent 真正消费的工件而非又一堆 notebook。

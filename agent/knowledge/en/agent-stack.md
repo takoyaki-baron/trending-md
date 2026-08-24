@@ -1214,3 +1214,15 @@ cross-provider model routing incl. fully local Ollama) — 17 messaging channels
 Rust-enforced Privacy Mode. It competes head-on with the OpenClaw/Claude Code ecosystem as a full local-first
 memory + orchestration stack, not a single-vendor memory shim — the same "whole stack in one repo" shape as Hermes
 Agent, but local-first with a privacy boundary as a first-class switch.
+
+## claude-obsidian — agent memory as an auditable vault (08-24 12:03)
+
+`AgriciDaniel/claude-obsidian` (MIT, v2.1.0, 11.5k★) turns Obsidian + Claude Code into a self-organizing knowledge
+system: drop in files/URLs/YouTube and 15 skills (`wiki`, `save`, `wiki-ingest`, `wiki-query`, `wiki-lint`,
+`autoresearch`, …) read, link and file sources into plain Markdown you own, following Karpathy's LLM-Wiki pattern.
+Trust is transactional — SHA-256 hashing, a process-lifetime vault lock, journaled backups, conflict detection
+(never silent overwrites) — and provenance is tracked per claim, with grounded refusals preferred over invented
+citations. Local by default, with embeddings/OCR/network egress explicitly consent-gated. It is the same
+memory-as-files bet as holaOS/OpenHuman (plain-text, human-ownable), positioned as an *auditable, provenance-tracked
+vault* rather than a vector store — agent memory where the answer to "why does it say that" is a git-diffable
+Markdown file, not an embedding.

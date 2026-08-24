@@ -1095,3 +1095,23 @@ that let `script`/`style` survive into XSS via *advanced usage* — mutating/reu
 (`ScRiPt`) in programmatic DOM, crafted doctypes, custom SVG/MathML policies — while the default `sanitize=True`
 path stays safe. **9.8 is VulnCheck-assigned for XSS, not RCE** — the default-config risk is materially lower than
 the number; record the scorer with the score ([[fact-check]]).
+
+## Keycloak account-takeover + GeoServer SQLi regression (08-24 12:03)
+
+**CVE-2026-18963 (Keycloak, CWE-640, CVSS 9.1 CNA-assigned).** An improper-state-validation bug in Keycloak's
+`reset-credentials` authentication flow lets an unauthenticated, remote attacker reset **any** user's password without
+clicking the emailed action link — a crafted request to the reset endpoint advances the session straight to the
+password-update phase, so the emailed token is never required. Full account takeover of any account, including
+administrative ones. Fixed upstream 26.7.2 (Aug 19) + Red Hat Build 26.4/26.6; mitigation is disabling "Forgot
+password" per realm. The shape: **one unauthenticated request defeats the "prove you own the email inbox" step at the
+heart of a leading identity provider** — a state-machine skip in the auth flow (not credential theft, not a crypto
+bug) — so every Keycloak in front of internal systems treats 26.7.2 as a drop-everything update.
+
+**CVE-2026-76904 (GeoServer, GHSA-mqjf-5f49-2fjh, CVSS 9.8).** An unauthenticated SQL injection in GeoServer's OGC
+`jsonArrayContains` filter for PostGIS datastores — a **regression of CVE-2023-25158** (also 9.8). The function writes
+`<value>` into generated SQL without escaping; chaining through WFS 1.0 lets a second PostgreSQL statement run at the
+top level of the query, and if GeoServer connects as superuser or with `pg_execute_server_program`, that becomes OS
+command execution on the database host. watchTowr observed active exploitation within hours of disclosure. Fixed in
+GeoTools 33.6/34.5/35.1 (GeoServer 2.27.6/2.28.5/3.0.1). The shape: **a textbook regression — a patched 9.8
+reintroduced by a new filter function — on a server routinely internet-exposed for public maps**; exploitation is
+observed, not theoretical.
