@@ -1,8 +1,8 @@
 ---
 date: 2026-08-24
-updated: 2026-08-24T04:03:00Z
+updated: 2026-08-24T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 13
+sources: 16
 license: CC-BY-4.0
 ---
 
@@ -183,13 +183,125 @@ AWS 与 UCSD 的研究者（Jiang、Wang、Liu、Xu、Yao、Poovendran、He）�
 
 ---
 
+## 13. CVE-2026-18963 — Keycloak 密码重置绕过漏洞让任何人都可接管任意账户（CVSS 9.1）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD / Red Hat · CVSS 9.1（CNA 评定） · ~1d ago (Aug 24)
+- **Tags:** `cve` `keycloak` `identity` `account-takeover` `authentication`
+
+Red Hat 披露了 **CVE-2026-18963**——Keycloak `reset-credentials` 认证流程中的状态校验缺陷（CWE-640），使**未经认证的远程攻击者无需点击邮件中的操作链接即可重置任意用户的密码**。向重置端点发送精心构造的请求，会将会话直接推进到密码更新阶段，因此邮件令牌完全不需要；结果是任意账户（**包括管理员账户**）被完全接管。上游 Keycloak **26.7.2**（8 月 19 日）及 Red Hat Build of Keycloak 26.4 / 26.6 分支已修复；Red Hat 的临时缓解措施是在每个 realm 中禁用"忘记密码"设置。截至 8 月 24 日尚无利用或公开 PoC 的报告。
+
+**Why it matters:** 一次未经认证的请求就能击穿一流身份提供商核心的"证明你拥有邮箱"环节——任何在内部系统前部署 Keycloak 的团队都应当把 26.7.2 当作"放下一切立即升级"的更新，而非例行补丁。
+
+[`🔗 NVD CVE-2026-18963`](https://nvd.nist.gov/vuln/detail/CVE-2026-18963) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/critical-keycloak-password-reset-flaw.html)
+
+---
+
+## 14. Qwen3.8-27B — 阿里 27B Apache-2.0 开源模型"家用 Opus"，24 GB 显卡即可跑 agent 编码
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · Qwen3.8-27B · ~10d ago (Aug 14 release)
+- **Tags:** `open-weights` `llm` `qwen` `agentic-coding` `multimodal`
+
+阿里 Qwen 团队开源了 **Qwen3.8-27B**（Apache-2.0）：一个 27B 稠密模型（含视觉编码器为 28B），采用 **Gated-DeltaNet / 注意力**混合架构——48 层线性注意力 + 16 层全注意力——原生支持**图像与视频输入**和 **262K 上下文**（通过 YaRN 可扩展到 1M，仅托管版）。核心数据：**SWE-bench Pro 61.7**、**Terminal-Bench 2.1 73.0**，高于 Claude Opus 4.6 Max 报告的 SWE-bench Pro 53.4；4-bit 量化后（约 17 GB）即可在 24 GB 消费级显卡或笔记本上运行。发布数日内即登顶 Hugging Face trending，前三天下载量突破 300 万。
+
+**Why it matters:** 这是"前沿级"agent 编码能力在本地可部署规模下最清晰的证据——但看待 SWE-bench Pro 的差距要谨慎：该数字是厂商自报、且使用 **Claude Code harness** 跑出来的，而 Opus 4.6 Max 的分数是其官方报告值，两者并非同条件的消融对比；独立测试还发现它比前代慢约 3 倍、更耗 token。
+
+[`🔗 Qwen3.8-27B model card`](https://huggingface.co/Qwen/Qwen3.8-27B) · [`🔗 OrcaRouter review`](https://www.orcarouter.ai/blog/qwen-3-8-27b-review)
+
+---
+
+## 15. CVE-2026-76904 — GeoServer `jsonArrayContains` SQL 注入回归 CVE-2023-25158，已被积极利用（CVSS 9.8）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub advisory GHSA-mqjf-5f49-2fjh · CVSS 9.8 · disclosed Aug 12, patched Aug 14
+- **Tags:** `cve` `sql-injection` `geoserver` `postgis` `actively-exploited`
+
+**CVE-2026-76904**（GHSA-mqjf-5f49-2fjh，CVSS 9.8）是 GeoServer 面向 PostGIS 数据存储的 OGC `jsonArrayContains` 过滤器中的未认证 SQL 注入——是 **CVE-2023-25158 的回归**（同为 9.8）。`jsonArrayContains(<column>, <pointer>, <value>)` 函数将 `<value>` 未经转义地写入生成的 SQL；通过 **WFS 1.0** 串联，可在查询顶层执行第二条 PostgreSQL 语句，若 GeoServer 以超级用户或持有 `pg_execute_server_program` 的角色连接数据库，则可升级为数据库主机上的**操作系统命令执行**。watchTowr 在披露后数小时内即观察到积极的利用尝试。已在 GeoTools 33.6 / 34.5 / 35.1（GeoServer 2.27.6 / 2.28.5 / 3.0.1）中修复。
+
+**Why it matters:** 教科书式的回归——一个已修复的 9.8 漏洞被一个新的过滤器函数重新引入——而它落在通常面向公网暴露、用于公开地图的服务器上，且利用行为已在野外被观察到，并非理论推演。
+
+[`🔗 GitHub advisory GHSA-mqjf-5f49-2fjh`](https://github.com/advisories/GHSA-mqjf-5f49-2fjh) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/unpatched-geoserver-zero-day-targeted.html)
+
+---
+
+## 16. vorssaint-utils — 一个免费 macOS 菜单栏工具集，替代十几个付费工具（日增 2.5k star）
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 9.9k stars · +2,530 today (#20 daily trending)
+- **Tags:** `macos` `menu-bar` `open-source` `gpl` `local-first`
+
+**vorssaint/vorssaint-utils**（GPL-3.0）把按应用音量混音器（支持超过 100% 增益和按应用输出路由）、窗口吸附 + ⌘Tab 切换器、剪贴板历史、命令栏、防止休眠、显示器/XDR 亮度、电池/温度曲线图和 Homebrew 管理器整合进一个菜单栏图标——"无账户、无遥测、无订阅"，全部本地运行。通过 `brew install --cask vorssaint` 安装，模块化设计（只安装需要的功能），所有权限均为可选并附说明。
+
+**Why it matters:** 一个"Raycast 遇上 Bartender"式的整合成为 GitHub 今日涨星最快的项目，其本地优先、模块化的姿态，也正是推动桌面工具去订阅化的大趋势所在。
+
+[`🔗 vorssaint/vorssaint-utils`](https://github.com/vorssaint/vorssaint-utils) · [`🔗 Releases`](https://github.com/vorssaint/vorssaint-utils/releases)
+
+---
+
+## 17. ai-engineering-from-scratch — 一门 511 课、20 阶段课程，每课都交付一个可复用工件
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 48k stars · #13 trending
+- **Tags:** `education` `ai-engineering` `curriculum` `open-source` `mcp`
+
+**rohitg00/ai-engineering-from-scratch**（MIT）是一套免费的 511 课 / 20 阶段 AI 工程课程（约 329 小时，覆盖 Python、TypeScript、Rust、Julia），每课都产出一个**可复用工件——prompt、skill、agent 或 MCP server**——而非纯理论。阶段从线性代数 → 经典机器学习 → 深度学习 → Transformer → LLM → 工具/协议 → agent → 群体 → 生产部署；可安装的 AI 助教 skill（`npx skills add …`）包含专门的 MCP 和 Agent Skills 路径，另附六卷合订本和免费的 Anthropic 认证备考。
+
+**Why it matters:** 直击"84% 的人在用 AI 工具，却只有 18% 觉得能专业地使用"的鸿沟——一门围绕 agent 真正消费的工件而构建的课程，而非又一堆 notebook。
+
+[`🔗 rohitg00/ai-engineering-from-scratch`](https://github.com/rohitg00/ai-engineering-from-scratch) · [`🔗 aiengineeringfromscratch.com`](https://aiengineeringfromscratch.com)
+
+---
+
+## 18. claude-obsidian — 一个本地优先的"第二大脑"，把资料归档进 Obsidian 知识图谱
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 11.5k stars · #12 trending
+- **Tags:** `obsidian` `claude-code` `agent-memory` `local-first` `knowledge-base`
+
+**AgriciDaniel/claude-obsidian**（MIT，v2.1.0）把 Obsidian + Claude Code 变成一个自组织知识系统：丢入文件、URL 或 YouTube，15 个 skill（`wiki`、`save`、`wiki-ingest`、`wiki-query`、`wiki-lint`、`autoresearch`……）即会阅读、链接并把来源归档到你自己的纯 Markdown 中，遵循 Karpathy 的 LLM-Wiki 模式。信任是事务性的——SHA-256 哈希、进程级 vault 锁、日志化备份与冲突检测（绝不静默覆盖）——且逐条追踪来源，宁可拒绝也不编造引用。
+
+**Why it matters:** 把 agent 记忆做成可审计、人类可拥有的 Obsidian vault，而非不透明的向量库——默认本地，embedding、OCR 与网络出口均需显式授权。
+
+[`🔗 AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian) · [`🔗 Releases`](https://github.com/AgriciDaniel/claude-obsidian/releases)
+
+---
+
+## 19. anthropics/claude-plugins-community — Anthropic 为 Claude Code 开放经过安全审查的插件市场
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 1.2k stars · #7 trending
+- **Tags:** `plugins` `claude-code` `marketplace` `anthropic` `skills`
+
+Anthropic 发布了 **anthropics/claude-plugins-community**（Apache-2.0），这是 **Claude Cowork 与 Claude Code** 社区插件市场的只读镜像。插件在 clau.de/plugin-directory-submission 提交，需通过自动化安全扫描后方可分发；`marketplace.json` 列表每晚从 Anthropic 内部审查管线同步。用 `claude plugin marketplace add anthropics/claude-plugins-community` 安装，再 `claude plugin install <name>@claude-community`——当前插件包括 `eli5`、`quickdesign`、`testdino` 和 `tres-finance-plugin`。
+
+**Why it matters:** 为第三方 Claude Code 扩展提供了一个经审查的分发渠道——这是 skills 生态一直缺失的"应用商店"层，也是一个重要的信任边界，因为每个插件都在你的开发环境里运行。
+
+[`🔗 anthropics/claude-plugins-community`](https://github.com/anthropics/claude-plugins-community) · [`🔗 Claude plugins`](https://claude.com/plugins)
+
+---
+
+## 20. Daedalus-150M — 一个为 CPU 推理设计的卷积-注意力混合模型（arXiv 2608.20210）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.20210 · ~1d ago
+- **Tags:** `research` `efficient-models` `cpu-inference` `quantization` `small-models`
+
+**Daedalus-150M**（arXiv 2608.20210）是一个为 CPU 推理而生的 1.5 亿参数语言模型：18 个 block 中只有 6 个使用全注意力，其余 12 个使用"记忆宽度仅两个时间步"的短卷积，因此三分之二的网络从不重读不断增长的缓存。从零开始用 59.9B token 训练、4-bit 权重，在预注册的五任务基准上（47.31 vs 42.20 及格线）击败 GPT-2 124M、Pythia-160M、OPT-125M 和 MobileLLM-125M——尽管后者们见过 3×–1000× 更多的数据——且在 2K 上下文下比同规模全注意力对照组解码快 1.76×。
+
+**Why it matters:** 一项受控实验证明，长上下文 LLM 的主要内存成本 KV-cache 在 CPU/边缘层级可以被大幅设计掉，且该消融（相同数据、相同规模）真正隔离了架构的作用。
+
+[`🔗 arXiv 2608.20210`](https://arxiv.org/abs/2608.20210) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.20210)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-24T04:03:00Z |
-| Items | 12 |
-| Sources tracked | 13 (Hacker News, Tom's Hardware, Risky.biz, Kaspersky, The Hacker News, GitHub, AWS, InfoQ, NVD, VulnCheck, arXiv, Hugging Face, gentic.news) |
+| Generated | 2026-08-24T12:03:00Z |
+| Items | 20 |
+| Sources tracked | 16 (Hacker News, Tom's Hardware, Risky.biz, Kaspersky, The Hacker News, GitHub, AWS, InfoQ, NVD, VulnCheck, arXiv, Hugging Face, gentic.news, OrcaRouter, aiengineeringfromscratch.com, Claude.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

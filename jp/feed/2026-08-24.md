@@ -1,8 +1,8 @@
 ---
 date: 2026-08-24
-updated: 2026-08-24T04:03:00Z
+updated: 2026-08-24T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 13
+sources: 16
 license: CC-BY-4.0
 ---
 
@@ -183,13 +183,125 @@ LLM エージェントのクロスタスクなスキル転移を統制して調�
 
 ---
 
+## 13. CVE-2026-18963 — Keycloak のパスワードリセット回避で誰でも任意のアカウントを乗っ取り（CVSS 9.1）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD / Red Hat · CVSS 9.1（CNA 評価） · ~1d ago (Aug 24)
+- **Tags:** `cve` `keycloak` `identity` `account-takeover` `authentication`
+
+Red Hat は **CVE-2026-18963** を公開した。Keycloak の `reset-credentials` 認証フローにおける状態検証の不備（CWE-640）で、**未認証のリモート攻撃者がメールのアクションリンクをクリックせずに任意のユーザーのパスワードをリセットできる**。リセットエンドポイントに細工したリクエストを送ると、セッションが直接パスワード更新フェーズへ進むため、メールのトークンは不要になる。結果として任意のアカウント（**管理者アカウントを含む**）の完全乗っ取りに至る。上流 Keycloak **26.7.2**（8月19日）と Red Hat Build of Keycloak 26.4 / 26.6 系統で修正済み。Red Hat の暫定緩和策はレルムごとに「パスワードを忘れた場合」設定を無効化すること。8月24日時点で悪用や公開 PoC の報告はない。
+
+**Why it matters:** 一度の未認証リクエストで、主要 ID プロバイダーの中核にある「メール受信箱の所有を証明せよ」という段階が破られる——内部システムの前に置かれたすべてのデプロイは、26.7.2 を「すべてを止めて適用する」更新として扱うべきで、通常の更新ではない。
+
+[`🔗 NVD CVE-2026-18963`](https://nvd.nist.gov/vuln/detail/CVE-2026-18963) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/critical-keycloak-password-reset-flaw.html)
+
+---
+
+## 14. Qwen3.8-27B — アリババの27B Apache-2.0「自宅のOpus」、24GB GPUでエージェントコーディング
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · Qwen3.8-27B · ~10d ago (Aug 14 release)
+- **Tags:** `open-weights` `llm` `qwen` `agentic-coding` `multimodal`
+
+アリババの Qwen チームが **Qwen3.8-27B**（Apache-2.0）をオープンソース化した。27B 密モデル（ビジョンエンコーダ含め28B）で、**Gated-DeltaNet / アテンション**のハイブリッド構成——線形アテンション層48＋全アテンション層16——を採用し、**画像・動画入力**と **262K トークンのコンテキスト**をネイティブに扱う（YaRN で1Mまで拡張可、ホスト版のみ）。主要数値は **SWE-bench Pro 61.7** と **Terminal-Bench 2.1 73.0** で、Claude Opus 4.6 Max の報告値 SWE-bench Pro 53.4 を上回る。4-bit 量子化（約17GB）すれば24GBのコンシューマーGPUやノートPCで動く。公開数日で Hugging Face トレンド首位となり、最初の3日で300万ダウンロードを突破した。
+
+**Why it matters:** 「フロンティア級」のエージェントコーディング能力がローカルでホスト可能な規模になった最良の証拠——ただし SWE-bench Pro の差は慎重に扱うべきで、これは**Claude Code ハーネス**で測定されたベンダー報告値であり、Opus 4.6 Max のスコアは公式報告値のため、両者は同条件のアブレーションではない。独立テストでは前世代より約3倍遅くトークン消費も多い。
+
+[`🔗 Qwen3.8-27B model card`](https://huggingface.co/Qwen/Qwen3.8-27B) · [`🔗 OrcaRouter review`](https://www.orcarouter.ai/blog/qwen-3-8-27b-review)
+
+---
+
+## 15. CVE-2026-76904 — GeoServer の `jsonArrayContains` SQLi が CVE-2023-25158 を再発、悪用確認（CVSS 9.8）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub advisory GHSA-mqjf-5f49-2fjh · CVSS 9.8 · disclosed Aug 12, patched Aug 14
+- **Tags:** `cve` `sql-injection` `geoserver` `postgis` `actively-exploited`
+
+**CVE-2026-76904**（GHSA-mqjf-5f49-2fjh、CVSS 9.8）は、GeoServer の PostGIS データストア向け OGC `jsonArrayContains` フィルタにある未認証 SQL インジェクションで、**CVE-2023-25158 のリグレッション**（同じく9.8）。`jsonArrayContains(<column>, <pointer>, <value>)` 関数が `<value>` をエスケープせず生成 SQL に書き込む。**WFS 1.0** 経由で連結すると、クエリ最上位で2つ目の PostgreSQL 文を実行でき、GeoServer がスーパーユーザーまたは `pg_execute_server_program` を持つロールで接続している場合、データベースホストでの **OS コマンド実行**に至る。watchTowr は公開から数時間以内に積極的な悪用の試みを観測した。GeoTools 33.6 / 34.5 / 35.1（GeoServer 2.27.6 / 2.28.5 / 3.0.1）で修正済み。
+
+**Why it matters:** 修正済みの9.8が新しいフィルタ関数によって再導入された、教科書通りのリグレッション——しかも公開地図のために常時インターネット公開されるサーバー上で発生し、悪用は理論ではなく実際に観測されている。
+
+[`🔗 GitHub advisory GHSA-mqjf-5f49-2fjh`](https://github.com/advisories/GHSA-mqjf-5f49-2fjh) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/unpatched-geoserver-zero-day-targeted.html)
+
+---
+
+## 16. vorssaint-utils — 12個の有料ユーティリティを置き換える無料macOSメニューバーツールキット（日+2.5k star）
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 9.9k stars · +2,530 today (#20 daily trending)
+- **Tags:** `macos` `menu-bar` `open-source` `gpl` `local-first`
+
+**vorssaint/vorssaint-utils**（GPL-3.0）は、アプリ別音量ミキサー（100%超ブーストとアプリ別出力ルーティング）、ウィンドウスナップ＋⌘Tabスイッチャー、クリップボード履歴、コマンドバー、スリープ防止、ディスプレイ/XDR輝度、バッテリー/温度グラフ、Homebrew マネージャーを1つのメニューバーアイコンに集約——「アカウント不要、テレメトリなし、サブスクなし」ですべてローカル動作。`brew install --cask vorssaint` でインストールでき、モジュール式（必要な機能だけ導入）で、すべての権限が任意かつ説明付き。
+
+**Why it matters:** 「Raycast×Bartender」的な統合が GitHub で本日最も急上昇しており、そのローカルファーストでモジュール式の姿勢は、サブスク型デスクトップツール離れを後押しする大きな流れそのもの。
+
+[`🔗 vorssaint/vorssaint-utils`](https://github.com/vorssaint/vorssaint-utils) · [`🔗 Releases`](https://github.com/vorssaint/vorssaint-utils/releases)
+
+---
+
+## 17. ai-engineering-from-scratch — 511レッスン・20フェーズ、全レッスンが成果物を生むカリキュラム
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 48k stars · #13 trending
+- **Tags:** `education` `ai-engineering` `curriculum` `open-source` `mcp`
+
+**rohitg00/ai-engineering-from-scratch**（MIT）は、511レッスン・20フェーズの無料 AI エンジニアリングカリキュラム（Python・TypeScript・Rust・Julia で約329時間）で、各レッスンが**再利用可能な成果物——プロンプト、スキル、エージェント、または MCP サーバー**——を生み出す（理論ではない）。フェーズは線形代数 → 古典ML → 深層学習 → Transformer → LLM → ツール/プロトコル → エージェント → 群れ → 本番と進み、インストール可能な AI チュータースキル（`npx skills add …`）には MCP と Agent Skills の専用パス、さらに6巻の合本と無料の Anthropic 認定対策が付属する。
+
+**Why it matters:** 「84%が AI ツールを使う一方、専門的に使えると感じるのは18%」というギャップへの直接の答え——エージェントが実際に消費する成果物を中心に据えたカリキュラムであり、単なるノートブックの山ではない。
+
+[`🔗 rohitg00/ai-engineering-from-scratch`](https://github.com/rohitg00/ai-engineering-from-scratch) · [`🔗 aiengineeringfromscratch.com`](https://aiengineeringfromscratch.com)
+
+---
+
+## 18. claude-obsidian — 情報源を Obsidian の知識グラフへ整理するローカルファーストの「第二の脳」
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 11.5k stars · #12 trending
+- **Tags:** `obsidian` `claude-code` `agent-memory` `local-first` `knowledge-base`
+
+**AgriciDaniel/claude-obsidian**（MIT、v2.1.0）は Obsidian + Claude Code を自己組織化する知識システムに変える。ファイル、URL、YouTube を投げ込むと、15のスキル（`wiki`、`save`、`wiki-ingest`、`wiki-query`、`wiki-lint`、`autoresearch` など）が読み取り、リンクし、あなたが所有するプレーン Markdown へ情報源を整理する（Karpathy の LLM-Wiki パターン）。信頼はトランザクション型——SHA-256 ハッシュ、プロセス生存期間の vault ロック、ジャーナル化バックアップ、衝突検出（黙って上書きしない）——で、クレームごとに出所を追跡し、捏造引用より根拠のある拒否を優先する。
+
+**Why it matters:** エージェントメモリを不透明なベクトルストアではなく、監査可能で人間が所有できる Obsidian vault に——デフォルトでローカル、embedding・OCR・ネットワーク出力は明示的な同意でゲート。
+
+[`🔗 AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian) · [`🔗 Releases`](https://github.com/AgriciDaniel/claude-obsidian/releases)
+
+---
+
+## 19. anthropics/claude-plugins-community — Anthropic が Claude Code 向けにセキュリティ審査済みプラグインマーケットを公開
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 1.2k stars · #7 trending
+- **Tags:** `plugins` `claude-code` `marketplace` `anthropic` `skills`
+
+Anthropic は **anthropics/claude-plugins-community**（Apache-2.0）を公開した。**Claude Cowork と Claude Code** のコミュニティプラグインマーケットプレイスの読み取り専用ミラーで、プラグインは clau.de/plugin-directory-submission で提出され、自動セキュリティスキャンを通過してから配布承認される。`marketplace.json` リストは Anthropic の内部レビューパイプラインから毎晩同期される。`claude plugin marketplace add anthropics/claude-plugins-community` で追加し、`claude plugin install <name>@claude-community` でインストール——現在のプラグインには `eli5`、`quickdesign`、`testdino`、`tres-finance-plugin` がある。
+
+**Why it matters:** サードパーティ製 Claude Code 拡張に審査済みの配布チャネルを提供——スキルエコシステムに欠けていた「アプリストア」層であり、各プラグインは開発環境内で実行されるため重要な信頼境界でもある。
+
+[`🔗 anthropics/claude-plugins-community`](https://github.com/anthropics/claude-plugins-community) · [`🔗 Claude plugins`](https://claude.com/plugins)
+
+---
+
+## 20. Daedalus-150M — CPU 推論向けに設計された畳み込み・アテンションハイブリッド（arXiv 2608.20210）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.20210 · ~1d ago
+- **Tags:** `research` `efficient-models` `cpu-inference` `quantization` `small-models`
+
+**Daedalus-150M**（arXiv 2608.20210）は CPU 推論向けに作られた1.5億パラメータの言語モデル。18ブロック中6ブロックのみが全アテンションを使い、残り12ブロックは「メモリ幅が2タイムステップ」の短い畳み込みを使うため、ネットワークの3分の2は成長するキャッシュを再読しない。59.9B トークンでゼロから学習し4-bit 重みで、事前登録された5タスクベンチマーク（47.31 vs 42.20 の基準線）で GPT-2 124M、Pythia-160M、OPT-125M、MobileLLM-125M を上回る——後者は3×〜1000×のデータを見ているにもかかわらず——2K コンテキストでは同規模の全アテンション対照より1.76×速くデコードする。
+
+**Why it matters:** 長コンテキスト LLM の主要メモリコストである KV-cache が、CPU/エッジ層ではほぼ設計で排除できることを示す対照実験——アブレーション（同一データ・同一規模）がアーキテクチャの効果を実際に分離している。
+
+[`🔗 arXiv 2608.20210`](https://arxiv.org/abs/2608.20210) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.20210)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-24T04:03:00Z |
-| Items | 12 |
-| Sources tracked | 13 (Hacker News, Tom's Hardware, Risky.biz, Kaspersky, The Hacker News, GitHub, AWS, InfoQ, NVD, VulnCheck, arXiv, Hugging Face, gentic.news) |
+| Generated | 2026-08-24T12:03:00Z |
+| Items | 20 |
+| Sources tracked | 16 (Hacker News, Tom's Hardware, Risky.biz, Kaspersky, The Hacker News, GitHub, AWS, InfoQ, NVD, VulnCheck, arXiv, Hugging Face, gentic.news, OrcaRouter, aiengineeringfromscratch.com, Claude.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
