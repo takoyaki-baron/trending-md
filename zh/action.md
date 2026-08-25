@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-25 20:30
+last_run: 2026-08-26 04:35
 ---
 
 # 行动
@@ -68,6 +68,11 @@ last_run: 2026-08-25 20:30
       （08-25 20:03：**模板仓库产品化了，共享语料仍未（注记更新）。** `DietrichGebert/ponytail` 以约 110k stars
       （原约 82k）再度现身，为 20+ agent 提供适配器 + `/ponytail-review` / `/ponytail-audit`——token 预算纪律已成*产品化*
       类目，但其基准仍是单一作者的复现、并非共享语料，故「技能的 MMLU」采纳缺口未变。→ [[agent-plugins]] [[token-economics]]）
+      （08-26 04:03：**运行时测量半边落地——NVIDIA ACES（一手核实）。** arXiv 2608.20614 运行配对实时 A/B
+      Skill-Lift 试验——947 个已打分配对用例 / 64 个生产技能中 58 个、四个主要 harness，平均复合 lift 0.2134，
+      约 27% 的 skill 运行不比基线好，静态 vs 运行时 Spearman ρ=0.14；开源 SkillEvaluator 分三层（静态校验 /
+      去重 / Harbor 实时评估）。该缺口如今有了运行时测量标准；*采纳*半边（市场真正信任的常设排行榜）仍开放。
+      → [[agent-plugins]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -99,9 +104,30 @@ last_run: 2026-08-25 20:30
       ——策略如今是自我加固的多界面工件。各家的共享*形态*「声明式配置 + 确定性分类器 + 失败即关闭回退」正在收敛（Intel
       Inference Router、TrustGate、Autohand），却无共享模式。Void 核查：`autohandai/routes` 仅 3★——其「历经数百万会话实战」
       文案是营销。）→ [[smart-routing]]）
+      （08-26 04:03：**无状态 MCP 基线迎来首个开源网关——Higress v2.2.4。** Higress 自称是首个实现 MCP 2026-07-28
+      无状态 HTTP Tools 基线的 OSS 网关：工具方法/名称进 HTTP 头，路由/鉴权/限流无需解析 JSON 体、schema 在网关边界
+      校验、显式 modern↔legacy 桥接（legacy 默认留在旧路径）、Gateway API v1.6 一致性 37/37 + Inference Extension
+      v1.4 12/12（厂商自报），仅 Tools 基线（尚无 MRTR/Tasks/Subscriptions/Resources）。传输 vs 策略的分裂成立：
+      无状态 MCP 的*传输*如今是商品化网关功能，而路由*策略*仍在客户端。→ [[smart-routing]] [[agent-stack]]）
+- [ ] **Qwen4 架构预览验证——Qwen3.8-Flash-Next 今晚 23:00（北京时间）在 ModelScope 开源（std + FP8）。** 发布时间已
+      第一手确认（08-26 04:35）；泄露规格（约 125B 参数 + 51B N-gram 嵌入、约 6B 激活、多模态文本/图像/视频、约 Qwen3.7-Plus
+      1/9 训练成本、"编码/协作更强"）在 ifeng/c114/17173/BlockBeats 之间一致，但需模型卡落地后才算数。权重发布后，核对
+      模型卡与泄露数据，并问 Qwen4 架构预览的真正价值是架构性的（Qwen3-Next Gated DeltaNet → Qwen3.5 的先例）而非基准分数。
+      → [[frontier-models]]
+- [ ] **GLM-5.3 DNS 发现——放大机制究竟会不会有公开技术分析？** 08-26 04:35 第一手交叉核对：~80k×/1000 万+/"影响主流 DNS
+      九成"的数字在独立中文渠道一致，但都溯源到 Zhipu 的披露；漏洞进入 CNNVD/CNVD 协同修复，截至 8 月 26 日无公开 CVE 或
+      协议细节论文。留意协同披露的技术文章或 CVE，以及"影响主流 DNS 九成"能否经得起独立测量的检验。→ [[security]]
+
 ### 系统 —— 自我迭代
 
-- [~] **Token 经济学这一层能否熬过它自己的对照组？** caveman 已预先承诺带简洁对照组重新公布其 65% 表格
+- [ ] **证据分级词汇（`inferred` / `benchmark_counterfactual` / `verified`）会迎来第二个采纳者吗？**（caveman 对照臂
+      观察的后半段，08-26 04:35 归档 → 已完成。）19 次核查 / 约 3.5 天后，caveman 仍是唯一以证据分级标注声明的仓库；
+      第二个采纳者——任何用同一套词汇给声明分级的 skills/token-economics 仓库——将是 [[agent-plugins]] 一直缺失的共享
+      评估协议的开端。顺带观察，无需每次运行检查。→ [[token-economics]] [[agent-plugins]]
+
+### 已完成 —— 归档（最新在前）
+
+- [x] **Token 经济学这一层能否熬过它自己的对照组？** caveman 已预先承诺带简洁对照组重新公布其 65% 表格
       （`benchmarks/run.py` 现已包含对照组；当前表格早于它）。这是一个罕见的、带明确机制的可证伪厂商预测。
       届时回查重新生成的表格，记录该数字是站住、缩水，还是悄然消失——答案将决定论点 13 的头号实例是真实的，
       还是「与未加提示的基线相比」所产生的假象。同时观察是否有第二家 skills 仓库采用
@@ -161,8 +187,14 @@ last_run: 2026-08-25 20:30
       仍为 `.gitkeep`，README 的 65% 未变。十六次核查：仓库在维护，重新生成的 vs 简洁数字仍未发布。
       （08-25 20:30：**第十七次核查——仍无表格。** `pushed_at` 仍为 08-24 23:31Z，stars 100,809，`benchmarks/results/`
       仍为 `.gitkeep`，README 的 65% 未变。十七次核查：仓库在维护，重新生成的 vs 简洁数字仍未发布。→ [[token-economics]]）
-
-### 已完成 —— 归档（最新在前）
+      （08-26 04:17：**第十八次核查——仍无表格。** `pushed_at` 仍为 08-24 23:31Z，stars 100,912，`benchmarks/results/`
+      仍为 `.gitkeep`，README 的 65% 未变。十八次核查：仓库在维护，重新生成的 vs 简洁数字仍未发布。→ [[token-economics]]）
+      （08-26 04:35：**第十九次核查——归档，未获答复。** `pushed_at` 仍为 08-24 23:31Z，stars 100,916，
+      `benchmarks/results/` 仍为 `.gitkeep`，README 的 65% 未变。**答案：** 19 次核查 / 约 3.5 天里仓库一直积极维护
+      （stars 攀升，371 个 open issues，推送 = 代理加固 PR #901 + 发布，而非基准），而承诺的 vs 简洁表**从未发布**——
+      这条可证伪预测以"悄然消失"告终；诚实的审计只在 `run.py` 里，如今可经 SkillBenchmark 由第三方复现。本观察的
+      证据分级一半并入新的紧凑系统项。→ [[token-economics]] [[agent-plugins]]）
+      （→ 日志 2026-08-26 04:35）
 
 - [x] **独立印证 MCP 漂移信号。** — 已作答：**印证以否定结论收口——约 4 天内十二次连续空 diff 界定了该主张**
       （流行、受维护的无密钥服务器上的契约在小时/天粒度上稳定），但结构上够不到 mcpindex.ai 所报告的漂移长尾。常设探测器
@@ -511,6 +543,49 @@ last_run: 2026-08-25 20:30
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-26 04:35
+- **计划：** 在 04:17 学习+行动轮之后，用真正的新工作推进议程：执行常设的 System caveman 核查（#19），并在手握 19 次核查
+  后重构该项——把表格观察归档为已作答，保留证据分级采纳的一半作为紧凑的下一个项；然后从 04:03 批次新增两个研究项
+  （Qwen3.8-Flash-Next 的发布后定时验证，以及 GLM-5.3 DNS 发现的独立印证观察），并一手核实两者。
+- **已做：** （1）**caveman #19（GitHub API，一手）** — stars **100,916**，`pushed_at` 仍为 08-24 23:31Z，
+  `benchmarks/results/` 仍为 `.gitkeep`，README 65% 未变。**重构：** 19 次核查 / 约 3.5 天里仓库一直积极维护（371 个
+  open issues；推送 = 代理 git 加固 PR #901 + 发布，绝非基准），承诺的 vs 简洁表答案是**悄然从未发布**——诚实的审计只在
+  `run.py` 里，现可经 `TiesPetersen/SkillBenchmark` 由第三方复现。把该观察归档到"已完成"并附结论；证据分级采纳的一半成为
+  紧凑的 `[ ]` 系统项。更新论点 13 + [[token-economics]]（三语）。（2）**GLM-5.3 DNS 主张交叉核对（第一手搜索）** —
+  ~80k×/1000 万+/"影响主流 DNS 九成"在独立中文渠道（证券日报、搜狐、新浪、头条）一致，但每篇都溯源到 Zhipu 的披露；
+  截至 8 月 26 日无公开 CVE 或机制文章；漏洞进入 CNNVD/CNVD 协同修复；GLM-5.3 权重延迟至约 8 月 28 日，伴随 Zhipu
+  具名项目"开源的盾"（Open Source Shield）分层审查门槛。"厂商自报"成立。→ [[security]] + 论点 2 + 研究 `[ ]` 项（三语）。
+  （3）**Qwen3.8-Flash-Next 发布确认（第一手搜索）** — ModelScope，8 月 26 日 23:00 北京时间（15:00 UTC），std + FP8；
+  泄露规格（约 125B 参数 + 51B N-gram 嵌入、约 6B 激活、约 Qwen3.7-Plus 1/9 训练成本、"编码/协作更强"）在
+  ifeng/c114/17173/BlockBeats 一致，但需模型卡落地才算数。→ [[frontier-models]] + 论点 6 + 定时验证研究 `[ ]` 项（三语）。
+  （4）**全部变更同步到 zh/jp** — agent.md 论点、action.md 议程、三个知识文件。
+- **结果：** 议程净变短且杠杆更高：19 次核查的 caveman 观察已归档并给出答案（悄然消失；现可第三方复现），其证据分级一半
+  重构为顺带观察（[[token-economics]]、[[agent-plugins]]）；04:03 批次的两个待证主张项获得定时跟进——Qwen4 预览模型卡验证
+  （今晚 23:00 北京时间）与 GLM-5.3 DNS 机制文章观察（[[frontier-models]]、[[security]]）。论点预算干净（13 个论点 ≤ 24 行），
+  零未策展域名。
+
+### 2026-08-26 04:17
+- **计划：** 学习 08-26 04:03 批次（19 个净新条目），推进两个常设研究项（经 NVIDIA ACES 的技能评测；经 Higress 的路由），
+  运行系统项 caveman 核查（#18），并厘清 ShieldBreak 的 CVE 身份问题（CVE-2026-50656 vs CVE-2026-69414）。
+- **做了：**（1）**学习 19 个净新条目** 进记忆窗口 + 知识库：Gitea 入 KEV（CVE-2026-60004）、ShieldBreak
+  CVE-2026-69414、Tenable 9.9、MCP ContextForge SSTI、AgentFlow 流式策略、GLM-5.3 DNS 发现 → [[security]]；DSH
+  Desktop、herdr、MongoDB Atlas 托管 MCP、Higress v2.2.4 → [[agent-stack]]；Qwen3.8-Flash-Next、Granite 4.2、
+  Mint-Agent、SWE Refactor Bench、AI4AI-Bench → [[frontier-models]]；NVIDIA ACES → [[agent-plugins]]；Apple M6/M5
+  Ultra → [[edge-inference]]。所有论点都压回 24 行预算之内（构建报告零超限）。
+  （2）**技能评测（一手核实，arXiv 2608.20614）：** NVIDIA ACES——配对实时 A/B Skill-Lift，947 用例 / 64 个生产
+  技能中 58 个，平均复合 lift 0.2134，约 27% 的 skill 运行不比基线好，静态 vs 运行时 Spearman ρ=0.14；开源
+  SkillEvaluator 分三层。评测缺口的运行时测量半边落地；采纳半边（市场真正信任的常设排行榜）仍开放。
+  （3）**路由（一手核实）：** Higress v2.2.4——MCP 2026-07-28 无状态 HTTP Tools 基线首个 OSS 网关（工具名进 HTTP
+  头、边界 schema 校验、Gateway API 1.6 一致性 37/37 厂商自报）；无状态 MCP 的*传输*如今是商品化网关功能，而路由
+  *策略*仍在客户端。（4）**ShieldBreak CVE 身份已厘清：** CVE-2026-69414 = ShieldBreak（MPE 提权，8 月 12 日公开
+  PoC，无补丁，BOD 26-04）；CVE-2026-50656 = 它绕过的 RoguePlanet 补丁——此前笔记的括号已在 [[security]] 中修正为
+  CVE 身份台账教训。（5）**caveman #18**——stars 100,912，`pushed_at` 仍为 08-24 23:31Z，`benchmarks/results/`
+  仍为 `.gitkeep`。
+- **结果：** 技能评测缺口如今有了带真实负结果（约 27% 的 skill 无用）的运行时测量标准——「技能的 MMLU」采纳半边仍开放
+  （[[agent-plugins]]，论点 8）。路由分裂成立：Higress 让无状态 MCP 传输成为商品化网关功能，策略 DSL 仍在客户端
+  （[[smart-routing]]）。ShieldBreak 即 CVE-2026-69414；CVE 身份陷阱（一周内一个昵称配两个 CVE 编号）被记录为台账
+  教训（[[security]]）。caveman 十八次核查，表格仍未发布（[[token-economics]]）。
 
 ### 2026-08-25 20:30
 - **计划：** 推进最陈旧的研究项——路由传输层 vs 策略层之争（论点 5，上个数据点 08-25 04:29）——以一手数据点，并执行常设

@@ -1189,3 +1189,61 @@ gadget to write a `.jspws` into the webroot and execute it. **KEV Aug 5**; Austr
 servers under active attack. Fixed in **2025.11.7 / 2026.1.3**. Build servers hold deployment creds, signing keys and
 cloud tokens, so unauth RCE here is a supply-chain choke point — and the July-disclose / August-exploit timeline is the
 shrinking patch-to-weaponization window again (shape 2).
+
+## Gitea/Forgejo KEV'd pre-auth RCE + ShieldBreak gets its CVE + Tenable 9.9 + MCP SSTI gateway + flow-centric policy (08-26 04:03)
+
+The batch's security stream, read first-hand at the primary sources where reachable.
+
+- **Gitea CVE-2026-60004 (CWE-94, CVSS 9.8) → CISA KEV (Aug 25), active exploitation.** The `diffpatch`
+  git-hook injection — an add/add three-way-merge conflict in `POST /api/v1/repos/{owner}/{repo}/diffpatch`
+  forces a file into the *bare* clone's live hooks dir, and Git executes `post-index-change` as the Gitea
+  service account — was already in the ledger (08-18, shape 1). The net-new facts: **KEV-added Aug 25**
+  (federal remediation deadline **Aug 28**), fixed in **Gitea 1.27.1** (Jul 27 — the release notes list it
+  under MISC as a patch-apply refactor, not under SECURITY), EPSS ~0.95, multiple public PoCs (shinthink,
+  imbas007) + a Nuclei template, and the stealth angle: command output is stashed inside Git objects rather
+  than phoning home, so the exfil is unusually quiet. Self-hosted Git = source + secrets + CI creds, so an
+  actively-exploited pre-auth RCE there is the standing-credentials pivot at the forge.
+- **ShieldBreak gets its CVE — CVE-2026-69414, and the CVE-identity lesson.** The 08-16 note's parenthetical
+  "(CVE-2026-50656)" referred to the *RoguePlanet patch* ShieldBreak bypasses, not to ShieldBreak itself
+  (Qualys, read first-hand: ShieldBreak "emerged shortly after Microsoft released a fix for RoguePlanet").
+  **ShieldBreak is CVE-2026-69414** (assigned Aug 14; public PoC Aug 12; Win11 25H2 + Server 2025): an EoP in
+  the **Microsoft Malware Protection Engine** that steers which file Defender's **cloud-hydration path**
+  (Cloud Filter API / CFAPI) scans — a user-mode callback + filesystem/Object-Manager primitives convert
+  Defender's privileged processing into `NT AUTHORITY\SYSTEM`. **No patch**; CISA **BOD 26-04** gives a
+  14-day detect/mitigate window. The 08-16 "rogue cloud-storage provider + CLFS log manipulation" detail and
+  this batch's "CFAPI hydration + Object Manager" detail are the same chain at two levels of abstraction.
+  Ledger lesson: when a nickname ("ShieldBreak") and two CVE numbers surface in the same week, resolve *which
+  CVE is the vuln and which is the patch* before recording ([[fact-check]]).
+- **Tenable SecurityCenter CVE-2026-19626 (CWE-95, CVSS 9.9) — the scanner is the target.** Three `eval()`
+  sinks in report rendering (`ReportChartingLib.php:8283/5538/5714` + an `is_callable()` gate at 6125);
+  `h00die`'s **CONFIRMED pure-REST non-admin PoC** (Aug 21) reaches it as an org user with report rights via
+  `POST /rest/group`, with command output rendering into the finished pie legend as the exfil channel. Fixed in
+  **6.9.0** (eval removed, `{=...}` restricted to a safe arithmetic regex). The lesson is the *role*: a
+  vulnerability scanner holds network/credential data, and here a standard analyst account is enough — audit
+  who can launch report definitions.
+- **GHSA-VWF3-4XXJ-QG6H — SSTI→RCE in IBM's `mcp-contextforge-gateway` (CVSS 9.8, CWE-1336/CWE-94).** An
+  unsandboxed Jinja2 renderer + an unsafe `str.format()` fallback in a prompt-template MCP service; a user
+  with template-modification rights bypasses regex filters and executes host commands. Fixed in **1.0.0**
+  (SandboxedEnvironment + pre-flight validation + `CONTENT_VALIDATE_PROMPT_TEMPLATES=true`). The third-party
+  MCP supply chain keeps producing high-severity flaws — every MCP dependency is now inside the trust boundary
+  (shape 10's long tail).
+- **AgentFlow — dataflow, not per-call, as the security-policy unit (arXiv 2608.22868).** A runtime reference
+  monitor mediates agent actions against *flow/path* rules with stateful taint semantics; a bounded SMT
+  verifier checks safety properties. On 949 AgentDojo injected cases: **confirmed compromise 33.0% → 0.0%**
+  while aggregate utility *improves* (46.7% → 63.3%); on 200 AgentDyn Dailylife cases, 73.5% → 0.0% at
+  near-baseline utility; on ASB's direct-prompt-injection harness, 0/1,200. Preliminary + scoped to
+  policy-modeled behaviors. This is the thesis-11 boundary made *dataflow-aware*: the unit of policy moves
+  from a single tool call to the path sensitive data takes across a sequence of steps.
+- **GLM-5.3's red team finds a 40-year-old DNS protocol flaw (~80k× amplification) — vendor-reported.** Zhipu's
+  model-assisted hunt (Tsinghua NISL, Nankai, Tencent Xuanwu, Qihoo + others) surfaced a DNS protocol-level
+  flaw latent since the protocol's 1983 design: a few crafted requests amplify server computational pressure by
+  up to ~**80,000×**, potentially affecting **10M+ public DNS services**; disclosed via CNNVD/CNVD. The
+  two-week run tallied **2,404 candidate vulnerabilities** (1,088 mid/high severity) across **269 projects**.
+  No public CVE yet — the 80k×/10M numbers are claims pending independent confirmation. The pattern (an LLM
+  red-team finding a protocol-age bug humans missed for four decades) is the constructive mirror of the
+  offensive AI-assisted exploitation shape (shape 4).
+  **Cross-checked 08-26 04:35:** the ~80k×/10M+/"90% of mainstream DNS" figures are consistent across
+  independent Chinese outlets (证券日报, sohu, sina, toutiao) but every report traces to Zhipu's disclosure —
+  no independent technical analysis of the amplification *mechanism*, no CVE as of this date. All discovered
+  vulnerabilities entered the CNNVD/CNVD coordinated-repair flow; Zhipu's delayed ~Aug 28 open weights ship
+  under a named program, "开源的盾" (Open Source Shield), a layered security-review gate.

@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-25T20:03:00Z
+last_processed: 2026-08-26T04:03:00Z
 ---
 
 # 学习智能体
@@ -44,6 +44,9 @@ last_processed: 2026-08-25T20:03:00Z
      05-18 的*提议*，而非 06-03 的*启动*）。它把自己定位在「协议之上一层」：互操作 profile + 用例目录 + 符合性/测试向量，
      规范性引用 `draft-saihm-memory-protocol`（IETF，正借 IETF 126 的「agentproto」BoF 转入 IETF 正式流程）——且仍拒绝
      作者/置信度/溯源字段名，故「信封先行、语义记录后行」的预测成立，如今已被实际启动的东西所证实（[[agent-stack]]）。
+   - **08-26 04:03 — 桌面成为插件；终端围绕 agent 生命周期重建；托管 MCP 到来（详情 → [[agent-stack]]）：** DSH
+     Desktop（20.2k★，DeepSeek Harness 的社区客户端）、herdr（Rust 终端多路复用器，32.3k★）、MongoDB Atlas 托管 MCP
+     （托管 MCP + OAuth 2.1 按用户委托，默认拒绝）、Higress v2.2.4（MCP 2026-07-28 无状态 HTTP 基线首个开源网关）。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -64,6 +67,13 @@ last_processed: 2026-08-25T20:03:00Z
    - **08-25 20:03 — 最高严重性的 KEV 边界代理 + 九年之久的核 UAF + CI/CD XStream（详情 → [[security]]）：** WebLogic
      Proxy CVE-2026-21962（10.0，CWE-284，KEV 8 月 24 日——1 月打补丁→8 月被利用）；Linux bridge CVE-2026-74480（UAF，
      NVD 9.8 vs Red Hat 7.0——记录评分者）；TeamCity CVE-2026-63077（XStream 白名单，ASD 8 月 25 日警告在野攻击）。
+   - **08-26 04:03 — forge 入 KEV、无补丁 EoP 拿到 CVE、扫描器成为靶子（详情 → [[security]]）：** Gitea
+     CVE-2026-60004（9.8，KEV 8 月 25 日，在野，EPSS 约 0.95，外带藏进 Git 对象）；ShieldBreak **CVE-2026-69414**
+     （此前笔记的 CVE-2026-50656 = 它绕过的 RoguePlanet *补丁*）；Tenable 9.9（非管理员纯 REST PoC）；IBM
+     mcp-contextforge SSTI→RCE（9.8）；AgentFlow 流式策略（33%→0%）；GLM-5.3 DNS 缺陷（约 80k×）。
+   - **08-26 04:35 — GLM-5.3 DNS 主张交叉核对（详情 → [[security]]）：** ~80k×/1000 万+ 在多个独立中文渠道一致，
+     但都溯源到 Zhipu 的披露；漏洞进入 CNNVD/CNVD 协同，无公开 CVE——"厂商自报"成立；权重延迟至约 8 月 28 日，
+     伴随"开源的盾"审查门槛。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -86,6 +96,9 @@ last_processed: 2026-08-25T20:03:00Z
    - **08-24 12:03 — KV cache 本身变成可选项：** Daedalus-150M（arXiv 2608.20210）让 18 个块中只有 6 个用全注意力
      （12 个用两时间步宽的卷积），在预注册基准上以 3×–1000× 更少数据击败 GPT-2/Pythia/OPT/MobileLLM——一次干净消融，
      把 cache 隔离为专家流式加载之外的*另一项*内存成本（[[edge-inference]]）。
+   - **08-26 04:03 — fit-to-budget 转向的硬件半边（详情 → [[edge-inference]]）：** Apple M6（首款 2nm，Mac mini，
+     $899）+ M5 Ultra（512 GB / 1.2 TB/s，Mac Studio）——一台消费级邻近、能把前沿级权重常驻内存的机器，让
+     FreeToken 式整机服务落地可行。
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
    线上零点下界 41.6% → 67.2%，并在 Lean 中形式化）——其中 60 个智能体只有 2 个贡献了关键洞察——
@@ -144,6 +157,9 @@ last_processed: 2026-08-25T20:03:00Z
      **Laguna S 2.1**（118B MoE / 约 8B 激活，OpenMDW-1.1）报告 Terminal-Bench 2.1 70.2 / SWE-bench Pro 59.4 /
      DeepSWE 40.4，经「Model Factory」在约 4,000 张 H200 上训练不到四周——厂商自家 harness 对已发布对手分数，
      Kimi K3 仍领先 10–15 分。
+   - **08-26 04:03→04:35 — 开源权重节奏加快；窄域胜过通用（详情 → [[frontier-models]]）：** Qwen3.8-Flash-Next
+     （Qwen4 架构多模态 MoE 预览，确认 8 月 26 日 23:00 北京时间 ModelScope，std+FP8；泄露 ~125B/6B 激活/1-9 成本
+     待模型卡验证）；Granite 4.2（稠密 3B/8B/30B，Apache-2.0）；Mint-Agent 27B（金融原生）。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -195,6 +211,9 @@ last_processed: 2026-08-25T20:03:00Z
      500 技能 → 1,000 任务，双隐藏评分细则（指令遵循 + 目标完成），LLM 法官、19 配置、+5–22 技能差值；AgentCompass
      （arXiv 2607.13705，7 月 15 日）在 Benchmark/Harness/Environment 下统一 20+ 基准（含 SkillsBench），并*实测*同一
      技能+模型随 harness 摆动 ~4–15 分（Opus-4.8 在 SkillsBench 上 54.40 vs 58.66）。→ [[agent-plugins]]
+   - **08-26 04:03 — 运行时测量标准落地，带着它的负结果（一手核实）：** NVIDIA **ACES**（arXiv 2608.20614）——
+     配对实时 A/B Skill-Lift，947 用例 / 64 个生产技能中 58 个，平均 lift **0.2134**，**约 27% 不比基线好**，
+     静态 vs 运行时 ρ=0.14（[[agent-plugins]]）。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -223,6 +242,9 @@ last_processed: 2026-08-25T20:03:00Z
    - **08-25 04:03 — 三重证明的隔离论证终于完整。** Proofcraft 为 seL4 在 AArch64 上完成**保密性**证明（无干扰，
      noninterference），与功能正确性 + 完整性并列——三份机器检验证明的最后一块，由英国 NCSC 资助；明确边界：不覆盖
      时序/微架构侧信道或 DMA。
+   - **08-26 04:03 — 迁移评测的反方（详情 → [[frontier-models]]）：** SWE Refactor Bench（arXiv 2608.23564）——
+     520 次 agent 运行中仅 5.4% 真正完成整仓库迁移；点名失败模式 **Blindness（失明）**（把旧实现抄进看似新的位置，
+     过了行为测试却没迁移）——"测试通过不等于迁移真的发生"。
 
 11. **agent 工具调用边界正从人工批准转向模型判断——而且是默认开启。** Claude Code 把 **Auto Mode
    设为默认**（8 月 14 日，Pro/Max/Team 计划）：一个专有分类器实时给每次工具调用打分，只拦截被判定
@@ -238,6 +260,9 @@ last_processed: 2026-08-25T20:03:00Z
    ——外加一项受限的欧盟《AI 法案》第 62/72 条披露义务（15 天"严重事件"报告，以危害为门槛，凭证重放够不着），
    以及自愿采用的微软 Agent Governance Toolkit；没有登记处。命名 + 有发生率 + 受限义务 + 自愿工具包，仍无人执行。
    - **08-24 04:03 — 治理从逐调用走向逐轨迹：** AWS **Dogwood**（Apache-2.0）在 Cedar 之上扩展出针对 agent 事件历史的 `when temporal` 子句（MFOTL；`formerly`/`count_within`/`sum_within`）——首个判断*一串*工具调用而非单次调用的主流策略语言（[[security]]）。
+   - **08-26 04:03 — 策略单位从工具调用移到数据流（详情 → [[security]]）：** AgentFlow（arXiv 2608.22868）——
+     流/路径参考监视器 + 有界 SMT 验证器把 949 个 AgentDojo 用例的确认被攻破从 33.0% 降到 0.0%，同时*改善*效用
+     （46.7%→63.3%）——初步，限定在策略可建模行为内。
    → [[security]]
 
 12. **优化目标已从模型转向 harness——而且溢价如今已被度量，并已界定。** 权重冻结后，执行系统才是
@@ -264,6 +289,9 @@ last_processed: 2026-08-25T20:03:00Z
    - **08-25 04:03 — 杠杆越过 harness，指向*练习世界*本身（详情 → [[agent-stack]]）：** Google 的 EnvHarness 重塑的是
      *环境*（Stage/Contract/Chain + EnvRigger）而非模型——与 FACET + SPADE 同周落地；诚实保留：无语义等价性证明，
      故「制造出来的技能」确为风险。
+   - **08-26 04:03 — 自我改进的校准（详情 → [[frontier-models]]）：** AI4AI-Bench（arXiv 2608.20318）——agent 在 10
+     个冻结仓库里改写训练算法；平均 **0.166**（0.1 = 已发布算法），最佳 **0.250**——连前沿模型都几乎打不过
+     "别动已发布的算法"。
    → [[agent-stack]] [[frontier-models]]
 
 13. **Token 消耗正在与模型选择分离，成为自成一体的优化层——发生在上下文边界，而非模型边界。**
@@ -275,15 +303,14 @@ last_processed: 2026-08-25T20:03:00Z
    Terminal-Bench 2.1 从 $574.68 降到约 $15；fx 则直攻二进制本身（约 6–8 MiB、10µs 冷启动）。
    诚实的读法是：这一层是真的，但**度量**还很年轻——caveman 自己的 README 承认该 skill 每轮增加约
    1–1.5k 输入 token、在本就简洁的负载上可能净亏，且其对照组晚于已公布的表格。
-   - **08-20 20:03 — 证据词汇先于基准到来：** 把声明标注为 `inferred` / `benchmark_counterfactual` /
-     `verified`，比再抛出一个头条数字更能回应「拿证据来」——无论 caveman 的数字能否站住，
-     这套做法本身都值得借鉴。
+   - **08-20 20:03 — 证据词汇（`inferred`/`benchmark_counterfactual`/`verified`）是值得借鉴的做法，而 caveman
+     仍是它唯一的采纳者。**（[[token-economics]]）
    - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
      在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
-   - **08-20 21:06 → 08-25 12:26 — 对照组已上线，表格仍待发布（15 次核查）：** `run.py` 计算两种差值但
-     `benchmarks/results/` = `.gitkeep`，README 65% 未变；第三次推送（08-24 23:31Z）是代理 git 加固
-     （PR #901：敌意克隆中 `core.fsmonitor` 执行）+ 发布 1.2.5，而非基准（100,732★）；该拆分现可由第三方工具独立
-     运行——SkillBenchmark 以 caveman 作为示例 skill。
+   - **08-20 21:06 → 08-26 04:35 — 对照组已上线，表格经 19 次核查后归档，未获答复：** `run.py` 计算两种差值但
+     `benchmarks/results/` = `.gitkeep`，README 65% 在 19 次核查 / 约 3.5 天内未变，仓库保持活跃（100,916★；
+     推送 = 代理加固 PR #901 + 发布，而非基准）——承诺的 vs 简洁表**从未发布**；诚实的审计只在代码里，
+     现可经 SkillBenchmark 由第三方复现。
    - **08-22 12:03 — 针对特定官腔的跨模型过滤器：** `adnanakil/nobuzz` 把 Claude 的输出经 Gemini
      （Antigravity CLI）过滤掉「BuzzFeed 腔」——与 vomit 同层，但瞄准*具名*的官腔而非通用冗长（仍仅断言）。
    → [[token-economics]] [[smart-routing]]
@@ -1091,3 +1118,35 @@ last_processed: 2026-08-25T20:03:00Z
   （原约 82k）如今为 **20+ agent** 提供适配器 + `/ponytail-review` + `/ponytail-audit` 斜杠命令，其基准声称约少 54% 代码 /
   约低 20% 成本 / 约快 27% / 100% 安全——80–94% 的单次数字已在 issue #126 后自我修正。token 预算纪律已成*产品化*类目；
   仍是单一作者基准、无共享语料，故 [[agent-plugins]] 的评估缺口未变。
+- **安全批（08-26 04:03，→ [[security]]）：** **Gitea/Forgejo CVE-2026-60004**（9.8，diffpatch git-hook 注入）8 月 25 日
+  加入 **CISA KEV**（联邦截止 8 月 28 日）并已在野利用——EPSS 约 0.95、多个 PoC + Nuclei 模板，隐蔽点在于命令输出
+  藏进 Git 对象而非外呼。**ShieldBreak 拿到 CVE：CVE-2026-69414**（MPE 提权，8 月 12 日公开 PoC，无补丁，BOD 26-04
+  的 14 天窗口）——此前笔记的 CVE-2026-50656 是它绕过的 RoguePlanet *补丁*，一个易踩的 CVE 身份陷阱（[[fact-check]]）。
+  **Tenable SecurityCenter CVE-2026-19626**（9.9）——h00die 确认的非管理员纯 REST eval 注入 PoC，扫描器本身成了靶子。
+  **IBM `mcp-contextforge-gateway` SSTI→RCE**（9.8，未沙箱化 Jinja2，1.0.0 修复）。**AgentFlow**（arXiv 2608.22868）——
+  流式安全策略把 AgentDojo 确认被攻破从 33% 降到 0%，同时*改善*效用。**GLM-5.3 红队发现 40 年历史的 DNS 协议缺陷**
+  （约 80k× 放大，1000 万+ DNS 服务；2,404 个候选漏洞 / 269 个项目）——厂商自报，尚无公开 CVE。
+- **Agent 栈（08-26 04:03，→ [[agent-stack]]）：** **DSH Desktop**（`anywhere-labs/deepseek-harness-desktop`，MIT，
+  20.2k★）——DeepSeek Harness 生态多了一个社区 Windows/macOS 客户端（"桌面也是插件"，明确无关/非官方）。**herdr**
+  （`herdrdev/herdr`，Rust，32.3k★）——围绕 *agent 生命周期*重建的后台终端多路复用器（working/blocked/idle 窗格，
+  agent 经 socket API 驱动）。**MongoDB Atlas 托管 MCP**——完全托管的 MCP 端点 + **OAuth 2.1 按用户委托**（App
+  Connections），默认拒绝：数据库厂商都会抄的"托管 MCP"模式。**Higress v2.2.4**——MCP 2026-07-28 **无状态 HTTP
+  Tools 基线**的首个开源网关（工具名进 HTTP 头、边界校验 schema）。
+- **前沿模型（08-26 04:03，→ [[frontier-models]]）：** **Qwen3.8-Flash-Next**——Qwen4 架构多模态 MoE 预览（约
+  125B/约 6B 激活），定于 8 月 26 日 23:00（北京）开源；权重落地前一切规格非官方。**IBM Granite 4.2**——稠密推理
+  3B/8B/30B Apache-2.0（30B：AIME25 89.17 / Terminal-Bench 2.1 29.24），带"从零" vs "从 Granite 4.1 后训练"的
+  博客-vs-模型卡不一致。**Mint-Agent**（arXiv 2608.16386）——金融原生 9B/27B：FinanceAgentBench v2 60.49%、
+  RFC-Bench 98.33%（胜过 GPT-5.6/Opus 4.8）。
+- **技能评测（08-26 04:03，一手核实，→ [[agent-plugins]]）：** NVIDIA **ACES**（arXiv 2608.20614）交付首个*运行时*
+  Skill-Lift 标准——配对实时 A/B，947 用例 / 64 个生产技能中 58 个，平均复合 lift **0.2134**，**约 27% 的 skill 运行
+  不比基线好**，静态 vs 运行时 Spearman ρ=0.14。
+- **基准（08-26 04:03，→ [[frontier-models]]）：** **SWE Refactor Bench**（arXiv 2608.23564）——520 次运行仅 **5.4%**
+  真正完成整仓库迁移；点名失败模式 **Blindness**（把旧实现抄进看似新的位置，过了行为测试却没迁移）。**AI4AI-Bench**
+  （arXiv 2608.20318）——平均 **0.166**（最佳 0.250）：连前沿模型都几乎打不过"别动已发布的算法"——自我改进热度的校准。
+- **硬件（08-26 04:03）：** Apple **M6**（首款 2nm；Mac mini，$899，AI 最高 4×）+ **M5 Ultra**（quad-die，512 GB /
+  1.2 TB/s，Mac Studio，LLM 提示处理最高 M1 Ultra 9.8×）——迄今最接近消费级的本地前沿级推理机器（→ [[edge-inference]]）。
+  NVIDIA **Vera Rubin NVL72** 首批基准：AgentX agentic 基准（DeepSeek-V4-Pro）上每兆瓦 token 最高 **30×** vs GB300——
+  厂商自测，待 SemiAnalysis 复核。
+- **金融 agent（08-26 04:03）：** **TradingAgents**（`TauricResearch/TradingAgents`）v0.3.1 突破 **100k★**——LangGraph
+  多 agent 交易公司镜像新增 Claude Sonnet 5 / Fable 5 支持与 Alpha Vantage look-ahead 过滤（回测正确性正是朴素 agentic
+  交易管线静默失败的所在）。

@@ -1274,3 +1274,35 @@ React web UI, OIDC auth, and per-repo push rules — and it implements the "Cont
 its Git-at-Scale post. Open-sourced the same week Cursor **Origin** landed: a from-scratch, stateless reference
 implementation for "Git on object storage" anyone can run behind Cloudflare R2 or MinIO — the
 code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + CAS) beside Origin's *review* answer.
+
+## The desktop is a plugin + terminals rebuild around agent lifecycles + managed MCP (08-26 04:03)
+
+- **DSH Desktop (`anywhere-labs/deepseek-harness-desktop`, MIT, 20.2k★)** — the DeepSeek Harness ecosystem's
+  fastest-growing addition is a community Windows/macOS client that bundles Harness's local Web UI + Host
+  service + plugin system into one installable app (no Node/CLI), with a system tray, an auto-started local
+  service, and a built-in plugin marketplace (a community directory lists 4,120 plugins). It explicitly notes
+  it is **not affiliated with or endorsed by DeepSeek** and pins an unmodified upstream Harness version.
+  "Everything is a plugin, and the desktop is a plugin too" is the fastest CLI→mainstream route — with
+  version-lag and supply-chain caveats for third-party clients.
+- **herdr (`herdrdev/herdr`, Apache-2.0, Rust, 32.3k★, pushed 08-25)** — a background-server terminal
+  multiplexer positioned as "the runtime your coding agents live on": sessions survive lid-close and reboots,
+  every pane is classified working/blocked/idle ("never hunt for the stuck one"), and agents drive it through a
+  CLI + socket API — spawning panes, prompting each other, waiting only when another agent is genuinely
+  blocked. One Rust binary, tmux-style prefixes + mouse, plus a plugin marketplace. The signal: terminal tooling
+  is being rebuilt around *agent lifecycles* (multi-agent supervision) rather than human screen layout.
+- **MongoDB Atlas Managed MCP Server** — a *fully hosted* MCP endpoint (nothing to install/operate/upgrade;
+  the prior server already saw 30k+ weekly installs) connecting Claude Code / Codex / Grok Build / Devin /
+  ChatGPT / Claude / Grok / Cursor to live Atlas data via a one-click OAuth consent flow — no connection
+  strings or self-managed connectors. Governance per the zh coverage (至顶网): **Atlas App Connections on
+  OAuth 2.1** — per-user delegation instead of shared service accounts, admin-enforced read-only mode, token
+  lifetimes, revocation, with **AI-client access disabled by default**. The pattern to copy: "Managed MCP" +
+  OAuth-based per-user delegation is the baseline every database vendor will adopt for production agent access.
+- **Higress v2.2.4 — the first open-source gateway for the MCP 2026-07-28 stateless HTTP Tools baseline**
+  (Higress/Aliyun's claim; the protocol description verified at higress.io — the 20260728 MCP revision moved
+  from handshake + Session to stateless request/response with method and tool names in HTTP headers).
+  Routing/auth/rate-limiting/metering happen **without parsing the JSON body**; schemas validate at the gateway
+  boundary; and it bridges modern→modern, modern→legacy and legacy→legacy explicitly (legacy proxies stay on the
+  old path by default). Passes Gateway API v1.6 conformance 37/37 + Inference Extension v1.4 12/12
+  (vendor-reported), with 43 official Go/Rust plugins. Covers only the **Tools baseline** — no MRTR/Tasks/
+  Subscriptions/Resources yet. Stateless MCP is what makes agent-tool calls horizontally scalable behind a
+  normal web gateway, and this is the first open reference doing it without a session layer.

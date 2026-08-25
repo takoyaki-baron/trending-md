@@ -961,3 +961,29 @@ Google Research + WashU + UNC 的 **EnvHarness**（arXiv 2608.19880；`google-re
 克隆包、Git LFS、React Web UI、OIDC 认证与按仓库推送规则——并实现了 Cursor 在其 Git-at-Scale 文章中描述的「Continuity」
 架构。与 Cursor **Origin** 同周开源：一个从零开始、无状态的「对象存储上的 Git」参考实现，任何人可在 Cloudflare R2 或
 MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Origin 的*评审*答案之外又有了*存储*答案（无状态 WAL + CAS）。
+
+## 桌面成为插件 + 终端围绕 agent 生命周期重建 + 托管 MCP（08-26 04:03）
+
+- **DSH Desktop（`anywhere-labs/deepseek-harness-desktop`，MIT，20.2k★）**——DeepSeek Harness 生态中增长
+  最快的成员是一个社区版 Windows/macOS 客户端：把 Harness 的本地 Web UI + Host 服务 + 插件系统打包进一个
+  可安装应用（无需 Node/CLI），带系统托盘、自动启动的本地服务、内置插件市场（社区目录列有 4,120 个插件）。
+  它明确注明**与 DeepSeek 无关、未经其背书**，并锁定未修改的上游 Harness 版本。"一切都是插件，桌面也是
+  插件"是从 CLI 走向主流的最快路径——但第三方客户端有版本滞后与供应链风险。
+- **herdr（`herdrdev/herdr`，Apache-2.0，Rust，32.3k★，08-25 推送）**——后台常驻的终端多路复用器，
+  定位是"你的编码 agent 赖以运行时的运行时"：会话跨合盖/重启存活，每个窗格被分类为 working/blocked/idle
+  （"再也不找卡住的那个"），agent 通过 CLI + socket API 驱动它——开窗格、互相提示、只在另一个 agent 真正
+  阻塞时才等待。单个 Rust 二进制，tmux 风格前缀 + 鼠标，外加插件市场。信号：终端工具正围绕 *agent 生命周期*
+  （多 agent 监督）而非人类屏幕布局重建。
+- **MongoDB Atlas 托管 MCP Server**——*完全托管* 的 MCP 端点（无需安装/运维/升级；此前 server 已每周
+  30k+ 安装）把 Claude Code / Codex / Grok Build / Devin / ChatGPT / Claude / Grok / Cursor 以一键 OAuth
+  授权连接到实时 Atlas 数据——无连接串、无自管理连接器。治理细节按中文报道（至顶网）：**基于 OAuth 2.1
+  的 Atlas App Connections**——按用户委托而非共享服务账户、管理员强制只读、令牌寿命、撤销，且 **AI 客户端
+  默认禁用**。值得抄的模式："托管 MCP" + 基于 OAuth 的按用户委托，是每个数据库厂商在生产 agent 访问上
+  都会采用的基础。
+- **Higress v2.2.4——面向 MCP 2026-07-28 无状态 HTTP Tools 基线首个开源网关**（Higress/阿里云的宣称；
+  协议描述已在 higress.io 核读——20260728 MCP 修订从握手 + Session 改为无状态请求/响应，方法与工具名进
+  HTTP 头）。路由/鉴权/限流/计量**无需解析 JSON 体**；schema 在网关边界校验；显式桥接 modern→modern、
+  modern→legacy、legacy→legacy（legacy 代理默认留在旧路径）。通过 Gateway API v1.6 一致性 37/37 +
+  Inference Extension v1.4 12/12（厂商自报），43 个官方 Go/Rust 插件。仅覆盖 **Tools 基线**——尚无
+  MRTR/Tasks/Subscriptions/Resources。无状态 MCP 正是让 agent 工具调用能在普通 Web 网关后水平扩展的东西，
+  这是首个无会话层做这件事的开源参考。

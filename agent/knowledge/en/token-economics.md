@@ -124,6 +124,13 @@ worth borrowing regardless of whether caveman's specific numbers survive their c
   throughout; `pushed_at` moved once (to 08-23 12:04Z, the first code change after ~2.6 days) and has held
   since; README's 65% table unchanged; stars 100,357 → 100,499. Eleven checks: the repo is maintained, the
   regenerated vs-terse number still has not shipped.
+  **Twelfth–nineteenth checks (08-24 20:30 → 08-26 04:35) — archived unanswered.** `pushed_at` held at
+  08-24 23:31Z (the third push = proxy git-hardening PR #901 + release 1.2.5) through all eight; `benchmarks/results/`
+  stayed `.gitkeep`; README's 65% unchanged; stars 100,620 → 100,916. **Answer:** the promised vs-terse table
+  **quietly never shipped** — the repo is actively maintained (stars climbing, 371 open issues) and spends velocity
+  on proxy security, not the benchmark; the honest audit lives in `run.py` only, now third-party-runnable via
+  SkillBenchmark. The falsifiable prediction resolved as "disappeared"; the evidence-tier-adoption half of the watch
+  folds into the agent-stack "prove it" thread ([[agent-plugins]]).
 - Does pixel-mode billing hold? It depends on providers pricing image tokens below the text they
   replace — a pricing-policy dependency, not a technical one, and therefore revocable by a vendor
   changing a rate card.

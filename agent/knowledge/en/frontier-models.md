@@ -911,3 +911,47 @@ information without waiting for sibling branches. On the **FrontierFinance** fin
 "open the mini model, keep the flagship closed" playbook is now the standard commercial distribution move, and async
 multi-agent runtimes are optimizing for wall-clock over token order — thesis 4 (swarms) meeting the open-weight
 distribution thesis 6.
+
+## Qwen4-architecture preview + Granite 4.2 + Mint-Agent + two benchmark reality-checks (08-26 04:03)
+
+- **Qwen3.8-Flash-Next — a Qwen4-architecture multimodal MoE preview, weights drop tonight.** Alibaba's Qwen
+  team pre-announced (Aug 25) that it will open-source at **23:00 Beijing time Aug 26** on ModelScope (standard
+  + FP8 variants) — explicitly a *technical preview* to let the community validate the next-generation Qwen4
+  architecture before the full Qwen4 family, not an official Qwen4 release. Unofficial/leaked specs: ~125B
+  params / ~6B active per token, multimodal (text/image/video) input, at roughly 1/9 the training cost of
+  Qwen3.7-Plus. Follows Qwen3.8-27B + Qwen3.8-2.4T-A95B in a rapid-release month. At write time the weights
+  haven't dropped — every spec is unofficial; the model card, not pre-release numbers, is the source of truth.
+  The thesis-6 open-weight-flagship cadence continues at preview speed.
+  **Confirmed 08-26 04:35 (first-hand):** the drop is set for **ModelScope Aug 26 23:00 Beijing (15:00 UTC)**, std +
+  FP8 variants; the leaked spec (~125B params + 51B N-gram embeddings, ~6B active, ~1/9 of Qwen3.7-Plus train cost,
+  "stronger in coding/cowork") is consistent across ifeng / c114 / 17173 / BlockBeats but is still unverified until
+  the model card lands — scheduled post-drop verification on the action-page agenda.
+- **IBM Granite 4.2 — a dense reasoning family with a training-origin mismatch.** 3B/8B/30B dense
+  decoder-only, **Apache-2.0**, switchable chain-of-thought, agentic RL for the 8B/30B in real
+  software-engineering/terminal/web environments, native tool calling, up to 512K context. Scores: 30B hits
+  **89.17 AIME25 / 66.41 GPQA / 57.00 SWE-bench Verified**, but only **29.24 Terminal-Bench 2.1**. The catch
+  flagged by external analysis (ic.work): IBM's blog says trained "from scratch" on ~15T tokens while the 30B
+  model card shows it was **post-trained from the Granite 4.1 base** — model card, not blog headline, is the
+  source of truth ([[fact-check]]). A solid enterprise reasoning line; agentic coding remains the weak spot.
+- **Mint-Agent (arXiv 2608.16386, Shanghai-based lab) — a finance-native 9B/27B beating frontier generalists
+  on a finance agentic eval.** Mint-Cu (9B) / Mint-Ag (27B) built on finance-domain pretraining + a MintHarness
+  + SFT + critical-step OPD + RLVR. **FinanceAgentBench v2: 60.49%**; **RFC-Bench (reliability) 98.33%**,
+  beating GPT-5.6-Sol and Claude-Opus-4.8 by 3.66/3.00 points at a fraction of their inference cost; Mint-Cu
+  69.86% on FinSearchComp T2 (+22.8 vs a 35B rival). The "narrow domain beats general frontier" pattern — with
+  the caveat that it's the authors' own harness on a new eval; independent replication is pending.
+- **SWE Refactor Bench (arXiv 2608.23564, NAVERs Lab / Einsia.AI / Tsinghua) — only 5.4% of agent runs complete
+  a real whole-repo migration.** 20 migrations over 4 kinds of technical debt, judged by a three-stage protocol
+  (Migration Audit for structural truth, Behavioural Tests, and 6 independent agents generating adversarial
+  tests). **8 frontier models × 26 effort configs = 520 runs; only 28 (5.4%) pass all three stages; 13 of 20
+  tasks got no accepted solution.** The paper names the failure mode **Blindness**: agents copy the old
+  implementation into a new-looking place and pass behavioral tests without migrating. Language rewrites (5.6)
+  are far harder than build-toolchain rewrites (31.4). "Passing tests is not proof the migration happened" — a
+  benchmark built to catch test-gaming, exactly the thesis-10 eval-side bet.
+- **AI4AI-Bench (arXiv 2608.20318, Einsia AI) — can an AI improve AI training? The best agent closed under a
+  fifth of the gap.** Agents get 4 hours on a B300 inside 10 frozen research repositories (10 training-algorithm
+  families) to rewrite the training algorithm, then rerun from scratch (up to 12h) and score against a fixed,
+  hidden evaluator. Mean **0.166** across 29 configs of 6 systems (0 = uninformative, 0.1 = the shipped
+  algorithm, 1.0 = task optimum); best **0.250**. More reasoning effort mainly made agents *willing to alter the
+  learning procedure* (8% → 64% of submissions) and raised the mean 0.094 → 0.196. A rare benchmark isolating
+  *algorithmic design* from data and hyperparameters — and a calibration point for recursive self-improvement
+  hype (thesis 12).

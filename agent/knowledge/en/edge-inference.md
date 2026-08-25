@@ -267,3 +267,15 @@ when the observation arrives. Training-free. Across 3 benchmarks × 3 LLMs it cu
 (~20% average) and, against a compute-matched control, hits higher Pass@1 at 1.3–3.2× less sequential decoding. Not
 an edge/quantization trick — it is "think while you wait" at the agent-runtime layer, scaling reasoning without
 user-perceived latency or retraining; directly relevant to any runtime that idles on tool I/O.
+
+## Apple's 2nm turn — 512 GB / 1.2 TB/s on-device frontier-ish inference (08-26 04:03)
+
+The local-inference ceiling just moved. Apple unveiled the **M6** — its first **2nm** chip — in a new Mac mini
+(dual 16-core Neural Engine, up to 4× AI performance over the prior mini, **$899**) and the **M5 Ultra**
+(quad-die UltraFusion, up to 36-core CPU / 80-core GPU) in a Mac Studio — **512 GB unified memory and 1.2 TB/s
+bandwidth**, enough for "hundreds of billions of parameter" on-device models, with LLM prompt processing up to
+9.8× the M1 Ultra. The Mac Pro is discontinued, making Studio the top desktop. Ships Sep 22 on macOS 27. The
+~4.3–4.5× AI claims are Apple's own numbers, and the price jumps ($899 mini / $5,499 Studio) reflect the
+DRAM-cost environment (the memory-economics note above). Thesis 3's local-inference turn now has a
+consumer-adjacent machine that can hold frontier-ish weights resident — the hardware half of bandwidth-adaptive
+serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops being theoretical.

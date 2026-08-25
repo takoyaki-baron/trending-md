@@ -909,3 +909,49 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
 （`/app/agents/v1`）的构造 XML 链接 gadget 向 webroot 写入 `.jspws` 并执行。**8 月 5 日入 KEV**；澳大利亚 **ASD/ACSC 于
 8 月 25 日警告**服务器正遭主动攻击。修复于 **2025.11.7 / 2026.1.3**。构建服务器持有部署凭证、签名密钥与云 token，此处的
 未认证 RCE 是供应链咽喉——7 月披露 / 8 月利用的时间线，又是补丁到武器化窗口的收缩（形态 2）。
+
+## Gitea/Forgejo 入 KEV 的预认证 RCE + ShieldBreak 拿到 CVE 编号 + Tenable 9.9 + MCP SSTI 网关 + 流式策略（08-26 04:03）
+
+本批安全流，均尽可能在一手来源处核读过。
+
+- **Gitea CVE-2026-60004（CWE-94，CVSS 9.8）→ CISA KEV（8 月 25 日），已被积极利用。** `diffpatch`
+  的 git-hook 注入——在 `POST /api/v1/repos/{owner}/{repo}/diffpatch` 中利用 add/add 三方合并冲突，
+  把文件写进 *bare* 克隆的真实 hooks 目录，Git 以 Gitea 服务账户执行 `post-index-change`——此前已在台账中
+  （08-18，形态 1）。净新增事实：**8 月 25 日加入 KEV**（联邦修复截止 **8 月 28 日**），修复于
+  **Gitea 1.27.1**（7 月 27 日——发布说明把该改动列在 MISC 下、按 patch-apply 重构处理，而非 SECURITY），
+  EPSS 约 0.95，多个公开 PoC（shinthink、imbas007）+ 一个 Nuclei 模板，隐蔽点在于：命令输出被藏进 Git
+  对象而非回连外呼，因此极难察觉。自托管 Git = 源码 + 密钥 + CI 凭据，所以这里被积极利用的预认证 RCE，
+  就是 forge 上的常驻凭据支点（形态 1）。
+- **ShieldBreak 拿到 CVE——CVE-2026-69414，以及 CVE 身份辨析的教训。** 08-16 笔记括号里的
+  "（CVE-2026-50656）" 指的是 ShieldBreak 所绕过的 *RoguePlanet 补丁*，不是 ShieldBreak 本身（Qualys，
+  已一手核读：ShieldBreak "在微软发布 RoguePlanet 修复后不久出现"）。**ShieldBreak 即 CVE-2026-69414**
+  （8 月 14 日分配；公开 PoC 8 月 12 日；Win11 25H2 + Server 2025）：微软恶意软件防护引擎中的一个提权漏洞，
+  攻击者引导 Defender 的**云水合路径**（Cloud Filter API / CFAPI）扫描哪个文件——用户态回调 + 文件系统/
+  Object Manager 原语把 Defender 的特权处理变成 `NT AUTHORITY\SYSTEM`。**无补丁**；CISA **BOD 26-04**
+  给出 14 天检测/缓解窗口。08-16 的"恶意云存储商 + CLFS 日志操纵"细节与本批的"CFAPI 水合 + Object
+  Manager"细节，是同一链条的两种抽象层次。台账教训：当一个昵称（"ShieldBreak"）同一周内出现两个 CVE
+  编号时，先分辨*哪个 CVE 是漏洞、哪个是补丁*再记录（[[fact-check]]）。
+- **Tenable SecurityCenter CVE-2026-19626（CWE-95，CVSS 9.9）——扫描器本身成了靶子。** 报告渲染里三处
+  `eval()` 汇点（`ReportChartingLib.php:8283/5538/5714` + 6125 行的 `is_callable()` 闸门）；`h00die`
+  的 **CONFIRMED 纯 REST 非管理员 PoC**（8 月 21 日）以拥有报告权限的 org 用户身份经 `POST /rest/group`
+  触达，命令输出渲染进最终饼图图例作为外带通道。修复于 **6.9.0**（移除 eval，`{=...}` 限制为安全算术正则）。
+  教训在于*角色*：漏洞扫描器持有网络/凭据数据，而这里一个普通分析师账户就够——应审计谁能启动报告定义。
+- **GHSA-VWF3-4XXJ-QG6H——IBM `mcp-contextforge-gateway` 的 SSTI→RCE（CVSS 9.8，CWE-1336/CWE-94）。**
+  提示词模板 MCP 服务中未沙箱化的 Jinja2 渲染器 + 不安全的 `str.format()` 回退；有模板修改权限的用户
+  可绕过正则过滤并执行主机命令。修复于 **1.0.0**（SandboxedEnvironment + 预检 + `CONTENT_VALIDATE_PROMPT_TEMPLATES=true`）。
+  第三方 MCP 供应链持续产出高危缺陷——每个 MCP 依赖如今都在信任边界之内（形态 10 的长尾）。
+- **AgentFlow——以数据流而非单次调用作为安全策略单元（arXiv 2608.22868）。** 运行时参考监视器按
+  *流/路径* 规则配合有状态污点语义仲裁 agent 动作；有界 SMT 验证器检查安全性质。949 个 AgentDojo
+  注入用例：**确认被攻破从 33.0% → 0.0%**，同时聚合效用*提升*（46.7% → 63.3%）；200 个 AgentDyn
+  Dailylife 用例 73.5% → 0.0%；ASB 直接提示注入 harness 0/1,200。初步、且限定在策略可建模行为内。
+  这是论点 11 边界变得*数据流感知*：策略单元从单次工具调用，移到敏感数据跨步骤所走的路径。
+- **GLM-5.3 红队发现 40 年历史的 DNS 协议缺陷（约 80k× 放大）——厂商自报。** Zhipu 的模型辅助狩猎
+  （清华 NISL、南开、腾讯玄武、奇虎等）浮出一个自 1983 年协议设计起就潜伏的 DNS 协议级缺陷：少量构造
+  请求可将服务器计算压力放大至约 **80,000×**，可能影响 **1000 万+ 公共 DNS 服务**；经 CNNVD/CNVD 披露。
+  两周行动共统计 **2,404 个候选漏洞**（1,088 个中/高危）跨 **269 个项目**。尚无公开 CVE——80k×/10M
+  数字是待独立确认的主张。该模式（LLM 红队发现人类 40 年未察的协议级缺陷）是进攻性 AI 辅助利用形态
+  （形态 4）的建设性镜像。
+  **2026-08-26 04:35 交叉核对：** ~80k×/1000 万+/"影响主流 DNS 九成"等数字在多个独立中文渠道（证券日报、搜狐、新浪、
+  头条）一致，但每篇报道都溯源到 Zhipu 的披露——截至该日尚无对放大*机制*的独立技术分析，也无公开 CVE。所有发现的漏洞
+  已进入 CNNVD/CNVD 协同修复流程；Zhipu 延迟至约 8 月 28 日的开源权重伴随一个具名项目"开源的盾"（Open Source Shield）
+  分层安全审查门槛。

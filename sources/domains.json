@@ -3094,5 +3094,158 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "163.com": {
+    "cat": "news",
+    "en": "NetEase news portal; carries major tech/Chinese-market coverage, sometimes syndicated from other outlets. Cross-checked (08-26): its M6 Mac mini and Mint-Agent stories match Apple Newsroom and arXiv facts respectively — verify numbers against primary sources before citing.",
+    "zh": "网易新闻门户；覆盖重要科技与中国市场动态，部分为转载。已交叉核验（08-26）：其 M6 Mac mini 与 Mint-Agent 报道分别与 Apple Newsroom 和 arXiv 的事实一致——引用前请以一手来源核对数字。",
+    "jp": "NetEase（網易）のニュースポータル。主要なテック・中国市場報道を扱うが一部は転載。突合済み（08-26）：M6 Mac mini と Mint-Agent の記事はそれぞれ Apple Newsroom と arXiv の事実と一致——引用前に一次ソースで数字を確認すること。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "api.aitntnews.com": {
+    "cat": "news",
+    "en": "AITNT AI-tech news aggregator API — Chinese AI/tech coverage, secondary signal. Cross-checked via feed co-citation (AI4AI-Bench arXiv id matches the arXiv abstract).",
+    "zh": "AITNT 的 AI 科技资讯聚合 API——国内 AI/技术报道，二手信号。经 feed 同引交叉核验（AI4AI-Bench 的 arXiv 编号与摘要一致）。",
+    "jp": "AITNT の AI テックニュース集約 API——中国の AI/技術報道、二次シグナル。フィード共引用で突合（AI4AI-Bench の arXiv 番号が抄録と一致）。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "apple.com": {
+    "cat": "vendor",
+    "en": "Apple Newsroom — first-party product announcements (M6/M5 Ultra). Primary for hardware specs; performance claims are Apple's own.",
+    "zh": "Apple 新闻室——官方产品发布（M6/M5 Ultra）。硬件规格的一手来源；性能数字为 Apple 自报。",
+    "jp": "Apple Newsroom——公式製品発表（M6/M5 Ultra）。ハードウェア仕様の一次ソース。性能数値は Apple 独自。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "benchlm.ai": {
+    "cat": "data",
+    "en": "Benchmark leaderboard aggregator (SWE Refactor Bench) — machine-readable leaderboard data for agent benchmarks; verify the underlying paper for methodology.",
+    "zh": "基准排行榜聚合站（SWE Refactor Bench）——agent 基准的机器可读榜单数据；方法论请以原始论文为准。",
+    "jp": "ベンチマークリーダーボード集約（SWE Refactor Bench）——エージェントベンチマークの機械可読な順位データ。方法論は元論文で確認。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "blog.qualys.com": {
+    "cat": "security",
+    "en": "Qualys security-research blog — vendor threat intel (ShieldBreak CVE-2026-69414). Cross-checked first-hand: CVE number + RoguePlanet relationship confirmed.",
+    "zh": "Qualys 安全研究博客——厂商威胁情报（ShieldBreak CVE-2026-69414）。已一手交叉核验：CVE 编号与 RoguePlanet 关系属实。",
+    "jp": "Qualys のセキュリティリサーチブログ——ベンダーの脅威インテル（ShieldBreak CVE-2026-69414）。一手で突合：CVE 番号と RoguePlanet の関係を確認。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "cycognito.com": {
+    "cat": "security",
+    "en": "CyCognito threat research — exposure-management vendor analysis (Gitea diffpatch RCE). Read first-hand: CVSS 9.8, affected 1.17–1.27.1, fix 1.27.1 confirmed.",
+    "zh": "CyCognito 威胁研究——暴露面管理厂商的分析（Gitea diffpatch RCE）。已一手核读：CVSS 9.8、受影响 1.17–1.27.1、修复 1.27.1 属实。",
+    "jp": "CyCognito の脅威リサーチ——暴露管理ベンダーの分析（Gitea diffpatch RCE）。直接読了：CVSS 9.8、影響 1.17–1.27.1、修正 1.27.1 を確認。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "herdr.dev": {
+    "cat": "code",
+    "en": "herdr project site — Rust agent-terminal multiplexer (herdrdev/herdr). Cross-checked first-hand against the GitHub repo (Apache-2.0, 32.3k★).",
+    "zh": "herdr 项目官网——Rust 编写的 agent 终端多路复用器（herdrdev/herdr）。已一手对照 GitHub 仓库核验（Apache-2.0，32.3k★）。",
+    "jp": "herdr プロジェクトサイト——Rust 製エージェントターミナルマルチプレクサ（herdrdev/herdr）。GitHub リポジトリと突合（Apache-2.0、32.3k★）。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "higress.io": {
+    "cat": "code",
+    "en": "Higress project blog — Alibaba's open-source API gateway (v2.2.4 MCP stateless baseline). Protocol description verified first-hand; 'first OSS gateway' + conformance numbers are vendor-reported.",
+    "zh": "Higress 项目博客——阿里的开源 API 网关（v2.2.4 MCP 无状态基线）。协议描述已一手核实；「首个 OSS 网关」与一致性数字为厂商自报。",
+    "jp": "Higress プロジェクトブログ——Alibaba の OSS API ゲートウェイ（v2.2.4 MCP ステートレスベースライン）。プロトコル記述は一手確認。「最初の OSS ゲートウェイ」と適合数値はベンダー報告。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "ibm.com": {
+    "cat": "vendor",
+    "en": "IBM corporate blog — first-party product announcements (Granite 4.2). Primary for intent; verify numbers against the model card (blog-vs-card mismatch flagged externally).",
+    "zh": "IBM 企业博客——官方产品发布（Granite 4.2）。意图的一手来源；数字请对照模型卡（博客与模型卡不一致已被外部指出）。",
+    "jp": "IBM コーポレートブログ——公式製品発表（Granite 4.2）。意図の一次ソース。数値はモデルカードで確認（ブログとカードの不一致が外部指摘あり）。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "ic.work": {
+    "cat": "news",
+    "en": "ic.work — Chinese dev-media analysis (Granite 4.2 training-origin mismatch). Secondary analysis; useful for catching vendor framing vs model-card discrepancies.",
+    "zh": "ic.work——国内开发者媒体分析（Granite 4.2 训练来源不一致）。二手分析；善于发现厂商叙事与模型卡的出入。",
+    "jp": "ic.work——中国の開発者メディア分析（Granite 4.2 の学習出自不一致）。二次分析。ベンダー語りとモデルカードのずれを掴むのに有用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "mongodb.com": {
+    "cat": "vendor",
+    "en": "MongoDB newsroom — first-party product announcements (Atlas Managed MCP). Read first-hand: hosted MCP endpoint + agent list confirmed; OAuth 2.1 detail lives in docs/zh coverage.",
+    "zh": "MongoDB 新闻室——官方产品发布（Atlas 托管 MCP）。已一手核读：托管 MCP 端点 + 支持 agent 列表属实；OAuth 2.1 细节在文档/中文报道中。",
+    "jp": "MongoDB ニュースルーム——公式製品発表（Atlas マネージド MCP）。直接読了：ホスト型 MCP エンドポイント + 対応エージェントを確認。OAuth 2.1 の詳細はドキュメント/中国語報道。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "news.17173.com": {
+    "cat": "news",
+    "en": "17173 news — Chinese games/tech media (Qwen3.8-Flash-Next preview specs). Secondary signal; verify specs against the model card once weights drop.",
+    "zh": "17173 资讯——国内游戏/科技媒体（Qwen3.8-Flash-Next 预览规格）。二手信号；权重发布后请以模型卡核对规格。",
+    "jp": "17173 ニュース——中国のゲーム/テックメディア（Qwen3.8-Flash-Next プレビュー仕様）。二次シグナル。ウェイト公開後はモデルカードで確認。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "post.smzdm.com": {
+    "cat": "news",
+    "en": "smzdm posts — Chinese deals/tech community (GLM-5.3 DNS finding). Community repost; treat the 80k×/10M numbers as vendor-reported claims.",
+    "zh": "smzdm 社区——国内导购/科技社区（GLM-5.3 DNS 发现）。社区转载；80k×/10M 请当作厂商自报的主张。",
+    "jp": "smzdm 投稿——中国のクーポン/テックコミュニティ（GLM-5.3 DNS 発見）。コミュニティ転載。80k×/10M はベンダー報告の主張として扱う。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "rss.jingjiribao.cn": {
+    "cat": "news",
+    "en": "证券日报 (Securities Daily) — Chinese financial daily (GLM-5.3 red-team coverage). Established state-aligned financial media; verify security specifics against primary sources.",
+    "zh": "证券日报——国内财经日报（GLM-5.3 红队报道）。权威财经媒体；安全细节请对照一手来源。",
+    "jp": "証券日報（Securities Daily）——中国の金融日刊（GLM-5.3 レッドチーム報道）。有力な金融メディア。セキュリティ詳細は一次ソースで確認。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "tech.ifeng.com": {
+    "cat": "news",
+    "en": "ifeng tech — Chinese portal tech section (Qwen preview). Secondary signal for Chinese AI announcements; treat pre-release specs as unofficial.",
+    "zh": "凤凰网科技——国内门户科技频道（Qwen 预览）。国内 AI 发布的二手信号；发布前规格视为非官方。",
+    "jp": "ifeng テック——中国ポータルのテック部門（Qwen プレビュー）。中国 AI 発表の二次シグナル。リリース前仕様は非公式扱い。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "wccftech.com": {
+    "cat": "news",
+    "en": "Wccftech — hardware/tech news (Vera Rubin NVL72 benchmarks). Reliable for vendor-touted hardware numbers; label vendor-measured claims as such.",
+    "zh": "Wccftech——硬件/科技新闻（Vera Rubin NVL72 基准）。对厂商宣传的硬件数字较可靠；厂商自测的主张请照实标注。",
+    "jp": "Wccftech——ハードウェア/テックニュース（Vera Rubin NVL72 ベンチ）。ベンダー宣伝のハードウェア数値に信頼性。ベンダー計測の主張はその旨を明記。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "zhiding.cn": {
+    "cat": "news",
+    "en": "至顶网 (zhiding.cn) — Chinese IT media (MongoDB Atlas Managed MCP). Secondary coverage; carried the OAuth 2.1 per-user delegation detail.",
+    "zh": "至顶网——国内 IT 媒体（MongoDB Atlas 托管 MCP）。二手报道；OAuth 2.1 按用户委托细节由其所载。",
+    "jp": "至顶网（zhiding.cn）——中国の IT メディア（MongoDB Atlas マネージド MCP）。二次報道。OAuth 2.1 ユーザー単位委任の詳細を掲載。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

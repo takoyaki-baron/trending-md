@@ -376,3 +376,21 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   Environment 宿主）上都已闭合，但它本应带来的可比性恰恰是 AgentCompass 证明仍然缺失的东西——技能分数是运行它的 harness 的
   函数，所以没有锁定 harness 的排行榜只是噪声。既有预测（「谁交付*被采纳的*标准谁拥有市场」）成立；新发现是采纳为何难：它
   需要冻结 harness，而不只是语料。
+
+## NVIDIA ACES——运行时 Skill-Lift 标准落地，且约 27% 的 skill 运行不比基线好（08-26 04:03）
+
+已在 arXiv 2608.20614 一手核读。**ACES（Agentic Continuous Evaluation of Skills，技能持续评估）**是一个
+仓库原生的框架，把 skill 当作*可执行 agent 制品*来评估：它运行**配对实时 A/B 试验**——同一任务装与不装
+目标 skill——在相同模型、harness、工作区与打分器下，把轨迹规范化为 Agent Trajectory Interchange Format
+（ATIF），给六个默认运行时指标打分，报告 **Skill Lift**（对固定任务/harness/工作区/打分器而言该 skill
+的增量价值）。同一协议支持产品自有任务套件比较 baseline、skill、bundle、team-skill 与 plugin 目标。
+结果：**145 个真实 skill**（企业内 + 公共目录），仅扫描的闸门度量的是互补侧面——结构 vs LLM 裁判
+**Spearman ρ = 0.14**；**947 个已打分配对用例、来自 64 个生产 skill 中的 58 个、四个主要 harness**，
+均值复合 Skill Lift **0.2134**（95% CI [0.1967, 0.2301]），仅结果 lift 均值 0.1799，**约 27% 的 skill
+运行未超过基线**（947 中 87 负 / 171 零）。开源的 **SkillEvaluator**（`NVIDIA/SkillEvaluator`）分三层——
+静态校验、去重检查、基于 Harbor 的实时评估——另有一个 300+ skill 的已核验目录基准，剔除安全后均值 +39。
+
+**为何落在这里：** 它是 [[agent-plugins]] 生态第一个*运行时*度量标准——不是又一个断言、不是快照语料，
+而是一个常设的配对试验协议，回答"安装这个 skill 是否真的帮到活体 agent"——它的负结果正是诚实的信号：
+"存在一个 skill"几乎说明不了它是否有用。它给了论点 8 评估缺口一个运行时度量半边；*采用*半边（市场真正
+信任的常设排行榜）仍然空缺。

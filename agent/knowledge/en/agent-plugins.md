@@ -484,3 +484,25 @@ sharpest finding is a *measured* reason the standard is still unachieved.
   harness that ran it, so a leaderboard without a pinned harness is noise. The standing prediction ("whoever
   ships an *adopted* standard owns the marketplace") holds; the new finding is *why* adoption is hard: it
   requires freezing the harness, not just the corpus.
+
+## NVIDIA ACES — the runtime Skill-Lift standard ships, and ~27% of skill runs don't beat baseline (08-26 04:03)
+
+Verified first-hand at arXiv 2608.20614. **ACES (Agentic Continuous Evaluation of Skills)** is a
+repository-native framework that evaluates skills as *executable agent artifacts*: it runs **paired live A/B
+trials** — the same task with and without the target skill — under the same model, harness, workspace and
+scorer, normalizes trajectories into the Agent Trajectory Interchange Format (ATIF), grades six default runtime
+metrics, and reports **Skill Lift**: the skill's added value for a fixed task/harness/workspace/scorer. The
+same protocol supports product-owned task suites comparing baseline, skill, bundle, team-skill and plugin
+targets. Results: on **145 real skills** from internal enterprise repositories + public catalogs, scan-only
+gates measure complementary facets — structural vs LLM-judge **Spearman ρ = 0.14**; across **947 scored paired
+cases from 58 of 64 production skills and four primary harnesses**, mean composite Skill Lift **0.2134** (95%
+CI [0.1967, 0.2301]), mean outcome-only lift 0.1799, and **~27% of skill runs did not beat baseline** (87
+negative / 171 zero of 947). The open-source **SkillEvaluator** (`NVIDIA/SkillEvaluator`) ships three tiers —
+static validation, duplication checks, and Harbor-based live evaluation — and a separate verified-catalog
+benchmark of 300+ skills showed +39 average points excluding security.
+
+**Why it lands in [[agent-plugins]]:** it is the first *runtime* measurement standard for the skills ecosystem
+— not another assertion, not a snapshot corpus, but a standing paired-trial protocol that answers "does
+installing this skill help a live agent" — and its negative result is the honest signal: "a skill exists" says
+almost nothing about whether it helps. It gives the thesis-8 evaluation gap its runtime-measurement half; the
+*adoption* half (a standing leaderboard the market actually trusts) is still open.
