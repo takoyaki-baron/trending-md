@@ -96,6 +96,11 @@ Colin Eberhardt 提出质疑——一条光秃秃的"遵循 YAGNI 原则"提示�
 一个让技能*证明*其宣称的公开行为测试框架。目前尚无共享评估标准——"技能的 MMLU"是开放缺口；谁先
 交付谁就拥有技能市场。
 
+**注记更新（08-25 20:03）：** `DietrichGebert/ponytail` 以**约 110k stars**（原约 82k）再度现身，如今为 **20+
+个 agent** 提供适配器及 `/ponytail-review` + `/ponytail-audit` 斜杠命令，其基准重述为约少 54% 代码 / 约低 20%
+成本 / 约快 27% / 100% 安全——80–94% 的单次数字仍保持自我修正（issue #126）。token 预算纪律（YAGNI）已成
+*产品化*类目；其基准仍是单一作者的复现，并非共享语料，故「技能的 MMLU」缺口未变。
+
 ## Anthropic 推出规范的正典之家（8 月 14 日）
 
 `anthropics/skills` —— Anthropic 官方的 Agent Skills 公开仓库（169K stars）——如今成为它亲手编写的

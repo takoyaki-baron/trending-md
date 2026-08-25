@@ -1160,3 +1160,32 @@ the same `push_files` tool is allowed on feature branches and denied on `main`
 zero-ML/deterministic, with an audit log and a live dashboard. This is the precise missing primitive the MCP
 roadmap declines to ship (no tool versioning/hashing/signed manifests) — a deterministic, auditable policy layer
 over *what a tool may touch*, independent of which vendor's spec wins.
+
+## WebLogic Proxy KEV 10.0 + Linux bridge UAF + TeamCity XStream allow-list (08-25 20:03)
+
+**CVE-2026-21962 (Oracle WebLogic Server Proxy Plug-in / Oracle HTTP Server, CWE-284, CVSS 10.0).** Unauthenticated
+improper-access-control in the module that puts WebLogic behind Apache/IIS — vector `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`,
+described in public reporting as a URI-normalization path traversal that reads/creates/alters critical data; the
+changed scope (`S:C`) spreads the compromise past the vulnerable component. Oracle patched it in the **January 2026
+CPU**, but CISA added it to **KEV on Aug 24** citing confirmed active exploitation, with a federal remediation
+deadline of Aug 27. The January-patch→August-KEV lag is the shape-2 (patch-then-reverse-engineer) theme at maximum
+severity: a perimeter proxy plug-in, patched 8 months ago, still exploited in the wild — "assume compromise, patch
+now" for exposed OHS/WebLogic front-ends. Scorer: Oracle (`secalert_us@oracle.com`) as CNA; NVD Analyzed.
+
+**CVE-2026-74480 (Linux kernel net/bridge, CWE-416, UAF).** A use-after-free in the **multicast fast-leave path** of
+`br_multicast_leave_group()`: with multicast-to-unicast enabled, the loop deletes the port-group entry via
+`br_multicast_del_pg()` but keeps advancing `pp` through the now-freed entry, leaving `mp->ports` dangling. The bug
+dates to **January 2017** (many LTS kernels affected); the upstream fix (a `break` after `br_multicast_del_pg()`) landed
+July 2026. **Nebula Security** published a working root-escalation PoC + demo on RHEL 10.2 on Aug 25. **Scorer split —
+record it:** NVD rates **9.8**, Red Hat **7.0** (local, high-complexity, low-privilege). A nearly decade-old kernel bug
+reaching public root PoC is the "old code ≠ safe code" reminder, and the 2.8-point spread is a textbook who-scored-it
+case ([[fact-check]]).
+
+**CVE-2026-63077 (JetBrains TeamCity, CWE-502, CVSS 9.8) — the XStream root cause is now named.** Already in the ledger
+(shape 1) as "unauth RCE via XStream deserialization, KEV, ~4,500 exposed"; the 08-25 20:03 batch adds the *why* and the
+*now*. Rapid7's Stephen Fewer traced it to a **permissive XStream allow-list**: TeamCity added its own protocol classes
+without removing XStream's defaults, so crafted XML to unauthenticated agent endpoints (`/app/agents/v1`) chains a
+gadget to write a `.jspws` into the webroot and execute it. **KEV Aug 5**; Australia's **ASD/ACSC warned Aug 25** of
+servers under active attack. Fixed in **2025.11.7 / 2026.1.3**. Build servers hold deployment creds, signing keys and
+cloud tokens, so unauth RCE here is a supply-chain choke point — and the July-disclose / August-exploit timeline is the
+shrinking patch-to-weaponization window again (shape 2).

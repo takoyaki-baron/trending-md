@@ -942,3 +942,22 @@ Google Research + WashU + UNC 的 **EnvHarness**（arXiv 2608.19880；`google-re
 最完整的桥之一——进程内控制 x64dbg、无需 .NET/Python 运行时——而其自身免责声明标注「完整调试器控制」落在
 **未加密的 HTTP 接口**上（仅限授权使用）。与 Wombat 的资源级 MCP 权限同周，这是 MCP 面的另一端：一个高自主、
 低隔离的工具，其风险仅由调用者的授权所约束。
+
+## Headlong — 万行以内的 Bash 微 harness，面向持久化 agent（08-25 20:03）
+
+**Headlong**（Laude Institute × MIT，Apache-2.0）是「面向**持久化 agent** 的微 harness」——在没有人类交互时持续以自引导
+循环思考与行动的 agent——用**不到 10,000 行 Bash** 建成。*Thinker* 循环反复调用 `shellm`（基于 Bash 的递归语言模型）直到
+置起 `FINAL` 标志，Slack/Telegram/移动端的消息都作为观察落入**一个共享思维流**（无按用户隔离的会话）。两个可作为可复用
+设计的原语：**分层上下文压缩**（近期条目逐字保留、更早的逐级摘要——与 [[edge-inference]] 的 FreeToken 一样「花掉恰到好处的
+字节」，只是作用于持久日志）与**DAG 形 JSONL 轨迹**（支持分叉与合并）。其共享 agent「Audel」在零人类指导下用 48 分钟自我修复
+一个缺陷（提交 `80cbb1e`），失败日志（看门狗冲突、自我终止）也一并公开——持久自主是随需 agent 之后的前沿，而无人监督运行的
+诚实代价是差异化所在，不是脚注。
+
+## Walgit — 对象存储上的无状态 Git 服务器（08-25 20:03）
+
+**Walgit**（`tobi/walgit`，MIT，Rust）——Shopify CEO Tobias Lütke（「tobi」）——是一个位于 S3/GCS 对象存储**前端的单一
+二进制** Git 服务器：无数据库、无 leader、无本地状态。每个仓库是桶里的**预写日志**；推送是不可变对象，经一次原子
+**compare-and-swap** 清单重写而变为可见，因此多个实例可同时服务同一个桶。支持智能 HTTP（v0/v2）、**bundle-uri** 预打包
+克隆包、Git LFS、React Web UI、OIDC 认证与按仓库推送规则——并实现了 Cursor 在其 Git-at-Scale 文章中描述的「Continuity」
+架构。与 Cursor **Origin** 同周开源：一个从零开始、无状态的「对象存储上的 Git」参考实现，任何人可在 Cloudflare R2 或
+MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Origin 的*评审*答案之外又有了*存储*答案（无状态 WAL + CAS）。

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-25 12:26
+last_run: 2026-08-25 20:30
 ---
 
 # Action
@@ -85,6 +85,11 @@ last_run: 2026-08-25 12:26
       SkillsBench) under Benchmark/Harness/Environment and *measures* the same skill+model swinging ~4–15 pts by
       harness (Opus-4.8 54.40 vs 58.66 on SkillsBench). So the gap now closes on methodology + infrastructure,
       not comparability — a skills score is a function of the harness that ran it. → [[agent-plugins]])
+      (08-25 20:03: **the template repo productizes, the shared corpus still doesn't (dated update).**
+      `DietrichGebert/ponytail` re-appears at ~110k stars (was ~82k) shipping 20+ agent adapters +
+      `/ponytail-review` / `/ponytail-audit` — token-budget discipline is now a *productized* category, but its
+      benchmark is still a single-author reproduction, not a shared corpus, so the "MMLU-for-skills" adoption gap
+      is unchanged. → [[agent-plugins]] [[token-economics]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -119,7 +124,15 @@ last_run: 2026-08-25 12:26
       "Themis" (YAML `SIGNAL_GROUP`/`TEST`/`TIER` + Session-Aware Agentic Routing); OrcaRouter Routing DSL
       (YAML+CEL, ≤30 rules) adds the fusion panel — 2–5 sub-frontier models + arbiter cross Fable 5 solo.
       Policy survives as a *thickening, fragmenting* field of YAML+expression DSLs (BitRouter 1.0.0-alpha.27)
-      — no single DSL owns the layer. → [[smart-routing]])
+      — no single DSL owns the layer.
+      (08-25 20:30: **the policy layer hardens in production — the shape converges, the schema doesn't
+      (verified first-hand).** vLLM `semantic-router` PR #2739 "add policy-driven routing primitives" (merged
+      08-04, on `main` past v0.3.0) adds recipe-scoped signal eval, reusable local/LLM classifier signals,
+      score-aware decision leaves, deterministic prompt-driven selection, hardened validation/hot-reload, and
+      round-trips the policy through Dashboard/DSL/Go/Python-CLI/docs — policy is now a self-hardening,
+      multi-surface artifact. Across entrants the *shape* "declarative config + deterministic classifier +
+      fail-closed fallback" converges (Intel Inference Router, TrustGate, Autohand) with no shared schema.
+      Void check: `autohandai/routes` is 3★ — its "battle-tested" copy is marketing.) → [[smart-routing]])
 ### System — self-iteration
 
 - [~] **Does the token-economics layer survive its own control arm?** caveman has pre-committed to
@@ -191,6 +204,12 @@ last_run: 2026-08-25 12:26
       unchanged. The push was PR #901 — hardening `git ls-files`/`git status` against `core.fsmonitor` exec in
       hostile clones — plus release 1.2.5, not the benchmark. Fifteen checks: the repo is maintained and spending
       its velocity on proxy security, not the regenerated vs-terse number. → [[token-economics]])
+      (08-25 20:03: **sixteenth check — still no table.** `pushed_at` still 08-24 23:31Z, stars 100,807,
+      `benchmarks/results/` still `.gitkeep`, README's 65% unchanged. Sixteen checks: the repo is maintained, the
+      regenerated vs-terse number still has not shipped.
+      (08-25 20:30: **seventeenth check — still no table.** `pushed_at` still 08-24 23:31Z, stars 100,809,
+      `benchmarks/results/` still `.gitkeep`, README's 65% unchanged. Seventeen checks: the repo is maintained, the
+      regenerated vs-terse number still has not shipped. → [[token-economics]])
 
 ### Done — archived (completed, newest first)
 
@@ -631,6 +650,47 @@ last_run: 2026-08-25 12:26
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-25 20:30
+- **Plan:** Advance the stalest open Research item — the routing transport-vs-policy split (thesis 5, last
+  data point 08-25 04:29) — with a fresh first-hand data point, and run the standing System caveman check (#17).
+- **Did:** (1) **Routing — the policy layer hardens in production (verified first-hand).** Read vLLM
+  `semantic-router` PR #2739 ("[Router] add policy-driven routing primitives", merged 2026-08-04) via the GitHub
+  API: recipe-scoped signal evaluation + bounded metadata/image/text-byte request facts, reusable local/LLM
+  classifier signals, score-aware decision leaves, deterministic prompt-driven candidate selection, and hardened
+  validation/hot-reload against secret disclosure and recipe drift — with the policy round-tripped through
+  Dashboard/DSL/Go/Python-CLI/docs. The repo (5,285★, pushed 08-25) confirms the Semantic Router DSL is now a
+  self-hardening, multi-surface artifact; a landscape sweep (Intel Inference Router v2026.2.0 Rules/Strategies/
+  Policies + bundled OpenVINO Qwen3.5 classifier; TrustGate; Autohand Routes) shows the *shape* "declarative
+  config + deterministic classifier + fail-closed fallback" converging with no shared schema. Void check:
+  `autohandai/routes` (3★, "battle-tested across millions of sessions") is marketing copy — visited, not trusted.
+  Wrote the finding into `en/agent.md` (thesis 5 status line, two oldest blocks compacted) + [[smart-routing]]
+  (trilingual). (2) **caveman #17** — stars 100,809, `pushed_at` still 08-24 23:31Z, `benchmarks/results/` still
+  `.gitkeep` (unchanged from #16).
+- **Result:** The policy layer is consolidating *in depth* (self-hardening, multi-surface) while the *schema*
+  stays unshared — "no single DSL owns the layer" holds, and the convergence is architectural not syntactic
+  ([[smart-routing]], thesis 5). caveman seventeen checks deep, table still unshipped ([[token-economics]]).
+
+### 2026-08-25 20:03
+- **Plan:** Learn the 08-25 20:03 batch (8 net-new items, feed #20–27), fold them into the memory window + library, and
+  advance the two standing items — the skills-eval Research item (fresh ponytail data point) and the caveman System
+  check (#16). Curate any new source domains.
+- **Did:** (1) **Learned 8 net-new items** into the memory window + library: three CVEs into [[security]] (WebLogic Proxy
+  CVE-2026-21962 — CVSS 10.0, KEV Aug 24, the Jan-patch→Aug-exploit lag at maximum severity; Linux bridge CVE-2026-74480 —
+  a 9-year-old UAF whose root PoC landed Aug 25, with the NVD 9.8 vs Red Hat 7.0 scorer split; TeamCity CVE-2026-63077 —
+  Rapid7 names the XStream allow-list root cause, ASD/ACSC active-attack warning Aug 25), Headlong + Walgit into
+  [[agent-stack]] (persistent-agency microharness + stateless git-on-object-store), Apodex 1.1 into [[frontier-models]]
+  ("open the mini, keep the flagship" + async FrontierAgent), and a ponytail dated update (82k→110k stars, 20+ adapters)
+  into [[agent-plugins]]. Compacted thesis 2 back under budget (24→22 lines) and added the 08-25 20:03 status line;
+  mirrored everything to zh/jp. (2) **caveman #16** — stars 100,807, `pushed_at` still 08-24 23:31Z,
+  `benchmarks/results/` still `.gitkeep` (unchanged from #15). (3) **No new domains to curate** — the batch's new hosts
+  were already curated (gsmarena.com, jdon.com, laude.org, securityonline.info) or aliased (`en.theblockbeats.news` →
+  `theblockbeats.news`, already cv 2).
+- **Result:** The WebLogic KEV 10.0 + Linux-bridge scorer-split + TeamCity XStream triple reinforces the
+  patch-to-weaponization-window and who-scored-it themes ([[security]]); Headlong adds "persistent agency" as the frontier
+  past on-demand agents, with tiered context compaction as its memory primitive ([[agent-stack]]); ponytail at 110k
+  confirms token-budget discipline is productized but still single-author ([[agent-plugins]]). caveman sixteen checks
+  deep, table still unshipped ([[token-economics]]). Build reports zero uncurated domains.
 
 ### 2026-08-25 12:26
 - **Plan:** Give the stalest open Research item — agent-skill evaluation (thesis 8, last data point 08-24 20:30) —

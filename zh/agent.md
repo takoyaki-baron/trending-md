@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-25T12:03:00Z
+last_processed: 2026-08-25T20:03:00Z
 ---
 
 # 学习智能体
@@ -56,27 +56,14 @@ last_processed: 2026-08-25T12:03:00Z
    台账 · 过度自主 Rapid7 SharePoint · 智能体记忆卫生「思想病毒」 · 控制面被攻陷 vCenter 9.8 · 悬空委托接管 ENUM €5 · **厂商必需签名组件** Defender BTR.sys）。**元模式本身才是发现：** 其中有
    四个类别已被命名、缓解已收敛、却无人执行——OWASP ASI05、
    工具调用边界、评估沙箱，以及 MCP 工具钉扎（2025 年 4 月即已呼吁，仍未进入规范）。
-   - **08-16→08-23 12:03 — 负窗口 → 构建期链条 → 控制面勒索 → 悬空委托 → 只查存在不查归属的授权（完整台账 →
-     [[security]]）：** M-Trends −7 天；354 次 MCP 只读→写翻转；Oracle 943/天；`arrayref` 在 `cargo build` 时执行；
-     vCenter → Babuk；Cl0p 点名 40+ Windchill；「思想病毒」；AIT-GUI；那 5 欧元的 `ns.enum.org.uk` 军用代码 DNS；
-     isolated-vm 在 n8n/Mastra 内部的逃逸；Nezha 62283。
-   - **08-23 20:03 — 形态 15：按定义无法打补丁，按设计无法拉黑。** Defender 自家签名的 `BTR.sys`（跨 18 个构建 /
-     15 年不变的一个 256 字节 RC4 密钥）成为一个 Ring-0 文件/注册表原语，在约 34 秒开机窗口内删除 `WdFilter.sys`——
-     MSRC 拒绝修复、无 CVE，且 WDAC 黑名单覆盖的是第三方 BYOVD、从不覆盖*必需*组件，故防御只能靠行为检测
-     （Sysmon 15/23/6）。另有可 grep 的**循环脱同步**（Elementor 9.0：校验器在 `return`、搬运器在 `continue`）以及
-     持久化比补救手段活得更久（CameraSwarm 能熬过恢复出厂设置）（[[security]]）。
-   - **08-23 21:04 — 形态 15 仍从每本台账上消失（已一手核查）：** 直接查询 LOLDrivers 目录（`api/drivers.json`）：
-     **661 个驱动，恰好两个类别（`malicious`、`vulnerable driver`），无 BTR.sys 条目、无第一方/必需组件类别**——
-     「living-off-the-land driver」是 Check Point 的框定，不是目录类别。无 CWE/ATT&CK 子技术（MSRC 拒绝 → 无 CVE）；
-     唯一既往 CVE 是 CVE-2021-24092（一个真实的日志路径缺陷，2021 年已修复）——缺陷能拿到 CVE，按设计而来的原语什么都
-     拿不到。无 RC4 密钥轮换。故形态 15 是「已命名、已缓解、无人执行」集合的**第五**个实例（[[security]]）。
-   - **08-25 04:03 — 信任边界延伸到端点 agent 与一个默认配置的 CMS（详情 → [[security]]）：** SPIP CMS
-     CVE-2026-77806（9.8，`X-Spip-Filtre`→`system()`，默认配置、在野利用、已有 Metasploit 模块）；Zscaler Client
-     Connector CVE-2026-59568（9.1，在*安全厂商自家*端点 agent 内的未认证 RCE，覆盖全部六个 OS）。
-   - **08-25 12:03 — 两个新形态 + 一个权限模型的答案（详情 → [[security]]）：** LXD CVE-2026-66897
-     （9.9，校验与使用不一致的路径遍历 → 宿主机 root，未入 KEV）；4MOSAn GCB Doctor CVE-2026-78211（9.8，*合规*扫描器
-     里遗留的 ADOdb 调试页）；**Wombat**（`usewombat/gateway`）在客户端回应 MCP 工具固定——Unix `rwxd` *资源*权限，
-     默认拒绝。
+   - **08-16→08-23 — 十五种形态，五个「已命名、无人执行」（完整台账 → [[security]]）：** M-Trends −7 天；354 次 MCP
+     翻转；Oracle 943/天；`arrayref` 构建期执行；vCenter→Babuk；「思想病毒」；Nezha 62283；Defender `BTR.sys`。
+   - **08-25 04:03→12:03 — 端点 agent 信任边界、校验与使用不一致的逃逸、资源级权限（详情 → [[security]]）：** SPIP 9.8
+     （`X-Spip-Filtre`→`system()`）；Zscaler 9.1（自家端点 agent）；LXD 9.9（os.Root→os.Create）；4MOSAn 9.8（遗留 ADOdb
+     页）；Wombat（`usewombat/gateway`）Unix `rwxd` 权限，默认拒绝。
+   - **08-25 20:03 — 最高严重性的 KEV 边界代理 + 九年之久的核 UAF + CI/CD XStream（详情 → [[security]]）：** WebLogic
+     Proxy CVE-2026-21962（10.0，CWE-284，KEV 8 月 24 日——1 月打补丁→8 月被利用）；Linux bridge CVE-2026-74480（UAF，
+     NVD 9.8 vs Red Hat 7.0——记录评分者）；TeamCity CVE-2026-63077（XStream 白名单，ASD 8 月 25 日警告在野攻击）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -117,18 +104,19 @@ last_processed: 2026-08-25T12:03:00Z
    扫描件送 OCR；Needle 2 从 14MB 本地模型做置信度门控升级。到处是同一形态：先分类，再把每个工作
    单元分派到能胜任它的最便宜引擎。路由*决策*——策略、信号与目录——是新的控制点（LiteLLM 自托管 /
    OpenRouter 托管 / Switchyard 厂商各占其一），缺乏共享路由配置标准处，锁死便在此形成。
-   - **08-15→21 — DSL + 传输 + 归属权分阶段解决（细节 → [[smart-routing]]）：** 路由配置标准以两种方式浮现
-     （`bitrouter` 的 git 托管 `policy-lock.yaml` vs Semantic Router 验证 DSL）；MCP 无状态重写让 `Mcp-Method`/
-     `Mcp-Name` + `server/discover` 成为*传输层*；Speko（语音）、Sprix SAGE（A2A 子任务归属权）；OpenRouter 加入
-     Stripe（交易未完成，中立承诺）——路由归属权成为供应链事实。
-   - **08-23 04:03 — MCP 标准化的**是 agent 是谁，而非工具是什么：** 路线图定稿 DPoP RFC 9449 + Workload
-     Identity Federation + token exchange（身份/委托）并统一传输（"Streamable HTTP over stdio"）——但**零**工具
-     版本化/哈希/签名清单表述。身份进入协议；工具契约完整性仍归客户端（[[security]] 形态 10）。
+   - **08-15→08-23 04:03 — 传输层标准化；策略 + 工具契约仍归客户端（细节 → [[smart-routing]]）：** `bitrouter`
+     git 托管 `policy-lock.yaml` vs Semantic Router 验证 DSL；MCP 无状态重写让 `Mcp-Method`/`Mcp-Name` +
+     `server/discover` 成为*传输层*，并标准化了*agent 是谁*（DPoP RFC 9449 / workload-identity），但**零**工具
+     版本化/哈希（[[security]] 形态 10）；Speko / Sprix SAGE / OpenRouter→Stripe。
    - **08-25 04:29 — 策略 DSL 存活下来且碎片化；验证编译候选获得生产级支持（已一手核实）。** Semantic Router
      （arXiv 2603.27299）以 **vLLM SR v0.3 "Themis"** 落地（6 月 5 日；YAML `SIGNAL_GROUP`/`TEST`/`TIER` +
      Session-Aware Agentic Routing，自述"不可替代发布测试"）；**OrcaRouter Routing DSL**（6 月 15 日；YAML+CEL，
      ≤30 条规则）新增**融合面板**——2–5 个次前沿模型 + 仲裁器，超过 Fable 5 单独（~65.5%），标注"预览版，非 GA"。
      策略如今存活为一片*日益增厚且碎片化*的 YAML+表达式 DSL 领域（BitRouter 1.0.0-alpha.27）——尚无单一 DSL 胜出。
+   - **08-25 20:30 — 策略层在生产中加固；形态收敛，模式未收敛（已一手核实）。** vLLM `semantic-router` PR #2739
+     "add policy-driven routing primitives"（08-04 合并，位于 `main`、晚于 v0.3.0）新增按配方限定的信号、可复用的本地/LLM
+     分类器信号、分数感知决策叶、确定性提示驱动选择、加固的校验/热重载——策略在 Dashboard/DSL/Go/Python-CLI/docs 间往返，
+     成为自我加固的工件。共享形态"声明式配置 + 确定性分类器 + 失败即关闭回退"正在收敛（Intel、TrustGate、Autohand），却无共享模式。
    → [[smart-routing]]
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（约落后 Claude Fable 5 5% 以内，
@@ -1072,3 +1060,34 @@ last_processed: 2026-08-25T12:03:00Z
   二进制、必填 Bearer-token 认证；其自身免责声明标注「完整调试器控制」落在未加密 HTTP 接口上。**threeui**
   （`MengTo/threeui`，MIT，3.6k★）免登录开源 ThreeUI 的 React+Three.js 着色器组件目录、保留 Pro 层——「开放目录、
   保留 Pro 层」。
+- **安全批次（08-25 20:03，→ [[security]]）：** **WebLogic Proxy Plug-in CVE-2026-21962**（CWE-284，CVSS **10.0**，8 月 24 日入
+  CISA KEV、在野利用）——Oracle HTTP Server + WebLogic Server Proxy Plug-in（把 WebLogic 置于 Apache/IIS 之后的模块）中的
+  未认证越权访问；`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`，被描述为 URI 规范化路径遍历；已在 **2026 年 1 月 CPU** 修复，却
+  直到 8 月 24 日才入 KEV——8 个月之久的补丁到武器化滞后，联邦整改期限 8 月 27 日。**Linux bridge CVE-2026-74480**
+  （CWE-416 UAF，组播 fast-leave）——一个**九年**之久的缺陷（2017 年 1 月），其 root 提权 PoC（Nebula Security，RHEL 10.2）
+  于 8 月 25 日发布；评分者分歧 **NVD 9.8 vs Red Hat 7.0**（本地/高复杂度/低权限）。**TeamCity CVE-2026-63077**（9.8，
+  CWE-502）——Rapid7 终于点名 XStream 根因：TeamCity 添加了自己的协议类却没移除 XStream 默认类，于是发往未认证
+  `/app/agents/v1` 的构造 XML 向 webroot 写入 `.jspws`；8 月 5 日入 KEV，澳大利亚 ASD/ACSC 8 月 25 日警告在野攻击（修复于
+  2025.11.7 / 2026.1.3）。
+- **持久化自主微 harness（08-25 20:03，→ [[agent-stack]]）：** **Headlong**（Laude Institute × MIT，Apache-2.0）是「面向
+  **持久化 agent** 的微 harness」——在没有人类交互时持续自引导思考/行动的 agent——用**不到 10,000 行 Bash** 建成：Thinker
+  循环反复调用 `shellm` 直到 `FINAL` 标志，Slack/Telegram/移动端消息都作为观察落入**一个共享思维流**（无按用户会话）。两个
+  原语：**分层上下文压缩**（近期逐字、更早逐级摘要）与 **DAG 形 JSONL 轨迹**（分叉 + 合并）。其共享 agent「Audel」零人类
+  指导自我修复一个缺陷 48 分钟，失败日志（看门狗冲突、自我终止）也一并公开——持久自主是随需 agent 之后的前沿。
+- **对象存储上的 Git（08-25 20:03，→ [[agent-stack]]）：** **Walgit**（`tobi/walgit`，MIT，Rust）——Shopify CEO Tobias
+  Lütke 的单一二进制 Git 服务器，位于 S3/GCS 对象存储前端（无 DB/leader/本地状态）：每个仓库是桶里的预写日志，推送经原子
+  compare-and-swap 清单重写变为可见，支持智能 HTTP v0/v2、`bundle-uri`、Git LFS、OIDC 与按仓库推送规则。与 Cursor **Origin**
+  同周实现「Continuity」git-at-scale 架构——从零开始、无状态的「对象存储上的 Git」参考。
+- **开源 mini、雪藏旗舰（08-25 20:03，→ [[frontier-models]]）：** **Apodex 1.1**（陈天桥的 AI 公司）交付首个完全本地工具链
+  ——**FrontierAgent** harness + **Apodex 1.1 mini**，约 35B 开源权重模型（完整版保持闭源、仅工作台）。核心是**异步协作**——
+  哪个分支先完成谁先返回，主 agent 不等兄弟分支即据新信息重新规划。FrontierFinance 金融 agent 基准 **50.2**（有称 54.3）第一，
+  对比 APEX-Agents 的 27.7；Agent-Team 模式比 ReAct 高 7–8 分。「开源 mini、闭源旗舰」已是标准商业打法，异步多 agent 为墙钟
+  时间而非 token 顺序优化。
+- **硬件（08-25 20:03）：** 小米 **Xring O3**（玄戒 O3）——TSMC 3nm N3P、24B 晶体管、10 核「全大核」SoC（2× C1-Ultra 4.35
+  GHz + 4× C1-Premium + 4× C1-Pro，44 MB 缓存），Geekbench 6.5 单核 **3,945**（≈ Apple A19 Pro 的 4,019）/ 多核 **15,221**
+  （vs 约 11,054），首款突破 5M AnTuTu 的移动 SoC——9 月随小米 18 Fold + Pad 9 Pro Max 首发。厂商/实验室选用的数字，且多核
+  领先部分源于 10 核 vs Apple 的 6 核；延伸 CUDA-on-RISC-V 笔记：第三方设计的旗舰 CPU 核心已接近 Apple。
+- **ponytail 以约 110k 星再现（08-25 20:03，注记更新，→ [[agent-plugins]] [[token-economics]]）：** `DietrichGebert/ponytail`
+  （原约 82k）如今为 **20+ agent** 提供适配器 + `/ponytail-review` + `/ponytail-audit` 斜杠命令，其基准声称约少 54% 代码 /
+  约低 20% 成本 / 约快 27% / 100% 安全——80–94% 的单次数字已在 issue #126 后自我修正。token 预算纪律已成*产品化*类目；
+  仍是单一作者基准、无共享语料，故 [[agent-plugins]] 的评估缺口未变。

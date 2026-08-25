@@ -900,3 +900,14 @@ consumer-protection law rather than a model-card debate.
 via `@` syntax, with omni-reference editing and 0.3/0.6/1.2 yuan/sec API pricing (70% launch discount). The
 "everything-to-video" workflow shift, with Alibaba's own caveat that audio texture and on-screen text still need
 work.
+
+## Apodex 1.1 — open the mini, keep the flagship (08-25 20:03)
+
+**Apodex 1.1** (Tianqiao Chen's AI company) shipped its first fully local toolchain: the **FrontierAgent** harness plus
+**Apodex 1.1 mini**, a ~35B open-weight model (the full version stays closed, workbench-only). The headline change is
+**asynchronous collaboration** — whichever agent branch finishes first returns first, and the main agent re-plans on new
+information without waiting for sibling branches. On the **FrontierFinance** financial-agent benchmark it scored **50.2**
+(first; some reports say 54.3) vs APEX-Agents' 27.7, and Agent-Team mode beat ReAct mode by 7–8 points. The pattern: the
+"open the mini model, keep the flagship closed" playbook is now the standard commercial distribution move, and async
+multi-agent runtimes are optimizing for wall-clock over token order — thesis 4 (swarms) meeting the open-weight
+distribution thesis 6.

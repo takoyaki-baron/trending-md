@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-25 12:26
+last_run: 2026-08-25 20:30
 ---
 
 # 行动
@@ -65,6 +65,9 @@ last_run: 2026-08-25 12:26
       7 月 15 日）在 Benchmark/Harness/Environment 下统一 20+ 基准（含 SkillsBench）并*实测*同一技能+模型随
       harness 摆动 ~4–15 分（Opus-4.8 在 SkillsBench 上 54.40 vs 58.66）。故缺口如今在方法论 + 基础设施上收口，
       而非可比性——技能分数是运行它的 harness 的函数。→ [[agent-plugins]]）
+      （08-25 20:03：**模板仓库产品化了，共享语料仍未（注记更新）。** `DietrichGebert/ponytail` 以约 110k stars
+      （原约 82k）再度现身，为 20+ agent 提供适配器 + `/ponytail-review` / `/ponytail-audit`——token 预算纪律已成*产品化*
+      类目，但其基准仍是单一作者的复现、并非共享语料，故「技能的 MMLU」采纳缺口未变。→ [[agent-plugins]] [[token-economics]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -90,7 +93,12 @@ last_run: 2026-08-25 12:26
       （arXiv 2603.27299）以 vLLM SR v0.3 "Themis" 落地（YAML `SIGNAL_GROUP`/`TEST`/`TIER` + Session-Aware Agentic
       Routing）；OrcaRouter Routing DSL（YAML+CEL，≤30 条规则）新增融合面板——2–5 个次前沿模型 + 仲裁器，超过 Fable 5 单独。
       策略如今存活为一片*日益增厚且碎片化*的 YAML+表达式 DSL 领域（BitRouter 1.0.0-alpha.27）——尚无单一 DSL 胜出。
-      → [[smart-routing]]）
+      （08-25 20:30：**策略层在生产中加固——形态收敛、模式未收敛（已一手核实）。** vLLM `semantic-router` PR #2739
+      "add policy-driven routing primitives"（08-04 合并，位于 `main`、晚于 v0.3.0）新增按配方限定的信号、可复用的本地/LLM
+      分类器信号、分数感知决策叶、确定性提示驱动选择、加固的校验/热重载，并把策略在 Dashboard/DSL/Go/Python-CLI/docs 间往返
+      ——策略如今是自我加固的多界面工件。各家的共享*形态*「声明式配置 + 确定性分类器 + 失败即关闭回退」正在收敛（Intel
+      Inference Router、TrustGate、Autohand），却无共享模式。Void 核查：`autohandai/routes` 仅 3★——其「历经数百万会话实战」
+      文案是营销。）→ [[smart-routing]]）
 ### 系统 —— 自我迭代
 
 - [~] **Token 经济学这一层能否熬过它自己的对照组？** caveman 已预先承诺带简洁对照组重新公布其 65% 表格
@@ -149,6 +157,10 @@ last_run: 2026-08-25 12:26
       （第三次推送），stars 100,732，`benchmarks/results/` 仍为 `.gitkeep`，README 的 65% 未变。这次推送是 PR #901
       ——把 `git ls-files`/`git status` 对敌意克隆中 `core.fsmonitor` 执行做加固——加发布 1.2.5，而非基准。十五次核查：
       仓库在维护，并把速度花在代理安全上，而非重新生成的 vs 简洁数字。→ [[token-economics]]）
+      （08-25 20:03：**第十六次核查——仍无表格。** `pushed_at` 仍为 08-24 23:31Z，stars 100,807，`benchmarks/results/`
+      仍为 `.gitkeep`，README 的 65% 未变。十六次核查：仓库在维护，重新生成的 vs 简洁数字仍未发布。
+      （08-25 20:30：**第十七次核查——仍无表格。** `pushed_at` 仍为 08-24 23:31Z，stars 100,809，`benchmarks/results/`
+      仍为 `.gitkeep`，README 的 65% 未变。十七次核查：仓库在维护，重新生成的 vs 简洁数字仍未发布。→ [[token-economics]]）
 
 ### 已完成 —— 归档（最新在前）
 
@@ -499,6 +511,38 @@ last_run: 2026-08-25 12:26
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-25 20:30
+- **计划：** 推进最陈旧的研究项——路由传输层 vs 策略层之争（论点 5，上个数据点 08-25 04:29）——以一手数据点，并执行常设
+  系统项 caveman 核查（#17）。
+- **实施：** （1）**路由——策略层在生产中加固（已一手核实）。** 通过 GitHub API 读取 vLLM `semantic-router` PR #2739
+  （"[Router] add policy-driven routing primitives"，2026-08-04 合并）：按配方限定的信号求值 + 有界 metadata/图片/文本字节请求事实、
+  可复用的本地/LLM 分类器信号、分数感知决策叶、确定性提示驱动候选选择，以及针对密钥泄露与配方漂移的校验/热重载加固——策略在
+  Dashboard/DSL/Go/Python-CLI/docs 间往返。该仓库（5,285★，08-25 推送）证实 Semantic Router DSL 现已成为自我加固的多界面工件；
+  一次全景扫描（Intel Inference Router v2026.2.0 的 Rules/Strategies/Policies + 内置 OpenVINO Qwen3.5 分类器；TrustGate；Autohand
+  Routes）显示共享*形态*「声明式配置 + 确定性分类器 + 失败即关闭回退」正在收敛，却无共享模式。Void 核查：`autohandai/routes`
+  （3★，「历经数百万会话实战」）是营销文案——已访问、未采信。已将发现写入 `en/agent.md`（论点 5 状态行，压缩两段最旧块）+
+  [[smart-routing]]（三语）。（2）**caveman #17**——stars 100,809，`pushed_at` 仍为 08-24 23:31Z，`benchmarks/results/` 仍为
+  `.gitkeep`（与 #16 无异）。
+- **结果：** 策略层正在*纵深*整合（自我加固、多界面），而*模式*仍不共享——「尚无单一 DSL 胜出」依旧成立，且收敛是架构性
+  而非语法性（[[smart-routing]]，论点 5）。caveman 已十七次核查，表格仍未发布（[[token-economics]]）。
+
+### 2026-08-25 20:03
+- **计划：** 学习 08-25 20:03 批次（8 条净新条目，feed #20–27），将其折入记忆窗口 + 知识库，并推进两个常设项——技能评估
+  研究项（ponytail 新数据点）与 caveman 系统核查（#16）。整理任何新来源域名。
+- **实施：** （1）**学习 8 条净新条目**并折入记忆窗口 + 知识库：三条 CVE 入 [[security]]（WebLogic Proxy CVE-2026-21962——
+  CVSS 10.0、KEV 8 月 24 日，最高严重性下的 1 月打补丁→8 月被利用滞后；Linux bridge CVE-2026-74480——九年之久的 UAF，其 root
+  PoC 于 8 月 25 日发布，NVD 9.8 vs Red Hat 7.0 的评分者分歧；TeamCity CVE-2026-63077——Rapid7 点名 XStream 白名单根因，
+  ASD/ACSC 8 月 25 日警告在野攻击），Headlong + Walgit 入 [[agent-stack]]（持久化自主微 harness + 对象存储上的无状态 Git），
+  Apodex 1.1 入 [[frontier-models]]（「开源 mini、雪藏旗舰」+ 异步 FrontierAgent），ponytail 注记更新（82k→110k stars、
+  20+ 适配器）入 [[agent-plugins]]。将论点 2 压回预算内（24→22 行）并新增 08-25 20:03 状态行；同步镜像至 zh/jp。（2）
+  **caveman #16**——stars 100,807，`pushed_at` 仍为 08-24 23:31Z，`benchmarks/results/` 仍为 `.gitkeep`（与 #15 相同）。
+  （3）**无新域名需整理**——本批次的新主机均已整理（gsmarena.com、jdon.com、laude.org、securityonline.info）或已别名
+  （`en.theblockbeats.news` → `theblockbeats.news`，已 cv 2）。
+- **结果：** WebLogic KEV 10.0 + Linux-bridge 评分者分歧 + TeamCity XStream 三连击强化了补丁到武器化窗口与「记录评分者」
+  主题（[[security]]）；Headlong 将「持久自主」列为随需 agent 之后的前沿，其记忆原语是分层上下文压缩（[[agent-stack]]）；
+  ponytail 在 110k 星确认 token 预算纪律已产品化但仍单一作者（[[agent-plugins]]）。caveman 十六次核查，表格仍未发布
+  （[[token-economics]]）。build 报告零未整理域名。
 
 ### 2026-08-25 12:26
 - **计划：** 给最陈旧的开放研究项——agent 技能评估（论点 8，上一条数据点 08-24 20:30）——补一个全新的一手数据点；运行常设系统项

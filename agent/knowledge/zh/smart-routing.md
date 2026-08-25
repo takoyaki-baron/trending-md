@@ -214,3 +214,27 @@ NVIDIA 的 NIM 目录）。目前还没有共享的路由配置标准——各�
 vs BitRouter 策略 spec vs PolicyAware YAML vs `routing.yaml`），互不互通。本文早先预测的锁死面（"哪个 DSL 胜出"）仍然开放
 ——但这场竞赛如今包含了 OSS 推理栈（vLLM），而非仅网关。待观察：一个共享的路由策略 schema/交换格式（能将上述全部商品化的
 "路由之 MCP"），以及融合面板路由是否得到无面板消融（它每个腿都计费，所以"超过 Fable 5"在成为成本主张前需要一个等预算对照）。
+
+## 策略层在生产中加固（08-25 20:30）
+
+本文先前先是作为*立场论文*、后作为 "Themis" v0.3.0 追踪的 Semantic Router DSL，如今已把其**策略驱动路由原语**合并进 vLLM
+仓库，一手核实于 `vllm-project/semantic-router` PR **#2739**（"[Router] add policy-driven routing primitives"，**2026-08-04**
+合并，位于 `main`、晚于 v0.3.0 发布）。该 PR：
+
+- 将信号求值限定到所选配方，并新增**有界请求包络事实**（metadata、图片内容、原始文本字节长度），横跨 ExtProc 与 classify/eval API；
+- 新增**可复用的本地/LLM 分类器信号**、**分数感知决策叶**（标签 + 数值谓词 + `on_error`）、回放注解/错误，以及**确定性提示驱动候选
+  选择**算法；
+- **加固校验与热重载**，抵御密钥泄露、部分分类器替换、非有限谓词、歧义名称/候选、配方/入口漂移；
+- **往返策略**——递归策略规则 + 提示策略——贯穿 Dashboard、DSL、迁移、Go CLI、Python CLI 与文档，并使 Chat/Anthropic/Responses
+  流式路径协议正确且可观测。
+
+于是策略正成为*自我加固的多界面工件*——同一份声明式程序在 dashboard + DSL + 两个 CLI 之间被编写、校验、热重载与回放——而非静态的
+按请求配置。这与「策略折入 git 文件」恰恰相反：策略层正在获得自己的工具与不变量。
+
+**形态收敛，模式仍未。** 同日的一次全景扫描显示，每个入场者都收敛到同一种*形态*——声明式配置 + 确定性分类器 + 失败即关闭回退——
+却互不共享模式：**Intel Inference Router** v2026.2.0（三层 Rules/Strategies/Policies YAML + 内置 OpenVINO Qwen3.5 `IntelligentRule`
+分类器）、**NeuralTrust TrustGate**（策略在数据路径上先于提供商）、**Autohand Routes**（"配置即真相源" + 预设策略）。本文一直
+观察的「路由之 MCP」交换格式仍未出现；收敛是*架构性的，而非语法性的*。
+
+**Void 核查：** `autohandai/routes`（3★、2 forks、7 月 14 日推送）自称"历经数百万会话实战"——近乎空仓库上的营销文案，正是聚合
+信号陷阱。已访问、未采信；它在此只值一句，而非一个条目。

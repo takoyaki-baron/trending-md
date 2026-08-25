@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-25T12:03:00Z
+last_processed: 2026-08-25T20:03:00Z
 ---
 
 # Learnt Agent
@@ -57,16 +57,14 @@ patterns, and turn them into insights and actionable todos.
    signed component** Defender BTR.sys). **The meta-pattern is the finding:** in four the class is named,
    the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
    and MCP tool pinning (urged Apr 2025, still not in the spec).
-   - **08-16→08-23 12:03→21:04 — negative window → build-time chain → control-plane ransom → dangling delegation →
-     existence-not-ownership authz → shape 15 (unpatchable, unblocklistable, off every ledger; full ledger → [[security]]):**
-     M-Trends −7d; 354 MCP flips; Oracle 943/day; `arrayref` at `cargo build`; vCenter→Babuk; Cl0p Windchill; "mind viruses";
-     Nezha 62283; Defender's signed `BTR.sys` (no CVE/WDAC/LOLDrivers, no key rotation) — 5th "enforced by nobody".
-   - **08-25 04:03 — trust boundary reaches the endpoint agent + a default-config CMS (detail → [[security]]):** SPIP
-     CVE-2026-77806 (9.8, `X-Spip-Filtre`→`system()`, in-the-wild, Metasploit module); Zscaler CVE-2026-59568 (9.1, unauth RCE
-     in a *security vendor's own* endpoint agent, all six OSes).
-   - **08-25 12:03 — two more shapes + a permission-model answer (detail → [[security]]):** LXD CVE-2026-66897 (9.9,
-     validation-to-use path traversal → host root, not KEV); 4MOSAn CVE-2026-78211 (9.8, leftover ADOdb debug page in a
-     *compliance* scanner); **Wombat** (`usewombat/gateway`) — MCP tool-pinning client-side, Unix `rwxd` *resource* perms, deny-by-default.
+   - **08-16→08-23 — fifteen shapes, five "enforced by nobody" (full ledger → [[security]]):** M-Trends −7d; 354 MCP
+     flips; Oracle 943/day; `arrayref` build-time; vCenter→Babuk; "mind viruses"; Nezha 62283; Defender `BTR.sys`.
+   - **08-25 04:03→12:03 — endpoint-agent trust boundary, validation-to-use escape, resource-scoped perms (detail →
+     [[security]]):** SPIP 9.8 (`X-Spip-Filtre`→`system()`); Zscaler 9.1 (own endpoint agent); LXD 9.9 (os.Root→os.Create);
+     4MOSAn 9.8 (leftover ADOdb page); Wombat (`usewombat/gateway`) Unix `rwxd` perms, deny-by-default.
+   - **08-25 20:03 — a max-severity KEV'd perimeter proxy + a 9-year-old kernel UAF + CI/CD XStream (detail → [[security]]):**
+     WebLogic Proxy CVE-2026-21962 (10.0, CWE-284, KEV Aug 24 — Jan-patch→Aug-exploit); Linux bridge CVE-2026-74480 (UAF, NVD
+     9.8 vs Red Hat 7.0 — record the scorer); TeamCity CVE-2026-63077 (XStream allow-list, ASD active-attack Aug 25).
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -116,21 +114,21 @@ patterns, and turn them into insights and actionable todos.
    the cheapest engine that can do it. The router *decision* — its policy, signal, and catalog — is
    the new control point (LiteLLM self-host / OpenRouter hosted / Switchyard vendor each own one),
    so lock-in forms where there's no shared routing-config standard.
-   - **08-15→21 — the DSL + transport + ownership resolved in stages (detail → [[smart-routing]]):** the
-     routing-config standard emerges two ways (`bitrouter` git-owned `policy-lock.yaml` vs the Semantic Router
-     verified DSL); MCP's stateless rewrite makes `Mcp-Method`/`Mcp-Name` + `server/discover` the *transport*;
-     Speko (voice), Sprix SAGE (A2A sub-task ownership); OpenRouter joins Stripe (sale unclosed, neutrality
-     pledge) — routing ownership becomes a supply-chain fact.
-   - **08-23 04:03 — MCP standardizes *who the agent is*, not what the tool is:** the roadmap finalizes DPoP
-     RFC 9449 + Workload Identity Federation + token exchange (identity/delegation) and unifies transport
-     ("Streamable HTTP over stdio") — but carries **zero** tool-versioning/hashing/signed-manifest language.
-     Identity moves into the protocol; tool-contract integrity stays client-side ([[security]] shape 10).
+   - **08-15→08-23 04:03 — transport standardizes; policy + tool-contract stay client-side (detail → [[smart-routing]]):**
+     `bitrouter` git-owned `policy-lock.yaml` vs the Semantic Router verified DSL; MCP's stateless rewrite made
+     `Mcp-Method`/`Mcp-Name` + `server/discover` the *transport* and standardized *who the agent is* (DPoP RFC 9449 /
+     workload-identity) with **zero** tool-versioning/hashing ([[security]] shape 10); Speko / Sprix SAGE / OpenRouter→Stripe.
    - **08-25 04:29 — the policy DSL survives and fragments; the verified-compilation candidate got a production
      backer (verified first-hand).** Semantic Router (arXiv 2603.27299) shipped as **vLLM SR v0.3 "Themis"**
      (Jun 5; YAML `SIGNAL_GROUP`/`TEST`/`TIER` + Session-Aware Agentic Routing, disclaimed "not a substitute for
      release testing"); **OrcaRouter Routing DSL** (Jun 15; YAML+CEL, ≤30 rules) adds the **fusion panel** — 2–5
      sub-frontier models + arbiter cross Fable 5 solo (~65.5%), "preview, not GA." Policy survives as a
      *thickening, fragmenting* field of YAML+expression DSLs (BitRouter 1.0.0-alpha.27) — no single DSL owns it.
+   - **08-25 20:30 — the policy layer hardens in production; the shape converges, the schema doesn't (verified first-hand).**
+     vLLM `semantic-router` PR #2739 "add policy-driven routing primitives" (merged 08-04, on `main` past v0.3.0) adds recipe-scoped
+     signals, reusable local/LLM classifier signals, score-aware decision leaves, deterministic prompt-driven selection, and
+     hardened validation/hot-reload — the policy round-trips Dashboard/DSL/Go/Python-CLI/docs as a self-hardening artifact. The shared
+     shape "declarative config + deterministic classifier + fail-closed fallback" converges (Intel, TrustGate, Autohand) sans schema.
    → [[smart-routing]]
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** DeepSeek V4 Pro GA
@@ -1288,3 +1286,43 @@ patterns, and turn them into insights and actionable todos.
   full-debugger control over an unencrypted HTTP interface. **threeui** (`MengTo/threeui`, MIT, 3.6k★) opens the
   ThreeUI React+Three.js shader-component catalog login-free, keeping the Pro tier gated — "open the catalog,
   keep the pro tier."
+- **Security batch (08-25 20:03, → [[security]]):** **WebLogic Proxy Plug-in CVE-2026-21962** (CWE-284, CVSS **10.0**,
+  CISA KEV Aug 24, actively exploited) — an unauth improper-access-control flaw in Oracle HTTP Server + the WebLogic
+  Server Proxy Plug-in (the module that puts WebLogic behind Apache/IIS); `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`,
+  described as URI-normalization path traversal; patched in the **January 2026 CPU** but only KEV'd Aug 24 — an
+  8-month patch-to-weaponization lag with a federal remediation deadline of Aug 27. **Linux bridge CVE-2026-74480**
+  (CWE-416 UAF, multicast fast-leave) — a **9-year-old** bug (Jan 2017) whose root-exploit PoC (Nebula Security,
+  RHEL 10.2) landed Aug 25; scorer split **NVD 9.8 vs Red Hat 7.0** (local/high-complexity/low-priv). **TeamCity
+  CVE-2026-63077** (9.8, CWE-502) — the XStream root cause is now named by Rapid7: TeamCity added its own protocol
+  classes without removing XStream defaults, so crafted XML to unauth `/app/agents/v1` writes a `.jspws` to the
+  webroot; KEV Aug 5, Australia's ASD/ACSC warned of active attack Aug 25 (fixed 2025.11.7 / 2026.1.3).
+- **Persistent-agency microharness (08-25 20:03, → [[agent-stack]]):** **Headlong** (Laude Institute × MIT, Apache-2.0)
+  is a "microharness for **persistent agents**" — agents that keep thinking/acting in a self-guided loop with no
+  human interacting — in **under 10,000 lines of Bash**: a Thinker loop invokes `shellm` until a `FINAL` flag, and
+  Slack/Telegram/mobile all land as observations in **one shared thought stream** (no per-user sessions). Two
+  primitives: **tiered context compaction** (recent verbatim, older progressively summarized) and a **DAG-shaped
+  JSONL trajectory** (forks + merges). Its shared agent "Audel" self-repaired a bug over 48 min with zero human
+  direction, and the failure log (watchdog conflicts, self-termination) is published alongside — persistent agency
+  as the frontier past on-demand agents.
+- **Git-on-object-store (08-25 20:03, → [[agent-stack]]):** **Walgit** (`tobi/walgit`, MIT, Rust) — Shopify CEO Tobias
+  Lütke's single-binary Git server in front of an S3/GCS object store (no DB/leader/local state): each repo is a
+  write-ahead log in the bucket, pushes become visible via an atomic compare-and-swap manifest rewrite, with smart
+  HTTP v0/v2, `bundle-uri`, Git LFS, OIDC and per-repo push rules. It implements Cursor's "Continuity" git-at-scale
+  architecture the same week Origin landed — a from-scratch, stateless reference for "Git on object storage."
+- **Open the mini, keep the flagship (08-25 20:03, → [[frontier-models]]):** **Apodex 1.1** (Tianqiao Chen's AI company)
+  shipped its first fully local toolchain — the **FrontierAgent** harness + **Apodex 1.1 mini**, a ~35B open-weight
+  model (the full version stays closed, workbench-only). Headline: **asynchronous collaboration** — whichever agent
+  branch finishes first returns first, and the main agent re-plans without waiting for siblings. FrontierFinance
+  financial-agent benchmark **50.2** (some say 54.3) first place vs APEX-Agents' 27.7; Agent-Team mode +7–8 over ReAct.
+  "Open the mini, keep the flagship" is now the standard commercial playbook, and async multi-agent optimizes
+  wall-clock over token order.
+- **Hardware (08-25 20:03):** Xiaomi's **Xring O3** (玄戒 O3) — a TSMC 3nm N3P, 24B-transistor, 10-core "all-big-core"
+  SoC (2× C1-Ultra 4.35 GHz + 4× C1-Premium + 4× C1-Pro, 44 MB cache) scoring Geekbench 6.5 **3,945 single** (≈ Apple
+  A19 Pro's 4,019) / **15,221 multi** (vs ~11,054), first mobile SoC over 5M AnTuTu — debuts in the Xiaomi 18 Fold +
+  Pad 9 Pro Max in Sept. Vendor/lab-selected figures, and the multi-core lead partly reflects 10 cores vs Apple's 6;
+  extends the CUDA-on-RISC-V note as a third party-designed flagship CPU core roughly matching Apple.
+- **ponytail re-appears at ~110k stars (08-25 20:03, dated update, → [[agent-plugins]] [[token-economics]]):**
+  `DietrichGebert/ponytail` (was ~82k) now ships adapters for **20+ agents** + `/ponytail-review` + `/ponytail-audit`
+  slash commands, and its own benchmark claims ~54% less code / ~20% cheaper / ~27% faster / 100% safe — the 80–94%
+  single-shot numbers already self-corrected after issue #126. Token-budget discipline is now a *productized*
+  category; still a single-author benchmark with no shared corpus, so the [[agent-plugins]] eval gap holds.

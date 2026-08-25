@@ -885,3 +885,27 @@ Build 26.4/26.6 已修复；缓解措施是按 realm 禁用「忘记密码」。
 （`{ "resource": "github/org/repo/main", "mode": "r---" }`）。默认拒绝、最具体规则优先、零 ML / 确定性，带审计日志与实时
 仪表盘。这正是 MCP 路线图拒绝交付的原语（无工具版本/哈希/签名清单）——一层确定、可审计的策略，落在*工具能触碰什么*上，
 与哪个厂商的规范获胜无关。
+
+## WebLogic Proxy KEV 10.0 + Linux 桥接 UAF + TeamCity XStream 白名单（08-25 20:03）
+
+**CVE-2026-21962（Oracle WebLogic Server Proxy Plug-in / Oracle HTTP Server，CWE-284，CVSS 10.0）。** 将 WebLogic
+置于 Apache/IIS 之后的模块中存在未认证的越权访问——向量 `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`，公开报道描述为 URI
+规范化路径遍历，可读取/创建/篡改关键数据；变化作用域（`S:C`）让危害蔓延到脆弱组件之外。Oracle 在 **2026 年 1 月
+CPU** 中已修复，但 CISA 于 **8 月 24 日**以确认在野利用为由将其列入 **KEV**，联邦整改期限为 8 月 27 日。1 月打补丁 →
+8 月入 KEV 的滞后，正是形态 2（打补丁即逆向）主题在最高严重性下的表现：一个 8 个月前已修复的边界代理插件仍在野被利用
+——对暴露的 OHS/WebLogic 前端而言是「假定已失陷、立即打补丁」。评分者：Oracle（`secalert_us@oracle.com`）为 CNA；NVD
+Analyzed。
+
+**CVE-2026-74480（Linux 内核 net/bridge，CWE-416，UAF）。** `br_multicast_leave_group()` 的**组播 fast-leave 路径**
+中存在释放后使用：开启组播转单播后，循环通过 `br_multicast_del_pg()` 删除端口组条目，却让 `pp` 继续沿已释放的条目
+前进，留下悬空的 `mp->ports`。该缺陷可追溯到 **2017 年 1 月**（大量 LTS 内核受影响）；上游修复（在
+`br_multicast_del_pg()` 后加 `break`）于 2026 年 7 月合入。**Nebula Security** 于 8 月 25 日发布了在 RHEL 10.2 上可用的
+root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**，Red Hat 评 **7.0**（本地、高复杂度、低权限）。一个近十年
+之久的内核缺陷达到公开 root PoC，正是「旧代码 ≠ 安全代码」的提醒，2.8 分的落差也是记录评分者的教科书案例（[[fact-check]]）。
+
+**CVE-2026-63077（JetBrains TeamCity，CWE-502，CVSS 9.8）——XStream 根因终被点名。** 台账（形态 1）中已有「XStream
+反序列化未认证 RCE，KEV，约 4,500 暴露」；08-25 20:03 批次补上了*为何*与*现在*。Rapid7 的 Stephen Fewer 追溯到**过于
+宽松的 XStream 白名单**：TeamCity 添加了自己的协议类却没有移除 XStream 的默认类，于是发往未认证 agent 端点
+（`/app/agents/v1`）的构造 XML 链接 gadget 向 webroot 写入 `.jspws` 并执行。**8 月 5 日入 KEV**；澳大利亚 **ASD/ACSC 于
+8 月 25 日警告**服务器正遭主动攻击。修复于 **2025.11.7 / 2026.1.3**。构建服务器持有部署凭证、签名密钥与云 token，此处的
+未认证 RCE 是供应链咽喉——7 月披露 / 8 月利用的时间线，又是补丁到武器化窗口的收缩（形态 2）。

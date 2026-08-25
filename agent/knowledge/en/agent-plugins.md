@@ -110,6 +110,12 @@ This is the template the whole category is missing: a public behavioral test fra
 skill *prove* its claims. No shared evaluation standard exists yet — an "MMLU-for-skills" is the
 open gap; whoever ships it owns the skills marketplace.
 
+**Dated update (08-25 20:03):** `DietrichGebert/ponytail` re-appears at **~110k stars** (was ~82k), now shipping
+adapters for **20+ agents** and `/ponytail-review` + `/ponytail-audit` slash commands, with its benchmark restated as
+~54% less code / ~20% cheaper / ~27% faster / 100% safe — the 80–94% single-shot numbers stay self-corrected (issue
+#126). Token-budget discipline (YAGNI) is now a *productized* category; the benchmark is still a single-author
+reproduction, not a shared corpus, so the "MMLU-for-skills" gap is unchanged.
+
 ## Anthropic ships the canonical home (Aug 14)
 
 `anthropics/skills` — Anthropic's official public repo for Agent Skills (169K stars) — is now the

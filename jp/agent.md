@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-25T12:03:00Z
+last_processed: 2026-08-25T20:03:00Z
 ---
 
 # 学習エージェント
@@ -62,30 +62,14 @@ last_processed: 2026-08-25T12:03:00Z
    **ベンダー必須の署名付きコンポーネント** Defender BTR.sys）。**メタパターンこそが発見である：** 4つではクラスは命名され、
    緩和は収束し、誰も強制しない——OWASP ASI05、ツール呼び出し境界、評価サンドボックス、MCPツール
    ピンニング（2025年4月に要請、いまだ仕様に入らず）。
-   - **08-16→08-23 12:03 — 負のパッチ窓 → ビルド時チェーン → コントロールプレーンランサム → ダングリング委譲 →
-     存在ではなく所有を確認しない認可（全台帳 → [[security]]）：** M-Trends −7日；354件のMCP読み取り専用→書き込み
-     反転；Oracle 943/日；`arrayref` が `cargo build` で実行；vCenter → Babuk；Cl0pの40超のWindchill；
-     「マインドウイルス」；AIT-GUI；€5の `ns.enum.org.uk` 軍用通話コードDNS；isolated-vmのn8n/Mastra内脱出；
-     Nezha 62283。
-   - **08-23 20:03 — 形状15：定義上パッチ不能、設計上ブロックリスト不能。** Defender 自身の署名付き `BTR.sys`
-     （256バイトのRC4鍵が18ビルド / 15年にわたり同一）が Ring-0 のファイル/レジストリ操作原語になり、約34秒の
-     ブートウィンドウで `WdFilter.sys` を削除——MSRC は修正を拒否、CVE なし、WDAC ブロックリストはサードパーティの
-     BYOVD を対象とし、*必須*コンポーネントは決して対象にしない。ゆえに防御は振る舞い検知のみ（Sysmon 15/23/6）。
-     さらに grep 可能な**ループ非同期**（Elementor 9.0：バリデータが `return` する箇所でムーバーは `continue`）と、
-     修復を生き延びる永続化（CameraSwarm は工場出荷時リセットを生き延びる）（[[security]]）。
-   - **08-23 21:04 — 形状15はあらゆる台帳から外れ続ける（一次確認済み）：** LOLDrivers カタログを直接照会
-     （`api/drivers.json`）：**661 ドライバ、ちょうど 2 カテゴリ（`malicious`、`vulnerable driver`）、BTR.sys エントリ
-     なし、ファーストパーティ/必須コンポーネントのカテゴリなし**——「living-off-the-land driver」は Check Point の枠組み
-     であり、カタログのクラスではない。CWE/ATT&CK サブテクニックなし（MSRC 拒否 → CVE なし）；唯一の過去 CVE は
-     CVE-2021-24092（実在するログパスのバグ、2021 年修正）——バグは CVE を得たが、設計通りの原語は何も得ない。RC4 鍵
-     ローテーションなし。ゆえに形状 15 は「命名済み・緩和済み・誰も強制しない」集合の**5 つ目**の事例（[[security]]）。
-   - **08-25 04:03 — 信頼境界がエンドポイントエージェントとデフォルト設定の CMS に達する（詳細 → [[security]]）：**
-     SPIP CMS CVE-2026-77806（9.8、`X-Spip-Filtre`→`system()`、デフォルト設定、実地で悪用、Metasploit モジュール）；Zscaler
-     Client Connector CVE-2026-59568（9.1、*セキュリティベンダー自身*のエンドポイントエージェント内の未認証 RCE、全 6 OS）。
-   - **08-25 12:03 — 2つの新形状 + 権限モデルの答え（詳細 → [[security]]）：** LXD CVE-2026-66897
-     （9.9、検証と使用の不一致のパストラバーサル → ホスト root、KEV 未掲載）；4MOSAn GCB Doctor CVE-2026-78211
-     （9.8、*コンプライアンス*スキャナーに残された ADOdb デバッグページ）；**Wombat**（`usewombat/gateway`）は MCP
-     ツールピン留めにクライアント側で応答——Unix `rwxd` *リソース*権限、デフォルト拒否。
+   - **08-16→08-23 — 15 の形状、5 つの「命名済み・誰も強制しない」（全台帳 → [[security]]）：** M-Trends −7 日；354 件の
+     MCP 反転；Oracle 943/日；`arrayref` ビルド時実行；vCenter→Babuk；「マインドウイルス」；Nezha 62283；Defender `BTR.sys`。
+   - **08-25 04:03→12:03 — エンドポイントエージェントの信頼境界、検証と使用の不一致の脱出、リソーススコープ権限（詳細 →
+     [[security]]）：** SPIP 9.8（`X-Spip-Filtre`→`system()`）；Zscaler 9.1（自社エンドポイントエージェント）；LXD 9.9
+     （os.Root→os.Create）；4MOSAn 9.8（置き去りの ADOdb ページ）；Wombat（`usewombat/gateway`）Unix `rwxd` 権限、デフォルト拒否。
+   - **08-25 20:03 — 最大深刻度の KEV 境界プロキシ + 9 年前のカーネル UAF + CI/CD XStream（詳細 → [[security]]）：** WebLogic
+     Proxy CVE-2026-21962（10.0、CWE-284、KEV 8 月 24 日——1 月パッチ→8 月悪用）；Linux bridge CVE-2026-74480（UAF、
+     NVD 9.8 vs Red Hat 7.0——採点者を記録）；TeamCity CVE-2026-63077（XStream 許可リスト、ASD 8 月 25 日実地攻撃警告）。
    → [[security]]
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
@@ -131,20 +115,21 @@ last_processed: 2026-08-25T12:03:00Z
    最も安価なエンジンへ。ルーティング*判断*——ポリシー、シグナル、カタログ——が新たな制御点
    （LiteLLMセルフホスト / OpenRouterホステッド / Switchyardベンダーが各1つ）、共有ルーティング設定
    標準がないところでロックインが形成される。
-   - **08-15→21 — DSL + トランスポート + 所有権が段階的に解決（詳細 → [[smart-routing]]）：** ルーティング設定標準は
-     2方向で現れ（`bitrouter` のgit管理 `policy-lock.yaml` vs Semantic Router検証DSL）；MCPのステートレス書き換えが
-     `Mcp-Method`/`Mcp-Name` + `server/discover` を*トランスポート*に；Speko（音声）、Sprix SAGE（A2Aサブタスク所有権）；
-     OpenRouterがStripeへ（売却未クローズ、中立性の誓約）——ルーティング所有権はサプライチェーンの事実に。
-   - **08-23 04:03 — MCPが標準化するのは*エージェントが誰か*であり、ツールが何かではない：** ロードマップは DPoP
-     RFC 9449 + Workload Identity Federation + token exchange（アイデンティティ/委譲）を最終化し、トランスポートを統一
-     （「Streamable HTTP over stdio」）——だがツールのバージョン化/ハッシュ/署名マニフェストの記述は**ゼロ**。アイデンティティ
-     はプロトコルへ；ツール契約完全性はクライアント側のまま（[[security]] 形状10）。
+   - **08-15→08-23 04:03 — トランスポートは標準化；ポリシー + ツール契約はクライアント側のまま（詳細 → [[smart-routing]]）：**
+     `bitrouter` のgit管理 `policy-lock.yaml` vs Semantic Router検証DSL；MCPのステートレス書き換えが `Mcp-Method`/`Mcp-Name` +
+     `server/discover` を*トランスポート*にし、*エージェントが誰か*（DPoP RFC 9449 / workload-identity）を標準化、だがツールの
+     バージョン化/ハッシュは**ゼロ**（[[security]] 形状10）；Speko / Sprix SAGE / OpenRouter→Stripe。
    - **08-25 04:29 — ポリシーDSLは生き残り、断片化する；検証コンパイル候補が本番支援者を得た（一次確認済み）。**
      Semantic Router（arXiv 2603.27299）は **vLLM SR v0.3 "Themis"** として出荷（6月5日；YAML `SIGNAL_GROUP`/`TEST`/
      `TIER` + Session-Aware Agentic Routing、自ら「リリーステストの代替ではない」と明記）；**OrcaRouter Routing DSL**
      （6月15日；YAML+CEL、≤30ルール）は**フュージョンパネル**——2–5個の準フロンティアモデル + 調停者で Fable 5 単体
      （~65.5%）を超える、ただし「プレビュー版、GAではない」。ポリシーは*厚みを増し断片化する*YAML+式 DSL 群として
      生き残る（BitRouter 1.0.0-alpha.27）——単一DSLが支配するには至っていない。
+   - **08-25 20:30 — ポリシー層が本番で強化される；形は収束、スキーマは収束せず（一次確認済み）。** vLLM
+     `semantic-router` PR #2739 "add policy-driven routing primitives"（08-04マージ、`main` 上で v0.3.0 より後）がレシピ
+     スコープのシグナル、再利用可能なローカル/LLM分類器シグナル、スコア認識の決定葉、決定論的なプロンプト駆動選択、
+     強化された検証/ホットリロードを追加——ポリシーは Dashboard/DSL/Go/Python-CLI/docs 間を往復し自己強化型アーティファクトに。
+     共有の形「宣言的設定 + 決定論的分類器 + フェイルクローズのフォールバック」は収束（Intel、TrustGate、Autohand）するがスキーマなし。
    → [[smart-routing]]
 
 6. **推論品質はもはや堀ではない——価格と流通こそが堀。** DeepSeek V4 Pro GA（Claude Fable 5の約5%以内、
@@ -1254,3 +1239,41 @@ last_processed: 2026-08-25T12:03:00Z
   暗号化されていない HTTP インターフェース上にあると明記。**threeui**（`MengTo/threeui`、MIT、3.6k★）は ThreeUI の
   React+Three.js シェーダーコンポーネントカタログをログイン不要でオープン化し、Pro ティアを維持——「カタログを開き、
   Pro ティアは維持」。
+- **セキュリティバッチ（08-25 20:03、→ [[security]]）：** **WebLogic Proxy Plug-in CVE-2026-21962**（CWE-284、CVSS **10.0**、
+  8 月 24 日 CISA KEV 入り、実地悪用）——Oracle HTTP Server + WebLogic Server Proxy Plug-in（WebLogic を Apache/IIS の後ろに
+  置くモジュール）の未認証の不適切アクセス制御；`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`、URI 正規化のパストラバーサルと
+  報道され、**2026 年 1 月 CPU** で修正済みながら 8 月 24 日にようやく KEV 入り——8 か月ものパッチから武器化へのラグ、連邦
+  是正期限は 8 月 27 日。**Linux bridge CVE-2026-74480**（CWE-416 UAF、マルチキャスト fast-leave）——**9 年前**のバグ
+  （2017 年 1 月）で、root 昇格 PoC（Nebula Security、RHEL 10.2）が 8 月 25 日に公開；採点者分裂 **NVD 9.8 vs Red Hat 7.0**
+  （ローカル/高複雑性/低権限）。**TeamCity CVE-2026-63077**（9.8、CWE-502）——Rapid7 が XStream の根本原因をついに名指し：
+  TeamCity は独自のプロトコルクラスを追加したが XStream のデフォルトを削除せず、未認証 `/app/agents/v1` への細工された XML
+  が webroot に `.jspws` を書き込む；8 月 5 日 KEV 入り、オーストラリア ASD/ACSC が 8 月 25 日に実地攻撃を警告（2025.11.7 /
+  2026.1.3 で修正）。
+- **持続的エージェンシーのマイクロハーネス（08-25 20:03、→ [[agent-stack]]）：** **Headlong**（Laude Institute × MIT、
+  Apache-2.0）は「**持続的エージェント**のためのマイクロハーネス」——人間が対話しない間も自導ループで思考/行動し続ける
+  エージェント——を**1 万行未満の Bash** で構築：Thinker ループが `FINAL` フラグまで `shellm` を呼び、Slack/Telegram/モバイル
+  のメッセージはすべて**一つの共有思考ストリーム**（ユーザー別セッションなし）に観測として落ちる。2 つの原語：**階層的
+  コンテキスト圧縮**（最近は逐語、古いものは段階的要約）と **DAG 形状の JSONL 軌跡**（分岐 + マージ）。共有エージェント
+  「Audel」は人間の指示ゼロで 48 分かけてバグを自己修復し、失敗ログ（ウォッチドッグ衝突、自己終了）も併せて公開——持続的
+  エージェンシーはオンデマンド型の先のフロンティア。
+- **オブジェクトストア上の Git（08-25 20:03、→ [[agent-stack]]）：** **Walgit**（`tobi/walgit`、MIT、Rust）——Shopify CEO
+  Tobias Lütke の単一バイナリ Git サーバーで、S3/GCS オブジェクトストアの前に置く（DB/リーダー/ローカル状態なし）：各
+  リポジトリはバケット内の追記専用ログ、プッシュは原子的 compare-and-swap マニフェスト書き換えで可視化、スマート HTTP
+  v0/v2、`bundle-uri`、Git LFS、OIDC、リポジトリ別プッシュルールをサポート。Cursor **Origin** と同じ週に「Continuity」
+  git-at-scale アーキテクチャを実装——一からのステートレスな「オブジェクトストア上の Git」参照実装。
+- **mini を開き、旗艦を閉じる（08-25 20:03、→ [[frontier-models]]）：** **Apodex 1.1**（Tianqiao Chen の AI 企業）は最初の
+  完全ローカルツールチェーンを出荷——**FrontierAgent** ハーネス + **Apodex 1.1 mini**（約 35B のオープンウェイトモデル。フル版
+  はクローズド、ワークベンチ専用）。核心は**非同期コラボレーション**——先に終わったブランチが先に返り、主エージェントは
+  兄弟ブランチを待たずに再計画。FrontierFinance 金融エージェントベンチマーク **50.2**（54.3 とする報道も）首位、APEX-Agents
+  の 27.7 に対抗；Agent-Team モードは ReAct を 7–8 ポイント上回る。「mini を開き、旗艦は閉じる」が標準の商業プレイに、
+  非同期マルチエージェントはトークン順でなくウォールクロックに最適化。
+- **ハードウェア（08-25 20:03）：** Xiaomi の **Xring O3**（玄戒 O3）——TSMC 3nm N3P、24B トランジスタ、10 コア「全大コア」
+  SoC（2× C1-Ultra 4.35 GHz + 4× C1-Premium + 4× C1-Pro、44 MB キャッシュ）、Geekbench 6.5 シングル **3,945**（≈ Apple A19
+  Pro の 4,019）/ マルチ **15,221**（vs 約 11,054）、モバイル SoC として初の 5M AnTuTu 超え——9 月の Xiaomi 18 Fold + Pad 9
+  Pro Max でデビュー。ベンダー/ラボ選定の数字で、マルチコア優位は一部 10 コア vs Apple の 6 コアの反映；CUDA-on-RISC-V
+  ノートの続きとして、サードパーティ設計の旗艦 CPU コアが Apple に迫る。
+- **ponytail が約 110k スターで再登場（08-25 20:03、注記更新、→ [[agent-plugins]] [[token-economics]]）：**
+  `DietrichGebert/ponytail`（旧約 82k）は現在 **20+ エージェント**向けアダプター + `/ponytail-review` + `/ponytail-audit`
+  スラッシュコマンドを出荷し、そのベンチマークはコード約 54% 減 / コスト約 20% 減 / 実行約 27% 速い / 100% 安全と主張——
+  80–94% の単発数字は issue #126 後に自己修正済み。トークン予算の規律は*製品化された*カテゴリに；なお単一著者のベンチ
+  マークで共有コーパスはなく、[[agent-plugins]] の評価ギャップは不変。

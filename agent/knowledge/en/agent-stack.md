@@ -1250,3 +1250,27 @@ most complete bridges from an LLM agent to a native RE debugger — in-process x
 runtime — and its own disclaimer flags that "full debugger control" sits on an **unencrypted HTTP interface**
 (authorized use only). The same week as Wombat's resource-scoped MCP permissions, this is the other end of the
 MCP surface: a high-agency, low-isolation tool whose risk is bounded only by the caller's authorization.
+
+## Headlong — a <10k-line Bash microharness for persistent agents (08-25 20:03)
+
+**Headlong** (Laude Institute × MIT, Apache-2.0) is a "microharness for **persistent agents**" — agents that keep
+thinking and acting in a self-guided loop when no human is interacting — built in **under 10,000 lines of Bash**. A
+*Thinker* loop repeatedly invokes `shellm` (a Bash-based recursive language model) until a `FINAL` flag is set, and
+messages from Slack/Telegram/mobile all land as observations in **one shared thought stream** (no per-user sessions).
+Two primitives stand out as the reusable design: **tiered context compaction** (recent entries verbatim, older ones
+progressively summarized — the same "spend the exact bytes" turn as [[edge-inference]]'s FreeToken, applied to a
+persistent log) and a **DAG-shaped JSONL trajectory** supporting forks and merges. Its shared agent "Audel" self-repaired
+a bug across 48 minutes with zero human direction (commit `80cbb1e`), and the failure log (watchdog conflicts,
+self-termination, "keeps no secrets") is published alongside — persistent agency is the frontier past on-demand agents,
+and the honest cost of unsupervised operation is the differentiator, not a footnote.
+
+## Walgit — a stateless Git server on an object store (08-25 20:03)
+
+**Walgit** (`tobi/walgit`, MIT, Rust) — Shopify CEO Tobias Lütke ("tobi") — is a Git server that is **one binary in
+front of an S3/GCS object store**: no database, no leader, no local state. Each repository is a **write-ahead log** in
+the bucket; pushes are immutable objects made visible by an atomic **compare-and-swap** manifest rewrite, so many
+instances serve one bucket at once. Supports smart HTTP (v0/v2), **bundle-uri** pre-packaged clone bundles, Git LFS, a
+React web UI, OIDC auth, and per-repo push rules — and it implements the "Continuity" architecture Cursor described in
+its Git-at-Scale post. Open-sourced the same week Cursor **Origin** landed: a from-scratch, stateless reference
+implementation for "Git on object storage" anyone can run behind Cloudflare R2 or MinIO — the
+code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + CAS) beside Origin's *review* answer.

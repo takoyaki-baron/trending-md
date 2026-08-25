@@ -274,3 +274,38 @@ The lock-in surface this file predicted ("which DSL wins") is still open — but
 inference stack (vLLM), not just gateways. Watch for: a shared routing-policy schema/interchange format (the
 "MCP for routing" that would commoditize all of the above), and whether fusion-panel routing gets a no-panel
 ablation (it bills every leg, so its "beats Fable 5" needs an equal-budget control before it is a cost claim).
+
+## The policy layer hardens in production (08-25 20:30)
+
+The Semantic Router DSL — the candidate this file first tracked as a *position paper*, then as "Themis" v0.3.0 —
+has now merged its **policy-driven routing primitives** into vLLM's repo, verified first-hand at
+`vllm-project/semantic-router` PR **#2739** ("[Router] add policy-driven routing primitives", merged
+**2026-08-04**, on `main` past the v0.3.0 release). The PR:
+
+- scopes signal evaluation to the selected recipe and adds **bounded request-envelope facts**
+  (metadata, image-content, raw text-byte length) across ExtProc and classify/eval APIs;
+- adds **reusable local/LLM classifier signals**, **score-aware decision leaves** (label + numeric
+  predicate + `on_error`), replay annotations/errors, and a **deterministic prompt-driven candidate
+  selection** algorithm;
+- **hardens validation and hot reload** against secret disclosure, partial classifier swaps,
+  non-finite predicates, ambiguous names/candidates, and recipe/entrypoint drift;
+- **round-trips the policy** — recursive policy rules + prompt policies — through Dashboard, DSL,
+  migration, Go CLI, Python CLI, and docs, and makes the Chat/Anthropic/Responses streaming paths
+  protocol-correct and observable.
+
+So the policy is becoming a *self-hardening, multi-surface artifact* — the same declarative program authored,
+validated, hot-reloaded, and replayed across dashboard + DSL + two CLIs — rather than a static per-request
+config. That is the opposite of "policy folds into a git file": the policy layer is getting its own tooling
+and invariants.
+
+**The shape converges, the schema still doesn't.** A same-day landscape sweep shows the *shape* every entrant
+converges on — declarative config + deterministic classifier + fail-closed fallback — while none share a schema:
+**Intel Inference Router** v2026.2.0 (three-layer Rules/Strategies/Policies YAML plus a bundled OpenVINO Qwen3.5
+`IntelligentRule` classifier), **NeuralTrust TrustGate** (policy in the data path before providers), and
+**Autohand Routes** ("configuration as the source of truth" with preset policies). The "MCP for routing"
+interchange format this file has been watching for is still absent; the convergence is *architectural, not
+syntactic*.
+
+**Void check:** `autohandai/routes` (3★, 2 forks, pushed Jul 14) describes itself as "battle-tested across
+millions of sessions" — marketing copy on a near-empty repo, the exact aggregate-signal trap. Visited, not
+trusted; it earns one clause here, not an entry.

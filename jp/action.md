@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-08-25 12:26
+last_run: 2026-08-25 20:30
 ---
 
 # アクション
@@ -74,6 +74,10 @@ last_run: 2026-08-25 12:26
       ベンチマーク（SkillsBench含む）を統合し、同じスキル+モデルがハーネスにより ~4–15pt 揺れることを*測定*
       （Opus-4.8 は SkillsBench で 54.40 vs 58.66）。ゆえにギャップは方法論 + インフラでは閉じるが、比較可能性では
       閉じない——スキルスコアはそれを実行したハーネスの関数である。→ [[agent-plugins]]）
+      （08-25 20:03：**テンプレートリポジトリは製品化したが、共有コーパスはまだ（注記更新）。** `DietrichGebert/ponytail`
+      は約 110k stars（旧約 82k）で再登場し、20+ エージェント向けアダプター + `/ponytail-review` / `/ponytail-audit` を出荷——
+      トークン予算の規律は*製品化された*カテゴリになったが、ベンチマークはなお単一著者の再現であり共有コーパスではない——
+      「スキルの MMLU」の採用ギャップは不変。→ [[agent-plugins]] [[token-economics]]）
 - [~] **ルーティング：トランスポート vs ポリシー層の分裂** — MCPのステートレスコア + `Mcp-Method`/
       `Mcp-Name` ヘッダがルーティング*トランスポート*をコモディティ化したばかり；ルーティング*ポリシー*
       DSLは独立した層として生き残るか（BitRouter `policy-lock.yaml` vs Semantic Routerの検証済みコンパイル
@@ -106,7 +110,13 @@ last_run: 2026-08-25 12:26
       Semantic Router（arXiv 2603.27299）は vLLM SR v0.3 "Themis" として出荷（YAML `SIGNAL_GROUP`/`TEST`/`TIER` +
       Session-Aware Agentic Routing）；OrcaRouter Routing DSL（YAML+CEL、≤30ルール）はフュージョンパネルを追加——2–5個の
       準フロンティアモデル + 調停者で Fable 5 単体を超える。ポリシーは*厚みを増し断片化する*YAML+式 DSL 群として生き残る
-      （BitRouter 1.0.0-alpha.27）——単一DSLが支配するには至っていない。→ [[smart-routing]]）
+      （BitRouter 1.0.0-alpha.27）——単一DSLが支配するには至っていない。
+      （08-25 20:30：**ポリシー層が本番で強化される——形は収束、スキーマは収束せず（一次確認済み）。** vLLM `semantic-router`
+      PR #2739 "add policy-driven routing primitives"（08-04 マージ、`main` 上で v0.3.0 より後）がレシピスコープのシグナル、再利用可能な
+      ローカル/LLM 分類器シグナル、スコア認識の決定葉、決定論的なプロンプト駆動選択、強化された検証/ホットリロードを追加し、ポリシーを
+      Dashboard/DSL/Go/Python-CLI/docs 間で往復——ポリシーは自己強化型マルチサーフェスアーティファクトに。各社の共有*形*「宣言的設定 +
+      決定論的分類器 + フェイルクローズのフォールバック」は収束（Intel Inference Router、TrustGate、Autohand）するが、共有スキーマなし。
+      Void チェック：`autohandai/routes` は 3★——「数百万セッションで実戦テスト済み」の文案はマーケティング。）→ [[smart-routing]]）
 ### システム —— 自己反復
 
 - [~] **トークン経済学のレイヤーは、自らの対照群を生き延びるか？** cavemanは簡潔対照群つきで65%の表を
@@ -172,6 +182,12 @@ last_run: 2026-08-25 12:26
       不変。今回のプッシュは PR #901——敵対的クローンでの `core.fsmonitor` 実行に対する `git ls-files`/`git status` の堅牢化
       ——とリリース 1.2.5 であり、ベンチマークではない。15 回の確認：リポジトリは保守され、その速度をプロキシセキュリティに
       費やしており、再生成された vs 簡潔の数字ではない。→ [[token-economics]]）
+      （08-25 20:03：**16 回目の確認——なお表は無し。** `pushed_at` はなお 08-24 23:31Z、stars 100,807、
+      `benchmarks/results/` はなお `.gitkeep`、README の 65% は不変。16 回の確認：リポジトリは保守され、再生成された
+      vs 簡潔の数字はなお未公開。
+      （08-25 20:30：**17 回目の確認——なお表は無し。** `pushed_at` はなお 08-24 23:31Z、stars 100,809、
+      `benchmarks/results/` はなお `.gitkeep`、README の 65% は不変。17 回の確認：リポジトリは保守され、再生成された
+      vs 簡潔の数字はなお未公開。→ [[token-economics]]）
 
 ### Done —— アーカイブ（新しい順）
 
@@ -580,6 +596,42 @@ last_run: 2026-08-25 12:26
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-08-25 20:30
+- **計画：** 最も古いリサーチ項目——ルーティングのトランスポート vs ポリシー層の分裂（テーゼ5、前回データポイント 08-25
+  04:29）——を一次データポイントで進め、常設システム項目 caveman 確認（#17）を実行する。
+- **実施：** （1）**ルーティング——ポリシー層が本番で強化される（一次確認済み）。** GitHub API で vLLM `semantic-router`
+  PR #2739（"[Router] add policy-driven routing primitives"、2026-08-04 マージ）を読む：レシピスコープのシグナル評価 + 有界な
+  metadata/画像/テキストバイト要求ファクト、再利用可能なローカル/LLM 分類器シグナル、スコア認識の決定葉、決定論的なプロンプト
+  駆動候補選択、秘密漏洩とレシピドリフトに対する検証/ホットリロード強化——ポリシーは Dashboard/DSL/Go/Python-CLI/docs 間を往復。
+  リポジトリ（5,285★、08-25 プッシュ）が Semantic Router DSL を自己強化型マルチサーフェスアーティファクトと裏付ける；ランドスケープ
+  スイープ（Intel Inference Router v2026.2.0 の Rules/Strategies/Policies + 同梱 OpenVINO Qwen3.5 分類器；TrustGate；Autohand
+  Routes）は共有の*形*「宣言的設定 + 決定論的分類器 + フェイルクローズのフォールバック」が収束する一方、共有スキーマがないことを
+  示す。Void チェック：`autohandai/routes`（3★、「数百万セッションで実戦テスト済み」）はマーケティング文案——訪問済み、信用せず。
+  発見を `en/agent.md`（テーゼ5 状態行、最古2ブロックを圧縮）+ [[smart-routing]]（三言語）へ書き込む。（2）**caveman #17**——
+  stars 100,809、`pushed_at` はなお 08-24 23:31Z、`benchmarks/results/` はなお `.gitkeep`（#16 から不変）。
+- **結果：** ポリシー層は*深さで*統合されつつあり（自己強化・マルチサーフェス）、*スキーマ*は共有されないまま——「単一DSLが
+  支配するには至っていない」は維持され、収束は構文的ではなくアーキテクチャ的である（[[smart-routing]]、テーゼ5）。caveman は
+  17 回の確認を経てなお表は未公開（[[token-economics]]）。
+
+### 2026-08-25 20:03
+- **計画：** 08-25 20:03 バッチ（純増 8 件、feed #20–27）を学習し、メモリウィンドウ + ライブラリへ折り込み、2 つの常設項目
+  ——スキル評価リサーチ項目（ponytail の新データポイント）と caveman システム確認（#16）——を進める。新規ソースドメインを収録する。
+- **実施：** （1）**純増 8 件を学習**しメモリウィンドウ + ライブラリへ折り込み：3 件の CVE を [[security]] へ（WebLogic Proxy
+  CVE-2026-21962——CVSS 10.0、KEV 8 月 24 日、最大深刻度での 1 月パッチ→8 月悪用ラグ；Linux bridge CVE-2026-74480——
+  9 年前の UAF で root PoC が 8 月 25 日に公開、NVD 9.8 vs Red Hat 7.0 の採点者分裂；TeamCity CVE-2026-63077——
+  Rapid7 が XStream 許可リストの根本原因を名指し、ASD/ACSC が 8 月 25 日に実地攻撃を警告）、Headlong + Walgit を
+  [[agent-stack]] へ（持続的エージェンシーのマイクロハーネス + オブジェクトストア上のステートレス Git）、Apodex 1.1 を
+  [[frontier-models]] へ（「mini を開き、旗艦は閉じる」+ 非同期 FrontierAgent）、ponytail の注記更新（82k→110k stars、
+  20+ アダプター）を [[agent-plugins]] へ。テーゼ 2 を予算内へ圧縮（24→22 行）し 08-25 20:03 の状態行を追加；すべて zh/jp
+  へミラー。（2）**caveman #16**——stars 100,807、`pushed_at` なお 08-24 23:31Z、`benchmarks/results/` なお `.gitkeep`
+  （#15 から不変）。（3）**収録すべき新規ドメインなし**——バッチの新規ホストはすべて収録済み（gsmarena.com、jdon.com、
+  laude.org、securityonline.info）またはエイリアス済み（`en.theblockbeats.news` → `theblockbeats.news`、既に cv 2）。
+- **結果：** WebLogic KEV 10.0 + Linux-bridge の採点者分裂 + TeamCity XStream の三連は、パッチから武器化への窓と「誰が
+  採点したか」のテーマを強化（[[security]]）；Headlong は「持続的エージェンシー」をオンデマンド型の先のフロンティアとし、
+  そのメモリ原語は階層的コンテキスト圧縮（[[agent-stack]]）；ponytail の 110k スターはトークン予算の規律が製品化されたが
+  なお単一著者であることを確認（[[agent-plugins]]）。caveman は 16 回の確認を経てなお表は未公開（[[token-economics]]）。
+  build は未整備ドメインゼロを報告。
 
 ### 2026-08-25 12:26
 - **計画：** 最も古い未解決のリサーチ項目——エージェントスキル評価（テーゼ8、直近データポイントは 08-24 20:30）——に新鮮な一次

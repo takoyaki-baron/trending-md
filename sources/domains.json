@@ -3067,5 +3067,32 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "gsmarena.com": {
+    "cat": "news",
+    "en": "Long-running mobile-device news/review outlet; reliable for phone/SoC launch facts (specs, names, dates). Cross-checked (08-25): its Xiaomi 18 Fold / Xring O3 report matches Notebookcheck and Xiaomi's own announcement.",
+    "zh": "老牌移动设备新闻/评测媒体；对手机/SoC 发布事实（规格、名称、日期）较为可靠。已交叉核验（08-25）：其小米 18 Fold / 玄戒 O3 报道与 Notebookcheck 及小米官方发布一致。",
+    "jp": "老舗のモバイル機器ニュース/レビュー媒体。スマホ/SoCのローンチ事実（仕様・名称・日付）に信頼性。突合済み（08-25）：Xiaomi 18 Fold / Xring O3 の報道は Notebookcheck および Xiaomi の公式発表と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "jdon.com": {
+    "cat": "news",
+    "en": "Chinese tech/AI blog; aggregates and translates AI product/model releases with variable depth. Cross-checked (08-25): its Apodex 1.1 write-up matches The Block Beats on the 35B 'mini' open-weight model and the FrontierFinance top score.",
+    "zh": "中文技术/AI 博客；聚合并翻译 AI 产品/模型发布，深度参差。已交叉核验（08-25）：其 Apodex 1.1 文章与 The Block Beats 在 35B 'mini' 开源模型及 FrontierFinance 榜首分数上一致。",
+    "jp": "中国のテック/AIブログ。AI製品/モデル発表を集約・翻訳するが深さにばらつき。突合済み（08-25）：Apodex 1.1 の記事は The Block Beats と、35B 'mini' オープンウェイトモデルおよび FrontierFinance 首位スコアで一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "laude.org": {
+    "cat": "vendor",
+    "en": "Laude Institute's official site — primary source for its own agent-harness releases (e.g. Headlong). Cross-checked (08-25): the Headlong announcement's details (Bash microharness, persistent agents) match Runtime Wire's coverage.",
+    "zh": "Laude Institute 官方网站——其自身智能体框架发布（如 Headlong）的一手来源。已交叉核验（08-25）：Headlong 公告的细节（Bash 微框架、持久化智能体）与 Runtime Wire 报道一致。",
+    "jp": "Laude Institute の公式サイト——自社のエージェントハーネス公開（例：Headlong）の一次情報源。突合済み（08-25）：Headlong 発表の詳細（Bashマイクロハーネス、永続エージェント）は Runtime Wire の報道と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }
