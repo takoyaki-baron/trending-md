@@ -1133,3 +1133,30 @@ trust-boundary failure in its purest form: **the tool you installed to protect t
 the same "vendor's own component" theme as Defender `BTR.sys` (shape 15), but here as a patchable CVE rather than a
 by-design primitive. Both reinforce the meta-pattern: the protection plane itself (endpoint agent, CMS default config)
 keeps showing up as the entry point.
+
+## LXD container escape + leftover-debug-page injection + resource-scoped MCP permissions (08-25 12:03)
+
+**CVE-2026-66897 (LXD, CWE-22/23, CVSS 9.9).** A path traversal in Canonical LXD's instance-template processing
+from a **validation-to-use discrepancy**: the code validates the template path against a *confined* `os.Root`
+handle, then opens/creates the file with an *unconfined* `os.Create`, so traversal keys like
+`/nonexistent/../../tmp/target` overwrite arbitrary root-owned host files → host root code execution. A caller
+with container-edit permission (or a malicious image) reaches it. Affects LXD 4.0.0–4.0.13 / 5.0.0–5.0.9 /
+5.21.0–5.21.7 / 6.0–6.10; fixed in the .13/.9/.7/6.10 line. **Not KEV-listed, no in-the-wild evidence yet.** The
+grep-able class: *validate with one handle, act with another* — the container→host direction of the
+existence-not-ownership / validation-to-use family.
+
+**CVE-2026-78211 (4MOSAn GCB Doctor, CWE-78, CVSS 9.8).** Unauthenticated OS command injection in a Taiwanese
+Government Configuration Baseline compliance-and-scanning product, via a **leftover ADOdb test/debug page**
+shipped in production builds that passes a request parameter unsanitized into a system-command routine — RCE
+with no auth or interaction. Disclosed Aug 24 via TWCERT/CC, credited to Linwz (DEVCORE); fixed 20260621. The
+shape is the *forgotten debug surface* on a tool whose whole purpose is security compliance — a
+supply-chain-adjacent fail with no public exploit or confirmed in-the-wild use yet.
+
+**Wombat (`usewombat/gateway`) — resource-scoped MCP permissions, "chmod for agents."** The MCP tool-pinning
+gap (shape 10) has been answered client-side by pinning *tools* (mcp-scan, mcp-gateway) — Wombat is the first to
+scope *resources* rather than tool names. A `permissions.json` manifest grants `r`/`w`/`x`/`d` on resources, so
+the same `push_files` tool is allowed on feature branches and denied on `main`
+(`{ "resource": "github/org/repo/main", "mode": "r---" }`). Deny-by-default, most-specific-rule-wins,
+zero-ML/deterministic, with an audit log and a live dashboard. This is the precise missing primitive the MCP
+roadmap declines to ship (no tool versioning/hashing/signed manifests) — a deterministic, auditable policy layer
+over *what a tool may touch*, independent of which vendor's spec wins.

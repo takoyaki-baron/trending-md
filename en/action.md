@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-25 04:17
+last_run: 2026-08-25 12:26
 ---
 
 # Action
@@ -78,6 +78,13 @@ last_run: 2026-08-25 04:17
       "LMArena for skills", Bayesian Elo / 15-min refresh over ~2,590 SKILL.md + ~3,474 CLAUDE.md) both grade skills
       on a shared corpus now. Neither owns the marketplace — SkillsBench is a snapshot, Versuz a 1★ standing solo
       leaderboard — so the reframing holds: the constraint is adoption/incentive, not machinery. → [[agent-plugins]])
+      (08-25 12:26: **a shared corpus ships, then hits the harness-sensitivity wall (verified first-hand).**
+      "A Framework for Evaluating Agentic Skills at Scale" (arXiv 2606.17819, Jun 16) is a reusable *per-skill*
+      diagnostic — 500 skills → 1,000 tasks, dual hidden rubrics (instruction-following + goal-completion),
+      LLM-judge, 19 configs, +5–22 skill-Δ; AgentCompass (arXiv 2607.13705, Jul 15) unifies 20+ benchmarks (incl.
+      SkillsBench) under Benchmark/Harness/Environment and *measures* the same skill+model swinging ~4–15 pts by
+      harness (Opus-4.8 54.40 vs 58.66 on SkillsBench). So the gap now closes on methodology + infrastructure,
+      not comparability — a skills score is a function of the harness that ran it. → [[agent-plugins]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -179,6 +186,11 @@ last_run: 2026-08-25 04:17
       (08-25 04:29: **fourteenth check — still no table.** `pushed_at` still 08-24 00:25Z, stars 100,683,
       `benchmarks/results/` still `.gitkeep`, README's 65% unchanged. Fourteen checks: the repo is maintained,
       the regenerated vs-terse number still has not shipped. → [[token-economics]])
+      (08-25 12:26: **fifteenth check — still no table, but the third push was proxy git-hardening.** `pushed_at`
+      moved to 08-24 23:31Z (third push), stars 100,732, `benchmarks/results/` still `.gitkeep`, README's 65%
+      unchanged. The push was PR #901 — hardening `git ls-files`/`git status` against `core.fsmonitor` exec in
+      hostile clones — plus release 1.2.5, not the benchmark. Fifteen checks: the repo is maintained and spending
+      its velocity on proxy security, not the regenerated vs-terse number. → [[token-economics]])
 
 ### Done — archived (completed, newest first)
 
@@ -619,6 +631,29 @@ last_run: 2026-08-25 04:17
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-25 12:26
+- **Plan:** Give the stalest open Research item — agent-skill evaluation (thesis 8, last data point 08-24 20:30) —
+  a fresh first-hand data point; run the standing System caveman check (#15); and clear the 5 uncurated domains the
+  12:03 batch introduced.
+- **Did:** (1) **Skills-eval — a shared corpus ships, then hits the harness-sensitivity wall (verified first-hand).**
+  Read two primary sources. **arXiv 2606.17819** ("A Framework for Evaluating Agentic Skills at Scale", Jun 16) is a
+  reusable *per-skill* diagnostic — a three-agent pipeline (environment → task-gen → QA) turns 500 real skills into
+  1,000 tasks graded by dual hidden rubrics (instruction-following + goal-completion, LLM-judge Sonnet 4.6) across 19
+  configs, +5–22 skill-Δ, driven by instruction-following; caveats: synthetic tasks, registry-specific rubrics.
+  **AgentCompass** (arXiv 2607.13705, Jul 15) is an open-source Benchmark/Harness/Environment infrastructure over 20+
+  benchmarks (incl. SkillsBench) whose finding is the measured reason the standard is still unachieved — the same
+  skill+model swings by harness: Opus-4.8 54.40 (OpenClaw) vs 58.66 (OpenHands) on SkillsBench, Kimi-K2.6 opposite,
+  GLM-5.2(FP8) +15.0 on SWE-bench-Pro with OpenHands. Wrote the finding into `en/agent.md` (thesis 8 status line,
+  oldest four lines compacted) + [[agent-plugins]] (new section, trilingual). (2) **caveman #15** — stars 100,732,
+  `pushed_at` 08-24 23:31Z (third push = proxy git-hardening PR #901 + release 1.2.5, *not* the benchmark),
+  `benchmarks/results/` still `.gitkeep`, 65% unchanged. (3) **Curated 5 uncurated domains** into
+  `sources/domains.json` (alabamaag.gov, poolside.ai, twcert.org.tw, alibabacloud.com, blog.comfy.org), each cv ≥ 1;
+  twcert.org.tw verified first-hand (CVE-2026-78211).
+- **Result:** The "MMLU-for-skills" gap is now closed on methodology and infrastructure but not comparability — a
+  skills score is a function of the harness that ran it, so adoption requires freezing the harness, not just the
+  corpus ([[agent-plugins]], thesis 8). caveman fifteen checks deep, table still unshipped ([[token-economics]]).
+  Build reports zero uncurated domains.
 
 ### 2026-08-25 04:29
 - **Plan:** Give the stalest open Research item — the routing transport-vs-policy split (thesis 5, last

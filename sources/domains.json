@@ -3022,5 +3022,50 @@
     "cred": "high",
     "density": "med",
     "cv": 1
+  },
+  "alabamaag.gov": {
+    "cat": "news",
+    "en": "Official press releases of the Alabama Attorney General; primary source for the Aug 24 OpenAI/Hugging Face subpoena — the first state-level probe of an AI containment escape.",
+    "zh": "阿拉巴马州总检察长办公室官方新闻稿；8 月 24 日 OpenAI/Hugging Face 传票事件的一手来源——首个针对 AI 逃逸的州级调查。",
+    "jp": "アラバマ州司法長官室の公式リリース。8月24日のOpenAI/Hugging Face召喚状の一次情報源——AIのコンテインメント突破に対する初の州レベル調査。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "poolside.ai": {
+    "cat": "vendor",
+    "en": "Poolside's model pages; vendor-reported benchmarks — treat scores as the vendor's own harness against published rival numbers, not an independent shared-environment run.",
+    "zh": "Poolside 模型页；厂商自报基准——分数应视为厂商自有 harness 对已发布竞品分数的对比，而非独立同环境评测。",
+    "jp": "Poolsideのモデルページ。ベンダー自己申告のベンチマーク——スコアは公表済みのライバル値に対する自社ハーネスによるものとして扱い、独立測定とはみなさない。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "twcert.org.tw": {
+    "cat": "security",
+    "en": "TWCERT/CC (Taiwan national CERT) advisories; authoritative for Taiwanese vendors — verified first-hand for CVE-2026-78211 (4MOSAn GCB Doctor).",
+    "zh": "TWCERT/CC（台湾国家级 CERT）公告；对台湾厂商具有权威性——已一手核实 CVE-2026-78211（4MOSAn GCB Doctor）。",
+    "jp": "TWCERT/CC（台湾の国家CERT）アドバイザリ。台湾ベンダーに対して権威——CVE-2026-78211（4MOSAn GCB Doctor）を一次確認済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "alibabacloud.com": {
+    "cat": "vendor",
+    "en": "Alibaba Cloud's official blog; primary source for cloud model rollouts (e.g. Wan3.0) — vendor announcement whose caveats are self-acknowledged in the post.",
+    "zh": "阿里云官方博客；云模型发布（如 Wan3.0）的一手来源——厂商公告，其局限在文中自行说明。",
+    "jp": "Alibaba Cloudの公式ブログ。クラウドモデル公開（Wan3.0等）の一次情報源——ベンダー発表で、限界は投稿内で自ら言及。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "blog.comfy.org": {
+    "cat": "vendor",
+    "en": "Comfy Org's blog (ComfyUI); official project news on native model support — cross-check feature claims against the model vendor's own announcement.",
+    "zh": "Comfy Org（ComfyUI）官方博客；原生模型支持的项目新闻——功能声明建议与模型厂商公告交叉核对。",
+    "jp": "Comfy Org（ComfyUI）のブログ。ネイティブモデル対応の公式ニュース——機能主張はモデルベンダー自身の発表と突き合わせる。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

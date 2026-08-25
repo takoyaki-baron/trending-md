@@ -448,3 +448,33 @@ evals. Both verified first-hand this run.
   snapshot; Versuz is a standing leaderboard nobody uses. The "whoever ships it owns the marketplace" prediction
   holds, and the shipped-but-un-adopted state confirms the 08-23 reframing: the binding constraint is incentive,
   not machinery — stars still arrive without proof, so a proof-marketplace has no buyer.
+
+## A shared corpus ships — then hits the harness-sensitivity wall (08-25 12:26)
+
+Two primary sources, both verified first-hand, move thesis 8's "MMLU-for-skills" watch-item again — and the
+sharpest finding is a *measured* reason the standard is still unachieved.
+
+- **"A Framework for Evaluating Agentic Skills at Scale"** (arXiv 2606.17819, Jun 16 2026, Maksim Shaposhnikov
+  et al.) is a *reusable per-skill diagnostic methodology* — the first framework for isolating a single skill's
+  impact rather than aggregate benchmark scoring. A three-agent pipeline (environment-engineering agent →
+  task-generation agent → validation/QA agent) turns **500 real-world open-source skills** into **1,000
+  executable tasks**, each graded by **two hidden rubrics** — *instruction-following* (does the agent honor the
+  skill's workflow conventions, library choices, naming rules, prohibited patterns) and *goal-completion* (are
+  the outputs correct) — scored by an LLM-judge (Sonnet 4.6) on 1–10 scales. Across **19 agent-model
+  configurations** (Anthropic/OpenAI/Google/DeepSeek/MiniMax/Qwen/GLM/Nemotron × Claude Code/Codex/OpenHands),
+  skill access yields **+5–22 points**, driven mainly by instruction-following, and lets smaller models emulate
+  larger ones. Caveats read first-hand: synthetic tasks and skill-registry-specific rubrics.
+- **AgentCompass** (arXiv 2607.13705, Jul 15 2026, Kai Chen et al., 23 authors) is an open-source, lightweight,
+  extensible agent-evaluation *infrastructure* that decomposes eval into **Benchmark / Harness / Environment**
+  and natively supports **20+ benchmarks across five dimensions** — including **SkillsBench** in the Productivity
+  dimension. Its finding is the harness-sensitivity bomb under every skills leaderboard: **the same model+skill
+  scores swing by harness** — Claude-Opus-4.8 scores **54.40 (OpenClaw) vs 58.66 (OpenHands)** on SkillsBench,
+  while Kimi-K2.6 goes the *opposite* direction (53.10 vs 50.62); Opus-4.8 drops 8.7 on DeepSearchQA and
+  GLM-5.2(FP8) gains 15.0 on SWE-bench-Pro with OpenHands. Its own caveat: gaps are computed against the closest
+  external reference, and some spread "may also arise from harness versions or benchmark-specific adaptations."
+- **The read:** the "MMLU-for-skills" gap is now closed on *methodology* (a reusable per-skill diagnostic exists)
+  and on *infrastructure* (a unified Benchmark/Harness/Environment host exists), but the comparability it was
+  supposed to deliver is exactly what AgentCompass shows is still missing — a skills score is a function of the
+  harness that ran it, so a leaderboard without a pinned harness is noise. The standing prediction ("whoever
+  ships an *adopted* standard owns the marketplace") holds; the new finding is *why* adoption is hard: it
+  requires freezing the harness, not just the corpus.

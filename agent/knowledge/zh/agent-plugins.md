@@ -349,3 +349,25 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   刷新。它是 1★ / 83 提交——常设排行榜的形态，零采纳。
 - **解读：** 评估缺口不再是工具缺口——而是*采纳*缺口。SkillsBench 是固定快照；Versuz 是无人使用的常设排行榜。「谁交付谁拥有市场」
   的预测成立，而已交付却未被采纳的状态印证了 08-23 的重框定：约束是激励，而非机制——没有证明也能拿到 stars，于是证明市场没有买家。
+
+## 共享语料交付——随后撞上 harness 敏感性之墙（08-25 12:26）
+
+两份一手核实的主要来源，再次推动论点 8 的「技能的 MMLU」观察项——而最尖锐的发现是一个*被量化*的理由：标准仍未达成。
+
+- **「A Framework for Evaluating Agentic Skills at Scale」**（arXiv 2606.17819，2026-06-16，Maksim Shaposhnikov
+  等）是一套*可复用的单技能诊断方法*——首个隔离单个技能影响的框架，而非聚合基准评分。三 agent 流水线（环境工程 agent →
+  任务生成 agent → 校验/QA agent）把 **500 个真实开源技能**变成 **1,000 个可执行任务**，每个任务用**两套隐藏评分细则**打分——
+  *指令遵循*（agent 是否遵守技能的工作流约定、库选择、命名规则、禁用模式）与*目标完成*（输出是否正确）——由 LLM 法官
+  （Sonnet 4.6）按 1–10 打分。跨 **19 个 agent-模型配置**（Anthropic/OpenAI/Google/DeepSeek/MiniMax/Qwen/GLM/Nemotron
+  × Claude Code/Codex/OpenHands），技能访问带来 **+5–22 分**，主要由指令遵循驱动，并让小模型逼近大模型。一手读到的保留：
+  合成任务与特定技能注册表的评分细则。
+- **AgentCompass**（arXiv 2607.13705，2026-07-15，Kai Chen 等 23 位作者）是一个开源、轻量、可扩展的 agent 评测*基础设施*，
+  把评测拆成 **Benchmark / Harness / Environment**，原生支持**五维 20+ 基准**——含 Productivity 维度的 **SkillsBench**。
+  其发现是每个技能排行榜之下的 harness 敏感性炸弹：**同一模型+技能随 harness 分数摆动**——Claude-Opus-4.8 在 SkillsBench
+  上得分 **54.40（OpenClaw）vs 58.66（OpenHands）**，而 Kimi-K2.6 方向*相反*（53.10 vs 50.62）；Opus-4.8 在 DeepSearchQA
+  掉 8.7，GLM-5.2(FP8) 用 OpenHands 在 SWE-bench-Pro 涨 15.0。其自身保留：差距对照最近的外部参考计算，且部分散差「也可能源于
+  harness 版本或基准特定的适配」。
+- **解读：** 「技能的 MMLU」缺口如今在*方法论*（有了可复用的单技能诊断）与*基础设施*（有了统一的 Benchmark/Harness/
+  Environment 宿主）上都已闭合，但它本应带来的可比性恰恰是 AgentCompass 证明仍然缺失的东西——技能分数是运行它的 harness 的
+  函数，所以没有锁定 harness 的排行榜只是噪声。既有预测（「谁交付*被采纳的*标准谁拥有市场」）成立；新发现是采纳为何难：它
+  需要冻结 harness，而不只是语料。

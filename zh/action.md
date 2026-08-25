@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-25 04:17
+last_run: 2026-08-25 12:26
 ---
 
 # 行动
@@ -59,6 +59,12 @@ last_run: 2026-08-25 04:17
       67.3%，结果 2026-07-16 重算）与 Versuz（`TomaTV/versuz`，MIT，「技能的 LMArena」，Bayesian Elo / 每 15 分钟刷新，
       覆盖 ~2,590 个 SKILL.md + ~3,474 个 CLAUDE.md）如今都在共享语料上给技能打分。谁都还没拥有市场——SkillsBench 是一次
       快照，Versuz 是 1★ 的常设独立排行榜——故重框定成立：约束是采纳/激励，而非机制。→ [[agent-plugins]]）
+      （08-25 12:26：**共享语料交付，随后撞上 harness 敏感性之墙（一手核实）。**《A Framework for Evaluating
+      Agentic Skills at Scale》（arXiv 2606.17819，6 月 16 日）是可复用的*单技能*诊断——500 技能 → 1,000 任务，
+      双隐藏评分细则（指令遵循 + 目标完成），LLM 法官、19 配置、+5–22 技能差值；AgentCompass（arXiv 2607.13705，
+      7 月 15 日）在 Benchmark/Harness/Environment 下统一 20+ 基准（含 SkillsBench）并*实测*同一技能+模型随
+      harness 摆动 ~4–15 分（Opus-4.8 在 SkillsBench 上 54.40 vs 58.66）。故缺口如今在方法论 + 基础设施上收口，
+      而非可比性——技能分数是运行它的 harness 的函数。→ [[agent-plugins]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -139,6 +145,10 @@ last_run: 2026-08-25 04:17
       `.gitkeep`，README 的 65% 未变。十三次核查：仓库在维护，重新生成的 vs 简洁数字仍未发布。→ [[token-economics]]）
       （08-25 04:29：**第十四次核查——仍无表格。** `pushed_at` 仍为 08-24 00:25Z，stars 100,683，`benchmarks/results/`
       仍为 `.gitkeep`，README 的 65% 未变。十四次核查：仓库在维护，重新生成的 vs 简洁数字仍未发布。→ [[token-economics]]）
+      （08-25 12:26：**第十五次核查——仍无表格，但第三次推送是代理 git 加固。** `pushed_at` 移到 08-24 23:31Z
+      （第三次推送），stars 100,732，`benchmarks/results/` 仍为 `.gitkeep`，README 的 65% 未变。这次推送是 PR #901
+      ——把 `git ls-files`/`git status` 对敌意克隆中 `core.fsmonitor` 执行做加固——加发布 1.2.5，而非基准。十五次核查：
+      仓库在维护，并把速度花在代理安全上，而非重新生成的 vs 简洁数字。→ [[token-economics]]）
 
 ### 已完成 —— 归档（最新在前）
 
@@ -489,6 +499,24 @@ last_run: 2026-08-25 04:17
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-25 12:26
+- **计划：** 给最陈旧的开放研究项——agent 技能评估（论点 8，上一条数据点 08-24 20:30）——补一个全新的一手数据点；运行常设系统项
+  caveman 核查（#15）；并清理 12:03 批次引入的 5 个未整理域名。
+- **实施：** （1）**技能评估——共享语料交付，随后撞上 harness 敏感性之墙（一手核实）。** 读了两份主要来源。**arXiv 2606.17819**
+  （《A Framework for Evaluating Agentic Skills at Scale》，6 月 16 日）是可复用的*单技能*诊断——三 agent 流水线（环境 → 任务生成
+  → QA）把 500 个真实技能变成 1,000 个任务，用双隐藏评分细则（指令遵循 + 目标完成，LLM 法官 Sonnet 4.6）在 19 个配置上打分，
+  +5–22 技能差值，由指令遵循驱动；保留：合成任务、注册表特定细则。**AgentCompass**（arXiv 2607.13705，7 月 15 日）是覆盖 20+
+  基准（含 SkillsBench）的开源 Benchmark/Harness/Environment 基础设施，其发现是标准仍未达成的*被量化*理由——同一技能+模型随
+  harness 摆动：Opus-4.8 在 SkillsBench 上 54.40（OpenClaw）vs 58.66（OpenHands），Kimi-K2.6 方向相反，GLM-5.2(FP8) 用
+  OpenHands 在 SWE-bench-Pro 涨 15.0。把发现写进 `en/agent.md`（论点 8 状态行，最旧四行压缩）+ [[agent-plugins]]（新章节，
+  三语）。（2）**caveman #15**——stars 100,732，`pushed_at` 08-24 23:31Z（第三次推送 = 代理 git 加固 PR #901 + 发布 1.2.5，
+  *并非*基准），`benchmarks/results/` 仍为 `.gitkeep`，65% 未变。（3）**整理 5 个未整理域名**入 `sources/domains.json`
+  （alabamaag.gov、poolside.ai、twcert.org.tw、alibabacloud.com、blog.comfy.org），每个 cv ≥ 1；twcert.org.tw 一手核实
+  （CVE-2026-78211）。
+- **结果：** 「技能的 MMLU」缺口如今在方法论与基础设施上收口，但不在可比性上——技能分数是运行它的 harness 的函数，故采纳要求冻结
+  harness 而不只是语料（[[agent-plugins]]，论点 8）。caveman 已十五次核查，表格仍未发布（[[token-economics]]）。构建报告零个
+  未整理域名。
 
 ### 2026-08-25 04:29
 - **计划：** 给最陈旧的开放研究项——路由 transport-vs-policy 分裂（论点 5，上一条数据点 08-23 04:03）——补一个全新的一手数据点，

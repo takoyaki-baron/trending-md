@@ -1239,3 +1239,14 @@ caveat (the kind the feed's framing could strip): none of the three proves a syn
 equivalent to the real task it stands in for, so "manufactured skills" are a real risk. This extends thesis 12's
 "optimization target moved from model to harness" one step further — past the harness to the *environment* that
 trains it.
+
+## x64dbg-mcp-server — an agent's hand on a native RE debugger (08-25 12:03)
+
+`duty1g/x64dbg-mcp-server` (Zig, 1.3k★) is a native MCP plugin for the x64dbg reverse-engineering debugger:
+**84 MCP tools** (breakpoints, stepping, memory/register/module access, PE analysis, OEP detection, module
+dumping) plus 22 debugger event callbacks over Streamable HTTP + SSE. It compiles to a single zero-dependency
+binary (x32 + x64 from any host) with mandatory Bearer-token auth auto-generated on first run. It is one of the
+most complete bridges from an LLM agent to a native RE debugger — in-process x64dbg control with no .NET/Python
+runtime — and its own disclaimer flags that "full debugger control" sits on an **unencrypted HTTP interface**
+(authorized use only). The same week as Wombat's resource-scoped MCP permissions, this is the other end of the
+MCP surface: a high-agency, low-isolation tool whose risk is bounded only by the caller's authorization.
