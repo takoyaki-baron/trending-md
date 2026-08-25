@@ -1,8 +1,8 @@
 ---
 date: 2026-08-25
-updated: 2026-08-25T12:03:00Z
+updated: 2026-08-25T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -281,13 +281,125 @@ Alabama Attorney General **Steve Marshall** subpoenaed OpenAI on **Aug 24** — 
 
 ---
 
+## 20. CVE-2026-21962 — a CVSS 10.0 unauthenticated flaw in the Oracle WebLogic Proxy Plug-in lands in CISA KEV (Aug 24)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV / Oracle CPU · CVSS 10.0 · ~1d ago (Aug 24)
+- **Tags:** `cve` `oracle` `weblogic` `rce` `actively-exploited`
+
+**CVE-2026-21962** (CWE-284, **CVSS 10.0** — the maximum) is an unauthenticated improper-access-control flaw in the **Oracle HTTP Server** and the **Oracle WebLogic Server Proxy Plug-in** (the module that puts WebLogic behind Apache/IIS). The vector `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N` needs no credentials or interaction, and the *changed scope* lets the compromise spread past the vulnerable component — public reporting describes it as a **URI-normalization path traversal** that lets an attacker read, create, or alter critical data. Oracle patched it in the **January 2026 CPU**, but on **Aug 24** CISA added it to the **Known Exploited Vulnerabilities (KEV)** catalog citing confirmed active exploitation, with a federal remediation deadline of **Aug 27**.
+
+**Why it matters:** A maximum-severity, KEV-listed, actively-exploited flaw in a perimeter proxy plug-in is an "assume compromise, patch now" signal — and the January-patch-to-August-KEV lag means many exposed deployments are still running the vulnerable version.
+
+[`🔗 NVD CVE-2026-21962`](https://nvd.nist.gov/vuln/detail/CVE-2026-21962) · [`🔗 Security Affairs`](https://securityaffairs.com/197801/security/u-s-cisa-adds-maximum-severity-oracle-flaw-to-its-known-exploited-vulnerabilities-catalog.html)
+
+---
+
+## 21. Xiaomi's Xring O3 — a 10-core all-big-core 3nm SoC that matches Apple single-threaded and beats it multi-threaded
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 900 pts · ~1d ago (Aug 24)
+- **Tags:** `hardware` `soc` `xiaomi` `semiconductor` `mobile`
+
+Xiaomi unveiled the **Xring O3** (小米玄戒 O3), its self-designed flagship smartphone SoC, on **Aug 24** — a **TSMC 3nm (N3P)** chip with **24B transistors** and a **10-core "all-big-core"** CPU (two C1-Ultra at 4.35 GHz, four C1-Premium at 3.68 GHz, four C1-Pro at 3.15 GHz) plus **44 MB of on-chip cache**. On Geekbench 6.5 it scores **3,945 single-core** (≈ Apple A19 Pro's 4,019) and **15,221 multi-core** (vs ~11,054), and is the **first mobile SoC to break 5M on AnTuTu** (5,228,014). It debuts in the **Xiaomi 18 Fold** and Pad 9 Pro Max in September; Daniel Lemire reads its wide cores as an industry shift toward cache-heavy designs over clock speed.
+
+**Why it matters:** A credible third-party-designed flagship SoC roughly matching Apple's cores — and beating them multi-threaded — is a real "domestic silicon" milestone, with the caveat that the figures are vendor/lab-selected and the multi-core lead partly reflects 10 cores vs Apple's 6.
+
+[`🔗 Notebookcheck — XRing O3`](https://www.notebookcheck.net/Xiaomi-launches-XRing-O3-claims-it-is-the-fastest-smartphone-SoC-with-an-AnTuTu-score-of-over-5-million.1376668.0.html) · [`🔗 GSMArena — Xiaomi 18 Fold`](https://www.gsmarena.com/xiaomi_18_fold_is_officially_coming_in_september_with_the_monstrous_xring_o3_chipset-news-74306.php)
+
+---
+
+## 22. ponytail — a 110k-star ruleset that makes your agent "think like the laziest senior dev in the room"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · ~110k stars · ~1d ago
+- **Tags:** `agents` `coding-agent` `rules` `yagni` `open-source`
+
+**DietrichGebert/ponytail** (MIT, ~110k stars) is a plugin/ruleset that injects an always-on decision ladder into coding agents — skip what isn't needed (YAGNI), reuse existing code, prefer stdlib/native APIs, use one-liners, then write only the minimum that works — while explicitly keeping validation, security, and accessibility intact. It ships adapters for **20+ agents** (Claude Code, Codex, Copilot CLI, Cursor, Windsurf, Cline, OpenCode, Devin, Grok, …) plus `/ponytail-review` and `/ponytail-audit` slash commands. Its own benchmark (real Claude Code sessions on a FastAPI+React template) claims **~54% less code, ~20% cheaper, ~27% faster, 100% safe** — and the README transparently revises its earlier "80–94%" single-shot numbers after issue #126 showed the baseline included conversational prose.
+
+**Why it matters:** Token-budget discipline is becoming a productized category, and ponytail's honest self-correction of its own headline numbers is exactly the kind of source integrity this feed's discipline rewards.
+
+[`🔗 DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail) · [`🔗 README`](https://github.com/DietrichGebert/ponytail#readme)
+
+---
+
+## 23. CVE-2026-74480 — a 9-year-old Linux bridge fast-leave use-after-free gets a public root-exploit PoC (Aug 25)
+
+- **Velocity:** ▮▮ rising
+- **Source:** Nebula Security PoC · CVSS 9.8 (NVD) / 7.0 (Red Hat) · ~today (Aug 25)
+- **Tags:** `cve` `linux` `kernel` `privilege-escalation` `use-after-free`
+
+**CVE-2026-74480** (CWE-416) is a **use-after-free** in the Linux kernel's network bridge (`net/bridge`), in the **multicast fast-leave path** of `br_multicast_leave_group()`. With multicast-to-unicast enabled, the loop deletes a port-group entry via `br_multicast_del_pg()` but keeps advancing `pp` through the now-freed entry, leaving `mp->ports` dangling. **Nebula Security** published a working **PoC + demo video** (root privilege escalation on RHEL 10.2) on **Aug 25**; the bug dates to **January 2017**, so many LTS kernels are affected, while the upstream fix (a `break` after `br_multicast_del_pg()`) landed in **July 2026**. **Note the scorer split:** NVD rates it **9.8**, Red Hat **7.0** (local, high complexity, low privileges).
+
+**Why it matters:** A nearly decade-old kernel bug reaching public root-exploit PoC is a reminder that "old code" ≠ "safe code" — and the NVD-vs-Red Hat 2.8-point spread is a textbook case of why recording the scorer matters.
+
+[`🔗 NebuSec PoC (RHEL 10.2)`](https://github.com/NebuSec/CyberMeowfia/tree/main/security-research/Linux-CVE-2026-74480-RHEL-10.2) · [`🔗 SecurityOnline`](https://securityonline.info/linux-cve-2026-74480/)
+
+---
+
+## 24. Apodex 1.1 — Tianqiao Chen ships a 35B open-weight "mini" model plus an async FrontierAgent harness
+
+- **Velocity:** ▮▮ rising
+- **Source:** The Block Beats / JDON · ~today (Aug 25)
+- **Tags:** `ai-model` `open-weights` `finance` `agents` `frontieragent`
+
+**Apodex 1.1** — the AI company founded by Tianqiao Chen — shipped its first **fully local toolchain** on Aug 25: the **FrontierAgent** harness plus **Apodex 1.1 mini**, a ~35B open-weight model (the full version stays closed, workbench-only). The headline change is **asynchronous collaboration**: whichever agent branch finishes first returns first, and the main agent re-plans on new information without waiting for sibling branches. On the **FrontierFinance** financial-agent benchmark it scored **50.2** (some reports say 54.3) — first place, versus APEX-Agents' 27.7 — and Agent-Team mode beat ReAct mode by 7–8 points.
+
+**Why it matters:** "Open the mini model, keep the flagship closed" is now the standard commercial playbook, and the async multi-agent design is a concrete signal that agent runtimes are optimizing for wall-clock over token order.
+
+[`🔗 The Block Beats`](https://en.theblockbeats.news/flash/363359) · [`🔗 JDON`](https://www.jdon.com/94286-apodex-1-1-scaling-agentic-intelligence-for-compl.html)
+
+---
+
+## 25. Headlong — a <10k-line Bash microharness for agents that keep thinking when nobody is asking
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 79 pts · ~today (Aug 25)
+- **Tags:** `agents` `persistent-agents` `harness` `bash` `open-source`
+
+**Headlong** (Laude Institute × MIT, Apache-2.0) is a "microharness for **persistent agents**" — agents that keep thinking and acting in a self-guided loop even when no human is interacting. The core is **under 10,000 lines of Bash**: a *Thinker* loop repeatedly invokes `shellm` (a Bash-based recursive language model) until a `FINAL` flag is set, and messages from Slack/Telegram/mobile all land as observations in **one shared thought stream** (no per-user sessions). Two primitives stand out: **tiered context compaction** (recent entries stay verbatim, older ones get progressively summarized) and a **DAG-shaped JSONL trajectory** supporting forks and merges. Its shared agent "Audel" self-repaired a bug across 48 minutes with zero human direction (commit `80cbb1e`).
+
+**Why it matters:** Persistent agency is the frontier past on-demand agents — and Headlong's own failure log (watchdog conflicts, self-termination, "keeps no secrets") is the honest cost of letting an agent run unsupervised.
+
+[`🔗 laude.org — Headlong`](https://www.laude.org/updates/headlong-a-microharness-for-persistent-agents) · [`🔗 Runtime Wire`](https://runtimewire.com/article/laude-headlong-persistent-agent-microharness)
+
+---
+
+## 26. CVE-2026-63077 — Australia warns TeamCity servers under active attack as the unauthenticated RCE hits KEV
+
+- **Velocity:** ▮▮ rising
+- **Source:** ASD/ACSC + Rapid7 · CVSS 9.8 · ~today (Aug 25)
+- **Tags:** `cve` `teamcity` `rce` `supply-chain` `ci-cd`
+
+Australia's **ASD/ACSC** warned on **Aug 25** that **TeamCity** servers are under active attack — the latest escalation of **CVE-2026-63077** (CWE-502, **CVSS 9.8**), an unauthenticated RCE in JetBrains TeamCity On-Premises that CISA added to **KEV on Aug 5**. Rapid7's **Stephen Fewer** traced the root cause to a **permissive XStream allow-list**: TeamCity added its own protocol classes without removing XStream's defaults, so crafted XML to unauthenticated agent endpoints (`/app/agents/v1`) chains a gadget to write a `.jspws` file into the webroot and execute it. Fixed in **2025.11.7 / 2026.1.3**.
+
+**Why it matters:** Build servers hold deployment credentials, signing keys, and cloud tokens, so unauthenticated RCE here is a software supply-chain choke point — and the July-disclosed / August-exploited timeline shows the patch-to-weaponization window is shrinking.
+
+[`🔗 Rapid7 analysis`](https://www.rapid7.com/blog/post/etr-cve-2026-63077-critical-unauthenticated-remote-code-execution-in-jetbrains-teamcity/) · [`🔗 iTnews — ASD warning`](https://www.itnews.com.au/news/asd-warns-australian-teamcity-servers-under-attack-628400)
+
+---
+
+## 27. Walgit — Shopify CEO's single-binary Git server that sits in front of an object store
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 106 pts · ~1d ago
+- **Tags:** `git` `rust` `object-storage` `developer-tools` `server`
+
+**Walgit** (`tobi/walgit`, MIT, Rust) is a Git server from Shopify CEO **Tobias Lütke** ("tobi") that is **one binary in front of an S3/GCS object store** — no database, no leader, no local state. Each repository is a **write-ahead log** in the bucket; pushes are immutable objects made visible by an atomic **compare-and-swap** manifest rewrite, so many instances can serve one bucket at once. It supports smart HTTP (v0/v2), **bundle-uri** pre-packaged clone bundles, Git LFS, a React web UI, OIDC auth, and per-repo push rules — and it implements the "Continuity" architecture Cursor described in its Git-at-Scale post.
+
+**Why it matters:** A from-scratch, stateless Git server from a major engineering leader, open-sourced the same week Cursor's Origin landed — a concrete reference implementation for "Git on object storage" anyone can run behind Cloudflare R2 or MinIO.
+
+[`🔗 tobi/walgit`](https://github.com/tobi/walgit) · [`🔗 OpenSourceForU`](https://www.opensourceforu.com/2026/08/shopify-ceo-builds-open-source-git-server-walgit-over-a-weekend/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-25T12:03:00Z |
-| Items | 19 |
-| Sources tracked | 28 (NVD, Debian, ipshipyard.com, Runtime Wire, xusheng.dev, byteiota, GitHub, Simon Willison, Rapid7, Zscaler, Chips and Cheese, HotHardware, seL4 discourse, Proofcraft, arXiv, Hugging Face, envharness.com, TechCrunch, Alabama AG, Poolside, VentureBeat, Mallory, TWCERT/CC, IONIX, Alibaba Cloud, ComfyUI, Hacker News, npm) |
+| Generated | 2026-08-25T20:03:00Z |
+| Items | 27 |
+| Sources tracked | 37 (NVD, Debian, ipshipyard.com, Runtime Wire, xusheng.dev, byteiota, GitHub, Simon Willison, Rapid7, Zscaler, Chips and Cheese, HotHardware, seL4 discourse, Proofcraft, arXiv, Hugging Face, envharness.com, TechCrunch, Alabama AG, Poolside, VentureBeat, Mallory, TWCERT/CC, IONIX, Alibaba Cloud, ComfyUI, Hacker News, npm, Security Affairs, SecurityOnline, iTnews, The Block Beats, JDON, laude.org, OpenSourceForU, Notebookcheck, GSMArena) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

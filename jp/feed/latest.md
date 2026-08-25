@@ -1,8 +1,8 @@
 ---
 date: 2026-08-25
-updated: 2026-08-25T12:03:00Z
+updated: 2026-08-25T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -281,13 +281,125 @@ Hot Chips 2026 で NVIDIA は、x86・Arm に続くサーバー CPU の選択肢
 
 ---
 
+## 20. CVE-2026-21962 — Oracle WebLogic Proxy Plug-in の CVSS 10.0 未認証脆弱性が CISA KEV に追加（8 月 24 日）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV / Oracle CPU · CVSS 10.0 · ~1d ago（8 月 24 日）
+- **Tags:** `cve` `oracle` `weblogic` `rce` `actively-exploited`
+
+**CVE-2026-21962**（CWE-284、**CVSS 10.0**＝最高値）は、**Oracle HTTP Server** および **Oracle WebLogic Server Proxy Plug-in**（WebLogic を Apache/IIS の背後に置くモジュール）の未認証の不適切なアクセス制御の脆弱性。ベクター `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N` は認証も操作も不要で、*スコープ変更*により影響は脆弱なコンポーネントを越えて広がる——公開報道では **URI 正規化のパストラバーサル**とされ、攻撃者が重要なデータを読み取り・作成・改変できる。Oracle は **2026 年 1 月の CPU** で修正済みだが、**8 月 24 日**に CISA が実環境での悪用を確認したとして **KEV カタログ**に追加、連邦機関の期限は **8 月 27 日**。
+
+**Why it matters:** 境界に置かれるプロキシプラグインにおける最高深刻度・KEV 掲載・実悪用中の欠陥は「侵害を前提に即パッチ」のシグナル。1 月のパッチから 8 月の KEV 掲載までの遅れは、露出したままの古いデプロイがまだ多いことを意味する。
+
+[`🔗 NVD CVE-2026-21962`](https://nvd.nist.gov/vuln/detail/CVE-2026-21962) · [`🔗 Security Affairs`](https://securityaffairs.com/197801/security/u-s-cisa-adds-maximum-severity-oracle-flaw-to-its-known-exploited-vulnerabilities-catalog.html)
+
+---
+
+## 21. Xiaomi の Xring O3 — 10 コア・全大コアの 3nm SoC、シングルスレッドで Apple に並びマルチスレッドで上回る
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 900 pts · ~1d ago（8 月 24 日）
+- **Tags:** `hardware` `soc` `xiaomi` `semiconductor` `mobile`
+
+Xiaomi は **8 月 24 日**、自社設計のフラッグシップ SoC **Xring O3**（小米玄戒 O3）を発表した。**TSMC 3nm（N3P）**プロセス、**240 億トランジスタ**、**10 コア「全大コア」** CPU（C1-Ultra 2 基 @4.35GHz、C1-Premium 4 基 @3.68GHz、C1-Pro 4 基 @3.15GHz）と **44MB のオンチップキャッシュ**を備える。Geekbench 6.5 ではシングルコア **3,945**（Apple A19 Pro の 4,019 にほぼ並ぶ）、マルチコア **15,221**（約 11,054 に対して）を記録し、**AnTuTu で 500 万点を突破した初のモバイル SoC**（5,228,014）となった。9 月に **Xiaomi 18 Fold** と Pad 9 Pro Max に搭載。Daniel Lemire はワイドコアを、クロック向上よりキャッシュ重視への業界シフトと読む。
+
+**Why it matters:** Apple のコアにほぼ並び、マルチスレッドでは上回る、信頼できるサードパーティ製フラッグシップ SoC は本物の「国産シリコン」の節目。ただし数値はベンダー／ラボ選定で、マルチコア優位は 10 コア対 Apple の 6 コアという構成差も含む。
+
+[`🔗 Notebookcheck — XRing O3`](https://www.notebookcheck.net/Xiaomi-launches-XRing-O3-claims-it-is-the-fastest-smartphone-SoC-with-an-AnTuTu-score-of-over-5-million.1376668.0.html) · [`🔗 GSMArena — Xiaomi 18 Fold`](https://www.gsmarena.com/xiaomi_18_fold_is_officially_coming_in_september_with_the_monstrous_xring_o3_chipset-news-74306.php)
+
+---
+
+## 22. ponytail — エージェントを「部屋で一番怠惰なシニア開発者」のように考えさせる 11 万スターのルールセット
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · ~110k stars · ~1d ago
+- **Tags:** `agents` `coding-agent` `rules` `yagni` `open-source`
+
+**DietrichGebert/ponytail**（MIT、約 11 万スター）は、コーディングエージェントに常時稼働の意思決定ラダーを注入するプラグイン／ルールセット——不要なものは省き（YAGNI）、既存コードを再利用し、標準ライブラリ／ネイティブ API を優先し、一行で済むなら一行にし、その上で「動く最小限」だけを書く——一方で検証・セキュリティ・アクセシビリティは明示的に維持する。**20 以上のエージェント**（Claude Code、Codex、Copilot CLI、Cursor、Windsurf、Cline、OpenCode、Devin、Grok ほか）向けアダプターと `/ponytail-review`・`/ponytail-audit` スラッシュコマンドを同梱。自前ベンチマーク（FastAPI+React テンプレート上の実 Claude Code セッション）は**コード約 54% 減・コスト約 20% 減・速度約 27% 向上・100% 安全**を謳う——README は issue #126 でベースラインに会話文が混入していたと判明したことを受け、当初の「80–94%」という単発数値を正直に修正している。
+
+**Why it matters:** トークン予算の規律は一つの製品カテゴリになりつつあり、ponytail が自らの見出し数値を正直に修正したことは、このフィードが重んじる「ソースの誠実さ」そのもの。
+
+[`🔗 DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail) · [`🔗 README`](https://github.com/DietrichGebert/ponytail#readme)
+
+---
+
+## 23. CVE-2026-74480 — 9 年前の Linux ブリッジ fast-leave の use-after-free に root 権限昇格 PoC が公開（8 月 25 日）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Nebula Security PoC · CVSS 9.8 (NVD) / 7.0 (Red Hat) · ~today（8 月 25 日）
+- **Tags:** `cve` `linux` `kernel` `privilege-escalation` `use-after-free`
+
+**CVE-2026-74480**（CWE-416）は、Linux カーネルのネットワークブリッジ（`net/bridge`）における **use-after-free** で、`br_multicast_leave_group()` の**マルチキャスト fast-leave 経路**に存在する。マルチキャスト→ユニキャスト変換が有効な場合、ループが `br_multicast_del_pg()` でポートグループ項目を削除しても、解放済みの項目を通して `pp` を進め続け、`mp->ports` がダングリング状態になる。**Nebula Security** が **8 月 25 日**に動作する **PoC とデモ動画**（RHEL 10.2 での root 権限昇格）を公開。バグは **2017 年 1 月**まで遡るため多くの LTS カーネルが影響を受け、上流修正（`br_multicast_del_pg()` の後の `break`）は **2026 年 7 月**に取り込まれた。**スコアの食い違いに注意：** NVD は **9.8**、Red Hat は **7.0**（ローカル・高複雑度・低権限）。
+
+**Why it matters:** 約 10 年前のカーネルのバグが公開 root 権限昇格 PoC に到達したことは「古いコード＝安全なコード」ではないことを再確認させ、NVD と Red Hat の 2.8 ポイントの差は、スコアラーを記録することの重要性を示す教科書的事例。
+
+[`🔗 NebuSec PoC (RHEL 10.2)`](https://github.com/NebuSec/CyberMeowfia/tree/main/security-research/Linux-CVE-2026-74480-RHEL-10.2) · [`🔗 SecurityOnline`](https://securityonline.info/linux-cve-2026-74480/)
+
+---
+
+## 24. Apodex 1.1 — 陳天橋が 35B オープンウェイト「mini」モデルと非同期 FrontierAgent ハーネスを公開
+
+- **Velocity:** ▮▮ rising
+- **Source:** The Block Beats / JDON · ~today（8 月 25 日）
+- **Tags:** `ai-model` `open-weights` `finance` `agents` `frontieragent`
+
+陳天橋が創業した AI 企業 **Apodex** は 8 月 25 日、**Apodex 1.1** を公開し、**完全にローカルなツールチェーン**を初めて提供した。**FrontierAgent** ハーネスと、約 35B のオープンウェイトモデル **Apodex 1.1 mini**（フル版はクローズドで、オンラインワークベンチのみ）。最大の変化は**非同期コラボレーション**：先に完了したエージェントブランチが先に結果を返し、メインエージェントは兄弟ブランチを待たずに新情報で後続タスクを動的に調整する。**FrontierFinance** 金融エージェント評価では **50.2** 点（54.3 点とする報道も）で 1 位——APEX-Agents の 27.7 点を大きく上回り、Agent-Team モードは ReAct モードより 7–8 点上回った。
+
+**Why it matters:** 「mini モデルは公開、フラッグシップはクローズド」はもはや標準的な商業プレイブックで、非同期マルチエージェント設計はエージェントランタイムがトークン順ではなくウォールクロックで最適化されつつあることを示す具体的シグナル。
+
+[`🔗 The Block Beats`](https://en.theblockbeats.news/flash/363359) · [`🔗 JDON`](https://www.jdon.com/94286-apodex-1-1-scaling-agentic-intelligence-for-compl.html)
+
+---
+
+## 25. Headlong — 誰も頼んでいないのに考え続けるエージェントのための 1 万行未満の Bash マイクロハーネス
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 79 pts · ~today（8 月 25 日）
+- **Tags:** `agents` `persistent-agents` `harness` `bash` `open-source`
+
+**Headlong**（Laude Institute × MIT、Apache-2.0）は、人間が対話していない間もエージェントが自律ループで考え・行動し続ける**永続エージェント**向けの「マイクロハーネス」。コアは**1 万行未満の Bash**：*Thinker* ループが `shellm`（Bash ベースの再帰的言語モデル）を `FINAL` フラグが立つまで繰り返し呼び、Slack／Telegram／モバイルからのメッセージはすべて**単一の共有思考ストリーム**に観測として流れ込む（ユーザー別セッションなし）。特徴的なのは 2 つのプリミティブ——**階層的コンテキスト圧縮**（直近はそのまま、古いものは段階的に要約）と、フォーク／マージを扱える **DAG 型 JSONL 軌跡**。共有エージェント「Audel」は人の指示なしで 48 分かけてバグを自己修復した（commit `80cbb1e`）。
+
+**Why it matters:** 永続エージェンシーはオンデマンド型エージェントの先のフロンティア。Headlong 自身の失敗ログ（ウォッチドッグ衝突、自己終了、「秘密を守れない」）は、エージェントを無人で動かすことの正直なコスト。
+
+[`🔗 laude.org — Headlong`](https://www.laude.org/updates/headlong-a-microharness-for-persistent-agents) · [`🔗 Runtime Wire`](https://runtimewire.com/article/laude-headlong-persistent-agent-microharness)
+
+---
+
+## 26. CVE-2026-63077 — オーストラリアが TeamCity サーバーへの活発な攻撃を警告、未認証 RCE が KEV 入り
+
+- **Velocity:** ▮▮ rising
+- **Source:** ASD/ACSC + Rapid7 · CVSS 9.8 · ~today（8 月 25 日）
+- **Tags:** `cve` `teamcity` `rce` `supply-chain` `ci-cd`
+
+オーストラリアの **ASD/ACSC** は **8 月 25 日**、**TeamCity** サーバーが活発な攻撃を受けていると警告した。これは JetBrains TeamCity On-Premises の未認証 RCE である **CVE-2026-63077**（CWE-502、**CVSS 9.8**）の最新の展開で、CISA は **8 月 5 日**に **KEV** へ追加済み。Rapid7 の **Stephen Fewer** は根本原因を**緩すぎる XStream 許可リスト**と特定——TeamCity が自前のプロトコルクラスを追加する際に XStream のデフォルト許可を削除しなかったため、未認証のエージェントエンドポイント（`/app/agents/v1`）への細工した XML がガジェットチェーンを経由して webroot に `.jspws` ファイルを書き込み、実行する。**2025.11.7 / 2026.1.3** で修正。
+
+**Why it matters:** ビルドサーバーはデプロイ資格情報・署名鍵・クラウドトークンを保持するため、ここでの未認証 RCE はソフトウェアサプライチェーンの要衝。7 月に開示され 8 月に悪用されたタイムラインは、パッチから武器化までの猶予が縮んでいることを示す。
+
+[`🔗 Rapid7 analysis`](https://www.rapid7.com/blog/post/etr-cve-2026-63077-critical-unauthenticated-remote-code-execution-in-jetbrains-teamcity/) · [`🔗 iTnews — ASD 警告`](https://www.itnews.com.au/news/asd-warns-australian-teamcity-servers-under-attack-628400)
+
+---
+
+## 27. Walgit — Shopify CEO による、オブジェクトストアの前に置く単一バイナリの Git サーバー
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 106 pts · ~1d ago
+- **Tags:** `git` `rust` `object-storage` `developer-tools` `server`
+
+**Walgit**（`tobi/walgit`、MIT、Rust）は、Shopify CEO **Tobias Lütke**（「tobi」）による Git サーバーで、**S3/GCS オブジェクトストアの前に置く単一バイナリ**——データベースもリーダーもローカル状態も持たない。各リポジトリはバケット内の**先行書き込みログ（WAL）**で、push はイミュータブルなオブジェクトとして書き込まれ、原子的な**比較交換（CAS）**によるマニフェスト書き換えで初めて可視化されるため、複数インスタンスが 1 つのバケットを同時に扱える。smart HTTP（v0/v2）、**bundle-uri** の事前パッケージ済みクローンバンドル、Git LFS、React Web UI、OIDC 認証、リポジトリごとの push ルールを備え、Cursor が Git-at-Scale 記事で述べた「Continuity」アーキテクチャを実装する。
+
+**Why it matters:** 有力なエンジニアリングリーダーがゼロから作ったステートレスな Git サーバーが、Cursor Origin と同じ週にオープンソース化された——Cloudflare R2 や MinIO の背後で誰でも動かせる「オブジェクトストア上の Git」の具体的な参照実装。
+
+[`🔗 tobi/walgit`](https://github.com/tobi/walgit) · [`🔗 OpenSourceForU`](https://www.opensourceforu.com/2026/08/shopify-ceo-builds-open-source-git-server-walgit-over-a-weekend/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-25T12:03:00Z |
-| Items | 19 |
-| Sources tracked | 28 (NVD, Debian, ipshipyard.com, Runtime Wire, xusheng.dev, byteiota, GitHub, Simon Willison, Rapid7, Zscaler, Chips and Cheese, HotHardware, seL4 discourse, Proofcraft, arXiv, Hugging Face, envharness.com, TechCrunch, Alabama AG, Poolside, VentureBeat, Mallory, TWCERT/CC, IONIX, Alibaba Cloud, ComfyUI, Hacker News, npm) |
+| Generated | 2026-08-25T20:03:00Z |
+| Items | 27 |
+| Sources tracked | 37 (NVD, Debian, ipshipyard.com, Runtime Wire, xusheng.dev, byteiota, GitHub, Simon Willison, Rapid7, Zscaler, Chips and Cheese, HotHardware, seL4 discourse, Proofcraft, arXiv, Hugging Face, envharness.com, TechCrunch, Alabama AG, Poolside, VentureBeat, Mallory, TWCERT/CC, IONIX, Alibaba Cloud, ComfyUI, Hacker News, npm, Security Affairs, SecurityOnline, iTnews, The Block Beats, JDON, laude.org, OpenSourceForU, Notebookcheck, GSMArena) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

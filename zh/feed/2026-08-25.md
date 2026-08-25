@@ -1,8 +1,8 @@
 ---
 date: 2026-08-25
-updated: 2026-08-25T12:03:00Z
+updated: 2026-08-25T20:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -281,13 +281,125 @@ Farid Zakaria 的 **SELF**（Structured Executable & Linkable Format）让一个
 
 ---
 
+## 20. CVE-2026-21962——Oracle WebLogic Proxy Plug-in 的 CVSS 10.0 未认证漏洞进入 CISA KEV（8 月 24 日）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV / Oracle CPU · CVSS 10.0 · ~1d ago（8 月 24 日）
+- **Tags:** `cve` `oracle` `weblogic` `rce` `actively-exploited`
+
+**CVE-2026-21962**（CWE-284，**CVSS 10.0**——最高级别）是 **Oracle HTTP Server** 与 **Oracle WebLogic Server Proxy Plug-in**（将 WebLogic 置于 Apache/IIS 之后的模块）中的未认证越权访问漏洞。向量 `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N` 无需凭据或交互，且其*作用域变更*使攻击可越过受影响组件向外蔓延——公开报道将其描述为一种 **URI 规范化路径遍历**，可让攻击者读取、创建或篡改关键数据。Oracle 已在 **2026 年 1 月 CPU** 中修复，但在 **8 月 24 日** CISA 以“确认在野利用”为由将其列入 **已知被利用漏洞（KEV）** 目录，联邦机构修复期限为 **8 月 27 日**。
+
+**Why it matters:** 边界代理插件中出现最高严重度、已列入 KEV、且正被在野利用的漏洞，是“假定已被入侵、立即修补”的信号——而从 1 月修补到 8 月才进 KEV 的时间差，意味着大量暴露在外的部署仍在运行易受攻击的版本。
+
+[`🔗 NVD CVE-2026-21962`](https://nvd.nist.gov/vuln/detail/CVE-2026-21962) · [`🔗 Security Affairs`](https://securityaffairs.com/197801/security/u-s-cisa-adds-maximum-severity-oracle-flaw-to-its-known-exploited-vulnerabilities-catalog.html)
+
+---
+
+## 21. 小米玄戒 O3——10 核全大核 3nm SoC，单线程追平苹果、多线程大幅反超
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 900 pts · ~1d ago（8 月 24 日）
+- **Tags:** `hardware` `soc` `xiaomi` `semiconductor` `mobile`
+
+小米于 **8 月 24 日**发布自研旗舰手机 SoC **玄戒 O3**（Xring O3）——采用 **台积电 3nm（N3P）** 工艺、**240 亿晶体管**，配备 **10 核“全大核”** CPU（2 颗 4.35 GHz 的 C1-Ultra、4 颗 3.68 GHz 的 C1-Premium、4 颗 3.15 GHz 的 C1-Pro）以及 **44 MB 片上缓存**。Geekbench 6.5 中单核得分 **3,945**（≈苹果 A19 Pro 的 4,019）、多核 **15,221**（对比约 11,054），并成为**首款安兔兔突破 500 万分的手机 SoC**（5,228,014）。它将于 9 月搭载于 **小米 MIX Fold 5 / 18 Fold** 与 Pad 9 Pro Max；Daniel Lemire 认为其宽核设计标志着行业正从拉高主频转向堆缓存。
+
+**Why it matters:** 一款可信的第三方自研旗舰 SoC 大致追平苹果核心——多核甚至反超——是实打实的“国产芯片”里程碑，不过其数字为厂商/实验室选取，且多核领先部分源于 10 核对苹果的 6 核。
+
+[`🔗 Notebookcheck — XRing O3`](https://www.notebookcheck.net/Xiaomi-launches-XRing-O3-claims-it-is-the-fastest-smartphone-SoC-with-an-AnTuTu-score-of-over-5-million.1376668.0.html) · [`🔗 GSMArena — Xiaomi 18 Fold`](https://www.gsmarena.com/xiaomi_18_fold_is_officially_coming_in_september_with_the_monstrous_xring_o3_chipset-news-74306.php)
+
+---
+
+## 22. ponytail——一个 11 万星规则集，让你的智能体“像房间里最懒的资深工程师那样思考”
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · ~110k stars · ~1d ago
+- **Tags:** `agents` `coding-agent` `rules` `yagni` `open-source`
+
+**DietrichGebert/ponytail**（MIT，约 11 万星）是一个插件/规则集，为编码智能体注入一套常驻决策阶梯——跳过不需要的（YAGNI）、复用现有代码、优先标准库/原生 API、能用一行就别写十行、只写“能跑起来的最小实现”——同时明确保留校验、安全与可访问性。它提供 **20 多种智能体**的适配器（Claude Code、Codex、Copilot CLI、Cursor、Windsurf、Cline、OpenCode、Devin、Grok 等），以及 `/ponytail-review` 和 `/ponytail-audit` 斜杠命令。其自测基准（在 FastAPI+React 模板上跑真实 Claude Code 会话）宣称**代码量减少约 54%、成本降低约 20%、速度提升约 27%、100% 安全**——而 README 也坦率地修正了此前“80–94%”的单次数字，因为 issue #126 指出基线里混入了对话性文字。
+
+**Why it matters:** token 预算自律正在变成一种可产品化的品类，而 ponytail 对自己头条数字的诚实自我修正，正是本 feed 所推崇的“来源诚实”。
+
+[`🔗 DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail) · [`🔗 README`](https://github.com/DietrichGebert/ponytail#readme)
+
+---
+
+## 23. CVE-2026-74480——九年前的 Linux 网桥 fast-leave 释放后使用漏洞公开 root 提权 PoC（8 月 25 日）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Nebula Security PoC · CVSS 9.8 (NVD) / 7.0 (Red Hat) · ~today（8 月 25 日）
+- **Tags:** `cve` `linux` `kernel` `privilege-escalation` `use-after-free`
+
+**CVE-2026-74480**（CWE-416）是 Linux 内核网络桥接模块（`net/bridge`）中、位于 `br_multicast_leave_group()` **组播 fast-leave 路径**上的**释放后使用（UAF）**漏洞。当启用组播转单播时，循环会用 `br_multicast_del_pg()` 删除一个端口组条目，却继续让 `pp` 沿着已被释放的条目前进，使 `mp->ports` 留下悬空指针。**Nebula Security** 于 **8 月 25 日**发布了可用的 **PoC 与演示视频**（RHEL 10.2 上的 root 提权）；该缺陷可追溯到 **2017 年 1 月**，因此大量 LTS 内核均受影响，而上游修复（在 `br_multicast_del_pg()` 后加 `break`）已于 **2026 年 7 月**合入。**注意评分分歧：** NVD 评为 **9.8**，Red Hat 评为 **7.0**（本地、高复杂度、低权限）。
+
+**Why it matters:** 一个近十年前的内核缺陷走到公开 root 提权 PoC，再次提醒“老代码”不等于“安全代码”——而 NVD 与 Red Hat 之间 2.8 分的差距，正是为何记录评分者的教科书案例。
+
+[`🔗 NebuSec PoC (RHEL 10.2)`](https://github.com/NebuSec/CyberMeowfia/tree/main/security-research/Linux-CVE-2026-74480-RHEL-10.2) · [`🔗 SecurityOnline`](https://securityonline.info/linux-cve-2026-74480/)
+
+---
+
+## 24. Apodex 1.1——陈天桥发布 35B 开源“mini”模型与异步 FrontierAgent 框架
+
+- **Velocity:** ▮▮ rising
+- **Source:** The Block Beats / JDON · ~today（8 月 25 日）
+- **Tags:** `ai-model` `open-weights` `finance` `agents` `frontieragent`
+
+陈天桥创办的 AI 公司 **Apodex** 于 8 月 25 日发布 **Apodex 1.1**，首次提供**完整的本地工具链**：**FrontierAgent** 框架加上 **Apodex 1.1 mini**——一个约 35B 的开源权重模型（完整版仍闭源，仅限在线工作台）。核心变化是**异步协作**：哪个智能体分支先完成就先返回，主智能体可在不等待兄弟分支的情况下根据新信息动态调整后续任务。在 **FrontierFinance** 金融智能体评测中，它取得 **50.2** 分（另有报道称 54.3 分）——位列第一，对比 APEX-Agents 的 27.7 分；Agent-Team 模式比 ReAct 模式高出 7–8 分。
+
+**Why it matters:** “开源 mini 模型、旗舰保持闭源”已成商业上的标准打法，而异步多智能体设计是一个具体信号：智能体运行时正从“按 token 顺序”转向“按墙钟时间”优化。
+
+[`🔗 The Block Beats`](https://en.theblockbeats.news/flash/363359) · [`🔗 JDON`](https://www.jdon.com/94286-apodex-1-1-scaling-agentic-intelligence-for-compl.html)
+
+---
+
+## 25. Headlong——一个不足 1 万行 Bash 的微框架，让智能体在无人提问时持续思考
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 79 pts · ~today（8 月 25 日）
+- **Tags:** `agents` `persistent-agents` `harness` `bash` `open-source`
+
+**Headlong**（Laude Institute × MIT，Apache-2.0）是一个面向**持久化智能体**的“微框架”——让智能体即便无人交互也能在自驱循环中持续思考与行动。核心是**不足 1 万行的 Bash**：一个 *Thinker* 循环反复调用 `shellm`（一个基于 Bash 的递归语言模型），直到设置 `FINAL` 标志为止；来自 Slack/Telegram/手机的消息全部作为观测落入**同一条共享思维流**（没有按用户区分的会话）。两个原语尤为突出：**分层上下文压缩**（近期记录原样保留、更早的逐步摘要）与**支持分叉/合并的 DAG 形 JSONL 轨迹**。其共享智能体“Audel”曾在无人指挥的情况下，用 48 分钟自行修复一个 bug（commit `80cbb1e`）。
+
+**Why it matters:** 持久化智能体是“按需智能体”之后的下一个前沿——而 Headlong 自己的失败日志（看门狗冲突、自我终止、“守不住秘密”）正是放任智能体无人值守运行所要付出的真实代价。
+
+[`🔗 laude.org — Headlong`](https://www.laude.org/updates/headlong-a-microharness-for-persistent-agents) · [`🔗 Runtime Wire`](https://runtimewire.com/article/laude-headlong-persistent-agent-microharness)
+
+---
+
+## 26. CVE-2026-63077——澳大利亚警告 TeamCity 服务器正遭活跃攻击，未认证 RCE 进入 KEV
+
+- **Velocity:** ▮▮ rising
+- **Source:** ASD/ACSC + Rapid7 · CVSS 9.8 · ~today（8 月 25 日）
+- **Tags:** `cve` `teamcity` `rce` `supply-chain` `ci-cd`
+
+澳大利亚 **ASD/ACSC** 于 **8 月 25 日**警告 **TeamCity** 服务器正遭活跃攻击——这是 **CVE-2026-63077**（CWE-502，**CVSS 9.8**）的最新升级；该漏洞是 JetBrains TeamCity On-Premises 中的未认证 RCE，CISA 已于 **8 月 5 日**将其列入 **KEV**。Rapid7 的 **Stephen Fewer** 将根因追溯到**过于宽松的 XStream 白名单**：TeamCity 在加入自己的协议类时并未移除 XStream 的默认权限，攻击者向未认证的 agent 端点（`/app/agents/v1`）发送精心构造的 XML，链式触发 gadget 在 webroot 写入 `.jspws` 文件并执行。已在 **2025.11.7 / 2026.1.3** 修复。
+
+**Why it matters:** 构建服务器持有部署凭据、签名密钥与云 token，此处的未认证 RCE 是软件供应链的关键咽喉——而“7 月披露、8 月被利用”的时间线表明，从补丁到武器化的窗口正在缩短。
+
+[`🔗 Rapid7 analysis`](https://www.rapid7.com/blog/post/etr-cve-2026-63077-critical-unauthenticated-remote-code-execution-in-jetbrains-teamcity/) · [`🔗 iTnews — ASD 警告`](https://www.itnews.com.au/news/asd-warns-australian-teamcity-servers-under-attack-628400)
+
+---
+
+## 27. Walgit——Shopify CEO 打造的单一二进制 Git 服务器，直接架在对象存储之前
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 106 pts · ~1d ago
+- **Tags:** `git` `rust` `object-storage` `developer-tools` `server`
+
+**Walgit**（`tobi/walgit`，MIT，Rust）是 Shopify CEO **Tobias Lütke**（“tobi”）打造的 Git 服务器，是**架在 S3/GCS 对象存储之前的单一二进制**——无数据库、无主节点、无本地状态。每个仓库在桶中是一条**预写日志（WAL）**；push 是不可变对象，仅在一次原子的**比较并交换（CAS）**清单重写后才对外可见，因此多个实例可同时服务同一个桶。它支持 smart HTTP（v0/v2）、**bundle-uri** 预打包克隆包、Git LFS、React Web UI、OIDC 认证与按仓库的 push 规则——并实现了 Cursor 在其 Git-at-Scale 文章中所描述的“Continuity”架构。
+
+**Why it matters:** 一位重量级工程领袖从零打造的、无状态 Git 服务器，恰好与 Cursor Origin 同周开源——是“对象存储上的 Git”的可直接运行参考实现，任何人都能跑在 Cloudflare R2 或 MinIO 之后。
+
+[`🔗 tobi/walgit`](https://github.com/tobi/walgit) · [`🔗 OpenSourceForU`](https://www.opensourceforu.com/2026/08/shopify-ceo-builds-open-source-git-server-walgit-over-a-weekend/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-25T12:03:00Z |
-| Items | 19 |
-| Sources tracked | 28 (NVD, Debian, ipshipyard.com, Runtime Wire, xusheng.dev, byteiota, GitHub, Simon Willison, Rapid7, Zscaler, Chips and Cheese, HotHardware, seL4 discourse, Proofcraft, arXiv, Hugging Face, envharness.com, TechCrunch, Alabama AG, Poolside, VentureBeat, Mallory, TWCERT/CC, IONIX, Alibaba Cloud, ComfyUI, Hacker News, npm) |
+| Generated | 2026-08-25T20:03:00Z |
+| Items | 27 |
+| Sources tracked | 37 (NVD, Debian, ipshipyard.com, Runtime Wire, xusheng.dev, byteiota, GitHub, Simon Willison, Rapid7, Zscaler, Chips and Cheese, HotHardware, seL4 discourse, Proofcraft, arXiv, Hugging Face, envharness.com, TechCrunch, Alabama AG, Poolside, VentureBeat, Mallory, TWCERT/CC, IONIX, Alibaba Cloud, ComfyUI, Hacker News, npm, Security Affairs, SecurityOnline, iTnews, The Block Beats, JDON, laude.org, OpenSourceForU, Notebookcheck, GSMArena) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
