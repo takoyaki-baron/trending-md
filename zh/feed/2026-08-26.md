@@ -1,8 +1,8 @@
 ---
 date: 2026-08-26
-updated: 2026-08-26T04:03:00Z
+updated: 2026-08-26T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 44
 license: CC-BY-4.0
 ---
 
@@ -281,13 +281,153 @@ NVIDIA 在 Hot Chips 2026 前后公布了 **Vera Rubin NVL72** 的**首批片上
 
 ---
 
+## 20. OpenAI 的 Jalapeño ASIC——首批基准声称推理能效较 Blackwell 高 1.5–1.9 倍
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenAI blog / TechCrunch · ~1d ago（8 月 25 日）
+- **Tags:** `openai` `hardware` `silicon` `inference` `asic`
+
+在 Hot Chips 2026 上，OpenAI 公布了 **Jalapeño** 的首批实测结果——其首款自研推理 ASIC（与博通合作开发，台积电 N3P 3nm 工艺，700W TDP / 实测稳定约 550W，6 组 HBM4 = 216GB @ 15.4 TB/s）。在 SemiAnalysis 的开源 **InferenceX** 基准上，跨 GPT-OSS 120B、DeepSeek R1 670B、Kimi K2.5 1T 三个模型，它声称较 Nvidia GB200/GB300 **每瓦 AI 工作量高 1.5–1.9 倍**、端到端延迟**低 1.7–3.6 倍**、交互式工作负载性能**高 2.1–4.1 倍**——基于权重固定式 MXFP4 脉动阵列与自研语言（Gloun）。从设计到流片仅约 9 个月，OpenAI 自己的模型参与编写与优化内核（AI 生成的 MoE 模块比人工编写快 1.5–1.8 倍）。2026 年底小批量部署，2027 年放量；仅供内部使用。
+
+**Why it matters:** 这是 AI 实验室推出的第一款可信的非 NVIDIA 推理芯片，围绕"每焦耳 token"而非峰值算力设计——但对比对象是 Blackwell（而非 Vera Rubin），且数据是 OpenAI 自选基准上的自测数字，独立验证仍待完成。
+
+[`🔗 OpenAI — the full stack behind abundant intelligence`](https://openai.com/index/the-full-stack-behind-abundant-intelligence/) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/25/openais-jalapeno-chip-is-built-for-fast-inference-at-scale-benchmarks-show/) · [`🔗 iThome (zh)`](https://m.ithome.com/html/994306.htm)
+
+---
+
+## 21. Perplexity 发布 Portable Computer——为 NVIDIA DGX Spark 优化的全本地智能体栈
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VentureBeat / SiliconANGLE · ~1d ago（8 月 25 日）
+- **Tags:** `perplexity` `nvidia` `local-ai` `agents` `hardware`
+
+**Perplexity** 发布 **Portable Computer**——其 Computer 智能体平台的完全端侧版本，与 NVIDIA 密切合作打造，首批运行于 **DGX Spark**（128 GB）及配备 ≥24 GB 显存 RTX GPU 的 Linux 机器。整个栈——模型（Qwen 3.8 27B 或 Perplexity 自训练的 **PPLX 27B**）、智能体 harness、工具路由、连接器，以及一个在缺失时让 harness 自我禁用的 OS 级沙箱——全部本地运行，本地完成的工作**不消耗任何 token 额度**；升级到 15+ 云端前沿模型需明确获得用户批准，且只返回纯文本建议、无法访问本地文件。在 Perplexity 的 Local Knowledge Work Bench 上得分 **82.6%**（对比 Pi 77.6%、Hermes 74.0%），使用 PPLX 27B 时 **85.4%**，在 BrowseComp 上比 Pi 少用约 70% token。
+
+**Why it matters:** "本地优先、云端可选"正是数据控制与 token 经济下新兴的企业模式——而 Perplexity 主张本地智能体需要*协同设计*的 harness 而非通用型，重新定义了小模型智能体之争。
+
+[`🔗 VentureBeat`](https://venturebeat.com/ai/perplexity-partners-with-nvidia-to-launch-portable-computer-a-fully-local-ai-agent-with-zero-token-costs) · [`🔗 SiliconANGLE`](https://siliconangle.com/2026/08/25/perplexity-ai-launches-portable-computer-on-device-ai-agent/) · [`🔗 至顶网 (zh)`](https://www.zhiding.cn/edge-ai/2026/0826/3197483.shtml)
+
+---
+
+## 22. miniOrange SAML SSO——两个认证绕过 CVE 正在被在野利用以接管 WordPress 管理员
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Hacker News / SecurityWeek · ~2d ago（8 月 24 日）
+- **Tags:** `cve` `wordpress` `saml` `auth-bypass` `actively-exploited`
+
+Xecurify **miniOrange SAML 2.0 SP Single Sign-On** WordPress 插件中的 **CVE-2026-61979**（CVSS 8.1）与 **CVE-2026-15981**（CVSS 9.8）允许未认证攻击者以**任意用户（含管理员）**身份登录。61979 是签名算法混淆——插件采用 SAML 响应中声明的算法，把 IdP 的 RSA 公钥当作 HMAC 共享密钥；15981 是真值性 bug——`mo_saml_validate_signature()` 把 OpenSSL 的 `-1`（处理错误）当作有效签名。DigitalOcean 安全团队于 8 月 16 日发现异常管理员会话；Patchstack 分析了攻击链，攻击者正以**公开 PoC 进行机会性扫描**，针对约 1 万免费 + 3 万付费安装。补丁已存在，但付费版本未收到明确公告，且各版本的修复版本号不同。
+
+**Why it matters:** SAML 签名校验逻辑不断制造账户接管链，而"静默补丁"加"按版本差异"让这对正被在野利用的漏洞格外难以治理——对任何暴露的 WordPress SSO，都应默认假设已被攻陷。
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/08/attackers-target-miniorange-saml-flaws.html) · [`🔗 SecurityWeek`](https://www.securityweek.com/wordpress-websites-targeted-via-miniorange-plugin-vulnerabilities/)
+
+---
+
+## 23. llama.cpp v0.3.0——原生支持 dots3-note 多模态，核心升级 ggml 0.22.0
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · release v0.3.0 · ~1d ago（8 月 25 日）
+- **Tags:** `llm` `inference` `llama.cpp` `multimodal` `open-source`
+
+**llama.cpp v0.3.0**（ggml-org）发布：`mtmd` 多模态库新增 **dots3-note 视觉与音频**支持（新 DSA-ISWA KV 缓存类型）、通过 ffmpeg 解码 WebP、Pillow 精确重采样算法，以及修复了 `moov` 原子位于文件末尾的视频；**GLM-4.5-Air 获得 MTP**，DeepSeek 4 新增 tensor-split 模式，核心升级到 **ggml v0.22.0**（meta 后端张量拆分、逐算子 Metal 内核并行编译、修复 `ggml_clamp` 为真正的非原地操作）。
+
+**Why it matters:** llama.cpp 是所有本地推理工具的事实参考运行时——许久以来的首个 0.x 大版本，把多模态与视频处理整合进几乎所有本地 AI 工具都依赖的那个二进制。
+
+[`🔗 llama.cpp v0.3.0 release`](https://github.com/ggml-org/llama.cpp/releases/tag/v0.3.0) · [`🔗 lemmus.org`](https://lemmus.org/post/24898197)
+
+---
+
+## 24. ReWorld——能记住自己带你看过哪里的交互式世界模型（arXiv 2608.23565）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.23565 · ~1d ago（8 月 25 日）
+- **Tags:** `research` `world-model` `video-generation` `memory` `arxiv`
+
+**ReWorld**（港科大广州 + 阿里，arXiv 2608.23565）在交互式视频扩散世界模型中把*控制*（短视界）与*记忆*（无界）分离：多数注意力头保持局部，少数"全局"头跨历史注意力，随机块丢弃让稀疏历史分布内化，推理记忆由**姿态索引地标库**约束——模型检索离当前相机姿态最近的地标。它以 **704×1280** 流式生成交互视频（4 步蒸馏、LoRA rank-128），在动作跟随、长程回忆与视频质量上胜过 6 个近期交互式世界模型——一次 64 秒往返 rollout 仍能从固定的 12 块缓存重新生成起点画面。推理代码已开源。
+
+**Why it matters:** 长程记忆是交互式世界模型缺失的能力，而姿态索引地标库是廉价而具体的机制——"记得自己给你看过什么"将成为世界模型基准的下一个维度。
+
+[`🔗 arXiv 2608.23565`](https://arxiv.org/abs/2608.23565) · [`🔗 GitHub — zhifeichen097/ReWorld`](https://github.com/zhifeichen097/ReWorld)
+
+---
+
+## 25. CVE-2026-80138——ClipBucket V5 安装器命令注入为未认证 RCE（CVSS 9.2 / 9.8）
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck / Rapid7 · CVSS 9.2 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `rce` `clipbucket` `installer` `command-injection`
+
+**CVE-2026-80138**（CWE-78；CVSS 4.0 **9.2**、CVSS 3.1 **9.8**）——ClipBucket V5 的 Web 安装器（`cb_install`）未经验证/转义就把 `php_cli_filepath` 参数传给 shell 执行，因此**未认证**攻击者可 POST 精心构造的值，以 Web 服务器用户身份执行任意系统命令。影响 5.5.1 至 5.5.3-#153；已在 **5.5.3-#154+** 修复。由 VulnCheck 分配（致谢 Adam Nurudini），被描述为极易利用——只要安装器可触达，即等同于主机被完全攻陷。
+
+**Why it matters:** 面向公网的视频托管 CMS 遗留安装器就是常驻 RCE——"安装完成后删除 `cb_install`"是最古老的加固建议，这个 CVE 又一次证明安装页才是最薄弱的环节。
+
+[`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/clipbucket-v5-5.5.1-through-5.5.3-153-os-command-injection-via-installer-php-cli-filepath-parameter) · [`🔗 Rapid7`](https://www.rapid7.com/db/vulnerabilities/cve-2026-80138/) · [`🔗 IONIX`](https://www.ionix.io/threat-center/cve-2026-80138/)
+
+---
+
+## 26. C2PA 相机认证"与现实接触即崩塌"——一台被 root 的 Pixel 就能铸出有效的签名照片
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 104 pts · ~1d ago（8 月 25 日）
+- **Tags:** `c2pa` `provenance` `security` `android` `photography`
+
+David Buchanan 的文章论证 Google **Pixel Camera C2PA Assurance Level 2** 认证并不可靠：信任链建立在 Android Key Attestation 与 Play Integrity 之上，但提权漏洞——他引用 **CVE-2026-43499**，一个在完全更新 Pixel 上可一键 root 的漏洞，且提前 90 多天报告——让任何人**无需硬件攻击即可制造 C2PA 有效的签名伪造**，而"对着屏幕翻拍"的模拟攻击则零技术即可击破。HN 讨论（104 分、65 条评论）争论加密溯源是否真的能确立照片真实性——或者签名反而让*未验证*的内容显得更可疑。
+
+**Why it matters:** 溯源正成为对抗深度伪造的默认答案，而当被 root 的设备能铸出有效签名时，"C2PA 签名"≠"真实"——这是所有押注该标准平台与政策的基本信任模型警告。
+
+[`🔗 da.vidbuchanan.co.uk — essay`](https://www.da.vidbuchanan.co.uk/blog/android-c2pa.html) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49439499)
+
+---
+
+## 27. Python 的 str.lower() 与 IDNA 2003 分道扬镳——CVE-2026-17084，一个 Unicode 版本锚定 bug
+
+- **Velocity:** ▮ steady
+- **Source:** Seth Larson blog · HN 46 pts · ~1d ago
+- **Tags:** `python` `idna` `unicode` `cve` `security`
+
+Seth Larson（PSF 安全驻场开发者）详解 **CVE-2026-17084**：`stringprep`/IDNA 2003 编解码器（`str.encode('idna')`）在 RFC 3454 大小写折叠中使用了 `str.lower()`，但 `str.lower()` 遵循解释器的 Unicode 版本（17.0）而非规范钉死的 **Unicode 3.2.0**。同一可见输入在不同 Unicode 版本下会编码成不同的 Punycode（如 `"ᎠᎠ"` → `xn--58da` 与 `xn--kz9aa`）——一个可用于同形字/钓鱼、白名单绕过或 SSRF 式混淆的解析器差分。修复仅在 StringPrep 内把大小写折叠锚定到 Unicode 3.2.0（CPython PR #155293，回移植到 3.14/3.15）；NVD 归类为 **CWE-436** 解释冲突。
+
+**Why it matters:** "版本锚定"——规范钉住旧 Unicode 版本而代码跟随当前版本——是一类安静的安全 bug，建议迁移出 IDNA 2003 编解码器、改用 IDNA 2008 的 `idna` 包。
+
+[`🔗 sethmlarson.dev`](https://sethmlarson.dev/when-str-lower-is-a-security-vulnerability) · [`🔗 CPython PR #155293`](https://github.com/python/cpython/pull/155293) · [`🔗 HN`](https://news.ycombinator.com/item?id=49440410)
+
+---
+
+## 28. ERPO——阿里把 RL 正则化从响应侧搬到查询侧（arXiv 2608.23311）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.23311 · ~1d ago
+- **Tags:** `research` `rl` `rhlf` `optimization` `alibaba`
+
+**ERPO**（arXiv 2608.23311，被 EMNLP 2026 主会接收）用**查询 KL（Query-KL）**惩罚——针对当前策略所诱导的查询分布——替代 LLM 策略优化中的动作侧 **Policy-KL** 正则器：由于 QKL 梯度仅经查询似然流动，不会对响应分布施加直接压力，因此探索得以保留。它不依赖特定估计器，无需额外前向即可接入 GRPO/PPO/REINFORCE。在 6 个数学基准（Qwen2.5-Math-7B，240 步）上得分 **0.336 vs 0.274**（GRPO 基线）；在 960+ 步训练下 GRPO 的 KL 爆炸、约 480 步后准确率崩溃，而 ERPO 保持稳定。代码已开源（AlibabaResearch/ERPO）。
+
+**Why it matters:** 稳定–探索困境是 RLHF 的核心瓶颈——用约束*查询*漂移取代约束*响应*漂移，是一个廉价、通用、能显著稳定长程训练的改动。
+
+[`🔗 arXiv 2608.23311`](https://arxiv.org/abs/2608.23311) · [`🔗 GitHub — AlibabaResearch/ERPO`](https://github.com/AlibabaResearch/ERPO)
+
+---
+
+## 29. CVE-2026-79992——Emacs TRAMP 经构造文件名触发 shell 注入（CVSS 7.8）
+
+- **Velocity:** ▮ steady
+- **Source:** Red Hat / NVD · CVSS 7.8 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `emacs` `tramp` `command-injection` `local`
+
+Red Hat 披露 **CVE-2026-79992**（CWE-78，CVSS 7.8）：Emacs **TRAMP** 在把登录参数交给本地 shell 前未做净化拼接，因此本地攻击者诱使你打开**精心构造的文件名**（经由 "user" 字段）即可实现 shell 命令注入与任意代码执行。影响 RHEL 的 `emacs` 包（RHEL 9/10 标记为受影响）；支持渠道内暂无修复——缓解手段是避免处理不可信文件名。
+
+**Why it matters:** 编辑器的远程文件层成了注入面——提醒我们，"本地"工具若为处理远程路径而调用 shell，也需要与网络服务同等的输入净化纪律，而不可信文件名就是新的不可信 HTML。
+
+[`🔗 Red Hat CVE`](https://access.redhat.com/security/cve/cve-2026-79992) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-79992)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-26T04:03:00Z |
-| Items | 19 |
-| Sources tracked | 29 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至顶网, arXiv, AITNT, 证券日报, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com) |
+| Generated | 2026-08-26T12:03:00Z |
+| Items | 29 |
+| Sources tracked | 44 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至顶网, arXiv, AITNT, 证券日报, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com, openai.com, TechCrunch, VentureBeat, SiliconANGLE, The Hacker News, SecurityWeek, lemmus.org, VulnCheck, Rapid7, IONIX, da.vidbuchanan.co.uk, HN, sethmlarson.dev, Red Hat, NVD) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

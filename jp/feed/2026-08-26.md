@@ -1,8 +1,8 @@
 ---
 date: 2026-08-26
-updated: 2026-08-26T04:03:00Z
+updated: 2026-08-26T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 44
 license: CC-BY-4.0
 ---
 
@@ -281,13 +281,153 @@ MongoDB.local Build Fest で発表された **Atlas Managed MCP Server** は、�
 
 ---
 
+## 20. OpenAI の Jalapeño ASIC — 初のベンチマークで Blackwell 比 1.5–1.9 倍の推論効率を主張
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenAI blog / TechCrunch · ~1d ago（8 月 25 日）
+- **Tags:** `openai` `hardware` `silicon` `inference` `asic`
+
+Hot Chips 2026 で、OpenAI は自社初のカスタム推論 ASIC **Jalapeño**（Broadcom と共同開発、TSMC N3P 3nm、700W TDP／実測約 550W 持続、HBM4 6 スタック = 216GB @ 15.4TB/s）の初の実測結果を公表した。SemiAnalysis のオープンな **InferenceX** ベンチマークで GPT-OSS 120B・DeepSeek R1 670B・Kimi K2.5 1T を比較し、Nvidia GB200/GB300 に対し**1ワットあたりの AI ワークロードが 1.5–1.9 倍**、エンドツーエンド遅延は**1.7–3.6 倍低く**、対話型ワークロードでは**2.1–4.1 倍高速**と主張。ウェイトステーショナリーの MXFP4 シストリックアレイと独自言語（Gloun）を採用。設計からテープアウトまで約 9 か月で、OpenAI 自身のモデルがカーネル設計・最適化を支援した（AI 生成の MoE ブロックは人間が書いたものより 1.5–1.8 倍高速）。2026 年末に小規模展開、2027 年に拡大。社内利用のみ。
+
+**Why it matters:** AI ラボ発の初の有力な非 Nvidia 推論シリコンであり、ピーク FLOPs ではなく 1 ジュールあたりのトークンを軸に設計されている — ただし比較対象は Blackwell（Vera Rubin ではない）で、数値は OpenAI 自身が選んだベンチマーク上の自社データ。独立検証はまだだ。
+
+[`🔗 OpenAI — the full stack behind abundant intelligence`](https://openai.com/index/the-full-stack-behind-abundant-intelligence/) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/25/openais-jalapeno-chip-is-built-for-fast-inference-at-scale-benchmarks-show/) · [`🔗 iThome (zh)`](https://m.ithome.com/html/994306.htm)
+
+---
+
+## 21. Perplexity が Portable Computer 発表 — NVIDIA DGX Spark 向けに最適化した完全ローカルなエージェントスタック
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VentureBeat / SiliconANGLE · ~1d ago（8 月 25 日）
+- **Tags:** `perplexity` `nvidia` `local-ai` `agents` `hardware`
+
+**Perplexity** は、Computer エージェントプラットフォームの完全オンデバイス版 **Portable Computer** を発表。NVIDIA と密接に協力して開発され、**DGX Spark**（128GB）と RTX GPU ≥24GB を備えた Linux マシンで最初に動作する。モデル（Qwen 3.8 27B または Perplexity が自社ハーネス用に追加訓練した **PPLX 27B**）、エージェントハーネス、ツールルーター、コネクタ、そしてサンドボックスが無ければハーネス自身が無効化される OS レベルのサンドボックスまで、スタック全体がローカルで動作し、ローカルで完了した作業は**トークンクレジットを消費しない**。15+ のクラウドフロンティアモデルへのエスカレーションは明示的なユーザー承認が必須で、返ってくるのはテキストのみのアドバイスでローカルファイルにはアクセスできない。Perplexity の Local Knowledge Work Bench では **82.6%**（Pi 77.6%、Hermes 74.0% に対し）、PPLX 27B では **85.4%**、BrowseComp では Pi 比約 70% 少ないトークンで同等の精度。
+
+**Why it matters:** 「ローカルファースト＋オプトインのクラウド」は、データ統制とトークン経済が求めるエンタープライズの新パターン。ローカルエージェントには汎用ハーネスではなく*共同設計された*ハーネスが必要という Perplexity の主張は、小規模モデルのエージェント論争を塗り替える。
+
+[`🔗 VentureBeat`](https://venturebeat.com/ai/perplexity-partners-with-nvidia-to-launch-portable-computer-a-fully-local-ai-agent-with-zero-token-costs) · [`🔗 SiliconANGLE`](https://siliconangle.com/2026/08/25/perplexity-ai-launches-portable-computer-on-device-ai-agent/) · [`🔗 至頂網 (zh)`](https://www.zhiding.cn/edge-ai/2026/0826/3197483.shtml)
+
+---
+
+## 22. miniOrange SAML SSO — WordPress 管理者を奪う認証バイパス CVE 2件が実環境で悪用中
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Hacker News / SecurityWeek · ~2d ago（8 月 24 日）
+- **Tags:** `cve` `wordpress` `saml` `auth-bypass` `actively-exploited`
+
+Xecurify 製 **miniOrange SAML 2.0 SP Single Sign-On** WordPress プラグインの **CVE-2026-61979**（CVSS 8.1）と **CVE-2026-15981**（CVSS 9.8）により、未認証の攻撃者が**任意ユーザー（管理者含む）**としてログインできる。61979 は署名アルゴリズム混乱 — プラグインが SAML レスポンスで宣言されたアルゴリズムを尊重し、IdP の RSA 公開鍵を HMAC 共有秘密として扱う。15981 は真偽値バグ — `mo_saml_validate_signature()` が OpenSSL の `-1`（処理エラー）を有効な署名として扱う。DigitalOcean のセキュリティチームが 8 月 16 日に異常な管理者セッションを検知し、Patchstack が攻撃チェーンを分析。攻撃者は**公開 PoC を使った日和見スキャン**を約 1 万の無料 + 3 万の有料インストールに対して実行中。修正版は存在するが、有料版には明確な通知がなく、エディションごとに修正バージョンが異なる。
+
+**Why it matters:** SAML の署名検証ロジックはアカウント乗っ取りチェーンを量産し続けており、「サイレントパッチ」とエディション別バージョンが実環境悪用中のこのペアの修復を特に困難にしている。露出した WordPress SSO は侵害を前提にすべき典型的なケースだ。
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/08/attackers-target-miniorange-saml-flaws.html) · [`🔗 SecurityWeek`](https://www.securityweek.com/wordpress-websites-targeted-via-miniorange-plugin-vulnerabilities/)
+
+---
+
+## 23. llama.cpp v0.3.0 — dots3-note マルチモーダルをネイティブ対応、コアは ggml 0.22.0 へ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · release v0.3.0 · ~1d ago（8 月 25 日）
+- **Tags:** `llm` `inference` `llama.cpp` `multimodal` `open-source`
+
+**llama.cpp v0.3.0**（ggml-org）がリリース：`mtmd` マルチモーダルライブラリに **dots3-note の視覚・音声**対応（新 DSA-ISWA KV キャッシュ型）、ffmpeg 経由の WebP デコード、Pillow 準拠の正確なリサイズアルゴリズム、`moov` アトムがファイル末尾にある動画の修正を追加。**GLM-4.5-Air は MTP 対応**、DeepSeek 4 に tensor-split モード、コアは **ggml v0.22.0** へ（メタバックエンドのテンソル分割、並列コンパイルされる op 別 Metal カーネル、真の非インプレース `ggml_clamp`）。
+
+**Why it matters:** llama.cpp はローカル推論の事実上のリファレンスランタイム。久々の 0.x メジャーバンプであり、ローカル AI ツールが依存するあの 1 バイナリにマルチモーダルと動画処理を統合する。
+
+[`🔗 llama.cpp v0.3.0 release`](https://github.com/ggml-org/llama.cpp/releases/tag/v0.3.0) · [`🔗 lemmus.org`](https://lemmus.org/post/24898197)
+
+---
+
+## 24. ReWorld — 自分が見せた場所を覚えている対話型ワールドモデル（arXiv 2608.23565）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.23565 · ~1d ago（8 月 25 日）
+- **Tags:** `research` `world-model` `video-generation` `memory` `arxiv`
+
+**ReWorld**（HKUST-GZ + Alibaba、arXiv 2608.23565）は、対話型ビデオ拡散ワールドモデルで*制御*（短いホライズン）と*記憶*（無制限）を分離する。大半のアテンションヘッドは局所に留め、少数の「グローバル」ヘッドが履歴全体にアテンド。ランダムチャンクドロップで疎な履歴を分布内にし、推論メモリは**ポーズ索引ランドマークバンク**で有界化 — モデルは現在のカメラポーズに最も近いランドマークを検索する。**704×1280** の対話型ビデオをストリーミング生成（4 ステップ蒸留、LoRA rank-128）し、行動追従・長期リコール・画質で 6 つの最近の対話型ワールドモデルを上回る。64 秒の往復ロールアウトでも、固定 12 チャンクキャッシュから開始ビューを再生成できる。推論コードは GitHub で公開。
+
+**Why it matters:** 長期記憶は対話型ワールドモデルに欠けていた能力であり、ポーズ索引ランドマークバンクは安価で具体的な仕組み。「自分が見せた場所を覚えているか」がワールドモデルベンチマークの次の軸になるだろう。
+
+[`🔗 arXiv 2608.23565`](https://arxiv.org/abs/2608.23565) · [`🔗 GitHub — zhifeichen097/ReWorld`](https://github.com/zhifeichen097/ReWorld)
+
+---
+
+## 25. CVE-2026-80138 — ClipBucket V5 インストーラのコマンドインジェクションは未認証 RCE（CVSS 9.2 / 9.8）
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck / Rapid7 · CVSS 9.2 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `rce` `clipbucket` `installer` `command-injection`
+
+**CVE-2026-80138**（CWE-78；CVSS 4.0 **9.2**、CVSS 3.1 **9.8**）— ClipBucket V5 の Web インストーラ（`cb_install`）は、`php_cli_filepath` パラメータを検証・エスケープせずシェル実行に渡すため、**未認証**の攻撃者が細工した値を POST して Web サーバーユーザー権限で任意の OS コマンドを実行できる。影響範囲は 5.5.1 〜 5.5.3-#153。**5.5.3-#154+** で修正。VulnCheck が採番（Adam Nurudini 宛て謝辞）。インストーラに到達可能ならホスト完全侵害に直結する、と容易に悪用可能とされる。
+
+**Why it matters:** インターネットに面した動画ホスティング CMS に残ったインストーラは常設 RCE。「セットアップ後は `cb_install` を削除せよ」は最も古いハードニングの教訓だが、この CVE はセットアップページが最弱リンクであることを再び示した。
+
+[`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/clipbucket-v5-5.5.1-through-5.5.3-153-os-command-injection-via-installer-php-cli-filepath-parameter) · [`🔗 Rapid7`](https://www.rapid7.com/db/vulnerabilities/cve-2026-80138/) · [`🔗 IONIX`](https://www.ionix.io/threat-center/cve-2026-80138/)
+
+---
+
+## 26. C2PA カメラ認証は「現実と接触すると崩壊する」— root 化した Pixel で有効な署名写真を作れる
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 104 pts · ~1d ago（8 月 25 日）
+- **Tags:** `c2pa` `provenance` `security` `android` `photography`
+
+David Buchanan のエッセイは、Google **Pixel Camera C2PA Assurance Level 2** 認証が脆弱だと論じる。信頼チェーンは Android Key Attestation と Play Integrity に依存するが、特権昇格バグ — 彼が引用する **CVE-2026-43499**（完全に更新済み Pixel でワンクリック root を可能にし、90 日以上前に報告済み）— を使えば、**ハードウェア攻撃なしで C2PA 有効な署名偽造**が誰にでも作れる。「スクリーンの写真を撮る」アナログ攻撃もゼロスキルで決まる。HN スレッド（104 点、65 コメント）は、暗号プロビナンス（provenance）が写真の真実性を確立できるのか、それとも署名が*未検証*のコンテンツをより怪しく見せるのかを論じている。
+
+**Why it matters:** ディープフェイク対策のデフォルト回答になりつつある provenance だが、root 化デバイスが有効な署名を鋳造できるなら「C2PA 署名」≠「真正」。標準に賭けるすべてのプラットフォームと政策への、基本的な信頼モデル上の警告だ。
+
+[`🔗 da.vidbuchanan.co.uk — essay`](https://www.da.vidbuchanan.co.uk/blog/android-c2pa.html) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49439499)
+
+---
+
+## 27. Python の str.lower() が IDNA 2003 から乖離 — CVE-2026-17084、Unicode バージョン固定のバグ
+
+- **Velocity:** ▮ steady
+- **Source:** Seth Larson blog · HN 46 pts · ~1d ago
+- **Tags:** `python` `idna` `unicode` `cve` `security`
+
+Seth Larson（PSF セキュリティ開発担当）が **CVE-2026-17084** を解説：`stringprep`/IDNA 2003 コーデック（`str.encode('idna')`）は RFC 3454 のケースフォールディングに `str.lower()` を使うが、`str.lower()` は仕様が固定した **Unicode 3.2.0** ではなくインタプリタの Unicode バージョン（17.0）に従う。同じ見た目の入力が Unicode バージョンによって異なる Punycode にエンコードされる（例：`"ᎠᎠ"` → `xn--58da` vs `xn--kz9aa`）— ホモグリフ/フィッシング、許可リスト回避、SSRF 式の混乱攻撃に使えるパーサー差分だ。修正は StringPrep 内でのみケースフォールディングを Unicode 3.2.0 に固定（CPython PR #155293、3.14/3.15 にバックポート）。NVD は **CWE-436**（解釈の競合）に分類。
+
+**Why it matters:** 仕様が古い Unicode バージョンを固定しているのにコードが現在版に追従する「バージョン固定」は、静かなセキュリティバグの一種。IDNA 2003 コーデックから離れ、IDNA 2008 の `idna` パッケージへ移行するのが推奨だ。
+
+[`🔗 sethmlarson.dev`](https://sethmlarson.dev/when-str-lower-is-a-security-vulnerability) · [`🔗 CPython PR #155293`](https://github.com/python/cpython/pull/155293) · [`🔗 HN`](https://news.ycombinator.com/item?id=49440410)
+
+---
+
+## 28. ERPO — Alibaba が RL の正則化を応答側からクエリ側へ移す（arXiv 2608.23311）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.23311 · ~1d ago
+- **Tags:** `research` `rl` `rhlf` `optimization` `alibaba`
+
+**ERPO**（arXiv 2608.23311、EMNLP 2026 本会議採択）は、LLM ポリシー最適化におけるアクション側 **Policy-KL** 正則化を、現在のポリシーが誘導するクエリ分布への **Query-KL** ペナルティで置き換える。QKL 勾配はクエリ尤度のみを通過するため応答分布への直接的な圧力はなく、探索は完全に保たれる。推定器非依存で、追加フォワードなしに GRPO/PPO/REINFORCE へ差し込める。6 つの数学ベンチマーク（Qwen2.5-Math-7B、240 ステップ）で **0.336 vs 0.274**（GRPO ベースライン）。960+ ステップの訓練では GRPO の KL が爆発し約 480 ステップ後に精度が崩壊するのに対し、ERPO は安定を保つ。コードはオープンソース（AlibabaResearch/ERPO）。
+
+**Why it matters:** 安定性と探索のジレンマは RLHF の中核ボトルネック。*応答*ドリフトではなく*クエリ*ドリフトを制約するのは、安価で汎用的、しかも長尺訓練を実測で安定化させる変更だ。
+
+[`🔗 arXiv 2608.23311`](https://arxiv.org/abs/2608.23311) · [`🔗 GitHub — AlibabaResearch/ERPO`](https://github.com/AlibabaResearch/ERPO)
+
+---
+
+## 29. CVE-2026-79992 — 細工したファイル名で Emacs TRAMP がシェルインジェクション（CVSS 7.8）
+
+- **Velocity:** ▮ steady
+- **Source:** Red Hat / NVD · CVSS 7.8 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `emacs` `tramp` `command-injection` `local`
+
+Red Hat が **CVE-2026-79992**（CWE-78、CVSS 7.8）を開示：Emacs **TRAMP** はログイン引数をサニタイズせず連結してローカルシェルに渡すため、ローカルの攻撃者に**悪意あるファイル名**（"user" フィールド経由）を開かされるとシェルコマンドインジェクションと任意コード実行に至る。RHEL の `emacs` パッケージ（RHEL 9/10 が影響対象として記載）に影響。サポート対象チャネルに修正はまだなく、緩和策は信頼できないファイル名を処理しないこと。
+
+**Why it matters:** エディタのリモートファイル層がインジェクション面になる — リモートパスを扱うためにシェルを呼ぶ「ローカル」ツールも、ネットワークサービスと同じ入力サニタイズ規律を要するという再確認。信頼できないファイル名は新しい信頼できない HTML だ。
+
+[`🔗 Red Hat CVE`](https://access.redhat.com/security/cve/cve-2026-79992) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-79992)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-26T04:03:00Z |
-| Items | 19 |
-| Sources tracked | 29 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至頂網, arXiv, AITNT, 証券日報, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com) |
+| Generated | 2026-08-26T12:03:00Z |
+| Items | 29 |
+| Sources tracked | 44 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至頂網, arXiv, AITNT, 証券日報, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com, openai.com, TechCrunch, VentureBeat, SiliconANGLE, The Hacker News, SecurityWeek, lemmus.org, VulnCheck, Rapid7, IONIX, da.vidbuchanan.co.uk, HN, sethmlarson.dev, Red Hat, NVD) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

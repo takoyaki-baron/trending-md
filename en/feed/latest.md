@@ -1,8 +1,8 @@
 ---
 date: 2026-08-26
-updated: 2026-08-26T04:03:00Z
+updated: 2026-08-26T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 44
 license: CC-BY-4.0
 ---
 
@@ -281,13 +281,153 @@ A Shanghai-based lab released **Mint-Agent**, a finance-native agentic family �
 
 ---
 
+## 20. OpenAI's Jalapeño ASIC — first benchmarks claim 1.5–1.9× per-watt inference over Blackwell
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenAI blog / TechCrunch · ~1d ago (Aug 25)
+- **Tags:** `openai` `hardware` `silicon` `inference` `asic`
+
+At Hot Chips 2026, OpenAI published first measured results for **Jalapeño**, its first custom inference ASIC (co-developed with Broadcom, TSMC N3P 3nm, 700W TDP / ~550W sustained, 6 HBM4 stacks = 216 GB at 15.4 TB/s). On SemiAnalysis' open **InferenceX** benchmark across GPT-OSS 120B, DeepSeek R1 670B, and Kimi K2.5 1T, it claims **1.5–1.9× more AI work per watt** than Nvidia GB200/GB300, **1.7–3.6× lower end-to-end latency**, and **2.1–4.1× higher performance** on interactive workloads — built on a weight-stationary MXFP4 systolic array plus a custom language (Gloun). Design-to-tapeout took ~9 months, with OpenAI's own models helping write and optimize kernels (AI-generated MoE blocks ran 1.5–1.8× faster than human-written ones). Small-volume deployment late 2026, scaling in 2027; internal use only.
+
+**Why it matters:** The first credible non-NVIDIA inference silicon from an AI lab, built around tokens-per-joule rather than peak FLOPs — but the comparisons are against Blackwell (not Vera Rubin) and the numbers are OpenAI's own on its chosen benchmark, so independent verification is still pending.
+
+[`🔗 OpenAI — the full stack behind abundant intelligence`](https://openai.com/index/the-full-stack-behind-abundant-intelligence/) · [`🔗 TechCrunch`](https://techcrunch.com/2026/08/25/openais-jalapeno-chip-is-built-for-fast-inference-at-scale-benchmarks-show/) · [`🔗 iThome (zh)`](https://m.ithome.com/html/994306.htm)
+
+---
+
+## 21. Perplexity launches Portable Computer — a fully local agent stack, optimized for NVIDIA DGX Spark
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VentureBeat / SiliconANGLE · ~1d ago (Aug 25)
+- **Tags:** `perplexity` `nvidia` `local-ai` `agents` `hardware`
+
+**Perplexity** launched **Portable Computer**, a fully on-device version of its Computer agent platform built in close cooperation with NVIDIA, running first on **DGX Spark** (128 GB) and Linux boxes with RTX GPUs ≥24 GB. The whole stack — models (Qwen 3.8 27B or Perplexity's post-trained **PPLX 27B**), agent harness, tool router, connectors, and an OS-level sandbox that disables the harness if unavailable — runs locally, and local work consumes **zero token credits**; escalation to 15+ cloud frontier models requires explicit user approval and returns text-only advice with no local-file access. On Perplexity's Local Knowledge Work Bench it scores **82.6%** (vs 77.6% Pi, 74.0% Hermes), **85.4%** with PPLX 27B, and uses ~70% fewer tokens than Pi on BrowseComp.
+
+**Why it matters:** "Local-first with opt-in cloud" is the emerging enterprise pattern for data control and token economics — and Perplexity's argument that local agents need a *co-designed* harness, not a general-purpose one, reframes the small-model agent debate.
+
+[`🔗 VentureBeat`](https://venturebeat.com/ai/perplexity-partners-with-nvidia-to-launch-portable-computer-a-fully-local-ai-agent-with-zero-token-costs) · [`🔗 SiliconANGLE`](https://siliconangle.com/2026/08/25/perplexity-ai-launches-portable-computer-on-device-ai-agent/) · [`🔗 至顶网 (zh)`](https://www.zhiding.cn/edge-ai/2026/0826/3197483.shtml)
+
+---
+
+## 22. miniOrange SAML SSO — two auth-bypass CVEs actively exploited to take over WordPress admins
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Hacker News / SecurityWeek · ~2d ago (Aug 24)
+- **Tags:** `cve` `wordpress` `saml` `auth-bypass` `actively-exploited`
+
+**CVE-2026-61979** (CVSS 8.1) and **CVE-2026-15981** (CVSS 9.8) in Xecurify's **miniOrange SAML 2.0 SP Single Sign-On** WordPress plugin let an unauthenticated attacker log in as **any user, including administrators**. 61979 is a signature-algorithm confusion — the plugin honors the SAML response's declared algorithm and treats the IdP's RSA public key as an HMAC shared secret; 15981 is a truthiness bug where `mo_saml_validate_signature()` treats OpenSSL's `-1` (processing error) as a valid signature. DigitalOcean's security team caught an anomalous admin session on Aug 16; Patchstack analyzed the chain, and attackers are running **opportunistic scans with a public PoC** against ~10k free + 30k paid installs. Patches exist, but paid editions got no explicit advisory and fix versions differ per edition.
+
+**Why it matters:** SAML signature-validation logic keeps producing account-takeover chains, and "silent patches" plus edition-dependent versioning make this actively-exploited pair particularly hard for admins to remediate — a textbook reason to assume compromise on any exposed WordPress SSO.
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/08/attackers-target-miniorange-saml-flaws.html) · [`🔗 SecurityWeek`](https://www.securityweek.com/wordpress-websites-targeted-via-miniorange-plugin-vulnerabilities/)
+
+---
+
+## 23. llama.cpp v0.3.0 — native dots3-note multimodal and a ggml 0.22.0 core
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · release v0.3.0 · ~1d ago (Aug 25)
+- **Tags:** `llm` `inference` `llama.cpp` `multimodal` `open-source`
+
+**llama.cpp v0.3.0** (ggml-org) landed: the `mtmd` multimodal library adds **dots3-note vision and audio** (a new DSA-ISWA KV cache type), WebP decoding via ffmpeg, a Pillow-accurate resize algorithm, and a fix for videos whose `moov` atom sits at end-of-file; **GLM-4.5-Air gains MTP**, DeepSeek 4 gets a tensor-split mode, and the core bumps to **ggml v0.22.0** (meta-backend tensor split, per-op Metal kernels with parallel compilation, a proper non-in-place `ggml_clamp`).
+
+**Why it matters:** llama.cpp is the reference runtime for local inference everywhere — a first 0.x major bump in a long while, consolidating multimodal + video handling into the one binary most local-AI tooling builds on.
+
+[`🔗 llama.cpp v0.3.0 release`](https://github.com/ggml-org/llama.cpp/releases/tag/v0.3.0) · [`🔗 lemmus.org`](https://lemmus.org/post/24898197)
+
+---
+
+## 24. ReWorld — an interactive world model that remembers where it showed you (arXiv 2608.23565)
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.23565 · ~1d ago (Aug 25)
+- **Tags:** `research` `world-model` `video-generation` `memory` `arxiv`
+
+**ReWorld** (HKUST-GZ + Alibaba, arXiv 2608.23565) separates *control* (short horizon) from *memory* (unbounded) in an interactive video-diffusion world model: most attention heads stay local while a few "global" heads attend across history, random chunk dropping makes sparse histories in-distribution, and inference memory is bounded by a **pose-indexed landmark bank** — the model retrieves landmarks nearest the current camera pose. It streams **704×1280** interactive video (4-step distillation, LoRA rank-128) and beats six recent interactive world models on action-following, long-horizon recall, and video quality — a 64-second out-and-back rollout still regenerates its starting view from a fixed 12-chunk cache. Inference code is on GitHub.
+
+**Why it matters:** Long-horizon memory is the missing capability in interactive world models, and the pose-indexed landmark bank is a cheap, concrete mechanism for it — expect "remembers what it showed you" to become the next world-model benchmark axis.
+
+[`🔗 arXiv 2608.23565`](https://arxiv.org/abs/2608.23565) · [`🔗 GitHub — zhifeichen097/ReWorld`](https://github.com/zhifeichen097/ReWorld)
+
+---
+
+## 25. CVE-2026-80138 — ClipBucket V5 installer command injection is unauthenticated RCE (CVSS 9.2 / 9.8)
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck / Rapid7 · CVSS 9.2 · ~1d ago (Aug 25)
+- **Tags:** `cve` `rce` `clipbucket` `installer` `command-injection`
+
+**CVE-2026-80138** (CWE-78; CVSS 4.0 **9.2**, CVSS 3.1 **9.8**) — ClipBucket V5's web installer (`cb_install`) passes the `php_cli_filepath` parameter to shell execution without validation or escaping, so an **unauthenticated** attacker can POST a crafted value and run arbitrary OS commands as the web-server user. Affects versions 5.5.1 through 5.5.3-#153; fixed in **5.5.3-#154+**. Assigned by VulnCheck (credit Adam Nurudini) and described as trivial to exploit — full host compromise whenever the installer is reachable.
+
+**Why it matters:** A leftover installer on an internet-facing video-hosting CMS is a standing RCE — "delete `cb_install` after setup" is the oldest hardening advice in the book, and this CVE is another instance of the setup page being the weakest link.
+
+[`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/clipbucket-v5-5.5.1-through-5.5.3-153-os-command-injection-via-installer-php-cli-filepath-parameter) · [`🔗 Rapid7`](https://www.rapid7.com/db/vulnerabilities/cve-2026-80138/) · [`🔗 IONIX`](https://www.ionix.io/threat-center/cve-2026-80138/)
+
+---
+
+## 26. C2PA camera authentication "does not survive contact with reality" — a rooted Pixel can mint valid signed photos
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 104 pts · ~1d ago (Aug 25)
+- **Tags:** `c2pa` `provenance` `security` `android` `photography`
+
+David Buchanan's essay argues Google's **Pixel Camera C2PA Assurance Level 2** certification is unsound: the trust chain rests on Android Key Attestation and Play Integrity, but privilege-escalation bugs — he cites **CVE-2026-43499**, a one-click root exploit on fully-patched Pixels, reported 90+ days earlier — let anyone produce **C2PA-valid signed forgeries without hardware attacks**, and analog "photo of a screen" attacks defeat the system with zero skill. The HN thread (104 pts, 65 comments) debates whether cryptographic provenance can ever establish photographic truth — or whether signatures make the *unverified* look more suspect.
+
+**Why it matters:** With provenance becoming the default answer to deepfakes, an implementation where a rooted device mints valid signatures means "C2PA-signed" ≠ "authentic" — a fundamental trust-model caveat for every platform and policy betting on the standard.
+
+[`🔗 da.vidbuchanan.co.uk — essay`](https://www.da.vidbuchanan.co.uk/blog/android-c2pa.html) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49439499)
+
+---
+
+## 27. Python's str.lower() diverges from IDNA 2003 — CVE-2026-17084, a Unicode version-anchoring bug
+
+- **Velocity:** ▮ steady
+- **Source:** Seth Larson blog · HN 46 pts · ~1d ago
+- **Tags:** `python` `idna` `unicode` `cve` `security`
+
+Seth Larson (PSF Security Developer-in-Residence) details **CVE-2026-17084**: the `stringprep`/IDNA 2003 codec (`str.encode('idna')`) used `str.lower()` for RFC 3454 case-folding, but `str.lower()` follows the interpreter's Unicode version (17.0) instead of the spec's pinned **Unicode 3.2.0**. The same visible input encodes to different Punycode under different Unicode versions (e.g. `"ᎠᎠ"` → `xn--58da` vs `xn--kz9aa`) — a parser differential usable for homoglyph/phishing, allowlist bypass, or SSRF-style confusion. The fix anchors case-folding to Unicode 3.2.0 only within StringPrep (CPython PR #155293, backported to 3.14/3.15); NVD classifies it **CWE-436** interpretation conflict.
+
+**Why it matters:** "Version anchoring" — a spec pinning an old Unicode version while code follows the current one — is a quiet class of security bug, and the recommendation is to move off the IDNA 2003 codec to the IDNA 2008 `idna` package.
+
+[`🔗 sethmlarson.dev`](https://sethmlarson.dev/when-str-lower-is-a-security-vulnerability) · [`🔗 CPython PR #155293`](https://github.com/python/cpython/pull/155293) · [`🔗 HN`](https://news.ycombinator.com/item?id=49440410)
+
+---
+
+## 28. ERPO — Alibaba regularizes RL on the query side instead of the response (arXiv 2608.23311)
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.23311 · ~1d ago
+- **Tags:** `research` `rl` `rhlf` `optimization` `alibaba`
+
+**ERPO** (arXiv 2608.23311, accepted to EMNLP 2026) replaces the action-side **Policy-KL** regularizer in LLM policy optimization with a **Query-KL** penalty on the query distribution the current policy induces — because the QKL gradient flows only through query likelihood, it places no direct pressure on the response distribution, so exploration is preserved. It is estimator-agnostic and plugs into GRPO/PPO/REINFORCE without extra forward passes. On six math benchmarks (Qwen2.5-Math-7B, 240 steps) it scores **0.336 vs 0.274** GRPO baseline; under 960+ step training GRPO's KL explodes and accuracy collapses after ~480 steps while ERPO stays stable. Code open-sourced (AlibabaResearch/ERPO).
+
+**Why it matters:** The stability–exploration trade-off is the core RLHF bottleneck — bounding *query* drift instead of *response* drift is a cheap, general change that measurably stabilizes long training runs.
+
+[`🔗 arXiv 2608.23311`](https://arxiv.org/abs/2608.23311) · [`🔗 GitHub — AlibabaResearch/ERPO`](https://github.com/AlibabaResearch/ERPO)
+
+---
+
+## 29. CVE-2026-79992 — Emacs TRAMP shell injection via crafted filenames (CVSS 7.8)
+
+- **Velocity:** ▮ steady
+- **Source:** Red Hat / NVD · CVSS 7.8 · ~1d ago (Aug 25)
+- **Tags:** `cve` `emacs` `tramp` `command-injection` `local`
+
+Red Hat disclosed **CVE-2026-79992** (CWE-78, CVSS 7.8): Emacs **TRAMP** concatenates login arguments without sanitization before passing them to a local shell, so a local attacker who gets you to open a **maliciously crafted filename** (via the "user" field) achieves shell command injection and arbitrary code execution. Affects RHEL's `emacs` package (RHEL 9/10 listed as affected); no fix yet in supported channels — the mitigation is to avoid processing untrusted filenames.
+
+**Why it matters:** The editor's remote-file layer is the injection surface — a reminder that "local" tools that shell out to handle remote paths need the same input-sanitization discipline as network services, and untrusted filenames are the new untrusted HTML.
+
+[`🔗 Red Hat CVE`](https://access.redhat.com/security/cve/cve-2026-79992) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-79992)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-26T04:03:00Z |
-| Items | 19 |
-| Sources tracked | 29 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至顶网, arXiv, AITNT, 证券日报, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com) |
+| Generated | 2026-08-26T12:03:00Z |
+| Items | 29 |
+| Sources tracked | 44 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至顶网, arXiv, AITNT, 证券日报, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com, openai.com, TechCrunch, VentureBeat, SiliconANGLE, The Hacker News, SecurityWeek, lemmus.org, VulnCheck, Rapid7, IONIX, da.vidbuchanan.co.uk, HN, sethmlarson.dev, Red Hat, NVD) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
