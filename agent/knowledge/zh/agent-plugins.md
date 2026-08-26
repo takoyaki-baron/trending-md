@@ -403,3 +403,21 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   PNG/SVG/WebM 导出和 1200×630 分享卡片。"架构 Delta"模式对比 Before/Delta/After 并给出机器可读凭证，还能把粘贴的
   Mermaid 重新写成 Archify JSON。**"宁可渲染失败也不渲染错误"正是 agent 工具需要的正确性心态**——表明技能浪潮正从
   散文式指令转向可校验、可机器检查的产物（论点 8 的方向）。
+
+## Anthropic 第一方插件目录 + 科学技能垂直（08-27 04:15）
+
+- **`anthropics/claude-plugins-official`——Anthropic 开出官方精选 Claude Code 插件目录（34.3k★，Apache-2.0）。** 分为
+  `plugins/`（Anthropic 维护）与 `external_plugins/`（合作伙伴/社区，经质量 + 安全评审把关）。一条命令安装
+  （`/plugin install {name}@claude-plugins-official` 或 `/plugin > Discover`）；插件 `name` 为不可变 slug，带 `renames`
+  迁移映射；仓库还文档化了面向纯 SKILL.md 仓库的 **skill-bundle** 模式。README 明确 Anthropic 不验证第三方插件内容——
+  "安装、更新或使用前务必确保你信任该插件。" **为何重要：** 在插件生态狂奔（Cursor 规范、社区镜像）之后，Anthropic 如今拥有
+  一条精选第一方通道——但免责声明才是诚实之处：官方目录是**信任信号，而非安全保证**，第三方技能的洪流让运行时验证
+  （ACES、Archify）成为真正的闸门。（市场预测的*分发*半边如今有了 Anthropic 自有的闸门，补全 08-24 `claude-plugins-community`
+  审核镜像；*评估*半边仍无常设榜单。）
+- **`K-Dense-AI/scientific-agent-skills`——趋势榜上最大的专用科学技能库（34.7k★，MIT）。** **163 个开箱即用技能**
+  （生物信息学、化学信息学、药物发现、临床研究、医学影像、材料、量子、实验室自动化）+ 跨 78 个公共数据库的统一检索 +
+  约 70 个优化的 Python 包技能（RDKit、ScanPy、OpenMM 等），全部遵循开放 **Agent Skills** 标准，可在 Claude Code、
+  Cursor、Codex 与 Gemini CLI 中运行。由"Claude Scientific Skills"更名而来；每个 PR 都带安全扫描流水线——6 月一次扫描在
+  147 个技能中报 **67 个严重 / 43 个高危**（107 个标记安全），所以 README"用前先扫描"的指引是真的。**为何重要：**
+  "把任意 agent 变成 AI 科学家"是风险最高的技能垂直（药物发现、临床），34.7k★ 说明市场认同——但安全报告与按技能授权
+  的警示恰恰说明，大型技能注册表需要生态才刚开始建的运行时验证工具（论点 8 的评估缺口，如今有了具体的安全扫描数据点）。

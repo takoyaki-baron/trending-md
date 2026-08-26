@@ -1328,3 +1328,48 @@ The batch's security stream, read first-hand at the primary sources where reacha
   triggering `Deserialize` through a BDC Finder method. The **August 2026 Cumulative Update** adds the
   `ValidateSafeBcsType` allowlist. ~8,500 internet-facing servers; joint Censys advisory (Aug 25). The auth-bypass
   half is already in KEV and actively probed — assume the full unauth-RCE path is being tested.
+
+## Wordfence Argus + SENAITE + Tomcat RewriteValve (08-27 04:15)
+
+- **Wordfence Argus — an AI agent finds a 6-step unauth RCE chain in the Avada theme (CVE-2026-18431, CVSS 9.8).**
+  Wordfence's depth-first AI research agent **Argus** autonomously found and reproduced a **six-step chain** (each flaw
+  harmless alone) turning an anonymous request into **unauthenticated RCE** in the **Avada** theme + **Fusion Builder**
+  plugin — one of WordPress's best-sellers, 1M+ sales. Tracked as **CVE-2026-18431**: missing-authorization (CWE-862)
+  + input-validation gaps across the Fusion Patcher component let an attacker write an executable PHP file. Argus found
+  it in **~2 hours** on July 30; ThemeFusion shipped **Avada 7.16.1 / Fusion Builder 3.16.1** Aug 25 (premium firewall
+  rule Aug 5, free users Aug 29). **Why it matters:** the exploit required all six links in order — exactly the
+  multi-step reasoning breadth-first scanners miss and a long-horizon agent can hold in view — and it is the first big
+  public proof that **AI agents now find WordPress-class chains at human-rare depth**, not just one-step bugs.
+  (Extends the AI-assisted-exploitation shape: Wiz/Red Agent + Rapid7 were assisted research on *the analyst's*
+  workflow; Argus is an agent *searching product code* autonomously.)
+- **SENAITE.CORE — eval-injection chain → unauth RCE in a laboratory-information system (CVE-2026-54569, CVSS 9.8,
+  GitHub-assigned, also GHSA-jrw6-7x4q-w25j).** SENAITE.CORE 2.0.0–2.6.0: state-changing JSON API routes
+  (`/@@API/update`, `getusers`, …) skip the `Access JSON API` permission, and `set_fields_from_request` passes raw
+  `RecordsField` values straight to Python's **`eval()`** before mutator permission checks — so an anonymous attacker
+  runs a two-request chain (`@@uuid` to find `bika_setup`, then a crafted `/@@API/update`) and executes arbitrary
+  Python inside the Zope worker. Hotfix `SenaiteHotfix20260602` patches without an upgrade; 2.6.1+/2.7.0 fix it
+  properly. **Why it matters:** lab systems hold health/pharma/research data and are usually treated as internal — an
+  *unauthenticated* eval-injection RCE with a published chain means any internet-facing SENAITE instance should be
+  treated as owned until patched. (AI/ML-adjacent infra shape: the auto-login + code-exec pattern recurs — cf. DB-GPT.)
+- **Apache Tomcat RewriteValve off-by-one silently bypasses access-control rules (CVE-2026-65927, CWE-193, CVSS 6.9).**
+  When a rule triggers re-evaluation, the engine restarts at the **second rule instead of the first** — so security
+  rules placed at the head of a rewrite chain (URI blocking, normalization) are silently skipped. Affects Tomcat
+  11.0.0-M1–11.0.24, 10.1.0-M1–10.1.57, 9.0.0.M1–9.0.120, 8.5.0–8.5.100; fixed 11.0.25, 10.1.59 (the 10.1.58 RC vote
+  failed), 9.0.121. No public exploit, not yet in KEV, but remotely reachable via crafted URLs. The "the security rule
+  was there, but a flag restarted evaluation one rule late" bug — the kind that lets crafted URLs slip past exactly the
+  controls an operator believes are enforced, in the most widely-deployed Java server.
+
+## Argus follow-up — the multi-step-chain class gets a second agent + a volume denominator (08-27 04:30)
+
+- **Argus is Wordfence's *second* AI vuln agent — the shape is now a vendor capability class, not a one-off.**
+  Argus is the depth-first counterpart to **PRISM** (breadth-first, launched earlier in 2026, 300+ vulnerabilities logged,
+  caught a supply-chain backdoor in a WordPress.org plugin in under two hours). Wordfence publishes nothing about how
+  Argus is built — "the same agentic techniques would help attackers as much as defenders" — so the *capability* is
+  claimed, not reproducible. The three watch conditions, checked first-hand 08-27: (1) **other vendors' multi-step AI
+  chains** — none published yet; the closest is volume: WordPress HackerOne submissions jumped **20–30/month → 450 in
+  July** after a researcher used OpenAI Sol Ultra for a pre-auth WordPress core RCE. (2) **six-flaw shape generalization**
+  — the Avada chain additionally required **administrator-authored content present** on the target (Wordfence's Alex
+  Thomas), a real constraint on the "any WordPress target" reading. (3) **chain-discovery-rate denominator** — the
+  submissions-volume jump is the first denominator-ish signal, but no vendor publishes AI-found chain counts vs human
+  researchers. **Answer: partially measured** — a two-agent taxonomy (breadth vs depth) + a submissions-volume jump,
+  still no independent rate and no other vendor's published chain. Residual watch folds in here.

@@ -131,6 +131,16 @@ caveman 为每一条声明标注其背后的证据强度：
   dexpal-ai-tools/caveman）与一个 Tessl 注册表条目（v1.0.7，"96 质量分"）——没有一家独立采纳这套分级词汇；
   词汇仍只属于单个仓库。顺带观察。
 
+### 仓库内三臂测试基准落地——并修正头条数字（08-27 04:30）
+
+- **PR #47 给 caveman 加上可审计的三臂评测基准**（基线 vs "简洁"对照组 vs 简洁+SKILL.md），发现诚实的节省是
+  **均值 −22% 到 −49%，而非 −75%**（caveman-cn 中位数 −54%，caveman −50%，caveman-es −48%，compress −21%）。
+  这是归档的 19 次检查所等待的、*仓库内*首次独立运行的控制臂拆分——可通过 PR 的基准由第三方运行，而非 caveman 自己的
+  `run.py` 数字。分级词汇（`inferred`/`benchmark_counterfactual`/`verified`）仍只有一家采纳者（08-27 04:30 第 21 次核查：
+  只有 caveman + fork + 一个 Tessl 条目）——但它所评级的*数字*如今在仓库内有了第二个、更低的测量。
+- **MSApps 拒绝在其自主 agent 舰队部署 caveman**——逐字文本流水线断裂、代理凭据流暴露、BSL-1.1 许可拆分，以及 `learn`
+  模式读取对话历史。这是对代理引擎的第一个点名生产环境的"不"；诚实性保留条款在部署时起作用的实例。
+
 ## vomit——针对冗长的本地风格过滤器（08-21 12:03）
 
 `zachahn/vomit`（Go，GPLv3）经 MessageDisplay 钩子拦截 Claude Code / Claude 5 的输出，在显示前把它交给**另一个本地

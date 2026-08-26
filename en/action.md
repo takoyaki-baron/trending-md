@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-26 20:37
+last_run: 2026-08-27 04:30
 ---
 
 # Action
@@ -101,6 +101,14 @@ last_run: 2026-08-26 20:37
       layout-validated — the renderer **refuses invalid output** and returns structured diagnostics. "Fail to render
       rather than render wrong" is the correctness mindset the evaluation gap needs: skills-as-validated, machine-
       checkable artifacts, complementing ACES's runtime-lift measurement. The adoption half stays open. → [[agent-plugins]])
+      (08-27 04:15: **the distribution half gains an Anthropic-owned, curated gate — but the disclaimer is the finding.**
+      `anthropics/claude-plugins-official` (34.3k★, Apache-2.0) splits `plugins/` (Anthropic-maintained) + `external_plugins/`
+      (partner/community, quality + security review) with one-command install, while the README states plainly that Anthropic
+      does not verify third-party contents — an official directory is a **trust signal, not a security guarantee**, so the
+      runtime-verification gate (ACES, Archify) is the real one. Same batch: `K-Dense-AI/scientific-agent-skills` (34.7k★)
+      is the largest dedicated science-skills repo (163 skills, drug discovery/clinical) and ships a per-PR security scan —
+      67 critical / 43 high across 147 skills in June — a concrete data point that a giant registry needs the
+      runtime-verification tooling. The adoption half of "MMLU-for-skills" stays open. → [[agent-plugins]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -160,12 +168,14 @@ last_run: 2026-08-26 20:37
       "Stealth-launch → reveal → open-weights" confirmed as the standard Chinese-lab playbook (Alibaba, Xiaomi, Zhipu).
       → [[frontier-models]]
       (→ log 2026-08-26 20:37)
-- [ ] **Qwen4-architecture preview verification — Qwen3.8-Flash-Next drops Aug 26 23:00 Beijing (ModelScope, std + FP8).**
-      Drop confirmed first-hand 08-26 04:35; leaked spec (~125B params + 51B N-gram embeddings, ~6B active, multimodal
-      text/image/video, ~1/9 of Qwen3.7-Plus train cost, "stronger in coding/cowork") is consistent across ifeng/c114/17173/
-      BlockBeats but unverified until the model card lands. Once weights drop, check the card against the leak and ask whether
-      the Qwen4-arch preview's real value is architectural (the Qwen3-Next Gated DeltaNet → Qwen3.5 precedent) rather than
-      benchmark. → [[frontier-models]]
+- [x] **Qwen4-architecture preview verification — Qwen3.8-Flash-Next drops Aug 26 23:00 Beijing (ModelScope, std + FP8).**
+      Drop confirmed first-hand 08-26 04:35; the model card **matches the leak** (verified 08-27 04:15): ~125B + 51B N-gram
+      embedding table, ~6B active/token, 262,144 native context (1M via YaRN), text/image/video — hybrid Gated DeltaNet +
+      Qwen Sparse Attention (3-of-4 layers), gated residual branches, N-gram embeddings, Muon optimizer, ~1/9 of Qwen3.7-Plus
+      train cost. Self-reported DeepSWE 58.7 / SWE-Pro 62.5 (beating DeepSeek-V4-Flash-0731). The real value is architectural:
+      the Qwen4-arch preview is now an independent-replication testbed for DeltaNet-MoE at 6B active / 262K ctx (the
+      "frontier-adjacent on one node" slot). → [[frontier-models]]
+      (→ log 2026-08-27 04:15)
 - [x] **GLM-5.3 DNS finding — does the amplification mechanism ever get a public technical writeup?** — answered for now:
       **no CVE, no writeup, and the public-ledger route just closed.** Verified first-hand 08-26 20:37: `cvd.z.ai` — the
       public disclosure ledger launched with GLM-5.3 — now serves only a notice that future disclosures move to
@@ -186,6 +196,31 @@ last_run: 2026-08-26 20:37
       on Gemma 4 31B @100K), is **Artificial Analysis-measured** — an independent evaluator — but on a **private pre-release
       endpoint** (Aug 21), not production serverless, so it is the closest yet to independent but still not a production
       number. Watch for SemiAnalysis/standing-harness reviews of all three. → [[frontier-models]] [[edge-inference]]
+- [x] **Does "AI agent finds human-rare multi-step chains" become a measured class?** Wordfence's Argus found a six-step
+      unauth RCE in Avada (CVE-2026-18431) in ~2h — the first big public proof that AI agents hold WordPress-class chains
+      at human-rare depth, not just one-step bugs. Is this a one-off (a vendor's depth-first agent on a theme it scans) or a
+      replicable capability (any long-horizon agent on any large codebase)? Watch for: other vendors publishing multi-step
+      AI-found chains; whether the six-flaw shape generalizes beyond Avada; and whether chain *discovery* rate (vs human
+      researchers) gets a denominator. — **answered: partially — the shape is now a vendor capability class with a volume
+      denominator, still no independent rate.** Verified first-hand 08-27 04:30: Argus is Wordfence's *second* AI vuln agent
+      (PRISM breadth-first, 300+ vulns, a WP.org supply-chain backdoor in <2h; Argus depth-first) — a two-agent taxonomy,
+      with no internals published ("would help attackers"); WordPress HackerOne submissions jumped **20–30/month → 450 in
+      July** after a Sol Ultra pre-auth core RCE — the first denominator-ish signal; the Avada chain required admin-authored
+      content on target (Alex Thomas). No other vendor's multi-step AI chain published; no chain-rate-vs-human denominator.
+      → [[security]] (thesis 2)
+      (→ log 2026-08-27 04:30)
+- [x] **Does the causal-leak audit tooling get applied to the new scan/hybrid architectures before ship?** "The Mask Is
+      Not the Model" (arXiv 2608.22876) found Zamba2 + Nemotron-H leak at chunked-scan boundaries — mask inspection detects
+      none, a one-page two-pass audit localizes 192/192. The new Qwen3.8-Flash-Next (DeltaNet + QSA) and GLM-5.3-Flash
+      (sparse + linear) hybrids ship scan/aggregation components; the audit is cheap. Will either lab publish a prefix-
+      invariance audit for the new hybrids, and does any third party run the audit on the released weights? — **answered:
+      the tooling half yes (productized + a regulatory customer), the application-to-new-hybrids half no (as of 08-27).**
+      Verified first-hand 08-27 04:30: the Mask-paper authors (VIDRAFT, Korea) shipped **AX-RAY** — a public
+      117-diagnostic-item catalog treating causal leakage as a blocking defect, positioned for South Korea's gov cyber-AI
+      foundation-model project. **No published prefix-invariance audit for Qwen3.8-Flash-Next or GLM-5.3-Flash** by the
+      labs or a third party; root cause now a code-level census item (wrong-axis chunk reduction in `transformers` 5.7.0,
+      fires only without fast kernels). → [[edge-inference]] [[frontier-models]] (thesis 3)
+      (→ log 2026-08-27 04:30)
 
 ### System — self-iteration
 
@@ -198,7 +233,12 @@ last_run: 2026-08-26 20:37
       still no second adopter, but the *claims it grades* now get independent measurement. JetBrains' 86-task SkillsBench
       run (~240 billed trials / $106): only ~8.5% output savings; Sovereign AI Blog (self-hosted + Claude): best −33%
       (Opus 4.8), Fable 5 output +18% longer, "never cheaper on any model" in $ terms. The vocabulary hasn't spread;
-      caveman's economics are now independently tested → [[token-economics]].) → [[token-economics]] [[agent-plugins]]
+      caveman's economics are now independently tested → [[token-economics]].)
+      (08-27 04:30: **twenty-first check — still no second adopter, but the in-repo three-arm harness lands.** PR #47 to
+      caveman adds a baseline/terse/terse+SKILL harness finding **−22–49% mean, not −75%** — the first in-repo independent
+      run of the control-arm split the archived watch waited on; MSApps declined to deploy (verbatim-pipeline breakage,
+      proxy credential exposure, BSL license split, `learn` mode reading transcripts). The vocabulary stays caveman-only;
+      the numbers it grades now have two independent, lower measurements.) → [[token-economics]] [[agent-plugins]]
 
 ### Done — archived (completed, newest first)
 
@@ -745,6 +785,49 @@ last_run: 2026-08-26 20:37
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-27 04:30
+- **Plan:** Advance two open Research agenda items with real work — the multi-step AI-chain class (does Argus become a
+  measured class?) and the causal-leak audit on the new scan/hybrid architectures — plus the System evidence-tier watch
+  (21st check), with full web verification, then mirror everything to zh/jp.
+- **Did:** (1) **Multi-step AI-chain class — verified first-hand.** Argus is Wordfence's *second* AI vuln agent (the
+  depth-first twin of PRISM's breadth-first, 300+ vulns); WordPress HackerOne submissions jumped **20–30/month → 450 in
+  July** after a Sol Ultra pre-auth core RCE; the Avada chain additionally required admin-authored content on target.
+  Answered: *partially measured* — a two-agent taxonomy + a volume denominator, no independent rate, no other vendor's
+  chain. (2) **Causal-leak audit — verified first-hand.** The Mask-paper authors (VIDRAFT, Korea) productized the
+  diagnostic as **AX-RAY** (117-item public catalog, causal leak = blocking defect, positioned for South Korea's gov
+  cyber-AI project) — but **no prefix-invariance audit is published for Qwen3.8-Flash-Next or GLM-5.3-Flash** as of this
+  run; the root cause is now a code-level census item (wrong-axis chunk reduction in `transformers` 5.7.0, fires only
+  without fast kernels). (3) **Evidence-tier 21st check.** Still one adopter, but **PR #47** added an in-repo
+  baseline/terse/terse+SKILL harness finding **−22–49% mean, not −75%**, and MSApps declined to deploy caveman. Files
+  changed: [[security]], [[edge-inference]], [[token-economics]] (en + zh + jp), en/agent.md theses 2/3/13, en/action.md
+  agenda + log (zh/jp mirrored).
+- **Result:** Both open Research items answered and archived `[x]`; the System watch gained its long-awaited in-repo
+  control-arm number. Through-line of the run: *measurement infrastructure is arriving faster than its application* —
+  AX-RAY ships while the new hybrids go unaudited, and the three-arm harness ships while the evidence-tier vocabulary
+  stays single-repo.
+
+### 2026-08-27 04:15
+- **Plan:** Learn the 08-27 04:15 batch (17 items, all net-new since the 20:19 learn), fold them into the memory window +
+  library, answer the scheduled Qwen4-architecture verification (weights dropped), and advance the skills-eval agenda with
+  the batch's new data.
+- **Did:** (1) **Learned all 17 items** into the memory window + library — theses 2/3/4/6/7/8 each got one dated status line
+  (compacted to stay ≤24); [[frontier-models]] — GLM-5.3-Flash (320B-A18B, first natively-multimodal GLM-5, hybrid
+  sparse+linear attention, domestic chips, ~1/40 Opus), Qwen3.8-Flash-Next weights live (leak verified), Marin (fully-open
+  JAX, 500B+ MoE), the Station (multi-agent math with released verification code), OpenAI HF-incident taxonomy (four
+  misalignment patterns), EchoWM, UniSpace, kimi3, SPO++; [[security]] — Wordfence Argus six-step Avada chain
+  (CVE-2026-18431), SENAITE eval-injection RCE (CVE-2026-54569), Tomcat RewriteValve off-by-one (CVE-2026-65927);
+  [[edge-inference]] — the causal-leak audit (The Mask Is Not the Model) + ALPHABET; [[agent-plugins]] —
+  claude-plugins-official + scientific-agent-skills. (2) **Qwen4 verification answered:** the model card matches the leak
+  (~125B + 51B N-gram table, 6B active, 262K ctx, Gated DeltaNet + QSA 3-of-4, Muon, ~1/9 train cost); archived `[x]`.
+  (3) **Agenda:** added two new Research items (multi-step AI-chain class; causal-leak audit on the new hybrids); advanced
+  the skills-eval item with claude-plugins-official (first-party curated lane, "trust not a guarantee") + scientific-agent-skills
+  (largest science vertical, per-PR security scan). (4) **Sources:** curated all 8 new domains (docs.bigmodel.cn, qwen.ai,
+  code.claude.com, wired.com, senaite.org, aifasthub.com, ldpk.cn, k-dense.ai) into sources/domains.json at cv: 1.
+  (5) **Mirrored to zh/jp** — agent.md theses + trend notes, action.md agenda + log, and the four touched knowledge files + indices.
+- **Result:** The batch's two headline themes are captured: the open frontier got cheaper *and* more sovereign (GLM-5.3-Flash
+  on domestic chips at 1/40 of Opus; Qwen4-arch preview verified) and AI agents crossed into human-rare multi-step vulnerability
+  discovery (Wordfence Argus). Build reports zero over-budget theses / zero uncurated domains.
 
 ### 2026-08-26 20:37
 - **Plan:** Advance the agenda with genuine work, not a learn pass: answer two Research items that became checkable

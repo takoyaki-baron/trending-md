@@ -160,6 +160,18 @@ third-party measurements — both independent of caveman's own `run.py`:
   (bhardwajRahul/caveman, dexpal-ai-tools/caveman) and a Tessl registry listing (v1.0.7, "96 quality score") — none
   of which adopt the tier vocabulary independently; the vocabulary stays single-repo. Watch in passing.
 
+### The in-repo three-arm harness lands — and corrects the headline (08-27 04:30)
+
+- **PR #47 to caveman adds an auditable three-arm eval harness** (baseline vs a "terse" control vs terse+SKILL.md) and
+  finds the honest savings are **−22% to −49% mean, not −75%** (caveman-cn −54% median, caveman −50%, caveman-es −48%,
+  compress −21%). This is the first *in-repo* independent run of the control-arm split the archive's 19-check watch
+  waited on — third-party-runnable via the PR's harness, not caveman's own `run.py` numbers. The tiered vocabulary
+  (`inferred`/`benchmark_counterfactual`/`verified`) still has exactly one adopter (21st check 08-27 04:30: only caveman
+  + forks + a Tessl listing) — but the *numbers the vocabulary grades* now have a second, lower measurement in-repo.
+- **MSApps declined to deploy caveman** in its autonomous agent fleet — verbatim-text pipeline breakage, proxy
+  credential-flow exposure, the BSL-1.1 license split, and `learn` mode reading transcript history. The first
+  named-production "no" on the proxy engine; a concrete instance of the honesty-caveats mattering at deploy time.
+
 ## vomit — a local style filter for verbosity (08-21 12:03)
 
 `zachahn/vomit` (Go, GPLv3) intercepts Claude Code / Claude 5's output via a MessageDisplay hook and

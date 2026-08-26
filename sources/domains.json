@@ -3346,5 +3346,77 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "docs.bigmodel.cn": {
+    "cat": "vendor",
+    "en": "Zhipu/BigModel official docs — first-hand for the GLM-5.3-Flash model card + API specs; co-cited with z.ai blog + doNews for the same release.",
+    "zh": "智谱/BigModel 官方文档——GLM-5.3-Flash 模型卡与 API 规格的一手来源；与 z.ai 博客、doNews 同源互证。",
+    "jp": "Zhipu/BigModel公式ドキュメント——GLM-5.3-FlashのモデルカードとAPI仕様の一次情報。z.aiブログ・doNewsと相互引用。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "qwen.ai": {
+    "cat": "vendor",
+    "en": "Alibaba Qwen official blog — first-hand for the Qwen3.8-Flash-Next launch + Qwen4-architecture preview; co-cited with the GitHub repo + llm-stats.",
+    "zh": "阿里 Qwen 官方博客——Qwen3.8-Flash-Next 发布与 Qwen4 架构预览的一手来源；与 GitHub 仓库、llm-stats 互证。",
+    "jp": "Alibaba Qwen公式ブログ——Qwen3.8-Flash-Next発表とQwen4アーキテクチャプレビューの一次情報。GitHubリポジトリ・llm-statsと相互引用。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "code.claude.com": {
+    "cat": "vendor",
+    "en": "Anthropic's Claude Code docs — first-hand for plugin/plugin-directory documentation; co-cited with the claude-plugins-official repo.",
+    "zh": "Anthropic Claude Code 官方文档——插件/插件目录文档的一手来源；与 claude-plugins-official 仓库互证。",
+    "jp": "Anthropic Claude Code公式ドキュメント——プラグイン/プラグインディレクトリの一次情報。claude-plugins-officialリポジトリと相互引用。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "wired.com": {
+    "cat": "news",
+    "en": "Wired — longform tech/security journalism; co-cited with OpenAI's own HF-incident report, not as the primary source.",
+    "zh": "Wired——技术/安全深度报道媒体；与 OpenAI 的 HF 事件官方报告同引互证，非一手来源。",
+    "jp": "Wired——技術・セキュリティの長文ジャーナリズム。OpenAI自身のHFインシデント報告と相互引用（一次情報ではない）。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "senaite.org": {
+    "cat": "security",
+    "en": "SENAITE community site — first-hand advisory for CVE-2026-54569 (LIMS eval-injection RCE); co-cited with VulDB.",
+    "zh": "SENAITE 社区官网——CVE-2026-54569（LIMS eval 注入 RCE）公告的一手来源；与 VulDB 互证。",
+    "jp": "SENAITEコミュニティサイト——CVE-2026-54569（LIMS evalインジェクションRCE）勧告の一次情報。VulDBと相互引用。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "aifasthub.com": {
+    "cat": "research",
+    "en": "AI paper aggregator — secondary summaries of arXiv papers (EchoWM); co-cited with the arXiv abstract as the primary.",
+    "zh": "AI 论文聚合站——arXiv 论文的二手摘要（EchoWM）；以 arXiv 原文为一手来源互证。",
+    "jp": "AI論文アグリゲーター——arXiv論文の二次要約（EchoWM）。一次情報のarXiv要旨と相互引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "ldpk.cn": {
+    "cat": "news",
+    "en": "Chinese tech media (科技日报转载) — reprints/reports on research items (UniSpace); co-cited with the arXiv primary.",
+    "zh": "中国科技媒体（科技日报转载）——科研项目（UniSpace）的转载报道；与 arXiv 原文互证。",
+    "jp": "中国テックメディア（科技日报転載）——研究項目（UniSpace）の報道。一次情報のarXivと相互引用。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "k-dense.ai": {
+    "cat": "vendor",
+    "en": "K-Dense official site — first-hand blog for scientific-agent-skills; co-cited with the GitHub repo (34.7k★).",
+    "zh": "K-Dense 官网——scientific-agent-skills 官方博客的一手来源；与 GitHub 仓库（34.7k★）互证。",
+    "jp": "K-Dense公式サイト——scientific-agent-skillsの公式ブログ一次情報。GitHubリポジトリ（34.7k★）と相互引用。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

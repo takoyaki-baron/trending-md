@@ -1018,3 +1018,38 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   ——实例化 `System.Web.UI.LosFormatter` 并经 BDC Finder 方法触发 `Deserialize`。**2026 年 8 月累积更新**加入
   `ValidateSafeBcsType` 允许列表。约 8,500 台暴露在公网的服务器；Censys 联合公告（Aug 25）。认证绕过半边已在 KEV
   且正被积极探测——应假设完整未认证 RCE 路径正在被测试。
+
+## Wordfence Argus + SENAITE + Tomcat RewriteValve（08-27 04:15）
+
+- **Wordfence Argus——AI agent 在 Avada 主题里找到一条 6 步未认证 RCE 链（CVE-2026-18431，CVSS 9.8）。** Wordfence 的
+  深度优先 AI 研究 agent **Argus** 自主发现并复现了一条**六步链**（每步单独看都无害），把匿名请求变成 **Avada** 主题 +
+  **Fusion Builder** 插件里的**未认证 RCE**——WordPress 最畅销产品之一，销量 100 万+。编号 **CVE-2026-18431**：跨
+  Fusion Patcher 组件的缺失授权（CWE-862）+ 输入校验缺口让攻击者可写入可执行 PHP 文件。Argus 于 7 月 30 日约 **2 小时**
+  找到；ThemeFusion 于 8 月 25 日发布 **Avada 7.16.1 / Fusion Builder 3.16.1**（高级防火墙规则 8 月 5 日，免费用户 8 月 29 日）。
+  **为何重要：** 利用要求六环按序全中——正是广度优先扫描器会漏、长视距 agent 能守住的多步推理——这是第一个大规模公开证据：
+  **AI agent 现在能以接近人类的罕见深度找到 WordPress 级链条**，而非只找单步 bug。（延伸 AI 辅助利用形态：Wiz/Red Agent 与
+  Rapid7 是对*分析者*工作流的辅助研究；Argus 是 agent 自主*搜索产品代码*。）
+- **SENAITE.CORE——eval 注入链 → 实验室信息系统的未认证 RCE（CVE-2026-54569，CVSS 9.8，GitHub 分配，另 GHSA-jrw6-7x4q-w25j）。**
+  SENAITE.CORE 2.0.0–2.6.0：改状态的 JSON API 路由（`/@@API/update`、`getusers` 等）跳过 `Access JSON API` 权限，而
+  `set_fields_from_request` 在变更器权限检查前把原始 `RecordsField` 值直接交给 Python 的 **`eval()`**——匿名攻击者跑一条两步链
+  （`@@uuid` 找 `bika_setup`，再造一个 `/@@API/update`）即可在 Zope worker 内执行任意 Python。热修复 `SenaiteHotfix20260602`
+  无需升级即可打；2.6.1+/2.7.0 正式修复。**为何重要：** 实验室系统存放健康、制药与研究数据，通常被视为内网——*未认证*
+  eval 注入 RCE 加上已公开的利用链，意味着任何暴露在公网的 SENAITE 实例在打补丁前都应按已被攻陷处理。（AI/ML 邻接基础设施形态：
+  自动登录 + 代码执行模式复现——cf. DB-GPT。）
+- **Apache Tomcat RewriteValve 差一错误静默绕过访问控制规则（CVE-2026-65927，CWE-193，CVSS 6.9）。** 规则触发重新评估时，
+  引擎从**第二条规则**而非第一条**重新开始**——置于重写链头部的安全规则（URI 拦截、归一化）被静默跳过。影响 Tomcat
+  11.0.0-M1–11.0.24、10.1.0-M1–10.1.57、9.0.0.M1–9.0.120、8.5.0–8.5.100；修复于 11.0.25、10.1.59（10.1.58 RC 投票失败）、
+  9.0.121。无公开利用、尚未入 KEV，但可经构造 URL 远程触达。"安全规则在，但一个标志把评估往后重启了一条规则"的 bug 类别——
+  让构造 URL 恰好绕过操作员以为正在生效的控制，落在部署最广的 Java 服务器上。
+
+## Argus 后续——多步链这类能力获得第二个 agent 与一个数量级分母（08-27 04:30）
+
+- **Argus 是 Wordfence 的*第二个* AI 漏洞 agent——这类能力现在是供应商能力类，而非一次性事件。** Argus 是 **PRISM**
+  （广度优先，2026 年初上线，已记录 300+ 漏洞，两小时内抓到一个 WordPress.org 插件里的供应链后门）的深度优先对应物。
+  Wordfence 完全不公开 Argus 的构建方式——"同样的 agent 技术对攻击者和防御者同样有帮助"——所以这项*能力*是被声称的，
+  不可复现。三个观察条件于 08-27 一手核查：(1) **其他供应商的多步 AI 链**——尚未有任何公开；最接近的是数量：
+  WordPress HackerOne 提交从**每月 20–30 条跳到 7 月的 450 条**，起因是一位研究者用 OpenAI Sol Ultra 找到一个
+  WordPress 核心的未认证 RCE。(2) **六缺陷形态是否泛化**——Avada 链还额外要求目标站点**存在管理员创作的内容**
+  （Wordfence 的 Alex Thomas），这是对"任意 WordPress 目标"解读的真实约束。(3) **链发现率分母**——提交量跳升是第一个
+  类似分母的信号，但没有供应商公布 AI 发现链与人类研究者的对比数。**答案：部分被测量**——双 agent 分类（广度 vs 深度）+
+  提交量跳升，仍无独立比率、也无其他供应商公布的链。残余观察并入本节。

@@ -517,3 +517,27 @@ almost nothing about whether it helps. It gives the thesis-8 evaluation gap its 
   Before/Delta/After with a machine-readable receipt, and it re-authors pasted Mermaid into Archify JSON. **"Fail to
   render rather than render wrong" is the correctness mindset agent tooling needs** — a sign the skills wave is moving
   from prose instructions to validated, machine-checkable artifacts (thesis 8's direction).
+
+## Anthropic's first-party plugin directory + the science-skills vertical (08-27 04:15)
+
+- **`anthropics/claude-plugins-official` — Anthropic opens an official, curated Claude Code plugin directory
+  (34.3k★, Apache-2.0).** Split into `plugins/` (Anthropic-maintained) and `external_plugins/` (partner/community,
+  gated on quality + security review). Install is one command (`/plugin install {name}@claude-plugins-official` or
+  `/plugin > Discover`); plugin `name` fields are immutable slugs with a `renames` map for migration, and the repo
+  documents a **skill-bundle** pattern for SKILL.md-only repos. The README is explicit that Anthropic does not verify
+  third-party plugin contents — "make sure you trust a plugin before installing, updating, or using it." **Why it
+  matters:** after the plugin-ecosystem rush (Cursor's spec, community mirrors), Anthropic now owns a curated
+  first-party lane — but the disclaimer is the honest part: an official directory is a **trust signal, not a security
+  guarantee**, and the flood of third-party skills makes runtime verification (ACES, Archify) the real gate. (The
+  *distribution* half of the marketplace prediction now has an Anthropic-owned gate, complementing the 08-24
+  `claude-plugins-community` vetted mirror; the *evaluation* half still has no standing leaderboard.)
+- **`K-Dense-AI/scientific-agent-skills` — the largest dedicated science-skills repo on trending (34.7k★, MIT).**
+  **163 ready-to-use skills** (bioinformatics, cheminformatics, drug discovery, clinical research, medical imaging,
+  materials, quantum, lab automation) plus unified lookup across 78 public databases and ~70 optimized Python-package
+  skills (RDKit, ScanPy, OpenMM, …), all following the open **Agent Skills** standard so they run in Claude Code,
+  Cursor, Codex, and Gemini CLI. Renamed from "Claude Scientific Skills"; ships a security-scan pipeline with each PR —
+  a June scan reported **67 critical / 43 high findings across 147 skills** (107 marked safe), so the README's "scan
+  before use" guidance is real. **Why it matters:** "turn any agent into an AI scientist" is the highest-stakes skills
+  vertical (drug discovery, clinical), and 34.7k★ says the market agrees — but the security report and per-skill-license
+  caveats are exactly why a giant skill registry needs the runtime-verification tooling the ecosystem is only now
+  building (thesis 8's evaluation gap, now with a concrete security-scan data point).

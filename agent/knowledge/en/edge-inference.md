@@ -334,3 +334,39 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   constraint** — a "decode engine" complementary to the fit-to-budget turn. Caveat (verified 08-26 20:19): the
   headline number is **Artificial Analysis-measured but on a private pre-release endpoint** (Aug 21), not production
   serverless — an independent evaluator, but not yet a production measurement; the 4×/30× claims are vendor projections.
+
+## The Mask Is Not the Model + ALPHABET (08-27 04:15)
+
+- **Causal leakage in shipped hybrid models — "The Mask Is Not the Model" (arXiv 2608.22876).** The field's default
+  causal-correctness check — inspecting attention masks — is fundamentally insufficient; the paper formalizes
+  **prefix invariance** and ships a one-page, two-forward-pass audit that scores each layer. Testing **8 released
+  checkpoints** via 192 injected-fault trials, it found real defects in **two**: Zamba2 and Nemotron-H leak information
+  exactly at **chunked-scan boundaries** in their recurrent/scan component. The mask is correct, but inter-chunk
+  aggregation leaks — **"causality is a graph-level property."** Mask inspection "detected none, while our audit
+  localized all 192/192 to the exact layer." **Why it matters:** causal leaks in *shipped, widely-downloaded* open
+  models mean future-context contamination in pretrained weights — and the lesson extends to every scan/aggregation
+  architecture now shipping, **including the new DeltaNet/QSA hybrids (Qwen3.8-Flash-Next)** and Kimi K3's
+  linear-attention core. The audit tooling is cheap (one page, two forward passes); the open question is whether it
+  gets applied to the new hybrids *before* they ship (→ agenda).
+- **ALPHABET — a 6,437-parameter linear-time sequence model approaches a Bayes oracle (arXiv 2608.24051).** Compresses
+  temporal history into stable complex "pole modes" via a direct bank (resynthesis into the feature trajectory), an
+  independent cascaded bank, and an affine head that reads only modal energies and lag moments — an "explicitly
+  auditable prediction interface" at width D=64. On a Gaussian control task its learned descriptor approaches the
+  **Bayes oracle** where raw autocovariances perform at chance; mean rank **3.97** across an 82-task registry;
+  **5.02× faster inference** / 3.93× faster training than nine baselines; each mode energy ties to a
+  frequency-localized measurement of the second-order spectrum. The extreme end of the "tiny efficient models" trend
+  (sits beside Daedalus's KV-cache-elimination) — and an auditable internal state (modal energies, not black-box
+  activations) is a genuine differentiator for control tasks where you need to know *why* the model decided.
+- **The audit tooling got productized the same week — VIDRAFT AX-RAY (08-27 04:30, verified first-hand).** The
+  Mask-paper authors (VIDRAFT, a Korean AI company, CEO Kim Min-sik) shipped the diagnostic as **AX-RAY /
+  FINAL-Bench Diagnostics** — a public AI-safety catalog of **117 diagnostic items** across three axes and eleven
+  operational categories (prefix invariance / causal leak, chunked-scan & masking consistency, KV-cache path
+  consistency, cross-implementation consistency), mapping items to legal/regulatory/ethical contexts and treating
+  confirmed causal leakage as a **blocking defect** regardless of score. It is being positioned as the verification
+  layer for South Korea's government "cybersecurity-specialized AI foundation model" project — the audit now has a
+  *regulatory* customer. **Watch, answered-for-now (08-27 04:30): no published prefix-invariance audit for
+  Qwen3.8-Flash-Next (Gated DeltaNet + QSA) or GLM-5.3-Flash (sparse + linear) — by the labs or a third party — as of
+  this run.** The root cause is now a code-level census item: in `transformers` 5.7.0, `modeling_zamba2.py` +
+  `modeling_nemotron_h.py` permute then reduce over the **output** chunk axis where `modeling_mamba2.py` reduces over
+  the **input** chunk axis — and the defect fires only when fast kernels are absent (CPU/CI slow path). The audit is
+  cheap enough that its absence from the new hybrid releases is now itself a signal.
