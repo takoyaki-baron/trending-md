@@ -306,3 +306,31 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   own breakdown credits ~5 of the ~12 pts over Pi to the harness stack (base Qwen also beats Pi ~5) + only 2.8 to
   PPLX post-training — treat as a directional claim, not a spec, until the benchmark is open-sourced. A DIY
   replication path (Ollama + Qwen3.8-27B + OpenCode on a 24 GB GPU) exists but is not an independent benchmark.
+
+## QAH + CarWatch + Groq 3 LPX (08-26 20:19)
+
+- **QAH — quantization-aware healing makes a 4-bit model beat its bf16 source (arXiv 2608.20953, Multiverse
+  Computing).** Replaces the degraded intermediate teacher in QAT/QAD: the 4-bit student is distilled **directly
+  from the original full-precision model** via KL divergence. Applied to GPT-OSS 120B → 60B → MXFP4, the QAH
+  student **matched or beat its bfloat16 source on 7 of 9 benchmarks** (AA-LCR 42.7 vs 35.3, AIME 2025 76.3 vs
+  70.7, Aider 40.9 vs 38.2) and edged the 120B teacher on LiveCodeBench — at ~half the weights and compute per
+  token. On GPT-OSS 9B it peaks ~7× faster than QAT and stays within ~2 points of peak for 1,200 steps while QAT
+  loses ~19. Ships open-weight as **HyperNova-60B** (Apache-2.0). **Caveat:** Multiverse's own measurements on its
+  own pipeline (proprietary compression, GPT-OSS-only) — "beats bf16" is a result to reproduce, not yet an
+  independent fact. The fit-to-budget quantization turn (thesis 3) gains a "compression that heals" variant: if 4-bit
+  + half the parameters can match full precision, the dominant serving cost of open models drops.
+- **CarWatch — a Raspberry Pi 5 as a fully offline car agent (`ThinkOffApp/CarWatch`, AGPL-3.0, 171★, Show HN).**
+  Serves **Qwen3.6-35B-A3B** locally (~14.3 GB quant, ~3.5 tok/s) with RAG over the 745-page owner's manual, reads
+  OBD-II via a Bluetooth ELM327, and issues make-safe cloud commands (lock doors, close windows) through Home
+  Assistant. Hands-free voice is fully on-device — continuous VAD → whisper.cpp → grounded answer. A ~$100 device
+  running a 35B local model is a concrete "local AI" end state; the split between read-only OBD-II access and
+  explicitly make-safe commands is a sane safety model for an on-device agent.
+- **NVIDIA Groq 3 LPX — a decode engine enters full production (~3,400 tok/s on Gemma 4 31B at 100K ctx).** At Hot
+  Chips 2026 NVIDIA announced the decode-phase **LPU** chip from the Groq acquisition (complementary to Vera Rubin)
+  is in full production. Artificial Analysis measured **~3,400 output tok/s on Gemma 4 31B at 100K context** (zhidx
+  cites a 3,431 tok/s median at 100K, nearly flat vs 10K; 4,767 SPEED-Bench coding median). Each rack holds 256 LP30
+  accelerators (128 GB on-chip SRAM, 640 TB/s scale-up, liquid-cooled); **Nebius** is the first cloud via its Token
+  Factory platform. The hardware bet that **multi-turn agent workloads, not chat, are the binding inference
+  constraint** — a "decode engine" complementary to the fit-to-budget turn. Caveat (verified 08-26 20:19): the
+  headline number is **Artificial Analysis-measured but on a private pre-release endpoint** (Aug 21), not production
+  serverless — an independent evaluator, but not yet a production measurement; the 4×/30× claims are vendor projections.

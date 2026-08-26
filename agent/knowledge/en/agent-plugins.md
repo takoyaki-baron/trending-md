@@ -506,3 +506,14 @@ benchmark of 300+ skills showed +39 average points excluding security.
 installing this skill help a live agent" — and its negative result is the honest signal: "a skill exists" says
 almost nothing about whether it helps. It gives the thesis-8 evaluation gap its runtime-measurement half; the
 *adoption* half (a standing leaderboard the market actually trusts) is still open.
+
+## Archify — a skill that fails to render rather than render wrong (08-26 20:19)
+
+- **`tt-a1i/archify`** (MIT, 16.8k★, +1,002★ today) — an agent skill (SKILL.md) for Raven, Cursor, Claude Code,
+  Codex CLI and OpenCode that converts a repo or natural-language description into interactive
+  architecture/sequence/data-flow diagrams. Its typed JSON IR is **schema- and layout-validated** — the renderer
+  **refuses invalid output** (crossing edges, overlapping labels) and returns structured diagnostics; output is a
+  self-contained HTML file with PNG/SVG/WebM exports and 1200×630 share cards. An "Architecture Delta" mode compares
+  Before/Delta/After with a machine-readable receipt, and it re-authors pasted Mermaid into Archify JSON. **"Fail to
+  render rather than render wrong" is the correctness mindset agent tooling needs** — a sign the skills wave is moving
+  from prose instructions to validated, machine-checkable artifacts (thesis 8's direction).

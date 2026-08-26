@@ -255,3 +255,25 @@ AI 性能最高为此前 mini 的 4×，**$899**）；**M5 Ultra**（quad-die Ul
   假设下不堪重负"失败。Perplexity 自己的拆解把领先 Pi 约 12 分中的 ~5 分归功于 harness 栈（基础 Qwen 也领先 Pi 约 5 分），
   PPLX 后训练只加 2.8 分——在基准开源前，应视为方向性主张而非规格。DIY 复刻路径（Ollama + Qwen3.8-27B + OpenCode，
   24 GB GPU）存在，但不是独立基准。
+
+## QAH + CarWatch + Groq 3 LPX (08-26 20:19)
+
+- **QAH —— 量化感知治愈让 4-bit 模型反超其 bf16 源（arXiv 2608.20953，Multiverse Computing）。** 用**直接从原始全精度
+  模型**经 KL 散度蒸馏 4-bit 学生，取代 QAT/QAD 中降级的中间教师。应用于 GPT-OSS 120B → 60B → MXFP4，QAH 学生在
+  **9 项基准中 7 项匹配或超过其 bfloat16 源**（AA-LCR 42.7 vs 35.3，AIME 2025 76.3 vs 70.7，Aider 40.9 vs 38.2），
+  并在 LiveCodeBench 上逼近 120B 教师——权重与每 token 算力约减半。在 GPT-OSS 9B 上峰值约比 QAT 快 7×，1,200 步内
+  距峰值约 2 分，而 QAT 掉约 19 分。以开源权重 **HyperNova-60B**（Apache-2.0）发布。**注意：** Multiverse 自有管线上的
+  自测数字（专有压缩、仅 GPT-OSS）——"反超 bf16" 是需要复现的结果，尚非独立事实。按实测预算量化转向（论点 3）多了
+  一个"能自愈的压缩"变体：若 4-bit + 减半参数就能匹配全精度，开源模型的主导服务成本就会下降。
+- **CarWatch —— 树莓派 5 变成完全离线的车载 agent（`ThinkOffApp/CarWatch`，AGPL-3.0，171★，Show HN）。**
+  本地跑 **Qwen3.6-35B-A3B**（约 14.3 GB 量化，约 3.5 tok/s），对 745 页车主手册做 RAG，经蓝牙 ELM327 读取 OBD-II，
+  并通过 Home Assistant 发出"可安全执行"的云端命令（锁门、关窗）。免提语音完全端侧——连续 VAD → whisper.cpp →
+  接地答案。一台约 $100 的设备跑 35B 本地模型是具体的"本地 AI"终态；只读 OBD-II 与显式"可安全执行"命令的切分，
+  是端侧 agent 合理的安全模型。
+- **NVIDIA Groq 3 LPX —— 解码引擎进入量产（Gemma 4 31B 在 100K 上下文下约 3,400 tok/s）。** Hot Chips 2026 上
+  NVIDIA 宣布来自 Groq 收购的解码阶段 **LPU** 芯片（与 Vera Rubin 互补）进入量产。Artificial Analysis 实测在
+  **Gemma 4 31B 100K 上下文下约 3,400 输出 tok/s**（zhidx 引用 100K 下 3,431 tok/s 中位数，与 10K 几乎持平；
+  SPEED-Bench 编码中位数 4,767）。每机架 256 个 LP30 加速器（128 GB 片上 SRAM、640 TB/s scale-up、液冷）；
+  **Nebius** 通过其 Token Factory 平台成为首个云厂商。硬件押注**多轮 agent 工作负载（而非聊天）才是推理的约束**——
+  与按实测预算转向互补的"解码引擎"。注意（08-26 20:19 已核实）：头条数字**由 Artificial Analysis 实测，但在私人预发布端点**
+  （8 月 21 日），而非生产级 serverless——独立评估方，但还不是生产实测；4×/30× 为厂商预测。

@@ -955,6 +955,10 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   头条）一致，但每篇报道都溯源到 Zhipu 的披露——截至该日尚无对放大*机制*的独立技术分析，也无公开 CVE。所有发现的漏洞
   已进入 CNNVD/CNVD 协同修复流程；Zhipu 延迟至约 8 月 28 日的开源权重伴随一个具名项目"开源的盾"（Open Source Shield）
   分层安全审查门槛。
+  **2026-08-26 20:37 核查——公开台账通道关闭，未出技术文章。** 随 GLM-5.3 上线的公开披露台账 `cvd.z.ai` 现在只留一条
+  通知——今后所有披露移交 CNVD/CNNVD/NVDB，从未发布任何 DNS 技术细节。截至 8 月 26 日，约 80k×/1000 万+/"影响主流
+  DNS 九成"的放大漏洞仍无公开 CVE；数字依旧溯源到 Zhipu 的披露，机制无独立测量。剩余观察："影响主流 DNS 九成"能否
+  经得起独立检验，以及协同披露文章是否经由 CNNVD/CNVD 浮出。
 
 ## miniOrange SAML、遗留安装器、版本锚定、TRAMP shell 注入、C2PA 被 root 的相机（08-26 12:03）
 
@@ -991,3 +995,26 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   无限制 KeyStore 访问，zygote 钩子冒充 Pixel Camera）。**未出现 C2PA 规范修订或平台采纳后退**——Google 反而在*扩大*
   C2PA（I/O 2026 年 5 月宣布 Pixel 8/9 视频签名）；Samsung 的 RKP/EL2 能挡住部分故障注入，但既不普适也不充分。
   标准维持原样：唯一真正的修复是把图像管线重写到安全 enclave 的不可行方案。
+
+## Chrome Aura 沙箱逃逸 + AI 基础设施认证漏洞 + 配置写入触发 hook + SharePoint 链被武器化 (08-26 20:19)
+
+- **Chrome Aura CVE-2026-79290 —— 一个 use-after-free 造成的 Critical 沙箱逃逸（CISA ADP Vulnrichment 评 CVSS 9.6）。**
+  CWE-416，Aura 窗口层 UAF；构造的 HTML 页面可破坏内存并逃出渲染沙箱，在浏览器外执行代码。已在 Chrome
+  **152.0.7977.65**（稳定版，Aug 25）修复，同批还有 CVE-2026-79138（ANGLE 越界写，Windows，High）、CVE-2026-79026
+  （Extensions UAF，High）、CVE-2026-79125（WebXR 信息泄露，Low）。尚无在野利用，未进 KEV。**两周内第二次 Chrome
+  Critical 修复**——"浏览器即 agent 运行时"的供应链话题（多数 agent harness 与无头工具都构建在 Chrome 上）。
+- **DB-GPT CVE-2026-80104 —— 未认证路径穿越 → 任意文件写入 → RCE（CVSS 9.8，VulnCheck 分配）。** `skill_upload`
+  把 `file.filename` 原样写入 `upload_dir/filename`，不做规范化或包含检查；而认证依赖在**没有 `user_id` 头时也返回
+  admin 角色**——未认证攻击者可把 `.py` 模块放进包内，在下一次 import 时获得代码执行。dbgpt-app 0.8.0，
+  已在 **v0.8.1**（GitHub + PyPI）修复。"没有 user_id 也是 admin" 是 AI 工具里可 grep 的授权缺陷——与 GBIF IPT
+  安装端点绕过同形。
+- **GitPython CVE-2026-78676 —— 一次配置写入变成活的 `core.hooksPath`，RCE（CVSS 9.8，CWE-88）。**
+  `GitConfigParser.write_section` 把带引号的多行配置值重序列化成**不带引号的物理换行**，于是休眠值变成活的指令
+  （如 `core.hooksPath`）——之后任何 Git 操作都会调用攻击者控制的 hook 执行代码。这是**延迟触发注入**类
+  （触发与写入必须都发生；扫描器很少能抓到）。在 GitPython **3.1.59** 修复，同版本还修了 CVE-2026-78675
+  （`.gitmodules` 泄露）+ CVE-2026-78677（目录穿越）。无已确认在野利用；公开 PoC 在各追踪器间有争议。
+- **CVE-2026-63520 —— SharePoint 不安全类型实例化获得公开武器化链（日期更新）。** VulnCheck 于 Aug 24 发布
+  **武器化完整链**，把 `DbTypeReflector.ResolveDotNetType()` 缺陷（已与 CVE-2026-55040 一起入账）拼成**未认证 RCE**
+  ——实例化 `System.Web.UI.LosFormatter` 并经 BDC Finder 方法触发 `Deserialize`。**2026 年 8 月累积更新**加入
+  `ValidateSafeBcsType` 允许列表。约 8,500 台暴露在公网的服务器；Censys 联合公告（Aug 25）。认证绕过半边已在 KEV
+  且正被积极探测——应假设完整未认证 RCE 路径正在被测试。

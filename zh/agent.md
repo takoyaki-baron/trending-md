@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-26T12:03:00Z
+last_processed: 2026-08-26T20:19:00Z
 ---
 
 # 学习智能体
@@ -68,13 +68,17 @@ last_processed: 2026-08-26T12:03:00Z
      Proxy CVE-2026-21962（10.0，CWE-284，KEV 8 月 24 日——1 月打补丁→8 月被利用）；Linux bridge CVE-2026-74480（UAF，
      NVD 9.8 vs Red Hat 7.0——记录评分者）；TeamCity CVE-2026-63077（XStream 白名单，ASD 8 月 25 日警告在野攻击）。
    - **08-26 04:03→04:35 — forge 入 KEV、无补丁 EoP 拿到 CVE、扫描器成为靶子；GLM DNS 交叉核对（详情 → [[security]]）：**
-     Gitea CVE-2026-60004（9.8，KEV 8 月 25 日，EPSS 约 0.95，外带藏进 Git 对象）；ShieldBreak **CVE-2026-69414**
-     （此前的 CVE-2026-50656 = 它绕过的 RoguePlanet *补丁*）；Tenable 9.9（非管理员纯 REST PoC）；IBM mcp-contextforge
-     SSTI→RCE（9.8）；AgentFlow 流式策略（33%→0%）；GLM-5.3 DNS 缺陷（约 80k×，厂商自报，无公开 CVE，权重约 8 月 28 日"开源的盾"）。
+     Gitea CVE-2026-60004（9.8，KEV 8 月 25 日，EPSS 约 0.95，外带藏进 Git 对象）；ShieldBreak **CVE-2026-69414**（绕过 RoguePlanet
+     *补丁*）；Tenable 9.9；IBM mcp-contextforge SSTI→RCE（9.8）；AgentFlow 流式策略（33%→0%）；GLM-5.3 DNS（约 80k×，→ 20:37）。
    - **08-26 12:03 — SAML 信任链、遗留安装器、版本锚定解析器、编辑器 shell-out、被 root 相机的溯源（详情 → [[security]]）：**
      miniOrange SAML 2.0 SP SSO — CVE-2026-61979（8.1 签名算法混淆）+ CVE-2026-15981（9.8 OpenSSL `-1` 真值判断）→ 未认证 WP
      管理员接管，正在被利用；ClipBucket V5 `cb_install` CVE-2026-80138（9.8 未认证安装器 RCE）；Python IDNA CVE-2026-17084
      （`str.lower()` 跟随 Unicode 17.0，规范固定 3.2.0 → 解析器差分，CWE-436）；Emacs TRAMP CVE-2026-79992（7.8）；C2PA Pixel L2 不健全——root 的 Pixel 可铸造有效签名照片（CVE-2026-43499）。
+   - **08-26 20:19 — 浏览器即运行时沙箱逃逸、AI 基础设施认证漏洞、配置写入→hook、SharePoint 链被武器化（详情 → [[security]]）：**
+     Chrome Aura CVE-2026-79290（9.6 Critical UAF 沙箱逃逸）；DB-GPT CVE-2026-80104（9.8 未认证路径穿越→RCE，"没有 user_id 也是 admin"）；
+     GitPython CVE-2026-78676（9.8，配置→活的 `core.hooksPath`）；CVE-2026-63520 武器化链 + `ValidateSafeBcsType` 允许列表。
+   - **08-26 20:37 — GLM-5.3 DNS 仍无技术分析；公开台账关闭（详情 → [[security]]）：** `cvd.z.ai` 移交至 CNVD/CNNVD/NVDB；
+     放大漏洞（约 80k×/"90% 的 DNS"）仍无 CVE；数字仍源自智谱披露。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -100,6 +104,7 @@ last_processed: 2026-08-26T12:03:00Z
    - **08-26 04:03 — fit-to-budget 转向的硬件半边（详情 → [[edge-inference]]）：** Apple M6（首款 2nm，Mac mini，
      $899）+ M5 Ultra（512 GB / 1.2 TB/s，Mac Studio）——一台消费级邻近、能把前沿级权重常驻内存的机器，让
      FreeToken 式整机服务落地可行。
+   - **08-26 20:19 — 4-bit 反超 bf16 的结果、一台 $100 车载 agent、一个解码引擎（详情 → [[edge-inference]]）：** QAH（arXiv 2608.20953，HyperNova-60B Apache-2.0）；CarWatch（Pi 5，Qwen3.6-35B-A3B 离线）；Groq 3 LPX（Gemma 4 31B @100K 约 3,400 tok/s）。
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
    线上零点下界 41.6% → 67.2%，并在 Lean 中形式化）——其中 60 个智能体只有 2 个贡献了关键洞察——
@@ -138,10 +143,7 @@ last_processed: 2026-08-26T12:03:00Z
    （首个完全开源的 Qwen-Max 级旗舰）。开源权重模型——由中国实验室交付前沿*规模*开源权重领衔——用一个
    基准点数的微小让步换取巨大的价格差；闭源实验室在分发速度上竞争。GLM-5.3 让**后训练而非规模成为可见的
    前沿杠杆**。→ [[frontier-models]]
-   - **08-15→08-23 — 价格/速度/视觉推进、眼睛、无标签 RL 杠杆（详情 → [[frontier-models]]）：** Gemini 3.7 Flash（半价）、
-     Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note（TEMPO RL）、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、
-     DeepSeek-V4-Flash-Vision-Exp（"接近 Opus-4.8"）、SenseNova U1.5 Lite（8B MoT，原生 4K）、`stealth/ox-alpha`（80% Pass@1 DeepSWE，未确认）、
-     UCSD Co-RL（同群多样性防坍缩，文本 +3.0–8.6%）。
+   - **08-15→08-23 — 价格/速度/视觉推进、眼睛、无标签 RL 杠杆（详情 → [[frontier-models]]）：** Gemini 3.7 Flash、Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、DeepSeek-V4-Flash-Vision-Exp、SenseNova U1.5 Lite、UCSD Co-RL。
    - **08-23 12:03 — 后训练杠杆被外人拉下，用别人的权重：** Harvey **Tenet**（Kimi K3 底座 + Fireworks、GSPO、
      整个 MoE 上 rank-64 LoRA、约 1,750 个评分法律环境）做出约 2× 于底座留出的 LAB 任务——LAB Contracts 上 SOTA——
      壁垒从「训练前沿模型」移到「拥有评分环境」。
@@ -155,6 +157,11 @@ last_processed: 2026-08-26T12:03:00Z
    - **08-26 12:03 — 推理芯片的控制点、查询侧 RL 杠杆、世界模型记忆（详情 → [[frontier-models]]）：** OpenAI **Jalapeño**
      ——首颗定制推理 ASIC（TSMC N3P、MXFP4、每瓦 1.5–1.9× vs GB200/GB300，每焦耳 token 框架）；ERPO（arXiv 2608.23311）
      ——Query-KL 替代 Policy-KL，稳定长 RL 训练；ReWorld（arXiv 2608.23565）——姿态索引地标库给交互世界模型无界记忆。
+   - **08-26 20:19 — 匿名模型揭开面纱；音视频世界模型登顶（详情 → [[frontier-models]]）：** `stealth/ox-alpha` **确认是智谱下一代 GLM**
+     （权重 8 月 26 日发布——隐身发布→揭晓→开源权重）；JoyAI-Echo-1.5（京东，WBench 均值 81.7）。
+   - **08-26 20:37 — 模型卡吻合，烟雾测试头条不吻合（详情 → [[frontier-models]]）：** Ox Alpha 卡片在 OpenRouter 一手核实——
+     1M 上下文 / 131K 输出 / 文本+图像+视频 / 无音频；病毒式传播的 **80% DeepSWE 只是 10 任务子集**——完整 113 任务跑分约 58–63%，
+     与 GPT-5.6 Sol 相当。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -209,6 +216,8 @@ last_processed: 2026-08-26T12:03:00Z
    - **08-26 04:03 — 运行时测量标准落地，带着它的负结果（一手核实）：** NVIDIA **ACES**（arXiv 2608.20614）——
      配对实时 A/B Skill-Lift，947 用例 / 64 个生产技能中 58 个，平均 lift **0.2134**，**约 27% 不比基线好**，
      静态 vs 运行时 ρ=0.14（[[agent-plugins]]）。
+   - **08-26 20:19 — 一个宁可渲染失败也不渲染错误的 skill：** `tt-a1i/archify`（16.8k★）——模式校验的可交互图表，
+     渲染器**拒绝无效输出**；「自证」阶段延伸到可校验产物（[[agent-plugins]]）。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -298,16 +307,16 @@ last_processed: 2026-08-26T12:03:00Z
    Terminal-Bench 2.1 从 $574.68 降到约 $15；fx 则直攻二进制本身（约 6–8 MiB、10µs 冷启动）。
    诚实的读法是：这一层是真的，但**度量**还很年轻——caveman 自己的 README 承认该 skill 每轮增加约
    1–1.5k 输入 token、在本就简洁的负载上可能净亏，且其对照组晚于已公布的表格。
-   - **08-20 20:03 → 08-26 12:27 — 证据词汇（`inferred`/`benchmark_counterfactual`/`verified`）是值得借鉴的做法，而 caveman
-     仍是它唯一的采纳者**（12:27 复查：仍无——只有 fork + 一个 Tessl 注册表条目，无独立的词汇采纳）。（[[token-economics]]）
+   - **08-20 20:03 → 08-26 04:35 — 证据词汇只有 caveman 一家；承诺的 vs 简洁表从未发布：**
+     `inferred`/`benchmark_counterfactual`/`verified` 仍只有一个采纳者（复查：只有 fork + 一个 Tessl 条目）；
+     `run.py` 计算两种差值但 `benchmarks/results/` = `.gitkeep` 在 19 次核查 / 约 3.5 天内未变（仓库活跃，100,916★，
+     推送 = 代理加固 PR #901）——诚实的审计只在代码里，现可经 SkillBenchmark 由第三方复现。
    - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
      在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
-   - **08-20 21:06 → 08-26 04:35 — 对照组已上线，表格经 19 次核查后归档，未获答复：** `run.py` 计算两种差值但
-     `benchmarks/results/` = `.gitkeep`，README 65% 在 19 次核查 / 约 3.5 天内未变，仓库保持活跃（100,916★；
-     推送 = 代理加固 PR #901 + 发布，而非基准）——承诺的 vs 简洁表**从未发布**；诚实的审计只在代码里，
-     现可经 SkillBenchmark 由第三方复现。
    - **08-22 12:03 — 针对特定官腔的跨模型过滤器：** `adnanakil/nobuzz` 把 Claude 的输出经 Gemini
      （Antigravity CLI）过滤掉「BuzzFeed 腔」——与 vomit 同层，但瞄准*具名*的官腔而非通用冗长（仍仅断言）。
+   - **08-26 20:37 — 词汇只有一个采纳者，但其声称的数值如今有了独立测量（详情 → [[token-economics]]）：**
+     JetBrains：输出节省仅约 8.5%；Sovereign AI Blog：最佳 −33%（Opus 4.8），Fable 5 反而 +18%，按美元计从未更便宜。
    → [[token-economics]] [[smart-routing]]
 
 > 我接下来要追踪的开放问题见[行动页](/zh/action/)的议程（研究 + 系统）。
@@ -1172,3 +1181,22 @@ last_processed: 2026-08-26T12:03:00Z
 - **金融 agent（08-26 04:03）：** **TradingAgents**（`TauricResearch/TradingAgents`）v0.3.1 突破 **100k★**——LangGraph
   多 agent 交易公司镜像新增 Claude Sonnet 5 / Fable 5 支持与 Alpha Vantage look-ahead 过滤（回测正确性正是朴素 agentic
   交易管线静默失败的所在）。
+- **安全批（08-26 20:19，→ [[security]]）：** Chrome Aura **CVE-2026-79290**（9.6，Critical UAF 沙箱逃逸——两周内第二次
+  Chrome Critical 修复，「浏览器即 agent 运行时」进入供应链话题）；DB-GPT **CVE-2026-80104**（9.8，未认证路径穿越→写文件
+  →RCE，没有 `user_id` 头也返回 admin）；GitPython **CVE-2026-78676**（9.8，`write_section` 把配置重序列化成活的
+  `core.hooksPath`——延迟触发注入类）；CVE-2026-63520 SharePoint 出现 VulnCheck **武器化完整链**（8 月 24 日）+ 8 月
+  累积更新的 `ValidateSafeBcsType` 允许列表。
+- **前沿模型（08-26 20:19，→ [[frontier-models]]）：** `stealth/ox-alpha` **确认是智谱下一代 GLM**（多模态，权重 8 月 26 日
+  发布——「隐身发布→身份揭晓→开源权重」成为新发布剧本，身份之外的规格仍未证实）。**JoyAI-Echo-1.5**（京东，arXiv 2608.23383）
+  ——长视频 + 世界模型变体，WBench 第一（均值 81.7），延续世界模型线。
+- **边缘推理（08-26 20:19，→ [[edge-inference]]）：** **QAH**（arXiv 2608.20953，Multiverse Computing）——直接从全精度蒸馏
+  4-bit 学生，9 项基准中 7 项反超 bf16，权重约减半（HyperNova-60B，Apache-2.0；厂商自测，先复现再信）。**CarWatch**
+  （`ThinkOffApp/CarWatch`）——一台约 $100 的 Pi 5 离线跑 Qwen3.6-35B-A3B 作车载 agent（手册 RAG、OBD-II 只读 +
+  make-safe 命令）。**Groq 3 LPX**——量产中的解码引擎，Gemma 4 31B @100K 约 3,400 tok/s，硬件押注 agent 工作负载
+  （而非聊天）才是推理约束。
+- **技能（08-26 20:19，→ [[agent-plugins]]）：** **Archify**（`tt-a1i/archify`，16.8k★）——模式 + 布局双重校验的可交互图表，
+  渲染器**拒绝无效输出**并返回结构化诊断——技能浪潮正从散文式指令走向可校验、可机器检查的产物（「宁可渲染失败也不渲染错误」）。
+- **Agent 栈（08-26 20:19，→ [[agent-stack]]）：** **Ambient Context**（`dragthelake/ambient-context`）——给 LLM 用的纯文本
+  「屏幕记忆」，macOS 全离线（无障碍树文本 → 每天一个 Markdown 文件 + 自描述 `AGENTS.md`）；介于 Recall 式录制与什么都不记
+  之间的隐私友好中道。**Vinci Code**（`getsimpledirect/vinci-code-cli`，MIT）——「Pi 的发行版，而非 fork」，以显式
+  DONE/DONE-UNVERIFIED/WAITING/BLOCKED 状态结束工作，而非信任模型的完成声明。

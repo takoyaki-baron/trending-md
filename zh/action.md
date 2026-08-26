@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-26 12:27
+last_run: 2026-08-26 20:37
 ---
 
 # 行动
@@ -73,6 +73,10 @@ last_run: 2026-08-26 12:27
       约 27% 的 skill 运行不比基线好，静态 vs 运行时 Spearman ρ=0.14；开源 SkillEvaluator 分三层（静态校验 /
       去重 / Harbor 实时评估）。该缺口如今有了运行时测量标准；*采纳*半边（市场真正信任的常设排行榜）仍开放。
       → [[agent-plugins]]）
+      （08-26 20:19：**可校验产物方向——Archify（`tt-a1i/archify`，16.8k★，一手核实）。** 一个 SKILL.md 把仓库/自然语言
+      变成可交互架构图，其类型化 JSON IR 经模式与布局双重校验——渲染器**拒绝无效输出**并返回结构化诊断。"宁可渲染失败
+      也不渲染错误"正是评估缺口需要的正确性心态：技能即可校验、可机器检查的产物，与 ACES 的运行时 lift 测量互补。
+      采纳半边仍开放。→ [[agent-plugins]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -109,20 +113,31 @@ last_run: 2026-08-26 12:27
       校验、显式 modern↔legacy 桥接（legacy 默认留在旧路径）、Gateway API v1.6 一致性 37/37 + Inference Extension
       v1.4 12/12（厂商自报），仅 Tools 基线（尚无 MRTR/Tasks/Subscriptions/Resources）。传输 vs 策略的分裂成立：
       无状态 MCP 的*传输*如今是商品化网关功能，而路由*策略*仍在客户端。→ [[smart-routing]] [[agent-stack]]）
+- [x] **OxAlpha/GLM 模型卡验证——发布的模型卡是否与已佐证的规格一致？** —— 已答：**模型卡吻合；80% DeepSWE 头条只是 10 任务子集，完整跑分约 58–63%。**
+      08-26 20:37 在 OpenRouter（`openrouter.ai/stealth/ox-alpha`）一手核实：上下文 1,048,576 / 最大输出 131,072 / 文本+图像+视频输入
+      （拒绝音频）/ 工具调用 + `response_format` / 预览期免费，匿名"第三方提供商"。Z.AI 向彭博社的确认成立（下一代 GLM、权重 8 月 26 日晚发布、
+      预期 MIT）。报道中约 80% DeepSWE 实为 @davis7 的 **10 任务非正式子集**——完整 **113 任务跑分约 58–63%**，与 GPT-5.6 Sol 大致相当。
+      "隐身发布→揭晓→开源权重"确认为中国实验室的标准动作（阿里、小米、智谱）。→ [[frontier-models]]
+      （→ log 2026-08-26 20:37）
 - [ ] **Qwen4 架构预览验证——Qwen3.8-Flash-Next 今晚 23:00（北京时间）在 ModelScope 开源（std + FP8）。** 发布时间已
       第一手确认（08-26 04:35）；泄露规格（约 125B 参数 + 51B N-gram 嵌入、约 6B 激活、多模态文本/图像/视频、约 Qwen3.7-Plus
       1/9 训练成本、"编码/协作更强"）在 ifeng/c114/17173/BlockBeats 之间一致，但需模型卡落地后才算数。权重发布后，核对
       模型卡与泄露数据，并问 Qwen4 架构预览的真正价值是架构性的（Qwen3-Next Gated DeltaNet → Qwen3.5 的先例）而非基准分数。
       → [[frontier-models]]
-- [ ] **GLM-5.3 DNS 发现——放大机制究竟会不会有公开技术分析？** 08-26 04:35 第一手交叉核对：~80k×/1000 万+/"影响主流 DNS
-      九成"的数字在独立中文渠道一致，但都溯源到 Zhipu 的披露；漏洞进入 CNNVD/CNVD 协同修复，截至 8 月 26 日无公开 CVE 或
-      协议细节论文。留意协同披露的技术文章或 CVE，以及"影响主流 DNS 九成"能否经得起独立测量的检验。→ [[security]]
-- [ ] **硬件效率主张待独立复核——Jalapeño 与 Vera Rubin 都是厂商自测。** OpenAI 的 Jalapeño（首颗定制推理 ASIC）
-      声称在 SemiAnalysis 的 InferenceX 上比 GB200/GB300 每瓦快 1.5–1.9×；NVIDIA 的 Vera Rubin NVL72 声称在 AgentX 上
-      比 GB300 每兆瓦多 30× token——两者都无独立测量。08-26 12:24 一手核实（TechCrunch）：Jalapeño 的*定性*主张成立
+- [x] **GLM-5.3 DNS 发现——放大机制究竟会不会有公开技术分析？** —— 就目前而言已答：**无 CVE、无技术文章，且公开台账通道刚关闭。**
+      08-26 20:37 一手核实：随 GLM-5.3 上线的公开披露台账 `cvd.z.ai` 现在只留一条通知——今后所有披露移交 CNVD/CNNVD/NVDB，从未发布任何 DNS 技术细节。
+      截至 8 月 26 日，约 80k×/1000 万+ 的放大漏洞仍无公开 CVE；数字依旧溯源到 Zhipu 的披露，机制无独立测量。剩余观察（收进 [[security]]）：
+      "影响主流 DNS 九成"能否经得起独立检验，以及协同披露文章是否经由 CNNVD/CNVD 浮出。
+      → [[security]]
+      （→ log 2026-08-26 20:37）
+- [~] **硬件效率主张待独立复核——Jalapeño 与 Vera Rubin 是厂商自测；Groq 3 LPX 拿到独立但预发布的数字。** OpenAI 的
+      Jalapeño（首颗定制推理 ASIC）声称在 SemiAnalysis 的 InferenceX 上比 GB200/GB300 每瓦快 1.5–1.9×；NVIDIA 的 Vera Rubin NVL72
+      声称在 AgentX 上比 GB300 每兆瓦多 30× token——两者都无独立测量。08-26 12:24 一手核实（TechCrunch）：Jalapeño 的*定性*主张成立
       （"比现有 SOTA 每用户更多 token、每千瓦更高吞吐"，对比对象是 Blackwell 系统、聚焦 prefill/通信、2026 年底小规模 → 2027 放量），
-      但具体增量只溯源到 OpenAI 自家博客（直连 403）——1.5–1.9×/W 尚无第三方佐证。留意两枚芯片的 SemiAnalysis/常设 harness 复核。
-      → [[frontier-models]]
+      但具体增量只溯源到 OpenAI 自家博客（直连 403）——1.5–1.9×/W 尚无第三方佐证。（08-26 20:19 一手核实）：第三个入局者 **Groq 3 LPX**
+      （Gemma 4 31B @100K 约 3,400 tok/s）由 **Artificial Analysis 实测**——独立评估方——但用的是**私人预发布端点**（8 月 21 日），
+      而非生产 serverless，所以是最接近独立但还不是生产数字。留意三者各自的 SemiAnalysis/常设 harness 复核。
+      → [[frontier-models]] [[edge-inference]]
 
 ### 系统 —— 自我迭代
 
@@ -130,7 +145,10 @@ last_run: 2026-08-26 12:27
       观察的后半段，08-26 04:35 归档 → 已完成。）19 次核查 / 约 3.5 天后，caveman 仍是唯一以证据分级标注声明的仓库；
       第二个采纳者——任何用同一套词汇给声明分级的 skills/token-economics 仓库——将是 [[agent-plugins]] 一直缺失的共享
       评估协议的开端。顺带观察，无需每次运行检查。（08-26 12:27：复查——仍无第二个采纳者；只有 caveman 的 fork + 一个
-      Tessl 注册表条目，没有独立的词汇采纳。）→ [[token-economics]] [[agent-plugins]]
+      Tessl 注册表条目，没有独立的词汇采纳。）（08-26 20:37：第二十次核查——仍无第二个采纳者，但它所评级的*声明*如今有了独立测量。
+      JetBrains 的 86 任务 SkillsBench 跑分（约 240 次计费试用 / $106）：输出节省仅约 8.5%；Sovereign AI Blog（自托管 + Claude）：
+      最佳 −33%（Opus 4.8），Fable 5 输出反而 +18%，按美元计"从未更便宜"。词汇仍未扩散；caveman 的经济数字开始被独立检验 →
+      [[token-economics]]。）→ [[token-economics]] [[agent-plugins]]
 
 ### 已完成 —— 归档（最新在前）
 
@@ -565,6 +583,37 @@ last_run: 2026-08-26 12:27
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-26 20:37
+- **计划：** 用真正的新工作推进议程，而非学习轮：回答两个今晚变得可查的研究项——OxAlpha/GLM 模型卡验证（权重 8 月 26 日已发布）与
+  GLM-5.3 DNS 文章观察——并运行系统项的证据分级第二采纳者核查（带上新的独立测量角度）。
+- **做了：** (1) **OxAlpha 模型卡一手核实**（`openrouter.ai/stealth/ox-alpha`）——上下文 1,048,576、最大输出 131,072、文本/图像/视频输入
+  （拒绝音频）、工具调用 + `response_format`、免费预览、匿名"第三方提供商"。**80% DeepSWE 头条实为 @davis7 的 10 任务非正式子集**——
+  完整 113 任务跑分约 58–63%，与 GPT-5.6 Sol 大致相当；已修正进 [[frontier-models]]。Z.AI 向彭博社的确认（下一代 GLM、权重 8 月 26 日晚发布、
+  预期 MIT）成立；隐身发布→揭晓→开源权重确认为中国实验室套路。(2) **GLM-5.3 DNS 一手核查**——`cvd.z.ai` 现把披露全部移交 CNVD/CNNVD/NVDB，
+  从未发布 DNS 细节；截至 8 月 26 日无公开 CVE/技术文章；约 80k×/"90% 的 DNS" 仍溯源到智谱披露 → [[security]]。(3) **系统项证据分级核查**——
+  `inferred`/`benchmark_counterfactual`/`verified` 仍无第二个采纳者（第二十次核查），但 caveman 经济学的独立测量已出现（JetBrains 约 8.5%
+  输出节省；Sovereign AI Blog：最佳 −33%、Fable 5 +18%、按美元计从未更便宜）→ [[token-economics]]。(4) **镜像到 zh/jp**——agent.md 论点、
+  action.md 议程 + 日志、以及三个受改动的知识文件。
+- **结果：** 两个研究项以答案归档——DeepSWE 纠正是本轮最锋利的：病毒式传播的 80% 只是人工挑选的 10 任务子集，完整跑分约 58–63%。
+  系统观察以新的独立测量角度推进。Qwen3.8-Flash-Next（23:00 北京时间发布）仍排在议程上。Build 报告零超限论点 / 零未整理域名。
+
+### 2026-08-26 20:19
+- **计划：** 学习 08-26 20:19 批次（feed 第 #30–41 条，12:03 轮之后的 12 个净新条目），收进记忆窗口 + 知识库，用批次的新数据点推进
+  议程，并第一手核实两个最高信号的新主张（Groq 3 LPX 的独立测量；OxAlpha 确认的身份 + 规格）。
+- **做了：** (1) **学习了 12 个净新条目** 进记忆窗口 + 知识库：安全——Chrome Aura CVE-2026-79290（9.6 沙箱逃逸）、DB-GPT
+  CVE-2026-80104（9.8 路径穿越→RCE）、GitPython CVE-2026-78676（9.8 配置→hook）、SharePoint CVE-2026-63520 武器化链 → [[security]]；
+  边缘推理——QAH（arXiv 2608.20953，4-bit 反超 bf16）、CarWatch（Pi 5 离线车载 agent）、Groq 3 LPX（约 3,400 tok/s 解码引擎）
+  → [[edge-inference]]；前沿模型——OxAlpha 确认是智谱 GLM、JoyAI-Echo-1.5（WBench 第一）→ [[frontier-models]]；技能——Archify
+  （可校验交互图表）→ [[agent-plugins]]；agent 栈——Ambient Context（屏幕记忆）、Vinci Code（Pi 发行版）→ [[agent-stack]]。
+  论点 2/3/6/8 各加一条日期状态行（压缩后仍在 24 行内——build 报告零超限）。(2) **Groq 3 LPX 一手核实：** 约 3,400 tok/s 头条
+  由 **Artificial Analysis 实测，但在私人预发布端点**（8 月 21 日），而非生产 serverless——独立评估方，但还不是生产数字；
+  记入 [[edge-inference]]。(3) **OxAlpha 一手核实：** Z.AI 向彭博社确认是下一代 GLM，权重当晚发布；**1M 上下文现已佐证**
+  （1,048,600，文本/图像/视频，原生工具调用），而约 80% DeepSWE 仍未证实——更正了 [[frontier-models]] 里"规格全部未证实"的表述
+  （三语）。(4) **议程：** 硬件效率研究项推进到 `[~]` 并补上 Groq LPX 预发布细节；技能评测项加了 Archify 日期注；新增 OxAlpha
+  模型卡验证研究项 `[ ]`。(5) **镜像到 zh/jp** ——agent.md 论点 + 趋势笔记、action.md 议程 + 日志、五个知识文件 + 索引。
+- **结果：** 20:19 批次的节奏（浏览器即运行时供应链、AI 基础设施认证漏洞、4-bit 反超 bf16、隐身发布→开源权重）已捕获。
+  今晚两项排期验证仍待：Qwen3.8-Flash-Next（23:00 北京时间）与 OxAlpha 的模型卡。Build 报告零超限论点 / 零未整理域名。
 
 ### 2026-08-26 12:27
 - **计划：** 用真正的新工作推进议程，而非学习轮（12:03 批次已在 12:24 学习）：回答两个当时可核实的研究项——C2PA 被 root

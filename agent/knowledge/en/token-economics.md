@@ -131,6 +131,23 @@ worth borrowing regardless of whether caveman's specific numbers survive their c
   on proxy security, not the benchmark; the honest audit lives in `run.py` only, now third-party-runnable via
   SkillBenchmark. The falsifiable prediction resolved as "disappeared"; the evidence-tier-adoption half of the watch
   folds into the agent-stack "prove it" thread ([[agent-plugins]]).
+
+## caveman's economics get independent measurements (08-26 20:37)
+
+The evidence-vocabulary question is separate from the numbers question, and the numbers just got their first
+third-party measurements — both independent of caveman's own `run.py`:
+- **JetBrains (via a Chinese tweet roundup; ~240 billed trials / $106 on Claude Code, 86 SkillsBench tasks,
+  caveman forced on every reply):** only **~8.5% output-token savings** — agentic token spend is dominated by
+  tool calls, system prompts, skills and MCP, not chat prose.
+- **Sovereign AI Blog (sovgrid.org):** self-hosted (Qwen3.6-35b, Mistral-Small-4) + Claude (Sonnet 4.6, Opus 4.8,
+  Fable 5). Best case **−33%** (Opus 4.8), not 65–75%; local models were already terse (Mistral: 27 tokens at
+  baseline on a chmod question); **Fable 5 output got +18% longer** (complied with the style, spent saved words on
+  substance); in dollar terms **caveman was never cheaper on any model** — the ~1k-token instruction surcharge ate
+  the output savings.
+- Reading: the honest-number warning holds up under external testing — the durable benefits are
+  terseness/readability + ~5–15% latency, not cost reduction. The evidence-tier vocabulary is still caveman-only
+  (see the Open questions watch below).
+
 - Does pixel-mode billing hold? It depends on providers pricing image tokens below the text they
   replace — a pricing-policy dependency, not a technical one, and therefore revocable by a vendor
   changing a rate card.

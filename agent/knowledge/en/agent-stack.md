@@ -1306,3 +1306,21 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   (vendor-reported), with 43 official Go/Rust plugins. Covers only the **Tools baseline** — no MRTR/Tasks/
   Subscriptions/Resources yet. Stateless MCP is what makes agent-tool calls horizontally scalable behind a
   normal web gateway, and this is the first open reference doing it without a session layer.
+
+## Screen memory as plain text + a "distribution of Pi" (08-26 20:19)
+
+- **Ambient Context (`dragthelake/ambient-context`, Show HN)** — a macOS menu-bar app that records your work as
+  plain Markdown for an LLM to read: captures focused-window text via the Accessibility API (no screenshots/OCR),
+  writes one Markdown file per day plus an `AGENTS.md` describing the format, and redacts before writing (skips
+  password managers/private browsing, scrubs credentials). Fully offline. Point Claude Code at the folder and ask
+  "what did I work on Tuesday?". **"Text-only, local-only screen memory"** — a privacy-preserving middle path
+  between Recall/Rewind-style recording and nothing; the self-describing `AGENTS.md` pattern (handing human context
+  to an agent without a database) is the note. Limits: Chromium/Electron accessibility trees are slow; GPU-rendered
+  terminals expose little text.
+- **Vinci Code (`getsimpledirect/vinci-code-cli`, MIT) — "a distribution of Pi, not a fork."** SimpleDirect's
+  opinionated layer on Mario Zechner's MIT harness preserves upstream history: plain-language narration, command
+  guards, secret masking, OS-level sandboxing, checkpoints, undo/review, durable task receipts. It ends work in four
+  explicit states — **DONE, DONE-UNVERIFIED, WAITING, BLOCKED** — rather than trusting the model's completion claim,
+  and pauses before irreversible commands (`rm -rf` defaults to no). "A distribution of Pi, not a fork" keeps the
+  growing Pi ecosystem compatible; explicit end-states are a small but real accountability shift for agent CLIs
+  (thesis 12's harness-engineering thread).

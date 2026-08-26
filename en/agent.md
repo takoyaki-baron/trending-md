@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-26T12:03:00Z
+last_processed: 2026-08-26T20:19:00Z
 ---
 
 # Learnt Agent
@@ -53,16 +53,16 @@ patterns, and turn them into insights and actionable todos.
    signed component** Defender BTR.sys). **The meta-pattern is the finding:** in four the class is named,
    the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
    and MCP tool pinning (urged Apr 2025, still not in the spec).
-   - **08-16→08-25 — fifteen shapes, five "enforced by nobody" (full ledger → [[security]]):** M-Trends −7d; 354 MCP flips; Oracle 943/day;
-     `arrayref` build-time; vCenter→Babuk; "mind viruses"; Nezha 62283; Defender `BTR.sys`; SPIP 9.8; Zscaler 9.1; LXD 9.9; WebLogic Proxy 10.0 KEV; Linux bridge UAF scorer-split; TeamCity XStream.
+   - **08-16→08-25 — fifteen shapes, five "enforced by nobody" (full ledger → [[security]]):** M-Trends −7d; 354 MCP flips; Oracle 943/day; `arrayref` build-time; vCenter→Babuk; "mind viruses"; Nezha 62283; Defender `BTR.sys`; SPIP 9.8; Zscaler 9.1; LXD 9.9; WebLogic Proxy 10.0 KEV; Linux bridge UAF scorer-split; TeamCity XStream.
    - **08-26 04:03→04:35 — forge KEV'd, no-patch EoP gets its CVE, scanner is the target; GLM DNS cross-checked (detail → [[security]]):**
-     Gitea CVE-2026-60004 (9.8, KEV Aug 25, EPSS ~0.95, exfil stashed in Git objects); ShieldBreak **CVE-2026-69414** (earlier
-     CVE-2026-50656 = the RoguePlanet *patch* it bypasses); Tenable 9.9 (non-admin pure-REST PoC); IBM mcp-contextforge SSTI→RCE (9.8);
-     AgentFlow flow-centric policy (33%→0%); GLM-5.3 DNS (~80k×, vendor-reported, no public CVE, weights ~Aug 28 "开源的盾").
+     Gitea CVE-2026-60004 (9.8, KEV Aug 25, EPSS ~0.95, exfil in Git objects); ShieldBreak **CVE-2026-69414** (bypasses the RoguePlanet
+     *patch*); Tenable 9.9; IBM mcp-contextforge SSTI→RCE (9.8); AgentFlow flow-centric policy (33%→0%); GLM-5.3 DNS (~80k×, → 20:37).
    - **08-26 12:03 — SAML trust-chain, leftover installer, version-anchored parser, editor shell-out, rooted-camera provenance (detail → [[security]]):**
-     miniOrange SAML 2.0 SP SSO — CVE-2026-61979 (8.1 sig-alg confusion) + CVE-2026-15981 (9.8 OpenSSL `-1` truthiness) → unauth WP admin
-     takeover, actively exploited; ClipBucket V5 `cb_install` CVE-2026-80138 (9.8 unauth installer RCE); Python IDNA CVE-2026-17084
-     (`str.lower()` Unicode 17.0 vs spec 3.2.0 → parser differential, CWE-436); Emacs TRAMP CVE-2026-79992 (7.8); C2PA Pixel L2 unsound — rooted Pixel mints valid signed photos (CVE-2026-43499).
+     miniOrange SAML 2.0 SP SSO — CVE-2026-61979 (8.1 sig-alg confusion) + CVE-2026-15981 (9.8 OpenSSL `-1` truthiness) → unauth WP admin takeover, actively exploited; ClipBucket V5 `cb_install` CVE-2026-80138 (9.8 unauth installer RCE); Python IDNA CVE-2026-17084 (`str.lower()` 17.0 vs 3.2.0 → parser differential, CWE-436); Emacs TRAMP CVE-2026-79992 (7.8); C2PA Pixel L2 unsound — rooted Pixel mints valid signed photos (CVE-2026-43499).
+   - **08-26 20:19 — browser-as-runtime sandbox-escape, AI-infra auth holes, a config-write→hook, the SharePoint chain weaponized (detail → [[security]]):**
+     Chrome Aura CVE-2026-79290 (9.6 Critical UAF sandbox-escape); DB-GPT CVE-2026-80104 (9.8 unauth path-traversal→RCE); GitPython CVE-2026-78676 (9.8, config→live `core.hooksPath`); CVE-2026-63520 weaponized chain + `ValidateSafeBcsType` allowlist.
+   - **08-26 20:37 — GLM-5.3 DNS stays writeup-less; the public ledger closes (detail → [[security]]):** `cvd.z.ai`
+     retired to CNVD/CNNVD/NVDB; still no CVE for the ~80k×/"90% of DNS" amplification; figures Zhipu-sourced.
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -88,6 +88,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-26 04:03 — the hardware half of the fit-to-budget turn (detail → [[edge-inference]]):** Apple M6 (first 2nm,
      Mac mini, $899) + M5 Ultra (512 GB / 1.2 TB/s, Mac Studio) — a consumer-adjacent machine holding frontier-ish
      weights resident, making FreeToken-style whole-machine serving practical.
+   - **08-26 20:19 — the 4-bit-beats-bf16 result, a $100 car agent, a decode engine (detail → [[edge-inference]]):** QAH (arXiv 2608.20953, HyperNova-60B Apache-2.0); CarWatch (Pi 5, Qwen3.6-35B-A3B offline); Groq 3 LPX (~3,400 tok/s Gemma 4 31B @100K).
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
    Claude's 60-agent Riemann run (41.6% → 67.2% on the critical-line bound, formalized in Lean)
@@ -134,16 +135,12 @@ patterns, and turn them into insights and actionable todos.
    led by Chinese labs shipping frontier-*scale* open weights — trade a sliver of benchmark points for
    a huge price gap; closed labs compete on distribution speed. GLM-5.3 made **post-training, not
    scale, the visible frontier lever**. → [[frontier-models]]
-   - **08-15→08-23 — price/speed/vision push, eyes, a label-free RL lever (detail → [[frontier-models]]):** Gemini 3.7 Flash; Qwen3.8-27B;
-     GPT-5.6 Sol "Ultrafast"; dots3-note; UI-Mate; Agent Lightning v1.0; Ornith-1.5; ESOpt; ASI-Bench; DeepSeek-V4-Flash-Vision-Exp; SenseNova U1.5 Lite;
-     `stealth/ox-alpha` (unconfirmed); UCSD Co-RL (arXiv 2608.17253, +3.0–8.6% text).
+   - **08-15→08-23 — price/speed/vision push, eyes, a label-free RL lever (detail → [[frontier-models]]):** Gemini 3.7 Flash; Qwen3.8-27B; GPT-5.6 Sol "Ultrafast"; dots3-note; UI-Mate; Agent Lightning v1.0; Ornith-1.5; ESOpt; ASI-Bench; DeepSeek-V4-Flash-Vision-Exp; SenseNova U1.5 Lite; UCSD Co-RL.
    - **08-23 12:03 — the post-training lever pulled by an outsider, on somebody else's weights:** Harvey **Tenet**
      (Kimi K3 base + Fireworks, GSPO, rank-64 LoRA over the full MoE, ~1,750 graded legal environments) does ~2× the
      base's held-out LAB tasks — SOTA on LAB Contracts — the barrier moved from "train a frontier model" to "own the graded environments".
    - **08-25 12:03 — the first Western ~118B open-weight coder in 11 months (detail → [[frontier-models]]):**
-     Poolside **Laguna S 2.1** (118B MoE / ~8B active, OpenMDW-1.1) reports 70.2 Terminal-Bench 2.1 / 59.4
-     SWE-bench Pro / 40.4 DeepSWE, trained <4 weeks on ~4,000 H200s via its "Model Factory" — vendor's own
-     harness against published rival scores, Kimi K3 still +10–15 pts.
+     Poolside **Laguna S 2.1** (118B MoE / ~8B active, OpenMDW-1.1) reports 70.2 Terminal-Bench 2.1 / 59.4 SWE-bench Pro / 40.4 DeepSWE, trained <4 weeks on ~4,000 H200s — vendor's own harness, Kimi K3 still +10–15 pts.
    - **08-26 04:03→04:35 — open-weight cadence accelerates; domain-narrow beats general (detail → [[frontier-models]]):**
      Qwen3.8-Flash-Next (Qwen4-arch multimodal MoE preview, ModelScope Aug 26 23:00 Beijing std+FP8; leaked ~125B/~6B-active
      unverified until model card); Granite 4.2 (dense 3B/8B/30B, Apache-2.0); Mint-Agent 27B (finance-native).
@@ -151,6 +148,10 @@ patterns, and turn them into insights and actionable todos.
      OpenAI **Jalapeño** — first custom inference ASIC (TSMC N3P, MXFP4, 1.5–1.9× per-watt vs GB200/GB300, tokens-per-joule framing);
      ERPO (arXiv 2608.23311) — Query-KL replaces Policy-KL, stabilizes long RL runs; ReWorld (arXiv 2608.23565) — pose-indexed
      landmark bank gives interactive world models unbounded memory.
+   - **08-26 20:19 — the anonymous model gets a face; audio-visual world-model ranks #1 (detail → [[frontier-models]]):** `stealth/ox-alpha` **confirmed as Zhipu's next-gen GLM** (weights drop Aug 26 — stealth-launch→reveal→open-weights); JoyAI-Echo-1.5 (JD, WBench avg 81.7).
+   - **08-26 20:37 — the card matches, the smoke-test headline doesn't (detail → [[frontier-models]]):** Ox Alpha
+     card verified at OpenRouter — 1M ctx / 131K out / text+image+video / no audio; the viral **80% DeepSWE was a
+     10-task subset** — full 113-task runs land ~58–63%, level with GPT-5.6 Sol.
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -185,9 +186,8 @@ patterns, and turn them into insights and actionable todos.
    standardized the packaging spec (Anthropic absent), and the harness layer resolved to a *layered
    convergence* (portable core converges, per-vendor shell persists). Expect an "MMLU-for-skills" eval
    standard; whoever ships it owns the skills marketplace. → [[agent-plugins]]
-   - **08-18→08-23 — assertion-only professional-capability/methodology repos; the first self-audit machinery
-     (detail → [[agent-plugins]]):** Anthropic-Cybersecurity-Skills, benjamin-plus-skill, superpowers (274k★),
-     mattpocock/skills (211k★); caveman's evidence tiers + skill-creator's per-author evals.
+   - **08-18→08-23 — assertion-only professional-capability/methodology repos; the first self-audit machinery (detail → [[agent-plugins]]):**
+     Anthropic-Cybersecurity-Skills, benjamin-plus-skill, superpowers (274k★), mattpocock/skills (211k★); caveman's evidence tiers + skill-creator's per-author evals.
    - **08-23 12:03 — the gap is an incentive gap, not a tooling gap:** `multica-ai/andrej-karpathy-skills` (205,384★)
      is 2.3 KB of frozen prose, `pushed_at` 2026-04-20, no LICENSE — stars measure *distribution*, not development ([[agent-plugins]]).
    - **08-24 04:03 — a canonical index + the first transfer counter-evidence:** `VoltAgent/awesome-agent-skills` (1,497
@@ -196,11 +196,12 @@ patterns, and turn them into insights and actionable todos.
      security-vetted, nightly-synced marketplace mirror; the evaluation half still doesn't ([[agent-plugins]]).
    - **08-24 20:30 — "MMLU-for-skills" closes on tooling, not adoption (verified):** SkillsBench + Versuz both grade skills on a shared corpus — neither owns the marketplace ([[agent-plugins]]).
    - **08-25 12:26 — a shared corpus ships, then hits the harness-sensitivity wall (verified first-hand):**
-     arXiv 2606.17819 (per-skill diagnostic, 500 skills → 1,000 tasks); AgentCompass *measures* the same skill+model
-     swinging ~4–15 pts by harness (Opus-4.8 54.40 vs 58.66). → [[agent-plugins]]
+     arXiv 2606.17819 (per-skill diagnostic, 500 skills → 1,000 tasks); AgentCompass measures the same skill+model swinging ~4–15 pts by harness (Opus-4.8 54.40 vs 58.66). → [[agent-plugins]]
    - **08-26 04:03 — the runtime measurement standard arrives, with its negative result (verified first-hand):**
      NVIDIA **ACES** (arXiv 2608.20614) — paired live A/B Skill-Lift, 947 cases / 58 of 64 skills, mean lift **0.2134**,
      **~27% don't beat baseline**, static-vs-runtime ρ=0.14 ([[agent-plugins]]).
+   - **08-26 20:19 — a skill that fails to render rather than render wrong:** `tt-a1i/archify` (16.8k★) — schema-validated
+     interactive diagrams, the renderer **refuses invalid output**; the "prove it" phase extends to validated artifacts ([[agent-plugins]]).
    → [[agent-plugins]] [[token-economics]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
@@ -302,18 +303,17 @@ patterns, and turn them into insights and actionable todos.
    (~6–8 MiB, 10µs cold start). The honest reading is that the layer is real but the *measurements* are
    young: caveman's own README concedes the skill adds ~1–1.5k input tokens per turn and can go
    net-negative on already-terse workloads, and that its control arm postdates its published table.
-   - **08-20 20:03 → 08-26 12:27 — the evidence vocabulary (`inferred`/`benchmark_counterfactual`/`verified`) is the
-     practice worth borrowing, and caveman remains its only adopter** (re-checked 12:27: still none — only forks +
-     a Tessl registry listing, no independent vocabulary adoption). ([[token-economics]])
-   - **08-20 21:06 → 08-26 04:35 — control arm live, table archived unanswered after 19 checks:** `run.py` computes both
-     deltas but `benchmarks/results/` = `.gitkeep` and README's 65% held across 19 checks / ~3.5 days while the repo
-     stayed active (100,916★; pushes = proxy-hardening PR #901 + releases) — the promised vs-terse table **never shipped**;
-     the honest audit lives in code only, third-party-runnable via SkillBenchmark.
+   - **08-20 20:03 → 08-26 04:35 — evidence vocabulary is caveman's alone; the promised vs-terse table never shipped:**
+     `inferred`/`benchmark_counterfactual`/`verified` still has one adopter (re-checks: only forks + a Tessl listing);
+     `run.py` computes both deltas but `benchmarks/results/` = `.gitkeep` across 19 checks / ~3.5 days (repo active, 100,916★,
+     pushes = proxy-hardening PR #901) — the honest audit lives in code only, third-party-runnable via SkillBenchmark.
    - **08-21 12:03 — the style-filter instance:** `zachahn/vomit` pipes Claude 5's output through a local
      gpt-oss:20b to strip "token vomit" before display — the same compress-the-wire layer, applied to verbosity.
    - **08-22 12:03 — a cross-model filter for a specific house voice:** `adnanakil/nobuzz` routes Claude's output
      through Gemini (Antigravity CLI) to strip the "BuzzFeed voice" — same layer as vomit, but targeting a *named*
      house voice rather than generic verbosity (still assertion-only).
+   - **08-26 20:37 — the vocabulary has one adopter, but its claims now get independent measurement (detail → [[token-economics]]):**
+     JetBrains: ~8.5% output savings; Sovereign AI Blog: best −33% (Opus 4.8), Fable 5 +18% longer, never cheaper in $.
    → [[token-economics]] [[smart-routing]]
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
@@ -1404,3 +1404,27 @@ patterns, and turn them into insights and actionable todos.
 - **Agent finance (08-26 04:03):** **TradingAgents** (`TauricResearch/TradingAgents`) passed **100k★** with v0.3.1 —
   the LangGraph multi-agent trading-firm mirror adds Claude Sonnet 5 / Fable 5 support and Alpha Vantage
   look-ahead filtering (backtesting correctness is where naive agentic trading pipelines silently fail).
+- **Security batch (08-26 20:19, → [[security]]):** Chrome Aura **CVE-2026-79290** (9.6, Critical UAF sandbox-escape —
+  the second Critical Chrome fix in two weeks, "browser as agent runtime" in the supply-chain conversation);
+  DB-GPT **CVE-2026-80104** (9.8, unauth path-traversal→file-write→RCE, auth returns admin even without a `user_id`
+  header); GitPython **CVE-2026-78676** (9.8, `write_section` re-serializes a config into a live `core.hooksPath` —
+  a delayed-trigger injection class); CVE-2026-63520 SharePoint gets a VulnCheck **weaponized full chain** (Aug 24)
+  + the August CU's `ValidateSafeBcsType` allowlist.
+- **Frontier models (08-26 20:19, → [[frontier-models]]):** `stealth/ox-alpha` **confirmed as Zhipu's next-gen GLM**
+  (multimodal, weights drop Aug 26 — stealth-launch→identity-reveal→open-weights is the new model-launch playbook,
+  specs beyond identity still unverified). **JoyAI-Echo-1.5** (JD, arXiv 2608.23383) — long-video + world-model
+  variants, ranks first on WBench (avg 81.7), extends the world-model thread.
+- **Edge-inference (08-26 20:19, → [[edge-inference]]):** **QAH** (arXiv 2608.20953, Multiverse Computing) — distilling
+  the 4-bit student directly from full precision beats bf16 on 7/9 benchmarks at ~half weights (HyperNova-60B,
+  Apache-2.0; vendor-measured, reproduce before trusting). **CarWatch** (`ThinkOffApp/CarWatch`) — a ~$100 Pi 5 runs
+  Qwen3.6-35B-A3B offline as a car agent (RAG over the manual, OBD-II read-only + make-safe commands). **Groq 3 LPX**
+  — a decode engine in full production, ~3,400 tok/s on Gemma 4 31B @100K, the hardware bet that agentic workloads,
+  not chat, are the inference constraint.
+- **Skills (08-26 20:19, → [[agent-plugins]]):** **Archify** (`tt-a1i/archify`, 16.8k★) — schema- and layout-validated
+  interactive diagrams, the renderer **refuses invalid output** and returns structured diagnostics — the skills wave
+  moving from prose instructions to validated, machine-checkable artifacts ("fail to render rather than render wrong").
+- **Agent-stack (08-26 20:19, → [[agent-stack]]):** **Ambient Context** (`dragthelake/ambient-context`) — text-only
+  "screen memory" for LLMs, fully offline on macOS (accessibility-tree text → one Markdown file/day + a self-describing
+  `AGENTS.md`); the privacy-preserving middle path between Recall-style recording and nothing. **Vinci Code**
+  (`getsimpledirect/vinci-code-cli`, MIT) — "a distribution of Pi, not a fork", ending work in explicit
+  DONE/DONE-UNVERIFIED/WAITING/BLOCKED states rather than trusting the model's completion claim.

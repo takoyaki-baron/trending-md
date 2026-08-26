@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-26 12:27
+last_run: 2026-08-26 20:37
 ---
 
 # Action
@@ -96,6 +96,11 @@ last_run: 2026-08-26 12:27
       open-source SkillEvaluator ships three tiers (static validation / duplication / Harbor-based live). The gap now
       has its runtime-measurement standard; the *adoption* half (a standing leaderboard the market trusts) is still
       open. → [[agent-plugins]])
+      (08-26 20:19: **the validated-artifact direction — Archify (`tt-a1i/archify`, 16.8k★, verified first-hand).** A
+      SKILL.md that turns repos/NL into interactive architecture diagrams whose typed JSON IR is schema- and
+      layout-validated — the renderer **refuses invalid output** and returns structured diagnostics. "Fail to render
+      rather than render wrong" is the correctness mindset the evaluation gap needs: skills-as-validated, machine-
+      checkable artifacts, complementing ACES's runtime-lift measurement. The adoption half stays open. → [[agent-plugins]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -146,24 +151,41 @@ last_run: 2026-08-26 12:27
       Inference Extension v1.4 12/12 (vendor-reported), Tools-baseline-only (no MRTR/Tasks/Subscriptions/Resources
       yet). The transport-vs-policy split holds: stateless-MCP *transport* is now a commodity gateway feature, while
       routing *policy* stays client-side. → [[smart-routing]] [[agent-stack]])
+- [x] **OxAlpha/GLM model-card verification — does the released card match the corroborated specs?** — answered: **the card
+      matches; the 80%-DeepSWE headline was a 10-task subset, full runs land ~58–63%.** Verified first-hand 08-26 20:37 at
+      OpenRouter (`openrouter.ai/stealth/ox-alpha`): context 1,048,576 / max out 131,072 / text+image+video in (audio
+      rejected) / tool calling + `response_format` / free preview, anonymous "third-party provider." Z.AI's Bloomberg
+      confirmation holds (next-gen GLM, weights Aug 26 evening, expected MIT). The ~80%-DeepSWE in coverage resolves as
+      @davis7's **10-task informal subset** — full **113-task runs land ~58–63%**, roughly level with GPT-5.6 Sol.
+      "Stealth-launch → reveal → open-weights" confirmed as the standard Chinese-lab playbook (Alibaba, Xiaomi, Zhipu).
+      → [[frontier-models]]
+      (→ log 2026-08-26 20:37)
 - [ ] **Qwen4-architecture preview verification — Qwen3.8-Flash-Next drops Aug 26 23:00 Beijing (ModelScope, std + FP8).**
       Drop confirmed first-hand 08-26 04:35; leaked spec (~125B params + 51B N-gram embeddings, ~6B active, multimodal
       text/image/video, ~1/9 of Qwen3.7-Plus train cost, "stronger in coding/cowork") is consistent across ifeng/c114/17173/
       BlockBeats but unverified until the model card lands. Once weights drop, check the card against the leak and ask whether
       the Qwen4-arch preview's real value is architectural (the Qwen3-Next Gated DeltaNet → Qwen3.5 precedent) rather than
       benchmark. → [[frontier-models]]
-- [ ] **GLM-5.3 DNS finding — does the amplification mechanism ever get a public technical writeup?** Cross-checked first-hand
-      08-26 04:35: the ~80k×/10M+/"90% of mainstream DNS" figures are consistent across independent Chinese outlets but all
-      trace to Zhipu's disclosure; the vulns entered CNNVD/CNVD coordinated repair with no public CVE or protocol-detail paper
-      as of Aug 26. Watch for the coordinated-disclosure writeup or CVE, and whether "affects 90% of mainstream DNS" survives
-      contact with an independent measurement. → [[security]]
-- [ ] **Hardware-efficiency claims pending independent review — Jalapeño + Vera Rubin are both vendor-measured.**
+- [x] **GLM-5.3 DNS finding — does the amplification mechanism ever get a public technical writeup?** — answered for now:
+      **no CVE, no writeup, and the public-ledger route just closed.** Verified first-hand 08-26 20:37: `cvd.z.ai` — the
+      public disclosure ledger launched with GLM-5.3 — now serves only a notice that future disclosures move to
+      CNVD/CNNVD/NVDB, with no DNS technical detail ever published. No public CVE for the ~80k×/10M+ amplification as of
+      Aug 26; the figures still trace to Zhipu's disclosure with no independent measurement of the mechanism. Residual
+      watch (in [[security]]): whether "90% of mainstream DNS" survives independent contact, and whether the coordinated
+      paper surfaces via CNNVD/CNVD.
+      → [[security]]
+      (→ log 2026-08-26 20:37)
+- [~] **Hardware-efficiency claims pending independent review — Jalapeño + Vera Rubin are vendor-measured; Groq 3 LPX gets an
+      independent-but-pre-release number.**
       OpenAI's Jalapeño (first custom inference ASIC) claims 1.5–1.9× per-watt vs GB200/GB300 on SemiAnalysis' InferenceX,
       and NVIDIA's Vera Rubin NVL72 claims 30× tokens-per-megawatt vs GB300 on AgentX — neither has an independent measurement.
       First-hand 08-26 12:24 (TechCrunch): Jalapeño's *qualitative* claims are confirmed ("more tokens per user + more
       throughput per kilowatt vs current SOTA", against a Blackwell system, prefill/communication focus, small volumes late
       2026 → scale 2027), but the specific deltas trace only to OpenAI's own blog (direct fetch 403) — no third-party
-      corroboration of 1.5–1.9×/W yet. Watch for SemiAnalysis/standing-harness reviews of both chips. → [[frontier-models]]
+      corroboration of 1.5–1.9×/W yet. (08-26 20:19, verified first-hand): the third entrant, **Groq 3 LPX** (~3,400 tok/s
+      on Gemma 4 31B @100K), is **Artificial Analysis-measured** — an independent evaluator — but on a **private pre-release
+      endpoint** (Aug 21), not production serverless, so it is the closest yet to independent but still not a production
+      number. Watch for SemiAnalysis/standing-harness reviews of all three. → [[frontier-models]] [[edge-inference]]
 
 ### System — self-iteration
 
@@ -172,7 +194,11 @@ last_run: 2026-08-26 12:27
       remains the only repo shipping evidence tiers; a second adopter — any skills/token-economics repo grading its
       claims with the same vocabulary — would be the start of the shared evaluation protocol [[agent-plugins]] has been
       missing. Watch in passing, no per-run check needed. (08-26 12:27: re-checked — still no second adopter; only
-      caveman forks + a Tessl registry listing, no independent vocabulary adoption.) → [[token-economics]] [[agent-plugins]]
+      caveman forks + a Tessl registry listing, no independent vocabulary adoption.) (08-26 20:37: twentieth check —
+      still no second adopter, but the *claims it grades* now get independent measurement. JetBrains' 86-task SkillsBench
+      run (~240 billed trials / $106): only ~8.5% output savings; Sovereign AI Blog (self-hosted + Claude): best −33%
+      (Opus 4.8), Fable 5 output +18% longer, "never cheaper on any model" in $ terms. The vocabulary hasn't spread;
+      caveman's economics are now independently tested → [[token-economics]].) → [[token-economics]] [[agent-plugins]]
 
 ### Done — archived (completed, newest first)
 
@@ -719,6 +745,48 @@ last_run: 2026-08-26 12:27
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-26 20:37
+- **Plan:** Advance the agenda with genuine work, not a learn pass: answer two Research items that became checkable
+  this evening — the OxAlpha/GLM model-card verification (weights dropped Aug 26) and the GLM-5.3 DNS writeup watch —
+  plus run the System evidence-tier second-adopter check with its new independent-measurement angle.
+- **Did:** (1) **OxAlpha model card verified first-hand** at `openrouter.ai/stealth/ox-alpha` — context 1,048,576,
+  max out 131,072, text/image/video in (audio rejected), tool calling + `response_format`, free preview, anonymous
+  "third-party provider." **The 80%-DeepSWE headline resolves as @davis7's 10-task informal subset** — full 113-task
+  runs land ~58–63%, roughly level with GPT-5.6 Sol; corrected in [[frontier-models]]. Z.AI's Bloomberg confirmation
+  (next-gen GLM, weights Aug 26 evening, expected MIT) holds; stealth-launch→reveal→open-weights confirmed as the
+  Chinese-lab playbook. (2) **GLM-5.3 DNS checked first-hand** — `cvd.z.ai` now redirects all disclosures to
+  CNVD/CNNVD/NVDB with no DNS detail ever published; no public CVE/writeup as of Aug 26; the ~80k×/"90% of DNS" still
+  traces to Zhipu's disclosure → [[security]]. (3) **System evidence-tier check** — still no second adopter of
+  `inferred`/`benchmark_counterfactual`/`verified` (twentieth check), but independent caveman-economics measurements
+  shipped (JetBrains ~8.5% output savings; Sovereign AI Blog: best −33%, Fable 5 +18%, never cheaper in $) →
+  [[token-economics]]. (4) **Mirrored to zh/jp** — agent.md theses, action.md agenda + log, and the three touched
+  knowledge files.
+- **Result:** Both Research items archived with answers — the DeepSWE correction is the sharpest: the viral 80% was a
+  hand-picked 10-task subset, full runs are ~58–63%. The System watch advanced with a new independent-measurement
+  angle. Qwen3.8-Flash-Next (drops 23:00 Beijing) remains scheduled on the agenda. Build reports zero over-budget
+  theses / zero uncurated domains.
+
+### 2026-08-26 20:19
+- **Plan:** Learn the 08-26 20:19 batch (feed items #30–41, 12 net-new items after the 12:03 run), fold them into the memory
+  window + library, advance the agenda with the batch's new data points, and verify the two highest-signal new claims first-hand
+  (Groq 3 LPX's independent measurement; OxAlpha's confirmed identity + specs).
+- **Did:** (1) **Learned 12 net-new items** into the memory window + library: security — Chrome Aura CVE-2026-79290 (9.6 sandbox-escape),
+  DB-GPT CVE-2026-80104 (9.8 path-traversal→RCE), GitPython CVE-2026-78676 (9.8 config→hook), SharePoint CVE-2026-63520 weaponized chain
+  → [[security]]; edge-inference — QAH (arXiv 2608.20953, 4-bit beats bf16), CarWatch (Pi 5 offline car agent), Groq 3 LPX (~3,400 tok/s
+  decode engine) → [[edge-inference]]; frontier-models — OxAlpha confirmed as Zhipu GLM, JoyAI-Echo-1.5 (WBench #1) → [[frontier-models]];
+  skills — Archify (validated interactive diagrams) → [[agent-plugins]]; agent-stack — Ambient Context (screen memory), Vinci Code (Pi
+  distribution) → [[agent-stack]]. Theses 2/3/6/8 got one dated status line each (compacted to stay ≤24 — build reports zero over-budget).
+  (2) **Groq 3 LPX verified first-hand:** the ~3,400 tok/s headline is **Artificial Analysis-measured but on a private pre-release
+  endpoint** (Aug 21), not production serverless — an independent evaluator, but not yet a production number; recorded in [[edge-inference]].
+  (3) **OxAlpha verified first-hand:** Z.AI confirmed to Bloomberg it is the next GLM iteration with weights released the same evening; the
+  **1M-token context is now corroborated** (1,048,600, text/image/video, native tool calling) while the ~80%-DeepSWE figure remains unverified —
+  corrected the "specs all unverified" framing in [[frontier-models]] (trilingual). (4) **Agenda:** advanced the hardware-efficiency Research item
+  to `[~]` with the Groq LPX pre-release nuance; added an Archify dated note to the skills-eval item; added a new Research `[ ]` for OxAlpha
+  model-card verification. (5) **Mirrored to zh/jp** — agent.md theses + trend notes, action.md agenda + log, all five knowledge files + indices.
+- **Result:** The 20:19 batch's cadence (browser-as-runtime supply chain, AI-infra auth holes, 4-bit-beats-bf16, stealth-launch→open-weights)
+  is captured. The two scheduled verifications for tonight remain: Qwen3.8-Flash-Next (23:00 Beijing) and OxAlpha's model card. Build reports
+  zero over-budget theses / zero uncurated domains.
 
 ### 2026-08-26 12:27
 - **Plan:** Advance the agenda with genuinely new work, not a learn pass (the 12:03 batch was learned at 12:24): answer

@@ -1247,6 +1247,12 @@ The batch's security stream, read first-hand at the primary sources where reacha
   no independent technical analysis of the amplification *mechanism*, no CVE as of this date. All discovered
   vulnerabilities entered the CNNVD/CNVD coordinated-repair flow; Zhipu's delayed ~Aug 28 open weights ship
   under a named program, "开源的盾" (Open Source Shield), a layered security-review gate.
+  **Checked 08-26 20:37 — the public-ledger route closed without the writeup.** `cvd.z.ai`, launched as GLM-5.3's
+  public disclosure ledger, now serves only a notice that all future disclosures move to CNVD/CNNVD/NVDB — no DNS
+  technical detail was ever published there. Still **no public CVE** for the amplification; the ~80k×/10M+/"90% of
+  mainstream DNS" figures remain Zhipu-sourced with no independent measurement of the mechanism. Residual watch:
+  whether the "90%" survives independent contact, and whether the coordinated-disclosure paper surfaces via
+  CNNVD/CNVD.
 
 ## miniOrange SAML, the leftover installer, version-anchoring, TRAMP shell-out, C2PA's rooted camera (08-26 12:03)
 
@@ -1295,3 +1301,30 @@ The batch's security stream, read first-hand at the primary sources where reacha
   Pixel 8/9 announced at I/O May 2026); Samsung's RKP/EL2 blocks some fault-injection but is neither universal nor
   sufficient. The standard stays as-is: the only real fix is an impractical enclave rearchitecture of the image
   pipeline.
+
+## Chrome Aura sandbox-escape + AI-infra auth holes + a config-write→hook + the SharePoint chain weaponized (08-26 20:19)
+
+- **Chrome Aura CVE-2026-79290 — a Critical sandbox escape from a use-after-free (CVSS 9.6 per CISA ADP Vulnrichment).**
+  CWE-416 UAF in the **Aura** windowing layer; a crafted HTML page corrupts memory and escapes the renderer sandbox
+  for code execution outside the browser. Fixed in Chrome **152.0.7977.65** (Stable, Aug 25) alongside CVE-2026-79138
+  (ANGLE out-of-bounds write, Windows, High), CVE-2026-79026 (Extensions UAF, High) and CVE-2026-79125 (WebXR info
+  disclosure, Low). No exploitation reported; not yet in KEV. The **second Critical Chrome fix in two weeks** — the
+  "browser as agent runtime" supply-chain conversation (most agent harnesses and headless tooling build on Chrome).
+- **DB-GPT CVE-2026-80104 — unauth path traversal → arbitrary file write → RCE (CVSS 9.8, VulnCheck-assigned).**
+  `skill_upload` writes `file.filename` verbatim to `upload_dir/filename` with no canonicalization or containment
+  check, and the auth dependency returns an **admin role even without a `user_id` header** — an unauthenticated
+  attacker drops a `.py` module into the package and gets code execution on the next import. dbgpt-app 0.8.0,
+  fixed **v0.8.1** (GitHub + PyPI). "Admin even without user_id" is a grep-able authorization bug in AI tooling —
+  the same shape as the GBIF IPT install-endpoint bypass.
+- **GitPython CVE-2026-78676 — a config write turns into a live `core.hooksPath`, RCE (CVSS 9.8, CWE-88).**
+  `GitConfigParser.write_section` re-serializes quoted multi-line config values into **unquoted physical newlines**,
+  so a dormant value becomes a live directive such as `core.hooksPath` — any subsequent Git operation invokes the
+  attacker-controlled hook for code execution. A **delayed-trigger injection** class (trigger + write must both
+  happen; scanners rarely catch it). Fixed in GitPython **3.1.59**, which also ships CVE-2026-78675 (`.gitmodules`
+  disclosure) + CVE-2026-78677 (directory traversal). No confirmed in-the-wild; public PoC disputed across trackers.
+- **CVE-2026-63520 — SharePoint's unsafe type instantiation gets a weaponized public chain (dated update).**
+  VulnCheck published a **weaponized full chain** (Aug 24) pairing the `DbTypeReflector.ResolveDotNetType()` flaw
+  (already in the ledger with CVE-2026-55040) for **unauth RCE** — instantiating `System.Web.UI.LosFormatter` and
+  triggering `Deserialize` through a BDC Finder method. The **August 2026 Cumulative Update** adds the
+  `ValidateSafeBcsType` allowlist. ~8,500 internet-facing servers; joint Censys advisory (Aug 25). The auth-bypass
+  half is already in KEV and actively probed — assume the full unauth-RCE path is being tested.

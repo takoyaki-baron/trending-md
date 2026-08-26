@@ -987,3 +987,31 @@ distribution thesis 6.
   64-second out-and-back rollout regenerates its starting view from a fixed 12-chunk cache. "Remembers what it
   showed you" is the next world-model benchmark axis (extends the DreamX-Phi / LTX-2.5 / MegaParts world-model
   thread).
+
+## OxAlpha confirmed as Zhipu's GLM + JoyAI-Echo-1.5 (08-26 20:19)
+
+- **`stealth/ox-alpha` gets a face — it is Zhipu's next-generation GLM, and the weights drop the same night.** The
+  anonymous OpenRouter model (covered 08-22 as unconfirmed) is confirmed by Z.AI to Bloomberg on Aug 26 as a **new
+  iteration of the GLM series** — a multimodal reasoning model (text/image/video) built for coding and agentic
+  tasks — with weights released **the same evening**. The uncredited Aug 20 launch is called the biggest in
+  OpenRouter's history: it topped the leaderboard with more than double DeepSeek's usage and is free for a week.
+  **Stealth-launch → identity-reveal → open-weights is the new model-launch playbook** (Alibaba + Xiaomi used the
+  same tactic this year). **Verified 08-26 20:19:** the **1M-token context window is now corroborated** (1,048,600
+  tokens, text/image/video input, native tool calling, in Bloomberg-sourced coverage), and the codename traces to
+  the Chinese film *牛来* ("Ox Comes"); prior researchers had already fingerprinted it to Zhipu (tokenizer matching
+  GLM-5.3, video-token usage matching GLM-5V-Turbo). Stripe CEO Patrick Collison called the stealth launch
+  "impressive." **Model card verified 08-26 20:37 (first-hand at `openrouter.ai/stealth/ox-alpha`):** context
+  **1,048,576** / max output **131,072** / text+image+video input (**audio rejected**) / tool calling +
+  `response_format` (no schema enforcement) / free for the ~1-week preview / provider still an anonymous
+  "third-party provider," slated for removal Aug 26. **The ~80%-DeepSWE headline resolves as @davis7's 10-task
+  informal subset** — full 113-task runs land **~58–63%** (66/113 in one attempt; ~63% in two independent runs),
+  roughly level with GPT-5.6 Sol rather than the leap the smoke test implied. Weights expected under MIT (Z.AI's
+  GLM license), consistent with the stealth-launch→reveal→open-weights playbook.
+- **JoyAI-Echo-1.5 — JD's long-horizon audio-visual generation ranks first on WBench (arXiv 2608.23383).** Two
+  variants: a **long-video** one using composable cross-shot memory + speaker cues to keep character appearance and
+  voice identity persistent, and a **world-model** one converting heterogeneous navigation inputs into calibrated
+  metric 6-DoF camera trajectories for controller-agnostic interaction. Trained via progressive teacher forcing +
+  short/long-horizon Self-Gradient Forcing on self-generated rollouts; the world-model variant **ranks first on
+  WBench (avg 81.7)** and leads SANA-WM-Bench for long-horizon persistence + visual quality. Open-sourced
+  (`jd-opensource/JoyAI-Echo`). "Persistent stories and interactive worlds" is the frontier past clip-based video —
+  extends the world-model thread (ReWorld, DreamX-Phi, LTX-2.5).

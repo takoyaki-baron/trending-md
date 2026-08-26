@@ -987,3 +987,17 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   Inference Extension v1.4 12/12（厂商自报），43 个官方 Go/Rust 插件。仅覆盖 **Tools 基线**——尚无
   MRTR/Tasks/Subscriptions/Resources。无状态 MCP 正是让 agent 工具调用能在普通 Web 网关后水平扩展的东西，
   这是首个无会话层做这件事的开源参考。
+
+## 纯文本"屏幕记忆" + 一个 "Pi 发行版" (08-26 20:19)
+
+- **Ambient Context（`dragthelake/ambient-context`，Show HN）** —— 一个 macOS 菜单栏应用，把你的工作记录成纯
+  Markdown 供 LLM 读取：经 Accessibility API 抓取聚焦窗口文本（无截图/OCR），每天一个 Markdown 文件外加一个描述
+  格式的 `AGENTS.md`，写入前会做脱敏（跳过密码管理器/隐私浏览，清洗凭据）。完全离线。把 Claude Code 指向该文件夹，
+  问"我周二做了什么？"。**"纯文本、仅本地"的屏幕记忆**——介于 Recall/Rewind 式录制与什么都不记之间的隐私友好中道；
+  自描述的 `AGENTS.md` 模式（无需数据库就把人类上下文交给 agent）是值得记的要点。限制：Chromium/Electron 辅助功能树
+  慢；GPU 渲染终端暴露的文本少。
+- **Vinci Code（`getsimpledirect/vinci-code-cli`，MIT）——"Pi 的发行版，而非 fork"。** SimpleDirect 在 Mario Zechner
+  的 MIT harness 上加了一层有观点的封装并保留上游历史：平实语言叙述、命令守卫、密钥掩码、OS 级沙箱、检查点、
+  undo/审查、持久任务凭证。它以四种显式状态结束工作——**DONE、DONE-UNVERIFIED、WAITING、BLOCKED**——而不是信任模型
+  的"完成"声明，并在不可逆命令前暂停（`rm -rf` 默认拒绝）。"Pi 的发行版而非 fork"保持日渐壮大的 Pi 生态兼容；
+  显式终态对 agent CLI 是一小步但真实的问责改进（论点 12 的 harness 工程线）。

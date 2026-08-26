@@ -394,3 +394,12 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
 而是一个常设的配对试验协议，回答"安装这个 skill 是否真的帮到活体 agent"——它的负结果正是诚实的信号：
 "存在一个 skill"几乎说明不了它是否有用。它给了论点 8 评估缺口一个运行时度量半边；*采用*半边（市场真正
 信任的常设排行榜）仍然空缺。
+
+## Archify —— 一个"宁可渲染失败也不渲染错误"的 skill (08-26 20:19)
+
+- **`tt-a1i/archify`**（MIT，16.8k★，今日 +1,002★）——一个 agent skill（SKILL.md），适用于 Raven、Cursor、Claude
+  Code、Codex CLI 和 OpenCode，把仓库或自然语言描述转成可交互的架构/时序/数据流图。其类型化 JSON IR 经过**模式与
+  布局双重校验**——渲染器**拒绝无效输出**（交叉边、重叠标签）并返回结构化诊断；输出是自包含 HTML 文件，带
+  PNG/SVG/WebM 导出和 1200×630 分享卡片。"架构 Delta"模式对比 Before/Delta/After 并给出机器可读凭证，还能把粘贴的
+  Mermaid 重新写成 Archify JSON。**"宁可渲染失败也不渲染错误"正是 agent 工具需要的正确性心态**——表明技能浪潮正从
+  散文式指令转向可校验、可机器检查的产物（论点 8 的方向）。

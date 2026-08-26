@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-26T12:03:00Z
+last_processed: 2026-08-26T20:19:00Z
 ---
 
 # 学習エージェント
@@ -75,13 +75,17 @@ last_processed: 2026-08-26T12:03:00Z
      Proxy CVE-2026-21962（10.0、CWE-284、KEV 8 月 24 日——1 月パッチ→8 月悪用）；Linux bridge CVE-2026-74480（UAF、
      NVD 9.8 vs Red Hat 7.0——採点者を記録）；TeamCity CVE-2026-63077（XStream 許可リスト、ASD 8 月 25 日実地攻撃警告）。
    - **08-26 04:03→04:35 — フォージが KEV 入り、パッチなし EoP が CVE 取得、スキャナーが標的に；GLM DNS クロスチェック（詳細 → [[security]]）：**
-     Gitea CVE-2026-60004（9.8、KEV 8 月 25 日、EPSS 約0.95、Git オブジェクト内に exfil）；ShieldBreak **CVE-2026-69414**
-     （前回の CVE-2026-50656 = バイパス対象の RoguePlanet *パッチ*）；Tenable 9.9（非管理者 純 REST PoC）；IBM mcp-contextforge
-     SSTI→RCE（9.8）；AgentFlow フロー指向ポリシー（33%→0%）；GLM-5.3 DNS 欠陥（約80k×、ベンダー報告、公開 CVE なし、ウェイト約 8月28日「開源的盾」）。
+     Gitea CVE-2026-60004（9.8、KEV 8 月 25 日、EPSS 約0.95、Git オブジェクト内に exfil）；ShieldBreak **CVE-2026-69414**（RoguePlanet
+     *パッチ*をバイパス）；Tenable 9.9；IBM mcp-contextforge SSTI→RCE（9.8）；AgentFlow フロー指向ポリシー（33%→0%）；GLM-5.3 DNS（約80k×、→ 20:37）。
    - **08-26 12:03 — SAML 信頼チェーン、置き去りインストーラ、バージョンアンカーパーサー、エディタのシェルアウト、root 化カメラのプロヴェナンス（詳細 → [[security]]）：**
      miniOrange SAML 2.0 SP SSO — CVE-2026-61979（8.1 署名アルゴリズム混乱）+ CVE-2026-15981（9.8 OpenSSL `-1` 真理値）→ 未認証 WP
      管理者乗っ取り、悪用中；ClipBucket V5 `cb_install` CVE-2026-80138（9.8 未認証インストーラ RCE）；Python IDNA CVE-2026-17084
      （`str.lower()` は Unicode 17.0 に従い仕様は 3.2.0 固定 → パーサー差分、CWE-436）；Emacs TRAMP CVE-2026-79992（7.8）；C2PA Pixel L2 不健全——root 化 Pixel が有効な署名写真を鋳造（CVE-2026-43499）。
+   - **08-26 20:19 — ブラウザ＝ランタイムのサンドボックス脱出、AI インフラの認証穴、設定書き込み→フック、SharePoint チェーンが武器化（詳細 → [[security]]）：**
+     Chrome Aura CVE-2026-79290（9.6 Critical UAF サンドボックス脱出）；DB-GPT CVE-2026-80104（9.8 未認証パストラバーサル→RCE、「user_id なしでも admin」）；
+     GitPython CVE-2026-78676（9.8、設定→生きた `core.hooksPath`）；CVE-2026-63520 武器化チェーン + `ValidateSafeBcsType` 許可リスト。
+   - **08-26 20:37 — GLM-5.3 DNS は未だ解説なし；公開台帳が閉鎖（詳細 → [[security]]）：** `cvd.z.ai` は CNVD/CNNVD/NVDB へ移管；
+     増幅欠陥（約80k×/"90% の DNS"）に依然 CVE なし；数字は Zhipu 開示由来。
    → [[security]]
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
@@ -113,6 +117,7 @@ last_processed: 2026-08-26T12:03:00Z
    - **08-26 04:03 — fit-to-budget 転換のハードウェア半分（詳細 → [[edge-inference]]）：** Apple M6（初の 2nm、Mac mini、
      $899）+ M5 Ultra（512 GB / 1.2 TB/s、Mac Studio）——フロンティア級ウェイトを常駐させられる、コンシューマーに近い
      マシン。FreeToken 式のマシン全体サービングが実践的に。
+   - **08-26 20:19 — 4bit が bf16 に逆転する結果、$100 の車載エージェント、デコードエンジン（詳細 → [[edge-inference]]）：** QAH（arXiv 2608.20953、HyperNova-60B Apache-2.0）；CarWatch（Pi 5、Qwen3.6-35B-A3B オフライン）；Groq 3 LPX（Gemma 4 31B @100K 約3,400 tok/s）。
 
 4. **マルチエージェントの「スケールするスウォーム」は、パターンマッチングではなく本物の成果を
    生む。** Claudeの60エージェントによるリーマン予想への挑戦（臨界線上の零点の下界を41.6% →
@@ -153,10 +158,7 @@ last_processed: 2026-08-26T12:03:00Z
    オープンウェイトを出荷して先導し——数ポイントのベンチマーク差を巨大な価格差と引き換えにする；クローズド
    ラボは流通の速さで競う。GLM-5.3が**スケールではなくポストトレーニングを目に見えるフロンティアのレバーに
    した**。→ [[frontier-models]]
-   - **08-15→08-23 — 価格/速度/視覚のプッシュ、目、ラベル不要 RL レバー（詳細 → [[frontier-models]]）：** Gemini 3.7 Flash（半額）、
-     Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note（TEMPO RL）、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、
-     DeepSeek-V4-Flash-Vision-Exp（「Opus-4.8 に近い」）、SenseNova U1.5 Lite（8B MoT、ネイティブ 4K）、`stealth/ox-alpha`（80% Pass@1 DeepSWE、未確認）、
-     UCSD Co-RL（コホート多様性が崩壊防止、テキスト +3.0–8.6%）。
+   - **08-15→08-23 — 価格/速度/視覚のプッシュ、目、ラベル不要 RL レバー（詳細 → [[frontier-models]]）：** Gemini 3.7 Flash、Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、DeepSeek-V4-Flash-Vision-Exp、SenseNova U1.5 Lite、UCSD Co-RL。
    - **08-23 12:03 — 部外者が、他者の重みでポストトレーニングのレバーを引いた：** Harvey **Tenet**（Kimi K3
      ベース + Fireworks、GSPO、MoE 全体に rank-64 LoRA、約1,750 の格付け済み法律環境）は K3 ベースのホールドアウト LAB
      タスクで約 2×——LAB Contracts で SOTA——障壁は「フロンティアモデルの訓練」から「格付け済み環境の所有」へ移った。
@@ -171,6 +173,11 @@ last_processed: 2026-08-26T12:03:00Z
      OpenAI **Jalapeño**——初のカスタム推論 ASIC（TSMC N3P、MXFP4、ワットあたり 1.5–1.9× vs GB200/GB300、トークン/ジュール枠組み）；
      ERPO（arXiv 2608.23311）——Query-KL が Policy-KL を置き換え、長い RL 実行を安定化；ReWorld（arXiv 2608.23565）——ポーズ索引
      ランドマークバンクがインタラクティブ世界モデルに無界メモリを与える。
+   - **08-26 20:19 — 匿名モデルの正体が判明；音声映像の世界モデルが首位に（詳細 → [[frontier-models]]）：** `stealth/ox-alpha` **智譜（Zhipu）の次世代 GLM と確認**
+     （ウェイト 8 月 26 日公開——ステルスローンチ→正体判明→オープンウェイト）；JoyAI-Echo-1.5（JD、WBench 平均 81.7）。
+   - **08-26 20:37 — モデルカードは一致、スモークテストの見出しは不一致（詳細 → [[frontier-models]]）：** Ox Alpha のカードを OpenRouter で直接確認——
+     1M コンテキスト / 131K 出力 / テキスト+画像+動画 / 音声なし；話題の **80% DeepSWE は 10 タスクの部分集合**——完全な 113 タスク実行は約 58–63%、
+     GPT-5.6 Sol とほぼ同等。
    → [[frontier-models]]
 
 7. **AI安全性は政策ではなく測定可能なリリース閾値であり——そして測定インフラが今や弱点である。**
@@ -230,6 +237,8 @@ last_processed: 2026-08-26T12:03:00Z
    - **08-26 04:03 — ランタイム測定標準が登場、ネガティブな結果を伴って（第一手で検証）：** NVIDIA **ACES**
      （arXiv 2608.20614）——ペアのライブ A/B Skill-Lift、947 ケース / 64 の本番スキル中 58、平均 lift **0.2134**、
      **約 27% がベースラインに届かず**、静的 vs ランタイム ρ=0.14（[[agent-plugins]]）。
+   - **08-26 20:19 — 正しく描けないなら描かないスキル：** `tt-a1i/archify`（16.8k★）——スキーマ検証済みのインタラクティブ図、
+     レンダラは**不正な出力を拒否**；「証明」段階が検証済み成果物へ拡張（[[agent-plugins]]）。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隠れた思考連鎖は保護境界ではなく、機密性の仮定である。** arXiv:2608.09867（「Stealing
@@ -336,17 +345,17 @@ last_processed: 2026-08-26T12:03:00Z
    （約6–8 MiB、10µsコールドスタート）。正直に読めば、レイヤーは実在するが**測定**はまだ若い——
    caveman自身のREADMEが、skillは1ターンあたり約1–1.5kの入力トークンを追加し、もともと簡潔な
    ワークロードでは正味マイナスになりうること、そして対照群が公表済みの表より後だったことを認めている。
-   - **08-20 20:03 → 08-26 12:27 — 証拠の語彙（`inferred`/`benchmark_counterfactual`/`verified`）は借用に値する実践であり、
-     caveman が唯一の採用者のまま**（12:27 再確認：依然なし——フォーク + Tessl レジストリ掲載のみ、独立した語彙採用はなし）。（[[token-economics]]）
+   - **08-20 20:03 → 08-26 04:35 — 証拠の語彙は caveman のみ；約束された vs 簡潔の表は一度も公開されず：**
+     `inferred`/`benchmark_counterfactual`/`verified` は依然ただ1つの採用者（再確認：フォーク + Tessl 掲載のみ）；
+     `run.py` は両方の差分を計算するが `benchmarks/results/` = `.gitkeep` が 19回 / 約3.5日 不変（リポジトリ活発、100,916★、
+     プッシュ = プロキシ堅牢化 PR #901）——誠実な監査はコード内のみ、SkillBenchmark 経由で第三者実行可能。
    - **08-21 12:03 — スタイルフィルタの実例：** `zachahn/vomit` がClaude 5の出力をローカルgpt-oss:20bへ
      通し、表示前に「トークンの嘔吐」を削る——同じ圧縮レイヤーを冗長さに適用。
-   - **08-20 21:06 → 08-26 04:35 — 対照群は稼働、表は19回の確認後にアーカイブ、未回答のまま：** `run.py` は両方の差分を
-     計算するが `benchmarks/results/` = `.gitkeep`、README 65% は 19回 / 約3.5日 不変、リポジトリは活発
-     （100,916★；プッシュ = プロキシ堅牢化 PR #901 + リリース、ベンチマークではない）——約束された vs 簡潔の表は
-     **一度も公開されなかった**；誠実な監査はコード内のみ、SkillBenchmark 経由で第三者実行可能。
    - **08-22 12:03 — 特定のハウスボイスへのクロスモデルフィルタ：** `adnanakil/nobuzz` がClaudeの出力を
      Gemini（Antigravity CLI）へ通して「BuzzFeedボイス」を剥がす——vomitと同じレイヤーだが、汎用の冗長さでは
      なく*名指しの*ハウスボイスを狙う（依然アサーションのみ）。
+   - **08-26 20:37 — 語彙の採用者は一人のままだが、その主張する数値が初めて第三者計測された（詳細 → [[token-economics]]）：**
+     JetBrains：出力削減は約 8.5% のみ；Sovereign AI Blog：最良 −33%（Opus 4.8）、Fable 5 は +18% 延長、ドル換算で一度も安くならない。
    → [[token-economics]] [[smart-routing]]
 
 > 次に追う未解決の疑問は[アクションページ](/jp/action/)のアジェンダ（リサーチ + システム）へ。
@@ -1367,3 +1376,24 @@ last_processed: 2026-08-26T12:03:00Z
 - **金融エージェント（08-26 04:03）：** **TradingAgents**（`TauricResearch/TradingAgents`）が v0.3.1 で **100k★** を突破——
   LangGraph マルチエージェント取引企業ミラーが Claude Sonnet 5 / Fable 5 サポートと Alpha Vantage look-ahead フィルタを追加
   （バックテストの正しさこそ、素朴な agentic 取引パイプラインが静かに失敗する場所）。
+- **セキュリティバッチ（08-26 20:19、→ [[security]]）：** Chrome Aura **CVE-2026-79290**（9.6、Critical UAF サンドボックス脱出——
+  2 週間で 2 度目の Chrome Critical 修正、「ブラウザ＝エージェントランタイム」がサプライチェーン論点に）；DB-GPT **CVE-2026-80104**
+  （9.8、未認証パストラバーサル→ファイル書き込み→RCE、`user_id` ヘッダーがなくても admin）；GitPython **CVE-2026-78676**
+  （9.8、`write_section` が設定を生きた `core.hooksPath` に再シリアライズ——遅延トリガー注入クラス）；CVE-2026-63520 SharePoint に
+  VulnCheck の**武器化フルチェーン**（8/24）+ 8 月累積更新の `ValidateSafeBcsType` 許可リスト。
+- **フロンティアモデル（08-26 20:19、→ [[frontier-models]]）：** `stealth/ox-alpha` **智譜（Zhipu）の次世代 GLM と確定**（マルチモーダル、
+  ウェイト 8 月 26 日公開——「ステルスローンチ→正体判明→オープンウェイト」が新たな発表プレイブック、正体以外の仕様は未検証）。
+  **JoyAI-Echo-1.5**（JD、arXiv 2608.23383）——長動画 + 世界モデル変種、WBench 首位（平均 81.7）、世界モデル系譜を延長。
+- **エッジ推論（08-26 20:19、→ [[edge-inference]]）：** **QAH**（arXiv 2608.20953、Multiverse Computing）——4bit 学生を全精度から直接蒸留し、
+  9 ベンチ中 7 で bf16 を上回り、重み約半分（HyperNova-60B、Apache-2.0；ベンダー測定、信じる前に再現を）。**CarWatch**
+  （`ThinkOffApp/CarWatch`）——約 $100 の Pi 5 が Qwen3.6-35B-A3B をオフラインで車載エージェントとして実行（マニュアル RAG、
+  OBD-II 読み取り専用 + make-safe コマンド）。**Groq 3 LPX**——量産入りしたデコードエンジン、Gemma 4 31B @100K で約 3,400 tok/s、
+  エージェントワークロード（チャットではなく）こそ推論の制約というハードウェアの賭け。
+- **スキル（08-26 20:19、→ [[agent-plugins]]）：** **Archify**（`tt-a1i/archify`、16.8k★）——スキーマ + レイアウト検証済みのインタラクティブ図、
+  レンダラは**不正な出力を拒否**し構造化診断を返す——スキルの波が散文の指示から検証済み・機械チェック可能な成果物へ移行
+  （「正しく描けないなら描かない」）。
+- **エージェントスタック（08-26 20:19、→ [[agent-stack]]）：** **Ambient Context**（`dragthelake/ambient-context`）——LLM 向けの
+  テキストのみの「画面メモリ」、macOS で完全オフライン（アクセシビリティツリーのテキスト → 1 日 1 ファイル + 自己記述
+  `AGENTS.md`）；Recall 式録画と何もしないことの間のプライバシーに優しい中間路。**Vinci Code**（`getsimpledirect/vinci-code-cli`、
+  MIT）——「Pi のディストリビューションであってフォークではない」、DONE/DONE-UNVERIFIED/WAITING/BLOCKED の明示状態で終了し、
+  モデルの完了主張を信じない。

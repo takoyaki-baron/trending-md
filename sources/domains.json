@@ -3283,5 +3283,68 @@
     "cred": "high",
     "density": "high",
     "cv": 1
+  },
+  "theedgemalaysia.com": {
+    "cat": "news",
+    "en": "Malaysian business/finance news outlet (The Edge). Reliable for corporate confirmations. Cross-checked (08-26): its OxAlpha/Z.AI piece matches ChainCatcher's Bloomberg-sourced report (GLM-series identity + same-night weight release).",
+    "zh": "马来西亚商业/财经媒体（The Edge）。企业确认类新闻较可靠。已交叉核验（08-26）：其 OxAlpha/Z.AI 报道与 ChainCatcher 引述彭博的报道一致（GLM 系列身份 + 当晚发布权重）。",
+    "jp": "マレーシアのビジネス/金融ニュース（The Edge）。企業確認系の報道に信頼性。突合済み（08-26）：OxAlpha/Z.AI 記事は ChainCatcher の Bloomberg ソース報道（GLM シリーズの正体＋当日夜のウェイト公開）と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "nvidianews.nvidia.com": {
+    "cat": "vendor",
+    "en": "NVIDIA official newsroom — canonical primary source for hardware/product announcements. Cross-checked (08-26): Groq 3 LPX production claims corroborated by zhidx and multiple tech outlets.",
+    "zh": "NVIDIA 官方新闻室——硬件/产品公告的权威一手来源。已交叉核验（08-26）：Groq 3 LPX 量产声明得到 zhidx 及多家科技媒体佐证。",
+    "jp": "NVIDIA 公式ニュースルーム——ハードウェア/製品発表の正規一次ソース。突合済み（08-26）：Groq 3 LPX 量産発表は zhidx など複数メディアが裏付け。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "zhidx.com": {
+    "cat": "news",
+    "en": "智东西 (Zhidx) — Chinese AI/hardware tech media with fresh measured figures. Cross-checked (08-26): its 3,431 tok/s Groq 3 LPX median aligns with the Artificial Analysis benchmark NVIDIA cites.",
+    "zh": "智东西——国内 AI/硬件科技媒体，常有新鲜实测数据。已交叉核验（08-26）：其 Groq 3 LPX 3,431 tok/s 中位数与 NVIDIA 引用的 Artificial Analysis 基准相符。",
+    "jp": "智东西（Zhidx）——中国の AI/ハードウェア技術メディア。新しい実測値を報じる。突合済み（08-26）：Groq 3 LPX の 3,431 tok/s 中央値は NVIDIA が引用する Artificial Analysis ベンチと一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "nebius.com": {
+    "cat": "vendor",
+    "en": "Nebius official blog (AI-cloud infrastructure). Primary for its own product adoption announcements. Cross-checked (08-26): first-adopter claim for Groq 3 LPX corroborated by NVIDIA newsroom.",
+    "zh": "Nebius 官方博客（AI 云基础设施）。其自身产品采用公告的一手来源。已交叉核验（08-26）：Groq 3 LPX 首个采用者的说法获 NVIDIA 新闻室佐证。",
+    "jp": "Nebius 公式ブログ（AIクラウド基盤）。自社製品の採用発表の一次ソース。突合済み（08-26）：Groq 3 LPX 初導入クラウドという主張は NVIDIA ニュースルームが裏付け。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "skillsmp.com": {
+    "cat": "community",
+    "en": "Agent-skills marketplace directory listing skills across harnesses. Use to find repos, verify against the GitHub source. Cross-checked (08-26): Archify listing matches tt-a1i/archify repo.",
+    "zh": "智能体技能市场目录，收录各类框架的技能。用于发现仓库，需对照 GitHub 源核实。已交叉核验（08-26）：Archify 条目与 tt-a1i/archify 仓库一致。",
+    "jp": "エージェントスキルのマーケットプレイスディレクトリ。リポジトリ発見に使用し、GitHub ソースで照合する。突合済み（08-26）：Archify の掲載は tt-a1i/archify リポジトリと一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "unite.ai": {
+    "cat": "news",
+    "en": "AI/tech news outlet covering research announcements. Secondary analysis — verify numbers against arXiv/primary. Cross-checked (08-26): QAH coverage matches arXiv 2608.20953 abstract numbers.",
+    "zh": "AI/科技新闻站点，报道研究发布。属二手分析——数字请对照 arXiv/一手来源核实。已交叉核验（08-26）：QAH 报道与 arXiv 2608.20953 摘要数字一致。",
+    "jp": "研究発表を報じる AI/テックニュース。二次分析——数値は arXiv/一次ソースで確認。突合済み（08-26）：QAH 報道は arXiv 2608.20953 抄録の数値と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "getsimpledirect.com": {
+    "cat": "vendor",
+    "en": "SimpleDirect's newsroom blog — primary source for Vinci Code CLI open-sourcing. Cross-checked (08-26): repo name/link in the post matches the actual GitHub repo getsimpledirect/vinci-code-cli.",
+    "zh": "SimpleDirect 新闻博客——Vinci Code CLI 开源的一手来源。已交叉核验（08-26）：文中仓库名/链接与真实 GitHub 仓库 getsimpledirect/vinci-code-cli 一致。",
+    "jp": "SimpleDirect のニュースルームブログ——Vinci Code CLI オープンソース化の一次ソース。突合済み（08-26）：記事内のリポジトリ名/リンクは実在の GitHub リポジトリ getsimpledirect/vinci-code-cli と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }
