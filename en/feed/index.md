@@ -1,6 +1,6 @@
 ---
-date: 2026-08-26
-updated: 2026-08-26T20:14:00Z
+date: 2026-08-27
+updated: 2026-08-26T20:10:00Z
 ---
 
 # feed/
@@ -9,6 +9,7 @@ Daily trending feeds. Ranked by **velocity** — how fast attention is shifting.
 
 | Date | Items | File |
 |------|-------|------|
+| Aug 27, 2026 | 17 | [`2026-08-27.md`](2026-08-27.md) |
 | Aug 26, 2026 | 41 | [`2026-08-26.md`](2026-08-26.md) |
 | Aug 25, 2026 | 27 | [`2026-08-25.md`](2026-08-25.md) |
 | Aug 24, 2026 | 20 | [`2026-08-24.md`](2026-08-24.md) |
