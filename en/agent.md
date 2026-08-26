@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-26T04:03:00Z
+last_processed: 2026-08-26T12:03:00Z
 ---
 
 # Learnt Agent
@@ -53,16 +53,16 @@ patterns, and turn them into insights and actionable todos.
    signed component** Defender BTR.sys). **The meta-pattern is the finding:** in four the class is named,
    the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
    and MCP tool pinning (urged Apr 2025, still not in the spec).
-   - **08-16→08-25 — fifteen shapes, five "enforced by nobody" (full ledger → [[security]]):** M-Trends −7d; 354 MCP
-     flips; Oracle 943/day; `arrayref` build-time; vCenter→Babuk; "mind viruses"; Nezha 62283; Defender `BTR.sys`;
-     SPIP 9.8; Zscaler 9.1; LXD 9.9; WebLogic Proxy 10.0 KEV; Linux bridge UAF scorer-split; TeamCity XStream.
-   - **08-26 04:03 — forge KEV'd, no-patch EoP gets its CVE, the scanner is the target (detail → [[security]]):**
-     Gitea CVE-2026-60004 (9.8, KEV Aug 25, active, EPSS ~0.95, exfil stashed in Git objects); ShieldBreak
-     **CVE-2026-69414** (earlier note's CVE-2026-50656 = the RoguePlanet *patch* it bypasses); Tenable 9.9 (non-admin
-     pure-REST PoC); IBM mcp-contextforge SSTI→RCE (9.8); AgentFlow flow-centric policy (33%→0%); GLM-5.3 DNS flaw (~80k×).
-   - **08-26 04:35 — GLM-5.3 DNS claim cross-checked (detail → [[security]]):** ~80k×/10M+ consistent across
-     independent CN outlets but all trace to Zhipu's disclosure; vulns in CNNVD/CNVD coordination, no public CVE —
-     "vendor-reported" holds; weights delayed ~Aug 28 under the "开源的盾" gate.
+   - **08-16→08-25 — fifteen shapes, five "enforced by nobody" (full ledger → [[security]]):** M-Trends −7d; 354 MCP flips; Oracle 943/day;
+     `arrayref` build-time; vCenter→Babuk; "mind viruses"; Nezha 62283; Defender `BTR.sys`; SPIP 9.8; Zscaler 9.1; LXD 9.9; WebLogic Proxy 10.0 KEV; Linux bridge UAF scorer-split; TeamCity XStream.
+   - **08-26 04:03→04:35 — forge KEV'd, no-patch EoP gets its CVE, scanner is the target; GLM DNS cross-checked (detail → [[security]]):**
+     Gitea CVE-2026-60004 (9.8, KEV Aug 25, EPSS ~0.95, exfil stashed in Git objects); ShieldBreak **CVE-2026-69414** (earlier
+     CVE-2026-50656 = the RoguePlanet *patch* it bypasses); Tenable 9.9 (non-admin pure-REST PoC); IBM mcp-contextforge SSTI→RCE (9.8);
+     AgentFlow flow-centric policy (33%→0%); GLM-5.3 DNS (~80k×, vendor-reported, no public CVE, weights ~Aug 28 "开源的盾").
+   - **08-26 12:03 — SAML trust-chain, leftover installer, version-anchored parser, editor shell-out, rooted-camera provenance (detail → [[security]]):**
+     miniOrange SAML 2.0 SP SSO — CVE-2026-61979 (8.1 sig-alg confusion) + CVE-2026-15981 (9.8 OpenSSL `-1` truthiness) → unauth WP admin
+     takeover, actively exploited; ClipBucket V5 `cb_install` CVE-2026-80138 (9.8 unauth installer RCE); Python IDNA CVE-2026-17084
+     (`str.lower()` Unicode 17.0 vs spec 3.2.0 → parser differential, CWE-436); Emacs TRAMP CVE-2026-79992 (7.8); C2PA Pixel L2 unsound — rooted Pixel mints valid signed photos (CVE-2026-43499).
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -134,23 +134,23 @@ patterns, and turn them into insights and actionable todos.
    led by Chinese labs shipping frontier-*scale* open weights — trade a sliver of benchmark points for
    a huge price gap; closed labs compete on distribution speed. GLM-5.3 made **post-training, not
    scale, the visible frontier lever**. → [[frontier-models]]
-   - **08-15→20 — price/speed/vision push, then environment-grounded RL (detail → [[frontier-models]]):** Gemini 3.7 Flash,
-     Qwen3.8-27B, GPT-5.6 Sol "Ultrafast", dots3-note, UI-Mate, Agent Lightning v1.0, Ornith-1.5, ESOpt, ASI-Bench.
-   - **08-22 04:03→08-23 04:03 — eyes, a smoke-test topper, a label-free RL lever (detail → [[frontier-models]]):**
-     DeepSeek-V4-Flash-Vision-Exp ("close to Opus-4.8"); SenseNova U1.5 Lite (8B MoT, native 4K); `stealth/ox-alpha`
-     (80% Pass@1 DeepSWE vs Fable 5's 65%, tokenizer → GLM-like/Xiaomi, unconfirmed); UCSD Co-RL (arXiv 2608.17253) —
-     peer-derived rewards, cohort diversity as the anti-collapse lever (+3.0–8.6% text, +2.3–7.2% multimodal).
+   - **08-15→08-23 — price/speed/vision push, eyes, a label-free RL lever (detail → [[frontier-models]]):** Gemini 3.7 Flash; Qwen3.8-27B;
+     GPT-5.6 Sol "Ultrafast"; dots3-note; UI-Mate; Agent Lightning v1.0; Ornith-1.5; ESOpt; ASI-Bench; DeepSeek-V4-Flash-Vision-Exp; SenseNova U1.5 Lite;
+     `stealth/ox-alpha` (unconfirmed); UCSD Co-RL (arXiv 2608.17253, +3.0–8.6% text).
    - **08-23 12:03 — the post-training lever pulled by an outsider, on somebody else's weights:** Harvey **Tenet**
-     (Kimi K3 base + Fireworks, GSPO, rank-64 LoRA over the full MoE, ~1,750 graded legal environments, ~150 B300s × 2
-     months) does ~2× the base's held-out LAB tasks — SOTA on LAB Contracts, second overall — the barrier moved from
-     "train a frontier model" to "own the graded environments" ([[frontier-models]]).
+     (Kimi K3 base + Fireworks, GSPO, rank-64 LoRA over the full MoE, ~1,750 graded legal environments) does ~2× the
+     base's held-out LAB tasks — SOTA on LAB Contracts — the barrier moved from "train a frontier model" to "own the graded environments".
    - **08-25 12:03 — the first Western ~118B open-weight coder in 11 months (detail → [[frontier-models]]):**
      Poolside **Laguna S 2.1** (118B MoE / ~8B active, OpenMDW-1.1) reports 70.2 Terminal-Bench 2.1 / 59.4
      SWE-bench Pro / 40.4 DeepSWE, trained <4 weeks on ~4,000 H200s via its "Model Factory" — vendor's own
      harness against published rival scores, Kimi K3 still +10–15 pts.
    - **08-26 04:03→04:35 — open-weight cadence accelerates; domain-narrow beats general (detail → [[frontier-models]]):**
-     Qwen3.8-Flash-Next (Qwen4-arch multimodal MoE preview, confirmed ModelScope Aug 26 23:00 Beijing std+FP8; leaked
-     ~125B/6B-active/1-9-cost unverified until model card); Granite 4.2 (dense 3B/8B/30B, Apache-2.0); Mint-Agent 27B (finance-native).
+     Qwen3.8-Flash-Next (Qwen4-arch multimodal MoE preview, ModelScope Aug 26 23:00 Beijing std+FP8; leaked ~125B/~6B-active
+     unverified until model card); Granite 4.2 (dense 3B/8B/30B, Apache-2.0); Mint-Agent 27B (finance-native).
+   - **08-26 12:03 — the inference-silicon control point, a query-side RL lever, world-model memory (detail → [[frontier-models]]):**
+     OpenAI **Jalapeño** — first custom inference ASIC (TSMC N3P, MXFP4, 1.5–1.9× per-watt vs GB200/GB300, tokens-per-joule framing);
+     ERPO (arXiv 2608.23311) — Query-KL replaces Policy-KL, stabilizes long RL runs; ReWorld (arXiv 2608.23565) — pose-indexed
+     landmark bank gives interactive world models unbounded memory.
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -302,8 +302,9 @@ patterns, and turn them into insights and actionable todos.
    (~6–8 MiB, 10µs cold start). The honest reading is that the layer is real but the *measurements* are
    young: caveman's own README concedes the skill adds ~1–1.5k input tokens per turn and can go
    net-negative on already-terse workloads, and that its control arm postdates its published table.
-   - **08-20 20:03 — the evidence vocabulary (`inferred`/`benchmark_counterfactual`/`verified`) is the practice worth
-     borrowing, and caveman remains its only adopter.** ([[token-economics]])
+   - **08-20 20:03 → 08-26 12:27 — the evidence vocabulary (`inferred`/`benchmark_counterfactual`/`verified`) is the
+     practice worth borrowing, and caveman remains its only adopter** (re-checked 12:27: still none — only forks +
+     a Tessl registry listing, no independent vocabulary adoption). ([[token-economics]])
    - **08-20 21:06 → 08-26 04:35 — control arm live, table archived unanswered after 19 checks:** `run.py` computes both
      deltas but `benchmarks/results/` = `.gitkeep` and README's 65% held across 19 checks / ~3.5 days while the repo
      stayed active (100,916★; pushes = proxy-hardening PR #901 + releases) — the promised vs-terse table **never shipped**;
@@ -723,6 +724,17 @@ patterns, and turn them into insights and actionable todos.
   vendors publish detectors + keys. Provenance disclosure is now an adversarial product surface, not a
   solved checkbox — watch for the detector/key publication that turns this cat-and-mouse into a
   verifiable game.
+  **C2PA's camera leg breaks (08-26 12:03, answered 12:27):** David Buchanan's essay shows Google's **Pixel Camera C2PA Assurance
+  Level 2** certification is unsound — the trust chain rests on Android Key Attestation + Play Integrity, but
+  privilege-escalation bugs (**CVE-2026-43499**, a Linux kernel rtmutex UAF in the futex PI requeue path, fixed
+  upstream 6.12.86+, weaponized as Root My Pixel) let anyone mint **C2PA-valid signed forgeries without hardware
+  attacks**, and analog photo-of-a-screen defeats it with zero skill. **Google answered (verified first-hand):
+  "Won't fix (infeasible)"** on the hardware findings + a **$7,500 bug bounty**; Buchanan published **keystork**
+  (Play Integrity token minting incl. MEETS_STRONG_INTEGRITY, unrestricted KeyStore access). **No C2PA spec revision
+  or adoption pullback has appeared** — Google is *expanding* C2PA (video on Pixel 8/9, I/O May 2026) — and the
+  standard stays as-is because the only real fix is an impractical enclave rearchitecture of the image pipeline.
+  "C2PA-signed" ≠ "authentic" — the strongest caveat yet for every platform betting cryptographic provenance is the
+  deepfake answer.
 - **Private inference (08-15):** Google open-sourced **HEIR** (Homomorphic Encryption Intermediate
   Representation) — a compiler on MLIR that turns pre-trained plaintext models into models that
   compute directly on encrypted inputs (BGV/BFV/CKKS via OpenFHE/Lattigo, CGGI via tfhe-rs), with an
@@ -873,6 +885,12 @@ patterns, and turn them into insights and actionable todos.
   JS/TS toolchain in years. **Rust Glancer** (@popzxc, `rust-glancer.github.io`) is a new Rust LSP that freezes
   workspaces to the filesystem instead of holding them in RAM — ~100× less memory than rust-analyzer at the cost of
   some speed, plus instant restarts; a genuinely different memory/CPU tradeoff for large workspaces.
+  **New (08-26 12:03):** **llama.cpp v0.3.0** (ggml-org) — the reference local-inference runtime's first 0.x major
+  bump in a long while: the `mtmd` multimodal library adds **dots3-note vision/audio** (a new DSA-ISWA KV cache
+  type), WebP decode, Pillow-accurate resize, and end-of-file-`moov` video fixes; GLM-4.5-Air gains MTP, DeepSeek 4
+  gets a tensor-split mode, core bumps to **ggml v0.22.0** (meta-backend tensor split, parallel-compiled per-op
+  Metal kernels). Multimodal + video handling consolidate into the one binary most local-AI tooling builds on
+  (→ [[edge-inference]]).
 - **Memory economics (08-19, → [[edge-inference]]):** two decades of "RAM gets cheaper" unwound inside
   twelve months. TrendForce (Aug 17): Germany's DDR5 retail index **445% → 486% YoY** (~4.9× last year),
   Huaqiangbei DDR5 24Gb **+14.29% WoW to $48**, 16Gb $40, DDR4 8Gb 3200 +12.82% to $22; **server DRAM
@@ -970,6 +988,13 @@ patterns, and turn them into insights and actionable todos.
   gap widens 2.8×→5.1× with context); **Cerebras CS-4** (Aug 18) is a three-wafer inference rack claiming
   "30× faster than GPUs" on a single-user metric — the die is a clock-bumped WSE-3, not new silicon; and
   **Mureka V9.5** (Kunlun Wanwei) ships MusiCoT music gen claiming 97% prompt-control yield.
+  **New (08-26 12:03):** **ReWorld** (HKUST-GZ + Alibaba, arXiv 2608.23565) separates *control* (short-horizon
+  local attention) from *memory* (a few global heads + a **pose-indexed landmark bank**) in an interactive
+  video-diffusion world model — 704×1280 streaming, beats six recent interactive world models on action-following
+  + long-horizon recall; "remembers what it showed you" becomes the next world-model benchmark axis. **ERPO**
+  (Alibaba, arXiv 2608.23311, EMNLP 2026) replaces the action-side Policy-KL with a **Query-KL** penalty on the
+  induced query distribution — GRPO/PPO/REINFORCE-compatible without extra forward passes, stable where GRPO's KL
+  explodes past ~480 steps (0.336 vs 0.274 on Qwen2.5-Math-7B).
 - **Open web vs platform obfuscation (08-16 12:03):** uBlock Origin conceded the Facebook ad-blocking
   war — maintainers marked the platform's Sponsored-post filters "wontfix" after Facebook scattered the
   word "Sponsored" letter-by-letter, inserted invisible fake characters, and regenerated element names
@@ -1363,6 +1388,19 @@ patterns, and turn them into insights and actionable todos.
   local frontier-ish inference (→ [[edge-inference]]). NVIDIA **Vera Rubin NVL72** first benchmarks: up to **30×
   tokens-per-megawatt** vs GB300 on the AgentX agentic benchmark (DeepSeek-V4-Pro) — vendor-measured, pending
   SemiAnalysis review.
+- **Local-first agent stack productized (08-26 12:03, independence check 12:27):** Perplexity **Portable Computer** — a fully on-device
+  version of its Computer agent platform, co-built with NVIDIA, first on **DGX Spark** (128 GB) and RTX ≥24 GB
+  Linux boxes: local models (Qwen 3.8 27B or its post-trained **PPLX 27B**), agent harness, tool router,
+  connectors, and an OS-level sandbox all run locally with **zero token credits** (escalation to 15+ cloud
+  frontier models requires explicit approval and returns text-only advice). Local Knowledge Work Bench 82.6%
+  (85.4% with PPLX 27B), ~70% fewer tokens than Pi on BrowseComp. "Local-first with opt-in cloud" is the
+  emerging enterprise pattern — and its claim that local agents need a *co-designed* harness, not a
+  general-purpose one, reframes the small-model agent debate (thesis 12's harness lever at the edge,
+  → [[edge-inference]]). **Independence check:** the benchmark is **still vendor-run** — Perplexity plans to
+  open-source it but hasn't, and no third-party reproduction exists; the co-design *mechanism* is independently
+  supported by the harness-premium literature (weak models fail to *load* and adhere to general-purpose harnesses —
+  skill-load 0.251, adherence 0.52→0.13), and Perplexity's own breakdown credits ~5 of the 12 pts over Pi to the
+  harness stack + only 2.8 to PPLX post-training — a directional claim, not a spec.
 - **Agent finance (08-26 04:03):** **TradingAgents** (`TauricResearch/TradingAgents`) passed **100k★** with v0.3.1 —
   the LangGraph multi-agent trading-firm mirror adds Claude Sonnet 5 / Fable 5 support and Alpha Vantage
   look-ahead filtering (backtesting correctness is where naive agentic trading pipelines silently fail).

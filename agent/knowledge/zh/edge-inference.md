@@ -233,3 +233,25 @@ AI 性能最高为此前 mini 的 4×，**$899**）；**M5 Ultra**（quad-die Ul
 的 AI 数字是 Apple 自报；价格跳涨（mini $899 / Studio $5,499）反映的是 DRAM 成本环境（上文内存经济学笔记）。
 论点 3 的端侧推理转向如今有了一台消费级邻近的机器，能把前沿级权重常驻内存——带宽自适应服务
 （FreeToken 的桌面 284B / 单工作站 753B 数字）的硬件一半不再只是理论。
+
+## llama.cpp v0.3.0 + Perplexity Portable Computer —— 本地栈的参考运行时与产品化的本地优先 agent（08-26 12:03）
+
+- **llama.cpp v0.3.0（ggml-org）—— 本地推理参考运行时的首个 0.x 大版本，久违了。** `mtmd` 多模态库新增
+  **dots3-note 视觉与音频**（新的 DSA-ISWA KV 缓存类型）、经 ffmpeg 的 WebP 解码、Pillow 精确的缩放算法，
+  以及修复了 `moov` atom 在文件末尾的视频；GLM-4.5-Air 增加 MTP，DeepSeek 4 新增 tensor-split 模式，
+  核心升至 **ggml v0.22.0**（meta-backend 张量切分、并行编译的逐算子 Metal kernel、真正的非 in-place
+  `ggml_clamp`）。多模态 + 视频处理收拢进大多数本地 AI 工具所依赖的同一个二进制——对整个本地推理生态
+  （论点 3）都是一次一等信号更新。
+- **Perplexity Portable Computer —— 在 NVIDIA DGX Spark 上把"本地优先、云端按需"产品化。** 与 NVIDIA 紧密
+  合作打造的 Computer agent 平台的纯本地版本：本地模型（Qwen 3.8 27B 或 Perplexity 后训练的 **PPLX 27B**）、
+  agent 运行框架、工具路由、连接器与一个 OS 级沙箱全部本地运行，本地工作消耗**零 token 额度**——升级到 15+
+  云端前沿模型需要显式批准，且只返回纯文本建议、不接触本地文件。在其 Local Knowledge Work Bench 上得 82.6%
+  （PPLX 27B 为 85.4%），优于 Pi 77.6 / Hermes 74.0，BrowseComp 上比 Pi 少用约 70% token。值得追踪的论点：
+  本地 agent 需要的是*协同设计*的运行框架，而非通用框架——把小型模型 agent 之争重新框定为框架设计问题
+  （论点 12 的杠杆伸到端侧），落脚在上文 M6/M5 Ultra 的硬件天花板之上。
+  **独立核实（08-26 12:27）：** 该基准**仍是厂商自测**——Perplexity 计划开源 Local Knowledge Work Bench 但尚未，
+  且无第三方复现。协同设计*机制*有独立支持：harness 溢价文献（论点 12，arXiv:2605.30621）发现弱模型无法*加载*
+  并遵从通用 harness（skill-load 0.251、遵从度 0.52→0.13）——正是 Portable Computer 点名的"小模型在通用 harness
+  假设下不堪重负"失败。Perplexity 自己的拆解把领先 Pi 约 12 分中的 ~5 分归功于 harness 栈（基础 Qwen 也领先 Pi 约 5 分），
+  PPLX 后训练只加 2.8 分——在基准开源前，应视为方向性主张而非规格。DIY 复刻路径（Ollama + Qwen3.8-27B + OpenCode，
+  24 GB GPU）存在，但不是独立基准。

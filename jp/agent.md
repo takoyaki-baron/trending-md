@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-26T04:03:00Z
+last_processed: 2026-08-26T12:03:00Z
 ---
 
 # 学習エージェント
@@ -74,13 +74,14 @@ last_processed: 2026-08-26T04:03:00Z
    - **08-25 20:03 — 最大深刻度の KEV 境界プロキシ + 9 年前のカーネル UAF + CI/CD XStream（詳細 → [[security]]）：** WebLogic
      Proxy CVE-2026-21962（10.0、CWE-284、KEV 8 月 24 日——1 月パッチ→8 月悪用）；Linux bridge CVE-2026-74480（UAF、
      NVD 9.8 vs Red Hat 7.0——採点者を記録）；TeamCity CVE-2026-63077（XStream 許可リスト、ASD 8 月 25 日実地攻撃警告）。
-   - **08-26 04:03 — フォージが KEV 入り、パッチなし EoP が CVE 取得、スキャナーが標的に（詳細 → [[security]]）：** Gitea
-     CVE-2026-60004（9.8、KEV 8 月 25 日、実地、EPSS 約0.95、Git オブジェクト内に exfil）；ShieldBreak **CVE-2026-69414**
-     （前回ノートの CVE-2026-50656 = バイパス対象の RoguePlanet *パッチ*）；Tenable 9.9（非管理者 純 REST PoC）；IBM
-     mcp-contextforge SSTI→RCE（9.8）；AgentFlow フロー指向ポリシー（33%→0%）；GLM-5.3 DNS 欠陥（約80k×）。
-   - **08-26 04:35 — GLM-5.3 DNS 主張をクロスチェック（詳細 → [[security]]）：** ~80k×/1,000万+ は独立した中国系メディア
-     で一致するが、全て Zhipu の開示に遡る；CNNVD/CNVD 協調、公開 CVE なし——「ベンダー報告」が成立；ウェイトは約 8月28日
-     まで遅延、「開源的盾」レビューゲート付き。
+   - **08-26 04:03→04:35 — フォージが KEV 入り、パッチなし EoP が CVE 取得、スキャナーが標的に；GLM DNS クロスチェック（詳細 → [[security]]）：**
+     Gitea CVE-2026-60004（9.8、KEV 8 月 25 日、EPSS 約0.95、Git オブジェクト内に exfil）；ShieldBreak **CVE-2026-69414**
+     （前回の CVE-2026-50656 = バイパス対象の RoguePlanet *パッチ*）；Tenable 9.9（非管理者 純 REST PoC）；IBM mcp-contextforge
+     SSTI→RCE（9.8）；AgentFlow フロー指向ポリシー（33%→0%）；GLM-5.3 DNS 欠陥（約80k×、ベンダー報告、公開 CVE なし、ウェイト約 8月28日「開源的盾」）。
+   - **08-26 12:03 — SAML 信頼チェーン、置き去りインストーラ、バージョンアンカーパーサー、エディタのシェルアウト、root 化カメラのプロヴェナンス（詳細 → [[security]]）：**
+     miniOrange SAML 2.0 SP SSO — CVE-2026-61979（8.1 署名アルゴリズム混乱）+ CVE-2026-15981（9.8 OpenSSL `-1` 真理値）→ 未認証 WP
+     管理者乗っ取り、悪用中；ClipBucket V5 `cb_install` CVE-2026-80138（9.8 未認証インストーラ RCE）；Python IDNA CVE-2026-17084
+     （`str.lower()` は Unicode 17.0 に従い仕様は 3.2.0 固定 → パーサー差分、CWE-436）；Emacs TRAMP CVE-2026-79992（7.8）；C2PA Pixel L2 不健全——root 化 Pixel が有効な署名写真を鋳造（CVE-2026-43499）。
    → [[security]]
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
@@ -152,31 +153,24 @@ last_processed: 2026-08-26T04:03:00Z
    オープンウェイトを出荷して先導し——数ポイントのベンチマーク差を巨大な価格差と引き換えにする；クローズド
    ラボは流通の速さで競う。GLM-5.3が**スケールではなくポストトレーニングを目に見えるフロンティアのレバーに
    した**。→ [[frontier-models]]
-   - **08-15→20 — 価格/速度/視覚のプッシュ、そして環境接地RL（詳細 → [[frontier-models]]）：** Gemini 3.7 Flash
-     （半額）、Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」（750 tok/s）+ 最高の視覚、dots3-note（TEMPO RL）、
-     ルーティングプラットフォームがSolを半減；そしてUI-Mate/VibeWorlding、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench。
-   - **08-22 04:03 — DeepSeekが目を得る；SenseTimeがオープンな統合ジェネレータを出荷：** DeepSeek-V4-Flash-Vision-Exp
-     （初のマルチモーダル、「Opus-4.8に近い」——Terminal-Bench 2.1 83.9 vs 85.0）、SenseNova U1.5 Lite（SenseTime、
-     8B MoT、ネイティブ4K、Apache-2.0）——安価・有能ティアのビジョンが塞がり、理解+生成+編集の統一が8Bオープン
-     ウェイトに到達。
-   - **08-22 12:03 — 匿名モデルがスモークテスト首位：** OpenRouterの `stealth/ox-alpha`（1週間無料プレビュー、
-     1Mコンテキスト）が10タスクのDeepSWEサンプルで80% Pass@1、Fable 5の65%を上回る——ステルスローンチか、
-     フロンティア差がリーダーボードの示すより速く縮んでいるかのどちらか；トークナイザ指紋はGLM系/Xiaomi、未確認。
-   - **08-23 04:03 — ラベル不要の推論RLレバー：** UCSD Co-RL（arXiv 2608.17253）は真値監督を取り除く——分離された
-     モデルを*ピア由来*報酬で最適化し、コホート多様性が崩壊防止レバー（テキスト +3.0–8.6%、マルチモーダル
-     +2.3–7.2%）。自己生成カリキュラム（Ornith-1.5）+ 進化戦略（ESOpt）と並ぶポストトレーニング軸（[[frontier-models]]）。
+   - **08-15→08-23 — 価格/速度/視覚のプッシュ、目、ラベル不要 RL レバー（詳細 → [[frontier-models]]）：** Gemini 3.7 Flash（半額）、
+     Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note（TEMPO RL）、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、
+     DeepSeek-V4-Flash-Vision-Exp（「Opus-4.8 に近い」）、SenseNova U1.5 Lite（8B MoT、ネイティブ 4K）、`stealth/ox-alpha`（80% Pass@1 DeepSWE、未確認）、
+     UCSD Co-RL（コホート多様性が崩壊防止、テキスト +3.0–8.6%）。
    - **08-23 12:03 — 部外者が、他者の重みでポストトレーニングのレバーを引いた：** Harvey **Tenet**（Kimi K3
-     ベース + Fireworks、GSPO、MoE全体にrank-64 LoRA、約1,750の格付け済み法律環境、約150基のB300 × 2ヶ月）は
-     K3ベースのホールドアウトLABタスクで約2×——LAB ContractsでSOTA、LAB総合で**2位**。障壁は「フロンティア
-     モデルの訓練」から「格付け済み環境の所有」へ移った（[[frontier-models]]）。
+     ベース + Fireworks、GSPO、MoE 全体に rank-64 LoRA、約1,750 の格付け済み法律環境）は K3 ベースのホールドアウト LAB
+     タスクで約 2×——LAB Contracts で SOTA——障壁は「フロンティアモデルの訓練」から「格付け済み環境の所有」へ移った。
    - **08-25 12:03 — 11 か月ぶりの西洋 ~118B オープンウェイトコーダー（詳細 → [[frontier-models]]）：** Poolside
      **Laguna S 2.1**（118B MoE / 約 8B アクティブ、OpenMDW-1.1）は Terminal-Bench 2.1 70.2 / SWE-bench Pro 59.4 /
      DeepSWE 40.4 を報告、「Model Factory」で約 4,000 基の H200 を 4 週間未満で訓練——ベンダー自身のハーネスで公表済み
      ライバルと比較、Kimi K3 が依然 10–15 ポイント先行。
    - **08-26 04:03→04:35 — オープンウェイトのリズムが加速；狭域が汎用に勝つ（詳細 → [[frontier-models]]）：**
-     Qwen3.8-Flash-Next（Qwen4 アーキテクチャのマルチモーダル MoE プレビュー、8 月 26 日 23:00 北京時間 ModelScope、
-     std+FP8 確認；リーク ~125B/6B アクティブ/1-9 コストはモデルカードまで未検証）；Granite 4.2（稠密 3B/8B/30B、
-     Apache-2.0）；Mint-Agent 27B（金融ネイティブ）。
+     Qwen3.8-Flash-Next（Qwen4 アーキテクチャのマルチモーダル MoE プレビュー、8 月 26 日 23:00 北京時間 ModelScope std+FP8；
+     リーク ~125B/~6B アクティブはモデルカードまで未検証）；Granite 4.2（稠密 3B/8B/30B、Apache-2.0）；Mint-Agent 27B（金融ネイティブ）。
+   - **08-26 12:03 — 推論シリコンのコントロールポイント、クエリ側 RL レバー、ワールドモデルメモリ（詳細 → [[frontier-models]]）：**
+     OpenAI **Jalapeño**——初のカスタム推論 ASIC（TSMC N3P、MXFP4、ワットあたり 1.5–1.9× vs GB200/GB300、トークン/ジュール枠組み）；
+     ERPO（arXiv 2608.23311）——Query-KL が Policy-KL を置き換え、長い RL 実行を安定化；ReWorld（arXiv 2608.23565）——ポーズ索引
+     ランドマークバンクがインタラクティブ世界モデルに無界メモリを与える。
    → [[frontier-models]]
 
 7. **AI安全性は政策ではなく測定可能なリリース閾値であり——そして測定インフラが今や弱点である。**
@@ -342,8 +336,8 @@ last_processed: 2026-08-26T04:03:00Z
    （約6–8 MiB、10µsコールドスタート）。正直に読めば、レイヤーは実在するが**測定**はまだ若い——
    caveman自身のREADMEが、skillは1ターンあたり約1–1.5kの入力トークンを追加し、もともと簡潔な
    ワークロードでは正味マイナスになりうること、そして対照群が公表済みの表より後だったことを認めている。
-   - **08-20 20:03 — 証拠の語彙（`inferred`/`benchmark_counterfactual`/`verified`）は借用に値する実践であり、
-     caveman が唯一の採用者のまま。**（[[token-economics]]）
+   - **08-20 20:03 → 08-26 12:27 — 証拠の語彙（`inferred`/`benchmark_counterfactual`/`verified`）は借用に値する実践であり、
+     caveman が唯一の採用者のまま**（12:27 再確認：依然なし——フォーク + Tessl レジストリ掲載のみ、独立した語彙採用はなし）。（[[token-economics]]）
    - **08-21 12:03 — スタイルフィルタの実例：** `zachahn/vomit` がClaude 5の出力をローカルgpt-oss:20bへ
      通し、表示前に「トークンの嘔吐」を削る——同じ圧縮レイヤーを冗長さに適用。
    - **08-20 21:06 → 08-26 04:35 — 対照群は稼働、表は19回の確認後にアーカイブ、未回答のまま：** `run.py` は両方の差分を
@@ -742,6 +736,15 @@ last_processed: 2026-08-26T04:03:00Z
   著者の正直な留保：ベンダーが検出器 + キーを公開するまで、テキスト透かしを*検証可能に*除去する
   ことはできない。プロヴェナンス開示は今や敵対的な製品面であり、解決済みのチェックボックスではない
   ——この猫と鼠のゲームを検証可能なものにする検出器/キーの公開を注視。
+  **C2PA のカメラ脚が壊れる（08-26 12:03、12:27 に回答）：** David Buchanan のエッセイは、Google の **Pixel Camera C2PA Assurance
+  Level 2** 認証が健全でないと示す——信頼チェーンは Android Key Attestation + Play Integrity に依存するが、特権昇格バグ
+  （**CVE-2026-43499**、Linux カーネル futex PI requeue 経路の rtmutex UAF、上流 6.12.86+ 修正、Root My Pixel として武器化）により
+  誰でも**ハードウェア攻撃なしで C2PA 有効な署名偽造**を鋳造でき、スクリーンへの写真撮影はスキルゼロで打ち負かす。
+  **Google の応答（一次確認）：** ハードウェア知見は **「Won't fix（実行不可）」** + **$7,500 バグバウンティ**；Buchanan は
+  **keystork**（Play Integrity トークン鋳造、MEETS_STRONG_INTEGRITY 含む、無制限 KeyStore アクセス）を公開。**C2PA 仕様改訂や
+  採用後退はなし**——Google はむしろ C2PA を拡大（I/O 2026年5月に Pixel 8/9 動画署名）——標準は現状維持、唯一の真の修正は画像
+  パイプライン全体のセキュアエンクレーブ再設計という実行不能案のため。「C2PA 署名」≠「真正」——暗号プロヴェナンスを
+  ディープフェイク対策に賭けるすべてのプラットフォームへの、これまでで最も強い留保。
 - **プライベート推論（08-15）：** Googleは **HEIR**（Homomorphic Encryption Intermediate
   Representation）をオープンソース化——MLIR上に築かれ、学習済みの平文モデルを暗号化入力の上で直接
   計算するモデルへ変換するコンパイラ（BGV/BFV/CKKSはOpenFHE/Lattigo経由、CGGIはtfhe-rs経由）、
@@ -885,6 +888,11 @@ last_processed: 2026-08-26T04:03:00Z
   の構造変化。**Rust Glancer**（@popzxc、`rust-glancer.github.io`）は新しいRust LSPで、ワークスペースをRAMに保持
   せずファイルシステムへ凍結——rust-analyzer比約100×少ないメモリ、代償は若干の速度、加えて即時再起動。大規模
   ワークスペース向けの、真に異なるメモリ/CPUトレードオフ。
+  **新規（08-26 12:03）：** **llama.cpp v0.3.0**（ggml-org）——ローカル推論参照ランタイムとしては久々の 0.x メジャーバンプ：
+  `mtmd` マルチモーダルライブラリが **dots3-note ビジョン/オーディオ**（新しい DSA-ISWA KV キャッシュ型）、WebP デコード、
+  Pillow 準拠のリサイズ、`moov` がファイル末尾にある動画の修正を追加；GLM-4.5-Air は MTP、DeepSeek 4 はテンソルスプリット、
+  コアは **ggml v0.22.0** へ（meta-backend テンソルスプリット、並列コンパイルの per-op Metal カーネル）。マルチモーダル＋動画処理が
+  大多数のローカル AI ツールが依存する単一バイナリに統合される（→ [[edge-inference]]）。
 - **メモリ経済学（08-19、→ [[edge-inference]]）：** 「RAMは安くなる」という20年の前提が12ヶ月でほどけた。
   TrendForce（8月17日）：ドイツのDDR5小売指数 **445% → 486%前年比**（昨年の約4.9倍）、華強北のDDR5 24Gb
   **週比+14.29%の$48**、16Gb $40、DDR4 8Gb 3200 +12.82%の$22；**サーバーDRAM契約価格は3Q26に前期比+13–18%と
@@ -975,6 +983,12 @@ last_processed: 2026-08-26T04:03:00Z
   注意し、話しながら見る11.3BオープンVLM（TTFT差が文脈とともに2.8×→5.1×へ拡大）；**Cerebras CS-4**（8月18日）は
   3ウェハ推論ラックで単一ユーザー指標で「GPUより30×高速」と主張——ダイはクロックを上げたWSE-3であり、新シリコン
   ではない；**Mureka V9.5**（昆仑万维）はMusiCoT音楽生成を出荷し、97%のプロンプト制御歩留まりを主張。
+  **新規（08-26 12:03）：** **ReWorld**（HKUST-GZ + Alibaba、arXiv 2608.23565）は*制御*（短ホライズン局所注意）と
+  *メモリ*（無界）を分離——大半のアテンションヘッドは局所に留まり、少数の「グローバル」ヘッドが履歴を横断、推論メモリは
+  **ポーズ索引ランドマークバンク**で境界付け、704×1280 のインタラクティブビデオをストリーミングし動作追従＋長ホライズン想起で
+  直近 6 つのインタラクティブ世界モデルを上回る；「何を見せたか覚えている」が次の世界モデル軸。**ERPO**（Alibaba、
+  arXiv 2608.23311、EMNLP 2026）はアクション側 Policy-KL を**クエリ側 KL（Query-KL）**に置き換え——GRPO/PPO/REINFORCE 互換、
+  追加フォワードなし、GRPO の KL が約 480 ステップで爆発する所でも安定（0.336 vs 0.274）。
 - **オープンウェブ vs プラットフォームの難読化（08-16 12:03）：** uBlock OriginはFacebook広告ブロック戦争を
   断念——メンテナーは同プラットフォームのSponsored投稿フィルタを「wontfix」とし、Facebookが「Sponsored」と
   いう語を1文字ずつバラし、不可視の偽文字を挿入し、要素名を絶えず再生成してパターンマッチを挫いているため。
@@ -1339,6 +1353,17 @@ last_processed: 2026-08-26T04:03:00Z
   512 GB / 1.2 TB/s、Mac Studio、LLM プロンプト処理は M1 Ultra 比最大 9.8×）——これまでで最もコンシューマーに近い
   ローカル・フロンティア級推論マシン（→ [[edge-inference]]）。NVIDIA **Vera Rubin NVL72** 初のベンチマーク：AgentX
   （DeepSeek-V4-Pro）で GB300 比メガワットあたりトークン最大 **30×**——ベンダー計測、SemiAnalysis のレビュー待ち。
+- **ローカルファーストエージェントスタックが製品化（08-26 12:03、12:27 に独立確認）：** Perplexity **Portable Computer**——NVIDIA と共同で
+  構築した Computer エージェントプラットフォームの完全オンデバイス版、まず **DGX Spark**（128 GB）と RTX ≥24 GB の Linux 機で：
+  ローカルモデル（Qwen 3.8 27B または事後学習した **PPLX 27B**）、エージェントハーネス、ツールルーター、コネクタ、OS レベル
+  サンドボックスがすべてローカルで動作し、ローカル作業は**ゼロトークンクレジット**（15+ のクラウドフロンティアモデルへの
+  エスカレーションは明示的承認が必要で、テキストのみの助言を返す）。Local Knowledge Work Bench 82.6%（PPLX 27B で 85.4%）、
+  BrowseComp で Pi より約 70% 少ないトークン。「ローカルファースト、オプトインクラウド」がエンタープライズパターンに——
+  ローカルエージェントには汎用ではなく*共設計された*ハーネスが必要という主張が、小モデルエージェント論争を再枠組み化
+  （thesis 12 のレバーをエッジへ、→ [[edge-inference]]）。**独立確認：** Local Knowledge Work Bench は**依然ベンダー実行**——
+  Perplexity はオープンソース化を計画するも未実施、第三者再現もなし；共設計*メカニズム*には独立の裏付け——ハーネスプレミアム
+  文献（弱モデルは汎用ハーネスを*ロード*できず遵守も失敗——skill-load 0.251、遵守 0.52→0.13）——そして Perplexity 自身の内訳も
+  Pi への ~12 ポイント差のうち ~5 をハーネススタック、PPLX 後訓練を 2.8 とする——方向性のある主張であり仕様ではない。
 - **金融エージェント（08-26 04:03）：** **TradingAgents**（`TauricResearch/TradingAgents`）が v0.3.1 で **100k★** を突破——
   LangGraph マルチエージェント取引企業ミラーが Claude Sonnet 5 / Fable 5 サポートと Alpha Vantage look-ahead フィルタを追加
   （バックテストの正しさこそ、素朴な agentic 取引パイプラインが静かに失敗する場所）。

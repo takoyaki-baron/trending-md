@@ -3247,5 +3247,41 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "lemmus.org": {
+    "cat": "community",
+    "en": "Federated social-aggregator mirror of release announcements; useful secondary link when it carries the changelog, but never a substitute for the primary repo. Cross-validated (08-26): its llama.cpp v0.3.0 summary matches the GitHub release notes.",
+    "zh": "联邦式社交聚合镜像，转发发布公告；当其承载变更日志时是有效的次级链接，但不能替代主仓库。已交叉核验（08-26）：其对 llama.cpp v0.3.0 的总结与 GitHub 发布说明一致。",
+    "jp": "リリース告知をミラーする連合型ソーシャルアグリゲーター。チェンジログを載せている場合は有用な二次リンクだが、一次リポジトリの代わりにはならない。突合済み（08-26）：llama.cpp v0.3.0の要約はGitHubリリースノートに一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "da.vidbuchanan.co.uk": {
+    "cat": "security",
+    "en": "David Buchanan's security-research blog; first-hand analysis of Android C2PA camera auth. Cross-validated (08-26): its CVE-2026-43499 one-click-root claim matches the HN thread (104 pts) and Pixel-root coverage; note it is an opinionated essay, not a disclosure.",
+    "zh": "David Buchanan 的安全研究博客；对 Android C2PA 相机认证的一手分析。已交叉核验（08-26）：其 CVE-2026-43499 一键 root 的说法与 HN 讨论（104 分）及 Pixel root 报道一致；注意这是观点性文章而非漏洞披露。",
+    "jp": "David Buchananのセキュリティ研究ブログ。Android C2PAカメラ認証の一次分析。突合済み（08-26）：CVE-2026-43499のワンクリックroot主張はHNスレッド（104点）やPixel root報道と一致。ただし意見エッセイであって開示文書ではない点に注意。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "sethmlarson.dev": {
+    "cat": "security",
+    "en": "PSF Security Developer-in-Residence Seth Larson's blog; authoritative on CPython stdlib security. Cross-validated (08-26): the str.lower()/IDNA-2003 CVE-2026-17084 writeup matches CPython PR #155293 and NVD's CWE-436 classification.",
+    "zh": "PSF 安全驻场开发者 Seth Larson 的博客；CPython 标准库安全方面的权威。已交叉核验（08-26）：其 str.lower()/IDNA-2003 CVE-2026-17084 分析与 CPython PR #155293 及 NVD 的 CWE-436 分类一致。",
+    "jp": "PSFセキュリティ開発担当Seth Larsonのブログ。CPython標準ライブラリのセキュリティに詳しい。突合済み（08-26）：str.lower()/IDNA-2003のCVE-2026-17084解説はCPython PR #155293とNVDのCWE-436分類に一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "access.redhat.com": {
+    "cat": "security",
+    "en": "Red Hat's official security-advisory hub; authoritative CVE records and RHEL impact assessment. Cross-validated (08-26): the Emacs TRAMP CVE-2026-79992 entry matches NVD (CVSS 7.8, CWE-78).",
+    "zh": "Red Hat 官方安全公告中心；权威 CVE 记录与 RHEL 影响评估。已交叉核验（08-26）：其 Emacs TRAMP CVE-2026-79992 条目与 NVD 一致（CVSS 7.8，CWE-78）。",
+    "jp": "Red Hat公式のセキュリティアドバイザリハブ。CVE記録とRHEL影響評価の権威。突合済み（08-26）：Emacs TRAMP CVE-2026-79992のエントリはNVD（CVSS 7.8、CWE-78）に一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
   }
 }

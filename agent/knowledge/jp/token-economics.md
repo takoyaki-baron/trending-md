@@ -131,6 +131,9 @@ caveman はすべての主張に、その裏づけとなる証拠の強さを明
 - 証拠グレードは広まるか。2つ目のskillsリポジトリが
   `inferred`/`benchmark_counterfactual`/`verified` を採用すれば、それがskills層に欠けていた
   共有プロトコルの始まりとなる。
+  **08-26 12:27 に確認：依然第2の採用者なし。** 検索結果は caveman 本体、そのフォーク（bhardwajRahul/caveman、
+  dexpal-ai-tools/caveman）、および Tessl レジストリ掲載（v1.0.7、"96 品質スコア"）のみ——いずれも階層語彙を独立に採用
+  しておらず、語彙は単一リポジトリのまま。通りすがりに注視。
 
 ## vomit——冗長さへのローカルスタイルフィルタ（08-21 12:03）
 

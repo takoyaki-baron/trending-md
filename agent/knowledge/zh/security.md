@@ -955,3 +955,39 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   头条）一致，但每篇报道都溯源到 Zhipu 的披露——截至该日尚无对放大*机制*的独立技术分析，也无公开 CVE。所有发现的漏洞
   已进入 CNNVD/CNVD 协同修复流程；Zhipu 延迟至约 8 月 28 日的开源权重伴随一个具名项目"开源的盾"（Open Source Shield）
   分层安全审查门槛。
+
+## miniOrange SAML、遗留安装器、版本锚定、TRAMP shell 注入、C2PA 被 root 的相机（08-26 12:03）
+
+- **miniOrange SAML 2.0 SP SSO — CVE-2026-61979 + CVE-2026-15981，未认证 WordPress 管理员接管，正在被积极利用。**
+  Xecurify 插件（约 1 万免费 + 3 万付费安装）的两个认证绕过缺陷。61979（8.1）是**签名算法混淆**：插件信任
+  SAML 响应声明的算法，把 IdP 的 RSA 公钥当作 HMAC 共享密钥。15981（9.8）是**真值判断 bug**：
+  `mo_saml_validate_signature()` 把 OpenSSL 的 `-1`（处理错误）当作有效签名。DigitalOcean 安全团队在 8 月 16 日
+  发现异常管理员会话；攻击者携带公开 PoC 进行机会性扫描。有补丁，但付费版没有明确公告、各版本修复号不同——
+  "静默补丁"让修复变得困难。该类别反复出现（弱认证 / SAML 签名校验账户接管）；可复用的教训是 SAML 签名逻辑
+  不断产生认证绕过链，而按版本区分的修复号把修复藏了起来。
+- **ClipBucket V5 CVE-2026-80138（CWE-78；CVSS 4.0 9.2 / CVSS 3.1 9.8）——遗留安装器即 RCE。**
+  网页安装器（`cb_install`）把 `php_cli_filepath` 未经校验/转义就传给 shell 执行，因此**未认证**的 POST
+  就能以 web 服务器用户身份运行任意系统命令（5.5.1–5.5.3-#153；#154+ 修复；VulnCheck 分配，Adam Nurudini 报告）。
+  "装完就删 `cb_install`"是最古老的安全建议——安装页面作为常驻的薄弱环节，与 GBIF IPT 安装端点绕过、
+  TrueConf 暴露的管理面（"可被触达的管理面"这一反复出现的形态）同族。
+- **Python `str.lower()` 与 IDNA 2003 — CVE-2026-17084，Unicode 版本锚定解析器差分（CWE-436）。**
+  `stringprep`/IDNA 2003 编解码器用 `str.lower()` 做 RFC 3454 大小写折叠，但 `str.lower()` 跟随解释器的
+  Unicode 版本（17.0）而非规范固定的 Unicode 3.2.0——同一可见输入在不同版本下编码成不同 Punycode
+  （`"ᎠᎠ"` → `xn--58da` vs `xn--kz9aa`），可用于同形字/白名单绕过/SSRF 混淆。修复仅在 StringPrep 内把
+  大小写折叠锚定到 Unicode 3.2.0（CPython PR #155293，backport 到 3.14/3.15）。可泛化的类别："规范钉住旧
+  Unicode 版本，而代码跟随当前版本"——建议从 IDNA 2003 编解码器迁移到 IDNA 2008 的 `idna` 包。
+- **Emacs TRAMP CVE-2026-79992（CWE-78，CVSS 7.8）——编辑器的远端文件层就是注入面。**
+  TRAMP 把登录参数未经清理就拼接后传给本地 shell，因此本地攻击者诱使你打开一个**恶意构造的文件名**
+  （"user" 字段）即可实现 shell 注入与任意代码执行。RHEL 9/10 支持渠道尚无修复；缓解措施是不要处理不受信任的
+  文件名。为处理远端路径而调用 shell 的"本地"工具需要与网络服务相同的输入清理纪律——不受信任的文件名就是新的不受信任的 HTML。
+- **C2PA 相机认证无法在 root 设备上存续。** David Buchanan 的文章论证 Google 的 **Pixel Camera C2PA Assurance
+  Level 2** 认证并不健全：信任链建立在 Android Key Attestation + Play Integrity 之上，但提权漏洞
+  （**CVE-2026-43499**，Linux 内核 futex PI requeue 路径的 rtmutex UAF，上游 6.12.86+ 修复，被武器化为 Root My Pixel）
+  让任何人无需硬件攻击即可铸造 **C2PA 有效的签名伪造**；对屏幕拍屏这类模拟攻击更是零技术门槛。在溯源成为深度伪造
+  默认答案的当下，"C2PA 签名" ≠ "真实"——对每个押注该标准的平台与政策，这都是根本性的信任模型警告。这是溯源军备
+  竞赛笔记的安全腿：一条信任*链*的强度只取决于它最弱的特权边界，而非最强的签名。
+  **Google 的回应（08-26 12:27 一手核实）：** 硬件相关发现定为 **"Won't fix（不可行）"**，并支付 **$7,500 漏洞赏金**；
+  Buchanan 发布了 **keystork**（`DavidBuchanan314/keystork`——Play Integrity token 铸造，含 `MEETS_STRONG_INTEGRITY` +
+  无限制 KeyStore 访问，zygote 钩子冒充 Pixel Camera）。**未出现 C2PA 规范修订或平台采纳后退**——Google 反而在*扩大*
+  C2PA（I/O 2026 年 5 月宣布 Pixel 8/9 视频签名）；Samsung 的 RKP/EL2 能挡住部分故障注入，但既不普适也不充分。
+  标准维持原样：唯一真正的修复是把图像管线重写到安全 enclave 的不可行方案。

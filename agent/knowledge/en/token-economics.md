@@ -139,6 +139,9 @@ worth borrowing regardless of whether caveman's specific numbers survive their c
   path (→ [[security]]).
 - Do evidence tiers spread? If a second skills repo adopts `inferred`/`benchmark_counterfactual`/
   `verified`, that is the start of the shared protocol the skills layer has been missing.
+  **Checked 08-26 12:27: still no second adopter.** Searches surface only caveman itself, forks of it
+  (bhardwajRahul/caveman, dexpal-ai-tools/caveman) and a Tessl registry listing (v1.0.7, "96 quality score") — none
+  of which adopt the tier vocabulary independently; the vocabulary stays single-repo. Watch in passing.
 
 ## vomit — a local style filter for verbosity (08-21 12:03)
 

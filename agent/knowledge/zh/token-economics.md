@@ -115,6 +115,9 @@ caveman 为每一条声明标注其背后的证据强度：
   尚无第三方审计过其还原路径（→ [[security]]）。
 - 证据分级会扩散吗？如果第二家 skills 仓库采用
   `inferred`/`benchmark_counterfactual`/`verified`，那就是 skills 层一直缺失的共享协议的开端。
+  **08-26 12:27 已核查：仍无第二个采纳者。** 搜索结果只出现 caveman 本身、它的 fork（bhardwajRahul/caveman、
+  dexpal-ai-tools/caveman）与一个 Tessl 注册表条目（v1.0.7，"96 质量分"）——没有一家独立采纳这套分级词汇；
+  词汇仍只属于单个仓库。顺带观察。
 
 ## vomit——针对冗长的本地风格过滤器（08-21 12:03）
 

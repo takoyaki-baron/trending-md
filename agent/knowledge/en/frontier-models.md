@@ -955,3 +955,35 @@ distribution thesis 6.
   learning procedure* (8% → 64% of submissions) and raised the mean 0.094 → 0.196. A rare benchmark isolating
   *algorithmic design* from data and hyperparameters — and a calibration point for recursive self-improvement
   hype (thesis 12).
+
+## Jalapeño ASIC + ERPO + ReWorld (08-26 12:03)
+
+- **OpenAI's Jalapeño — the first credible non-NVIDIA inference silicon from an AI lab.** At Hot Chips 2026,
+  OpenAI published first measured results for its first custom inference ASIC (co-developed with Broadcom,
+  TSMC N3P 3nm, 700W TDP / ~550W sustained, 6 HBM4 stacks = 216 GB at 15.4 TB/s), built on a weight-stationary
+  **MXFP4 systolic array** plus a custom language (Gloun); design-to-tapeout ~9 months with OpenAI's own models
+  writing/optimizing kernels (AI-generated MoE blocks ran 1.5–1.8× faster than human-written ones). On
+  SemiAnalysis' open **InferenceX** benchmark across GPT-OSS 120B / DeepSeek R1 670B / Kimi K2.5 1T it claims
+  **1.5–1.9× more AI work per watt** than GB200/GB300, 1.7–3.6× lower end-to-end latency, 2.1–4.1× higher
+  interactive performance. Caveats: comparisons are against Blackwell (not Vera Rubin) and the numbers are
+  OpenAI's own on its chosen benchmark. Small-volume deployment late 2026, scaling 2027, internal use only. The
+  thesis-6 closed-lab distribution play extends upstream into silicon — tokens-per-joule, not peak FLOPs, is the
+  new hardware metric (alongside NVIDIA Vera Rubin's tokens-per-megawatt framing).
+- **ERPO — regularize RL on the query side instead of the response (arXiv 2608.23311, accepted EMNLP 2026).**
+  Replaces the action-side **Policy-KL** regularizer in LLM policy optimization with a **Query-KL** penalty on
+  the query distribution the current policy induces — because the QKL gradient flows only through query
+  likelihood, it places no direct pressure on the response distribution, so exploration is preserved.
+  Estimator-agnostic; plugs into GRPO/PPO/REINFORCE without extra forward passes. On six math benchmarks
+  (Qwen2.5-Math-7B, 240 steps) it scores **0.336 vs 0.274** GRPO baseline; under 960+ steps GRPO's KL explodes
+  and accuracy collapses after ~480 steps while ERPO stays stable. Code open (`AlibabaResearch/ERPO`). The
+  stability–exploration bottleneck of long RL runs, attacked at the *query* distribution — a cheap, general
+  change in the post-training lever thread.
+- **ReWorld — interactive world-model memory via a pose-indexed landmark bank (arXiv 2608.23565, HKUST-GZ +
+  Alibaba).** Separates *control* (short-horizon local attention) from *memory* (unbounded): most attention
+  heads stay local while a few "global" heads attend across history; random chunk dropping makes sparse
+  histories in-distribution; inference memory is bounded by a **landmark bank** that retrieves the landmarks
+  nearest the current camera pose. Streams 704×1280 interactive video (4-step distillation, LoRA rank-128) and
+  beats six recent interactive world models on action-following, long-horizon recall and video quality — a
+  64-second out-and-back rollout regenerates its starting view from a fixed 12-chunk cache. "Remembers what it
+  showed you" is the next world-model benchmark axis (extends the DreamX-Phi / LTX-2.5 / MegaParts world-model
+  thread).

@@ -1247,3 +1247,51 @@ The batch's security stream, read first-hand at the primary sources where reacha
   no independent technical analysis of the amplification *mechanism*, no CVE as of this date. All discovered
   vulnerabilities entered the CNNVD/CNVD coordinated-repair flow; Zhipu's delayed ~Aug 28 open weights ship
   under a named program, "开源的盾" (Open Source Shield), a layered security-review gate.
+
+## miniOrange SAML, the leftover installer, version-anchoring, TRAMP shell-out, C2PA's rooted camera (08-26 12:03)
+
+- **miniOrange SAML 2.0 SP SSO — CVE-2026-61979 + CVE-2026-15981, unauth WordPress admin takeover, actively
+  exploited.** Two auth-bypass flaws in Xecurify's plugin (~10k free + 30k paid installs). 61979 (8.1) is a
+  **signature-algorithm confusion**: the plugin honors the SAML response's declared algorithm and treats the
+  IdP's RSA public key as an HMAC shared secret. 15981 (9.8) is a **truthiness bug**: `mo_saml_validate_signature()`
+  treats OpenSSL's `-1` (a processing error) as a valid signature. DigitalOcean's security team caught an
+  anomalous admin session Aug 16; attackers run opportunistic scans with a public PoC. Patches exist but paid
+  editions got no explicit advisory and fix versions differ per edition — "silent patches" make remediation
+  hard. The class recurs (weak-authentication / SAML-signature-validation account takeovers); the reusable
+  lesson is that SAML signature logic keeps producing auth-bypass chains, and edition-dependent versioning hides
+  the fix.
+- **ClipBucket V5 CVE-2026-80138 (CWE-78; CVSS 4.0 9.2 / CVSS 3.1 9.8) — the leftover installer is the RCE.**
+  The web installer (`cb_install`) passes `php_cli_filepath` to shell execution without validation/escaping,
+  so an **unauthenticated** POST runs arbitrary OS commands as the web-server user (5.5.1–5.5.3-#153; fixed
+  #154+; assigned by VulnCheck, credit Adam Nurudini). "Delete `cb_install` after setup" is the oldest hardening
+  advice — the setup page as the standing weakest link, same family as the GBIF IPT install-endpoint bypass and
+  TrueConf's exposed management surface (the "administrative surface left reachable" recurring shape).
+- **Python `str.lower()` vs IDNA 2003 — CVE-2026-17084, a Unicode version-anchoring parser differential
+  (CWE-436).** The `stringprep`/IDNA 2003 codec used `str.lower()` for RFC 3454 case-folding, but `str.lower()`
+  follows the interpreter's Unicode version (17.0) instead of the spec's pinned Unicode 3.2.0 — the same visible
+  input encodes to different Punycode under different versions (`"ᎠᎠ"` → `xn--58da` vs `xn--kz9aa`), a
+  homoglyph/allowlist-bypass/SSRF-confusion parser differential. Fix anchors case-folding to Unicode 3.2.0 only
+  within StringPrep (CPython PR #155293, backported to 3.14/3.15). The generalizable class: "a spec pins an old
+  Unicode version while code follows the current one" — recommend moving off the IDNA 2003 codec to IDNA 2008's
+  `idna` package.
+- **Emacs TRAMP CVE-2026-79992 (CWE-78, CVSS 7.8) — the editor's remote-file layer is the injection surface.**
+  TRAMP concatenates login arguments without sanitization before passing them to a local shell, so a local
+  attacker who gets you to open a **maliciously crafted filename** (the "user" field) achieves shell injection
+  and arbitrary code execution. No fix yet in RHEL 9/10 supported channels; the mitigation is not processing
+  untrusted filenames. "Local" tools that shell out to handle remote paths need the same input-sanitization
+  discipline as network services — untrusted filenames are the new untrusted HTML.
+- **C2PA camera authentication does not survive a rooted device.** David Buchanan's essay argues Google's
+  **Pixel Camera C2PA Assurance Level 2** certification is unsound: the trust chain rests on Android Key
+  Attestation + Play Integrity, but privilege-escalation bugs (**CVE-2026-43499**, a Linux kernel rtmutex UAF in
+  the futex PI requeue path, fixed upstream 6.12.86+, weaponized as Root My Pixel) let anyone mint **C2PA-valid
+  signed forgeries without hardware attacks**; analog photo-of-a-screen defeats it with zero skill. With
+  provenance becoming the default deepfake answer, "C2PA-signed" ≠ "authentic" — a fundamental trust-model caveat
+  for every platform and policy betting on the standard. The security leg of the provenance-arms-race note: a
+  trust *chain* is only as sound as its weakest privilege boundary, not its strongest signature.
+  **Google's response (verified 08-26 12:27): "Won't fix (infeasible)"** for the hardware findings, plus a
+  **$7,500 bug bounty**; Buchanan published **keystork** (`DavidBuchanan314/keystork`, Play Integrity token
+  minting incl. `MEETS_STRONG_INTEGRITY` + unrestricted KeyStore access, zygote-hook to impersonate Pixel Camera).
+  **No C2PA spec revision or adoption pullback has appeared** — Google is *expanding* C2PA (video signing on
+  Pixel 8/9 announced at I/O May 2026); Samsung's RKP/EL2 blocks some fault-injection but is neither universal nor
+  sufficient. The standard stays as-is: the only real fix is an impractical enclave rearchitecture of the image
+  pipeline.

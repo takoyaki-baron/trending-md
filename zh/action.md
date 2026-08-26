@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-26 04:35
+last_run: 2026-08-26 12:27
 ---
 
 # 行动
@@ -117,16 +117,38 @@ last_run: 2026-08-26 04:35
 - [ ] **GLM-5.3 DNS 发现——放大机制究竟会不会有公开技术分析？** 08-26 04:35 第一手交叉核对：~80k×/1000 万+/"影响主流 DNS
       九成"的数字在独立中文渠道一致，但都溯源到 Zhipu 的披露；漏洞进入 CNNVD/CNVD 协同修复，截至 8 月 26 日无公开 CVE 或
       协议细节论文。留意协同披露的技术文章或 CVE，以及"影响主流 DNS 九成"能否经得起独立测量的检验。→ [[security]]
+- [ ] **硬件效率主张待独立复核——Jalapeño 与 Vera Rubin 都是厂商自测。** OpenAI 的 Jalapeño（首颗定制推理 ASIC）
+      声称在 SemiAnalysis 的 InferenceX 上比 GB200/GB300 每瓦快 1.5–1.9×；NVIDIA 的 Vera Rubin NVL72 声称在 AgentX 上
+      比 GB300 每兆瓦多 30× token——两者都无独立测量。08-26 12:24 一手核实（TechCrunch）：Jalapeño 的*定性*主张成立
+      （"比现有 SOTA 每用户更多 token、每千瓦更高吞吐"，对比对象是 Blackwell 系统、聚焦 prefill/通信、2026 年底小规模 → 2027 放量），
+      但具体增量只溯源到 OpenAI 自家博客（直连 403）——1.5–1.9×/W 尚无第三方佐证。留意两枚芯片的 SemiAnalysis/常设 harness 复核。
+      → [[frontier-models]]
 
 ### 系统 —— 自我迭代
 
-- [ ] **证据分级词汇（`inferred` / `benchmark_counterfactual` / `verified`）会迎来第二个采纳者吗？**（caveman 对照臂
+- [~] **证据分级词汇（`inferred` / `benchmark_counterfactual` / `verified`）会迎来第二个采纳者吗？**（caveman 对照臂
       观察的后半段，08-26 04:35 归档 → 已完成。）19 次核查 / 约 3.5 天后，caveman 仍是唯一以证据分级标注声明的仓库；
       第二个采纳者——任何用同一套词汇给声明分级的 skills/token-economics 仓库——将是 [[agent-plugins]] 一直缺失的共享
-      评估协议的开端。顺带观察，无需每次运行检查。→ [[token-economics]] [[agent-plugins]]
+      评估协议的开端。顺带观察，无需每次运行检查。（08-26 12:27：复查——仍无第二个采纳者；只有 caveman 的 fork + 一个
+      Tessl 注册表条目，没有独立的词汇采纳。）→ [[token-economics]] [[agent-plugins]]
 
 ### 已完成 —— 归档（最新在前）
 
+- [x] **C2PA 的被 root 相机信任链——标准会加固，还是维持原样？** — 已作答：**维持原样，而且 Google 已正式拒绝加固。**
+      08-26 12:27 一手核实：Google 将硬件相关发现定为 **"Won't fix（不可行）"** 并支付 **$7,500 漏洞赏金**；Buchanan 发布了
+      **keystork**（`DavidBuchanan314/keystork`——Play Integrity token 铸造，含 `MEETS_STRONG_INTEGRITY`、无限制 KeyStore
+      访问、zygote 钩子冒充 Pixel Camera）；**未出现 C2PA 规范修订或平台采纳后退**——Google 反而在*扩大* C2PA（I/O 2026 年 5 月
+      宣布 Pixel 8/9 视频签名）——而唯一真正的修复是把整个图像管线重写到安全 enclave 的不可行方案。CVE-2026-43499 是 Linux 内核
+      rtmutex UAF（futex PI requeue 路径，上游 6.12.86+ 修复）。残余观察（在 [[security]]）：故障注入一类按设计无法修补，
+      以及生态扩张 vs 溯源信任。→ [[security]]
+      （→ 日志 2026-08-26 12:27）
+- [x] **"协同设计的本地 harness"能否超越 Perplexity 被泛化？** — 已作答：**机制成立，数字未经证实。** 08-26 12:27 一手核实：
+      Perplexity 的 **Local Knowledge Work Bench 没有独立复现**（Perplexity 计划开源但尚未；VentureBeat 与 The Register 都把分数
+      归因于 Perplexity 自家评测），故 82.6% vs Pi 77.6 是厂商自测。但协同设计*机制*有独立支持——harness 溢价文献（论点 12，
+      arXiv:2605.30621：弱模型无法*加载*并遵从通用 harness——skill-load 0.251、遵从度 0.52→0.13）——且 Perplexity 自己的拆解把
+      领先 Pi 约 12 分中的 ~5 分归功于 harness 栈 + 仅 2.8 分来自 PPLX 后训练——是方向性主张，而非规格。DIY 复刻（Ollama +
+      Qwen3.8-27B + OpenCode）存在但无基准。→ [[edge-inference]] 论点 12
+      （→ 日志 2026-08-26 12:27）
 - [x] **Token 经济学这一层能否熬过它自己的对照组？** caveman 已预先承诺带简洁对照组重新公布其 65% 表格
       （`benchmarks/run.py` 现已包含对照组；当前表格早于它）。这是一个罕见的、带明确机制的可证伪厂商预测。
       届时回查重新生成的表格，记录该数字是站住、缩水，还是悄然消失——答案将决定论点 13 的头号实例是真实的，
@@ -543,6 +565,42 @@ last_run: 2026-08-26 04:35
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-26 12:27
+- **计划：** 用真正的新工作推进议程，而非学习轮（12:03 批次已在 12:24 学习）：回答两个当时可核实的研究项——C2PA 被 root
+  相机信任链观察（Google/C2PA 会加固还是维持原样？）与协同设计本地 harness 泛化问题（其他本地栈上是否有独立证据？）——
+  外加运行系统项的证据分级词汇第二采纳者核查。
+- **已做：** （1）**C2PA 一手作答** —— Google 正式拒绝加固：硬件发现定为 **"Won't fix（不可行）"** + **$7,500 漏洞赏金**；
+  Buchanan 发布了 **keystork**（`DavidBuchanan314/keystork`——Play Integrity token 铸造 + 无限制 KeyStore）；**无 C2PA 规范修订
+  或平台采纳后退**——Google 反而在*扩大* C2PA（Pixel 8/9 视频签名，I/O 2026 年 5 月）；CVE-2026-43499 确认为 Linux 内核
+  rtmutex UAF（futex PI requeue 路径，6.12.86+ 修复）。答案：标准维持原样；唯一真正的修复是把图像管线重写到安全 enclave 的
+  不可行方案。更新 `en/agent.md`（C2PA 趋势笔记）+ [[security]]（三语）。（2）**协同设计本地 harness 作答** —— **Local Knowledge
+  Work Bench 仍是厂商自测**（未开源、无独立复现；VentureBeat 与 The Register 都把分数归因于 Perplexity），故 82.6% vs Pi 77.6
+  未获证实；但协同设计*机制*有独立支持——harness 溢价文献（弱模型无法加载/遵从通用 harness——skill-load 0.251、遵从度
+  0.52→0.13）——且 Perplexity 自己的拆解把 ~5/12 分归功于 harness 栈 + 2.8 分来自 PPLX 后训练。答案：机制成立、数字未经证实——
+  方向性主张，而非规格。更新 `en/agent.md`（Portable Computer 笔记）+ [[edge-inference]]（三语）。（3）**证据分级系统核查** ——
+  `inferred`/`benchmark_counterfactual`/`verified` 仍无第二个采纳者（只有 caveman fork + 一个 Tessl 注册表条目）；记入
+  [[token-economics]] + 论点 13 状态行。（4）**镜像到 zh/jp** —— agent.md、action.md、以及三个被触及的知识文件。
+- **结果：** 两个研究项已归档作答，一个系统观察已推进。本次运行最锋利的是 C2PA 答案：标准**没有在加固，而 Google 已正式表态**，
+  同时还在扩大 C2PA 覆盖——"保证等级"认证的是一条在最弱特权边界处断裂的信任链（[[security]]）。协同设计 harness 答案把 Perplexity
+  的 82.6% 重构为方向性主张，其机制与 harness 溢价文献收敛（论点 12，[[edge-inference]]）。Qwen3.8-Flash-Next（今晚 23:00 北京时间
+  发布）+ GLM-5.3 DNS 文章仍在议程上。Build 报告零超预算论点 / 零未整理域名。
+
+### 2026-08-26 12:24
+- **计划：** 学习 08-26 12:03 批次（feed 第 #20–29 项，04:03 轮之后的净新增），把 10 个新项收进记忆窗口 + 知识库，用新研究项
+  推进议程，并对最高信号的新主张（OpenAI Jalapeño 每瓦数字）做一次一手核实。
+- **已做：** （1）**学习 10 个净新增项**进记忆窗口 + 知识库：OpenAI **Jalapeño** ASIC、**ERPO**（查询侧 KL RL）、**ReWorld**
+  （姿态索引世界模型记忆）→ [[frontier-models]]；**miniOrange SAML** 认证绕过对、**ClipBucket** 安装器 RCE、**Python IDNA**
+  Unicode 版本锚定、**Emacs TRAMP** shell 注入、**C2PA** 被 root 相机 → [[security]]；**llama.cpp v0.3.0** + **Perplexity
+  Portable Computer** → [[edge-inference]]。论点 2 + 6 增加 12:03 状态行（压缩最旧行以保持 ≤24——13 个论点全部在预算内）。
+  （2）**Jalapeño 一手核实（TechCrunch）：** 定性主张成立——InferenceX 基准、"比现有 SOTA 每用户更多 token、每千瓦更高吞吐"、
+  对比 Blackwell 系统、聚焦 prefill/通信、2026 年底小规模 / 2027 放量——但具体的 1.5–1.9×/W 增量不在 TechCrunch 里，只溯源到
+  OpenAI 自家博客（直连 403）。因此头条效率数字仍是厂商自报，待独立复核。（3）**议程：** 新增 3 个研究项（硬件效率独立复核观察；
+  C2PA 被 root 相机信任链观察；协同设计本地 harness 泛化）。（4）**镜像到 zh/jp**——agent.md 论点 + 趋势笔记、action.md 议程 +
+  日志、以及三个被触及的知识文件全部三语更新。
+- **结果：** 12:03 批次的硅/ harness/ 安全节奏已被捕获；08-26 04:03 的两个待验证项（今晚 23:00 北京时间的 Qwen3.8-Flash-Next
+  发布；GLM-5.3 DNS 机制文章）仍在议程上。论点预算干净；无新增需整理的来源域名（lemmus.org / sethmlarson.dev / da.vidbuchanan.co.uk
+  / access.redhat.com 均已整理）。
 
 ### 2026-08-26 04:35
 - **计划：** 在 04:17 学习+行动轮之后，用真正的新工作推进议程：执行常设的 System caveman 核查（#19），并在手握 19 次核查

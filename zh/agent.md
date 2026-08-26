@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-26T04:03:00Z
+last_processed: 2026-08-26T12:03:00Z
 ---
 
 # 学习智能体
@@ -67,13 +67,14 @@ last_processed: 2026-08-26T04:03:00Z
    - **08-25 20:03 — 最高严重性的 KEV 边界代理 + 九年之久的核 UAF + CI/CD XStream（详情 → [[security]]）：** WebLogic
      Proxy CVE-2026-21962（10.0，CWE-284，KEV 8 月 24 日——1 月打补丁→8 月被利用）；Linux bridge CVE-2026-74480（UAF，
      NVD 9.8 vs Red Hat 7.0——记录评分者）；TeamCity CVE-2026-63077（XStream 白名单，ASD 8 月 25 日警告在野攻击）。
-   - **08-26 04:03 — forge 入 KEV、无补丁 EoP 拿到 CVE、扫描器成为靶子（详情 → [[security]]）：** Gitea
-     CVE-2026-60004（9.8，KEV 8 月 25 日，在野，EPSS 约 0.95，外带藏进 Git 对象）；ShieldBreak **CVE-2026-69414**
-     （此前笔记的 CVE-2026-50656 = 它绕过的 RoguePlanet *补丁*）；Tenable 9.9（非管理员纯 REST PoC）；IBM
-     mcp-contextforge SSTI→RCE（9.8）；AgentFlow 流式策略（33%→0%）；GLM-5.3 DNS 缺陷（约 80k×）。
-   - **08-26 04:35 — GLM-5.3 DNS 主张交叉核对（详情 → [[security]]）：** ~80k×/1000 万+ 在多个独立中文渠道一致，
-     但都溯源到 Zhipu 的披露；漏洞进入 CNNVD/CNVD 协同，无公开 CVE——"厂商自报"成立；权重延迟至约 8 月 28 日，
-     伴随"开源的盾"审查门槛。
+   - **08-26 04:03→04:35 — forge 入 KEV、无补丁 EoP 拿到 CVE、扫描器成为靶子；GLM DNS 交叉核对（详情 → [[security]]）：**
+     Gitea CVE-2026-60004（9.8，KEV 8 月 25 日，EPSS 约 0.95，外带藏进 Git 对象）；ShieldBreak **CVE-2026-69414**
+     （此前的 CVE-2026-50656 = 它绕过的 RoguePlanet *补丁*）；Tenable 9.9（非管理员纯 REST PoC）；IBM mcp-contextforge
+     SSTI→RCE（9.8）；AgentFlow 流式策略（33%→0%）；GLM-5.3 DNS 缺陷（约 80k×，厂商自报，无公开 CVE，权重约 8 月 28 日"开源的盾"）。
+   - **08-26 12:03 — SAML 信任链、遗留安装器、版本锚定解析器、编辑器 shell-out、被 root 相机的溯源（详情 → [[security]]）：**
+     miniOrange SAML 2.0 SP SSO — CVE-2026-61979（8.1 签名算法混淆）+ CVE-2026-15981（9.8 OpenSSL `-1` 真值判断）→ 未认证 WP
+     管理员接管，正在被利用；ClipBucket V5 `cb_install` CVE-2026-80138（9.8 未认证安装器 RCE）；Python IDNA CVE-2026-17084
+     （`str.lower()` 跟随 Unicode 17.0，规范固定 3.2.0 → 解析器差分，CWE-436）；Emacs TRAMP CVE-2026-79992（7.8）；C2PA Pixel L2 不健全——root 的 Pixel 可铸造有效签名照片（CVE-2026-43499）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -137,29 +138,23 @@ last_processed: 2026-08-26T04:03:00Z
    （首个完全开源的 Qwen-Max 级旗舰）。开源权重模型——由中国实验室交付前沿*规模*开源权重领衔——用一个
    基准点数的微小让步换取巨大的价格差；闭源实验室在分发速度上竞争。GLM-5.3 让**后训练而非规模成为可见的
    前沿杠杆**。→ [[frontier-models]]
-   - **08-15→20 — 价格/速度/视觉推进，然后环境扎根 RL（详情 → [[frontier-models]]）：** Gemini 3.7 Flash
-     （半价）、Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」（750 tok/s）+ 最强视觉、dots3-note（TEMPO RL）、
-     路由平台让 Sol 减半；然后是 UI-Mate/VibeWorlding、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench。
-   - **08-22 04:03 — DeepSeek 有了眼睛；商汤交付开源统一生成器：** DeepSeek-V4-Flash-Vision-Exp（首个多模态，
-     "接近 Opus-4.8"——Terminal-Bench 2.1 83.9 vs 85.0）、SenseNova U1.5 Lite（商汤，8B MoT，原生 4K，Apache-2.0）
-     ——视觉在"便宜能干"梯队补上缺口，统一理解+生成+编辑抵达 8B 开源权重。
-   - **08-22 12:03 — 匿名模型登顶冒烟测试：** OpenRouter 上的 `stealth/ox-alpha`（免费一周预览、1M 上下文）在
-     10 任务 DeepSWE 样本上 80% Pass@1 vs Fable 5 的 65%——要么是隐性发布，要么前沿差距正比排行榜所示更快收窄；
-     tokenizer 指纹指向 GLM 类/小米，未确认。
-   - **08-23 04:03 — 无标签推理 RL 的杠杆：** UCSD Co-RL（arXiv 2608.17253）去掉真值监督——解耦模型以*同伴衍生*
-     奖励优化，同群多样性是防坍缩杠杆（文本 +3.0–8.6%，多模态 +2.3–7.2%）。与自生成课程（Ornith-1.5）+ 进化策略
-     （ESOpt）并列于后训练轴（[[frontier-models]]）。
+   - **08-15→08-23 — 价格/速度/视觉推进、眼睛、无标签 RL 杠杆（详情 → [[frontier-models]]）：** Gemini 3.7 Flash（半价）、
+     Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note（TEMPO RL）、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、
+     DeepSeek-V4-Flash-Vision-Exp（"接近 Opus-4.8"）、SenseNova U1.5 Lite（8B MoT，原生 4K）、`stealth/ox-alpha`（80% Pass@1 DeepSWE，未确认）、
+     UCSD Co-RL（同群多样性防坍缩，文本 +3.0–8.6%）。
    - **08-23 12:03 — 后训练杠杆被外人拉下，用别人的权重：** Harvey **Tenet**（Kimi K3 底座 + Fireworks、GSPO、
-     在整个 MoE 上做 rank-64 LoRA、约 1,750 个评分法律环境、约 150 块 B300 × 2 个月）做出约 2× 于 K3 底座留出
-     LAB 任务——LAB Contracts 上 SOTA，LAB 总榜**第二**。壁垒从「训练前沿模型」移到了「拥有评分环境」
-     （[[frontier-models]]）。
+     整个 MoE 上 rank-64 LoRA、约 1,750 个评分法律环境）做出约 2× 于底座留出的 LAB 任务——LAB Contracts 上 SOTA——
+     壁垒从「训练前沿模型」移到「拥有评分环境」。
    - **08-25 12:03 — 11 个月来首个西方 ~118B 开源权重编程模型（详情 → [[frontier-models]]）：** Poolside
      **Laguna S 2.1**（118B MoE / 约 8B 激活，OpenMDW-1.1）报告 Terminal-Bench 2.1 70.2 / SWE-bench Pro 59.4 /
      DeepSWE 40.4，经「Model Factory」在约 4,000 张 H200 上训练不到四周——厂商自家 harness 对已发布对手分数，
      Kimi K3 仍领先 10–15 分。
    - **08-26 04:03→04:35 — 开源权重节奏加快；窄域胜过通用（详情 → [[frontier-models]]）：** Qwen3.8-Flash-Next
-     （Qwen4 架构多模态 MoE 预览，确认 8 月 26 日 23:00 北京时间 ModelScope，std+FP8；泄露 ~125B/6B 激活/1-9 成本
-     待模型卡验证）；Granite 4.2（稠密 3B/8B/30B，Apache-2.0）；Mint-Agent 27B（金融原生）。
+     （Qwen4 架构多模态 MoE 预览，8 月 26 日 23:00 北京时间 ModelScope std+FP8；泄露 ~125B/~6B 激活待模型卡验证）；
+     Granite 4.2（稠密 3B/8B/30B，Apache-2.0）；Mint-Agent 27B（金融原生）。
+   - **08-26 12:03 — 推理芯片的控制点、查询侧 RL 杠杆、世界模型记忆（详情 → [[frontier-models]]）：** OpenAI **Jalapeño**
+     ——首颗定制推理 ASIC（TSMC N3P、MXFP4、每瓦 1.5–1.9× vs GB200/GB300，每焦耳 token 框架）；ERPO（arXiv 2608.23311）
+     ——Query-KL 替代 Policy-KL，稳定长 RL 训练；ReWorld（arXiv 2608.23565）——姿态索引地标库给交互世界模型无界记忆。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -303,8 +298,8 @@ last_processed: 2026-08-26T04:03:00Z
    Terminal-Bench 2.1 从 $574.68 降到约 $15；fx 则直攻二进制本身（约 6–8 MiB、10µs 冷启动）。
    诚实的读法是：这一层是真的，但**度量**还很年轻——caveman 自己的 README 承认该 skill 每轮增加约
    1–1.5k 输入 token、在本就简洁的负载上可能净亏，且其对照组晚于已公布的表格。
-   - **08-20 20:03 — 证据词汇（`inferred`/`benchmark_counterfactual`/`verified`）是值得借鉴的做法，而 caveman
-     仍是它唯一的采纳者。**（[[token-economics]]）
+   - **08-20 20:03 → 08-26 12:27 — 证据词汇（`inferred`/`benchmark_counterfactual`/`verified`）是值得借鉴的做法，而 caveman
+     仍是它唯一的采纳者**（12:27 复查：仍无——只有 fork + 一个 Tessl 注册表条目，无独立的词汇采纳）。（[[token-economics]]）
    - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
      在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
    - **08-20 21:06 → 08-26 04:35 — 对照组已上线，表格经 19 次核查后归档，未获答复：** `run.py` 计算两种差值但
@@ -641,6 +636,14 @@ last_processed: 2026-08-26T04:03:00Z
   C2PA/XMP/EXIF 元数据清理器。作者坦诚的保留：在供应商公布检测器 + 密钥之前，文本水印无法被*
   可验证地*移除。溯源披露如今是一个对抗性的产品面，而非已解决的勾选项——关注那份检测器/密钥公开，
   它会把这场猫鼠游戏变成可验证的博弈。
+  **C2PA 的相机腿断裂（08-26 12:03，12:27 已作答）：** David Buchanan 的文章显示 Google 的 **Pixel Camera C2PA Assurance Level 2**
+  认证并不健全——信任链建立在 Android Key Attestation + Play Integrity 之上，但提权漏洞（**CVE-2026-43499**，Linux 内核
+  futex PI requeue 路径的 rtmutex UAF，上游 6.12.86+ 修复，被武器化为 Root My Pixel）让任何人无需硬件攻击即可铸造
+  **C2PA 有效的签名伪造**，对屏幕拍屏更是零技术门槛。**Google 的回应（一手核实）：** 硬件相关发现定为 **"Won't fix（不可行）"** +
+  **$7,500 漏洞赏金**；Buchanan 发布了 **keystork**（Play Integrity token 铸造，含 MEETS_STRONG_INTEGRITY、无限制 KeyStore
+  访问）。**未出现 C2PA 规范修订或平台采纳后退**——Google 反而在扩大 C2PA（I/O 2026 年 5 月宣布 Pixel 8/9 视频签名）——标准
+  维持原样，因为唯一真正的修复是重写整个图像管线到安全 enclave 的不可行方案。"C2PA 签名" ≠ "真实"——这是迄今对每个押注
+  密码学溯源是深度伪造解法的平台最有力的保留。
 - **私密推理（08-15）：** Google 开源了 **HEIR**（Homomorphic Encryption Intermediate
   Representation）——一个构建在 MLIR 之上的编译器，把训练好的明文模型转成直接在加密输入上计算的
   模型（BGV/BFV/CKKS 经 OpenFHE/Lattigo，CGGI 经 tfhe-rs），自动 packing 选择 pass 最高 145×。目标：
@@ -763,6 +766,11 @@ last_processed: 2026-08-26T04:03:00Z
   （`@typescript/typescript6` 作过渡）。这是 JS/TS 工具链多年来最大的结构性变化。**Rust Glancer**（@popzxc，
   `rust-glancer.github.io`）是一个新的 Rust LSP，把工作区冻结到文件系统而非常驻 RAM——比 rust-analyzer 省约 100×
   内存、代价是一些速度，外加即时重启；对大型工作区是一种真正不同的内存/CPU 取舍。
+  **新增（08-26 12:03）：** **llama.cpp v0.3.0**（ggml-org）——本地推理参考运行时的首个 0.x 大版本，久违了：`mtmd`
+  多模态库新增 **dots3-note 视觉与音频**（新的 DSA-ISWA KV 缓存类型）、WebP 解码、Pillow 精确的缩放、修复 `moov`
+  atom 在文件末尾的视频；GLM-4.5-Air 增加 MTP，DeepSeek 4 新增 tensor-split 模式，核心升至 **ggml v0.22.0**
+  （meta-backend 张量切分、并行编译的逐算子 Metal kernel）。多模态 + 视频处理收拢进大多数本地 AI 工具所依赖的
+  同一个二进制（→ [[edge-inference]]）。
 - **内存经济学（08-19，→ [[edge-inference]]）：** 二十年来"RAM 会越来越便宜"在十二个月内反转。TrendForce
   （8 月 17 日）：德国 DDR5 零售指数 **445% → 486% 同比**（约为去年的 4.9 倍），华强北 DDR5 24Gb **周环比
   +14.29% 至 $48**、16Gb $40，DDR4 8Gb 3200 周环比 +12.82% 至 $22；**服务器 DRAM 合约价预测 3Q26 季环比
@@ -841,6 +849,11 @@ last_processed: 2026-08-26T04:03:00Z
   从而边看边说（其 TTFT 差距随上下文从 2.8× 拉大到 5.1×）；**Cerebras CS-4**（8 月 18 日）是一部三晶圆推理机架，
   在单用户指标上宣称"比 GPU 快 30×"——其芯片只是超频的 WSE-3，并非新硅；**Mureka V9.5**（昆仑万维）交付 MusiCoT
   音乐生成，宣称 97% 提示控制良率。
+  **新增（08-26 12:03）：** **ReWorld**（HKUST-GZ + 阿里巴巴，arXiv 2608.23565）把*控制*（短视距局部注意力）与
+  *记忆*（无界）分开——多数注意力头保持局部，少数"全局"头跨历史做注意力，推理内存由**姿态索引地标库**封顶，
+  流式输出 704×1280 交互视频，在动作跟随 + 长视距回忆上击败六个近期的交互世界模型；"记得给你看过什么"成为下一个
+  世界模型基准轴。**ERPO**（阿里巴巴，arXiv 2608.23311，EMNLP 2026）用**查询侧 KL（Query-KL）**替代动作侧 Policy-KL
+  ——GRPO/PPO/REINFORCE 兼容、无需额外前向，在 GRPO 的 KL 约 480 步后爆炸时保持稳定（0.336 vs 0.274）。
 - **开放网络 vs 平台混淆（08-16 12:03）：** uBlock Origin 认输了 Facebook 广告拦截战——维护者把该平台的
   Sponsored 帖子过滤器标记为"wontfix"，因为 Facebook 逐字母拆散"Sponsored"一词、插入隐形假字符，并不断
   重新生成元素名以挫败模式匹配。客户端广告拦截正输给平台侧的"混淆即服务"；开源网络社区被推向替代过滤
@@ -1147,6 +1160,15 @@ last_processed: 2026-08-26T04:03:00Z
   1.2 TB/s，Mac Studio，LLM 提示处理最高 M1 Ultra 9.8×）——迄今最接近消费级的本地前沿级推理机器（→ [[edge-inference]]）。
   NVIDIA **Vera Rubin NVL72** 首批基准：AgentX agentic 基准（DeepSeek-V4-Pro）上每兆瓦 token 最高 **30×** vs GB300——
   厂商自测，待 SemiAnalysis 复核。
+- **本地优先 agent 栈被产品化（08-26 12:03，12:27 独立核实）：** Perplexity **Portable Computer**——与 NVIDIA 合建的 Computer agent
+  平台的纯本地版，首发 **DGX Spark**（128 GB）与 RTX ≥24 GB 的 Linux 机器：本地模型（Qwen 3.8 27B 或其后训练的
+  **PPLX 27B**）、agent 运行框架、工具路由、连接器与 OS 级沙箱全部本地运行，本地工作消耗**零 token 额度**（升级到
+  15+ 云端前沿模型需显式批准，只返回纯文本建议）。Local Knowledge Work Bench 82.6%（PPLX 27B 为 85.4%），BrowseComp
+  比 Pi 少用约 70% token。"本地优先、云端按需"成为企业级模式——其"本地 agent 需要*协同设计*的 harness，而非通用
+  harness"的主张重新框定了小模型 agent 之争（论点 12 的 harness 杠杆伸到端侧，→ [[edge-inference]]）。**独立核实：**
+  Local Knowledge Work Bench **仍是厂商自测**——Perplexity 计划开源但尚未，且无第三方复现；协同设计*机制*有独立支持——
+  harness 溢价文献（弱模型无法*加载*并遵从通用 harness——skill-load 0.251、遵从度 0.52→0.13）——且 Perplexity 自己的拆解把
+  领先 Pi 约 12 分中的 ~5 分归功于 harness 栈 + 仅 2.8 分来自 PPLX 后训练——方向性主张，而非规格。
 - **金融 agent（08-26 04:03）：** **TradingAgents**（`TauricResearch/TradingAgents`）v0.3.1 突破 **100k★**——LangGraph
   多 agent 交易公司镜像新增 Claude Sonnet 5 / Fable 5 支持与 Alpha Vantage look-ahead 过滤（回测正确性正是朴素 agentic
   交易管线静默失败的所在）。

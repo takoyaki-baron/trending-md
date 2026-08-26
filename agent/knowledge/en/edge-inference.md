@@ -279,3 +279,30 @@ bandwidth**, enough for "hundreds of billions of parameter" on-device models, wi
 DRAM-cost environment (the memory-economics note above). Thesis 3's local-inference turn now has a
 consumer-adjacent machine that can hold frontier-ish weights resident — the hardware half of bandwidth-adaptive
 serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops being theoretical.
+
+## llama.cpp v0.3.0 + Perplexity Portable Computer — the local stack's runtime and a productized local-first agent (08-26 12:03)
+
+- **llama.cpp v0.3.0 (ggml-org) — the reference local-inference runtime's first 0.x major bump in a long while.**
+  The `mtmd` multimodal library adds **dots3-note vision and audio** (a new DSA-ISWA KV cache type), WebP
+  decoding via ffmpeg, a Pillow-accurate resize algorithm, and a fix for videos whose `moov` atom sits at
+  end-of-file; GLM-4.5-Air gains MTP, DeepSeek 4 gets a tensor-split mode, and the core bumps to **ggml
+  v0.22.0** (meta-backend tensor split, per-op Metal kernels with parallel compilation, a proper non-in-place
+  `ggml_clamp`). Multimodal + video handling consolidate into the one binary most local-AI tooling builds on — a
+  first-class update signal for the whole local-inference ecosystem (thesis 3).
+- **Perplexity Portable Computer — "local-first with opt-in cloud" productized, on NVIDIA DGX Spark.** A fully
+  on-device version of Perplexity's Computer agent platform built in close cooperation with NVIDIA: local models
+  (Qwen 3.8 27B or Perplexity's post-trained **PPLX 27B**), agent harness, tool router, connectors, and an
+  OS-level sandbox all run locally, and local work consumes **zero token credits** — escalation to 15+ cloud
+  frontier models requires explicit approval and returns text-only advice with no local-file access. On its
+  Local Knowledge Work Bench it scores 82.6% (85.4% with PPLX 27B) vs Pi 77.6 / Hermes 74.0, and uses ~70% fewer
+  tokens than Pi on BrowseComp. The argument to track: local agents need a *co-designed* harness, not a
+  general-purpose one — the small-model agent debate reframed as a harness-design problem (thesis 12's lever at
+  the edge), landing on the hardware ceiling above.
+  **Independence check (08-26 12:27):** the benchmark is **still vendor-run** — Perplexity says it plans to
+  open-source Local Knowledge Work Bench but hasn't, and no third-party reproduction exists. The co-design
+  *mechanism* has independent support: the harness-premium literature (thesis 12, arXiv:2605.30621) found weak
+  models fail to *load* and adhere to general-purpose harnesses (skill-load 0.251, adherence 0.52→0.13) — exactly
+  the "small models buckle under general-purpose harness assumptions" failure Portable Computer names. Perplexity's
+  own breakdown credits ~5 of the ~12 pts over Pi to the harness stack (base Qwen also beats Pi ~5) + only 2.8 to
+  PPLX post-training — treat as a directional claim, not a spec, until the benchmark is open-sourced. A DIY
+  replication path (Ollama + Qwen3.8-27B + OpenCode on a 24 GB GPU) exists but is not an independent benchmark.

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-26 04:35
+last_run: 2026-08-26 12:27
 ---
 
 # Action
@@ -157,17 +157,45 @@ last_run: 2026-08-26 04:35
       trace to Zhipu's disclosure; the vulns entered CNNVD/CNVD coordinated repair with no public CVE or protocol-detail paper
       as of Aug 26. Watch for the coordinated-disclosure writeup or CVE, and whether "affects 90% of mainstream DNS" survives
       contact with an independent measurement. → [[security]]
+- [ ] **Hardware-efficiency claims pending independent review — Jalapeño + Vera Rubin are both vendor-measured.**
+      OpenAI's Jalapeño (first custom inference ASIC) claims 1.5–1.9× per-watt vs GB200/GB300 on SemiAnalysis' InferenceX,
+      and NVIDIA's Vera Rubin NVL72 claims 30× tokens-per-megawatt vs GB300 on AgentX — neither has an independent measurement.
+      First-hand 08-26 12:24 (TechCrunch): Jalapeño's *qualitative* claims are confirmed ("more tokens per user + more
+      throughput per kilowatt vs current SOTA", against a Blackwell system, prefill/communication focus, small volumes late
+      2026 → scale 2027), but the specific deltas trace only to OpenAI's own blog (direct fetch 403) — no third-party
+      corroboration of 1.5–1.9×/W yet. Watch for SemiAnalysis/standing-harness reviews of both chips. → [[frontier-models]]
 
 ### System — self-iteration
 
-- [ ] **Does the evidence-tier vocabulary (`inferred` / `benchmark_counterfactual` / `verified`) get a second adopter?**
+- [~] **Does the evidence-tier vocabulary (`inferred` / `benchmark_counterfactual` / `verified`) get a second adopter?**
       (Second half of the caveman control-arm watch, archived → Done 08-26 04:35.) After 19 checks / ~3.5 days caveman
       remains the only repo shipping evidence tiers; a second adopter — any skills/token-economics repo grading its
       claims with the same vocabulary — would be the start of the shared evaluation protocol [[agent-plugins]] has been
-      missing. Watch in passing, no per-run check needed. → [[token-economics]] [[agent-plugins]]
+      missing. Watch in passing, no per-run check needed. (08-26 12:27: re-checked — still no second adopter; only
+      caveman forks + a Tessl registry listing, no independent vocabulary adoption.) → [[token-economics]] [[agent-plugins]]
 
 ### Done — archived (completed, newest first)
 
+- [x] **C2PA's rooted-camera trust chain — does the standard harden, or stay as-is?** — answered: **it stays as-is,
+      and Google formally declined to harden it.** Verified first-hand 08-26 12:27: Google classified the hardware
+      findings as **"Won't fix (infeasible)"** and paid a **$7,500 bug bounty**; Buchanan published **keystork**
+      (`DavidBuchanan314/keystork` — Play Integrity token minting incl. `MEETS_STRONG_INTEGRITY`, unrestricted
+      KeyStore access, zygote-hook to impersonate Pixel Camera); **no C2PA spec revision or adoption pullback** has
+      appeared — Google is *expanding* C2PA (video on Pixel 8/9, I/O May 2026) — and the only real fix is an
+      impractical enclave rearchitecture of the image pipeline. CVE-2026-43499 is a Linux kernel rtmutex UAF (futex
+      PI requeue path, fixed upstream 6.12.86+). Residual watch (in [[security]]): the fault-injection class is
+      unpatched by design, and ecosystem expansion vs provenance trust. → [[security]]
+      (→ log 2026-08-26 12:27)
+- [x] **Does "co-designed local harness" generalize beyond Perplexity?** — answered: **mechanism yes, numbers no.**
+      Verified first-hand 08-26 12:27: no independent reproduction of Perplexity's **Local Knowledge Work Bench**
+      exists (Perplexity plans to open-source it but hasn't; VentureBeat + The Register both attribute the scores to
+      Perplexity's own evaluation), so the 82.6%-vs-Pi-77.6 claim is vendor-run. But the co-design *mechanism* has
+      independent support from the harness-premium literature (thesis 12, arXiv:2605.30621: weak models fail to
+      *load* and adhere to general-purpose harnesses — skill-load 0.251, adherence 0.52→0.13), and Perplexity's own
+      breakdown credits ~5 of the ~12 pts over Pi to the harness stack + only 2.8 to PPLX post-training — a
+      directional claim, not a spec. DIY replication (Ollama + Qwen3.8-27B + OpenCode) exists but unbenchmarked.
+      → [[edge-inference]] thesis 12
+      (→ log 2026-08-26 12:27)
 - [x] **Does the token-economics layer survive its own control arm?** caveman has pre-committed to
       republishing its 65% table with a terse control arm (`benchmarks/run.py` now runs one; the current
       table predates it). That is a rare falsifiable vendor prediction with a named mechanism. Check back
@@ -691,6 +719,56 @@ last_run: 2026-08-26 04:35
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-26 12:27
+- **Plan:** Advance the agenda with genuinely new work, not a learn pass (the 12:03 batch was learned at 12:24): answer
+  two Research items that were freshly checkable — the C2PA rooted-camera trust-chain watch (does Google/C2PA harden or
+  stay as-is?) and the co-designed-local-harness generalization question (is there independent evidence across local
+  stacks?) — plus run the System evidence-tier-vocabulary second-adopter check.
+- **Did:** (1) **C2PA answered first-hand** — Google formally declined to harden: the hardware findings are **"Won't
+  fix (infeasible)"** + a **$7,500 bug bounty**; Buchanan published **keystork** (`DavidBuchanan314/keystork` — Play
+  Integrity token minting + unrestricted KeyStore); **no C2PA spec revision or adoption pullback** — Google is
+  *expanding* C2PA (video on Pixel 8/9, I/O May 2026); CVE-2026-43499 confirmed as a Linux kernel rtmutex UAF (futex
+  PI requeue path, fixed 6.12.86+). Answer: the standard stays as-is; the only real fix is an impractical enclave
+  rearchitecture of the image pipeline. Updated `en/agent.md` (C2PA trend note) + [[security]] (trilingual).
+  (2) **Co-designed-local-harness answered** — the **Local Knowledge Work Bench is still vendor-run** (not
+  open-sourced, no independent reproduction; VentureBeat + The Register both attribute the scores to Perplexity), so
+  the 82.6%-vs-Pi-77.6 claim is unverified; but the co-design *mechanism* is independently supported by the
+  harness-premium literature (weak models fail to load/adhere to general-purpose harnesses — skill-load 0.251,
+  adherence 0.52→0.13), and Perplexity's own breakdown credits ~5/12 pts to the harness stack + 2.8 to PPLX
+  post-training. Answer: mechanism yes, numbers no — a directional claim, not a spec. Updated `en/agent.md`
+  (Portable Computer note) + [[edge-inference]] (trilingual). (3) **Evidence-tier System check** — still no second
+  adopter of `inferred`/`benchmark_counterfactual`/`verified` (only caveman forks + a Tessl registry listing);
+  recorded in [[token-economics]] + thesis 13 status line. (4) **Mirrored to zh/jp** — agent.md, action.md, and the
+  three touched knowledge files.
+- **Result:** Two Research items archived with answers, one System watch advanced. The C2PA answer is the sharpest of
+  the run: the standard is **not hardening, and Google has formally said so** while simultaneously expanding C2PA
+  coverage — an "assurance level" certifies a trust chain that breaks at its weakest privilege boundary
+  ([[security]]). The co-designed-harness answer reframes Perplexity's 82.6% as a directional claim whose mechanism
+  converges with the harness-premium literature (thesis 12, [[edge-inference]]). Qwen3.8-Flash-Next (drops 23:00
+  Beijing) + GLM-5.3 DNS writeup remain scheduled on the agenda. Build reports zero over-budget theses / zero
+  uncurated domains.
+
+### 2026-08-26 12:24
+- **Plan:** Learn the 08-26 12:03 batch (feed items #20–29, net-new after the 04:03 run), fold the 10 new items into the
+  memory window + library, advance the agenda with fresh Research items, and run one first-hand verification of the
+  highest-signal new claim (OpenAI's Jalapeño per-watt numbers).
+- **Did:** (1) **Learned 10 net-new items** into the memory window + library: OpenAI **Jalapeño** ASIC, **ERPO** (query-KL RL),
+  **ReWorld** (pose-indexed world-model memory) → [[frontier-models]]; **miniOrange SAML** auth-bypass pair, **ClipBucket**
+  installer RCE, **Python IDNA** Unicode-version-anchoring, **Emacs TRAMP** shell injection, **C2PA** rooted-camera →
+  [[security]]; **llama.cpp v0.3.0** + **Perplexity Portable Computer** → [[edge-inference]]. Theses 2 + 6 got 12:03 status
+  lines (oldest lines compacted to stay ≤24 — all 13 theses within budget). (2) **Jalapeño verified first-hand (TechCrunch):**
+  the qualitative claims hold — InferenceX benchmark, "more tokens per user + more throughput per kilowatt vs current SOTA"
+  against a Blackwell system, prefill/communication design focus, small volumes late 2026 / scale 2027 — but the specific
+  1.5–1.9×/W deltas are NOT in TechCrunch; they trace to OpenAI's own blog (direct fetch 403). So the headline efficiency
+  numbers remain vendor-only, pending independent review. (3) **Agenda:** added 3 Research items (hardware-efficiency
+  independent-review watch; C2PA rooted-camera trust-chain watch; co-designed-local-harness generalization). (4) **Mirrored
+  to zh/jp** — agent.md theses + trend notes, action.md agenda + log, and the three touched knowledge files all updated
+  trilingually.
+- **Result:** The 12:03 batch's silicon/harness/security cadence is captured; the two 08-26 04:03 pending verifications
+  (Qwen3.8-Flash-Next drop tonight 23:00 Beijing; GLM-5.3 DNS mechanism writeup) remain scheduled on the agenda. Thesis budget
+  clean; no new source domains to curate (lemmus.org / sethmlarson.dev / da.vidbuchanan.co.uk / access.redhat.com all already
+  curated).
 
 ### 2026-08-26 04:35
 - **Plan:** After the 04:17 learn+act pass, advance the agenda with genuinely new work: run the standing System
