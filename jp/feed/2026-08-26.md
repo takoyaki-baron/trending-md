@@ -1,8 +1,8 @@
 ---
 date: 2026-08-26
-updated: 2026-08-26T12:03:00Z
+updated: 2026-08-26T20:14:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 44
+sources: 57
 license: CC-BY-4.0
 ---
 
@@ -421,13 +421,181 @@ Red Hat が **CVE-2026-79992**（CWE-78、CVSS 7.8）を開示：Emacs **TRAMP**
 
 ---
 
+## 30. OxAlpha は Zhipu の次世代 GLM と確定 — 今夜オープンウェイト公開
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Edge Malaysia / ChainCatcher · ~today（8 月 26 日）
+- **Tags:** `ai-model` `glm` `zhipu` `open-weights` `openrouter`
+
+8 月 22 日に Ox Alpha を OpenRouter 上の匿名モデルとして取り上げたが、**Z.AI（Zhipu）** は 8 月 26 日に Bloomberg に対し、同モデルが**GLM シリーズの新たなイテレーション**であることを確認——コーディングとエージェントタスク向けのマルチモーダル推論モデル（テキスト/画像/動画）——そして**今夜中にウェイトを公開**すると発表。8 月 20 日の無記名ローンチは OpenRouter 史上最大と言われ、リーダーボード首位で DeepSeek の 2 倍以上の利用を記録、現在 1 週間無料。コードネームは中国映画『牛来』に由来し、Alibaba と Xiaomi も今年同じステルスローンチ戦略を取ったと報じられている。
+
+**Why it matters:** 「ステルスローンチ → 正体公開 → オープンウェイト」は新しいモデル発表の常套手段になりつつあり、この確認はリーダーボードの噂を再現可能なオープンモデルへ変える。ただし出回っている約 100 万トークン・DeepSWE 80% などの数字は確認済みソースには含まれていないため、モデルカード公開までは身元と入手可能性以外の仕様は未検証として扱うべき。
+
+[`🔗 The Edge Malaysia`](https://theedgemalaysia.com/node/815823) · [`🔗 ChainCatcher — Bloomberg`](https://www.chaincatcher.com/article/2285607)
+
+---
+
+## 31. CVE-2026-63520 — SharePoint の安全でない .NET 型インスタンス化が未認証 RCE に連鎖（CVSS 8.1）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck / Censys · CVSS 8.1 · ~1d ago（8 月 24 日）
+- **Tags:** `cve` `microsoft` `sharepoint` `rce` `type-instantiation`
+
+**CVE-2026-63520**（CVSS 8.1、`AV:N/AC:H/PR:N/UI:N`、CNA 割当 — NVD の評価は保留）は、SharePoint の Business Connectivity Services における安全でない .NET 型インスタンス化。`DbTypeReflector.ResolveDotNetType()` が攻撃者が制御する BDCM `TypeName` に対して許可リストなしで `Type.GetType()` を呼ぶ。**VulnCheck** は 8 月 24 日、既報の **CVE-2026-55040** JWT バイパスと組み合わせた**武器化済み完全チェーン**を公開——`System.Web.UI.LosFormatter` をインスタンス化し、BDC Finder メソッド経由で `Deserialize` をトリガーして**未認証 RCE** を達成。影響は **2026 年 8 月累積更新プログラム**以前の SharePoint Server 2016/2019/Subscription Edition。同更新は `ValidateSafeBcsType` 許可リストを追加。Rapid7 の Stephen Fewer が発見、インターネット公開サーバー約 8,500 台、8 月 25 日に Censys 共同アドバイザリ。
+
+**Why it matters:** 認証バイパス側はすでに KEV 入りして活発に探査されている。その上に公開された武器化チェーンが載ったことで、SharePoint 管理者は完全な未認証 RCE 経路が試行されていると想定すべきで、8 月累積更新が唯一の緩和策となる。
+
+[`🔗 VulnCheck`](https://www.vulncheck.com/blog/cve-2026-63520-sharepoint-unsafe-type-rce) · [`🔗 Censys advisory`](https://censys.com/advisory/cve-2026-55040-cve-2026-63520/) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-63520)
+
+---
+
+## 32. CVE-2026-79290 — Chrome Aura の use-after-free は Critical のサンドボックス脱出（CVSS 9.6）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chrome Releases / OpenCVE · CVSS 9.6 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `chrome` `use-after-free` `sandbox-escape` `browser`
+
+**CVE-2026-79290**（CWE-416、**CVSS 9.6**、CISA ADP Vulnrichment によるスコア）は Chrome の **Aura** ウィンドウ層の use-after-free で、Chromium は**Critical** と評価。細工した HTML ページでメモリを破壊し、レンダラーの外でのコード実行につながる**サンドボックス脱出**が可能。**Chrome 152.0.7977.65**（Stable、8 月 25 日）で全プラットフォーム修正。同じドロップには CVE-2026-79138（ANGLE の境界外書き込み、Windows、High）、CVE-2026-79026（Extensions UAF、High）、CVE-2026-79125（WebXR 情報漏えい、Low）も含まれる。悪用報告なし、KEV 未掲載。
+
+**Why it matters:** 多くのエージェントハーネスやヘッドレスツールが依存するブラウザの Critical サンドボックス脱出 UAF は「今すぐ更新」の合図。2 週間で 2 回目の Critical Chrome 修正となり、「ブラウザ＝エージェントランタイム」のサプライチェーン問題も引き続き話題の中心にある。
+
+[`🔗 Chrome Releases`](https://chromereleases.googleblog.com/2026/08/stable-channel-update-for-desktop_0256176589.html) · [`🔗 OpenCVE`](https://app.opencve.io/cve/CVE-2026-79290) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-79290)
+
+---
+
+## 33. NVIDIA Groq 3 LPX が本格量産へ — Gemma 4 31B を 100K コンテキストで約 3,400 tok/s
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVIDIA Newsroom / zhidx · ~2d ago（8 月 24 日、Hot Chips 2026）
+- **Tags:** `nvidia` `hardware` `inference` `groq` `agentic-ai`
+
+NVIDIA は Hot Chips 2026（8 月 24 日）で、**Groq 3 LPX** アクセラレータ— Groq 買収由来のデコードフェーズ LPU チップで、Vera Rubin プラットフォームと補完関係—が**本格量産に入った**と発表。独立評価の **Artificial Analysis** は **Gemma 4 31B を 100K コンテキストで約 3,400 出力トークン/秒**と計測（zhidx は 100K で中央値 3,431 tok/s、10K とほぼ同等、SPEED-Bench コーディング中央値 4,767 tok/s と報道）。NVIDIA はレイテンシ重視のエージェントワークロードで**最接近の代替比 4 倍**を主張。1 ラックあたり 256 基の LP30（128 GB オンチップ SRAM、640 TB/s スケールアップ帯域、液冷）。**Nebius** が Token Factory プラットフォーム経由で最初の導入クラウドに。
+
+**Why it matters:** Groq 3 LPX はフロンティア級モデルをリクエスト単位で即応させる「デコードエンジン」—「推論のボトルネックはチャットではなくマルチターン・エージェントワークロード」というハードウェア賭け。ただし見出しの数字はオープンな 31B モデルであってフロンティア MoE ではなく、4×/30× はベンダー予測。
+
+[`🔗 NVIDIA Newsroom`](https://nvidianews.nvidia.com/news/nvidia-groq-3-lpx-now-in-full-production-with-world-class-speed-for-agentic-ai) · [`🔗 zhidx — 3,431 tok/s`](https://www.zhidx.com/p/587895.html) · [`🔗 Nebius`](https://nebius.com/blog/posts/nvidia-groq-3-lpx-nebius-token-factory)
+
+---
+
+## 34. Archify — コードベースをスキーマ検証済みの対話型図にするエージェントスキル（16.8k スター）
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 16.8k stars · ~today（8 月 26 日）
+- **Tags:** `agents` `skills` `diagrams` `architecture` `open-source`
+
+**tt-a1i/archify**（MIT、16.8k スター）は、Raven・Cursor・Claude Code・Codex CLI・OpenCode 向けエージェントスキル（SKILL.md）。リポジトリや自然言語のシステム記述を対話型のアーキテクチャ/シーケンス/データフロー図に変換する。型付き JSON IR はスキーマ＋レイアウト検証付きで、レンダラーは**不正な出力（交差するエッジ、重なるラベル）を拒否**し、構造化された診断を返す。出力は自己完結型 HTML ファイルで、PNG/SVG/WebM エクスポートと 1200×630 シェアカードに対応。「Architecture Delta」モードは Before/Delta/After を機械可読なレシートで比較し、貼り付けられた Mermaid を Archify JSON に書き直す。本日 GitHub デイリートレンド入り（+1,002 スター）。
+
+**Why it matters:** 「間違って描くくらいなら描かない」はエージェントツールに必要な正しさの姿勢。Archify はスキルの波が散文的な指示から、検証済みで機械確認可能な成果物へ移りつつある証拠でもある。
+
+[`🔗 tt-a1i/archify`](https://github.com/tt-a1i/archify) · [`🔗 SkillsMP`](https://skillsmp.com/creators/tt-a1i/archify/archify)
+
+---
+
+## 35. CVE-2026-80104 — DB-GPT の未認証パストラバーサル → 任意ファイル書き込み → RCE（CVSS 9.8）
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · CVSS 9.8 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `db-gpt` `ai-infra` `path-traversal` `rce`
+
+**CVE-2026-80104**（CWE-22、**CVSS 9.8**、VulnCheck 割当）は **eosphoros-ai/DB-GPT** の `skill_upload` ハンドラにおける未認証パストラバーサル。`file.filename` を正規化・包含チェックなしで `upload_dir/filename` にそのまま書き込み、認証依存処理は `user_id` ヘッダーがなくても admin ロールを返す。未認証の攻撃者はパッケージ内に `.py` モジュールを仕込み、次回インポート時にコード実行を得られる。影響は `dbgpt-app` 0.8.0、**v0.8.1**（GitHub + PyPI）で修正。実環境での悪用は確認されていない。
+
+**Why it matters:** データベースエージェントフレームワークを本番データストアに直接つなぐ開発者が増える中、CVSS 9.8 は攻撃者が狙う AI サプライチェーン面そのもの。「user_id がなくても admin」は AI ツールの認可ロジックを監査すべき事例。
+
+[`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-80104) · [`🔗 eosphoros-ai/DB-GPT`](https://github.com/eosphoros-ai/DB-GPT/releases)
+
+---
+
+## 36. CVE-2026-78676 — GitPython が設定を生きた `core.hooksPath` に再シリアライズ、RCE（CVSS 9.8）
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory / NVD · CVSS 9.8 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `gitpython` `rce` `argument-injection` `python`
+
+**CVE-2026-78676**（CWE-88、**CVSS 9.8**）は **GitPython ≤ 3.1.58** に影響。`GitConfigParser.write_section` が引用符付きの複数行設定値を引用符なしの物理改行に再シリアライズし、休眠状態の値を **`core.hooksPath` のような生きたディレクティブ**に変える。その後の Git 操作が攻撃者制御のフックを呼び出し、コード実行につながる。トリガーには細工された複数行 git 設定値と、後続の無関係な設定書き込みが必要。**GitPython 3.1.59** で修正され、同バージョンは CVE-2026-78675（`.gitmodules` 情報漏えい）と CVE-2026-78677（ディレクトリトラバーサル）も修正。実環境での悪用確認なし、公開 PoC はトラッカー間で論争あり。
+
+**Why it matters:** ほぼすべての Python ツールチェーンが Git を呼ぶために使うライブラリの 9.8 はサプライチェーン RCE。「設定の書き込みがフックになる」という遅延トリガー型インジェクションは、セキュリティスキャナがめったに検出できない類のもの。
+
+[`🔗 GitHub Advisory GHSA-9557-234j-7rv9`](https://github.com/advisories/GHSA-9557-234j-7rv9) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-78676)
+
+---
+
+## 37. JoyAI-Echo-1.5 — JD の長時間音声・映像生成が WBench 首位（arXiv 2608.23383）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.23383 · ~1d ago（8 月 25 日改訂）
+- **Tags:** `research` `video-generation` `audio-visual` `world-model` `open-source`
+
+**JoyAI-Echo-1.5**（JD、arXiv 2608.23383）は統合型音声・映像生成システムで、2 つの変種を持つ。**ロングビデオ変種**は合成可能なクロスショットメモリと話者キューでキャラクターの外見と声のアイデンティティを持続させる。**ワールドモデル変種**は異種ナビゲーション入力を較正されたメトリック 6-DoF カメラ軌道に変換し、コントローラー非依存のインタラクションを可能にする。プログレッシブな teacher forcing と自己生成ロールアウト上の short/long-horizon Self-Gradient Forcing で訓練され、ワールドモデル変種は **WBench で首位（平均 81.7）**、SANA-WM-Bench では長時間持続性と画質で先行。コードとウェイトはオープンソース化（jd-opensource/JoyAI-Echo）。
+
+**Why it matters:** 「持続するストーリーと対話可能な世界」はクリップ単位の動画生成を超えるフロンティア。ロングビデオ経路とワールドモデル経路を分けた設計は、この分野が「記憶を伴う生成」へ収束する中で注目に値する。
+
+[`🔗 arXiv 2608.23383`](https://arxiv.org/abs/2608.23383) · [`🔗 jd-opensource/JoyAI-Echo`](https://github.com/jd-opensource/JoyAI-Echo)
+
+---
+
+## 38. QAH — 4-bit モデルが bfloat16 の元モデルを上回る量子化対応ヒーリング（arXiv 2608.20953）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / Unite.ai · 2608.20953 · ~1d ago（8 月 25 日）
+- **Tags:** `research` `quantization` `llm` `efficiency` `open-weights`
+
+**Quantization-Aware Healing（QAH）**（Multiverse Computing、HF ブログ 8 月 25 日 + arXiv 2608.20953）は、QAT/QAD で品質が劣化した中間ティーチャーを置き換え、**4-bit の学生を元の全精度モデルから直接** KL ダイバージェンスで蒸留する。**GPT-OSS 120B → 60B → MXFP4** に適用すると、QAH 学生は **9 ベンチマーク中 7 つで bfloat16 の元を上回るか同等**（AA-LCR 42.7 vs 35.3、AIME 2025 76.3 vs 70.7、Aider 40.9 vs 38.2）、LiveCodeBench では 120B ティーチャーに肉薄。重みとトークンあたり計算量は約半分。GPT-OSS 9B では QAT より約 7 倍速くピークに達し、1,200 ステップにわたりピークから約 2 点以内を維持（QAT は約 19 点低下）。成果はオープンウェイトの **HyperNova-60B**（Apache-2.0）として公開。
+
+**Why it matters:** 4-bit 圧縮＋半分のパラメータで全精度に並ぶなら、オープンモデルの主な提供コストは一気に下がる。ただしこれらは Multiverse 独自パイプライン（独自圧縮、GPT-OSS のみ）での自社計測。「bf16 を上回る」はまだ再現待ちの結果であり、独立した事実ではない。
+
+[`🔗 arXiv 2608.20953`](https://arxiv.org/abs/2608.20953) · [`🔗 Unite.ai`](https://www.unite.ai/multiverse-computings-4-bit-healing-beats-full-precision-model/) · [`🔗 papers.cool`](https://papers.cool/arxiv/2608.20953)
+
+---
+
+## 39. Ambient Context — LLM 向けテキスト専用「画面メモリー」、macOS で完全オフライン（Show HN）
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 61 pts · ~1d ago（8 月 25 日）
+- **Tags:** `agents` `memory` `macos` `privacy` `local-first`
+
+**dragthelake/ambient-context**（Show HN、8 月 25 日）は macOS メニューバーアプリで、作業を LLM が読める平文 Markdown として記録する。Accessibility API 経由でフォーカス中のウィンドウのテキストを数秒ごとに取得（スクリーンショット/OCR なし）、1 日 1 つの Markdown ファイルと形式を説明する `AGENTS.md` を書き出す。書き込み前に脱敏処理—パスワードマネージャーやプライベートブラウジングをスキップし、認証情報/API キー/カード番号を除去。完全オフライン（アカウント・サーバー・テレメトリ・ネットワーク呼び出しなし）で、Claude Code にフォルダを指定して「火曜日に何をした？」と聞ける。既知の制限：Chromium/Electron はアクセシビリティツリーが遅く、GPU レンダリングのターミナル（Kitty、Alacritty）はテキストをほとんど公開しない。122 スター、v0.1.0 未署名、macOS 14+ Apple Silicon が必要。
+
+**Why it matters:** 「テキスト専用・ローカル専用の画面メモリー」は、Recall/Rewind 型の記録と何も記録しないの間の、プライバシーに配慮した中間路。自分の日々のログを記述した AGENTS.md は、データベースなしで人間の文脈をエージェントに渡す巧妙なパターン。
+
+[`🔗 dragthelake/ambient-context`](https://github.com/dragthelake/ambient-context) · [`🔗 runtimewire`](https://runtimewire.com/article/cameron-smith-ambient-context-mac-memory-markdown) · [`🔗 HN`](https://news.ycombinator.com/item?id=49429095)
+
+---
+
+## 40. CarWatch — Raspberry Pi 5 を完全オフラインのカーエージェントに（Show HN）
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 143 pts · ~1d ago（8 月 25 日）
+- **Tags:** `agents` `edge-ai` `raspberry-pi` `local-ai` `hardware`
+
+**ThinkOffApp/CarWatch**（AGPL-3.0、171 スター）は Raspberry Pi 5 で動く車載エージェント。**Qwen3.6-35B-A3B** をローカルで実行（約 14.3 GB 量子化、約 3.5 tok/s）、745 ページのオーナーズマニュアルに対して RAG、Bluetooth ELM327 経由で OBD-II を読み取り、Home Assistant 経由で安全系クラウドコマンド（ロック、窓閉め）を実行可能。ハンズフリー音声はすべてオンデバイス（連続 VAD → whisper.cpp → 根拠付き応答）、ポート 8088 にスマホ用ダッシュボード。Show HN は 143 ポイント/45 コメント（コンテンツではなく形式でフラグされた）。
+
+**Why it matters:** 約 100 ドルのデバイスで 35B ローカルモデル・音声・自分の車のマニュアルを動かすのは「ローカル AI」の具体的な終着点—トークンが遅くても。読み取り専用 OBD-II と明示的に安全系だけのコマンドを分けた設計は、オンデバイスエージェントの健全な安全モデル。
+
+[`🔗 ThinkOffApp/CarWatch`](https://github.com/ThinkOffApp/CarWatch) · [`🔗 HN`](https://news.ycombinator.com/item?id=49435675)
+
+---
+
+## 41. Vinci Code — SimpleDirect が Pi ベースのターミナルコーディングエージェントを MIT で公開
+
+- **Velocity:** ▮ steady
+- **Source:** SimpleDirect blog · ~1d ago（8 月 25 日）
+- **Tags:** `coding-agent` `cli` `open-source` `mit` `pi`
+
+トロントの **SimpleDirect** は **Vinci Code CLI** を **MIT** ライセンスでオープンソース化（8 月 25 日）。Mario Zechner の MIT ハーネス **Pi** の「ディストリビューション」で、上流の履歴を保持しつつ、平易なナレーション・コマンドガード・秘密情報マスキング・OS レベルサンドボックス・チェックポイント・undo/review・永続的なタスクレシートを独自レイヤーとして追加。作業は **DONE、DONE-UNVERIFIED、WAITING、BLOCKED** の 4 つの明示状態で終了し、モデルの「完了」主張をそのまま信じない。不可逆コマンドの前では一時停止（`rm -rf` はデフォルトで拒否）。BYOK で 33 プロバイダーに対応。明示的にベータ、ローカルモデル非対応、CLI のみ。
+
+**Why it matters:** 毎回の実行を明示的な「未検証/ブロック」状態で締めくくるのは、エージェント CLI における小さくとも実際の説明責任の転換。「Pi のフォークではなくディストリビューション」という位置づけは、成長する Pi エコシステムの互換性を保つ。
+
+[`🔗 SimpleDirect — Vinci Code`](https://getsimpledirect.com/blog/vinci-code-is-now-open-source) · [`🔗 getsimpledirect/vinci-code-cli`](https://github.com/getsimpledirect/vinci-code-cli)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-26T12:03:00Z |
-| Items | 29 |
-| Sources tracked | 44 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至頂網, arXiv, AITNT, 証券日報, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com, openai.com, TechCrunch, VentureBeat, SiliconANGLE, The Hacker News, SecurityWeek, lemmus.org, VulnCheck, Rapid7, IONIX, da.vidbuchanan.co.uk, HN, sethmlarson.dev, Red Hat, NVD) |
+| Generated | 2026-08-26T20:14:00Z |
+| Items | 41 |
+| Sources tracked | 57 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至頂網, arXiv, AITNT, 証券日報, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com, openai.com, TechCrunch, VentureBeat, SiliconANGLE, The Hacker News, SecurityWeek, lemmus.org, VulnCheck, Rapid7, IONIX, da.vidbuchanan.co.uk, HN, sethmlarson.dev, Red Hat, NVD, Censys, ChainCatcher, Chrome Releases, NVIDIA Newsroom, Nebius, OpenCVE, papers.cool, runtimewire, SimpleDirect blog, SkillsMP, The Edge Malaysia, unite.ai, zhidx) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

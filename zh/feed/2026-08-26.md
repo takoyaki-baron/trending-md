@@ -1,8 +1,8 @@
 ---
 date: 2026-08-26
-updated: 2026-08-26T12:03:00Z
+updated: 2026-08-26T20:14:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 44
+sources: 57
 license: CC-BY-4.0
 ---
 
@@ -421,13 +421,181 @@ Red Hat 披露 **CVE-2026-79992**（CWE-78，CVSS 7.8）：Emacs **TRAMP** 在�
 
 ---
 
+## 30. OxAlpha 确认为智谱下一代 GLM——今晚开源权重
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Edge Malaysia / ChainCatcher · ~today（8 月 26 日）
+- **Tags:** `ai-model` `glm` `zhipu` `open-weights` `openrouter`
+
+自 8 月 22 日我们将 Ox Alpha 作为 OpenRouter 上的匿名模型报道以来，**智谱（Z.AI）**于 8 月 26 日向彭博社确认，它是**GLM 系列的最新迭代**——一个面向编码与智能体任务的多模态推理模型（文本/图像/视频）——并表示将于**当晚发布权重**。这次 8 月 20 日的匿名发布被称为 OpenRouter 史上最大发布：它登顶排行榜，使用量是 DeepSeek 的两倍多，目前免费一周。报道称其代号取自中国电影《牛来》，并指出阿里与小米今年也采用了同样的"匿名首发"策略。
+
+**Why it matters:** "匿名首发 → 揭晓身份 → 开源权重"正在成为新的模型发布套路，而这一确认把排行榜传闻变成可复现的开源模型——但流传的约 100 万上下文与 DeepSWE 80% 等数字并未在已确认的来源中，因此在模型卡落地前，身份与可用性之外的数据都应视为未证实。
+
+[`🔗 The Edge Malaysia`](https://theedgemalaysia.com/node/815823) · [`🔗 ChainCatcher — Bloomberg`](https://www.chaincatcher.com/article/2285607)
+
+---
+
+## 31. CVE-2026-63520——SharePoint 不安全的 .NET 类型实例化串联成未认证 RCE（CVSS 8.1）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck / Censys · CVSS 8.1 · ~1d ago（8 月 24 日）
+- **Tags:** `cve` `microsoft` `sharepoint` `rce` `type-instantiation`
+
+**CVE-2026-63520**（CVSS 8.1，`AV:N/AC:H/PR:N/UI:N`，CNA 分配——NVD 评估待定）是 SharePoint 业务连接服务（BCS）中的不安全 .NET 类型实例化：`DbTypeReflector.ResolveDotNetType()` 对攻击者控制的 BDCM `TypeName` 调用 `Type.GetType()` 且无允许列表。**VulnCheck** 于 8 月 24 日发布了**武器化完整利用链**，将其与已报道的 **CVE-2026-55040** JWT 绕过串联，实现**未认证 RCE**——实例化 `System.Web.UI.LosFormatter` 并通过 BDC Finder 方法触发 `Deserialize`。影响 **2026 年 8 月累积更新**之前的 SharePoint Server 2016/2019/订阅版，该更新加入了 `ValidateSafeBcsType` 允许列表；由 Rapid7 的 Stephen Fewer 发现，约 8,500 台公网服务器，8 月 25 日 Censys 联合公告。
+
+**Why it matters:** 认证绕过那半条链已进入 KEV 且正被积极探测——在此基础上出现公开武器化利用链，意味着 SharePoint 管理员应假设完整的未认证 RCE 路径正在被尝试，8 月累积更新是唯一缓解手段。
+
+[`🔗 VulnCheck`](https://www.vulncheck.com/blog/cve-2026-63520-sharepoint-unsafe-type-rce) · [`🔗 Censys advisory`](https://censys.com/advisory/cve-2026-55040-cve-2026-63520/) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-63520)
+
+---
+
+## 32. CVE-2026-79290——Chrome Aura 释放后使用漏洞是严重级沙箱逃逸（CVSS 9.6）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chrome Releases / OpenCVE · CVSS 9.6 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `chrome` `use-after-free` `sandbox-escape` `browser`
+
+**CVE-2026-79290**（CWE-416，**CVSS 9.6**，CISA ADP Vulnrichment 评分）是 Chrome **Aura** 窗口层中的释放后使用漏洞，Chromium 评为**严重级**：精心构造的 HTML 页面可破坏内存并**逃逸沙箱**，在渲染进程外执行代码。已在 **Chrome 152.0.7977.65**（Stable，8 月 25 日）全平台修复，同一批还包括 CVE-2026-79138（ANGLE 越界写，Windows，高危）、CVE-2026-79026（Extensions UAF，高危）与 CVE-2026-79125（WebXR 信息泄露，低危）。暂无在野利用报告，尚未进入 KEV。
+
+**Why it matters:** 多数智能体框架与无头工具所依赖的浏览器出现严重级沙箱逃逸 UAF，是"立即更新"的信号——两周内第二个严重级 Chrome 修复，也让"浏览器即智能体运行时"持续处于供应链议题中心。
+
+[`🔗 Chrome Releases`](https://chromereleases.googleblog.com/2026/08/stable-channel-update-for-desktop_0256176589.html) · [`🔗 OpenCVE`](https://app.opencve.io/cve/CVE-2026-79290) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-79290)
+
+---
+
+## 33. NVIDIA Groq 3 LPX 全面投产——Gemma 4 31B 在 100K 上下文下约 3,400 token/秒
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVIDIA Newsroom / zhidx · ~2d ago（8 月 24 日，Hot Chips 2026）
+- **Tags:** `nvidia` `hardware` `inference` `groq` `agentic-ai`
+
+NVIDIA 在 Hot Chips 2026（8 月 24 日）宣布，其 **Groq 3 LPX** 加速器——源自 Groq 收购的解码阶段 LPU 芯片，与 Vera Rubin 平台互补——已**全面量产**。独立评测机构 **Artificial Analysis** 测得 **Gemma 4 31B 在 100K 上下文下约 3,400 输出 token/秒**（zhidx 引用 100K 下 3,431 tok/s 中位数，与 10K 几乎持平，SPEED-Bench 编码中位数 4,767 tok/s）。NVIDIA 称对延迟敏感的智能体工作负载比最接近的替代方案快 **4 倍**。每个机架含 256 颗 LP30 加速器（128 GB 片上 SRAM，640 TB/s 扩展带宽，液冷）；**Nebius** 是首个通过其 Token Factory 平台部署的云厂商。
+
+**Why it matters:** Groq 3 LPX 是让前沿级模型逐请求秒回的"解码引擎"——这是"多轮智能体工作负载才是推理瓶颈，而非聊天"的硬件押注——不过头号数字是开放 31B 模型而非前沿 MoE，且 4×/30× 的说法是厂商预测。
+
+[`🔗 NVIDIA Newsroom`](https://nvidianews.nvidia.com/news/nvidia-groq-3-lpx-now-in-full-production-with-world-class-speed-for-agentic-ai) · [`🔗 zhidx — 3,431 tok/s`](https://www.zhidx.com/p/587895.html) · [`🔗 Nebius`](https://nebius.com/blog/posts/nvidia-groq-3-lpx-nebius-token-factory)
+
+---
+
+## 34. Archify——把代码库变成经过 schema 校验的交互式图表的智能体技能（16.8k 星）
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 16.8k stars · ~today（8 月 26 日）
+- **Tags:** `agents` `skills` `diagrams` `architecture` `open-source`
+
+**tt-a1i/archify**（MIT，16.8k 星）是一个面向 Raven、Cursor、Claude Code、Codex CLI 与 OpenCode 的智能体技能（SKILL.md），把仓库或自然语言描述转换为交互式架构/时序/数据流图。其类型化 JSON IR 经过 schema 与布局校验——渲染器**拒绝无效输出**（交叉连线、重叠标签）并返回结构化诊断——输出是自包含 HTML 文件，支持 PNG/SVG/WebM 导出与 1200×630 分享卡片。"架构 Delta"模式以机器可读回执对比 Before/Delta/After，还能把粘贴的 Mermaid 改写为 Archify JSON。今日登上 GitHub 日趋势（+1,002 星）。
+
+**Why it matters:** "宁可渲染失败也不渲染错误"正是智能体工具所需的正确性思维，Archify 也表明技能浪潮正从散文式指令走向经过校验、机器可查的工件。
+
+[`🔗 tt-a1i/archify`](https://github.com/tt-a1i/archify) · [`🔗 SkillsMP`](https://skillsmp.com/creators/tt-a1i/archify/archify)
+
+---
+
+## 35. CVE-2026-80104——DB-GPT 未认证路径穿越 → 任意文件写入 → RCE（CVSS 9.8）
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · CVSS 9.8 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `db-gpt` `ai-infra` `path-traversal` `rce`
+
+**CVE-2026-80104**（CWE-22，**CVSS 9.8**，VulnCheck 分配）是 **eosphoros-ai/DB-GPT** 中 `skill_upload` 处理器的未认证路径穿越：它把 `file.filename` 原样写入 `upload_dir/filename`，不做规范化或包含性检查，且认证依赖在无 `user_id` 头时仍返回 admin 角色。未认证攻击者可向包内投放 `.py` 模块，在下次导入时获得代码执行。影响 `dbgpt-app` 0.8.0；已在 **v0.8.1**（GitHub + PyPI）修复。暂无确认的在野利用。
+
+**Why it matters:** 开发者正把数据库智能体框架直接接入生产数据存储，其中出现 CVSS 9.8 正是攻击者探测的 AI 供应链面——"无 user_id 也是 admin"提醒我们审计 AI 工具中的授权逻辑。
+
+[`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-80104) · [`🔗 eosphoros-ai/DB-GPT`](https://github.com/eosphoros-ai/DB-GPT/releases)
+
+---
+
+## 36. CVE-2026-78676——GitPython 把配置重序列化成活动的 `core.hooksPath` 实现 RCE（CVSS 9.8）
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory / NVD · CVSS 9.8 · ~1d ago（8 月 25 日）
+- **Tags:** `cve` `gitpython` `rce` `argument-injection` `python`
+
+**CVE-2026-78676**（CWE-88，**CVSS 9.8**）影响 **GitPython ≤ 3.1.58**：`GitConfigParser.write_section` 会把带引号的多行配置值重序列化为不带引号的物理换行，从而把休眠值变成**活动指令（如 `core.hooksPath`）**——之后任何 Git 操作都会调用攻击者控制的钩子实现代码执行。触发需要一条精心构造的多行 git 配置值外加一次后续的无关配置写入。已在 **GitPython 3.1.59** 修复，该版本同时修复 CVE-2026-78675（`.gitmodules` 泄露）与 CVE-2026-78677（目录穿越）。暂无确认的在野利用；公开 PoC 在各追踪器上存在争议。
+
+**Why it matters:** 几乎所有 Python 工具链都靠这个库来调起 Git，其中出现 9.8 就是供应链 RCE——而"一次配置写入变成钩子"是安全扫描器很少能抓到的延迟触发型注入。
+
+[`🔗 GitHub Advisory GHSA-9557-234j-7rv9`](https://github.com/advisories/GHSA-9557-234j-7rv9) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-78676)
+
+---
+
+## 37. JoyAI-Echo-1.5——京东长时程音视频生成登顶 WBench（arXiv 2608.23383）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.23383 · ~1d ago（8 月 25 日修订）
+- **Tags:** `research` `video-generation` `audio-visual` `world-model` `open-source`
+
+**JoyAI-Echo-1.5**（京东，arXiv 2608.23383）是统一音视频生成系统，含两个变体：**长视频**变体用可组合的跨镜头记忆与说话人线索保持角色外观与音色的持续性；**世界模型**变体把异构导航输入转换为经校准的度量 6-DoF 相机轨迹，支持与控制器无关的交互。采用渐进式教师强制加基于自生成轨迹的短/长时程 Self-Gradient Forcing 训练，世界模型变体**在 WBench 排名第一（平均 81.7）**，并在 SANA-WM-Bench 上于长时程持续性、视觉质量方面领先。代码与权重已开源（jd-opensource/JoyAI-Echo）。
+
+**Why it matters:** "持续故事与可交互世界"是超越片段式视频生成的下一个前沿——把长视频路径与世界模型路径拆开，是这一领域向"带记忆的生成"收敛时值得关注的设计。
+
+[`🔗 arXiv 2608.23383`](https://arxiv.org/abs/2608.23383) · [`🔗 jd-opensource/JoyAI-Echo`](https://github.com/jd-opensource/JoyAI-Echo)
+
+---
+
+## 38. QAH——量化感知修复让 4-bit 模型胜过其 bfloat16 源模型（arXiv 2608.20953）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / Unite.ai · 2608.20953 · ~1d ago（8 月 25 日）
+- **Tags:** `research` `quantization` `llm` `efficiency` `open-weights`
+
+**量化感知修复（QAH）**（Multiverse Computing，HF 博客 8 月 25 日 + arXiv 2608.20953）用**直接基于原始全精度模型的 KL 散度蒸馏**替代 QAT/QAD 中质量退化的中间教师。应用到 **GPT-OSS 120B → 60B → MXFP4** 后，QAH 学生在 **9 项基准中 7 项达到或超过其 bfloat16 源**（AA-LCR 42.7 vs 35.3，AIME 2025 76.3 vs 70.7，Aider 40.9 vs 38.2），并在 LiveCodeBench 上险胜 120B 教师——而权重与每 token 算力约为其一半。在 GPT-OSS 9B 上，它约比 QAT 快 7 倍达到峰值，并在 1,200 步内保持离峰值约 2 分以内，而 QAT 跌去约 19 分。成果以 **HyperNova-60B**（Apache-2.0）开源权重形式发布。
+
+**Why it matters:** 若 4-bit 压缩外加一半参数量就能追平全精度，开放模型的主要服务成本将骤降——但这些是 Multiverse 在自有流水线（专有压缩、仅 GPT-OSS）上的自测数据，因此"胜过 bf16"是待复现的结果，而非独立事实。
+
+[`🔗 arXiv 2608.20953`](https://arxiv.org/abs/2608.20953) · [`🔗 Unite.ai`](https://www.unite.ai/multiverse-computings-4-bit-healing-beats-full-precision-model/) · [`🔗 papers.cool`](https://papers.cool/arxiv/2608.20953)
+
+---
+
+## 39. Ambient Context——面向 LLM 的纯文本"屏幕记忆"，macOS 上完全离线（Show HN）
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 61 pts · ~1d ago（8 月 25 日）
+- **Tags:** `agents` `memory` `macos` `privacy` `local-first`
+
+**dragthelake/ambient-context**（Show HN，8 月 25 日）是一个 macOS 菜单栏应用，把工作记录为纯 Markdown 供 LLM 阅读：它通过辅助功能 API 每隔几秒捕获焦点窗口文本（无截图/OCR），每天写一个 Markdown 文件并附 `AGENTS.md` 描述格式，写入前会脱敏——跳过密码管理器/隐私浏览，清除凭据/API 密钥/银行卡号。完全离线（无账户、服务器、遥测或网络调用），你把 Claude Code 指向该文件夹问"我周二干了什么"即可。已知局限：Chromium/Electron 的辅助功能树较慢，GPU 渲染终端（Kitty、Alacritty）暴露的文本很少。122 星，v0.1.0 未签名，需 macOS 14+ Apple Silicon。
+
+**Why it matters:** "纯文本、本地、仅屏幕记忆"是介于 Recall/Rewind 式录制与什么都不记之间的隐私友好中间路线——而用 AGENTS.md 描述你自己的日常日志，是无数据库把手头人类上下文交给智能体的巧妙模式。
+
+[`🔗 dragthelake/ambient-context`](https://github.com/dragthelake/ambient-context) · [`🔗 runtimewire`](https://runtimewire.com/article/cameron-smith-ambient-context-mac-memory-markdown) · [`🔗 HN`](https://news.ycombinator.com/item?id=49429095)
+
+---
+
+## 40. CarWatch——把树莓派 5 变成完全离线的车载智能体（Show HN）
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 143 pts · ~1d ago（8 月 25 日）
+- **Tags:** `agents` `edge-ai` `raspberry-pi` `local-ai` `hardware`
+
+**ThinkOffApp/CarWatch**（AGPL-3.0，171 星）是运行在树莓派 5 上的车载智能体：本地运行 **Qwen3.6-35B-A3B**（约 14.3 GB 量化，约 3.5 tok/s），基于 745 页车主手册做 RAG，通过蓝牙 ELM327 读取 OBD-II，并能经 Home Assistant 下发仅安全相关的云命令（锁门、关窗）。免提语音完全端侧运行——连续 VAD → whisper.cpp → 基于资料的应答——手机仪表盘在 8088 端口。Show HN 获得 143 分/45 评论（因格式而非内容被标记）。
+
+**Why it matters:** 一台约百美元设备本地跑 35B 模型、带语音与你的车主手册，是"本地 AI"一个具体的终态——慢 token 也照单全收——而"只读 OBD-II 访问"与"明确仅安全命令"的划分，是端侧智能体合理的安全模型。
+
+[`🔗 ThinkOffApp/CarWatch`](https://github.com/ThinkOffApp/CarWatch) · [`🔗 HN`](https://news.ycombinator.com/item?id=49435675)
+
+---
+
+## 41. Vinci Code——SimpleDirect 以 MIT 协议开源其基于 Pi 的终端编码智能体
+
+- **Velocity:** ▮ steady
+- **Source:** SimpleDirect blog · ~1d ago（8 月 25 日）
+- **Tags:** `coding-agent` `cli` `open-source` `mit` `pi`
+
+多伦多的 **SimpleDirect** 于 8 月 25 日以 **MIT** 协议开源了 **Vinci Code CLI**——"Pi 的一个发行版"（Mario Zechner 的 MIT 智能体框架），保留上游历史并加入一层有主见的封装：平白语言解说、命令守卫、密钥掩码、操作系统级沙箱、检查点、撤销/审查与持久任务回执。它把工作终结为四种明确状态——**DONE、DONE-UNVERIFIED、WAITING、BLOCKED**——而非信任模型自称的完成，并在不可逆命令前暂停（`rm -rf` 默认拒绝）。自带密钥（BYOK）支持 33 家供应商；明确处于 beta，不支持本地模型，仅 CLI。
+
+**Why it matters:** 每次运行都以明确的"未验证/阻塞"状态收尾，是智能体 CLI 一个小小的但真实的问责转变——而"Pi 的发行版而非分支"也让日益壮大的 Pi 生态保持兼容。
+
+[`🔗 SimpleDirect — Vinci Code`](https://getsimpledirect.com/blog/vinci-code-is-now-open-source) · [`🔗 getsimpledirect/vinci-code-cli`](https://github.com/getsimpledirect/vinci-code-cli)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-26T12:03:00Z |
-| Items | 29 |
-| Sources tracked | 44 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至顶网, arXiv, AITNT, 证券日报, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com, openai.com, TechCrunch, VentureBeat, SiliconANGLE, The Hacker News, SecurityWeek, lemmus.org, VulnCheck, Rapid7, IONIX, da.vidbuchanan.co.uk, HN, sethmlarson.dev, Red Hat, NVD) |
+| Generated | 2026-08-26T20:14:00Z |
+| Items | 41 |
+| Sources tracked | 57 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至顶网, arXiv, AITNT, 证券日报, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com, openai.com, TechCrunch, VentureBeat, SiliconANGLE, The Hacker News, SecurityWeek, lemmus.org, VulnCheck, Rapid7, IONIX, da.vidbuchanan.co.uk, HN, sethmlarson.dev, Red Hat, NVD, Censys, ChainCatcher, Chrome Releases, NVIDIA Newsroom, Nebius, OpenCVE, papers.cool, runtimewire, SimpleDirect blog, SkillsMP, The Edge Malaysia, unite.ai, zhidx) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

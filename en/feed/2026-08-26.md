@@ -1,8 +1,8 @@
 ---
 date: 2026-08-26
-updated: 2026-08-26T12:03:00Z
+updated: 2026-08-26T20:14:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 44
+sources: 57
 license: CC-BY-4.0
 ---
 
@@ -421,13 +421,181 @@ Red Hat disclosed **CVE-2026-79992** (CWE-78, CVSS 7.8): Emacs **TRAMP** concate
 
 ---
 
+## 30. OxAlpha confirmed as Zhipu's next-gen GLM — open weights drop tonight
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Edge Malaysia / ChainCatcher · ~today (Aug 26)
+- **Tags:** `ai-model` `glm` `zhipu` `open-weights` `openrouter`
+
+Since we covered Ox Alpha as an anonymous OpenRouter model on Aug 22, **Z.AI (Zhipu)** confirmed to Bloomberg on Aug 26 that it is **a new iteration of its GLM series** — a multimodal reasoning model (text/image/video) built for coding and agentic tasks — and says it will **release the weights the same evening**. The uncredited Aug 20 launch is being called the biggest in OpenRouter's history: it topped the leaderboard with more than double DeepSeek's usage and is currently free for one week. Coverage traces the codename to the Chinese film *Niu Lai* ("Ox Comes") and notes Alibaba and Xiaomi used the same stealth-launch tactic this year.
+
+**Why it matters:** Stealth-launch → identity-reveal → open-weights is the new model-launch playbook, and the confirmation turns a leaderboard rumor into a reproducible open model — but the ~1M-token context and 80%-on-DeepSWE figures circulating in coverage are not in the confirmed sources, so treat specs beyond identity and availability as unverified until the model card lands.
+
+[`🔗 The Edge Malaysia`](https://theedgemalaysia.com/node/815823) · [`🔗 ChainCatcher — Bloomberg`](https://www.chaincatcher.com/article/2285607)
+
+---
+
+## 31. CVE-2026-63520 — SharePoint unsafe .NET type instantiation chains into unauthenticated RCE (CVSS 8.1)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck / Censys · CVSS 8.1 · ~1d ago (Aug 24)
+- **Tags:** `cve` `microsoft` `sharepoint` `rce` `type-instantiation`
+
+**CVE-2026-63520** (CVSS 8.1, `AV:N/AC:H/PR:N/UI:N`, CNA-assigned — NVD assessment pending) is an unsafe .NET type instantiation in SharePoint's Business Connectivity Services: `DbTypeReflector.ResolveDotNetType()` calls `Type.GetType()` on an attacker-controlled BDCM `TypeName` with no allowlist. **VulnCheck** published a **weaponized full chain** (Aug 24) pairing it with the already-covered **CVE-2026-55040** JWT bypass for **unauthenticated RCE** — instantiating `System.Web.UI.LosFormatter` and triggering `Deserialize` through a BDC Finder method. Affects SharePoint Server 2016/2019/Subscription Edition before the **August 2026 Cumulative Update**, which adds the `ValidateSafeBcsType` allowlist; found by Rapid7's Stephen Fewer, with ~8,500 internet-facing servers and a joint Censys advisory (Aug 25).
+
+**Why it matters:** The auth-bypass half is already in KEV and actively probed — a public weaponized chain on top means SharePoint admins should assume the full unauthenticated-RCE path is being tested, and the August CU is the only mitigation.
+
+[`🔗 VulnCheck`](https://www.vulncheck.com/blog/cve-2026-63520-sharepoint-unsafe-type-rce) · [`🔗 Censys advisory`](https://censys.com/advisory/cve-2026-55040-cve-2026-63520/) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-63520)
+
+---
+
+## 32. CVE-2026-79290 — Chrome Aura use-after-free is a Critical sandbox escape (CVSS 9.6)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chrome Releases / OpenCVE · CVSS 9.6 · ~1d ago (Aug 25)
+- **Tags:** `cve` `chrome` `use-after-free` `sandbox-escape` `browser`
+
+**CVE-2026-79290** (CWE-416, **CVSS 9.6** per CISA ADP Vulnrichment) is a use-after-free in Chrome's **Aura** windowing layer that Chromium rates **Critical**: a crafted HTML page can corrupt memory and **escape the sandbox** for code execution outside the renderer. Fixed in **Chrome 152.0.7977.65** (Stable, Aug 25) on all platforms, in the same drop as CVE-2026-79138 (ANGLE out-of-bounds write, Windows, High), CVE-2026-79026 (Extensions UAF, High) and CVE-2026-79125 (WebXR info disclosure, Low). No exploitation reported; not yet in KEV.
+
+**Why it matters:** A Critical sandbox-escape UAF in the browser most agent harnesses and headless tooling build on is an update-now signal — and the second Critical Chrome fix in two weeks keeps "browser as agent runtime" in the supply-chain conversation.
+
+[`🔗 Chrome Releases`](https://chromereleases.googleblog.com/2026/08/stable-channel-update-for-desktop_0256176589.html) · [`🔗 OpenCVE`](https://app.opencve.io/cve/CVE-2026-79290) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-79290)
+
+---
+
+## 33. NVIDIA Groq 3 LPX enters full production — ~3,400 tok/s on Gemma 4 31B at 100K context
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVIDIA Newsroom / zhidx · ~2d ago (Aug 24, Hot Chips 2026)
+- **Tags:** `nvidia` `hardware` `inference` `groq` `agentic-ai`
+
+NVIDIA announced at Hot Chips 2026 (Aug 24) that its **Groq 3 LPX** accelerator — the decode-phase LPU chip from the Groq acquisition, complementary to the Vera Rubin platform — is in **full production**. Independent evaluator **Artificial Analysis** recorded **~3,400 output tokens/sec running Gemma 4 31B at 100K context** (zhidx cites a 3,431 tok/s median at 100K, nearly flat vs 10K, and a 4,767 tok/s SPEED-Bench coding median). NVIDIA claims **4× the nearest alternative** on latency-sensitive agentic workloads. Each rack holds 256 LP30 accelerators (128 GB on-chip SRAM, 640 TB/s scale-up, liquid-cooled); **Nebius** is the first cloud to deploy it via its Token Factory platform.
+
+**Why it matters:** Groq 3 LPX is a "decode engine" making frontier-grade models feel instant per request — the hardware bet that multi-turn agent workloads, not chat, are the binding constraint on inference — though the headline numbers are on an open 31B model, not a frontier MoE, and the 4×/30× claims are vendor projections.
+
+[`🔗 NVIDIA Newsroom`](https://nvidianews.nvidia.com/news/nvidia-groq-3-lpx-now-in-full-production-with-world-class-speed-for-agentic-ai) · [`🔗 zhidx — 3,431 tok/s`](https://www.zhidx.com/p/587895.html) · [`🔗 Nebius`](https://nebius.com/blog/posts/nvidia-groq-3-lpx-nebius-token-factory)
+
+---
+
+## 34. Archify — an agent skill that turns codebases into schema-validated interactive diagrams (16.8k stars)
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 16.8k stars · ~today (Aug 26)
+- **Tags:** `agents` `skills` `diagrams` `architecture` `open-source`
+
+**tt-a1i/archify** (MIT, 16.8k stars) is an agent skill (SKILL.md) for Raven, Cursor, Claude Code, Codex CLI and OpenCode that converts a repo or natural-language description into interactive architecture/sequence/data-flow diagrams. Its typed JSON IR is schema- and layout-validated — the renderer **refuses invalid output** (crossing edges, overlapping labels) and returns structured diagnostics — and output is a self-contained HTML file with PNG/SVG/WebM exports and 1200×630 share cards. An "Architecture Delta" mode compares Before/Delta/After with a machine-readable receipt, and it re-authors pasted Mermaid into Archify JSON. On GitHub daily trending today (+1,002 stars).
+
+**Why it matters:** "Fail to render rather than render wrong" is the correctness mindset agent tooling needs, and Archify is a sign the skills wave is moving from prose instructions to validated, machine-checkable artifacts.
+
+[`🔗 tt-a1i/archify`](https://github.com/tt-a1i/archify) · [`🔗 SkillsMP`](https://skillsmp.com/creators/tt-a1i/archify/archify)
+
+---
+
+## 35. CVE-2026-80104 — DB-GPT unauthenticated path traversal → arbitrary file write → RCE (CVSS 9.8)
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · CVSS 9.8 · ~1d ago (Aug 25)
+- **Tags:** `cve` `db-gpt` `ai-infra` `path-traversal` `rce`
+
+**CVE-2026-80104** (CWE-22, **CVSS 9.8**, VulnCheck-assigned) is an unauthenticated path traversal in **eosphoros-ai/DB-GPT**'s `skill_upload` handler: it writes `file.filename` verbatim to `upload_dir/filename` with no canonicalization or containment check, and the auth dependency returns an admin role even without a `user_id` header. An unauthenticated attacker can drop a `.py` module into the package and get code execution on the next import. Affects `dbgpt-app` 0.8.0; fixed in **v0.8.1** (GitHub + PyPI). No confirmed in-the-wild exploitation.
+
+**Why it matters:** A CVSS 9.8 in the database-agent framework developers are wiring straight into production data stores is exactly the AI-supply-chain surface attackers probe — and "admin even without user_id" is a reminder to audit authorization logic in AI tooling.
+
+[`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-80104) · [`🔗 eosphoros-ai/DB-GPT`](https://github.com/eosphoros-ai/DB-GPT/releases)
+
+---
+
+## 36. CVE-2026-78676 — GitPython re-serializes a config into a live `core.hooksPath`, RCE (CVSS 9.8)
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory / NVD · CVSS 9.8 · ~1d ago (Aug 25)
+- **Tags:** `cve` `gitpython` `rce` `argument-injection` `python`
+
+**CVE-2026-78676** (CWE-88, **CVSS 9.8**) in **GitPython ≤ 3.1.58**: `GitConfigParser.write_section` re-serializes quoted multi-line config values into unquoted physical newlines, turning a dormant value into a **live directive such as `core.hooksPath`** — so any subsequent Git operation invokes the attacker-controlled hook for code execution. The trigger needs a crafted multi-line git-config value plus a later unrelated config write. Fixed in **GitPython 3.1.59**, which also ships CVE-2026-78675 (`.gitmodules` disclosure) and CVE-2026-78677 (directory traversal). No confirmed in-the-wild exploitation; the public PoC is disputed across trackers.
+
+**Why it matters:** A 9.8 in the library nearly every Python toolchain uses to shell out to Git is a supply-chain RCE — and "a config write turns into a hook" is a delayed-trigger injection class that scanners rarely catch.
+
+[`🔗 GitHub Advisory GHSA-9557-234j-7rv9`](https://github.com/advisories/GHSA-9557-234j-7rv9) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-78676)
+
+---
+
+## 37. JoyAI-Echo-1.5 — JD's long-horizon audio-visual generation ranks first on WBench (arXiv 2608.23383)
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.23383 · ~1d ago (rev Aug 25)
+- **Tags:** `research` `video-generation` `audio-visual` `world-model` `open-source`
+
+**JoyAI-Echo-1.5** (JD, arXiv 2608.23383) is a unified audio-visual generation system with two variants: a **long-video** variant using composable cross-shot memory and speaker cues to keep character appearance and voice identity persistent, and a **world-model** variant converting heterogeneous navigation inputs into calibrated metric 6-DoF camera trajectories for controller-agnostic interaction. Trained via progressive teacher forcing plus short/long-horizon Self-Gradient Forcing on self-generated rollouts, the world-model variant **ranks first on WBench (avg 81.7)** and leads on SANA-WM-Bench for long-horizon persistence and visual quality. Code and weights are open-sourced (jd-opensource/JoyAI-Echo).
+
+**Why it matters:** "Persistent stories and interactive worlds" is the frontier past clip-based video generation, and splitting a long-video path from a world-model path is a design worth watching as the field converges on memory-bearing generation.
+
+[`🔗 arXiv 2608.23383`](https://arxiv.org/abs/2608.23383) · [`🔗 jd-opensource/JoyAI-Echo`](https://github.com/jd-opensource/JoyAI-Echo)
+
+---
+
+## 38. QAH — quantization-aware healing makes a 4-bit model beat its bfloat16 source (arXiv 2608.20953)
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / Unite.ai · 2608.20953 · ~1d ago (Aug 25)
+- **Tags:** `research` `quantization` `llm` `efficiency` `open-weights`
+
+**Quantization-Aware Healing (QAH)** (Multiverse Computing, HF blog Aug 25 + arXiv 2608.20953) replaces the degraded intermediate teacher in QAT/QAD: it distills the 4-bit student **directly from the original full-precision model** via KL divergence. Applied to **GPT-OSS 120B → 60B → MXFP4**, the QAH student **matched or beat its bfloat16 source on 7 of 9 benchmarks** (AA-LCR 42.7 vs 35.3, AIME 2025 76.3 vs 70.7, Aider 40.9 vs 38.2) and edged the 120B teacher on LiveCodeBench — at ~half the weights and compute per token. On GPT-OSS 9B it peaks ~7× faster than QAT and stays within ~2 points of peak for 1,200 steps while QAT loses ~19. The result ships open-weight as **HyperNova-60B** (Apache-2.0).
+
+**Why it matters:** If 4-bit compression plus half the parameters can match full precision, the dominant serving cost of open models just dropped — but these are Multiverse's own measurements on its own pipeline (proprietary compression, GPT-OSS-only), so "beats bf16" is a result to reproduce, not yet an independent fact.
+
+[`🔗 arXiv 2608.20953`](https://arxiv.org/abs/2608.20953) · [`🔗 Unite.ai`](https://www.unite.ai/multiverse-computings-4-bit-healing-beats-full-precision-model/) · [`🔗 papers.cool`](https://papers.cool/arxiv/2608.20953)
+
+---
+
+## 39. Ambient Context — text-only "screen memory" for LLMs, fully offline on macOS (Show HN)
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 61 pts · ~1d ago (Aug 25)
+- **Tags:** `agents` `memory` `macos` `privacy` `local-first`
+
+**dragthelake/ambient-context** (Show HN, Aug 25) is a macOS menu-bar app that records your work as plain Markdown for an LLM to read: it captures focused-window text via the Accessibility API every few seconds (no screenshots/OCR), writes one Markdown file per day plus an `AGENTS.md` describing the format, and redacts before writing — skipping password managers/private browsing and scrubbing credentials/API keys/card numbers. Fully offline (no account, server, telemetry, or network calls), you point Claude Code at the folder and ask "what did I work on Tuesday?". Known limits: Chromium/Electron accessibility trees are slow, and GPU-rendered terminals (Kitty, Alacritty) expose little text. 122 stars, v0.1.0 unsigned, macOS 14+ Apple Silicon.
+
+**Why it matters:** "Text-only, local-only screen memory" is a privacy-preserving middle path between Recall/Rewind-style recording and nothing — and an AGENTS.md describing your own daily log is a neat pattern for handing human context to an agent without a database.
+
+[`🔗 dragthelake/ambient-context`](https://github.com/dragthelake/ambient-context) · [`🔗 runtimewire`](https://runtimewire.com/article/cameron-smith-ambient-context-mac-memory-markdown) · [`🔗 HN`](https://news.ycombinator.com/item?id=49429095)
+
+---
+
+## 40. CarWatch — a Raspberry Pi 5 turned into a fully offline car agent (Show HN)
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 143 pts · ~1d ago (Aug 25)
+- **Tags:** `agents` `edge-ai` `raspberry-pi` `local-ai` `hardware`
+
+**ThinkOffApp/CarWatch** (AGPL-3.0, 171 stars) is an in-car agent running on a Raspberry Pi 5: it serves a **Qwen3.6-35B-A3B** locally (~14.3 GB quant, ~3.5 tok/s) with RAG over the 745-page owner's manual, reads OBD-II via a Bluetooth ELM327, and can issue make-safe cloud commands (lock doors, close windows) through Home Assistant. Hands-free voice runs entirely on-device — continuous VAD → whisper.cpp → grounded answer — with a phone dashboard on port 8088. The Show HN drew 143 points/45 comments (it was flagged for format, not content).
+
+**Why it matters:** A ~$100 device running a 35B local model with voice and your car's manual is a concrete "local AI" end state — slow tokens and all — and the split between read-only OBD-II access and explicitly make-safe commands is a sane safety model for an on-device agent.
+
+[`🔗 ThinkOffApp/CarWatch`](https://github.com/ThinkOffApp/CarWatch) · [`🔗 HN`](https://news.ycombinator.com/item?id=49435675)
+
+---
+
+## 41. Vinci Code — SimpleDirect open-sources its Pi-based terminal coding agent under MIT
+
+- **Velocity:** ▮ steady
+- **Source:** SimpleDirect blog · ~1d ago (Aug 25)
+- **Tags:** `coding-agent` `cli` `open-source` `mit` `pi`
+
+Toronto's **SimpleDirect** open-sourced **Vinci Code CLI** (MIT, Aug 25) — "a distribution of Pi" (Mario Zechner's MIT harness) that preserves upstream history and adds an opinionated layer: plain-language narration, command guards, secret masking, OS-level sandboxing, checkpoints, undo/review, and durable task receipts. It ends work in four explicit states — **DONE, DONE-UNVERIFIED, WAITING, BLOCKED** — rather than trusting the model's completion claim, and pauses before irreversible commands (`rm -rf` defaults to no). BYOK across 33 providers; explicitly beta, no local-model support, CLI-only.
+
+**Why it matters:** Ending every run with an explicit unverified/blocked state is a small but real accountability shift for agent CLIs — and "a distribution of Pi, not a fork" keeps the growing Pi ecosystem compatible.
+
+[`🔗 SimpleDirect — Vinci Code`](https://getsimpledirect.com/blog/vinci-code-is-now-open-source) · [`🔗 getsimpledirect/vinci-code-cli`](https://github.com/getsimpledirect/vinci-code-cli)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-26T12:03:00Z |
-| Items | 29 |
-| Sources tracked | 44 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至顶网, arXiv, AITNT, 证券日报, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com, openai.com, TechCrunch, VentureBeat, SiliconANGLE, The Hacker News, SecurityWeek, lemmus.org, VulnCheck, Rapid7, IONIX, da.vidbuchanan.co.uk, HN, sethmlarson.dev, Red Hat, NVD) |
+| Generated | 2026-08-26T20:14:00Z |
+| Items | 41 |
+| Sources tracked | 57 (CISA KEV, CyCognito, GitHub, Qualys, livethreat.ai, Apple Newsroom, Wccftech, iThome, IBM, ic.work, MongoDB, 至顶网, arXiv, AITNT, 证券日报, smzdm, VulDB, dev.to, GitHub Advisory, herdr.dev, OpenGithubs, explainx.ai, Alibaba Cloud, Higress, benchlm.ai, SciRate, ifeng, 17173, 163.com, openai.com, TechCrunch, VentureBeat, SiliconANGLE, The Hacker News, SecurityWeek, lemmus.org, VulnCheck, Rapid7, IONIX, da.vidbuchanan.co.uk, HN, sethmlarson.dev, Red Hat, NVD, Censys, ChainCatcher, Chrome Releases, NVIDIA Newsroom, Nebius, OpenCVE, papers.cool, runtimewire, SimpleDirect blog, SkillsMP, The Edge Malaysia, unite.ai, zhidx) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
