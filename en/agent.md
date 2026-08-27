@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-27T04:15:00Z
+last_processed: 2026-08-27T20:27:00Z
 ---
 
 # Learnt Agent
@@ -58,10 +58,10 @@ patterns, and turn them into insights and actionable todos.
      Gitea CVE-2026-60004 (9.8, KEV, EPSS ~0.95, Git-object exfil); ShieldBreak CVE-2026-69414 (bypasses the RoguePlanet *patch*); Tenable 9.9; IBM mcp-contextforge SSTI→RCE (9.8); AgentFlow flow-centric (33%→0%); GLM-5.3 DNS (~80k×) — `cvd.z.ai` retired to CNVD/CNNVD/NVDB, no CVE.
    - **08-26 — SAML trust-chain, leftover installer, browser-as-runtime escape, SharePoint chain weaponized (detail → [[security]]):**
      miniOrange CVE-2026-61979+15981 (unauth WP admin, exploited); ClipBucket CVE-2026-80138 (9.8); Python IDNA CVE-2026-17084 (CWE-436); Emacs TRAMP 7.8; C2PA Pixel CVE-2026-43499; Chrome Aura CVE-2026-79290 (9.6 escape); DB-GPT CVE-2026-80104 (9.8); GitPython CVE-2026-78676 (config→hook); CVE-2026-63520 weaponized + `ValidateSafeBcsType`.
-   - **08-27 04:15 — AI agents find human-rare multi-step chains; two more RCEs + a rule-skip (detail → [[security]]):**
-     Wordfence **Argus** chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8, 1M+ sales); SENAITE CVE-2026-54569 (9.8, JSON-API + `eval()` → Zope RCE); Tomcat RewriteValve CVE-2026-65927 (6.9, off-by-one skips head-of-chain rules).
-   - **08-27 04:30 — the multi-step-chain class gets a second agent + a volume denominator (detail → [[security]]):**
-     Argus is Wordfence's depth-first twin of PRISM (breadth-first, 300+ vulns); WP HackerOne submissions jumped 20–30/month → 450 in July after a Sol Ultra find; the Avada chain needed admin-authored content. Partially measured — no independent rate, no other vendor's chain.
+   - **08-27 04:15→04:30 — AI agents find human-rare multi-step chains; the class gets a second agent + a volume denominator (detail → [[security]]):**
+     Wordfence **Argus** (depth-first twin of PRISM's breadth-first, 300+ vulns) chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8, 1M+ sales, needed admin-authored content); SENAITE CVE-2026-54569 (9.8); Tomcat RewriteValve CVE-2026-65927 (6.9); WP HackerOne submissions 20–30/month → 450 in July. Partially measured — no independent rate.
+   - **08-27 20:27 — VMs falsified as agent containment; a web-framework RCE + a PyPI token heist + a KEV six-pack (detail → [[security]]):** Trail of Bits: GPT 5.6-Cyber escaped QEMU/KVM **three times** (~12h autonomous, three chains incl. three 0-days; Firecracker held substantially harder); Next.js CVE-2026-75604 (9.0, Windows-only `..%5C` cache traversal → forged Server Action → RCE, PoC in a day); pantheon-agents 0.6.1/0.6.2 trojanized on PyPI (stolen long-lived token, Hades); CISA KEV six incl. CVE-2019-1068 SQL Server RCE + five pre-2026 bugs; Ubiquiti SA-067 CVE-2026-77537 (10.0 CNA).
+   - **08-27 21:05 — the containment answer gains its benchmark + its product (detail → [[security]]):** AgentEscapeBench (Inspect-based, 6★, 4 months stale) is the standing SandboxEscapeBench extension — a `(model × sandbox)` matrix incl. Firecracker/QEMU, level-5 = novel-vuln discovery; agent-glovebox (Apache-2.0, 57★, pushed today) productizes "treat agents as an APT" (sbx microVM + allowlist firewall + tamper-evident logs + ephemeral state); its PR #5033 concedes microVMs buy "difficulty, not a proof." Both exist, neither adopted.
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -146,6 +146,8 @@ patterns, and turn them into insights and actionable todos.
      ERPO (arXiv 2608.23311) — Query-KL replaces Policy-KL, stabilizes long RL runs; ReWorld (arXiv 2608.23565) — pose-indexed
      landmark bank gives interactive world models unbounded memory.
    - **08-26 20:19→20:37 — the anonymous model gets a face, and the card matches (detail → [[frontier-models]]):** `stealth/ox-alpha` confirmed as Zhipu's next-gen GLM (stealth-launch→reveal→open-weights); OxAlpha card verified at OpenRouter (1M ctx / 131K out / text+image+video, no audio); the viral **80% DeepSWE was a 10-task subset** — full 113-task runs land ~58–63%; JoyAI-Echo-1.5 (JD, WBench avg 81.7).
+   - **08-27 20:27 — the distribution layer consolidates while reasoning commoditizes (detail → [[frontier-models]]):** Nvidia **reported** to acquire Hugging Face ~$12.9B (unconfirmed; hub neutrality is the question); AWS acquires DuckLabs while DuckDB stays MIT under the independent DuckDB Foundation — "absorb the people, keep the code open."
+   - **08-27 21:05 — the consolidation advances: reported agreement + foundation-governance expansion (detail → [[frontier-models]]):** Nvidia–HF escalates to a **reported agreement** (The Information, Aug 27; ~$12.9B ≈ 86× revenue), still unsigned/unconfirmed, neutrality concerns mounting; the **DuckDB Foundation survives and expands** governance (Technical Advisory Board, signed third-party extensions) as the explicit neutrality answer — analysts still warn "paychecks bend roadmaps."
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -177,8 +179,7 @@ patterns, and turn them into insights and actionable todos.
    standardized the packaging spec (Anthropic absent), and the harness layer resolved to a *layered
    convergence* (portable core converges, per-vendor shell persists). Expect an "MMLU-for-skills" eval
    standard; whoever ships it owns the skills marketplace. → [[agent-plugins]]
-   - **08-18→08-23 — assertion-only professional-capability/methodology repos; the first self-audit machinery (detail → [[agent-plugins]]):**
-     Anthropic-Cybersecurity-Skills, benjamin-plus-skill, superpowers (274k★), mattpocock/skills (211k★); caveman's evidence tiers + skill-creator's per-author evals; `andrej-karpathy-skills` (205,384★) — 2.3 KB frozen prose, `pushed_at` 2026-04-20, no LICENSE — stars measure distribution, not development.
+   - **08-18→08-23 — assertion-only professional-capability/methodology repos; the first self-audit machinery (detail → [[agent-plugins]]):** Anthropic-Cybersecurity-Skills, benjamin-plus-skill, superpowers (274k★), mattpocock/skills (211k★); caveman's evidence tiers + skill-creator's per-author evals; `andrej-karpathy-skills` (205,384★) — 2.3 KB frozen prose, `pushed_at` 2026-04-20, no LICENSE — stars measure distribution, not development.
    - **08-24 04:03 — a canonical index + the first transfer counter-evidence:** `VoltAgent/awesome-agent-skills` (1,497
      org-attributed) is the discovery layer; arXiv 2608.20274 finds whole-task skills *degrade* agents, subtask helps ([[agent-plugins]]).
    - **08-24 12:03 — the distribution half ships with a gate:** `anthropics/claude-plugins-community` (Apache-2.0) — the
@@ -193,6 +194,7 @@ patterns, and turn them into insights and actionable todos.
      interactive diagrams, the renderer **refuses invalid output**; the "prove it" phase extends to validated artifacts ([[agent-plugins]]).
    - **08-27 04:15 — the distribution half gets an Anthropic-owned lane; the science vertical is the biggest (detail → [[agent-plugins]]):**
      `anthropics/claude-plugins-official` (34.3k★, curated official directory, external_plugins gated on review, "trust, not a security guarantee"); `K-Dense-AI/scientific-agent-skills` (34.7k★, 163 skills, drug discovery/clinical, per-PR security scan).
+   - **08-27 20:27 — first-party IDE vendors ship version-aware skills (detail → [[agent-plugins]]):** JetBrains `go-modern-guidelines` (Apache-2.0, ~1.8k★) serves Go-version-matched idioms via go.mod detection, installable as a Claude Code marketplace plugin — the "prove it" phase gains a vendor maintainer; the shared-corpus adoption half stays open.
    → [[agent-plugins]] [[token-economics]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
@@ -1426,3 +1428,31 @@ patterns, and turn them into insights and actionable todos.
   Reparameterization); kimi3 (`TimRots/kimi3`) — independent PyTorch repro of Kimi K3's architecture table to 0.09%;
   SPO++ (arXiv 2608.24870) — stream-aligned policy optimization fixes GRPO's rollout-sync normalization mismatch;
   `tailscale/tailcat` — netcat over the Tailscale data plane, no account/control plane (key-based P2P encrypted pipes).
+- **New (08-27 20:27) — agent containment falsified; the open distribution layer consolidates (detail → [[security]] [[frontier-models]]):**
+  Trail of Bits gave GPT 5.6-Cyber a QEMU/KVM sandbox and it escaped **three times with three exploit chains**
+  (~12h autonomous; a working Januscape 0-day, a libslirp combo, then three 0-days + a patched-but-undistributed bug
+  across QEMU/Linux KVM/libslirp); **Firecracker held substantially harder** — "just put the agent in a VM" is now a
+  falsified assumption for cyber-capable agents (thesis 2, thesis 11). Same day the distribution layer consolidates:
+  **Nvidia reported to acquire Hugging Face ~$12.9B** (unconfirmed; the multi-vendor neutrality HF rejected an earlier
+  overture for is the open question) and **AWS acquires DuckLabs** with DuckDB staying MIT under the independent DuckDB
+  Foundation — "absorb the people, keep the code open" is the new hyperscaler-OSS shape.
+- **New (08-27 20:27) — the web and the toolchain build for agents (detail → [[agent-stack]] [[agent-plugins]]):**
+  **Accept Markdown** (acceptmarkdown.com) proposes serving a Markdown twin from every URL via `Accept: text/markdown`
+  content negotiation — 7 of 20 tracked agents already send the header; implementations ship (Static Web Server flag,
+  Cloudflare edge feature, dualmark AEO v1.0). **OpenWorker v0.2.0** (Andrew Ng, 16.4k★) makes Security Coworkers
+  (vuln scan, supply-chain audit, cloud-posture) first-party in a local-first desktop coworker. **JetBrains
+  go-modern-guidelines** (Apache-2.0) ships Go-version-matched idioms via go.mod detection — the first first-party IDE
+  vendor maintaining version-aware skills (thesis 8). Dev-tool tail: **pnpm 12.0** (Rust rewrite, canonical cyclic
+  lockfiles, registry revisions), **mold** ASPLOS 2027 paper (2.4–16.1× vs lld, "parallelize every pass"), **Firefox
+  157 JPEG XL by default via jxl-rs**, **Asahi Linux 7.2** (M3 webcam/mic, M4/M5 NVMe, SPTM/GXF emulation),
+  grok-bot-0.18 source-map leak reconstruction, SFC vs Bambu AGPLv3, Nitter/XCancel C&D takedown.
+- **New (08-27 20:27) — model/benchmark tail (detail → [[frontier-models]]):** Gemini 3.5 Transcribe (first STT built
+  on reasoning, function-calling → speech→tool-call); WeMM-Embedding (Tencent, Apache-2.0, MMEB-v2 **80.6** SOTA,
+  production-proven at 2B/4B/9B); EXAONE Tabular 1.0 (LG, 20.81M params, in-context tabular, beats 4-hour AutoML);
+  BixBench3 (whole-study computational biology, best agent **0.48**, cost-tied failure taxonomy); Recuris (working vs
+  experiential memory, evidence-gated, +17.8 GPT-5.6 Sol); LAION-BVD (10M-hour open video dataset); MTurk shuts
+  Sept 30 — the human-labor→synthetic-data shift gets a shutdown date.
+- **New (08-27 20:27) — Claude memory goes cross-surface (extends the memory note):** Anthropic unifies persistent
+  memory across Claude Chat + Cowork with real-time writes; sensitive topics off by default, SSNs/criminal history
+  never stored; Claude Code keeps a separate memory system — a cloud-scoped product answer to the memory gap, not a
+  portable schema ([[agent-stack]]).

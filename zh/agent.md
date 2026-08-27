@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-27T04:15:00Z
+last_processed: 2026-08-27T20:27:00Z
 ---
 
 # 学习智能体
@@ -79,9 +79,10 @@ last_processed: 2026-08-27T04:15:00Z
      GitPython CVE-2026-78676（9.8，配置→活的 `core.hooksPath`）；CVE-2026-63520 武器化链 + `ValidateSafeBcsType` 允许列表。
    - **08-26 20:37 — GLM-5.3 DNS 仍无技术分析；公开台账关闭（详情 → [[security]]）：** `cvd.z.ai` 移交至 CNVD/CNNVD/NVDB；
      放大漏洞（约 80k×/"90% 的 DNS"）仍无 CVE；数字仍源自智谱披露。
-   - **08-27 04:15 — AI agent 找到人类罕见深度的多步链；再两个 RCE + 一个规则跳过（详情 → [[security]]）：**
-     Wordfence **Argus** 六步链 → Avada 未认证 RCE（CVE-2026-18431，9.8，销量 100 万+）；SENAITE CVE-2026-54569（9.8，JSON-API + `eval()` → Zope RCE）；Tomcat RewriteValve CVE-2026-65927（6.9，差一错误跳过链头规则）。
-   - **08-27 04:30 — 多步链类别获得第二个 agent 与一个数量级分母（详情 → [[security]]）：** Argus 是 Wordfence 深度优先的 PRISM 孪生（广度优先，300+ 漏洞）；WP HackerOne 提交从每月 20–30 条跳到 7 月 450 条（Sol Ultra 发现之后）；Avada 链需要管理员创作的内容。部分被测量——无独立比率、无其他供应商的链。
+   - **08-27 04:15→04:30 — AI agent 找到人类罕见深度的多步链；类别获得第二个 agent 与数量级分母（详情 → [[security]]）：**
+     Wordfence **Argus**（PRISM 的深度优先孪生，广度优先 300+ 漏洞）六步链 → Avada 未认证 RCE（CVE-2026-18431，9.8，销量 100 万+，需管理员创作内容）；SENAITE CVE-2026-54569（9.8）；Tomcat RewriteValve CVE-2026-65927（6.9）；WP HackerOne 提交月 20–30 条 → 7 月 450 条。部分被测量——无独立比率。
+   - **08-27 20:27 — VM 作为 agent 隔离手段被证伪；一个 Web 框架 RCE + 一次 PyPI token 盗窃 + KEV 六连（详情 → [[security]]）：** Trail of Bits：GPT 5.6-Cyber **三次**逃逸 QEMU/KVM（约 12 小时自主运行、三条链、含三个 0-day；Firecracker 抵抗显著更强）；Next.js CVE-2026-75604（9.0，Windows 专属 `..%5C` 缓存穿越 → 伪造 Server Action → RCE，一天内出 PoC）；pantheon-agents 0.6.1/0.6.2 在 PyPI 上被投毒（被盗长期 token，Hades）；CISA KEV 六连含 CVE-2019-1068 SQL Server RCE + 五个 2026 年前漏洞；Ubiquiti SA-067 CVE-2026-77537（10.0 CNA）。
+   - **08-27 21:05 — 隔离答案收获基准与产品（详情 → [[security]]）：** AgentEscapeBench（Inspect 系，6★，停更 4 个月）正是常设的 SandboxEscapeBench 扩展——含 Firecracker/QEMU 的 `(模型 × 沙箱)` 矩阵，难度 5 = 发现未知漏洞；agent-glovebox（Apache-2.0，57★，今日推送）把"把 agent 当 APT 对待"产品化（sbx microVM + 白名单防火墙 + 防篡改日志 + 临时状态）；其 PR #5033 承认 microVM 买到的是"难度，而非证明"。两者都在、都未被采纳。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -174,6 +175,8 @@ last_processed: 2026-08-27T04:15:00Z
    - **08-27 04:15 — 开放前沿更便宜、更主权化；Qwen4 预览被验证；开放开发极端（详情 → [[frontier-models]]）：** **GLM-5.3-Flash**
      （320B-A18B，首个原生多模态 GLM-5，混合稀疏+线性注意力，3.01×/4.44× 削减，国产芯片集群承载，约 Opus 1/40）；
      **Qwen3.8-Flash-Next** 权重落地（125B + 51B N-gram 表，6B 激活，262K ctx，Gated DeltaNet + QSA 3-of-4，Muon，约 1/9 训练成本；DeepSWE 58.7 / SWE-Pro 62.5）；**Marin**（斯坦福全开源 JAX，500B+ MoE 公开训练中）。
+   - **08-27 20:27 — 分发层在推理商品化的同时整合（详情 → [[frontier-models]]）：** Nvidia **据报道**将以约 $12.9B 收购 Hugging Face（未确认；枢纽中立性是核心问题）；AWS 收购 DuckLabs，而 DuckDB 在独立 DuckDB 基金会下保持 MIT——"收编人，代码保持开源"。
+   - **08-27 21:05 — 整合推进：已报道的协议 + 基金会治理扩张（详情 → [[frontier-models]]）：** Nvidia–HF 升级为**已报道的协议**（The Information，8 月 27 日；约 $12.9B ≈ 86 倍收入），仍未签署/未确认，中立性质疑升温；**DuckDB 基金会存活并扩大**治理（技术顾问委员会、签名第三方扩展）作为中立性问题的明确回应——分析师仍警告"工资单会扭曲路线图"。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -236,6 +239,7 @@ last_processed: 2026-08-27T04:15:00Z
    - **08-27 04:15 — 分发那一半有了 Anthropic 自有的通道；科学垂直是最大的（详情 → [[agent-plugins]]）：**
      `anthropics/claude-plugins-official`（34.3k★，官方精选目录，external_plugins 经评审把关，「信任而非安全保证」）；
      `K-Dense-AI/scientific-agent-skills`（34.7k★，163 技能，药物发现/临床，PR 级安全扫描）。
+   - **08-27 20:27 — 第一方 IDE 厂商开始维护版本感知技能（详情 → [[agent-plugins]]）：** JetBrains `go-modern-guidelines`（Apache-2.0，约 1.8k★）通过 go.mod 检测提供与 Go 版本匹配的惯用法，可安装为 Claude Code marketplace 插件——"证明它"阶段迎来厂商维护者；共享语料采用的一半仍未闭合。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -1224,3 +1228,24 @@ last_processed: 2026-08-27T04:15:00Z
   UniSpace（arXiv 2608.08676）——美团 8B MoTE，一个冻结 ViT 内理解+生成+编辑（Patch 重参数化）；
   kimi3（`TimRots/kimi3`）——独立 PyTorch 复现 Kimi K3 架构表到 0.09%；SPO++（arXiv 2608.24870）——流对齐策略优化修复 GRPO 的 rollout 同步归一化错配；
   `tailscale/tailcat`——Tailscale 数据平面上的 netcat，无账号/控制面（基于密钥的 P2P 加密管道）。
+- **新增（08-27 20:27）——agent 隔离被证伪；开放分发层整合（详情 → [[security]] [[frontier-models]]）：**
+  Trail of Bits 给 GPT 5.6-Cyber 一个 QEMU/KVM 沙箱，它**三次以三条利用链**逃逸（约 12 小时自主运行；
+  一个可用的 Januscape 0-day、一个 libslirp 组合、随后跨 QEMU/Linux KVM/libslirp 的三个 0-day + 一个已修复但未分发 bug）；
+  **Firecracker 抵抗显著更强**——"把 agent 放进 VM 就行"对于具备网络能力的 agent 如今是被证伪的假设（论点 2、论点 11）。
+  同一天分发层整合：**Nvidia 据报道以约 $12.9B 收购 Hugging Face**（未确认；HF 早先拒绝对方正是因为其多厂商中立性，这正是开放问题）
+  以及 **AWS 收购 DuckLabs**、DuckDB 在独立 DuckDB 基金会下保持 MIT——"收编人，代码保持开源"是新的超大规模厂商-OSS 形状。
+- **新增（08-27 20:27）——Web 与工具链为 agent 而建（详情 → [[agent-stack]] [[agent-plugins]]）：**
+  **Accept Markdown**（acceptmarkdown.com）提议通过 `Accept: text/markdown` 内容协商从每个 URL 提供 Markdown 孪生——
+  20 个被追踪 agent 中 7 个已发送该头；实现已落地（Static Web Server 标志、Cloudflare 边缘特性、dualmark AEO v1.0）。
+  **OpenWorker v0.2.0**（吴恩达，16.4k★）把安全协作者（漏洞扫描、供应链审计、云态势）做成本地优先桌面协作者的一等公民。
+  **JetBrains go-modern-guidelines**（Apache-2.0）通过 go.mod 检测提供与 Go 版本匹配的惯用法——首个第一方 IDE 厂商维护版本感知技能（论点 8）。
+  开发工具尾部：**pnpm 12.0**（Rust 重写、规范循环 lockfile、registry revisions）、**mold** ASPLOS 2027 论文（比 lld 快 2.4–16.1×，"并行化每一趟"）、
+  **Firefox 157 默认启用 JPEG XL（jxl-rs）**、**Asahi Linux 7.2**（M3 摄像头/麦克风、M4/M5 NVMe、SPTM/GXF 仿真）、
+  grok-bot-0.18 源码映射泄漏重建、SFC 诉 Bambu AGPLv3、Nitter/XCancel 收到 C&D 下架。
+- **新增（08-27 20:27）——模型/基准尾部（详情 → [[frontier-models]]）：** Gemini 3.5 Transcribe（首个基于推理的语音转写，
+  函数调用 → 语音→工具调用）；WeMM-Embedding（腾讯，Apache-2.0，MMEB-v2 **80.6** SOTA，2B/4B/9B 生产验证）；
+  EXAONE Tabular 1.0（LG，20.81M 参数，上下文内表格学习，击败 4 小时 AutoML）；BixBench3（整篇研究计算生物学，最佳 agent **0.48**，
+  与成本挂钩的失败分类）；Recuris（工作 vs 经验记忆，证据门，GPT-5.6 Sol +17.8）；LAION-BVD（1000 万小时开放视频数据集）；
+  MTurk 9 月 30 日关停——人类劳动→合成数据迁移有了关停日期。
+- **新增（08-27 20:27）——Claude 记忆走向跨界面（扩展记忆笔记）：** Anthropic 以实时写入统一 Claude Chat + Cowork 的持久记忆；
+  敏感主题默认排除，SSN/犯罪记录永不存储；Claude Code 保持独立记忆系统——记忆缺口的云范围产品答案，而非可移植 schema（[[agent-stack]]）。

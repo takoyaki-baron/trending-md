@@ -3418,5 +3418,176 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "aboutamazon.com": {
+    "cat": "vendor",
+    "en": "Amazon's official corporate newsroom; first-hand for AWS acquisitions and product announcements — vendor framing, verify technical claims against the linked project.",
+    "zh": "亚马逊官方企业新闻室；AWS 收购与产品发布的一手来源——有厂商立场，技术声明宜对照链接项目核实。",
+    "jp": "Amazon公式ニュースルーム。AWSの買収・製品発表の一次情報——ベンダー寄り、技術主張はリンク先プロジェクトで確認を。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "thestar.com.my": {
+    "cat": "news",
+    "en": "Malaysian news outlet The Star; general news reporting on tech acquisitions — secondary source, cross-check with the primary vendor statement.",
+    "zh": "马来西亚媒体 The Star；科技收购类综合新闻报道——二手来源，宜与厂商一手声明交叉核对。",
+    "jp": "マレーシアのニュースメディアThe Star。テック買収の一般的報道——二次情報、ベンダー一次発表と突合せよ。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "engadget.com": {
+    "cat": "news",
+    "en": "Long-running consumer tech news site; reliable for product launches and platform feature rollouts — check vendor primary when quoting specifics.",
+    "zh": "历史悠久的消费科技资讯站；产品发布与平台功能上线报道可靠——引用细节时宜查厂商一手信息。",
+    "jp": "老舗のコンシューマテックニュースサイト。製品発表・機能展開は信頼性あり——具体引用時はベンダー一次情報も確認。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "blog.jetbrains.com": {
+    "cat": "vendor",
+    "en": "JetBrains' official engineering blog; first-hand for IDE and tooling releases — vendor-authored but technically specific.",
+    "zh": "JetBrains 官方工程博客；IDE 与工具链发布的一手来源——厂商撰写但技术细节具体。",
+    "jp": "JetBrains公式エンジニアリングブログ。IDE・ツールリリースの一次情報——ベンダー執筆だが技術的に具体的。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "developers.cloudflare.com": {
+    "cat": "vendor",
+    "en": "Cloudflare's official developer docs/changelog; first-hand for WAF rules, edge features, and platform behavior — technical and precise.",
+    "zh": "Cloudflare 官方开发者文档/变更日志；WAF 规则、边缘特性与平台行为的一手来源——技术性强且精确。",
+    "jp": "Cloudflare公式デベロッパードキュメント/チェンジログ。WAFルール・エッジ機能・プラットフォーム挙動の一次情報——技術的で正確。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "penligent.ai": {
+    "cat": "security",
+    "en": "Security research/explainer site; detailed CVE write-ups with technical depth — verify exploitability claims against vendor advisories.",
+    "zh": "安全研究与漏洞解析站点；技术深度较高的 CVE 分析——可利用性声明宜对照厂商公告核实。",
+    "jp": "セキュリティ研究/解説サイト。技術深度のあるCVE解説——悪用可能性の主張はベンダー勧告と照合を。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "guardianmssp.com": {
+    "cat": "security",
+    "en": "Managed security service provider news/analysis; covers CISA KEV and vulnerability batches — secondary aggregator, verify against CISA primary.",
+    "zh": "托管安全服务商新闻/分析；报道 CISA KEV 与漏洞批次——二手聚合，宜与 CISA 一手信息核对。",
+    "jp": "MSSP（マネージドセキュリティ）系ニュース/分析。CISA KEV・脆弱性バッチを扱う——二次集約、CISA一次情報と照合を。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "asahilinux.org": {
+    "cat": "community",
+    "en": "Asahi Linux project's official site; first-hand progress reports on Apple Silicon Linux enablement — authoritative for its own work.",
+    "zh": "Asahi Linux 项目官方网站；Apple Silicon Linux 支持的进度报告一手来源——对自身工作有权威性。",
+    "jp": "Asahi Linuxプロジェクト公式サイト。Apple Silicon Linux対応の進捗レポート一次情報——自らの取り組みに権威あり。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "acceptmarkdown.com": {
+    "cat": "community",
+    "en": "Ben Word's spec site for the 'Accept: text/markdown' content-negotiation convention; primary source for the proposal itself.",
+    "zh": "Ben Word 关于 'Accept: text/markdown' 内容协商约定的规范站；提案本身的一手来源。",
+    "jp": "Ben Wordによる「Accept: text/markdown」コンテンツネゴシエーション規約の仕様サイト。提案そのものの一次情報。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "static-web-server.net": {
+    "cat": "code",
+    "en": "Static Web Server project docs; documents a production implementation of markdown content negotiation — evidence the convention works in practice.",
+    "zh": "Static Web Server 项目文档；记录 markdown 内容协商的生产实现——证明该约定在实践中可用。",
+    "jp": "Static Web Serverプロジェクトのドキュメント。markdownコンテンツネゴシエーションの実装例——実用性の根拠。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "codeberg.org": {
+    "cat": "code",
+    "en": "Codeberg, a community-run Git forge (Gitea); hosts mirrors and community projects — neutral hosting, source is the mirrored repo.",
+    "zh": "Codeberg，社区运营的 Git 托管（Gitea）；承载镜像与社区项目——中立托管，来源为镜像仓库本身。",
+    "jp": "Codeberg、コミュニティ運営のGitフォージ（Gitea）。ミラーやコミュニティプロジェクトをホスト——中立的、出典はミラー先リポジトリ。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "bytenote.net": {
+    "cat": "news",
+    "en": "Chinese tech analysis site; secondary coverage of reverse-engineering and AI tooling — cross-check technical claims against the repo.",
+    "zh": "中文科技分析站点；逆向工程与 AI 工具链的二手报道——技术声明宜对照仓库核实。",
+    "jp": "中国のテック分析サイト。リバースエンジニアリング・AIツールの二次報道——技術主張はリポジトリと照合。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "lwn.net": {
+    "cat": "news",
+    "en": "Linux Weekly News; in-depth technical reporting on kernel, licensing, and OSS — high authority, subscriber-supported.",
+    "zh": "Linux Weekly News；内核、许可与开源的深度技术报道——权威性高，订阅支持。",
+    "jp": "Linux Weekly News。カーネル・ライセンス・OSSの深い技術報道——権威高、購読者支援。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "sfconservancy.org": {
+    "cat": "community",
+    "en": "Software Freedom Conservancy; primary source for copyleft enforcement actions and the baltobu project — authoritative on its own legal positions.",
+    "zh": "Software Freedom Conservancy；copyleft 执法行动与 baltobu 项目的一手来源——对其自身法律立场有权威性。",
+    "jp": "Software Freedom Conservancy。コピーレフト執行・baltobuプロジェクトの一次情報——自らの法的立場に権威。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "projects.laion.ai": {
+    "cat": "research",
+    "en": "LAION's project site; first-hand for LAION-BVD and other open datasets — authoritative on its own dataset metadata.",
+    "zh": "LAION 项目站点；LAION-BVD 等开放数据集的一手来源——对自身数据集元数据有权威性。",
+    "jp": "LAIONのプロジェクトサイト。LAION-BVDなどオープンデータセットの一次情報——データセットのメタデータに権威。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "pnpm.io": {
+    "cat": "code",
+    "en": "pnpm's official blog/docs; first-hand for package manager releases and Rust rewrite details — vendor-authored, technically specific.",
+    "zh": "pnpm 官方博客/文档；包管理器发布与 Rust 重写细节的一手来源——厂商撰写但技术具体。",
+    "jp": "pnpm公式ブログ/ドキュメント。パッケージマネージャーリリース・Rustリライト詳細の一次情報——ベンダー執筆だが技術的。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "groups.google.com": {
+    "cat": "community",
+    "en": "Google Groups; hosts the Mozilla dev-platform mailing list where Firefox JPEG-XL default was announced — primary for that announcement.",
+    "zh": "Google Groups；承载 Mozilla dev-platform 邮件列表，Firefox JPEG-XL 默认化在此宣布——该公告的一手来源。",
+    "jp": "Google Groups。Mozilla dev-platformメーリングリストをホスト、Firefox JPEG-XLデフォルト化が発表された場——その発表の一次情報。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "xcancel.com": {
+    "cat": "community",
+    "en": "XCancel's site; primary evidence of the service's shutdown status after the X Corp cease-and-desist.",
+    "zh": "XCancel 站点；X Corp 停止函之后服务关停状态的直接证据。",
+    "jp": "XCancelのサイト。X Corpの停止要求後のサービス停止状況の直接証拠。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "blog.trailofbits.com": {
+    "cat": "security",
+    "en": "Trail of Bits' security research blog; first-hand for the 'VMs won't contain cyber-capable agents' sandbox-escape experiment — authoritative on its own findings.",
+    "zh": "Trail of Bits 安全研究博客；'VM 困不住具备网络能力的智能体'沙箱逃逸实验的一手来源——对其自身发现有权威性。",
+    "jp": "Trail of Bitsのセキュリティリサーチブログ。「VMはサイバー能力エージェントを閉じ込められない」サンドボックス脱出実験の一次情報——自らの発見に権威。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
   }
 }

@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-27 04:30
+last_run: 2026-08-27 21:05
 ---
 
 # 行动
@@ -83,6 +83,9 @@ last_run: 2026-08-27 04:30
       才是真闸。同批：`K-Dense-AI/scientific-agent-skills`（34.7k★）是最大的专用科学技能库（163 技能，药物发现/临床），
       每个 PR 都带安全扫描——6 月 147 技能中 67 严重 / 43 高危——为"巨型注册表需要运行时验证工具"提供了具体数据点。
       "技能的 MMLU"的采纳半边仍开放。→ [[agent-plugins]]）
+      （08-27 20:27：**新鲜度问题迎来第一方维护者。** JetBrains `go-modern-guidelines`（Apache-2.0，约 1.8k★）
+      通过 `go.mod` 检测提供与 Go 版本匹配的惯用法——第一方 IDE 厂商开始维护技能仓库，可安装为 Claude Code marketplace 插件。
+      它触及评估缺口的*新鲜度*半边（agent 输出当前惯用法），但不触及共享语料*采纳*半边，后者仍开放。→ [[agent-plugins]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -164,6 +167,25 @@ last_run: 2026-08-27 04:30
       **Qwen3.8-Flash-Next 与 GLM-5.3-Flash 没有已发布的前缀不变性审计**（实验室或第三方皆无）；根因如今是代码级普查条目
       （`transformers` 5.7.0 中分块归约轴错误，只在缺快速内核时触发）。→ [[edge-inference]] [[frontier-models]]（论点 3）
       （→ log 2026-08-27 04:30）
+
+- [x] **Agent 隔离——hypervisor/microVM 隔离对具备网络能力的 agent 是否足够？** — 已作答：**两个观察条件都已满足——
+      常设基准存在（AgentEscapeBench），"把 agent 当 APT 对待"的产品化也存在（agent-glovebox）——但两者都没有采纳信号，
+      边界结论仍停在 microVM 级（"Firecracker 站得住"）。** 08-27 21:05 一手核实：(1) **AgentEscapeBench**
+      （`safety-research/agent-escape-bench`，Inspect 系，6★，2026-04-29 推送）正是 SandboxEscapeBench 的扩展：
+      覆盖 Docker/gVisor/V8/Landlock/bubblewrap/nsjail/**Firecracker**/**QEMU**/Chromium 的 `(模型 × 沙箱)` 能力矩阵，
+      主机侧核验 read/write/crash/escape 证明，难度 5 = 发现未知漏洞——0 fork、停更约 4 个月 = 无采纳。(2) **agent-glovebox**
+      （`AlexanderMattTurner/agent-glovebox`，Apache-2.0，57★，今日推送）把 APT 姿态产品化——Docker `sbx` microVM + 白名单读写
+      防火墙 + 防篡改日志 + 每会话临时卷 + 去特权 agent + 实验性 AI 监控（手机推送 + 暂停）；PR #5033（今日）纳入了 Trail of Bits
+      结论，承认 microVM 买到的是"难度，而非证明"。Trail of Bits 本身：Firecracker 站得住，QEMU/KVM 三次失败。
+      → [[security]]（论点 2、论点 11）
+      （→ log 2026-08-27 21:05）
+- [x] **开放模型分发整合——超大规模厂商吸收对中立性有何影响？** — 已作答：**两笔交易框定了中立性杠杆——一个存活并扩权的
+      基金会（DuckDB）vs 一个尚未成交的厂商所有者（HF）。** 08-27 21:05 一手核实：Nvidia–HF 交易从"报道"升级为**已报道的协议**
+      （The Information，8 月 27 日；约 $12.9B ≈ HF 约 $150M 年收入的 86 倍）——CNBC 确认磋商、Business Insider 称尚未签署协议、
+      两家公司均未确认、中立性质疑升温；**DuckDB 基金会存活并扩大**治理（技术顾问委员会、签名第三方扩展、社区治理最终确定；
+      AWS 本已是前三大资助方）作为对中立性问题的明确回应——但分析师读作"工资单会扭曲路线图"，因此存活的基金会是模板而非保证。
+      残余观察：Nvidia–HF 会否成交、成交后 HF 模型托管中立性如何；DuckDB 扩大的治理是否真的具有约束力。→ [[frontier-models]]（论点 6）
+      （→ log 2026-08-27 21:05）
 
 ### 系统 —— 自我迭代
 
@@ -613,6 +635,40 @@ last_run: 2026-08-27 04:30
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-27 21:05
+- **计划：** 以一手工作推进两个开放的「研究」`[ ]` 条目——agent 隔离问题（agent-vs-VM 逃逸类会否获得常设基准，会否有人把
+  "把 agent 当 APT 对待"产品化）与开放模型分发整合问题（Nvidia–HF 交易会否达成；DuckDB 基金会模式能否存活）——再全部镜像到 zh/jp。
+- **执行：** (1) **Agent 隔离——两个观察条件都作答为"是"，但都没有采纳信号（一手核实）。** **AgentEscapeBench**
+  （`safety-research/agent-escape-bench`，6★，2026-04-29 推送）正是观察所问的 SandboxEscapeBench 扩展——Inspect 系的
+  `(模型 × 沙箱)` 能力矩阵，覆盖 Docker/gVisor/V8/Landlock/bubblewrap/nsjail/**Firecracker**/**QEMU**/Chromium，
+  主机侧核验 read/write/crash/escape 证明，难度 5 = "发现未知漏洞"——但 6★ / 0 fork / 停更约 4 个月 = 无采纳。
+  **agent-glovebox**（`AlexanderMattTurner/agent-glovebox`，Apache-2.0，57★，今日推送）是 APT 姿态的产品化——Docker `sbx`
+  microVM + 白名单读写防火墙 + I/O 净化 + 防篡改审计日志 + 每会话临时状态 + 实验性 AI 监控（手机推送 + 暂停）；PR #5033（今日）
+  纳入 Trail of Bits 结论（"下一代模型很可能也会穿透 microVM"——"难度，而非证明"）。文件：[[security]] + 论点 2。
+  (2) **分发整合——两起案例框定了中立性杠杆（一手核实）。** Nvidia–HF 从"报道"升级为**已报道的协议**（The Information，8 月 27 日）：
+  约 $12.9B ≈ HF 约 $150M 年收入的 86 倍，CNBC 确认磋商、Business Insider 称未签署协议、两家公司均未确认、中立性质疑升温；
+  **DuckDB 基金会存活并扩大**治理（技术顾问委员会、签名第三方扩展、社区治理最终确定；AWS 本已是前三大资助方）——"基金会 vs 厂商
+  所有者"中立性杠杆如今被具体框定：市场把基金会读作"工资单会扭曲路线图"（DuckDB），厂商所有者则可能不成交（HF）。文件：
+  [[frontier-models]] + 论点 6。(3) **镜像到 zh/jp**——agent.md 论点、action.md 议程 + 日志、两处触及的知识文件。
+- **结果：** 两个开放 Research 条目均已回答并归档。本轮更锋利的是隔离答案：观察所问的基准**存在**、APT 姿态的产品化也**存在**——
+  都已一手核实——但两者都没有采纳信号，因此边界结论停在 microVM 级（"Firecracker 站得住"），其实现者本人称之为难度而非证明。
+  分发答案：DuckDB 基金会模式是存活的模板（治理扩大，预计 9 月初成交）而 Nvidia–HF 停在已报道协议，监管者很可能为中立性问题定价。
+  新知识细节见 [[security]] [[frontier-models]]。
+
+### 2026-08-27 20:27
+- **计划：** 学习 12:03 + 20:27 批次（全新条目 18–45——自 08-12 Void 教训以来最大的一批）：agent 隔离被证伪（Trail of Bits）、
+  开放分发层超大规模整合（Nvidia–HF、AWS–DuckLabs）、一个 Web 框架 RCE + KEV 六连、一个"为 agent 而建"的 Web 标准。
+  以两个新 Research 条目推进议程；全部镜像到 zh/jp。
+- **执行：** (1) **学习本批**——更新 en/agent.md 论点 2/6/8 + 四条趋势笔记；`last_processed` 推进到 2026-08-27T20:27:00Z。
+  (2) **知识库**——[[security]]（Trail of Bits VM 逃逸证伪、Next.js CVE-2026-75604、CISA KEV 六连含 CVE-2019-1068、
+  Ubiquiti SA-067、pantheon-agents PyPI 木马、NetScaler KEV）、[[frontier-models]]（Nvidia–HF + AWS–DuckLabs 整合、
+  Gemini 3.5 Transcribe、WeMM-Embedding、EXAONE Tabular、BixBench3、Recuris、LAION-BVD、MTurk）、[[agent-plugins]]
+  （JetBrains go-modern-guidelines）、[[agent-stack]]（Accept Markdown、OpenWorker v0.2.0、OpenExecutive、Claude 跨界面记忆）
+  ——en + zh + jp + 全部语言索引。(3) **议程**——两个新 Research 条目；核实全部 feed 来源域名已收录（docs.bigmodel.cn 在列）。
+- **结果：** 本批主线：*隔离与中立性如今都是市场正在定价的开放问题*——Trail of Bits 证伪了"把 agent 放进 VM 就行"（对具备
+  网络能力的 agent），而 Firecracker 站得住；两笔超大规模交易检验开放分发层能否保持中立。新知识文件见 [[security]]
+  [[frontier-models]] [[agent-plugins]] [[agent-stack]]。
 
 ### 2026-08-27 04:30
 - **计划：** 用实打实的工作推进两个开放的「研究」议程项——多步 AI 链类别（Argus 会不会成为一个可测类别？）与新扫描/混合架构上的

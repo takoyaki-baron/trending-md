@@ -1324,3 +1324,42 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   and pauses before irreversible commands (`rm -rf` defaults to no). "A distribution of Pi, not a fork" keeps the
   growing Pi ecosystem compatible; explicit end-states are a small but real accountability shift for agent CLIs
   (thesis 12's harness-engineering thread).
+
+## The web builds for agents + a security-first local coworker (08-27 20:27)
+
+- **Accept Markdown — a content-negotiation convention to serve AI agents clean text (acceptmarkdown.com, Ben Word /
+  Roots/Sage).** Proposes serving a **Markdown variant of every page from the same URL** via standard HTTP content
+  negotiation: client sends `Accept: text/markdown`, server responds `Content-Type: text/markdown` (with
+  `Vary: Accept`) instead of HTML. The site tracks 20 AI agents: **7 already send the header** (Claude Code, Copilot
+  Chat/CLI, Cursor, Microsoft Copilot, OpenClaw, OpenCode) while consumer agents (ChatGPT browsing, Claude.ai web,
+  Gemini, Grok, Perplexity) still fetch HTML. Implementations already exist — Static Web Server's native
+  `--accept-markdown` flag, WordPress plugins, Cloudflare's "Markdown for Agents" edge feature, dualmark's "AEO
+  Specification v1.0." **Why it matters:** the structured alternative to `llms.txt` — instead of one index file, every
+  URL serves its own markdown twin (fewer tokens, no nav noise, one standard agents can rely on once servers adopt
+  it). Content negotiation is decades-old HTTP; agents are finally the client that makes it worth turning on.
+- **OpenWorker v0.2.0 (`andrewyng/openworker`, MIT, 16.4k★, +1,059/day) — Andrew Ng's local-first AI coworker adds
+  built-in security agents.** A local-first desktop "AI coworker" producing finished deliverables rather than chat;
+  v0.2.0 adds **Security Coworkers** — code-vulnerability scanning, supply-chain dependency audit, and cloud-posture
+  checks — plus Skills (reusable workflow packs), cross-session Memory tied to project folders, an auto-approve
+  reviewer mode, a guided MCP server-add flow, and Intel Mac (x64) builds. Runs your own model key
+  (OpenAI/Anthropic/Google/Ollama), keeps conversations + tokens local, built on Ng's aisuite. **Why it matters:**
+  "the open-source AI coworker you can audit" now ships a security posture — shift-left security agents as first-party
+  features, and the clearest mainstream signal yet that local-first agent workstations are a product category (extends
+  the Perplexity Portable Computer note).
+- **OpenExecutive (`SenteLabsAI/OpenExecutive`, Apache-2.0, ~1k★, 686-pt HN debut) — fired developers ship an
+  open-source "AI CEO."** One coherent executive persona backed by **8 specialist Claude agents** (CSO, CFO, CHRO,
+  General Counsel, COO, CMO, CPO, Board Communications) routed by an Executive Orchestrator, with RAG over built-in
+  MBA-level knowledge + uploaded company documents (ChromaDB), episodic memory in SQLite, a scheduler, and
+  web/Slack/email/Telegram/Discord/CLI interfaces. Ships a **29-scenario LLM-judge eval suite (CI gate ≥3.5/5)** and
+  runs on local models (Ollama, vLLM). A functioning multi-agent executive stack under Apache-2.0 — the open-source
+  retort to "replace engineers with AI" is itself an AI product.
+- **Anthropic unifies Claude memory across Chat and Cowork (Aug 25) — the memory gap gets a cloud-scoped product
+  answer, not a schema.** Persistent memory now spans Claude Chat + Claude Cowork with **real-time memory writes**
+  during chats (not post-hoc summaries); users manage per-topic entries in Settings (one correction applies
+  everywhere). Sensitive topics (health, race, ethnicity, religion, politics, gender identity) are **excluded by
+  default** behind an opt-in toggle; SSNs, criminal history, immigration status are never stored. On by default for
+  Free/Pro/Max (web/desktop/mobile); not retroactive; **Claude Code keeps a separate memory system**. **Why it
+  matters:** editable persistent memory spanning a chat surface + a computer-use agent is the missing primitive for
+  long-running agent work — but it is a *product* layer (hosted, non-portable, per-vendor), exactly the shape the
+  memory-standardization note predicts: MCP standardizes the connection, so memory fills by product adoption, not a
+  shared format ([[agent-stack]] memory note).

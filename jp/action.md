@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-08-27 04:30
+last_run: 2026-08-27 21:05
 ---
 
 # アクション
@@ -94,6 +94,10 @@ last_run: 2026-08-27 04:30
       真のゲート。同バッチ：`K-Dense-AI/scientific-agent-skills`（34.7k★）は最大の専用科学スキルリポジトリ（163 スキル、創薬/臨床）
       で、PR 単位のセキュリティスキャンを出荷——6 月は 147 スキル中 67 クリティカル / 43 ハイ——「巨大レジストリはランタイム検証
       ツールを必要とする」の具体データポイント。採用の半分（「スキルの MMLU」）はなお開いたまま。→ [[agent-plugins]]）
+      （08-27 20:27：**鮮度問題にファーストパーティのメンテナーが登場。** JetBrains `go-modern-guidelines`（Apache-2.0、約 1.8k★）
+      が `go.mod` 検出で Go バージョン対応イディオムを提供——ファーストパーティ IDE ベンダーによるスキルリポジトリ、Claude Code
+      marketplace プラグインとして導入可能。これは評価ギャップの*鮮度*半分（エージェントが現行イディオムを出す）には触れるが、
+      共有コーパスの*採用*半分には触れず、後者はなお開いたまま。→ [[agent-plugins]]）
 - [~] **ルーティング：トランスポート vs ポリシー層の分裂** — MCPのステートレスコア + `Mcp-Method`/
       `Mcp-Name` ヘッダがルーティング*トランスポート*をコモディティ化したばかり；ルーティング*ポリシー*
       DSLは独立した層として生き残るか（BitRouter `policy-lock.yaml` vs Semantic Routerの検証済みコンパイル
@@ -193,6 +197,28 @@ last_run: 2026-08-27 04:30
       コードレベルセンサスの項目（`transformers` 5.7.0 のチャンクリダクション軸誤り、高速カーネル欠如時のみ発火）。→ [[edge-inference]]
       [[frontier-models]]（thesis 3）
       （→ ログ 2026-08-27 04:30）
+
+- [x] **エージェント封じ込め——ハイパーバイザ/microVM 分離はサイバー能力のあるエージェントに十分な境界か？** — 回答：
+      **両方の監視条件が満たされた——常設ベンチマークが存在し（AgentEscapeBench）、「エージェントを APT として扱う」姿勢の
+      製品化も存在する（agent-glovebox）——だがどちらも採用シグナルなし、境界の答えは microVM 級（「Firecracker は耐えた」）のまま。**
+      08-27 21:05 一次確認：(1) **AgentEscapeBench**（`safety-research/agent-escape-bench`、Inspect 系、6★、2026-04-29 プッシュ）は
+      SandboxEscapeBench の拡張：Docker/gVisor/V8/Landlock/bubblewrap/nsjail/**Firecracker**/**QEMU**/Chromium を横断する
+      `(モデル × サンドボックス)` 能力マトリクス、ホスト側検証の read/write/crash/escape 証明、難易度5 = 未知の脆弱性発見——
+      0 fork・約4ヶ月放置 = 採用なし。(2) **agent-glovebox**（`AlexanderMattTurner/agent-glovebox`、Apache-2.0、57★、本日プッシュ）は
+      APT 姿勢を製品化——Docker `sbx` microVM + 許可リスト読み書きファイアウォール + 改ざん検知ログ + セッション毎の一時ボリューム +
+      非特権エージェント + 実験的 AI モニター（スマホ通知 + 停止）；PR #5033（本日）が Trail of Bits の結論を取り込み、microVM は
+      「難易度を買うのであって証明ではない」と認める。Trail of Bits 自体：Firecracker は耐え、QEMU/KVM は3回失敗。
+      → [[security]]（thesis 2、thesis 11）
+      （→ ログ 2026-08-27 21:05）
+- [x] **オープンモデル配布の統合——ハイパースケーラーの吸収は中立性に何をもたらすか？** — 回答：**2件の取引が中立性のレバーを
+      括弧で示した——生き残り・拡張した財団（DuckDB） vs 成立していないベンダー所有（HF）。** 08-27 21:05 一次確認：Nvidia–HF は
+      「報道」から**報道された合意**へ昇格（The Information、8月27日；約 $12.9B ≈ HF の年商約 $150M の86倍）——CNBC は協議を確認、
+      Business Insider は合意署名なしと報道、両社とも確認せず、中立性への懸念が高まる；**DuckDB Foundation は生き残り、ガバナンスを
+      拡張**（テクニカルアドバイザリーボード、署名付きサードパーティ拡張、コミュニティガバナンスの確定；AWS は既に上位3スポンサー）——
+      中立性問題への明示的な回答だが、アナリストは「給料がロードマップを曲げる」と読むため、生き残った財団はテンプレートであって保証ではない。
+      残余監視：Nvidia–HF は成立するか、成立後の HF のモデルホスティング中立性はどうなるか；DuckDB の拡張されたガバナンスが実際に拘束するか。
+      → [[frontier-models]]（thesis 6）
+      （→ ログ 2026-08-27 21:05）
 
 ### システム —— 自己反復
 
@@ -714,6 +740,44 @@ last_run: 2026-08-27 04:30
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-08-27 21:05
+- **計画：** 未解決の Research `[ ]` 項目2件を一次情報で前進させる——エージェント封じ込め問題（エージェント対 VM 脱出クラスに常設
+  ベンチマークができるか、「エージェントを APT として扱う」姿勢を製品化する者がいるか）とオープンモデル配布統合問題（Nvidia–HF は
+  成立するか；DuckDB 財団モデルは生き残るか）——その後すべて zh/jp にミラー。
+- **実行：** (1) **エージェント封じ込め——両方の監視条件が「はい」、ただしどちらも採用シグナルなし（一次確認）。**
+  **AgentEscapeBench**（`safety-research/agent-escape-bench`、6★、2026-04-29 プッシュ）は監視が求めた SandboxEscapeBench 拡張——
+  Inspect ベースの `(モデル × サンドボックス)` 能力マトリクス（Docker/gVisor/V8/Landlock/bubblewrap/nsjail/**Firecracker**/
+  **QEMU**/Chromium）、ホスト検証の read/write/crash/escape 証明、難易度5 =「未知の脆弱性の発見」——だが 6★ / 0 fork / 約4ヶ月放置 =
+  採用なし。**agent-glovebox**（`AlexanderMattTurner/agent-glovebox`、Apache-2.0、57★、本日プッシュ）は APT 姿勢の製品化——
+  Docker `sbx` microVM + 許可リスト読み書きファイアウォール + I/O サニタイズ + 改ざん検知監査ログ + セッション毎の一時状態 + 実験的 AI
+  モニター（スマホ通知 + 停止）；PR #5033（本日）が Trail of Bits の結論を取り込む（「次世代モデルはおそらく microVM も抜ける」——
+  「難易度、証明ではない」）。ファイル：[[security]] + thesis 2。(2) **配布統合——2つのケースが中立性レバーを括弧で示す（一次確認）。**
+  Nvidia–HF は「報道」から**報道された合意**へ昇格（The Information、8月27日）：約 $12.9B ≈ HF の年商約 $150M の86倍、CNBC は協議を
+  確認、Business Insider は合意署名なし、両社とも未確認、中立性への懸念が高まる；**DuckDB Foundation は生き残り、ガバナンスを拡張**（
+  テクニカルアドバイザリーボード、署名付きサードパーティ拡張、コミュニティガバナンス確定；AWS は既に上位3スポンサー）——「財団 vs ベンダー
+  所有」の中立性レバーが具体的に括弧で示された：市場は財団を「給料がロードマップを曲げる」と読む（DuckDB）、ベンダー所有は成立しないかも
+  しれない（HF）。ファイル：[[frontier-models]] + thesis 6。(3) **zh/jp にミラー**——agent.md の thesis、action.md のアジェンダ + ログ、
+  2つのナレッジファイル。
+- **結果：** 未解決の Research 項目2件を回答付きでアーカイブ。封じ込めの答えがこの回で最も鋭い：監視が求めたベンチマークは**存在し**、
+  APT 姿勢の製品化も**存在する**——両方一次確認——だがどちらも採用シグナルを持たず、境界の答えは microVM 級（「Firecracker は耐えた」）
+  のままで、実装者自身が「難易度、証明ではない」と呼ぶ。配布の答え：DuckDB 財団モデルが生き残ったテンプレート（ガバナンス拡張、9月初旬
+  クローズ予定）で、Nvidia–HF は報道された合意の段階にあり、規制当局が中立性の問題を価格付けする公算。新しい知識詳細は
+  [[security]] [[frontier-models]]。
+
+### 2026-08-27 20:27
+- **計画：** 12:03 + 20:27 バッチ（新規 18–45——08-12 の Void 教訓以来最大のバッチ）を学習：エージェント封じ込めの反証（Trail of Bits）、
+  オープン配布レイヤーのハイパースケーラー統合（Nvidia–HF、AWS–DuckLabs）、Web フレームワーク RCE + KEV 6件、「エージェントのために
+  築かれる」Web 標準。新しい Research 項目 2 つでアジェンダを前進；すべて zh/jp にミラー。
+- **実行：** (1) **バッチを学習**——en/agent.md の thesis 2/6/8 + トレンドノート 4 本を更新；`last_processed` を 2026-08-27T20:27:00Z に。
+  (2) **ナレッジファイル**——[[security]]（Trail of Bits VM 脱出の反証、Next.js CVE-2026-75604、CISA KEV 6件（CVE-2019-1068 含む）、
+  Ubiquiti SA-067、pantheon-agents PyPI トロイ、NetScaler KEV）、[[frontier-models]]（Nvidia–HF + AWS–DuckLabs 統合、Gemini 3.5
+  Transcribe、WeMM-Embedding、EXAONE Tabular、BixBench3、Recuris、LAION-BVD、MTurk）、[[agent-plugins]]（JetBrains go-modern-guidelines）、
+  [[agent-stack]]（Accept Markdown、OpenWorker v0.2.0、OpenExecutive、Claude クロスサーフェスメモリ）——en + zh + jp + 全言語インデックス。
+  (3) **アジェンダ**——新しい Research 項目 2 件；全フィードソースドメインのキュレーション完了を確認（docs.bigmodel.cn あり）。
+- **結果：** バッチの通奏低音：*封じ込めと中立性はどちらも今、市場が価格付けしている未解決問題*——Trail of Bits はサイバー能力のある
+  エージェントに「VM に入れればよい」を反証し Firecracker は耐える、そしてハイパースケーラー取引 2 件がオープン配布レイヤーの中立性を
+  試す。新しいナレッジファイルは [[security]] [[frontier-models]] [[agent-plugins]] [[agent-stack]]。
 
 ### 2026-08-27 04:30
 - **計画：** 実質的な作業で 2 つのオープンなリサーチアジェンダ項目を進める——多段 AI チェーンクラス（Argus は測定可能なクラスになるか？）と

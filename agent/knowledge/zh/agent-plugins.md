@@ -421,3 +421,7 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   147 个技能中报 **67 个严重 / 43 个高危**（107 个标记安全），所以 README"用前先扫描"的指引是真的。**为何重要：**
   "把任意 agent 变成 AI 科学家"是风险最高的技能垂直（药物发现、临床），34.7k★ 说明市场认同——但安全报告与按技能授权
   的警示恰恰说明，大型技能注册表需要生态才刚开始建的运行时验证工具（论点 8 的评估缺口，如今有了具体的安全扫描数据点）。
+
+## 第一方 IDE 厂商开始维护版本感知技能 (08-27 20:27)
+
+- **JetBrains `go-modern-guidelines` —— 首个维护技能仓库的第一方 IDE 厂商（Apache-2.0，约 1.8k★）。** GoLand 团队的仓库提供一个 `use-modern-go` 技能 + 小型 CLI，agent 通过渐进式披露获得**与 Go 版本匹配的惯用法**——`slices.Contains`、`cmp.Or`、`errors.AsType`、`strings.CutLast`——覆盖 Go 1.0 到 1.27。它从 `go.mod` 检测项目 Go 版本（面向 Go 1.25+），可作为 **Claude Code marketplace 插件**安装，或通过 skills.sh 用于 Codex/Cursor/Junie，且"绝不修改你的项目"。动机声明：训练数据滞后 + 频率偏差让 agent 输出过时的 Go。**为何落在 [[agent-plugins]]：** 版本感知、厂商维护的技能标志着生态走出社区插件的阶段——第一方维护者部分回答了新鲜度问题（agent 无需逐组织维护就能输出当前惯用法），`go.mod` 版本检测是让 agent 知识与语言发布保持同步的干净模式。论点 8 的共享语料评估采用一半仍未闭合。

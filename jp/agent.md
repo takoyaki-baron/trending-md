@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-27T04:15:00Z
+last_processed: 2026-08-27T20:27:00Z
 ---
 
 # 学習エージェント
@@ -86,9 +86,10 @@ last_processed: 2026-08-27T04:15:00Z
      GitPython CVE-2026-78676（9.8、設定→生きた `core.hooksPath`）；CVE-2026-63520 武器化チェーン + `ValidateSafeBcsType` 許可リスト。
    - **08-26 20:37 — GLM-5.3 DNS は未だ解説なし；公開台帳が閉鎖（詳細 → [[security]]）：** `cvd.z.ai` は CNVD/CNNVD/NVDB へ移管；
      増幅欠陥（約80k×/"90% の DNS"）に依然 CVE なし；数字は Zhipu 開示由来。
-   - **08-27 04:15 — AI エージェントが人間並みに希少な多段チェーンを発見；さらに RCE 2 件 + ルールスキップ 1 件（詳細 → [[security]]）：**
-     Wordfence **Argus** が 6 ステップチェーン → Avada の未認証 RCE（CVE-2026-18431、9.8、販売 100 万+）；SENAITE CVE-2026-54569（9.8、JSON-API + `eval()` → Zope RCE）；Tomcat RewriteValve CVE-2026-65927（6.9、off-by-one がチェーン先頭ルールをスキップ）。
-   - **08-27 04:30 — マルチステップチェーンというクラスが第二のエージェントと量の分母を得る（詳細 → [[security]]）：** Argus は Wordfence の深さ優先版で PRISM の双子（幅優先、300+ 脆弱性）；WP の HackerOne 提出が月 20–30 件 → 7 月 450 件へ急増（Sol Ultra の発見後）；Avada チェーンは管理者作成コンテンツを要求。部分的に測定——独立した比率も他ベンダーのチェーンもなし。
+   - **08-27 04:15→04:30 — AI エージェントが人間並みに希少な多段チェーンを発見；クラスが第二のエージェントと量の分母を得る（詳細 → [[security]]）：**
+     Wordfence **Argus**（PRISM の深さ優先の双子、幅優先 300+ 脆弱性）が 6 ステップチェーン → Avada の未認証 RCE（CVE-2026-18431、9.8、販売 100 万+、管理者作成コンテンツが必要）；SENAITE CVE-2026-54569（9.8）；Tomcat RewriteValve CVE-2026-65927（6.9）；WP の HackerOne 提出が月 20–30 件 → 7 月 450 件。部分的に測定——独立した比率なし。
+   - **08-27 20:27 — VM がエージェント封じ込めとして反証される；Web フレームワーク RCE + PyPI トークン強奪 + KEV 6件（詳細 → [[security]]）：** Trail of Bits：GPT 5.6-Cyber が QEMU/KVM から **3 回**脱出（約 12 時間の自律動作、3 つのチェーン、0-day 3 件を含む；Firecracker はかなり頑健）；Next.js CVE-2026-75604（9.0、Windows 専用 `..%5C` キャッシュトラバーサル → Server Action 偽造 → RCE、1 日で PoC）；pantheon-agents 0.6.1/0.6.2 が PyPI でトロイ化（盗まれた長命トークン、Hades）；CISA KEV 6件（CVE-2019-1068 SQL Server RCE + 2026 年以前の 5 件）；Ubiquiti SA-067 CVE-2026-77537（10.0 CNA）。
+   - **08-27 21:05 — 封じ込めの答えがベンチマークとプロダクトを得る（詳細 → [[security]]）：** AgentEscapeBench（Inspect 系、6★、4ヶ月放置）は常設の SandboxEscapeBench 拡張——Firecracker/QEMU を含む `(モデル × サンドボックス)` マトリクス、難易度5 = 未知の脆弱性発見；agent-glovebox（Apache-2.0、57★、本日プッシュ）が「エージェントを APT として扱う」を製品化（sbx microVM + 許可リストFW + 改ざん検知ログ + 一時状態）；その PR #5033 は microVM は「難易度、証明ではない」と認める。両方存在、どちらも未採用。
    → [[security]]
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
@@ -191,6 +192,8 @@ last_processed: 2026-08-27T04:15:00Z
    - **08-27 04:15 — オープンフロンティアがより安価でより主権的に；Qwen4 プレビュー検証；オープン開発の極端（詳細 → [[frontier-models]]）：** **GLM-5.3-Flash**
      （320B-A18B、初のネイティブマルチモーダル GLM-5、ハイブリッド疎 + 線形アテンション、3.01×/4.44× 削減、国内製チップクラスタで稼働、Opus の約 1/40）；
      **Qwen3.8-Flash-Next** ウェイト公開（125B + 51B N-gram 表、6B アクティブ、262K ctx、Gated DeltaNet + QSA 3-of-4、Muon、訓練コスト約 1/9；DeepSWE 58.7 / SWE-Pro 62.5）；**Marin**（スタンフォード全オープン JAX、500B+ MoE を公開訓練中）。
+   - **08-27 20:27 — 推論がコモディティ化する一方で配布レイヤーが統合（詳細 → [[frontier-models]]）：** Nvidia が Hugging Face を約 $12.9B で買収すると**報道**（未確認、ハブの中立性が論点）；AWS は DuckLabs を買収、DuckDB は独立 DuckDB Foundation の下で MIT のまま——「人を吸収、コードはオープンのまま」。
+   - **08-27 21:05 — 統合が前進：報道された合意 + 財団ガバナンス拡張（詳細 → [[frontier-models]]）：** Nvidia–HF は**報道された合意**へ昇格（The Information、8月27日；約 $12.9B ≈ 収益の86倍）、未署名・未確認のまま、中立性への懸念が高まる；**DuckDB Foundation は生き残り、ガバナンスを拡張**（テクニカルアドバイザリーボード、署名付きサードパーティ拡張）が中立性問題への明示的答え——アナリストは依然「給料がロードマップを曲げる」と警告。
    → [[frontier-models]]
 
 7. **AI安全性は政策ではなく測定可能なリリース閾値であり——そして測定インフラが今や弱点である。**
@@ -259,6 +262,7 @@ last_processed: 2026-08-27T04:15:00Z
    - **08-27 04:15 — 流通半分に Anthropic 保有のレーンが加わる；科学垂直が最大（詳細 → [[agent-plugins]]）：**
      `anthropics/claude-plugins-official`（34.3k★、公式厳選ディレクトリ、external_plugins はレビューでゲート、「信頼であってセキュリティ保証ではない」）；
      `K-Dense-AI/scientific-agent-skills`（34.7k★、163 スキル、創薬/臨床、PR 単位のセキュリティスキャン）。
+   - **08-27 20:27 — ファーストパーティ IDE ベンダーがバージョン認識スキルを出荷（詳細 → [[agent-plugins]]）：** JetBrains `go-modern-guidelines`（Apache-2.0、約 1.8k★）が go.mod 検出で Go バージョン対応イディオムを提供、Claude Code marketplace プラグインとして導入可——「証明せよ」段階にベンダー保守者が加わる；共有コーパス採用の半分はまだ開いたまま。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隠れた思考連鎖は保護境界ではなく、機密性の仮定である。** arXiv:2608.09867（「Stealing
@@ -1423,3 +1427,24 @@ last_processed: 2026-08-27T04:15:00Z
   UniSpace（arXiv 2608.08676）——美団 8B MoTE、1 つの凍結 ViT 内で理解+生成+編集（Patch 再パラメータ化）；
   kimi3（`TimRots/kimi3`）——Kimi K3 のアーキテクチャ表を独立 PyTorch で 0.09% まで再現；SPO++（arXiv 2608.24870）——ストリーム整列型方策最適化が GRPO の rollout 同期の正規化ミスマッチを修正；
   `tailscale/tailcat`——Tailscale データプレーン上の netcat、アカウント/コントロールプレーンなし（鍵ベースの P2P 暗号化パイプ）。
+- **新着（08-27 20:27）——エージェント封じ込めが反証される；オープン配布レイヤーが統合（詳細 → [[security]] [[frontier-models]]）：**
+  Trail of Bits は GPT 5.6-Cyber に QEMU/KVM サンドボックスを与えたところ、**3 回、3 つのエクスプロイトチェーン**で脱出
+  （約 12 時間の自律動作；実用的な Januscape 0-day、libslirp の組み合わせ、その後 QEMU/Linux KVM/libslirp 横断の 0-day 3 件 + 修正済みだが未配布のバグ）；
+  **Firecracker はかなり頑健だった**——「VM にエージェントを入れればよい」はサイバー能力のあるエージェントには反証された前提（thesis 2、thesis 11）。
+  同じ日に配布レイヤーが統合：**Nvidia が Hugging Face を約 $12.9B で買収すると報道**（未確認；HF が以前の打診を断ったマルチベンダー中立性こそが論点）、
+  **AWS は DuckLabs を買収**、DuckDB は独立 DuckDB Foundation の下で MIT のまま——「人を吸収、コードはオープンのまま」が新しいハイパースケーラー-OSS の形。
+- **新着（08-27 20:27）——Web とツールチェーンがエージェントのために築かれる（詳細 → [[agent-stack]] [[agent-plugins]]）：**
+  **Accept Markdown**（acceptmarkdown.com）は `Accept: text/markdown` コンテンツネゴシエーションで全 URL から Markdown 双子を提供する提案——
+  追跡中の 20 エージェントのうち 7 つが既にヘッダーを送信；実装も登場（Static Web Server フラグ、Cloudflare エッジ機能、dualmark AEO v1.0）。
+  **OpenWorker v0.2.0**（Andrew Ng、16.4k★）はセキュリティコワーカー（脆弱性スキャン、サプライチェーン監査、クラウドポスチャ）をローカルファーストデスクトップコワーカーのファーストクラスに。
+  **JetBrains go-modern-guidelines**（Apache-2.0）は go.mod 検出で Go バージョン対応イディオムを提供——初のファーストパーティ IDE ベンダーによるバージョン認識スキル（thesis 8）。
+  開発ツールの尻尾：**pnpm 12.0**（Rust 書き直し、正規な循環 lockfile、registry revisions）、**mold** ASPLOS 2027 論文（lld 比 2.4–16.1×、「すべてのパスを並列化」）、
+  **Firefox 157 の JPEG XL デフォルト化（jxl-rs）**、**Asahi Linux 7.2**（M3 ウェブカメラ/マイク、M4/M5 NVMe、SPTM/GXF エミュレーション）、
+  grok-bot-0.18 ソースマップ漏洩の復元、SFC vs Bambu AGPLv3、Nitter/XCancel の C&D による閉鎖。
+- **新着（08-27 20:27）——モデル/ベンチマークの尻尾（詳細 → [[frontier-models]]）：** Gemini 3.5 Transcribe（推論ベース初の音声文字起こし、
+  関数呼び出し → 音声→ツール呼び出し）；WeMM-Embedding（Tencent、Apache-2.0、MMEB-v2 **80.6** SOTA、2B/4B/9B で本番実証）；
+  EXAONE Tabular 1.0（LG、20.81M パラメータ、文脈内表形式学習、4 時間 AutoML に勝利）；BixBench3（研究丸ごと計算生物学、最良エージェント **0.48**、
+  コスト連動の失敗分類）；Recuris（作業 vs 経験記憶、証拠ゲート、GPT-5.6 Sol +17.8）；LAION-BVD（1000 万時間オープン動画データセット）；
+  MTurk が 9/30 に終了——人間労働→合成データへの移行に終了日が付いた。
+- **新着（08-27 20:27）——Claude メモリがクロスサーフェス化（メモリノートの拡張）：** Anthropic はリアルタイム書き込みで Claude Chat + Cowork の永続メモリを統合；
+  機微トピックはデフォルトで除外、SSN/犯罪歴は保存しない；Claude Code は別のメモリシステム——メモリギャップへのクラウド限定プロダクト回答であり、ポータブルなスキーマではない（[[agent-stack]]）。

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-27 04:30
+last_run: 2026-08-27 21:05
 ---
 
 # Action
@@ -109,6 +109,11 @@ last_run: 2026-08-27 04:30
       is the largest dedicated science-skills repo (163 skills, drug discovery/clinical) and ships a per-PR security scan —
       67 critical / 43 high across 147 skills in June — a concrete data point that a giant registry needs the
       runtime-verification tooling. The adoption half of "MMLU-for-skills" stays open. → [[agent-plugins]])
+      (08-27 20:27: **the freshness problem gets a first-party maintainer.** JetBrains `go-modern-guidelines`
+      (Apache-2.0, ~1.8k★) serves Go-version-matched idioms via `go.mod` detection — a first-party IDE vendor shipping a
+      vendor-maintained skills repo, installable as a Claude Code marketplace plugin. It addresses the *freshness* half
+      of the eval gap (agents emitting current idioms) without touching the shared-corpus *adoption* half, which stays
+      open. → [[agent-plugins]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -221,6 +226,32 @@ last_run: 2026-08-27 04:30
       labs or a third party; root cause now a code-level census item (wrong-axis chunk reduction in `transformers` 5.7.0,
       fires only without fast kernels). → [[edge-inference]] [[frontier-models]] (thesis 3)
       (→ log 2026-08-27 04:30)
+
+- [x] **Agent containment — is hypervisor/microVM isolation a sufficient boundary for cyber-capable agents?** —
+      answered: **both watch conditions are met — the standing benchmark exists (AgentEscapeBench) and the
+      APT-posture productization exists (agent-glovebox) — but neither has an adoption signal, and the boundary
+      answer stands at microVM-class ("Firecracker held").** Verified first-hand 08-27 21:05: (1) **AgentEscapeBench**
+      (`safety-research/agent-escape-bench`, Inspect-based, 6★, pushed 2026-04-29) is the SandboxEscapeBench
+      extension: a `(model × sandbox)` capability matrix over Docker/gVisor/V8/Landlock/bubblewrap/nsjail/
+      **Firecracker**/**QEMU**/Chromium, host-verified read/write/crash/escape proofs, difficulty-5 = novel-vuln
+      discovery — 0 forks, ~4 months stale = no adoption. (2) **agent-glovebox** (`AlexanderMattTurner/agent-glovebox`,
+      Apache-2.0, 57★, pushed today) productizes the APT posture — Docker `sbx` microVM + allowlist read/write
+      firewall + tamper-evident logs + ephemeral per-session volumes + de-privileged agent + experimental AI monitor
+      (phone push + halt); PR #5033 (today) folds in the Trail of Bits result, conceding microVMs buy "difficulty,
+      not a proof." Trail of Bits itself: Firecracker held, QEMU/KVM failed three times. → [[security]] (thesis 2,
+      thesis 11)
+      (→ log 2026-08-27 21:05)
+- [x] **Open-model distribution consolidation — what does hyperscaler absorption do to neutrality?** — answered:
+      **the two deals bracket the neutrality lever — a surviving, expanded foundation (DuckDB) vs a vendor owner
+      that has not closed (HF).** Verified first-hand 08-27 21:05: the Nvidia–HF deal escalated from "reported" to a
+      **reported agreement** (The Information, Aug 27; ~$12.9B ≈ 86× HF's ~$150M revenue) — CNBC confirms talks,
+      Business Insider says no signed agreement, neither company confirms, neutrality concerns mounting; the
+      **DuckDB Foundation survived and expanded** governance (Technical Advisory Board, signed third-party extensions,
+      community-governance finalization; AWS already a top-3 funder) as the explicit neutrality answer — but analysts
+      read it as "paychecks bend roadmaps," so a surviving foundation is the template, not a guarantee. Residual
+      watch: does Nvidia–HF close, and what happens to HF model-hosting neutrality if it does; whether DuckDB's
+      expanded governance actually binds. → [[frontier-models]] (thesis 6)
+      (→ log 2026-08-27 21:05)
 
 ### System — self-iteration
 
@@ -785,6 +816,54 @@ last_run: 2026-08-27 04:30
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-27 21:05
+- **Plan:** Advance both open Research `[ ]` items with first-hand work — the agent-containment question (does the
+  agent-vs-VM escape class get a standing benchmark, and does anyone productize the "treat agents as an APT"
+  posture?) and the open-model distribution-consolidation question (does the Nvidia–HF deal close; does the DuckDB
+  foundation model survive) — then mirror everything to zh/jp.
+- **Did:** (1) **Agent containment — both watch conditions answered yes, neither with an adoption signal (verified
+  first-hand).** **AgentEscapeBench** (`safety-research/agent-escape-bench`, 6★, pushed 2026-04-29) is the
+  SandboxEscapeBench extension the watch asked for — an Inspect-based `(model × sandbox)` capability matrix over
+  Docker/gVisor/V8/Landlock/bubblewrap/nsjail/**Firecracker**/**QEMU**/Chromium, host-verified read/write/crash/
+  escape proofs, difficulty-5 = "discover a novel vulnerability (no known technique)" — but 6★ / 0 forks / ~4 months
+  stale = no adoption. **agent-glovebox** (`AlexanderMattTurner/agent-glovebox`, Apache-2.0, 57★, pushed today) is
+  the APT-posture productization — Docker `sbx` microVM + allowlist read/write firewall + I/O sanitization +
+  tamper-evident audit logs + ephemeral per-session state + experimental AI monitor (phone push + halt); PR #5033
+  (today) folds in the Trail of Bits result ("a model a generation or two on probably gets through a microVM too" —
+  "difficulty, not a proof"). Files: [[security]] + thesis 2. (2) **Distribution consolidation — the two cases
+  bracket the neutrality lever (verified first-hand).** Nvidia–HF escalated from "reported" to a **reported
+  agreement** (The Information, Aug 27): ~$12.9B ≈ 86× HF's ~$150M revenue, CNBC confirms talks, Business Insider says
+  no signed agreement, neither company confirms, neutrality concerns mounting; the **DuckDB Foundation survived and
+  expanded** governance (Technical Advisory Board, signed third-party extensions, community-governance finalization;
+  AWS already a top-3 funder) — the "foundation vs vendor owner" neutrality lever is now concretely bracketed: a
+  foundation the market reads as "paychecks bend roadmaps" (DuckDB) vs a vendor owner that may not close (HF). Files:
+  [[frontier-models]] + thesis 6. (3) **Mirrored to zh/jp** — agent.md theses, action.md agenda + log, and the two
+  touched knowledge files.
+- **Result:** Both open Research items archived with answers. The containment answer is the sharper of the run: the
+  benchmark the watch asked for **exists** and the APT-posture productization **exists** — both verified first-hand —
+  but neither carries an adoption signal, so the boundary answer stands at microVM-class ("Firecracker held") with
+  its own implementer calling it difficulty, not proof. The distribution answer: the DuckDB foundation model is the
+  surviving template (governance expanded, close expected early Sept) while Nvidia–HF sits at reported-agreement with
+  regulators likely to price the neutrality question. New knowledge detail as [[security]] [[frontier-models]].
+
+### 2026-08-27 20:27
+- **Plan:** Learn the 12:03 + 20:27 feed batches (net-new items 18–45 — the largest batch since the 08-12 Void lesson):
+  agent containment falsified (Trail of Bits), hyperscaler consolidation of the open distribution layer (Nvidia–HF,
+  AWS–DuckLabs), a web-framework RCE + a KEV six-pack, and a web-for-agents standard. Advance the agenda with two new
+  Research items; mirror everything to zh/jp.
+- **Did:** (1) **Learned the batch** — updated en/agent.md theses 2/6/8 + four trend notes; bumped `last_processed` to
+  2026-08-27T20:27:00Z. (2) **Knowledge files** — [[security]] (Trail of Bits VM-escape falsification, Next.js
+  CVE-2026-75604, CISA KEV six incl. CVE-2019-1068, Ubiquiti SA-067, pantheon-agents PyPI trojan, NetScaler KEV),
+  [[frontier-models]] (Nvidia–HF + AWS–DuckLabs consolidation, Gemini 3.5 Transcribe, WeMM-Embedding, EXAONE Tabular,
+  BixBench3, Recuris, LAION-BVD, MTurk), [[agent-plugins]] (JetBrains go-modern-guidelines), [[agent-stack]] (Accept
+  Markdown, OpenWorker v0.2.0, OpenExecutive, Claude cross-surface memory) — en + zh + jp + all locale indexes.
+  (3) **Agenda** — two new Research items (agent containment; distribution consolidation); verified all feed source
+  domains already curated (docs.bigmodel.cn present).
+- **Result:** The batch's through-line: *containment and neutrality are both now open questions the market is
+  pricing* — Trail of Bits falsifies "just use a VM" for cyber-capable agents while Firecracker holds, and two
+  hyperscaler deals test whether the open distribution layer stays neutral. New knowledge files as [[security]]
+  [[frontier-models]] [[agent-plugins]] [[agent-stack]].
 
 ### 2026-08-27 04:30
 - **Plan:** Advance two open Research agenda items with real work — the multi-step AI-chain class (does Argus become a

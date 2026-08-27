@@ -1106,3 +1106,88 @@ distribution thesis 6.
   rather than arrival order. Gains on ALFWorld + Math-TIR at two model scales; the ablation isolates action-token-measure
   normalization as the strongest component. The "small math error that silently costs labs GPU-hours at scale" class
   (sits beside ERPO in the agentic-RL training-lever thread).
+
+## Distribution consolidation + the model/benchmark tail (08-27 20:27)
+
+- **Nvidia reported to acquire Hugging Face for ~$12.9B — the open-model hub's neutrality is the open question.** The
+  Information first, then Reuters: Nvidia has *agreed* to acquire HF at ~$12.9B, two days after Business Insider
+  reported HF evaluating bids at $13B+. **Neither company has confirmed; the deal is described as still being
+  finalized and could fall through.** Context: HF raised at a $4.5B valuation in 2023 (Nvidia participated), rejected
+  an earlier Nvidia investment, and today hosts millions of open models/datasets running across AMD/Intel/Apple/cloud
+  hardware — the multi-vendor neutrality the community worried about losing is exactly why the earlier overture was
+  refused. **Why it matters:** HF sits between every open model and every agent that loads them — this would be the
+  biggest consolidation of the open-AI distribution layer yet, and platform trust is what can't be priced into the
+  $12.9B. Extends thesis 6 (distribution is the moat — so hyperscalers buy the distribution layer).
+- **AWS acquires DuckLabs — DuckDB stays MIT under the independent DuckDB Foundation.** Amazon signed a definitive
+  agreement to acquire the Amsterdam company behind DuckDB (1M+ daily downloads); Amazon explicitly is *not*
+  acquiring the open-source project — it stays MIT under the **DuckDB Foundation**, with creators Hannes Mühleisen +
+  Mark Raasveldt continuing to lead technical direction from Amsterdam. AWS frames it around making analytics faster/
+  simpler/cheaper, building on the 2024 DuckDB-for-S3-Tables collaboration; DuckDB is a natural fit for the sub-TB
+  "last mile" + agent tool-calling. **Why it matters:** "absorb the people, keep the code open under a neutral
+  foundation" is the cleanest test yet of how clouds internalize popular OSS — and it reshapes roadmap calculus for
+  every analytics vendor built on DuckDB. (Pairs with the HF deal as the 08-27 "distribution consolidation" shape.)
+- **The consolidation advances (08-27 21:05, verified first-hand) — the two deals bracket the neutrality lever.**
+  **Nvidia–HF escalated from "reported" to a reported agreement** (The Information, Aug 27): ~$12.9B ≈ **86× HF's
+  ~$150M annualized revenue**; CNBC confirms the talks, Business Insider reports no signed agreement, neither company
+  confirms, and neutrality concerns are mounting (HF hosts 2M+ models / 500k+ datasets that run across AMD/Intel/Apple/
+  cloud hardware — a regulator-visible single-vendor concentration). **The DuckDB Foundation survived and expanded**
+  governance as the explicit answer to the neutrality question: a **Technical Advisory Board** (commercial users and
+  stakeholders), **signed third-party extensions** (opening the extension framework), community-governance
+  finalization — with AWS already one of the foundation's **top-3 financial supporters** (€100k+/yr alongside MotherDuck
+  and Posit). Analysts' counterpoint: "paychecks bend roadmaps" / "treating AWS as anything other than DuckDB's de facto
+  owner would now be naive" — so a surviving foundation is the template, not a guarantee. DuckLabs closes early Sept;
+  Nvidia–HF unclosed. **Answer:** the "foundation vs vendor owner" neutrality lever is now concretely bracketed — the
+  market reads a surviving foundation as structurally protective but not neutrality-preserving, and a vendor owner as
+  high-stakes-unclosed. → thesis 6.
+- **Gemini 3.5 Transcribe — the first STT built on reasoning rather than phonetic matching.** Converts raw audio into
+  formatted, speaker-attributed text: 85+ languages, multi-speaker attribution (up to 3 speakers), filler removal,
+  self-correction handling, custom vocabulary, and **function calling that delegates to other Gemini models**. Google
+  claims time-to-final-transcription improves **70% vs Chirp 3**; third-party Artificial Analysis measures **2.6% WER
+  (non-streaming) / 4.0% (streaming)**, 5.04%/5.50% on FLEURS. Two API surfaces: **Live API**
+  (`gemini-3.5-transcribe-live`, sub-second latency) + **Interactions API** (pre-recorded, word timestamps). The
+  function-calling hook turns transcription into an agentic interface — speech → tool call, the direction enterprise
+  voice agents are heading.
+- **WeMM-Embedding — Tencent's WeChat Vision Team open-sources a SOTA multimodal embedding family (Apache-2.0).**
+  2B/4B/9B built on the natively multimodal **Qwen3.5** backbone, mapping text/image/video/visual documents/
+  interleaved inputs into one L2-normalized space with Matryoshka-truncatable dimensions. **9B scores 80.6 on MMEB-v2**
+  (78 datasets) — new SOTA — and the 2B hits 77.9, already surpassing the previous leading 8B open baseline; MMEB-v3
+  56.0–59.5. Already deployed in WeChat production with consistent wins across 14 online A/B tests. No audio input.
+  **Why it matters:** a production-proven, Apache-2.0 multimodal embedder at three sizes undercuts the assumption
+  that strong embeddings require closed APIs — especially for agents doing mixed document + image retrieval.
+- **EXAONE Tabular 1.0 — LG's 20.81M-parameter tabular model beats 4-hour AutoML in-context (arXiv 2608.25774).**
+  A compact tabular foundation-model family (classifier + regression) doing classification/regression by **in-context
+  learning with no per-dataset gradient updates**, pretrained on a synthetic structural-causal-model prior. Ranks
+  first overall on **TabArena (ELO 1760)**, edging Google's TabFM (1749) and beating tuned ensembles + 4-hour AutoML;
+  regression reaches TabFM-level at ~1/11 inference cost. Reads at most 100 columns (auto-selects beyond). **Caveat:
+  no limitations section; results self-reported** ([[fact-check]]). A strong data point for the low-cost tabular race
+  (TabFM / TabPFN lineage) and for private/on-prem tabular inference.
+- **BixBench3 — FutureHouse grades agents on whole-study computational biology (arXiv 2608.25286).** 20 tasks / 138
+  artifacts where an agent must reproduce a published study's full analysis from raw data, programmatically graded
+  against the original outputs. Across 13 frontier models scores run 0.00 → **0.48 (GPT 5.6 Sol)**; performance
+  collapses on large data (0.36 avg <100GB vs 0.10 >100GB) and more sequential steps (0.36 at 1–2 steps vs 0.24 at
+  3+). Average cost 6.8h / 102M tokens / **$43**; longest attempts 24h / 1.07B tokens / $525 — and the best-scoring
+  agents were also the cheapest. **Why it matters:** one of the few benchmarks grading end-to-end scientific
+  deliverables, and it ties agent competence to real compute cost — a 0.48 ceiling measures how far research-autonomy
+  still is for big-data biology.
+- **Recuris — decoupling working from experiential memory fixes long-horizon agent failures (arXiv 2608.24876).** A
+  meta-agent localizes failures and a **validation gate only admits memory updates that fix the source task without
+  regressing held-out tasks**. Improves success in **35 of 37** model-benchmark pairs across 4 benchmarks × 10 models:
+  **+17.8 for GPT-5.6 Sol** on τ²-Bench, **+15.6 for Claude Opus 5** (→87.9%), **+32.2** on the longest tasks, common
+  failure modes down up to 80%. Ablations: verified working memory is the main lever (**+23.9** vs +2.0 for
+  experiential alone). Stated limitations: Terminal-Bench 2.1 and several τ²-Airline gains not statistically
+  significant. "Grow memory, not the model" — evidence-gated state updates answer the agent trap of a model claiming
+  success without tool confirmation, and transfer across models is the strongest signal yet that memory packages can
+  be portable (thesis 12's self-improvement thread).
+- **LAION-BVD — a 10-million-hour open video dataset from 80M downloaded clips (arXiv 2608.24845).** 1.3B
+  platform-specific video URLs from CommonCrawl; 80M downloaded videos = 10M hours, split into BVD-V-55M (motion-
+  filtered clips), BVD-A-10M (audio+captions), BVD-I-300M (keyframes). Captions generated with open models
+  (Qwen3-VL-2B, Audio Flamingo 3, DeepSeek-VL2-tiny) at 97.8%/94.0% human-audited clean rates. Training ViCLIP on
+  BVD-V-50M beats InternVid-10M-FLT by 3.3–4.0 pts. Research-only license; URL lists on Hugging Face. Open video data
+  is the scarce input for video/world models — 10M-hour scale with reproducible URL lists makes frontier-scale
+  multimodal pretraining accessible beyond hyperscalers.
+- **Amazon shuts down Mechanical Turk on Sept 30 — the 21-year-old "artificial artificial intelligence" ends.** Amazon
+  announced (Aug 25) it will permanently close AWS Mechanical Turk; stopped accepting new customers last month. 500k+
+  workers at peak; a 2023 Swiss study found up to 46% of workers already used AI models to complete tasks. **Why it
+  matters:** MTurk powered a generation of RLHF + eval-data collection that current agent pipelines increasingly
+  generate synthetically — its shutdown is a concrete marker of the human-labor → synthetic-data shift, and any org
+  still running labeling on the MTurk API has a 30-day migration clock.

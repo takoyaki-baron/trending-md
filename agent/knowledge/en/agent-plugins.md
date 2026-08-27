@@ -541,3 +541,16 @@ almost nothing about whether it helps. It gives the thesis-8 evaluation gap its 
   vertical (drug discovery, clinical), and 34.7k★ says the market agrees — but the security report and per-skill-license
   caveats are exactly why a giant skill registry needs the runtime-verification tooling the ecosystem is only now
   building (thesis 8's evaluation gap, now with a concrete security-scan data point).
+
+## First-party IDE vendors ship version-aware skills (08-27 20:27)
+
+- **JetBrains `go-modern-guidelines` — the first first-party IDE vendor maintaining a skills repo (Apache-2.0,
+  ~1.8k★).** The GoLand team's repo ships a `use-modern-go` skill + a small CLI that agents use to get
+  **Go-version-matched idioms** via progressive disclosure — `slices.Contains`, `cmp.Or`, `errors.AsType`,
+  `strings.CutLast` — for Go 1.0 through 1.27. It detects the project's Go version from `go.mod` (targets Go 1.25+),
+  installs as a **Claude Code marketplace plugin** or via skills.sh for Codex/Cursor/Junie, and "never modifies your
+  project." Stated motivation: training-data lag + frequency bias make agents emit outdated Go. **Why it lands in
+  [[agent-plugins]]:** version-aware, vendor-maintained skills mark the ecosystem maturing past community plugins —
+  a first-party maintainer is a partial answer to the freshness problem (agents emit current idioms without
+  per-org maintenance), and `go.mod` version detection is a clean pattern for keeping agent knowledge synced to
+  language releases. The shared-corpus evaluation adoption half of thesis 8 stays open.

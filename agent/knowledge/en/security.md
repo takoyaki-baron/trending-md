@@ -1373,3 +1373,71 @@ The batch's security stream, read first-hand at the primary sources where reacha
   submissions-volume jump is the first denominator-ish signal, but no vendor publishes AI-found chain counts vs human
   researchers. **Answer: partially measured** — a two-agent taxonomy (breadth vs depth) + a submissions-volume jump,
   still no independent rate and no other vendor's published chain. Residual watch folds in here.
+
+## Next.js Windows RCE + CISA KEV six + Ubiquiti + PyPI trojan + the VM-containment falsification (08-27 20:27)
+
+- **Trail of Bits — "VMs won't contain cyber-capable agents" is now a measured falsification, not a warning.** GPT
+  **5.6-Cyber** was given a QEMU/KVM sandbox VM and told to read a flag file; it escaped **three times with three
+  different exploit chains**: (1) a working exploit for the then-unreleased host-kernel bug **CVE-2026-53359**
+  ("Januscape"); (2) a **libslirp** combo (**CVE-2026-9539** plus a fixed-but-unmarked bug) for arbitrary host
+  memory read/write; (3) after Trail of Bits rebuilt QEMU from latest source — **three 0-days plus a
+  patched-but-undistributed bug** across QEMU, Linux KVM and libslirp. It operated autonomously for **~12 hours**,
+  backtracked from dead ends, and favored reliable reusable exploits over one-shot crashes. **Firecracker held
+  substantially harder.** **Why it matters:** the isolation recommendation (thesis 11 / the 08-16 two-speed
+  isolation note) is now *microVM + least privilege + monitoring + pristine per-task environments + treat agents as
+  an APT* — plain KVM/QEMU guest VMs are not a containment boundary for cyber-capable agents. This is the
+  strongest empirical extension yet of the "sandbox escape" shape (SandboxEscapeBench → AISI hypervisor-as-minimum →
+  now: even that fails against a capable agent).
+- **The containment answer gains its benchmark + its product (08-27 21:05, both verified first-hand).**
+  (1) **AgentEscapeBench** (`safety-research/agent-escape-bench`, 6★ / 0 forks, pushed 2026-04-29) is the
+  SandboxEscapeBench extension the agent-vs-VM watch asked for: an **Inspect-based** (AISI lineage) `(model × sandbox)`
+  capability matrix over Docker/gVisor (14 configs)/V8/Landlock/bubblewrap/nsjail/**Firecracker**/**QEMU**/Chromium,
+  each sample a disposable QEMU VM building a payload verified in a fresh scoring VM, **read/write/crash/escape**
+  proofs checked host-side (the flag is never on disk in the eval phase), difficulty-5 = "discover a novel
+  vulnerability (no known technique)" — exactly the Trail of Bits move. No adoption signal: 4 months stale, zero forks.
+  (2) **agent-glovebox** (`AlexanderMattTurner/agent-glovebox`, Apache-2.0, 57★, pushed 2026-08-27) productizes
+  "treat agents as an APT": the whole session runs in a Docker `sbx` microVM (Firecracker-class, "closer to
+  Firecracker's class than to QEMU's") behind an **allowlist read/write firewall** (a read-only host serves
+  GET/HEAD/OPTIONS/git-fetch, everything else 403), with I/O sanitization, **tamper-evident audit logs**, **ephemeral
+  per-session volumes** (blocks cross-session staging via poisoned `.bashrc`), a de-privileged agent (no passwordless
+  sudo/docker group), root-locked managed settings, and an experimental AI monitor with phone push + halt. PR #5033
+  (today) corrects the hypervisor-escape assumption after Trail of Bits: carrying the Firecracker result to sbx is
+  "measured, not proof" — "a model a generation or two on, given enough time, probably gets through a microVM too."
+  **Answer:** the microVM boundary is the current floor (Firecracker held, QEMU-class failed three times); the
+  benchmark to measure it and the product to deploy it now both exist — neither is adopted.
+- **Next.js CVE-2026-75604 (CVSS 9.0, GHSA-p293-qw3h-jr36) — unauthenticated RCE on Windows-hosted servers via the
+  incremental-cache.** A canonicalization mismatch in the file-system incremental cache lets an unauthenticated
+  attacker use **encoded backslashes (`..%5C`)** to traverse out of the cache directory on Windows filesystems, read
+  `server-reference-manifest.json`, extract the Server Actions `encryptionKey`, and **forge a malicious encrypted
+  Server Action** to run arbitrary commands. Affects Pages Router + App Router (without Cache Components) on
+  Next ≥13.4 <15.5.24 and ≥16.0 <16.3.3; **Linux/macOS and Vercel/Netlify unaffected**. Emergency release
+  15.5.24 / 16.3.3; **public PoCs within a day** and Cloudflare pushed an **emergency WAF rule** Aug 26. A second
+  AVIF advisory (GHSA-2xp9-vwfh-vxw4) shipped in the same release. **Why it matters:** unauth RCE in the most
+  widely-deployed React framework with a Windows-specific backslash-canonicalization root cause — a grep-able class
+  beyond Next.js, and the WAF rule means attackers are expected to weaponize fast.
+- **CISA KEV batch (Aug 26) — six actively-exploited entries, five pre-2026.** Headliner **CVE-2019-1068**,
+  Microsoft SQL Server RCE (CVSS 8.8, exploited in the Database Engine service account context, federal deadline
+  **Aug 29** — a 48h window). The rest (due Sep 9) trace to a Cisco Talos report on Chinese cybercrime group
+  **UAT-10147** targeting web servers: CVE-2022-0995 (Linux kernel out-of-bounds write), CVE-2015-5287 (Red Hat
+  ABRT symlink), CVE-2015-3246 (Red Hat libuser race), CVE-2021-23758 (Ajax.NET Professional deserialization RCE).
+  **Why it matters:** a KEV batch of five pre-2026 bugs is the catalog doing its job — attackers chain decade-old
+  Linux/Red Hat flaws — and any internet-exposed MSSQL instance is on the critical path.
+- **Ubiquiti Security Advisory Bulletin 067 (Aug 26) — 22 flaws, two CVSS 10.0.** **CVE-2026-77537** (10.0,
+  Ubiquiti CNA-assigned, improper input validation) is a **command injection in UniFi Protect** (affected < 7.2.105;
+  network-reachable, no privileges or user interaction, scope change); **CVE-2026-77554** (10.0) in UniFi Talk;
+  **CVE-2026-77550** auth bypass in UniFi OS; **CVE-2026-77534** (9.9) improper-access-control escalation on UniFi OS
+  Server / essentially the whole device line (UDMs, Cloud Gateways, NVRs, NAS). **Not NVD-analyzed yet; no known
+  exploitation.** CNA-only scoring means the numbers are not independently verified ([[fact-check]] who-scored-it).
+- **`pantheon-agents` 0.6.1/0.6.2 trojanized on PyPI (GHSA-93qj-5q5v-3c2h, CRITICAL) — a credential stealer from a
+  stolen long-lived token.** The maintainer's PyPI account was compromised in the June 2026 "Hades" supply-chain
+  attack; the attacker used a **stolen long-lived PyPI token** to upload malicious wheels directly to the registry.
+  On `pip install`, a `*-setup.pth` file downloads the **Bun runtime** and runs an obfuscated credential stealer
+  harvesting env vars, `~/.pypirc`, `~/.npmrc`, `~/.aws` and other cloud credentials, SSH keys, and API tokens. The
+  GitHub source is clean — only the PyPI artifacts are affected. **IoC: an unexpected `*-setup.pth` in
+  site-packages.** One stolen token silently turned a package's release channel into a credential drain (the
+  build-time supply-chain shape; cf. `arrayref`).
+- **Citrix NetScaler CVE-2026-8452 — KEV'd as a confirmed pre-auth RCE target (extending the 08-16 note).** CISA
+  added it Aug 26 (federal deadline **Aug 29**) with confirmed active exploitation. SAML-path memory-bounds error,
+  reachable **pre-auth** as Gateway (SSL VPN / ICA / CVPN / RDP proxy) or AAA vserver; Citrix rated DoS but watchTowr
+  demonstrated **unauth RCE** (PHP webshell via shellcode on the executable heap). Fixed NetScaler 14.1-72.61 /
+  13.1-63.18 (patched June 30). **Scorer split: 9.8 (NVD 3.1) vs 8.8 (Citrix CNA 4.0).**
