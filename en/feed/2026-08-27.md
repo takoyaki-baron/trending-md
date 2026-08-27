@@ -1,8 +1,8 @@
 ---
 date: 2026-08-27
-updated: 2026-08-26T20:10:00Z
+updated: 2026-08-27T04:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 25
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -253,13 +253,195 @@ Meituan's LongCat team released **UniSpace** (arXiv 2608.08676): an **8B** Mixtu
 
 ---
 
+## 18. AWS acquires DuckLabs — the company behind DuckDB, while the project stays open under its own foundation
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / Amazon · 1002 pts · ~15h ago (~21:00 UTC+8)
+- **Tags:** `aws` `duckdb` `database` `open-source` `acquisition`
+
+Amazon signed a definitive agreement to acquire **DuckLabs**, the Amsterdam-based company behind the in-process OLAP database **DuckDB** (1M+ daily downloads). Amazon is explicitly *not* acquiring the DuckDB open-source project — it stays MIT-licensed under the independent **DuckDB Foundation**, with creators Hannes Mühleisen and Mark Raasveldt continuing to lead technical direction from Amsterdam. AWS frames the deal around making its analytics "faster, simpler, and more cost-effective," building on the 2024 DuckDB-for-S3-Tables collaboration, and DuckDB is a natural fit for the sub-TB "last mile" of queries plus agent tool-calling.
+
+**Why it matters:** A hyperscaler absorbing the most-embedded open-source analytical database — while leaving the code under a neutral foundation — is the cleanest test yet of how clouds internalize popular OSS without killing it, and it reshapes the roadmap calculus for every analytics vendor built on DuckDB.
+
+[`🔗 Amazon (aboutamazon)`](https://www.aboutamazon.com/news/company-news/aws-ducklabs) · [`🔗 The Register`](https://www.theregister.com/databases/2026/08/26/aws-buys-ducklabs-the-people-behind-the-popular-in-process-olap-database/5292590)
+
+---
+
+## 19. Nvidia reported to acquire Hugging Face for ~$12.9B — the open-model hub's neutrality is the open question
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / The Information · 465 pts · ~2h ago (~10:15 UTC+8)
+- **Tags:** `nvidia` `hugging-face` `acquisition` `open-source` `reported`
+
+Multiple reports — The Information first, then Reuters — say **Nvidia has agreed to acquire Hugging Face for ~$12.9B**, two days after Business Insider reported the "GitHub of AI" was evaluating acquisition bids at $13B+. Neither company has confirmed and the deal is described as still being finalized, so it could fall through. Context: Hugging Face raised at a $4.5B valuation in 2023 (Nvidia participated), rejected an earlier Nvidia investment, and today hosts millions of open models/datasets that run across AMD, Intel, Apple, and cloud hardware — the multi-vendor neutrality the community worried about losing is exactly why the earlier overture was refused.
+
+**Why it matters:** Hugging Face sits between every open model and every agent that loads them — a reported Nvidia buyout (unconfirmed) would be the biggest consolidation of the open-AI distribution layer yet, and platform trust is the thing that can't be priced into the $12.9B figure.
+
+[`🔗 The Star (The Information)`](https://www.thestar.com.my/tech/tech-news/2026/08/27/nvidia-agrees-to-buy-hugging-face-for-129-billion-the-information-reports) · [`🔗 RuntimeWire`](https://runtimewire.com/article/nvidia-buy-hugging-face-12-9-billion)
+
+---
+
+## 20. CVE-2026-8452 — Citrix NetScaler SAML heap overflow lands in CISA KEV as a confirmed pre-auth RCE target
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV / GitHub Advisory · CVSS 9.8 · Aug 26 (due Aug 29)
+- **Tags:** `citrix` `netscaler` `kev` `rce` `active-exploitation`
+
+CISA added **CVE-2026-8452** (NetScaler ADC/Gateway) to its Known Exploited Vulnerabilities catalog on Aug 26 — one of six additions in the batch — with confirmed active exploitation and a federal remediation deadline of **Aug 29**. The flaw is a memory-bounds error in the SAML authentication path, reachable **pre-auth** when the appliance runs as a Gateway (SSL VPN / ICA / CVPN / RDP proxy) or AAA virtual server; Citrix rated it DoS, but **watchTowr Labs demonstrated it chains to unauthenticated RCE** (a PHP webshell via shellcode on the executable heap). Fixed in NetScaler 14.1-72.61 / 13.1-63.18 (patched June 30). CVSS **9.8 (NVD 3.1)** vs **8.8 (Citrix CNA 4.0)** — scorer disagreement to note.
+
+**Why it matters:** NetScaler is a perimeter appliance in thousands of orgs, and an actively-exploited KEV entry with a demonstrated pre-auth RCE and a three-day federal patch window is the highest-priority fix in this batch — treat any internet-facing Gateway as owned until verified patched.
+
+[`🔗 CIRCL CVE-2026-8452`](https://vulnerability.circl.lu/vuln/CVE-2026-8452) · [`🔗 GitHub Advisory`](https://github.com/advisories/GHSA-r7wg-r5wj-c765)
+
+---
+
+## 21. Gemini 3.5 Transcribe — Google's "most precise" speech-to-text replaces Chirp 3 with two new API surfaces
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google blog / 9to5Google · ~1d ago (Aug 26)
+- **Tags:** `speech-to-text` `gemini` `multimodal` `gcp`
+
+Google DeepMind announced **Gemini 3.5 Transcribe** (Aug 26), a speech-to-text model that converts raw audio into formatted, speaker-attributed text — 85+ languages, multi-speaker attribution (up to 3 speakers, 3+ experimental), filler-word removal, self-correction handling, custom vocabulary, and function calling that delegates to other Gemini models. Google claims time-to-final-transcription improves **70% vs Chirp 3**; third-party Artificial Analysis measures **2.6% WER (non-streaming) / 4.0% (streaming)** and 5.04%/5.50% on FLEURS. Two API surfaces: the **Live API** (`gemini-3.5-transcribe-live`, sub-second latency) and the **Interactions API** for pre-recorded audio with word timestamps, available in Google AI Studio and the Enterprise Agent Platform in public preview.
+
+**Why it matters:** This is the first STT explicitly built on Gemini-3.5-class reasoning rather than phonetic matching — and the function-calling hook turns transcription into an agentic interface (speech → tool call), which is the direction enterprise voice agents are heading.
+
+[`🔗 Google blog`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5-transcribe/) · [`🔗 9to5Google`](https://9to5google.com/2026/08/26/gemini-3-5-transcribe/)
+
+---
+
+## 22. WeMM-Embedding — Tencent's WeChat Vision Team open-sources a SOTA multimodal embedding family
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / arXiv · 2608.24053 · ~1d ago (Aug 26)
+- **Tags:** `multimodal` `embedding` `tencent` `open-source` `retrieval`
+
+Tencent's WeChat Vision Team released **WeMM-Embedding** (Apache-2.0), a universal multimodal embedding family in 2B/4B/9B sizes built on the natively multimodal **Qwen3.5** backbone, mapping text, images, video, visual documents, and interleaved inputs into one L2-normalized space with Matryoshka-truncatable dimensions. The 9B variant scores **80.6 on MMEB-v2** (78 datasets) — a new SOTA — and the 2B hits 77.9, already surpassing the previous leading 8B open baseline; MMEB-v3 scores range 56.0–59.5. Already deployed in WeChat production (Channels, Official Accounts, Moments, e-commerce) with consistent wins across 14 online A/B tests. Technical report: arXiv 2608.24053; audio input is not supported.
+
+**Why it matters:** Embedding quality is the quiet multiplier on retrieval/RAG, and a vendor shipping a production-proven, Apache-2.0 multimodal embedder at three sizes undercuts the assumption that strong embeddings require closed APIs — especially for agents doing mixed document + image retrieval.
+
+[`🔗 GitHub Tencent/WeMM-Embedding`](https://github.com/Tencent/WeMM-Embedding) · [`🔗 arXiv 2608.24053`](https://arxiv.org/abs/2608.24053)
+
+---
+
+## 23. Anthropic unifies Claude memory across Chat and Cowork — real-time writes, sensitive topics off by default
+
+- **Velocity:** ▮▮ rising
+- **Source:** Engadget / SD Times · ~1d ago (Aug 25)
+- **Tags:** `anthropic` `claude` `memory` `cowork` `agent`
+
+Anthropic shipped **persistent memory across Claude Chat and Claude Cowork** (Aug 25): context built in conversations now carries into cloud-based Cowork tasks and vice versa, with **real-time memory writes** during chats instead of post-hoc summaries. Users manage memories as per-topic entries in Settings (view/edit/delete; one correction applies everywhere). Sensitive topics (health, race, ethnicity, religion, politics, gender identity) are **excluded by default** behind an opt-in toggle, and SSNs, criminal history, and immigration status are never stored. On by default for Free/Pro/Max (web/desktop/mobile); memories are not retroactive; Claude Code keeps a separate memory system.
+
+**Why it matters:** Editable, persistent memory spanning a chat surface and a computer-use agent is the missing primitive for long-running agent work — but the sensitive-topic defaults and the cloud-only scope (Cowork must run in the cloud) are the honest parts of a feature that is as much about trust controls as capability.
+
+[`🔗 Engadget`](https://www.engadget.com/2243753/claude-memory-now-works-across-both-chats-and-cowork-sessions/) · [`🔗 SD Times`](https://sdtimes.com/ai/anthropic-puts-persistent-memory-into-claude-cowork/)
+
+---
+
+## 24. CVE-2026-77537 — Ubiquiti's SA-067 drops a CVSS 10.0 command injection on UniFi Protect (22 flaws total)
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ubiquiti SA-067 / CIRCL · CVSS 10.0 (CNA) · Aug 26
+- **Tags:** `ubiquiti` `unifi` `command-injection` `cve-10-0`
+
+Ubiquiti's **Security Advisory Bulletin 067** (Aug 26) fixes 22 vulnerabilities across the UniFi line, headlined by **CVE-2026-77537**, a CVSS 10.0 (Ubiquiti CNA-assigned) improper-input-validation **command injection in UniFi Protect** (affected < 7.2.105; network-reachable, no privileges or user interaction, scope change) — plus a second 10.0 in UniFi Talk (CVE-2026-77554), an auth bypass in UniFi OS (CVE-2026-77550), and **CVE-2026-77534 (9.9)** improper-access-control escalation affecting UniFi OS Server and essentially the whole device line (UDMs, Cloud Gateways, NVRs, NAS). Not NVD-analyzed yet; no known exploitation.
+
+**Why it matters:** An unauthenticated CVSS 10.0 command injection on UniFi Protect plus a 9.9 on the entire UniFi management plane hits a product family deployed pervasively in homes and SMBs — the patch window is immediate even without observed exploits, and the CNA-only scoring means NVD has not yet independently verified the numbers.
+
+[`🔗 CIRCL CVE-2026-77537`](https://vulnerability.circl.lu/vuln/CVE-2026-77537) · [`🔗 CIRCL CVE-2026-77534`](https://vulnerability.circl.lu/vuln/CVE-2026-77534)
+
+---
+
+## 25. pantheon-agents 0.6.1/0.6.2 on PyPI are trojanized — a credential stealer exfiltrates SSH keys, cloud creds, and tokens
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory · GHSA-93qj-5q5v-3c2h · ~1d ago (Aug 26)
+- **Tags:** `supply-chain` `pypi` `credential-stealer` `malware`
+
+A GitHub Security Advisory (GHSA-93qj-5q5v-3c2h, CRITICAL) documents trojanized **`pantheon-agents` 0.6.1 and 0.6.2 on PyPI**: the maintainer's PyPI account was compromised in the June 2026 "Hades" supply-chain attack, and the attacker used a stolen long-lived PyPI token to upload malicious wheels directly to the registry. On `pip install`, a `*-setup.pth` file downloads the Bun runtime and runs an obfuscated credential stealer harvesting env vars, `~/.pypirc`, `~/.npmrc`, `~/.aws` and other cloud credentials, SSH keys, and API tokens. The GitHub source is clean — only the PyPI artifacts are affected — and anyone who installed 0.6.1/0.6.2 should assume every credential on that machine was exfiltrated.
+
+**Why it matters:** One stolen, long-lived PyPI token silently turned a package's release channel into a credential drain — and "pip install from the registry" is exactly the default most agent tooling uses. The IoC (an unexpected `*-setup.pth` in site-packages) is worth checking on every dev machine.
+
+[`🔗 GitHub Advisory`](https://github.com/advisories/GHSA-93qj-5q5v-3c2h) · [`🔗 pantheon-agents advisory`](https://github.com/aristoteleo/PantheonOS/security/advisories/GHSA-93qj-5q5v-3c2h)
+
+---
+
+## 26. BixBench3 — FutureHouse grades agents on whole-study computational biology, and the best agent scores 0.48
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.25286 · ~1d ago (Aug 26)
+- **Tags:** `agent-benchmark` `computational-biology` `science-agents` `evaluation`
+
+FutureHouse extended **BixBench** into **BixBench3** (arXiv 2608.25286): 20 tasks / 138 artifacts where an agent must reproduce a published study's full analysis from raw data, programmatically graded against the original outputs. Across 13 frontier models, scores run 0.00 (Gemini 3.1 Flash Lite) to **0.48 (GPT 5.6 Sol)**; performance collapses on large data (0.36 avg <100GB vs 0.10 >100GB) and with more sequential steps (0.36 at 1–2 steps vs 0.24 at 3+). Average attempt cost: 6.8h / 102M tokens / $43, with the longest attempts consuming **24h / 1.07B tokens / $525** — and notably the best-scoring agents were also the cheapest. The failure taxonomy is LLM-judge-graded (correlates ρ=−0.92 with score).
+
+**Why it matters:** One of the few benchmarks that grades end-to-end scientific deliverables rather than chat answers — and it ties agent competence to real compute cost. A 0.48 ceiling is a concrete measure of how far research-autonomy still is for big-data biology.
+
+[`🔗 arXiv 2608.25286`](https://arxiv.org/abs/2608.25286) · [`🔗 GitHub FutureHouse/BixBench`](https://github.com/FUture-House/BixBench)
+
+---
+
+## 27. MoneyPrinterTurbo v1.3.5 — the 117k-star AI short-video generator adds Claude and hardens its API
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 117k stars (+7.2k/wk) · v1.3.5 (Aug 22) · trending today
+- **Tags:** `ai-video` `text-to-video` `open-source` `release`
+
+**harry0703/MoneyPrinterTurbo** (MIT, 117k stars, +7.2k this week) shipped **v1.3.5** (Aug 22): Anthropic Claude joins as a native LLM provider, WaveSpeed AI + Shengsuan AI join Pexels/Pixabay as text-to-video material sources, MiniMax + Fish Audio join the TTS stack, and the WebUI gains reusable generation presets. The release also hardens a tool that was previously open by default: optional **API-key auth for `/api/v1` and generated task files**, symlink-traversal prevention, upload validation, and restricted custom-audio paths.
+
+**Why it matters:** The most-starred "prompt-to-short-video" pipeline just closed the loop (Claude driving generation end-to-end) while adding security defaults — a reminder that release-driven spikes in consumer AI tools are where agent tooling quietly gets its security posture.
+
+[`🔗 GitHub MoneyPrinterTurbo`](https://github.com/harry0703/MoneyPrinterTurbo) · [`🔗 Releases`](https://github.com/harry0703/MoneyPrinterTurbo/releases)
+
+---
+
+## 28. Amazon shuts down Mechanical Turk on Sept 30 — the 21-year-old "artificial artificial intelligence" ends
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News / CNBC · 189 pts · ~4h ago (~08:30 UTC+8)
+- **Tags:** `mturk` `amazon` `crowdsourcing` `shutdown` `rlhf`
+
+Amazon announced (Aug 25) it will permanently close **AWS Mechanical Turk** on **September 30, 2026** — the crowdsourcing platform Jeff Bezos once called "artificial artificial intelligence," which matched human workers with "HITs" (data labeling, transcription, surveys) for cents. The notice points requesters and workers to an FAQ; Amazon stopped accepting new customers last month. MTurk ran for 21 years and served 500k+ workers at its peak; a 2023 Swiss study found up to 46% of its workers already used AI models to complete tasks.
+
+**Why it matters:** MTurk powered a generation of RLHF and eval-data collection that current agent pipelines increasingly generate synthetically — its shutdown is a concrete marker of the human-labor → synthetic-data shift, and any org still running labeling workflows on the MTurk API has a 30-day migration clock.
+
+[`🔗 CNBC`](https://www.cnbc.com/2026/08/25/amazon-service-that-jeff-bezos-called-artificial-ai-is-shutting-down.html) · [`🔗 The Next Web`](https://thenextweb.com/news/amazon-mechanical-turk-closing-september-2026)
+
+---
+
+## 29. EXAONE Tabular 1.0 — LG's 20.8M-parameter model beats 4-hour AutoML on tabular tasks in-context
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.25774 · ~1d ago (Aug 26)
+- **Tags:** `tabular-model` `in-context-learning` `lg-ai` `foundation-model`
+
+LG AI Research released **EXAONE Tabular 1.0** (arXiv 2608.25774; weights on Hugging Face), a compact tabular foundation-model family (20.81M-parameter classifier plus regression) that does classification/regression by **in-context learning with no per-dataset gradient updates**, pretrained on a synthetic structural-causal-model prior. The classifier ranks first overall on **TabArena (ELO 1760)**, edging Google's TabFM (1749) and beating tuned ensembles and 4-hour AutoML; regression reaches TabFM-level performance at ~1/11 inference cost. It reads at most 100 columns (auto-selects beyond); the report has no limitations section and the results are self-reported.
+
+**Why it matters:** A ~21M-parameter model beating AutoML pipelines on tabular data in-context is a strong data point for the low-cost tabular race (TabFM, TabPFN lineage) — and for private/on-prem deployments where tabular inference has to run on commodity hardware.
+
+[`🔗 arXiv 2608.25774`](https://arxiv.org/abs/2608.25774) · [`🔗 Hugging Face`](https://huggingface.co/LG-AI-Research/EXAONE-Tabular)
+
+---
+
+## 30. JetBrains ships "Modern Go Guidelines" — a version-aware skills repo that keeps AI agents current on Go idioms
+
+- **Velocity:** ▮ steady
+- **Source:** JetBrains blog / GitHub · 1.8k stars · Aug 24
+- **Tags:** `jetbrains` `go` `agent-skills` `claude-code` `developer-tools`
+
+JetBrains' GoLand team released **JetBrains/go-modern-guidelines** (Apache-2.0, ~1.8k stars): a skills repo with a `use-modern-go` skill and a small CLI that agents use to get **Go-version-matched idioms** via progressive disclosure — `slices.Contains`, `cmp.Or`, `errors.AsType`, `strings.CutLast` — for Go 1.0 through 1.27. It detects the project's Go version from `go.mod` (targets Go 1.25+), installs as a Claude Code marketplace plugin or via skills.sh for Codex/Cursor/Junie, and "never modifies your project." The stated motivation: training-data lag and frequency bias make agents emit outdated Go.
+
+**Why it matters:** A first-party IDE vendor shipping a version-aware, vendor-maintained skill package marks the Agent Skills ecosystem maturing past community plugins — and go.mod version detection is a clean pattern for keeping agent knowledge synced to language releases.
+
+[`🔗 JetBrains blog`](https://blog.jetbrains.com/go/2026/08/24/help-ai-coding-agents-write-up-to-date-code-with-modern-golang-skills/) · [`🔗 GitHub`](https://github.com/JetBrains/go-modern-guidelines)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-26T20:10:00Z |
-| Items | 17 |
-| Sources tracked | 25 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool) |
+| Generated | 2026-08-27T04:03:00Z |
+| Items | 30 |
+| Sources tracked | 37 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool, aboutamazon.com, The Register, The Star, RuntimeWire, CISA, CIRCL, 9to5Google, Engadget, SD Times, CNBC, The Next Web, JetBrains) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

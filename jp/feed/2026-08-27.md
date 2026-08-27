@@ -1,8 +1,8 @@
 ---
 date: 2026-08-27
-updated: 2026-08-26T20:10:00Z
+updated: 2026-08-27T04:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 25
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -253,13 +253,195 @@ Wordfence の深さ優先 AI リサーチエージェント **Argus** は、匿�
 
 ---
 
+## 18. AWS が DuckLabs を買収 — DuckDB を手がける企業を取得、プロジェクトは独立した財団のもとでオープンのまま
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / Amazon · 1002 pts · ~15h ago (~21:00 UTC+8)
+- **Tags:** `aws` `duckdb` `database` `open-source` `acquisition`
+
+Amazon は、インメモリ OLAP データベース **DuckDB**（1 日 100 万超ダウンロード）を手がけるアムステルダム拠点の企業 **DuckLabs** を買収する正式契約に署名した。Amazon は DuckDB オープンソースプロジェクト自体は*買収しない*ことを明示している——独立した **DuckDB Foundation** のもとで MIT ライセンスを維持し、開発者の Hannes Mühleisen と Mark Raasveldt はアムステルダムから引き続き技術の方向性を主導する。AWS は本取引を、アナリティクスを「より高速・よりシンプル・より費用対効果の高い」ものにするためのものと位置づけ、2024 年の DuckDB-for-S3-Tables コラボレーションを土台とする。DuckDB はサブ TB のクエリの「ラストマイル」とエージェントのツール呼び出しに自然に適合する。
+
+**Why it matters:** ハイパースケーラーが最も組み込みの進んだオープンソース分析データベースを吸収しつつ、コードを中立な財団の下に残す——これはクラウド大手が人気 OSS を殺さずに内製化する方法のこれまでで最もクリーンな試金石であり、DuckDB 上に構築されたすべてのアナリティクスベンダーのロードマップの計算を塗り替える。
+
+[`🔗 Amazon (aboutamazon)`](https://www.aboutamazon.com/news/company-news/aws-ducklabs) · [`🔗 The Register`](https://www.theregister.com/databases/2026/08/26/aws-buys-ducklabs-the-people-behind-the-popular-in-process-olap-database/5292590)
+
+---
+
+## 19. Nvidia、Hugging Face を約 129 億ドルで買収と報道 — オープンモデルハブの中立性が最大の疑問点
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / The Information · 465 pts · ~2h ago (~10:15 UTC+8)
+- **Tags:** `nvidia` `hugging-face` `acquisition` `open-source` `reported`
+
+The Information が最初に、次いで Reuters など複数の報道が、**Nvidia が Hugging Face を約 129 億ドルで買収することに合意した**と伝えている。Business Insider が「AI の GitHub」が 130 億ドル超での買収提案を評価中と報じた 2 日後のことだ。両社とも確認しておらず、取引はまだ最終調整中とされており、破談の可能性もある。背景：Hugging Face は 2023 年に 45 億ドルの評価額で資金調達を行い（Nvidia も参加）、それ以前の Nvidia の出資を拒否していた。現在は AMD・Intel・Apple・クラウドハードウェアで動作する数百万のオープンモデル/データセットをホストしている——コミュニティが失うことを懸念するマルチベンダー中立性こそが、以前の申し出が拒否された理由そのものだ。
+
+**Why it matters:** Hugging Face はすべてのオープンモデルとそれらをロードするすべてのエージェントの間に位置する——報道された Nvidia による買収（未確認）は、オープン AI の配布レイヤーに対するこれまでで最大の統合となる。そしてプラットフォームへの信頼こそ、129 億ドルという数字に織り込むことのできないものだ。
+
+[`🔗 The Star (The Information)`](https://www.thestar.com.my/tech/tech-news/2026/08/27/nvidia-agrees-to-buy-hugging-face-for-129-billion-the-information-reports) · [`🔗 RuntimeWire`](https://runtimewire.com/article/nvidia-buy-hugging-face-12-9-billion)
+
+---
+
+## 20. CVE-2026-8452 — Citrix NetScaler の SAML ヒープオーバーフローが、確認済み pre-auth RCE 標的として CISA KEV に掲載
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV / GitHub Advisory · CVSS 9.8 · Aug 26 (due Aug 29)
+- **Tags:** `citrix` `netscaler` `kev` `rce` `active-exploitation`
+
+CISA は **CVE-2026-8452**（NetScaler ADC/Gateway）を 8 月 26 日に既知の悪用済み脆弱性（KEV）カタログに追加した——このバッチで追加された 6 件のうちの 1 件で、確認済みの活発な悪用と、連邦政府機関向けの修正期限 **8 月 29 日**が設定されている。本欠陥は SAML 認証パスのメモリ境界エラーで、アプライアンスが Gateway（SSL VPN / ICA / CVPN / RDP プロキシ）または AAA 仮想サーバとして動作する場合に**認証前（pre-auth）**に到達可能。Citrix は DoS と評価したが、**watchTowr Labs はこれが未認証 RCE に連鎖することを実証した**（実行可能ヒープ上の shellcode による PHP webshell）。NetScaler 14.1-72.61 / 13.1-63.18（6 月 30 日パッチ適用済み）で修正。CVSS **9.8（NVD 3.1）** vs **8.8（Citrix CNA 4.0）**——採番者の見解の相違に注意。
+
+**Why it matters:** NetScaler は数千の組織の境界アプライアンスであり、実証済みの pre-auth RCE と 3 日間の連邦修正猶予を伴う、活発に悪用されている KEV エントリは本バッチで最優先の修正対象だ——インターネットに晒された Gateway は、パッチ適用を確認するまで侵害済みとして扱え。
+
+[`🔗 CIRCL CVE-2026-8452`](https://vulnerability.circl.lu/vuln/CVE-2026-8452) · [`🔗 GitHub Advisory`](https://github.com/advisories/GHSA-r7wg-r5wj-c765)
+
+---
+
+## 21. Gemini 3.5 Transcribe — Google の「最も精密な」音声認識が 2 つの新 API サーフェスで Chirp 3 を置き換え
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google blog / 9to5Google · ~1d ago (Aug 26)
+- **Tags:** `speech-to-text` `gemini` `multimodal` `gcp`
+
+Google DeepMind は **Gemini 3.5 Transcribe**（8 月 26 日）を発表した。生の音声をフォーマット済み・話者属性付きのテキストに変換する音声認識モデルで、85 以上の言語、マルチ話者属性（最大 3 話者、3 以上は実験的）、フィラー語の除去、自己修正処理、カスタム語彙、他の Gemini モデルに委譲するファンクションコーリングに対応する。Google は最終文字起こしまでの時間が **Chirp 3 比で 70% 改善**すると主張。サードパーティの Artificial Analysis は **2.6% WER（非ストリーミング）/ 4.0%（ストリーミング）**、FLEURS では 5.04%/5.50% を計測した。2 つの API サーフェス：**Live API**（`gemini-3.5-transcribe-live`、サブ秒レイテンシ）と、録音済み音声にワードタイムスタンプを付与する **Interactions API**。Google AI Studio と Enterprise Agent Platform でパブリックプレビュー公開中。
+
+**Why it matters:** これは音素マッチングではなく Gemini-3.5 級の推論の上に明示的に構築された初の STT であり、ファンクションコーリングのフックが文字起こしをエージェント型インターフェース（音声 → ツール呼び出し）に変える——これはエンタープライズ音声エージェントが向かう方向だ。
+
+[`🔗 Google blog`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5-transcribe/) · [`🔗 9to5Google`](https://9to5google.com/2026/08/26/gemini-3-5-transcribe/)
+
+---
+
+## 22. WeMM-Embedding — Tencent の WeChat Vision チームが SOTA マルチモーダル埋め込みファミリーをオープンソース化
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / arXiv · 2608.24053 · ~1d ago (Aug 26)
+- **Tags:** `multimodal` `embedding` `tencent` `open-source` `retrieval`
+
+Tencent の WeChat Vision チームは **WeMM-Embedding**（Apache-2.0）を公開した。ネイティブマルチモーダルの **Qwen3.5** バックボーン上に構築した 2B/4B/9B サイズの汎用マルチモーダル埋め込みファミリーで、テキスト・画像・動画・ビジュアルドキュメント・インターリーブ入力を、Matryoshka 切り詰め可能な次元を持つ 1 つの L2 正規化空間にマッピングする。9B 版は **MMEB-v2（78 データセット）で 80.6** を記録——新 SOTA だ——2B は 77.9 で、それまでのトップの 8B オープンベースラインをすでに上回る。MMEB-v3 スコアは 56.0–59.5 の範囲。WeChat 本番環境（Channels、Official Accounts、Moments、e コマース）にすでにデプロイされ、14 件のオンライン A/B テストで一貫した勝利を収めている。テクニカルレポートは arXiv 2608.24053。音声入力は未対応。
+
+**Why it matters:** 埋め込み品質は検索/RAG の静かな増倍率であり、本番実証済みの Apache-2.0 マルチモーダルエンベダーを 3 サイズで提供するベンダーは、強力な埋め込みにはクローズド API が必要という前提を揺るがす——特に混在するドキュメント + 画像検索を行うエージェントにとっては。
+
+[`🔗 GitHub Tencent/WeMM-Embedding`](https://github.com/Tencent/WeMM-Embedding) · [`🔗 arXiv 2608.24053`](https://arxiv.org/abs/2608.24053)
+
+---
+
+## 23. Anthropic が Claude メモリを Chat と Cowork で統合 — リアルタイム書き込み、センシティブトピックはデフォルトでオフ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Engadget / SD Times · ~1d ago (Aug 25)
+- **Tags:** `anthropic` `claude` `memory` `cowork` `agent`
+
+Anthropic は **Claude Chat と Claude Cowork にまたがる永続メモリ**（8 月 25 日）を出荷した。会話で蓄積されたコンテキストがクラウドベースの Cowork タスクに引き継がれ、その逆も同様で、チャット中のメモリ書き込みは事後サマリーではなく**リアルタイム**で行われる。ユーザーはメモリを Settings のトピック別エントリとして管理できる（表示/編集/削除、1 回の修正がすべての場所に適用）。センシティブトピック（健康、人種、民族、宗教、政治、性自認）は**デフォルトで除外**され、オプトインのトグルで有効化。SSN、犯罪歴、移民ステータスは保存されない。Free/Pro/Max（Web/デスクトップ/モバイル）でデフォルトオン。メモリは遡及適用されず、Claude Code は別のメモリシステムを維持する。
+
+**Why it matters:** チャットサーフェスとコンピュータ使用エージェントにまたがる編集可能な永続メモリは、長期間のエージェント作業に欠けていたプリミティブだ——しかしセンシティブトピックのデフォルトとクラウドのみのスコープ（Cowork はクラウドで実行する必要がある）は、能力と同じくらい信頼コントロールが重要なこの機能の正直な部分である。
+
+[`🔗 Engadget`](https://www.engadget.com/2243753/claude-memory-now-works-across-both-chats-and-cowork-sessions/) · [`🔗 SD Times`](https://sdtimes.com/ai/anthropic-puts-persistent-memory-into-claude-cowork/)
+
+---
+
+## 24. CVE-2026-77537 — Ubiquiti の SA-067 が UniFi Protect に CVSS 10.0 のコマンドインジェクションを公表（欠陥は計 22 件）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ubiquiti SA-067 / CIRCL · CVSS 10.0 (CNA) · Aug 26
+- **Tags:** `ubiquiti` `unifi` `command-injection` `cve-10-0`
+
+Ubiquiti の **Security Advisory Bulletin 067**（8 月 26 日）は UniFi 製品ライン全体の 22 件の脆弱性を修正する。筆頭は **CVE-2026-77537**——Ubiquiti（CNA 採番）による CVSS 10.0、不適切な入力検証による **UniFi Protect のコマンドインジェクション**（影響を受けるバージョン &lt; 7.2.105、ネットワーク到達可能、権限・ユーザー操作不要、スコープ変更あり）だ。さらに UniFi Talk に 2 つ目の 10.0（CVE-2026-77554）、UniFi OS に認証バイパス（CVE-2026-77550）、そして **CVE-2026-77534（9.9）** の不適切なアクセス制御による権限昇格が UniFi OS Server と実質的に製品ライン全体（UDM、Cloud Gateway、NVR、NAS）に影響する。まだ NVD 解析はされておらず、既知の悪用もない。
+
+**Why it matters:** UniFi Protect への未認証 CVSS 10.0 コマンドインジェクションに加え、UniFi 管理プレーン全体への 9.9 は、家庭と SMB に広く導入されている製品ファミリーを直撃する——観測されたエクスプロイトがなくても修正は即時対応が必要で、CNA のみの採番であるため NVD はまだ数値を独立に検証していない。
+
+[`🔗 CIRCL CVE-2026-77537`](https://vulnerability.circl.lu/vuln/CVE-2026-77537) · [`🔗 CIRCL CVE-2026-77534`](https://vulnerability.circl.lu/vuln/CVE-2026-77534)
+
+---
+
+## 25. PyPI の pantheon-agents 0.6.1/0.6.2 がトロイの木馬化 — 資格情報窃取マルウェアが SSH 鍵・クラウド資格情報・トークンを窃取
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory · GHSA-93qj-5q5v-3c2h · ~1d ago (Aug 26)
+- **Tags:** `supply-chain` `pypi` `credential-stealer` `malware`
+
+GitHub Security Advisory（GHSA-93qj-5q5v-3c2h、CRITICAL）は、PyPI 上のトロイの木馬化された **`pantheon-agents` 0.6.1 および 0.6.2** を文書化している。メンテナーの PyPI アカウントは 2026 年 6 月の「Hades」サプライチェーン攻撃で侵害され、攻撃者は窃取した長期有効な PyPI トークンを使って悪意のある wheel をレジストリに直接アップロードした。`pip install` 時に `*-setup.pth` ファイルが Bun ランタイムをダウンロードし、難読化された資格情報窃取マルウェアを実行して、環境変数、`~/.pypirc`、`~/.npmrc`、`~/.aws` などのクラウド資格情報、SSH 鍵、API トークンを収集する。GitHub ソースはクリーンで——影響を受けるのは PyPI の成果物のみ——0.6.1/0.6.2 をインストールした人は、そのマシン上のすべての資格情報が窃取されたとみなすべきだ。
+
+**Why it matters:** 1 つの窃取された長期有効な PyPI トークンが、パッケージのリリースチャネルを静かに資格情報流出の排水溝に変えた——そして「レジストリからの pip install」こそ、ほとんどのエージェントツールが使うまさにデフォルトの動作だ。この IoC（site-packages 内の予期しない `*-setup.pth`）はすべての開発マシンで確認する価値がある。
+
+[`🔗 GitHub Advisory`](https://github.com/advisories/GHSA-93qj-5q5v-3c2h) · [`🔗 pantheon-agents advisory`](https://github.com/aristoteleo/PantheonOS/security/advisories/GHSA-93qj-5q5v-3c2h)
+
+---
+
+## 26. BixBench3 — FutureHouse が研究全体の計算生物学でエージェントを採点、最高スコアのエージェントは 0.48
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.25286 · ~1d ago (Aug 26)
+- **Tags:** `agent-benchmark` `computational-biology` `science-agents` `evaluation`
+
+FutureHouse は **BixBench** を **BixBench3**（arXiv 2608.25286）に拡張した。20 タスク / 138 アーティファクトで構成され、エージェントは公開済み研究の完全な分析を生データから再現し、元の出力に対してプログラム的に採点される。13 のフロンティアモデルで、スコアは 0.00（Gemini 3.1 Flash Lite）から **0.48（GPT 5.6 Sol）** まで分布。性能は大規模データ（100GB 未満で平均 0.36 vs 100GB 超で 0.10）と逐次ステップの多さ（1〜2 ステップで 0.36 vs 3 以上で 0.24）で崩壊する。試行あたりの平均コストは 6.8 時間 / 1 億 200 万トークン / 43 ドルで、最長の試行は **24 時間 / 10 億 7000 万トークン / 525 ドル**を消費した——注目すべきは、最高スコアのエージェントが同時に最も安価だったことだ。失敗の分類は LLM ジャッジで採点される（スコアと ρ=−0.92 の相関）。
+
+**Why it matters:** チャットの回答ではなくエンドツーエンドの科学的成果物を採点する数少ないベンチマークの 1 つであり、エージェントの能力を実際の計算コストに結びつける。0.48 という天井は、ビッグデータ生物学における研究自律性がまだどれだけ遠いかを示す具体的な尺度だ。
+
+[`🔗 arXiv 2608.25286`](https://arxiv.org/abs/2608.25286) · [`🔗 GitHub FutureHouse/BixBench`](https://github.com/FUture-House/BixBench)
+
+---
+
+## 27. MoneyPrinterTurbo v1.3.5 — 117k スターの AI ショート動画生成ツールが Claude を追加し API を強化
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 117k stars (+7.2k/wk) · v1.3.5 (Aug 22) · trending today
+- **Tags:** `ai-video` `text-to-video` `open-source` `release`
+
+**harry0703/MoneyPrinterTurbo**（MIT、117k スター、今週 +7.2k）は **v1.3.5**（8 月 22 日）をリリースした。Anthropic Claude がネイティブ LLM プロバイダとして加わり、テキストから動画への素材ソースとして WaveSpeed AI + Shengsuan AI が Pexels/Pixabay に加わり、MiniMax + Fish Audio が TTS スタックに加わり、WebUI は再利用可能な生成プリセットを獲得した。また本リリースは、以前はデフォルトでオープンだったツールを強化する。`/api/v1` と生成されたタスクファイルへの**オプションの API キー認証**、シンボリックリンクトラバーサル防止、アップロード検証、カスタムオーディオパスの制限を追加した。
+
+**Why it matters:** 最もスターを集めた「プロンプトからショート動画へ」のパイプラインが、セキュリティデフォルトを追加しながらループを閉じた（Claude がエンドツーエンドで生成を駆動）——コンシューマー向け AI ツールのリリースによる急上昇こそ、エージェントツールが静かにセキュリティ態勢を獲得する場所であることを思い出させる。
+
+[`🔗 GitHub MoneyPrinterTurbo`](https://github.com/harry0703/MoneyPrinterTurbo) · [`🔗 Releases`](https://github.com/harry0703/MoneyPrinterTurbo/releases)
+
+---
+
+## 28. Amazon が 9 月 30 日に Mechanical Turk を終了 — 21 年間続いた「人工人工知能」が幕を閉じる
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News / CNBC · 189 pts · ~4h ago (~08:30 UTC+8)
+- **Tags:** `mturk` `amazon` `crowdsourcing` `shutdown` `rlhf`
+
+Amazon は（8 月 25 日）、**AWS Mechanical Turk** を **2026 年 9 月 30 日**に恒久的に閉鎖すると発表した。Jeff Bezos がかつて「人工人工知能（artificial artificial intelligence）」と呼んだこのクラウドソーシングプラットフォームは、人間のワーカーと「HIT」（データラベリング、文字起こし、アンケート）をセント単位の報酬でマッチングしていた。通知はリクエスターとワーカーを FAQ に誘導している。Amazon は先月、新規顧客の受け付けを停止した。MTurk は 21 年間運営され、ピーク時には 50 万人超のワーカーにサービスを提供した。2023 年のスイスの研究では、ワーカーの最大 46% がすでに AI モデルを使ってタスクを完了していたことが判明している。
+
+**Why it matters:** MTurk は、現在のエージェントパイプラインがますます合成的に生成する、一世代分の RLHF と評価データ収集を支えた——その終了は人間労働から合成データへの移行の具体的な指標であり、いまだに MTurk API でラベリングワークフローを動かしている組織には 30 日間の移行クロックが動いている。
+
+[`🔗 CNBC`](https://www.cnbc.com/2026/08/25/amazon-service-that-jeff-bezos-called-artificial-ai-is-shutting-down.html) · [`🔗 The Next Web`](https://thenextweb.com/news/amazon-mechanical-turk-closing-september-2026)
+
+---
+
+## 29. EXAONE Tabular 1.0 — LG の 20.8M パラメータモデルが表形式タスクで 4 時間の AutoML を in-context で破る
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.25774 · ~1d ago (Aug 26)
+- **Tags:** `tabular-model` `in-context-learning` `lg-ai` `foundation-model`
+
+LG AI Research は **EXAONE Tabular 1.0**（arXiv 2608.25774、ウェイトは Hugging Face）を公開した。**データセットごとの勾配更新なしの in-context learning** で分類/回帰を行うコンパクトな表形式ファンデーションモデルファミリー（20.81M パラメータの分類器 + 回帰）で、合成された構造因果モデル事前分布で事前学習されている。分類器は **TabArena（ELO 1760）で総合 1 位**となり、Google の TabFM（1749）を僅差で抑え、チューニング済みアンサンブルと 4 時間の AutoML を破った。回帰は約 1/11 の推論コストで TabFM 級の性能に到達する。最大 100 列を読み取り（それを超えると自動選択）。レポートには制限事項セクションがなく、結果は自己報告である。
+
+**Why it matters:** 約 2100 万パラメータのモデルが表形式データで AutoML パイプラインを in-context で破ることは、低コスト表形式競争（TabFM、TabPFN 系譜）にとって強力なデータポイントだ——そして表形式推論をコモディティハードウェアで動かす必要があるプライベート/オンプレミス展開にとっても。
+
+[`🔗 arXiv 2608.25774`](https://arxiv.org/abs/2608.25774) · [`🔗 Hugging Face`](https://huggingface.co/LG-AI-Research/EXAONE-Tabular)
+
+---
+
+## 30. JetBrains が「Modern Go Guidelines」をリリース — AI エージェントを Go イディオムの最新状態に保つバージョン対応スキルリポジトリ
+
+- **Velocity:** ▮ steady
+- **Source:** JetBrains blog / GitHub · 1.8k stars · Aug 24
+- **Tags:** `jetbrains` `go` `agent-skills` `claude-code` `developer-tools`
+
+JetBrains の GoLand チームは **JetBrains/go-modern-guidelines**（Apache-2.0、約 1.8k スター）を公開した。`use-modern-go` スキルと小規模な CLI を備えたスキルリポジトリで、エージェントは段階的開示（progressive disclosure）によって Go 1.0 から 1.27 までの **Go バージョンにマッチしたイディオム**——`slices.Contains`、`cmp.Or`、`errors.AsType`、`strings.CutLast`——を取得できる。`go.mod` からプロジェクトの Go バージョンを検出し（Go 1.25+ を対象）、Claude Code のマーケットプレイスプラグインとして、または Codex/Cursor/Junie 向けに skills.sh 経由でインストールされる。そして「プロジェクトを一切変更しない」。動機として明言されているのは、訓練データの遅れと頻度バイアスにより、エージェントが古い Go を出力してしまうことだ。
+
+**Why it matters:** ファーストパーティの IDE ベンダーがバージョン対応・ベンダー保守のスキルパッケージを提供することは、Agent Skills エコシステムがコミュニティプラグインを超えて成熟していることを示す——そして go.mod のバージョン検出は、エージェントの知識を言語リリースに同期させ続けるクリーンなパターンだ。
+
+[`🔗 JetBrains blog`](https://blog.jetbrains.com/go/2026/08/24/help-ai-coding-agents-write-up-to-date-code-with-modern-golang-skills/) · [`🔗 GitHub`](https://github.com/JetBrains/go-modern-guidelines)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-26T20:10:00Z |
-| Items | 17 |
-| Sources tracked | 25 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool) |
+| Generated | 2026-08-27T04:03:00Z |
+| Items | 30 |
+| Sources tracked | 37 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool, aboutamazon.com, The Register, The Star, RuntimeWire, CISA, CIRCL, 9to5Google, Engadget, SD Times, CNBC, The Next Web, JetBrains) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
