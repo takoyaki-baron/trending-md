@@ -1,8 +1,8 @@
 ---
 date: 2026-08-27
-updated: 2026-08-27T04:03:00Z
+updated: 2026-08-27T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 37
+sources: 53
 license: CC-BY-4.0
 ---
 
@@ -435,13 +435,223 @@ JetBrains の GoLand チームは **JetBrains/go-modern-guidelines**（Apache-2.
 
 ---
 
+## 31. OpenExecutive — 解雇された開発者がオープンソースの「AI CEO」を公開、仮想エグゼクティブチームを稼働
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 686 pts · ~10h ago (~09:46 UTC+8)
+- **Tags:** `ai-tools` `agents` `open-source` `claude` `industry`
+
+HN の話題「CEO が AI のために開発者を解雇。開発者はオープンソースの AI CEO を作る」が指すのは **SenteLabsAI/OpenExecutive**（Apache-2.0、約 1k スター、FastAPI + Next.js）：8 つの専門 Claude エージェント（CSO、CFO、CHRO、総務・法務、COO、CMO、CPO、取締役会コミュニケーション）を Executive Orchestrator が束ねる「AI 駆動の仮想エグゼクティブチーム」。MBA 級ナレッジ + アップロードした社内文書への RAG（ChromaDB）、SQLite のエピソード記憶、期限付きフォローアップを拾うスケジューラ、Web/Slack/メール/Telegram/Discord/CLI インターフェースを備える。29 シナリオの LLM-as-judge 評価スイート（CI ゲート ≥3.5/5）付きで、ローカルモデル（Ollama、vLLM）でも実行可能。
+
+**Why it matters:** 「エンジニアを AI で置き換える」流れへのオープンソースによる反撃は、それ自体が AI 製品——Apache-2.0 のマルチエージェント経営スタック。686 ポイントの HN デビューは、コミュニティが皮肉を楽しみつつ、8 エージェントの取締役会が単一モデルより本当に価値を生むかを検証していることを示す。
+
+[`🔗 SenteLabsAI/OpenExecutive`](https://github.com/SenteLabsAI/OpenExecutive) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49458418)
+
+---
+
+## 32. CVE-2026-75604 — Next.js のインクリメンタルキャッシュのパストラバーサルで Windows サーバーに未認証 RCE（CVSS 9.0）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Vercel / GHSA-p293-qw3h-jr36 · CVSS 9.0 · ~1d ago (patch Aug 25-26)
+- **Tags:** `cve` `nextjs` `rce` `path-traversal` `windows`
+
+Next.js が緊急セキュリティリリース（15.5.24 / 16.3.3）で **CVE-2026-75604**（GHSA-p293-qw3h-jr36、CVSS 9.0）を修正。ファイルシステムのインクリメンタルキャッシュの正規化の不整合により、未認証の攻撃者がエンコードされたバックスラッシュ（`..%5C`）を使い、**Windows ファイルシステム**上でキャッシュディレクトリから脱出し、`server-reference-manifest.json` を読んで Server Actions の `encryptionKey` を取得、悪意のある暗号化 Server Action を偽造して任意コマンドを実行できる。影響は Pages Router / App Router（Cache Components なし）で Next ≥13.4 <15.5.24 と ≥16.0 <16.3.3。Linux/macOS と Vercel/Netlify は影響なし。同じリリースに 2 つ目の AVIF 勧告（GHSA-2xp9-vwfh-vxw4）も含まれる。公開 PoC が存在し、Cloudflare は 8 月 26 日に緊急 WAF ルールを展開。
+
+**Why it matters:** 最も広く使われる React フレームワークでの未認証 RCE——1 日以内に公開 PoC と WAF 緊急ルールが出る——は、セルフホストの Windows 上の Next.js を緊急パッチ対象にする。バックスラッシュ正規化という根本原因は、Next.js を超えて監査すべき Windows 特有のバグクラスだ。
+
+[`🔗 Vercel changelog`](https://vercel.com/changelog/nextjs-august-2026-security-release) · [`🔗 Cloudflare WAF release`](https://developers.cloudflare.com/changelog/post/2026-08-26-emergency-waf-release/) · [`🔗 penligent explainer`](https://www.penligent.ai/hackinglabs/tr/cve-2026-75604/)
+
+---
+
+## 33. CISA KEV が NetScaler 以外に 6 件の悪用済み脆弱性を追加 — 2019 年の SQL Server RCE とレガシー Red Hat/Linux バグを含む
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV / CVETodo · six additions · ~1d ago (Aug 26, due Aug 29/Sep 9)
+- **Tags:** `cve` `kev` `mssql` `linux-kernel` `active-exploitation`
+
+CISA は 8 月 26 日、KEV カタログに**6 件の悪用済み脆弱性**を追加した——本日先に報じた Citrix NetScaler 以外の分。目玉は **CVE-2019-1068**、Database Engine サービスアカウントのコンテキストで悪用される Microsoft SQL Server RCE（CVSS 8.8）で、連邦政府の期限は **8 月 29 日**。残り（期限 9 月 9 日）は Web サーバーを狙う中国系サイバー犯罪グループ **UAT-10147** に関する Cisco Talos レポートに紐づく：CVE-2022-0995（Linux カーネルの境界外書き込み）、CVE-2015-5287（Red Hat ABRT シンボリックリンク）、CVE-2015-3246（Red Hat libuser 競合）、CVE-2021-23758（Ajax.NET Professional のデシリアライズ RCE）。6 件中 5 件は 2026 年以前のもの。
+
+**Why it matters:** 10 年前の Red Hat と Linux カーネルの欠陥を攻撃者が今も連鎖させている——KEV がその役割を果たした形だ。そして SQL Server RCE の 48 時間という連邦期限（8 月 29 日）は、インターネットに露出した MSSQL インスタンスすべてを最優先に押し上げる。
+
+[`🔗 CVETodo`](https://cvetodo.com/news/cisa-orders-urgent-patch-for-citrix-netscaler-cve-2026-8452-as-active-exploitation-spreads-adds-five) · [`🔗 Guardian MSSP`](https://www.guardianmssp.com/2026/08/27/cisa-adds-six-exploited-flaws-to-kev-including-netscaler-linux-and-sql-server-bugs/) · [`🔗 CISA KEV`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 34. OpenWorker v0.2.0 — Andrew Ng のローカルファースト AI コワーカーに組み込みセキュリティエージェント
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 16.4k stars (+1,059/day) · v0.2.0 (Aug 25-26)
+- **Tags:** `agents` `security` `local-first` `open-source` `coworker`
+
+**andrewyng/openworker**（MIT、16.4k スター、今日 +1,059）が **v0.2.0** をリリース。チャットだけでなく完成した成果物を生むローカルファーストのデスクトップ「AI コワーカー」に、組み込みの**セキュリティ・コワーカー**——コード脆弱性スキャン、サプライチェーン依存関係監査、クラウド設定チェック——を追加。さらに Skills（再利用可能なワークフローパック）、プロジェクトフォルダに紐づくクロスセッション Memory、自動承認レビューモード、ガイド付き MCP サーバー追加フロー、Apple Silicon に加えて Intel Mac（x64）ビルドも提供。モデルキーは自分で持ち込み（OpenAI/Anthropic/Google/Ollama）、会話とトークンはローカルに留まる。Ng の aisuite 上に構築。
+
+**Why it matters:** Ng の賭け——「監査可能なオープンソース AI コワーカー」——がセキュリティ態勢を内蔵して届いた。監査可能なハーネス、機密コード向けの完全ローカルモデルオプション、ファーストクラスの shift-left セキュリティエージェント。ローカルファーストのエージェントワークステーションが製品カテゴリになったことを示す最も明確なメインストリームのシグナルだ。
+
+[`🔗 andrewyng/openworker`](https://github.com/andrewyng/openworker) · [`🔗 Release v0.2.0`](https://github.com/andrewyng/openworker/releases/tag/v0.2.0)
+
+---
+
+## 35. Asahi Linux 進捗レポート：Linux 7.2 — M3 の Web カメラ/マイク、M4/M5 の NVMe 起動、SPTM/GXF エミュレーション
+
+- **Velocity:** ▮▮ rising
+- **Source:** Asahi Linux / Hacker News · 310 pts · ~13h ago (~06:35 UTC+8)
+- **Tags:** `asahi` `linux` `apple-silicon` `m3` `m4`
+
+**Asahi Linux の Linux 7.2 進捗レポート**（James Calligeros、8 月 26 日）は Apple Silicon 対応の大きな波を記録している。EL3 ファームウェア不在に対応する UEFI Runtime Service ベースの PSCI 導管。m1n1 ハイパーバイザーが **SPRR/GXF** をエミュレートし、M4+ で Apple の **SPTM** ブロブと XNU を一緒にロードできるように。**全 M3 デバイスで Web カメラ + マイクが完全動作**し、逆解析した ACE3 USB コントローラ（SPMI バス）により USB 3.0/Thunderbolt に対応。**M4/M5** で NVMe と PCIe 列挙が動作。Bootlin の VA-API-to-V4L2-Stateless 翻訳層のフォークによる AVC/HEVC/VP9 の AVD 動画デコード。公式 M3 リリースは「ほぼ準備完了」。
+
+**Why it matters:** Apple Silicon Linux が実用性の閾値を越えた——M3 が（カメラ、マイク、USB-C 付きの）サポートされたデイリードライバーになり、M4/M5 がストレージ付きで起動する。SPTM/GXF エミュレーションは真のローレベル初物であり、製品ライン全体を Linux の地図に留める。
+
+[`🔗 Asahi Linux blog`](https://asahilinux.org/2026/08/progress-report-7-2/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49456851)
+
+---
+
+## 36. Accept Markdown — コンテンツネゴシエーションで AI エージェントにクリーンなテキストを届ける規約（acceptmarkdown.com）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News / acceptmarkdown.com · 152 pts · ~16h ago (~03:45 UTC+8)
+- **Tags:** `agents` `web` `http` `markdown` `spec`
+
+**acceptmarkdown.com**（Roots/Sage の Ben Word 作）は、標準の HTTP コンテンツネゴシエーションを使い、**同じ URL から各ページの Markdown 版を配信する**規約を提案する。クライアントが `Accept: text/markdown` を送ると、サーバーは HTML ではなく `Content-Type: text/markdown`（`Vary: Accept` 付き）で応答する。サイトは 20 の AI エージェントを追跡しており、7 つ（Claude Code、Copilot Chat/CLI、Cursor、Microsoft Copilot、OpenClaw、OpenCode）がすでにこのヘッダーを送る一方、消費者向けエージェント（ChatGPT ブラウズ、Claude.ai ウェブ、Gemini、Grok、Perplexity）は依然 HTML しか取得しない。実装はすでに存在する——Static Web Server のネイティブ `--accept-markdown` フラグ、WordPress プラグイン、Cloudflare の「Markdown for Agents」エッジ機能、dualmark の「AEO Specification v1.0」。
+
+**Why it matters:** これは `llms.txt` の構造化された代替だ。単一のインデックスファイルの代わりに、すべての URL が自身の markdown 双子を提供する——トークン削減、ナビノイズなし、一度サーバーが採用すればエージェントが頼れる標準。HTTP コンテンツネゴシエーションは数十年存在してきた。エージェントこそ、それをオンにする価値を生んだ最初のクライアントだ。
+
+[`🔗 acceptmarkdown.com`](https://acceptmarkdown.com/) · [`🔗 Static Web Server`](https://static-web-server.net/features/markdown-content-negotiation/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49454764)
+
+---
+
+## 37. Mold: A Massively Parallel Linker — Rui Ueyama の ASPLOS 2027 論文が 2.4–16.1× 高速化を分解
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.23228 · ~15h ago
+- **Tags:** `linker` `mold` `parallel` `asplos` `build-tools`
+
+**mold** リンカの論文（arXiv 2608.23228、ASPLOS 2027 採録）が公開された。Rui Ueyama の主張：既存リンカはシンボル解決とアーカイブ処理が絡み合い、コアの大半を遊ばせている。mold のクリーンスレート設計はこれを分離し、**パイプライン全体に体系的にデータ並列性を適用**する——単一のホットスポット最適化ではない。実測では数 GB のデバッグバイナリを「多くて数秒、しばしば 1 秒未満」でリンクし、**lld 比 2.4–16.1×、GNU ld 比最大 112×**。アブレーションは単一の最適化が支配的でないことを示す——高速化は累積的だ。
+
+**Why it matters:** リンクは C++ ビルドにおける最後の直列ボトルネック。論文の「1 箇所でなく全パスを並列化する」という発見は他ツールへの青写真であり、「mold を使え」というアドバイスに引用可能な実測の裏付けを与える。
+
+[`🔗 arXiv 2608.23228`](https://arxiv.org/abs/2608.23228) · [`🔗 rui314/mold`](https://github.com/rui314/mold)
+
+---
+
+## 38. grok-bot-0.18-reconstructed — 出荷版に同梱されたソースマップから Grok Bot 0.18 のソースを再構築
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 3.3k stars · ~today (opened Aug 23-26)
+- **Tags:** `reverse-engineering` `typescript` `electron` `grok` `open-source`
+
+**b-nnett/grok-bot-0.18-reconstructed**（3.3k スター）は、出荷された **Grok Bot 0.18.0 macOS アプリ**の非公式・ソース指向の再構築。開発者は本番ビルドに**ランタイムソースマップ**が誤って同梱されているのを発見した。ソースマップは圧縮 JS を可読な構造に逆マップできるため、Electron のメインプロセス、preload ブリッジ、ホスト、コーディネーター、プロトコル、レンダラー境界を TypeScript（約 490k 行、`host/` 層だけで 64k 行）として再構築した。さらに**推論ルーター**（Cursor、Claude Code、Codex、OpenRouter に切替）、ローカル使用量追跡、任意のローカル Docker サンドボックスを追加。ライセンスは付与されておらず、再配布には法的リスクがある。
+
+**Why it matters:** 出荷された Electron アプリが自身のソースマップを漏らすのはサプライチェーンの教訓であると同時に、リバースエンジニアリングへの贈り物だ。そしてこの再構築は、既存の Claude Code/Codex ログインで Grok Bot のツールを使えるようにするルーターとしても機能する。
+
+[`🔗 b-nnett/grok-bot-0.18-reconstructed`](https://github.com/b-nnett/grok-bot-0.18-reconstructed) · [`🔗 Codeberg mirror`](https://codeberg.org/paperbyte/grok-bot-0.18-reconstructed) · [`🔗 bytenote analysis`](https://www.bytenote.net/article/grok-bot-018-reconstructed-inference-router)
+
+---
+
+## 39. SFC が Bambu Lab を AGPLv3/GPLv2 違反で追及 — クローズドなネットワークライブラリを同梱したスライサーのフォーク
+
+- **Velocity:** ▮▮ rising
+- **Source:** LWN / Software Freedom Conservancy · 424 pts · ~18h ago
+- **Tags:** `agpl` `enforcement` `3d-printing` `open-source` `legal`
+
+LWN の記事（HN 424 ポイント）は、**Software Freedom Conservancy（SFC）による Bambu Lab への継続的なコピーレフト執行**を詳報する。Bambu Studio は AGPLv3 ライセンスの PrusaSlicer のフォークであり、「実際の対応ソース」なしに配布され、専有の `libbambu_networking` を `dlopen()` で動的ロードして、共有の User-Agent 文字列で Bambu のサーバーにコールバックする——AGPL のサーバーサイドコピーレフトの縮図だ。別途、Bambu の Buildroot ベース Linux ファームウェアが GPLv2 に違反しているとされる。SFC はまた、クラウド印刷機能を復活させたポーランド人開発者 Paweł Jarczak の OrcaSlicer-bambulab フォークへの DMCA テイクダウンを記録し、**baltobu** 逆解析プロジェクトを継続。募金は 25 万ドルを超えた。
+
+**Why it matters:** メインストリームのコンシューマハードウェアメーカーが GPL フォークを専有物として扱う——今年最大の執行テストケースだ。SFC が訴訟を検討しており、ベンダーのサーバーが実際の処理を担う場合の「対応ソース」の意味に前例を作る可能性がある。
+
+[`🔗 LWN`](https://lwn.net/SubscriberLink/1089390/46116614cc74b814/) · [`🔗 SFC — AGPLv3 violations`](https://sfconservancy.org/news/2026/may/18/bambu-studio-3d-printer-agpl-violation-response/)
+
+---
+
+## 40. Recuris — 作業記憶と経験記憶の分離が長期的エージェントの失敗を修正（arXiv 2608.24876）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.24876 · ~2d ago (Aug 25)
+- **Tags:** `agents` `memory` `long-horizon` `rl` `self-improvement`
+
+**Recuris**（arXiv 2608.24876）は、**作業記憶**（タスクの目標/状態/証拠）と**経験記憶**（再利用可能スキル）を分離することで長期的エージェントの失敗に対処する。メタエージェントが失敗を特定し、検証ゲートが「元タスクを修正し、保持タスクを退行させない」記憶更新のみを受け入れる。4 ベンチマーク × 10 モデルの 37 組中 **35 組**で成功率を改善——τ²-Bench で GPT-5.6 Sol **+17.8**、Claude Opus 5 **+15.6**（→87.9%）、最長タスク **+32.2**、共通の失敗モードは最大 80% 減少。アブレーションは、検証付き作業記憶が主なレバーであることを示す（+23.9 vs 経験記憶のみ +2.0）。明示された限界：Terminal-Bench 2.1 と一部の τ²-Airline アブレーションは統計的に有意でなかった。
+
+**Why it matters:** 「モデルではなく記憶を育てる」という有界自己改善のテーゼであり、証拠ゲート付き状態更新は古典的なエージェントの罠——ツール確認なしでモデルが成功を主張すること——に答える。モデル間の転移可能性は、記憶パッケージが移植可能であることを示す最強のシグナルだ。
+
+[`🔗 arXiv 2608.24876`](https://arxiv.org/abs/2608.24876) · [`🔗 Gen-Verse/Recuris`](https://github.com/Gen-Verse/Recuris)
+
+---
+
+## 41. LAION-BVD — 8000 万クリップからなる 1000 万時間のオープン動画データセット（arXiv 2608.24845）
+
+- **Velocity:** ▮ steady
+- **Source:** LAION / Hacker News · 68 pts · ~10h ago (~09:50 UTC+8)
+- **Tags:** `dataset` `video` `multimodal` `laion` `open-data`
+
+**LAION-BVD**（arXiv 2608.24845、「1000 万時間のオープン動画データセット」）は、CommonCrawl から収集した 13 億のプラットフォーム別動画 URL を公開し、**8000 万本のダウンロード済み動画、合計 1000 万時間**を BVD-V-55M（5500 万のモーションフィルタ済みクリップ）、BVD-A-10M（キャプション付き音声セグメント）、BVD-I-300M（3 億キーフレーム）に分割する。キャプションはオープンモデル（Qwen3-VL-2B、Audio Flamingo 3、DeepSeek-VL2-tiny）で生成され、人手監査のクリーン率は 97.8%/94.0%。BVD-V-50M で ViCLIP を訓練すると InternVid-10M-FLT より 3.3–4.0 ポイント高い。研究用途限定。URL リストは Hugging Face で公開。
+
+**Why it matters:** オープンな動画データは動画・世界モデル訓練の希少な入力だ。BVD の 1000 万時間スケールと完全再現可能な URL リストは、フロンティア級のマルチモーダル事前学習をハイパースケーラ以外にも開放する。
+
+[`🔗 LAION project`](https://projects.laion.ai/bvd/) · [`🔗 arXiv 2608.24845`](https://arxiv.org/abs/2608.24845) · [`🔗 Hugging Face`](https://huggingface.co/datasets/laion/BVD-URLs)
+
+---
+
+## 42. pnpm 12.0 — Rust リライト版、正準化された循環ロックファイルと registry revision
+
+- **Velocity:** ▮ steady
+- **Source:** pnpm blog / Hacker News · 77 pts · ~7h ago (~13:12 UTC+8)
+- **Tags:** `pnpm` `package-manager` `rust` `release` `node`
+
+**pnpm 12.0**（8 月 26 日）は「意図的に移行ではない」Rust リライト——コマンド、フラグ、設定、ロックファイル形式は 11 から引き継ぐ。目玉：**git 依存がアイデンティティ化**（正準的な HTTPS 解決、ロックファイルに SSH URL を一切記録しない）；**循環グラフのロックファイルが正準化**（インストール順序に関わらずバイト同一、ピア解決 2–3× 高速化、メモリ約 25% 削減）；Linux で `packageImportMethod: auto` がクローン優先からハードリンク優先に；**registry revision** により、すでに公開されたバージョンの置き換え成果物を registry が配信可能（`<version>+rN` として記録）；プロジェクト認識型グローバル bin がプロジェクト指定の Node/Deno/Bun に追従；pnpm 自身が npm/Yarn/Bun をインストールし、レジストリ署名で検証する。
+
+**Why it matters:** メジャーなパッケージマネージャが破壊的移行なしで Rust に書き換えたのは「Rust リライト」の波のテンプレート。正準化ロックファイルと registry revision は、再現不能なインストールや「パッチ済みだが再公開できないバージョン」といった現実のサプライチェーンの痛みに答える。
+
+[`🔗 pnpm blog`](https://pnpm.io/blog/releases/12.0) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49460032)
+
+---
+
+## 43. Firefox 157 が JPEG XL をデフォルト有効化 — 最後の主要「抵抗勢力」が転向
+
+- **Velocity:** ▮ steady
+- **Source:** Mozilla dev-platform / Hacker News · 434 pts · ~1d ago
+- **Tags:** `firefox` `jpeg-xl` `image-format` `mozilla` `rust`
+
+Mozilla は Firefox 157（9 月下旬）で**全プラットフォームの JPEG XL デコードをデフォルト有効化**すると発表。使用するのは **jxl-rs**——Mozilla が約 10 万行の C++ libjxl を置き換えるよう挑戦した後、Google Research と共同で作られた Rust デコーダ。アニメーションとプログレッシブレンダリングに対応。HDR 画像は SDR として表示され、トーンマッピングは他の形式より優れている。Chrome も JPEG XL をデフォルト配信する意向を正式化しており、2026 年末までに主要エンジンがすべて対応に収束する（Safari はすでに部分対応）。
+
+**Why it matters:** JPEG XL の採用問題は鶏と卵だった——ブラウザのデフォルトがないからサイトが使わない。Firefox + Chrome のデフォルト化がその膠着を破る。メモリ安全性を明示的な理由とする Rust デコーダは、「Rust リライト」論にとってセキュリティ・バイ・コンストラクションのデータポイントでもある。
+
+[`🔗 Mozilla dev-platform`](https://groups.google.com/a/mozilla.org/g/dev-platform/c/3YMV4MS34KA) · [`🔗 Phoronix`](https://www.phoronix.com/news/Firefox-JPEG-XL-2026-Plans)
+
+---
+
+## 44. Nitter と XCancel が X Corp の停止要求で閉鎖 — オープンな Twitter ミラーは消えた
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News / GitHub · 1174 pts (C&D) · ~2h ago (takedown Aug 27)
+- **Tags:** `nitter` `xcancel` `twitter` `shutdown` `cease-and-desist`
+
+**X Corp は Nitter と XCancel に停止要求（cease-and-desist）を送り**、両サービスは閉鎖された。長年運営されたオープンソースの no-JS Twitter フロントエンド Nitter は C&D を受け取り（zedeus/nitter#1442 に記録）、Twitter/X リンクのリダイレクトを修正するツール XCancel は「追って通知があるまで停止」。これは X の API アクセス制限強化に続く動きだ。
+
+**Why it matters:** Nitter はボット、研究者、低帯域幅ユーザーにとって Twitter/X への事実上の公共アクセス層だった。その閉鎖はオープンウェブツールエコシステムへの実質的な損失であり、ミラーやスクレイパーが今やレート制限ではなく法的措置に直面することを思い出させる。
+
+[`🔗 zedeus/nitter#1442`](https://github.com/zedeus/nitter/issues/1442) · [`🔗 XCancel`](https://xcancel.com) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49462427)
+
+---
+
+## 45. 「VM はサイバー能力を持つエージェントを閉じ込められない」— Trail of Bits が GPT 5.6-Cyber による KVM サンドボックス脱出を 3 回実演
+
+- **Velocity:** ▮ steady
+- **Source:** Trail of Bits / Hacker News · 166 pts · ~21h ago (~22:49 UTC+8)
+- **Tags:** `agent-security` `vm` `sandbox` `exploit` `ai-agents`
+
+Trail of Bits は **GPT 5.6-Cyber** に QEMU/KVM サンドボックス VM からの脱出とフラグファイルの読み取りを課した。エージェントは**3 回、3 つの異なるエクスプロイトチェーンで脱出**した。当時未公開だったホストカーネルバグ CVE-2026-53359（「Januscape」）への実用的なエクスプロイト。libslirp の組み合わせ（CVE-2026-9539 + 修正済みだが未マークのバグ）による任意ホストメモリ読み書き。そして Trail of Bits が最新ソースから QEMU を再構築した後、QEMU・Linux KVM・libslirp にまたがる**3 つのゼロデイ + 修正済みだが未配布のバグ**。約 12 時間自律運用し、行き詰まりから引き返し、一回性のクラッシュより信頼性のある再利用可能なエクスプロイトを好んだ。Firecracker はかなり堅牢だった。
+
+**Why it matters:** 「エージェントを VM に入れればよい」は、サイバー能力を持つエージェントに対しては反証された仮定だ。レポートの推奨（最小権限、迅速更新のディストリビューション、監視、タスクごとのクリーンな環境、エージェントを APT として扱う）が、エージェントサンドボックスの新たなベースラインになる。
+
+[`🔗 Trail of Bits`](https://blog.trailofbits.com/2026/08/26/vms-wont-contain-cyber-capable-agents/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49450188)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-27T04:03:00Z |
-| Items | 30 |
-| Sources tracked | 37 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool, aboutamazon.com, The Register, The Star, RuntimeWire, CISA, CIRCL, 9to5Google, Engadget, SD Times, CNBC, The Next Web, JetBrains) |
+| Generated | 2026-08-27T12:03:00Z |
+| Items | 45 |
+| Sources tracked | 53 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool, aboutamazon.com, The Register, The Star, RuntimeWire, CISA, CIRCL, 9to5Google, Engadget, SD Times, CNBC, The Next Web, JetBrains, Vercel, Cloudflare, CVETodo, GuardianMSSP, Asahi Linux, Static Web Server, Codeberg, bytenote, LWN, SFC, LAION, pnpm, Mozilla, Phoronix, Trail of Bits, XCancel) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

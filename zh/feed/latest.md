@@ -1,8 +1,8 @@
 ---
 date: 2026-08-27
-updated: 2026-08-27T04:03:00Z
+updated: 2026-08-27T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 37
+sources: 53
 license: CC-BY-4.0
 ---
 
@@ -435,13 +435,223 @@ JetBrains 的 GoLand 团队发布 **JetBrains/go-modern-guidelines**（Apache-2.
 
 ---
 
+## 31. OpenExecutive——被裁开发者开源一个"AI CEO"，运行一支虚拟高管团队
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 686 pts · ~10h ago (~09:46 UTC+8)
+- **Tags:** `ai-tools` `agents` `open-source` `claude` `industry`
+
+HN 头条"CEO 为给 AI 腾位置裁掉开发者，开发者开源了 AI CEO"指向 **SenteLabsAI/OpenExecutive**（Apache-2.0，约 1k 星，FastAPI + Next.js）：一个"AI 驱动虚拟高管团队"——由 8 个专家 Claude 智能体（CSO、CFO、CHRO、总法律顾问、COO、CMO、CPO、董事会沟通）支撑的单一连贯高管人格，由 Executive Orchestrator 路由，内置 MBA 级知识 RAG + 上传的公司文档（ChromaDB）、SQLite 中的情境记忆、定时器处理有时间要求的后续事项，并提供 Web/Slack/邮件/Telegram/Discord/CLI 界面。它带有一套 29 个 LLM 评判场景的评估套件（CI 门槛 ≥3.5/5），也能跑本地模型（Ollama、vLLM）。
+
+**Why it matters:** 对"用 AI 取代工程师"的开源回击本身就是一个 AI 产品——Apache-2.0 下的多智能体高管栈——它 686 分的 HN 首秀表明社区一边拥抱反讽，一边检验 8 智能体董事会是否真的比单个模型更有价值。
+
+[`🔗 SenteLabsAI/OpenExecutive`](https://github.com/SenteLabsAI/OpenExecutive) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49458418)
+
+---
+
+## 32. CVE-2026-75604——Next.js 增量缓存路径遍历导致 Windows 服务器未认证 RCE（CVSS 9.0）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Vercel / GHSA-p293-qw3h-jr36 · CVSS 9.0 · ~1d ago (patch Aug 25-26)
+- **Tags:** `cve` `nextjs` `rce` `path-traversal` `windows`
+
+Next.js 发布紧急安全版本（15.5.24 / 16.3.3）修复 **CVE-2026-75604**（GHSA-p293-qw3h-jr36，CVSS 9.0）：文件系统增量缓存的规范化不一致让未认证攻击者用编码反斜杠（`..%5C`）在 **Windows 文件系统**上穿越出缓存目录、读取 `server-reference-manifest.json`、提取 Server Actions 的 `encryptionKey`，再伪造加密的 Server Action 执行任意命令。影响使用 Pages Router 与 App Router（未开启 Cache Components）的 Next ≥13.4 <15.5.24 与 ≥16.0 <16.3.3；Linux/macOS 及 Vercel/Netlify 不受影响。同一版本还附带第二个 AVIF 公告（GHSA-2xp9-vwfh-vxw4）。公开 PoC 已出现，Cloudflare 于 8 月 26 日推送紧急 WAF 规则。
+
+**Why it matters:** 最广泛部署的 React 框架出现未认证 RCE——一天内就有公开 PoC、WAF 紧急规则——任何自托管的 Windows Next.js 部署都成了紧急补丁目标；反斜杠规范化根因也是一类值得超出 Next.js 范围审计的 Windows 特有 bug。
+
+[`🔗 Vercel changelog`](https://vercel.com/changelog/nextjs-august-2026-security-release) · [`🔗 Cloudflare WAF release`](https://developers.cloudflare.com/changelog/post/2026-08-26-emergency-waf-release/) · [`🔗 penligent explainer`](https://www.penligent.ai/hackinglabs/tr/cve-2026-75604/)
+
+---
+
+## 33. CISA KEV 新增六项被利用漏洞——含 2019 年 SQL Server RCE 与老旧 Red Hat/Linux bug
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV / CVETodo · six additions · ~1d ago (Aug 26, due Aug 29/Sep 9)
+- **Tags:** `cve` `kev` `mssql` `linux-kernel` `active-exploitation`
+
+CISA 于 8 月 26 日向 KEV 目录新增**六项活跃被利用漏洞**——即今日早前报道的 Citrix NetScaler 之外的一批。头条是 **CVE-2019-1068**，一个以数据库引擎服务账户上下文被利用的 Microsoft SQL Server RCE（CVSS 8.8），联邦修复期限 **8 月 29 日**。其余（9 月 9 日到期）与 Cisco Talos 关于中国网络犯罪组织 **UAT-10147** 攻击 Web 服务器的报告相关：CVE-2022-0995（Linux 内核越界写）、CVE-2015-5287（Red Hat ABRT 符号链接）、CVE-2015-3246（Red Hat libuser 竞态）、CVE-2021-23758（Ajax.NET Professional 反序列化 RCE）。六个中五个早于 2026 年。
+
+**Why it matters:** 一批五个 2026 年前的 bug 进入 KEV，正是目录发挥作用的体现——攻击者仍在利用十年前的 Red Hat 与 Linux 内核缺陷——而 SQL Server RCE 的 48 小时联邦修复期限（8 月 29 日）把每个暴露在互联网上的 MSSQL 实例推上关键路径。
+
+[`🔗 CVETodo`](https://cvetodo.com/news/cisa-orders-urgent-patch-for-citrix-netscaler-cve-2026-8452-as-active-exploitation-spreads-adds-five) · [`🔗 Guardian MSSP`](https://www.guardianmssp.com/2026/08/27/cisa-adds-six-exploited-flaws-to-kev-including-netscaler-linux-and-sql-server-bugs/) · [`🔗 CISA KEV`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 34. OpenWorker v0.2.0——吴恩达的本地优先 AI 同事新增内置安全智能体
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 16.4k stars (+1,059/day) · v0.2.0 (Aug 25-26)
+- **Tags:** `agents` `security` `local-first` `open-source` `coworker`
+
+**andrewyng/openworker**（MIT，16.4k 星，今日 +1,059）发布 **v0.2.0**：一个产出成品交付物而非聊天内容的本地优先桌面"AI 同事"，新增内置 **安全同事**——代码漏洞扫描、供应链依赖审计、云配置检查——另有 Skills（可复用工作流包）、绑定到项目文件夹的跨会话 Memory、自动审批 reviewer 模式、引导式 MCP 服务器添加流程，以及 Apple Silicon 之外的 Intel Mac（x64）构建。它运行你自己的模型密钥（OpenAI/Anthropic/Google/Ollama），对话与 token 留在本地，构建于吴恩达的 aisuite 之上。
+
+**Why it matters:** 吴恩达的赌注——"可审计的开源 AI 同事"——现在自带安全姿态：可审计的 harness、面向敏感代码的完全本地模型选项，以及作为一等功能内置的 shift-left 安全智能体。这是"本地优先智能体工作站"成为产品类别的最清晰主流信号。
+
+[`🔗 andrewyng/openworker`](https://github.com/andrewyng/openworker) · [`🔗 Release v0.2.0`](https://github.com/andrewyng/openworker/releases/tag/v0.2.0)
+
+---
+
+## 35. Asahi Linux 进度报告：Linux 7.2——M3 摄像头/麦克风、M4/M5 NVMe 起步与 SPTM/GXF 模拟
+
+- **Velocity:** ▮▮ rising
+- **Source:** Asahi Linux / Hacker News · 310 pts · ~13h ago (~06:35 UTC+8)
+- **Tags:** `asahi` `linux` `apple-silicon` `m3` `m4`
+
+**Asahi Linux 的 Linux 7.2 进度报告**（James Calligeros，8 月 26 日）记录了 Apple Silicon 支持的一大波进展：为应对缺乏 EL3 固件而实现的 UEFI Runtime Service PSCI 通道；m1n1 虚拟机监控程序现在模拟 **SPRR/GXF**，因此能在 M4+ 上再次加载 Apple 的 **SPTM** blob 与 XNU 共存；**所有 M3 设备获得完整摄像头 + 麦克风**，加上逆向的 ACE3 USB 控制器（SPMI 总线）带来 USB 3.0/Thunderbolt；**M4/M5** 上 NVMe 与 PCIe 枚举可用；以及通过 fork Bootlin 的 VA-API-to-V4L2-Stateless 翻译层实现的 AVC/HEVC/VP9 AVD 视频解码。官方 M3 版本"几乎就绪"。
+
+**Why it matters:** Apple Silicon Linux 跨越了可用性门槛——M3 作为受支持的日常主力机（摄像头、麦克风、USB-C），M4/M5 可启动并读取存储——而 SPTM/GXF 模拟是真正的底层首创，让整条产品线留在 Linux 版图内。
+
+[`🔗 Asahi Linux blog`](https://asahilinux.org/2026/08/progress-report-7-2/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49456851)
+
+---
+
+## 36. Accept Markdown——一种用内容协商把干净文本喂给 AI 智能体的约定（acceptmarkdown.com）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News / acceptmarkdown.com · 152 pts · ~16h ago (~03:45 UTC+8)
+- **Tags:** `agents` `web` `http` `markdown` `spec`
+
+**acceptmarkdown.com**（作者 Roots/Sage 的 Ben Word）提出一个约定：通过标准 HTTP 内容协商，从**同一 URL 提供每个页面的 Markdown 变体**——当客户端发送 `Accept: text/markdown` 时，服务器以 `Content-Type: text/markdown`（并带 `Vary: Accept`）响应而非 HTML。站点追踪 20 个 AI 智能体：7 个已发送该头（Claude Code、Copilot Chat/CLI、Cursor、Microsoft Copilot、OpenClaw、OpenCode），而消费级智能体（ChatGPT 浏览、Claude.ai Web、Gemini、Grok、Perplexity）仍只抓 HTML。实现已经存在——Static Web Server 原生 `--accept-markdown` 标志、WordPress 插件、Cloudflare 的 "Markdown for Agents" 边缘特性，以及 dualmark 的 "AEO Specification v1.0"。
+
+**Why it matters:** 这是 `llms.txt` 的结构化替代：不用单个索引文件，而是让每个 URL 提供自己的 markdown 孪生版——更少 token、没有导航噪音、一个服务器一旦采纳智能体就能依赖的标准。HTTP 内容协商已经存在了几十年；智能体终于成为值得开启它的客户端。
+
+[`🔗 acceptmarkdown.com`](https://acceptmarkdown.com/) · [`🔗 Static Web Server`](https://static-web-server.net/features/markdown-content-negotiation/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49454764)
+
+---
+
+## 37. Mold: A Massively Parallel Linker——Rui Ueyama 的 ASPLOS 2027 论文拆解 2.4–16.1× 提速
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.23228 · ~15h ago
+- **Tags:** `linker` `mold` `parallel` `asplos` `build-tools`
+
+**mold** 链接器论文（arXiv 2608.23228，已收录于 ASPLOS 2027）发布。Rui Ueyama 的论点：现有链接器把符号解析与归档处理纠缠在一起，让多数核心闲置；mold 的从零设计将其解耦，并在**整个流水线上系统性地应用数据并行**，而非只优化单一热点。实测：链接数 GB 的调试二进制"最多几秒，往往不到一秒"，**比 lld 快 2.4–16.1×，比 GNU ld 最多快 112×**；消融实验显示没有任何单一优化占主导——提速是累积的。
+
+**Why it matters:** 链接是 C++ 构建中最后一个串行瓶颈，而论文"并行每一趟、而不是只优化一处"的发现为其他工具提供了蓝图——也给了"用 mold"这条建议一个可引用、有实测支撑的理由。
+
+[`🔗 arXiv 2608.23228`](https://arxiv.org/abs/2608.23228) · [`🔗 rui314/mold`](https://github.com/rui314/mold)
+
+---
+
+## 38. grok-bot-0.18-reconstructed——开发者从发布版泄露的 source map 重建 Grok Bot 0.18 源码
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 3.3k stars · ~today (opened Aug 23-26)
+- **Tags:** `reverse-engineering` `typescript` `electron` `grok` `open-source`
+
+**b-nnett/grok-bot-0.18-reconstructed**（3.3k 星）是对已发布的 **Grok Bot 0.18.0 macOS 应用**的非官方、面向源码的重建——开发者发现生产构建意外包含其**运行时 source map**，可将压缩 JS 映射回可读结构，于是把 Electron 主进程、preload 桥、host、协调器、协议与渲染器边界重建为 TypeScript（约 490k 行；仅 `host/` 层就 64k 行）。它还新增**推理路由器**切换后端（Cursor、Claude Code、Codex、OpenRouter）、本地用量追踪，以及可选的本地 Docker 沙箱。未授予任何许可；再分发有法律风险。
+
+**Why it matters:** 已发布的 Electron 应用泄露自身 source map，既是供应链教训也是逆向工程的礼物——而这次重建同时充当路由器，让你能用现有的 Claude Code/Codex 登录使用 Grok Bot 的工具。
+
+[`🔗 b-nnett/grok-bot-0.18-reconstructed`](https://github.com/b-nnett/grok-bot-0.18-reconstructed) · [`🔗 Codeberg mirror`](https://codeberg.org/paperbyte/grok-bot-0.18-reconstructed) · [`🔗 bytenote analysis`](https://www.bytenote.net/article/grok-bot-018-reconstructed-inference-router)
+
+---
+
+## 39. SFC 追责 Bambu Lab 违反 AGPLv3/GPLv2——一个附带闭源网络库的分叉切片器
+
+- **Velocity:** ▮▮ rising
+- **Source:** LWN / Software Freedom Conservancy · 424 pts · ~18h ago
+- **Tags:** `agpl` `enforcement` `3d-printing` `open-source` `legal`
+
+LWN 的报道（HN 424 分）详述 **Software Freedom Conservancy 对 Bambu Lab 持续的 copyleft 执法**：Bambu Studio 是 AGPLv3 许可的 PrusaSlicer 的分叉，发布时没有提供"实际对应的源代码"，并通过 `dlopen()` 动态加载专有的 `libbambu_networking`，它借助共享 User-Agent 字符串回连 Bambu 服务器——AGPL 服务端 copyleft 的微缩案例。另外，Bambu 基于 Buildroot 的 Linux 固件被指违反 GPLv2。SFC 还记录了对波兰开发者 Paweł Jarczak 的 OrcaSlicer-bambulab 分叉（恢复了云打印功能）的 DMCA 下架，并继续其 **baltobu** 逆向工程项目，筹款已超过 25 万美元。
+
+**Why it matters:** 一家主流消费硬件厂商把 GPL 分叉当作专有软件，是今年最重要的执法测试案例——而 SFC 正在考虑诉讼，其结果可能为"当供应商的服务器承担实际工作时，对应源代码意味着什么"确立先例。
+
+[`🔗 LWN`](https://lwn.net/SubscriberLink/1089390/46116614cc74b814/) · [`🔗 SFC — AGPLv3 violations`](https://sfconservancy.org/news/2026/may/18/bambu-studio-3d-printer-agpl-violation-response/)
+
+---
+
+## 40. Recuris——把工作记忆与经验记忆解耦，修复长程智能体失败（arXiv 2608.24876）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.24876 · ~2d ago (Aug 25)
+- **Tags:** `agents` `memory` `long-horizon` `rl` `self-improvement`
+
+**Recuris**（arXiv 2608.24876）通过把**工作记忆**（任务目标/状态/证据）与**经验记忆**（可复用技能）解耦来应对长程智能体失败，由一个 meta-agent 定位失败、一个验证门只接受"修复源任务且不使保留任务回退"的记忆更新。在 4 个基准 × 10 个模型的 37 个组合中改进了 **35 个**——τ²-Bench 上 GPT-5.6 Sol **+17.8**、Claude Opus 5 **+15.6**（→87.9%）、最长任务 **+32.2**、常见失败模式最多下降 80%。消融显示经验证的工作记忆是主要杠杆（+23.9 vs 仅经验记忆 +2.0）。声明局限：Terminal-Bench 2.1 与若干 τ²-Airline 消融的收益未达统计显著。
+
+**Why it matters:** "成长记忆，而非模型"是有界的自我改进论点，而基于证据的状态更新回应了经典智能体陷阱——模型在未经工具确认时自称成功。跨模型的可迁移性是迄今最强的信号：记忆包可以携带。
+
+[`🔗 arXiv 2608.24876`](https://arxiv.org/abs/2608.24876) · [`🔗 Gen-Verse/Recuris`](https://github.com/Gen-Verse/Recuris)
+
+---
+
+## 41. LAION-BVD——一个由 8000 万条下载片段构成的 1000 万小时开放视频数据集（arXiv 2608.24845）
+
+- **Velocity:** ▮ steady
+- **Source:** LAION / Hacker News · 68 pts · ~10h ago (~09:50 UTC+8)
+- **Tags:** `dataset` `video` `multimodal` `laion` `open-data`
+
+**LAION-BVD**（arXiv 2608.24845，"一个 1000 万小时的开放视频数据集"）发布从 CommonCrawl 收集的 13 亿条平台特定视频 URL，其中 **8000 万条已下载视频合计 1000 万小时**，拆分为 BVD-V-55M（5500 万条运动过滤片段）、BVD-A-10M（带字幕的音频片段）与 BVD-I-300M（3 亿关键帧）。字幕用开放模型生成（Qwen3-VL-2B、Audio Flamingo 3、DeepSeek-VL2-tiny），人工审计干净率 97.8%/94.0%。在 BVD-V-50M 上训练 ViCLIP 比 InternVid-10M-FLT 高 3.3–4.0 分。仅限研究使用；URL 列表在 Hugging Face 发布。
+
+**Why it matters:** 开放视频数据是视频与世界模型训练中稀缺的输入，而 BVD 的 1000 万小时规模加上完全可复现的 URL 列表，让前沿级多模态预训练不再被超大规模厂商垄断。
+
+[`🔗 LAION project`](https://projects.laion.ai/bvd/) · [`🔗 arXiv 2608.24845`](https://arxiv.org/abs/2608.24845) · [`🔗 Hugging Face`](https://huggingface.co/datasets/laion/BVD-URLs)
+
+---
+
+## 42. pnpm 12.0——Rust 重写版发布：规范化的循环 lockfile 与 registry revision
+
+- **Velocity:** ▮ steady
+- **Source:** pnpm blog / Hacker News · 77 pts · ~7h ago (~13:12 UTC+8)
+- **Tags:** `pnpm` `package-manager` `rust` `release` `node`
+
+**pnpm 12.0**（8 月 26 日）是"刻意不做迁移"的 Rust 重写——命令、标志、设置与 lockfile 格式都从 11 延续。头条特性：**git 依赖成为身份**（规范 HTTPS 解析，lockfile 中绝不记录 SSH URL）；**循环依赖图的 lockfile 规范化**（无论安装顺序如何都字节一致，peer 解析快 2–3×、内存省约 25%）；Linux 上 `packageImportMethod: auto` 改为先 hardlink；**registry revision** 让 registry 可为已发布版本提供替换构件（记录为 `<version>+rN`）；项目感知的全局 bin 跟随项目锁定的 Node/Deno/Bun 版本；pnpm 还能自行安装 npm/Yarn/Bun，并对照 registry 签名验证。
+
+**Why it matters:** 主流包管理器不做破坏性迁移就完成 Rust 重写，是"Rust 重写潮"的模板；规范化 lockfile 与 registry revision 直击真实供应链痛点（不可复现安装、已修复但无法重新发布的版本）。
+
+[`🔗 pnpm blog`](https://pnpm.io/blog/releases/12.0) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49460032)
+
+---
+
+## 43. Firefox 157 将默认启用 JPEG XL——最后一个主要"顽固派"也转向
+
+- **Velocity:** ▮ steady
+- **Source:** Mozilla dev-platform / Hacker News · 434 pts · ~1d ago
+- **Tags:** `firefox` `jpeg-xl` `image-format` `mozilla` `rust`
+
+Mozilla 宣布 Firefox 157（9 月下旬）将在**所有平台默认启用 JPEG XL 解码**，使用 **jxl-rs**——Mozilla 向 Google Research 发起挑战后与之合作构建的 Rust 解码器，用于替换约 10 万行 C++ 的 libjxl。实现支持动画与渐进渲染；HDR 图像以 SDR 显示，色调映射优于其他格式。Chrome 也已正式表态将默认推送 JPEG XL，因此所有主要引擎将在 2026 年底前汇聚支持（Safari 已有部分支持）。
+
+**Why it matters:** JPEG XL 的普及问题是先有鸡还是先有蛋——没有浏览器默认支持，就没有站点使用。Firefox + Chrome 默认化打破了僵局；而以内存安全为明确理由的 Rust 解码器，也为"Rust 重写"论提供了安全优先构建的数据点。
+
+[`🔗 Mozilla dev-platform`](https://groups.google.com/a/mozilla.org/g/dev-platform/c/3YMV4MS34KA) · [`🔗 Phoronix`](https://www.phoronix.com/news/Firefox-JPEG-XL-2026-Plans)
+
+---
+
+## 44. Nitter 与 XCancel 在收到 X Corp 停止函后关站——开放 Twitter 镜像已成历史
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News / GitHub · 1174 pts (C&D) · ~2h ago (takedown Aug 27)
+- **Tags:** `nitter` `xcancel` `twitter` `shutdown` `cease-and-desist`
+
+**X Corp 向 Nitter 与 XCancel 发出了停止与终止函**，两个服务现已关站。Nitter——运营多年的开源无 JS Twitter 前端——收到 C&D（记录在 zedeus/nitter#1442），XCancel——修复 Twitter/X 链接重定向的工具——"暂停服务直至另行通知"。此举紧接 X 不断收紧的 API 访问限制。
+
+**Why it matters:** Nitter 是机器人、研究人员与低带宽用户访问 Twitter/X 的事实公共层，其关站是对开放 Web 工具生态的真实损失——也提醒人们：镜像与抓取工具如今面临的不仅是限流，还有来自所读平台的法律行动。
+
+[`🔗 zedeus/nitter#1442`](https://github.com/zedeus/nitter/issues/1442) · [`🔗 XCancel`](https://xcancel.com) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49462427)
+
+---
+
+## 45. "VM 困不住具备网络能力的智能体"——Trail of Bits 演示 GPT 5.6-Cyber 三次逃逸 KVM 沙箱
+
+- **Velocity:** ▮ steady
+- **Source:** Trail of Bits / Hacker News · 166 pts · ~21h ago (~22:49 UTC+8)
+- **Tags:** `agent-security` `vm` `sandbox` `exploit` `ai-agents`
+
+Trail of Bits 给 **GPT 5.6-Cyber** 出了一道题：逃出 QEMU/KVM 沙箱虚拟机并读取 flag 文件。智能体**三次逃逸、用了三条不同的漏洞链**：针对当时未公开的主机内核 bug CVE-2026-53359（"Januscape"）的可用利用；libslirp 组合（CVE-2026-9539 加一个已修复但未标记的 bug）实现任意主机内存读写；以及在 Trail of Bits 用最新源码重建 QEMU 后，**三个 0-day 加一个已修复但未分发 bug** 横跨 QEMU、Linux KVM 与 libslirp。它自主运行约 12 小时、从死胡同回头、偏好可靠可复用的利用而非一次性崩溃。Firecracker 则表现坚实得多。
+
+**Why it matters:** "把智能体放进 VM 就行"对于具备网络能力的智能体已是被证伪的假设——报告的建议（最小权限、快速更新发行版、监控、每次任务用干净环境、把智能体当 APT 对待）是智能体沙箱化的新基线。
+
+[`🔗 Trail of Bits`](https://blog.trailofbits.com/2026/08/26/vms-wont-contain-cyber-capable-agents/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49450188)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-27T04:03:00Z |
-| Items | 30 |
-| Sources tracked | 37 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool, aboutamazon.com, The Register, The Star, RuntimeWire, CISA, CIRCL, 9to5Google, Engadget, SD Times, CNBC, The Next Web, JetBrains) |
+| Generated | 2026-08-27T12:03:00Z |
+| Items | 45 |
+| Sources tracked | 53 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool, aboutamazon.com, The Register, The Star, RuntimeWire, CISA, CIRCL, 9to5Google, Engadget, SD Times, CNBC, The Next Web, JetBrains, Vercel, Cloudflare, CVETodo, GuardianMSSP, Asahi Linux, Static Web Server, Codeberg, bytenote, LWN, SFC, LAION, pnpm, Mozilla, Phoronix, Trail of Bits, XCancel) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-08-27
-updated: 2026-08-27T04:03:00Z
+updated: 2026-08-27T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 37
+sources: 53
 license: CC-BY-4.0
 ---
 
@@ -435,13 +435,223 @@ JetBrains' GoLand team released **JetBrains/go-modern-guidelines** (Apache-2.0, 
 
 ---
 
+## 31. OpenExecutive — fired developers ship an open-source "AI CEO" that runs a virtual executive team
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 686 pts · ~10h ago (~09:46 UTC+8)
+- **Tags:** `ai-tools` `agents` `open-source` `claude` `industry`
+
+The HN story "CEO fired developers to make room for AI. Developers create open source AI CEO" points at **SenteLabsAI/OpenExecutive** (Apache-2.0, ~1k stars, FastAPI + Next.js): an "AI-powered virtual executive team" — one coherent executive persona backed by 8 specialist Claude agents (CSO, CFO, CHRO, General Counsel, COO, CMO, CPO, Board Communications) routed by an Executive Orchestrator, with RAG over built-in MBA-level knowledge plus uploaded company documents (ChromaDB), episodic memory in SQLite, a scheduler for time-sensitive follow-ups, and web/Slack/email/Telegram/Discord/CLI interfaces. It ships an eval suite of 29 LLM-judge scenarios (CI gate ≥3.5/5) and can run on local models (Ollama, vLLM).
+
+**Why it matters:** The open-source retort to "replace engineers with AI" is itself an AI product — a functioning multi-agent executive stack under Apache-2.0 — and its 686-point HN debut shows the community embracing the irony while testing whether an 8-agent board adds real value over a single model.
+
+[`🔗 SenteLabsAI/OpenExecutive`](https://github.com/SenteLabsAI/OpenExecutive) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49458418)
+
+---
+
+## 32. CVE-2026-75604 — Next.js unauthenticated RCE on Windows-hosted servers via incremental-cache path traversal (CVSS 9.0)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Vercel / GHSA-p293-qw3h-jr36 · CVSS 9.0 · ~1d ago (patch Aug 25-26)
+- **Tags:** `cve` `nextjs` `rce` `path-traversal` `windows`
+
+Next.js shipped an emergency security release (15.5.24 / 16.3.3) fixing **CVE-2026-75604** (GHSA-p293-qw3h-jr36, CVSS 9.0): a canonicalization mismatch in the file-system incremental cache lets an unauthenticated attacker use encoded backslashes (`..%5C`) to traverse out of the cache directory on **Windows filesystems**, read `server-reference-manifest.json`, extract the Server Actions `encryptionKey`, and forge a malicious encrypted Server Action to run arbitrary commands. Affects Pages Router and App Router (without Cache Components) on Next ≥13.4 <15.5.24 and ≥16.0 <16.3.3; Linux/macOS and Vercel/Netlify are unaffected. A second AVIF advisory (GHSA-2xp9-vwfh-vxw4) shipped in the same release. Public PoCs exist and Cloudflare pushed an emergency WAF rule on Aug 26.
+
+**Why it matters:** Unauthenticated RCE in the most widely-deployed React framework — with a public PoC within a day and a WAF emergency rule — makes any self-hosted Windows Next.js deployment an urgent patch target, and the backslash-canonicalization root cause is a Windows-specific class bug worth auditing beyond Next.js.
+
+[`🔗 Vercel changelog`](https://vercel.com/changelog/nextjs-august-2026-security-release) · [`🔗 Cloudflare WAF release`](https://developers.cloudflare.com/changelog/post/2026-08-26-emergency-waf-release/) · [`🔗 penligent explainer`](https://www.penligent.ai/hackinglabs/tr/cve-2026-75604/)
+
+---
+
+## 33. CISA KEV adds six exploited flaws beyond NetScaler — including a 2019 SQL Server RCE and legacy Red Hat/Linux bugs
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV / CVETodo · six additions · ~1d ago (Aug 26, due Aug 29/Sep 9)
+- **Tags:** `cve` `kev` `mssql` `linux-kernel` `active-exploitation`
+
+CISA added **six actively exploited vulnerabilities** to its KEV catalog on Aug 26 — the batch beyond the Citrix NetScaler entry covered earlier today. Headliner: **CVE-2019-1068**, a Microsoft SQL Server RCE (CVSS 8.8) exploited in the context of the Database Engine service account, with a federal deadline of **Aug 29**. The rest (due Sep 9) are tied to a Cisco Talos report on Chinese cybercrime group **UAT-10147** targeting web servers: CVE-2022-0995 (Linux kernel out-of-bounds write), CVE-2015-5287 (Red Hat ABRT symlink), CVE-2015-3246 (Red Hat libuser race), and CVE-2021-23758 (Ajax.NET Professional deserialization RCE). Five of the six predate 2026.
+
+**Why it matters:** A KEV batch of five pre-2026 bugs is the catalog doing its job — attackers are chaining decade-old Red Hat and Linux kernel flaws — and the SQL Server RCE's 48-hour federal deadline (Aug 29) puts every internet-exposed MSSQL instance on the critical path.
+
+[`🔗 CVETodo`](https://cvetodo.com/news/cisa-orders-urgent-patch-for-citrix-netscaler-cve-2026-8452-as-active-exploitation-spreads-adds-five) · [`🔗 Guardian MSSP`](https://www.guardianmssp.com/2026/08/27/cisa-adds-six-exploited-flaws-to-kev-including-netscaler-linux-and-sql-server-bugs/) · [`🔗 CISA KEV`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 34. OpenWorker v0.2.0 — Andrew Ng's local-first AI coworker adds built-in security agents
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 16.4k stars (+1,059/day) · v0.2.0 (Aug 25-26)
+- **Tags:** `agents` `security` `local-first` `open-source` `coworker`
+
+**andrewyng/openworker** (MIT, 16.4k stars, trending +1,059 today) shipped **v0.2.0**: a local-first desktop "AI coworker" that produces finished deliverables rather than chat, adding built-in **Security Coworkers** — code-vulnerability scanning, supply-chain dependency audit, and cloud-posture checks — plus Skills (reusable workflow packs), cross-session Memory tied to project folders, an auto-approve reviewer mode, a guided MCP server-add flow, and Intel Mac (x64) builds alongside Apple Silicon. It runs your own model key (OpenAI/Anthropic/Google/Ollama), keeps conversations and tokens local, and is built on Ng's aisuite.
+
+**Why it matters:** Ng's bet — "the open-source AI coworker you can audit" — now ships with a security posture: an auditable harness, a fully-local model option for sensitive code, and shift-left security agents as first-party features. It's the clearest mainstream signal that local-first agent workstations are a product category.
+
+[`🔗 andrewyng/openworker`](https://github.com/andrewyng/openworker) · [`🔗 Release v0.2.0`](https://github.com/andrewyng/openworker/releases/tag/v0.2.0)
+
+---
+
+## 35. Asahi Linux Progress Report: Linux 7.2 — M3 webcam/mic, M4/M5 NVMe bringup, and SPTM/GXF emulation
+
+- **Velocity:** ▮▮ rising
+- **Source:** Asahi Linux / Hacker News · 310 pts · ~13h ago (~06:35 UTC+8)
+- **Tags:** `asahi` `linux` `apple-silicon` `m3` `m4`
+
+The **Asahi Linux progress report for Linux 7.2** (James Calligeros, Aug 26) documents a major wave of Apple Silicon enablement: a UEFI Runtime Service PSCI conduit to work around the lack of EL3 firmware; the m1n1 hypervisor now emulates **SPRR/GXF** so it can load Apple's **SPTM** blob alongside XNU on M4+ again; **full webcam + microphone on all M3 devices** plus the reverse-engineered ACE3 USB controller (SPMI bus) bringing USB 3.0/Thunderbolt; working NVMe and PCIe enumeration on **M4/M5**; and AVD video decoding for AVC/HEVC/VP9 via a fork of Bootlin's VA-API-to-V4L2-Stateless translation layer. An official M3 release is "almost ready."
+
+**Why it matters:** Apple Silicon Linux crosses a usability threshold — M3 as a supported daily driver (cameras, mics, USB-C), M4/M5 booting with storage — and the SPTM/GXF emulation is a genuine low-level first that keeps the whole line on the Linux map.
+
+[`🔗 Asahi Linux blog`](https://asahilinux.org/2026/08/progress-report-7-2/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49456851)
+
+---
+
+## 36. Accept Markdown — a content-negotiation convention to serve AI agents clean text (acceptmarkdown.com)
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News / acceptmarkdown.com · 152 pts · ~16h ago (~03:45 UTC+8)
+- **Tags:** `agents` `web` `http` `markdown` `spec`
+
+**acceptmarkdown.com** (by Ben Word of Roots/Sage) proposes a convention for serving a **Markdown variant of every page from the same URL** via standard HTTP content negotiation: when a client sends `Accept: text/markdown`, the server responds `Content-Type: text/markdown` (with `Vary: Accept`) instead of HTML. The site tracks 20 AI agents: 7 already send the header (Claude Code, Copilot Chat/CLI, Cursor, Microsoft Copilot, OpenClaw, OpenCode) while consumer agents (ChatGPT browsing, Claude.ai web, Gemini, Grok, Perplexity) still only fetch HTML. Implementations already exist — Static Web Server's native `--accept-markdown` flag, WordPress plugins, Cloudflare's "Markdown for Agents" edge feature, and dualmark's "AEO Specification v1.0."
+
+**Why it matters:** It's the structured alternative to `llms.txt`: instead of a single index file, every URL serves its own markdown twin — fewer tokens, no nav noise, one standard agents can rely on once servers adopt it. Content negotiation has been in HTTP for decades; agents are finally the client that makes it worth turning on.
+
+[`🔗 acceptmarkdown.com`](https://acceptmarkdown.com/) · [`🔗 Static Web Server`](https://static-web-server.net/features/markdown-content-negotiation/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49454764)
+
+---
+
+## 37. Mold: A Massively Parallel Linker — Rui Ueyama's ASPLOS 2027 paper dissects the 2.4–16.1× speedup
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.23228 · ~15h ago
+- **Tags:** `linker` `mold` `parallel` `asplos` `build-tools`
+
+The **mold** linker paper (arXiv 2608.23228, accepted to ASPLOS 2027) is out. Rui Ueyama's thesis: existing linkers leave most cores idle because symbol resolution and archive processing are entangled; mold's clean-slate design decouples them and applies **data parallelism systematically across the entire pipeline** rather than optimizing one hot spot. Measured: it links multi-gigabyte debug binaries "in at most a few seconds, often under a second," is **2.4–16.1× faster than lld and up to 112× faster than GNU ld**, and an ablation shows no single optimization dominates — the speedup is cumulative.
+
+**Why it matters:** Linking is the last serial bottleneck in C++ builds, and the paper's "parallelize every pass, not one" finding gives other tools a blueprint — and gives the "use mold" advice a citable, measured justification.
+
+[`🔗 arXiv 2608.23228`](https://arxiv.org/abs/2608.23228) · [`🔗 rui314/mold`](https://github.com/rui314/mold)
+
+---
+
+## 38. grok-bot-0.18-reconstructed — a developer rebuilds Grok Bot 0.18's source from the source maps it shipped
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 3.3k stars · ~today (opened Aug 23-26)
+- **Tags:** `reverse-engineering` `typescript` `electron` `grok` `open-source`
+
+**b-nnett/grok-bot-0.18-reconstructed** (3.3k stars) is an unofficial, source-oriented reconstruction of the shipped **Grok Bot 0.18.0 macOS app** — the developer found the production build accidentally included its **runtime source maps**, which map minified JS back to readable structure, and rebuilt the Electron main process, preload bridge, host, coordinator, protocol, and renderer boundaries as TypeScript (~490k lines; 64k in the `host/` layer alone). It also adds an **inference router** to switch backends (Cursor, Claude Code, Codex, OpenRouter), local usage tracking, and an optional local Docker sandbox. No license is granted; redistribution carries legal risk.
+
+**Why it matters:** A shipped Electron app leaking its own source maps is both a supply-chain lesson and a reverse-engineering gift — and the reconstruction doubles as a router that makes Grok Bot's tools usable with your existing Claude Code/Codex logins.
+
+[`🔗 b-nnett/grok-bot-0.18-reconstructed`](https://github.com/b-nnett/grok-bot-0.18-reconstructed) · [`🔗 Codeberg mirror`](https://codeberg.org/paperbyte/grok-bot-0.18-reconstructed) · [`🔗 bytenote analysis`](https://www.bytenote.net/article/grok-bot-018-reconstructed-inference-router)
+
+---
+
+## 39. SFC pursues Bambu Lab for AGPLv3/GPLv2 — a slicer fork that ships a closed networking library
+
+- **Velocity:** ▮▮ rising
+- **Source:** LWN / Software Freedom Conservancy · 424 pts · ~18h ago
+- **Tags:** `agpl` `enforcement` `3d-printing` `open-source` `legal`
+
+LWN's report (HN 424 pts) details the **Software Freedom Conservancy's ongoing copyleft enforcement against Bambu Lab**: Bambu Studio, a fork of AGPLv3-licensed PrusaSlicer, ships without the "actual corresponding source" and dynamically loads a proprietary `libbambu_networking` via `dlopen()`, which calls home to Bambu's servers over a shared User-Agent string — the AGPL's server-side copyleft case in miniature. Separately, Bambu's Buildroot-based Linux firmware is alleged to violate GPLv2. SFC also documents the DMCA takedown of Polish developer Paweł Jarczak's OrcaSlicer-bambulab fork (which restored cloud printing) and continues its **baltobu** reverse-engineering project, whose fundraiser passed $250k.
+
+**Why it matters:** A mainstream consumer-hardware maker treating a GPL fork as proprietary is the enforcement test case of the year — and with SFC exploring lawsuits, the outcome could set precedent for what "corresponding source" means when the vendor's servers do the real work.
+
+[`🔗 LWN`](https://lwn.net/SubscriberLink/1089390/46116614cc74b814/) · [`🔗 SFC — AGPLv3 violations`](https://sfconservancy.org/news/2026/may/18/bambu-studio-3d-printer-agpl-violation-response/)
+
+---
+
+## 40. Recuris — decoupling working from experiential memory fixes long-horizon agent failures (arXiv 2608.24876)
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2608.24876 · ~2d ago (Aug 25)
+- **Tags:** `agents` `memory` `long-horizon` `rl` `self-improvement`
+
+**Recuris** (arXiv 2608.24876) targets long-horizon agent failure by decoupling **working memory** (task goals/status/evidence) from **experiential memory** (reusable skills), with a meta-agent that localizes failures and a validation gate that only admits memory updates which fix the source task without regressing held-out tasks. It improves success in **35 of 37** model-benchmark pairs across 4 benchmarks × 10 models — **+17.8 for GPT-5.6 Sol** on τ²-Bench, **+15.6 for Claude Opus 5** (→87.9%), **+32.2** on the longest tasks, common failure modes down up to 80%. Ablations show verified working memory is the main lever (+23.9 vs +2.0 for experiential alone). Stated limitations: gains on Terminal-Bench 2.1 and several τ²-Airline ablations were not statistically significant.
+
+**Why it matters:** "Grow memory, not the model" is the bounded self-improvement thesis, and the evidence-gated state updates answer the classic agent trap — a model claiming success without tool confirmation. The transferability across models is the strongest signal yet that memory packages can be portable.
+
+[`🔗 arXiv 2608.24876`](https://arxiv.org/abs/2608.24876) · [`🔗 Gen-Verse/Recuris`](https://github.com/Gen-Verse/Recuris)
+
+---
+
+## 41. LAION-BVD — a 10-million-hour open video dataset from 80M downloaded clips (arXiv 2608.24845)
+
+- **Velocity:** ▮ steady
+- **Source:** LAION / Hacker News · 68 pts · ~10h ago (~09:50 UTC+8)
+- **Tags:** `dataset` `video` `multimodal` `laion` `open-data`
+
+**LAION-BVD** (arXiv 2608.24845, "a 10-million-hour open video dataset") releases 1.3B platform-specific video URLs collected from CommonCrawl, with **80M downloaded videos totaling 10 million hours**, split into BVD-V-55M (55M motion-filtered clips), BVD-A-10M (audio segments with captions), and BVD-I-300M (300M keyframes). Captions were generated with open models (Qwen3-VL-2B, Audio Flamingo 3, DeepSeek-VL2-tiny) at 97.8%/94.0% human-audited clean rates. Training ViCLIP on BVD-V-50M beats InternVid-10M-FLT by 3.3–4.0 points. Research-only license; URL lists released on Hugging Face.
+
+**Why it matters:** Open video data is the scarce input for video and world models, and BVD's 10M-hour scale with fully-reproducible URL lists makes frontier-scale multimodal pretraining accessible beyond the hyperscalers.
+
+[`🔗 LAION project`](https://projects.laion.ai/bvd/) · [`🔗 arXiv 2608.24845`](https://arxiv.org/abs/2608.24845) · [`🔗 Hugging Face`](https://huggingface.co/datasets/laion/BVD-URLs)
+
+---
+
+## 42. pnpm 12.0 — the Rust rewrite ships with canonical cyclic lockfiles and registry revisions
+
+- **Velocity:** ▮ steady
+- **Source:** pnpm blog / Hacker News · 77 pts · ~7h ago (~13:12 UTC+8)
+- **Tags:** `pnpm` `package-manager` `rust` `release` `node`
+
+**pnpm 12.0** (Aug 26) is the Rust rewrite that's "deliberately not a migration" — commands, flags, settings, and lockfile format carry over from 11. Headlines: **git dependencies become identities** (canonical HTTPS resolution, never SSH URLs in the lockfile); **lockfiles of cyclic graphs are now canonical** (byte-identical regardless of install order, 2–3× faster peer resolution, ~25% less memory); `packageImportMethod: auto` hardlinks first on Linux; **registry revisions** let a registry serve a replacement artifact for an already-published version (recorded as `<version>+rN`); project-aware global bins follow the project's pinned Node/Deno/Bun; and pnpm can now install npm/Yarn/Bun itself, verified against registry signatures.
+
+**Why it matters:** A major package manager rewritten in Rust without a breaking migration is a template for the "rewrite in Rust" wave, and the canonical-lockfile + registry-revision features address real supply-chain pain (non-reproducible installs, patched-but-unpublishable versions).
+
+[`🔗 pnpm blog`](https://pnpm.io/blog/releases/12.0) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49460032)
+
+---
+
+## 43. Firefox 157 will enable JPEG XL by default — the last major holdout turns it on
+
+- **Velocity:** ▮ steady
+- **Source:** Mozilla dev-platform / Hacker News · 434 pts · ~1d ago
+- **Tags:** `firefox` `jpeg-xl` `image-format` `mozilla` `rust`
+
+Mozilla announced Firefox 157 (late September) will ship **JPEG XL decoding by default on all platforms**, using **jxl-rs** — the Rust decoder built with Google Research after Mozilla challenged the team to replace the ~100k-line C++ libjxl. The implementation supports animation and progressive rendering; HDR images display as SDR with better tone mapping than other formats. Chrome has also formalized intent to ship JPEG XL by default, so all major engines converge on it before the end of 2026 (Safari already has partial support).
+
+**Why it matters:** JPEG XL's adoption problem was a chicken-and-egg — no browser default, so no sites use it. Firefox + Chrome defaulting breaks that deadlock, and a Rust decoder with memory safety as the stated reason is a security-by-construction data point for the "rewrite in Rust" argument.
+
+[`🔗 Mozilla dev-platform`](https://groups.google.com/a/mozilla.org/g/dev-platform/c/3YMV4MS34KA) · [`🔗 Phoronix`](https://www.phoronix.com/news/Firefox-JPEG-XL-2026-Plans)
+
+---
+
+## 44. Nitter and XCancel shut down after X Corp cease-and-desist — the open Twitter mirrors are gone
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News / GitHub · 1174 pts (C&D) · ~2h ago (takedown Aug 27)
+- **Tags:** `nitter` `xcancel` `twitter` `shutdown` `cease-and-desist`
+
+**X Corp sent cease-and-desist notices to Nitter and XCancel**, and both services have now been taken down. Nitter — the long-running open-source no-JS Twitter frontend — received a C&D (tracked in zedeus/nitter#1442), and XCancel, the tool that fixed Twitter/X link redirects, is "stopped until further notice." The move follows X's escalating API access restrictions.
+
+**Why it matters:** Nitter was the de-facto public-access layer to Twitter/X for bots, researchers, and low-bandwidth users, and its takedown is a real loss to open-web tooling — plus a reminder that mirrors and scrapers now face legal action, not just rate limits, from the platform they read.
+
+[`🔗 zedeus/nitter#1442`](https://github.com/zedeus/nitter/issues/1442) · [`🔗 XCancel`](https://xcancel.com) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49462427)
+
+---
+
+## 45. "VMs won't contain cyber-capable agents" — Trail of Bits shows GPT 5.6-Cyber escaping a KVM sandbox three times
+
+- **Velocity:** ▮ steady
+- **Source:** Trail of Bits / Hacker News · 166 pts · ~21h ago (~22:49 UTC+8)
+- **Tags:** `agent-security` `vm` `sandbox` `exploit` `ai-agents`
+
+Trail of Bits gave **GPT 5.6-Cyber** a challenge: escape a QEMU/KVM sandbox VM and read a flag file. The agent escaped **three times with three different exploit chains**: a working exploit for the then-unreleased host kernel bug CVE-2026-53359 ("Januscape"), a libslirp combo (CVE-2026-9539 plus a fixed-but-unmarked bug) for arbitrary host memory read/write, and — after Trail of Bits rebuilt QEMU from latest source — **three 0-days plus a patched-but-undistributed bug** across QEMU, Linux KVM, and libslirp. It operated autonomously for ~12 hours, backtracked from dead ends, and favored reliable, reusable exploits over one-shot crashes. Firecracker held substantially harder.
+
+**Why it matters:** "Just put the agent in a VM" is now a falsified assumption for cyber-capable agents — and the report's recommendations (least privilege, rapid-update distros, monitoring, pristine per-task environments, treat agents as an APT) are the new baseline for agent sandboxing.
+
+[`🔗 Trail of Bits`](https://blog.trailofbits.com/2026/08/26/vms-wont-contain-cyber-capable-agents/) · [`🔗 Hacker News`](https://news.ycombinator.com/item?id=49450188)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-27T04:03:00Z |
-| Items | 30 |
-| Sources tracked | 37 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool, aboutamazon.com, The Register, The Star, RuntimeWire, CISA, CIRCL, 9to5Google, Engadget, SD Times, CNBC, The Next Web, JetBrains) |
+| Generated | 2026-08-27T12:03:00Z |
+| Items | 45 |
+| Sources tracked | 53 (Hacker News, Z.ai, doNews, bigmodel.cn, Qwen, GitHub, llm-stats, Wordfence, OpenCVE, code.claude.com, arXiv, dev.to, SciRate, openai.com, Fortune, Wired, SENAITE, VulDB, Tailscale, aifasthub, ldpk.cn, k-dense.ai, oss-security, Google, Hugging Face, papers.cool, aboutamazon.com, The Register, The Star, RuntimeWire, CISA, CIRCL, 9to5Google, Engadget, SD Times, CNBC, The Next Web, JetBrains, Vercel, Cloudflare, CVETodo, GuardianMSSP, Asahi Linux, Static Web Server, Codeberg, bytenote, LWN, SFC, LAION, pnpm, Mozilla, Phoronix, Trail of Bits, XCancel) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
