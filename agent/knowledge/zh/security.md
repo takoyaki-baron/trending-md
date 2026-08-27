@@ -1065,3 +1065,31 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
 - **Ubiquiti 安全公告 067（8 月 26 日）——22 个漏洞，两个 CVSS 10.0。** **CVE-2026-77537**（10.0，Ubiquiti CNA 分配，输入校验不当）是 **UniFi Protect 的命令注入**（受影响 < 7.2.105；网络可达，无需权限或用户交互，scope 变化）；**CVE-2026-77554**（10.0）在 UniFi Talk；**CVE-2026-77550** UniFi OS 认证绕过；**CVE-2026-77534**（9.9）UniFi OS Server / 几乎整条设备线的访问控制提权（UDM、Cloud Gateways、NVR、NAS）。**NVD 尚未分析；暂无已知利用。** 仅 CNA 评分意味着数字未经独立验证（[[fact-check]] 谁评的分）。
 - **`pantheon-agents` 0.6.1/0.6.2 在 PyPI 上被投毒（GHSA-93qj-5q5v-3c2h, CRITICAL）——从被盗的长期 token 变成凭据窃取器。** 维护者的 PyPI 账户在 2026 年 6 月 "Hades" 供应链攻击中沦陷；攻击者用**被盗的长期有效 PyPI token** 直接向注册表上传恶意 wheel。`pip install` 时，`*-setup.pth` 文件下载 **Bun 运行时**并运行混淆的凭据窃取器，收割环境变量、`~/.pypirc`、`~/.npmrc`、`~/.aws` 等云凭据、SSH 密钥与 API token。GitHub 源码是干净的——只有 PyPI 产物受影响。**IoC：site-packages 中出现异常的 `*-setup.pth`。** 一个被盗 token 悄悄把包的发布渠道变成凭据排水管（构建期供应链形状；对照 `arrayref`）。
 - **Citrix NetScaler CVE-2026-8452 —— 进入 KEV，确认为未认证 RCE 目标（扩展 08-16 笔记）。** CISA 于 8 月 26 日加入（联邦截止 **8 月 29 日**），确认活跃利用。SAML 路径内存边界错误，作为 Gateway（SSL VPN / ICA / CVPN / RDP 代理）或 AAA vserver 时**未认证可达**；Citrix 定为 DoS，但 watchTowr 演示了**未认证 RCE**（通过可执行堆上 shellcode 的 PHP webshell）。修复于 NetScaler 14.1-72.61 / 13.1-63.18（6 月 30 日已打补丁）。**评分者分歧：9.8（NVD 3.1）vs 8.8（Citrix CNA 4.0）。**
+
+## CISA KEV ownCloud 三连 + 第二个 MCP-stdio RCE + Gitea 野外挖矿 + split-controller（08-28 04:22）
+
+- **CISA KEV 新增三条（8 月 27 日，BOD 26-04）。** **CVE-2023-49105**（ownCloud，CVSS 9.8——未配置签名密钥时的未认证
+  WebDAV 文件访问，而那是默认配置）：Hunt.io 发现它被用于攻击**菲律宾核研究机构**——约 9 GB 数据被窃，含研究堆芯
+  数据库、燃料库存记录、人员档案与一个 KeePass 数据库；以中等置信度归因于疑似中文语系操作者。联邦截止 8 月 30 日 /
+  9 月 10 日。**CVE-2026-53362**（Linux 内核 IPv6 UDP 数据路径越界写，CVSS 7.8，本地提权）与 **CVE-2026-66384**
+  （JFrog Artifactory Docker 缓存路径穿越，5.3）补齐本批。**为何重要：** 2023 年的默认不安全配置漏洞仍被用来对核机构做
+  定向情报窃取；这批 KEV 也在做它该做的——同时暴露一个多年前的认证绕过和一个真实攻击链今天就在用的内核 LPE。
+- **Chainlit CVE-2026-45018（CVSS 9.8，GHSA-w3fx-mc44-mf6j）——数周内第二个严重级 MCP-stdio RCE（继 LiteLLM
+  之后）。** `/mcp` 端点只对可执行文件名（`npx`）做白名单、不对参数做校验，因此精心构造的 `npx -y -c 'ARBITRARY
+  COMMAND'` 能以服务器权限执行任意系统命令。影响 Chainlit 2.4.0rc0–2.11.1；2.12.0（8 月 25 日）修复，彻底移除客户端
+  提供的 `fullCommand` 参数；公告附有可运行 PoC，并注明 MCP 自 2.7.0 起默认关闭。**为何重要：** MCP 是默认的 AI-agent
+  集成面，直通 AI 应用服务器的未认证命令执行正成为一种反复出现的形态——"只白名单名字、不校验参数"的 bug 是可 grep 的。
+- **Gitea CVE-2026-60004——野外挖矿确认（扩展 08-26 笔记）。** 攻击者利用 9.8 分的预认证 `diffpatch` git-hook 注入
+  （1.27.1 于 7 月 27 日修复）植入可执行的 `post-index-change` git hook + 挖矿投递器；一条有记录的链约 11 秒完成、
+  把受害机 CPU 打到 70% 以上。Gitea 默认开放注册（无邮箱验证）让预认证路径轻易可达；约 5,000 个暴露公网的实例在范围
+  内。KEV 8 月 25 日加入，联邦截止 8 月 28 日。
+- **Chrome CVE-2026-79026（CVSS 9.6，CWE-416）——扩展 use-after-free → 沙箱外任意代码。** 影响 152.0.7977.65 之前
+  的版本；远程攻击者经社工诱使安装恶意扩展，即可在浏览器沙箱外运行任意代码。NVD 评分 9.6（scope 变更）；暂无野外利用、
+  未入 KEV；8 月 25 日桌面版 / 8 月 26 日 Android 修复。扩展驱动的沙箱逃逸以用户安装恶意扩展为前提。
+- **RSFiles! CVE-2026-57827（CVSS 9.8，CWE-434）——split-controller 上传绕过。** Joomla 文件管理器 `com_rsfiles`
+  < 1.17.12：`checkupload` 任务持有权限检查与扩展名白名单但什么都不写，而 `upload` 任务无权限检查、无扩展名校验、
+  无 CSRF token 直接写——于是 `&task=rsfiles.upload` 把一个 PHP webshell 丢进 `/downloads/`（保护性 `.htaccess`
+  默认关闭）。1.17.12 修复（检查移入写方法，`.htaccess` 默认开启）。"检查与动作分处两地"是 PHP-CMS 系统性的 bug 类。
+- **Zimbra CVE-2026-73570 更新（扩展 08-20 笔记）。** Shadowserver 于 8 月 22 日追踪到 **274 台**暴露公网的受害实例
+  （两天前为 155），至少 8,200 台仍未打补丁；CISA 于 8 月 21 日将其加入 KEV，联邦三天截止（8 月 24 日）；8.9 为 MITRE
+  CNA 分配。

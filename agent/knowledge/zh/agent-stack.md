@@ -1008,3 +1008,33 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 - **OpenWorker v0.2.0（`andrewyng/openworker`，MIT，16.4k★，+1,059/天）——吴恩达的本地优先 AI 协作者加入内建安全 agent。** 一个本地优先的桌面 "AI 协作者"，产出完整交付物而非聊天；v0.2.0 新增**安全协作者**——代码漏洞扫描、供应链依赖审计、云态势检查——外加 Skills（可复用工作流包）、绑定项目文件夹的跨会话 Memory、自动批准 reviewer 模式、引导式 MCP server 添加流程、Intel Mac（x64）构建。运行你自己的模型 key（OpenAI/Anthropic/Google/Ollama），对话与 token 留在本地，基于 Ng 的 aisuite。**为何重要：**"可审计的开源 AI 协作者"如今自带安全姿态——安全 agent 成为一等公民功能，也是本地优先 agent 工作站成为产品类别的最清晰主流信号（扩展 Perplexity Portable Computer 笔记）。
 - **OpenExecutive（`SenteLabsAI/OpenExecutive`，Apache-2.0，约 1k★，686 分 HN 首秀）——被裁的开发者发布开源 "AI CEO"。** 一个统一的执行者人设，背后是 **8 个专家 Claude agent**（CSO、CFO、CHRO、总法律顾问、COO、CMO、CPO、董事会沟通），由 Executive Orchestrator 路由，带内建 MBA 级知识的 RAG + 上传的公司文档（ChromaDB）、SQLite 里的情景记忆、调度器，以及 web/Slack/email/Telegram/Discord/CLI 界面。带 **29 场景 LLM 裁判评测套件（CI 门 ≥3.5/5）**，可跑本地模型（Ollama、vLLM）。Apache-2.0 下可用的多 agent 高管栈——"用 AI 替代工程师"的开源反击本身就是一个 AI 产品。
 - **Anthropic 统一 Claude Chat 与 Cowork 的记忆（8 月 25 日）——记忆缺口得到一个云范围的产品答案，而非 schema。** 持久记忆现在横跨 Claude Chat 与 Claude Cowork，支持**实时记忆写入**（而非事后摘要）；用户在 Settings 按主题管理条目（一处更正全局生效）。敏感主题（健康、种族、族裔、宗教、政治、性别认同）**默认排除**，需主动开启；SSN、犯罪记录、移民身份永不存储。Free/Pro/Max 默认开启（web/桌面/移动）；不追溯；**Claude Code 保持独立的记忆系统**。**为何重要：** 跨聊天界面 + computer-use agent 的可编辑持久记忆是长程 agent 工作缺失的原语——但它是*产品*层（托管、不可移植、单一厂商），正是记忆标准化笔记预言的样子：MCP 标准化连接，于是记忆按产品采纳填充，而非共享格式（[[agent-stack]] 记忆笔记）。
+
+## 网络走向 agent 原生 + 浏览器内置进 agent + agentic 生产管线（08-28 04:22）
+
+- **WebMCP——面向 agent 原生的网页内工具注册标准。** 一份草案 W3C 标准（Web Machine Learning Community Group），
+  允许网页把 JavaScript 函数注册为工具（名称、描述、输入 schema），agent 在页面内及其已登录会话中调用它们——与
+  服务端 MCP 相区别。OpenAI 的 WebMCP Challenge（8 月 25 日–9 月 3 日，与 Google Chrome、Cloudflare、Shopify、
+  Vercel、Render、Netlify 合办的 10 天黑客松；前十名得 $3,000 + 一年 ChatGPT Pro），加上 ChatGPT 桌面版内置浏览器
+  现已支持 WebMCP（需 GPT-5.6 Sol/Terra），把兼容站点当作"站点工具"，对敏感动作做权限与安全检查。**为何重要：**
+  MCP 标准化了服务端工具访问之后，WebMCP 是要让公开网页本身可被 agent 操作——页内工具模型成为"抓取 + 猜测 UI"的
+  真正替代，而且 OpenAI/Google/Cloudflare/Shopify 同押一场挑战赛。
+- **Claude Cowork 内置浏览器——agent 拥有一个与用户隔离的浏览器。** 8 月 27 日：Claude 桌面应用 Cowork 里内置了一个
+  原生 Chromium 浏览器；需要联网的任务在侧边面板打开；"是 Claude 的浏览器，不是你的"——访问不到打开中的标签页/书签/
+  已存密码，按站点可选导入登录态，敏感站点（银行、邮件、SSO）默认排除；本周陆续推给 Pro/Max/Team，Enterprise 可由
+  管理员立即启用。Anthropic 自己的保留：prompt 注入风险"显著降低，而非消除"——信任边界落在按站点导入的决策上。
+  "Claude in Chrome" 扩展仍用于用户已打开的页面。
+- **OpenMontage（`calesthio/OpenMontage`，AGPL-3.0，52.2k★，#1 GitHub 趋势）——agentic 视频生产。** 无代码编排器：
+  agent 读取 YAML 管线清单 + Markdown"导演技能"文件、调用 Python 工具、自我评审、检查点化状态、在创意决策点暂停等待人工
+  批准。12 条生产管线、100+ 工具、60+ 供应商集成、700+ 技能文件；能用免费本地栈（Piper TTS、Remotion、FFmpeg）从
+  Archive.org/NASA/Wikimedia Commons 拼装真实素材，零 API key。**为何重要：**"AI 跑的是生产工作流，不是 prompt-to-clip"——
+  agent harness 变成交付管线，且审批门/预算上限/渲染后自评是随产品交付的治理（论点 12）。
+- **VoiceMem（arXiv 2608.26005）——面向语音 agent 的双脑流式记忆。** 将并行的信息"左脑"（事实检索）与情感"右脑"
+  （情感归因 + 人设建模）配对，支持流式记忆 I/O + 可替换后端。top-5 检索比 Mem0 类的 top-200 高约 30 分；三个
+  人设基准上 SOTA（较此前最优 +4.29 聚合）；检索 134 ms 完成（在标准 VAD 延迟内）。基于 Qwen2.5-Omni/Qwen3-Omni/
+  Step-Audio2-Mini 与 ChatMem-400K 数据集。记忆是持久化语音 agent 的瓶颈，廉价双脑配方 + 解耦后端是具体答案
+  （扩展记忆标准化笔记）。
+- **Omnigent v0.11.0（`omnigent-ai/omnigent`，Apache-2.0，9.4k★，alpha）——"harness 之上的 harness"获得实时治理。**
+  可在运行时用 shift+tab 切换 Claude Code 权限模式（Manual/Auto/Accept edits/Plan）、以 Max/Ultra 推理跑 Codex 会话，
+  外加每次触发的 LLM 花费上限（`max_cost_usd`）+ 钉死的权限模式。把 Claude Code、Codex、Cursor、OpenCode、Hermes、Pi、
+  Grok Build、Devin 包在一个策略/沙箱/协作层后面，带本地 Web UI、macOS 应用、REST API。**为何重要：** agent 治理作为
+  控制平面的最强开源体现——策略/成本/沙箱跨所有编码 agent 标准化，而非逐个工具（论点 12）。

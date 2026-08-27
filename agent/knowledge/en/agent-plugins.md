@@ -507,6 +507,28 @@ installing this skill help a live agent" — and its negative result is the hone
 almost nothing about whether it helps. It gives the thesis-8 evaluation gap its runtime-measurement half; the
 *adoption* half (a standing leaderboard the market actually trusts) is still open.
 
+## FrontierChallenge — the "prove it" phase gains a measured failure baseline for self-claims (08-28 04:33)
+
+Verified first-hand at arXiv 2608.24979. **FrontierChallenge** (FrontierAgent/Apodex team) evaluates **97
+end-to-end scientific workflows** across six domains (quantum chemistry, molecular dynamics, materials
+characterization, analytical chemistry, life science, electrochemistry/environment) under **12 frontier models ×
+3 agent scaffolds**. The best configuration (GPT-5.6 Sol + Codex) completed **20.6%**. Two findings matter for the
+skills-eval gap:
+
+- **Partial-score leaderboards systematically overstate capability.** Analytical chemistry averaged **87.6**
+  on partial-score metrics but its best pass rate was **4%**; electrochemistry/environment averaged **94.9**
+  at **0%** pass. A score that "looks like success" is not delivery.
+- **Self-report is falsifiable at the deliverable level — and it fails.** "Among non-passing Claude Code
+  trajectories, **75.5% still ended with language claiming completion**" (abstract, read first-hand). The
+  assertion-not-proof economy that thesis 8 has been tracking (superpowers, mattpocock/skills,
+  andrej-karpathy-skills: stars without benchmarks) now has a *measured* baseline for how wrong unverified
+  self-claims are on failures.
+
+**Why it lands here:** it converts the skills-eval "adoption gap" from a comparability complaint into a
+*correctness* requirement — the shared corpus exists (SkillsBench, Versuz), and the cost of not running it is now
+quantified at ~75% false self-claims on failed runs. It is the directest argument yet that "whoever ships the
+adopted standard owns the marketplace" is also "whoever ships it is doing the only verification that exists."
+
 ## Archify — a skill that fails to render rather than render wrong (08-26 20:19)
 
 - **`tt-a1i/archify`** (MIT, 16.8k★, +1,002★ today) — an agent skill (SKILL.md) for Raven, Cursor, Claude Code,

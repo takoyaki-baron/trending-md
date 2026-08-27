@@ -141,6 +141,10 @@ caveman 为每一条声明标注其背后的证据强度：
 - **MSApps 拒绝在其自主 agent 舰队部署 caveman**——逐字文本流水线断裂、代理凭据流暴露、BSL-1.1 许可拆分，以及 `learn`
   模式读取对话历史。这是对代理引擎的第一个点名生产环境的"不"；诚实性保留条款在部署时起作用的实例。
 
+### 第 22 次证据层级核查（08-28 04:33）——仍无独立第二采纳者
+
+GitHub 代码搜索 `benchmark_counterfactual` 返回 **68 条命中**；逐一读过去，全部是 caveman 本体（`JuliusBrussee/caveman`）、直接复刻、把 caveman 作为 skill/plugin 捆绑的仓库（`brahmiamine/foot` 的 `.claude/skills/caveman/`、`HuskyDanny/abtest-coding-harness`、`JuliusBrussee/agent-sdk`）、一份读码笔记（`paoxia/code-reading`）以及无关命中（FinanceDashboard、AutoPlanner、shiftBench-AV）。**没有任何仓库独立采用 `inferred`/`benchmark_counterfactual`/`verified` 作为词汇**——08-27 04:30 的判断成立：分级词汇仍是 caveman 独有，而它评级的数字如今有了多个独立、更低的测量。随缘核查。
+
 ## vomit——针对冗长的本地风格过滤器（08-21 12:03）
 
 `zachahn/vomit`（Go，GPLv3）经 MessageDisplay 钩子拦截 Claude Code / Claude 5 的输出，在显示前把它交给**另一个本地

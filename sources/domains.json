@@ -3589,5 +3589,113 @@
     "cred": "high",
     "density": "high",
     "cv": 1
+  },
+  "prohoster.info": {
+    "cat": "news",
+    "en": "Tech-blog aggregator covering FOSS/infra news in multiple languages; surfaced the systemd-journald write-amplification acknowledgment with independent measurements. Cross-checked (08-28): its ValdikSS 750-byte→50-70KB figures match the systemd issue #40262 thread and OpenNET.",
+    "zh": "多语言科技博客聚合站，报道 FOSS/基础设施新闻；报道了 systemd-journald 写入放大问题被承认一事，含独立测量。已交叉核验（08-28）：其 ValdikSS 750 字节→50-70KB 数据与 systemd issue #40262 及 OpenNET 一致。",
+    "jp": "FOSS・インフラ系ニュースを多言語で扱うテックブログ。systemd-journald の書き込み増幅問題の認証を独立計測とともに報道。突合済み（08-28）：ValdikSS の 750バイト→50-70KB 数値は systemd issue #40262 と OpenNET に一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "opennet.ru": {
+    "cat": "news",
+    "en": "Long-running Russian-language open-source/security news site; reliable for translation+context of English-language FOSS stories. Cross-checked (08-28): its systemd-journald piece matches the primary issue thread.",
+    "zh": "老牌俄语开源/安全新闻站；对英文 FOSS 报道的翻译与背景补充较可靠。已交叉核验（08-28）：其 systemd-journald 报道与主 issue 讨论一致。",
+    "jp": "老舗のロシア語オープンソース・セキュリティニュースサイト。英語 FOSS 記事の翻訳・文脈補足に信頼性。突合済み（08-28）：systemd-journald 記事は元 issue スレッドと一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "cybernoz.com": {
+    "cat": "security",
+    "en": "Cybersecurity news site; published the ownCloud/Philippine nuclear-agency exploitation detail. Cross-checked (08-28): the CVE-2023-49105 exploitation facts align with the CISA KEV addition and Hunt.io attribution.",
+    "zh": "网络安全新闻站；报道了 ownCloud 遭利用窃取菲律宾核机构数据的细节。已交叉核验（08-28）：CVE-2023-49105 利用事实与 CISA KEV 收录及 Hunt.io 归因一致。",
+    "jp": "サイバーセキュリティニュースサイト。ownCloud によるフィリピン核機関からのデータ窃取の詳細を報道。突合済み（08-28）：CVE-2023-49105 の悪用事実は CISA KEV 登録と Hunt.io の属性評価に一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "deepmind.google": {
+    "cat": "research",
+    "en": "Google DeepMind official blog — authoritative for its own model/research announcements. Cross-checked (08-28): the double-blind-evaluation pilot details (Confidential Space GPU enclaves, partners) match RuntimeWire coverage.",
+    "zh": "Google DeepMind 官方博客——其自身模型/研究公告的权威来源。已交叉核验（08-28）：双盲评估试点细节（Confidential Space GPU 安全区、合作方）与 RuntimeWire 报道一致。",
+    "jp": "Google DeepMind 公式ブログ。自社モデル・研究発表の権威ある一次情報。突合済み（08-28）：二重盲検評価パイロットの詳細（Confidential Space GPU エンクレーブ、パートナー）は RuntimeWire の報道と一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "community.openai.com": {
+    "cat": "community",
+    "en": "OpenAI's official developer forum — primary channel for platform announcements like the WebMCP Challenge. Cross-checked (08-28): challenge dates/prizes match Search Engine Journal and the OpenAI challenge page.",
+    "zh": "OpenAI 官方开发者论坛——WebMCP Challenge 等平台公告的主要渠道。已交叉核验（08-28）：挑战赛日期/奖项与 Search Engine Journal 及 OpenAI 活动页一致。",
+    "jp": "OpenAI 公式開発者フォーラム。WebMCP Challenge などプラットフォーム発表の主チャネル。突合済み（08-28）：開催日・賞金は Search Engine Journal と OpenAI チャレンジページに一致。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "searchenginejournal.com": {
+    "cat": "news",
+    "en": "Long-running search-marketing/tech news site; covered the ChatGPT WebMCP browser support with concrete feature details. Cross-checked (08-28): details match the OpenAI community announcement and gigazine coverage.",
+    "zh": "老牌搜索引擎营销/科技新闻站；对 ChatGPT WebMCP 浏览器支持有具体功能报道。已交叉核验（08-28）：细节与 OpenAI 社区公告及 gigazine 报道一致。",
+    "jp": "老舗の検索マーケティング・テックニュースサイト。ChatGPT の WebMCP ブラウザ対応を具体的に報道。突合済み（08-28）：内容は OpenAI コミュニティ発表と gigazine に一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "macmagazine.com.br": {
+    "cat": "news",
+    "en": "Brazilian Apple/tech news site; reported the Claude Cowork built-in browser for macOS. Cross-checked (08-28): feature set matches The Next Web and other coverage of Anthropic's announcement.",
+    "zh": "巴西苹果/科技新闻站；报道了 Claude Cowork 在 macOS 上的内置浏览器。已交叉核验（08-28）：功能与 The Next Web 及 Anthropic 公告报道一致。",
+    "jp": "ブラジルの Apple/テックニュースサイト。Claude Cowork の組み込みブラウザ（macOS）を報道。突合済み（08-28）：機能は The Next Web や Anthropic 発表報道と一致。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "aisecwatch.com": {
+    "cat": "security",
+    "en": "AI-security research writeup site; analyzed the Chainlit MCP command-injection root cause. Cross-checked (08-28): affected range and 2.12.0 fix match the GitHub Advisory.",
+    "zh": "AI 安全研究分析站；剖析了 Chainlit MCP 命令注入根因。已交叉核验（08-28）：受影响范围与 2.12.0 修复与 GitHub Advisory 一致。",
+    "jp": "AI セキュリティ研究の分析サイト。Chainlit MCP コマンドインジェクションの根本原因を分析。突合済み（08-28）：影響範囲と 2.12.0 修正は GitHub Advisory に一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "spatialintelligence.ai": {
+    "cat": "community",
+    "en": "Bilawal Sidhu's Substack (Map the World) — the author's own primary writeup of open-sourcing God's Eye View. Cross-checked (08-28): repo details match the GitHub repository itself.",
+    "zh": "Bilawal Sidhu 的 Substack（Map the World）——作者本人关于开源 God's Eye View 的一手文章。已交叉核验（08-28）：仓库细节与 GitHub 仓库本身一致。",
+    "jp": "Bilawal Sidhu の Substack（Map the World）。God's Eye View オープンソース化について本人が書いた一次情報。突合済み（08-28）：リポジトリの詳細は GitHub リポジトリ本体と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "omarchy.org": {
+    "cat": "other",
+    "en": "Official manual/site for the Omarchy Linux distribution by DHH. Cross-checked (08-28): project description matches the basecamp/omarchy README.",
+    "zh": "DHH 的 Omarchy Linux 发行版官方手册/网站。已交叉核验（08-28）：项目描述与 basecamp/omarchy README 一致。",
+    "jp": "DHH による Omarchy Linux ディストリビューションの公式マニュアル/サイト。突合済み（08-28）：プロジェクト説明は basecamp/omarchy README に一致。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "blog.redwoodresearch.org": {
+    "cat": "research",
+    "en": "Redwood Research's official blog — primary source for the independent METR/Redwood investigation of the OpenAI/Hugging Face incident. Cross-checked (08-28): key figures match the CGTN summary of the same report.",
+    "zh": "Redwood Research 官方博客——METR/Redwood 对 OpenAI/Hugging Face 事件独立调查的一手来源。已交叉核验（08-28）：关键数字与 CGTN 对同一报告的摘要一致。",
+    "jp": "Redwood Research 公式ブログ。OpenAI/Hugging Face 事件に関する METR/Redwood 独立調査の一次情報。突合済み（08-28）：主要数値は同レポートの CGTN 要約と一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "news.cgtn.com": {
+    "cat": "news",
+    "en": "CGTN — Chinese state media tech desk; summarized the METR/Redwood OpenAI-agents investigation. Cross-checked (08-28): the 700-agent figure matches the Redwood Research report directly.",
+    "zh": "CGTN——中国官方媒体的科技板块；报道了 METR/Redwood 对 OpenAI 智能体事件的调查。已交叉核验（08-28）：700 个智能体的数字与 Redwood Research 报告一致。",
+    "jp": "CGTN（中国国営メディア）のテックデスク。METR/Redwood の OpenAI エージェント調査を要約。突合済み（08-28）：700 エージェントという数字は Redwood Research 報告書に一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

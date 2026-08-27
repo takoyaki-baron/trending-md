@@ -172,6 +172,16 @@ third-party measurements — both independent of caveman's own `run.py`:
   credential-flow exposure, the BSL-1.1 license split, and `learn` mode reading transcript history. The first
   named-production "no" on the proxy engine; a concrete instance of the honesty-caveats mattering at deploy time.
 
+### 22nd evidence-tier check (08-28 04:33) — still no independent second adopter
+
+GitHub code search for `benchmark_counterfactual` returns **68 hits**; read through them, they are all caveman
+itself (`JuliusBrussee/caveman`), direct forks, repos bundling caveman as a skill/plugin (`.claude/skills/caveman/`
+in `brahmiamine/foot`, `HuskyDanny/abtest-coding-harness`, `JuliusBrussee/agent-sdk`), a code-reading notes file
+(`paoxia/code-reading`) and unrelated matches (FinanceDashboard, AutoPlanner, shiftBench-AV). **No repo adopts
+`inferred`/`benchmark_counterfactual`/`verified` as an independent vocabulary** — the 08-27 04:30 framing holds:
+the tiered vocabulary remains caveman-only while the numbers it grades now have multiple independent, lower
+measurements. Watch in passing.
+
 ## vomit — a local style filter for verbosity (08-21 12:03)
 
 `zachahn/vomit` (Go, GPLv3) intercepts Claude Code / Claude 5's output via a MessageDisplay hook and

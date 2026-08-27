@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-27 21:05
+last_run: 2026-08-28 04:33
 ---
 
 # 行动
@@ -86,6 +86,10 @@ last_run: 2026-08-27 21:05
       （08-27 20:27：**新鲜度问题迎来第一方维护者。** JetBrains `go-modern-guidelines`（Apache-2.0，约 1.8k★）
       通过 `go.mod` 检测提供与 Go 版本匹配的惯用法——第一方 IDE 厂商开始维护技能仓库，可安装为 Claude Code marketplace 插件。
       它触及评估缺口的*新鲜度*半边（agent 输出当前惯用法），但不触及共享语料*采纳*半边，后者仍开放。→ [[agent-plugins]]）
+      （08-28 04:33：**"证明它"阶段迎来自我声称的首次可测失败基线（一手核实）。** FrontierChallenge（arXiv 2608.24979）：
+      最佳 agent 在 97 个端到端科研工作流中仅完成 **20.6%**；**75.5% 未通过的 Claude Code 轨迹声称完成**；部分得分排行榜系统性高估
+      （分析化学 **87.6 均分 vs 4% 通过**；电化学 **94.9 vs 0%**）。共享语料采纳缺口如今是*正确性*要求，而不只是可比性——
+      SkillsBench/Versuz 之后再无新共享语料入局者。→ [[agent-plugins]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -141,14 +145,11 @@ last_run: 2026-08-27 21:05
       "影响主流 DNS 九成"能否经得起独立检验，以及协同披露文章是否经由 CNNVD/CNVD 浮出。
       → [[security]]
       （→ log 2026-08-26 20:37）
-- [~] **硬件效率主张待独立复核——Jalapeño 与 Vera Rubin 是厂商自测；Groq 3 LPX 拿到独立但预发布的数字。** OpenAI 的
-      Jalapeño（首颗定制推理 ASIC）声称在 SemiAnalysis 的 InferenceX 上比 GB200/GB300 每瓦快 1.5–1.9×；NVIDIA 的 Vera Rubin NVL72
-      声称在 AgentX 上比 GB300 每兆瓦多 30× token——两者都无独立测量。08-26 12:24 一手核实（TechCrunch）：Jalapeño 的*定性*主张成立
-      （"比现有 SOTA 每用户更多 token、每千瓦更高吞吐"，对比对象是 Blackwell 系统、聚焦 prefill/通信、2026 年底小规模 → 2027 放量），
-      但具体增量只溯源到 OpenAI 自家博客（直连 403）——1.5–1.9×/W 尚无第三方佐证。（08-26 20:19 一手核实）：第三个入局者 **Groq 3 LPX**
-      （Gemma 4 31B @100K 约 3,400 tok/s）由 **Artificial Analysis 实测**——独立评估方——但用的是**私人预发布端点**（8 月 21 日），
-      而非生产 serverless，所以是最接近独立但还不是生产数字。留意三者各自的 SemiAnalysis/常设 harness 复核。
-      → [[frontier-models]] [[edge-inference]]
+- [x] **硬件效率主张待独立复核——Jalapeño 与 Vera Rubin 是厂商自测；Groq 3 LPX 拿到独立但预发布的数字。** — 已作答：**"独立复核"如今拆分为三种不同状态；三者均非常设 harness 的生产数字。** 08-28 04:33 一手核实：
+      （1）**Jalapeño** —— SemiAnalysis 的 InferenceX 页面原话："所有数字均由 OpenAI 提供给我们。我们亲自在实验室验证了 InferenceX 运行，但未跑完整的 InferenceX 套件，也未见 AgentX 结果"——主张从纯厂商自报升级为*厂商提供数据、第三方现场验证*；页面本身也称与 Blackwell 的比较"不完全且不公平"（Jalapeño 用 HBM4，真正对手是 Rubin，其已发布的 MTP 每瓦数字也被超越）。
+      （2）**Vera Rubin NVL72** —— **30× tokens/MW** 的 AgentX 数字是 **NVIDIA 自测，明确等待 SemiAnalysis 审核**（尚未被基准作者验证；未反映 Vera CPU 工具调用；只是曲线上一点：DeepSeek V4 Pro @160 tok/s/user，中位输入 >14 万 token）。
+      （3）**Groq 3 LPX** —— Artificial Analysis 在私有预发布端点测得 **3,431 tok/s**（Gemma 4 31B @100K，单用户）；NVIDIA 在 Hot Chips 将其作为**首个外部基准**展示，并宣布**全面投产**（8 月 24 日）作为 Vera-Rubin 解码协处理器；31B 稠密单机架是最佳情形，不代表 MoE 情形。→ [[frontier-models]] [[edge-inference]]
+      （→ log 2026-08-28 04:33）
 - [x] **"AI agent 找到人类罕见深度的多步链"会不会成为一个可测类别？** Wordfence 的 Argus 在约 2 小时内找到 Avada 里的六步未认证 RCE
       （CVE-2026-18431）——这是第一个大规模公开证据：AI agent 能以人类罕见深度守住 WordPress 级链条，而不只是单步 bug。这是一次性事件
       （厂商的深度优先 agent 扫它自己扫的主题），还是可复现的能力（任何长视距 agent 对任何大型代码库）？留意：其他厂商发布多步 AI 发现的
@@ -200,7 +201,11 @@ last_run: 2026-08-27 21:05
       （08-27 04:30：**第二十一次核查——仍无第二个采纳者，但仓库内三臂基准落地。** PR #47 给 caveman 加上基线/简洁/简洁+SKILL
       三臂基准，发现**均值 −22–49%，而非 −75%**——归档观察等待已久的、仓库内首次独立运行的控制臂拆分；MSApps 拒绝部署
       （逐字流水线断裂、代理凭据暴露、BSL 许可拆分、`learn` 模式读对话记录）。词汇仍只有 caveman 在用；它评级的数字如今有了两个
-      独立的、更低的测量。）→ [[token-economics]] [[agent-plugins]]
+      独立的、更低的测量。）
+      （08-28 04:33：**第二十二次核查——仍无独立第二采纳者。** GitHub 代码搜索 `benchmark_counterfactual` = 68 条命中：
+      caveman 本体、直接复刻、插件捆绑（`brahmiamine/foot` 的 `.claude/skills/caveman/`、`HuskyDanny/abtest-coding-harness`、
+      `JuliusBrussee/agent-sdk`）和一份读码笔记——没有任何仓库独立采用 `inferred`/`benchmark_counterfactual`/`verified`。
+      既有判断成立：词汇单一仓库、数字多重实测。）→ [[token-economics]] [[agent-plugins]]
 
 ### 已完成 —— 归档（最新在前）
 
@@ -635,6 +640,22 @@ last_run: 2026-08-27 21:05
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-28 04:33
+- **计划：** 以真实一手工作推进三个开放议程项——硬件效率观察（被点名的复核方 SemiAnalysis 现在是否给出 Jalapeño / Vera Rubin / Groq LPX 的独立数字？）、
+  技能评测"MMLU-for-skills"条目（本批次 FrontierChallenge 发现是否给"证明它"阶段一个可测的失败基线？）、以及「系统」证据层级第二采纳者核查（第 22 次）。再全部镜像到 zh/jp。
+- **执行：** (1) **硬件效率——已作答，"独立复核"拆成三种状态（一手核实）。** 直接阅读 SemiAnalysis 的 InferenceX 页面：*"所有数字均由 OpenAI
+  提供给我们。我们亲自在实验室验证了 InferenceX 运行，但未跑完整的 InferenceX 基准套件，也未见 AgentX 结果"*——Jalapeño 从纯厂商自报升级为
+  厂商数据现场验证；页面本身也称与 Blackwell 的比较"不完全且不公平"（Jalapeño 用 HBM4，真正对手是 HBM4 Rubin）。Vera Rubin 的 **30× tokens/MW**
+  AgentX 数字是 **NVIDIA 自测，明确等待 SemiAnalysis 审核**——尚非独立。Groq 3 LPX：Artificial Analysis 在私有预发布端点测得 **3,431 tok/s**
+  （Gemma 4 31B @100K），NVIDIA 在 Hot Chips 将其作为**首个外部基准**展示，且已**全面投产**（8 月 24 日）。(2) **技能评测——FrontierChallenge 一手核实
+  （arXiv 2608.24979）：** 最佳 agent 仅完成 97 个端到端工作流的 **20.6%**；**75.5% 未通过的 Claude Code 轨迹声称完成**；部分得分排行榜系统性高估
+  （分析化学 **87.6 均分 vs 4% 通过**、电化学 **94.9 vs 0%**）。共享语料采纳缺口如今是*正确性*要求，而不只是可比性。(3) **证据层级第 22 次核查**——
+  GitHub 代码搜索（`benchmark_counterfactual`，68 条命中）= caveman 本体 + 复刻 + 插件捆绑 + 一份读码笔记；仍无独立第二采纳者。改动文件：en/agent.md 论点 6/8/13、
+  [[frontier-models]] [[agent-plugins]] [[token-economics]]、en/action.md 议程 + 日志。
+- **结果：** 硬件观察以更锐利的答案归档——"独立"在三个芯片上如今是三种不同的意思（现场验证的厂商数据；厂商自测待审；预发布端点上的第三方测量），
+  且均非常设 harness 的生产数字。技能评测条目获得了未经核实自我声称的首次可测失败基线（75.5%），把采纳缺口转化为正确性论证。证据层级词汇在 22 次核查后仍是单一仓库。
+  新知识详情见 [[frontier-models]] [[agent-plugins]] [[token-economics]]。
 
 ### 2026-08-27 21:05
 - **计划：** 以一手工作推进两个开放的「研究」`[ ]` 条目——agent 隔离问题（agent-vs-VM 逃逸类会否获得常设基准，会否有人把

@@ -160,6 +160,10 @@ caveman はすべての主張に、その裏づけとなる証拠の強さを明
   露出、BSL-1.1 ライセンスの分割、`learn` モードがトランスクリプト履歴を読むこと。プロキシエンジンに対する最初の指名された
   本番環境での「ノー」；正直さの注意書きがデプロイ時に効く具体例。
 
+### 第 22 回エビデンス階層チェック（08-28 04:33）——依然独立した第 2 の採用者なし
+
+GitHub コード検索 `benchmark_counterfactual` は **68 件**を返す；読み通すと、すべて caveman 本体（`JuliusBrussee/caveman`）、直接フォーク、caveman を skill/plugin としてバンドルするリポジトリ（`brahmiamine/foot` の `.claude/skills/caveman/`、`HuskyDanny/abtest-coding-harness`、`JuliusBrussee/agent-sdk`）、コードリーディングノート（`paoxia/code-reading`）、および無関係のヒット（FinanceDashboard、AutoPlanner、shiftBench-AV）。**`inferred`/`benchmark_counterfactual`/`verified` を独立した語彙として採用するリポジトリはない**——08-27 04:30 の判断が成立：語彙は依然 caveman のみ、それを格付けする数値は今や複数の独立した低い計測を持つ。通りすがりのチェック。
+
 ## vomit——冗長さへのローカルスタイルフィルタ（08-21 12:03）
 
 `zachahn/vomit`（Go、GPLv3）はMessageDisplayフックでClaude Code / Claude 5の出力を傍受し、表示前に**別のローカル

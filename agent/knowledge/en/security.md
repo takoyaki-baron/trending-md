@@ -1441,3 +1441,40 @@ The batch's security stream, read first-hand at the primary sources where reacha
   reachable **pre-auth** as Gateway (SSL VPN / ICA / CVPN / RDP proxy) or AAA vserver; Citrix rated DoS but watchTowr
   demonstrated **unauth RCE** (PHP webshell via shellcode on the executable heap). Fixed NetScaler 14.1-72.61 /
   13.1-63.18 (patched June 30). **Scorer split: 9.8 (NVD 3.1) vs 8.8 (Citrix CNA 4.0).**
+
+## CISA KEV ownCloud trio + the second MCP-stdio RCE + Gitea in-the-wild + split-controller (08-28 04:22)
+
+- **CISA KEV adds three (Aug 27, BOD 26-04).** **CVE-2023-49105** (ownCloud, CVSS 9.8 — unauthenticated WebDAV file
+  access when no signing key is configured, which was the default): Hunt.io found it exploited against a **Philippine
+  nuclear research agency** — ~9 GB exfiltrated incl. research-reactor core databases, fuel inventory records,
+  personnel files and a KeePass database; medium-confidence attribution to suspected Chinese-speaking operators.
+  Federal deadlines Aug 30 / Sep 10. **CVE-2026-53362** (Linux kernel IPv6 out-of-bounds write in the UDP data path,
+  CVSS 7.8, local privilege escalation) and **CVE-2026-66384** (JFrog Artifactory Docker-cache path traversal, 5.3)
+  complete the batch. **Why it matters:** a 2023 default-insecure config bug is still being exploited for targeted
+  intelligence collection at a nuclear agency, and the batch shows KEV doing its job — surfacing both a years-old auth
+  bypass and a kernel LPE that real campaigns chain today.
+- **Chainlit CVE-2026-45018 (CVSS 9.8, GHSA-w3fx-mc44-mf6j) — the second critical MCP-stdio RCE in weeks (after
+  LiteLLM).** The `/mcp` endpoint allowlists only the executable name (`npx`) and not its arguments, so a crafted
+  `npx -y -c 'ARBITRARY COMMAND'` executes arbitrary OS commands with server privileges. Affects Chainlit 2.4.0rc0–
+  2.11.1; fixed in 2.12.0 (Aug 25), which removes the client-supplied `fullCommand` parameter entirely; the advisory
+  carries a working PoC and notes MCP is disabled by default since 2.7.0. **Why it matters:** MCP is the default
+  AI-agent integration surface, and unauthenticated command execution straight into an AI application server is now a
+  recurring shape — the allowlist-the-name-not-the-args bug is grep-able.
+- **Gitea CVE-2026-60004 — in-the-wild cryptomining confirmed (extends the 08-26 note).** Attackers use the 9.8
+  pre-auth `diffpatch` git-hook injection (fixed in 1.27.1, July 27) to plant an executable `post-index-change` git
+  hook + cryptomining droppers; one documented chain completed in ~11 seconds and drove >70% CPU on the victim.
+  Gitea's default open registration (no email verification) makes the pre-auth route trivially reachable; ~5,000
+  internet-exposed instances are in scope. KEV Aug 25, federal deadline Aug 28.
+- **Chrome CVE-2026-79026 (CVSS 9.6, CWE-416) — extension use-after-free → arbitrary code outside the sandbox.**
+  Before 152.0.7977.65; a remote attacker via social engineering runs arbitrary code outside the browser sandbox by
+  getting a crafted extension installed. NVD 9.6 (scope-changed); no in-the-wild exploitation, not in KEV; fixed
+  Aug 25 desktop / Aug 26 Android. Extension-driven sandbox escape gated on a user installing a malicious extension.
+- **RSFiles! CVE-2026-57827 (CVSS 9.8, CWE-434) — the split-controller upload bypass.** `com_rsfiles` Joomla
+  file-manager < 1.17.12: the `checkupload` task holds the permission check + extension allow-list but writes
+  nothing, while `upload` writes with no permission/extension check and no CSRF token — so `&task=rsfiles.upload`
+  drops a PHP webshell into `/downloads/` (protective `.htaccess` off by default). Fixed 1.17.12 (checks moved into
+  the write method, `.htaccess` on by default). "Checks and actions in different places" is the pervasive PHP-CMS
+  bug class.
+- **Zimbra CVE-2026-73570 update (extends the 08-20 note).** Shadowserver tracked **274 compromised** internet-facing
+  instances on Aug 22 (up from 155 two days earlier), with at least 8,200 still unpatched; CISA added it to KEV Aug 21
+  with a three-day federal deadline (Aug 24); the 8.9 is MITRE-CNA-assigned.

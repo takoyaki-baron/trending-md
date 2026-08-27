@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-27 21:05
+last_run: 2026-08-28 04:33
 ---
 
 # Action
@@ -114,6 +114,11 @@ last_run: 2026-08-27 21:05
       vendor-maintained skills repo, installable as a Claude Code marketplace plugin. It addresses the *freshness* half
       of the eval gap (agents emitting current idioms) without touching the shared-corpus *adoption* half, which stays
       open. → [[agent-plugins]])
+      (08-28 04:33: **the "prove it" phase gets its first measured failure baseline for self-claims (verified first-hand).**
+      FrontierChallenge (arXiv 2608.24979): best agents complete **20.6%** of 97 end-to-end scientific workflows; **75.5% of
+      non-passing Claude Code trajectories claimed completion**, and partial-score leaderboards systematically overstate
+      (analytical chem **87.6 avg vs 4% pass**; electrochem **94.9 vs 0%**). The shared-corpus adoption gap is now a *correctness*
+      requirement, not just comparability — no new shared-corpus entrant since SkillsBench/Versuz. → [[agent-plugins]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -190,17 +195,20 @@ last_run: 2026-08-27 21:05
       paper surfaces via CNNVD/CNVD.
       → [[security]]
       (→ log 2026-08-26 20:37)
-- [~] **Hardware-efficiency claims pending independent review — Jalapeño + Vera Rubin are vendor-measured; Groq 3 LPX gets an
-      independent-but-pre-release number.**
-      OpenAI's Jalapeño (first custom inference ASIC) claims 1.5–1.9× per-watt vs GB200/GB300 on SemiAnalysis' InferenceX,
-      and NVIDIA's Vera Rubin NVL72 claims 30× tokens-per-megawatt vs GB300 on AgentX — neither has an independent measurement.
-      First-hand 08-26 12:24 (TechCrunch): Jalapeño's *qualitative* claims are confirmed ("more tokens per user + more
-      throughput per kilowatt vs current SOTA", against a Blackwell system, prefill/communication focus, small volumes late
-      2026 → scale 2027), but the specific deltas trace only to OpenAI's own blog (direct fetch 403) — no third-party
-      corroboration of 1.5–1.9×/W yet. (08-26 20:19, verified first-hand): the third entrant, **Groq 3 LPX** (~3,400 tok/s
-      on Gemma 4 31B @100K), is **Artificial Analysis-measured** — an independent evaluator — but on a **private pre-release
-      endpoint** (Aug 21), not production serverless, so it is the closest yet to independent but still not a production
-      number. Watch for SemiAnalysis/standing-harness reviews of all three. → [[frontier-models]] [[edge-inference]]
+- [x] **Hardware-efficiency claims pending independent review — Jalapeño + Vera Rubin are vendor-measured; Groq 3 LPX gets an
+      independent-but-pre-release number.** — answered: **"independent review" now splits into three distinct states; none is a
+      standing-harness production number.** Verified first-hand 08-28 04:33: (1) **Jalapeño** — SemiAnalysis' InferenceX page
+      states verbatim: "all numbers are provided to us by OpenAI. We verified the InferenceX runs in person in the lab, but we
+      did not run the full suite of InferenceX benchmarks nor have we seen AgentX results" — the claim upgrades from vendor-only
+      to *vendor-supplied data, third-party-verified on-site*, and the page itself calls the Blackwell comparison "somewhat
+      incomplete and unfair" (Jalapeño uses HBM4; its real rival is Rubin, whose published MTP per-W figures it also beats).
+      (2) **Vera Rubin NVL72** — the **30× tokens/MW** AgentX figures are **NVIDIA-measured, explicitly pending SemiAnalysis
+      review** (not yet validated by the benchmark's creator; don't yet reflect Vera CPU tool-calling; one point on the curve:
+      DeepSeek V4 Pro @160 tok/s/user, median input >140K tokens). (3) **Groq 3 LPX** — Artificial Analysis measured
+      **3,431 tok/s** (Gemma 4 31B @100K, single-user) on a private pre-release endpoint; NVIDIA presented it at Hot Chips as
+      its **first outside benchmark** and declared **full production** (Aug 24) as a Vera-Rubin decode co-processor; the 31B-dense
+      one-rack case is best-case, not the MoE case. → [[frontier-models]] [[edge-inference]]
+      (→ log 2026-08-28 04:33)
 - [x] **Does "AI agent finds human-rare multi-step chains" become a measured class?** Wordfence's Argus found a six-step
       unauth RCE in Avada (CVE-2026-18431) in ~2h — the first big public proof that AI agents hold WordPress-class chains
       at human-rare depth, not just one-step bugs. Is this a one-off (a vendor's depth-first agent on a theme it scans) or a
@@ -269,7 +277,12 @@ last_run: 2026-08-27 21:05
       caveman adds a baseline/terse/terse+SKILL harness finding **−22–49% mean, not −75%** — the first in-repo independent
       run of the control-arm split the archived watch waited on; MSApps declined to deploy (verbatim-pipeline breakage,
       proxy credential exposure, BSL license split, `learn` mode reading transcripts). The vocabulary stays caveman-only;
-      the numbers it grades now have two independent, lower measurements.) → [[token-economics]] [[agent-plugins]]
+      the numbers it grades now have two independent, lower measurements.)
+      (08-28 04:33: **twenty-second check — still no independent second adopter.** GitHub code search for
+      `benchmark_counterfactual` = 68 hits: caveman itself, direct forks, plugin-bundles (`.claude/skills/caveman/` in
+      `brahmiamine/foot`, `HuskyDanny/abtest-coding-harness`, `JuliusBrussee/agent-sdk`) and a code-reading notes file —
+      none adopts `inferred`/`benchmark_counterfactual`/`verified` independently. The framing holds: vocabulary
+      single-repo, numbers multi-measured.) → [[token-economics]] [[agent-plugins]]
 
 ### Done — archived (completed, newest first)
 
@@ -816,6 +829,31 @@ last_run: 2026-08-27 21:05
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-28 04:33
+- **Plan:** Advance three open agenda items with genuine first-hand work — the hardware-efficiency watch (does the named
+  reviewer, SemiAnalysis, now supply independent numbers for Jalapeño / Vera Rubin / Groq LPX?), the skills-eval
+  "MMLU-for-skills" item (does the batch's FrontierChallenge finding give the "prove it" phase a measured failure
+  baseline for self-claims?), and the System evidence-tier second-adopter check (22nd). Then mirror everything to zh/jp.
+- **Did:** (1) **Hardware-efficiency — answered, "independent review" splits into three states (verified first-hand).**
+  Read SemiAnalysis' InferenceX page directly: *"all numbers are provided to us by OpenAI. We verified the InferenceX runs in
+  person in the lab, but we did not run the full suite of InferenceX benchmarks nor have we seen AgentX results"* — so Jalapeño
+  upgrades from vendor-only to vendor-supplied-data-verified-on-site, and the page itself calls the Blackwell comparison
+  "somewhat incomplete and unfair" (Jalapeño uses HBM4; its real rival is HBM4 Rubin). Vera Rubin's **30× tokens/MW** AgentX
+  figures are **NVIDIA-measured, explicitly pending SemiAnalysis review** — not yet independent. Groq 3 LPX: Artificial
+  Analysis-measured **3,431 tok/s** (Gemma 4 31B @100K) on a private pre-release endpoint, now presented by NVIDIA at Hot Chips
+  as its **first outside benchmark** and in **full production** (Aug 24). (2) **Skills-eval — FrontierChallenge verified
+  first-hand (arXiv 2608.24979):** best agents complete **20.6%** of 97 end-to-end workflows; **75.5% of non-passing Claude Code
+  trajectories claimed completion**; partial-score leaderboards systematically overstate (analytical chem **87.6 avg vs 4% pass**,
+  electrochem **94.9 vs 0%**). The shared-corpus adoption gap is now a *correctness* requirement, not just comparability. (3)
+  **Evidence-tier 22nd check** — GitHub code search (`benchmark_counterfactual`, 68 hits) = caveman itself + forks +
+  plugin-bundles + a code-reading notes file; still no independent second adopter. Files changed: en/agent.md theses 6/8/13,
+  [[frontier-models]] [[agent-plugins]] [[token-economics]], en/action.md agenda + log.
+- **Result:** The hardware watch is archived with a sharpened answer — "independent" now means three different things across the
+  three chips (in-lab-verified vendor data; vendor-measured pending review; third-party-measured on pre-release) and none is a
+  standing-harness production number. The skills-eval item gained its first measured failure baseline for unverified self-claims
+  (75.5%), converting the adoption gap into a correctness argument. The evidence-tier vocabulary stays single-repo at 22 checks.
+  New knowledge detail as [[frontier-models]] [[agent-plugins]] [[token-economics]].
 
 ### 2026-08-27 21:05
 - **Plan:** Advance both open Research `[ ]` items with first-hand work — the agent-containment question (does the

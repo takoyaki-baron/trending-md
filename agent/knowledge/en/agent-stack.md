@@ -1363,3 +1363,42 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   long-running agent work — but it is a *product* layer (hosted, non-portable, per-vendor), exactly the shape the
   memory-standardization note predicts: MCP standardizes the connection, so memory fills by product adoption, not a
   shared format ([[agent-stack]] memory note).
+
+## The web becomes agent-native + the browser ships inside the agent + agentic production pipelines (08-28 04:22)
+
+- **WebMCP — in-page tool registration standard for the agent-native web.** A draft W3C standard (Web Machine
+  Learning Community Group) that lets a webpage register JavaScript functions as tools (names, descriptions, input
+  schemas) that an agent invokes inside the page and its signed-in session — distinct from server-side MCP. OpenAI's
+  WebMCP Challenge (Aug 25–Sep 3, 10-day hackathon with Google Chrome, Cloudflare, Shopify, Vercel, Render, Netlify;
+  top-10 get $3,000 + a year of ChatGPT Pro) plus ChatGPT desktop's built-in browser now supports WebMCP (requires
+  GPT-5.6 Sol/Terra), treating compatible sites as "site tools" with permission/safety checks for sensitive actions.
+  **Why it matters:** after MCP standardized server-side tool access, WebMCP is the push to make the public web itself
+  agent-operable — the in-page tool model as a real alternative to scraping-and-guessing UIs, with OpenAI/Google/
+  Cloudflare/Shopify behind one challenge.
+- **Claude Cowork gets a built-in browser — the agent owns a browser, isolated from the user's.** Aug 27: a native
+  Chromium browser inside the Claude desktop app's Cowork; tasks needing the web open in a side panel; "Claude's
+  browser, not yours" — no access to open tabs/bookmarks/saved passwords, optional per-site login import, sensitive
+  sites (banking, email, SSO) excluded by default; rolling out to Pro/Max/Team, Enterprise via admin. Anthropic's own
+  caveat: prompt-injection risk is "significantly reduced, not eliminated" — the trust boundary lands on per-site
+  import decisions. The "Claude in Chrome" extension remains for pages the user already has open.
+- **OpenMontage (`calesthio/OpenMontage`, AGPL-3.0, 52.2k★, #1 GitHub trending) — agentic video production.**
+  No code orchestrator: the agent reads YAML pipeline manifests + Markdown "director skill" files, calls Python tools,
+  self-reviews, checkpoints state, pauses for human approval at creative decision points. 12 production pipelines,
+  100+ tools, 60+ provider integrations, 700+ skill files; assembles real footage from Archive.org/NASA/Wikimedia
+  Commons with a free local stack (Piper TTS, Remotion, FFmpeg), zero API keys. **Why it matters:** "the AI runs a
+  production workflow, not a prompt-to-clip" — agent harnesses become deliverables pipelines, with approval gates /
+  budget caps / post-render self-review as governance shipped with the product (thesis 12).
+- **VoiceMem (arXiv 2608.26005) — dual-brain streaming memory for speech agents.** Pairs a parallel informational
+  "left brain" (factual retrieval) with an emotional "right brain" (affective attribution + persona modeling), with
+  streaming memory I/O + swappable backends. Top-5 retrieval beats Mem0-class at top-200 by ~30 points; SOTA across
+  three persona benchmarks (+4.29 aggregate over the prior best); retrieval in 134 ms (within VAD latency). Built on
+  Qwen2.5-Omni/Qwen3-Omni/Step-Audio2-Mini with a ChatMem-400K dataset. Memory is the bottleneck for persistent voice
+  agents, and a cheap dual-brain recipe with decoupled backends is a concrete answer (extends the memory-standardization
+  note).
+- **Omnigent v0.11.0 (`omnigent-ai/omnigent`, Apache-2.0, 9.4k★, alpha) — "harness over harnesses" gains live
+  governance.** Switches Claude Code permission modes (Manual/Auto/Accept edits/Plan) at runtime via shift+tab, runs
+  Codex sessions at Max/Ultra reasoning, plus per-firing LLM spend caps (`max_cost_usd`) + pinned permission modes.
+  Wraps Claude Code, Codex, Cursor, OpenCode, Hermes, Pi, Grok Build, Devin behind one policy/sandbox/collaboration
+  layer with a local web UI, macOS app, REST API. **Why it matters:** the strongest open-source embodiment of agent
+  governance as a control plane — policy/cost/sandbox standardized across every coding agent instead of per-tool
+  (thesis 12).
