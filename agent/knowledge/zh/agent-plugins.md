@@ -434,3 +434,7 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
 ## 第一方 IDE 厂商开始维护版本感知技能 (08-27 20:27)
 
 - **JetBrains `go-modern-guidelines` —— 首个维护技能仓库的第一方 IDE 厂商（Apache-2.0，约 1.8k★）。** GoLand 团队的仓库提供一个 `use-modern-go` 技能 + 小型 CLI，agent 通过渐进式披露获得**与 Go 版本匹配的惯用法**——`slices.Contains`、`cmp.Or`、`errors.AsType`、`strings.CutLast`——覆盖 Go 1.0 到 1.27。它从 `go.mod` 检测项目 Go 版本（面向 Go 1.25+），可作为 **Claude Code marketplace 插件**安装，或通过 skills.sh 用于 Codex/Cursor/Junie，且"绝不修改你的项目"。动机声明：训练数据滞后 + 频率偏差让 agent 输出过时的 Go。**为何落在 [[agent-plugins]]：** 版本感知、厂商维护的技能标志着生态走出社区插件的阶段——第一方维护者部分回答了新鲜度问题（agent 无需逐组织维护就能输出当前惯用法），`go.mod` 版本检测是让 agent 知识与语言发布保持同步的干净模式。论点 8 的共享语料评估采用一半仍未闭合。
+
+## WikiSkill——持久化 wiki 的技能进化（08-29 04:19）
+
+- **WikiSkill（arXiv 2608.27454）——Google 研究者用持久化 wiki 协同进化 agent 技能。** 把原始执行经验、累积知识与可执行技能分开；持续把 agent 经验整合进一个持久化 wiki，再由其驱动技能进化。报告在多个基准与模型上稳定优于 SOTA 技能进化方法；消融显示持久化 wiki 至关重要、一个模型进化出的技能可迁移到其他模型、进化后的技能能让较小模型击败明显更大的模型。诚实的注意（按摘要）：相对无技能基线的增益"在大多数模型-基准设置中"成立，而非普遍成立。直击当前 agent 技能挖掘"优化历史散落各处"的失败——小模型+技能的发现是对成本敏感 agent 配置最承重的论断（论点 8 的证明阶段，如今有了 wiki 形状的基底）。

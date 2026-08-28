@@ -3823,5 +3823,140 @@
     "cred": "high",
     "density": "med",
     "cv": 1
+  },
+  "anil.recoil.org": {
+    "cat": "community",
+    "en": "Anil Madhavapeddy's personal blog — OCaml maintainer's first-hand security/OSS essays (e.g. \"rumour is the exploit\"); primary, but a personal perspective.",
+    "zh": "Anil Madhavapeddy 的个人博客——OCaml 维护者的一手安全/开源随笔（如《rumour is the exploit》）；属一手来源，但代表个人观点。",
+    "jp": "Anil Madhavapeddy の個人ブログ——OCaml メンテナによる一次のセキュリティ/OSS エッセイ（例:「rumour is the exploit」）。一次情報だが個人の見解。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "blog.luanti.org": {
+    "cat": "community",
+    "en": "Luanti (Minetest) project blog — primary source for project announcements like the Aug 2026 Tracer.AI DMCA removal; verify takedown claims against the store record.",
+    "zh": "Luanti（Minetest）项目博客——项目公告的一手来源，如 2026 年 8 月 Tracer.AI DMCA 下架事件；下架相关主张需向应用商店记录核实。",
+    "jp": "Luanti（Minetest）プロジェクトブログ——2026年8月の Tracer.AI DMCA 削除などのプロジェクト発表の一次ソース。削除の主張はストア記録と要突合。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "dev.taisounds.news": {
+    "cat": "news",
+    "en": "TaiSounds — Taiwanese tech/media outlet; covered the Apple Sep 9 event invitation; cross-checked against 36Kr on the same story.",
+    "zh": "TaiSounds——台湾科技/媒体媒体；报道了苹果 9 月 9 日发布会邀请；同一事件已与 36Kr 交叉核验。",
+    "jp": "TaiSounds——台湾のテックメディア。Apple 9月9日イベント招待を報道。同一の件で 36Kr と突合済み。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "four.htmx.org": {
+    "cat": "community",
+    "en": "htmx's release-announcement site — primary source for htmx 4.0.0 (XHR→fetch, opt-in inheritance, npm tag policy); authoritative for the project's own changes.",
+    "zh": "htmx 的发布公告站——htmx 4.0.0（XHR→fetch、显式继承、npm 标签策略）的一手来源；对项目自身变更是权威记录。",
+    "jp": "htmx のリリースアナウンスサイト——htmx 4.0.0（XHR→fetch、オプトイン継承、npm タグ方針）の一次ソース。プロジェクト自身の変更については権威。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "gbhackers.com": {
+    "cat": "security",
+    "en": "Cybersecurity news blog — fast on exploit writeups and advisories; secondary aggregator, verify against the vendor advisory.",
+    "zh": "网络安全新闻博客——对漏洞利用分析与公告跟进快；二手聚合媒体，需向厂商公告核实。",
+    "jp": "サイバーセキュリティニュースブログ。エクスプロイト解説と勧告に速い。二次メディア——ベンダー勧告と要突合。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "htmx.org": {
+    "cat": "community",
+    "en": "htmx's official project site — canonical docs and install targets; primary for project capabilities and release details.",
+    "zh": "htmx 官方项目站——权威文档与安装入口；项目能力与发布细节的一手来源。",
+    "jp": "htmx 公式プロジェクトサイト——正規のドキュメントとインストール先。プロジェクト機能・リリース詳細の一次ソース。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "laravel-news.com": {
+    "cat": "news",
+    "en": "Laravel community news site — covered swoole/typephp (native PHP AOT compiler); secondary, cross-checked against the repo README.",
+    "zh": "Laravel 社区新闻站——报道了 swoole/typephp（原生 PHP AOT 编译器）；二手来源，已与仓库 README 交叉核验。",
+    "jp": "Laravel コミュニティニュースサイト。swoole/typephp（ネイティブ PHP AOT コンパイラ）を報道。二次ソース——リポジトリ README と突合済み。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "netzpolitik.org": {
+    "cat": "news",
+    "en": "German digital-rights news — strong on surveillance, copyright, and sanctions coverage; cross-checked the Autistici/Inventati designation against State Dept/OFAC releases.",
+    "zh": "德国数字权利媒体——在监控、版权与制裁报道上较强；Autistici/Inventati 制裁一事已与国务院/OFAC 公告交叉核验。",
+    "jp": "ドイツのデジタル権利系メディア。監視・著作権・制裁報道に強い。Autistici/Inventati 指定は国務省/OFAC 発表と突合済み。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "ofac.treasury.gov": {
+    "cat": "security",
+    "en": "US Treasury OFAC — primary government source for sanctions designations and General Licenses (e.g. GL 36 for Autistici/Inventati); authoritative but policy-driven.",
+    "zh": "美国财政部 OFAC——制裁指定与通用许可证（如针对 Autistici/Inventati 的 GL 36）的政府一手来源；权威但属政策驱动。",
+    "jp": "米国財務省 OFAC——制裁指定と一般ライセンス（例:Autistici/Inventati 向け GL 36）の政府一次ソース。権威だが政策駆動。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "politico.com": {
+    "cat": "news",
+    "en": "US political/news outlet — covered the Anthropic blacklisting ruling (Judge Rita Lin, N.D. Cal.); cross-checked against The Hill and other outlets.",
+    "zh": "美国政治/新闻媒体——报道了 Anthropic 黑名单裁定（加州北区法院 Rita Lin 法官）；已与 The Hill 等媒体交叉核验。",
+    "jp": "米国の政治/ニュースメディア。Anthropic ブラックリスト判決（Rita Lin 判事、N.D. Cal.）を報道。The Hill などと突合済み。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "sonatype.com": {
+    "cat": "security",
+    "en": "Software supply-chain security vendor — its analysis of the Log4j2 MarshalledObject report (sonatype-2026-006746) clarifies why Apache called it a non-finding; vendor lens, but carefully reasoned.",
+    "zh": "软件供应链安全厂商——其对 Log4j2 MarshalledObject 报告的分析（sonatype-2026-006746）说明了 Apache 为何称之为非问题；有厂商立场，但论证严谨。",
+    "jp": "ソフトウェアサプライチェーンセキュリティベンダー。Log4j2 MarshalledObject 報告（sonatype-2026-006746）の分析は Apache が非該当と呼ぶ理由を明確に説明。ベンダー視点だが慎重な論理。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "state.gov": {
+    "cat": "news",
+    "en": "US State Department — primary government source for designations and press releases (e.g. Autistici/Inventati SDGT under EO 13224); authoritative, policy-driven framing.",
+    "zh": "美国国务院——指定与新闻稿的政府一手来源（如依据 EO 13224 将 Autistici/Inventati 列为 SDGT）；权威，但属政策话语。",
+    "jp": "米国務省——指定とプレスリリースの政府一次ソース（例:EO 13224 に基づく Autistici/Inventati の SDGT 指定）。権威だが政策枠組み。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "support.cpanel.net": {
+    "cat": "security",
+    "en": "cPanel's official support/security portal — primary source for CVE-2026-65643 (domain-parking arbitrary file write → root RCE); authoritative for affected versions and fixed builds.",
+    "zh": "cPanel 官方支持/安全门户——CVE-2026-65643（域名停放任意文件写入 → root RCE）的一手来源；对受影响版本与修复版本是权威记录。",
+    "jp": "cPanel 公式サポート/セキュリティポータル。CVE-2026-65643（ドメインパーキングの任意ファイル書き込み → root RCE）の一次ソース。影響版・修正版に権威。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "support.servicenow.com": {
+    "cat": "security",
+    "en": "ServiceNow's official support KB — primary source for KB3152242 (three CVSS 10.0 Now Platform flaws); authoritative for scope and fix releases.",
+    "zh": "ServiceNow 官方支持知识库——KB3152242（Now 平台三个 CVSS 10.0 漏洞）的一手来源；对范围与修复版本是权威记录。",
+    "jp": "ServiceNow 公式サポート KB。KB3152242（Now プラットフォームの CVSS 10.0 脆弱性 3 件）の一次ソース。対象範囲と修正リリースに権威。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "thehill.com": {
+    "cat": "news",
+    "en": "US politics/policy outlet — covered the Anthropic blacklisting ruling; cross-checked against Politico, Anadolu Ajansi and others for the same Aug 27 decision.",
+    "zh": "美国政治/政策媒体——报道了 Anthropic 黑名单裁定；同一 8 月 27 日裁决已与 Politico、Anadolu Ajansi 等交叉核验。",
+    "jp": "米国の政治/政策メディア。Anthropic ブラックリスト判決を報道。同じ8月27日の判決を Politico、Anadolu Ajansi などと突合済み。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
   }
 }

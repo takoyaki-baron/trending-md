@@ -1313,3 +1313,59 @@ distribution thesis 6.
   agents (`load-bearing`, `seam`) grew from 0.7% of the corpus in early 2025 to ~39% by mid-2026, with 848 distinct
   accounts using `load-bearing`. Also documents GH Archive silently losing PR-description text in an Oct 2025
   Events-API payload change — breaking a naive data source several tools depend on.
+
+## GLM-5.3 open weights + the revenue-gated license; low-cost pretraining (08-29 04:19)
+
+- **GLM-5.3 full-size open weights ship under a revenue-gated license (Aug 28).** Zhipu released the 753B MoE
+  (`zai-org/GLM-5.3`) on Hugging Face ~2 weeks after the API debut and 3 days after GLM-5.3-Flash, held back for
+  "security enhancements" because its cyber-vulnerability-finding capability came out stronger than expected. Card
+  claims open-weights SOTA on Terminal-Bench 3.0 (28.3) + top CyberGym (84.5 vs GLM-5.2's 77.2) + ExploitBench (54.4),
+  warning it "more than doubles GLM-5.2 on exploitation benchmarks." The custom **"glm-5.3" license** keeps an MIT-style
+  grant but conditions serving: any company (or affiliate) with aggregate revenue over $10B in any 12 consecutive months
+  must pass a Z.AI security review before offering the model as a service (carve-outs for end-user products that embed
+  the model + pure relaying). **Why it matters:** a revenue-threshold security review is a new open-weights licensing
+  precedent aimed squarely at hyperscalers — the delayed-open-weights safety gate (thesis 7) resolves into a *licensing*
+  gate on who may serve the weights, and the cyber-capability caveat — not the benchmark headline — is the part to quote.
+- **Puro-2B (arXiv 2608.27370) — from-scratch pretraining on consumer RTX 5090s for under $6.9K.** Tsinghua's "Poor
+  Lab" trained ~2B models on up to 1.4T tokens in FP8 on consumer RTX 5090 GPUs; the best checkpoint cost <$6.9K in
+  compute and "approaches Qwen2.5-1.5B performance under our evaluation protocol"; a fitted cost-scaling law suggests
+  ~$4.4K would match Qwen2-1.5B. Weights, data, and the full recipe are Apache-2.0 (HF collection), incl. an end-to-end
+  case study of how pretraining data curricula affect post-training downstream performance. A concrete data point against
+  the "pretraining is unaffordable for academia" wall — with the honest caveats kept: "under our evaluation protocol,"
+  and the sub-$5,090 figure is a scaling-law extrapolation, not a trained model (thesis 6's price/distribution lever).
+- **Gemini Co-Scientist extends to closed-loop lab execution (arXiv 2608.26701, Aug 27, 35 authors).** Beyond in-silico
+  hypothesis generation: interfaced a semi-automated chemical vapor deposition reactor to design a safer MXene precursor
+  route (a lamellar 2D material "sharing key structural similarities" with the Ti3C2Tx lattice — "further experiments
+  are needed to confirm the atomic structure"); tailored growth recipes in minutes enabling single-attempt monolayer
+  MoS2/MoSe2/WS2 via Gemini 3 Deep Think; predicted engineered E. coli swarming phenotypes that "quantitatively match"
+  unpublished wet-lab measurements; and autonomously discovered an inference-time-scaling architecture that beat six
+  frontier models on HealthBench (Hard/Professional) while reducing potential clinical harm under blinded physician
+  evaluation. **Why it matters:** the shift from "hypothesis generator" to "execution-grounded research partner" — with
+  the material caveats (unconfirmed MXene structure, validation against unpublished data) belonging in the analysis, not
+  just the body (the 08-23 limitations-reading rule).
+
+## The revenue-gated license becomes a class — two sub-classes, GLM-5.3 the security-review gate (08-29 04:35)
+
+- **The "glm-5.3" license, read first-hand (huggingface.co/zai-org/GLM-5.3, LICENSE at HEAD).** MIT-style grant +
+  Section-2 condition: the security review applies only when the licensee or an affiliate **operates a Model-as-a-Service
+  business** AND aggregate revenue (licensee + affiliates) **exceeds $10B in any consecutive 12 months**. MaaS is defined
+  as giving a third party inference/fine-tuning access with "meaningful control over the inputs, parameters, or training
+  data." Carve-outs: (a) end-user products with the model embedded in specific features/harnesses, (b) mere relaying of
+  requests to models hosted by others (OpenRouter-style relays are out of scope). **No fee, no acceptable-use section, no
+  termination clause, no audit/enforcement mechanism** — beyond the review condition it binds only as a contract claim,
+  and the carve-outs are broad. The cyber-capability gating is entirely in the conditional review, not a use restriction.
+- **The "Qwen3.8-Max" license, read first-hand (huggingface.co/Qwen/Qwen3.8-2.4T-A95B, LICENSE at HEAD).** Custom
+  "Qwen3.8-Max License" — the trigger is MaaS **or AI Work Assistant** + **$50M aggregate/12 months** → the licensee
+  "shall obtain a separate license from Qwen" before any commercial use. Internal-use carve-out (outputs/capabilities not
+  exposed to third parties); MaaS relaying excluded; AI-Work-Assistant excludes single-purpose tools and non-coding/office
+  domains. Attribution: >100M MAU or $20M monthly revenue → model name must be prominently displayed. **No security
+  review.** A monetization gate aimed at inference marketplaces and AI work assistants that would compete with QwenCloud.
+- **The class.** Reported entrants complete a family: **Moonshot Kimi K3** (Jul 2026) — cloud resale over ~$20M annual
+  revenue needs a separate agreement, revenue-share up to 30%, in talks with AWS/Azure/GCP; **Mistral Medium / Devstral 2**
+  (Modified MIT) — consolidated monthly revenue over $20M → no rights without a commercial license; contrast **DeepSeek**
+  (royalty-free perpetual irrevocable) and **Meta Llama Community** (conditional only at ~700M MAU).
+  **Two sub-classes:** monetization gates (Qwen/Kimi/Mistral, $20–50M, no security review) vs GLM-5.3's capability gate
+  ($10B + security review, no fee). The class's meta-point: revenue-threshold licenses that force US firms to *contract*
+  with the Chinese lab to legally resell create a regulatory hook — "with revenue comes regulability" (Kimi K3 drew US
+  security review; Treasury flagged possible trade blacklisting). The 04:19 read of GLM-5.3 as "aimed at hyperscalers"
+  is confirmed by the $10B scale (100–500× the others' thresholds). → thesis 6, thesis 7.

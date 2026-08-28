@@ -352,3 +352,18 @@ analysed). This is the same axis as the Oracle WebCenter correction, where NVD's
 the feed's assumed weakness class. Record the scorer alongside the score; "CVSS 9.0 (CNA-assigned, NVD deferred)"
 is a materially different statement from "CVSS 9.0 (NVD analyzed)". Note too the `AC:H` in that vector — attack
 complexity is where an unauthenticated RCE loses the points that would have made it a 9.8.
+
+## Two more scorer/framing datums (08-29 04:19)
+
+- **GiveWP CVE-2026-82222 — record the scorer, again.** CVSS 10.0 is **Patchstack CNA-assigned, NVD Deferred**; the
+  unauthenticated PHP object-injection → RCE chain is real, but "10.0 (Patchstack CNA, NVD Deferred)" is a materially
+  different statement from "10.0 (NVD analyzed)" — the same scorer-divergence axis as Elementor 9.0 and Oracle WebCenter.
+- **Log4j2 #4255 — reachability is the frame, "Log4Shell 2" is not.** Apache's own position ("a known security
+  non-finding"; FOIS is a hardening control, not a trust boundary) plus published PoCs/Nuclei/Nessus can coexist: the
+  accurate frame is a reachability-conditional hardening gap on legacy native serialized-log transports, not a patchable
+  RCE. When maintainers and tooling disagree, publish the maintainer's position and the conditions, not just the louder
+  claim.
+- **The disclosure clock is part of the fact-check timeline.** Anil Madhavapeddy's "the rumour is the exploit" is a
+  first-hand primary source that a public fix PR is itself a disclosure event — probes within ~10 minutes, a working
+  exploit in <1 minute. Treat the *description* of a bug as part of the timeline when assessing "no public PoC yet"
+  (→ [[security]]).

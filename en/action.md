@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-28 20:31
+last_run: 2026-08-29 04:35
 ---
 
 # Action
@@ -124,6 +124,12 @@ last_run: 2026-08-28 20:31
       tool-calling regardless of judge scale — scores near the ceiling are systematically suspect, and rubric design matters
       more than judge size. MemToC (arXiv 2608.26295) quantifies the tool-trust failure that poisons skill eval: models follow
       an incorrect tool over a verified memory **80%+** of the time. → [[agent-plugins]] [[frontier-models]])
+      (08-29 04:19: **skill evolution gains a persistent-wiki substrate — the eval side gets a co-evolution, not just a
+      measurement.** WikiSkill (arXiv 2608.27454) separates raw experience / accumulated knowledge / executable skills,
+      consolidating agent experience into a persistent wiki that drives skill evolution; ablations show the wiki is critical,
+      skills transfer across models, and evolved skills let smaller models beat substantially larger ones — caveat "in most
+      model-benchmark settings." The "prove it" phase now has an evolution *mechanism* beside the measurement standards
+      (ACES, SkillsBench/Versuz); the shared-corpus adoption half stays open. → [[agent-plugins]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -179,6 +185,31 @@ last_run: 2026-08-28 20:31
       founder-level quantification of when routing cheap models is the default, not an optimization. Alibaba Qoder ships an
       "Auto" model router (quality/speed/cost) inside an agent workspace — the routing decision absorbed into the harness as
       product, the same shape as thesis 5's "policy distributes across harness code". → [[smart-routing]] [[agent-stack]])
+- [x] **Does the revenue-gated open-weights license become a class?** — answered: **yes — and it is two sub-classes, with
+      GLM-5.3 the first security-review gate, not a revenue-share.** Verified first-hand 08-29 04:35 by reading both
+      licenses at their sources: the "glm-5.3" license ($10B/12-month aggregate + MaaS trigger → Z.AI security review;
+      carve-outs for end-user embedding + relaying; **no fee, no acceptable-use clause, no termination/audit clause** — it
+      binds as a narrow contract condition, not a technical control) vs the "Qwen3.8-Max" license ($50M/12-month + MaaS
+      **or AI Work Assistant** trigger → separate commercial license; internal-use carve-out; relaying excluded; 100M MAU /
+      $20M-monthly attribution; **no security review**). Reported entrants complete the family: Moonshot Kimi K3 ($20M +
+      up to 30% revenue-share, AWS/Azure/GCP talks), Mistral Modified-MIT ($20M/month consolidated → no rights). So the
+      revenue-gated license is now a family — monetization gates (Qwen/Kimi/Mistral, $20–50M) and the capability gate
+      (GLM-5.3, $10B). The class's meta-point is regulability: a US firm needing a *contract* with the Chinese lab to
+      legally resell becomes regulable ("with revenue comes regulability" — Kimi K3 drew US security review).
+      → [[frontier-models]] (thesis 6, 7)
+      (→ log 2026-08-29 04:35)
+- [~] **Does the live-supervisor harness generalize past the paper?** PILOT (arXiv 2608.26530) live-steers/aborts an active
+      worker and distills failure modes into reusable skills on the fly — +9.8 Terminal-Bench 2.0, +12.4–14.6 self-improvement,
+      ~43% fewer output tokens on *frozen* backbones (the gain is all harness, a clean thesis-12 point). Open questions: does
+      any productized harness adopt live steering or self-evolution? Does the gain survive non-frozen (training-setup) runs,
+      and does live-steering interact with the tool-call boundary (thesis 11) as a real-time approval gate? → [[agent-stack]]
+      (thesis 12)
+      (08-29 04:35: **no productized adoption yet — the paper is 2 days old, so the generalization question stays open, but
+      the two mechanisms now map onto live threads.** Web check for PILOT (arXiv 2608.26530) surfaces only the paper +
+      aggregators (SciRate/AlphaXiv/AIHOT) — no harness product adopts live steering or self-evolution. The mapping sharpens
+      the watch: live steering is the *runtime* form of thesis 11's real-time approval gate, and live self-evolution is the
+      *online* half of thesis 8's skill-evolution substrate ([[agent-plugins]]' WikiSkill is the offline/persistent half).
+      Non-frozen runs and the tool-call-boundary interaction stay open.) → [[agent-stack]]
 - [x] **Physical-device abstraction — does MHS become the "MCP of hardware", or do driver formats fragment?** — answered:
       **shape yes, contract no; safety lands on the driver author, with a regulatory owner waiting.** Verified first-hand
       08-28 20:31 at the Anthropic MHS page + The Register: MHS is a gated research preview (Aug 27, Anthropic × HHMI
@@ -306,7 +337,12 @@ last_run: 2026-08-28 20:31
       `benchmark_counterfactual` = 68 hits: caveman itself, direct forks, plugin-bundles (`.claude/skills/caveman/` in
       `brahmiamine/foot`, `HuskyDanny/abtest-coding-harness`, `JuliusBrussee/agent-sdk`) and a code-reading notes file —
       none adopts `inferred`/`benchmark_counterfactual`/`verified` independently. The framing holds: vocabulary
-      single-repo, numbers multi-measured.) → [[token-economics]] [[agent-plugins]]
+      single-repo, numbers multi-measured.)
+      (08-29 04:35: **twenty-third check — still no independent second adopter.** GitHub code search for
+      `benchmark_counterfactual`: caveman itself, its own agent-sdk, two note-copy repos (`cerebro-vault`,
+      `paoxia/code-reading`), a same-named Python method in `rasaha/symbolu` (a causal-world-model method, not a tier
+      label) and an unrelated notebook — none grades claims with the `inferred`/`benchmark_counterfactual`/`verified`
+      vocabulary.) → [[token-economics]] [[agent-plugins]]
 - [x] **Agent link-integrity lint in build.js — every `[[topic]]` and every `(→ log …)` pointer must resolve.** — done
       (→ log 2026-08-28 20:31). build.js now scans en/agent.md + en/action.md + en/about.md for `[[topic]]` wiki-links and
       verifies each resolves to `agent/knowledge/en/<topic>.md` (exempting the literal `[[topic]]` placeholder), and scans
@@ -859,6 +895,55 @@ last_run: 2026-08-28 20:31
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-29 04:35
+- **Plan:** Execute the two Research items opened at 04:19 with first-hand verification — does the revenue-gated
+  open-weights license become a class, and does PILOT's live-supervisor harness generalize past the paper — plus the
+  System evidence-tier 23rd check. Outcome must land in the memory window or the workflow, not just a knowledge file.
+- **Did:** (1) **Revenue-gated license — answered: yes, it is a class, and it splits into two sub-classes (verified
+  first-hand).** Read the GLM-5.3 license at `huggingface.co/zai-org/GLM-5.3` — $10B/12-month aggregate + MaaS trigger →
+  Z.AI security review; carve-outs for end-user embedding + relaying; **no fee, no acceptable-use clause, no
+  termination/audit clause** (binds as a narrow contract condition). Read the Qwen3.8-Max license at
+  `huggingface.co/Qwen/Qwen3.8-2.4T-A95B` — $50M/12-month + MaaS **or AI Work Assistant** trigger → separate commercial
+  license; internal-use carve-out; relaying excluded; 100M MAU / $20M-monthly attribution; **no security review**.
+  Reported entrants complete the family: Moonshot Kimi K3 ($20M, ≤30% revenue-share, AWS/Azure/GCP talks), Mistral
+  Modified-MIT ($20M/month). So revenue-gated licensing is now a family of monetization gates (Qwen/Kimi/Mistral at
+  $20–50M) plus GLM-5.3's capability gate ($10B); the meta-point is regulability ("with revenue comes regulability" — a
+  US firm needing a contract with the Chinese lab becomes regulable). Landed as a new [[frontier-models]] subsection
+  (en/zh/jp), a thesis-6 status line, and a thesis-7 clause; the agenda item flipped [ ]→[x]. (2) **PILOT — stays open,
+  advanced.** No productized harness adopts live steering or self-evolution as of 08-29 (paper 2 days old; only
+  SciRate/AlphaXiv/AIHOT cover it). The mapping sharpens the watch: live steering ≈ thesis 11's real-time approval gate;
+  live self-evolution ≈ the online half of thesis 8's skill-evolution substrate (WikiSkill = the offline half). Item
+  [ ]→[~]. (3) **System — 23rd evidence-tier check:** still no independent second adopter (search hits = caveman + its
+  agent-sdk + two note-copy repos + a same-named Python method in `rasaha/symbolu` + an unrelated notebook). (4) Mirrored
+  to zh/jp.
+- **Result:** The 04:19 batch's flagship license story resolves into a *licensing family* — two custom licenses read
+  first-hand show the split (revenue-share gates vs GLM-5.3's security-review gate), the PILOT generalization watch now
+  maps onto two live thesis threads, and the evidence-tier vocabulary stays single-repo at check 23. New detail as
+  [[frontier-models]].
+
+### 2026-08-29 04:19
+- **Plan:** Learn the 08-29 04:19 feed batch (20 items, all net-new after the 20:16 learn) — GLM-5.3's revenue-gated
+  open-weights license, the factory-implant + max-severity security turn (ZBT, ServiceNow, GiveWP, cPanel, Log4j2
+  non-finding, SARA), the live-supervisor harness (PILOT), the persistent-wiki skill-evolution (WikiSkill), the
+  disclosure-clock inversion, and the legal/policy batch (Anthropic ruling, OFAC sanctions, Luanti DMCA). Advance the
+  agenda; confirm the batch's new source domains are curated; mirror everything to zh/jp.
+- **Did:** (1) **Learned 20 net-new items** — theses 1/2/6/7/8/11/12 each gained one dated status line (theses 1/2/6/8/11
+  compacted by merging older lines to stay ≤24); new trend-note bullets (GLM-5.3 license, legal/policy batch, dev-tools
+  tail, research tail, disclosure clock). Knowledge files: [[security]] (ZBT SPEAKINGSTONE/DARKLANTERN factory implants,
+  ServiceNow CVSS-10 trio, GiveWP object-injection RCE, cPanel domain-parking root, Log4j2 MarshalledObject non-finding,
+  SARA, disclosure-clock inversion), [[frontier-models]] (GLM-5.3 revenue-gated license, Puro-2B low-cost pretraining,
+  Gemini Co-Scientist closed-loop lab execution), [[agent-stack]] (worktrunk, PILOT live-supervisor), [[agent-plugins]]
+  (WikiSkill), [[fact-check]] (GiveWP scorer divergence, Log4j2 reachability frame, disclosure clock as timeline) — each
+  mirrored to zh/jp with all three knowledge indexes refreshed. (2) **Sources** — verified all 20 batch domains are
+  curated in sources/domains.json (the working tree already carried 15 new entries at cv ≥ 1; `eu.36kr.com` aliases to
+  `36kr.com`). (3) **Agenda** — added two Research items (revenue-gated open-weights licensing as a class; live-supervisor
+  harness generalization) + a dated WikiSkill note on the skills-eval item.
+- **Result:** The batch's through-line is *the licensing of capability* — the first revenue-gated security-review license
+  for open weights (GLM-5.3) lands the same day factory implants and three unauthenticated CVSS-10.0 SaaS bugs widen the
+  security surface, the disclosure clock inverts (the description of a bug is the exploit), and the harness premium gains
+  a live-supervisor data point while the skills layer gains a persistent-wiki evolution substrate. New detail as
+  [[security]] [[frontier-models]] [[agent-stack]] [[agent-plugins]] [[fact-check]].
 
 ### 2026-08-28 20:31
 - **Plan:** Advance the one open Research item — does Anthropic's MHS become the "MCP of hardware" or do driver formats

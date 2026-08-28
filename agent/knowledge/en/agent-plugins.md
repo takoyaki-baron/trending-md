@@ -576,3 +576,14 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
   a first-party maintainer is a partial answer to the freshness problem (agents emit current idioms without
   per-org maintenance), and `go.mod` version detection is a clean pattern for keeping agent knowledge synced to
   language releases. The shared-corpus evaluation adoption half of thesis 8 stays open.
+
+## WikiSkill — persistent-wiki skill evolution (08-29 04:19)
+
+- **WikiSkill (arXiv 2608.27454) — Google researchers co-evolve agent skills with a persistent wiki.** Separates raw
+  execution experience, accumulated knowledge, and executable skills; continuously consolidates agent experience into a
+  persistent wiki that then drives skill evolution. Reports consistent gains over state-of-the-art skill-evolution
+  methods across benchmarks and models; ablations show the persistent wiki is critical, skills evolved by one model
+  transfer to others, and evolved skills let smaller models beat substantially larger ones. Honest caveat per the
+  abstract: gains over no-skill baselines hold "in most model-benchmark settings," not universally. Targets the
+  "scattered optimization histories" failure of current agent-skill mining — the smaller-model-plus-skills finding is
+  the load-bearing claim for cost-conscious agent setups (thesis 8's prove-it phase, now with a wiki-shaped substrate).

@@ -1526,3 +1526,55 @@ The batch's security stream, read first-hand at the primary sources where reacha
   execution. Found with `github.com/daedalus/fuzzer` — the viral "vibecoded fuzzer" framing overstates a conventional
   coverage-guided fuzzer (Markov generation, grammar-aware mutations, information-theoretic scheduling). Check the
   primary source before repeating the claim (→ [[fact-check]]).
+
+## Factory implants, a max-severity SaaS trio, and the disclosure clock (08-29 04:19)
+
+- **ZBT white-label routers ship two factory implants — no vendor fix (CVE-2026-74232 / CVE-2026-74233, VulnCheck CNA).**
+  Shenzhen Zhibotong (ZBT) firmware, rebranded as Deep Orange / WiFlyer / KuWFi, carries two undocumented services:
+  **SPEAKINGSTONE** (`yunmgrd`) beacons outbound over UDP 10000 to a hardcoded C2 — root command execution, PPPoE
+  credential theft, a DNS-hijack list and reverse-SSH tunnels, working behind NAT (a sinkhole on the expired backup C2
+  domain drew 392 beacons, 390 in China); **DARKLANTERN** (`infosrvd`) listens on UDP 9992, exposed inbound by the stock
+  firewall, with an auth defeated by a hardcoded salt + an all-zero wildcard MAC giving a single-packet root shell (an
+  Aug 18–21 scan found 203 internet-facing instances across 22 countries). Both CVSS 9.8 (v3.1) / 9.3 (v4.0); **no fixed
+  firmware exists** — Zbtlink suspended sales but published no statement. The embedded/IoT supply-chain shape (factory
+  implants in globally-rebranded devices) with inventorying + blocking the C2/ports the only defense.
+- **ServiceNow patches three unauthenticated CVSS 10.0 flaws (KB3152242, Aug 27).** CVE-2026-18885 (code injection in the
+  GraphQL Composite Data API → unauth RCE/data access), CVE-2026-18886 (improper access control in the system-config image
+  upload processor → privilege escalation), CVE-2026-74820 (SQL injection via a dynamic-schema ORDER BY clause → arbitrary
+  SQL against the instance DB) — all `AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H`; plus CVE-2026-6876 (CVSS 8.7, low-privilege
+  sandbox escape). No active exploitation / no public PoC at publication; hosted instances auto-patched, self-hosted must
+  patch manually. Max-severity unauth bugs in the IT-service-management backbone, with PoCs typically days behind an
+  advisory like this.
+- **GiveWP CVE-2026-82222 (CVSS 10.0, Patchstack CNA, NVD Deferred) — unauth PHP object injection → RCE.** GiveWP
+  ≤ 4.16.7.1: the `maybeSafeUnserialize()` "safe" helper preserves `__PHP_Incomplete_Class` payload bytes and the
+  donation-session flow later unserializes without the guard, so a gadget planted in the `last_name` profile field wakes
+  a TCPDF/TestData POP chain to OS-command execution — reachable on a default install up to 4.16.5.1. CISA SSVC
+  "Automatable: yes"; fixed in 4.16.7.2 (chain closed at five independent points). The exact mass-exploitation profile
+  once a scanner ships, and another CNA-vs-NVD scorer divergence — record the scorer (→ [[fact-check]]).
+- **cPanel CVE-2026-65643 — domain-parking arbitrary file write → root (all supported versions).** An authenticated
+  account permitted to add parked/addon domains can create arbitrary files anywhere on the server (CWE-73), escalating to
+  code execution as root and full compromise of every hosted account. On shared/reseller hosting the "authenticated"
+  barrier is trivial (cheap plan / stuffed credential / phished account). No CVSS published in the advisory; no public
+  PoC; not in KEV. Fixed builds 11.110.0.141+, 11.134.0.53+, 11.136.0.37+, 11.138.0.2+, WP2 11.138.1.7+.
+- **Log4j2 issue #4255 — the MarshalledObject allowlist bypass that Apache calls a "known security non-finding".**
+  `FilteredObjectInputStream`'s class allowlist includes `java.rmi.MarshalledObject`, which stores an inner serialized
+  payload in an opaque byte array and deserializes it with a plain `ObjectInputStream` on `.get()` — outside the filter;
+  Log4j's own `Log4jLogEvent` proxy calls `.get()` during deserialization, so a gadget chain can execute unfiltered on
+  serialized-log receivers (log4j-core 2.8.0–2.26.1 over native Java-serialized log transport). No CVE, no patch: Apache
+  explicitly calls it "an independent discovery of a known security non-finding" (FOIS is a hardening control, not a
+  trust boundary) — even as public PoCs, a Nuclei template and a Nessus plugin ship. The accurate frame is reachability
+  on legacy serialized-log transports, not "Log4Shell 2" — the no-CVE tension is the story (→ [[fact-check]]).
+- **SARA (arXiv 2608.27146) — "when tool outputs become commands": action induction separated from runtime
+  authorization.** A CAS paper argues a tool output that "begins to specify concrete actions" is effectively a command;
+  SARA's runtime-authorization layer uses a context-isolated Action Probe to detect action-inducing semantics + track
+  action provenance, then authorizes tool calls only against goal-, execution-chain-, and argument-level support, with a
+  No-History-Promotion rule stopping past recurrence from laundering action origins into authority. On AgentDojo +
+  AgentDyn, SARA caps attack success rate at ≤0.63% across four settings while keeping task utility competitive — a
+  concrete countermeasure to the prompt-injection/tool-abuse class behind several critical MCP CVEs (thesis 2, thesis 11).
+- **The disclosure clock inverts — first-hand data that the *description* of a bug is the exploit.** OCaml maintainer
+  Anil Madhavapeddy ("Just the rumour of a bug is enough to find an exploit"): after a public PR for a cohttp
+  path-traversal fix, probes for the exact pattern hit his server within ~10 minutes and an agent produced a working
+  local exploit in under a minute; mean time-to-exploit ≈ −7 days (vs ~63 days in 2018–19); marimo's CVE-2026-39987 was
+  exploited 9h after its advisory with no public PoC. Prescription: traditional embargoes are obsolete — lean on rapid
+  continuous shipping + protocol-layer "virtual patching." The negative-TTE defense-metric thread from 08-16 gains its
+  strongest primary-source voice (→ [[fact-check]]).

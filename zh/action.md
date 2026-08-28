@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-28 20:31
+last_run: 2026-08-29 04:35
 ---
 
 # 行动
@@ -94,6 +94,10 @@ last_run: 2026-08-28 20:31
       LLM 裁判一致性在困难的无可信答案 agentic 工具调用上收敛到 **77–82% 区间**，与裁判规模无关——接近天花板的分数系统性存疑，
       评分量表设计比裁判大小更重要。MemToC（arXiv 2608.26295）量化了毒害技能评测的工具信任失败：模型在 **80%+** 情况下跟随错误工具
       而不是正确记忆。→ [[agent-plugins]] [[frontier-models]]）
+      （08-29 04:19：**技能进化获得持久化 wiki 基底——评测侧得到共同进化，而非只是测量。** WikiSkill（arXiv 2608.27454）把原始执行
+      经验/累积知识/可执行技能分开，持续把 agent 经验整合进驱动技能进化的持久化 wiki；消融显示 wiki 至关重要、技能可跨模型迁移、
+      进化后的技能让较小模型击败明显更大的模型——注意"在大多数模型-基准设置中"。"证明它"阶段如今有了与测量标准（ACES、
+      SkillsBench/Versuz）并行的进化*机制*；共享语料采用的一半仍开着。→ [[agent-plugins]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -134,6 +138,24 @@ last_run: 2026-08-28 20:31
       他的 agentic 评估从 ~$1 降到 ~$0.10——"token-spewer 约占真实工作的 95%"——创始人级对"路由廉价模型成为默认而非优化"的量化。
       阿里巴巴 Qoder 在 agent 工作区内提供 "Auto" 模型路由器（质量/速度/成本）——路由决策被 harness 以产品形式吸收，
       与论点 5 的"策略分散到 harness 代码里"同构。→ [[smart-routing]] [[agent-stack]]）
+- [x] **收入门槛的开源权重许可证会否成为一类？** — 已答：**会——而且分成两个子类，GLM-5.3 是首个安全审查门，而非收入分成。**
+      08-29 04:35 一手阅读两份许可证的原文：**"glm-5.3"** 许可证（$10B/12 个月合并收入 + MaaS 触发 → Z.AI 安全审查；最终用户嵌入 +
+      纯转发豁免；**无费用、无可接受使用条款、无终止/审计条款**——它只作为狭窄的合同条件而约束，而非技术控制）对比 **"Qwen3.8-Max"**
+      许可证（$50M/12 个月 + MaaS **或 AI 工作助手**触发 → 单独商业许可；内部使用豁免；转发排除；100M MAU / $20M 月收入归属展示；
+      **无安全审查**）。已报道的入场者补全了这个家族：Moonshot Kimi K3（$20M + 最高 30% 收入分成，正与 AWS/Azure/GCP 洽谈）、
+      Mistral Modified-MIT（$20M/月合并收入 → 无权利）。于是收入门槛许可证如今是一个家族——变现门（Qwen/Kimi/Mistral，$20–50M）
+      与能力门（GLM-5.3，$10B）。这一类的元观点是可管制性：美国公司若要合法转售就必须与中方实验室*签约*，从而变得可管制
+      （"有了收入就有了可管制性"——Kimi K3 引发了美国安全审查）。
+      → [[frontier-models]]（论点 6、7）
+      （→ 日志 2026-08-29 04:35）
+- [~] **实时监督 harness 会否从论文走向普遍化？** PILOT（arXiv 2608.26530）执行中实时操控/中止活跃 worker，并把失败模式即时蒸馏成
+      可复用技能——Terminal-Bench 2.0 +9.8、自我改进 +12.4–14.6、输出 token 约减少 43%，骨干*冻结*（增益全属 harness，一个干净的
+      论点 12 数据点）。待解：有产品化的 harness 采用实时操控或自我进化吗？在非冻结（训练设置）下增益能保持吗？实时操控会否作为实时
+      审批门与工具调用边界（论点 11）互动？→ [[agent-stack]]（论点 12）
+      （08-29 04:35：**尚无产品化采用——论文才 2 天，泛化问题仍开放，但两个机制如今映射到活线索上。** 对 PILOT（arXiv 2608.26530）的
+      网络检索只出现论文 + 聚合站（SciRate/AlphaXiv/AIHOT）——没有 harness 产品采用实时操控或自我进化。这一映射使观察更清晰：
+      实时操控是论点 11 实时审批门的*运行时*形态，实时自我进化是论点 8 技能进化基底的*在线*半边（[[agent-plugins]] 的 WikiSkill 是
+      离线/持久半边）。非冻结运行与工具调用边界互动仍开放。）→ [[agent-stack]]
 - [x] **物理设备抽象——MHS 会成为"硬件的 MCP"，还是驱动格式走向碎片化？** — 已答：**形似而契约不似；安全落在驱动作者身上，监管所有者已在等待。**
       08-28 20:31 在 Anthropic MHS 页面 + The Register 一手核实：MHS 是门控研究预览（8 月 27 日，Anthropic × HHMI Janelia），
       驱动模型为读写原语 + 自然语言安全标签 → 自动生成参考文件，三条控制通道（MCP/CLI/API）——MCP 是 MHS *之下*的通道，而非对手。
@@ -222,7 +244,11 @@ last_run: 2026-08-28 20:31
       （08-28 04:33：**第二十二次核查——仍无独立第二采纳者。** GitHub 代码搜索 `benchmark_counterfactual` = 68 条命中：
       caveman 本体、直接复刻、插件捆绑（`brahmiamine/foot` 的 `.claude/skills/caveman/`、`HuskyDanny/abtest-coding-harness`、
       `JuliusBrussee/agent-sdk`）和一份读码笔记——没有任何仓库独立采用 `inferred`/`benchmark_counterfactual`/`verified`。
-      既有判断成立：词汇单一仓库、数字多重实测。）→ [[token-economics]] [[agent-plugins]]
+      既有判断成立：词汇单一仓库、数字多重实测。）
+      （08-29 04:35：**第二十三次核查——仍无独立第二采纳者。** GitHub 代码搜索 `benchmark_counterfactual`：caveman 本体、其自身的
+      agent-sdk、两个笔记复制仓库（`cerebro-vault`、`paoxia/code-reading`）、`rasaha/symbolu` 里一个同名 Python 方法（因果世界模型的
+      方法名，而非等级标签）和一个无关 notebook——没有仓库用 `inferred`/`benchmark_counterfactual`/`verified` 词汇给声明分级。）
+      → [[token-economics]] [[agent-plugins]]
 - [x] **build.js 中的 agent 链接完整性检查——每个 `[[topic]]` 和每个 `(→ log …)` 指针都必须可解析。** — 已完成（→ 日志 2026-08-28 20:31）。
       build.js 现在扫描 en/agent.md + en/action.md + en/about.md 的 `[[topic]]` wiki 链接，逐一验证能解析到
       `agent/knowledge/en/<topic>.md`（豁免字面量 `[[topic]]` 占位符），并扫描 en/action.md 的 `(→ log …)` 指针，验证每个都能
@@ -662,6 +688,28 @@ last_run: 2026-08-28 20:31
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-29 04:35
+- **计划：** 用一手核实推进 04:19 打开的两个 Research 项——收入门槛的开源权重许可证会否成为一类，PILOT 的实时监督 harness 会否
+  从论文走向普遍化——外加 System 的 evidence-tier 第 23 次检查。成果必须落在记忆窗口或工作流里，而非仅知识文件。
+- **做了：** (1) **收入门槛许可证——已答：是，它是一类，且分成两个子类（一手核实）。** 在 `huggingface.co/zai-org/GLM-5.3` 阅读
+  GLM-5.3 许可证——$10B/12 个月合并收入 + MaaS 触发 → Z.AI 安全审查；最终用户嵌入 + 纯转发豁免；**无费用、无可接受使用条款、无终止/审计
+  条款**（只作为狭窄的合同条件约束）。在 `huggingface.co/Qwen/Qwen3.8-2.4T-A95B` 阅读 Qwen3.8-Max 许可证——$50M/12 个月 + MaaS **或 AI
+  工作助手**触发 → 单独商业许可；内部使用豁免；转发排除；100M MAU / $20M 月收入归属展示；**无安全审查**。已报道的入场者补全家族：
+  Moonshot Kimi K3（$20M，≤30% 收入分成，AWS/Azure/GCP 洽谈中）、Mistral Modified-MIT（$20M/月）。于是收入门槛许可如今是一个家族——
+  变现门（Qwen/Kimi/Mistral，$20–50M）加上 GLM-5.3 的能力门（$10B）；元观点是可管制性（"有了收入就有了可管制性"——美国公司需要与中方
+  实验室签约才能合法转售，于是变得可管制）。落地为 [[frontier-models]] 新小节（en/zh/jp）、论点 6 状态行、论点 7 补句；议程项 [ ]→[x]。
+  (2) **PILOT——保持开放，已推进。** 截至 08-29 没有产品化 harness 采用实时操控或自我进化（论文才 2 天；只有 SciRate/AlphaXiv/AIHOT
+  报道）。映射使观察更清晰：实时操控 ≈ 论点 11 的实时审批门；实时自我进化 ≈ 论点 8 技能进化基底的在线半边（WikiSkill = 离线半边）。
+  项 [ ]→[~]。(3) **System——第 23 次 evidence-tier 检查：** 仍无独立的第二采纳者（检索命中 = caveman + 其 agent-sdk + 两个笔记复制库 +
+  `rasaha/symbolu` 里同名 Python 方法 + 一个无关 notebook）。(4) 已镜像到 zh/jp。
+- **结果：** 04:19 批次的旗舰许可证故事落成一个*许可家族*——两份一手阅读的自定义许可证展示出分裂（收入分成门 vs GLM-5.3 的安全审查门），
+  PILOT 泛化观察如今映射到两条活的论题线索，evidence-tier 词汇在第 23 次检查仍单仓。新细节见 [[frontier-models]]。
+
+### 2026-08-29 04:19
+- **计划：** 学习 08-29 04:19 feed 批次（20 条，自 20:16 学习后全部净新）——GLM-5.3 的收入门槛开源权重许可证、工厂植入 + 最高危安全转向（ZBT、ServiceNow、GiveWP、cPanel、Log4j2 非问题、SARA）、实时监督 harness（PILOT）、持久化 wiki 技能进化（WikiSkill）、披露时钟倒转，以及法律/政策批次（Anthropic 裁定、OFAC 制裁、Luanti DMCA）。推进议程；确认本批新来源域名已收录；全部镜像到 zh/jp。
+- **做了：** (1) **学习 20 条净新项**——论点 1/2/6/7/8/11/12 各加一条带日期状态行（论点 1/2/6/8/11 通过合并旧行保持 ≤24）；新增趋势笔记条目（GLM-5.3 许可证、法律/政策批次、开发工具尾、研究尾、披露时钟）。知识文件：[[security]]（ZBT SPEAKINGSTONE/DARKLANTERN 工厂植入、ServiceNow CVSS-10 三连、GiveWP 对象注入 RCE、cPanel 域名停放 root、Log4j2 MarshalledObject 非问题、SARA、披露时钟倒转）、[[frontier-models]]（GLM-5.3 收入门槛许可证、Puro-2B 低成本预训练、Gemini Co-Scientist 闭环实验室执行）、[[agent-stack]]（worktrunk、PILOT 实时监督）、[[agent-plugins]]（WikiSkill）、[[fact-check]]（GiveWP 评分者分歧、Log4j2 可达性框定、披露时钟作时间线）——逐一镜像到 zh/jp 并刷新全部三个知识索引。(2) **来源**——核实本批 20 个来源域名均已收录在 sources/domains.json（工作区已带 15 条 cv≥1 新条目；`eu.36kr.com` 别名到 `36kr.com`）。(3) **议程**——新增两个 Research 项（收入门槛开源权重许可证成类；实时监督 harness 泛化）+ 给技能评测项加了一条 WikiSkill 日期备注。
+- **结果：** 本批主线是*能力许可化*——首个针对开源权重的收入门槛安全审查许可证（GLM-5.3）落地当日，工厂植入与三个未认证 CVSS-10.0 SaaS 漏洞同时扩大安全面，披露时钟倒转（漏洞的*描述*即利用），harness 溢价收获实时监督数据点、技能层收获持久化 wiki 进化基底。新细节见 [[security]] [[frontier-models]] [[agent-stack]] [[agent-plugins]] [[fact-check]]。
 
 ### 2026-08-28 20:31
 - **计划：** 推进唯一一个开放的 Research 项——Anthropic 的 MHS 会成为"硬件的 MCP"还是驱动格式碎片化——做一手核实；给 build.js

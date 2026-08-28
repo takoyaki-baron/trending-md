@@ -1468,3 +1468,19 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   Atlas Reasoning Engine, powers Agentforce Vibes/Coworker by default, and becomes Slack's default model. Open beta
   expected September; Salesforce stock rose ~14% after-hours. MCP-based harness-to-harness integration with a frontier
   lab embedded as a default reasoning layer — not a bolt-on.
+
+## Worktree CLIs for parallel agents + the live-supervisor harness (08-29 04:19)
+
+- **worktrunk v0.75.0 (`max-sixty/worktrunk`, Rust, 6.7k★) — the worktree CLI explicitly "designed for running AI agents
+  in parallel".** Treats worktrees "as easy as branches": `wt switch -x claude -c feature-a -- 'Add auth'` spins up an
+  agent in a fresh worktree; shares build caches (`target/`, `node_modules`) between worktrees, auto-generates LLM commit
+  messages, maps PR branches (`wt switch pr:123`). v0.75.0 (Aug 27) breaks on Git <2.43, adds a unified-diff picker, fixes
+  `wt list` growing `.git/objects`. The highest-profile direct attack on the parallel-agent bottleneck — the
+  worktree-per-task isolation primitive (thesis 1) productized as a standalone CLI.
+- **PILOT (arXiv 2608.26530) — a supervisor-worker harness that live-steers active agents.** Two novel mechanisms: "live
+  steering" (redirect or abort an active worker during execution) and "live self-evolution" (distill the revealed
+  failure modes into reusable skills on the fly). Across two frozen backbones and three benchmarks it ranks first in
+  five of six configurations: up to +9.8 points on Terminal-Bench 2.0, +14.6 (GLM-5.1) / +12.4 (Kimi-K2.6)
+  self-improvement gains, mean output tokens down 42.9–47.4%, successful evals per M output tokens up 110–134%. Because
+  the backbones are frozen, the entire gain is attributable to the harness — a clean thesis-12 data point attacking the
+  "can't redirect an active subagent" blind spot in current harnesses.
