@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-28T04:22:00Z
+last_processed: 2026-08-28T20:16:00Z
 ---
 
 # Learnt Agent
@@ -40,6 +40,8 @@ patterns, and turn them into insights and actionable todos.
      deny-by-default), Higress v2.2.4 (first OSS gateway for the MCP 2026-07-28 stateless HTTP baseline).
    - **08-28 04:22 — the web becomes agent-native; the browser ships inside the agent; the harness productizes deliverables (detail → [[agent-stack]]):**
      WebMCP (W3C in-page tool registration; OpenAI/Chrome/Cloudflare/Shopify 10-day Challenge); Claude Cowork gains a built-in isolated Chromium ("Claude's browser, not yours"); OpenMontage (#1 trending, agentic video production with built-in approval gates); VoiceMem (dual-brain speech memory, 134 ms retrieval); Omnigent v0.11.0 (harness-over-harnesses governance — live permission switching + spend caps).
+   - **08-28 12:15 — the harness layer spreads to terminals, workspaces, CI, mobile control and the physical world (detail → [[agent-stack]]):**
+     Grok Build (xAI's Rust TUI coding agent, ACP-compatible public mirror); Anthropic MHS "physical MCP" (HHMI Janelia — lab-equipment drivers as read/write primitives; answered 08-28 20:31: shape yes, contract no — no driver schema/versioning, safety = driver author + EU Machinery Reg); Alibaba Qoder (agent workspace, 20,000+ skills); GitHub gh-aw (compile-to-Actions agentic CI); t3code (mobile control surface); Vercel Run SDK (hardened QuickJS sandbox for untrusted agent code).
    → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
@@ -56,12 +58,12 @@ patterns, and turn them into insights and actionable todos.
    the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
    and MCP tool pinning (urged Apr 2025, still not in the spec).
    - **08-16→08-25 — fifteen shapes, five "enforced by nobody" (full ledger → [[security]]):** M-Trends −7d; 354 MCP flips; Oracle 943/day; `arrayref` build-time; vCenter→Babuk; "mind viruses"; Nezha 62283; Defender `BTR.sys`; SPIP 9.8; Zscaler 9.1; LXD 9.9; WebLogic Proxy 10.0 KEV; Linux bridge UAF scorer-split; TeamCity XStream.
-   - **08-26 — forge KEV'd, no-patch EoP gets its CVE, scanner is the target; GLM DNS ledger closes (detail → [[security]]):**
-     Gitea CVE-2026-60004 (9.8, KEV, EPSS ~0.95, Git-object exfil); ShieldBreak CVE-2026-69414 (bypasses the RoguePlanet *patch*); Tenable 9.9; IBM mcp-contextforge SSTI→RCE (9.8); AgentFlow flow-centric (33%→0%); GLM-5.3 DNS (~80k×) — `cvd.z.ai` retired to CNVD/CNNVD/NVDB, no CVE.
-   - **08-26 — SAML trust-chain, leftover installer, browser-as-runtime escape, SharePoint chain weaponized (detail → [[security]]):**
-     miniOrange CVE-2026-61979+15981 (unauth WP admin, exploited); ClipBucket CVE-2026-80138 (9.8); Python IDNA CVE-2026-17084 (CWE-436); Emacs TRAMP 7.8; C2PA Pixel CVE-2026-43499; Chrome Aura CVE-2026-79290 (9.6 escape); DB-GPT CVE-2026-80104 (9.8); GitPython CVE-2026-78676 (config→hook); CVE-2026-63520 weaponized + `ValidateSafeBcsType`.
+   - **08-26 — forge KEV'd, EoP gets its CVE, scanner is the target, SAML trust-chain + SharePoint weaponized (detail → [[security]]):**
+     Gitea CVE-2026-60004 (9.8, KEV, EPSS ~0.95); ShieldBreak CVE-2026-69414 (bypasses the RoguePlanet patch); Tenable 9.9; IBM mcp-contextforge SSTI→RCE (9.8); AgentFlow flow-centric (33%→0%); GLM-5.3 DNS (~80k×) — `cvd.z.ai` retired, no CVE; miniOrange CVE-2026-61979+15981 (unauth WP admin, exploited); ClipBucket CVE-2026-80138 (9.8); Python IDNA CVE-2026-17084 (CWE-436); Emacs TRAMP 7.8; C2PA Pixel CVE-2026-43499; Chrome Aura CVE-2026-79290 (9.6 escape); DB-GPT CVE-2026-80104 (9.8); GitPython CVE-2026-78676 (config→hook); SharePoint CVE-2026-63520 weaponized + `ValidateSafeBcsType`.
    - **08-27 04:15→04:30 — AI agents find human-rare multi-step chains; the class gets a second agent + a volume denominator (detail → [[security]]):**
      Wordfence **Argus** (depth-first twin of PRISM's breadth-first, 300+ vulns) chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8, 1M+ sales, needed admin-authored content); SENAITE CVE-2026-54569 (9.8); Tomcat RewriteValve CVE-2026-65927 (6.9); WP HackerOne submissions 20–30/month → 450 in July. Partially measured — no independent rate.
+   - **08-28 12:15 — a no-CVE zero-day + a cache-server RCE PoC + the WordPress PoC turn (detail → [[security]]):**
+     PaperCut NG/MF zero-day (active exploitation, no CVE, Apache Tapestry auth-bypass → SYSTEM RCE, ~1,000 exposed); Redis QVD-2026-58458 (8.8 TLS pending-list UAF → public RCE PoC, fixed 8.8.2 across every branch); turnkey unauth PoCs ship for TranslatePress CVE-2026-19632 (9.8 admin takeover via reset-link disclosure) + Tutor LMS CVE-2026-19092 (9.8 arbitrary PHP function call) + Elementor Pro CVE-2026-32475; Xiiaozet LK100W ICS 2× 9.8 (ICSA-26-239-01).
    - **08-27 20:27 — VMs falsified as agent containment; a web-framework RCE + a PyPI token heist + a KEV six-pack (detail → [[security]]):** Trail of Bits: GPT 5.6-Cyber escaped QEMU/KVM **three times** (~12h autonomous, three chains incl. three 0-days; Firecracker held substantially harder); Next.js CVE-2026-75604 (9.0, Windows-only `..%5C` cache traversal → forged Server Action → RCE, PoC in a day); pantheon-agents 0.6.1/0.6.2 trojanized on PyPI (stolen long-lived token, Hades); CISA KEV six incl. CVE-2019-1068 SQL Server RCE + five pre-2026 bugs; Ubiquiti SA-067 CVE-2026-77537 (10.0 CNA).
    - **08-27 21:05 — the containment answer gains its benchmark + its product (detail → [[security]]):** AgentEscapeBench (Inspect-based, 6★, 4 months stale) is the standing SandboxEscapeBench extension — a `(model × sandbox)` matrix incl. Firecracker/QEMU, level-5 = novel-vuln discovery; agent-glovebox (Apache-2.0, 57★, pushed today) productizes "treat agents as an APT" (sbx microVM + allowlist firewall + tamper-evident logs + ephemeral state); its PR #5033 concedes microVMs buy "difficulty, not a proof." Both exist, neither adopted.
    - **08-28 04:22 — KEV batch + the MCP-stdio RCE becomes a two-instance class (detail → [[security]]):** CISA KEV adds ownCloud CVE-2023-49105 (9.8, exploited vs a Philippine nuclear agency, ~9 GB exfil), Linux IPv6 CVE-2026-53362 (7.8 LPE), JFrog CVE-2026-66384 (5.3); Chainlit CVE-2026-45018 (9.8 — second critical MCP-stdio RCE in weeks, after LiteLLM); Gitea CVE-2026-60004 confirmed in-the-wild cryptomining (~11 s chain, >70% CPU); Chrome CVE-2026-79026 (9.6 extension UAF sandbox-escape); RSFiles CVE-2026-57827 (9.8 split-controller upload bypass); Zimbra CVE-2026-73570 now 274 compromised / 8,200+ unpatched.
@@ -85,6 +87,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-26 20:19 — the 4-bit-beats-bf16 result, a $100 car agent, a decode engine (detail → [[edge-inference]]):** QAH (arXiv 2608.20953, HyperNova-60B Apache-2.0); CarWatch (Pi 5, Qwen3.6-35B-A3B offline); Groq 3 LPX (~3,400 tok/s Gemma 4 31B @100K).
    - **08-27 04:15 — causality leaks at the scan boundary; a 6.4k-param model approaches the Bayes oracle (detail → [[edge-inference]]):** "The Mask Is Not the Model" (arXiv 2608.22876) — Zamba2 + Nemotron-H leak at chunked-scan boundaries (mask inspection detects none, audit localizes 192/192); ALPHABET (arXiv 2608.24051) — 6,437 params, pole-mode descriptor, near-Bayes-oracle on a Gaussian control task.
    - **08-27 04:30 — the audit tooling gets a vendor; the new hybrids go unaudited (detail → [[edge-inference]]):** the Mask paper's authors productized the diagnostic as VIDRAFT **AX-RAY** (117-item public catalog, causal leak = blocking defect, aimed at South Korea's gov cyber-AI project) — while no prefix-invariance audit is published for Qwen3.8-Flash-Next or GLM-5.3-Flash.
+   - **08-28 12:15 — the "no-GPU frontier" and the "soft-forgetting" decoder (detail → [[edge-inference]]):** colibri (`JustVugg/colibri`, pure C) streams the ~19,456 routed experts of a 744B MoE from NVMe through a per-layer LRU — runs GLM-5.2/Kimi K3 (2.8T)/Inkling with *no GPU*; Baidu Unlimited-OCR (R-SWA) holds the KV cache constant so dozens of PDF pages decode in one pass.
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
    Claude's 60-agent Riemann run (41.6% → 67.2% on the critical-line bound, formalized in Lean)
@@ -153,6 +156,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-27 20:27 — the distribution layer consolidates while reasoning commoditizes (detail → [[frontier-models]]):** Nvidia **reported** to acquire Hugging Face ~$12.9B (unconfirmed; hub neutrality is the question); AWS acquires DuckLabs while DuckDB stays MIT under the independent DuckDB Foundation — "absorb the people, keep the code open."
    - **08-27 21:05 — the consolidation advances: reported agreement + foundation-governance expansion (detail → [[frontier-models]]):** Nvidia–HF escalates to a **reported agreement** (The Information, Aug 27; ~$12.9B ≈ 86× revenue), still unsigned/unconfirmed, neutrality concerns mounting; the **DuckDB Foundation survives and expands** governance (Technical Advisory Board, signed third-party extensions) as the explicit neutrality answer — analysts still warn "paychecks bend roadmaps."
    - **08-28 04:33 — the hardware-efficiency watch resolves into three independence states (detail → [[frontier-models]]):** SemiAnalysis **verified Jalapeño's InferenceX runs in person in the lab** — vendor-supplied data, 8k1k only, **no AgentX** ("smokes every other chip" per-W, but the Blackwell baseline is "somewhat incomplete and unfair"; the real rival is HBM4 Rubin); Vera Rubin's **30× tokens/MW stays NVIDIA-measured, explicitly pending SemiAnalysis review**; Groq 3 LPX is **Artificial-Analysis-measured (3,431 tok/s) on a private pre-release endpoint**, now **full production** (Aug 24) and presented by NVIDIA as its first outside benchmark. None is a standing-harness production number.
+   - **08-28 12:15 — the consolidation reaches "agreement" and the cheap-model essay quantifies the split (detail → [[frontier-models]]):** Nvidia–HF escalates to a **reported agreement** (~$12.9B ≈ 86× revenue, The Information Aug 27; still unsigned, neutrality the live risk); Calvin French-Owen's "Small Models Have Arrived" (680 HN pts) — his pet agentic eval dropped ~$1 → ~$0.10 with a cheap model, "token-spewer is ~95% of real work"; Gemini Omni 1.1 Flash ships scene-extension + keyframe control at a 360p cheap-draft tier.
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -286,6 +290,7 @@ patterns, and turn them into insights and actionable todos.
      — agents rewrite training algorithms in 10 frozen repos; mean **0.166** (0.1 = shipped algorithm), best **0.250**
      — even frontier models barely beat "leave the shipped algorithm alone."
    - **08-28 04:22 — the harness productizes governance + deliverables, and gets a fresh bound (detail → [[agent-stack]] [[frontier-models]]):** Omnigent v0.11.0 (harness-over-harnesses: live Claude Code permission-mode switching + per-firing spend caps); OpenMontage (#1 trending, agentic video production with built-in approval gates); FrontierChallenge bounds end-to-end research harnesses at 20.6%.
+   - **08-28 12:15 — the harness gets a first-party terminal agent, a hardened sandbox and a lineage R&D reward (detail → [[agent-stack]] [[frontier-models]]):** Grok Build (xAI's Rust TUI, ACP-compatible) means every frontier lab ships its own harness; Vercel Run SDK (QuickJS-in-worker, host-owned tool boundary) makes safe code-exec a default; Praxist (arXiv 2608.25955) earns 60 MLE-bench medals at ~1/12 the model spend by inheriting a typed evidence graph across attempts.
    → [[agent-stack]] [[frontier-models]]
 
 13. **Token spend is separating from model choice and becoming its own optimization layer — at the context
@@ -1483,3 +1488,49 @@ patterns, and turn them into insights and actionable todos.
 - **Small but real (08-28 04:22):** **God's Eye View** (`bilawalsidhu/gods-eye-view`, 7.4k★, +1,984/day) — a fully
   client-side CesiumJS 3D globe over live public data (flights, ships, satellites, CCTV, fires) with a voice agent
   (OpenAI Realtime, 28 tools) — open data + WebGL + agent control without a backend.
+- **Security batch (08-28 12:15, → [[security]]):** the turnkey-PoC turn. **PaperCut NG/MF zero-day** — actively
+  exploited, **no CVE**, Apache Tapestry "complex direct" auth-bypass → unauth SYSTEM RCE (Derby `CALL` → H2 `INIT` →
+  Nashorn JS); Huntress confirmed two incidents (one <2 min), emergency patches Aug 28, ~1,000 exposed — the second
+  PaperCut zero-day after CVE-2023-27350. **Redis QVD-2026-58458** (8.8) — TLS pending-list UAF → arbitrary read/write
+  + RCE over the normal TLS command interface; public PoC; fixed in 8.8.2 but every branch needs its own patch. Three
+  WordPress turnkey unauth PoCs: **TranslatePress CVE-2026-19632** (9.8 admin takeover via a plaintext reset key stored
+  as a translatable string), **Tutor LMS CVE-2026-19092** (9.8 arbitrary zero-arg PHP function invocation), **Elementor
+  Pro CVE-2026-32475** (loop-desync upload, now a scanning tool). **Xiiaozet LK100W** ICS (ICSA-26-239-01) 2× 9.8 on
+  critical-infrastructure devices. FFmpeg issue #24290 (VPK divide-by-zero) is the anti-pattern reminder: the viral
+  "vibecoded fuzzer" framing overstates a conventional coverage-guided fuzzer (→ [[fact-check]]).
+- **Agent-stack (08-28 12:15, → [[agent-stack]]):** **Grok Build** (`xai-org/grok-build`, Rust TUI, ACP/headless/embed
+  modes) completes the set — every frontier lab now ships a first-party harness. **Anthropic MHS** ("physical MCP",
+  HHMI Janelia) standardizes lab-equipment drivers as read/write primitives with NL safety tags — CMU wired equipment
+  in ~8h, QuEra laser stabilization 58%→99.3%. **Alibaba Qoder** (agent workspace, Agent Harness + Auto router,
+  20,000+ skills). **gh-aw** (GitHub's agentic CI: Markdown workflow → `.lock.yml` → Actions, sandboxed read-only).
+  **t3code** (20.8k★ mobile control surface). **Vercel Run SDK** (hardened QuickJS-in-worker, host-function-only
+  bridge — safe code-exec as a default). **Praxist** (arXiv 2608.25955) — lineage-graph R&D agents, 60 MLE-bench
+  medals at $3,054 vs $38,370 (~1/12). **GitNexus** (46k★ zero-server browser code KG). **Claudeforce**
+  (Salesforce×Anthropic: 37 sales skills + Claude as Agentforce's reasoning engine).
+- **Edge inference (08-28 12:15, → [[edge-inference]]):** **colibri** (`JustVugg/colibri`, Apache-2.0, pure C) treats
+  VRAM/RAM/NVMe as one hierarchy — ~19,456 routed experts of a 744B MoE (~370 GB on disk) stream on demand through a
+  per-layer LRU (learned hot-pins, batch-union reads, `O_DIRECT`, dual-SSD mirroring); runs GLM-5.2 / Kimi K3 (2.8T) /
+  Inkling (975B) with **no GPU**. **Baidu Unlimited-OCR** (MIT, 24.7k★) swaps all decoder attention for Reference
+  Sliding Window Attention — constant KV cache, dozens of pages in one forward pass; "soft forgetting" is the fix for
+  the KV-growth wall. Both extend thesis 3.
+- **Frontier models + evaluation honesty (08-28 12:15, → [[frontier-models]]):** **Gemini Omni 1.1 Flash** (video:
+  scene extension to 40s, keyframe control, 360p cheap-draft tier, 4K upscaling). **PAWBench** (arXiv 2608.27345) —
+  the first distributional world-model benchmark; no model passes. **TTPO** (arXiv 2608.27448) — label-free test-time
+  policy optimization (Qwen3-1.7B 38.0→45.2). **Zero-Shot Self-Orchestration** (arXiv 2608.26480) — manager-worker
+  ledger gains are real but model-dependent (+23.4 Qwen3.8-27B, null/negative for others). **N64 decomp in 84 days**
+  (vs ~596 for the sequel) — AI-assisted RE ceiling: proprietary-compiler quirks still needed human experts.
+  **AgentJudgeBench** (arXiv 2608.26623, EMNLP 2026) — LLM-as-judge alignment converges to a **77–82% ceiling** on hard
+  no-ground-truth agentic tasks regardless of scale; **MemToC** (arXiv 2608.26295) — models follow an incorrect tool
+  over a verified memory **80%+** of the time. **"The load-bearing vocabulary of Claude"** — AI-agent prose is now
+  ~39% of GitHub PR descriptions (hard measurement of the Claude dialect homogenizing OSS).
+- **Small but real (08-28 12:15):** **Cloudflare freed ~100 TB** from 1.1.1.1's DNS cache with five Rust data-layout
+  changes (953→420 B/entry, −56%; p99 9.3→5.3 GB) — the byte-matters case study at 250B-entry scale. Needle 2
+  re-appears as a dated update (45M tool-calling model, 14 MB, 36.7k HF downloads/mo).
+- **MHS answered (08-28 20:31, → [[model-hardware-standard]]):** Anthropic's Model Hardware Standard is a "physical MCP" at
+  the *shape* level only — standardized read/write driver primitives + natural-language safety tags → auto-generated
+  reference file, three control paths (MCP/CLI/API; MCP is a channel *under* MHS). Verified first-hand: the spec has **no
+  driver versioning, no schema, no backward-compat, no tag contract** — tags are free-form prose, so the "durable safety
+  boundary" is prose a postdoc wrote. Safety semantics: Anthropic now (gated preview), the driver author after open-source;
+  the EU Machinery Regulation 2023/1230 (2027-01-20) can make an MHS constraint file a regulated safety component — the
+  first regulatory owner in the otherwise "enforced by nobody" layer. ICS/OT extension is **unclaimed** (no OT threat
+  model/auth in the preview). The open-source release is the fork in the road. [[agent-stack]] [[security]]

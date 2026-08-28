@@ -1478,3 +1478,51 @@ The batch's security stream, read first-hand at the primary sources where reacha
 - **Zimbra CVE-2026-73570 update (extends the 08-20 note).** Shadowserver tracked **274 compromised** internet-facing
   instances on Aug 22 (up from 155 two days earlier), with at least 8,200 still unpatched; CISA added it to KEV Aug 21
   with a three-day federal deadline (Aug 24); the 8.9 is MITRE-CNA-assigned.
+
+## Redis RCE PoC + PaperCut zero-day + the WordPress PoC turn (08-28 12:15)
+
+- **Redis QVD-2026-58458 (CVSS 8.8) — the TLS pending-list UAF becomes a public RCE PoC.** `tlsProcessPendingData()`
+  walks the pending list with a cached successor pointer; when command processing re-enters the event loop and closes
+  another TLS connection, the cached node is already freed — arbitrary address read/write and RCE with redis-server
+  privileges over the normal TLS command interface (no modules / file writes / debugger). Disclosed Aug 26 with a public
+  PoC (`v12-security/pocs`); no reported in-the-wild exploitation yet. Fix commit `6d088c3` ships in 8.8.2; minimum
+  fixed versions span **every branch** (6.2.24, 7.2.16, 7.4.11, 8.2.9, 8.4.6, 8.6.6, 8.10.1). Requires `tls-port` +
+  default-user `ping`/`echo`/`eval` perms. The preceding 8.8.0 fix was itself bypassable, so unpatched TLS ports are a
+  first-priority upgrade — the cache server class every agent and web framework sits behind.
+- **PaperCut NG/MF zero-day — actively exploited in the wild, no CVE yet (Aug 27-28).** An authentication bypass in
+  Apache Tapestry's "complex direct" request format: a crafted `/app?service=direct/1/Error/ConfigEditor/…` request
+  renders a public Error page while executing privileged ConfigEditor/UserList components, letting an unauthenticated
+  attacker point external user-lookup at a malicious JDBC/SQL chain (Derby `CALL` → H2 `INIT` → Nashorn-backed JS
+  trigger) and execute arbitrary code as SYSTEM. Huntress confirmed two customer incidents (one intrusion under two
+  minutes) with base64 system-profiling payloads + hex-encoded Java `.class` drops. No CVE assigned as of writing;
+  emergency out-of-cycle patches shipped Aug 28 02:10 AEST for v25/v26 (Windows build 25.0.12.76497), v24 in progress;
+  ~1,000 internet-exposed instances in scope. Second PaperCut zero-day after CVE-2023-27350 (mass-exploited by
+  Cl0p/LockBit affiliates) — network lockdown + emergency patching are the only defense while the catalog catches up.
+- **TranslatePress CVE-2026-19632 (CVSS 9.8, Wordfence CNA, NVD not yet primary) — unauth admin takeover via
+  password-reset link disclosure.** On ≤ 3.3.1 (~400k active installs): when an admin whose profile locale is a
+  published secondary language resets their password, the full reset URL — plaintext reset key included — is stored as
+  a translatable string; the public `trp_get_translations_regular` AJAX action then lets an unauthenticated attacker
+  enumerate dictionary rows, recover the key, and reset the admin password. Wordfence reports blocking 7,269 exploit
+  attempts in 24h; a public PoC (`YonLiud/CVE-2026-19632`) is out. Fixed 3.3.2 — which itself shipped a separate
+  Stored XSS (CVE-2026-66582), so update to 3.3.4+. 2FA/passkeys are the effective mitigation until patched.
+- **Tutor LMS CVE-2026-19092 (CVSS 9.8, WPScan CNA) — unauth arbitrary zero-arg PHP function invocation.** Tutor LMS
+  2.1.3–4.0.5: request data can overwrite internal variables during template rendering, so an unauthenticated attacker
+  can shadow internal variables and invoke arbitrary zero-argument PHP functions (`phpinfo`, `getallheaders`, …) and
+  read their output. Fixed 4.0.6, with a WPScan-researched public PoC. An RCE-adjacent primitive in a widely-installed
+  e-learning plugin.
+- **Elementor Pro CVE-2026-32475 — the advisory becomes a scanning tool (extends the 08-23 note).** Public turnkey PoC
+  (`sahmsec/CVE-2026-32475`, stdlib-only Python): two file parts for a non-required File Upload field — an empty first
+  part that early-returns validation, then a `.php` payload that `process_field()` still moves to
+  `wp-content/uploads/elementor/forms/<uniqid>.php` — no authentication, no nonce; auto-discovers form pages, single +
+  batch modes. Fixed 4.2.2 (Aug 19); Wordfence scores 9.8. "Assume compromise if unpatched" — a standard scanning
+  target.
+- **Xiiaozet LK100W (ICSA-26-239-01) — 2× CVSS 9.8 on critical-infrastructure IoT.** CVE-2026-78239 (missing
+  authentication for a critical management function), CVE-2026-76943 (admin-channel authentication bypass enabling
+  command execution), CVE-2026-78037 (OS command injection in the web management interface). No confirmed exploitation /
+  no public PoCs at publication; fixed in firmware 2.1.240+. The Aug 23 Dahua camera botnet shows the initial-access
+  ladder these cheap pre-auth RCE devices build into OT networks.
+- **FFmpeg issue #24290 — the VPK divide-by-zero (the anti-pattern reminder).** A crafted 21-byte Sony VPK input sets
+  `nb_channels=0`; `vpk_read_packet()` divides by it at `libavformat/vpk.c:89` → SIGFPE — a reliable DoS, not code
+  execution. Found with `github.com/daedalus/fuzzer` — the viral "vibecoded fuzzer" framing overstates a conventional
+  coverage-guided fuzzer (Markov generation, grammar-aware mutations, information-theoretic scheduling). Check the
+  primary source before repeating the claim (→ [[fact-check]]).

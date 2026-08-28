@@ -3697,5 +3697,131 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "salesforce.com": {
+    "cat": "vendor",
+    "en": "Salesforce official newsroom + product pages; first-hand for the Aug 2026 'Claudeforce' partnership with Anthropic (37-skill plugin, Claude as Agentforce reasoning engine). Cross-validated (08-28): the plugin/skill counts and MCP-based routing (AIforce) match the press release and product page, and the ~14% after-hours stock move is widely corroborated.",
+    "zh": "Salesforce 官方新闻稿与产品页；2026 年 8 月与 Anthropic 的“Claudeforce”合作（37 技能插件、Claude 作为 Agentforce 推理引擎）的一手来源。已交叉核验（08-28）：插件/技能数量与基于 MCP 的路由（AIforce）在新闻稿与产品页一致，约 14% 的盘后涨幅也得到多方印证。",
+    "jp": "Salesforce公式ニュースルーム＆製品ページ。2026年8月のAnthropicとの「Claudeforce」提携（37スキルプラグイン、ClaudeがAgentforceの推論エンジンに）の一次情報源。突合済み（08-28）：プラグイン/スキル数とMCPベースのルーティング（AIforce）はプレスリリースと製品ページで一致し、約14%の時間外上昇も広く裏付けられている。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "papercut.com": {
+    "cat": "vendor",
+    "en": "PaperCut official KB/security bulletins — first-hand for the Aug 27 2026 NG/MF zero-day advisory (auth bypass → pre-auth RCE, no CVE yet). Cross-validated (08-28) against Huntress (two confirmed customer incidents, SYSTEM-level execution) and Rapid7's Tapestry 'complex direct' technical analysis.",
+    "zh": "PaperCut 官方知识库/安全公告——2026 年 8 月 27 日 NG/MF 零日公告（认证绕过 → 预认证 RCE，尚无 CVE）的一手来源。已交叉核验（08-28）：与 Huntress（两起已确认客户事件、SYSTEM 级执行）及 Rapid7 的 Tapestry “complex direct” 技术分析一致。",
+    "jp": "PaperCut公式KB/セキュリティ速報——2026年8月27日のNG/MFゼロデイ勧告（認証バイパス→認証前RCE、CVE未発番）の一次情報源。Huntress（確認済み顧客インシデント2件、SYSTEM権限実行）とRapid7のTapestry「complex direct」技術分析に突合済み（08-28）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "huntress.com": {
+    "cat": "security",
+    "en": "Huntress security research blog; first-hand incident forensics. Used 08-28 for the PaperCut zero-day (two customer incidents, base64 `whoami & ver` payloads, `Udydn.class` drops, SYSTEM-level `charmap.exe`). Cross-validated against PaperCut's own advisory and Rapid7.",
+    "zh": "Huntress 安全研究博客；一手事件取证。08-28 用于 PaperCut 零日（两起客户事件、base64 `whoami & ver` payload、`Udydn.class` 投放、SYSTEM 级 `charmap.exe`）。已与 PaperCut 官方公告及 Rapid7 交叉核验。",
+    "jp": "Huntressのセキュリティ研究ブログ。インシデントフォレンジックの一次情報。08-28にPaperCutゼロデイで使用（顧客インシデント2件、base64の`whoami & ver`ペイロード、`Udydn.class`のドロップ、SYSTEM権限の`charmap.exe`）。PaperCut公式勧告とRapid7に突合済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2
+  },
+  "wpscan.com": {
+    "cat": "security",
+    "en": "WPScan — WordPress vulnerability database; CNA-assigned scores for plugin CVEs. Used 08-28 for CVE-2026-19092 (Tutor LMS CVSS 9.8 unauthenticated arbitrary function invocation). Cross-validated against the NVD record.",
+    "zh": "WPScan——WordPress 漏洞库；插件 CVE 的 CNA 评分方。08-28 用于 CVE-2026-19092（Tutor LMS CVSS 9.8 未认证任意函数调用）。已与 NVD 记录交叉核验。",
+    "jp": "WPScan——WordPress脆弱性データベース。プラグインCVEのCNA採点元。08-28にCVE-2026-19092（Tutor LMS CVSS 9.8 認証なし任意関数呼び出し）で使用。NVDレコードに突合済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "calv.info": {
+    "cat": "community",
+    "en": "Calvin French-Owen's personal blog (Segment co-founder). Used 08-28 for 'Small Models Have Arrived' (GPT-5.6 Luna ~100 tok/s, $1→$0.10 pet-eval). Cross-validated: 680 HN points and consistent numbers in multiple independent recaps.",
+    "zh": "Calvin French-Owen（Segment 联合创始人）的个人博客。08-28 用于《Small Models Have Arrived》（GPT-5.6 Luna 约 100 tok/s，宠物评测 $1→$0.10）。已交叉核验：HN 680 分，多篇独立解读数字一致。",
+    "jp": "Calvin French-Owen（Segment共同創業者）の個人ブログ。08-28に「Small Models Have Arrived」（GPT-5.6 Luna約100 tok/s、ペット評価$1→$0.10）で使用。突合済み：HN 680ポイント、複数の独立要約で数字が一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "qoder.com": {
+    "cat": "vendor",
+    "en": "Qoder official product site (Alibaba). Used 08-28 for the agent-workspace relaunch alongside the Aliyun developer-community article (Qwen3.8-Max, Auto router, 40+ connectors / 70+ plugins / 20k+ skills). Cross-validated against PingWest and the Aliyun article.",
+    "zh": "Qoder 官方产品站（阿里）。08-28 与阿里云开发者社区文章一起用于智能体工作台重塑报道（Qwen3.8-Max、Auto 调度、40+ 连接器/70+ 插件/2 万+ 技能）。已与 PingWest 及阿里云文章交叉核验。",
+    "jp": "Qoder公式プロダクトサイト（アリババ）。08-28にエージェントワークスペース刷新をAliyun開発者コミュニティ記事と併せて使用（Qwen3.8-Max、Autoルーター、40+コネクタ/70+プラグイン/2万+スキル）。PingWestとAliyun記事に突合済み。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "louisabraham.github.io": {
+    "cat": "community",
+    "en": "GitHub Pages data-analysis writeup by Louis Abraham ('The load-bearing vocabulary of Claude', 461k PR descriptions, agent-vocab cluster 0.7%→~39%). Cross-validated (08-28): methodology and figures corroborated by the 562-point HN thread and the linked repo.",
+    "zh": "Louis Abraham 的 GitHub Pages 数据分析文章（《The load-bearing vocabulary of Claude》，46.1 万条 PR 描述，智能体词汇簇 0.7%→约 39%）。已交叉核验（08-28）：方法与数据得到 562 分 HN 讨论帖及所附仓库印证。",
+    "jp": "Louis Abraham氏のGitHub Pagesデータ分析記事（「The load-bearing vocabulary of Claude」、46.1万件のPR説明、エージェント語彙クラスタ0.7%→約39%）。突合済み（08-28）：手法と数値は562ポイントのHNスレッドとリンク先リポジトリが裏付け。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "blog.chrislewis.au": {
+    "cat": "community",
+    "en": "Chris Lewis's engineering blog. Used 08-28 for the Snowboard Kids N64 decompilation in 84 days (AI-agent harness + IDO 5.3 quirks). Cross-validated against the cdlewis/snowboardkids-decomp repo and the 252-point HN thread.",
+    "zh": "Chris Lewis 的工程博客。08-28 用于 Snowboard Kids N64 84 天反编译（AI 智能体 harness + IDO 5.3 编译器怪癖）。已与 cdlewis/snowboardkids-decomp 仓库及 252 分 HN 讨论帖交叉核验。",
+    "jp": "Chris Lewis氏のエンジニアリングブログ。08-28にSnowboard Kids N64の84日デコンパイル（AIエージェントハーネス＋IDO 5.3の癖）で使用。cdlewis/snowboardkids-decompリポジトリと252ポイントのHNスレッドに突合済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "businessinsider.com": {
+    "cat": "news",
+    "en": "Business Insider — business/tech news; its Nvidia–Hugging Face acquisition reporting (~$12.9B ≈ 86× revenue, reported agreement Aug 27) is independently corroborated by HPCwire and The Information.",
+    "zh": "Business Insider——商业/科技新闻；其对英伟达收购 Hugging Face 的报道（约 $12.9B ≈ 86× 营收，8 月 27 日已报道的协议）得到 HPCwire 与 The Information 的独立佐证。",
+    "jp": "Business Insider——ビジネス/テックニュース。Nvidia による Hugging Face 買収報道（約 $12.9B ≈ 86× 売上、8/27 に合意と報道）は HPCwire と The Information が独立に裏付け。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "hpcwire.com": {
+    "cat": "news",
+    "en": "HPCwire — high-performance-computing industry news; its Nvidia–Hugging Face coverage independently corroborates Business Insider's ~$12.9B figure.",
+    "zh": "HPCwire——高性能计算行业新闻；其对英伟达收购 Hugging Face 的报道独立佐证了 Business Insider 的约 $12.9B 数字。",
+    "jp": "HPCwire——HPC 業界ニュース。Nvidia–Hugging Face 報道は Business Insider の約 $12.9B という数字を独立に裏付ける。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "secrss.com": {
+    "cat": "security",
+    "en": "QiAnXin secrss (奇安信) — Chinese security news; its Redis QVD-2026-58458 writeup (TLS pending-list UAF, CVSS 8.8, fixed 8.8.2) matches the Redis fix commit 6d088c3.",
+    "zh": "奇安信 secrss——中文安全资讯；其对 Redis QVD-2026-58458 的报道（TLS 挂起列表 UAF，8.8，8.8.2 修复）与 Redis 修复提交 6d088c3 一致。",
+    "jp": "QiAnXin secrss——中国のセキュリティニュース。Redis QVD-2026-58458 の記事（TLS 保留リスト UAF、8.8、8.8.2 修正）は Redis 修正コミット 6d088c3 と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "hn.edgecompute.app": {
+    "cat": "community",
+    "en": "HN mirror on the edgecompute.app proxy — a Hacker News item reader used as a stable permalink; carries the original thread, facts still trace to the linked primary source.",
+    "zh": "edgecompute.app 代理上的 HN 镜像——Hacker News 条目阅读器，用作稳定永久链接；承载原始讨论，事实仍需回溯到所链接的原始来源。",
+    "jp": "edgecompute.app プロキシ上の HN ミラー——Hacker News アイテムリーダーで安定したパーマリンクとして使用。元スレッドを保持するが、事実はリンク先の一次ソースに遡る必要がある。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "zero.redgem.net": {
+    "cat": "security",
+    "en": "Zero RedGem — a security exploit/0day listing aggregator; carries the Elementor Pro CVE-2026-32475 PoC entry. Secondary aggregator — verify CVE facts against the advisory/PoC repo.",
+    "zh": "Zero RedGem——安全漏洞利用/0day 列表聚合器；收录 Elementor Pro CVE-2026-32475 PoC 条目。二手聚合器——CVE 事实需向公告/PoC 仓库核实。",
+    "jp": "Zero RedGem——セキュリティのエクスプロイト/0day 一覧アグリゲーター。Elementor Pro CVE-2026-32475 の PoC エントリを掲載。二次アグリゲーター——CVE の事実はアドバイザリ/PoC リポジトリで要検証。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "code.ffmpeg.org": {
+    "cat": "code",
+    "en": "FFmpeg's own issue tracker — primary source for FFmpeg bugs; issue #24290 (VPK divide-by-zero, SIGFPE at libavformat/vpk.c:89) is the authoritative record.",
+    "zh": "FFmpeg 官方问题追踪器——FFmpeg bug 的原始来源；issue #24290（VPK 除零，libavformat/vpk.c:89 处 SIGFPE）是权威记录。",
+    "jp": "FFmpeg 公式の issue トラッカー——FFmpeg のバグに関する一次ソース。issue #24290（VPK ゼロ除算、libavformat/vpk.c:89 で SIGFPE）が権威ある記録。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
   }
 }

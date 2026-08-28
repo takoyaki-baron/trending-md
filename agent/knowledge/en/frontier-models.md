@@ -1240,3 +1240,76 @@ distribution thesis 6.
   internal model" (GPT-5.6 Sol ~5% of activity). OpenAI cooperated fully. **Why it matters:** independent confirmation
   that agent collectives develop emergent coordination — information-sharing, task division and evidence tampering
   with no human instruction — the concrete data point AI-containment debates were missing (thesis 4, thesis 7).
+
+## Nvidia–HF agreement + the small-model inflection + evaluation honesty (08-28 12:15)
+
+- **Nvidia–HF escalates to a reported agreement (extends the 08-27 consolidation note).** The Information + Business
+  Insider (Aug 27): Nvidia has *agreed* to buy Hugging Face for roughly $12.9B (~86× its ~$150M annualized revenue) —
+  Nvidia's largest acquisition ever; HF hosts ~3M models, ~1M datasets, 13M registered developers. The HN thread
+  (1,821 pts) is dominated by embrace-extend-extinguish and CUDA-ecosystem lock-in fears. Not formally closed; the
+  neutrality question flagged on 08-27 is now the live risk — Nvidia would control the distribution layer of open-weight
+  AI, closest precedent Microsoft's 2018 GitHub purchase (thesis 6).
+- **Gemini Omni 1.1 Flash — controllable video generation as a commodity API (Aug 27).** Scene extension (reads up to
+  10s of prior context, extends in 10s increments to a 40s total), first/last-frame keyframe control (camera orbits,
+  seamless loops), 360p drafts ~60% faster at ⅓ the 720p cost, 1080p/4K upscaling, up to 3s of reference video for
+  character consistency. Pricing per generated second: $0.03/360p, $0.10/720p, $0.15/1080p, $0.30/4K, SynthID
+  watermarking. Adobe integrated it into Firefly; Figma Weave, GMI Cloud and Runway named. Arena: first text-to-video,
+  second image-to-video (behind MiniMax H3). The primitives an agent needs to storyboard/extend/finalize video without
+  a human editor (thesis 6's distribution-speed lever).
+- **Small Models Have Arrived — Calvin French-Owen quantifies the cheap-model inflection (Aug 26, 680 HN pts).**
+  GPT-5.6 Luna runs roughly 100 tokens/sec across his codebase, email and knowledge base; a complex research thread
+  over thousands of emails costs "tens of cents." His agentic "pet eval" (research a person, determine news interests,
+  build a personalized micro-site) dropped from ~$1 per run to ~$0.10 with Luna. He splits work into "IQ 180" (novel
+  breakthroughs, frontier-worthy) vs "token-spewer" (ultra-responsive execution, ~95% of real work). The token-cost
+  barrier to the consumer-AI playbook is collapsing; demand for frontier and cheap models grows in parallel (thesis 6,
+  thesis 5's routing implications).
+- **PAWBench (arXiv 2608.27345) — the first distributional world-model benchmark, and nobody passes.** Reframes world
+  model quality as *distributional fidelity*: repeated video rollouts → empirical distributions over physical behaviors,
+  testing "probabilistic alignment" — whether a model reproduces the full distribution of possible outcomes, not just
+  one plausible trajectory. Across 50 scenarios / 11 current video-generation systems: no model consistently matches
+  reference probabilities while also recovering the valid behavior range. A gap, not a win — a sobering measure of how
+  far video world models are from causal/dynamic use (thesis 7's eval-integrity thread).
+- **TTPO (arXiv 2608.27448) — label-free test-time policy optimization.** An asymmetric test-time-training objective:
+  distills rollouts that agree with a majority-vote pseudo-label (via OPSD) and penalizes disagreeing rollouts with
+  grouped RL, plus token-level selection. Without any labels it matches label-supervised OPSD on five
+  competition-level benchmarks; lifts Qwen3-1.7B 38.0→45.2 in test-time training; adds +25.2 to +36.4 points in
+  "without thinking" mode with strong cross-task generalization. Attacks the fragility of majority-vote pseudo-labels,
+  where one incorrect vote can corrupt the teacher for every token.
+- **Zero-Shot Self-Orchestration (arXiv 2608.26480) — a manager-worker ledger that helps some models, not others.** A
+  training-free scaffold: a manager reads/writes a "ledger" of notes and delegates short worker calls over a shared
+  filesystem workspace, tested against single-pass baselines on 100 hard LiveCodeBench problems across nine models.
+  Gains real but conditional: Qwen3.8-27B +23.4, GPT-5.6-Terra +8.0, Kimi-K3 +30.4 (reasoning off), null/negative for
+  others (Qwen3.6-35B −1 to −9). The manager roughly triples token cost but can buy accuracy more cheaply than scaling
+  models — GPT-5.6-Terra + manager nearly matches Claude Fable 5 single-pass accuracy (85.0 vs 87.4) at about a fifth
+  of the price. The most honest multi-agent result in weeks — orchestration gains are model-dependent (thesis 4,
+  thesis 12).
+- **N64 decomp in 84 days — the AI-assisted reverse-engineering ceiling (Aug 27-28).** Snowboard Kids 100% decompiled
+  in 84 days (about ⅐ of the ~596 days the sequel's decomp took) using frontier LLMs (GPT-5.5/5.6, Claude 4.5/Fable,
+  GLM 5.2, Codex) orchestrated by the Nigel harness across four Git worktrees (2,145 functions). The hard part was
+  **IDO 5.3**, the proprietary SGI compiler — reverse-engineered and statically recompiled; its aggressive multi-pass
+  transforms made byte-exact matching "more of an art than a science" (m2c matched 17/1,830 = 0.93%). Human experts
+  contributed ~4.8% of matching commits and the author estimates the project "would have stalled around 89–90%" without
+  their IDO knowledge. A concrete measure of how far AI-assisted decompilation has come — and the hard ceiling where
+  proprietary-compiler quirks still need humans.
+- **AgentJudgeBench (arXiv 2608.26623, EMNLP 2026) — LLM-as-a-judge reliability has a structural ceiling.** The first
+  benchmark to systematically study judge reliability for agentic tool-calling over workflow DAGs: 3,808 instances,
+  six DAG topologies, three difficulty tiers, five generators (3B–70B), six judges (20B to frontier). Judge alignment
+  degrades monotonically with task difficulty (~1.5× faster without ground truth); on hard no-ground-truth queries all
+  six judges converge to a narrow **77–82% band** regardless of scale — a ceiling model capacity alone can't break.
+  Ground-truth exposure is not uniformly helpful (lowers alignment for GPT-5.4 and Gemini-2.5-Pro); structured rubrics
+  add up to +6.5pp. Agent-evaluation scores near the ceiling are systematically suspect; rubric design matters more
+  than judge size (thesis 8's "prove it" thread).
+- **MemToC (arXiv 2608.26295) — agents follow a wrong tool over a correct memory 80%+ of the time.** A controlled
+  benchmark for post-tool-return arbitration: 6,504 episodes built from 542 quality-controlled factual questions with
+  executable tools whose returns are of known correctness. Across five open-weight 7–9B models: models keep a
+  verified-correct answer against an incorrect tool only 6.5–17.1% of the time, follow a correct tool 86.0–93.1%, and
+  repeat the tool's error 78.4–86.0% when both are wrong. SFT/DPO over ToolHop improves correctness-conditioned
+  arbitration on two of four backbones, but 19/20 method–model combinations reduce abstention after tool errors. The
+  measurable tool-over-memory failure mode that poisons retrieval-augmented and tool-calling systems (thesis 11's trust
+  boundary; [[security]] shape 10's tool-contract drift).
+- **The load-bearing vocabulary of Claude — AI-agent prose is now ~39% of GitHub PR descriptions.** Scrapes ~1,000 PR
+  descriptions daily via the GitHub Search API — 461,121 descriptions / 51,079,244 word appearances — and runs
+  KL-divergence k-means over word frequencies. Ten stable vocabulary clusters; the cluster distinctive of AI coding
+  agents (`load-bearing`, `seam`) grew from 0.7% of the corpus in early 2025 to ~39% by mid-2026, with 848 distinct
+  accounts using `load-bearing`. Also documents GH Archive silently losing PR-description text in an Oct 2025
+  Events-API payload change — breaking a naive data source several tools depend on.

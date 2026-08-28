@@ -1402,3 +1402,69 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   layer with a local web UI, macOS app, REST API. **Why it matters:** the strongest open-source embodiment of agent
   governance as a control plane — policy/cost/sandbox standardized across every coding agent instead of per-tool
   (thesis 12).
+
+## The harness layer spreads: xAI's terminal agent + physical MCP + workspaces + agentic CI (08-28 12:15)
+
+- **Grok Build (`xai-org/grok-build`, Rust, 26.2k★) — xAI's terminal-native coding agent arrives as a public mirror.**
+  A full-screen, mouse-interactive TUI that understands a codebase, edits files, runs shell commands, searches the web
+  and manages long-running tasks, with interactive / headless-scripting / editor-embedding (Agent Client Protocol)
+  modes. The repo is a public mirror synced from the SpaceXAI monorepo (39 commits, `SOURCE_REV` pins the upstream
+  SHA); first-party code Apache-2.0; official binaries via x.ai/cli; vendors ports of `openai/codex` + `sst/opencode`
+  tool implementations; external contributions not accepted. **Why it matters:** every frontier lab now ships its own
+  harness — xAI's TUI-first, ACP-compatible design is the terminal-native alternative to Claude Code / Codex, and the
+  mirror makes the engineering inspectable even where it can't be contributed to (thesis 12).
+- **Anthropic MHS — the "physical MCP" (Aug 27, with HHMI Janelia).** The Model Hardware Standard exposes programmable
+  lab devices (microscopes, liquid handlers, robotic arms, lasers) as simple read/write primitives with
+  natural-language safety tags, so any model can operate unfamiliar hardware through MCP / CLI / API — no custom
+  integration code. Partners: AWS (Strands Robots), Hugging Face (LeRobot), Raspberry Pi, Universal Robots, Genentech,
+  QuEra, CMU, Doosan, Danaher. Reported results: CMU connected lab equipment in ~8h and ran experiments ~3× faster;
+  QuEra raised quantum-laser stabilization 58%→99.3%. Research preview; Anthropic plans to open-source after safety
+  evals, and concedes model spatial reasoning is still limited (Genentech's Claude initially read foaming in samples as
+  a software bug). **Why it matters:** after MCP standardized software tool access, MHS bets the same abstraction works
+  on the physical world — the interface that turns agents into lab/factory operators, with safety limits encoded into
+  the driver tags themselves.
+- **Alibaba Qoder — the agent workspace, not the IDE (Aug 27).** Repositioned from an AI coding tool into a
+  general-purpose agent workspace: describe a goal in natural language and Qoder invokes coding plus tool capabilities
+  for development, prototyping and data processing. "Agent Harness" architecture with a read-modify-verify-iterate
+  loop, Qwen3.8-Max + an "Auto" model router balancing quality/speed/cost, 40+ connectors, 70+ plugins and 20,000+
+  skills across programming and general-purpose modes (desktop, IDE, CLI, JetBrains, mobile, Cloud Agents). The clearest
+  signal yet that Chinese-vendor agent tooling is going general-audience rather than developer-only.
+- **gh-aw (`github/gh-aw`, MIT, ~5k★) — GitHub's own agentic-workflow engine.** Define agent workflows in Markdown +
+  YAML frontmatter; `gh aw compile` validates them into a `.lock.yml` that GitHub Actions runs — targeting
+  reasoning-heavy tasks (issue triage, PR review, CI-failure investigation). Agent jobs are sandboxed and read-only by
+  default, writes applied through validated "safe-outputs" jobs; supports Copilot, Claude Code, Codex, Gemini and Pi.
+  v0.87.8 (Aug 28) retired versions 0.68.4–0.71.3 over a billing-affecting bug; multiple releases per week. GitHub
+  shipping its own compile-to-Actions abstraction for agentic CI — a bellwether for where agentic automation in the
+  GitHub ecosystem is heading.
+- **t3code (`pingdotgg/t3code`, MIT, 20.8k★) — drive agent CLI sessions from your phone.** iOS/Android/web/Electron
+  control surface for Claude Code, Codex, Cursor, Grok Build, OpenCode — launch, monitor and drive terminal agent
+  sessions from anywhere. v0.0.35 (Aug 27); maintainers explicit it is very early ("expect bugs"). A marker that agent
+  harnesses are becoming remote-first, networked products rather than local-terminal-only tools.
+- **Vercel Run SDK (`vercel-labs/run`, Apache-2.0) — a hardened sandbox for untrusted agent-generated code.** Executes
+  untrusted JavaScript/TypeScript in a hardened QuickJS context inside a worker thread, with no direct route to Node.js,
+  the filesystem or the network — host functions are the only bridge to the application, so a coding agent can call
+  `store.listOrders` but never touch credentials. Execution can pause for human approval and resume via a signed token
+  with deterministic replay of settled host calls; timeout / memory / QuickJS-heap / result-size limits are capped.
+  Powers "code mode" in the AI SDK (extracted from just-bash's `js-exec`). Sandboxing where the host owns the tool
+  boundary — safe code-execution as a default, not an afterthought (thesis 12).
+- **Praxist (arXiv 2608.25955) — lineage-centered R&D agents earn 60 MLE-bench medals at ~1/12 the cost.** Instead of
+  treating each attempt as self-contained, Praxist turns reproducible artifacts + evaluator outcomes into a typed
+  evidence graph (findings, lane-structured frontiers, agendas) so later attempts inherit validated mechanisms rather
+  than re-learning them. On the 75-task MLE-bench suite: 60 medals (80.0%, 49 gold) vs a Claude Code baseline's 55
+  (73.3%, 34 gold) at US$3,054 vs US$38,370 in model spend (~1/12). Four open-ended case studies (quant trading,
+  LiDAR-inertial SLAM, tokamak magnetic control, rocket landing) each beat their task-native baseline. Attacks the
+  cost-and-traceability wall of long agent research campaigns — making agent gains attributable to lineage rather than
+  unrepeatable luck (thesis 12).
+- **GitNexus (`abhigyanpatwari/GitNexus`, 46k★, PolyForm Noncommercial) — a "zero-server" code knowledge graph.**
+  Turns any repo into an interactive knowledge graph that runs entirely in the browser, with a built-in Graph RAG agent
+  and a CLI + MCP server so Claude Code/Cursor/Codex can query the indexed graph. v1.6.10 (the "resolution-correctness
+  release") types receiver chains from AST structure in all 14 languages and resolves imports from real module config
+  (tsconfig, Go module paths, Composer autoload, Python re-exports) instead of path-suffix guesses; #5 on daily
+  trending. Code intelligence for agents, no server to stand up.
+- **Claudeforce (Salesforce × Anthropic, Aug 26-27) — enterprise agents displace the CRM UI.** A "Salesforce in
+  Claude" plugin with 37 prebuilt sales skills (meeting prep, deal-health review, pipeline updates) reasoning over live
+  revenue context, routing actions back through Salesforce permissions and audit trails via AIforce (Salesforce's
+  MCP-server/API/CLI enterprise harness). In the other direction, Claude becomes the reasoning model behind Agentforce's
+  Atlas Reasoning Engine, powers Agentforce Vibes/Coworker by default, and becomes Slack's default model. Open beta
+  expected September; Salesforce stock rose ~14% after-hours. MCP-based harness-to-harness integration with a frontier
+  lab embedded as a default reasoning layer — not a bolt-on.

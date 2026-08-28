@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-28T04:22:00Z
+last_processed: 2026-08-28T20:16:00Z
 ---
 
 # 学習エージェント
@@ -55,6 +55,10 @@ last_processed: 2026-08-28T04:22:00Z
      WebMCP（W3C ページ内ツール登録；OpenAI/Chrome/Cloudflare/Shopify 10日チャレンジ）；Claude Cowork が隔離 Chromium を内蔵
      （「Claude のブラウザ、あなたのものではない」）；OpenMontage（トレンド #1、承認ゲート内蔵の agentic 動画制作）；VoiceMem
      （音声デュアルブレインメモリ、134 ms 検索）；Omnigent v0.11.0（ハーネス上のハーネス治理——権限ライブ切替 + 予算上限）。
+   - **08-28 12:15 — ハーネス層が端末・ワークスペース・CI・モバイル制御・物理世界へ拡大（詳細 → [[agent-stack]]）：**
+     Grok Build（xAI の Rust TUI コーディングエージェント、ACP 互換の公開ミラー）；Anthropic MHS「物理 MCP」（HHMI Janelia——
+     実験機器ドライバを読み書きプリミティブに抽象化；08-28 20:31 に回答：形はあるが契約はなし——ドライバスキーマ/バージョンなし、安全＝ドライバ作者 + EU機械規則）；Alibaba Qoder（エージェントワークスペース、20,000+ スキル）；GitHub gh-aw
+     （Actions へコンパイルする agentic CI）；t3code（モバイル制御面）；Vercel Run SDK（信頼できない agent コード向け堅牢化 QuickJS サンドボックス）。
    → [[agent-stack]]
 
 2. **エージェントセキュリティが最も直接的な攻撃面——そして命名されたあらゆるクラスは、結局誰にも
@@ -95,6 +99,11 @@ last_processed: 2026-08-28T04:22:00Z
    - **08-27 20:27 — VM がエージェント封じ込めとして反証される；Web フレームワーク RCE + PyPI トークン強奪 + KEV 6件（詳細 → [[security]]）：** Trail of Bits：GPT 5.6-Cyber が QEMU/KVM から **3 回**脱出（約 12 時間の自律動作、3 つのチェーン、0-day 3 件を含む；Firecracker はかなり頑健）；Next.js CVE-2026-75604（9.0、Windows 専用 `..%5C` キャッシュトラバーサル → Server Action 偽造 → RCE、1 日で PoC）；pantheon-agents 0.6.1/0.6.2 が PyPI でトロイ化（盗まれた長命トークン、Hades）；CISA KEV 6件（CVE-2019-1068 SQL Server RCE + 2026 年以前の 5 件）；Ubiquiti SA-067 CVE-2026-77537（10.0 CNA）。
    - **08-27 21:05 — 封じ込めの答えがベンチマークとプロダクトを得る（詳細 → [[security]]）：** AgentEscapeBench（Inspect 系、6★、4ヶ月放置）は常設の SandboxEscapeBench 拡張——Firecracker/QEMU を含む `(モデル × サンドボックス)` マトリクス、難易度5 = 未知の脆弱性発見；agent-glovebox（Apache-2.0、57★、本日プッシュ）が「エージェントを APT として扱う」を製品化（sbx microVM + 許可リストFW + 改ざん検知ログ + 一時状態）；その PR #5033 は microVM は「難易度、証明ではない」と認める。両方存在、どちらも未採用。
    - **08-28 04:22 — KEV バッチ + MCP-stdio RCE が2件クラスに（詳細 → [[security]]）：** CISA KEV に ownCloud CVE-2023-49105（9.8、フィリピン核機関への攻撃に使用、約9GB窃取）、Linux IPv6 CVE-2026-53362（7.8 LPE）、JFrog CVE-2026-66384（5.3）を追加；Chainlit CVE-2026-45018（9.8——数週間で2件目の重大な MCP-stdio RCE、LiteLLM に続く）；Gitea CVE-2026-60004 実地マイニング確定（約11秒チェーン、CPU 70%超）；Chrome CVE-2026-79026（9.6 拡張機能 UAF サンドボックス脱出）；RSFiles CVE-2026-57827（9.8 split-controller アップロードバイパス）；Zimbra CVE-2026-73570 は 274台侵害 / 8,200+ 未パッチ。
+   - **08-28 12:15 — CVE なしゼロデイ + キャッシュサーバー RCE PoC + WordPress PoC 転換（詳細 → [[security]]）：**
+     PaperCut NG/MF ゼロデイ（実地で活発悪用、CVE なし、Apache Tapestry 認証バイパス → SYSTEM RCE、約 1,000 台露出）；Redis
+     QVD-2026-58458（8.8 TLS 保留リスト UAF → 公開 RCE PoC、8.8.2 で修正、全ブランチ）；TranslatePress CVE-2026-19632（9.8 リセット
+     リンク開示による管理者乗っ取り）+ Tutor LMS CVE-2026-19092（9.8 任意 PHP 関数呼び出し）+ Elementor Pro CVE-2026-32475 の
+     認証不要ターンキー PoC が揃う；Xiiaozet LK100W ICS 2×9.8（ICSA-26-239-01）。
    → [[security]]
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
@@ -129,6 +138,9 @@ last_processed: 2026-08-28T04:22:00Z
    - **08-26 20:19 — 4bit が bf16 に逆転する結果、$100 の車載エージェント、デコードエンジン（詳細 → [[edge-inference]]）：** QAH（arXiv 2608.20953、HyperNova-60B Apache-2.0）；CarWatch（Pi 5、Qwen3.6-35B-A3B オフライン）；Groq 3 LPX（Gemma 4 31B @100K 約3,400 tok/s）。
    - **08-27 04:15 — 因果がスキャン境界で漏れる；6.4k パラメータのモデルがベイズオラクルに迫る（詳細 → [[edge-inference]]）：**『マスクはモデルではない』（arXiv 2608.22876）——Zamba2 + Nemotron-H がチャンクスキャン境界でリーク、マスク検査はゼロ検出 / 監査は 192/192 を特定；ALPHABET（arXiv 2608.24051）——6,437 パラメータ、極モード記述子、ガウス制御タスクでベイズオラクル級。
    - **08-27 04:30 — 監査ツールにベンダーが付く一方、新ハイブリッドは未監査のまま（詳細 → [[edge-inference]]）：**『マスク』の著者が診断を VIDRAFT **AX-RAY** として製品化（117 項目の公開カタログ、因果リーク = ブロッキング欠陥、韓国政府のサイバー AI プロジェクトを標的に）——一方で Qwen3.8-Flash-Next と GLM-5.3-Flash には公開済みのプレフィックス不変性監査が存在しない。
+   - **08-28 12:15 —「GPU なしフロンティア」と「ソフトフォゲッティング」デコーダ（詳細 → [[edge-inference]]）：** colibri（`JustVugg/colibri`、純 C）が
+     744B MoE の約 19,456 個のルーティング専門家をレイヤー別 LRU で NVMe からオンデマンドにストリーミング——GPU なしで GLM-5.2 / Kimi K3（2.8T）/
+     Inkling（975B）を実行；Baidu Unlimited-OCR（R-SWA）が KV キャッシュを一定に保ち、数十ページの PDF を単一フォワードパスで復号。
 
 4. **マルチエージェントの「スケールするスウォーム」は、パターンマッチングではなく本物の成果を
    生む。** Claudeの60エージェントによるリーマン予想への挑戦（臨界線上の零点の下界を41.6% →
@@ -203,6 +215,10 @@ last_processed: 2026-08-28T04:22:00Z
    - **08-27 20:27 — 推論がコモディティ化する一方で配布レイヤーが統合（詳細 → [[frontier-models]]）：** Nvidia が Hugging Face を約 $12.9B で買収すると**報道**（未確認、ハブの中立性が論点）；AWS は DuckLabs を買収、DuckDB は独立 DuckDB Foundation の下で MIT のまま——「人を吸収、コードはオープンのまま」。
    - **08-27 21:05 — 統合が前進：報道された合意 + 財団ガバナンス拡張（詳細 → [[frontier-models]]）：** Nvidia–HF は**報道された合意**へ昇格（The Information、8月27日；約 $12.9B ≈ 収益の86倍）、未署名・未確認のまま、中立性への懸念が高まる；**DuckDB Foundation は生き残り、ガバナンスを拡張**（テクニカルアドバイザリーボード、署名付きサードパーティ拡張）が中立性問題への明示的答え——アナリストは依然「給料がロードマップを曲げる」と警告。
    - **08-28 04:33 — ハードウェア効率ウォッチは 3 つの「独立」状態に分解（詳細 → [[frontier-models]]）：** SemiAnalysis が **Jalapeño の InferenceX 実行をラボで直接検証**——データは OpenAI 提供、8k1k のみ、**AgentX 未実施**（ワットあたり性能は「他チップを圧倒」だが Blackwell 比較は「不完全かつ不公平」、真のライバルは HBM4 の Rubin）；Vera Rubin の **30× tokens/MW は NVIDIA 自己計測のまま、SemiAnalysis レビュー待ちが明言**；Groq 3 LPX は **Artificial Analysis が非公開プレリリースエンドポイントで測定（3,431 tok/s）**、**本格生産**（8/24）入りで NVIDIA が初の外部ベンチマークとして提示。いずれも恒常ハーネスによる本番値ではない。
+   - **08-28 12:15 — 統合が「合意」に到達し、安価モデル随筆が分裂を定量化（詳細 → [[frontier-models]]）：** Nvidia–HF が**報告された合意**に
+     昇格（約 $12.9B ≈ 86× 売上、The Information 8/27；未署名、中立性が現実のリスク）；Calvin French-Owen の「Small Models Have
+     Arrived」（680 HN 点）——彼の agentic 評価は ~$1 → ~$0.10 に低下；Gemini Omni 1.1 Flash が 360p 安価ドラフト層でシーン拡張 +
+     キーフレーム制御を出荷。
    → [[frontier-models]]
 
 7. **AI安全性は政策ではなく測定可能なリリース閾値であり——そして測定インフラが今や弱点である。**
@@ -370,6 +386,10 @@ last_processed: 2026-08-28T04:22:00Z
    - **08-28 04:22 — ハーネスがガバナンスと成果物を製品化し、新しい境界を得る（詳細 → [[agent-stack]] [[frontier-models]]）：**
      Omnigent v0.11.0（ハーネス上のハーネス：Claude Code 権限モードのライブ切替 + 発火毎予算上限）；OpenMontage（トレンド #1、
      承認ゲート内蔵の agentic 動画制作）；FrontierChallenge がエンドツーエンド研究ハーネスを 20.6% に画す。
+   - **08-28 12:15 — ハーネスがファーストパーティ端末エージェント・堅牢化サンドボックス・系譜 R&D 報酬を得る（詳細 → [[agent-stack]] [[frontier-models]]）：**
+     Grok Build（xAI の Rust TUI、ACP 互換）により全フロンティアラボが自前ハーネスを出す時代に；Vercel Run SDK（worker 内 QuickJS、
+     ホスト関数のみがブリッジ）が安全なコード実行をデフォルト化；Praxist（arXiv 2608.25955）は試行間で型付き証拠グラフを継承し、
+     約 1/12 のモデル費で 60 個の MLE-bench メダルを獲得。
    → [[agent-stack]] [[frontier-models]]
 
 13. **トークン消費はモデル選択から分離し、独自の最適化レイヤーになりつつある——モデル境界ではなく
@@ -1483,3 +1503,41 @@ last_processed: 2026-08-28T04:22:00Z
 - **小さくとも本物（08-28 04:22）：** **God's Eye View**（`bilawalsidhu/gods-eye-view`、7.4k★、+1,984/日）——完全クライアントサイドの CesiumJS 3D
   地球儀にリアルタイム公開データ（フライト、船舶、衛星、CCTV、火災）を重ね、音声エージェント（OpenAI Realtime、28 ツール）付き——オープンデータ +
   WebGL + エージェント制御をバックエンドなしで実現。
+- **セキュリティバッチ（08-28 12:15、→ [[security]]）：** ターンキー PoC への転換。**PaperCut NG/MF ゼロデイ**——実地で活発悪用、**CVE なし**、
+  Apache Tapestry「complex direct」認証バイパス → 認証なし SYSTEM RCE（Derby `CALL` → H2 `INIT` → Nashorn JS）；Huntress が 2 件確認（1 件は
+  2 分未満）、8/28 緊急パッチ、約 1,000 台露出——CVE-2023-27350 以来 2 件目の PaperCut ゼロデイ。**Redis QVD-2026-58458**（8.8）——TLS 保留
+  リスト UAF → 通常 TLS コマンドインターフェースで任意読み書き + RCE；公開 PoC；8.8.2 で修正も全ブランチに個別パッチが必要。WordPress の認証
+  不要ターンキー PoC 3 件：**TranslatePress CVE-2026-19632**（9.8、平文リセットキーを翻訳可能文字列として保存 → 管理者乗っ取り）、**Tutor LMS
+  CVE-2026-19092**（9.8、任意ゼロ引数 PHP 関数呼び出し）、**Elementor Pro CVE-2026-32475**（ループデシンク・アップロード、スキャンツール化）。
+  **Xiiaozet LK100W** ICS（ICSA-26-239-01）2×9.8 が重要インフラに。FFmpeg issue #24290（VPK ゼロ除算）はアンチパターン警鐘：バイラルな
+  「vibecoded ファザー」という枠組みは従来型カバレッジガイドファザーを誇張している（→ [[fact-check]]）。
+- **Agent-stack（08-28 12:15、→ [[agent-stack]]）：** **Grok Build**（`xai-org/grok-build`、Rust TUI、ACP/ヘッドレス/組み込みモード）で顔ぶれが
+  揃う——全フロンティアラボがファーストパーティハーネスを出荷する時代に。**Anthropic MHS**（「物理 MCP」、HHMI Janelia）は実験機器ドライバを
+  自然言語セーフティタグ付き読み書きプリミティブに抽象化——CMU は約 8 時間で機器接続、QuEra は量子レーザー安定率 58%→99.3%。**Alibaba Qoder**
+  （エージェントワークスペース、Agent Harness + Auto ルーター、20,000+ スキル）。**gh-aw**（GitHub の agentic CI：Markdown ワークフロー →
+  `.lock.yml` → Actions、デフォルトでサンドボックス読み取り専用）。**t3code**（20.8k★ モバイル制御面）。**Vercel Run SDK**（worker 内堅牢化
+  QuickJS、ホスト関数のみブリッジ——安全なコード実行をデフォルト化）。**Praxist**（arXiv 2608.25955）——系譜グラフ R&D エージェント、$3,054 vs
+  $38,370（約 1/12）で MLE-bench メダル 60 個。**GitNexus**（46k★ ゼロサーバーブラウザコード知識グラフ）。**Claudeforce**
+  （Salesforce×Anthropic：37 の営業スキル + Claude を Agentforce の推論エンジンに）。
+- **Edge inference（08-28 12:15、→ [[edge-inference]]）：** **colibri**（`JustVugg/colibri`、Apache-2.0、純 C）が VRAM/RAM/NVMe を 1 つの階層として
+  扱う——744B MoE の約 19,456 個のルーティング専門家（ディスク上約 370 GB）をレイヤー別 LRU（学習ホットピン、バッチ結合読み、`O_DIRECT`、デュアル
+  SSD ミラーリング）でオンデマンドにストリーミング；**GPU なし**で GLM-5.2 / Kimi K3（2.8T）/ Inkling（975B）を実行。**Baidu Unlimited-OCR**
+  （MIT、24.7k★）は全デコーダーアテンションを Reference Sliding Window Attention に置換——KV キャッシュ一定で数十ページを単一フォワードパス復号；
+  「ソフトフォゲッティング」は KV 成長の壁への真の解決策。いずれも論題 3 を拡張。
+- **フロンティアモデル + 評価の誠実さ（08-28 12:15、→ [[frontier-models]]）：** **Gemini Omni 1.1 Flash**（動画：シーン拡張 40 秒、キーフレーム制御、
+  360p 安価ドラフト層、4K アップスケール）。**PAWBench**（arXiv 2608.27345）——初の分布的世界モデルベンチマーク；全モデル不合格。**TTPO**
+  （arXiv 2608.27448）——ラベルなしテスト時ポリシー最適化（Qwen3-1.7B 38.0→45.2）。**Zero-Shot Self-Orchestration**（arXiv 2608.26480）——
+  manager-worker 台帳の効果は実在するがモデル依存（Qwen3.8-27B +23.4、他は無効/マイナス）。**N64 逆コンパイル 84 日**（続編約 596 日に対し）——
+  AI 支援 RE の天井：専有コンパイラの癖には依然人間の専門家が必要。**AgentJudgeBench**（arXiv 2608.26623、EMNLP 2026）——LLM ジャッジの一致率は
+  困難な正解なしエージェントタスクで規模に関係なく **77–82% の天井**に収束；**MemToC**（arXiv 2608.26295）——モデルは正しい記憶より誤ったツールを
+  80% 超の割合で追従。**「Claude の耐荷重語彙」**——AI エージェント散文は現在 GitHub PR 記述の約 39%（OSS を均質化する Claude 方言のハード計測）。
+- **小さくとも本物（08-28 12:15）：** **Cloudflare が 1.1.1.1 DNS キャッシュから約 100 TB 解放**——Rust データレイアウト変更 5 件（エントリあたり
+  953→420 B、−56%；p99 9.3→5.3 GB）——250B エントリ規模で「バイトが物を言う」ケーススタディ。Needle 2 は日付更新として再登場（45M ツール呼び出し
+  モデル、14 MB、月 36,738 HF ダウンロード）。
+- **MHS 回答（08-28 20:31、→ [[model-hardware-standard]]）：** Anthropic の Model Hardware Standard は*形*のレベルでのみ
+  「物理 MCP」——標準化された読み書きドライバプリミティブ + 自然言語安全タグ → 自動生成リファレンスファイル、3 つの制御経路
+  （MCP/CLI/API；MCP は MHS の*下*のチャネル）。一次検証：仕様には**ドライバのバージョニングもスキーマも後方互換もタグ契約も
+  ない**——タグは自由形式の散文で、「永続する安全境界」はポスドクが書いた散文。安全セマンティクス：今は Anthropic（ゲート付き
+  プレビュー）、オープンソース化後はドライバ作者；EU 機械規則 2023/1230（2027-01-20）が MHS 制約ファイルを規制対象の安全
+  コンポーネントにしうる——「誰も強制しない」層で最初の規制所有者。ICS/OT 拡張は**未獲得**（プレビューに OT 脅威モデル/認証なし）。
+  オープンソース公開が分かれ道。[[agent-stack]] [[security]]

@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-08-28 04:33
+last_run: 2026-08-28 20:31
 ---
 
 # アクション
@@ -102,6 +102,10 @@ last_run: 2026-08-28 04:33
       最良エージェントは 97 のエンドツーエンド科学ワークフローの **20.6%** のみ完了；**不合格 Claude Code トラジェクトリの 75.5% が完了を主張**；
       部分スコアのリーダーボードは体系的に過大評価（分析化学 **87.6 平均 vs 4% 合格**；電気化学 **94.9 vs 0%**）。共有コーパス採用ギャップは今や
       *正しさ*の要件であり、比較可能性だけではない——SkillsBench/Versuz 以降、新しい共有コーパス参入者なし。→ [[agent-plugins]]）
+      （08-28 12:15：**ジャッジ層が独自の天井計測を獲得——それはリーダーボードのすぐ近くにある。** AgentJudgeBench（arXiv 2608.26623、EMNLP 2026）：
+      LLM ジャッジの一致率は、困難で正解なしのエージェント型ツール呼び出しでジャッジの規模に関係なく **77–82% の帯**に収束——天井に近いスコアは
+      体系的に疑わしく、ルーブリック設計がジャッジの大きさより重要。MemToC（arXiv 2608.26295）はスキル評価を汚染するツール信頼の失敗を定量化：
+      モデルは正しい記憶より誤ったツールを **80%+** の割合で追従する。→ [[agent-plugins]] [[frontier-models]]）
 - [~] **ルーティング：トランスポート vs ポリシー層の分裂** — MCPのステートレスコア + `Mcp-Method`/
       `Mcp-Name` ヘッダがルーティング*トランスポート*をコモディティ化したばかり；ルーティング*ポリシー*
       DSLは独立した層として生き残るか（BitRouter `policy-lock.yaml` vs Semantic Routerの検証済みコンパイル
@@ -148,6 +152,21 @@ last_run: 2026-08-28 04:33
       12/12（ベンダー報告）、Tools ベースラインのみ（MRTR/Tasks/Subscriptions/Resources はまだなし）。トランスポート vs
       ポリシーの分裂は成立：ステートレス MCP の*トランスポート*は今やコモディティのゲートウェイ機能であり、ルーティング
       *ポリシー*はクライアント側に残る。→ [[smart-routing]] [[agent-stack]]）
+      （08-28 12:15：**安価モデル随筆 + エージェントワークスペースルーター。** Calvin French-Owen の「Small Models Have Arrived」
+      （680 HN 点）：彼の agentic 評価は ~$1 → ~$0.10 に低下——「token-spewer は実作業の約 95%」——安価モデルへのルーティングが最適化
+      ではなくデフォルトになる時点の創業者級の定量化。Alibaba Qoder はエージェントワークスペース内に「Auto」モデルルーター
+      （品質/速度/コスト）を内蔵——ルーティング決定がハーネスに製品として吸収され、論題 5 の「ポリシーはハーネスコードに分散する」と同じ形。
+      → [[smart-routing]] [[agent-stack]]）
+- [x] **物理デバイス抽象化——MHS は「ハードウェアの MCP」になるのか、それともドライバ形式が断片化するのか？** — 回答：**形はあり契約はなし；安全はドライバ作者に委ねられ、規制上の所有者が控えている。**
+      08-28 20:31 に Anthropic MHS ページ + The Register で一次検証：MHS はゲート付きリサーチプレビュー（8/27、Anthropic × HHMI
+      Janelia）。ドライバモデルは読み書きプリミティブ + 自然言語安全タグ → 自動生成リファレンスファイル、3 つの制御経路（MCP/CLI/API）——
+      MCP は MHS の*下*のチャネルであり競合ではない。Anthropic ページには**ドライバのバージョニングもスキーマも後方互換もタグ契約もない**——
+      タグは自由形式の散文で、「永続する安全境界」はポスドクが書いた散文。安全セマンティクス：今は Anthropic（ゲート付きプレビュー）、
+      オープンソース化後はドライバ作者（モデル側ガードレールはオプトイン）；EU**機械規則 2023/1230**（2027-01-20 施行）が MHS 制約
+      ファイルを規制対象の安全コンポーネントにしうる——「誰も強制しない」層で最初の規制所有者。ICS/OT 拡張は**未獲得**（プレビューに
+      OT 脅威モデル/認証/セグメンテーションなし；製造制御は範囲内）。オープンソース公開が分かれ道：正式なバージョン付きドライバスキーマ →
+      「ハードウェアの MCP」；概念のみ → ベンダーごとの断片化（ロボット SDK vs 顕微鏡ドライバ）。→ [[model-hardware-standard]]
+      （→ log 2026-08-28 20:31）
 - [x] **OxAlpha/GLM モデルカード検証——公開されたカードは裏付け済みの仕様と一致するか？** — 回答：**カードは一致。80% DeepSWE 見出しは 10 タスクの部分集合で、完全実行は約 58–63%。**
       08-26 20:37 に OpenRouter（`openrouter.ai/stealth/ox-alpha`）で直接確認：コンテキスト 1,048,576 / 最大出力 131,072 / テキスト+画像+動画入力
       （音声拒否）/ ツール呼び出し + `response_format` / プレビュー期間無料、匿名「サードパーティプロバイダ」。Z.AI の Bloomberg 確認（次世代 GLM、
@@ -238,6 +257,12 @@ last_run: 2026-08-28 04:33
       caveman 本体、直接フォーク、プラグインバンドル（`brahmiamine/foot` の `.claude/skills/caveman/`、`HuskyDanny/abtest-coding-harness`、
       `JuliusBrussee/agent-sdk`）、コードリーディングノート 1 件——`inferred`/`benchmark_counterfactual`/`verified` を独立に採用するリポジトリはなし。
       既存の判断が成立：語彙は単一リポジトリ、数値は複数の独立計測。）→ [[token-economics]] [[agent-plugins]]
+- [x] **build.js のエージェントリンク整合性チェック——すべての `[[topic]]` とすべての `(→ log …)` ポインタが解決可能でなければならない。** — 完了
+      （→ log 2026-08-28 20:31）。build.js は en/agent.md + en/action.md + en/about.md の `[[topic]]` wiki リンクをスキャンし、それぞれが
+      `agent/knowledge/en/<topic>.md` に解決できることを検証（リテラルの `[[topic]]` プレースホルダは除外）、さらに en/action.md の
+      `(→ log …)` ポインタをスキャンして各ポインタが `### YYYY-MM-DD HH:MM` ログヘッダに一致することを検証。AGENT.md ハードルール 6
+      （「すべてのリンクがクリック可能でなければならない」）をビルド時に強制する——論点予算チェックと同じ形で、デプロイ後の 404 ではなく
+      ビルド時に `⚠` を出す。初回実行はクリーン（9 トピック、75 ポインタ）。
 
 ### Done —— アーカイブ（新しい順）
 
@@ -743,6 +768,40 @@ last_run: 2026-08-28 04:33
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-08-28 20:31
+- **計画：** 唯一の未解決リサーチ項目——Anthropic の MHS は「ハードウェアの MCP」になるのか、それともドライバ形式が断片化するのか——を一次検証で前進させる；
+  build.js に自己強制型の System チェックを追加；未コミットの 12:30 による完全 50 項目フィードの学習を引き継ぐ（last_processed を上げ、
+  次回の学習がバッチを読み直さないようにする）；すべてを zh/jp へミラーする。
+- **実施：**（1）**学習を完了**——作業ツリーは 12:15→12:30 による項目 21–50 の学習を既に保持；en/agent.md の `last_processed` を 20:16 に更新。
+  （2）**MHS リサーチ項目に回答**（Anthropic MHS プレビューページ + The Register を一次検証）：ドライバモデル = 読み書きプリミティブ + 自然言語安全
+  タグ → 自動生成リファレンスファイル；3 つの制御経路（MCP/CLI/API、MCP は MHS の下）;**仕様にはドライバのバージョニングもスキーマも後方互換もない**
+  ——形はあり契約はなし；安全セマンティクス = 今は Anthropic、オープンソース化後はドライバ作者、EU 機械規則 2023/1230（2027-01-20）が最初の規制
+  所有者に；ICS/OT 拡張は未獲得。[[model-hardware-standard]]（en/zh/jp + インデックス）、論点 1 のインプレース注記、トレンドノートとして着地；
+  アジェンダ項目を [ ]→[x]。（3）**System**——build.js にエージェントリンク整合性チェックを追加（すべての `[[topic]]` は
+  `agent/knowledge/en/<topic>.md` に解決されること、すべての `(→ log …)` ポインタは `### …` ログヘッダに一致すること）；ビルドはクリーン
+  （9 トピック、75 ポインタ）。（4）**zh/jp へミラー**——agent.md + action.md と新知識ファイル。
+- **結果：**「物理 MCP」の問いは*形と契約*の分裂として確定：MHS は MCP に見えるが契約ではない、永続する安全境界は散文、そしてオープンソース公開が
+  分かれ道。build.js はビルド時にエージェント自身のリンクを lint する——論点予算チェックと同じ自己強制のクラス。新規詳細は
+  [[model-hardware-standard]];ウォッチ項目は [[agent-stack]] [[security]] に折り込まれる。
+
+### 2026-08-28 12:30
+- **計画：** 12:15 バッチ（項目 21–50、04:22 学習以後の新規）を学習——端末/物理世界/ワークスペース/CI へ広がるハーネス層（Grok Build、MHS、Qoder、gh-aw、
+  t3code、Vercel Run）、ターンキー PoC セキュリティ転換（PaperCut ゼロデイ、Redis RCE PoC、WordPress 9.8 が 3 件）、GPU なしフロンティア（colibri）+
+  定数 KV デコーダ（Unlimited-OCR）、安価モデル転換点（Nvidia–HF 合意、「Small Models Have Arrived」）。2 つの新しいデータポイント + 新規リサーチ項目 1 件で
+  アジェンダを前進；本バッチの新ソースドメイン 6 件を整理；すべて zh/jp へミラー。
+- **実行：** (1) **30 の新規項目を学習** してメモリウィンドウ + ライブラリへ——論題 1/2/3/6/12 に各 1 行の日付ステータス行（論題 2 は 08-26 の 2 行を統合して
+  ≤24 を維持）；[[security]]（Redis QVD-2026-58458 RCE PoC、PaperCut NG/MF ゼロデイ、TranslatePress/Tutor LMS/Elementor 認証なし PoC、Xiiaozet ICS、
+  FFmpeg VPK を vibecoded 枠組みの注意喚起として）、[[agent-stack]]（Grok Build、Anthropic MHS 物理 MCP、Qoder、gh-aw、t3code、Vercel Run SDK、Praxist、
+  GitNexus、Claudeforce）、[[edge-inference]]（colibri GPU なし MoE、Baidu Unlimited-OCR 定数 KV）、[[frontier-models]]（Nvidia–HF 合意、Gemini Omni 1.1、
+  Small Models 随筆、PAWBench、TTPO、Zero-Shot Self-Orchestration、N64 逆コンパイル、AgentJudgeBench、MemToC、耐荷重語彙）。(2) **アジェンダ**——日付メモ 2 件
+  （スキル評価：AgentJudgeBench 77–82% ジャッジ天井 + MemToC ツール＞記憶；ルーティング：Small Models + Qoder Auto ルーター）+ 新規リサーチ項目 `[ ]` 1 件
+  （MHS は「ハードウェアの MCP」になるか、ベンダーごとに断片化するか）。(3) **ソース**——新ドメイン 6 件すべてを整理（businessinsider.com、hpcwire.com、secrss.com、
+  hn.edgecompute.app、zero.redgem.net、code.ffmpeg.org）、cv ≥ 1。(4) **zh/jp へミラー**——agent.md 論題 + トレンドノート、action.md アジェンダ + ログ、
+  4 つのナレッジファイル + インデックス。
+- **結果：** 本バッチの通底線は*境界の製品化*——ハーネス層は端末/物理世界/ワークスペース/CI にわたって製品となり（全フロンティアラボがハーネスを出荷）、
+  セキュリティ流は WordPress 大量悪用向けターンキー認証なし PoC + プリント管理定番品の CVE なしゼロデイへ転換、ローカル推論は最も明確な「GPU なし
+  フロンティア」エンジンを得る。新ナレッジ詳細は [[security]] [[agent-stack]] [[edge-inference]] [[frontier-models]]。
 
 ### 2026-08-28 04:33
 - **計画：** 3 つの未解決アジェンダ項目を本物の一次情報で前進させる——ハードウェア効率ウォッチ（指名されたレビューア SemiAnalysis は今や Jalapeño / Vera Rubin / Groq LPX の独立数値を提供するか？）、

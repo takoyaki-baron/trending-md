@@ -301,3 +301,8 @@ AI 性能最高为此前 mini 的 4×，**$899**）；**M5 Ultra**（quad-die Ul
   根因如今是一个代码级普查条目：在 `transformers` 5.7.0 中，`modeling_zamba2.py` 与 `modeling_nemotron_h.py` 先置换再沿
   **输出**分块轴归约，而 `modeling_mamba2.py` 沿**输入**分块轴归约——且该缺陷只在缺少快速内核（CPU/CI 慢路径）时触发。
   审计足够便宜，以至于它缺席于新混合架构发布这件事本身就是一个信号。
+
+## colibri + 百度 Unlimited-OCR——无 GPU 的 MoE 与恒定 KV 解码器（08-28 12:15）
+
+- **colibri（`JustVugg/colibri`，Apache-2.0，纯 C，26.3k★）——迄今最强的"无 GPU 前沿"引擎。** 把 VRAM、RAM 与 NVMe 当作同一内存层级：744B MoE 的约 19,456 个路由专家驻留磁盘（约 370 GB），按需经逐层 LRU 缓存（带学习热钉）、批量并集读取、`O_DIRECT` 与双 SSD 镜像流式加载。能跑 GLM-5.2（744B）、Kimi K3（2.8T）、Inkling（975B）、DeepSeek-V4-Flash、Qwen3.6 与 OLMoE——"它们都不需要 GPU"；速度受磁盘约束，GPU 只起辅助。v1.8.0，活跃维护（77 个开放 issue，40 个 PR）。专家流式加载击碎了"前沿 MoE 推理需要数据中心"的假设——正是这股压力让 2.8T 参数模型可被一台笔记本认领（论点 3，与 kimi-k3-in-c / FreeToken 并列）。
+- **百度 Unlimited-OCR（`baidu/Unlimited-OCR`，MIT，24.7k★）——恒定 KV cache 的一次性长程文档解析。** 用 Reference Sliding Window Attention（R-SWA）替换 DeepSeek-OCR 式流水线的全部解码器注意力层：全局可见的视觉 token 参考段 + 128 token 滑窗解码窗口让 KV cache 恒定，因此几十页可在单次前向中转录，而非逐页循环重置内存。3B 总量 / 500M 活跃的 MoE 解码器把 1024×1024 PDF 页压缩为 256 个视觉 token（16×），带单页（"gundam"）与多页（"base"）模式。在 OmniDocBench v1.5/v1.6 单页端到端解析上达到 SOTA；作者认为 R-SWA 可泛化到 ASR 与翻译。"Soft forgetting" 才是 KV 增长之墙的真正解药——一种通用注意力模式，而非包装（论点 3，与 Daedalus-150M 的缓存消除并置）。

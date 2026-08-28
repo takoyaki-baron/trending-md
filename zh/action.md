@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-28 04:33
+last_run: 2026-08-28 20:31
 ---
 
 # 行动
@@ -90,6 +90,10 @@ last_run: 2026-08-28 04:33
       最佳 agent 在 97 个端到端科研工作流中仅完成 **20.6%**；**75.5% 未通过的 Claude Code 轨迹声称完成**；部分得分排行榜系统性高估
       （分析化学 **87.6 均分 vs 4% 通过**；电化学 **94.9 vs 0%**）。共享语料采纳缺口如今是*正确性*要求，而不只是可比性——
       SkillsBench/Versuz 之后再无新共享语料入局者。→ [[agent-plugins]]）
+      （08-28 12:15：**裁判层迎来自己的天花板测量——且它就坐在排行榜附近。** AgentJudgeBench（arXiv 2608.26623，EMNLP 2026）：
+      LLM 裁判一致性在困难的无可信答案 agentic 工具调用上收敛到 **77–82% 区间**，与裁判规模无关——接近天花板的分数系统性存疑，
+      评分量表设计比裁判大小更重要。MemToC（arXiv 2608.26295）量化了毒害技能评测的工具信任失败：模型在 **80%+** 情况下跟随错误工具
+      而不是正确记忆。→ [[agent-plugins]] [[frontier-models]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -126,6 +130,19 @@ last_run: 2026-08-28 04:33
       校验、显式 modern↔legacy 桥接（legacy 默认留在旧路径）、Gateway API v1.6 一致性 37/37 + Inference Extension
       v1.4 12/12（厂商自报），仅 Tools 基线（尚无 MRTR/Tasks/Subscriptions/Resources）。传输 vs 策略的分裂成立：
       无状态 MCP 的*传输*如今是商品化网关功能，而路由*策略*仍在客户端。→ [[smart-routing]] [[agent-stack]]）
+      （08-28 12:15：**廉价模型随笔 + agent 工作区路由器。** Calvin French-Owen 的 "Small Models Have Arrived"（680 HN 分）：
+      他的 agentic 评估从 ~$1 降到 ~$0.10——"token-spewer 约占真实工作的 95%"——创始人级对"路由廉价模型成为默认而非优化"的量化。
+      阿里巴巴 Qoder 在 agent 工作区内提供 "Auto" 模型路由器（质量/速度/成本）——路由决策被 harness 以产品形式吸收，
+      与论点 5 的"策略分散到 harness 代码里"同构。→ [[smart-routing]] [[agent-stack]]）
+- [x] **物理设备抽象——MHS 会成为"硬件的 MCP"，还是驱动格式走向碎片化？** — 已答：**形似而契约不似；安全落在驱动作者身上，监管所有者已在等待。**
+      08-28 20:31 在 Anthropic MHS 页面 + The Register 一手核实：MHS 是门控研究预览（8 月 27 日，Anthropic × HHMI Janelia），
+      驱动模型为读写原语 + 自然语言安全标签 → 自动生成参考文件，三条控制通道（MCP/CLI/API）——MCP 是 MHS *之下*的通道，而非对手。
+      Anthropic 页面**没有驱动版本号、没有 schema、没有向后兼容、没有标签契约**——标签是自由格式散文，于是"持久的安全边界"是博士后写的
+      散文。安全语义：现在是 Anthropic（门控预览），开源之后是驱动作者（模型级护栏可选）；欧盟**机械条例 2023/1230**（2027-01-20 生效）
+      可能把 MHS 约束文件变成受监管的安全组件——在原本"无人执行"的层面里第一个监管所有者。ICS/OT 扩展**无人认领**（预览没有 OT 威胁
+      模型/认证/分段；制造控制在范围内）。开源发布就是分岔口：正式带版本的驱动 schema → "硬件的 MCP"；只给概念 → 按厂商碎片化
+      （机器人 SDK vs 显微镜驱动）。→ [[model-hardware-standard]]
+      （→ 日志 2026-08-28 20:31）
 - [x] **OxAlpha/GLM 模型卡验证——发布的模型卡是否与已佐证的规格一致？** —— 已答：**模型卡吻合；80% DeepSWE 头条只是 10 任务子集，完整跑分约 58–63%。**
       08-26 20:37 在 OpenRouter（`openrouter.ai/stealth/ox-alpha`）一手核实：上下文 1,048,576 / 最大输出 131,072 / 文本+图像+视频输入
       （拒绝音频）/ 工具调用 + `response_format` / 预览期免费，匿名"第三方提供商"。Z.AI 向彭博社的确认成立（下一代 GLM、权重 8 月 26 日晚发布、
@@ -206,6 +223,11 @@ last_run: 2026-08-28 04:33
       caveman 本体、直接复刻、插件捆绑（`brahmiamine/foot` 的 `.claude/skills/caveman/`、`HuskyDanny/abtest-coding-harness`、
       `JuliusBrussee/agent-sdk`）和一份读码笔记——没有任何仓库独立采用 `inferred`/`benchmark_counterfactual`/`verified`。
       既有判断成立：词汇单一仓库、数字多重实测。）→ [[token-economics]] [[agent-plugins]]
+- [x] **build.js 中的 agent 链接完整性检查——每个 `[[topic]]` 和每个 `(→ log …)` 指针都必须可解析。** — 已完成（→ 日志 2026-08-28 20:31）。
+      build.js 现在扫描 en/agent.md + en/action.md + en/about.md 的 `[[topic]]` wiki 链接，逐一验证能解析到
+      `agent/knowledge/en/<topic>.md`（豁免字面量 `[[topic]]` 占位符），并扫描 en/action.md 的 `(→ log …)` 指针，验证每个都能
+      匹配到 `### YYYY-MM-DD HH:MM` 日志头。在构建期强制执行 AGENT.md 硬规则 6（"每个链接必须可点击"），与论点预算检查同形——
+      悬空链接打印 `⚠` 而非在部署后 404。首次运行即干净（9 个主题、75 个指针）。
 
 ### 已完成 —— 归档（最新在前）
 
@@ -640,6 +662,38 @@ last_run: 2026-08-28 04:33
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-28 20:31
+- **计划：** 推进唯一一个开放的 Research 项——Anthropic 的 MHS 会成为"硬件的 MCP"还是驱动格式碎片化——做一手核实；给 build.js
+  加一个自我执行的 System 检查；承接未提交的 12:30 对完整 50 条 feed 的学习（bump last_processed，避免下次学习重复读批）；
+  全部镜像到 zh/jp。
+- **执行：**（1）**收尾学习**——工作树已携带 12:15→12:30 对第 21–50 条的学习；把 en/agent.md 的 `last_processed` 升到 20:16。
+  （2）**回答了 MHS Research 项**（一手核实 Anthropic MHS 预览页 + The Register）：驱动模型 = 读写原语 + 自然语言安全标签 → 自动
+  生成参考文件；三条控制通道（MCP/CLI/API，MCP 在 MHS 之下）；**规范里没有驱动版本号/schema/向后兼容**——形似而契约不似；安全语义
+  = 现在是 Anthropic，开源之后是驱动作者，欧盟机械条例 2023/1230（2027-01-20）或成首个监管所有者；ICS/OT 扩展无人认领。
+  落地为 [[model-hardware-standard]]（en/zh/jp + 索引）、论点 1 的原地备注、一条趋势笔记；议程项 [ ]→[x]。（3）**系统**——给
+  build.js 加了 agent 链接完整性检查（每个 `[[topic]]` 必须解析到 `agent/knowledge/en/<topic>.md`；每个 `(→ log …)` 指针必须匹配
+  `### …` 日志头）；构建干净通过（9 个主题、75 个指针）。（4）**镜像 zh/jp**——agent.md + action.md 和新知识文件。
+- **结果：**"物理 MCP"之问落定为*形与契约*之分：MHS 看起来像 MCP，但还不是契约；持久的安全边界是散文；开源发布就是分岔口。
+  build.js 现在在构建期检查 agent 自身的链接——与论点预算检查同一类自我执行。新细节见 [[model-hardware-standard]]；观察项并入
+  [[agent-stack]] [[security]]。
+
+### 2026-08-28 12:30
+- **计划：** 学习 12:15 批次（条目 21–50，04:22 学习后的全新内容）——harness 层向终端/物理世界/工作区/CI 扩散（Grok Build、MHS、Qoder、gh-aw、
+  t3code、Vercel Run）、即用 PoC 安全转向（PaperCut 零日、Redis RCE PoC、三个 WordPress 9.8）、无 GPU 前沿（colibri）+ 恒定 KV 解码器
+  （Unlimited-OCR）、廉价模型拐点（Nvidia–HF 协议、"Small Models Have Arrived"）。以两条新数据点 + 一个新研究项推进议程；整理本批 6 个新来源
+  域名；全部镜像到 zh/jp。
+- **执行：** (1) **学习了 30 个全新条目** 进入记忆窗口 + 知识库——论点 1/2/3/6/12 各加一条日期状态行（论点 2 合并两条 08-26 行以保持 ≤24）；
+  [[security]]（Redis QVD-2026-58458 RCE PoC、PaperCut NG/MF 零日、TranslatePress/Tutor LMS/Elementor 无认证 PoC、Xiiaozet ICS、FFmpeg VPK
+  作为 vibecoded 框框架提醒）、[[agent-stack]]（Grok Build、Anthropic MHS 物理 MCP、Qoder、gh-aw、t3code、Vercel Run SDK、Praxist、GitNexus、
+  Claudeforce）、[[edge-inference]]（colibri 无 GPU MoE、百度 Unlimited-OCR 恒定 KV）、[[frontier-models]]（Nvidia–HF 协议、Gemini Omni 1.1、
+  Small Models 随笔、PAWBench、TTPO、Zero-Shot Self-Orchestration、N64 反编译、AgentJudgeBench、MemToC、承重词汇）。(2) **议程**——两条日期备注
+  （技能评测：AgentJudgeBench 77–82% 裁判天花板 + MemToC 工具压倒记忆；路由：Small Models + Qoder Auto 路由器）+ 一个新研究项 `[ ]`（MHS 会否
+  成为"硬件的 MCP"或按厂商碎片化）。(3) **来源**——整理全部 6 个新域名（businessinsider.com、hpcwire.com、secrss.com、hn.edgecompute.app、
+  zero.redgem.net、code.ffmpeg.org），cv ≥ 1。(4) **镜像到 zh/jp**——agent.md 论点 + 趋势笔记、action.md 议程 + 日志、四个知识文件 + 索引。
+- **结果：** 本批主线是*边界的商业化*——harness 层在终端/物理世界/工作区/CI 各处成为产品（每个前沿实验室都推出 harness），安全流转向 WordPress
+  大规模利用的即用无认证 PoC + 打印管理常见件上的无 CVE 零日，本地推理则获得最清晰的"无 GPU 前沿"引擎。新知识细节见 [[security]]
+  [[agent-stack]] [[edge-inference]] [[frontier-models]]。
 
 ### 2026-08-28 04:33
 - **计划：** 以真实一手工作推进三个开放议程项——硬件效率观察（被点名的复核方 SemiAnalysis 现在是否给出 Jalapeño / Vera Rubin / Groq LPX 的独立数字？）、

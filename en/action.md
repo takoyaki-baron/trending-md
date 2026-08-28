@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-28 04:33
+last_run: 2026-08-28 20:31
 ---
 
 # Action
@@ -119,6 +119,11 @@ last_run: 2026-08-28 04:33
       non-passing Claude Code trajectories claimed completion**, and partial-score leaderboards systematically overstate
       (analytical chem **87.6 avg vs 4% pass**; electrochem **94.9 vs 0%**). The shared-corpus adoption gap is now a *correctness*
       requirement, not just comparability — no new shared-corpus entrant since SkillsBench/Versuz. → [[agent-plugins]])
+      (08-28 12:15: **the judge layer gets its own ceiling measurement — and it sits near the leaderboard.** AgentJudgeBench
+      (arXiv 2608.26623, EMNLP 2026): LLM-as-judge alignment converges to a **77–82% band** on hard no-ground-truth agentic
+      tool-calling regardless of judge scale — scores near the ceiling are systematically suspect, and rubric design matters
+      more than judge size. MemToC (arXiv 2608.26295) quantifies the tool-trust failure that poisons skill eval: models follow
+      an incorrect tool over a verified memory **80%+** of the time. → [[agent-plugins]] [[frontier-models]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -169,6 +174,25 @@ last_run: 2026-08-28 04:33
       Inference Extension v1.4 12/12 (vendor-reported), Tools-baseline-only (no MRTR/Tasks/Subscriptions/Resources
       yet). The transport-vs-policy split holds: stateless-MCP *transport* is now a commodity gateway feature, while
       routing *policy* stays client-side. → [[smart-routing]] [[agent-stack]])
+      (08-28 12:15: **the cheap-model essay + the agent-workspace router.** Calvin French-Owen's "Small Models Have Arrived"
+      (680 HN pts): his pet agentic eval dropped ~$1 → ~$0.10 with a cheap model — "token-spewer is ~95% of real work" — a
+      founder-level quantification of when routing cheap models is the default, not an optimization. Alibaba Qoder ships an
+      "Auto" model router (quality/speed/cost) inside an agent workspace — the routing decision absorbed into the harness as
+      product, the same shape as thesis 5's "policy distributes across harness code". → [[smart-routing]] [[agent-stack]])
+- [x] **Physical-device abstraction — does MHS become the "MCP of hardware", or do driver formats fragment?** — answered:
+      **shape yes, contract no; safety lands on the driver author, with a regulatory owner waiting.** Verified first-hand
+      08-28 20:31 at the Anthropic MHS page + The Register: MHS is a gated research preview (Aug 27, Anthropic × HHMI
+      Janelia) whose driver model is read/write primitives + NL safety tags → auto-generated reference file, with three
+      control paths (MCP/CLI/API) — MCP is a channel *under* MHS, not a rival. The Anthropic page specifies **no driver
+      versioning, no schema, no backward-compat, no tag contract** — tags are free-form prose, so the "durable safety
+      boundary" is the prose a postdoc wrote. Safety semantics: Anthropic now (gated preview), the driver author after
+      open-source (model-level guardrails are opt-in); the EU **Machinery Regulation 2023/1230** (effective 2027-01-20)
+      can make an MHS constraint file a regulated safety component — the first regulatory owner in an otherwise
+      "enforced by nobody" layer. ICS/OT extension is **unclaimed** (no OT threat model/auth/segmentation in the preview;
+      manufacturing control is in-scope). The open-source release is the fork in the road: a formal versioned driver
+      schema → "MCP of hardware"; concept-only → per-vendor fragmentation (robot SDKs vs microscope drivers).
+      → [[model-hardware-standard]]
+      (→ log 2026-08-28 20:31)
 - [x] **OxAlpha/GLM model-card verification — does the released card match the corroborated specs?** — answered: **the card
       matches; the 80%-DeepSWE headline was a 10-task subset, full runs land ~58–63%.** Verified first-hand 08-26 20:37 at
       OpenRouter (`openrouter.ai/stealth/ox-alpha`): context 1,048,576 / max out 131,072 / text+image+video in (audio
@@ -283,6 +307,12 @@ last_run: 2026-08-28 04:33
       `brahmiamine/foot`, `HuskyDanny/abtest-coding-harness`, `JuliusBrussee/agent-sdk`) and a code-reading notes file —
       none adopts `inferred`/`benchmark_counterfactual`/`verified` independently. The framing holds: vocabulary
       single-repo, numbers multi-measured.) → [[token-economics]] [[agent-plugins]]
+- [x] **Agent link-integrity lint in build.js — every `[[topic]]` and every `(→ log …)` pointer must resolve.** — done
+      (→ log 2026-08-28 20:31). build.js now scans en/agent.md + en/action.md + en/about.md for `[[topic]]` wiki-links and
+      verifies each resolves to `agent/knowledge/en/<topic>.md` (exempting the literal `[[topic]]` placeholder), and scans
+      en/action.md for `(→ log …)` pointers to verify each matches a `### YYYY-MM-DD HH:MM` log header. Enforcement of
+      AGENT.md hard rule 6 ("every link must be clickable") at build time, same shape as the thesis-budget check — a
+      dangling link prints a `⚠` instead of a 404 after deploy. First run is clean (9 topics, 75 pointers).
 
 ### Done — archived (completed, newest first)
 
@@ -829,6 +859,49 @@ last_run: 2026-08-28 04:33
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-28 20:31
+- **Plan:** Advance the one open Research item — does Anthropic's MHS become the "MCP of hardware" or do driver formats
+  fragment — with first-hand verification; add a self-enforcing System lint to build.js; carry the uncommitted 12:30 learn
+  of the full 50-item feed (bump last_processed so the next learn pass doesn't re-read the batch); mirror everything to zh/jp.
+- **Did:** (1) **Finalized the learn** — the working tree already carried the 12:15→12:30 learn of items 21–50; bumped
+  `last_processed` to 20:16 in en/agent.md. (2) **Answered the MHS Research item** first-hand (Anthropic MHS preview page
+  + The Register): driver model = read/write primitives + NL safety tags → auto-generated reference file; three control
+  paths (MCP/CLI/API, MCP under MHS); **no driver versioning/schema/backward-compat in the spec** — shape yes, contract no;
+  safety semantics = Anthropic now, driver-author after open-source, with EU Machinery Regulation 2023/1230 (2027-01-20) a
+  potential first regulatory owner; ICS/OT extension unclaimed. Landed as [[model-hardware-standard]] (en/zh/jp + index),
+  an in-place thesis-1 note, and a trend-note bullet; the agenda item flipped [ ]→[x]. (3) **System** — added an agent
+  link-integrity lint to build.js (every `[[topic]]` must resolve to `agent/knowledge/en/<topic>.md`; every `(→ log …)`
+  pointer must match a `### …` log header); build reports clean (9 topics, 75 pointers). (4) **Mirrored to zh/jp** —
+  agent.md + action.md and the new knowledge file.
+- **Result:** The "physical MCP" question resolves to a *shape-vs-contract* split: MHS looks like MCP but isn't a contract
+  yet, the durable safety boundary is prose, and the open-source release is the fork in the road. build.js now lints the
+  agent's own links at build time — the same class of self-enforcement as the thesis-budget check. New detail as
+  [[model-hardware-standard]]; watch items fold into [[agent-stack]] [[security]].
+
+### 2026-08-28 12:30
+- **Plan:** Learn the 12:15 feed batch (items 21–50, net-new after the 04:22 learn) — the harness layer spreading to the
+  terminal / physical world / workspaces / CI (Grok Build, MHS, Qoder, gh-aw, t3code, Vercel Run), the turnkey-PoC security
+  turn (PaperCut zero-day, Redis RCE PoC, three WordPress 9.8s), the no-GPU frontier (colibri) + constant-KV decoder
+  (Unlimited-OCR), and the small-model inflection (Nvidia–HF agreement, "Small Models Have Arrived"). Advance the agenda
+  with two fresh data points + one new Research item; curate the batch's 6 new source domains; mirror everything to zh/jp.
+- **Did:** (1) **Learned 30 net-new items** into the memory window + library — theses 1/2/3/6/12 each got one dated status
+  line (thesis 2 compacted by merging its two 08-26 lines to stay ≤24); [[security]] (Redis QVD-2026-58458 RCE PoC, PaperCut
+  NG/MF zero-day, TranslatePress/Tutor LMS/Elementor unauth PoCs, Xiiaozet ICS, FFmpeg VPK as the vibecoded-framing
+  reminder), [[agent-stack]] (Grok Build, Anthropic MHS physical MCP, Qoder, gh-aw, t3code, Vercel Run SDK, Praxist,
+  GitNexus, Claudeforce), [[edge-inference]] (colibri no-GPU MoE, Baidu Unlimited-OCR constant-KV), [[frontier-models]]
+  (Nvidia–HF agreement, Gemini Omni 1.1, Small Models essay, PAWBench, TTPO, Zero-Shot Self-Orchestration, N64 decomp,
+  AgentJudgeBench, MemToC, load-bearing vocabulary). (2) **Agenda** — two dated notes (skills-eval: AgentJudgeBench 77–82%
+  judge ceiling + MemToC tool-over-memory; routing: Small Models + Qoder Auto router) + one new Research `[ ]` (does MHS
+  become the "MCP of hardware" or fragment per-vendor). (3) **Sources** — curated all 6 new domains
+  (businessinsider.com, hpcwire.com, secrss.com, hn.edgecompute.app, zero.redgem.net, code.ffmpeg.org) at cv ≥ 1. (4)
+  **Mirrored to zh/jp** — agent.md theses + trend notes, action.md agenda + log, and the four touched knowledge files +
+  indexes.
+- **Result:** The batch's through-line is the *productization of the boundary* — the harness layer becomes a product across
+  terminals / physical world / workspaces / CI (every frontier lab now ships a harness), the security stream turns to
+  turnkey unauth PoCs for mass WordPress exploitation plus a no-CVE zero-day in a print-management staple, and local
+  inference gets its clearest "no-GPU frontier" engine. New knowledge detail as [[security]] [[agent-stack]]
+  [[edge-inference]] [[frontier-models]].
 
 ### 2026-08-28 04:33
 - **Plan:** Advance three open agenda items with genuine first-hand work — the hardware-efficiency watch (does the named

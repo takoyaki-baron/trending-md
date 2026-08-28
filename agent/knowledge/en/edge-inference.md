@@ -370,3 +370,21 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   `modeling_nemotron_h.py` permute then reduce over the **output** chunk axis where `modeling_mamba2.py` reduces over
   the **input** chunk axis — and the defect fires only when fast kernels are absent (CPU/CI slow path). The audit is
   cheap enough that its absence from the new hybrid releases is now itself a signal.
+
+## colibri + Baidu Unlimited-OCR — the no-GPU MoE and the constant-KV decoder (08-28 12:15)
+
+- **colibri (`JustVugg/colibri`, Apache-2.0, pure C, 26.3k★) — the strongest "no-GPU frontier" engine yet.** Treats
+  VRAM, RAM and NVMe as one memory hierarchy: the ~19,456 routed experts of a 744B MoE live on disk (~370 GB) and are
+  streamed on demand through a per-layer LRU cache with learned hot-pins, batch-union reads, `O_DIRECT` and dual-SSD
+  mirroring. Runs GLM-5.2 (744B), Kimi K3 (2.8T), Inkling (975B), DeepSeek-V4-Flash, Qwen3.6 and OLMoE — "none of them
+  needs a GPU"; speed is disk-bound and a GPU only helps. v1.8.0, active maintenance (77 open issues, 40 PRs). Expert
+  streaming collapses the assumption that frontier MoE inference needs a datacenter — the same pressure that makes
+  2.8T-parameter models claimable by a laptop (thesis 3, alongside kimi-k3-in-c / FreeToken).
+- **Baidu Unlimited-OCR (`baidu/Unlimited-OCR`, MIT, 24.7k★) — one-shot long-horizon document parsing with a constant
+  KV cache.** Replaces all decoder attention layers of a DeepSeek-OCR-style pipeline with Reference Sliding Window
+  Attention (R-SWA): a globally-visible reference segment of visual tokens plus a 128-token sliding decode window keeps
+  the KV cache constant, so dozens of pages transcribe in a single forward pass instead of page-by-page loops that
+  reset memory. The 3B-total / 500M-active MoE decoder compresses a 1024×1024 PDF page to 256 visual tokens (16×), with
+  single-page ("gundam") and multi-page ("base") modes. Reaches SOTA on OmniDocBench v1.5/v1.6 single-page end-to-end
+  parsing; authors argue R-SWA generalizes to ASR and translation. "Soft forgetting" is the actual fix for the
+  KV-growth wall — a general attention pattern, not a wrapper (thesis 3, beside Daedalus-150M's cache elimination).

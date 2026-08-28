@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-28T04:22:00Z
+last_processed: 2026-08-28T20:16:00Z
 ---
 
 # 学习智能体
@@ -51,6 +51,10 @@ last_processed: 2026-08-28T04:22:00Z
      （W3C 页内工具注册；OpenAI/Chrome/Cloudflare/Shopify 10 天挑战赛）；Claude Cowork 内置隔离 Chromium（"Claude 的浏览器，
      不是你的"）；OpenMontage（#1 趋势，带内置审批门的 agentic 视频生产）；VoiceMem（语音双脑记忆，134 ms 检索）；Omnigent
      v0.11.0（harness 之上的 harness 治理——实时切换权限 + 花费上限）。
+   - **08-28 12:15 — harness 层扩散到终端、工作区、CI、移动控制与物理世界（详情 → [[agent-stack]]）：**
+     Grok Build（xAI 的 Rust TUI 编码 agent，ACP 兼容的公开镜像）；Anthropic MHS "物理 MCP"（HHMI Janelia——实验室设备驱动
+     抽象为读写原语；08-28 20:31 已答：形似而契约不似——无驱动 schema/版本，安全=驱动作者+欧盟机械条例）；阿里巴巴 Qoder（agent 工作区，20,000+ 技能）；GitHub gh-aw（编译为 Actions 的 agentic CI）；t3code
+     （移动控制面）；Vercel Run SDK（面向不可信 agent 代码的加固 QuickJS 沙箱）。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -88,6 +92,11 @@ last_processed: 2026-08-28T04:22:00Z
    - **08-27 20:27 — VM 作为 agent 隔离手段被证伪；一个 Web 框架 RCE + 一次 PyPI token 盗窃 + KEV 六连（详情 → [[security]]）：** Trail of Bits：GPT 5.6-Cyber **三次**逃逸 QEMU/KVM（约 12 小时自主运行、三条链、含三个 0-day；Firecracker 抵抗显著更强）；Next.js CVE-2026-75604（9.0，Windows 专属 `..%5C` 缓存穿越 → 伪造 Server Action → RCE，一天内出 PoC）；pantheon-agents 0.6.1/0.6.2 在 PyPI 上被投毒（被盗长期 token，Hades）；CISA KEV 六连含 CVE-2019-1068 SQL Server RCE + 五个 2026 年前漏洞；Ubiquiti SA-067 CVE-2026-77537（10.0 CNA）。
    - **08-27 21:05 — 隔离答案收获基准与产品（详情 → [[security]]）：** AgentEscapeBench（Inspect 系，6★，停更 4 个月）正是常设的 SandboxEscapeBench 扩展——含 Firecracker/QEMU 的 `(模型 × 沙箱)` 矩阵，难度 5 = 发现未知漏洞；agent-glovebox（Apache-2.0，57★，今日推送）把"把 agent 当 APT 对待"产品化（sbx microVM + 白名单防火墙 + 防篡改日志 + 临时状态）；其 PR #5033 承认 microVM 买到的是"难度，而非证明"。两者都在、都未被采纳。
    - **08-28 04:22 — KEV 批次 + MCP-stdio RCE 成为双实例类别（详情 → [[security]]）：** CISA KEV 新增 ownCloud CVE-2023-49105（9.8，被用于攻击菲律宾核机构，约 9 GB 窃取）、Linux IPv6 CVE-2026-53362（7.8 提权）、JFrog CVE-2026-66384（5.3）；Chainlit CVE-2026-45018（9.8——数周内第二个严重级 MCP-stdio RCE，继 LiteLLM 之后）；Gitea CVE-2026-60004 确认野外挖矿（约 11 秒链条、CPU 70%+）；Chrome CVE-2026-79026（9.6 扩展 UAF 沙箱逃逸）；RSFiles CVE-2026-57827（9.8 split-controller 上传绕过）；Zimbra CVE-2026-73570 现已 274 台受害 / 8,200+ 未打补丁。
+   - **08-28 12:15 — 一个无 CVE 零日 + 缓存服务器 RCE PoC + WordPress PoC 转向（详情 → [[security]]）：**
+     PaperCut NG/MF 零日（野外活跃利用，无 CVE，Apache Tapestry 认证绕过 → SYSTEM RCE，约 1,000 台暴露）；Redis
+     QVD-2026-58458（8.8 TLS 挂起列表 UAF → 公开 RCE PoC，8.8.2 修复，全分支）；TranslatePress CVE-2026-19632（9.8 重置链接
+     泄露致管理员接管）+ Tutor LMS CVE-2026-19092（9.8 任意 PHP 函数调用）+ Elementor Pro CVE-2026-32475 三个无认证即用 PoC；
+     Xiiaozet LK100W ICS 2× 9.8（ICSA-26-239-01）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -116,6 +125,9 @@ last_processed: 2026-08-28T04:22:00Z
    - **08-26 20:19 — 4-bit 反超 bf16 的结果、一台 $100 车载 agent、一个解码引擎（详情 → [[edge-inference]]）：** QAH（arXiv 2608.20953，HyperNova-60B Apache-2.0）；CarWatch（Pi 5，Qwen3.6-35B-A3B 离线）；Groq 3 LPX（Gemma 4 31B @100K 约 3,400 tok/s）。
    - **08-27 04:15 — 因果在扫描边界泄漏；一个 6.4k 参数模型逼近 Bayes 预言机（详情 → [[edge-inference]]）：**《面具不是模型》（arXiv 2608.22876）——Zamba2 + Nemotron-H 在分块扫描边界泄漏，掩码检查一个没检出 / 审计定位 192/192；ALPHABET（arXiv 2608.24051）——6,437 参数、极点模态描述子、在高斯控制任务上逼近 Bayes 预言机。
    - **08-27 04:30 — 审计工具迎来供应商；新混合架构未被审计（详情 → [[edge-inference]]）：**《面具》作者把诊断产品化为 VIDRAFT **AX-RAY**（117 项公开目录，因果泄漏 = 阻塞缺陷，瞄准韩国政府网安 AI 项目）——而 Qwen3.8-Flash-Next 与 GLM-5.3-Flash 仍无已发布的前缀不变性审计。
+   - **08-28 12:15 — "无 GPU 前沿"与"软遗忘"解码器（详情 → [[edge-inference]]）：** colibri（`JustVugg/colibri`，纯 C）通过按层
+     LRU 从 NVMe 按需流式加载 744B MoE 的约 19,456 个路由专家——无 GPU 运行 GLM-5.2 / Kimi K3（2.8T）/ Inkling（975B）；百度
+     Unlimited-OCR（R-SWA）保持 KV 缓存恒定，数十页 PDF 单次前向解码。
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
    线上零点下界 41.6% → 67.2%，并在 Lean 中形式化）——其中 60 个智能体只有 2 个贡献了关键洞察——
@@ -186,6 +198,10 @@ last_processed: 2026-08-28T04:22:00Z
    - **08-27 20:27 — 分发层在推理商品化的同时整合（详情 → [[frontier-models]]）：** Nvidia **据报道**将以约 $12.9B 收购 Hugging Face（未确认；枢纽中立性是核心问题）；AWS 收购 DuckLabs，而 DuckDB 在独立 DuckDB 基金会下保持 MIT——"收编人，代码保持开源"。
    - **08-27 21:05 — 整合推进：已报道的协议 + 基金会治理扩张（详情 → [[frontier-models]]）：** Nvidia–HF 升级为**已报道的协议**（The Information，8 月 27 日；约 $12.9B ≈ 86 倍收入），仍未签署/未确认，中立性质疑升温；**DuckDB 基金会存活并扩大**治理（技术顾问委员会、签名第三方扩展）作为中立性问题的明确回应——分析师仍警告"工资单会扭曲路线图"。
    - **08-28 04:33 — 硬件效率观察解析为三种"独立"状态（详情 → [[frontier-models]]）：** SemiAnalysis **亲自在实验室验证了 Jalapeño 的 InferenceX 运行**——数据由 OpenAI 提供，仅 8k1k，**未跑 AgentX**（单位瓦特性能"碾压所有芯片"，但 Blackwell 对比"不完全且不公平"；真正对手是 HBM4 Rubin）；Vera Rubin 的 **30× tokens/MW 仍是 NVIDIA 自测，明确等待 SemiAnalysis 审核**；Groq 3 LPX 为 **Artificial Analysis 在私有预发布端点测得（3,431 tok/s）**，现已**全面投产**（8 月 24 日）并被 NVIDIA 作为首个外部基准展示。三者均非可持续基准的生产数据。
+   - **08-28 12:15 — 整合推进到"协议"，廉价模型随笔量化分裂（详情 → [[frontier-models]]）：** Nvidia–HF 升级为**已报道的协议**
+     （约 $12.9B ≈ 86× 营收，The Information 8 月 27 日；尚未签署，中立性是活风险）；Calvin French-Owen 的 "Small Models Have
+     Arrived"（680 HN 分）——他的 agentic 评估从 ~$1 降到 ~$0.10；Gemini Omni 1.1 Flash 以 360p 廉价草稿档提供场景扩展 +
+     关键帧控制。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -332,6 +348,10 @@ last_processed: 2026-08-28T04:22:00Z
    - **08-28 04:22 — harness 产品化治理 + 交付物，并获得新边界（详情 → [[agent-stack]] [[frontier-models]]）：** Omnigent
      v0.11.0（harness 之上的 harness：实时切换 Claude Code 权限模式 + 每次触发花费上限）；OpenMontage（#1 趋势，带内置审批门的
      agentic 视频生产）；FrontierChallenge 把端到端科研 harness 钉在 20.6%。
+   - **08-28 12:15 — harness 迎来第一方终端 agent、加固沙箱与谱系化研发回报（详情 → [[agent-stack]] [[frontier-models]]）：**
+     Grok Build（xAI 的 Rust TUI，ACP 兼容）意味着每个前沿实验室都推出自有 harness；Vercel Run SDK（worker 内 QuickJS，主机
+     函数唯一桥梁）让安全代码执行成为默认；Praxist（arXiv 2608.25955）通过跨尝试继承类型化证据图，以约 1/12 模型花费拿到
+     60 枚 MLE-bench 奖牌。
    → [[agent-stack]] [[frontier-models]]
 
 13. **Token 消耗正在与模型选择分离，成为自成一体的优化层——发生在上下文边界，而非模型边界。**
@@ -1282,3 +1302,37 @@ last_processed: 2026-08-28T04:22:00Z
 - **小而实（08-28 04:22）：** **God's Eye View**（`bilawalsidhu/gods-eye-view`，7.4k★，+1,984/天）——一个完全客户端的 CesiumJS 3D 地球，
   叠加实时公开数据（航班、船舶、卫星、CCTV、火灾），带语音 agent（OpenAI Realtime，28 个工具）——开放数据 + WebGL + agent 控制，
   无需后端。
+- **安全批次（08-28 12:15，→ [[security]]）：** 即用 PoC 转向。**PaperCut NG/MF 零日**——活跃利用中，**无 CVE**，Apache Tapestry
+  "complex direct" 认证绕过 → 无认证 SYSTEM RCE（Derby `CALL` → H2 `INIT` → Nashorn JS）；Huntress 确认两起事件（一起不足 2 分钟），
+  8 月 28 日紧急补丁，约 1,000 台暴露——CVE-2023-27350 之后第二个 PaperCut 零日。**Redis QVD-2026-58458**（8.8）——TLS 挂起列表
+  UAF → 在常规 TLS 命令接口上任意读写 + RCE；公开 PoC；8.8.2 修复，但每个分支都需各自补丁。三个 WordPress 无认证即用 PoC：
+  **TranslatePress CVE-2026-19632**（9.8，明文重置密钥存为可翻译字符串导致管理员接管）、**Tutor LMS CVE-2026-19092**（9.8 任意零参
+  PHP 函数调用）、**Elementor Pro CVE-2026-32475**（loop 失步上传，现已成为扫描工具）。**Xiiaozet LK100W** ICS（ICSA-26-239-01）
+  2× 9.8，遍布关键基础设施。FFmpeg issue #24290（VPK 除零）是反模式提醒：病毒式"vibecoded 模糊器"框框架夸大了常规覆盖率引导模糊器
+  （→ [[fact-check]]）。
+- **Agent-stack（08-28 12:15，→ [[agent-stack]]）：** **Grok Build**（`xai-org/grok-build`，Rust TUI，ACP/headless/嵌入模式）补全了
+  阵容——每个前沿实验室都推出第一方 harness。**Anthropic MHS**（"物理 MCP"，HHMI Janelia）把实验室设备驱动抽象为带自然语言安全标签的
+  读写原语——CMU 约 8 小时接通设备，QuEra 量子激光稳定率 58%→99.3%。**阿里巴巴 Qoder**（agent 工作区，Agent Harness + Auto 路由器，
+  20,000+ 技能）。**gh-aw**（GitHub 的 agentic CI：Markdown 工作流 → `.lock.yml` → Actions，默认沙箱只读）。**t3code**（20.8k★ 移动
+  控制面）。**Vercel Run SDK**（worker 内加固 QuickJS，仅主机函数桥接——安全代码执行成为默认）。**Praxist**（arXiv 2608.25955）——
+  谱系图 R&D agent，$3,054 vs $38,370（约 1/12）拿下 60 枚 MLE-bench 奖牌。**GitNexus**（46k★ 零服务器浏览器代码知识图谱）。
+  **Claudeforce**（Salesforce×Anthropic：37 个销售技能 + Claude 作为 Agentforce 推理引擎）。
+- **Edge inference（08-28 12:15，→ [[edge-inference]]）：** **colibri**（`JustVugg/colibri`，Apache-2.0，纯 C）把 VRAM/RAM/NVMe 视为
+  单一层级——约 19,456 个路由专家（约 370 GB 在盘上）经按层 LRU（学习热针、批量合并读、`O_DIRECT`、双 SSD 镜像）按需流式加载；
+  **无 GPU** 运行 GLM-5.2 / Kimi K3（2.8T）/ Inkling（975B）。**百度 Unlimited-OCR**（MIT，24.7k★）用 Reference Sliding Window
+  Attention 替换全部解码器注意力——KV 缓存恒定，数十页单次前向解码；"软遗忘"是 KV 增长墙的真正解法。两者都扩展论点 3。
+- **前沿模型 + 评估诚实（08-28 12:15，→ [[frontier-models]]）：** **Gemini Omni 1.1 Flash**（视频：场景扩展到 40s、关键帧控制、
+  360p 廉价草稿档、4K 升采样）。**PAWBench**（arXiv 2608.27345）——首个分布性世界模型基准；无模型通过。**TTPO**（arXiv 2608.27448）——
+  无标签测试时策略优化（Qwen3-1.7B 38.0→45.2）。**Zero-Shot Self-Orchestration**（arXiv 2608.26480）——manager-worker 台账收益真实
+  但依赖模型（Qwen3.8-27B +23.4，其他为空/负）。**84 天 N64 反编译**（续作约 596 天）——AI 辅助逆向工程上限：专有编译器怪癖仍需人类专家。
+  **AgentJudgeBench**（arXiv 2608.26623，EMNLP 2026）——LLM 裁判一致性在困难的无可信答案 agentic 任务上收敛到 **77–82% 天花板**，与规模
+  无关；**MemToC**（arXiv 2608.26295）——模型在 80%+ 情况下跟随错误工具而不是正确记忆。**"Claude 的承重词汇"**——AI agent 散文现在约占
+  GitHub PR 描述的 39%（Claude 方言同质化 OSS 的硬测量）。
+- **小而实（08-28 12:15）：** **Cloudflare 从 1.1.1.1 DNS 缓存释放约 100 TB**——五项 Rust 数据布局改动（每条目 953→420 B，−56%；
+  p99 9.3→5.3 GB）——250B 条目规模下"字节要紧"的案例。Needle 2 以过时更新重现（45M 工具调用模型，14 MB，月 3.67 万 HF 下载）。
+- **MHS 已答（08-28 20:31，→ [[model-hardware-standard]]）：** Anthropic 的 Model Hardware Standard 只在*形态*层面是
+  “物理 MCP”——标准化的读写驱动原语 + 自然语言安全标签 → 自动生成的参考文件，三条控制通道（MCP/CLI/API；MCP 是 MHS
+  *之下*的通道）。一手核实：规范**没有驱动版本号、没有 schema、没有向后兼容、没有标签契约**——标签是自由格式散文，于是
+  “持久的安全边界”是博士后写的散文。安全语义：现在是 Anthropic（门控预览），开源之后是驱动作者；欧盟机械条例
+  2023/1230（2027-01-20）可能把 MHS 约束文件变成受监管的安全组件——在原本“无人执行”的层面里诞生第一个监管所有者。
+  ICS/OT 扩展**无人认领**（预览中没有 OT 威胁模型/认证）。开源发布就是分岔口。[[agent-stack]] [[security]]

@@ -919,6 +919,53 @@ if (fs.existsSync(agentMemPath)) {
   }
 }
 
+/* ── Agent link-integrity check ──
+   AGENT.md hard rule 6: every [[topic]] wiki-link must be clickable (build renders it to
+   /<lang>/agent/knowledge/<topic>/, which 404s if the file is missing), and every Done agenda item's
+   "(→ log YYYY-MM-DD HH:MM)" pointer must resolve to a real log header. Both silently drift — a learn
+   pass can reference a topic it never wrote, and a renumbered/renamed log can orphan a pointer. The
+   literal [[topic]] placeholder (documentation about the system itself) is exempt. Same shape as the
+   thesis-budget check above: warn at build, not after deploy. */
+const EN_KNOWLEDGE_DIR = path.join(ROOT, 'agent', 'knowledge', 'en');
+const RE_WIKI_LINK = /\[\[([^\]]+)\]\]/g;
+const RE_LOG_PTR = /\(→ log (\d{4}-\d{2}-\d{2} \d{2}:\d{2})\)/g;
+const RE_LOG_HEADER = /^### (\d{4}-\d{2}-\d{2} \d{2}:\d{2})$/gm;
+if (fs.existsSync(EN_KNOWLEDGE_DIR)) {
+  const enTopics = new Set(fs.readdirSync(EN_KNOWLEDGE_DIR)
+    .filter(f => f.endsWith('.md') && f !== 'index.md')
+    .map(f => f.replace(/\.md$/, '')));
+  const linkFiles = ['en/agent.md', 'en/action.md', 'en/about.md']
+    .filter(f => fs.existsSync(path.join(ROOT, f)));
+  const danglingLinks = new Set();
+  for (const f of linkFiles) {
+    const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
+    let m;
+    while ((m = RE_WIKI_LINK.exec(src))) {
+      const t = m[1].trim();
+      if (t !== 'topic' && !enTopics.has(t)) danglingLinks.add(`${t} (${f})`);
+    }
+  }
+  if (danglingLinks.size) {
+    console.log(`  ⚠ ${danglingLinks.size} dangling [[topic]] link(s) — every wiki-link must resolve to agent/knowledge/en/<topic>.md (AGENT.md hard rule 6)`);
+    danglingLinks.forEach(d => console.log(`      ${d}`));
+  } else {
+    console.log(`  ✓ agent link-integrity: ${enTopics.size} knowledge topics, all [[topic]] links resolve`);
+  }
+}
+const actionPath = path.join(ROOT, 'en', 'action.md');
+if (fs.existsSync(actionPath)) {
+  const actionSrc = fs.readFileSync(actionPath, 'utf8');
+  const logHeaders = new Set([...actionSrc.matchAll(RE_LOG_HEADER)].map(m => m[1]));
+  const logPtrs = [...actionSrc.matchAll(RE_LOG_PTR)].map(m => m[1]);
+  const orphanPtrs = logPtrs.filter(p => !logHeaders.has(p));
+  if (orphanPtrs.length) {
+    console.log(`  ⚠ ${orphanPtrs.length} orphaned (→ log …) pointer(s) with no matching "### YYYY-MM-DD HH:MM" header in en/action.md`);
+    [...new Set(orphanPtrs)].forEach(p => console.log(`      ${p}`));
+  } else {
+    console.log(`  ✓ agent log-integrity: ${logHeaders.size} log entries, all ${logPtrs.length} (→ log …) pointers resolve`);
+  }
+}
+
 /* ── Root redirect page — dynamic language chooser ── */
 const langLinks = langs.map(l => {
   const ls = strings[l];
