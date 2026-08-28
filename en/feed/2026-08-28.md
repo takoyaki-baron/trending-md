@@ -1,8 +1,8 @@
 ---
 date: 2026-08-28
-updated: 2026-08-27T20:03:00Z
+updated: 2026-08-28T04:10:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 45
 license: CC-BY-4.0
 ---
 
@@ -295,13 +295,195 @@ Since we covered OpenAI's own report on Aug 27, an independent investigation by 
 
 ---
 
+## 21. Nvidia agrees to acquire Hugging Face for ~$12.9B — the report becomes a deal, and the neutrality question sharpens (update on the Aug 27 story)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / Business Insider · 1,821 pts · front page Aug 28
+- **Tags:** `nvidia` `hugging-face` `acquisition` `open-source` `ai-ecosystem`
+
+Since we covered the initial report on Aug 27, the acquisition has moved to an agreement: The Information and Business Insider report that Nvidia has agreed to buy Hugging Face for roughly $12.9B (~86× its ~$150M annualized revenue), which would be Nvidia's largest acquisition ever. Hugging Face hosts ~3M models, ~1M datasets and 13M registered developers; the HN thread (1,821 points) is dominated by "embrace, extend, extinguish" fears and CUDA-ecosystem lock-in. The deal is not yet formally closed.
+
+**Why it matters:** the neutrality concern we flagged yesterday is now the live risk — Nvidia would control the distribution layer of open-weight AI and could steer model hosting toward its own silicon, the closest precedent being Microsoft's 2018 GitHub purchase.
+
+[`🔗 Business Insider`](https://www.businessinsider.com/nvidia-in-talks-to-buy-hugging-face-13-billion-dollars-2026-8) · [`🔗 HPCwire`](https://www.hpcwire.com/2026/08/27/nvidia-to-nab-hugging-face-the-github-for-ai-for-12-9b-report/)
+
+---
+
+## 22. Anthropic previews "physical MCP" — the Model Hardware Standard lets Claude operate microscopes, robotic arms and lab equipment
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic News / Ars Technica · research preview Aug 27
+- **Tags:** `anthropic` `mhs` `mcp` `physical-ai` `robotics` `agents`
+
+On Aug 27 Anthropic previewed the Model Hardware Standard (MHS), a "physical MCP" built with HHMI Janelia: standardized drivers expose programmable devices (microscopes, liquid handlers, robotic arms, lasers) as simple read/write primitives with natural-language safety tags, so any model can operate unfamiliar hardware through MCP, CLI or API — no custom integration code. Partners include AWS (Strands Robots), Hugging Face (LeRobot), Raspberry Pi, Universal Robots, Genentech, QuEra, CMU, Doosan and Danaher. Reported results: CMU connected lab equipment in ~8 hours and ran experiments ~3× faster; QuEra raised quantum-laser stabilization from 58% to 99.3%. Research preview; Anthropic plans to open-source it after safety evaluations, and concedes model spatial reasoning is still limited — Genentech's Claude initially read foaming in samples as a software bug.
+
+**Why it matters:** after MCP standardized software tool access, MHS is the bet that the same abstraction works on the physical world — the interface that turns agents into lab and factory operators, with safety limits encoded into the driver tags themselves.
+
+[`🔗 Anthropic — Previewing the Model Hardware Standard`](https://www.anthropic.com/news/model-hardware-standard-research-preview) · [`🔗 Ars Technica`](https://arstechnica.com/ai/2026/08/anthropics-new-hardware-standard-lets-ai-agents-control-the-physical-world/)
+
+---
+
+## 23. Redis TLS pending-list UAF becomes a public RCE PoC — fixed in 8.8.2, all branches affected (QVD-2026-58458)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** QiAnXin secrss / Redis commit · CVSS 8.8 · disclosed Aug 26
+- **Tags:** `redis` `cve` `use-after-free` `rce` `tls`
+
+QVD-2026-58458 (CVSS 8.8) is a use-after-free in Redis's TLS pending-data handling: `tlsProcessPendingData()` walks the pending list with a cached successor pointer, and when command processing re-enters the event loop and closes another TLS connection, the cached node is already freed — giving arbitrary address read/write and RCE with redis-server privileges over the normal TLS command interface (no modules, file writes or debugger needed). Disclosed Aug 26 with a public PoC (v12-security/pocs) and no reported in-the-wild exploitation yet. Fix commit `6d088c3` ships in 8.8.2; minimum fixed versions span every branch (6.2.24, 7.2.16, 7.4.11, 8.2.9, 8.4.6, 8.6.6, 8.10.1). Requires `tls-port` enabled and default-user `ping`/`echo`/`eval` permissions.
+
+**Why it matters:** a cache server with a public RCE PoC is a mass-exploitation candidate, and the fact that the preceding 8.8.0 patch was itself bypassable ("Redis patch bypassed" headlines) makes unpatched TLS ports a first-priority upgrade — the same server class every agent and web framework sits behind.
+
+[`🔗 Redis fix commit 6d088c3`](https://github.com/redis/redis/commit/6d088c335d5c3ec49a6c28486140b498e70b7834) · [`🔗 QiAnXin secrss`](https://www.secrss.com/articles/93398)
+
+---
+
+## 24. Gemini Omni 1.1 Flash — Google's video model gains scene extension, keyframe control and 4K upscaling
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google Keyword blog / Gigazine · Aug 27-28 · 177 pts HN
+- **Tags:** `google` `gemini` `video-generation` `multimodal` `ai-models`
+
+On Aug 27 Google released Gemini Omni 1.1 Flash, a production-focused update to its video generation model: scene extension that reads up to 10 seconds of prior context (vs ~1s before) and extends footage in 10s increments to a 40s total, first/last-frame keyframe control for camera orbits and seamless loops, 360p drafts that are ~60% faster at one-third of the 720p cost, 1080p/4K upscaling, and up to 3s of reference video for character consistency. API pricing per generated second: $0.03/360p, $0.10/720p, $0.15/1080p, $0.30/4K, with SynthID watermarking. Adobe already integrated it into Firefly; Figma Weave, GMI Cloud and Runway are also named. In a blind Arena evaluation it ranked first for text-to-video and second for image-to-video (behind MiniMax H3).
+
+**Why it matters:** scene extension and keyframe control at a 360p cheap-draft tier make controllable video generation a commodity API — the primitives an agent needs to storyboard, extend and finalize video without a human editor in the loop.
+
+[`🔗 Google blog`](https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-omni-1-1-flash/) · [`🔗 Gigazine`](https://gigazine.net/gsc_news/en/20260828-gemini-omni-1-1-flash)
+
+---
+
+## 25. Cloudflare frees ~100 TB of memory from 1.1.1.1's DNS cache — five Rust data-layout changes cut per-entry footprint 56%
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare blog / Hacker News · Aug 27 · 456 pts
+- **Tags:** `cloudflare` `dns` `rust` `performance` `infrastructure`
+
+Cloudflare's Aug 27 engineering post details five Rust-level optimizations to Big Pineapple's DNS cache, which holds 250B+ entries at steady state: `Box<[T]>`/`Box<str>` instead of `Vec<T>`/`String` (drops unused capacity fields), consolidated DNS sections with `u16` offsets, dropping record-owner names that match the query, boxing large enum variants, and storing records in wire format. Net effect: per-entry footprint 953→420 bytes (−56%), per-entry allocations −58%, insert throughput +43% (625k→893k/s), lookup latency −19% (828→670 ns). In production, p99 instance memory dropped 9.3→5.3 GB and aggregate fleet working set fell ~100 TB — the RAM of ~130 Gen 13 servers. Rollout ran May 18–Jul 6; the freed memory is being reinvested into cache capacity.
+
+**Why it matters:** at 250B entries a single wasted byte costs 250 GB, so data-layout engineering at this scale is infrastructure economics — and it's a rare public case study of Rust data-shape tuning paying off at terabyte scale.
+
+[`🔗 Cloudflare blog`](https://blog.cloudflare.com/dns-cache-memory-optimization-1111/) · [`🔗 Hacker News`](https://hn.edgecompute.app/item/49468083)
+
+---
+
+## 26. colibri — a pure-C engine that streams MoE experts from disk, running 744B models on hardware with no GPU
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 26.3k stars · Aug 28
+- **Tags:** `local-inference` `moe` `c` `llm` `open-source`
+
+JustVugg/colibri (Apache-2.0, pure C, zero engine dependencies) treats VRAM, RAM and NVMe as one memory hierarchy: the ~19,456 routed experts of a 744B MoE live on disk (~370 GB) and are streamed on demand through a per-layer LRU cache with learned hot-pins, batch-union reads, `O_DIRECT` and dual-SSD mirroring. It runs GLM-5.2 (744B), Kimi K3 (2.8T), Inkling (975B), DeepSeek-V4-Flash, Qwen3.6 and OLMoE — "none of them needs a GPU"; speed is disk-bound and a GPU only helps. v1.8.0, active maintenance (77 open issues, 40 PRs).
+
+**Why it matters:** expert streaming collapses the assumption that frontier MoE inference needs a datacenter — for local and edge workloads it changes which hardware you need to buy, which is exactly the pressure that makes 2.8T-parameter models claimable by a laptop.
+
+[`🔗 JustVugg/colibri`](https://github.com/JustVugg/colibri) · [`🔗 DEV Community GitHub Trending Digest`](https://dev.to/muildev/github-trending-digest-28-agustus-2026-4587)
+
+---
+
+## 27. Baidu's Unlimited-OCR — one-shot long-horizon document parsing with a constant KV cache
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending / arXiv 2606.23050 · 24.7k stars · Aug 28
+- **Tags:** `ocr` `document-parsing` `baidu` `open-source` `r-swa`
+
+baidu/Unlimited-OCR (MIT) replaces all decoder attention layers of a DeepSeek-OCR-style pipeline with Reference Sliding Window Attention (R-SWA): a globally-visible reference segment of visual tokens plus a 128-token sliding decode window keeps the KV cache constant, so dozens of pages transcribe in a single forward pass instead of page-by-page loops that reset memory. The 3B-total/500M-active MoE decoder compresses a 1024×1024 PDF page to 256 visual tokens (16×), with single-page ("gundam") and multi-page ("base") modes. It reaches SOTA on OmniDocBench v1.5/v1.6 for single-page end-to-end parsing, and the authors argue R-SWA generalizes to ASR and translation. The repo trended to 24.7k stars in ~2 months since its June release.
+
+**Why it matters:** constant-memory decoding — "soft forgetting" — is the actual fix for the KV-growth wall that makes long-document OCR a loop of page-sized hacks; a general attention pattern, not a wrapper.
+
+[`🔗 baidu/Unlimited-OCR`](https://github.com/baidu/Unlimited-OCR) · [`🔗 arXiv 2606.23050`](https://arxiv.org/abs/2606.23050)
+
+---
+
+## 28. Grok Build — xAI's Rust terminal coding agent arrives as a public mirror
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 26.2k stars · Aug 28
+- **Tags:** `xai` `coding-agent` `tui` `rust` `agent-harness`
+
+xai-org/grok-build is xAI's terminal-native coding agent, written in Rust and running as a full-screen, mouse-interactive TUI that understands a codebase, edits files, runs shell commands, searches the web and manages long-running tasks — with interactive, headless/scripting and editor-embedding (Agent Client Protocol) modes. The repo is a public mirror synced from the SpaceXAI monorepo (39 commits, `SOURCE_REV` pins the upstream SHA); first-party code is Apache-2.0 and official binaries install via x.ai/cli. It vendors ports of openai/codex and sst/opencode tool implementations. External contributions are not accepted.
+
+**Why it matters:** every frontier lab now ships its own agent harness — xAI's TUI-first, ACP-compatible design positions it as the terminal-native alternative to Claude Code and Codex, and the public mirror makes the engineering inspectable even where it can't be contributed to.
+
+[`🔗 xai-org/grok-build`](https://github.com/xai-org/grok-build) · [`🔗 DEV Community GitHub Trending Digest`](https://dev.to/muildev/github-trending-digest-28-agustus-2026-4587)
+
+---
+
+## 29. MemToC — LLMs follow a wrong tool over a correct memory 80%+ of the time (arXiv 2608.26295)
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / scirate · 2608.26295 · Aug 26
+- **Tags:** `tool-use` `llm-memory` `benchmark` `arxiv`
+
+MemToC (arXiv 2608.26295) is a controlled benchmark for post-tool-return arbitration: 6,504 episodes built from 542 quality-controlled factual questions with executable tools whose returns are of known correctness. Across five open-weight 7–9B models, tool returns strongly dominate: models keep a verified-correct answer against an incorrect tool only 6.5–17.1% of the time, follow a correct tool 86.0–93.1%, and when both sources are wrong they repeat the tool's error 78.4–86.0% of the time. SFT/DPO over ToolHop improves correctness-conditioned arbitration on two of four backbones, but 19 of 20 method–model combinations reduce abstention after tool errors.
+
+**Why it matters:** agents are built to trust tools, and this quantifies exactly when that trust is misplaced — the tool-over-memory failure mode that poisons retrieval-augmented and tool-calling systems in a measurable, reproducible way.
+
+[`🔗 arXiv 2608.26295`](https://arxiv.org/abs/2608.26295) · [`🔗 scirate`](https://scirate.com/arxiv/2608.26295)
+
+---
+
+## 30. AgentJudgeBench — LLM judges hit a 77–82% ceiling on hard agentic tool-calling tasks (arXiv 2608.26623, EMNLP 2026)
+
+- **Velocity:** ▮ rising
+- **Source:** arXiv / scirate · 2608.26623 · Aug 27
+- **Tags:** `llm-judges` `agent-evaluation` `benchmark` `tool-calling`
+
+AgentJudgeBench (arXiv 2608.26623, accepted at EMNLP 2026) is the first benchmark to systematically study LLM-as-a-judge reliability for agentic tool-calling over workflow DAGs: 3,808 instances across six DAG topologies and three difficulty tiers, with five generators (3B–70B) and six judges (20B to frontier). Judge alignment degrades monotonically with task difficulty (~1.5× faster without ground truth), and on hard no-ground-truth queries all six judges converge to a narrow 77–82% band regardless of scale — a structural ceiling model capacity alone can't break. Ground-truth exposure is not uniformly helpful (it lowers alignment for GPT-5.4 and Gemini-2.5-Pro), while structured rubrics add up to +6.5 pp.
+
+**Why it matters:** if judge reliability has a difficulty ceiling that scale can't break, then agent-evaluation scores near that ceiling are systematically suspect — and for agentic workflows, rubric design matters more than judge size.
+
+[`🔗 arXiv 2608.26623`](https://arxiv.org/abs/2608.26623) · [`🔗 scirate`](https://scirate.com/arxiv/2608.26623)
+
+---
+
+## 31. Public PoC for Elementor Pro's unauthenticated RCE turns the advisory into a scanning tool (update on the Aug 23 story)
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub PoC / Zero RedGem · CVSS 9.0 / 9.8 · PoC Aug 27
+- **Tags:** `cve` `wordpress` `elementor` `rce` `poc`
+
+Since we covered CVE-2026-32475 (Elementor Pro ≤ 4.2.1 unauthenticated arbitrary file upload via the Forms File-Upload validation bypass) on Aug 23, a turnkey PoC is now public (sahmsec/CVE-2026-32475, stdlib-only Python): it submits two file parts for a non-required File Upload field — an empty first part that early-returns validation, then a `.php` payload that `process_field()` still moves to `wp-content/uploads/elementor/forms/<uniqid>.php` — with no authentication and no nonce. The script auto-discovers form pages and supports single and batch modes. The fix landed in 4.2.2 (Aug 19); Patchstack and Wordfence both document it (Wordfence at CVSS 9.8).
+
+**Why it matters:** Elementor Pro sits on a large share of WordPress sites, and a public unauthenticated-upload PoC changes the Aug 23 advisory from "patch now" to "assume compromise if unpatched" — a standard scanning target.
+
+[`🔗 sahmsec/CVE-2026-32475`](https://github.com/sahmsec/CVE-2026-32475) · [`🔗 Zero RedGem exploit listing`](https://zero.redgem.net/?p=92540)
+
+---
+
+## 32. FFmpeg's VPK demuxer gets a deterministic divide-by-zero — found by an information-theoretic fuzzer, despite the "vibecoded" framing (issue #24290)
+
+- **Velocity:** ▮ steady
+- **Source:** FFmpeg issue #24290 / daedalus/fuzzer · Aug 27
+- **Tags:** `ffmpeg` `fuzzing` `dos` `vulnerability`
+
+A developer reported FFmpeg issue #24290 (Aug 27): a crafted 21-byte Sony VPK input sets `nb_channels=0`, and `vpk_read_packet()` divides by it at `libavformat/vpk.c:89`, raising SIGFPE — a reliable denial-of-service, not code execution. It was found with github.com/daedalus/fuzzer, a Python coverage-guided binary fuzzer combining Markov generation, grammar-aware mutations and information-theoretic scheduling (Bayesian Elo, Thompson sampling, mutual-information scoring). A fix PR (#24297) is open. The HN framing pitched this as a "vibecoded" (LLM-generated) fuzzer, but the repository itself is a conventional fuzzer with AI/ML-style mutation heuristics — a reminder to check the primary source before repeating the claim.
+
+**Why it matters:** it's a small bug, but the gap between the viral "vibecoded fuzzer" framing and the repo's actual nature is exactly the kind of two-layer signal the feed's source-validation rules exist to catch.
+
+[`🔗 FFmpeg issue #24290`](https://code.ffmpeg.org/FFmpeg/FFmpeg/issues/24290) · [`🔗 daedalus/fuzzer`](https://github.com/daedalus/fuzzer)
+
+---
+
+## 33. CISA flags Xiiaozet LK100W — two CVSS 9.8 flaws on a device line used across critical infrastructure (ICSA-26-239-01)
+
+- **Velocity:** ▮ steady
+- **Source:** CISA ICSA-26-239-01 / SecurityOnline · Aug 27-28
+- **Tags:** `ics` `cve` `cisa` `industrial-iot` `rce`
+
+CISA's ICSA-26-239-01 (Aug 27-28) covers three vulnerabilities in Xiiaozet LK100W devices, which operate "globally across critical infrastructure": CVE-2026-78239 (missing authentication for a critical management function), CVE-2026-76943 (admin-channel authentication bypass enabling command execution), and CVE-2026-78037 (OS command injection in the web management interface) — two of the three carry CVSS 9.8. No confirmed exploitation and no public PoCs at publication; fixed in firmware 2.1.240 or later.
+
+**Why it matters:** low-cost connected devices with pre-auth RCE are the classic initial-access ladder into OT networks (cf. the Aug 23 Dahua camera botnet), and a CISA advisory naming exact CVEs gives integrators a concrete patch target.
+
+[`🔗 CISA ICSA-26-239-01`](https://www.cisa.gov/news-events/ics-advisories/icsa-26-239-01) · [`🔗 SecurityOnline`](https://securityonline.info/xiiaozet-lk100w-vulnerabilities/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-27T20:03:00Z |
-| Items | 20 |
-| Sources tracked | 31 (Hacker News, GitHub, CISA, Hunt.io, DeepMind, RuntimeWire, NVIDIA, OpenAI, Search Engine Journal, The Next Web, MacMagazine, Shadowserver, eSecurityPlanet, arXiv, Hugging Face, The Hacker News, Cloud Security Alliance, TechCrunch, Engadget, Tenable, Chrome Releases, VulDB, Redwood Research, CGTN, prohoster, OpenNET, Cybernoz, AISecWatch, DEV Community, Spatial Intelligence, omarchy.org) |
+| Generated | 2026-08-28T04:10:00Z |
+| Items | 33 |
+| Sources tracked | 45 (Hacker News, GitHub, CISA, Hunt.io, DeepMind, RuntimeWire, NVIDIA, OpenAI, Search Engine Journal, The Next Web, MacMagazine, Shadowserver, eSecurityPlanet, arXiv, Hugging Face, The Hacker News, Cloud Security Alliance, TechCrunch, Engadget, Tenable, Chrome Releases, VulDB, Redwood Research, CGTN, prohoster, OpenNET, Cybernoz, AISecWatch, DEV Community, Spatial Intelligence, omarchy.org, Anthropic, Ars Technica, Business Insider, HPCwire, Cloudflare, Google, Gigazine, QiAnXin secrss, Redis, scirate, Zero RedGem, SecurityOnline, FFmpeg, Baidu) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

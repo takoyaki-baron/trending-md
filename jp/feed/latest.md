@@ -1,8 +1,8 @@
 ---
 date: 2026-08-28
-updated: 2026-08-27T20:03:00Z
+updated: 2026-08-28T04:10:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 45
 license: CC-BY-4.0
 ---
 
@@ -295,13 +295,195 @@ CVE-2026-57827（CWE-434、CVSS 9.8）は、RSFiles!（`com_rsfiles`）Joomla �
 
 ---
 
+## 21. エヌビディアが Hugging Face を約 129 億ドルで買収へ合意——報道が成立、中立性への疑問は深まる（8/27 報道の続報）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / Business Insider · 1,821 pts · front page Aug 28
+- **Tags:** `nvidia` `hugging-face` `acquisition` `open-source` `ai-ecosystem`
+
+8 月 27 日に最初の報道を扱った後、買収は合意段階に進んだ：The Information と Business Insider は、エヌビディアが Hugging Face を約 129 億ドル（年換算売上約 1 億 5,000 万ドルの約 86 倍）で買収することに合意したと報じた。エヌビディア史上最大の買収となる。Hugging Face は約 300 万モデル、約 100 万データセット、1,300 万の登録開発者をホストする。HN スレッド（1,821 ポイント）は「embrace, extend, extinguish」懸念と CUDA エコシステムへのロックインをめぐる議論が支配的だ。取引はまだ正式には成立していない。
+
+**Why it matters:** 昨日指摘した中立性への懸念が今や現実のリスクになった——エヌビディアがオープンウェイト AI の配布層を支配し、モデルホスティングを自社シリコンへ誘導する可能性がある。最も近い先例は 2018 年のマイクロソフトによる GitHub 買収だ。
+
+[`🔗 Business Insider`](https://www.businessinsider.com/nvidia-in-talks-to-buy-hugging-face-13-billion-dollars-2026-8) · [`🔗 HPCwire`](https://www.hpcwire.com/2026/08/27/nvidia-to-nab-hugging-face-the-github-for-ai-for-12-9b-report/)
+
+---
+
+## 22. Anthropic が「物理版 MCP」をプレビュー——Model Hardware Standard で Claude が顕微鏡・ロボットアーム・実験装置を操作
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic News / Ars Technica · research preview Aug 27
+- **Tags:** `anthropic` `mhs` `mcp` `physical-ai` `robotics` `agents`
+
+8 月 27 日、Anthropic は HHMI Janelia と共同で Model Hardware Standard（MHS）をプレビュー公開した。これは「物理版 MCP」だ：標準化ドライバがプログラム可能なデバイス（顕微鏡、液体ハンドラ、ロボットアーム、レーザー）を単純な読み書きプリミティブとして公開し、自然言語の安全タグを添える——あらゆるモデルが MCP・CLI・API 経由で未知のハードウェアを操作でき、カスタム統合コードは不要。パートナーは AWS（Strands Robots）、Hugging Face（LeRobot）、Raspberry Pi、Universal Robots、Genentech、QuEra、CMU、Doosan、Danaher。報告された成果：CMU は実験装置を約 8 時間で接続し実験を約 3 倍高速化、QuEra は量子レーザー安定度を 58% から 99.3% へ向上。研究プレビュー段階で、Anthropic は安全性評価後にオープンソース化する計画。モデルの空間推論はまだ限定的だと認めており、Genentech のテストで Claude は当初、サンプルの発泡をソフトウェアバグと誤認した。
+
+**Why it matters:** MCP がソフトウェアツールアクセスを標準化した後、MHS は同じ抽象化が物理世界でも機能するという賭けだ——エージェントを実験室・工場のオペレータに変えるインターフェースであり、安全限界はドライバタグ自体にエンコードされる。
+
+[`🔗 Anthropic — Model Hardware Standard プレビュー`](https://www.anthropic.com/news/model-hardware-standard-research-preview) · [`🔗 Ars Technica`](https://arstechnica.com/ai/2026/08/anthropics-new-hardware-standard-lets-ai-agents-control-the-physical-world/)
+
+---
+
+## 23. Redis TLS pending リストの UAF が公開 RCE PoC に——8.8.2 で修正、全ブランチ影響（QVD-2026-58458）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** QiAnXin secrss / Redis commit · CVSS 8.8 · disclosed Aug 26
+- **Tags:** `redis` `cve` `use-after-free` `rce` `tls`
+
+QVD-2026-58458（CVSS 8.8）は Redis の TLS pending データ処理における use-after-free だ：`tlsProcessPendingData()` がキャッシュ済みの次ノードポインタで pending リストを走査するが、コマンド処理がイベントループに再入してリスト内の別の TLS 接続を閉じると、キャッシュ済みノードは解放済みになる——通常の TLS コマンドインターフェース上で redis-server 権限による任意アドレス読み書き・RCE が可能（モジュール・ファイル書き込み・デバッガ不要）。8 月 26 日開示、公開 PoC（v12-security/pocs）付き、実地悪用の報告はまだない。修正コミット `6d088c3` は 8.8.2 に同梱され、各ブランチの最低修正版は 6.2.24、7.2.16、7.4.11、8.2.9、8.4.6、8.6.6、8.10.1。`tls-port` 有効とデフォルトユーザーの `ping`/`echo`/`eval` 権限が必要。
+
+**Why it matters:** 公開 RCE PoC が付いたキャッシュサーバーは大量悪用の候補だ。しかも直前の 8.8.0 パッチ自体が迂回可能だった（「Redis パッチ迂回」の見出し）ため、未パッチの TLS ポートは最優先のアップグレード対象になる——あらゆるエージェントと Web フレームワークが背後で使っているのと同じサーバークラスだ。
+
+[`🔗 Redis 修正コミット 6d088c3`](https://github.com/redis/redis/commit/6d088c335d5c3ec49a6c28486140b498e70b7834) · [`🔗 奇安信 secrss`](https://www.secrss.com/articles/93398)
+
+---
+
+## 24. Gemini Omni 1.1 Flash——Google の動画モデルにシーン延長・キーフレーム制御・4K アップスケール
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google Keyword blog / Gigazine · Aug 27-28 · 177 pts HN
+- **Tags:** `google` `gemini` `video-generation` `multimodal` `ai-models`
+
+8 月 27 日、Google は動画生成モデルのプロダクション向けアップデート Gemini Omni 1.1 Flash をリリースした：最大 10 秒の先行コンテキストを読むシーン延長（従来は約 1 秒）で 10 秒刻み・最長 40 秒まで延長、カメラオービットやシームレスループ向けの先頭/末尾フレーム制御、720p の 3 分の 1 のコスト・約 60% 高速な 360p ドラフト、1080p/4K アップスケール、最大 3 秒のリファレンス動画によるキャラクター一貫性。API 価格は生成 1 秒あたり 360p $0.03、720p $0.10、1080p $0.15、4K $0.30、出力は SynthID 透かし付き。Adobe は Firefly に統合済み。Figma Weave、GMI Cloud、Runway も名を連ねる。ブラインド評価 Arena ではテキスト生成動画で 1 位、画像生成動画で 2 位（オープンソースの MiniMax H3 に次ぐ）。
+
+**Why it matters:** 360p の安価なドラフト帯でシーン延長とキーフレーム制御を提供することは、制御可能な動画生成をコモディティ API にする——人間の編集者なしでエージェントが絵コンテ・延長・仕上げを行うためのプリミティブだ。
+
+[`🔗 Google ブログ`](https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-omni-1-1-flash/) · [`🔗 Gigazine`](https://gigazine.net/gsc_news/en/20260828-gemini-omni-1-1-flash)
+
+---
+
+## 25. Cloudflare、1.1.1.1 の DNS キャッシュから約 100 TB のメモリを解放——5 つの Rust データレイアウト変更でエントリあたり 56% 削減
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare blog / Hacker News · Aug 27 · 456 pts
+- **Tags:** `cloudflare` `dns` `rust` `performance` `infrastructure`
+
+Cloudflare の 8 月 27 日付けエンジニアリング記事は、定常状態で 2,500 億超エントリを保持する Big Pineapple DNS キャッシュへの 5 つの Rust レイヤ最適化を詳述する：`Vec<T>`/`String` を `Box<[T]>`/`Box<str>` に（未使用の容量フィールドを除去）、`u16` オフセットで DNS セクションを統合、クエリと一致するレコードオーナー名を省略、大きい enum バリアントを box 化、レコードをワイヤ形式で保存。正味の効果：エントリあたりフットプリント 953→420 バイト（−56%）、エントリあたりアロケーション −58%、挿入スループット +43%（625k→893k/s）、ルックアップレイテンシ −19%（828→670 ns）。本番では p99 インスタンスメモリが 9.3→5.3 GB に減り、フリート全体のワーキングセットは約 100 TB 減少——Gen 13 サーバー約 130 台分の RAM に相当。展開は 5 月 18 日〜7 月 6 日。解放したメモリはキャッシュ容量に再投資されている。
+
+**Why it matters:** 2,500 億エントリでは、エントリあたり 1 バイトの無駄が 250 GB になる。この規模でのデータレイアウト工学はインフラ経済学そのものだ。Rust のデータシェイプ調整がテラバイト規模で報われた貴重な公開事例でもある。
+
+[`🔗 Cloudflare ブログ`](https://blog.cloudflare.com/dns-cache-memory-optimization-1111/) · [`🔗 Hacker News`](https://hn.edgecompute.app/item/49468083)
+
+---
+
+## 26. colibri——MoE エキスパートをディスクからストリーミングする純 C エンジン、GPU なしで 744B モデルを実行
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 26.3k stars · Aug 28
+- **Tags:** `local-inference` `moe` `c` `llm` `open-source`
+
+JustVugg/colibri（Apache-2.0、純 C、エンジン依存ゼロ）は VRAM・RAM・NVMe を単一のメモリ階層として扱う：744B MoE の約 19,456 個のルーティングエキスパートはディスク（約 370 GB）に置かれ、レイヤごとの LRU キャッシュ・学習式ホットピン・バッチ結合読み出し・`O_DIRECT`・デュアル SSD ミラーリングでオンデマンドにストリーミングされる。GLM-5.2（744B）、Kimi K3（2.8T）、Inkling（975B）、DeepSeek-V4-Flash、Qwen3.6、OLMoE を実行——「どれも GPU 不要」。速度はディスク律速で、GPU は速くするだけ。v1.8.0、活発にメンテナンス（オープン issue 77、PR 40）。
+
+**Why it matters:** エキスパートストリーミングは「フロンティア MoE 推論にはデータセンターが必要」という前提を崩す。ローカル・エッジのワークロードにとって、買うべきハードウェアが変わる——2.8T パラメータモデルをノート PC が持てるようにする圧力そのものだ。
+
+[`🔗 JustVugg/colibri`](https://github.com/JustVugg/colibri) · [`🔗 DEV Community GitHub トレンドダイジェスト`](https://dev.to/muildev/github-trending-digest-28-agustus-2026-4587)
+
+---
+
+## 27. Baidu の Unlimited-OCR——一定 KV キャッシュで 1 回のパスで長文書を解析
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending / arXiv 2606.23050 · 24.7k stars · Aug 28
+- **Tags:** `ocr` `document-parsing` `baidu` `open-source` `r-swa`
+
+baidu/Unlimited-OCR（MIT）は DeepSeek-OCR 系パイプラインの全デコーダ注意層を Reference Sliding Window Attention（R-SWA）に置き換える：グローバルに見える視覚トークンの参照セグメント＋128 トークンのスライディングデコード窓により KV キャッシュは一定に保たれ、数十ページが単一フォワードパスで転写される——ページごとにメモリをリセットするループの代わりに。3B 総/500M アクティブの MoE デコーダは 1024×1024 の PDF ページを 256 視覚トークンに圧縮（16 倍）、単一ページ（"gundam"）と複数ページ（"base"）の 2 モード。OmniDocBench v1.5/v1.6 の単一ページ E2E 解析で SOTA。著者らは R-SWA が ASR や翻訳にも汎化すると主張。6 月公開から約 2 か月で 24.7k 星に。
+
+**Why it matters:** 定数メモリデコード——「ソフトフォーゲッティング」——は、長文書 OCR をページ単位のハックのループに追い込む KV 成長の壁への実際の対処法だ。汎用のアテンションパターンであり、ラッパーではない。
+
+[`🔗 baidu/Unlimited-OCR`](https://github.com/baidu/Unlimited-OCR) · [`🔗 arXiv 2606.23050`](https://arxiv.org/abs/2606.23050)
+
+---
+
+## 28. Grok Build——xAI の Rust 製ターミナルコーディングエージェントが公開ミラーとして登場
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 26.2k stars · Aug 28
+- **Tags:** `xai` `coding-agent` `tui` `rust` `agent-harness`
+
+xai-org/grok-build は xAI のターミナルネイティブなコーディングエージェント。Rust 製で、フルスクリーン・マウス操作対応の TUI として、コードベース理解・ファイル編集・シェルコマンド実行・Web 検索・長時間タスク管理をこなす。対話・ヘッドレス/スクリプト・Agent Client Protocol（ACP）によるエディタ埋め込みの各モードに対応。リポジトリは SpaceXAI モノレポから同期される公開ミラー（39 コミット、`SOURCE_REV` が上流 SHA を固定）。一方コードは Apache-2.0、公式バイナリは x.ai/cli からインストール。openai/codex と sst/opencode のツール実装の移植をベンダリングしている。外部コントリビューションは受け付けていない。
+
+**Why it matters:** すべてのフロンティア研究所が自前のエージェントハーネスを出している。xAI の TUI ファースト・ACP 互換設計は Claude Code や Codex のターミナルネイティブ代替としての位置づけであり、公開ミラーはコントリビュートできなくてもエンジニアリングを検証可能にする。
+
+[`🔗 xai-org/grok-build`](https://github.com/xai-org/grok-build) · [`🔗 DEV Community GitHub トレンドダイジェスト`](https://dev.to/muildev/github-trending-digest-28-agustus-2026-4587)
+
+---
+
+## 29. MemToC——LLM は正しい記憶より誤ったツールに 80% 超の確率で従う（arXiv 2608.26295）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / scirate · 2608.26295 · Aug 26
+- **Tags:** `tool-use` `llm-memory` `benchmark` `arxiv`
+
+MemToC（arXiv 2608.26295）はツールリターン後の仲裁を扱う制御されたベンチマーク：正誤が既知のツールリターンを伴う 542 の品質管理済み事実質問から 6,504 エピソードを構築。5 つのオープンウェイト 7–9B モデルでツールリターンが強く支配する：誤ったツールに直面したときモデルが検証済みの正解を保持するのは 6.5–17.1% のみ、正しいツールへは 86.0–93.1% 追従、両方誤りの場合はツールの誤りを 78.4–86.0% 繰り返す。ToolHop 上の SFT/DPO は 4 バックボーンのうち 2 つで正確性条件付き仲裁を改善するが、20 の手法-モデル組み合わせのうち 19 がツールエラー後の棄却（abstention）を減らす。
+
+**Why it matters:** エージェントはツールを信頼するよう設計されている。このベンチマークは、その信頼がいつ誤るかを定量化する——ツールが記憶を上回る失敗モードが、検索拡張やツール呼び出しシステムを測定可能・再現可能な形で蝕んでいる。
+
+[`🔗 arXiv 2608.26295`](https://arxiv.org/abs/2608.26295) · [`🔗 scirate`](https://scirate.com/arxiv/2608.26295)
+
+---
+
+## 30. AgentJudgeBench——困難なエージェンティックツール呼び出しで LLM ジャッジは 77–82% の天井に達する（arXiv 2608.26623、EMNLP 2026）
+
+- **Velocity:** ▮ rising
+- **Source:** arXiv / scirate · 2608.26623 · Aug 27
+- **Tags:** `llm-judges` `agent-evaluation` `benchmark` `tool-calling`
+
+AgentJudgeBench（arXiv 2608.26623、EMNLP 2026 採録）は、DAG ワークフロー型エージェンティックツール呼び出しに対する LLM-as-a-judge の信頼性を体系的に研究した初のベンチマーク：3,808 インスタンス、6 種の DAG トポロジ、3 段階の難易度、5 つのジェネレータ（3B–70B）と 6 つのジャッジ（20B〜フロンティア級）。ジャッジの整合度は難易度とともに単調に低下し（ground truth なしでは約 1.5 倍速く）、ground truth なしの困難なクエリでは 6 つすべてのジャッジが規模に関係なく 77–82% の狭い帯に収束する——モデル容量だけでは破れない構造的天井だ。ground truth 露出は一様に有益ではなく（GPT-5.4 と Gemini-2.5-Pro では整合度が低下）、構造化ルーブリックは最大 +6.5 ポイント。
+
+**Why it matters:** ジャッジの信頼性にスケールで破れない難易度の天井があるなら、その天井付近のエージェント評価スコアは体系的に疑わしい。エージェンティックワークフローでは、ジャッジの規模よりルーブリック設計のほうが重要だ。
+
+[`🔗 arXiv 2608.26623`](https://arxiv.org/abs/2608.26623) · [`🔗 scirate`](https://scirate.com/arxiv/2608.26623)
+
+---
+
+## 31. Elementor Pro の認証なし RCE の公開 PoC が勧告をスキャンツールに変えた（8/23 報道の続報）
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub PoC / Zero RedGem · CVSS 9.0 / 9.8 · PoC Aug 27
+- **Tags:** `cve` `wordpress` `elementor` `rce` `poc`
+
+8 月 23 日に CVE-2026-32475（Elementor Pro ≤ 4.2.1 のフォームファイルアップロード検証バイパスによる認証なし任意ファイルアップロード）を報じて以来、ターンキーの PoC が公開された（sahmsec/CVE-2026-32475、Python 標準ライブラリのみ）：任意でないファイルアップロードフィールドに 2 つのファイルパートを送信——検証を早期 return させる空の最初のパートと、`process_field()` が `wp-content/uploads/elementor/forms/<uniqid>.php` に移動する `.php` ペイロード——認証も nonce も不要。フォームページの自動発見と単一/バッチモードをサポート。修正は 4.2.2（8 月 19 日）で提供済み。Patchstack と Wordfence が文書化（Wordfence は CVSS 9.8）。
+
+**Why it matters:** Elementor Pro は WordPress サイトの大きなシェアを占める。認証なしアップロードの公開 PoC は、8 月 23 日の勧告を「今すぐパッチ」から「未パッチなら侵害を前提に」へ変える——標準的なスキャンターゲットだ。
+
+[`🔗 sahmsec/CVE-2026-32475`](https://github.com/sahmsec/CVE-2026-32475) · [`🔗 Zero RedGem エクスプロイトリスト`](https://zero.redgem.net/?p=92540)
+
+---
+
+## 32. FFmpeg の VPK demuxer に決定論的なゼロ除算——「vibecoded」ではなく情報理論ファザーによる発見（issue #24290）
+
+- **Velocity:** ▮ steady
+- **Source:** FFmpeg issue #24290 / daedalus/fuzzer · Aug 27
+- **Tags:** `ffmpeg` `fuzzing` `dos` `vulnerability`
+
+開発者が 8 月 27 日に FFmpeg issue #24290 を報告した：細工した 21 バイトの Sony VPK 入力が `nb_channels` を 0 にし、`vpk_read_packet()` が `libavformat/vpk.c:89` でそれを除数にして SIGFPE を発生させる——コード実行ではなく信頼性の高い DoS。発見したのは github.com/daedalus/fuzzer——マルコフ生成・文法認識変異・情報理論的スケジューリング（ベイズ Elo、トンプソンサンプリング、相互情報スコアリング）を組み合わせた Python 製カバレッジガイド型バイナリファザー。修正 PR（#24297）が開かれている。HN はこれを「vibecoded」（LLM 生成）ファザーと喧伝したが、リポジトリ自体は AI/ML 風の変異ヒューリスティックを持つ常套ファザーだ——その主張を繰り返す前に一次ソースを確認すべき好例である。
+
+**Why it matters:** 小さなバグだが、「vibecoded ファザー」というバイラルな枠組みとリポジトリの実際の性質の落差は、このフィードのソース検証ルールが捉えようとしている二層シグナルそのものだ。
+
+[`🔗 FFmpeg issue #24290`](https://code.ffmpeg.org/FFmpeg/FFmpeg/issues/24290) · [`🔗 daedalus/fuzzer`](https://github.com/daedalus/fuzzer)
+
+---
+
+## 33. CISA が Xiiaozet LK100W を警告——重要インフラで使われるデバイスに CVSS 9.8 が 2 件（ICSA-26-239-01）
+
+- **Velocity:** ▮ steady
+- **Source:** CISA ICSA-26-239-01 / SecurityOnline · Aug 27-28
+- **Tags:** `ics` `cve` `cisa` `industrial-iot` `rce`
+
+CISA の ICSA-26-239-01（8 月 27〜28 日）は Xiiaozet LK100W デバイスの 3 つの脆弱性を扱う——このデバイスは「世界中の重要インフラで運用されている」：CVE-2026-78239（重要な管理機能の認証欠如）、CVE-2026-76943（管理チャネルの認証バイパスでコマンド実行に至る）、CVE-2026-78037（Web 管理インターフェースの OS コマンドインジェクション）——うち 2 件が CVSS 9.8。公開時点で実地悪用の確認・公開 PoC はなし。ファームウェア 2.1.240 以降で修正。
+
+**Why it matters:** 認証前 RCE を持つ低コストの接続デバイスは OT ネットワークへの典型的な初期アクセス梯子だ（8 月 23 日の Dahua カメラボットネットを参照）。CISA 勧告が具体的 CVE を挙げたことで、インテグレータは明確なパッチ対象を得る。
+
+[`🔗 CISA ICSA-26-239-01`](https://www.cisa.gov/news-events/ics-advisories/icsa-26-239-01) · [`🔗 SecurityOnline`](https://securityonline.info/xiiaozet-lk100w-vulnerabilities/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-27T20:03:00Z |
-| Items | 20 |
-| Sources tracked | 31 (Hacker News, GitHub, CISA, Hunt.io, DeepMind, RuntimeWire, NVIDIA, OpenAI, Search Engine Journal, The Next Web, MacMagazine, Shadowserver, eSecurityPlanet, arXiv, Hugging Face, The Hacker News, Cloud Security Alliance, TechCrunch, Engadget, Tenable, Chrome Releases, VulDB, Redwood Research, CGTN, prohoster, OpenNET, Cybernoz, AISecWatch, DEV Community, Spatial Intelligence, omarchy.org) |
+| Generated | 2026-08-28T04:10:00Z |
+| Items | 33 |
+| Sources tracked | 45 (Hacker News, GitHub, CISA, Hunt.io, DeepMind, RuntimeWire, NVIDIA, OpenAI, Search Engine Journal, The Next Web, MacMagazine, Shadowserver, eSecurityPlanet, arXiv, Hugging Face, The Hacker News, Cloud Security Alliance, TechCrunch, Engadget, Tenable, Chrome Releases, VulDB, Redwood Research, CGTN, prohoster, OpenNET, Cybernoz, AISecWatch, DEV Community, Spatial Intelligence, omarchy.org, Anthropic, Ars Technica, Business Insider, HPCwire, Cloudflare, Google, Gigazine, QiAnXin secrss, Redis, scirate, Zero RedGem, SecurityOnline, FFmpeg, Baidu) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

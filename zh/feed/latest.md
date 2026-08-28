@@ -1,8 +1,8 @@
 ---
 date: 2026-08-28
-updated: 2026-08-27T20:03:00Z
+updated: 2026-08-28T04:10:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 45
 license: CC-BY-4.0
 ---
 
@@ -295,13 +295,195 @@ CVE-2026-57827（CWE-434，CVSS 9.8）是 RSFiles!（`com_rsfiles`）Joomla 文�
 
 ---
 
+## 21. 英伟达同意以约 129 亿美元收购 Hugging Face——传闻落定，中立性疑虑加深（8 月 27 日报道的后续更新）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / Business Insider · 1,821 pts · front page Aug 28
+- **Tags:** `nvidia` `hugging-face` `acquisition` `open-source` `ai-ecosystem`
+
+自我们 8 月 27 日报道最初传闻以来，收购已进入协议阶段：The Information 与 Business Insider 报道，英伟达已同意以约 129 亿美元（约为其约 1.5 亿美元年化营收的 86 倍）收购 Hugging Face，这将是英伟达史上最大的一笔收购。Hugging Face 托管约 300 万个模型、100 万份数据集、服务 1300 万注册开发者；HN 讨论串（1,821 分）被"拥抱、扩展、再消灭"的担忧与 CUDA 生态锁定讨论主导。交易尚未正式完成。
+
+**Why it matters:** 我们昨天指出的中立性疑虑现在成了现实风险——英伟达将控制开源权重 AI 的分发层，并可能把模型托管引向自家芯片，最接近的先例是微软 2018 年收购 GitHub。
+
+[`🔗 Business Insider`](https://www.businessinsider.com/nvidia-in-talks-to-buy-hugging-face-13-billion-dollars-2026-8) · [`🔗 HPCwire`](https://www.hpcwire.com/2026/08/27/nvidia-to-nab-hugging-face-the-github-for-ai-for-12-9b-report/)
+
+---
+
+## 22. Anthropic 发布"物理 MCP"——Model Hardware Standard 让 Claude 操作显微镜、机械臂与实验室设备
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic News / Ars Technica · research preview Aug 27
+- **Tags:** `anthropic` `mhs` `mcp` `physical-ai` `robotics` `agents`
+
+8 月 27 日，Anthropic 联合 HHMI Janelia 预告了 Model Hardware Standard（MHS），一个"物理版 MCP"：标准化驱动把可编程设备（显微镜、液体处理机、机械臂、激光器）暴露为简单的读写原语，并附带自然语言安全标签——任何模型都能通过 MCP、CLI 或 API 操作陌生硬件，无需定制集成代码。合作方包括 AWS（Strands Robots）、Hugging Face（LeRobot）、Raspberry Pi、Universal Robots、Genentech、QuEra、CMU、Doosan 与 Danaher。已披露成果：CMU 约 8 小时接通实验室设备、实验提速约 3 倍；QuEra 把量子激光稳定度从 58% 提到 99.3%。目前为研究预览；Anthropic 计划在安全评估后开源，并承认模型的空间推理仍然有限——Genentech 测试中 Claude 一度把样品起泡误判为软件 bug。
+
+**Why it matters:** MCP 标准化了软件工具访问，MHS 则押注同一套抽象也能作用于物理世界——它把智能体变成实验室与工厂操作员的接口，安全边界直接编码在驱动标签里。
+
+[`🔗 Anthropic — 预览 Model Hardware Standard`](https://www.anthropic.com/news/model-hardware-standard-research-preview) · [`🔗 Ars Technica`](https://arstechnica.com/ai/2026/08/anthropics-new-hardware-standard-lets-ai-agents-control-the-physical-world/)
+
+---
+
+## 23. Redis TLS 待处理链表 UAF 出现公开 RCE PoC——8.8.2 修复，影响所有分支（QVD-2026-58458）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** QiAnXin secrss / Redis commit · CVSS 8.8 · disclosed Aug 26
+- **Tags:** `redis` `cve` `use-after-free` `rce` `tls`
+
+QVD-2026-58458（CVSS 8.8）是 Redis TLS 待处理数据处理中的释放后使用：`tlsProcessPendingData()` 用一个缓存的后续节点指针遍历待处理链表，当命令处理重新进入事件循环并关闭链表中的另一条 TLS 连接时，缓存节点已被释放——从而在普通 TLS 命令接口上以 redis-server 权限实现任意地址读写与 RCE（无需加载模块、写文件或调试器）。8 月 26 日披露，附公开 PoC（v12-security/pocs），暂无在野利用报告。修复提交 `6d088c3` 随 8.8.2 发布；各分支最低修复版本为 6.2.24、7.2.16、7.4.11、8.2.9、8.4.6、8.6.6、8.10.1。需要开启 `tls-port`，且默认用户拥有 `ping`/`echo`/`eval` 权限。
+
+**Why it matters:** 一款缓存服务器出现公开 RCE PoC，就是批量攻击的候选目标；而此前 8.8.0 补丁本身可被绕过（"Redis 补丁被绕过"的报道标题），这让未打补丁的 TLS 端口成为最优先升级项——这也是每一个智能体和 Web 框架背后的同一类服务器。
+
+[`🔗 Redis 修复提交 6d088c3`](https://github.com/redis/redis/commit/6d088c335d5c3ec49a6c28486140b498e70b7834) · [`🔗 奇安信 secrss`](https://www.secrss.com/articles/93398)
+
+---
+
+## 24. Gemini Omni 1.1 Flash——谷歌视频模型新增场景延展、关键帧控制与 4K 放大
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google Keyword blog / Gigazine · Aug 27-28 · 177 pts HN
+- **Tags:** `google` `gemini` `video-generation` `multimodal` `ai-models`
+
+8 月 27 日，谷歌发布 Gemini Omni 1.1 Flash，面向生产场景的视频生成模型更新：场景延展可读取最长 10 秒的前序上下文（此前约 1 秒），并以 10 秒为步长把视频延长到最长 40 秒；首尾关键帧控制支持镜头环绕与无缝循环；360p 草稿比 720p 快约 60%、成本仅为三分之一；支持 1080p/4K 放大；最多 3 秒参考视频保持角色一致性。API 按生成秒计价：360p $0.03、720p $0.10、1080p $0.15、4K $0.30，输出带 SynthID 水印。Adobe 已把它接入 Firefly；Figma Weave、GMI Cloud 与 Runway 也在名单上。在盲评 Arena 中，它文字生视频排第一、图生视频排第二（仅次于开源 MiniMax H3）。
+
+**Why it matters:** 在 360p 廉价草稿档上提供场景延展与关键帧控制，等于把可控视频生成变成一种通用 API——智能体无需人类剪辑师即可分镜、延展与成片的原语。
+
+[`🔗 Google 博客`](https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-omni-1-1-flash/) · [`🔗 Gigazine`](https://gigazine.net/gsc_news/en/20260828-gemini-omni-1-1-flash)
+
+---
+
+## 25. Cloudflare 从 1.1.1.1 的 DNS 缓存省下约 100 TB 内存——五项 Rust 数据布局改动把单条目占用降低 56%
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare blog / Hacker News · Aug 27 · 456 pts
+- **Tags:** `cloudflare` `dns` `rust` `performance` `infrastructure`
+
+Cloudflare 8 月 27 日的工程博文详解了对 Big Pineapple DNS 缓存的五项 Rust 层优化——该缓存稳态下保存 2500 亿+ 条目：用 `Box<[T]>`/`Box<str>` 取代 `Vec<T>`/`String`（去掉未使用的容量字段）、用 `u16` 偏移合并 DNS 区段、省略与查询匹配的记录属主名、box 化大枚举变体、以 wire 格式存储记录。净效果：单条目占用 953→420 字节（−56%），单条目分配 −58%，插入吞吐 +43%（625k→893k/s），查询延迟 −19%（828→670 ns）。生产中 p99 实例内存从 9.3 GB 降到 5.3 GB，全舰队工作集合计下降约 100 TB——相当于约 130 台 Gen 13 服务器的内存。上线时间为 5 月 18 日至 7 月 6 日；省下的内存正被重新投入缓存容量。
+
+**Why it matters:** 2500 亿条目下，每个条目浪费一个字节就是 250 GB——在这个规模上，数据布局工程就是基础设施经济学；这也是一份少见的、Rust 数据形态调优在 TB 级兑现的公开案例。
+
+[`🔗 Cloudflare 博客`](https://blog.cloudflare.com/dns-cache-memory-optimization-1111/) · [`🔗 Hacker News`](https://hn.edgecompute.app/item/49468083)
+
+---
+
+## 26. colibri——纯 C 推理引擎从磁盘流式加载 MoE 专家，无 GPU 硬件即可跑 744B 模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 26.3k stars · Aug 28
+- **Tags:** `local-inference` `moe` `c` `llm` `open-source`
+
+JustVugg/colibri（Apache-2.0，纯 C，零引擎依赖）把 VRAM、RAM 与 NVMe 视为同一层内存层次：一个 744B MoE 的约 19,456 个路由专家存放在磁盘上（约 370 GB），按需通过逐层 LRU 缓存、学习式热点钉住、批量合并读取、`O_DIRECT` 与双 SSD 镜像流式加载。它能跑 GLM-5.2（744B）、Kimi K3（2.8T）、Inkling（975B）、DeepSeek-V4-Flash、Qwen3.6 与 OLMoE——"全都无需 GPU"；速度受磁盘限制，GPU 只是加速。v1.8.0，维护活跃（77 个开放 issue、40 个 PR）。
+
+**Why it matters:** 专家流式加载打破了"前沿 MoE 推理需要数据中心"的假设——对本地与边缘负载来说，它直接改变你需要购买的硬件；这正是让 2.8T 参数模型可以被一台笔记本持有的压力来源。
+
+[`🔗 JustVugg/colibri`](https://github.com/JustVugg/colibri) · [`🔗 DEV Community GitHub 趋势摘要`](https://dev.to/muildev/github-trending-digest-28-agustus-2026-4587)
+
+---
+
+## 27. 百度 Unlimited-OCR——恒定 KV 缓存的一次性长文档解析
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending / arXiv 2606.23050 · 24.7k stars · Aug 28
+- **Tags:** `ocr` `document-parsing` `baidu` `open-source` `r-swa`
+
+baidu/Unlimited-OCR（MIT）用参考滑窗注意力（R-SWA）替换 DeepSeek-OCR 风格流水线的全部解码器注意力层：全局可见的视觉 token 参考段加一个 128 token 的滑动解码窗口，让 KV 缓存保持恒定——于是几十页文档可以在单次前向中完成转录，而不是逐页循环、每页重置记忆。3B 总量/500M 激活的 MoE 解码器把 1024×1024 的 PDF 页压缩为 256 个视觉 token（16×），并支持单页（"gundam"）与多页（"base"）两种模式。它在 OmniDocBench v1.5/v1.6 单页端到端解析上达到 SOTA，作者认为 R-SWA 可泛化到 ASR 与翻译。该仓库自 6 月发布以来约两个月涨到 24.7k 星。
+
+**Why it matters:** 恒定内存解码——"软遗忘"——才是真正解决 KV 增长墙的方案；正是这堵墙让长文档 OCR 只能靠逐页 hack 循环。它是一个通用注意力模式，而不是包装层。
+
+[`🔗 baidu/Unlimited-OCR`](https://github.com/baidu/Unlimited-OCR) · [`🔗 arXiv 2606.23050`](https://arxiv.org/abs/2606.23050)
+
+---
+
+## 28. Grok Build——xAI 的 Rust 终端编码智能体以公开镜像形式上线
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 26.2k stars · Aug 28
+- **Tags:** `xai` `coding-agent` `tui` `rust` `agent-harness`
+
+xai-org/grok-build 是 xAI 的原生终端编码智能体，用 Rust 编写，以全屏、鼠标交互的 TUI 运行：能理解代码库、编辑文件、执行 shell 命令、搜索网络并管理长时间运行的任务——支持交互、无头/脚本以及通过 Agent Client Protocol（ACP）嵌入编辑器等模式。该仓库是从 SpaceXAI 单体仓库同步的公开镜像（39 次提交，`SOURCE_REV` 钉住上游 SHA）；一方代码为 Apache-2.0，官方二进制通过 x.ai/cli 安装。它 vendor 了 openai/codex 与 sst/opencode 工具实现的移植。不接受外部贡献。
+
+**Why it matters:** 每一家前沿实验室都在推出自己的智能体 harness——xAI 的 TUI 优先、兼容 ACP 的设计把它定位成 Claude Code 与 Codex 的终端原生替代；公开镜像也让其工程实现可以被审视，即使无法贡献。
+
+[`🔗 xai-org/grok-build`](https://github.com/xai-org/grok-build) · [`🔗 DEV Community GitHub 趋势摘要`](https://dev.to/muildev/github-trending-digest-28-agustus-2026-4587)
+
+---
+
+## 29. MemToC——LLM 超过 80% 的时间会跟随错误工具、而不是正确记忆（arXiv 2608.26295）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / scirate · 2608.26295 · Aug 26
+- **Tags:** `tool-use` `llm-memory` `benchmark` `arxiv`
+
+MemToC（arXiv 2608.26295）是一个针对"工具返回后仲裁"的可控基准：由 542 个质量控制的事实问题构建 6,504 个回合，工具返回值正确性已知。在五个 7–9B 开源权重模型上，工具返回强烈占优：面对一个错误的工具，模型仅 6.5–17.1% 的时间保留已验证正确的答案；对正确工具 86.0–93.1% 跟随；当两个来源都错时，78.4–86.0% 会重复工具的错误。基于 ToolHop 的 SFT/DPO 在四个骨干中的两个上改善了"以正确性为条件的仲裁"，但 20 个方法-模型组合中有 19 个降低了工具错误后的弃答率。
+
+**Why it matters:** 智能体被设计成信任工具，而这项基准量化了这种信任在何时是错位的——工具压过记忆的失败模式，正以可测量、可复现的方式毒害检索增强与工具调用系统。
+
+[`🔗 arXiv 2608.26295`](https://arxiv.org/abs/2608.26295) · [`🔗 scirate`](https://scirate.com/arxiv/2608.26295)
+
+---
+
+## 30. AgentJudgeBench——在困难的智能体工具调用任务上，LLM 评判器触及 77–82% 天花板（arXiv 2608.26623，EMNLP 2026）
+
+- **Velocity:** ▮ rising
+- **Source:** arXiv / scirate · 2608.26623 · Aug 27
+- **Tags:** `llm-judges` `agent-evaluation` `benchmark` `tool-calling`
+
+AgentJudgeBench（arXiv 2608.26623，已被 EMNLP 2026 接收）是首个系统研究"LLM 作为评判器"在 DAG 工作流式智能体工具调用上可靠性的基准：3,808 个实例、六种 DAG 拓扑、三档难度，五个生成器（3B–70B）与六个评判器（20B 到前沿级）。评判器对齐度随难度单调下降（无 ground truth 时约快 1.5 倍）；在没有 ground truth 的困难问题上，六个评判器无论规模都收敛到狭窄的 77–82% 区间——这是模型容量无法突破的结构性天花板。暴露 ground truth 并不总是有用（它会降低 GPT-5.4 与 Gemini-2.5-Pro 的对齐度），而结构化评分细则最多可提升 +6.5 个百分点。
+
+**Why it matters:** 如果评判器可靠性存在规模无法突破的难度天花板，那么接近该天花板的智能体评估得分就系统性地可疑——对智能体工作流而言，评分细则的设计比评判器规模更重要。
+
+[`🔗 arXiv 2608.26623`](https://arxiv.org/abs/2608.26623) · [`🔗 scirate`](https://scirate.com/arxiv/2608.26623)
+
+---
+
+## 31. Elementor Pro 未认证 RCE 的公开 PoC 把公告变成了扫描工具（8 月 23 日报道的后续更新）
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub PoC / Zero RedGem · CVSS 9.0 / 9.8 · PoC Aug 27
+- **Tags:** `cve` `wordpress` `elementor` `rce` `poc`
+
+自我们 8 月 23 日报道 CVE-2026-32475（Elementor Pro ≤ 4.2.1 通过表单文件上传校验绕过实现未认证任意文件上传）以来，一个开箱即用的 PoC 现已公开（sahmsec/CVE-2026-32475，仅用 Python 标准库）：它为一个非必填文件上传字段提交两个文件部分——先一个空的第一个部分让校验提前 return，再一个 `.php` payload，而 `process_field()` 仍会把它移动到 `wp-content/uploads/elementor/forms/<uniqid>.php`——全程无需认证、无需 nonce。脚本能自动发现表单页，并支持单目标与批量模式。修复已在 4.2.2（8 月 19 日）落地；Patchstack 与 Wordfence 都有记录（Wordfence 评分为 CVSS 9.8）。
+
+**Why it matters:** Elementor Pro 占据 WordPress 站点的很大份额，公开的未认证上传 PoC 把 8 月 23 日的公告从"尽快打补丁"变成"未打补丁即视为失守"——一个标准扫描目标。
+
+[`🔗 sahmsec/CVE-2026-32475`](https://github.com/sahmsec/CVE-2026-32475) · [`🔗 Zero RedGem 利用列表`](https://zero.redgem.net/?p=92540)
+
+---
+
+## 32. FFmpeg VPK demuxer 出现确定性除零——由信息论模糊测试器发现，而非"vibecoded"的说法（issue #24290）
+
+- **Velocity:** ▮ steady
+- **Source:** FFmpeg issue #24290 / daedalus/fuzzer · Aug 27
+- **Tags:** `ffmpeg` `fuzzing` `dos` `vulnerability`
+
+有开发者于 8 月 27 日提交 FFmpeg issue #24290：一个精心构造的 21 字节 Sony VPK 输入把 `nb_channels` 置为 0，`vpk_read_packet()` 在 `libavformat/vpk.c:89` 处以它为除数，触发 SIGFPE——一种可靠的拒绝服务，而非代码执行。它由 github.com/daedalus/fuzzer 发现——一个 Python 覆盖率引导的二进制模糊测试器，结合马尔可夫生成、语法感知变异与信息论调度（贝叶斯 Elo、汤普森采样、互信息打分）。修复 PR（#24297）已开启。HN 把它描述为"vibecoded"（LLM 生成）的模糊测试器，但仓库本身是一个带有 AI/ML 风格变异启发式的常规模糊测试器——在重复这类说法前先核查一手来源的提醒。
+
+**Why it matters:** 这是个很小的 bug，但"vibecoded 模糊测试器"这一病毒式叙事与仓库实际性质之间的落差，正是本 feed 源验证规则要捕捉的那种双层信号。
+
+[`🔗 FFmpeg issue #24290`](https://code.ffmpeg.org/FFmpeg/FFmpeg/issues/24290) · [`🔗 daedalus/fuzzer`](https://github.com/daedalus/fuzzer)
+
+---
+
+## 33. CISA 通报 Xiiaozet LK100W——关键基础设施广泛部署的设备线存在两个 CVSS 9.8 漏洞（ICSA-26-239-01）
+
+- **Velocity:** ▮ steady
+- **Source:** CISA ICSA-26-239-01 / SecurityOnline · Aug 27-28
+- **Tags:** `ics` `cve` `cisa` `industrial-iot` `rce`
+
+CISA 的 ICSA-26-239-01（8 月 27–28 日）覆盖 Xiiaozet LK100W 设备线的三个漏洞——该设备"在全球关键基础设施中运行"：CVE-2026-78239（关键管理功能缺少认证）、CVE-2026-76943（管理通道认证绕过，可获得命令执行）、CVE-2026-78037（Web 管理界面 OS 命令注入）——其中两个 CVSS 9.8。发布时无确认在野利用、无公开 PoC；固件 2.1.240 或更高版本修复。
+
+**Why it matters:** 带预认证 RCE 的低成本联网设备是进入 OT 网络的经典初始访问阶梯（参见 8 月 23 日的大华摄像头僵尸网络），而 CISA 公告点名具体 CVE，给集成商一个明确的补丁目标。
+
+[`🔗 CISA ICSA-26-239-01`](https://www.cisa.gov/news-events/ics-advisories/icsa-26-239-01) · [`🔗 SecurityOnline`](https://securityonline.info/xiiaozet-lk100w-vulnerabilities/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-27T20:03:00Z |
-| Items | 20 |
-| Sources tracked | 31 (Hacker News, GitHub, CISA, Hunt.io, DeepMind, RuntimeWire, NVIDIA, OpenAI, Search Engine Journal, The Next Web, MacMagazine, Shadowserver, eSecurityPlanet, arXiv, Hugging Face, The Hacker News, Cloud Security Alliance, TechCrunch, Engadget, Tenable, Chrome Releases, VulDB, Redwood Research, CGTN, prohoster, OpenNET, Cybernoz, AISecWatch, DEV Community, Spatial Intelligence, omarchy.org) |
+| Generated | 2026-08-28T04:10:00Z |
+| Items | 33 |
+| Sources tracked | 45 (Hacker News, GitHub, CISA, Hunt.io, DeepMind, RuntimeWire, NVIDIA, OpenAI, Search Engine Journal, The Next Web, MacMagazine, Shadowserver, eSecurityPlanet, arXiv, Hugging Face, The Hacker News, Cloud Security Alliance, TechCrunch, Engadget, Tenable, Chrome Releases, VulDB, Redwood Research, CGTN, prohoster, OpenNET, Cybernoz, AISecWatch, DEV Community, Spatial Intelligence, omarchy.org, Anthropic, Ars Technica, Business Insider, HPCwire, Cloudflare, Google, Gigazine, QiAnXin secrss, Redis, scirate, Zero RedGem, SecurityOnline, FFmpeg, Baidu) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
