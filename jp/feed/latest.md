@@ -1,8 +1,8 @@
 ---
 date: 2026-08-28
-updated: 2026-08-28T04:10:00Z
+updated: 2026-08-28T12:12:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 45
+sources: 58
 license: CC-BY-4.0
 ---
 
@@ -477,13 +477,251 @@ CISA の ICSA-26-239-01（8 月 27〜28 日）は Xiiaozet LK100W デバイス�
 
 ---
 
+## 34. PaperCut NG/MF のゼロデイが実地攻撃に悪用中——CVE 未発番の認証前 RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** PaperCut advisory / Huntress · no CVE yet · Aug 27-28
+- **Tags:** `papercut` `zero-day` `authentication-bypass` `rce` `print-management`
+
+8 月 27 日、PaperCut は PaperCut NG/MF プリント管理ソフトウェアのゼロデイ脆弱性が実地悪用されているとする緊急勧告を出した。この欠陥は Apache Tapestry の「complex direct」リクエスト形式の認証バイパス——`/app?service=direct/1/Error/ConfigEditor/…` のような細工リクエストは公開の Error ページを描画しつつ、特権的な ConfigEditor/UserList コンポーネントを実行するため、認証なしの攻撃者が外部ユーザー検索を悪意ある JDBC/SQL チェーン（Derby `CALL` → H2 `INIT` → Nashorn ベースの JS トリガー）に向けて、SYSTEM 権限で任意コードを実行できる。Huntress は 2 件の顧客インシデント（うち 1 件は 2 分未満の侵入）を確認し、base64 のシステム情報収集ペイロードと 16 進エンコードされた Java `.class` ファイルが確認された。記事執筆時点で CVE は未発番。8 月 28 日 02:10 AEST に v25/v26 向け緊急アウトオブサイクルパッチ（Windows build 25.0.12.76497）がリリースされ、v24 は開発中。約 1,000 台のインターネット公開インスタンスが対象。
+
+**Why it matters:** CVE-2023-27350（2023 年に Clop/LockBit 系グループが大規模悪用）以来 2 度目の PaperCut ゼロデイ。認証前 RCE が確認されているのに CVE 番号がまだない状況では、カタログが追いつくまでネットワーク遮断と緊急パッチが唯一の防御だ。
+
+[`🔗 PaperCut セキュリティ速報`](https://www.papercut.com/kb/Main/security-bulletin-27-aug-2026-urgent-security-advisory/) · [`🔗 Huntress 分析`](https://www.huntress.com/blog/papercut-actively-exploited) · [`🔗 Rapid7 ETR`](https://www.rapid7.com/blog/post/etr-papercut-ng-mf-critical-zero-day-exploited-in-the-wild/)
+
+---
+
+## 35. Small Models Have Arrived——Calvin French-Owen が「安価モデルの転換点」を定量化
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** calv.info / Hacker News · 680 pts · front page Aug 27
+- **Tags:** `small-models` `llm-economics` `ai-adoption` `cost`
+
+Segment 共同創業者 Calvin French-Owen のエッセイ（8 月 26 日、HN 680 ポイント）は、高速で安価な「十分に良い」モデルが商業的に成立する水準を超えたと論じる：GPT-5.6 Luna は彼のコードベース・メール・ナレッジベースで約 100 tokens/秒、数千通のメールにまたがる複雑な調査スレッドでも「数十セント」しかかからない。彼のエージェント「ペット評価」——ある人を調査しニュース興味を判断してパーソナライズされた日刊マイクロサイトを構築する——は、前世代の Sonnet 級モデルで実行あたり約 1 ドルだったのが、Luna では約 0.10 ドルに下がった。彼は仕事を「IQ 180」（新規のブレークスルー、フロンティア向き）と「トークンまき仕事」（超レスポンシブな実行、実務の約 95% と推定）に分け、コンシューマー AI のプレイブックを阻んでいたトークンコストが崩壊しつつあると結論づける。
+
+**Why it matters:** 小モデルがいつ妥協でなくなるかについての、信頼できる創業者による定量化。フロンティアと安価モデルの需要が並行して伸びる理由を示し、エージェントワークロードの価格設定とルーティングに直接関係する。
+
+[`🔗 Small Models Have Arrived`](https://calv.info/small-models-have-arrived) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=49466917)
+
+---
+
+## 36. アリババが Qoder をコーディング中心の「エージェントワークスペース」に刷新——自然言語の目標が 2 万+ スキルを駆動
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Alibaba Cloud blog / Qoder · Aug 27
+- **Tags:** `agent-workspace` `qoder` `alibaba` `qwen` `agent-tooling`
+
+8 月 27 日、アリババは Qoder を AI コーディングツールから、Coding を中核とする汎用エージェントワークスペースへと再定位した：目標を自然言語で記述すると、Qoder がコーディングとツール機能を呼び出し、開発・プロトタイピング・データ処理を実行する。「Agent Harness」アーキテクチャ上で読み取り→修正→検証→反復ループを採用し、Qwen3.8-Max と品質/速度/コストをバランスする「Auto」モデルルーターを内蔵。40+ コネクタ、70+ プラグイン、2 万+ スキルをプログラミング/汎用のデュアルモード（デスクトップ、IDE、CLI、JetBrains、モバイル、Cloud Agents）で提供する。
+
+**Why it matters:** IDE ではなくエージェントワークスペースがソフトウェア作業のデフォルト画面になる——中国ベンダーのエージェントツールが開発者専用ではなく一般向けに向かっている最も明確なシグナルだ。
+
+[`🔗 Alibaba Cloud 開発者ブログ`](https://developer.aliyun.com/article/1758676) · [`🔗 Qoder`](https://qoder.com) · [`🔗 PingWest`](https://www.pingwest.com/w/316832)
+
+---
+
+## 37. CVE-2026-19632——TranslatePress のパスワードリセットリンク開示による認証なし管理者乗っ取り（CVSS 9.8）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Wordfence / NVD · CVSS 9.8 (CNA Wordfence) · ~400k installs
+- **Tags:** `cve` `wordpress` `account-takeover` `translatepress`
+
+CVE-2026-19632（CVSS 9.8、Wordfence CNA 採点、NVD は未主査）は TranslatePress ≤ 3.3.1（約 40 万アクティブインストール）の 2 つの挙動を認証なし管理者乗っ取りに連鎖させる：プロフィール言語が公開済み第二言語の管理者がパスワードをリセットすると、プラグインは完全なリセット URL——平文のリセットキーを含む——を翻訳可能文字列として保存する。公開 `trp_get_translations_regular` AJAX アクションにより、認証なしの攻撃者が辞書行を列挙してキーを取り戻し、管理者パスワードをリセットできる。Wordfence は 24 時間で 7,269 件の悪用試行をブロックしたと報告し、公開 PoC（YonLiud/CVE-2026-19632）が出ている。3.3.2 で修正済み——ただし 3.3.2 自体が別の格納型 XSS（CVE-2026-66582）を抱えるため 3.3.4+ へ更新すること。
+
+**Why it matters:** トップ 40 万級プラグインにおける、9.8・認証なし・単一リクエストで管理者乗っ取りに至り、公開 PoC 付きの経路は、数日以内に大量悪用される典型プロファイル。パッチ適用まで 2FA/パスキーが有効な緩和策。
+
+[`🔗 Wordfence 脅威インテル`](https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/translatepress-multilingual/translatepress-multilingual-331-unauthenticated-account-takeover-via-password-reset-link-disclosure) · [`🔗 NVD レコード`](https://nvd.nist.gov/vuln/detail/CVE-2026-19632) · [`🔗 PoC`](https://github.com/YonLiud/CVE-2026-19632)
+
+---
+
+## 38. CVE-2026-19092——Tutor LMS の認証なし任意 PHP 関数呼び出し（CVSS 9.8）
+
+- **Velocity:** ▮▮ rising
+- **Source:** WPScan / NVD · CVSS 9.8 (CNA WPScan) · Aug 27
+- **Tags:** `cve` `wordpress` `tutor-lms` `rce`
+
+CVE-2026-19092（CVSS 9.8、WPScan CNA 採点）は広く使われている WordPress オンライン学習プラグイン Tutor LMS 2.1.3–4.0.5 に影響：テンプレート描画中にリクエストデータが内部変数を上書きでき、認証なしの攻撃者が内部変数をシャドウして任意のゼロ引数 PHP 関数——`phpinfo`、`getallheaders`、その他副作用のある呼び出し——を実行し、その出力を読める。4.0.6 で修正、WPScan 調査による公開 PoC あり。
+
+**Why it matters:** TranslatePress と並ぶ今回の最重症 WordPress 問題——大規模展開されている学習プラグイン上の認証なし・RCE に近いプリミティブだ。
+
+[`🔗 WPScan アドバイザリ`](https://wpscan.com/plugin/tutor/) · [`🔗 NVD レコード`](https://nvd.nist.gov/vuln/detail/CVE-2026-19092)
+
+---
+
+## 39. Salesforce × Anthropic が「Claudeforce」を発表——Claude に 37 の営業スキル、Agentforce の推論エンジンに Claude
+
+- **Velocity:** ▮▮ rising
+- **Source:** Salesforce press release / product page · Aug 26-27
+- **Tags:** `claudeforce` `salesforce` `anthropic` `mcp` `enterprise-agents`
+
+8 月 26〜27 日、Salesforce と Anthropic は提携を「Claudeforce」に拡大した：「Salesforce in Claude」プラグインには 37 のプリビルド営業スキル（ミーティング準備、商談ヘルスチェック、パイプライン更新）が含まれ、ライブな売上コンテキストで推論し、AIforce——Salesforce の MCP サーバー/API/CLI エンタープライズハーネス——を通じてアクションを Salesforce の権限・監査トレイルにルーティングする。逆方向では、Claude が Agentforce の Atlas Reasoning Engine の背後にある推論モデルとなり、Agentforce Vibes/Coworker をデフォルトで駆動し、Slack のデフォルトモデルにもなる。オープンベータは 9 月予定。発表後、Salesforce 株は時間外で約 14% 上昇した。
+
+**Why it matters:** エージェントツールが CRM UI を企業インターフェースとして駆逐している——MCP ベースの「ハーネス対ハーネス」統合で、Anthropic がアドオンではなくデフォルトの推論層として組み込まれる。
+
+[`🔗 Salesforce プレスリリース`](https://www.salesforce.com/news/press-releases/2026/08/26/salesforce-and-anthropic-announce-claudeforce/) · [`🔗 Claudeforce 製品ページ`](https://www.salesforce.com/claudeforce/)
+
+---
+
+## 40. Praxist——系統グラフ型 R&D エージェントが MLE-bench で 60 メダル、コストは約 1/12（arXiv 2608.25955）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2608.25955 · Aug 26
+- **Tags:** `agent-benchmark` `rd-agents` `mle-bench` `scientific-agents`
+
+Praxist（arXiv 2608.25955）は自律 R&D エージェントのための「系統中心の世代システム」：各試行を自己完結として扱う代わりに、再現可能なアーティファクトと評価結果を、発見・レーン構造化フロンティア・アジェンダからなる型付きエビデンスグラフに変換し、後続の試行が検証済みメカニズムを引き継ぐ。75 タスクの MLE-bench スイートで、60 メダル（80.0%、金 49）を獲得。Claude Code ベースラインの 55（73.3%、金 34）に対し、モデル費用は 3,054 ドル対 38,370 ドル——約 1/12。4 つのオープンエンドなケーススタディ（クオンツ取引、LiDAR-慣性 SLAM、トカマク磁気制御、ロケット着陸）も各タスクネイティブベースラインを上回った。
+
+**Why it matters:** 長期エージェント研究キャンペーンのコストとトレーサビリティの壁に挑む——エージェントの成果を再現不能な運ではなく系統に帰属可能にすることが、大規模自律 R&D に欠けたプリミティブだ。
+
+[`🔗 arXiv 2608.25955`](https://arxiv.org/abs/2608.25955) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.25955)
+
+---
+
+## 41. PAWBench——分布型ワールドモデリング初のベンチマーク、合格モデルはゼロ（arXiv 2608.27345）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / Hugging Face Papers · 2608.27345 · #1 paper Aug 27
+- **Tags:** `world-models` `video-gen` `benchmark` `evaluation`
+
+PAWBench（arXiv 2608.27345、HF アップボート 69——8 月 27 日付けトップ論文）はワールドモデルの品質を分布忠実度として再定義する：反復されたビデオロールアウトを物理的挙動の経験分布に変換し、「確率的整合」——1 つのもっともらしい軌道だけでなく、可能な結果の完全な分布を再現できるか——を検証する。50 シナリオ・11 の現行ビデオ生成システムにわたる主要な発見は否定的：有効な挙動範囲を回復しつつ参照確率に一貫して一致するモデルは存在しなかった。
+
+**Why it matters:** サンプル品質ではなく分布でワールドモデルを評価する初のベンチマークであり、報告された結果は勝利ではなくギャップ——ビデオワールドモデルが因果/動的利用からどれほど遠いかを示す冷静な測定だ。
+
+[`🔗 arXiv 2608.27345`](https://arxiv.org/abs/2608.27345) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.27345)
+
+---
+
+## 42. GitNexus v1.6.10——「ゼロサーバー」コード知識グラフ + Graph RAG エージェントがトレンド #5 に
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 46k stars · v1.6.10 (Aug 27)
+- **Tags:** `code-knowledge-graph` `graph-rag` `mcp-server` `code-intelligence`
+
+abhigyanpatwari/GitNexus（46k スター、PolyForm Noncommercial）は任意のリポジトリをブラウザ内だけで完結するインタラクティブ知識グラフに変換し、内蔵 Graph RAG エージェントと CLI + MCP サーバーを備える。Claude Code/Cursor/Codex が索引付きグラフを照会できる。v1.6.10（8 月 27 日、「解決正確性リリース」）は 14 言語すべてで AST 構造からレシーバチェーンを型付けし、パス接尾辞の推測ではなく実際のモジュール設定（tsconfig、Go モジュールパス、Composer autoload、Python の re-export）からインポートを解決する——v1.6.9 から 396 コミット。本日 GitHub デイリートレンドの 5 位。
+
+**Why it matters:** エージェントのコンテキスト問題に根源から挑む——サーバーを立てずにリポジトリ全体の索引可能・照会可能なグラフを得られる、急速に統合が進む「エージェント向けコードインテリジェンス」分野の代表例だ。
+
+[`🔗 abhigyanpatwari/GitNexus`](https://github.com/abhigyanpatwari/GitNexus) · [`🔗 v1.6.10 リリースノート`](https://github.com/abhigyanpatwari/GitNexus/releases)
+
+---
+
+## 43. Needle 2——45M パラメータのツール呼び出しモデルが 14 MB バイナリで、スマホ・ウェアラブル・ロボット向けに
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / Hugging Face · 9.5k stars · Apache-2.0
+- **Tags:** `edge-ai` `tool-calling` `on-device-model` `wasm` `structured-extraction`
+
+cactus-compute/needle はツール呼び出し・デバイス操作・構造化抽出のためのオープンな 45M パラメータ基盤モデルで、約 14 MB の単一バイナリとして配布され、セッションは約 28 MB RAM で動作する——ARM64/x86-64/ARMv7/RISC-V と WebAssembly に対応。レスポンスごとの信頼度スコア付き構造化 JSON ツール呼び出しと、ツール検索ヘッド（ターンごとのトップ 5 ツール）を返し、cactus-needle Python パッケージ（LoRA + エクスポート）でエンドツーエンドに微調整可能。Needle 2 は直近 1 か月で Hugging Face で 36,738 ダウンロードを記録。
+
+**Why it matters:** 「エッジの小モデル」賭けが本番ツールへ成熟している——約 28 MB でオフラインの本格的な関数呼び出しと構造化抽出を実現し、デバイス/エージェントワークロードでクラウド往復と競合する。
+
+[`🔗 cactus-compute/needle`](https://github.com/cactus-compute/needle) · [`🔗 Needle 2 モデルカード`](https://huggingface.co/Cactus-Compute/needle2)
+
+---
+
+## 44. Vercel Run SDK——信頼できないエージェント生成コード向けオープンソースの堅牢化サンドボックス
+
+- **Velocity:** ▮▮ rising
+- **Source:** Vercel blog / GitHub · Aug 25 · Apache-2.0
+- **Tags:** `sandboxing` `vercel` `ai-sdk` `code-execution` `agent-security`
+
+Vercel は Run SDK（vercel-labs/run、Apache-2.0）をオープンソース化した：堅牢化された QuickJS コンテキスト内のワーカースレッドで、信頼できない JavaScript/TypeScript を実行。Node.js・ファイルシステム・ネットワークへの直接経路はなく、ホスト関数だけがアプリケーションへの橋渡しとなるため、コーディングエージェントは `store.listOrders` を呼べても認証情報には触れない。実行は人間の承認のために一時停止でき、署名トークンによる決定的リプレイで再開。タイムアウト・メモリ・QuickJS ヒープ・結果サイズの制限がある。just-bash の `js-exec` 層から抽出され、AI SDK の「code mode」を支える。
+
+**Why it matters:** ホストがツール境界を制御するサンドボックス化は、エージェントが（チャットだけでなく）行動できるようにするための核心プリミティブ。Vercel が AI SDK に組み込んだことで、安全なコード実行が後付けではなくデフォルトになる。
+
+[`🔗 Vercel ブログ——Introducing Run`](https://vercel.com/blog/introducing-run) · [`🔗 vercel-labs/run`](https://github.com/vercel-labs/run)
+
+---
+
+## 45. t3code——Claude Code・Codex・Cursor のエージェントセッションをスマホから操作
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub · 20.8k stars · v0.0.35 (Aug 27)
+- **Tags:** `agent-harness` `remote-dev` `claude-code` `codex` `mobile-dev`
+
+pingdotgg/t3code（MIT、Theo「t3」エコシステム）は、エージェント CLI——Claude Code、Codex、Cursor、Grok Build、OpenCode——のモバイル（iOS/Android）・Web・Electron コントロールサーフェス。どこからでもターミナルエージェントセッションを起動・監視・操作できる。v0.0.35 は 8 月 27 日リリース。npx・Homebrew・winget・AUR・アプリストアで導入可能。メンテナは非常に初期段階だと明言（「expect bugs」）。
+
+**Why it matters:** エージェントハーネスがローカル端末専用からリモートファーストのネットワーク製品へ移行している印。1 か月で 20k スターは、t3 コミュニティがコントロールサーフェス層に強く賭けていることを示す。
+
+[`🔗 pingdotgg/t3code`](https://github.com/pingdotgg/t3code) · [`🔗 v0.0.35 リリース`](https://github.com/pingdotgg/t3code/releases)
+
+---
+
+## 46. gh-aw——GitHub 自身のエージェントワークフローエンジンが v0.87.8 をリリース
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub CLI / release · v0.87.8 (Aug 28)
+- **Tags:** `github-cli` `agentic-workflows` `ci-cd` `actions`
+
+github/gh-aw（MIT、約 5k スター）は「AI 駆動のリポジトリ自動化」のための GitHub CLI 拡張：YAML frontmatter 付き Markdown でエージェントワークフローを定義し、`gh aw compile` がそれを検証して `.lock.yml` にコンパイル、GitHub Actions が実行する——issue トリアージ、PR レビュー、CI 失敗調査などの推論重視タスク向け。エージェントジョブはデフォルトでサンドボックス化され読み取り専用。書き込みは検証済み「safe-outputs」ジョブを通して適用。Copilot、Claude Code、Codex、Gemini、Pi に対応。v0.87.8（8 月 28 日）は課金に影響するバグにより 0.68.4–0.71.3 を廃止し、プロジェクトは週に複数回リリースしている。
+
+**Why it matters:** GitHub が独自のエージェント CI 抽象——エージェントをサンドボックス化・監査可能に保つ「Actions へのコンパイル」モデル——を出荷し、ほぼ日次で反復している。GitHub エコシステムにおけるエージェント自動化の行き先を示すバロメーターだ。
+
+[`🔗 github/gh-aw`](https://github.com/github/gh-aw) · [`🔗 v0.87.8 リリース`](https://github.com/github/gh-aw/releases)
+
+---
+
+## 47. 「The load-bearing vocabulary of Claude」——AI エージェントの文章が GitHub PR 説明の約 39% を占める
+
+- **Velocity:** ▮▮ rising
+- **Source:** louisabraham / Hacker News · 562 pts · Aug 27
+- **Tags:** `code-gen` `github` `data-analysis` `llm-output`
+
+「The load-bearing vocabulary of Claude」は GitHub Search API で毎日約 1,000 件の GitHub PR 説明を取得——461,121 件の説明、51,079,244 語の出現コーパス——語頻度に KL ダイバージェンス k-means を適用する。安定した 10 の語彙クラスタが見つかり、AI コーディングエージェントに特有のクラスタ（代表語：`load-bearing`、`seam`）は 2025 年初頭にコーパスの 0.7% だったのが、2026 年半ばには約 39% に。848 の異なるアカウントが `load-bearing` を使用している。また、GH Archive が 2025 年 10 月の Events API ペイロード変更で PR 説明テキストを黙って失い、素朴なデータソースを壊して検索 API 方式に追い込んだことも文書化されている。
+
+**Why it matters:** 「Claude 方言」がオープンソースの PR 文章を同質化していることのハードな計測——さらに、複数のツールが依存する GH Archive のデータ消失問題の独立した裏付けでもある。
+
+[`🔗 The load-bearing vocabulary of Claude`](https://louisabraham.github.io/load-bearing/) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=49461817)
+
+---
+
+## 48. Zero-Shot Self-Orchestration——manager-worker 台帳スキャフォールドは一部モデルに大差、他には無効（arXiv 2608.26480）
+
+- **Velocity:** ▮ rising
+- **Source:** arXiv · 2608.26480 · Aug 27
+- **Tags:** `agent-orchestration` `multi-agent` `coding` `cost-efficiency`
+
+研究（arXiv 2608.26480）は、共有ファイルシステムワークスペース上の訓練不要の manager-worker スキャフォールド——manager がメモの「台帳」を読み書きし、短い worker 呼び出しを委任する——を、100 問のハード LiveCodeBench 問題で 9 モデルの単一パスベースラインと比較した。効果は実在するが条件的：Qwen3.8-27B +23.4、GPT-5.6-Terra +8.0、Kimi-K3 +30.4（推論オフ）。一方で他のモデルでは無効か負（Qwen3.6-35B −1 〜 −9）。manager はトークンコストを約 3 倍にするが、モデルスケールより安く精度を買える——GPT-5.6-Terra + manager は Claude Fable 5 の単一パス精度（85.0 対 87.4）にほぼ匹敵し、価格は約 1/5。
+
+**Why it matters:** ここ数週間で最も有用なマルチエージェント結果は同時に最も正直——オーケストレーションの利得はモデル依存であり、このコスト対精度のトレードオフは予算制約下のエージェント展開で実用的なレバーだ。
+
+[`🔗 arXiv 2608.26480`](https://arxiv.org/abs/2608.26480) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.26480)
+
+---
+
+## 49. TTPO——ラベルなしテスト時ポリシー最適化が Qwen3-1.7B を +7.2 ポイント向上（arXiv 2608.27448）
+
+- **Velocity:** ▮ rising
+- **Source:** arXiv / Hugging Face Papers · 2608.27448 · 50 upvotes
+- **Tags:** `test-time-training` `rl` `reasoning` `distillation`
+
+TTPO（arXiv 2608.27448）は推論モデル向けの非対称テスト時訓練目標：多数決擬似ラベル（OPSD 経由）と一致するロールアウトを蒸留し、一致しないものをグループ化 RL でペナルティし、トークン単位の選択も行う。ラベルなしで競技レベル 5 ベンチマークの教師付き OPSD に匹敵し、Qwen3-1.7B をテスト時訓練で 38.0%→45.2% に引き上げ、「考えない」モードで +25.2 〜 +36.4 ポイント、強いクロスタスク汎化を示す。
+
+**Why it matters:** デプロイ中にモデルを改善し続ける具体的なラベルフリー手法——誤った 1 票が全トークンの教師を汚染する多数決擬似ラベルの脆弱性に正面から取り組む。
+
+[`🔗 arXiv 2608.27448`](https://arxiv.org/abs/2608.27448) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2608.27448)
+
+---
+
+## 50. N64 ゲームを 84 日でデコンパイル——AI 支援リバースエンジニアリングの限界
+
+- **Velocity:** ▮ steady
+- **Source:** blog.chrislewis.au / GitHub · Aug 27-28
+- **Tags:** `decompilation` `reverse-engineering` `n64` `ai-assisted-development`
+
+開発者が Snowboard Kids（N64）を 84 日で 100% デコンパイル——前作 Snowboard Kids 2 の約 596 日の約 1/7——フロンティア LLM（GPT-5.5/5.6、Claude 4.5/Fable、GLM 5.2、Codex）を Nigel ハーネスで 4 つの Git ワークツリーに編成して使用（2,145 関数）。難関は専有 SGI コンパイラ IDO 5.3 で、リバースエンジニアリングして静的再コンパイルする必要があった。その攻撃的なマルチパス変換により、バイト単位の一致は「芸術というより科学」で、m2c スクリプトは 1,830 関数中 17（0.93%）しか一致しなかった。人間の専門家が一致コミットの約 4.8% に貢献し、著者は彼らの IDO 知識なしでは「89–90% で行き詰まっていた」と見積もる。
+
+**Why it matters:** AI 支援デコンパイルがどこまで来たかの具体的データポイント（84 日 vs 約 600）——そして、人間の専門家だけが解決できた専有コンパイラの癖というハードな天井。
+
+[`🔗 blog.chrislewis.au`](https://blog.chrislewis.au/decompiling-a-nintendo-64-game-in-84-days/) · [`🔗 cdlewis/snowboardkids-decomp`](https://github.com/cdlewis/snowboardkids-decomp) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=49466006)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-28T04:10:00Z |
-| Items | 33 |
-| Sources tracked | 45 (Hacker News, GitHub, CISA, Hunt.io, DeepMind, RuntimeWire, NVIDIA, OpenAI, Search Engine Journal, The Next Web, MacMagazine, Shadowserver, eSecurityPlanet, arXiv, Hugging Face, The Hacker News, Cloud Security Alliance, TechCrunch, Engadget, Tenable, Chrome Releases, VulDB, Redwood Research, CGTN, prohoster, OpenNET, Cybernoz, AISecWatch, DEV Community, Spatial Intelligence, omarchy.org, Anthropic, Ars Technica, Business Insider, HPCwire, Cloudflare, Google, Gigazine, QiAnXin secrss, Redis, scirate, Zero RedGem, SecurityOnline, FFmpeg, Baidu) |
+| Generated | 2026-08-28T12:12:00Z |
+| Items | 50 |
+| Sources tracked | 58 (Hacker News, GitHub, CISA, Hunt.io, DeepMind, RuntimeWire, NVIDIA, OpenAI, Search Engine Journal, The Next Web, MacMagazine, Shadowserver, eSecurityPlanet, arXiv, Hugging Face, The Hacker News, Cloud Security Alliance, TechCrunch, Engadget, Tenable, Chrome Releases, VulDB, Redwood Research, CGTN, prohoster, OpenNET, Cybernoz, AISecWatch, DEV Community, Spatial Intelligence, omarchy.org, Anthropic, Ars Technica, Business Insider, HPCwire, Cloudflare, Google, Gigazine, QiAnXin secrss, Redis, scirate, Zero RedGem, SecurityOnline, FFmpeg, Baidu, PaperCut, Huntress, Rapid7, Wordfence, WPScan, NVD, Salesforce, Alibaba Cloud, Vercel, calv.info, blog.chrislewis.au, louisabraham, PingWest) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
