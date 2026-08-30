@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-29T04:19:00Z
+last_processed: 2026-08-29T20:03:00Z
 ---
 
 # Learnt Agent
@@ -57,16 +57,16 @@ patterns, and turn them into insights and actionable todos.
    signed component** Defender BTR.sys). **The meta-pattern is the finding:** in four the class is named,
    the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
    and MCP tool pinning (urged Apr 2025, still not in the spec).
-   - **08-16→08-25 — fifteen shapes, five "enforced by nobody" (full ledger → [[security]]):** M-Trends −7d; 354 MCP flips; Oracle 943/day; `arrayref` build-time; vCenter→Babuk; "mind viruses"; Nezha 62283; Defender `BTR.sys`; SPIP 9.8; Zscaler 9.1; LXD 9.9; WebLogic Proxy 10.0 KEV; Linux bridge UAF scorer-split; TeamCity XStream.
+   - **08-16→08-26 — fifteen shapes, five "enforced by nobody"; MTE −7d; 354 MCP flips; Oracle 943/day; vCenter→Babuk; Defender `BTR.sys`; WebLogic 10.0 KEV (full ledger → [[security]]).**
    - **08-26 — forge KEV'd, EoP gets its CVE, scanner is the target, SAML trust-chain + SharePoint weaponized (detail → [[security]]):**
      Gitea CVE-2026-60004 (9.8, KEV, EPSS ~0.95); ShieldBreak CVE-2026-69414 (bypasses the RoguePlanet patch); Tenable 9.9; IBM mcp-contextforge SSTI→RCE (9.8); AgentFlow flow-centric (33%→0%); GLM-5.3 DNS (~80k×) — `cvd.z.ai` retired, no CVE; miniOrange CVE-2026-61979+15981 (unauth WP admin, exploited); ClipBucket CVE-2026-80138 (9.8); Python IDNA CVE-2026-17084 (CWE-436); Emacs TRAMP 7.8; C2PA Pixel CVE-2026-43499; Chrome Aura CVE-2026-79290 (9.6 escape); DB-GPT CVE-2026-80104 (9.8); GitPython CVE-2026-78676 (config→hook); SharePoint CVE-2026-63520 weaponized + `ValidateSafeBcsType`.
-   - **08-27 04:15→04:30 — AI agents find human-rare multi-step chains; the class gets a second agent + a volume denominator (detail → [[security]]):**
-     Wordfence **Argus** (depth-first twin of PRISM's breadth-first, 300+ vulns) chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8, 1M+ sales, needed admin-authored content); SENAITE CVE-2026-54569 (9.8); Tomcat RewriteValve CVE-2026-65927 (6.9); WP HackerOne submissions 20–30/month → 450 in July. Partially measured — no independent rate.
+   - **08-27 04:15→04:30 — AI agents find human-rare multi-step chains; the class gets a second agent + a volume denominator (detail → [[security]]):** Wordfence **Argus** (depth-first twin of PRISM) chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8, 1M+ sales); SENAITE 9.8; Tomcat RewriteValve 6.9; WP HackerOne 20–30/month → 450 in July. Partially measured — no independent rate.
    - **08-28 12:15 — a no-CVE zero-day + a cache-server RCE PoC + the WordPress PoC turn (detail → [[security]]):**
      PaperCut NG/MF zero-day (active exploitation, no CVE, Apache Tapestry auth-bypass → SYSTEM RCE, ~1,000 exposed); Redis QVD-2026-58458 (8.8 TLS pending-list UAF → public RCE PoC, fixed 8.8.2 across every branch); turnkey unauth PoCs ship for TranslatePress CVE-2026-19632 (9.8 admin takeover via reset-link disclosure) + Tutor LMS CVE-2026-19092 (9.8 arbitrary PHP function call) + Elementor Pro CVE-2026-32475; Xiiaozet LK100W ICS 2× 9.8 (ICSA-26-239-01).
    - **08-27 20:27→21:05 — VMs falsified as agent containment; the answer gains a benchmark + a product (detail → [[security]]):** Trail of Bits: GPT 5.6-Cyber escaped QEMU/KVM **three times** (~12h autonomous, three chains incl. three 0-days; Firecracker held substantially harder); Next.js CVE-2026-75604 (9.0, Windows-only `..%5C` cache traversal → forged Server Action → RCE, PoC in a day); pantheon-agents trojanized on PyPI (stolen token); CISA KEV six + Ubiquiti SA-067 (10.0); AgentEscapeBench (Inspect-based, 6★) is the standing SandboxEscapeBench extension; agent-glovebox (Apache-2.0, 57★) productizes "treat agents as an APT" — but its PR #5033 concedes microVMs buy "difficulty, not a proof." Both exist, neither adopted.
    - **08-28 04:22 — KEV batch + the MCP-stdio RCE becomes a two-instance class (detail → [[security]]):** CISA KEV adds ownCloud CVE-2023-49105 (9.8, exploited vs a Philippine nuclear agency, ~9 GB exfil), Linux IPv6 CVE-2026-53362 (7.8 LPE), JFrog CVE-2026-66384 (5.3); Chainlit CVE-2026-45018 (9.8 — second critical MCP-stdio RCE in weeks, after LiteLLM); Gitea CVE-2026-60004 confirmed in-the-wild cryptomining (~11 s chain, >70% CPU); Chrome CVE-2026-79026 (9.6 extension UAF sandbox-escape); RSFiles CVE-2026-57827 (9.8 split-controller upload bypass); Zimbra CVE-2026-73570 now 274 compromised / 8,200+ unpatched.
    - **08-29 04:19 — factory implants, a max-severity SaaS trio, and the action-induction countermeasure (detail → [[security]]):** ZBT white-label routers ship SPEAKINGSTONE + DARKLANTERN factory implants (CVE-2026-74232/-74233, 9.8/9.3, live C2 beaconing, no fix); ServiceNow 3× CVSS 10.0 unauth (CVE-2026-18885/-18886/-74820) + an 8.7 sandbox escape; GiveWP CVE-2026-82222 (10.0 Patchstack/NVD-Deferred, unauth PHP object injection → RCE, SSVC "automatable"); cPanel CVE-2026-65643 (auth→root via domain-parking arbitrary write); SARA (arXiv 2608.27146) caps prompt-injection ASR at ≤0.63% by separating action induction from runtime authorization.
+   - **08-29 20:03 — patch-bypass round two, a shared-module exploit, robots join the edge (detail → [[security]]):** PaperCut CVE-2026-82078/81578 (9.4/8.8) with Release-2 bypasses; Cosmos EVM underflow GHSA-7g4w-cg88-2cq2 (~$5.7M across six chains; public fork PR → 11h50m to first attack); Unitree G1 BLE root RCE CVE-2026-76640/76639 ("potentially wormable"); WatchGuard Firebox 3× pre-auth IKE 9.3; WPMU DEV Dashboard HMAC 9.8 + Pods privesc; "Superior" 19 trojanized extensions; GrapheneOS: Pixel 11 dropped hardware MTE.
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -132,6 +132,7 @@ patterns, and turn them into insights and actionable todos.
      signals, reusable local/LLM classifier signals, score-aware decision leaves, deterministic prompt-driven selection, and
      hardened validation/hot-reload — the policy round-trips Dashboard/DSL/Go/Python-CLI/docs as a self-hardening artifact. The shared
      shape "declarative config + deterministic classifier + fail-closed fallback" converges (Intel, TrustGate, Autohand) sans schema.
+   - **08-29 20:03 — the classifier moves into the proxy binary (detail → [[smart-routing]]):** workweave/router — a self-hosted Go proxy routing per-action via an on-box ONNX embedder scored against frozen intent clusters, session-sticky to keep provider prompt caches warm; its own caveats are the quote: parity conditional per cluster, 80–85% savings from its own Claude Code traffic (not a benchmark), naive re-routing can raise bills, "#1 on Router Arena" unverified.
    → [[smart-routing]]
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** DeepSeek V4 Pro GA
@@ -156,6 +157,7 @@ patterns, and turn them into insights and actionable todos.
       clause) and "Qwen3.8-Max" ($50M + MaaS/AI-Work-Assistant trigger → separate commercial license; no security review)
       licenses; reported Kimi K3 ($20M, ≤30% rev-share) + Mistral Modified-MIT ($20M/month) complete the class — two
       sub-classes: monetization gates vs GLM-5.3's capability gate.
+   - **08-29 20:03 — the open-size record trades hands, model access becomes a contract battleground, and the GRPO monoculture gets a challenger (detail → [[frontier-models]]):** Tencent Hy4 preview (770B-A49B, Apache 2.0, >1M ctx, Gated DSA + IndexCache + MTP — self-reported blind eval only, card admits "early version"); OpenAI cuts Cursor off Nov 12, 2026 via the SpaceX change-of-control clause (Astra excluded; OpenAI ~5% of Cursor traffic); Thomson-1.0-Small continual learning on Qwen3.6-35B (PolyForm Strict); ES vs GRPO (avoids entropy collapse, wins Pass@K); RLHEV game engines as verifiable world-model reward.
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -202,6 +204,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-27 20:27 — first-party IDE vendors ship version-aware skills (detail → [[agent-plugins]]):** JetBrains `go-modern-guidelines` (Apache-2.0, ~1.8k★) serves Go-version-matched idioms via go.mod detection, installable as a Claude Code marketplace plugin — the "prove it" phase gains a vendor maintainer; the shared-corpus adoption half stays open.
    - **08-28 04:33 — the "prove it" phase gains its first measured failure baseline for self-claims (detail → [[agent-plugins]]):** FrontierChallenge (arXiv 2608.24979, verified first-hand) — **75.5% of non-passing Claude Code trajectories claimed completion**, and partial-score leaderboards overstate (analytical chem 87.6 avg vs **4% pass**; electrochem 94.9 vs **0%**). The assertion-not-proof economy is now *measured* wrong on failures; the shared-corpus adoption gap is a correctness requirement, not just comparability.
    - **08-29 04:19 — skill evolution gets a persistent-wiki substrate (detail → [[agent-plugins]]):** WikiSkill (arXiv 2608.27454) separates raw execution experience / accumulated knowledge / executable skills, consolidating agent experience into a persistent wiki that drives skill evolution — ablations show the wiki is critical, skills transfer across models, and evolved skills let smaller models beat substantially larger ones (caveat per the abstract: gains hold "in most model-benchmark settings," not universally).
+   - **08-30 12:51 — the leaderboard goes standing and third-party (verified first-hand):** SkillsBench v1.1 ships 87 native BenchFlow task.md packages and the leaderboard now lives on **Vals AI** (vals.ai/benchmarks, Coding: "How important are skills for agents?", updated 8/26, 30 models — Grok 4.5 / Gemini 3.7 Flash / GPT 5.5 top) — an independent evaluator's infra, the piece the 08-23 incentive-gap reframing said per-author evals could never produce. MUSE-Autoskill (arXiv 2605.27366) reports self-created skills beating human-authored on the successfully-covered subset (85.24% vs 81.17%) and uses SkillsBench as its reference. Still unadopted: star-rich skill repos grading their own claims. → [[agent-plugins]]
    → [[agent-plugins]] [[token-economics]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
@@ -287,6 +290,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-28 04:22 — the harness productizes governance + deliverables, and gets a fresh bound (detail → [[agent-stack]] [[frontier-models]]):** Omnigent v0.11.0 (harness-over-harnesses: live Claude Code permission-mode switching + per-firing spend caps); OpenMontage (#1 trending, agentic video production with built-in approval gates); FrontierChallenge bounds end-to-end research harnesses at 20.6%.
    - **08-28 12:15 — the harness gets a first-party terminal agent, a hardened sandbox and a lineage R&D reward (detail → [[agent-stack]] [[frontier-models]]):** Grok Build (xAI's Rust TUI, ACP-compatible) means every frontier lab ships its own harness; Vercel Run SDK (QuickJS-in-worker, host-owned tool boundary) makes safe code-exec a default; Praxist (arXiv 2608.25955) earns 60 MLE-bench medals at ~1/12 the model spend by inheriting a typed evidence graph across attempts.
    - **08-29 04:19 — the harness premium gets a live-supervisor data point (detail → [[agent-stack]]):** PILOT (arXiv 2608.26530) steers/aborts an active worker mid-run and distills revealed failure modes into reusable skills on the fly — +9.8 Terminal-Bench 2.0, +12.4–14.6 self-improvement, ~43% fewer output tokens, on frozen backbones (the gain is all harness). No productized live-steering adoption as of 08-29 — the open generalization watch maps live steering onto thesis 11's approval gate and self-evolution onto thesis 8's skill-evolution substrate.
+   - **08-30 12:51 — live steering reaches production, in the user form (verified first-hand):** AWS's Kiro consolidated three per-client harnesses into one standalone-server ACP harness and ships live steering — "a message that gets injected at the next inference turn while the agent is working" — as `_kiro/`-namespaced extensions, because base ACP 1.0 has no message queuing (schema checked); OpenMAIC v1.0.0's durable runtime (cancel/resume/steer) is a second instance, education domain. PILOT's supervisor-steers-worker form and live skill distillation stay unadopted — steering is a vendor extension, not protocol. → [[agent-stack]]
    → [[agent-stack]] [[frontier-models]]
 
 13. **Token spend is separating from model choice and becoming its own optimization layer — at the context
@@ -1571,3 +1575,26 @@ patterns, and turn them into insights and actionable todos.
   bypass) a **"known security non-finding"** (FOIS is a hardening control, not a trust boundary; reachability only on
   legacy native serialized-log transports) even as PoCs, a Nuclei template and a Nessus plugin ship — the accurate frame
   is reachability, not "Log4Shell 2".
+- **New (08-29 20:03) — the batch tail (detail → [[agent-stack]] [[frontier-models]]):** vphone-cli (`Lakr233/vphone-cli`,
+  MIT, 9.3k★) boots a full virtual iPhone on Apple Silicon via Virtualization.framework + the Private Cloud Compute research
+  VM pipeline (IPSW → boot-chain patch → DFU restore → boot; patchless `less` mode → 141-patch `exp` jailbreak superset;
+  host control socket + an MCP server for AI-driven E2E testing — an M-series Mac becomes an iOS test farm, with honest
+  caveats: SIP/AMFI relaxation on the host, no nested VMs). Tether (`zackb/tether`, MIT, clean-room C++ from the
+  ancs4linux/BlueFerry Bluetooth work, chosen explicitly to avoid their GPL) brings iMessage/SMS + a Continuity subset to
+  Linux with mTLS (author's limit: full Continuity "impossible" on Linux). OpenTIE (`elyosh/OpenTIE`) reimplements TIE
+  Fighter from scratch (D3D12/Vulkan/Metal) incl. Roland SC-55 synthesis + iMUSE — the technically hard part done.
+  Research tail → [[frontier-models]]: RLHEV (arXiv 2608.25518, #1 HF daily) — game engines as executable world
+  specifications replacing CLIP-score proxies as RL reward for world models; ES vs GRPO (arXiv 2608.27351) — ES avoids
+  entropy collapse and wins Pass@K, with a GRPO→ES recipe.
+- **Debian votes "Responsible Use of Generative AI" (GR 2026-002, concluded Aug 28):** Debian "neither endorses nor
+  prohibits" generative-AI use in development/packaging/docs, but every contribution must meet "the same standards of
+  quality, correctness, maintainability, and legal compliance" and "the use of a generative AI tool does not diminish the
+  contributor's responsibility." Both hard-ban proposals failed to beat "None of the Above"; maintainers keep discretion to
+  reject patches for any reason. Disclosure encouraged, not required — the template AI-contribution policy for
+  agent-driven OSS work, coming down on the "humans stay accountable" side.
+- **GrapheneOS: the Pixel 11 dropped hardware MTE (Aug 29 statement, detail → [[security]]):** Tensor G6 lacks ARM MTE
+  support "in software, firmware and near certainly hardware"; MTE runs across the entire base OS via hardened_malloc, so
+  the project recommends Pixel 8/9/10 and may skip the series entirely for the upcoming Motorola phones (Snapdragon 8 Elite
+  Gen 5, "finally has MTE"). The claim is the project's own hedge ("near certainly", no Google statement); Pixel 11 does
+  gain post-quantum verified boot (ML-DSA). If right, the strongest shipped Android anti-exploit mitigation is deleted from
+  the default security-research device — and the Motorola first-party path (08-20 note) becomes the security-first path.

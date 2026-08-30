@@ -1055,3 +1055,42 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 
 - **worktrunk v0.75.0（`max-sixty/worktrunk`，Rust，6.7k★）——明确"为并行运行 AI agent 而设计"的 worktree CLI。** 把 worktree 当作"像分支一样简单"：`wt switch -x claude -c feature-a -- 'Add auth'` 在一个全新 worktree 中拉起 agent；在 worktree 之间共享构建缓存（`target/`、`node_modules`），自动生成 LLM 提交信息，映射 PR 分支（`wt switch pr:123`）。v0.75.0（8 月 27 日）在 Git <2.43 上不可用，新增 unified-diff 选择器，修复 `wt list` 使 `.git/objects` 增长的问题。对并行 agent 瓶颈最直接的头部攻击——worktree-per-task 隔离原语（论点 1）产品化为独立 CLI。
 - **PILOT（arXiv 2608.26530）——实时操控活跃 agent 的 supervisor-worker harness。** 两个新机制："live steering"（执行期间重定向或中止活跃 worker）与"live self-evolution"（把暴露出的失败模式即时蒸馏成可复用技能）。横跨两个冻结骨干与三个基准，在六种配置的五个中排名第一：Terminal-Bench 2.0 最高 +9.8 分，+14.6（GLM-5.1）/ +12.4（Kimi-K2.6）自我改进增益，平均输出 token 下降 42.9–47.4%，每百万输出 token 的成功评估数上升 110–134%。因为骨干被冻结，全部增益都可归因于 harness——一个干净的论点 12 数据点，直击当前 harness"无法重定向活跃子 agent"的盲区。
+
+## 进入基金会孵化的运行时、教育多智能体、以及把记忆当 Datalog（08-29 20:03）
+
+- **Apache Maka（对 08-16→22 条目的日期更新）——agent 工作区进入 Apache 孵化器。** 仍是本地优先（Desktop/TUI/CLI）、
+  Apache-2.0、4.1k★（周榜 +1,876），开发活跃（8 月 30 日提交：Peer Mesh 中继发现、guest Turn 审批）。被锐化的事实：
+  "模型消息、工具调用、工具结果、权限决策与终止事件都记录为 append-only 日志"——以事件溯源审计踪迹作为运行时基底，配有沙箱
+  工具、自带模型连接与内置评测工具。README 注意点：尚无 Apache release（"用户必须从源码构建"）、Desktop 仅 Apple Silicon、
+  密钥存于本地明文文件、崩溃恢复默认关闭（耗 token）。agent 运行时进入基金会治理是类别成熟信号；带权限决策记录的 append-only
+  运行日志就是可审计、可移植性的基底。
+- **OpenMAIC v1.0.0（`THU-MAIC/OpenMAIC`，MIT，22.4k★，日榜 #4，+907/日）**——清华 THU-MAIC 的多智能体 AI 课堂（AI 教师 +
+  同学，含幻灯片、测验、仿真、白板、TTS）于 8 月 27 日跨过 1.0：新增 agent 工作台（"与规划你课程的 agent 对话"）、可取消/恢复/
+  引导的持久服务端 agent 运行时、20 个内置技能与 PostgreSQL 持久化。多智能体编排通常在编码任务上演示；这是一个 2.2 万星、有论文
+  背书的高校部署，把角色分离的 agent 编排用于教育——也是抵达 1.0 的最大 MIT 许可 agent 应用之一。注意点：开发用持久化令牌
+  "完全没有保密性与用户隔离"（仅限 localhost）、工作台默认关闭、内置 `mathml2omml` 在 MIT 仓库内保持 LGPL。
+- **Lemmalog（Jordy Zomer，pwning.systems）——把 agent 记忆当程序分析来做的系统，而文章标题先承认输给基线。** LLM 充当把杂乱
+  输入转成事实的概率前端；确定性 Datalog 引擎计算带撤回（依赖追踪的事实失效）、来源与时间有效区间的定点。诚实的结果：
+  LongMemEval 0.463 F1——**低于 PropMem 的 0.550**——但通过上下文少了约 38 倍（每题 2,700 vs 104,000 token），并在
+  Knowledge-Update 类目登顶（0.579）；LoCoMo 第三。作者明确拒绝宣称 Datalog 解决了 LLM 记忆：**瓶颈在抽取，不在推理。**
+  可迁移的是长时程 agent 的撤回/来源机制与这份诚实模板——一个头条里含着败绩的记忆系统写作，与 FrontierChallenge 75.5% 虚报完成
+  的发现同一形状（度量交付物、公布失误）。对记忆标准化条目的语境：又一个"带类型语义的记忆"实现，在 W3C CG 只标准化信封的同时自下而上出现。
+
+## 实时引导进入生产——Kiro 的统一 harness（08-30 12:51）
+
+- **AWS 的 Kiro "one agent, every surface"（在 kiro.dev 一手读过）——实时引导成为已出货的产品功能，以*用户*形态回答了
+  PILOT 观察的第一个条件。** Kiro 把三个按客户端各自构建的 agent（TypeScript IDE / Rust CLI / Python web）合并为
+  **一个独立服务进程的 harness**，以 **ACP（Agent Client Protocol，2026 年 6 月到达 1.0）**通信——harness 拥有 agent
+  循环、工具、子 agent、会话状态、配置、权限与引导；客户端（IDE、CLI、web、iOS）保持薄层，与传输无关（本地 stdio，云会话
+  走自定义 WebSocket 传输）。引导原话：**"我们加入了 live steering，用户可以在 agent 工作时发送一条消息，在下一次推理
+  回合注入，无需取消或等待就能塑造方向。ACP 不支持消息排队，所以我们用新的方法属性与通知扩展了 ACP 来实现实时引导。"**
+  在 ACP schema 处核实：基础 1.0 的 `session/prompt` 是原子的，回合中客户端能做的只有 `session/cancel` 与权限/elicitation
+  响应——所以引导虽已进入生产，却是 **`_kiro/` 命名空间的厂商扩展**（20+ agent 可调方法、15 个客户端可调方法、20 种通知
+  类型），不是协议本身。同一篇文章还值得注意：以 **Cedar** 作为唯一基于能力的权限语言（`fs_read`/`fs_write`/`shell`/
+  `web_fetch`/`mcp`/`subagent`，deny 恒胜、不可变安全不变量），取代三套互不相同的客户端权限语法；specs/hooks/自定义 agent
+  在所有界面统一。
+- **形态拆分就是发现：**出货的是*用户→agent*注入；PILOT 的两个机制——*监督者*在运行中途引导/中止活跃*工作者*，以及*运行中
+  技能蒸馏*（self-evolution）——截至 08-30 仍无任何产品化 harness 采用。第二个独立的引导实例：**OpenMAIC v1.0.0** 基于
+  PostgreSQL 的 agent 运行时（`lib/server/agent-runtime/`，租约执行）为其课程构建 agent 提供取消/恢复/引导——教育领域，
+  同为用户→agent 形态。接下来观察：监督者形态引导是否出现（多 agent harness 是自然归宿），以及引导是否会被收编进 ACP
+  基础协议而不是留在各家 `_namespace/` 扩展里——与 MCP 工具契约同样的"传输标准化、特性留在客户端"拆分。

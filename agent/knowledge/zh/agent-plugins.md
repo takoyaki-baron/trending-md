@@ -438,3 +438,19 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
 ## WikiSkill——持久化 wiki 的技能进化（08-29 04:19）
 
 - **WikiSkill（arXiv 2608.27454）——Google 研究者用持久化 wiki 协同进化 agent 技能。** 把原始执行经验、累积知识与可执行技能分开；持续把 agent 经验整合进一个持久化 wiki，再由其驱动技能进化。报告在多个基准与模型上稳定优于 SOTA 技能进化方法；消融显示持久化 wiki 至关重要、一个模型进化出的技能可迁移到其他模型、进化后的技能能让较小模型击败明显更大的模型。诚实的注意（按摘要）：相对无技能基线的增益"在大多数模型-基准设置中"成立，而非普遍成立。直击当前 agent 技能挖掘"优化历史散落各处"的失败——小模型+技能的发现是对成本敏感 agent 配置最承重的论断（论点 8 的证明阶段，如今有了 wiki 形状的基底）。
+
+## 排行榜走向常设第三方——SkillsBench 上架 Vals AI（08-30 12:51）
+
+- **"MMLU-for-skills" 的采用一半越过了它的门槛（一手核实）。** SkillsBench v1.1 现已提供 **87 个原生 BenchFlow task.md
+  包**（skillsbench.ai），排行榜落在 **Vals AI**——直接核对 `vals.ai/benchmarks`：Coding 分类下 **"SkillsBench——技能对
+  agent 有多重要？"**，更新于 2026-08-26，**已测 30 个模型**，榜首 **Grok 4.5 / Gemini 3.7 Flash / GPT 5.5**。这正是
+  08-23 激励缺口重构所说的必要形状：*一个由别人付费持续运行的常设第三方 harness*——Vals 是独立基准公司（Finance Agent、
+  Legal Agent、CyberBench），不是技能厂商。08-24 的注意（"快照，不是持续运行的 harness"）现已过时：它被托管、有版本
+  （v1.1）、并为可运行栈（BenchFlow）打包。
+- **MUSE-Autoskill（arXiv 2605.27366，在 arXiv 读过）——自创建技能在共享语料上可度量地超越人写技能。** "在 SkillsBench
+  上成功覆盖的子集里，其自创建技能超过人写技能（**85.24% vs 81.17%**）"，且 MUSE 创建的技能向 Hermes 的迁移优于 Codex 或
+  Claude 创建的（51.90%）。注意：该论文是把 SkillsBench 与 SkillLearnBench 当*参照*使用，而非宣称首创——更新的技能进化
+  工作现在以 SkillsBench 为对标物，这本身就是采用信号。WikiSkill（08-29）是同一自我进化方向的 wiki 基底兄弟。
+- **仍然开放的是：**市场上的*作者*依旧不给自己的说法打分——superpowers（274k★）、mattpocock/skills（211k★）、
+  `andrej-karpathy-skills`（205k★）与 caveman 的证据分级都没有附带 SkillsBench 分数。缺口已从"没有机制、没有常设 harness"
+  变成"没有作者提交"：排行榜存在，提交不存在。

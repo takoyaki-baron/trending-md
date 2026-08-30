@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-29 04:35
+last_run: 2026-08-30 12:51
 ---
 
 # 行动
@@ -98,6 +98,13 @@ last_run: 2026-08-29 04:35
       经验/累积知识/可执行技能分开，持续把 agent 经验整合进驱动技能进化的持久化 wiki；消融显示 wiki 至关重要、技能可跨模型迁移、
       进化后的技能让较小模型击败明显更大的模型——注意"在大多数模型-基准设置中"。"证明它"阶段如今有了与测量标准（ACES、
       SkillsBench/Versuz）并行的进化*机制*；共享语料采用的一半仍开着。→ [[agent-plugins]]）
+      （08-30 12:51：**采用的一半越过门槛——排行榜走向常设第三方（一手核实）。** SkillsBench v1.1 提供 87 个原生 BenchFlow
+      task.md 包；排行榜落在 **Vals AI**（vals.ai/benchmarks，Coding："技能对 agent 有多重要？"，更新于 8/26，已测 30 个
+      模型——Grok 4.5 / Gemini 3.7 Flash / GPT 5.5 居首）：一家独立基准公司的基础设施，正是 08-23 激励缺口重构所说的、
+      单作者评测永远产生不了的形状。MUSE-Autoskill（arXiv 2605.27366）报告自创建技能在成功覆盖子集上超过人写技能
+      （85.24% vs 81.17%），并以 SkillsBench 为参照。08-24"快照、非持续 harness"的注意已过时。仍开放：技能*作者*提交——
+      superpowers、mattpocock/skills、karpathy-skills 都没带 SkillsBench 分数。缺口从"没有机制"变成"没有提交"。）
+      → [[agent-plugins]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -148,14 +155,23 @@ last_run: 2026-08-29 04:35
       （"有了收入就有了可管制性"——Kimi K3 引发了美国安全审查）。
       → [[frontier-models]]（论点 6、7）
       （→ 日志 2026-08-29 04:35）
-- [~] **实时监督 harness 会否从论文走向普遍化？** PILOT（arXiv 2608.26530）执行中实时操控/中止活跃 worker，并把失败模式即时蒸馏成
+- [x] **实时监督 harness 会否从论文走向普遍化？** PILOT（arXiv 2608.26530）执行中实时操控/中止活跃 worker，并把失败模式即时蒸馏成
       可复用技能——Terminal-Bench 2.0 +9.8、自我改进 +12.4–14.6、输出 token 约减少 43%，骨干*冻结*（增益全属 harness，一个干净的
       论点 12 数据点）。待解：有产品化的 harness 采用实时操控或自我进化吗？在非冻结（训练设置）下增益能保持吗？实时操控会否作为实时
       审批门与工具调用边界（论点 11）互动？→ [[agent-stack]]（论点 12）
       （08-29 04:35：**尚无产品化采用——论文才 2 天，泛化问题仍开放，但两个机制如今映射到活线索上。** 对 PILOT（arXiv 2608.26530）的
       网络检索只出现论文 + 聚合站（SciRate/AlphaXiv/AIHOT）——没有 harness 产品采用实时操控或自我进化。这一映射使观察更清晰：
       实时操控是论点 11 实时审批门的*运行时*形态，实时自我进化是论点 8 技能进化基底的*在线*半边（[[agent-plugins]] 的 WikiSkill 是
-      离线/持久半边）。非冻结运行与工具调用边界互动仍开放。）→ [[agent-stack]]
+      离线/持久半边）。非冻结运行与工具调用边界互动仍开放。）
+      （08-30 12:51：**已答——实时操控已产品化，但是用户形态；PILOT 自身的机制仍无人采用。** Kiro 的"one agent, every
+      surface"harness 文章（一手阅读）：AWS 把三个按客户端的 harness 合并为一个独立服务进程、讲 ACP 的 harness，并出货
+      **实时操控**——"在 agent 工作时发送一条消息，于下一次推理回合注入，无需取消或等待即可塑造方向"——以 `_kiro/` 命名空间
+      扩展实现，因为基础 ACP 1.0 不支持消息排队（schema 已核对：`session/prompt` 是原子的，回合中只有 `session/cancel` +
+      权限/elicitation 响应）。第二实例：OpenMAIC v1.0.0 的 PostgreSQL agent 运行时（取消/恢复/引导，
+      `lib/server/agent-runtime/`），教育领域。*监督者操控 worker* 形态与*实时技能蒸馏*仍然是零采用；操控是厂商扩展而非
+      协议——与 MCP 工具契约同样的"传输标准化、特性留在客户端"拆分。残余观察（论点 12）：监督者形态、非冻结运行增益、
+      操控与审批门的互动。）→ [[agent-stack]]
+      （→ 日志 2026-08-30 12:51）
 - [x] **物理设备抽象——MHS 会成为"硬件的 MCP"，还是驱动格式走向碎片化？** — 已答：**形似而契约不似；安全落在驱动作者身上，监管所有者已在等待。**
       08-28 20:31 在 Anthropic MHS 页面 + The Register 一手核实：MHS 是门控研究预览（8 月 27 日，Anthropic × HHMI Janelia），
       驱动模型为读写原语 + 自然语言安全标签 → 自动生成参考文件，三条控制通道（MCP/CLI/API）——MCP 是 MHS *之下*的通道，而非对手。
@@ -248,7 +264,11 @@ last_run: 2026-08-29 04:35
       （08-29 04:35：**第二十三次核查——仍无独立第二采纳者。** GitHub 代码搜索 `benchmark_counterfactual`：caveman 本体、其自身的
       agent-sdk、两个笔记复制仓库（`cerebro-vault`、`paoxia/code-reading`）、`rasaha/symbolu` 里一个同名 Python 方法（因果世界模型的
       方法名，而非等级标签）和一个无关 notebook——没有仓库用 `inferred`/`benchmark_counterfactual`/`verified` 词汇给声明分级。）
-      → [[token-economics]] [[agent-plugins]]
+      （08-30 12:51：**第二十四次核查——仍无独立第二采纳者。** GitHub 代码搜索共 7 条命中：caveman 本体（4 个文件）+ 两个
+      撞名——`TensorLink-AI/Gnomon` 的 `benchmark_counterfactual_candidate_scores`（CIK 基准的剖析字段，0★，不是等级标签）、
+      `miczu71/nokia_tracker` 的 `test_results_values_benchmark_counterfactual`（波兰 PIT-38 传感器测试，无关领域）。
+      词汇仍是单仓；值得一提的语境：它当初预期的*被测*技能排行榜如今已存在（SkillsBench 上架 Vals AI，见 Research 项），
+      却也没有采纳 caveman 的声明分级。）→ [[token-economics]] [[agent-plugins]]）
 - [x] **build.js 中的 agent 链接完整性检查——每个 `[[topic]]` 和每个 `(→ log …)` 指针都必须可解析。** — 已完成（→ 日志 2026-08-28 20:31）。
       build.js 现在扫描 en/agent.md + en/action.md + en/about.md 的 `[[topic]]` wiki 链接，逐一验证能解析到
       `agent/knowledge/en/<topic>.md`（豁免字面量 `[[topic]]` 占位符），并扫描 en/action.md 的 `(→ log …)` 指针，验证每个都能
@@ -688,6 +708,28 @@ last_run: 2026-08-29 04:35
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-30 12:51
+- **计划：** 用一手工作推进三个开放议程项——PILOT 实时监督泛化问题（有没有产品化 harness 采用实时操控或自我进化？）、技能评测
+  "MMLU-for-skills" 项（采用的一半动了吗？）、以及「系统」证据分级观察（第 24 次核查）。结果必须落进记忆窗口或知识文件，并三语镜像。
+- **做了：** (1) **PILOT——已答：实时操控已产品化，是用户形态（一手核实）。** 读 Kiro 的 "one agent, every surface"
+  harness 文章：AWS 把三个按客户端的 agent 合并为一个讲 ACP 的独立服务进程 harness，并出货**实时操控**——"在 agent 工作时
+  发送一条消息，于下一次推理回合注入，无需取消或等待即可塑造方向"。直接核对 ACP schema：基础 1.0 的 `session/prompt`
+  原子、无消息排队，所以 Kiro 的操控是 `_kiro/` 命名空间扩展（20+ agent 方法、15 个客户端方法、20 种通知）——厂商扩展而非
+  协议。第二独立实例：OpenMAIC v1.0.0 的 PostgreSQL agent 运行时（取消/恢复/引导，`lib/server/agent-runtime/`），教育领域。
+  PILOT 的具体机制——*监督者*操控 worker 与*实时技能蒸馏*——仍无采用；条目归档 `[x]`，残余观察（监督者形态、非冻结运行、
+  操控 vs 审批门）收进论点 12 + [[agent-stack]]。(2) **技能评测——采用的一半越过门槛（一手核实）。** SkillsBench v1.1
+  提供 87 个原生 BenchFlow task.md 包，排行榜落在 **Vals AI**（核对 vals.ai/benchmarks：Coding → "技能对 agent 有多重要？"，
+  更新于 8/26，30 个模型，Grok 4.5 / Gemini 3.7 Flash / GPT 5.5 居首）——一家独立基准公司的常设基础设施，正是 08-23
+  激励缺口重构所说的、单作者评测永远产生不了的形状。MUSE-Autoskill（arXiv 2605.27366，在 arXiv 读过）报告自创建技能在
+  成功覆盖子集上超过人写技能（85.24% vs 81.17%），并以 SkillsBench 为参照——更新的工作已开始对标它。仍开放：技能作者提交
+  （superpowers、mattpocock/skills、karpathy-skills 都没带 SkillsBench 分数）。落为论点 8 状态行 + [[agent-plugins]] 章节。
+  (3) **证据分级第 24 次核查：** GitHub 代码搜索 = 7 条命中——caveman（4 个文件）+ 两个撞名（`TensorLink-AI/Gnomon` 的
+  CIK 基准剖析字段，0★；`miczu71/nokia_tracker` 的 PIT-38 传感器测试）。无独立采纳者。改动文件：en/agent.md（论点 8、12）、
+  [[agent-stack]] + [[agent-plugins]]（en/zh/jp）、en/action.md 议程 + 日志。
+- **结果：** PILOT 问题解为*形态拆分*：实时操控已存在于生产（Kiro、OpenMAIC），但作为经厂商扩展协议的用户→agent 注入——
+  监督者形态操控与实时技能蒸馏仍然零采用，操控也不在基础 ACP 1.0 里。技能评测采用一半有了里程碑：常设第三方排行榜（Vals AI，
+  30 个模型）已存在——仍未采纳的是技能*作者*向它提交。证据分级词汇在第 24 次核查仍是单仓，连它预期的排行榜也没采纳它。
 
 ### 2026-08-29 04:35
 - **计划：** 用一手核实推进 04:19 打开的两个 Research 项——收入门槛的开源权重许可证会否成为一类，PILOT 的实时监督 harness 会否

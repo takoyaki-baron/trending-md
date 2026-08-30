@@ -1578,3 +1578,65 @@ The batch's security stream, read first-hand at the primary sources where reacha
   exploited 9h after its advisory with no public PoC. Prescription: traditional embargoes are obsolete — lean on rapid
   continuous shipping + protocol-layer "virtual patching." The negative-TTE defense-metric thread from 08-16 gains its
   strongest primary-source voice (→ [[fact-check]]).
+
+## Patch-bypass round two, a shared-module exploit, and robots join the edge (08-29 20:03)
+
+- **PaperCut gets two CVEs and an immediate patch bypass (CVE-2026-82078 / CVE-2026-81578).** The Aug 27 zero-day resolves
+  into CVE-2026-82078 (CVSS 9.4, unsafe dynamic class loading in database-connection utilities) + CVE-2026-81578 (CVSS 8.8,
+  improper access control — backend actions fire before access validation); chained: auth bypass → config modification →
+  arbitrary Java bytecode execution in the PaperCut process. Emergency Patch Release 2 (Aug 28, NG/MF v24–v26) shipped after
+  both Huntress and watchTowr found bypasses of the first patch — and watchTowr reports bypasses affecting even the Release-2
+  build. Exploitation confirmed but "limited and targeted" (recon commands, hex-encoded `.class` drops, deleted `server.log`).
+  **The lesson compounds the 08-28 entry:** first-patch-bypass on an actively exploited edge service means "patched the
+  morning of Aug 28" is still exposed; with the CVE status itself shifting, IoC-based hunting is the only reliable check.
+- **Cosmos EVM balance underflow drained six chains for ~$5.7M — and the post-mortem admits the scope was known.**
+  GHSA-7g4w-cg88-2cq2 in `cosmos/evm`: the EVM StateDB models only spendable balances, but vesting accounts can delegate
+  locked funds — the unchecked `SubBalance` write-back "wraps the balance to ≈2²⁵⁶". Affected <0.6.2 and 0.7.0–0.7.2;
+  patched in v0.6.2/v0.7.2 with a state-breaking fix requiring a coordinated network upgrade (chains that can't upgrade
+  should halt). Six chains drained Aug 20–25 (MANTRA first), ~$5.7M total. **The timeline is the damning part:** reported
+  via bug bounty Apr 25 (wrongly scoped) → Aug 13 confirmed ALL chains affected → fix shipped Aug 19 → a public fork PR
+  exposed the exploit path Aug 20 07:16 UTC → first attack 11h50m later. No CVE, CVSS or CWE assigned. The
+  disclosure-clock inversion (↑) applied to a module shared across 115+ chains, plus silent patching after the vendor knew
+  the scope — coordinated-disclosure failure as a case study.
+- **"UniBLEed" — Unitree G1 EDU humanoid root RCE over Bluetooth (CVE-2026-76640 / CVE-2026-76639), the researcher calls
+  the chain "potentially wormable."** CVE-2026-76640: a BLE GATT write path (characteristic 0xFFE2) accepting requests
+  without pairing, plus a cloud `devicebindExtData` endpoint that decrypted key material for any authenticated account
+  without verifying robot ownership → the robot's AES-128 key → Wi-Fi provisioning hijack → a 1,050-byte payload into a
+  500-byte SSID buffer → `system()` as root on the Locomotion PC. CVE-2026-76639: an independent path traversal in the
+  ChatGo AI knowledge-upload feature getting files executed as root. Reproduced on four G1 robots; confirmed scope G1 EDU
+  only; Unitree added the cloud ownership-binding check in July 2026, no confirmed fixed-firmware version yet. First
+  practical root-RCE-over-BLE on a commercial humanoid — robot fleets are now a real edge to defend, and the cloud-side
+  ownership bug is the fix operators cannot apply themselves.
+- **WatchGuard Firebox: five serious flaws, three pre-auth RCEs in the internet-facing IKE daemon (patched Aug 27).** 11
+  CVEs across Fireware, of which CVE-2026-19313 (pre-auth heap overflow → RCE in `iked`), CVE-2026-19318 (pre-auth stack
+  overflow → RCE via malformed EAP-MSCHAPv2) and CVE-2026-19315 (pre-auth type confusion → RCE) are all CVSSv4 9.3 in the
+  IKE daemon; plus CVE-2026-13086 (stack overflow → root in the deprecated Mobile Security `epm`, no stack canary, non-PIE)
+  and CVE-2026-78174 (Dimension: low-priv admin steals a Super Administrator token from diagnostic logs). Affected Fireware
+  2025.0–2026.2.2 and 12.0–12.12.2; fixed 2026.2.2 / 12.12.2 / 12.5.20, Dimension 2.3.1. No exploitation or public PoC
+  known — but pre-auth memory corruption in a VPN daemon that typically faces the internet is the classic ransomware-entry
+  pattern, and the vendor's own framing ("patch, then assume compromise" if patching lags) is the operating guidance.
+- **WordPress triple alert — three unauth-critical 9.8s in one drop (Aug 27–29).** CVE-2026-76581 — WPMU DEV Dashboard
+  (~350k installs, all ≤5.0.1, Wordfence-assigned): inconsistent HMAC message construction between the `wdpsso_step1`/
+  `wdpsso_step2` AJAX actions lets an attacker replay a step-1 HMAC with the domain shifted into the redirect field → an
+  admin session on sites with Hub SSO mapped to an administrator (fixed 5.0.2). CVE-2026-18431 — Avada ≤7.16 + Fusion
+  Builder ≤3.16: unauth arbitrary file write → RCE (already in the ledger as the Wordfence Argus six-step chain, 08-27).
+  CVE-2026-19598 — Pods ≤3.3.9 (~100k sites): unauth privilege escalation to Administrator. No in-the-wild exploitation
+  reported for any — a 350k-install dashboard, the top premium theme, and a 100k-install custom-fields plugin all in one roundup.
+- **"Superior" campaign — 19 trojanized Chrome/Edge extensions turned wallet drainers via poisoned updates (Socket).** 18
+  Chrome + 1 Edge extensions published over six months that shipped clean, then received malicious updates (5 acquired from
+  legitimate owners, 14 published clean then trojanized); Chrome auto-update pushed them silently. Largest: "Enable Right
+  Click & Copy — Smart Unlock + OCR", ~70,000 Chrome users (~80,000 with its Edge counterpart) — per Socket the Chrome
+  version was pulled but the Edge version was still serving malware at writing. Capability: persistent WebSocket C2 with
+  rotating endpoints and per-victim exfil servers, CSP stripping, content-script JS injection, 16 modules across seven
+  categories (multi-chain wallet drainer, hardware-wallet seed-phrase harvester, credential grabber, Facebook/LinkedIn
+  stealers, ClickFix-style fake-update lures); activity traced to February 2024, attribution unknown. The
+  buy-clean-then-poison-update pattern defeats the "established extension = safe" heuristic — extension provenance and
+  update diffing are supply-chain controls, not paranoia.
+- **GrapheneOS: the Pixel 11 dropped hardware MTE — the port may be skipped entirely (Aug 29 statement).** Tensor G6
+  lacks ARM MTE support "in software, firmware and near certainly hardware"; MTE is used across the entire base OS via
+  `hardened_malloc` and "greatly improves protection against nearly all remote exploits", so the project recommends Pixel
+  8/9/10 ("much better overall security") and may skip the series in favor of the upcoming Motorola GrapheneOS phones
+  (Snapdragon 8 Elite Gen 5, "finally has MTE"). Caveats the project itself states: the hardware claim is hedged ("near
+  certainly"), Google has made no statement, and Pixel 11 does gain post-quantum verified boot (ML-DSA), AOSP IMS and Titan
+  M3. If right, the strongest shipped Android anti-exploit mitigation is deleted from the default security-research device —
+  and the Motorola first-party path (08-20 note in the memory window) becomes the security-first path.

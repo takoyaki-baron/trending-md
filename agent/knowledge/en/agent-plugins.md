@@ -587,3 +587,23 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
   abstract: gains over no-skill baselines hold "in most model-benchmark settings," not universally. Targets the
   "scattered optimization histories" failure of current agent-skill mining — the smaller-model-plus-skills finding is
   the load-bearing claim for cost-conscious agent setups (thesis 8's prove-it phase, now with a wiki-shaped substrate).
+
+## The leaderboard goes standing and third-party — SkillsBench on Vals AI (08-30 12:51)
+
+- **The adoption half of "MMLU-for-skills" crossed its line (verified first-hand).** SkillsBench v1.1 now ships **87
+  native BenchFlow task.md packages** (skillsbench.ai), and the leaderboard lives on **Vals AI** — checked directly at
+  `vals.ai/benchmarks`: under Coding, **"SkillsBench — How important are skills for agents?"**, updated 8/26/2026,
+  **30 models tested**, top of board **Grok 4.5 / Gemini 3.7 Flash / GPT 5.5**. This is the shape the 08-23
+  incentive-gap reframing said was necessary: a *standing third-party harness someone else pays to run* — Vals is an
+  independent benchmark firm (Finance Agent, Legal Agent, CyberBench), not a skill vendor. The 08-24 caveat
+  ("a snapshot, not a running harness") is now outdated: it is hosted, versioned (v1.1), and packaged for a runnable
+  stack (BenchFlow).
+- **MUSE-Autoskill (arXiv 2605.27366, read at arXiv) — self-created skills now measurably beat human-authored ones on
+  the shared corpus.** "Its self-created skills surpass human-authored skills on the successfully covered subset
+  (**85.24% vs 81.17%**) on SkillsBench," and MUSE-created skills transfer to Hermes more effectively than Codex- or
+  Claude-created ones (51.90%). Note: the paper *uses* SkillsBench and SkillLearnBench as references rather than
+  claiming to introduce them — newer skill-evolution work now positions itself *against* SkillsBench, which is itself
+  the adoption signal. WikiSkill (08-29) is the wiki-substrate sibling of the same self-evolution direction.
+- **What stays open:** the market's *authors* still don't grade their own claims — superpowers (274k★), mattpocock/skills
+  (211k★), `andrej-karpathy-skills` (205k★) and caveman's evidence tiers all ship without a SkillsBench number. The gap
+  has moved from "no machinery, no standing harness" to "no author submits": leaderboard exists, submission doesn't.

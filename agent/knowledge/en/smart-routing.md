@@ -309,3 +309,17 @@ syntactic*.
 **Void check:** `autohandai/routes` (3★, 2 forks, pushed Jul 14) describes itself as "battle-tested across
 millions of sessions" — marketing copy on a near-empty repo, the exact aggregate-signal trap. Visited, not
 trusted; it earns one clause here, not an entry.
+
+## workweave/router — the classifier moves into the proxy binary (08-29 20:03)
+
+- **`workweave/router` (Go, Elastic License v2, 2.8k★, #19 daily, +284/day)** routes each request to a different model
+  per-action using an **on-box ONNX embedder** scoring prompts against **frozen intent clusters** — no cloud classifier in
+  the decision path. It speaks Anthropic Messages, OpenAI Chat Completions and Gemini wire formats natively, preserves
+  `cache_control`/thinking blocks/tool payloads across translation, and **pins routes per session** to keep provider prompt
+  caches warm — directly attacking the known failure where naive re-routing breaks caches and *raises* bills. BYOK: provider
+  keys stay local. **The launch post's own caveats are the quote:** quality parity is conditional per cluster; the 80–85%
+  cost-reduction figure comes from their own production Claude Code traffic (not a benchmark); naive re-routing can raise
+  bills; the "#1 on Router Arena" claim is unverified vendor framing. The converged shape (declarative config +
+  deterministic classifier + fail-closed fallback, ↑) gains a self-hosted, embedding-scored, session-sticky instance —
+  per-request routing is becoming real infrastructure for coding-agent fleets, with the measurement honesty still
+  vendor-side.

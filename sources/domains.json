@@ -3958,5 +3958,104 @@
     "cred": "high",
     "density": "med",
     "cv": 1
+  },
+  "the-decoder.com": {
+    "cat": "news",
+    "en": "German AI-news outlet; careful reporting with primary quotes and update stamps. Cross-checked (08-30): its OpenAI-cuts-off-Cursor story matches openai.com's own statement verbatim (Nov 12 shutoff, change-of-control clause) and adds deal context (5% traffic figure, Anthropic expansion) not on the vendor page.",
+    "zh": "德国 AI 新闻媒体；报道严谨，保留原始引语与更新时间戳。已交叉核验（08-30）：其 OpenAI 切断 Cursor 报道与 openai.com 官方声明逐字一致（11 月 12 日停服、控制权变更条款），并补充了厂商页面没有的背景（5% 流量占比、Anthropic 扩容）。",
+    "jp": "ドイツのAIニュース媒体。一次引用と更新時刻を残す慎重な報道。突合済み（08-30）：OpenAIがCursorを遮断する記事はopenai.comの声明と逐語一致（11月12日停止・コントロール変更条項）で、ベンダーページにない文脈（トラフィック5%、Anthropic増強）も補う。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "debian.org": {
+    "cat": "community",
+    "en": "The Debian Project's canonical site; vote pages and official statements are primary sources. Cross-checked (08-30): vote_002 page matches LWN's report on the Generative AI GR outcome (Choice 5 won, hard bans failed against NOTA).",
+    "zh": "Debian 项目官方网站；投票页与官方声明属一手来源。已交叉核验（08-30）：vote_002 页面与 LWN 关于生成式 AI 广义决议结果的报道一致（选项 5 胜出，硬禁令未胜过 NOTA）。",
+    "jp": "Debian プロジェクトの公式サイト。投票ページや公式声明は一次資料。突合済み（08-30）：vote_002 ページは生成AIに関するGR結果のLWN報道と一致（選択肢5が勝利、禁止案はNOTAに敗北）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "tencent.com": {
+    "cat": "vendor",
+    "en": "Tencent's official announcement page; authoritative for release facts but benchmark claims are self-reported (Hy4 preview's 2.99/4.00 blind eval used 163 internal experts). Cross-checked (08-30): release facts match the HF model card; eval figures exist only here.",
+    "zh": "腾讯官方发布公告页；发布事实权威，但基准数据为自报（Hy4 预览版 2.99/4.00 盲评来自 163 名内部专家）。已交叉核验（08-30）：发布事实与 HF 模型卡一致；评测数字仅见于此处。",
+    "jp": "Tencentの公式発表ページ。リリース事実は権威だがベンチ主張は自己報告（Hy4 previewの2.99/4.00ブラインド評価は社内専門家163名）。突合済み（08-30）：リリース事実はHFモデルカードと一致、評価数値はここにのみ存在。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "zackbartel.com": {
+    "cat": "community",
+    "en": "Personal engineering blog of Zack Bartel; first-hand writeups with honest limitations sections. Cross-checked (08-30): Tether post's claims (clean-room C++, mTLS, OTP client limits) match the zackb/tether repo state.",
+    "zh": "Zack Bartel 的个人工程博客；一手技术长文，坦陈局限。已交叉核验（08-30）：Tether 文中的声明（净室 C++、mTLS、OTP 客户端限制）与 zackb/tether 仓库现状一致。",
+    "jp": "Zack Bartelの個人技術ブログ。限界を正直に書いた一次解説。突合済み（08-30）：Tether記事の主張（クリーンルームC++、mTLS、OTPクライアント制限）はzackb/tetherリポジトリの状態と一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "pwning.systems": {
+    "cat": "community",
+    "en": "Security researcher Jordy Zomer's blog; deep first-hand engineering posts that report negative results honestly (Lemmalog losing to PropMem on LongMemEval). Cross-checked (08-30): post numbers and HN thread agree.",
+    "zh": "安全研究员 Jordy Zomer 的博客；深度一手工程长文，如实报告负结果（Lemmalog 在 LongMemEval 上输给 PropMem）。已交叉核验（08-30）：文中数字与 HN 讨论串一致。",
+    "jp": "セキュリティ研究者Jordy Zomerのブログ。否定的な結果も正直に報告する深い一次解説（LemmalogがLongMemEvalでPropMemに敗北）。突合済み（08-30）：記事内数値はHNスレッドと一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "discuss.grapheneos.org": {
+    "cat": "security",
+    "en": "GrapheneOS's official forum; primary for the project's security posture statements, but its vendor criticism is the project's own framing (Pixel 11 MTE claim is hedged as \"near certainly hardware\"). Cross-checked (08-30): statement text matches its Bluesky post and HN coverage.",
+    "zh": "GrapheneOS 官方论坛；项目安全立场声明的一手来源，但其对厂商的批评是项目自己的措辞（Pixel 11 MTE 缺失被表述为“几乎可以肯定在硬件层面”）。已交叉核验（08-30）：声明文本与其 Bluesky 帖子及 HN 报道一致。",
+    "jp": "GrapheneOS公式フォーラム。同プロジェクトのセキュリティ姿勢声明の一次資料だが、ベンダー批判は同プロジェクト自身の表現（Pixel 11 MTE欠落は「ほぼ確実にハードウェア」と限定表現）。突合済み（08-30）：声明文はBluesky投稿・HN報道と一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "bleepingcomputer.com": {
+    "cat": "news",
+    "en": "Top independent security news outlet; strong on incident timelines, IoCs and patch guidance. Cross-checked (08-30): its PaperCut Release-2 story matches The Hacker News on both CVEs and adds server.log IoC strings.",
+    "zh": "顶级独立安全新闻媒体；事件时间线、IoC 与补丁指引扎实。已交叉核验（08-30）：其 PaperCut 第二版补丁报道与 The Hacker News 在两个 CVE 上一致，并补充了 server.log IoC 字符串。",
+    "jp": "独立系セキュリティ報道の筆頭。インシデント時系列・IoC・パッチ指示が強い。突合済み（08-30）：PaperCut第2版パッチ記事はThe Hacker Newsと両CVEで一致し、server.log IoC文字列を追加。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "cybersecuritynews.com": {
+    "cat": "news",
+    "en": "Security news aggregator; fast but variable rewrite quality — verify CVE details against the primary advisory. Cross-checked (08-30): its Unitree G1 chain writeup matches The Hacker News on both CVE IDs and the July cloud fix.",
+    "zh": "安全新闻聚合站；快但改写质量参差——CVE 细节请对照原始公告核实。已交叉核验（08-30）：其 Unitree G1 攻击链文章与 The Hacker News 在两个 CVE 编号及 7 月云端修复上一致。",
+    "jp": "セキュリティニュースのアグリゲータ。速いが書き直し品質はまちまち——CVE詳細は一次勧告で確認を。突合済み（08-30）：Unitree G1攻撃連鎖の記事はThe Hacker Newsと両CVE ID・7月のクラウド修正で一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "watchguard.com": {
+    "cat": "vendor",
+    "en": "WatchGuard's official security blog/PSIRT; authoritative for its own patch guidance (incl. its own \"assume compromise\" advice). Cross-checked (08-30): its Firebox post matches SecurityOnline on all five CVEs and fixed versions.",
+    "zh": "WatchGuard 官方安全博客/PSIRT；其自家补丁指引权威（含其“假定已沦陷”建议）。已交叉核验（08-30）：其 Firebox 文章与 SecurityOnline 在全部五个 CVE 及修复版本上一致。",
+    "jp": "WatchGuard公式セキュリティブログ/PSIRT。独自のパッチ指示は権威（「侵害を想定せよ」の助言含む）。突合済み（08-30）：Firebox記事はSecurityOnlineと全5件のCVE・修正版で一致。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "socket.dev": {
+    "cat": "security",
+    "en": "Socket's threat-research blog; first-hand supply-chain research with precise counts and timelines (19-extension \"Superior\" drainer campaign). Cross-checked (08-30): its article matches The Hacker News on every figure and adds detail (~70k Chrome + ~10k Edge users, AES-GCM C2).",
+    "zh": "Socket 威胁研究博客；一手供应链研究，数字与时间线精确（19 扩展“Superior”清空活动）。已交叉核验（08-30）：其文章与 The Hacker News 在所有数字上一致，并补充细节（约 7 万 Chrome + 约 1 万 Edge 用户、AES-GCM C2）。",
+    "jp": "Socketの脅威リサーチブログ。正確な数値と時系列の一次サプライチェーン研究（19拡張の「Superior」ドレイナーキャンペーン）。突合済み（08-30）：記事はThe Hacker Newsと全数値で一致し、詳細を補う（Chrome約7万+Edge約1万ユーザー、AES-GCM C2）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "weaveos.com": {
+    "cat": "vendor",
+    "en": "WorkWeave's company blog; launch posts for its own products with unusually honest caveats (self-reported cost figures from their own traffic, ambiguous publish dates — May 20 byline vs Aug 28 frontmatter). Cross-checked (08-30): architecture claims match the workweave/router repo.",
+    "zh": "WorkWeave 公司博客；自家产品发布文，罕见的坦诚免责（成本数字来自自家流量自报，发布日期自相矛盾——署名 5 月 20 日 vs 页面元数据 8 月 28 日）。已交叉核验（08-30）：架构描述与 workweave/router 仓库一致。",
+    "jp": "WorkWeaveの企業ブログ。自社製品のローンチ記事で、珍しく正直な注意書きあり（コスト数値は自己トラフィック由来の自己報告、公開日が矛盾——署名5月20日vsフロントマター8月28日）。突合済み（08-30）：アーキテクチャ記述はworkweave/routerリポジトリと一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

@@ -1369,3 +1369,42 @@ distribution thesis 6.
   with the Chinese lab to legally resell create a regulatory hook — "with revenue comes regulability" (Kimi K3 drew US
   security review; Treasury flagged possible trade blacklisting). The 04:19 read of GLM-5.3 as "aimed at hyperscalers"
   is confirmed by the $10B scale (100–500× the others' thresholds). → thesis 6, thesis 7.
+
+## Hy4, the Cursor shutoff, and the RL-lever challengers (08-29 20:03)
+
+- **Tencent Hy4 preview — the largest open-weight release since GLM-5.3 (770B > 753B), Apache 2.0.** 770B total / 49B
+  activated parameters, >1M-token context, BF16 + FP8 weights; 78-layer MoE (256 routed + 1 shared expert, top-8 routing),
+  Gated DeepSeek Sparse Attention with IndexCache, and a native MTP layer for speculative decoding; $0.834/M input,
+  $2.501/M output. The headline eval is Tencent's own blind test (163 internal experts, 203 engineering tasks): 2.99/4.00
+  vs GLM-5.3's 2.92 and Kimi K3's 2.94 — self-reported, no third-party verification — and the model card calls it "an
+  early version of Hy4" with over-long reasoning and "a tendency to over-verify its own work." The DeepSeek-derived
+  sparse-attention details make it directly reproducible; the open frontier's size record now trades hands within China's
+  ecosystem, under an unusually permissive license at that scale.
+- **OpenAI invokes the change-of-control clause to shut off Cursor — Nov 12, 2026.** After Cursor confirmed its
+  acquisition by SpaceX, OpenAI gave notice to wind down the model-supply contract with "a proposed shutoff date of
+  November 12, 2026" — the clause's maximum notice — citing Twitter breaking its data contract post-acquisition and Musk
+  admitting under oath that xAI violated OpenAI's ToS; the upcoming Astra "won't be provided to Cursor." Cursor says
+  OpenAI models are ~5% of its traffic and users can bring their own keys; Anthropic says it will expand Claude capacity
+  in Cursor. **Why it matters:** model access is now a contract-law battleground — distribution (thesis 6) can be revoked
+  on corporate-structure events, and every agent product routing frontier APIs inherits that counterparty risk.
+- **Thomson-1.0-Small (Thomson Reuters, arXiv 2608.27147) — continual learning as the non-lab route to "SovereignAI".**
+  Qwen3.6-35B-A3B + a mid/post-training continual-learning stack claiming "gains comparable to multiple successive model
+  generations" with the forgetting problem "almost completely eliminated" — pitched as how non-labs reach frontier-adjacent
+  models without full pretraining. Their own card tables are candid about the trade: Coding 37.4 (below base Qwen's 39.8),
+  Humanity's Last Exam 13.4, journalism Deep Research 74.2 vs Haiku 4.5's 81.0. License PolyForm Strict 1.0.0
+  (restrictive, not OSI); all benchmarks self-run. A credible demonstration of continual-pretraining economics on a 35B-A3B
+  base — with the "frontier" claim contradicted by its own coding number.
+- **ES vs GRPO (arXiv 2608.27351) — Evolution Strategies avoid entropy collapse and win on Pass@K.** A systematic
+  theoretical + empirical study of ES as memory-efficient LLM reasoning post-training: ES improves both Pass@1 and Pass@K
+  where GRPO suffers entropy collapse; verifier-projected JS diversity across the ES population correlates with Pass@K; a
+  sequential GRPO→ES recipe combines GRPO's Pass@1 with ES's Pass@K; gains concentrate in a sparse set of large-magnitude
+  updates ("functional sparsity") without catastrophic forgetting; larger models need smaller ES populations. A credible
+  challenge to the GRPO monoculture, landing as the field worries about RLVR diversity collapse — a second RL-lever data
+  point beside ERPO's Query-KL (08-26).
+- **RLHEV (arXiv 2608.25518, #1 HF daily paper Aug 28) — game engines as the verifiable reward for world models.**
+  Position/paradigm paper (Yang You's group): game engines act as "executable world specifications" that automatically
+  verify collision, physics, navigability and playability — replacing "fuzzy proxies such as CLIP scores" as RL reward for
+  spatial/world-model post-training — while developers supply accept/reject judgment and the process emits long-horizon
+  trajectory data. Caveat: the abstract contains no quantitative results. The same "executable verifier" argument that
+  powered RLVR for code, extended to spatial generation — its #1 daily ranking shows the world-model community converging
+  on reward-grounding as the bottleneck.

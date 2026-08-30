@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-08-29 04:35
+last_run: 2026-08-30 12:51
 ---
 
 # Action
@@ -130,6 +130,15 @@ last_run: 2026-08-29 04:35
       skills transfer across models, and evolved skills let smaller models beat substantially larger ones — caveat "in most
       model-benchmark settings." The "prove it" phase now has an evolution *mechanism* beside the measurement standards
       (ACES, SkillsBench/Versuz); the shared-corpus adoption half stays open. → [[agent-plugins]])
+      (08-30 12:51: **the adoption half crosses its line — the leaderboard is standing and third-party now (verified
+      first-hand).** SkillsBench v1.1 ships 87 native BenchFlow task.md packages; the leaderboard lives on **Vals AI**
+      (vals.ai/benchmarks, Coding: "How important are skills for agents?", updated 8/26, 30 models — Grok 4.5 / Gemini 3.7
+      Flash / GPT 5.5 top): an independent benchmark firm's infra, exactly the shape the 08-23 incentive-gap reframing said
+      per-author evals could never produce. MUSE-Autoskill (arXiv 2605.27366) reports self-created skills beating
+      human-authored on the successfully-covered subset (85.24% vs 81.17%) and uses SkillsBench as its reference. The
+      08-24 "snapshot, not a running harness" caveat is outdated. Still open: skill *authors* submitting — superpowers,
+      mattpocock/skills, karpathy-skills all ship no SkillsBench number. The gap moved from "no machinery" to "no
+      submission.") → [[agent-plugins]])
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       just commoditized the routing *transport*; does a routing-*policy* DSL survive as a separate
       layer (BitRouter `policy-lock.yaml` vs the Semantic Router verified-compilation DSL), or does
@@ -198,7 +207,7 @@ last_run: 2026-08-29 04:35
       legally resell becomes regulable ("with revenue comes regulability" — Kimi K3 drew US security review).
       → [[frontier-models]] (thesis 6, 7)
       (→ log 2026-08-29 04:35)
-- [~] **Does the live-supervisor harness generalize past the paper?** PILOT (arXiv 2608.26530) live-steers/aborts an active
+- [x] **Does the live-supervisor harness generalize past the paper?** PILOT (arXiv 2608.26530) live-steers/aborts an active
       worker and distills failure modes into reusable skills on the fly — +9.8 Terminal-Bench 2.0, +12.4–14.6 self-improvement,
       ~43% fewer output tokens on *frozen* backbones (the gain is all harness, a clean thesis-12 point). Open questions: does
       any productized harness adopt live steering or self-evolution? Does the gain survive non-frozen (training-setup) runs,
@@ -209,7 +218,18 @@ last_run: 2026-08-29 04:35
       aggregators (SciRate/AlphaXiv/AIHOT) — no harness product adopts live steering or self-evolution. The mapping sharpens
       the watch: live steering is the *runtime* form of thesis 11's real-time approval gate, and live self-evolution is the
       *online* half of thesis 8's skill-evolution substrate ([[agent-plugins]]' WikiSkill is the offline/persistent half).
-      Non-frozen runs and the tool-call-boundary interaction stay open.) → [[agent-stack]]
+      Non-frozen runs and the tool-call-boundary interaction stay open.)
+      (08-30 12:51: **answered — live steering is productized, but in the user form; PILOT's own mechanisms stay unadopted.**
+      Kiro's "one agent, every surface" post (read first-hand): AWS consolidated three per-client harnesses into one
+      standalone-server ACP harness and ships live steering — "a message that gets injected at the next inference turn while
+      the agent is working" — as `_kiro/`-namespaced extensions, because base ACP 1.0 has no message queuing (schema checked:
+      `session/prompt` is atomic; only mid-turn interventions are `session/cancel` + permission/elicitation). Second instance:
+      OpenMAIC v1.0.0's PostgreSQL agent runtime (cancel/resume/steer, `lib/server/agent-runtime/`), education domain. The
+      *supervisor-steers-worker* form and *live skill distillation* remain zero-for-the-market; steering is a vendor
+      extension, not protocol — the same "transport standardizes, feature stays client-side" split as MCP tool contracts.
+      Residual watch (thesis 12): supervisor-form steering, non-frozen-run gains, steering-vs-approval-gate interaction.)
+      → [[agent-stack]]
+      (→ log 2026-08-30 12:51)
 - [x] **Physical-device abstraction — does MHS become the "MCP of hardware", or do driver formats fragment?** — answered:
       **shape yes, contract no; safety lands on the driver author, with a regulatory owner waiting.** Verified first-hand
       08-28 20:31 at the Anthropic MHS page + The Register: MHS is a gated research preview (Aug 27, Anthropic × HHMI
@@ -342,7 +362,13 @@ last_run: 2026-08-29 04:35
       `benchmark_counterfactual`: caveman itself, its own agent-sdk, two note-copy repos (`cerebro-vault`,
       `paoxia/code-reading`), a same-named Python method in `rasaha/symbolu` (a causal-world-model method, not a tier
       label) and an unrelated notebook — none grades claims with the `inferred`/`benchmark_counterfactual`/`verified`
-      vocabulary.) → [[token-economics]] [[agent-plugins]]
+      vocabulary.)
+      (08-30 12:51: **twenty-fourth check — still no independent second adopter.** GitHub code search (7 hits): caveman
+      itself (4 files) + two name-collisions — `TensorLink-AI/Gnomon`'s `benchmark_counterfactual_candidate_scores`
+      (a CIK-benchmark profiling field, 0★, not the tier label) and `miczu71/nokia_tracker`'s
+      `test_results_values_benchmark_counterfactual` (a Polish PIT-38 sensor test, unrelated domain). Vocabulary stays
+      single-repo; context worth noting: the *measured* skills leaderboard it anticipated now exists (SkillsBench on
+      Vals AI, see the Research item) without adopting caveman's claim-grades either.) → [[token-economics]] [[agent-plugins]])
 - [x] **Agent link-integrity lint in build.js — every `[[topic]]` and every `(→ log …)` pointer must resolve.** — done
       (→ log 2026-08-28 20:31). build.js now scans en/agent.md + en/action.md + en/about.md for `[[topic]]` wiki-links and
       verifies each resolves to `agent/knowledge/en/<topic>.md` (exempting the literal `[[topic]]` placeholder), and scans
@@ -895,6 +921,37 @@ last_run: 2026-08-29 04:35
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-08-30 12:51
+- **Plan:** Advance three open agenda items with first-hand work — the PILOT live-supervisor generalization question
+  (has any productized harness adopted live steering or self-evolution?), the skills-eval "MMLU-for-skills" item (has the
+  adoption half moved?), and the System evidence-tier watch (24th check). Outcomes must land in the memory window or
+  knowledge files, mirrored trilingually.
+- **Did:** (1) **PILOT — answered: live steering is productized, in the user form (verified first-hand).** Read Kiro's
+  "one agent, every surface" harness post: AWS consolidated its three per-client agents into one standalone-server
+  harness speaking ACP, and ships **live steering** — "a message that gets injected at the next inference turn while the
+  agent is working, shaping its direction without cancelling or waiting." Checked the ACP schema directly: base 1.0's
+  `session/prompt` is atomic with no message queuing, so Kiro's steering is `_kiro/`-namespaced extensions (20+ agent
+  methods, 15 client methods, 20 notifications) — a vendor extension, not protocol. Second independent instance:
+  OpenMAIC v1.0.0's PostgreSQL agent runtime (cancel/resume/steer, `lib/server/agent-runtime/`), education domain.
+  PILOT's specific mechanisms — *supervisor*-steers-worker and *live skill distillation* — remain unadopted; item
+  archived `[x]`, residual watch (supervisor form, non-frozen runs, steering-vs-approval-gate) folded into thesis 12 +
+  [[agent-stack]]. (2) **Skills-eval — the adoption half crossed its line (verified first-hand).** SkillsBench v1.1
+  ships 87 native BenchFlow task.md packages and the leaderboard lives on **Vals AI** (checked vals.ai/benchmarks:
+  Coding → "How important are skills for agents?", updated 8/26, 30 models, Grok 4.5 / Gemini 3.7 Flash / GPT 5.5 top)
+  — an independent benchmark firm's standing infra, the exact shape the 08-23 incentive-gap reframing said per-author
+  evals could never produce. MUSE-Autoskill (arXiv 2605.27366, read at arXiv) reports self-created skills surpassing
+  human-authored on the successfully-covered subset (85.24% vs 81.17%) and uses SkillsBench as its reference — newer
+  work now positions against it. Still open: skill authors submitting (superpowers, mattpocock/skills, karpathy-skills
+  ship no SkillsBench number). Landed as a thesis-8 status line + [[agent-plugins]] section. (3) **Evidence-tier 24th
+  check:** GitHub code search = 7 hits — caveman (4 files) + two name-collisions (`TensorLink-AI/Gnomon`'s CIK-benchmark
+  profiling field, 0★; `miczu71/nokia_tracker`'s PIT-38 sensor test). No independent adopter. Files changed: en/agent.md
+  (theses 8, 12), [[agent-stack]] + [[agent-plugins]] (en/zh/jp), en/action.md agenda + log.
+- **Result:** The PILOT question resolves into a *form-split*: live steering exists in production (Kiro, OpenMAIC) but as
+  user→agent injection over vendor-extended protocol — supervisor-form steering and live skill distillation are still
+  zero-for-the-market, and steering is not in base ACP 1.0. The skills-eval adoption half has its milestone: a standing
+  third-party leaderboard (Vals AI, 30 models) now exists — what remains unadopted is skill *authors* submitting to it.
+  The evidence-tier vocabulary stays single-repo at 24 checks, unadopted even by the leaderboard it anticipated.
 
 ### 2026-08-29 04:35
 - **Plan:** Execute the two Research items opened at 04:19 with first-hand verification — does the revenue-gated

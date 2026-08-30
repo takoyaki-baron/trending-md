@@ -1484,3 +1484,58 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   self-improvement gains, mean output tokens down 42.9–47.4%, successful evals per M output tokens up 110–134%. Because
   the backbones are frozen, the entire gain is attributable to the harness — a clean thesis-12 data point attacking the
   "can't redirect an active subagent" blind spot in current harnesses.
+
+## An incubating runtime, an education swarm, and memory as Datalog (08-29 20:03)
+
+- **Apache Maka (dated update to the 08-16→22 note) — the agent workspace now sits in the Apache Incubator.** Still
+  local-first (Desktop/TUI/CLI), Apache-2.0, 4.1k★ (+1,876/week on GitHub Trending weekly), development live (Aug 30
+  commits: Peer Mesh relay discovery, guest Turn approval). The sharpening fact: "model messages, tool calls, tool results,
+  permission decisions, and termination events are recorded as an append-only log" — an event-sourced audit trail as the
+  runtime's substrate, with sandboxed tools, BYO model connections and built-in eval tooling. Caveats from the README: no
+  Apache release exists yet ("users must build from source"), Desktop is Apple-Silicon-Mac-only, secrets live in a local
+  plaintext file, crash-resume is off by default (it consumes tokens). An agent runtime entering foundation governance is
+  the maturing-category signal; the append-only run log with recorded permission decisions is the auditable-portability
+  substrate.
+- **OpenMAIC v1.0.0 (`THU-MAIC/OpenMAIC`, MIT, 22.4k★, +907/day at #4 trending)** — Tsinghua THU-MAIC's multi-agent AI
+  classroom (AI teacher + classmates with slides, quizzes, simulations, whiteboard, TTS) crossed 1.0 (Aug 27) with an agent
+  workbench ("chat with an agent that plans your curriculum"), a durable server-backed agent runtime with
+  cancel/resume/steering, 20 built-in skills, and PostgreSQL persistence. Multi-agent orchestration is usually demoed on
+  coding tasks; this is a 22k-star, paper-backed university deployment of role-separated agent orchestration in education —
+  one of the largest MIT-licensed agent apps to reach 1.0. Caveats: the dev persistence token has "no confidentiality and
+  no user isolation whatsoever" (localhost only), the workbench is off by default, and the bundled `mathml2omml` stays
+  LGPL inside the MIT repo.
+- **Lemmalog (Jordy Zomer, pwning.systems) — agent memory treated as program analysis, and the writeup leads with losing to
+  the baseline.** The LLM acts as a probabilistic front-end converting messy input into facts; a deterministic Datalog
+  engine computes a fixed point with retractions (dependency-tracked fact invalidation), provenance, and temporal validity
+  intervals. Honest results: LongMemEval 0.463 F1 — **below PropMem's 0.550** — while passing ~38× less context (2,700 vs
+  104,000 tokens/question) and topping the Knowledge-Update category (0.579); third on LoCoMo. The author explicitly
+  declines to claim Datalog solved LLM memory: **extraction, not deduction, is the bottleneck.** The transferable ideas are
+  the retraction/provenance mechanism for long-horizon agents and the honesty template — a memory-system writeup whose
+  headline includes the loss, the same shape as FrontierChallenge's 75.5% false-completion finding (measure the deliverable,
+  publish the miss). Context for the memory-standardization note: another implementation of "memory with typed semantics",
+  arriving bottom-up while the W3C CG standardizes only the envelope.
+
+## Live steering reaches production — Kiro's unified harness (08-30 12:51)
+
+- **AWS's Kiro "one agent, every surface" (read first-hand at kiro.dev) — live steering is now a shipped product
+  feature, answering the PILOT watch's first condition in the *user* form.** Kiro consolidated its three per-client
+  agents (TypeScript IDE / Rust CLI / Python web) into **one standalone-server harness process** speaking
+  **ACP (Agent Client Protocol, 1.0 since June 2026)** — the harness owns the agent loop, tools, sub-agents, session
+  state, config, permissions and steering; clients (IDE, CLI, web, iOS) stay thin and transport-agnostic (stdio locally,
+  a custom WebSocket transport for cloud sessions). The steering quote: **"we added live steering so users can send a
+  message that gets injected at the next inference turn while the agent is working, shaping its direction without
+  cancelling or waiting. ACP does not support queuing messages, so we extended ACP with new method properties and
+  notifications to enable live steering."** Verified at the ACP schema: base 1.0's `session/prompt` is atomic and the
+  only mid-turn client interventions are `session/cancel` and permission/elicitation responses — so steering exists in
+  production but as **`_kiro/`-namespaced vendor extensions** (20+ agent-callable methods, 15 client-callable, 20
+  notification types), not protocol. Also notable in the same post: **Cedar** as the one capability-based permission
+  language (`fs_read`/`fs_write`/`shell`/`web_fetch`/`mcp`/`subagent`, deny-always-wins, immutable invariants) replacing
+  three divergent per-client permission syntaxes, and Kiro-ACP specs/hooks/custom-agents unified across surfaces.
+- **The form-split is the finding:** what shipped is *user→agent* injection; PILOT's two mechanisms — a *supervisor*
+  steering/aborting an active *worker* mid-run, and *live skill distillation* (self-evolution during the run) — remain
+  unadopted by any productized harness as of 08-30. A second, independent steering instance: **OpenMAIC v1.0.0**'s
+  PostgreSQL-backed agent runtime (`lib/server/agent-runtime/`, leased execution) ships cancel/resume/steer for its
+  course-building agent — education domain, same user→agent form. Watch next: does supervisor-form steering appear
+  (multi-agent harnesses are the natural home), and does steering get pulled *into* base ACP rather than living as
+  per-vendor `_namespace/` extensions — the same "transport standardizes, feature stays client-side" split as MCP's
+  tool contracts.

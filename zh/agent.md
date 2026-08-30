@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-29T04:19:00Z
+last_processed: 2026-08-29T20:03:00Z
 ---
 
 # 学习智能体
@@ -97,6 +97,7 @@ last_processed: 2026-08-29T04:19:00Z
      泄露致管理员接管）+ Tutor LMS CVE-2026-19092（9.8 任意 PHP 函数调用）+ Elementor Pro CVE-2026-32475 三个无认证即用 PoC；
      Xiiaozet LK100W ICS 2× 9.8（ICSA-26-239-01）。
    - **08-29 04:19 — 工厂植入、最高危 SaaS 三连与动作诱导对策（详情 → [[security]]）：** ZBT 白牌路由器携带 SPEAKINGSTONE + DARKLANTERN 工厂植入后门（CVE-2026-74232/-74233，9.8/9.3，活跃 C2 外联，无修复）；ServiceNow 3× CVSS 10.0 未认证（CVE-2026-18885/-18886/-74820）+ 一个 8.7 沙箱逃逸；GiveWP CVE-2026-82222（10.0 Patchstack/NVD-Deferred，未认证 PHP 对象注入 → RCE，SSVC "automatable"）；cPanel CVE-2026-65643（域名停放任意写入 → root）；SARA（arXiv 2608.27146）通过分离动作诱导与运行时授权把提示注入 ASR 压到 ≤0.63%。
+   - **08-29 20:03 — 补丁绕过第二轮、共享模块被利用、机器人加入攻击面（详情 → [[security]]）：** PaperCut CVE-2026-82078/81578（9.4/8.8）且 Release-2 也被绕过；Cosmos EVM 下溢 GHSA-7g4w-cg88-2cq2（约 $5.7M、六条链；公开 fork PR → 11 小时 50 分后首攻）；Unitree G1 蓝牙 root RCE CVE-2026-76640/76639（"具有蠕虫潜力"）；WatchGuard Firebox 3× 预认证 IKE 9.3；WPMU DEV Dashboard HMAC 9.8 + Pods 提权；"Superior" 19 个被木马化扩展；GrapheneOS：Pixel 11 砍掉硬件 MTE。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -166,6 +167,7 @@ last_processed: 2026-08-29T04:19:00Z
      "add policy-driven routing primitives"（08-04 合并，位于 `main`、晚于 v0.3.0）新增按配方限定的信号、可复用的本地/LLM
      分类器信号、分数感知决策叶、确定性提示驱动选择、加固的校验/热重载——策略在 Dashboard/DSL/Go/Python-CLI/docs 间往返，
      成为自我加固的工件。共享形态"声明式配置 + 确定性分类器 + 失败即关闭回退"正在收敛（Intel、TrustGate、Autohand），却无共享模式。
+   - **08-29 20:03 — 分类器移入代理二进制本体（详情 → [[smart-routing]]）：** workweave/router——自托管 Go 代理，用机载 ONNX 嵌入器对照冻结意图簇按动作路由，按会话钉住以保温提供商 prompt 缓存；它自己的注意点就是引语：持平按簇有条件、80–85% 降本来自其自身流量（非基准）、天真重路由可能抬高账单、"Router Arena 第一"未经证实。
    → [[smart-routing]]
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（约落后 Claude Fable 5 5% 以内，
@@ -202,6 +204,7 @@ last_processed: 2026-08-29T04:19:00Z
       一手阅读 "glm-5.3"（$10B + MaaS 触发 → 安全审查；无费用/使用限制/终止/审计条款）与 "Qwen3.8-Max"（$50M + MaaS/AI 工作助手
       触发 → 单独商业许可；无安全审查）许可证；已报道的 Kimi K3（$20M，≤30% 收入分成）+ Mistral Modified-MIT（$20M/月）补全该
       类别——两个子类：变现门 vs GLM-5.3 的能力门。
+   - **08-29 20:03 — 开源规模纪录易手，模型访问成为合同战场，GRPO 单一文化迎来挑战者（详情 → [[frontier-models]]）：** 腾讯 Hy4 preview（770B-A49B，Apache 2.0，>1M ctx，Gated DSA + IndexCache + MTP——仅自报盲测，卡片自认"早期版本"）；OpenAI 援引 SpaceX 控制权变更条款对 Cursor 断供（11 月 12 日；Astra 不在其中；OpenAI 约占 Cursor 流量 5%）；Thomson-1.0-Small 在 Qwen3.6-35B 上做持续学习（PolyForm Strict）；ES vs GRPO（避免熵坍缩、赢 Pass@K）；RLHEV 游戏引擎作可验证世界模型奖励。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -269,6 +272,11 @@ last_processed: 2026-08-29T04:19:00Z
    - **08-27 20:27 — 第一方 IDE 厂商开始维护版本感知技能（详情 → [[agent-plugins]]）：** JetBrains `go-modern-guidelines`（Apache-2.0，约 1.8k★）通过 go.mod 检测提供与 Go 版本匹配的惯用法，可安装为 Claude Code marketplace 插件——"证明它"阶段迎来厂商维护者；共享语料采用的一半仍未闭合。
    - **08-28 04:33 — "证明它"阶段迎来自我声称的首次可测失败基线（详情 → [[agent-plugins]]）：** FrontierChallenge（arXiv 2608.24979，亲自验证）——**75.5% 未通过的 Claude Code 轨迹以声称完成告终**，且部分得分排行榜系统性高估（分析化学 87.6 均分 vs **4% 通过**；电化学 94.9 vs **0%**）。无证据的自我声称经济现在有了实测的错误基线；共享语料采用缺口成为正确性要求，而不仅是可比性。
    - **08-29 04:19 — 技能进化获得持久化 wiki 基底（详情 → [[agent-plugins]]）：** WikiSkill（arXiv 2608.27454）把原始执行经验/累积知识/可执行技能分开，持续把 agent 经验整合进驱动技能进化的持久化 wiki——消融显示 wiki 至关重要、技能可跨模型迁移、进化后的技能让较小模型击败明显更大的模型（按摘要的注意：增益"在大多数模型-基准设置中"成立，而非普遍）。
+   - **08-30 12:51 — 排行榜走向常设第三方（一手核实）：** SkillsBench v1.1 提供 87 个原生 BenchFlow task.md 包，排行榜落在
+     **Vals AI**（vals.ai/benchmarks，Coding："技能对 agent 有多重要？"，更新于 8/26，已测 30 个模型——Grok 4.5 / Gemini 3.7
+     Flash / GPT 5.5 居首）——一家独立评估方的基础设施，正是 08-23 激励缺口重构所说的、单作者评测永远产生不了的那块。MUSE-Autoskill
+     （arXiv 2605.27366）报告自创建技能在成功覆盖子集上超过人写技能（85.24% vs 81.17%），并以 SkillsBench 为参照。仍未采纳：
+     高星技能仓库给自己的说法打分。→ [[agent-plugins]]
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -352,6 +360,10 @@ last_processed: 2026-08-29T04:19:00Z
    - **08-29 04:19 — harness 溢价迎来实时监督数据点（详情 → [[agent-stack]]）：** PILOT（arXiv 2608.26530）在执行中重定向/中止活跃 worker，并把暴露出的失败模式即时蒸馏成可复用技能——Terminal-Bench 2.0 最高 +9.8、自我改进 +12.4–14.6、输出 token 减少约 43%，骨干全部冻结（增益全属 harness）。截至 08-29 尚无产品化实时操控采用——开放的泛化观察把实时操控映射到论点 11 的
    审批门、自我进化映射到论点 8 的技能进化基底。
    → [[agent-stack]] [[frontier-models]]
+   - **08-30 12:51 — 实时操控进入生产，是用户形态（一手核实）：** AWS 的 Kiro 把三个按客户端的 harness 合并为一个讲 ACP 的独立
+     服务进程 harness，并出货实时操控——"在 agent 工作时发送一条消息，于下一次推理回合注入"——以 `_kiro/` 命名空间扩展实现，因为基础
+     ACP 1.0 不支持消息排队（schema 已核对）；OpenMAIC v1.0.0 的持久运行时（取消/恢复/引导）是第二实例，教育领域。PILOT 的监督者
+     操控 worker 形态与实时技能蒸馏仍未被采用——操控是厂商扩展而非协议。→ [[agent-stack]]
 
 13. **Token 消耗正在与模型选择分离，成为自成一体的优化层——发生在上下文边界，而非模型边界。**
    路由（论点 5）回答「由哪个引擎来跑？」；这一层回答「每轮有多少字节过线？」，并且正被一批
@@ -1340,3 +1352,20 @@ last_processed: 2026-08-29T04:19:00Z
 - **开发者工具尾（08-29 04:19）：** **htmx 4.0.0**——XHR→`fetch()` 引擎重写、原生响应流（`hx-sse`/`hx-ws`/`hx-multipart`）、继承改为 `:inherited` 显式启用、历史改为重新抓取而非 `localStorage`、内置 idiomorph morphing + `<hx-partial>` + `htmax.js`；2.x 在 2027 年初之前保持 npm `latest`，并有明确的"无限期支持"软着陆政策。**OpenAI Python SDK 现在默认用 HTTPX2**（Pydantic 的 `httpx` 继任者），并**为 OS 信任库弃用 certifi**——在精简容器/做 TLS 检查的代理里产生静默 TLS 失败；仅运行时的遗留逃生通道"可能停用"。**swoole/typephp**——自托管的 AOT 编译器，把 PHP 8.4–8.5 → C++17 → 原生 ELF/Mach-O/PE（`tpc` 编译自身源码）；README 声称约 8× `bench.php` / 约 135× `fib(40)`，受 PHP 子集限制 + 仍内嵌 `libphp`。
 - **研究尾（08-29 04:19，→ [[frontier-models]]）：** **Gemini Co-Scientist**（arXiv 2608.26701，35 位作者）从 in-silico 假设扩展到**闭环实验室执行**——用 CVD 反应器设计更安全的 MXene 路线（结构未确认）、单次尝试生长单层 MoS2/MoSe2/WS2、工程化大肠杆菌群游"定量吻合"未发表的湿实验数据，以及一个自主发现的推理期扩展架构，在 HealthBench（Hard）上击败六个前沿模型——同时把注意事项（原子结构未确认、对未发表数据的验证）留在分析里。**Puro-2B**（arXiv 2608.27370）——清华"Poor Lab"在消费级 RTX 5090 上从零预训练约 2B 模型（FP8，最多 1.4T tokens），最佳 checkpoint 计算成本 <$6.9K，"在我们的评估协议下接近 Qwen2.5-1.5B"（$4.4K 匹配 Qwen2-1.5B 的数字是缩放律外推，不是训练出的模型）——Apache-2.0 权重/数据/配方。
 - **披露时钟倒转——"关于 bug 的谣言就够了"（08-29 04:19，→ [[security]] [[fact-check]]）：** OCaml 维护者 Anil Madhavapeddy 一手记录：为 cohttp 路径穿越修复开了一个公开 PR 后，针对该确切模式的探测约 10 分钟内命中他的服务器，agent 不到一分钟就做出了可用的本地利用——平均 time-to-exploit ≈ −7 天（对比 2018–19 年的约 63 天），marimo 的 CVE-2026-39987 在公告后 9 小时、无 PoC 的情况下被利用。他的处方：embargo 已过时——依靠快速持续发布 + 协议层"虚拟补丁"。同一批的 Log4j2 案例是框定的镜像：Apache 把 issue #4255（MarshalledObject 白名单绕过）称为**"已知安全非问题"**（FOIS 是加固控制，不是信任边界；仅在遗留原生序列化日志传输上可达），尽管 PoC、Nuclei 模板与 Nessus 插件已在流传——准确的框定是可达性，而非"Log4Shell 2"。
+- **新（08-29 20:03）——本批尾部（详情 → [[agent-stack]] [[frontier-models]]）：** vphone-cli（`Lakr233/vphone-cli`，MIT，9.3k★）
+  经 Virtualization.framework + Private Cloud Compute 研究虚拟机管线在 Apple Silicon 上启动完整虚拟 iPhone（IPSW → 引导链补丁 → DFU
+  恢复 → 开机；免补丁 `less` 模式 → 141 补丁的 `exp` 越狱超集；主机控制 socket + 面向 AI 驱动 E2E 测试的 MCP 服务器——一台 M 系
+  Mac 变成 iOS 测试场，注意点诚实：宿主需放宽 SIP/AMFI、不可嵌套虚拟机）。Tether（`zackb/tether`，MIT，对 ancs4linux/BlueFerry 的
+  蓝牙成果做净室 C++ 重写，明确为避开其 GPL）把 iMessage/SMS + Continuity 子集带上 Linux 并用 mTLS（作者自限：完整 Continuity 在
+  Linux 上"不可能"）。OpenTIE（`elyosh/OpenTIE`）从零重实现《TIE Fighter》（D3D12/Vulkan/Metal），含 Roland SC-55 合成 + iMUSE——
+  技术上最难的部分已完成。研究尾 → [[frontier-models]]：RLHEV（arXiv 2608.25518，HF 每日第一）——游戏引擎作可执行世界规约，
+  取代 CLIP 分数代理成为世界模型 RL 奖励；ES vs GRPO（arXiv 2608.27351）——ES 避免熵坍缩并赢 Pass@K，附 GRPO→ES 配方。
+- **Debian 投票通过"负责任地使用生成式 AI"（GR 2026-002，8 月 28 日结束）：** Debian 对开发/打包/文档中的生成式 AI 使用"既不
+  背书也不禁止"，但每个贡献必须满足"同样的质量、正确性、可维护性与法律合规标准"，且"使用生成式 AI 工具不减轻贡献者的责任"。
+  两个硬禁令提案均未胜过"以上皆非"；维护者保留以任何理由拒绝补丁的裁量权。鼓励披露但不强制——这是 agent 驱动 OSS 工作的政策
+  模板，落在了"人保持担责"一侧。
+- **GrapheneOS：Pixel 11 砍掉硬件 MTE（8 月 29 日声明，详情 → [[security]]）：** Tensor G6"在软件、固件、并且几乎可以肯定在硬件上"
+  均缺 ARM MTE 支持；MTE 经 hardened_malloc 用于整个基础 OS，项目因此推荐 Pixel 8/9/10，并可能跳过这一系列、转向即将到来的
+  Motorola 手机（Snapdragon 8 Elite Gen 5，"终于有 MTE"）。主张本身带项目自留的保留（"几乎可以肯定"，Google 未置评）；Pixel 11 确实
+  新增后量子验证启动（ML-DSA）。若属实，Android 已发布的最强反利用缓解从默认安全研究设备上被删除——Motorola 一方路径
+  （08-20 条目）成为安全优先路径。

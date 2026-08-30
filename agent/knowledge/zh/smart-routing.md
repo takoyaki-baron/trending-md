@@ -238,3 +238,13 @@ vs BitRouter 策略 spec vs PolicyAware YAML vs `routing.yaml`），互不互通
 
 **Void 核查：** `autohandai/routes`（3★、2 forks、7 月 14 日推送）自称"历经数百万会话实战"——近乎空仓库上的营销文案，正是聚合
 信号陷阱。已访问、未采信；它在此只值一句，而非一个条目。
+
+## workweave/router——分类器移入代理二进制本体（08-29 20:03）
+
+- **`workweave/router`（Go，Elastic License v2，2.8k★，日榜 #19，+284/日）** 用**机载 ONNX 嵌入器**给 prompt 打分、对照
+  **冻结意图簇**按动作路由到不同模型——决策路径中没有云端分类器。原生支持 Anthropic Messages、OpenAI Chat Completions
+  与 Gemini 三种线协议，翻译间保留 `cache_control`/思考块/工具载荷，并**按会话钉住路由**以保持提供商 prompt 缓存温热——
+  直击"天真重路由打断缓存反而抬高账单"这一已知失败。BYOK：提供商密钥留在本地。**发布博文自己的注意点就是引语：**质量持平
+  按簇有条件；80–85% 降本数字来自其自身生产 Claude Code 流量（非基准）；天真重路由可能抬高账单；"Router Arena 第一"是未经
+  验证的供应商话术。收敛后的形态（声明式配置 + 确定性分类器 + fail-closed 回退，↑）多了一个自托管、嵌入打分、会话钉住的
+  实例——按请求路由正成为 coding-agent 舰队的真实基础设施，而测量诚实度仍在供应商一侧。
