@@ -1,8 +1,8 @@
 ---
 date: 2026-08-30
-updated: 2026-08-29T20:03:00Z
+updated: 2026-08-30T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -295,13 +295,195 @@ Thomson Reuters は Qwen3.6-35B-A3B をミッド/ポストトレーニングの�
 
 ---
 
+## 21. カリフォルニア州議会が Linux/オープンソースの年齢認証法適用除外を満場一致で可決
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 356+ pts · 158 comments · front page Aug 30
+- **Tags:** `california` `age-verification` `linux` `open-source` `policy`
+
+カリフォルニア州議会は、GPL、MIT、BSD、Apache ライセンスで配布されるソフトウェアを州の年齢認証法の適用から除外する法案を満場一致で可決した——Tom's Hardware の報道によれば、この 4 つのライセンスファミリーでリリースされるコードは同法の年齢認証要件の対象外となる。HN の議論（158 コメント）の中心は、除外がソフトウェアの*機能*ではなく*ライセンス*を基準に引かれているという点だ——つまり同一の機能でも、配布ライセンス次第で規制されるか否かが分かれる。留保：これは議会通過の段階であり、署名期限や知事の動向はこのフィードでは未確認だ。
+
+**Why it matters:** 年齢認証法はカリフォルニアでソフトウェアを配布するすべての人にとって現実のコンプライアンスリスクだ。ライセンスを鍵にした除外は新しい立法ドラフティングの選択であり、オープンソースプロジェクトとその上で動くエージェントに直接影響する——そして「ライセンスか機能か」の境界線こそ、今後の争点が着地する場所になる。
+
+[`🔗 Tom's Hardware`](https://www.tomshardware.com/software/linux/california-lawmakers-unanimously-pass-linux-exemption-from-age-verification-law-software-distributed-under-the-gpl-mit-bsd-and-apache-licenses-are-exempt) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49495372)
+
+---
+
+## 22. Dan Luu「Bug Blindness」——気にならなくなったバグこそ、出荷されているバグだ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 287+ pts · 177 comments · front page Aug 30
+- **Tags:** `software-quality` `dan-luu` `bug-blindness` `agents` `ux`
+
+Dan Luu 氏の新エッセイは、多くの人はバグに遭遇する回数が少ないのではなく、無意識の回避策のライブラリを構築して気にしなくなっているだけだと論じる：Microsoft で壊れたログインチェックを迂回するために Wi-Fi を切る、Google Docs のタイトル再入力前に一瞬待つ、子どもの頃に汚れたマウスボールに適応する。完全な内部者の盲目ぶりの記録（嫌われ者の教材システムが愛されていると本気で信じていた Blackboard 社員、コードが LCP 指標を不正操作して実際のページ読み込みを遅くしていたのに性能を褒めていた Discourse スタッフ）、SEO スパムまみれの Kagi 検索結果を擁護するファン、そして dogfooding が機能しない理由——従業員は気づかないうちに欠陥を回避してしまう。エージェントに関連する転回点：氏は現在、通常ユーザーのシミュレーションに LLM を使い、自分の観察が再現されることを確認しており、「低品質なソフトウェアを量産するのはかつてなく簡単になり、品質を改善するのもかつてなく簡単になった」と結ぶ——ただし、まず改善が可能だと気づいているチームに限る。脚注では、バグだらけの Claude にもかかわらず Anthropic が記録的成長を遂げたことに触れつつ、その非常口は極端なモデル優位を持つ者にしかないと論じている。
+
+**Why it matters:** エッセイの核心メカニズム——個人の回避策の蓄積による品質への盲目——は、人間のデモで訓練されたエージェントの失敗モードそのものでもあり、「LLM をテストユーザーにして、新しいユーザーが見つけるはずのバグが見つかるなら、あなたの dogfooding は嘘をつき続けてきた」という具体的なテストをチームに与える。
+
+[`🔗 danluu.com/bug-blind/`](https://danluu.com/bug-blind/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49494520)
+
+---
+
+## 23. Samsung の LPDDR5X-PIM——Hot Chips 2026 がインメモリコンピュート DRAM の詳細を、弱点も込みで公開
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 267+ pts · 104 comments · Chips and Cheese · Aug 29
+- **Tags:** `samsung` `pim` `lpddr` `hot-chips` `hardware`
+
+Chips and Cheese の Hot Chips 2026 深掘り記事が、Samsung の LPDDR5X-PIM を解剖する：標準的な LPDDR5X-9600 ダイの 16 バンクそれぞれに PIM ブロックを追加したもので——MAC ツリーに加え 1,024 ビット命令、4 kbit 活性化ベクトル、2 kbit スケールのレジスタファイルを備え——DRAM の行アドレスを「MMIO アドレスのようなもの」に転用することで*未修正の*メモリコントローラでも動作し、コントローラの並べ替えに耐える Address Align Mode を持つ。主張される性能：バンク全体の内部帯域 614 GB/s（従来アクセスは 76.8 GB/s）、4 ビット入力でパッケージあたり 2.4 TOPS、8 チップで約 9.6 INT8 TOPS——ほぼ Meteor Lake の NPU 相当、ただし 128 GB のシステムメモリを犠牲に。記事自身の留保こそが本題だ：PIM モードと通常アクセスは安全に共存できない（スレッドをまたいでも）、読み取りは副作用を持つため Samsung は PIM をアンキャッシュ可能としてマッピングすることを推奨——キャッシング、プリフェッチ、投機的実行が失われる——そして PIM ブロック同士は直接通信できずホスト経由のみ。入手時期の告知はなし。
+
+**Why it matters:** DRAM 内処理はオンデバイス LLM 推理のメモリウォールに対する最も現実的な近道だ——そしてこの解説の価値は、ベンダースライドが省略するプログラミングモデルのコスト（専用チャネル、アンキャッシュ可能なマッピング、バンク間通信なし）まで価格に織り込んでいる点にある。
+
+[`🔗 Chips and Cheese`](https://chipsandcheese.com/p/hot-chips-2026-samsungs-processing) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49487341)
+
+---
+
+## 24. EVE Online が Python 3 へ移行——240 万行の稼働中 MMO コードベースを本番環境で移行
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 371+ pts · 200 comments · Aug 25 · 発表 Aug 25
+- **Tags:** `eve-online` `python` `migration` `game-development` `legacy-code`
+
+EVE Online——2010 年から Stackless Python 2.7 で動き、最後のバージョン変更から 16 年——が Python 3 への移行を開始した。注目は数字だ：約 2 万ファイル・240 万行をスキャンした結果、95.9% はすでに両バージョンでコンパイルでき、ブロックする行は約 3,300 行のみ（旧式 print、`123L` の long、`<>` 演算子）。ステージ 1（2.7 で動きつつ Python 3 互換となる自動書き換え）は 7 月に Singularity でテストされ、23 年分のプレイヤーデータを持ち 1 日 23.75 時間稼働する本番サーバー Tranquility にパッチ 24.01 でデプロイされた。ステージ 2 は、両バージョンでコンパイルできるものの*挙動*が異なる（整数除算と浮動小数点除算など）約 20,000 行を対象に、人間のレビューを要する。CCP の成功基準：「完全に気づかれないこと」。
+
+**Why it matters:** 開発者の多くが目にする中で最大級の、稼働中サービスの Python 2→3 移行が公開で解説された事例だ——そしてその段階的戦略（まずコードをバイリンガルにし、人間の注意は意味論が分岐する箇所だけに使う）は、エージェント駆動のレガシーコード大規模リファクタに転用可能なプレイブックだ。
+
+[`🔗 EVE Online announcement`](https://www.eveonline.com/news/view/the-move-to-python-3-begins) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49433328)
+
+---
+
+## 25. 「TerminalFix」——Microsoft が、ファイル名を指定して実行を Windows Terminal に置き換えた ClickFix の変種を詳報
+
+- **Velocity:** ▮▮ rising
+- **Source:** Microsoft Threat Intelligence · blog Aug 28 · The Hacker News Aug 30
+- **Tags:** `clickfix` `social-engineering` `backdoor` `dll-sideloading` `microsoft`
+
+Microsoft 脅威インテリジェンスの TerminalFix 解説：侵害されたサイトが偽の Cloudflare Turnstile「私はロボットではありません」ページを表示し、被害者に PowerShell コマンドの貼り付けを誘導する——実行ダイアログではなく Windows Terminal へで、「複数行の複雑なスクリプトが正常に実行される可能性を高める」。攻撃チェーン：コマンドが正規バイナリ（`LockScreenContentServer.exe`）と悪意ある `dui70.dll` を含む ZIP を取得 → DLL サイドローディング → PNG ステガノグラフィに隠されたペイロード → レジストリ Run キーとスケジュールタスクによる永続化 → Active Directory 偵察 → 暗号化 WebSocket 上で任意の TCP をトンネルする Python リバーストンネルインプラント（`client.py`、C2 は `gitnow[.]dev:443`）、加えて `Invoke-Expression` で新コマンドを実行する永続的な PowerShell ファイル監視ループ。
+
+**Why it matters:** ClickFix は「Win+R のワンライナー」というシグネチャを乗り越えつつある——実際のターミナルでしか確実に動かない複数行スクリプトは、実行ダイアログに鍵を打った素朴な検知を破る。そしてリバーストンネル型バックドアは、C2 が被害者*だけでなく*被害者のネットワークから到達できる任意のホストに届くことを意味する。
+
+[`🔗 Microsoft Security Blog`](https://www.microsoft.com/en-us/security/blog/2026/08/28/terminalfix-campaign-deploys-reverse-tunnel-through-multistage-intrusion/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/terminalfix-uses-fake-cloudflare.html)
+
+---
+
+## 26. FreeCORE——iXsystems が手放した TrueNAS CORE をコミュニティが引き継ぐ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 118+ pts · 65 comments · Aug 30
+- **Tags:** `truenas` `freenas` `freebsd` `zfs` `open-source`
+
+FreeCORE（「TrueNAS CORE — continued」）は、開発終了した TrueNAS CORE 系統の独立した継続プロジェクトで、CORE 13.3 システムを FreeBSD 15 ベースへと前進させている。現行リリースは 15.0-U1（安定版）、ロードマップには 15.1。既存の TrueNAS CORE 13.3 システムは enrollment スクリプトでそのままアップグレードできる。プロジェクトチームは独立性を明示——iXsystems および FreeBSD Foundation とは提携・支援・承認の関係がない——開発は Codeberg で行われ（GitHub ミラーあり）、セキュリティ連絡先も掲載されている。商標の境界にも注意：TrueNAS® と FreeBSD® は iXsystems/財団の商標のまま、プロジェクトはライセンスヘッダーで原著作者をクレジットしている。
+
+**Why it matters:** FreeNAS→TrueNAS CORE の系統は、一世帯分の homelab と小規模環境のデフォルト ZFS NAS だった。これは古典的な「アップストリームが見放し、コミュニティが続ける」ハンドオフであり——しかも異例なほどクリーンなライセンスと商標衛生で行われている。
+
+[`🔗 freecore.org`](https://freecore.org/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49494856)
+
+---
+
+## 27. last30days-skill——すべてのウォールドガーデンを一度に調べる 60k スターのエージェントスキル
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 本日 +272 スター · 累計 60.3k · MIT
+- **Tags:** `agent-skills` `search` `research` `multi-platform` `claude`
+
+mvanhorn/last30days-skill は、Reddit、X、YouTube、HN、Polymarket、TikTok、GitHub、ウェブを並列に横断してトピックを調査し、編集者のランク付けではなく実際のエンゲージメント——upvote、いいね、予測市場の真金——で順位付けした引用付きブリーフを合成するエージェントスキルだ。「Google は編集者を集約する。/last30days は人々を検索する」というのが売りで、各ウォールドガーデンは持ち込みの API キーと Cookie でブリッジする。README によれば：v3.11.1（2026 年 7 月）、5 月の v3.3 以降 15 リリースで 175 件の PR をマージ、第一次級の OpenAI Codex 対応、新無料ソース（arXiv、Techmeme、Digg）、`doctor` ヘルスチェック、コミュニティによるセキュリティ強化（OpenSSF Scorecard、Semgrep、84% のテストカバレッジ）を含む。数字が求める懐疑心：README には自己申告の「GitHub Trending #1 Repository Of The Day」バッジが表示され、リポジトリは HN でほぼ無名（最高提出は 3 ポイント）——スター数だけが規模のシグナルで、このフィードはそれを独立に裏付けられなかった。
+
+**Why it matters:** 「エージェントをウォールドガーデンのブリッジにする」パターンの最も明快な実例だ——1 つのスキル、12 のプラットフォーム、エンゲージメント重み付きの合成——そしてその人気（本物なら）は、エージェントがデフォルトのリサーチインターフェースになりつつあることを示す。60k という数字は未検証のベンダー表示メタデータとして扱うべきだ。
+
+[`🔗 mvanhorn/last30days-skill`](https://github.com/mvanhorn/last30days-skill) · [`🔗 launch post`](https://www.lumify.ai/blog/introducing-last30days-skill)
+
+---
+
+## 28. UrbanGround——エージェントが香港の実スケール再現都市を探索し、長期ホライゾンのナビゲーションが崩壊する
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face daily papers · Aug 28 の #3 · 73 upvotes · arXiv 2608.27456
+- **Tags:** `embodied-agents` `benchmark` `spatial-reasoning` `city-scale` `navigation`
+
+UrbanGround（arXiv 2608.27456）は「この問いを検証可能にする最初のサンドボックス」だ：全土をカバーする 3D 地理空間データから構築された物理的に制約された香港の再現都市で、マルチモーダル LLM エージェントが一人称視点とインタラクティブマップを使って探索する。3 段階にエスカレートするタスク階層——能動的な観察後の空間質問への応答、より遠くより明示的でない目的地へのナビゲーション、経路変更と歩行者の動きへのロバスト性——を通じた発見は割れている：エージェントは視覚認識と短距離の空間推論で使える原子スキルを持つが、「方向づけと歩行者を意識した移動は依然として信頼できず」、探索が長引くと局所的能力が持続的な目標志向行動へ合成できず、誤りが蓄積して効果的な修正メカニズムが働かない。アブストラクトにヘッドライン指標はなく、定性的な分岐こそが結果だ。
+
+**Why it matters:** コーディングやウェブのエージェントで繰り返し観測されてきたのと同じ失敗シグネチャ（局所スキルは健在、誤り修正なし、長期ホライゾンでの合成崩壊）が都市スケールでも現れた——これは現在のエージェントアーキテクチャの性質であり、個々のドメインのベンチマーク設計の問題ではないことの証拠だ。
+
+[`🔗 arXiv 2608.27456`](https://arxiv.org/abs/2608.27456) · [`🔗 HF papers`](https://huggingface.co/papers/2608.27456)
+
+---
+
+## 29. Qubes OS QSB-118——copy-to-vm のエラーレポート経路から shell メタ文字が dom0 に届く
+
+- **Velocity:** ▮ steady
+- **Source:** Qubes OS security bulletin · QSB-118 公開 Aug 28 · HN Aug 30
+- **Tags:** `qubes-os` `dom0` `command-injection` `sandbox-escape` `qfile`
+
+QSB-118：`qvm-copy-to-vm` が dom0 *から*悪意ある qube へファイルをコピーすると、その qube は dom0 に任意のコマンドを注入できる——「攻撃者が Qubes OS を制御できるようになる」、つまりセキュリティモデルの完全な突破だ。チェーン：`qfile` プロトコルの転送確認が攻撃者制御のファイル名を dom0 へ運び戻す。エラー時、`sanitize_remote_filename()` は `' '` 未満と `'~'` 超の文字とダブルクォートしか除去せず、shell メタ文字はそのまま残る。`display_error()` は `kdialog`/`zenity` のコマンド文字列を組み立てて `system()` で実行する。前提条件：qube がすでに侵害されていること、ユーザーがコピーを開始すること——複合的だが現実的なハードルだ。VM 側のカピーツールは影響なし（shell ではなく `execlp` を使用）。修正は `qubes-core-dom0-linux` 4.3.22。
+
+**Why it matters:** エラー*報告*経路も攻撃面だという教科書的な教訓——Qubes でいまだ `system()` の呼び出しを許されていた唯一のコンポーネントが dom0 への橋になり、「表示用のサニタイズと shell 用のサニタイズ」の取り違えは、LLM 生成パッチがもっともらしく再導入しうるバグクラスそのものだ。
+
+[`🔗 QSB-118`](https://www.qubes-os.org/news/2026/08/29/qsb-118/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49496918)
+
+---
+
+## 30. Self-OPD——フローモデリングモデルのための、教師なし完全オンポリシー蒸留
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face daily papers · Aug 28 の #5 · 69 upvotes · arXiv 2608.26872
+- **Tags:** `distillation` `flow-matching` `teacher-free` `image-generation` `rl`
+
+Self-OPD（arXiv 26872）は、拡散/フローモデルのオンポリシー蒸留が抱える 2 つのコスト——タスク固有の教師の訓練コスト、および教師と生徒の分布ミスマッチが生成軌跡に沿って複利的に誤差を増幅すること——を狙う。その一手：生徒が自分自身を教師にする——各タイムステップで決定論的な次状態予測を K 個の確率的 SDE 候補に分岐し、ODE サンプラーでロールアウトし、決定論的な自己参照ベースラインに対する正規化アドバンテージを計算し、高アドバンテージの分岐が生徒を引き寄せ低アドバンテージの分岐が反発させる pull-push 目的関数を適用する。マルチ目的の整合は報酬レベルで融合。主張される結果：「タスク固有の教師なしで既存の RL および OPD 手法を上回る」——アブストラクトに数値はなく、この主張は要約ではなく本論の表に依存する。
+
+**Why it matters:** OPD から教師を取り除くのは、LLM で GRPO を安くしたのと同じ一手——モデル自身のサンプルから計算する群相対ベースラインだ——であり、今回は教師訓練コストが常套の反論だった画像生成に着地した。
+
+[`🔗 arXiv 2608.26872`](https://arxiv.org/abs/2608.26872) · [`🔗 HF papers`](https://huggingface.co/papers/2608.26872)
+
+---
+
+## 31. 「何が良いエージェントデータを作るのか？」——エージェント学習データを 4 部構成のオブジェクトとして扱うタクソノミー
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face daily papers · Aug 28 の #6 · 61 upvotes · arXiv 2608.27260
+- **Tags:** `agentic-data` `data-generation` `survey` `agents` `verifiers`
+
+ポジション/サーベイ論文（arXiv 27260）は、エージェントデータを因子分解されたオブジェクト (E, q, τ, v)——環境仕様、タスクシグナル、インタラクションの実現、オプションの検証器——としてモデル化し、生成パラダイムをその主要アンカーと依存構造で整理する。組織化のレンズは ACE：**A**ccuracy（グラウンディングされ内部整合のデータのサポート）、**C**omplexity（学習質量を*宣言された*学習者の能力との相対で配置）、div**E**rsity（カバレッジ対冗長性）。名指しされる傾向：実行にグラウンディングされた正確性、学習者相対の複雑さ、より豊かな多様性——核心の課題は「エージェントと環境が進化するにつれ、有効で情報的かつ非冗長な経験を割り当て続けること」と枠づけられる。定量的結果はなし。語彙を寄与する論文だ。
+
+**Why it matters:** エージェントデータパイプラインは氾濫しているのに、なぜ失敗するかを語る共有語彙がない。「複雑さは学習者との相対」と「検証器はオプション部品」を明示化することは、EnvHarness 型の環境シェーピング研究（8 月 25 日のカバレッジ参照）に共通の枠組みを与える。
+
+[`🔗 arXiv 2608.27260`](https://arxiv.org/abs/2608.27260) · [`🔗 HF papers`](https://huggingface.co/papers/2608.27260)
+
+---
+
+## 32. GameWAM——フレーム*と*入力を同時に生成してゲームをプレイする World-Action Model
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face daily papers · Aug 28 の #8 · 40 upvotes · arXiv 2608.26200
+- **Tags:** `world-models` `gui-agents` `game-playing` `flow-matching` `action-model`
+
+GameWAM（arXiv 26200）は「ネイティブな閉ループゲームプレイと GUI 制御」のための初の World-Action Model とされる：単一のモデルが、block-causal 条件づけとフローマッチングの下で並行する視覚生成過程と行動生成過程を介して、未来の視覚観察*と*実行可能なキーボード/マウス軌跡を共同生成し、モード別の予測分布で異種のゲームプレイ/GUI 制御を扱う。長期ホライゾンのインタラクションには block-cycle 制御を用いる——短い行動プレフィックスだけ実行した後、新しい観察から再計画する——そして「比較対象のエージェントより少ない実行ネイティブアクションで競争力のあるタスク成功率」（アブストラクトに数値なし）。最も興味深いのは、命名された失敗モード **LASI**（Low-frequency Action Source Imprinting）だ：条件づけが固定でも、*サンプルされた行動ソース*の低周波成分が生成されたカメラの大まかな動きを体系的に操る——生成制御におけるソース感受性の失敗だ。
+
+**Why it matters:** World-Action Model は GUI 自動化の「エージェント＝シミュレータのコントローラ」という終着点であり、LASI はテストすべきまったく新しい失敗クラスだ——コントローラは観察だけでなく、そこからサンプリングするノイズ分布によっても攪乱されうる。
+
+[`🔗 arXiv 2608.26200`](https://arxiv.org/abs/2608.26200) · [`🔗 HF papers`](https://huggingface.co/papers/2608.26200)
+
+---
+
+## 33. OpenSEO——MCP を話す、Semrush/Ahrefs のオープンソース代替
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · デイリー #14、本日 +517 スター · 累計 14.9k · MIT
+- **Tags:** `seo` `open-source` `mcp` `agents` `self-hosted`
+
+every-app/open-seo は、キーワードリサーチ、順位トラッキング、競合インサイト、バックリンク、サイト監査、「AI 可視性」——AI の回答がブランドをどう語るかという、追跡されつつある問い——をカバーする従量課金の SEO ツールキットだ。データは持ち込み（DataForSEO の API キーを自分で用意）、Docker か Cloudflare でセルフホストするか、月 10 ドルのホスト版を使う。そしてこのフィードに載った理由は、**MCP サーバー**を同梱している点だ——Claude Code クラスのエージェントが、コピペではなく SEO データを直接照会し操作できる。リポジトリ上に日付付きのリリースノートは見えず、成長（本日 +517）には単一の公表トリガーもない——エージェントエコシステムからの自然な引き合いと見なすのがよい。
+
+**Why it matters:** 垂直 SaaS は「オープンコア + MCP」パターンの次のフロンティアだ：堀は昔からアプリではなくデータライセンス（DataForSEO）にあった——アプリがオープンになりエージェントからアドレス可能になった瞬間、エージェントこそが SEO ダッシュボードになる。
+
+[`🔗 every-app/open-seo`](https://github.com/every-app/open-seo) · [`🔗 hosted version`](https://openseo.so/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-29T20:03:00Z |
-| Items | 20 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, OpenAI, Cursor, The Decoder, Debian, LWN, Tencent, Hugging Face, arXiv, pwning.systems, zackbartel.com, GrapheneOS, The Hacker News, BleepingComputer, Socket, Wordfence, WatchGuard, SecurityOnline, GHSA, weaveos.com, cybersecuritynews.com) |
+| Generated | 2026-08-30T12:03:00Z |
+| Items | 33 |
+| Sources tracked | 31 (Hacker News, GitHub Trending, OpenAI, Cursor, The Decoder, Debian, LWN, Tencent, Hugging Face, arXiv, pwning.systems, zackbartel.com, GrapheneOS, The Hacker News, BleepingComputer, Socket, Wordfence, WatchGuard, SecurityOnline, GHSA, weaveos.com, cybersecuritynews.com, Tom's Hardware, danluu.com, Chips and Cheese, eveonline.com, Microsoft Security Blog, freecore.org, qubes-os.org, lumify.ai) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

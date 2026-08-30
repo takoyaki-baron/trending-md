@@ -1,8 +1,8 @@
 ---
 date: 2026-08-30
-updated: 2026-08-29T20:03:00Z
+updated: 2026-08-30T12:03:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -295,13 +295,195 @@ Thomson Reuters 用一套 mid/post-training 持续学习栈改造 Qwen3.6-35B-A3
 
 ---
 
+## 21. 加州立法者全票通过 Linux/开源豁免——免于该州年龄验证法
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 356+ pts · 158 comments · front page Aug 30
+- **Tags:** `california` `age-verification` `linux` `open-source` `policy`
+
+加州立法机构全票通过该州年龄验证法的豁免条款，涵盖以 GPL、MIT、BSD 与 Apache 许可证分发的软件——据 Tom's Hardware 报道，以上述四种许可证家族发布的代码将不受该法年龄验证要求的约束。HN 讨论（158 条评论）的焦点在于豁免是围绕*许可证*而非软件的实际功能划定的——这意味着完全相同的功能可能仅因分发许可证的不同而受监管或不受监管。注意事项：本次为立法机构通过；本 feed 尚未核实州长签署期限或州长方面的动作。
+
+**Why it matters:** 年龄验证法规是任何在加州分发软件者的现实合规风险；以许可证为键的豁免是一种新颖的立法起草选择，直接影响开源项目以及构建其上的智能体——而"按许可证而非按功能"的边界正是未来争议的落点。
+
+[`🔗 Tom's Hardware`](https://www.tomshardware.com/software/linux/california-lawmakers-unanimously-pass-linux-exemption-from-age-verification-law-software-distributed-under-the-gpl-mit-bsd-and-apache-licenses-are-exempt) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49495372)
+
+---
+
+## 22. Dan Luu："Bug Blindness"——你不再注意到的 bug 正是上线的那一批
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 287+ pts · 177 comments · front page Aug 30
+- **Tags:** `software-quality` `dan-luu` `bug-blindness` `agents` `ux`
+
+Dan Luu 的新文章指出，大多数人并非遇到更少的 bug——而是建立起了一套无意识的变通方法心理库，从此不再注意：在微软关掉 Wi-Fi 以绕过损坏的登录检查、在 Google Docs 重打标题前先等一下、小时候适应脏污的鼠标滚球。他记录了彻底的内部人盲视（一位 Blackboard 员工真心相信这个臭名昭著被讨厌的课程系统深受用户喜爱；Discourse 员工称赞性能，而代码在 LCP 指标上作弊、实际拖慢了真实页面的加载）、粉丝为满是 SEO 垃圾的 Kagi 结果辩护，以及 dogfooding 为何失效——员工在不知不觉中绕过了缺陷。与智能体相关的转折：他现在用 LLM 模拟普通用户来确认自己的观察可以复现，并总结道"做出低质量软件从未如此容易，改善质量也从未如此容易"——但前提是团队首先注意到改善是可能的。脚注提到 Anthropic 在 Claude 充满 bug 的情况下仍创下增长纪录，同时指出这种逃生通道只属于拥有极端模型优势的玩家。
+
+**Why it matters:** 文章的核心机制——由个人变通方法积累导致的质量盲视——同样是在人类演示上训练的智能体的失败模式，并且它给团队提供了一个具体的检验：如果你的"LLM 当测试用户"发现了一个新用户也会发现的 bug，说明你的 dogfooding 一直在骗你。
+
+[`🔗 danluu.com/bug-blind/`](https://danluu.com/bug-blind/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49494520)
+
+---
+
+## 23. 三星 LPDDR5X-PIM——Hot Chips 2026 公开存内计算 DRAM 的细节，包括缺陷
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 267+ pts · 104 comments · Chips and Cheese · Aug 29
+- **Tags:** `samsung` `pim` `lpddr` `hot-chips` `hardware`
+
+Chips and Cheese 的 Hot Chips 2026 深度解析拆解了三星的 LPDDR5X-PIM：在标准 LPDDR5X-9600 裸片的 16 个 bank 上各加一个 PIM 块——MAC 树加上 1,024 位指令、4 kbit 激活向量与 2 kbit 缩放寄存器堆——通过复用 DRAM 行地址（"类似 MMIO 地址"）在*未修改的*内存控制器上工作，并用地址对齐模式（Address Align Mode）容忍控制器的重排序。宣称指标：全 bank 内部带宽 614 GB/s，对传统访问的 76.8 GB/s；4-bit 输入下每封装 2.4 TOPS；八颗芯片约 9.6 INT8 TOPS——大致相当于 Meteor Lake 的 NPU，代价是占用 128 GB 系统内存。文章自己的保留意见才是重点：PIM 模式与普通访问无法安全共存（甚至跨线程也不行），读取带有副作用因此三星建议将 PIM 映射为不可缓存——牺牲缓存、预取与乱序/投机执行——且 PIM 块之间无法直接通信，只能经由主机。未给出任何上市时间。
+
+**Why it matters:** 存内处理是对端侧 LLM 推理内存墙最有希望的近期答案——而这篇解析的价值恰恰在于把厂商幻灯片省略的编程模型成本（保留通道、不可缓存映射、无 bank 间通信）计入了价格。
+
+[`🔗 Chips and Cheese`](https://chipsandcheese.com/p/hot-chips-2026-samsungs-processing) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49487341)
+
+---
+
+## 24. EVE Online 迁移到 Python 3——240 万行在线 MMO 代码库在生产环境完成迁移
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 371+ pts · 200 comments · Aug 25 · 公告 Aug 25
+- **Tags:** `eve-online` `python` `migration` `game-development` `legacy-code`
+
+EVE Online——自 2010 年起运行 Stackless Python 2.7，上一次版本变更已是 16 年前——开始向 Python 3 迁移。数字是最大的看点：扫描了约 2 万个文件共 240 万行代码，95.9% 已可在两个版本下编译，阻断行仅约 3,300 行（老式 print、`123L` 长整型、`<>` 运算符）。阶段 1（在 2.7 上运行但兼容 Python 3 的自动化改写）已于 7 月在 Singularity 测试服验证，并随 24.01 补丁部署到 Tranquility——那台保存着 23 年玩家数据、每天 23.75 小时在线的生产服务器。阶段 2 针对约 20,000 行在两个版本下都能编译但*行为*不同的代码（整除与浮点除法），需要人工审查。CCP 给出的成功标准："完全无感知"。
+
+**Why it matters:** 这是大多数开发者所能见到的被公开完整描述的最大规模在线服务 Python 2→3 迁移——其分阶段策略（先让代码双语兼容，只把人类注意力花在语义分歧处）是一套可迁移的剧本，适用于智能体驱动的遗留代码大规模重构。
+
+[`🔗 EVE Online announcement`](https://www.eveonline.com/news/view/the-move-to-python-3-begins) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49433328)
+
+---
+
+## 25. "TerminalFix"——微软披露用 Windows Terminal 取代运行对话框的 ClickFix 变种
+
+- **Velocity:** ▮▮ rising
+- **Source:** Microsoft Threat Intelligence · blog Aug 28 · The Hacker News Aug 30
+- **Tags:** `clickfix` `social-engineering` `backdoor` `dll-sideloading` `microsoft`
+
+微软威胁情报团队的 TerminalFix 报告：被入侵的网站显示伪造的 Cloudflare Turnstile"验证你是人类"页面，诱导受害者粘贴一条 PowerShell 命令——粘贴进 Windows Terminal 而非运行对话框，"提高了复杂多行脚本成功执行的概率"。攻击链：命令下载包含合法二进制（`LockScreenContentServer.exe`）与恶意 `dui70.dll` 的 ZIP → DLL 侧加载 → 藏在 PNG 隐写术中的载荷 → 经注册表 Run 键与计划任务持久化 → Active Directory 侦察 → Python 反向隧道植入体（`client.py`）经加密 WebSocket 隧道传输任意 TCP 流量（C2 位于 `gitnow[.]dev:443`），外加一个持久化的 PowerShell 文件监视循环，用 `Invoke-Expression` 执行新命令。
+
+**Why it matters:** ClickFix 正在超越其"Win+R 单行命令"的特征——只有在真实终端里才能可靠运行的多行脚本，会击穿以运行对话框为键位的朴素检测；而反向隧道后门意味着 C2 能到达受害者*网络内*的任何主机，而不只是受害者本身。
+
+[`🔗 Microsoft Security Blog`](https://www.microsoft.com/en-us/security/blog/2026/08/28/terminalfix-campaign-deploys-reverse-tunnel-through-multistage-intrusion/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/08/terminalfix-uses-fake-cloudflare.html)
+
+---
+
+## 26. FreeCORE——社区在 iXsystems 放弃之处接手 TrueNAS CORE
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 118+ pts · 65 comments · Aug 30
+- **Tags:** `truenas` `freenas` `freebsd` `zfs` `open-source`
+
+FreeCORE（"TrueNAS CORE——续作"）是对已停更的 TrueNAS CORE 产品线的独立延续，把 CORE 13.3 系统推进到 FreeBSD 15 基座上。当前版本：15.0-U1（稳定版），15.1 在路线图上；现有 TrueNAS CORE 13.3 系统可通过注册脚本原地升级。项目团队明确声明独立性——与 iXsystems 或 FreeBSD Foundation 无隶属、无赞助、未获背书——开发在 Codeberg 上进行（GitHub 镜像），并列有安全联络方式。注意商标边界：TrueNAS® 与 FreeBSD® 仍是 iXsystems/基金会的商标，项目在许可证头部署名了原作者。
+
+**Why it matters:** FreeNAS→TrueNAS CORE 这一脉曾是一代 homelab 与小型部署的默认 ZFS NAS；这是经典的"上游放弃、社区接续"交接——而且许可证与商标处理异常干净。
+
+[`🔗 freecore.org`](https://freecore.org/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49494856)
+
+---
+
+## 27. last30days-skill——一个 60k star 的智能体技能，同时横跨所有围墙花园做课题研究
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +272 stars today · 60.3k total · MIT
+- **Tags:** `agent-skills` `search` `research` `multi-platform` `claude`
+
+mvanhorn/last30days-skill 是一个智能体技能：并行横跨 Reddit、X、YouTube、HN、Polymarket、TikTok、GitHub 与全网研究一个主题，然后综合出一份带引用、按真实参与度（点赞、喜欢与预测市场真金白银）而非编辑排序的简报；其卖点是"Google 聚合的是编辑。/last30days 搜索的是人"，每座围墙花园都通过自带 API 密钥与 cookies 来桥接。据其 README：v3.11.1（2026 年 7 月），自 5 月 v3.3 以来 15 个发布合并了 175 个 PR，包括一流的 OpenAI Codex 支持、新免费源（arXiv、Techmeme、Digg）、`doctor` 健康检查，以及社区安全加固（OpenSSF Scorecard、Semgrep、84% 测试覆盖率）。这些数字应有的怀疑：README 展示了一枚自封的"GitHub Trending #1 Repository Of The Day"徽章，且该仓库在 HN 上几乎没有存在感（最高提交仅 3 分）——star 数是唯一的规模信号，本 feed 无法独立佐证。
+
+**Why it matters:** 这是"智能体作为围墙花园桥接器"模式最清晰的工作实例——一个技能、十几个平台、按参与度加权的综合——而它的流行（如果属实）说明智能体正在成为默认的研究界面。60k 这个数字应视为未经证实的厂商自述元数据。
+
+[`🔗 mvanhorn/last30days-skill`](https://github.com/mvanhorn/last30days-skill) · [`🔗 launch post`](https://www.lumify.ai/blog/introducing-last30days-skill)
+
+---
+
+## 28. UrbanGround——智能体探索 1:1 的香港复刻城，长程导航能力崩塌
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face daily papers · #3 for Aug 28 · 73 upvotes · arXiv 2608.27456
+- **Tags:** `embodied-agents` `benchmark` `spatial-reasoning` `city-scale` `navigation`
+
+UrbanGround（arXiv 2608.27456）自称是"首个让这个问题可被检验的沙箱"：用全境 3D 地理空间数据构建物理受限的香港复刻城，多模态 LLM 智能体以第一人称视角、借助交互式地图在其中探索。在三个递进任务层级上——主动观察后回答空间问题、导航到更远且更不显式的目的地、对路线变化与行人运动的鲁棒性——结论是分裂的：智能体在视觉识别与短程空间推理上拥有可用的原子技能，但"定向与顾及行人的移动仍然不可靠"，且随着探索延长，局部能力无法组合成持续的面向目标行为，误差不断累积而缺乏有效的纠错机制。摘要中没有头条指标——定性的分裂就是结果。
+
+**Why it matters:** 同一种失败特征（局部技能良好、无纠错、长程组合性崩塌）此前反复出现在编码与网页智能体上，如今在城市尺度再次出现——这说明它是当前智能体架构的属性，而非某个领域基准设计的问题。
+
+[`🔗 arXiv 2608.27456`](https://arxiv.org/abs/2608.27456) · [`🔗 HF papers`](https://huggingface.co/papers/2608.27456)
+
+---
+
+## 29. Qubes OS QSB-118——copy-to-VM 错误报告路径中的 shell 元字符泄漏直达 dom0
+
+- **Velocity:** ▮ steady
+- **Source:** Qubes OS security bulletin · QSB-118 published Aug 28 · HN Aug 30
+- **Tags:** `qubes-os` `dom0` `command-injection` `sandbox-escape` `qfile`
+
+QSB-118：如果 `qvm-copy-to-vm` 把文件*从 dom0*复制进一个恶意 qube，该 qube 可以向 dom0 注入任意命令——"使攻击者得以控制 Qubes OS"，即完整安全模型的失守。攻击链：`qfile` 协议的传输确认把攻击者控制的文件名带回 dom0；出错时，`sanitize_remote_filename()` 只过滤 `' '` 以下、`'~'` 以上的字符以及双引号，shell 元字符原样保留；`display_error()` 拼出 `kdialog`/`zenity` 命令字符串并用 `system()` 执行。前提条件：该 qube 必须已被入侵，且用户必须主动发起复制——门槛是复合的但现实可达。VM 侧的复制工具不受影响（用的是 `execlp` 而非 shell）。修复于 `qubes-core-dom0-linux` 4.3.22。
+
+**Why it matters:** 教科书式的教训：错误*报告*路径也是攻击面——Qubes 中唯一仍允许调用 `system()` 的组件成了打回 dom0 的桥，而"为显示净化、而非为 shell 净化"正是 LLM 生成的补丁最可能重新引入的 bug 类型。
+
+[`🔗 QSB-118`](https://www.qubes-os.org/news/2026/08/29/qsb-118/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=49496918)
+
+---
+
+## 30. Self-OPD——面向 flow-matching 模型的完全无教师在线策略蒸馏
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face daily papers · #5 for Aug 28 · 69 upvotes · arXiv 2608.26872
+- **Tags:** `distillation` `flow-matching` `teacher-free` `image-generation` `rl`
+
+Self-OPD（arXiv 26872）针对扩散/流模型在线策略蒸馏的两大成本：训练任务专属教师的开销，以及师生分布失配沿生成轨迹复利式放大的误差。它的做法：让学生监督自己——在每个时间步，把确定性的下一状态预测分叉成 K 个随机 SDE 候选，用 ODE 采样器 rollout，相对确定性的自参照基线计算归一化优势，然后施加拉推（pull-push）目标：高优势分支吸引学生、低优势分支排斥学生，多目标对齐在奖励层面融合。宣称结果："在没有任务专属教师的情况下优于既有 RL 与 OPD 方法"——摘要未给出数字，该主张依赖论文正文表格而非摘要。
+
+**Why it matters:** 从 OPD 中去掉教师，与当年让 GRPO 变便宜的竟是同一招——用模型自身样本算出的组相对基线——而这次落点在图像生成，那里教师训练成本一直是最站得住的反对理由。
+
+[`🔗 arXiv 2608.26872`](https://arxiv.org/abs/2608.26872) · [`🔗 HF papers`](https://huggingface.co/papers/2608.26872)
+
+---
+
+## 31. "什么才是好的智能体数据？"——把智能体训练数据当作四元对象来分类的框架
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face daily papers · #6 for Aug 28 · 61 upvotes · arXiv 2608.27260
+- **Tags:** `agentic-data` `data-generation` `survey` `agents` `verifiers`
+
+一篇立场/综述论文（arXiv 27260，作者来自华为诺亚方舟与上交大背景的团队）把智能体数据建模为因子化对象 (E, q, τ, v)——环境规格、任务信号、交互实现、可选验证器——然后按各自的主要锚点与依赖结构来组织生成范式。其组织性视角是 ACE：**A**ccuracy（有接地且内部一致的数据支撑）、**C**omplexity（学习质量相对于*声明的学习者*能力来摆放）、div**E**rsity（覆盖对冗余）。它点名的趋势：执行接地的准确性、学习者相对的复杂度、更丰富的多样性——核心挑战被框定为"随着智能体与环境演化，持续分配有效、有信息量且不冗余的经验"。没有定量结果；这是一篇贡献词汇表的论文。
+
+**Why it matters:** 智能体数据流水线泛滥，而业界缺少解释它们为何失败的共同语言；把"复杂度相对于学习者"与"验证器是可选组件"显式化，给了 EnvHarness 式的环境塑造工作（见我们 8 月 25 日的报道）一个共同的框架。
+
+[`🔗 arXiv 2608.27260`](https://arxiv.org/abs/2608.27260) · [`🔗 HF papers`](https://huggingface.co/papers/2608.27260)
+
+---
+
+## 32. GameWAM——同时生成画面*与*输入的世界-动作模型，用它玩游戏
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face daily papers · #8 for Aug 28 · 40 upvotes · arXiv 2608.26200
+- **Tags:** `world-models` `gui-agents` `game-playing` `flow-matching` `action-model`
+
+GameWAM（arXiv 26200）被称为首个面向"原生闭环游戏与 GUI 控制"的世界-动作模型（World-Action Model）：单一模型在块因果条件化与 flow matching 之下，经由并行的视觉与动作生成过程，联合生成未来视觉观察*与*可执行的键盘/鼠标轨迹，并用模式特定的预测分布处理异构的游戏/GUI 控制。对长程交互，它采用块循环控制——仅执行一小段动作前缀后即从新观察重新规划——并报告"以比对比智能体更少的原生动作取得有竞争力的任务成功率"（摘要未给数字）。最有意思的内容是它命名的一种失败模式：**LASI**（低频动作源印记，Low-frequency Action Source Imprinting）——即使条件固定，采样动作源的低频分量仍会系统性左右粗粒度的生成相机运动——这是生成式控制中一种对来源敏感的失败。
+
+**Why it matters:** 世界-动作模型是 GUI 自动化"智能体作为模拟器控制器"的终局形态，而 LASI 是一个真正值得新增测试的失败类别——你的控制器可能被它采样的噪声分布扰动，而不仅仅是被观察扰动。
+
+[`🔗 arXiv 2608.26200`](https://arxiv.org/abs/2608.26200) · [`🔗 HF papers`](https://huggingface.co/papers/2608.26200)
+
+---
+
+## 33. OpenSEO——会说 MCP 的开源 Semrush/Ahrefs 替代品
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · #14 daily, +517 stars today · 14.9k total · MIT
+- **Tags:** `seo` `open-source` `mcp` `agents` `self-hosted`
+
+every-app/open-seo 是一个按量付费的 SEO 工具箱，覆盖关键词研究、排名追踪、竞品洞察、外链、站点审计与"AI 可见度"——即 AI 回答如何评价一个品牌这一日益被追踪的问题。数据自带（需自备 DataForSEO API 密钥），可用 Docker 或 Cloudflare 自托管，也可用 $10/月的托管版——而它登上本 feed 的原因是它内置了 **MCP server**，Claude Code 一类智能体可以直接查询并操作 SEO 数据，而非靠复制粘贴。仓库上看不到带日期的发布说明，增长（今日 +517）也没有单一官宣触发点——视作智能体生态的自然拉动即可。
+
+**Why it matters:** 垂直 SaaS 是"开放核心 + MCP"模式的下一个前沿：护城河从来是数据许可（DataForSEO）而非应用本身——一旦应用开源且可被智能体寻址，智能体就成了 SEO 仪表盘。
+
+[`🔗 every-app/open-seo`](https://github.com/every-app/open-seo) · [`🔗 hosted version`](https://openseo.so/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-29T20:03:00Z |
-| Items | 20 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, OpenAI, Cursor, The Decoder, Debian, LWN, Tencent, Hugging Face, arXiv, pwning.systems, zackbartel.com, GrapheneOS, The Hacker News, BleepingComputer, Socket, Wordfence, WatchGuard, SecurityOnline, GHSA, weaveos.com, cybersecuritynews.com) |
+| Generated | 2026-08-30T12:03:00Z |
+| Items | 33 |
+| Sources tracked | 31 (Hacker News, GitHub Trending, OpenAI, Cursor, The Decoder, Debian, LWN, Tencent, Hugging Face, arXiv, pwning.systems, zackbartel.com, GrapheneOS, The Hacker News, BleepingComputer, Socket, Wordfence, WatchGuard, SecurityOnline, GHSA, weaveos.com, cybersecuritynews.com, Tom's Hardware, danluu.com, Chips and Cheese, eveonline.com, Microsoft Security Blog, freecore.org, qubes-os.org, lumify.ai) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
