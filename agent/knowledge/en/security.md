@@ -1640,3 +1640,22 @@ The batch's security stream, read first-hand at the primary sources where reacha
   certainly"), Google has made no statement, and Pixel 11 does gain post-quantum verified boot (ML-DSA), AOSP IMS and Titan
   M3. If right, the strongest shipped Android anti-exploit mitigation is deleted from the default security-research device —
   and the Motorola first-party path (08-20 note in the memory window) becomes the security-first path.
+
+## MCP ambient auth reaches GitOps; EOL routers and the self-hosted admin tail (08-31 04:15)
+
+- **argocd-mcp CVE-2026-82456 (CVSS 10.0, argoproj-labs, v0.8.0).** The HTTP transport binds to every
+  interface and accepts MCP sessions without validating caller credentials when `ARGOCD_API_TOKEN` is
+  configured — the token is read from the environment but never checked per-request, so anyone who can
+  reach the endpoint gets full Argo CD access (GitOps deploy manipulation → cluster resources). The
+  third critical MCP-server flaw in recent weeks (after LiteLLM and Chainlit) — "MCP server bound to
+  0.0.0.0 with ambient auth" is now a deployment-checklist item, and GitOps control planes are the
+  highest-leverage target in a cluster.
+- **D-Link DIR-825M firmware 1.1.8 — a batch of CVSS 9.9s through the boa web server**
+  (CVE-2026-82593 web management interface; CVE-2026-82592 command execution in
+  `/boafrm/formDiskFormat`; CVE-2026-82595 via `/boafrm/formSysCmd`). The same consumer-router shape
+  as the ZBT factory implants (08-29): EOL, internet-facing, pre-auth command execution, fixes
+  unlikely — the practical remediation is replacement.
+- **Cloud Commander CVE-2026-82460 (9.8, fixed 19.20.2).** Directory traversal in the `cloudcmd` npm
+  file manager's REST file-operation and markdown endpoints — unvalidated path input reads/writes
+  outside the intended root. The long tail of self-hosted Node admin tools is effectively shell access
+  with a UI — the class of endpoint both human operators and autonomous agents deploy and forget.

@@ -367,3 +367,17 @@ complexity is where an unauthenticated RCE loses the points that would have made
   first-hand primary source that a public fix PR is itself a disclosure event — probes within ~10 minutes, a working
   exploit in <1 minute. Treat the *description* of a bug as part of the timeline when assessing "no public PoC yet"
   (→ [[security]]).
+
+## The sharpest three-way scorer split yet (08-31 04:15)
+
+- **Tomcat DIGEST replay CVE-2026-65905 — one advisory, three severities.** NVD and VulDB rate it
+  **CVSS 9.8 Critical** (AV:N/AC:L/PR:N; CWE-294 capture-replay in the DIGEST authenticator — a
+  `nonceCount` at the upper boundary may allow replaying the authentication); Amazon's ALAS assigns
+  **4.8**; and the Apache Software Foundation itself classifies it **"Low — limited replay attack
+  possible."** Fixes shipped Aug 18 (9.0.121 / 10.1.58 / 11.0.25) within a batch of ~11 Tomcat CVEs,
+  eight of which also hit end-of-life Tomcat 8.5.
+- **The lesson generalizes past "record the scorer":** when the CNA itself disagrees with NVD by
+  three-plus severity bands, patch triage driven by raw NVD numbers over-reacts (replay feasibility
+  is genuinely limited) while orgs on EOL branches under-react to the batch's *other* bugs. Cite the
+  full spread — "9.8 (NVD/VulDB) vs 4.8 (ALAS) vs Low (Apache)" — and let the reader see the
+  disagreement instead of laundering one number through.

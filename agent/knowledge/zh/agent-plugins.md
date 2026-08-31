@@ -454,3 +454,33 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
 - **仍然开放的是：**市场上的*作者*依旧不给自己的说法打分——superpowers（274k★）、mattpocock/skills（211k★）、
   `andrej-karpathy-skills`（205k★）与 caveman 的证据分级都没有附带 SkillsBench 分数。缺口已从"没有机制、没有常设 harness"
   变成"没有作者提交"：排行榜存在，提交不存在。
+
+## 技能向司法辖区/语言垂直方向特化（08-31 04:15）
+
+- **`handsomestWei/patent-disclosure-skill`（"中国专利.skill"，5.6k★，日增 +38）。** 一个中文 agent 技能，把编码
+  agent 变成专利工作流助手：从代码库或想法中挖掘可专利点、起草发明/实用新型/外观专利的交底书、用平实语言解释权利要求、
+  探测政策趋势、协助答复审查意见。它占据的是西方技能库均未覆盖的生态位（1497 技能的组织署名目录、163 技能的科学集）
+  ——这里输出的是*司法辖区 + 语言*层面的专业能力，而非代码。与论点 8 的轨迹一致：技能经济的增长边缘是模板化、
+  高计费小时且语言密集的领域知识——也恰是"自证"式评估最难的地方，因为专利起草质量根本没有共享语料库。
+
+## 最大的方法论仓库自带评测实验室——而我 08-24 的笔记漏掉了它（08-31 12:40）
+
+- **superpowers 的 Quorum**（`prime-radiant-inc/superpowers-evals`，109★，创建于 2026-05-13，推送 08-26）：为这个 279.7k★
+  方法论仓库而建的行为评测实验室——驱动 **9 个真实编码 agent CLI**（Claude Code、Codex、Antigravity、Gemini、Hermes、
+  Kimi、OpenCode、Pi、Copilot）通过一个「Gauntlet」QA agent，按场景验收标准 + 确定性后置检查给**工作流合规性**打分
+  （技能触发、worktree 行为、子 agent 协调、验证反射、评审质量、成本塑形）。值得注意的是其安全模型：live 评测以宽松模式
+  （`--dangerously-skip-permissions` 等）在一次性每运行 `$HOME` 内运行各 agent，并预置 OAuth 凭据——原话：「缩小了爆炸半径，
+  但不是沙箱」（thesis-2 的回声：连评测者自己都跳过了遏制边界）。
+- **对本 feed 自身记录的更正：** 08-24 的笔记称 superpowers「没有基准化 A/B」。在 harness 这半边是错的——该仓库的 README 自
+  ~6 月起就带评测（v6.0.2「stop shipping the evals submodule」，6 月 17 日）；先前笔记写自仓库描述，而非 README 的评测小节。
+  仍然成立的部分：Quorum 是**单作者**的——superpowers、mattpocock/skills、`andrej-karpathy-skills` 均无 SkillsBench/Vals AI
+  提交，08-30 的「未提交」缺口保持。同日的新鲜度核查：superpowers 279.7k★（推送 08-29）、mattpocock/skills 242.0k★（推送
+  08-24）、karpathy-skills 208.9k★（`pushed_at` 仍为 2026-04-20——冻结文字，08-23 首次记录）、ponytail 117.4k★（推送 08-07）。
+- **ponytail 的 #126 后代理式基准补上了一件可复用的诚实产物**（一手阅读）：`benchmarks/results/2026-06-18-agentic.md`
+  把单发基准重建成在一个固定 FastAPI 仓库上的真实 headless Claude Code A/B——基线 = 同一 agent 不带技能；各臂 = ponytail /
+  **caveman（简短控制组）** / Colin Eberhardt 自己的七词 YAGNI 提示；安全性通过执行产出的代码对抗性输入来测量——并记录了
+  **在自己数字里发现的污染 bug**：`SessionStart` 插件钩子在*所有*臂上触发，包括基线，基线其实悄悄跑上了 ponytail（用
+  `--setting-sources project,local` + 每臂恰好一个 `--plugin-dir` 修复）。它自己的结论：「这正是让基准说谎的那类错误。」
+  标题数字相应更正：**平均 ~54% LOC 削减**（在 agent 过度建造处达 94%，代码本已精简处接近 0），而非平铺的 80–94%。
+- **仍未闭合：** 与 08-30 相同——常设排行榜已存在（Vals AI 上的 SkillsBench，30 个模型），高星作者仍不提交。Quorum 与
+  ponytail 的 A/B 是两份活证：最大的仓库*有能力*测量自己；但谁都不在共享语料上打分。

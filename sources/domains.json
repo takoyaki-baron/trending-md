@@ -4057,5 +4057,140 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "people.kernel.org": {
+    "cat": "community",
+    "en": "kernel.org staff blog (Konstantin Ryabitsev) — first-hand infrastructure operations data; the AI-crawler numbers (6M req/day, 33% solve Anubis) come from the operator itself. Cross-checked against the HN front-page discussion.",
+    "zh": "kernel.org 员工博客（Konstantin Ryabitsev）——第一手基础设施运维数据；AI 爬虫数字（600 万请求/日、33% 解出 Anubis）来自运维者本人。已与 HN 头条讨论交叉核验。",
+    "jp": "kernel.org スタッフブログ（Konstantin Ryabitsev）—— 一次のインフラ運用データ；AIクローラー数値（600万リクエスト/日、33%がAnubisを解決）は運用者自身から。HN フロントページの議論と突合済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "blog.python.org": {
+    "cat": "vendor",
+    "en": "Python Insider — the core developers' official announcement blog; authoritative for CPython releases and platform-tier changes, low volume.",
+    "zh": "Python Insider——CPython 核心开发者的官方公告博客；对发布与平台层级变化具权威性，更新量低。",
+    "jp": "Python Insider —— CPython コア開発者の公式アナウンスブログ；リリースとプラットフォーム階層変更の権威ある情報源、更新は少なめ。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "riseproject.dev": {
+    "cat": "vendor",
+    "en": "RISE Project (RISC-V software ecosystem initiative) blog — primary for RISC-V software milestones, but a promoting party: milestone framing is celebratory by design.",
+    "zh": "RISE Project（RISC-V 软件生态计划）博客——RISC-V 软件里程碑的第一手来源，但属推动方：里程碑表述天然带宣传色彩。",
+    "jp": "RISE Project（RISC-V ソフトウェア生態系構想）のブログ —— RISC-V ソフトウェアマイルストンの一次情報源だが推進側：マイルストンの表現は祝賀的になりがち。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "lobste.rs": {
+    "cat": "community",
+    "en": "Invite-only tech link aggregator — smaller, more practitioner-heavy discussion than HN; useful as a second community signal, no score inflation pressure.",
+    "zh": "邀请制技术链接聚合站——比 HN 更小、从业者浓度更高；可作第二社区信号，无分数通胀压力。",
+    "jp": "招待制のテックリンク集約サイト —— HN より小さく実務者色が強い；第二のコミュニティシグナルとして有用、スコアインフレ圧力なし。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "csis.org": {
+    "cat": "research",
+    "en": "Center for Strategic and International Studies — policy think tank; solid context briefs on Chinese AI models, but analysis not primary reporting.",
+    "zh": "战略与国际研究中心（CSIS）——政策智库；关于中国 AI 模型的背景综述扎实，但属分析而非一手报道。",
+    "jp": "戦略国際問題研究所（CSIS）—— 政策シンクタンク；中国 AI モデルの背景ブリーフは堅実だが、一次報道ではなく分析。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "herodevs.com": {
+    "cat": "vendor",
+    "en": "HeroDevs — commercial end-of-life support vendor; its CVE roundups for EOL software are useful aggregates, but it sells the problem it describes.",
+    "zh": "HeroDevs——商业化 EOL 支持厂商；其 EOL 软件 CVE 综述是有用的聚合，但它贩卖的正是它所描述的问题。",
+    "jp": "HeroDevs —— 商用 EOL サポートベンダー；EOL ソフトの CVE ラウンドアップは有用な集約だが、自らが語る問題を商売にしている。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "bbc.com": {
+    "cat": "news",
+    "en": "BBC News — mainstream general-audience outlet; reliable for the fact of an announcement, thin on technical detail — always pair with the primary source.",
+    "zh": "BBC 新闻——主流大众媒体；对\"某事发生了\"可靠，技术细节薄弱——务必与一手来源配对使用。",
+    "jp": "BBC News —— 主流の一般向け報道；発表の事実としては信頼できるが技術詳細は薄い —— 必ず一次ソースと併用。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "gist.github.com": {
+    "cat": "community",
+    "en": "GitHub Gist — here a third party's manually-posted GitHub Trending snapshots (rank, daily/total stars). A secondary aggregate with anonymous provenance: ranks and star counts match github.com when spot-checked (e.g. Heretic 29.3k/+485, 08-31), but it says nothing about why a repo trends — always open the repo itself (Void lesson).",
+    "zh": "GitHub Gist——此处指第三方手动张贴的 GitHub Trending 快照（排名、日增/总星数）。匿名出处的二手聚合：抽查时排名与星数与 github.com 一致（如 Heretic 29.3k/+485，08-31），但它不会告诉你仓库为何流行——务必打开仓库本身（Void 教训）。",
+    "jp": "GitHub Gist —— ここでは第三者が手動で投稿した GitHub Trending スナップショット（順位、日次/累計スター）。匿名の出所を持つ二次集約：スポットチェックでは順位・スター数は github.com と一致（例：Heretic 29.3k/+485、08-31）が、リポジトリがなぜトレンドに入ったかは語らない —— 必ずリポジトリ自体を開くこと（Void の教訓）。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "eveonline.com": {
+    "cat": "vendor",
+    "en": "CCP Games' EVE Online dev news; first-party vendor blog — authoritative for what CCP did to its own codebase (the 2.4M-line Python 2→3 migration), but the numbers (95.9% dual-compile, ~3,300 blocking lines) are vendor-reported and unreproduced.",
+    "zh": "CCP Games《EVE Online》官方开发新闻；一手厂商博客——对其自身代码库的举措（240 万行 Python 2→3 迁移）权威，但其中数字（95.9% 双版本可编译、约 3300 行阻塞代码）为厂商自报、未经独立复现。",
+    "jp": "CCP Games の EVE Online 公式開発ニュース。自社コードベースへの対応（240万行の Python 2→3 移行）については一次情報だが、数値（95.9% 両バージョンコンパイル、約3,300行のブロッキング行）はベンダー報告で未検証。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "microsoft.com": {
+    "cat": "security",
+    "en": "Microsoft Security Blog (microsoft.com/en-us/security) — first-party threat-intel and patch guidance for Microsoft's own estate; authoritative for its campaigns (e.g. TerminalFix reverse-tunnel intrusion, 08-30), but framing always favors Defender coverage — pair with independent trackers.",
+    "zh": "Microsoft 安全博客（microsoft.com/en-us/security）——微软自家生态威胁情报与补丁指引的一手来源；对其自身攻击战役（如 TerminalFix 反向隧道入侵，08-30）权威，但叙述总是偏向 Defender 的防护效果——需与独立追踪源配对。",
+    "jp": "Microsoft Security Blog（microsoft.com/en-us/security）。自社環境の脅威インテリジェンスとパッチ指針の一次情報。自社に関わる攻撃キャンペーン（例：TerminalFix リバーストンネル侵入、08-30）については信頼できるが、記述は Defender の検出有利に寄りがち —— 独立系トラッカーと併用。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "freecore.org": {
+    "cat": "community",
+    "en": "FreeCORE — the independent community continuation of TrueNAS CORE (13.3 base → 15.0-U1 current, verified first-hand 08-31: homepage states the lineage and explicit non-affiliation with iXsystems/FreeBSD Foundation); young project, longevity unproven — watch before recommending migrations.",
+    "zh": "FreeCORE——TrueNAS CORE 的独立社区延续项目（13.3 基线 → 15.0-U1 当前版；08-31 一手核验：主页明示谱系并声明与 iXsystems/FreeBSD 基金会无隶属）；项目年轻、存续未经验证——推荐迁移前需观察。",
+    "jp": "FreeCORE —— TrueNAS CORE の独立コミュニティ継続プロジェクト（13.3 ベース → 現在 15.0-U1。08-31 一次確認：公式サイトに系譜と iXsystems/FreeBSD Foundation 非所属を明記）。若いプロジェクトで継続性は未証明 —— 移行推奨の前には要観察。",
+    "cred": "med",
+    "density": "med",
+    "cv": 2
+  },
+  "lumify.ai": {
+    "cat": "vendor",
+    "en": "Lumify's product blog — a launch post for its own skill (last30days-skill); landing-page-grade self-description, useful only as the announcement pointer to the GitHub repo, not as evidence the skill works.",
+    "zh": "Lumify 产品博客——为其自家 skill（last30days-skill）发布的 Launch 文；属落地页式自我描述，仅可作为指向 GitHub 仓库的发布信号，不能作为该 skill 有效的证据。",
+    "jp": "Lumify のプロダクトブログ。自社スキル（last30days-skill）のローンチ投稿。ランディングページ的な自己記述であり、GitHub リポジトリへの案内としては有用だが、スキルの有効性の証拠にはならない。",
+    "cred": "low",
+    "density": "low",
+    "cv": 1
+  },
+  "qubes-os.org": {
+    "cat": "security",
+    "en": "Qubes OS official security bulletins (QSB) — the canonical primary source for Qubes advisories; verified first-hand 08-31 (QSB-118: Dom0 arbitrary code execution in qvm-copy-to-vm error reporting, 2026-08-29, titled and dated exactly as cited). Sparse but authoritative.",
+    "zh": "Qubes OS 官方安全公告（QSB）——Qubes 漏洞通告的权威一手来源；08-31 一手核验（QSB-118：qvm-copy-to-vm 错误报告中的 Dom0 任意代码执行，2026-08-29，标题与日期与引用完全一致）。更新稀疏但权威。",
+    "jp": "Qubes OS 公式セキュリティBulletin（QSB）。Qubes アドバイザリの権威ある一次ソース。08-31 に一次確認（QSB-118：qvm-copy-to-vm のエラー報告における Dom0 任意コード実行、2026-08-29 —— タイトル・日付とも引用どおり）。更新は疎だが信頼できる。",
+    "cred": "high",
+    "density": "med",
+    "cv": 2
+  },
+  "openseo.so": {
+    "cat": "vendor",
+    "en": "The hosted SaaS frontend of every-app/open-seo ($10/mo) — a commercial mirror of the open-source repo; useful to confirm the product exists and is monetized, carries no independent technical content — cite the repo instead.",
+    "zh": "every-app/open-seo 的托管 SaaS 前端（$10/月）——开源仓库的商业化镜像；可用于确认产品存在且已商业化，但没有独立技术内容——引用时以仓库为准。",
+    "jp": "every-app/open-seo のホステッド SaaS フロント（$10/月）。OSS リポジトリの商用版。製品が実在し収益化されている確認には使えるが、独立した技術的内容はなし —— 引用はリポジトリ側で。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "lists.apache.org": {
+    "cat": "community",
+    "en": "Apache Software Foundation mailing lists (Pony Mail) — the primary channel for Apache project advisories and maintainer threads (e.g. the Tomcat 9.0.121 / EOL-8.5 CVE discussion); authoritative for what the project said, thin on exploit detail — pair with NVD or a tracker.",
+    "zh": "Apache 软件基金会邮件列表（Pony Mail）——Apache 项目官方通告与维护者讨论的一手渠道（如 Tomcat 9.0.121 / EOL 8.5 的 CVE 讨论）；对\"项目说了什么\"权威，但利用细节薄弱——需与 NVD 或追踪源配对。",
+    "jp": "Apache ソフトウェア財団のメーリングリスト（Pony Mail）。Apache プロジェクトの公式アドバイザリとメンテナ議論の一次チャネル（例：Tomcat 9.0.121 / EOL 8.5 の CVE 議論）。プロジェクトの発言としては権威だが、攻撃詳細は薄い —— NVD やトラッカーと併用。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
   }
 }

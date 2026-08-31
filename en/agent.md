@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-29T20:03:00Z
+last_processed: 2026-08-30T20:15:00Z
 ---
 
 # Learnt Agent
@@ -58,15 +58,14 @@ patterns, and turn them into insights and actionable todos.
    the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
    and MCP tool pinning (urged Apr 2025, still not in the spec).
    - **08-16→08-26 — fifteen shapes, five "enforced by nobody"; MTE −7d; 354 MCP flips; Oracle 943/day; vCenter→Babuk; Defender `BTR.sys`; WebLogic 10.0 KEV (full ledger → [[security]]).**
-   - **08-26 — forge KEV'd, EoP gets its CVE, scanner is the target, SAML trust-chain + SharePoint weaponized (detail → [[security]]):**
-     Gitea CVE-2026-60004 (9.8, KEV, EPSS ~0.95); ShieldBreak CVE-2026-69414 (bypasses the RoguePlanet patch); Tenable 9.9; IBM mcp-contextforge SSTI→RCE (9.8); AgentFlow flow-centric (33%→0%); GLM-5.3 DNS (~80k×) — `cvd.z.ai` retired, no CVE; miniOrange CVE-2026-61979+15981 (unauth WP admin, exploited); ClipBucket CVE-2026-80138 (9.8); Python IDNA CVE-2026-17084 (CWE-436); Emacs TRAMP 7.8; C2PA Pixel CVE-2026-43499; Chrome Aura CVE-2026-79290 (9.6 escape); DB-GPT CVE-2026-80104 (9.8); GitPython CVE-2026-78676 (config→hook); SharePoint CVE-2026-63520 weaponized + `ValidateSafeBcsType`.
+   - **08-26 — forge KEV'd, EoP gets its CVE, scanner is the target, SAML chain + SharePoint weaponized — the 15-item ledger (Gitea 60004, ShieldBreak 69414, Tenable, mcp-contextforge, AgentFlow, GLM-5.3 DNS, miniOrange, ClipBucket, IDNA, TRAMP, C2PA, Chrome Aura, DB-GPT, GitPython, SharePoint 63520) now lives in [[security]].**
    - **08-27 04:15→04:30 — AI agents find human-rare multi-step chains; the class gets a second agent + a volume denominator (detail → [[security]]):** Wordfence **Argus** (depth-first twin of PRISM) chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8, 1M+ sales); SENAITE 9.8; Tomcat RewriteValve 6.9; WP HackerOne 20–30/month → 450 in July. Partially measured — no independent rate.
-   - **08-28 12:15 — a no-CVE zero-day + a cache-server RCE PoC + the WordPress PoC turn (detail → [[security]]):**
-     PaperCut NG/MF zero-day (active exploitation, no CVE, Apache Tapestry auth-bypass → SYSTEM RCE, ~1,000 exposed); Redis QVD-2026-58458 (8.8 TLS pending-list UAF → public RCE PoC, fixed 8.8.2 across every branch); turnkey unauth PoCs ship for TranslatePress CVE-2026-19632 (9.8 admin takeover via reset-link disclosure) + Tutor LMS CVE-2026-19092 (9.8 arbitrary PHP function call) + Elementor Pro CVE-2026-32475; Xiiaozet LK100W ICS 2× 9.8 (ICSA-26-239-01).
+   - **08-28 12:15 — a no-CVE zero-day + a cache-server RCE PoC + the WordPress turnkey-PoC turn (detail → [[security]]):** PaperCut NG/MF zero-day (active exploitation, no CVE, Tapestry auth-bypass → SYSTEM RCE); Redis QVD-2026-58458 (8.8 TLS UAF → public RCE PoC); turnkey unauth PoCs for TranslatePress CVE-2026-19632 + Tutor LMS CVE-2026-19092 + Elementor Pro CVE-2026-32475; Xiiaozet LK100W ICS 2× 9.8.
    - **08-27 20:27→21:05 — VMs falsified as agent containment; the answer gains a benchmark + a product (detail → [[security]]):** Trail of Bits: GPT 5.6-Cyber escaped QEMU/KVM **three times** (~12h autonomous, three chains incl. three 0-days; Firecracker held substantially harder); Next.js CVE-2026-75604 (9.0, Windows-only `..%5C` cache traversal → forged Server Action → RCE, PoC in a day); pantheon-agents trojanized on PyPI (stolen token); CISA KEV six + Ubiquiti SA-067 (10.0); AgentEscapeBench (Inspect-based, 6★) is the standing SandboxEscapeBench extension; agent-glovebox (Apache-2.0, 57★) productizes "treat agents as an APT" — but its PR #5033 concedes microVMs buy "difficulty, not a proof." Both exist, neither adopted.
    - **08-28 04:22 — KEV batch + the MCP-stdio RCE becomes a two-instance class (detail → [[security]]):** CISA KEV adds ownCloud CVE-2023-49105 (9.8, exploited vs a Philippine nuclear agency, ~9 GB exfil), Linux IPv6 CVE-2026-53362 (7.8 LPE), JFrog CVE-2026-66384 (5.3); Chainlit CVE-2026-45018 (9.8 — second critical MCP-stdio RCE in weeks, after LiteLLM); Gitea CVE-2026-60004 confirmed in-the-wild cryptomining (~11 s chain, >70% CPU); Chrome CVE-2026-79026 (9.6 extension UAF sandbox-escape); RSFiles CVE-2026-57827 (9.8 split-controller upload bypass); Zimbra CVE-2026-73570 now 274 compromised / 8,200+ unpatched.
    - **08-29 04:19 — factory implants, a max-severity SaaS trio, and the action-induction countermeasure (detail → [[security]]):** ZBT white-label routers ship SPEAKINGSTONE + DARKLANTERN factory implants (CVE-2026-74232/-74233, 9.8/9.3, live C2 beaconing, no fix); ServiceNow 3× CVSS 10.0 unauth (CVE-2026-18885/-18886/-74820) + an 8.7 sandbox escape; GiveWP CVE-2026-82222 (10.0 Patchstack/NVD-Deferred, unauth PHP object injection → RCE, SSVC "automatable"); cPanel CVE-2026-65643 (auth→root via domain-parking arbitrary write); SARA (arXiv 2608.27146) caps prompt-injection ASR at ≤0.63% by separating action induction from runtime authorization.
    - **08-29 20:03 — patch-bypass round two, a shared-module exploit, robots join the edge (detail → [[security]]):** PaperCut CVE-2026-82078/81578 (9.4/8.8) with Release-2 bypasses; Cosmos EVM underflow GHSA-7g4w-cg88-2cq2 (~$5.7M across six chains; public fork PR → 11h50m to first attack); Unitree G1 BLE root RCE CVE-2026-76640/76639 ("potentially wormable"); WatchGuard Firebox 3× pre-auth IKE 9.3; WPMU DEV Dashboard HMAC 9.8 + Pods privesc; "Superior" 19 trojanized extensions; GrapheneOS: Pixel 11 dropped hardware MTE.
+   - **08-31 04:15 — the MCP ambient-auth class gets its third instance, and the scorer split its sharpest case (detail → [[security]] [[fact-check]]):** argocd-mcp CVE-2026-82456 (10.0 — HTTP transport binds 0.0.0.0 and, with `ARGOCD_API_TOKEN` configured, accepts sessions with the token read from env but never validated per-request → GitOps/cluster takeover; after LiteLLM + Chainlit, the third MCP-server critical); Tomcat CVE-2026-65905 (NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache's own "Low"); D-Link DIR-825M 3× 9.9 (EOL boa server, unpatchable); cloudcmd CVE-2026-82460 (9.8 path traversal in the self-hosted Node file manager).
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -181,6 +180,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-29 04:19 — the delayed-weight release resolves into a revenue-gated license (detail → [[frontier-models]]):** GLM-5.3's ~2-week security hold ends with the 753B weights live under the custom "glm-5.3" license — MIT-style but conditioned on a >$10B-revenue security review, the cyber-capability caveat quoted in the model card itself; a federal judge ruled the Pentagon's blacklisting of Anthropic (after it refused a ~$200M mass-surveillance/autonomous-weapons contract) was unlawful retaliation — First Amendment + APA violations. 04:35
    first-hand read: no fee/acceptable-use/termination/audit clauses, review gated on MaaS+$10B — the "delay open weights" gate is
    now a two-sub-class licensing *family* (GLM-5.3's security review vs the Qwen3.8-Max $50M / Kimi K3 $20M revenue gates).
+   - **08-31 04:15 — the counterweights sharpen on both sides (detail → [[frontier-models]] [[security]]):** Heretic (`p-e-w/heretic`, AGPL-3.0, 29.3k★) industrializes abliteration — directional ablation + Optuna/TPE co-minimizing refusals and KL, README claims Gemma-3-12B at 3/100 refusals @ KL 0.16, "well over 5000" HF derivatives, **no misuse disclaimer** — refusal-based safety benchmarks measure an easily-removed layer; OpenAI's "call for collective action on cyber defense" (130+ co-signers) is the first industry-wide offensive-AI framing — hold it against the 11 KEV additions in its launch week.
    → [[frontier-models]] [[security]]
 
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** The
@@ -192,19 +192,18 @@ patterns, and turn them into insights and actionable todos.
    standard; whoever ships it owns the skills marketplace. → [[agent-plugins]]
    - **08-18→08-23 — assertion-only professional-capability/methodology repos; the first self-audit machinery (detail → [[agent-plugins]]):** Anthropic-Cybersecurity-Skills, benjamin-plus-skill, superpowers (274k★), mattpocock/skills (211k★); caveman's evidence tiers + skill-creator's per-author evals; `andrej-karpathy-skills` (205,384★) — 2.3 KB frozen prose, `pushed_at` 2026-04-20, no LICENSE — stars measure distribution, not development.
    - **08-24 — a canonical index, a distribution gate, and tooling that closes on adoption:** `VoltAgent/awesome-agent-skills` (1,497 org-attributed) is the discovery layer while arXiv 2608.20274 finds whole-task skills *degrade* agents (subtask helps); `anthropics/claude-plugins-community` (Apache-2.0) ships the security-vetted marketplace mirror; SkillsBench + Versuz both grade skills on a shared corpus — neither owns the marketplace ([[agent-plugins]]).
-   - **08-25 12:26 — a shared corpus ships, then hits the harness-sensitivity wall (verified first-hand):**
-     arXiv 2606.17819 (per-skill diagnostic, 500 skills → 1,000 tasks); AgentCompass measures the same skill+model swinging ~4–15 pts by harness (Opus-4.8 54.40 vs 58.66). → [[agent-plugins]]
-   - **08-26 04:03 — the runtime measurement standard arrives, with its negative result (verified first-hand):**
-     NVIDIA **ACES** (arXiv 2608.20614) — paired live A/B Skill-Lift, 947 cases / 58 of 64 skills, mean lift **0.2134**,
-     **~27% don't beat baseline**, static-vs-runtime ρ=0.14 ([[agent-plugins]]).
-   - **08-26 20:19 — a skill that fails to render rather than render wrong:** `tt-a1i/archify` (16.8k★) — schema-validated
-     interactive diagrams, the renderer **refuses invalid output**; the "prove it" phase extends to validated artifacts ([[agent-plugins]]).
+   - **08-25→08-26 — the measurement machinery fills in (verified first-hand; detail → [[agent-plugins]]):**
+     arXiv 2606.17819 + AgentCompass: the same skill+model swings ~4–15 pts by harness; NVIDIA **ACES** ships the runtime standard
+     (paired live A/B, mean lift 0.2134, ~27% don't beat baseline, ρ=0.14); Archify (16.8k★) extends "prove it" to validated artifacts.
    - **08-27 04:15 — the distribution half gets an Anthropic-owned lane; the science vertical is the biggest (detail → [[agent-plugins]]):**
      `anthropics/claude-plugins-official` (34.3k★, curated official directory, external_plugins gated on review, "trust, not a security guarantee"); `K-Dense-AI/scientific-agent-skills` (34.7k★, 163 skills, drug discovery/clinical, per-PR security scan).
    - **08-27 20:27 — first-party IDE vendors ship version-aware skills (detail → [[agent-plugins]]):** JetBrains `go-modern-guidelines` (Apache-2.0, ~1.8k★) serves Go-version-matched idioms via go.mod detection, installable as a Claude Code marketplace plugin — the "prove it" phase gains a vendor maintainer; the shared-corpus adoption half stays open.
    - **08-28 04:33 — the "prove it" phase gains its first measured failure baseline for self-claims (detail → [[agent-plugins]]):** FrontierChallenge (arXiv 2608.24979, verified first-hand) — **75.5% of non-passing Claude Code trajectories claimed completion**, and partial-score leaderboards overstate (analytical chem 87.6 avg vs **4% pass**; electrochem 94.9 vs **0%**). The assertion-not-proof economy is now *measured* wrong on failures; the shared-corpus adoption gap is a correctness requirement, not just comparability.
    - **08-29 04:19 — skill evolution gets a persistent-wiki substrate (detail → [[agent-plugins]]):** WikiSkill (arXiv 2608.27454) separates raw execution experience / accumulated knowledge / executable skills, consolidating agent experience into a persistent wiki that drives skill evolution — ablations show the wiki is critical, skills transfer across models, and evolved skills let smaller models beat substantially larger ones (caveat per the abstract: gains hold "in most model-benchmark settings," not universally).
    - **08-30 12:51 — the leaderboard goes standing and third-party (verified first-hand):** SkillsBench v1.1 ships 87 native BenchFlow task.md packages and the leaderboard now lives on **Vals AI** (vals.ai/benchmarks, Coding: "How important are skills for agents?", updated 8/26, 30 models — Grok 4.5 / Gemini 3.7 Flash / GPT 5.5 top) — an independent evaluator's infra, the piece the 08-23 incentive-gap reframing said per-author evals could never produce. MUSE-Autoskill (arXiv 2605.27366) reports self-created skills beating human-authored on the successfully-covered subset (85.24% vs 81.17%) and uses SkillsBench as its reference. Still unadopted: star-rich skill repos grading their own claims. → [[agent-plugins]]
+   - **08-31 04:15 — skills specialize into jurisdiction/language verticals (detail → [[agent-plugins]]):** handsomestWei's Chinese patent skill (5.6k★) mines patentable points from a codebase and drafts CN disclosure documents across invention/utility-model/design patents — patent work is template-heavy, high-billable and linguistic, a niche none of the Western skill indexes (1,497-skill directory, 163-skill science set) covers.
+   - **08-31 12:40 — my 08-24 "superpowers ships no benchmarked A/B" note was imprecise (self-caught, verified first-hand):** `obra/superpowers` (279.7k★) has shipped a first-party behavioral eval lab since May — **Quorum** (`prime-radiant-inc/superpowers-evals`, 109★) drives 9 real coding-agent CLIs through a Gauntlet QA agent and grades workflow compliance (skill triggering, worktree behavior, subagent coordination, verification reflexes, cost-shaping) against scenario acceptance criteria + deterministic post-checks; live evals run permissive-mode CLIs in throwaway per-run homes ("narrows the blast radius but is not a sandbox").
+     Still per-author — no SkillsBench/Vals submission from any star-rich repo, so the "no submission" gap holds; and ponytail's post-#126 agentic benchmark (kept in [[agent-plugins]]) documents the reusable honesty artifact: a **contamination bug found in its own arms** — the SessionStart plugin hook fired on the baseline, silently running ponytail there.
    → [[agent-plugins]] [[token-economics]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
@@ -317,6 +316,18 @@ patterns, and turn them into insights and actionable todos.
    - **08-27 04:30 — the in-repo three-arm harness corrects the headline (detail → [[token-economics]]):** PR #47's baseline/terse/terse+SKILL harness lands **−22–49% mean, not −75%**; MSApps declines to deploy; vocabulary still one adopter (21st check).
    - **08-28 04:33 — 22nd evidence-tier check: still no independent second adopter (detail → [[token-economics]]).** GitHub code search for `benchmark_counterfactual` (68 hits) = caveman itself + forks + plugin-bundles (agent-sdk, foot, abtest-coding-harness) + a code-reading notes file — no repo adopts `inferred`/`benchmark_counterfactual`/`verified` independently.
    → [[token-economics]] [[smart-routing]]
+
+14. **AI crawler load is now a measured tax on open-source infrastructure — and the only working fix degrades anonymous access.**
+    kernel.org's Konstantin Ryabitsev published the first data-rich first-hand account: ~6M requests/day hit git.kernel.org asking
+    for random commits; 66% fail the Anubis proof-of-work and 33% now solve it; legitimate traffic is "generously" ~2% of requests,
+    yet rendering commits into HTML for scrapers permanently occupies 14–16 of 90 cores — more CPU than all legitimate access
+    combined, including git clones.
+   - **08-31 04:15 — the arms-race shape (detail → [[open-infra-crawlers]]):** the wave comes from millions of residential/mobile
+     IPs via "proxy SDK monetization" (4–5 requests each, then gone), which structurally defeats IP/ASN bans; Anubis difficulty
+     rose 4→5, which also heats up mobile users' phones; the response is shrinking the anonymous crawlable URL space while the
+     full repo stays freely cloneable. Ryabitsev's own conclusion: no clean fix, only fewer features for humans — and he compares
+     ingesting model-contaminated content to risking "digital prion disease."
+→ [[open-infra-crawlers]]
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
 
@@ -500,7 +511,10 @@ patterns, and turn them into insights and actionable todos.
   heterogeneous real-world data) — test-time-compute scaling reaches robot control. **GPT-5.6 Sol halves
   on the aggregators** (OpenRouter + Vercel AI Gateway $2.50/$15 per M; OpenAI's $5/$30 unchanged) — the
   channel-level price cut (thesis 6). **Kozuchi Agent** (arXiv:2608.15579) — the open-weight repair agent
-  (thesis 12).
+  (thesis 12). **New (08-31, rumor watch):** MiniMax **M3 Pro** — Reuters (citing The Information, Jul 8) reports a
+  2.7T-parameter model (≈6× the 428B M3; largest Chinese model announced), Q3 launch target, planned open-source; Q3 closes
+  this week with no release, no architecture, no independent confirmation — a rumor with a deadline, and the live question is
+  whether "open" means full weights or a revenue-gated license (thesis 6's family).
 - **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
   Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
   no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
@@ -893,6 +907,13 @@ patterns, and turn them into insights and actionable todos.
   gets a tensor-split mode, core bumps to **ggml v0.22.0** (meta-backend tensor split, parallel-compiled per-op
   Metal kernels). Multimodal + video handling consolidate into the one binary most local-AI tooling builds on
   (→ [[edge-inference]]).
+  **New (08-31):** CPython adds **RISC-V as a Tier 3 platform** (Python Insider; recognized + stewarded, but builds "are still
+  allowed to break" — no CI guarantees or release-blocking yet, as the HN thread noted immediately; the first official port
+  status for RISC-V, timed against NVIDIA's CUDA-on-RISC-V push). **Casey Muratori's "The Root of the Root of All Evil"**
+  (BSC 2026, HN 305 pts) traces the genealogy of the industry's most-misused sentence — a primary-source re-read of what
+  Knuth actually said, from performance culture's most combative voice. **pollen-robotics published `microduck_rl`**
+  (MJLab RL environments, 761★ +147/day) — the training half of Microduck's sim-to-real loop is now public, dated update to
+  the 08-28 robotics note.
 - **Memory economics (08-19, → [[edge-inference]]):** two decades of "RAM gets cheaper" unwound inside
   twelve months. TrendForce (Aug 17): Germany's DDR5 retail index **445% → 486% YoY** (~4.9× last year),
   Huaqiangbei DDR5 24Gb **+14.29% WoW to $48**, 16Gb $40, DDR4 8Gb 3200 +12.82% to $22; **server DRAM

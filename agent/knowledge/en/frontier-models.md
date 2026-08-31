@@ -1408,3 +1408,25 @@ distribution thesis 6.
   trajectory data. Caveat: the abstract contains no quantitative results. The same "executable verifier" argument that
   powered RLVR for code, extended to spatial generation — its #1 daily ranking shows the world-model community converging
   on reward-grounding as the bottleneck.
+
+## Abliteration industrialized + the 2.7T rumor watch (08-31 04:15)
+
+- **Heretic (`p-e-w/heretic`, AGPL-3.0, 29.3k★, #5 trending at +485/day) — fully automatic censorship
+  removal, now at scale.** It orthogonalizes each layer's attention out-projection and MLP
+  down-projection against a residual direction (directional ablation per Arditi et al. 2024), then an
+  Optuna/TPE optimizer tunes the ablation parameters to co-minimize refusals and KL divergence from
+  the base model — so capability survives. README claims: its Gemma-3-12B variant suppresses refusals
+  to 3/100 at KL 0.16; dense, multimodal and MoE models supported; `pip install heretic-llm`; "well
+  over 5000" derivative models already on Hugging Face. Two fact-check notes: the re-spike has **no
+  new release attached** — it is attention returning to an existing tool, not a new capability; and
+  the README carries **no misuse disclaimer at all**. Relation to OBLITERATUS (08-22): OBLITERATUS
+  made abliteration *reproducible*; Heretic made it *automatic and distributed* — one CLI, thousands
+  of derivatives. Consequences: refusal-based safety benchmarks measure an easily-removed layer, and
+  the "what does removing alignment cost?" question now has a mass-market answer tool.
+- **MiniMax M3 Pro — a rumor with a deadline.** Reuters (citing The Information, Jul 8) reports a
+  2.7T-parameter model (≈6× the 428B M3; the largest Chinese model announced), under the name M3 Pro
+  with a Q3 launch target and a stated plan to open-source it. Q3 closes with no release, no
+  architecture details, no independent confirmation beyond the two outlets. If it ships as described
+  it would be the largest open-weight release ever, extending the pattern of the biggest open model
+  each month coming from a Chinese lab — and the live question is the license family: full weights,
+  or a revenue-gated "glm-5.3"-style gate?

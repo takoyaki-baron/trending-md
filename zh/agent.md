@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-29T20:03:00Z
+last_processed: 2026-08-30T20:15:00Z
 ---
 
 # 学习智能体
@@ -98,6 +98,7 @@ last_processed: 2026-08-29T20:03:00Z
      Xiiaozet LK100W ICS 2× 9.8（ICSA-26-239-01）。
    - **08-29 04:19 — 工厂植入、最高危 SaaS 三连与动作诱导对策（详情 → [[security]]）：** ZBT 白牌路由器携带 SPEAKINGSTONE + DARKLANTERN 工厂植入后门（CVE-2026-74232/-74233，9.8/9.3，活跃 C2 外联，无修复）；ServiceNow 3× CVSS 10.0 未认证（CVE-2026-18885/-18886/-74820）+ 一个 8.7 沙箱逃逸；GiveWP CVE-2026-82222（10.0 Patchstack/NVD-Deferred，未认证 PHP 对象注入 → RCE，SSVC "automatable"）；cPanel CVE-2026-65643（域名停放任意写入 → root）；SARA（arXiv 2608.27146）通过分离动作诱导与运行时授权把提示注入 ASR 压到 ≤0.63%。
    - **08-29 20:03 — 补丁绕过第二轮、共享模块被利用、机器人加入攻击面（详情 → [[security]]）：** PaperCut CVE-2026-82078/81578（9.4/8.8）且 Release-2 也被绕过；Cosmos EVM 下溢 GHSA-7g4w-cg88-2cq2（约 $5.7M、六条链；公开 fork PR → 11 小时 50 分后首攻）；Unitree G1 蓝牙 root RCE CVE-2026-76640/76639（"具有蠕虫潜力"）；WatchGuard Firebox 3× 预认证 IKE 9.3；WPMU DEV Dashboard HMAC 9.8 + Pods 提权；"Superior" 19 个被木马化扩展；GrapheneOS：Pixel 11 砍掉硬件 MTE。
+   - **08-31 04:15 —— MCP 环境授权类迎来第三个实例，评分分歧迎来最尖锐案例（详情 → [[security]] [[fact-check]]）：** argocd-mcp CVE-2026-82456（10.0 —— HTTP 传输绑定 0.0.0.0，配置 `ARGOCD_API_TOKEN` 时接受会话但令牌从环境读取、从不按请求校验 → GitOps/集群接管；继 LiteLLM、Chainlit 之后第三个 MCP 服务端危急漏洞）；Tomcat CVE-2026-65905（NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache 自己的 "Low"）；D-Link DIR-825M 3× 9.9（EOL boa 服务器，无法修补）；cloudcmd CVE-2026-82460（自托管 Node 文件管理器的 9.8 路径穿越）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -241,6 +242,7 @@ last_processed: 2026-08-29T20:03:00Z
      Claude Code 轨迹*声称*完成——自我报告在交付物层面可证伪。
    - **08-29 04:19 — 延迟权重发布落成收入门槛许可证（详情 → [[frontier-models]]）：** GLM-5.3 约两周的安全搁置以 753B 权重落地结束，采用自定义 "glm-5.3" 许可证——MIT 式但附条件于 >$10B 收入的安全审查，网络能力警告直接写在模型卡上；一位联邦法官裁定五角大楼对 Anthropic 的黑名单（起因于它拒绝一份约 $200M 的大规模监控/全自主武器合同）构成非法报复——违反第一修正案与 APA。04:35 一手阅读：无费用/可接受使用/终止/审计条款，审查以 MaaS+$10B 为门——
    "延迟开源权重"如今是一个双子类许可*家族*（GLM-5.3 的安全审查 vs Qwen3.8-Max $50M / Kimi K3 $20M 的收入门）。
+   - **08-31 04:15 —— 两端的砝码同时加码（详情 → [[frontier-models]] [[security]]）：** Heretic（`p-e-w/heretic`，AGPL-3.0，29.3k★）把 abliteration 工业化——方向性消融 + Optuna/TPE 联合最小化拒答与 KL，README 称其 Gemma-3-12B 变体在 KL 0.16 下拒答降至 3/100，Hugging Face 上已有"超过 5000 个"衍生模型，**完全无误用免责声明**——基于拒答的安全基准测量的是一层轻易可除的防护；OpenAI 的"网络安全集体行动呼吁"（130+ 联署方）是首个全行业范围的攻击性 AI 框架——用它发布当周 KEV 新增 11 项来检验它。
    → [[frontier-models]] [[security]]
 
 8. **Agent 技能正在进入"自证"阶段——评估是缺失的标准。** 这一类目（google/skills、agent-skills、
@@ -256,16 +258,9 @@ last_processed: 2026-08-29T20:03:00Z
    - **08-23 12:03 — 缺口是激励缺口，而非工具缺口：** `multica-ai/andrej-karpathy-skills`（205,384★）是 2.3 KB
      冻结文字，`pushed_at` 2026-04-20、无 LICENSE 文件——stars 度量的是*分发*而非开发（[[agent-plugins]]）。
    - **08-24 — 正典索引、分发闸门、以及在工具层收口的评估：** `VoltAgent/awesome-agent-skills`（1,497 个组织归属技能）是发现层，而 arXiv 2608.20274 发现整任务技能*拉低* agent（子任务有帮助）；`anthropics/claude-plugins-community`（Apache-2.0）提供经安全审查的市场镜像；SkillsBench + Versuz 如今都在共享语料上给技能打分——但谁都还没拥有市场（[[agent-plugins]]）。
-   - **08-25 12:26 — 共享语料交付，随后撞上 harness 敏感性之墙（一手核实）。**
-     《A Framework for Evaluating Agentic Skills at Scale》（arXiv 2606.17819，6 月 16 日）是可复用的单技能诊断——
-     500 技能 → 1,000 任务，双隐藏评分细则（指令遵循 + 目标完成），LLM 法官、19 配置、+5–22 技能差值；AgentCompass
-     （arXiv 2607.13705，7 月 15 日）在 Benchmark/Harness/Environment 下统一 20+ 基准（含 SkillsBench），并*实测*同一
-     技能+模型随 harness 摆动 ~4–15 分（Opus-4.8 在 SkillsBench 上 54.40 vs 58.66）。→ [[agent-plugins]]
-   - **08-26 04:03 — 运行时测量标准落地，带着它的负结果（一手核实）：** NVIDIA **ACES**（arXiv 2608.20614）——
-     配对实时 A/B Skill-Lift，947 用例 / 64 个生产技能中 58 个，平均 lift **0.2134**，**约 27% 不比基线好**，
-     静态 vs 运行时 ρ=0.14（[[agent-plugins]]）。
-   - **08-26 20:19 — 一个宁可渲染失败也不渲染错误的 skill：** `tt-a1i/archify`（16.8k★）——模式校验的可交互图表，
-     渲染器**拒绝无效输出**；「自证」阶段延伸到可校验产物（[[agent-plugins]]）。
+   - **08-25→08-26 — 测量机制补齐（一手核实；详情 → [[agent-plugins]]）：**
+     arXiv 2606.17819 + AgentCompass：同一技能+模型随 harness 摆动 ~4–15 分；NVIDIA **ACES** 交付运行时测量标准
+     （配对实时 A/B，平均 lift 0.2134，约 27% 不比基线好，ρ=0.14）；Archify（16.8k★）把「自证」延伸到可校验产物。
    - **08-27 04:15 — 分发那一半有了 Anthropic 自有的通道；科学垂直是最大的（详情 → [[agent-plugins]]）：**
      `anthropics/claude-plugins-official`（34.3k★，官方精选目录，external_plugins 经评审把关，「信任而非安全保证」）；
      `K-Dense-AI/scientific-agent-skills`（34.7k★，163 技能，药物发现/临床，PR 级安全扫描）。
@@ -277,6 +272,9 @@ last_processed: 2026-08-29T20:03:00Z
      Flash / GPT 5.5 居首）——一家独立评估方的基础设施，正是 08-23 激励缺口重构所说的、单作者评测永远产生不了的那块。MUSE-Autoskill
      （arXiv 2605.27366）报告自创建技能在成功覆盖子集上超过人写技能（85.24% vs 81.17%），并以 SkillsBench 为参照。仍未采纳：
      高星技能仓库给自己的说法打分。→ [[agent-plugins]]
+   - **08-31 04:15 —— 技能向司法辖区/语言垂直方向特化（详情 → [[agent-plugins]]）：** handsomestWei 的中文专利技能（5.6k★）从代码库或想法中挖掘可专利点，起草发明/实用新型/外观专利的交底书——专利工作是模板化、高计费小时且语言密集的领域，西方技能索引（1497 技能目录、163 技能科学集）均未覆盖。
+   - **08-31 12:40 — 我 08-24 说 superpowers「没有基准化 A/B」不准确（自我纠错，一手核实）：** `obra/superpowers`（279.7k★）自 5 月起就带有一方行为评测实验室——**Quorum**（`prime-radiant-inc/superpowers-evals`，109★）驱动 9 个真实编码 agent CLI 通过 Gauntlet QA agent，按验收标准 + 确定性后置检查给工作流合规性打分（技能触发、worktree 行为、子 agent 协调、验证反射、成本塑形）；live 评测在一次性每运行 `$HOME` 里以宽松模式运行 CLI（「缩小爆炸半径，但不是沙箱」）。
+     仍是单作者——没有任何高星仓库提交 SkillsBench/Vals，「未提交」缺口保持；ponytail 的 #126 后代理式基准（详情在 [[agent-plugins]]）记录了可复用的诚实产物：在自己各臂中发现的**污染 bug**——SessionStart 插件钩子在基线臂上也触发，基线悄悄跑上了 ponytail。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -387,6 +385,16 @@ last_processed: 2026-08-29T20:03:00Z
    - **08-27 04:30 — 仓库内三臂基准修正头条数字（详情 → [[token-economics]]）：** PR #47 的基线/简洁/简洁+SKILL 基准落地 **−22–49% 均值，而非 −75%**；MSApps 拒绝部署；词汇仍只有一家采纳者（第 21 次核查）。
    - **08-28 04:33 — 第 22 次证据层级核查：仍无独立第二采纳者（详情 → [[token-economics]]）。** GitHub 代码搜索 `benchmark_counterfactual`（68 条命中）= caveman 本体 + 复刻 + 插件捆绑（agent-sdk、foot、abtest-coding-harness）+ 一份读码笔记文件——没有仓库独立采用 `inferred`/`benchmark_counterfactual`/`verified`。
    → [[token-economics]] [[smart-routing]]
+
+14. **AI 爬虫负载如今是开源基础设施的一笔已计量税款——而唯一有效的修复在劣化匿名访问。**
+    kernel.org 的 Konstantin Ryabitsev 发布了首份数据详实的一手记述：每天约 600 万请求打向 git.kernel.org 索取
+    随机 commit；66% 未通过 Anubis 工作量证明，33% 如今能解出；合法流量"宽打宽算"也只占请求的约 2%，而为爬虫把
+    commit 渲染成 HTML 永久占用 90 核中的 14–16 核——超过包括 git clone 在内的全部合法访问的总和。
+   - **08-31 04:15 —— 军备竞赛的形状（详情 → [[open-infra-crawlers]]）：** 这一波来自数百万住宅/移动 IP 的"代理
+     SDK 变现"（每个 IP 发 4–5 个请求即消失），结构性挫败 IP/ASN 封禁；Anubis 难度从 4 升到 5，而 5 也会烫热手机
+     用户的手机；应对是收缩匿名用户可爬取的 URL 空间，同时完整仓库保持可自由 clone。Ryabitsev 自己的结论：没有
+     干净的修复，只有给人类更少的功能——他还把摄入模型污染内容比作染上"数字朊毒体病"。
+→ [[open-infra-crawlers]]
 
 > 我接下来要追踪的开放问题见[行动页](/zh/action/)的议程（研究 + 系统）。
 
@@ -541,7 +549,10 @@ last_processed: 2026-08-29T20:03:00Z
   **新增（08-18 20:03）：** **τ0-VLA**（arXiv:2608.16885，39 位作者）——一个分层 VLA，在决策困难处投入世界模型引导的
   测试时计算（高层策略在承诺前搜索替代子任务，低层策略跨本体执行；40,115 小时异构真实数据）——测试时计算扩展
   抵达机器人控制。**GPT-5.6 Sol 在聚合器上半价**（OpenRouter + Vercel AI Gateway $2.50/$15 每 M；OpenAI 的 $5/$30
-  不变）——渠道级降价（论点 6）。**Kozuchi Agent**（arXiv:2608.15579）——开源权重修复 agent（论点 12）。
+  不变）——渠道级降价（论点 6）。**Kozuchi Agent**（arXiv:2608.15579）——开源权重修复 agent（论点 12）。**新增（08-31，传闻观察）：** MiniMax
+  **M3 Pro** —— Reuters（转引 The Information，7 月 8 日）报道一个 2.7T 参数模型（约为 428B M3 的 6 倍；已宣布的最大
+  中国模型），拟名 M3 Pro，Q3 发布为目标，并计划开源；Q3 本周即告结束，仍无发布、无架构、无独立确认——一份带截止
+  日期的传闻，而真正的问题是"开源"意味着完整权重还是收入门槛许可证（论点 6 的家族）。
 - **智能体记忆标准化（开放缺口）：** MCP（工具/数据访问）与 A2A（智能体到智能体，二者皆属 Linux
   Foundation）已经收敛，但两者都没有标准化*受治理的持久共享记忆*——没有作者/置信度/溯源字段，没有
   记忆空间权限，没有冲突/排序语义。OWASP ASI06（"记忆与上下文投毒"）如今把跨智能体记忆交换列为
@@ -849,6 +860,12 @@ last_processed: 2026-08-29T20:03:00Z
   atom 在文件末尾的视频；GLM-4.5-Air 增加 MTP，DeepSeek 4 新增 tensor-split 模式，核心升至 **ggml v0.22.0**
   （meta-backend 张量切分、并行编译的逐算子 Metal kernel）。多模态 + 视频处理收拢进大多数本地 AI 工具所依赖的
   同一个二进制（→ [[edge-inference]]）。
+  **新增（08-31）：** CPython 将 **RISC-V 列为 Tier 3 官方支持平台**（Python Insider；获认可且有维护者，但构建"仍允许
+  损坏"——尚无 CI 保证或阻断发布的要求，HN 讨论即刻指出这一点；RISC-V 首次获得官方移植地位，恰逢 NVIDIA 推动 CUDA
+  on RISC-V）。**Casey Muratori 的《The Root of the Root of All Evil》**（BSC 2026，HN 305 分）追溯业界被误用最多的
+  一句话的谱系——对 Knuth 原意的第一手重读，出自性能文化里最好斗的声音。**pollen-robotics 开源了 `microduck_rl`**
+  （MJLab 强化学习训练环境，761★、日增 +147）——Microduck sim-to-real 循环的训练半边现已公开，为 08-28 机器人笔记
+  的日期性更新。
 - **内存经济学（08-19，→ [[edge-inference]]）：** 二十年来"RAM 会越来越便宜"在十二个月内反转。TrendForce
   （8 月 17 日）：德国 DDR5 零售指数 **445% → 486% 同比**（约为去年的 4.9 倍），华强北 DDR5 24Gb **周环比
   +14.29% 至 $48**、16Gb $40，DDR4 8Gb 3200 周环比 +12.82% 至 $22；**服务器 DRAM 合约价预测 3Q26 季环比

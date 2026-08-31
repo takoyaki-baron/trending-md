@@ -1125,3 +1125,16 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
 - **WordPress 三重警报——一次披露中的三个未认证 9.8（8 月 27–29 日）。** CVE-2026-76581——WPMU DEV Dashboard（约 35 万安装，全部 ≤5.0.1，Wordfence 评分）：`wdpsso_step1`/`wdpsso_step2` AJAX 动作之间 HMAC 消息构造不一致，攻击者可重放 step-1 HMAC 并把域名挪进 redirect 字段 → 在 Hub SSO 映射到管理员的站点上拿到管理员会话（5.0.2 修复）。CVE-2026-18431——Avada ≤7.16 + Fusion Builder ≤3.16：未认证任意文件写入 → RCE（已作为 08-27 Wordfence Argus 六步链在册）。CVE-2026-19598——Pods ≤3.3.9（约 10 万站点）：未认证提权至 Administrator。三者均无在野利用报告——35 万安装的面板、头部付费主题、10 万安装的自定义字段插件出现在同一次通报里。
 - **"Superior" 行动——19 个被投毒更新的 Chrome/Edge 扩展变成钱包盗取器（Socket）。** 过去六个月发布的 18 个 Chrome + 1 个 Edge 扩展先干净上架、后收到恶意更新（5 个从原所有者处收购、14 个干净发布后被木马化）；Chrome 自动更新静默推送。最大者"Enable Right Click & Copy — Smart Unlock + OCR"，约 7 万 Chrome 用户（连同 Edge 版约 8 万）——据 Socket，Chrome 版已下架但 Edge 版在撰写时仍在分发恶意软件。能力：持久 WebSocket C2（轮换端点 + 按受害者单独的 exfil 服务器）、剥离 CSP、内容脚本 JS 注入、横跨七类的 16 个模块（多链钱包盗取、硬件钱包助记词收割、凭证抓取、Facebook/LinkedIn 账号窃取、ClickFix 式假更新诱饵）；活动可追溯到 2024 年 2 月，归属不明。"先买干净再毒化更新"模式击败了"老牌扩展 = 安全"的启发式——扩展来源验证与更新 diff 审计已是供应链控制，而非偏执。
 - **GrapheneOS：Pixel 11 砍掉了硬件 MTE——移植可能整个跳过（8 月 29 日声明）。** Tensor G6 "在软件、固件、并且几乎可以肯定在硬件上"均不支持 ARM MTE；MTE 经 `hardened_malloc` 用于整个基础 OS，"对几乎所有远程利用大幅提升防护"，因此项目建议 Pixel 8/9/10（"整体安全性好得多"），并可能跳过这一系列、转向即将到来的 Motorola GrapheneOS 手机（Snapdragon 8 Elite Gen 5，"终于有 MTE"）。项目自己声明的注意点：硬件主张有保留（"几乎可以肯定"）、Google 未置评、Pixel 11 确实新增后量子验证启动（ML-DSA）、AOSP IMS 与 Titan M3。若属实，Android 已发布的最强反利用缓解措施从默认安全研究设备上被删除——而 Motorola 一方路径（记忆窗口 08-20 条目）成为安全优先路径。
+
+## MCP 环境授权烧到 GitOps；EOL 路由器与自托管管理工具长尾（08-31 04:15）
+
+- **argocd-mcp CVE-2026-82456（CVSS 10.0，argoproj-labs，v0.8.0）。** HTTP 传输绑定到所有网络接口，且在配置了
+  `ARGOCD_API_TOKEN` 的情况下接受 MCP 会话却不校验调用方凭据——令牌从环境读取但从不按请求检查，任何能访问该端点的
+  人即获得完整 Argo CD 权限（操纵 GitOps 部署 → 触达集群资源）。这是近几周第三个 MCP 服务端危急漏洞（继 LiteLLM、
+  Chainlit 之后）——"绑定 0.0.0.0 且靠环境授权的 MCP 服务端"如今应写进部署清单，而 GitOps 控制面是集群里杠杆最高的目标。
+- **D-Link DIR-825M 固件 1.1.8 —— 经 boa web 服务器的一批 CVSS 9.9**（CVE-2026-82593 web 管理界面；
+  CVE-2026-82592 `/boafrm/formDiskFormat` 命令执行；CVE-2026-82595 经 `/boafrm/formSysCmd`）。与上周 ZBT 工厂植入
+  同一消费级路由器形状：EOL、暴露公网、预认证命令执行、修复无望——现实的补救是换设备。
+- **Cloud Commander CVE-2026-82460（9.8，19.20.2 修复）。** `cloudcmd` npm 文件管理器的 REST 文件操作与 markdown
+  端点存在目录穿越——路径输入未校验，可读写预期根目录之外的任意文件。自托管 Node 管理工具的长尾实际上就是"带 UI 的
+  shell 访问"——正是人类运维与自主 agent 都会部署然后遗忘的那类端点。

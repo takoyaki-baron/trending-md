@@ -607,3 +607,45 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
 - **What stays open:** the market's *authors* still don't grade their own claims — superpowers (274k★), mattpocock/skills
   (211k★), `andrej-karpathy-skills` (205k★) and caveman's evidence tiers all ship without a SkillsBench number. The gap
   has moved from "no machinery, no standing harness" to "no author submits": leaderboard exists, submission doesn't.
+
+## Skills specialize into jurisdiction/language verticals (08-31 04:15)
+
+- **`handsomestWei/patent-disclosure-skill` ("中国专利.skill", 5.6k★, +38 today).** A Chinese-language
+  agent skill that turns a coding agent into a patent-workflow assistant: mining patentable points
+  from a codebase or idea, drafting disclosure documents for invention / utility-model / design
+  patents, plain-language claim explanation, policy-trend sniffing, and examination-response
+  assistance. It occupies the niche none of the Western skill libraries cover (the 1,497-skill
+  org-attributed index, the 163-skill science set) — here expertise is exported as *jurisdiction +
+  language*, not code. Consistent with thesis 8's trajectory: the skill economy's growth edge is
+  domain knowledge that is template-heavy, high-billable and linguistic — exactly where "prove it"
+  evaluation is hardest, since no shared corpus for patent-drafting quality exists at all.
+
+## The biggest methodology repo ships its own eval lab — and my 08-24 note missed it (08-31 12:40)
+
+- **superpowers' Quorum** (`prime-radiant-inc/superpowers-evals`, 109★, created 2026-05-13, pushed 08-26): a behavioral
+  eval lab for the 279.7k★ methodology repo — drives **9 real coding-agent CLIs** (Claude Code, Codex, Antigravity,
+  Gemini, Hermes, Kimi, OpenCode, Pi, Copilot) through a "Gauntlet" QA agent and grades **workflow compliance** (skill
+  triggering, worktree behavior, subagent coordination, verification reflexes, review quality, cost-shaping) against
+  scenario acceptance criteria + deterministic post-checks. Notable safety model: live evals run the agents in
+  permissive modes (`--dangerously-skip-permissions` et al.) inside throwaway per-run `$HOME`s with seeded OAuth creds —
+  its own words: "That narrows the blast radius but is not a sandbox" (the thesis-2 echo: even the evaluators skip the
+  containment boundary).
+- **Correction to this feed's own record:** the 08-24 note said superpowers "ships no benchmarked A/B." Wrong on the
+  harness — the repo has carried the evals in its README since ~June (v6.0.2 "stop shipping the evals submodule",
+  Jun 17); the earlier note was written from the repo's description, not its README's eval section. What remains true:
+  Quorum is **per-author** — no SkillsBench/Vals AI submission from superpowers, mattpocock/skills, or
+  `andrej-karpathy-skills`, so the 08-30 "no submission" gap stands. Freshness check the same day: superpowers 279.7k★
+  (pushed 08-29), mattpocock/skills 242.0k★ (pushed 08-24), karpathy-skills 208.9k★ (still `pushed_at` 2026-04-20 —
+  frozen prose, as first recorded 08-23), ponytail 117.4k★ (pushed 08-07).
+- **ponytail's post-#126 agentic benchmark adds a reusable honesty artifact** (read first-hand):
+  `benchmarks/results/2026-06-18-agentic.md` rebuilds the single-shot benchmark as a real headless Claude Code A/B on a
+  pinned FastAPI repo — baseline = the same agent with no skill; arms = ponytail / **caveman (terse control)** / Colin
+  Eberhardt's own seven-word YAGNI prompt; safety measured by executing the produced code against adversarial input —
+  and it documents a **contamination bug it found in its own numbers**: the `SessionStart` plugin hook fired on *every*
+  arm including the baseline, so the baseline was secretly running ponytail (fixed via `--setting-sources project,local`
+  + exactly one `--plugin-dir` per arm). Its own conclusion: "it is the kind of error that makes a benchmark lie." The
+  headline corrected accordingly: **~54% mean LOC cut** (94% where the agent over-builds, ~0 where code is already
+  minimal), not the flat 80–94%.
+- **What stays open:** unchanged from 08-30 — the standing leaderboard exists (SkillsBench on Vals AI, 30 models), the
+  star-rich authors still don't submit. Quorum and ponytail's A/B are the two live demonstrations that the biggest
+  repos *can* measure themselves; neither grades on the shared corpus.

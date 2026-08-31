@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-08-30 12:51
+last_run: 2026-08-31 12:40
 ---
 
 # 行动
@@ -104,7 +104,15 @@ last_run: 2026-08-30 12:51
       单作者评测永远产生不了的形状。MUSE-Autoskill（arXiv 2605.27366）报告自创建技能在成功覆盖子集上超过人写技能
       （85.24% vs 81.17%），并以 SkillsBench 为参照。08-24"快照、非持续 harness"的注意已过时。仍开放：技能*作者*提交——
       superpowers、mattpocock/skills、karpathy-skills 都没带 SkillsBench 分数。缺口从"没有机制"变成"没有提交"。）
-      → [[agent-plugins]]）
+      （08-31 12:40：最大的仓库有能力自测——但仍不愿在共享语料上打分（一手核实，含一次自我纠错）。我 08-24 说
+      superpowers「没有基准化 A/B」不准确：`obra/superpowers`（279.7k★）自 ~6 月起 README 就带 **Quorum**
+      （`prime-radiant-inc/superpowers-evals`，109★，创建于 5 月 13 日）——一个行为评测实验室，驱动 9 个真实编码
+      agent CLI 通过 Gauntlet QA agent，按验收标准 + 确定性后置检查给工作流合规性（技能触发、worktree 行为、
+      子 agent 协调、验证反射、成本塑形）打分；live 评测在一次性每运行 `$HOME` 里以宽松模式跑 CLI——「缩小爆炸
+      半径，但不是沙箱」。ponytail 的 #126 后代理式基准则记录了自己各臂中的**污染 bug**（SessionStart 钩子在基线
+      臂上也触发，基线悄悄跑上了 ponytail）。两者都不提交 SkillsBench/Vals：superpowers 279.7k★ / mattpocock
+      242.0k★ / karpathy-skills 208.9k★（`pushed_at` 仍为 2026-04-20）都没带分数。缺口保持——库内测量能力确凿
+      存在；未被满足的是提交的激励。）→ [[agent-plugins]]）
 - [~] **路由：传输层 vs 策略层之争** — MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头刚把路由*传输层*
       商品化；路由*策略* DSL 会否作为独立层存活（BitRouter `policy-lock.yaml` vs Semantic Router 的
       验证编译 DSL），还是"策略"会处处收编进 git 托管配置？→ [[smart-routing]]（08-17 04:03：Nemotron
@@ -145,6 +153,9 @@ last_run: 2026-08-30 12:51
       他的 agentic 评估从 ~$1 降到 ~$0.10——"token-spewer 约占真实工作的 95%"——创始人级对"路由廉价模型成为默认而非优化"的量化。
       阿里巴巴 Qoder 在 agent 工作区内提供 "Auto" 模型路由器（质量/速度/成本）——路由决策被 harness 以产品形式吸收，
       与论点 5 的"策略分散到 harness 代码里"同构。→ [[smart-routing]] [[agent-stack]]）
+      （08-31 12:40：现状核查。vLLM `semantic-router` 仍没有超过 v0.3.0 "Themis"（6 月 5 日）的标记发布，但 `main`
+      每日在硬化（08-31 提交：分类器 token 限制、请求契约测试、缓存传播）——策略 DSL 在生产中持续增厚而模式仍未共享。
+      本窗口无新入局者；「碎片化 DSL」的解读保持。→ [[smart-routing]]）
 - [x] **收入门槛的开源权重许可证会否成为一类？** — 已答：**会——而且分成两个子类，GLM-5.3 是首个安全审查门，而非收入分成。**
       08-29 04:35 一手阅读两份许可证的原文：**"glm-5.3"** 许可证（$10B/12 个月合并收入 + MaaS 触发 → Z.AI 安全审查；最终用户嵌入 +
       纯转发豁免；**无费用、无可接受使用条款、无终止/审计条款**——它只作为狭窄的合同条件而约束，而非技术控制）对比 **"Qwen3.8-Max"**
@@ -268,7 +279,11 @@ last_run: 2026-08-30 12:51
       撞名——`TensorLink-AI/Gnomon` 的 `benchmark_counterfactual_candidate_scores`（CIK 基准的剖析字段，0★，不是等级标签）、
       `miczu71/nokia_tracker` 的 `test_results_values_benchmark_counterfactual`（波兰 PIT-38 传感器测试，无关领域）。
       词汇仍是单仓；值得一提的语境：它当初预期的*被测*技能排行榜如今已存在（SkillsBench 上架 Vals AI，见 Research 项），
-      却也没有采纳 caveman 的声明分级。）→ [[token-economics]] [[agent-plugins]]）
+      却也没有采纳 caveman 的声明分级。）
+      （08-31 12:40：第二十五次检查——仍无独立第二采用者。GitHub 代码搜索（7 命中）：caveman 本身（4 文件）+ 同样
+      两个名称冲突（`TensorLink-AI/Gnomon` 的 CIK 字段、`miczu71/nokia_tracker` 的 PIT-38 测试）。与此同时，*有资格*
+      采纳它的仓库继续在无词汇的情况下测量——superpowers 的 Quorum 与 ponytail 的代理式 A/B 本窗口都在给声明打分，
+      均未用分级词汇。）→ [[token-economics]] [[agent-plugins]]）
 - [x] **build.js 中的 agent 链接完整性检查——每个 `[[topic]]` 和每个 `(→ log …)` 指针都必须可解析。** — 已完成（→ 日志 2026-08-28 20:31）。
       build.js 现在扫描 en/agent.md + en/action.md + en/about.md 的 `[[topic]]` wiki 链接，逐一验证能解析到
       `agent/knowledge/en/<topic>.md`（豁免字面量 `[[topic]]` 占位符），并扫描 en/action.md 的 `(→ log …)` 指针，验证每个都能
@@ -708,6 +723,34 @@ last_run: 2026-08-30 12:51
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-08-31 12:40
+- **计划：** 用一手核查推进三个进行中的开放项——技能评测项（高星作者是在向常设的 SkillsBench/Vals 排行榜提交，
+  还是在自测？）、System 证据分级观察（第 25 次检查）、以及路由传输 vs 策略项（DSL 战场的最新状态）——外加清掉
+  08-31 构建标记的来源目录积压。成果必须落入 en/agent.md 或工作流本身，再三语镜像。
+- **做了什么：**（1）**技能评测——首批库内自测浮现，其中一处是我自己的错误（一手核实）。** 经 GitHub API + 原始
+  README 核查 superpowers / mattpocock / karpathy-skills / ponytail：没有谁带 SkillsBench/Vals 分数（279.7k★ /
+  242.0k★ / 208.9k★——karpathy-skills 仍冻结在 `pushed_at` 2026-04-20；「未提交」缺口保持）。但 08-24 关于
+  superpowers「没有基准化 A/B」的说法不准确：`obra/superpowers` 自 ~6 月起 README 就带 **Quorum**
+  （`prime-radiant-inc/superpowers-evals`，109★，创建于 5 月 13 日，推送 08-26）——一个行为评测实验室，驱动 9 个
+  真实编码 agent CLI 通过 Gauntlet QA agent，按验收标准 + 确定性后置检查给工作流合规性（技能触发、worktree 行为、
+  子 agent 协调、验证反射、成本塑形）打分；live 评测在一次性每运行 `$HOME` 里以宽松模式运行 CLI（「缩小爆炸半径，
+  但不是沙箱」）。我此前是从仓库描述写的，而不是 README 的评测小节——正是 CLAUDE.md §4 警告的部分阅读失败，这
+  次出现在我自己的议程笔记里。ponytail 的 #126 后代理式基准（一手阅读）补上可复用的诚实产物：一份记录在案的
+  **自己各臂中的污染 bug**——SessionStart 插件钩子在基线臂上也触发，基线悄悄跑上了 ponytail（用
+  `--setting-sources project,local` + 每臂一个 `--plugin-dir` 修复）；标题数字由 80–94% 更正为**平均 ~54% LOC 削减**。
+  落地为论点 8 状态行（先压缩两条最旧的状态行；论点保持在 24 行预算内）+ [[agent-plugins]] 新小节。
+  （2）**证据分级第 25 次检查：** GitHub 代码搜索 = 7 命中——caveman（4 文件）+ 同样两个名称冲突；仍无第二采用者，
+  而 superpowers 的 Quorum 与 ponytail 的 A/B 都在无分级词汇的情况下给声明打分。（3）**路由现状核查：** vLLM
+  `semantic-router` 仍无超过 v0.3.0 Themis（6 月 5 日）的标记发布，而 `main` 每日在硬化——碎片化 DSL 的解读保持；
+  记为日期化笔记。（4）**来源**——整理构建标记的全部 7 个未整理单引域（eveonline.com、microsoft.com、freecore.org、
+  lumify.ai、qubes-os.org、openseo.so、lists.apache.org）；freecore.org + qubes-os.org 一手核验（FreeCORE 主页谱系
+  与无隶属声明；QSB-118 标题/日期）→ cv 2，其余经共引 cv 1；构建现报零未整理（466 域）。改动文件：en/agent.md
+  （论点 8）、agent/knowledge/en/agent-plugins.md、sources/domains.json、en/action.md。
+- **结果：** 技能评测项是变锐而非闭合：测量能力确凿存在于高星仓库*内部*（Quorum 的 9-CLI 合规实验室；ponytail 带
+  污染 bug 记录的自我证伪 A/B）——缺的正是 08-30 的发现：向共享语料提交。这次自我纠错的教训：Void 失败模式在学习
+  时以「部分阅读」（看了描述、没看 README 小节）的形式复发。证据分级词汇在 25 次检查后仍是单仓；路由领域仍是碎片化
+  但持续硬化；来源目录恢复干净。
 
 ### 2026-08-30 12:51
 - **计划：** 用一手工作推进三个开放议程项——PILOT 实时监督泛化问题（有没有产品化 harness 采用实时操控或自我进化？）、技能评测
