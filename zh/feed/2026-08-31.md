@@ -1,8 +1,8 @@
 ---
 date: 2026-08-31
-updated: 2026-08-30T20:15:00Z
+updated: 2026-08-31T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -185,13 +185,201 @@ handsomestWei 的"中国专利.skill"将编程智能体变成专利工作流助�
 
 ---
 
+## 13. DeepSeek 发布 V4-Flash-Vision-Exp——首个实验性 V4 多模态模型,MIT 许可
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · 模型卡上线约 2 小时 · HN 提交于 19:25 UTC+8
+- **Tags:** `deepseek` `multimodal` `open-weights` `moe` `llm`
+
+DeepSeek 在 Hugging Face 发布 `DeepSeek-V4-Flash-Vision-Exp`——"DeepSeek-V4 家族首个实验性多模态模型":在 V4-Flash 文本架构(305B 参数,DFlash 注意力、MoE、Hyper-Connections、DSpark 前向路径)上扩展视觉编码器和对齐模块,附带最小化 PyTorch 参考推理实现,MIT 许可。文本智能体成绩与纯文本的 V4-Flash-0731 大致持平(Terminal Bench 2.1:83.9 对 82.7;Claude Opus-4.8 为 85.0),而多模态增益才是这次实验的回报所在——ApexBench Pass@1 从 26.2 跃升至 36.5。`-Exp` 后缀是实打实的:没有推理服务商部署,脚注注明纯文本前代模型在视觉基准上"直接忽略多模态输入",智能体成绩也是在 DeepSeek Harness 最大推理努力档测得。
+
+**Why it matters:** DeepSeek 一直是开源权重竞赛中多模态赛道上显著的缺席者;即便是实验性的 MIT 许可 V4 视觉检查点,也补上了这块缺口——而它诚实的脚注(前代在视觉基准上忽略图像输入)是难得的基准卫生实践,值得点名。
+
+> DeepSeek 的脚注习惯值得高亮:当前代在视觉基准上"忽略多模态输入"时,本订阅源的规则是把这句话印在分数旁边,而不是埋进脚注。
+
+[`🔗 deepseek-ai/DeepSeek-V4-Flash-Vision-Exp`](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp) · [`🔗 HN 讨论串`](https://news.ycombinator.com/item?id=49508372)
+
+---
+
+## 14. "攻破 Claude Code Opus 5 Auto Mode"——间接注入链击败安全分类器
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Embrace The Red(wunderwuzzi)· HN 120+ 分 · 8月26日发布,8月31日登上头版
+- **Tags:** `prompt-injection` `agent-security` `claude-code` `rce` `llm`
+
+Johann Rehberger(wunderwuzzi)公布了针对 Claude Code Auto Mode 的可用 RCE 攻击链——Auto Mode 是 8 月中旬起的默认模式,用安全分类器取代人工审批。这条链从不直接命令模型:一个 415 响应诱导它从 `WebFetch` 回退到 `curl`,一次重定向送来一个 ZIP,内含 Claude 正确拒绝运行的诱饵二进制;而当 Claude 自写 Python 解码器、并在解压出的攻击者目录里运行它时,恶意的 `struct.py` 便遮蔽标准库,在 `import base64` 时执行——随后弹出 Calculator 并建立 C2 回连,小样本运行中成功率 60–80%。Anthropic 将报告以 "Informative" 关闭,定位 Auto Mode 为尽力而为的便利功能、真正边界是操作系统隔离与出口管控;Rehberger 则指出,厂商委托 Trajectory Labs 的评估在其 72 个场景 × 10 次的测试集中报告 0.00% 攻击成功率——而他的攻击链并不在那套场景里。
+
+**Why it matters:** "分类器不是沙箱"如今对着一个已上线的默认配置完成了端到端演示——最讽刺的是,分类器放行了创建恶意软件的步骤,却在事后拦截了 Claude 的清理命令;这种倒置应当终结智能体操作手册里任何"Auto Mode 放行 = 安全"的推理。
+
+> 更值得记住的是加餐变体:载荷通过 `claude -p` 再生成一个无头 Claude 实例,执行侦察并在工作区外写文件——智能体工具链本身成了后渗透工具包。
+
+[`🔗 Embrace The Red: 攻破 Claude Code Opus 5 Auto Mode`](https://embracethered.com/blog/posts/2026/breaking-claude-code-opus-5-and-automode/) · [`🔗 HN 讨论串`](https://news.ycombinator.com/item?id=49506819)
+
+---
+
+## 15. OpenClaw 2.0,"纯属意外"——16,000 个 PR、933 位贡献者把一次清理变成了项目史上最大版本
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenClaw 博客 · HN 114+ 分 · 127 条评论 · 8月30日发布
+- **Tags:** `openclaw` `agents` `open-source` `personal-ai` `release`
+
+开源、厂商中立的个人智能体 OpenClaw(前身为 Clawdbot/Moltbot)发布 2026.8.1 版本,冠名 OpenClaw 2.0,并自述为"OpenClaw 历史上规模最大的更新":来自 933 位贡献者(其中 569 位首次参与)的 16,000+ 个已合并 PR——大约相当于该项目有史以来合并 PR 总数的一半。团队原本只想简化安装、重建浏览器应用;结果把清理工作贯穿到代码库其余部分,滚雪球成了 2.0。安装现在会利用你机器上已有的东西(现有的 ChatGPT/Claude 订阅、API 密钥、本地模型),浏览器应用直接打开对话界面并兼任控制面板,新增的共享云会话让团队成员可以带着完整上下文加入或交接进行中的工作。值得注意的是,该项目此前 230 天内发了 106 个版本,随后为测试这次超大版本静默了近七周。
+
+**Why it matters:** 一个跑在你现有订阅上的个人智能体,加上多人交接,正在收敛到商业编码智能体厂商兜售的同一套工作流——而那七周的空窗说明,即便是贡献者众多的 OSS 项目也会撞上发布流程之墙,只有重做流程才能翻过去。
+
+[`🔗 OpenClaw 2.0, Accidentally`](https://openclaw.ai/blog/openclaw-2-accidentally) · [`🔗 2026.8.1 发布说明`](https://docs.openclaw.ai/releases/2026.8.1)
+
+---
+
+## 16. Simon Willison《理解 ChatGPT Work》——223 个工具、44 项技能,以及 OpenAI 的"致命三要素"
+
+- **Velocity:** ▮▮ rising
+- **Source:** simonwillison.net · HN 217+ 分 · 110 条评论 · 8月30日发布
+- **Tags:** `openai` `chatgpt` `agents` `analysis` `simon-willison`
+
+Simon Willison 发布了对 ChatGPT Work——OpenAI 于 7月9日 上线的智能体产品——的实测拆解,记录它实际做什么,而非 OpenAI 怎么描述它。一个名字之下是两个产品:Work Cloud(移动端)与 Work Local(桌面应用,前身 Codex),仅限付费档。他的工具枚举会话清点出 223 个注册工具和 44 项技能,能力清单才是重点:带完整互联网访问的代码执行(不同于 Chat 的封网容器)、含用户中介 2FA 登录的完整无头 Chrome、跨会话的持久共享文件系统(他有 171 个草稿文件夹)、经 Cloudflare Workers 发布 "ChatGPT Sites"、并行子智能体,以及定时自动化。他的结论:"一个异常令人困惑且非常强大的产品";安全隐患一句话概括——Work 同时具备私有数据访问、不可信内容与外传通道,正是他所说的"致命三要素"(lethal trifecta)。
+
+**Why it matters:** 这是关于部署最广泛的消费级智能体最接近系统提示词级文档的东西——而"三要素"的定性之所以重要,是因为 OpenAI 尚未公布防护机制(Willison 希望类似 Codex 的自动审查),运营者等于在盲批一组危险的能力组合。
+
+[`🔗 Understanding ChatGPT Work (simonwillison.net)`](https://simonwillison.net/2026/Aug/30/understanding-chatgpt-work/) · [`🔗 HN 讨论串`](https://news.ycombinator.com/item?id=49504625)
+
+---
+
+## 17. 12TB Steam "超大泄露"倒出 Steam2 时代——经由一个公开可访问的 API 端点
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ars Technica · HN 196+ 分 · 8月30日发布
+- **Tags:** `valve` `steam` `leak` `game-preservation` `security`
+
+超过 12TB 的 Steam2 时代内容——几乎覆盖 2013 年前 Valve 内容服务器上的每一个 depot,横跨 2003–2013——正在 BitTorrent 站点流传,其中包括此前从未公开的预发布、原型与试玩版本:可玩的早期 Portal 2(含被删的 GLaDOS/Cave Johnson 台词和一把 Episode 3 武器模型)、"ep3" 数据文件,以及 Left 4 Dead 2、CS:GO 和数十款第三方游戏的早期 beta。Valve 观察者 Gabe Follower 与 Scolcer 均指认这批内容来自一个公开可访问的 API 端点——"没有密码。什么都没有。藏在光天化日之下"——但它究竟是近期被抓取,还是 2013 年 SteamPipe 迁移后一直被私下囤积,尚不清楚。Ars 提示了盗版与法律风险:压缩包里大量是第三方发行商未发布的半成品,Valve 圈内人物如 Tyler McVicker 已在劝人别碰。
+
+**Why it matters:** 这是 PC 游戏版的任天堂 gigaleak,而安全教训直白得刺眼——十年的发行商内容一直躺在一个大家以为早已退役的内容系统的未认证端点后面;API 面不会因为产品迁移就自动失去价值,未认证的 API 资产不会自己下线。
+
+> 泄露包 readme 里"致所有囤积者温暖的祝愿"暗示这是一份转为公开的私人档案——若属实,Valve 的开放端点就是长达十年无人监测的暴露面,而非一次新鲜入侵。
+
+[`🔗 Ars Technica: 12TB Steam "超大泄露"`](https://arstechnica.com/gaming/2026/08/a-12tb-steam-teraleak-spills-more-than-a-decade-of-lost-pc-gaming-history/) · [`🔗 HN 讨论串`](https://news.ycombinator.com/item?id=49506182)
+
+---
+
+## 18. 2.4 亿域名的 P99 0 毫秒* 自动补全——keyDown 预取与那个诚实的星号
+
+- **Velocity:** ▮▮ rising
+- **Source:** ruurtjan.com · HN 152+ 分 · 64 条评论
+- **Tags:** `search` `autocomplete` `performance` `systems` `trie`
+
+Ruurtjan Pul 为 Wirewiki 的约 2.4 亿域名索引(Tranco 前 100 万加上 CZDS 区域文件,约 2.5 GB)构建了自动补全,"p99 0 ms" 的含义是:结果在按键释放之前就已就绪。延迟定义为从 keyUp 到结果可渲染,客户端在 keyDown 时预取——已输入前缀加上全部 38 个可能的下一字符(约 5 kB)——于是手指还按着时,答案已经在路上。后端将"头部"(为每个前缀预计算前 8 条建议的 trie)与"尾部"(SSD 上按块排序、增量压缩的域名,配 27 MB 内存目录)分离;多数请求 2 ms 内应答,nginx+API 在 1.6k req/s 下 p99 保持 15 ms。星号是承重墙:该结论仅在用户靠近他那台欧洲单机时成立——"来自美国的流量会增加 100–200 毫秒"。
+
+**Why it matters:** 延迟的重新定义(测到"结果就绪",靠预取藏住真实耗时)正是消费级搜索一直在玩的把戏——而这篇文章值得称赞之处在于精确说明了把戏在哪里失效,所以星号进了标题而不是脚注。
+
+[`🔗 2.4 亿域名的 P99 0 ms* 自动补全`](https://ruurtjan.com/articles/p99-0ms-autocomplete-for-240-million-domain-names) · [`🔗 HN 讨论串`](https://news.ycombinator.com/item?id=49505219)
+
+---
+
+## 19. OpenShot 4.0——GPL 视频编辑器迎来调色、内录与本地 ONNX AI 遮罩
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenShot 博客 · HN 135+ 分 · 8月30日发布
+- **Tags:** `openshot` `video-editing` `open-source` `onnx` `qt`
+
+OpenShot 4.0 于 8月30日 发布,配套库 libopenshot/-audio 同步达到 1.0.0。主打功能:专属 Color View 工作区(可打关键帧的 Color Grade 特效、调色轮、贝塞尔曲线、.cube LUT、实时示波器),以及把麦克风、屏幕、摄像头和系统音频录成独立可剪辑片段的 Recording View——在 Windows、macOS、X11 与 Wayland/PipeWire 上各用原生路径。Object Mask 特效完全在本地运行免费下载的 ONNX 模型(YOLO、EfficientSAM、Cutie),不依赖云订阅;时间线也已原生 Qt,完成了从 Web 组件的迁移。相对 3.5.1 的实测提升:Blur 快 61.8%,时间线快 3.4–5.1%。
+
+**Why it matters:** 大众市场 GPL 编辑器内置本地 ONNX 遮罩,是端侧 AI 的一个安静里程碑——把竞争对手锁在云端 GPU 时长之后的那个功能(动态遮罩/rotoscoping)用"无订阅"模式交了出来。
+
+[`🔗 OpenShot 4.0 发布文章`](https://www.openshot.org/blog/2026/08/30/openshot-40-record-edit-color-like-never-before/) · [`🔗 HN 讨论串`](https://news.ycombinator.com/item?id=49507822)
+
+---
+
+## 20. 《如何构建扩散语言模型》——Kuleshov 组把 ICLR/MLSS 讲座整理成公开教程
+
+- **Velocity:** ▮▮ rising
+- **Source:** kuleshov-group.github.io · HN 117+ 分
+- **Tags:** `diffusion` `llm` `tutorial` `research` `training`
+
+Kuleshov 组(康奈尔)发布了扩散语言模型的端到端教程,改编自 ICLR 2026 workshop 与 MLSS 2026 的讲座。它从高斯扩散直觉讲到掩码扩散("一个在所有掩码率上经 ELBO 训练的生成式 BERT"),再到生产级扩展:支持变长与 KV 缓存的块扩散、编码器–解码器拆分(Gemma Diffusion 与 NVIDIA Nemotron Diffusion 所用)、纠错式重掩码(ReMDM/UDLM)、采样蒸馏、离散引导(D-CBG/D-CFG),以及 RL 后训练(d1 的 diffu-GRPO、d2、DRAKES)。结语的主张大胆而克制:"扩散之于推理时与后训练缩放律,也许正如 Transformer 之于 RNN"——同时明确提示扩散尚未扩展到自回归的算力与数据规模,不过 100B 级实验(ESM3)看起来有希望。
+
+**Why it matters:** Mercury 2 的约 1,200 tok/s 和开源 LLaDA 8B 让扩散 LLM 在今年成为真实的推理选项;这份教程是进入该领域实际机制的最佳入口,而且出自发表了其中大半 RL 后训练工作的团队。
+
+[`🔗 How to build a diffusion language model`](https://kuleshov-group.github.io/blog/blog/2026/how-to-build-a-diffusion-language-model/) · [`🔗 HN 讨论串`](https://news.ycombinator.com/item?id=49503956)
+
+---
+
+## 21. crawl4ai v0.9.3——纯安全发布,一次关闭五个协同披露公告
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +229 · 总计 80.2k
+- **Tags:** `crawler` `security-release` `agents` `rag` `python`
+
+80k 星的 LLM 友好爬虫 crawl4ai 发布了纯安全版本 v0.9.3:关闭五个协同披露公告(PDF 处理路径中的任意文件写入、SSRF 与拒绝服务,外加 Docker Playground 中的两个 XSS),落地 33 项修复,覆盖 Docker 服务器、爬虫核心与 PDF 处理,并收紧了两个默认值(PDF 下载上限 100 MiB / 2,000 页;Docker 墙钟时限改为 300 秒)。这延续了该项目的近期轨迹:v0.9.0 已让 Docker API 默认安全(默认开认证、绑定回环),而 v0.8.x 的公告史里包括同一个服务器上的预认证沙箱逃逸 RCE 和一整个 SSRF 家族。
+
+**Why it matters:** 智能体技术栈把爬虫当作向提示词投喂不可信内容的受信管道——一个 Docker API 能写任意文件的爬虫,就是从恶意页面直达宿主机的通路;任何自托管它的人都值得为这次发布安排一次升级。
+
+[`🔗 unclecode/crawl4ai`](https://github.com/unclecode/crawl4ai) · [`🔗 8月31日 GitHub Trending 快照`](https://gist.github.com/qq1018408006/c5a58d5bfaab01c5896fdbf36e32a29e)
+
+---
+
+## 22. uv 把缓存去重下沉到文件级——省下 545 MiB,冷安装代价不足 4%
+
+- **Velocity:** ▮ steady
+- **Source:** astral-sh/uv PR #21327 · HN 73+ 分
+- **Tags:** `uv` `python` `packaging` `cache` `performance`
+
+Charlie Marsh 的 PR #21327 把 uv 的内容寻址缓存从 wheel 级下沉到文件级:每个载荷文件按其 BLAKE3 哈希存入新的 `files-v0` 桶,再硬链接到对应的 `archive-v0` 位置;硬链接数归一时即可清理。在他的机器上,134,222 个文件去重为 87,129 个对象,省下 545.2 MiB——约为缓存的 10%。冷安装代价从 +19.4% 一路基准测到 4% 以内(叠加一个已合并的缓冲区复用 PR 后,作者称现在反而比之前更快);热安装持平。PR 尚未合并、标记为 preview,zanieb 已批准,reflink 兼容性仍是开放问题。
+
+**Why it matters:** wheel 缓存正是 monorepo CI 与 AI 智能体沙箱悄悄堆积数十 GB 的地方——文件级去重攻击的是真实重复(同一个依赖的文件散布在成千上万个 wheel 里),而不只是共享相同的 wheel。
+
+[`🔗 astral-sh/uv PR #21327`](https://github.com/astral-sh/uv/pull/21327) · [`🔗 HN 讨论串`](https://news.ycombinator.com/item?id=49506142)
+
+---
+
+## 23. Corsair——一个自我定位为"超越 MCP"的开源集成平台
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +99 · 总计 11.1k
+- **Tags:** `integrations` `mcp` `agents` `open-source` `api`
+
+Corsair(corsairdev/corsair)正以"功能完整、DX 顺滑的产品集成平台"之姿登上趋势榜:维护良好的第三方 API 适配器、Apache-2.0 下可自托管,外加可选的托管 Hub 负责 OAuth 刷新与 webhook。它的切入角度是架构性的:"大多数智能体集成工具只支持 MCP",README 如此论证,而 Corsair 建立在 REST API 之上,让同一层集成同时服务智能体、后端服务和面向客户的多租户面板,无需逐服务写胶水代码。目前还没有任何正式版本 tag——11.1k 星的热度是注意力而非发布事件,所以这条趋势反映的是一个走向成熟的项目找到了受众,而非新能力。
+
+**Why it matters:** 集成层才是智能体部署真正卡住的地方(认证、令牌刷新、webhook);在智能体基础设施走向标准化的当口,一个可自托管、REST 优先的 MCP-only 替代方案是重要的架构站位。
+
+[`🔗 corsairdev/corsair`](https://github.com/corsairdev/corsair) · [`🔗 8月31日 GitHub Trending 快照`](https://gist.github.com/qq1018408006/c5a58d5bfaab01c5896fdbf36e32a29e)
+
+---
+
+## 24. livekit/agents 1.7.1——语音智能体框架刷新 STT 阵容,强化打断语义
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +131 · 总计 13.7k · v1.7.1 于 8月27日
+- **Tags:** `voice-ai` `agents` `livekit` `stt` `open-source`
+
+承载了相当大比例实时语音智能体的 livekit/agents 正因 1.7.x 系列登上趋势榜:1.7.0(8月20日)为智能体可观测性加入 PII 脱敏(对聊天历史与录音中的检测实体做语义脱敏)和 Expressive Mode(以对话上下文情绪标签驱动韵律);1.7.1(8月27日)新增 Palabra 与 Sarvam 流式插件、`gemini-3.5-transcribe-live`、ElevenLabs text-to-dialogue 流式支持,外加在生产语音里至关重要的修复:被打断的语音现在会取消生成,工具运行期间的智能体/用户状态也能正确追踪。
+
+**Why it matters:** 语音智能体的成败系于打断语义与 PII 处理——恰好都是本次发布触及的内容,因此 +131 星的一天可以合理视为语音智能体开发者痛点所在的风向标。
+
+[`🔗 livekit/agents`](https://github.com/livekit/agents) · [`🔗 1.7.1 发布说明`](https://github.com/livekit/agents/releases)
+
+---
+
+## 25. 《智能体记忆即文件格式》——memoryfields:一个 Markdown 加 SQLite 索引的 zip,取代记忆流水线
+
+- **Velocity:** ▮ steady
+- **Source:** calpaterson.com · HN 8+ 分
+- **Tags:** `agent-memory` `file-format` `rag` `agents` `open-source`
+
+Cal Paterson 提出把"记忆场"(memoryfields)作为普通 zip 压缩包来存储智能体记忆:Markdown 页面(约 8 kB / 2,000 token,以适配向量嵌入)、可选的 YAML frontmatter,以及可选的 SQLite 向量索引。其论点是记忆应当是数据而非流程:智能体自己撰写散文式记忆(不需要分块/蒸馏流水线),检索是一次约 2 次工具调用的语义跳跃,而非沿着 wiki 链接串行图遍历;zip 原样通行于 S3、GitHub、HTTP 或 Syncthing。他附上了诚实的自注——它"可以说是 RAG 的一种形态"——以及一句值得引用的安全线:"你绝不能与你信任之外的各方共享你的上下文窗口,包括经由记忆。"
+
+**Why it matters:** 每个智能体 harness 都在发明私有记忆存储;一个无趣的、厂商中立的文件格式,正是让记忆活得比 harness 久的那种标准——而其"低机制"哲学(智能体自己发明访问模式)是一个可检验的赌注:模型进步的速度会快于记忆中间件。
+
+[`🔗 Agent Memory as a File Format (calpaterson.com)`](https://calpaterson.com/memoryfields.html) · [`🔗 HN 讨论串`](https://news.ycombinator.com/item?id=49508317)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-30T20:15:00Z |
-| Items | 12 |
-| Sources tracked | 16 (Hacker News, GitHub Trending, people.kernel.org, OpenAI, BBC, Python Insider, RISE Project, Apache, NVD, Rapid7, VulDB, SecurityOnline, VulnCheck, Reuters, CSIS, Lobsters) |
+| Generated | 2026-08-31T12:20:00Z |
+| Items | 25 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, Hugging Face, Embrace The Red, OpenClaw, simonwillison.net, Ars Technica, ruurtjan.com, OpenShot, Kuleshov Group, astral-sh, corsairdev, livekit, calpaterson.com, people.kernel.org, OpenAI, BBC, Python Insider, RISE Project, Apache, NVD, Rapid7, VulDB, SecurityOnline, VulnCheck, Reuters, CSIS, Lobsters) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

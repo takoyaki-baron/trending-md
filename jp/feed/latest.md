@@ -1,8 +1,8 @@
 ---
 date: 2026-08-31
-updated: 2026-08-30T20:15:00Z
+updated: 2026-08-31T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -185,13 +185,201 @@ handsomestWei 氏の「中国专利.skill」は、コーディングエージェ
 
 ---
 
+## 13. DeepSeek が V4-Flash-Vision-Exp を公開——初の実験的 V4 マルチモーダルモデル、MIT ライセンス
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · モデルカード公開約2時間 · HN 投稿 19:25 UTC+8
+- **Tags:** `deepseek` `multimodal` `open-weights` `moe` `llm`
+
+DeepSeek が Hugging Face に `DeepSeek-V4-Flash-Vision-Exp` を公開した。「DeepSeek-V4 ファミリー初の実験的マルチモーダルモデル」であり、V4-Flash のテキストアーキテクチャ(305B パラメータ、DFlash attention、MoE、Hyper-Connections、DSpark フォワードパス)にビジョンエンコーダとアライナーを拡張し、最小構成の PyTorch リファレンス推論実装を MIT ライセンスで同梱している。テキスト系エージェントのスコアはテキスト専用の V4-Flash-0731 とほぼ同等(Terminal Bench 2.1:83.9 対 82.7。Claude Opus-4.8 は 85.0)で、実験の成果が表れるのはマルチモーダル側だ——ApexBench Pass@1 が 26.2 → 36.5 に跳ね上がる。`-Exp` 接尾辞は実質的な意味を持つ:推論プロバイダーへのデプロイはまだなく、脚注には「テキスト専用の前世代はビジョンベンチマークでマルチモーダル入力を単に無視していた」と明記され、エージェントスコアも DeepSeek Harness の最大推論努力モードで測定されている。
+
+**Why it matters:** DeepSeek はオープンウェイト競争でマルチモーダル分野の著名な欠席者だった。実験的とはいえ MIT ライセンスの V4 ビジョンチェックポイントがそのギャップを埋め始めた——そして前世代が画像入力を無視していたことを脚注で正直に明記する姿勢は、稀なベンチマーク衛生の実例として特筆に値する。
+
+> DeepSeek の脚注運用はハイライトに値する:前世代がビジョンベンチマークで「マルチモーダル入力を無視」していた場合、このフィードのルールはその一文をスコアの隣に印字することであり、脚注に埋もれさせないことだ。
+
+[`🔗 deepseek-ai/DeepSeek-V4-Flash-Vision-Exp`](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49508372)
+
+---
+
+## 14. 「Breaking Claude Code Opus 5 Auto Mode」——間接インジェクションの連鎖が安全分類器を突破
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Embrace The Red(wunderwuzzi)· HN 120+ pts · 8月26日公開、8月31日フロントページ
+- **Tags:** `prompt-injection` `agent-security` `claude-code` `rce` `llm`
+
+Johann Rehberger(wunderwuzzi)氏が、Claude Code の Auto Mode——8月中旬からデフォルトとなり、人間の承認プロンプトを安全分類器に置き換えたモード——に対する動作する RCE チェーンを公開した。このチェーンはモデルに命令を直接下すことはない:415 レスポンスで `WebFetch` から `curl` へのフォールバックを誘い、リダイレクトで ZIP を届ける。ZIP には Claude が正しく実行を拒否するデコイバイナリが入っており、Claude が代わりに自前の Python デコーダを書いて実行すると、展開先の攻撃者ディレクトリ内で悪意ある `struct.py` が標準ライブラリをシャドウし、`import base64` の時点で実行される——Calculator が起動し C2 コールバックが確立される。小規模サンプルで成功率は 60〜80%。Anthropic は報告を「Informative」としてクローズし、Auto Mode はベストエフォートの利便性機能であり実際の境界は OS 分離と egress 制御だと位置づけた。Rehberger 氏は、ベンダー委託の Trajectory Labs 評価が 72 シナリオ×10 回で 0.00% の攻撃成功率を報告していたが、彼のチェーンはそのセットに含まれていなかったと指摘する。
+
+**Why it matters:** 「分類器はサンドボックスではない」が、出荷済みデフォルトに対してエンドツーエンドで実証された。とどめは、分類器がマルウェア作成のステップは許可したのに、侵害検知後の Claude のクリーンアップコマンドは拒否したという逆転だ。これで「Auto Mode の承認 = 安全」というエージェント運用手順の推論は終わるべきだ。
+
+> 覚えておくべきはボーナス変種だ:ペイロードが `claude -p` で第2のヘッドレス Claude を起動し、偵察を行いワークスペース外にファイルを書く——エージェントのツールチェーンそのものがポストエクスプロイテーションの道具になる。
+
+[`🔗 Embrace The Red: Breaking Claude Code Opus 5 Auto Mode`](https://embracethered.com/blog/posts/2026/breaking-claude-code-opus-5-and-automode/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49506819)
+
+---
+
+## 15. OpenClaw 2.0、「偶然」——16,000 PR と 933 人のコントリビューターがクリーンアップを史上最大リリースに変えた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenClaw ブログ · HN 114+ pts · 127 コメント · 8月30日公開
+- **Tags:** `openclaw` `agents` `open-source` `personal-ai` `release`
+
+オープンソースでベンダーニュートラルなパーソナルエージェント OpenClaw(旧 Clawdbot/Moltbot)がバージョン 2026.8.1 を「OpenClaw 2.0」として出荷した。「OpenClaw の歴史上圧倒的に最大のアップデート」であり、933 人のコントリビューター(うち569人が初参加)によるマージ済み 16,000+ PR——プロジェクト開始以来のマージ PR 総数の約半分に相当する。チームの当初の目的はインストールの簡素化とブラウザアプリの再構築だけだったが、クリーンアップをコードベース全体に貫いた結果、雪だるま式に 2.0 になった。セットアップはマシンに既にあるもの(既存の ChatGPT/Claude サブスクリプション、API キー、ローカルモデル)を利用し、ブラウザアプリは会話画面から直接始まりコントロールサーフェスを兼ね、新しい共有クラウドセッションではチームメイトがコンテキストを保ったまま進行中の作業に参加・引き継ぎできる。注目すべきは、230日間で106リリースを重ねてきたプロジェクトが、このメガリリースのテストのため約7週間沈黙したことだ。
+
+**Why it matters:** 既存のサブスクリプションで動くパーソナルエージェントにマルチプレイヤー引き継ぎが加わると、商用コーディングエージェントベンダーが売っているものに収束していく。そして7週間の空白は、コントリビューターの多い OSS プロジェクトでもリリースプロセスの壁にぶつかり、プロセスの作り直しでしか超えられなかったことを示している。
+
+[`🔗 OpenClaw 2.0, Accidentally`](https://openclaw.ai/blog/openclaw-2-accidentally) · [`🔗 2026.8.1 リリースノート`](https://docs.openclaw.ai/releases/2026.8.1)
+
+---
+
+## 16. Simon Willison 氏の「Understanding ChatGPT Work」——223ツール、44スキル、そして OpenAI の「致命的な三要素」
+
+- **Velocity:** ▮▮ rising
+- **Source:** simonwillison.net · HN 217+ pts · 110 コメント · 8月30日公開
+- **Tags:** `openai` `chatgpt` `agents` `analysis` `simon-willison`
+
+Simon Willison 氏が、OpenAI が7月9日に投入したエージェント製品 ChatGPT Work の実測レビューを公開した。OpenAI の説明ではなく、実際に何をするかを記録したものだ。ひとつの名前に2製品がある:Work Cloud(モバイル)と Work Local(旧 Codex のデスクトップアプリ)。有料プラン限定だ。ツール列挙セッションで 223 個の登録ツールと 44 スキルを確認し、際立つのはケイパビリティのリストだ:完全なインターネットアクセス付きコード実行(Chat の閉じたコンテナと異なる)、ユーザー介在の 2FA ログインを含む完全なヘッドレス Chrome、セッションをまたぐ永続的な共有ファイルシステム(彼の環境には171のスクラッチフォルダがあった)、Cloudflare Workers 経由の「ChatGPT Sites」公開、並列サブエージェント、スケジュール自動化。彼の評決は「途方もなく分かりにくく、非常に強力な製品」。安全性は一言で言えば——Work はプライベートデータアクセス、信頼できないコンテンツ、データ持ち出しチャネルを兼ね備えており、彼の言う「致命的な三要素(lethal trifecta)」だ。
+
+**Why it matters:** 最も広く展開されているコンシューマーエージェントについて、システムプロンプト級のドキュメントに最も近いものがこれだ。三要素の指摘が重要なのは、OpenAI が保護機構を公表していないからだ(Willison 氏は Codex の自動レビューに似たものを期待していると書く)。運用者は危険なケイパビリティの組み合わせを目隠しで承認している。
+
+[`🔗 Understanding ChatGPT Work (simonwillison.net)`](https://simonwillison.net/2026/Aug/30/understanding-chatgpt-work/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49504625)
+
+---
+
+## 17. 12TB の Steam「テラリーク」が Steam2 時代を流出——公開アクセス可能な API エンドポイント経由で
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ars Technica · HN 196+ pts · 8月30日公開
+- **Tags:** `valve` `steam` `leak` `game-preservation` `security`
+
+Steam2 時代のコンテンツ 12TB 超——2013年以前の Valve コンテンツサーバーにアップロードされたほぼすべての depot を含む、2003〜2013 年分——が BitTorrent トラッカーで流出している。未公開のプレリリース・プロトタイプ・プレイテスト版が含まれ、カットされた GLaDOS/Cave Johnson の台詞や Episode 3 の武器モデルを持つ遊べる初期 Portal 2、「ep3」データファイル、Left 4 Dead 2 や CS:GO などサードパーティ作品の初期ベータが見つかっている。Valve ウォッチャーの Gabe Follower 氏と Scolcer 氏はどちらも、ダンプの入手元は「公開アクセス可能な API エンドポイント」——「パスワードも何もない。隠れてはいたが無防備だった」——と報告している。ただし最近スクレイプされたのか、2013年の SteamPipe 移行以来個人的に保管されてきたのかは不明だ。Ars は海賊版・法的リスクを指摘する。アーカイブにはサードパーティパブリッシャーの未公開成果物が多く含まれ、Tyler McVicker 氏らは手を出さないよう警告している。
+
+**Why it matters:** 任天堂の gigaleak に対応する PC ゲーム版の事件であり、セキュリティの教訓は辛辣だ——10年分のパブリッシャーコンテンツが、誰もが引退済みだと思い込んでいたコンテンツシステムの未認証エンドポイントの裏に生き延びていた。API サーフェスは製品が移行しても資産であり続け、未認証の API 資産は勝手に消えてくれない。
+
+> リークの readme にある「hoarder たちへの温かい祝福」は、これが公開に転じた私的アーカイブであることを示唆する——もし本当なら、Valve の開かれたエンドポイントは新規侵害ではなく10年間監視されなかった露出ということになる。
+
+[`🔗 Ars Technica: 12TB の Steam「テラリーク」`](https://arstechnica.com/gaming/2026/08/a-12tb-steam-teraleak-spills-more-than-a-decade-of-lost-pc-gaming-history/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49506182)
+
+---
+
+## 18. 2.4億ドメインの P99 0 ミリ秒* 自動補完——keyDown プリフェッチと正直なアスタリスク
+
+- **Velocity:** ▮▮ rising
+- **Source:** ruurtjan.com · HN 152+ pts · 64 コメント
+- **Tags:** `search` `autocomplete` `performance` `systems` `trie`
+
+Ruurtjan Pul 氏が、Wirewiki の約2.4億ドメインのインデックス(Tranco トップ100万 + CZDS ゾーンファイル、約2.5 GB)向けの自動補完を構築した。「p99 0 ms」とは、キーを離す前に結果の準備が整うという意味だ。レイテンシは keyUp から結果レンダリング可能までとして定義され、クライアントは keyDown でプリフェッチする——入力済みプレフィックスに加え、可能な次の38文字すべて(約5 kB)——つまり指がまだ押している間に答えはすでに転送中だ。バックエンドは、全プレフィックスに上位8候補を事前計算した trie の「ヘッド」と、SSD 上のデルタ圧縮・ブロックソート済みドメインの「テール」(27 MB のメモリ内ディレクトリ付き)に分かれる。大半のリクエストは2 ms で応答し、nginx+API は 1.6k req/s で p99 15 ms を維持する。アスタリスクが支えだ:主張が成立するのは彼のヨーロッパの単一サーバーに近いユーザーの場合のみ——「USA からのトラフィックは100〜200 ms 追加される」。
+
+**Why it matters:** レイテンシの再定義(「結果準備完了」までを測り、プリフェッチで実時間を隠す)は、コンシューマー検索が昔からやっている技そのものだ。この記事が称賛に値するのは、技がどこで破綻するかを正確に明示している点であり、だからこそアスタリスクは脚注ではなく見出しに入った。
+
+[`🔗 P99 0 ms* autocomplete for 240M domain names`](https://ruurtjan.com/articles/p99-0ms-autocomplete-for-240-million-domain-names) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49505219)
+
+---
+
+## 19. OpenShot 4.0——GPL 動画エディタにカラーグレーディング、録画、ローカル ONNX AI マスキングが登場
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenShot ブログ · HN 135+ pts · 8月30日公開
+- **Tags:** `openshot` `video-editing` `open-source` `onnx` `qt`
+
+OpenShot 4.0 が8月30日にリリースされ、姉妹ライブラリ libopenshot/-audio も 1.0.0 に到達した。目玉は:キーフレーム可能な Color Grade エフェクト、カラーホイール、ベジェ曲線、.cube LUT、ライブスコープを備えた専用の Color View ワークスペースと、マイク・画面・ウェブカメラ・システム音声を個別の編集可能クリップとして録画する Recording View(Windows、macOS、X11、Wayland/PipeWire で各ネイティブパス対応)。Object Mask エフェクトは無料ダウンロードの ONNX モデル(YOLO、EfficientSAM、Cutie)を完全にローカルで実行し、クラウドサブスクリプションは不要。タイムラインはネイティブ Qt になり、Web ベースコンポーネントからの移行を完了した。3.5.1 からの実測改善:Blur 61.8% 高速化、タイムライン 3.4〜5.1% 高速化。
+
+**Why it matters:** 大衆市場の GPL エディタにローカル ONNX マスキングが入ったのは、オンデバイス AI の静かなマイルストーンだ。競合がクラウド GPU 時間の後ろに隠している機能(ロトスコープ/マスキング)を「サブスクリプション不要」モデルで提供したことになる。
+
+[`🔗 OpenShot 4.0 リリース記事`](https://www.openshot.org/blog/2026/08/30/openshot-40-record-edit-color-like-never-before/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49507822)
+
+---
+
+## 20. 「How to build a diffusion language model」——Kuleshov グループが ICLR/MLSS の講義を公開チュートリアルに
+
+- **Velocity:** ▮▮ rising
+- **Source:** kuleshov-group.github.io · HN 117+ pts
+- **Tags:** `diffusion` `llm` `tutorial` `research` `training`
+
+Kuleshov グループ(コーネル大学)が、拡散言語モデルのエンドツーエンドチュートリアルを公開した。ICLR 2026 ワークショップと MLSS 2026 の講義を基にしている。ガウス拡散の直観から、マスク拡散(ELBO ですべてのマスク率にわたって学習される「生成的 BERT」)を経て、実運用級の拡張へ進む:可変長と KV キャッシュを可能にするブロック拡散、エンコーダ・デコーダ分割(Gemma Diffusion と NVIDIA Nemotron Diffusion が採用)、誤り訂正型リマスキング(ReMDM/UDLM)、サンプリング蒸留、離散ガイダンス(D-CBG/D-CFG)、RL ポストトレーニング(d1 の diffu-GRPO、d2、DRAKES)。結びの主張は大胆かつ抑制的だ:「推論時・ポストトレーニングのスケーリング則にとっての拡散は、RNN にとってのトランスフォーマーかもしれない」——ただし拡散はまだ自己回帰レベルの計算とデータにはスケールしておらず、100B クラスの実験(ESM3)が有望だという明示的な留保付きだ。
+
+**Why it matters:** Mercury 2 の約1,200 tok/s とオープンな LLaDA 8B により、拡散 LLM は今年、現実の推論選択肢になった。この記事は分野の実際の仕組みへの最良の入り口であり、しかもその中の RL ポストトレーニング研究の大半を発表してきたグループによるものだ。
+
+[`🔗 How to build a diffusion language model`](https://kuleshov-group.github.io/blog/blog/2026/how-to-build-a-diffusion-language-model/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49503956)
+
+---
+
+## 21. crawl4ai v0.9.3——セキュリティ専用リリースで5件の協調開示アドバイザリを一括解消
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +229 · 累計 80.2k
+- **Tags:** `crawler` `security-release` `agents` `rag` `python`
+
+80k スターの LLM フレンドリーなウェブクローラー crawl4ai が、純粋なセキュリティリリース v0.9.3 を出荷した:PDF 処理パスにおける任意ファイル書き込み・SSRF・DoS、および Docker Playground の2件の XSS という5件の協調開示アドバイザリを解消し、Docker サーバー・クローラー・PDF 処理にわたる33件の修正を取り込み、デフォルト値を2つ強化した(PDF ダウンロードは 100 MiB / 2,000 ページで上限、Docker のウォールクロック制限は300秒に)。これは近年の流れの継続だ:v0.9.0 は Docker API を secure-by-default(認証デフォルト有効、ループバックバインド)にし、v0.8.x のアドバイザリ履歴には同一サーバーにおけるプリ認証サンドボックスエスケープ RCE と SSRF ファミリーが含まれていた。
+
+**Why it matters:** エージェントスタックはクローラーを、信頼できないコンテンツをプロンプトに流し込む信頼された配管として扱う——Docker API が任意ファイルを書けるクローラーは、悪意あるページからホストへの直接経路になる。セルフホストしている人は今回のリリースをアップグレード計画に入れる価値がある。
+
+[`🔗 unclecode/crawl4ai`](https://github.com/unclecode/crawl4ai) · [`🔗 8月31日 GitHub Trending スナップショット`](https://gist.github.com/qq1018408006/c5a58d5bfaab01c5896fdbf36e32a29e)
+
+---
+
+## 22. uv がキャッシュ重複排除をファイルレベルへ——545 MiB 削減、コールドインストールのコストは4%未満
+
+- **Velocity:** ▮ steady
+- **Source:** astral-sh/uv PR #21327 · HN 73+ pts
+- **Tags:** `uv` `python` `packaging` `cache` `performance`
+
+Charlie Marsh 氏の PR #21327 は、uv のコンテンツアドレス型キャッシュを wheel レベルからファイルレベルへ拡張する:すべてのペイロードファイルを BLAKE3 ハッシュで新しい `files-v0` バケットに格納し、`archive-v0` の場所へハードリンクする。ハードリンク数が1になるとオブジェクトはクリーンアップされる。彼のマシンでは 134,222 ファイルが 87,129 オブジェクトに重複排除され、545.2 MiB——キャッシュの約10%——を節約した。コールドインストールのペナルティは +19.4% からベンチマークで4%未満まで削り(マージ済みのバッファ再利用 PR と合わせて、著者いわく以前より速くなった)、ウォームインストールは変動なし。PR は未マージで preview ラベル、zanieb の承認は得たが reflink 互換性は未解決の論点だ。
+
+**Why it matters:** wheel キャッシュは、モノレポ CI と AI エージェントのサンドボックスが気づかないうちに数十 GB を積み上げる場所だ。ファイルレベルの重複排除は、同一 wheel の共有ではなく真の重複(何千もの wheel に散らばる同じ依存関係のファイル)を攻撃する。
+
+[`🔗 astral-sh/uv PR #21327`](https://github.com/astral-sh/uv/pull/21327) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49506142)
+
+---
+
+## 23. Corsair——「MCP を超える」を標榜するオープンソース統合プラットフォーム
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +99 · 累計 11.1k
+- **Tags:** `integrations` `mcp` `agents` `open-source` `api`
+
+Corsair(corsairdev/corsair)が「シームレスな DX を備えたフル機能のプロダクト統合プラットフォーム」としてトレンドに上がっている:メンテナンスされたサードパーティ API アダプタ、Apache-2.0 でのセルフホスト対応、OAuth リフレッシュと webhook を担うオプションのホステッド Hub。その独自ポジションはアーキテクチャにある:「ほとんどのエージェント統合ツールは MCP 専用だ」と README は論じ、Corsair は REST API の上に築かれているため、同じ統合レイヤーがエージェント・バックエンド・顧客向けマルチテナントダッシュボードに、サービスごとの糊コードなしで使える。正式なリリースタグはまだない——11.1k スターの急騰は注目でありローンチイベントではない。つまりこのトレンドは、成熟しつつあるプロジェクトがオーディエンスを見つけたことを示すものであり、新ケイパビリティではない。
+
+**Why it matters:** エージェントのデプロイが実際に詰まるのは統合レイヤーだ(認証、トークンリフレッシュ、webhook)。エージェントインフラが標準化に向かういま、セルフホスト可能で REST ファーストの MCP 専用ツールへの代替は意味のあるアーキテクチャ上の立場だ。
+
+[`🔗 corsairdev/corsair`](https://github.com/corsairdev/corsair) · [`🔗 8月31日 GitHub Trending スナップショット`](https://gist.github.com/qq1018408006/c5a58d5bfaab01c5896fdbf36e32a29e)
+
+---
+
+## 24. livekit/agents 1.7.1——音声エージェントフレームワークが STT ラインナップを更新し、割り込み処理を強化
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +131 · 累計 13.7k · v1.7.1 は8月27日
+- **Tags:** `voice-ai` `agents` `livekit` `stt` `open-source`
+
+リアルタイム音声エージェントの大きな割合を支える livekit/agents が、1.7.x 系でトレンドに上がっている:1.7.0(8月20日)はエージェントオブザーバビリティ向けの PII マスキング(チャット履歴と録音から検出エンティティを意味的にマスキング)と Expressive Mode(会話コンテキストの感情タグで韻律を駆動)を追加し、1.7.1(8月27日)は Palabra と Sarvam のストリーミングプラグイン、`gemini-3.5-transcribe-live`、ElevenLabs text-to-dialogue ストリーミングに加え、本番音声で効く修正を届けた:割り込まれた発話は生成をキャンセルし、ツール実行中のエージェント/ユーザー状態も正しく追跡される。
+
+**Why it matters:** 音声エージェントの命運は割り込みセマンティクスと PII 処理にかかっており——今回のリリースが触れたのはまさにその部分だ。+131スターの一日は、音声エージェント開発者がどこに痛みを感じているかの指標として妥当だ。
+
+[`🔗 livekit/agents`](https://github.com/livekit/agents) · [`🔗 1.7.1 リリースノート`](https://github.com/livekit/agents/releases)
+
+---
+
+## 25. 「Agent Memory as a File Format」——memoryfields:Markdown と SQLite インデックスの zip でメモリパイプラインを置き換える
+
+- **Velocity:** ▮ steady
+- **Source:** calpaterson.com · HN 8+ pts
+- **Tags:** `agent-memory` `file-format` `rag` `agents` `open-source`
+
+Cal Paterson 氏が「memoryfields」を提案する——エージェントのメモリを単純な zip アーカイブとして保存する形式だ:Markdown ページ(約8 kB / 2,000トークン、ベクトル埋め込みに収まるサイズ)、オプションの YAML フロントマター、オプションの SQLite ベクトルインデックス。主張は、メモリはプロセスではなくデータであるべきだというもの:エージェント自身が散文のメモリを書き(チャンキング/蒸留パイプライン不要)、検索は wiki リンクの逐次グラフ探索ではなく約2回のツール呼び出しで完了する意味的ジャンプであり、zip は S3・GitHub・HTTP・Syncthing をそのまま通る。正直な留保として、これは「ある意味 RAG の一形態」であり、セキュリティの一文は引用に値する:「信頼しない相手とコンテキストウィンドウを共有してはならない——メモリを介してであっても。」
+
+**Why it matters:** どのエージェントハーネスも独自のメモリストアを発明している。退屈でベンダーニュートラルなファイルフォーマットこそ、メモリをハーネスより長生きさせる種類の標準だ。そして「低メカニズム」の哲学(アクセスパターンはエージェント自身が発明する)は、モデルの進歩がメモリミドルウェアより速いという検証可能な賭けだ。
+
+[`🔗 Agent Memory as a File Format (calpaterson.com)`](https://calpaterson.com/memoryfields.html) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49508317)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-30T20:15:00Z |
-| Items | 12 |
-| Sources tracked | 16 (Hacker News, GitHub Trending, people.kernel.org, OpenAI, BBC, Python Insider, RISE Project, Apache, NVD, Rapid7, VulDB, SecurityOnline, VulnCheck, Reuters, CSIS, Lobsters) |
+| Generated | 2026-08-31T12:20:00Z |
+| Items | 25 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, Hugging Face, Embrace The Red, OpenClaw, simonwillison.net, Ars Technica, ruurtjan.com, OpenShot, Kuleshov Group, astral-sh, corsairdev, livekit, calpaterson.com, people.kernel.org, OpenAI, BBC, Python Insider, RISE Project, Apache, NVD, Rapid7, VulDB, SecurityOnline, VulnCheck, Reuters, CSIS, Lobsters) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

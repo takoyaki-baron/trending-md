@@ -1,8 +1,8 @@
 ---
 date: 2026-08-31
-updated: 2026-08-30T20:15:00Z
+updated: 2026-08-31T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -185,13 +185,201 @@ handsomestWei's "中国专利.skill" turns a coding agent into a patent-workflow
 
 ---
 
+## 13. DeepSeek ships V4-Flash-Vision-Exp — its first experimental multimodal V4 model, MIT-licensed
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face · model card live ~2h · HN submission 19:25 UTC+8
+- **Tags:** `deepseek` `multimodal` `open-weights` `moe` `llm`
+
+DeepSeek published `DeepSeek-V4-Flash-Vision-Exp` on Hugging Face — "our first experimental multimodal model in the DeepSeek-V4 family": the V4-Flash text architecture (305B parameters, DFlash attention, MoE, Hyper-Connections, DSpark forward path) extended with a vision encoder and aligner, shipped with a minimal PyTorch reference inference implementation under an MIT license. Text-agent scores hold roughly level with the text-only V4-Flash-0731 (Terminal Bench 2.1: 83.9 vs 82.7, while Claude Opus-4.8 posts 85.0), and the multimodal gains are where the experiment pays off — ApexBench Pass@1 jumps 26.2 → 36.5. The `-Exp` suffix is doing real work: no inference-provider deployment, footnotes stating the text-only predecessor simply ignored image inputs on vision benchmarks, and agent scores measured with the DeepSeek Harness at max reasoning effort.
+
+**Why it matters:** DeepSeek has been the notable holdout on multimodality in the open-weight race; even an experimental MIT-licensed V4 vision checkpoint closes that gap — and its honest footnotes (predecessor ignoring image inputs) are a rare piece of benchmark hygiene worth noting.
+
+> DeepSeek's footnote practice deserves the highlight: when a predecessor "ignores multimodal inputs" on a vision benchmark, the feed's rule is to print that next to the score, not bury it.
+
+[`🔗 deepseek-ai/DeepSeek-V4-Flash-Vision-Exp`](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49508372)
+
+---
+
+## 14. "Breaking Claude Code Opus 5 Auto Mode" — an indirect-injection chain beats the safety classifier
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Embrace The Red (wunderwuzzi) · HN 120+ pts · published Aug 26, front page Aug 31
+- **Tags:** `prompt-injection` `agent-security` `claude-code` `rce` `llm`
+
+Johann Rehberger (wunderwuzzi) published a working RCE chain against Claude Code's Auto Mode — the default mode since mid-August that replaces human approval prompts with a safety classifier. The chain never commands the model: a 415 response nudges it to fall back from `WebFetch` to `curl`, a redirect delivers a ZIP with a decoy binary Claude correctly refuses to run, and when Claude writes its own Python decoder instead, running it inside the extracted attacker directory lets a malicious `struct.py` shadow the standard library and execute on `import base64` — Calculator and a C2 callback follow, in 60–80% of small-sample runs. Anthropic closed the report as "Informative," positioning Auto Mode as a best-effort convenience feature whose real boundary is OS isolation and egress control; Rehberger notes the vendor-commissioned Trajectory Labs evaluation reported 0.00% attack success on a 72-scenario suite his chain wasn't in.
+
+**Why it matters:** "a classifier is not a sandbox" is now demonstrated end-to-end against a shipping default — and the kicker is that the classifier approved the malware-creation steps but blocked Claude's cleanup commands after compromise, an inversion that should end any "Auto Mode approval = safe" reasoning in agent runbooks.
+
+> The bonus variant is the one to remember: the payload spawns a second headless Claude via `claude -p`, which performs recon and writes files outside the workspace — the agent toolchain itself becomes the post-exploitation toolkit.
+
+[`🔗 Embrace The Red: Breaking Claude Code Opus 5 Auto Mode`](https://embracethered.com/blog/posts/2026/breaking-claude-code-opus-5-and-automode/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49506819)
+
+---
+
+## 15. OpenClaw 2.0, "accidentally" — 16,000 PRs and 933 contributors turn a cleanup into the project's biggest release
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenClaw blog · HN 114+ pts · 127 comments · published Aug 30
+- **Tags:** `openclaw` `agents` `open-source` `personal-ai` `release`
+
+OpenClaw — the open-source, vendor-neutral personal agent (formerly Clawdbot/Moltbot) — shipped version 2026.8.1, branded OpenClaw 2.0 and described as "by far the largest update in the history of OpenClaw": 16,000+ merged pull requests (roughly half of all PRs ever merged into the project) from 933 contributors, 569 of them first-timers. The team set out only to simplify installation and rebuild the browser app; carrying the cleanup through the rest of the codebase snowballed into 2.0. Setup now uses what's already on your machine (existing ChatGPT/Claude subscriptions, API keys, local models), the browser app opens straight into a conversation and doubles as a control surface, and new shared cloud sessions let teammates join or hand off live work with context intact. Notably, the project had shipped 106 releases in 230 days, then went nearly seven weeks silent to test the mega-release.
+
+**Why it matters:** a personal agent that runs on your existing subscriptions with multiplayer handoff is converging on exactly the workflow commercial coding-agent vendors sell — and the 7-week gap shows even a heavily-contributed OSS project hit a shipping-process wall that only a reworked process could clear.
+
+[`🔗 OpenClaw 2.0, Accidentally`](https://openclaw.ai/blog/openclaw-2-accidentally) · [`🔗 Release notes 2026.8.1`](https://docs.openclaw.ai/releases/2026.8.1)
+
+---
+
+## 16. Simon Willison's "Understanding ChatGPT Work" — 223 tools, 44 skills, and OpenAI's lethal trifecta
+
+- **Velocity:** ▮▮ rising
+- **Source:** simonwillison.net · HN 217+ pts · 110 comments · published Aug 30
+- **Tags:** `openai` `chatgpt` `agents` `analysis` `simon-willison`
+
+Simon Willison published a hands-on teardown of ChatGPT Work, OpenAI's agent product launched July 9 — documenting what it actually does rather than how OpenAI describes it. It is two products under one name: Work Cloud (mobile) and Work Local (the desktop app, formerly Codex), paid-tier only. His tool-enumeration session counted 223 registered tools and 44 skills, and the capability list is what stands out: code execution with full internet access (unlike Chat's blocked container), a full headless Chrome including user-mediated 2FA logins, a persistent shared filesystem across sessions (he had 171 scratch folders), publishing "ChatGPT Sites" via Cloudflare Workers, parallel sub-agents, and scheduled automations. His verdict: "an extraordinarily confusing and very powerful product," and a safety concern in one phrase — Work combines private-data access, untrusted content, and exfiltration channels, his "lethal trifecta."
+
+**Why it matters:** this is the closest thing to a system prompt-level documentation of the most widely deployed consumer agent — and the trifecta framing matters because OpenAI hasn't published the protections (Willison hopes they resemble Codex's auto-review), so operators are granting dangerous capability combinations sight unseen.
+
+[`🔗 Understanding ChatGPT Work (simonwillison.net)`](https://simonwillison.net/2026/Aug/30/understanding-chatgpt-work/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49504625)
+
+---
+
+## 17. A 12TB Steam "teraleak" spills the Steam2 era — via a publicly accessible API endpoint
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ars Technica · HN 196+ pts · published Aug 30
+- **Tags:** `valve` `steam` `leak` `game-preservation` `security`
+
+More than 12TB of Steam2-era content — seemingly every depot uploaded to Valve's pre-2013 content servers, spanning 2003–2013 — is circulating on a BitTorrent tracker, including previously unseen pre-release, prototype and playtest builds: playable early Portal 2 with cut GLaDOS/Cave Johnson dialogue and an Episode 3 weapon model, "ep3" data files, and early betas of Left 4 Dead 2, CS:GO and dozens of third-party titles. Valve watchers Gabe Follower and Scolcer both report the dump came from a publicly accessible API endpoint — "no passwords. Nothing. Hidden in plain sight" — though whether it was scraped recently or hoarded privately since the 2013 SteamPipe migration is unclear. Ars notes the piracy and legal exposure: the archive is heavy on third-party publishers' unreleased work product, and Valve figures like Tyler McVicker are warning people off handling it.
+
+**Why it matters:** it's the PC-gaming counterpart to Nintendo's gigaleak, and the security lesson is blunt — a decade of publisher content survived behind an unauthenticated endpoint on a content system everyone assumed was retired; unauthenticated API surfaces don't stop being an asset just because the product moved on.
+
+> The leak's readme "warm n good wishes to all hoarders" suggests a private archive made public — which, if true, makes Valve's open endpoint a decade-long unmonitored exposure rather than a fresh breach.
+
+[`🔗 Ars Technica: A 12TB Steam "teraleak"`](https://arstechnica.com/gaming/2026/08/a-12tb-steam-teraleak-spills-more-than-a-decade-of-lost-pc-gaming-history/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49506182)
+
+---
+
+## 18. P99 0 ms* autocomplete over 240M domain names — prefetch-on-keyDown and the honest asterisk
+
+- **Velocity:** ▮▮ rising
+- **Source:** ruurtjan.com · HN 152+ pts · 64 comments
+- **Tags:** `search` `autocomplete` `performance` `systems` `trie`
+
+Ruurtjan Pul built autocomplete for Wirewiki's ~240M-domain index (Tranco top-1M plus CZDS zone files, ~2.5 GB) where "p99 0 ms" means results are ready before the key is released: latency is measured from keyUp to rendered results, and the client prefetches on keyDown — the typed prefix plus all 38 possible next characters (~5 kB) — so the answer is already in flight while the finger is still down. The backend splits a trie "head" (top 8 suggestions precomputed for every prefix) from a "tail" of delta-compressed, block-sorted domains on SSD with a 27 MB in-memory directory; most requests answer in 2 ms and nginx+API holds 15 ms at p99 at 1.6k req/s. The asterisk is load-bearing: the claim holds only because the user is near his single European server — "traffic from the USA will add 100–200 ms."
+
+**Why it matters:** the latency redefinition (measure to "results ready," hidden behind a prefetch) is the same trick consumer search has always played — and the post is a model of stating exactly where the trick stops working, which is why it earned the asterisk in the headline rather than a footnote.
+
+[`🔗 P99 0 ms* autocomplete for 240M domain names`](https://ruurtjan.com/articles/p99-0ms-autocomplete-for-240-million-domain-names) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49505219)
+
+---
+
+## 19. OpenShot 4.0 — color grading, built-in recording, and local ONNX AI masking land in the GPL editor
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenShot blog · HN 135+ pts · published Aug 30
+- **Tags:** `openshot` `video-editing` `open-source` `onnx` `qt`
+
+OpenShot 4.0 shipped Aug 30 with companion libraries libopenshot/-audio hitting 1.0.0. The headline features: a dedicated Color View workspace (keyframable Color Grade effect, color wheels, Bézier curves, .cube LUTs, live scopes) and a Recording View that captures mic, screen, webcam and system audio as separate editable clips — each with native paths on Windows, macOS, X11 and Wayland/PipeWire. The Object Mask effect runs free downloadable ONNX models (YOLO, EfficientSAM, Cutie) entirely locally, no cloud subscription, and the timeline is now native Qt, completing the move off web-based components. Measured gains over 3.5.1: Blur 61.8% faster, timeline 3.4–5.1% faster.
+
+**Why it matters:** local-ONNX masking in a mass-market GPL editor is a quiet milestone for on-device AI — the "no subscription" model applied to a feature (rotoscoping/masking) that competitors gate behind cloud GPU time.
+
+[`🔗 OpenShot 4.0 release post`](https://www.openshot.org/blog/2026/08/30/openshot-40-record-edit-color-like-never-before/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49507822)
+
+---
+
+## 20. "How to build a diffusion language model" — the Kuleshov group turns its ICLR/MLSS lectures into a public tutorial
+
+- **Velocity:** ▮▮ rising
+- **Source:** kuleshov-group.github.io · HN 117+ pts
+- **Tags:** `diffusion` `llm` `tutorial` `research` `training`
+
+The Kuleshov Group (Cornell) published a end-to-end tutorial on diffusion language models, adapted from workshop talks at ICLR 2026 and MLSS 2026. It builds from Gaussian-diffusion intuition through masked diffusion ("a generative BERT" trained over all masking rates via an ELBO) to the production-grade extensions: block diffusion for variable length and KV caching, encoder–decoder splits (used by Gemma Diffusion and NVIDIA's Nemotron Diffusion), error-correcting remasking (ReMDM/UDLM), sampling distillation, discrete guidance (D-CBG/D-CFG), and RL post-training (d1's diffu-GRPO, d2, DRAKES). The closing claim is bold and hedged in the same breath: "diffusion may be to inference-time and post-training scaling laws what the transformer was to RNNs" — with the explicit caveat that diffusion hasn't yet been scaled to autoregressive levels of compute and data, though 100B-class experiments (ESM3) look promising.
+
+**Why it matters:** Mercury 2 at ~1,200 tok/s and open LLaDA 8B made diffusion LLMs a real inference option this year; this is the single best on-ramp to the field's actual mechanics, from a group that has published much of the underlying RL post-training work.
+
+[`🔗 How to build a diffusion language model`](https://kuleshov-group.github.io/blog/blog/2026/how-to-build-a-diffusion-language-model/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49503956)
+
+---
+
+## 21. crawl4ai v0.9.3 — a security-only release closing five coordinated-disclosure advisories
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +229 today · 80.2k total
+- **Tags:** `crawler` `security-release` `agents` `rag` `python`
+
+crawl4ai — the 80k-star LLM-friendly web crawler — shipped v0.9.3 as a pure security release: it closes five coordinated-disclosure advisories (arbitrary file write, SSRF, and denial of service in the PDF processing path, plus two XSS issues in the Docker Playground) and lands 33 fixes across the Docker server, crawler and PDF handling, with two defaults hardened (PDF downloads capped at 100 MiB / 2,000 pages; Docker wall-clock limit now 300s). It continues the project's recent pattern: v0.9.0 made the Docker API secure-by-default (auth on, loopback binding) after a v0.8.x advisory history that included a pre-auth sandbox-escape RCE and an SSRF family in the same server.
+
+**Why it matters:** agent stacks treat crawlers as trusted plumbing feeding untrusted content into prompts — a crawler whose Docker API could write arbitrary files was a direct path from a hostile page to the host, and this release is worth scheduling around for anyone self-hosting it.
+
+[`🔗 unclecode/crawl4ai`](https://github.com/unclecode/crawl4ai) · [`🔗 GitHub Trending snapshot Aug 31`](https://gist.github.com/qq1018408006/c5a58d5bfaab01c5896fdbf36e32a29e)
+
+---
+
+## 22. uv moves cache dedup to the file level — 545 MiB saved, cold-install cost under 4%
+
+- **Velocity:** ▮ steady
+- **Source:** astral-sh/uv PR #21327 · HN 73+ pts
+- **Tags:** `uv` `python` `packaging` `cache` `performance`
+
+Charlie Marsh's PR #21327 extends uv's content-addressed caching from the wheel level down to individual files: every payload file is stored under its BLAKE3 hash in a new `files-v0` bucket and hardlinked into its `archive-v0` location, with cleanup dropping objects once hardlink count hits one. On his machine that deduplicates 134,222 files into 87,129 objects and saves 545.2 MiB — about 10% of the cache. The cold-install penalty was benchmarked down from +19.4% to under 4% (and, combined with a merged buffer-reuse PR, the author says it's now faster than before); warm installs are flat. The PR is open and labeled preview, with zanieb's approval and open questions on reflink compatibility.
+
+**Why it matters:** the wheel cache is where monorepo CI runners and AI-agent sandboxes silently accumulate tens of gigabytes — file-level dedup attacks the actual duplication (the same dependency files across thousands of wheels) instead of just sharing identical wheels.
+
+[`🔗 astral-sh/uv PR #21327`](https://github.com/astral-sh/uv/pull/21327) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49506142)
+
+---
+
+## 23. Corsair — an open-source integration platform that positions itself as "beyond MCP"
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +99 today · 11.1k total
+- **Tags:** `integrations` `mcp` `agents` `open-source` `api`
+
+Corsair (corsairdev/corsair) is trending as a "fully-featured product integration platform with a seamless DX": maintained adapters for third-party APIs, self-hostable under Apache-2.0, with an optional hosted Hub for OAuth refresh and webhooks. Its wedge is architectural: "Most agent integration tools are MCP-only," the README argues, while Corsair is built on a REST API so the same integration layer serves agents, backend services, and customer-facing multi-tenant dashboards without per-service glue code. There's no release tagged yet — the 11.1k-star spike is attention, not a launch event, so the trending entry reflects a maturing project finding its audience rather than a new capability.
+
+**Why it matters:** the integration layer is where agent deployments actually get stuck (auth, token refresh, webhooks), and a self-hostable, REST-first alternative to MCP-only tooling is a meaningful architectural position as agent infra standardizes.
+
+[`🔗 corsairdev/corsair`](https://github.com/corsairdev/corsair) · [`🔗 GitHub Trending snapshot Aug 31`](https://gist.github.com/qq1018408006/c5a58d5bfaab01c5896fdbf36e32a29e)
+
+---
+
+## 24. livekit/agents 1.7.1 — the voice-agent framework refreshes its STT lineup and hardens interruption handling
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +131 today · 13.7k total · v1.7.1 Aug 27
+- **Tags:** `voice-ai` `agents` `livekit` `stt` `open-source`
+
+livekit/agents — the framework behind a large share of realtime voice agents — is trending on the back of its 1.7.x line: 1.7.0 (Aug 20) added PII redaction for agent observability (semantic redaction of detected entities from chat history and recordings) and Expressive Mode (conversation-context emotion tags driving prosody), and 1.7.1 (Aug 27) brings new Palabra and Sarvam streaming plugins, `gemini-3.5-transcribe-live`, ElevenLabs text-to-dialogue streaming, plus fixes that matter in production voice: interrupted speech now cancels generation, and agent/user state is tracked correctly while tools run.
+
+**Why it matters:** voice agents live or die on interruption semantics and PII handling — both are exactly what this release touched, which makes the +131-star day a reasonable proxy for where voice-agent builders are feeling pain.
+
+[`🔗 livekit/agents`](https://github.com/livekit/agents) · [`🔗 Release 1.7.1 notes`](https://github.com/livekit/agents/releases)
+
+---
+
+## 25. "Agent Memory as a File Format" — memoryfields: a zip of Markdown and a SQLite index instead of a memory pipeline
+
+- **Velocity:** ▮ steady
+- **Source:** calpaterson.com · HN 8+ pts
+- **Tags:** `agent-memory` `file-format` `rag` `agents` `open-source`
+
+Cal Paterson proposes "memoryfields" — agent memories as a plain zip archive: Markdown pages (~8 kB / ~2,000 tokens, sized to fit a vector embedding), optional YAML frontmatter, and an optional SQLite vector index. The argument is that memory should be data, not process: the agent writes its own prose memories (no chunking/distillation pipeline), retrieval is a semantic jump in ~2 tool calls rather than serial graph-walking over wiki links, and the zip travels over S3, GitHub, HTTP or Syncthing unchanged. He includes the honest caveat that it is "arguably a form of RAG," and a security line worth quoting: "You must not share your context window, including via memories, with parties you don't trust."
+
+**Why it matters:** every agent harness is inventing a proprietary memory store; a boring, vendor-neutral file format is the kind of standard that lets memories outlive the harness — and the format's low-mechanism philosophy (agents invent their own access patterns) is a testable bet that models keep getting better faster than memory middleware does.
+
+[`🔗 Agent Memory as a File Format (calpaterson.com)`](https://calpaterson.com/memoryfields.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49508317)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-08-30T20:15:00Z |
-| Items | 12 |
-| Sources tracked | 16 (Hacker News, GitHub Trending, people.kernel.org, OpenAI, BBC, Python Insider, RISE Project, Apache, NVD, Rapid7, VulDB, SecurityOnline, VulnCheck, Reuters, CSIS, Lobsters) |
+| Generated | 2026-08-31T12:20:00Z |
+| Items | 25 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, Hugging Face, Embrace The Red, OpenClaw, simonwillison.net, Ars Technica, ruurtjan.com, OpenShot, Kuleshov Group, astral-sh, corsairdev, livekit, calpaterson.com, people.kernel.org, OpenAI, BBC, Python Insider, RISE Project, Apache, NVD, Rapid7, VulDB, SecurityOnline, VulnCheck, Reuters, CSIS, Lobsters) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
