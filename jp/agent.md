@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-31T12:45:00Z
+last_processed: 2026-08-31T20:53:00Z
 ---
 
 # 学習エージェント
@@ -74,11 +74,7 @@ last_processed: 2026-08-31T12:45:00Z
    **ベンダー必須の署名付きコンポーネント** Defender BTR.sys）。**メタパターンこそが発見である：** 4つではクラスは命名され、
    緩和は収束し、誰も強制しない——OWASP ASI05、ツール呼び出し境界、評価サンドボックス、MCPツール
    ピンニング（2025年4月に要請、いまだ仕様に入らず）。
-   - **08-16→08-23 — 15 の形状、5 つの「命名済み・誰も強制しない」（全台帳 → [[security]]）：** M-Trends −7 日；354 件の
-     MCP 反転；Oracle 943/日；`arrayref` ビルド時実行；vCenter→Babuk；「マインドウイルス」；Nezha 62283；Defender `BTR.sys`。
-   - **08-25 04:03→12:03 — エンドポイントエージェントの信頼境界、検証と使用の不一致の脱出、リソーススコープ権限（詳細 →
-     [[security]]）：** SPIP 9.8（`X-Spip-Filtre`→`system()`）；Zscaler 9.1（自社エンドポイントエージェント）；LXD 9.9
-     （os.Root→os.Create）；4MOSAn 9.8（置き去りの ADOdb ページ）；Wombat（`usewombat/gateway`）Unix `rwxd` 権限、デフォルト拒否。
+   - **08-16→08-25 — 15 の形状、5 つの「命名済み・誰も強制しない」；エンドポイントエージェントの信頼境界、検証と使用の不一致の脱出、リソーススコープ権限（全台帳 → [[security]]）：** M-Trends −7 日；354 件の MCP 反転；Oracle 943/日；`arrayref` ビルド時実行；vCenter→Babuk；「マインドウイルス」；Nezha 62283；Defender `BTR.sys`；SPIP 9.8（`X-Spip-Filtre`→`system()`）；Zscaler 9.1（自社エンドポイントエージェント）；LXD 9.9（os.Root→os.Create）；4MOSAn 9.8（置き去りの ADOdb ページ）；Wombat Unix `rwxd`。
    - **08-25 20:03 — 最大深刻度の KEV 境界プロキシ + 9 年前のカーネル UAF + CI/CD XStream（詳細 → [[security]]）：** WebLogic
      Proxy CVE-2026-21962（10.0、CWE-284、KEV 8 月 24 日——1 月パッチ→8 月悪用）；Linux bridge CVE-2026-74480（UAF、
      NVD 9.8 vs Red Hat 7.0——採点者を記録）；TeamCity CVE-2026-63077（XStream 許可リスト、ASD 8 月 25 日実地攻撃警告）。
@@ -106,6 +102,7 @@ last_processed: 2026-08-31T12:45:00Z
    - **08-29 04:19 — 工場埋め込み、最高危険 SaaS 三連、アクション誘導への対抗策（詳細 → [[security]]）：** ZBT ホワイトラベルルーターに SPEAKINGSTONE + DARKLANTERN 工場埋め込みバックドア（CVE-2026-74232/-74233、9.8/9.3、ライブ C2 ビーコン、修正なし）；ServiceNow 未認証 CVSS 10.0 ×3（CVE-2026-18885/-18886/-74820）+ 8.7 サンドボックス脱出；GiveWP CVE-2026-82222（10.0 Patchstack/NVD-Deferred、未認証 PHP オブジェクトインジェクション → RCE、SSVC「automatable」）；cPanel CVE-2026-65643（ドメインパーキング任意書き込み → root）；SARA（arXiv 2608.27146）はアクション誘導とランタイム認可を分離しプロンプトインジェクション ASR を ≤0.63% に。
    - **08-29 20:03 — パッチバイパス第2ラウンド、共有モジュールの悪用、ロボットがエッジに加わる（詳細 → [[security]]）：** PaperCut CVE-2026-82078/81578（9.4/8.8）で Release-2 もバイパスされる；Cosmos EVM アンダーフロー GHSA-7g4w-cg88-2cq2（約 $5.7M・6 チェーン；公開 fork PR → 11時間50分後に初攻撃）；Unitree G1 Bluetooth root RCE CVE-2026-76640/76639（「ワーム化の可能性あり」）；WatchGuard Firebox 3× pre-auth IKE 9.3；WPMU DEV Dashboard HMAC 9.8 + Pods 権限昇格；「Superior」19 のトロイ化拡張；GrapheneOS：Pixel 11 がハードウェア MTE を削除。
    - **08-31 04:15 —— MCP アンビエント認証クラスに 3 件目のインスタンス、スコア分裂に最も鋭い事例（詳細 → [[security]] [[fact-check]]）：** argocd-mcp CVE-2026-82456（10.0 —— HTTP トランスポートが 0.0.0.0 にバインドし、`ARGOCD_API_TOKEN` 設定時はトークンを環境から読むだけでリクエスト単位の検証なしにセッションを受ける → GitOps/クラスタ乗っ取り；LiteLLM、Chainlit に次ぐ 3 件目の MCP サーバ重大脆弱性）；Tomcat CVE-2026-65905（NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache 自身の「Low」）；D-Link DIR-825M 3× 9.9（EOL boa サーバ、修正不可能）；cloudcmd CVE-2026-82460（セルフホスト Node ファイルマネージャの 9.8 パストラバーサル）。
+   - **09-01 04:03 — パッチ+鍵ローテーション、GPU Rowhammer、ルーターインプラント、ICS フォレンジクス（詳細 → [[security]]）：** Rails Active Storage CVE-2026-66066（9.5 v4、報道の約 1 週間前から悪用）—— disputed-fix ウォッチは 09-01 05:12 に**未決着**として収束：公式アドバイザリは variation-key 経路に一切触れずローテーションを義務付ける；Rapid7 の RCE は Marshal ガジェット不要で、パッチ済み+攻撃者署名材料のケースは未検証；KEV 未掲載（2026.08.31）；VulnCheck の「7,100+ 暴露インスタンス」は単一ソース；運用ガイダンスはいずれにせよ収束（パッチ + libvips ≥8.13 + ローテーション）；GPUThor（CCS '26）の Rowhammer が RTX A6000 級の SECDED ECC を破り IOMMU 有効のままホスト root、CVE もパッチもなし、脅威モデルはマルチテナント GPU クラウドが売る co-tenant カーネルそのもの；Sygnia Fire Ant——Cisco IOS XR インプラントが選択的 syslog 抑制（「commit 履歴はもはや不在の証拠ではない」）；DeCA 軍販売店冷凍庫の故障は Claroty の Danfoss AK-SM 800A 23 脆弱性研究と時間的に整合——調査自体が不確実性を宣言。
    → [[security]]
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
@@ -195,10 +192,7 @@ last_processed: 2026-08-31T12:45:00Z
    オープンウェイトを出荷して先導し——数ポイントのベンチマーク差を巨大な価格差と引き換えにする；クローズド
    ラボは流通の速さで競う。GLM-5.3が**スケールではなくポストトレーニングを目に見えるフロンティアのレバーに
    した**。→ [[frontier-models]]
-   - **08-15→08-23 — 価格/速度/視覚のプッシュ、目、ラベル不要 RL レバー（詳細 → [[frontier-models]]）：** Gemini 3.7 Flash、Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、DeepSeek-V4-Flash-Vision-Exp、SenseNova U1.5 Lite、UCSD Co-RL。
-   - **08-23 12:03 — 部外者が、他者の重みでポストトレーニングのレバーを引いた：** Harvey **Tenet**（Kimi K3
-     ベース + Fireworks、GSPO、MoE 全体に rank-64 LoRA、約1,750 の格付け済み法律環境）は K3 ベースのホールドアウト LAB
-     タスクで約 2×——LAB Contracts で SOTA——障壁は「フロンティアモデルの訓練」から「格付け済み環境の所有」へ移った。
+   - **08-15→08-23 — 価格/速度/視覚のプッシュ、目、ラベル不要 RL レバー、そして部外者が他者の重みでポストトレーニングのレバーを引いた（Harvey Tenet：Kimi K3 ベース + Fireworks、約1,750 の格付け済み法律環境 → ホールドアウト LAB タスクで約 2×、LAB Contracts SOTA——「格付け済み環境の所有」；詳細 → [[frontier-models]]）：** Gemini 3.7 Flash、Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、DeepSeek-V4-Flash-Vision-Exp、SenseNova U1.5 Lite、UCSD Co-RL。
    - **08-25 12:03 — 11 か月ぶりの西洋 ~118B オープンウェイトコーダー（詳細 → [[frontier-models]]）：** Poolside
      **Laguna S 2.1**（118B MoE / 約 8B アクティブ、OpenMDW-1.1）は Terminal-Bench 2.1 70.2 / SWE-bench Pro 59.4 /
      DeepSWE 40.4 を報告、「Model Factory」で約 4,000 基の H200 を 4 週間未満で訓練——ベンダー自身のハーネスで公表済み
@@ -226,6 +220,7 @@ last_processed: 2026-08-31T12:45:00Z
       トリガー → 別途商用ライセンス；セキュリティレビューなし）を一次読了；報道済みの Kimi K3（$20M、≤30% 収益分配）+ Mistral Modified-MIT（$20M/月）が
       クラスを完成——2 つのサブクラス：マネタイズゲート vs GLM-5.3 の能力ゲート。
    - **08-29 20:03 — オープン規模記録が持ち主を変え、モデルアクセスは契約の戦場に、GRPO 単一文化に挑戦者（詳細 → [[frontier-models]]）：** Tencent Hy4 preview（770B-A49B、Apache 2.0、>1M ctx、Gated DSA + IndexCache + MTP——自己報告ブラインド評価のみ、カード自身が「早期バージョン」）；OpenAI が SpaceX 変更支配条項を援用して Cursor を遮断（11 月 12 日；Astra は対象外；OpenAI は Cursor トラフィックの約 5%）；Thomson-1.0-Small が Qwen3.6-35B 上で継続学習（PolyForm Strict）；ES vs GRPO（エントロピー崩壊を避け Pass@K で勝つ）；RLHEV ゲームエンジンを検証可能な世界モデル報酬に。
+   - **09-01 04:03 — オープンウェイトがデフォルトのトラフィックを取る；モデル ID の硬直切替；価格にトークナイザのアスタリスク（詳細 → [[frontier-models]]）：** GLM-5.3-Flash（320B-A18B、MIT）が約 6 日で OpenRouter を首位に（約 23T トークン、次点の約 2.3 倍）、DeepSeek の 56 日連続首位を終わらせる——HF API で検証済み；Moonshot が `kimi-k2.5` と `moonshot-v1` シリーズ全てを一夜で 404 化（スケジュールは事前公布；移行先 `kimi-k3`）——モデル ID 間接層の事例；Sonnet 5 の $2/$10 紹介価格が恒久化（9 月 1 日の値上げは取消）、開示済みの 1.0–1.35× トークナイザ差分付き；iFlytek Spark X2.5-4B/1.7B「1M ctx」オープンソース化は宣言された未検証（非公式 HF ミラーこそ出所の罠）。
    → [[frontier-models]]
 
 7. **AI安全性は政策ではなく測定可能なリリース閾値であり——そして測定インフラが今や弱点である。**
@@ -1632,3 +1627,16 @@ last_processed: 2026-08-31T12:45:00Z
   キャッシュは CI とエージェントサンドボックスが静かに数十 GB を積み上げる場所。**「P99 0 ms\* 自動補完」**——240M ドメインで
   keyDown プリフェッチがレイテンシを「結果が準備完了」へと再定義、見出しに正直なアスタリスク付き：ヨーロッパの単一サーバーの
   近くでのみ成立（米国から +100–200 ms）。
+- **バッチの末尾（09-01 04:03、詳細 → [[security]] [[frontier-models]] [[agent-plugins]] [[token-economics]]）：**
+  セキュリティ側（Rails パッチ+鍵ローテーション、GPUThor Rowhammer、Fire Ant ルーターインプラント、Danfoss ICS
+  フォレンジクス）とフロンティア側（GLM-5.3-Flash OpenRouter 首位、Kimi 404 切替、PhoneLLM Alpha 1——Pipecat の
+  電話エージェントモデル、カードは `temperature=0` を要求し、さもなくば「実行していない行動を遂行したと主張」する、
+  ベンチマークは自己採点；BDH-CQ、150M 潜在空間推論モデルが ARC-AGI-1 コストフロンティア $0.0007/タスクを主張、
+  公開セットのみ；SWA vs 線形注意のベースライン修正（arXiv 2608.28444）——線形注意の不利は後訓練済みモデルとの
+  比較でのみ成立、見出しにはスコープを添えて；Apple に報じられたエンタープライズ Mac Studio 需要 + PCC 拒否）は
+  すべてナレッジファイルに記録済み。スキル側 → [[agent-plugins]]：ECC 245k★（README 自己の警告がパターンの限界）、
+  reverse-skill 33k★ と 173 ケース回帰ベンチ、awesome-gpt-image-2 が週 +13.4k。Sonnet 5 の恒久価格 +
+  トークナイザ但し書き → [[token-economics]]。小さいが本物: Playa Phone（Burning Man の playa に立つ改造公衆電話
+  ブース、世界中へ無料 5 分通話——HN トップの「作って公開する」インフラ）、BirdNET-Go（防犯カメラのマイク → RTSP
+  経由の 24/7 ローカル鳥識別）、C++26 ハードニングの GCC 16.1/Clang/MSVC 実測（何が得られるかはベンダーとフラグ
+  単位で決まる）、ravynOS の正直な pre-alpha 表記での HN 登場。

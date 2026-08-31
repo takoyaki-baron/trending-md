@@ -4246,5 +4246,122 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "platform.kimi.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Moonshot AI's official developer docs; authoritative for model IDs, deprecation schedules and migration paths (verified: moonshot-v1/kimi-k2.5 404 cutover). Single-party for its own product state — corroborate impact claims elsewhere.",
+    "zh": "月之暗面官方开发者文档；对模型 ID、下线时间表与迁移路径具有权威性（已核实 moonshot-v1/kimi-k2.5 的 404 下线）。关于自身产品状态属单一信源——影响面论断需另行佐证。",
+    "jp": "Moonshot AI の公式開発者ドキュメント。モデル ID・提供終了スケジュール・移行パスの一次情報(404 移行を検証済み)。自社製品状態については単一情報源——影響の主張は別途裏取りを。"
+  },
+  "discuss.rubyonrails.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Official Rails security announcements; canonical CVE text, affected/patched ranges and workarounds (CVE-2026-66066 cross-checked against Rapid7 and SecurityWeek).",
+    "zh": "Rails 官方安全公告；CVE 正文、受影响/修复版本与缓解措施以这里为准（CVE-2026-66066 已与 Rapid7、SecurityWeek 交叉核验）。",
+    "jp": "Rails 公式セキュリティアナウンス。CVE 本文・影響/修正バージョン・緩和策の一次情報(CVE-2026-66066 を Rapid7・SecurityWeek と突合済み)。"
+  },
+  "linas.substack.com": {
+    "cat": "news",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Paywalled AI-industry newsletter; strong sourcing (e.g. OxAlpha/OpenRouter scoop) but headline numbers are hard to verify independently — treat volume figures as attributed, not confirmed.",
+    "zh": "付费墙内的 AI 行业通讯；线索扎实（如 OxAlpha/OpenRouter 爆料），但关键数字难以独立核验——引用时标注「据报道」而非「已确认」。",
+    "jp": "ペイウォール付きの AI 業界ニュースレター。独自情報(OxAlpha/OpenRouter など)は強いが、主要数字の独自検証が困難——数値は「報道ベース」として扱う。"
+  },
+  "playaphone.com": {
+    "cat": "community",
+    "cred": "high",
+    "density": "low",
+    "cv": 1,
+    "en": "One-off art/hardware project site (Playa Phone); verified first-hand for its own facts only — no scope beyond the project.",
+    "zh": "一次性艺术/硬件项目站点（Playa Phone）；仅就其自身事实做过一手核验——不外推。",
+    "jp": "単発のアート/ハードウェアプロジェクトサイト(Playa Phone)。プロジェクト自身の事実について一次検証済み——それ以外へは適用不可。"
+  },
+  "gururaj-s.github.io": {
+    "cat": "research",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Academic homepage hosting peer-reviewed papers (GPUThor, CCS '26); PDF confirmed to exist and load, text-layer extraction failed in-tool — cite with THN/venue corroboration.",
+    "zh": "托管同行评审论文的学者主页（GPUThor，CCS '26）；已确认 PDF 存在且可加载，但工具内文本层提取失败——引用时需 THN/会议方佐证。",
+    "jp": "査読論文を公開する研究者ホームページ(GPUThor、CCS '26)。PDF の存在と読み込みは確認済みだがツール内のテキスト抽出は失敗——THN/会議側の裏付けと併せて引用。"
+  },
+  "sygnia.co": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Sygnia's incident-research blog (Fire Ant campaign); primary source for IoCs/YARA — attribution claims are the firm's assessment and need independent corroboration.",
+    "zh": "Sygnia 的事件研究博客（Fire Ant 行动）；IoC/YARA 的一手来源——归因结论属该公司判断，需独立佐证。",
+    "jp": "Sygnia のインシデント調査ブログ(Fire Ant キャンペーン)。IoC/YARA の一次情報——帰属は同社の評価であり独立裏取りが必要。"
+  },
+  "pipecat.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Daily/Pipecat's product site; PhoneBench index page verified as methodology-only (no scores published there) — benchmark numbers must be cited from the HF model card.",
+    "zh": "Daily/Pipecat 产品站；已核实 PhoneBench 索引页仅含方法论（无分数）——基准数字须引用 HF 模型卡。",
+    "jp": "Daily/Pipecat の製品サイト。PhoneBench の索引ページは手法のみでスコア未掲載と検証済み——ベンチマーク数値は HF モデルカードから引用すること。"
+  },
+  "jasontucker.blog": {
+    "cat": "community",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Personal project blog (BirdNET-Go writeup); first-hand account, verified — anecdotal results, no accuracy metrics.",
+    "zh": "个人项目博客（BirdNET-Go 文章）；一手记录，已核验——结果为个人轶事，无准确率指标。",
+    "jp": "個人プロジェクトブログ(BirdNET-Go 記事)。一次記録として検証済み——結果は逸話的で精度メトリクスなし。"
+  },
+  "signalandsilence.substack.com": {
+    "cat": "news",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Independent investigative blog; the commissary-freezer post states its own uncertainty extensively — cite it FOR the hedged framing, not as confirmation of intrusion.",
+    "zh": "独立调查博客；军方超市冷柜一文大量陈述自身不确定性——引用它正是为了其审慎措辞，而非作为入侵的确认。",
+    "jp": "独立系調査ブログ。コミッサリー冷凍庫記事は自身の不確実性を詳細に明示——侵入の確証ではなく、その留保付き枠組みのために引用する。"
+  },
+  "macrumors.com": {
+    "cat": "news",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Apple-news aggregator relaying paywalled outlets (The Information); fast but single-removed — cite the upstream source, and keep 'reportedly' attached to unconfirmed claims.",
+    "zh": "转载付费墙媒体的苹果新闻聚合站（转述 The Information）；快但隔了一层——引用时注明上游来源，未证实的说法保留「据报道」。",
+    "jp": "ペイウォール媒体(The Information など)を伝達する Apple ニュースサイト。速いが一段階経由——上位ソースを明記し、未確認の主張には「報道ベース」を添える。"
+  },
+  "cppstories.com": {
+    "cat": "community",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Bartlomiej Filipek's C++ technical blog; hands-on, compiler-verified experiments — high-quality practitioner source (some sections Patreon-paywalled).",
+    "zh": "Bartlomiej Filipek 的 C++ 技术博客；动手实测、经编译器验证——高质量从业者信源（部分章节在 Patreon 付费墙后）。",
+    "jp": "Bartlomiej Filipek の C++ 技術ブログ。実測・コンパイラ検証済みの実験で、質の高い実務者ソース(一部は Patreon のペイウォール内)。"
+  },
+  "ravynos.com": {
+    "cat": "community",
+    "cred": "med",
+    "density": "low",
+    "cv": 1,
+    "en": "ravynOS project site; verified to match its own blunt pre-alpha framing — honest but no releases/dates to evaluate.",
+    "zh": "ravynOS 项目官网；已核实与其坦诚的 pre-alpha 表述一致——诚实，但没有可评估的 release/日期。",
+    "jp": "ravynOS プロジェクト公式サイト。率直な pre-alpha 記述と一致することを確認——誠実だが評価できるリリースや日付はない。"
+  },
+  "finout.io": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Finops vendor blog; its Sonnet 5 pricing analysis cross-checks against Anthropic's own changelog — useful cost math, vendor-adjacent framing.",
+    "zh": "Finops 厂商博客；其 Sonnet 5 定价分析与 Anthropic 官方变更日志交叉一致——成本计算有用，但带厂商立场。",
+    "jp": "Finops ベンダーのブログ。Sonnet 5 価格分析は Anthropic 自身の変更履歴と突合一致——コスト計算は有用だがベンダー寄りの枠組み。"
   }
 }

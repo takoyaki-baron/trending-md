@@ -1700,3 +1700,65 @@ The batch's security stream, read first-hand at the primary sources where reacha
   v0.8.x history including a pre-auth sandbox-escape RCE. Agent stacks treat crawlers as trusted plumbing feeding
   untrusted content into prompts — a crawler whose Docker API could write arbitrary files was a direct
   hostile-page→host path; worth scheduling the upgrade if self-hosting.
+
+## Patch-and-rotate Rails, GPU Rowhammer, router implants, and ICS forensics (09-01 04:03)
+
+- **Rails Active Storage CVE-2026-66066 "KindaRails2Shell" (CVSS v4 9.5, actively exploited) — a patch-and-rotate
+  event with a disputed fix.** Unauthenticated arbitrary file read in variant processing: Active Storage did not
+  disable libvips "unfuzzed" operations, so a crafted image upload (MATLAB Level 5 → libmatio → HDF5 external-file
+  list) reads arbitrary files — including the process environment, where `secret_key_base` lives → signature
+  forgery → RCE. Fixed late July in 7.2.3.2 / 8.0.5.1 / 8.1.3.1 (no fixed release for Rails 6.x). **The dispute,
+  with the framers:** per SecurityWeek citing VulnCheck, exploitation began ~1 week before the Aug 31 report (~1
+  month after patches shipped; ~7,000 exposed vulnerable instances found in early August), and VulnCheck reports
+  the fix blocks the libvips read but **not** the variation-key Marshal deserialization — the RCE gadget stays
+  executable "given a valid signature." Rapid7's framing is milder: patching Rails alone is insufficient (libvips
+  ≥ 8.13 required, and apps fail at boot if older) but does not call the patch incomplete. Either way the
+  remediation is upgrade + verify libvips (or `VIPS_BLOCK_UNTRUSTED`) + **rotate `secret_key_base` and
+  credentials**. Public exploit code exists; Rapid7 notes it is unclear how closely it matches the private chain
+  (attack details withheld until Aug 28).
+  **Resolution (09-01 05:12, all four watch conditions checked first-hand): the dispute stays unadjudicated —
+  a disputed residual-risk entry, not a confirmed incomplete fix.** (1) **No Rails-core statement on the
+  variation-key path exists** — the official advisory never mentions the variation key or Marshal; it hedges
+  only "we do not assume it is the only one that exists" (attack chains), and its own mitigation list concedes
+  the substance: upgrade + libvips ≥ 8.13 + rotate `secret_key_base`/master key/credentials, because
+  "upgrading closes the vulnerability but does not undo an exfiltrated secret." (2) **No independent PoC or
+  refutation of the Marshal gadget post-fix.** VulnCheck's primary claim (Brian Babcock, LinkedIn): "tested a
+  patched 8.1.3.1 server… the fix blocks the libvips file read, it does not neutralize the variation-key
+  Marshal deserialization" — "the RCE gadget still executes on a patched server given a valid signature."
+  Rapid7's technical analysis sidesteps rather than refutes: its validated RCE path "does not depend on a
+  Marshal object gadget" (JSON-compatible Hash/Array/String values in a signed variation), and it defends the
+  patch's design ("blocking untrusted operations stops matload") **without testing** the patched-server-plus-
+  attacker-held-signing-material case. So the two sides even disagree on the mechanism, not just the verdict.
+  (3) **Not in CISA KEV** (grep-negative against catalog 2026.08.31, 1,687 entries). (4) **The "~7,000 exposed"
+  figure is single-source** — VulnCheck's own first-party scan ("7,100+ exposed vulnerable instances"), no
+  independent second source; VulnCheck also states "No exploitation has been reported yet" for the residual
+  gadget. Operator guidance converges across all parties (patch + libvips ≥ 8.13 + rotate), so the practical
+  bottom line never depended on the dispute; the open question narrows to whether a fully patched server whose
+  signing material leaked is still RCE-able — watch for a third-party PoC targeting exactly that case.
+- **GPUThor (U. Toronto, CCS '26) — the first Rowhammer to defeat ECC on NVIDIA GDDR6 workstation GPUs, yielding
+  host root.** Non-uniform hammering + intra-warp activation merging produce multi-bit errors that SECDED
+  mis-corrects (3-bit flips pass as "corrected"); on an RTX A6000: ~11 detected uncorrectable errors + 1 silent
+  data corruption per day of hammering, and a triple-bit SDC yielded **host root with IOMMU enabled**. The
+  prerequisite is mundane: the ability to run an unprivileged CUDA kernel — a shared co-tenant GPU, which is
+  exactly what multi-tenant GPU clouds sell. NVIDIA was notified Apr 29 and issued guidance only — **no CVE, no
+  patch** (a full fix needs multi-bit ECC plus in-DRAM defenses: RFM/PRAC). This invalidates NVIDIA's earlier
+  claim that system-level ECC mitigates GPU Rowhammer. A10/L4/L40/RTX 4090 not affected; A100/H100 untested.
+- **Sygnia "Fire Ant" — Chinese spies turned Cisco IOS XR routers into a spying platform** (strongly overlapping
+  UNC3886 per Sygnia's assessment): custom router malware persisting as a fake service that runs "only during
+  alternating hours"; **selective syslog suppression** hiding an unlogged GRE tunnel; traffic capture with PCAP
+  uploads to attacker FTP; a previously undocumented root-level systemd backdoor ("BridgeAgent") disguised as a
+  Zabbix agent. The discovery trigger is the part to internalize — a GRE tunnel interface that "could not be
+  explained by a running configuration or commit history." Router-grade implants that suppress syslog break the
+  audit workflows network teams rely on: the commit history is no longer evidence of absence. No CVEs; IoCs +
+  YARA rules released.
+- **Military commissary freezers — hypothesis-driven ICS forensics that states its own uncertainty.** Freezers at
+  ≥6 US military commissaries (Fort Huachuca, F.E. Warren, Fort Irwin, Columbus, Newport, Travis) failed around
+  Aug 26–27 — Fort Huachuca's entered *active defrost* overnight "while the power didn't go out." The author
+  connects DeCA's centralized Refrigeration Management Control System ("Defrost shall be controlled through the
+  RMCS," ~182 locations procured March 2026) with Claroty Team82's Aug 9 research: **23 flaws (21 high-severity)
+  in Danfoss AK-SM 800A / Copeland XWEB Pro controllers** allowing remote manipulation of compressors, fans and
+  defrost, with thousands of Danfoss interfaces internet-exposed. The post's hedging is its best feature: "I do
+  not have evidence that the Defense Commissary Agency was hacked"; no demonstrated connection between the
+  Claroty findings and DeCA; botched updates and config errors remain plausible. The architectural fact stands
+  regardless of attribution: defrost at military grocery stores is remotely controllable through a device class
+  researchers have shown is manipulable and often exposed — a model of stating uncertainty in infra forensics.

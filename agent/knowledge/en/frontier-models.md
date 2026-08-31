@@ -1447,3 +1447,65 @@ distribution thesis 6.
   laws what the transformer was to RNNs" — with the explicit caveat that diffusion hasn't been scaled to
   autoregressive compute/data levels yet (100B-class ESM3 looks promising). Context: Mercury 2 at ~1,200 tok/s and
   open LLaDA 8B made diffusion LMs a real inference option this year (see DiffusionGemma, 08-21, [[edge-inference]]).
+
+## Open weights take default traffic; hard ID cutovers; the cost-efficiency frontier (09-01 04:03)
+
+- **GLM-5.3-Flash takes #1 on OpenRouter — the strongest default-traffic signal yet for open weights.** Zhipu's
+  first natively multimodal GLM-5 (320B total / 18B active, `zai-org/GLM-5.3-Flash`, weights Aug 25) reportedly
+  reached the top of the largest inference router in ~6 days (~23T tokens, ~2.3× the next model), ending DeepSeek's
+  56-day run. Verified against the Hugging Face API: **MIT-licensed**, ~379k downloads / 1,802 likes — out-pulling
+  the 753B GLM-5.3 flagship's ~66k. Card quirks that matter operationally: `reasoning_effort` defaults to max (keep
+  it there to reproduce benchmarks); chat requires explicitly passing `clear_thinking=true`; 72 community
+  quantizations listed, Unsloth 1-bit GGUFs runnable on ~100 GB machines. Caveats: the OpenRouter token-volume
+  figures and the Artificial Analysis score (57 vs the flagship's 60) come from paywalled coverage; license
+  reporting is contradictory across outlets (the flagship is revenue-gated, the Flash card says MIT — the LICENSE
+  file said MIT as of our check).
+- **Kimi's old model IDs are gone — the cleanest case yet for model-ID indirection.** `kimi-k2.5`, the entire
+  `moonshot-v1-8k/32k/128k/auto` series, and the three `moonshot-v1-*-vision-preview` models now return
+  `404 (model does not exist)`; the cutover hit Aug 31 overnight, per a deprecation schedule published in advance
+  on the same docs page (kimi-k2 series May 25, kimi-latest Jan 28). All migration paths point to `kimi-k3`
+  (2.8T params, native vision, 1M-token context). Thousands of Chinese-ecosystem apps pinned these IDs in
+  production prompts and configs. A binary, dated, no-alias cutover — model IDs need an indirection layer the way
+  package versions have one. (Extends the breaking-change-deadlines note: Assistants API Aug 26, Imagen 4 Aug 17,
+  now this.)
+- **PhoneLLM Alpha 1 (Pipecat) — a voice-agent vertical model, and a card that documents its own failure mode.**
+  Full-parameter SFT of NVIDIA Nemotron 3 Nano 30B-A3B (hybrid Mamba-Transformer MoE, 30B total / 3.5B active,
+  262k context, English-only), BSD-2-Clause with "no commercial restrictions" (Nemotron base license still
+  applies). Claims parity with GPT 5.6 Terra on voice-agent tasks at 1,300 ms faster P95 TTFT and ~94% lower cost
+  (self-host estimate $0.00025/min/agent on B200); PhoneBench 72.06, NVFP4 quantization 72.02. The card's own
+  caveats are the story's second half: the benchmark is self-run and self-graded by an LLM judge panel, and the
+  model **requires `temperature=0` with thinking disabled** to match training — otherwise it will claim actions it
+  didn't take ("Yes, I've booked that table"). Phantom action completion is a field manual for anyone evaluating
+  voice agents on self-graded benchmarks. Explicit alpha.
+- **BDH-CQ — a 150M-parameter latent-reasoning model claims the ARC-AGI-1 cost-efficiency frontier, public set
+  only.** (arXiv 2608.09888, Pathway) reasons in latent space — a recurrent memory updated continuously at
+  inference, no chain-of-thought text emitted — at 29.5% pass@2 on the public ARC-AGI-1 evaluation set at roughly
+  $0.0007 per task, claimed to break the previously reported cost-accuracy Pareto frontier. Most-upvoted HF paper
+  (765 upvotes) but a resurfacing (v1 Aug 10), not a fresh release. Structural caveats: the public evaluation set
+  only (no hidden-set half, no ARC-AGI-2), "state of the art" confined to cost efficiency rather than accuracy.
+  Cost-per-task is arguably the metric that matters for agent fleets, but public-set-only results are exactly
+  where contamination lives — the hidden-set absence is the number that tempers the headline.
+- **SWA "beats" linear attention — if you only compare against the post-trained ones (arXiv 2608.28444,
+  Samsung).** Jolicoeur-Martineau et al.: sliding-window attention with sinks matches or beats post-trained linear
+  attention across multiple LLMs — on Needle-in-a-Haystack and BABILong, SWA scores "2 to 10 times higher" with no
+  post-training, higher speed, lower memory. The scope is the point, and the authors state it themselves: the
+  comparison covers **post-trained linear attention only** — from-scratch or heavily-post-trained linear models
+  may yet compete; a practical recommendation, not a theoretical result. No independent coverage yet. The real
+  contribution is a baseline correction: a widely-repeated linear-attention advantage may partly be an artifact of
+  comparing against weakly-tuned models — quote the headline with its scope attached.
+- **iFlytek Spark X2.5 — a press schedule, not a release (rumor watch).** Declared Sept 1 open-sourcing of
+  星火 X2.5-4B and X2.5-1.7B edge models "natively supporting up to 1M-token context" (293B flagship base follows
+  Sept 7; a new flagship "based on fully domestic compute" promised for the 1024 Developer Festival). As of
+  research time: **no official weights on Hugging Face** — only unofficial `XHToken/Spark-X2.5-*` mirrors created
+  Aug 24–28 that pre-date the official date, of unclear provenance. An edge-class model with 1M context targets
+  exactly the agent-on-device niche, but until official weights land this is a company statement — and the
+  unofficial mirrors are precisely the provenance trap this feed's validation rules exist for.
+- **Apple's enterprise AI demand (The Information via MacRumors, Aug 30 — single-sourced, all "reportedly").** The
+  unusually early announcements (M6/M5 Pro Mac mini Aug 25; Mac Studio clustering promoted Aug 26; both launching
+  Sept 22) were driven by "unexpectedly strong enterprise appetite for AI hardware," with Apple pitching clusters
+  of Mac Studios to run "large frontier AI models." The report says Apple lacked an enterprise AI strategy and
+  **turned away companies asking for Private Cloud Compute access** (partners WebAI and Mount Thor build on Apple
+  hardware instead); AI demand collided with the global memory shortage, leaving many configurations out of stock
+  for months and some buyers defecting to Nvidia's DGX Spark. Apple has not confirmed being caught off guard.
+  Local/cluster AI is now an enterprise procurement category big enough to reshape Apple's launch calendar — and
+  the reported PCC refusal marks the exact boundary of Apple's private-AI story.

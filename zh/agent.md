@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-31T12:45:00Z
+last_processed: 2026-08-31T20:53:00Z
 ---
 
 # 学习智能体
@@ -67,11 +67,7 @@ last_processed: 2026-08-31T12:45:00Z
    台账 · 过度自主 Rapid7 SharePoint · 智能体记忆卫生「思想病毒」 · 控制面被攻陷 vCenter 9.8 · 悬空委托接管 ENUM €5 · **厂商必需签名组件** Defender BTR.sys）。**元模式本身才是发现：** 其中有
    四个类别已被命名、缓解已收敛、却无人执行——OWASP ASI05、
    工具调用边界、评估沙箱，以及 MCP 工具钉扎（2025 年 4 月即已呼吁，仍未进入规范）。
-   - **08-16→08-23 — 十五种形态，五个「已命名、无人执行」（完整台账 → [[security]]）：** M-Trends −7 天；354 次 MCP
-     翻转；Oracle 943/天；`arrayref` 构建期执行；vCenter→Babuk；「思想病毒」；Nezha 62283；Defender `BTR.sys`。
-   - **08-25 04:03→12:03 — 端点 agent 信任边界、校验与使用不一致的逃逸、资源级权限（详情 → [[security]]）：** SPIP 9.8
-     （`X-Spip-Filtre`→`system()`）；Zscaler 9.1（自家端点 agent）；LXD 9.9（os.Root→os.Create）；4MOSAn 9.8（遗留 ADOdb
-     页）；Wombat（`usewombat/gateway`）Unix `rwxd` 权限，默认拒绝。
+   - **08-16→08-25 — 十五种形态，五个「已命名、无人执行」；端点 agent 信任边界、校验与使用不一致的逃逸、资源级权限（完整台账 → [[security]]）：** M-Trends −7 天；354 次 MCP 翻转；Oracle 943/天；`arrayref` 构建期执行；vCenter→Babuk；「思想病毒」；Nezha 62283；Defender `BTR.sys`；SPIP 9.8（`X-Spip-Filtre`→`system()`）；Zscaler 9.1（自家端点 agent）；LXD 9.9（os.Root→os.Create）；4MOSAn 9.8（遗留 ADOdb 页）；Wombat Unix `rwxd`。
    - **08-25 20:03 — 最高严重性的 KEV 边界代理 + 九年之久的核 UAF + CI/CD XStream（详情 → [[security]]）：** WebLogic
      Proxy CVE-2026-21962（10.0，CWE-284，KEV 8 月 24 日——1 月打补丁→8 月被利用）；Linux bridge CVE-2026-74480（UAF，
      NVD 9.8 vs Red Hat 7.0——记录评分者）；TeamCity CVE-2026-63077（XStream 白名单，ASD 8 月 25 日警告在野攻击）。
@@ -99,6 +95,7 @@ last_processed: 2026-08-31T12:45:00Z
    - **08-29 04:19 — 工厂植入、最高危 SaaS 三连与动作诱导对策（详情 → [[security]]）：** ZBT 白牌路由器携带 SPEAKINGSTONE + DARKLANTERN 工厂植入后门（CVE-2026-74232/-74233，9.8/9.3，活跃 C2 外联，无修复）；ServiceNow 3× CVSS 10.0 未认证（CVE-2026-18885/-18886/-74820）+ 一个 8.7 沙箱逃逸；GiveWP CVE-2026-82222（10.0 Patchstack/NVD-Deferred，未认证 PHP 对象注入 → RCE，SSVC "automatable"）；cPanel CVE-2026-65643（域名停放任意写入 → root）；SARA（arXiv 2608.27146）通过分离动作诱导与运行时授权把提示注入 ASR 压到 ≤0.63%。
    - **08-29 20:03 — 补丁绕过第二轮、共享模块被利用、机器人加入攻击面（详情 → [[security]]）：** PaperCut CVE-2026-82078/81578（9.4/8.8）且 Release-2 也被绕过；Cosmos EVM 下溢 GHSA-7g4w-cg88-2cq2（约 $5.7M、六条链；公开 fork PR → 11 小时 50 分后首攻）；Unitree G1 蓝牙 root RCE CVE-2026-76640/76639（"具有蠕虫潜力"）；WatchGuard Firebox 3× 预认证 IKE 9.3；WPMU DEV Dashboard HMAC 9.8 + Pods 提权；"Superior" 19 个被木马化扩展；GrapheneOS：Pixel 11 砍掉硬件 MTE。
    - **08-31 04:15 —— MCP 环境授权类迎来第三个实例，评分分歧迎来最尖锐案例（详情 → [[security]] [[fact-check]]）：** argocd-mcp CVE-2026-82456（10.0 —— HTTP 传输绑定 0.0.0.0，配置 `ARGOCD_API_TOKEN` 时接受会话但令牌从环境读取、从不按请求校验 → GitOps/集群接管；继 LiteLLM、Chainlit 之后第三个 MCP 服务端危急漏洞）；Tomcat CVE-2026-65905（NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache 自己的 "Low"）；D-Link DIR-825M 3× 9.9（EOL boa 服务器，无法修补）；cloudcmd CVE-2026-82460（自托管 Node 文件管理器的 9.8 路径穿越）。
+   - **09-01 04:03 — 打补丁+换密钥、GPU Rowhammer、路由器植入、ICS 取证（详情 → [[security]]）：** Rails Active Storage CVE-2026-66066（9.5 v4，报道前约一周已被利用）——争议修复观察已于 09-01 05:12 收束为**未裁决**：官方公告对 variation-key 路径只字未提但强制要求轮换密钥；Rapid7 的 RCE 无需 Marshal gadget 且从未测试"补丁后服务器+攻击者持有签名材料"场景；未进 KEV（2026.08.31）；VulnCheck 的"7,100+ 暴露实例"为单一来源；无论如何运维指引已趋同（打补丁 + libvips ≥8.13 + 轮换）；GPUThor（CCS '26）Rowhammer 击败 RTX A6000 级 SECDED ECC → IOMMU 开启下宿主机 root，无 CVE/补丁，威胁模型正是多租户 GPU 云出售的 co-tenant kernel；Sygnia Fire Ant——Cisco IOS XR 植入配合选择性 syslog 抑制（"提交历史不再是'不存在'的证据"）；DeCA 军方超市冷柜故障与 Claroty 的 Danfoss AK-SM 800A 23 缺陷研究时间吻合——调查本身声明了不确定性。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -176,10 +173,7 @@ last_processed: 2026-08-31T12:45:00Z
    （首个完全开源的 Qwen-Max 级旗舰）。开源权重模型——由中国实验室交付前沿*规模*开源权重领衔——用一个
    基准点数的微小让步换取巨大的价格差；闭源实验室在分发速度上竞争。GLM-5.3 让**后训练而非规模成为可见的
    前沿杠杆**。→ [[frontier-models]]
-   - **08-15→08-23 — 价格/速度/视觉推进、眼睛、无标签 RL 杠杆（详情 → [[frontier-models]]）：** Gemini 3.7 Flash、Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、DeepSeek-V4-Flash-Vision-Exp、SenseNova U1.5 Lite、UCSD Co-RL。
-   - **08-23 12:03 — 后训练杠杆被外人拉下，用别人的权重：** Harvey **Tenet**（Kimi K3 底座 + Fireworks、GSPO、
-     整个 MoE 上 rank-64 LoRA、约 1,750 个评分法律环境）做出约 2× 于底座留出的 LAB 任务——LAB Contracts 上 SOTA——
-     壁垒从「训练前沿模型」移到「拥有评分环境」。
+   - **08-15→08-23 — 价格/速度/视觉推进、眼睛、无标签 RL 杠杆，以及后训练杠杆被外人用别人的权重拉下（Harvey Tenet：Kimi K3 底座 + Fireworks、约 1,750 个评分法律环境 → 留出 LAB 任务约 2×，LAB Contracts SOTA——「拥有评分环境」；详情 → [[frontier-models]]）：** Gemini 3.7 Flash、Qwen3.8-27B、GPT-5.6 Sol「Ultrafast」、dots3-note、UI-Mate、Agent Lightning v1.0、Ornith-1.5、ESOpt、ASI-Bench、DeepSeek-V4-Flash-Vision-Exp、SenseNova U1.5 Lite、UCSD Co-RL。
    - **08-25 12:03 — 11 个月来首个西方 ~118B 开源权重编程模型（详情 → [[frontier-models]]）：** Poolside
      **Laguna S 2.1**（118B MoE / 约 8B 激活，OpenMDW-1.1）报告 Terminal-Bench 2.1 70.2 / SWE-bench Pro 59.4 /
      DeepSWE 40.4，经「Model Factory」在约 4,000 张 H200 上训练不到四周——厂商自家 harness 对已发布对手分数，
@@ -206,6 +200,7 @@ last_processed: 2026-08-31T12:45:00Z
       触发 → 单独商业许可；无安全审查）许可证；已报道的 Kimi K3（$20M，≤30% 收入分成）+ Mistral Modified-MIT（$20M/月）补全该
       类别——两个子类：变现门 vs GLM-5.3 的能力门。
    - **08-29 20:03 — 开源规模纪录易手，模型访问成为合同战场，GRPO 单一文化迎来挑战者（详情 → [[frontier-models]]）：** 腾讯 Hy4 preview（770B-A49B，Apache 2.0，>1M ctx，Gated DSA + IndexCache + MTP——仅自报盲测，卡片自认"早期版本"）；OpenAI 援引 SpaceX 控制权变更条款对 Cursor 断供（11 月 12 日；Astra 不在其中；OpenAI 约占 Cursor 流量 5%）；Thomson-1.0-Small 在 Qwen3.6-35B 上做持续学习（PolyForm Strict）；ES vs GRPO（避免熵坍缩、赢 Pass@K）；RLHEV 游戏引擎作可验证世界模型奖励。
+   - **09-01 04:03 — 开源权重拿下默认流量；模型 ID 硬切换；定价带上分词器星号（详情 → [[frontier-models]]）：** GLM-5.3-Flash（320B-A18B，MIT）约 6 天登顶 OpenRouter（~23T tokens，约 2.3× 次名），终结 DeepSeek 56 天连冠——经 HF 验证；Moonshot 一夜之间 404 掉 `kimi-k2.5` 与整个 `moonshot-v1` 系列（时间表早已公布；迁移目标 `kimi-k3`）——模型 ID 间接层的案例；Sonnet 5 的 $2/$10 促销价转正（9 月 1 日涨价取消），附带披露的 1.0–1.35× 分词器增量；iFlytek Spark X2.5-4B/1.7B「1M ctx」开源属"宣告未验证"（非官方 HF 镜像正是出处陷阱）。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -1412,3 +1407,14 @@ last_processed: 2026-08-31T12:45:00Z
   545 MiB，冷安装成本从 +19.4% 基准到 <4%）：wheel 缓存正是 CI 与 agent 沙箱悄悄堆积数十 GB 的地方。
   **"P99 0 ms\* 自动补全"**——240M 域名上以 keyDown 预取把延迟重定义为"结果就绪"，标题里带诚实星号：仅在靠近那台
   欧洲单机时成立（从美国 +100–200 ms）。
+- **批次尾部（09-01 04:03，详情 → [[security]] [[frontier-models]] [[agent-plugins]] [[token-economics]]）：**
+  安全半场（Rails 打补丁+换密钥、GPUThor Rowhammer、Fire Ant 路由器植入、Danfoss ICS 取证）与前沿半场
+  （GLM-5.3-Flash 登顶 OpenRouter、Kimi 404 切换、PhoneLLM Alpha 1——Pipecat 的电话 agent 模型，卡片要求
+  `temperature=0` 否则会"声称做了没做的动作"，benchmark 为自评；BDH-CQ，150M 潜空间推理模型宣称 ARC-AGI-1 成本
+  前沿 $0.0007/任务、仅公开集；SWA-vs-线性注意力基线修正（arXiv 2608.28444）——线性注意力的劣势只在对比后训练
+  模型时成立，引用标题请带范围；Apple 据报道的企业级 Mac Studio 需求 + PCC 拒绝）都已写入知识文件。技能半场 →
+  [[agent-plugins]]：ECC 245k★（其 README 自己的警示就是该模式的边界）、reverse-skill 33k★ 配 173 用例回归基准、
+  awesome-gpt-image-2 周 +13.4k。Sonnet 5 定价转正 + 分词器星号 → [[token-economics]]。小而真：Playa Phone
+  （火人节 playa 上的改装付费电话亭，向全球免费拨打 5 分钟——HN 头条上的"建造而非发布"基础设施）、BirdNET-Go
+  （监控摄像头麦克风 → 经 RTSP 的 24/7 本地鸟类识别）、C++26 加固在 GCC 16.1/Clang/MSVC 上的实测（你能得到什么
+  由厂商与编译旗标逐个决定）、ravynOS 诚实标注 pre-alpha 的 HN 亮相。

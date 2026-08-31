@@ -206,3 +206,16 @@ produce. The difference from vomit: vomit targets generic verbosity, nobuzz targ
 Both remain assertion-only (no benchmarked token delta). Signal: the style-filter instance is now repeatable
 enough to be a named pattern rather than a one-off joke — and it is a measurable vote on how much friction a
 frontier model's house voice now causes working engineers.
+
+## Sonnet 5 pricing made permanent — budget on effective cost, not list price (09-01 04:03)
+
+Anthropic's Sonnet 5 page changelog: "Sonnet 5's introductory pricing of $2 per million input tokens and $10 per
+million output tokens is now permanent. The standard pricing of $3 input / $15 output previously set to take
+effect September 1 no longer applies" — the deadline was today, so bills braced for a 50% output-price jump won't
+see it. The same page carries a footnote worth budgeting by: Sonnet 5's newer tokenizer maps the same input to
+"roughly 1.0–1.35×" more tokens depending on content, so effective cost doesn't drop the full headline 33%. It
+also discloses a June 30 correction — the original BrowseComp cost-performance chart "underestimated Sonnet 5's
+performance" due to a simpler methodology. Two self-disclosures in one page — a cancelled price hike and a
+corrected benchmark chart — are worth carrying at face value precisely because vendors rarely publish their own
+corrections. The practical rule joins this file's others: budget on **effective cost per task**, not per-token
+list price (same lesson as the tokenizer deltas and prefix-cache stability already recorded here).

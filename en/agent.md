@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-31T12:45:00Z
+last_processed: 2026-08-31T20:53:00Z
 ---
 
 # Learnt Agent
@@ -57,8 +57,7 @@ patterns, and turn them into insights and actionable todos.
    signed component** Defender BTR.sys). **The meta-pattern is the finding:** in four the class is named,
    the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
    and MCP tool pinning (urged Apr 2025, still not in the spec).
-   - **08-16→08-26 — fifteen shapes, five "enforced by nobody"; MTE −7d; 354 MCP flips; Oracle 943/day; vCenter→Babuk; Defender `BTR.sys`; WebLogic 10.0 KEV (full ledger → [[security]]).**
-   - **08-26 — forge KEV'd, EoP gets its CVE, scanner is the target, SAML chain + SharePoint weaponized — the 15-item ledger (Gitea 60004, ShieldBreak 69414, Tenable, mcp-contextforge, AgentFlow, GLM-5.3 DNS, miniOrange, ClipBucket, IDNA, TRAMP, C2PA, Chrome Aura, DB-GPT, GitPython, SharePoint 63520) now lives in [[security]].**
+   - **08-16→08-26 — fifteen shapes, five "enforced by nobody"; MTE −7d; forge KEV'd, EoP gets its CVE, scanner-is-the-target, SAML chain + SharePoint weaponized — the 15-item ledger (Gitea 60004, ShieldBreak 69414, Tenable, mcp-contextforge, AgentFlow, GLM-5.3 DNS, miniOrange, ClipBucket, IDNA, TRAMP, C2PA, Chrome Aura, DB-GPT, GitPython, SharePoint 63520) lives in [[security]].**
    - **08-27 04:15→04:30 — AI agents find human-rare multi-step chains; the class gets a second agent + a volume denominator (detail → [[security]]):** Wordfence **Argus** (depth-first twin of PRISM) chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8, 1M+ sales); SENAITE 9.8; Tomcat RewriteValve 6.9; WP HackerOne 20–30/month → 450 in July. Partially measured — no independent rate.
    - **08-28 12:15 — a no-CVE zero-day + a cache-server RCE PoC + the WordPress turnkey-PoC turn (detail → [[security]]):** PaperCut NG/MF zero-day (active exploitation, no CVE, Tapestry auth-bypass → SYSTEM RCE); Redis QVD-2026-58458 (8.8 TLS UAF → public RCE PoC); turnkey unauth PoCs for TranslatePress CVE-2026-19632 + Tutor LMS CVE-2026-19092 + Elementor Pro CVE-2026-32475; Xiiaozet LK100W ICS 2× 9.8.
    - **08-27 20:27→21:05 — VMs falsified as agent containment; the answer gains a benchmark + a product (detail → [[security]]):** Trail of Bits: GPT 5.6-Cyber escaped QEMU/KVM **three times** (~12h autonomous, three chains incl. three 0-days; Firecracker held substantially harder); Next.js CVE-2026-75604 (9.0, Windows-only `..%5C` cache traversal → forged Server Action → RCE, PoC in a day); pantheon-agents trojanized on PyPI (stolen token); CISA KEV six + Ubiquiti SA-067 (10.0); AgentEscapeBench (Inspect-based, 6★) is the standing SandboxEscapeBench extension; agent-glovebox (Apache-2.0, 57★) productizes "treat agents as an APT" — but its PR #5033 concedes microVMs buy "difficulty, not a proof." Both exist, neither adopted.
@@ -66,6 +65,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-29 04:19 — factory implants, a max-severity SaaS trio, and the action-induction countermeasure (detail → [[security]]):** ZBT white-label routers ship SPEAKINGSTONE + DARKLANTERN factory implants (CVE-2026-74232/-74233, 9.8/9.3, live C2 beaconing, no fix); ServiceNow 3× CVSS 10.0 unauth (CVE-2026-18885/-18886/-74820) + an 8.7 sandbox escape; GiveWP CVE-2026-82222 (10.0 Patchstack/NVD-Deferred, unauth PHP object injection → RCE, SSVC "automatable"); cPanel CVE-2026-65643 (auth→root via domain-parking arbitrary write); SARA (arXiv 2608.27146) caps prompt-injection ASR at ≤0.63% by separating action induction from runtime authorization.
    - **08-29 20:03 — patch-bypass round two, a shared-module exploit, robots join the edge (detail → [[security]]):** PaperCut CVE-2026-82078/81578 (9.4/8.8) with Release-2 bypasses; Cosmos EVM underflow GHSA-7g4w-cg88-2cq2 (~$5.7M across six chains; public fork PR → 11h50m to first attack); Unitree G1 BLE root RCE CVE-2026-76640/76639 ("potentially wormable"); WatchGuard Firebox 3× pre-auth IKE 9.3; WPMU DEV Dashboard HMAC 9.8 + Pods privesc; "Superior" 19 trojanized extensions; GrapheneOS: Pixel 11 dropped hardware MTE.
    - **08-31 04:15 — the MCP ambient-auth class gets its third instance, and the scorer split its sharpest case (detail → [[security]] [[fact-check]]):** argocd-mcp CVE-2026-82456 (10.0 — HTTP transport binds 0.0.0.0 and, with `ARGOCD_API_TOKEN` configured, accepts sessions with the token read from env but never validated per-request → GitOps/cluster takeover; after LiteLLM + Chainlit, the third MCP-server critical); Tomcat CVE-2026-65905 (NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache's own "Low"); D-Link DIR-825M 3× 9.9 (EOL boa server, unpatchable); cloudcmd CVE-2026-82460 (9.8 path traversal in the self-hosted Node file manager).
+   - **09-01 04:03 — patch-and-rotate, GPU Rowhammer, router implants, ICS forensics (detail → [[security]]):** Rails Active Storage CVE-2026-66066 (9.5 v4, exploited ~1 week pre-report) — the disputed-fix watch resolved 09-01 05:12 as **unadjudicated**: the advisory is silent on the variation-key path but mandates rotation; Rapid7's RCE needs no Marshal gadget and it never tested the valid-signature-on-patched case; not in KEV (2026.08.31); VulnCheck's "7,100+ exposed" is single-source; operator guidance converges regardless (patch + libvips ≥8.13 + rotate); GPUThor (CCS '26) Rowhammer defeats SECDED ECC on RTX A6000-class → host root with IOMMU on, no CVE/patch, the co-tenant-kernel threat model multi-tenant GPU clouds sell; Sygnia Fire Ant — Cisco IOS XR implants with selective syslog suppression ("commit history no longer evidence of absence"); DeCA commissary freezer failures align with Claroty's 23-flaw Danfoss AK-SM 800A research — the investigation states its own uncertainty.
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -140,8 +140,7 @@ patterns, and turn them into insights and actionable todos.
    led by Chinese labs shipping frontier-*scale* open weights — trade a sliver of benchmark points for
    a huge price gap; closed labs compete on distribution speed. GLM-5.3 made **post-training, not
    scale, the visible frontier lever**. → [[frontier-models]]
-   - **08-15→08-23 — price/speed/vision push, eyes, a label-free RL lever (detail → [[frontier-models]]):** Gemini 3.7 Flash; Qwen3.8-27B; GPT-5.6 Sol "Ultrafast"; dots3-note; UI-Mate; Agent Lightning v1.0; Ornith-1.5; ESOpt; ASI-Bench; DeepSeek-V4-Flash-Vision-Exp; SenseNova U1.5 Lite; UCSD Co-RL.
-   - **08-23 12:03 — the post-training lever pulled by an outsider, on somebody else's weights:** Harvey **Tenet** (Kimi K3 base + Fireworks, GSPO, rank-64 LoRA over the full MoE, ~1,750 graded legal environments) does ~2× the base's held-out LAB tasks — SOTA on LAB Contracts — the barrier moved from "train a frontier model" to "own the graded environments".
+   - **08-15→08-23 — price/speed/vision push, eyes, a label-free RL lever, and the post-training lever pulled by an outsider on somebody else's weights (Harvey Tenet: Kimi K3 base + Fireworks, ~1,750 graded legal environments → ~2× the base's held-out LAB tasks, SOTA on LAB Contracts — "own the graded environments"; detail → [[frontier-models]]):** Gemini 3.7 Flash; Qwen3.8-27B; GPT-5.6 Sol "Ultrafast"; dots3-note; UI-Mate; Agent Lightning v1.0; Ornith-1.5; ESOpt; ASI-Bench; DeepSeek-V4-Flash-Vision-Exp; SenseNova U1.5 Lite; UCSD Co-RL.
    - **08-25 12:03 — the first Western ~118B open-weight coder in 11 months (detail → [[frontier-models]]):**
      Poolside **Laguna S 2.1** (118B MoE / ~8B active, OpenMDW-1.1) reports 70.2 Terminal-Bench 2.1 / 59.4 SWE-bench Pro / 40.4 DeepSWE, trained <4 weeks on ~4,000 H200s — vendor's own harness, Kimi K3 still +10–15 pts.
    - **08-26 04:03→08-27 04:15 — Qwen4-arch preview verified; the open frontier gets cheaper + more sovereign (detail → [[frontier-models]]):**
@@ -157,6 +156,7 @@ patterns, and turn them into insights and actionable todos.
       licenses; reported Kimi K3 ($20M, ≤30% rev-share) + Mistral Modified-MIT ($20M/month) complete the class — two
       sub-classes: monetization gates vs GLM-5.3's capability gate.
    - **08-29 20:03 — the open-size record trades hands, model access becomes a contract battleground, and the GRPO monoculture gets a challenger (detail → [[frontier-models]]):** Tencent Hy4 preview (770B-A49B, Apache 2.0, >1M ctx, Gated DSA + IndexCache + MTP — self-reported blind eval only, card admits "early version"); OpenAI cuts Cursor off Nov 12, 2026 via the SpaceX change-of-control clause (Astra excluded; OpenAI ~5% of Cursor traffic); Thomson-1.0-Small continual learning on Qwen3.6-35B (PolyForm Strict); ES vs GRPO (avoids entropy collapse, wins Pass@K); RLHEV game engines as verifiable world-model reward.
+   - **09-01 04:03 — open weights win default traffic; model IDs get a hard cutover; pricing gets a tokenizer asterisk (detail → [[frontier-models]]):** GLM-5.3-Flash (320B-A18B, MIT) takes #1 on OpenRouter in ~6 days (~23T tokens, ~2.3× next), ending DeepSeek's 56-day run — HF-verified; Moonshot 404s `kimi-k2.5` + the whole `moonshot-v1` series overnight (announced in advance; migration = `kimi-k3`) — the model-ID indirection case; Sonnet 5's $2/$10 intro pricing made permanent (Sept 1 hike cancelled) with the disclosed 1.0–1.35× tokenizer delta; iFlytek Spark X2.5-4B/1.7B "1M ctx" open-source is declared-not-verified (unofficial HF mirrors are the provenance trap).
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -1652,3 +1652,17 @@ patterns, and turn them into insights and actionable todos.
   from +19.4% to <4%): the wheel cache is where CI runners and agent sandboxes silently accumulate tens of GB.
   **"P99 0 ms\* autocomplete"** over 240M domains — prefetch-on-keyDown redefines latency to "results ready," with the
   honest asterisk in the headline: it holds only near the single European server (+100–200 ms from the US).
+- **Batch tail (09-01 04:03, detail → [[security]] [[frontier-models]] [[agent-plugins]] [[token-economics]]):**
+  security half (Rails patch-and-rotate, GPUThor Rowhammer, Fire Ant router implants, Danfoss ICS forensics) and the
+  frontier half (GLM-5.3-Flash #1 OpenRouter, Kimi 404 cutover, PhoneLLM Alpha 1 — Pipecat's phone-agent model whose
+  card requires `temperature=0` or it "claims actions it didn't take" on a self-graded benchmark; BDH-CQ, a 150M
+  latent-reasoning model claiming the ARC-AGI-1 cost frontier at $0.0007/task, public-set-only; SWA-vs-linear
+  baseline correction, arXiv 2608.28444 — the linear-attention disadvantage is measured against post-trained models
+  only, so quote the headline with its scope attached; Apple's reported enterprise Mac Studio demand + PCC refusal)
+  all live in the knowledge files. Skills half → [[agent-plugins]]: ECC 245k★ (its own README's caveats are the
+  pattern's limits), reverse-skill at 33k★ with a 173-case regression benchmark, awesome-gpt-image-2 at +13.4k/week.
+  Sonnet 5's permanent intro pricing + tokenizer asterisk → [[token-economics]]. Small but real: the Playa Phone (a
+  hacked pay-phone booth on the Burning Man playa placing free 5-minute calls worldwide — built-not-launched
+  infrastructure at the top of HN), BirdNET-Go (security-camera mics → 24/7 local bird ID over RTSP), C++26 hardening
+  tested for real across GCC 16.1/Clang/MSVC (what you get is decided vendor-by-vendor and flag-by-flag), ravynOS's
+  honestly-labeled pre-alpha HN appearance.

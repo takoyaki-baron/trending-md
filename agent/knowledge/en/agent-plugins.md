@@ -649,3 +649,36 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
 - **What stays open:** unchanged from 08-30 — the standing leaderboard exists (SkillsBench on Vals AI, 30 models), the
   star-rich authors still don't submit. Quorum and ponytail's A/B are the two live demonstrations that the biggest
   repos *can* measure themselves; neither grades on the shared corpus.
+
+## ECC at 245k★, a security-skill router at 33k★, prompt libraries as skills (09-01 04:03)
+
+- **affaan-m/ECC passes 245k★ (v2.2) — the largest datapoint in "harness config as open-source project," and its
+  README's caveats are the pattern's honest summary.** MIT; claims 68 agents, 286 skills, 94 commands, hooks, an
+  AgentShield security scanner, and a Memory Vault for cross-harness context sharing, with adapters for Codex,
+  Cursor, OpenCode, Gemini CLI, Zed, Copilot and Qwen; v2.2 adds guided package setup for Claude Code, Codex and
+  Kimi Code. The star count deserves scrutiny the repo itself supplies: the star-history badge documents the first
+  40,000 stars arriving Jan 18 – Feb 7 2026, the fork ratio is a healthy ~15%, third-party coverage tracks 82k →
+  224k — but a number this large for a config repo should be treated as **reach, not endorsement**. The README
+  warns that unofficial mirrors "may contain malware" (install only via the repo or the
+  `ecc-universal`/`ecc-agentshield` npm packages), that adapters are "capability-limited" with no parity
+  guarantee, and that its memory is "unreviewed context, not executable policy." Monetized (ECC Pro from
+  $19/seat/mo).
+- **reverse-skill re-appears at 33k★ (+1,439/day, v1.0.1) — dated update with new facts.** Now described in full:
+  44 security-skill modules (APK/iOS analysis, binary RE with IDA/radare2/Ghidra, OLLVM deobfuscation,
+  malware/YARA, firmware, pwn, CTF) behind 43 routing rules in a single `routing.json`, validated against a
+  173-case regression benchmark with CI on Windows and Ubuntu; targets Claude Code, Codex, Cursor, Kiro, Cline,
+  OpenCode. Honest caveats: this week's spike has no release trigger (it's the skills-for-agents wave); the
+  license is mixed — MIT overall, but a GPLv3 CTF-orchestrator component and an AGPL-3.0 pentest component invoked
+  CLI/MCP-only, source not included; README restricts use to "lawful security research, education, CTF
+  competitions, and testing of systems that you own." Security-research skill packs are the clearest sign the
+  skills pattern has left productivity demos — which is exactly why orgs need an approval process for which
+  skills their agents can route to.
+- **awesome-gpt-image-2 is the week's biggest mover (+13.4k → 26.3k★) — the 08-23 lead-generation read confirmed
+  at scale.** 544 reverse-engineered GPT-Image-2 prompt cases across 13 categories plus ~20 industrial template
+  sets (was 532 cases on 08-23), packaged as an installable agent skill (`gpt-image-2-style-library` via npm /
+  `npx skills add` / the Claude Code plugin marketplace). The trigger is virality inside the skills ecosystem plus
+  X features, not a release. The README's own caveats: content aggregated from public community sources
+  (credited to YouMind/OpenNana) "does not guarantee that third-party content can be used commercially"; no
+  releases; companion site auth-gated with paid credits — a commercial funnel around a community-aggregated repo.
+  The interesting signal isn't the images: prompt libraries now distribute as agent skills, one more step in
+  skills becoming the packaging standard for know-how — and the star curve is a marketing metric.

@@ -1169,3 +1169,50 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   100 MiB / 2,000 页；Docker 墙钟限制 300 秒）。背景：v0.8.x 的通告史（含 pre-auth 沙箱逃逸 RCE）之后，v0.9.0 已把
   Docker API 改为默认安全（开启认证、绑定 loopback）。agent 栈把爬虫当作向提示词投喂不可信内容的可信管道——一个
   Docker API 可写任意文件的爬虫就是恶意页面→宿主机的直达路径；自托管者值得为此安排升级。
+
+## Rails 打补丁+换密钥、GPU Rowhammer、路由器植入、ICS 取证（09-01 04:03）
+
+- **Rails Active Storage CVE-2026-66066 "KindaRails2Shell"（CVSS v4 9.5，已被积极利用）——一起"打补丁+换密钥"
+  事件，且修复本身有争议。** 变体处理中的未认证任意文件读取：Active Storage 未禁用 libvips "unfuzzed" 操作，
+  精心构造的图片上传（MATLAB Level 5 → libmatio → HDF5 外部文件列表）可读取任意文件——包括进程环境变量，
+  `secret_key_base` 就在那里 → 伪造签名 → RCE。7 月下旬已在 7.2.3.2 / 8.0.5.1 / 8.1.3.1 修复（Rails 6.x 无修复
+  版本）。**争议点，连同表述方：** 据 SecurityWeek 引述 VulnCheck，利用始于 8 月 31 日报道前约一周（补丁发布后
+  约 1 个月；8 月初发现约 7,000 个暴露的易受攻击实例），且 VulnCheck 报告该修复封堵了 libvips 读取但**未**封堵
+  variation-key Marshal 反序列化——RCE gadget 在"持有有效签名"的前提下仍可执行。Rapid7 的表述更温和：仅升级
+  Rails 不够（要求 libvips ≥ 8.13，过旧则应用启动失败），但未称补丁不完整。无论采信哪方，处置都是：升级 + 验证
+  libvips（或设 `VIPS_BLOCK_UNTRUSTED`）+ **轮换 `secret_key_base` 与凭证**。公开利用代码已出现；Rapid7 指出
+  其与提交给 Rails 团队的私有链的匹配程度不明（攻击细节 8 月 28 日前一直扣留）。
+  **收束（09-01 05:12，四个观察条件均已一手核查）：争议未获裁决——这是一条"残余风险有争议"记录，而非已证实的
+  不完整修复。**（1）**Rails 核心团队对 variation-key 路径无任何表态**——官方公告全篇未提 variation key 或
+  Marshal，仅以"我们不假定它是唯一存在的攻击链"作对冲，且其处置清单本身让步了实质：升级 + libvips ≥ 8.13 +
+  轮换 `secret_key_base`/master key/凭证，因为"升级封堵漏洞但不能追回已被窃取的密钥"。（2）**修复后 Marshal
+  gadget 无独立 PoC，也无独立反驳。** VulnCheck 的一手主张（Brian Babcock，LinkedIn）："测试了打过补丁的
+  8.1.3.1 服务器……修复封堵了 libvips 文件读取，但未中和 variation-key Marshal 反序列化"——"持有有效签名的
+  前提下，RCE gadget 在打过补丁的服务器上仍可执行"。Rapid7 的技术分析是回避而非反驳：其验证过的 RCE 路径
+  "不依赖 Marshal 对象 gadget"（签名 variation 中仅 JSON 兼容的 Hash/Array/String），并为补丁设计辩护
+  （"阻断不可信操作即拦截 matload"），**但从未测试**"补丁服务器 + 攻击者自持签名材料"的场景。即双方连机制
+  都不一致，遑论结论。（3）**未进 CISA KEV**（对 2026.08.31 目录、1,687 条 grep 为负）。（4）**"约 7,000 暴露"
+  数字为单一来源**——VulnCheck 自己的一方扫描（"7,100+ 暴露脆弱实例"），无独立第二来源；VulnCheck 同时声明
+  该残余 gadget "暂无被利用报告"。各方运维指引趋同（打补丁 + libvips ≥ 8.13 + 轮换），所以实操结论从不依赖
+  这场争议；未决问题收窄为：签名材料已泄露的完全打过补丁的服务器是否仍可被 RCE——关注恰好针对该场景的
+  第三方 PoC。
+- **GPUThor（多伦多大学，CCS '26）——首个在 NVIDIA GDDR6 工作站 GPU 上击败 ECC 的 Rowhammer，可获得宿主机
+  root。** 非均匀锤击 + intra-warp 激活合并产生 SECDED 误纠正的多位翻转（3 位翻转被当作"已纠正"放行）；RTX
+  A6000 上：每锤击一天约 11 次被检出的不可纠正错误 + 1 次静默数据损坏，一次三比特 SDC 在 **IOMMU 开启下取得
+  宿主机 root**。前提平淡无奇：能运行无特权的 CUDA kernel——共享 GPU 上的 co-tenant，而这正是多租户 GPU 云在
+  出售的东西。NVIDIA 4 月 29 日获通报，仅发布指导意见——**无 CVE、无补丁**（彻底修复需要多位 ECC 加 in-DRAM
+  防御：RFM/PRAC）。这推翻了 NVIDIA 早前"系统级 ECC 可缓解 GPU Rowhammer"的说法。A10/L4/L40/RTX 4090 不受
+  影响；A100/H100 未测试。
+- **Sygnia "Fire Ant"——中国间谍把 Cisco IOS XR 路由器变成间谍平台**（Sygnia 评估与 UNC3886 高度重叠）：定制
+  路由器恶意软件以假服务持久化、"仅在隔小时运行"；**选择性 syslog 抑制**隐藏未记录的 GRE 隧道；流量捕获并上传
+  PCAP 至攻击者 FTP；此前未记录的 root 级 systemd 后门（"BridgeAgent"）伪装成 Zabbix agent。值得内化的发现触发
+  点——一条"无法用运行配置或提交历史解释"的 GRE 隧道接口。抑制 syslog 的路由器级植入会破坏网络团队依赖的审计
+  工作流：提交历史不再是"不存在"的证据。无 CVE；已发布 IoC + YARA 规则。
+- **军方超市冷柜——声明自身不确定性的假设驱动式 ICS 取证。** 8 月 26–27 日前后，至少 6 个美军超市（Fort
+  Huachuca、F.E. Warren、Fort Irwin、Columbus、Newport、Travis）的冷柜故障——Fort Huachuca 的在"电力未中断"
+  的情况下连夜进入主动除霜。作者连接两个事实：DeCA 的集中式制冷管理系统（"除霜应通过 RMCS 控制"，2026 年 3
+  月采购，约 182 个网点）与 Claroty Team82 的 8 月 9 日研究：**Danfoss AK-SM 800A / Copeland XWEB Pro 控制器
+  的 23 个缺陷（21 个高危）**可远程操纵压缩机、风机与除霜，且数千个 Danfoss 界面暴露在互联网上。该文的自我
+  对冲是其最大优点："我没有证据表明 DeCA 被入侵"；Claroty 发现与 DeCA 之间"无已证实的关联"；更新失败与配置
+  错误仍是合理解释。无论归因如何，架构性事实独立成立：军用超市的除霜可通过一类已被证明可操纵且常常暴露的
+  设备远程控制——这是基础设施取证中陈述不确定性的范本。

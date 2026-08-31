@@ -968,3 +968,49 @@ APEX-Agents 的 27.7，Agent-Team 模式比 ReAct 模式高 7–8 分。模式�
   transformer 之于 RNN"——并明确警告 diffusion 尚未扩展到自回归的算力/数据规模（千亿级 ESM3 看起来有希望）。
   背景：Mercury 2 约 1,200 tok/s 与开源 LLaDA 8B 使 diffusion LM 今年成为真实的推理选项（见 DiffusionGemma，
   08-21，[[edge-inference]]）。
+
+## 开源权重拿下默认流量；硬切换的模型 ID；成本效率前沿（09-01 04:03）
+
+- **GLM-5.3-Flash 登顶 OpenRouter——开源权重迄今最强的默认流量信号。** 智谱首个原生多模态 GLM-5（320B 总参 /
+  18B 激活，`zai-org/GLM-5.3-Flash`，8 月 25 日权重）据报道在 ~6 天内登上最大推理路由器榜首（~23T tokens，约
+  为次名的 2.3 倍），终结 DeepSeek 的 56 天连冠。经 Hugging Face API 验证：**MIT 许可**，~37.9 万下载 /
+  1,802 赞——已超过 753B 旗舰 GLM-5.3 的 ~6.6 万。运维上要留意的卡片细节：`reasoning_effort` 默认 max（复现
+  benchmark 请保持默认）；对话需显式传 `clear_thinking=true`；已列出 72 个社区量化版，Unsloth 1-bit GGUF 可在
+  ~100 GB 机器上运行。注意：OpenRouter token 量数据与 Artificial Analysis 分数（57 vs 旗舰的 60）来自付费墙
+  报道；各媒体的许可表述互相矛盾（旗舰是营收门槛许可，Flash 卡片写 MIT——我们查证时 LICENSE 文件为 MIT）。
+- **Kimi 的旧模型 ID 消失了——模型 ID 需要间接层的最干净案例。** `kimi-k2.5`、整个 `moonshot-v1-8k/32k/128k/
+  auto` 系列与三个 `moonshot-v1-*-vision-preview` 现在返回 `404 (model does not exist)`；切换在 8 月 31 日
+  一夜之间生效，而弃用时间表早已在同一文档页公布（kimi-k2 系列 5 月 25 日、kimi-latest 1 月 28 日）。所有迁移
+  路径指向 `kimi-k3`（2.8T 参数、原生视觉、1M token 上下文）。成千上万的中文生态应用在生产提示词与配置里写死
+  了这些 ID。一次二元的、定档的、无别名的切换——模型 ID 需要包版本那样的间接层。（接续"破坏性变更截止日"笔记：
+  Assistants API 8 月 26 日、Imagen 4 8 月 17 日、如今轮到它。）
+- **PhoneLLM Alpha 1（Pipecat）——语音 agent 垂直模型，以及一张记录自身失效模式的模型卡。** 基于 NVIDIA
+  Nemotron 3 Nano 30B-A3B 的全参数 SFT（hybrid Mamba-Transformer MoE，30B 总参 / 3.5B 激活，262k 上下文，仅
+  英语），BSD-2-Clause"无商业限制"（NVIDIA Nemotron 基础模型许可仍适用）。宣称在语音 agent 任务上与 GPT 5.6
+  Terra 打平、P95 TTFT 快 1,300 ms、成本低 ~94%（自托管估算 B200 上 $0.00025/分钟/agent）；PhoneBench 72.06，
+  NVFP4 量化 72.02。卡片的自我警示才是故事的另一半：benchmark 为自测且由 LLM 评审团自评，且模型**必须
+  `temperature=0` 并关闭 thinking** 才与训练分布一致——否则会声称自己做了没做的事（"好的，餐桌订好了"）。
+  "幻影动作完成"是任何在自评 benchmark 上评估语音 agent 的人的现场手册。明确标注为 alpha。
+- **BDH-CQ——150M 参数潜空间推理模型宣称 ARC-AGI-1 成本效率前沿，但仅在公开集上。**（arXiv 2608.09888，
+  Pathway）在潜空间推理——推理时持续更新的循环记忆，不输出思维链文本——在 ARC-AGI-1 公开评测集上 pass@2
+  29.5%、每任务约 $0.0007，宣称打破已报道的成本-精度 Pareto 前沿。当前 HF papers 最高赞（765）但属于回潮
+  （v1 为 8 月 10 日）而非新发布。结构性注意：仅公开评测集（无隐藏集一半、无 ARC-AGI-2），"SOTA" 仅限于成本
+  效率而非精度。每任务成本可以说是 agent 集群真正关心的指标，但仅公开集的结果正是污染所在——隐藏集缺席才是
+  给标题降温的那个数字。
+- **SWA"击败"线性注意力——前提是你只与后训练过的对手比较（arXiv 2608.28444，三星）。** Jolicoeur-Martineau
+  等：带 sinks 的滑窗注意力在多个 LLM 上持平或胜过后训练的线性注意力——在 Needle-in-a-Haystack 与 BABILong
+  上 SWA 得分"高 2 到 10 倍"，且无需后训练、更快、更省内存。范围才是重点，作者自己写明：对比仅覆盖**后训练
+  的线性注意力**——从头训练或深度后训练的线性模型仍可能扳回；这是实践建议而非理论结果。尚无独立报道。真正的
+  贡献是基线修正：一个被广泛复述的线性注意力优势可能部分来自与弱调优模型的比较——引用该标题时请把范围带上。
+- **iFlytek Spark X2.5——是发布会日程，不是发布（传闻观察）。** 宣布 9 月 1 日开源星火 X2.5-4B 与 X2.5-1.7B
+  边缘模型，"原生支持最长 1M token 上下文"（293B 旗舰基座 9 月 7 日跟进；"基于全国产算力"的新旗舰承诺于 1024
+  开发者节）。截至调研时：**Hugging Face 上无官方权重**——只有 8 月 24–28 日创建、早于官方日期、来源不明的
+  非官方 `XHToken/Spark-X2.5-*` 镜像。带 1M 上下文的边缘级模型正瞄准 agent-on-device 生态位，但在官方权重落地
+  前这只是公司声明——非官方镜像正是本 feed 验证规则为之存在的出处陷阱。
+- **Apple 的企业级 AI 需求（The Information 经 MacRumors，8 月 30 日——单一信源，通篇"据报道"）。** 异常提前
+  的发布（8 月 25 日 M6/M5 Pro Mac mini；8 月 26 日宣传 Mac Studio 集群；均 9 月 22 日上市）源于"企业对 AI
+  硬件出乎意料的强劲需求"，Apple 向企业推销运行"大型前沿 AI 模型"的 Mac Studio 集群。报道称 Apple 缺乏企业
+  AI 战略，并**拒绝了申请 Private Cloud Compute 访问的公司**（合作方 WebAI 与 Mount Thor 转而在 Apple 硬件上
+  自建）；AI 需求与全球内存短缺相撞，许多配置缺货数月，部分买家转向 Nvidia DGX Spark。Apple 未确认被打了个
+  措手不及。本地/集群 AI 已成为足以重塑 Apple 发布日程的企业采购类目——而据报道的 PCC 拒绝标出了 Apple 私有
+  AI 故事的精确边界。

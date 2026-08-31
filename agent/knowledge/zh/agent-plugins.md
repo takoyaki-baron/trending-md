@@ -484,3 +484,27 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   标题数字相应更正：**平均 ~54% LOC 削减**（在 agent 过度建造处达 94%，代码本已精简处接近 0），而非平铺的 80–94%。
 - **仍未闭合：** 与 08-30 相同——常设排行榜已存在（Vals AI 上的 SkillsBench，30 个模型），高星作者仍不提交。Quorum 与
   ponytail 的 A/B 是两份活证：最大的仓库*有能力*测量自己；但谁都不在共享语料上打分。
+
+## 245k★ 的 ECC、33k★ 的安全技能路由器、作为技能分发的提示词库（09-01 04:03）
+
+- **affaan-m/ECC 突破 245k★（v2.2）——"harness 配置作为开源项目"这一模式的最大数据点，其 README 的自我警示就是
+  该模式边界的诚实总结。** MIT 许可；宣称 68 个 agent、286 个技能、94 条命令、hooks、AgentShield 安全扫描器、
+  跨 harness 上下文共享的 Memory Vault，适配 Codex、Cursor、OpenCode、Gemini CLI、Zed、Copilot、Qwen；v2.2 为
+  Claude Code、Codex、Kimi Code 增加引导式包安装。星数值得用仓库自己提供的材料审视：star-history 徽章记录前
+  40,000 颗星于 2026 年 1 月 18 日–2 月 7 日到达，fork 比例健康（~15%），第三方报道追踪 82k → 224k——但对一个
+  配置仓库而言，这个量级应被当作**触达面，而非背书**。README 警告非官方镜像"可能含恶意软件"（只从仓库或
+  `ecc-universal`/`ecc-agentshield` npm 包安装）、适配器"能力受限"且无一致性保证、其记忆是"未审查的上下文而非
+  可执行策略"。已商业化（ECC Pro 每席每月 $19 起）。
+- **reverse-skill 以 33k★ 回归（单日 +1,439，v1.0.1）——带新事实的过时更新。** 现在有完整描述：44 个安全技能
+  模块（APK/iOS 分析、IDA/radare2/Ghidra 二进制逆向、OLLVM 去混淆、恶意软件/YARA、固件、pwn、CTF）由单一
+  `routing.json` 中 43 条路由规则调度，配 173 用例回归 benchmark 与 Windows/Ubuntu CI；面向 Claude Code、Codex、
+  Cursor、Kiro、Cline、OpenCode。诚实的注意点：本周飙升没有发布触发点（是 skills-for-agents 浪潮）；许可是混合
+  的——整体 MIT，但一个 GPLv3 CTF 编排组件与一个 AGPL-3.0 渗透组件仅经 CLI/MCP 调用、不含源码；README 将用途
+  限定于"合法的安全研究、教育、CTF 竞赛与对自有系统的测试"。安全研究技能包是技能模式离开效率演示阶段最清晰的
+  信号——这正是组织需要为"agent 可路由到哪些技能"建立审批流程的原因。
+- **awesome-gpt-image-2 是本周最大动量（+13.4k → 26.3k★）——08-23 的获客漏斗判断在规模上得到确认。** 544 个
+  逆向工程的 GPT-Image-2 提示词用例、13 个类目、约 20 套工业模板集（08-23 时为 532 个），打包为可安装的 agent
+  技能（`gpt-image-2-style-library`，经 npm / `npx skills add` / Claude Code 插件市场）。触发点是技能生态内的
+  传播加 X 推荐，而非发布。README 自己的注意点：内容聚合自公开社区来源（署名 YouMind/OpenNana）"不保证第三方
+  内容可商用"；无 release；配套站点需登录并出售付费积分——围绕社区聚合仓库的商业漏斗。有趣的信号不是图片：
+  提示词库现在以 agent 技能的形态分发，是技能成为 know-how 打包标准的又一步——星数曲线是营销指标。
