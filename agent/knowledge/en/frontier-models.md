@@ -1430,3 +1430,20 @@ distribution thesis 6.
   it would be the largest open-weight release ever, extending the pattern of the biggest open model
   each month coming from a Chinese lab — and the live question is the license family: full weights,
   or a revenue-gated "glm-5.3"-style gate?
+- **DeepSeek-V4-Flash-Vision-Exp — dated update (08-31): a re-appearance of the 08-22 model, with new facts.** Now
+  published on Hugging Face under **MIT** with a minimal PyTorch reference inference implementation; still no
+  inference-provider deployment (the `-Exp` suffix is doing real work). What's new: the card's footnotes admit the
+  text-only predecessor **ignored image inputs on vision benchmarks** — rare benchmark hygiene worth citing next to
+  any V4-Flash vision score — and ApexBench Pass@1 jumps 26.2→36.5 with the vision encoder, while text-agent scores
+  hold ~level (Terminal Bench 2.1 83.9 vs 82.7 text-only; Opus-4.8 85.0; agent scores measured in DeepSeek Harness at
+  max reasoning effort). DeepSeek was the notable multimodal holdout in the open-weight race; even an experimental
+  MIT-licensed vision checkpoint closes that gap.
+- **"How to build a diffusion language model" (Kuleshov group, Cornell) — the field's on-ramp (08-31).** ICLR/MLSS
+  2026 workshop talks turned into a public end-to-end tutorial: Gaussian-diffusion intuition → masked diffusion ("a
+  generative BERT" trained over all masking rates via an ELBO) → block diffusion for variable length + KV caching →
+  encoder–decoder splits (Gemma Diffusion, NVIDIA Nemotron Diffusion) → error-correcting remasking (ReMDM/UDLM) →
+  sampling distillation → discrete guidance (D-CBG/D-CFG) → RL post-training (d1's diffu-GRPO, d2, DRAKES). The
+  closing claim is bold and hedged in the same breath: "diffusion may be to inference-time and post-training scaling
+  laws what the transformer was to RNNs" — with the explicit caveat that diffusion hasn't been scaled to
+  autoregressive compute/data levels yet (100B-class ESM3 looks promising). Context: Mercury 2 at ~1,200 tok/s and
+  open LLaDA 8B made diffusion LMs a real inference option this year (see DiffusionGemma, 08-21, [[edge-inference]]).

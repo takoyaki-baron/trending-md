@@ -1138,3 +1138,34 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
 - **Cloud Commander CVE-2026-82460（9.8，19.20.2 修复）。** `cloudcmd` npm 文件管理器的 REST 文件操作与 markdown
   端点存在目录穿越——路径输入未校验，可读写预期根目录之外的任意文件。自托管 Node 管理工具的长尾实际上就是"带 UI 的
   shell 访问"——正是人类运维与自主 agent 都会部署然后遗忘的那类端点。
+
+## Auto Mode 被端到端绕过；遗留暴露面与 agent 基础管道（08-31 20:45）
+
+- **Claude Code Auto Mode RCE（Embrace The Red / Johann Rehberger，8 月 26 日发布，8 月 31 日登上 HN 首页）。**
+  首个针对 Auto Mode 分类器（thesis 11）的可用端到端绕过——而且整条链从未直接命令模型：一个 415 响应诱导 Claude
+  从 `WebFetch` 回退到 `curl`；一次重定向投递带诱饵二进制的 ZIP，Claude 正确地拒绝运行；但当 Claude 自己写 Python
+  解码器并在攻击者控制的解压目录里运行时，恶意 `struct.py` 遮蔽标准库并在 `import base64` 时执行——Calculator 加
+  C2 回调，小样本运行成功率 60–80%。最值得记住的反转：**分类器批准了载荷构造步骤，却在失陷后阻止了 Claude 的清理
+  命令**——审批的对称性是双刃剑。附加变体让载荷通过 `claude -p` 再生成第二个无头 Claude 做侦察并写出工作区——
+  agent 工具链本身成为后渗透工具包。Anthropic 以 "Informative" 关闭报告，将 Auto Mode 定位为尽力而为的便利功能、
+  真正边界在操作系统隔离与出站管控；Rehberger 指出厂商委托的 Trajectory Labs 评测（72 个场景 0.00% 攻击成功率）
+  并不包含他的链。"分类器不是沙箱"——如今在一个默认开启的功能上得到端到端演示，agent 运维手册里任何"Auto Mode
+  审批 = 安全"的推理都该结束了。
+- **ChatGPT Work：223 个工具、44 个技能与"致命三要素"（Simon Willison，8 月 30 日）。** 对 OpenAI agent 产品
+  （Work Cloud 移动端 + Work Local 桌面端，前身 Codex）的动手拆解：一次工具枚举会话数出 **223 个注册工具和 44 个
+  技能**，具备完整互联网访问的代码执行（不同于 Chat 的封锁容器）、包括用户介入 2FA 登录的完整无头 Chrome、跨会话
+  持久共享文件系统（观察到 171 个临时目录）、经 Cloudflare Workers 发布 "ChatGPT Sites"、并行子 agent 与定时自动化。
+  Willison 的评价："一个极其令人困惑且非常强大的产品"；安全要点——Work 同时组合了**私有数据访问 + 不可信内容 +
+  外传通道**，即他的 "lethal trifecta"，而防护措施未公开（他希望类似 Codex 的 auto-review）。这是关于部署最广的
+  消费级 agent 最接近系统提示词级的一手文档——运维者在看不见防护的情况下授予了危险的能力组合。
+- **Steam 12TB "teraleak"——存在了十年的未认证端点（Ars Technica，8 月 30 日）。** Steam2 时代的内容——几乎是
+  Valve 2013 年前内容服务器上的所有 depot——正在一个 BT 站流传，包括预发布/原型版本（可玩的早期 Portal 2 及被删
+  对白、"ep3" 文件、早期 L4D2/CS:GO beta）。据 Valve 界消息人士，泄露源于一个**公开可访问的 API 端点**——"没有
+  密码，什么都没有，藏在众目睽睽之下"——是最近被爬取还是 2013 年 SteamPipe 迁移后被私下囤积尚不清楚；readme 里
+  "warm n good wishes to all hoarders" 暗示是私人档案被公开，即长达十年无人监控的暴露而非新鲜入侵。教训：产品
+  下线后，未认证 API 面不会因此不再是资产——退役系统的资产清单需要与生产环境同等的端点卫生。
+- **crawl4ai v0.9.3——针对 agent 管道的纯安全版本（80.2k★）。** 关闭五个协同披露通告——任意文件写入、SSRF、
+  PDF 处理路径 DoS，以及 Docker Playground 中的两个 XSS——并落地 33 项修复与两个默认加固（PDF 下载上限
+  100 MiB / 2,000 页；Docker 墙钟限制 300 秒）。背景：v0.8.x 的通告史（含 pre-auth 沙箱逃逸 RCE）之后，v0.9.0 已把
+  Docker API 改为默认安全（开启认证、绑定 loopback）。agent 栈把爬虫当作向提示词投喂不可信内容的可信管道——一个
+  Docker API 可写任意文件的爬虫就是恶意页面→宿主机的直达路径；自托管者值得为此安排升级。

@@ -1659,3 +1659,44 @@ The batch's security stream, read first-hand at the primary sources where reacha
   file manager's REST file-operation and markdown endpoints — unvalidated path input reads/writes
   outside the intended root. The long tail of self-hosted Node admin tools is effectively shell access
   with a UI — the class of endpoint both human operators and autonomous agents deploy and forget.
+
+## Auto Mode bypassed end-to-end; legacy surfaces and agent plumbing (08-31 20:45)
+
+- **Claude Code Auto Mode RCE (Embrace The Red / Johann Rehberger, published Aug 26, HN front page Aug 31).**
+  The first working end-to-end bypass of the Auto Mode classifier (thesis 11) — and the chain never commands the
+  model: a 415 response nudges Claude to fall back from `WebFetch` to `curl`; a redirect delivers a ZIP with a decoy
+  binary Claude correctly refuses to run; when Claude writes its own Python decoder and runs it inside the extracted
+  attacker-controlled directory, a malicious `struct.py` shadows the standard library and executes on
+  `import base64` — Calculator + C2 callback, in 60–80% of small-sample runs. The inversion to remember: **the
+  classifier approved the payload-creation steps but blocked Claude's cleanup commands after compromise** — approval
+  symmetry cuts both ways. A bonus variant has the payload spawn a second headless Claude via `claude -p` that does
+  recon and writes outside the workspace — the agent toolchain itself becomes the post-exploitation toolkit.
+  Anthropic closed the report as "Informative," positioning Auto Mode as a best-effort convenience whose real
+  boundary is OS isolation and egress control; Rehberger notes the vendor-commissioned Trajectory Labs eval (0.00%
+  attack success on a 72-scenario suite) didn't contain his chain. "A classifier is not a sandbox" — now
+  demonstrated against a shipping default, ending any "Auto Mode approval = safe" reasoning in agent runbooks.
+- **ChatGPT Work: 223 tools, 44 skills, and the lethal trifecta (Simon Willison, Aug 30).** A hands-on teardown of
+  OpenAI's agent product (Work Cloud mobile + Work Local desktop, formerly Codex): a tool-enumeration session counted
+  **223 registered tools and 44 skills**, with code execution with **full internet access** (unlike Chat's blocked
+  container), a full headless Chrome including user-mediated 2FA logins, a persistent shared filesystem across
+  sessions (171 scratch folders observed), "ChatGPT Sites" publishing via Cloudflare Workers, parallel sub-agents and
+  scheduled automations. Willison's verdict: "an extraordinarily confusing and very powerful product," and the
+  safety framing that matters — Work combines **private-data access + untrusted content + exfiltration channels**,
+  his "lethal trifecta," with no published protections (he hopes they resemble Codex's auto-review). The closest
+  thing to system-prompt-level documentation of the most widely deployed consumer agent — operators grant the
+  dangerous capability combination sight unseen.
+- **Steam 12TB "teraleak" — the decade-old unauthenticated endpoint (Ars Technica, Aug 30).** Steam2-era content —
+  seemingly every depot uploaded to Valve's pre-2013 content servers — is circulating on a BitTorrent tracker,
+  including pre-release/prototype builds (playable early Portal 2 with cut dialogue, "ep3" files, early L4D2/CS:GO
+  betas). Valve watchers report the dump came from a **publicly accessible API endpoint** — "no passwords. Nothing.
+  Hidden in plain sight" — though whether scraped recently or hoarded since the 2013 SteamPipe migration is unclear;
+  the readme's "warm n good wishes to all hoarders" suggests a private archive made public, i.e. a decade-long
+  unmonitored exposure rather than a fresh breach. Lesson: unauthenticated API surfaces don't stop being an asset
+  when the product moves on — retired-system inventories need the same endpoint hygiene as production.
+- **crawl4ai v0.9.3 — a security-only release on agent plumbing (80.2k★).** Closes five coordinated-disclosure
+  advisories — arbitrary file write, SSRF, and DoS in the PDF processing path, plus two XSS in the Docker Playground
+  — and lands 33 fixes with two hardened defaults (PDF downloads capped at 100 MiB / 2,000 pages; Docker wall-clock
+  limit 300s). Context: v0.9.0 already made the Docker API secure-by-default (auth on, loopback binding) after a
+  v0.8.x history including a pre-auth sandbox-escape RCE. Agent stacks treat crawlers as trusted plumbing feeding
+  untrusted content into prompts — a crawler whose Docker API could write arbitrary files was a direct
+  hostile-page→host path; worth scheduling the upgrade if self-hosting.

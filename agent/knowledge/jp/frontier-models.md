@@ -1103,3 +1103,19 @@ APEX-Agents の 27.7 に対抗し、Agent-Team モードは ReAct モードを 7
   いう。Q3 が閉じる：リリースなし、アーキテクチャ詳細なし、両媒体以外の独立確認なし。記載通り出荷されれば史上最大の
   オープンウェイトリリースとなり、「毎月最大のオープンモデルは中国ラボから」というパターンを延長する —— そして生きた
   問いはライセンスファミリー：完全ウェイトか、収益ゲート式の「glm-5.3」型か？
+- **DeepSeek-V4-Flash-Vision-Exp——日付付き更新（08-31）: 08-22 モデルの再登場、新しい事実付き。** 最小の PyTorch
+  参考推論実装とともに **MIT** で Hugging Face に公開。推論プロバイダーへの展開は依然なし（`-Exp` 接尾辞は本物の
+  仕事をしている）。新しい点: モデルカードの脚注が、テキスト専用の前世代が**視覚ベンチマークで画像入力を無視して
+  いた**と認めている——どんな V4-Flash 視覚スコアの隣にも引用すべき、稀なベンチマーク衛生。視覚エンコーダ追加で
+  ApexBench Pass@1 が 26.2→36.5 に跳ね、テキストエージェントスコアはほぼ横ばい（Terminal Bench 2.1: 83.9 vs
+  テキスト専用 82.7。Opus-4.8 は 85.0。エージェントスコアは DeepSeek Harness の最大推論工数で測定）。DeepSeek は
+  オープンウェイト競争で際立っていたマルチモーダル欠席者——実験的な MIT の視覚チェックポイントでもその差は埋まった。
+- **「How to build a diffusion language model」（Kuleshov group、Cornell）——分野への入口（08-31）。** ICLR/MLSS
+  2026 ワークショップ講演を公開のエンドツーエンドチュートリアルに: ガウス拡散の直観 → masked diffusion（ELBO で全
+  マスク率の上で学習する「生成的 BERT」）→ 可変長と KV キャッシュのための block diffusion → エンコーダ・デコーダ分離
+  （Gemma Diffusion、NVIDIA Nemotron Diffusion）→ 誤り訂正リマスキング（ReMDM/UDLM）→ サンプリング蒸留 → 離散
+  ガイダンス（D-CBG/D-CFG）→ RL ポストトレーニング（d1 の diffu-GRPO、d2、DRAKES）。結びの主張は大胆で、同じ呼吸で
+  保留付き: 「diffusion は推論時間とポストトレーニングのスケーリング則において、transformer が RNN に対してであった
+  ものになるかもしれない」——ただし diffusion はまだ自己回帰的な計算/データ規模にスケールされていないと明示
+  （1000 億級の ESM3 は有望）。文脈: Mercury 2（約 1,200 tok/s）とオープンな LLaDA 8B が今年、diffusion LM を現実の
+  推論選択肢にした（DiffusionGemma、08-21、[[edge-inference]] 参照）。

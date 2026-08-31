@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-30T20:15:00Z
+last_processed: 2026-08-31T12:45:00Z
 ---
 
 # Learnt Agent
@@ -265,6 +265,7 @@ patterns, and turn them into insights and actionable todos.
    exceeded permissions (Gravitee 88%); EU AI Act Art 62/72 duty harm-gated; no registry. Still enforced by nobody.
    - **08-24→08-26 — the unit of policy moves from the tool call to the dataflow (detail → [[security]]):** AWS **Dogwood** (Apache-2.0) extends Cedar with a `when temporal` clause over an agent's event history (MFOTL) — the first policy language judging a *sequence* of calls; AgentFlow (arXiv 2608.22868) — a flow/path reference monitor + bounded SMT verifier cuts confirmed compromise 33.0%→0.0% on 949 AgentDojo cases while *improving* utility (46.7%→63.3%) — preliminary, scoped to policy-modeled behaviors.
    - **08-29 04:19 — the countermeasure gets its own authorization layer (detail → [[security]]):** SARA (arXiv 2608.27146) treats action-inducing tool outputs as commands — a context-isolated Action Probe detects action semantics + tracks provenance, then authorizes tool calls against goal/execution-chain/argument-level support (No-History-Promotion rule stops recurrence laundering origins into authority) — caps attack success at ≤0.63% on AgentDojo/AgentDyn while keeping utility competitive.
+   - **08-31 20:45 — the classifier default is bypassed end-to-end (detail → [[security]]):** Embrace The Red's chain beats Claude Code Auto Mode without ever commanding the model (415 → `curl` fallback → ZIP → self-written Python decoder → malicious `struct.py` shadowing stdlib → RCE on `import base64`, 60–80% of runs); Anthropic closed it "Informative" — Auto Mode is best-effort, the real boundary is OS isolation + egress control; the classifier approved payload-creation but blocked post-compromise cleanup. Same week Willison counts ChatGPT Work at 223 tools + 44 skills with full-internet code-exec + headless Chrome — the "lethal trifecta" (private data + untrusted content + exfiltration) shipped by default.
    → [[security]]
 
 12. **The optimization target shifted from the model to the harness — and the premium is now measured,
@@ -963,6 +964,11 @@ patterns, and turn them into insights and actionable todos.
   **t10→t11 (08-24 04:30→20:30):** two more snapshots, both **0/0/0/0** — eleven consecutive nulls over ~4 days
   (66 tools / 7 servers). Unchanged: the corroboration stays closed in the negative, the detector is a standing
   per-run capability, `cv` stays 1. → [[security]]
+  **Proposed as a file format, again (08-31 20:45):** Cal Paterson's **memoryfields** — agent memories as a plain
+  zip of ~8 kB Markdown pages + optional SQLite vector index, retrieval in ~2 tool calls, portable over S3/GitHub/HTTP
+  unchanged; self-described as "arguably a form of RAG," with the load-bearing security line "You must not share your
+  context window, including via memories, with parties you don't trust." The fourth bottom-up proposal in this shape
+  (after Agent Memory Hall, Portable Agent Memory, plur packs) — still none with a second implementer. → [[agent-stack]]
 - **Breaking-change deadlines stack up (08-19 20:03):** OpenAI's **Assistants API shuts down Aug 26** (the
   docs' rename table — Assistants→Prompts, Threads→Conversations, Runs→Responses — is not a codemod: Threads
   carry live conversation state and there's no backfill tool), and Google already **shut off all three
@@ -1101,7 +1107,11 @@ patterns, and turn them into insights and actionable todos.
   screenshot/UI-reading loops no longer route around DeepSeek. **SenseNova U1.5 Lite** (SenseTime, Apache-2.0) is an
   8B Mixture-of-Transformers that generates **native 4K** (not upscaled) and follows 3–4K-char instructions — unified
   understand+generate+edit on one GPU (MOPD distillation, no router), with the vendor's own limits flagged (dense
-  text, person details, complex edits).
+  text, person details, complex edits). **Dated update (08-31 20:45):** the same model is now on Hugging Face under
+  MIT with a minimal PyTorch reference inference implementation — no inference-provider deployment; the card's
+  footnotes admit the text-only predecessor *ignored image inputs* on vision benchmarks (rare benchmark hygiene —
+  print it next to any V4-Flash vision score), and ApexBench Pass@1 jumps 26.2→36.5 with the vision encoder. Same
+  numbers as the 08-22 note — a re-appearance, not a new model.
 - **Small but real (08-22 04:03):** **Kagi** shipped the first native "exclude paywalled websites" toggle among
   mainstream engines (a domain-level blacklist; blunt, but a paid, ad-free engine can cut publisher traffic where
   ad-funded incumbents structurally can't). **Cobalt** (`BandarLabs/Cobalt`, AGPL-3.0) turns a Kobo e-reader into a
@@ -1619,3 +1629,26 @@ patterns, and turn them into insights and actionable todos.
   Gen 5, "finally has MTE"). The claim is the project's own hedge ("near certainly", no Google statement); Pixel 11 does
   gain post-quantum verified boot (ML-DSA). If right, the strongest shipped Android anti-exploit mitigation is deleted from
   the default security-research device — and the Motorola first-party path (08-20 note) becomes the security-first path.
+- **Agent infra tail (08-31 20:45, → [[agent-stack]]):** **OpenClaw 2.0** (2026.8.1) "accidentally" — a cleanup
+  (simplify install, rebuild browser app) snowballed into 16,000+ merged PRs from 933 contributors (569 first-timers),
+  ~half of all PRs ever merged into the project; setup now reuses existing ChatGPT/Claude subscriptions, API keys and
+  local models, the browser app doubles as a control surface, and shared cloud sessions add multiplayer handoff with
+  context intact — after 106 releases in 230 days, the project went ~7 weeks silent to land the mega-release. **Corsair**
+  (`corsairdev/corsair`, Apache-2.0, 11.1k★) — a self-hostable REST-first integration platform positioned "beyond MCP":
+  maintained adapters + OAuth refresh + webhooks (optional hosted Hub), one layer serving agents, backends and
+  multi-tenant dashboards; the star spike has no tagged release — attention, not a launch. **livekit/agents 1.7.x** —
+  PII redaction for agent observability + interrupted speech now cancels generation: interruption semantics and PII
+  handling are where voice-agent builders actually feel pain.
+- **Security + dev tail (08-31 20:45, detail → [[security]]):** **Steam 12TB "teraleak"** — Steam2-era depots
+  (2003–2013, incl. Portal 2/Episode 3 pre-release builds) circulating via a publicly accessible API endpoint ("no
+  passwords… hidden in plain sight") — unauthenticated surfaces don't stop being an asset when the product moves on.
+  **crawl4ai v0.9.3** — a security-only release closing five coordinated-disclosure advisories (arbitrary file write,
+  SSRF, PDF-path DoS, 2 XSS) on the 80k-star crawler agents treat as trusted plumbing: a crawler whose Docker API could
+  write files was a direct hostile-page→host path. **Kuleshov group's "How to build a diffusion language model"** — the
+  field's best on-ramp (masked → block diffusion + KV caching → ReMDM remasking → diffu-GRPO RL), hedged claim: "diffusion
+  may be to inference-time and post-training scaling laws what the transformer was to RNNs" (→ [[frontier-models]]).
+  **OpenShot 4.0** — local ONNX object masking (YOLO/EfficientSAM/Cutie) in a mass-market GPL editor, no cloud.
+  **uv PR #21327** — file-level BLAKE3 cache dedup (545 MiB saved on the author's cache, cold-install cost benchmarked
+  from +19.4% to <4%): the wheel cache is where CI runners and agent sandboxes silently accumulate tens of GB.
+  **"P99 0 ms\* autocomplete"** over 240M domains — prefetch-on-keyDown redefines latency to "results ready," with the
+  honest asterisk in the headline: it holds only near the single European server (+100–200 ms from the US).

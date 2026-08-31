@@ -1539,3 +1539,39 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   (multi-agent harnesses are the natural home), and does steering get pulled *into* base ACP rather than living as
   per-vendor `_namespace/` extensions — the same "transport standardizes, feature stays client-side" split as MCP's
   tool contracts.
+
+## OpenClaw 2.0, REST-first integrations, voice-agent hygiene, memory as a zip (08-31 20:45)
+
+- **OpenClaw 2.0 (2026.8.1) — a cleanup became the biggest release in the project's history.** The vendor-neutral
+  personal agent set out only to simplify installation and rebuild the browser app; carrying the cleanup through the
+  codebase snowballed into **16,000+ merged PRs from 933 contributors (569 first-timers)** — roughly half of all PRs
+  ever merged. Setup now uses what's already on your machine (existing ChatGPT/Claude subscriptions, API keys, local
+  models), the browser app opens straight into a conversation and doubles as a control surface, and **shared cloud
+  sessions** let teammates join or hand off live work with context intact. Process signal: 106 releases in 230 days,
+  then ~7 weeks silent to test the mega-release — even a heavily-contributed OSS project hit a shipping-process wall
+  only a reworked process could clear. A personal agent running on existing subscriptions with multiplayer handoff
+  converges on exactly the workflow commercial coding-agent vendors sell.
+- **Corsair (`corsairdev/corsair`, Apache-2.0, 11.1k★) — "beyond MCP" as an architectural position.** A self-hostable
+  product-integration platform built on a **REST API rather than MCP-only**: maintained third-party API adapters,
+  OAuth token refresh and webhooks (optional hosted Hub), so one integration layer serves agents, backend services
+  and customer-facing multi-tenant dashboards without per-service glue. Its README argument: "Most agent integration
+  tools are MCP-only." Fact-check note: the 11.1k★ spike has **no tagged release** — attention, not a launch event;
+  a maturing project finding its audience. The integration layer (auth, token refresh, webhooks) is where agent
+  deployments actually get stuck, so a self-hostable REST-first alternative is a meaningful position as agent infra
+  standardizes.
+- **livekit/agents 1.7.x — the production pain in voice agents is interruption + PII.** 1.7.0 (Aug 20) added PII
+  redaction for agent observability (semantic redaction of detected entities from chat history and recordings) and
+  Expressive Mode (conversation-context emotion tags driving prosody); 1.7.1 (Aug 27) adds Palabra/Sarvam streaming
+  plugins, `gemini-3.5-transcribe-live`, ElevenLabs text-to-dialogue streaming, and the fixes that matter in
+  production: **interrupted speech now cancels generation**, and agent/user state is tracked correctly while tools
+  run. The +131-star day is a reasonable proxy for where voice-agent builders feel pain — interruption semantics and
+  PII handling, exactly what this release touched.
+- **memoryfields (Cal Paterson) — agent memory as a file format, not a pipeline.** Agent memories as a plain zip:
+  Markdown pages (~8 kB / ~2,000 tokens, sized to fit a vector embedding), optional YAML frontmatter, optional
+  SQLite vector index. The argument: memory should be *data*, not process — the agent writes its own prose memories
+  (no chunking/distillation pipeline), retrieval is a semantic jump in ~2 tool calls rather than serial
+  graph-walking, and the zip travels over S3/GitHub/HTTP/Syncthing unchanged. Honest caveats included: "arguably a
+  form of RAG," and the load-bearing security line — **"You must not share your context window, including via
+  memories, with parties you don't trust."** The fourth bottom-up proposal in the vendor-neutral-format shape (after
+  Agent Memory Hall, Portable Agent Memory, plur packs) — still none with a second implementer. Its bet is testable:
+  models keep getting better faster than memory middleware does.

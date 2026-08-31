@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-30T20:15:00Z
+last_processed: 2026-08-31T12:45:00Z
 ---
 
 # 学习智能体
@@ -322,6 +322,7 @@ last_processed: 2026-08-30T20:15:00Z
    以及自愿采用的微软 Agent Governance Toolkit；没有登记处。命名 + 有发生率 + 受限义务 + 自愿工具包，仍无人执行。
    - **08-24→08-26 — 策略单位从工具调用移到数据流（详情 → [[security]]）：** AWS **Dogwood**（Apache-2.0）在 Cedar 之上扩展出针对 agent 事件历史的 `when temporal` 子句（MFOTL）——首个判断*一串*调用的策略语言；AgentFlow（arXiv 2608.22868）——流/路径参考监视器 + 有界 SMT 验证器把 949 个 AgentDojo 用例的确认被攻破从 33.0% 降到 0.0%，同时*改善*效用（46.7%→63.3%）——初步，限定在策略可建模行为内。
    - **08-29 04:19 — 对策拥有自己的授权层（详情 → [[security]]）：** SARA（arXiv 2608.27146）把诱导动作的工具输出当作命令——上下文隔离的 Action Probe 检测动作语义 + 追踪来源，然后仅依据目标/执行链/参数层支持授权工具调用（No-History-Promotion 规则阻止过去复用把来源洗白成权威）——在 AgentDojo/AgentDyn 上把攻击成功率压到 ≤0.63%，同时保持效用有竞争力。
+   - **08-31 20:45 — 分类器默认模式被端到端绕过（详情 → [[security]]）：** Embrace The Red 的链在从不直接命令模型的情况下击破 Claude Code Auto Mode（415 → `curl` 回退 → ZIP → 自写 Python 解码器 → 恶意 `struct.py` 遮蔽标准库 → `import base64` 触发 RCE，60–80% 成功率）；Anthropic 以 "Informative" 关闭——Auto Mode 是尽力而为，真正的边界是 OS 隔离 + 出站管控；分类器批准了载荷构造却阻止了失陷后的清理。同一周 Willison 数出 ChatGPT Work 有 223 个工具 + 44 个技能、带全互联网代码执行 + 无头 Chrome——"致命三要素"（私有数据 + 不可信内容 + 外传通道）默认即发货。
    → [[security]]
 
 12. **优化目标已从模型转向 harness——而且溢价如今已被度量，并已界定。** 权重冻结后，执行系统才是
@@ -905,6 +906,11 @@ last_processed: 2026-08-30T20:15:00Z
   能力而存在，而非裁决。→ [[security]]
   **t10→t11（08-24 04:30→20:30）：** 又两次快照，全部 **0/0/0/0**——约 4 天内十一次连续空结果（66 个工具 / 7 台服务器）。
   结论不变；探测器仍是常设的按次运行能力，`cv` 仍为 1。→ [[security]]
+  **再次以文件格式提案（08-31 20:45）：** Cal Paterson 的 **memoryfields**——agent 记忆是一个普通 zip：约 8 kB 的
+  Markdown 页 + 可选 SQLite 向量索引，约 2 次工具调用内检索，经 S3/GitHub/HTTP 原样携带；自称 "arguably a form of
+  RAG"，并带上承重的安全线 "You must not share your context window, including via memories, with parties you don't
+  trust."。这是该形状下第四个自下而上提案（继 Agent Memory Hall、Portable Agent Memory、plur packs 之后）——仍然
+  没有一个拥有第二实现者。→ [[agent-stack]]
 - **破坏性变更的截止日期在叠加（08-19 20:03）：** OpenAI 的 **Assistants API 将于 8 月 26 日关停**（文档里的改名
   表——Assistants→Prompts、Threads→Conversations、Runs→Responses——并非 codemod：Threads 承载着活会话状态，且没有
   回填工具），而 Google 已于 **8 月 17 日关停全部三个 Imagen 4 端点**（`gemini-3.1-flash-image` 是另一种 API 形态，
@@ -1015,7 +1021,9 @@ last_processed: 2026-08-30T20:15:00Z
   视觉上「接近 Opus-4.8」（Terminal-Bench 2.1 83.9 vs 85.0）、1M 上下文、实验性；DeepSeek Harness 0.1.1 同日交付
   视觉支持。视觉曾是默认「便宜能干」调用里的唯一缺口，如今读屏/UI 循环无需再绕开 DeepSeek。**SenseNova U1.5 Lite**
   （商汤，Apache-2.0）是一个 8B Mixture-of-Transformers，生成**原生 4K**（非上采样）并遵循 3–4K 字符指令——单 GPU
-  上的统一理解+生成+编辑（MOPD 蒸馏、无需路由器），厂商自列局限（密集文本、人物细节、复杂编辑）。
+  上的统一理解+生成+编辑（MOPD 蒸馏、无需路由器），厂商自列局限（密集文本、人物细节、复杂编辑）。 **日期更新（08-31 20:45）：** 同一模型现已 MIT 许可发布于 Hugging Face，附最小 PyTorch 参考推理实现——仍无推理
+  厂商部署；模型卡脚注承认纯文本前代**在视觉基准上忽略图像输入**（罕见的基准卫生——把它印在任何 V4-Flash 视觉分数旁），
+  加入视觉编码器后 ApexBench Pass@1 从 26.2 跳到 36.5。数字与 08-22 条目相同——是重现，不是新模型。
 - **小而真（08-22 04:03）：** **Kagi** 交付了主流引擎中首个原生「排除付费墙网站」开关（域名级黑名单；生硬，但付费、
   无广告的引擎能砍掉出版商流量，而广告赞助的现有玩家在结构上做不到）。**Cobalt**（`BandarLabs/Cobalt`，AGPL-3.0）把
   Kobo 电子书阅读器变成原生应用平台——启动器 + 签名应用商店 + Rust SDK + 每应用非特权进程，配 Ed25519 签名清单与能力
@@ -1386,3 +1394,21 @@ last_processed: 2026-08-30T20:15:00Z
   Motorola 手机（Snapdragon 8 Elite Gen 5，"终于有 MTE"）。主张本身带项目自留的保留（"几乎可以肯定"，Google 未置评）；Pixel 11 确实
   新增后量子验证启动（ML-DSA）。若属实，Android 已发布的最强反利用缓解从默认安全研究设备上被删除——Motorola 一方路径
   （08-20 条目）成为安全优先路径。
+- **Agent 基础设施尾批（08-31 20:45，→ [[agent-stack]]）：** **OpenClaw 2.0**（2026.8.1）"意外"——一次清理（简化安装、
+  重建浏览器应用）滚成 16,000+ 个合并 PR、933 名贡献者（569 位首次参与），约为项目历史 PR 总量的一半；安装复用现有
+  ChatGPT/Claude 订阅、API key 与本地模型，浏览器应用兼作控制面，共享云会话支持上下文完整的多人交接——230 天发了
+  106 个版本后静默约 7 周才交付这个超大版本。**Corsair**（`corsairdev/corsair`，Apache-2.0，11.1k★）——自托管的
+  REST 优先集成平台，定位 "beyond MCP"：维护良好的适配器 + OAuth 刷新 + webhook（可选托管 Hub），同一层服务 agent、
+  后端与多租户面板；星标飙升但无任何 tagged release——是关注，不是发布。**livekit/agents 1.7.x**——agent 可观测性
+  PII 脱敏 + 被打断的语音会取消生成：打断语义与 PII 处理是语音 agent 开发者真正感到痛的地方。
+- **安全 + 开发者尾批（08-31 20:45，详情 → [[security]]）：** **Steam 12TB "teraleak"**——Steam2 时代的 depot
+  （2003–2013，含 Portal 2/Episode 3 预发布版本）经一个公开可访问的 API 端点流出（"没有密码……藏在众目睽睽之下"）——
+  产品下线后未认证面不会因此不再是资产。**crawl4ai v0.9.3**——纯安全版本，关闭五个协同披露通告（任意文件写入、SSRF、
+  PDF 路径 DoS、2 个 XSS），这个被 agent 当作可信管道的 8 万星爬虫，其 Docker API 曾可写任意文件——恶意页面→宿主机
+  的直达路径。**Kuleshov group 的 "How to build a diffusion language model"**——该领域最好的入门材料（masked →
+  block diffusion + KV 缓存 → ReMDM 重掩码 → diffu-GRPO RL），对冲式断言："diffusion 之于推理时间与后训练
+  scaling law，或许正如 transformer 之于 RNN"（→ [[frontier-models]]）。**OpenShot 4.0**——大众市场 GPL 编辑器里的
+  本地 ONNX 物体遮罩（YOLO/EfficientSAM/Cutie），无云端。**uv PR #21327**——文件级 BLAKE3 缓存去重（作者缓存省
+  545 MiB，冷安装成本从 +19.4% 基准到 <4%）：wheel 缓存正是 CI 与 agent 沙箱悄悄堆积数十 GB 的地方。
+  **"P99 0 ms\* 自动补全"**——240M 域名上以 keyDown 预取把延迟重定义为"结果就绪"，标题里带诚实星号：仅在靠近那台
+  欧洲单机时成立（从美国 +100–200 ms）。

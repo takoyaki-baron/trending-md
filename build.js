@@ -505,6 +505,7 @@ const SOURCE_ALIASES = {
   'tip.golang.org': 'go.dev',
   'blog.modelcontextprotocol.io': 'modelcontextprotocol.io',
   'api.msrc.microsoft.com': 'msrc.microsoft.com',
+  'docs.openclaw.ai': 'openclaw.ai',
 };
 
 function normalizeHost(url) {
@@ -916,6 +917,42 @@ if (fs.existsSync(agentMemPath)) {
       console.log(`  ⚠ ${over.length} thesis/theses over the ${THESIS_LINE_BUDGET}-line budget — move detail to agent/knowledge/ and leave a dated status line + [[link]]`);
       over.forEach(t => console.log(`      thesis ${t.num} (${t.len} lines)`));
     }
+  }
+}
+
+/* ── Agenda-item budget check ──
+   en/action.md's Agenda drifts the same way the memory window did before the thesis-budget check
+   above: an open item accumulates one dated parenthetical per run until it is a ledger, not a todo
+   (the skills-eval item reached ~127 lines this way). Same rule as the theses (AGENT.md hard rule 1):
+   the item keeps its claim plus the dated status lines that still matter; the history belongs in the
+   knowledge files it links. Scoped to the Research + System buckets — Done is an archive and may
+   run long. */
+const AGENDA_ITEM_LINE_BUDGET = 24;
+const actionAgendaPath = path.join(ROOT, 'en', 'action.md');
+if (fs.existsSync(actionAgendaPath)) {
+  const aLines = fs.readFileSync(actionAgendaPath, 'utf8').split('\n');
+  const items = [];
+  aLines.forEach((l, i) => {
+    if (/^### (Research|System)/.test(l)) {
+      // bucket runs until the next section header at any level ("### Done", "## Log", …)
+      let e = aLines.findIndex((l2, j) => j > i && /^#{2,3} /.test(l2));
+      if (e === -1) e = aLines.length;
+      for (let j = i + 1; j < e; j++) {
+        if (/^- \[.\]/.test(aLines[j])) items.push({ bucket: l.replace(/^### /, '').replace(/ —.*$/, ''), start: j });
+      }
+    }
+  });
+  items.forEach((t, idx) => {
+    let stop = idx + 1 < items.length ? items[idx + 1].start : aLines.length;
+    for (let j = t.start + 1; j < stop; j++) { if (/^#{2,3} /.test(aLines[j])) { stop = j; break; } }
+    t.len = aLines.slice(t.start, stop).filter(l => l.trim()).length;
+    t.name = (aLines[t.start].match(/\*\*([^*]+)/) || [])[1] || aLines[t.start].slice(0, 48);
+  });
+  const over = items.filter(t => t.len > AGENDA_ITEM_LINE_BUDGET).sort((a, b) => b.len - a.len);
+  console.log(`  ✓ en/action.md agenda: ${items.length} open items (Research + System)`);
+  if (over.length) {
+    console.log(`  ⚠ ${over.length} agenda item(s) over the ${AGENDA_ITEM_LINE_BUDGET}-line budget — compact to claim + dated status lines; history belongs in the linked knowledge files`);
+    over.forEach(t => console.log(`      [${t.bucket}] ${t.name}… (${t.len} lines)`));
   }
 }
 

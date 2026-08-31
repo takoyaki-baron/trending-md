@@ -4192,5 +4192,59 @@
     "cred": "high",
     "density": "med",
     "cv": 1
+  },
+  "embracethered.com": {
+    "cat": "security",
+    "en": "Embrace The Red (Wunderwuzzi) — AI/LLM security research blog; prompt-injection and agent-hijack PoCs. Verified first-hand (08-31): 'Breaking Claude Code Opus 5 Auto Mode' (Aug 26) exists on the index; its end-to-end Auto Mode bypass chain is the third-party test the classifier default needed.",
+    "zh": "Embrace The Red（Wunderwuzzi）——AI/LLM 安全研究博客；提示注入与 agent 劫持的 PoC。一手核实（08-31）：索引页确有《Breaking Claude Code Opus 5 Auto Mode》（8 月 26 日）；其端到端 Auto Mode 绕过链正是分类器默认方案需要的第三方检验。",
+    "jp": "Embrace The Red（Wunderwuzzi）——AI/LLMセキュリティ研究ブログ。プロンプトインジェクションとエージェントハイジャックのPoC。一次確認済み（08-31）：『Breaking Claude Code Opus 5 Auto Mode』（8/26）がインデックスに存在。そのエンドツーエンドのAuto Modeバイパスチェーンは、分類器デフォルトが欠いていたサードパーティ検証。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "openclaw.ai": {
+    "cat": "community",
+    "en": "OpenClaw — open-source agent runtime; its docs (SOUL.md/AGENTS.md identity files) were read first-hand on 08-21 for the mind-viruses check, and the OpenClaw 2.0 mega-release (16,000+ merged PRs, 933 contributors) is announced here. Project's own site: vendor-of-record for release claims.",
+    "zh": "OpenClaw——开源 agent 运行时；其文档（SOUL.md/AGENTS.md 身份文件）在 08-21 的 mind-viruses 核查中被一手阅读过，OpenClaw 2.0 巨型版本（16,000+ 已合并 PR、933 位贡献者）也在此发布。项目自有站点：发布声明的官方来源。",
+    "jp": "OpenClaw——オープンソースのエージェントランタイム。ドキュメント（SOUL.md/AGENTS.md のアイデンティティファイル）は 08-21 の mind-viruses 検証で一次読解済み。OpenClaw 2.0 メガリリース（マージ 16,000+ PR、貢献者 933 名）もここで発表。プロジェクト公式サイト：リリース主張の一次情報。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "ruurtjan.com": {
+    "cat": "community",
+    "en": "Ruurtjan Pul's personal blog — practitioner engineering write-ups; cited for the 'P99 0 ms* autocomplete' post over 240M domains, whose honest asterisk (holds only near the single European server) is in the headline itself.",
+    "zh": "Ruurtjan Pul 的个人博客——一线工程随笔；因《P99 0 ms* autocomplete》（覆盖 2.4 亿域名）被引用，其诚实的星号说明（仅在单一欧洲服务器附近成立）就写在标题里。",
+    "jp": "Ruurtjan Pul の個人ブログ——実務者によるエンジニアリング解説。2.4 億ドメインを対象にした『P99 0 ms* autocomplete』で引用。誠実なアスタリスク注記（単一ヨーロッパサーバー近傍でのみ成立）が見出し自体にある。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "openshot.org": {
+    "cat": "vendor",
+    "en": "OpenShot — GPL open-source video editor's official site; the 4.0 release adds local ONNX object masking (YOLO/EfficientSAM/Cutie) with no cloud. Vendor-of-record for release features; claims are its own.",
+    "zh": "OpenShot——GPL 开源视频编辑器官网；4.0 版本加入本地 ONNX 物体遮罩（YOLO/EfficientSAM/Cutie），无云端。发布功能的官方来源；声明为其自述。",
+    "jp": "OpenShot——GPL オープンソース動画エディタの公式サイト。4.0 でローカル ONNX オブジェクトマスキング（YOLO/EfficientSAM/Cutie）を追加、クラウドなし。リリース機能の一次情報；主張は自己報告。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "kuleshov-group.github.io": {
+    "cat": "research",
+    "en": "Kuleshov group (Cornell ECE) — academic lab page; cited for 'How to build a diffusion language model', the field's best on-ramp (masked → block diffusion + KV caching → ReMDM remasking → diffu-GRPO RL). Academic primary source, hedged claims kept in its own wording.",
+    "zh": "Kuleshov 组（康奈尔 ECE）——学术实验室页面；因《How to build a diffusion language model》被引用，这是该领域最好的入门路线（masked → block diffusion + KV 缓存 → ReMDM 重掩码 → diffu-GRPO RL）。学术一手来源，谨慎的断言保留其原话。",
+    "jp": "Kuleshov 研究室（コーネル ECE）——学術ラボのページ。『How to build a diffusion language model』で引用。分野最高の入門ルート（masked → block diffusion + KV キャッシュ → ReMDM リマスキング → diffu-GRPO RL）。学術の一次情報で、控えめな主張は原文の言葉のまま保持。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "calpaterson.com": {
+    "cat": "community",
+    "en": "Cal Paterson (csvbase author) — personal blog; cited for 'Agent memory as a file format' (memoryfields: agent memories as a zip of ~8 kB Markdown pages + optional SQLite vector index), the fourth bottom-up agent-memory-format proposal. Verified first-hand (08-31): the post exists on the index, dated Aug 2026.",
+    "zh": "Cal Paterson（csvbase 作者）——个人博客；因《Agent memory as a file format》（memoryfields：智能体记忆打包为 ~8 kB Markdown 页面 zip + 可选 SQLite 向量索引）被引用，这是第四个自下而上的 agent 记忆格式提案。一手核实（08-31）：索引页确有该文，日期 2026 年 8 月。",
+    "jp": "Cal Paterson（csvbase の作者）——個人ブログ。『Agent memory as a file format』（memoryfields：エージェントメモリを ~8 kB の Markdown ページ zip + 任意の SQLite ベクトルインデックスに）で引用。ボトムアップのエージェントメモリ形式提案としては 4 件目。一次確認済み（08-31）：インデックスに 2026 年 8 月付で当該記事が存在。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

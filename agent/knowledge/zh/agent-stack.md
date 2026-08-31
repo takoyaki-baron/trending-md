@@ -1094,3 +1094,30 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   PostgreSQL 的 agent 运行时（`lib/server/agent-runtime/`，租约执行）为其课程构建 agent 提供取消/恢复/引导——教育领域，
   同为用户→agent 形态。接下来观察：监督者形态引导是否出现（多 agent harness 是自然归宿），以及引导是否会被收编进 ACP
   基础协议而不是留在各家 `_namespace/` 扩展里——与 MCP 工具契约同样的"传输标准化、特性留在客户端"拆分。
+
+## OpenClaw 2.0、REST 优先的集成层、语音 agent 卫生、作为 zip 的记忆（08-31 20:45）
+
+- **OpenClaw 2.0（2026.8.1）——一次清理变成项目史上最大发布。** 厂商中立的个人 agent 本只想简化安装并重建浏览器
+  应用；清理蔓延到整个代码库后滚成 **16,000+ 个合并 PR，来自 933 名贡献者（569 位首次参与）**——约为项目历史合并
+  PR 总量的一半。安装现在复用机器上已有的东西（现有 ChatGPT/Claude 订阅、API key、本地模型），浏览器应用打开即是
+  对话、并可兼作控制面，**共享云会话**让队友加入或交接进行中的工作且上下文完整。流程信号：230 天内发了 106 个
+  版本，随后静默约 7 周以交付这个超大版本——即使贡献者众多的 OSS 项目也会撞上只有重构流程才能突破的交付墙。跑在
+  现有订阅上的个人 agent 加多人交接，正在收敛到商业编码 agent 厂商售卖的同一工作流。
+- **Corsair（`corsairdev/corsair`，Apache-2.0，11.1k★）——"beyond MCP" 作为一种架构立场。** 一个可自托管的
+  产品集成平台，构建在 **REST API 而非 MCP-only** 之上：维护良好的第三方 API 适配器、OAuth token 刷新与 webhook
+  （可选托管 Hub），让同一集成层同时服务 agent、后端服务与面向客户的多租户面板。README 的论点："大多数 agent
+  集成工具是 MCP-only。" 事实核查注：11.1k★ 的热度**没有任何 tagged release**——是关注而非发布事件；一个成熟项目
+  在找到自己的受众。集成层（认证、token 刷新、webhook）是 agent 部署真正卡住的地方，因此在 agent 基础设施标准化
+  之际，可自托管的 REST 优先替代方案是一个有分量的立场。
+- **livekit/agents 1.7.x——语音 agent 的生产痛点是打断 + PII。** 1.7.0（8 月 20 日）为 agent 可观测性加入 PII
+  脱敏（对聊天历史与录音中检出的实体做语义脱敏）及 Expressive Mode（以对话上下文情感标签驱动韵律）；1.7.1
+  （8 月 27 日）加入 Palabra/Sarvam 流式插件、`gemini-3.5-transcribe-live`、ElevenLabs text-to-dialogue 流式，
+  以及生产中真正要紧的修复：**被打断的语音现在会取消生成**，工具运行期间 agent/用户状态被正确跟踪。+131 星的一天
+  是语音 agent 开发者痛点所在的合理代理——正是本次发布触及的打断语义与 PII 处理。
+- **memoryfields（Cal Paterson）——agent 记忆作为文件格式而非管道。** agent 记忆就是一个普通 zip：Markdown 页面
+  （约 8 kB / 约 2,000 token，按向量嵌入的尺寸设计）、可选 YAML frontmatter、可选 SQLite 向量索引。论点：记忆应当是
+  *数据*而非流程——agent 自己写散文式记忆（没有分块/蒸馏管道），检索是约 2 次工具调用内的语义跳转而非串行图遍历，
+  且 zip 经 S3/GitHub/HTTP/Syncthing 原样传输。包含诚实的警告："arguably a form of RAG"，以及承重的那句安全线——
+  **"You must not share your context window, including via memories, with parties you don't trust."** 这是厂商
+  中立格式形状下的第四个自下而上提案（继 Agent Memory Hall、Portable Agent Memory、plur packs 之后）——仍然没有一个
+  拥有第二实现者。它的赌注可检验：模型变好的速度持续快于记忆中间件。

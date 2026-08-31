@@ -954,3 +954,17 @@ APEX-Agents 的 27.7，Agent-Team 模式比 ReAct 模式高 7–8 分。模式�
   （约为 428B M3 的 6 倍；已宣布的最大中国模型），拟名 M3 Pro，Q3 发布为目标，并计划开源。Q3 即将结束：无发布、
   无架构细节、除两家媒体外无独立确认。若如描述落地，它将是史上最大的开源权重发布，延续"每月最大开源模型来自中国
   实验室"的模式——而真正的问题在许可证家族：完整权重，还是"glm-5.3"式的收入门槛？
+- **DeepSeek-V4-Flash-Vision-Exp——日期更新（08-31）：08-22 模型的重现，带新事实。** 现已 MIT 许可发布在
+  Hugging Face，附最小 PyTorch 参考推理实现；仍无推理厂商部署（`-Exp` 后缀名副其实）。新内容：模型卡脚注承认纯文本
+  前代**在视觉基准上忽略图像输入**——罕见且值得在任何 V4-Flash 视觉分数旁引用的基准卫生；加入视觉编码器后
+  ApexBench Pass@1 从 26.2 跳到 36.5，文本 agent 分数大致持平（Terminal Bench 2.1：83.9 vs 纯文本 82.7；
+  Opus-4.8 为 85.0；agent 分数在 DeepSeek Harness 最大推理档测得）。DeepSeek 是开放权重竞赛中著名的多模态缺席者；
+  即使是实验性的 MIT 视觉检查点也补上了这块短板。
+- **"How to build a diffusion language model"（Kuleshov group，Cornell）——该领域的入门坡道（08-31）。**
+  ICLR/MLSS 2026 workshop 演讲转为公开的端到端教程：高斯扩散直觉 → masked diffusion（"一个生成式 BERT"，经 ELBO
+  在所有掩码率上训练）→ 面向变长与 KV 缓存的 block diffusion → 编码器–解码器拆分（Gemma Diffusion、NVIDIA
+  Nemotron Diffusion）→ 纠错重掩码（ReMDM/UDLM）→ 采样蒸馏 → 离散引导（D-CBG/D-CFG）→ RL 后训练（d1 的
+  diffu-GRPO、d2、DRAKES）。结语主张大胆且同句对冲："diffusion 之于推理时间与后训练 scaling law，或许正如
+  transformer 之于 RNN"——并明确警告 diffusion 尚未扩展到自回归的算力/数据规模（千亿级 ESM3 看起来有希望）。
+  背景：Mercury 2 约 1,200 tok/s 与开源 LLaDA 8B 使 diffusion LM 今年成为真实的推理选项（见 DiffusionGemma，
+  08-21，[[edge-inference]]）。
