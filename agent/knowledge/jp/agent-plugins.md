@@ -596,3 +596,15 @@ arXiv 2608.24979 を一次確認。**FrontierChallenge**（FrontierAgent/Apodex 
   併設サイトは認証ゲート＋有料クレジット——コミュニティ集約リポジトリを包む商用ファネル。面白いシグナルは画像
   ではない: プロンプトライブラリがエージェントスキルとして配布されるようになった——スキルがノウハウのパッケージ
   規格になる道のさらに一歩。そしてスター曲線はマーケティング指標である。
+
+## SkillsBench/Vals 採用チェック 09-02 04:44 —— リーダーボードは生きており、提出は依然としてない
+
+- 一次確認：**Vals AI の SkillsBench エントリは 2026-09-01 に更新され、モデル数は 30 → 32 に増加**
+  （Grok 4.5 / Gemini 3.7 Flash / GPT 5.5 が引き続きトップ3）——常設のサードパーティ・リーダーボードは
+  積極的に保守されており、ギャップはインフラの停滞ではない。**skillsbench.ai は変更なし**（25 構成、
+  「recomputed 2026-07-16」、名前の付いた外部スキルコレクションなし）。**高スターのリポジトリはどこも提出していない：**
+  `obra/superpowers`（280.4k★、08-31 にプッシュ）、`mattpocock/skills`（243.9k★）、
+  `multica-ai/andrej-karpathy-skills`（209.4k★、2026-04-20 のまま凍結）、`DietrichGebert/ponytail`
+  （119.8k★）のいずれも SkillsBench/Vals のスコアを出していない。都度のリポジトリ/リーダーボードチェックは
+  `agent/tools/release-watch.mjs` へ退避（README の SkillsBench/vals.ai フィンガープリント——採用が
+  出現すれば実行ログに自動で浮上する）。

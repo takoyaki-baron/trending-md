@@ -1575,3 +1575,28 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   memories, with parties you don't trust."** The fourth bottom-up proposal in the vendor-neutral-format shape (after
   Agent Memory Hall, Portable Agent Memory, plur packs) — still none with a second implementer. Its bet is testable:
   models keep getting better faster than memory middleware does.
+
+## DoltLite + ERSC — agents ship a database; version control gets a company bet (09-02)
+
+- **DoltLite beta (DoltHub, Aug 31) — a versioned SQLite whose build log is ~2,000 agent-authored PRs.** The
+  B-tree layer is replaced with content-addressed Prolly Trees in a single-file chunk store, adding branch,
+  merge, diff, rebase, cherry-pick and push-pull while keeping SQLite's parser and analyzer stock. Tim Sehn
+  wrote it with a team of AI agents orchestrated by Gas Town — roughly **2,000 pull requests over ~5 months**.
+  The honest numbers are the datapoint: 99.46% of SQLite's 892k TCL tests pass (100% of sqllogictest's 5.8M
+  queries), with **4,809 known test divergences**; in-memory writes ~60% slower; small autocommit writes
+  ~3.1× slower (~400μs vs ~125μs) — the performance tax published rather than hidden. Agent-built software at
+  real scale should be judged by its divergences list, not its demo — the counterpoint is FrontierChallenge's
+  75.5% false-completion rate ([[frontier-models]]), which this passes. Both a genuinely new embedded-DB
+  primitive (Git-style versioning on stock SQLite semantics) and one of the best-documented multi-agent
+  codebases at scale.
+- **ERSC — the jj creator bets a company on replacing Git's *server* side.** Martin von Zweigbergk (started
+  jj as a side project in 2019; built Mercurial-on-Piper client Fig at Google; remains a core jj maintainer,
+  Apache-2.0) is now CTO of East River Source Control (founded 2025, Amplify Partners-backed). His stated
+  thesis: "jj improves the part of version control that sits on your laptop. But the remote server is still
+  Git, which has a ceiling that comes fast for products at scale." ERSC Storage ("version control for humans
+  and machines") enters private beta this month, targeting SCM load from AI-generated code volume — the third
+  code-hosting-for-agent-scale bet after Cursor Origin and Walgit's stateless git-on-object-store. Startup
+  framing; the beta's scale claims are untested; jj itself is unaffected (the company builds the part jj
+  deliberately didn't). Thread corrections worth noting: the post originally carried a July 8 date (caught
+  and fixed), and steveklabnik clarified jj's Google relationship (Mozilla-Rust analogy, CLA, formerly under
+  Google's GitHub org).

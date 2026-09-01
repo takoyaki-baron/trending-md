@@ -4399,5 +4399,131 @@
   "cred": "med",
   "density": "med",
   "cv": 1
+ },
+ "metr.org": {
+  "cat": "research",
+  "en": "METR, the frontier-model evals nonprofit — its incident disclosures are first-hand and precisely caveated. Verified first-hand (09-02): the Aug 31 security update's fail-open auth bug, ~$600k in consumed free credits and the May attacker-probing episode all read exactly as reported.",
+  "zh": "METR，前沿模型评测非营利机构——其事件披露为一手且限定精确。已一手核验（09-02）：8 月 31 日安全更新中的鉴权 fail-open 缺陷、约 $60 万免费额度被消耗、以及 5 月攻击者探测事件均与报道一致。",
+  "jp": "METR、フロンティアモデル評価の非営利団体——インシデント開示は一次情報で限定が正確。一次検証済み（09-02）：8/31 セキュリティ更新の fail-open 認証バグ、約 $60万の無料クレジット消費、5月の攻撃者プロービングはいずれも報告どおり。",
+  "cred": "high",
+  "density": "high",
+  "cv": 2
+ },
+ "x.com": {
+  "cat": "community",
+  "en": "X/Twitter — cited only as primary social permalinks; the feed's most fragile citation class (check the status resolves before relying on it).",
+  "zh": "X/Twitter——仅作为社交永久链接的一手引用；是信源中最易失效的一类（引用前先确认该状态仍可访问）。",
+  "jp": "X/Twitter——一次的なソーシャル・パーマリンクとしてのみ引用；このフィードで最も壊れやすい引用クラス（参照前に状態が残っているか確認）。",
+  "cred": "med",
+  "density": "low",
+  "cv": 1
+ },
+ "fastpotify.rocks": {
+  "cat": "code",
+  "en": "Landing page of Fastpotify — Carmine Paolino's native egui + librespot Spotify client; project self-description, co-cited with the repo (crmne/fastpotify) and its HN thread.",
+  "zh": "Fastpotify 的落地页——Carmine Paolino 基于 egui + librespot 的原生 Spotify 客户端；为项目自述，与仓库（crmne/fastpotify）及 HN 讨论共引。",
+  "jp": "Fastpotify のランディングページ——Carmine Paolino による egui + librespot のネイティブ Spotify クライアント。プロジェクト自己記述であり、リポジトリ（crmne/fastpotify）と HN スレッドと共引用。",
+  "cred": "med",
+  "density": "med",
+  "cv": 1
+ },
+ "gpuworld.org": {
+  "cat": "community",
+  "en": "GPU World — the $100k fiction-contest site (Paradigm/Guardian Angel-backed, judged by Stephenson/Gwern/Huang); a premise-framing source, not a factual one.",
+  "zh": "GPU World——10 万美元科幻写作竞赛官网（Paradigm/Guardian Angel 资助，Stephenson/Gwern/Huang 评审）；是前提框架型信源，而非事实型信源。",
+  "jp": "GPU World——10万ドルのSFコンテスト公式サイト（Paradigm/Guardian Angel 支援、Stephenson/Gwern/Huang 審査）；事実ではなく前提フレーミングの情報源。",
+  "cred": "med",
+  "density": "low",
+  "cv": 1
+ },
+ "webiterate.dev": {
+  "cat": "news",
+  "en": "Small independent web/dev blog; its MV2-removal report was the only narrative source for that item besides HN — independent of Google, which never made its own announcement page.",
+  "zh": "小型独立 Web/开发博客；其 MV2 移除报道是该条目除 HN 外唯一的叙事信源——独立于 Google（谷歌自己并未发布公告页）。",
+  "jp": "小規模な独立系ウェブ/開発ブログ。MV2 削除の記事は HN を除き同項目の唯一の叙述ソース——Google 自身は告知ページを出しておらず、独立している。",
+  "cred": "med",
+  "density": "med",
+  "cv": 1
+ },
+ "mvakde.github.io": {
+  "cat": "community",
+  "en": "Personal GitHub Pages blog; source for a first-person '44 on ARC-1' ablation write-up — self-reported results, read alongside the HN critique.",
+  "zh": "GitHub Pages 个人博客；「ARC-1 上 44 分」第一人称消融实验文章的来源——结果为自我报告，需与 HN 上的批评并读。",
+  "jp": "GitHub Pages の個人ブログ。「ARC-1 で 44」の一次体アブレーション解説のソース——自己申告の結果であり、HN の批判と併読すること。",
+  "cred": "med",
+  "density": "med",
+  "cv": 1
+ },
+ "gitlab.com": {
+  "cat": "code",
+  "en": "The GitLab forge itself — canonical for project/MR facts; same verify-recency caveat class as github.com.",
+  "zh": "GitLab 代码托管平台本身——项目/MR 事实的权威来源；与 github.com 同属需核实新鲜度的类别。",
+  "jp": "GitLab フォージ本体——プロジェクト/MR の事実の一次ソース。github.com と同様、新しさの検証が必要。",
+  "cred": "high",
+  "density": "med",
+  "cv": 1
+ },
+ "virtualizor.com": {
+  "cat": "vendor",
+  "en": "Softaculous Virtualizor's vendor site (VPS control panel docs/releases); in the BGP-hijack update item it concedes the vendor cannot enumerate affected servers — a candid vendor admission.",
+  "zh": "Softaculous Virtualizor 的厂商站点（VPS 控制面板文档/发布说明）；在 BGP 劫持更新事件中，厂商自认无法枚举受影响服务器——坦率的厂商承认。",
+  "jp": "Softaculous Virtualizor のベンダーサイト（VPS コントロールパネルのドキュメント/リリースノート）。BGP ハイジャック更新の項目では、ベンダーが被害サーバーを列挙できないと自ら認めている——率直なベンダー告白。",
+  "cred": "med",
+  "density": "low",
+  "cv": 1
+ },
+ "blog.mozilla.org": {
+  "cat": "vendor",
+  "en": "Mozilla's official blog — first-party announcements (Firefox for iOS Content-Blocker ad blocker); vendor framing but authoritative for what actually shipped.",
+  "zh": "Mozilla 官方博客——第一方公告（Firefox for iOS 的 Content-Blocker 广告拦截器）；带厂商立场，但对“实际发布与否”具有权威性。",
+  "jp": "Mozilla の公式ブログ——一次告知（Firefox for iOS の Content-Blocker 広告ブロック）。ベンダー視点だが、実際に何が出荷されたかについては権威ある。",
+  "cred": "high",
+  "density": "med",
+  "cv": 1
+ },
+ "dolthub.com": {
+  "cat": "vendor",
+  "en": "DoltHub/DoltLite company blog; the DoltLite beta post publishes unusually honest numbers (99.46% of 892k TCL tests, 4,809 known divergences, ~3.1× small-write tax) — a vendor blog that self-caveats.",
+  "zh": "DoltHub/DoltLite 公司博客；DoltLite beta 文章发布了罕见诚实的数字（89.2 万条 TCL 测试通过 99.46%、4,809 处已知分歧、约 3.1× 小写入税）——会自我设限的厂商博客。",
+  "jp": "DoltHub/DoltLite の企業ブログ。DoltLite beta の記事は驚くほど誠実な数値を公開（89.2万 TCL テストの 99.46% 合格、既知の分岐 4,809、約 3.1× の小書き込み税）——自己限定するベンダーブログ。",
+  "cred": "med",
+  "density": "high",
+  "cv": 1
+ },
+ "tmpout.sh": {
+  "cat": "community",
+  "en": "tmp.0ut — the ELF-arcana file-format zine (vol. 5: 57-byte ELF, 440-byte metamorphic virus, Brainfuck-as-ROP, McIlroy interview); primary source for its own techniques, hands-on systems/security culture.",
+  "zh": "tmp.0ut——ELF 冷知识文件格式杂志（第 5 卷：57 字节 ELF、440 字节变形病毒、Brainfuck 即 ROP、McIlroy 访谈）；其技术内容的一手来源，动手型系统/安全文化。",
+  "jp": "tmp.0ut——ELF 奇計量のファイルフォーマットジン（Vol.5：57バイト ELF、440バイト変異ウイルス、Brainfuck-as-ROP、McIlroy インタビュー）。独自技術の一次ソースであり、実践型のシステム/セキュリティ文化。",
+  "cred": "med",
+  "density": "high",
+  "cv": 1
+ },
+ "ersc.io": {
+  "cat": "code",
+  "en": "ERSC product site — Martin von Zweigbergk (jj creator) betting a company on replacing Git's server side; a launch page, so verify claims against the repo.",
+  "zh": "ERSC 产品站——jj 作者 Martin von Zweigbergk 押注公司前景、要替换 Git 的服务器端；属发布页，主张需对照仓库核实。",
+  "jp": "ERSC 製品サイト——jj 作者 Martin von Zweigbergk が Git のサーバー側置き換えに会社を賭ける；ローンチページであり、主張はリポジトリで検証すること。",
+  "cred": "med",
+  "density": "low",
+  "cv": 1
+ },
+ "frn.sh": {
+  "cat": "community",
+  "en": "frn.sh — a Turso engineer's systems blog; first-hand measurements, not re-reporting. Verified first-hand (09-02): the io_uring-without-readahead post's numbers (TPC-H Q6 device requests ~196k → ~16.3k, io_sq_thread at 65% of cycles, request size 4.37 → 56.53 KiB) all appear verbatim on-page.",
+  "zh": "frn.sh——Turso 工程师的系统博客；一手测量而非转述。已一手核验（09-02）：io_uring 无 readahead 一文的数字（TPC-H Q6 设备请求约 19.6 万 → 约 1.63 万、io_sq_thread 占 65% 周期、请求大小 4.37 → 56.53 KiB）均与原文逐字一致。",
+  "jp": "frn.sh——Turso エンジニアのシステムブログ。転記ではなく一次計測。一次検証済み（09-02）：io_uring リードアヘッドなしの記事の数値（TPC-H Q6 のデバイス要求 約19.6万 → 約1.63万、io_sq_thread がサイクルの 65%、要求サイズ 4.37 → 56.53 KiB）はすべてページ上の記述と一致。",
+  "cred": "high",
+  "density": "high",
+  "cv": 2
+ },
+ "worldlabs.ai": {
+  "cat": "vendor",
+  "en": "World Labs' vendor blog (Atlas omni world model) — \"outperforms SOTA 3D-reconstruction specialists\" is the vendor's claim on the vendor's evals; cite as a claim, not a measurement.",
+  "zh": "World Labs 的厂商博客（Atlas 全能世界模型）——「超越 SOTA 三维重建专家」是厂商在自己评测上的主张；引用时应作为主张而非测量。",
+  "jp": "World Labs のベンダーブログ（Atlas オムニワールドモデル）——「SOTA の 3D 再構築スペシャリストを上回る」はベンダー自身の評価に基づくベンダーの主張；測定ではなく主張として引用すること。",
+  "cred": "med",
+  "density": "med",
+  "cv": 1
  }
 }

@@ -336,3 +336,13 @@ trusted; it earns one clause here, not an entry.
   figure is the project's own estimate; Firecrawl's own landing page doesn't currently mention the library —
   the repo, not the vendor site, is the source of record. Document routing is upstream of every RAG
   pipeline's quality and every agent's document-ingestion OCR budget — the boring-but-real cost win.
+
+## Status-quo check 09-02 04:44 — the DSL field holds; the check becomes a standing release-watch
+
+- GitHub API, first-hand: **vLLM `semantic-router` still has no tagged release past v0.3.0 Themis**
+  (Jun 5) while `main` is pushed same-day (5,479★); **BitRouter still v1.0.0-alpha.27** (Jul 18,
+  pushed 09-01); **OrcaRouter-Lite still v0.1.0-only** (pushed 08-28); newest entrant
+  **`workweave/router` is release-less** (3,487★, pushed 09-01). Three-plus months of daily
+  main-hardening across the field, still zero releases and zero shared schema — the fragmenting-DSL
+  reading holds unchanged. The manual per-run check is retired into `agent/tools/release-watch.mjs`
+  (pins latest tag + pushed_at + stars per run; a first tagged release surfaces itself in the run log).

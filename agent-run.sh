@@ -113,6 +113,17 @@ node "$REPO_DIR/agent/tools/evidence-tier-watch.mjs" \
   --state "$REPO_DIR/agent/data/evidence-tier-watch.json" 2>&1 \
   || echo "evidence-tier watch failed (non-fatal)"
 
+# ── Pass 5: release watch (standing, best-effort) ──
+# Two agenda threads (thesis 5 routing-DSL status-quo checks; thesis 8 skills-eval no-submission
+# checks) kept degrading into per-run manual GitHub lookups whose "no change" was the data point.
+# This watch pins latest release tag + pushed_at + stars + README adoption fingerprints (SkillsBench/
+# vals.ai) for a manifest of watched repos and reports ONLY changes — a new routing-DSL release or a
+# skill repo adopting the shared corpus surfaces itself in the run log. See agent/tools/release-watch.mjs.
+node "$REPO_DIR/agent/tools/release-watch.mjs" \
+  --manifest "$REPO_DIR/agent/tools/release-watch.json" \
+  --state "$REPO_DIR/agent/data/release-watch.json" 2>&1 \
+  || echo "release watch failed (non-fatal)"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

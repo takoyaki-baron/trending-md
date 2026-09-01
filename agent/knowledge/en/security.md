@@ -1785,3 +1785,50 @@ The batch's security stream, read first-hand at the primary sources where reacha
   and **usable to escape a container**; a public PoC is merged into Google's kernelCTF repo; upstream fix
   `736b380e28d0`, mitigation RHSB-2026-009. Caveat stands: Red Hat's own page stops at "kernel memory
   overwrite" — the container-escape reading is secondary coverage + the kernelCTF PR, not CNA text.
+
+## 09-02 batch — BGP hijack meets the unsigned updater, and two scorer-split auth bypasses
+
+- **Virtualizor malicious update delivered via BGP hijack (vendor incident blog; Aug 28 20:57 → Aug 30 06:10
+  UTC) — the "valid TLS + update server" trust model weaponized end to end.** AS62390 (NexonHost) announced a
+  more-specific /24 over Softaculous's Hetzner block `162.55.80.0/24` (spoofed origin, transit AS6204; at peak
+  ~100% of the 368 RIPE RIS collector peers carried the hijack). Because the CA's validation traffic itself
+  traversed the hijack, the attacker obtained a **technically valid Let's Encrypt certificate covering 26
+  domains** incl. `virtualizor.com` — victim connections showed no TLS warning — and delivered a malicious
+  Virtualizor update to "a handful of servers" (IoC: a systemd unit at `/etc/systemd/system/java-jre-update.
+  service`). The caveats are the story: update clients "did not yet cryptographically verify update packages"
+  (signing only "planned"; v3.2.9.9 on Sep 1 adds a Security Analyzer); Softaculous **cannot enumerate victims**
+  (diverted requests never reached its logs); Hetzner didn't proactively notify; mitigation took ~12h. A new
+  supply-chain shape beside the vendor-pipe backdoors: **transport hijack + unsigned auto-updater** — every
+  unsigned auto-updater on the internet is exposed to this exact class.
+- **JFrog Artifactory CVE-2026-82329 (CVSS 9.8, CNA: JFrog; NVD still *Awaiting Analysis*; CWE-287,
+  `AV:N/AC:L/PR:N/UI:N`) — under default configuration, unauth network access bypasses authentication for
+  admin.** Patched Aug 28 (Cloud fixed; self-hosted needs 7.111.21 / 7.117.28 / 7.125.20 / 7.133.29 /
+  7.146.38 / 7.161.20; HN-reported affected range 7.111.4–7.161.19). watchTowr reports in-the-wild
+  exploitation "days after" disclosure with attackers minting admin tokens — but the claim is
+  **single-source**: JFrog didn't respond to SecurityWeek, the flaw is **not** in CISA KEV, and CISA's SSVC
+  in NVD says exploitation "has not yet been observed." Two hedges before repeating "actively exploited": the
+  "default configuration" qualifier (hardened installs may not be exposed) and the scorer split (JFrog 9.8 vs
+  NVD unanalyzed vs CISA not-observed). Treat as patch-and-audit: upgrade, then review what was published
+  recently — an artifact store is one step from poisoned-artifact, SolarWinds-style outcomes.
+- **Exchange CVE-2026-62911 (CVSS 8.0, CNA: Microsoft, CWE-294) — capture-replay auth bypass, disclosed at
+  Pwn2Own Berlin 2026 by DEVCORE's Orange Tsai.** An NTLM relay + MRSProxy chain lets an *authorized* attacker
+  escalate and hijack mailboxes (read, send, download); fixed in the Aug 2026 Patch Tuesday for Exchange 2016
+  CU23 / 2019 CU14-CU15 / SE RTM. No confirmed in-the-wild abuse, but public PoC exists (NCSC-NL; CISA SSVC
+  "poc"), Shadowserver counts **21,899 unpatched internet-exposed servers** (US ~6,200, Germany ~5,100), and
+  Germany's BSI says ~85% of on-prem Exchange there remains vulnerable. The structural clock: Exchange
+  2016/2019 are patched only via the ESU program, which **ends October 2026** — August was the last Patch
+  Tuesday window many of these servers will ever get. And 8.0 undersells it: "authorized attacker" means any
+  authenticated account, which in Exchange land is often the whole org.
+- **13 trojanized Packagist themes (Socket, Sep 1) — SEO-spam supply chain merged with a commodity iOS
+  exploit kit.** Malicious Composer themes (namespaces `vsmov`, `vsphim`, `haiau009`, `chilltvcms`,
+  `ophimcms`) for Vietnamese OphimCMS/KKPhim streaming sites inject JavaScript into every visitor; iPhone
+  visitors on unpatched iOS 18.4–18.6.x get a WebKit renderer exploit (CVE-2025-31277 + CVE-2025-43529 — both
+  patched and KEV-listed; Apple acknowledged 43529 in targeted attacks) pivoting through IOSurface/mach GPU
+  into kernel escape via the `AppleM2ScalerCSCDriver` IOKit user client (through `mediaplaybackd` XPC; fixed
+  iOS/macOS 26.1), harvesting keychain databases, Wi-Fi passwords, SMS, contacts, location — and since an Aug
+  12 redeployment, **wallet seed phrases** (Bitget, Phantom, Trust, OKX…), exfiltrated to 20 rotating C2
+  domains on FUNNULL ("Triad Nexus", OFAC-sanctioned since May 2025 for facilitating $200M+ in scams).
+  Caveats: iOS 18.7 and 26.2+ are not exposed to known stages; the kernel variant's exact origin "cannot be
+  resolved from available evidence"; Socket warns all packages from the five namespaces are untrusted (a
+  dormant "Custom JS" activation remains). Both chain CVEs are last year's and patched — the story is the
+  delivery system (zero-interaction kernel compromise from a supply-chain foothold), not a new Apple bug.

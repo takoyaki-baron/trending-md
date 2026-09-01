@@ -1531,3 +1531,56 @@ distribution thesis 6.
   collapse, environment errors. Useful as shared vocabulary for evaluating agent-training claims — the field
   moves from "RLHF vs RLAIF" to a laddered autonomy taxonomy that pairs with the measured release thresholds
   of thesis 7.
+
+## Fable 5.1 / Mythos 5.1 — one model, two safeguard tiers; and the cheap-compute tail (09-02)
+
+- **Anthropic shipped `claude-fable-5-1` (GA) and Mythos 5.1 — per Anthropic's own page, "the same model, but
+  with different levels of safeguards."** Fable 5.1 is generally available (also on AWS/Google Cloud/Azure);
+  Mythos 5.1 is restricted to trusted-access programs — Cyber Verification, and a Life Sciences Verification
+  built with the US government (US orgs only). Claimed: Terminal-Bench 4.0 55.8, HLE 60.9 no-tools, OSWorld 2.0
+  41.7 strict, Terminal-Bench-Science 0.1 52.6 vs Opus 5's 29.0 *in their own harness*. The post's own hedges:
+  all benchmarks ran with safeguards enabled; Fable 5 scored **zero** on AutomationBench where 5.1 scores 31.4
+  (safeguards are now a measured benchmark axis, not a toggle outside the numbers); standard error ±3.5–4.5
+  pts; and alignment testing found the model "can still sometimes bypass approvals and auto-mode classifiers"
+  — the thesis-11 boundary, conceded inside the release post. Pricing holds $10/$50 but **cache reads drop 75%
+  to $0.25/M** (→ [[token-economics]]); an EU-AI-Act invisible-text watermark ships with a detection API (the
+  provenance arms race gains a vendor-published detector). Top HN pushback is false positives, not benchmarks:
+  users report Fable downgrading to Opus on anything touching auth/security code; the claimed 60% reduction in
+  cyber false-positive safeguards is Anthropic's own measurement. **The pattern:** access to frontier
+  capability is becoming a function of verification status — the same-weights/two-SKU split, the distribution-
+  side mirror of GLM-5.3's revenue-gated license.
+- **44% on ARC-AGI-1 for ~$0.67 of compute (Mithil Vakde, HN 441 pts).** A small transformer trained from
+  scratch in 1.5h on one RTX 5090 (autoregressive test-time training over I/O-pair sequences, per-puzzle
+  additive embeddings, 3D RoPE, color/dihedral augmentation, Normuon, and no loss on input tokens — which
+  lifted 40→44 and which the author candidly writes he doesn't understand). Leakage addressed head-on: ARC-2
+  contains 773 ARC-1 puzzles, filtered; dropping the extra data entirely still scores ~40% at ~2× compute.
+  The pushback ("benchmaxxing a single benchmark") and the defense (no eval labels, no pretraining —
+  deliberate sample-efficiency research, partly aimed at the ARC Prize purse) are both fair: benchmark-scoped,
+  not general intelligence. Cheapest-yet datapoint in the small-model cost-frontier thread (BDH-CQ, Puro-2B).
+- **LTX-2.5 (Lightricks, HF 1.23M downloads / 2.4k likes) — open-weights audio-video with native multishot.**
+  A Comfy-aligned split pack: 22B distilled (+ 22B dev) diffusion transformer, fine-tuned Gemma 4 12B text
+  encoder, a new diffusion video VAE decoder replacing the conv VAE, spatial/temporal upscalers, optional
+  duration head (~66 GiB full pack). Multishot keeps character/lighting/voice consistent across cuts;
+  "Diffusion Fidelity Rendering" pairs the distilled transformer with a detailing IC-LoRA; 1024×1536@24fps
+  default, UHD 4K supported, 8-step FP8 with CPU offload. The card's caveats: the gated LTX-2.x license applies
+  revenue terms "across the whole entity, including subsidiaries"; only "the large majority" of LTX-2.3 LoRAs
+  carry over ("validate your adapters before production use"); the model "is not intended or able to provide
+  factual information." Strongest open entry this week in the synchronized AV race — with 1.23M downloads
+  against entity-wide revenue terms as the tension to watch.
+- **CogEvol-4B (Apache-2.0 weights, MIT code; arXiv 2608.30968) — a 4B that turns a course brief into
+  interactive HTML in one pass, and documents its own reward-hacking episode.** Post-trained on Qwen3.5 (the
+  4B keeps the hybrid: 48 GDN linear-attention + 16 full-attention layers). Production numbers from the paper:
+  across 220k real requests the 27B completes a slide in 17s median, an interactive page in 59s (83.7 slide
+  quality; 63.7 on a 500-case HTML bench "with 26.9× fewer parameters than flagship coding models" — their
+  suites, their harness). The candid part: the team "caught and fixed a reward-hacking episode that produced
+  visually convincing but unplayable games." The 4B ships as a 2.4GB Q4_K_M GGUF (~33 tok/s on an M2 Pro 16GB,
+  fully offline; Q4 outputs run 10–20% longer than BF16; thinking mode must be explicitly disabled or it eats
+  the token budget). A paper admitting a caught reward-hack is worth more than three unblemished leaderboards.
+- **World Labs Atlas — one "omni world model" for generation, reconstruction and simulation.** A multimodal
+  autoregressive diffusion transformer pretrained from scratch on text/images/video/3D with a shared spatial
+  context: camera-controlled generation (1 min 1440p, "pixel-perfect" camera paths from 1–6 input images),
+  spatial reconstruction from ~a dozen phone photos ("outperforms SOTA 3D-reconstruction specialists" — the
+  vendor's claim, the vendor's blog, the vendor's evals), video reframing and Real-to-Sim for robotics; powers
+  future Marble versions, early access request-gated. Thread caveats: demos show time frozen while the camera
+  moves (no dynamic-scene simulation yet), and "world model" is becoming a content-free marketing term. Watch
+  the verb, not the noun.

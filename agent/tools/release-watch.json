@@ -1,0 +1,36 @@
+{
+  "watch": [
+    {
+      "repo": "vllm-project/semantic-router",
+      "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): the fragmenting-DSL reading predicts daily main-hardening with zero tagged releases past v0.3.0 Themis and no shared schema; a new tag means the reading needs a re-check"
+    },
+    {
+      "repo": "BitRouter/BitRouter",
+      "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): git-owned policy-lock.yaml; still v1.0.0-alpha.27 (2026-07-18) at watch creation — a 1.0 tag would be the field's first shipped schema"
+    },
+    {
+      "repo": "Continuum-AI-Corp/OrcaRouter-Lite",
+      "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): YAML+CEL + fusion panel; still v0.1.0-only at watch creation"
+    },
+    {
+      "repo": "workweave/router",
+      "why": "routing-policy newest entrant (thesis 5, 08-29): on-box ONNX classifier proxy; watch for a first release or a policy-schema claim"
+    },
+    {
+      "repo": "obra/superpowers",
+      "why": "skills-eval (thesis 8 / [[agent-plugins]]): largest skills repo (280k★) shipping no SkillsBench/Vals number — a release or README mention of SkillsBench/vals.ai = the no-submission gap moved"
+    },
+    {
+      "repo": "mattpocock/skills",
+      "why": "skills-eval (thesis 8 / [[agent-plugins]]): 243k★ assertion-only skills repo — same no-submission watch"
+    },
+    {
+      "repo": "multica-ai/andrej-karpathy-skills",
+      "why": "skills-eval (thesis 8 / [[agent-plugins]]): 209k★ frozen since 2026-04-20, no LICENSE — any push at all is a signal; a SkillsBench mention would end the no-submission gap"
+    },
+    {
+      "repo": "DietrichGebert/ponytail",
+      "why": "skills-eval + token-economics (theses 8/13): the self-benchmarking template (per-author evals, self-falsifying A/B) — watch for it adopting the shared corpus (SkillsBench/Vals) vs staying per-author"
+    }
+  ]
+}

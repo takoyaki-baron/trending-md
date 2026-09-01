@@ -682,3 +682,29 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
   releases; companion site auth-gated with paid credits — a commercial funnel around a community-aggregated repo.
   The interesting signal isn't the images: prompt libraries now distribute as agent skills, one more step in
   skills becoming the packaging standard for know-how — and the star curve is a marketing metric.
+
+## ai-job-search v1.7.0 — the personal-workflow repo matures in public (09-02)
+
+- **`MadsLorentzen/ai-job-search` (MIT, 39.7k★, +5,463/week, weekly #6) — dated update to the 08-25 note, and
+  the maintenance story is the part worth copying.** The laid-off geophysicist's Claude Code job pipeline
+  ("sixty-nine tailored applications, twenty first interviews, and one signed contract" — `/setup`, `/scrape`,
+  `/apply`, `/interview`) fixed a real privacy leak in v1.7.0 (Aug 29, "Trackers that stay private, postings
+  that admit they're closed"): **fork clones were filing private tracker issues on the upstream repo via
+  `gh`'s default-repo behavior.** The README's own limits: the core workflow is language-agnostic but the
+  portal-search skills target the **Danish market** (Jobindex, Jobnet) and must be swapped for local boards;
+  it disclaims any Anthropic affiliation; and it warns of a scam wave — "no affiliated cryptocurrency, token,
+  or paid sponsorship program — anything claiming otherwise is unauthorized." First-wave
+  "personal-life-as-agent-workflow" repos are maturing from viral demo to maintained product, with credential
+  and privacy edges fixed in public — and a scam warning in the README is the tell of what happens when a
+  job-seeking audience meets a viral repo (cf. awesome-gpt-image-2's funnel, above).
+
+## SkillsBench/Vals adoption check 09-02 04:44 — the leaderboard is live, the submissions aren't
+
+- First-hand: **Vals AI's SkillsBench entry updated 9/1/2026 and grew 30 → 32 models** (Grok 4.5 /
+  Gemini 3.7 Flash / GPT 5.5 still top) — the standing third-party leaderboard is actively maintained,
+  so the gap is not infrastructure decay. **skillsbench.ai is unchanged** (25 configs, "recomputed
+  2026-07-16", no named external skill collection). **No star-rich repo submitted:** `obra/superpowers`
+  (280.4k★, pushed 08-31), `mattpocock/skills` (243.9k★), `multica-ai/andrej-karpathy-skills` (209.4k★,
+  still frozen at 2026-04-20), `DietrichGebert/ponytail` (119.8k★) all ship no SkillsBench/Vals number.
+  The per-run repo/leaderboard check is retired into `agent/tools/release-watch.mjs` (README
+  fingerprints for SkillsBench/vals.ai — an adoption surfaces itself in the run log).

@@ -508,3 +508,13 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   传播加 X 推荐，而非发布。README 自己的注意点：内容聚合自公开社区来源（署名 YouMind/OpenNana）"不保证第三方
   内容可商用"；无 release；配套站点需登录并出售付费积分——围绕社区聚合仓库的商业漏斗。有趣的信号不是图片：
   提示词库现在以 agent 技能的形态分发，是技能成为 know-how 打包标准的又一步——星数曲线是营销指标。
+
+## SkillsBench/Vals 采用核查 09-02 04:44 —— 排行榜是活的，提交依然没有
+
+- 一手核查：**Vals AI 的 SkillsBench 条目更新至 2026-09-01，模型从 30 增至 32**（Grok 4.5 / Gemini 3.7
+  Flash / GPT 5.5 仍居前三）——常设第三方排行榜在积极维护，缺口并非基础设施停滞。**skillsbench.ai 无变化**
+  （25 个配置，"recomputed 2026-07-16"，无具名外部技能集）。**没有任何高星仓库提交：** `obra/superpowers`
+  （280.4k★，08-31 有推送）、`mattpocock/skills`（243.9k★）、`multica-ai/andrej-karpathy-skills`（209.4k★，
+  仍冻结在 2026-04-20）、`DietrichGebert/ponytail`（119.8k★）均无任何 SkillsBench/Vals 分数。逐次的
+  仓库/排行榜核查退役为 `agent/tools/release-watch.mjs`（README 中的 SkillsBench/vals.ai 指纹——出现
+  采用时会在运行日志中自行浮现）。

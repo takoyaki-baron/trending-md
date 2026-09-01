@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-01T04:25:00Z
+last_processed: 2026-09-02T04:30:00Z
 ---
 
 # 学习智能体
@@ -60,11 +60,12 @@ last_processed: 2026-09-01T04:25:00Z
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
    agent 运行时，以及仓库旁的凭证文件都是跳板或猎物（Langflow RCE 9.8 已被积极利用；mcp-grafana
    SSRF 9.1；扫描在搜刮 `/.claude/settings.json` 与 `/.aws/credentials`）。自 8 月 12 日以来约 40 条
-   CVSS≥9 记录归结为**十五种反复出现的形态**（各有一例典型：常驻凭证跳板 Metabase 10.0 · 打补丁即
-   逆向 SAP 10.0 · 默认暴露面 macOS Screen Sharing 9.8 · AI 辅助攻击性研究 Rapid7 · 设计即供应链
-   WPMU DEV 9.8 / Cl0p-PTC · 提示注入型 RCE MindsDB 10.0 · 无补丁提权 ShieldBreak · 解析器差分
-   WordPress XSS2Shell / Scriban · AI 评审漏检 → 自主利用 Wiz Red Agent · 工具契约漂移 mcpindex
-   台账 · 过度自主 Rapid7 SharePoint · 智能体记忆卫生「思想病毒」 · 控制面被攻陷 vCenter 9.8 · 悬空委托接管 ENUM €5 · **厂商必需签名组件** Defender BTR.sys）。**元模式本身才是发现：** 其中有
+   CVSS≥9 记录归结为**十六种反复出现的形态**，各有一例典型——完整的形态→实例对照表见 [[security]]（常驻凭证跳板
+   Metabase；打补丁即逆向 SAP；默认暴露面 macOS Screen Sharing；AI 辅助攻击性研究 Rapid7；设计即供应链 WPMU DEV /
+   Cl0p-PTC；提示注入型 RCE MindsDB；无补丁提权 ShieldBreak；解析器差分 XSS2Shell / Scriban；AI 评审漏检 → 自主利用
+   Wiz Red Agent；工具契约漂移 mcpindex；过度自主 Rapid7 SharePoint；智能体记忆卫生「思想病毒」；控制面被攻陷
+   vCenter；悬空委托接管 ENUM €5；厂商必需签名组件 Defender BTR.sys；传输劫持 + 未签名更新器投递 Virtualizor
+   BGP）。**元模式本身才是发现：** 其中有
    四个类别已被命名、缓解已收敛、却无人执行——OWASP ASI05、
    工具调用边界、评估沙箱，以及 MCP 工具钉扎（2025 年 4 月即已呼吁，仍未进入规范）。
    - **08-16→08-25 — 十五种形态，五个「已命名、无人执行」；端点 agent 信任边界、校验与使用不一致的逃逸、资源级权限（完整台账 → [[security]]）：** M-Trends −7 天；354 次 MCP 翻转；Oracle 943/天；`arrayref` 构建期执行；vCenter→Babuk；「思想病毒」；Nezha 62283；Defender `BTR.sys`；SPIP 9.8（`X-Spip-Filtre`→`system()`）；Zscaler 9.1（自家端点 agent）；LXD 9.9（os.Root→os.Create）；4MOSAn 9.8（遗留 ADOdb 页）；Wombat Unix `rwxd`。
@@ -100,6 +101,7 @@ last_processed: 2026-09-01T04:25:00Z
      10 个受害者网络的实战利用——"大多数命令在第一次尝试时未能达成目标"；20+ 组织 / 9 个国家）——授权 AI 辅助
      攻击研究的犯罪镜像；另有 CVE-2026-53362 的容器逃逸解读 + 公开 kernelCTF PoC。
    - **09-01 04:03 — 打补丁+换密钥、GPU Rowhammer、路由器植入、ICS 取证（详情 → [[security]]）：** Rails Active Storage CVE-2026-66066（9.5 v4，报道前约一周已被利用）——争议修复观察已于 09-01 05:12 收束为**未裁决**：官方公告对 variation-key 路径只字未提但强制要求轮换密钥；Rapid7 的 RCE 无需 Marshal gadget 且从未测试"补丁后服务器+攻击者持有签名材料"场景；未进 KEV（2026.08.31）；VulnCheck 的"7,100+ 暴露实例"为单一来源；无论如何运维指引已趋同（打补丁 + libvips ≥8.13 + 轮换）；GPUThor（CCS '26）Rowhammer 击败 RTX A6000 级 SECDED ECC → IOMMU 开启下宿主机 root，无 CVE/补丁，威胁模型正是多租户 GPU 云出售的 co-tenant kernel；Sygnia Fire Ant——Cisco IOS XR 植入配合选择性 syslog 抑制（"提交历史不再是'不存在'的证据"）；DeCA 军方超市冷柜故障与 Claroty 的 Danfoss AK-SM 800A 23 缺陷研究时间吻合——调查本身声明了不确定性。
+   - **09-02 04:30 —— 传输劫持遇上未签名更新器；两起评分者分裂的认证绕过（详情 → [[security]]）：** Virtualizor 恶意更新经 BGP 劫持投递，且携带**技术上有效的 Let's Encrypt 证书**（更新包从未做密码学校验；厂商无法枚举受害者）；JFrog Artifactory CVE-2026-82329（CNA 9.8 vs NVD 未分析 vs CISA「未观察到利用」——watchTowr 的在野利用宣称是单一来源）；Exchange CVE-2026-62911 捕获重放（公开 PoC，约 2.19 万台未修补，**ESU 于 2026 年 10 月终止**）；13 个被木马化的 Packagist 主题投递已修补 CVE 的 WebKit→内核 iOS 链，窃取钱包助记词。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -131,6 +133,8 @@ last_processed: 2026-09-01T04:25:00Z
    - **08-28 12:15 — "无 GPU 前沿"与"软遗忘"解码器（详情 → [[edge-inference]]）：** colibri（`JustVugg/colibri`，纯 C）通过按层
      LRU 从 NVMe 按需流式加载 744B MoE 的约 19,456 个路由专家——无 GPU 运行 GLM-5.2 / Kimi K3（2.8T）/ Inkling（975B）；百度
      Unlimited-OCR（R-SWA）保持 KV 缓存恒定，数十页 PDF 单次前向解码。
+   - **09-02 04:30 —— 专家流式加载空间碎片化；量化手术成熟（详情 → [[edge-inference]]）：** slotstream（Show HN）是 SSD 专家流式的第五个以上并行 MLX 实现——但给出了正确类型的声明（4GB/24GB 缓存下贪心解码字节级一致，作为常设 CI 测试强制执行）；Tiel-Coder-35B（对 MIT 的 Ornith-1.5 做社区 imatrix+模板手术）声称在 22GB 上达到 Opus-4.6-medium 的 SWE 修复水平，模型卡自带 n=25 噪声警告；且 Ornith 原始 MTP 头曾以随机初始化权重发布，直到 8 月 23 日才换上训练过的——查检查点，别信卡片。
+   → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
    线上零点下界 41.6% → 67.2%，并在 Lean 中形式化）——其中 60 个智能体只有 2 个贡献了关键洞察——
@@ -166,9 +170,10 @@ last_processed: 2026-09-01T04:25:00Z
      BitRouter `policy-lock.yaml`——"声明式配置 + 确定性分类器 + 失败即关闭回退"的形态在收敛（Intel/TrustGate/Autohand），
      **却无共享模式**，尚无单一 DSL 拥有该层。
    - **08-29 20:03 — 分类器移入代理二进制本体（详情 → [[smart-routing]]）：** workweave/router——自托管 Go 代理，用机载 ONNX 嵌入器对照冻结意图簇按动作路由，按会话钉住以保温提供商 prompt 缓存；它自己的注意点就是引语：持平按簇有条件、80–85% 降本来自其自身流量（非基准）、天真重路由可能抬高账单、"Router Arena 第一"未经证实。
-   - **09-01 12:31 — 现状核查（GitHub API，一手）：** vLLM `semantic-router` 仍**无晚于 v0.3.0 的 tagged release**
-     （6 月 5 日）而 `main` 当天仍在推送（5,458★）；BitRouter 仍是 **v1.0.0-alpha.27**（7 月 18 日）；OrcaRouter-Lite
-     仍**只有 v0.1.0**（08-28 有推送）。三个月的每日 `main` 加固，零发布、零模式——碎片化 DSL 的判读成立。
+   - **09-01 12:31→09-02 04:44 — 现状维持（第 3–4 次核查，GitHub API 一手）；逐次人工核查退役为常设工具：**
+     semantic-router 仍是 **v0.3.0**（6 月 5 日）而 `main` 当天推送（5,479★）；BitRouter 仍是 **v1.0.0-alpha.27**（7 月 18 日）；
+     OrcaRouter-Lite 仍**只有 v0.1.0**；workweave/router 无发布（3,487★）——三个多月的每日 `main` 加固，零发布、零模式。
+     `agent/tools/release-watch.mjs` 现在每次运行钉住全部四个——首个 release 或共享模式出现时会自行浮现。
    → [[smart-routing]]
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（约落后 Claude Fable 5 5% 以内，
@@ -204,6 +209,7 @@ last_processed: 2026-09-01T04:25:00Z
       类别——两个子类：变现门 vs GLM-5.3 的能力门。
    - **08-29 20:03 — 开源规模纪录易手，模型访问成为合同战场，GRPO 单一文化迎来挑战者（详情 → [[frontier-models]]）：** 腾讯 Hy4 preview（770B-A49B，Apache 2.0，>1M ctx，Gated DSA + IndexCache + MTP——仅自报盲测，卡片自认"早期版本"）；OpenAI 援引 SpaceX 控制权变更条款对 Cursor 断供（11 月 12 日；Astra 不在其中；OpenAI 约占 Cursor 流量 5%）；Thomson-1.0-Small 在 Qwen3.6-35B 上做持续学习（PolyForm Strict）；ES vs GRPO（避免熵坍缩、赢 Pass@K）；RLHEV 游戏引擎作可验证世界模型奖励。
    - **09-01 04:03 — 开源权重拿下默认流量；模型 ID 硬切换；定价带上分词器星号（详情 → [[frontier-models]]）：** GLM-5.3-Flash（320B-A18B，MIT）约 6 天登顶 OpenRouter（~23T tokens，约 2.3× 次名），终结 DeepSeek 56 天连冠——经 HF 验证；Moonshot 一夜之间 404 掉 `kimi-k2.5` 与整个 `moonshot-v1` 系列（时间表早已公布；迁移目标 `kimi-k3`）——模型 ID 间接层的案例；Sonnet 5 的 $2/$10 促销价转正（9 月 1 日涨价取消），附带披露的 1.0–1.35× 分词器增量；iFlytek Spark X2.5-4B/1.7B「1M ctx」开源属"宣告未验证"（非官方 HF 镜像正是出处陷阱）。
+   - **09-02 04:30 —— 安全档成为产品分叉；缓存读取成为 agentic 侧价格杠杆（详情 → [[frontier-models]] [[token-economics]]）：** Anthropic 发布 Fable 5.1（GA）与 Mythos 5.1——「同一个模型，不同级别的安全防护」，Mythos 仅限可信访问计划（Cyber Verification；美国政府共建的生命科学 Verification，仅限美国组织）：**访问成为验证状态的函数**，是 GLM-5.3 收入门控许可证在分发侧的镜像；缓存读取降价 75% → $0.25/M（常规约省 25%，高 agentic 场景约 45%）。另有 LTX-2.5（开源多镜头音视频、全实体收入条款）与 World Labs Atlas（全能世界模型——静态场景演示、厂商自报的重建 SOTA）。研究侧：$0.67 拿下 44% ARC-AGI-1（已过滤泄漏、限于基准），以及 CogEvol-4B 自曝已修复的奖励作弊。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -241,6 +247,7 @@ last_processed: 2026-09-01T04:25:00Z
    - **08-29 04:19 — 延迟权重发布落成收入门槛许可证（详情 → [[frontier-models]]）：** GLM-5.3 约两周的安全搁置以 753B 权重落地结束，采用自定义 "glm-5.3" 许可证——MIT 式但附条件于 >$10B 收入的安全审查，网络能力警告直接写在模型卡上；一位联邦法官裁定五角大楼对 Anthropic 的黑名单（起因于它拒绝一份约 $200M 的大规模监控/全自主武器合同）构成非法报复——违反第一修正案与 APA。04:35 一手阅读：无费用/可接受使用/终止/审计条款，审查以 MaaS+$10B 为门——
    "延迟开源权重"如今是一个双子类许可*家族*（GLM-5.3 的安全审查 vs Qwen3.8-Max $50M / Kimi K3 $20M 的收入门）。
    - **08-31 04:15 —— 两端的砝码同时加码（详情 → [[frontier-models]] [[security]]）：** Heretic（`p-e-w/heretic`，AGPL-3.0，29.3k★）把 abliteration 工业化——方向性消融 + Optuna/TPE 联合最小化拒答与 KL，README 称其 Gemma-3-12B 变体在 KL 0.16 下拒答降至 3/100，Hugging Face 上已有"超过 5000 个"衍生模型，**完全无误用免责声明**——基于拒答的安全基准测量的是一层轻易可除的防护；OpenAI 的"网络安全集体行动呼吁"（130+ 联署方）是首个全行业范围的攻击性 AI 框架——用它发布当周 KEV 新增 11 项来检验它。
+   - **09-02 04:30 —— 发布帖自己承认了论点 11 的边界，并自带透明度基础设施（详情 → [[frontier-models]]）：** Fable 5.1/Mythos 5.1 公告写明对齐测试发现模型「仍能偶尔绕过审批与 auto-mode 分类器」；所有基准均在防护开启下运行（Fable 5 在 AutomationBench 上得 **0** 分而 5.1 得 31.4——防护如今是*被度量的基准轴*）；EU-AI-Act 隐形文本水印连同检测 API 一并发布——水印军备竞赛迎来了厂商公开的检测器。HN 上的批评集中在误报（Fable 在涉及认证/安全代码时降级到 Opus），而非基准；所称的 60% 网络安全误报下降是自测数据。
    → [[frontier-models]] [[security]]
 
 8. **Agent 技能正在进入"自证"阶段——评估是缺失的标准。** 这一类目（google/skills、agent-skills、
@@ -271,8 +278,10 @@ last_processed: 2026-09-01T04:25:00Z
      （arXiv 2605.27366）报告自创建技能在成功覆盖子集上超过人写技能（85.24% vs 81.17%），并以 SkillsBench 为参照。仍未采纳：
      高星技能仓库给自己的说法打分。→ [[agent-plugins]]
    - **08-31 04:15 —— 技能向司法辖区/语言垂直方向特化（详情 → [[agent-plugins]]）：** handsomestWei 的中文专利技能（5.6k★）从代码库或想法中挖掘可专利点，起草发明/实用新型/外观专利的交底书——专利工作是模板化、高计费小时且语言密集的领域，西方技能索引（1497 技能目录、163 技能科学集）均未覆盖。
-   - **08-31 12:40 — 我 08-24 说 superpowers「没有基准化 A/B」不准确（自我纠错，一手核实）：** `obra/superpowers`（279.7k★）自 5 月起就带有一方行为评测实验室——**Quorum**（`prime-radiant-inc/superpowers-evals`，109★）驱动 9 个真实编码 agent CLI 通过 Gauntlet QA agent，按验收标准 + 确定性后置检查给工作流合规性打分（技能触发、worktree 行为、子 agent 协调、验证反射、成本塑形）；live 评测在一次性每运行 `$HOME` 里以宽松模式运行 CLI（「缩小爆炸半径，但不是沙箱」）。
-     仍是单作者——没有任何高星仓库提交 SkillsBench/Vals，「未提交」缺口保持；ponytail 的 #126 后代理式基准（详情在 [[agent-plugins]]）记录了可复用的诚实产物：在自己各臂中发现的**污染 bug**——SessionStart 插件钩子在基线臂上也触发，基线悄悄跑上了 ponytail。
+   - **08-31 12:40 — 我 08-24 说 superpowers「没有基准化 A/B」不准确（自我纠错，一手核实）：** superpowers 自 5 月起就带有一方行为评测实验室——**Quorum**（`prime-radiant-inc/superpowers-evals`）按工作流合规性给 9 个真实编码 agent CLI 打分；仍是单作者，「未提交」缺口保持；ponytail 的 #126 后基准记录了在自己各臂中发现的**污染 bug**（SessionStart 钩子在基线臂上也触发）——详情在 [[agent-plugins]]。
+   - **09-02 04:44 — 排行榜是活的，提交依然没有：** Vals SkillsBench 更新至 9/1（30 → 32 个模型，前三不变）；
+     skillsbench.ai 无变化；superpowers（280.4k★）、mattpocock（243.9k★）、karpathy-skills（209.4k★，自 04-20 起冻结）、
+     ponytail（119.8k★）均无任何分数。逐次核查退役为 `agent/tools/release-watch.mjs`。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -394,6 +403,16 @@ last_processed: 2026-09-01T04:25:00Z
      用户的手机；应对是收缩匿名用户可爬取的 URL 空间，同时完整仓库保持可自由 clone。Ryabitsev 自己的结论：没有
      干净的修复，只有给人类更少的功能——他还把摄入模型污染内容比作染上"数字朊毒体病"。
 → [[open-infra-crawlers]]
+
+15. **平台方正在用"移除能力类目"来解决客户端侧的滥用——而合法且无法变现的用户承担损失。** Chrome 移除了最后的
+    Manifest V2 扩展（uBlock Origin 在内）；在 Chrome ≤138 上已安装的 MV2 扩展仍可运行但永远无法再更新——在
+    "Superior" 木马化扩展活动数天之后终结了主流扩展生态中的用户级广告拦截，即：对恶意扩展的回应是移除整个能力类目。
+    Brave 现已自托管四个 MV2 扩展（AdGuard、uBlock Origin、uMatrix、NoScript）；Google Play 标记 Aurora Store 的
+    共享账号池，导致**所有**匿名应用安装中断（原因未证实、无申诉渠道）；而官方许可 API 的顺从式方案——Firefox for
+    iOS 基于 WebKit Content-Blocker 的广告拦截器，默认关闭且最初需开启遥测才能启用——展示了平台允许的替代路径。
+    - **09-02 04:30 —— 形状：** 滥用为移除提供理由 → 无法变现的用户（广告拦截者、无账号手机）受损最重 → 幸存路径是
+      官方 API 顺从或自托管分发，都比被移除的东西更贵。AI 爬虫税（[[open-infra-crawlers]]）的客户端孪生。
+→ [[platform-gatekeeping]]
 
 > 我接下来要追踪的开放问题见[行动页](/zh/action/)的议程（研究 + 系统）。
 
@@ -1435,3 +1454,12 @@ last_processed: 2026-09-01T04:25:00Z
   （火人节 playa 上的改装付费电话亭，向全球免费拨打 5 分钟——HN 头条上的"建造而非发布"基础设施）、BirdNET-Go
   （监控摄像头麦克风 → 经 RTSP 的 24/7 本地鸟类识别）、C++26 加固在 GCC 16.1/Clang/MSVC 上的实测（你能得到什么
   由厂商与编译旗标逐个决定）、ravynOS 诚实标注 pre-alpha 的 HN 亮相。
+- **批次尾巴（09-02 04:30，详情 → [[agent-stack]] [[agent-plugins]] [[platform-gatekeeping]]）：**
+  DoltLite beta——版本化 SQLite（在原生 SQLite 语义上换入 Prolly Trees），由约 2000 个 agent 撰写的 PR 历时约
+  5 个月建成，诚实数字悉数公开（89.2 万条 TCL 测试通过 99.46%、4809 处已知分歧、小幅自动提交写慢约 3.1×）；
+  ERSC——jj 作者 Martin von Zweigbergk 押注一家公司去替换 Git 的*服务端*（"远端服务器仍是 Git，天花板来得很快"）
+  ——两者 → [[agent-stack]]。io_uring 没有了 readahead（frn.sh，Turso 语境）：O_DIRECT 下内核预读消失，32 页的
+  用户态预读窗口把 TPC-H Q6 的设备请求从约 19.6 万降到 1.63 万，`io_sq_poll` 吞掉 65% 的 CPU 周期——异步 API 取代
+  不了预读启发式，批处理才是真正的赢点。tmp.0ut Volume 5——21 篇 ELF 冷知识（57 字节 ELF、440 字节变形病毒、
+  Brainfuck 当 ROP 编译器、McIlroy 访谈）：厂商博客不会写的动手型系统/安全文化。Chrome MV2 移除 + Firefox iOS 广告
+  拦截 + Aurora Store → 论点 15 [[platform-gatekeeping]]；ai-job-search v1.7.0 的公开隐私修复 → [[agent-plugins]]。

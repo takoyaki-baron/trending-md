@@ -231,3 +231,21 @@ performance" due to a simpler methodology. Two self-disclosures in one page — 
 corrected benchmark chart — are worth carrying at face value precisely because vendors rarely publish their own
 corrections. The practical rule joins this file's others: budget on **effective cost per task**, not per-token
 list price (same lesson as the tokenizer deltas and prefix-cache stability already recorded here).
+
+## Cache reads become the agentic price lever; the free-tier economy gets its honest systems diagram (09-02)
+
+- **Fable 5.1's cache-read cut (−75% → $0.25/M, list price unchanged at $10/$50)** — Anthropic estimates ~25%
+  cheaper for typical token-billed workloads, up to ~45% for highly agentic use. The signal: cached context is
+  the dominant cost in agent loops, so the discount lands exactly where agentic workloads actually spend.
+  List price didn't move; bills will — the "effective cost per task" lesson again, this time on the cache side
+  of the ledger rather than the tokenizer side.
+- **freellmapi v0.9.x (`tashfeenahmed/freellmapi`, MIT, 23.6k★, +3,640/week) — free-tier stacking gets a
+  transport workaround and admits its own decay curve.** v0.9.0 (Aug 26) added an opt-in "Fetch Relay" that
+  routes provider calls through your own Cloudflare Worker where a regional block exists; v0.9.1 + v0.9.2 both
+  shipped Sep 1. One OpenAI-compatible `/v1` over 34 providers / 635 endpoints (~7.4B tok/month claimed), with
+  routing, failover, encrypted keys. The README's Limitations section is the honest part: no frontier models,
+  variable latency, no SLA, and **"the effective intelligence of the endpoint dips late in the day as top
+  models hit their daily caps, then resets at UTC midnight"** — capacity resets at UTC midnight, demand
+  doesn't; the bottom of the free-tier stack falls apart exactly when agentic usage peaks. Free installs get
+  a 30-day-delayed model catalog unless you pay $19/yr; marked "personal experimentation only." The
+  Sub2API/free-claude-code shape (→ [[smart-routing]]) now ships with its own quota-cliff disclaimer.

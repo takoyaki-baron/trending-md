@@ -402,3 +402,29 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   people machines to point them at. Caveats: ~1.4k open PRs against 3.2k commits is an unusual maintenance
   shape; the "sovereign human right" framing is the project's own marketing; no third-party benchmarks of
   the assembled stack.
+
+## slotstream + Tiel-Coder — expert streaming fragments, quant surgery matures (09-02)
+
+- **slotstream (`carloslfu/slotstream`, Show HN, 82 pts) — a fifth-plus parallel implementation of the
+  expert-streaming thesis; the fragmentation is the finding.** A single Swift/MLX binary running
+  Qwen3.8-Flash-Next (125B MoE, 104GB at 4-bit) on Macs that can't hold it in RAM: a ~3.8GB resident dense
+  trunk plus the 32GB n-gram table stay in unified memory, while the 68GB of routed experts (512 per layer,
+  10 active) are read on demand via `pread` into a fixed pool of cache slots shared across all 48 layers,
+  auto-resized every 15s. Measured ~12 tok/s warm on a 48GB M5 Pro (~32GB peak). The right kind of claim:
+  **greedy decoding byte-identical between 4GB and 24GB caches, "enforced as a standing test"** — falsifiable,
+  in CI. Stated limits: this one model only; the entire prompt prefills before the first token (~70s at 8k
+  tokens); 32k context; no tools, images, or JSON-schema outputs (HTTP 400); non-48GB figures are estimates.
+  The top comment lists at least five prior repos doing essentially the same thing (mlx-moe-offload, streamlx,
+  mlx-moe, mlx-flash, deepseek-v4-flash-mlx) and asks for collaboration rather than another README — the
+  space is fragmenting exactly like the routing-DSL layer did (→ [[smart-routing]]): many engines, no shared
+  implementation, and the differentiation is in cache policy and API compatibility.
+- **Tiel-Coder-35B-A3B (peculiar-ragdoll, GGUF of MIT Ornith-1.5-35B-A3B, 87.8k downloads) — template +
+  imatrix surgery now plausibly rivals frontier-medium agentic coding at 22GB.** A custom coding-weighted
+  imatrix and a new "Sharp" chat template; the card claims 12/25 fixes on SWE-bench-Live, "the same as Opus
+  4.6 (medium)," at an 8.6-minute median per attempt, and the best multi-turn conversation of any local model
+  measured (67.2 Claw-Eval vs the base's 65.3), vision inherited from the base's BF16 mmproj projector. The
+  load-bearing caveat is the card's own: "Benchmarks are one run per problem on SWE-bench-Live… treat small
+  differences as noise" (n=25) — the honest headline, in the same class as the disclaimer-stripping cases in
+  [[fact-check]] but on the virtuous side. Bonus quality-control story: a side note documents that Ornith's
+  original **MTP head shipped as random-init weights** until a trained one was re-uploaded Aug 23, verified
+  by kurtosis statistics — check the checkpoints, not the card.

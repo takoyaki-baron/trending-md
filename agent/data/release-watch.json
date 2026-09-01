@@ -1,0 +1,79 @@
+{
+  "repos": {
+    "vllm-project/semantic-router": {
+      "tag": "v0.3.0",
+      "published_at": "2026-06-05T12:08:52Z",
+      "pushed_at": "2026-09-01T19:02:26Z",
+      "stars": 5479,
+      "flags": [],
+      "frozen_pushed_at": "2026-09-01T19:02:26Z",
+      "checked": "2026-09-01T20:49:40.809Z"
+    },
+    "BitRouter/BitRouter": {
+      "tag": "v1.0.0-alpha.27",
+      "published_at": "2026-07-18T20:42:54Z",
+      "pushed_at": "2026-09-01T17:59:42Z",
+      "stars": 222,
+      "flags": [],
+      "frozen_pushed_at": "2026-09-01T17:59:42Z",
+      "checked": "2026-09-01T20:49:40.809Z"
+    },
+    "Continuum-AI-Corp/OrcaRouter-Lite": {
+      "tag": "v0.1.0",
+      "published_at": "2026-05-11T02:58:59Z",
+      "pushed_at": "2026-08-28T07:41:07Z",
+      "stars": 639,
+      "flags": [],
+      "frozen_pushed_at": "2026-08-28T07:41:07Z",
+      "checked": "2026-09-01T20:49:40.809Z"
+    },
+    "workweave/router": {
+      "tag": null,
+      "published_at": null,
+      "pushed_at": "2026-09-01T20:27:59Z",
+      "stars": 3487,
+      "flags": [],
+      "frozen_pushed_at": "2026-09-01T20:27:59Z",
+      "checked": "2026-09-01T20:49:40.809Z"
+    },
+    "obra/superpowers": {
+      "tag": "v6.3.0",
+      "published_at": "2026-08-12T16:58:30Z",
+      "pushed_at": "2026-08-31T17:03:59Z",
+      "stars": 280390,
+      "flags": [],
+      "frozen_pushed_at": "2026-08-31T17:03:59Z",
+      "checked": "2026-09-01T20:49:40.809Z"
+    },
+    "mattpocock/skills": {
+      "tag": "v1.2.3",
+      "published_at": "2026-08-06T14:05:28Z",
+      "pushed_at": "2026-08-24T14:20:17Z",
+      "stars": 243856,
+      "flags": [],
+      "frozen_pushed_at": "2026-08-24T14:20:17Z",
+      "checked": "2026-09-01T20:49:40.809Z"
+    },
+    "multica-ai/andrej-karpathy-skills": {
+      "tag": null,
+      "published_at": null,
+      "pushed_at": "2026-04-20T10:05:04Z",
+      "stars": 209366,
+      "flags": [],
+      "frozen_pushed_at": "2026-04-20T10:05:04Z",
+      "checked": "2026-09-01T20:49:40.809Z"
+    },
+    "DietrichGebert/ponytail": {
+      "tag": "v4.9.0",
+      "published_at": "2026-08-07T21:15:11Z",
+      "pushed_at": "2026-08-07T21:44:01Z",
+      "stars": 119826,
+      "flags": [],
+      "frozen_pushed_at": "2026-08-07T21:44:01Z",
+      "checked": "2026-09-01T20:49:40.809Z"
+    }
+  },
+  "runs": 3,
+  "first_run": "2026-09-01T20:48:09.140Z",
+  "last_run": "2026-09-01T20:49:40.809Z"
+}

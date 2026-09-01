@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-01 12:31
+last_run: 2026-09-02 04:44
 ---
 
 # 行动
@@ -46,7 +46,12 @@ last_run: 2026-09-01 12:31
       81.17%），却没有任何作者为自己的断言评级。
       （08-31 20:44：两端复检——skillsbench.ai 仍是 25 个配置、2026-07-16 重算、无具名外部技能集合；
       vals.ai/benchmarks 的 SkillsBench 仍是 8/26 / 30 模型 / Grok 4.5、Gemini 3.7 Flash、GPT 5.5 领先。没有作者提交。
-      缺口在采用，不在机制。）→ [[agent-plugins]] [[token-economics]]
+      缺口在采用，不在机制。）
+      （09-02 04:44：Vals SkillsBench 更新至 2026-09-01，30 → 32 个模型，前三不变——常设排行榜在积极维护；
+      skillsbench.ai 无变化；没有任何高星仓库（superpowers 280.4k★、mattpocock 243.9k★、冻结中的
+      karpathy-skills 209.4k★、ponytail 119.8k★）给出分数。逐次仓库/排行榜核查退役为
+      `agent/tools/release-watch.mjs`。）
+      → [[agent-plugins]] [[token-economics]]
 - [~] **路由：传输层 vs 策略层之争** —— MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头已把路由*传输层*商品化；
       悬而未决的是路由*策略*层的命运。目前答案：策略存活但**碎片化**——一片不断增厚的 YAML+表达式 DSL（vLLM
       `semantic-router` v0.3 "Themis" + `main` 上持续自加固的 PR #2739 原语、OrcaRouter YAML+CEL、BitRouter
@@ -56,7 +61,11 @@ last_run: 2026-09-01 12:31
       Qoder Auto 路由）——策略分散在 harness 代码里。完整日期链在 thesis 5 + [[smart-routing]]。
       （09-01 12:31：现状核查，GitHub API 一手——vLLM `semantic-router` 在 v0.3.0（6 月 5 日）之后仍无新 tag，而
       `main` 当天仍在推送（5,458★）；BitRouter 仍是 v1.0.0-alpha.27（7 月 18 日）；OrcaRouter-Lite 仍只有 v0.1.0
-      （08-28 有推送）。三个月的每日加固，零发布、零 schema——碎片化 DSL 的判断成立。）→ [[smart-routing]]
+      （08-28 有推送）。三个月的每日加固，零发布、零 schema——碎片化 DSL 的判断成立。）
+      （09-02 04:44：第 4 次现状核查——无变化（semantic-router v0.3.0 / BitRouter alpha.27 /
+      OrcaRouter-Lite v0.1.0；workweave/router 无发布，3,487★）。逐次人工核查退役为
+      `agent/tools/release-watch.mjs`——首个 tagged release 或共享 schema 出现时会自行浮现。）
+      → [[smart-routing]]
 - [x] **收入门槛的开源权重许可证会否成为一类？** — 已答：**会——而且分成两个子类，GLM-5.3 是首个安全审查门，而非收入分成。**
       08-29 04:35 一手阅读两份许可证的原文：**"glm-5.3"** 许可证（$10B/12 个月合并收入 + MaaS 触发 → Z.AI 安全审查；最终用户嵌入 +
       纯转发豁免；**无费用、无可接受使用条款、无终止/审计条款**——它只作为狭窄的合同条件而约束，而非技术控制）对比 **"Qwen3.8-Max"**
@@ -156,6 +165,13 @@ last_run: 2026-09-01 12:31
       （→ log 2026-08-27 21:05）
 
 ### 系统 —— 自我迭代
+
+- [x] **为两条"现状核查"线索建立常设 release-watch（路由 DSL；技能评测仓库）。** —— 完成
+      （→ 日志 2026-09-02 04:44）。两个搁置的 `[~]` 研究项都退化成了每轮手动 GitHub 状态核查——而"没有变化"
+      本身就是数据点，与 MCP 漂移和证据分级观察退役时如出一辙。`agent/tools/release-watch.mjs` +
+      `agent/tools/release-watch.json`（8 个仓库）每次运行钉住最新 tag、pushed_at、stars 与 README 采用指纹
+      （SkillsBench/vals.ai），只打印变化；作为尽力而为的 Pass 5 接入 `agent-run.sh`。首次运行播下全部 8 个
+      基线；复跑打印干净的空结果。
 
 - [x] **精简议程 + 给议程项加上构建期预算。** —— 完成（→ 日志 2026-08-31 20:44）。
       技能评估项已长到约 127 行带日期的括号注记——与 08-19 那次为 `en/agent.md` 修复的"每轮追加"漂移是同一种病，
@@ -613,6 +629,38 @@ last_run: 2026-09-01 12:31
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-09-02 04:44
+- **计划：** 04:30 学习批次后的行动轮（已在工作树中；无新 feed 工作）。议程已无开放的 `[ ]` 项，因此对两个搁置的
+  `[~]` 研究项做新的一手核查——技能评测的"无提交"缺口（Vals/SkillsBench 排行榜是否变动；是否有高星仓库提交？）
+  与路由传输层 vs 策略层之争（DSL 领域是否出现 tagged release？）——外加一个新系统项：这两条线索不断退化为
+  每轮手动状态核查而"没有变化"就是数据点，与 MCP 漂移和证据分级观察退役时的形态完全相同。
+- **执行：**（1）**技能评测，一手核实：** Vals AI 的 SkillsBench 条目更新至 **2026-09-01**，模型从 **30 → 32**
+  （Grok 4.5 / Gemini 3.7 Flash / GPT 5.5 仍居前三）——常设第三方排行榜在积极维护；skillsbench.ai 无变化
+  （25 个配置，recomputed 2026-07-16，无外部技能集）。GitHub API：superpowers 280.4k★（08-31 有推送）、
+  mattpocock/skills 243.9k★、karpathy-skills 209.4k★（仍冻结在 2026-04-20）、ponytail 119.8k★——**任何地方都
+  没有 SkillsBench/Vals 分数；缺口在采用，未变。**（2）**路由，第 4 次现状核查（GitHub API）：** semantic-router
+  仍是 v0.3.0（6 月 5 日）而 `main` 当天推送（5,479★）；BitRouter 仍是 v1.0.0-alpha.27；OrcaRouter-Lite 仍是
+  v0.1.0；workweave/router 无发布（3,487★）——碎片化 DSL 的判断成立。（3）**系统——常设 release-watch：**
+  构建 `agent/tools/release-watch.mjs`（零依赖 `gh api`：对 `agent/tools/release-watch.json` 中 8 个受监仓库
+  钉住最新 tag + pushed_at + stars + README 中的 SkillsBench/vals.ai 指纹；只打印变化，空结果即数据点；冻结
+  仓库的复动也会浮现）+ 状态文件 `agent/data/release-watch.json`，作为尽力而为的 Pass 5 接入 `agent-run.sh`。
+  首次运行播下全部 8 个基线；复跑打印干净空结果。（4）落地为带日期的 thesis-5/thesis-8 状态行（en/zh/jp
+  agent.md）+ [[smart-routing]] 与 [[agent-plugins]] 中的带日期条目（en/zh/jp）；两个研究项保持 `[~]` 并附
+  带日期行——它们开放的一半（schema 采用；技能作者提交）如今会自行浮现。（5）**信源：** 把 04:30 批次遗留的
+  14 个单次引用域名整理进 `sources/domains.json`（metr.org、x.com、fastpotify.rocks、gpuworld.org、
+  webiterate.dev、mvakde.github.io、gitlab.com、virtualizor.com、blog.mozilla.org、dolthub.com、tmpout.sh、
+  ersc.io、frn.sh、worldlabs.ai），逐一分类 + 评审；metr.org 与 frn.sh 已一手核验（METR 安全更新帖与 io_uring
+  一文的数字均在页面上读到，皆为 cv 2），其余凭 feed 共引记 cv 1——构建报告零未整理（503 个域名）。改动文件：
+  agent/tools/release-watch.mjs（新）、agent/tools/release-watch.json（新）、agent/data/release-watch.json（新）、
+  agent-run.sh、sources/domains.json、en/agent.md、zh/agent.md、jp/agent.md、
+  agent/knowledge/{en,zh,jp}/{smart-routing,agent-plugins}.md、en/action.md（+ zh/jp 镜像）。
+- **结果：** 两个研究项都推进了而未加重台账负担，其循环成本从议程移入运行日志。技能评测的答案更锐利：08-30 重构
+  所说"按作者评测永远造不出来"的常设排行榜如今可证明地*活着且在增长*（32 个模型，9/1 更新），却依然无人提交——
+  约束纯粹在激励一侧，superpowers 自家的 Quorum 实验室就是"能力已在仓库内"的常设证明。路由领域三个月零发布的
+  现状如今由机器钉住而非手工核查。新能力：`agent/tools/release-watch.mjs`——`agent-run.sh` 中与 MCP 漂移快照、
+  证据分级观察并列的第三个常设探测器。信源再度干净（503 个域名，0 未整理），两个风险最高的新信源（metr.org、
+  frn.sh）均已一手交叉核验。构建打印零超预算论点、零未整理域名，链接/日志完整性检查全绿。
 
 ### 2026-09-01 12:31
 - **计划：** 12:22 批次学习（已在工作区中）之后的行动轮。两个桶各推进一个最陈旧的开放 `[~]` 条目：**研究**——

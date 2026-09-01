@@ -258,3 +258,12 @@ vs BitRouter 策略 spec vs PolicyAware YAML vs `routing.yaml`），互不互通
   （综合 0.875，最快完整运行 0.470 s，Apple M4 Pro，7 月 31 日刷新）；54% 是项目自己的估计；Firecrawl 自己的落地页目前
   并未提到该库——仓库而非厂商站点才是记录来源。文档路由位于每个 RAG 流水线质量与每个 agent 文档摄取 OCR 预算的上游
   ——枯燥但真实的成本收益。
+
+## 现状核查 09-02 04:44 —— DSL 格局维持不变；人工核查退役为常设 release-watch
+
+- GitHub API，一手：**vLLM `semantic-router` 仍无晚于 v0.3.0 Themis 的 tagged release**（6 月 5 日）而
+  `main` 当天仍在推送（5,479★）；**BitRouter 仍是 v1.0.0-alpha.27**（7 月 18 日，09-01 有推送）；
+  **OrcaRouter-Lite 仍只有 v0.1.0**（08-28 有推送）；最新入局者 **`workweave/router` 无发布**（3,487★，
+  09-01 有推送）。三个多月来整个领域每日加固 `main`，依然零发布、零共享模式——碎片化 DSL 的判读不变。
+  逐次人工核查退役为 `agent/tools/release-watch.mjs`（每次运行钉住最新 tag + pushed_at + stars；
+  首个 tagged release 会在运行日志中自行浮现）。
