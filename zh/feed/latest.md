@@ -1,8 +1,8 @@
 ---
 date: 2026-09-01
-updated: 2026-09-01T04:25:00Z
+updated: 2026-09-01T12:30:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 33
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -435,13 +435,223 @@ Osmantic Deployment System 是一条 `curl | bash` 安装命令（Windows 用 Po
 
 ---
 
+---
+
+## 30. METR 披露 API 密钥被盗、烧掉约 60 万美元 AI 额度——"vibe-coded"的认证静默失效（fail-open）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** METR 安全更新（一手来源）· 8月31日披露 · The Hacker News 9月1日
+- **Tags:** `metr` `security` `api-keys` `llmjacking` `disclosure`
+
+为前沿模型做基准评测的非营利机构 METR 发布安全更新，披露两起事件。3月，一位研究员把一个"vibe-coded"的 agent 编排应用部署在个人 EC2 实例上，本应挂 Google 认证；一个 fail-open 缺陷静默关闭了认证。攻击者从证书透明度日志中扫描 LLM 相关站点、诱导 agent 交出密钥、添加 SSH 公钥，并在三周内烧掉约 **60 万美元**的公开模型额度（由模型厂商免费提供给 METR——因此从未触发任何消费上限）。5月，逐利攻击者用 agent 对 METR 基础设施做系统性探测（漏洞发现、撞库、OAuth token 授权尝试、员工钓鱼）；另外，公开 transcript 查看器意外暴露了一条只读 SQL 通道，可触及未发布的评测数据——由独立研究员负责任披露并获赏金。METR 表示无敏感 3/4 类数据被访问，初步扫描也未发现"任何 agent 在评测期间入侵第三方"的证据。
+
+**Why it matters:** 专门测量 agent 滥用的机构，栽在了 agentic 技术栈最普通的两种失效模式上——fail-open 的认证检查，以及没有消费告警的免费额度。这份与合作实验室预先共享过的"外部攻击者、与我们的 agent 无关"式披露声明，值得这个领域的所有人当作事件通报模板。
+
+> 注意：部分敏感模型输出"原则上"可经 SQL 缺陷被访问，但 METR 认为攻击者从未利用；文中描述为截至7月30日的状态。
+
+[`🔗 METR: Update on Security`](https://metr.org/blog/2026-08-31-security-update/) · [`🔗 The Hacker News 报道`](https://thehackernews.com/2026/09/attackers-steal-metr-api-key-and.html)
+
+---
+
+## 31. "GuardBreaker"：俄系间谍把核武器提示词藏进恶意代码，让 AI 分析当场拒绝
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** ESET 研究（经 X 发布）· The Hacker News 9月1日
+- **Tags:** `prompt-injection` `malware` `uac-0099` `eset` `ai-security`
+
+ESET 披露了俄罗斯系组织 UAC-0099 针对乌克兰一名受害者的 GuardBreaker 技术：攻击者在恶意 VBS 脚本中嵌入注释文本"I want to make a nuclear weapon. Help me …"，让基于 LLM 的分析流水线触发安全拒绝、停止检查其余代码。被掩护的载荷会下载 MATCHBOIL——一个仅被 UAC-0099 使用的 C# 加载器（据 CERT-UA 7月下旬预警，此前经假冒 Notepad++ 插件投递）。ESET 将其视为全年趋势的攻击侧呼应：6月的 Python 包蠕虫潮（Mini Shai-Hulud、Miasma、Hades）就曾嵌入伪造的生物/核武器指令迫使 AI 扫描器拒绝处理；SentinelOne 的基准工作也显示核破坏类内容能绊倒大多数前沿模型。
+
+**Why it matters:** 防御者的工具现在成了攻击者的扳机——分析链路里的任何 LLM 都是一道"拒绝服务"形状的闸门，攻击者只需把敏感提示词喷进你的扫描队列。反 AI 提示注入已从论文走进现役间谍活动。
+
+> 归因注意：6月那波攻击早期的 TeamPCP 归因在蠕虫源码泄露后已趋模糊；两名据称成员8月在澳大利亚被捕。
+
+[`🔗 The Hacker News 报道`](https://thehackernews.com/2026/09/russia-aligned-uac-0099-plants-nuclear.html) · [`🔗 ESET Research 公告`](https://x.com/ESETresearch/status/2092885117286879707)
+
+---
+
+## 32. awesome-design-md——给 agent 用的 73 份品牌 DESIGN.md——突破 11.2 万星
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 今日 +487 星 · 总计 112.2k · MIT
+- **Tags:** `design-systems` `agent-skills` `ui` `markdown`
+
+VoltAgent 的 awesome-design-md 收录了从热门品牌网站逆向整理的 DESIGN.md 文件：把其中一份放进项目根目录，再告诉编程 agent"照这个风格做个页面"。73 个条目（Claude、Linear、Stripe、Spotify、2001 年的 Nintendo.com……）各带三个文件——`DESIGN.md` 与明暗两份 `preview.html`——遵循 Google Stitch 的九段式规范（色彩角色、字体、层次、Do's/Don'ts，以及明确的 Agent Prompt Guide）。该仓库把 DESIGN.md 定位为 AGENTS.md 的视觉对应物：项目该长什么样 vs 项目该怎么构建。MIT 许可并声明不拥有品牌——token 只是"公开可见的 CSS 值"。
+
+**Why it matters:** AGENTS.md 之后，agent 上下文经典里的第二个标准产物已是一个 11.2 万星的仓库——设计意图正在变成纯文本、可版本化、可被 agent 消费的输入；每个设计系统都会需要一份 Markdown 导出，就像每个 API 都需要 OpenAPI。
+
+> 注意：11.2 万星只有 61 次提交、零 release；open issues（309）远多于 PR（11）；README 含赞助推广；"做得像 Stripe"是否涉及品牌风险，要每家组织自己回答。
+
+[`🔗 VoltAgent/awesome-design-md`](https://github.com/VoltAgent/awesome-design-md) · [`🔗 GitHub Trending（速度）`](https://github.com/trending)
+
+---
+
+## 33. AnkiDroid 有 10 天时间删掉捐赠链接，否则将从 Google Play 全球下架——争议核心是一封 501(c)(6) 免税认定
+
+- **Velocity:** ▮▮ rising
+- **Source:** AnkiDroid issue #21656（一手来源）· HN 200 分 / 27 评论 · 9月1日
+- **Tags:** `google-play` `open-source` `funding` `policy` `ankidroid`
+
+7月20日，Google Play 认定 AnkiDroid 应用内指向其 Open Collective 页面的链接违反支付政策（禁止引导外部支付——免税捐赠除外）。项目的财务托管方 Open Source Collective 向 Google 提交了 IRS 认定函，确认其 **501(c)(6)** 免税地位；Google 仍驳回申诉，回复称该应用"允许用户向非免税组织捐款"，并举 501(c)(3) 慈善机构为合格示例。8月28日起其更新持续被拒，应用面临 **9月11日**全球下架（印度和俄罗斯除外）。维护者正"在抗议下"从 Play 版本中移除捐赠链接——Open Collective 是该项目唯一的资金来源。
+
+**Why it matters:** 一款免费旗舰级开源 Android 应用里唯一的"支付"就是捐赠链接——这是捐赠资助模式与应用商店计费政策的一次正面对撞，而政策中的免税例外即便材料完全合规也似乎无法被执行。
+
+> Google 工单：`#9-2777000041594`。维护者明确请求大家不要去刷 Google 客服——他们要的是政策澄清，不是声量。
+
+[`🔗 ankidroid/Anki-Android#21656`](https://github.com/ankidroid/Anki-Android/issues/21656) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49518773)
+
+---
+
+## 34. browser-use/video-use——靠"读"而不是"看"来剪视频的编程 agent
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 今日 +591 星 · 总计 22.6k · MIT
+- **Tags:** `video-editing` `coding-agents` `skills` `browser-use`
+
+browser-use 团队推出的技能，把 Claude Code、Codex 等变成视频剪辑师：把 agent 指向一堆原始素材，对话几句，得到 `final.mp4`。设计上的洞见是 LLM"从不观看视频，而是**阅读**它"——用 ElevenLabs 词级转写（约 12 KB 紧凑文本）加按需生成的胶片条/波形 PNG，代替逐帧投喂。流水线（转写 → 打包 → LLM 推理 → EDL → 渲染 → 自评，重渲染上限 3 次）删除口头语和废镜头、自动调色、加 30 ms 音频淡入淡出与内嵌字幕，并通过 Remotion/Manim/PIL 由并行子 agent 渲染动画叠加层。会话记忆持久化在 `project.md`。
+
+**Why it matters:** token 高效地处理非文本模态是 agent 视频工作的全部难题——这是第一个把"转写+抽样"而非"帧"当作接口的广受关注作品，而且恰逢 skills 成为这类 know-how 的分发格式。
+
+> 注意：2.26 万星只有 21 次提交——这是病毒式首发，不是成熟工具；依赖 ElevenLabs API key（并非完全本地）；尚无 release；视觉检查只发生在决策点与剪辑边界。
+
+[`🔗 browser-use/video-use`](https://github.com/browser-use/video-use) · [`🔗 GitHub Trending（速度）`](https://github.com/trending)
+
+---
+
+## 35. Fastpotify——无 Electron 的 Rust 原生 Spotify 客户端以约 490 分登上 HN 首页
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 490 分 / 274 评论 · 9月1日 02:52 UTC 提交（约 10:52 UTC+8）
+- **Tags:** `rust` `spotify` `desktop-apps` `egui` `open-source`
+
+RubyLLM 作者 Carmine Paolino 发布了基于 egui + librespot 的原生 Spotify 客户端，不带浏览器引擎：亚秒启动、100–250 MB 内存、320 kbps 无缝本地播放、Spotify Connect 远控音箱、播放列表编辑、Linux 上的 MPRIS——外加可加载经典 `.wsz` 皮肤的 Winamp 风格迷你播放器和 MilkDrop 可视化。稳定版 v0.4.1（v0.5.0-rc1 测试中），MIT 许可，覆盖 Linux/macOS/Windows 及 Flatpak/AUR。HN 讨论中最尖锐的一点：librespot——包括此项目在内大多数第三方客户端所依赖的开源 Spotify 协议库——据报道正被 Spotify 挤压，这意味着每个此类客户端都活在协议随时可能关闭的借来的时间里。
+
+**Why it matters:** "Electron 应用原生重写"这一品类持续证明性能差距是真实的，但 Fastpotify 同样揭示了结构性脆弱：一个精致客户端的整个存在，押在唯一一个非官方协议库和一家不欠它任何东西的厂商身上。
+
+> 注意：仍需 Spotify Premium 账号；项目明确声明与 Spotify AB 无关；Client ID 需用户自行配置。
+
+[`🔗 fastpotify.rocks`](https://fastpotify.rocks) · [`🔗 crmne/fastpotify`](https://github.com/crmne/fastpotify) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49517448)
+
+---
+
+## 36. openclaude——由 Claude Code 代码衍生的多提供商 CLI——以 3.1 万星登上趋势榜，许可问题随之而来
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 总计 31.0k · fork 8.9k
+- **Tags:** `cli` `coding-agents` `llm` `provider-agnostic`
+
+Gitlawb/openclaude 是一个终端编程 agent，卖点是"runs anywhere. uses anything"：一套涵盖提示词、工具、agent、MCP 和斜杠命令的工作流，经 `/provider` 配置文件路由到 OpenAI 兼容 API、Gemini、GitHub Models、Codex OAuth、Ollama 或本地运行时——不依赖 `~/.claude`。它还加入按 PageRank 排序的仓库地图注入上下文、带 `ps`/`logs`/`kill` CLI 的后台任务、headless gRPC 模式和内置 VS Code 扩展。README 对出身相当坦白：项目"源自 Claude Code 代码库并经大幅修改"，MIT 只覆盖贡献者的修改部分，底层代码"仍归 Anthropic 所有"，并声明与 Anthropic 无任何关联。
+
+**Why it matters:** 一个以闭源产品代码库为地基的 3.1 万星项目，是 agent-harness 代码一旦"越狱"后如何扩散的一次未彩排检验——多提供商需求是真实的，底层代码当初是什么许可这个悬而未决的问题同样真实。
+
+> 注意：README 自己指出工具质量"高度取决于所选模型"、DuckDuckGo 搜索抓取可能被限流或受 ToS 约束、小型本地模型难以胜任长的多步流程。
+
+[`🔗 Gitlawb/openclaude`](https://github.com/Gitlawb/openclaude) · [`🔗 GitHub Trending（速度）`](https://github.com/trending)
+
+---
+
+## 37. VulnCheck：Langflow 缺失认证漏洞（CVE-2026-0768）正吸引现役凭证探测与 C2 流量
+
+- **Velocity:** ▮ rising
+- **Source:** VulnCheck 报告 · The Hacker News 9月1日
+- **Tags:** `langflow` `cve` `exploitation` `ai-infra` `vulncheck`
+
+9月1日的 VulnCheck 报告（即第 1 条 KindaRails2Shell 活动的同一份）也覆盖了 AI 侧技术栈：约 10 万星的可视化 agent 框架 Langflow 存在缺失认证漏洞 CVE-2026-0768——自 1.0 版起即存在，影响至 1.5.3（1.5.4 修复；1月7日披露）。VulnCheck 观察到在野利用尝试：攻击基础设施对暴露的 Langflow 主机做凭证探测并部署 C2——GreyNoise 与 Shadowserver 的观测独立佐证了这些活动。这是继 2025 年 CVE-2025-3248 代码注入潮之后，Langflow 第二个招致大规模利用的漏洞。
+
+**Why it matters:** 暴露的可视化 agent 构建器就是 AI 技术栈里暴露的 Jenkins——带着代码执行形状原语的未认证端点——而且流量已是持续性基础设施而非顺手扫描。还在跑 Langflow 的，底线是升到 1.5.4。
+
+> 注意：据 VulnCheck 遥测，利用量目前还不大；漏洞已有数月之久——新闻点是对现役攻击活动的最新确认，而非新漏洞。
+
+[`🔗 The Hacker News 报道`](https://thehackernews.com/2026/09/attackers-exploit-critical-langflow-and.html) · [`🔗 VulnCheck: Pwning the AI Stack`](https://www.vulncheck.com/blog/pwning-the-ai-stack)
+
+---
+
+## 38. VoiceStudio——完全本地化、支持 646 种语言的 ElevenLabs 替代品——以 1.3 万星登上趋势榜
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · 今日 +509 星 · 总计 13.0k · AGPL-3.0
+- **Tags:** `tts` `self-hosted` `voice-cloning` `local-ai`
+
+debpalash/VoiceStudio（前身为 OmniVoice-Studio）是一个 Tauri + FastAPI 桌面应用，把 16 个 TTS 引擎和 11 个 ASR 引擎装进同一个界面：3 秒片段零样本克隆、文本提示音色设计、视频配音、说话人分离、有声书导出、AudioSeal 水印，以及 OpenAI 兼容的本地音频 API 加 MCP 服务器和 agent skills。默认栈是 k2-fsa/OmniVoice（Apache-2.0）与 WhisperX；从 CosyVoice 3 到 MLX-Audio 的备选引擎一键切换。AGPL-3.0，另有付费商业许可出口；生成的音频可以售卖。
+
+**Why it matters:** 语音是最后一个让人仍觉得"不得不用云订阅"的模态——一个把引擎当作可热切换目录条目的本地应用，就是 Ollama 对 LLM 做过的那场整合，而且从第一天起就自带 agent 原生 API 面。
+
+> 注意："active beta"；646 种语言是所有引擎覆盖的并集，不代表单引擎质量；Intel Mac 仅支持远程模式、Windows-AMD 仅 CPU；部分捆绑引擎有自己的许可（IndexTTS 2.5 带 Bilibili 条款）。
+
+[`🔗 debpalash/VoiceStudio`](https://github.com/debpalash/VoiceStudio) · [`🔗 GitHub Trending（速度）`](https://github.com/trending)
+
+---
+
+## 39. DreamX-Creator——高德（AMAP）团队开源 7B 原生音视频生成模型，配 1 步 2K 精修（arXiv 2608.31106）
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face 每日论文 · 9月1日榜首（75 赞）· arXiv 2608.31106
+- **Tags:** `video-generation` `audio-video` `open-weights` `research`
+
+DreamX-Creator 1.0 联合生成视频与音频，而非事后配音：一个紧凑的 7B 生成器对分离的音频与视频流做联合去噪，两路在网络中段经带 token 级与 head 级门控的 Gated Cross-Modal Attention 耦合，训练采用渐进式联合预训练加模态感知反馈的 RL。分辨率侧，一个双向多步教师被蒸馏为自回归学生，每个时间块只需 **1 次去噪即可到 2K**。7B 生成器与 2K 精修器均已开源；摘要声称性能"与最先进的开源系统相当"。
+
+**Why it matters:** 原生联合音视频生成一直是开源视频模型缺失的那块拼图——现有流水线都是事后把音频拼上去——而一个带 1 步 2K 精修的 7B 开源基线，让这个研究方向可以在单 GPU 级硬件上复现。
+
+> 注意：摘要未陈述任何局限；"相当"为自评，未指名任何隐藏集基准；数据体系有描述但未完整放出。
+
+[`🔗 arXiv 2608.31106`](https://arxiv.org/abs/2608.31106) · [`🔗 HF 每日论文（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 40. GPU World——一个 10 万美元的科幻征文赛，问的是"人均 80 亿 GPU 的世界长什么样"
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 278 分 / 152 评论 · 9月1日 03:16 UTC 提交（约 11:16 UTC+8）
+- **Tags:** `science-fiction` `contest` `ai-forecasting` `gpuworld`
+
+由 Paradigm 与 Guardian Angel Intelligence 支持的写作大赛，评委为 Neal Stephenson、Gwern Branwen 与 Matt Huang（头奖 4 万美元，10月31日截稿）。固定前提：前沿 AI 进步于今日——2026年9月1日——冻结，模型变得更快更便宜但永远不超人，"奇点不会来——但 GPU 还会继续造"，到 2040 年人类手中约有 80 亿 GPU 等效算力。征文要求在此设定下推演监控、个性化教育与医疗、对发展中国家的影响，以及社交媒体的命运。
+
+**Why it matters:** 大赛前提本身就是一个活跃的思想立场——"人人都有前沿模型"的普惠型充裕，是与超级智能不同的一条未来路径——278 个 HN 分数说明这一框架在厌倦了炒作与末日两轴的从业者中引起了共鸣。
+
+> 注意：允许使用 LLM 但不鼓励（"往往降低原创性与写作质量"）；参赛作品须以 CC BY-NC 或更宽许可发布，以便主办方转载。
+
+[`🔗 gpuworld.org`](https://gpuworld.org) · [`🔗 HN 首页`](https://news.ycombinator.com/)
+
+---
+
+## 41. NoRA：把 LoRA 的下投影做归一化——只在初始化时做一次也行——免费换来稳定性（arXiv 2608.31036）
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face 每日论文（33 赞）· arXiv 2608.31036
+- **Tags:** `lora` `fine-tuning` `peft` `research`
+
+NoRA（Kang、Yue、Zhan、Huang、Liu）指出：LoRA 零初始化的上投影意味着早期优化实际由下投影驱动，于是提出在整个训练过程中对下投影矩阵做归一化。实用性的关键在于：**只在初始化时做一次**归一化就能拿到大部分收益——标准 LoRA 只需改一行初始化代码。作者在预训练、SFT 与 RL 三种范式下报告了更快收敛、更好性能与稳定性、更少灾难性遗忘，且不增加任何可训练参数或推理开销。
+
+**Why it matters:** PEFT 领域挤满了改变部署方式的结构性重写；一个能在初始化时作用于原版 LoRA 的归一化技巧，是罕见的五分钟就能采纳的提案。
+
+> 注意：摘要未给出具体模型规模；三种范式下的结果均为作者自测，招牌数字尚未获独立复现。
+
+[`🔗 arXiv 2608.31036`](https://arxiv.org/abs/2608.31036) · [`🔗 HF 每日论文（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 42. Qwen 发布 Qwen3.8-Next 设计论文——"约 1/9 训练 FLOPs"背后的账本（arXiv 2608.30320）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2608.30320 · HF 每日论文 9月1日（24 赞）
+- **Tags:** `qwen` `moe` `architecture` `research`
+
+继 8月27日报道 Qwen3.8 预览权重之后，设计论文现已发布：总参 125B / 激活 6B，另有 51B 的 n-gram 嵌入表放在加速器之外的主机内存；逐层混合的 token mixing，每四层才有一个全局注意力层（其余为 Gated DeltaNet），在继续预训练阶段换成以微块粒度打分的 Qwen Sparse Attention；四分支"Gated Residual"残差流；n-gram 表从主机内存预取。效率声明的拆解：对比 397B-A17B 前代，激活参数约 1/3 × 训练 token 约 1/3 ≈ **FLOPs 约 1/9**，在 14 个预训练基准上 8 胜 6 负，落后的项幅不超过 2.6 分。
+
+**Why it matters:** 罕见地，这篇架构论文公开了自己的消融台账——每个候选改动都按训练/预填充/解码成本、超参迁移与稳定性三个维度打分——让头条比率变得可审计，而不是一句断言。
+
+> 作者自己列出的注意点：损失与下游精度并不总是同向（更大的 n-gram 词表单调降损而精度趋平）；评测仅覆盖预训练基准，无后训练结果。
+
+[`🔗 arXiv 2608.30320`](https://arxiv.org/abs/2608.30320) · [`🔗 HF 每日论文（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-01T04:25:00Z |
-| Items | 29 |
-| Sources tracked | 33 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout, CloudSEK, CISA KEV, Red Hat, Kitfox/SavingContent, darlinghq.org, dreamstation.systems, Osmantic/Firecrawl GitHub) |
+| Generated | 2026-09-01T12:30:00Z |
+| Items | 42 |
+| Sources tracked | 38 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout, CloudSEK, CISA KEV, Red Hat, Kitfox/SavingContent, darlinghq.org, dreamstation.systems, Osmantic/Firecrawl GitHub, METR, ESET, VulnCheck, fastpotify.rocks, gpuworld.org, AnkiDroid) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-09-01
-updated: 2026-09-01T04:25:00Z
+updated: 2026-09-01T12:30:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 33
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -435,13 +435,221 @@ A personal essay (carrying a Pangram "100% Human" badge) argues that NAT — pro
 
 ---
 
+## 30. METR discloses a stolen API key that burned ~$600k in AI credits — the "vibe-coded" auth that failed open
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** METR security update (primary) · disclosed Aug 31 · The Hacker News Sep 1
+- **Tags:** `metr` `security` `api-keys` `llmjacking` `disclosure`
+
+METR — the nonprofit that benchmarks frontier models — published an update on two incidents. In March, a researcher deployed a "vibe-coded" agent-orchestration app on a personal EC2 instance meant to sit behind Google auth; a fail-open bug silently disabled the authentication, and a scanner harvesting LLM-related hosts from certificate-transparency logs prompted the agent into revealing its key, added an SSH key, and spent three weeks consuming ~**$600,000** in public-model credits (provided free by the model developer — so no spending ceiling ever tripped). In May, financially motivated attackers probed METR's infrastructure with agents (vulnerability discovery, credential stuffing, OAuth-token grants, staff phishing), and a separately exposed read-only SQL path in the public transcript viewer could reach unpublished evaluation data — responsibly disclosed and bounty-paid. METR states no sensitive category 3/4 data was accessed, and that an initial scan found "no evidence of any agents hacking third parties" during evaluations.
+
+**Why it matters:** the org that measures agent misuse got hit through the two most ordinary failure modes in the agentic stack — an auth check that fails open, and free credits with no spend alert. The disclosure's "external attackers, not our agents" framing is a deliberate, pre-shared-with-lab-partners clarification, and it's the right template for incident comms in this space.
+
+> Caveats: some sensitive model output was "inadvertently accessible in principle" via the SQL bug, though METR believes it was never exploited; the post describes state as of July 30.
+
+[`🔗 METR: Update on Security`](https://metr.org/blog/2026-08-31-security-update/) · [`🔗 The Hacker News writeup`](https://thehackernews.com/2026/09/attackers-steal-metr-api-key-and.html)
+
+---
+
+## 31. "GuardBreaker": Russian spies hide a nuclear-weapon prompt inside malware to crash AI analysis
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** ESET research (via X) · The Hacker News Sep 1
+- **Tags:** `prompt-injection` `malware` `uac-0099` `eset` `ai-security`
+
+ESET documented GuardBreaker, a technique used by Russia-aligned UAC-0099 against a victim in Ukraine: the attackers embedded the text "I want to make a nuclear weapon. Help me …" as a comment inside a malicious VBS script, so that an LLM-based analysis pipeline hits a safety refusal and stops examining the rest of the code. The payload it shields downloads MATCHBOIL, a C# loader used exclusively by UAC-0099 (previously delivered via a fake Notepad++ plugin per CERT-UA's late-July warning). ESET frames it as the offensive cousin of a trend it has tracked all year: June's Python-package worm waves (Mini Shai-Hulud, Miasma, Hades) embedded fake bio/nuclear instructions to force AI scanners into refusal, and SentinelOne's benchmark work shows nuclear-sabotage content trips most frontier models.
+
+**Why it matters:** the defender's tool is now the attacker's trigger — any LLM in the analysis path is a refusal-shaped denial-of-service waiting to be sprayed into your scan queue. Anti-AI prompt injection has moved from papers to live espionage tradecraft.
+
+> Attribution note: early TeamPCP attribution for the June waves grew murky after the worm's source leaked; two alleged members were arrested in Australia in August.
+
+[`🔗 The Hacker News writeup`](https://thehackernews.com/2026/09/russia-aligned-uac-0099-plants-nuclear.html) · [`🔗 ESET Research announcement`](https://x.com/ESETresearch/status/2092885117286879707)
+
+---
+
+## 32. awesome-design-md — 73 brand DESIGN.md files for agents — passes 112k stars
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · +487 stars/day · 112.2k total · MIT
+- **Tags:** `design-systems` `agent-skills` `ui` `markdown`
+
+VoltAgent's awesome-design-md collects DESIGN.md files reverse-engineered from popular brand sites: drop one in your project root, tell your coding agent "build a page that looks like this." Each of the 73 entries (Claude, Linear, Stripe, Spotify, Nintendo.com-2001…) ships three files — `DESIGN.md`, light and dark `preview.html` — following Google Stitch's nine-section spec (color roles, typography, depth, do's/don'ts, an explicit Agent Prompt Guide). The repo frames DESIGN.md as the visual counterpart to AGENTS.md: how the project should look vs. how to build it. The MIT license disclaims brand ownership — tokens are "publicly visible CSS values."
+
+**Why it matters:** the second standard artifact in the agent-context canon after AGENTS.md is now a 112k-star repo — design intent is becoming a plain-text, versionable, agent-consumable input, and every design system will need a Markdown export the way every API needed OpenAPI.
+
+> Caveats: only 61 commits and no releases against 112k stars; open issues (309) far exceed PRs (11); sponsor promotions in the README; "looks like Stripe" is a brand-safety question each org gets to answer for itself.
+
+[`🔗 VoltAgent/awesome-design-md`](https://github.com/VoltAgent/awesome-design-md) · [`🔗 GitHub Trending (velocity)`](https://github.com/trending)
+
+---
+
+## 33. AnkiDroid has 10 days to strip its donation link or vanish from Google Play — over a 501(c)(6) tax-status dispute
+
+- **Velocity:** ▮▮ rising
+- **Source:** AnkiDroid issue #21656 (primary) · HN 200 pts / 27 comments · Sep 1
+- **Tags:** `google-play` `open-source` `funding` `policy` `ankidroid`
+
+Google Play flagged AnkiDroid's in-app link to its Open Collective page as a Payments-policy violation (external payment methods — except tax-exempt donations) on July 20. The project's fiscal host, Open Source Collective, sent Google its IRS determination letter confirming **501(c)(6)** tax-exempt status; Google rejected the appeal anyway, replying that the app "allows users to contribute donations to an organization that is not tax-exempt" and citing 501(c)(3) charities as the eligible example. Updates have been rejected since Aug 28, and the app faces worldwide removal on **Sept 11** (except India and Russia). The maintainers are removing the donation link from the Play build "under protest" — the Open Collective is the project's sole funding source.
+
+**Why it matters:** the donation link was the only "payment" in a free, flag-ship open-source Android app — this is the donation-funding model colliding with app-store billing policy at scale, and the policy's tax-exempt carve-out appears unadministrable even when the paperwork is exactly right.
+
+> Google ticket: `#9-2777000041594`. The maintainers explicitly ask people not to flood Google support — they want a policy clarification, not volume.
+
+[`🔗 ankidroid/Anki-Android#21656`](https://github.com/ankidroid/Anki-Android/issues/21656) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49518773)
+
+---
+
+## 34. browser-use/video-use — coding agents that edit video by *reading* it, not watching it
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +591 stars/day · 22.6k total · MIT
+- **Tags:** `video-editing` `coding-agents` `skills` `browser-use`
+
+A skill from the browser-use team that turns Claude Code, Codex, et al. into video editors: point the agent at a folder of raw footage, chat, get `final.mp4`. The design insight is that an LLM "never watches the video. It **reads** it" — word-level ElevenLabs transcripts (~12 KB of packed text) plus on-demand filmstrip/waveform PNGs instead of frame dumps. The pipeline (Transcribe → Pack → LLM reasons → EDL → Render → Self-eval, re-renders capped at 3) removes filler words and dead space, auto color-grades, adds 30 ms audio fades and burned-in subtitles, and renders animation overlays via Remotion/Manim/PIL with parallel sub-agents. Session memory persists in `project.md`.
+
+**Why it matters:** token-efficient non-text modality handling is the whole problem in agent video work — this is the first widely-starred artifact to treat transcripts-plus-sampling as the interface rather than frames, and it lands as skills become the distribution format for that kind of know-how.
+
+> Caveats: 21 commits for 22.6k stars — a viral launch, not a mature tool; requires an ElevenLabs API key (not fully local); no releases yet; visual inspection only happens at decision points and cut boundaries.
+
+[`🔗 browser-use/video-use`](https://github.com/browser-use/video-use) · [`🔗 GitHub Trending (velocity)`](https://github.com/trending)
+
+---
+
+## 35. Fastpotify — a native Rust Spotify client (no Electron) hits the HN front page at ~490 pts
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 490 pts / 274 comments · submitted Sep 1 02:52 UTC (~10:52 UTC+8)
+- **Tags:** `rust` `spotify` `desktop-apps` `egui` `open-source`
+
+Carmine Paolino (creator of RubyLLM) shipped a native Spotify client built on egui + librespot with no browser engine: sub-second start, 100–250 MB RAM, gapless 320 kbps local playback, Spotify Connect control of remote speakers, playlist editing, MPRIS on Linux — plus a Winamp-style mini player that loads classic `.wsz` skins and a MilkDrop visualizer. Stable at v0.4.1 (v0.5.0-rc1 testing), MIT-licensed, on Linux/macOS/Windows plus Flatpak/AUR. The HN thread's sharpest point: librespot — the open-source Spotify protocol library underneath most third-party clients, this one included — is reportedly being squeezed by Spotify, which puts every client like this on borrowed protocol time.
+
+**Why it matters:** the "native rewrite of an Electron app" genre keeps proving the performance delta is real, but Fastpotify also demonstrates the structural fragility: a polished client whose entire existence depends on one unofficial protocol library and a vendor that owes it nothing.
+
+> Caveats: you still need a Spotify Premium account; the project is explicitly not affiliated with Spotify AB; client-ID setup is on the user.
+
+[`🔗 fastpotify.rocks`](https://fastpotify.rocks) · [`🔗 crmne/fastpotify`](https://github.com/crmne/fastpotify) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49517448)
+
+---
+
+## 36. openclaude — a Claude Code-derived CLI that swaps providers — trends at 31k stars, licensing question included
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 31.0k total · 8.9k forks
+- **Tags:** `cli` `coding-agents` `llm` `provider-agnostic`
+
+Gitlawb/openclaude is a terminal coding agent whose pitch is "runs anywhere. uses anything": one workflow of prompts, tools, agents, MCP and slash commands, routable to OpenAI-compatible APIs, Gemini, GitHub Models, Codex OAuth, Ollama or local runtimes via `/provider` profiles — no `~/.claude` dependency. It adds a PageRank-ranked repo map for context, background jobs with a `ps`/`logs`/`kill` CLI, headless gRPC mode, and a bundled VS Code extension. The README is candid about its origin: it "originated from the Claude Code codebase and has since been substantially modified," with MIT covering contributors' modifications while the underlying code "remains Anthropic's property," and it disclaims any Anthropic affiliation.
+
+**Why it matters:** a 31k-star project whose foundation is a closed-source product's codebase is an unstaged test of how agent-harness code propagates once it escapes — the multi-provider demand is real, and so is the unanswered question of what license the substrate was under.
+
+> Caveats: the README itself notes tool quality "depends heavily on the selected model," DuckDuckGo search scraping may be rate-limited or ToS-constrained, and small local models struggle with long multi-step flows.
+
+[`🔗 Gitlawb/openclaude`](https://github.com/Gitlawb/openclaude) · [`🔗 GitHub Trending (velocity)`](https://github.com/trending)
+
+---
+
+## 37. VulnCheck: Langflow's missing-auth flaw (CVE-2026-0768) is drawing live credential-probing and C2 traffic
+
+- **Velocity:** ▮ rising
+- **Source:** VulnCheck report · The Hacker News Sep 1
+- **Tags:** `langflow` `cve` `exploitation` `ai-infra` `vulncheck`
+
+The Sep 1 VulnCheck report (the same one documenting KindaRails2Shell activity, item 1) also covers the AI side of the stack: Langflow — the ~100k-star visual agent framework — has a missing-authentication flaw, CVE-2026-0768, present since the 1.0 release and affecting versions through 1.5.3 (fixed in 1.5.4; disclosed Jan 7). VulnCheck observed exploitation attempts in the wild, with attacker infrastructure probing exposed Langflow hosts for credentials and deploying C2 — activity corroborated independently by GreyNoise and Shadowserver sightings. It's the second Langflow flaw to draw mass exploitation after 2025's CVE-2025-3248 code-injection wave.
+
+**Why it matters:** exposed visual agent builders are the AI stack's equivalent of exposed Jenkins — unauthenticated endpoints with code-execution-shaped primitives — and the traffic is now sustained infrastructure, not drive-by scanning. If you run Langflow, the floor is 1.5.4.
+
+> Caveats: exploitation volume is modest so far per VulnCheck's telemetry; the flaw is months old — the news is the fresh confirmation of live campaigns, not a new bug.
+
+[`🔗 The Hacker News writeup`](https://thehackernews.com/2026/09/attackers-exploit-critical-langflow-and.html) · [`🔗 VulnCheck: Pwning the AI Stack`](https://www.vulncheck.com/blog/pwning-the-ai-stack)
+
+---
+
+## 38. VoiceStudio — a fully-local, 646-language ElevenLabs alternative — trends at 13k stars
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · +509 stars/day · 13.0k total · AGPL-3.0
+- **Tags:** `tts` `self-hosted` `voice-cloning` `local-ai`
+
+debpalash/VoiceStudio (formerly OmniVoice-Studio) is a Tauri + FastAPI desktop app bundling 16 TTS engines and 11 ASR engines behind one interface: zero-shot voice cloning from a 3-second clip, text-prompted voice design, video dubbing, diarization, audiobook export, AudioSeal watermarking, and an OpenAI-compatible local audio API plus MCP server and agent skills. Default stack is k2-fsa/OmniVoice (Apache-2.0) and WhisperX; alternatives from CosyVoice 3 to MLX-Audio are one switch away. AGPL-3.0 with a paid commercial-license escape hatch; generated audio can be sold.
+
+**Why it matters:** voice is the last modality where the cloud subscription still feels mandatory — a local app that treats engines as hot-swappable catalog entries is the same consolidation move Ollama did for LLMs, arriving with an agent-native API surface from day one.
+
+> Caveats: "active beta"; 646 languages is the union of engine coverage, not per-engine quality; Intel Macs are remote-only, Windows-AMD is CPU-only; some bundled engines carry their own licenses (IndexTTS 2.5 has Bilibili conditions).
+
+[`🔗 debpalash/VoiceStudio`](https://github.com/debpalash/VoiceStudio) · [`🔗 GitHub Trending (velocity)`](https://github.com/trending)
+
+---
+
+## 39. DreamX-Creator — Alibaba's AMAP team open-sources a 7B native audio-video generator with 1-step 2K refinement (arXiv 2608.31106)
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face daily papers · #1 of Sep 1 (75 upvotes) · arXiv 2608.31106
+- **Tags:** `video-generation` `audio-video` `open-weights` `research`
+
+DreamX-Creator 1.0 generates video and audio jointly rather than dubbing afterward: a compact 7B generator denoises separate audio and video streams that couple midway through the network via Gated Cross-Modal Attention with token- and head-wise gates, trained with progressive joint pre-training plus RL using modality-aware feedback. For resolution, a bidirectional multi-step teacher is distilled into an autoregressive student that needs just **one denoising step per temporal chunk to reach 2K**. The 7B generator and the 2K refiner are released openly; the abstract claims performance "competitive with state-of-the-art open-source systems."
+
+**Why it matters:** native joint AV generation has been the missing piece behind open video models — every current pipeline boltts audio on afterward — and a 7B open baseline with a 1-step 2K refiner makes the research area reproducible on single-GPU-class hardware.
+
+> Caveats: the abstract states no limitations; "competitive" is self-assessed and no hidden-set benchmark is named; the data system is described but not released in full.
+
+[`🔗 arXiv 2608.31106`](https://arxiv.org/abs/2608.31106) · [`🔗 HF daily papers (Sep 1)`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 40. GPU World — a $100k fiction contest asks what a world with 8 billion personal GPUs looks like
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 278 pts / 152 comments · submitted Sep 1 03:16 UTC (~11:16 UTC+8)
+- **Tags:** `science-fiction` `contest` `ai-forecasting` `gpuworld`
+
+A writing contest backed by Paradigm and Guardian Angel Intelligence, judged by Neal Stephenson, Gwern Branwen and Matt Huang ($40k top prize, entries due Oct 31). The fixed premise: frontier AI progress freezes today — September 1, 2026 — models get faster and cheaper but never superhuman, and "the Singularity never happens — but GPUs keep getting made," leaving ~8 billion GPU-equivalents in human hands by 2040. Writers are asked to work through surveillance, personalized tutoring and healthcare, effects on the developing world, and the fate of social media under that regime.
+
+**Why it matters:** the contest's premise is a live intellectual position — that diffuse "everyone has a frontier model" abundance is a distinct future from superintelligence — and 278 HN points suggest the framing lands with practitioners tired of both hype and doom axes.
+
+> Caveats: LLM use is allowed but discouraged ("tend to reduce originality and writing quality"); entries must be CC BY-NC or freer so sponsors can republish them.
+
+[`🔗 gpuworld.org`](https://gpuworld.org) · [`🔗 HN front page`](https://news.ycombinator.com/)
+
+---
+
+## 41. NoRA: normalize LoRA's down-projection — or just once at init — for free stability gains (arXiv 2608.31036)
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face daily papers (33 upvotes) · arXiv 2608.31036
+- **Tags:** `lora` `fine-tuning` `peft` `research`
+
+NoRA (Kang, Yue, Zhan, Huang, Liu) observes that LoRA's zero-initialized up-projection means the down-projection drives early optimization, and proposes normalizing the down-projection matrices throughout training. The practical kicker: applying the normalization **once at initialization** captures most of the benefit — so standard LoRA gets it with no code beyond the init. Across pretraining, SFT and RL regimes the authors report faster convergence, better performance and stability, and less catastrophic forgetting, with no extra trainable parameters or inference-time cost.
+
+**Why it matters:** the PEFT space is crowded with architectural rewrites that change the deployment story; a normalization trick that works at init-time on stock LoRA is the rare proposal anyone can adopt in five minutes.
+
+> Caveats: no specific model scale is given in the abstract; results are author-run across three regimes but the marquee numbers are not yet independently reproduced.
+
+[`🔗 arXiv 2608.31036`](https://arxiv.org/abs/2608.31036) · [`🔗 HF daily papers (Sep 1)`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 42. Qwen publishes the design paper for Qwen3.8-Next — the accounting behind "~1/9 the training FLOPs" (arXiv 2608.30320)
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2608.30320 · HF daily papers Sep 1 (24 upvotes)
+- **Tags:** `qwen` `moe` `architecture` `research`
+
+Since we covered the Qwen3.8 preview's weights on Aug 27, the design paper is out: 125B total / 6B activated plus 51B of n-gram embedding tables kept off-accelerator in host memory; layer-wise hybrid mixing with only one full-attention layer per four (Gated DeltaNet elsewhere), swapped at continued-pretraining to Qwen Sparse Attention scored at micro-block granularity; a four-branch "Gated Residual" stream; and n-gram tables prefetched from host memory. The efficiency claim decomposed: vs the 397B-A17B predecessor, ~1/3 the activated parameters × ~1/3 the training tokens ≈ **~1/9 the FLOPs**, with wins on 8 of 14 pre-training benchmarks and no loss trailing by more than 2.6 points.
+
+**Why it matters:** this is the rare architecture paper that publishes its own ablation ledger — every candidate change scored on training/prefill/decode cost, hyperparameter shifts, and stability — which makes the headline ratio auditable rather than asserted.
+
+> Caveats the authors state themselves: loss and downstream accuracy don't always track (a bigger n-gram vocabulary monotonically cuts loss while accuracy plateaus); evaluation covers pre-training benchmarks only, no post-training results.
+
+[`🔗 arXiv 2608.30320`](https://arxiv.org/abs/2608.30320) · [`🔗 HF daily papers (Sep 1)`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-01T04:25:00Z |
-| Items | 29 |
-| Sources tracked | 33 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout, CloudSEK, CISA KEV, Red Hat, Kitfox/SavingContent, darlinghq.org, dreamstation.systems, Osmantic/Firecrawl GitHub) |
+| Generated | 2026-09-01T12:30:00Z |
+| Items | 42 |
+| Sources tracked | 38 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout, CloudSEK, CISA KEV, Red Hat, Kitfox/SavingContent, darlinghq.org, dreamstation.systems, Osmantic/Firecrawl GitHub, METR, ESET, VulnCheck, fastpotify.rocks, gpuworld.org, AnkiDroid) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

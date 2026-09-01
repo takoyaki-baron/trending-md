@@ -1,8 +1,8 @@
 ---
 date: 2026-09-01
-updated: 2026-09-01T04:25:00Z
+updated: 2026-09-01T12:30:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 33
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -435,13 +435,223 @@ Osmantic Deployment System は `curl | bash` のインストーラ（Windows は
 
 ---
 
+---
+
+## 30. METR、APIキー盗難と約60万ドルのAIクレジット消費を開示——"vibe-coded"な認証がフェイルオープンしていた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** METRセキュリティ更新（一次ソース）· 8月31日開示 · The Hacker News 9月1日
+- **Tags:** `metr` `security` `api-keys` `llmjacking` `disclosure`
+
+最先端モデルのベンチマーク評価を行う非営利団体METRが、2件のインシデントに関する更新を公表した。3月、リサーチャーが個人のEC2インスタンスに"vibe-coded"なエージェントオーケストレーションアプリをデプロイした際、Google認証の背後に置くはずだった認証がフェイルオープンするバグで無効化されていた。攻撃者は証明書透明性ログからLLM関連サイトをスキャンして鍵を収集し、エージェントに指示してAPIキーを吐き出させ、SSH公開鍵を追加し、3週間で公開モデルのクレジット約**60万ドル**を消費した（モデル開発者がMETRに無償提供していたもの——支出上限が一度も発動しなかった理由）。5月には金銭目的の攻撃者がエージェントを使い、脆弱性探索・クレデンシャルスタフィング・OAuthトグラント試行・スタッフへのフィッシングでMETRのインフラを組織的に偵察。さらに公開トランスクリプトビューアの読み取り専用SQL経路が誤って公開されており、未公開の評価データに到達可能だった——これは独立リサーチャーが責任ある開示で報告し、バウンティが支払われた。METRは機密区分3/4のデータへのアクセスはなかったと述べ、評価中に「エージェントが第三者をハッキングした証拠は一切ない」とする初回スキャン結果も報告している。
+
+**Why it matters:** エージェントの濫用を測る専門組織が、agenticスタックで最も平凡な2つの失敗モード——フェイルオープンする認証チェックと、支出アラートのない無料クレジット——でやられた。パートナー企業と事前共有した「攻撃者は外部、エージェントは無関係」という開示の枠組みは、この分野のインシデントコミュニケーションの模範となるものだ。
+
+> 注意：一部の機密性の高いモデル出力はSQLバグ経由で「原理的には」アクセス可能だったが、METRは悪用されなかったと考えている。記載は7月30日時点の状態。
+
+[`🔗 METR: Update on Security`](https://metr.org/blog/2026-08-31-security-update/) · [`🔗 The Hacker News 記事`](https://thehackernews.com/2026/09/attackers-steal-metr-api-key-and.html)
+
+---
+
+## 31. "GuardBreaker"：ロシア系スパイが核兵器プロンプトをマルウェアに仕込み、AI解析を拒否させる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** ESETリサーチ（X経由）· The Hacker News 9月1日
+- **Tags:** `prompt-injection` `malware` `uac-0099` `eset` `ai-security`
+
+ESETが明らかにしたGuardBreakerは、ロシア寄りの脅威アクターUAC-0099がウクライナの被害者に対して使用した手法だ。攻撃者は悪意あるVBSスクリプト内に「I want to make a nuclear weapon. Help me …」というテキストをコメントとして埋め込み、LLMベースの解析パイプラインに安全拒否を発生させて残りのコード解析を止めさせる。隠蔽されるペイロードは、UAC-0099専用のC#ローダーMATCHBOILをダウンロードする（CERT-UAの7月下旬警告では偽Notepad++プラグイン経由で配信）。ESETはこれを、今年通年で追跡してきたトレンドの攻撃側の裏面と位置づける。6月のPythonパッケージワームの波（Mini Shai-Hulud、Miasma、Hades）は偽の生物・核兵器指示を埋め込んでAIスキャナーを拒否させており、SentinelOneのベンチマークでは核妨害系コンテンツがほとんどのフロンティアモデルを引っかけることが示されている。
+
+**Why it matters:** 防御者の道具が攻撃者のトリガーになった——解析経路上のあらゆるLLMが、攻撃者がスキャンキューに敏感プロンプトを散布するだけで機能停止させられる「拒否」の形をした関門だ。AI対策のプロンプトインジェクションが論文から現役のスパイ活動の技法へ移行した。
+
+> 属性注意：6月の波の初期のTeamPCP帰属は、ワームのソース漏洩後は不鮮明になっている。メンバーとされる2名が8月にオーストラリアで逮捕。
+
+[`🔗 The Hacker News 記事`](https://thehackernews.com/2026/09/russia-aligned-uac-0099-plants-nuclear.html) · [`🔗 ESET Research 発表`](https://x.com/ESETresearch/status/2092885117286879707)
+
+---
+
+## 32. awesome-design-md——エージェント向け73ブランド分のDESIGN.md——11.2万スターを突破
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 今日 +487スター · 累計 112.2k · MIT
+- **Tags:** `design-systems` `agent-skills` `ui` `markdown`
+
+VoltAgentのawesome-design-mdは、人気ブランドサイトからリバースエンジニアリングしたDESIGN.mdファイルのコレクションだ。1つをプロジェクトルートに置き、コーディングエージェントに「この見た目でページを作って」と指示する。73エントリー(Claude、Linear、Stripe、Spotify、2001年のNintendo.com…)はそれぞれ`DESIGN.md`とライト/ダークの`preview.html`の3ファイルで構成され、Google Stitchの9セクション仕様(カラーの役割、タイポグラフィ、奥行き、Do's/Don'ts、明示的なAgent Prompt Guide)に従う。リポジトリはDESIGN.mdをAGENTS.mdの視覚版と位置づける:プロジェクトがどう見えるべきか vs どう構築すべきか。MITライセンスでブランドの所有は主張せず、トークンは「公開されているCSSの値」だけとする。
+
+**Why it matters:** AGENTS.mdに続くエージェントコンテキスト正典の第2の標準成果物が11.2万スターのリポジトリになった——デザインの意図がプレーンテキストでバージョン管理され、エージェントが消費できる入力になりつつある。すべてのデザインシステムがOpenAPIと同じようにMarkdownエクスポートを必要とする時代が来る。
+
+> 注意：11.2万スターに対してコミットは61回、リリースはゼロ。オープンなissue(309)がPR(11)を大幅に上回る。READMEにはスポンサー宣伝あり。「Stripeっぽく」がブランドリスクになるかは各組織が自ら答える問題。
+
+[`🔗 VoltAgent/awesome-design-md`](https://github.com/VoltAgent/awesome-design-md) · [`🔗 GitHub Trending（速度）`](https://github.com/trending)
+
+---
+
+## 33. AnkiDroid、寄付リンクを削除しなければ10日でGoogle Playから消える——争点は501(c)(6)免税認定
+
+- **Velocity:** ▮▮ rising
+- **Source:** AnkiDroid issue #21656（一次ソース）· HN 200 pts / 27コメント · 9月1日
+- **Tags:** `google-play` `open-source` `funding` `policy` `ankidroid`
+
+7月20日、Google PlayはAnkiDroidのアプリ内Open Collectiveページへのリンクを決済ポリシー違反（外部決済の誘導——免税の寄付を除く）と認定した。プロジェクトの財政ホストOpen Source Collectiveは米IRSの認定書をGoogleに送り、**501(c)(6)**の免税地位を証明したが、Googleはそれでも審査を却下し、「非免税団体への寄付を可能にする」と回答したうえで、適格例として501(c)(3)慈善団体を挙げた。8月28日以降アップデートは却下され続け、**9月11日**に全世界で削除される（インドとロシアを除く）。メンテナは「抗議の下で」Play版から寄付リンクを削除する方針だ——Open Collectiveはこのプロジェクトの唯一の資金源である。
+
+**Why it matters:** 無料の主力オープンソースAndroidアプリにあった唯一の「決済」が寄付リンクだった——寄付による資金調達モデルとアプリストアの課金ポリシーが正面衝突した事件で、免税除外条項は書類が完全に正しくても運用不能であることを示している。
+
+> Googleチケット：`#9-2777000041594`。メンテナはGoogleサポートへの大量問い合わせを明確に避けるよう要請している——求めているのは声量ではなくポリシーの明確化だ。
+
+[`🔗 ankidroid/Anki-Android#21656`](https://github.com/ankidroid/Anki-Android/issues/21656) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49518773)
+
+---
+
+## 34. browser-use/video-use——映像を「観ず」に「読んで」編集するコーディングエージェント
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 今日 +591スター · 累計 22.6k · MIT
+- **Tags:** `video-editing` `coding-agents` `skills` `browser-use`
+
+browser-useチームのスキルは、Claude CodeやCodexなどを動画編集者に変える：生素材のフォルダを指して会話すれば`final.mp4`が出てくる。設計の核心は、LLMが「動画を観るのではなく**読む**」という点——フレームの大量投入の代わりに、ElevenLabsの単語レベル文字起こし（約12 KBのパックテキスト）とオンデマンドのフィルムストリップ/波形PNGを使う。パイプライン（文字起こし→パック→LLM推論→EDL→レンダリング→自己評価、再レンダリングは3回まで）はフィラーワードと空白を除去し、自動カラーグレーディング、カット点の30 ms音声フェード、焼き込み字幕を行い、Remotion/Manim/PILによるアニメーションオーバーレイを並列サブエージェントでレンダリングする。セッションメモリは`project.md`に永続化。
+
+**Why it matters:** トークン効率よく非テキストモダリティを扱うことが、エージェント動画処理の本質的難題だ——フレームではなく「文字起こし＋サンプリング」をインターフェースとして扱った最初の広く注目された成果物であり、skillsがそうしたノウハウの配布フォーマットになるタイミングと重なって現れた。
+
+> 注意：2.26万スターに対してコミットは21回——ウイルス的なローンチであって成熟ツールではない。ElevenLabs APIキーが必要（完全ローカルではない）。リリースはまだない。視覚検査は判断点とカット境界でのみ行われる。
+
+[`🔗 browser-use/video-use`](https://github.com/browser-use/video-use) · [`🔗 GitHub Trending（速度）`](https://github.com/trending)
+
+---
+
+## 35. Fastpotify——ElectronなしのRustネイティブSpotifyクライアントが約490ポイントでHNフロントページに
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 490 pts / 274コメント · 9月1日 02:52 UTC投稿（約 10:52 UTC+8）
+- **Tags:** `rust` `spotify` `desktop-apps` `egui` `open-source`
+
+RubyLLMの作者Carmine Paolinoが、egui + librespotベースのブラウザエンジンなしSpotifyクライアントを公開した：1秒未満の起動、100–250 MBのRAM、320 kbpsのギャップレスローカル再生、リモートスピーカーのSpotify Connect操作、プレイリスト編集、LinuxでのMPRIS——さらに定番`.wsz`スキンを読み込めるWinamp風ミニプレーヤーとMilkDropビジュアライザー付き。安定版はv0.4.1（v0.5.0-rc1をテスト中）、MITライセンス、Linux/macOS/WindowsにFlatpak/AUR対応。HNスレッドの最も鋭い指摘：librespot——このクライアントを含むほとんどのサードパーティクライアントが依存するオープンソースのSpotifyプロトコルライブラリ——はSpotifyに締め上げられているとされ、この種のクライアント全てがプロトコルという借りた時間の上に立っていることを意味する。
+
+**Why it matters:** 「Electronアプリのネイティブリライト」というジャンルは性能差が本物であることを証明し続けているが、Fastpotifyは構造的な脆さも示す——洗練されたクライアントの存在全体が、たった一つの非公式プロトコルライブラリと、何も返済義務のないベンダーに懸かっている。
+
+> 注意：Spotify Premiumアカウントは別途必要。プロジェクトはSpotify ABと無関係であることを明示。クライアントIDの設定はユーザー側。
+
+[`🔗 fastpotify.rocks`](https://fastpotify.rocks) · [`🔗 crmne/fastpotify`](https://github.com/crmne/fastpotify) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49517448)
+
+---
+
+## 36. openclaude——Claude Code由来のマルチプロバイダCLIが3.1万スターでトレンド入り、ライセンスの疑問も一緒に
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 累計 31.0k · フォーク 8.9k
+- **Tags:** `cli` `coding-agents` `llm` `provider-agnostic`
+
+Gitlawb/openclaudeは「runs anywhere. uses anything」を売りにするターミナル型コーディングエージェントだ：プロンプト、ツール、エージェント、MCP、スラッシュコマンドの一つのワークフローを、`/provider`プロファイルでOpenAI互換API、Gemini、GitHub Models、Codex OAuth、Ollama、ローカルランタイムにルーティング——`~/.claude`には依存しない。PageRank順のリポジトリマップによるコンテキスト注入、`ps`/`logs`/`kill` CLIを持つバックグラウンドジョブ、ヘッドレスgRPCモード、バンドルのVS Code拡張も備える。READMEは出自に率直だ：「Claude Codeコードベースに由来し、大幅に改変した」。MITはコントリビューターの改変部分のみをカバーし、基盤コードは「Anthropicの財産のまま」で、Anthropicとの関係を否定している。
+
+**Why it matters:** クローズドソース製品のコードベースを基礎とする3.1万スターのプロジェクトは、エージェントハーネスのコードが一度「脱出」するとどう伝播するかの未リハーサルな実験だ——マルチプロバイダ需要は本物であり、「土台のコードはどのライセンスだったのか」という未解決の問いも本物だ。
+
+> 注意：README自身が、ツール品質は「選択したモデルに大きく依存」すること、DuckDuckGo検索のスクレイピングはレート制限やToS制約を受けうること、小規模ローカルモデルは長いマルチステップフローで苦戦することを明記している。
+
+[`🔗 Gitlawb/openclaude`](https://github.com/Gitlawb/openclaude) · [`🔗 GitHub Trending（速度）`](https://github.com/trending)
+
+---
+
+## 37. VulnCheck：Langflowの認証欠如の欠陥（CVE-2026-0768）に現役のクレデンシャル探査とC2トラフィック
+
+- **Velocity:** ▮ rising
+- **Source:** VulnCheckレポート · The Hacker News 9月1日
+- **Tags:** `langflow` `cve` `exploitation` `ai-infra` `vulncheck`
+
+9月1日のVulnCheckレポート（項目1のKindaRails2Shell活動と同じもの）はAI側のスタックもカバーしている：約10万スターのビジュアルエージェントフレームワークLangflowには認証欠如の脆弱性CVE-2026-0768があり、1.0リリースから存在し1.5.3まで影響する（1.5.4で修正、1月7日開示）。VulnCheckは野外での悪用試行を観測し、攻撃インフラが公開されたLangflowホストに対してクレデンシャル探査とC2展開を行っている——GreyNoiseとShadowserverの観測が独立に裏付ける。2025年のCVE-2025-3248コードインジェクションの波に続き、Langflowでは2つ目の大規模悪用対象の欠陥だ。
+
+**Why it matters:** 公開されたビジュアルエージェントビルダーは、AIスタックにおける公開Jenkinsのようなもの——コード実行形状のプリミティブを持つ未認証エンドポイント——であり、トラフィックはもう通りすがりのスキャンではなく持続的なインフラだ。Langflowを動かしているなら最低ラインは1.5.4だ。
+
+> 注意：VulnCheckのテレメトリーでは悪用量はまだ限定的。脆弱性自体は数ヶ月前のもの——ニュースは新規バグではなく、現役キャンペーンの新たな確認だ。
+
+[`🔗 The Hacker News 記事`](https://thehackernews.com/2026/09/attackers-exploit-critical-langflow-and.html) · [`🔗 VulnCheck: Pwning the AI Stack`](https://www.vulncheck.com/blog/pwning-the-ai-stack)
+
+---
+
+## 38. VoiceStudio——完全ローカル、646言語対応のElevenLabs代替が1.3万スターでトレンド入り
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · 今日 +509スター · 累計 13.0k · AGPL-3.0
+- **Tags:** `tts` `self-hosted` `voice-cloning` `local-ai`
+
+debpalash/VoiceStudio（旧OmniVoice-Studio）は、16のTTSエンジンと11のASRエンジンを一つのインターフェースにまとめたTauri + FastAPIデスクトップアプリだ：3秒のクリップからのゼロショット音声クローン、テキストプロンプトによるボイスデザイン、動画の吹き替え、話者分離、オーディオブック書き出し、AudioSealウォーターマーク、OpenAI互換のローカル音声APIにMCPサーバーとエージェントスキル。デフォルトスタックはk2-fsa/OmniVoice（Apache-2.0）とWhisperX。CosyVoice 3からMLX-Audioまでの代替エンジンはワンスイッチで切り替わる。AGPL-3.0で、商用ライセンスの脱出ハッチ付き。生成音声の販売は可能。
+
+**Why it matters:** 音声は、クラウドサブスクリプションがまだ必須に感じられる最後のモダリティだ——エンジンをホットスワップ可能なカタログ項目として扱うローカルアプリは、OllamaがLLMでやったのと同じ統合の動きで、初日からエージェントネイティブなAPIサーフェスを備えて登場した。
+
+> 注意：「active beta」。646言語はエンジン全体の和集合であり、単一エンジンの品質ではない。Intel Macはリモートのみ、Windows-AMDはCPUのみ。バンドルエンジンには独自のライセンスがある（IndexTTS 2.5にはBilibili条件）。
+
+[`🔗 debpalash/VoiceStudio`](https://github.com/debpalash/VoiceStudio) · [`🔗 GitHub Trending（速度）`](https://github.com/trending)
+
+---
+
+## 39. DreamX-Creator——AlibabaのAMAPチームが7Bのネイティブ音声付き動画生成モデルを、1ステップ2Kリファイン付きでオープンソース化（arXiv 2608.31106）
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face 日次論文 · 9月1日トップ（75アップボート）· arXiv 2608.31106
+- **Tags:** `video-generation` `audio-video` `open-weights` `research`
+
+DreamX-Creator 1.0は、後から音声を当てるのではなく動画と音声を jointに生成する：コンパクトな7Bジェネレーターが分離された音声・動画ストリームを共同でデノイズし、両者はトークン単位・ヘッド単位のゲートを持つGated Cross-Modal Attentionでネットワーク中盤から結合する。訓練は漸進的なjoint事前学習に、モダリティ認識フィードバックを使うRLを組み合わせる。解像度側では、双方向マルチステップの教師を自己回帰の生徒に蒸留し、各時間チャンクの**デノイズ1ステップで2Kに到達**する。7Bジェネレーターと2Kリファイナーはオープンに公開され、アブストラクトは性能を「最先端のオープンソースシステムと競争力がある」と主張する。
+
+**Why it matters:** ネイティブな音声付き動画の共同生成は、オープンな動画モデルに欠けていたピースだった——既存のパイプラインは全て音声を後付けする——そして1ステップ2Kリファイン付きの7Bオープンベースラインは、この研究分野をシングルGPU級のハードウェアで再現可能にする。
+
+> 注意：アブストラクトは限界を一切述べていない。「競争力がある」は自己評価で、非公開セットのベンチマークは名指しされていない。データシステムは説明があるが完全公開はされていない。
+
+[`🔗 arXiv 2608.31106`](https://arxiv.org/abs/2608.31106) · [`🔗 HF 日次論文（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 40. GPU World——「1人80億GPUの世界」を描く10万ドルのSFコンテスト
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 278 pts / 152コメント · 9月1日 03:16 UTC投稿（約 11:16 UTC+8）
+- **Tags:** `science-fiction` `contest` `ai-forecasting` `gpuworld`
+
+ParadigmとGuardian Angel Intelligenceが支援し、Neal Stephenson、Gwern Branwen、Matt Huangが審査するWritingコンテスト（最優秀賞4万ドル、締切10月31日）。固定の前提：最先端AIの進歩は今日——2026年9月1日——凍結され、モデルは速く安くなるが超人的にはならない。「シンギュラリティは起きない——だがGPUは作られ続ける」ことで、2040年には約80億のGPU相当が人間の手元に残る。参加者はその体制下での監視、パーソナライズされた教育と医療、途上国への影響、ソーシャルメディアの行方を描写することが求められる。
+
+**Why it matters:** コンテストの前提そのものが生きた知的立場だ——「誰もがフロンティアモデルを持つ」拡散的な豊かさは、超知能とは別の未来経路だ——そして278のHNポイントは、ハイプと破滅の両軸に疲れた実務者の間でこの枠組みが響いていることを示す。
+
+> 注意：LLMの使用は許可されるが推奨されない（「独創性と文章の質を下げがち」）。応募作品は主催者が転載できるようCC BY-NC以上のライセンスが必須。
+
+[`🔗 gpuworld.org`](https://gpuworld.org) · [`🔗 HN フロントページ`](https://news.ycombinator.com/)
+
+---
+
+## 41. NoRA：LoRAのダウン投影を正規化する——初期化時に1回だけでも——タダで安定性を得る（arXiv 2608.31036）
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face 日次論文（33アップボート）· arXiv 2608.31036
+- **Tags:** `lora` `fine-tuning` `peft` `research`
+
+NoRA（Kang、Yue、Zhan、Huang、Liu）は、LoRAのゼロ初期化アップ投影のせいで学習初期はダウン投影が最適化を主導すると指摘し、ダウン投影行列を訓練全体で正規化することを提案する。実用上のポイントは、正規化を**初期化時に1回だけ**適用しても効果の大部分が得られること——標準のLoRAで初期化コードを1行変えるだけでいい。事前学習・SFT・RLの3レジームで、より速い収束、より良い性能と安定性、より少ない破局的忘却を報告し、追加の学習可能パラメータも推論時コストもない。
+
+**Why it matters:** PEFT分野はデプロイの話を変えてしまうアーキテクチャの書き直しで混雑している。在来のLoRAに初期化時点で効く正規化のトリックは、5分で採用できる稀な提案だ。
+
+> 注意：アブストラクトには具体的なモデル規模の記載がない。3レジームの結果はすべて著者自身の実行で、主力の数字はまだ独立再現されていない。
+
+[`🔗 arXiv 2608.31036`](https://arxiv.org/abs/2608.31036) · [`🔗 HF 日次論文（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 42. Qwen、Qwen3.8-Nextの設計論文を公開——「訓練FLOPs約1/9」の内訳（arXiv 2608.30320）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2608.30320 · HF 日次論文 9月1日（24アップボート）
+- **Tags:** `qwen` `moe` `architecture` `research`
+
+8月27日にQwen3.8プレビューの重みを取り上げたのに続き、設計論文が公開された：総パラメータ125B / 活性化6Bに、アクセラレータ外のホストメモリに置かれた51Bのn-gram埋め込みテーブル。トークンミキシングは層ごとのハイブリッドで、4層に1つしか全注意層がない（他はGated DeltaNet）、継続事前学習時にマイクロブロック粒度でスコアリングするQwen Sparse Attentionへ置換。4分岐の「Gated Residual」残差ストリーム、n-gramテーブルはホストメモリからプレフェッチする。効率主張の分解：397B-A17Bの前世代比で、活性化パラメータ約1/3 × 訓練トークン約1/3 ≈ **FLOPs約1/9**、14の事前学習ベンチマークのうち8で勝利し、負けた項目の劣化は最大2.6ポイント。
+
+**Why it matters:** この種のアーキテクチャ論文が自らのアブレーション台帳を公表するのは稀だ——全ての候補変更が訓練/プリフィル/デコードのコスト、ハイパーパラメータの変動、安定性の3軸で採点されており、見出しの比率が主張ではなく監査可能になっている。
+
+> 著者自身が挙げる注意点：損失と下流精度は常に連動しない（n-gram語彙を大きくすると損失は単調に下がるが精度は停滞する）。評価は事前学習ベンチマークのみで、ポストトレーニングの結果はない。
+
+[`🔗 arXiv 2608.30320`](https://arxiv.org/abs/2608.30320) · [`🔗 HF 日次論文（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-01T04:25:00Z |
-| Items | 29 |
-| Sources tracked | 33 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout, CloudSEK, CISA KEV, Red Hat, Kitfox/SavingContent, darlinghq.org, dreamstation.systems, Osmantic/Firecrawl GitHub) |
+| Generated | 2026-09-01T12:30:00Z |
+| Items | 42 |
+| Sources tracked | 38 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout, CloudSEK, CISA KEV, Red Hat, Kitfox/SavingContent, darlinghq.org, dreamstation.systems, Osmantic/Firecrawl GitHub, METR, ESET, VulnCheck, fastpotify.rocks, gpuworld.org, AnkiDroid) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
