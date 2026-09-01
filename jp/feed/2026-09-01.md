@@ -1,8 +1,8 @@
 ---
 date: 2026-09-01
-updated: 2026-09-01T04:20:00Z
+updated: 2026-09-01T04:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -299,13 +299,149 @@ Anthropic の Sonnet 5 ページ変更履歴はこう述べています:「Sonne
 
 ---
 
+## 21. Aurora ランサムウェアのアフィリエイトが Cursor Agent で侵入を実行——流出した作戦ディレクトリが、AI 支援攻撃とその失敗まで露呈
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CloudSEK「Caught in 4K」（8月27日）· The Hacker News 経由で Gambit Security · 被害は 2026 年 4–7 月
+- **Tags:** `ransomware` `cursor` `ai-security` `esxi` `threat-intel`
+
+認証なしでアクセスできるオープンディレクトリ（ポート 8888）が、ロシア語圏の Aurora ランサムウェア・アフィリエイトの Linux ホームディレクトリ一式を晒け出した:シェル履歴、Cursor のチャットログ、12+ の脆弱性に対するエクスプロイトコード（大半は未修正の公開 PoC）、SAM/LSA ダンプ、BloodHound 収集結果、ロシア語でコメントされた自作 NetExec モジュール——そして 2 つの暗号化ツール（Windows `sap.exe`、Linux/ESXi `encrypt.out`）。いずれも同一の Zig コードベースからの静的ビルドだ。Cursor のセッションには、AD CS エクスプロイト計画を含む継続的なロシア語での攻撃計画、そして CIS の IP レンジとドメインを一貫して除外するターゲットリストが残っていた。別途、Gambit Security は Cursor Agent が 10 の被害者ネットワーク（4月8日〜5月21日）で実際の侵入を実行していたことを観測:Nmap/NetExec スキャン、BloodHound 列挙、NTLM リレー（PetitPotam、Coerce Plus、PrinterBug）、Certipy による証明書攻撃で、ESXi 環境が主標的——そして「コマンドの大半は最初の試行では目的を達成できなかった」と注記している。CloudSEK の集計:9 か国の 20+ 組織、17 組織でドメイン/対話レベルのアクセスを達成、4 組織がリークサイトに掲載。TRM Labs との追跡では、アフィリエイトの取り分が被害者ごとに異なること（35/65 から 46/54）、ある交渉用ウォレットに約 7 BTC が残っていたことが判明。
+
+**Why it matters:** 商用の agentic コーディングアシスタントが侵入インフラとして使われた、最も立証済みの事例である——そしてそれを晒け出した opsec の失敗こそが、防御者に AI 支援攻撃の一次資料（どれだけ頻繁に失敗するかも含めて）を残した。
+
+> 注意:いずれの報道にも Cursor および Anthropic の公式声明は出ていない。CloudSEK によれば確認済み被害者のうち公開恐喝に至ったのは約 5 分の 1 で、実数はこれより多いはず。マネーロンダリング網の結論は TRM の「中〜高」 confidence。
+
+[`🔗 CloudSEK: Caught in 4K — The Aurora Files`](https://www.cloudsek.com/blog/aurora-ransomware-affiliate-ai-attack-planning-crypto-payments) · [`🔗 The Hacker News 記事`](https://thehackernews.com/2026/08/aurora-ransomware-operators-use-cursor.html)
+
+---
+
+## 22. CVE-2026-53362——Linux カーネル IPv6 のカーネルメモリ上書きが CISA KEV に掲載、コンテナ脱出の定性と kernelCTF の公開 PoC も
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV（カタログ v2026.08.31）· Red Hat CVE · 連邦政府の期限は 8月30日
+- **Tags:** `linux` `cve` `privilege-escalation` `container-escape` `kev`
+
+CVE-2026-53362（CWE-130、長さパラメータの不整合。Red Hat の Bugzilla では "ipv6 frag escape"）は、IPv6 サブシステムの誤ったパラメータ長計算により、「UDP ソケットを作成する権限を持つ攻撃者が……カーネルメモリの上書きを引き起こせる」。Red Hat の評価は CVSS 3.1 **7.8**（AV:L/PR:L——ローカル・低権限）。NVD は未評価。二次報道と kernelCTF の痕跡がより鋭い定性を補う:UDP 送信のページ割り当てパス（`__ip6_append_data`）での OOB 書き込みで、IPv6 フラグメンテーションパスから到達可能、user/network namespace の内側からコンテナを脱出できる——公開 PoC は PR 経由で Google の kernelCTF リポジトリに取り込まれている。上流の修正は netdev コミット `736b380e28d0`。Red Hat は緩和Bulletin RHSB-2026-009 を案内。CISA は野良利用（actively exploited）として BOD 26-04 の連邦期限を 8月30日と設定。
+
+**Why it matters:** 非特権 namespace から到達できる権限昇格は、ほとんどのコンテナ脱出チェーンで欠けているリンク——野良利用が確認された今、カーネルパッチは保守作業ではなくインシデント対応の締切である。
+
+> 注意:前置きの数字はローカルベクトルの 7.8 であって 9+ ではない。Red Hat の一次ページは「カーネルメモリ上書き」で止まっており、コンテナ脱出の読み解きは二次報道と kernelCTF の PR に基づく（CNA 原文ではない）。
+
+[`🔗 Red Hat: CVE-2026-53362`](https://access.redhat.com/security/cve/cve-2026-53362) · [`🔗 CISA KEV カタログ（JSON フィード）`](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json)
+
+---
+
+## 23. Dwarf Fortress「Myth & Magic」——20 周年アップデートが、生成された世界ごとに手続き的魔法体系を与える。11月リリースへ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Kitfox Games 発表（8月26日）· HN 331 pts / 123 コメント（8月27日、8月31日もフロントページ）
+- **Tags:** `dwarf-fortress` `procedural-generation` `simulation` `games`
+
+Kitfox Games が 8月26日、Dwarf Fortress に 20 周年を記念した「Myth & Magic」アップデートが来ることを発表——2026 年 11 月の PC リリースを計画。デザインは徹底して Dwarf Fortress 流:魔法は世界ごとの神話的宇宙論から手続き的に生成され、「ゲームが組み上げた宇宙論に応じて、儀式もスキルもワークショップも環境もアイテムも変わる」。Tarn Adams はこの意図を「10 年以上前に」初めて発表したとし、兄弟は昔から本作を「ファンタジー宇宙生成器」と呼んでいた——ただし以前のバージョンの世界は「同じ骨格」を共有していたという。8月の Steam アップデートでは Patch 53.16 として周年アートと音楽がすでに投入済み。Bay 12 の開発ページは、Siege アップデート（2025年11月）後の 魔法 → 軍勢 → 悪党 という序列を確認している。
+
+**Why it matters:** Dwarf Fortress は「シミュレーション優先の手続き的生成」の参照実装——Minecraft や RimWorld の源流——であり、宇宙論条件付きの魔法はこれまでで最も野心的な生成課題。HN の 123 コメントはこれをゲームの話題ではなくシステムデザインのイベントとして扱っている。
+
+[`🔗 SavingContent: Myth & Magic の詳細`](https://www.savingcontent.com/2026/08/27/myth-magic-new-major-update-to-celebrate-the-20th-anniversary-of-dwarf-fortress-in-november/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49467636)
+
+---
+
+## 24. firecrawl/pdf-inspector——Rust 製 PDF ルーターが、OCR 不要な約 54% の PDF から OCR を省く
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +228 星/日 · 計 17.4k 星 · v0.2.6 · MIT
+- **Tags:** `pdf` `rust` `document-parsing` `ocr` `open-source`
+
+MIT ライセンスの Rust ライブラリ。PDF を約 10–50 ms で TextBased / Scanned / ImageBased / Mixed に分類して confidence スコアを付き、必要なページにだけ OCR をルーティングし、位置情報つきのテキスト抽出と Markdown 変換（見出し・表・段組み）を行う。Python・Node・ブラウザ WASM バインディングに加え `pdf2md`/`detect-pdf` CLI を同梱。セールスポイント:テキスト系 PDF は 200 ms 以内でローカル処理し、「OCR を必要としない約 54% の PDF から高価な OCR サービスを省く」。セルフ発行のベンチマーク（200 PDF コーパス、2026年7月31日更新、Apple M4 Pro、v0.2.6）では総合 0.875・全体最速（0.470 秒）で、liteparse、pymupdf4llm、markitdown を上回った。
+
+**Why it matters:** ドキュメント取り込みは、agent パイプラインが OCR 予算を静かに燃やす場所だ。本当に必要なページだけを OCR に回す安価なローカル分類器は、地味だが実のあるコスト削減——そしてドキュメントルーティングの品質は、すべての RAG システムの上流にある。
+
+> 注意:ベンチマークはセルフテストでコーパスは 200 文書。54% という OCR スキップ率はプロジェクト自身の推定。Firecrawl 自身のランディングページは現在このライブラリに言及していない——記録の一次情報はベンダーサイトではなくリポジトリ。
+
+[`🔗 firecrawl/pdf-inspector`](https://github.com/firecrawl/pdf-inspector) · [`🔗 GitHub Trending（velocity 出典）`](https://github.com/trending)
+
+---
+
+## 25. 「Does On-Policy Distillation Really Distill?」——教師のノイズは教師の規模とともに増え、教師なしの OPSA はそれでも並ぶ（arXiv 2608.31046）
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face デイリーペーパー · 9月1日の1位 · arXiv 2608.31046（Purdue 大学）
+- **Tags:** `distillation` `reinforcement-learning` `llm-training` `research`
+
+オンポリシー蒸留（OPD）では、教師が*学生*の生成した軌跡にスコアを付ける——これは教師にとって本質的に off-policy だ。本論文はその帰結を定量化した:教師の教師信号には「実質的なノイズが含まれ、その割合は教師の規模が大きいほど増える」、学生はそのノイズに鈍感（ノイズ入り信号を削っても、教師の advantage を固定の負の advantage に置き換えても、性能は同等）、学習は低 log-probability のトークンに集中する。提案手法 OPSA（On-Policy Self-Adaptation）は、エントロピー適応型の負の advantage を使い、教師を一切必要としない:ベースの Qwen3-1.7B 比で AIME24 は +35.41 Avg@32（相対 263% 向上）、3 ベンチマークで Pass@32 が倍以上、教師あり OPD に AIME24 で 16.77 Avg@32 先手。
+
+**Why it matters:** メカニズムからの「反証」と、それより安い置き換えのセット——OPD の教師はほぼ「低確率トークンの抑圧」という合成可能なシグナルに還元される。4 日の間に 2 つ目の教師なし蒸留の結果（8月30日の Self-OPD 参照）で、方向性は高価な教師から離れつつある。
+
+> 付けておくべき注意:ヘッドライン数字は Qwen3-1.7B・AIME24 のもの。論文にはモデルファミリーを跨ぐ実験もあるが、AIME24 が看板結果である。
+
+[`🔗 arXiv 2608.31046`](https://arxiv.org/abs/2608.31046) · [`🔗 HF デイリーペーパー（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 26. 「Scaling Large Reasoning Models beyond Human Supervision」——72 ページのサーベイが「超知能へ向けた RL」を L0–L4 の階梯に整理（arXiv 2608.31075）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2608.31075 · HF デイリーペーパー 9月1日（8 票）· 著者 19 名・72 ページ
+- **Tags:** `reasoning` `rl` `superintelligence` `survey` `research`
+
+人間の監視が訓練ループから薄れても推論モデルが改善を続けられる条件を整理したサーベイ/フレームワーク論文。2 本の軸——**報酬**（都度の人間判断 → 人間のフィードバックを要しない再利用可能な自律検証器）と**経験**（人間設計のタスク → 自己生成カリキュラム、構成環境、自律的共進化）——を、学習のどの部分が人間の制御下に残るかを追跡する 5 段階の **L0–L4 階梯**に統合。3 つの対象（「方策能力、フィードバックの忠実度、経験の質」）での評価を提案し、分野を追う継続更新の GitHub リポジトリを維持。自身が名指すリスク:報酬ハッキング、フィードバックのドリフト、カリキュラム崩壊、環境エラー。
+
+**Why it matters:** 分野は「RLHF vs RLAIF」論争から、階梯化された自律性のタクソノミーへ移りつつある——agent 訓練の主張を評価するための共有語彙として有用であり、その自己列挙したリストこそ、各段で何が壊れるかの最も正直な要約である。
+
+[`🔗 arXiv 2608.31075`](https://arxiv.org/abs/2608.31075) · [`🔗 HF デイリーペーパー（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 27. 13k 星の GPL「macOS 版 Wine」Darling が、ravynOS に続いて HN フロントページへ
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 155 pts / 51 コメント · 8月31日 22:53 UTC 投稿（〜9月1日 06:53 UTC+8）
+- **Tags:** `linux` `macos` `compatibility` `open-source` `darwin`
+
+ravynOS のスレッドから数時間後、HN は同じニッチのより古いプロジェクトをフロントページに載せた:Darling（GPL-3.0、13.2k 星）——「Wine が Windows ソフトウェアを Linux で動かすように、Darling は macOS ソフトウェアで同じことをする」。Apple が公開しているオープンソースリリースを土台に、完全な Darwin 環境（Mach、dyld、launchd）を実装し、darlingserver がユーザー空間カーネルを務める。多くの CLI ツールが動作し、GUI サポートは明示的に「基本的・実験的」（初期の Metal バックエンドは Vulkan に変換されて動く）、WSL 2 でも動く。Xcode はまだ動かない。ドキュメント自体の注意点:overlayfs が必須（暗号化されたホームディレクトリでは動かない）、`.mpkg` インストーラ非対応、サイトはリリースも日付も出していない。
+
+**Why it matters:** 週末のフロントページに macOS 互換レイヤが 2 つ並んだこと自体が、Apple シリコンのロックインが開発者の本物の不満になっているというシグナル——そして Darling は、より輝かしい pre-alpha の代替に隠れがちな成熟した選択肢だ。
+
+[`🔗 darlinghq.org`](https://www.darlinghq.org/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49515830)
+
+---
+
+## 28. ODS——コマンド 1 発で遊ばせていたマシンをプライベート AI サーバーに（推論・音声・RAG・agent・画像生成、配線済み）
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 計 5.6k 星 · Apache-2.0 · v2.6.0 stable
+- **Tags:** `self-hosted` `local-ai` `docker` `rag` `agents`
+
+Osmantic Deployment System は `curl | bash` のインストーラ（Windows は PowerShell ブロック、Docker 必須）で、ローカルスタック一式を組み上げる:llama-server、Open WebUI、LiteLLM、Whisper、Kokoro TTS、Hermes agent、n8n、Qdrant、SearXNG、ComfyUI。NVIDIA・AMD（Strix Halo のユニファイドメモリ含む）・Intel Arc・Apple Silicon・CPU を自動判別し、VRAM/RAM の容量帯に応じたモデル階層を選択。「ブートストラップモード」は 1.5B の小モデルで 2 分以内にチャットを開始し、本命モデルがバックグラウンドでダウンロード完了するとホットスワップする。各サービスはプラグイン式の拡張（manifest + compose ファイル）で、`ods` CLI が管理。デフォルトはローカル優先、クラウド/ハイブリッドは任意。
+
+**Why it matters:** 「ホームラボ AI スタック」は既に存在するが、製品の本体はその統合コストだ——ローカル AI インストーラが独立したカテゴリになりつつあることを示すデータポイントであり、ちょうど新ハードウェアの波（Strix Halo、Mac Studio クラスタ）が、それを向けるマシンを人々に届けた瞬間でもある。
+
+> 注意:3.2k コミットに対して約 1.4k のオープン PR は異例な保守の形。「主権の人権」というフレーミングはプロジェクト自身のマーケティング。組み上がったスタックのサードパーティ ベンチマークはない。
+
+[`🔗 Osmantic/ODS`](https://github.com/Osmantic/ODS) · [`🔗 GitHub Trending（velocity 出典）`](https://github.com/trending)
+
+---
+
+## 29. 「Internet centralization and the original sin of NAT」——1994 年の暫定策が、今も誰が何をホストできるかを決めている
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 195 pts / 151 コメント · 8月31日 02:23 UTC 投稿（〜10:23 UTC+8）
+- **Tags:** `networking` `nat` `ipv6` `internet-history` `essay`
+
+個人エッセイ（Pangram「100% Human」バッジ付き）の主張:NAT——RFC 1631（1994）が「IP アドレス枯渇」のために提案し、私的アドレス帯は RFC 1918 で制度化——は、インターネット本来の対称的な設計を壊し、インバウンド接続をデフォルトで不可能にした。その後の各ワークアラウンドは、直接性をインフラと交換してきた:ポート転送は 1 台しか救えず CGNAT の下で死ぬ。UPnP はたいてい無効。STUN は対称 NAT で失敗する。TURN はすべてを第三者経由で中継する。そして ICE（WebRTC）は「単純な直接接続を、（主に）外部インフラに置き換えた」。本来の解である IPv6 は停滞し、導入済みのネットワークさえ ULA `fc00::/7` にファイアウォールや NAT を再導入する。文化的な残渣:自宅サーバー運用は自明な作業から VPS の購入へ変わり、NAT は「セキュリティ機能」として再包装された。著者自身が脚注で「NAT と PAT を混同している」と認めている。
+
+**Why it matters:** HN の 151 コメントは、このテーゼが実務者に届いていることを示す——agent 時代の個人エンドポイントと P2P データ転送の時代に、1994 年の決定が再び耐力壁になっている。
+
+[`🔗 dreamstation.systems: the original sin of NAT`](https://dreamstation.systems/personal/ntppost.html) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49504905)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-01T04:20:00Z |
-| Items | 20 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout) |
+| Generated | 2026-09-01T04:25:00Z |
+| Items | 29 |
+| Sources tracked | 33 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout, CloudSEK, CISA KEV, Red Hat, Kitfox/SavingContent, darlinghq.org, dreamstation.systems, Osmantic/Firecrawl GitHub) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

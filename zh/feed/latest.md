@@ -1,8 +1,8 @@
 ---
 date: 2026-09-01
-updated: 2026-09-01T04:20:00Z
+updated: 2026-09-01T04:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -299,13 +299,149 @@ Anthropic 的 Sonnet 5 页面变更日志写道:"Sonnet 5 的介绍期定价—�
 
 ---
 
+## 21. Aurora 勒索软件附属组织用 Cursor Agent 跑完整入侵流程——一次泄露的作战目录把 AI 辅助攻击（连同它的失败）摆在明面上
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CloudSEK "Caught in 4K"（8月27日）· The Hacker News 转述 Gambit Security · 受害者横跨 2026 年 4–7 月
+- **Tags:** `ransomware` `cursor` `ai-security` `esxi` `threat-intel`
+
+一个未鉴权的开放目录（端口 8888）把一名俄语 Aurora 勒索软件附属组织的整个 Linux 主目录暴露了出来:shell 历史、Cursor 聊天记录、针对 12+ 个漏洞的利用代码（多数是未修改的公开 PoC）、SAM/LSA 转储、BloodHound 采集结果、用俄语注释的自制 NetExec 模块——以及两个加密器（Windows `sap.exe`、Linux/ESXi `encrypt.out`），均由同一份 Zig 代码静态编译而来。Cursor 会话显示其用俄语进行持续性攻击规划，包括一份完整的 AD CS 利用方案，目标清单始终排除 CIS 的 IP 段和域名。另一边，Gambit Security 观察到 Cursor Agent 在 10 个受害者网络（4月8日–5月21日）中实际执行入侵:Nmap/NetExec 扫描、BloodHound 枚举、NTLM 中继（PetitPotam、Coerce Plus、PrinterBug）、Certipy 证书攻击，目标多为 ESXi 环境——并指出"大多数命令在第一次尝试时并未达成既定目标"。CloudSEK 的统计:9 个国家的 20+ 家组织、17 家被攻至域/交互级权限、4 家登上泄露站点;与 TRM Labs 追踪的支付流显示各受害者的分账比例不同（35/65 到 46/54 不等），其中一个谈判钱包内躺有约 7 BTC。
+
+**Why it matters:** 这是迄今记录最完整的"商用 agentic 编码助手被用作入侵基础设施"案例——而暴露它的那次 opsec 失误，恰恰给防御者留下了一份 AI 辅助攻击的第一手实录，包括它失败得有多频繁。
+
+> 注意事项:所有报道中均无 Cursor 或 Anthropic 的官方表态;CloudSEK 指出仅约 1/5 的确认受害者走到公开勒索阶段，因此统计数字偏低;洗钱网络结论是 TRM 的"中高"置信度。
+
+[`🔗 CloudSEK: Caught in 4K — The Aurora Files`](https://www.cloudsek.com/blog/aurora-ransomware-affiliate-ai-attack-planning-crypto-payments) · [`🔗 The Hacker News 报道`](https://thehackernews.com/2026/08/aurora-ransomware-operators-use-cursor.html)
+
+---
+
+## 22. CVE-2026-53362——Linux 内核 IPv6 内核内存覆写进入 CISA KEV，附容器逃逸定性与 kernelCTF 公开 PoC
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CISA KEV（v2026.08.31 目录）· Red Hat CVE · 联邦修复截止日为 8月30日
+- **Tags:** `linux` `cve` `privilege-escalation` `container-escape` `kev`
+
+CVE-2026-53362（CWE-130，长度参数不一致;Red Hat Bugzilla 称之为 "ipv6 frag escape"）:IPv6 子系统中的参数长度计算错误，使得"拥有创建 UDP 套接字权限的攻击者……可以触发内核内存覆写"。Red Hat 评级 CVSS 3.1 **7.8**（AV:L/PR:L——本地、低权限）;NVD 尚未评分。二手报道与 kernelCTF 线索补上了更锐利的定性:这是 UDP 发送分页分配路径（`__ip6_append_data`）上的越界写，可经 IPv6 分片路径触达，并能从 user/network namespace 内实现容器逃逸——一份公开 PoC 已通过 PR 合入 Google 的 kernelCTF 仓库。上游修复为 netdev 提交 `736b380e28d0`;Red Hat 指向缓解公告 RHSB-2026-009。CISA 将其列为在野利用，BOD 26-04 下的联邦截止日为 8月30日。
+
+**Why it matters:** 一个从非特权 namespace 即可触发的提权漏洞，正是大多数容器逃逸链中缺失的那一环——加上在野利用已获确认，内核补丁现在是应急响应截止日，而不是维护窗口。
+
+> 注意事项:标题数字是本地向量的 7.8，并非 9+;Red Hat 官方页面只写到"内核内存覆写"为止——容器逃逸的解读来自二手报道和 kernelCTF PR，而非 CNA 原文。
+
+[`🔗 Red Hat: CVE-2026-53362`](https://access.redhat.com/security/cve/cve-2026-53362) · [`🔗 CISA KEV 目录（JSON feed）`](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json)
+
+---
+
+## 23. 《矮人要塞》"Myth & Magic"——20 周年更新让每个生成的世界拥有自己的程序化魔法体系，11月上线
+
+- **Velocity:** ▮▮ rising
+- **Source:** Kitfox Games 8月26日公告 · HN 331 分 / 123 评论（8月27日，8月31日仍在首页）
+- **Tags:** `dwarf-fortress` `procedural-generation` `simulation` `games`
+
+Kitfox Games 于 8月26日宣布，《矮人要塞》将在 20 周年之际迎来 "Myth & Magic" 更新——计划 2026 年 11 月登陆 PC。设计非常"矮人要塞":魔法由每个世界的神话宇宙观程序化生成，"游戏构造出什么样的宇宙观，就会有什么样的仪式、技能、工作坊、环境和物品"。Tarn Adams 表示这一意向"十多年前"就首次公布过，兄弟俩一直把这款游戏描述为"一个奇幻宇宙生成器"，只是早期版本的世界"共享同一副骨架"。8月的 Steam 更新已随 Patch 53.16 发布了周年美术与音乐;Bay 12 开发页确认了 Siege 更新（2025年11月）之后 魔法 → 军队 → 反派 的更新序列。
+
+**Why it matters:** 《矮人要塞》是"模拟优先的程序化生成"的参照实现——Minecraft、RimWorld 的源头——而以宇宙观为条件的魔法是它迄今最宏大的生成命题;HN 上 123 条评论把它当作系统设计事件而非游戏新闻来讨论。
+
+[`🔗 SavingContent: Myth & Magic 详情`](https://www.savingcontent.com/2026/08/27/myth-magic-new-major-update-to-celebrate-the-20th-anniversary-of-dwarf-fortress-in-november/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49467636)
+
+---
+
+## 24. firecrawl/pdf-inspector——用 Rust 给 PDF 分诊，让约 54% 不需要 OCR 的 PDF 直接跳过 OCR
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +228 星/天 · 共 17.4k 星 · v0.2.6 · MIT
+- **Tags:** `pdf` `rust` `document-parsing` `ocr` `open-source`
+
+一个 MIT 许可的 Rust 库:以约 10–50 毫秒将 PDF 分类为 TextBased / Scanned / ImageBased / Mixed 并给出置信度，只在需要时按页路由 OCR，并支持位置感知的文本抽取与 Markdown 转换（标题、表格、多栏）。提供 Python、Node 和浏览器 WASM 绑定，外加 `pdf2md`/`detect-pdf` 命令行。卖点:文本型 PDF 本地 200 毫秒内处理完，"为约 54% 不需要 OCR 的 PDF 省下昂贵的 OCR 服务"。其自发布基准（200 份 PDF 语料，2026年7月31日刷新，Apple M4 Pro，v0.2.6）综合得分 0.875、全程最快（0.470 秒），领先 liteparse、pymupdf4llm 和 markitdown。
+
+**Why it matters:** 文档摄取是 agent 流水线悄悄烧掉 OCR 预算的地方;一个只把真正需要的页面送去 OCR 的本地廉价分类器，是枯燥但真实的成本优化——而文档路由质量在每一个 RAG 系统的上游。
+
+> 注意事项:基准为自测，语料仅 200 份;54% 的 OCR 跳过比例是项目自己的估计;Firecrawl 自家落地页目前并未提及这个库——以仓库为准，而非厂商站点。
+
+[`🔗 firecrawl/pdf-inspector`](https://github.com/firecrawl/pdf-inspector) · [`🔗 GitHub Trending（速度来源）`](https://github.com/trending)
+
+---
+
+## 25. "Does On-Policy Distillation Really Distill?"——教师噪声随教师规模增大，而无教师的 OPSA 照样打平（arXiv 2608.31046）
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face 每日论文 · 9月1日第1名 · arXiv 2608.31046（普渡大学）
+- **Tags:** `distillation` `reinforcement-learning` `llm-training` `research`
+
+在线策略蒸馏（OPD）让教师给*学生*生成的轨迹打分——而这些轨迹对教师而言天然是 off-policy 的。这篇论文量化了后果:教师监督中存在"大量噪声，且噪声占比随教师规模增大而上升";学生对噪声不敏感（去掉含噪监督、或用固定负优势替代教师优势，性能相仿）;学习集中在低 log-probability 的 token 上。论文提出的替代方案 OPSA（On-Policy Self-Adaptation）用熵自适应负优势、完全不需要教师:相对基座 Qwen3-1.7B，在 AIME24 上 +35.41 Avg@32（相对提升 263%），三个基准上的 Pass@32 翻倍以上，并在 AIME24 上领先基于教师的 OPD 16.77 Avg@32。
+
+**Why it matters:** 一次带机理的"证伪"+一个更便宜的替代品——OPD 中的教师大体归结为"压制低概率 token"这一可合成的信号。四天内出现两个无教师蒸馏结果（参见 8月30日 Self-OPD），标志着方向正在离开昂贵教师。
+
+> 值得保留的注意事项:头条数字来自 Qwen3-1.7B 上的 AIME24;论文有跨模型族实验，但 AIME24 是门面结果。
+
+[`🔗 arXiv 2608.31046`](https://arxiv.org/abs/2608.31046) · [`🔗 HF 每日论文（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 26. "Scaling Large Reasoning Models beyond Human Supervision"——72 页综述把"通往超级智能的 RL"整理成 L0–L4 阶梯（arXiv 2608.31075）
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2608.31075 · HF 每日论文 9月1日（8 赞）· 19 位作者、72 页
+- **Tags:** `reasoning` `rl` `superintelligence` `survey` `research`
+
+一篇综述/框架论文，梳理当人类监督淡出训练回路后推理模型如何继续提升:两条轴——**奖励**（逐例人类判断 → 无需人类反馈的可复用自主验证器）与**经验**（人类设计任务 → 自生成课程、构造环境、自主共同进化）——统一为五级 **L0–L4 阶梯**，标注学习中还有多少环节处于人类控制之下。论文提出围绕三个对象评估（"策略能力、反馈保真度、经验质量"），并维护一个持续更新的领域 GitHub 仓库。它自己点名的风险:奖励作弊、反馈漂移、课程坍塌、环境错误。
+
+**Why it matters:** 该领域正从"RLHF vs RLAIF"之争走向阶梯化的自主性分类法——这是评估 agent 训练主张的共享词汇，而它自己的风险清单就是对每一级会坏掉什么最诚实的总结。
+
+[`🔗 arXiv 2608.31075`](https://arxiv.org/abs/2608.31075) · [`🔗 HF 每日论文（9月1日）`](https://huggingface.co/papers?date=2026-09-01)
+
+---
+
+## 27. 13k 星的 GPL"macOS 版 Wine"Darling 跟着 ravynOS 一起登上 HN 首页
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 155 分 / 51 评论 · 8月31日 22:53 UTC 提交（~9月1日 06:53 UTC+8）
+- **Tags:** `linux` `macos` `compatibility` `open-source` `darwin`
+
+在 ravynOS 讨论帖数小时后，HN 首页推上了同一细分领域里更老的项目:Darling（GPL-3.0，13.2k 星）——"Wine 让你在 Linux 上跑 Windows 软件，Darling 对 macOS 软件做同样的事。"它基于苹果公开发布的开源代码实现完整 Darwin 环境（Mach、dyld、launchd），darlingserver 充当用户态内核;许多命令行工具可用，GUI 支持明确标注"基础实验性"，最初的 Metal 后端经翻译跑在 Vulkan 上，可在 WSL 2 下运行，Xcode 尚不能运行。文档自带注意事项:需要 overlayfs（加密主目录会出问题）、不支持 `.mpkg` 安装包，且站点不发布 release 和日期。
+
+**Why it matters:** 一个周末的首页上出现两个 macOS 兼容层项目，是"苹果硅锁定"成为开发者真实怨气的信号——而 Darling 是被更闪亮的 pre-alpha 替代品遮住的成熟选项。
+
+[`🔗 darlinghq.org`](https://www.darlinghq.org/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49515830)
+
+---
+
+## 28. ODS——一条命令把闲置机器变成私有 AI 服务器（推理、语音、RAG、agent、图像生成，全部接线完毕）
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 共 5.6k 星 · Apache-2.0 · v2.6.0 稳定版
+- **Tags:** `self-hosted` `local-ai` `docker` `rag` `agents`
+
+Osmantic Deployment System 是一条 `curl | bash` 安装命令（Windows 用 PowerShell 块，需 Docker），组装出完整本地栈:llama-server、Open WebUI、LiteLLM、Whisper、Kokoro TTS、Hermes agent、n8n、Qdrant、SearXNG 和 ComfyUI。自动识别 NVIDIA、AMD（含 Strix Halo 统一内存）、Intel Arc、Apple Silicon 或 CPU，按显存/内存档位自动选型;"bootstrap 模式"先用 1.5B 小模型在 2 分钟内开聊，正式模型后台下载完后热切换。每个服务都是可插拔扩展（manifest + compose 文件），由 `ods` CLI 管理;默认本地优先，云/混合可选。
+
+**Why it matters:** "家庭实验室 AI 栈"早已存在，但集成税才是产品本体——ODS 是"本地 AI 安装器正在自成一个品类"的数据点，恰好赶上新硬件浪潮（Strix Halo、Mac Studio 集群）给人们送来了可指向它的机器。
+
+> 注意事项:约 1.4k 开放 PR 对 3.2k 次提交是个罕见的维护形态;"主权人权"式话术是项目自己的营销;组装后的整栈没有第三方基准。
+
+[`🔗 Osmantic/ODS`](https://github.com/Osmantic/ODS) · [`🔗 GitHub Trending（速度来源）`](https://github.com/trending)
+
+---
+
+## 29. "Internet centralization and the original sin of NAT"——1994 年的权宜之计，至今仍在决定谁有资格架设服务器
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 195 分 / 151 评论 · 8月31日 02:23 UTC 提交（~10:23 UTC+8）
+- **Tags:** `networking` `nat` `ipv6` `internet-history` `essay`
+
+一篇个人博文（带有 Pangram "100% Human" 徽章）提出:NAT——RFC 1631（1994）为解决"IP 地址枯竭"而提出、私有地址段由 RFC 1918 划定——打破了互联网最初的对称设计，让入站连接默认不可能。随后每一种变通都在用直接性交换基础设施:端口转发只能服务一台设备且在 CGNAT 下失效;UPnP 常被禁用;STUN 在对称 NAT 下失效;TURN 把一切流量经由第三方中继;而 ICE（WebRTC）"用（主要是）外部基础设施取代了简单的直连"。真正的解法 IPv6 停滞不前，即便部署了的网络也会在 ULA `fc00::/7` 上重新加回防火墙或 NAT。文化残留:在家架服务器从轻而易举变成一次 VPS 消费，NAT 还被重新包装成"安全特性"。作者自己在脚注里承认文章"混淆了 NAT 和 PAT"。
+
+**Why it matters:** HN 上 151 条评论说明这个论点击中了从业者——而在 agent 时代的个人端点与 P2P 数据传输浪潮里，1994 年的那个决定再次成为承重墙。
+
+[`🔗 dreamstation.systems: the original sin of NAT`](https://dreamstation.systems/personal/ntppost.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49504905)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-01T04:20:00Z |
-| Items | 20 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout) |
+| Generated | 2026-09-01T04:25:00Z |
+| Items | 29 |
+| Sources tracked | 33 (Hacker News, GitHub Trending, Hugging Face, arXiv, Ruby on Rails advisory, SecurityWeek, Rapid7, The Hacker News, BleepingComputer, Sygnia, Keycloak, CCS '26 / gururaj-s.github.io, Kimi platform docs, MacRumors, The Information, Anthropic, OpenAI, Pipecat, Linas, Jiemian/163, C++ Stories, playaphone.com, jasontucker.blog, Signals & Silence, Finout, CloudSEK, CISA KEV, Red Hat, Kitfox/SavingContent, darlinghq.org, dreamstation.systems, Osmantic/Firecrawl GitHub) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
