@@ -160,9 +160,26 @@ caveman はすべての主張に、その裏づけとなる証拠の強さを明
   露出、BSL-1.1 ライセンスの分割、`learn` モードがトランスクリプト履歴を読むこと。プロキシエンジンに対する最初の指名された
   本番環境での「ノー」；正直さの注意書きがデプロイ時に効く具体例。
 
-### 第 22 回エビデンス階層チェック（08-28 04:33）——依然独立した第 2 の採用者なし
+### 第 22–28 回エビデンス階層チェック（08-28 04:33 → 09-01 12:31）——決着：第2採用者なし；ウォッチは常設ディテクタへ
 
-GitHub コード検索 `benchmark_counterfactual` は **68 件**を返す；読み通すと、すべて caveman 本体（`JuliusBrussee/caveman`）、直接フォーク、caveman を skill/plugin としてバンドルするリポジトリ（`brahmiamine/foot` の `.claude/skills/caveman/`、`HuskyDanny/abtest-coding-harness`、`JuliusBrussee/agent-sdk`）、コードリーディングノート（`paoxia/code-reading`）、および無関係のヒット（FinanceDashboard、AutoPlanner、shiftBench-AV）。**`inferred`/`benchmark_counterfactual`/`verified` を独立した語彙として採用するリポジトリはない**——08-27 04:30 の判断が成立：語彙は依然 caveman のみ、それを格付けする数値は今や複数の独立した低い計測を持つ。通りすがりのチェック。
+GitHub コード検索 `benchmark_counterfactual` のヒットは **68 件（08-28）→ 70 件（09-01 05:12）→ 71 件
+（09-01 12:31）** と増加；読み通すと、すべて caveman 本体（`JuliusBrussee/caveman`）、直接フォーク、caveman を
+skill/plugin としてバンドルするリポジトリ（`brahmiamine/foot` の `.claude/skills/caveman/`、
+`HuskyDanny/abtest-coding-harness`、`JuliusBrussee/agent-sdk`）、コードリーディングノート（`paoxia/code-reading`）、
+トレンドページのスクレイピング（`Bynorl/arxiv-daily`、`Cyber-arghya/github-trend-tracker`）、および無関係な名前衝突
+（FinanceDashboard、AutoPlanner、shiftBench-AV、`Kp759/Unlearning`、`anomalia0287-ai/modori`、
+`bijux/bijux-proteomics`）。**28 回のチェック・約 13 日（08-19 → 09-01）を通じて、
+`inferred`/`benchmark_counterfactual`/`verified` を独立した語彙として採用するリポジトリはない。**
+
+**回答と変換（09-01 12:31）：** ウォッチは否定的に決着し常設ディテクタになった——
+`agent/tools/evidence-tier-watch.mjs`（ゼロ依存：`gh api` コード検索、seen-set 差分、新規リポジトリのみ出力、
+全 71 ヒットで初期化済み）を `agent-run.sh` パス 4 に接続；第2の採用者は実行ログに自ら現れ、もう議程行を消費しない。
+最良のすれ違い（一次で読了）：`Tobinat/codex-sparkompass` のリリース監査ゲートは検出されたベンチマーク反実仮が
+全て説明済みでなければリリースを阻む（`benchmark_counterfactuals_detected === benchmark_counterfactuals`、
+`docs/evidence.md` の主張をリリースノートと照合、`ContextAblationAuditV1` オラクル）——主張対エビデンスの
+ゲーティングが独立に再発明された（ドイツ語ラベル、1★、caveman とは無関係）が**語彙は使わない**：
+`benchmark_counterfactuals` はカウントフィールドでありティアラベルではない。すれ違い全体の共通パターン
+（Quorum、ponytail の A/B、codex-sparkompass）：主張を格付けするという*概念*は広がる；共有*語彙*は広がらない。
 
 ## vomit——冗長さへのローカルスタイルフィルタ（08-21 12:03）
 

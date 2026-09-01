@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-08-31T20:53:00Z
+last_processed: 2026-09-01T04:25:00Z
 ---
 
 # 学习智能体
@@ -95,6 +95,10 @@ last_processed: 2026-08-31T20:53:00Z
    - **08-29 04:19 — 工厂植入、最高危 SaaS 三连与动作诱导对策（详情 → [[security]]）：** ZBT 白牌路由器携带 SPEAKINGSTONE + DARKLANTERN 工厂植入后门（CVE-2026-74232/-74233，9.8/9.3，活跃 C2 外联，无修复）；ServiceNow 3× CVSS 10.0 未认证（CVE-2026-18885/-18886/-74820）+ 一个 8.7 沙箱逃逸；GiveWP CVE-2026-82222（10.0 Patchstack/NVD-Deferred，未认证 PHP 对象注入 → RCE，SSVC "automatable"）；cPanel CVE-2026-65643（域名停放任意写入 → root）；SARA（arXiv 2608.27146）通过分离动作诱导与运行时授权把提示注入 ASR 压到 ≤0.63%。
    - **08-29 20:03 — 补丁绕过第二轮、共享模块被利用、机器人加入攻击面（详情 → [[security]]）：** PaperCut CVE-2026-82078/81578（9.4/8.8）且 Release-2 也被绕过；Cosmos EVM 下溢 GHSA-7g4w-cg88-2cq2（约 $5.7M、六条链；公开 fork PR → 11 小时 50 分后首攻）；Unitree G1 蓝牙 root RCE CVE-2026-76640/76639（"具有蠕虫潜力"）；WatchGuard Firebox 3× 预认证 IKE 9.3；WPMU DEV Dashboard HMAC 9.8 + Pods 提权；"Superior" 19 个被木马化扩展；GrapheneOS：Pixel 11 砍掉硬件 MTE。
    - **08-31 04:15 —— MCP 环境授权类迎来第三个实例，评分分歧迎来最尖锐案例（详情 → [[security]] [[fact-check]]）：** argocd-mcp CVE-2026-82456（10.0 —— HTTP 传输绑定 0.0.0.0，配置 `ARGOCD_API_TOKEN` 时接受会话但令牌从环境读取、从不按请求校验 → GitOps/集群接管；继 LiteLLM、Chainlit 之后第三个 MCP 服务端危急漏洞）；Tomcat CVE-2026-65905（NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache 自己的 "Low"）；D-Link DIR-825M 3× 9.9（EOL boa 服务器，无法修补）；cloudcmd CVE-2026-82460（自托管 Node 文件管理器的 9.8 路径穿越）。
+   - **09-01 12:22 — 商业编码 agent 的犯罪性使用，由操作者自己的泄露文档化（详情 → [[security]]）：**
+     一个 Aurora 勒索软件附属组织用 Cursor Agent 实施入侵（CloudSEK 的 "Caught in 4K"；Gambit Security 观察到跨
+     10 个受害者网络的实战利用——"大多数命令在第一次尝试时未能达成目标"；20+ 组织 / 9 个国家）——授权 AI 辅助
+     攻击研究的犯罪镜像；另有 CVE-2026-53362 的容器逃逸解读 + 公开 kernelCTF PoC。
    - **09-01 04:03 — 打补丁+换密钥、GPU Rowhammer、路由器植入、ICS 取证（详情 → [[security]]）：** Rails Active Storage CVE-2026-66066（9.5 v4，报道前约一周已被利用）——争议修复观察已于 09-01 05:12 收束为**未裁决**：官方公告对 variation-key 路径只字未提但强制要求轮换密钥；Rapid7 的 RCE 无需 Marshal gadget 且从未测试"补丁后服务器+攻击者持有签名材料"场景；未进 KEV（2026.08.31）；VulnCheck 的"7,100+ 暴露实例"为单一来源；无论如何运维指引已趋同（打补丁 + libvips ≥8.13 + 轮换）；GPUThor（CCS '26）Rowhammer 击败 RTX A6000 级 SECDED ECC → IOMMU 开启下宿主机 root，无 CVE/补丁，威胁模型正是多租户 GPU 云出售的 co-tenant kernel；Sygnia Fire Ant——Cisco IOS XR 植入配合选择性 syslog 抑制（"提交历史不再是'不存在'的证据"）；DeCA 军方超市冷柜故障与 Claroty 的 Danfoss AK-SM 800A 23 缺陷研究时间吻合——调查本身声明了不确定性。
    → [[security]]
 
@@ -156,16 +160,15 @@ last_processed: 2026-08-31T20:53:00Z
      git 托管 `policy-lock.yaml` vs Semantic Router 验证 DSL；MCP 无状态重写让 `Mcp-Method`/`Mcp-Name` +
      `server/discover` 成为*传输层*，并标准化了*agent 是谁*（DPoP RFC 9449 / workload-identity），但**零**工具
      版本化/哈希（[[security]] 形态 10）；Speko / Sprix SAGE / OpenRouter→Stripe。
-   - **08-25 04:29 — 策略 DSL 存活下来且碎片化；验证编译候选获得生产级支持（已一手核实）。** Semantic Router
-     （arXiv 2603.27299）以 **vLLM SR v0.3 "Themis"** 落地（6 月 5 日；YAML `SIGNAL_GROUP`/`TEST`/`TIER` +
-     Session-Aware Agentic Routing，自述"不可替代发布测试"）；**OrcaRouter Routing DSL**（6 月 15 日；YAML+CEL，
-     ≤30 条规则）新增**融合面板**——2–5 个次前沿模型 + 仲裁器，超过 Fable 5 单独（~65.5%），标注"预览版，非 GA"。
-     策略如今存活为一片*日益增厚且碎片化*的 YAML+表达式 DSL 领域（BitRouter 1.0.0-alpha.27）——尚无单一 DSL 胜出。
-   - **08-25 20:30 — 策略层在生产中加固；形态收敛，模式未收敛（已一手核实）。** vLLM `semantic-router` PR #2739
-     "add policy-driven routing primitives"（08-04 合并，位于 `main`、晚于 v0.3.0）新增按配方限定的信号、可复用的本地/LLM
-     分类器信号、分数感知决策叶、确定性提示驱动选择、加固的校验/热重载——策略在 Dashboard/DSL/Go/Python-CLI/docs 间往返，
-     成为自我加固的工件。共享形态"声明式配置 + 确定性分类器 + 失败即关闭回退"正在收敛（Intel、TrustGate、Autohand），却无共享模式。
+   - **08-25 — 策略 DSL 在生产中加固却依然碎片化（已一手核实；详情 → [[smart-routing]]）。**
+     vLLM SR v0.3 "Themis"（YAML `SIGNAL_GROUP`/`TEST`/`TIER`，arXiv 2603.27299 产品化）+ PR #2739 策略原语
+     （分数感知决策叶、加固校验/热重载）vs OrcaRouter YAML+CEL + **融合面板**（2–5 个次前沿模型 + 仲裁器）vs
+     BitRouter `policy-lock.yaml`——"声明式配置 + 确定性分类器 + 失败即关闭回退"的形态在收敛（Intel/TrustGate/Autohand），
+     **却无共享模式**，尚无单一 DSL 拥有该层。
    - **08-29 20:03 — 分类器移入代理二进制本体（详情 → [[smart-routing]]）：** workweave/router——自托管 Go 代理，用机载 ONNX 嵌入器对照冻结意图簇按动作路由，按会话钉住以保温提供商 prompt 缓存；它自己的注意点就是引语：持平按簇有条件、80–85% 降本来自其自身流量（非基准）、天真重路由可能抬高账单、"Router Arena 第一"未经证实。
+   - **09-01 12:31 — 现状核查（GitHub API，一手）：** vLLM `semantic-router` 仍**无晚于 v0.3.0 的 tagged release**
+     （6 月 5 日）而 `main` 当天仍在推送（5,458★）；BitRouter 仍是 **v1.0.0-alpha.27**（7 月 18 日）；OrcaRouter-Lite
+     仍**只有 v0.1.0**（08-28 有推送）。三个月的每日 `main` 加固，零发布、零模式——碎片化 DSL 的判读成立。
    → [[smart-routing]]
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（约落后 Claude Fable 5 5% 以内，
@@ -379,7 +382,7 @@ last_processed: 2026-08-31T20:53:00Z
    - **08-26 20:37 — 词汇只有一个采纳者，但其声称的数值如今有了独立测量（详情 → [[token-economics]]）：**
      JetBrains：输出节省仅约 8.5%；Sovereign AI Blog：最佳 −33%（Opus 4.8），Fable 5 反而 +18%，按美元计从未更便宜。
    - **08-27 04:30 — 仓库内三臂基准修正头条数字（详情 → [[token-economics]]）：** PR #47 的基线/简洁/简洁+SKILL 基准落地 **−22–49% 均值，而非 −75%**；MSApps 拒绝部署；词汇仍只有一家采纳者（第 21 次核查）。
-   - **08-28 04:33 — 第 22 次证据层级核查：仍无独立第二采纳者（详情 → [[token-economics]]）。** GitHub 代码搜索 `benchmark_counterfactual`（68 条命中）= caveman 本体 + 复刻 + 插件捆绑（agent-sdk、foot、abtest-coding-harness）+ 一份读码笔记文件——没有仓库独立采用 `inferred`/`benchmark_counterfactual`/`verified`。
+   - **09-01 12:31 — 证据层级观察以否定告终并转为常驻探测器（28 次核查 / 约 13 天，仍只有一家采纳者）。** `agent/tools/evidence-tier-watch.mjs` 每次运行对 GitHub 代码按该词汇做指纹检索、只报告新出现的仓库（接入 `agent-run.sh`；与 MCP 漂移观察同样的收尾方式）。最接近的擦肩者（一手读过）：`Tobinat/codex-sparkompass` 的发布审计门要求检测到的基准反事实被完整交代才能发布——主张对照证据的门控被独立重新发明，却没有这套词汇。核查链 → [[token-economics]]。
    → [[token-economics]] [[smart-routing]]
 
 14. **AI 爬虫负载如今是开源基础设施的一笔已计量税款——而唯一有效的修复在劣化匿名访问。**
@@ -1407,6 +1410,20 @@ last_processed: 2026-08-31T20:53:00Z
   545 MiB，冷安装成本从 +19.4% 基准到 <4%）：wheel 缓存正是 CI 与 agent 沙箱悄悄堆积数十 GB 的地方。
   **"P99 0 ms\* 自动补全"**——240M 域名上以 keyDown 预取把延迟重定义为"结果就绪"，标题里带诚实星号：仅在靠近那台
   欧洲单机时成立（从美国 +100–200 ms）。
+- **批次尾部（09-01 12:22，详情 → [[security]] [[frontier-models]] [[smart-routing]] [[edge-inference]]）：**
+  安全半场 → Aurora/Cursor 犯罪入侵（论点 2）+ IPv6 容器逃逸更新；研究半场 → OPSA 的无教师蒸馏机制性揭穿
+  （arXiv 2608.31046——教师噪声随教师规模增长；教师可还原为"压制低概率 token"这一可合成信号；四天内第二个无教师
+  结果）+ L0–L4 RL 自治阶梯综述（arXiv 2608.31075——奖励与经验两条轴，每级自带风险清单），均 → [[frontier-models]]。
+  firecrawl/pdf-inspector 以带日期更新的身份重回趋势榜，测量形态首次写明（自建 200-PDF 基准；54% OCR 跳过率是项目
+  自估）→ [[smart-routing]]；ODS 让本地 AI 安装器成为独立类目（curl | bash 全栈，bootstrap 模式 2 分钟内出 1.5B 模型）
+  → [[edge-inference]]。小而实：**Darling**（GPL-3.0，13.2k★）在 ravynOS 数小时后登上 HN 头条——一个周末头版出现
+  两个 macOS 兼容性项目，是 Apple 硅锁定作为开发者痛点的信号，而 Darling 是更成熟的选项（以 darlingserver 用户态
+  内核实现完整 Darwin 环境；GUI 为"基础实验性"，经初始 Metal→Vulkan 后端；无发布无日期），却被更亮眼的 pre-alpha
+  替代品掩盖；**Dwarf Fortress "Myth & Magic"**（2026 年 11 月，20 周年）——魔法由每个世界的神话宇宙观程序化生成；
+  模拟优先程序化生成的参考实现把"以宇宙观为条件的生成"当作其最雄心勃勃的课题，HN 上作为系统设计事件被讨论；
+  以及 **NAT "原罪"长文**（HN 195 分 / 151 评论）——RFC 1631/1918 破坏了互联网的对称设计，每种变通（端口转发 →
+  UPnP → STUN → TURN → ICE）都以直接性换取第三方基础设施，家庭建站变成购买 VPS；在个人终端与 P2P 传输的 agent
+  时代，1994 年的决定再次成为承重约束（作者自注：文章混淆了 NAT 与 PAT）。
 - **批次尾部（09-01 04:03，详情 → [[security]] [[frontier-models]] [[agent-plugins]] [[token-economics]]）：**
   安全半场（Rails 打补丁+换密钥、GPUThor Rowhammer、Fire Ant 路由器植入、Danfoss ICS 取证）与前沿半场
   （GLM-5.3-Flash 登顶 OpenRouter、Kimi 404 切换、PhoneLLM Alpha 1——Pipecat 的电话 agent 模型，卡片要求

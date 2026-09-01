@@ -323,3 +323,16 @@ trusted; it earns one clause here, not an entry.
   deterministic classifier + fail-closed fallback, ↑) gains a self-hosted, embedding-scored, session-sticky instance —
   per-request routing is becoming real infrastructure for coding-agent fleets, with the measurement honesty still
   vendor-side.
+
+## firecrawl/pdf-inspector — dated update, the same classify-first dispatch (09-01 12:22)
+
+- **`firecrawl/pdf-inspector` (MIT, 17.4k★, +228/day, v0.2.6) re-enters trending** — a dated update to the
+  08-15 routing note, now with its measurement shape spelled out: classifies PDFs TextBased / Scanned /
+  ImageBased / Mixed in ~10–50 ms with confidence scores, routes per-page OCR only where needed, position-
+  aware extraction + Markdown conversion (headings, tables, multi-column); Python/Node/WASM bindings +
+  `pdf2md`/`detect-pdf` CLIs. Pitch: handle text PDFs locally in under 200 ms and "skip expensive OCR
+  services for the ~54% of PDFs that don't need them." Caveats (the honest part): the benchmark is self-run
+  on a 200-PDF corpus (0.875 overall, fastest full run 0.470 s, Apple M4 Pro, refreshed Jul 31); the 54%
+  figure is the project's own estimate; Firecrawl's own landing page doesn't currently mention the library —
+  the repo, not the vendor site, is the source of record. Document routing is upstream of every RAG
+  pipeline's quality and every agent's document-ingestion OCR budget — the boring-but-real cost win.

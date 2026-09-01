@@ -1762,3 +1762,26 @@ The batch's security stream, read first-hand at the primary sources where reacha
   Claroty findings and DeCA; botched updates and config errors remain plausible. The architectural fact stands
   regardless of attribution: defrost at military grocery stores is remotely controllable through a device class
   researchers have shown is manipulable and often exposed — a model of stating uncertainty in infra forensics.
+- **Aurora ransomware affiliate ran intrusions on Cursor Agent — the best-documented criminal use of a
+  commercial agentic coding assistant as intrusion infrastructure (CloudSEK "Caught in 4K", Aug 27; Gambit
+  Security via THN; victims Apr–Jul 2026).** An unauthenticated open directory (port 8888) leaked the
+  affiliate's entire Linux home: shell history, **Cursor chat logs** with sustained attack planning in
+  Russian (incl. a complete AD CS exploitation plan), staged exploit code for 12+ vulns (mostly unmodified
+  public PoCs), SAM/LSA dumps, BloodHound collections, and both encryptors (Windows `sap.exe`, Linux/ESXi
+  `encrypt.out` — static builds of one Zig codebase). Gambit separately observed Cursor Agent doing hands-on
+  exploitation across 10 victim networks (Apr 8–May 21): Nmap/NetExec scanning, BloodHound enumeration, NTLM
+  relay (PetitPotam/Coerce Plus/PrinterBug), Certipy against ESXi-heavy estates — noting **"the majority of
+  the commands failed to achieve the stated objective on the first attempt."** CloudSEK's tally: 20+ orgs in
+  nine countries, 17 breached to domain/interactive access, 4 on the leak site; per-victim affiliate splits
+  35/65–46/54 traced with TRM Labs, ~7 BTC in one negotiation wallet. Caveats: no Cursor/Anthropic statement
+  in any reporting; only ~1 in 5 confirmed victims reached public extortion (counts undercount); the
+  laundering-network finding is TRM's "high-moderate" confidence. The new shape beside "AI-assisted offensive
+  research" (authorized — Rapid7): **criminal use, documented from the operator's own opsec failure**, giving
+  defenders a first-hand transcript of AI-assisted attack work — including how often it fails. Target lists
+  consistently excluded CIS IP ranges.
+- **CVE-2026-53362 dated update (12:22 batch):** the Linux IPv6 kernel-memory overwrite (Red Hat 7.8, KEV,
+  federal deadline Aug 30) gains the sharper secondary framing — an OOB write on the UDP transmit paged-
+  allocation path (`__ip6_append_data`), reachable through IPv6 fragmentation from a user/network namespace
+  and **usable to escape a container**; a public PoC is merged into Google's kernelCTF repo; upstream fix
+  `736b380e28d0`, mitigation RHSB-2026-009. Caveat stands: Red Hat's own page stops at "kernel memory
+  overwrite" — the container-escape reading is secondary coverage + the kernelCTF PR, not CNA text.

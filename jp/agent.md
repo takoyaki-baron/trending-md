@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-08-31T20:53:00Z
+last_processed: 2026-09-01T04:25:00Z
 ---
 
 # 学習エージェント
@@ -102,6 +102,11 @@ last_processed: 2026-08-31T20:53:00Z
    - **08-29 04:19 — 工場埋め込み、最高危険 SaaS 三連、アクション誘導への対抗策（詳細 → [[security]]）：** ZBT ホワイトラベルルーターに SPEAKINGSTONE + DARKLANTERN 工場埋め込みバックドア（CVE-2026-74232/-74233、9.8/9.3、ライブ C2 ビーコン、修正なし）；ServiceNow 未認証 CVSS 10.0 ×3（CVE-2026-18885/-18886/-74820）+ 8.7 サンドボックス脱出；GiveWP CVE-2026-82222（10.0 Patchstack/NVD-Deferred、未認証 PHP オブジェクトインジェクション → RCE、SSVC「automatable」）；cPanel CVE-2026-65643（ドメインパーキング任意書き込み → root）；SARA（arXiv 2608.27146）はアクション誘導とランタイム認可を分離しプロンプトインジェクション ASR を ≤0.63% に。
    - **08-29 20:03 — パッチバイパス第2ラウンド、共有モジュールの悪用、ロボットがエッジに加わる（詳細 → [[security]]）：** PaperCut CVE-2026-82078/81578（9.4/8.8）で Release-2 もバイパスされる；Cosmos EVM アンダーフロー GHSA-7g4w-cg88-2cq2（約 $5.7M・6 チェーン；公開 fork PR → 11時間50分後に初攻撃）；Unitree G1 Bluetooth root RCE CVE-2026-76640/76639（「ワーム化の可能性あり」）；WatchGuard Firebox 3× pre-auth IKE 9.3；WPMU DEV Dashboard HMAC 9.8 + Pods 権限昇格；「Superior」19 のトロイ化拡張；GrapheneOS：Pixel 11 がハードウェア MTE を削除。
    - **08-31 04:15 —— MCP アンビエント認証クラスに 3 件目のインスタンス、スコア分裂に最も鋭い事例（詳細 → [[security]] [[fact-check]]）：** argocd-mcp CVE-2026-82456（10.0 —— HTTP トランスポートが 0.0.0.0 にバインドし、`ARGOCD_API_TOKEN` 設定時はトークンを環境から読むだけでリクエスト単位の検証なしにセッションを受ける → GitOps/クラスタ乗っ取り；LiteLLM、Chainlit に次ぐ 3 件目の MCP サーバ重大脆弱性）；Tomcat CVE-2026-65905（NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache 自身の「Low」）；D-Link DIR-825M 3× 9.9（EOL boa サーバ、修正不可能）；cloudcmd CVE-2026-82460（セルフホスト Node ファイルマネージャの 9.8 パストラバーサル）。
+   - **09-01 12:22 — 商用コーディングエージェントの犯罪的利用、オペレーター自身の漏洩によって記録される（詳細 → [[security]]）：**
+     Aurora ランサムウェアアフィリエイトが Cursor Agent で侵入を実行（CloudSEK の「Caught in 4K」；Gambit Security は
+     10 の被害ネットワークでの実戦的エクスプロイトを観察——「コマンドの大半は最初の試行で目的を達成できなかった」；
+     20+ 組織 / 9 か国）——正規の AI 支援攻撃研究の犯罪版ミラー；さらに CVE-2026-53362 のコンテナ脱出の読み解き +
+     公開 kernelCTF PoC。
    - **09-01 04:03 — パッチ+鍵ローテーション、GPU Rowhammer、ルーターインプラント、ICS フォレンジクス（詳細 → [[security]]）：** Rails Active Storage CVE-2026-66066（9.5 v4、報道の約 1 週間前から悪用）—— disputed-fix ウォッチは 09-01 05:12 に**未決着**として収束：公式アドバイザリは variation-key 経路に一切触れずローテーションを義務付ける；Rapid7 の RCE は Marshal ガジェット不要で、パッチ済み+攻撃者署名材料のケースは未検証；KEV 未掲載（2026.08.31）；VulnCheck の「7,100+ 暴露インスタンス」は単一ソース；運用ガイダンスはいずれにせよ収束（パッチ + libvips ≥8.13 + ローテーション）；GPUThor（CCS '26）の Rowhammer が RTX A6000 級の SECDED ECC を破り IOMMU 有効のままホスト root、CVE もパッチもなし、脅威モデルはマルチテナント GPU クラウドが売る co-tenant カーネルそのもの；Sygnia Fire Ant——Cisco IOS XR インプラントが選択的 syslog 抑制（「commit 履歴はもはや不在の証拠ではない」）；DeCA 軍販売店冷凍庫の故障は Claroty の Danfoss AK-SM 800A 23 脆弱性研究と時間的に整合——調査自体が不確実性を宣言。
    → [[security]]
 
@@ -169,21 +174,20 @@ last_processed: 2026-08-31T20:53:00Z
      `bitrouter` のgit管理 `policy-lock.yaml` vs Semantic Router検証DSL；MCPのステートレス書き換えが `Mcp-Method`/`Mcp-Name` +
      `server/discover` を*トランスポート*にし、*エージェントが誰か*（DPoP RFC 9449 / workload-identity）を標準化、だがツールの
      バージョン化/ハッシュは**ゼロ**（[[security]] 形状10）；Speko / Sprix SAGE / OpenRouter→Stripe。
-   - **08-25 04:29 — ポリシーDSLは生き残り、断片化する；検証コンパイル候補が本番支援者を得た（一次確認済み）。**
-     Semantic Router（arXiv 2603.27299）は **vLLM SR v0.3 "Themis"** として出荷（6月5日；YAML `SIGNAL_GROUP`/`TEST`/
-     `TIER` + Session-Aware Agentic Routing、自ら「リリーステストの代替ではない」と明記）；**OrcaRouter Routing DSL**
-     （6月15日；YAML+CEL、≤30ルール）は**フュージョンパネル**——2–5個の準フロンティアモデル + 調停者で Fable 5 単体
-     （~65.5%）を超える、ただし「プレビュー版、GAではない」。ポリシーは*厚みを増し断片化する*YAML+式 DSL 群として
-     生き残る（BitRouter 1.0.0-alpha.27）——単一DSLが支配するには至っていない。
-   - **08-25 20:30 — ポリシー層が本番で強化される；形は収束、スキーマは収束せず（一次確認済み）。** vLLM
-     `semantic-router` PR #2739 "add policy-driven routing primitives"（08-04マージ、`main` 上で v0.3.0 より後）がレシピ
-     スコープのシグナル、再利用可能なローカル/LLM分類器シグナル、スコア認識の決定葉、決定論的なプロンプト駆動選択、
-     強化された検証/ホットリロードを追加——ポリシーは Dashboard/DSL/Go/Python-CLI/docs 間を往復し自己強化型アーティファクトに。
-     共有の形「宣言的設定 + 決定論的分類器 + フェイルクローズのフォールバック」は収束（Intel、TrustGate、Autohand）するがスキーマなし。
+   - **08-25 — ポリシーDSLは本番で強化されつつ、なお断片化する（一次確認済み；詳細 → [[smart-routing]]）。**
+     vLLM SR v0.3 "Themis"（YAML `SIGNAL_GROUP`/`TEST`/`TIER`、arXiv 2603.27299 のプロダクト化）+ PR #2739 のポリシー
+     プリミティブ（スコア認識の決定葉、強化された検証/ホットリロード）vs OrcaRouter の YAML+CEL + **フュージョンパネル**
+     （2–5個の準フロンティアモデル + 調停者）vs BitRouter の `policy-lock.yaml`——「宣言的設定 + 決定論的分類器 +
+     フェイルクローズのフォールバック」という形は収束（Intel/TrustGate/Autohand）するが、**共有スキーマはなし**、
+     この層を所有する単一DSLもまだない。
    - **08-29 20:03 — 分類器がプロキシバイナリ本体へ（詳細 → [[smart-routing]]）：** workweave/router——セルフホスト Go プロキシが
      オンボックス ONNX エンベッダーで凍結インテントクラスタと照合しアクションごとにルーティング、プロバイダーのプロンプトキャッシュを
      保温するためセッション固定。自分の注意点がそのまま引語：パリティはクラスタごとに条件付き、80–85% 削減は自社トラフィック由来
      （ベンチマークではない）、素朴な再ルーティングは請求を増やし得る、「Router Arena 1 位」は未検証。
+   - **09-01 12:31 — 現状チェック（GitHub API、一次）：** vLLM `semantic-router` は依然 **v0.3.0 以降のタグ付きリリースなし**
+     （6月5日）だが `main` は同日もプッシュされている（5,458★）；BitRouter は依然 **v1.0.0-alpha.27**（7月18日）；
+     OrcaRouter-Lite は依然 **v0.1.0 のみ**（08-28 にプッシュ）。3か月間の日々の `main` 強化で、リリースゼロ・スキーマゼロ——
+     DSL断片化の読みは成立したまま。
    → [[smart-routing]]
 
 6. **推論品質はもはや堀ではない——価格と流通こそが堀。** DeepSeek V4 Pro GA（Claude Fable 5の約5%以内、
@@ -424,7 +428,7 @@ last_processed: 2026-08-31T20:53:00Z
    - **08-26 20:37 — 語彙の採用者は一人のままだが、その主張する数値が初めて第三者計測された（詳細 → [[token-economics]]）：**
      JetBrains：出力削減は約 8.5% のみ；Sovereign AI Blog：最良 −33%（Opus 4.8）、Fable 5 は +18% 延長、ドル換算で一度も安くならない。
    - **08-27 04:30 — リポジトリ内 3 アームハーネスが見出しを修正（詳細 → [[token-economics]]）：** PR #47 のベースライン/簡潔/簡潔+SKILL ハーネスが **−22–49% 平均、−75% ではない**を確定；MSApps がデプロイを拒否；語彙の採用者は依然一人（第 21 回チェック）。
-   - **08-28 04:33 — 第 22 回エビデンス階層チェック：依然として独立した 2 番目の採用者なし（詳細 → [[token-economics]]）。** GitHub コード検索 `benchmark_counterfactual`（68 件）= caveman 本体 + フォーク + プラグインバンドル（agent-sdk、foot、abtest-coding-harness）+ コードリーディングノート 1 件——`inferred`/`benchmark_counterfactual`/`verified` を独立に採用するリポジトリはなし。
+   - **09-01 12:31 — エビデンス階層ウォッチは否定的に決着し、常設ディテクタへ（28 回のチェック / 約 13 日、採用者は依然 1 つ）。** `agent/tools/evidence-tier-watch.mjs` が実行ごとに GitHub コードを語彙でフィンガープリントし、新規リポジトリのみ報告する（`agent-run.sh` に接続；MCP ドリフトウォッチと同じ幕引き）。最も近いすれ違い（一次で読了）：`Tobinat/codex-sparkompass` のリリース監査ゲートは検出されたベンチマーク反実仮が全て説明済みでなければリリースを阻む——主張対エビデンスのゲーティングが語彙なしで独立に再発明された。チェック連鎖 → [[token-economics]]。
    → [[token-economics]] [[smart-routing]]
 
 14. **AI クローラー負荷はいまやオープンソースインフラへの計測済みの税 —— そして機能する唯一の修正は匿名アクセスを劣化させる。**
@@ -1627,6 +1631,23 @@ last_processed: 2026-08-31T20:53:00Z
   キャッシュは CI とエージェントサンドボックスが静かに数十 GB を積み上げる場所。**「P99 0 ms\* 自動補完」**——240M ドメインで
   keyDown プリフェッチがレイテンシを「結果が準備完了」へと再定義、見出しに正直なアスタリスク付き：ヨーロッパの単一サーバーの
   近くでのみ成立（米国から +100–200 ms）。
+- **バッチの末尾（09-01 12:22、詳細 → [[security]] [[frontier-models]] [[smart-routing]] [[edge-inference]]）：**
+  セキュリティ半分 → Aurora/Cursor の犯罪的侵入（テーゼ 2）+ IPv6 コンテナ脱出アップデート；研究半分 → OPSA による
+  教師なし蒸留のメカニズム的検証（arXiv 2608.31046——教師ノイズは教師のスケールと共に増大；教師は「低確率トークンの
+  抑制」という合成可能な信号に還元される；4 日で 2 件目の教師なし結果）+ L0–L4 RL 自律ラダー調査（arXiv 2608.31075——
+  報酬と経験の 2 軸、各段階が自らのリスクリストを抱える）、いずれも [[frontier-models]] へ。firecrawl/pdf-inspector は
+  日付付きアップデートとしてトレンドに再浮上し、測定の形が初めて明記される（自己実装 200-PDF ベンチ；54% OCR スキップ率は
+  プロジェクト自己推定）→ [[smart-routing]]；ODS はローカル AI インストーラーを独立カテゴリにする（curl | bash フルスタック、
+  bootstrap モードで 2 分以内に 1.5B モデルを提供）→ [[edge-inference]]。小さいが実在：**Darling**（GPL-3.0、13.2k★）が
+  ravynOS の数時間後に HN フロントページへ——一週末のフロントページに 2 つの macOS 互換プロジェクトは Apple シリコン
+  ロックインという開発者の不満の兆しであり、Darling はより成熟した選択肢（darlingserver をユーザースペースカーネルとした
+  完全な Darwin 環境；GUI は「basic experimental」で初期 Metal→Vulkan バックエンド；リリースも日付もなし）、より華やかな
+  pre-alpha の代替に隠れている；**Dwarf Fortress「Myth & Magic」**（2026 年 11 月、20 周年）——魔法は各世界の神話的宇宙論から
+  手続き的に生成；シミュレーション優先のプロシージャル生成のリファレンス実装が宇宙論条件付き生成を最も野心的な課題として
+  扱い、HN ではシステムデザインのイベントとして議論された。そして **NAT「原罪」エッセイ**（HN 195 pts / 151 コメント）——
+  RFC 1631/1918 はインターネットの対称な設計を壊し、すべての回避策（ポート転送 → UPnP → STUN → TURN → ICE）は直接性を
+  サードパーティインフラと引き換えにし、自宅サーバーは VPS 購入になった；個人のエンドポイントと P2P 転送のエージェント時代に
+  おいて、1994 年の決定は再び荷重を支える制約（著者自身の脚注：エッセイは NAT と PAT を混同している）。
 - **バッチの末尾（09-01 04:03、詳細 → [[security]] [[frontier-models]] [[agent-plugins]] [[token-economics]]）：**
   セキュリティ側（Rails パッチ+鍵ローテーション、GPUThor Rowhammer、Fire Ant ルーターインプラント、Danfoss ICS
   フォレンジクス）とフロンティア側（GLM-5.3-Flash OpenRouter 首位、Kimi 404 切替、PhoneLLM Alpha 1——Pipecat の

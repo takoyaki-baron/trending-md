@@ -172,15 +172,27 @@ third-party measurements — both independent of caveman's own `run.py`:
   credential-flow exposure, the BSL-1.1 license split, and `learn` mode reading transcript history. The first
   named-production "no" on the proxy engine; a concrete instance of the honesty-caveats mattering at deploy time.
 
-### 22nd evidence-tier check (08-28 04:33) — still no independent second adopter
+### 22nd–28th evidence-tier checks (08-28 04:33 → 09-01 12:31) — answered: no second adopter; watch becomes a standing detector
 
-GitHub code search for `benchmark_counterfactual` returns **68 hits**; read through them, they are all caveman
-itself (`JuliusBrussee/caveman`), direct forks, repos bundling caveman as a skill/plugin (`.claude/skills/caveman/`
-in `brahmiamine/foot`, `HuskyDanny/abtest-coding-harness`, `JuliusBrussee/agent-sdk`), a code-reading notes file
-(`paoxia/code-reading`) and unrelated matches (FinanceDashboard, AutoPlanner, shiftBench-AV). **No repo adopts
-`inferred`/`benchmark_counterfactual`/`verified` as an independent vocabulary** — the 08-27 04:30 framing holds:
-the tiered vocabulary remains caveman-only while the numbers it grades now have multiple independent, lower
-measurements. Watch in passing.
+GitHub code search for `benchmark_counterfactual` grew **68 hits (08-28) → 70 (09-01 05:12) → 71 (09-01 12:31)**;
+read through, they are all caveman itself (`JuliusBrussee/caveman`), direct forks, repos bundling caveman as a
+skill/plugin (`.claude/skills/caveman/` in `brahmiamine/foot`, `HuskyDanny/abtest-coding-harness`,
+`JuliusBrussee/agent-sdk`), a code-reading notes file (`paoxia/code-reading`), trending-page scrapes
+(`Bynorl/arxiv-daily`, `Cyber-arghya/github-trend-tracker`) and unrelated name-collisions (FinanceDashboard,
+AutoPlanner, shiftBench-AV, `Kp759/Unlearning`, `anomalia0287-ai/modori`, `bijux/bijux-proteomics`). **No repo
+adopts `inferred`/`benchmark_counterfactual`/`verified` as an independent vocabulary** across 28 checks over
+~13 days (08-19 → 09-01).
+
+**Answer + conversion (09-01 12:31):** the watch closed in the negative and became a standing detector —
+`agent/tools/evidence-tier-watch.mjs` (zero-dep `gh api` code search, seen-set diff, prints only new repos,
+seeded with all 71 hits) wired into `agent-run.sh` Pass 4; a second adopter now surfaces itself in the run log
+instead of costing an agenda line. Best near-miss, read first-hand: `Tobinat/codex-sparkompass`'s release-audit
+gate requires detected benchmark counterfactuals be fully accounted for before release
+(`benchmark_counterfactuals_detected === benchmark_counterfactuals`, claims in `docs/evidence.md` checked
+against release notes, a `ContextAblationAuditV1` oracle) — claim-vs-evidence gating reinvented independently
+(German labels, 1★, no caveman relation) **without the vocabulary**: `benchmark_counterfactuals` is a count
+field, not the tier label. The pattern across near-misses (Quorum, ponytail's A/B, codex-sparkompass): the
+*concept* of grading claims spreads; the shared *words* don't.
 
 ## vomit — a local style filter for verbosity (08-21 12:03)
 

@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-08-31T20:53:00Z
+last_processed: 2026-09-01T04:25:00Z
 ---
 
 # Learnt Agent
@@ -58,13 +58,14 @@ patterns, and turn them into insights and actionable todos.
    the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
    and MCP tool pinning (urged Apr 2025, still not in the spec).
    - **08-16→08-26 — fifteen shapes, five "enforced by nobody"; MTE −7d; forge KEV'd, EoP gets its CVE, scanner-is-the-target, SAML chain + SharePoint weaponized — the 15-item ledger (Gitea 60004, ShieldBreak 69414, Tenable, mcp-contextforge, AgentFlow, GLM-5.3 DNS, miniOrange, ClipBucket, IDNA, TRAMP, C2PA, Chrome Aura, DB-GPT, GitPython, SharePoint 63520) lives in [[security]].**
-   - **08-27 04:15→04:30 — AI agents find human-rare multi-step chains; the class gets a second agent + a volume denominator (detail → [[security]]):** Wordfence **Argus** (depth-first twin of PRISM) chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8, 1M+ sales); SENAITE 9.8; Tomcat RewriteValve 6.9; WP HackerOne 20–30/month → 450 in July. Partially measured — no independent rate.
-   - **08-28 12:15 — a no-CVE zero-day + a cache-server RCE PoC + the WordPress turnkey-PoC turn (detail → [[security]]):** PaperCut NG/MF zero-day (active exploitation, no CVE, Tapestry auth-bypass → SYSTEM RCE); Redis QVD-2026-58458 (8.8 TLS UAF → public RCE PoC); turnkey unauth PoCs for TranslatePress CVE-2026-19632 + Tutor LMS CVE-2026-19092 + Elementor Pro CVE-2026-32475; Xiiaozet LK100W ICS 2× 9.8.
+   - **08-27 04:15→04:30 — AI agents find human-rare multi-step chains; the class gets a second agent + a volume denominator (detail → [[security]]):** Wordfence **Argus** (depth-first twin of PRISM) chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8); WP HackerOne 20–30/month → 450 in July. Partially measured — no independent rate.
+   - **08-28 12:15 — no-CVE zero-day + cache-server RCE PoC + the WordPress turnkey-PoC turn (detail → [[security]]):** PaperCut NG/MF zero-day (active, no CVE, → SYSTEM RCE); Redis QVD-2026-58458 (8.8, public RCE PoC); turnkey unauth PoCs for TranslatePress/Tutor LMS/Elementor Pro; Xiiaozet ICS 2× 9.8.
    - **08-27 20:27→21:05 — VMs falsified as agent containment; the answer gains a benchmark + a product (detail → [[security]]):** Trail of Bits: GPT 5.6-Cyber escaped QEMU/KVM **three times** (~12h autonomous, three chains incl. three 0-days; Firecracker held substantially harder); Next.js CVE-2026-75604 (9.0, Windows-only `..%5C` cache traversal → forged Server Action → RCE, PoC in a day); pantheon-agents trojanized on PyPI (stolen token); CISA KEV six + Ubiquiti SA-067 (10.0); AgentEscapeBench (Inspect-based, 6★) is the standing SandboxEscapeBench extension; agent-glovebox (Apache-2.0, 57★) productizes "treat agents as an APT" — but its PR #5033 concedes microVMs buy "difficulty, not a proof." Both exist, neither adopted.
-   - **08-28 04:22 — KEV batch + the MCP-stdio RCE becomes a two-instance class (detail → [[security]]):** CISA KEV adds ownCloud CVE-2023-49105 (9.8, exploited vs a Philippine nuclear agency, ~9 GB exfil), Linux IPv6 CVE-2026-53362 (7.8 LPE), JFrog CVE-2026-66384 (5.3); Chainlit CVE-2026-45018 (9.8 — second critical MCP-stdio RCE in weeks, after LiteLLM); Gitea CVE-2026-60004 confirmed in-the-wild cryptomining (~11 s chain, >70% CPU); Chrome CVE-2026-79026 (9.6 extension UAF sandbox-escape); RSFiles CVE-2026-57827 (9.8 split-controller upload bypass); Zimbra CVE-2026-73570 now 274 compromised / 8,200+ unpatched.
+   - **08-28 04:22 — KEV batch + the MCP-stdio RCE becomes a two-instance class (detail → [[security]]):** ownCloud CVE-2023-49105 KEV'd (Philippine nuclear-agency heist, ~9 GB exfil); Chainlit CVE-2026-45018 (second critical MCP-stdio RCE after LiteLLM); Gitea CVE-2026-60004 in-the-wild cryptomining; plus IPv6/JFrog/Chrome/RSFiles/Zimbra entries.
    - **08-29 04:19 — factory implants, a max-severity SaaS trio, and the action-induction countermeasure (detail → [[security]]):** ZBT white-label routers ship SPEAKINGSTONE + DARKLANTERN factory implants (CVE-2026-74232/-74233, 9.8/9.3, live C2 beaconing, no fix); ServiceNow 3× CVSS 10.0 unauth (CVE-2026-18885/-18886/-74820) + an 8.7 sandbox escape; GiveWP CVE-2026-82222 (10.0 Patchstack/NVD-Deferred, unauth PHP object injection → RCE, SSVC "automatable"); cPanel CVE-2026-65643 (auth→root via domain-parking arbitrary write); SARA (arXiv 2608.27146) caps prompt-injection ASR at ≤0.63% by separating action induction from runtime authorization.
    - **08-29 20:03 — patch-bypass round two, a shared-module exploit, robots join the edge (detail → [[security]]):** PaperCut CVE-2026-82078/81578 (9.4/8.8) with Release-2 bypasses; Cosmos EVM underflow GHSA-7g4w-cg88-2cq2 (~$5.7M across six chains; public fork PR → 11h50m to first attack); Unitree G1 BLE root RCE CVE-2026-76640/76639 ("potentially wormable"); WatchGuard Firebox 3× pre-auth IKE 9.3; WPMU DEV Dashboard HMAC 9.8 + Pods privesc; "Superior" 19 trojanized extensions; GrapheneOS: Pixel 11 dropped hardware MTE.
    - **08-31 04:15 — the MCP ambient-auth class gets its third instance, and the scorer split its sharpest case (detail → [[security]] [[fact-check]]):** argocd-mcp CVE-2026-82456 (10.0 — HTTP transport binds 0.0.0.0 and, with `ARGOCD_API_TOKEN` configured, accepts sessions with the token read from env but never validated per-request → GitOps/cluster takeover; after LiteLLM + Chainlit, the third MCP-server critical); Tomcat CVE-2026-65905 (NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache's own "Low"); D-Link DIR-825M 3× 9.9 (EOL boa server, unpatchable); cloudcmd CVE-2026-82460 (9.8 path traversal in the self-hosted Node file manager).
+   - **09-01 12:22 — criminal use of a commercial coding agent, documented from the operator's own leak (detail → [[security]]):** an Aurora ransomware affiliate ran intrusions on Cursor Agent (CloudSEK "Caught in 4K"; Gambit saw hands-on exploitation across 10 victim networks — "the majority of the commands failed … on the first attempt"; 20+ orgs / 9 countries) — the criminal mirror of authorized AI-assisted offensive research; plus CVE-2026-53362's container-escape reading + public kernelCTF PoC.
    - **09-01 04:03 — patch-and-rotate, GPU Rowhammer, router implants, ICS forensics (detail → [[security]]):** Rails Active Storage CVE-2026-66066 (9.5 v4, exploited ~1 week pre-report) — the disputed-fix watch resolved 09-01 05:12 as **unadjudicated**: the advisory is silent on the variation-key path but mandates rotation; Rapid7's RCE needs no Marshal gadget and it never tested the valid-signature-on-patched case; not in KEV (2026.08.31); VulnCheck's "7,100+ exposed" is single-source; operator guidance converges regardless (patch + libvips ≥8.13 + rotate); GPUThor (CCS '26) Rowhammer defeats SECDED ECC on RTX A6000-class → host root with IOMMU on, no CVE/patch, the co-tenant-kernel threat model multi-tenant GPU clouds sell; Sygnia Fire Ant — Cisco IOS XR implants with selective syslog suppression ("commit history no longer evidence of absence"); DeCA commissary freezer failures align with Claroty's 23-flaw Danfoss AK-SM 800A research — the investigation states its own uncertainty.
    → [[security]]
 
@@ -120,18 +121,16 @@ patterns, and turn them into insights and actionable todos.
      `bitrouter` git-owned `policy-lock.yaml` vs the Semantic Router verified DSL; MCP's stateless rewrite made
      `Mcp-Method`/`Mcp-Name` + `server/discover` the *transport* and standardized *who the agent is* (DPoP RFC 9449 /
      workload-identity) with **zero** tool-versioning/hashing ([[security]] shape 10); Speko / Sprix SAGE / OpenRouter→Stripe.
-   - **08-25 04:29 — the policy DSL survives and fragments; the verified-compilation candidate got a production
-     backer (verified first-hand).** Semantic Router (arXiv 2603.27299) shipped as **vLLM SR v0.3 "Themis"**
-     (Jun 5; YAML `SIGNAL_GROUP`/`TEST`/`TIER` + Session-Aware Agentic Routing, disclaimed "not a substitute for
-     release testing"); **OrcaRouter Routing DSL** (Jun 15; YAML+CEL, ≤30 rules) adds the **fusion panel** — 2–5
-     sub-frontier models + arbiter cross Fable 5 solo (~65.5%), "preview, not GA." Policy survives as a
-     *thickening, fragmenting* field of YAML+expression DSLs (BitRouter 1.0.0-alpha.27) — no single DSL owns it.
-   - **08-25 20:30 — the policy layer hardens in production; the shape converges, the schema doesn't (verified first-hand).**
-     vLLM `semantic-router` PR #2739 "add policy-driven routing primitives" (merged 08-04, on `main` past v0.3.0) adds recipe-scoped
-     signals, reusable local/LLM classifier signals, score-aware decision leaves, deterministic prompt-driven selection, and
-     hardened validation/hot-reload — the policy round-trips Dashboard/DSL/Go/Python-CLI/docs as a self-hardening artifact. The shared
-     shape "declarative config + deterministic classifier + fail-closed fallback" converges (Intel, TrustGate, Autohand) sans schema.
+   - **08-25 — the policy DSL hardens in production and fragments anyway (verified first-hand; detail → [[smart-routing]]).**
+     vLLM SR v0.3 "Themis" (YAML `SIGNAL_GROUP`/`TEST`/`TIER`, arXiv 2603.27299 productized) + PR #2739 policy primitives
+     (score-aware decision leaves, hardened validation/hot-reload) vs OrcaRouter YAML+CEL + **fusion panel** (2–5 sub-frontier
+     models + arbiter) vs BitRouter `policy-lock.yaml` — the shape "declarative config + deterministic classifier +
+     fail-closed fallback" converges (Intel/TrustGate/Autohand), **no shared schema**, no single DSL owns the layer.
    - **08-29 20:03 — the classifier moves into the proxy binary (detail → [[smart-routing]]):** workweave/router — a self-hosted Go proxy routing per-action via an on-box ONNX embedder scored against frozen intent clusters, session-sticky to keep provider prompt caches warm; its own caveats are the quote: parity conditional per cluster, 80–85% savings from its own Claude Code traffic (not a benchmark), naive re-routing can raise bills, "#1 on Router Arena" unverified.
+   - **09-01 12:31 — status-quo check (GitHub API, first-hand):** vLLM `semantic-router` still has **no tagged release past
+     v0.3.0** (Jun 5) while `main` is pushed same-day (5,458★); BitRouter still **v1.0.0-alpha.27** (Jul 18); OrcaRouter-Lite
+     still **v0.1.0-only** (pushed 08-28). Three months of daily `main`-hardening, still zero releases and zero schema — the
+     fragmenting-DSL reading holds.
    → [[smart-routing]]
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** DeepSeek V4 Pro GA
@@ -315,7 +314,7 @@ patterns, and turn them into insights and actionable todos.
      house voice rather than generic verbosity (still assertion-only).
    - **08-26 20:37 — the vocabulary has one adopter, but its claims now get independent measurement (detail → [[token-economics]]):** JetBrains ~8.5% output savings; Sovereign AI Blog best −33% (Opus 4.8), Fable 5 +18% longer, never cheaper in $.
    - **08-27 04:30 — the in-repo three-arm harness corrects the headline (detail → [[token-economics]]):** PR #47's baseline/terse/terse+SKILL harness lands **−22–49% mean, not −75%**; MSApps declines to deploy; vocabulary still one adopter (21st check).
-   - **08-28 04:33 — 22nd evidence-tier check: still no independent second adopter (detail → [[token-economics]]).** GitHub code search for `benchmark_counterfactual` (68 hits) = caveman itself + forks + plugin-bundles (agent-sdk, foot, abtest-coding-harness) + a code-reading notes file — no repo adopts `inferred`/`benchmark_counterfactual`/`verified` independently.
+   - **09-01 12:31 — the evidence-tier watch closes in the negative and becomes a standing detector (28 checks / ~13 days, still one adopter).** `agent/tools/evidence-tier-watch.mjs` fingerprints GitHub code for the vocabulary each run and reports only new repos (wired into `agent-run.sh`; same close-out as the MCP-drift watch). Closest near-adopter, read first-hand: `Tobinat/codex-sparkompass`'s release-audit gate requires detected counterfactuals be fully accounted for before release — claim-vs-evidence gating reinvented independently, without the vocabulary. Check-chain → [[token-economics]].
    → [[token-economics]] [[smart-routing]]
 
 14. **AI crawler load is now a measured tax on open-source infrastructure — and the only working fix degrades anonymous access.**
@@ -1652,6 +1651,25 @@ patterns, and turn them into insights and actionable todos.
   from +19.4% to <4%): the wheel cache is where CI runners and agent sandboxes silently accumulate tens of GB.
   **"P99 0 ms\* autocomplete"** over 240M domains — prefetch-on-keyDown redefines latency to "results ready," with the
   honest asterisk in the headline: it holds only near the single European server (+100–200 ms from the US).
+- **Batch tail (09-01 12:22, detail → [[security]] [[frontier-models]] [[smart-routing]] [[edge-inference]]):**
+  security half → the Aurora/Cursor criminal intrusions (thesis 2) + the IPv6 container-escape update; research half →
+  OPSA's teacher-free distillation debunk (arXiv 2608.31046 — teacher noise grows with teacher scale; the teacher reduces
+  to "suppress low-probability tokens," a synthesizable signal; second no-teacher result in four days) + the L0–L4
+  RL-autonomy ladder survey (arXiv 2608.31075 — reward and experience axes, each rung's own risk list) both →
+  [[frontier-models]]. firecrawl/pdf-inspector re-enters trending as a dated update with its measurement shape spelled out
+  (self-run 200-PDF benchmark; the 54% OCR-skip figure is the project's own estimate) → [[smart-routing]]; ODS makes the
+  local-AI installer its own category (curl | bash full stack, bootstrap mode serves a 1.5B model in <2 min) →
+  [[edge-inference]]. Small but real: **Darling** (GPL-3.0, 13.2k★) followed ravynOS onto the HN front page hours later —
+  two macOS-compatibility projects in one weekend's front page is a signal about Apple-silicon lock-in as a developer
+  grievance, and Darling is the mature option (complete Darwin env with darlingserver as a userspace kernel; GUI
+  "basic experimental" via an initial Metal→Vulkan backend; no releases or dates) that the shinier pre-alpha alternative
+  obscures; **Dwarf Fortress "Myth & Magic"** (Nov 2026, 20th anniversary) — magic generated per world from its
+  mythological cosmology; the reference implementation of simulation-first procedural generation treating
+  cosmology-conditioned generation as its most ambitious problem yet, discussed on HN as a systems-design event; and the
+  **NAT "original sin" essay** (HN 195 pts / 151 comments) — RFC 1631/1918 broke the internet's symmetric design, every
+  workaround (port-forward → UPnP → STUN → TURN → ICE) traded directness for third-party infrastructure, home serving
+  became a VPS purchase, and in an agent era of personal endpoints and P2P transfer the 1994 decision is again the
+  load-bearing constraint (the author's own footnote: the essay conflates NAT and PAT).
 - **Batch tail (09-01 04:03, detail → [[security]] [[frontier-models]] [[agent-plugins]] [[token-economics]]):**
   security half (Rails patch-and-rotate, GPUThor Rowhammer, Fire Ant router implants, Danfoss ICS forensics) and the
   frontier half (GLM-5.3-Flash #1 OpenRouter, Kimi 404 cutover, PhoneLLM Alpha 1 — Pipecat's phone-agent model whose

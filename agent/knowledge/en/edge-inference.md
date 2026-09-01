@@ -388,3 +388,17 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   single-page ("gundam") and multi-page ("base") modes. Reaches SOTA on OmniDocBench v1.5/v1.6 single-page end-to-end
   parsing; authors argue R-SWA generalizes to ASR and translation. "Soft forgetting" is the actual fix for the
   KV-growth wall — a general attention pattern, not a wrapper (thesis 3, beside Daedalus-150M's cache elimination).
+
+## ODS — the local-AI installer becomes its own category (09-01 12:22)
+
+- **`Osmantic/ODS` (Apache-2.0, 5.6k★, v2.6.0 stable)** — a `curl | bash` installer (PowerShell block on
+  Windows, Docker required) that assembles a full local stack: llama-server, Open WebUI, LiteLLM, Whisper,
+  Kokoro TTS, the Hermes agent, n8n, Qdrant, SearXNG and ComfyUI. Auto-detects NVIDIA / AMD (incl. Strix
+  Halo unified memory) / Intel Arc / Apple Silicon / CPU, picks a model tier to fit the VRAM/RAM envelope,
+  and "bootstrap mode" serves a 1.5B model in under 2 minutes while the real model downloads in background
+  and hot-swaps in. Every service is a drop-in extension (manifest + compose file) managed by an `ods` CLI;
+  local-first by default, cloud/hybrid optional. The integration tax is the product — local-AI installers
+  are becoming a category at exactly the moment the new hardware wave (Strix Halo, Mac Studio clusters) gives
+  people machines to point them at. Caveats: ~1.4k open PRs against 3.2k commits is an unusual maintenance
+  shape; the "sovereign human right" framing is the project's own marketing; no third-party benchmarks of
+  the assembled stack.

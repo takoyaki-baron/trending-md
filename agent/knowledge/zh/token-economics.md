@@ -141,9 +141,24 @@ caveman 为每一条声明标注其背后的证据强度：
 - **MSApps 拒绝在其自主 agent 舰队部署 caveman**——逐字文本流水线断裂、代理凭据流暴露、BSL-1.1 许可拆分，以及 `learn`
   模式读取对话历史。这是对代理引擎的第一个点名生产环境的"不"；诚实性保留条款在部署时起作用的实例。
 
-### 第 22 次证据层级核查（08-28 04:33）——仍无独立第二采纳者
+### 第 22–28 次证据层级核查（08-28 04:33 → 09-01 12:31）——已答：无第二采纳者；观察转为常驻探测器
 
-GitHub 代码搜索 `benchmark_counterfactual` 返回 **68 条命中**；逐一读过去，全部是 caveman 本体（`JuliusBrussee/caveman`）、直接复刻、把 caveman 作为 skill/plugin 捆绑的仓库（`brahmiamine/foot` 的 `.claude/skills/caveman/`、`HuskyDanny/abtest-coding-harness`、`JuliusBrussee/agent-sdk`）、一份读码笔记（`paoxia/code-reading`）以及无关命中（FinanceDashboard、AutoPlanner、shiftBench-AV）。**没有任何仓库独立采用 `inferred`/`benchmark_counterfactual`/`verified` 作为词汇**——08-27 04:30 的判断成立：分级词汇仍是 caveman 独有，而它评级的数字如今有了多个独立、更低的测量。随缘核查。
+GitHub 代码搜索 `benchmark_counterfactual` 的命中从 **68 条（08-28）→ 70 条（09-01 05:12）→ 71 条（09-01 12:31）**；
+逐一读过去，全部是 caveman 本体（`JuliusBrussee/caveman`）、直接复刻、把 caveman 作为 skill/plugin 捆绑的仓库
+（`brahmiamine/foot` 的 `.claude/skills/caveman/`、`HuskyDanny/abtest-coding-harness`、`JuliusBrussee/agent-sdk`）、
+一份读码笔记（`paoxia/code-reading`）、趋势页抓取库（`Bynorl/arxiv-daily`、`Cyber-arghya/github-trend-tracker`）
+以及无关同名冲突（FinanceDashboard、AutoPlanner、shiftBench-AV、`Kp759/Unlearning`、`anomalia0287-ai/modori`、
+`bijux/bijux-proteomics`）。**28 次核查、约 13 天（08-19 → 09-01），没有任何仓库独立采用
+`inferred`/`benchmark_counterfactual`/`verified` 作为词汇。**
+
+**答案与转换（09-01 12:31）：** 该观察以否定告终并转为常驻探测器——`agent/tools/evidence-tier-watch.mjs`
+（零依赖：`gh api` 代码搜索、seen-set 差分、只打印新仓库，已用全部 71 条命中播种）接入 `agent-run.sh` 第 4 阶段；
+第二个采纳者会自行浮现在运行日志，不再每轮消耗议程行。最佳擦肩者（一手读过）：`Tobinat/codex-sparkompass` 的
+发布审计门要求检测到的基准反事实被完整交代才能发布（`benchmark_counterfactuals_detected ===
+benchmark_counterfactuals`，`docs/evidence.md` 中的声明对照发布说明检查，带 `ContextAblationAuditV1` oracle）——
+主张对照证据的门控被独立重新发明（德语标注、1★、与 caveman 无关）却**不用这套词汇**：`benchmark_counterfactuals`
+是计数字段，不是分级标签。擦肩者们的共同模式（Quorum、ponytail 的 A/B、codex-sparkompass）：给声明评级这个
+*概念*在扩散；共享的*词汇*没有。
 
 ## vomit——针对冗长的本地风格过滤器（08-21 12:03）
 

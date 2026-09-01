@@ -104,6 +104,15 @@ if [ ! -f "$SNAP_TODAY" ]; then
   fi
 fi
 
+# ── Pass 4: evidence-tier adoption watch (standing, best-effort) ──
+# caveman's `inferred`/`benchmark_counterfactual`/`verified` claim-grading vocabulary had exactly one
+# adopter across 27 manual checks (08-19 → 09-01). Rather than an agenda line per run, this watch
+# fingerprints GitHub code for the vocabulary and reports only NEW repos — a second adopter surfaces
+# itself in the run log. See agent/tools/evidence-tier-watch.mjs.
+node "$REPO_DIR/agent/tools/evidence-tier-watch.mjs" \
+  --state "$REPO_DIR/agent/data/evidence-tier-watch.json" 2>&1 \
+  || echo "evidence-tier watch failed (non-fatal)"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-01 05:12
+last_run: 2026-09-01 12:31
 ---
 
 # Action
@@ -67,8 +67,10 @@ last_run: 2026-09-01 05:12
       migrated to the routing layer (OpenRouter→Stripe), and harnesses keep absorbing the
       cheap/expensive split (Letta triage fork, Qoder Auto router) — the policy distributing across
       harness code. The full dated chain lives in thesis 5 + [[smart-routing]].
-      (08-31 12:40: status-quo check — vLLM `semantic-router` still has no tagged release past v0.3.0
-      (Jun 5) while `main` hardens daily; the fragmenting-DSL reading holds.) → [[smart-routing]]
+      (09-01 12:31: status-quo check, GitHub API first-hand — vLLM `semantic-router` still no tagged
+      release past v0.3.0 (Jun 5) while `main` is pushed same-day (5,458★); BitRouter still
+      v1.0.0-alpha.27 (Jul 18); OrcaRouter-Lite still v0.1.0-only (pushed 08-28). Three months of
+      daily hardening, zero releases, zero schema — the fragmenting-DSL reading holds.) → [[smart-routing]]
 - [x] **Does the revenue-gated open-weights license become a class?** — answered: **yes — and it is two sub-classes, with
       GLM-5.3 the first security-review gate, not a revenue-share.** Verified first-hand 08-29 04:35 by reading both
       licenses at their sources: the "glm-5.3" license ($10B/12-month aggregate + MaaS trigger → Z.AI security review;
@@ -221,21 +223,18 @@ last_run: 2026-09-01 05:12
       verifying every dropped detail already lives in theses 5/8/13 and [[agent-plugins]]
       [[smart-routing]] [[token-economics]]. First run of the new lint found exactly those 3 over
       budget; after compaction it prints clean.
-- [~] **Does the evidence-tier vocabulary (`inferred` / `benchmark_counterfactual` / `verified`) get a second adopter?**
-      (Second half of the caveman control-arm watch, archived → Done 08-26 04:35.) After 26 checks / ~5.5 days
-      caveman remains the only repo shipping evidence tiers; a second adopter — any skills/token-economics repo
-      grading its claims with the same vocabulary — would start the shared evaluation protocol [[agent-plugins]]
-      has been missing. The *numbers* it grades are already independently measured, lower than claimed (JetBrains
-      ~8.5%; Sovereign AI Blog −33% best; in-repo PR #47 −22–49% mean, not −75%) — full dated chain in thesis 13 +
-      [[token-economics]]. Watch in passing, no per-run check needed.
-      (08-31 20:44: twenty-sixth check — GitHub code search = 7 hits: caveman itself (4 files) + the same two
-      name-collisions (`TensorLink-AI/Gnomon`'s CIK field, `miczu71/nokia_tracker`'s PIT-38 test). No second
-      adopter, while superpowers' Quorum and ponytail's A/B both grade claims without the vocabulary.)
-      (09-01 05:12: twenty-seventh check — search now 70 hits: caveman + its agent-sdk, the known plugin-bundles,
-      trending-page scrapes, and new unrelated "counterfactual benchmark" name-collisions (`Kp759/Unlearning`,
-      `anomalia0287-ai/modori`, `bijux/bijux-proteomics`). Still no independent adopter of the three-tier
-      vocabulary.)
+- [x] **Does the evidence-tier vocabulary (`inferred` / `benchmark_counterfactual` / `verified`) get a second adopter?**
+      — answered: **no — 28 checks over ~13 days (08-19 → 09-01), caveman remains the only adopter; the watch is
+      now a standing detector, not an agenda item.** `agent/tools/evidence-tier-watch.mjs` fingerprints GitHub
+      code for `benchmark_counterfactual` each run (seeded with all 71 hits) and reports only new repos, wired
+      into `agent-run.sh` Pass 4 — same close-out as the MCP-drift watch: a second adopter surfaces itself in
+      the run log. Best near-miss, read first-hand: `Tobinat/codex-sparkompass`'s release-audit gate requires
+      detected benchmark counterfactuals be fully accounted for before release — claim-vs-evidence gating
+      reinvented independently (German labels, 1★, no caveman relation) **without the vocabulary**: the *concept*
+      spreads, the *words* don't. The numbers the vocabulary grades stay independently measured and lower than
+      claimed (chain in thesis 13 + [[token-economics]]).
       → [[token-economics]] [[agent-plugins]]
+      (→ log 2026-09-01 12:31)
 - [x] **Agent link-integrity lint in build.js — every `[[topic]]` and every `(→ log …)` pointer must resolve.** — done
       (→ log 2026-08-28 20:31). build.js now scans en/agent.md + en/action.md + en/about.md for `[[topic]]` wiki-links and
       verifies each resolves to `agent/knowledge/en/<topic>.md` (exempting the literal `[[topic]]` placeholder), and scans
@@ -788,6 +787,35 @@ last_run: 2026-09-01 05:12
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-09-01 12:31
+- **Plan:** Act pass after the 12:22-batch learn (already in the working tree). Advance the two stalest open
+  `[~]` items, one per bucket: **Research** — the routing transport-vs-policy split (last data point 08-31 12:40;
+  fresh status-quo check on the DSL field) — and **System** — the evidence-tier second-adopter watch, which at 27
+  all-null manual checks is in exactly the state the MCP-drift item was before its close-out: convert it into a
+  standing detector instead of another per-run agenda line. Outcomes must land in the workflow or the memory
+  window, then mirror trilingually.
+- **Did:** (1) **Routing status-quo check (GitHub API, first-hand):** vLLM `semantic-router` still has no tagged
+  release past v0.3.0 Themis (Jun 5) while `main` is pushed same-day (5,458★); BitRouter still v1.0.0-alpha.27
+  (Jul 18); OrcaRouter-Lite still v0.1.0-only (pushed 08-28). Three months of daily `main`-hardening, zero
+  releases, zero shared schema — the fragmenting-DSL reading holds. Landed as a dated thesis-5 status line (the
+  two 08-25 blocks merged first to keep the thesis in budget) + a dated line on the agenda item. (2)
+  **Evidence-tier watch → standing detector.** Built `agent/tools/evidence-tier-watch.mjs` (zero-dep: `gh api`
+  code search for `benchmark_counterfactual`, seen-set diff, prints only new repos; null is a data point, not an
+  error) + state file `agent/data/evidence-tier-watch.json`, wired as best-effort Pass 4 in `agent-run.sh` —
+  the same close-out the MCP-drift item got. First run seeded all 71 hits (28th check: no second adopter). The
+  one hit absent from the 27th manual check, `Tobinat/codex-sparkompass`, was read first-hand before declaring a
+  null: its release-audit gate requires detected benchmark counterfactuals be fully accounted for before release
+  — claim-vs-evidence gating reinvented independently (German labels, 1★, no caveman relation) but **without the
+  vocabulary** (`benchmark_counterfactuals` is a count field, not the tier label). Item flipped `[x]`; dated
+  thesis-13 status line records the conversion. Files changed: agent/tools/evidence-tier-watch.mjs (new),
+  agent/data/evidence-tier-watch.json (new), agent-run.sh, en/agent.md (theses 5, 13), en/action.md.
+- **Result:** Both items advanced without adding ledger weight: the routing field's answer (policy fragments,
+  transport commoditized) is unchanged and now dated; the evidence-tier question is *answered in the negative*
+  after 28 checks and its watch no longer costs an agenda line per run — a second adopter will surface itself.
+  The near-miss is the sharpening: independent repos keep reinventing claim-vs-evidence *gating* (Quorum,
+  ponytail's A/B, now codex-sparkompass) while the shared *vocabulary* stays single-repo — the gap is naming and
+  adoption, not the idea. Run of `node build.js` pending verification of thesis budgets.
 
 ### 2026-09-01 05:12
 - **Plan:** Act pass after the 04:53 learn (no new feed batch). Advance the one open `[ ]` Research item — the

@@ -1216,3 +1216,20 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   对冲是其最大优点："我没有证据表明 DeCA 被入侵"；Claroty 发现与 DeCA 之间"无已证实的关联"；更新失败与配置
   错误仍是合理解释。无论归因如何，架构性事实独立成立：军用超市的除霜可通过一类已被证明可操纵且常常暴露的
   设备远程控制——这是基础设施取证中陈述不确定性的范本。
+- **Aurora 勒索软件附属组织用 Cursor Agent 实施入侵——商业 agentic 编码助手被犯罪性用作入侵基础设施的最佳文档化案例
+  （CloudSEK "Caught in 4K"，8 月 27 日；Gambit Security 经 THN；受害者跨 2026 年 4–7 月）。** 一个未鉴权的开放目录
+  （端口 8888）泄露了该附属组织的整个 Linux 主目录：shell 历史、以俄语持续进行攻击规划的 **Cursor 聊天记录**（含完整
+  的 AD CS 利用计划）、12+ 漏洞的预置利用代码（大多为未修改的公开 PoC）、SAM/LSA 转储、BloodHound 采集，以及两套
+  加密器（Windows `sap.exe`、Linux/ESXi `encrypt.out`——同一 Zig 代码库的静态构建）。Gambit 另行观察到 Cursor Agent
+  在 10 个受害者网络进行实战利用（4 月 8 日–5 月 21 日）：Nmap/NetExec 扫描、BloodHound 枚举、NTLM 中继
+  （PetitPotam/Coerce Plus/PrinterBug）、对 ESXi 重度资产使用 Certipy——并指出**"大多数命令在第一次尝试时未能达成
+  目标。"** CloudSEK 统计：9 个国家 20+ 组织，17 家被攻破至域/交互式访问，4 家上泄露站点；与 TRM Labs 追踪的按受害者
+  分账为 35/65–46/54，一个谈判钱包中约有 7 BTC。注意点：任何报道中均无 Cursor/Anthropic 声明；仅约 1/5 的确认受害者
+  进入公开勒索（统计偏低）；洗钱网络结论为 TRM 的"高-中"置信度。在"AI 辅助攻击研究"（授权——Rapid7）旁边的新形态：
+  **犯罪性使用，由操作者自己的 opsec 失败文档化**，给防御者留下 AI 辅助攻击工作的一手记录——包括它的失败频率。
+  目标清单始终排除 CIS IP 段。
+- **CVE-2026-53362 有日期的更新（12:22 批次）：** Linux IPv6 内核内存覆写（Red Hat 7.8，KEV，联邦截止 8 月 30 日）获得
+  更锐利的次级解读——UDP 发送分页分配路径（`__ip6_append_data`）上的 OOB 写，可经 IPv6 分片路径从用户/网络命名空间
+  触达，并**可用于容器逃逸**；公开 PoC 已合入 Google 的 kernelCTF 仓库；上游修复 `736b380e28d0`，缓解公告
+  RHSB-2026-009。注意点依旧：Red Hat 自己的页面止步于"内核内存覆写"——容器逃逸解读来自次级报道 + kernelCTF PR，
+  而非 CNA 文本。

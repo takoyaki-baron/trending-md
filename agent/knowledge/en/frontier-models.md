@@ -1509,3 +1509,25 @@ distribution thesis 6.
   for months and some buyers defecting to Nvidia's DGX Spark. Apple has not confirmed being caught off guard.
   Local/cluster AI is now an enterprise procurement category big enough to reshape Apple's launch calendar — and
   the reported PCC refusal marks the exact boundary of Apple's private-AI story.
+- **"Does On-Policy Distillation Really Distill?" (arXiv 2608.31046, Purdue; #1 HF daily paper Sep 1) — a
+  mechanistic debunk with a cheaper replacement.** On-policy distillation (OPD) has a teacher score
+  trajectories the *student* generated — inherently off-policy for the teacher. Quantified: teacher
+  supervision contains "substantial noise whose prevalence increases with teacher scale," the student is
+  insensitive to it (removing noisy supervision, or substituting a fixed negative advantage, yields similar
+  performance), and learning concentrates on low log-probability tokens. The replacement, **OPSA** (On-Policy
+  Self-Adaptation), uses entropy-adaptive negative advantages with **no teacher at all**: vs base Qwen3-1.7B,
+  +35.41 Avg@32 on AIME24 (263% relative), more than doubles Pass@32 across three benchmarks, beats
+  teacher-based OPD by 16.77 Avg@32. The teacher mostly reduces to "suppress low-probability tokens" — a
+  signal you can synthesize. Second no-teacher result in four days (cf. Self-OPD, Aug 30): a direction of
+  travel away from expensive teachers. Caveat worth carrying: headline numbers are AIME24 + Qwen3-1.7B;
+  cross-family experiments are reported but AIME24 is the marquee.
+- **"Scaling Large Reasoning Models beyond Human Supervision" (arXiv 2608.31075, 19 authors, 72 pages) —
+  RL-toward-autonomy becomes an L0–L4 ladder.** Two axes — **reward** (per-instance human judgments →
+  reusable autonomous verifiers needing no human feedback) and **experience** (human-designed tasks →
+  self-generated curricula, constructed environments, autonomous co-evolution) — unified in a five-level
+  ladder tracking how much of learning stays under human control; evaluation along three objects ("policy
+  capability, feedback fidelity, experience quality"); a continuously updated GitHub repo of the field. Its
+  own risk list is the honest summary of what breaks at each rung: reward hacking, feedback drift, curriculum
+  collapse, environment errors. Useful as shared vocabulary for evaluating agent-training claims — the field
+  moves from "RLHF vs RLAIF" to a laddered autonomy taxonomy that pairs with the measured release thresholds
+  of thesis 7.

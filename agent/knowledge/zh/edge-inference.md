@@ -306,3 +306,13 @@ AI 性能最高为此前 mini 的 4×，**$899**）；**M5 Ultra**（quad-die Ul
 
 - **colibri（`JustVugg/colibri`，Apache-2.0，纯 C，26.3k★）——迄今最强的"无 GPU 前沿"引擎。** 把 VRAM、RAM 与 NVMe 当作同一内存层级：744B MoE 的约 19,456 个路由专家驻留磁盘（约 370 GB），按需经逐层 LRU 缓存（带学习热钉）、批量并集读取、`O_DIRECT` 与双 SSD 镜像流式加载。能跑 GLM-5.2（744B）、Kimi K3（2.8T）、Inkling（975B）、DeepSeek-V4-Flash、Qwen3.6 与 OLMoE——"它们都不需要 GPU"；速度受磁盘约束，GPU 只起辅助。v1.8.0，活跃维护（77 个开放 issue，40 个 PR）。专家流式加载击碎了"前沿 MoE 推理需要数据中心"的假设——正是这股压力让 2.8T 参数模型可被一台笔记本认领（论点 3，与 kimi-k3-in-c / FreeToken 并列）。
 - **百度 Unlimited-OCR（`baidu/Unlimited-OCR`，MIT，24.7k★）——恒定 KV cache 的一次性长程文档解析。** 用 Reference Sliding Window Attention（R-SWA）替换 DeepSeek-OCR 式流水线的全部解码器注意力层：全局可见的视觉 token 参考段 + 128 token 滑窗解码窗口让 KV cache 恒定，因此几十页可在单次前向中转录，而非逐页循环重置内存。3B 总量 / 500M 活跃的 MoE 解码器把 1024×1024 PDF 页压缩为 256 个视觉 token（16×），带单页（"gundam"）与多页（"base"）模式。在 OmniDocBench v1.5/v1.6 单页端到端解析上达到 SOTA；作者认为 R-SWA 可泛化到 ASR 与翻译。"Soft forgetting" 才是 KV 增长之墙的真正解药——一种通用注意力模式，而非包装（论点 3，与 Daedalus-150M 的缓存消除并置）。
+
+## ODS——本地 AI 安装器成为独立类目（09-01 12:22）
+
+- **`Osmantic/ODS`（Apache-2.0，5.6k★，v2.6.0 stable）**——一条 `curl | bash` 安装器（Windows 上为 PowerShell 块，需
+  Docker），装配完整本地栈：llama-server、Open WebUI、LiteLLM、Whisper、Kokoro TTS、Hermes agent、n8n、Qdrant、
+  SearXNG 与 ComfyUI。自动检测 NVIDIA / AMD（含 Strix Halo 统一内存）/ Intel Arc / Apple Silicon / CPU，按 VRAM/RAM
+  预算挑选模型档位，"bootstrap 模式"在 2 分钟内先以 1.5B 模型提供服务，真正的模型后台下载、热替换接入。每个服务都是
+  由 `ods` CLI 管理的即插式扩展（manifest + compose 文件）；默认本地优先，云/混合可选。集成税就是产品——本地 AI 安装器
+  正在成为独立类目，恰好赶上新硬件浪潮（Strix Halo、Mac Studio 集群）给了人们可以指向它们的机器。注意点：约 1.4k 开放
+  PR 对 3.2k 提交是罕见的维护形态；"主权人权"式话术是项目自己的营销；装配后的栈无第三方基准。

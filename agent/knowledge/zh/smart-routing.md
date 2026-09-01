@@ -248,3 +248,13 @@ vs BitRouter 策略 spec vs PolicyAware YAML vs `routing.yaml`），互不互通
   按簇有条件；80–85% 降本数字来自其自身生产 Claude Code 流量（非基准）；天真重路由可能抬高账单；"Router Arena 第一"是未经
   验证的供应商话术。收敛后的形态（声明式配置 + 确定性分类器 + fail-closed 回退，↑）多了一个自托管、嵌入打分、会话钉住的
   实例——按请求路由正成为 coding-agent 舰队的真实基础设施，而测量诚实度仍在供应商一侧。
+
+## firecrawl/pdf-inspector——有日期的更新，同一种"先分类再分派"（09-01 12:22）
+
+- **`firecrawl/pdf-inspector`（MIT，17.4k★，+228/天，v0.2.6）重回趋势榜**——8 月 15 日路由条目的带日期更新，测量形态首次
+  写明：以约 10–50 ms 及置信度分数将 PDF 分为 TextBased / Scanned / ImageBased / Mixed，仅对需要的页面按页路由 OCR，
+  位置感知提取 + Markdown 转换（标题、表格、多栏）；Python/Node/WASM 绑定 + `pdf2md`/`detect-pdf` CLI。卖点：本地 200 ms
+  内处理文本 PDF，"为约 54% 不需要 OCR 的 PDF 跳过昂贵的 OCR 服务"。注意点（诚实的部分）：基准为自建 200-PDF 语料
+  （综合 0.875，最快完整运行 0.470 s，Apple M4 Pro，7 月 31 日刷新）；54% 是项目自己的估计；Firecrawl 自己的落地页目前
+  并未提到该库——仓库而非厂商站点才是记录来源。文档路由位于每个 RAG 流水线质量与每个 agent 文档摄取 OCR 预算的上游
+  ——枯燥但真实的成本收益。
