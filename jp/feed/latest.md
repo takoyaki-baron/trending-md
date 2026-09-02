@@ -1,8 +1,8 @@
 ---
 date: 2026-09-02
-updated: 2026-09-02T04:15:00Z
+updated: 2026-09-02T12:35:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 39
 license: CC-BY-4.0
 ---
 
@@ -496,13 +496,253 @@ Baseten の Philip Kiely がポートフォリオ理論を推論エンジニア�
 
 ---
 
+## 31. SonicWall SMA 1000 にさらに 2 つのゼロデイが野良攻撃中——CVSS 10.0 のプレ認証 SSRF、RCE への連鎖の可能性
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** SonicWall PSIRT SNWLID-2026-0016（一次ソース、Sep 1 公開）· The Hacker News Sep 2
+- **Tags:** `sonicwall` `cve-2026-83548` `cve-2026-83549` `ssrf` `zero-day` `active-exploitation`
+
+SonicWall のアドバイザリ SNWLID-2026-0016 は、SMA 1000 アプライアンス（6210、7210、8200v。12.4.3-03453 以前と 12.5.0-02835 以前が影響）の 2 つの脆弱性を開示した：**CVE-2026-83548**（CVSS 10.0）は Appliance Work Place インターフェースにおける意図しないフォワードプロキシ経由のプレ認証 SSRF、**CVE-2026-83549**（CVSS 7.8）は Appliance Management Console での認証後 OS コマンドインジェクションで、「特定の条件下」で RCE に至る。SonicWall は「脆弱性の活発な悪用を示す事案を調査した」と述べている——「連鎖」という読みはその事案からの推論であって別途確認されたものではなく、帰属情報もなく、執筆時点で CISA KEV 未収載。修正はプラットフォームホットフィックス **12.4.3-03526** と **12.5.0-02952**。IoC を見つけた場合のベンダー指示は再イメージング、全パスワードの変更、TOTP のリセット。これは 7 月の CVE-2026-15409/15410（UTA0533 が KNUCKLEBALL マルウェアの配備に使用）とは別のペアで——今夏 2 度目の SMA 1000 ゼロデイ騒動だ。
+
+**Why it matters:** エッジ VPN アプライアンスは企業攻撃面の「パッチを当てない層」であり、同じ製品ラインでゼロデイの季節が繰り返されるなら、「前のアドバイザリのパッチ適用済み」はもはや安全な状態ではない。
+
+> 「野良悪用」の主張はベンダーが調査した 1 件のみに依る——まずパッチを当てよ。ただし「攻撃チェーンを形成する可能性」は実証ではなく推論として読め。
+
+[`🔗 SonicWall：SNWLID-2026-0016`](https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2026-0016) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/attackers-exploit-two-sonicwall-sma.html)
+
+---
+
+## 32. Forescout が Claude で 2021 年の PLC エクスプロイトを別の WAGO コントローラへ移植——成功、費用 $535.74、そして 2 台目の PLC をブリック
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Forescout Vedere Labs ブログ（一次ソース）· The Hacker News / SecurityWeek Sep 2
+- **Tags:** `ics` `ot-security` `claude` `plc` `exploit-porting` `ai-cyber`
+
+Forescout の Vedere Labs が Anthropic の Cyber Verification プログラムの一環で実験を行った：CVE-2021-31886——Nucleus RTOS FTP サーバにおける CVSS 9.8 のプレ認証スタックオーバーフロー——を、悪用既知の WAGO 750-852 から WAGO 750-831 へ、ターミナル・Ghidra・実機を備えた対話型 Claude Code セッションで移植する。移植は成功した：Claude は USER/CWD コマンドシーケンスを導出し、CRLF 終端を落としてペイロードを 256 バイトのゼロ埋めから守り、NOP スレッドから 2 つの実動ペイロード（ICMP echo、「PWNED」入り UDP パケット）まで **12 分**で到達。RCE ステージ全体の費用は **8 時間 32 分で $535.74** で、「研究者の持続的な操舵」が必要だった（Sonnet 4.6 では停滞し、Opus 4.6 への切替で進捗）。続く C2 インプラント作業は失敗——フラッシュマップ領域への書き込みで PLC は完全にブリック—— capability は「ネットワークパケットの送信」で止まる。Forescout 自身の留保こそが本題だ：「同じ研究者が AI なしで、より短時間かつ低コストで初期 RCE 移植を達成できたと主張することもできる」。そして Nucleus V1 の修正は存在しない（Siemens は修正予定なし。緩和は FTP/21 の遮断とセグメンテーション）。
+
+**Why it matters:** 動作する ICS エクスプロイトの AI 支援によるハードウェア間移植として初めて well-documented な事例——費用の数字、失敗モード、そしてベンダー自らの人間ならもっと安くできたという留保付き。AI 攻防論争に通常欠けている証拠基盤そのものだ。
+
+> ブリックされた PLC が 2 つ目の正直なデータポイントだ：エージェントはエクスプロイトでは加速し、地図の縁の外でも同じ自信を持つ。
+
+[`🔗 Forescout：Can AI Create PLC Attacks?`](https://www.forescout.com/blog/can-ai-create-plc-attacks-yes-but-it%E2%80%99s-not-that-easy-yet/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/researchers-use-claude-to-port-pre-auth.html) · [`🔗 SecurityWeek`](https://www.securityweek.com/experiment-porting-a-plc-exploit-with-ai-takes-hours-and-hundreds-of-dollars/)
+
+---
+
+## 33. Switchvox VoIP の脆弱性（CVE-2026-9586）が野良攻撃下——認証不要の SQLi から PostgreSQL スーパーユーザのリバースシェルへ、約 4,000 台が露出
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Horizon3.ai 開示（一次ソース）· The Hacker News Sep 2
+- **Tags:** `switchvox` `cve-2026-9586` `sql-injection` `voip` `active-exploitation`
+
+CVE-2026-9586（CVSS 9.3）は Sangoma Switchvox SMB 8.3（104997）の認証不要 SQL インジェクションだ：`/pa` エンドポイントは `<PolycomIPPhone>` で始まる XML を処理する際、攻撃者制御の `PhoneIP` 値を PostgreSQL クエリへ直接連結する。任意 SQL からデータベーススーパーユーザとしてのコード実行に至る——SRA Labs は抽出、Web 管理者への権限昇格、「サーバ上で任意コードを実行しリバースシェルを起動」を実証した。2026 年 4 月に Sangoma へ報告された 12 件の脆弱性の 1 つ（Horizon3.ai）で、SRA Labs が 5 月に独立発見。**8.4.0.2**（7 月 14 日）で修正済み。Horizon3.ai は **8 月 30 日**開始の野良悪用を観測：リバースシェルに続く Base64 エンコードのプロセス列挙で、IoC は `/var/log/switchvox/db-quirks.log`、攻撃者 IP は 176.65.148[.]184。スキャンでは約 4,000 インスタンスがインターネット露出（大半は米国）、ハニーポットは高頻度の反復攻撃を吸収中——研究者 Zach Hanley は「露出している Switchvox インスタンスの大半は標的になった、なる予定だ」と警告する。
+
+**Why it matters:** VoIP サーバは通話録音・認証情報・トランク設定を保持し、その職能上ポートを開放せざるを得ず、ほぼ誰もインベントリを持っていない——1 か月前のパッチと稼働中のワーム的キャンペーンの組み合わせは、まさに進行中の侵害の定番レシピだ。
+
+> 7 月 14 日にパッチ、8 月 30 日に悪用開始——この 6 週間の遅延こそが脆弱性の本体だ。
+
+[`🔗 Horizon3.ai：CVE-2026-9586`](https://horizon3.ai/attack-research/disclosures/cve-2026-9586-sangoma-switchvox-rce/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/attackers-exploit-critical-switchvox.html)
+
+---
+
+## 34. NousResearch の hermes-agent が「The Pantheon Release」——v0.21.0 がマルチエージェントをデフォルト ON の名前付きボットの社会に変える
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 累計 23.98 万 · 本日 +529 · Release v0.21.0（Aug 31）
+- **Tags:** `agents` `multi-agent` `hermes` `nous-research` `open-source`
+
+Hermes Agent v0.21.0（「The Pantheon Release」）は v0.20.0 以降の 760+ コントリビュータによる約 5,800 コミット・約 2,475 マージ PR をまとめた。ヘッドラインは **Bot Mode**。デスクトップアプリにバンドルされデフォルト ON：各エージェントプロファイルに名前、決定論的なアバター顔、Discord 風グループチャット内の席が与えられ、ボット同士が、またあなたと会話する（@ メンションでアドレス）。周辺には：プロファイルやゲートウェイを跨ぐ永続的なボット間 DM の `hermes peer`（返信は各エージェントの検証可能な Bot Chat に残る、送りっぱなしではない）；スケジュール間で記憶を運ぶ cron ジョブで「スケジュールされたエージェントが実際に学習する」；サブエージェントの飛行中ライブステアリング；MCP サーフェスの指揮所化；デスクトップブラウザの操縦。MIT ライセンス、本日もリポジトリにプッシュあり。
+
+**Why it matters:** マルチエージェント UX は「同僚で埋まったチャットアプリ」——パイプラインの段階ではなく、名前がありアドレス可能で永続するエンティティ——へ収束しつつあり、24 万スターの hermes はそのテーゼの最大のオープン展開だ。
+
+> 注目すべき設計の賭け： durable で検証可能なエージェント間会話をインターフェースとし、記憶をスケジュールに紐付ける。昔のやり方はまず配管だった——今はチャットそのものがランタイムだ。
+
+[`🔗 NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent) · [`🔗 Release v2026.8.31 (v0.21.0)`](https://github.com/NousResearch/hermes-agent/releases/tag/v2026.8.31)
+
+---
+
+## 35. 「The Emergent Symbolic Structure of Artificial Neural Networks」——LLM のベクトルを閉形式の記号方程式に置き換えても挙動はほとんど変わらない
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2608.29530（一次ソース）· HN 184 pts / 62 コメント · Sep 2 04:15 UTC 提投（~12:15 UTC+8）
+- **Tags:** `interpretability` `neurosymbolic` `research` `llm` `arxiv`
+
+McCoy、Soulos、Linzen、Smolensky が、ニューラルネットがなぜ言語や論理を扱えるのかへの直接検証を行う：「ニューラルネットワークの内部表現は記号構造を暗黙に実現しているのではないか」という仮説だ。手法：ネットワークの表現生成プロセスを、記号構造をインスタンス化する閉形式の方程式で近似し、それを丸ごと置換する。結果：挙動は「ほぼ変化しない」——小規模なリスト操作ネットワークでも、算術・論理・コード・言語の 4 領域にわたる LLM でも。近似が閉形式であるため因果的介入が可能になり——記号構造への的確な編集が LLM の挙動を予測可能に変える——これこそ構造が相関的な飾りではなく荷重を支えていることの証拠だ。論文の留保も適切だ：これは記号的見方とベクトル的見方を「和解しうる一つの可能性」として提示され、置換は挙動を「ほぼ」保存するのであって正確には保存しない。
+
+**Why it matters:** LLM 内部が記号方程式に丸ごと置換できて挙動損失が最小なら、解釈可能性は扱える対象を得る——記号 vs ベクトル論争に、また一つのプロービング分類器の相関研究ではなく、丸ごと置換する実験が届いた。
+
+> 「ほぼ変わらない」を注意深く読め：それは発見であると同時に限界でもある——残差のドリフトこそ、ネットワークが方程式でなくなる場所だ。
+
+[`🔗 arXiv:2608.29530`](https://arxiv.org/abs/2608.29530) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49531651)
+
+---
+
+## 36. pacifio/atlas——「エージェントのためのバージョン管理」——本日のトレンド最速上昇（+895）、コミットを生み出したセッションに紐付けるチェックポイント
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 累計 2.6k · 本日 +895 · alpha-0.3.0（Aug 25）
+- **Tags:** `agents` `version-control` `agent-infra` `rust` `acp`
+
+Atlas は Rust 製ワークスペースアプリで、エージェントの実行ごとに**チェックポイント**を生成する：コミットが、それを生み出したセッションへリンクされ、プロンプト・ツール呼び出し・ファイル変更が一緒に保存され、数か月後もクエリ可能だ。Claude Code、Codex、そしてより広い ACP レジストリ（Cursor、OpenCode、Kilo Code）が、zed-industries の Agent Client Protocol 経由で同じコードベース上に並走し、デバイス上の共有メモリを持つ——「Claude Code が下した判断は Codex の次のプロンプトに現れる」——さらにエージェント切り替えを跨ぐセッション引き継ぎ：キュレーションされたファクトパックと前セッションの末尾が運ばれる。ノートは `.atlas/knowledge/` の Markdown、セッションは JSONL、`CLAUDE.md`/`AGENTS.md` は 1 つのインデックスへ折り畳まれる。チェックポイント記録は gitignore された `.atlas/` 内の SQLite。デフォルトでローカル、組織同期はオプトイン。留保：まだプレアルファ版（alpha-0.3.0）で、README は「レジストリのロングテイルのエージェントの QA は進行中」と認める。
+
+**Why it matters:** 3 週間前、ERSC は「Git のサーバ側はエージェント群の下で壁に当たる」に賭けた。Atlas はそのローカルファーストの補完だ——エージェントはすでにコミットの相当部分を書いており、今日に至るまで「なぜ」を「何を」の隣に保持するツールはない。
+
+> gitignore されたチェックポイント DB が正直なアーキテクチャの告白だ：コミット履歴は git に純粋なまま、エージェントの来歴はクエリ可能な sidecar に置かれる。
+
+[`🔗 pacifio/atlas`](https://github.com/pacifio/atlas) · [`🔗 Release alpha-0.3.0`](https://github.com/pacifio/atlas/releases/tag/alpha-0.3.0)
+
+---
+
+## 37. TimesFM 3.0——Google の時系列予測基盤モデルが 3 ベンチマークで 1 位を主張し、Apache ライセンスを手放す
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub release v3.0.0（一次ソース、Aug 28）· 本日トレンド +326 · HF `google/timesfm-3.0-pytorch`
+- **Tags:** `time-series` `forecasting` `foundation-models` `google-research` `open-weights`
+
+TimesFM 3.0 は、将来既知の共変量を含むネイティブな多変量＋単変量の共変量付き予測を「タスクごとのチューニングなしで」追加し、fev-bench（実世界タスク 100）、TIME Benchmark（領域データセット 50 / タスク 98）、GIFT-Eval（基盤モデル部門）の 3 つで 1 位を主張する。過小報告されているのはライセンスだ：2.5 まで重みは Apache-2.0 だったが、**3.0 の重みは「timesfm-non-commercial-license-v1.0」へ移行**——「デフォルトの事前学習重みの商業的・生産的使用は認められない」——リポジトリ自身が TimesFM が BigQuery ML・Google Sheets・Vertex Model Garden に搭載されていると注記しているにもかかわらずだ。ベンチマークは自己申告で、README は 3.0 のパラメータ数もコンテキスト長も示していない（2.5 は 200M パラメータ / 16k コンテキスト）。
+
+**Why it matters:** オープン時系列予測の旗手が 3 つの 1 位を主張しつつ重みを準クローズへ動かすのは、Google が価値をどこに置くと考えているかの小さいが判読可能なシグナルだ——Apache-2.0 の TimesFM に固定された本番パイプラインは、アップグレード前に細則を読み直す必要がある。
+
+> LTX-2.5 のゲート付きライセンスのパターンが再演されている：「オープンウェイト」は今や日常的に「あなたが企業になるまでオープン」を意味する。
+
+[`🔗 google-research/timesfm`](https://github.com/google-research/timesfm) · [`🔗 google/timesfm-3.0-pytorch（Hugging Face）`](https://huggingface.co/google/timesfm-3.0-pytorch)
+
+---
+
+## 38. GeoNetwork：欠落した認可チェック＋安全でない Saxon 設定が認証不要 RCE に連鎖——政府のジオポータルに波及
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ethiack リサーチ（一次ソース）· The Hacker News Sep 2
+- **Tags:** `geonetwork` `cve-2026-63219` `cve-2026-58400` `xslt` `rce` `government`
+
+政府ポータルで使われるオープンソースの地理空間メタデータカタログ GeoNetwork に、連鎖可能な 2 つの脆弱性：**CVE-2026-63219**（CVSS 8.6）は formatter アップロードエンドポイントの認可チェック欠落で、匿名ユーザが任意の `.xsl`/`.zip` を formatter ディレクトリへ置ける。**CVE-2026-58400**（CVSS 9.1）は Saxon XSLT 設定の不備で——secure-processing 設定があるにもかかわらず——ロードされたスタイルシートが `java.lang.Runtime.exec()` を呼べる。公開レコードへの 1 回の GET で GeoNetwork ユーザとして OS コマンドが実行される。修正は 7 月 8 日の **4.4.12 / 4.2.17**（アドバイザリ公開は 8 月 31 日）；暫定緩和はリバースプロキシで `/geonetwork/srv/api/formatters` への書き込みメソッドを遮断すること。Ethiack は 39 か国の露出インスタンス 121 を指紋採取——89% が政府・軍・国家機関関連——ただしそれらは*脆弱な*インスタンスであって侵害確認ではなく、KEV 収載も公表された悪用報告もない。データはベンダー研究者に単一ソース。留保はそのまま保持する。
+
+**Why it matters:** 地理空間スタック（GeoServer に続き GeoNetwork）が、公共セクターの地図インフラがまさに存在する場所でプレ認証 RCE を産み続けている——修正は 7 月から利用可能だったのに、アドバイザリは今週やっと公開された。
+
+> 露出を確認せよ：この連鎖はどの段階でも認証情報を必要とせず、政府ジオポータルこそ標的母集団だ。
+
+[`🔗 Ethiack：GeoNetwork PreAuth RCE`](https://ethiack.com/info-hub/research/geonetwork-preauth-RCE) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/geonetwork-fixes-unauthenticated-rce.html)
+
+---
+
+## 39. 当局が 23 歳の P2P ファイル感染型ボットネット Sality をシンクホール化——突いたのは、自らのピアリストへの盲目的信頼
+
+- **Velocity:** ▮▮ rising
+- **Source:** 米司法省プレスリリース（一次ソース、Aug 31）· The Hacker News Sep 2
+- **Tags:** `botnet` `sality` `takedown` `p2p` `sinkhole`
+
+米司法省が、ブルガリア・ハンガリー・ルーマニア、さらに CrowdStrike と Shadowserver Foundation とともに、8 月 31 日に Sality を瓦解させた——**2003 年**から活動する Windows ファイル感染型ボットネットで、コードベースを共有しつつプロトコルと鍵が非互換な 2 つの P2P C2 ネットワーク（v3 と v4）を持ち、到達可能な感染機 15,000+、クリップボードハイジャック payload EggJagger は少なくとも 15 万ドルの暗号資産窃盗に関わる。手法：Sality のピアリスト機構には認証も暗号学的 identity も許可リストもなく、当局はボットの 40 分の検証サイクルの間にプロトコル操作で正当なピアを一掃し（2014 年 GameOver Zeus、2017 年 Kelihos と同じピアリスト汚染）、スーパーノードから隔離し、シンクホールエントリを挿入した——感染機は今や CrowdStrike 運営のシンクへビーコンする（ライトハウス IP 188.166.101.148 への UDP トラフィックを確認せよ）。ドメインは差押えられ、9 つの payload URL が落ちた。留保は率直だ：マシンは感染したまま——「それらのシステムに既にインストールされたマルウェアはアクティブのまま」で、断たれたのは*新規*の payload 配達だけだ。
+
+**Why it matters:** ファイル感染型ボットネットは 10 年前に死んだと宣言されていた。P2P プロトコル信頼を突く瓦解プレイブックが 2026 年も機能すること、そして数十万台のまだ病原体を抱えた SOHO デバイスにとって瓦解は修復ではないことを、これは示している。
+
+> 「認証なし、暗号学的 identity なし、許可リストなし」——ボットネットは 2003 年の LAN の脅威モデルを持っており、それで死んだ。
+
+[`🔗 米司法省：Sality Malware Disrupted in International Cyber Takedown`](https://www.justice.gov/usao-cdca/pr/sality-malware-disrupted-international-cyber-takedown) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/authorities-turn-salitys-p2p-network.html)
+
+---
+
+## 40. 「M4 Pro Mac mini のローカルモデル構成」——237 pts の青写真：Qwen MoE 1 つ、oMLX、Tailscale、あとは全部オプション
+
+- **Velocity:** ▮▮ rising
+- **Source:** lws.io（一次ソース）· HN 237 pts / 142 コメント · Sep 1 22:30 UTC 提投（~Sep 2 06:30 UTC+8）
+- **Tags:** `local-llm` `mlx` `apple-silicon` `self-hosted` `qwen`
+
+Kevin Lewis の常時稼働 M4 Pro Mac mini（48 GB）は、**Qwen3.6-35B-A3B-OptiQ-4bit**——256 エキスパートで合計 35B、トークンあたり約 3B アクティブ、常駐約 20 GB——を主推論モデルとし、チャットと整形用に Gemma-4-E4B-it（2.4 GB）を加え、**oMLX**（HF モデルブラウザ、自動発見、SSD 永続 KV キャッシュ）で提供する。実測はプロンプト処理 325 tok/s、生成 34 tok/s。iPhone・MacBook・mini が Tailscale 経由で接続する。クライアント：Hermes エージェントバックエンド、iOS の Apollo、Raycast AI、コーディングの Pi。数字は代償とともに提示される：4-bit OptiQ（敏感な層は 8-bit）は BF16 比でベンチ 1〜2 ポイントの低下；dense 27B モデルは 16 GB 機ではスワップ痛みなしでは入らない；34 tok/s は「気にならない程度に速い」であって即時ではない。サイジングのチェックリスト：4-bit ではファイルサイズ（GB）≈ パラメータ数、そこから macOS のオーバーヘッド約 6〜8 GB、KV キャッシュの余地を引き、SSD スワップ前に 10〜15% のバッファを残す。
+
+**Why it matters:** これはローカル LLM 市場の具体的な中間点だ（上の slotstream の項目はその極端へ押し進む）——約 1,400 ドルの常時稼働ボックスが「GPT-5 や Claude Opus を必要としないリクエストの 80%」を担い、API は純粋主義のテストではなくフォールバックとして保持される。
+
+> 最も情報量の多い細部は MoE の教訓だ：総パラメータ数はマーケティング、アクティブパラメータ × 量子化幅だけが RAM に収まるかを決める。
+
+[`🔗 lws.io：My local model setup`](https://lws.io/blog/my-local-model-setup/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49529132)
+
+---
+
+## 41. Movie Scene Map——15,565 の実撮影ロケーションを 1 枚の地図に、すべて Wikidata から構築、CC0 ダンプと MCP エンドポイント付き
+
+- **Velocity:** ▮ steady
+- **Source:** moviescenemap.com（一次ソース）· HN 278 pts / 38 コメント · Sep 1 16:34 UTC 提投（~Sep 2 00:34 UTC+8）
+- **Tags:** `open-data` `wikidata` `maps` `film` `mcp`
+
+無料・広告なしの実ロケ地アトラス——スタジオ、城、街路——166 か国の 15,565 地点をカバーし、9,287 の映画・シリーズと 653 フランチャイズ、さらに 2,153 のゲーム、407 のアニメ、365 の漫画を*物語の舞台*で配置する（明示的に「舞台」とラベルされ、「撮影地」とは決して言わない）。すべてのピンはオープンデータから：Wikidata の撮影地ステートメントを座標に結合、Commons の写真、Wikipedia 記事——「リスト記事から scraping したものは何もなく、生成されたものも何もない」。ステートメントとメンションの 2 種の証拠は厳密に分離される。データセット全体が **CC0** で GeoJSON/CSV としてダウンロード可能で、AI アシスタント向けの読み取り専用 MCP エンドポイントもある。サイト自身の正直さのページ：「アトラスはキュレーションであり、完全ではない」——空の国は Wikidata カバーの希薄さを意味し、撮影がないことを意味しない。出典付きの Wikidata ステートメントを 1 つ追加すれば、次の再構築で作品が現れる。
+
+**Why it matters:** 構造化オープンデータと薄いレンダラで何が生産できるかのモデルだ——そして人間向けインターフェースと並んで MCP エンドポイントを第一級のインターフェースとして露出する、最初期の消費者向けサイトの 1 つだ。
+
+> 差別化は方法論ノートにある：Wikipedia の*メンション*は Wikidata の*ステートメント*より弱い証拠であり、サイトは両者を混ぜない——この規律はデータよりも希少だ。
+
+[`🔗 Movie Scene Map`](https://moviescenemap.com/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49524320)
+
+---
+
+## 42. Weedout——YouTube の「Made with AI」動画を隠す $1.99 の Safari 拡張、ラベルのないスロップは範囲外だと正直に認める
+
+- **Velocity:** ▮ steady
+- **Source:** masteranza.github.io（一次ソース）· HN 157 pts / 70 コメント · Sep 1 22:06 UTC 提投（~Sep 2 06:06 UTC+8）
+- **Tags:** `safari` `youtube` `ai-slop` `extension` `filtering`
+
+Weedout は、macOS Safari（13+）で YouTube 自身の「Made with AI」ラベルを持つ動画をフィード・検索・関連動画・プレイリスト・Shorts から取り除く。オプションで Shorts の自動スキップ、削除前に確認できるようフラグ付き項目をその場でフェードさせる「Dim モード」も備える。検出は意図的に賢くない：YouTube 自身の開示バッジ*のみ*でフィルタする——「推測なし、ヒューリスティックなし、誤認なし」——すべてローカル処理でライブフィード 1 回あたり約 0.5 秒、アカウントもデータ収集もなし、買い切り $1.99。明記された限界が製品のテーゼそのものだ：AI 製だが*無ラベル*のコンテンツは「当面、範囲外」。HN スレッドでは隣接する論争が走る——プラットフォームのラベルを信頼することは共犯なのか、そして（ランク下げではなく）隠すことが YouTube にあなたについて何を学ばせるのか。
+
+**Why it matters:** Chrome が MV2 を削除し uBlock 級のブロッキングが死んだ今、プラットフォームネイティブのフィルタ面（Safari のコンテンツブロッカー、YouTube 自身のラベル）がユーザ側キュレーションがまだ生きている場所だ——これは AI スロップフィルタのアイデアを最小の正直な形まで剥いたものだ。
+
+> 範囲の自白こそ信頼のシグナルだ：隠すのは YouTube 自身が AI と認めたものだけで、それ以上は何も主張しない。
+
+[`🔗 Weedout`](https://masteranza.github.io/weedout/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49528895)
+
+---
+
+## 43. 「いいよ、自分でテキストエディタを作ろう」——canvas は `<textarea>` に負け、理由はアクセシビリティだ
+
+- **Velocity:** ▮ steady
+- **Source:** dbushell.com（一次ソース）· HN 166 pts / 144 コメント · Sep 1 17:12 UTC 提投（~Sep 2 01:12 UTC+8）
+- **Tags:** `text-editors` `web-dev` `accessibility` `canvas` `contenteditable`
+
+Web 開発者の David Bushell が 3 つのテキストエディタデモを作り、淘汰の順序を報告した。Canvas：完全な制御だが「何ひとつタダでくれない」——カーソル移動、タイピング、選択、scrollcheat をすべて手書き——そして「完全にアクセス不能」、これが失格理由。`contenteditable="plaintext-only"`：ネイティブの選択・取り消し・アクセシビリティがタダで手に入るが、文字数が上がると性能の壁（Chromium が最悪）。素の `<textarea>`：長文で最高の性能だが、textarea は CSS ハイライトを使えないため、別の DOM オーバーレイ層と MicroLighter によるシンタックスハイライトが必要。テーゼは文体ごと届く：「最近のソフトウェアはゴミだ」そして彼は「ゴミを作るのが上手い」；Monaco/VS Code は「`<div>` スープの地獄」。範囲の明示：「テキストエディタの 90%、機能の 1%」、UTF-16 書記素の落とし穴込みで「雨の日のために」棚上げ。
+
+**Why it matters:** canvas エディタ流行への簡潔な実証的答えだ——ブラウザのネイティブ編集プリミティブこそがアクセシビリティの物語であり、すべての自作エディタはそれをゼロから再び稼がされている。
+
+> 「テキストエディタの 90%、機能の 1%」は、エージェント製エディタのほとんどへの正直なレビューでもある。
+
+[`🔗 dbushell.com：Fine, I'll build my own text editor`](https://dbushell.com/2026/09/01/text-editor/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49524863)
+
+---
+
+## 44. Superlinked の SIE——エージェントが呼ぶすべてのモデルを 1 つのセルフホスト推論クラスタで、埋め込みからエージェントループまで
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 累計 3.0k · 本日 +61 · Apache-2.0
+- **Tags:** `inference` `agent-infra` `embeddings` `self-hosted` `kubernetes`
+
+SIE（Superlinked Inference Engine）は「タスクごとのモデルサーバ」を「100+ モデルを 1 クラスタで提供する」仕組みへ置き換え、OpenAI 互換エンドポイント（`/v1/embeddings`、`/v1/chat/completions`、`/v1/completions`、`/v1/responses`）の背後で、検索/リトリーバル、ドキュメント→Markdown、構造化出力、コンテンツ安全性、そしてエージェントループ自体を担う。事前設定カタログ（Stella、SPLADE、Qwen3、GLiNER、SigLIP——MTEB ベンチマーク済み）はオンデマンドでモデルをロードし LRU で退避；K8s/Helm 設定にロードバランシングゲートウェイ、KEDA オートスケーリング、Grafana ダッシュボードが付属；SDK は LangChain、LlamaIndex、DSPy、CrewAI とベクトル DB 御三家に統合。新しいのでスター数（3.0k）がまだ README バッジに収まる——有用なシグナルはアーキテクチャにある：タスク別のモデルサーバが、タスクの形をした 1 つのクラスタへ潰れつつある。
+
+**Why it matters:** エージェントスタックは密かに 5〜10 のモデル依存（embedder、reranker、parser、安全性、主 LLM）を溜め込む；それらを 5 つの雪片サーバではなく 1 つのオートスケールクラスタとして運用すれば、vLLM が決して請求しなかった運用コストを削できる。
+
+> 狙いはタスクリストにある：「エージェントループ自体」が提供されるモデルワークロードになっている——推論インフラはモデルだけでなく、エージェントに値付けし始めている。
+
+[`🔗 superlinked/sie`](https://github.com/superlinked/sie) · [`🔗 SIE ドキュメント`](https://superlinked.com/docs/)
+
+---
+
+## 45. True Rate of Unemployment が 24.9% に——AI 雇用代替論争が繰り返し手を伸ばす統計
+
+- **Velocity:** ▮ steady
+- **Source:** LISEP（一次ソース）· HN 265 pts / 238 コメント · Sep 2 02:21 UTC 提投（~10:21 UTC+8）
+- **Tags:** `labor-economics` `unemployment` `statistics` `data` `ai-impact`
+
+LISEP の True Rate of Unemployment——「機能的に失業している」米労働力の割合：求職中の失業者、非自発的パートタイム、またはフルタイムでも生活賃金（保守的に 2025 ドル建て税前年 26,000 ドル）未満の収入——は 2026 年 7 月に **24.9%** に達し、0.2 ポイント上昇、「4 か月連続の上昇」。同月の BLS のヘッドライン失業率は 4.1% だった。BLS のマイクロデータに基づき方法論は全公開；人口統計別の開きは大きい（高卒資格なし 50.3%、大学院 12.8%；女性 31.0% 対男性 19.5%）。238 コメントの HN スレッドが解釈の作業をしている：AI の労働への影響について何を結論するにせよ、スレッドの争点はどの分母が正直かだ——BLS は積極的な求職者のみを数え、TRU は仕事の存在だけでなく価格を問う。
+
+**Why it matters:** エージェントの能力が労働市場の変数になれば、議論はこの種の統計を通って走る——原因が何であれ、4 か月連続の上昇は、代替論争が次に引用する数字になる。
+
+> 26,000 ドルの閾値とフレーミングは LISEP が設定する；方法は開示されているが、これは利害の近い研究所の尺度だ——BLS の代わりにではなく、BLS と並べて読め。
+
+[`🔗 LISEP：True Rate of Unemployment`](https://www.lisep.org/tru) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49530989)
+
+---
+
 ## Metadata
 
 | 項目 | 値 |
 |-------|-------|
-| Generated | 2026-09-02T04:15:00Z |
-| Items | 30 |
-| Sources tracked | 28 (Hacker News, GitHub Trending, Hugging Face, Anthropic, OpenAI, NVD, SecurityWeek, The Hacker News, BleepingComputer, Socket, KrebsOnSecurity, Kaspersky Securelist, Virtualizor/Softaculous, Mozilla, DoltHub, ERSC, frn.sh, tmpout.sh, World Labs, webiterate.dev, mvakde.github.io, CogEvol, danluu.com, Simon Willison, newsonaut.com, ambientcss.vercel.app, Nori Robotics, Baseten) |
+| Generated | 2026-09-02T12:35:00Z |
+| Items | 45 |
+| Sources tracked | 39 (Hacker News, GitHub Trending, Hugging Face, arXiv, Anthropic, OpenAI, NVD, SecurityWeek, The Hacker News, BleepingComputer, Socket, KrebsOnSecurity, Kaspersky Securelist, Virtualizor/Softaculous, Mozilla, DoltHub, ERSC, frn.sh, tmpout.sh, World Labs, webiterate.dev, mvakde.github.io, CogEvol, danluu.com, Simon Willison, newsonaut.com, ambientcss.vercel.app, Nori Robotics, Baseten, SonicWall PSIRT, Forescout, Horizon3.ai, Ethiack, US DOJ, NousResearch, pacifio/atlas, google-research/timesfm, lws.io, moviescenemap.com, masteranza.github.io, dbushell.com, Superlinked, LISEP) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（毎日 3 回） |
 | Ranking | ベロシティ重み付け（新しさ × エンゲージメント加速 × ソースの権威性） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

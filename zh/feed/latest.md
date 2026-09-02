@@ -1,8 +1,8 @@
 ---
 date: 2026-09-02
-updated: 2026-09-02T04:15:00Z
+updated: 2026-09-02T12:35:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 39
 license: CC-BY-4.0
 ---
 
@@ -495,13 +495,253 @@ Baseten 的 Philip Kiely 把组合投资理论引入推理工程：每个部署�
 
 ---
 
+## 31. SonicWall SMA 1000 再曝两个在野利用的零日——CVSS 10.0 预认证 SSRF，或可串联成 RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** SonicWall PSIRT SNWLID-2026-0016（一手来源，发布于 Sep 1）· The Hacker News Sep 2
+- **Tags:** `sonicwall` `cve-2026-83548` `cve-2026-83549` `ssrf` `zero-day` `active-exploitation`
+
+SonicWall 的安全公告 SNWLID-2026-0016 披露了 SMA 1000 设备（6210、7210、8200v，受影响版本为 12.4.3-03453 及更早、12.5.0-02835 及更早）的两个漏洞：**CVE-2026-83548**（CVSS 10.0），Appliance Work Place 接口中经由非预期正向代理的预认证 SSRF；**CVE-2026-83549**（CVSS 7.8），Appliance Management Console 中经认证的管理员 OS 命令注入，在"特定条件下"可达 RCE。SonicWall 表示其"调查了一起表明这些漏洞正被主动利用的案件"——"可串联利用"是从该案推断的，并未单独证实；无归因，且截稿时无 CISA KEV 条目。修复版本为平台热补丁 **12.4.3-03526** 与 **12.5.0-02952**；厂商对发现 IoC 的建议是重镜像、轮换全部密码、重置 TOTP。这与 7 月的 CVE-2026-15409/15410（被 UTA0533 用于投放 KNUCKLEBALL 恶意软件）是不同的两枚漏洞——今年夏天 SMA 1000 的第二轮零日风波。
+
+**Why it matters:** 边缘 VPN 设备是企业攻击面中"从不打补丁"的那一层，而同一产品线反复出现零日季意味着"装了上一份公告的补丁"已不再是一个安全状态。
+
+> "在野利用"的说法仅基于厂商调查的一起案件——先打补丁，但请把"或构成攻击链"读作推断而非演示。
+
+[`🔗 SonicWall：SNWLID-2026-0016`](https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2026-0016) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/attackers-exploit-two-sonicwall-sma.html)
+
+---
+
+## 32. Forescout 用 Claude 把 2021 年的 PLC 漏洞利用移植到另一款 WAGO 控制器——成功了，花费 $535.74，并烧砖了第二台 PLC
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Forescout Vedere Labs 博客（一手来源）· The Hacker News / SecurityWeek Sep 2
+- **Tags:** `ics` `ot-security` `claude` `plc` `exploit-porting` `ai-cyber`
+
+Forescout 的 Vedere Labs 做了一项与 Anthropic Cyber Verification 计划相关的实验：把 CVE-2021-31886——Nucleus RTOS FTP 服务器中 CVSS 9.8 的预认证栈溢出——从已知可利用的 WAGO 750-852 移植到 WAGO 750-831，全程在交互式 Claude Code 会话中进行，配有终端、Ghidra 与物理设备。移植成功了：Claude 推导出 USER/CWD 命令序列并去掉 CRLF 终止符，使载荷躲过 256 字节的清零操作，随后用 **12 分钟**从 NOP 雪橇推进到两个可用载荷（ICMP echo、携带 "PWNED" 的 UDP 包）；完整 RCE 阶段在 **8 小时 32 分内花费 $535.74**，且需要"研究者的持续引导"（在 Sonnet 4.6 上陷入停滞，切换到 Opus 4.6 后才推进）。后续的 C2 植精任务失败了——向 flash 映射内存写入直接把 PLC 永久烧砖——且能力止步于"发送网络数据包"。Forescout 自己的保留条款正是重点："可以说同样的研究者不用 AI 也能用更少时间、更低成本完成初始 RCE 移植"；而 Nucleus V1 没有任何修复（Siemens 不打算修，缓解手段只有封禁 FTP/21 与网络分段）。
+
+**Why it matters:** 首个有完整记录的 AI 辅助跨硬件移植可用工控漏洞利用案例——带着费用数字、失败模式，以及厂商自己"人类做会更便宜"的保留条款，这正是 AI 攻防辩论通常缺失的证据基础。
+
+> 被烧砖的 PLC 是第二个诚实的数据点：智能体在漏洞利用上加速，也在地图边缘之外同样自信。
+
+[`🔗 Forescout：Can AI Create PLC Attacks?`](https://www.forescout.com/blog/can-ai-create-plc-attacks-yes-but-it%E2%80%99s-not-that-easy-yet/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/researchers-use-claude-to-port-pre-auth.html) · [`🔗 SecurityWeek`](https://www.securityweek.com/experiment-porting-a-plc-exploit-with-ai-takes-hours-and-hundreds-of-dollars/)
+
+---
+
+## 33. Switchvox VoIP 漏洞（CVE-2026-9586）遭在野攻击——无认证 SQLi 直达 PostgreSQL 超级用户反弹 shell，约 4,000 台暴露
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Horizon3.ai 披露（一手来源）· The Hacker News Sep 2
+- **Tags:** `switchvox` `cve-2026-9586` `sql-injection` `voip` `active-exploitation`
+
+CVE-2026-9586（CVSS 9.3）是 Sangoma Switchvox SMB 8.3（104997）中的无认证 SQL 注入：`/pa` 端点处理以 `<PolycomIPPhone>` 开头的 XML 时，把攻击者可控的 `PhoneIP` 值直接拼接进 PostgreSQL 查询。从任意 SQL 可以升级为以数据库超级用户身份执行代码——SRA Labs 演示了数据抽取、提权到 Web 管理员，以及"在服务器上执行任意代码，唤起反弹 shell"。该漏洞是 2026 年 4 月向 Sangoma 报告的 12 枚漏洞之一（Horizon3.ai），SRA Labs 于 5 月独立发现；**8.4.0.2**（7 月 14 日）已修复。Horizon3.ai 观察到野外利用始于 **8 月 30 日**：反弹 shell 之后再投放 Base64 编码的进程枚举命令，IoC 位于 `/var/log/switchvox/db-quirks.log`，攻击者 IP 为 176.65.148[.]184。扫描显示约 4,000 个实例暴露在互联网上，大多位于美国；蜜罐正在承受高频重复攻击——研究者 Zach Hanley 警告"大多数暴露的 Switchvox 实例将会或已经被瞄准"。
+
+**Why it matters:** VoIP 服务器保存着通话录音、凭据与中继配置，因其职能端口必须开放，且几乎无人盘点它们——一个月前的补丁加上一场活着的类蠕虫攻击，就是数据泄露进行时的标准配方。
+
+> 7 月 14 日修补，8 月 30 日开始被利用——这六周的补丁滞后期就是全部漏洞所在。
+
+[`🔗 Horizon3.ai：CVE-2026-9586`](https://horizon3.ai/attack-research/disclosures/cve-2026-9586-sangoma-switchvox-rce/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/attackers-exploit-critical-switchvox.html)
+
+---
+
+## 34. NousResearch 的 hermes-agent 发布 "The Pantheon Release"——v0.21.0 把多智能体变成默认开启的具名机器人社会
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 总计 23.98 万星 · 今日 +529 · Release v0.21.0 Aug 31
+- **Tags:** `agents` `multi-agent` `hermes` `nous-research` `open-source`
+
+Hermes Agent v0.21.0（"The Pantheon Release"）汇总了 v0.20.0 以来 760+ 贡献者的约 5,800 次提交与约 2,475 个合并 PR。头号特性是 **Bot Mode**，现已在桌面应用中内置且默认开启：每个智能体档案都有名字、确定性的头像面孔，以及在 Discord 式群聊中的位置——你的机器人彼此交谈、也与你交谈，支持 @ 提及寻址。围绕它：`hermes peer` 提供跨档案、跨网关的可持久化机器人间私信（回复落在每个智能体可检视的 Bot Chat 中，而非发完即弃）；定时任务携带记忆跨运行延续，让"定时智能体真正学习"；子智能体可在飞行中途被实时引导；MCP 面重建为真正的指挥中心；还能驱动桌面浏览器。MIT 许可，仓库今日仍有推送。
+
+**Why it matters:** 多智能体 UX 正在收敛为"一个坐满同事的聊天应用"——具名、可寻址、持久存在的实体，而非流水线阶段——在 24 万星的体量上，hermes 是这一论点最大的开源部署。
+
+> 值得观察的设计赌注：以可持久、可检视的智能体间对话作为界面，并把记忆挂在调度上——旧路径是先做管道；现在聊天本身就是运行时。
+
+[`🔗 NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent) · [`🔗 Release v2026.8.31 (v0.21.0)`](https://github.com/NousResearch/hermes-agent/releases/tag/v2026.8.31)
+
+---
+
+## 35. 《The Emergent Symbolic Structure of Artificial Neural Networks》——把 LLM 的向量换成闭式符号方程，行为几乎不变
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2608.29530（一手来源）· HN 184 分 / 62 评论 · 提交于 Sep 2 04:15 UTC（~12:15 UTC+8）
+- **Tags:** `interpretability` `neurosymbolic` `research` `llm` `arxiv`
+
+McCoy、Soulos、Linzen 与 Smolensky 对"神经网络为何能胜任语言与逻辑"给出了一个直接检验：假设"神经网络的内部表示隐式实现了符号结构"。方法：用一个实例化符号结构的闭式方程去近似网络的表示生成过程，然后整体替换。结果：行为"基本保持不变"——无论在小型列表操作网络中，还是在横跨四个领域（算术、逻辑、代码、语言）的 LLM 中。由于该近似是闭式的，它支持因果干预——对符号结构的精准修改会可预测地改变 LLM 行为，这正是这些结构承重而非仅是相关装饰的证据。论文的保留措辞得当：它自陈只是"调和符号观点与向量观点的一种可能路径"，且替换只"基本"保行为，并非精确。
+
+**Why it matters:** 如果 LLM 内部可以被符号方程整体替换而行为损失极小，可解释性就获得了可操作的对象——符号 vs 向量的辩论也迎来了第一个整体替换实验，而非又一个探测分类器的相关性研究。
+
+> 请仔细读"基本不变"：它既是发现也是边界——残余漂移正是网络不再等于方程的地方。
+
+[`🔗 arXiv:2608.29530`](https://arxiv.org/abs/2608.29530) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49531651)
+
+---
+
+## 36. pacifio/atlas——"面向智能体的版本控制"——今日趋势榜最快上升者（+895），检查点把提交与会话绑在一起
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 总计 2.6k 星 · 今日 +895 · alpha-0.3.0 Aug 25
+- **Tags:** `agents` `version-control` `agent-infra` `rust` `acp`
+
+Atlas 是一款 Rust 工作区应用：每次智能体运行都产生**检查点**——提交与产生它的会话绑定，prompt、工具调用与文件改动保存在一起，数月后仍可查询。Claude Code、Codex 与更广的 ACP 注册表（Cursor、OpenCode、Kilo Code）通过 zed-industries 的 Agent Client Protocol 在同一代码库上并肩运行，共享设备端记忆——"Claude Code 做的决策会出现在 Codex 的下一条 prompt 里"——加上跨智能体切换的会话交接：一条精选事实包加上上一会话的尾部。笔记是 `.atlas/knowledge/` 中的 Markdown，会话是 JSONL，`CLAUDE.md`/`AGENTS.md` 折叠进同一索引；检查点记录是 gitignore 的 `.atlas/` 里的 SQLite。默认本地；组织同步需主动开启。保留条款：仍是预 alpha 版本（alpha-0.3.0），且 README 承认"注册表长尾智能体的 QA 仍在进行"。
+
+**Why it matters:** 三周前 ERSC 押注"Git 的服务端会在智能体舰队下崩溃"；Atlas 是本地优先的互补面——智能体已写下相当比例的提交，而今天没有任何工具把"为什么"留在"改了什么"旁边。
+
+> gitignore 的检查点数据库是诚实的架构自白：提交历史保持 git 纯净，智能体溯源是可查询的 sidecar。
+
+[`🔗 pacifio/atlas`](https://github.com/pacifio/atlas) · [`🔗 Release alpha-0.3.0`](https://github.com/pacifio/atlas/releases/tag/alpha-0.3.0)
+
+---
+
+## 37. TimesFM 3.0——谷歌时序预测基础模型宣称三个榜单第一，同时放弃了 Apache 许可
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub release v3.0.0（一手来源，Aug 28）· 今日趋势 +326 · HF `google/timesfm-3.0-pytorch`
+- **Tags:** `time-series` `forecasting` `foundation-models` `google-research` `open-weights`
+
+TimesFM 3.0 新增原生多变量 + 单变量带协变量预测——包括未来已知协变量——"无需逐任务调参"，并宣称在 fev-bench（100 个真实任务）、TIME Benchmark（50 个领域数据集 / 98 个任务）、GIFT-Eval（基础模型组）三个榜单均列第一。许可才是被低估的部分：到 2.5 为止权重都是 Apache-2.0；**3.0 权重改用 "timesfm-non-commercial-license-v1.0"**——"默认预训练权重不允许商业或生产使用"——尽管仓库自己注明 TimesFM 已进入 BigQuery ML、Google Sheets 与 Vertex Model Garden。基准为自报；README 未给出 3.0 的参数量与上下文长度（2.5 为 200M 参数 / 16k 上下文）。
+
+**Why it matters:** 开源时序预测的旗手在宣称三个第一的同时把权重半闭源，这是谷歌对价值所在的一次清晰表态——任何固定在 Apache-2.0 TimesFM 上的生产管线，升级前都得重读细则。
+
+> LTX-2.5 的门控许可模式在重演："开放权重"如今例行意味着"开放到你成为一家公司为止"。
+
+[`🔗 google-research/timesfm`](https://github.com/google-research/timesfm) · [`🔗 google/timesfm-3.0-pytorch（Hugging Face）`](https://huggingface.co/google/timesfm-3.0-pytorch)
+
+---
+
+## 38. GeoNetwork：缺失的鉴权检查 + 不安全的 Saxon 配置串联成无认证 RCE，波及政府地理门户
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ethiack 研究（一手来源）· The Hacker News Sep 2
+- **Tags:** `geonetwork` `cve-2026-63219` `cve-2026-58400` `xslt` `rce` `government`
+
+政府门户常用的开源地理空间元数据目录 GeoNetwork 存在两个可串联漏洞：**CVE-2026-63219**（CVSS 8.6），formatter 上传端点缺失鉴权检查，匿名用户可向 formatter 目录投放任意 `.xsl`/`.zip`；**CVE-2026-58400**（CVSS 9.1），Saxon XSLT 配置不安全——尽管启用了 secure-processing，已加载的样式表仍可调用 `java.lang.Runtime.exec()`——随后对公开记录的一次 GET 即以 GeoNetwork 用户身份执行 OS 命令。修复于 7 月 8 日随 **4.4.12 / 4.2.17** 发布（公告 8 月 31 日才发布）；临时缓解是在反向代理上封禁 `/geonetwork/srv/api/formatters` 的写方法。Ethiack 指纹识别出 39 个国家的 121 个暴露实例——89% 与政府、军方或国家机构相关——但这些是*易受攻击*实例而非确认失陷，无 KEV 条目、无公开利用报告。数据单一来自厂商研究者；保留条款照留。
+
+**Why it matters:** 地理空间栈（GeoServer 之后轮到 GeoNetwork）持续产出预认证 RCE，而中招地点恰是公共部门地图基础设施——修复 7 月就位，公告本周才到。
+
+> 请核查暴露面：这条链任何一步都不需要凭据，而政府地理门户正是目标人群。
+
+[`🔗 Ethiack：GeoNetwork PreAuth RCE`](https://ethiack.com/info-hub/research/geonetwork-preauth-RCE) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/geonetwork-fixes-unauthenticated-rce.html)
+
+---
+
+## 39. 多国执法机关把 23 岁的 P2P 文件感染型僵尸网络 Sality 变成蜜罐——利用的正是它对自身节点列表的盲信
+
+- **Velocity:** ▮▮ rising
+- **Source:** 美国司法部新闻稿（一手来源，Aug 31）· The Hacker News Sep 2
+- **Tags:** `botnet` `sality` `takedown` `p2p` `sinkhole`
+
+美国司法部联合保加利亚、匈牙利、罗马尼亚以及 CrowdStrike 与 Shadowserver 基金会，于 8 月 31 日瓦解了 Sality——一个自 **2003 年**活跃的 Windows 文件感染型僵尸网络，拥有两套 P2P C2 网络（v3 与 v4，共享代码库、协议与密钥互不兼容），可达感染机 15,000+，其 EggJagger 剪贴板劫持载荷据信造成至少 15 万美元加密货币盗窃。手法：Sality 的节点列表机制没有认证、没有加密身份、没有白名单，执法方在机器人 40 分钟的验证周期内用协议操纵清洗合法节点（与 2014 年对付 GameOver Zeus、2017 年对付 Kelihos 的同类技术），先隔离超级节点，再注入 sinkhole 条目——受感染机器现在信标到 CrowdStrike 运营的水槽（检查是否有到信标 IP 188.166.101.148 的 UDP 流量）。相关域名被查封，九个载荷 URL 下线。保留条款说得很直白：机器仍然是感染的——"已安装在这些系统上的既有恶意软件仍然活跃"，被切断的只是*新*载荷投放。
+
+**Why it matters:** 文件感染型僵尸网络十年前就被宣告死亡；这次表明 P2P 协议信任层面的瓦解剧本在 2026 年依然有效，同时也提醒：对数十万台仍带毒的 SOHO 设备而言，瓦解不等于修复。
+
+> "无认证、无加密身份、无白名单"——这个僵尸网络带着 2003 年局域网的威胁模型，并死于它。
+
+[`🔗 美国司法部：Sality Malware Disrupted in International Cyber Takedown`](https://www.justice.gov/usao-cdca/pr/sality-malware-disrupted-international-cyber-takedown) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/authorities-turn-salitys-p2p-network.html)
+
+---
+
+## 40. 《我在 M4 Pro Mac mini 上的本地模型配置》——237 分的蓝图：一个 Qwen MoE、oMLX、Tailscale，其余皆可选
+
+- **Velocity:** ▮▮ rising
+- **Source:** lws.io（一手来源）· HN 237 分 / 142 评论 · 提交于 Sep 1 22:30 UTC（~Sep 2 06:30 UTC+8）
+- **Tags:** `local-llm` `mlx` `apple-silicon` `self-hosted` `qwen`
+
+Kevin Lewis 那台常开的 M4 Pro Mac mini（48 GB）以 **Qwen3.6-35B-A3B-OptiQ-4bit**——256 专家共 35B 总参数、每 token 约 3B 激活、常驻约 20 GB——作为主力推理模型，外加 Gemma-4-E4B-it（2.4 GB）负责聊天与格式化，由 **oMLX**（HF 模型浏览器、自动发现、SSD 持久化 KV 缓存）服务，实测 prompt 处理 325 tok/s、生成 34 tok/s，iPhone、MacBook 与 mini 经 Tailscale 接入。客户端：Hermes 智能体后端、iOS 上的 Apollo、Raycast AI、写代码用的 Pi。数字带着代价一起给出：4-bit OptiQ（敏感层 8-bit）相比 BF16 损失 1–2 个基准点；稠密 27B 模型在 16 GB 机器上不换页就没法跑；34 tok/s 是"快到他察觉不到"，而非即时。他的容量清单：4-bit 下文件大小（GB）≈ 参数量，减去约 6–8 GB macOS 开销，减去 KV 缓存余量，SSD 换页前保留 10–15% 缓冲。
+
+**Why it matters:** 这是本地 LLM 市场的具体中间形态（上文 slotstream 一条把它推向极端）——一台约 1,400 美元的常开主机覆盖"80% 不需要 GPT-5 或 Claude Opus 的请求"，API 保留为后备而非洁癖测试。
+
+> 最有信息量的细节是 MoE 一课：总参数量是营销数字，激活参数 × 量化位宽才决定能不能装进内存。
+
+[`🔗 lws.io：My local model setup`](https://lws.io/blog/my-local-model-setup/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49529132)
+
+---
+
+## 41. Movie Scene Map——15,565 个真实取景地上汇成一张地图，全部由 Wikidata 构建，附带 CC0 数据包与 MCP 端点
+
+- **Velocity:** ▮ steady
+- **Source:** moviescenemap.com（一手来源）· HN 278 分 / 38 评论 · 提交于 Sep 1 16:34 UTC（~Sep 2 00:34 UTC+8）
+- **Tags:** `open-data` `wikidata` `maps` `film` `mcp`
+
+一个免费无广告的真实取景地图集——影棚、城堡、街道——覆盖 166 个国家的 15,565 个地点，涉及 9,287 部影视与 653 个系列，另有 2,153 部游戏、407 部动画与 365 部漫画按*故事设定地*摆放（明确标注"故事设定于"，绝不说"拍摄于"）。每根图钉都来自开放数据：Wikidata 的取景地声明联接坐标、Commons 照片、Wikipedia 词条——"不抓取任何清单文，不生成任何内容"，声明与提及两类证据严格分开。整个数据集以 **CC0** 许可下载为 GeoJSON/CSV，并为 AI 助手提供只读 MCP 端点。站点自己的诚实页写着："本图集是策展的，不是完备的"——某国空白意味着 Wikidata 覆盖稀疏而非没有拍摄，补一条有来源的 Wikidata 声明，下一轮重建即会收录。
+
+**Why it matters:** 结构化开放数据加一层薄渲染能产出什么，这是一个样板——也是最早把 MCP 端点与人类界面并列为头等公民的消费级站点之一。
+
+> 方法论注释才是差异点：Wikipedia 的*提及*是弱于 Wikidata *声明*的证据，而站点从不混用——这份纪律比数据更稀缺。
+
+[`🔗 Movie Scene Map`](https://moviescenemap.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49524320)
+
+---
+
+## 42. Weedout——售价 $1.99 的 Safari 扩展隐藏 YouTube 标注"Made with AI"的视频，并坦承未标注的垃圾内容不在范围内
+
+- **Velocity:** ▮ steady
+- **Source:** masteranza.github.io（一手来源）· HN 157 分 / 70 评论 · 提交于 Sep 1 22:06 UTC（~Sep 2 06:06 UTC+8）
+- **Tags:** `safari` `youtube` `ai-slop` `extension` `filtering`
+
+Weedout 在 macOS Safari（13+）上把带有 YouTube 自家 "Made with AI" 标签的视频从信息流、搜索、相关视频、播放列表与 Shorts 中移除，附带可选的 Shorts 自动跳过与"Dim 模式"——被标记项先原地淡出，供你核验后再移除。检测刻意不走聪明路线：*只*依据 YouTube 自己的披露徽标——"不猜测、不启发式、不冤枉"，全部本地处理，单次实时信息流约 0.5 秒，无账号无数据收集，一次性 $1.99。声明的限制即是整个产品论点：AI 制作但*未标注*的内容"暂不在范围内"。HN 席间的相邻辩论：信任平台标签算不算共谋，以及隐藏（而非降权）AI 内容会教会 YouTube 什么。
+
+**Why it matters:** Chrome 移除 MV2、uBlock 级封锁死亡之后，平台原生的过滤面（Safari 内容拦截器、YouTube 自家标签）成了用户侧策展仅存的阵地——这是 AI 垃圾过滤器理念被剥到最小诚实形态的样子。
+
+> 范围自白就是信任信号：它隐藏的恰是 YouTube 自己承认为 AI 的部分，且不再多宣称一分。
+
+[`🔗 Weedout`](https://masteranza.github.io/weedout/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49528895)
+
+---
+
+## 43. 《行吧，我自己写个文本编辑器》——canvas 输给 `<textarea>`，理由是无障碍
+
+- **Velocity:** ▮ steady
+- **Source:** dbushell.com（一手来源）· HN 166 分 / 144 评论 · 提交于 Sep 1 17:12 UTC（~Sep 2 01:12 UTC+8）
+- **Tags:** `text-editors` `web-dev` `accessibility` `canvas` `contenteditable`
+
+Web 开发者 David Bushell 写了三个文本编辑器 demo，并报告了淘汰顺序。Canvas：完全可控但"什么都不能白拿"——光标移动、输入、选区、scrollcheat 全部手写——而且"完全不可访问"，这是出局理由。`contenteditable="plaintext-only"`：原生选区、撤销与无障碍白拿，但字符数一高就撞性能墙（Chromium 最差）。朴素 `<textarea>`：长文本性能最佳，但需要独立的 DOM 覆盖层加 MicroLighter 做语法高亮，因为 textarea 用不了 CSS 高亮。论点连同其行文风格一起交付："如今的软件是垃圾"，而他"擅长造垃圾"；Monaco/VS Code 是"`<div>` 浓汤地狱"。范围自陈："一个文本编辑器的 90%，功能的 1%"，含 UTF-16 字素坑，项目"留给雨天再说"。
+
+**Why it matters:** 对 canvas 编辑器风潮的一份紧凑经验性回答——浏览器原生编辑原语就是无障碍故事本身，每一个自绘编辑器都在从零重新挣得它。
+
+> "文本编辑器的 90%，功能的 1%"也是对大多数智能体所写编辑器的诚实测评。
+
+[`🔗 dbushell.com：Fine, I'll build my own text editor`](https://dbushell.com/2026/09/01/text-editor/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49524863)
+
+---
+
+## 44. Superlinked 的 SIE——一个自托管推理集群，服务智能体调用的每一个模型，从嵌入到智能体循环本身
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 总计 3.0k 星 · 今日 +61 · Apache-2.0
+- **Tags:** `inference` `agent-infra` `embeddings` `self-hosted` `kubernetes`
+
+SIE（Superlinked Inference Engine）用"一个集群服务 100+ 模型"取代"每个任务一台模型服务器"，暴露 OpenAI 兼容端点（`/v1/embeddings`、`/v1/chat/completions`、`/v1/completions`、`/v1/responses`），覆盖检索、文档转 Markdown、结构化输出、内容安全与智能体循环。预配置目录（Stella、SPLADE、Qwen3、GLiNER、SigLIP——经 MTEB 基准测试）按需加载模型并以 LRU 驱逐；附 K8s/Helm 配置、负载均衡网关、KEDA 自动扩缩与 Grafana 面板；SDK 集成 LangChain、LlamaIndex、DSPy、CrewAI 与三大向量库。新到星数（3.0k）还配得上 README 徽章——真正有用的信号是架构：按任务划分的模型服务器正在坍缩成一个按任务形状组织的集群。
+
+**Why it matters:** 智能体栈悄悄累积了 5–10 个模型依赖（嵌入器、重排器、解析器、安全审查、主 LLM）；把它们当作一个自动扩缩的集群而非五台雪花服务器来运营，省下的正是 vLLM 从未覆盖的运维账单。
+
+> 玄机在任务清单里："智能体循环本身"成为一种被服务的模型负载——推理基础设施开始为智能体计价，而不只为模型。
+
+[`🔗 superlinked/sie`](https://github.com/superlinked/sie) · [`🔗 SIE 文档`](https://superlinked.com/docs/)
+
+---
+
+## 45. 真实失业率升至 24.9%——AI 替代辩论反复伸手去拿的那个统计量
+
+- **Velocity:** ▮ steady
+- **Source:** LISEP（一手来源）· HN 265 分 / 238 评论 · 提交于 Sep 2 02:21 UTC（~10:21 UTC+8）
+- **Tags:** `labor-economics` `unemployment` `statistics` `data` `ai-impact`
+
+LISEP 的真实失业率（True Rate of Unemployment）衡量美国劳动力中"功能性失业"的比例：失业且在找工作、被迫兼职，或全职但收入低于生活工资（保守取 2025 年美元税前 26,000 美元/年）——2026 年 7 月达到 **24.9%**，上升 0.2 个百分点，"连续第四个月上升"，同月 BLS 头条失业率为 4.1%。该指标基于 BLS 微观数据、方法全文公开；人口学分差巨大（无高中文凭者 50.3%，高级学位 12.8%；女性 31.0% 对男性 19.5%）。238 条评论的 HN 席间在做真正的解释工作：无论你对 AI 的劳动效应作何结论，争论的焦点都是哪个分母诚实——BLS 只计在积极求职者，TRU 给岗位定价，而不只问其存在与否。
+
+**Why it matters:** 当智能体能力成为劳动力市场的变量，辩论就必然经过这样的统计量——无论成因为何，这四个月的连续攀升就是替代辩论接下来要引用的数字。
+
+> 26,000 美元阈值与整体框架由 LISEP 设定；方法公开，但这是一家立场相近的研究机构的度量——请对照 BLS 阅读而非取代 BLS。
+
+[`🔗 LISEP：True Rate of Unemployment`](https://www.lisep.org/tru) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49530989)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-09-02T04:15:00Z |
-| Items | 30 |
-| Sources tracked | 28 (Hacker News, GitHub Trending, Hugging Face, Anthropic, OpenAI, NVD, SecurityWeek, The Hacker News, BleepingComputer, Socket, KrebsOnSecurity, Kaspersky Securelist, Virtualizor/Softaculous, Mozilla, DoltHub, ERSC, frn.sh, tmpout.sh, World Labs, webiterate.dev, mvakde.github.io, CogEvol, danluu.com, Simon Willison, newsonaut.com, ambientcss.vercel.app, Nori Robotics, Baseten) |
+| Generated | 2026-09-02T12:35:00Z |
+| Items | 45 |
+| Sources tracked | 39 (Hacker News, GitHub Trending, Hugging Face, arXiv, Anthropic, OpenAI, NVD, SecurityWeek, The Hacker News, BleepingComputer, Socket, KrebsOnSecurity, Kaspersky Securelist, Virtualizor/Softaculous, Mozilla, DoltHub, ERSC, frn.sh, tmpout.sh, World Labs, webiterate.dev, mvakde.github.io, CogEvol, danluu.com, Simon Willison, newsonaut.com, ambientcss.vercel.app, Nori Robotics, Baseten, SonicWall PSIRT, Forescout, Horizon3.ai, Ethiack, US DOJ, NousResearch, pacifio/atlas, google-research/timesfm, lws.io, moviescenemap.com, masteranza.github.io, dbushell.com, Superlinked, LISEP) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 热度速度加权（时效 × 互动加速 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

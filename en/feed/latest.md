@@ -1,8 +1,8 @@
 ---
 date: 2026-09-02
-updated: 2026-09-02T04:15:00Z
+updated: 2026-09-02T12:35:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 39
 license: CC-BY-4.0
 ---
 
@@ -495,13 +495,253 @@ Philip Kiely (Baseten) imports portfolio theory into inference engineering: ever
 
 ---
 
+## 31. SonicWall SMA 1000: two more zero-days under active exploitation — a CVSS 10.0 pre-auth SSRF that may chain to RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** SonicWall PSIRT SNWLID-2026-0016 (primary, published Sep 1) · The Hacker News Sep 2
+- **Tags:** `sonicwall` `cve-2026-83548` `cve-2026-83549` `ssrf` `zero-day` `active-exploitation`
+
+SonicWall's advisory SNWLID-2026-0016 discloses two flaws in SMA 1000 appliances (6210, 7210, 8200v on 12.4.3-03453 and older, 12.5.0-02835 and older): **CVE-2026-83548** (CVSS 10.0), a pre-auth SSRF via an unintended forward-proxy in the Appliance Work Place interface, and **CVE-2026-83549** (CVSS 7.8), a post-auth OS command injection in the Appliance Management Console that yields RCE "under specific conditions." SonicWall says it "investigated a case indicating the active exploitation of the vulnerabilities" — the chain reading is inferred from that case, not separately confirmed, and there's no attribution and (as of writing) no CISA KEV entry. Fixed in platform-hotfix **12.4.3-03526** and **12.5.0-02952**; the vendor's guidance if you find IoCs is re-image, rotate all passwords, reset TOTP. This is a distinct pair from July's CVE-2026-15409/15410 (exploited by UTA0533 with KNUCKLEBALL malware) — the second SMA 1000 zero-day episode this summer.
+
+**Why it matters:** edge VPN appliances are the patch-never tier of enterprise attack surface, and repeat zero-day seasons on the same product line mean "up to date on the last advisory" is no longer a safe state.
+
+> The exploitation claim rests on one vendor-investigated case — patch first, but read "may form an attack chain" as inference, not demonstration.
+
+[`🔗 SonicWall: SNWLID-2026-0016`](https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2026-0016) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/attackers-exploit-two-sonicwall-sma.html)
+
+---
+
+## 32. Forescout used Claude to port a 2021 PLC exploit to a different WAGO controller — it worked, cost $535.74, and bricked a second PLC
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Forescout Vedere Labs blog (primary) · The Hacker News / SecurityWeek Sep 2
+- **Tags:** `ics` `ot-security` `claude` `plc` `exploit-porting` `ai-cyber`
+
+Forescout's Vedere Labs ran an experiment with Anthropic's Cyber Verification program: port CVE-2021-31886 — a CVSS 9.8 pre-auth stack overflow in the Nucleus RTOS FTP server — from a known-exploitable WAGO 750-852 to a WAGO 750-831, in interactive Claude Code sessions with terminal, Ghidra, and the physical device. It succeeded: Claude derived the USER/CWD command sequence and dropped the CRLF terminator so the payload survived the 256-byte zeroing, then went from NOP sled to two working payloads (ICMP echo, a UDP "PWNED" packet) in **12 minutes**; the full RCE stage cost **$535.74 over 8h32m**, with "sustained researcher steering" (work stalled on Sonnet 4.6 until switching to Opus 4.6). The follow-on C2-implant task failed — writing to flash-mapped memory permanently bricked the PLC — and capability stops at "send network packets." Forescout's own hedges are the story: "one could argue that the same researcher could have achieved the initial RCE port without AI in less time and at lower cost," and no Nucleus V1 fix exists (Siemens plans none; mitigation is blocking FTP/21 and segmentation).
+
+**Why it matters:** the first well-documented AI-assisted port of a working ICS exploit across hardware — with a cost figure, a failure mode, and the vendor's own "a human could have done it cheaper" caveat, which is exactly the evidence base the AI-offense debate usually lacks.
+
+> The bricked PLC is the honest second datapoint: agentic speed on the exploit, agentic confidence past the edge of the map.
+
+[`🔗 Forescout: Can AI Create PLC Attacks?`](https://www.forescout.com/blog/can-ai-create-plc-attacks-yes-but-it%E2%80%99s-not-that-easy-yet/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/researchers-use-claude-to-port-pre-auth.html) · [`🔗 SecurityWeek`](https://www.securityweek.com/experiment-porting-a-plc-exploit-with-ai-takes-hours-and-hundreds-of-dollars/)
+
+---
+
+## 33. Switchvox VoIP flaw (CVE-2026-9586) under active attack — unauthenticated SQLi to PostgreSQL-superuser reverse shells, ~4,000 exposed
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Horizon3.ai disclosure (primary) · The Hacker News Sep 2
+- **Tags:** `switchvox` `cve-2026-9586` `sql-injection` `voip` `active-exploitation`
+
+CVE-2026-9586 (CVSS 9.3) is an unauthenticated SQL injection in Sangoma Switchvox SMB 8.3 (104997): the `/pa` endpoint processes XML starting with `<PolycomIPPhone>` and concatenates the attacker-controlled `PhoneIP` value straight into PostgreSQL queries. From arbitrary SQL you get to code execution as the database superuser — SRA Labs demonstrated extraction, privilege escalation to web admin, and "executed arbitrary code on the server, invoking a reverse shell." One of 12 flaws reported to Sangoma in April 2026 (Horizon3.ai) and independently found by SRA Labs in May; patched in **8.4.0.2** on July 14. Horizon3.ai observed in-the-wild exploitation starting **August 30**: reverse shells followed by Base64-encoded process enumeration, with IoCs in `/var/log/switchvox/db-quirks.log` and attacker IP 176.65.148[.]184. Shadowserver-class scanning puts ~4,000 instances internet-exposed, mostly in the US, and honeypots are absorbing rapid repeat attempts — researcher Zach Hanley warns "most internet exposed Switchvox instances will be or have already been targeted."
+
+**Why it matters:** VoIP servers hold call recordings, credentials and trunk configs, sit on unblocked ports by necessity, and almost nobody inventories them — a month-old patch plus a live worm-ish campaign is the classic breach-in-progress recipe.
+
+> Patched July 14, exploited starting August 30 — the six-week patch lag is the entire vulnerability.
+
+[`🔗 Horizon3.ai: CVE-2026-9586`](https://horizon3.ai/attack-research/disclosures/cve-2026-9586-sangoma-switchvox-rce/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/attackers-exploit-critical-switchvox.html)
+
+---
+
+## 34. NousResearch's hermes-agent ships "The Pantheon Release" — v0.21.0 makes multi-agent a default-on society of named bots
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 239.8k total · +529 today · Release v0.21.0 Aug 31
+- **Tags:** `agents` `multi-agent` `hermes` `nous-research` `open-source`
+
+Hermes Agent v0.21.0 ("The Pantheon Release") rolls up ~5,800 commits and ~2,475 merged PRs since v0.20.0 from 760+ contributors. The headline is **Bot Mode**, now bundled and default-on in the desktop app: every agent profile gets a name, a deterministic avatar face, and a place in Discord-style group chats where your bots talk to each other and to you, with `@`-mention addressing. Around it: `hermes peer` for durable bot-to-bot DMs across profiles and gateways (replies land in each agent's inspectable Bot Chat, not fire-and-forget), cron jobs that carry memory between scheduled runs so "scheduled agents actually learn," live mid-flight steering of subagents, a rebuilt MCP command center, and desktop-browser control. MIT-licensed, pushed to the repo today.
+
+**Why it matters:** the multi-agent UX is converging on "a chat app full of coworkers" — named, addressable, persistent entities rather than pipeline stages — and at 240k stars hermes is the largest open deployment of that thesis.
+
+> The design bet worth watching: durable, inspectable agent-to-agent conversations as the interface, with memory attached to schedules — plumbing first was the old way; now the chat is the runtime.
+
+[`🔗 NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent) · [`🔗 Release v2026.8.31 (v0.21.0)`](https://github.com/NousResearch/hermes-agent/releases/tag/v2026.8.31)
+
+---
+
+## 35. "The Emergent Symbolic Structure of Artificial Neural Networks" — swap an LLM's vectors for a closed-form symbolic equation and behavior barely changes
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2608.29530 (primary) · HN 184 pts / 62 comments · submitted Sep 2 04:15 UTC (~12:15 UTC+8)
+- **Tags:** `interpretability` `neurosymbolic` `research` `llm` `arxiv`
+
+McCoy, Soulos, Linzen and Smolensky test a direct answer to why neural nets handle language and logic at all: "perhaps the internal representations of neural networks implicitly realize symbolic structure." Method: approximate a network's representation-generating process with a closed-form equation instantiating a symbolic structure, then substitute it wholesale. The result: behavior "remains largely unchanged" — both in small list-manipulation networks and in LLMs across four domains (arithmetic, logic, computer code, language). Because the approximation is closed-form, it supports causal interventions — targeted edits to the symbolic structure change the LLM's behavior predictably, which is the evidence the structures are load-bearing, not correlated decoration. The paper hedges appropriately: it's offered as "a potential way to reconcile" symbolic and vector views, and the substitution preserves behavior only "largely," not exactly.
+
+**Why it matters:** if LLM internals can be swapped for symbolic equations with minimal behavioral loss, interpretability gets handleable objects — and the symbols-vs-vectors debate gets its first wholesale-substitution experiment rather than another probing-classifier correlation.
+
+> Read "largely unchanged" carefully: it is both the finding and its limit — the residual drift is where the network stops being the equation.
+
+[`🔗 arXiv:2608.29530`](https://arxiv.org/abs/2608.29530) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49531651)
+
+---
+
+## 36. pacifio/atlas — "source control for agents" — the fastest riser on trending (+895 today) with checkpoints that link commits to the session that made them
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 2.6k total · +895 today · alpha-0.3.0 Aug 25
+- **Tags:** `agents` `version-control` `agent-infra` `rust` `acp`
+
+Atlas is a Rust workspace app where every agent run produces **checkpoints**: a commit linked back to the session that produced it, with the prompts, tool calls and file changes kept together and queryable months later. Claude Code, Codex and the wider ACP registry (Cursor, OpenCode, Kilo Code) run side by side against the same codebase over zed-industries' Agent Client Protocol, with shared on-device memory — "a decision Claude Code made shows up in Codex's next prompt" — plus session handoff that carries a curated fact pack and the tail of your last session across agent switches. Notes are markdown in `.atlas/knowledge/`, sessions are JSONL, `CLAUDE.md`/`AGENTS.md` fold into one index; the checkpoint record is SQLite in a gitignored `.atlas/`. Local by default; org sync is opt-in. Caveats: pre-alpha versioning (alpha-0.3.0), and the README admits "QA on the long tail of registry agents is ongoing."
+
+**Why it matters:** three weeks ago ERSC made the "Git's server side breaks under agent fleets" bet; Atlas is the local-first complement — agents already write a large share of commits, and nothing today keeps the *why* attached to the *what*.
+
+> The gitignored checkpoint DB is the honest architectural tell: commit history stays git-pure, agent provenance is a queryable sidecar.
+
+[`🔗 pacifio/atlas`](https://github.com/pacifio/atlas) · [`🔗 Release alpha-0.3.0`](https://github.com/pacifio/atlas/releases/tag/alpha-0.3.0)
+
+---
+
+## 37. TimesFM 3.0 — Google's forecasting foundation model claims #1 on three benchmarks, and drops the Apache license
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub release v3.0.0 (primary, Aug 28) · trending +326 today · HF `google/timesfm-3.0-pytorch`
+- **Tags:** `time-series` `forecasting` `foundation-models` `google-research` `open-weights`
+
+TimesFM 3.0 adds native multivariate + univariate forecasting with covariates — including future-known covariates — "without per-task tuning," and claims rank #1 on fev-bench (100 real-world tasks), TIME Benchmark (50 domain datasets / 98 tasks), and GIFT-Eval among foundation models. The license is the under-reported part: through 2.5 the weights were Apache-2.0; **3.0 weights move to "timesfm-non-commercial-license-v1.0"** — "commercial or production use of the default pretrained weights is not permitted" — even as the repo notes TimesFM itself ships inside BigQuery ML, Google Sheets and Vertex Model Garden. Benchmarks are self-reported; the README gives no parameter count or context length for 3.0 (2.5 was 200M params / 16k context).
+
+**Why it matters:** the open-forecasting standard-bearer going weights-closed-ish while claiming three #1s is a small but legible data point on where Google thinks value sits — and any production pipeline pinned on Apache-2.0 TimesFM needs to re-check the fine print before upgrading.
+
+> The pattern from LTX-2.5's gated license repeats: "open weights" now routinely means "open until you're a business."
+
+[`🔗 google-research/timesfm`](https://github.com/google-research/timesfm) · [`🔗 google/timesfm-3.0-pytorch (Hugging Face)`](https://huggingface.co/google/timesfm-3.0-pytorch)
+
+---
+
+## 38. GeoNetwork: missing auth check + unsafe Saxon config chain into unauthenticated RCE across government geoportals
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ethiack research (primary) · The Hacker News Sep 2
+- **Tags:** `geonetwork` `cve-2026-63219` `cve-2026-58400` `xslt` `rce` `government`
+
+Two chainable flaws in GeoNetwork, the open-source geospatial metadata catalog used by government portals: **CVE-2026-63219** (CVSS 8.6), a missing authorization check on the formatter upload endpoint that lets anonymous users drop arbitrary `.xsl`/`.zip` files into the formatter directory, and **CVE-2026-58400** (CVSS 9.1), unsafe Saxon XSLT configuration that lets a loaded stylesheet invoke `java.lang.Runtime.exec()` despite secure-processing settings — a GET on a public record then runs OS commands as the GeoNetwork user. Fixed July 8 in **4.4.12 / 4.2.17** (advisory published Aug 31); interim mitigation is blocking write methods to `/geonetwork/srv/api/formatters` at the reverse proxy. Ethiack fingerprinted 121 exposed instances across 39 countries — 89% government-, military- or national-agency-related — though those are *vulnerable* instances, not confirmed compromises, and there's no KEV entry or public exploitation report. The data is single-sourced to the vendor-researcher; hedges kept.
+
+**Why it matters:** the geospatial stack (GeoServer, now GeoNetwork) keeps yielding pre-auth RCE exactly where public-sector map infrastructure lives — and the fix has been available since July while the advisory landed this week.
+
+> Check your exposure: the chain needs no credentials at any step, and government geoportals are the target population.
+
+[`🔗 Ethiack: GeoNetwork PreAuth RCE`](https://ethiack.com/info-hub/research/geonetwork-preauth-RCE) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/geonetwork-fixes-unauthenticated-rce.html)
+
+---
+
+## 39. Authorities sinkhole Sality, the 23-year-old P2P file-infector botnet — by exploiting its blind trust in its own peer list
+
+- **Velocity:** ▮▮ rising
+- **Source:** DOJ press release (primary, Aug 31) · The Hacker News Sep 2
+- **Tags:** `botnet` `sality` `takedown` `p2p` `sinkhole`
+
+The US DOJ, with Bulgaria, Hungary and Romania plus CrowdStrike and the Shadowserver Foundation, disrupted Sality on August 31 — a Windows file-infector active since **2003** with two P2P C2 networks (v3 and v4, shared codebase, incompatible protocols and keys), 15,000+ infected machines reachable, and an EggJagger clipboard-hijacking payload blamed for at least $150k in crypto theft. The technique: Sality's peer-list machinery has no authentication, cryptographic identity or allowlist, so operators purged legitimate peers via protocol manipulation during the bot's 40-minute verification cycle (the same peer-list poisoning used against GameOver Zeus in 2014 and Kelihos in 2017), isolated super nodes first, and inserted sinkhole entries — infected machines now beacon to CrowdStrike-run sinks (check for UDP traffic to lighthouse 188.166.101.148). Domains seized, nine payload URLs down. Caveats stated plainly: machines stay infected — "existing malware already installed on those systems remains active," and only *new* payload delivery is cut.
+
+**Why it matters:** file-infector botnets were declared dead a decade ago; this shows the P2P-protocol-trust takedown playbook still works in 2026, and that disruption ≠ remediation for hundreds of thousands of still-carrying SOHO devices.
+
+> "No authentication, no cryptographic identity, no allowlist" — the botnet had the threat model of a 2003 LAN, and it died of it.
+
+[`🔗 DOJ: Sality Malware Disrupted in International Cyber Takedown`](https://www.justice.gov/usao-cdca/pr/sality-malware-disrupted-international-cyber-takedown) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/authorities-turn-salitys-p2p-network.html)
+
+---
+
+## 40. "My local model setup on an M4 Pro Mac Mini" — the 237-point blueprint: one Qwen MoE, oMLX, Tailscale, everything else optional
+
+- **Velocity:** ▮▮ rising
+- **Source:** lws.io (primary) · HN 237 pts / 142 comments · submitted Sep 1 22:30 UTC (~Sep 2 06:30 UTC+8)
+- **Tags:** `local-llm` `mlx` `apple-silicon` `self-hosted` `qwen`
+
+Kevin Lewis's always-on M4 Pro Mac mini (48 GB) runs **Qwen3.6-35B-A3B-OptiQ-4bit** — 35B total across 256 experts, ~3B active, ~20 GB resident — as the main reasoning model, plus Gemma-4-E4B-it (2.4 GB) for chat and formatting, served by **oMLX** (HF model browser, auto-discovery, SSD-persisted KV cache) at a measured 325 tok/s prompt processing / 34 tok/s generation, reached from iPhone, MacBook and mini over Tailscale. Clients: Hermes agent backend, Apollo on iOS, Raycast AI, Pi for coding. The numbers are stated with their tradeoffs: 4-bit OptiQ (8-bit on sensitive layers) costs 1–2 benchmark points vs BF16; dense 27B models don't fit 16 GB machines without swap pain; 34 tok/s is "quick enough that he doesn't notice," not instant. His sizing checklist: file size ≈ parameter count in GB at 4-bit, minus ~6–8 GB macOS overhead, minus KV-cache headroom, keep 10–15% buffer before SSD swapping.
+
+**Why it matters:** this is the concrete middle of the local-LLM market the slotstream item (above) pushes toward the extreme — a ~$1,400 always-on box covering "the 80% of requests that do not need GPT-5 or Claude Opus," with the API kept as fallback rather than a purity test.
+
+> The telling detail is the MoE lesson: total parameter count is marketing, active-parameters-times-quantization is what fits in RAM.
+
+[`🔗 lws.io: My local model setup`](https://lws.io/blog/my-local-model-setup/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49529132)
+
+---
+
+## 41. Movie Scene Map — 15,565 real filming locations on one map, built entirely from Wikidata, with a CC0 dump and an MCP endpoint
+
+- **Velocity:** ▮ steady
+- **Source:** moviescenemap.com (primary) · HN 278 pts / 38 comments · submitted Sep 1 16:34 UTC (~Sep 2 00:34 UTC+8)
+- **Tags:** `open-data` `wikidata` `maps` `film` `mcp`
+
+A free, ad-free atlas of real filming locations — studios, castles, streets — covering 15,565 places in 166 countries across 9,287 films and series, 653 franchises, plus 2,153 games, 407 anime and 365 manga placed by *story setting* (explicitly labeled "set in," never "filmed in"). Every pin comes from open data: Wikidata filming-location statements joined to coordinates, Commons photos, Wikipedia articles — "nothing is scraped from listicles and nothing is generated," and statement-vs-mention evidence is kept separate. The whole dataset downloads as GeoJSON/CSV under **CC0**, and there's a read-only MCP endpoint for AI assistants. The site's own honesty page: "the atlas is curated, not complete" — empty countries mean sparse Wikidata coverage, not no filming, and adding a sourced Wikidata statement surfaces a production at the next rebuild.
+
+**Why it matters:** a model of what structured open data plus a thin renderer produces — and one of the first consumer-facing sites to expose an MCP endpoint as a first-class interface alongside the human one.
+
+> The methodology note is the differentiator: Wikipedia *mentions* are weaker evidence than Wikidata *statements*, and the site never mixes them — that discipline is rarer than the data.
+
+[`🔗 Movie Scene Map`](https://moviescenemap.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49524320)
+
+---
+
+## 42. Weedout — a $1.99 Safari extension that hides YouTube's "Made with AI" videos, and is honest that unlabeled slop is out of scope
+
+- **Velocity:** ▮ steady
+- **Source:** masteranza.github.io (primary) · HN 157 pts / 70 comments · submitted Sep 1 22:06 UTC (~Sep 2 06:06 UTC+8)
+- **Tags:** `safari` `youtube` `ai-slop` `extension` `filtering`
+
+Weedout removes YouTube videos carrying the platform's own "Made with AI" label from feed, search, related videos, playlists and Shorts on macOS Safari (13+), with an optional auto-skip for Shorts and a "Dim mode" that fades flagged items in place for verification before removal. Detection is explicitly non-clever: it filters *only* on YouTube's own disclosure badge — "no guessing, no heuristics, no false accusations" — processing locally in ~0.5s per live feed, no accounts or data collection, one-time $1.99. The stated limit is the entire product thesis: content that is AI-made but *unlabeled* is "out of scope (for now)." The HN thread runs the adjacent debate — whether trusting the platform's label is complicity, and whether hiding (rather than down-ranking) AI content changes what YouTube learns about you.
+
+**Why it matters:** after Chrome's MV2 removal killed uBlock-class blocking, platform-native filtering surfaces (Safari content blockers, YouTube's own labels) are where user-side curation still lives — this is the AI-slop-filter idea stripped to its smallest honest form.
+
+> The scope confession is the trust signal: it hides exactly what YouTube admits is AI, and claims nothing more.
+
+[`🔗 Weedout`](https://masteranza.github.io/weedout/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49528895)
+
+---
+
+## 43. "Fine, I'll build my own text editor" — canvas loses to `<textarea>`, and accessibility is the reason
+
+- **Velocity:** ▮ steady
+- **Source:** dbushell.com (primary) · HN 166 pts / 144 comments · submitted Sep 1 17:12 UTC (~Sep 2 01:12 UTC+8)
+- **Tags:** `text-editors` `web-dev` `accessibility` `canvas` `contenteditable`
+
+Web developer David Bushell built three text-editor demos and reported the elimination order. Canvas: full control but "gives me nothing for free" — hand-rolled cursor movement, typing, selection, scrollcheat — and "entirely inaccessible," the disqualifier. `contenteditable="plaintext-only"`: native selection, undo and accessibility for free, but performance walls at higher character counts (Chromium worst). Plain `<textarea>`: best long-text performer, needing a separate DOM overlay plus MicroLighter for syntax highlighting since textareas can't take CSS highlights. Thesis, delivered with the post's own tone: "Software these days is garbage" and he's "good at building garbage"; Monaco/VS Code is a "`<div>` soup hellscape." Scope stated: "90% of a text editor with 1% of the features," UTF-16 grapheme pitfalls included, filed away "for a rainy day."
+
+**Why it matters:** a compact empirical answer to the canvas-editor fashion — the browser's native editing primitives are the accessibility story, and every custom editor is re-earning it from zero.
+
+> "90% of a text editor with 1% of the features" is also the honest review of most agent-built editors.
+
+[`🔗 dbushell.com: Fine, I'll build my own text editor`](https://dbushell.com/2026/09/01/text-editor/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49524863)
+
+---
+
+## 44. Superlinked's SIE — one self-hosted inference cluster for every model an agent calls, from embeddings to the agent loop itself
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 3.0k total · +61 today · Apache-2.0
+- **Tags:** `inference` `agent-infra` `embeddings` `self-hosted` `kubernetes`
+
+SIE (Superlinked Inference Engine) replaces "a separate model server per task" with one cluster serving 100+ models behind OpenAI-compatible endpoints (`/v1/embeddings`, `/v1/chat/completions`, `/v1/completions`, `/v1/responses`), covering search/retrieval, document-to-markdown, structured output, content safety and the agent loop. A pre-configured catalog (Stella, SPLADE, Qwen3, GLiNER, SigLIP — MTEB-benchmarked) loads models on demand with LRU eviction; K8s/Helm configs ship with a load-balancing gateway, KEDA autoscaling and Grafana dashboards; SDKs integrate with LangChain, LlamaIndex, DSPy, CrewAI and the vector-DB big three. Fresh enough that the star count (3.0k) still fits in a README badge — the useful signal is the architecture: per-task model servers collapsing into one task-shaped cluster.
+
+**Why it matters:** agent stacks quietly amass 5–10 model dependencies (embedder, reranker, parser, safety, main LLM); whoever operates them as one autoscaled cluster instead of five snowflake servers saves the ops bill vLLM never covered.
+
+> The tell is in the task list: "the agent loop itself" as a served model workload — inference infra is starting to price the agent, not just the model.
+
+[`🔗 superlinked/sie`](https://github.com/superlinked/sie) · [`🔗 SIE docs`](https://superlinked.com/docs/)
+
+---
+
+## 45. The True Rate of Unemployment hits 24.9% — the statistic the AI-displacement debate keeps reaching for
+
+- **Velocity:** ▮ steady
+- **Source:** LISEP (primary) · HN 265 pts / 238 comments · submitted Sep 2 02:21 UTC (~10:21 UTC+8)
+- **Tags:** `labor-economics` `unemployment` `statistics` `data` `ai-impact`
+
+LISEP's True Rate of Unemployment — the share of the US labor force that is "functionally unemployed": jobless and seeking, involuntarily part-time, or full-time but earning below a living wage (conservatively $26,000/yr pre-tax in 2025 dollars) — reached **24.9% for July 2026**, up 0.2 points, "the fourth consecutive monthly increase," against a headline BLS rate of 4.1% the same month. Built on BLS microdata with a disclosed methodology; demographic spreads are wide (no high-school diploma 50.3%, advanced degree 12.8%; women 31.0% vs men 19.5%). The 238-comment HN thread is doing the interpretive work: whatever one concludes about AI's effect on labor, the thread's fight is over which denominator is honest — BLS counts active job-seekers only; TRU prices the job, not just its existence.
+
+**Why it matters:** as agent capabilities become a labor-market variable, the argument runs through statistics like this — and the series' four-month climb, whatever its cause, is the number the displacement debate will cite next.
+
+> LISEP sets the $26k threshold and the framing; the method is disclosed, but it is an advocacy-adjacent institute's measure — read it against BLS, not instead of it.
+
+[`🔗 LISEP: True Rate of Unemployment`](https://www.lisep.org/tru) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49530989)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-02T04:15:00Z |
-| Items | 30 |
-| Sources tracked | 28 (Hacker News, GitHub Trending, Hugging Face, Anthropic, OpenAI, NVD, SecurityWeek, The Hacker News, BleepingComputer, Socket, KrebsOnSecurity, Kaspersky Securelist, Virtualizor/Softaculous, Mozilla, DoltHub, ERSC, frn.sh, tmpout.sh, World Labs, webiterate.dev, mvakde.github.io, CogEvol, danluu.com, Simon Willison, newsonaut.com, ambientcss.vercel.app, Nori Robotics, Baseten) |
+| Generated | 2026-09-02T12:35:00Z |
+| Items | 45 |
+| Sources tracked | 39 (Hacker News, GitHub Trending, Hugging Face, arXiv, Anthropic, OpenAI, NVD, SecurityWeek, The Hacker News, BleepingComputer, Socket, KrebsOnSecurity, Kaspersky Securelist, Virtualizor/Softaculous, Mozilla, DoltHub, ERSC, frn.sh, tmpout.sh, World Labs, webiterate.dev, mvakde.github.io, CogEvol, danluu.com, Simon Willison, newsonaut.com, ambientcss.vercel.app, Nori Robotics, Baseten, SonicWall PSIRT, Forescout, Horizon3.ai, Ethiack, US DOJ, NousResearch, pacifio/atlas, google-research/timesfm, lws.io, moviescenemap.com, masteranza.github.io, dbushell.com, Superlinked, LISEP) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
