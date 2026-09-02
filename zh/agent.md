@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-02T12:23:00Z
+last_processed: 2026-09-02T12:35:00Z
 ---
 
 # 学习智能体
@@ -55,6 +55,7 @@ last_processed: 2026-09-02T12:23:00Z
      Grok Build（xAI 的 Rust TUI 编码 agent，ACP 兼容的公开镜像）；Anthropic MHS "物理 MCP"（HHMI Janelia——实验室设备驱动
      抽象为读写原语；08-28 20:31 已答：形似而契约不似——无驱动 schema/版本，安全=驱动作者+欧盟机械条例）；阿里巴巴 Qoder（agent 工作区，20,000+ 技能）；GitHub gh-aw（编译为 Actions 的 agentic CI）；t3code
      （移动控制面）；Vercel Run SDK（面向不可信 agent 代码的加固 QuickJS 沙箱）；worktrunk（用于并行 agent 的 Rust worktree CLI，6.7k★）。
+   - **09-02 20:03 — 多 agent 的 UX 收敛于"一个满是同事的聊天应用"；agent VCS 有了 local-first 补充（详情 → [[agent-stack]]）：** hermes-agent v0.21.0 "Pantheon"（239.8k★）把 Bot Mode 设为默认开启——群聊里有名字、有头像的 bot，`@` 提及寻址、跨 profile 的持久点对点 DM、携带记忆的 cron 任务（"聊天即运行时"）；`pacifio/atlas` 把 agent 的每个 commit 关联回它的会话（提示词/工具调用/文件改动存进一个 gitignore 的 SQLite sidecar，可事后查询——git 保持纯净）；Superlinked SIE 把 embeddings→agent-loop 作为一套 OpenAI 兼容的 K8s 集群交付。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -102,6 +103,7 @@ last_processed: 2026-09-02T12:23:00Z
      攻击研究的犯罪镜像；另有 CVE-2026-53362 的容器逃逸解读 + 公开 kernelCTF PoC。
    - **09-01 04:03 — 打补丁+换密钥、GPU Rowhammer、路由器植入、ICS 取证（详情 → [[security]]）：** Rails Active Storage CVE-2026-66066（9.5 v4，报道前约一周已被利用）——争议修复观察已于 09-01 05:12 收束为**未裁决**：官方公告对 variation-key 路径只字未提但强制要求轮换密钥；Rapid7 的 RCE 无需 Marshal gadget 且从未测试"补丁后服务器+攻击者持有签名材料"场景；未进 KEV（2026.08.31）；VulnCheck 的"7,100+ 暴露实例"为单一来源；无论如何运维指引已趋同（打补丁 + libvips ≥8.13 + 轮换）；GPUThor（CCS '26）Rowhammer 击败 RTX A6000 级 SECDED ECC → IOMMU 开启下宿主机 root，无 CVE/补丁，威胁模型正是多租户 GPU 云出售的 co-tenant kernel；Sygnia Fire Ant——Cisco IOS XR 植入配合选择性 syslog 抑制（"提交历史不再是'不存在'的证据"）；DeCA 军方超市冷柜故障与 Claroty 的 Danfoss AK-SM 800A 23 缺陷研究时间吻合——调查本身声明了不确定性。
    - **09-02 04:30 —— 传输劫持遇上未签名更新器；两起评分者分裂的认证绕过（详情 → [[security]]）：** Virtualizor 恶意更新经 BGP 劫持投递，且携带**技术上有效的 Let's Encrypt 证书**（更新包从未做密码学校验；厂商无法枚举受害者）；JFrog Artifactory CVE-2026-82329（CNA 9.8 vs NVD 未分析 vs CISA「未观察到利用」——watchTowr 的在野利用宣称是单一来源）；Exchange CVE-2026-62911 捕获重放（公开 PoC，约 2.19 万台未修补，**ESU 于 2026 年 10 月终止**）；13 个被木马化的 Packagist 主题投递已修补 CVE 的 WebKit→内核 iOS 链，窃取钱包助记词。
+   - **09-02 20:03 —— ICS 拿到自己的 AI 攻击数据点；边缘设备迎来又一轮零日季；一个 23 岁的僵尸网络死于它的 2003 年威胁模型（详情 → [[security]]）：** Forescout × Claude 用 12 分钟 / $535.74 把 CVE-2021-31886 移植到多台 WAGO PLC——并刷砖了第二台 PLC（厂商自己的保留："人类本可以做得更便宜"）；SonicWall SMA 1000 CVE-2026-83548/-83549（10.0 预认证 SSRF + 7.8 认证后 → RCE；"活跃利用"仅建立在单一厂商案例上）；Switchvox CVE-2026-9586（9.3 未认证 SQLi → postgres 超级用户反向 shell，补丁发布六周后被利用，约 4,000 台暴露）；GeoNetwork 授权缺失 + Saxon XSLT 链（121 个政府地理门户）；DOJ 借其未认证的 P2P 节点列表给 Sality 投下 sinkhole。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -134,6 +136,7 @@ last_processed: 2026-09-02T12:23:00Z
      LRU 从 NVMe 按需流式加载 744B MoE 的约 19,456 个路由专家——无 GPU 运行 GLM-5.2 / Kimi K3（2.8T）/ Inkling（975B）；百度
      Unlimited-OCR（R-SWA）保持 KV 缓存恒定，数十页 PDF 单次前向解码。
    - **09-02 04:30 —— 专家流式加载空间碎片化；量化手术成熟（详情 → [[edge-inference]]）：** slotstream（Show HN）是 SSD 专家流式的第五个以上并行 MLX 实现——但给出了正确类型的声明（4GB/24GB 缓存下贪心解码字节级一致，作为常设 CI 测试强制执行）；Tiel-Coder-35B（对 MIT 的 Ornith-1.5 做社区 imatrix+模板手术）声称在 22GB 上达到 Opus-4.6-medium 的 SWE 修复水平，模型卡自带 n=25 噪声警告；且 Ornith 原始 MTP 头曾以随机初始化权重发布，直到 8 月 23 日才换上训练过的——查检查点，别信卡片。
+   - **09-02 20:03 —— 消费级蓝图落在 slotstream 与 API 之间（详情 → [[edge-inference]]）：** 一台 M4 Pro Mac mini（48 GB）在 oMLX + Tailscale 上跑 Qwen3.6-35B-A3B-OptiQ-4bit（约 20 GB 常驻、约 3B 激活），325/34 tok/s——选型规则："总参数量是营销；活跃参数 × 量化才是装得进 RAM 的东西。"
    → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
@@ -210,6 +213,7 @@ last_processed: 2026-09-02T12:23:00Z
    - **08-29 20:03 — 开源规模纪录易手，模型访问成为合同战场，GRPO 单一文化迎来挑战者（详情 → [[frontier-models]]）：** 腾讯 Hy4 preview（770B-A49B，Apache 2.0，>1M ctx，Gated DSA + IndexCache + MTP——仅自报盲测，卡片自认"早期版本"）；OpenAI 援引 SpaceX 控制权变更条款对 Cursor 断供（11 月 12 日；Astra 不在其中；OpenAI 约占 Cursor 流量 5%）；Thomson-1.0-Small 在 Qwen3.6-35B 上做持续学习（PolyForm Strict）；ES vs GRPO（避免熵坍缩、赢 Pass@K）；RLHEV 游戏引擎作可验证世界模型奖励。
    - **09-01 04:03 — 开源权重拿下默认流量；模型 ID 硬切换；定价带上分词器星号（详情 → [[frontier-models]]）：** GLM-5.3-Flash（320B-A18B，MIT）约 6 天登顶 OpenRouter（~23T tokens，约 2.3× 次名），终结 DeepSeek 56 天连冠——经 HF 验证；Moonshot 一夜之间 404 掉 `kimi-k2.5` 与整个 `moonshot-v1` 系列（时间表早已公布；迁移目标 `kimi-k3`）——模型 ID 间接层的案例；Sonnet 5 的 $2/$10 促销价转正（9 月 1 日涨价取消），附带披露的 1.0–1.35× 分词器增量；iFlytek Spark X2.5-4B/1.7B「1M ctx」开源属"宣告未验证"（非官方 HF 镜像正是出处陷阱）。
    - **09-02 04:30 —— 安全档成为产品分叉；缓存读取成为 agentic 侧价格杠杆（详情 → [[frontier-models]] [[token-economics]]）：** Anthropic 发布 Fable 5.1（GA）与 Mythos 5.1——「同一个模型，不同级别的安全防护」，Mythos 仅限可信访问计划（Cyber Verification；美国政府共建的生命科学 Verification，仅限美国组织）：**访问成为验证状态的函数**，是 GLM-5.3 收入门控许可证在分发侧的镜像；缓存读取降价 75% → $0.25/M（常规约省 25%，高 agentic 场景约 45%）。另有 LTX-2.5（开源多镜头音视频、全实体收入条款）与 World Labs Atlas（全能世界模型——静态场景演示、厂商自报的重建 SOTA）。研究侧：$0.67 拿下 44% ARC-AGI-1（已过滤泄漏、限于基准），以及 CogEvol-4B 自曝已修复的奖励作弊。
+   - **09-02 20:03 —— "开源，直到你成了生意"抵达预测领域；可解释性拿到首个整体替换实验（详情 → [[frontier-models]]）：** TimesFM 3.0 在三个基础模型预测基准上声称第一，却把 Apache-2.0 换成非商业许可证（钉在 2.5 上的生产管线必须重新核查）；arXiv 2608.29530 把一个 LLM 的内部机制换成一条闭式符号方程，行为"基本不变"——对符号做因果干预即可预测地改变行为。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -571,6 +575,10 @@ last_processed: 2026-09-02T12:23:00Z
   **M3 Pro** —— Reuters（转引 The Information，7 月 8 日）报道一个 2.7T 参数模型（约为 428B M3 的 6 倍；已宣布的最大
   中国模型），拟名 M3 Pro，Q3 发布为目标，并计划开源；Q3 本周即告结束，仍无发布、无架构、无独立确认——一份带截止
   日期的传闻，而真正的问题是"开源"意味着完整权重还是收入门槛许可证（论点 6 的家族）。
+  **09-02 21:14：** 基线一手核查——MiniMaxAI 的 HF 组织最新模型是 MiniMax-Music3（08-07）与
+  MiniMax-H3（07-28），没有 M3 Pro；HN 上也没有 M3 Pro 的故事；报告发出约 8 周后仍无官方公告。
+  已机器钉住：`disclosure-watch.json` 第 2 项（HN 指纹 `minimax.*(m3 pro|2.7t)`）会在发布落地时
+  自行浮现。
 - **智能体记忆标准化（开放缺口）：** MCP（工具/数据访问）与 A2A（智能体到智能体，二者皆属 Linux
   Foundation）已经收敛，但两者都没有标准化*受治理的持久共享记忆*——没有作者/置信度/溯源字段，没有
   记忆空间权限，没有冲突/排序语义。OWASP ASI06（"记忆与上下文投毒"）如今把跨智能体记忆交换列为
@@ -1479,3 +1487,14 @@ last_processed: 2026-09-02T12:23:00Z
   `Imbad0202/academic-research-skills`（45k★）拒绝让你引用没读过的东西——主张审计门以金标集校准至
   FNR<0.15/FPR<0.10，语料级验证仍是未来工作 → [[agent-plugins]]。Baseten 的效率前沿一文把推理技术分为*沿前沿
   移动*与*推出前沿*——一份共享词汇表，零基准 → [[edge-inference]]。
+- **批次尾（09-02 20:03，详情 → [[security]] [[agent-stack]] [[platform-gatekeeping]] [[frontier-models]] [[edge-inference]]）：**
+  安全半场（SonicWall、Switchvox、GeoNetwork、Sality、Forescout 的 PLC 移植）落在论点 2 +
+  [[security]]。Weedout（$1.99 Safari 扩展）只按平台自己的标签过滤，把带 "Made with AI" 标记的 YouTube
+  视频隐藏掉——MV2 之后，用户侧策展活在平台原生的表面上，未标注的 slop 诚实地说不在范围内 →
+  [[platform-gatekeeping]]。Movie Scene Map——15,565 个取景地，纯由 Wikidata *statement* 构建（"提及"
+  作为较弱证据单独保留），CC0 导出 + 只读 MCP 端点作为一等接口。David Bushell 的文本编辑器排除序列：
+  canvas "完全不可访问"，`contenteditable="plaintext-only"` 卡在性能上，长文本由朴素 `<textarea>` 胜出——
+  原生原语正是每个自研编辑器都要从零重新挣得的可访问性故事。LISEP 的 True Rate of Unemployment 在
+  2026 年 7 月达到 **24.9%**（vs BLS 4.1%），连续四个月上升——无论 AI 取代之争引用哪个分母，都要把
+  游说色彩浓厚的指标对照 BLS 读，而非替代 BLS。hermes Pantheon + atlas + SIE → 论点 1；TimesFM 3.0 +
+  符号结构论文 → 论点 6；M4 Pro 蓝图 → 论点 3。

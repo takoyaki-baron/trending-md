@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-09-02T12:23:00Z
+last_processed: 2026-09-02T12:35:00Z
 ---
 
 # 学習エージェント
@@ -59,6 +59,7 @@ last_processed: 2026-09-02T12:23:00Z
      Grok Build（xAI の Rust TUI コーディングエージェント、ACP 互換の公開ミラー）；Anthropic MHS「物理 MCP」（HHMI Janelia——
      実験機器ドライバを読み書きプリミティブに抽象化；08-28 20:31 に回答：形はあるが契約はなし——ドライバスキーマ/バージョンなし、安全＝ドライバ作者 + EU機械規則）；Alibaba Qoder（エージェントワークスペース、20,000+ スキル）；GitHub gh-aw
      （Actions へコンパイルする agentic CI）；t3code（モバイル制御面）；Vercel Run SDK（信頼できない agent コード向け堅牢化 QuickJS サンドボックス）；worktrunk（並列エージェント向け Rust worktree CLI、6.7k★）。
+   - **09-02 20:03 — マルチエージェント UX が「同僚だらけのチャットアプリ」へ収束；エージェント VCS にローカルファーストの補完（詳細 → [[agent-stack]]）：** hermes-agent v0.21.0「Pantheon」（239.8k★）が Bot Mode をデフォルト ON に——グループチャット内の名前とアバター付きボット、`@` メンション、永続的な peer-to-peer DM、メモリを持ち運ぶ cron ジョブ（「チャットこそがランタイム」）；`pacifio/atlas` はエージェントの全 commit をそのセッションに紐付け（プロンプト/ツール呼び出し/ファイル変更を gitignore された SQLite サイドカーで照会可能——git は純粋なまま）；Superlinked SIE は埋め込み→エージェントループを 1 つの OpenAI 互換 K8s クラスタとして提供。
    → [[agent-stack]]
 
 2. **エージェントセキュリティが最も直接的な攻撃面——そして命名されたあらゆるクラスは、結局誰にも
@@ -110,6 +111,7 @@ last_processed: 2026-09-02T12:23:00Z
      公開 kernelCTF PoC。
    - **09-01 04:03 — パッチ+鍵ローテーション、GPU Rowhammer、ルーターインプラント、ICS フォレンジクス（詳細 → [[security]]）：** Rails Active Storage CVE-2026-66066（9.5 v4、報道の約 1 週間前から悪用）—— disputed-fix ウォッチは 09-01 05:12 に**未決着**として収束：公式アドバイザリは variation-key 経路に一切触れずローテーションを義務付ける；Rapid7 の RCE は Marshal ガジェット不要で、パッチ済み+攻撃者署名材料のケースは未検証；KEV 未掲載（2026.08.31）；VulnCheck の「7,100+ 暴露インスタンス」は単一ソース；運用ガイダンスはいずれにせよ収束（パッチ + libvips ≥8.13 + ローテーション）；GPUThor（CCS '26）の Rowhammer が RTX A6000 級の SECDED ECC を破り IOMMU 有効のままホスト root、CVE もパッチもなし、脅威モデルはマルチテナント GPU クラウドが売る co-tenant カーネルそのもの；Sygnia Fire Ant——Cisco IOS XR インプラントが選択的 syslog 抑制（「commit 履歴はもはや不在の証拠ではない」）；DeCA 軍販売店冷凍庫の故障は Claroty の Danfoss AK-SM 800A 23 脆弱性研究と時間的に整合——調査自体が不確実性を宣言。
    - **09-02 04:30 —— トランスポートハイジャックが未署名アップデータと出会う；採点者分裂した2件の認証バイパス（詳細 → [[security]]）：** Virtualizor の悪質更新が BGP ハイジャック経由で配信され、**技術的に有効な Let's Encrypt 証明書**付き（更新パッケージは暗号学的検証が未実装；ベンダーには被害者を列挙する手段がない）；JFrog Artifactory CVE-2026-82329（CNA 9.8 vs NVD 未分析 vs CISA「悪用は未観測」——watchTowr の野良悪用主張は単一ソース）；Exchange CVE-2026-62911 キャプチャリプレイ（公開 PoC、約 21,900 台未パッチ、**ESU は 2026 年 10 月に終了**）；13 のトロイ化 Packagist テーマがパッチ済み CVE の WebKit→カーネル iOS チェーンでウォレットシードを窃取。
+   - **09-02 20:03 — ICS が AI 攻撃側のデータポイントを得る；エッジ機器は再びゼロデイの季節へ；23 年物のボットネットが 2003 年の脅威モデルのまま死ぬ（詳細 → [[security]]）：** Forescout × Claude が CVE-2021-31886 を WAGO PLC 間で移植（12 分 / $535.74——さらに 2 台目の PLC を文鎮化、ベンダー自身の留保：「人間ならもっと安くできた」）；SonicWall SMA 1000 CVE-2026-83548/-83549（10.0 pre-auth SSRF + 7.8 post-auth → RCE；活発な悪用は単一のベンダー事例に依存）；Switchvox CVE-2026-9586（9.3 未認証 SQLi → postgres スーパーユーザーのリバースシェル、パッチから 6 週間後に悪用、約 4,000 台露出）；GeoNetwork の認可漏れ + Saxon XSLT チェーン（政府ジオポータル 121 件）；DOJ が認証なしの P2P ピアリスト経由で Sality をシンクホール化。
    → [[security]]
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
@@ -148,6 +150,7 @@ last_processed: 2026-09-02T12:23:00Z
      744B MoE の約 19,456 個のルーティング専門家をレイヤー別 LRU で NVMe からオンデマンドにストリーミング——GPU なしで GLM-5.2 / Kimi K3（2.8T）/
      Inkling（975B）を実行；Baidu Unlimited-OCR（R-SWA）が KV キャッシュを一定に保ち、数十ページの PDF を単一フォワードパスで復号。
    - **09-02 04:30 —— エキスパートストリーミング空間の断片化；量子化サージェリーの成熟（詳細 → [[edge-inference]]）：** slotstream（Show HN）は SSD エキスパートストリーミングの 5 つ目以上の並列 MLX 実装——しかし正しい種類の主張を添える（4GB/24GB キャッシュで貪欲デコードがバイト同一、常設 CI テストとして強制）；Tiel-Coder-35B（MIT の Ornith-1.5 へのコミュニティ imatrix+テンプレート手術）が 22GB で Opus-4.6-medium 相当の SWE 修正を主張、カード自身の n=25 ノイズ警告付き；さらに Ornith の元 MTP ヘッドはランダム初期化の重みで出荷され、8 月 23 日に学習済みのものへ差し替えられた——カードではなくチェックポイントを確認せよ。
+   - **09-02 20:03 — コンシューマー設計図が slotstream と API の間に着地（詳細 → [[edge-inference]]）：** M4 Pro Mac mini（48 GB）が Qwen3.6-35B-A3B-OptiQ-4bit（常駐約 20 GB、アクティブ約 3B）を oMLX + Tailscale 上で 325/34 tok/s で実行——サイジング規則：「総パラメータ数はマーケティング、RAM に収まるのは アクティブパラメータ × 量子化」。
    → [[edge-inference]]
 
 4. **マルチエージェントの「スケールするスウォーム」は、パターンマッチングではなく本物の成果を
@@ -231,6 +234,7 @@ last_processed: 2026-09-02T12:23:00Z
    - **08-29 20:03 — オープン規模記録が持ち主を変え、モデルアクセスは契約の戦場に、GRPO 単一文化に挑戦者（詳細 → [[frontier-models]]）：** Tencent Hy4 preview（770B-A49B、Apache 2.0、>1M ctx、Gated DSA + IndexCache + MTP——自己報告ブラインド評価のみ、カード自身が「早期バージョン」）；OpenAI が SpaceX 変更支配条項を援用して Cursor を遮断（11 月 12 日；Astra は対象外；OpenAI は Cursor トラフィックの約 5%）；Thomson-1.0-Small が Qwen3.6-35B 上で継続学習（PolyForm Strict）；ES vs GRPO（エントロピー崩壊を避け Pass@K で勝つ）；RLHEV ゲームエンジンを検証可能な世界モデル報酬に。
    - **09-01 04:03 — オープンウェイトがデフォルトのトラフィックを取る；モデル ID の硬直切替；価格にトークナイザのアスタリスク（詳細 → [[frontier-models]]）：** GLM-5.3-Flash（320B-A18B、MIT）が約 6 日で OpenRouter を首位に（約 23T トークン、次点の約 2.3 倍）、DeepSeek の 56 日連続首位を終わらせる——HF API で検証済み；Moonshot が `kimi-k2.5` と `moonshot-v1` シリーズ全てを一夜で 404 化（スケジュールは事前公布；移行先 `kimi-k3`）——モデル ID 間接層の事例；Sonnet 5 の $2/$10 紹介価格が恒久化（9 月 1 日の値上げは取消）、開示済みの 1.0–1.35× トークナイザ差分付き；iFlytek Spark X2.5-4B/1.7B「1M ctx」オープンソース化は宣言された未検証（非公式 HF ミラーこそ出所の罠）。
    - **09-02 04:30 —— セーフガード層が製品の分割になる；キャッシュ読みがエージェント側の価格レバーに（詳細 → [[frontier-models]] [[token-economics]]）：** Anthropic が Fable 5.1（GA）と Mythos 5.1 をリリース——「同じモデル、異なるレベルのセーフガード」、Mythos は信頼されたアクセスプログラム限定（Cyber Verification；米政府と構築したライフサイエンス Verification、米国組織のみ）：**アクセスが検証ステータスの関数になる**、GLM-5.3 の収益ゲートライセンスの配布側の鏡像；キャッシュ読み 75% 値下げ → $0.25/M（通常約 25% 安く、高度に agentic な用途で約 45%）。加えて LTX-2.5（オープンウェイト・マルチショット AV、エンティティ全体の収益条項）と World Labs Atlas（オムニ世界モデル——静的シーンのデモ、ベンダー主張の再構築 SOTA）。リサーチ側：$0.67 での 44% ARC-AGI-1（リーク濾過済み・ベンチマーク限定）と CogEvol-4B の捕捉・修正済み報酬ハッキングの自己開示。
+   - **09-02 20:03 — 「ビジネスになるまでオープン」が予測へ到達；解釈可能性に初の丸ごと置換実験（詳細 → [[frontier-models]]）：** TimesFM 3.0 は 3 つの基盤モデル予測ベンチマークで首位を主張する一方、Apache-2.0 を非商用ライセンスへ変更（2.5 に固定された本番パイプラインは再確認が必要）；arXiv 2608.29530 は LLM の内部を閉形式の記号方程式へ置き換えても挙動が「ほぼ変わらない」ことを示し、記号への因果的介入が挙動を予測どおりに変える。
    → [[frontier-models]]
 
 7. **AI安全性は政策ではなく測定可能なリリース閾値であり——そして測定インフラが今や弱点である。**
@@ -648,7 +652,10 @@ last_processed: 2026-09-02T12:23:00Z
   ウォッチ）：** MiniMax **M3 Pro** —— Reuters（The Information に基づく、7 月 8 日）が 2.7T パラメータのモデル（428B の M3 の
   約 6 倍；発表された最大の中国モデル）を報じ、M3 Pro の名で Q3 ローンチ目標、オープンソース化を計画；Q3 は今週閉じるが、
   リリースもアーキテクチャも独立確認もない —— 期限つきのうわさであり、生きた問いは「オープン」が完全ウェイトか収益ゲート
-  ライセンスか（テーゼ 6 のファミリー）。
+  ライセンスか（テーゼ 6 のファミリー）。**09-02 21:14：** ベースラインを一次情報で確認——MiniMaxAI の HF
+  組織の最新は MiniMax-Music3（08-07）と MiniMax-H3（07-28）で、M3 Pro はない；HN にも M3 Pro の話は
+  ない；報道から約 8 週間、公式発表はまだない。機械で固定済み：`disclosure-watch.json` の第 2 項（HN
+  フィンガープリント `minimax.*(m3 pro|2.7t)`）がドロップを自動で検知する。
 - **エージェントメモリの標準化（未解決のギャップ）：** MCP（ツール/データアクセス）とA2A（エージェント
   間、いずれもLinux Foundation）は収束したが、どちらも*統制された永続的共有メモリ*を標準化していない
   ——著者/信頼度/プロヴェナンスのフィールド、メモリ空間の権限、競合/順序のセマンティクスがない。
@@ -1717,3 +1724,16 @@ last_processed: 2026-09-02T12:23:00Z
   ゴールドセットで FNR<0.15/FPR<0.10 に較正、コーパス規模の検証は将来の課題 → [[agent-plugins]]。Baseten の効率
   フロンティア論文は推論技術を*フロンティアに沿って移動* vs *押し出す* に分ける——共有語彙、ベンチマークゼロ →
   [[edge-inference]]。
+- **バッチ末尾（09-02 20:03、詳細 → [[security]] [[agent-stack]] [[platform-gatekeeping]] [[frontier-models]] [[edge-inference]]）：**
+  セキュリティ半分（SonicWall、Switchvox、GeoNetwork、Sality、Forescout の PLC 移植）はテーゼ 2 +
+  [[security]] に記録。Weedout（$1.99 の Safari 拡張）はプラットフォーム自身のラベルだけでフィルタし、YouTube の
+  「Made with AI」動画を非表示にする——MV2 後、ユーザー側のキュレーションはプラットフォームネイティブな面に生き延び、
+  ラベルのないスロップは正直どこまでいっても範囲外 → [[platform-gatekeeping]]。Movie Scene Map——Wikidata の
+  *statement* だけから構築した 15,565 件の撮影ロケーション（言及はより弱い証拠として分離保持）、CC0 ダンプ +
+  ファーストクラスのインターフェースとしての読み取り専用 MCP エンドポイント。David Bushell のテキストエディタ淘汰順：
+  canvas は「完全にアクセシブルでない」、`contenteditable="plaintext-only"` は性能で壁に当たる、長文では素の
+  `<textarea>` が勝つ——ネイティブプリミティブこそ、カスタムエディタが毎回ゼロから再獲得しなければならない
+  アクセシビリティの物語。LISEP の True Rate of Unemployment は 2026 年 7 月で **24.9%**（BLS は 4.1%）、
+  4 か月連続の上昇——AI による雇用代替論がどの分母を引用するにせよ、擁護団体に近い指標は BLS の代わりではなく
+  BLS と並べて読むこと。hermes Pantheon + atlas + SIE → テーゼ 1；TimesFM 3.0 + 記号構造論文 → テーゼ 6；
+  M4 Pro 設計図 → テーゼ 3。

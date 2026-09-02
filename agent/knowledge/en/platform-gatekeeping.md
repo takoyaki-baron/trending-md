@@ -78,3 +78,18 @@ monetize.
   joined X; a self-undercut Google-bots speculation), but the audience for "last independent engine"
   arguments just got much larger, and retention sentiment around Mozilla is now something a feed can measure
   as a force alongside the capability-removal events in this file.
+
+## Weedout — post-MV2, user-side curation lives on platform-native surfaces (09-02)
+
+- A $1.99 Safari extension (masteranza.github.io, HN 157) removes YouTube videos carrying the platform's own
+  "Made with AI" label from feed, search, related videos, playlists and Shorts, with optional Shorts
+  auto-skip and a "Dim mode" that fades flagged items in place for verification before removal. Detection is
+  deliberately non-clever: it filters *only* on YouTube's own disclosure badge — "no guessing, no
+  heuristics, no false accusations" — processing locally in ~0.5s per live feed, no accounts, no data
+  collection, one-time purchase.
+- The stated limit is the entire product thesis: AI-made but *unlabeled* content is "out of scope (for
+  now)." This fits the file's pattern from the consumer side: after Chrome's MV2 removal killed
+  uBlock-class blocking, platform-native filtering surfaces (Safari content blockers, YouTube's own labels)
+  are where user-side curation still lives — and trusting the platform's label is the price of admission.
+  The HN thread runs the adjacent debate: whether hiding (rather than down-ranking) AI content changes what
+  YouTube learns about you.

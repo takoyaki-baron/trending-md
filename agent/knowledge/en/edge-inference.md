@@ -443,3 +443,19 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
 - Useful because inference debates are usually tradeoff arguments without a shared map — naming which
   techniques relocate you versus expand the frontier is the mental model behind most real serving-config
   decisions, and the zero-benchmark disclaimer keeps it a mental model, not a result.
+
+## The M4 Pro blueprint — the concrete middle of the local-LLM market (09-02)
+
+- lws.io (HN 237): an always-on M4 Pro Mac mini (48 GB) runs **Qwen3.6-35B-A3B-OptiQ-4bit** (35B total /
+  256 experts, ~3B active, ~20 GB resident) as the main reasoning model, plus Gemma-4-E4B-it (2.4 GB) for
+  chat and formatting, served by **oMLX** (HF model browser, auto-discovery, SSD-persisted KV cache) at a
+  measured 325 tok/s prompt processing / 34 tok/s generation — reached from iPhone, MacBook and mini over
+  Tailscale. Clients: Hermes agent backend, Apollo on iOS, Raycast AI, Pi for coding.
+- Numbers stated with their tradeoffs: 4-bit OptiQ (8-bit on sensitive layers) costs 1–2 benchmark points vs
+  BF16; dense 27B models don't fit 16 GB machines without swap pain; 34 tok/s is "quick enough that he
+  doesn't notice," not instant. Sizing checklist: file size ≈ parameter count in GB at 4-bit, minus ~6–8 GB
+  macOS overhead, minus KV-cache headroom, keep 10–15% buffer before SSD swapping.
+- Position: the concrete middle between slotstream's expert-streaming extreme and the API fallback — a
+  ~$1,400 always-on box covering "the 80% of requests that do not need GPT-5 or Claude Opus," with the API
+  kept as fallback rather than a purity test. The telling detail is the MoE lesson: total parameter count is
+  marketing; active parameters × quantization is what fits in RAM.

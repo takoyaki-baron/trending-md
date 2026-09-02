@@ -1633,3 +1633,29 @@ distribution thesis 6.
   battery are the checkable part). Follows HF × Pollen's Microduck ($399 bipedal, sim-to-real RL stack,
   08-28) — consumer robotics is price-competing downward while skills marketplaces become the platform
   argument.
+
+## TimesFM 3.0 — the open-forecasting standard-bearer goes weights-closed-ish (09-02)
+
+- google-research/timesfm v3.0.0: native multivariate + univariate forecasting with covariates (including
+  future-known) "without per-task tuning"; claims #1 on fev-bench (100 real-world tasks), TIME Benchmark
+  (50 domain datasets / 98 tasks), and GIFT-Eval among foundation models. Self-reported benchmarks; the
+  README gives no parameter count or context length for 3.0 (2.5 was 200M params / 16k context).
+- The under-reported part is the license: through 2.5 the weights were Apache-2.0; **3.0 moves to
+  "timesfm-non-commercial-license-v1.0"** — "commercial or production use of the default pretrained weights
+  is not permitted" — even as TimesFM itself ships inside BigQuery ML, Google Sheets and Vertex Model Garden.
+  The LTX-2.5 gated-license pattern repeats at Google: "open weights" now routinely means "open until you're
+  a business." Any production pipeline pinned on Apache-2.0 TimesFM must re-check the fine print before
+  upgrading.
+
+## "The Emergent Symbolic Structure of Artificial Neural Networks" — swap the vectors for an equation (09-02)
+
+- arXiv 2608.29530 (McCoy, Soulos, Linzen, Smolensky; HN 184): approximate a network's
+  representation-generating process with a **closed-form equation instantiating a symbolic structure**, then
+  substitute it wholesale — behavior "remains largely unchanged" in small list-manipulation networks and in
+  LLMs across four domains (arithmetic, logic, computer code, language). Because the approximation is
+  closed-form it supports causal interventions: targeted edits to the symbolic structure change LLM behavior
+  predictably — the evidence the structures are load-bearing, not correlated decoration.
+- Why it matters: the first wholesale-substitution experiment in the symbols-vs-vectors debate (rather than
+  another probing-classifier correlation), and a handleable object for interpretability. The paper hedges as
+  "a potential way to reconcile" the two views. Read "largely unchanged" carefully — it is both the finding
+  and its limit: the residual drift is where the network stops being the equation.

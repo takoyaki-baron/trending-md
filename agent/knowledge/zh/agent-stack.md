@@ -1133,3 +1133,36 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   用户不会查看的缓存目录里）。无头 LibreOffice 正是 .docx/.xlsx/.pptx 操作的经典路径——agent 能替你做表格，
   却不必告诉你它为此下载了一套办公套件。
 - 框架纪律：这篇是观察性文章而非揭发——没有 OpenAI 声明、没有许可证评论；Willison 只陈述目录里有什么。
+
+## hermes-agent v0.21.0 "Pantheon"——聊天应用成为多 agent 运行时（09-02）
+
+- NousResearch 的 hermes-agent（239.8k★，MIT）自 v0.20.0 起收拢 760+ 贡献者的约 5,800 次提交 / 约 2,475 个
+  合并 PR。头条是 **Bot Mode**：随桌面应用捆绑、默认开启——每个 agent profile 都有名字、确定性的头像面孔，
+  并在 Discord 式群聊里占一席之地，bot 之间、bot 与你之间对话，`@` 提及寻址。围绕它：`hermes peer` 提供跨
+  profile、跨网关的持久 bot 间 DM（回复落在各 agent 可查的 Bot Chat 里，而非发后即忘），携带记忆跨调度运行
+  的 cron 任务（"被调度的 agent 真的在学习"）、子代理的实时中途引导、重建的 MCP 指挥中心、桌面浏览器控制。
+- 为什么重要：多 agent 的 UX 正在收敛于"一个满是同事的聊天应用"——有名字、可寻址、持久的实体，而非流水线
+  阶段——而在 24 万星规模上，hermes 是这一论点最大的开源部署。值得观察的设计赌注：把持久、可查的 agent 间
+  对话当作界面，把记忆挂到调度上——管道优先是旧做法；如今聊天就是运行时。
+
+## pacifio/atlas——"agent 的版本控制"：溯源作为可查询的 sidecar（09-02）
+
+- Rust 工作区应用（2.6k★，日增 +895，alpha-0.3.0）：每次 agent 运行产出**检查点**——一个关联回产生它的会话
+  的 commit——提示词、工具调用与文件改动保存在一起，数月后仍可查询。Claude Code、Codex 与更广的 ACP 注册表
+  （Cursor、OpenCode、Kilo Code）经 zed-industries 的 Agent Client Protocol 并排运行于同一代码库，共享设备上
+  的记忆（"Claude Code 做的一个决定会出现在 Codex 的下一条提示里"），会话交接携带精选事实包。笔记是
+  `.atlas/knowledge/` 里的 markdown；会话是 JSONL；`CLAUDE.md`/`AGENTS.md` 折叠进同一索引。
+- 诚实的架构信号：检查点记录是 **gitignore** 的 `.atlas/` 里的 SQLite——提交历史保持 git 纯净，agent 溯源
+  是一个可查询的 sidecar。这是对上文 ERSC 服务端押注的 local-first 补充。注意点：pre-alpha；README 承认
+  "注册表中长尾 agent 的 QA 仍在进行"。
+
+## Superlinked SIE——每个 agent 栈一套推理集群，而非每个模型一台服务器（09-02）
+
+- superlinked/sie（Apache-2.0，3.0k★）：一个自托管集群，在 OpenAI 兼容端点（`/v1/embeddings`、
+  `/v1/chat/completions`、`/v1/completions`、`/v1/responses`）之后服务 100+ 模型——覆盖搜索/检索、
+  文档转 markdown、结构化输出、内容安全，以及**agent 循环本身**。预配置目录（Stella、SPLADE、Qwen3、
+  GLiNER、SigLIP——MTEB 基准）按需加载模型并 LRU 驱逐；K8s/Helm + 负载均衡网关 + KEDA 自动扩缩 +
+  Grafana 开箱即用；SDK 覆盖 LangChain/LlamaIndex/DSPy/CrewAI 与三大向量库。
+- 为什么重要：agent 栈会悄悄积累 5–10 个模型依赖（embedder、重排器、解析器、安全、主 LLM）；把它们作为一个
+  自动扩缩集群来运维、而不是五台雪花服务器，省下的是 vLLM 从未覆盖的运维账单。信号就在任务清单里："agent
+  循环本身"成为一种被服务的模型工作负载——推理基础设施开始给 agent 计价，而不只是给模型计价。

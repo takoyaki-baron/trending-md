@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-09-02T12:23:00Z
+last_processed: 2026-09-02T12:35:00Z
 ---
 
 # Learnt Agent
@@ -27,10 +27,7 @@ patterns, and turn them into insights and actionable todos.
    (durable state + human gates: the *state kernel*), Cline Kanban (git-worktree-per-task: the
    *isolation primitive*).
    - **08-16→22 — orchestration → code hosting → economics → density → workflow-as-code → the open harness (detail → [[agent-stack]]):** paperclip, Omarchy 4.0, OpenCut, ai-memory, Cordis, Cursor Origin, microsandbox, machine0, Letta SDK, TrueForge, DeepSeek Harness (167k★/6d), Agent Substrate (30×+), fx, OneCLI, `openai/codex` (Apache-2.0), ECC + Apache Maka.
-   - **08-23 13:03→21:04 — memory gets its spec: the envelope, not the fields (detail → [[agent-stack]]).** No
-     MCP SEP touches memory semantics; the W3C AI Agent Memory Interop CG launched 2026-06-03, normatively
-     referencing IETF `draft-saihm-memory-protocol`, still declining authorship/confidence/provenance — envelope
-     first, semantic record later.
+   - **08-23 13:03→21:04 — memory gets its spec: the envelope, not the fields (detail → [[agent-stack]]).** No MCP SEP touches memory semantics; the W3C AI Agent Memory Interop CG launched 2026-06-03, normatively referencing IETF `draft-saihm-memory-protocol`, still declining authorship/confidence/provenance — envelope first, semantic record later.
    - **08-23 20:03 — the stack recombines in one repo; the log gets signatures:** Hermes Agent (MIT, **234,615★,
      34,925 open issues** — backlog, not stars, is the maintenance signal) rebundles skills+memory+6 gateways+7
      terminal backends; Buzz (29.9k★) makes every event a signed **Nostr** event — provenance from the format ([[agent-stack]]).
@@ -42,6 +39,7 @@ patterns, and turn them into insights and actionable todos.
      WebMCP (W3C in-page tool registration; OpenAI/Chrome/Cloudflare/Shopify 10-day Challenge); Claude Cowork gains a built-in isolated Chromium ("Claude's browser, not yours"); OpenMontage (#1 trending, agentic video production with built-in approval gates); VoiceMem (dual-brain speech memory, 134 ms retrieval); Omnigent v0.11.0 (harness-over-harnesses governance — live permission switching + spend caps).
    - **08-28 12:15 — the harness layer spreads to terminals, workspaces, CI, mobile control and the physical world (detail → [[agent-stack]]):**
      Grok Build (xAI's Rust TUI coding agent, ACP-compatible public mirror); Anthropic MHS "physical MCP" (HHMI Janelia — lab-equipment drivers as read/write primitives; answered 08-28 20:31: shape yes, contract no — no driver schema/versioning, safety = driver author + EU Machinery Reg); Alibaba Qoder (agent workspace, 20,000+ skills); GitHub gh-aw (compile-to-Actions agentic CI); t3code (mobile control surface); Vercel Run SDK (hardened QuickJS sandbox for untrusted agent code); worktrunk (Rust worktree CLI for parallel agents, 6.7k★).
+   - **09-02 20:03 — the multi-agent UX converges on "a chat app full of coworkers"; agent VCS gets a local-first complement (detail → [[agent-stack]]):** hermes-agent v0.21.0 "Pantheon" (239.8k★) makes Bot Mode default-on — named, avatar-faced bots in group chats with `@`-mention, durable peer-to-peer DMs, cron jobs that carry memory ("the chat is the runtime"); `pacifio/atlas` links every agent commit to its session (prompts/tool calls/file changes queryable in a gitignored SQLite sidecar — git stays pure); Superlinked SIE serves embeddings→agent-loop as one OpenAI-compatible K8s cluster.
    → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
@@ -55,10 +53,8 @@ patterns, and turn them into insights and actionable todos.
    AI-review-miss → autonomous exploit Wiz Red Agent; tool-contract drift mcpindex; excessive agency Rapid7
    SharePoint; agent memory hygiene "mind viruses"; control-plane compromise vCenter; dangling-delegation
    takeover ENUM €5; vendor-required signed component Defender BTR.sys; transport-hijack unsigned-update
-   delivery Virtualizor BGP). **The meta-pattern is the finding:** in four the class is named,
-   the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox,
-   and MCP tool pinning (urged Apr 2025, still not in the spec).
-   - **08-16→08-26 — fifteen shapes, five "enforced by nobody"; MTE −7d; forge KEV'd, EoP gets its CVE, scanner-is-the-target, SAML chain + SharePoint weaponized — the 15-item ledger (Gitea 60004, ShieldBreak 69414, Tenable, mcp-contextforge, AgentFlow, GLM-5.3 DNS, miniOrange, ClipBucket, IDNA, TRAMP, C2PA, Chrome Aura, DB-GPT, GitPython, SharePoint 63520) lives in [[security]].**
+   delivery Virtualizor BGP). **The meta-pattern is the finding:** in four the class is named, the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox, and MCP tool pinning (urged Apr 2025, still not in the spec).
+   - **08-16→08-26 — fifteen shapes, five "enforced by nobody"; MTE −7d; forge KEV'd, EoP gets its CVE, scanner-is-the-target, SAML chain + SharePoint weaponized — the 15-item ledger lives in [[security]].**
    - **08-27 04:15→04:30 — AI agents find human-rare multi-step chains; the class gets a second agent + a volume denominator (detail → [[security]]):** Wordfence **Argus** (depth-first twin of PRISM) chained six flaws → unauth RCE in Avada (CVE-2026-18431, 9.8); WP HackerOne 20–30/month → 450 in July. Partially measured — no independent rate.
    - **08-28 04:22→12:15 — KEV batch, the MCP-stdio RCE becomes a two-instance class, then a no-CVE zero-day + the WordPress turnkey-PoC turn (detail → [[security]]):** ownCloud CVE-2023-49105 KEV'd (Philippine nuclear-agency heist); Chainlit CVE-2026-45018 (second critical MCP-stdio RCE after LiteLLM); Gitea CVE-2026-60004 in-the-wild; PaperCut NG/MF zero-day (active, no CVE, → SYSTEM RCE); Redis QVD-2026-58458 (8.8, public PoC); turnkey unauth PoCs for TranslatePress/Tutor LMS/Elementor Pro; Xiiaozet ICS 2× 9.8.
    - **08-27 20:27→21:05 — VMs falsified as agent containment; the answer gains a benchmark + a product (detail → [[security]]):** Trail of Bits: GPT 5.6-Cyber escaped QEMU/KVM **three times** (~12h autonomous, three chains incl. three 0-days; Firecracker held substantially harder); Next.js CVE-2026-75604 (9.0, Windows-only `..%5C` cache traversal → forged Server Action → RCE, PoC in a day); pantheon-agents trojanized on PyPI (stolen token); CISA KEV six + Ubiquiti SA-067 (10.0); AgentEscapeBench (Inspect-based, 6★) is the standing SandboxEscapeBench extension; agent-glovebox (Apache-2.0, 57★) productizes "treat agents as an APT" — but its PR #5033 concedes microVMs buy "difficulty, not a proof." Both exist, neither adopted.
@@ -67,6 +63,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-31 04:15 — the MCP ambient-auth class gets its third instance, and the scorer split its sharpest case (detail → [[security]] [[fact-check]]):** argocd-mcp CVE-2026-82456 (10.0 — HTTP transport binds 0.0.0.0 and, with `ARGOCD_API_TOKEN` configured, accepts sessions with the token read from env but never validated per-request → GitOps/cluster takeover; after LiteLLM + Chainlit, the third MCP-server critical); Tomcat CVE-2026-65905 (NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache's own "Low"); D-Link DIR-825M 3× 9.9 (EOL boa server, unpatchable); cloudcmd CVE-2026-82460 (9.8 path traversal in the self-hosted Node file manager).
    - **09-01 04:03→12:22 — patch-and-rotate, GPU Rowhammer, router implants, ICS forensics; then criminal use of a commercial coding agent, documented from the operator's own leak (detail → [[security]]):** Rails Active Storage CVE-2026-66066 (9.5, exploited pre-report; disputed-fix watch resolved **unadjudicated** — operator guidance converges on patch + libvips ≥8.13 + rotate); GPUThor (CCS '26) Rowhammer defeats SECDED ECC → host root with IOMMU on (no CVE/patch — the co-tenant threat model multi-tenant GPU clouds sell); Sygnia Fire Ant implants with selective syslog suppression ("commit history no longer evidence of absence"); DeCA freezer failures ↔ Claroty's 23-flaw Danfoss AK-SM 800A research (uncertainty stated); and an Aurora ransomware affiliate ran intrusions on Cursor Agent (CloudSEK "Caught in 4K"; "the majority of the commands failed … on the first attempt") — the criminal mirror of authorized AI-assisted offensive research; CVE-2026-53362's container-escape reading + public kernelCTF PoC.
    - **09-02 04:30 — transport hijack meets the unsigned updater; two scorer-split auth bypasses (detail → [[security]]):** Virtualizor malicious update delivered via BGP hijack carrying a **technically valid Let's Encrypt certificate** (update packages never cryptographically verified; the vendor cannot enumerate victims); JFrog Artifactory CVE-2026-82329 (9.8 CNA vs NVD unanalyzed vs CISA "not observed" — the watchTowr exploitation claim is single-source); Exchange CVE-2026-62911 capture-replay (public PoC, ~21.9k unpatched, **ESU ends Oct 2026**); 13 trojanized Packagist themes serve a patched-CVE WebKit→kernel iOS chain harvesting wallet seeds.
+   - **09-02 20:03 — ICS gets its AI-offense datapoint; edge appliances take another zero-day season; a 23-year-old botnet dies of its 2003 threat model (detail → [[security]]):** Forescout × Claude ported CVE-2021-31886 across WAGO PLCs in 12 min / $535.74 — and bricked a second PLC (the vendor's own hedge: "a human could have done it cheaper"); SonicWall SMA 1000 CVE-2026-83548/-83549 (10.0 pre-auth SSRF + 7.8 post-auth → RCE; active exploitation rests on one vendor case); Switchvox CVE-2026-9586 (9.3 unauth SQLi → postgres-superuser reverse shell, exploited six weeks post-patch, ~4,000 exposed); GeoNetwork authz-miss + Saxon XSLT chain (121 gov geoportals); DOJ sinkholes Sality via its unauthenticated P2P peer list.
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -89,6 +86,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-27 04:30 — the audit tooling gets a vendor; the new hybrids go unaudited (detail → [[edge-inference]]):** the Mask paper's authors productized the diagnostic as VIDRAFT **AX-RAY** (117-item public catalog, causal leak = blocking defect, aimed at South Korea's gov cyber-AI project) — while no prefix-invariance audit is published for Qwen3.8-Flash-Next or GLM-5.3-Flash.
    - **08-28 12:15 — the "no-GPU frontier" and the "soft-forgetting" decoder (detail → [[edge-inference]]):** colibri (`JustVugg/colibri`, pure C) streams the ~19,456 routed experts of a 744B MoE from NVMe through a per-layer LRU — runs GLM-5.2/Kimi K3 (2.8T)/Inkling with *no GPU*; Baidu Unlimited-OCR (R-SWA) holds the KV cache constant so dozens of PDF pages decode in one pass.
    - **09-02 04:30 — the expert-streaming space fragments; quant surgery matures (detail → [[edge-inference]]):** slotstream (Show HN) is the fifth-plus parallel MLX implementation of SSD expert streaming — with the right kind of claim (greedy decode byte-identical across 4GB/24GB caches, enforced as a standing CI test); Tiel-Coder-35B (community imatrix+template surgery on MIT Ornith-1.5) claims Opus-4.6-medium SWE fixes at 22GB with the card's own n=25 noise warning; and Ornith's original MTP head shipped as random-init weights until Aug 23 — check the checkpoints, not the card.
+   - **09-02 20:03 — the consumer blueprint lands between slotstream and the API (detail → [[edge-inference]]):** an M4 Pro Mac mini (48 GB) running Qwen3.6-35B-A3B-OptiQ-4bit (~20 GB resident, ~3B active) on oMLX + Tailscale at 325/34 tok/s — sizing rule: "total parameter count is marketing; active parameters × quantization is what fits in RAM."
    → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
@@ -156,6 +154,7 @@ patterns, and turn them into insights and actionable todos.
    - **08-29 20:03 — the open-size record trades hands, model access becomes a contract battleground, and the GRPO monoculture gets a challenger (detail → [[frontier-models]]):** Tencent Hy4 preview (770B-A49B, Apache 2.0, >1M ctx, Gated DSA + IndexCache + MTP — self-reported blind eval only, card admits "early version"); OpenAI cuts Cursor off Nov 12, 2026 via the SpaceX change-of-control clause (Astra excluded; OpenAI ~5% of Cursor traffic); Thomson-1.0-Small continual learning on Qwen3.6-35B (PolyForm Strict); ES vs GRPO (avoids entropy collapse, wins Pass@K); RLHEV game engines as verifiable world-model reward.
    - **09-01 04:03 — open weights win default traffic; model IDs get a hard cutover; pricing gets a tokenizer asterisk (detail → [[frontier-models]]):** GLM-5.3-Flash (320B-A18B, MIT) takes #1 on OpenRouter in ~6 days (~23T tokens, ~2.3× next), ending DeepSeek's 56-day run — HF-verified; Moonshot 404s `kimi-k2.5` + the whole `moonshot-v1` series overnight (announced in advance; migration = `kimi-k3`) — the model-ID indirection case; Sonnet 5's $2/$10 intro pricing made permanent (Sept 1 hike cancelled) with the disclosed 1.0–1.35× tokenizer delta; iFlytek Spark X2.5-4B/1.7B "1M ctx" open-source is declared-not-verified (unofficial HF mirrors are the provenance trap).
    - **09-02 04:30 — the safeguard tier becomes a product split; the cache read becomes the agentic price lever (detail → [[frontier-models]] [[token-economics]]):** Anthropic ships Fable 5.1 (GA) and Mythos 5.1 — "the same model, but with different levels of safeguards," Mythos restricted to trusted-access programs (Cyber Verification; US-gov Life Sciences Verification, US orgs only): **access as a function of verification status**, the distribution-side mirror of GLM-5.3's revenue-gated license; cache reads −75% → $0.25/M (~25% cheaper typical, ~45% highly agentic). Plus LTX-2.5 (open-weights multishot AV, entity-wide revenue terms) and World Labs Atlas (omni world model — static-scene demos, vendor-claimed reconstruction SOTA). Research tail: 44% ARC-AGI-1 for ~$0.67 (leakage-filtered, benchmark-scoped) and CogEvol-4B's caught-and-fixed reward-hack disclosure.
+   - **09-02 20:03 — "open until you're a business" reaches forecasting; interpretability gets its first wholesale-substitution experiment (detail → [[frontier-models]]):** TimesFM 3.0 claims #1 on three foundation-model forecasting benchmarks but drops Apache-2.0 for a non-commercial license (production pipelines pinned on 2.5 must re-check); arXiv 2608.29530 swaps an LLM's internals for a closed-form symbolic equation and behavior is "largely unchanged" — causal interventions on the symbols predictably change behavior.
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -536,6 +535,10 @@ patterns, and turn them into insights and actionable todos.
   2.7T-parameter model (≈6× the 428B M3; largest Chinese model announced), Q3 launch target, planned open-source; Q3 closes
   this week with no release, no architecture, no independent confirmation — a rumor with a deadline, and the live question is
   whether "open" means full weights or a revenue-gated license (thesis 6's family).
+  **09-02 21:14:** baseline first-hand — the MiniMaxAI HF org's newest are MiniMax-Music3 (08-07) +
+  MiniMax-H3 (07-28), no M3 Pro, and HN carries no M3 Pro story; no official announcement ~8 weeks
+  after the report. Machine-pinned: `disclosure-watch.json` item 2 (HN fingerprint
+  `minimax.*(m3 pro|2.7t)`) surfaces a drop itself.
 - **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
   Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
   no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
@@ -1738,3 +1741,16 @@ patterns, and turn them into insights and actionable todos.
   calibrated to FNR<0.15/FPR<0.10 on a 20-tuple gold set, corpus-scale validation still future work →
   [[agent-plugins]]. Baseten's efficient-frontier essay splits inference techniques into *move along* the
   latency–throughput frontier vs *push it out* — a shared vocabulary, zero benchmarks → [[edge-inference]].
+- **Batch tail (09-02 20:03, detail → [[security]] [[agent-stack]] [[platform-gatekeeping]] [[frontier-models]] [[edge-inference]]):**
+  the security half (SonicWall, Switchvox, GeoNetwork, Sality, Forescout's PLC port) lives in thesis 2 +
+  [[security]]. Weedout ($1.99 Safari extension) hides YouTube "Made with AI" videos by filtering only on the
+  platform's own label — post-MV2, user-side curation lives on platform-native surfaces, and unlabeled slop is
+  honestly out of scope → [[platform-gatekeeping]]. Movie Scene Map — 15,565 filming locations built purely from
+  Wikidata *statements* (mentions kept separate as weaker evidence), CC0 dump + a read-only MCP endpoint as a
+  first-class interface. David Bushell's text-editor elimination order: canvas is "entirely inaccessible,"
+  `contenteditable="plaintext-only"` walls on performance, plain `<textarea>` wins long-text — native primitives
+  are the accessibility story every custom editor re-earns from zero. LISEP's True Rate of Unemployment hits
+  **24.9%** for July 2026 (vs BLS 4.1%), four consecutive monthly rises — whichever denominator the
+  AI-displacement debate cites, read the advocacy-adjacent measure against BLS, not instead of it. hermes
+  Pantheon + atlas + SIE → thesis 1; TimesFM 3.0 + the symbolic-structure paper → thesis 6; the M4 Pro blueprint
+  → thesis 3.

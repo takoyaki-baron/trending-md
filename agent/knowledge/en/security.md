@@ -1869,3 +1869,67 @@ The batch's security stream, read first-hand at the primary sources where reacha
 - Operator rule: never `npm install` and run an unknown take-home's server — check `package.json` for
   locally-vendored dependencies first; that's the whole con. The job-lure line (Lazarus et al.) now targets
   the exact repo a candidate opens, on all three OSes, wearing the toolchain's own face.
+
+## SonicWall SMA 1000 — second zero-day season on the same product line (09-02)
+
+- SNWLID-2026-0016: **CVE-2026-83548** (CVSS 10.0) — pre-auth SSRF via an unintended forward-proxy in the
+  Appliance Work Place interface; **CVE-2026-83549** (CVSS 7.8) — post-auth OS command injection in the
+  Appliance Management Console yielding RCE "under specific conditions." Affected: SMA 1000 6210/7210/8200v
+  on 12.4.3-03453 and older, 12.5.0-02835 and older; fixed in 12.4.3-03526 / 12.5.0-02952.
+- SonicWall "investigated a case indicating active exploitation" — the RCE-chain reading is *inferred* from
+  that one case, not demonstrated; no attribution, no KEV entry (as of writing). Vendor guidance on IoCs:
+  re-image, rotate all passwords, reset TOTP. A distinct pair from July's CVE-2026-15409/15410 (UTA0533,
+  KNUCKLEBALL) — the second SMA 1000 zero-day episode this summer.
+- Why it matters: edge VPN appliances are the patch-never tier; repeat zero-day seasons on one product line
+  mean "up to date on the last advisory" is no longer a safe state.
+
+## Forescout × Claude — the first documented AI-assisted ICS exploit port across hardware (09-02)
+
+- Vedere Labs (under Anthropic's Cyber Verification program) ported **CVE-2021-31886** (9.8, pre-auth stack
+  overflow in the Nucleus RTOS FTP server) from a known-exploitable WAGO 750-852 to a WAGO 750-831 in
+  interactive Claude Code sessions (terminal + Ghidra + the physical device). Claude derived the USER/CWD
+  command sequence, dropped the CRLF terminator so the payload survived 256-byte zeroing, and went from NOP
+  sled to two working payloads in **12 minutes** — after work stalled on Sonnet 4.6 until switching to
+  Opus 4.6. Full RCE stage: **$535.74 over 8h32m**, with "sustained researcher steering."
+- The honest second datapoint: the follow-on C2-implant task **permanently bricked the PLC** (writing to
+  flash-mapped memory), and capability stops at "send network packets." Forescout's own hedge is the story:
+  "one could argue that the same researcher could have achieved the initial RCE port without AI in less time
+  and at lower cost." No Nucleus V1 fix exists (Siemens plans none; mitigation = block FTP/21 + segment).
+- Extends the AI-assisted offensive-research shape (Rapid7) into ICS — with a cost figure, a failure mode,
+  and the vendor's own counterfactual caveat: exactly the evidence base the AI-offense debate usually lacks.
+
+## Switchvox CVE-2026-9586 — a six-week patch lag is the whole vulnerability (09-02)
+
+- Unauthenticated SQLi (CVSS 9.3) in Sangoma Switchvox SMB 8.3: the `/pa` endpoint processes XML starting
+  `<PolycomIPPhone>` and concatenates the attacker-controlled `PhoneIP` into PostgreSQL queries; arbitrary
+  SQL → code execution as the database superuser (Horizon3/SRA Labs demonstrated extraction → web-admin
+  escalation → reverse shell). Patched 8.4.0.2 on **July 14**; in-the-wild exploitation from **Aug 30**
+  (reverse shells + Base64 process enumeration; IoCs in `/var/log/switchvox/db-quirks.log`, attacker IP
+  176.65.148[.]184). ~4,000 internet-exposed instances, mostly US; honeypots absorbing rapid repeat attempts.
+- VoIP servers hold call recordings, credentials and trunk configs, sit on necessarily-open ports, and
+  almost nobody inventories them — the classic breach-in-progress recipe on a month-old patch.
+
+## GeoNetwork — missing authz + unsafe Saxon XSLT chain into unauth RCE on government geoportals (09-02)
+
+- **CVE-2026-63219** (8.6): no authorization check on the formatter upload endpoint — anonymous users drop
+  arbitrary `.xsl`/`.zip` into the formatter directory. **CVE-2026-58400** (9.1): unsafe Saxon XSLT
+  configuration lets a loaded stylesheet invoke `java.lang.Runtime.exec()` *despite secure-processing
+  settings* — a GET on a public record then runs OS commands. Fixed July 8 in 4.4.12 / 4.2.17 (advisory
+  published Aug 31); interim mitigation: block write methods to `/geonetwork/srv/api/formatters` at the proxy.
+- Ethiack fingerprinted 121 exposed instances across 39 countries, 89% government/military/national-agency —
+  *vulnerable*, not confirmed compromised; single-sourced to the vendor-researcher, no KEV entry. The
+  geospatial stack (GeoServer, now GeoNetwork) keeps yielding pre-auth RCE exactly where public-sector map
+  infrastructure lives — and the fix predates the advisory by seven weeks.
+
+## Sality sinkholed — a 23-year-old botnet dies of its 2003 threat model (09-02)
+
+- DOJ (Aug 31), with Bulgaria/Hungary/Romania + CrowdStrike + the Shadowserver Foundation: Sality (Windows
+  file-infector active since **2003**, two P2P C2 networks v3/v4 — shared codebase, incompatible protocols
+  and keys — 15,000+ reachable machines, the EggJagger clipboard hijacker blamed for ≥$150k crypto theft)
+  disrupted by exploiting its peer-list machinery: **no authentication, no cryptographic identity, no
+  allowlist**. Operators purged legitimate peers via protocol manipulation inside the bot's 40-minute
+  verification cycle, isolated super nodes first, inserted sinkhole entries — the same peer-list poisoning
+  used against GameOver Zeus (2014) and Kelihos (2017).
+- Caveats stated plainly: machines stay infected — "existing malware already installed on those systems
+  remains active"; only *new* payload delivery is cut (check UDP to lighthouse 188.166.101.148). Disruption
+  ≠ remediation for the still-carrying SOHO population.

@@ -1003,6 +1003,28 @@ if (fs.existsSync(actionPath)) {
   }
 }
 
+/* ── Learn-pass log check ──
+   AGENT.md output contract: the log is one entry per run, and a learn run bumps en/agent.md's
+   last_processed. Observed 2026-09-02: the ~20:35 local learn pass updated the memory window +
+   knowledge files but left no en/action.md log entry — exactly the silent drift this check makes
+   visible. Log headers are local time (UTC+8); last_processed is UTC, so compare as instants: a
+   compliant run always logs *after* it learns, so last_processed newer than the newest log header
+   means a learn pass went unlogged. */
+if (fs.existsSync(agentMemPath) && fs.existsSync(actionPath)) {
+  const memSrc = fs.readFileSync(agentMemPath, 'utf8');
+  const lpRaw = (memSrc.match(/^last_processed:\s*(\S+)/m) || [])[1];
+  const newestLog = [...fs.readFileSync(actionPath, 'utf8').matchAll(RE_LOG_HEADER)].map(m => m[1]).sort().pop();
+  if (lpRaw && newestLog) {
+    const lpMs = Date.parse(/(Z|[+-]\d{2}:?\d{2})$/.test(lpRaw) ? lpRaw : `${lpRaw}Z`);
+    const logMs = Date.parse(`${newestLog.replace(' ', 'T')}+08:00`);
+    if (Number.isFinite(lpMs) && Number.isFinite(logMs) && lpMs > logMs) {
+      console.log(`  ⚠ learn pass unlogged: en/agent.md last_processed (${lpRaw}) is newer than the newest en/action.md log entry (${newestLog} UTC+8) — every run must prepend a log entry (AGENT.md output contract)`);
+    } else {
+      console.log(`  ✓ learn-pass log: last_processed (${lpRaw}) is covered by log entry ${newestLog}`);
+    }
+  }
+}
+
 /* ── Root redirect page — dynamic language chooser ── */
 const langLinks = langs.map(l => {
   const ls = strings[l];

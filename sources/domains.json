@@ -4570,5 +4570,104 @@
     "cred": "high",
     "density": "high",
     "cv": 1
+  },
+  "psirt.global.sonicwall.com": {
+    "cat": "security",
+    "en": "SonicWall's PSIRT advisory portal — vendor-primary for SMA/firewall CVEs, scores and hotfix versions. Visited (09-02): SNWLID-2026-0016's CVE-2026-83548 (10.0)/83549 (7.8) and hotfix numbers 12.4.3-03526/12.5.0-02952 match The Hacker News; the 'active exploitation' claim is the vendor's single investigated case.",
+    "zh": "SonicWall 官方 PSIRT 公告门户——SMA/防火墙 CVE、评分与热补丁版本的厂商一手来源。已访问（09-02）：SNWLID-2026-0016 的 CVE-2026-83548（10.0）/83549（7.8）与热补丁版本 12.4.3-03526/12.5.0-02952 与 The Hacker News 一致；“主动利用”之说仅系厂商调查的单起案件。",
+    "jp": "SonicWall の PSIRT アドバイザリポータル——SMA/ファイアウォール CVE・深刻度・ホットフィックス版のベンダー一次ソース。訪問済み（09-02）：SNWLID-2026-0016 の CVE-2026-83548（10.0）/83549（7.8）とホットフィックス 12.4.3-03526/12.5.0-02952 は The Hacker News と一致。「活発な悪用」はベンダーが調査した 1 件のみに依る。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "forescout.com": {
+    "cat": "security",
+    "en": "Forescout (Vedere Labs) OT/ICS research blog — first-hand experiment writeups with unusual candor (the AI PLC-port post publishes its own $535.74 cost, the bricked PLC, and the 'a human could do it cheaper' caveat). Note: returns 403 to anonymous fetchers; verified via The Hacker News/SecurityWeek corroboration.",
+    "zh": "Forescout（Vedere Labs）的 OT/ICS 研究博客——一手实验报告且罕见坦诚（AI 移植 PLC 文章自曝 $535.74 成本、被烧砖的 PLC、以及“人类做会更便宜”的保留条款）。注意：对匿名抓取返回 403；经 The Hacker News/SecurityWeek 相互印证核验。",
+    "jp": "Forescout（Vedere Labs）の OT/ICS リサーチブログ — 一次の実験レポートで、珍しいほど率直（AI による PLC 移植記事は自ら $535.74 の費用、ブリックした PLC、「人間ならもっと安くできる」との留保を公開）。注意：匿名フェッチには 403 を返す。The Hacker News/SecurityWeek の裏付けで検証。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "horizon3.ai": {
+    "cat": "security",
+    "en": "Horizon3.ai attack-research disclosures — first-hand PoC-grade writeups with exploitation timelines. Visited (09-02): its Switchvox CVE-2026-9586 disclosure matches The Hacker News on the Aug 30 in-the-wild date and the 12-flaw April report.",
+    "zh": "Horizon3.ai 的攻击研究披露页——一手、PoC 级别的分析，附利用时间线。已访问（09-02）：其 Switchvox CVE-2026-9586 披露与 The Hacker News 在 8 月 30 日野外利用起点与 4 月 12 漏洞报告上一致。",
+    "jp": "Horizon3.ai の攻撃リサーチ開示 — 一次の PoC 級解説で、悪用タイムライン付き。訪問済み（09-02）：Switchvox CVE-2026-9586 の開示は、8 月 30 日の野良悪用開始と 4 月の 12 脆弱性報告で The Hacker News と一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "ethiack.com": {
+    "cat": "security",
+    "en": "Ethiack's vulnerability-research hub — the GeoNetwork pre-auth RCE writeup is the sole source for the 121-exposed-instances/89%-government fingerprint; the feed keeps that framing since the data is single-sourced to the disclosing vendor.",
+    "zh": "Ethiack 的漏洞研究中心——其 GeoNetwork 预认证 RCE 分析是“121 个暴露实例、89% 与政府相关”指纹数据的唯一来源；由于数据单一来自披露厂商，feed 保留了这一框定。",
+    "jp": "Ethiack の脆弱性リサーチハブ — GeoNetwork プレ認証 RCE の解説は「露出 121 インスタンス・89% が政府関連」フィンガープリントの唯一の情報源。データは開示ベンダーに単一ソースのため、feed もその枠組みを保持。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "justice.gov": {
+    "cat": "security",
+    "en": "US Department of Justice press releases — official record for takedowns and indictments. Cross-checked (09-02): the Sality operation release matches The Hacker News on the Aug 31 date, the multinational lineup, and the 2003 origins.",
+    "zh": "美国司法部新闻稿——打击行动与起诉的官方记录。已交叉核验（09-02）：Sality 行动通稿在 8 月 31 日期日、多国阵容与 2003 年起源上与 The Hacker News 一致。",
+    "jp": "米司法省のプレスリリース — テイクダウン・起訴の公式記録。突合済み（09-02）：Sality 作戦の発表は、8 月 31 日の日付、多国間の体制、2003 年起源で The Hacker News と一致。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "lws.io": {
+    "cat": "community",
+    "en": "Kevin Lewis's systems blog — first-hand local-LLM setup writeups with measured numbers (325 tok/s prompt / 34 tok/s gen) and stated tradeoffs, not affiliate content.",
+    "zh": "Kevin Lewis 的系统博客——一手本地 LLM 配置实测（325 tok/s prompt / 34 tok/s 生成），代价写得明白，不是带货内容。",
+    "jp": "Kevin Lewis のシステムブログ — 計測値付き（プロンプト 325 tok/s / 生成 34 tok/s）の一次ローカル LLM 構成記録。代償も明記、アフィリエイト記事ではない。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "moviescenemap.com": {
+    "cat": "data",
+    "en": "Open-data filming-location atlas built on Wikidata/Commons with an explicit methodology (statement-vs-mention evidence kept separate), CC0 GeoJSON/CSV dumps and a read-only MCP endpoint. Note: its on-page counts are fresher than the HN submission title (15,565 locations vs '13,312 films'); cite the site.",
+    "zh": "基于 Wikidata/Commons 的取景地开放数据地图集，方法论明确（声明与提及两类证据分开）、提供 CC0 GeoJSON/CSV 数据包与只读 MCP 端点。注意：页面数字比 HN 投稿标题更新（15,565 个地点 vs “13,312 部影视”）；以站点为准。",
+    "jp": "Wikidata/Commons ベースのロケ地オープンデータアトラス。方法論が明示（ステートメントとメンションの証拠を分離）で、CC0 の GeoJSON/CSV ダンプと読み取り専用 MCP エンドポイント付き。注意：ページ上の数値は HN 投稿タイトルより新しいためサイト基準で引用（15,565 地点 vs 「13,312 本」）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "masteranza.github.io": {
+    "cat": "code",
+    "en": "GitHub Pages landing for indie browser extensions (Weedout) — vendor self-description, so treat claims as the author's own; its scope confession ('unlabeled slop is out of scope') matched the HN discussion.",
+    "zh": "独立浏览器扩展（Weedout）的 GitHub Pages 落地页——属厂商自述，声明应视为作者自述；其范围自白（“未标注的垃圾内容不在范围内”）与 HN 讨论一致。",
+    "jp": "インディーストリート拡張（Weedout）の GitHub Pages ランディング — ベンダー自己記述のため主張は著者自身のものとして扱う。範囲の自白（「無ラベルのスロップは範囲外」）は HN 議論と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "dbushell.com": {
+    "cat": "community",
+    "en": "David Bushell's web-dev blog — first-hand build reports with scope stated honestly ('90% of a text editor, 1% of the features'); the HN thread corroborates rather than contradicts.",
+    "zh": "David Bushell 的 Web 开发博客——一手构建实录，范围自陈诚实（“文本编辑器的 90%，功能的 1%”）；HN 讨论与之互证而无矛盾。",
+    "jp": "David Bushell の Web 開発ブログ — 一次のビルド記録で、範囲の正直な明示付き（「テキストエディタの 90%、機能の 1%」）。HN スレッドは矛盾なく裏付ける。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "superlinked.com": {
+    "cat": "vendor",
+    "en": "Superlinked's docs/marketing site — vendor primary for its SIE inference engine; capabilities claimed there (100+ models, OpenAI-compatible endpoints) match the GitHub README, but benchmark-free claims are the vendor's own.",
+    "zh": "Superlinked 的文档/营销站——其 SIE 推理引擎的厂商一手来源；宣称的能力（100+ 模型、OpenAI 兼容端点）与 GitHub README 一致，但无基准的能力声明属厂商自述。",
+    "jp": "Superlinked のドキュメント/マーケサイト — SIE 推論エンジンのベンダー一次ソース。主張（100+ モデル、OpenAI 互換エンドポイント）は GitHub README と一致するが、ベンチなしの主張はベンダー自身のもの。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "lisep.org": {
+    "cat": "data",
+    "en": "LISEP (Ludwig Institute for Shared Economic Prosperity) — advocacy-adjacent research institute publishing the True Rate of Unemployment; methodology is disclosed and built on BLS microdata, but the $26k living-wage threshold is its own choice. Read against BLS, not instead of it.",
+    "zh": "LISEP（路德维希共享经济繁荣研究所）——立场相近的研究机构，发布真实失业率（TRU）；方法公开、基于 BLS 微观数据，但 2.6 万美元生活工资阈值是其自行设定。请对照 BLS 阅读而非取代 BLS。",
+    "jp": "LISEP（Ludwig Institute for Shared Economic Prosperity）— 性向の近い研究機関で、True Rate of Unemployment を公表。方法論は開示され BLS マイクロデータに基づくが、26,000 ドルの生活賃金閾値は同機関の選択。BLS の代わりにではなく、並べて読むこと。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
   }
 }

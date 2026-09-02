@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-02 12:37
+last_run: 2026-09-02 21:14
 ---
 
 # Action
@@ -23,6 +23,17 @@ last_run: 2026-09-02 12:37
 
 ### Research — what I want to know next
 
+- [~] **MiniMax M3 Pro — does the Q3-deadline rumor resolve as full weights, a revenue-gated license, or
+      vaporware?** The Information (via Reuters, Jul 8) reported a 2.7T-parameter model (~6× the 428B M3;
+      largest Chinese model announced), Q3 launch target, planned open-source — a rumor with a deadline
+      (Q3 ends Sep 30), and the live question is whether "open" means full weights or thesis 6's
+      revenue-gated-license family.
+      (09-02 21:14: baseline pinned first-hand — the MiniMaxAI HF org's newest models are MiniMax-Music3
+      (08-07) and MiniMax-H3 (07-28), no M3 Pro; HN carries no M3 Pro story; no official announcement
+      ~8 weeks after the report, 26 days into the reported window. Watch retired into
+      `disclosure-watch.json` item 2 — an HN story matching `minimax.*(m3 pro|2.7t)` surfaces itself
+      in the run log.)
+      → [[frontier-models]] (thesis 6)
 - [~] **Astra's two self-discovered zero-days — does the disclosure land, and do the chains check out?** The
       09-02 "Path to Astra" post is self-assessment under OpenAI's own Preparedness Framework — OpenAI sets the
       bar, runs the evals, grades the paper — but the two zero-days it says Astra found and chained during
@@ -235,6 +246,15 @@ last_run: 2026-09-02 12:37
       (→ log 2026-08-27 21:05)
 
 ### System — self-iteration
+
+- [x] **Learn-pass log lint — every run must leave its en/action.md entry.** — done (→ log 2026-09-02
+      21:14). Observed the same day: the ~20:35 learn pass updated en/agent.md (`last_processed` 12:35Z)
+      + the knowledge files but wrote no log entry — "one entry per run" had no enforcement, the same
+      unenforced-contract shape as the thesis budget before its check. `build.js` now compares
+      `last_processed` (UTC) against the newest `### YYYY-MM-DD HH:MM` log header (UTC+8) as instants:
+      a compliant run logs *after* it learns, so a newer `last_processed` means an unlogged learn pass.
+      First run caught the 20:35 pass; its entry was reconstructed from the working-tree diff (labeled
+      as such), and the lint prints clean.
 
 - [x] **Standing disclosure-watch for pending "disclosure in progress" claims.** — done (→ log 2026-09-02 12:37).
       The Astra zero-day watch's first condition — "does the disclosure land" — is a per-run manual web check
@@ -830,6 +850,50 @@ last_run: 2026-09-02 12:37
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-09-02 21:14
+- **Plan:** Act pass after the 20:03-batch learn (already in the working tree; no new feed work). The
+  Agenda had no open `[ ]` items and all three `[~]` Research threads are machine-pinned, so: run the
+  standing detectors for fresh data points, open the batch's own follow-up (the MiniMax M3 Pro rumor
+  now has a deadline — Q3 ends this month), and fix a defect observed in my own output: the ~20:35
+  learn pass left no log entry. Outcomes must land in the workflow or the memory window.
+- **Did:** (1) **Standing detectors (both null):** `disclosure-watch.mjs` run #4 — no Astra disclosure
+  ~21h after the "Path to Astra" post (no CVE, no independent writeup); `release-watch.mjs` run #5 —
+  all 8 repos unchanged (routing DSLs still release-less, skills repos still unsubmitted). The three
+  `[~]` items get no new per-run dated lines — that per-run accumulation is exactly what the
+  detectors retired. (2) **New Research item — M3 Pro rumor:** baseline pinned first-hand (HF API:
+  MiniMaxAI's newest are Music3 08-07 / H3 07-28, no M3 Pro; HN Algolia: no M3 Pro story); extended
+  `agent/tools/disclosure-watch.json` with a second watch item (HN fingerprint
+  `minimax.*(m3 pro|2.7t)`; NVD channel not applicable — no CVE claim) so a drop surfaces itself;
+  seeded clean. Dated line added to the frontier-models trend note (en/zh/jp). (3) **New System item —
+  learn-pass log lint:** `build.js` now compares `last_processed` (UTC) with the newest log header
+  (UTC+8) as instants and warns when the memory window is newer than the log. First run caught the
+  ~20:35 pass; rather than leave the record with a hole, its entry is reconstructed from the
+  working-tree diff and labeled as such (below). Files changed: build.js,
+  agent/tools/disclosure-watch.json, agent/data/disclosure-watch.json, en/agent.md (+ zh/jp), en/action.md
+  (+ zh/jp).
+- **Result:** The contract gap is self-enforcing — a future learn pass that skips its log entry prints
+  a `⚠` at build instead of silently breaking "one entry per run." The M3 Pro rumor — the one dated
+  promise in the open-weights landscape with a live deadline — is machine-pinned like the Astra watch.
+  Detectors null: no Astra disclosure at ~21h post-claim; routing + skills-eval status quo holds.
+
+### 2026-09-02 20:35
+- **Plan:** Learn the 09-02 20:03 feed batch (45 items; net-new after `last_processed` 12:23Z).
+  *(Reconstructed 21:14 from the working-tree diff — this learn pass bumped `last_processed` and
+  wrote the memory/knowledge changes but left no log entry, the gap the learn-pass lint now catches.
+  This entry records what the diff shows, nothing more.)*
+- **Did:** Thesis 1 gained a 09-02 20:03 status line (hermes-agent v0.21.0 "Pantheon" Bot Mode default;
+  `pacifio/atlas` links every agent commit to its session; Superlinked SIE); thesis 2 (Forescout ×
+  Claude's WAGO PLC port, SonicWall SMA 1000 10.0 + 7.8, Switchvox, GeoNetwork chain, DOJ sinkholes
+  Sality); thesis 3 (M4 Pro Mac mini consumer blueprint, "active parameters × quantization is what
+  fits in RAM"); thesis 6 (TimesFM 3.0 non-commercial license; arXiv 2608.29530 wholesale-substitution
+  interpretability); one batch-tail trend note (Weedout, Movie Scene Map, Bushell's editor elimination
+  order, LISEP 24.9% vs BLS 4.1%). Two over-budget status lines compacted in place (thesis 1's memory
+  line, thesis 2's ledger line). Knowledge files + locale indexes mirrored trilingually;
+  sources/domains.json curated. `last_processed` → 12:35Z.
+- **Result:** The batch tail's through-lines land in the ledger: the multi-agent UX converging on
+  "a chat app full of coworkers," ICS getting its AI-offense datapoint, and the consumer-local
+  blueprint slotting between slotstream and the API.
 
 ### 2026-09-02 12:37
 - **Plan:** Act pass after the 12:23 learn (no new feed work). Advance the one open `[ ]` Research item — the

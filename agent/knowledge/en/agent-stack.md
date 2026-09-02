@@ -1617,3 +1617,43 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   do it.
 - Framing discipline: the post is observational, not an exposé — no OpenAI statement, no licensing
   commentary; Willison states only what the directory contains.
+
+## hermes-agent v0.21.0 "Pantheon" — the chat app becomes the multi-agent runtime (09-02)
+
+- NousResearch's hermes-agent (239.8k★, MIT) rolls up ~5,800 commits / ~2,475 merged PRs from 760+
+  contributors since v0.20.0. Headline: **Bot Mode**, bundled and default-on in the desktop app — every
+  agent profile gets a name, a deterministic avatar face, and a place in Discord-style group chats where
+  bots talk to each other and to you, with `@`-mention addressing. Around it: `hermes peer` for durable
+  bot-to-bot DMs across profiles and gateways (replies land in each agent's inspectable Bot Chat, not
+  fire-and-forget), cron jobs that carry memory between scheduled runs ("scheduled agents actually learn"),
+  live mid-flight steering of subagents, a rebuilt MCP command center, desktop-browser control.
+- Why it matters: the multi-agent UX is converging on "a chat app full of coworkers" — named, addressable,
+  persistent entities rather than pipeline stages — and at 240k stars hermes is the largest open deployment
+  of that thesis. The design bet to watch: durable, inspectable agent-to-agent conversations as the
+  interface, with memory attached to schedules — plumbing-first was the old way; now the chat is the runtime.
+
+## pacifio/atlas — "source control for agents": provenance as a queryable sidecar (09-02)
+
+- Rust workspace app (2.6k★, +895/day, alpha-0.3.0) where every agent run produces **checkpoints**: a commit
+  linked back to the session that made it — prompts, tool calls and file changes kept together and queryable
+  months later. Claude Code, Codex and the wider ACP registry (Cursor, OpenCode, Kilo Code) run side by side
+  against one codebase over zed-industries' Agent Client Protocol, with shared on-device memory ("a decision
+  Claude Code made shows up in Codex's next prompt") and session handoff carrying a curated fact pack. Notes
+  are markdown in `.atlas/knowledge/`; sessions are JSONL; `CLAUDE.md`/`AGENTS.md` fold into one index.
+- The honest architectural tell: the checkpoint record is SQLite in a **gitignored** `.atlas/` — commit
+  history stays git-pure, agent provenance is a queryable sidecar. The local-first complement to ERSC's
+  server-side bet (above). Caveats: pre-alpha; the README admits "QA on the long tail of registry agents is
+  ongoing."
+
+## Superlinked SIE — one inference cluster per agent stack, not one server per model (09-02)
+
+- superlinked/sie (Apache-2.0, 3.0k★): one self-hosted cluster serving 100+ models behind OpenAI-compatible
+  endpoints (`/v1/embeddings`, `/v1/chat/completions`, `/v1/completions`, `/v1/responses`) — covering
+  search/retrieval, document-to-markdown, structured output, content safety, and **the agent loop itself**.
+  A pre-configured catalog (Stella, SPLADE, Qwen3, GLiNER, SigLIP — MTEB-benchmarked) loads models on demand
+  with LRU eviction; K8s/Helm + a load-balancing gateway + KEDA autoscaling + Grafana ship in the box; SDKs
+  for LangChain/LlamaIndex/DSPy/CrewAI and the vector-DB big three.
+- Why it matters: agent stacks quietly amass 5–10 model dependencies (embedder, reranker, parser, safety,
+  main LLM); operating them as one autoscaled cluster instead of five snowflake servers saves the ops bill
+  vLLM never covered. The tell is in the task list: "the agent loop itself" as a served model workload —
+  inference infra is starting to price the agent, not just the model.
