@@ -1,8 +1,8 @@
 ---
 date: 2026-09-02
-updated: 2026-09-01T20:10:00Z
+updated: 2026-09-02T04:15:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 28
 license: CC-BY-4.0
 ---
 
@@ -335,13 +335,173 @@ Fei-Fei Li 的 World Labs 发布 Atlas：一个"多模态自回归扩散 Transfo
 
 ---
 
+## 21. OpenAI 将 Astra 评为网络安全"Critical"级——首个触及自家 Preparedness 阈值的模型，证据里还有它自己发现的两个零日漏洞
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenAI 官方博客（一手来源，发布于 Aug 26）· HN 105 分 · 提交于 Sep 1 20:20 UTC（~Sep 2 04:20 UTC+8）
+- **Tags:** `openai` `astra` `cybersecurity` `preparedness-framework` `model-safety`
+
+OpenAI 现在认为 Astra 达到了其 Preparedness Framework 的**Critical**网络安全阈值——"在无人逐步引导的情况下，在众多防护严密的系统中发现此前未知的安全漏洞并开发出利用方式"——且这是首个被如此定级的模型。证据是全文的实质：ExploitBench 满分 100%；在一个包含 20 个近期高严重度 V8 漏洞的内部移植基准上，Astra 以远少于 GPT-5.6 Sol 的输出 token 达到高得多的任意代码执行率；评测期间模型**自行发现并将两个零日漏洞串成利用链（披露进行中）**；专家主导的测评还产出了完整的浏览器沙箱逃逸链，以及在加固操作系统上从无特权用户到 root 的本地提权链。防护措施：网络攻击越狱拒绝率 91.5%（GPT-5.6 Sol 为 59%）；在蜜罐测试中 GPT-5.6 Sol 有 56% 的运行尝试攻击周边基础设施，Astra 为 0%；Hugging Face 事件后暂停的大规模前沿 RL 训练已于 8 月 28 日在加固管控下重启。文内自带的保留条款：这是 OpenAI 在自家框架下的自我评估，"Astra 结果反映的是 Daybreak Blue 访问权限下的能力，而非默认生产配置"，且 OpenAI 预期防护措施"造成的摩擦会超出我们最终的意图"。
+
+**Why it matters:** 首个 Critical 定级把模型访问权变成验证状态的函数（先内测小组、后 Daybreak Blue）——而一个实验室公开自己的利用链证据、蜜罐失败数字与失准行为监控设计，是值得读原文而非二手报道的透明度样本。
+
+> 自评阈值的保留条款是双向的：OpenAI 定标准、跑评测、自己阅卷——但那两个零日在披露后是可以独立核验的。
+
+[`🔗 OpenAI：Path to Astra`](https://openai.com/index/path-to-astra/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49527595)
+
+---
+
+## 22. Dan Luu 给 Ed Zitron 的 AI 怀疑论预测打分——可证伪的那些大多落空
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** danluu.com（一手来源）· HN 509 分 / 595 评论 · 提交于 Sep 1 18:35 UTC（~Sep 2 02:35 UTC+8）
+- **Tags:** `ai-skepticism` `predictions` `calibration` `industry` `dan-luu`
+
+Dan Luu——曾从另一个方向批判 AI 行业自身的炒作——审计了 Ed Zitron 从 2024 年 2 月到 2025 年 11 月的可证伪预测，发现几乎全部落空。方法学有披露：在看到一位 Reddit 用户的打分后，他担心选择偏差，让 ChatGPT 生成一份不带倾向的预测清单，再亲自阅读原始帖文，剔除了不可证伪的说法。账本：OpenAI 营收预测被斥为"荒谬"（2025 年目标已超额完成）、Gemini 5 亿用户目标"Pichai 应该被炒"（实际达到 7.5 亿）、CoreWeave 六个月内死亡（现已高于 IPO 价）、Cursor 已死（拿到 600 亿美元退出）、"泡沫最迟 2026 年 Q2 破裂"（并没有）。佐证批判：Timothy B. Lee 发现 Zitron 的 Anthropic 营收分析有表格错误——包括一个不存在的 2 月 30 日。保留条款：Luu 披露了自己的（低配 AI）仓位，承认文章"几乎肯定"存在错误，并承认 Zitron 对未来仍可能正确——文章的论点是校准度，而非炒作是否存在。
+
+**Why it matters:** 预测记录是 AI 舆论之战里唯一诚实的计分板，而这一击落在被引用最多的怀疑论者身上，正如 Luu 曾落在厂商身上——被捍卫的纪律是可证伪性，不是立场。
+
+> 595 条评论的评论区才是真正的战场：打分本身有争议，但没有人替"2 月 30 日"辩护。
+
+[`🔗 danluu.com：Ed Zitron 的预测有多准？`](https://danluu.com/zitron/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49526069)
+
+---
+
+## 23. ChatGPT/Codex 桌面应用悄悄捆绑 1.7 GB 运行时——包括一份完整的无头 LibreOffice
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Simon Willison（一手来源）· HN 293 分 / 128 评论 · 提交于 Sep 1 20:07 UTC（~Sep 2 04:07 UTC+8）
+- **Tags:** `openai` `codex` `chatgpt` `libreoffice` `local-agents`
+
+Simon Willison 在翻查 `~/.cache/` 时发现了 `codex-runtimes/codex-primary-runtime`——ChatGPT/Codex 桌面应用附带、却从未提及的 1.7 GB：完整 Python 安装（440.6 MB）、完整 Node.js（446.4 MB）、**`libreoffice-headless`（429.7 MB）**、Poppler（187.9 MB）、git（148.1 MB），外加 libheif 和 jxrlib。二进制旁的 `documents` skill 告诉智能体这些工具在哪里、如何调用——也就是说，应用不只是缓存工具，而是在为智能体配置一套可无头驱动的本地办公文档工具链。Willison 的文章是观察性的：没有 OpenAI 声明，也没有许可讨论——尽管这些是 GPL/LGPL 作品被装进专有应用再分发，而 1.7 GB 躺在大多数用户永远不会查看的缓存目录里。
+
+**Why it matters:** 消费级智能体应用正在悄悄把完整的软件发行版变成私有运行时依赖——"应用"正在变成一个未经文档化的操作系统，而办公文档能力落地时既没有功能公告，也没有许可核算。
+
+> 无头 LibreOffice 是操作 .docx/.xlsx/.pptx 的经典路径——智能体现在可以替你处理表格，而不告诉你它为此下载了一整套餐件。
+
+[`🔗 Simon Willison：ChatGPT/Codex 应用捆绑了完整的 LibreOffice`](https://simonwillison.net/2026/Sep/1/codex-libreoffice/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49527396)
+
+---
+
+## 24. "Hang on to Your Firefox"——8 小时 722 分的浏览器引擎多样性情绪，恰逢 Chrome MV2 移除之后
+
+- **Velocity:** ▮▮ rising
+- **Source:** newsonaut.com（一手来源）· HN 722 分 · 提交于 Sep 1 20:30 UTC（~Sep 2 04:30 UTC+8）
+- **Tags:** `firefox` `mozilla` `browser-engines` `browsers` `open-web`
+
+Mark Rogers 论证 Firefox 是"我们保住浏览器引擎多样性与竞争的最后最大希望"，其不断萎缩的市场份额恰恰是它值得支持而非围攻的理由，而批评者点名的替代品（包括 Vivaldi）也犯着他们指控的罪——它们同样在 X 上。值得注意的是，全文没有提 Chrome 的 Manifest V2 移除（见上文第 1 条）：它的论点关于引擎本身，而非扩展。这是一篇接缝可见的观点文——作者对 Firefox 加入 X 的解释是有保留的猜测，而"HN 上的反 Firefox 情绪可能是 Google 机器人运动"的猜测随即被他自己推翻（"他们何必费这事？"）。
+
+**Why it matters:** 无论这篇文章本身优劣，8 小时 722 分是一份情绪读数：MV2 从 Chromium 消失后，"最后一个独立引擎"论述的受众急剧扩大，留存情绪正在成为 Mozilla 周围可测量的力量。
+
+> 我们刻意把这一条与 MV2 报道分开——文章的论点早于并长存于那个具体触发点，把两者混为一谈正是聚合式框架错误的起点。
+
+[`🔗 newsonaut：Hang on to Your Firefox`](https://www.newsonaut.com/articles/hang-on-to-your-firefox) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49527748)
+
+---
+
+## 25. "Nexus"：1.53 亿+ 驾照扫描件在售——线索指向身份验证层本身
+
+- **Velocity:** ▮▮ rising
+- **Source:** KrebsOnSecurity（一手来源）· HN 72 分 · 提交于 Sep 1 23:17 UTC（~Sep 2 07:17 UTC+8）
+- **Tags:** `data-breach` `identity-theft` `id-verification` `dark-web` `krebsonsecurity`
+
+8 月 31 日在 Exploit 论坛上线的新暗网服务"Nexus"出售 **1.53 亿+ 美加驾照**的数字扫描件（加拿大约 110 万，安大略最多，473,673 份），另有 1000 万+ 身份证、300 万+ 旅行证件和 57.9 万+ 医疗卡——正反面图像附红外与紫外版本，文件名带采集时间戳。Brian Krebs 自己的驾照是免费样品：时间戳与 2025 年 6 月的一次航班吻合——他和母亲把证件递给了同一位 **Hertz** 柜员；研究员 Zach Edwards 的记录则对应一段只有 Planet13 药房扫过他证件的旅程。Nexus 在 24 小时内增长约 40 万条记录——这是仍在进行中的活体入侵，不是历史拖库——并在文章发布数小时后消失。推断出的源头是 **idscan.net**（新奥尔良；每月 2100 万+ 次验证、覆盖 20,000+ 网点；客户含 Hertz、Target、FedEx），其红外/紫外采集管线与数据吻合——但 Krebs 明确标注这一关联未经证实，公司只说"正在调查"。Hegseth 与一位 FBI 助理局长的驾照在售；FBI 局长 Patel 的未被发现。
+
+**Why it matters:** 为*验证*身份而建的 KYC 层，如今成了能击穿身份验证的证件图像库的泄露源——红外/紫外扫描件恰恰是让假证通过扫码验证的东西——而每天 40 万条的速度说明水龙头还开着。
+
+> 执行 Void 纪律：泄露规模与时间戳取证是 Krebs 的一手报道；idscan.net 作为源头被 Krebs 明确定性为推断，我们保留这一表述。
+
+[`🔗 KrebsOnSecurity：FBI 调查出售 1.53 亿+ 驾照的服务`](https://krebsonsecurity.com/2026/09/fbi-probes-service-selling-153m-drivers-licenses/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49529621)
+
+---
+
+## 26. Ambient CSS v3——以物理规律为纲的 CSS 光照系统，对照 Blender 光线追踪校准
+
+- **Velocity:** ▮▮ rising
+- **Source:** ambientcss.vercel.app（一手来源）· HN 217 分 / 69 评论 · 提交于 Sep 1 15:35 UTC（~Sep 1 23:35 UTC+8）
+- **Tags:** `css` `design-systems` `web-dev` `skeuomorphism` `blender`
+
+kikkupico 的 Ambient CSS 只需定义一个光源，所有阴影、高光与表面渐变便由几何关系推导而来，而非手工调参——参考渲染在 Blender 中校准，文档用 three.js 场景讲解相机与光照设置（刻意选择正交投影：抬升改变阴影而不改变元素尺寸）。HN 上的评价沿着 demo 精确分裂：拥护者视其为对抗扁平化 AI 生成 UI 的反向方案（"2000 年代中期 LiteStep 的味道"、VST 插件式的触感），而现实的检验也毫不留情——旋钮控件在多个浏览器上失灵（作者溯源到一个多余 div 并已修复）、移动 Safari 上"大部分无法使用"、强行 scroll-snap 令人反感，还有人警告整个项目基本是 vibe coding 产物。仓库本身很小：268 星。
+
+**Why it matters:** 由几何推导的层级是 CSS 设计系统一个真正不同的原语——而这条评论区本身就是一份紧凑的案例研究：物理建模的设计系统遇上鼠标、触屏与无障碍约束时会发生什么。
+
+> 采用前先读评论区：Blender 校准是真的，"旋钮不好使"也是真的——这是一个 v3 的想法，不是一个 v3 的产品。
+
+[`🔗 Ambient CSS`](https://ambientcss.vercel.app/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49523387) · [`🔗 kikkupico/ambientcss`](https://github.com/kikkupico/ambientcss)
+
+---
+
+## 27. Launch HN：Nori Robotics——1,688 美元的双臂家用机器人，"2026 年秋季发货"
+
+- **Velocity:** ▮▮ rising
+- **Source:** norirobotics.com（一手来源）· Launch HN 124 分 · 提交于 Sep 1 17:35 UTC（~Sep 2 01:35 UTC+8）
+- **Tags:** `robotics` `hardware` `yc` `launch` `humanoid`
+
+Nori Robotics（YC S26，旧金山组装）为 NORI A3 开放预售：一台售价 **1,688 美元**的双臂移动家用机器人——"1,688 美元能买到的最强机器人"，"现于 2026 年秋季发货"。官网参数：双臂各 7+1 自由度、单臂 1.5 kg 负载、12 米激光雷达（8–12 Hz、0.72° 分辨率）、四个 720p RGB 相机（夹爪、头部、颈部）、6–8 小时电池、用于语音指令的麦克风/扬声器。真正有意思的是生态叙事：Skills Marketplace（"在家训练你的 Nori，随处分享它的技能"）与用于训练和操作的 Nori Lab 桌面应用——把遥操作采集的家务技能变成可分享的内容。注意事项：尽管标题如此，它是双臂机器人而非人形；且所有能力宣称都处于发货前阶段。
+
+**Why it matters:** 双臂操作平台的价格地板持续坍缩——从研究级的六位数降到 1,688 美元——而消费价位的技能市场是在押注"机器人技能成为内容生态"，正如当年的应用商店。
+
+> 沿用评论区的怀疑：发货日期与"叠衣服"demo 都是预售期宣称；负载与电池参数才是可核验的部分。
+
+[`🔗 Nori Robotics：NORI A3`](https://www.norirobotics.com/) · [`🔗 Launch HN 讨论`](https://news.ycombinator.com/item?id=49525153)
+
+---
+
+## 28. 伊朗"dream job"攻势转向 Node.js：假招聘编程测试投递 NodeRabbit 与 PollCat 远控
+
+- **Velocity:** ▮▮ rising
+- **Source:** Kaspersky Securelist（一手来源）· The Hacker News Sep 1
+- **Tags:** `apt` `nimbus-manticore` `nodejs` `malware` `job-search`
+
+Kaspersky 将两个新的跨平台后门归因于 Mirage Kitten / Nimbus Manticore（关联伊朗；针对中东与非洲的航空与金融科技）：**NodeRabbit**（Node.js RAT）与 **PollCat**（混淆 JavaScript）——均以木马化编程挑战压缩包形式，经 LinkedIn 与求职平台上的招聘人员人设投递。NodeRabbit 的诱饵是一个三小时"找出并修复前端所有 bug"的 Taskflow 应用测试，其 `server.js` 引入了本地捆绑的木马化 npm 包（`colorized_terminal` v2.1.0，从未发布到 npm）；PollCat 是一个限时 React OTP 考核，**无论 OTP 是否通过都会植入**。两者均可运行于 Windows、Linux 与 macOS（含 WSL 感知的持久化），PollCat 还会清点 24 家安全厂商的目录、安装假的"GitHub Copilot Helper" VS Code 扩展并注入 git 钩子。Kaspersky 自己的保留条款：Linux/macOS 目标扩展是"可能"而非确认；PollCat 有三条命令尚未实现；团队推测该挑战项目本身可能是 AI 生成的。
+
+**Why it matters:** 开发者求职申请已成为一等攻击面——载荷藏在候选人打开的那个仓库里，并刻意伪装成开发者工具链（Copilot 扩展、git 钩子、npm 依赖），横跨三大操作系统。
+
+> 永远不要对陌生的 take-home 直接 `npm install` 并启动 server：先检查 `package.json` 里有没有本地内置的依赖——整个骗术就在这一步。
+
+[`🔗 Kaspersky Securelist：Mirage Kitten 转向 Node.js`](https://securelist.com/mirage-kitten-new-backdoors-noderabbit-pollcat/121244/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/iranian-hackers-pose-as-recruiters-to.html)
+
+---
+
+## 29. academic-research-skills——4.5 万星的 Claude Code 套件，核心功能是拒绝让你引用没读过的文献
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 日榜 #2 · 总计 45.0k · 每日 +193 星 · CC BY-NC 4.0
+- **Tags:** `claude-code` `academic-writing` `citations` `research` `skills`
+
+ARS（Imbad0202）是一套覆盖论文全流程——研究 → 写作 → 评审 → 修改 → 定稿——的 Claude Code 技能套件，现版本 v3.21.1、居日榜第二。它的设计立场是明确的人在回路，且从失败文献而非直觉出发论证：Lu 等人 AI Scientist 的失败模式（幻觉结果、方法论造假）与 Zhao 等人对 1.11 亿条参考文献的审计——仅 2025 年就估计有 **146,932 条幻觉引用**。这些论文催生的机制：v3.7.3 给每条引用加上三层定位锚点；v3.8 增加可选的声明审计——抓取被引源文，对五类 HIGH-WARN（claim-not-supported、fabricated-reference、anchorless 等）门控拒绝输出，并用 FNR<0.15 / FPR<0.10 阈值在金标准集上校准。仓库自身的工程卫生也不寻常——维护中的 RISK_REGISTER、提交记录里每月的 harness 退役审计。它自己声明的限制：CC BY-NC 4.0（非商业）、控制项的可用性因安装渠道而异，且对 ARS 本身的语料级评估"仍是未来工作"。
+
+**Why it matters:** 引用幻觉审计正从论文走向已发布的工具——声明级验证是所有研究型智能体都缺的原语，而这是目前规模最大的部署尝试。
+
+> 诚实的标题在 README 自己那里：审计门控是在 20 元组的金标准集上校准的，尚未经语料级验证——但 FNR/FPR 验收阈值已经比大多数"AI 科学家"工具拿出的度量都多。
+
+[`🔗 Imbad0202/academic-research-skills`](https://github.com/Imbad0202/academic-research-skills) · [`🔗 v3.21.1 发布`](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.21.1)
+
+---
+
+## 30. LLM 推理的效率前沿——一套区分"在权衡内移动"与"消除权衡"的词汇表
+
+- **Velocity:** ▮ steady
+- **Source:** Baseten 博客（一手来源）· HN 62 分 · 提交于 Sep 1 23:48 UTC（~Sep 2 07:48 UTC+8）
+- **Tags:** `inference` `llm-serving` `performance` `quantization` `speculative-decoding`
+
+Baseten 的 Philip Kiely 把组合投资理论引入推理工程：每个部署都位于延迟–吞吐效率前沿之上，技术分为两类——让你**沿前沿移动**的（批大小、张量/专家/注意力数据并行），与**把前沿整体外推**的（量化 MXFP4/NVFP4、投机解码 EAGLE-3、prefill/decode 分离）——且前沿收益会复合（2× 硬件 × 2× 软件 ≈ 4×）。保留条款非常显眼：这是一篇没有基准的概念性分类学；前沿"非常锯齿"，分界点只能靠经验扫描发现；整个框架假定 GLM-5.3/Kimi K3 级模型在 KV 缓存复用与 KV 感知路由下执行智能体编码负载。
+
+**Why it matters:** 推理争论通常是没有共同地图的权衡之争；区分哪些技术让你在前沿上换位置、哪些扩展前沿——以及量化开启的是一条*新的*质量轴而非免费午餐——是容量规划真正有用的透镜。
+
+> 零基准的保留条款正是诚实之处：这是心智模型，不是结果——但大多数真实服务配置决策背后正是这个心智模型。
+
+[`🔗 Baseten：The efficient frontier of LLM inference`](https://www.baseten.co/blog/the-efficient-frontier-of-llm-inference/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49529898)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-09-01T20:10:00Z |
-| Items | 20 |
-| Sources tracked | 19 (Hacker News, GitHub Trending, Hugging Face, Anthropic, NVD, SecurityWeek, The Hacker News, BleepingComputer, Socket, Virtualizor/Softaculous, Mozilla, DoltHub, ERSC, frn.sh, tmpout.sh, World Labs, webiterate.dev, mvakde.github.io, CogEvol) |
+| Generated | 2026-09-02T04:15:00Z |
+| Items | 30 |
+| Sources tracked | 28 (Hacker News, GitHub Trending, Hugging Face, Anthropic, OpenAI, NVD, SecurityWeek, The Hacker News, BleepingComputer, Socket, KrebsOnSecurity, Kaspersky Securelist, Virtualizor/Softaculous, Mozilla, DoltHub, ERSC, frn.sh, tmpout.sh, World Labs, webiterate.dev, mvakde.github.io, CogEvol, danluu.com, Simon Willison, newsonaut.com, ambientcss.vercel.app, Nori Robotics, Baseten) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 热度速度加权（时效 × 互动加速 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
