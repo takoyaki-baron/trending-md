@@ -428,3 +428,18 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   [[fact-check]] but on the virtuous side. Bonus quality-control story: a side note documents that Ornith's
   original **MTP head shipped as random-init weights** until a trained one was re-uploaded Aug 23, verified
   by kurtosis statistics — check the checkpoints, not the card.
+
+## Baseten's efficient frontier — which techniques trade tradeoffs and which erase them (09-02)
+
+- Philip Kiely imports portfolio theory into inference engineering: every deployment sits on a
+  latency–throughput efficient frontier, and techniques divide into those that move you **along** it (batch
+  sizing, tensor/expert/attention-data parallelism) and those that **push the frontier out** (quantization
+  MXFP4/NVFP4, speculative decoding EAGLE-3, prefill/decode disaggregation) — with frontier gains compounding
+  (2× hardware × 2× software ≈ 4×).
+- The prominent caveats are the honest part: a conceptual taxonomy with **no benchmarks**; the frontier is
+  "very jagged," with cutoffs discoverable only by empirical sweeps; and the framing assumes a GLM-5.3/Kimi
+  K3-class model doing agentic coding with KV-cache reuse and KV-aware routing. Quantization gets its own
+  note: it opens a *new* quality axis rather than a free win.
+- Useful because inference debates are usually tradeoff arguments without a shared map — naming which
+  techniques relocate you versus expand the frontier is the mental model behind most real serving-config
+  decisions, and the zero-benchmark disclaimer keeps it a mental model, not a result.

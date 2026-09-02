@@ -1832,3 +1832,40 @@ The batch's security stream, read first-hand at the primary sources where reacha
   resolved from available evidence"; Socket warns all packages from the five namespaces are untrusted (a
   dormant "Custom JS" activation remains). Both chain CVEs are last year's and patched — the story is the
   delivery system (zero-interaction kernel compromise from a supply-chain foothold), not a new Apple bug.
+
+## "Nexus" — the ID-verification layer is the breach source (09-02)
+
+- KrebsOnSecurity: a dark-web service advertised on the Exploit forum (Aug 31) sells digital scans of
+  **153M+ US and Canadian driver's licenses** (~1.1M Canadian; Ontario the largest), plus 10M+ ID cards, 3M+
+  travel documents, 579k+ medical cards — front/back images **with infrared and ultraviolet versions**,
+  filenames carrying capture timestamps. Krebs's own license was the free sample; its timestamp matched a
+  June 2025 flight where he and his mother handed IDs to a **Hertz** agent together; researcher Zach
+  Edwards's record matched a trip where only a Planet13 dispensary scanned him.
+- Nexus grew ~400,000 records in 24 hours — an active breach, not a dump — and vanished hours after
+  publication. The inferential source is **idscan.net** (New Orleans; 21M+ verifications/month at 20,000+
+  locations; clients incl. Hertz, Target, FedEx), whose IR/UV capture pipeline matches the data; the company
+  says only that it is "investigating," and Krebs labels the link unconfirmed. Hegseth's and an FBI assistant
+  director's licenses were listed; FBI Director Patel's was not found.
+- Why it matters: the KYC layer built to *verify* identity is now the breach source for document imagery that
+  *defeats* document verification — IR/UV scans are exactly what lets a fake ID pass a bar scan — and the
+  daily growth says the tap was still open when the story ran. Void discipline applied: the breach scale and
+  timestamp forensics are Krebs's firsthand reporting; idscan.net as source stays explicitly framed as
+  inference.
+
+## Mirage Kitten pivots to Node.js — the job application as first-class attack surface (09-02)
+
+- Kaspersky attributes two new cross-platform backdoors to Iran-linked Mirage Kitten / Nimbus Manticore
+  (aviation + fintech targeting across the Middle East and Africa): **NodeRabbit** (Node.js RAT) and
+  **PollCat** (obfuscated JavaScript), delivered as trojanized coding-challenge archives via recruiter
+  personas on LinkedIn and job platforms.
+- The lures impersonate the developer toolchain itself: NodeRabbit's lure is a three-hour "find and fix all
+  bugs in the frontend" test on a Taskflow app whose `server.js` imports a locally vendored trojanized npm
+  package (`colorized_terminal` v2.1.0, never published to npm); PollCat is a time-limited React OTP
+  assessment that implants **whether or not the OTP validates**. Both run on Windows/Linux/macOS with
+  WSL-aware persistence; PollCat inventories folders for 24 security vendors and can install a fake "GitHub
+  Copilot Helper" VS Code extension and inject git hooks. Kaspersky's hedges: the expanded Linux/macOS
+  targeting is "likely" not confirmed; three PollCat commands are unimplemented; the challenge project may
+  itself have been AI-assisted.
+- Operator rule: never `npm install` and run an unknown take-home's server — check `package.json` for
+  locally-vendored dependencies first; that's the whole con. The job-lure line (Lazarus et al.) now targets
+  the exact repo a candidate opens, on all three OSes, wearing the toolchain's own face.

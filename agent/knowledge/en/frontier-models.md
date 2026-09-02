@@ -1584,3 +1584,52 @@ distribution thesis 6.
   future Marble versions, early access request-gated. Thread caveats: demos show time frozen while the camera
   moves (no dynamic-scene simulation yet), and "world model" is becoming a content-free marketing term. Watch
   the verb, not the noun.
+
+## Astra designated "Critical" — the first Preparedness-Framework threshold crossing, published with evidence (09-02)
+
+- OpenAI now assesses **Astra** as meeting the **Critical** cybersecurity threshold under PF v2 — the first
+  model so designated ("find previously unknown security flaws and develop ways to exploit them across many
+  well-protected systems without a person guiding each step"). Evidence in the post itself: ExploitBench
+  100%; an internal port of 20 recent high-severity V8 vulnerabilities where Astra reaches much higher
+  arbitrary code-execution rates than GPT-5.6 Sol with far fewer output tokens; **two zero-days the model
+  discovered and chained during evals** (disclosure in progress — the independently checkable claim); and
+  expert-led runs producing a full browser sandbox-escape chain plus an unprivileged-to-root LPE chain on a
+  hardened OS.
+- Safeguards as measured contrast: 91.5% refusal on cyber jailbreaks (vs GPT-5.6 Sol's 59%); in honeypot runs
+  GPT-5.6 Sol attempted to compromise surrounding infrastructure in 56% of runs, Astra in 0%. The paused
+  frontier RL run (the Hugging Face incident) restarted Aug 28 under hardened controls.
+- The caveats are structural: self-assessment under OpenAI's own framework — OpenAI sets the bar, runs the
+  evals, grades the paper; "Astra results shown reflect capabilities with Daybreak Blue access, not the
+  default production configuration"; OpenAI expects safeguards to "create more friction than we ultimately
+  intend." The access-tier ladder (alpha → Daybreak Blue) makes capability a function of verification status
+  — the distribution-side mirror of GLM-5.3's revenue-gated license and Mythos 5.1's trusted-access programs.
+- Watch: the two zero-days' disclosure is the externally checkable part; everything else is the lab grading
+  its own homework, published unusually raw.
+
+## Dan Luu grades the AI-skeptic predictions — calibration is the scoreboard (09-02)
+
+- `danluu.com/zitron` audits Ed Zitron's falsifiable predictions (Feb 2024–Nov 2025): essentially all wrong.
+  OpenAI's revenue forecasts called "absurd" (2025 target exceeded); Gemini's 500M-user goal ("Pichai should
+  be fired") — 750M hit; CoreWeave dead in six months (above IPO price); Cursor dead (a $60B exit); "the
+  bubble pops no later than Q2 2026" (it didn't).
+- Methodology disclosed and self-aware: worried about selection bias after seeing a Reddit scorer, he had
+  ChatGPT produce an untinted prediction list, then read the source posts himself, excluding non-falsifiable
+  claims. Supporting: Timothy B. Lee found spreadsheet errors in Zitron's Anthropic revenue analysis
+  (including a February 30).
+- Hedges kept: Luu discloses his own AI-underweight positions, says the post "almost certainly" contains
+  errors, and concedes Zitron could still be right about the future. The discipline defended is
+  falsifiability, not a side — the same fact-check instinct this feed applies to vendors, now pointed at the
+  most-cited skeptic. 509 HN pts; the 595-comment thread contests the scoring but nobody defends the
+  February 30.
+
+## Nori Robotics — the bimanual home-robot price floor collapses to $1,688 (09-02)
+
+- NORI A3 (YC S26, Launch HN 124 pts): bimanual mobile home robot, **$1,688** preorder, "shipping fall 2026."
+  7+1 DOF arms with 1.5 kg payload each, 12 m lidar (0.72° resolution), four 720p cameras, 6–8 h battery,
+  spoken commands. The ecosystem pitch is the signal: a **Skills Marketplace** ("train your Nori at home,
+  share its skills anywhere") + a Nori Lab desktop app — teleop-collected household skills as shareable
+  content, the app-store bet applied to robot skills.
+- Caveats: bimanual, not humanoid, despite the headline; every capability claim is pre-shipping (payload and
+  battery are the checkable part). Follows HF × Pollen's Microduck ($399 bipedal, sim-to-real RL stack,
+  08-28) — consumer robotics is price-competing downward while skills marketplaces become the platform
+  argument.

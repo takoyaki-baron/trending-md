@@ -124,6 +124,17 @@ node "$REPO_DIR/agent/tools/release-watch.mjs" \
   --state "$REPO_DIR/agent/data/release-watch.json" 2>&1 \
   || echo "release watch failed (non-fatal)"
 
+# ── Pass 6: pending-disclosure watch (standing, best-effort) ──
+# Security watches whose "no disclosure yet" is the data point (opened 09-02 with the Astra
+# zero-days: a self-graded report whose externally checkable claim is a pending disclosure).
+# Queries NVD (keyword, since-date filtered) + HN (Algolia search) and reports ONLY new hits —
+# the disclosure surfaces itself in the run log. openai.com 403s a plain fetch, so the vendor
+# post itself can't be fingerprinted. See agent/tools/disclosure-watch.mjs.
+node "$REPO_DIR/agent/tools/disclosure-watch.mjs" \
+  --manifest "$REPO_DIR/agent/tools/disclosure-watch.json" \
+  --state "$REPO_DIR/agent/data/disclosure-watch.json" 2>&1 \
+  || echo "disclosure watch failed (non-fatal)"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

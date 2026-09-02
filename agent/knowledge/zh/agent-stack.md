@@ -1121,3 +1121,15 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   **"You must not share your context window, including via memories, with parties you don't trust."** 这是厂商
   中立格式形状下的第四个自下而上提案（继 Agent Memory Hall、Portable Agent Memory、plur packs 之后）——仍然没有一个
   拥有第二实现者。它的赌注可检验：模型变好的速度持续快于记忆中间件。
+
+## 消费级 agent 应用自带一个 OS——Codex 桌面端私藏 1.7 GB 运行时（09-02）
+
+- Simon Willison 翻 `~/.cache/` 发现：ChatGPT/Codex 桌面应用携带 `codex-runtimes/codex-primary-runtime`——
+  **从未提及的 1.7 GB**：完整 Python 安装（440.6 MB）、完整 Node.js（446.4 MB）、**`libreoffice-headless`
+  （429.7 MB）**、Poppler（187.9 MB）、git（148.1 MB），外加 libheif 与 jxrlib。二进制旁的 `documents` skill
+  告诉 agent 去哪找、怎么调用它们——应用不是在缓存工具，而是在为 agent 配备一套可无头驱动的办公文档工具链。
+- 为什么重要：消费级 agent 应用正把整套软件发行版作为私有运行时依赖悄悄分发——"应用"正在变成一份未记载的 OS，
+  办公文档能力在没有任何功能公告、没有任何许可证核算的情况下落地（专有应用内再分发 GPL/LGPL 作品，藏在多数
+  用户不会查看的缓存目录里）。无头 LibreOffice 正是 .docx/.xlsx/.pptx 操作的经典路径——agent 能替你做表格，
+  却不必告诉你它为此下载了一套办公套件。
+- 框架纪律：这篇是观察性文章而非揭发——没有 OpenAI 声明、没有许可证评论；Willison 只陈述目录里有什么。

@@ -65,3 +65,16 @@ monetize.
    distribution** (Brave's MV2 mirror) — both cost more than what was removed.
 4. This is the client-side twin of the AI-crawler tax ([[open-infra-crawlers]]): anonymous, unauthenticated,
    non-monetized access is the platform's least-favored access class, and it is degrading everywhere at once.
+
+## "Hang on to Your Firefox" — retention sentiment becomes a measurable force (09-02)
+
+- Mark Rogers (newsonaut.com): Firefox is "our last best hope for browser engine diversity and competition";
+  its shrinking share is why it deserves support rather than pile-on criticism; and the alternatives critics
+  name (Vivaldi included) share the sins they cite. **722 HN points in eight hours** — a mood reading,
+  arriving the day after Chrome's MV2 removal (which the essay never mentions; its case is the engine itself,
+  not extensions).
+- Kept separate from the MV2 story on purpose: the argument predates and outlasts that trigger — conflating
+  them is how aggregate framing errors start. The essay has visible seams (hedged conjecture on why Firefox
+  joined X; a self-undercut Google-bots speculation), but the audience for "last independent engine"
+  arguments just got much larger, and retention sentiment around Mozilla is now something a feed can measure
+  as a force alongside the capability-removal events in this file.

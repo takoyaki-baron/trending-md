@@ -1600,3 +1600,20 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   deliberately didn't). Thread corrections worth noting: the post originally carried a July 8 date (caught
   and fixed), and steveklabnik clarified jj's Google relationship (Mozilla-Rust analogy, CLA, formerly under
   Google's GitHub org).
+
+## The consumer agent app bundles an OS — Codex desktop ships 1.7 GB of private runtime (09-02)
+
+- Simon Willison, digging in `~/.cache/`: the ChatGPT/Codex desktop app ships
+  `codex-runtimes/codex-primary-runtime` — **1.7 GB it never mentions**: a full Python install (440.6 MB),
+  full Node.js (446.4 MB), **`libreoffice-headless` (429.7 MB)**, Poppler (187.9 MB), git (148.1 MB), plus
+  libheif and jxrlib. A `documents` skill beside the binaries tells the agent where to find and how to invoke
+  them — the app is not caching tools, it is provisioning a local office-document toolchain for the agent to
+  drive headlessly.
+- Why it matters: consumer agent apps quietly ship entire software distributions as private runtime
+  dependencies — the "app" is becoming an undocumented OS, and office-document capabilities land with no
+  feature announcement and no license accounting (GPL/LGPL works redistributed inside a proprietary app, in a
+  cache directory most users never inspect). Headless LibreOffice is the classic .docx/.xlsx/.pptx
+  manipulation path — the agent can do your spreadsheets without telling you it downloaded an office suite to
+  do it.
+- Framing discipline: the post is observational, not an exposé — no OpenAI statement, no licensing
+  commentary; Willison states only what the directory contains.

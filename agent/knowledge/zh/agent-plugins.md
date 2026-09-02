@@ -518,3 +518,16 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   仍冻结在 2026-04-20）、`DietrichGebert/ponytail`（119.8k★）均无任何 SkillsBench/Vals 分数。逐次的
   仓库/排行榜核查退役为 `agent/tools/release-watch.mjs`（README 中的 SkillsBench/vals.ai 指纹——出现
   采用时会在运行日志中自行浮现）。
+
+## academic-research-skills——引用审计作为成品工具落地（09-02）
+
+- `Imbad0202/academic-research-skills`（CC BY-NC 4.0，45.0k★，+193/天，日榜 #2，v3.21.1）——覆盖论文全流程
+  （研究 → 写作 → 审阅 → 修改 → 定稿）的 Claude Code 技能套件，核心特性是**拒绝让你引用没读过的东西**——
+  其依据是失败文献而非直觉：Lu 等人对 AI Scientist 局限的分析（幻觉结果、方法论捏造）与 Zhao 等人对 1.11 亿
+  条引用的审计（仅 2025 年就估计有 **146,932 条幻觉引用**）。
+- 这些数字催生的机制：v3.7.3 给每条引用加三层定位锚；v3.8 增加可选的主张审计——抓取被引来源，在五类 HIGH-WARN
+  （主张不受支持、捏造文献、无锚点……）上拒绝输出，以金标集校准至 FNR<0.15 / FPR<0.10 的验收阈值。少见的卫生
+  习惯：维护中的 RISK_REGISTER、提交日志里每月的 harness 退役审计。
+- 诚实的告诫来自 README 自己：CC BY-NC 4.0（禁商用）、控制可用性随安装渠道而异、对 ARS 本身的语料级评估
+  "仍是未来工作"——门控只在 20 元组的金标集上校准过。主张级验证是每个研究 agent 缺失的原语；这是已部署的最大
+  尝试，而 FNR/FPR 验收阈值已比多数"AI 科学家"工具的测量多（对照上文 FrontierChallenge 75.5% 的虚假完成率）。

@@ -708,3 +708,21 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
   still frozen at 2026-04-20), `DietrichGebert/ponytail` (119.8k★) all ship no SkillsBench/Vals number.
   The per-run repo/leaderboard check is retired into `agent/tools/release-watch.mjs` (README
   fingerprints for SkillsBench/vals.ai — an adoption surfaces itself in the run log).
+
+## academic-research-skills — citation auditing ships as tooling (09-02)
+
+- `Imbad0202/academic-research-skills` (CC BY-NC 4.0, 45.0k★, +193/day, daily #2, v3.21.1) — a Claude Code
+  skill suite covering the full paper pipeline (research → write → review → revise → finalize) whose core
+  feature is **refusing to let you cite things you didn't read** — argued from failure literature rather than
+  vibes: Lu et al.'s AI Scientist limitations (hallucinated results, methodology fabrication) and Zhao et
+  al.'s audit of 111M references estimating **146,932 hallucinated citations in 2025 alone**.
+- The machinery those numbers motivate: v3.7.3 gave every citation a three-layer locator anchor; v3.8 added
+  an opt-in claim audit that fetches the cited source and gate-refuses output on five HIGH-WARN classes
+  (claim-not-supported, fabricated-reference, anchorless…), calibrated against a gold set with FNR<0.15 /
+  FPR<0.10 acceptance thresholds. Unusual hygiene: a maintained RISK_REGISTER and monthly harness-retirement
+  audits in the commit log.
+- The honest caveats are the README's own: CC BY-NC 4.0 (non-commercial), control availability varies by
+  install channel, and corpus-scale evaluation of ARS itself "remains future work" — the gates are calibrated
+  on a 20-tuple gold set. Claim-level verification is the missing primitive in every research agent; this is
+  the largest deployed attempt at it, and FNR/FPR acceptance thresholds are more measurement than most "AI
+  scientist" tools ship (cf. the ARS stance vs FrontierChallenge's 75.5% false-completion rate, above).

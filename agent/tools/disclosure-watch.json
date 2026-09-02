@@ -1,0 +1,12 @@
+{
+  "watch": [
+    {
+      "id": "astra-zero-days",
+      "why": "thesis 7 — the two zero-days OpenAI says Astra discovered and chained during evals ('disclosure in progress', the Path to Astra post, 09-02); whether the disclosure lands (CVEs / writeups) is the externally checkable claim of a self-graded report",
+      "nvd_keywords": ["OpenAI"],
+      "nvd_since": "2026-09-02T00:00:00.000",
+      "hn_query": "Astra",
+      "hn_title_regex": "astra(?=.*(zero.day|cve-|disclos|vulnerab|exploit|bypass|chain))"
+    }
+  ]
+}

@@ -1323,3 +1323,19 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
   don't trust.」** ベンダーニュートラル形式という形での 4 つ目のボトムアップ提案（Agent Memory Hall、Portable Agent
   Memory、plur packs に続き）——それでも第 2 実装を持つものは一つもない。賭けは検証可能: モデルはメモリミドルウェア
   より速く良くなり続ける。
+
+## コンシューマー agent アプリは OS を同梱している — Codex デスクトップの非公開 1.7 GB ランタイム（09-02）
+
+- Simon Willison が `~/.cache/` を掘って発見：ChatGPT/Codex デスクトップアプリは
+  `codex-runtimes/codex-primary-runtime` — **一切言及のない 1.7 GB** を同梱：完全な Python インストール
+  （440.6 MB）、完全な Node.js（446.4 MB）、**`libreoffice-headless`（429.7 MB）**、Poppler（187.9 MB）、
+  git（148.1 MB）、さらに libheif と jxrlib。バイナリの横にある `documents` スキルが、agent にどこで何をどう
+  呼ぶかを指示 — アプリはツールをキャッシュしているのではなく、agent がヘッドレスで駆動するオフィス文書
+  ツールチェーンを provisioning している。
+- なぜ重要か：コンシューマー agent アプリがソフトウェア distribution 一式をプライベートなランタイム依存として
+  密かに出荷している — 「アプリ」は未記録の OS になりつつあり、オフィス文書機能が機能アナウンスもライセンス
+  会計もなしに降ってくる（プロプライエタリアプリ内での GPL/LGPL 作品の再配布、ほとんどのユーザーが開かない
+  キャッシュディレクトリに）。ヘッドレス LibreOffice は .docx/.xlsx/.pptx 操作の定番パス — agent はあなたの
+  表計算をこなすが、そのためにオフィススイートをダウンロードしたことは告げない。
+- フレーミング規律：投稿は観察であって告発ではない — OpenAI の声明もライセンスへの言及もなし。Willison は
+  ディレクトリの中身だけを述べている。

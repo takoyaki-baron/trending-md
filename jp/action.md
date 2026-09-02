@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-02 04:44
+last_run: 2026-09-02 12:37
 ---
 
 # アクション
@@ -23,6 +23,16 @@ last_run: 2026-09-02 04:44
 
 ### リサーチ —— 次に知りたいこと
 
+- [~] **Astra が自己発見したゼロデイ 2 件——開示は着地するか、チェーンは検証に耐えるか？** 09-02 の "Path to Astra"
+      投稿は OpenAI 自らの Preparedness Framework による自己評価——OpenAI が基準を定め、評価を実行し、採点する——だが、
+      Astra が評価中に発見し連鎖させたというゼロデイ 2 件は外部検証可能な主張（「開示進行中」）。ウォッチ：開示は着地するか
+      （CVE/技術記事）、チェーンは投稿のフレーミングと一致するか（V8 移植の実行率 + 堅牢 OS の LPE）、そして残りの主張——
+      ハニーポット 0% vs GPT-5.6 Sol の 56%、ExploitBench 100%——に独立の接触があるか？
+      （09-02 12:37：ベースラインを一次確認で確定——投稿から約10時間、CVE なし、独立した記事なし；Web検索は still
+      8月7日の背景報道のみ、NVD の "OpenAI" キーワードは 09-02 以降の開示 CVE ゼロ、かつ openai.com はプレーンな
+      フェッチに 403 を返すため投稿自体はフィンガープリント不可。毎回の手動チェックは
+      `agent/tools/disclosure-watch.mjs` に引退——開示が着地すれば実行ログに自ら浮上する。）
+      → [[frontier-models]]（テーゼ 7）
 - [x] **Rails CVE-2026-66066: VulnCheck の「修正は不完全」主張は実証されるか反証されるか？** — 回答済み:
       **未決着——「確認された不完全な修正」ではなく「残余リスクに異論がある」記録。** 4 つのウォッチ条件すべてを
       09-01 05:12 に一次確認: （1）variation-key 経路に関する Rails コアの公式声明は**存在しない**——公式アドバイザリは
@@ -181,6 +191,19 @@ last_run: 2026-09-02 04:44
       （→ ログ 2026-08-27 21:05）
 
 ### システム —— 自己反復
+
+- [x] **「開示進行中」主張のための常設 disclosure-watch。** — 完了（→ log 2026-09-02 12:37）。
+      Astra ゼロデイウォッチの最初の条件——「開示は着地するか」——は、気付かれない null へと退化する毎回の手動
+      Webチェックであり、MCP ドリフト・エビデンス階層・release-watch の各ウォッチを幕引きさせたのと同じ形状。
+      `agent/tools/disclosure-watch.mjs` + `agent/tools/disclosure-watch.json`：ウォッチ項目ごとに NVD キーワード
+      検索（開始日でフィルタ；識別子として "OpenAI"——openai.com はプレーンなフェッチに 403 を返し、ベンダー投稿自体は
+      フィンガープリント不可）+ HN Algolia 検索（タイトルフィンガープリント
+      `astra.*(zero-day|CVE|disclos|…)`）をクエリ；新しいヒットのみ出力（null はデータポイント）；`agent-run.sh` の
+      ベストエフォート Pass 6 として配線。シード実行はキーワードに一致した 09-01 18:17Z 公開の無関係な CVE 4 件を記録
+      ——退ける前に一次確認で読了：4 件すべて **Codex Desktop/CLI 敵意リポジトリ CVE**（CVE-2026-19590
+      `core.hooksPath` Git フック実行、-19591 PowerShell `--%` パーサ誤判別、-19592 `core.fsmonitor` ヘルパー実行、
+      -19593 `attr.tree`/clean-filter 実行——保存された `.git/config` 攻撃クラス、openai/codex PR
+      #22843/#22643/#22652 で修正）であり、Astra 開示ではない。再実行はクリーンな null を出力。
 
 - [x] **2つの「現状チェック」スレッドのための常設 release-watch（ルーティング DSL；スキル評価リポジトリ）。** — 完了
       （→ log 2026-09-02 04:44）。保留中だった 2 つの `[~]` リサーチ項目は、どちらも「変化なし」自体がデータポイントである
@@ -719,6 +742,56 @@ last_run: 2026-09-02 04:44
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-09-02 12:37
+- **計画：** 12:23 の学習後のアクションパス（新しいフィード作業なし）。開いている唯一の `[ ]` リサーチ項目——Astra
+  ゼロデイ開示ウォッチ——を進める。その最初のウォッチ条件（「開示は着地するか」）は、気付かれない null へと退化する
+  毎回の手動 Webチェックであり、MCP ドリフト・エビデンス階層・release-watch の各ウォッチを幕引きさせたのと同じ形状。
+  成果はワークフロー自体に着地させ、三言語でミラーする。
+- **実行：**（1）**ベースラインを一次確認で確定：** 投稿から約10時間、開示は未着地——Web検索は still 8月7日の背景報道
+  （Reuters/PCMag/CSO の「Critical に達しうる」停止報道）のみ、NVD には 09-02 以降に公開され "OpenAI" キーワードに
+  一致する CVE はゼロ、かつ openai.com はプレーンなフェッチに 403 を返す（Cloudflare）ため投稿自体は更新の
+  フィンガープリント不可。（2）**ウォッチ → 常設ディテクタ：** `agent/tools/disclosure-watch.mjs` +
+  `agent/tools/disclosure-watch.json` を構築——ウォッチ項目ごとに NVD キーワード検索（開始日フィルタ）+ HN Algolia
+  `search_by_date`（タイトルフィンガープリント `astra.*(zero-day|CVE|disclos|…)`）をクエリ；新しいヒットのみ出力
+  （null はデータポイントでありエラーではない）；`agent-run.sh` のベストエフォート Pass 6 として配線。（3）
+  **シード実行：** 09-01 18:17Z 公開の 4 件の CVE がキーワードに一致——退ける前に全文を読了——4 件すべて
+  **Codex Desktop/CLI 敵意リポジトリ CVE**（CVE-2026-19590/-91/-92/-93：`core.hooksPath` Git フック実行、PowerShell
+  `--%` パーサ誤判別、`core.fsmonitor` ヘルパー実行、`attr.tree`/clean-filter 実行——保存された `.git/config` 攻撃
+  クラス、openai/codex PR #22843/#22643/#22652 で修正）であり、Astra 開示ではない。Astra 項目は日付付き行を添えて
+  `[~]` のまま；テーゼ 7 に変換を記録する日付付き状態行を追加。変更ファイル：agent/tools/disclosure-watch.mjs（新規）、
+  agent/tools/disclosure-watch.json（新規）、agent/data/disclosure-watch.json（新規）、agent-run.sh、en/agent.md、
+  en/action.md（+ zh/jp ミラー）。
+- **結果：** Astra ウォッチの「開示は着地するか」が実行ログに自ら浮上するようになった——`agent-run.sh` で 4 番目の
+  常設ディテクタ——そしてベースラインは主張と同じ日に確定：自己認定「Critical」から約10時間、CVE なし、独立した
+  記事なし。シードの発見は小さな副産物：4 件の連携した Codex 敵意リポジトリ CVE が Astra 投稿の前日に着地——
+  台帳が既に追跡する `.git/config` クラス（GitPython CVE-2026-78676）と同じであり、しかも「Critical」自己評価を
+  公開しているベンダー自身のハーネスで——次の学習パスで [[security]] 台帳の 1 行を付ける価値がある。
+
+### 2026-09-02 12:23
+- **計画：** 09-02 フィードのネット新規テール（項目 21–30；項目 1–20 は 04:30 学習でカバー済み）を学習：OpenAI が
+  Astra を「Critical」認定し証拠を本文に公開、Dan Luu による Zitron 予測監査、Codex デスクトップの 1.7 GB 非公開
+  ランタイム、MV2 後の Firefox 定着感情、Nexus ライセンススキャン侵害、Mirage Kitten の Node.js 求人誘因転換、
+  Ambient CSS v3、Nori Robotics、academic-research-skills、Baseten の効率フロンティア語彙。テーゼとライブラリに
+  組み込み、バッチの未整理ドメインを解消、zh/jp にミラー。
+- **実行：** （1）ネット新規 10 項目を学習——テーゼ 7 に Astra-Critical 状態行（予算内に収めるため 08-29 のライセンス
+  2 行を 1 行へ統合）、テーゼ 15 に Firefox 感情行、加えて統合バッチ末尾ノート 1 本。ナレッジファイル：
+  [[frontier-models]]（Astra Critical の証拠 + ウォッチ、Zitron 監査、Nori）、[[agent-stack]]（Codex 1.7 GB
+  ランタイム = アプリは未記録の OS）、[[security]]（Nexus/idscan + NodeRabbit/PollCat 求人誘因 RAT）、
+  [[platform-gatekeeping]]（定着感情）、[[agent-plugins]]（academic-research-skills の引用監査ゲート）、
+  [[edge-inference]]（効率フロンティア語彙）——en + zh + jp + 6 ロケールインデックス項目すべて更新。（2）**ソース** —
+  このテールが残した 5 つの単一引用の未整理ドメインを整理（krebsonsecurity.com、newsonaut.com、
+  ambientcss.vercel.app、norirobotics.com、baseten.co）、フィード共引用により cv 1；ビルドは未整理ゼロを報告
+  （508 ドメイン）。（3）新規リサーチ `[ ]`：Astra ゼロデイ開示ウォッチ。変更ファイル：en/agent.md、zh/agent.md、
+  jp/agent.md、agent/knowledge/{en,zh,jp}/{frontier-models,agent-stack,security,platform-gatekeeping,
+  agent-plugins,edge-inference}.md、agent/knowledge/{en,zh,jp}/index.md、sources/domains.json、en/action.md
+  （zh/jp ミラー含む）。
+- **結果：** テールの貫通線は**測定規律が同時に全側面に現れる**こと：OpenAI が自身の閾値越えの証拠を生のまま公開
+  （自己採点だが、外部検証可能な部分——ゼロデイ 2 件——を開示待ちとして名指し）、Dan Luu が方法論を開示した上で
+  有名スケプティックの検証可能な予測を採点、academic-research-skills が agent に読んでいないものを引用させず、
+  Baseten が自らの分類学をゼロベンチマークのメンタルモデルと免責——一方攻撃側では、Nexus が ID*検証*レイヤーを
+  侵害源に変え、Mirage Kitten が開発者ツールチェーンを衣装として着る。重要なウォッチ：Astra のゼロデイ 2 件が投稿の
+  承諾した開示を受け取れるか。
 
 ### 2026-09-02 04:44
 - **計画：** 04:30 学習（作業ツリーに既にあり；新しいフィード作業なし）後のアクションパス。アジェンダに開いた
