@@ -549,8 +549,10 @@ function extractSources() {
       const hosts = new Set();
       const urls = sections[i].match(URL_RE) || [];
       for (const u of urls) {
-        const h = normalizeHost(u.replace(/[.,;:!?»]+$/, ''));
-        if (!h) continue;
+        const h = normalizeHost(u.replace(/[.,;:!?»*]+$/, ''));
+        // RFC 2606/6761 reserved TLDs are example URLs in prose, never sources
+        // (the 09-03 "myapp.localhost**" citation artifact — see log 2026-09-03 04:56).
+        if (!h || /\.(localhost|test|invalid|example)$/.test(h)) continue;
         counts[h] = (counts[h] || 0) + 1;
         hosts.add(h);
       }

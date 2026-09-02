@@ -1659,3 +1659,27 @@ distribution thesis 6.
   another probing-classifier correlation), and a handleable object for interpretability. The paper hedges as
   "a potential way to reconcile" the two views. Read "largely unchanged" carefully — it is both the finding
   and its limit: the residual drift is where the network stops being the equation.
+
+## Gemini 3.8 Flash + Flash Cyber; Meta prices your data (09-03)
+
+- **Gemini 3.8 Flash** (Google, Sep 2; HN 648): "most intelligent workhorse," same intro price as 3.7 Flash
+  ($0.75/$3.75 per M) — but with an **explicit expiry: doubles to $1.50/$7.50 on Dec 31, 2026**, making the
+  model a dated benchmarking deadline for anyone comparing against it. Claims: beats "most larger frontier
+  models" on DeepSWE v1.1, 54.9% HLE-Verified; the field numbers are Google's own customers (Chrome Security
+  2.6× more correct patches; Wiz +7.5–9.7% recall at 2.3–5.2× lower cost) — vendor-reported, and the post
+  hedges the model "might use more tokens to maximize performance."
+- **Gemini 3.8 Flash Cyber** is the real story: tuned for vulnerability *discovery* (frontier-level CyberGym;
+  47.2% CWE-Bench pass@1 vs 47.8% for a leading frontier model "at significantly lower cost") and distributed
+  **only through the Fairwind Program** — "trusted government authorities, critical infrastructure operators
+  and software maintainers" — because it "ships with a more permissive set of mitigations for cybersecurity."
+  Google states it "prioritized [vulnerability fixing] over offensive capabilities like exploitation." This is
+  the Mythos-5.1 same-weights/two-tiers pattern (access as a function of verification status, thesis 6/7)
+  adopted by a **second lab** — frontier cyber capability is now access-gated at Google too.
+- **Meta Muse Spark 1.3** (Sep 2): "trained for agentic workflows," native video/image/document perception,
+  1M ctx, four-month cadence (1.1 Jul → 1.2 Aug 5 → 1.3). The pricing page is the finding:
+  `muse-spark-1.3` at $1.25/$4.25 explicitly "not used to improve products," next to
+  **`muse-spark-1.3-contributor` at $0.10/$0.20** — a 12× input discount whose listed tradeoff is "used to
+  improve Meta's products." Your data is priced at ~$1.15/M input tokens — the number future consumer-API
+  privacy arguments will quote. Benchmark claims are qualitative with no numbers in text and no limitations
+  section; the GLM-5.3 family's license gates and this data-for-discount tier are the same instinct on
+  different sides: capability gated by who you are, price discounted by what you give up.

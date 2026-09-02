@@ -1380,3 +1380,28 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
   蓄積する；それらを 5 つの雪片サーバーではなく 1 つのオートスケールクラスタとして運用すれば、vLLM が決してカバー
   しなかった運用コストを削減できる。徴候はタスクリストにある：「エージェントループ自体」が提供されるモデルワーク
   ロードとして現れる——推論インフラはモデルだけでなくエージェントの価格設定を始めている。
+
+## エージェントネイティブな開発ループ：chrome-devtools-mcp、portless、FrontierHarness（09-03）
+
+- **ChromeDevTools/chrome-devtools-mcp が 50k★ を突破**（Apache-2.0、Google 公式の「エージェントのためのブラウザ」MCP）：
+  ライブで検査可能な Chrome——性能トレース（任意で CrUX 実ユーザーデータで補強）、ネットワーク検査、スクリーンショット、
+  ソースマップ付きスタックのコンソールメッセージ、アクション結果を待つ Puppeteer 自動化、`--slim` の削減ツールセット。
+  運用者に関係するデフォルト：Google は**使用統計をデフォルトで収集**（無効化は `--no-usage-statistics`）、性能ツールは
+  トレース URL を CrUX API へ送りうる（`--no-performance-crux`）；公式サポートは Google Chrome / Chrome for Testing のみ。
+  同週の MV2 削除と合わせて見ると、Google は人間の拡張機能の Web を閉じながらエージェント自動化の Web を標準化して
+  いる——これは後者の参照実装である。
+- **vercel-labs/portless**（11.7k★）：安定した名前付き dev サーバー URL——`portless myapp next dev` がポートを割り当て、
+  443 でローカルプロキシを自動起動、ローカル CA を生成して信頼し、HTTP/2 で **https://myapp.localhost** を提供。
+  エージェントに関係する部分は意図的：worktree は自動でブランチサブドメインを得て（`fix-ui.myapp.localhost`）、
+  モノレポは 1 つの `portless.json` からサービスを得、名前付き URL はポート変動に耐える安定したターゲットを
+  エージェントに与える。誠実な pre-1.0 の但し書き：macOS/Linux では 443 に sudo が必要、Safari では
+  `portless hosts sync` が必要な場合がある、厳格な OAuth プロバイダ（Google、Apple）は `.localhost` のリダイレクト URI を
+  丸ごと拒否する。「人間とエージェントのために」が現実の設計制約になりつつある——ツール層はエージェントを開発環境の
+  ファーストパーティクライアントとみなすようになった。
+- **FrontierHarness**（frontierharness.org、Show HN、55 pts）：**同一モデル（Kimi K3）**、同じ新しいチェックポイント復元、
+  同じ VM 形状で、9 つのコーディングエージェントハーネス / 12 構成（Codex、Claude Code、Pi、OpenCode、Kimi Code、Hermes、
+  Exo、DeepSeek Harness、Oh My Pi）の 360 試行を実行。合格率は 50–66.7% にまたがり、タスクあたり中央値コストは
+  **$1.05（Exo）→ $18.34（Claude Code）——同等品質で 17× の開き**。ハーネス層がモデル選択より大きなコスト変数に
+  なった——テーゼ 12 の主張が測定された。サイト自身が強要するベンダーの但し書きを読むこと：Runta が Runta 自身の
+  ランタイム上で実施、そして OpenCode の目を引く $0.0615 の成功あたりコストは**失敗を除外**している（含めると $3.24）——
+  「成功タスクあたりコスト」では各ベンダーが輝き、「タスクあたり中央値コスト」で初めて比較可能になる。

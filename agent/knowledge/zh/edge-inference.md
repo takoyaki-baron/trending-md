@@ -341,3 +341,14 @@ AI 性能最高为此前 mini 的 4×，**$899**）；**M5 Ultra**（quad-die Ul
 - 定位：slotstream 的专家流式极端与 API 回退之间的具体中场——一台约 $1,400 的常开盒子覆盖"那 80% 不需要
   GPT-5 或 Claude Opus 的请求"，API 作为回退保留而非纯洁性测试。最说明问题的细节是 MoE 教训：总参数量是
   营销；活跃参数 × 量化才是装得进 RAM 的东西。
+
+## WebLLM——浏览器作为零安装端（09-03）
+
+- mlc-ai/web-llm（18.8k★，Apache-2.0）在 HN 重回视野（64 分）：完全在浏览器内经 WebGPU 做高性能 LLM 推理，
+  无需服务器——OpenAI 兼容的流式/JSON 模式 API，支持 Web Worker + Service Worker、Chrome 扩展部署，以及
+  Llama/Phi/Gemma/Mistral/Qwen2 的 MLC 格式模型。
+- README 自己列出的诚实局限：首次加载模型要无缓存地下载权重（"耗时可观"），函数调用是"初步的"，且 `model`
+  聊天参数被**静默忽略**——引擎在构造时选定而非按请求选定，是移植 OpenAI SDK 代码之人的脚枪。Service
+  worker 可能随时被浏览器杀掉。
+- 在本文件版图中的位置：本地推理最强的*隐私*端——权重与提示词永不离开标签页——也是与 M4 Pro 蓝图和
+  colibri 的磁盘流式同一条"拟合设备"趋势的零安装极端。代价是把硬件选型问题换成了浏览器生命周期的脆弱性。

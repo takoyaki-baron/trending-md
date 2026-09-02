@@ -726,3 +726,22 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
   on a 20-tuple gold set. Claim-level verification is the missing primitive in every research agent; this is
   the largest deployed attempt at it, and FNR/FPR acceptance thresholds are more measurement than most "AI
   scientist" tools ship (cf. the ARS stance vs FrontierChallenge's 75.5% false-completion rate, above).
+
+## mattpocock/skills passes 245k★ — the anti-framework stance made explicit (09-03)
+
+- `mattpocock/skills` (MIT, 245.1k★, +1,272/day) now states what it *rejects*: whole-process frameworks
+  (GSD, BMAD, Spec-Kit) for "owning the whole process and thereby removing user control." Instead: small
+  composable skills mapped to four failure modes — the agent didn't do what you want (`/grill-me`,
+  `/grill-with-docs`), too verbose (a shared domain language in `CONTEXT.md`), code doesn't work (`/tdd`,
+  `/diagnosing-bugs`), "we built a ball of mud" (`/to-spec`, `/improve-codebase-architecture`).
+- The design distinction worth stealing: **user-invoked vs model-invoked** — orchestration skills only run
+  when typed, while disciplines like `code-review` and `diagnosing-bugs` are things the agent reaches for on
+  its own. Two deliberately exclusive install paths: the auto-updating Claude Code plugin, or
+  `npx skills@latest add mattpocock/skills` for editable local files. Backed by a ~60k-subscriber newsletter
+  (distribution the eval-gap repos never had).
+- Data point in the products-vs-libraries argument about agent workflows: one of the largest aggregations of
+  working engineering practice for agents is explicitly anti-framework — adjacent to ponytail (121k★, whose
+  entire job is subtracting process and which publicly corrected its own headline number, now with an honest
+  README concession that gains shrink to near zero on already-minimal code and a terse reasoning model can
+  use *more* tokens). The "prove it" phase has grown a "subtract it" wing; both still ship self-run
+  benchmarks only (ponytail: 12 tasks, Haiku 4.5, n=4 — no third-party A/B).

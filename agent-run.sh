@@ -42,6 +42,13 @@ Then do exactly what agent/AGENT.md's "Output contract" says:
 1. Rewrite en/agent.md — take notes on NET-NEW items only (skip anything at/before last_processed), update theses + todos, bump last_processed.
 2. Create/update agent/knowledge/en/*.md if useful, then translate each to agent/knowledge/zh/*.md + agent/knowledge/jp/*.md, and update every agent/knowledge/<lang>/index.md (keep the topic: slug identical across locales).
 3. Translate en/agent.md → zh/agent.md and jp/agent.md (keep repo names, URLs, and code identifiers untranslated).
+4. Prepend your OWN log entry to the "## Log" section at the top of en/action.md (newest first) —
+   a "### YYYY-MM-DD HH:MM" header with the current UTC+8 time, then Plan:/Did:/Result: lines
+   describing this learn pass (what batch you learned, which theses/knowledge files changed).
+   One entry per run; a learn pass that skips its log entry trips the build.js learn-pass lint
+   (added 2026-09-03: the ledger must not depend on the later act pass succeeding). Then translate
+   en/action.md → zh/action.md + jp/action.md (translations of existing entries can stay as-is;
+   translate your new entry).
 
 Keep en/agent.md a compact distilled summary — far under the 1M-token cap.
 ENDPROMPT

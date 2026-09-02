@@ -3,77 +3,77 @@
     "vllm-project/semantic-router": {
       "tag": "v0.3.0",
       "published_at": "2026-06-05T12:08:52Z",
-      "pushed_at": "2026-09-02T13:10:56Z",
-      "stars": 5493,
+      "pushed_at": "2026-09-02T20:14:23Z",
+      "stars": 5502,
       "flags": [],
-      "frozen_pushed_at": "2026-09-02T13:10:56Z",
-      "checked": "2026-09-02T13:28:52.608Z"
+      "frozen_pushed_at": null,
+      "checked": "2026-09-02T21:11:56.359Z"
     },
     "BitRouter/BitRouter": {
       "tag": "v1.0.0-alpha.27",
       "published_at": "2026-07-18T20:42:54Z",
-      "pushed_at": "2026-09-02T05:59:54Z",
+      "pushed_at": "2026-09-02T17:41:24Z",
       "stars": 223,
       "flags": [],
-      "frozen_pushed_at": "2026-09-02T05:59:54Z",
-      "checked": "2026-09-02T13:28:52.608Z"
+      "frozen_pushed_at": null,
+      "checked": "2026-09-02T21:11:56.359Z"
     },
     "Continuum-AI-Corp/OrcaRouter-Lite": {
       "tag": "v0.1.0",
       "published_at": "2026-05-11T02:58:59Z",
       "pushed_at": "2026-08-28T07:41:07Z",
-      "stars": 641,
+      "stars": 643,
       "flags": [],
       "frozen_pushed_at": "2026-08-28T07:41:07Z",
-      "checked": "2026-09-02T13:28:52.608Z"
+      "checked": "2026-09-02T21:11:56.359Z"
     },
     "workweave/router": {
       "tag": null,
       "published_at": null,
-      "pushed_at": "2026-09-02T13:06:10Z",
-      "stars": 3593,
+      "pushed_at": "2026-09-02T20:01:21Z",
+      "stars": 3628,
       "flags": [],
-      "frozen_pushed_at": "2026-09-02T13:06:10Z",
-      "checked": "2026-09-02T13:28:52.608Z"
+      "frozen_pushed_at": null,
+      "checked": "2026-09-02T21:11:56.359Z"
     },
     "obra/superpowers": {
       "tag": "v6.3.0",
       "published_at": "2026-08-12T16:58:30Z",
       "pushed_at": "2026-08-31T17:03:59Z",
-      "stars": 280705,
+      "stars": 280813,
       "flags": [],
       "frozen_pushed_at": "2026-08-31T17:03:59Z",
-      "checked": "2026-09-02T13:28:52.608Z"
+      "checked": "2026-09-02T21:11:56.359Z"
     },
     "mattpocock/skills": {
       "tag": "v1.2.3",
       "published_at": "2026-08-06T14:05:28Z",
       "pushed_at": "2026-08-24T14:20:17Z",
-      "stars": 244681,
+      "stars": 245107,
       "flags": [],
       "frozen_pushed_at": "2026-08-24T14:20:17Z",
-      "checked": "2026-09-02T13:28:52.608Z"
+      "checked": "2026-09-02T21:11:56.359Z"
     },
     "multica-ai/andrej-karpathy-skills": {
       "tag": null,
       "published_at": null,
       "pushed_at": "2026-04-20T10:05:04Z",
-      "stars": 209551,
+      "stars": 209639,
       "flags": [],
       "frozen_pushed_at": "2026-04-20T10:05:04Z",
-      "checked": "2026-09-02T13:28:52.608Z"
+      "checked": "2026-09-02T21:11:56.359Z"
     },
     "DietrichGebert/ponytail": {
       "tag": "v4.9.0",
       "published_at": "2026-08-07T21:15:11Z",
       "pushed_at": "2026-08-07T21:44:01Z",
-      "stars": 120750,
+      "stars": 121290,
       "flags": [],
       "frozen_pushed_at": "2026-08-07T21:44:01Z",
-      "checked": "2026-09-02T13:28:52.608Z"
+      "checked": "2026-09-02T21:11:56.359Z"
     }
   },
-  "runs": 6,
+  "runs": 7,
   "first_run": "2026-09-01T20:48:09.140Z",
-  "last_run": "2026-09-02T13:28:52.608Z"
+  "last_run": "2026-09-02T21:11:56.359Z"
 }

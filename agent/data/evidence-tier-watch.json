@@ -431,10 +431,22 @@
       "path": "claude-sandbox-shared/.claude/plugins/marketplaces/caveman/README.md",
       "html_url": "https://github.com/jonn-smith/claude-docker-sandbox/blob/0c6ce7e597f0b2c8f1a823e484e2626ba7ef3b66/claude-sandbox-shared/.claude/plugins/marketplaces/caveman/README.md",
       "found": "2026-09-01T21:01:07.401Z"
+    },
+    "JuliusBrussee/caveman::benchmarks/render_charts.py": {
+      "repo": "JuliusBrussee/caveman",
+      "path": "benchmarks/render_charts.py",
+      "html_url": "https://github.com/JuliusBrussee/caveman/blob/3b74643f4d910f496babd4e634b1ba7168816f14/benchmarks/render_charts.py",
+      "found": "2026-09-02T21:11:56.296Z"
+    },
+    "slept-de-night/ai_quant_platform::.agent_plan/AI_QUANT_LEARNING_RFT_RL_FRONTIER_PLAN_2026-09-02/08_EPISODE_DATA_AND_GRADER_CONTRACTS.md": {
+      "repo": "slept-de-night/ai_quant_platform",
+      "path": ".agent_plan/AI_QUANT_LEARNING_RFT_RL_FRONTIER_PLAN_2026-09-02/08_EPISODE_DATA_AND_GRADER_CONTRACTS.md",
+      "html_url": "https://github.com/slept-de-night/ai_quant_platform/blob/5d2da8b2318d75ad120f46d90731db37c86395bb/.agent_plan/AI_QUANT_LEARNING_RFT_RL_FRONTIER_PLAN_2026-09-02/08_EPISODE_DATA_AND_GRADER_CONTRACTS.md",
+      "found": "2026-09-02T21:11:56.296Z"
     }
   },
-  "runs": 5,
+  "runs": 6,
   "first_run": "2026-09-01T04:34:31.653Z",
-  "last_run": "2026-09-02T13:28:52.561Z",
-  "last_total": 71
+  "last_run": "2026-09-02T21:11:56.296Z",
+  "last_total": 73
 }

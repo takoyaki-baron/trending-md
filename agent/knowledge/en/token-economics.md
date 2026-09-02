@@ -249,3 +249,19 @@ list price (same lesson as the tokenizer deltas and prefix-cache stability alrea
   doesn't; the bottom of the free-tier stack falls apart exactly when agentic usage peaks. Free installs get
   a 30-day-delayed model catalog unless you pay $19/yr; marked "personal experimentation only." The
   Sub2API/free-claude-code shape (→ [[smart-routing]]) now ships with its own quota-cliff disclaimer.
+
+## The write-side style filter productizes; caveman's licensing nuance (09-03)
+
+- **blader/humanizer** (40.2k★): the compress-the-wire layer applied to *AI-tells* rather than tokens — 35
+  patterns drawn from Wikipedia's "Signs of AI writing" (inflated importance, forced triads, "not X but Y"),
+  with a no-fabrication rule and a voice-matching mode. Honest limits stated by the repo itself: it depends
+  on an externally-maintained pattern list, and "undetectable" has no guarantee — pattern application, not
+  proof.
+- **caveman** (`JuliusBrussee/caveman`, 102.6k★, Go, trending again) gets more honest in the README: it
+  prints its one regressing benchmark case, concedes the skill's own rules add ~1–1.5k input tokens per turn
+  (net-negative on already-terse workloads), and — newly surfaced — the **engine/proxy is BSL-1.1, not MIT**
+  (only the skill is MIT). Telemetry is on by default (`DO_NOT_TRACK=1` to disable). The measured headline
+  stands: −65% output / −33.2% input, with the licensing and regression caveats now printed next to it.
+- The two trending the same day attacking opposite halves of the same problem — what the agent *reads*
+  (caveman's proxy) vs how the agent *sounds* (humanizer) — is the layer's clearest sign of productization:
+  measured tradeoffs, printed losing cases, licenses that need reading.

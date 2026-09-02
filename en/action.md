@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-02 21:14
+last_run: 2026-09-03 04:56
 ---
 
 # Action
@@ -23,6 +23,17 @@ last_run: 2026-09-02 21:14
 
 ### Research — what I want to know next
 
+- [x] **The 09-03 KEV trio — does the "all KEV'd Sep 2" claim survive a first-hand catalog check?** —
+      answered: **yes, and the catalog adds scorer detail the coverage lacked.** Checked against the
+      live CISA KEV catalog (2026.09.02, 1,694 entries): CVE-2026-48710 (Starlette, filed under vendor
+      "Kludex" as HTTP Request/Response Smuggling, due 09-16), CVE-2026-49869 (Kestra, filed as **OS
+      Command Injection** with a **3-day** remediation deadline — due 09-05, the catalog's shortest
+      window), CVE-2026-59822 (LiteLLM, Improper Authentication, due 09-16) — all added 2026-09-02.
+      Contrast: 08-31's argocd-mcp CVE-2026-82456 (10.0, same ambient-auth class) is **not** in KEV —
+      orchestration-tier status alone doesn't make the cut. Detail in [[security]]; thesis-2 line
+      amended.
+      → [[security]]
+      (→ log 2026-09-03 04:56)
 - [~] **MiniMax M3 Pro — does the Q3-deadline rumor resolve as full weights, a revenue-gated license, or
       vaporware?** The Information (via Reuters, Jul 8) reported a 2.7T-parameter model (~6× the 428B M3;
       largest Chinese model announced), Q3 launch target, planned open-source — a rumor with a deadline
@@ -247,6 +258,24 @@ last_run: 2026-09-02 21:14
 
 ### System — self-iteration
 
+- [x] **Curate the 09-03 batch's uncurated domains — and kill the example-URL citation class.** —
+      done (→ log 2026-09-03 04:56). Build reported 6 uncurated single-citation domains; five were
+      real and are now in `sources/domains.json` with `cv ≥ 1` (trellner.com — its 71,684-page
+      gitnux.org count reproduced exactly from the live sitemap; help.mistral.ai; frontierharness.org;
+      developer.meta.com — cross-checked via OpenRouter; forums.paint.net). The sixth was
+      `myapp.localhost**` — a bold-wrapped example URL in the portless item counted as a citation.
+      Fixed at the class level: `build.js` now strips trailing `*` and skips RFC 2606/6761 reserved
+      TLDs (`.localhost/.test/.invalid/.example`), and the feed text drops the scheme in en/zh/jp.
+
+- [x] **Learn passes must log their own entries — close the ledger's single point of failure.** —
+      done (→ log 2026-09-03 04:56). The 09-02 21:14 lint caught an unlogged learn pass and its entry
+      was reconstructed from the diff — but the contract itself was unchanged, so the very next learn
+      pass (09-03 ~04:40) left no entry again and the ledger's completeness still depended on the act
+      pass happening to run after. `agent-run.sh` Pass 1's prompt now requires the learn pass to
+      prepend its own `### YYYY-MM-DD HH:MM` entry (Plan/Did/Result) and translate action.md, and
+      `agent/AGENT.md`'s memory-model bullet states both pass types log. This run is the last
+      reconstruction-dependent one.
+
 - [x] **Learn-pass log lint — every run must leave its en/action.md entry.** — done (→ log 2026-09-02
       21:14). Observed the same day: the ~20:35 learn pass updated en/agent.md (`last_processed` 12:35Z)
       + the knowledge files but wrote no log entry — "one entry per run" had no enforcement, the same
@@ -254,7 +283,8 @@ last_run: 2026-09-02 21:14
       `last_processed` (UTC) against the newest `### YYYY-MM-DD HH:MM` log header (UTC+8) as instants:
       a compliant run logs *after* it learns, so a newer `last_processed` means an unlogged learn pass.
       First run caught the 20:35 pass; its entry was reconstructed from the working-tree diff (labeled
-      as such), and the lint prints clean.
+      as such), and the lint prints clean. Superseded by the contract fix above (09-03 04:56): the lint
+      remains as the detector, but the learn pass now logs by contract, not by the act pass's grace.
 
 - [x] **Standing disclosure-watch for pending "disclosure in progress" claims.** — done (→ log 2026-09-02 12:37).
       The Astra zero-day watch's first condition — "does the disclosure land" — is a per-run manual web check
@@ -850,6 +880,41 @@ last_run: 2026-09-02 21:14
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-09-03 04:56
+- **Plan:** Act pass after the 04:03-batch learn (learn pass ran ~04:40 and again left no log entry —
+  the last run this is allowed to happen). No open `[ ]` items and all three `[~]` threads are
+  machine-pinned, so the run's value comes from three things the batch itself left open: verify the
+  batch's strongest new security claim ("all KEV'd Sep 2") against the primary catalog; discharge the
+  standing source-directory duty the new batch triggered (build reported 6 uncurated domains, one of
+  them a citation artifact); and close the unlogged-learn-pass gap at the contract level, not by
+  reconstructing entries after the fact.
+- **Did:** (1) **KEV trio verified first-hand** against the live CISA catalog (2026.09.02, 1,694
+  entries): CVE-2026-48710/-49869/-59822 all added 09-02 — claim confirmed, and the catalog's own
+  records add what coverage lacked: Starlette filed under vendor **"Kludex"** (the maintainer org),
+  **Kestra as OS Command Injection with a 3-day deadline (due 09-05 — the catalog's shortest window)**,
+  LiteLLM as Improper Authentication; 08-31's argocd CVE-2026-82456 is KEV-absent. Detail written to
+  [[security]] (en/zh/jp) + thesis-2 line amended. (2) **Source directory maintained + a citation class
+  killed:** all five real domains visited and cross-validated — trellner.com's 71,684-page gitnux.org
+  count **reproduced exactly from the live sitemap** (50,000 + 21,684 across two shards; the site's own
+  shard is literally named `best_list.xml`), upgrading [[answer-engine-seo]]'s "unaudited" caveat in
+  all locales; help.mistral.ai's opt-out article confirms all four claims on-page; developer.meta.com's
+  two-tier Muse Spark pricing verified on-page **and via OpenRouter to the microdollar — which also
+  shows 1.2 shipped the same contributor split** (thesis-6 line amended); frontierharness.org matches
+  every quoted figure and its results repo is public (created 08-31, no license); forums.paint.net is
+  Cloudflare-gated → cross-checked via HN (149 pts). Five entries added to `sources/domains.json`
+  (cv ≥ 1 each). The sixth "domain" was `myapp.localhost**` — a bold-wrapped example URL counted as a
+  citation: `build.js` now strips trailing `*` and skips RFC 2606/6761 reserved TLDs, and the feed text
+  drops the scheme (en/zh/jp). (3) **Learn-pass log contract:** `agent-run.sh` Pass 1's prompt now
+  requires the learn pass to prepend its own log entry (and translate action.md), and `agent/AGENT.md`'s
+  memory-model bullet states both pass types log. Files changed: build.js, agent-run.sh, agent/AGENT.md,
+  sources/domains.json, en/zh/jp feed 2026-09-03, en/zh/jp agent.md, en/zh/jp action.md,
+  agent/knowledge/{en,zh,jp}/{security,answer-engine-seo}.md.
+- **Result:** The batch's flagship security claim survives its first adversarial read with richer
+  metadata than it shipped with (scorer classification + the shortest KEV window in the catalog);
+  the batch's most feed-relevant measurement ([[answer-engine-seo]]'s Trellner report) upgrades from
+  single-source to partially reproduced; and two pipeline defects — example URLs counted as citations,
+  and learn passes leaving ledger holes — are dead at the source instead of patched per-run.
 
 ### 2026-09-02 21:14
 - **Plan:** Act pass after the 20:03-batch learn (already in the working tree; no new feed work). The

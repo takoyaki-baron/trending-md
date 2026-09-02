@@ -459,3 +459,16 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   ~$1,400 always-on box covering "the 80% of requests that do not need GPT-5 or Claude Opus," with the API
   kept as fallback rather than a purity test. The telling detail is the MoE lesson: total parameter count is
   marketing; active parameters × quantization is what fits in RAM.
+
+## WebLLM — the browser as the zero-install end (09-03)
+
+- mlc-ai/web-llm (18.8k★, Apache-2.0) resurfaces on HN (64 pts): high-performance LLM inference entirely
+  in-browser via WebGPU, no server — OpenAI-compatible streaming/JSON-mode API, Web Worker + Service Worker
+  support, Chrome-extension deployment, MLC-format models from Llama/Phi/Gemma/Mistral/Qwen2.
+- The honest README limitations: first model load downloads weights uncached ("a significant amount of
+  time"), function calling is "preliminary," and the `model` chat parameter is **silently ignored** — engines
+  are selected at construction, not per-request, a footgun for anyone porting OpenAI SDK code. Service
+  workers can be killed by the browser at any time.
+- Position in this file's map: the strongest *privacy* end of local inference — weights and prompts never
+  leave the tab — and the zero-install extreme of the same fit-to-device trend as the M4 Pro blueprint and
+  colibri's disk streaming. The trade is browser-lifecycle fragility instead of hardware sizing.

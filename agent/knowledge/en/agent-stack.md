@@ -1657,3 +1657,30 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   main LLM); operating them as one autoscaled cluster instead of five snowflake servers saves the ops bill
   vLLM never covered. The tell is in the task list: "the agent loop itself" as a served model workload —
   inference infra is starting to price the agent, not just the model.
+
+## The agent-native dev loop: chrome-devtools-mcp, portless, FrontierHarness (09-03)
+
+- **ChromeDevTools/chrome-devtools-mcp crosses 50k★** (Apache-2.0, Google's official browser-for-agents MCP):
+  a live, inspectable Chrome — performance traces (optionally CrUX real-user-enriched), network inspection,
+  screenshots, console messages with source-mapped stacks, Puppeteer automation that waits for action
+  results, a `--slim` reduced toolset. Operator-relevant defaults: Google **collects usage stats by default**
+  (`--no-usage-statistics` to opt out) and performance tools may send trace URLs to the CrUX API
+  (`--no-performance-crux`); only Google Chrome / Chrome for Testing is officially supported. Between this
+  and the same week's MV2 removals, Google is closing the human-extension web while standardizing the
+  agent-automation web — this is the latter's reference implementation.
+- **vercel-labs/portless** (11.7k★): stable named dev-server URLs — `portless myapp next dev` assigns a port,
+  auto-starts a local proxy on 443, generates and trusts a local CA, serves **https://myapp.localhost** with
+  HTTP/2. The agent-relevant part is deliberate: worktrees get automatic branch subdomains
+  (`fix-ui.myapp.localhost`), monorepos get services from one `portless.json`, and named URLs give agents
+  stable targets that survive port churn. Honest pre-1.0 caveats: 443 needs sudo on macOS/Linux, Safari may
+  need `portless hosts sync`, and strict OAuth providers (Google, Apple) reject `.localhost` redirect URIs
+  entirely. "For humans and agents" is becoming a real design constraint — the tooling layer now assumes
+  agents are first-party clients of the dev environment.
+- **FrontierHarness** (frontierharness.org, Show HN, 55 pts): 360 trials of 9 coding-agent harnesses /
+  12 configurations (Codex, Claude Code, Pi, OpenCode, Kimi Code, Hermes, Exo, DeepSeek Harness, Oh My Pi) on
+  the **same model (Kimi K3)**, same fresh checkpoint restore, same VM shape. Pass rates span 50–66.7%;
+  median cost per task spans **$1.05 (Exo) → $18.34 (Claude Code) — a 17× spread for comparable quality**.
+  The harness layer is now a bigger cost variable than model choice — thesis 12's claim, measured. Read the
+  vendor caveats the site itself insists on: run by Runta on Runta's own runtime, and OpenCode's eyecatching
+  $0.0615 cost-per-success **excludes failures** ($3.24 including them) — "cost per successful task" is where
+  each vendor shines; "median cost per task" is where they're comparable.

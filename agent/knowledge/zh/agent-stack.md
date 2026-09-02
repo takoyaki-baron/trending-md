@@ -1166,3 +1166,25 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 - 为什么重要：agent 栈会悄悄积累 5–10 个模型依赖（embedder、重排器、解析器、安全、主 LLM）；把它们作为一个
   自动扩缩集群来运维、而不是五台雪花服务器，省下的是 vLLM 从未覆盖的运维账单。信号就在任务清单里："agent
   循环本身"成为一种被服务的模型工作负载——推理基础设施开始给 agent 计价，而不只是给模型计价。
+
+## agent 原生开发环路：chrome-devtools-mcp、portless、FrontierHarness（09-03）
+
+- **ChromeDevTools/chrome-devtools-mcp 突破 50k★**（Apache-2.0，Google 官方的"给 agent 用的浏览器"MCP）：
+  一个活体、可检视的 Chrome——性能 trace（可选 CrUX 真实用户增强）、网络检查、截图、带源码映射堆栈的
+  console 消息、会等待动作结果的 Puppeteer 自动化、`--slim` 精简工具集。对操作者要紧的默认值：Google
+  **默认收集使用统计**（`--no-usage-statistics` 退出），性能工具可能把 trace URL 发给 CrUX API
+  （`--no-performance-crux`）；官方只支持 Google Chrome / Chrome for Testing。在本项目与同周的 MV2 移除
+  之间，Google 正在关闭人类扩展的 web，同时标准化 agent 自动化的 web——这是后者的参考实现。
+- **vercel-labs/portless**（11.7k★）：稳定的具名 dev server URL——`portless myapp next dev` 分配端口、在
+  443 上自动启动本地代理、生成并信任本地 CA、以 HTTP/2 服务 **https://myapp.localhost**。对 agent 有意义的
+  部分是刻意的：worktree 自动获得分支子域名（`fix-ui.myapp.localhost`），monorepo 从一份 `portless.json`
+  获得各服务，具名 URL 给 agent 能熬过端口漂移的稳定目标。诚实的 pre-1.0 注意点：443 在 macOS/Linux 需要
+  sudo，Safari 可能需要 `portless hosts sync`，而严格的 OAuth 提供商（Google、Apple）完全拒绝 `.localhost`
+  重定向 URI。"为人类和 agent"正在成为真实的设计约束——工具层如今假定 agent 是开发环境的第一方客户端。
+- **FrontierHarness**（frontierharness.org，Show HN，55 分）：9 个 coding-agent harness / 12 种配置
+  （Codex、Claude Code、Pi、OpenCode、Kimi Code、Hermes、Exo、DeepSeek Harness、Oh My Pi）在**同一个模型
+  （Kimi K3）**、相同的全新 checkpoint 恢复、相同 VM 形态上跑 360 次试验。通过率跨 50–66.7%；每任务中位
+  成本跨 **$1.05（Exo）→ $18.34（Claude Code）——可比质量下 17× 的差距**。harness 层如今是比模型选择更大
+  的成本变量——论点 12 的主张，被度量了。读一读网站自己坚持要写的厂商告诫：由 Runta 在 Runta 自家运行时上
+  运营，且 OpenCode 醒目的 $0.0615 单次成功成本**不含失败**（含失败为 $3.24）——"每次成功任务的成本"是
+  各家发光的地方，"每任务中位成本"才是可比的地方。

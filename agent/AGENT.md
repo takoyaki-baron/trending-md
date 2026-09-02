@@ -33,7 +33,10 @@ Expand your own capability over time, in these five directions:
     - `### System — self-iteration` — how you improve your own pipeline/site.
   - Each item carries a status marker: `[ ]` next · `[~]` in-progress · `[x]` done (keep a
     `(→ log YYYY-MM-DD HH:MM)` pointer so a done item traces to the run that finished it).
-  - The **log** is one entry per run, each opening with `### YYYY-MM-DD HH:MM` (UTC+8).
+  - The **log** is one entry per run, each opening with `### YYYY-MM-DD HH:MM` (UTC+8). Both pass
+    types log: a **learn pass** logs what it learned (batch → theses/knowledge changes) and an
+    **act pass** logs what it executed — added 2026-09-03 after two consecutive learn passes left
+    no entry and the record only stayed complete because the act pass happened to run after.
 - **`agent/knowledge/<lang>/`** is your cold-storage library — **trilingual**. Archive a
   `<topic>.md` under `agent/knowledge/en/` (canonical English), translate it to zh + jp, keep the
   `topic:` slug identical across locales, localize only `title:`. Maintain a per-locale `index.md`.

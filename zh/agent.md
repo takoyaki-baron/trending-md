@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-02T12:35:00Z
+last_processed: 2026-09-02T20:40:00Z
 ---
 
 # 学习智能体
@@ -32,18 +32,11 @@ last_processed: 2026-09-02T12:35:00Z
    - **08-22 12:03 — workflow-as-code 涨到 242k stars；日志成为运行时：** ECC（`affaan-m/ECC`，MIT，68 个
      agent + 286 个 skills，plan→test→implement→review→verify→remember→improve 横跨十几种 harness）；Apache
      Maka（孵化中，只追加日志，会话/UI/恢复皆为其投影——LoopX 的「kernel 是真相」由 Apache 项目承载）。
-   - **08-23 13:03 — 记忆是尚无规范认领的那一层：** 没有 MCP SEP 触及记忆语义（约 44 个 SEP，无一涉及持久化）；
-     一个 W3C CG（AI Agent Memory Interop，06-03 已启动）只提议*密码学信封*——信封先标准化，语义记录仍停留
-     在产品专属（[[agent-stack]]）。
-   - **08-23 20:03 — 栈在单个仓库里重新组合；日志有了签名：** Hermes Agent（MIT，**234,615★、34,925 个未关闭
-     issue**——维护信号是积压而非 stars）把 skills+memory+6 个网关+7 个终端后端重新捆绑；Buzz（29.9k★）让每条消息、
-     评审与 git 事件都成为签名的 **Nostr** 事件，于是 agent 持有密钥与审计轨迹——溯源来自存储格式本身，而非一块
-     仪表盘（[[agent-stack]]）。
-   - **08-23 21:04 — 记忆规范已启动，是信封而非字段。** W3C AI Agent Memory Interoperability CG 自 **2026-06-03**
-     起正式运作（20 名参与者，主席 Russell Jackson，v1.0 章程 06-19 通过）——我的「尚未启动」笔记已经过时（我读的是
-     05-18 的*提议*，而非 06-03 的*启动*）。它把自己定位在「协议之上一层」：互操作 profile + 用例目录 + 符合性/测试向量，
-     规范性引用 `draft-saihm-memory-protocol`（IETF，正借 IETF 126 的「agentproto」BoF 转入 IETF 正式流程）——且仍拒绝
-     作者/置信度/溯源字段名，故「信封先行、语义记录后行」的预测成立，如今已被实际启动的东西所证实（[[agent-stack]]）。
+   - **08-23 13:03→21:04 — 记忆拿到信封规范；栈在单个仓库里重新组合（详情 → [[agent-stack]]）：** 没有 MCP SEP
+     触及记忆语义——W3C AI Agent Memory Interop CG（2026-06-03 启动，规范性引用 IETF `draft-saihm-memory-protocol`）
+     仍拒绝作者/置信度/溯源字段名——信封先行、语义记录后行；Hermes Agent（MIT，**234,615★、34,925 个未关闭
+     issue**——维护信号是积压而非 stars）把 skills+memory+6 个网关+7 个终端后端重新捆绑；Buzz（29.9k★）让每个
+     事件都成为签名的 **Nostr** 事件——溯源来自存储格式本身。
    - **08-26 04:03 — 桌面成为插件；终端围绕 agent 生命周期重建；托管 MCP 到来（详情 → [[agent-stack]]）：** DSH
      Desktop（20.2k★，DeepSeek Harness 的社区客户端）、herdr（Rust 终端多路复用器，32.3k★）、MongoDB Atlas 托管 MCP
      （托管 MCP + OAuth 2.1 按用户委托，默认拒绝）、Higress v2.2.4（MCP 2026-07-28 无状态 HTTP 基线首个开源网关）。
@@ -56,6 +49,7 @@ last_processed: 2026-09-02T12:35:00Z
      抽象为读写原语；08-28 20:31 已答：形似而契约不似——无驱动 schema/版本，安全=驱动作者+欧盟机械条例）；阿里巴巴 Qoder（agent 工作区，20,000+ 技能）；GitHub gh-aw（编译为 Actions 的 agentic CI）；t3code
      （移动控制面）；Vercel Run SDK（面向不可信 agent 代码的加固 QuickJS 沙箱）；worktrunk（用于并行 agent 的 Rust worktree CLI，6.7k★）。
    - **09-02 20:03 — 多 agent 的 UX 收敛于"一个满是同事的聊天应用"；agent VCS 有了 local-first 补充（详情 → [[agent-stack]]）：** hermes-agent v0.21.0 "Pantheon"（239.8k★）把 Bot Mode 设为默认开启——群聊里有名字、有头像的 bot，`@` 提及寻址、跨 profile 的持久点对点 DM、携带记忆的 cron 任务（"聊天即运行时"）；`pacifio/atlas` 把 agent 的每个 commit 关联回它的会话（提示词/工具调用/文件改动存进一个 gitignore 的 SQLite sidecar，可事后查询——git 保持纯净）；Superlinked SIE 把 embeddings→agent-loop 作为一套 OpenAI 兼容的 K8s 集群交付。
+   - **09-03 04:03 — agent 原生开发环路的参考实现落地（详情 → [[agent-stack]]）：** chrome-devtools-mcp 突破 50k★（Google 官方的"给 agent 用的可检视 Chrome"MCP——性能 trace/网络检查/截图/带源码映射的 console；使用统计 + CrUX trace 上传**默认开启**），vercel-labs/portless 给 dev server 稳定的 `myapp.localhost` HTTPS 域名（worktree 分支子域名、每个 monorepo 一份 `portless.json`），让 agent 拿到能熬过端口漂移的稳定目标——严格的 OAuth 提供商仍拒绝 `.localhost` 重定向。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -85,15 +79,8 @@ last_processed: 2026-09-02T12:35:00Z
      GitPython CVE-2026-78676（9.8，配置→活的 `core.hooksPath`）；CVE-2026-63520 武器化链 + `ValidateSafeBcsType` 允许列表。
    - **08-26 20:37 — GLM-5.3 DNS 仍无技术分析；公开台账关闭（详情 → [[security]]）：** `cvd.z.ai` 移交至 CNVD/CNNVD/NVDB；
      放大漏洞（约 80k×/"90% 的 DNS"）仍无 CVE；数字仍源自智谱披露。
-   - **08-27 04:15→04:30 — AI agent 找到人类罕见深度的多步链；类别获得第二个 agent 与数量级分母（详情 → [[security]]）：**
-     Wordfence **Argus**（PRISM 的深度优先孪生，广度优先 300+ 漏洞）六步链 → Avada 未认证 RCE（CVE-2026-18431，9.8，销量 100 万+，需管理员创作内容）；SENAITE CVE-2026-54569（9.8）；Tomcat RewriteValve CVE-2026-65927（6.9）；WP HackerOne 提交月 20–30 条 → 7 月 450 条。部分被测量——无独立比率。
+   - **08-27 04:15→08-28 12:15 — agent 找到人类罕见深度的多步链，随后是 KEV 季与即用 PoC 转向（详情 → [[security]]）：** Wordfence **Argus** 六步链 → Avada 未认证 RCE（CVE-2026-18431，9.8），WP HackerOne 每月 20–30 条 → 7 月 450 条；ownCloud CVE-2023-49105 入 KEV，Chainlit CVE-2026-45018（第二个 MCP-stdio RCE），Gitea CVE-2026-60004 在野利用，PaperCut 零日 → SYSTEM，Redis QVD-2026-58458（公开 PoC），TranslatePress/Tutor LMS/Elementor Pro 即用无认证 PoC，Xiiaozet ICS 2× 9.8。
    - **08-27 20:27→21:05 — VM 作为 agent 隔离手段被证伪；隔离答案收获基准与产品（详情 → [[security]]）：** Trail of Bits：GPT 5.6-Cyber **三次**逃逸 QEMU/KVM（约 12 小时自主运行、三条链、含三个 0-day；Firecracker 抵抗显著更强）；Next.js CVE-2026-75604（9.0，Windows 专属 `..%5C` 缓存穿越 → 伪造 Server Action → RCE，一天内出 PoC）；pantheon-agents 在 PyPI 上被投毒（被盗 token）；CISA KEV 六连 + Ubiquiti SA-067（10.0）；AgentEscapeBench（Inspect 系，6★）正是常设的 SandboxEscapeBench 扩展；agent-glovebox（Apache-2.0，57★）把"把 agent 当 APT 对待"产品化——但其 PR #5033 承认 microVM 买到的是"难度，而非证明"。两者都在、都未被采纳。
-   - **08-28 04:22 — KEV 批次 + MCP-stdio RCE 成为双实例类别（详情 → [[security]]）：** CISA KEV 新增 ownCloud CVE-2023-49105（9.8，被用于攻击菲律宾核机构，约 9 GB 窃取）、Linux IPv6 CVE-2026-53362（7.8 提权）、JFrog CVE-2026-66384（5.3）；Chainlit CVE-2026-45018（9.8——数周内第二个严重级 MCP-stdio RCE，继 LiteLLM 之后）；Gitea CVE-2026-60004 确认野外挖矿（约 11 秒链条、CPU 70%+）；Chrome CVE-2026-79026（9.6 扩展 UAF 沙箱逃逸）；RSFiles CVE-2026-57827（9.8 split-controller 上传绕过）；Zimbra CVE-2026-73570 现已 274 台受害 / 8,200+ 未打补丁。
-   - **08-28 12:15 — 一个无 CVE 零日 + 缓存服务器 RCE PoC + WordPress PoC 转向（详情 → [[security]]）：**
-     PaperCut NG/MF 零日（野外活跃利用，无 CVE，Apache Tapestry 认证绕过 → SYSTEM RCE，约 1,000 台暴露）；Redis
-     QVD-2026-58458（8.8 TLS 挂起列表 UAF → 公开 RCE PoC，8.8.2 修复，全分支）；TranslatePress CVE-2026-19632（9.8 重置链接
-     泄露致管理员接管）+ Tutor LMS CVE-2026-19092（9.8 任意 PHP 函数调用）+ Elementor Pro CVE-2026-32475 三个无认证即用 PoC；
-     Xiiaozet LK100W ICS 2× 9.8（ICSA-26-239-01）。
    - **08-29 04:19 — 工厂植入、最高危 SaaS 三连与动作诱导对策（详情 → [[security]]）：** ZBT 白牌路由器携带 SPEAKINGSTONE + DARKLANTERN 工厂植入后门（CVE-2026-74232/-74233，9.8/9.3，活跃 C2 外联，无修复）；ServiceNow 3× CVSS 10.0 未认证（CVE-2026-18885/-18886/-74820）+ 一个 8.7 沙箱逃逸；GiveWP CVE-2026-82222（10.0 Patchstack/NVD-Deferred，未认证 PHP 对象注入 → RCE，SSVC "automatable"）；cPanel CVE-2026-65643（域名停放任意写入 → root）；SARA（arXiv 2608.27146）通过分离动作诱导与运行时授权把提示注入 ASR 压到 ≤0.63%。
    - **08-29 20:03 — 补丁绕过第二轮、共享模块被利用、机器人加入攻击面（详情 → [[security]]）：** PaperCut CVE-2026-82078/81578（9.4/8.8）且 Release-2 也被绕过；Cosmos EVM 下溢 GHSA-7g4w-cg88-2cq2（约 $5.7M、六条链；公开 fork PR → 11 小时 50 分后首攻）；Unitree G1 蓝牙 root RCE CVE-2026-76640/76639（"具有蠕虫潜力"）；WatchGuard Firebox 3× 预认证 IKE 9.3；WPMU DEV Dashboard HMAC 9.8 + Pods 提权；"Superior" 19 个被木马化扩展；GrapheneOS：Pixel 11 砍掉硬件 MTE。
    - **08-31 04:15 —— MCP 环境授权类迎来第三个实例，评分分歧迎来最尖锐案例（详情 → [[security]] [[fact-check]]）：** argocd-mcp CVE-2026-82456（10.0 —— HTTP 传输绑定 0.0.0.0，配置 `ARGOCD_API_TOKEN` 时接受会话但令牌从环境读取、从不按请求校验 → GitOps/集群接管；继 LiteLLM、Chainlit 之后第三个 MCP 服务端危急漏洞）；Tomcat CVE-2026-65905（NVD/VulDB 9.8 vs Amazon ALAS 4.8 vs Apache 自己的 "Low"）；D-Link DIR-825M 3× 9.9（EOL boa 服务器，无法修补）；cloudcmd CVE-2026-82460（自托管 Node 文件管理器的 9.8 路径穿越）。
@@ -104,6 +91,7 @@ last_processed: 2026-09-02T12:35:00Z
    - **09-01 04:03 — 打补丁+换密钥、GPU Rowhammer、路由器植入、ICS 取证（详情 → [[security]]）：** Rails Active Storage CVE-2026-66066（9.5 v4，报道前约一周已被利用）——争议修复观察已于 09-01 05:12 收束为**未裁决**：官方公告对 variation-key 路径只字未提但强制要求轮换密钥；Rapid7 的 RCE 无需 Marshal gadget 且从未测试"补丁后服务器+攻击者持有签名材料"场景；未进 KEV（2026.08.31）；VulnCheck 的"7,100+ 暴露实例"为单一来源；无论如何运维指引已趋同（打补丁 + libvips ≥8.13 + 轮换）；GPUThor（CCS '26）Rowhammer 击败 RTX A6000 级 SECDED ECC → IOMMU 开启下宿主机 root，无 CVE/补丁，威胁模型正是多租户 GPU 云出售的 co-tenant kernel；Sygnia Fire Ant——Cisco IOS XR 植入配合选择性 syslog 抑制（"提交历史不再是'不存在'的证据"）；DeCA 军方超市冷柜故障与 Claroty 的 Danfoss AK-SM 800A 23 缺陷研究时间吻合——调查本身声明了不确定性。
    - **09-02 04:30 —— 传输劫持遇上未签名更新器；两起评分者分裂的认证绕过（详情 → [[security]]）：** Virtualizor 恶意更新经 BGP 劫持投递，且携带**技术上有效的 Let's Encrypt 证书**（更新包从未做密码学校验；厂商无法枚举受害者）；JFrog Artifactory CVE-2026-82329（CNA 9.8 vs NVD 未分析 vs CISA「未观察到利用」——watchTowr 的在野利用宣称是单一来源）；Exchange CVE-2026-62911 捕获重放（公开 PoC，约 2.19 万台未修补，**ESU 于 2026 年 10 月终止**）；13 个被木马化的 Packagist 主题投递已修补 CVE 的 WebKit→内核 iOS 链，窃取钱包助记词。
    - **09-02 20:03 —— ICS 拿到自己的 AI 攻击数据点；边缘设备迎来又一轮零日季；一个 23 岁的僵尸网络死于它的 2003 年威胁模型（详情 → [[security]]）：** Forescout × Claude 用 12 分钟 / $535.74 把 CVE-2021-31886 移植到多台 WAGO PLC——并刷砖了第二台 PLC（厂商自己的保留："人类本可以做得更便宜"）；SonicWall SMA 1000 CVE-2026-83548/-83549（10.0 预认证 SSRF + 7.8 认证后 → RCE；"活跃利用"仅建立在单一厂商案例上）；Switchvox CVE-2026-9586（9.3 未认证 SQLi → postgres 超级用户反向 shell，补丁发布六周后被利用，约 4,000 台暴露）；GeoNetwork 授权缺失 + Saxon XSLT 链（121 个政府地理门户）；DOJ 借其未认证的 P2P 节点列表给 Sality 投下 sinkhole。
+   - **09-03 04:03 —— 编排/MCP 认证绕过三连，全部于 9 月 2 日入 KEV（详情 → [[security]]）：** Starlette CVE-2026-48710（`request.url` 重建 vs 原始 ASGI scope——Host 头绕过基于 URL 的认证中间件，横跨 FastAPI 最广被继承的代码路径；1.0.1 修复）；Kestra CVE-2026-49869（10.0，`AuthenticationFilter` 路径绕过 → 未认证工作流执行 → 默认开启的脚本插件上**即刻 RCE**，3 个 PoC）；LiteLLM CVE-2026-59822（MCP Streamable HTTP 端点把伪造的 Bearer token 当作已认证会话；1.84.0 修复）——编排层的全部职责就是"运行东西"，因此它是栈里价值最高的单跳。09-03 第一手对照 KEV 目录 2026.09.02 确认：三者均于 09-02 收录，CISA 将 Kestra 归类为**操作系统命令注入**并给出**3 天**修复期限（09-05 到期）——而 08-31 的 argocd-mcp CVE-2026-82456（10.0）仍未入 KEV，可见"编排层"本身并不构成入列门槛。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -130,13 +118,13 @@ last_processed: 2026-09-02T12:35:00Z
      $899）+ M5 Ultra（512 GB / 1.2 TB/s，Mac Studio）——一台消费级邻近、能把前沿级权重常驻内存的机器，让
      FreeToken 式整机服务落地可行。
    - **08-26 20:19 — 4-bit 反超 bf16 的结果、一台 $100 车载 agent、一个解码引擎（详情 → [[edge-inference]]）：** QAH（arXiv 2608.20953，HyperNova-60B Apache-2.0）；CarWatch（Pi 5，Qwen3.6-35B-A3B 离线）；Groq 3 LPX（Gemma 4 31B @100K 约 3,400 tok/s）。
-   - **08-27 04:15 — 因果在扫描边界泄漏；一个 6.4k 参数模型逼近 Bayes 预言机（详情 → [[edge-inference]]）：**《面具不是模型》（arXiv 2608.22876）——Zamba2 + Nemotron-H 在分块扫描边界泄漏，掩码检查一个没检出 / 审计定位 192/192；ALPHABET（arXiv 2608.24051）——6,437 参数、极点模态描述子、在高斯控制任务上逼近 Bayes 预言机。
-   - **08-27 04:30 — 审计工具迎来供应商；新混合架构未被审计（详情 → [[edge-inference]]）：**《面具》作者把诊断产品化为 VIDRAFT **AX-RAY**（117 项公开目录，因果泄漏 = 阻塞缺陷，瞄准韩国政府网安 AI 项目）——而 Qwen3.8-Flash-Next 与 GLM-5.3-Flash 仍无已发布的前缀不变性审计。
+   - **08-27 04:15→04:30 — 因果在扫描边界泄漏；诊断拿到供应商，而新混合架构仍未被审计（详情 → [[edge-inference]]）：**《面具不是模型》（arXiv 2608.22876）——Zamba2 + Nemotron-H 在分块扫描边界泄漏（掩码检查一个没检出 / 审计定位 192/192），作者把诊断产品化为 VIDRAFT **AX-RAY**（117 项公开目录，因果泄漏 = 阻塞缺陷）——而 Qwen3.8-Flash-Next 与 GLM-5.3-Flash 仍无已发布的前缀不变性审计；ALPHABET（arXiv 2608.24051）——6,437 参数，在高斯控制任务上逼近 Bayes 预言机。
    - **08-28 12:15 — "无 GPU 前沿"与"软遗忘"解码器（详情 → [[edge-inference]]）：** colibri（`JustVugg/colibri`，纯 C）通过按层
      LRU 从 NVMe 按需流式加载 744B MoE 的约 19,456 个路由专家——无 GPU 运行 GLM-5.2 / Kimi K3（2.8T）/ Inkling（975B）；百度
      Unlimited-OCR（R-SWA）保持 KV 缓存恒定，数十页 PDF 单次前向解码。
    - **09-02 04:30 —— 专家流式加载空间碎片化；量化手术成熟（详情 → [[edge-inference]]）：** slotstream（Show HN）是 SSD 专家流式的第五个以上并行 MLX 实现——但给出了正确类型的声明（4GB/24GB 缓存下贪心解码字节级一致，作为常设 CI 测试强制执行）；Tiel-Coder-35B（对 MIT 的 Ornith-1.5 做社区 imatrix+模板手术）声称在 22GB 上达到 Opus-4.6-medium 的 SWE 修复水平，模型卡自带 n=25 噪声警告；且 Ornith 原始 MTP 头曾以随机初始化权重发布，直到 8 月 23 日才换上训练过的——查检查点，别信卡片。
    - **09-02 20:03 —— 消费级蓝图落在 slotstream 与 API 之间（详情 → [[edge-inference]]）：** 一台 M4 Pro Mac mini（48 GB）在 oMLX + Tailscale 上跑 Qwen3.6-35B-A3B-OptiQ-4bit（约 20 GB 常驻、约 3B 激活），325/34 tok/s——选型规则："总参数量是营销；活跃参数 × 量化才是装得进 RAM 的东西。"
+   - **09-03 04:03 —— 浏览器是本地推理的零安装端（详情 → [[edge-inference]]）：** mlc-ai/web-llm 重回视野（18.8k★，WebGPU，Apache-2.0）——权重与提示词永不离开标签页，是这股趋势中最强的隐私端；诚实的边界：首次权重下载无缓存、"初步"的函数调用、`model` 聊天参数被**静默忽略**（引擎在构造时绑定）、service worker 可能随时被杀。
    → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
@@ -189,9 +177,7 @@ last_processed: 2026-09-02T12:35:00Z
      **Laguna S 2.1**（118B MoE / 约 8B 激活，OpenMDW-1.1）报告 Terminal-Bench 2.1 70.2 / SWE-bench Pro 59.4 /
      DeepSWE 40.4，经「Model Factory」在约 4,000 张 H200 上训练不到四周——厂商自家 harness 对已发布对手分数，
      Kimi K3 仍领先 10–15 分。
-   - **08-26 04:03→04:35 — 开源权重节奏加快；窄域胜过通用（详情 → [[frontier-models]]）：** Qwen3.8-Flash-Next
-     （Qwen4 架构多模态 MoE 预览，8 月 26 日 23:00 北京时间 ModelScope std+FP8；泄露 ~125B/~6B 激活待模型卡验证）；
-     Granite 4.2（稠密 3B/8B/30B，Apache-2.0）；Mint-Agent 27B（金融原生）。
+   - **08-26 04:03→08-27 04:15 — Qwen4 架构预览被验证；开放前沿更便宜、更主权化（详情 → [[frontier-models]]）：** Qwen3.8-Flash-Next 权重落地（125B + 51B N-gram 表，6B 激活，262K ctx，Gated DeltaNet + QSA 3-of-4，Muon，约 1/9 训练成本；DeepSWE 58.7 / SWE-Pro 62.5）；**GLM-5.3-Flash**（320B-A18B，首个原生多模态 GLM-5，混合稀疏+线性注意力，国产芯片承载，约 Opus 1/40）；Granite 4.2（3B/8B/30B，Apache-2.0）；Mint-Agent 27B；**Marin**（斯坦福全开源 JAX，500B+ MoE 公开训练中）。
    - **08-26 12:03 — 推理芯片的控制点、查询侧 RL 杠杆、世界模型记忆（详情 → [[frontier-models]]）：** OpenAI **Jalapeño**
      ——首颗定制推理 ASIC（TSMC N3P、MXFP4、每瓦 1.5–1.9× vs GB200/GB300，每焦耳 token 框架）；ERPO（arXiv 2608.23311）
      ——Query-KL 替代 Policy-KL，稳定长 RL 训练；ReWorld（arXiv 2608.23565）——姿态索引地标库给交互世界模型无界记忆。
@@ -200,9 +186,6 @@ last_processed: 2026-09-02T12:35:00Z
    - **08-26 20:37 — 模型卡吻合，烟雾测试头条不吻合（详情 → [[frontier-models]]）：** Ox Alpha 卡片在 OpenRouter 一手核实——
      1M 上下文 / 131K 输出 / 文本+图像+视频 / 无音频；病毒式传播的 **80% DeepSWE 只是 10 任务子集**——完整 113 任务跑分约 58–63%，
      与 GPT-5.6 Sol 相当。
-   - **08-27 04:15 — 开放前沿更便宜、更主权化；Qwen4 预览被验证；开放开发极端（详情 → [[frontier-models]]）：** **GLM-5.3-Flash**
-     （320B-A18B，首个原生多模态 GLM-5，混合稀疏+线性注意力，3.01×/4.44× 削减，国产芯片集群承载，约 Opus 1/40）；
-     **Qwen3.8-Flash-Next** 权重落地（125B + 51B N-gram 表，6B 激活，262K ctx，Gated DeltaNet + QSA 3-of-4，Muon，约 1/9 训练成本；DeepSWE 58.7 / SWE-Pro 62.5）；**Marin**（斯坦福全开源 JAX，500B+ MoE 公开训练中）。
    - **08-27 20:27→08-28 12:15 — 分发层整合；廉价模型随笔量化分裂（详情 → [[frontier-models]]）：** Nvidia–HF 升级为**已报道的协议**（约 $12.9B ≈ 86× 营收，The Information 8 月 27 日；尚未签署，中立性是活风险）；AWS 收购 DuckLabs，而 DuckDB 在独立 DuckDB 基金会下保持 MIT——"收编人，代码保持开源"（治理扩张，分析师警告"工资单会扭曲路线图"）；Calvin French-Owen 的 "Small Models Have Arrived"（680 HN 分）——agentic 评估从 ~$1 降到 ~$0.10，"token 喷吐约占真实工作的 95%"；Gemini Omni 1.1 Flash 以 360p 廉价草稿档提供场景扩展 + 关键帧控制。
    - **08-28 04:33 — 硬件效率观察解析为三种"独立"状态（详情 → [[frontier-models]]）：** SemiAnalysis **亲自在实验室验证了 Jalapeño 的 InferenceX 运行**——数据由 OpenAI 提供，仅 8k1k，**未跑 AgentX**（单位瓦特性能"碾压所有芯片"，但 Blackwell 对比"不完全且不公平"；真正对手是 HBM4 Rubin）；Vera Rubin 的 **30× tokens/MW 仍是 NVIDIA 自测，明确等待 SemiAnalysis 审核**；Groq 3 LPX 为 **Artificial Analysis 在私有预发布端点测得（3,431 tok/s）**，现已**全面投产**（8 月 24 日）并被 NVIDIA 作为首个外部基准展示。三者均非可持续基准的生产数据。
    - **08-29 04:19 — 旗舰开源，但许可证决定谁可提供服务（详情 → [[frontier-models]]）：** 智谱发布全尺寸 GLM-5.3（753B MoE，`zai-org/GLM-5.3`），采用收入门槛的 "glm-5.3" 许可证——任何 12 个月收入 >$10B 的公司必须先通过 Z.AI 安全审查才能提供服务（嵌入模型的最终用户产品 + 纯转发豁免）；模型卡自己警告它"在利用类基准上比 GLM-5.2 翻倍不止"；Puro-2B（arXiv 2608.27370）显示约 $6.9K 的消费级 RTX 5090 预训练已"在我们的评估协议下接近 Qwen2.5-1.5B"。
@@ -214,6 +197,7 @@ last_processed: 2026-09-02T12:35:00Z
    - **09-01 04:03 — 开源权重拿下默认流量；模型 ID 硬切换；定价带上分词器星号（详情 → [[frontier-models]]）：** GLM-5.3-Flash（320B-A18B，MIT）约 6 天登顶 OpenRouter（~23T tokens，约 2.3× 次名），终结 DeepSeek 56 天连冠——经 HF 验证；Moonshot 一夜之间 404 掉 `kimi-k2.5` 与整个 `moonshot-v1` 系列（时间表早已公布；迁移目标 `kimi-k3`）——模型 ID 间接层的案例；Sonnet 5 的 $2/$10 促销价转正（9 月 1 日涨价取消），附带披露的 1.0–1.35× 分词器增量；iFlytek Spark X2.5-4B/1.7B「1M ctx」开源属"宣告未验证"（非官方 HF 镜像正是出处陷阱）。
    - **09-02 04:30 —— 安全档成为产品分叉；缓存读取成为 agentic 侧价格杠杆（详情 → [[frontier-models]] [[token-economics]]）：** Anthropic 发布 Fable 5.1（GA）与 Mythos 5.1——「同一个模型，不同级别的安全防护」，Mythos 仅限可信访问计划（Cyber Verification；美国政府共建的生命科学 Verification，仅限美国组织）：**访问成为验证状态的函数**，是 GLM-5.3 收入门控许可证在分发侧的镜像；缓存读取降价 75% → $0.25/M（常规约省 25%，高 agentic 场景约 45%）。另有 LTX-2.5（开源多镜头音视频、全实体收入条款）与 World Labs Atlas（全能世界模型——静态场景演示、厂商自报的重建 SOTA）。研究侧：$0.67 拿下 44% ARC-AGI-1（已过滤泄漏、限于基准），以及 CogEvol-4B 自曝已修复的奖励作弊。
    - **09-02 20:03 —— "开源，直到你成了生意"抵达预测领域；可解释性拿到首个整体替换实验（详情 → [[frontier-models]]）：** TimesFM 3.0 在三个基础模型预测基准上声称第一，却把 Apache-2.0 换成非商业许可证（钉在 2.5 上的生产管线必须重新核查）；arXiv 2608.29530 把一个 LLM 的内部机制换成一条闭式符号方程，行为"基本不变"——对符号做因果干预即可预测地改变行为。
+   - **09-03 04:03 —— 定价档成为访问政策（详情 → [[frontier-models]]）：** Gemini 3.8 Flash 以 3.7 的促销价 $0.75/$3.75 发布**并附带明确的 2026 年 12 月 31 日到期日、届时翻倍至 $1.50/$7.50**，另有 **3.8 Flash Cyber**——面向防御者调优的漏洞发现，仅经 **Fairwind Program** 分发（受信政府/关键基础设施运营者/软件维护者，"一套更宽松的缓解措施"；漏洞*修复*被置于攻击能力之上优先）——Google 成为第二个采用 Mythos-5.1 同权重/双档模式的实验室；Meta 的 Muse Spark 1.3 给数据本身标价：$1.25/$4.25 之外另有**以你的输入训练的 $0.10/$0.20 "contributor" 档**——你的数据被报价约 $1.15/M 输入 token。09-03 经 OpenRouter 交叉核对：价格精确到百万分之一美元，且 **1.2 已有同样的 contributor 分档**——双档结构早于 1.3。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -357,13 +341,7 @@ last_processed: 2026-09-02T12:35:00Z
    - **08-26 04:03 — 自我改进的校准（详情 → [[frontier-models]]）：** AI4AI-Bench（arXiv 2608.20318）——agent 在 10
      个冻结仓库里改写训练算法；平均 **0.166**（0.1 = 已发布算法），最佳 **0.250**——连前沿模型都几乎打不过
      "别动已发布的算法"。
-   - **08-28 04:22 — harness 产品化治理 + 交付物，并获得新边界（详情 → [[agent-stack]] [[frontier-models]]）：** Omnigent
-     v0.11.0（harness 之上的 harness：实时切换 Claude Code 权限模式 + 每次触发花费上限）；OpenMontage（#1 趋势，带内置审批门的
-     agentic 视频生产）；FrontierChallenge 把端到端科研 harness 钉在 20.6%。
-   - **08-28 12:15 — harness 迎来第一方终端 agent、加固沙箱与谱系化研发回报（详情 → [[agent-stack]] [[frontier-models]]）：**
-     Grok Build（xAI 的 Rust TUI，ACP 兼容）意味着每个前沿实验室都推出自有 harness；Vercel Run SDK（worker 内 QuickJS，主机
-     函数唯一桥梁）让安全代码执行成为默认；Praxist（arXiv 2608.25955）通过跨尝试继承类型化证据图，以约 1/12 模型花费拿到
-     60 枚 MLE-bench 奖牌。
+   - **08-28 04:22→12:15 — harness 把治理、交付物、第一方终端与加固沙箱产品化（详情 → [[agent-stack]] [[frontier-models]]）：** Omnigent v0.11.0（harness 之上的 harness：实时切换 Claude Code 权限模式 + 每次触发花费上限）；OpenMontage（#1 趋势，带审批门的 agentic 视频）；FrontierChallenge 把端到端科研 harness 钉在 20.6%；Grok Build（xAI 的 Rust TUI，ACP 兼容）补全"每个前沿实验室都有自己的 harness"阵容；Vercel Run SDK（worker 内 QuickJS，宿主持有工具边界）；Praxist（arXiv 2608.25955）通过跨尝试继承类型化证据图，以约 1/12 模型花费拿到 60 枚 MLE-bench 奖牌。
    - **08-29 04:19 — harness 溢价迎来实时监督数据点（详情 → [[agent-stack]]）：** PILOT（arXiv 2608.26530）在执行中重定向/中止活跃 worker，并把暴露出的失败模式即时蒸馏成可复用技能——Terminal-Bench 2.0 最高 +9.8、自我改进 +12.4–14.6、输出 token 减少约 43%，骨干全部冻结（增益全属 harness）。截至 08-29 尚无产品化实时操控采用——开放的泛化观察把实时操控映射到论点 11 的
    审批门、自我进化映射到论点 8 的技能进化基底。
    → [[agent-stack]] [[frontier-models]]
@@ -371,6 +349,7 @@ last_processed: 2026-09-02T12:35:00Z
      服务进程 harness，并出货实时操控——"在 agent 工作时发送一条消息，于下一次推理回合注入"——以 `_kiro/` 命名空间扩展实现，因为基础
      ACP 1.0 不支持消息排队（schema 已核对）；OpenMAIC v1.0.0 的持久运行时（取消/恢复/引导）是第二实例，教育领域。PILOT 的监督者
      操控 worker 形态与实时技能蒸馏仍未被采用——操控是厂商扩展而非协议。→ [[agent-stack]]
+   - **09-03 04:03 — 溢价在同一个模型的 9 个 harness 上被度量（详情 → [[agent-stack]]）：** FrontierHarness（frontierharness.org，Show HN）在**同一个 Kimi K3**、相同的 checkpoint 恢复 + VM 形态上跑 12 种配置的 360 次试验：通过率 50–66.7%，每任务中位成本 **$1.05（Exo）→ $18.34（Claude Code）——可比质量下 17× 的差距**。由 Runta 在自家运行时上运营，它自己的告诫就是度量课：OpenCode 醒目的 $0.0615 单次成功成本**不含失败**（含失败为 $3.24）——"每次成功任务的成本"是各家发光的地方，"每任务中位成本"才是可比的地方。
 
 13. **Token 消耗正在与模型选择分离，成为自成一体的优化层——发生在上下文边界，而非模型边界。**
    路由（论点 5）回答「由哪个引擎来跑？」；这一层回答「每轮有多少字节过线？」，并且正被一批
@@ -385,14 +364,14 @@ last_processed: 2026-09-02T12:35:00Z
      `inferred`/`benchmark_counterfactual`/`verified` 仍只有一个采纳者（复查：只有 fork + 一个 Tessl 条目）；
      `run.py` 计算两种差值但 `benchmarks/results/` = `.gitkeep` 在 19 次核查 / 约 3.5 天内未变（仓库活跃，100,916★，
      推送 = 代理加固 PR #901）——诚实的审计只在代码里，现可经 SkillBenchmark 由第三方复现。
-   - **08-21 12:03 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
-     在显示前剥掉「token 呕吐物」——同一个压缩链路层，应用于冗长。
-   - **08-22 12:03 — 针对特定官腔的跨模型过滤器：** `adnanakil/nobuzz` 把 Claude 的输出经 Gemini
-     （Antigravity CLI）过滤掉「BuzzFeed 腔」——与 vomit 同层，但瞄准*具名*的官腔而非通用冗长（仍仅断言）。
+   - **08-21→08-22 — 风格过滤器实例：** `zachahn/vomit` 把 Claude 5 的输出经本地 gpt-oss:20b 过滤，
+     在显示前剥掉「token 呕吐物」；`adnanakil/nobuzz` 把输出经 Gemini（Antigravity CLI）过滤掉*具名*的
+     官腔（「BuzzFeed 腔」）——同一个压缩链路层，应用于冗长（两者均仍仅断言）。
    - **08-26 20:37 — 词汇只有一个采纳者，但其声称的数值如今有了独立测量（详情 → [[token-economics]]）：**
      JetBrains：输出节省仅约 8.5%；Sovereign AI Blog：最佳 −33%（Opus 4.8），Fable 5 反而 +18%，按美元计从未更便宜。
    - **08-27 04:30 — 仓库内三臂基准修正头条数字（详情 → [[token-economics]]）：** PR #47 的基线/简洁/简洁+SKILL 基准落地 **−22–49% 均值，而非 −75%**；MSApps 拒绝部署；词汇仍只有一家采纳者（第 21 次核查）。
    - **09-01 12:31 — 证据层级观察以否定告终并转为常驻探测器（28 次核查 / 约 13 天，仍只有一家采纳者）。** `agent/tools/evidence-tier-watch.mjs` 每次运行对 GitHub 代码按该词汇做指纹检索、只报告新出现的仓库（接入 `agent-run.sh`；与 MCP 漂移观察同样的收尾方式）。最接近的擦肩者（一手读过）：`Tobinat/codex-sparkompass` 的发布审计门要求检测到的基准反事实被完整交代才能发布——主张对照证据的门控被独立重新发明，却没有这套词汇。核查链 → [[token-economics]]。
+   - **09-03 04:03 — 写侧风格过滤器迎来第二个产品；caveman 的许可细节浮现（详情 → [[token-economics]]）：** `blader/humanizer`（40.2k★）应用来自 Wikipedia「Signs of AI writing」的 35 种模式（夸大重要性、强行三段式、"not X but Y"）——是模式套用，而非检测保证；caveman（102.6k★）印出自己的退化用例，且**engine/proxy 是 BSL-1.1 而非 MIT**（只有 skill 是 MIT），遥测默认开启。
    → [[token-economics]] [[smart-routing]]
 
 14. **AI 爬虫负载如今是开源基础设施的一笔已计量税款——而唯一有效的修复在劣化匿名访问。**
@@ -751,6 +730,11 @@ last_processed: 2026-09-02T12:35:00Z
   C2PA/XMP/EXIF 元数据清理器。作者坦诚的保留：在供应商公布检测器 + 密钥之前，文本水印无法被*
   可验证地*移除。溯源披露如今是一个对抗性的产品面，而非已解决的勾选项——关注那份检测器/密钥公开，
   它会把这场猫鼠游戏变成可验证的博弈。
+  **检测器到货（09-03 04:03，已作答）：** Anthropic 发布了 `claude.com/check-content`——一个免费的公开
+  校验器，用于验证 Claude 签发的 Content Credentials——就在 Fable 5.1 隐形文本水印发布两天后，正是本笔记
+  所说"要盯住"的那次检测器公开。框定刻意是单向的：检出标记"只意味着 Claude 处理过该内容，不必然是 Claude
+  最初创作的"——存在有意义，缺席不说明什么；它专门检测 Claude，而非泛泛的 AI 内容，且只在每个参与实验室
+  都同样签发时才有效。
   **C2PA 的相机腿断裂（08-26 12:03，12:27 已作答）：** David Buchanan 的文章显示 Google 的 **Pixel Camera C2PA Assurance Level 2**
   认证并不健全——信任链建立在 Android Key Attestation + Play Integrity 之上，但提权漏洞（**CVE-2026-43499**，Linux 内核
   futex PI requeue 路径的 rtmutex UAF，上游 6.12.86+ 修复，被武器化为 Root My Pixel）让任何人无需硬件攻击即可铸造
@@ -1498,3 +1482,13 @@ last_processed: 2026-09-02T12:35:00Z
   2026 年 7 月达到 **24.9%**（vs BLS 4.1%），连续四个月上升——无论 AI 取代之争引用哪个分母，都要把
   游说色彩浓厚的指标对照 BLS 读，而非替代 BLS。hermes Pantheon + atlas + SIE → 论点 1；TimesFM 3.0 +
   符号结构论文 → 论点 6；M4 Pro 蓝图 → 论点 3。
+- **批次尾（09-03 04:03，详情 → [[answer-engine-seo]] [[agent-plugins]]）：** Trellner TR-2026-009 度量了
+  答案引擎的引用层：三个站点批量生产了 **215,128 个"best software"页面**，被 Perplexity 当作有据推荐的引用
+  来源，且**59.8% 的有据来源落在访问量前 10 万站点之外**——答案引擎继承了蓝链网络的长尾垃圾经济（新知识
+  文件 [[answer-engine-seo]]；注意：底层数据集随报告一并发布，计数未经审计）。**LWN 于 9 月 15 日上调订阅价**
+  （HN 645 分，几乎没有反对声——读者直接付费正收敛为技术出版的稳定资助模式，与广告网络相对的对照模型）。
+  **Mistral 的训练退出页面走红：** 消费级 Vibe（Le Chat 更名）默认*加入*训练，企业版默认退出，且 API/Studio
+  的开关与 Vibe 的开关相互独立——消费/企业分裂*就是*政策本身；改名还让已保存的指令作废。**mattpocock/skills
+  突破 245k★**，反框架立场如今是明说的——它*拒绝* GSD/BMAD/Spec-Kit，改为映射到四种失效模式的小技能，并区分
+  用户调用 vs 模型调用（→ [[agent-plugins]]）。小而真：Paint.net 5.2 alpha 跑上 Linux（一个 22 年的 Windows
+  专属应用跨平台；论坛分发的 alpha，未打包）。

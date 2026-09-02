@@ -1933,3 +1933,33 @@ The batch's security stream, read first-hand at the primary sources where reacha
 - Caveats stated plainly: machines stay infected — "existing malware already installed on those systems
   remains active"; only *new* payload delivery is cut (check UDP to lighthouse 188.166.101.148). Disruption
   ≠ remediation for the still-carrying SOHO population.
+
+## The auth-bypass trio — Starlette, Kestra, LiteLLM, all KEV'd Sep 2 (09-03)
+
+- **Starlette CVE-2026-48710** (CWE-444 request/response smuggling; fixed 1.0.1): the reconstruction of
+  `request.url` disagrees with the raw ASGI `scope`, so middleware and endpoints that make security decisions
+  on the reconstructed URL — host allowlists, URL-based auth checks — can be bypassed by an attacker-controlled
+  Host header. Mitigation: authorize on the raw scope path or route/function identity, never a derived
+  convenience attribute. Score pending NVD analysis at write time; the maintainer's own "a maintainer's
+  perspective" writeup is the most-shared context. FastAPI's reach makes this one of the most widely
+  inherited code paths in Python web services.
+- **Kestra CVE-2026-49869** (CVSS 10.0, KEV Sep 2, 3 public PoCs; fixed 1.0.45/1.3.21): `AuthenticationFilter`
+  uses `request.getPath()` in a bypassable way → an unauthenticated remote attacker creates and executes
+  arbitrary workflows → **immediate code execution**, because script-execution plugins ship **enabled by
+  default**. The third orchestration/agent-layer auth-bypass→trivial-RCE in a month (argocd-mcp, LiteLLM,
+  now Kestra): the orchestration tier is becoming the highest-value single hop in the stack because its
+  whole job is running things.
+- **LiteLLM CVE-2026-59822** (KEV Sep 2; fixed 1.84.0): the MCP Streamable HTTP endpoint accepted a fabricated
+  Authorization header and established an *authenticated* MCP session with the arbitrary token — access to
+  whatever tools that session exposes. The second MCP-transport auth flaw after Chainlit's stdio RCE (08-28);
+  the blast radius is every downstream service that assumed "reached LiteLLM" means "authenticated."
+- The class note: all three are a *derived convenience value trusted at the framework boundary* —
+  `request.url`, `getPath()`, the Bearer string — where the attacker controls the inputs to the derivation.
+  Same grep-able instinct as existence-not-ownership authz (Nezha) and validation-to-use (LXD).
+- **KEV-confirmed first-hand (09-03, catalog 2026.09.02, 1,694 entries):** all three added 2026-09-02.
+  CISA's own records add scorer/classification detail the coverage lacked — Starlette is filed under
+  vendor **"Kludex"** (the maintainer org) as HTTP Request/Response Smuggling, due 09-16; **Kestra as
+  OS Command Injection with a 3-day remediation deadline (due 09-05)** — the shortest window the catalog
+  assigns, consistent with CISA treating workflow-execution-as-RCE as immediately weaponizable; LiteLLM
+  as Improper Authentication, due 09-16. Notably, 08-31's argocd-mcp CVE-2026-82456 (10.0, same
+  ambient-auth class) is **not** in KEV — orchestration-tier status alone doesn't make the KEV cut.

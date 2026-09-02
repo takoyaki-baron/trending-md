@@ -531,3 +531,18 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
 - 诚实的告诫来自 README 自己：CC BY-NC 4.0（禁商用）、控制可用性随安装渠道而异、对 ARS 本身的语料级评估
   "仍是未来工作"——门控只在 20 元组的金标集上校准过。主张级验证是每个研究 agent 缺失的原语；这是已部署的最大
   尝试，而 FNR/FPR 验收阈值已比多数"AI 科学家"工具的测量多（对照上文 FrontierChallenge 75.5% 的虚假完成率）。
+
+## mattpocock/skills 突破 245k★——反框架立场被明说（09-03）
+
+- `mattpocock/skills`（MIT，245.1k★，单日 +1,272）如今写明了它*拒绝*什么：接管整流程的框架（GSD、BMAD、
+  Spec-Kit），理由是"接管整个流程、从而夺走用户的控制权"。取而代之：映射到四种失效模式的小型可组合技能
+  ——agent 没做你想要的（`/grill-me`、`/grill-with-docs`）、太啰嗦（`CONTEXT.md` 里的共享领域语言）、代码
+  跑不通（`/tdd`、`/diagnosing-bugs`）、"我们造了个泥球"（`/to-spec`、`/improve-codebase-architecture`）。
+- 值得偷走的设计区分：**用户调用 vs 模型调用**——编排类技能只在被键入时运行，而 `code-review`、
+  `diagnosing-bugs` 这类纪律是 agent 自己会去够的东西。两条刻意互斥的安装路径：自动更新的 Claude Code
+  插件，或 `npx skills@latest add mattpocock/skills` 换取可编辑的本地文件。背后是约 6 万订阅者的 newsletter
+  （评估缺口仓库从未有过的分发渠道）。
+- "产品 vs 库"之争关于 agent 工作流的一个数据点：最大的 agent 工程实践聚合之一明确反框架——与 ponytail
+  相邻（121k★，其全部职责就是做减法，且公开修正过自己的头条数字，如今 README 里还有诚实的让步：在已经
+  极简的代码上增益缩到近零、一个简洁的推理模型可能用*更多* token）。"证明它"阶段长出了"减掉它"的一翼；
+  两者仍只发布自跑基准（ponytail：12 任务、Haiku 4.5、n=4——无第三方 A/B）。
