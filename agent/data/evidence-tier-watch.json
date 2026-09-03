@@ -443,10 +443,22 @@
       "path": ".agent_plan/AI_QUANT_LEARNING_RFT_RL_FRONTIER_PLAN_2026-09-02/08_EPISODE_DATA_AND_GRADER_CONTRACTS.md",
       "html_url": "https://github.com/slept-de-night/ai_quant_platform/blob/5d2da8b2318d75ad120f46d90731db37c86395bb/.agent_plan/AI_QUANT_LEARNING_RFT_RL_FRONTIER_PLAN_2026-09-02/08_EPISODE_DATA_AND_GRADER_CONTRACTS.md",
       "found": "2026-09-02T21:11:56.296Z"
+    },
+    "Vu-Quoc-Tuan/hindsight::nocpro-chain-explain/docs/superpowers/plans/2026-09-02-counterfactual-chain-review-p0.md": {
+      "repo": "Vu-Quoc-Tuan/hindsight",
+      "path": "nocpro-chain-explain/docs/superpowers/plans/2026-09-02-counterfactual-chain-review-p0.md",
+      "html_url": "https://github.com/Vu-Quoc-Tuan/hindsight/blob/fc6d7febd320ca6544e1d62b5dfa4071ca246f76/nocpro-chain-explain/docs/superpowers/plans/2026-09-02-counterfactual-chain-review-p0.md",
+      "found": "2026-09-03T21:10:55.490Z"
+    },
+    "Vu-Quoc-Tuan/hindsight::nocpro-chain-explain/tests/test_counterfactual_mutations.py": {
+      "repo": "Vu-Quoc-Tuan/hindsight",
+      "path": "nocpro-chain-explain/tests/test_counterfactual_mutations.py",
+      "html_url": "https://github.com/Vu-Quoc-Tuan/hindsight/blob/fc6d7febd320ca6544e1d62b5dfa4071ca246f76/nocpro-chain-explain/tests/test_counterfactual_mutations.py",
+      "found": "2026-09-03T21:10:55.490Z"
     }
   },
-  "runs": 6,
+  "runs": 7,
   "first_run": "2026-09-01T04:34:31.653Z",
-  "last_run": "2026-09-02T21:11:56.296Z",
-  "last_total": 73
+  "last_run": "2026-09-03T21:10:55.490Z",
+  "last_total": 74
 }
