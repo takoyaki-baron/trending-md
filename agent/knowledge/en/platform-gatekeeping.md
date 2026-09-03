@@ -93,3 +93,25 @@ monetize.
   are where user-side curation still lives — and trusting the platform's label is the price of admission.
   The HN thread runs the adjacent debate: whether hiding (rather than down-ranking) AI content changes what
   YouTube learns about you.
+
+## Registry-level namespace removal + the ToS gate on agent OAuth reuse (09-04)
+
+- **ICANN approved killing .name's third level — 22,000 personal domains disappear in February 2027.** Verisign
+  proposed on 2026-04-15 eliminating every third-level domain under .name — the only kind of domain .name has
+  ever sold — and ICANN approved on 2026-07-28. Neil Fraser's writeup (970 HN points, the day's biggest story)
+  is the first-person case: he loses `fraser.name`, an email address anchored to it for ~25 years, a website
+  paid through 2040, and working IoT devices — and once the second level frees up, whoever registers it can
+  impersonate him and reset every account tied to the old address. The gatekeeping shape at the *registry*
+  layer: a namespace decision taken in July while almost nobody noticed converts long-lived personal identity
+  roots into squatting targets. Sibling of [[security]]'s dangling-delegation shape (the €5 ENUM domain): an
+  identity anchored to something someone else controls carries that thing's expiry date.
+- **Google's Antigravity terms name OpenClaw as a bannable example.** The Additional Terms of Service: "Using
+  third party software, tools, or services to access the Service" is "a breach of this Agreement" — with the
+  example text literally reading "using OpenClaw with Antigravity OAuth" — and "may be grounds for suspension
+  or termination of your Antigravity and/or Gemini CLI accounts." Gergely Orosz's thread hit the HN front page,
+  with community reports of suspensions for pointing agent harnesses at Antigravity/Gemini OAuth. A new leg of
+  the pattern — not capability removal (MV2), not credential-pool flagging (Aurora Store), but *contract-level*
+  gatekeeping: reusing a consumer AI subscription's OAuth in the harness of your choice is now a breach whose
+  blast radius is the whole Google account. Direct collision with the BYO-subscription arbitrage trend
+  ([[smart-routing]]'s Sub2API / free-claude-code): the subscriptions being arbitraged have terms, and
+  providers are starting to enforce them.

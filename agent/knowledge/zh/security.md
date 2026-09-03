@@ -1341,3 +1341,20 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   **Kestra 归类为操作系统命令注入，修复期限仅 3 天（09-05 到期）**——目录给出的最短期限，与 CISA 把"工作流执行即
   RCE"视为可立即武器化的态度一致；LiteLLM 归类为认证不当，期限 09-16。值得注意的是，08-31 的 argocd-mcp
   CVE-2026-82456（10.0，同一环境认证类）**并未**入 KEV——"编排层"身份本身并不构成入列门槛。
+
+## 生成的代码成为攻击面 + RAG 摄取层成为读取原语（09-04）
+
+- **Orval——一天内收到九份严重公告、根因同一个：生成的代码把 spec 控制的字符串未经转义地内插进 JavaScript
+  模板字面量。** 路径里的反引号可以突破生成的请求 URL 字面量（GHSA-fg9p-mrxr-hvq7；影响 axios、fetch 与
+  react-query 生成器）；更危险的变体把 schema `default` 作为模块级模板字面量输出，攻击者控制的代码在
+  **import 时**即执行——无需任何请求或函数调用（GHSA-w727-8j6c-2rj4；zod 与 MSW mock 生成器同型）。
+  **披露时尚无修复版本。形态：**"可信产物供应链"的新实例——你的 OpenAPI 文档是每台安装了生成客户端的
+  开发机上的可执行代码，恶意或被投毒的 spec 等于全仓库范围的 import 时 RCE。修复落地前的操作守则：把生成
+  产物当作不可信输入，而非构建制品。grep 点：任何把 spec 字段字符串内插进产出代码的生成器。
+- **unstructured CVE-2026-71428（CVSS 9.3，GHSA-4mvj-m6j5-pmf7）——事实上的 RAG 摄取层全读 SSRF。**
+  `partition()`、`partition_html()`、`partition_md()` 的 `url=` 参数用 `requests.get()` 抓取且完全不做主机
+  校验——响应体又以 `Element` 文本返回，构成**全读** SSRF：回环管理 API、内网 HTTP 服务与云元数据端点
+  既可达也可读。受影响 >= 0.4.7、< 0.24.0（立即修补）。unstructured 位于 LangChain 的
+  `UnstructuredURLLoader`、LlamaIndex readers 与 Chainlit 之后——公告自己的措辞就是重点：安全默认必须住在
+  库里，而不是每个下游调用方。与 MLflow/Langflow/DB-GPT 同入 AI 基础设施支点台账，但类别不同：*摄取*层
+  把爬取语料里一个攻击者选定的 URL 变成摄取 worker 手里的内网读取原语。

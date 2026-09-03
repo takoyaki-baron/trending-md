@@ -31,6 +31,10 @@
     {
       "repo": "DietrichGebert/ponytail",
       "why": "skills-eval + token-economics (theses 8/13): the self-benchmarking template (per-author evals, self-falsifying A/B) — watch for it adopting the shared corpus (SkillsBench/Vals) vs staying per-author"
+    },
+    {
+      "repo": "orval-labs/orval",
+      "why": "generated-code RCE class (thesis 2 / [[security]]): 17 published advisories (9 import-time RCE, published 2026-07-12), every one first_patched_version=null as of 09-04, latest v8.27.0 closes none — a fix release or advisory update surfaces here"
     }
   ]
 }

@@ -73,3 +73,20 @@ created: 2026-09-02
   Chrome 移除 MV2 杀死 uBlock 级拦截之后，平台原生的过滤表面（Safari content blocker、YouTube 自己的标签）
   就是用户侧策展仍然存活的地方——信任平台的标签是入场费。HN 讨论串延伸出相邻争论：隐藏（而非降权）AI
   内容是否会改变 YouTube 对你的认知。
+
+## 注册表层命名空间清除 + agent OAuth 复用的合同闸门（09-04）
+
+- **ICANN 批准消灭 .name 的三级域——22,000 个个人域名将于 2027 年 2 月消失。** Verisign 于 2026-04-15
+  提议废除 .name 下所有三级域名——.name 唯一卖过的域名形态——ICANN 于 2026-07-28 批准。Neil Fraser 的
+  文章（970 HN 分，当日最大新闻）是第一人称案例：他失去 `fraser.name`、锚定其上约 25 年的邮箱、一个付费
+  到 2040 年的网站、还能用的 IoT 设备——而二级一旦释放，注册它的人就能冒充他并重置绑定旧地址的所有账户。
+  这是*注册表*层的把关形态：一个 7 月做出、几乎无人注意的命名空间决定，把长寿的个人身份根变成抢注目标。
+  与 [[security]] 的悬空委托形态（€5 的 ENUM 域名）互为姊妹：锚定在别人控制的某物上的身份，继承那东西的
+  到期日。
+- **Google 的 Antigravity 条款把 OpenClaw 点名为可封禁示例。** 附加服务条款："使用第三方软件、工具或服务
+  访问本服务"即"违反本协议"——示例文字直书 "using OpenClaw with Antigravity OAuth"——并"可能构成暂停或
+  终止你的 Antigravity 和/或 Gemini CLI 账户的依据"。Gergely Orosz 的推文线程登上 HN 首页，社区已有把
+  agent harness 指向 Antigravity/Gemini OAuth 而被停权的报告。形态的新支——不是能力移除（MV2）、不是
+  凭据池标记（Aurora Store），而是*合同级*把关：把消费级 AI 订阅的 OAuth 复用进自选 harness 现在是违约，
+  爆炸半径是整个 Google 账户。与 BYO 订阅套利趋势（[[smart-routing]] 的 Sub2API / free-claude-code）正面
+  相撞：被套利的订阅带有条款，而提供商开始执行。

@@ -9,6 +9,22 @@
       "hn_title_regex": "astra(?=.*(zero.day|cve-|disclos|vulnerab|exploit|bypass|chain))"
     },
     {
+      "id": "frontier-outage-rca",
+      "why": "thesis 1 dependency risk — the 09-03 simultaneous outage. Status pages read first-hand 09-04 04:48: Anthropic ran two incidents (cause 'identified' but never named), OpenAI two (no cause), xAI one (one-line updates); no vendor published a root cause or postmortem, the 'shared Azure dependency' theory has no primary source, and Cloudflare's CTO publicly denied involvement. A postmortem landing surfaces here. NVD channel not applicable — HN fingerprint only.",
+      "nvd_keywords": [],
+      "nvd_since": "2026-09-03T00:00:00.000",
+      "hn_query": "outage",
+      "hn_title_regex": "(openai|chatgpt|codex|claude|anthropic|grok|xai|x\\.ai|gemini).*(outage|postmortem|post.mortem|root.cause|incident)"
+    },
+    {
+      "id": "name-termination",
+      "why": "thesis 15 — Verisign's elimination of every third-level .name domain (proposed 2026-04-15, ICANN-approved 2026-07-28, termination Feb 2027, ~22,000 holders). Verified 09-04: no redemption, refund, or 2LD-grandfathering path exists in the approved RSEP. Watch: a registrar response, lawsuit, ICANN reconsideration, or grandfathering policy surfacing before Feb 2027. NVD channel not applicable — HN fingerprint only.",
+      "nvd_keywords": [],
+      "nvd_since": "2026-08-28T00:00:00.000",
+      "hn_query": "domain",
+      "hn_title_regex": "\\.name.*(terminat|grandfather|refund|lawsuit|sue|icann|verisign|redeem|compensat|squatt|petition|2ld|tld)"
+    },
+    {
       "id": "minimax-m3-pro",
       "why": "thesis 6 — the rumor with a deadline (The Information via Reuters, 2026-07-08): a 2.7T-parameter 'M3 Pro' (~6× the 428B M3), Q3 launch target, planned open-source; the open question is whether 'open' means full weights or a revenue-gated license. Baseline 09-02: no release, no official announcement. NVD channel not applicable (no CVE claim) — HN fingerprint only.",
       "nvd_since": "2026-07-08T00:00:00.000",

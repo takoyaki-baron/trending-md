@@ -472,3 +472,11 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
 - Position in this file's map: the strongest *privacy* end of local inference — weights and prompts never
   leave the tab — and the zero-install extreme of the same fit-to-device trend as the M4 Pro blueprint and
   colibri's disk streaming. The trade is browser-lifecycle fragility instead of hardware sizing.
+
+- **Qwen3.8 27B on Cerebras at ~1,500 tok/s (Sep 3, HN 250 pts).** Wafer-scale serving of an open-weights
+  Apache-2.0 dense 27B (released by Qwen in August) at ~1,500 tokens/s with 64k/128k context; for scale,
+  `gpt-oss-120b` runs ~3,000 tok/s on the same catalog. The HN thread is local-inference operators doing
+  arithmetic against their own tok/s budgets. The asterisk: Cerebras hardware, not reproducible on a GPU node.
+  Position in this file's map: agent loops are bottlenecked on output tokens, and 1,500 tok/s makes long
+  reasoning chains cost-irrelevant *if* you accept wafer-scale as your serving tier — the serving-speed
+  counterpart to the M4 Pro blueprint (own hardware) and WebLLM (browser).

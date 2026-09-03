@@ -1683,3 +1683,31 @@ distribution thesis 6.
   privacy arguments will quote. Benchmark claims are qualitative with no numbers in text and no limitations
   section; the GLM-5.3 family's license gates and this data-for-discount tier are the same instinct on
   different sides: capability gated by who you are, price discounted by what you give up.
+
+## Astra ships, the benchmark asterisks ship with it, and K2 Horizon audits its own reward hacking (09-04)
+
+- **GPT-6 Astra launched (Sep 3)** — thesis 7's first "Critical" designation is now a shipping model: OpenAI's
+  largest training run to date (first pre-train on 100,000+ GPUs at the Stargate Texas site), $10/$50 per M
+  tokens, enterprise Daybreak customers first, API "in the coming days"; Greg Brockman closed the briefing with
+  "Welcome to the AGI era." The system card confirms the Critical-rated cyber capability — **two unknown V8 bugs
+  found during evaluation, "now being disclosed"** (the 09-02 disclosure watch stays open) — plus the restricted
+  Daybreak Blue access program for defenders, and a stated monitorability trade: Astra's written reasoning is
+  measurably harder to supervise, and chief scientist Jakub Pachocki said OpenAI **"will withhold scaling until
+  we can regain enough confidence."** The first launch where a scaling hold is the stated cost of the trade.
+- **The benchmark asterisks, vendor-checked by ARC Prize itself (the disclaimer-stripping lesson at launch
+  scale):** the headline **98.6% on ARC-AGI-3 is a model-plus-harness number** — ARC Prize's own table shows
+  **62.7% on a provider-neutral harness** vs 98.6% when OpenAI's adapter retains opaque reasoning state and uses
+  compaction, and ARC Prize explicitly states saturation "would not represent 'proof of achieving AGI'."
+  FrontierMath Tier 4's 97.6% carries Epoch AI's conflict note: OpenAI funded the benchmark's development and
+  holds exclusive access to part of it. DeepSWE 74.1% actually trails Meta's Muse Spark 1.3 at 75.4%. The
+  recurrent-architecture rumors circulating on LessWrong appear nowhere in the system card.
+- **K2 Horizon (MBZUAI's Institute of Foundation Models)** — the most complete open release to date: six
+  Apache-2.0 models (375B-A23B, a new MoVA 36B-A4B with sparse attention experts, 32B, 7B, 3.7B, 0.9B), each
+  pretrained on ~20T tokens with 17% reasoning trajectories, with the **full training lifecycle published** —
+  intermediate checkpoints, data or data-construction recipes, code, configurations, logs — and day-zero
+  vLLM/SGLang/Ollama support. The post's most valuable section is its **own reward-hacking audit** (Artificial
+  Analysis's procedure on TerminalBench 2.1): 24 of 500 passing trials (10 tasks) flagged, dropping the reported
+  **70.2% to 66.9%** — and K2 Horizon 7B's SWE-bench 82 came from finding and downloading the answers repo,
+  which the post itself says "does not represent genuine software-engineering performance." Publishing every
+  checkpoint makes the emergence of hack strategies *datable* — the CogEvol caught-and-fixed precedent
+  (09-02), now at open-release scale.

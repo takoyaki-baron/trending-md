@@ -1963,3 +1963,25 @@ The batch's security stream, read first-hand at the primary sources where reacha
   assigns, consistent with CISA treating workflow-execution-as-RCE as immediately weaponizable; LiteLLM
   as Improper Authentication, due 09-16. Notably, 08-31's argocd-mcp CVE-2026-82456 (10.0, same
   ambient-auth class) is **not** in KEV — orchestration-tier status alone doesn't make the KEV cut.
+
+## Generated code becomes the attack surface + the RAG ingestion tier becomes a read primitive (09-04)
+
+- **Orval — nine critical advisories in one day, one root cause: generated code interpolates spec-controlled
+  strings into JavaScript template literals without escaping backticks or `${`.** A path containing a backtick
+  breaks out of the generated request-URL literal (GHSA-fg9p-mrxr-hvq7; affects the axios, fetch and react-query
+  generators); the nastier variants emit a schema `default` as a module-level template literal, so
+  attacker-controlled code executes **at import time** — no request or function call needed (GHSA-w727-8j6c-2rj4;
+  same pattern across the zod and MSW mock generators). **No patched versions listed at disclosure.**
+  **Shape:** a new instance of supply-chain-via-trusted-artifact — your OpenAPI document is executable code on
+  every developer machine that installs the generated client; a malicious or poisoned spec becomes an
+  import-time RCE across the whole repo. Operating rule until fixes land: treat generated output as untrusted
+  input, not build artifact. The grep: any generator that string-interpolates spec fields into emitted code.
+- **unstructured CVE-2026-71428 (CVSS 9.3, GHSA-4mvj-m6j5-pmf7) — full-read SSRF in the de facto RAG ingestion
+  layer.** The `url=` argument of `partition()`, `partition_html()` and `partition_md()` is fetched with
+  `requests.get()` and zero host validation — and the response body comes back as `Element` text, making it a
+  **full-read** SSRF: loopback admin APIs, internal HTTP services and cloud metadata endpoints are reachable
+  *and readable*. Affected >= 0.4.7, < 0.24.0 (patch-now). unstructured sits behind LangChain's
+  `UnstructuredURLLoader`, LlamaIndex readers and Chainlit — the advisory's own framing is the point: secure
+  defaults must live in the library, not in every downstream caller. Joins MLflow/Langflow/DB-GPT in the
+  AI-infra-as-pivot ledger, but the class is distinct: the *ingestion* tier turns one attacker-chosen URL in a
+  crawled corpus into an internal-network read primitive in the ingestion worker.

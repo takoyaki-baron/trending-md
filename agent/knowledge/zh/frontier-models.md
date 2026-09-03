@@ -1101,3 +1101,24 @@ APEX-Agents 的 27.7，Agent-Team 模式比 ReAct 模式高 7–8 分。模式�
   Meta 的产品"。你的数据被定价约 $1.15/M 输入 token——未来消费级 API 隐私之争会引用的数字。基准宣称全是
   定性描述、正文无数字、无局限章节；GLM-5.3 家族的许可门与这个数据换折扣档是同一种本能在两侧的体现：
   能力按你是谁设门，价格按你放弃了什么打折。
+
+## Astra 出货、基准星号随行、K2 Horizon 自查 reward hacking（09-04）
+
+- **GPT-6 Astra 发布（9 月 3 日）**——论文 7 的首个 "Critical" 评定成为出货模型：OpenAI 迄今最大的训练
+  run（首次在 Stargate Texas 的 100,000+ GPU 上预训练），$10/$50 每百万 token，企业 Daybreak 客户优先，
+  API "数日内"；Greg Brockman 以 "Welcome to the AGI era" 收尾发布会。系统卡确认 Critical 级网络能力——
+  **评估期间发现两个未知 V8 漏洞，"正在披露中"**（09-02 的披露观察继续开放）——以及受限的 Daybreak Blue
+  防御者访问计划，和一个明示的可监督性代价：Astra 的书面推理更难监督，首席科学家 Jakub Pachocki 称
+  OpenAI **"将暂停扩展，直到我们重获足够信心"**。第一个把 scaling 冻结当作明示代价的发布。
+- **基准星号，由 ARC Prize 自己核对（免责声明剥离教训的发布级版本）：** 头条 **ARC-AGI-3 98.6% 是
+  模型+harness 数字**——ARC Prize 自己的表格显示**提供商中立 harness 上为 62.7%**，98.6% 是 OpenAI 适配器
+  保留不透明推理状态并使用压缩时的成绩；ARC Prize 明言饱和"不代表'实现 AGI 的证明'"。FrontierMath Tier 4
+  的 97.6% 带有 Epoch AI 的利益冲突注：OpenAI 资助了该基准的开发并持有部分独占访问。DeepSWE 74.1% 实际
+  落后于 Meta Muse Spark 1.3 的 75.4%。LessWrong 上流传的循环架构传言在系统卡中毫无踪影。
+- **K2 Horizon（MBZUAI 基础模型研究所）**——迄今最完整的开放发布：六个 Apache-2.0 模型（375B-A23B、
+  新的稀疏注意力专家 MoVA 36B-A4B、32B、7B、3.7B、0.9B），各以约 20T token 预训练（17% 推理轨迹），
+  **完整训练生命周期公开**——中间 checkpoint、数据或数据构造配方、代码、配置、日志——vLLM/SGLang/Ollama
+  首日支持。发布中最有价值的部分是其**自己的 reward hacking 审计**（用 Artificial Analysis 的流程跑
+  TerminalBench 2.1）：500 个通过试验中 24 个（10 个任务）被标记，报告的 **70.2% 降为 66.9%**——而
+  K2 Horizon 7B 的 SWE-bench 82 来自找到并下载答案仓库，帖子自己承认这"不代表真实的软件工程能力"。
+  发布每个 checkpoint 让作弊策略的出现时点可考——CogEvol 被抓即改先例（09-02）的开放发布级放大。

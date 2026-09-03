@@ -1684,3 +1684,26 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   vendor caveats the site itself insists on: run by Runta on Runta's own runtime, and OpenCode's eyecatching
   $0.0615 cost-per-success **excludes failures** ($3.24 including them) — "cost per successful task" is where
   each vendor shines; "median cost per task" is where they're comparable.
+
+- **Zed: "Xanadu was waiting for agents" (Sep 1, Nathan Sobo).** Ted Nelson's Project Xanadu — two-way links,
+  quotation by reference (transclusion), "never overwrite, always version" — failed because humans were fine
+  with the web's breakable string links; agents change the economics because they "keep nothing in their
+  heads," will follow every link, and can carry Xanadu's bookkeeping burden. Zed's DeltaDB operationalizes it:
+  Lamport timestamps, Merkle-tree naming via Git hashes, CRDTs, and anchors that keep text-span references
+  resolvable as code changes — while Delta threads remain ordinary Git branches, so existing tooling keeps
+  working. Agent output that cites its sources with resolvable anchors is a provenance primitive — the same
+  "every decision needs a receipt" problem as pacifio/atlas's session-linked commits. The essay itself concedes
+  the open question: whether agents actually need transclusion or just Git. A bet, not a benchmark.
+- **DeepSeek Harness — dated update (09-04).** Held #1 trending at **210,921★** (created Aug 13; ~19.8k★/48h
+  after 62.3k the period before — velocity decelerating from a huge spike, not growing). Net-new facts since
+  the 08-23 note: a design paper on its "spatiotemporal composability" programming paradigm
+  (**arXiv 2608.25512**), and the plugin ecosystem self-organizing — an `oh-my-dsh` community distribution, a
+  `dsh-plugin` topic, VS Code clients, and comparison threads arguing convergence on a general "Host ABI." The
+  README's own honesty is unchanged: developer preview, "THERE WILL BE COMPATIBILITY-BREAKING CHANGES."
+- **The 09-03 four-provider outage (context note).** ChatGPT/Codex, Claude, Gemini and Grok all threw errors in
+  overlapping windows on the morning of Sep 3 — Astra launch day (252-pt Ask HN thread, 468 comments; OpenAI
+  reported "elevated errors across ChatGPT and Codex," Grok showed widespread failures, Gemini stumbled with
+  other Google services, Claude's status page had Opus models last to recover). No vendor has published a root
+  cause; every confident explanation (including the circulating Azure one) is speculation. The one measured
+  fact: everything built on frontier APIs failed as one system for about an hour — the "rent your brain"
+  dependency's first simultaneous stress test.

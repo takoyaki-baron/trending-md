@@ -1188,3 +1188,21 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   的成本变量——论点 12 的主张，被度量了。读一读网站自己坚持要写的厂商告诫：由 Runta 在 Runta 自家运行时上
   运营，且 OpenCode 醒目的 $0.0615 单次成功成本**不含失败**（含失败为 $3.24）——"每次成功任务的成本"是
   各家发光的地方，"每任务中位成本"才是可比的地方。
+
+- **Zed："Xanadu 等的就是 agent"（9 月 1 日，Nathan Sobo）。** Ted Nelson 的 Project Xanadu——双向链接、
+  引用即转载（transclusion）、"永不覆写，永远版本化"——失败是因为人类接受了可断链的字符串链接；agent
+  改变了经济学：它们"脑子里不留东西"、会追每个链接、能扛起 Xanadu 的记账负担。Zed 的 DeltaDB 把它
+  操作化：Lamport 时间戳、经 Git 哈希的 Merkle 树命名、CRDT、以及让文本区间引用随代码变更保持可解析的
+  锚点——而 Delta 线程仍是普通 Git 分支，既有工具链照常工作。agent 输出以可解析锚点引用来源是一种溯源
+  原语——与 pacifio/atlas 的会话关联提交同属"每个决定都要有回执"问题。文章自己承认开放问题：agent 到底
+  需要 transclusion 还是只需要 Git。是下注，不是基准。
+- **DeepSeek Harness——日期更新（09-04）。** 持续占据 trending #1，**210,921★**（8 月 13 日创建；
+  ~19.8k★/48h，上一周期为 62.3k——速度从巨大尖峰回落，而非继续增长）。相对 08-23 笔记的新事实：
+  "时空可组合性"编程范式的设计论文（**arXiv 2608.25512**），插件生态自组织——`oh-my-dsh` 社区发行版、
+  `dsh-plugin` 话题、VS Code 客户端、以及争论收敛到通用 "Host ABI" 的比较帖。README 的诚实不变：开发者
+  预览版，"THERE WILL BE COMPATIBILITY-BREAKING CHANGES"。
+- **09-03 四提供商同时宕机（背景注）。** 9 月 3 日早晨——Astra 发布日——ChatGPT/Codex、Claude、Gemini
+  与 Grok 在重叠时间窗内相继报错（252 分 Ask HN 帖、468 条评论；OpenAI 报告 "elevated errors across
+  ChatGPT and Codex"，Grok 大面积故障，Gemini 与其他 Google 服务一同踉跄，Claude 状态页 Opus 系列最后
+  恢复）。没有任何厂商公布根因；一切自信的解释（包括流传的 Azure 说）都是猜测。唯一可测的事实：建在
+  前沿 API 之上的一切作为一个系统同时失效约一小时——"租用大脑"依赖的首次同时压力测试。

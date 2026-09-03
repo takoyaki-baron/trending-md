@@ -4813,5 +4813,95 @@
     "en": "Personal engineering blog (kciter); detailed web-performance walkthroughs with measured budgets and honest caveats. Cross-validated (09-03): main-thread claims (16.6ms/10ms/50ms long-task) are standard web-vitals figures; reception via HN thread.",
     "zh": "个人工程博客（kciter）；Web 性能实战文，含实测预算与诚实的注意事项。交叉验证（09-03）：主线程论断（16.6ms/10ms/50ms long task）为标准 Web Vitals 数字；反响经 HN 讨论确认。",
     "jp": "個人エンジニアリングブログ（kciter）。実測予算と誠実な注意書きを備えた Web パフォーマンス解説。相互検証済み（09-03）：メインスレッドの主張（16.6ms/10ms/50ms long task）は標準的な Web Vitals の数値、反応は HN 議論で確認。"
+  },
+  "arcprize.org": {
+    "cat": "research",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "ARC Prize Foundation's benchmark authority — publishes provider-neutral harness numbers next to vendor claims. Cross-validated (09-04): its Astra table (62.7% neutral vs 98.6% model+harness) is the independent control against OpenAI's own system card, i.e. it disagrees with the vendor in the vendor's disfavor — the strongest credibility signal a leaderboard can show.",
+    "zh": "ARC Prize 基金会的基准权威——把提供商中立的 harness 数字与厂商宣称并列发布。交叉验证（09-04）：其 Astra 表格（中立 62.7% vs 模型+harness 98.6%）正是对照 OpenAI 自家系统卡的独立控制组——它在朝着对厂商不利的方向分歧，这是排行榜所能给出的最强可信信号。",
+    "jp": "ARC Prize 財団のベンチマーク権威——プロバイダ中立ハーネスの数値をベンダー主張と並べて公開。相互検証済み（09-04）：Astra の表（中立 62.7% vs モデル+ハーネス 98.6%）は OpenAI 自身のシステムカードに対する独立の対照であり、ベンダーに不利な方向で食い違う——リーダーボードが示しうる最強の信頼性シグナル。"
+  },
+  "deploymentsafety.openai.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "OpenAI's deployment-safety/system-card subdomain — primary source for Preparedness designations and capability claims, but self-published: the lab grades its own paper. Cross-validated (09-04): its Astra claims (two V8 zero-days \"now being disclosed\") checked against ARC Prize's independent harness table, which materially discounts the headline benchmark numbers.",
+    "zh": "OpenAI 的部署安全/系统卡子域——Preparedness 评定与能力宣称的一手来源，但属自发布：实验室给自己阅卷。交叉验证（09-04）：其 Astra 主张（两个 V8 漏洞\"正在披露中\"）对照 ARC Prize 的独立 harness 表核验，头条基准数字被实质性打折。",
+    "jp": "OpenAI のデプロイ安全/システムカードサブドメイン——Preparedness 認定と能力主張の一次ソースだが自己発行：ラボが自分の答案を採点する。相互検証済み（09-04）：Astra の主張（V8 ゼロデイ 2 件「現在開示中」）を ARC Prize の独立ハーネス表と照合し、眉見出しのベンチマーク数値は実質的に割り引かれる。"
+  },
+  "ifm.ai": {
+    "cat": "research",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "MBZUAI's Institute of Foundation Models blog — open-weights release posts with unusually candid self-audits. Cross-validated (09-04): its K2 Horizon reward-hacking self-audit (TerminalBench 70.2→66.9; 7B SWE-bench 82 = downloaded answers) is self-reported but pairs with models verifiable on Hugging Face and day-zero vLLM/SGLang support.",
+    "zh": "MBZUAI 基础模型研究所的博客——开放权重发布公告，自带罕见坦率的自我审计。交叉验证（09-04）：其 K2 Horizon reward-hacking 自审（TerminalBench 70.2→66.9；7B SWE-bench 82 = 下载答案）虽属自报，但模型可在 Hugging Face 核验、vLLM/SGLang 首日支持可对照。",
+    "jp": "MBZUAI 基礎モデル研究所のブログ——珍しく率直な自己監査付きのオープンウェイト リリース投稿。相互検証済み（09-04）：K2 Horizon の reward-hacking 自己監査（TerminalBench 70.2→66.9；7B SWE-bench 82 = 解答ダウンロード）は自己報告だが、モデルは Hugging Face で検証可能で vLLM/SGLang の初日対応も突き合わせ可能。"
+  },
+  "antigravity.google": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Google Antigravity's terms site — the contract text itself, quotable verbatim. Cross-validated (09-04): the OpenClaw-ban clause (\"using OpenClaw with Antigravity OAuth\") read against the HN discussion and Gergely Orosz's thread, which carry the suspension reports the static ToS page cannot.",
+    "zh": "Google Antigravity 的条款站——合同文本本身，可逐字引用。交叉验证（09-04）：OpenClaw 禁令条款（\"using OpenClaw with Antigravity OAuth\"）对照 HN 讨论与 Gergely Orosz 的推文线程核验——静态条款页给不了的停权报告由后者补足。",
+    "jp": "Google Antigravity の規約サイト——契約テキストそのもので、逐語引用可能。相互検証済み（09-04）：OpenClaw 禁止条項（「using OpenClaw with Antigravity OAuth」）を HN 議論と Gergely Orosz のスレッドと照合——静的な規約ページが持たない停止報告は後者が補う。"
+  },
+  "neil.fraser.name": {
+    "cat": "community",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Neil Fraser's personal site — first-person primary source for the .name termination story (the affected holder writing his own loss). Cross-validated (09-04): the ICANN/Verisign dates and the 22,000-holder figure corroborated by the 970-point HN discussion quoting the same timeline.",
+    "zh": "Neil Fraser 的个人网站——.name 废除事件的第一人称一手来源（受影响的持有者亲写自己的损失）。交叉验证（09-04）：ICANN/Verisign 日期与 22,000 持有者数字经 970 分 HN 讨论中引用的同一时间线印证。",
+    "jp": "Neil Fraser の個人サイト——.name 廃止事件の一人称一次ソース（影響を受けた保有者自身が損失を記す）。相互検証済み（09-04）：ICANN/Verisign の日付と 22,000 保有者という数字は、970 ポイントの HN 議論が引用する同じ時系列で裏付け。"
+  },
+  "thenewstack.io": {
+    "cat": "news",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Developer-facing tech news analysis; secondary coverage that links primary sources. Cross-validated (09-04): its Astra launch analysis matches the system card and ARC Prize table it cites — analysis, not new facts.",
+    "zh": "面向开发者的技术新闻分析；会链到一手来源的二手报道。交叉验证（09-04）：其 Astra 发布分析与所引系统卡及 ARC Prize 表格一致——是分析，不是新事实。",
+    "jp": "開発者向けテックニュース分析。一次ソースへリンクする二次報道。相互検証済み（09-04）：Astra ローンチ分析は引用先のシステムカード・ARC Prize 表と一致——新しい事実ではなく分析。"
+  },
+  "futurism.com": {
+    "cat": "news",
+    "cred": "med",
+    "density": "low",
+    "cv": 1,
+    "en": "Tech/science news outlet, headline-driven; useful for fast incident aggregation. Cross-validated (09-04): its four-provider outage report matches the vendor status pages and the 468-comment Ask HN thread it links — aggregation of verifiable status, not original reporting.",
+    "zh": "科技/科学新闻媒体，标题驱动；适合快速事故聚合。交叉验证（09-04）：其四提供商宕机报道与其链接的厂商状态页及 468 条评论的 Ask HN 帖一致——是对可核验状态的聚合，非原创调查。",
+    "jp": "テック/サイエンス報道、見出しドリブン。インシデントの高速集約に有用。相互検証済み（09-04）：4 プロバイダ障害の報道はリンク先のベンダー ステータスページと 468 コメントの Ask HN スレッドと一致——検証可能なステータスの集約であり、独自取材ではない。"
+  },
+  "deepseek-harness.github.io": {
+    "cat": "code",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Official docs site for deepseek-ai/deepseek-harness. Cross-validated (09-04): architecture doc and SAFETY.md notice match the repo README (210k★, developer-preview warnings) — docs and repo agree.",
+    "zh": "deepseek-ai/deepseek-harness 的官方文档站。交叉验证（09-04）：架构文档与 SAFETY.md 提示与仓库 README（210k★、开发者预览警告）一致——文档与仓库互证。",
+    "jp": "deepseek-ai/deepseek-harness の公式ドキュメントサイト。相互検証済み（09-04）：アーキテクチャ文書と SAFETY.md の注意書きはリポジトリ README（210k★、開発者プレビュー警告）と一致——文書とリポジトリが相互に裏付け。"
+  },
+  "inference-docs.cerebras.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Cerebras inference docs/model catalog — vendor-measured tok/s on Cerebras hardware only. Cross-validated (09-04): the ~1,500 tok/s Qwen3.8-27B listing matches the HN discussion's quoted numbers; the hardware-bound asterisk is the catalog's own framing.",
+    "zh": "Cerebras 推理文档/模型目录——仅在 Cerebras 硬件上测得的 tok/s。交叉验证（09-04）：约 1,500 tok/s 的 Qwen3.8-27B 列项与 HN 讨论引用的数字一致；硬件绑定星号是目录自己的措辞。",
+    "jp": "Cerebras 推論ドキュメント/モデルカタログ——Cerebras ハードウェア上でのみ計測された tok/s。相互検証済み（09-04）：~1,500 tok/s の Qwen3.8-27B 掲載は HN 議論が引用する数値と一致；ハードウェア束縛の但し書きはカタログ自身の文言。"
+  },
+  "babyloniantwins.com": {
+    "cat": "community",
+    "cred": "med",
+    "density": "low",
+    "cv": 1,
+    "en": "The port author's personal blog — first-person build log for the Babylonian Twins Amiga-to-Godot port, including its own reported bugs. Cross-validated (09-04): byte-identical rebuild claim and the honest-failure notes match the linked HN discussion; single-author claims (e.g. the unconfirmed detail he flags himself) stay attributed to him.",
+    "zh": "移植作者的个人博客——Babylonian Twins 从 Amiga 到 Godot 移植的第一人称构建日志，含其自报的 bug。交叉验证（09-04）：字节级一致重建的主张与诚实失误记录与其链接的 HN 讨论一致；单一作者的主张（含他自己标注无法确认的细节）保持归于其本人。",
+    "jp": "移植作者の個人ブログ——Babylonian Twins の Amiga→Godot 移植に関する一人称ビルドログ、自報のバグも含む。相互検証済み（09-04）：バイト単位一致の再構築主張と正直な失敗記録はリンク先の HN 議論と一致；単一著者の主張（本人が確認不能と印を付けた細部を含む）は本人に帰属させたまま。"
   }
 }
