@@ -4759,5 +4759,59 @@
     "cred": "high",
     "density": "high",
     "cv": 1
+  },
+  "pola.rs": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Official blog of the Polars dataframe project; release posts carry exact behavior-change details and their own escape hatches. Cross-validated (09-03): Polars 2.0 RC claims checked against HN discussion and repo.",
+    "zh": "Polars DataFrame 项目官方博客；发布文含精确的行为变更细节与逃生通道。交叉验证（09-03）：2.0 RC 内容与 HN 讨论及仓库核对一致。",
+    "jp": "Polars DataFrame プロジェクト公式ブログ。リリース記事は正確な動作変更と逃げ道を含む。相互検証済み（09-03）：2.0 RC の内容を HN 議論とリポジトリで確認。"
+  },
+  "aisle.com": {
+    "cat": "security",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Aisle's blog — vendor selling an autonomous zero-day discovery system; the curl six-CVE post is self-reported but timestamped and validated by curl maintainers. Cross-validated (09-03): CVE IDs and Stenberg/Kroah-Hartman quotes against HN thread.",
+    "zh": "Aisle（自主零日发现系统厂商）博客；curl 六 CVE 文为厂商自述，但有时间戳且经 curl 维护者验证。交叉验证（09-03）：CVE 编号与 Stenberg/Kroah-Hartman 引语对 HN 讨论核对。",
+    "jp": "自律ゼロデイ発見システムを売る Aisle のブログ。curl 6 CVE 記事はベンダー自述だがタイムスタンプがあり curl メンテナが検証済み。相互検証済み（09-03）：CVE 番号と Stenberg/Kroah-Hartman の発言を HN 議論で確認。"
+  },
+  "multiversecomputing.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Multiverse Computing (Spanish quantum-inspired compression / CompactifAI) resources page; benchmark numbers are third-party (Artificial Analysis) but selection and framing are the vendor's. Cross-validated (09-03): Quasar 438B scores against HN discussion; internal inconsistencies noted (Nemotron 38 vs 36).",
+    "zh": "Multiverse Computing（西班牙量子启发压缩/CompactifAI）资源页；基准数字来自第三方（Artificial Analysis）但取舍与措辞属厂商。交叉验证（09-03）：Quasar 438B 分数对 HN 讨论核对；发现内部不一致（Nemotron 38 vs 36）。",
+    "jp": "Multiverse Computing（スペインの量子インスパイア圧縮/CompactifAI）のリソースページ。ベンチは第三者（Artificial Analysis）だが取捨と枠付けはベンダー。相互検証済み（09-03）：Quasar 438B のスコアを HN 議論で確認、内部不整合も確認（Nemotron 38 vs 36）。"
+  },
+  "tiktok-api.seeksocial.io": {
+    "cat": "data",
+    "cred": "low",
+    "density": "high",
+    "cv": 1,
+    "en": "Anonymous reverse-engineer's writeup + product page for TikTok private-API scraping; technically detailed but sells the toolkit and the author is unidentified. Cross-validated (09-03): dataset claims (4.5B rows, fields, ToS caveat) confirmed on the Hugging Face dataset card.",
+    "zh": "匿名逆向工程师的 TikTok 私有 API 抓取技术说明+产品页；技术细节扎实，但同步售卖工具包且作者身份不明。交叉验证（09-03）：数据集主张（45 亿行、字段、ToS 告知）已在 Hugging Face 数据集卡上核实。",
+    "jp": "匿名リバースエンジニアによる TikTok プライベート API スクレイピングの解説+製品ページ。技術詳細は豊富だがツールキットを販売し作者は匿名。相互検証済み（09-03）：データセットの主張（45 億行、フィールド、ToS 注記）を Hugging Face のカードで確認。"
+  },
+  "hermit-tech.com": {
+    "cat": "community",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Hermit Tech's engineering blog (Melbourne data consultancy); opinion essays, anecdote-led but explicitly sourced. Cross-validated (09-03): the \"AI Can Make You Suck Faster Too\" essay's quotes and Cox attribution read on-page; reception via HN thread.",
+    "zh": "Hermit Tech（墨尔本数据咨询公司）的工程博客；观点随笔为主、以轶事领衔但来源明确。交叉验证（09-03）：\"AI Can Make You Suck Faster Too\" 的引语与 Cox 出处已在原文核对；反响经 HN 讨论确认。",
+    "jp": "Hermit Tech（メルボルンのデータコンサル）のエンジニアリングブログ。意見エッセイ中心で逸話が先導するが出典は明示。相互検証済み（09-03）：エッセイの引用と Cox の帰属を本文で確認、反応は HN 議論で確認。"
+  },
+  "kciter.so": {
+    "cat": "community",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Personal engineering blog (kciter); detailed web-performance walkthroughs with measured budgets and honest caveats. Cross-validated (09-03): main-thread claims (16.6ms/10ms/50ms long-task) are standard web-vitals figures; reception via HN thread.",
+    "zh": "个人工程博客（kciter）；Web 性能实战文，含实测预算与诚实的注意事项。交叉验证（09-03）：主线程论断（16.6ms/10ms/50ms long task）为标准 Web Vitals 数字；反响经 HN 讨论确认。",
+    "jp": "個人エンジニアリングブログ（kciter）。実測予算と誠実な注意書きを備えた Web パフォーマンス解説。相互検証済み（09-03）：メインスレッドの主張（16.6ms/10ms/50ms long task）は標準的な Web Vitals の数値、反応は HN 議論で確認。"
   }
 }

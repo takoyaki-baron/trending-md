@@ -1,8 +1,8 @@
 ---
 date: 2026-09-03
-updated: 2026-09-03T12:25:00+08:00
+updated: 2026-09-03T20:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -399,13 +399,190 @@ Wasmi——被 Stellar Soroban、Typst、Zellij 与 Ripple 嵌入使用的 Rust 
 
 ---
 
+## 25. Polars 2.0 预发布版——流式引擎成为默认，静默类型强转变为报错
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** pola.rs（一手来源） · HN 221 分 / 63 评论 · Sep 3 ~14:59 UTC+8 提交
+- **Tags:** `polars` `dataframes` `rust` `data-engineering` `release`
+
+Ritchie Vink 发布了 2.0 的首个候选版本（"正式的 2.0 将在未来几周落地……我们希望这对你是一次无聊的升级"）。头条变化：所有 `LazyFrame` 查询现在默认运行在流式引擎上——总体"轻松快 5 倍"，内存也有大幅改善。更深的故事是严格化转向：`is_in` 不再做 Int64→Float64 的有损类型转换（过去会静默舍入大整数 ID 造成误命中——现在抛出 `InvalidOperationError`），水平 `concat` 抛出 `ShapeError` 而不是用 null 补齐，歧义类型转换被移除，被删除的 API 会抛出新的 `AttributeRemovedError`/`ArgumentRemovedError` 并指向替代方案（`melt` → `unpivot`）。逃生通道是显式的：`engine="in-memory"` 可按查询或进程级恢复旧行为。
+
+**Why it matters:** pandas 后继者阵营刚刚把"响亮地失败，而不是静默强转"变成了标准——依赖宽松类型转换的流水线，现在会在它们一直悄悄出错的那一行精确地断掉。
+
+> 流式引擎"对某些操作默认不保证行序"（`join`、`group_by`、`unpivot`）——在假设输出有序之前，先用 `maintain_order=True` 显式开启。
+
+[`🔗 pola.rs：Announcing Polars 2 (Pre-Release)`](https://pola.rs/posts/announcing-polars-2/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49546753)
+
+---
+
+## 26. averygan/reclip——一个约 150 行的 Flask yt-dlp 壳成为今日涨星最快的仓库（+673 星）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 今日 +673 星 · 总 8,154
+- **Tags:** `yt-dlp` `self-hosted` `media` `python` `minimalism`
+
+ReClip 是一个带 Web UI 的自托管视频/音频下载器：粘贴 yt-dlp 支持的 1,000+ 站点中任意一个的 URL，选 MP4 或 MP3 和清晰度，可单条或批量下载并自动去重。技术栈本身就是卖点：约 150 行的 Python/Flask 后端、"无框架、无构建步骤"的原生 HTML/CSS/JS 前端，以及恰好两个依赖（Flask、yt-dlp）——外加 ffmpeg。MIT 许可，提供 Docker 方式，运行在 8899 端口。README 声明"仅供个人使用"，并要求用户尊重版权与平台服务条款。
+
+**Why it matters:** 就在 Chrome 完成清除 Manifest V2 广告拦截器的同一周，本批涨星最快的仓库是一个极简自托管工具——"工具自己握在手里"的条件反射，正在持续把"简单"本身换算成涨星速度。
+
+> 只有 19 次提交、没有发布版本：这是一个正踩在病毒式传播节点上的年轻项目，不是 hardened 基础设施——合法使用范围是用户自己的责任，代码不会替你兜底。
+
+[`🔗 averygan/reclip`](https://github.com/averygan/reclip) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 27. OpenAI 与 Anthropic 的工具交了零分之后，curl 收获六个 CVE——专用 AI 系统在真实代码库上跑赢了前沿模型
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Aisle 博客（一手来源，厂商自述） · HN 171 分 / 56 评论 · Sep 2 ~21:43 UTC+8 提交
+- **Tags:** `curl` `cve` `ai-security` `zero-day` `vulnerability-discovery`
+
+8 月 24 日，curl 创始人 Daniel Stenberg 公开表示待处理 CVE 只有三个——而且前沿 AI 一无所获："[Anthropic] Mythos 说它再也找不到了……[OpenAI] Codex security 给出一张空列表。"随后，销售自主零日发现系统的初创公司 Aisle 把自己的系统跑在 curl 上，产出 29 份报告；Stenberg 次日公开记分："Mythos: 0 / Aisle: 29。"验证结论的是 curl 的维护者（而非 Aisle），其中六个成为 curl 8.22.0 的 CVE（CVE-2026-80229/-80230/-80231/-80255/-82208/-82209——OpenSSL provider 释放后重用、pinning 绕过、CA store 连接复用、cookie 属性缺陷），**全部评级为 Low**；到 8 月 28 日，curl 的待处理 CVE 数从三个涨到十个。Greg Kroah-Hartman："我在 Linux 上也看到同样的情况。不知道 Aisle 做了什么不一样的事，但是哇……"
+
+**Why it matters:** 第一次公开的、有时间戳的正面对决中，专用 AI 系统在生产级代码上击败了前沿模型——但诚实的分母同样重要：29 份报告只有 6 个成为 CVE，且全部 Low，而这篇总结出自厂商自己之手。
+
+> Aisle 自己的框架值得保留：Low 严重级反映的是"curl 极高的工程成熟度"——留在一个 hardened 代码库里的都是窄配置 bug，而这恰恰是无模型依赖的工具应该大显身手的地方。
+
+[`🔗 Aisle：Six curl CVEs after OpenAI and Anthropic found zero`](https://aisle.com/blog/aisle-discovered-six-curl-cves-after-openai-and-anthropic-found-zero) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49536114)
+
+---
+
+## 28. Audacity 4.0——多年来的第一个大版本：Qt 重构、新剪辑模型，以及一份诚实的"缺失功能"清单
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub release（一手来源） · HN 44 分 / 7 评论 · Sep 3 ~18:53 UTC+8 发布
+- **Tags:** `audacity` `audio` `qt` `open-source` `release`
+
+Audacity 4.0.0 今日发布：UI 重建于 Qt 之上，原生高分屏渲染、可停靠面板、可保存的 Workspace（Modern/Classic/Music）、亮/暗/高对比主题。剪辑模型发生实质变化——直接剪辑选择与多选、专用 Split 工具、对齐参考线，并移除了 Select/Envelope/Draw/Multi 工具模式，改为上下文相关的行为。官方 Windows 构建现在包含 ASIO 支持。新的 `.aup4` 工程格式从 `.aup3` 转换是**单向的**（"转换后的工程无法存回 `.aup3`"），而且发布说明公开列出了 4.0 砍掉的部分：Time Tracks、Note/MIDI 轨、宏、scripting pipe、LADSPA/VAMP 宿主、Play-at-speed——"计划在未来版本中补齐"。
+
+**Why it matters:** 这个 25 岁的 GPL 音频编辑器刚刚完成了十年来最大的一次架构跃迁，而带着明确的"已知缺失清单"发布大版本——而不是悄悄发生功能回退——是更多项目该抄的发布说明写法。
+
+> 如果你的工作流依赖 scripting pipe 或 MIDI 轨，在功能对齐清单完成前请留在 Audacity 3；`.aup4` 的单向转换意味着没有便宜的后悔药。
+
+[`🔗 Audacity 4.0.0 release`](https://github.com/audacity/audacity/releases/tag/Audacity-4.0.0) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49548395)
+
+---
+
+## 29. Quasar 438B——Multiverse Computing 宣称"欧洲领先 AI 模型"，并亲自公布了与前沿的差距
+
+- **Velocity:** ▮▮ rising
+- **Source:** Multiverse Computing（一手来源，厂商自述） · HN 185 分 / 65 评论 · Sep 2 ~18:02 UTC+8 提交
+- **Tags:** `multiverse-computing` `model-release` `europe` `benchmarks` `sovereign-ai`
+
+Multiverse Computing——CompactifAI 背后那家西班牙量子启发压缩公司——发布了面向"企业级智能体与编码"打造的 Quasar 438B，支持英语与西班牙语。在 Artificial Analysis 的 Intelligence Index v4.1.1 上得分 **43**——高于 Mistral Medium 3.5（30）、Nemotron 3 Ultra（38）与 Inkling（42），低于 Claude Opus 5（63）；AA-LCR 75.0（与 Grok 4.6 high 和 Opus 5"接近持平"）；Terminal-Bench v2.1 得分 69.3，对比由 Opus 5 以 89.1 领跑的前沿集团——公司自己称这是"提升空间最大的评测"。页面未提及许可证，也没有开放权重：只能通过 CompactifAI API 访问。
+
+**Why it matters:** 欧洲主权模型的论点现在有了一个公开榜单数字，而不是一纸新闻稿——而且值得肯定的是，同一篇文章自己放上了 43 对 63 的前沿差距和 Terminal-Bench 的落后，而这正是大多数"欧洲领先"报道会略去的部分。
+
+> 这里的一切都是厂商自述对照第三方榜单，438B 级参数量是自我描述，页面甚至把 Nemotron 3 Ultra 同时写成 38 和 36——在独立数字出现之前，把这些排名当作方向性参考即可。
+
+[`🔗 Multiverse Computing：Introducing Quasar 438B`](https://multiversecomputing.com/resources/introducing-quasar-438b-europe-s-leading-ai-model) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49534132)
+
+---
+
+## 30. GrapheneOS 撤回 Pixel 11 的 MTE 讣告——硬件支持还在，只是被固件废掉了
+
+- **Velocity:** ▮▮ rising
+- **Source:** GrapheneOS on Mastodon（一手来源，永久链接已经实例 API 验证） · HN 190 分 / 153 评论 · Sep 2 ~22:00 UTC+8 提交
+- **Tags:** `grapheneos` `pixel` `mte` `memory-safety` `android`
+
+**更新：** 继我们 8 月 30 日报道"Pixel 11 砍掉硬件 MTE——移植可能整个跳过"之后，GrapheneOS 现在带来好消息："它在硬件层面至少还保有最低限度的 MTE 支持。我们认为是他们为了省钱移除了 CPU 缓存中的大部分硬件加速。性能被毁掉后，固件里干脆整个禁用了。它或许仍可用。"也就是说，硅片保留了最低限度的 MTE 能力；Google 禁用的是固件侧的启用，因为去加速后的实现太慢。9 月 1 日的这条帖子（永久链接在 grapheneos.social 上可解析；注意用 mastodon.social 查询会 404）在最初报道发出 48 小时内，把这次反转送上了 HN 190 分。
+
+**Why it matters:** MTE 是让 C/C++ 代码在 Android 上被"构造性捕获"的内存安全兜底——降级后的硬件是否"仍可用"，决定 Pixel 11 到底还有没有 GrapheneOS 移植可言；而这个项目愿意在两天内公开自己的反转，正是本 feed 给所有人打分所依据的事实核查标准。
+
+> "We think" 在帖子里承担了真实的工作量：缓存加速被移除的解释是 GrapheneOS 的推断，而不是 Google 的确认。
+
+[`🔗 GrapheneOS on Mastodon（Sep 1）`](https://grapheneos.social/@GrapheneOS/117194007157499435) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49536384)
+
+---
+
+## 31. 45 亿条 TikTok 视频成为可下载数据集——史上最大公开社交媒体抓取，全程零账号
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face 数据集（一手来源） · HN 17 分，新上榜爬升中 · Sep 3 ~19:25 UTC+8 提交
+- **Tags:** `tiktok` `scraping` `dataset` `privacy` `reverse-engineering`
+
+`kuben-developer/tiktok-videos-4b` 已上线 Hugging Face：**4,501,811,789 行**（289 GB Parquet，研究用途许可），覆盖 TikTok 视频的文案、互动数（观看/点赞/评论/分享/收藏）、音乐、国家、语言与发布时间。随附的技术说明解释了方法：私有 Android 应用 API、匿名设备注册（全程不用任何账号）、经 X-Argus（Simon/Speck/SM3 密码）与 X-Ladon 的请求签名、uTLS 指纹伪装，以及轮换住宅代理（约 950 美元/月）——大约三周的采集。数据集说明卡异常审慎：互动数是单次快照（不做时长归一化就无法跨采集日期比较）、数据按创作者聚簇需要重新洗牌、不含创作者身份或媒体 URL（"刻意为之"）、只是 32 个分区中的 27 个而非全量、采集违反 TikTok 服务条款，并提供了 GDPR/CCPA 删除请求通道。
+
+**Why it matters:** 无论你的立场是研究、虚假信息分析还是威胁建模，这都重置了一个主要平台上"公开可获得数据"的下限——并且证明了 TikTok 的设备信任架构可以在数十亿行规模上被爬取，而不冒任何账号封禁风险。
+
+> 作者在免费数据集旁边同步出售抓取工具包（699/1,899 美元）——这次研究发布同时也是产品演示。写稿时 HN 讨论才刚刚开始；预期合法性之争会占据主导。
+
+[`🔗 Hugging Face：kuben-developer/tiktok-videos-4b`](https://huggingface.co/datasets/kuben-developer/tiktok-videos-4b) · [`🔗 方法说明`](https://tiktok-api.seeksocial.io/)
+
+---
+
+## 32. "AI Can Make You Suck Faster Too"——"四年 10 倍编码 AI 本该产出三个 Airbnb"的算术拿下 190 分
+
+- **Velocity:** ▮ steady
+- **Source:** hermit-tech.com（一手来源，8 月 17 日发表） · HN 190 分 / 173 评论 · Sep 1 ~13:32 UTC+8 提交，仍在首页
+- **Tags:** `analysis` `productivity` `ai-skepticism` `essay` `engineering`
+
+这篇 Hermit Tech 文章（借用 Disesdi Shoshana Cox 的算术）算了一笔账：按宣称的 10 倍开发提速，开源 LLM 的四年本应产出大约三个 Airbnb、两个 Stripe 和三个 Dropbox——"那么，它们他妈的在哪儿？"GenAI 时代最大的新科技公司，恰恰是 GenAI 公司自己。作者的论据是一次 10 美元 DeepSeek 的真实咨询项目实验：产出"能跑，但它是一辆轮子用胶带粘着的小丑车"；更深的论点是，写代码从来就不是软件交付中最耗时的环节——相信"让 Claude 干就行"移除了瓶颈的管理者，优化错了约束。
+
+**Why it matters:** 这是本周怀疑者审计类文章（9 月 2 日 Dan Luu 给 Ed Zitron 打分）的反向题材——而它的核心主张出奇地可证伪：数一数 2022 年之后那些只因为 AI 压垮了构建成本才存在的软件公司。173 条评论和连续两天的首页旅程说明，整个行业都想让这个论点有个裁决。
+
+> 这篇文章以轶事而非测量领衔——一个开发者、一个项目、10 美元额度。它的力量在于那个可证伪的宏观主张，而不是微观证据。
+
+[`🔗 hermit-tech：AI Can Make You Suck Faster Too`](https://www.hermit-tech.com/blog/ai-can-make-you-suck-faster-too) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49518316)
+
+---
+
+## 33. "浏览器的主线程很贵"——一份关于你实际只有 10 毫秒的现场指南
+
+- **Velocity:** ▮ steady
+- **Source:** kciter.so（一手来源） · HN 143 分 / 48 评论 · Sep 1 ~22:00 UTC+8 提交，仍在首页
+- **Tags:** `web-performance` `javascript` `browser` `inp` `scheduling`
+
+一篇讲透"JS 执行与屏幕绘制为什么排在同一线程的同一条队"的实战文：60 Hz 下每帧名义上 16.6 毫秒，但扣除浏览器开销后实际预算约 10 毫秒（120 Hz 减半），超过 50 毫秒的任务会被标记为 long task。论点："代码不是慢，它只是恰好占着主线程"——所以调算法通常不是解法。两类药方，并附上诚实的取舍：精明地花这条线程（拆分工作并让出、批量合并高频事件），或者干脆别用它（合成器、Web Worker）。注意事项是最好的部分——"让出并不会让工作变快"、拆得太细会适得其反、`setTimeout` 有最小嵌套定时器延迟（所以有了 `MessageChannel` 或 `scheduler.yield()`），而且对大响应做 `JSON.parse` 是原子的，你怎么都绕不开。
+
+**Why it matters:** INP 和 TBT 已经成为决定感知质量的门槛指标，而它们本质上都只是"主线程被堵了多久"——当仪表盘变红时，团队真正需要的正是这套词汇和决策树。
+
+> 有些工作无法拆分：当单次解析堵住线程时，唯一的出口是 Worker——这篇文章顶住了"让出能解决一切"的诱惑。
+
+[`🔗 kciter.so：The Browser's Main Thread Is Expensive`](https://kciter.so/posts/the-expensive-main-thread/en/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49522137)
+
+---
+
+## 34. Cloudflare 的缓存转码原型——写入时 zstd 压缩 CDN 缓存，服务时解码，静态体积约剩 ⅓
+
+- **Velocity:** ▮ steady
+- **Source:** Cloudflare 博客（一手来源） · HN 123 分 / 55 评论 · Sep 1 ~21:41 UTC+8 提交
+- **Tags:** `cloudflare` `caching` `zstandard` `pingora` `infrastructure`
+
+Cloudflare 的一次实习期原型：在响应写入缓存时用 Zstandard（level 3）转码，在静态存储和经 Tiered Cache 的数据中心间传输中保持压缩，只在面向客户端的跳上解码——动机是内存与磁盘价格暴涨，让"有效缓存容量"成为最便宜的赢面。在 10 台服务器约 100 万请求上的实测：符合条件的资源缩到约 ⅓（2.834 倍压缩比），编码成本 4.31 纳秒/字节且**每次填充只付一次**，解码 1.56 纳秒/字节、每次服务都要付，换取"几个百分点"的额外 CPU。准入规则保守——200 OK、无既有 Content-Encoding、可压缩文本、≥4 KiB——而且文章坦承媒体内容被排除在外（占请求的 21.4% 却占字节的 63.3%），测试语料是刻意挑的可压缩内容，这个压缩比不是全网络常数。
+
+**Why it matters:** 在内存与存储成本攀升的当下，用几个百分点的 CPU 换约 3 倍缓存容量，是大多数缓存运营方都将被迫评估的交易——这也是继上周 Cloudflare DNS 缓存内存优化之后，第二个"缓存占用工程成为一级预算科目"的数据点。
+
+> 范围说明：这是 CDN 对象缓存，不是 1.1.1.1 解析器——而且"只转码热门内容"测过之后反而更差，这个反直觉结果值得记住。
+
+[`🔗 Cloudflare：We could save petabytes of cache storage with Zstandard and Pingora`](https://blog.cloudflare.com/cache-transcoding/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49521909)
+
+---
+
+## 35. magnitudedev/magnitude——为你的编码智能体挑选、调优并伺服本地模型的推理服务器
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +130 星 · 总 1,755
+- **Tags:** `local-llm` `inference` `agents` `developer-tools` `apache-2.0`
+
+Magnitude 会分析你的机器（芯片、内存、带宽），推荐放得下的本地模型——附带预估 tokens/sec——然后下载、自动调优（投机解码、并发）并伺服它们，在内存吃紧时卸载空闲模型。真正的钩子是智能体互操作层：`magnitude setup`——或粘贴一段生成的提示词——把你现有的 harness（Pi、OpenCode、Hermes、OpenClaw、Codex、Claude Code、Oh My Pi、Cline）接到本地服务器上，智能体还可以在会话中途通过 CLI 切换模型。Apache-2.0，`npm i -g @magnitudedev/cli`，权重下载后完全离线；Hugging Face 上任意 GGUF 均可用；Windows 仅支持 WSL。
+
+**Why it matters:** 前天的 FrontierHarness 条目显示 harness 能让单任务成本摆动 17 倍——magnitude 攻的是另一个变量：把模型"选择"这件事从操作者手里整个拿走，这也是本周本地模型热潮（见 Mac Mini 蓝图那条）长出的自动化层。
+
+> 年轻项目：1.8k 星、尚无发布版本，"runs the best local models" 是 README 自己的营销话术，且质量上限仍受你机器内存约束——设置提示词会把上手过程交给智能体执行，粘贴前先读一遍它要做什么。
+
+[`🔗 magnitudedev/magnitude`](https://github.com/magnitudedev/magnitude) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-09-03T12:25:00+08:00 |
-| Items | 24 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Paint.net forums, mlc-ai/web-llm, PhiloLabs, werwolv.net, Jenkins security advisory, SecurityOnline, Nature Human Behaviour, sngyai/Sequoia-X, secondthoughts.ai, wasmi-labs) |
+| Generated | 2026-09-03T20:15:00+08:00 |
+| Items | 35 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Paint.net forums, mlc-ai/web-llm, PhiloLabs, werwolv.net, Jenkins security advisory, SecurityOnline, Nature Human Behaviour, sngyai/Sequoia-X, secondthoughts.ai, wasmi-labs, pola.rs, aisle.com, Multiverse Computing, grapheneos.social, Hugging Face, tiktok-api.seeksocial.io, hermit-tech.com, kciter.so, Cloudflare blog) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

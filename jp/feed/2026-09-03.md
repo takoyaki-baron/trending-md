@@ -1,8 +1,8 @@
 ---
 date: 2026-09-03
-updated: 2026-09-03T12:25:00+08:00
+updated: 2026-09-03T20:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -399,13 +399,189 @@ Wasmi——Stellar の Soroban、Typst、Zellij、Ripple に組み込まれて�
 
 ---
 
+## 25. Polars 2.0 プレリリース——ストリーミングエンジンがデフォルトに、サイレントな型強制はエラーへ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** pola.rs（一次ソース） · HN 221 pts / 63 コメント · Sep 3 ~14:59 UTC+8 投稿
+- **Tags:** `polars` `dataframes` `rust` `data-engineering` `release`
+
+Ritchie Vink が 2.0 の最初のリリース候補を公開（「正式な 2.0 は数週間以内に登場する……あなたにとって退屈なアップグレードであることを願っている」）。ヘッドラインの変更：すべての `LazyFrame` クエリがデフォルトでストリーミングエンジンで実行されるように——合計で「簡単に 5 倍高速」、メモリも大幅に改善。より深い物語は厳格化への転換：`is_in` はもはや Int64→Float64 の損失ありキャストをしない（従来は大きな整数 ID をサイレントに丸めて誤検出を生んでいた—— now `InvalidOperationError`）、水平 `concat` は null 埋めの代わりに `ShapeError` を投げ、曖昧なキャストは削除され、削除された API は代替を指す新しい `AttributeRemovedError`/`ArgumentRemovedError` を投げる（`melt` → `unpivot`）。逃げ道も明示的：`engine="in-memory"` でクエリ単位またはプロセス単位で旧動作に戻せる。
+
+**Why it matters:** pandas 後継系が「サイレントに強制するのではなく、大声で失敗する」を標準化した——寛容なキャストに依存していたパイプラインは、ずっと静かに間違っていたその行で正確に壊れることになる。
+
+> ストリーミングエンジンは「一部の操作でデフォルトでは行順を保証しない」（`join`、`group_by`、`unpivot`）——出力が順序付きだと仮定する前に `maintain_order=True` で明示的にオプトインせよ。
+
+[`🔗 pola.rs：Announcing Polars 2 (Pre-Release)`](https://pola.rs/posts/announcing-polars-2/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49546753)
+
+---
+
+## 26. averygan/reclip——約 150 行の Flask yt-dlp ラッパーが本日最速のリポジトリへ（+673 スター）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 本日 +673 スター · 累計 8,154
+- **Tags:** `yt-dlp` `self-hosted` `media` `python` `minimalism`
+
+ReClip は Web UI 付きのセルフホスト動画/音声ダウンローダー：yt-dlp が対応する 1,000+ サイトの任意の URL を貼り、MP4 か MP3 と画質を選び、URL 自動重複排除つきで単発または一括ダウンロード。スタックこそがセールスポイント：約 150 行の Python/Flask バックエンド、「フレームワークなし、ビルドステップなし」のバニラ HTML/CSS/JS フロントエンド、依存はちょうど 2 つ（Flask、yt-dlp）——加えて ffmpeg。MIT ライセンス、Docker オプション、ポート 8899 で提供。README は「個人利用のみを想定」と明記し、著作権とプラットフォームの利用規約の尊重を利用者に求めている。
+
+**Why it matters:** Chrome が Manifest V2 広告ブロッカーの削除を終えたのと同じ週に、このバッチで最も伸びたリポジトリはミニマルなセルフホストツールだった——「ツールは自分で持つ」という反射が、今も「シンプルさ」そのものをスター速度に換算し続けている。
+
+> コミットは 19 しかなくリリースもない：バイラルな瞬間に乗っている若いプロジェクトであって、hardened されたインフラではない——合法な利用範囲はコードではなくユーザーの責任だ。
+
+[`🔗 averygan/reclip`](https://github.com/averygan/reclip) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 27. OpenAI と Anthropic のツールがゼロを返した後、curl に 6 つの CVE——専門特化 AI システムが実コードベースでフロンティアを上回った
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Aisle ブログ（一次ソース、ベンダー自身） · HN 171 pts / 56 コメント · Sep 2 ~21:43 UTC+8 投稿
+- **Tags:** `curl` `cve` `ai-security` `zero-day` `vulnerability-discovery`
+
+8 月 24 日、curl の創設者 Daniel Stenberg は保留中の CVE が 3 つだけであること、そしてフロンティア AI が何も見つけられなかったことを公開した：「[Anthropic] Mythos はこれ以上見つからないと言っている……[OpenAI] Codex security は空のリストを返した」。その後、自律ゼロデイ発見システムを売るスタートアップ Aisle が自社システムを curl に走らせ、29 件のレポートを提出；Stenberg は翌日公開で採点した：「Mythos: 0 / Aisle: 29。」検証したのは curl のメンテナ（Aisle ではない）で、うち 6 件が curl 8.22.0 の CVE になった（CVE-2026-80229/-80230/-80231/-80255/-82208/-82209——OpenSSL provider の UAF、ピニング回避、CA store 接続再利用、cookie 属性の欠陥）、**すべて Low 深刻度**；8 月 28 日までに curl の保留 CVE 数は 3 から 10 に増えた。Greg Kroah-Hartman：「Linux でも同じことが起きているのを見ている。Aisle が何を違うやり方でやっているのかは分からないが、すごい……」
+
+**Why it matters:** 公開された、タイムスタンプ付きの正々堂々の対決で、専門特化 AI システムが実運用コードでフロンティアモデルを打ち負かした初の事例——ただし正直な分母も重要だ：29 件のレポートのうち CVE になったのは 6 件、すべて Low、そしてこのまとめはベンダー自身の手によるものだ。
+
+> Aisle 自身の枠組みを保持する価値がある：Low 深刻度は「curl の卓越したエンジニアリング成熟度」を映している——hardened されたコードベースに残るのは狭い設定のバグで、それはまさにモデル非依存のツールが輝くべき場所だ。
+
+[`🔗 Aisle：Six curl CVEs after OpenAI and Anthropic found zero`](https://aisle.com/blog/aisle-discovered-six-curl-cves-after-openai-and-anthropic-found-zero) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49536114)
+
+---
+
+## 28. Audacity 4.0——数年ぶりのメジャーバージョン：Qt 再構築、新しいクリップモデル、そして正直な「未実装機能」リスト
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub release（一次ソース） · HN 44 pts / 7 コメント · Sep 3 ~18:53 UTC+8 リリース
+- **Tags:** `audacity` `audio` `qt` `open-source` `release`
+
+Audacity 4.0.0 が本日リリース：UI は Qt 上で再構築され、ネイティブ高 DPI レンダリング、ドッキング可能なパネル、保存できる Workspace（Modern/Classic/Music）、ライト/ダーク/ハイコントラストテーマ。編集モデルは実質的に変わる——クリップの直接選択とマルチ選択、専用 Split ツール、配置ガイド、そして Select/Envelope/Draw/Multi ツールモードを廃止し文脈依存の動作へ。公式 Windows ビルドは ASIO サポートを含むように。新しい `.aup4` プロジェクト形式は `.aup3` からの変換が**一方通行**（「変換されたプロジェクトは `.aup3` に保存し直せない」）、リリースノートは 4.0 で落としたものを公然と列挙する：Time Tracks、Note/MIDI トラック、マクロ、scripting pipe、LADSPA/VAMP ホスティング、Play-at-speed——「将来のリリースで予定」。
+
+**Why it matters:** 25 歳の GPL オーディオエディタが十年で最大のアーキテクチャ賭けに出た。そして「既知の欠落リスト」を明示したままメジャーバージョンを出す——フィーチャーの静かなリグレッションではなく——は、より多くのプロジェクトが真似すべきリリースノートの作法だ。
+
+> scripting pipe や MIDI トラックに依存するワークフローなら、パリティリストが片付くまで Audacity 3 に留まれ；`.aup4` への一方向変換は安価な後悔薬がないことを意味する。
+
+[`🔗 Audacity 4.0.0 release`](https://github.com/audacity/audacity/releases/tag/Audacity-4.0.0) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49548395)
+
+---
+
+## 29. Quasar 438B——Multiverse Computing が「欧州随一の AI モデル」を主張、フロンティアとの差も自ら公開
+
+- **Velocity:** ▮▮ rising
+- **Source:** Multiverse Computing（一次ソース、ベンダー自身） · HN 185 pts / 65 コメント · Sep 2 ~18:02 UTC+8 投稿
+- **Tags:** `multiverse-computing` `model-release` `europe` `benchmarks` `sovereign-ai`
+
+Multiverse Computing——CompactifAI 背後のスペインの量子インスパイア圧縮企業——が「エンタープライズ規模のエージェントとコーディングのために構築された」Quasar 438B を発表、英語とスペイン語に対応。Artificial Analysis の Intelligence Index v4.1.1 で **43** を獲得——Mistral Medium 3.5（30）、Nemotron 3 Ultra（38）、Inkling（42）を上回り、Claude Opus 5（63）には及ばない；AA-LCR は 75.0（Grok 4.6 high と Opus 5 に「ほぼ匹敵」）；Terminal-Bench v2.1 は 69.3 対 Opus 5 が 89.1 で率いるフロンティア集団——同社自身これを「最も伸びしろのある評価」と呼ぶ。ライセンスへの言及はなく、オープンウェイトもない：アクセスは CompactifAI API のみ。
+
+**Why it matters:** 欧州の主権モデル論がプレスリリースではなく公開リーダーボードの数字を持った——しかも称賛すべきことに、同じ記事が 43 対 63 のフロンティア差と Terminal-Bench の劣位を自ら載せている。それはたいていの「欧州首位」報道が省く部分だ。
+
+> ここにあるのはすべて第三者リーダーボードに対するベンダー自身の主張、438B クラスのサイズも自己申告、ページは Nemotron 3 Ultra を 38 と 36 の両方で引用している——独立した数字が届くまで、これらの順位は方向性として扱うこと。
+
+[`🔗 Multiverse Computing：Introducing Quasar 438B`](https://multiversecomputing.com/resources/introducing-quasar-438b-europe-s-leading-ai-model) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49534132)
+
+---
+
+## 30. GrapheneOS が Pixel 11 の MTE 訃報を撤回——ハードウェアサポートは残っていた、ただファームウェアが無効化していた
+
+- **Velocity:** ▮▮ rising
+- **Source:** GrapheneOS on Mastodon（一次ソース、パーマリンクはインスタンス API で検証済み） · HN 190 pts / 153 コメント · Sep 2 ~22:00 UTC+8 投稿
+- **Tags:** `grapheneos` `pixel` `mte` `memory-safety` `android`
+
+**更新：** 8 月 30 日に「Pixel 11 はハードウェア MTE を落とした——移植は丸ごとスキップされる可能性」と報じた件の後、GrapheneOS が良い知らせを発表：「少なくとも最低限の MTE サポートはハードウェアレベルでまだある。CPU キャッシュから大部分のハードウェアアクセラレーションが、コスト削減のために取り除かれたと我々は考えている。性能が台無しになったため、ファームウェアで完全に無効化された。それでも使えるかもしれない。」つまりシリコンは最小限の MTE 能力を保持しており、Google が無効化したのはファームウェア側のイネーブルメントで、アクセラレーションを削がれた実装が遅すぎたためだ。9 月 1 日のこの投稿（パーマリンクは grapheneos.social で解決可能；mastodon.social で照会すると 404 になる点に注意）は、最初の報告から 48 時間以内にこの反転を HN 190 ポイントへ押し上げた。
+
+**Why it matters:** MTE は C/C++ コードを Android 上で「構造的に捕捉される」ようにするメモリ安全性のバックストップ——劣化したハードウェアが「それでも使えるか」どうかが Pixel 11 に GrapheneOS ポートが存在し得るかを決め、プロジェクトが 2 日で自らの反転を公表する姿勢は、このフィードが全員を採点するファクトチェックの規範そのものだ。
+
+> 投稿の「We think」は本当の仕事をしている：キャッシュアクセラレーション除去の説明は GrapheneOS の推論であって、Google の確認ではない。
+
+[`🔗 GrapheneOS on Mastodon（Sep 1）`](https://grapheneos.social/@GrapheneOS/117194007157499435) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49536384)
+
+---
+
+## 31. 45 億本の TikTok 動画がダウンロード可能なデータセットに——史上最大の公開ソーシャルメディアスクレイピング、アカウントゼロで実施
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face データセット（一次ソース） · HN 17 pts、新規かつ上昇中 · Sep 3 ~19:25 UTC+8 投稿
+- **Tags:** `tiktok` `scraping` `dataset` `privacy` `reverse-engineering`
+
+`kuben-developer/tiktok-videos-4b` が Hugging Face で公開：**4,501,811,789 行**（289 GB の Parquet、研究目的ライセンス）、TikTok 動画のキャプション、エンゲージメント数（再生/いいね/コメント/シェア/保存）、音楽、国、言語、投稿時刻をカバー。付随する技術説明は手法を解説する：プライベートな Android アプリ API、匿名デバイス登録（アカウントは一切不使用）、X-Argus（Simon/Speck/SM3 暗号）と X-Ladon によるリクエスト署名、uTLS フィンガープリント偽装、ローテーティング住宅プロキシ（月約 950 ドル）——採取期間は約 3 週間。データセットカードは異例なほど慎重だ：エンゲージメント数は一回きりのスナップショット（年齢正規化なしでは採取日を跨いで比較不可能）、行はクリエイター単位でクラスタリングされておりシャッフルが必要、クリエイター ID やメディア URL は含まれない（「意図的」）、32 パーティション中 27 のサンプルで全数ではない、採取は TikTok の利用規約に反する、そして GDPR/CCPA の削除申請手続きが用意されている。
+
+**Why it matters:** 研究か、誤情報分析か、脅威モデリングか、どの立場であれ、これは主要プラットフォームから「公開的に取得可能なもの」の下限を引き上げた——そして TikTok のデバイストラスト構造が、単一のアカウント停止リスクも負わずに数十億行規模でスクレイプ可能であることを実証した。
+
+> 作者は無料データセットの隣でスクレイピングツールキット（699/1,899 ドル）も販売している——この研究リリースは製品デモでもある。執筆時点で HN のスレッドは始まったばかり；合法性を巡る戦いが支配すると見込まれる。
+
+[`🔗 Hugging Face：kuben-developer/tiktok-videos-4b`](https://huggingface.co/datasets/kuben-developer/tiktok-videos-4b) · [`🔗 手法の解説`](https://tiktok-api.seeksocial.io/)
+
+---
+
+## 32. "AI Can Make You Suck Faster Too"——「4 年間の 10 倍コーディング AI なら Airbnb 3 社分ができているはず」という算術が 190 ポイントに
+
+- **Velocity:** ▮ steady
+- **Source:** hermit-tech.com（一次ソース、8 月 17 日発表） · HN 190 pts / 173 コメント · Sep 1 ~13:32 UTC+8 投稿、まだフロントページ
+- **Tags:** `analysis` `productivity` `ai-skepticism` `essay` `engineering`
+
+Hermit Tech のエッセイ（Disesdi Shoshana Cox の算術を借りた）は計算する：宣言どおり 10 倍の開発高速化なら、オープンソース LLM の 4 年間でおよそ Airbnb 3 社、Stripe 2 社、Dropbox 3 社が生まれているはずだった——「で、そいつらは一体どこにいるんだ？」GenAI 時代最大の新テック企業は、GenAI 企業自身である。著者の証拠は実際のコンサル案件での 10 ドルの DeepSeek 実験：出力は「動きはするが、タイヤをダクトテープで留めたおもちゃの車だった」、より深い主張は、コードを書くことはソフトウェアデリバリーの時間的支配要素では決してなかったというもの——「Claude にやらせればいい」とボトルネックが消えたと信じるリーダーは、間違った制約を最適化している。
+
+**Why it matters:** 今週の懐疑派監査エッセイ（9 月 2 日の Dan Luu による Ed Zitron 採点）の対をなすジャンル——そしてその中心的な主張は驚くほど反証可能だ：AI が構築コストを潰したことだけを理由に存在する 2022 年以降のソフトウェア企業を数えよ。173 コメントと 2 日連続のフロントページは、業界全体がこの論争の裁定を求めていると言っている。
+
+> エッセイは測定ではなく逸話が先導している——開発者 1 名、プロジェクト 1 件、10 ドルのクレジット。その強さは反証可能なマクロな主張にあり、ミクロな証拠にはない。
+
+[`🔗 hermit-tech：AI Can Make You Suck Faster Too`](https://www.hermit-tech.com/blog/ai-can-make-you-suck-faster-too) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49518316)
+
+---
+
+## 33. 「ブラウザのメインスレッドは高い」——実際に残されている 10 ミリ秒のフィールドガイド
+
+- **Velocity:** ▮ steady
+- **Source:** kciter.so（一次ソース） · HN 143 pts / 48 コメント · Sep 1 ~22:00 UTC+8 投稿、まだフロントページ
+- **Tags:** `web-performance` `javascript` `browser` `inp` `scheduling`
+
+JS 実行と画面描画が「同じスレッドの同じ列に並ぶ」理由を解き明かす実戦記事：60 Hz では 1 フレームは名目 16.6 ミリ秒だが、ブラウザのオーバーヘッド後に実質予算は約 10 ミリ秒（120 Hz では半分）、50 ミリ秒超で long task とフラグが立つ。テーゼ：「コードが遅いのではない。そのコードがたまたまメインスレッドを掴んでいるだけ」——だからアルゴリズムの改善はたいてい解決策にならない。2 つの処方箋、正直なトレードオフつき：スレッドを賢く使う（作業を分割して yield、高頻度イベントをバッチ化）、あるいはまったく使わない（コンポジタ、Web Worker）。注意書きが最良の部分——「yield しても作業は速くならない」、分割が細かすぎると逆効果、`setTimeout` には最小ネストタイマー遅延がある（ゆえに `MessageChannel` や `scheduler.yield()`）、そして大きなレスポンスへの `JSON.parse` は何をしてもアトミックだ。
+
+**Why it matters:** INP と TBT は知覚品質を門番する指標になり、その両方とも本質的には「メインスレッドがどれだけ塞がれていたか」——ダッシュボードが赤くなったとき、チームに本当に必要なのはこの語彙と決定木だ。
+
+> 分割できない作業もある：単一のパースが塞ぐとき、唯一の出口は Worker——この記事は「yield がすべてを解決する」という誘惑に抗っている。
+
+[`🔗 kciter.so：The Browser's Main Thread Is Expensive`](https://kciter.so/posts/the-expensive-main-thread/en/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49522137)
+
+---
+
+## 34. Cloudflare のキャッシュトランスコーディング試作——書き込み時に zstd 圧縮、配信時にデコード、保管容量は約 1/3
+
+- **Velocity:** ▮ steady
+- **Source:** Cloudflare ブログ（一次ソース） · HN 123 pts / 55 コメント · Sep 1 ~21:41 UTC+8 投稿
+- **Tags:** `cloudflare` `caching` `zstandard` `pingora` `infrastructure`
+
+Cloudflare のインターン試作は、キャッシュに書き込む時点で対象レスポンスを Zstandard（level 3）でトランスコードし、保管時も Tiered Cache によるデータセンター間転送でも圧縮したまま保ち、クライアント面向けのホップでのみデコードする——動機はメモリとディスク価格の高騰であり、「実効キャッシュ容量」が最も安い勝ち筋になったことだ。10 サーバー約 100 万リクエストでの実測：対象アセットは約 1/3 に縮小（2.834 倍の比率）、エンコードは 4.31 ns/バイトで**フィルごとに一度だけ**、デコードは 1.56 ns/バイトを配信のたびに支払い、引き換えに「数パーセント」の追加 CPU。適格ルールは保守的——200 OK、既存の Content-Encoding なし、圧縮可能なテキスト、4 KiB 以上——そして投稿は率直に、メディアが除外されたこと（リクエストの 21.4% だがバイトの 63.3%）、テストコーパスが意図的に圧縮しやすいものだったため、この比率は全ネットワーク定数ではないと認めている。
+
+**Why it matters:** RAM とストレージのコストが上昇する今、数パーセントの CPU を約 3 倍のキャッシュ容量と交換する取引は、ほとんどのキャッシュ運用者が評価を迫られるものだ——先週の Cloudflare DNS キャッシュメモリ記事に続く、キャッシュフットプリント工学が第一級の予算項目になった 2 つ目のデータポイントでもある。
+
+> 範囲の注記：これは CDN オブジェクトキャッシュであって 1.1.1.1 リゾルバではない——そして「人気コンテンツのみトランスコード」はテストされた結果むしろ悪化した。この直感に反する結果こそ覚える価値がある。
+
+[`🔗 Cloudflare：We could save petabytes of cache storage with Zstandard and Pingora`](https://blog.cloudflare.com/cache-transcoding/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49521909)
+
+---
+
+## 35. magnitudedev/magnitude——コーディングエージェントが使うべきローカルモデルを選び、チューニングし、提供する推論サーバー
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +130 スター · 累計 1,755
+- **Tags:** `local-llm` `inference` `agents` `developer-tools` `apache-2.0`
+
+Magnitude はマシンをプロファイリングし（チップ、メモリ、帯域）、収まるローカルモデルを推定 tokens/sec つきで推奨し、ダウンロードして自動チューニング（投機的デコーディング、同時実行数）して提供し、メモリが逼迫するとアイドルモデルをアンロードする。フックはエージェント相互運用レイヤーだ：`magnitude setup`——または生成されたプロンプトを 1 つ貼る——で既存のハーネス（Pi、OpenCode、Hermes、OpenClaw、Codex、Claude Code、Oh My Pi、Cline）をローカルサーバーに接続し、エージェントはセッション途中でも CLI 経由でモデルを切り替えられる。Apache-2.0、`npm i -g @magnitudedev/cli`、ウェイト取得後は完全オフライン；Hugging Face の任意の GGUF が使用可能；Windows は WSL のみ。
+
+**Why it matters:** 昨日の FrontierHarness 項目はハーネスがタスクあたりコストを 17 倍振れさせうることを示した——magnitude はもう一つの変数を攻撃し、モデルの「選択」をオペレーターから丸ごと取り去る。それは今週のローカルモデル流行（Mac Mini 設計図の項を参照）がオートメーションレイヤーを育てたということだ。
+
+> 若いプロジェクト：1.8k スター、リリースはまだない、「runs the best local models」は README 自身のマーケティングで、品質はマシンのメモリに律速される——セットアッププロンプトはオンボーディングをエージェントに任せるので、貼る前に何をするか読め。
+
+[`🔗 magnitudedev/magnitude`](https://github.com/magnitudedev/magnitude) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
 ## Metadata
 
 | 項目 | 値 |
 |-------|-------|
-| Generated | 2026-09-03T12:25:00+08:00 |
-| Items | 24 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Paint.net forums, mlc-ai/web-llm, PhiloLabs, werwolv.net, Jenkins security advisory, SecurityOnline, Nature Human Behaviour, sngyai/Sequoia-X, secondthoughts.ai, wasmi-labs) |
+| Generated | 2026-09-03T20:15:00+08:00 |
+| Items | 35 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Paint.net forums, mlc-ai/web-llm, PhiloLabs, werwolv.net, Jenkins security advisory, SecurityOnline, Nature Human Behaviour, sngyai/Sequoia-X, secondthoughts.ai, wasmi-labs, pola.rs, aisle.com, Multiverse Computing, grapheneos.social, Hugging Face, tiktok-api.seeksocial.io, hermit-tech.com, kciter.so, Cloudflare blog) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（毎日3回） |
 | Ranking | ベロシティ重視（新しさ × エンゲージメント加速度 × ソースの権威性） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

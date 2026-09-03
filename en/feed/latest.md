@@ -1,8 +1,8 @@
 ---
 date: 2026-09-03
-updated: 2026-09-03T12:25:00+08:00
+updated: 2026-09-03T20:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -399,13 +399,189 @@ Wasmi — the Rust WebAssembly interpreter embedded in Stellar's Soroban, Typst,
 
 ---
 
+## 25. Polars 2.0 pre-release — the streaming engine becomes the default, and silent coercion becomes an error
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** pola.rs (primary) · HN 221 pts / 63 comments · submitted Sep 3 ~14:59 UTC+8
+- **Tags:** `polars` `dataframes` `rust` `data-engineering` `release`
+
+Ritchie Vink published the first 2.0 release candidate ("the definite 2.0 release will land in the following weeks… we hope it to be a boring experience for you"). The headline change: all `LazyFrame` queries now run on the streaming engine by default — "easily 5x faster" in aggregate, with major memory improvements. The deeper story is the strictness pivot: `is_in` no longer lossy-casts Int64→Float64 (which silently rounded large IDs into false positives — now `InvalidOperationError`), horizontal `concat` raises `ShapeError` instead of null-padding, ambiguous casts are removed, and removed APIs raise new `AttributeRemovedError`/`ArgumentRemovedError` exceptions that point at replacements (`melt` → `unpivot`). Escape hatches are explicit: `engine="in-memory"` restores old behavior per query or process-wide.
+
+**Why it matters:** the pandas-successor lineage just standardized "fail loudly instead of silently coercing" — pipelines that depended on lenient casting will now break at the exact line where they were quietly wrong.
+
+> The streaming engine "doesn't guarantee row-order by default for certain operations" (`join`, `group_by`, `unpivot`) — opt in with `maintain_order=True` before you assume ordered output.
+
+[`🔗 pola.rs: Announcing Polars 2 (Pre-Release)`](https://pola.rs/posts/announcing-polars-2/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49546753)
+
+---
+
+## 26. averygan/reclip — a ~150-line Flask wrapper around yt-dlp is the day's fastest-rising repo (+673 stars)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · +673 stars today · 8,154 total
+- **Tags:** `yt-dlp` `self-hosted` `media` `python` `minimalism`
+
+ReClip is a self-hosted video/audio downloader with a web UI: paste a URL from any of yt-dlp's 1,000+ supported sites, pick MP4 or MP3 and a quality, download individually or in bulk with automatic URL deduplication. The stack is the point: a Python/Flask backend of roughly 150 lines, a vanilla HTML/CSS/JS frontend with "no frameworks, no build step," and exactly two dependencies (Flask, yt-dlp) — plus ffmpeg. MIT-licensed, Docker option, serves on port 8899. The README states "intended for personal use only" and asks users to respect copyright and platform ToS.
+
+**Why it matters:** the same week Chrome finished removing Manifest V2 ad blockers, the fastest-growing repo in this batch is a minimal self-hosting tool — the "own your tooling" reflex keeps converting simplicity itself into star velocity.
+
+> Only 19 commits and no releases: this is a young project riding a viral moment, not hardened infrastructure — and its lawful-use scope is the user's responsibility, not the code's.
+
+[`🔗 averygan/reclip`](https://github.com/averygan/reclip) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 27. Six curl CVEs after OpenAI and Anthropic's tools came back with zero — a specialized AI system out-found the frontier on a real codebase
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Aisle blog (primary, vendor-published) · HN 171 pts / 56 comments · submitted Sep 2 ~21:43 UTC+8
+- **Tags:** `curl` `cve` `ai-security` `zero-day` `vulnerability-discovery`
+
+On Aug 24, curl founder Daniel Stenberg publicly noted only three CVEs were pending — and that frontier AI had found nothing: "[Anthropic] Mythos says it can't find any more… [OpenAI] Codex security shows an empty list." Aisle — a startup selling an autonomous zero-day-discovery system — then ran its system on curl and produced 29 reports; Stenberg publicly scored it the next day: "Mythos: 0 / Aisle: 29." Curl's maintainers (not Aisle) validated the findings, and six became CVEs in curl 8.22.0 (CVE-2026-80229/-80230/-80231/-80255/-82208/-82209 — OpenSSL provider UAF, pinning bypass, CA-store reuse, cookie attribute flaws), **all rated Low severity**; curl's pending-CVE count rose from three to ten by Aug 28. Greg Kroah-Hartman: "I'm seeing the same for Linux as well. No idea what Aisle is doing differently, but wow…"
+
+**Why it matters:** the first public, timestamped head-to-head where a specialized AI system beat frontier models on production code — but the honest denominators matter: 6 of 29 reports became CVEs, all Low, and the writeup is the vendor's own.
+
+> Aisle's own framing is worth keeping: the low severities reflect "curl's exceptional engineering maturity" — what's left in a hardened codebase are narrow-configuration bugs, which is exactly where model-independent tooling should shine.
+
+[`🔗 Aisle: Six curl CVEs after OpenAI and Anthropic found zero`](https://aisle.com/blog/aisle-discovered-six-curl-cves-after-openai-and-anthropic-found-zero) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49536114)
+
+---
+
+## 28. Audacity 4.0 — the first major version in years ships a Qt rebuild, a new clip model, and an honest missing-features list
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub release (primary) · HN 44 pts / 7 comments · released Sep 3 ~18:53 UTC+8
+- **Tags:** `audacity` `audio` `qt` `open-source` `release`
+
+Audacity 4.0.0 landed today: the UI is rebuilt on Qt with native high-DPI rendering, dockable panels, saved Workspaces (Modern/Classic/Music), and light/dark/high-contrast themes. The editing model changes substantively — direct clip selection and multi-select, a dedicated Split tool, alignment guides, and the removal of the Select/Envelope/Draw/Multi tool modes in favor of context-sensitive behavior. Official Windows builds now include ASIO support. The new `.aup4` project format converts from `.aup3` **one-way** ("Converted projects cannot be saved back to `.aup3`"), and the release notes openly list what 4.0 dropped: Time Tracks, Note/MIDI tracks, macros, the scripting pipe, LADSPA/VAMP hosting, Play-at-speed — "planned for future releases."
+
+**Why it matters:** the 25-year-old GPL audio editor just took its biggest architectural swing in a decade, and shipping a major version with an explicit known-missing list — rather than quietly regressing features — is the release-notes behavior more projects should copy.
+
+> If your workflow depends on the scripting pipe or MIDI tracks, stay on Audacity 3 until the parity list clears; and the one-way `.aup4` conversion means no cheap undo.
+
+[`🔗 Audacity 4.0.0 release`](https://github.com/audacity/audacity/releases/tag/Audacity-4.0.0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49548395)
+
+---
+
+## 29. Quasar 438B — Multiverse Computing claims "Europe's leading AI model," and publishes the gap to the frontier itself
+
+- **Velocity:** ▮▮ rising
+- **Source:** Multiverse Computing (primary, vendor-published) · HN 185 pts / 65 comments · submitted Sep 2 ~18:02 UTC+8
+- **Tags:** `multiverse-computing` `model-release` `europe` `benchmarks` `sovereign-ai`
+
+Multiverse Computing — the Spanish quantum-inspired compression company behind CompactifAI — introduced Quasar 438B, "built for enterprise-scale agents and coding," English and Spanish. On Artificial Analysis's Intelligence Index v4.1.1 it scores **43** — ahead of Mistral Medium 3.5 (30), Nemotron 3 Ultra (38) and Inkling (42), and behind Claude Opus 5 (63); AA-LCR 75.0 ("near parity" with Grok 4.6 high and Opus 5); Terminal-Bench v2.1 69.3 vs the frontier group led by Opus 5 at 89.1 — which the company itself calls "the evaluation with the most headroom." No license is mentioned and there are no open weights: access is via the CompactifAI API only.
+
+**Why it matters:** Europe's sovereign-model argument now has a published leaderboard number instead of a press release — and to the company's credit, the same post carries the 43-vs-63 frontier gap and the Terminal-Bench deficit that most "leading in Europe" coverage omits.
+
+> Everything here is vendor-published against a third-party leaderboard, the 438B-class size is self-described, and the page even cites Nemotron 3 Ultra at both 38 and 36 — treat the rankings as directional until independent numbers land.
+
+[`🔗 Multiverse Computing: Introducing Quasar 438B`](https://multiversecomputing.com/resources/introducing-quasar-438b-europe-s-leading-ai-model) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49534132)
+
+---
+
+## 30. GrapheneOS walks back the Pixel 11 MTE obituary — the hardware support is still there, just crippled in firmware
+
+- **Velocity:** ▮▮ rising
+- **Source:** GrapheneOS on Mastodon (primary, permalink verified via instance API) · HN 190 pts / 153 comments · submitted Sep 2 ~22:00 UTC+8
+- **Tags:** `grapheneos` `pixel` `mte` `memory-safety` `android`
+
+**Update:** since we covered this on Aug 30 ("the Pixel 11 dropped hardware MTE — the port may be skipped entirely"), GrapheneOS now reports good news: "It still has at least bare minimum support for MTE at a hardware level. We think they removed most of the hardware acceleration from the CPU cache to save money. They ruined the performance so it ended up being fully disabled in firmware. It may still be usable." So the silicon retains minimal MTE capability; what Google disabled is the firmware enablement, because the de-accelerated implementation was too slow. The Sep 1 post (permalink resolves on grapheneos.social; note the URL 404s if queried against mastodon.social) drew 190 points of HN attention to the reversal within 48 hours of the original report.
+
+**Why it matters:** MTE is the memory-safety backstop that makes C/C++ code caught-by-construction on Android — whether the degraded hardware is "still usable" decides if the Pixel 11 gets a GrapheneOS port at all, and the project's willingness to publish its own reversal in two days is the fact-checking norm this feed grades everyone by.
+
+> "We think" is doing real work in the post: the cache-acceleration-removal explanation is GrapheneOS's inference, not Google's confirmation.
+
+[`🔗 GrapheneOS on Mastodon (Sep 1)`](https://grapheneos.social/@GrapheneOS/117194007157499435) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49536384)
+
+---
+
+## 31. 4.5 billion TikTok videos as a downloadable dataset — the largest public social-media scrape ever, collected with zero accounts
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face dataset (primary) · HN 17 pts, new and climbing · submitted Sep 3 ~19:25 UTC+8
+- **Tags:** `tiktok` `scraping` `dataset` `privacy` `reverse-engineering`
+
+`kuben-developer/tiktok-videos-4b` is live on Hugging Face: **4,501,811,789 rows** (289 GB of Parquet, research-purposed license) covering captions, engagement counts (views/likes/comments/shares/saves), sound, country, language and posting time for TikTok videos. The accompanying writeup explains the method: the private Android-app API, anonymous device registration (no accounts anywhere), request signing via X-Argus (Simon/Speck/SM3 ciphers) and X-Ladon, uTLS fingerprint spoofing, and rotating residential proxies (~$950/month) — about three weeks of collection. The dataset card is unusually careful: engagement counts are a one-time snapshot (not comparable across capture dates without age normalization), rows are creator-clustered and need shuffling, no creator identities or media URLs are included ("deliberate"), it's 27 of 32 partitions rather than a census, collection was contrary to TikTok's ToS, and there's a GDPR/CCPA removal-request process.
+
+**Why it matters:** whether your interest is research, mis/disinfo analysis, or threat modeling, this resets the floor for what's publicly obtainable from a major platform — and it demonstrates that TikTok's device-trust architecture is scrapable at billions-of-rows scale without a single account ban risk surface.
+
+> The author sells the scraping toolkit ($699/$1,899) alongside the free dataset — the research release is also the product demo. The HN thread had just started at write time; expect the legality fight to dominate.
+
+[`🔗 Hugging Face: kuben-developer/tiktok-videos-4b`](https://huggingface.co/datasets/kuben-developer/tiktok-videos-4b) · [`🔗 Method writeup`](https://tiktok-api.seeksocial.io/)
+
+---
+
+## 32. "AI Can Make You Suck Faster Too" — 190 points for the arithmetic that four years of 10× coding AI should have produced three Airbnbs by now
+
+- **Velocity:** ▮ steady
+- **Source:** hermit-tech.com (primary, published Aug 17) · HN 190 pts / 173 comments · submitted Sep 1 ~13:32 UTC+8, still on front page
+- **Tags:** `analysis` `productivity` `ai-skepticism` `essay` `engineering`
+
+The Hermit Tech essay (borrowing Disesdi Shoshana Cox's arithmetic) runs the numbers: at a claimed 10× development speedup, four years of open-source LLMs should have yielded roughly three Airbnbs, two Stripes and three Dropboxes — "So. Where the fuck are they?" The biggest new tech companies of the GenAI era are the GenAI companies themselves. The author's evidence is a $10 DeepSeek experiment on a real consultancy project: the output "would run, but it was a clown car rolling around with wheels held on by duct tape," and the deeper claim is that writing lines of code was never the time-dominant part of software delivery — leaders who believe "just get Claude to do it" removed the bottleneck are optimizing the wrong constraint.
+
+**Why it matters:** this is the counter-genre to this week's skeptic-auditing essays (Dan Luu grading Ed Zitron on Sep 2) — and its central claim is refreshingly falsifiable: count the post-2022 software companies that exist only because AI collapsed the build cost. 173 comments and a two-day front-page run say the industry wants this argument adjudicated.
+
+> The essay is anecdote-led, not measurement-led — one developer, one project, $10 of credits. Its strength is the falsifiable macro-claim, not its micro-evidence.
+
+[`🔗 hermit-tech: AI Can Make You Suck Faster Too`](https://www.hermit-tech.com/blog/ai-can-make-you-suck-faster-too) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49518316)
+
+---
+
+## 33. "The Browser's Main Thread Is Expensive" — a field guide to the 10 ms you actually have
+
+- **Velocity:** ▮ steady
+- **Source:** kciter.so (primary) · HN 143 pts / 48 comments · submitted Sep 1 ~22:00 UTC+8, still on front page
+- **Tags:** `web-performance` `javascript` `browser` `inp` `scheduling`
+
+A walkthrough of why JS execution and screen drawing "stand in a single line on the same thread": at 60 Hz a frame is nominally 16.6 ms, but after browser overhead the practical budget is ~10 ms (halved on 120 Hz), and "long tasks" are flagged at 50 ms. The thesis: "The code isn't slow. It just happens to be the code that's holding the main thread" — so algorithmic tweaks are usually not the fix. Two families of remedies, with honest tradeoffs: spend the thread wisely (split work and yield, batch high-frequency events), or don't use it at all (compositor, Web Workers). The caveats are the best part — "yielding does not make the work faster," splitting too finely backfires, `setTimeout` carries a minimum nested-timer delay (hence `MessageChannel` or `scheduler.yield()`), and `JSON.parse` on a large response is atomic no matter what you do.
+
+**Why it matters:** INP and TBT are now the metrics that gate perceived quality, and both are just "how long was the main thread blocked" — this is the vocabulary and the decision tree teams actually need when those dashboards go red.
+
+> Some work is unsplittable: when a single parse blocks, the only exit is a Worker — the article resists the temptation to pretend yielding fixes everything.
+
+[`🔗 kciter.so: The Browser's Main Thread Is Expensive`](https://kciter.so/posts/the-expensive-main-thread/en/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49522137)
+
+---
+
+## 34. Cloudflare's cache transcoding prototype — zstd-compress the CDN cache on fill, decode on serve, ~⅓ the bytes at rest
+
+- **Velocity:** ▮ steady
+- **Source:** Cloudflare blog (primary) · HN 123 pts / 55 comments · submitted Sep 1 ~21:41 UTC+8
+- **Tags:** `cloudflare` `caching` `zstandard` `pingora` `infrastructure`
+
+A Cloudflare internship prototype transcodes eligible responses with Zstandard (level 3) when they're written to cache, keeps them compressed at rest and in transit between data centers via Tiered Cache, and decodes only on the client-facing hop — motivated by surging memory and disk prices turning "effective cache capacity" into the cheap win. Measured on ~1M requests across 10 servers: eligible assets shrink to ~⅓ (2.834× ratio), encode costs 4.31 ns/byte **once per fill**, decode 1.56 ns/byte per serve, for "a few percent" extra CPU. The eligibility rules are conservative — 200 OK, no existing Content-Encoding, compressible text, ≥4 KiB — and the post is upfront that media was excluded (21.4% of requests but 63.3% of bytes) and that the test corpus was deliberately compressible, so the ratio is not a fleet-wide constant.
+
+**Why it matters:** with RAM and storage costs climbing, trading a few percent of CPU for roughly 3× cache capacity is the trade most cache operators will be forced to evaluate — and this follows last week's Cloudflare DNS-cache memory post as a second data point that cache-footprint engineering is now a first-class budget line.
+
+> Scope note: this is the CDN object cache, not the 1.1.1.1 resolver — and restricting transcoding to *popular* content was tested and performed worse, which is the counterintuitive result worth remembering.
+
+[`🔗 Cloudflare: We could save petabytes of cache storage with Zstandard and Pingora`](https://blog.cloudflare.com/cache-transcoding/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49521909)
+
+---
+
+## 35. magnitudedev/magnitude — a local inference server that picks, tunes and serves the model your coding agent should use
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +130 stars today · 1,755 total
+- **Tags:** `local-llm` `inference` `agents` `developer-tools` `apache-2.0`
+
+Magnitude profiles your machine (chip, memory, bandwidth), recommends local models that fit — with estimated tokens/sec — then downloads, auto-tunes (speculative decoding, concurrency) and serves them, unloading idle models under memory pressure. The agent-interop layer is the hook: `magnitude setup` — or pasting one generated prompt — wires your existing harness (Pi, OpenCode, Hermes, OpenClaw, Codex, Claude Code, Oh My Pi, Cline) to the local server, and agents can switch models through the CLI mid-session. Apache-2.0, `npm i -g @magnitudedev/cli`, fully offline once weights are down; any GGUF from Hugging Face works; Windows via WSL only.
+
+**Why it matters:** yesterday's FrontierHarness item showed the harness can swing cost-per-task 17× — magnitude attack the other variable, removing model *selection* from the operator entirely, which is the local-model trend (see this week's Mac Mini blueprint) growing an automation layer.
+
+> Young project: 1.8k stars, no releases yet, "runs the best local models" is the README's own marketing, and quality remains bounded by your machine's memory — the setup prompt hands the onboarding to an agent, so read what it does before pasting.
+
+[`🔗 magnitudedev/magnitude`](https://github.com/magnitudedev/magnitude) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-03T12:25:00+08:00 |
-| Items | 24 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Paint.net forums, mlc-ai/web-llm, PhiloLabs, werwolv.net, Jenkins security advisory, SecurityOnline, Nature Human Behaviour, sngyai/Sequoia-X, secondthoughts.ai, wasmi-labs) |
+| Generated | 2026-09-03T20:15:00+08:00 |
+| Items | 35 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Paint.net forums, mlc-ai/web-llm, PhiloLabs, werwolv.net, Jenkins security advisory, SecurityOnline, Nature Human Behaviour, sngyai/Sequoia-X, secondthoughts.ai, wasmi-labs, pola.rs, aisle.com, Multiverse Computing, grapheneos.social, Hugging Face, tiktok-api.seeksocial.io, hermit-tech.com, kciter.so, Cloudflare blog) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
