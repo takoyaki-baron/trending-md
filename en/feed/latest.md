@@ -1,8 +1,8 @@
 ---
 date: 2026-09-03
-updated: 2026-09-03T04:10:00+08:00
+updated: 2026-09-03T12:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 15
+sources: 21
 license: CC-BY-4.0
 ---
 
@@ -245,7 +245,7 @@ The Chrome DevTools team's MCP server — "Chrome DevTools for coding agents" �
 - **Source:** GitHub Trending · +69 stars today · 11,650 total
 - **Tags:** `developer-tools` `localhost` `https` `monorepo` `vercel`
 
-vercel-labs/portless is a CLI that gives dev servers stable named URLs: `portless myapp next dev` assigns a random port, auto-starts a local proxy on 443, generates and trusts a local CA, and serves **https://myapp.localhost** with HTTP/2 by default. The agent-relevant part is deliberate: worktrees get automatic branch subdomains (`fix-ui.myapp.localhost`), monorepos get `api.myapp.localhost` from one `portless.json`, and named URLs give agents stable targets that survive port churn. Pre-1.0 caveats are honestly listed: port 443 needs sudo on macOS/Linux, Safari may need `portless hosts sync`, and strict OAuth providers (Google, Apple) reject `.localhost` redirect URIs entirely.
+vercel-labs/portless is a CLI that gives dev servers stable named URLs: `portless myapp next dev` assigns a random port, auto-starts a local proxy on 443, generates and trusts a local CA, and serves **myapp.localhost** with HTTP/2 by default. The agent-relevant part is deliberate: worktrees get automatic branch subdomains (`fix-ui.myapp.localhost`), monorepos get `api.myapp.localhost` from one `portless.json`, and named URLs give agents stable targets that survive port churn. Pre-1.0 caveats are honestly listed: port 443 needs sudo on macOS/Linux, Safari may need `portless hosts sync`, and strict OAuth providers (Google, Apple) reject `.localhost` redirect URIs entirely.
 
 **Why it matters:** "for humans and agents" is becoming a real design constraint — ports were fine when only humans typed them, and the tooling layer is starting to assume agents are first-party clients of the dev environment.
 
@@ -287,13 +287,125 @@ mlc-ai/web-llm — high-performance LLM inference entirely in the browser via We
 
 ---
 
+## 18. PhiloLabs/fable51-worlds — an agent swarm rebuilt San Francisco's Union Square in Three.js, and camera-matched it against reality
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN 163 pts / 54 comments · submitted Sep 2 ~19:49 UTC (~Sep 3 03:49 UTC+8)
+- **Tags:** `agents` `threejs` `world-models` `osm` `claude-code`
+
+A new MIT-licensed repo from PhiloLabs makes "worlds via code": explorable browser-native 3D reconstructions of real places, generated end-to-end by agent swarms — no game engine, no proprietary 3D tiles. The single shipped world is Union Square, San Francisco: 453 OSM building footprints, 75 hand-authored façades, 129 named storefronts, 220 pedestrians on a 1,398-node nav graph, 109 vehicles including Powell St cable cars, and two explorable interiors (Apple Union Square, Nintendo SF). The pipeline is the interesting part: research agents pull OSM/USGS data, Blender-as-a-library emits GLB kits, a pure Three.js runtime assembles the scene — and QA is a **camera-match loop**: Playwright screenshots 34 fixed viewpoints and diffs them against free-licensed photos, with 9 independent reviewer-agent reports feeding the next fix cycle. Code and generated assets are MIT; reference photos are *not* redistributed, with per-sector `refs/*/SOURCES.md` provenance files.
+
+**Why it matters:** the validation loop is what separates this from the render-demo genre — claims are anchored to 34 camera-matched viewpoints and 147 comparison sheets rather than vibes, and it's an early template for "agents as world-builders" with built-in, photo-grounded eval.
+
+> Six commits on `main`, ~158 stars, one world, "more worlds coming" — this is a proof of concept, not a platform. The ODbL attribution requirement on OSM-derived geometry is a real obligation if you fork it.
+
+[`🔗 PhiloLabs/fable51-worlds`](https://github.com/PhiloLabs/fable51-worlds) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49541458)
+
+---
+
+## 19. WerWolv's guide to reverse engineering unknown file formats — the ImHex Pattern Language walkthrough hits the HN front page
+
+- **Velocity:** ▮ rising
+- **Source:** werwolv.net (primary, published Aug 27) · HN 129 pts / 26 comments · resurfaced to front page Sep 3
+- **Tags:** `reverse-engineering` `imhex` `binary-formats` `hex-editor` `tooling`
+
+ImHex author WerWolv published the tutorial they wish they'd had: take FEZ's completely undocumented binary save file and go from a wall of hex to a full, typed description in ImHex's Pattern Language. The method is general, not game-specific: check for known magic, decompile the code that reads/writes the file (JetBrains Rider for the C# game, with Ghidra/IDA/Binary Ninja named for native code), identify the serialization building blocks — 7-bit-encoded length prefixes, nullable `Object<T>` wrappers, size-prefixed lists, enums — and re-express each one as a Pattern Language struct with `[[fixed_size]]`, `[[format]]` and `[[transform]]` attributes. The end state is a fully-decoded save file where every byte is highlighted and editable, with the pattern doubling as documentation of the format. ImHex itself is a 54.6k-star GPL-2.0 hex editor; the post notes some features shown require a Nightly build (≥ v1.38.1).
+
+**Why it matters:** "read the decompiled writer function and work backwards" has been tribal knowledge; this is now a citable, step-by-step methodology — and the Pattern Language is the rare tool whose output *is* the documentation, which is exactly what agents asked to parse unknown formats need.
+
+> The author's own caveat: not every target decompiles this cleanly — C#/.NET is the easy case, and native binaries put you in Ghidra-land with much more work per field.
+
+[`🔗 werwolv.net: Reverse Engineering Unknown File Formats`](https://werwolv.net/posts/file_format_reverse_engineering/) · [`🔗 WerWolv/ImHex`](https://github.com/WerWolv/ImHex)
+
+---
+
+## 20. Jenkins ships 31 CVE fixes in one advisory — the headline is an XStream deserialization chain to the Script Console
+
+- **Velocity:** ▮ rising
+- **Source:** Jenkins security advisory 2026-09-02 (primary) · covered Sep 3
+- **Tags:** `jenkins` `cve` `rce` `deserialization` `ci-cd`
+
+Jenkins's September advisory patches **31 CVEs across core and ~15 plugins**, with fixes in weekly **2.580** / LTS **2.568.3**. The lead bug, **CVE-2026-84645** (CVSS 8.8), lets persistence-root types (agents, items, builds) be nested inside a user-submitted `config.xml` and routed through Stapler — "a crafted combination of such objects can result in attackers getting access to an improperly protected Script Console, resulting in remote code execution." Also RCE-capable: File Parameter plugin path traversal (CVE-2026-84671) and Performance plugin Java deserialization (CVE-2026-84670); plus stored XSS, a CSRF-token leak to sibling subdomains, session fixation, and a SAML plugin flaw letting metadata overwrites authenticate as any user (CVE-2026-84668). The advisory reports **no known in-the-wild exploitation**; most findings came through the EC-sponsored bug bounty.
+
+**Why it matters:** CI controllers are the credential-crowded heart of every dev org, and the `config.xml` deserialization class has escaped Jenkins's Script Security filter before — patch the controller before the PoCs arrive, not after.
+
+> Two flagged loose ends: the Parameterized Remote Trigger Plugin (CVE-2026-84676, plaintext tokens) **has no fix as of publication**, and the update-center2 XSS (CVE-2026-84677) awaits a malicious-plugin proof.
+
+[`🔗 Jenkins security advisory 2026-09-02`](https://www.jenkins.io/security/advisory/2026-09-02/) · [`🔗 SecurityOnline: Jenkins patches RCE flaw and 30+ vulnerabilities`](https://securityonline.info/jenkins-advisory-2026-09-02-rce/)
+
+---
+
+## 21. Nature Human Behaviour: LLM polishing is measurably flattening writing — complexity variance down 21–50%
+
+- **Velocity:** ▮ steady
+- **Source:** Nature Human Behaviour (primary, published Aug 24) · HN 66 pts / 43 comments · on front page Sep 3
+- **Tags:** `research` `linguistics` `llm` `homogenization` `writing`
+
+A USC team (Sourati et al.) reports across three studies, seven datasets and 880,000+ texts that widespread LLM use as a writing assistant "is linked to declines in linguistic diversity": when models polish or rewrite text, core content survives but style homogenizes — variance in writing-complexity features drops a statistically significant **21–50%** across datasets and models (GPT-3.5, Gemini, Llama 3), "emphasizing conformity over individuality." The observational arm is an interrupted time-series over arXiv, Patch News and Reddit showing complexity-variance shrinking after ChatGPT's launch alongside rising AI-attribution rates; the experimental arm rewrites ~12 prompt types' worth of originals and re-scores trait classifiers (personality, gender, age, morality) on them, watching the predictions drift. Flagged consequences: diagnostics, personalization, hiring assessments, cultural preservation.
+
+**Why it matters:** the effect survives across three different model families — this is a property of the assistant pattern, not one vendor's tuning — and downstream systems trained on pre-LLM text are silently scoring a distribution that no longer exists.
+
+> The time-series findings are explicitly correlational ("is linked to"); parts of the Limitations section are paywalled, and per-dataset sample sizes vary by orders of magnitude — the 21–50% range is wide because the evidence strength is uneven.
+
+[`🔗 Nature Human Behaviour: The shrinking landscape of linguistic diversity`](https://www.nature.com/articles/s41562-026-02550-0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49497996)
+
+---
+
+## 22. sngyai/Sequoia-X — a Chinese retail quant screener that scans the whole A-share market after close and pushes picks to Feishu
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +63 stars today · 6,229 total
+- **Tags:** `quant` `stocks` `python` `chinese-oss` `automation`
+
+Sequoia-X is an MIT-licensed Python "A股量化选股系统 V2" that runs after each trading day's close: it pulls backward-adjusted daily K-lines for ~5,200 stocks from **baostock** (free, no registration), stores them in local SQLite — which the README says sidesteps Eastmoney anti-scraping — runs six built-in strategies (Turtle 20-day breakout, MA+volume, High Tight Flag, Limit-Up Shakeout, Uptrend Limit-Down, O'Neil-style RPS breakout), and pushes the hits to a Feishu group chat in 2–3 minutes via 8 parallel processes. Full-market backfill takes ~12 minutes. The engineering is unusually modern for the genre: Pydantic settings, vectorized computation, property-based tests, ruff/pytest, a crontab recipe at 19:15 on weekdays.
+
+**Why it matters:** the Chinese retail-quant genre is usually a pile of scraped notebooks; this one's stack (free data source, local storage, strategy modules as swappable units) makes it a usable starting point — and a template for how the genre is professionalizing.
+
+> It's a technical-pattern screener, not a return claim: no backtest results are published in the README, and strategy output arrives as candidates to review, not as signals to trade.
+
+[`🔗 sngyai/Sequoia-X`](https://github.com/sngyai/Sequoia-X) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 23. "Reasons robotics is hard" — a hardware founder's 14-item checklist for why the ChatGPT moment hasn't come for physical AI
+
+- **Velocity:** ▮ steady
+- **Source:** secondthoughts.ai (primary) · HN 61 pts / 24 comments · submitted Sep 2 ~22:02 UTC (~Sep 3 06:02 UTC+8)
+- **Tags:** `robotics` `embodied-ai` `analysis` `hardware`
+
+Steve Newman (Wrike co-founder, hardware builder) enumerates why physical AI lags knowledge-work AI: hands (~24 degrees of freedom, ~17,000 tactile sensors — no robot matches the full combination and delicate sensors don't survive heavy use), cluttered-scene perception, re-planning, missing training data for physical tasks, zero cooperation ability, unresolved form factors, safety (a robot that freezes mid-task is itself a hazard), endurance (one cited humanoid manages 10–15 minutes of task work before cooling), onboard-compute tradeoffs, and non-existent supply chains — Tesla took 14 years to reach a million-car year. His central epistemics point: **demo videos are weak evidence** — cherry-picked from maybe 1-in-100 runs, staged to dodge hard cases, sped up in editing.
+
+**Why it matters:** as humanoids raise on the strength of montage videos, this is a compact checklist for discounting them — and its conclusion is sharper than "it's early": the demo-to-reality gap in robotics will likely be *wider* than the benchmark-to-reality gap LLMs just went through.
+
+> Newman thinks cost will ultimately *not* be the limiting factor — the hard constraints are dexterity, reliability and generalization, which is the opposite of what most robot-launch coverage emphasizes.
+
+[`🔗 secondthoughts.ai: Reasons robotics is hard`](https://secondthoughts.ai/p/14-reasons-robotics-is-hard) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49543191)
+
+---
+
+## 24. Wasmi 2.0 — the Rust WASM interpreter gets ~2.2× faster, and half the win came from undoing a Rust 1.92 miscompile
+
+- **Velocity:** ▮ steady
+- **Source:** wasmi-labs blog (primary) · HN front page, 60 pts / 3 comments
+- **Tags:** `webassembly` `rust` `interpreter` `performance` `compiler`
+
+Wasmi — the Rust WebAssembly interpreter embedded in Stellar's Soroban, Typst, Zellij and Ripple — shipped 2.0: four dispatch modes (direct-threaded default using tail calls, indirect-threaded, and two fallbacks), accumulator registers that replace stack-slot decoding, a redesigned instance object with one contiguous handles allocation, and a lock-free append-only CodeMap enabling lazy compilation. Net effect: **~2.2× faster than 1.0** (geometric mean, Apple M2 Pro), now competitive with Wasm3, Stitch, WAMR and Wasmtime Pulley. The honest engineering detail is the biggest single win: an accidental Rust 1.92 `DestinationPropagation` deoptimization was collapsing branch sites into `csel` — fixing it took CoreMark from ~2,800 to 4,200+ (~50% by itself), and Stitch had silently suffered the same regression. Remaining caveats are printed in the post: SIMD stays off by default, accumulator registers across calls caused regressions and weren't merged, charts are "a peek" of the full suite.
+
+**Why it matters:** interpreter engineering is quietly load-bearing for blockchains and plugin systems — and the post is a case study in how a compiler release can silently cost a third of your performance until someone benchmarks across toolchain versions.
+
+> The Stellar Development Foundation sponsorship **ends October 2026**; the author is openly seeking new funding or a compatible role before the Wasmi 3.0 (Wasm 3.0 features) roadmap.
+
+[`🔗 wasmi-labs: Wasmi 2.0 — engineering of the fastest WASM interpreters`](https://wasmi-labs.github.io/blog/posts/wasmi-v2.0/) · [`🔗 wasmi-labs/wasmi`](https://github.com/wasmi-labs/wasmi)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-03T04:10:00+08:00 |
-| Items | 17 |
-| Sources tracked | 15 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Kestra, BerriAI/LiteLLM, Paint.net forums, mlc-ai/web-llm) |
+| Generated | 2026-09-03T12:25:00+08:00 |
+| Items | 24 |
+| Sources tracked | 21 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Paint.net forums, mlc-ai/web-llm, PhiloLabs, werwolv.net, Jenkins security advisory, SecurityOnline, Nature Human Behaviour, sngyai/Sequoia-X, secondthoughts.ai, wasmi-labs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

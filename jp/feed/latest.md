@@ -1,8 +1,8 @@
 ---
 date: 2026-09-03
-updated: 2026-09-03T04:10:00+08:00
+updated: 2026-09-03T12:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 15
+sources: 21
 license: CC-BY-4.0
 ---
 
@@ -245,7 +245,7 @@ Chrome DevTools チームの MCP サーバー——「コーディングエー�
 - **Source:** GitHub Trending · 本日 +69 星 · 累計 11,650
 - **Tags:** `developer-tools` `localhost` `https` `monorepo` `vercel`
 
-vercel-labs/portless は、開発サーバーに安定した名前付き URL を与える CLI：`portless myapp next dev` がランダムポートを割り当て、443 でローカルプロキシを自動起動し、ローカル CA を生成して信頼し、**https://myapp.localhost** をデフォルトで HTTP/2 で提供する。エージェントに関連する部分は意図的だ：worktree は自動的にブランチ名サブドメイン（`fix-ui.myapp.localhost`）を得て、monorepo は1つの `portless.json` から `api.myapp.localhost` を得て、名前付き URL はポートの変動を生き延びる安定したターゲットをエージェントに与える。Pre-1.0 の注意点は正直に列挙されている：macOS/Linux では 443 のバインドに sudo が必要、Safari は `portless hosts sync` が必要な場合がある、そして厳格な OAuth プロバイダ（Google、Apple）は `.localhost` のリダイレクト URI を完全に拒否する。
+vercel-labs/portless は、開発サーバーに安定した名前付き URL を与える CLI：`portless myapp next dev` がランダムポートを割り当て、443 でローカルプロキシを自動起動し、ローカル CA を生成して信頼し、**myapp.localhost** をデフォルトで HTTP/2 で提供する。エージェントに関連する部分は意図的だ：worktree は自動的にブランチ名サブドメイン（`fix-ui.myapp.localhost`）を得て、monorepo は1つの `portless.json` から `api.myapp.localhost` を得て、名前付き URL はポートの変動を生き延びる安定したターゲットをエージェントに与える。Pre-1.0 の注意点は正直に列挙されている：macOS/Linux では 443 のバインドに sudo が必要、Safari は `portless hosts sync` が必要な場合がある、そして厳格な OAuth プロバイダ（Google、Apple）は `.localhost` のリダイレクト URI を完全に拒否する。
 
 **Why it matters:** 「人間とエージェントのために」は現実の設計制約になりつつある——ポート番号は人間が打つだけなら十分だったが、ツール層はエージェントを開発環境の一人目のクライアントとみなし始めている。
 
@@ -287,13 +287,125 @@ mlc-ai/web-llm——WebGPU により完全にブラウザ内で高性能 LLM 推
 
 ---
 
+## 18. PhiloLabs/fable51-worlds —— エージェント群がサンフランシスコ・ユニオンスクエアをThree.jsで再構築し、実写とカメラ位置を突き合わせて検証
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN 163 pts / 54 コメント · Sep 2 ~19:49 UTC 投稿（~Sep 3 03:49 UTC+8）
+- **Tags:** `agents` `threejs` `world-models` `osm` `claude-code`
+
+PhiloLabs の新しい MIT ライセンスのリポジトリは「worlds via code」：実在の場所をブラウザで探索可能な 3D で再構築したもので、ゲームエンジンも専有 3D tiles も使わず、エージェント群によってエンドツーエンドで生成された。現在出荷されている世界はユニオンスクエア（SF）ただ一つ：453 の OSM 建物フットプリント、75 の手作りファサード、129 の実名店舗、1,398 ノードのナビゲーショングラフ上を歩く 220 人の歩行者、パウエル街のケーブルカーを含む 109 台の車両、さらに探索可能な 2 つの店内シーン（Apple Union Square、Nintendo SF）。面白いのはパイプライン：リサーチエージェントが OSM/USGS データを取得し、Blender-as-a-library が GLB キットを出力し、純 Three.js ランタイムがシーンを組み立てる——そして QA は**カメラマッチループ**：Playwright が 34 の固定視点をスクリーンショットし、自由ライセンスの実写写真と差分を取り、9 本の独立レビューエージェントレポートが次の修正サイクルに戻される。コードと生成アセットは MIT。参照写真は*再配布されず*、出所はセクターごとの `refs/*/SOURCES.md` に記録される。
+
+**Why it matters:** レンダーデモというジャンルとこのリポジトリを分けるのは検証ループだ——主張が雰囲気ではなく 34 のカメラマッチ視点と 147 枚の比較シートに固定されており、「エージェントを世界の構築者にする」試みの初期テンプレートであり、写真に基づく評価が組み込まれている。
+
+> `main` ブランチはコミット 6 件、星 ~158、世界は 1 つ、「さらなる世界が近日公開」——これはプラットフォームではなく実概念証明。OSM 由来ジオメトリの ODbL 表示義務は、フォークした途端に現実に刺さる。
+
+[`🔗 PhiloLabs/fable51-worlds`](https://github.com/PhiloLabs/fable51-worlds) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49541458)
+
+---
+
+## 19. WerWolv の未知ファイル形式リバースエンジニアリング指南 —— ImHex Pattern Language チュートリアルがHNフロントページに
+
+- **Velocity:** ▮ rising
+- **Source:** werwolv.net（一次ソース、8月27日公開） · HN 129 pts / 26 コメント · 9月3日にフロントページ再浮上
+- **Tags:** `reverse-engineering` `imhex` `binary-formats` `hex-editor` `tooling`
+
+ImHex の作者 WerWolv が、ずっと存在してほしかったチュートリアルを書いた：ドキュメントが一切ない FEZ のバイナリセーブファイルを、16進数の壁から ImHex の Pattern Language による完全で型付きの形式記述まで持っていく。手法は汎用で、ゲームに限らない：既知のマジックを確認し、ファイルを読み書きするコードを逆コンパイルし（C# のゲームは JetBrains Rider、ネイティブは Ghidra/IDA/Binary Ninja が挙げられる）、7ビットエンコード長プレフィックス、nullable な `Object<T>` ラッパー、サイズ前置きリスト、列挙型といったシリアライズ構成要素を特定し、それぞれを `[[fixed_size]]`・`[[format]]`・`[[transform]]` 属性付きの Pattern Language 構造体として書き直す。最終状態は全バイトがハイライトされ編集もできる完全デコード済みセーブファイルで、パターンファイル自体が形式のドキュメントになる。ImHex 自体は 54.6k 星の GPL-2.0_hex エディタ。投稿では一部機能に Nightly ビルド（≥ v1.38.1）が必要と注記されている。
+
+**Why it matters:** 「逆コンパイルした書き込み関数を読んで逆算する」は業界内の口承知識だった；今では引用可能な段階的手法になり、Pattern Language は出力*そのものが*ドキュメントになる珍しいツールだ——未知の形式を解析させられるエージェントがまさに必要とするもの。
+
+> 作者自身の注意書き：すべてのターゲットがこれほどきれいに逆コンパイルできるわけではない——C#/.NET は容易なケースで、ネイティブバイナリは Ghidra の世界に落ち、フィールドごとに数倍の手間がかかる。
+
+[`🔗 werwolv.net：未知ファイル形式のリバースエンジニアリング`](https://werwolv.net/posts/file_format_reverse_engineering/) · [`🔗 WerWolv/ImHex`](https://github.com/WerWolv/ImHex)
+
+---
+
+## 20. Jenkins が1つのアドバイザリで31件のCVEを修正 —— 中心は Script Console に至る XStream 逆シリアライズ連鎖
+
+- **Velocity:** ▮ rising
+- **Source:** Jenkins セキュリティアドバイザリ 2026-09-02（一次ソース） · 9月3日報道
+- **Tags:** `jenkins` `cve` `rce` `deserialization` `ci-cd`
+
+Jenkins の9月アドバイザリは**コアと約15プラグインにまたがる31件の CVE** を修正し、修正版は weekly **2.580** / LTS **2.568.3**。先頭の脆弱性 **CVE-2026-84645**（CVSS 8.8）は、永続化ルート型（agents、items、builds）をユーザー提出の `config.xml` 内にネストさせ Stapler 経由でルーティングできるというもの——「そのようなオブジェクトの細工された組み合わせにより、攻撃者が適切に保護されていない Script Console にアクセスし、リモートコード実行に至る」可能性がある。RCE に至りうる他の脆弱性：File Parameter プラグインのパストラバーサル（CVE-2026-84671）、Performance プラグインの Java 逆シリアライズ（CVE-2026-84670）；このほか保存型 XSS、兄弟サブドメインへの CSRF トークン漏えい、セッション固定、そしてメタデータ上書きで任意ユーザーとして認証できる SAML プラグインの欠陥（CVE-2026-84668）。アドバイザリは**既知の野良悪用はなし**と報告。発見の多くは EC がスポンサーのバグバウンティ経由。
+
+**Why it matters:** CI コントローラはあらゆる開発組織で認証情報が最も集中する心臓部であり、`config.xml` 逆シリアライズのこのクラスは以前にも Jenkins の Script Security フィルタを突破したことがある——PoC が出る*前に*パッチを当てること。出てからではなく。
+
+> 名指しされた未解決が2つ：Parameterized Remote Trigger プラグイン（CVE-2026-84676、平文トークン）は**アドバイザリ公開時点で修正なし**、update-center2 の XSS（CVE-2026-84677）は悪意あるプラグインの実例をまだ待っている。
+
+[`🔗 Jenkins セキュリティアドバイザリ 2026-09-02`](https://www.jenkins.io/security/advisory/2026-09-02/) · [`🔗 SecurityOnline：Jenkins、RCE含む30以上の脆弱性を修正`](https://securityonline.info/jenkins-advisory-2026-09-02-rce/)
+
+---
+
+## 21. Nature Human Behaviour：LLM による推敲は書き方を測定可能なレベルで均質化している —— 複雑さの分散が 21–50% 減少
+
+- **Velocity:** ▮ steady
+- **Source:** Nature Human Behaviour（一次ソース、8月24日公開） · HN 66 pts / 43 コメント · 9月3日フロントページ
+- **Tags:** `research` `linguistics` `llm` `homogenization` `writing`
+
+USC のチーム（Sourati ら）は、3つの研究・7データセット・88万+テキストにわたり、LLM を文章アシスタントとして広く使うことが「言語多様性の低下と関連している」ことを報告：モデルが文章を推敲・書き直すと中身は保たれるが文体は均質化し、文章複雑さの特徴の分散はデータセット・モデル（GPT-3.5、Gemini、Llama 3）を横断して統計的に有意に **21–50%** 減少。「支配的な特性に関連するパターンを増幅し他を抑制し、個性よりも同調性を強調する」。観察部門は arXiv・Patch News・Reddit による中断時系列分析で、ChatGPT 登場後に複雑さの分散が縮小し AI 由来率が上昇；実験部門は約12種のプロンプトで原文を書き直し、特性分類器（人格・性別・年齢・道徳）を書き直しテキストに再適用して予測のドリフトを観測。指摘される影響：診断、パーソナライゼーション、採用評価、文化保存。
+
+**Why it matters:** 効果は3つの異なるモデルファミリーで一貫する——これは特定ベンダーの調整ではなく「アシスタントというパターン」自体の性質であり——LLM 以前のテキストで学習した下流システムは、もう存在しない分布を黙ってスコアリングしている。
+
+> 時系列の発見は明示的に相関（「関連している」）；Limitations の一部はペイウォールの内側で、データセットごとのサンプルサイズは桁違いに異なる——21–50% という幅が広いのは証拠の強さが不均一だからだ。
+
+[`🔗 Nature Human Behaviour：LLM時代に縮む言語多様性の景観`](https://www.nature.com/articles/s41562-026-02550-0) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49497996)
+
+---
+
+## 22. sngyai/Sequoia-X —— 引け後にA株市場全体をスキャンし、候補をFeishuへ推送する中国個人投資家向けクオンティット銘柄スクリーナー
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +63 星 · 累計 6,229
+- **Tags:** `quant` `stocks` `python` `chinese-oss` `automation`
+
+Sequoia-X は MIT ライセンスの Python「A股量化选股系统 V2」：各取引日の引け後に実行され、**baostock**（無料・登録不要）から約5,200銘柄の後調整済み日足ローソクを取得し、ローカル SQLite に保存（README によれば東方財富のアンチスクレイピングを回避）、6つの内蔵ストラテジー（タートル20日ブレイクアウト、移動平均+出来高、High Tight Flag、ストップ高振るい落とし、上昇トレンド中のストップ安、O'Neil 流 RPS ブレイクアウト）を実行し、8並列プロセスで2〜3分以内にヒットを Feishu グループチャットへ推送する。全市場のバックフィルは約12分。このジャンルにしては珍しく現代的なエンジニアリング：Pydantic 設定、ベクトル化計算、プロパティベーステスト、ruff/pytest、平日19:15の crontab レシピ付き。
+
+**Why it matters:** 中国個人投資家向けクオンティットのジャンルは通常、コピーし合った notebook の山だ；この一式のスタック（無料データソース、ローカルストレージ、差し替え可能なストラテジーモジュール）は実際に使える出発点になり——ジャンルの工学的成熟のひな型にもなる。
+
+> テクニカルパターンのスクリーナーであり、リターンの主張ではない：README にバックテスト成績は掲載されておらず、ストラテジーの出力は人間が確認すべき候補であり、売買シグナルではない。
+
+[`🔗 sngyai/Sequoia-X`](https://github.com/sngyai/Sequoia-X) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 23. 「ロボティクスが難しい理由」——ハードウェア起業家が挙げた14の理由、ChatGPT の瞬間がフィジカルAIに来ない理由
+
+- **Velocity:** ▮ steady
+- **Source:** secondthoughts.ai（一次ソース） · HN 61 pts / 24 コメント · Sep 2 ~22:02 UTC 投稿（~Sep 3 06:02 UTC+8）
+- **Tags:** `robotics` `embodied-ai` `analysis` `hardware`
+
+Steve Newman（Wrike 共同創業者、ハードウェアビルダー）は、フィジカルAIがナレッジワークAIに後れを取る理由を列挙する：手（自由度約24、触覚センサー約17,000——全組み合わせを満たすロボットは存在せず、精密なセンサーは酷使に耐えない）、雑然としたシーンの知覚、再計画、物理タスクの学習データ不足、協調能力ゼロ、未決着のフォームファクター、安全性（タスク途中で固まるロボット自体が危険源）、持久力（引用されたあるヒューマノイドは冷却まで10〜15分しか作業できない）、オンボード計算のトレードオフ、そして存在しないサプライチェーン——テスラが100万台の年までに14年かかった。彼の核心は認識論：**デモ映像は弱い証拠**——おそらく100回に1回の成功から選び抜かれ、難しいケースを避けるよう演出され、編集で速度を水増ししている。
+
+**Why it matters:** ヒューマノイドがモンタージュ映像を武器に資金を集める今、これは割り引いて見るための簡潔なチェックリストであり——結論は「まだ早い」よりも鋭い：ロボティクスのデモと現実のギャップは、LLM がたった今通過したベンチマークと現実のギャップより*さらに広い*だろう。
+
+> Newman はコストが最終的な制約には*ならない*と考えている——ハードな制約は器用さ・信頼性・汎化であり、ほとんどのロボット発表の報道が強調するのとは正反対だ。
+
+[`🔗 secondthoughts.ai：ロボティクスが難しい理由`](https://secondthoughts.ai/p/14-reasons-robotics-is-hard) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49543191)
+
+---
+
+## 24. Wasmi 2.0 —— Rust 製 WASM インタプリタが約2.2倍高速化、その半分は Rust 1.92 の誤最適化の取り消しが生んだ
+
+- **Velocity:** ▮ steady
+- **Source:** wasmi-labs ブログ（一次ソース） · HN フロントページ 60 pts / 3 コメント
+- **Tags:** `webassembly` `rust` `interpreter` `performance` `compiler`
+
+Wasmi——Stellar の Soroban、Typst、Zellij、Ripple に組み込まれている Rust 製 WebAssembly インタプリタ——が 2.0 をリリース：4つのディスパッチモード（テールコールを使う直接スレッディングがデフォルト、間接スレッディング、フォールバック2種）、スタックスロットのデコードを置き換えるアキュムレータレジスタ、単一の連続した handles 割り当てに再設計されたインスタンスオブジェクト、遅延コンパイルを可能にするロックフリーの追記型 CodeMap。正味の効果：**1.0 比 約2.2倍高速**（幾何平均、Apple M2 Pro）、Wasm3・Stitch・WAMR・Wasmtime Pulley に匹敵するまでに。最も誠実なエンジニアリング詳細は最大の単一勝因：Rust 1.92 の偶然の `DestinationPropagation` 最適化誤爆が分岐サイトを `csel` に潰していた——修正で CoreMark は約2,800から4,200超へ（これだけで約 +50%）、Stitch も同じリグレッションに黙って苦しんでいた。残りの注意書きもすべて本文に印刷されている：SIMD はデフォルトでオフ、呼び出しをまたぐアキュムレータレジスタはリグレッションを起こし未マージ、チャートはフルスイートの「一瞥」に過ぎない。
+
+**Why it matters:** インタプリタのエンジニアリングはブロックチェーンとプラグインシステムを静かに支えている——そしてこの投稿は、コンパイラのリリースが誰もバージョンを横断してベンチマークするまで性能の3分の1を黙って奪いうる、というケーススタディでもある。
+
+> Stellar Development Foundation のスポンサーシップは**2026年10月に終了**；作者は Wasmi 3.0（Wasm 3.0 機能）ロードマップの前に、新たな資金または互換性のある役割を公に探している。
+
+[`🔗 wasmi-labs：Wasmi 2.0 —— 最速WASMインタプリタのエンジニアリング`](https://wasmi-labs.github.io/blog/posts/wasmi-v2.0/) · [`🔗 wasmi-labs/wasmi`](https://github.com/wasmi-labs/wasmi)
+
+---
+
 ## Metadata
 
 | 項目 | 値 |
 |-------|-------|
-| Generated | 2026-09-03T04:10:00+08:00 |
-| Items | 17 |
-| Sources tracked | 15 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Kestra, BerriAI/LiteLLM, Paint.net forums, mlc-ai/web-llm) |
+| Generated | 2026-09-03T12:25:00+08:00 |
+| Items | 24 |
+| Sources tracked | 21 (Hacker News, GitHub Trending, Google blog, LWN, Mistral Help Center, Anthropic/Claude, Meta developer docs, Trellner, NVD, GitHub Advisories, CISA KEV, Paint.net forums, mlc-ai/web-llm, PhiloLabs, werwolv.net, Jenkins security advisory, SecurityOnline, Nature Human Behaviour, sngyai/Sequoia-X, secondthoughts.ai, wasmi-labs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（毎日3回） |
 | Ranking | ベロシティ重視（新しさ × エンゲージメント加速度 × ソースの権威性） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
