@@ -4714,5 +4714,50 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "werwolv.net": {
+    "cat": "code",
+    "en": "WerWolv's blog (ImHex author); deep, first-hand reverse-engineering writeups — the Aug 2026 file-format tutorial was verified end-to-end against the ImHex repo's pattern-language docs and GPL-2.0 license (cv via WerWolv/ImHex).",
+    "zh": "WerWolv（ImHex 作者）的博客；第一手逆向工程长文——2026 年 8 月的文件格式教程已对照 ImHex 仓库的 Pattern Language 文档与 GPL-2.0 许可逐项核实。",
+    "jp": "WerWolv（ImHex 作者）のブログ。一次情報のリバースエンジニアリング長文——2026年8月のファイル形式チュートリアルは ImHex リポジトリの Pattern Language ドキュメント・GPL-2.0 ライセンスと突き合わせて検証済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "jenkins.io": {
+    "cat": "security",
+    "en": "Official Jenkins security advisories; canonical CVE detail (affected/fixed versions per plugin) — the 2026-09-02 advisory's CVE list and fixed versions matched SecurityOnline's independent summary exactly.",
+    "zh": "Jenkins 官方安全通告；CVE 细节（各插件受影响/修复版本）的权威来源——2026-09-02 通告的 CVE 清单与修复版本同 SecurityOnline 的独立摘要完全一致。",
+    "jp": "Jenkins 公式セキュリティアドバイザリ。CVE詳細（プラグイン別の影響/修正版）の一次ソース——2026-09-02 の CVE リストと修正版は SecurityOnline の独自要約と完全に一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "nature.com": {
+    "cat": "research",
+    "en": "Nature Portfolio; peer-reviewed primary research — abstract/methods visible, Limitations often paywalled (cite what was actually read). Sourati et al. linguistic-diversity paper verified 09-03; title/date/findings consistent with independent coverage.",
+    "zh": "Nature 系列期刊；同行评审的一手研究——摘要与方法可见，Limitations 常在付费墙后（只引用实际读到的部分）。Sourati 等的语言多样性论文已于 09-03 核实，标题/日期/发现与独立报道一致。",
+    "jp": "Nature Portfolio。査読済みの一次研究——要旨・手法は閲覧可、Limitations はしばしばペイウォール内（実際に読んだ部分のみ引用）。Sourati らの言語多様性論文は 09-03 検証済み、題目・日付・発見は独立報道と一致。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "secondthoughts.ai": {
+    "cat": "news",
+    "en": "Steve Newman's essays; practitioner analysis from a hardware/software founder — opinionated but numbered-and-checkable claims (the robotics piece cites specific specs and timelines); no in-house data, treat as informed commentary.",
+    "zh": "Steve Newman 的博客；来自软硬件创业者的从业者分析——观点鲜明但论断可逐条核对（机器人学一文引用了具体规格与时间线）；无自有数据，按知情评论对待。",
+    "jp": "Steve Newman のエッセイ。ハード/ソフト起業家による実務者分析——主張は強いが番号付きで検証可能（ロボティクス稿は具体的なスペックと時系列を引用）。独自データはなく、知情のコメントとして扱う。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "wasmi-labs.github.io": {
+    "cat": "code",
+    "en": "Wasmi project blog; detailed interpreter-engineering writeups with printed caveats (benchmark scope, unmerged regressions, funding status) — claims cross-checked against the wasmi-labs/wasmi repo (users, license, features).",
+    "zh": "Wasmi 项目博客；解释器工程长文且注意事项印在明处（基准范围、未合并的回归、资助状态）——主张已对照 wasmi-labs/wasmi 仓库（用户、许可、特性）交叉核实。",
+    "jp": "Wasmi プロジェクトのブログ。インタプリタ工学の詳細な解説で注意書きも明示（ベンチ範囲、未マージのリグレッション、資金状況）——主張は wasmi-labs/wasmi リポジトリ（利用者・ライセンス・機能）と突き合わせて検証済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
   }
 }
