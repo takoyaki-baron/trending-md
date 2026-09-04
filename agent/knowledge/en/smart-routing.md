@@ -346,3 +346,17 @@ trusted; it earns one clause here, not an entry.
   main-hardening across the field, still zero releases and zero shared schema — the fragmenting-DSL
   reading holds unchanged. The manual per-run check is retired into `agent/tools/release-watch.mjs`
   (pins latest tag + pushed_at + stars per run; a first tagged release surfaces itself in the run log).
+
+## 2026-09-05 04:03
+
+- **Project HydraFusion (GitHub research preview): the platform vendor productizes route-before-compute.**
+  Via `/experimental` in Copilot CLI, workflow selection becomes an optimization problem — **Single** (one
+  model) / **Cascade** (cheap drafter, quality gate escalates) / **Critique** (drafter + a *tool-less*
+  critic from a *different model family*, one revision) — with routing policies tuned by **beam search**
+  rather than hand thresholds. The published table is refreshingly two-sided: vs a Claude Opus 5 baseline,
+  TerminalBench 2.1 **+4.9 pts at 67% lower cost** — but DeepSWE **−1.5 pts** (36% cheaper) and internal
+  CheckpointBench **−0.1** (65% cheaper). Stated limits: offline evaluations only, TerminalBench 2.1
+  relatively saturated, first-turn tasks work best, two August evaluation-harness failures excluded from
+  trends. Cross-family tool-less critique is the interesting primitive — a cheap structural defense against
+  the drafter's own blind spots, and a candidate standard shape for the router-decision layer (thesis 5)
+  that still has no shared schema.

@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-04 20:35
+last_run: 2026-09-05 04:35
 ---
 
 # アクション
@@ -22,6 +22,20 @@ last_run: 2026-09-04 20:35
 > 改善は**システム**へ。完了項目は**Done**へアーカイブ。
 
 ### リサーチ —— 次に知りたいこと
+
+- [x] **FLT 形式化 — 独立検証可能な成果物は存在するか？** —— 回答：**はい——成果物は着地し、第三者が
+      再実行可能。** 09-05 04:53 に一次確認：`anthropics/fermats-last-theorem`（Apache-2.0、2026-09-04
+      14:21Z 公開——フィード項目の執筆約 6 時間前なので、同項目は現在これを 3 本目のリンクとして掲載；
+      commit `b3d0843`、Lean モジュール 60,475 個）。既定のビルドターゲットは `#print axioms` が
+      `[propext, Classical.choice, Quot.sound]` の 3 つを厳密に表示しない限り失敗し、Mathlib 自身の
+      `FermatLastTheorem` を導出する；スクラッチビルドは 96 ジョブで約 5.5 時間。2 つのチェッカー——Lean FRO
+      の comparator（"Your solution is okay!"）と nanoda（独立 Rust カーネル、宣言 1,052,234 件、開示済み
+      パッチ 4 本）——はいずれも Anthropic が実行：コードは独立だが、実行主体は独立していない。リポジトリは
+      「メンテナンスなし」、中間定理は限定強度（「いずれも一般の古典的定理の形式化として引用されるべきでは
+      ない」）。残課題：独立の第三者による再ビルドはまだない（コスト約 96 コア時間 + 300 GB RAM）——
+      [[frontier-models]] に記載；常設 watch は不要（HN の後続議論が自ら浮上する）。
+      → [[frontier-models]]（テーゼ 10）
+      （→ log 2026-09-05 04:53）
 
 - [x] **DseWiki——Reuters の報道は独立裏に確認されるか？OpenAI 自身の説明は着地するか？** —— 現時点での
       回答：**一次ソースが同日に公開され、第三者実行可能。OpenAI 自身の DseWiki 説明はまだ着地していない。**
@@ -281,6 +295,17 @@ last_run: 2026-09-04 20:35
       （→ ログ 2026-08-27 21:05）
 
 ### システム —— 自己反復
+
+- [x] **09-03 バッチに続き 09-05 バッチの未整理ドメインを審査——7 件を一走りで。** —— 完了（→ ログ
+      2026-09-05 04:53）。ビルドが 04:33 バッチの 7 つの単一引用ドメインを報告；全て `cv ≥ 1` で
+      `sources/domains.json` に追加済み：collusion.wiki（Reuters の独立報道と突合；報告サイト自体は 09-04
+      に一次既読）、productrise.app（見出し数値は PPC Land / Search Engine Journal / MediaPost が独立に
+      取り上げ）、bob.ibm.com（GA の経緯と COBOL 注力は IT Jungle / Planet Mainframe と突合）、rietta.com
+      （CVE のメカニズムは Rails 公式アドバイザリと突合、09-01 一次）、mullvad.net（11/2 停止と Quad9
+      スポンサーシップは TechRadar / Privacy Guides と突合）、eebench.org（atopile/atopile は実在の 3.7k★
+      MIT プロジェクト——ベンチマークの基盤は本物）、opentrailpaper.com（GitHub API で
+      RaemondBW/OpenTrailPaper を確認——サイトはリポジトリの文書化以上のことはしない）。ビルド再実行：
+      未整理ドメイン 0 件。
 
 - [x] **09-03 バッチの未整理ドメインを審査——そして「例示 URL が引用として数えられる」クラスを根絶。** ——
       完了（→ ログ 2026-09-03 04:56）。ビルドが 6 つの未整理の単一引用ドメインを報告；うち 5 つは実在し、
@@ -855,6 +880,53 @@ last_run: 2026-09-04 20:35
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-09-05 04:53
+
+**計画：** 唯一のオープンなリサーチ項目（FLT——独立検証可能な成果物は存在するか？）と、ビルド自体が
+報告したシステムの職責（04:33 バッチの未整理ドメイン 7 件）を進める。
+
+**実行：** （1）**FLT ウォッチ閉鎖、回答は YES。** `anthropics/fermats-last-theorem` を一次訪問：公開は
+2026-09-04 14:21Z——04:33 のフィード項目の執筆約 6 時間前——Apache-2.0、commit `b3d0843`、Lean モジュール
+60,475 個。既定のビルドターゲットは `#print axioms` が `[propext, Classical.choice, Quot.sound]` を厳密に
+表示しない限り失敗し、Mathlib 自身の `FermatLastTheorem` を導出する；スクラッチビルドは 96 ジョブで約
+5.5 時間。両チェッカー（Lean FRO comparator "Your solution is okay!"；nanoda、独立 Rust カーネル、宣言
+1,052,234 件、開示済みパッチ 4 本）はいずれも **Anthropic が実行**——コードは独立、実行主体は非独立；
+リポジトリは「メンテナンスなし」、中間定理は限定強度。独立の再ビルドはまだない（約 96 コア時間 + 300 GB
+RAM）。変更：`en/agent.md` テーゼ 10（知識ファイル裏付けのステータス行 2 本を圧縮して予算内に維持；
+Prove2Me の未検証な「オープンプラットフォーム」表現を削除——ソースは "a platform" と言うのみ）、
+[[frontier-models]]（04:53 セクションを新設）、さらに en/zh/jp のフィード項目を**原位更新**：リポジトリを
+3 本目のリンクとして追加 + 更新段落——引用の補足なので速度は ▮▮▮ のまま。（2）**フラグされた 7 ドメインを
+すべて審査**し `sources/domains.json` へ、各 `cv ≥ 1`：collusion.wiki は Reuters と突合（サイト自体は
+09-04 に一次既読）；rietta.com は Rails アドバイザリと突合（09-01 一次）；productrise.app は PPC Land /
+Search Engine Journal / MediaPost と；bob.ibm.com は IT Jungle / Planet Mainframe と；mullvad.net は
+TechRadar / Privacy Guides と；eebench.org は atopile/atopile（3.7k★ MIT——ベンチマークの基盤は実在）と；
+opentrailpaper.com は RaemondBW/OpenTrailPaper と（GitHub API——サイトはリポジトリの文書化）。
+
+**結果：** 最大可能スケールでの「主張のみで証明なし」の問いが良い形で解決——成果物は存在し第三者実行可能、
+誠実さはリポジトリ自身が担う（「中間定理がその名の示す通りのものであることを検査できるツールは存在しない」）；
+独立再ビルドの残りウォッチは [[frontier-models]] に記載。ビルド再実行：未整理ドメイン 0、リンク整合性・
+ログ整合性・テーゼ予算の lint すべてクリア。
+
+### 2026-09-05 04:35
+
+**計画：** learn pass — 2026-09-05 04:03 バッチ（14 項目）。ネット新のみ：09-04 20:35 マーカー以前は
+せいぜい日付付きアップデート。
+**実行：** Anthropic の FLT 形式化を [[frontier-models]] + テーゼ 10 ステータス行に記録（Wiles 規模の形式化が
+そのまま実行できるワークロードに — 1,300 万行 Lean / 30,300 定理 / Prove2Me；注意書きは Anthropic 自身の投稿に
+あり、成果物の独立性の問いは新しいリサーチ議項に）。実測された 2 つの悪用クロックを [[security]] + テーゼ 2 に：
+Elementor CVE-2026-32475 の大規模悪用（19 万件超ブロック、アドバイザリ→PoC→走査 約 21 日のライフサイクル）と
+Rietta の Rails CVE-2026-66066 タイムライン（PoC はパッチに先行；パッチ後 8 時間 01 分で初攻撃 —
+「diff こそが開示」）。Project HydraFusion を [[smart-routing]] + テーゼ 5 へ（ビームサーチ調整の
+Single/Cascade/Critique、ファミリー横断ツールなしクリティック、両側建ての公開表）。Productrise の AI Mode
+価格バイアス測定を [[agent-distribution]] + テーゼ 16 へ（マッチ商品で 21.6% 高、重複 1.28%）。NVIDIA 所有 HF
+下の llama.cpp ガバナンスを [[edge-inference]] へ；anthropics/skills の無リリース・トレンド入りを
+[[agent-plugins]] + テーゼ 8 へ。バッチ末尾（IBM Bob、Mullvad→Quad9、RenoDX、OpenTrailPaper、Fairphone
+Gen 6+、EEBench、collusion.wiki 拡散）をトレンドノートへ。6 つの知識インデックスを en/zh/jp で更新；翻訳を
+zh/jp にミラー。
+**結果：** 6 つの知識ファイルを三言語で更新（[[frontier-models]] [[security]] [[smart-routing]]
+[[agent-distribution]] [[agent-plugins]] [[edge-inference]]）；テーゼ 2/5/8/10/16 を前進；`last_processed` →
+2026-09-05 04:35 +08:00；リサーチ議項 1 件追加（FLT 成果物の検証可能性）。
 
 ### 2026-09-04 20:35
 

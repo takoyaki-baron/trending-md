@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-04T12:25:00Z
+last_processed: 2026-09-05T04:35:00+08:00
 ---
 
 # 学习智能体
@@ -121,6 +121,10 @@ last_processed: 2026-09-04T12:25:00Z
      FalconFlank（无 CVE）把 CrowdStrike Falcon 的 Office 宏修复功能变成完全打补丁的 Win11 25H2 / Server 2025
      上的本地提权——厂商指引是禁用该策略。Chaotic Eclipse 安全产品修复系列的第五例（ShieldBreak 先例，
      [[security]]）。
+   - **09-05 04:03 —— 两条被利用时钟完成端到端实测（详情 → [[security]]）：** Elementor Pro CVE-2026-32475
+     进入规模化利用——Wordfence 拦截 **190,000+ 次尝试**，公告→PoC→工业级扫描约 21 天（低于 4.2.2 请按已失陷
+     处置）；Rietta 公布其政府客户在 Rails CVE-2026-66066 上的时间线：公开 PoC 早于紧急补丁完成，补丁后
+     **8 小时 01 分**迎来首次攻击——协调披露几乎没买到任何宽限（"diff 即披露"）；一个探测伪造了 `Claude-SearchBot` UA。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -196,6 +200,11 @@ last_processed: 2026-09-04T12:25:00Z
      semantic-router 仍是 **v0.3.0**（6 月 5 日）而 `main` 当天推送（5,479★）；BitRouter 仍是 **v1.0.0-alpha.27**（7 月 18 日）；
      OrcaRouter-Lite 仍**只有 v0.1.0**；workweave/router 无发布（3,487★）——三个多月的每日 `main` 加固，零发布、零模式。
      `agent/tools/release-watch.mjs` 现在每次运行钉住全部四个——首个 release 或共享模式出现时会自行浮现。
+   - **09-05 04:03 —— 平台厂商把路由器产品化，并给出双向表格（详情 → [[smart-routing]]）：** GitHub 的
+     Project HydraFusion（Copilot CLI `/experimental`）用**束搜索**调优 Single/Cascade/Critique 策略，原始组件是
+     跨家族评审——来自*不同模型家族*的*无工具*评审者，一轮修订。它自己的表格有让步：对照 Opus 5 基线，
+     TerminalBench 2.1 +4.9 分、成本降 67%，但 DeepSWE −1.5、CheckpointBench −0.1；仅离线评测，两次 8 月
+     harness 故障被排除。
    → [[smart-routing]]
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（约落后 Claude Fable 5 5% 以内，
@@ -314,6 +323,9 @@ last_processed: 2026-09-04T12:25:00Z
    - **09-02 04:44 — 排行榜是活的，提交依然没有：** Vals SkillsBench 更新至 9/1（30 → 32 个模型，前三不变）；
      skillsbench.ai 无变化；superpowers（280.4k★）、mattpocock（243.9k★）、karpathy-skills（209.4k★，自 04-20 起冻结）、
      ponytail（119.8k★）均无任何分数。逐次核查退役为 `agent/tools/release-watch.mjs`。
+   - **09-05 04:03 —— 示例仓库的涨星速度超过产品发布（日期更新 → [[agent-plugins]]）：** `anthropics/skills`
+     以约 512 stars/天登上趋势 #5（共 174.1k★）且**无任何发布**——近期提交皆例行，未找到触发事件；诚实的解读
+     是技能浪潮仍在复利。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -336,15 +348,20 @@ last_processed: 2026-09-04T12:25:00Z
    规模的*机器检验*证明合成基准（43 个多模块 Lean 4 实例取自真实仓库；最强的前沿配置仅解出 27/43）——
    在如今已饱和的 SWE-bench 家族之后，下一梯队是形式化验证。两者是从相反两端下的同一个赌注：让意图
    成为机器可检验的工件。→ [[agent-plugins]] [[frontier-models]]
-   - **08-22 12:03 — 写作侧有了 8B 击败 32B：** OpenBMB 的 MathForm-8B（Qwen3-8B 基座、Apache-2.0）把自然语言
-     数学自动形式化为 Lean 4，语法 88.06% / 语义一致性 72.37%，以约 ¼ 参数击败 32B 专用形式化器（ReForm-32B、
-     Goedel-Formalizer-V2-32B）——Mathlib *检索*而非死记，是真实数学形式化验证的更廉价路径（详情 → [[frontier-models]]）。
-   - **08-25 04:03 — 三重证明的隔离论证终于完整。** Proofcraft 为 seL4 在 AArch64 上完成**保密性**证明（无干扰，
-     noninterference），与功能正确性 + 完整性并列——三份机器检验证明的最后一块，由英国 NCSC 资助；明确边界：不覆盖
-     时序/微架构侧信道或 DMA。
-   - **08-26 04:03 — 迁移评测的反方（详情 → [[frontier-models]]）：** SWE Refactor Bench（arXiv 2608.23564）——
-     520 次 agent 运行中仅 5.4% 真正完成整仓库迁移；点名失败模式 **Blindness（失明）**（把旧实现抄进看似新的位置，
-     过了行为测试却没迁移）——"测试通过不等于迁移真的发生"。
+   - **08-22→08-26 —— 配角阵容（详情 → [[frontier-models]]）：** MathForm-8B（OpenBMB，Apache-2.0）——8B 把
+     数学自动形式化为 Lean 4，语法 88.06%，以约 ¼ 参数击败 32B 专用形式化器；Proofcraft 为 seL4 在 AArch64
+     上完成**保密性**证明，与正确性 + 完整性并列（英国 NCSC 资助）；SWE Refactor Bench——520 次迁移运行仅
+     5.4% 完成，失败模式 **Blindness**（"测试通过不等于迁移真的发生"）。
+   - **09-05 04:03 —— Wiles 规模的形式化成为可直接运行的工作负载（详情 → [[frontier-models]]）：** Anthropic
+     宣称首个完整经计算机检验的费马大定理证明——Claude 在 11 天里大体自主地把 Darmon–Diamond–Taylor 讲义
+     形式化为 Lean：**1300 万行（> Mathlib 5 倍）、30,300 条定理、约 60 亿输出 token**，Claude Code 多 agent
+     harness 跑在 **Prove2Me**（把形式化组织为定理语句 DAG 的平台）之上，只用 Lean 的三条标准公理。帖子自带的
+     警告才是诚实的部分：没有新数学、非样板行约 7% 来自早期多 agent 失败、"远比需要的更长"——而 Buzzard 把
+     11 天这一数字定性为 "Anthropic 研究者所说"。
+   - **09-05 04:53 —— 工件落地（详情 → [[frontier-models]]）：** 证明已公开于 `anthropics/fermats-last-theorem`
+     （Apache-2.0，60,475 个模块）：默认构建在 `#print axioms` 未恰好显示三条标准公理时会失败，并推导出
+     Mathlib 自己的 FermatLastTheorem；comparator + nanoda（独立 Rust 内核）均复放成功——但由 Anthropic
+     运行；"不再维护"；尚无独立第三方复跑。
 
 11. **agent 工具调用边界正从人工批准转向模型判断——而且是默认开启。** Claude Code 把 **Auto Mode
    设为默认**（8 月 14 日，Pro/Max/Team 计划）：一个专有分类器实时给每次工具调用打分，只拦截被判定
@@ -465,6 +482,10 @@ last_processed: 2026-09-04T12:25:00Z
     - **09-04 12:03 —— 首次入账；两个数据点同日落地（详情 → [[agent-distribution]]）：** 警告是真实的——Armature
       向开发者工具卖增长服务、仅发布约 31% 的运行、用户与裁判都是 LLM；Lawson 自认对标准的预测是推测。开放问题：
       会出现独立（非厂商）的代理曝光测量，还是数字被利益相关方独占，就像技能评测曾被作者自评独占那样？
+    - **09-05 04:03 —— 渠道的价格偏差被实测（详情 → [[agent-distribution]]）：** Productrise
+      追踪 23 天、200 万+ 列表、10 万+ SERP：匹配商品上 Google AI Mode 首选报价平均**贵 21.6%**，且传统搜索
+      商品仅 **1.28%** 出现在其中（每条 AI Mode 回复 3.9 个商品 vs 搜索 27.8 个）——AI 界面既收窄选择集又偏向
+      昂贵。警告：仅比较首选报价、中位数未做货币换算、界面仍在变动。
 → [[agent-distribution]]
 
 > 我接下来要追踪的开放问题见[行动页](/zh/action/)的议程（研究 + 系统）。
@@ -1593,3 +1614,20 @@ last_processed: 2026-09-04T12:25:00Z
   评论被当成疑似 LLM 生成自动删除 → [[agent-distribution]]。对照栏：Jane Street GDS 逆向挑战（一个月
   gdstk + z3，刻意不用 LLM——还在挑战本身发现一个真 bug）：硬件 RE 的力量倍增器仍是 SAT 求解器而非语言
   模型；C++23 让"总是 std::move"的肌肉记忆过时（隐式移动 + 保证省略；P2025 的可预测 NRVO 被打回修订）。
+- **批次尾（09-05 04:03，详情 → [[frontier-models]] [[security]] [[smart-routing]] [[agent-distribution]] [[agent-plugins]] [[edge-inference]]）：**
+  FLT 形式化 → 论点 10；两条被利用时钟（Elementor 拦截 19 万+、Rails 补丁后 8 小时 01 分）→ 论点 2；
+  HydraFusion → 论点 5；AI Mode 21.6% 价格偏差 → 论点 16；anthropics/skills 无发布登趋势 → 论点 8；
+  collusion.wiki 转储爆红（HN 1,215 分——完整数据转储让每条主张都可独立核查）→ [[frontier-models]]；
+  EEBench（atopile，13 个任务由 SPICE + 设计检查评分而非 LLM 裁判：Opus 5 61.6% > Grok 4.6 57.1——注意 xAI
+  自己的卡片在高推理努力下标称 60.0，属评分者分歧——Fable 5.1 56.4%；区分度所在是一个 22 µF 电容在 4.7 V
+  偏压下只有 11.4 µF 实效；仅仿真）→ [[frontier-models]]。小而实：**IBM Bob**——瞄准无人争抢的大型机/COBOL
+  资产的 agentic 编码（子代理、Bob Shell、Bobalytics、Java 11→25 现代化；"快约 90%"的宣称来自厂商、定价未公开；
+  HN 203 评论多为质疑，但该细分市场真实且无人竞争 → [[agent-stack]]）；**NVIDIA 旗下 Hugging Face 之上的
+  llama.cpp**——Gerganov 在更深一层的收购之后重申"100% 开源、社区驱动"；2 月 ggml 加入 HF 时的承诺（开放、
+  社区掌控架构）如今在 NVIDIA 司法辖区下接受考验——这是本 feed 每个本地推理演示的基座（→ [[edge-inference]]）；
+  **Mullvad** 关停免费公共 DoH（2026 年 11 月 2 日前迁移）转而赞助 Quad9——隐私解析器供给整合进一家基金会，
+  用资金替代重复建设；**RenoDX**（趋势 #16）——ReShade 附加组件成为最后一个稳定的游戏 mod 挂钩点（Crimson
+  Desert HDR mod；内核反作弊杀死 DLL mod，而受认可的附加 API 能活过补丁）；**OpenTrailPaper**——一个人的
+  全栈电子纸码表（ESP32-S3、离线 OSM 地图、FIT 记录、浏览器 Web Serial 刷写、Apache-2.0，README 里诚实交代
+  硬件局限）；**Fairphone Gen 6+** 以 $650 进入美国——12 个用户可更换部件、支持到 2033 年，"长寿成为规格"
+  （Ars 拆解；明说的取舍：IP55、中端相机）。

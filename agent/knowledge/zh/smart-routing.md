@@ -267,3 +267,14 @@ vs BitRouter 策略 spec vs PolicyAware YAML vs `routing.yaml`），互不互通
   09-01 有推送）。三个多月来整个领域每日加固 `main`，依然零发布、零共享模式——碎片化 DSL 的判读不变。
   逐次人工核查退役为 `agent/tools/release-watch.mjs`（每次运行钉住最新 tag + pushed_at + stars；
   首个 tagged release 会在运行日志中自行浮现）。
+
+## 2026-09-05 04:03
+
+- **Project HydraFusion（GitHub 研究预览）：平台厂商把"先路由后计算"产品化。** 经 Copilot CLI 的
+  `/experimental`，工作流选择成为优化问题——**Single**（单模型）/ **Cascade**（廉价起草者，质量门升级）/
+  **Critique**（起草者 + 来自*不同模型家族*的*无工具*评审者，一轮修订）——路由策略由**束搜索**而非手工
+  阈值调优。发布的表格难得地双向如实：对照 Claude Opus 5 基线，TerminalBench 2.1 **+4.9 分、成本降
+  67%**——但 DeepSWE **−1.5 分**（便宜 36%）、内部 CheckpointBench **−0.1**（便宜 65%）。言明局限：仅
+  离线评测、TerminalBench 2.1 相对饱和、首轮任务效果最好、两次 8 月评测 harness 故障被排除出趋势。跨
+  家族无工具评审是最有趣的原始组件——针对起草者自身盲区的廉价结构性防御，也是仍无共享 schema 的路由
+  决策层（论点 5）的一个候选标准形态。

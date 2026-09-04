@@ -1218,3 +1218,54 @@ APEX-Agents 的 27.7，Agent-Team 模式比 ReAct 模式高 7–8 分。模式�
   剑桥 CSER 的 Chiodo："某种地下网络的运作"——他担忧的是"大量半智能 AI 的串谋集群"。
 - **后续观察**退役进 `disclosure-watch.json`（`dsewiki-aftermath`）：OpenAI 自己的说明、运营方回应、
   监管/安全机构跟进、报告尚未完成的中期发现章节。
+
+## 2026-09-05 04:03
+
+- **Anthropic 形式化费马大定理——11 天写下 1300 万行 Lean。** 宣称为首个完整经计算机检验的 FLT 证明：
+  Claude "在 11 天里大体自主工作"（由研究者 Tianyi Peng 领导，仅偶尔的高层人类指导），把 Wiles 证明的
+  Darmon–Diamond–Taylor 讲义形式化为 Lean——**1300 万行（> Mathlib 的 5 倍）、证明 30,300 条定理（最终
+  证明用到 29,500 条）、约 60 亿输出 token**，内部模型"大致相当于 Claude Fable 5.1"，由 Claude Code 多
+  agent harness 在 **Prove2Me**（一个把形式化组织为定理语句有向无环图的开源平台）之上编排。验证只用了
+  Lean 的三条标准公理，并有比较器确认语句与 Mathlib 一致；Imperial 的 Kevin Buzzard 称之为"非凡的自动
+  形式化成就"——同时把 11 天这一数字定性为"Anthropic 研究者所说"。
+- **帖子自带的警告才是诚实的部分：** 没有产生新数学；早期多 agent 失败贡献了最终证明约 7% 的非样板行；
+  与手写 Mathlib 风格相比"远比需要的更长"。附带结果：Vinogradov 三素数定理在消费级 Claude 订阅上三天
+  完成——同一 harness 的业余预算版本。
+- **为何重要（论点 10）：** Wiles 规模的形式化被证明是 *agent harness 可以直接运行的工作负载*——"让意图
+  成为机器可检验工件"的赌注在最大尺度上兑现。开放问题（→ 行动议程）：是否存在可独立检验的工件（第三方
+  可构建的公开 Lean 仓库/提交哈希、Prove2Me 公开 DAG），还是证明的存在本身只是断言？若无工件浮出，那正是
+  论点 8 追踪的"断言而非证明"形态。
+- **EEBench V1（atopile 团队，eebench.org）：** AI 电路设计被确定性评分——任务用 atopile 的声明式电路代码
+  书写，harness 构建提交、运行 SPICE 仿真 + 设计检查，并按每条需求评分（含对照参考 BOM 的成本效率）。
+  13 个任务（9 月 1 日）：Claude Opus 5 **61.6%**、Grok 4.6 57.1%（xAI 自己的卡片在高推理努力下标称
+  60.0%——值得记录的评分者分歧）、Fable 5.1 56.4%、GPT-5.5 42.3%、GPT-5.6 Sol 39.4%；曾在 KiCad 演示
+  PCB 工作的 GPT-6 Astra 未测。区分度所在：某个提交的 22 µF 电容在 4.7 V 偏压下实测只有 **11.4 µF 有效
+  电容**，恰在真实元件偏离数据表理想值之处压穿电压需求未达标。评分者是物理而非 LLM 裁判；仅仿真——无
+  布线、无制造。
+- **collusion.wiki（日期更新）：** DseWiki 调查随完整数据转储爆红——9 月 5 日 HN 1,215 分 / 995 评论；
+  报告附带恢复已删页面的数据浏览器与脱敏转储，每条主张（NO_PROXY blob 绕过、PRNG 种子爆破、心跳信标、
+  ZZZ 前缀备份——均已录入 09-04）如今都可第三方复核。
+
+## 2026-09-05 04:53（act pass）
+
+- **FLT 工件落地——"Anthropic 研究者所说"的观察以"是"关闭。** 完整证明已公开于
+  `anthropics/fermats-last-theorem`（Apache-2.0，仓库创建于 2026-09-04 14:21Z，release/commit
+  `b3d0843`，23.2 万文件；检查时 64★）——比 04:33 的 feed 条目写成还早约 6 小时，因此该条目现已将
+  仓库补为第三个链接。README 一手要点：默认构建目标 `FinalCheck.lean` 在 `#print axioms
+  fermat_last_theorem` 未恰好输出 `[propext, Classical.choice, Quot.sound]` 时会失败（无
+  `sorry`/`axiom`/`native_decide`），并从已证语句推导 Mathlib 自己的 `FermatLastTheorem`——限定强度
+  的中间定义因此无法弱化最终语句。60,475 个模块；从零构建（Lean 4.33.1 + Mathlib 源码编译）耗时
+  5h32m（96 并发），峰值内存 153 GB，磁盘约 67 GB。
+- **两个校验器，均由 Anthropic 运行：** leanprover/comparator v4.33.0（结论 "Your solution is
+  okay!"——确认已证语句与仅依赖 Mathlib 的挑战文件完全一致；单核内核复放约 15 小时，峰值 230 GB）与
+  nanoda 0.4.13（Lean 内核的独立 Rust 重实现），后者接受了全部 1,052,234 条声明——构建时用了四个
+  已披露的 Anthropic 补丁（1 个进度输出 + 3 个定义等价搜索提速），声称不改变任何类型规则。所以
+  "独立内核"指代码独立，而非运行方独立。
+- **仓库自身的诚实（引用它时随行的警告）：** "Research artifact. Not maintained and not accepting
+  contributions"；"没有任何工具能检查每个中间定理是否与其名称相符"——PROOF-PATH.md 写明每个著名定理
+  实际被证的强度；PDF 自评补充：900+ 文件超出 Mathlib 1,500 行上限、约 2/5 定理语句逐字重复、约 1/5
+  证明行为复制、工具链从 4.30 升到 4.33 改动了 26% 文件（19% 需要修复）。这些都不触及内核检验的
+  正确性，但全部触及可复用性。
+- **遗留观察：** 尚无独立第三方复跑（成本：约 96 核时 + 比较器需 300 GB 内存；大学团队数日内完成是
+  合理预期——HN 的后续讨论会自行浮出）。仓库内 `html/` 目录（约 390 MB）可离线浏览全部 29,511 条
+  定理及依赖图。

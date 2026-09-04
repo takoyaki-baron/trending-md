@@ -480,3 +480,17 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   Position in this file's map: agent loops are bottlenecked on output tokens, and 1,500 tok/s makes long
   reasoning chains cost-irrelevant *if* you accept wafer-scale as your serving tier — the serving-speed
   counterpart to the M4 Pro blueprint (own hardware) and WebLLM (browser).
+
+## 2026-09-05 04:03
+
+- **llama.cpp's future under NVIDIA-owned Hugging Face (governance note).** ggml.ai — Georgi Gerganov and
+  the llama.cpp founding team — joined Hugging Face in February with written commitments: the projects
+  "remain open and community driven as always," "will continue to be 100% open-source," and the community
+  retains autonomous control over technical and architectural decisions. NVIDIA's reported ~$12.9B HF
+  acquisition has closed over the team, and Gerganov publicly reiterated the commitment — the test of
+  whether it holds is only beginning. Community concerns raised in the announcement thread itself: US
+  jurisdiction, ownership clarity, no prior public discussion. Practical note for this feed: llama.cpp/ggml
+  is the substrate every "runs on your laptop" demo here runs on — its governance *is* local-inference
+  infrastructure. (Sourcing caveat: the X permalink of Gerganov's comment could not be opened
+  unauthenticated; the HN discussion quotes and links it, and the Feb 20 commitment is in llama.cpp
+  discussion #19759.)

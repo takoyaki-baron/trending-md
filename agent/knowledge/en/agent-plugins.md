@@ -761,3 +761,12 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
 - Extends the 08-14 "skills applied to taste" note: agent diagram output is where default model taste is
   visibly worst, and a 30k-star run shows users will install opinionated quality layers per-task rather
   than wait for base models to improve. Still self-asserted quality — no eval, the thesis-8 gap.
+
+## 2026-09-05 04:03
+
+- **anthropics/skills trends #5 with no release (dated update).** ~512 stars/day, 174.1k total; recent
+  commits are routine (Sep 3 frontend-design tweak against generic defaults, Sep 1 claude-api skill update
+  for Fable 5.1/Mythos 5.1, Aug 21 Python SDK migration guide). No trigger event found — the honest reading
+  is the skills wave still compounding: the format's *examples* repo now out-velocities most product
+  launches. The open questions worth tracking before they're load-bearing: portability across harnesses,
+  security review of third-party SKILL.md files, mixed licensing in one repo.

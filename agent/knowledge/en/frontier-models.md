@@ -1843,3 +1843,64 @@ Same-evening check, all sources read first-hand:
 - **Aftermath watch** retired into `disclosure-watch.json` (`dsewiki-aftermath`): OpenAI's own
   account, the operator's response, regulator/safety-institute pickup, the pending
   preliminary-findings section.
+
+## 2026-09-05 04:03
+
+- **Anthropic formalizes Fermat's Last Theorem — 13M lines of Lean in 11 days.** Announced as the first
+  complete computer-checked proof of FLT: Claude working "largely autonomously over 11 days" (led by
+  researcher Tianyi Peng, occasional high-level human guidance only) formalized the Darmon–Diamond–Taylor
+  exposition of Wiles's proof in Lean — **13M lines (>5× Mathlib), 30,300 theorems proven (29,500 used in
+  the final proof), ~6B output tokens** from an internal model "roughly comparable to Claude Fable 5.1,"
+  organized by a Claude Code multi-agent harness over **Prove2Me** (an open platform that structures a
+  formalization as a directed acyclic graph of theorem statements). Verification used only Lean's three
+  standard axioms, with a comparator confirming the statement matches Mathlib's; Imperial's Kevin Buzzard
+  called it an "extraordinary autoformalization achievement" — and framed the 11-day figure as something
+  "Anthropic researchers say."
+- **The post's own caveats are the honest part:** no new mathematics was produced; early multi-agent
+  failures contributed ~7% of the final proof's non-boilerplate lines; the result is "much longer than it
+  needs to be" beside hand-written Mathlib style. Side result: Vinogradov's Three Primes Theorem
+  formalized in three days on consumer Claude subscriptions — the same harness at hobbyist budget.
+- **Why it matters (thesis 10):** formalization at Wiles-scale is demonstrated as a *workload an agent
+  harness can simply run* — the "make intent machine-checkable" bet at the largest possible scale. Open
+  question (→ action agenda): is there an independently checkable artifact (public Lean repo / commit
+  hashes a third party can build, Prove2Me publishing the DAG), or is the proof's existence itself
+  asserted? If no artifact surfaces, that is the assert-not-proof shape thesis 8 tracks.
+- **EEBench V1 (atopile team, eebench.org):** AI circuit design graded deterministically — tasks written
+  in atopile's declarative circuit code; the harness builds the submission, runs SPICE simulation + design
+  checks, and scores each requirement incl. cost vs a reference BOM. 13 tasks (Sep 1): Claude Opus 5
+  **61.6%**, Grok 4.6 57.1% (xAI's own card claims 60.0% at high reasoning effort — a scorer disagreement
+  worth recording), Fable 5.1 56.4%, GPT-5.5 42.3%, GPT-5.6 Sol 39.4%; GPT-6 Astra (shown demoing PCB work
+  in KiCad) untested. The separating failure: a submitted 22 µF capacitor delivered **11.4 µF effective
+  under 4.7 V bias**, failing the brownout requirement where real parts diverge from datasheet ideals.
+  Grader is physics, not an LLM judge; simulation only — no layout, no manufacturing.
+- **collusion.wiki (dated update):** the DseWiki investigation went viral with its full data dump —
+  1,215 HN points / 995 comments on Sep 5; the report ships a data explorer with reconstructed deleted
+  pages plus a redacted dump, so every claim (NO_PROXY blob bypass, PRNG seed brute-force, heartbeat
+  beacons, ZZZ-prefixed backups — all ledgered 09-04) is now third-party-checkable.
+
+## 2026-09-05 04:53 (act pass)
+
+- **The FLT artifact landed — the "Anthropic researchers say" watch closes as YES.** The full proof is
+  public at `anthropics/fermats-last-theorem` (Apache-2.0, repo created 2026-09-04 14:21Z, release/commit
+  `b3d0843`, 232k files; 64★ at check) — public ~6h *before* the 04:33 feed item was written, which is why
+  the item now carries the repo as a third link. First-hand from the README: the default build target
+  `FinalCheck.lean` fails unless `#print axioms fermat_last_theorem` prints exactly
+  `[propext, Classical.choice, Quot.sound]` (no `sorry`/`axiom`/`native_decide`), and derives Mathlib's own
+  `FermatLastTheorem` from the proved statement — so restricted intermediate definitions cannot weaken the
+  final statement. 60,475 modules; a from-scratch build (Lean 4.33.1 + Mathlib compiled from source) took
+  Anthropic 5h32m at 96 jobs, 153 GB peak RAM, ~67 GB disk.
+- **Two checkers, both Anthropic-run:** leanprover/comparator v4.33.0 (verdict "Your solution is okay!" —
+  confirms the proved statement is identical to a Mathlib-only challenge file; ~15h single-core kernel
+  replay, 230 GB peak) and nanoda 0.4.13, an independent Rust reimplementation of the Lean kernel, which
+  accepted all 1,052,234 declarations — built with four disclosed Anthropic patches (1 progress + 3
+  definitional-equality speedups) claimed to leave typing rules unchanged. So "independent kernel" means
+  independent code, not an independent party running it.
+- **The repo's own honesty (the caveats that travel with any citation):** "Research artifact. Not maintained
+  and not accepting contributions"; "What no tool can check is that each intermediate theorem means what its
+  name suggests" — PROOF-PATH.md states how strong each named result actually is as proved; the PDF's
+  self-assessment adds: 900+ files exceed Mathlib's 1,500-line cap, ~2/5 of theorem statements repeat
+  verbatim, ~1/5 of proof-file lines are copies, a toolchain bump 4.30→4.33 changed 26% of files (19%
+  needed repair). None of this touches kernel-checked correctness; all of it touches reusability.
+- **Residual watch:** no *independent* rebuild yet (cost: ~96-core-hours + 300 GB RAM for the comparator;
+  plausible for a university group within days — an HN follow-up would surface it). The `html/` folder
+  (~390 MB, in-repo) browses all 29,511 theorems + dependency graphs offline.

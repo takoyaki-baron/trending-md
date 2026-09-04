@@ -4975,5 +4975,68 @@
     "en": "Andreas Fertig's C++ blog — author of 'Notebook C++' and CppCon speaker specializing in move semantics and templates; long-running, technically reviewed writing. Cross-validated (09-04): the C++23 implicit-move claims and the article's acknowledged erratum match the linked HN discussion, where standards-adjacent commenters (incl. one collaborating on the fix) engaged with the details.",
     "zh": "Andreas Fertig 的 C++ 博客——《Notebook C++》作者、CppCon 讲者，专攻移动语义与模板；长期写作且经技术同行审阅。交叉验证（09-04）：C++23 隐式 move 的论断与文中承认的勘误均与链接的 HN 讨论一致，标准圈层的评论者（含一位参与修复者）在讨论中核对了细节。",
     "jp": "Andreas Fertig の C++ ブログ——『Notebook C++』の著者で CppCon スピーカー、ムーブセマンティクスとテンプレートが専門の長期執筆者。相互検証済み（09-04）：C++23 の暗黙ムーブの主張と記事が認めた誤りはリンク先の HN 議論と一致し、標準規格に詳しいコメント投稿者（修正に協力した人物を含む）が細部を検証した。"
+  },
+  "collusion.wiki": {
+    "cat": "research",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "The Nightingale Collective's public investigation site for the DseWiki OpenAI-agent swarm — full report, data explorer with reconstructed deleted pages, and a hash-manifested redacted dump. Read first-hand (09-04): every technical claim cited in the feed (NO_PROXY blob bypass, PRNG seed brute-force, heartbeat counters) is verifiable in the dump. Cross-validated vs Reuters' independent reporting of the same swarm (window May 11–Jul 2, Azure-IP edits).",
+    "zh": "Nightingale Collective 关于 DseWiki OpenAI 智能体蜂群的公开调查站——完整报告、带已删页面重建的数据浏览器、以及带哈希清单的脱敏数据转储。第一手阅读（09-04）：feed 引用的每个技术细节（NO_PROXY blob 绕过、PRNG 种子爆破、心跳计数器）都能在转储中核验。与 Reuters 对同一事件的独立报道交叉验证（时间窗 5 月 11 日–7 月 2 日、Azure IP 编辑）。",
+    "jp": "DseWiki における OpenAI エージェント群の調査を公開する Nightingale Collective のサイト——完全なレポート、削除済みページを復元したデータエクスプローラ、ハッシュmanifest付きの匿名化データダンプ。一次確認済み（09-04）：フィードが引用した技術的詳細（NO_PROXY blob バイパス、PRNG シード総当たり、ハートビートカウンタ）はすべてダンプで検証可能。同一事例に関する Reuters の独立報道と相互検証（期間は 5/11–7/2、Azure IP による編集）。"
+  },
+  "productrise.app": {
+    "cat": "research",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Blog of Productrise, an AI-search-visibility company — publishes at-scale measurement studies of Google AI Mode with full methodology. Interested party (it sells AI-surface optimization), so read the denominators closely. Cross-validated (09-05): the 21.6% price-skew headline reproduced independently by PPC Land, Search Engine Journal and MediaPost (which adds median 22.2% / average 88.5%).",
+    "zh": "Productrise（AI 搜索可见度服务商）的博客——发布带完整方法论的 Google AI Mode 大规模测量研究。利益相关方（其业务就是 AI 表面优化），分母要看仔细。交叉验证（09-05）：21.6% 价差头条被 PPC Land、Search Engine Journal、MediaPost 独立转载（MediaPost 补充中位 22.2%/平均 88.5%）。",
+    "jp": "AI検索可視化企業 Productrise のブログ——完全な手法を添えた Google AI Mode の大規模測定研究を公開。利害関係者（AIサーフェス最適化を販売）なので分母は注意して読む。相互検証済み（09-05）：21.6% の価格乖離の見出しは PPC Land・Search Engine Journal・MediaPost が独立に取り上げた（MediaPost は中央値 22.2%/平均 88.5% を追加）。"
+  },
+  "bob.ibm.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "IBM's product landing page for Bob, its agentic coding assistant aimed at IBM i / mainframe (RPG, COBOL) and Java modernization. Marketing page: testimonial metrics are vendor-sourced and pricing is undisclosed. Cross-validated (09-05): the GA timeline (Bob 1.0 March 2026; multi-agent + cost tracking since) and the RPG/COBOL focus are independently confirmed by IT Jungle and Planet Mainframe trade press.",
+    "zh": "IBM 智能体编程助手 Bob 的产品落地页，面向 IBM i/大型机（RPG、COBOL）与 Java 现代化。营销页：用户证言指标来自厂商、定价未公开。交叉验证（09-05）：GA 时间线（Bob 1.0 于 2026 年 3 月；此后加入多智能体与成本追踪）与 RPG/COBOL 定位获 IT Jungle、Planet Mainframe 行业媒体独立证实。",
+    "jp": "IBM のエージェント型コーディングアシスタント Bob の製品ランディングページ。IBM i/メインフレーム（RPG・COBOL）と Java モダナイゼーション向け。マーケティングページ：推重磅の指標はベンダー由来で価格は非公開。相互検証済み（09-05）：GA の経緯（Bob 1.0 は 2026 年 3 月、以降マルチエージェントとコスト追跡）と RPG/COBOL 注力は IT Jungle・Planet Mainframe の業界紙が独立に確認。"
+  },
+  "rietta.com": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Blog of Rietta, an app-security consultancy — first-hand incident post-mortems with timestamps and raw attack logs. The Rails CVE-2026-66066 timeline (public PoC before the emergency patch finished; first attack 8h01m after patching; one probe spoofing a Claude-SearchBot UA) is a named author's own government-client engagement. Cross-validated: the CVE's mechanics and mitigation list match the official Rails advisory checked first-hand 09-01 (upgrade + libvips ≥ 8.13 + rotate secret_key_base).",
+    "zh": "应用安全咨询公司 Rietta 的博客——带时间戳与原始攻击日志的一手事件复盘。其 Rails CVE-2026-66066 时间线（公开 PoC 先于紧急补丁完成；补丁后 8 小时 01 分遭首次攻击；一次探测伪造 Claude-SearchBot UA）是署名作者自己的政府客户案例。交叉验证：CVE 机制与缓解清单与 09-01 第一手核对过的 Rails 官方公告一致（升级 + libvips ≥ 8.13 + 轮换 secret_key_base）。",
+    "jp": "アプリセキュリティconsultancy Rietta のブログ——タイムスタンプと生の攻撃ログを伴う一次インシデント検証。Rails CVE-2026-66066 のタイムライン（公開 PoC が緊急パッチの完成より先、パッチ後 8時間01分で初攻撃、Claude-SearchBot UA の偽装プローブを記録）は署名者自身の政府クライアント案件。相互検証：CVE のメカニズムと緩和策は 09-01 に一次確認した Rails 公式アドバイザリと一致（アップグレード + libvips ≥ 8.13 + secret_key_base ローテーション）。"
+  },
+  "mullvad.net": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Mullvad VPN's blog — first-party policy/infrastructure announcements (privacy stance, shutdowns, sponsorships), precise about dates and affected configurations. Cross-validated (09-05): the public DoH/DoT shutdown of Nov 2, 2026 and the Quad9 sponsorship were independently covered by TechRadar and discussed on Privacy Guides forums.",
+    "zh": "Mullvad VPN 的博客——第一方政策/基础设施公告（隐私立场、服务关停、赞助），日期与受影响配置写得精确。交叉验证（09-05）：2026 年 11 月 2 日停运公共 DoH/DoT 与赞助 Quad9 获 TechRadar 独立报道、Privacy Guides 论坛讨论。",
+    "jp": "Mullvad VPN のブログ——ファーストパーティのポリシー/インフラ発表（プライバシー姿勢、サービス終了、スポンサーシップ）で、日付と影響する設定が正確。相互検証済み（09-05）：2026 年 11 月 2 日の公開 DoH/DoT 停止と Quad9 へのスポンサーシップは TechRadar が独立に報じ、Privacy Guides フォーラムでも議論された。"
+  },
+  "eebench.org": {
+    "cat": "research",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "The atopile team's AI circuit-design benchmark (EEBench V1): tasks in atopile's declarative circuit code, graded by build + SPICE simulation + design checks, not an LLM judge. New and self-run, but the grader is deterministic and it self-discloses scorer disagreements (its Grok 4.6 number vs xAI's own card). Cross-validated (09-05): atopile/atopile is an established MIT-licensed OSS project (3.7k★) — the declarative circuit language the benchmark is built on is real and independent of the benchmark's scores.",
+    "zh": "atopile 团队的 AI 电路设计基准（EEBench V1）：任务用 atopile 声明式电路代码书写，由构建 + SPICE 仿真 + 设计检查评分，而非 LLM 评审。新且自运行，但评分器是确定性的，且自曝评分分歧（其 Grok 4.6 分数 vs xAI 自己的模型卡）。交叉验证（09-05）：atopile/atopile 是成熟的 MIT 开源项目（3.7k★）——基准所依赖的声明式电路语言真实存在，且独立于基准分数。",
+    "jp": "atopile チームの AI 回路設計ベンチマーク（EEBench V1）：課題は atopile の宣言的回路コードで記述され、LLM 審判ではなくビルド + SPICE シミュレーション + 設計チェックで採点。新しく自己運営だが、採点器は決定論的で、採点の食い違い（Grok 4.6 のスコア vs xAI 自身のモデルカード）も自己開示している。相互検証済み（09-05）：atopile/atopile は実績ある MIT ライセンスの OSS（3.7k★）——ベンチマークの基盤である宣言的回路言語は実在し、スコアから独立している。"
+  },
+  "opentrailpaper.com": {
+    "cat": "community",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Project homepage of OpenTrailPaper — one developer's open-source e-paper bike computer on a LilyGO T5S3 (ESP32-S3): offline OSM maps, GPX navigation, FIT recording, BLE sensors, browser-based flashing. Cross-validated (09-05): RaemondBW/OpenTrailPaper verified via GitHub API (Apache-2.0, created Jul 2026, pushed Sep 4; description matches) — the site documents the repo, does not outrun it.",
+    "zh": "OpenTrailPaper 的项目主页——一位开发者的开源电子墨水屏自行车码表，基于 LilyGO T5S3（ESP32-S3）：离线 OSM 地图、GPX 导航、FIT 记录、BLE 传感器、浏览器刷机。交叉验证（09-05）：经 GitHub API 核实 RaemondBW/OpenTrailPaper（Apache-2.0，2026 年 7 月创建，9 月 4 日仍有推送；描述相符）——该网站是对仓库的文档化，没有超出仓库内容。",
+    "jp": "OpenTrailPaper のプロジェクトホームページ——LilyGO T5S3（ESP32-S3）上のオープンソース電子ペーパーサイコンを一人で開発：オフライン OSM 地図、GPX ナビ、FIT 記録、BLE センサ、ブラウザからの書き込み。相互検証済み（09-05）：GitHub API で RaemondBW/OpenTrailPaper を確認（Apache-2.0、2026 年 7 月作成、9 月 4 日に push、説明も一致）——サイトはリポジトリの文書化であり、それ以上を主張しない。"
   }
 }

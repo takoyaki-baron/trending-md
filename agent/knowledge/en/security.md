@@ -2047,3 +2047,21 @@ The batch's security stream, read first-hand at the primary sources where reacha
   feature, running with kernel/SYSTEM privilege, *is* the escalation primitive — an unpatched EDR agent
   is fleet-wide exposure by definition, so a public PoC justifies a mitigation review before any CVE
   exists.
+
+## 2026-09-05 04:03
+
+- **The Elementor Pro lifecycle completes: mass exploitation.** CVE-2026-32475 (9.8, Wordfence-assigned;
+  ≤ 4.2.1 unauthenticated arbitrary file upload via the Forms file-upload validation loop-desync, fixed
+  4.2.2 Aug 19; turnkey PoC Aug 27 — both already ledgered) reached industrial scale in early September:
+  Wordfence's firewall blocked **190,000+ exploit attempts**. Advisory → PoC → mass scanning in ~21 days,
+  every stage public. Sourcing note: Wordfence's site blocks automated fetches, so the figure was verified
+  via their published text rather than the full post body.
+- **The Rails clock measured: 8h01m patch → first attack.** Rietta published the exploitation timeline for
+  a US state-government client's app on CVE-2026-66066 (Rails 8 Active Storage file-read → RCE, covered
+  09-01): the public PoC hit GitHub at 21:47 UTC Jul 29 — *before* the emergency patch finished at 11:09 PM
+  EST that evening; the first attack landed 7:10:25 AM the next morning (a maliciously crafted Windows BMP
+  from a RIPE-network IP posing as Chrome 131); sustained adaptive probing ran daily through August from
+  rotating IPs — one request spoofed a `Claude-SearchBot` user agent, another openly named the CVE. Every
+  attempt failed exactly where the patch blocks. Measured conclusion: coordinated disclosure bought ~zero
+  grace — **the diff is the disclosure**; patch on the fix, not on the writeup. (Extends the OCaml −7-day
+  negative-TTE datapoint: here time-to-exploit is +8h only because the patch won the race by hours.)

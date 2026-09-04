@@ -81,3 +81,20 @@ comments were being auto-removed as likely LLM-generated**, noting users "much p
 imperfect-but-authentic writing." LLM-detection friction now lands on exactly the authentic builders
 these tools are meant to empower — the same education/authenticity layer Lawson describes, enforcing
 itself at the community gate.
+
+## 2026-09-05 04:03
+
+- **Google AI Mode's price skew, measured at scale (Productrise; 23 days, Aug 9–31; 2M+ listings, 100k+
+  SERPs, US/UK).** Matching the same products across surfaces by Google's stable product identifier on the
+  same query and date: AI Mode's lead offer averaged **21.6% more expensive** on matched products (across
+  all listings the median was $149 vs $100); only **1.28%** of traditional-search products also appeared in
+  AI Mode (3.9 products per AI Mode response vs 27.8 in search); where the surfaces disagreed on price
+  (38.1% of matched pairs), AI Mode was pricier **68.4%** of the time. The study's stated limits: lead
+  offers only, outlier mismatches (used vs new) can skew averages, USD and GBP never converted for the
+  median comparison, and the surface is still actively evolving.
+- **Why it extends thesis 16:** agent-mediated channels don't just pick winners — the first at-scale
+  measurement shows the AI surface *narrows the choice set and skews expensive*. Whether the selection is a
+  ranking artifact, a merchant-feed artifact, or monetization is unknown; Google hasn't said. Joins
+  Armature's tool-choice numbers and the answer-engine spam ledger ([[answer-engine-seo]]) as the
+  measured-agent-channel file — and raises the same independence question: the measurer (Productrise) sells
+  SEO/AI-visibility tooling.
