@@ -1972,6 +1972,17 @@ The batch's security stream, read first-hand at the primary sources where reacha
   generators); the nastier variants emit a schema `default` as a module-level template literal, so
   attacker-controlled code executes **at import time** — no request or function call needed (GHSA-w727-8j6c-2rj4;
   same pattern across the zod and MSW mock generators). **No patched versions listed at disclosure.**
+  **Resolved 09-04 12:46 (verified first-hand at the advisory page + npm + PR):** the fix had shipped **the same
+  day** — PR #3692 "escape spec-controlled strings in generated template literals and object keys" (merged
+  2026-07-12T12:00Z, fixes ten draft advisories at three emission boundaries via `jsesc` with `quotes:'backtick'`
+  / `JSON.stringify`, plus the `mutation-generator.ts` path that bypassed `getRoute`'s escaping) was released as
+  **v8.21.0 the same day** (npm: 2026-07-12). Every advisory's `first_patched_version` (< 8.21.0; one at 8.22.0)
+  was only **backfilled Sep 2–3** — 52 days after the fix shipped, hours after this feed pinned all 17 as null.
+  Two lessons: "no patched versions" can be a *metadata* lag, not a code event — check the repo's own merge
+  history before treating an advisory as unpatched; and **patched ≠ announced-patched** is itself an operating
+  rule, because scanners act on the advisory field. v8.28.1 (Sep 3) closes one adjacent sink (form-data keys,
+  PR #3988, first-time contributor) — the class is being closed by case-by-case escaping, not a codegen
+  restructure; no SAST "generated-client interpolation" check has appeared.
   **Shape:** a new instance of supply-chain-via-trusted-artifact — your OpenAPI document is executable code on
   every developer machine that installs the generated client; a malicious or poisoned spec becomes an
   import-time RCE across the whole repo. Operating rule until fixes land: treat generated output as untrusted
@@ -1985,3 +1996,33 @@ The batch's security stream, read first-hand at the primary sources where reacha
   defaults must live in the library, not in every downstream caller. Joins MLflow/Langflow/DB-GPT in the
   AI-infra-as-pivot ledger, but the class is distinct: the *ingestion* tier turns one attacker-chosen URL in a
   crawled corpus into an internal-network read primitive in the ingestion worker.
+
+## The agent substrate (Git) + the switching fabric become unauth-RCE surfaces (09-04 12:03)
+
+- **GitSpawn (Manifold Security, disclosed Sep 2) — malicious `.git/config` executes code across 7 CLI coding
+  agents.** The flaw is not in the model: agents spawn `git status`/`git diff` at startup to gather context,
+  and Git config keys like `core.fsmonitor` are command-execution sinks read from the repo's own `.git/config`
+  — the same sink VS Code patched in 2021 (CVE-2021-43891), re-derived by each new agent at a layer no sandbox
+  policy covers. Delivery requires the repo to arrive as files with `.git` intact (zip/drive/sync folder — a
+  plain `git clone` strips it); the payload then runs as the user, outside the sandbox, with no approval prompt
+  — in some agents before the workspace-trust prompt or even before authentication. **Unpatched at
+  publication:** Claude Code's second path ("ultrareview", config key withheld while live), Hermes Agent 0.21.0
+  (CVE-2026-71963, assigned by VulnCheck after six untriaged contact attempts to Nous Research), Qwen Code
+  0.22.3 (Alibaba accepted the report Jul 7), Grok Build 1.0.13 (xAI closed it as a duplicate of a report it
+  had marked "informative"). **Patched:** goose 1.44.0 (CVE-2026-72718, CVSS 4.0 7.0), Codex CLI 0.131.0
+  (three same-day CVEs incl. CVE-2026-19592), Claude Code 2.1.196, Cursor. Five of Manifold's eight reports
+  came back as duplicates of independent researchers — "this is being found from more than one direction." No
+  exploitation observed; none of these CVEs were in KEV (v2026.09.01). Operating rule: inspect `.git/config`
+  before pointing an agent at any repo received as an archive.
+- **Cisco CVE-2026-20212 (CVSS 9.8, Cisco-assigned CNA) — unauthenticated root RCE on ten Silicon One-based
+  Nexus 9000 switch models** (N9324C-SE1U through N9K-C9808): a service binds to an unrestricted address,
+  leaving TCP 43210/43211 reachable in the default Layer 3 VRF — anyone who can reach them connects directly
+  and runs crafted input with **root privileges**, or crashes the S1HAL process and reloads the device. 45
+  NX-OS releases 10.3(1)–10.6(3s) affected; no fixed-release table (Software Checker only); iACL workaround =
+  explicitly deny 43210/43211. Same drop: an IOS XR "hardening release" — seven umbrella CVEs (one per CWE
+  bucket, two at 9.8: CVE-2026-20274 memory-safety, CVE-2026-20279 missing-auth/cert-validation), **no
+  workaround for any IOS XR version**, SMUs covering just 15 of 111 affected releases, the third such drop in
+  30 days. **Scoring/disclosure note:** 9.8 is vendor CNA-assigned and "not aware of any malicious use" is a
+  disclosure-time statement, not evidence of safety; the umbrella model itself (twice-monthly, scored at worst
+  defect) makes per-CVE triage mostly meaningless. Context: Sygnia's Fire Ant implants live on IOS XR with the
+  initial access vector still unattributed.

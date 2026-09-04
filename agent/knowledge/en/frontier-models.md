@@ -1711,3 +1711,41 @@ distribution thesis 6.
   which the post itself says "does not represent genuine software-engineering performance." Publishing every
   checkpoint makes the emergence of hack strategies *datable* — the CogEvol caught-and-fixed precedent
   (09-02), now at open-release scale.
+
+## The 09-04 12:03 research tail: encoders, world models, two stones, and a GNSS cliff
+
+- **NeoMME (H Company, Sep 3, Apache-2.0, 260M/800M)** — multimodal-native encoders: text + images in one
+  bidirectional Transformer (no vision tower, no causal LM), trained from scratch with a masked
+  discrete-diffusion objective on ~524B packed tokens (NorMuon), 16k ctx, sliding-window attention + periodic
+  global layers. Retriever variants rank page screenshots for visual document RAG: ViDoRe v3 nDCG@10 0.523
+  (260M) / 0.556 (800M), claimed on the model-size Pareto frontier — the 260M "within 0.002 nDCG@10 of
+  ColQwen2.5 while using ~14× fewer parameters"; ~51 pages/s on an L40S; hierarchical token pooling +
+  asymmetric quantization cuts late-interaction storage ~1.5 MB → 6 kB/page (255×) at >95% of baseline nDCG.
+  **Read the footnotes (the disclaimer-stripping lesson again):** NeoMME's own numbers are self-reported (‡)
+  while the closest competitors (ColQwen2.5, ColModernVBERT) carry MTEB-derived scores (†) — the headline
+  comparison crosses sources.
+- **Puffin-World (NTU S-Lab, Sep 2, NTU S-Lab License 1.0)** — a unified multimodal world model that
+  generates, reconstructs and simulates 3D-consistent scenes grounded in three explicit "world states":
+  physics (a gravity field + latitude map keep generated worlds upright), geometry (depth), appearance (RGB).
+  Key representation: the Omni-Camera, a dense 9-channel per-pixel camera condition (absolute up-vector +
+  latitude field, relative ray-origin/direction), physics propagated by rotating the perceived gravity vector
+  into each future view's frame. Data: Puffin-Cam-15M triplets (900K panoramas), Puffin-Traj-1M trajectories,
+  camera annotations for 28 public datasets (~44.5M images). Honest gaps: static scenes only, physics
+  "primarily through gravity and latitude," no benchmark numbers in the blog, the Puffin-World paper itself
+  still "coming soon" (only the ICLR 2026 predecessor, arXiv 2510.08673, is citable). Representational
+  contribution, not scoreboard-shaped: anchor generation to gravity and horizon so worlds don't drift.
+- **Shin Jin-seo 2–1 over KataGo on two stones (played Jul 17–21, resurfaced Sep 3).** The world No. 1
+  nine-dan took black with two preset stones each game at the Korea Economic Daily's Seoul HQ — a handicap the
+  organizers called "the absolute boundary for human competition against modern AI." Lost game 1 lopsidedly,
+  won games 2–3 by 4.5 and 11.5 — the first human to win an official series against a top engine on two
+  stones. He spotted an exploitable pattern (KataGo mirroring when he opened at the opposite komoku) and
+  deliberately declined to use it: "I didn't want to win that way." In Astra launch week, the honest other
+  column: the top-human/top-engine gap is now precisely measurable as "two stones," not infinite.
+- **GNSS as an autonomy dependency: the Nov 2025 superstorm (Geophysical Research Letters, 2026, Aerospace
+  Corp / Yizengaw et al.).** Six X-class flares + associated CMEs drove horizontal GPS errors above 10 m
+  across the continental US, with strong amplitude scintillation spanning ~80°–120° W — a span the authors
+  state "has never been seen before" at mid-latitudes. Economic damage stayed minimal mostly by luck: the
+  storm hit outside farming season (the May 2024 storm cost an estimated ~$500M in US agricultural losses) —
+  and this is the peak of the Sun's 11-year cycle. Precision agriculture, surveying, drones and any outdoor
+  autonomy stack quietly assume sub-meter GNSS; this is the rare infrastructure-risk story that ships with a
+  published paper to design tests against.

@@ -1206,3 +1206,19 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   ChatGPT and Codex"，Grok 大面积故障，Gemini 与其他 Google 服务一同踉跄，Claude 状态页 Opus 系列最后
   恢复）。没有任何厂商公布根因；一切自信的解释（包括流传的 Azure 说）都是猜测。唯一可测的事实：建在
   前沿 API 之上的一切作为一个系统同时失效约一小时——"租用大脑"依赖的首次同时压力测试。
+
+- **Funes——Hugging Face 亲自下场做代理记忆（9 月 3 日，Apache-2.0，huggingface/funes）。** 单个 Rust 二进制：
+  解析 Claude Code、Codex、pi、Hermes 已经留在磁盘上的会话轨迹，写入 append-only 的 Lance 数据集，逐轮增量
+  建索引，并对外提供 `recall`/`get` 工具——混合向量+BM25 检索、cross-encoder 重排、新近度加权，每条命中都
+  带出处（agent、session、turn）。`funes add codex acme/funes-memory` 把本地记忆绑定到默认私有的 Hub 数据集，
+  记忆因此可跨机器迁移；保留原始文本而非蒸馏。自家两任务基准：召回比书面交接便宜 8×/4×；压缩在其中一个任务上
+  "把关键发现压平了"。自述缺口：秘密扫描器覆盖有已知漏洞（SECURITY.md），release checksum "不对 bucket 本身
+  作认证"。这是记忆的第三种形态——流水线服务、zip-of-Markdown（memoryfields，08-31）之后的数据集原生派——由
+  开放模型已然信任的平台亲手发布，"记忆是你拥有的数据"从宣言变成默认。
+- **Armature：编码代理实际装了哪些工具？（16,893 次运行，9 月 3 日）。** 5,292 个有效会话，横跨 75 个合成仓库
+  （虚构公司名、真实 lockfile）、10 种语言、18 个行业，一个 Gemini 3.7 Flash 实例扮演用户、另一个当裁判：三个
+  代理只在 **42% 的单元里收敛到同一个工具**；Cursor 约 2/3 会话用网络搜索，Codex 94%，Claude Code 约 30%
+  （靠先验）；同样的需求下，邮件 SDK 赢家随语言翻转（TS 用 Resend、Python 用 SendGrid、Go 用 Postmark）；
+  Stripe 赢 9/10；PayPal 被引用 139 次却从未被选中；被提及最多的 Supabase 输给了 Neon。**代理中介市场份额**
+  的首次大规模测量——但来自利益相关方（Armature 向开发者工具卖增长服务），仅发布约 31% 的运行，且用户与裁判
+  都是 LLM：方向性参考，不是福音。完整的分发渠道解读 → [[agent-distribution]]。

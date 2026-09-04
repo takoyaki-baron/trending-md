@@ -4903,5 +4903,50 @@
     "en": "The port author's personal blog — first-person build log for the Babylonian Twins Amiga-to-Godot port, including its own reported bugs. Cross-validated (09-04): byte-identical rebuild claim and the honest-failure notes match the linked HN discussion; single-author claims (e.g. the unconfirmed detail he flags himself) stay attributed to him.",
     "zh": "移植作者的个人博客——Babylonian Twins 从 Amiga 到 Godot 移植的第一人称构建日志，含其自报的 bug。交叉验证（09-04）：字节级一致重建的主张与诚实失误记录与其链接的 HN 讨论一致；单一作者的主张（含他自己标注无法确认的细节）保持归于其本人。",
     "jp": "移植作者の個人ブログ——Babylonian Twins の Amiga→Godot 移植に関する一人称ビルドログ、自報のバグも含む。相互検証済み（09-04）：バイト単位一致の再構築主張と正直な失敗記録はリンク先の HN 議論と一致；単一著者の主張（本人が確認不能と印を付けた細部を含む）は本人に帰属させたまま。"
+  },
+  "armature.tech": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Armature's dev-tools growth blog — source of the 16,893-run coding-agent tool-choice measurement (Sep 3). Credibility capped on purpose: Armature sells growth services to dev tools (an interested party), publishes ~31% of runs, and both the simulated user and judge are LLMs. Cross-validated (09-04): the HN discussion quotes the same dataset size, 42%-agreement headline and caveats as the blog itself; the findings remain single-source self-measurement — directional, not gospel.",
+    "zh": "Armature 的开发者工具增长博客——16,893 次运行的编码代理工具选择测量（9 月 3 日）来源。可信度刻意封顶：Armature 向开发者工具卖增长服务（利益相关方），仅发布约 31% 的运行，且模拟用户与裁判都是 LLM。交叉验证（09-04）：HN 讨论引用的数据集规模、42% 一致头条与警告与博客一致；发现仍是单源自测——方向性参考，不是福音。",
+    "jp": "Armature の開発者ツール成長ブログ——16,893 実行のコーディングエージェント・ツール選択測定（9月3日）の出典。信頼性は意図的に上限付き：Armature は開発者ツール向け成長サービスを販売する利害当事者で、実行の約 31% のみ公開、ユーザーも審判も LLM。相互検証済み（09-04）：HN 議論がブログと同じデータ規模・42% 一致の見出し・警告を引用；所見は依然単一ソースの自己測定——方向的参考であり福音ではない。"
+  },
+  "manifold.security": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Manifold Security research blog — the GitSpawn disclosure (8 flaws across 7 CLI coding agents via malicious `.git/config`). Cross-validated (09-04): the findings are independently confirmed by third parties — CVE assignments (VulnCheck for Hermes, vendor CNAs for goose/Codex) and shipped patches (goose 1.44.0, Codex CLI 0.131.0, Claude Code 2.1.196); 5 of 8 reports independently duplicated by other researchers, which cuts both ways.",
+    "zh": "Manifold Security 研究博客——GitSpawn 披露（跨 7 个 CLI 编码代理的 8 个缺陷，经恶意 `.git/config`）。交叉验证（09-04）：发现被第三方独立证实——CVE 分配（Hermes 由 VulnCheck、goose/Codex 由厂商 CNA）与已发布补丁（goose 1.44.0、Codex CLI 0.131.0、Claude Code 2.1.196）；8 份报告中 5 份被其他研究者独立重复，这把刀两面开刃。",
+    "jp": "Manifold Security 研究ブログ——GitSpawn 披露（悪意ある `.git/config` による 7 CLI コーディングエージェント横断の 8 欠陥）。相互検証済み（09-04）：所見は第三者が独立に確認——CVE 割り当て（Hermes は VulnCheck、goose/Codex はベンダー CNA）と出荷済み修正（goose 1.44.0、Codex CLI 0.131.0、Claude Code 2.1.196）；8 件中 5 件が他研究者により独立に重複報告されており、これは諸刃。"
+  },
+  "kedglobal.com": {
+    "cat": "news",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "The Korea Economic Daily — established Korean business daily; first-hand coverage venue of the Shin Jin-seo vs KataGo two-stone series (Jul 17–21, Seoul). Cross-validated (09-04): the series dates, handicap and game scores match the resurfacing HN discussion and KataGo community commentary; a news page, not a primary record — quotes go through its own reporting.",
+    "zh": "韩国经济新闻——韩国主要商业日报；申真谞 vs KataGo 授两子番棋（7 月 17–21 日，首尔）的一手报道方。交叉验证（09-04）：对局日期、让子与比分与重新发酵的 HN 讨论及 KataGo 社区评论一致；是新闻页而非原始记录——引语经过其自身采编。",
+    "jp": "韓国経済新聞——韓国の主要ビジネス日刊紙；申眞諝 vs KataGo 二子三番勝負（7月17〜21日、ソウル）の一次報道元。相互検証済み（09-04）：対局日程・ハンディキャップ・棋譜結果は再浮上した HN 議論および KataGo コミュニティの言及と一致；ニュースページであり一次記録ではない——発言は同紙の編集経由。"
+  },
+  "sciencealert.com": {
+    "cat": "news",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "ScienceAlert — secondary science news outlet; its GPS-superstorm piece is faithful to the underlying Geophysical Research Letters paper (Aerospace Corp, Yizengaw et al.) it links. Cross-validated (09-04): the >10 m error, longitude span and the May-2024 ~$500M agricultural-loss comparison all trace to the linked paper; still a popularization — read the paper for the authors' own hedges.",
+    "zh": "ScienceAlert——二手科学新闻站；其 GPS 超级风暴报道忠实于所链接的 Geophysical Research Letters 论文（Aerospace Corp，Yizengaw 等）。交叉验证（09-04）：>10 米误差、经度跨度与 2024 年 5 月约 5 亿美元农业损失对比都可溯源到所链论文；仍是科普化转述——作者自己的保留措辞要读原文。",
+    "jp": "ScienceAlert——二次科学ニュースサイト；GPS スーパー嵐の記事は、リンク先の Geophysical Research Letters 論文（Aerospace Corp、Yizengaw ら）に忠実。相互検証済み（09-04）：10 m 超の誤差、経度スパン、2024 年 5 月の約 5 億ドル農業損失比較はすべてリンク先論文に辿れる；それでも一般化された転述——著者自身の留保は原論文で読むべき。"
+  },
+  "nolanlawson.com": {
+    "cat": "community",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Nolan Lawson's personal blog — long-time browser/engine performance engineer (MS Edge, Chrome team history); first-hand essayist on web-platform reality. Cross-validated (09-04): the educational-work departures/pivots he cites (Rauschmayer, Alam-Naylor, Comeau, Dodds, Osmani) are independently verifiable public announcements, and his caveats section explicitly grades his own predictions.",
+    "zh": "Nolan Lawson 的个人博客——资深浏览器/引擎性能工程师（MS Edge、Chrome 团队经历），写 web 平台现实的第一手文章。交叉验证（09-04）：他引用的教育工作者退出/转向（Rauschmayer、Alam-Naylor、Comeau、Dodds、Osmani）都是可独立核实的公开事实，且他的警告小节明确给自己预测的可靠度分了级。",
+    "jp": "Nolan Lawson の個人ブログ——長年ブラウザ/エンジン性能エンジニアリングに携わった（MS Edge、Chrome チーム歴）ウェブプラットフォームの現実を書く一人称エッセイスト。相互検証済み（09-04）：彼が挙げる教育活動の終了・方向転換（Rauschmayer、Alam-Naylor、Comeau、Dodds、Osmani）はいずれも独立に検証可能な公表事実であり、警告セクションは自身の予測の確度を明示的に格付けしている。"
   }
 }

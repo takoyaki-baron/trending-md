@@ -1707,3 +1707,24 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   cause; every confident explanation (including the circulating Azure one) is speculation. The one measured
   fact: everything built on frontier APIs failed as one system for about an hour — the "rent your brain"
   dependency's first simultaneous stress test.
+
+- **Funes — Hugging Face ships its own agent memory (Sep 3, Apache-2.0, huggingface/funes).** A single Rust
+  binary that parses the session traces Claude Code, Codex, pi and Hermes already leave on disk into an
+  append-only Lance dataset, indexes incrementally per turn, and serves `recall`/`get` tools backed by hybrid
+  vector+BM25 retrieval with cross-encoder reranking and recency weighting — every hit citing its provenance
+  (agent, session, turn). `funes add codex acme/funes-memory` binds the local memory to a private-by-default
+  Hub dataset, so memory travels across machines; raw text is preserved rather than distilled. Its own
+  two-task benchmark: recall 8×/4× cheaper than a written handoff; compaction "flattened key findings" on one
+  of the two tasks. Stated gaps: the secret scanner's coverage has documented holes (SECURITY.md), and the
+  release checksum "does not authenticate the bucket itself." Memory's third shape — pipeline services, the
+  zip-of-Markdown `memoryfields` school (08-31), now dataset-native — shipped by the platform every open
+  model already trusts, so "memory is data you own" stops being a manifesto and becomes a default.
+- **Armature: which tools do coding agents actually install? (16,893 runs, Sep 3).** 5,292 valid sessions
+  across 75 synthetic repositories (fake company names, real lockfiles) in 10 languages/18 sectors, a Gemini
+  3.7 Flash instance as simulated user + another as judge: the three agents converge on the same tool in
+  **only 42% of cells**; Cursor web-searches in ~2/3 of sessions, Codex in 94%, Claude Code ~30% (runs on
+  priors); with identical asks the email winner flips by language (Resend/TS, SendGrid/Python, Postmark/Go);
+  Stripe wins 9/10; PayPal cited 139×, never picked; Supabase, most-mentioned, lost to Neon. The first
+  large-scale measurement of **agent-mediated market share** — but from an interested party (Armature sells
+  growth services to dev tools), only ~31% of runs published, and both user and judge are LLMs: directional,
+  not gospel. The full distribution-channel reading → [[agent-distribution]].

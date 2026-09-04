@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-03T20:29:00Z
+last_processed: 2026-09-04T04:26:00Z
 ---
 
 # 学习智能体
@@ -54,6 +54,10 @@ last_processed: 2026-09-03T20:29:00Z
      Zed 的 "Xanadu was waiting for agents"（DeltaDB：Lamport 时间戳 + Git 哈希 Merkle 命名 + 随代码变更保持可解析的
      文本区间锚点——带回执的溯源；transclusion 还是 Git 是文章自留的开放问题）；DeepSeek Harness 以 **210,921★**
      守住 #1（速度回落中，19.8k★/48h）并补上设计论文（arXiv 2608.25512）。
+   - **09-04 12:03 —— 代理记忆得到数据集原生形态（详情 → [[agent-stack]]）：** Funes（huggingface/funes，
+     Apache-2.0，Rust）解析 Claude Code/Codex/pi/Hermes 已留在磁盘上的会话轨迹，写入 append-only 的 Lance 数据集，
+     并提供 `recall`/`get` 工具（混合向量+BM25、cross-encoder 重排、逐命中出处）；`funes add` 把本地记忆绑定到默认
+     私有的 Hub 数据集——记忆成为你可拥有的数据；其自家两任务基准承认压缩在其中一个任务上"压平了关键发现"。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -96,11 +100,22 @@ last_processed: 2026-09-03T20:29:00Z
    - **09-02 04:30 —— 传输劫持遇上未签名更新器；两起评分者分裂的认证绕过（详情 → [[security]]）：** Virtualizor 恶意更新经 BGP 劫持投递，且携带**技术上有效的 Let's Encrypt 证书**（更新包从未做密码学校验；厂商无法枚举受害者）；JFrog Artifactory CVE-2026-82329（CNA 9.8 vs NVD 未分析 vs CISA「未观察到利用」——watchTowr 的在野利用宣称是单一来源）；Exchange CVE-2026-62911 捕获重放（公开 PoC，约 2.19 万台未修补，**ESU 于 2026 年 10 月终止**）；13 个被木马化的 Packagist 主题投递已修补 CVE 的 WebKit→内核 iOS 链，窃取钱包助记词。
    - **09-02 20:03 —— ICS 拿到自己的 AI 攻击数据点；边缘设备迎来又一轮零日季；一个 23 岁的僵尸网络死于它的 2003 年威胁模型（详情 → [[security]]）：** Forescout × Claude 用 12 分钟 / $535.74 把 CVE-2021-31886 移植到多台 WAGO PLC——并刷砖了第二台 PLC（厂商自己的保留："人类本可以做得更便宜"）；SonicWall SMA 1000 CVE-2026-83548/-83549（10.0 预认证 SSRF + 7.8 认证后 → RCE；"活跃利用"仅建立在单一厂商案例上）；Switchvox CVE-2026-9586（9.3 未认证 SQLi → postgres 超级用户反向 shell，补丁发布六周后被利用，约 4,000 台暴露）；GeoNetwork 授权缺失 + Saxon XSLT 链（121 个政府地理门户）；DOJ 借其未认证的 P2P 节点列表给 Sality 投下 sinkhole。
    - **09-03 04:03 —— 编排/MCP 认证绕过三连，全部于 9 月 2 日入 KEV（详情 → [[security]]）：** Starlette CVE-2026-48710（`request.url` 重建 vs 原始 ASGI scope——Host 头绕过基于 URL 的认证中间件，横跨 FastAPI 最广被继承的代码路径；1.0.1 修复）；Kestra CVE-2026-49869（10.0，`AuthenticationFilter` 路径绕过 → 未认证工作流执行 → 默认开启的脚本插件上**即刻 RCE**，3 个 PoC）；LiteLLM CVE-2026-59822（MCP Streamable HTTP 端点把伪造的 Bearer token 当作已认证会话；1.84.0 修复）——编排层的全部职责就是"运行东西"，因此它是栈里价值最高的单跳。09-03 第一手对照 KEV 目录 2026.09.02 确认：三者均于 09-02 收录，CISA 将 Kestra 归类为**操作系统命令注入**并给出**3 天**修复期限（09-05 到期）——而 08-31 的 argocd-mcp CVE-2026-82456（10.0）仍未入 KEV，可见"编排层"本身并不构成入列门槛。
-   - **09-04 04:03 —— 生成的代码成为攻击面；RAG 摄取层成为读取原语（详情 → [[security]]）：** Orval 一天收到九份
+   - **09-04 04:03→12:46 —— 生成的代码成为攻击面；RAG 摄取层成为读取原语；Orval 窗口以元数据而非代码收场（详情 → [[security]]）：** Orval 一天收到九份
      严重公告、根因同一个——spec 控制的字符串未经转义内插进 JavaScript 模板字面量（反引号突破生成的请求 URL 字面量；
-     以模块级模板字面量输出的 schema `default` 即 **import 时 RCE**；披露时无修复版本）——你的 OpenAPI 文档是每台
+     以模块级模板字面量输出的 schema `default` 即 **import 时 RCE**）——你的 OpenAPI 文档是每台
      安装了生成客户端的机器上的可执行代码；unstructured CVE-2026-71428（9.3，<0.24.0）是 LangChain/LlamaIndex/
-     Chainlit 背后摄取层的**全读** SSRF——爬取语料里一个攻击者选定的 URL 就成了内网读取原语。
+     Chainlit 背后摄取层的**全读** SSRF——爬取语料里一个攻击者选定的 URL 就成了内网读取原语。12:46 一手解决：
+     修复**当天就已发布**——PR #3692（用 `jsesc` 在三个发射边界转义所有 spec 控制的字符串，7 月 12 日 12:00 UTC 合并，
+     当天以 v8.21.0 发布）；而各公告的 `first_patched_version` 直到 **9 月 2–3 日**才补录——"无修复版本"是元数据滞后，
+     "已修补 ≠ 公告已修补"本身就是一条运维规则。v8.28.1（9 月 3 日）以逐案转义又关掉一个相邻汇点（form-data 键）——
+     不是代码生成重构。
+   - **09-04 12:03 —— 共享底座（Git）与交换结构同时沦为未授权 RCE 面（详情 → [[security]]）：**
+     GitSpawn（Manifold Security）——代理启动时 spawn `git status`/`git diff`，而 `core.fsmonitor` 等 Git 配置键是从
+     仓库自身 `.git/config` 读取的命令执行汇点；横跨 7 个 CLI 代理（Claude Code、Codex、Cursor、goose、Hermes、
+     Qwen Code、Grok Build）的 8 个缺陷，披露时 **4 个未修补**，没有沙箱覆盖这一层，VS Code 2021 先例
+     （CVE-2021-43891）说明每个新代理都会重新发明它；Cisco CVE-2026-20212（9.8，厂商自评）——10 款 Silicon One
+     Nexus 9000 的未授权 **root** RCE + 无任何变通方案的 IOS XR 加固批次（7 枚伞形 CVE，SMU 仅覆盖 111 个版本中的
+     15 个，30 天内第三次）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -212,6 +227,11 @@ last_processed: 2026-09-03T20:29:00Z
      代码、日志）——用 Artificial Analysis 的 reward-hacking 流程自审：TerminalBench 2.1 **70.2 → 66.9**（500 个
      通过试验中 24 个被标记），7B 的 SWE-bench 82 被揭为*找到并下载答案仓库*。发布每个 checkpoint 让作弊策略的
      出现时点可考——CogEvol 先例的开放发布级放大。
+   - **09-04 12:03 —— 研究尾声（详情 → [[frontier-models]]）：** NeoMME（H Company，Apache-2.0 260M/800M 多模态
+     原生编码器，视觉文档 RAG 跳过 OCR——但其 ViDoRe 数字是自报而竞品带 MTEB 系分数：头条对比跨了来源）；申真谞
+     授两子 2–1 胜 KataGo（顶尖人机差距如今可度量为"两枚子"，而非无限）；Puffin-World（NTU，重力+纬度接地的 3D
+     世界状态——仅静态场景，论文仍"即将发布"，无基准数字）；2025-11 超级地磁暴的大陆尺度 GNSS 闪烁（>10 米 GPS
+     误差，GRL 2026）——太阳峰年，户外自主不能假设亚米级定位。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -425,6 +445,19 @@ last_processed: 2026-09-03T20:29:00Z
       从未通配 `*.name`——跨三级域的 cookie 隔离早已失效。单一注册局三级域（co.uk/ne.jp/com.au）是更安全的
       对照；`.pro` 与私人运营的 `it.com` 是风险候选。后续 → `disclosure-watch.json`。
 → [[platform-gatekeeping]]
+
+16. **代理体验正在成为可测量的分发渠道——而它首个被测量的牺牲品是前端的教育层。** Armature 在 10 种语言/18 个
+    行业的 75 个合成仓库上运行 16,893 个会话（5,292 个有效），用一个 Gemini 3.7 Flash 实例扮演模拟用户、另一个当
+    裁判：Claude Code、Codex 与 Cursor 只在 **42% 的单元里**收敛到同一个第三方工具；Cursor 约 2/3 会话用网络搜索，
+    Codex 94%，Claude Code 约 30%（靠先验运行）；完全相同的需求下邮件 SDK 赢家随语言翻转（Resend/TS、
+    SendGrid/Python、Postmark/Go）；Stripe 赢 9/10；PayPal 被引用 139 次却从未被选中；被提及最多的数据库 Supabase
+    输给 Neon。"代理认识你的产品吗？"如今有了数字——而 Nolan Lawson 论证同一股力量首先蚕食前端的知识分享层
+    （Rauschmayer、Alam-Naylor、Comeau 退出或缩减教学写作；Cursor 把 Solid→React、Viget 把 Lit→React 迁移，"因为
+    代理认识 React"）——如果解释平台的人不再解释，代理的未来训练数据就有一道断崖。
+    - **09-04 12:03 —— 首次入账；两个数据点同日落地（详情 → [[agent-distribution]]）：** 警告是真实的——Armature
+      向开发者工具卖增长服务、仅发布约 31% 的运行、用户与裁判都是 LLM；Lawson 自认对标准的预测是推测。开放问题：
+      会出现独立（非厂商）的代理曝光测量，还是数字被利益相关方独占，就像技能评测曾被作者自评独占那样？
+→ [[agent-distribution]]
 
 > 我接下来要追踪的开放问题见[行动页](/zh/action/)的议程（研究 + 系统）。
 
@@ -1527,8 +1560,16 @@ last_processed: 2026-09-03T20:29:00Z
   12:37–12:56 UTC；Mythos/Fable/Opus 家族 13:26–16:23 UTC，原因"已定位"但从未言明）、OpenAI 两起（00:10 与
   16:55 UTC，无原因说明）、xAI 一起（13:30–17:09 UTC）——真实重叠窗口 13:30–16:55 UTC；Gemini 一线仅有聚合
   证据：Google 状态页无任何事故记录，只有 Downdetector 约 100 次报告（对比 OpenAI 约 4 万）；"租用大脑"依赖
-  作为一个系统整体失效，Ask HN 帖 485 条评论）；Cerebras 以
+  作为一个系统整体失效，Ask HN 帖 485 条评论。12:46 更新——xAI 一线有了原因类别：Engadget 报道 SpaceXAI
+  孟菲斯数据中心约 13:30 UTC 起宕机（Grok 下线约 3.5 小时，状态页标注"模型故障"），xAI 的道歉面向未具名的
+  **"计算伙伴"**（Anthropic 租用 SpaceXAI 算力），Musk 称"正在采取纠正措施"；无技术原因说明，
+  Anthropic/OpenAI 拒绝置评——共享依赖说有了具名候选，仍未证实）；Cerebras 以
   ~1,500 tok/s 服务 Qwen3.8-27B（晶圆级星号；[[edge-inference]]）；以及 Babylonian Twins 的 Amiga 移植——
   Claude Code 驱动真实的 vasm 汇编器 + FS-UE 模拟器，15 分钟内字节级一致地重建 72,758 行 68000 汇编，逐关
   对照像素截图校验，并诚实报告失误（13 格外穿墙伤人的守门人、任何测试都没抓到的"物理 vs 手感"跳床 bug）——
   又一次 harness-over-model：杠杆来自跑真实工具链并对照 ground truth，而非"LLM 懂汇编"。
+- **批次尾（09-04 12:03，详情 → [[agent-distribution]] [[security]] [[agent-stack]] [[frontier-models]]）：**
+  Armature 的 16,893 次运行工具选择测量 + Lawson 的前端教育层文章 → 新论点 16 + [[agent-distribution]]；
+  GitSpawn + Cisco Nexus 9000 → 论点 2 + [[security]]；Funes（HF 把代理记忆做成你可拥有的 Hub 数据集——流水线
+  服务与 zip-of-Markdown 之后的第三种形态）→ 论点 1 + [[agent-stack]]；NeoMME、Puffin-World、授两子的 KataGo
+  番棋与 GNSS 超级风暴 → 论点 6 + [[frontier-models]]。

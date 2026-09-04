@@ -1348,7 +1348,16 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   模板字面量。** 路径里的反引号可以突破生成的请求 URL 字面量（GHSA-fg9p-mrxr-hvq7；影响 axios、fetch 与
   react-query 生成器）；更危险的变体把 schema `default` 作为模块级模板字面量输出，攻击者控制的代码在
   **import 时**即执行——无需任何请求或函数调用（GHSA-w727-8j6c-2rj4；zod 与 MSW mock 生成器同型）。
-  **披露时尚无修复版本。形态：**"可信产物供应链"的新实例——你的 OpenAPI 文档是每台安装了生成客户端的
+  **披露时尚无修复版本。09-04 12:46 已解决（公告页 + npm + PR 一手核实）：**修复**与披露同日发布**——
+  PR #3692 "escape spec-controlled strings in generated template literals and object keys"（2026-07-12T12:00Z
+  合并；在三个发射边界用 `jsesc`（`quotes:'backtick'`）/`JSON.stringify` 转义，覆盖十份草稿公告，并修掉
+  绕过 `getRoute` 转义的 `mutation-generator.ts` 路径）**当天以 v8.21.0 发布**（npm：2026-07-12）。
+  而各公告的 `first_patched_version`（< 8.21.0；一份为 8.22.0）直到 **9 月 2–3 日**才补录——距修复发布 52 天，
+  距本 feed 钉死"全部为 null"仅数小时。两条教训："无修复版本"可能只是*元数据*滞后而非代码事件——把公告当成
+  未修补之前，先查仓库自己的合并历史；**"已修补 ≠ 公告已修补"**本身就是运维规则，因为扫描器只认公告字段。
+  v8.28.1（9 月 3 日）又以逐案转义关掉一个相邻汇点（form-data 键，PR #3988，首次贡献者）——该类别靠逐案
+  转义关闭，而非代码生成重构；SAST"生成客户端内插"检查尚未出现。
+  **形态：**"可信产物供应链"的新实例——你的 OpenAPI 文档是每台安装了生成客户端的
   开发机上的可执行代码，恶意或被投毒的 spec 等于全仓库范围的 import 时 RCE。修复落地前的操作守则：把生成
   产物当作不可信输入，而非构建制品。grep 点：任何把 spec 字段字符串内插进产出代码的生成器。
 - **unstructured CVE-2026-71428（CVSS 9.3，GHSA-4mvj-m6j5-pmf7）——事实上的 RAG 摄取层全读 SSRF。**
@@ -1358,3 +1367,28 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   `UnstructuredURLLoader`、LlamaIndex readers 与 Chainlit 之后——公告自己的措辞就是重点：安全默认必须住在
   库里，而不是每个下游调用方。与 MLflow/Langflow/DB-GPT 同入 AI 基础设施支点台账，但类别不同：*摄取*层
   把爬取语料里一个攻击者选定的 URL 变成摄取 worker 手里的内网读取原语。
+
+## 代理 substrate（Git）与交换结构同时沦为未授权 RCE 面（09-04 12:03）
+
+- **GitSpawn（Manifold Security，9 月 2 日披露）——恶意 `.git/config` 在 7 个 CLI 编码代理中执行代码。**
+  漏洞不在模型：代理启动时会 spawn `git status`/`git diff` 收集上下文，而 `core.fsmonitor` 这类 Git 配置键
+  是从仓库自己的 `.git/config` 读取的命令执行汇点——与 VS Code 2021 年修补的是同一个汇点
+  （CVE-2021-43891），每个新代理都在沙箱策略覆盖不到的层重新发明它。投递要求仓库以"带 `.git` 的文件"形式
+  到达（zip/网盘/同步目录——普通 `git clone` 会剥离它）；载荷随后以用户身份、在沙箱外、无任何审批提示地
+  运行——在某些代理里甚至早于工作区信任提示或认证之前。**披露时未修补：** Claude Code 的第二条路径
+  （"ultrareview"，配置键在生效期间被扣留），Hermes Agent 0.21.0（CVE-2026-71963，Nous Research 六次联系
+  均未分诊后由 VulnCheck 分配 CVE），Qwen Code 0.22.3（Alibaba 7 月 7 日已接受报告），Grok Build 1.0.13
+  （xAI 把它关闭为一份自己标记过 "informative" 的报告的重复项）。**已修补：** goose 1.44.0
+  （CVE-2026-72718，CVSS 4.0 7.0）、Codex CLI 0.131.0（同日三枚 CVE，含 CVE-2026-19592）、Claude Code
+  2.1.196、Cursor。Manifold 的 8 份报告有 5 份回来是独立研究者的重复——"这正在被不止一个方向发现。" 未观测
+  到在野利用；这些 CVE 均不在 KEV（v2026.09.01）。操作规则：任何以归档形式收到的仓库，先把 `.git/config`
+  检查一遍再交给代理。
+- **Cisco CVE-2026-20212（CVSS 9.8，Cisco 自家 CNA）——十款 Silicon One 交换机未授权 root RCE**
+  （N9324C-SE1U 至 N9K-C9808）：某服务绑定在不受限地址上，TCP 43210/43211 在默认 Layer 3 VRF 内可达——
+  能连上即可直接以 **root 权限** 运行构造输入，或打崩 S1HAL 进程并重启设备。影响 10.3(1)–10.6(3s) 共 45 个
+  NX-OS 版本；无固定版本表（只有 Software Checker）；iACL 缓解 = 显式拒绝 43210/43211。同一批还包含 IOS XR
+  "加固版"：7 枚伞形 CVE（每个 CWE 桶一枚，两枚 9.8：CVE-2026-20274 内存安全、CVE-2026-20279 缺认证/
+  证书校验），**任何 IOS XR 版本均无变通方案**，SMU 仅覆盖 111 个受影响版本中的 15 个，30 天内第三次此类
+  发布。**评分/披露注：** 9.8 是厂商 CNA 自评，"未发现恶意利用"只是披露时点的表态而非安全证据；伞形模式
+  本身（半月一发、按最严重缺陷计分）让逐 CVE 分诊基本失效。背景：Sygnia 的 Fire Ant 植入正活在 IOS XR 上，
+  初始入侵向量仍未归因。

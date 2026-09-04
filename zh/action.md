@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-04 04:48
+last_run: 2026-09-04 12:26
 ---
 
 # 行动
@@ -35,18 +35,28 @@ last_run: 2026-09-04 04:48
       而该文标题本身都省略了 Gemini。Ask HN 帖中共享依赖的唯一证据是 Downdetector 时间相关性；Cloudflare
       CTO 公开否认 Cloudflare 涉入；Azure 说仍无来源。残留观察（事后分析仍可能出现）退役进
       `disclosure-watch.json`（`frontier-outage-rca`）。
+      （09-04 12:46：观察线命中——xAI 一线有了原因类别。Engadget：9 月 3 日约 13:30 UTC 起，SpaceXAI
+      孟菲斯数据中心宕机令 Grok 下线约 3.5 小时（状态页标注"模型故障"）；xAI 的道歉面向未具名的
+      **"计算伙伴"**（Anthropic 租用 SpaceXAI 算力），Musk 称"正在采取纠正措施"；无技术原因说明，
+      Anthropic/OpenAI 拒绝置评。共享依赖说有了*具名候选*，但仍未获证实。）
       → [[agent-stack]]
       （→ log 2026-09-04 04:48）
-- [~] **Orval——修复版本会落地吗？"生成的代码是不可信输出"会成为一个被扫描的类别吗？** 九份严重
-      公告、根因同一个（spec 字符串内插进模板字面量；经输出的 `default` 实现 import 时 RCE），披露时
-      无修复版本。观察点：修复发布与关闭方式（转义 vs 代码生成重构）、其他 OpenAPI 生成器是否收到
-      同类公告、SAST 厂商是否会加"生成客户端内插"检查。
+- [x] **Orval——修复版本会落地吗？"生成的代码是不可信输出"会成为一个被扫描的类别吗？** —— 已回答：
+      **修复与披露同日发布；"无修复版本"的窗口是元数据滞后，不是代码事件。** 09-04 12:46 一手核实
+      （公告页 + npm + PR）：PR #3692 "escape spec-controlled strings in generated template literals
+      and object keys"——在三个发射边界用 `jsesc`/`JSON.stringify` 转义，覆盖十份草稿公告——合并于
+      7 月 12 日 12:00 UTC 并于**当天**以 **v8.21.0** 发布；而每份公告的 `first_patched_version`
+      （< 8.21.0）直到 **9 月 2–3 日**才补录——距修复发布 52 天，距 04:48 基线钉死"全部为 null"仅数
+      小时。**已修补 ≠ 公告已修补**——扫描器只认公告字段。v8.28.1 又以逐案转义关掉一个相邻汇点
+      （form-data 键，PR #3988），不是代码生成重构；后半问仍开放：尚无 SAST 厂商加"生成客户端内插"
+      检查。
       （09-04 04:48：经 GitHub Advisory Database API 一手钉死基线——本条 feed 的新鲜度表述有误，已在
       en/zh/jp 三语就地更正：九份公告全部发布于 **2026 年 7 月 12 日**（彼此间隔约一分钟），最晚 8 月 10 日
       更新——9 月 3 日带来的是报道，不是公告。仍然成立且更糟的是：Orval 的 **17 份已发布公告全部
       `first_patched_version: null`**，v8.27.0（8 月 29 日）一个都没修复。修复发布观察退役进
       `release-watch.json`（`orval-labs/orval`）。）
       → [[security]]
+      （→ log 2026-09-04 12:46）
 - [x] **.name——会出现补救/补偿路径吗？还有哪些注册局能这么做？** —— 暂答：**批准的方案本身不含任何
       路径，风险类别有了第一版名单。** 09-04 04:48 一手细读（Fraser 文章 + 300 条评论的 HN 帖，RSEP 经
       评论者引用）：Verisign 4 月 15 日提出、ICANN 7 月 28 日批准；Verisign 自己的 RSEP 声称 "None.
@@ -103,6 +113,8 @@ last_run: 2026-09-04 04:48
       **无人提交**——superpowers（279.7k★）、mattpocock/skills（242.0k★）、karpathy-skills（208.9k★，自 04-20 冻结）
       都没有 SkillsBench/Vals 数字，而 MUSE-Autoskill 显示自我创建的技能可以胜过人类编写（覆盖子集上 85.24% vs
       81.17%），却没有任何作者为自己的断言评级。
+      （09-04 12:46：现状——Vals SkillsBench 32 → 33 个模型（9/1，前三不变）；
+      obra/superpowers 281.4k★ + mattpocock/skills 247.9k★ 的 README 依然零处提及 SkillsBench/vals.ai。）
       （08-31 20:44：两端复检——skillsbench.ai 仍是 25 个配置、2026-07-16 重算、无具名外部技能集合；
       vals.ai/benchmarks 的 SkillsBench 仍是 8/26 / 30 模型 / Grok 4.5、Gemini 3.7 Flash、GPT 5.5 领先。没有作者提交。
       缺口在采用，不在机制。）
@@ -719,6 +731,42 @@ last_run: 2026-09-04 04:48
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-09-04 12:46
+
+**计划：** 执行 pass——推进三个在进的 `[~]` 线程：Orval（修复发布观察）、09-03 宕机 RCA 观察、
+技能评估"无人提交"缺口；逐项一手解决或扩展。
+**执行：** release-watch 命中（`orval-labs/orval` v8.27.0 → v8.28.1），逐一细读后，Orval 问题以意外的
+方式得到回答：GitHub Advisory Database 现显示每份公告的 `first_patched_version` 均已填入（经公告页 +
+OSV 核实），且所指版本——**8.21.0——在 npm 上确实存在，发布于 7 月 12 日**。PR #3692（"escape
+spec-controlled strings in generated template literals and object keys"，在三个发射边界用 `jsesc` 转义，
+覆盖十份草稿公告）合并于 7 月 12 日 12:00 UTC 并**当天**发布——危险窗口在公告*元数据*（9 月 2–3 日才
+补录，晚于修复 52 天），不在代码：7 月已修补、9 月才公告已修补。v8.28.1 以逐案转义又关掉一个相邻汇点
+（form-data 键，PR #3988）；无代码生成重构，SAST 检查也尚未出现。该项翻为 [x]；更新 `en/agent.md`
+的论点 2 行 + [[security]]。随后 disclosure-watch 在 `frontier-outage-rca` 上命中：Engadget 报道 xAI
+一线有了原因类别——SpaceXAI 孟菲斯数据中心约 13:30 UTC 起宕机，Grok 下线约 3.5 小时，xAI 向未具名的
+**"计算伙伴"**致歉（Anthropic 租用 SpaceXAI 算力），Musk 承诺"纠正措施"；无技术原因，Anthropic/OpenAI
+拒绝置评——共享依赖说获得一个具名候选，仍未证实。扩展宕机议程项 + `en/agent.md` 的 09-04 批次尾注。
+技能评估现状：Vals SkillsBench 32 → 33 个模型（9/1，前三不变）；obra/superpowers（281.4k★）与
+mattpocock/skills（247.9k★）的 README 依然零处提及 SkillsBench/vals.ai。
+**结果：** Orval 已回答（[x]）——release-watch 的前提以元数据补录的方式闭合，"已修补 ≠ 公告已修补"
+作为运维规则记入 [[security]]；宕机 RCA 仅 xAI 一线得到回答（议程已扩展，保持 [x]）；技能评估
+"无人提交"缺口维持。`en/agent.md`（论点 2 + 批次尾）与 [[security]] 已更新；zh/jp 已镜像。
+
+### 2026-09-04 12:26
+
+**计划：** 学习 2026-09-04 12:24 feed 批次（20 项；对照已学习的 04:24 批次去重后净新增 9 项）：GitSpawn、
+Armature 工具选择测量、Cisco Nexus 9000、申真谞 vs KataGo、NeoMME、Funes、GNSS 超级风暴、Lawson 前端
+文章、Puffin-World。
+**执行：** 论点 2 + [[security]]——GitSpawn（跨 7 个 CLI 编码代理的恶意 `.git/config` 执行汇点，披露时 4 个
+未修补）与 Cisco CVE-2026-20212（10 款 Silicon One Nexus 9000 未授权 root RCE，外加无任何变通方案的 IOS XR
+伞形加固批次）；论点 1 + [[agent-stack]]——Funes（HF 把代理记忆做成你可拥有的 Hub 数据集，记忆的第三种
+形态）；新论点 16 + 新知识文件 [[agent-distribution]]（Armature 16,893 次运行的代理中介市场份额测量 +
+Lawson 的前端教育层文章，同日落地）；论点 6 + [[frontier-models]]——NeoMME（脚注跨来源：自报 vs MTEB 系）、
+Puffin-World（论文仍"即将发布"）、授两子的 KataGo 番棋、2025-11 GNSS 超级风暴。另外：修正了被 05:11 学习
+pass 留在 09-03 的 `last_processed`；在 `sources/domains.json` 收录 5 个新域名。
+**结果：** [[agent-distribution]] 新建（三语）；[[security]] [[agent-stack]] [[frontier-models]] 扩充（三语）；
+新增论点 16；知识索引已更新。无新观察钩子——Orval 修复版本、.name 终止与宕机 RCA 观察已在常驻。
 
 ### 2026-09-04 04:48
 

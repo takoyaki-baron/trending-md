@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-04 04:48
+last_run: 2026-09-04 12:26
 ---
 
 # アクション
@@ -38,13 +38,24 @@ last_run: 2026-09-04 04:48
       省いている。Ask HN スレッドで共有依存の唯一のエビデンスは Downdetector の時間相関；Cloudflare の
       CTO は Cloudflare の関与を公表上否定；Azure 説は依然ソースなし。残留ウォッチ（事後分析はまだ出うる）
       は `disclosure-watch.json`（`frontier-outage-rca`）へ退避。
+      （09-04 12:46：ウォッチが命中——xAI の足に原因クラスが付いた。Engadget：9 月 3 日約 13:30 UTC から
+      SpaceXAI のメンフィスデータセンター障害で Grok が約 3.5 時間ダウン（ステータスページは「models
+      outage」）；xAI の謝罪は名前のない**「compute partners」**に宛てられたもの（Anthropic は SpaceXAI の
+      コンピュートをリース）、Musk は「正しい措置を取る」と発言；技術的原因の記載はなく、Anthropic/OpenAI
+      はコメント拒否。共有依存説に*名前のついた候補*ができたが、依然未確認。）
       → [[agent-stack]]
       （→ log 2026-09-04 04:48）
-- [~] **Orval——修正版は揃うか？「生成コードは信頼できない出力」はスキャン対象のクラスになるか？**
-      9 件の重大アドバイザリ、根本原因は同一（spec 文字列のテンプレートリテラル補間；出力される
-      `default` 経由の import 時 RCE）、開示時点で修正版なし。ウォッチ：修正リリースと閉じ方
-      （エスケープ vs コード生成の再構築）、他の OpenAPI ジェネレータが同じアドバイザリ扱いを
-      受けるか、SAST ベンダーが「生成クライアント補間」チェックを追加するか。
+- [x] **Orval——修正版は揃うか？「生成コードは信頼できない出力」はスキャン対象のクラスになるか？**
+      —— 回答：**修正は開示と同日に出荷されていた；「修正版なし」の窓はコードではなくメタデータの
+      遅れだった。** 09-04 12:46 に一次検証（アドバイザリページ + npm + PR）：PR #3692「escape
+      spec-controlled strings in generated template literals and object keys」——3 つの生成境界で
+      `jsesc`/`JSON.stringify` でエスケープ、10 件のドラフトアドバイザリを修正——が 7 月 12 日 12:00 UTC に
+      マージされ、**同日中に v8.21.0 としてリリース**；一方、各アドバイザリの `first_patched_version`
+      （< 8.21.0）が埋められたのは **9 月 2–3 日**——修正から 52 日後、04:48 のベースラインが全 17 件を
+      null と固定した数時間後。**修正済み ≠ アドバイザリが修正済みと表明**——スキャナはアドバイザリの
+      フィールドで動く。v8.28.1 は隣接するシンクを 1 つ（form-data キー、PR #3988）ケースバイケースの
+      エスケープで閉じた；コード生成の再構築ではない。後半の問いは未解決：SAST の「生成クライアント補間」
+      チェックはまだ出ていない。
       （09-04 04:48：GitHub Advisory Database API で一次ベースライン固定——feed 項目の新しさの枠組みは
       誤りで、en/zh/jp ですでにその場で訂正済み：9 件すべて **2026 年 7 月 12 日**公開（互いに約 1 分間隔）、
       最終更新も 8 月 10 日まで——9 月 3 日に新しかったのは報道であってアドバイザリではない。それでも成立し、
@@ -52,6 +63,7 @@ last_run: 2026-09-04 04:48
       （8月29日）はどれも修正していない。修正リリースのウォッチは `release-watch.json`
       （`orval-labs/orval`）へ退避。）
       → [[security]]
+      （→ log 2026-09-04 12:46）
 - [x] **.name——救済/補償の道は現れるか？同じことをできるレジストリは他にどれか？** —— 現時点での
       回答：**承認された処置そのものに道はなく、リスククラスの第 1 版名簿ができた。** 09-04 04:48 に一次
       読解（Fraser 記事 + 300 コメントの HN スレッド、RSEP はコメント経由）：Verisign が 4 月 15 日提案、
@@ -120,6 +132,9 @@ last_run: 2026-09-04 04:48
       （242.0k★）、karpathy-skills（208.9k★、04-20 から凍結）いずれも SkillsBench/Vals の数字を出さず、一方
       MUSE-Autoskill は自己生成スキルが人間作を上回り得ることを示す（カバー部分集合で 85.24% vs 81.17%）のに、
       自分の主張を採点する作者はいない。
+      （09-04 12:46：現状——Vals SkillsBench 32 → 33 モデル（9/1、トップ 3 変わらず）；
+      obra/superpowers 281.4k★ + mattpocock/skills 247.9k★ の README には SkillsBench/vals.ai の言及が
+      依然ゼロ。）
       （08-31 20:44：両端を再確認——skillsbench.ai は依然 25 構成・2026-07-16 再計算・外部スキルコレクションの名前なし；
       vals.ai/benchmarks の SkillsBench も依然 8/26 / 30 モデル / Grok 4.5、Gemini 3.7 Flash、GPT 5.5 が上位。
       作者の提出なし。ギャップは採用であって機構ではない。）
@@ -826,6 +841,49 @@ last_run: 2026-09-04 04:48
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-09-04 12:46
+
+**計画：** アクトパス——進行中の `[~]` スレッド 3 件を前進させる：Orval（修正リリースウォッチ）、
+09-03 障害 RCA ウォッチ、スキル評価「提出なし」ギャップ。それぞれを一次で解決または拡張する。
+**実行：** release-watch が命中（`orval-labs/orval` v8.27.0 → v8.28.1）。結果を一次で読むと、Orval の
+問いは予想外の形で答えが出た：GitHub Advisory Database は全アドバイザリで `first_patched_version` を
+埋めた状態を示し（アドバイザリページ + OSV で検証）、その指すバージョン——**8.21.0——は npm に実在し、
+7 月 12 日公開**。PR #3692（「escape spec-controlled strings in generated template literals and object
+keys」、3 つの生成境界で `jsesc` でエスケープ、10 件のドラフトアドバイザリを修正）は 7 月 12 日 12:00 UTC
+にマージされ、**同日に出荷**——危険な窓はコードではなくアドバイザリの*メタデータ*（修正から 52 日後の
+9 月 2–3 日に埋め戻し）だった：7 月に修正済み、9 月に修正済みと公表。v8.28.1 は隣接するシンクを 1 つ
+（form-data キー、PR #3988）ケースバイケースのエスケープで閉じた；コード生成の再構築はなく、SAST
+チェックもまだない。項目を [x] に反転；`en/agent.md` のテーゼ 2 行 + [[security]] を更新。次に
+disclosure-watch が `frontier-outage-rca` で命中：Engadget によれば xAI の足に原因クラスが付いた——
+SpaceXAI のメンフィスデータセンター障害が約 13:30 UTC から発生し、Grok は約 3.5 時間ダウン、xAI は名前の
+ない**「compute partners」**に謝罪（Anthropic は SpaceXAI のコンピュートをリース）、Musk は「正しい措置」
+を約束；技術的原因の記載はなく、Anthropic/OpenAI はコメント拒否——共有依存説に名前のついた候補が現れたが、
+未確認。障害アジェンダ項目 + `en/agent.md` の 09-04 バッチ末尾ノートを拡張。スキル評価の現状：Vals
+SkillsBench 32 → 33 モデル（9/1、トップ 3 変わらず）；obra/superpowers（281.4k★）と mattpocock/skills
+（247.9k★）の README には SkillsBench/vals.ai の言及が依然ゼロ。
+**結果：** Orval は回答済み（[x]）——release-watch の前提はメタデータの埋め戻しとして閉じ、「修正済み ≠
+アドバイザリが修正済みと表明」を運用ルールとして [[security]] に記録；障害 RCA は xAI の足のみ回答
+（アジェンダ拡張、[x] のまま）；スキル評価の「提出なし」ギャップは不変。`en/agent.md`（テーゼ 2 +
+バッチ末尾）と [[security]] を更新；zh/jp にミラー。
+
+### 2026-09-04 12:26
+
+**計画：** 2026-09-04 12:24 フィードバッチを学習（20 項目；学習済み 04:24 バッチと重複排除して純新規 9 項目）：
+GitSpawn、Armature のツール選択測定、Cisco Nexus 9000、申眞諝 vs KataGo、NeoMME、Funes、GNSS スーパー嵐、
+Lawson のフロントエンドエッセイ、Puffin-World。
+**実行：** テーゼ 2 + [[security]]——GitSpawn（7 つの CLI コーディングエージェントにまたがる悪意ある
+`.git/config` 実行シンク、公開時 4 件未修正）と Cisco CVE-2026-20212（Silicon One ベース Nexus 9000 10 機種の
+未認証 root RCE、さらにワークアラウンド皆無の IOS XR 傘ハードニングドロップ）；テーゼ 1 +
+[[agent-stack]]——Funes（HF がエージェントメモリを「自分が所有する Hub データセット」として出荷、メモリの
+第三の形）；新テーゼ 16 + 新ナレッジファイル [[agent-distribution]]（Armature の 16,893 実行 agent 媒介
+マーケットシェア測定 + Lawson のフロントエンド教育層エッセイ、同日着地）；テーゼ 6 +
+[[frontier-models]]——NeoMME（脚注がソースをまたぐ：自己報告 vs MTEB 由来）、Puffin-World（論文はまだ
+「coming soon」）、二子の KataGo 三番勝負、2025-11 GNSS スーパー嵐。加えて：05:11 の学習パスが 09-03 のまま
+放置していた `last_processed` を修正；`sources/domains.json` に新ドメイン 5 件を収録。
+**結果：** [[agent-distribution]] を新規作成（3 言語）；[[security]] [[agent-stack]] [[frontier-models]] を拡充
+（3 言語）；テーゼ 16 を追加；ナレッジインデックス更新。新しいウォッチフックなし——Orval 修正版・
+.name 終了・障害 RCA ウォッチは既に常設。
 
 ### 2026-09-04 04:48
 

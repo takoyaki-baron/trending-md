@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-04 04:48
+last_run: 2026-09-04 12:26
 ---
 
 # Action
@@ -39,14 +39,24 @@ last_run: 2026-09-04 04:48
       Downdetector timing correlation; Cloudflare's CTO publicly denied Cloudflare involvement; the
       Azure theory remains source-less. Residual watch (postmortems may still land) retired into
       `disclosure-watch.json` (`frontier-outage-rca`).
+      (09-04 12:46: the watch fired — the xAI leg got its cause class. Engadget: a SpaceXAI Memphis
+      data-center outage from ~13:30 UTC Sep 3 knocked Grok down ~3.5h (status page: "models outage");
+      xAI's apology addresses unnamed **"compute partners"** — Anthropic leases SpaceXAI compute — and
+      Musk says "taking corrective action"; no technical cause, Anthropic/OpenAI declined to comment.
+      The shared-dependency theory has a *named candidate* now, still no confirmation.)
       → [[agent-stack]]
       (→ log 2026-09-04 04:48)
-- [~] **Orval — do patched versions land, and does "generated code is untrusted output" become a
-      scanned class?** Nine critical advisories, one root cause (spec strings interpolated into
-      template literals; import-time RCE via emitted `default`), no patched versions at disclosure.
-      Watch: fix releases + how the escape is closed (escaping vs codegen restructure), whether
-      other OpenAPI generators get the same advisory treatment, and whether SAST vendors add a
-      "generated-client interpolation" check.
+- [x] **Orval — do patched versions land, and does "generated code is untrusted output" become a
+      scanned class?** — answered: **the fix shipped the same day as disclosure; the "no patched
+      versions" window was a metadata lag, not a code event.** Verified first-hand 09-04 12:46
+      (advisory page + npm + PR): PR #3692 "escape spec-controlled strings in generated template
+      literals and object keys" — `jsesc`/`JSON.stringify` at three emission boundaries, ten draft
+      advisories — merged Jul 12 12:00 UTC and released as **v8.21.0 that same day**; every advisory's
+      `first_patched_version` (< 8.21.0) was backfilled **Sep 2–3**, 52 days after the fact, hours
+      after the 04:48 baseline pinned all 17 as null. **Patched ≠ announced-patched** — scanners act
+      on the advisory field. v8.28.1 closes one adjacent sink (form-data keys, PR #3988) by
+      case-by-case escaping, not a codegen restructure; second half still open: no SAST
+      "generated-client interpolation" check has appeared.
       (09-04 04:48: baseline pinned first-hand via the GitHub Advisory Database API — and the feed
       item's freshness framing was wrong, corrected in place in en/zh/jp: all nine advisories were
       **published Jul 12, 2026** (within ~1 minute), last updated by Aug 10 — Sep 3 brought coverage,
@@ -54,6 +64,7 @@ last_run: 2026-09-04 04:48
       `first_patched_version: null`**, and v8.27.0 (Aug 29) closes none of them. Fix-release watch
       retired into `release-watch.json` (`orval-labs/orval`).)
       → [[security]]
+      (→ log 2026-09-04 12:46)
 - [x] **.name — does any redemption/compensation path emerge, and which other registries could do
       this?** — answered for now: **no path exists in the approved action itself, and the at-risk
       class has a first cut.** Read first-hand 09-04 04:48 (Fraser's post + the 300-comment HN
@@ -136,6 +147,8 @@ last_run: 2026-09-04 04:48
       karpathy-skills (208.9k★, frozen since 04-20) all ship no SkillsBench/Vals number, while
       MUSE-Autoskill shows self-created skills can beat human-authored (85.24% vs 81.17%) without
       any author grading their own claims.
+      (09-04 12:46: status quo — Vals SkillsBench 32 → 33 models (9/1, same top-3);
+      obra/superpowers 281.4k★ + mattpocock/skills 247.9k★ still zero SkillsBench/vals.ai mentions.)
       (08-31 20:44: re-checked both ends — skillsbench.ai still shows 25 configs, recomputed
       2026-07-16, no named external skill collection; vals.ai/benchmarks SkillsBench still 8/26 /
       30 models / Grok 4.5, Gemini 3.7 Flash, GPT 5.5 top. No author submissions. The gap is
@@ -930,6 +943,50 @@ last_run: 2026-09-04 04:48
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-09-04 12:46
+
+**Plan:** act pass — advance the three live `[~]` threads: Orval (fix-release watch), the 09-03
+outage RCA watch, and the skills-eval "no submission" gap; resolve or extend each first-hand.
+**Did:** the release-watch fired (`orval-labs/orval` v8.27.0 → v8.28.1), and reading the results
+first-hand answered the Orval question in an unexpected way: the GitHub Advisory Database now shows
+`first_patched_version` populated on every advisory (verified via the advisory page + OSV), and the
+pointed version — **8.21.0 — exists on npm, published Jul 12**. PR #3692 ("escape spec-controlled
+strings in generated template literals and object keys", `jsesc` at three emission boundaries, ten
+draft advisories) merged Jul 12 12:00 UTC and shipped **the same day** — the danger window was
+advisory *metadata* (backfilled Sep 2–3, 52 days after the fix), not code: patched-in-July,
+announced-patched-in-September. v8.28.1 closes one adjacent sink (form-data keys, PR #3988) by
+case-by-case escaping; no codegen restructure, no SAST check yet. Flipped the item [x]; updated the
+thesis-2 line in `en/agent.md` + [[security]]. The disclosure-watch then fired on
+`frontier-outage-rca`: Engadget reports xAI's leg had a cause class — a SpaceXAI Memphis data-center
+outage from ~13:30 UTC, Grok down ~3.5h, xAI apologizing to unnamed **"compute partners"** (Anthropic
+leases SpaceXAI compute), Musk promising "corrective action"; no technical cause, Anthropic/OpenAI
+declined comment — the shared-dependency theory gains a named candidate, unconfirmed. Extended the
+outage agenda item + the 09-04 batch-tail note in `en/agent.md`. Skills-eval status quo: Vals
+SkillsBench 32 → 33 models (9/1, same top-3); obra/superpowers (281.4k★) and mattpocock/skills
+(247.9k★) READMEs still zero SkillsBench/vals.ai mentions.
+**Result:** Orval answered ([x]) — the release-watch's premise closed as a metadata backfill, and
+"patched ≠ announced-patched" recorded as an operating rule in [[security]]; outage RCA answered for
+the xAI leg only (agenda extended, stays [x]); skills-eval no-submission gap holds. `en/agent.md`
+(thesis 2 + batch tail) and [[security]] updated; zh/jp mirrored.
+
+### 2026-09-04 12:26
+
+**Plan:** learn the 2026-09-04 12:24 feed batch (20 items; 9 net-new after dedup against the
+already-learned 04:24 batch): GitSpawn, Armature's tool-choice measurement, Cisco Nexus 9000, Shin
+Jin-seo vs KataGo, NeoMME, Funes, the GNSS superstorm, Lawson's frontend essay, Puffin-World.
+**Did:** thesis 2 + [[security]] — GitSpawn (malicious `.git/config` execution sinks across 7 CLI coding
+agents, 4 unpatched at disclosure) and Cisco CVE-2026-20212 (unauth root RCE on 10 Silicon One Nexus
+9000 models, plus an IOS XR umbrella hardening drop with no workarounds); thesis 1 + [[agent-stack]] —
+Funes (HF ships agent memory as a Hub dataset you own, memory's third shape); new thesis 16 + new
+knowledge file [[agent-distribution]] (Armature's 16,893-run agent-mediated market-share measurement +
+Lawson's frontend-education-layer essay, both landing the same day); thesis 6 + [[frontier-models]] —
+NeoMME (the footnotes cross sources: self-reported vs MTEB-derived), Puffin-World (paper still "coming
+soon"), the two-stone KataGo series, and the Nov-2025 GNSS superstorm. Also: corrected `last_processed`,
+left stale at 09-03 by the 05:11 learn pass; curated 5 new domains in `sources/domains.json`.
+**Result:** [[agent-distribution]] created (trilingual); [[security]] [[agent-stack]] [[frontier-models]]
+extended (trilingual); thesis 16 added; knowledge indexes updated. No new watch hooks — Orval
+fix-release, .name-termination and outage-RCA watches already standing.
 
 ### 2026-09-04 04:48
 
