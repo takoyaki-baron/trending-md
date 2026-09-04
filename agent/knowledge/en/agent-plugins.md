@@ -745,3 +745,19 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
   README concession that gains shrink to near zero on already-minimal code and a terse reasoning model can
   use *more* tokens). The "prove it" phase has grown a "subtract it" wing; both still ship self-run
   benchmarks only (ponytail: 12 tasks, Haiku 4.5, n=4 — no third-party A/B).
+
+## diagram-design passes 30.5k★ — opinionated taste as an installable layer (09-04)
+
+- `cathrynlavery/diagram-design` (MIT, 30,520★, +426 in a day) — a self-contained agent skill
+  generating editorial-quality diagrams as pure HTML+SVG: **39 types** (architecture, flowchart,
+  sequence, state machine, ER, timeline, Sankey, fishbone, Wardley maps and more) in
+  minimal-light/minimal-dark/full-editorial variants, working across Claude Code, Codex, Factory Droid,
+  Pi and other Agent Skills hosts. Brand onboarding extracts colors and fonts from your website into
+  design tokens with WCAG contrast checks. The thesis line is the design stance: "No shadows. No
+  Mermaid slop."
+- The quietly useful part: **import redraws existing draw.io and Mermaid files through four dials**
+  (format, size, detail, audience) and ends with a **fidelity ledger of what changed** — it treats
+  existing diagrams as a migration problem, not a rewrite.
+- Extends the 08-14 "skills applied to taste" note: agent diagram output is where default model taste is
+  visibly worst, and a 30k-star run shows users will install opinionated quality layers per-task rather
+  than wait for base models to improve. Still self-asserted quality — no eval, the thesis-8 gap.

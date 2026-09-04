@@ -1392,3 +1392,19 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   发布。**评分/披露注：** 9.8 是厂商 CNA 自评，"未发现恶意利用"只是披露时点的表态而非安全证据；伞形模式
   本身（半月一发、按最严重缺陷计分）让逐 CVE 分诊基本失效。背景：Sygnia 的 Fire Ant 植入正活在 IOS XR 上，
   初始入侵向量仍未归因。
+
+## 浏览器年内第六个零日 + EDR 自身的修复功能成为提权原语（09-04 20:03）
+
+- **Chrome CVE-2026-85046（CVSS 8.8）——V8 类型混淆，在野利用已确认。** 152.0.7977.82/.83 修复
+  （9 月 3 日稳定通道，12 项修复）：构造 HTML 页面经类型混淆在浏览器沙箱内执行任意代码，Google 确认
+  存在在野利用——Security Affairs 计为 **2026 年修复的第六个活跃利用 Chrome 零日**，这是频率，不是
+  连胜。8 月 4 日报告（$1,000 赏金），在漏洞代码流传中搁置了一个月。浏览器补丁时延已成为一切 agent
+  驱动浏览栈威胁模型的一部分；继承 Chromium 的浏览器也要排查。与 08-28 覆盖的扩展 UAF
+  （CVE-2026-79026）不是同一个缺陷。
+- **FalconFlank（Chaotic Eclipse / Nightmare-Eclipse，9 月 4 日，无 CVE）——CrowdStrike Falcon
+  Sensor 的 Office 恶意宏*修复*功能被变成本地提权。** 公开 PoC，声称在完全打补丁的 Windows 11
+  25H2 与 Windows Server 2025 上可用；CrowdStrike "正在积极调查"，临时指引是禁用 Microsoft Office
+  File Suspicious Macro Removal 策略。同一研究者的系列第五例（HardBreacher/Kaspersky——已修；
+  ShieldBreak/Defender CVE-2026-69414——未修；GreenSection/NVIDIA；PrettyPrague/Avast——补丁开发中）。
+  **形态（细化无补丁 EoP 条目）：** 安全产品自身的修复功能以内核/SYSTEM 权限运行，它*就是*提权原语
+  ——未修补的 EDR 代理按定义就是全机队暴露面，因此公开 PoC 出现即值得做缓解复查，无需等 CVE。

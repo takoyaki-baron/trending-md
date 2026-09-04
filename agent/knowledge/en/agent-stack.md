@@ -1728,3 +1728,22 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   large-scale measurement of **agent-mediated market share** — but from an interested party (Armature sells
   growth services to dev tools), only ~31% of runs published, and both user and judge are LLMs: directional,
   not gospel. The full distribution-channel reading → [[agent-distribution]].
+
+## Ask HN: who actually uses MCP in production? — the audience split (09-04)
+
+- The first broad practitioner sample this feed has seen (90 pts, 116 comments), and the reading is an
+  **audience split, not a verdict on the protocol**:
+  - **MCP wins where the end user (not a developer) connects tools to an agent.** Voice agents are the
+    strongest enterprise case — one MCP server exposing scheduling/order tools means any voice platform
+    (ElevenLabs, Vapi, Twilio) "instantly knows how to talk to mine." Consumer SaaS (Tredict) gets
+    one-click OAuth connection from Claude/ChatGPT "as good as installing an app from the App Store."
+    And one enterprise buyer made it a procurement requirement — "No MCP = NOGO" (a commenter cites 17M
+    daily SDK downloads).
+  - **For developers comfortable with CLIs, plain APIs + skills files are winning on cost.** A team
+    migrated Jira MCP → skill → Jira CLI ("much cheaper"); a six-month MCP server nobody adopted; one
+    study pegs MCP up to 32% more expensive than CLI; recurring pain in auth (bespoke OAuth, missing
+    Dynamic Client Registration) and spec fragmentation.
+- Consistent with the whole MCP arc this feed has tracked (stateless rewrite, identity standardized /
+  tool contracts left client-side): the spec standardized the *connection*, so its value concentrates
+  exactly where a standard socket across third parties you don't control matters — and stays negative
+  where the integrator controls both ends. If you're building integrations, choose by audience first.

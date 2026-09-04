@@ -1612,3 +1612,21 @@ XStream のデフォルトを削除しなかったため、未認証エージェ
   「悪用の認識なし」は開示時点の声明であり安全性の証拠ではない。傘モデル自体（隔週・最悪欠陥で採点）は
   CVE 単位のトリアージをほぼ無意味にする。背景：Sygnia の Fire Ant インプラントは IOS XR 上で生きており、
   初期侵入経路は未帰属のまま。
+
+## ブラウザ年間 6 つ目のゼロデイ + EDR 自身の修復機能が権限昇格に（09-04 20:03）
+
+- **Chrome CVE-2026-85046（CVSS 8.8）——V8 型混同、悪用を野外で確認。** 152.0.7977.82/.83 で修正
+  （9 月 3 日安定チャネル、12 件の修正）：細工 HTML ページが型混同でブラウザサンドボックス内の任意コード
+  実行に至り、Google は野外出現を確認——Security Affairs は **2026 年に修正された 6 つ目の活発に悪用された
+  Chrome ゼロデイ**と数える。これは連続記録ではなく頻度。8 月 4 日に報告（$1,000 賞金）され、悪用コードが
+  流れる中 1 か月間未修正のままだった。ブラウザのパッチ遅延はエージェント駆動ブラウジングスタック全般の
+  脅威モデルに組み込まれた；Chromium 継承ブラウザも要確認。08-28 被りの拡張 UAF（CVE-2026-79026）とは
+  別の欠陥。
+- **FalconFlank（Chaotic Eclipse / Nightmare-Eclipse、9 月 4 日、CVE なし）——CrowdStrike Falcon
+  Sensor の Office 悪意あるマクロ*修復*機能をローカル権限昇格に転用。** 公開 PoC、完全にパッチ済みの
+  Windows 11 25H2 と Windows Server 2025 で動作と主張；CrowdStrike は「積極的に調査中」で、暫定ガイダンスは
+  Microsoft Office File Suspicious Macro Removal ポリシーの無効化。同一研究者シリーズの 5 例目
+  （HardBreacher/Kaspersky——修正済み；ShieldBreak/Defender CVE-2026-69414——未修正；GreenSection/NVIDIA；
+  PrettyPrague/Avast——パッチ開発中）。**形（無パッチ EoP エントリの精緻化）：** セキュリティ製品自身の修復
+  機能がカーネル/SYSTEM 権限で動くこと自体が昇格プリミティブ——未修正の EDR エージェントは定義上フリート全体の
+  露出であり、ゆえに公開 PoC は CVE の前に緩和見直しを正当化する。

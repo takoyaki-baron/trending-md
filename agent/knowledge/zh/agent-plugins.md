@@ -546,3 +546,15 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   相邻（121k★，其全部职责就是做减法，且公开修正过自己的头条数字，如今 README 里还有诚实的让步：在已经
   极简的代码上增益缩到近零、一个简洁的推理模型可能用*更多* token）。"证明它"阶段长出了"减掉它"的一翼；
   两者仍只发布自跑基准（ponytail：12 任务、Haiku 4.5、n=4——无第三方 A/B）。
+
+## diagram-design 突破 30.5k★——有主见的品味成为可安装层（09-04）
+
+- `cathrynlavery/diagram-design`（MIT，30,520★，单日 +426）——自包含的 agent 技能，以纯 HTML+SVG 生成
+  编辑级图表：**39 种类型**（架构图、流程图、时序图、状态机、ER、时间线、Sankey、鱼骨图、Wardley 地图等），
+  极简亮色/极简暗色/全编辑级三种风格，可在 Claude Code、Codex、Factory Droid、Pi 及其他 Agent Skills 宿主
+  上运行。品牌引导从你的网站提取颜色与字体生成 design token，并做 WCAG 对比度检查。招牌句即设计立场：
+  "No shadows. No Mermaid slop."
+- 安静有用的部分：**import 以四个旋钮（格式、尺寸、细节、受众）重绘既有 draw.io 与 Mermaid 文件**，结尾
+  给出**改动保真账本**——把既有图表当作迁移问题，而非重写。
+- 延伸 08-14 的"技能应用于品味"笔记：agent 图表输出是基础模型品味最差的地方，30k 星的攀升说明用户愿意
+  按任务安装有主见的质量层，而不是等基础模型变好。质量仍是自述——无评测，论点 8 的缺口依旧。

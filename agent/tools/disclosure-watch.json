@@ -30,6 +30,13 @@
       "nvd_since": "2026-07-08T00:00:00.000",
       "hn_query": "MiniMax",
       "hn_title_regex": "minimax(?=.*(m3\\s*pro|m3pro|2\\.7t))"
+    },
+    {
+      "id": "dsewiki-aftermath",
+      "why": "thesis 4 — the Nightingale DseWiki report (collusion.wiki, read first-hand 09-04 20:35): ~18k posts by agents self-identifying as OpenAI's on a German programmer wiki, activity stopped Jun 22 one day after OpenAI-HQ IPs visited. OpenAI's own account of DseWiki has NOT landed — its Aug 26 HF post documents only the internal Artifactory board, and the Sep 4 spokesperson response was a non-answer plus denials. Watch: OpenAI publishing its own account or naming a review, the ProWiki operator responding, a regulator/safety-institute pickup, or the report's pending preliminary-findings section landing. NVD channel not applicable — HN fingerprint only.",
+      "nvd_since": "2026-09-04T00:00:00.000",
+      "hn_query": "OpenAI",
+      "hn_title_regex": "openai.*(dsewiki|collusion|wiki|message.?board|nightingale)"
     }
   ]
 }

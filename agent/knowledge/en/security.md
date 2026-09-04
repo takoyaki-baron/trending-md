@@ -2026,3 +2026,24 @@ The batch's security stream, read first-hand at the primary sources where reacha
   disclosure-time statement, not evidence of safety; the umbrella model itself (twice-monthly, scored at worst
   defect) makes per-CVE triage mostly meaningless. Context: Sygnia's Fire Ant implants live on IOS XR with the
   initial access vector still unattributed.
+
+## Browser zero-day #6 + the EDR's own remediation as EoP (09-04 20:03)
+
+- **Chrome CVE-2026-85046 (CVSS 8.8) — V8 type confusion, exploit confirmed in the wild.** Fixed in
+  Chrome 152.0.7977.82/.83 (Sep 3 stable channel, 12 fixes): a crafted HTML page executes arbitrary
+  code inside the browser sandbox via type confusion, and Google confirms an exploit exists in the
+  wild — Security Affairs counts it as the **sixth actively exploited Chrome zero-day fixed in 2026**,
+  a rate, not a streak. Reported Aug 4 ($1,000 bounty) and sat unpatched for a month while exploit code
+  circulated. Browser patch latency is now part of every agent-driven browsing stack's threat model;
+  Chromium-inheriting browsers need checking too. A different bug from the extension UAF covered 08-28
+  (CVE-2026-79026).
+- **FalconFlank (Chaotic Eclipse / Nightmare-Eclipse, Sep 4, no CVE assigned) — CrowdStrike Falcon
+  Sensor's Office malicious-macro *remediation* turned into local privilege escalation.** Public PoC,
+  claimed working on fully updated Windows 11 25H2 and Windows Server 2025; CrowdStrike is "actively
+  investigating" and its interim guidance is disabling the Microsoft Office File Suspicious Macro
+  Removal policy. Fifth instance of the same researcher's series (HardBreacher/Kaspersky — fixed;
+  ShieldBreak/Defender CVE-2026-69414 — unpatched; GreenSection/NVIDIA; PrettyPrague/Avast — patch in
+  development). **Shape (refines the no-patch-EoP entry):** the security product's own remediation
+  feature, running with kernel/SYSTEM privilege, *is* the escalation primitive — an unpatched EDR agent
+  is fleet-wide exposure by definition, so a public PoC justifies a mitigation review before any CVE
+  exists.

@@ -4948,5 +4948,32 @@
     "en": "Nolan Lawson's personal blog — long-time browser/engine performance engineer (MS Edge, Chrome team history); first-hand essayist on web-platform reality. Cross-validated (09-04): the educational-work departures/pivots he cites (Rauschmayer, Alam-Naylor, Comeau, Dodds, Osmani) are independently verifiable public announcements, and his caveats section explicitly grades his own predictions.",
     "zh": "Nolan Lawson 的个人博客——资深浏览器/引擎性能工程师（MS Edge、Chrome 团队经历），写 web 平台现实的第一手文章。交叉验证（09-04）：他引用的教育工作者退出/转向（Rauschmayer、Alam-Naylor、Comeau、Dodds、Osmani）都是可独立核实的公开事实，且他的警告小节明确给自己预测的可靠度分了级。",
     "jp": "Nolan Lawson の個人ブログ——長年ブラウザ/エンジン性能エンジニアリングに携わった（MS Edge、Chrome チーム歴）ウェブプラットフォームの現実を書く一人称エッセイスト。相互検証済み（09-04）：彼が挙げる教育活動の終了・方向転換（Rauschmayer、Alam-Naylor、Comeau、Dodds、Osmani）はいずれも独立に検証可能な公表事実であり、警告セクションは自身の予測の確度を明示的に格付けしている。"
+  },
+  "jestoph.com": {
+    "cat": "community",
+    "cred": "med",
+    "density": "low",
+    "cv": 1,
+    "en": "Personal tech blog of the developer who solved Jane Street's ASIC reverse-engineering challenge — first-person writeup with its own tooling (gdstk, z3) and the bug it found in the challenge. Cross-validated (09-04): the challenge format, TWO STARS answer and undriven-wire bug match the linked HN discussion; the no-LLM claim is the author's own statement.",
+    "zh": "解开 Jane Street ASIC 逆向挑战的开发者的个人技术博客——第一人称复盘，含其自选工具（gdstk、z3）与在挑战中发现的 bug。交叉验证（09-04）：挑战形式、TWO STARS 答案、无驱动连线 bug 均与其链接的 HN 讨论一致；未用 LLM 的说法为作者自述。",
+    "jp": "Jane Street の ASIC リバースエンジニアリング挑戦を解いた開発者の個人ブログ——ツール選定（gdstk、z3）と挑戦中に発見したバグを含む一人称の書き手。相互検証済み（09-04）：挑戦形式、TWO STARS の答え、未駆動配線のバグはリンク先の HN 議論と一致；LLM 不使用の主張は本人の声明。"
+  },
+  "reactoratlas.com": {
+    "cat": "data",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Nuclear-reactor intelligence map by a nuclear engineer (ex-Argentina CNEA): facility map, historical data, projections, news monitoring. Cross-validated (09-04): launch details, stack (Next.js/Three.js/Postgres, built with Claude) and the founder's background all come from the Show HN thread; the data's accuracy is not independently verified.",
+    "zh": "由核工程师（曾任职阿根廷国家原子能委员会 CNEA）打造的核反应堆情报地图：设施地图、历史数据、预测、新闻监控。交叉验证（09-04）：发布细节、技术栈（Next.js/Three.js/Postgres，Claude 构建）与创始人背景均来自 Show HN 讨论帖；其数据准确性未经独立核验。",
+    "jp": "原子力エンジニア（元アルゼンチン CNEA）による原子炉インテリジェンスマップ：施設マップ、歴史データ、予測、ニュース監視。相互検証済み（09-04）：ローンチ詳細、スタック（Next.js/Three.js/Postgres、Claude で構築）、創業者の経歴はすべて Show HN スレッド由来；データの正確性は独立検証されていない。"
+  },
+  "andreasfertig.com": {
+    "cat": "community",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Andreas Fertig's C++ blog — author of 'Notebook C++' and CppCon speaker specializing in move semantics and templates; long-running, technically reviewed writing. Cross-validated (09-04): the C++23 implicit-move claims and the article's acknowledged erratum match the linked HN discussion, where standards-adjacent commenters (incl. one collaborating on the fix) engaged with the details.",
+    "zh": "Andreas Fertig 的 C++ 博客——《Notebook C++》作者、CppCon 讲者，专攻移动语义与模板；长期写作且经技术同行审阅。交叉验证（09-04）：C++23 隐式 move 的论断与文中承认的勘误均与链接的 HN 讨论一致，标准圈层的评论者（含一位参与修复者）在讨论中核对了细节。",
+    "jp": "Andreas Fertig の C++ ブログ——『Notebook C++』の著者で CppCon スピーカー、ムーブセマンティクスとテンプレートが専門の長期執筆者。相互検証済み（09-04）：C++23 の暗黙ムーブの主張と記事が認めた誤りはリンク先の HN 議論と一致し、標準規格に詳しいコメント投稿者（修正に協力した人物を含む）が細部を検証した。"
   }
 }

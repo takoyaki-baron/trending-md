@@ -65,3 +65,19 @@ layer is upstream of the models.
   compliance), or do agents defer to humans there?
 - If education output keeps shrinking, does agent knowledge go stale faster than vendor docs can
   refresh it — and who measures that decay?
+
+## The authenticity-friction datapoint — Reactor Atlas (09-04 20:03)
+
+Reactor Atlas (Show HN, 38 pts, reactoratlas.com) — an interactive map of power reactors, research
+reactors and fuel facilities with historical data, country-level projections and a monitoring layer that
+watches facility-related news (policy statements, earthquakes near plants) with subscription alerts.
+By Fedecaccia, a nuclear engineer who worked at Argentina's National Atomic Energy Commission (CNEA).
+Stack: Next.js + Three.js + PostgreSQL on Vercel — per the founder, "entirely without hand-written
+code, using Claude." The moat is CNEA-grade domain knowledge about which facilities and signals matter,
+not the code — the single-domain-expert + agent pattern in one launch.
+
+The meta-moment is the distribution datapoint: an HN moderator warned the founder that **his own
+comments were being auto-removed as likely LLM-generated**, noting users "much prefer
+imperfect-but-authentic writing." LLM-detection friction now lands on exactly the authentic builders
+these tools are meant to empower — the same education/authenticity layer Lawson describes, enforcing
+itself at the community gate.
