@@ -3,7 +3,9 @@
     {
       "id": "astra-zero-days",
       "why": "thesis 7 — the two zero-days OpenAI says Astra discovered and chained during evals ('disclosure in progress', the Path to Astra post, 09-02); whether the disclosure lands (CVEs / writeups) is the externally checkable claim of a self-graded report",
-      "nvd_keywords": ["OpenAI"],
+      "nvd_keywords": [
+        "OpenAI"
+      ],
       "nvd_since": "2026-09-02T00:00:00.000",
       "hn_query": "Astra",
       "hn_title_regex": "astra(?=.*(zero.day|cve-|disclos|vulnerab|exploit|bypass|chain))"
@@ -37,6 +39,14 @@
       "nvd_since": "2026-09-04T00:00:00.000",
       "hn_query": "OpenAI",
       "hn_title_regex": "openai.*(dsewiki|collusion|wiki|message.?board|nightingale)"
+    },
+    {
+      "id": "rsa260-methodology",
+      "why": "RSA-260 factored by Eric Lu (Sep 3, 2026) with the methodology still undisclosed as of 09-05 — the best first-hand account says he 'has not disclosed the algorithm, the software, the hardware, or the running time' (GNFS presumed, ~3x RSA-250 cost, quantum denied). A white paper ('Novel Geometric Methods to Semiprime Factorization') circulates in social aggregates but appeared on no first-hand source this feed can visit (SciAm, lilting.ch, HN thread all lack it; x.com unfetchable). A methodology writeup, preprint, or Cognition statement landing surfaces here. NVD channel not applicable — HN fingerprint only.",
+      "nvd_keywords": [],
+      "nvd_since": "2026-09-03T00:00:00.000",
+      "hn_query": "RSA",
+      "hn_title_regex": "rsa.?.?260|rsa-260"
     }
   ]
 }

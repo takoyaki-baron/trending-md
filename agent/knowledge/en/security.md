@@ -2065,3 +2065,34 @@ The batch's security stream, read first-hand at the primary sources where reacha
   attempt failed exactly where the patch blocks. Measured conclusion: coordinated disclosure bought ~zero
   grace — **the diff is the disclosure**; patch on the fix, not on the writeup. (Extends the OCaml −7-day
   negative-TTE datapoint: here time-to-exploit is +8h only because the patch won the race by hours.)
+
+## The self-hosted AI stack gets its own CVE cadence; publication that skips the disclosure clock; the ID-scan breach was a live feed (09-05 12:03)
+
+- **VulnCheck's CVSS 9+ batch across the open-source AI serving stack** (48h on NVD, all scored by VulnCheck as CNA —
+  record the scorer): FastChat CVE-2026-85695 (9.4, unauth auth bypass in `/register_worker`); TEN Framework
+  CVE-2026-85688 (9.8, unauth arbitrary file read *and write* in the TMAN Designer file service); SadTalker
+  CVE-2026-85696 (9.8, OS command injection via uploaded audio filenames in video muxing); Taipy CVE-2026-85183 (9.3,
+  socket.io configured with wildcard CORS plus credentials); zerox CVE-2026-85672 (9.8, command injection in the
+  file-download mechanism); marker CVE-2026-85684 (9.1, path traversal in the FastAPI upload handler);
+  excel-mcp-server CVE-2026-85661 (9.8, missing path confinement in stdio mode); python-jose CVE-2026-85394 (9.1, HMAC
+  accepting DER-encoded public keys). Robotics footnote: three 9.8s in the MOOS middleware family. The self-hosted AI
+  stack is now a distinct attack surface with its own disclosure cadence — several are pre-auth RCE or arbitrary file
+  write in exactly the glue agents get pointed at.
+- **`bikini/exploitarium` — publication that bypasses the disclosure clock entirely.** "A single archive of public
+  exploit PoCs and vulnerability research writeups. At the time I post these, none have been reported" — 41 tracked
+  entries: Firefox 152.0.5 backup-NSS RCE, Ghidra 12.1.2 RCE/ACE, OpenSSH agent-lock provider bypass, nmap IPv6 extlen
+  wrap, libssh2 use-after-free, objdump DLX out-of-bounds write (crediting 4D4J's earlier finding, CVE-2026-18220, as
+  prior art). The pinned "Statement" pushes back on the "random kid burning tokens" narrative: GPT-5.3 ran the fuzzing
+  under a strict workflow, PoCs were hand-typed, and "you do NOT need a SOTA model… it is only marginal when paired with
+  decent human oversight." Two running threads collide here: AI-driven vulnerability discovery at hobbyist budget, and
+  no-CVE/no-vendor-notification publication — the disclosure clock not tightened but skipped.
+- **The Nexus ID-scan breach was a live feed, not a dump** (Krebs follow-up to the 09-02 listing): Nexus advertised on
+  the Exploit forum Aug 31 that it had "been continuously exfiltrating new data into our private database"; Krebs
+  watched the record count grow by nearly 400,000 in 24 hours, and his own scan's timestamp matched a June 2025 Hertz
+  rental — intrusion origin at least 14 months back. The FBI's New Orleans field office opened an investigation into
+  idscan.net (21M+ verifications monthly at 20,000+ locations) on Sep 1. Corpus: 153M+ US licenses, 10M+ ID cards,
+  3M+ travel documents, ~579,000 medical cards — including scans of the Defense Secretary and an FBI assistant
+  director. The threat model moves from "your ID was in a dump" to "your ID was on a live feed" — every scan since
+  mid-2025 at one of 20,000 locations potentially in attacker hands near-real-time. Honest caveat: the idscan.net
+  attribution is circumstantial (nine volunteers' timestamps matched rentals/visits; the company has not confirmed a
+  breach, and Caesars denies being a client since Feb 2025); Nexus went offline shortly after publication.

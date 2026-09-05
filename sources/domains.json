@@ -5038,5 +5038,77 @@
     "en": "Project homepage of OpenTrailPaper — one developer's open-source e-paper bike computer on a LilyGO T5S3 (ESP32-S3): offline OSM maps, GPX navigation, FIT recording, BLE sensors, browser-based flashing. Cross-validated (09-05): RaemondBW/OpenTrailPaper verified via GitHub API (Apache-2.0, created Jul 2026, pushed Sep 4; description matches) — the site documents the repo, does not outrun it.",
     "zh": "OpenTrailPaper 的项目主页——一位开发者的开源电子墨水屏自行车码表，基于 LilyGO T5S3（ESP32-S3）：离线 OSM 地图、GPX 导航、FIT 记录、BLE 传感器、浏览器刷机。交叉验证（09-05）：经 GitHub API 核实 RaemondBW/OpenTrailPaper（Apache-2.0，2026 年 7 月创建，9 月 4 日仍有推送；描述相符）——该网站是对仓库的文档化，没有超出仓库内容。",
     "jp": "OpenTrailPaper のプロジェクトホームページ——LilyGO T5S3（ESP32-S3）上のオープンソース電子ペーパーサイコンを一人で開発：オフライン OSM 地図、GPX ナビ、FIT 記録、BLE センサ、ブラウザからの書き込み。相互検証済み（09-05）：GitHub API で RaemondBW/OpenTrailPaper を確認（Apache-2.0、2026 年 7 月作成、9 月 4 日に push、説明も一致）——サイトはリポジトリの文書化であり、それ以上を主張しない。"
+  },
+  "blog.master.dev": {
+    "cat": "news",
+    "en": "Personal dev blog (Master.dev courses); first-hand field reports with measured numbers — the React Compiler/Vite piece was verified against the vite-plugin-react release notes. Practitioner-written, numbers check out; single-author caveat applies.",
+    "zh": "个人开发者博客(Master.dev 课程)；带实测数字的一手报告——React Compiler/Vite 一文已对照 vite-plugin-react 发布说明核验。从业者亲笔、数字可对上；单作者局限仍在。",
+    "jp": "個人開発ブログ(Master.dev コース)。実測数値付きの一次フィールドレポート——React Compiler/Vite 記事は vite-plugin-react のリリースノートと突合済み。実務者執筆で数値は整合。単一作者の限界はある。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "engineering.atspotify.com": {
+    "cat": "vendor",
+    "en": "Spotify's official engineering blog; vendor-authored product writeups (Portal/shunt) that unusually include a candid 'what doesn't work' section — benchmarks are vendor-run, not independent.",
+    "zh": "Spotify 官方工程博客；厂商撰写的产品文章(Portal/shunt),罕见地包含坦率的“什么行不通”一节——基准为厂商自测，非独立复测。",
+    "jp": "Spotify 公式エンジニアリングブログ。ベンダー製のプロダクト記事(Portal/shunt)だが、珍しく率直な「何が動かないか」セクション付き——ベンチマークはベンダー実施で独立測定ではない。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "support.google.com": {
+    "cat": "vendor",
+    "en": "Google's official support/documentation pages; canonical for product changes (the Gmail Send-as deprecation) but states changes without reasons or migration paths — read for facts, not rationale.",
+    "zh": "Google 官方支持/文档页；产品变更(Gmail Send-as 弃用)的权威来源，但只陈述变更、不给原因或迁移路径——读事实，别读动机。",
+    "jp": "Google 公式サポート/ドキュメントページ。プロダクト変更(Gmail Send as 廃止)の一次情報だが、理由や移行パスの記載はない——事実は読めるが動機は読めない。",
+    "cred": "high",
+    "density": "low",
+    "cv": 1
+  },
+  "en.wikipedia.org": {
+    "cat": "data",
+    "en": "Wikipedia (English); crowd-edited but fast on verifiable milestones — the RSA-260 factorization was confirmed against the HN thread's independently checkable divisor within a day. Good for math/crypto facts with public artifacts; weak for breaking news.",
+    "zh": "英文维基百科；众编但在可验证里程碑上很快——RSA-260 分解已在一天内对照 HN 讨论串中可独立验算的除数确认。适合有公开工件的数学/密码学事实；快新闻偏弱。",
+    "jp": "英語版 Wikipedia。群衆編集だが検証可能なマイルストーンには速い——RSA-260 の分解は、HN スレッドの独立検証可能な除数と 1 日以内に突合済み。公開成果物のある数学/暗号の事実に強く、速報には弱い。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "theguardian.com": {
+    "cat": "news",
+    "en": "Major UK news outlet; the military ad-ID story was sourced to named officials' letters (Wyden) and Reuters statements — properly attributed reporting, editorial framing included.",
+    "zh": "英国主流媒体；军方广告 ID 报道来源为具名官员信件(Wyden)与路透社声明——署名规范，含社论式框架。",
+    "jp": "英国の主要メディア。軍の広告 ID 記事は(Hyden)議員の公開書簡と Reuters 声明という名前の出典付き——属性は正確だが社論的フレーミングあり。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "agentconnect.md": {
+    "cat": "research",
+    "en": "Agent-tooling research blog; the grep-vs-LSP pilot publishes its own limitations (small task sets, few rollouts) and raw numbers — self-described preliminary, treat effect sizes as directional.",
+    "zh": "智能体工具研究博客；grep-vs-LSP 试点自带局限性说明(任务集小、rollout 少)并公开原始数字——自认初步研究，效应量只作方向参考。",
+    "jp": "エージェントツール系リサーチブログ。grep対LSP パイロットは自ら限界(小さなタスクセット、少数ロールアウト)を明示し生の数値も公開——予備研究と自己定義しており、効果量は方向性として見る。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "gmcgoldr.github.io": {
+    "cat": "research",
+    "en": "Personal essay blog (GitHub Pages); opinion/analysis pieces with stated caveats — the next-token-predictor essay is argument, not measurement; validated only in that its claims match the author's own framing.",
+    "zh": "个人随笔博客(GitHub Pages)；观点/分析文章且自带注意事项——“下一个词预测器”一文是论证而非测量；核验仅限于其主张与作者自述一致。",
+    "jp": "個人エッセイブログ(GitHub Pages)。注意書き付きの意見/分析——次トークン予測器の記事は測定ではなく論証。検証は主張が著者自身の枠組みと一致する範囲にとどまる。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "lilting.ch": {
+    "cat": "news",
+    "en": "Independent technical writeups (lilting.ch); its RSA-260 piece is the best first-hand summary of what is and isn't known — and itself debunks the aggregator-reported 'hand-sampling primes' rumor. Cross-validated: its RSA-250 (829-bit, Feb 2020) record claim matches Wikipedia raw, and its 130-digit/both-prime claims were re-verified by this feed's own arithmetic.",
+    "zh": "独立技术随笔站（lilting.ch）；其 RSA-260 一文是对已知/未知信息最好的一手综述，并亲自戳穿了聚合站报道的\"手工采样素数\"谣言。已交叉验证：其 RSA-250（829 比特，2020 年 2 月）纪录说法与维基百科原文一致，130 位/均为素数的说法经本 feed 独立算术复核。",
+    "jp": "独立系の技術解説サイト（lilting.ch）；RSA-260 記事は既知/未知の情報について最良の一次まとめで、アグリゲーターが報じた「素数の手サンプリング」デマ自体を検証している。クロス検証済み：RSA-250（829 ビット、2020 年 2 月）の記録主張は Wikipedia 原文と一致、130 桁/両素数の主張は本フィードの独自算術で再検証。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
   }
 }

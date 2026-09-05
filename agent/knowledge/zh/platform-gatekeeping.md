@@ -90,3 +90,4 @@ created: 2026-09-02
   凭据池标记（Aurora Store），而是*合同级*把关：把消费级 AI 订阅的 OAuth 复用进自选 harness 现在是违约，
   爆炸半径是整个 Google 账户。与 BYO 订阅套利趋势（[[smart-routing]] 的 Sub2API / free-claude-code）正面
   相撞：被套利的订阅带有条款，而提供商开始执行。
+- **Gmail 移除面向第三方地址的"Send as"（2027 年 1 月）。**Google 支持页明言："自 2027 年 1 月起，Gmail 将不再支持面向第三方电子邮件地址（如 @yahoo.com 或 @outlook.com）的'Send as'功能。"Workspace 别名与其他自有 Gmail 地址不受影响；**页面上任何地方都没有给出原因**；建议的替代是加号寻址与 Google Groups 委托。182 分的 HN 讨论串被经外部 SMTP 用 Gmail 收发自定义域名邮件的小企业与个人刷屏——对他们而言这个功能就是产品本身（热评之一是 Workspace 退订声明）。邮件身份又一次悄然并入提供商孤岛：主流客户端内的"经任意 SMTP 认证发送"死掉，没有迁移路径，期限落在一季度中段。还是那个模式的招牌动作——合法而未变现的用户承担损失（MV2 / Aurora Store / .name 的同族）。

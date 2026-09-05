@@ -265,3 +265,18 @@ list price (same lesson as the tokenizer deltas and prefix-cache stability alrea
 - The two trending the same day attacking opposite halves of the same problem — what the agent *reads*
   (caveman's proxy) vs how the agent *sounds* (humanizer) — is the layer's clearest sign of productization:
   measured tradeoffs, printed losing cases, licenses that need reading.
+
+## Enforcement beats instruction: Spotify's "shunt" routes inside Claude Code (09-05 12:03)
+
+- Spotify principal PM Dimitri Mazmanov's writeup: most of what a coding agent does is I/O, not reasoning — so route
+  it. The implementation is a Claude Code plugin ("shunt") over Portal's AiKA Modes (declarative agents on ephemeral
+  runtimes — "AWS Lambda, but for agents"). Two **PreToolUse hooks** do the enforcement: any Read of a file over 350
+  lines (configurable via `SHUNT_MIN_LINES`) is *blocked* and redirected to a `bulk-reader` mode running Gemini 2.5
+  Flash, while a `code-writer` mode generates boilerplate straight to disk so the frontier model never sees it.
+  Benchmarks on a Java monorepo: ~90% mean token savings on bulk reads (vendor-run, not independent).
+- The "what doesn't work" section is the best part: you can't delegate *editing* (summaries lack reliable line
+  numbers), you can't delegate *reasoning* (the worker missed a subtle thread-safety bug Claude caught in seconds),
+  and there's 10–30s latency with a 30-second invocation cap. Marketplace install path: `spotify/portal-ai-plugins`.
+- The difference from "put routing rules in CLAUDE.md" is the **enforcement-vs-instruction** split the agent-infra
+  ecosystem keeps rediscovering: the model doesn't get a choice about the expensive read. Read-side counterpart to
+  caveman's compression proxy and humanizer's write-side filter — the layer's third productized quadrant.

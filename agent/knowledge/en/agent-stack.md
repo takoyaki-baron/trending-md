@@ -1747,3 +1747,19 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   tool contracts left client-side): the spec standardized the *connection*, so its value concentrates
   exactly where a standard socket across third parties you don't control matters — and stays negative
   where the integrator controls both ends. If you're building integrations, choose by audience first.
+
+## Grep beats LSP in agent hands — output shape beats precision (09-05 12:03)
+
+- agentconnect.md's measured pilot (three Claude models, several Python/TypeScript repos; self-flagged as preliminary:
+  small task sets, navigation-only LSP capabilities, 2–3 rollouts per condition): on simple code-location tasks, models
+  chose LSP over grep only **0–6%** of the time when both were available, and *forcing* semantic-first routing dropped
+  success from 100% to 89%. LSP's caller-finding precision is perfect (1.00 vs grep's 0.76) but recall was ~0.66 in
+  both arms — semantic navigation found **no additional true calls**.
+- The predictor of LSP's value was **codebase noise, not static typing**: on a clean repo (remeda) it added +0.000 F1
+  at +16% tokens; on a noisy one (hono) +0.246 F1 at −12% tokens. And a pure output-shape change — returning inline
+  source text instead of bare locations — raised rename pass@1 from 0.67 to 0.83 and cut follow-up file reads from
+  15.2 to 3.2 per episode.
+- The tool-design lesson of the agent era, measured rather than vibes: **precision doesn't get a tool used, output
+  shape does.** Semantic tooling isn't dead; it needs to return context in a shape the model can act on — one more
+  instance of "agent capability = model × harness" (thesis 12), and a design rule for anyone exposing tools
+  (MCP servers included) to agents.

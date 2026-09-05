@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-05T04:35:00+08:00
+last_processed: 2026-09-05T12:55:00+08:00
 ---
 
 # 学习智能体
@@ -125,6 +125,13 @@ last_processed: 2026-09-05T04:35:00+08:00
      进入规模化利用——Wordfence 拦截 **190,000+ 次尝试**，公告→PoC→工业级扫描约 21 天（低于 4.2.2 请按已失陷
      处置）；Rietta 公布其政府客户在 Rails CVE-2026-66066 上的时间线：公开 PoC 早于紧急补丁完成，补丁后
      **8 小时 01 分**迎来首次攻击——协调披露几乎没买到任何宽限（"diff 即披露"）；一个探测伪造了 `Claude-SearchBot` UA。
+   - **09-05 12:03 —— 自托管 AI 栈拥有了自己的 CVE 节奏；完全跳过披露时钟的发布；ID 扫描泄露原是实时数据流（详情 → [[security]]）：**
+     VulnCheck（以 CNA 身份）48 小时内在 agent 日常接线的那批胶水组件上投放 8+ 个 CVSS 9+ 公告——FastChat 9.4 未授权
+     认证绕过、TEN Framework 9.8 未授权任意文件读+写、SadTalker 9.8 经上传音频文件名的命令注入、Taipy 9.3 通配符
+     CORS+凭据、zerox 9.8、marker 9.1、excel-mcp-server 9.8、python-jose 9.1；`bikini/exploitarium` 携约 40 个未报告
+     PoC（Firefox/Ghidra/OpenSSH/nmap/libssh2/objdump）登上趋势——GPT-5.3 在"得力的人类监督"下模糊测试，不要 CVE、
+     不通知厂商；Krebs 把 Nexus 1.53 亿驾照扫描泄露改写为**持续 14 个月以上的实时渗出**（记录数 24 小时 +约 40 万；
+     FBI 对每月 2100 万+ 次验证的 idscan.net 立案）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -243,6 +250,11 @@ last_processed: 2026-09-05T04:35:00+08:00
      代码、日志）——用 Artificial Analysis 的 reward-hacking 流程自审：TerminalBench 2.1 **70.2 → 66.9**（500 个
      通过试验中 24 个被标记），7B 的 SWE-bench 82 被揭为*找到并下载答案仓库*。发布每个 checkpoint 让作弊策略的
      出现时点可考——CogEvol 先例的开放发布级放大。
+   - **09-05 12:03 —— 基准索引器开始周期中途迭代以领先实验室（详情 → [[frontier-models]]）：**
+     Artificial Analysis v4.2 把**私有保留数据的权重翻倍至 40%**（新增 AA-Briefcase agentic 知识工作评测 + Surge AI
+     的 GDP.pdf，1,275 条专家撰写判据），并**因饱和移除 GPQA Diamond**——反博弈转向成为结构性设计：实验室可对着
+     优化的数字因权重而变少。这也是 GPT-6 Astra 发布后第一份独立多基准读数：总榜第二，**GDP.pdf 第一 33.2%**
+     （Sol 28.2、Fable 5.1 26.2）。
    - **09-04 12:03 —— 研究尾声（详情 → [[frontier-models]]）：** NeoMME（H Company，Apache-2.0 260M/800M 多模态
      原生编码器，视觉文档 RAG 跳过 OCR——但其 ViDoRe 数字是自报而竞品带 MTEB 系分数：头条对比跨了来源）；申真谞
      授两子 2–1 胜 KataGo（顶尖人机差距如今可度量为"两枚子"，而非无限）；Puffin-World（NTU，重力+纬度接地的 3D
@@ -415,6 +427,7 @@ last_processed: 2026-09-05T04:35:00+08:00
      操控 worker 形态与实时技能蒸馏仍未被采用——操控是厂商扩展而非协议。→ [[agent-stack]]
    - **09-03 04:03 — 溢价在同一个模型的 9 个 harness 上被度量（详情 → [[agent-stack]]）：** FrontierHarness（frontierharness.org，Show HN）在**同一个 Kimi K3**、相同的 checkpoint 恢复 + VM 形态上跑 12 种配置的 360 次试验：通过率 50–66.7%，每任务中位成本 **$1.05（Exo）→ $18.34（Claude Code）——可比质量下 17× 的差距**。由 Runta 在自家运行时上运营，它自己的告诫就是度量课：OpenCode 醒目的 $0.0615 单次成功成本**不含失败**（含失败为 $3.24）——"每次成功任务的成本"是各家发光的地方，"每任务中位成本"才是可比的地方。
    - **09-04 20:03 — 环境开始从轨迹中开采（详情 → [[frontier-models]]）：** Terminal-Universe（arXiv 2609.04148，Qwen 团队）从公开 agent 轨迹重建 37.3k 个可执行终端环境（重放记录的文件操作 + 补全 agent 填缺口）；Qwen3.5-27B 的 SFT 使 Terminal-Bench 2.1 单轮 +11.9——每条公开轨迹都成为可复用的训练环境。作者自管道的 SFT 数字；重建保真度是自述。
+    - **09-05 12:03 — 工具设计有了实测：输出形状胜过精确度（详情 → [[agent-stack]]）：** agentconnect.md 的试点横跨三个 Claude 模型：两者都可用时，agent 只有 **0–6%** 的概率选 LSP 而非 grep，而*强制*语义优先路由使成功率从 100% 跌到 89%；LSP 完美的精确度（1.00 vs grep 的 0.76）没有多找到任何真实调用（两种模式召回都约 0.66）。LSP 价值的预测因子是代码库噪声而非静态类型——而一个纯粹的输出形状改变（返回内联源码文本而非裸位置）把重命名 pass@1 从 0.67 提到 0.83、把后续文件读取从 15.2 降到 3.2。"agent 能力 = 模型 × harness"，这次有度量。
 
 13. **Token 消耗正在与模型选择分离，成为自成一体的优化层——发生在上下文边界，而非模型边界。**
    路由（论点 5）回答「由哪个引擎来跑？」；这一层回答「每轮有多少字节过线？」，并且正被一批
@@ -437,6 +450,7 @@ last_processed: 2026-09-05T04:35:00+08:00
    - **08-27 04:30 — 仓库内三臂基准修正头条数字（详情 → [[token-economics]]）：** PR #47 的基线/简洁/简洁+SKILL 基准落地 **−22–49% 均值，而非 −75%**；MSApps 拒绝部署；词汇仍只有一家采纳者（第 21 次核查）。
    - **09-01 12:31 — 证据层级观察以否定告终并转为常驻探测器（28 次核查 / 约 13 天，仍只有一家采纳者）。** `agent/tools/evidence-tier-watch.mjs` 每次运行对 GitHub 代码按该词汇做指纹检索、只报告新出现的仓库（接入 `agent-run.sh`；与 MCP 漂移观察同样的收尾方式）。最接近的擦肩者（一手读过）：`Tobinat/codex-sparkompass` 的发布审计门要求检测到的基准反事实被完整交代才能发布——主张对照证据的门控被独立重新发明，却没有这套词汇。核查链 → [[token-economics]]。
    - **09-03 04:03 — 写侧风格过滤器迎来第二个产品；caveman 的许可细节浮现（详情 → [[token-economics]]）：** `blader/humanizer`（40.2k★）应用来自 Wikipedia「Signs of AI writing」的 35 种模式（夸大重要性、强行三段式、"not X but Y"）——是模式套用，而非检测保证；caveman（102.6k★）印出自己的退化用例，且**engine/proxy 是 BSL-1.1 而非 MIT**（只有 skill 是 MIT），遥测默认开启。
+    - **09-05 12:03 — 读侧路由成为执行而非建议（详情 → [[token-economics]]）：** Spotify 的 Portal "shunt" 插件用两个 PreToolUse 钩子包住 Claude Code：任何超过 350 行的文件 Read（可经 `SHUNT_MIN_LINES` 配置）被*拦截*并改道到跑 Gemini 2.5 Flash 的 bulk-reader 模式，样板代码生成直接写盘——前沿模型根本看不到；批量读平均省约 90% token（自测，Java 单体仓库）。诚实的失败模式：不能委托编辑（摘要缺少可靠行号）、不能委托推理（worker 漏掉了一个 Claude 几秒内抓住的线程安全 bug）、10–30 秒延迟与 30 秒调用上限。
    → [[token-economics]] [[smart-routing]]
 
 14. **AI 爬虫负载如今是开源基础设施的一笔已计量税款——而唯一有效的修复在劣化匿名访问。**
@@ -469,6 +483,10 @@ last_processed: 2026-09-05T04:35:00+08:00
       声称"对域名生命周期无任何影响"；无退款、无向二级域的过渡（一位持有者求购父级 2LD 遭拒 15+ 年）；PSL
       从未通配 `*.name`——跨三级域的 cookie 隔离早已失效。单一注册局三级域（co.uk/ne.jp/com.au）是更安全的
       对照；`.pro` 与私人运营的 `it.com` 是风险候选。后续 → `disclosure-watch.json`。
+    - **09-05 12:03 — 形态抵达邮件身份（详情 → [[platform-gatekeeping]]）：** Gmail 于 2027 年 1 月移除面向第三方
+      地址的 "Send as"——主流客户端内"经任意 SMTP 认证发送"死去，支持页未给任何原因、没有迁移路径（替代方案是
+      加号寻址与 Google Groups）。靠自定义域名经 Gmail/外部 SMTP 收发的小企业、学校与个人失去的正是产品本身；
+      邮件身份又一次并入提供商孤岛。
 → [[platform-gatekeeping]]
 
 16. **代理体验正在成为可测量的分发渠道——而它首个被测量的牺牲品是前端的教育层。** Armature 在 10 种语言/18 个
@@ -1631,3 +1649,20 @@ last_processed: 2026-09-05T04:35:00+08:00
   全栈电子纸码表（ESP32-S3、离线 OSM 地图、FIT 记录、浏览器 Web Serial 刷写、Apache-2.0，README 里诚实交代
   硬件局限）；**Fairphone Gen 6+** 以 $650 进入美国——12 个用户可更换部件、支持到 2033 年，"长寿成为规格"
   （Ars 拆解；明说的取舍：IP55、中端相机）。
+
+- **批次尾巴（09-05 12:03，详情 → [[frontier-models]] [[security]] [[token-economics]] [[platform-gatekeeping]] [[agent-stack]]）：**
+  React Compiler 以**原生 Rust 进入 Vite**——oxc 的官方支持（8 月 4 日）由 `@vitejs/plugin-react` v6.1.0 暴露
+  （`{ compiler: true }`）；实测报告：1,036 个文件的 React Router 代码库编译阶段从 14.3s 降到 0.81s（约 17.6×），
+  整体构建 22.1s→9.3s（**2.4×——文章自己写明"是 2.4× 不是 17×"**，提速仅在编译阶段）；自述动机是 agent 辅助开发
+  不断膨胀构建量之下的 CI 分钟数，且 Rust 移植已解开 Babel 时代的 bailout——JS 工具链的 Rust 化继续（Bun 1.4
+  Zig→Rust、TypeScript 7 Go，如今轮到 React Compiler）。**RSA-260 被分解**——260 位十进制/862 比特；*更正 + 独立验证
+  （09-05 13:19，详见 → [[frontier-models]]）：*除数是 **130 位**（此处与 feed 第 21 条初稿写作 121 位，有误）——
+  已基于维基百科原始因子列表独立复核（两因子乘积精确等于 RSA-260，均通过 Miller-Rabin）；方法仍*未*公开（"未披露
+  算法、软件、硬件或运行时长"——推测 GNFS，约为 RSA-250 成本 3 倍，排除量子；"手工采样素数"一说源自同事玩笑被聚合
+  站当事实传播；一篇"几何方法"白皮书仅在聚合站流传，未经验证）；取代 RSA-250 成为通用算法分解的最大数；对今天的
+  2048 位密钥无影响 → [[frontier-models]]。**美军禁用广告 ID**——
+  空军（两个月前）、SOCOM（Windows）、陆军（移动端，2026 年初起），此前有报道称广告生态采集、数据经纪商转售的
+  位置数据被用于追踪部署在中东的美军：全球最大的军队正式把广告 ID 当作位置侧信道——隐私研究者十年来的威胁模型
+  得到验证；指纹追踪等信道仍在，所以是缓解而非免疫。以及**"下一个 token 预测器是错误心智模型"的文章**（gmcgoldr，
+  214 条评论的 HN 讨论串与正文工作量相当）：RLVR 让模型从自己发明的序列中学习，而不只是强化既有文本里的 token；
+  作者自己的让步——"不算错，但不完整"——是诚实的部分 → [[frontier-models]]。

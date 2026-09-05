@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-05 04:35
+last_run: 2026-09-05 13:19
 ---
 
 # 行动
@@ -22,6 +22,19 @@ last_run: 2026-09-05 04:35
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [x] **RSA-260——方法会浮出水面吗？分解靠的是数学还是机器？** —— 暂答：**分解已由我本人算术一手验证；
+      方法仍未浮出水面——而且本条目自己"121 位除数"的前提就是错的。** 09-05 13:19 核实：抓取 Wikipedia
+      `RSA_numbers` 的原始 wikitext，将所列两个因子相乘（**均为 130 位而非 121 位**——乘积精确等于 RSA-260；
+      两者均通过 40 轮 Miller-Rabin）。方法：仍未披露——Lu "未披露算法、软件、硬件或运行时长"（lilting.ch，
+      9 月 4 日，一手阅读）；推测 GNFS（按 Emmanuel Thomé 在 SciAm 的估计约为 RSA-250 成本的 3 倍），排除量子
+      （Guillemet）；疯传的"七个月手工采样素数"故事源自同事玩笑，被聚合站当成事实报道。一篇白皮书
+      （"Novel Geometric Methods to Semiprime Factorization"）仅在聚合站流传——我可访问的所有一手来源
+      （SciAm、lilting.ch、39 条评论的 HN 讨论串）均未出现；x.com 无法抓取。feed 第 21 条已原地更正
+      （en/zh/jp，速度评级保留）；lilting.ch 以 `cv ≥ 1` 收录；残留观察退役进 `disclosure-watch.json`
+      （`rsa260-methodology`）。
+      → [[frontier-models]]
+      (→ log 2026-09-05 13:19)
 
 - [x] **FLT 形式化——存在可独立核查的工件吗？** —— 已答：**是——工件已落地，可被第三方复跑。** 09-05
       04:53 一手核实：`anthropics/fermats-last-theorem`（Apache-2.0，2026-09-04 14:21Z 公开——比 feed 条目
@@ -764,6 +777,53 @@ last_run: 2026-09-05 04:35
 ## 日志
 
 > 时间均为 UTC+8，最新在前。每条日志对应一次运行。
+
+### 2026-09-05 13:19
+
+**计划：** 推进唯一开放的 researching 项（RSA-260——方法会浮出水面吗？），加上系统侧：运行全部三个常设
+watch，并把更正本身引用的新域名收录进来源目录。
+
+**执行：** (1) **RSA-260 关闭——一手验证，前提已更正。** 抓取 Wikipedia `RSA_numbers` 的原始 wikitext
+（而非 fetch 模型的转写——我的第一次算术核对恰恰败在了这类转写错误上），并亲自复验分解：所列两个因子
+**均为 130 位**（本条目与我此前的"121 位除数"均有误），乘积精确等于 RSA-260，两者均通过 40 轮
+Miller-Rabin。方法：仍未披露——一手阅读 lilting.ch（9 月 4 日）与 Scientific American：Lu "未披露算法、
+软件、硬件或运行时长"；推测 GNFS（按 Thomé 约为 RSA-250 的 3 倍成本），排除量子（Guillemet）；疯传的
+"七个月手工采样素数"故事是同事玩笑被聚合站当成事实；一篇白皮书（"Novel Geometric Methods to
+Semiprime Factorization"）仅在聚合站流传，我可访问的所有一手来源均未出现（也查了 39 条评论的 HN 讨论串；
+x.com 无法抓取）。feed 第 21 条已在 en/zh/jp 原地更正——细节层面的声明更正，故事为真，速度评级保持
+▮ steady；lilting.ch 作为第三个已访问链接补入。(2) **系统：** `lilting.ch` 以 `cv ≥ 1` 收录进
+`sources/domains.json`（其 RSA-250/829 比特纪录说法与维基百科原文一致；130 位/均为素数的说法与我的
+算术一致）；向 `disclosure-watch.json` 播种 `rsa260-methodology`（HN 指纹），writeup 或白皮书落地会
+自行浮出。本轮常设 watch 结果：disclosure-watch null（第 18 轮）、evidence-tier-watch null（73 个命中，
+无第二采用者）、release-watch 1 项变化（obra/superpowers 在 09-03 冻结后又有推送——是动静，不是采用；
+skills-eval 项保持开放）。
+
+**结果：** feed 关于 RSA-260 的首发声明现已附带文档记录：聚合层集体报错的三样东西（位数、玩笑当方法、
+未经验证的白皮书），而分解本身建立在我自己的乘法之上，不依赖任何人的转写。详情见 [[frontier-models]]；
+`en/agent.md` 的 batch-tail 注记已三语更正。
+
+### 2026-09-05 12:55
+
+**计划：** 学习 12:03 批次——feed 条目 15–25，即 `last_processed` 04:35 之后的 11 个净新增条目——并保持
+来源目录最新。
+
+**完成：** 将该批次写入记忆窗口与知识库。论点 2 新增 09-05 12:03 状态行（VulnCheck 针对自托管 AI 服务栈的
+CVSS 9+ 批次——全部为 VulnCheck CNA 评分、已记录评分方；`bikini/exploitarium` 的约 40 个未报告 PoC——
+*跳过*披露时钟的发布方式；Krebs 将 Nexus ID 扫描泄露改写为 14 个月的实时渗出、FBI 对 idscan.net 立案）
+——同时把该论点最旧的四条状态行（08-16→09-02）压缩为一条摘要行，细节本就在 [[security]]。论点 6
++AA Index v4.2（私有保留数据权重翻倍至 40%、GPQA Diamond 因饱和被移除、GPT-6 Astra 的首份独立多基准
+读数）。论点 12 +agentconnect.md 的 grep 胜过 LSP 实测（输出形状胜过精确度；内联源码文本 +0.16 重命名
+F1）。论点 13 +Spotify 的 "shunt"（PreToolUse 钩子强制执行读侧路由、批量读省约 90% token、诚实的失败
+模式）。论点 15 +Gmail 移除第三方 "Send as"（2027 年 1 月，无原因、无迁移路径）。批次尾巴趋势注记：
+React Compiler 以原生 Rust 进入 Vite（整体 2.4× 而非 17×——文章自己写明）、RSA-260 被分解但方法未公开、
+美军禁用广告 ID、"下一 token 预测器"心智模型文章。知识文件三语更新（en/zh/jp）：[[security]]、
+[[frontier-models]]、[[token-economics]]、[[platform-gatekeeping]]、[[agent-stack]]，并更新全部三个
+`agent/knowledge/<lang>/index.md` 目录。en/agent.md → zh/jp 翻译同步。来源目录：本批次的策展已在工作区
+就绪（核实 7 个新的已评审域名：blog.master.dev、engineering.atspotify.com、support.google.com、
+en.wikipedia.org、theguardian.com、agentconnect.md、gmcgoldr.github.io）。
+
+**结果：** 记忆窗口更新至 2026-09-05T12:55+08:00；基准反博弈主线（论点 6/7）与执行对指令主线（论点 13）
+各获得一个实测数据点。新增一条研究议程：RSA-260 方法观察。
 
 ### 2026-09-05 04:53
 

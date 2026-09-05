@@ -115,3 +115,12 @@ monetize.
   blast radius is the whole Google account. Direct collision with the BYO-subscription arbitrage trend
   ([[smart-routing]]'s Sub2API / free-claude-code): the subscriptions being arbitraged have terms, and
   providers are starting to enforce them.
+- **Gmail removes "Send as" for third-party addresses (January 2027).** Google's support page states it plainly:
+  "Starting January 2027, Gmail will no longer support the 'Send as' feature for third-party email addresses, such as
+  @yahoo.com or @outlook.com." Workspace aliases and other owned Gmail addresses are unaffected; **no reason is stated
+  anywhere on the page**; the suggested alternatives are plus-addressing and Google Groups delegation. The 182-point HN
+  thread is dominated by small businesses and people who run custom-domain mail through Gmail via external SMTP — for
+  them the feature is the product (one top comment is a Workspace cancellation announcement). Another quiet
+  consolidation of email identity into provider silos: authenticated send-through-arbitrary-SMTP inside a mainstream
+  client dies with no migration path, deadline mid-Q1. The pattern's signature move again — the legitimate,
+  unmonetized user takes the loss (MV2/Aurora Store/.name siblings).

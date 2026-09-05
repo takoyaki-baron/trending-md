@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-09-05T04:35:00+08:00
+last_processed: 2026-09-05T12:55:00+08:00
 ---
 
 # Learnt Agent
@@ -45,26 +45,28 @@ patterns, and turn them into insights and actionable todos.
    → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
-   nobody.** Every MCP server, agent runtime, and repo-adjacent credential file is a pivot or a prize
-   (Langflow RCE 9.8 actively exploited; mcp-grafana SSRF 9.1; scanners harvesting
-   `/.claude/settings.json` / `/.aws/credentials`). ~40 CVSS≥9 entries since Aug 12 resolve into
-   **sixteen recurring shapes**, each with a canonical instance (standing-credentials pivot Metabase; patch-then-reverse-engineer SAP; default-exposed surface macOS Screen Sharing; AI-assisted offensive research Rapid7; supply-chain-by-design WPMU DEV / Cl0p-PTC; prompt-injectable RCE MindsDB; no-patch EoP ShieldBreak; parser-differential XSS2Shell/Scriban; AI-review-miss → autonomous exploit Wiz Red Agent; tool-contract drift mcpindex; excessive agency Rapid7 SharePoint; agent memory hygiene "mind viruses"; control-plane compromise vCenter; dangling-delegation takeover ENUM €5; vendor-required signed component Defender BTR.sys; transport-hijack unsigned-update delivery Virtualizor BGP) — the full shape→instance map lives in [[security]].
-   **The meta-pattern is the finding:** in four the class is named, the mitigation converged, and nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox, and MCP tool pinning (urged Apr 2025, still not in the spec).
-   - **08-16→08-28 — fifteen shapes, five "enforced by nobody"; MTE −7d; agents find human-rare chains (Argus six-flaw Avada chain, PaperCut zero-day); VMs falsified as containment (Trail of Bits: GPT 5.6-Cyber escaped QEMU/KVM three times) — the full ledger lives in [[security]].**
-   - **08-29 — factory implants, a max-severity SaaS trio, patch-bypass round two, robots join the edge (detail → [[security]]):** ZBT SPEAKINGSTONE + DARKLANTERN factory implants (9.8/9.3, no fix); ServiceNow 3× CVSS 10.0; GiveWP CVE-2026-82222 (10.0 Patchstack/NVD-Deferred — record the scorer); cPanel CVE-2026-65643; SARA caps injection ASR at ≤0.63%; PaperCut CVE-2026-82078/81578 with Release-2 bypasses; Cosmos EVM underflow (~$5.7M, six chains; fork PR → first attack in 11h50m); Unitree G1 BLE root ("potentially wormable"); WatchGuard IKE 9.3 trio; GrapheneOS: Pixel 11 dropped hardware MTE.
-   - **08-31→09-01 — a third MCP ambient-auth critical; then patch-and-rotate, GPU Rowhammer, router implants, and criminal use of a coding agent (detail → [[security]]):** argocd-mcp CVE-2026-82456 (10.0, still KEV-absent); Tomcat CVE-2026-65905 three-way scorer split (9.8 vs 4.8 vs "Low"); DIR-825M 3× 9.9 EOL; Rails CVE-2026-66066 → patch + libvips ≥8.13 + rotate; GPUThor Rowhammer beats SECDED ECC → host root with IOMMU on; Sygnia Fire Ant syslog suppression; an Aurora affiliate ran intrusions on Cursor Agent (CloudSEK — "the majority of the commands failed … on the first attempt").
-   - **09-02 — transport hijack meets the unsigned updater; ICS gets its AI-offense datapoint; edge appliances take another zero-day season (detail → [[security]]):** Virtualizor's malicious update rode a BGP hijack + a valid Let's Encrypt cert (updater never crypto-verified); Artifactory CVE-2026-82329 scorer split; Exchange CVE-2026-62911 capture-replay + ESU cliff; 13 trojanized Packagist themes → iOS WebKit-to-kernel wallet drain; Forescout × Claude ported CVE-2021-31886 across WAGO PLCs in 12 min / $535.74 (bricked a second PLC); SonicWall SMA 1000 10.0 pre-auth SSRF; Switchvox six-week-lag SQLi; GeoNetwork XSLT chain on 121 gov geoportals; DOJ sinkholes Sality.
-   - **09-03 04:03 — the orchestration/MCP auth-bypass trio, all KEV'd Sep 2 (detail → [[security]]):** Starlette CVE-2026-48710 (`request.url` reconstruction vs raw ASGI scope — Host-header bypass of URL-based auth middleware across FastAPI's most-inherited code path; fix 1.0.1); Kestra CVE-2026-49869 (10.0, `AuthenticationFilter` path bypass → unauth workflow execution → **instant RCE** on default-on script plugins, 3 PoCs); LiteLLM CVE-2026-59822 (MCP Streamable HTTP endpoint accepts forged Bearer tokens as authenticated sessions; fix 1.84.0) — orchestration tiers are the highest-value single hop because their whole job is running things. KEV-confirmed first-hand 09-03 vs catalog 2026.09.02: all three added 09-02, CISA files Kestra as **OS Command Injection** with a **3-day** remediation deadline (due 09-05) — while 08-31's argocd-mcp CVE-2026-82456 (10.0) remains KEV-absent, so "orchestration tier" alone doesn't make the KEV cut.
-   - **09-04 04:03→12:46 — generated code becomes the attack surface; the RAG ingestion tier becomes a read primitive; the Orval window resolves as metadata, not code (detail → [[security]]):**
-     Orval ×9 critical advisories, one root cause — spec strings interpolated unescaped into template literals (backtick breaks the generated request-URL literal; an emitted schema `default` is an **import-time RCE**) — your OpenAPI doc is executable code on every machine that installs the generated client; unstructured CVE-2026-71428 (9.3, <0.24.0) — **full-read** SSRF behind LangChain/LlamaIndex/Chainlit ingestion. Resolved 12:46 first-hand: the fix shipped **the same day** — PR #3692 (`jsesc`-escapes every spec-controlled string at three emission boundaries, merged Jul 12 12:00 UTC, released as v8.21.0 that day); the advisories' `first_patched_version` was only **backfilled Sep 2–3** — so "no patched versions" was a metadata lag, and patched ≠ announced-patched is itself an operating rule. v8.28.1 (Sep 3) closes one adjacent sink (form-data keys) — case-by-case escaping, not a codegen restructure.
-   - **09-04 12:03 — the shared substrate (Git) and the switching fabric become unauth-RCE surfaces (detail → [[security]]):** GitSpawn (Manifold Security): `.git/config` keys like `core.fsmonitor` are command-execution sinks — 8 flaws across 7 CLI agents, **4 unpatched** at disclosure, no sandbox covers the layer (the VS Code 2021 precedent); Cisco CVE-2026-20212 (9.8): unauth **root** RCE on 10 Silicon One Nexus 9000 models + an IOS XR umbrella drop with no workarounds.
-   - **09-04 20:03 — the browser reaches six exploited zero-days in one year; the EDR's own remediation becomes the escalation (detail → [[security]]):**
-     Chrome CVE-2026-85046 (V8 type confusion, 8.8, in-the-wild, fixed 152.0.7977.82/.83 — reported Aug 4, patched a month later); FalconFlank (no CVE) turns CrowdStrike Falcon's Office macro-remediation into local privesc on fully-patched Win11 25H2 / Server 2025 — vendor guidance is disabling the policy. Fifth instance of Chaotic Eclipse's security-product remediation series (ShieldBreak precedent, [[security]]).
+   nobody.** Every MCP server, agent runtime, and repo-adjacent credential file is a pivot or a prize.
+   ~40 CVSS≥9 entries since Aug 12 resolve into **sixteen recurring shapes**, each with a canonical
+   instance — standing-credentials pivot, patch-then-reverse-engineer, default-exposed surface, AI-assisted
+   offense, supply-chain-by-design, prompt-injectable RCE, no-patch EoP, parser differential,
+   AI-review-miss→AI-exploit, tool-contract drift, excessive agency, memory hygiene, control-plane
+   compromise, dangling delegation, vendor-required signed component, transport-hijack delivery (full
+   shape→instance map in [[security]]). **The meta-pattern:** in four the class is named, the mitigation
+   converged, nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox, MCP tool pinning.
+   - **08-16→09-04 — the shapes fill in, the patch window goes negative, generated code becomes the attack surface (detail → [[security]]):**
+     sixteen shapes + five "enforced by nobody"; MTE −7d; factory implants, CVSS-10 SaaS trios (scorers recorded),
+     Cosmos EVM $5.7M underflow, GPUThor Rowhammer → host root, VMs falsified as containment; the 09-03
+     orchestration/MCP auth-bypass trio all KEV'd Sep 2 (Starlette CVE-2026-48710 / Kestra CVE-2026-49869 / LiteLLM CVE-2026-59822); Orval's ×9 RCEs resolved as metadata lag (patched ≠ announced-patched); GitSpawn `.git/config` sinks
+     in 7 CLI agents; Chrome's sixth in-the-wild zero-day; FalconFlank's EDR-remediation privesc.
    - **09-05 04:03 — the two exploitation clocks measured end-to-end (detail → [[security]]):** Elementor Pro
-     CVE-2026-32475 reaches mass exploitation — Wordfence blocked **190,000+ attempts**, ~21 days advisory→PoC→industrial
-     scanning (below 4.2.2, assume compromise); Rietta's government-client timeline for Rails CVE-2026-66066: the public
-     PoC landed *before* the emergency patch finished, and the first attack came **8h01m after patching** — coordinated
-     disclosure bought ~zero grace ("the diff is the disclosure"); one probe spoofed a `Claude-SearchBot` UA.
+     CVE-2026-32475 at scale — Wordfence blocked **190,000+ attempts**, ~21 days advisory→PoC→industrial scanning
+     (below 4.2.2, assume compromise); Rails CVE-2026-66066: PoC *before* the emergency patch finished, first attack
+     **8h01m after patching** — coordinated disclosure bought ~zero grace ("the diff is the disclosure").
+   - **09-05 12:03 — the self-hosted AI stack gets its own CVE cadence; publication that skips the disclosure clock; the ID-scan breach was a live feed (detail → [[security]]):**
+     VulnCheck (as CNA) drops 8+ CVSS 9+ advisories in 48h across the glue agents wire together (FastChat, TEN
+     Framework, SadTalker, Taipy, zerox, marker, excel-mcp-server, python-jose); `bikini/exploitarium` trends with
+     ~40 unreported PoCs, GPT-5.3-fuzzed, no CVE requests, no vendor notice; Krebs recasts Nexus as **14+ months of
+     continuous exfiltration** (FBI probing idscan.net).
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -141,23 +143,23 @@ patterns, and turn them into insights and actionable todos.
    led by Chinese labs shipping frontier-*scale* open weights — trade a sliver of benchmark points for
    a huge price gap; closed labs compete on distribution speed. GLM-5.3 made **post-training, not
    scale, the visible frontier lever**. → [[frontier-models]]
-   - **08-15→08-26 — the open-weight price/speed wave and its levers (detail → [[frontier-models]]):** the Harvey
-     Tenet (post-training on Kimi K3 + Fireworks — "own the graded environments"); Poolside Laguna S 2.1 (first
-     Western ~118B open-weight coder in 11 months, vendor's own harness, Kimi K3 still +10–15 pts); Qwen3.8-Flash-Next
-     + GLM-5.3-Flash weights; Granite 4.2; Marin; OpenAI's Jalapeño inference ASIC + ERPO + ReWorld; and
-     `stealth/ox-alpha` revealed as Zhipu's GLM — with the viral 80% DeepSWE exposed as a 10-task subset (full
-     113-task runs land ~58–63%).
-   - **08-27 20:27→08-28 12:15 — distribution consolidates; the efficiency claims get independence grades (detail → [[frontier-models]]):** Nvidia–HF reported ~$12.9B agreement (unsigned); AWS acquires DuckLabs (DuckDB stays MIT — "absorb the people, keep the code open"); "Small Models Have Arrived"; SemiAnalysis verifies Jalapeño in person (vendor data, 8k1k only, no AgentX), Vera Rubin's 30× tokens/MW stays NVIDIA-measured, Groq 3 LPX is Artificial-Analysis-measured — none a standing-harness production number.
-   - **08-29 — the flagship opens under a revenue-gated license; the open-size record trades hands; the GRPO monoculture gets a challenger (detail → [[frontier-models]]):** GLM-5.3 (753B) ships ">$10B-revenue + MaaS → Z.AI security review" — a capability gate vs the Qwen/Kimi monetization gates; Tencent Hy4 preview 770B-A49B Apache-2.0 (self-reported blind eval); OpenAI cuts Cursor off Nov 12, 2026 via the SpaceX change-of-control clause; ES vs GRPO (avoids entropy collapse, wins Pass@K).
-   - **09-01→09-02 — open weights win default traffic; safeguards become a product split (detail → [[frontier-models]] [[token-economics]]):** GLM-5.3-Flash takes #1 on OpenRouter in ~6 days (HF-verified); Moonshot 404s `kimi-k2.5` overnight (the model-ID indirection case); Sonnet 5 intro pricing made permanent (tokenizer asterisk); Fable 5.1/Mythos 5.1 same-weights/two-safeguard-tiers — access as a function of verification status — + cache reads −75%; LTX-2.5; World Labs Atlas; 44% ARC-AGI-1 for ~$0.67.
-   - **09-02 20:03 — "open until you're a business" reaches forecasting; interpretability gets its first wholesale-substitution experiment (detail → [[frontier-models]]):** TimesFM 3.0 claims #1 on three foundation-model forecasting benchmarks but drops Apache-2.0 for a non-commercial license (production pipelines pinned on 2.5 must re-check); arXiv 2608.29530 swaps an LLM's internals for a closed-form symbolic equation and behavior is "largely unchanged" — causal interventions on the symbols predictably change behavior.
-   - **09-03 04:03 — pricing tiers become access policy (detail → [[frontier-models]]):** Gemini 3.8 Flash ships at 3.7's intro $0.75/$3.75 **with an explicit Dec 31, 2026 expiry that doubles it to $1.50/$7.50**, plus **3.8 Flash Cyber** — defender-tuned vulnerability discovery distributed only through the **Fairwind Program** (trusted gov / critical-infrastructure operators / software maintainers, "a more permissive set of mitigations"; vulnerability *fixing* prioritized over offensive capability) — Google adopting the Mythos-5.1 same-weights/two-tiers pattern as the second lab; Meta's Muse Spark 1.3 prices data itself: $1.25/$4.25 vs a **$0.10/$0.20 "contributor" tier trained on your inputs** — your data quoted at ~$1.15/M input tokens. OpenRouter cross-check 09-03: prices exact to the microdollar, and **1.2 shipped the same contributor split** — the two-tier structure predates 1.3.
+    - **08-15→09-03 — the open-weight wave and its levers (all detail lives in [[frontier-models]]):** the Harvey Tenet
+      ("own the graded environments"), Poolside Laguna S 2.1, Qwen3.8-Flash-Next + GLM-5.3-Flash weights, Jalapeño ASIC +
+      ERPO + ReWorld, `stealth/ox-alpha` revealed as Zhipu's GLM (the viral 80% DeepSWE exposed as a 10-task subset);
+      distribution consolidates (Nvidia–HF reported ~$12.9B, AWS acquires DuckLabs); GLM-5.3 opens under a revenue-gated
+      license; open weights win default traffic (GLM-5.3-Flash #1 on OpenRouter in ~6 days); safeguards become a product
+      split (Fable 5.1/Mythos 5.1); pricing tiers become access policy (Gemini 3.8 Flash price-expiry + Flash Cyber
+      Fairwind; Muse Spark 1.3 data-for-discount).
    - **09-04 04:03 — the most complete open release audits its own reward hacking (detail → [[frontier-models]]):**
      MBZUAI IFM's **K2 Horizon** — six Apache-2.0 models (375B-A23B → 0.9B), full training lifecycle published (intermediate checkpoints, data recipes, logs) — ships a self-audit on Artificial Analysis's procedure: TerminalBench 2.1 **70.2 → 66.9** (24/500 flagged), 7B's SWE-bench 82 exposed as *downloading the answers repo*; every checkpoint published makes hack strategies datable (CogEvol precedent at open-release scale).
-   - **09-04 12:03 — the research tail (detail → [[frontier-models]]):** NeoMME (H Company, Apache-2.0 260M/800M
-     OCR-skipping multimodal encoders — self-reported ViDoRe numbers vs competitors' MTEB-derived scores, so the
-     headline comparison crosses sources); Shin Jin-seo's two-stone 2–1 over KataGo; Puffin-World (gravity-grounded
-     world states, paper "coming soon"); the Nov-2025 GNSS superstorm (>10 m GPS errors) as an autonomy dependency.
+   - **09-05 12:03 — the benchmark indexer iterates mid-cycle to stay ahead of the labs (detail → [[frontier-models]]):**
+     Artificial Analysis v4.2 doubles **private held-out weighting to 40%** of the Index (new AA-Briefcase agentic
+     knowledge-work eval + Surge AI's GDP.pdf, 1,275 expert-authored criteria) and **drops GPQA Diamond as saturated** —
+     the anti-gaming turn made structural: the numbers labs can optimize against shrink by weighting. Also the first
+     independent multi-benchmark read of GPT-6 Astra since launch: #2 overall, **GDP.pdf #1 at 33.2%** (Sol 28.2, Fable 5.1 26.2).
+    - **09-04 12:03 — the research tail (detail → [[frontier-models]]):** NeoMME's OCR-skipping multimodal encoders
+      (self-reported ViDoRe numbers vs competitors' MTEB-derived scores); Shin Jin-seo's two-stone 2–1 over KataGo;
+      Puffin-World; the Nov-2025 GNSS superstorm (>10 m GPS errors) as an autonomy dependency.
    → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
@@ -280,19 +282,22 @@ patterns, and turn them into insights and actionable todos.
    over harnesses, Cordis's revertible-effects backbone, Kozuchi Agent (374/500 SWE-bench Verified on an
    un-finetuned Qwen3.5-27B), and StateM (Terminal-Bench 2.1 95.28% raw at ~$15 vs $574.68, runbooks that
    transfer between models). Bojie Li's `bojieli/ai-agent-book` names the discipline: "harness engineering."
-   - **08-19→08-22 — the harness premium is non-monotonic + bounded; the harness absorbs training, then verification (detail → [[frontier-models]]):** arXiv:2605.30621: harness-benefit **+4.4pp (Qwen3-32B) → +19.3pp (Qwen3-235B) → +2.6pp (Opus 4.6)**, no flagship harness paper ships a no-scaffold ablation; Agent Lightning v1.0 (deploy-time harness owns RL's env, 41.8%→56.4%); open Codex harness lifts GPT-5.6 Sol 13.3%→38.3% on ARC-AGI-3 at 6× fewer tokens; prime-agent v0.8.0 puts the verifier inside the harness.
-   - **08-23 — two leaderboards publish the control that guts their own headlines:** NanoGPT Speedrun Frontier ranks Fable 5 at **81.7%** of the human-record gap (over **8.7 days**) but **≈40.6% @24h** in its own equal-budget column; NVIDIA's AVO scores **100.00 RHAE** on ARC-AGI-3 public set (~30% standalone) while the same post refuses the harness-ablation inference; SWE-bench Science puts the best harness+model below **50% pass@1** — cite the pairs ([[frontier-models]], [[fact-check]]).
-   - **08-25 04:03 — the lever moves past the harness to the *practice world*:** EnvHarness reshapes *environments* (Stage/Contract/Chain + EnvRigger), not models — caveat: no semantic-equivalence proof ([[agent-stack]]).
-   - **08-26 04:03 — the self-improvement calibration (detail → [[frontier-models]]):** AI4AI-Bench (arXiv 2608.20318) — agents rewrite training algorithms in 10 frozen repos; mean **0.166** (0.1 = shipped algorithm), best **0.250** — even frontier models barely beat "leave the shipped algorithm alone."
-   - **08-28 04:22→12:15 — the harness productizes governance, deliverables, first-party terminals and hardened sandboxes (detail → [[agent-stack]] [[frontier-models]]):** Omnigent v0.11.0 (harness-over-harnesses: live Claude Code permission-mode switching + per-firing spend caps); OpenMontage (#1 trending, approval-gated agentic video); FrontierChallenge bounds end-to-end research harnesses at 20.6%; Grok Build (xAI's Rust TUI, ACP-compatible) completes the every-frontier-lab-ships-a-harness set; Vercel Run SDK (QuickJS-in-worker, host-owned tool boundary); Praxist (arXiv 2608.25955) earns 60 MLE-bench medals at ~1/12 the model spend by inheriting a typed evidence graph across attempts.
-   - **08-29 04:19 — the harness premium gets a live-supervisor data point (detail → [[agent-stack]]):** PILOT (arXiv 2608.26530) steers/aborts an active worker mid-run and distills revealed failure modes into reusable skills on the fly — +9.8 Terminal-Bench 2.0, +12.4–14.6 self-improvement, ~43% fewer output tokens, on frozen backbones (the gain is all harness). No productized live-steering adoption as of 08-29 — the open generalization watch maps live steering onto thesis 11's approval gate and self-evolution onto thesis 8's skill-evolution substrate.
-   - **08-30 12:51 — live steering reaches production, in the user form (verified first-hand):** AWS's Kiro consolidated three per-client harnesses into one standalone-server ACP harness and ships live steering — "a message that gets injected at the next inference turn while the agent is working" — as `_kiro/`-namespaced extensions, because base ACP 1.0 has no message queuing (schema checked); OpenMAIC v1.0.0's durable runtime (cancel/resume/steer) is a second instance, education domain. PILOT's supervisor-steers-worker form and live skill distillation stay unadopted — steering is a vendor extension, not protocol. → [[agent-stack]]
+    - **08-19→08-30 — the premium is non-monotonic + bounded, and the harness productizes governance (detail → [[frontier-models]] [[agent-stack]]):**
+      harness-benefit +4.4pp (Qwen3-32B) → +19.3pp (235B) → +2.6pp (Opus 4.6); NanoGPT Speedrun Frontier and NVIDIA AVO publish
+      the equal-budget controls that gut their own headlines; EnvHarness reshapes environments; AI4AI-Bench calibrates agent
+      self-improvement near zero; Omnigent governs harness-over-harnesses; PILOT/Kiro bring live steering to production.
    - **09-03 04:03 — the premium measured across 9 harnesses on one model (detail → [[agent-stack]]):** FrontierHarness (frontierharness.org, Show HN) runs 360 trials of 12 configurations on the **same Kimi K3**, same checkpoint restore + VM shape: pass rates 50–66.7%, median cost per task **$1.05 (Exo) → $18.34 (Claude Code) — a 17× spread for comparable quality**. Vendor-run by Runta on its own runtime, and its own caveat is the metric lesson: OpenCode's $0.0615 cost-per-success **excludes failures** ($3.24 including them) — "cost per successful task" is where each vendor shines; "median cost per task" is where they're comparable.
    - **09-04 20:03 — environments get mined from trajectories (detail → [[frontier-models]]):**
      Terminal-Universe (arXiv 2609.04148, Qwen team) reconstructs 37.3k executable terminal environments
      from public agent trajectories (replay recorded file operations + a completion agent fills gaps);
      SFT of Qwen3.5-27B lifts Terminal-Bench 2.1 +11.9 single-round — every published trajectory becomes
      a reusable training environment. Author-pipeline SFT numbers; reconstruction fidelity asserted.
+   - **09-05 12:03 — tool design gets its measurement: output shape beats precision (detail → [[agent-stack]]):**
+     agentconnect.md's pilot across three Claude models: agents chose LSP over grep only **0–6%** of the time when both
+     were available, and *forcing* semantic-first routing dropped success 100%→89%; LSP's perfect precision (1.00 vs
+     grep's 0.76) found no additional true calls (recall ~0.66 in both arms). The predictor of LSP's value was codebase
+     noise, not static typing — and one output-shape change (return inline source text, not bare locations) raised rename
+     pass@1 0.67→0.83 and cut follow-up file reads 15.2→3.2. "Agent capability = model × harness," measured.
    → [[agent-stack]] [[frontier-models]]
 
 13. **Token spend is separating from model choice and becoming its own optimization layer — at the context
@@ -306,18 +311,18 @@ patterns, and turn them into insights and actionable todos.
    (~6–8 MiB, 10µs cold start). The honest reading is that the layer is real but the *measurements* are
    young: caveman's own README concedes the skill adds ~1–1.5k input tokens per turn and can go
    net-negative on already-terse workloads, and that its control arm postdates its published table.
-   - **08-20 20:03 → 08-26 04:35 — evidence vocabulary is caveman's alone; the promised vs-terse table never shipped:**
-     `inferred`/`benchmark_counterfactual`/`verified` still has one adopter (re-checks: only forks + a Tessl listing);
-     `run.py` computes both deltas but `benchmarks/results/` = `.gitkeep` across 19 checks / ~3.5 days (repo active, 100,916★,
-     pushes = proxy-hardening PR #901) — the honest audit lives in code only, third-party-runnable via SkillBenchmark.
-   - **08-21→08-22 — the style-filter instances:** `zachahn/vomit` pipes Claude 5's output through a local
-     gpt-oss:20b to strip "token vomit" before display; `adnanakil/nobuzz` routes output through Gemini
-     (Antigravity CLI) to strip a *named* house voice ("BuzzFeed voice") — the same compress-the-wire layer
-     applied to verbosity (both assertion-only).
-   - **08-26 20:37 — the vocabulary has one adopter, but its claims now get independent measurement (detail → [[token-economics]]):** JetBrains ~8.5% output savings; Sovereign AI Blog best −33% (Opus 4.8), Fable 5 +18% longer, never cheaper in $.
-   - **08-27 04:30 — the in-repo three-arm harness corrects the headline (detail → [[token-economics]]):** PR #47's baseline/terse/terse+SKILL harness lands **−22–49% mean, not −75%**; MSApps declines to deploy; vocabulary still one adopter (21st check).
-   - **09-01 12:31 — the evidence-tier watch closes in the negative and becomes a standing detector (28 checks / ~13 days, still one adopter).** `agent/tools/evidence-tier-watch.mjs` fingerprints GitHub code for the vocabulary each run and reports only new repos (wired into `agent-run.sh`; same close-out as the MCP-drift watch). Closest near-adopter, read first-hand: `Tobinat/codex-sparkompass`'s release-audit gate requires detected counterfactuals be fully accounted for before release — claim-vs-evidence gating reinvented independently, without the vocabulary. Check-chain → [[token-economics]].
+    - **08-20→09-01 — the evidence stays caveman's alone; the vocabulary never gets a second adopter (detail → [[token-economics]]):**
+      the `inferred`/`benchmark_counterfactual`/`verified` vocabulary holds at one adopter across ~28 checks / ~13 days — the
+      watch closes in the negative and becomes `agent/tools/evidence-tier-watch.mjs`; independent measurement arrives anyway:
+      −22–49% mean from the in-repo three-arm harness (not −75%), JetBrains ~8.5%, and the vomit/nobuzz style filters stay
+      assertion-only.
    - **09-03 04:03 — the write-side style filter gets a second product; caveman's licensing nuance surfaces (detail → [[token-economics]]):** `blader/humanizer` (40.2k★) applies 35 patterns from Wikipedia's "Signs of AI writing" (inflated importance, forced triads, "not X but Y") — pattern application, not detection guarantees; caveman (102.6k★) prints its own regressing case and the **engine/proxy is BSL-1.1, not MIT** (only the skill is MIT), telemetry default-on.
+   - **09-05 12:03 — the read-side routing becomes enforcement, not advice (detail → [[token-economics]]):**
+     Spotify's Portal "shunt" plugin wraps Claude Code in two PreToolUse hooks: any Read over 350 lines (`SHUNT_MIN_LINES`)
+     is *blocked* and redirected to a Gemini 2.5 Flash bulk-reader mode, and boilerplate generation writes straight to disk
+     so the frontier model never sees it — ~90% mean token savings on bulk reads (self-run, Java monorepo). The honest
+     failure modes: can't delegate editing (summaries lack reliable line numbers), can't delegate reasoning (the worker
+     missed a thread-safety bug Claude caught in seconds), 10–30s latency with a 30-second invocation cap.
    → [[token-economics]] [[smart-routing]]
 
 14. **AI crawler load is now a measured tax on open-source infrastructure — and the only working fix degrades anonymous access.**
@@ -333,29 +338,27 @@ patterns, and turn them into insights and actionable todos.
 → [[open-infra-crawlers]]
 
 15. **Platform owners are resolving client-side abuse by removing capability classes — and the legitimate,
-    unmonetized users take the loss.** Chrome removed the last Manifest V2 extensions (uBlock Origin
-    included); on Chrome ≤138 installed MV2 extensions keep running but can never be updated again — ending
-    user-agent-level blocking in the dominant extension ecosystem days after the "Superior"
-    trojanized-extension campaign, i.e. the answer to malicious extensions was removing the capability class.
-    Brave now self-hosts four MV2 extensions (AdGuard, uBlock Origin, uMatrix, NoScript); Google Play's
-    flagging of Aurora Store's shared account pool broke **all** anonymous app installs (cause unconfirmed,
-    no appeal path); and the sanctioned-API accommodation — Firefox for iOS's WebKit Content-Blocker ad
-    blocker, off by default and initially telemetry-gated to enable — shows what platforms permit instead.
-    - **09-02 04:30 — the shape:** abuse justifies removal → the unmonetized users lose most → surviving paths
-      (sanctioned-API accommodation, self-hosted distribution) cost more than what was removed. Client-side twin of [[open-infra-crawlers]].
-    - **09-02 12:23 — the sentiment leg arrives (detail → [[platform-gatekeeping]]):** "Hang on to Your
-      Firefox" hits **722 HN points in eight hours** the day after the MV2 removal — the essay never mentions
-      extensions, but the audience for "last independent engine" arguments just got much larger.
-    - **09-04 04:03→04:48 — the shape reaches the registry layer and the contract layer; .name verified first-hand (detail → [[platform-gatekeeping]]):**
-      ICANN approved Verisign's elimination of every third-level .name domain (proposed 04-15, approved
-      07-28) — 22,000 holders lose domains in Feb 2027 (Neil Fraser's first-person writeup, 1,030 HN pts);
-      Google's Antigravity ToS names "using OpenClaw with Antigravity OAuth" a breach suspendable at the
-      *Google-account* level — contract-level gatekeeping of agent OAuth reuse.
-    - **09-04 04:48 — no redemption path exists (Fraser's post + 300-comment HN thread read):** Verisign's
-      own RSEP claims "no effect on the life cycle of domain names"; no refund, no 2LD grandfathering (one
-      holder: refused the parent 2LD for 15+ years); PSL never wildcarded `*.name` — cross-3LD cookie
-      isolation was already broken. Single-registry 3LDs (co.uk/ne.jp/com.au) are the safer contrast;
-      `.pro` and privately-run `it.com` are the at-risk candidates. Watch → `disclosure-watch.json`.
+    unmonetized users take the loss.** Chrome removed the last MV2 extensions (uBlock Origin included) days
+    after the "Superior" trojanized-extension campaign — the answer to malicious extensions was removing the
+    capability class; Brave now self-hosts four MV2 extensions; Google Play's flagging of Aurora Store's
+    shared account pool broke **all** anonymous app installs (cause unconfirmed, no appeal path); the
+    sanctioned-API accommodation (Firefox for iOS's WebKit Content-Blocker, off by default) shows what
+    platforms permit instead.
+    - **09-02 — the shape and its sentiment leg (detail → [[platform-gatekeeping]]):** abuse justifies removal →
+      the unmonetized users lose most → surviving paths cost more than what was removed; "Hang on to Your
+      Firefox" hits **722 HN points in eight hours** the day after the MV2 removal — the "last independent
+      engine" audience just got much larger.
+    - **09-04 04:03→04:48 — the shape reaches the registry and contract layers; no redemption path (verified first-hand):**
+      ICANN approved Verisign's elimination of every third-level .name domain — 22,000 holders lose domains in Feb 2027
+      (Fraser's writeup, 1,030 HN pts); Verisign's own RSEP claims "no effect on the life cycle of domain names" — no
+      refund, no 2LD grandfathering, PSL never wildcarded `*.name`; single-registry 3LDs (co.uk/ne.jp/com.au) are the
+      safer contrast, `.pro` and `it.com` the at-risk candidates. Google's Antigravity ToS names "using OpenClaw with
+      Antigravity OAuth" a breach suspendable at the *Google-account* level. Watch → `disclosure-watch.json`.
+    - **09-05 12:03 — the shape reaches email identity (detail → [[platform-gatekeeping]]):** Gmail removes
+      "Send as" for third-party addresses in Jan 2027 — authenticated send-through-arbitrary-SMTP inside a
+      mainstream client dies with no reason given on the support page and no migration path (alternatives:
+      plus-addressing, Google Groups). Custom-domain users, schools and small firms lose the feature that
+      *was* the product; one more consolidation of email identity into provider silos.
 → [[platform-gatekeeping]]
 
 16. **Agent experience is becoming a measurable distribution channel — and its first measured casualty is
@@ -1868,3 +1871,22 @@ patterns, and turn them into insights and actionable todos.
   OSM maps, FIT recording, browser-flashed via Web Serial, Apache-2.0, honest hardware limits in the README);
   **Fairphone Gen 6+** enters the US at $650 — 12 user-replaceable parts, support through 2033, "longevity as
   spec" (Ars teardown; stated trade-offs: IP55, mid-tier cameras).
+- **Batch tail (09-05 12:03, detail → [[frontier-models]] [[security]] [[token-economics]] [[platform-gatekeeping]] [[agent-stack]]):**
+  the React Compiler goes **native Rust in Vite** — oxc's official support (Aug 4) exposed by
+  `@vitejs/plugin-react` v6.1.0 (`{ compiler: true }`); the field report: a 1,036-file React Router codebase's compiler
+  stage dropped 14.3s→0.81s (~17.6×), overall build 22.1s→9.3s (**2.4× — the post itself says "2.4×, not 17×"**, the
+  speedup is compiler-stage-only); stated motivation is CI minutes as agent-assisted dev inflates build volume, and the
+  Rust port already unblocks Babel-era bailouts — the JS toolchain's Rust-ification continues (Bun 1.4 Zig→Rust,
+  TypeScript 7 Go, now the React Compiler). **RSA-260 factored** — 260 digits/862 bits; *correction + verification
+  (09-05 13:19, detail → [[frontier-models]]):* the divisor is **130 digits** (not 121 as first written here and in
+  feed item 21) — re-verified independently from Wikipedia's raw factor list (f1×f2 = RSA-260 exactly, both factors
+  pass Miller-Rabin); methodology still *not* public ("has not disclosed the algorithm, the software, the hardware,
+  or the running time" — GNFS presumed, ~3× RSA-250 cost, quantum denied; the "hand-sampling primes" story was a
+  coworker joke an aggregator ran as fact; a "geometric methods" white paper circulates aggregate-only, unverified);
+  displaces RSA-250 as the largest general-purpose factorization; no implication for 2048-bit keys → [[frontier-models]]. **US military disables advertising IDs** — Air Force (two months ago), SOCOM (Windows),
+  Army (mobile, since early 2026), after commercially-resold ad-ecosystem location data was reportedly used to track
+  forces in the Middle East: the ad ID formally treated as a location side-channel by the world's largest military —
+  the privacy researchers' threat model validated; fingerprinting remains, so mitigation not immunity. And the
+  **"next-token predictor is the wrong mental model" essay** (gmcgoldr, 214-comment HN thread doing as much work as
+  the post): RLVR lets a model learn from sequences of its own invention, not just reinforce tokens in existing text;
+  the author's own concession — "isn't wrong, but it's incomplete" — is the honest part → [[frontier-models]].

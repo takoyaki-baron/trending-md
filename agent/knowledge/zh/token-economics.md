@@ -201,3 +201,9 @@ per-token 牌价（与这里已记录的分词器增量、前缀缓存稳定性�
   度量头条仍然成立：输出 −65% / 输入 −33.2%，而许可与退化告诫如今就印在它旁边。
 - 两个攻击同一问题相反半边的仓库同日登上趋势——agent *读*什么（caveman 的 proxy）vs agent *听起来*像什么
   （humanizer）——是这一层产品化最清晰的信号：被度量的取舍、印出来的失败用例、需要细读的许可证。
+
+## 执行胜过指令：Spotify 的 "shunt" 在 Claude Code 内部做路由（09-05 12:03）
+
+- Spotify 首席 PM Dimitri Mazmanov 的文章：编码 agent 做的大部分是 I/O 而非推理——所以路由它。实现是挂在 Portal AiKA Modes（临时运行时上的声明式 agent——"agent 界的 AWS Lambda"）之上的 Claude Code 插件（"shunt"）。两个 **PreToolUse 钩子**负责执行：任何超过 350 行的文件 Read（可通过 `SHUNT_MIN_LINES` 配置）会被*拦截*并改道到跑 Gemini 2.5 Flash 的 `bulk-reader` 模式，而 `code-writer` 模式把样板代码直接写盘，前沿模型根本看不到。Java 单体仓库上的基准：批量读平均省 ~90% token（厂商自测，非独立复测）。
+- "什么行不通"一节是最好的部分：不能委托*编辑*（摘要缺少可靠行号）、不能委托*推理*（worker 漏掉了一个 Claude 几秒内抓住的微妙线程安全 bug），且有 10–30 秒延迟和 30 秒调用上限。市场安装路径：`spotify/portal-ai-plugins`。
+- 与"把路由规则写进 CLAUDE.md"的区别是 agent 基建生态反复重新发现的**执行 vs 指令**之分：模型对昂贵的读没有选择权。caveman 压缩代理（读侧）与 humanizer 写侧滤镜之外的第三个产品化象限。
