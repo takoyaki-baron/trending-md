@@ -111,14 +111,17 @@ if [ ! -f "$SNAP_TODAY" ]; then
   fi
 fi
 
-# ── Pass 4: evidence-tier adoption watch (standing, best-effort) ──
-# caveman's `inferred`/`benchmark_counterfactual`/`verified` claim-grading vocabulary had exactly one
-# adopter across 27 manual checks (08-19 → 09-01). Rather than an agenda line per run, this watch
-# fingerprints GitHub code for the vocabulary and reports only NEW repos — a second adopter surfaces
-# itself in the run log. See agent/tools/evidence-tier-watch.mjs.
-node "$REPO_DIR/agent/tools/evidence-tier-watch.mjs" \
-  --state "$REPO_DIR/agent/data/evidence-tier-watch.json" 2>&1 \
-  || echo "evidence-tier watch failed (non-fatal)"
+# ── Pass 4: code-search watch (standing, best-effort) ──
+# Generalized 2026-09-06 from evidence-tier-watch.mjs (which was hardcoded to one query): a
+# config-driven GitHub code-search watcher for fingerprints whose "no new hits" is the data point.
+# Currently watches: (1) caveman's evidence-tier vocabulary (thesis 13 — a second adopter would end
+# the one-adopter negative result); (2-4) the Random Attention paper-ID + scoped vLLM/SGLang queries
+# (thesis 3 — an upstream integration lands in production-server code, which release-watch can't
+# see). See agent/tools/code-watch.mjs + code-watch.json.
+node "$REPO_DIR/agent/tools/code-watch.mjs" \
+  --config "$REPO_DIR/agent/tools/code-watch.json" \
+  --state "$REPO_DIR/agent/data/code-watch.json" 2>&1 \
+  || echo "code watch failed (non-fatal)"
 
 # ── Pass 5: release watch (standing, best-effort) ──
 # Two agenda threads (thesis 5 routing-DSL status-quo checks; thesis 8 skills-eval no-submission

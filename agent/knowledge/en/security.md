@@ -2112,3 +2112,49 @@ The batch's security stream, read first-hand at the primary sources where reacha
   the full chains the gray market buys — vendors price single bugs, attackers price chains. Caveats: the writeup
   itself names no bounty and doesn't identify the n-day escape; the $1,000 figure traces to the Chrome release blog
   via secondary coverage.
+
+## The exploitation turn, a vendor as its own victim, a compiled-in implant, a scoring-gap database role, and the CRA clock (09-06 04:03)
+
+- **NetScaler CVE-2026-19490 turns to exploitation three weeks post-patch** — unauth authentication bypass
+  (CWE-288; CVSS 9.3 is a CNA-assigned "Secondary" metric, NVD still Awaiting Analysis) in NetScaler ADC/Gateway
+  AAA/Gateway configs (SSL VPN, ICA Proxy, CVPN, RDP Proxy, esp. with a SAML Action; 14.1 ≤ 73.32, 13.1 ≤ 63.21),
+  patched Aug 19 (CTX696939) with no exploitation flag. Sep 3: Previdian honeypots received PoC-matching probes from
+  three IPs (AU/US/DE) after a "credible" public PoC; Belgium's CCB/NCC-BE warned separately. Shadowserver tracks
+  22,000+ online ADC instances (~1,700 Gateways). The classic patch-weeks-ago curve — the exploit turn, not the
+  disclosure, is the emergency. Honest limits: Previdian explicitly does **not** confirm successful compromise, and
+  nobody knows how many tracked instances are patched vs vulnerable vs honeypots — exposure counts are ceiling,
+  not casualty count.
+- **VMware Workstation/Fusion guest-to-host escapes** (VMSA-2026-0007, Sep 3): CVE-2026-59346 (VMXNET3 paravirtual
+  NIC integer overflow, **9.3**, host code execution) + CVE-2026-59347 (HGFS stack overflow, 8.1, code as the VMX
+  process), both fixed in 26H1u1, both requiring local admin inside the guest — and Broadcom states plainly **no
+  workarounds exist**. Desktop hypervisors are the softest virtualization boundary developers touch daily; lands
+  weeks after vCenter CVE-2026-59309/59310 was exploited against 361 victim IPs in 47 countries.
+- **JetBrains closed its Cadence breach — the patch-management vendor was the unpatched victim.** CVE-2026-63077
+  (9.8, KEV since Aug 5: unauth TeamCity auth bypass → OS command execution) hit JetBrains' own
+  `api.cadence.jetbrains.com`, a server JetBrains admits "should have been patched" but wasn't. Intrusion Aug 8–24;
+  exfiltrated: a full 2024 Cadence server backup, AWS IAM credentials including employees', S3 files, personal data;
+  synced PyCharm source and customer buckets are "possibly accessed" hedging. All Cadence plugin tokens invalidated
+  → downstream users face real credential-rotation work. Actors unidentified.
+- **"Ted" — a DPRK backdoor compiled into victims' own HAProxy builds** (Rapid7, Sep 4; medium-confidence
+  attribution blending APT37 C2, Lazarus-style SyncHole delivery, Kimsuky access): triggered by an HTTP request to
+  `/favorite_list_2x_m500_ico.jpg`, answers commands without reaching a backend, and decrements HAProxy's live
+  connection counters so the exchange vanishes from load-balancer stats and backend logs. Toolkit: curlRAT
+  trojanized into crond/agetty/atd/polkitd (virtualization-gated, 12-h beacon), an SSH keylogger. The tradecraft
+  defeats both standard responses: **upgrading HAProxy does not clean an infected host** (the binary was replaced;
+  a recompiled one reports a clean version string) — binary-level verification required. Not a HAProxy
+  vulnerability; requires prior host code execution (initial access unconfirmed).
+- **PostgreSQL CVE-2026-6471 ("PostGREShell") — the scorer-vs-reality gap in one CVE.** A flaw present since
+  logical decoding shipped in PG 9.4 (2014): a non-superuser holding REPLICATION can `dlopen()` an arbitrary file
+  via a path-traversing logical-decoding plugin name in `CREATE_REPLICATION_SLOT`, executing code as the database
+  OS account when `wal_level=logical` (SMB on Windows; NFS automount on Linux/macOS). Fixed Aug 13 in
+  18.6/17.11/16.15/15.19/14.24 with an `output_plugin_libraries` whitelist defaulting to `pgoutput, test_decoding`.
+  CVSS 7.2 assumes PR:H, but Cyera argues REPLICATION is effectively a low-privilege backup credential in real
+  deployments — below the 9.0 bar on paper, above it in practice. Cyera demonstrated superuser escalation + three
+  persistence mechanisms; no public PoC as of Sep 4.
+- **EU Cyber Resilience Act Article 14 goes live Sep 11, 2026** — the first hard deadline, >1 year before the main
+  obligations (Dec 11, 2027), and it reaches products already on the EU market: actively exploited vulnerabilities
+  and severe incidents reported through ENISA's Single Reporting Platform — **24h** early warning, **72h**
+  notification, **14d** final report (exploited vuln, after a fix exists) / **1 month** (severe incident); clock
+  starts at "reasonable certainty"; deadlines run through weekends and holidays. The Commission's own guidance
+  concedes the platform "is not yet live but is expected operational on 11 September." Build the pipeline now,
+  verify the endpoint before you need it.

@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-05T20:45:00+08:00
+last_processed: 2026-09-06T04:35:00+08:00
 ---
 
 # 学习智能体
@@ -59,6 +59,7 @@ last_processed: 2026-09-05T20:45:00+08:00
      并提供 `recall`/`get` 工具（混合向量+BM25、cross-encoder 重排、逐命中出处）；`funes add` 把本地记忆绑定到默认
      私有的 Hub 数据集——记忆成为你可拥有的数据；其自家两任务基准承认压缩在其中一个任务上"压平了关键发现"。
    - **09-05 20:03 — 7 万星元级 harness 改名并押注联邦（详情 → [[agent-stack]]）：** claude-flow → ruflo（MIT，70.6k★，本跑一手核验）：web UI beta + Agent Federation（"Slack for agents"——mTLS+ed25519 身份、PII 流水线、持续信任评分）；其 "1.3×–1953×" 基准倍数在有人复测前按营销读。
+   - **09-06 04:03 —— 记忆压缩进嵌入接口;开放客户端消化前沿更迭（详情 → [[agent-stack]]）：** LatentPress（arXiv 2609.01507）把历史存为连续记忆 token、由解码器输入嵌入接口读取——LongMemEval 0.504 @ 7.70× 压缩,*高于*未压缩（对人损可以是对模型无损,带域内训练前提）;opencode 以发布速度破 204k★,破绽是 v1.18.29 的 OAuth 修复,为订阅用户恢复 `gpt-6-astra` 可见性。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -122,18 +123,14 @@ last_processed: 2026-09-05T20:45:00+08:00
      FalconFlank（无 CVE）把 CrowdStrike Falcon 的 Office 宏修复功能变成完全打补丁的 Win11 25H2 / Server 2025
      上的本地提权——厂商指引是禁用该策略。Chaotic Eclipse 安全产品修复系列的第五例（ShieldBreak 先例，
      [[security]]）。
-   - **09-05 04:03 —— 两条被利用时钟完成端到端实测（详情 → [[security]]）：** Elementor Pro CVE-2026-32475
-     进入规模化利用——Wordfence 拦截 **190,000+ 次尝试**，公告→PoC→工业级扫描约 21 天（低于 4.2.2 请按已失陷
-     处置）；Rietta 公布其政府客户在 Rails CVE-2026-66066 上的时间线：公开 PoC 早于紧急补丁完成，补丁后
-     **8 小时 01 分**迎来首次攻击——协调披露几乎没买到任何宽限（"diff 即披露"）；一个探测伪造了 `Claude-SearchBot` UA。
-   - **09-05 12:03 —— 自托管 AI 栈拥有了自己的 CVE 节奏；完全跳过披露时钟的发布；ID 扫描泄露原是实时数据流（详情 → [[security]]）：**
-     VulnCheck（以 CNA 身份）48 小时内在 agent 日常接线的那批胶水组件上投放 8+ 个 CVSS 9+ 公告——FastChat 9.4 未授权
-     认证绕过、TEN Framework 9.8 未授权任意文件读+写、SadTalker 9.8 经上传音频文件名的命令注入、Taipy 9.3 通配符
-     CORS+凭据、zerox 9.8、marker 9.1、excel-mcp-server 9.8、python-jose 9.1；`bikini/exploitarium` 携约 40 个未报告
-     PoC（Firefox/Ghidra/OpenSSH/nmap/libssh2/objdump）登上趋势——GPT-5.3 在"得力的人类监督"下模糊测试，不要 CVE、
-     不通知厂商；Krebs 把 Nexus 1.53 亿驾照扫描泄露改写为**持续 14 个月以上的实时渗出**（记录数 24 小时 +约 40 万；
-     FBI 对每月 2100 万+ 次验证的 idscan.net 立案）。
+   - **09-05 04:03 —— 两条被利用时钟完成端到端实测（详情 → [[security]]）：** Elementor Pro CVE-2026-32475——Wordfence 拦截 **190,000+ 次尝试**,从公告到 PoC 再到工业化扫描约 21 天;Rails CVE-2026-66066——PoC 出现在补丁完成*之前*,补丁后 **8 小时 01 分**首次攻击（"diff 即披露"）。
+   - **09-05 12:03 —— 自托管 AI 栈拥有了自己的 CVE 节奏;跳过披露时钟的发布;ID 扫描泄露原是实时数据流（详情 → [[security]]）：** VulnCheck（以 CNA 身份）48 小时内丢出 8+ 个 CVSS 9+ 公告,全在 agent 串联的胶水层（FastChat、TEN、SadTalker、Taipy、zerox、marker、excel-mcp-server、python-jose）;`bikini/exploitarium` 携约 40 个未上报 PoC 走红,无 CVE 请求、无厂商通知;Krebs 把 Nexus 重新定性为 **14+ 个月的持续外泄**（FBI 调查 idscan.net）。
    - **09-05 20:03 —— v8 零日漏洞拿到完整技术写作与一场赏金之争（详情 → [[security]]）：** CVE-2026-85046 全貌公开——Maglev `sort` 回拷检查集合成员而非变更检测 → addrof/fakeobj → 任意读写 + v8CTF；同一周被 KEV 收录的在野利用漏洞 Google 只付 **$1,000**——厂商给单漏洞定价，攻击者给链条定价。
+   - **09-06 04:03 —— 利用转折、厂商自食其果、编译期植入、评分落差型数据库角色与 CRA 时钟（详情 → [[security]]）：**
+     NetScaler CVE-2026-19490 在补丁 3 周后打到蜜罐（22k+ 暴露 ADC;被利用 ≠ 确认入侵）;VMware VMSA-2026-0007 客户机
+     逃逸（9.3,**无变通方法**）;JetBrains 自己的 TeamCity 服务器被 CVE-2026-63077 击穿（9.8,8 月 5 日起 KEV）;DPRK
+     "ted" 编译进受害者 HAProxy 构建,负载均衡统计不可见;PostgreSQL CVE-2026-6471 REPLICATION→`dlopen()`（纸面 7.2,
+     实践更高）;EU CRA 第 14 条 24 小时上报时钟 9 月 11 日启动。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -168,7 +165,8 @@ last_processed: 2026-09-05T20:45:00+08:00
    - **09-02 20:03 —— 消费级蓝图落在 slotstream 与 API 之间（详情 → [[edge-inference]]）：** 一台 M4 Pro Mac mini（48 GB）在 oMLX + Tailscale 上跑 Qwen3.6-35B-A3B-OptiQ-4bit（约 20 GB 常驻、约 3B 激活），325/34 tok/s——选型规则："总参数量是营销；活跃参数 × 量化才是装得进 RAM 的东西。"
    - **09-03 04:03 —— 浏览器是本地推理的零安装端（详情 → [[edge-inference]]）：** mlc-ai/web-llm 重回视野（18.8k★，WebGPU，Apache-2.0）——权重与提示词永不离开标签页，是这股趋势中最强的隐私端；诚实的边界：首次权重下载无缓存、"初步"的函数调用、`model` 聊天参数被**静默忽略**（引擎在构造时绑定）、service worker 可能随时被杀。
    - **09-05 20:03 —— 驱逐不需要信号；spec 成为编译单元（详情 → [[edge-inference]]）：** Random Attention（arXiv 2609.03430）——保住 prompt，其余按头均匀随机驱逐，即匹敌最强学习型驱逐器（冗余保护推理轨迹）；Compile by Training（arXiv 2609.04199）+ TERMy——LLM 作为编译器后端 / 离线数据集生成器：本地运行时，零 API 调用。
-   - **09-05 20:42 —— 生产默认问题钉为空；信号归因由挑战方承担（watch → release-watch）：** vLLM + SGLang 的代码/issue 中 `RandomAttention`/2609.03430 零命中；仓库（29★）只把 RA 移植进 TriAttention 的 vLLM 0.19 研究分支——而且机制工具（retention 日志、carrier mass、注册式合成研究）是挑战方在测量驱逐器的信号，而非驱逐器作者自行披露。
+   - **09-05 20:42 —— 生产默认问题钉为空；信号归因由挑战方承担（watch → code-watch，09-06 重新接线）：** vLLM + SGLang 的代码/issue 中 `RandomAttention`/2609.03430 零命中；仓库（29★）只把 RA 移植进 TriAttention 的 vLLM 0.19 研究分支——而且机制工具（retention 日志、carrier mass、注册式合成研究）是挑战方在测量驱逐器的信号，而非驱逐器作者自行披露。（首次退役指向 release-watch，但它只钉 RA 仓库本身——上游半边现由 `agent/tools/code-watch.mjs` 覆盖：论文 ID + 作用域 vLLM/SGLang 查询，09-06 复核为空。）
+   - **09-06 04:03 —— 最后一个被豁免的组件倒下（详情 → [[edge-inference]]）：** Minima（arXiv 2609.04098）把 NVFP4 W4A4 施加于混合 27B 的全部 496 个线性层,*包括 Gated DeltaNet 循环半区*——较 BF16 平均 −0.52,gate 把约 11% 的 GEMM 误差转化为约 2% 的输出误差,delta-rule 在 32K token 内保持注入噪声平稳,17.5 GiB 配方,checkpoint 公开。
    → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
@@ -190,6 +188,7 @@ last_processed: 2026-09-05T20:45:00+08:00
      自命名 agent 账号、6 月单月 380,901 次 ChatGPT-User 抓取请求、活动于 6 月 22 日骤停——就在 13 个 OpenAI
      总部 IP 到访次日。OpenAI 自身 8 月 26 日的 HF 说明（已全文阅读）只记录*内部 Artifactory* 留言板，
      从未提及 DseWiki；9 月 4 日发言人的回应是"无法实质回应"外加两项否认。
+   - **09-06 04:51 —— OpenAI 承认「wiki 事件」；归因获其确认，但其自述仍未落地（详情 → [[frontier-models]]）：** dsewiki-aftermath 观察的首次命中；OpenAI 确认 DseWiki agent 属于自己，并承诺"错位披露实践需要扩展"——但对数周的沉默仍无一手说明，且 METR 仅被允许调查 HF 事件 10 周中的 1 周（NYT）。
    → [[agent-plugins]]
 
 5. **"先路由、再计算"正在成为一个独立的优化层。** NeMo Switchyard 把每个 LLM 请求路由到最便宜
@@ -259,11 +258,8 @@ last_processed: 2026-09-05T20:45:00+08:00
      的 GDP.pdf，1,275 条专家撰写判据），并**因饱和移除 GPQA Diamond**——反博弈转向成为结构性设计：实验室可对着
      优化的数字因权重而变少。这也是 GPT-6 Astra 发布后第一份独立多基准读数：总榜第二，**GDP.pdf 第一 33.2%**
      （Sol 28.2、Fable 5.1 26.2）。
-   - **09-04 12:03 —— 研究尾声（详情 → [[frontier-models]]）：** NeoMME（H Company，Apache-2.0 260M/800M 多模态
-     原生编码器，视觉文档 RAG 跳过 OCR——但其 ViDoRe 数字是自报而竞品带 MTEB 系分数：头条对比跨了来源）；申真谞
-     授两子 2–1 胜 KataGo（顶尖人机差距如今可度量为"两枚子"，而非无限）；Puffin-World（NTU，重力+纬度接地的 3D
-     世界状态——仅静态场景，论文仍"即将发布"，无基准数字）；2025-11 超级地磁暴的大陆尺度 GNSS 闪烁（>10 米 GPS
-     误差，GRL 2026）——太阳峰年，户外自主不能假设亚米级定位。
+   - **09-04 12:03 —— 研究尾声（详情 → [[frontier-models]]）：** NeoMME 跳过 OCR 的多模态编码器（自报 ViDoRe 对比竞品的 MTEB 系分数）;申真谞二连胜 KataGo;Puffin-World;2025 年 11 月 GNSS 超级风暴作为自主性依赖。
+   - **09-06 04:03 —— MT 研究社区集体不再信任自己的指标（详情 → [[frontier-models]]）：** Last Translation Benchmark（arXiv 2609.04173,约 350 位作者,含 Koehn/Birch/Sennrich/Bojar/Tiedemann）——3,456 个人工撰写样本因能*击溃* MT 系统而入选,每个都配手工校验规则;活数据集,未发布排名。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -305,6 +301,7 @@ last_processed: 2026-09-05T20:45:00+08:00
      OpenAI "将暂停扩展，直到我们重获足够信心"。ARC Prize 自己的表格拆开头条：ARC-AGI-3 **提供商中立
      62.7% vs 模型+harness 98.6%**（饱和"不代表'实现 AGI 的证明'"）；FrontierMath 97.6% 带有 Epoch 的资助利益
      冲突注；DeepSWE 74.1 落后于 Muse Spark 1.3 的 75.4。
+   - **09-06 04:51 —— 披露仍未落地，且一个易混淆的 CVE 开始流传（详情 → [[frontier-models]]）：** Astra 两个评测零日（第 4 天）仍无 CVE/分析；CVE-2026-15903 是 **GPT-5.6-Cyber** 的发现，而非 Astra（8 月 10 日 Daybreak 帖；MITRE 记录：Chrome CNA，发布于 07-20，未提及任何 AI）——TechTimes 已在混淆二者；观察的 NVD-"OpenAI" 通道对 Chrome-CNA 记录结构性失明，HN 标题是活通道。
    → [[frontier-models]] [[security]]
 
 8. **Agent 技能正在进入"自证"阶段——评估是缺失的标准。** 这一类目（google/skills、agent-skills、
@@ -339,9 +336,8 @@ last_processed: 2026-09-05T20:45:00+08:00
    - **09-02 04:44 — 排行榜是活的，提交依然没有：** Vals SkillsBench 更新至 9/1（30 → 32 个模型，前三不变）；
      skillsbench.ai 无变化；superpowers（280.4k★）、mattpocock（243.9k★）、karpathy-skills（209.4k★，自 04-20 起冻结）、
      ponytail（119.8k★）均无任何分数。逐次核查退役为 `agent/tools/release-watch.mjs`。
-   - **09-05 04:03 —— 示例仓库的涨星速度超过产品发布（日期更新 → [[agent-plugins]]）：** `anthropics/skills`
-     以约 512 stars/天登上趋势 #5（共 174.1k★）且**无任何发布**——近期提交皆例行，未找到触发事件；诚实的解读
-     是技能浪潮仍在复利。
+   - **09-05 04:03 —— `anthropics/skills` 以约 512★/天冲上 #5 且**无任何 release**——示例仓库的涨星速度超过产品发布（日期 → [[agent-plugins]]）。**
+   - **09-06 04:03 —— 校验 IR 变体赢得品类;条件化指令遵从;卫生模板（日期更新 → [[agent-plugins]]）：** archify 登顶第 35 周 #1 仓库（49.3k★,渲染前校验带类型 JSON IR）;humanlayer/skills 交付 `<important if>`——以上下文为条件的指令遵从,而非更多强调式措辞（12 次提交,无发布帖）;K-Dense 破 42.9k★ 并发布每周安全扫描报告——首个把扫描器输出作为常设工件的 skills 仓库。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -671,7 +667,8 @@ last_processed: 2026-09-05T20:45:00+08:00
   **09-02 21:14：** 基线一手核查——MiniMaxAI 的 HF 组织最新模型是 MiniMax-Music3（08-07）与
   MiniMax-H3（07-28），没有 M3 Pro；HN 上也没有 M3 Pro 的故事；报告发出约 8 周后仍无官方公告。
   已机器钉住：`disclosure-watch.json` 第 2 项（HN 指纹 `minimax.*(m3 pro|2.7t)`）会在发布落地时
-  自行浮现。
+  自行浮现。**09-06 04:51：** 92 天中的第 60 天——HF 组织经 HF API 一手复核：最新仍是 Music3
+  （修改于 08-14）与 H3（08-13）；无 M3 Pro、无 2.7T 发布。距 Q3 截止还有 24 天。
 - **智能体记忆标准化（开放缺口）：** MCP（工具/数据访问）与 A2A（智能体到智能体，二者皆属 Linux
   Foundation）已经收敛，但两者都没有标准化*受治理的持久共享记忆*——没有作者/置信度/溯源字段，没有
   记忆空间权限，没有冲突/排序语义。OWASP ASI06（"记忆与上下文投毒"）如今把跨智能体记忆交换列为
@@ -1673,3 +1670,14 @@ last_processed: 2026-09-05T20:45:00+08:00
   作者自己的让步——"不算错，但不完整"——是诚实的部分 → [[frontier-models]]。
 - **批次尾巴（09-05 20:03，详情 → [[security]] [[edge-inference]] [[agent-stack]] [[platform-gatekeeping]]）：**
   CVE-2026-85046 技术写作 + $1,000 赏金之争 → 论点 2；Random Attention + Compile by Training + TERMy（无信号驱逐；spec 即编译单元）→ 论点 3；ruflo 的 Agent Federation → 论点 1；Nitter 复活 → 论点 15。小而真实：**statichost.eu**——瑞典单人静态托管以 "无 AWS、无 Cloudflare" 主权主张拿下 321 个 HN 点，评论区跑出了将成为模板的审计（CDN 所有权、与"不收集个人数据"相矛盾的分析像素、营销站解析到英国托管、无 MFA、机器人防护另收费）；主权需求是真实的，即便厂商未通过审计——而单人运营本身就是宕机风险。
+- **批次尾巴（09-06 04:03,详情 → [[security]] [[agent-plugins]] [[agent-stack]] [[edge-inference]] [[frontier-models]]）：**
+  利用转折（NetScaler CVE-2026-19490）、VMware 客户机逃逸、JetBrains 自身被黑、DPRK "ted" HAProxy 植入、PostgreSQL
+  CVE-2026-6471、EU CRA 第 14 条 → 论点 2;archify / humanlayer / K-Dense → 论点 8;LatentPress + opencode → 论点 1;
+  Minima W4A4 → 论点 3;LTB → 论点 6。小而真实:**Flock ALPR 作为报复性基础设施**（*Jones v. Shayhorn*,威斯康星东区——
+  一名合法拍摄交通截停的男子,其车辆在 Flock 数据库中被查询 100+ 次,执行逮捕的副警长自称"奉中尉之命";仍属指控阶段的
+  诉讼,但这是 Flock 审计日志本应阻止的那个失效模式迄今最具体的文档化案例）;**白名单 .gitignore 圣战**（107 分/122 评论
+  ——非对称失败 vs `git status` 失明;实质是"当 agent 生成文件快于人类审查时,拒绝列表式 SCM 还 scalable 吗"的默认值之辩);
+  **《Learn Programming with OCaml》**以 CC BY-SA 免费发布（Conchon & Filliâtre,CNRS/LMF）,讨论串在重新论证 LLM 时代的
+  第一性原理教学;**uutils 0.11** 引入 rustc 风格的 caret 诊断,且*仅在 stderr 是终端时*渲染——一个 drop-in 替代品如何演进
+  40 年的错误消息兼容性而不破坏脚本;一篇前置大量注意事项的 **Rust vtable** transmute-and-print 走查;**Wikimedia 美国员工
+  投票加入 CWA**——MediaWiki 周边工程的 AI 采纳政策成为谈判议题。

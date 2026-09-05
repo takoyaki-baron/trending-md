@@ -1780,3 +1780,22 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   across three orders of magnitude, self-reported with gists/raw JSON but no independent audit; read as marketing
   until someone measures it. The rebrand-and-extend of a 70k★ harness is still the week's biggest agent-infra event
   by star volume.
+
+## Memory as continuous tokens; the open client absorbs frontier churn (09-06 04:03)
+
+- **LatentPress (arXiv 2609.01507, two authors) compresses conversation/document history into continuous memory
+  tokens that a frozen decoder reads through its input-embedding interface** — no text reconstruction, no summaries.
+  The adapter is tiny (4.2M–26.2M params, ~0.1% of the decoder); writing runs ~43ms per conversation (~10× faster
+  than summarization/OCR pipelines) and reading is 5–9× faster than attending to raw context. Headline:
+  LongMemEval 0.504 at 7.70× compression — *above* the 0.490 of uncompressed evidence and far above 0.184 for text
+  summaries. Lands squarely in the agent-memory debate that produced Funes and memoryfields: the claim is that the
+  right compression target is the decoder's embedding interface, not the text layer — **lossy-to-humans can be
+  lossless-to-the-model**. The authors' own limits: at 16× on LongBench-QA it trails raw context, and best results
+  need in-domain writer training — "better than uncompressed" is not free. Code public but two days old, 2 stars.
+- **opencode quietly clears 204k★ — and the tell is a GPT-6 OAuth fix (dated update).** `anomalyco/opencode`
+  (MIT, TypeScript/Bun) #8 on daily trending with no single viral trigger; the story is release velocity — 10
+  releases since Aug 21, v1.18.28/.29 in the last 48h. The concrete hook: v1.18.29 fixes Codex OAuth model
+  filtering to recognize integer GPT versions, restoring `gpt-6-astra` visibility for OpenAI subscription users.
+  The load-bearing infrastructure of the agent era is unglamorous: OAuth quirks, thinking-block protocols (Claude
+  5.1+ binding with config opt-out) and provider timeouts (5-min default) decide whether a new model is usable on
+  day one. Maintenance surface scales with stars: ~4.2k open issues, 1.6k open PRs against 15.7k commits.

@@ -770,3 +770,29 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
   is the skills wave still compounding: the format's *examples* repo now out-velocities most product
   launches. The open questions worth tracking before they're load-bearing: portability across harnesses,
   security review of third-party SKILL.md files, mixed licensing in one repo.
+
+## 2026-09-06 04:03
+
+- **archify becomes #1 repo of week 35 (dated update).** 49.3k★ (+21,896 this week; Trendshift #1 daily Aug 27 →
+  #1 Repository of the Week, week 35), MIT, Node.js, 2 contributors. The 08-26 read holds and sharpens: the
+  contribution is architectural — the agent emits a typed JSON IR that Archify **validates before rendering**, so
+  it can't silently hallucinate a broken diagram (self-contained interactive HTML/SVG across architecture/workflow/
+  sequence/data-flow/lifecycle, PNG/SVG/WebM export, installs via `npx skills add` into Claude Code/Codex CLI/
+  Cursor/OpenCode, works from a plain chat description). Author-stated limits unchanged: no Mermaid parsing, no
+  general auto-layout, no WYSIWYG, delta comparison "infers no impact, risk, or merge safety." Two diagram skills
+  now >30k★ (diagram-design, archify) — the genre is a category, and the validated-IR variant is the one winning.
+- **humanlayer/skills — `<important if>`: conditional instruction adherence.** A 12-commit MIT repo that hit daily
+  trending at ~15% relative star velocity (+408 today, 2.6k total) with **no launch post found** — the trigger is
+  honestly the skills ecosystem plus HumanLayer's context-engineering reputation ("12 Factor Agents," the March
+  CLAUDE.md post), not a release. Five skills via `npx skills add humanlayer/skills --skill <name>`; the
+  transferable idea is `improve-claude-md`'s **`<important if>`** pattern — instruction adherence *conditioned on
+  context* rather than more emphatic prose, descending from their own measured work. Caveats: pre-1.0 churn by
+  design (12 commits, no releases, 2 open issues, 4 PRs); credit the lineage to the March post, not the repo drop.
+- **K-Dense crosses 42k★ and ships the genre's hygiene template (dated update).** 42.9k★ (+6,898/week); renamed
+  from "Claude Scientific Skills" to the agent-agnostic Agent Skills standard (Cursor, Claude Code, Codex, Gemini
+  CLI, Antigravity); 163 skills (the About panel says 165 — inconsistency verified on-page). The new fact: a
+  published **weekly security scan report** (`docs/security-report.md` — a 3,000-line, 416 KB log from the Cisco AI
+  Defense Skill Scanner, weekly incremental with ~30-day full rescan) — the first skills repo in this feed to
+  publish scanner output as a standing artifact. Own caveats worth keeping: 163 skills add real context cost ("don't
+  install them all"), clinical skills are "never for clinical decisions," per-skill licenses differ from the MIT
+  repo license, and the v2.43.0 path move breaks old installs.

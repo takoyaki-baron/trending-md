@@ -1,0 +1,24 @@
+{
+  "watch": [
+    {
+      "id": "evidence-tier",
+      "query": "benchmark_counterfactual",
+      "why": "caveman's claim-grading vocabulary (`inferred`/`benchmark_counterfactual`/`verified`) — a second adopter ends the one-adopter negative result (thesis 13 / [[token-economics]]); migrated from evidence-tier-watch.mjs on 2026-09-06 with its seeded seen-set intact"
+    },
+    {
+      "id": "ra-paper-id",
+      "query": "\"2609.03430\"",
+      "why": "signal-free KV eviction (thesis 3 / [[edge-inference]]): the arXiv ID is the precise fingerprint — the name `RandomAttention` is noise (239 hits, mostly unrelated UER/xformers attention code, verified 09-06). Any new repo citing the paper is a potential integration or replication"
+    },
+    {
+      "id": "ra-vllm",
+      "query": "RandomAttention repo:vllm-project/vllm",
+      "why": "signal-free KV eviction (thesis 3): the open question is whether signal-free eviction lands in a production default — a hit here is vLLM itself integrating it"
+    },
+    {
+      "id": "ra-sglang",
+      "query": "RandomAttention repo:sgl-project/sglang",
+      "why": "signal-free KV eviction (thesis 3): same production-default question, SGLang side"
+    }
+  ]
+}

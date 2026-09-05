@@ -566,3 +566,24 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   5.1/Mythos 5.1、8 月 21 日 Python SDK 迁移指南）。未找到具体触发事件——诚实的解读是技能浪潮仍在复利：
   该格式的*示例*仓库如今的速度超过大多数产品发布。值得在其成为承重墙之前追踪的开放问题：跨 harness 可
   移植性、第三方 SKILL.md 的安全评审、同一仓库内的混合许可。
+
+## 2026-09-06 04:03
+
+- **archify 成为第 35 周的 #1 仓库(日期更新)。** 49.3k★(本周 +21,896;Trendshift 8 月 27 日日榜 #1 → 第 35 周
+  周榜 #1),MIT、Node.js、2 位贡献者。08-26 的判断成立并更清晰:它的贡献是架构性的——agent 输出带类型的 JSON IR,
+  Archify 在渲染**之前校验**它,因此不可能悄悄幻觉出损坏的图(自包含交互式 HTML/SVG,覆盖架构/工作流/时序/数据流/
+  生命周期,支持 PNG/SVG/WebM 导出,经 `npx skills add` 安装进 Claude Code/Codex CLI/Cursor/OpenCode,可从纯对话
+  描述出发)。作者声明的限制不变:不解析 Mermaid、无通用自动布局、无 WYSIWYG,delta 对比"不推断影响、风险或合并
+  安全性"。两个图表 skill 现都超过 30k★(diagram-design、archify)——这个品类已成类目,而校验 IR 的变体是赢家。
+- **humanlayer/skills——`<important if>`:条件化指令遵从。** 一个 12 次提交的 MIT 仓库,以当日约 15% 的相对星速
+  (+408,总量 2.6k)冲上日榜,且**没有找到任何发布帖**——触发因素诚实地说就是 skills 生态加上 HumanLayer 的
+  context-engineering 声誉("12 Factor Agents"、三月那篇 CLAUDE.md 文章),而非一次发布。五个 skill 经
+  `npx skills add humanlayer/skills --skill <name>` 安装;可迁移的思想是 `improve-claude-md` 的 **`<important
+  if>`** 模式——指令遵从*以上下文为条件*,而不是更多强调式措辞,源自他们自己有测量支撑的工作。注意事项:设计上
+  就是 pre-1.0 滚动(12 次提交、无 release、2 个 open issue、4 个 PR);谱系应记在三月那篇文章头上,不是仓库。
+- **K-Dense 破 42k★,交出该品类的卫生模板(日期更新)。** 42.9k★(本周 +6,898);从 "Claude Scientific Skills"
+  改名为 agent 无关的 Agent Skills 标准(Cursor、Claude Code、Codex、Gemini CLI、Antigravity);163 个 skill
+  (About 面板写 165——页面核实过的不一致)。新事实:发布**每周安全扫描报告**(`docs/security-report.md`——一份
+  3,000 行、416 KB 的 Cisco AI Defense Skill Scanner 日志,每周增量 + 约 30 天全量重扫)——本 feed 追踪到的第一个
+  把扫描器输出作为常设工件发布的 skills 仓库。值得保留的作者自警:163 个 skill 带来真实上下文成本("别全装"),
+  临床类 skill "绝不用于临床决策",per-skill 许可与仓库 MIT 许可不同,v2.43.0 的路径迁移会使旧安装失效。

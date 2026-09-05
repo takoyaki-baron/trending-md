@@ -5137,5 +5137,104 @@
     "cred": "med",
     "density": "low",
     "cv": 1
+  },
+  "packagemain.tech": {
+    "cat": "news",
+    "en": "Alex Pliutau's Go/dev blog; the allowlist-.gitignore proposal post — opinionated practitioner essays, not a news org.",
+    "zh": "Alex Pliutau 的 Go/开发博客;白名单 .gitignore 提案一文——观点鲜明的从业者随笔,非新闻机构。",
+    "jp": "Alex Pliutau の Go/開発ブログ。ホワイトリスト .gitignore 提案の投稿——主張の鋭い実務者エッセイであり、報道機関ではない。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "usr.lmf.cnrs.fr": {
+    "cat": "research",
+    "en": "CNRS/LMF (Université Paris-Saclay) lab page hosting the free CC BY-SA 'Learn Programming with OCaml' book by Conchon & Filliâtre — academic primary source.",
+    "zh": "CNRS/LMF(巴黎-萨克雷大学)实验室页面,托管 Conchon & Filliâtre 的免费 CC BY-SA《Learn Programming with OCaml》——学术一手来源。",
+    "jp": "CNRS/LMF(パリ=サクレ大)のラボページ。Conchon & Filliâtre の無料 CC BY-SA『Learn Programming with OCaml』を公開——学術の一次ソース。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "wikiworkersunited.org": {
+    "cat": "community",
+    "en": "Wiki Workers United's own announcement page — the union campaign's primary source for the Wikimedia CWA vote; advocacy framing by definition.",
+    "zh": "Wiki Workers United 自己的公告页——Wikimedia CWA 投票的工会方一手来源;按定义带倡导立场。",
+    "jp": "Wiki Workers United 自身の発表ページ——Wikimedia CWA 投票の組合側一次ソース;定義上アドボカシー寄り。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "reason.com": {
+    "cat": "news",
+    "en": "Reason magazine's courts/privacy reporting; the Flock ALPR retaliation suit writeup — advocacy-adjacent but the legal-document quotes check out against TMJ4's independent report.",
+    "zh": "Reason 杂志的法院/隐私报道;Flock ALPR 报复诉讼一文——带倡导倾向,但引用的法律文书与 TMJ4 的独立报道可互证。",
+    "jp": "Reason 誌の法廷/プライバシー報道。Flock ALPR 報復訴訟の記事——アドボカシー寄りだが、引用する法務文書は TMJ4 の独立報道と突き合う。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "tmj4.com": {
+    "cat": "news",
+    "en": "Milwaukee-area TMJ4 local news; independent local-TV confirmation of the Waukesha Flock lawsuit details (internal memo, deposition).",
+    "zh": "密尔沃基地区 TMJ4 地方新闻;对 Waukesha Flock 诉讼细节(内部备忘录、证词)的独立地方电视台印证。",
+    "jp": "ミルウォーキー圏の TMJ4 ローカルニュース。Waukesha Flock 訴訟の詳細(内部メモ、証言)の独立したローカルTV裏付け。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "uutils.org": {
+    "cat": "code",
+    "en": "uutils/coreutils project blog — first-party engineering writeups (the 0.11 diagnostics post); vendor-of-own-work framing but technically precise.",
+    "zh": "uutils/coreutils 项目博客——第一方工程文章(0.11 诊断一文);自述自家工作,但技术上精确。",
+    "jp": "uutils/coreutils プロジェクトのブログ——一次側のエンジニアリング解説(0.11 診断の記事);自作の説明だが技術的に正確。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "sofiabelen.github.io": {
+    "cat": "community",
+    "en": "Sofía Belén López Vicens' personal site; the Rust vtables walkthrough — individual technical blogging, caveat-forward, companion code on GitHub.",
+    "zh": "Sofía Belén López Vicens 的个人网站;Rust vtable 走查一文——个人技术博客,前置大量注意事项,配套代码在 GitHub。",
+    "jp": "Sofía Belén López Vicens の個人サイト。Rust vtable のウォークスルー——個人技術ブログ、但し書き前置き、伴走コードは GitHub。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "freshfields.com": {
+    "cat": "news",
+    "en": "Freshfields law firm's regulatory analysis; the CRA Art 14 obligations breakdown — professional legal commentary, careful hedging, not a regulator.",
+    "zh": "Freshfields 律所的监管分析;CRA 第 14 条义务拆解——专业法律评论,措辞谨慎,非监管机构。",
+    "jp": "Freshfields 法律事務所の規制分析。CRA 第 14 条義務の分解——専門家の法律解説で、ヘッジは慎重、規制当局ではない。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "digital-strategy.ec.europa.eu": {
+    "cat": "news",
+    "en": "European Commission's official policy pages (CRA etc.) — the regulator itself; authoritative but its summaries truncate scope, per this feed's own check.",
+    "zh": "欧盟委员会官方政策页面(CRA 等)——监管机构本身;权威,但其摘要会截断范围,本 feed 已核实。",
+    "jp": "欧州委員会の公式政策ページ(CRA など)——規制当局そのもの。権威だが、要約がスコープを切り詰めるのは本フィードの確認済み。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "support.broadcom.com": {
+    "cat": "vendor",
+    "en": "Broadcom support portal — VMware/CVE advisory home (VMSA-2026-0007); primary for its own products but opaque, login-walled, slow to index.",
+    "zh": "Broadcom 支持门户——VMware/CVE 公告主页(VMSA-2026-0007);自身产品的第一手来源,但页面不透明、有登录墙、索引慢。",
+    "jp": "Broadcom サポートポータル——VMware/CVE アドバイザリのホーム(VMSA-2026-0007);自社製品の一次ソースだが不透明で、ログイン壁があり、インデックスが遅い。",
+    "cred": "high",
+    "density": "low",
+    "cv": 1
+  },
+  "humanlayer.dev": {
+    "cat": "vendor",
+    "en": "HumanLayer's blog — the `<important if>` lineage verified first-hand ('Getting Claude to Actually Read Your CLAUDE.md', Mar 17 2026: conditional XML blocks; 'show-me' skill post Aug 12). Vendor-of-own-technique framing, but measured work.",
+    "zh": "HumanLayer 的博客——`<important if>` 的谱系已一手核验(《Getting Claude to Actually Read Your CLAUDE.md》,2026-03-17:条件式 XML 块;'show-me' skill 文章 8 月 12 日)。自家技术的自述框架,但有测量支撑。",
+    "jp": "HumanLayer のブログ——`<important if>` の系譜を一次確認(『Getting Claude to Actually Read Your CLAUDE.md』2026-03-17:条件付き XML ブロック、'show-me' スキル記事は 8 月 12 日)。自技術のベンダー説明だが、測定に基づく仕事。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
   }
 }

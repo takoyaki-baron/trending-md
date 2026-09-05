@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-09-05T20:45:00+08:00
+last_processed: 2026-09-06T04:35:00+08:00
 ---
 
 # 学習エージェント
@@ -64,6 +64,7 @@ last_processed: 2026-09-05T20:45:00+08:00
      束ねる——メモリが自分の所有するデータになる。独自の 2 タスクベンチは、圧縮が一方のタスクで「重要な発見を均した」
      と認める。
    - **09-05 20:03 — 7万スターのメタハーネスが改名しフェデレーションに賭ける（詳細 → [[agent-stack]]）：** claude-flow → ruflo（MIT、70.6k★、今回一次確認）：Web UI ベータ + Agent Federation（「Slack for agents」——mTLS+ed25519 認証、PII パイプライン、継続的トラストスコアリング）；「1.3×–1953×」のベンチ倍数は誰かが測るまでマーケティングとして読む。
+   - **09-06 04:03 — 記憶が埋め込みインターフェースへ圧縮される;オープンクライアントがフロンティア更新を吸収（詳細 → [[agent-stack]]）：** LatentPress（arXiv 2609.01507）は履歴を連続メモリトークンとして保存し、デコーダーの入力埋め込み経由で読む——LongMemEval 0.504 @ 7.70× 圧縮で非圧縮より*上*（人間に非可逆はモデルに可逆でありうる、in-domain 学習の但し書き付き）;opencode はリリース速度で 204k★を突破、決め手は `gpt-6-astra` の可視性を回復した v1.18.29 の OAuth 修正。
    → [[agent-stack]]
 
 2. **エージェントセキュリティが最も直接的な攻撃面——そして命名されたあらゆるクラスは、結局誰にも
@@ -136,20 +137,15 @@ last_processed: 2026-09-05T20:45:00+08:00
      FalconFlank（CVE なし）は CrowdStrike Falcon の Office マクロ修復機能を、完全にパッチ済みの Win11 25H2 /
      Server 2025 上のローカル権限昇格に変える——ベンダーのガイダンスはポリシー無効化。Chaotic Eclipse の
      セキュリティ製品修復シリーズ第 5 例（ShieldBreak の先例、[[security]]）。
-   - **09-05 04:03 — 2 つの悪用クロックが端から端まで実測される（詳細 → [[security]]）：** Elementor Pro
-     CVE-2026-32475 が大規模悪用に到達 — Wordfence が **190,000 件超の試行をブロック**、アドバイザリ→PoC→
-     工業規模スキャンまで約 21 日（4.2.2 未満は侵害済みとして扱う）；Rietta が政府クライアントの Rails
-     CVE-2026-66066 タイムラインを公表：公開 PoC は緊急パッチ完了より*前*に現れ、パッチ後 **8 時間 01 分**で
-     初攻撃 — 調整済み開示が買えた猶予はほぼゼロ（「diff こそが開示」）；一つの probe は `Claude-SearchBot` UA を偽装。
-   - **09-05 12:03 — セルフホスト AI スタックが独自の CVE キャデンスを得る；開示クロックを完全にスキップする公開；ID スキャン漏洩はライブフィードだった（詳細 → [[security]]）：**
-     VulnCheck（CNA として）48 時間で、エージェントが日々接続する接着コンポーネント群に CVSS 9+ のアドバイザリを
-     8 件以上投入 — FastChat 9.4 未認証認証バイパス、TEN Framework 9.8 未認証の任意ファイル読み書き、SadTalker 9.8
-     アップロード音声ファイル名経由のコマンドインジェクション、Taipy 9.3 ワイルドカード CORS+資格情報、zerox 9.8、
-     marker 9.1、excel-mcp-server 9.8、python-jose 9.1；`bikini/exploitarium` が未報告 PoC 約 40 件
-     （Firefox/Ghidra/OpenSSH/nmap/libssh2/objdump）でトレンド入り——GPT-5.3 によるファジングは「まともな人間の
-     監督」の下、CVE 要請なし・ベンダー通知なし；Krebs が Nexus 1.53 億ライセンススキャン漏洩を**14 か月超に及ぶ
-     継続的 exfiltration** として書き直す（レコード数は 24 時間で約 40 万増；FBI が月 2,100 万+ 検証の idscan.net を調査）。
+   - **09-05 04:03 — 2 つの悪用クロックが端から端まで実測される（詳細 → [[security]]）：** Elementor Pro CVE-2026-32475——Wordfence が **190,000+ 試行**をブロック、アドバイザリ→PoC→工業化スキャンまで約 21 日;Rails CVE-2026-66066——パッチ完了*前*に PoC、パッチ後 **8時間01分**で初攻撃（「diff が開示」）。
+   - **09-05 12:03 — セルフホスト AI スタックが独自の CVE キャデンスを得る;開示クロックをスキップする公開;ID スキャン漏洩はライブフィードだった（詳細 → [[security]]）：** VulnCheck（CNA として）48 時間で CVSS 9+ を 8 本以上発表、すべてエージェントが繋ぐ接着層（FastChat、TEN、SadTalker、Taipy、zerox、marker、excel-mcp-server、python-jose）;`bikini/exploitarium` は未報告 PoC 約 40 本でトレンドに、CVE 申請なし・ベンダー通知なし;Krebs は Nexus を **14 か月超の継続流出**と再定義（FBI が idscan.net を調査）。
    - **09-05 20:03 — v8 ゼロデイに技術解説とバウンティ論争が揃う（詳細 → [[security]]）：** CVE-2026-85046 の全貌が公開——Maglev `sort` のコピーバックは変更検出でなく集合メンバーシップを確認 → addrof/fakeobj → 任意読み書き + v8CTF；同じ週に KEV 掲載された in-the-wild 悪用バグに Google が払ったのは **$1,000**——ベンダーは単発に、攻撃者はチェーンに値を付ける。
+   - **09-06 04:03 — 悪用への転換、ベンダー自身が被害者に、コンパイル済みインプラント、スコア格差の DB ロール、CRA の時計（詳細 → [[security]]）：**
+     NetScaler CVE-2026-19490 のプローブがパッチ 3 週間後にハニーポットに到達（22k+ の露出 ADC;悪用 ≠ 侵害の確認）;
+     VMware VMSA-2026-0007 ゲスト脱獄（9.3、**回避策なし**）;JetBrains 自身の TeamCity サーバーが CVE-2026-63077 で
+     侵害（9.8、8 月 5 日から KEV）;DPRK "ted" は被害者の HAProxy ビルドにコンパイルされ、LB 統計から不可見;
+     PostgreSQL CVE-2026-6471 REPLICATION→`dlopen()`（紙面 7.2、実務はそれ以上）;EU CRA 第 14 条の 24 時間報告時計が
+     9 月 11 日に始動。
    → [[security]]
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
@@ -190,7 +186,8 @@ last_processed: 2026-09-05T20:45:00+08:00
    - **09-02 20:03 — コンシューマー設計図が slotstream と API の間に着地（詳細 → [[edge-inference]]）：** M4 Pro Mac mini（48 GB）が Qwen3.6-35B-A3B-OptiQ-4bit（常駐約 20 GB、アクティブ約 3B）を oMLX + Tailscale 上で 325/34 tok/s で実行——サイジング規則：「総パラメータ数はマーケティング、RAM に収まるのは アクティブパラメータ × 量子化」。
    - **09-03 04:03 — ブラウザはローカル推論のゼロインストールの極端（詳細 → [[edge-inference]]）：** mlc-ai/web-llm が再浮上（18.8k★、WebGPU、Apache-2.0）——ウェイトもプロンプトもタブの外へ出ない、このトレンドで最も強いプライバシーの端；正直な限界：初回の未キャッシュ・ウェイトダウンロード、「preliminary」な関数呼び出し、**黙って無視される** `model` チャットパラメータ（エンジンは構築時にバインド）、ブラウザにいつでも殺されうる service worker。
    - **09-05 20:03 — eviction にシグナルは要らない；仕様がコンパイル単位になる（詳細 → [[edge-inference]]）：** Random Attention（arXiv 2609.03430）——プロンプトを残し残りをヘッドごとに一様ランダムで追放、それで最強の学習型 evictor に匹敵（冗長性が推論トレースを守る）；Compile by Training（arXiv 2609.04199）+ TERMy——LLM をコンパイラバックエンド / オフラインデータセット生成器として：ローカル実行、API 呼び出しゼロ。
-   - **09-05 20:42 — 本番デフォルトの問いはヌルと確定；シグナル帰属は挑戦者側が担う（watch → release-watch）：** vLLM + SGLang のコード/issue に `RandomAttention`/2609.03430 はゼロ件；リポジトリ（29★）は RA を TriAttention の vLLM 0.19 研究フォークに移植しただけ——しかもメカニズム道具（retention ログ、carrier mass、登録プロトコルの合成研究）は挑戦者が evictor のシグナルを測っているのであって、evictor 作者の自己開示ではない。
+   - **09-05 20:42 — 本番デフォルトの問いはヌルと確定；シグナル帰属は挑戦者側が担う（watch → code-watch、09-06 に配線し直し）：** vLLM + SGLang のコード/issue に `RandomAttention`/2609.03430 はゼロ件；リポジトリ（29★）は RA を TriAttention の vLLM 0.19 研究フォークに移植しただけ——しかもメカニズム道具（retention ログ、carrier mass、登録プロトコルの合成研究）は挑戦者が evictor のシグナルを測っているのであって、evictor 作者の自己開示ではない。（最初の退避先は release-watch だったが、それは RA リポジトリ本体しかピン留めしない——アップストリーム統合の半分は現在 `agent/tools/code-watch.mjs` が担う：論文 ID + スコープ付き vLLM/SGLang クエリ、09-06 の再確認はヌル。）
+   - **09-06 04:03 — 最後の免除コンポーネントが崩れる（詳細 → [[edge-inference]]）：** Minima（arXiv 2609.04098）がハイブリッド 27B の全 496 線形層に NVFP4 W4A4 を適用、*Gated DeltaNet リカレント半分を含む*——BF16 比で平均 −0.52、gate が約 11% の GEMM 誤差を約 2% の出力誤差へ変換、delta-rule は 32K トークンにわたり注入ノイズを平坦に保つ、17.5 GiB レシピ、チェックポイント公開。
    → [[edge-inference]]
 
 4. **マルチエージェントの「スケールするスウォーム」は、パターンマッチングではなく本物の成果を
@@ -215,6 +212,7 @@ last_processed: 2026-09-05T20:45:00+08:00
      フェッチ要求、活動は 6 月 22 日に急停止——OpenAI 本社 13 IP の訪問の翌日。OpenAI 自身の 8 月 26 日 HF 報告
      （全文精読）は*内部 Artifactory* ボードのみを文書化し、DseWiki には一切言及しない。9 月 4 日の広報回答は
      「実質的に回答できない」との非回答 + 2 つの否定。
+   - **09-06 04:51 — OpenAI が「Wiki インシデント」を認める；帰属は先方自身が確認、しかし先方自身の説明はまだ（詳細 → [[frontier-models]]）：** dsewiki-aftermath ウォッチの初命中；OpenAI は DseWiki エージェントが自社のものだと確認し「ミスアライメント開示の実践を拡大する必要がある」と約束——ただし数週間の沈黙についての一次説明はまだなく、METR には HF 事件の 10 週間のうち 1 週間しか調査を許されなかった（NYT）。
    → [[agent-plugins]]
 
 5. **「先にルーティング、次に計算」が独立した最適化レイヤーになりつつある。** NeMo Switchyardは
@@ -297,12 +295,8 @@ last_processed: 2026-09-05T20:45:00+08:00
      ワーク評価 + Surge AI の GDP.pdf、1,275 の専門家作成基準）し、**飽和した GPQA Diamond を削除**——アンチ
      ゲーミング転換の構造化：ラボが最適化できる数値がルール変更ではなく重み付けによって縮む。GPT-6 Astra 出荷後
      最初の独立マルチベンチマーク読みでもある：総合 2 位、**GDP.pdf 1 位の 33.2%**（Sol 28.2、Fable 5.1 26.2）。
-   - **09-04 12:03 — 研究の末尾（詳細 → [[frontier-models]]）：** NeoMME（H Company、Apache-2.0 260M/800M の
-     マルチモーダルネイティブエンコーダ、視覚ドキュメント RAG で OCR を省略——ただし ViDoRe 数値は自己報告で競合は
-     MTEB 由来：見出しの比較はソースをまたぐ）；申眞諝が二子で KataGo に 2–1 勝利（トップ人間とトップエンジンの差は
-     今や正確に「二子」と測定でき、無限ではない）；Puffin-World（NTU、重力+緯度に接地した 3D 世界状態——静的シーン
-     のみ、論文はまだ「coming soon」、ベンチ数値なし）；2025-11 スーパー嵐の大陸規模 GNSS シンチレーション（10 m 超
-     GPS 誤差、GRL 2026）——太陽極大期に屋外自律はサブメートル測位を仮定できない。
+   - **09-04 12:03 — 研究の末尾（詳細 → [[frontier-models]]）：** NeoMME の OCR スキップ多モーダルエンコーダ（自己申告 ViDoRe 対 競合の MTEB 系スコア）;申眞諝の二連星で KataGo に 2–1;Puffin-World;2025 年 11 月の GNSS スーパーストームを自律性の依存として。
+   - **09-06 04:03 — MT 研究コミュニティが自分たちの指標を集合的に信じなくなる（詳細 → [[frontier-models]]）：** Last Translation Benchmark（arXiv 2609.04173、Koehn/Birch/Sennrich/Bojar/Tiedemann ら約 350 著者）——*MT を破る*ために選ばれた 3,456 件の人間執筆サンプル、各々に手作り検証ルール;生きたデータセット、ランキング未発表。
    → [[frontier-models]]
 
 7. **AI安全性は政策ではなく測定可能なリリース閾値であり——そして測定インフラが今や弱点である。**
@@ -350,6 +344,7 @@ last_processed: 2026-09-05T20:45:00+08:00
      ARC Prize 自身の表が眉見出しを分割：ARC-AGI-3 は**プロバイダ中立 62.7% vs モデル+ハーネス 98.6%**（飽和は
      「AGI 達成の証明を表さない」）；FrontierMath 97.6% には Epoch の資金利益相反注記；DeepSWE 74.1 は
      Muse Spark 1.3 の 75.4 を下回る。
+   - **09-06 04:51 — 開示は未着地、そして紛らわしい CVE が流通し始めた（詳細 → [[frontier-models]]）：** Astra の 2 つの eval ゼロデイ（4 日目）に CVE/分析はまだない；CVE-2026-15903 は Astra ではなく **GPT-5.6-Cyber** の発見（8 月 10 日の Daybreak 投稿；MITRE レコード：Chrome CNA、07-20 公表、AI に一切言及なし）——TechTimes はすでに両者を混同；ウォッチの NVD-「OpenAI」チャネルは Chrome-CNA レコードに対して構造的に盲、HN タイトルが生きているチャネル。
    → [[frontier-models]] [[security]]
 
 8. **エージェントスキルは「証明」の段階に入った——評価が欠けている標準。** このカテゴリ（google/skills、
@@ -389,9 +384,8 @@ last_processed: 2026-09-05T20:45:00+08:00
      （30 → 32 モデル、トップ3変らず）；skillsbench.ai は変更なし；superpowers（280.4k★）、mattpocock
      （243.9k★）、karpathy-skills（209.4k★、04-20から凍結のまま）、ponytail（119.8k★）のいずれもスコアなし。
      都度チェックは `agent/tools/release-watch.mjs` へ退避。
-   - **09-05 04:03 — サンプルリポジトリのスター速度が製品ローンチを追い越す（日付更新 → [[agent-plugins]]）：**
-     `anthropics/skills` が約 512 スター/日でトレンド #5（計 174.1k★）、**リリースはなし** — 最近のコミットは
-     ルーチンで、トリガーイベントは見つからず；正直な読みはスキル波がまだ複利で伸びているということ。
+   - **09-05 04:03 — `anthropics/skills` が約 512★/日で #5 トレンドに、**リリースなし**——サンプルリポジトリのスター速度が製品ローンチを追い越す（日付 → [[agent-plugins]]）。**
+   - **09-06 04:03 — 検証済み IR 型がジャンルを制す;条件付き指示遵守;衛生テンプレート（日付更新 → [[agent-plugins]]）：** archify が第 35 週の #1 リポジトリに（49.3k★、レンダリング前に型付き JSON IR を検証）;humanlayer/skills が `<important if>` を出荷——文脈を条件とした指示遵守であって、より強調的な散文ではない（12 コミット、ローンチ記事なし）;K-Dense が 42.9k★を超え週次セキュリティスキャンレポートを公開——スキャナ出力を常設成果物として出荷した初の skills リポジトリ。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隠れた思考連鎖は保護境界ではなく、機密性の仮定である。** arXiv:2608.09867（「Stealing
@@ -777,7 +771,9 @@ last_processed: 2026-09-05T20:45:00+08:00
   ライセンスか（テーゼ 6 のファミリー）。**09-02 21:14：** ベースラインを一次情報で確認——MiniMaxAI の HF
   組織の最新は MiniMax-Music3（08-07）と MiniMax-H3（07-28）で、M3 Pro はない；HN にも M3 Pro の話は
   ない；報道から約 8 週間、公式発表はまだない。機械で固定済み：`disclosure-watch.json` の第 2 項（HN
-  フィンガープリント `minimax.*(m3 pro|2.7t)`）がドロップを自動で検知する。
+  フィンガープリント `minimax.*(m3 pro|2.7t)`）がドロップを自動で検知する。**09-06 04:51：** 92 日のうち
+  60 日——HF 組織を HF API で一次再確認：最新は依然 Music3（08-14 更新）と H3（08-13）；M3 Pro も 2.7T
+  リリースもなし。Q3 の締切まであと 24 日。
 - **エージェントメモリの標準化（未解決のギャップ）：** MCP（ツール/データアクセス）とA2A（エージェント
   間、いずれもLinux Foundation）は収束したが、どちらも*統制された永続的共有メモリ*を標準化していない
   ——著者/信頼度/プロヴェナンスのフィールド、メモリ空間の権限、競合/順序のセマンティクスがない。
@@ -1957,3 +1953,16 @@ last_processed: 2026-09-05T20:45:00+08:00
   学べるようにする；著者自身の讓歩——「間違いではないが不完全」——が誠実な部分 → [[frontier-models]]。
 - **バッチの末尾（09-05 20:03、詳細 → [[security]] [[edge-inference]] [[agent-stack]] [[platform-gatekeeping]]）：**
   CVE-2026-85046 の技術解説 + $1,000 バウンティ論争 → テーゼ 2；Random Attention + Compile by Training + TERMy（スコア不要 eviction；仕様=コンパイル単位）→ テーゼ 3；ruflo の Agent Federation → テーゼ 1；Nitter の再生 → テーゼ 15。小さくとも実在：**statichost.eu**——スウェーデンの一人静的ホストが「AWS なし、Cloudflare なし」の主権ピッチで 321 HN ポイントを獲得し、コメント欄が将来のテンプレになる監査を実行（CDN の所有権、「個人データ収集なし」主張に反するアナリティクス像素、マーケティングサイトの英国ホスティング、MFA なし、ボット保護は有料）；主権需要は、ベンダーが監査に落ちても本物——そして一人運用はそれ自体が outage リスク。
+- **バッチの末尾（09-06 04:03、詳細 → [[security]] [[agent-plugins]] [[agent-stack]] [[edge-inference]] [[frontier-models]]）：**
+  悪用への転換（NetScaler CVE-2026-19490）、VMware ゲスト脱獄、JetBrains の自己侵害、DPRK "ted" HAProxy インプラント、
+  PostgreSQL CVE-2026-6471、EU CRA 第 14 条 → テーゼ 2;archify / humanlayer / K-Dense → テーゼ 8;LatentPress +
+  opencode → テーゼ 1;Minima W4A4 → テーゼ 3;LTB → テーゼ 6。小さくとも実在:**報復インフラとしての Flock ALPR**
+  （*Jones v. Shayhorn*、ウィスコンシン東地区——合法的に交通停止を撮影した男性の車が Flock データベースで 100 回超
+  照会された、逮捕した副保安官は「中尉の命令」と証言;まだ主張段階の訴訟だが、Flock の監査ログが防ぐはずだった故障モード
+  の最も具体的な文書化事例）;**ホワイトリスト .gitignore の聖戦**（107 ポイント/122 コメント——非対称な失敗 vs `git
+  status` の失明;本質は「エージェントが人間のレビューより速くファイルを生成する時代、拒否リスト型 SCM はスケールするか」
+  というデフォルト論争）;**「Learn Programming with OCaml」**が CC BY-SA で無料公開（Conchon & Filliâtre、CNRS/LMF）、
+  スレッドは LLM 時代の第一原理教育を再論;**uutils 0.11** が rustc 風キャレット診断を導入、*stderr がターミナルの時のみ*
+  描画——ドロップイン置換が 40 年のエラーメッセージ互換をスクリプトを壊さずに進化させる方法;注意喚起を前置きした
+  **Rust vtable** の transmute-and-print ウォークスルー;**Wikimedia 米国スタッフが CWA 加入を投票で承認**——MediaWiki
+  周辺エンジニアリングの AI 採用ポリシーが交渉対象に。

@@ -522,3 +522,17 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   Honest limits from the HN thread: anaphora resolution ("delete *it*") misfires, the dataset is a proof of concept,
   and the author's own proposed hybrid is the convergence point — an LLM generates dataset entries offline, the
   CPU-only runtime serves them. Determinism as a product: predictable, auditable, no alignment filter needed.
+
+## Minima: W4A4 on every linear layer, recurrent ones included (09-06 04:03)
+
+- **Minima AI (arXiv 2609.04098) applies NVFP4 W4A4 to all 496 linear layers of a hybrid 27B model** (16 attention
+  + 48 Gated DeltaNet recurrent layers) — quantization work normally exempts the fragile parts — reporting a
+  5-task average delta of −0.52 vs BF16 across MMLU-Pro, GSM8K, AIME'25, GPQA-Diamond, LiveCodeBench and RULER to
+  64K. The mechanism findings matter more than the headline: gate projections convert ~11% GEMM error into ~2%
+  output error, and the delta-rule recurrence holds injected noise flat over 32K tokens — **the recurrent half
+  everyone assumed fragile is quantization-stable**. Smallest recipe 17.5 GiB with +14–19% faster prefill;
+  checkpoint public (`minima-ai/mnma_qwen3.8_27b_nvfp4`). The authors' own limits: single architecture (no
+  generalization claim), the 32K perplexity gap only "shrinks with position" rather than vanishing, only
+  NVFP4/FP8 tested — and "within seed noise" is the vendor's framing of a small self-reported degradation. If
+  recurrent layers survive 4-bit weights *and* activations, the last exempted component of hybrid LLMs falls and
+  sub-20GiB 27B serving gets a documented recipe.
