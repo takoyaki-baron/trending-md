@@ -142,6 +142,18 @@ node "$REPO_DIR/agent/tools/disclosure-watch.mjs" \
   --state "$REPO_DIR/agent/data/disclosure-watch.json" 2>&1 \
   || echo "disclosure watch failed (non-fatal)"
 
+# ── Pass 7: cited-link liveness check (standing, best-effort) ──
+# Nothing in the pipeline re-resolves a published link after the run that cited it — a 404 that
+# lands tomorrow surfaces only when a reader hits it, and CLAUDE.md's correction convention
+# already names social permalinks as the feed's most fragile citations. Re-checks every URL in
+# the newest en/feed file and reports ONLY dead links (GET-based — HEAD lies at the edge;
+# per-host pacing for HN's limiter; bot-wall 403s are reported as "cannot judge", never as
+# dead). See agent/tools/link-check.mjs.
+node "$REPO_DIR/agent/tools/link-check.mjs" \
+  --feed-dir "$REPO_DIR/en/feed" \
+  --state "$REPO_DIR/agent/data/link-check.json" --days 1 2>&1 \
+  || echo "link check failed (non-fatal)"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

@@ -35,6 +35,10 @@
     {
       "repo": "orval-labs/orval",
       "why": "generated-code RCE class (thesis 2 / [[security]]): 17 published advisories (9 import-time RCE, published 2026-07-12), every one first_patched_version=null as of 09-04, latest v8.27.0 closes none — a fix release or advisory update surfaces here"
+    },
+    {
+      "repo": "SalesforceAIResearch/Random-Attention",
+      "why": "signal-free KV eviction (thesis 3 / [[edge-inference]]): the paper's open question is whether signal-free eviction reaches a production default — as of 09-05 zero code/issue mentions in vLLM and SGLang; a release here or README evidence of upstream integration surfaces the answer"
     }
   ]
 }

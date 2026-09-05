@@ -5110,5 +5110,32 @@
     "cred": "high",
     "density": "high",
     "cv": 1
+  },
+  "serotav.github.io": {
+    "cat": "research",
+    "en": "Independent security writeup blog (GitHub Pages); the CVE-2026-85046 V8 writeup publishes the full Maglev sort type-confusion chain with exploit mechanics. Cross-validated: the CVE ID, in-the-wild status and fixed version match the CISA KEV listing (added Sep 4) and Chrome 152.0.7977.82 release notes; the bounty figure does not come from this page.",
+    "zh": "独立安全写作博客(GitHub Pages)；CVE-2026-85046 的 V8 技术写作公开了完整的 Maglev sort 类型混淆利用链。已交叉验证：CVE 编号、在野利用状态与修复版本与 CISA KEV 收录(9 月 4 日)及 Chrome 152.0.7977.82 发布说明一致；赏金数字不出自本页。",
+    "jp": "独立系セキュリティ解説ブログ(GitHub Pages)。CVE-2026-85046 の V8 解説が Maglev sort 型混同の完全チェーンとエクスプロイト機構を公開。クロス検証済み：CVE 番号・in-the-wild 状態・修正版は CISA KEV 掲載(9月4日)および Chrome 152.0.7977.82 リリースノートと一致。バウンティ額は本ページ由来ではない。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "statichost.eu": {
+    "cat": "code",
+    "en": "One-person Swedish static hosting pitched on digital sovereignty (\"no AWS, no Cloudflare\"); real users (FreeSewing, JUnit) but its own HN thread surfaced the gaps: analytics pixels + third-party status-page scripts despite a no-personal-data claim, site on UK hosting, no MFA. Cross-validated: the no-AWS/no-Cloudflare pitch and user list match the HN discussion; several marketing claims were actively contradicted there.",
+    "zh": "瑞典单人静态托管，主打数字主权(\"无 AWS、无 Cloudflare\")；有真实用户(FreeSewing、JUnit)，但其自己的 HN 讨论串暴露了短板：声称不收集个人数据却带分析像素与第三方状态页脚本、站点托管在英国、无 MFA。已交叉验证：无 AWS/Cloudflare 的主张与用户名单与 HN 讨论一致；部分营销话术在该讨论中被直接推翻。",
+    "jp": "デジタル主権(\"AWS なし、Cloudflare なし\")を売りにするスウェーデンの一人静的ホスティング。実ユーザー(FreeSewing、JUnit)はいるが、自らの HN スレッドが弱点を晒した：個人データ収集なしの主張に反するアナリティクス像素とサードパーティ製ステータスページスクリプト、サイトは英国ホスティング、MFA なし。クロス検証済み：AWS/Cloudflare 不使用の主張とユーザー一覧は HN 議論と一致。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "flo.ruv.io": {
+    "cat": "code",
+    "en": "Hosted web-UI beta of the ruflo agent harness (claude-flow rebrand); multi-model agentic chat with MCP tool integration. Cross-validated this run: its described capabilities match the ruvnet/ruflo README first-hand; self-hostable via the repo's Docker config. Early beta of a rebranded product — treat as a demo surface, not infrastructure.",
+    "zh": "ruflo 智能体 harness(claude-flow 改名)的托管 web UI beta;多模型智能体聊天 + MCP 工具集成。本跑已交叉验证：所述能力与 ruvnet/ruflo README 一手一致；可经仓库的 Docker 配置自托管。改名产品的早期 beta——当演示面看,别当基础设施。",
+    "jp": "ruflo エージェントハーネス（claude-flow 改名）のホスト型 Web UI ベータ。マルチモデルのエージェントチャット + MCP ツール統合。今回クロス検証：記載能力は ruvnet/ruflo の README と一次一致。リポジトリの Docker 構成で自己ホスト可。改名直後の製品の早期ベータ——インフラではなくデモサーフェスとして扱う。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
   }
 }

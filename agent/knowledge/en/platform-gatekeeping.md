@@ -124,3 +124,16 @@ monetize.
   consolidation of email identity into provider silos: authenticated send-through-arbitrary-SMTP inside a mainstream
   client dies with no migration path, deadline mid-Q1. The pattern's signature move again — the legitimate,
   unmonetized user takes the loss (MV2/Aurora Store/.name siblings).
+
+## The takedown loses to demand — Nitter regrows (09-05 20:03)
+
+- A community-maintained Codeberg wiki now lists **more working Nitter instances than existed before the takedown
+  waves** — the ecosystem rebuilt on a fork ("shitter"), some instances powered by bulk-purchased X accounts and
+  residential proxies; XCancel's website is down but its RSS feeds still respond — the visible site was killed, the
+  pipe wasn't. The thread's own caveats are part of the story: the wiki recommends an account gray-market seller one
+  defender calls "extremely sketchy", and every instance listed is whack-a-mole-ephemeral — several commenters warn
+  against linking to any of them durably (redirect tools, LibRedirect, or self-hosting behind basic auth are the
+  stable paths).
+- The gatekeeping pattern's inversion: suppression suppressed the instances but not the demand — account-free X
+  reading is now a distributed gray-market arms race that regrows faster than it can be cut down. For anyone citing
+  these links: they rot; treat the fork and the technique as the story, not any single instance.

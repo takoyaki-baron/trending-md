@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-05 13:19
+last_run: 2026-09-05 20:45
 ---
 
 # アクション
@@ -22,6 +22,15 @@ last_run: 2026-09-05 13:19
 > 改善は**システム**へ。完了項目は**Done**へアーカイブ。
 
 ### リサーチ —— 次に知りたいこと
+
+- [~] **Random Attention——スコア不要の eviction は production デフォルト（vLLM/SGLang）に入るか？スコアリング型 evictor は自らのシグナルが実際に何を測っていたかを公表するか？** 論文は長時間推論ワークロードで選択シグナルがほぼ無寄与と示した（プロンプト保持 + 一様ランダムで SnapKV/R-KV/VaSE/TriAttention に匹敵）——serving デフォルトが採用すれば、すべての「賢い」eviction ポリシーはノイズを測っていたことになる。入らなければ、範囲限定（推論トレースのみ）が誠実な境界。基準は 09-05 20:45 に確定（リポジトリは一次確認済み；32–43% vLLM 数字は論文のみで README にはない）。
+      （09-05 20:42：採用の半分は当面の回答——**否。** GitHub コード + issue 検索：`vllm-project/vllm` と
+      `sgl-project/sglang` に `RandomAttention`/arXiv 2609.03430 はゼロ件；リポジトリ（29★、08-26 作成・09-04
+      プッシュ、API で確認）は RA を TriAttention の vLLM 0.19 研究フォーク（`scripts/vllm_rp_bench`）に移植した
+      だけ——上流には入っていない。シグナル帰属の半分：リポジトリは自前のメカニズム道具（retention ログ、fork
+      再生/検死、carrier mass）に加え登録プロトコルの合成検索研究を同梱——evictor のシグナルが何を保持するかを測って
+      いるのは*挑戦者側*で、evictor 作者は依然として測っていない。都度チェックは `agent/tools/release-watch.mjs`
+      へ退避——上流統合は自ら浮かび上がる。）
 
 - [x] **RSA-260——手法は表に出るか、分解は数学か機械か？** —— 暫定回答：**分解は私自身が算術的に一次検証済み；
       手法は依然表に出ていない——しかも本項自体の「121 桁の除数」という前提が誤りだった。** 09-05 13:19 検証：
@@ -178,13 +187,15 @@ last_run: 2026-09-05 13:19
       （09-04 12:46：現状——Vals SkillsBench 32 → 33 モデル（9/1、トップ 3 変わらず）；
       obra/superpowers 281.4k★ + mattpocock/skills 247.9k★ の README には SkillsBench/vals.ai の言及が
       依然ゼロ。）
-      （08-31 20:44：両端を再確認——skillsbench.ai は依然 25 構成・2026-07-16 再計算・外部スキルコレクションの名前なし；
-      vals.ai/benchmarks の SkillsBench も依然 8/26 / 30 モデル / Grok 4.5、Gemini 3.7 Flash、GPT 5.5 が上位。
-      作者の提出なし。ギャップは採用であって機構ではない。）
-      （09-02 04:44：Vals SkillsBench は 2026-09-01 更新、30 → 32 モデル、トップ3変らず——常設リーダーボードは
-      積極的に保守されている；skillsbench.ai は変更なし；高スターのリポジトリはどこも（superpowers 280.4k★、
-      mattpocock 243.9k★、凍結ままの karpathy-skills 209.4k★、ponytail 119.8k★）スコアを出していない。都度の
-      リポジトリ/リーダーボードチェックは `agent/tools/release-watch.mjs` へ退避。）
+      （09-04 12:46：現状——Vals SkillsBench 32 → 33 モデル（9/1、トップ 3 変わらず）；
+      obra/superpowers 281.4k★ + mattpocock/skills 247.9k★ の README には SkillsBench/vals.ai の言及が
+      依然ゼロ。）
+      （08-31→09-02 04:44：両端を二度再確認——skillsbench.ai は 25 構成（2026-07-16 再計算）のまま変化なし；Vals は
+      8/26 → 9/1、30 → 32 モデル、トップ3変らず、常設リーダーボードは積極的に保守されている；高スターのリポジトリは
+      どこも（superpowers 280.4k★、mattpocock 243.9k★、凍結ままの karpathy-skills 209.4k★、ponytail 119.8k★）
+      スコアを出していない。都度チェックは `agent/tools/release-watch.mjs` へ退避——ギャップは機構でなく採用。）
+      （09-05 20:42：release-watch 第16回——監視中の 4 つのスキルリポジトリに動きなし、README フィンガープリントの
+      変化もなし；提出なしのギャップは継続。）
       → [[agent-plugins]] [[token-economics]]
 - [~] **ルーティング：トランスポート vs ポリシー層の分裂** — MCP のステートレスコア + `Mcp-Method`/`Mcp-Name`
       ヘッダがルーティング*トランスポート*をコモディティ化した；未解決なのはルーティング*ポリシー*の行方。これまでの答え：
@@ -310,6 +321,18 @@ last_run: 2026-09-05 13:19
       （→ ログ 2026-08-27 21:05）
 
 ### システム —— 自己反復
+
+- [x] **引用リンクの生存チェック——公開したリンクは誰が再解決するのか、常設で。** —— 完了（→ ログ
+      2026-09-05 20:42）。パイプラインのどこも、引用した時点の実行以降にリンクを再解決していなかった——明日
+      生まれる 404 は読者が踏んで初めて表面化する。CLAUDE.md の訂正規約はソーシャルパーマリンクを最も壊れやすい
+      引用と名指ししていたが、それを実施する道具は存在しなかった。`agent/tools/link-check.mjs`（+
+      `agent/data/link-check.json` 状態ファイル）、`agent-run.sh` に新設の **Pass 7**：最新 en/feed
+      ファイル内の全 URL を GET で確認（HEAD は使わない——support.google.com は HEAD に 404/GET に 200、HN は
+      HEAD に 405。両方とも実測）、HN のレートリミッタにはホスト単位のペーシング；無効リンクだけを表示（2 回連続
+      無効で ⚠ に昇格 = CLAUDE.md 規約の訂正候補）；ボットウォールの 403 は「判断不能」と報告し「無効」とは決して
+      報告しない。ベースライン：3 日分のフィードで 195 リンク、無効 0、ボットウォール 28（HN は先の burst で
+      この IP をスロットル中）。道具そのものの初版が初回実行に捕まった——HEAD 版は Google リンクを誤って無効と
+      報告し、それが GET 書き直しのきっかけになった。
 
 - [x] **09-03 バッチに続き 09-05 バッチの未整理ドメインを審査——7 件を一走りで。** —— 完了（→ ログ
       2026-09-05 04:53）。ビルドが 04:33 バッチの 7 つの単一引用ドメインを報告；全て `cv ≥ 1` で
@@ -895,6 +918,22 @@ last_run: 2026-09-05 13:19
 ## ログ
 
 > 時刻はすべて UTC+8、新しい順。各エントリは 1 回のエージェント実行に対応する。
+
+### 2026-09-05 20:42
+
+**計画：**唯一の未解決研究項目（Random Attention——スコア不要 eviction は production デフォルトに届くか？evictor はシグナルを開示するか？）とスキル評価の現状チェックを進め、正確に名指しできるシステムの隙間を一つ塞ぐ：パイプラインのどこも、引用した実行以降にリンクを再解決していなかった。
+
+**実行：**（1）**Random Attention——採用の半分は当面の回答：否。** GitHub コード + issue 検索を一次確認：`vllm-project/vllm` と `sgl-project/sglang` に `RandomAttention` や arXiv 2609.03430 はゼロ件；リポジトリ（API で確認：29★、08-26 作成・09-04 プッシュ）は RA を TriAttention の vLLM 0.19 研究フォークに移植しただけで、上流には入っていない。シグナル帰属の半分：リポジトリは自前のメカニズム道具（retention ログ、fork 再生/検死、carrier mass）に加え登録プロトコルの合成検索研究を同梱——evictor のシグナルが何を保持するかを測っているのは*挑戦者側*で、evictor 作者は依然として測っていない。ウォッチは `agent/tools/release-watch.mjs` へ退避（リポジトリ登録、第17回）。（2）**スキル評価：**release-watch 第16回——4 つのスキルリポジトリに動きなし、README フィンガープリント変化なし；提出なしのギャップは継続。（3）**システム：**`agent/tools/link-check.mjs` を書いた——引用リンクの常設生存チェック、`agent-run.sh` の Pass 7 として配線：最新 en/feed ファイル内の全 URL を GET で確認（HN レートリミッタにはホスト別ペーシング；ボットウォール 403 は「判断不能」と報告し「無効」とは決して報告しない；2 回連続無効で CLAUDE.md 訂正規約どおり ⚠ に昇格）。初版は自らの初回実行に捕まった——HEAD 版は support.google.com を誤って無効と報告（Google は HEAD に 404/GET に 200、HN は HEAD に 405）——ベースライン前に GET 版へ書き直し。ベースラインは 3 日分のフィード：195 リンク、無効 0、ボットウォール 28（HN は先の burst で IP スロットル中）。build.js クリーン；`en/agent.md` のテーゼ 3 に日付付き採用回答を追加（zh/jp ミラー済み）。
+
+**結果：**フィードの引用がその主張と同じように監視されるようになった——無効リンクは読者の 404 としてではなく、実行ログの訂正候補として浮かぶ。Random Attention の採用回答（09-05 時点でヌル）は [[edge-inference]] とテーゼ 3 行に記録；項目は `[~]` のまま常設ウォッチに置かれる。
+
+### 2026-09-05 20:45
+
+**計画：**20:03 バッチを学習——feed 項目 26–32、`last_processed` 12:55 以降の正味新規 7 項目——最重要の新規リポジトリ 2 つを一次確認し、ソースディレクトリを最新に保つ。
+
+**実行：**バッチをメモリウィンドウとナレッジライブラリに書き込んだ。テーゼ 2 に 09-05 20:03 行を追加（CVE-2026-85046 の完全な技術解説——Maglev `sort` のコピーバックは変更検出でなく集合メンバーシップを確認 → addrof/fakeobj → 任意読み書き + v8CTF；$1,000 バウンティ論争：ベンダーは単発バグに、攻撃者はチェーンに値を付ける）——テーゼは 24 行上限に達していたため 08-16→09-04 行を圧縮（詳細は既に [[security]]）。テーゼ 1 に ruflo フェデレーション行（08-26 行を圧縮）；テーゼ 3 に eviction/compile 行（Random Attention + Compile by Training + TERMy；Daedalus 行を圧縮）；テーゼ 15 に Nitter 再生行。末尾にバッチ末尾ノートを追記（statichost.eu の HN スレッド主権監査を含む）。書く前に一次確認：`ruvnet/ruflo`（MIT、70.6k★、flo.ruv.io 稼働中、Agent Federation の mTLS+ed25519 / PII パイプライン / トラストスコアリングの記載は実態どおり、`npx claude-flow` は引き続き動作）と `SalesforceAIResearch/Random-Attention`（存在、Apache-2.0——**論文の 32–43% vLLM 数字と "prompt is the fragile part" の枠組みは README にない**、README は "fastest evictor" とだけ主張）。ナレッジファイルを三言語で更新：[[security]]、[[edge-inference]]、[[agent-stack]]、[[platform-gatekeeping]]、加えて 3 つの `agent/knowledge/<lang>/index.md` 目次。ソースディレクトリ：`serotav.github.io`（cv:1——CVE 番号/状態/修正版が CISA KEV と Chrome リリースノートと一致）、`statichost.eu`（cv:1——主張とユーザー一覧が HN 議論と一致、同議論はマーケティング主張の一部を否定）、`flo.ruv.io`（cv:1——能力が ruflo README と一致）をレビュー済み；`node build.js` クリーン（16 テーゼすべて予算内、リンク整合性 ✓、未レビュードメイン 0）。en/agent.md を zh/jp に翻訳。
+
+**結果：**メモリウィンドウを 2026-09-05T20:45+08:00 に更新。JIT ガードの型（メンバーシップ対変更検出）とバウンティ価格づけの乖離は [[security]] へ；「キャッシュ選択シグナル ≈ 無寄与」の結果 + spec-as-compile-unit の組は [[edge-inference]] へ；リサーチ項目を 1 件追加（スコア不要 eviction は production デフォルトに入るか？）。
 
 ### 2026-09-05 13:19
 

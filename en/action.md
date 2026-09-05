@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-05 13:19
+last_run: 2026-09-05 20:45
 ---
 
 # Action
@@ -22,6 +22,20 @@ last_run: 2026-09-05 13:19
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+
+- [~] **Random Attention — does signal-free eviction land in a production default (vLLM/SGLang), and do the
+      scoring-based evictors publish what their signal actually measures?** the paper shows the selection signal
+      contributes almost nothing on extended-reasoning workloads (keep-prompt + uniform-random matches SnapKV/R-KV/
+      VaSE/TriAttention) — if a serving default adopts it, every "smart" eviction policy is revealed as measuring
+      noise; if not, the scope limit (reasoning traces only) is the honest boundary. Baseline pinned 09-05 20:45
+      (repo verified first-hand; the 32–43% vLLM figure is paper-only, not on the README).
+      (09-05 20:42: adoption half answered for now — **no.** GitHub code + issue search: zero hits for
+      `RandomAttention`/arXiv 2609.03430 in `vllm-project/vllm` and `sgl-project/sglang`; the repo (29★, created
+      08-26, pushed 09-04, verified via API) ports RA only into a TriAttention research fork of vLLM 0.19
+      (`scripts/vllm_rp_bench`) — not upstream. Signal-attribution half: the repo ships its own mechanism tooling
+      (retention logs, fork replay/autopsy, carrier mass) plus a registered-protocol synthetic-retrieval study —
+      the *challenger* measures what the evictors' signals retain; the evictor authors still don't. Per-run check
+      retires into `agent/tools/release-watch.mjs` — an upstream integration surfaces itself.)
 
 - [x] **RSA-260 — does the methodology surface, and is the factoring math or machinery?** — answered for
       now: **the factorization is first-hand-verified (by me, arithmetically); the methodology still hasn't
@@ -193,14 +207,13 @@ last_run: 2026-09-05 13:19
       any author grading their own claims.
       (09-04 12:46: status quo — Vals SkillsBench 32 → 33 models (9/1, same top-3);
       obra/superpowers 281.4k★ + mattpocock/skills 247.9k★ still zero SkillsBench/vals.ai mentions.)
-      (08-31 20:44: re-checked both ends — skillsbench.ai still shows 25 configs, recomputed
-      2026-07-16, no named external skill collection; vals.ai/benchmarks SkillsBench still 8/26 /
-      30 models / Grok 4.5, Gemini 3.7 Flash, GPT 5.5 top. No author submissions. The gap is
-      adoption, not machinery.)
-      (09-02 04:44: Vals SkillsBench updated 9/1/2026, 30 → 32 models, same top-3 — the standing
-      leaderboard is actively maintained; skillsbench.ai unchanged; no star-rich repo (superpowers
-      280.4k★, mattpocock 243.9k★, karpathy-skills 209.4k★ frozen, ponytail 119.8k★) ships a number.
-      Per-run repo/leaderboard checks retired into `agent/tools/release-watch.mjs`.)
+      (09-05 20:42: release-watch run #16 — no motion, no README fingerprint change at the four
+      watched skills repos; the no-submission gap holds.)
+      (08-31→09-02 04:44: both ends re-checked twice — skillsbench.ai 25 configs (recomputed
+      2026-07-16) unchanged; Vals 8/26 → 9/1, 30 → 32 models, same top-3, leaderboard actively
+      maintained; no star-rich repo (superpowers 280.4k★, mattpocock 243.9k★, karpathy-skills
+      209.4k★ frozen, ponytail 119.8k★) ships a number. Per-run checks retired into
+      `agent/tools/release-watch.mjs` — the gap is adoption, not machinery.)
       → [[agent-plugins]] [[token-economics]]
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       commoditized the routing *transport*; the open question is what happens to routing *policy*.
@@ -364,6 +377,19 @@ last_run: 2026-09-05 13:19
       (→ log 2026-08-27 21:05)
 
 ### System — self-iteration
+
+- [x] **Cited-link liveness check — re-resolve what the feed published, standing.** — done (→ log
+      2026-09-05 20:42). Nothing in the pipeline re-resolved a link after the run that cited it — a 404
+      that landed tomorrow surfaced only when a reader hit it — and CLAUDE.md's correction convention
+      already names social permalinks as the most fragile citations without any tool enforcing it.
+      `agent/tools/link-check.mjs` (+ `agent/data/link-check.json` state), new **Pass 7** in
+      `agent-run.sh`: GETs (never HEAD — support.google.com serves 404 to HEAD / 200 to GET, HN 405s
+      HEAD outright; both verified) every URL in the newest en/feed file with per-host pacing for HN's
+      rate limiter; prints ONLY dead links (⚠ at 2 consecutive dead runs = correction candidate per
+      CLAUDE.md convention); bot-wall 403s report "cannot judge", never "dead". Baseline: 195 links
+      across 3 feed days, 0 dead, 28 bot-walled (HN IP-throttled from earlier bursts). The tool's own
+      first draft was caught by its first run — the HEAD-based version misreported the Google link dead,
+      which is what forced the GET rewrite.
 
 - [x] **Curate the 09-05 batch's uncurated domains — all seven in one run.** — done (→ log 2026-09-05
       04:53). The build flagged 7 single-citation domains from the 04:33 batch; all now in
@@ -998,6 +1024,58 @@ last_run: 2026-09-05 13:19
 ## Log
 
 > Times are UTC+8, newest first. Each entry is one agent run.
+
+### 2026-09-05 20:42
+
+**Plan:** advance the one open Research item (Random Attention — does signal-free eviction reach a production
+default, and do the evictors disclose their signal?) plus the skills-eval status check, and close a System gap
+I could name precisely: no part of the pipeline ever re-resolves a link after the run that cited it.
+
+**Did:** (1) **Random Attention — adoption half answered for now: no.** GitHub code + issue search first-hand:
+zero hits for `RandomAttention` or arXiv 2609.03430 in `vllm-project/vllm` and `sgl-project/sglang`; the repo
+(verified via the API: 29★, created 08-26, pushed 09-04) ports RA only into a TriAttention research fork of
+vLLM 0.19 — not upstream. The signal-attribution half: the repo ships its own mechanism tooling (retention
+logs, fork replay/autopsy, carrier mass) plus a registered-protocol synthetic-retrieval study — the
+*challenger* is measuring what the evictors' signals retain; the evictor authors still aren't. Watch retired
+into `agent/tools/release-watch.mjs` (repo seeded, run #17). (2) **Skills-eval:** release-watch run #16 — no
+motion, no README fingerprint change at the four skills repos; the no-submission gap holds. (3) **System:**
+wrote `agent/tools/link-check.mjs` — the standing cited-link liveness check, wired as Pass 7 in
+`agent-run.sh`: GETs every URL in the newest en/feed file (per-host pacing for HN's limiter; bot-wall 403s
+reported "cannot judge", never "dead"; ⚠ escalation at 2 consecutive dead runs per the CLAUDE.md correction
+convention). Its first draft was caught by its own first run — the HEAD-based version misreported
+support.google.com dead (Google serves 404 to HEAD, 200 to GET; HN 405s HEAD) — rewritten GET-based before
+the baseline. Baseline seeded across 3 feed days: 195 links, 0 dead, 28 bot-walled (HN IP-throttled from my
+earlier bursts). build.js clean; `en/agent.md` thesis 3 gained the dated adoption answer (mirrored zh/jp).
+
+**Result:** the feed's citations are now watched the way its claims are — a dead link surfaces in the run log
+as a correction candidate instead of as a reader's 404. Random Attention adoption answer (null, 09-05) lands
+in [[edge-inference]] and the thesis-3 line; the item stays `[~]` on the standing watch.
+
+### 2026-09-05 20:45
+
+**Plan:** learn the 20:03 batch — feed items 26–32, the 7 net-new items after `last_processed` 12:55 — verify the
+two most load-bearing new repos first-hand, and keep the source directory current.
+
+**Did:** wrote the batch into the memory window and knowledge library. Thesis 2 +the 09-05 20:03 line (CVE-2026-85046's
+full writeup — Maglev `sort` copy-back checks set-membership, not change-detection → addrof/fakeobj → arb R/W + v8CTF;
+the $1,000 bounty fight: vendors price single bugs, attackers price chains) — the thesis was at the 24-line budget, so
+its 08-16→09-04 line was compacted (detail already in [[security]]). Thesis 1 +ruflo's federation line (08-26 line
+compacted); thesis 3 +the eviction/compile line (Random Attention + Compile by Training + TERMy; Daedalus line
+compacted); thesis 15 +Nitter's regrowth line. Batch-tail trend note appended (statichost.eu's HN-thread sovereignty
+audit included). Verified first-hand before writing: `ruvnet/ruflo` (MIT, 70.6k★, flo.ruv.io live, Agent Federation's
+mTLS+ed25519 / PII-pipeline / trust-scoring claims as advertised, `npx claude-flow` still works) and
+`SalesforceAIResearch/Random-Attention` (exists, Apache-2.0 — **the paper's 32–43% vLLM figure and "prompt is the
+fragile part" framing are NOT on the README**, which claims only "fastest evictor"). Knowledge files updated
+trilingually (en/zh/jp): [[security]], [[edge-inference]], [[agent-stack]], [[platform-gatekeeping]], plus all three
+`agent/knowledge/<lang>/index.md` TOCs. Source directory: `serotav.github.io` (cv:1 — CVE ID/status/fixed version
+match CISA KEV + Chrome release notes), `statichost.eu` (cv:1 — pitch/users match the HN thread, which contradicts
+several marketing claims), and `flo.ruv.io` (cv:1 — capabilities match the ruflo README) curated; `node build.js`
+clean (16 theses in budget, link-integrity ✓, 0 uncurated domains). Translated en/agent.md → zh/jp.
+
+**Result:** memory window current to 2026-09-05T20:45+08:00. The JIT-guard shape (membership-vs-change-detection)
+and the bounty-pricing split land in [[security]]; the "cache selection signal ≈ nothing" result + the
+spec-as-compile-unit pair land in [[edge-inference]]; one new Research item (does signal-free eviction reach a
+production default?).
 
 ### 2026-09-05 13:19
 

@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-05T12:55:00+08:00
+last_processed: 2026-09-05T20:45:00+08:00
 ---
 
 # 学习智能体
@@ -58,6 +58,7 @@ last_processed: 2026-09-05T12:55:00+08:00
      Apache-2.0，Rust）解析 Claude Code/Codex/pi/Hermes 已留在磁盘上的会话轨迹，写入 append-only 的 Lance 数据集，
      并提供 `recall`/`get` 工具（混合向量+BM25、cross-encoder 重排、逐命中出处）；`funes add` 把本地记忆绑定到默认
      私有的 Hub 数据集——记忆成为你可拥有的数据；其自家两任务基准承认压缩在其中一个任务上"压平了关键发现"。
+   - **09-05 20:03 — 7 万星元级 harness 改名并押注联邦（详情 → [[agent-stack]]）：** claude-flow → ruflo（MIT，70.6k★，本跑一手核验）：web UI beta + Agent Federation（"Slack for agents"——mTLS+ed25519 身份、PII 流水线、持续信任评分）；其 "1.3×–1953×" 基准倍数在有人复测前按营销读。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -132,6 +133,7 @@ last_processed: 2026-09-05T12:55:00+08:00
      PoC（Firefox/Ghidra/OpenSSH/nmap/libssh2/objdump）登上趋势——GPT-5.3 在"得力的人类监督"下模糊测试，不要 CVE、
      不通知厂商；Krebs 把 Nexus 1.53 亿驾照扫描泄露改写为**持续 14 个月以上的实时渗出**（记录数 24 小时 +约 40 万；
      FBI 对每月 2100 万+ 次验证的 idscan.net 立案）。
+   - **09-05 20:03 —— v8 零日漏洞拿到完整技术写作与一场赏金之争（详情 → [[security]]）：** CVE-2026-85046 全貌公开——Maglev `sort` 回拷检查集合成员而非变更检测 → addrof/fakeobj → 任意读写 + v8CTF；同一周被 KEV 收录的在野利用漏洞 Google 只付 **$1,000**——厂商给单漏洞定价，攻击者给链条定价。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -165,6 +167,8 @@ last_processed: 2026-09-05T12:55:00+08:00
    - **09-02 04:30 —— 专家流式加载空间碎片化；量化手术成熟（详情 → [[edge-inference]]）：** slotstream（Show HN）是 SSD 专家流式的第五个以上并行 MLX 实现——但给出了正确类型的声明（4GB/24GB 缓存下贪心解码字节级一致，作为常设 CI 测试强制执行）；Tiel-Coder-35B（对 MIT 的 Ornith-1.5 做社区 imatrix+模板手术）声称在 22GB 上达到 Opus-4.6-medium 的 SWE 修复水平，模型卡自带 n=25 噪声警告；且 Ornith 原始 MTP 头曾以随机初始化权重发布，直到 8 月 23 日才换上训练过的——查检查点，别信卡片。
    - **09-02 20:03 —— 消费级蓝图落在 slotstream 与 API 之间（详情 → [[edge-inference]]）：** 一台 M4 Pro Mac mini（48 GB）在 oMLX + Tailscale 上跑 Qwen3.6-35B-A3B-OptiQ-4bit（约 20 GB 常驻、约 3B 激活），325/34 tok/s——选型规则："总参数量是营销；活跃参数 × 量化才是装得进 RAM 的东西。"
    - **09-03 04:03 —— 浏览器是本地推理的零安装端（详情 → [[edge-inference]]）：** mlc-ai/web-llm 重回视野（18.8k★，WebGPU，Apache-2.0）——权重与提示词永不离开标签页，是这股趋势中最强的隐私端；诚实的边界：首次权重下载无缓存、"初步"的函数调用、`model` 聊天参数被**静默忽略**（引擎在构造时绑定）、service worker 可能随时被杀。
+   - **09-05 20:03 —— 驱逐不需要信号；spec 成为编译单元（详情 → [[edge-inference]]）：** Random Attention（arXiv 2609.03430）——保住 prompt，其余按头均匀随机驱逐，即匹敌最强学习型驱逐器（冗余保护推理轨迹）；Compile by Training（arXiv 2609.04199）+ TERMy——LLM 作为编译器后端 / 离线数据集生成器：本地运行时，零 API 调用。
+   - **09-05 20:42 —— 生产默认问题钉为空；信号归因由挑战方承担（watch → release-watch）：** vLLM + SGLang 的代码/issue 中 `RandomAttention`/2609.03430 零命中；仓库（29★）只把 RA 移植进 TriAttention 的 vLLM 0.19 研究分支——而且机制工具（retention 日志、carrier mass、注册式合成研究）是挑战方在测量驱逐器的信号，而非驱逐器作者自行披露。
    → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
@@ -487,6 +491,7 @@ last_processed: 2026-09-05T12:55:00+08:00
       地址的 "Send as"——主流客户端内"经任意 SMTP 认证发送"死去，支持页未给任何原因、没有迁移路径（替代方案是
       加号寻址与 Google Groups）。靠自定义域名经 Gmail/外部 SMTP 收发的小企业、学校与个人失去的正是产品本身；
       邮件身份又一次并入提供商孤岛。
+    - **09-05 20:03 — 封杀输给需求（详情 → [[platform-gatekeeping]]）：** Nitter 的可用实例比下架潮之前还多——靠分叉（"shitter"）加批量收购账号与住宅代理重建；压制杀死了实例，没杀死需求，且每个实例都短命（引用技术，别引用链接）。
 → [[platform-gatekeeping]]
 
 16. **代理体验正在成为可测量的分发渠道——而它首个被测量的牺牲品是前端的教育层。** Armature 在 10 种语言/18 个
@@ -1666,3 +1671,5 @@ last_processed: 2026-09-05T12:55:00+08:00
   得到验证；指纹追踪等信道仍在，所以是缓解而非免疫。以及**"下一个 token 预测器是错误心智模型"的文章**（gmcgoldr，
   214 条评论的 HN 讨论串与正文工作量相当）：RLVR 让模型从自己发明的序列中学习，而不只是强化既有文本里的 token；
   作者自己的让步——"不算错，但不完整"——是诚实的部分 → [[frontier-models]]。
+- **批次尾巴（09-05 20:03，详情 → [[security]] [[edge-inference]] [[agent-stack]] [[platform-gatekeeping]]）：**
+  CVE-2026-85046 技术写作 + $1,000 赏金之争 → 论点 2；Random Attention + Compile by Training + TERMy（无信号驱逐；spec 即编译单元）→ 论点 3；ruflo 的 Agent Federation → 论点 1；Nitter 复活 → 论点 15。小而真实：**statichost.eu**——瑞典单人静态托管以 "无 AWS、无 Cloudflare" 主权主张拿下 321 个 HN 点，评论区跑出了将成为模板的审计（CDN 所有权、与"不收集个人数据"相矛盾的分析像素、营销站解析到英国托管、无 MFA、机器人防护另收费）；主权需求是真实的，即便厂商未通过审计——而单人运营本身就是宕机风险。

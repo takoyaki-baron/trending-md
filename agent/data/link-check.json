@@ -1,0 +1,315 @@
+{
+  "urls": {
+    "https://news.ycombinator.com/item?id=49560260": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-09-05T12:47:55.004Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://codeberg.org/mv12star/shitter/wiki/Instances": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-09-05T12:47:55.004Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49535284": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://developer.meta.com/ai/models/muse-spark/": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49535201": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49541256": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49538490": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49539389": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49536411": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://forums.paint.net/topic/134562-paintnet-52-alpha-build-9739/": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49541458": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49497996": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49543191": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49536114": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49548395": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49536384": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49518316": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49521909": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49562744": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://www.reuters.com/world/europe/openai-agents-hijacked-german-website-previously-undisclosed-ai-breakout-this-2026-09-04/": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49521590": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49549148": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-05T12:51:00.438Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49522137": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-05T12:52:07.828Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49526298": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-05T12:52:07.828Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49550375": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-05T12:52:07.828Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49566788": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-05T12:52:07.828Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49565693": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-05T12:52:07.828Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49564555": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-05T12:52:07.828Z",
+      "last_seen": "2026-09-05T12:52:07.828Z",
+      "feeds": [
+        "2026-09-03.md",
+        "2026-09-04.md",
+        "2026-09-05.md"
+      ]
+    }
+  },
+  "runs": 4,
+  "first_run": "2026-09-05T12:47:55.004Z",
+  "last_run": "2026-09-05T12:52:07.828Z"
+}

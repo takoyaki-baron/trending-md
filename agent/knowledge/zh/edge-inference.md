@@ -368,3 +368,25 @@ AI 性能最高为此前 mini 的 4×，**$899**）；**M5 Ultra**（quad-die Ul
   事先无公开讨论。对本 feed 的实操提示：llama.cpp/ggml 是这里每个"在你笔记本上运行"演示的基座——它的治理
   *就是*本地推理基础设施。（来源说明：Gerganov 评论的 X 永久链接无法在未认证环境下打开；HN 讨论引用并
   链接了它，2 月 20 日的承诺见 llama.cpp discussion #19759。）
+
+## 无信号驱逐;把"编译"作为"推理服务"之外的另一条路(09-05 20:03)
+
+- **Random Attention(arXiv 2609.03430,Salesforce)删除了整个领域的中心前提。** 所有 KV-cache 压缩方法都按
+  "未来重要性"给缓存 token 打分、保留最高分;Random Attention 保留 prompt,其余在每个注意力头内均匀随机驱逐——
+  完全不打分——却在同等预算下持平或超过最强的学习型选择器(SnapKV、R-KV、VaSE、TriAttention)。README(本跑
+  一手核验:Apache-2.0,`random_pp`):在 HF harness 和 vLLM 两种栈里都是 "the fastest evictor"——注意论文里的
+  **32–43% vLLM 吞吐数字和 "prompt 是缓存中最脆弱的部分" 的表述只出现在论文里,README 上没有**。机制:推理轨迹
+  在两个层级上用冗余保护自己——文本边推理边复述所需内容,每个头各存一份——所以 prompt 一旦保住,随机抽样就够用。
+  范围诚实标注:仅限长推理负载(Qwen3-4B/14B/32B、phi-4-reasoning;MATH-500、GPQA-Diamond、AIME25/26、HMMT、
+  LiveCodeBench),不是通用 KV 压缩。与 Daedalus 一脉相承,继续缩小"缓存"本身——先是缓存变可选,现在连它的
+  选择信号都几乎测不出贡献。
+- **Compile by Training(arXiv 2609.04199,Deng/Nie/Shieber,EMNLP 2026 demo,HF 每日论文第一)把 LLM 变成编译器
+  后端,而非运行时依赖**:编译期由教师模型按自然语言 spec 生成任务专属训练数据,在紧凑解释器上训练一个小 adapter;
+  编译出的函数之后在本地运行,无教师、无 API 调用——像普通软件一样存储、版本化、组合。在 FuzzyBench-Hard 上:
+  83.6% 语义准确率,而快速 Program-as-Weights 基线恰好得零分——诚实注意事项:头条基准是作者自己的,基线在上面
+  得零是构造使然,准确率明确以约 1 分钟编译时间为代价。已上线公开交互服务。
+- **TERMy / NPC-Forge(gioblu,AGPL-3.0)是从"零训练"一端出发的同一条编译期/运行期拆分**:约 1,000 行确定性
+  Python NLU 流水线(去噪 → 精确 → 模板 → 概率匹配 + IDF 加权 Levenshtein)把自然语言变成 shell 命令,树莓派
+  Zero 上毫秒级响应,对破坏性命令有硬编码权限门控,并提供 OpenAI 兼容 API 让同一 NPC 接入 LLM 前端。HN 讨论串
+  的诚实边界:指代消解("删掉*它*")会出错,数据集只是概念验证;作者自己提出的混合方案正是收敛点——LLM 离线生成
+  数据集条目,纯 CPU 运行时负责服务。确定性即产品:可预测、可审计、不需要对齐过滤器。

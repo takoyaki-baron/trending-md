@@ -494,3 +494,31 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   infrastructure. (Sourcing caveat: the X permalink of Gerganov's comment could not be opened
   unauthenticated; the HN discussion quotes and links it, and the Feb 20 commitment is in llama.cpp
   discussion #19759.)
+
+## Signal-free eviction; compilation as an alternative to serving (09-05 20:03)
+
+- **Random Attention (arXiv 2609.03430, Salesforce) deletes the field's central premise.** Every KV-cache compression
+  method scores cached tokens by future importance and keeps the best; Random Attention keeps the prompt and evicts
+  everything else uniformly at random per head — no scoring at all — and matches or beats the strongest learned
+  selectors (SnapKV, R-KV, VaSE, TriAttention) at matched budgets. README (verified first-hand: Apache-2.0,
+  `random_pp`): "the fastest evictor" in both an HF harness and a vLLM stack — note the paper's **32–43% vLLM
+  throughput figure and the "prompt is the fragile part of the cache" framing are paper-only, not on the README**.
+  Mechanism: reasoning traces protect themselves with redundancy at two levels — the text restates what it needs as
+  it works, and each head keeps its own copy — so once the prompt is safe, a random draw retains enough. Scope
+  honestly framed: extended-reasoning workloads (Qwen3-4B/14B/32B, phi-4-reasoning; MATH-500, GPQA-Diamond, AIME25/26,
+  HMMT, LiveCodeBench), not general KV compression. Follows Daedalus in shrinking what the cache *is* — first the
+  cache becomes optional, now its selection signal measures almost nothing.
+- **Compile by Training (arXiv 2609.04199, Deng/Nie/Shieber, EMNLP 2026 demo, #1 HF daily paper) makes the LLM a
+  compiler backend, not a runtime dependency**: at compile time, teacher models generate task-specific training data
+  from a natural-language spec and train a small adapter on a compact interpreter; the compiled function then runs
+  locally with no teacher and no API call — stored, versioned and composed "like ordinary software." On
+  FuzzyBench-Hard: 83.6% semantic accuracy where the fast Program-as-Weights baseline scores exactly zero — with the
+  honest caveats that the headline benchmark is the authors' own, the baseline scores zero on it by construction, and
+  accuracy is explicitly traded against ~1 minute of compile time. Ships as a public interactive service.
+- **TERMy / NPC-Forge (gioblu, AGPL-3.0) is the same build-time/run-time split from the no-training end**: a ~1,000-line
+  deterministic Python NLU pipeline (noise stripping → exact → template → probabilistic matching with IDF-weighted
+  Levenshtein) turns natural language into shell commands with millisecond responses on a Pi Zero, hardcoded
+  permission gating for destructive commands, and an OpenAI-compatible API so the same NPC plugs into LLM frontends.
+  Honest limits from the HN thread: anaphora resolution ("delete *it*") misfires, the dataset is a proof of concept,
+  and the author's own proposed hybrid is the convergence point — an LLM generates dataset entries offline, the
+  CPU-only runtime serves them. Determinism as a product: predictable, auditable, no alignment filter needed.

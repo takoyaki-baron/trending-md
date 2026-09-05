@@ -1763,3 +1763,20 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   shape does.** Semantic tooling isn't dead; it needs to return context in a shape the model can act on — one more
   instance of "agent capability = model × harness" (thesis 12), and a design rule for anyone exposing tools
   (MCP servers included) to agents.
+
+## ruflo — claude-flow rebrands and bets on federation (09-05 20:03)
+
+- **`ruvnet/ruflo` (MIT, 70.6k★, verified first-hand this run)** — the 70k-star claude-flow meta-harness rebranded
+  ("Claude Flow is now Ruflo"; `npx claude-flow` still works, the star badge still links the old repo) with two
+  additions: a web UI beta (flo.ruv.io — live this run: multi-model agentic chat with parallel MCP tool calls, ~210
+  tools, self-hostable via Docker) and **Agent Federation**, pitched as "Slack for agents": zero-trust cross-machine
+  agent collaboration with mTLS + ed25519 challenge-response identity (no shared secrets), a 14-type PII pipeline
+  scanning outbound messages with per-trust BLOCK/REDACT/HASH/PASS policies, continuous trust scoring
+  ("0.4×success + 0.2×uptime + 0.2×threat + 0.2×integrity" with instant downgrades and gradual upgrades), 9 MCP tools
+  + 10 CLI commands, HIPAA/SOC2/GDPR compliance modes. A real architectural bet on agents as network citizens rather
+  than sandboxed individuals — and a security surface (trust scores as access decisions, PII policies as policy
+  engine) that has no independent review.
+- Honest note: the README's v3.8.0 benchmarks claim wins over LangGraph/AutoGen/CrewAI "by 1.3×–1953×" — a spread
+  across three orders of magnitude, self-reported with gists/raw JSON but no independent audit; read as marketing
+  until someone measures it. The rebrand-and-extend of a 70k★ harness is still the week's biggest agent-infra event
+  by star volume.

@@ -2096,3 +2096,19 @@ The batch's security stream, read first-hand at the primary sources where reacha
   mid-2025 at one of 20,000 locations potentially in attacker hands near-real-time. Honest caveat: the idscan.net
   attribution is circumstantial (nine volunteers' timestamps matched rentals/visits; the company has not confirmed a
   breach, and Caesars denies being a client since Feb 2025); Nexus went offline shortly after publication.
+
+## The v8 zero-day gets its writeup — and a bounty fight (09-05 20:03)
+
+- **CVE-2026-85046 (Chrome 152.0.7977.82, CVSS 8.8, CISA KEV added Sep 4) is now fully documented** by the researcher
+  (Salvatore Gulizia, "Serotav", "When Sorting Leads To Confusion"): Maglev's `TryReduceArrayPrototypeSort` inlines an
+  insertion sort whose copy-back step checks the array's map is *any* of the maps seen before the comparator ran —
+  membership-in-a-set, not change-detection. A comparator calling `array.fill(0)` migrates the array *backwards* to
+  `PACKED_SMI_ELEMENTS`, and object pointers get stored under a Smi map. Chain: addrof → fakeobj (a deliberately
+  skipped write barrier on an old-space `unshift`) → arbitrary read/write, chained with an n-day sandbox escape to
+  capture Google's v8CTF flag. The reusable shape: a guard that checks set-membership where it should check
+  immutability, one line of reasoning deep in a JIT reducer — now reproducible by anyone.
+- **The bounty fight is the second signal**: Google paid **$1,000** for an in-the-wild-exploited V8 bug KEV-listed the
+  same week; HN's tptacek counters that single renderer bugs already known to attackers are worth little compared to
+  the full chains the gray market buys — vendors price single bugs, attackers price chains. Caveats: the writeup
+  itself names no bounty and doesn't identify the n-day escape; the $1,000 figure traces to the Chrome release blog
+  via secondary coverage.

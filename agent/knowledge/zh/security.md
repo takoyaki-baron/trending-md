@@ -1428,3 +1428,16 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
 - **VulnCheck 在开源 AI 服务栈上的 CVSS 9+ 批次**（48 小时内登上 NVD，全部由 VulnCheck 以 CNA 身份评分——记录评分方）：FastChat CVE-2026-85695（9.4，`/register_worker` 未授权认证绕过）；TEN Framework CVE-2026-85688（9.8，TMAN Designer 文件服务未授权任意文件读*与写*）；SadTalker CVE-2026-85696（9.8，经上传音频文件名在视频合成中注入 OS 命令）；Taipy CVE-2026-85183（9.3，socket.io 配置了通配符 CORS 加凭据）；zerox CVE-2026-85672（9.8，文件下载机制中的命令注入）；marker CVE-2026-85684（9.1，FastAPI 上传处理器的路径穿越）；excel-mcp-server CVE-2026-85661（9.8，stdio 模式缺少路径约束）；python-jose CVE-2026-85394（9.1，HMAC 接受 DER 编码公钥）。机器人学脚注：MOOS 中间件家族有三个 9.8。自托管 AI 栈现在是一个拥有自己披露节奏的独立攻击面——其中多个恰是 agent 被指向前的那类胶水组件里的预认证 RCE 或任意文件写。
 - **`bikini/exploitarium`——完全绕过披露时钟的发布。**"一个公开漏洞 PoC 与漏洞研究文章的单一档案。发布时这些均未被报告"——41 个被追踪条目：Firefox 152.0.5 backup-NSS RCE、Ghidra 12.1.2 RCE/ACE、OpenSSH agent-lock 提供者绕过、nmap IPv6 extlen 回绕、libssh2 UAF、objdump DLX 越界写（并署名 4D4J 更早的发现 CVE-2026-18220 为先行工作）。置顶的"声明"反驳"随机小孩烧 token"叙事：模糊测试由 GPT-5.3 在严格工作流下完成，PoC 为手工录入，"你不需要 SOTA 模型……只有在配上得力的人类监督时它才勉强有用"。两条主线在此碰撞：爱好者预算下的 AI 驱动漏洞发现，以及不要 CVE、不通知厂商的发布——披露时钟不是被压缩，而是被跳过。
 - **Nexus ID 扫描泄露是一条实时数据流，不是一次性转储**（Krebs 对 09-02 曝光的后续）：Nexus 8 月 31 日在 Exploit 论坛宣称"一直在向我们的私有数据库持续渗出新数据"；Krebs 亲眼看到记录数 24 小时内增长近 40 万，他自己扫描的时间戳对应 2025 年 6 月的一次 Hertz 租车——入侵起点至少在 14 个月前。FBI 新奥尔良分局 9 月 1 日对 idscan.net（每月 2100 万+ 次验证、20,000+ 地点）立案调查。语料：1.53 亿+ 美国驾照、1000 万+ 身份证、300 万+ 旅行证件、约 57.9 万张医疗卡——包括国防部长与一名 FBI 助理局长的扫描件。威胁模型从"你的证件在某个转储里"变为"你的证件在一条实时数据流上"——2025 年年中以来在两万个地点中的每一次扫描都可能近实时落入攻击者之手。诚实的告诫：idscan.net 的归因是间接的（九名志愿者的时间戳匹配租车/到访；公司未确认被入侵；Caesars 否认 2025 年 2 月后是客户）；Nexus 在报道发表后很快下线。
+
+## v8 在野零日漏洞迎来完整技术写作——以及一场赏金之争(09-05 20:03)
+
+- **CVE-2026-85046(Chrome 152.0.7977.82,CVSS 8.8,9 月 4 日列入 CISA KEV)现已有研究者的完整技术写作**
+  (Salvatore Gulizia,即 "Serotav","When Sorting Leads To Confusion"):Maglev 的 `TryReduceArrayPrototypeSort`
+  内联了一个插入排序,其回拷步骤检查的是数组的 map 是否为 comparator 运行前见过的*任意一个* map——是集合成员判断,
+  不是变更检测。comparator 里调用 `array.fill(0)` 会把数组*倒退*迁移到 `PACKED_SMI_ELEMENTS`,对象指针被以 Smi map
+  存储。利用链:addrof → fakeobj(旧空间 `unshift` 上被刻意跳过的写屏障)→ 任意读写,再串联一个 n-day 沙箱逃逸
+  拿到 Google 的 v8CTF flag。可复用的形状:在应该检查不可变性的地方检查了集合成员,藏在 JIT reducer 深处的一行
+  推理——现在任何人都能复现。
+- **赏金之争是第二个信号**:对一个已在野利用、同一周被列入 KEV 的 V8 漏洞,Google 只付了 **$1,000**;HN 的 tptacek
+  反驳:攻击者已知的单个渲染进程漏洞本就不值钱,灰市买的是完整利用链——厂商给单个漏洞定价,攻击者给链条定价。
+  注意事项:技术写作本身未提及赏金、也未指明那个 n-day 逃逸;$1,000 数字来自 Chrome 发布博客的二手转述。

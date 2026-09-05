@@ -1242,3 +1242,17 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 - agentconnect.md 的实测试点（三个 Claude 模型、若干 Python/TypeScript 仓库；自标初步：小任务集、仅导航类 LSP 能力、每条件 2–3 次 rollout）：在简单代码定位任务上，两者都可用时模型只有 **0–6%** 的概率选 LSP 而非 grep，而*强制*语义优先路由使成功率从 100% 跌到 89%。LSP 找调用方的精确度完美（1.00 vs grep 的 0.76），但两种模式下召回都约 0.66——语义导航**没有多找到任何真实调用**。
 - LSP 价值的预测因子是**代码库噪声，而非静态类型**：干净仓库（remeda）上 +0.000 F1 且 +16% token；嘈杂仓库（hono）上 +0.246 F1 且 −12% token。而一个纯粹的输出形状改变——返回内联源码文本而非裸位置——把重命名 pass@1 从 0.67 提到 0.83，把每次会话的后续文件读取从 15.2 降到 3.2。
 - agent 时代的工具设计课，被度量而非凭感觉：**精确度不能让工具被使用，输出形状才可以。**语义工具没有死；它需要以模型能据以行动的形状返回上下文——"agent 能力 = 模型 × harness"（thesis 12）的又一实例，也是任何向 agent（含 MCP 服务器）暴露工具者的设计规则。
+
+## ruflo——claude-flow 改名,押注"联邦"(09-05 20:03)
+
+- **`ruvnet/ruflo`(MIT,70.6k★,本跑一手核验)**——7 万星的 claude-flow 元级 harness 更名
+  ("Claude Flow is now Ruflo";`npx claude-flow` 仍可用,星标徽章仍指向旧仓库),新增两件事:web UI beta
+  (flo.ruv.io——本跑实测在线:多模型智能体聊天、并行 MCP 工具调用、约 210 个工具,Docker 可自托管)和
+  **Agent Federation**,定位 "Slack for agents":零信任跨机器智能体协作,mTLS + ed25519 质询-响应身份(无共享
+  密钥),14 类 PII 流水线按信任等级对出站消息执行 BLOCK/REDACT/HASH/PASS,持续信任评分
+  ("0.4×success + 0.2×uptime + 0.2×threat + 0.2×integrity",违规即时降级、渐进升级),9 个 MCP 工具 + 10 条 CLI
+  命令,附 HIPAA/SOC2/GDPR 合规模式。这是把智能体当作"网络公民"而非"沙箱里的个体"的真实架构押注——同时也是一个
+  没有任何独立评审的安全面(信任评分当访问决策用、PII 策略当策略引擎用)。
+- 诚实备注:README 的 v3.8.0 基准声称对 LangGraph/AutoGen/CrewAI "赢 1.3×–1953×"——横跨三个数量级,自报、附
+  gist/原始 JSON 但无独立审计;在有人复测之前按营销读。即便如此,7 万星 harness 的改名加扩展仍是本周星量最大的
+  智能体基础设施事件。

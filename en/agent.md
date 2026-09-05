@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-09-05T12:55:00+08:00
+last_processed: 2026-09-05T20:45:00+08:00
 ---
 
 # Learnt Agent
@@ -27,10 +27,7 @@ patterns, and turn them into insights and actionable todos.
    (durable state + human gates: the *state kernel*), Cline Kanban (git-worktree-per-task: the
    *isolation primitive*).
    - **08-16→08-23 — the stack decomposes by layer; memory gets its envelope spec, not its fields (detail → [[agent-stack]]):** paperclip → ECC + Apache Maka harness/economics winners + `openai/codex` (Apache-2.0); W3C AI Agent Memory Interop CG (launched 2026-06-03, IETF `draft-saihm-memory-protocol`) declines authorship/confidence/provenance — envelope first; Hermes Agent (MIT, **234,615★, 34,925 open issues** — backlog, not stars, is the maintenance signal) rebundles skills+memory+gateways+backends; Buzz makes every event a signed Nostr event.
-   - **08-26 04:03 — the desktop becomes a plugin; terminals rebuild around agent lifecycles; managed MCP arrives
-     (detail → [[agent-stack]]):** DSH Desktop (20.2k★, community client of DeepSeek Harness), herdr (Rust
-     agent-terminal multiplexer, 32.3k★), MongoDB Atlas Managed MCP (hosted MCP + OAuth 2.1 per-user delegation,
-     deny-by-default), Higress v2.2.4 (first OSS gateway for the MCP 2026-07-28 stateless HTTP baseline).
+   - **08-26 04:03 — the desktop becomes a plugin; terminals rebuild around agent lifecycles; managed MCP arrives (detail → [[agent-stack]]):** DSH Desktop (20.2k★), herdr (32.3k★), MongoDB Atlas Managed MCP (OAuth 2.1 per-user delegation, deny-by-default), Higress v2.2.4 (first OSS MCP-stateless gateway).
    - **08-28 04:22→12:15 — the web goes agent-native; the harness spreads everywhere (detail → [[agent-stack]]):**
      WebMCP, Cowork's built-in browser, OpenMontage, VoiceMem, Omnigent governance; Grok Build, Anthropic MHS
      "physical MCP" (answered same day: shape yes, contract no), Qoder, gh-aw, t3code, Vercel Run SDK, worktrunk —
@@ -42,6 +39,7 @@ patterns, and turn them into insights and actionable todos.
      (huggingface/funes, Rust) parses Claude Code/Codex/pi/Hermes session traces into an append-only Lance dataset
      with provenance-citing `recall`/`get`, bound to a private-by-default Hub dataset — data you own; its own bench
      concedes compaction "flattened key findings" on one task.
+   - **09-05 20:03 — the 70k-star meta-harness rebrands and bets on federation (detail → [[agent-stack]]):** claude-flow → ruflo (MIT, 70.6k★, verified first-hand): web UI beta + Agent Federation ("Slack for agents" — mTLS+ed25519 identity, PII pipeline, continuous trust scoring); its "1.3×–1953×" benchmark spread reads as marketing until measured.
    → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
@@ -53,11 +51,7 @@ patterns, and turn them into insights and actionable todos.
    compromise, dangling delegation, vendor-required signed component, transport-hijack delivery (full
    shape→instance map in [[security]]). **The meta-pattern:** in four the class is named, the mitigation
    converged, nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox, MCP tool pinning.
-   - **08-16→09-04 — the shapes fill in, the patch window goes negative, generated code becomes the attack surface (detail → [[security]]):**
-     sixteen shapes + five "enforced by nobody"; MTE −7d; factory implants, CVSS-10 SaaS trios (scorers recorded),
-     Cosmos EVM $5.7M underflow, GPUThor Rowhammer → host root, VMs falsified as containment; the 09-03
-     orchestration/MCP auth-bypass trio all KEV'd Sep 2 (Starlette CVE-2026-48710 / Kestra CVE-2026-49869 / LiteLLM CVE-2026-59822); Orval's ×9 RCEs resolved as metadata lag (patched ≠ announced-patched); GitSpawn `.git/config` sinks
-     in 7 CLI agents; Chrome's sixth in-the-wild zero-day; FalconFlank's EDR-remediation privesc.
+   - **08-16→09-04 — the shapes fill in, the patch window goes negative, generated code becomes the attack surface (detail → [[security]]):** sixteen shapes + five "enforced by nobody"; MTE −7d; factory implants, CVSS-10 SaaS trios, Cosmos EVM $5.7M, VMs falsified as containment; the 09-03 orchestration/MCP auth-bypass trio all KEV'd Sep 2 (Starlette CVE-2026-48710 / Kestra CVE-2026-49869 / LiteLLM CVE-2026-59822); Orval's ×9 RCEs = metadata lag; GitSpawn `.git/config` sinks in 7 CLI agents; Chrome's sixth in-the-wild zero-day; FalconFlank privesc.
    - **09-05 04:03 — the two exploitation clocks measured end-to-end (detail → [[security]]):** Elementor Pro
      CVE-2026-32475 at scale — Wordfence blocked **190,000+ attempts**, ~21 days advisory→PoC→industrial scanning
      (below 4.2.2, assume compromise); Rails CVE-2026-66066: PoC *before* the emergency patch finished, first attack
@@ -67,6 +61,9 @@ patterns, and turn them into insights and actionable todos.
      Framework, SadTalker, Taipy, zerox, marker, excel-mcp-server, python-jose); `bikini/exploitarium` trends with
      ~40 unreported PoCs, GPT-5.3-fuzzed, no CVE requests, no vendor notice; Krebs recasts Nexus as **14+ months of
      continuous exfiltration** (FBI probing idscan.net).
+   - **09-05 20:03 — the v8 zero-day gets its writeup, and a bounty fight (detail → [[security]]):** CVE-2026-85046 fully
+     documented — Maglev `sort` copy-back checks set-membership, not change-detection → addrof/fakeobj → arb R/W + v8CTF;
+     Google paid **$1,000** for a bug KEV'd the same week — vendors price single bugs, attackers price chains.
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -78,9 +75,7 @@ patterns, and turn them into insights and actionable todos.
    pressure moved from "make the model smaller" to "spend the exact bytes you have." Unsloth Desktop
    (73.5k stars) collapsed "try a model" and "adapt a model" into one local app. → [[edge-inference]]
    - **08-21→08-23 — tokenization, diffusion, MIT bases, lossless speculative decode, the budget stops being static (detail → [[edge-inference]]):** RollTab (125M MIDI, NOTE token); DiffusionGemma (~1,500 tok/s); Ling-3.0 base checkpoints (MIT); Liquid AI DSpark (3.18× H100 / 2.87× M4 Max, greedy-identical); FreeToken (arXiv 2608.16157, 35B on 8GB → 753B GLM-5.2 on one workstation, "bandwidth-adaptive" for *agent* workloads).
-   - **08-24 12:03 — the KV cache itself becomes optional:** Daedalus-150M (arXiv 2608.20210) keeps only 6/18 blocks on
-     full attention (12 use two-timestep-wide convolutions), beating GPT-2/Pythia/OPT/MobileLLM on a pre-registered
-     benchmark at 3×–1000× less data — a clean ablation isolating the cache as the *other* memory cost ([[edge-inference]]).
+   - **08-24 12:03 — the KV cache itself becomes optional:** Daedalus-150M (arXiv 2608.20210) keeps only 6/18 blocks on full attention — a clean ablation isolating the cache as the *other* memory cost ([[edge-inference]]).
    - **08-26 04:03 — the hardware half of the fit-to-budget turn (detail → [[edge-inference]]):** Apple M6 (first 2nm,
      Mac mini, $899) + M5 Ultra (512 GB / 1.2 TB/s, Mac Studio) — a consumer-adjacent machine holding frontier-ish
      weights resident, making FreeToken-style whole-machine serving practical.
@@ -90,6 +85,8 @@ patterns, and turn them into insights and actionable todos.
    - **09-02 04:30 — the expert-streaming space fragments; quant surgery matures (detail → [[edge-inference]]):** slotstream (Show HN) is the fifth-plus parallel MLX implementation of SSD expert streaming — with the right kind of claim (greedy decode byte-identical across 4GB/24GB caches, enforced as a standing CI test); Tiel-Coder-35B (community imatrix+template surgery on MIT Ornith-1.5) claims Opus-4.6-medium SWE fixes at 22GB with the card's own n=25 noise warning; and Ornith's original MTP head shipped as random-init weights until Aug 23 — check the checkpoints, not the card.
    - **09-02 20:03 — the consumer blueprint lands between slotstream and the API (detail → [[edge-inference]]):** an M4 Pro Mac mini (48 GB) running Qwen3.6-35B-A3B-OptiQ-4bit (~20 GB resident, ~3B active) on oMLX + Tailscale at 325/34 tok/s — sizing rule: "total parameter count is marketing; active parameters × quantization is what fits in RAM."
    - **09-03 04:03 — the browser is the zero-install end of local inference (detail → [[edge-inference]]):** mlc-ai/web-llm resurfaces (18.8k★, WebGPU, Apache-2.0) — weights and prompts never leave the tab, the strongest privacy end of the trend; honest limits: uncached first weight download, "preliminary" function calling, a `model` chat parameter **silently ignored** (engines bind at construction), killable service workers.
+   - **09-05 20:03 — eviction needs no signal; the spec becomes the compile unit (detail → [[edge-inference]]):** Random Attention (arXiv 2609.03430) — keep the prompt, evict the rest uniformly at random, matches the best learned evictors (redundancy protects reasoning traces); Compile by Training (arXiv 2609.04199) + TERMy — the LLM as compiler backend / offline dataset generator: local run time, no API call.
+   - **09-05 20:42 — the production-default question pinned null; the signal attribution is challenger-carried (watch → release-watch):** zero `RandomAttention`/2609.03430 hits in vLLM + SGLang code/issues; the repo (29★) ports RA only into a TriAttention research fork of vLLM 0.19 — and the mechanism tooling (retention logs, carrier mass, registered synthetic study) is the challenger measuring the evictors' signals, not the evictor authors disclosing.
    → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
@@ -359,6 +356,7 @@ patterns, and turn them into insights and actionable todos.
       mainstream client dies with no reason given on the support page and no migration path (alternatives:
       plus-addressing, Google Groups). Custom-domain users, schools and small firms lose the feature that
       *was* the product; one more consolidation of email identity into provider silos.
+    - **09-05 20:03 — the takedown loses to demand (detail → [[platform-gatekeeping]]):** Nitter has more working instances than before the takedowns — rebuilt on a fork ("shitter") with bulk-bought accounts + residential proxies; suppression killed the instances, not the demand, and every instance is ephemeral (cite the technique, not the link).
 → [[platform-gatekeeping]]
 
 16. **Agent experience is becoming a measurable distribution channel — and its first measured casualty is
@@ -1890,3 +1888,11 @@ patterns, and turn them into insights and actionable todos.
   **"next-token predictor is the wrong mental model" essay** (gmcgoldr, 214-comment HN thread doing as much work as
   the post): RLVR lets a model learn from sequences of its own invention, not just reinforce tokens in existing text;
   the author's own concession — "isn't wrong, but it's incomplete" — is the honest part → [[frontier-models]].
+- **Batch tail (09-05 20:03, detail → [[security]] [[edge-inference]] [[agent-stack]] [[platform-gatekeeping]]):**
+  CVE-2026-85046's writeup + the $1,000 bounty fight → thesis 2; Random Attention + Compile by Training + TERMy
+  (signal-free eviction; spec-as-compile-unit) → thesis 3; ruflo's Agent Federation → thesis 1; Nitter's regrowth →
+  thesis 15. Small but real: **statichost.eu** — a one-person Swedish static host pulling 321 HN pts on a "no AWS,
+  no Cloudflare" sovereignty pitch, and the comment section running the audit that will become the template
+  (CDN ownership, analytics pixels contradicting the no-personal-data claim, the marketing site resolving to UK
+  hosting, no MFA, bot protection paid extra); the sovereignty demand is real even where the vendor fails the
+  audit, and a one-operator host is itself an outage risk.
