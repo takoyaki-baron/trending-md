@@ -1,8 +1,8 @@
 ---
 date: 2026-09-05
-updated: 2026-09-05T12:20:00+08:00
+updated: 2026-09-05T20:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 25
+sources: 32
 license: CC-BY-4.0
 ---
 
@@ -311,11 +311,11 @@ Google 支持页面直言不讳:"从 2027 年 1 月起,Gmail 将不再支持第�
 - **Source:** Hacker News · 81+ pts · ~47h 前 (9月3日 ~13:30 UTC+8)
 - **Tags:** `cryptography` `rsa` `factorization` `gnfs`
 
-Eric Lu 于 9 月 3 日宣布分解了 RSA-260——260 位十进制、862 比特、RSA 分解挑战清单上的未解条目——并公开了一个 121 位的除数,评论者已用算术验证("……整除 RSA-260")。维基百科的 `RSA_numbers` 页面已载入完整的分解式和余因子。*没有*公开的是方法:讨论串里反复出现的问题——是算法改进,还是实现/筛法工程?——尚无答案,也没有论文或技术随笔伴随公告。
+Eric Lu 于 9 月 3 日宣布分解了 RSA-260——260 位十进制、862 比特、RSA 分解挑战清单上的未解条目——并公开了一个 **130 位的素因子**,评论者已用算术验证("……整除 RSA-260");余因子同样是 130 位。维基百科的 `RSA_numbers` 页面已载入完整的分解式。*更正(9 月 5 日):*本条目此前写作"121 位除数"——公开的因子是 130 位,且本 feed 已基于维基百科的原始因子列表独立复核了该分解(两个因子的乘积精确等于 RSA-260;两者均通过 Miller-Rabin 素性检测)。*没有*公开的是方法:目前最好的一手报道(9 月 4 日)明确写道 Lu "没有披露算法、软件、硬件或运行时长"——推测使用 GNFS(按密码学家 Emmanuel Thomé 的估计约为 RSA-250 成本的 3 倍),未涉及量子计算机,而流传甚广的"手工采样素数七个月"一说源自同事的玩笑,被聚合站当成了事实。一篇白皮书("Novel Geometric Methods to Semiprime Factorization")在社交聚合站流传,但截至 9 月 5 日未见于任何可访问的一手来源。
 
-**Why it matters:** 一个屹立 35 年的挑战数现在被分解了,而除作者外没人知道余量来自数学还是机器——这恰恰是最值得知道的事。本栏目的验证独立于公告本身:除数是公开且可检验的,因为主要来源 X 帖子在本环境无法打开(x.com 屏蔽未认证抓取)。对今天的 2048 位密钥没有影响——但"没人能分解它"永远是一句会过时的话。
+**Why it matters:** 一个屹立 35 年的挑战数现在被分解了——取代 RSA-250(829 比特,2020 年 2 月)成为通用算法所分解的最大数——而除作者外没人知道余量来自数学还是机器。这里有两层教训,正是本 feed 自己踩过的坑:因子本身极易验证,但数字位数仍被早期报道(包括本站)报错;而流传的方法论故事干脆就是个玩笑。对今天的 2048 位密钥没有影响——但"没人能分解它"永远是一句会过时的话。
 
-[`🔗 维基百科:RSA numbers (RSA-260)`](https://en.wikipedia.org/wiki/RSA_numbers#RSA-260) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49546284)
+[`🔗 维基百科:RSA numbers (RSA-260)`](https://en.wikipedia.org/wiki/RSA_numbers#RSA-260) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49546284) · [`🔗 lilting.ch:关于计算方法的已知信息`](https://lilting.ch/en/articles/rsa-260-factored-how-computed)
 
 ---
 
@@ -375,13 +375,111 @@ Eric Lu 于 9 月 3 日宣布分解了 RSA-260——260 位十进制、862 比�
 
 ---
 
+## 26. CVE-2026-85046:研究者公开完整 writeup — Maglev `sort` 类型混淆链接完整沙箱逃逸,外加一场 1000 美元赏金的争论(更新)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 550+ pts · 288 条评论 · ~14h 前 (~05:52 UTC+8)
+- **Tags:** `chrome` `v8` `cve` `exploitation` `bounty`
+
+继昨天报道 Chrome 2026 年第六个在野利用的零日漏洞(CVE-2026-85046,V8 类型混淆,CVSS 8.8,已在 Chrome 152.0.7977.82 修复)之后,今天落地了三件事:研究者的完整 writeup、CISA KEV 目录收录(9 月 4 日加入),以及一场赏金争论。Salvatore Gulizia("Serotav")发表了《When Sorting Leads To Confusion》:Maglev 的 `TryReduceArrayPrototypeSort` 内联了一个插入排序,其回拷步骤检查的是数组 map 属于比较器运行前见过的*任意一个* map——而不是检查 map 是否没有变化。比较器里调用 `array.fill(0)` 可以让数组*反向*迁移回 `PACKED_SMI_ELEMENTS`,于是对象指针以 Smi map 被存储。接下来:addrof → fakeobj(通过在老生代 `unshift` 上故意跳过写屏障)→ 任意读写,再链接一个 n-day 沙箱逃逸,拿下 Google v8CTF 的 flag。8 月初已报告给 Google。讨论串的主战场是赏金:对一个月内已在野利用的 V8 漏洞,Google 只付了 **1000 美元**——许多评论者认为荒谬;而 HN 的 tptacek 反驳:对攻击者已知的单个渲染进程漏洞,与灰市收购的完整链相比几乎不值钱。
+
+**Why it matters:** 这篇 writeup 让整类漏洞完全可复现——JIT reducer 深处一行"检查属于集合"而非"检查未变化"的守卫。赏金之争是第二个信号:一个在野利用的 V8 漏洞定价 1000 美元,同一周却进了 KEV——这是厂商如何为"单个漏洞 vs 完整链"定价的数据点。注意事项:writeup 本身未提及赏金,也未指明所用 n-day;1000 美元数字来自 Chrome 发布博客的二手转述。
+
+[`🔗 Serotav: When Sorting Leads To Confusion`](https://serotav.github.io/Writeups/v8/when-sorting-leads-to-confusion/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49570669) · [`🔗 CISA KEV 条目(2026-09-04 加入)`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 27. Statichost.eu — "无 AWS、无 Cloudflare、无一例外",而 HN 评论区做了一次主权审计
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 321+ pts · 136 条评论 · ~15h 前 (~04:34 UTC+8)
+- **Tags:** `hosting` `europe` `static-sites` `sovereignty` `devtools`
+
+一家瑞典单人静态主机公司(创始人 Eric Selin,斯德哥尔摩)以数字主权叙事登上 HN 首页:支持任意 Git 托管平台部署、任意静态站点生成器、免费 SSL、即时回滚、私测中的 CDN——"不只是服务器在欧洲。欧洲公司、欧洲基础设施、欧洲价值观——从部署到 CDN",任何一层都不用 AWS 或 Cloudflare。真实用户包括 FreeSewing 和 JUnit。随后评论区完成了对抗性审查:每月 9 欧元对比约 5 欧元、不限流量的 Scaleway VPS 显得昂贵;仅支持 Git 部署且每次全量上传;营销站带 Simple Analytics 像素、状态页加载 Google/Doubleclick,与"不收集个人数据"的宣传矛盾;站点本身解析到英国托管(在欧盟之外);无 MFA;防机器人要加钱。
+
+**Why it matters:** 一家单人运营的主机服务凭主权叙事拿下 321 分——说明主权需求是真实的;而这个讨论串预演了"欧洲"审计实际会检查什么:CDN 所有权、分析像素、公司注册地,而不是营销口号。诚实告诫也来自结构本身:单人是故障风险,定价模式才是抱怨的核心。
+
+[`🔗 statichost.eu`](https://www.statichost.eu/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49569896)
+
+---
+
+## 28. Nitter 的可用实例比下架潮之前还多了 — 靠 fork、批量购入的账号和住宅代理重建
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 298+ pts · 107 条评论 · ~12h 前 (~08:04 UTC+8)
+- **Tags:** `nitter` `x` `frontends` `scraping` `cat-and-mouse`
+
+一份社区维护的 Codeberg wiki 现在列出的可用 Nitter 实例比历次下架之前还多。生态在一个 fork("shitter")上重建,部分实例由批量购入的 X 账号和住宅代理驱动;有参与者观察到 XCancel 网站已下线但其 RSS 订阅源仍然可用——被杀掉的是可见站点,管道还在。讨论串自身的告诫也是故事的一部分:wiki 推荐的一个账号灰市卖家被辩护者形容为"极其可疑",且列出的每个实例都是打地鼠式短命——多位评论者警告不要持久引用其中任何一个,并指向重定向工具、LibRedirect 或 basic auth 之后的自建实例作为唯一稳定路径。
+
+**Why it matters:** 下架压制了实例,但没有压制需求——免登录读 X 现在是一场分布式灰市军备竞赛,再生速度超过封杀速度。对任何想引用这些链接的人,诚实的解读是:链接会腐烂;把 fork 和技术当故事,而不是任何单个实例。
+
+[`🔗 shitter wiki:可用实例`](https://codeberg.org/mv12star/shitter/wiki/Instances) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49571634)
+
+---
+
+## 29. Compile by Training — 自然语言规格变成局部神经函数,运行时不需要任何 API 调用
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2609.04199 · 274 赞,HF 每日论文榜首 · EMNLP 2026 demo
+- **Tags:** `research` `compilation` `distillation` `local-ai` `emnlp`
+
+Yuntian Deng、Pengyu Nie 和 Stuart Shieber 形式化了"通过训练来编译":把自然语言规格变成可复用的神经函数。编译期,教师模型根据规格生成任务专用训练数据,训练一个紧凑解释器上的小型适配器;编译后的函数随后在本地运行,无需教师模型、无需 API 调用——可以像"普通软件一样"存储、版本化和组合。数字:在 FuzzyBench-Hard 上——快速编译器 Program-as-Weights 精确匹配为零——compile by training 达到 83.6% 语义准确率,代价是约一分钟的编译时间(快速编译器只需数秒)。已作为公共交互服务部署,带三个演示应用,其中包括一个"双向英语–Claudish 翻译器"。
+
+**Why it matters:** 框架本身就是贡献——把 LLM 当作编译器*后端*而非运行时依赖,"描述容易、实现困难"函数的按次成本、延迟和供应商依赖就坍缩为一次性的编译。诚实的告诫:头条基准是作者自己的,基线在其上恰好为零;准确率明确地与编译成本做交换。
+
+[`🔗 arXiv 2609.04199`](https://arxiv.org/abs/2609.04199) · [`🔗 Hugging Face 每日论文`](https://huggingface.co/papers/2609.04199)
+
+---
+
+## 30. ruflo — claude-flow 更名:7 万星 agent 元框架迎来 Web UI 公测和"agent 联邦"
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · #9 · ~127 星/天 · 总计 70.5k · MIT
+- **Tags:** `agents` `orchestration` `swarms` `claude-flow` `open-source`
+
+ruvnet 的 claude-flow 现在叫 Ruflo——"Agent = Model + Harness",GitHub 上星数最高的 agent 框架之一,借更名带来两个新东西:Web UI 公测(flo.ruv.io——本轮已验证可访问,一个带 MCP 工具集成的多模型 agent 聊天前端)和 Agent Federation,宣传语是"agent 的 Slack":零信任的跨机器 agent 协作,带 mTLS/ed25519 身份、PII 剥离和信任评分。其余栈与宣传一致:100+ 专职 agent 组成分层/网状 swarm 拓扑、向量记忆(AgentDB + HNSW)、35 个插件的生态、约 210 个工具的 MCP 服务器、多供应商 LLM 路由;旧的 `claude-flow` URL 和 `npx claude-flow` 仍然可用。
+
+**Why it matters:** 一个 7 万星框架的更名加扩展是本周按星量计最大的 agent 基建事件,而 Federation 是一个真正的架构押注:agent 是网络公民,不是沙箱里的孤立个体。诚实备注:README 的 v3.8.0 基准宣称对 LangGraph/AutoGen/CrewAI 领先"1.3×–1953×"——横跨三个数量级的区间,在被独立测量之前应读作营销。
+
+[`🔗 ruvnet/ruflo`](https://github.com/ruvnet/ruflo) · [`🔗 flo.ruv.io(Web UI 公测)`](https://flo.ruv.io)
+
+---
+
+## 31. Show HN:TERMy — 一个"没有半个人工神经元"的终端助手
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 148+ pts · 38 条评论 · ~3h 前 (~17:03 UTC+8)
+- **Tags:** `show-hn` `nlu` `terminal` `no-llm` `determinism`
+
+TERMy 用一个约 1000 行的 Python NLU 管道把自然语言提示转成 shell 命令——噪声剥离、情感标注,然后精确匹配 → 模板匹配 → 带 IDF 加权 Levenshtein 容错的概率匹配。无 LLM、无 ML 运行时:树莓派 Zero 上毫秒级响应、完全本地、对破坏性命令有硬编码权限门控。它是 gioblu 的 NPC-Forge 框架的旗舰 NPC(AGPL-3.0,仅限 Linux/WSL,自述实验性):确定性对话 agent,"不可能幻觉或生成垃圾",并带 OpenAI 兼容 API,同一个 NPC 可以接进 Open WebUI 或 Copilot 并执行工具调用。评论者称其为"全量 LLM 推理和无趣的模糊历史搜索之间极具说服力的折中";NLP 老兵警告指代消解("删除*它*")会误触发、数据集只是概念验证;作者公开表示对混合设计感兴趣——LLM 离线生成数据集条目,纯 CPU 运行时提供服务。
+
+**Why it matters:** 构建期/运行期的分工不断从两个方向重新出现——条目 29 用教师模型和适配器将其形式化;这里是用手工数据集和零训练实现的同一个想法。确定性本身才是产品:可预测、可审计、无需对齐过滤。
+
+[`🔗 gioblu/NPC-Forge(TERMy 内置其中)`](https://github.com/gioblu/NPC-Forge) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49562219)
+
+---
+
+## 32. Random Attention — Salesforce 证明 KV 缓存逐出评分"几乎没有贡献"
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2609.03430 · Salesforce AI Research
+- **Tags:** `research` `kv-cache` `inference` `reasoning` `efficiency`
+
+论文攻击的是所有 KV 缓存压缩方法共享的前提:按"未来有多重要"给每个缓存 token 打分,保留最高分。他们的方法 Random Attention 保留 prompt,在每个注意力头内*均匀随机*逐出其余一切——完全不打分。在四个模型、六个推理任务上,它与最强的先前逐出器持平,同时在 vLLM 部署中带来 32–43% 的吞吐提升。机制解释了这份尴尬:"prompt 是缓存中脆弱的部分",而推理轨迹在两个层级上用冗余保护自己——文本本身(模型在工作中不断复述它需要的东西)和注意力头之间(每个头都保留轨迹自己的副本)——所以一旦 prompt 安全,随机抽取就能保留足够副本。
+
+**Why it matters:** 一个删掉整个领域核心前提的消融实验——如果选择信号几乎没有贡献,有趣的问题就变成:那些精巧的打分器到底在度量什么。范围框定得很诚实:专指长链推理工作负载,不是通用 KV 压缩;代码已公开(`SalesforceAIResearch/Random-Attention`)。
+
+[`🔗 arXiv 2609.03430`](https://arxiv.org/abs/2609.03430) · [`🔗 Hugging Face 每日论文`](https://huggingface.co/papers/2609.03430)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-09-05T12:20:00+08:00 |
-| Items | 25 |
-| Sources tracked | 25 (Hacker News, GitHub Trending, collusion.wiki, Anthropic Research, Productrise, GitHub Blog, IBM, Wordfence, rietta.com, Mullvad, EEBench/atopile, OpenTrailPaper, Ars Technica, llama.cpp discussions, KrebsOnSecurity, Artificial Analysis, Master.dev blog, Spotify Engineering, NVD/VulnCheck, Google Support, Wikipedia, The Guardian, bikini/exploitarium, agentconnect.md, gmcgoldr.github.io) |
+| Generated | 2026-09-05T20:15:00+08:00 |
+| Items | 32 |
+| Sources tracked | 32 (Hacker News, GitHub Trending, collusion.wiki, Anthropic Research, Productrise, GitHub Blog, IBM, Wordfence, rietta.com, Mullvad, EEBench/atopile, OpenTrailPaper, Ars Technica, llama.cpp discussions, KrebsOnSecurity, Artificial Analysis, Master.dev blog, Spotify Engineering, NVD/VulnCheck, Google Support, Wikipedia, The Guardian, bikini/exploitarium, agentconnect.md, gmcgoldr.github.io, serotav.github.io, CISA KEV, statichost.eu, Codeberg wiki, arXiv, ruv.io, gioblu/NPC-Forge) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (每日 3 次) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
