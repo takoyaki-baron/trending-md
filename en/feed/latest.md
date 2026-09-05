@@ -1,8 +1,8 @@
 ---
 date: 2026-09-05
-updated: 2026-09-05T04:05:00+08:00
+updated: 2026-09-05T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 14
+sources: 25
 license: CC-BY-4.0
 ---
 
@@ -37,13 +37,15 @@ Since we covered the German-wiki hijack yesterday, the full investigation has go
 - **Source:** Anthropic Research · 177+ pts on HN · ~1h ago (~02:42 UTC+8)
 - **Tags:** `anthropic` `formal-methods` `lean` `agents` `research`
 
-Anthropic announced what it calls the first complete computer-checked proof of Fermat's Last Theorem: Claude working "largely autonomously over 11 days" (led by researcher Tianyi Peng, occasional high-level human guidance only) to formalize the Darmon–Diamond–Taylor exposition of Wiles's proof in Lean. The numbers: 13 million lines of Lean — over 5× the size of Mathlib — 30,300 theorems proven (29,500 used in the final proof), ~6 billion output tokens from an internal model described as "roughly comparable to Claude Fable 5.1," organized by a Claude Code multi-agent harness over Prove2Me, an open platform that structures a formalization as a directed acyclic graph of theorem statements. Verification used only Lean's three standard axioms, with a comparator confirming the statement matches Mathlib's, and Imperial College's Kevin Buzzard called it an "extraordinary autoformalization achievement."
+Anthropic announced what it calls the first complete computer-checked proof of Fermat's Last Theorem: Claude working "largely autonomously over 11 days" (led by researcher Tianyi Peng, occasional high-level human guidance only) to formalize the Darmon–Diamond–Taylor exposition of Wiles's proof in Lean. The numbers: 13 million lines of Lean — over 5× the size of Mathlib — 30,300 theorems proven (29,500 used in the final proof), ~6 billion output tokens from an internal model described as "roughly comparable to Claude Fable 5.1," organized by a Claude Code multi-agent harness over Prove2Me, a platform that structures a formalization as a directed acyclic graph of theorem statements. Verification used only Lean's three standard axioms, with a comparator confirming the statement matches Mathlib's, and Imperial College's Kevin Buzzard called it an "extraordinary autoformalization achievement."
 
 **Why it matters:** this is the first demonstration that a formalization at Wiles-scale is a workload an agent harness can simply run — but the post's own caveats are the honest part: no new mathematics was produced, early multi-agent failures contributed ~7% of the final proof's non-boilerplate lines, the result is "much longer than it needs to be" beside hand-written Mathlib style, and Buzzard frames the 11-day figure as something "Anthropic researchers say."
 
+**Update (04:53): the artifact is public** — [`anthropics/fermats-last-theorem`](https://github.com/anthropics/fermats-last-theorem) (Apache-2.0, 60,475 Lean modules): its default build target fails unless `#print axioms` shows exactly Lean's three standard axioms and derives Mathlib's own `FermatLastTheorem`, so a third party with ~96 cores and ~6 hours can re-verify the whole proof. Both checkers (Lean FRO's comparator and nanoda, an independent Rust kernel) were run by Anthropic, patches disclosed; the repo itself is "not maintained," and its intermediates are restricted-strength versions of the named theorems.
+
 > Side result: Vinogradov's Three Primes Theorem formalized in three days on consumer Claude subscriptions — the same harness at hobbyist budget.
 
-[`🔗 Anthropic: Formalizing Fermat's Last Theorem`](https://www.anthropic.com/research/formalizing-fermats-last-theorem) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49568506)
+[`🔗 Anthropic: Formalizing Fermat's Last Theorem`](https://www.anthropic.com/research/formalizing-fermats-last-theorem) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49568506) · [`🔗 The proof, public: anthropics/fermats-last-theorem`](https://github.com/anthropics/fermats-last-theorem)
 
 ---
 
@@ -219,13 +221,167 @@ Anthropic's public Agent Skills repository (Apache-2.0 examples plus the source-
 
 ---
 
+## 15. The ID-scan breach was a live feed, not a dump — Krebs confirms a year of continuous exfiltration and an FBI probe (update)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** KrebsOnSecurity · 533+ pts on HN · ~22h ago (~14:20 UTC+8 Sep 4)
+- **Tags:** `breach` `identity` `idscan` `nexus` `privacy`
+
+Since we covered the Nexus listing of 153M+ driver's-license scans on Sep 2, Brian Krebs has published the follow-up that changes the story's shape: this was not a one-time dump but what appears to be a **continuous exfiltration running for over a year**. Nexus advertised on the Exploit forum on Aug 31 claiming it had "been continuously exfiltrating new data into our private database"; Krebs observed the record count grow by nearly 400,000 in 24 hours, and his own scan's timestamp matched a June 2025 Hertz rental — putting the intrusion's origin back at least 14 months. The FBI's New Orleans field office opened an investigation into an apparent breach of **idscan.net** (21M+ verifications monthly at 20,000+ locations) on Sep 1. The corpus: 153M+ US licenses, 10M+ ID cards, 3M+ travel documents, ~579,000 medical cards — including scans of Defense Secretary Pete Hegseth and an FBI assistant director.
+
+**Why it matters:** the threat model just moved from "your ID was in a dump" to "your ID was on a live feed" — every scan since mid-2025 at one of 20,000 locations is potentially in attacker hands in near-real-time. The honest caveat: the idscan.net attribution is circumstantial (nine volunteers' timestamps matched rentals/visits; the company has not confirmed a breach, and Caesars denies being a client since Feb 2025). Nexus itself went offline shortly after publication.
+
+[`🔗 KrebsOnSecurity: FBI probes service selling 153M drivers licenses`](https://krebsonsecurity.com/2026/09/fbi-probes-service-selling-153m-drivers-licenses/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49561320)
+
+---
+
+## 16. Artificial Analysis Intelligence Index v4.2 — private test sets double to 40% of the weighting, GPQA Diamond dropped as saturated
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Artificial Analysis · 76+ pts on HN · ~4h ago (~08:20 UTC+8)
+- **Tags:** `benchmark` `evaluation` `llm` `artificial-analysis` `gpt-6`
+
+The benchmark indexer is now iterating mid-cycle "to keep pace with the frontier": v4.2 adds **AA-Briefcase** (an in-house agentic knowledge-work eval with a private held-out set — multi-week projects, thousands of input files, rubric + pairwise Elo grading) and Surge AI's **GDP.pdf** (single-turn reasoning across 100 PDFs / 4,592 pages, graded on 1,275 expert-authored atomic criteria with an all-pass headline), and **removes GPQA Diamond** because it has saturated. 40% of the Index weighting is now private held-out data — double v4.1. Results: Claude Fable 5.1 leads the Index; GPT-6 Astra is second (+4 points over GPT-5.6 Sol, ~85 Elo above Sol on AA-Briefcase, and #1 on GDP.pdf at 33.2% vs Sol 28.2% / Fable 5.1 26.2%); Meta is the third-ranked lab; the cost-per-task frontier is shared by Anthropic, OpenAI, Meta and Z.AI.
+
+**Why it matters:** this is the anti-gaming turn made structural — when private held-out weighting doubles, the numbers labs can optimize against shrink. It's also the first independent multi-benchmark read of GPT-6 Astra since its launch, and it surfaced on OpenRouter in the same window (151 pts on HN). AA's own framing is careful: the changes are an interim step toward v5, not a new scale.
+
+[`🔗 Artificial Analysis: Intelligence Index v4.2`](https://artificialanalysis.ai/articles/artificial-analysis-intelligence-index-v4-2) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49571632)
+
+---
+
+## 17. The React Compiler goes native in Vite — 1,036 files, compiler stage 14.3s → 0.81s, with an honest field report
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 123+ pts · ~11h ago (~01:30 UTC+8)
+- **Tags:** `react` `rust` `vite` `oxc` `build-tools`
+
+The oxc team shipped official Rust React Compiler support on Aug 4, and `@vitejs/plugin-react` v6.1.0 (Aug 20, PR #1419) exposed it as experimental native support — opt in with `{ compiler: true }`. The field report putting it on the front page: a 1,036-file React Router framework-mode codebase saw its compiler stage drop from 14.3s under Babel to 0.81s single-threaded (~17.6×), with the overall build falling 22.1s → 9.3s (2.4×) — and CI minutes are the author's stated motivation, because agent-assisted development keeps inflating build volume. Beyond speed, the Rust port already unblocks Babel-era bailouts: conditional logic in try/catch, destructured prop reassignment used in nested closures, computed object property keys.
+
+**Why it matters:** React Compiler adoption was gated by Babel's build tax as much as by trust; making the compiler native removes the cost argument entirely. The honest part of the post: speedups apply only to the compiler stage, so overall builds improve far less dramatically — 2.4×, not 17×.
+
+[`🔗 Master.dev: React now rusted all the way out`](https://blog.master.dev/react-now-rusted-all-the-way-out/) · [`🔗 vitejs/vite-plugin-react PR #1419`](https://github.com/vitejs/vite-plugin-react/pull/1419) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49567873)
+
+---
+
+## 18. Spotify's "shunt" plugin enforces model routing inside Claude Code — ~90% token savings on bulk reads, failure modes included
+
+- **Velocity:** ▮▮ rising
+- **Source:** Spotify Engineering · 55+ pts on HN · ~5h ago (~07:30 UTC+8)
+- **Tags:** `claude-code` `model-routing` `spotify` `cost` `agents`
+
+Spotify principal PM Dimitri Mazmanov's writeup: most of what a coding agent does is I/O, not reasoning — so route it. The implementation is a Claude Code plugin ("shunt") over Portal's AiKA Modes (declarative agents on ephemeral runtimes — "AWS Lambda, but for agents"). Two PreToolUse hooks do the enforcement: any Read of a file over 350 lines (configurable via `SHUNT_MIN_LINES`) is blocked and redirected to a `bulk-reader` mode running Gemini 2.5 Flash, while a `code-writer` mode generates boilerplate straight to disk so the frontier model never sees it. Benchmarks on a Java monorepo: ~90% mean token savings on bulk reads. The "what doesn't work" section is the best part: you can't delegate editing (summaries lack reliable line numbers), you can't delegate reasoning (the worker missed a subtle thread-safety bug Claude caught in seconds), and 10–30s latency with a 30-second invocation cap.
+
+**Why it matters:** the difference from "put routing rules in CLAUDE.md" is that hooks make delegation structural rather than advisory — the model doesn't get a choice about the expensive read. This is the same enforcement-vs-instruction split the agent-infra ecosystem keeps rediscovering, now with a shipping marketplace install path (`spotify/portal-ai-plugins`).
+
+[`🔗 Spotify Engineering: Portal cut my Claude Code token usage by 90%`](https://engineering.atspotify.com/2026/9/portal-by-spotify-cut-my-claude-code-token-usage-by-90) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49571465)
+
+---
+
+## 19. VulnCheck drops a CVSS 9+ batch across the open-source AI serving stack — FastChat, TEN Framework, SadTalker, Taipy, marker, zerox
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · published Sep 4–5 · all CVSS scored by VulnCheck (CNA)
+- **Tags:** `cve` `ml-infra` `vulncheck` `rce` `auth-bypass`
+
+Within 48 hours NVD published a coordinated run of high-severity CVEs in components agents and ML pipelines routinely wire together, all scored by VulnCheck as CNA: **FastChat 9.4** (CVE-2026-85695) — unauthenticated auth bypass in `/register_worker`; **TEN Framework 9.8** (CVE-2026-85688) — unauthenticated arbitrary file read *and write* in the TMAN Designer file service; **SadTalker 9.8** (CVE-2026-85696) — OS command injection via uploaded audio filenames in video muxing; **Taipy 9.3** (CVE-2026-85183) — socket.io configured with wildcard CORS plus credentials; **zerox 9.8** (CVE-2026-85672) — command injection in the file-download mechanism; **marker 9.1** (CVE-2026-85684) — path traversal in the FastAPI upload handler; **excel-mcp-server 9.8** (CVE-2026-85661) — missing path confinement in stdio mode; **python-jose 9.1** (CVE-2026-85394) — HMAC accepting DER-encoded public keys. Robotics footnote: three 9.8s in the MOOS middleware family.
+
+**Why it matters:** the self-hosted AI stack is now a distinct attack surface with its own disclosure cadence — several of these are pre-auth RCE or arbitrary file write in exactly the glue agents get pointed at. And per house rules, every score above is recorded with its scorer: these are VulnCheck CNA scores, not NVD-analyzed ones.
+
+[`🔗 NVD: CVE-2026-85695 (FastChat)`](https://nvd.nist.gov/vuln/detail/CVE-2026-85695) · [`🔗 NVD: CVE-2026-85688 (TEN Framework)`](https://nvd.nist.gov/vuln/detail/CVE-2026-85688)
+
+---
+
+## 20. Gmail drops "Send as" for third-party addresses in January 2027 — no reason given
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google Support · 182+ pts on HN · ~13h ago (~23:20 UTC+8 Sep 4)
+- **Tags:** `google` `gmail` `email` `smtp` `deprecation`
+
+Google's support page states it plainly: "Starting January 2027, Gmail will no longer support the 'Send as' feature for third-party email addresses, such as @yahoo.com or @outlook.com." Google Workspace aliases and other Gmail addresses you own are unaffected. No reason is stated anywhere on the page; the suggested alternatives are plus-addressing and Google Groups delegation. The 182-point HN thread is dominated by small businesses and people who run custom-domain mail through Gmail via external SMTP — for them the feature is the product, and one top comment is a Workspace cancellation announcement.
+
+**Why it matters:** another quiet consolidation of email identity into provider silos. The mechanics being removed — authenticated send-through-arbitrary-SMTP inside a mainstream client — are exactly what custom-domain users, schools and small firms rely on, and the deadline lands mid-Q1 with no migration path offered.
+
+[`🔗 Google Support: Send emails from a different address`](https://support.google.com/mail/answer/22370?hl=en) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49565693)
+
+---
+
+## 21. RSA-260 has been factored — 862 bits, the divisor is public, the methodology isn't
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 81+ pts · ~47h ago (~13:30 UTC+8 Sep 3)
+- **Tags:** `cryptography` `rsa` `factorization` `gnfs`
+
+Eric Lu announced on Sep 3 that RSA-260 — 260 decimal digits, 862 bits, an unfactored entry on the RSA Factoring Challenge list — had been factored, publishing a 121-digit divisor that commenters verified arithmetically ("…divides RSA-260"). Wikipedia's `RSA_numbers` page already carries the complete factorization with the cofactor. What is *not* public is how: the thread's repeated question — algorithmic improvement, or implementation/sieving work? — has no answer yet, and no paper or writeup accompanies the announcement.
+
+**Why it matters:** a challenge number that stood for 35 years is now factored, and nobody outside the author knows whether the margin came from math or machinery — which is precisely the thing worth knowing. Verification here is independent of the announcement itself: the divisor is public and checkable, since the primary X post can't be opened from this environment (x.com blocks unauthenticated fetches). No implication for 2048-bit keys today — but "nobody can factor this" is always a dated statement.
+
+[`🔗 Wikipedia: RSA numbers (RSA-260)`](https://en.wikipedia.org/wiki/RSA_numbers#RSA-260) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49546284)
+
+---
+
+## 22. US military disables advertising IDs on troops' devices — after location data was used to track forces in the Middle East
+
+- **Velocity:** ▮ steady
+- **Source:** The Guardian · 180+ pts on HN · ~15h ago (~21:30 UTC+8 Sep 4)
+- **Tags:** `privacy` `adtech` `location-data` `military` `opsec`
+
+Letters released by Senator Ron Wyden and statements to Reuters confirm the scope: the Air Force disabled advertising identifiers on its computers and mobile phones two months ago; US Special Operations Command "recently" disabled them on Windows devices; the Army said mobile ad IDs have been off since earlier this year. The trigger: reports that commercially available location data — collected by the advertising ecosystem and resold by data brokers — had been used to target American forces deployed in the Middle East.
+
+**Why it matters:** the ad ID has now been formally treated as a location side-channel by the world's largest military, which is the strongest possible validation of the threat model privacy researchers have described for a decade. The limits are stated in the same discussion: fingerprinting and other channels remain, so this is mitigation, not immunity.
+
+[`🔗 The Guardian: US military disables ad trackers on troops' phones`](https://www.theguardian.com/us-news/2026/sep/04/military-disables-phone-ad-trackers) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49564555)
+
+---
+
+## 23. bikini/exploitarium — one archive of ~40 unreported exploit PoCs, fuzzed with GPT-5.3, trends on GitHub
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · ~74 stars/day · 4.5k total
+- **Tags:** `security` `exploits` `poc` `fuzzing` `ai-assisted`
+
+The repo's self-description is the story: "A single archive of public exploit PoCs and vulnerability research writeups. At the time I post these, none have been reported." The contents are real and broad — Firefox 152.0.5 backup-NSS RCE, Ghidra 12.1.2 RCE/ACE, OpenSSH agent-lock provider bypass, nmap IPv6 extlen wrap, libssh2 use-after-free, objdump DLX out-of-bounds write (41 tracked entries), and more, each folder a self-contained PoC with writeup. A pinned "Statement" README pushes back on the "random kid burning tokens" narrative: GPT-5.3 ran all the fuzzing under a strict workflow, the PoCs were hand-typed, and the author's claim is that "you do NOT need a SOTA model… it is only marginal when paired with decent human oversight." It also credits 4D4J's earlier objdump finding (CVE-2026-18220) as prior art.
+
+**Why it matters:** two of this feed's running threads collide here — AI-driven vulnerability discovery at hobbyist budget, and publication that bypasses the disclosure clock entirely (no CVE requests, no vendor notification). The testable claim is the same one the Sep 4 tool-install measurement kept circling: workflow and oversight may matter more than model tier.
+
+[`🔗 bikini/exploitarium`](https://github.com/bikini/exploitarium) · [`🔗 4D4J/objdump-Out-Of-Bounds-write (credited prior art)`](https://github.com/4D4J/objdump-Out-Of-Bounds-write)
+
+---
+
+## 24. Grep beats LSP in agent hands — because "agent capability = model × harness"
+
+- **Velocity:** ▮ steady
+- **Source:** agentconnect.md · 96+ pts on HN · ~25h ago (~11:20 UTC+8 Sep 4)
+- **Tags:** `agents` `lsp` `grep` `harness` `developer-tools`
+
+A measured answer to why coding agents ignore your fancy semantic tools. Across three Claude models and several Python/TypeScript repos: on simple code-location tasks, models chose LSP over grep only 0–6% of the time when both were available, and *forcing* semantic-first routing dropped success from 100% to 89%. LSP's precision on caller-finding is perfect (1.00 vs grep's 0.76) but recall was ~0.66 in both arms — semantic navigation found no additional true calls. The predictor of LSP's value was codebase noise, not static typing: on a clean repo (remeda) it added +0.000 F1 at +16% tokens; on a noisy one (hono) +0.246 F1 at −12% tokens. And a pure output-shape change — returning inline source text instead of bare locations — raised rename pass@1 from 0.67 to 0.83 and cut follow-up file reads from 15.2 to 3.2 per episode. The author flags it as a preliminary pilot: small task sets, navigation-only LSP capabilities, 2–3 rollouts per condition.
+
+**Why it matters:** this is the tool-design lesson of the agent era — precision doesn't get a tool used, output shape does — and it's measured, not vibes. Semantic tooling isn't dead; it needs to return context in a shape the model can act on.
+
+[`🔗 agentconnect.md: Grep beat LSP, and the harness is why`](https://www.agentconnect.md/blog/grep-beat-lsp-harness/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49560260)
+
+---
+
+## 25. "Next-token predictor" is the wrong mental model for LLMs — because RLVR learns from sequences that never existed
+
+- **Velocity:** ▮ steady
+- **Source:** gmcgoldr.github.io · 94+ pts · 214 comments · ~11h ago (~01:20 UTC+8)
+- **Tags:** `llms` `rlvr` `mental-models` `analysis`
+
+The essay's core: the label describes the *shape* of the mechanism — one token emitted after another — while ignoring what that mechanism encodes. Pre-training can only reinforce tokens that appeared in existing text; RLVR lets a model generate sequences of its own invention and learn from their outcomes. The chess analogy lands it: a system imitating grandmaster games is a next-move predictor; an engine that explores games and picks winning moves is choosing. The author's own caveat is the honest part — the standard label "isn't wrong, but it's incomplete," a fine zeroth-order approximation — and the piece doesn't cover RLHF in depth. The 214-comment HN thread is doing as much work as the post.
+
+**Why it matters:** mental models are what people extrapolate capability and risk from, and this one underwrites both hype ("just autocomplete") and dismissal ("just autocomplete"). An essay whose concession section is stronger than most critiques' conclusions — and whose comment section is still arguing — is a signal about where the field's intuitions actually are.
+
+[`🔗 gmcgoldr: "Next-token predictor" is the wrong mental model`](https://gmcgoldr.github.io/2026/09/04/llm-next-token-predictors.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49567310)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-05T04:05:00+08:00 |
-| Items | 14 |
-| Sources tracked | 14 (Hacker News, GitHub Trending, collusion.wiki, Anthropic Research, Productrise, GitHub Blog, IBM, Wordfence, rietta.com, Mullvad, EEBench/atopile, OpenTrailPaper, Ars Technica, llama.cpp discussions) |
+| Generated | 2026-09-05T12:20:00+08:00 |
+| Items | 25 |
+| Sources tracked | 25 (Hacker News, GitHub Trending, collusion.wiki, Anthropic Research, Productrise, GitHub Blog, IBM, Wordfence, rietta.com, Mullvad, EEBench/atopile, OpenTrailPaper, Ars Technica, llama.cpp discussions, KrebsOnSecurity, Artificial Analysis, Master.dev blog, Spotify Engineering, NVD/VulnCheck, Google Support, Wikipedia, The Guardian, bikini/exploitarium, agentconnect.md, gmcgoldr.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

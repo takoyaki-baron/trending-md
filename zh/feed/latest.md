@@ -1,8 +1,8 @@
 ---
 date: 2026-09-05
-updated: 2026-09-05T04:05:00+08:00
+updated: 2026-09-05T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 14
+sources: 25
 license: CC-BY-4.0
 ---
 
@@ -37,13 +37,15 @@ license: CC-BY-4.0
 - **Source:** Anthropic Research · HN 177+ pts · ~1h 前 (~02:42 UTC+8)
 - **Tags:** `anthropic` `formal-methods` `lean` `agents` `research`
 
-Anthropic 宣布完成首个完整的机器校验费马大定理证明:Claude "在 11 天内基本自主工作"(由研究员 Tianyi Peng 领导,仅有偶尔的高层人类指导),将 Wiles 证明的 Darmon–Diamond–Taylor 讲义版本形式化为 Lean。数字:1300 万行 Lean——超过 Mathlib 规模的 5 倍——证明 30,300 个定理(最终证明使用了 29,500 个),内部模型(描述为"大致相当于 Claude Fable 5.1")消耗约 60 亿输出 token,由 Claude Code 多智能体框架驱动,并通过 Prove2Me(将形式化组织为定理语句有向无环图的开放平台)协调。验证仅使用 Lean 的三条标准公理,比较器确认定理陈述与 Mathlib 一致;帝国理工的 Kevin Buzzard 称之为"非凡的自动形式化成就"。
+Anthropic 宣布完成首个完整的机器校验费马大定理证明:Claude "在 11 天内基本自主工作"(由研究员 Tianyi Peng 领导,仅有偶尔的高层人类指导),将 Wiles 证明的 Darmon–Diamond–Taylor 讲义版本形式化为 Lean。数字:1300 万行 Lean——超过 Mathlib 规模的 5 倍——证明 30,300 个定理(最终证明使用了 29,500 个),内部模型(描述为"大致相当于 Claude Fable 5.1")消耗约 60 亿输出 token,由 Claude Code 多智能体框架驱动,并通过 Prove2Me(将形式化组织为定理语句有向无环图的平台)协调。验证仅使用 Lean 的三条标准公理,比较器确认定理陈述与 Mathlib 一致;帝国理工的 Kevin Buzzard 称之为"非凡的自动形式化成就"。
 
 **Why it matters:** 这是首次证明 Wiles 规模的形式化是智能体框架可以直接运行的工作负载——但公告自己的注意事项才是诚实的部分:没有产生新数学,早期多智能体的失败贡献了最终证明约 7% 的非样板行,与手工编写的 Mathlib 风格相比结果"远比必要的更长",而 Buzzard 把 11 天这个数字表述为"Anthropic 研究人员所言"。
 
+**更新(04:53):证明工件已公开** —— [`anthropics/fermats-last-theorem`](https://github.com/anthropics/fermats-last-theorem)(Apache-2.0,60,475 个 Lean 模块):其默认构建目标在 `#print axioms` 未恰好显示 Lean 的三条标准公理时会构建失败,并从已证语句推导出 Mathlib 自己的 `FermatLastTheorem`——任何拥有约 96 核与约 6 小时的第三方都能重新验证整个证明。两个校验器(Lean FRO 的 comparator 与独立 Rust 内核 nanoda)均由 Anthropic 运行,补丁已披露;仓库本身"不再维护",且其中间定理是限定强度的版本。
+
 > 附带结果:用消费级 Claude 订阅在三天内形式化了 Vinogradov 三素数定理——同一框架的爱好者预算版本。
 
-[`🔗 Anthropic:形式化费马大定理`](https://www.anthropic.com/research/formalizing-fermats-last-theorem) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49568506)
+[`🔗 Anthropic:形式化费马大定理`](https://www.anthropic.com/research/formalizing-fermats-last-theorem) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49568506) · [`🔗 证明已公开:anthropics/fermats-last-theorem`](https://github.com/anthropics/fermats-last-theorem)
 
 ---
 
@@ -219,13 +221,167 @@ Anthropic 的公开 Agent Skills 仓库(Apache-2.0 示例 + Claude 文件能力�
 
 ---
 
+## 15. 身份证扫描泄露不是一次性转储,而是"实时数据流" — Krebs 证实持续渗出超过一年,FBI 已立案调查(更新)
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** KrebsOnSecurity · HN 533+ pts · ~22h 前 (9月4日 ~14:20 UTC+8)
+- **Tags:** `breach` `identity` `idscan` `nexus` `privacy`
+
+继 9 月 2 日报道 Nexus 出售 153M+ 驾照扫描件后,Brian Krebs 的跟进报道改变了整个事件的性质:这不是一次性转储,而是一场**持续渗出超过一年**的攻击。Nexus 于 8 月 31 日在 Exploit 论坛打广告,声称"一直在持续渗出新数据到我们的私有数据库";Krebs 观察到 24 小时内记录数增长近 40 万条,他自己那份扫描的时间戳对应 2025 年 6 月的一次 Hertz 租车——把入侵起点推回到至少 14 个月前。FBI 新奥尔良分局已于 9 月 1 日针对疑似 **idscan.net**(每月在 20,000+ 地点处理 2100 万+ 次核验)泄露事件立案。数据规模:153M+ 美国驾照、10M+ 身份证、3M+ 旅行证件、约 57.9 万张医疗卡——其中包括国防部长 Pete Hegseth 和一名 FBI 助理局长的扫描件。
+
+**Why it matters:** 威胁模型从"你的身份证在某个转储里"升级为"你的身份证在实时数据流上"——自 2025 年年中以来,在 20,000 个地点中的任何一次扫描都可能已近实时地落入攻击者之手。诚实的注意事项:idscan.net 的归因是间接推断(九名志愿者扫描件的时间戳与租车/到店记录吻合;该公司未确认泄露,Caesars 否认自 2025 年 2 月起是其客户)。Nexus 本身在报道发布后不久即下线。
+
+[`🔗 KrebsOnSecurity:FBI 调查出售 1.53 亿驾照扫描件的服务`](https://krebsonsecurity.com/2026/09/fbi-probes-service-selling-153m-drivers-licenses/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49561320)
+
+---
+
+## 16. Artificial Analysis 智能指数 v4.2 — 私有测试集权重翻倍至 40%,GPQA Diamond 因饱和被移除
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Artificial Analysis · HN 76+ pts · ~4h 前 (~08:20 UTC+8)
+- **Tags:** `benchmark` `evaluation` `llm` `artificial-analysis` `gpt-6`
+
+基准测试机构已开始中场迭代以"跟上前沿":v4.2 新增 **AA-Briefcase**(自研的智能体知识工作评测,私有保留测试集——数周长度的项目、数千个输入文件,采用评分细则 + 两两对比 Elo 评分)和 Surge AI 的 **GDP.pdf**(对 100 份 PDF / 4,592 页做单轮推理,按 1,275 条专家撰写的原子标准评分,以全通过为头条指标),并**移除已饱和的 GPQA Diamond**。指数权重中 40% 现在是私有保留数据——是 v4.1 的两倍。结果:Claude Fable 5.1 领跑指数;GPT-6 Astra 位居第二(比 GPT-5.6 Sol 高 4 分,在 AA-Briefcase 上高出 Sol 约 85 Elo,并以 33.2% 登顶 GDP.pdf,对比 Sol 28.2%、Fable 5.1 26.2%);Meta 是排名第三的实验室;成本-任务前沿由 Anthropic、OpenAI、Meta 和 Z.AI 共享。
+
+**Why it matters:** 这是"防作弊"的结构化落地——当私有保留权重翻倍,实验室可以针对性优化的公开数字就缩水了。这也是 GPT-6 Astra 发布后首份独立的多基准解读,且同一时间窗口内 Astra 已上线 OpenRouter(HN 151 pts)。AA 自己的表述很谨慎:这些变更是通往 v5 的过渡步骤,而非新量表。
+
+[`🔗 Artificial Analysis:智能指数 v4.2`](https://artificialanalysis.ai/articles/artificial-analysis-intelligence-index-v4-2) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49571632)
+
+---
+
+## 17. React Compiler 在 Vite 中转为原生 — 1,036 个文件,编译阶段 14.3s → 0.81s,附诚实实测报告
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 123+ pts · ~11h 前 (~01:30 UTC+8)
+- **Tags:** `react` `rust` `vite` `oxc` `build-tools`
+
+oxc 团队于 8 月 4 日发布官方 Rust 版 React Compiler 支持,`@vitejs/plugin-react` v6.1.0(8 月 20 日,PR #1419)将其暴露为实验性原生支持——传入 `{ compiler: true }` 即可启用。把它送上 HN 首页的实测:一个 1,036 个文件的 React Router framework 模式代码库,编译阶段从 Babel 的 14.3s 降至单线程 0.81s(约 17.6 倍),整体构建从 22.1s 降至 9.3s(2.4 倍)——作者给出的动机是 CI 分钟数,因为智能体辅助开发不断推高构建量。除速度之外,Rust 移植版已解开 Babel 时代的若干放弃优化场景:try/catch 中的条件逻辑、嵌套闭包中使用的解构 prop 重赋值、计算对象属性键。
+
+**Why it matters:** React Compiler 的推广此前既受限于信任度,也受限于 Babel 的构建税;原生编译器把成本论点彻底抹掉。这篇帖子诚实的地方在于:加速只作用于编译阶段,因此整体构建的提升远没有那么戏剧性——是 2.4 倍,不是 17 倍。
+
+[`🔗 Master.dev:React 现在"从头到尾都是 Rust"`](https://blog.master.dev/react-now-rusted-all-the-way-out/) · [`🔗 vitejs/vite-plugin-react PR #1419`](https://github.com/vitejs/vite-plugin-react/pull/1419) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49567873)
+
+---
+
+## 18. Spotify 的 "shunt" 插件在 Claude Code 内强制执行模型路由 — 大量读取节省约 90% token,附失败清单
+
+- **Velocity:** ▮▮ rising
+- **Source:** Spotify Engineering · HN 55+ pts · ~5h 前 (~07:30 UTC+8)
+- **Tags:** `claude-code` `model-routing` `spotify` `cost` `agents`
+
+Spotify 首席产品经理 Dimitri Mazmanov 的文章:编码智能体做的大部分是 I/O 而非推理——那就把 I/O 路由出去。实现是基于 Portal 的 AiKA Modes(声明式智能体运行在临时运行时上——"智能体版的 AWS Lambda")的 Claude Code 插件 "shunt"。两个 PreToolUse 钩子负责强制执行:任何对超过 350 行文件(可通过 `SHUNT_MIN_LINES` 配置)的 Read 调用被拦截并重定向到运行 Gemini 2.5 Flash 的 `bulk-reader` 模式;`code-writer` 模式则把样板代码直接写到磁盘,前沿模型完全看不到。在 Java monorepo 上的基准测试:批量读取平均节省约 90% token。"什么行不通"一节是最有价值的部分:编辑无法委派(摘要缺少可靠行号),推理无法委派(worker 漏掉了一个 Claude 几秒就发现的线程安全 bug),以及 10–30 秒延迟加 30 秒调用上限。
+
+**Why it matters:** 与"把路由规则写进 CLAUDE.md"的区别在于:钩子让委派成为结构性约束而非建议——模型对昂贵的读取没有选择权。这是智能体基础设施生态反复重新发现的"强制 vs 指令"之辨,这次带了可安装的商店路径(`spotify/portal-ai-plugins`)。
+
+[`🔗 Spotify Engineering:Portal 把我的 Claude Code token 用量砍了 90%`](https://engineering.atspotify.com/2026/9/portal-by-spotify-cut-my-claude-code-token-usage-by-90) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49571465)
+
+---
+
+## 19. VulnCheck 在开源 AI 服务栈投下一批 CVSS 9+ — FastChat、TEN Framework、SadTalker、Taipy、marker、zerox
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 发布于 9 月 4–5 日 · CVSS 评分机构均为 VulnCheck (CNA)
+- **Tags:** `cve` `ml-infra` `vulncheck` `rce` `auth-bypass`
+
+48 小时内,NVD 发布了针对智能体和 ML 流水线常用组件的一批高严重性 CVE,评分机构均为 VulnCheck (CNA):**FastChat 9.4**(CVE-2026-85695)——`/register_worker` 未认证身份验证绕过;**TEN Framework 9.8**(CVE-2026-85688)——TMAN Designer 文件服务未认证的任意文件读取*和写入*;**SadTalker 9.8**(CVE-2026-85696)——视频合成时通过上传音频文件名进行 OS 命令注入;**Taipy 9.3**(CVE-2026-85183)——socket.io 配置了通配符 CORS 加凭据;**zerox 9.8**(CVE-2026-85672)——文件下载机制中的命令注入;**marker 9.1**(CVE-2026-85684)——FastAPI 上传处理器路径穿越;**excel-mcp-server 9.8**(CVE-2026-85661)——stdio 模式缺少路径限制;**python-jose 9.1**(CVE-2026-85394)——HMAC 接受 DER 编码公钥。机器人学脚注:MOOS 中间件家族有三个 9.8。
+
+**Why it matters:** 自托管 AI 栈已经成为有自己披露节奏的独立攻击面——其中数个正是智能体被指向的粘合层里的预认证 RCE 或任意文件写入。且按本刊规则,上面每个分数都记录了评分者:这些是 VulnCheck CNA 分数,不是 NVD Analyzed 分数。
+
+[`🔗 NVD: CVE-2026-85695 (FastChat)`](https://nvd.nist.gov/vuln/detail/CVE-2026-85695) · [`🔗 NVD: CVE-2026-85688 (TEN Framework)`](https://nvd.nist.gov/vuln/detail/CVE-2026-85688)
+
+---
+
+## 20. Gmail 将于 2027 年 1 月起停用第三方地址的"以此地址发送" — 未给出原因
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google Support · HN 182+ pts · ~13h 前 (9月4日 ~23:20 UTC+8)
+- **Tags:** `google` `gmail` `email` `smtp` `deprecation`
+
+Google 支持页面直言不讳:"从 2027 年 1 月起,Gmail 将不再支持第三方电子邮件地址(如 @yahoo.com 或 @outlook.com)的'以此地址发送'功能。" 你拥有的 Google Workspace 别名和其他 Gmail 地址不受影响。页面上没有给出任何原因;建议的替代方案是 plus 别名和 Google Groups 委托。182 分的 HN 讨论被小型企业和通过外部 SMTP 经 Gmail 收发自定义域名邮件的用户刷屏——对他们来说这个功能就是产品本身,热门评论之一就是一条 Workspace 退订宣言。
+
+**Why it matters:** 电子邮件身份又一次安静地并入厂商孤岛。被移除的机制——在主流客户端内通过任意已认证 SMTP 发信——恰恰是自定义域名用户、学校和小公司所依赖的,而截止日期落在第一季度中段,且没有提供任何迁移路径。
+
+[`🔗 Google Support:用其他地址发送邮件`](https://support.google.com/mail/answer/22370?hl=en) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49565693)
+
+---
+
+## 21. RSA-260 已被分解 — 862 位,除数公开,方法未公开
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 81+ pts · ~47h 前 (9月3日 ~13:30 UTC+8)
+- **Tags:** `cryptography` `rsa` `factorization` `gnfs`
+
+Eric Lu 于 9 月 3 日宣布分解了 RSA-260——260 位十进制、862 比特、RSA 分解挑战清单上的未解条目——并公开了一个 121 位的除数,评论者已用算术验证("……整除 RSA-260")。维基百科的 `RSA_numbers` 页面已载入完整的分解式和余因子。*没有*公开的是方法:讨论串里反复出现的问题——是算法改进,还是实现/筛法工程?——尚无答案,也没有论文或技术随笔伴随公告。
+
+**Why it matters:** 一个屹立 35 年的挑战数现在被分解了,而除作者外没人知道余量来自数学还是机器——这恰恰是最值得知道的事。本栏目的验证独立于公告本身:除数是公开且可检验的,因为主要来源 X 帖子在本环境无法打开(x.com 屏蔽未认证抓取)。对今天的 2048 位密钥没有影响——但"没人能分解它"永远是一句会过时的话。
+
+[`🔗 维基百科:RSA numbers (RSA-260)`](https://en.wikipedia.org/wiki/RSA_numbers#RSA-260) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49546284)
+
+---
+
+## 22. 美军关闭军人设备上的广告追踪标识符 — 此前位置数据被用于追踪驻中东部队
+
+- **Velocity:** ▮ steady
+- **Source:** The Guardian · HN 180+ pts · ~15h 前 (9月4日 ~21:30 UTC+8)
+- **Tags:** `privacy` `adtech` `location-data` `military` `opsec`
+
+参议员 Ron Wyden 公开的信件和给路透社的声明确认了范围:空军两个月前已在其电脑和手机上禁用广告标识符;美国特种作战司令部"最近"在 Windows 设备上禁用;陆军表示移动广告 ID 自今年年初起已关闭。触发点:有报道称商业可得的位置数据——由广告生态采集、数据经纪商转售——被用于追踪部署在中东的美军人员。
+
+**Why it matters:** 广告 ID 现在已被世界上最大的军队正式当作位置侧信道处置,这是对隐私研究者描述了十年的威胁模型最有力的验证。同一场讨论里也写明了局限:指纹识别等渠道依然存在,所以这是缓解而非免疫。
+
+[`🔗 The Guardian:美军关闭军人手机上的广告追踪器`](https://www.theguardian.com/us-news/2026/sep/04/military-disables-phone-ad-trackers) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49564555)
+
+---
+
+## 23. bikini/exploitarium — 约 40 个未上报漏洞 PoC 的单一档案库,用 GPT-5.3 做模糊测试,登上 GitHub 趋势
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 约 74 stars/日 · 总 4.5k
+- **Tags:** `security` `exploits` `poc` `fuzzing` `ai-assisted`
+
+仓库的自我描述就是新闻:"公开漏洞 PoC 与漏洞研究的单一档案库。发布时,这些漏洞均无人上报。" 内容真实且面广——Firefox 152.0.5 backup-NSS RCE、Ghidra 12.1.2 RCE/ACE、OpenSSH agent-lock provider 绕过、nmap IPv6 extlen 回绕、libssh2 释放后重用、objdump DLX 越界写入(41 条跟踪条目)等,每个文件夹都是自带说明的独立 PoC。置顶的"声明" README 反驳了"烧 token 的随机小孩"叙事:GPT-5.3 在严格工作流下完成了全部模糊测试,PoC 为手打,作者的主张是"你不需要 SOTA 模型……在配上像样的人类监督时,它只是边际优势"。它还注明 4D4J 更早的 objdump 发现(CVE-2026-18220)为在先工作。
+
+**Why it matters:** 本栏目的两条主线在此相撞——爱好者预算下的 AI 驱动漏洞发现,以及完全绕过披露时钟的发布方式(不申请 CVE、不通知厂商)。可检验的主张与 9 月 4 日工具安装测量反复触及的是同一个:工作流和监督可能比模型档位更重要。
+
+[`🔗 bikini/exploitarium`](https://github.com/bikini/exploitarium) · [`🔗 4D4J/objdump-Out-Of-Bounds-write(注明的在先工作)`](https://github.com/4D4J/objdump-Out-Of-Bounds-write)
+
+---
+
+## 24. 智能体手里 Grep 胜过 LSP — 因为"智能体能力 = 模型 × 框架"
+
+- **Velocity:** ▮ steady
+- **Source:** agentconnect.md · HN 96+ pts · ~25h 前 (9月4日 ~11:20 UTC+8)
+- **Tags:** `agents` `lsp` `grep` `harness` `developer-tools`
+
+对"编码智能体为何无视你的高级语义工具"的量化回答。横跨三个 Claude 模型与若干 Python/TypeScript 仓库:在简单的代码定位任务上,当两者同时可用时,模型只有 0–6% 的概率选择 LSP;而*强制*语义优先路由会让成功率从 100% 跌到 89%。LSP 在调用者查找上的精确度完美(1.00 对 grep 的 0.76),但两条臂的召回率都约 0.66——语义导航没有找到任何额外的真实调用。预测 LSP 价值的变量是代码库噪声而非静态类型:在干净仓库(remeda)上它以 +16% token 换来 +0.000 F1;在嘈杂仓库(hono)上以 −12% token 换来 +0.246 F1。而一个纯粹改变输出形状的操作——返回内联源码文本而非裸位置——把重命名 pass@1 从 0.67 提到 0.83,把每次任务的后续文件读取从 15.2 降到 3.2。作者自认这是初步试点:任务集小、只测了导航类 LSP 能力、每条件 2–3 次 rollout。
+
+**Why it matters:** 这是智能体时代的工具设计课——决定工具是否被使用的是输出形状,不是精确度——而且这是测量,不是感觉。语义工具没有死;它需要以模型能直接行动的形状返回上下文。
+
+[`🔗 agentconnect.md:Grep 赢了 LSP,原因是框架`](https://www.agentconnect.md/blog/grep-beat-lsp-harness/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49560260)
+
+---
+
+## 25. "下一个词预测器"是错误的 LLM 心智模型 — 因为 RLVR 从从未存在过的序列中学习
+
+- **Velocity:** ▮ steady
+- **Source:** gmcgoldr.github.io · 94+ pts · 214 条评论 · ~11h 前 (~01:20 UTC+8)
+- **Tags:** `llms` `rlvr` `mental-models` `analysis`
+
+文章的核心:这个标签描述的是机制的*形状*——一个接一个地输出 token——却无视该机制编码了什么。预训练只能强化既有文本中出现过的 token;RLVR 则让模型生成自己发明的序列,并从结果中学习。国际象棋的类比一针见血:模仿大师棋谱的系统是"下一手预测器";探索棋局并挑出赢法的引擎是在*选择*。作者自己的注意事项是诚实所在:标准标签"并非错误,但不完整",是一个不错的零阶近似——而且文章没有深入讨论 RLHF。214 条评论的 HN 讨论串正在做与正文同样多的工作。
+
+**Why it matters:** 心智模型决定了人们外推能力与风险的方式,而这个模型同时支撑着炒作("只是自动补全")与轻视("只是自动补全")。一篇让步部分比多数批评的结论更有力的文章——加上仍在争论的评论区——正是对这个领域真实直觉所在位置的信号。
+
+[`🔗 gmcgoldr:"下一个词预测器"是错误的心智模型`](https://gmcgoldr.github.io/2026/09/04/llm-next-token-predictors.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49567310)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-09-05T04:05:00+08:00 |
-| Items | 14 |
-| Sources tracked | 14 (Hacker News, GitHub Trending, collusion.wiki, Anthropic Research, Productrise, GitHub Blog, IBM, Wordfence, rietta.com, Mullvad, EEBench/atopile, OpenTrailPaper, Ars Technica, llama.cpp discussions) |
+| Generated | 2026-09-05T12:20:00+08:00 |
+| Items | 25 |
+| Sources tracked | 25 (Hacker News, GitHub Trending, collusion.wiki, Anthropic Research, Productrise, GitHub Blog, IBM, Wordfence, rietta.com, Mullvad, EEBench/atopile, OpenTrailPaper, Ars Technica, llama.cpp discussions, KrebsOnSecurity, Artificial Analysis, Master.dev blog, Spotify Engineering, NVD/VulnCheck, Google Support, Wikipedia, The Guardian, bikini/exploitarium, agentconnect.md, gmcgoldr.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (每日 3 次) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
