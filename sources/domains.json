@@ -5277,5 +5277,104 @@
     "cred": "med",
     "density": "med",
     "cv": 1
+  },
+  "isaraerospace.com": {
+    "cat": "vendor",
+    "en": "Isar Aerospace's own press room — primary source for Spectrum launch milestones, but payload-status claims come with the company's own hedges.",
+    "zh": "Isar Aerospace 官方新闻室 —— Spectrum 发射里程碑的第一手来源，但载荷状态声明附带公司自己的保留措辞。",
+    "jp": "Isar Aerospace の公式プレスルーム — Spectrum 打ち上げマイルストーンの一次情報。ただしペイロード状態の主張には同社自身の留保が付く。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "space.com": {
+    "cat": "news",
+    "en": "Established spaceflight news outlet; launch coverage matched Isar's own press release point-for-point.",
+    "zh": "老牌航天媒体；其发射报道与 Isar 官方新闻稿逐点一致。",
+    "jp": "老舗の宇宙開発報道メディア。打ち上げ報道が Isar の公式プレスリリースと点単位で一致した。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "devquasar.com": {
+    "cat": "news",
+    "en": "Independent tech blog (hardware writeups); BC-250 specs verified against Tom's Hardware and forum sources before citing.",
+    "zh": "独立技术博客（硬件向）；BC-250 规格在引用前已对照 Tom's Hardware 和论坛信源核实。",
+    "jp": "独立系テックブログ(ハードウェア寄り)。BC-250 の仕様は Tom's Hardware とフォーラム情報で照合済み。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "runjs.app": {
+    "cat": "vendor",
+    "en": "Blog of the RunJS JavaScript playground; evergreen educational essays — good prose, but vendor-adjacent and undated resurfacing.",
+    "zh": "RunJS JavaScript 游乐场的博客；常青教育长文——文笔好，但属厂商周边且翻红内容无新发布。",
+    "jp": "RunJS(JSプレイグラウンド)のブログ。常連の教育エッセイ——文章は良いがベンダー隣接で、再浮上は新発表ではない。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "bergie.iki.fi": {
+    "cat": "community",
+    "en": "Henri Bergius' personal blog (Midgard/NoFlo author) — primary source for his own licensing decisions; single-author claims, verify project details independently.",
+    "zh": "Henri Bergius 个人博客(Midgard/NoFlo 作者)——其许可决策的第一手来源；单作者陈述，项目细节需独立核实。",
+    "jp": "Henri Bergius 個人ブログ(Midgard/NoFlo 作者)——自身のライセンス判断の一次情報。単独著者の主張のため、プロジェクト詳細は独立に確認を。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "jeremykun.com": {
+    "cat": "research",
+    "en": "Math ∩ Programming — Jeremy Kun's long-form technical writing; the honest, uncensored companion to his corporate blog posts. Depth verified against the Google post it accompanies.",
+    "zh": "Math ∩ Programming——Jeremy Kun 的长篇技术写作；其公司博客文章的坦率无删节版。已对照所伴读的 Google 文章核实深度。",
+    "jp": "Math ∩ Programming — Jeremy Kun の長文技術執筆。企業ブログの検閲なし伴読版。 accompanying Google 記事と照合済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "heir.dev": {
+    "cat": "research",
+    "en": "Official docs of the HEIR homomorphic-encryption compiler (Google-backed); canonical for capabilities, not for performance claims.",
+    "zh": "HEIR 同态加密编译器官方文档(谷歌支持)；能力描述以它为准，性能声明则不然。",
+    "jp": "HEIR 準同型暗号コンパイラの公式ドキュメント(Google 支援)。能力記述の一次情報だが性能主張は別。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "thequantuminsider.com": {
+    "cat": "news",
+    "en": "Dedicated quantum-computing news site; IBM Nighthawk r2 figures matched IBM's own blog — treat throughput claims as vendor-sourced either way.",
+    "zh": "专注量子计算的新闻站；IBM Nighthawk r2 数据与 IBM 官方博客一致——但吞吐声明无论如何都源自厂商。",
+    "jp": "量子コンピューティング専門ニュースサイト。IBM Nighthawk r2 の数値は IBM 公式ブログと一致——スループット主張はいずれにせよベンダー由来。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "victoriametrics.com": {
+    "cat": "vendor",
+    "en": "VictoriaMetrics' engineering blog (Phuong Le's Go internals series) — deep, version-pinned runtime walkthroughs; vendor blog but code-level and reproducible.",
+    "zh": "VictoriaMetrics 工程博客(Phuong Le 的 Go 内部机制系列)——深挖且钉死版本的运行时走读；虽是厂商博客但达到代码级、可复现。",
+    "jp": "VictoriaMetrics のエンジニアリングブログ(Phuong Le の Go 内部シリーズ)——バージョン固定の深いランタイム解説。ベンダーブログだがコードレベルで再現可能。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "nesbitt.io": {
+    "cat": "community",
+    "en": "Andrew Nesbitt's personal blog on dependencies and package management — careful single-author essays; arguments are opinion-forward by design.",
+    "zh": "Andrew Nesbitt 的个人博客，专注依赖与包管理——严谨的单作者论述；论证天然偏观点先行。",
+    "jp": "Andrew Nesbitt の個人ブログ。依存関係とパッケージ管理が主题——慎重な単独著者のエッセイで、論証は意図的に意見先行。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "eur-lex.europa.eu": {
+    "cat": "data",
+    "en": "The EU's official law portal — canonical text of EUPL and other legislation; authoritative by construction, unfriendly to scraping.",
+    "zh": "欧盟官方法律门户——EUPL 等法规的权威文本；天然权威，但对抓取不友好。",
+    "jp": "EU の官方法ポータル — EUPL 等の法令の正規テキスト。構造的に権威だがスクレイピングには不 friendly。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
   }
 }

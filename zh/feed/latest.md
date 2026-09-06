@@ -1,8 +1,8 @@
 ---
 date: 2026-09-06
-updated: 2026-09-06T12:19:00+08:00
+updated: 2026-09-06T20:24:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -451,13 +451,181 @@ okf-memory/okf-agent-memory(MIT,纯 Go,9 月 5 日创建)实现了"Google OKF v0
 
 ---
 
+## 32. Isar Aerospace 第二次飞行即入轨——欧洲商业公司首次交付卫星
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 642+ pts · ~344 评论 · 新闻稿 9 月 5 日 22:12 CEST(~04:12 UTC+8)
+- **Tags:** `isar-aerospace` `spaceflight` `europe` `launch` `industry`
+
+Isar Aerospace 的 Spectrum 火箭于 9 月 5 日 22:12 CEST 从挪威 Andøya Space 点火升空——这仅是该火箭的**第二次飞行**——成功入轨并部署了有效载荷，使这家德国初创公司成为首家将卫星送入轨道的欧洲商业航天公司。公司称火箭依次完成了 MaxQ、主发动机关机、级间分离、二级点火、过卡门线后抛整流罩，以及入轨圆化燃烧，最后完成星箭分离。有效载荷来自德国航天中心(DLR)的 Microlauncher 竞赛(由 ESA Boost! 资助)，为教育机构和初创公司提供低成本进入太空的机会。Spectrum 首飞于 2025 年 3 月在升空约 30 秒后失败；两次尝试内从资格飞行到入轨，是一条 SpaceX 式的轨迹。
+
+**为什么重要：** 发射一直是欧洲缺失的一层——自 Arianespace 的体制化模式以来就没有主权商业选项——CEO Daniel Metzler 的表述也很直白："发射仍是全球航天工业最大的瓶颈。"诚实附注就写在新闻稿里：Isar "正在与客户确认卫星状态"，载荷健康尚未确认，而且一次入轨还不等于发射节奏。
+
+[`🔗 Isar Aerospace 新闻稿`](https://isaraerospace.com/press/history-for-european-spaceflight-isar-aerospace-reaches-orbit-and-deploys-payloads-on-second-flight) · [`🔗 Space.com: 从欧洲本土入轨`](https://www.space.com/space-exploration/launches-spacecraft/isar-aerospace-second-launch-norway-ando) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49580369)
+
+---
+
+## 33. "60 美元的游戏 PC"——AMD BC-250 矿板是阉割版 PS5,社区让它跑起了游戏
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 350+ pts · 103 评论 · ~26 小时前(~9 月 5 日 18:40 UTC+8)
+- **Tags:** `amd` `bc-250` `hardware` `linux` `budget-gaming`
+
+DevQuasar 的文章记录了 BC-250:一块中国产加密矿板，用的是阉割版 PlayStation 5 Oberon APU——8 个 Zen 2 CPU 核心只剩 6 个、36 组 RDNA2 CU 只剩 24 组——爱好者历史上以约 60 美元购入(现在 120 美元起，供给收紧)，刷入普通 Linux 启动。社区工作让它跑起了《赛博朋克 2077》、《GTA V》(~65 FPS)、Switch 模拟器甚至光追；同样的板子也被改造用于本地 LLM 推理——16GB GDDR6 加裸机 Linux 让它成了便宜的推理节点。每美元性能来自"这是回收的游戏机芯片，不是桌面 APU",代价也是游戏机式的：板载无视频输出、驱动靠社区补丁、散热按矿架假设设计。
+
+**为什么重要：** 这是电子垃圾套利、游戏机安全研究与家庭实验室 Linux 三线交汇的罕见故事——一台真正可用的 150 美元内 x86-64 + RDNA2 机器，只因矿潮替板子买了单才得以存在。信源附注：随着风潮扩散价格已近乎翻倍，芯片是永久性阉割，整套玩法毫无官方支持——驱动补丁躺在论坛帖里，不在上游内核。
+
+[`🔗 DevQuasar: "60 美元的游戏 PC"——AMD BC-250`](https://devquasar.com/hardware/the-60-gaming-pc-amd-bc-250/) · [`🔗 Tom's Hardware: BC-250 重出江湖，能跑《赛博朋克 2077》`](https://www.tomshardware.com/video-games/playstation/amds-rare-playstation-5-apu-based-bc-250-mining-board-resurfaces-for-usd120-and-can-actually-run-cyberpunk-2077) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49576386)
+
+---
+
+## 34. All-in-One WP Migration 二阶 SQL 注入(CVE-2026-19949)——未认证的归档恢复漏洞可链到 RCE,约 325 万站点未打补丁
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wordfence(发现方)/ WPScan · 9 月初披露 · 7.110 修复
+- **Tags:** `wordpress` `cve-2026-19949` `sql-injection` `rce` `plugins`
+
+安装量约 500 万的 All-in-One WP Migration and Backup 插件存在未认证的**二阶 SQL 注入**：攻击者控制的恢复数据流经一处转义不充分的查询，Wordfence 的分析显示该注入可以从 SQLi 升级为远程代码执行与整站接管。7.109 及以下版本受影响，7.110 修复。披露时约 325 万站点仍未打补丁，且有报告称漏洞利用代码已公开流传。评分附注：发现方将其评为 High,撰写时我们未能确认具体 CVSS 数值——纸面上低于本 feed 的 9.0 门槛，但实际上 325 万未补丁站点加公开利用代码，已在其上。
+
+**为什么重要：** 迁移/备份插件是 WordPress 里唯一天生就要接收整站归档并回写数据库的组件——它因此既是最诱人的目标、也是最难安全注入逃逸的地方。这也是一周内第三起 WordPress 生态警报(继 WPMU DEV/Avada/Pods 批次和 Elementor Pro 之后)，插件攻击面的信号本身就很说明问题。
+
+[`🔗 WPScan 公告`](https://wpscan.com/vulnerability/03fc9f1a-5199-40fa-960d-75a266eb7e95/) · [`🔗 Wordfence: 500 万站点受影响`](https://www.wordfence.com/blog/2026/09/5-million-wordpress-sites-affected-by-sql-injection-vulnerability-in-all-in-one-wp-migration-and-backup-wordpress-plugin/) · [`🔗 NVD 记录`](https://nvd.nist.gov/vuln/detail/CVE-2026-19949)
+
+---
+
+## 35. 程序员的音乐理论——用代码从正弦波推导出十二个音
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 178+ pts · 86 评论 · ~30 小时前(~9 月 5 日 14:30 UTC+8)
+- **Tags:** `music-theory` `education` `audio` `programming`
+
+Luke Haas 的 RunJS 长文(8 月 17 日发表，本周末重新翻红)用程序员想要的方式教乐理：从"声音就是气压的抖动"出发，在浏览器里生成正弦波，然后**推导**而非背诵十二个音、大音阶模式、和弦与一段真正可用的和弦进行——每层都用数组搭出来，直到最后才出现记谱("先有值得记录的东西，才有它的记谱法")。每一步都是可执行的 JavaScript,读者可以亲耳验证每个论断。HN 评论区基本是赞赏性的第一性原理讨论，也照例拐进了十二平均律的妥协。
+
+**为什么重要：** 这是 LLM 时代正在推动的教学范式的最佳小样本——给可执行、可验证的推导，而不是让你接受的约定——而且毫无门槛("我不会乐器"就是开篇第一句)。附注：这是常青内容翻红而非新发布，内容也止于和声基础——没有节奏、曲式和制作。
+
+[`🔗 程序员的音乐理论(RunJS 博客)`](https://runjs.app/blog/music-theory-for-programmers) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49541888)
+
+---
+
+## 36. "我换了许可证"——28 年后，Henri Bergius 把默认许可证换成 EUPL,堵上 SaaS 漏洞
+
+- **Velocity:** ▮▮ rising
+- **Source:** Henri Bergius 博客 · 9 月 5 日 · HN 60+ pts · 57 评论
+- **Tags:** `licensing` `eupl` `open-source` `copyleft` `saas`
+
+Henri Bergius(Midgard CMS、NoFlo、流式编程)回顾了 28 年发布软件的三个许可时代(Midgard 用 LGPLv2,JavaScript 时代用 MIT),宣布将默认许可证切换为 **EUPL-1.2**——欧盟的强著作权许可证，其条款直达 SaaS 部署，与是否分发无关。他的论证很直白："我们赢了辩论，却没为用户和开发者赢得什么。我们所有的努力只是让大公司更便宜地造东西。"他还引用了 EUPL 拥有 23 种语言法律效力的官方译本。已换证的项目:`reticulum-js`、`dacar`、一个船用能源预测器和一套海上博客工具；NoFlo 本身因存在第三方贡献仍保持 MIT。
+
+**为什么重要：** 宽松许可证的反噬在智能体时代持续累积——当代码的边际用户是拿它训练或吸收的企业时，MIT 交易看起来就不一样了——而 EUPL 是"能在云端存活的 copyleft"立场下被低估的工具。附注：这是一位老将的个人默认选择，不是项目决策；EUPL 在 npm 生态仍然罕见，其与 GPL 的兼容条款有值得先读再用的怪癖。
+
+[`🔗 Henri Bergius: 我换了许可证`](https://bergie.iki.fi/blog/eupl/) · [`🔗 EUPL-1.2 全文(EUR-Lex)`](https://eur-lex.europa.eu/eli/dec/2017/863/oj)
+
+---
+
+## 37. Obscura v0.2.2——Rust 无头浏览器迎来原生渲染:"无需 Chromium"
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · v0.2.2 于 9 月 5 日发布 · 26.0k stars · HN 20+ pts
+- **Tags:** `headless-browser` `rust` `web-scraping` `agents` `release`
+
+Obscura——一个为网页抓取和 AI 智能体自动化打造的 Rust 无头浏览器引擎——于 9 月 5 日发布 v0.2.2,兑现了 README 预告已久的里程碑：**原生渲染**，即截图、实时录屏和 PDF 导出由 Obscura 自己的管线直接生成，而不再捆绑 Chromium。该引擎已通过内嵌 V8 运行真实 JavaScript,支持 Chrome DevTools 协议，并把自己定位为 Puppeteer 和 Playwright 下无头 Chrome 的即插即用替代品。自述数据：内存约 30 MB(无头 Chrome 200+ MB)、二进制 70 MB、页面加载约 85 ms、内置反检测。README 还声称 Cloudflare 的 Kitesurf 智能体浏览器原型始于把 Obscura 移植到 Workers。
+
+**为什么重要：** 智能体集群是无头浏览器增长最快的消费方，Chromium 税(内存、体积、启动)在集群规模上成倍放大——一个 CDP 兼容、可信的非 Chromium 引擎会改变成本曲线。附注：所有性能数字均为厂商自述、未经基准测试；"即插即用"的 Puppeteer/Playwright 兼容是最难兑现的承诺；Cloudflare Kitesurf 渊源是营销声明，我们尚未对照 Cloudflare 自己的文章核实。
+
+[`🔗 h4ckf0r0day/obscura`](https://github.com/h4ckf0r0day/obscura) · [`🔗 Hacker News: 原生渲染发布`](https://news.ycombinator.com/item?id=49580771)
+
+---
+
+## 38. HEIR,坦率版——Jeremy Kun 写给谷歌同态加密编译器更新的"无限制"伴读
+
+- **Velocity:** ▮ steady
+- **Source:** Math ∩ Programming · 9 月 4 日 · HN 56+ pts
+- **Tags:** `homomorphic-encryption` `compiler` `privacy` `cryptography` `ml-inference`
+
+谷歌的 Jeremy Kun 为其 8 月 14 日 Google Security 博客文章写了这篇"无字数无术语限制"的伴读，主角是 **HEIR**——一个把普通程序翻译成直接在加密数据上运行的程序的编译器。博文演示了四个小而完整的预训练 ML 模型(包括一个信用卡欺诈检测器)，基于 CKKS 实现私有推理：服务器从头到尾看不到任何一个明文比特。伴读覆盖了示例仓库怎么跑(bazel 管理)、编译后模型的运行时对比，以及 Kun 本人眼中的项目路线图。措辞一如既往地坦率："我可以不受字数和术语限制，尽情说真话。"
+
+**为什么重要：** 全同态加密十年来说"还差一个数量级"就能实用；一个 ML 工程师真的能用、附有诚实运行时数字的维护中的编译器，才是它变成现实的增量路径。信源自述附注：演示都是小模型；同态推理仍远慢于明文，跑通示例的最大门槛是工具链(bazel)而非理论。
+
+[`🔗 Jeremy Kun: HEIR 更新`](https://www.jeremykun.com/2026/09/04/updates-on-heir-homomorphic-encryption/) · [`🔗 HEIR 项目 (heir.dev)`](https://heir.dev)
+
+---
+
+## 39. IBM Quantum Nighthawk r2 上线为 `ibm_phoenix`——120 量子比特、耗散复位、宣称 25 倍电路吞吐
+
+- **Velocity:** ▮ steady
+- **Source:** IBM Quantum 博客 · 9 月初 · HN 25+ pts
+- **Tags:** `quantum-computing` `ibm` `hardware` `research`
+
+IBM 发布了迄今最快的 QPU——Nighthawk r2,以 `ibm_phoenix` 之名上线 IBM Quantum 平台：120 个可编程量子比特以方形晶格排布，由 218 个新一代可调耦合器连接，另有 120 个复位元件——共 458 个物理量子元件。头牌特性是**主动耗散量子比特复位**，IBM 将其宣称的 **25 倍电路速度/吞吐提升**归功于此——每秒超过 10 万个量子电路，目标是让大规模电路绑定类工作负载真正可用，而不是排队等死。该设计最早出现在 IBM 2025 年 11 月的路线图上；r2 是交付版。
+
+**为什么重要：** 对任何跑大量小电路的人(化学、采样、误差缓解管线)来说，瓶颈是吞吐而非量子比特数，而复位时间正是吞吐死去的地方——所以一个 25 倍的复位驱动声明，如果在用户负载里站得住，比再添几个量子比特重要得多。附注：25 倍是厂商在自己基准上的自述，未经独立验证；"每秒电路数"不是关于量子优势或电路深度的声明。
+
+[`🔗 IBM Quantum: Nighthawk r2`](https://www.ibm.com/quantum/blog/nighthawk-r2) · [`🔗 The Quantum Insider: 25 倍电路速度目标`](https://thequantuminsider.com/2026/09/03/ibms-nighthawk-r2-quantum-processor-targets-a-25-fold-increase-in-circuit-speed/)
+
+---
+
+## 40. Simon Willison 的 GPT-6 Astra 鹈鹕对比网格——每个推理档都更好，外加一个 token 计数线索
+
+- **Velocity:** ▮ steady
+- **Source:** simonwillison.net · 9 月 4 日 · HN 22+ pts
+- **Tags:** `gpt-6-astra` `benchmark` `evaluation` `svg` `llms`
+
+Willison 用他招牌的"SVG 鹈鹕骑自行车"评测测试了刚拿到访问权的 GPT-6 Astra 的五个推理档(Astra 不支持 `reasoning=none`),再对 GPT-5.6 Sol、Terra 和 Luna 渲染出对比网格。结论：Astra 从 low 到 xhigh 的每一只鹈鹕都胜过 GPT-5.6-Sol 最好的一只；Astra 在 max 以下仍不能稳定把两条腿画进画面。成本上 Astra 约为 Sol 的 2 倍($10/$50 对 $5/$30 每百万 token),但 token 用得更少，于是"Astra low 以 9.55 美分画出了比 GPT-5.6 Sol 任何一档都好的鹈鹕"。最锐利的观察是顺带的：Astra 和 Luna 都只消耗 16 个输入 token,而 Sol 和 Terra 用了 26——"我怀疑 Astra 和 Luna 之间的亲缘关系比 OpenAI 承认的更近。"
+
+**为什么重要：** 鹈鹕评测看着像玩笑，实际是一件跨模型一致性不错的仪器——这张网格同时是 Astra 定价档的首份独立成本/质量读数。附注：样本极小、未盲测，任务只有一族提示，tokenizer 观察是假说而非证据。
+
+[`🔗 Simon Willison: Astra 的鹈鹕对比网格`](https://simonwillison.net/2026/Sep/4/astra-pelicans/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49575122)
+
+---
+
+## 41. Kale——拒绝猜测"你的公式现在指向哪"的电子表格
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2608.26345 · HN 56+ pts
+- **Tags:** `spreadsheets` `programming-languages` `research` `arxiv`
+
+论文背后的用户研究发现，标准电子表格引用语义在安静地制造危险：当用户重构被引用的表格时，系统会"贴心地"把区域引用改写成"新区域"——而那未必是用户所指的区域，由此引入无人审查的 bug。原型系统 **Kale** 通过限制可表达引用的种类消灭了这一失败模式，让结构编辑无法悄悄改挂公式；论文显示用户在 Kale 的限制下仍能高效完成原本易错的任务，并附有一项衡量这些限制在真实电子表格上代价的语料库研究。
+
+**为什么重要：** 这是面向全球部署量最大的终端用户编程环境的编程语言研究，而它的设计动作——把危险的一类程序变成写不出来的，而不是警告——与 archify(条目 1)对智能体画图的做法是同一招。附注：这是原型加用户研究，不是已发布系统；语料库研究度量的是限制的代价，不是采用率。
+
+[`🔗 arXiv 2608.26345`](https://arxiv.org/abs/2608.26345) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49516962)
+
+---
+
+## 42. Go 内置 map 现在到底怎么工作——面向 1.24 后运行时的 Swiss Tables 深潜
+
+- **Velocity:** ▮ steady
+- **Source:** VictoriaMetrics 博客 · Phuong Le · 9 月 3 日 · HN 85+ pts
+- **Tags:** `go` `maps` `swiss-tables` `internals`
+
+Phuong Le 这篇 24 分钟的长文以运行时内部机制的深度剖析了 Go 1.24 重写的 map 实现——Swiss Tables:控制字分组及其对 SIMD 友好的匹配、组目录如何增长收缩、迭代顺序会怎样、旧的桶加溢出模型的哪些行为(和驱逐怪癖)保留或消失。文章刻意先重讲所需的 map 基础，使其可以独立阅读，与 Go 团队自己更短的"Faster Go maps with Swiss Tables"形成互补。
+
+**为什么重要：** map 重写悄悄改变了 Go 服务依赖的性能特征——内存布局、扩容触发、迭代——而自 1.24 起生产代码就跑在它上面，团队里却没人读过内部实现。附注：这是一篇钉死在特定 Go 版本上的逆向工程走读，而内部机制恰恰是点版本允许更改的东西。
+
+[`🔗 VictoriaMetrics: Go 内置 map 如何用 Swiss Tables 工作`](https://victoriametrics.com/blog/go-swiss-table-map/index.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49548852)
+
+---
+
+## 43. 把 Git 子模块当包管理器——`.gitmodules` 是清单，gitlink 是锁文件条目
+
+- **Velocity:** ▮ steady
+- **Source:** nesbitt.io · Andrew Nesbitt · 9 月 1 日 · HN 90+ pts
+- **Tags:** `git` `submodules` `package-manager` `dependencies`
+
+Nesbitt 的论证从一个冲突出发:`git worktree remove` 拒绝任何含子模块的 worktree,除非加 `--force`——而早在十一年前，GitHub 的 2.5 发布公告就警告过"不建议在包含子模块的仓库中使用 git worktree"——git 自己的两个特性至今无法组合。由此他用包管理器的透镜重构子模块:`.gitmodules` 是清单，gitlink 条目是锁文件记录，checkout 是安装步骤——而相应的缺口(无解析策略、无冲突处理、糟糕的更新体验)解释了这个特性为何始终没能取代真正的包管理器，即使 monorepo 在悄悄继续用它。
+
+**为什么重要：** 子模块仍是 git 内置的唯一依赖机制，而智能体驱动的工作流(为了构建能跑而顺手执行 `git submodule update --init`)正在让这个模式重新常态化，却没人重新审视它的风险。附注：这是一篇带案例的论述，不是综述；worktree 冲突是症状，不是核心论证。
+
+[`🔗 nesbitt.io: 把 Git 子模块当包管理器`](https://nesbitt.io/2026/09/01/git-submodules-as-a-package-manager.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49519850)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-06T12:19:00+08:00 |
-| Items | 31 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI, Coder Advisory, Cloud in a Bottle/Imbue, Sylvain Kalache, Bryan Cantrill/Oxide, Lapcat Software, Robocurve, pushin.eu, X/@ljharb) |
+| Generated | 2026-09-06T20:24:00+08:00 |
+| Items | 43 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI, Coder Advisory, Cloud in a Bottle/Imbue, Sylvain Kalache, Bryan Cantrill/Oxide, Lapcat Software, Robocurve, pushin.eu, X/@ljharb, Isar Aerospace, Space.com, DevQuasar, Tom's Hardware, WPScan, Wordfence, RunJS/Luke Haas, bergie.iki.fi, Math ∩ Programming, IBM Quantum, The Quantum Insider, simonwillison.net, VictoriaMetrics, nesbitt.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

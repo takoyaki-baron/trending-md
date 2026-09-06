@@ -1,8 +1,8 @@
 ---
 date: 2026-09-06
-updated: 2026-09-06T12:19:00+08:00
+updated: 2026-09-06T20:24:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -451,13 +451,181 @@ okf-memory/okf-agent-memory (MIT, pure Go, created Sep 5) implements the "Google
 
 ---
 
+## 32. Isar Aerospace reaches orbit on only its second flight — Europe's first commercial satellite delivery
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 642+ pts · ~344 comments · press release Sep 5, 22:12 CEST (~04:12 UTC+8)
+- **Tags:** `isar-aerospace` `spaceflight` `europe` `launch` `industry`
+
+Isar Aerospace's Spectrum rocket lifted off from Andøya Space, Norway at 22:12 CEST on September 5 and — on what was only the vehicle's **second flight** — reached orbit and deployed its payloads, making the German startup the first commercial European space company to deliver satellites to orbit. The company says the vehicle transited MaxQ, completed MECO, stage separation, second-stage ignition, fairing jettison past the Kármán line and a circularization burn before spacecraft separation. The payloads came from the German Space Agency (DLR)'s Microlauncher Competition, funded through ESA Boost!, giving educational institutions and start-ups low-cost access to space. The first Spectrum flight in March 2025 ended ~30 seconds after liftoff; the qualification-flight-to-orbit in two attempts is a SpaceX-style trajectory.
+
+**Why it matters:** launch has been Europe's missing layer — no sovereign commercial option since Arianespace's institutional model — and CEO Daniel Metzler's framing is explicit: "Launch continues to be the largest bottleneck for the global space industry." The honest caveat is in the release itself: Isar is "working with the customers to confirm the satellite status," so payload health is not yet confirmed, and one orbit insertion does not yet make a cadence.
+
+[`🔗 Isar Aerospace press release`](https://isaraerospace.com/press/history-for-european-spaceflight-isar-aerospace-reaches-orbit-and-deploys-payloads-on-second-flight) · [`🔗 Space.com: reaches orbit from European soil`](https://www.space.com/space-exploration/launches-spacecraft/isar-aerospace-second-launch-norway-ando) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49580369)
+
+---
+
+## 33. The "$60 gaming PC" — AMD's BC-250 mining board is a cut-down PS5, and the community made it boot games
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 350+ pts · 103 comments · ~26h ago (~18:40 UTC+8 Sep 5)
+- **Tags:** `amd` `bc-250` `hardware` `linux` `budget-gaming`
+
+DevQuasar's writeup documents the BC-250: a Chinese crypto-mining board built around a cut-down PlayStation 5 Oberon APU — 6 of 8 Zen 2 CPU cores and 24 of 36 RDNA2 CUs — that hobbyists buy for historically ~$60 (now $120+, as supplies tighten) and boot into ordinary Linux. Community work has it running Cyberpunk 2077, GTA V at ~65 FPS, Switch emulation and even ray tracing; the same boards have been repurposed for local LLM inference, where the 16GB GDDR6 and bare-metal Linux make them a cheap inference node. The performance per dollar comes from the fact that this is console silicon repurposed, not a desktop APU — with console-style compromises: no video output on the board, community-patched drivers, and cooling that assumes a mining rack.
+
+**Why it matters:** it's the rare story where e-waste arbitrage, console security research and homelab Linux intersect — a genuinely usable sub-$150 x86-64 + RDNA2 machine that exists only because a mining boom paid for the boards. Caveats from the sources: prices have roughly doubled as the trend spreads, the die is permanently cut down, and nothing about the setup is supported — driver patches live in forum threads, not upstream kernels.
+
+[`🔗 DevQuasar: The "$60 Gaming PC" — AMD BC-250`](https://devquasar.com/hardware/the-60-gaming-pc-amd-bc-250/) · [`🔗 Tom's Hardware: BC-250 resurfaces, runs Cyberpunk 2077`](https://www.tomshardware.com/video-games/playstation/amds-rare-playstation-5-apu-based-bc-250-mining-board-resurfaces-for-usd120-and-can-actually-run-cyberpunk-2077) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49576386)
+
+---
+
+## 34. All-in-One WP Migration second-order SQLi (CVE-2026-19949) — unauthenticated archive-restore bug chainable to RCE across ~3.25M unpatched sites
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wordfence (discoverer) / WPScan · disclosed early September · patched in 7.110
+- **Tags:** `wordpress` `cve-2026-19949` `sql-injection` `rce` `plugins`
+
+The All-in-One WP Migration and Backup plugin (~5 million installs) had an unauthenticated **second-order SQL injection** in its archive-restore functionality: attacker-controlled restore data flows through an insufficiently escaped query, and Wordfence's analysis shows the injection can be escalated from SQLi to remote code execution and full site takeover. Versions through 7.109 are affected; 7.110 patches it. At disclosure roughly 3.25 million sites remained unpatched, and exploit code is reported to be publicly circulating. Scoring note: the flaw is rated High by its discoverer, and we could not confirm a numeric CVSS at write time — on paper it sits below this feed's 9.0 bar; in practice 3.25M unpatched sites and a public exploit put it above.
+
+**Why it matters:** the migration/backup plugin is the one WordPress component that, by design, accepts a full archive of a site and writes it back into the database — making it both the juiciest target and the hardest place to escape-inject safely. It's also the third WordPress-ecosystem alert in a week (after the WPMU DEV/Avada/Pods batch and Elementor Pro), which is its own signal about the plugin attack surface.
+
+[`🔗 WPScan advisory`](https://wpscan.com/vulnerability/03fc9f1a-5199-40fa-960d-75a266eb7e95/) · [`🔗 Wordfence: 5 million sites affected`](https://www.wordfence.com/blog/2026/09/5-million-wordpress-sites-affected-by-sql-injection-vulnerability-in-all-in-one-wp-migration-and-backup-wordpress-plugin/) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-19949)
+
+---
+
+## 35. Music Theory for Programmers — derive the twelve notes from a sine wave, in code
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 178+ pts · 86 comments · ~30h ago (~14:30 UTC+8 Sep 5)
+- **Tags:** `music-theory` `education` `audio` `programming`
+
+Luke Haas' RunJS essay (published Aug 17, resurfacing this weekend) teaches music theory the way a programmer would want it: start from "sound is air pressure wobbling," generate a sine wave in the browser, and derive — rather than memorize — the twelve notes, the major-scale pattern, chords and a working chord progression, building each layer out of arrays before written notation appears ("once there is something for it to be notation *of*"). Every step runs as executable JavaScript, so the reader can hear each claim. The HN thread is largely appreciative first-principles discussion, with the usual detours into equal temperament's compromises.
+
+**Why it matters:** it's a small exemplar of a teaching genre the LLM era is pushing toward — derivations you can execute and verify rather than conventions you're told to accept — and it does so without gatekeeping ("I can't play an instrument" is the opening line). Caveats: it's an evergreen post resurfacing, not a new release, and it stops at harmony basics — no rhythm, form or production.
+
+[`🔗 Music theory for programmers (RunJS blog)`](https://runjs.app/blog/music-theory-for-programmers) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49541888)
+
+---
+
+## 36. "I changed my license" — after 28 years, Henri Bergius switches his default to EUPL, closing the SaaS loophole
+
+- **Velocity:** ▮▮ rising
+- **Source:** Henri Bergius blog · Sep 5 · 60+ pts on HN · 57 comments
+- **Tags:** `licensing` `eupl` `open-source` `copyleft` `saas`
+
+Henri Bergius — Midgard CMS, NoFlo, flow-based programming — recounts three licensing eras across 28 years of publishing software (LGPLv2 for Midgard, MIT for his JavaScript era) and announces the switch of his default license to **EUPL-1.2**, the EU's strong-copyleft license whose terms reach SaaS deployment regardless of distribution. His argument is blunt: "We won the debate, and gained little for users or developers. All that our efforts did was to make it easier for big corporations to build things more cheaply." He also cites EUPL's legally valid official translations into 23 languages. Already relicensed: `reticulum-js`, `dacar`, a boat energy predictor and an offshore blogging tool; NoFlo itself stays MIT as a pre-existing project with third-party contributions.
+
+**Why it matters:** the permissive-license backlash has been building in the agent era — when the marginal user of your code is a corporation training or absorbing it, the MIT bargain looks different — and EUPL is an underused instrument for the "copyleft that survives the cloud" position. Caveats: this is one veteran developer's default, not a project decision; EUPL remains rare in the npm ecosystem, and its GPL-compatibility terms have quirks worth reading before adopting.
+
+[`🔗 Henri Bergius: I changed my license`](https://bergie.iki.fi/blog/eupl/) · [`🔗 EUPL-1.2 full text (EUR-Lex)`](https://eur-lex.europa.eu/eli/dec/2017/863/oj)
+
+---
+
+## 37. Obscura v0.2.2 — native rendering lands in the Rust headless browser: "No Chromium required"
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · v0.2.2 released Sep 5 · 26.0k stars · HN 20+ pts
+- **Tags:** `headless-browser` `rust` `web-scraping` `agents` `release`
+
+Obscura — a Rust headless browser engine built for web scraping and AI-agent automation — shipped v0.2.2 on September 5 with the milestone its README has been teasing: **native rendering**, i.e. screenshots, live screencast and PDF export generated directly by Obscura's own pipeline rather than by bundling Chromium. The engine already runs real JavaScript via embedded V8, speaks the Chrome DevTools Protocol, and positions itself as a drop-in replacement for headless Chrome under Puppeteer and Playwright. Self-reported numbers: ~30 MB resident vs 200+ MB for headless Chrome, 70 MB binary, ~85 ms page loads, built-in anti-detect. The README also claims Cloudflare's Kitesurf agent-browser prototype began as a port of Obscura to Workers.
+
+**Why it matters:** agent fleets are the fastest-growing consumer of headless browsers, and the Chromium tax (memory, binary size, startup) is paid at fleet scale — a credible non-Chromium engine with CDP compatibility changes the cost curve. Caveats: every performance figure is the vendor's own and unbenchmarked, "drop-in" Puppeteer/Playwright compatibility is the hardest promise to keep, and the Cloudflare Kitesurf lineage is a marketing claim we have not verified against Cloudflare's own post.
+
+[`🔗 h4ckf0r0day/obscura`](https://github.com/h4ckf0r0day/obscura) · [`🔗 Hacker News: native rendering announcement`](https://news.ycombinator.com/item?id=49580771)
+
+---
+
+## 38. HEIR, honestly — Jeremy Kun's companion to Google's homomorphic-encryption compiler update
+
+- **Velocity:** ▮ steady
+- **Source:** Math ∩ Programming · Sep 4 · 56+ pts on HN
+- **Tags:** `homomorphic-encryption` `compiler` `privacy` `cryptography` `ml-inference`
+
+Jeremy Kun (Google) published the no-limits companion to his August 14 Google Security blog post on **HEIR**, the compiler that translates ordinary programs — the post demonstrates four small but nontrivial pre-trained ML models, including a credit-card fraud detector — into programs that operate directly on encrypted data (CKKS-based), enabling private inference where the server never sees a cleartext bit. The companion article covers how the examples repo works (bazel-managed), runtime comparisons between the compiled models, and Kun's own view of the project roadmap. The framing is characteristically candid: "I have no limits on word count or jargon, and I can feel free to be honest."
+
+**Why it matters:** fully-homomorphic encryption has spent a decade one-order-of-magnitude-away from practical; a maintained compiler ML-engineers can actually target — with honest runtime numbers attached — is the incremental path by which it becomes real. Caveats stated in the sources: the demos are small models; HE inference remains far slower than plaintext, and the biggest hurdle to running the examples is tooling (bazel), not theory.
+
+[`🔗 Jeremy Kun: Updates on HEIR`](https://www.jeremykun.com/2026/09/04/updates-on-heir-homomorphic-encryption/) · [`🔗 HEIR project (heir.dev)`](https://heir.dev)
+
+---
+
+## 39. IBM Quantum Nighthawk r2 goes live as `ibm_phoenix` — 120 qubits, dissipative reset, claimed 25× circuit throughput
+
+- **Velocity:** ▮ steady
+- **Source:** IBM Quantum blog · early September · 25+ pts on HN
+- **Tags:** `quantum-computing` `ibm` `hardware` `research`
+
+IBM released Nighthawk r2, its fastest QPU to date, on the IBM Quantum Platform under the name `ibm_phoenix`: 120 programmable qubits in a square lattice connected by 218 next-generation tunable couplers, plus 120 reset elements — 458 physical quantum elements total. The headline feature is **active dissipative qubit reset**, a redesigned reset mechanism that IBM credits for a claimed **25× increase in circuit speed/throughput** — more than 100,000 quantum circuits per second, aimed at making large circuit-binding workloads actually usable rather than queue-bound. The design was first shown on IBM's November 2025 roadmap; r2 is the delivered version.
+
+**Why it matters:** throughput, not qubit count, is the practical bottleneck for anyone running many small circuits (chemistry, sampling, error-mitigation pipelines), and reset time is where that throughput dies — so a 25× reset-driven claim, if it holds in user workloads, matters more than another qubit increment. Caveats: the 25× figure is the vendor's own, measured on its benchmarks, not independent; "circuits per second" is not a claim about quantum advantage or circuit depth.
+
+[`🔗 IBM Quantum: Nighthawk r2`](https://www.ibm.com/quantum/blog/nighthawk-r2) · [`🔗 The Quantum Insider: 25-fold circuit speed target`](https://thequantuminsider.com/2026/09/03/ibms-nighthawk-r2-quantum-processor-targets-a-25-fold-increase-in-circuit-speed/)
+
+---
+
+## 40. Simon Willison's pelican grid for GPT-6 Astra — better at every reasoning level, and a token-count tell
+
+- **Velocity:** ▮ steady
+- **Source:** simonwillison.net · Sep 4 · 22+ pts on HN
+- **Tags:** `gpt-6-astra` `benchmark` `evaluation` `svg` `llms`
+
+Willison ran his signature SVG-pelican-riding-a-bicycle eval against freshly-accessed GPT-6 Astra at five reasoning levels (Astra has no `reasoning=none`), then rendered a comparison grid against GPT-5.6 Sol, Terra and Luna. Findings: every Astra pelican, low through xhigh, beats even the best GPT-5.6-Sol pelican; Astra below max still can't reliably get both legs inside the frame. On cost, Astra is ~2× Sol's price ($10/$50 vs $5/$30 per million) but uses fewer tokens, so "Astra low produces a better pelican than ANY of the GPT-5.6 Sol models, for 9.55 cents." The sharpest observation is incidental: Astra and Luna both consumed 16 input tokens where Sol and Terra used 26 — "I wonder if Astra and Luna are more related to each other than OpenAI let on?"
+
+**Why it matters:** the pelican eval looks like a joke and functions as a consistent cross-model instrument — and this grid doubles as the first independent cost/quality read on Astra's pricing tiers. Caveats: n is tiny and unblinded, the task is one prompt family, and the tokenizer observation is a hypothesis, not evidence.
+
+[`🔗 Simon Willison: The Pelican comparison grid for Astra`](https://simonwillison.net/2026/Sep/4/astra-pelicans/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49575122)
+
+---
+
+## 41. Kale — a spreadsheet that refuses to guess what your formula now points at
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2608.26345 · 56+ pts on HN
+- **Tags:** `spreadsheets` `programming-languages` `research` `arxiv`
+
+A user study behind this paper found that standard spreadsheet reference semantics are quietly dangerous: when a user restructures a referenced table, the system *helpfully* rewrites range references to "the new range" — which may not be the range the user meant, introducing bugs no one reviews. **Kale**, the prototype, eliminates the failure mode by restricting which references can be expressed at all, so structural edits can't silently re-point formulas; the paper shows users complete error-prone tasks effectively under Kale's restrictions, and includes a corpus study of what the restrictions would cost on real spreadsheets.
+
+**Why it matters:** it's programming-languages research aimed at the world's most-deployed end-user programming environment, and the design move — make the dangerous class of programs unwritable instead of warning about it — is the same move archify (item 1) makes for agent-drawn diagrams. Caveats: it's a prototype plus user study, not a shipped system, and the corpus study measures cost of restrictions, not adoption.
+
+[`🔗 arXiv 2608.26345`](https://arxiv.org/abs/2608.26345) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49516962)
+
+---
+
+## 42. How Go's built-in map actually works now — a Swiss Tables deep-dive for post-1.24 runtimes
+
+- **Velocity:** ▮ steady
+- **Source:** VictoriaMetrics blog · Phuong Le · Sep 3 · 85+ pts on HN
+- **Tags:** `go` `maps` `swiss-tables` `internals`
+
+Phuong Le's 24-minute read walks Go 1.24's rewritten map implementation — Swiss Tables — at runtime-internals depth: the control-word groups and their SIMD-friendly matching, how the directory of groups grows and shrinks, what happens to iteration order, and where the old bucket-and-overflow model's behaviors (and eviction quirks) survive or vanish. It deliberately re-explains the needed map fundamentals first so it stands alone, positioning itself against the Go team's own shorter "Faster Go maps with Swiss Tables" post.
+
+**Why it matters:** the map rewrite silently changed performance characteristics that Go services rely on — memory layout, growth triggers, iteration — and most production code has been running on it since 1.24 without anyone on the team reading the internals. Caveats: it's a reverse-engineered walkthrough pinned to specific Go versions, and internals are exactly the thing point-releases are allowed to change.
+
+[`🔗 VictoriaMetrics: How Go's Built-in Map Works with Swiss Tables`](https://victoriametrics.com/blog/go-swiss-table-map/index.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49548852)
+
+---
+
+## 43. Git submodules as a package manager — `.gitmodules` is a manifest and the gitlink is a lockfile entry
+
+- **Velocity:** ▮ steady
+- **Source:** nesbitt.io · Andrew Nesbitt · Sep 1 · 90+ pts on HN
+- **Tags:** `git` `submodules` `package-manager` `dependencies`
+
+Nesbitt's argument starts from a collision: `git worktree remove` refuses any worktree containing submodules without `--force`, eleven years after GitHub's 2.5 announcement warned "it's not recommended to use git worktree with a repository that contains submodules" — two of git's own features still not composable. From there he reframes submodules through a package-manager lens: `.gitmodules` is a manifest, the gitlink entry is a lockfile record, and the checkout is the install step — with the corresponding gaps (no resolution strategy, no conflict handling, the update story) explaining why the feature never displaced real package managers even as monorepos quietly keep using it.
+
+**Why it matters:** submodules remain the only dependency mechanism built into git itself, and agent-driven workflows (which happily run `git submodule update --init` to make builds work) are re-normalizing the pattern without its hazards being re-litigated. Caveats: it's an essay with a worked case, not a survey, and the worktree collision is a symptom, not the core argument.
+
+[`🔗 nesbitt.io: Git Submodules as a Package Manager`](https://nesbitt.io/2026/09/01/git-submodules-as-a-package-manager.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49519850)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-06T12:19:00+08:00 |
-| Items | 31 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI, Coder Advisory, Cloud in a Bottle/Imbue, Sylvain Kalache, Bryan Cantrill/Oxide, Lapcat Software, Robocurve, pushin.eu, X/@ljharb) |
+| Generated | 2026-09-06T20:24:00+08:00 |
+| Items | 43 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI, Coder Advisory, Cloud in a Bottle/Imbue, Sylvain Kalache, Bryan Cantrill/Oxide, Lapcat Software, Robocurve, pushin.eu, X/@ljharb, Isar Aerospace, Space.com, DevQuasar, Tom's Hardware, WPScan, Wordfence, RunJS/Luke Haas, bergie.iki.fi, Math ∩ Programming, IBM Quantum, The Quantum Insider, simonwillison.net, VictoriaMetrics, nesbitt.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

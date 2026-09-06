@@ -1,8 +1,8 @@
 ---
 date: 2026-09-06
-updated: 2026-09-06T12:19:00+08:00
+updated: 2026-09-06T20:24:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -451,13 +451,181 @@ okf-memory/okf-agent-memory(MIT、純 Go、9 月 5 日作成)は「Google OKF v0
 
 ---
 
+## 32. Isar Aerospace 第2回飛行で軌道到達——欧州の商業会社として初の衛星デリバリー
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 642+ pts · 約344 コメント · プレスリリース 9月5日 22:12 CEST(〜04:12 UTC+8)
+- **Tags:** `isar-aerospace` `spaceflight` `europe` `launch` `industry`
+
+Isar Aerospace の Spectrum ロケットが9月5日22:12 CESTにノルウェーの Andøya Space から打ち上げられ、ロケットとしてわずか**2回目の飛行**で軌道に到達し、ペイロードを展開。ドイツのスタートアップが、軌道に衛星を届けた欧州初の商業宇宙企業となった。同社によれば、機体は MaxQ を通過し、MECO、段分離、2段目点火、カーマンライン通過後のフェアリング分離、軌道円化燃焼を経て機体分離を完了。ペイロードはドイツ航空宇宙センター(DLR)の Microlauncher 競争(ESA Boost! の資金提供)から選ばれ、教育機関やスタートアップに低コストの宇宙アクセスを提供する。Spectrum の初飛行は2025年3月に離昇約30秒で終了。2回の試行で資格認定飛行から軌道到達は、SpaceX 型の軌跡だ。
+
+**なぜ重要か:** 打ち上げは欧州に欠けていた層——Arianespace の制度的モデル以来、主権的な商業オプションが存在しなかった——であり、CEO Daniel Metzler の表現は明快だ。「打ち上げは依然として世界的宇宙産業最大のボトルネックです」。正直な注意書きもプレスリリース内にある。Isar は「衛星の状態を確認するため顧客と連携中」であり、ペイロードの健全性は未確認。軌道投入1回だけでは運用ペースとは言えない。
+
+[`🔗 Isar Aerospace プレスリリース`](https://isaraerospace.com/press/history-for-european-spaceflight-isar-aerospace-reaches-orbit-and-deploys-payloads-on-second-flight) · [`🔗 Space.com: 欧州の土から軌道へ`](https://www.space.com/space-exploration/launches-spacecraft/isar-aerospace-second-launch-norway-ando) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49580369)
+
+---
+
+## 33. 「60ドルのゲーミングPC」——AMD BC-250 マイニングボードは削り版 PS5、コミュニティがゲームを起動させた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 350+ pts · 103 コメント · 約26時間前(9月5日 18:40 UTC+8 頃)
+- **Tags:** `amd` `bc-250` `hardware` `linux` `budget-gaming`
+
+DevQuasar の記事が取り上げるのは BC-250。中国製の暗号資産マイニングボードで、カットダウンされた PlayStation 5 の Oberon APU——Zen 2 CPU 8コアのうち6コア、RDNA2 CU 36のうち24——を搭載し、愛好家がかつて約60ドルで購入(供給逼迫で現在は120ドル以上)して、普通の Linux を起動していた。コミュニティの努力により Cyberpunk 2077、GTA V(約65 FPS)、Switch エミュレーション、さらにはレイトレーシングまで動作。同じボードはローカル LLM 推理への転用にも使われており、16GB GDDR6 とベアメタル Linux が安価な推論ノードになる。ドルあたり性能の秘密は「これがデスクトップ APU ではなく転用されたコンソールシリコンである」ことで、代償もコンソール式だ。ボードに映像出力はなく、ドライバはコミュニティパッチ、冷却はマイニングラック前提の設計。
+
+**なぜ重要か:** e-waste アービトラージ、コンソールセキュリティ研究、ホームラボ Linux が交差する珍しい話だ。150ドル未満で実際に使える x86-64 + RDNA2 マシンは、マイニングブームがボード代を払ってくれたからこそ存在する。情報源の注意書き。ブーム拡散で価格はほぼ倍増、ダイは永久にカットダウン済み、そしてこの構成は一切サポート対象外——ドライバのパッチは上流カーネルではなくフォーラムのスレッドにある。
+
+[`🔗 DevQuasar: 「60ドルのゲーミングPC」— AMD BC-250`](https://devquasar.com/hardware/the-60-gaming-pc-amd-bc-250/) · [`🔗 Tom's Hardware: BC-250 が再浮上、Cyberpunk 2077 が動く`](https://www.tomshardware.com/video-games/playstation/amds-rare-playstation-5-apu-based-bc-250-mining-board-resurfaces-for-usd120-and-can-actually-run-cyberpunk-2077) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49576386)
+
+---
+
+## 34. All-in-One WP Migration のセカンドオーダー SQLi(CVE-2026-19949)——未認証のアーカイブ復元バグが RCE に連鎖、未パッチ約325万サイト
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wordfence(発見者)/ WPScan · 9月上旬に開示 · 7.110 で修正
+- **Tags:** `wordpress` `cve-2026-19949` `sql-injection` `rce` `plugins`
+
+インストール数約500万の All-in-One WP Migration and Backup プラグインに、未認証の**セカンドオーダー SQL インジェクション**が存在した。アーカイブ復元機能において攻撃者制御の復元データがエスケープ不十分なクエリを通過し、Wordfence の分析ではこのインジェクションが SQLi からリモートコード実行とサイト全体の乗っ取りにエスカレート可能とされる。7.109 までのバージョンが影響を受け、7.110 で修正。開示時点で約325万サイトが未パッチのまま悪用コードが公開流通していると報告されている。スコアリング注記。発見者の評価は High で、執筆時点で数値 CVSS は確認できず。紙面上は本フィードの9.0基準を下回るが、実際には325万の未パッチサイトと公開エクスプロイトが基準の上にある。
+
+**なぜ重要か:** 移行/バックアッププラグインは、WordPress の中で唯一サイト全体のアーカイブを受け取りデータベースに書き戻すよう設計されたコンポーネントであり、最も魅力的な標的であると同時に、インジェクションのエスケープが最も難しい場所でもある。今週は WPMU DEV/Avada/Pods のバッチ、Elementor Pro に続き3件目の WordPress エコシステム警報であり、プラグイン攻撃面へのシグナルそのものだ。
+
+[`🔗 WPScan アドバイザリ`](https://wpscan.com/vulnerability/03fc9f1a-5199-40fa-960d-75a266eb7e95/) · [`🔗 Wordfence: 500万サイトが影響`](https://www.wordfence.com/blog/2026/09/5-million-wordpress-sites-affected-by-sql-injection-vulnerability-in-all-in-one-wp-migration-and-backup-wordpress-plugin/) · [`🔗 NVD レコード`](https://nvd.nist.gov/vuln/detail/CVE-2026-19949)
+
+---
+
+## 35. プログラマーのための音楽理論——正弦波からコードで12音を導出する
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 178+ pts · 86 コメント · 約30時間前(9月5日 14:30 UTC+8 頃)
+- **Tags:** `music-theory` `education` `audio` `programming`
+
+Luke Haas の RunJS エッセイ(8月17日公開、今週末に再浮上)は、プログラマーが欲しい形で音楽理論を教える。「音とは空気圧の揺れである」から始め、ブラウザで正弦波を生成し、12音、メジャースケールのパターン、コード、実際に機能するコード進行を暗記ではなく**導出**していく。各層は配列で構築され、最後に楽譜が登場するのは「記譜すべきものができてから」。全ステップが実行可能な JavaScript であり、読者は各主張を耳で検証できる。HN スレッドは第一原理的な称賛の議論が中心で、例によって平均律の妥協への迂回もいつもの通り。
+
+**なぜ重要か:** LLM 時代が後押しする教学ジャンル——受け入れるよう言われる規約ではなく、実行・検証可能な導出——の小さな模範例であり、「楽器が弾けない」という冒頭の一言の通り門戸が広い。注意点。常連コンテンツの再浮上であり新発表ではなく、内容は和声の基礎まで。リズム、フォーム、制作には触れない。
+
+[`🔗 プログラマーのための音楽理論(RunJS ブログ)`](https://runjs.app/blog/music-theory-for-programmers) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49541888)
+
+---
+
+## 36. 「ライセンスを変えました」——28年目で Henri Bergius がデフォルトを EUPL に切替、SaaS 抜け穴を塞ぐ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Henri Bergius ブログ · 9月5日 · HN 60+ pts · 57 コメント
+- **Tags:** `licensing` `eupl` `open-source` `copyleft` `saas`
+
+Henri Bergius(Midgard CMS、NoFlo、フローベースプログラミング)は、28年間のソフトウェア公開における3つのライセンス時代(Midgard は LGPLv2、JavaScript 時代は MIT)を振り返り、デフォルトライセンスを **EUPL-1.2**——配布の有無にかかわらず SaaS デプロイに及ぶ EU の強コピーレフトライセンス——へ切り替えたと発表。彼の主張は率直だ。「私たちは論争に勝ち、ユーザーと開発者のためにほとんど何も得られなかった。私たちの努力のすべては、大企業がより安く物を作りやすくしただけだった」。23言語の法的に有効な公式訳を持つ点も挙げる。既に移行済み:`reticulum-js`、`dacar`、船舶向けエネルギー予測、海上ブログツール。NoFlo 自体はサードパーティ貢献のある既存プロジェクトのため MIT のまま。
+
+**なぜ重要か:** パーミッシブライセンスへの反発はエージェント時代に蓄積している——コードの限界ユーザーがそれを訓練・吸収する企業になると、MIT の取引は違って見える——そして EUPL は「クラウドで生き残るコピーレフト」の立場における過小利用された手段だ。注意点。これは一人のベテラン開発者のデフォルトでありプロジェクトの決定ではない。EUPL は npm エコシステムでは依然稀で、GPL 互換条項には採用前に読むべきクセがある。
+
+[`🔗 Henri Bergius: I changed my license`](https://bergie.iki.fi/blog/eupl/) · [`🔗 EUPL-1.2 全文(EUR-Lex)`](https://eur-lex.europa.eu/eli/dec/2017/863/oj)
+
+---
+
+## 37. Obscura v0.2.2——Rust 製ヘッドレスブラウザにネイティブレンダリング登場:「Chromium 不要」
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · v0.2.2 を9月5日リリース · 26.0k スター · HN 20+ pts
+- **Tags:** `headless-browser` `rust` `web-scraping` `agents` `release`
+
+ウェブスクレイピングと AI エージェント自動化のために作られた Rust 製ヘッドレスブラウザエンジン Obscura が9月5日に v0.2.2 をリリースし、README が予告し続けてきたマイルストーンを達成した。**ネイティブレンダリング**、つまりスクリーンショット、ライブスクリーンキャスト、PDF エクスポートを Chromium をバンドルせず Obscura 自身のパイプラインで直接生成する。エンジンは既に組み込み V8 で実際の JavaScript を実行し、Chrome DevTools Protocol を話し、Puppeteer・Playwright 配下でヘッドレス Chrome のドロップイン代替を自称する。自己申告の数値。メモリ約30 MB(ヘッドレス Chrome は200+ MB)、バイナリ70 MB、ページ読み込み約85 ms、アンチ検出内蔵。README は Cloudflare の Kitesurf エージェントブラウザのプロトタイプが Obscura の Workers へのポートから始まったと主張している。
+
+**なぜ重要か:** エージェントフリートはヘッドレスブラウザの最速成長消費者であり、Chromium 税(メモリ・サイズ・起動)はフリート規模で何倍にもなる。CDP 互換の信頼できる非 Chromium エンジンはコスト曲線を変える。注意点。性能数値はすべてベンダー自己申告で未ベンチマーク。「ドロップイン」の Puppeteer/Playwright 互換は最も守りにくい約束であり、Cloudflare Kitesurf の系譜は Cloudflare 自身の記事に対して未検証のマーケティング主張だ。
+
+[`🔗 h4ckf0r0day/obscura`](https://github.com/h4ckf0r0day/obscura) · [`🔗 Hacker News: ネイティブレンダリング発表`](https://news.ycombinator.com/item?id=49580771)
+
+---
+
+## 38. HEIR、正直版——Jeremy Kun による Google の準同型暗号コンパイラ更新の「無制限」伴読
+
+- **Velocity:** ▮ steady
+- **Source:** Math ∩ Programming · 9月4日 · HN 56+ pts
+- **Tags:** `homomorphic-encryption` `compiler` `privacy` `cryptography` `ml-inference`
+
+Google の Jeremy Kun が、8月14日の Google Security ブログ投稿——**HEIR**、つまり普通のプログラムを暗号化データ上で直接動作するプログラムへ変換するコンパイラの更新——について、制限なしの伴読記事を公開した。ブログ投稿は4つの小さいが自明でない事前学習済み ML モデル(クレジットカード不正検出モデルを含む)のコンパイル例を示すもので、CKKS ベースの秘密計算によりサーバーは平文の1ビットも見ない。伴読記事ではサンプルリポジトリの動かし方(bazel 管理)、コンパイル済みモデルの実行時間比較、Kun 自身のプロジェクトロードマップ観を扱う。文体は例通り率直だ。「字数も専門用語も制限なく、正直でいられる。さあ、お付き合いあれ」。
+
+**なぜ重要か:** 完全準同型暗号は10年間「実用まであと一桁」と言われ続けてきた。ML エンジニアが実際にターゲットにでき、正直な実行時間数値が付いたメンテナンス中のコンパイラこそ、それが現実になる漸進的経路だ。情報源自体の注意書き。デモは小さなモデル。HE 推論は平文より大幅に遅く、サンプルを動かす最大の障害は理論ではなくツールチェーン(bazel)だ。
+
+[`🔗 Jeremy Kun: HEIR の更新`](https://www.jeremykun.com/2026/09/04/updates-on-heir-homomorphic-encryption/) · [`🔗 HEIR プロジェクト (heir.dev)`](https://heir.dev)
+
+---
+
+## 39. IBM Quantum Nighthawk r2 が `ibm_phoenix` として稼働開始——120量子ビット、散逸リセット、25倍の回路スループットを主張
+
+- **Velocity:** ▮ steady
+- **Source:** IBM Quantum ブログ · 9月上旬 · HN 25+ pts
+- **Tags:** `quantum-computing` `ibm` `hardware` `research`
+
+IBM がこれまでで最速の QPU、Nighthawk r2 を IBM Quantum Platform で `ibm_phoenix` という名前でリリースした。120のプログラマブル量子ビットを正方格子に配置し、218の次世代チューナブルカプラで接続、さらに120のリセット素子——物理量子素子は合計458。目玉は**能動的散逸量子ビットリセット**で、IBM はこれにより**回路速度/スループットが25倍**——毎秒10万超の量子回路——になると主張し、大規模な回路バインディング系ワークロードを待ち行列ではなく実際に使えるものにすることを目指す。設計は2025年11月の IBM ロードマップで初公開され、r2 はその提供版だ。
+
+**なぜ重要か:** 多数の小さな回路を回す者(化学、サンプリング、誤り緩和パイプライン)にとって実用上のボトルネックは量子ビット数ではなくスループットであり、スループットが死ぬ場所がリセット時間だ。だから25倍というリセット駆動の主張がユーザーワークロードで成立するなら、さらなる量子ビット増強より重要になる。注意点。25倍という数値はベンダー自身のベンチマークによるもので未検証。「毎秒の回路数」は量子優位性や回路深度に関する主張ではない。
+
+[`🔗 IBM Quantum: Nighthawk r2`](https://www.ibm.com/quantum/blog/nighthawk-r2) · [`🔗 The Quantum Insider: 25倍の回路速度ターゲット`](https://thequantuminsider.com/2026/09/03/ibms-nighthawk-r2-quantum-processor-targets-a-25-fold-increase-in-circuit-speed/)
+
+---
+
+## 40. Simon Willison の GPT-6 Astra ペリカングリッド——全推論レベルでより良く、そしてトークン数の手がかり
+
+- **Velocity:** ▮ steady
+- **Source:** simonwillison.net · 9月4日 · HN 22+ pts
+- **Tags:** `gpt-6-astra` `benchmark` `evaluation` `svg` `llms`
+
+Willison が代名詞となっている「自転車に乗るペリカンの SVG」評価を、アクセスを得たばかりの GPT-6 Astra の5つの推論レベルで実行し(Astra には `reasoning=none` がない)、GPT-5.6 Sol・Terra・Luna との比較グリッドを描いた。結果。low から xhigh までのすべての Astra ペリカンが、最高の GPT-5.6-Sol ペリカンすら上回った。max 未満の Astra は依然として両脚をフレーム内に安定して収められない。コスト面では Astra は Sol の約2倍($10/$50 対 $5/$30、100万トークンあたり)だがトークン消費が少なく、「Astra low は9.55セントで GPT-5.6 Sol のどのモデルよりも良いペリカンを生み出す」。最も鋭い観察は付随的だ。Astra と Luna は入力トークン16に対し、Sol と Terra は26を消費した。「Astra と Luna は OpenAI が認めている以上に互いに関係しているのでは」と彼は書く。
+
+**なぜ重要か:** ペリカン評価は冗談に見えて、一貫したクロスモデルの計器として機能しており、このグリッドは Astra の価格 tier に関する最初の独立したコスト/品質の読みにもなる。注意点。n は極小で非ブラインド、タスクは1つのプロンプト族のみ、トークナイザの観察は証拠ではなく仮説だ。
+
+[`🔗 Simon Willison: Astra のペリカン比較グリッド`](https://simonwillison.net/2026/Sep/4/astra-pelicans/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49575122)
+
+---
+
+## 41. Kale——「あなたの数式は今どこを指しているのか」を推測しないスプレッドシート
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2608.26345 · HN 56+ pts
+- **Tags:** `spreadsheets` `programming-languages` `research` `arxiv`
+
+論文の基盤となったユーザー研究は、標準的なスプレッドシートの参照セマンティクスが静かに危険であることを示した。ユーザーが参照先のテーブルを再構成すると、システムは親切にも範囲参照を「新しい範囲」へ書き換える——それがユーザーが意図した範囲とは限らず、誰にもレビューされないバグを生む。プロトタイプの **Kale** は、表現できる参照の種類を制限することでこの失敗モードを排除し、構造編集が数式を黙って付け替えることを不可能にした。論文は、Kale の制約下でもユーザーが従来エラーを起こしやすいタスクを効果的に完了できることを示し、制約が実際のスプレッドシートで及ぼすコストを測るコーパス研究も含む。
+
+**なぜ重要か:** 世界で最も広く展開されているエンドユーザープログラミング環境を狙ったプログラミング言語研究であり、その設計手法——危険な種類のプログラムを警告するのではなく書けなくする——は、エージェント描画図に対する archify(項目1)と同じ手だ。注意点。プロトタイプとユーザー研究であり出荷済みシステムではない。コーパス研究は制約のコストを測るものであり採用率ではない。
+
+[`🔗 arXiv 2608.26345`](https://arxiv.org/abs/2608.26345) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49516962)
+
+---
+
+## 42. Go の組み込み map は今どう動いているのか——1.24 以降のランタイム向け Swiss Tables 深掘り
+
+- **Velocity:** ▮ steady
+- **Source:** VictoriaMetrics ブログ · Phuong Le · 9月3日 · HN 85+ pts
+- **Tags:** `go` `maps` `swiss-tables` `internals`
+
+Phuong Le の24分間の読み物が、Go 1.24 で書き直された map 実装——Swiss Tables——をランタイム内部の深度で歩く。制御ワードのグループと SIMD フレンドリなマッチング、グループディレクトリの伸縮、イテレーション順に何が起きるか、そして古いバケット+オーバーフローモデルのどの振る舞い(と排除のクセ)が残り、何が消えたか。記事は必要な map の基礎をわざわざ再説明してから本題に入るため単独で読め、Go チーム自身のより短い「Faster Go maps with Swiss Tables」と相補的だ。
+
+**なぜ重要か:** map の書き直しは、Go サービスが依存する性能特性——メモリレイアウト、成長トリガ、イテレーション——を静かに変えた。1.24 以降、本番コードはその上で動いているのに、チームの誰も内部実装を読んでいないことが多い。注意点。特定の Go バージョンに釘付けされたリバースエンジニアリングの walkthrough であり、内部実装はまさにポイントリリースで変更が許されるものだ。
+
+[`🔗 VictoriaMetrics: Go の組み込み map と Swiss Tables`](https://victoriametrics.com/blog/go-swiss-table-map/index.html) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49548852)
+
+---
+
+## 43. Git サブモジュールをパッケージマネージャとして——`.gitmodules` はマニフェスト、gitlink はロックファイルのエントリ
+
+- **Velocity:** ▮ steady
+- **Source:** nesbitt.io · Andrew Nesbitt · 9月1日 · HN 90+ pts
+- **Tags:** `git` `submodules` `package-manager` `dependencies`
+
+Nesbitt の議論はある衝突から始まる。`git worktree remove` はサブモジュールを含む worktree を `--force` なしでは拒否する——11年前、GitHub の 2.5 発表が「サブモジュールを含むリポジトリで git worktree を使うのは推奨しない」と警告してからずっと、git 自身の2機能が組み合わせられないままだ。そこから彼はサブモジュールをパッケージマネージャのレンズで捉え直す。`.gitmodules` はマニフェスト、gitlink エントリはロックファイルの記録、チェックアウトがインストール手順——そして対応するギャップ(解決戦略なし、競合処理なし、update の貧弱さ)が、monorepo が密かに使い続ける中で、この機能が本物のパッケージマネージャを置き換えられなかった理由を説明する。
+
+**なぜ重要か:** サブモジュールは git 自体に組み込まれた唯一の依存メカニズムであり、エージェント駆動のワークフロー(ビルドを通すために快く `git submodule update --init` を実行する)は、その危険が再検討されないままパターンを再標準化しつつある。注意点。これは事例付きのエッセイでありサーベイではない。worktree の衝突は症状であって核心の主張ではない。
+
+[`🔗 nesbitt.io: Git サブモジュールをパッケージマネージャとして`](https://nesbitt.io/2026/09/01/git-submodules-as-a-package-manager.html) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49519850)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-06T12:19:00+08:00 |
-| Items | 31 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI, Coder Advisory, Cloud in a Bottle/Imbue, Sylvain Kalache, Bryan Cantrill/Oxide, Lapcat Software, Robocurve, pushin.eu, X/@ljharb) |
+| Generated | 2026-09-06T20:24:00+08:00 |
+| Items | 43 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI, Coder Advisory, Cloud in a Bottle/Imbue, Sylvain Kalache, Bryan Cantrill/Oxide, Lapcat Software, Robocurve, pushin.eu, X/@ljharb, Isar Aerospace, Space.com, DevQuasar, Tom's Hardware, WPScan, Wordfence, RunJS/Luke Haas, bergie.iki.fi, Math ∩ Programming, IBM Quantum, The Quantum Insider, simonwillison.net, VictoriaMetrics, nesbitt.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
