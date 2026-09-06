@@ -1,8 +1,8 @@
 ---
 date: 2026-09-06
-updated: 2026-09-06T04:19:00+08:00
+updated: 2026-09-06T12:19:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -283,13 +283,181 @@ anomalyco/opencode——"开源编码智能体"(TypeScript/Bun,MIT)——位居�
 
 ---
 
+## 20. Coder 注册表经由自家 Cloudflare 账户遭入侵——恶意 Terraform 模块在 14 小时内收割 provisioner 机密
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Coder 安全公告 GHSA-vx42-ghc9-gw65 · 攻击窗口 8 月 31 日 07:35–21:45 UTC · 9 月 3 日披露
+- **Tags:** `supply-chain` `coder` `terraform` `cloudflare` `infostealer`
+
+攻击者没有攻破 Coder 的构建流水线——他们"获得了 Coder Cloudflare 基础设施的访问权限，并向地址池添加了未授权 IP",于是 registry.coder.com 间歇性地提供了一个被篡改的注册表，其中的 Terraform 模块化身信息窃取器：收割 provisioner 环境变量、云端**与 AI 工具 API 密钥**、CI/CD 凭据、配置文件机密与终端历史、OIDC 令牌、SSH 密钥、一次性外部认证令牌以及 Coder 数据库密码——全部外传至仿冒域名 `coder-infra[.]com`。Coder(用户包括 Dropbox、Palantir、Square、梅赛德斯-奔驰、KKR、EnBW 及美国政府)发布了修复版本(2.37.0/2.36.4/2.35.7/2.34.9)、用于查找受影响缓存模块的 SQL 查询，以及一条少见的指令：升级**之前**先在防火墙/DNS/VPC 日志中排查外传域名。
+
+**Why it matters:** 这次的目标是控制平面——CDN 账户而非注册表服务器，而这恰恰是大多数团队当作"别人家的事"的那一层。Coder 自己的承认最扎心：由于攻击者的服务器不在其控制之内，它"无法确凿识别每一个受影响的部署"。如果你在 8 月 31 日从 registry.coder.com 拉取过 Terraform 模块，请把公告列出的所有凭据全部轮换。
+
+[`🔗 Coder 公告 GHSA-vx42-ghc9-gw65`](https://github.com/coder/coder/security/advisories/GHSA-vx42-ghc9-gw65) · [`🔗 BleepingComputer:恶意模块被推送`](https://www.bleepingcomputer.com/news/security/coders-registry-infrastructure-compromised-to-push-malicious-modules/)
+
+---
+
+## 21. Cloud in a Bottle — Imbue 发布开源"云智能手机"，让自托管触手可及
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 218+ pts · 93 条评论 · ~4h 前 (~08:03 UTC+8)
+- **Tags:** `self-hosting` `open-source` `containers` `agpl` `launch`
+
+Imbue(经工程师 Zack Polizzi 之手)在 6 个多月私下开发后发布 Cloud in a Bottle:一个 AGPL-3.0 平台，"一台装了 web 服务器的 Ubuntu 机器"承载仪表盘，把 HTTP(S) 路由到 rootless 加固容器化应用——所有应用共享一次登录、应用之间按权限共享数据、可选的平台 API(通知、共享，移动操作系统式)，外加精选应用目录。零遥测；托管版(附 10 美元试用金)是商业模式，而自托管路线"将永远是一等公民"。文章抢先点名了现有方案:Sandstorm(已弃)、Nextcloud(慢、企业导向)、YunoHost(无沙箱)、Coolify(各自为政的孤岛加独立登录)。
+
+**Why it matters:** 一家 AI 实验室投入 6 个月，赌的是让自托管用起来像手机而不是系统管理——这是对个人软件走向的一次重要投票。文章自己的注意事项也很诚实：目录"目前还很小"，早期用户需要"一点技术基础(或者一个编码智能体)"，而自托管可及性与开源应用供给之间的鸡生蛋问题被正面点出，而非含糊带过。
+
+[`🔗 Cloud in a Bottle 发布文章`](https://cloudinabottle.org/blog/launch-post) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49582000)
+
+---
+
+## 22. "AI 处理故障，工程师却失去对系统的手感"——自动化悖论抵达 on-call
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 368+ pts · 327 条评论 · ~20h 前 (9 月 5 日 ~15:52 UTC+8)
+- **Tags:** `sre` `incident-response` `ai-automation` `skill-erosion` `reliability`
+
+Sylvain Kalache 的文章指出：能调查告警、形成假设并实施修复的 AI SRE，正在消耗掉恰恰是响应者赖以建立直觉的那些例行故障——等到无法自动化的新型高严重度事故到来时，人已经荒废了。这是 Bainbridge 1983 年"自动化的悖论"(Ironies of Automation)的 2026 版。航空类比是承重墙：发动机故障发生率低于十万分之一飞行小时，这正是 FAA 强制每半年复训模拟机的原因——他援引了复兴航空 235 号班机：机组误诊发动机故障，首次告警后 117 秒坠毁。预测：平均 MTTR 下降，复杂事故的处置时长飙升；团队积累"理解力债务"(comprehension debt)。他给出的解方用的是罪魁祸首本身：LLM 驱动的事故演练(Rootly × Uptime Labs 已经在跑)、桌面推演和混沌工程成为 on-call 标准备战。
+
+**Why it matters:** 这是技能侵蚀在 on-call 场景下迄今最锋利的表述——看 AI 解释它的工作，等于看小威打球学网球。注意事项：这是论证与类比而非测量；MTTR 预测是方向性主张，文章没有引用任何"AI 处置事故翻车"的数据集。
+
+[`🔗 Sylvain Kalache:AI handles incidents, engineers lose touch`](https://www.sylvainkalache.com/blog/ai-handles-incidents-engineers-lose-touch-with-their-systems) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49574167)
+
+---
+
+## 23. Bryan Cantrill:《读者的反叛》——读者分辨得出来，而且 78% 的人一发现就不读了
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 185+ pts · 67 条评论 · ~6.5h 前 (~05:37 UTC+8)
+- **Tags:** `ai-writing` `authorship` `pangram` `essays` `oxide`
+
+Cantrill 9 月 5 日的文章主张：公开发表的文字"唯一的目的就是服务读者"，而读者已经对 LLM 散文发起了反叛——他引用 Cynthia Dunlop 对 668 名开发者的调查：一旦察觉是 LLM,78%"立即停止阅读"，71% 日后会回避该作者，98% 宁可读不完美的人类文字。他的结论是：LLM 代笔如今在策略上就是自毁，而不只是俗气。他指出的机制是垃圾邮件史的重演:Pangram 4 检测器终于同时做到低误报和低漏报，Oxide 自家的 RFD 576 也已要求公开文章通过"Pangram-clean"检测。他向两位受人尊敬、发表 LLM 代笔文章的作者提出两个尖锐问题——你是觉得读者看不出来，还是觉得读者不在乎？——并点名敦促组织(Rust 基金会)采纳真实性政策。
+
+**Why it matters:** 如果检测精度是真的，AI 代笔就带上了垃圾邮件式的品牌风险——激励从"蒙混过关"变成"被抓了就一辈子被记住"。注意事项:Dunlop 调查是承重证据，而我们是转引自 Cantrill 的概述，并未审查调查本身的方法论。
+
+[`🔗 Bryan Cantrill:The revolt of the reader`](https://bcantrill.dtrace.org/2026/09/05/the-revolt-of-the-reader/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49580939)
+
+---
+
+## 24. 《LLM 是一种认知病毒》——复杂科学重量级学者把 LLM 依赖建模成流行病
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 209+ pts · 174 条评论 · ~8h 前 (~04:02 UTC+8)
+- **Tags:** `arxiv` `cognitive-risk` `llm-adoption` `modeling` `research`
+
+arXiv 2609.03344(9 月 3 日)作者阵容为 Ricard Solé、Giulio Ruffini、Luis F. Seoane、Manlio de Domenico、David C. Krakauer、Michael Levin 等——一个把 LLM 采用建模为流行病学的区室模型，含三种用户状态(未耦合 → 耦合 → 持久依赖)，社会传播、恢复与集体强化相互作用，产生临界点、技术锁定，以及越过临界阈值后的"认知能力的骤然丧失"。提出的对策是"认知免疫"：降低人际传播、让依赖保持可逆。这是一篇纯理论论文——没有实证采用数据——摘要自己用的动词是"可以通过……来理解"和"可能"。
+
+**Why it matters:** 作者名单就是故事：当 Krakauer、Solé 和 Levin 联名给 LLM 依赖套上流行病学框架，这个框架就从专栏文章变成了可引用的模型。注意事项(出自论文自身)：区室模型在技术采用预测上的历史记录很差，"认知能力"只在模型内部被操作化定义，而 HN 的 174 条评论大多在争论病毒类比而非数学本身。
+
+[`🔗 arXiv 2609.03344`](https://arxiv.org/abs/2609.03344) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49580164)
+
+---
+
+## 25. Chrome 再度无视"关闭所有窗口时删除网站数据"——而且依旧只对 google.com 网开一面
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 162+ pts · 18 条评论 · ~4.5h 前 (~07:39 UTC+8)
+- **Tags:** `chrome` `privacy` `browser` `google` `site-data`
+
+Jeff Johnson(Lapcat Software)报告：Chrome 152.0.7977.83 在开启"关闭所有窗口时删除网站在本机保存的数据"的情况下，依然持久保留 `www.google.com` 的 cookie、localStorage 和 sessionStorage——距离他记录并促使 Google 修复几乎相同的豁免已过六年。复现很讲究：两台 Mac;未登录、Chrome 登录已禁用；默认搜索引擎换成 DuckDuckGo 以排除变量;`chrome://settings/content/all` 在一次 Google 搜索前显示 0 字节，一次搜索后出现约 1,216 KB 的 google.com 数据，关窗、退出、重启 Chrome 都活着，删掉再重来照样复现。就他所见，Google 的网站是唯一被豁免的。他明确倾向于汉隆剃刀——更可能是 bug 或 QA 失误而非阴谋——同时指出以 Google 之富"没资格拿无能当借口"。
+
+**Why it matters:** "关闭时删除网站数据"是当作保证出售的隐私控制；如果它对浏览器厂商自己的一方域名静默失效，故事的主角就是这个控制本身，而不是 Google 的 cookie。注意事项：一位作者在两台机器上的复现、回归引入时间未知、未定位根因，发稿时 Google 尚无回应。
+
+[`🔗 Lapcat:Chrome again exempts Google from user site data settings`](https://lapcatsoftware.com/articles/2026/9/1.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49581870)
+
+---
+
+## 26. nvm 的仓库描述里现在躺着一个 Solana 代币地址——而且是维护者在推广
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 94.9k stars · 今日登上日榜
+- **Tags:** `nvm` `open-source-funding` `memecoin` `supply-chain` `github`
+
+nvm-sh/nvm——94,938 star 的 Node 版本管理器，在各处 README 里用 `curl … | bash` 安装——今天上趋势不是因为代码，而是因为它的仓库描述末尾多了一个 pump.fun 格式的代币地址(`$nvm: 3Arcxq…pump`)。关键是，这看起来是维护者背书而非盗号：直到 9 月 4 日的近期提交都是 Jordan Harband 和贡献者的常规维护，v0.40.7 的 release note 只字未提代币，而 Harband 本人的 X 帖子写着"多亏今天的 $nvm 支持，我才得以发布 nvm v0.40.7!"——把一次真实发布描述为由代币支持所成全。
+
+**Why it matters:** 一个 memecoin 借由生态中装机量最大的脚本之一的信任面来推广，无论动机如何都是一场治理事件——README 的安装命令会继承描述的公信力，而"发代币维持开源"会成为其他维护者读到的先例邀请。代码什么都没变；警报是资金模式，不是恶意软件。注意事项：X 帖子我们只到达搜索摘要层，未能独立打开核实；仓库内不存在任何事件声明或代币文档；代币本身的来历完全未经核实。
+
+[`🔗 nvm-sh/nvm(见描述)`](https://github.com/nvm-sh/nvm) · [`🔗 Jordan Harband on X`](https://x.com/ljharb)
+
+---
+
+## 27. GPT-6 Astra 上机械臂——积木入碗 19/20,在真正难的地方诚实地打平
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 79+ pts · 32 条评论 · ~2.5h 前 (~09:52 UTC+8)
+- **Tags:** `gpt-6-astra` `robotics` `benchmark` `embodied-ai` `evaluation`
+
+Robocurve——曾测试过 Claude Fable 系列的第三方评测站(不是 OpenAI;注意那个借来的 `openai.` 子域名)——让 GPT-6 Astra 在双臂 I2RT YAM 机械臂上对阵 Fable 5.1:在把红色积木放进碗的任务中，Astra 得分 19/20 对 8/20,单次成本 0.94 对 2.12 美元，耗时 2.5 对 6.8 分钟，输出 token 约 2k 对 10–16k。在更难的拼图嵌入任务上，Astra 只拿到 2/20——与 Fable 5.1 **完全相同**，同样"卡在最后一步"。方法论：每模型每任务 20 次试验(共 120 次运行记录，转录与视频全部公开)，人工按 0–4 评分。页面自己的局限一节写明：评分是"操作者知情判定"、碗任务两个模型用了不同台架、Astra 晚两天运行、缓存差异可能低估其成本优势。
+
+**Why it matters:** 这是 Astra 的第一次第三方具身测试，而它最诚实的发现是那次打平——在需要精度的任务上，前沿模型恰好在上一代跌倒的地方跌倒。把子域名当营销看，把公开的转录当数据看；n=20 加不盲评的评分，这是带收据的演示，不是排行榜。
+
+[`🔗 Robocurve:GPT-6 Astra on robot arms`](https://openai.robocurve.org/gpt-6-astra/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49582582)
+
+---
+
+## 28. HPE 修复 ArubaOS-CX 未认证 RCE(CVE-2026-73749,CVSS 9.8)——一份公告 24 个漏洞，没有任何变通方案
+
+- **Velocity:** ▮ steady
+- **Source:** HPE 公告 · CVE 9 月 1 日发布 · CVSS 9.8(HPE CNA 评分)
+- **Tags:** `arubaos-cx` `cve-2026-73749` `rce` `networking` `hpe`
+
+CVE-2026-73749 是 ArubaOS-CX 某守护进程中的缓冲区溢出：未认证的远程攻击者向受影响服务发送特制数据包，即可获得**高权限**代码执行。HPE 将其评为 9.8 Critical(CNA 评分;NVD 9 月 1 日发布)，并在五个分支上修复——10.18.1002+、10.17.1030+、10.16.1060+、10.13.1190+ 以及维护期已结束的 10.10.1181+——不提供任何变通方案。同一份公告还包含 23 个 8.1–8.8 分的漏洞：认证后命令注入、格式化字符串缺陷、存储型 XSS、缺失 CSRF 防护、认证绕过，以及一个影响管理员尚未配置的设备的可预测出厂默认密码。HPE 声明"未发现主动利用或公开 PoC"。
+
+**Why it matters:** 园区/数据中心交换机操作系统上的预认证 RCE 加"没有变通方案"，无论是否已被利用都是立即打补丁的子弹——交换机所在的位置，正是网络分段假设成立的地方。未配置设备的默认密码是最阴险的一条：它攻击的是运输途中或躺在货架上的设备。注意事项：目前未观测到利用，且 10.10 分支的修复是绝唱。
+
+[`🔗 NVD:CVE-2026-73749 记录`](https://nvd.nist.gov/vuln/detail/CVE-2026-73749) · [`🔗 BleepingComputer:HPE 修复 ArubaOS-CX RCE`](https://www.bleepingcomputer.com/news/security/hpe-patches-critical-arubaos-cx-remote-code-execution-flaw/)
+
+---
+
+## 29. pushin.eu — "永不离开欧洲的 Git 托管"，邀请制、且以反 slop 为设计目标
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 324+ pts · 149 条评论 · ~22h 前 (9 月 5 日 ~14:31 UTC+8)
+- **Tags:** `git` `hosting` `europe` `sovereignty` `developer-tools`
+
+Peter Ullrich 的 pushin.eu(邀请制 beta,莱顿)在 Scaleway 巴黎数据中心的裸金属服务器上托管公开与私有 Git 仓库，带 issue、PR 和 CI——不设美国故障转移，网站声称由此消除 CLOUD Act 管辖暴露；不会将客户代码用于 AI 训练(自身或伙伴皆然)。迁移是入口：`pun` CLI 从 GitHub 导入时保留历史、标签、issue、PR、时间戳与归属信息，REST API 刻意镜像 GitHub 的请求/响应结构。最独特的定位是反 slop:邀请制注册、计划中的担保/声誉系统、以及针对智能体生成的低质量贡献的贡献限额。正式版和付费档("与 GitHub 和 GitLab 相当")目标 2027 年初。
+
+**Why it matters:** 昨天打到静态托管的欧洲主权浪潮，如今抵达 forge——智能体时代的贡献洪流真正到来的那一层，而"谁有资格开 PR"正在变成产品功能。注意事项：产品尚未正式发布且邀请制;API 只覆盖 GitHub 表面的一部分；设计上的单地区同时意味着单点故障；定价是承诺，不是价格。
+
+[`🔗 pushin.eu`](https://pushin.eu) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49573680)
+
+---
+
+## 30. Balrogg — 出自 Kamila Szewczyk 之手，把 Vorbis/Opus 无损压缩再小 8–12%
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 67+ pts · 9 条评论 · ~63h 前 (Show HN)
+- **Tags:** `audio` `compression` `vorbis` `opus` `lossless`
+
+iczelia/balrogg(GPL-3.0,C99,除 libm 外零依赖)把 Ogg Vorbis 文件无损缩小通常 8–12%,Opus 3–8%,装进 `.blr` 容器——HN 标题的"最高 15%"是尾部而非中位数。力度档 `-1`–`-9` 用编码时间换体积；到 `-4` 为止每一档增加一个残差模型阶段，更高档只扩大参数搜索，所以 `-4`–`-9` 解码完全一致。Vorbis 调优会对每个候选设置评估完整文件并保留最优。作者是 Kamila Szewczyk(delta/packager 的作者);Opus 解析器派生自 libopus。README 自己的警告：在 v2.0 之前，`.blr` 归档**不保证**向前或向后兼容——把它当重新编码的检查点，而不是归档格式。
+
+**Why it matters:** 对已压缩音频做无损再压缩是压缩领域所剩最难的赢面之一，而一个击败容器而非编解码器、还能用的工具非常罕见。注意事项：年轻项目(9 月 3 日创建，53 stars),格式明确不稳定，且收益依赖格式——Opus 用户拿到的是 Vorbis 归档的三分之一。
+
+[`🔗 iczelia/balrogg`](https://github.com/iczelia/balrogg) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49549778)
+
+---
+
+## 31. OKF Agent Memory — 面向编码智能体的 Git 原生持久记忆，上线一天就登上 Show HN
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 49+ pts · 16 条评论 · ~6h 前 (~06:15 UTC+8)
+- **Tags:** `agent-memory` `mcp` `go` `git` `show-hn`
+
+okf-memory/okf-agent-memory(MIT,纯 Go,9 月 5 日创建)实现了"Google OKF v0.2"智能体记忆规范：记忆存放在一个智能体原生读写的 Git 仓库里，配 300µs 以内的内存 BM25 检索、内嵌 MCP 服务器和渐进式披露；作者声称在零外部数据库、零依赖的情况下削减约 80% 的 token 膨胀。它落进智能体基础设施争夺最激烈的赛道——记忆是什么格式——在这里 Hugging Face 的 Funes(会话轨迹 → 数据集)、LatentPress(连续记忆 token)和 memoryfields(Markdown 压缩包 + SQLite)各自押了不同的注。
+
+**Why it matters:** Git 原生是桌面上最可审计的答案——智能体把记忆当仓库来维护，意味着记忆可以被 diff、审查和回滚，这正是其他格式在模拟的东西。注意事项：仓库只有一天历史、113 stars;"Google OKF v0.2"的规范关联和 80% 这个数字都是作者自述、未经基准测试，本 feed 也尚未核实规范文档本身。
+
+[`🔗 okf-memory/okf-agent-memory`](https://github.com/okf-memory/okf-agent-memory) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49581240)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-06T04:19:00+08:00 |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI) |
+| Generated | 2026-09-06T12:19:00+08:00 |
+| Items | 31 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI, Coder Advisory, Cloud in a Bottle/Imbue, Sylvain Kalache, Bryan Cantrill/Oxide, Lapcat Software, Robocurve, pushin.eu, X/@ljharb) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

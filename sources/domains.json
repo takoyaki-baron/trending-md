@@ -5236,5 +5236,46 @@
     "cred": "med",
     "density": "high",
     "cv": 1
+  },
+  "cloudinabottle.org": {
+    "cat": "vendor",
+    "en": "Imbue's open-source self-hosting platform launch post — primary source for the Cloud in a Bottle item; vendor blog, so catalog size and 'magic-free' claims are self-reported.",
+    "zh": "Imbue 开源自托管平台的发布文章——Cloud in a Bottle 条目的原始出处；厂商博客，目录规模与“零魔法”等说法为自述。",
+    "jp": "Imbue のオープンソース自ホスティングプラットフォームのローンチ記事——Cloud in a Bottle 記事の一次情報。ベンダーブログのためカタログ規模などの主張は自己申告。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "sylvainkalache.com": {
+    "en": "Sylvain Kalache's personal blog (Honeypot co-founder) — primary source for the AI-incidents skill-erosion essay; argument and analogy, no dataset.",
+    "zh": "Sylvain Kalache 的个人博客(Honeypot 联合创始人)——AI 处理事故与技能侵蚀一文的一手出处；属论证与类比，无数据集。",
+    "jp": "Sylvain Kalache の個人ブログ(Honeypot 共同創業者)——AI インシデント処理とスキル侵食のエッセイの一次情報。議論と類比でありデータセットなし。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "bcantrill.dtrace.org": {
+    "en": "Bryan Cantrill's (Oxide CTO) personal blog — primary source for 'The revolt of the reader'; survey statistics are cited secondhand here, verify against Dunlop's original.",
+    "zh": "Bryan Cantrill(Oxide CTO)的个人博客——《读者的反叛》一文的一手出处；其中的调查统计为转引，应对照 Dunlop 原始调查核实。",
+    "jp": "Bryan Cantrill(Oxide CTO)の個人ブログ——『The revolt of the reader』の一次情報。調査統計は二次引用のため Dunlop の原典での確認が望ましい。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "openai.robocurve.org": {
+    "en": "Third-party robot-arm eval site — publishes full transcripts/videos but uses a borrowed 'openai.' subdomain and unblinded operator grading; treat as demo-with-receipts, not a leaderboard.",
+    "zh": "第三方机械臂评测站——公开完整转录与视频，但借用 “openai.” 子域名且为操作者知情评分；当作带收据的演示而非排行榜。",
+    "jp": "第三者系ロボットアーム評価サイト——完全なトランスクリプトと動画を公開するが、借用した「openai.」サブドメインと非ブラインドのオペレーター採点が問題。リーダーボードではなくレシート付きデモとして扱う。",
+    "cred": "low",
+    "density": "med",
+    "cv": 1
+  },
+  "pushin.eu": {
+    "en": "European Git hosting (invite-only beta) — primary source for the sovereignty-forge item; product claims (no CLOUD Act, no AI training) are self-stated, pricing is a promise.",
+    "zh": "欧洲 Git 托管(邀请制 beta)——“主权 forge”条目的一手出处；产品主张(无 CLOUD Act、不做 AI 训练)为自述，定价仍是承诺。",
+    "jp": "欧州の Git ホスティング(招待制ベータ)——主権 forge 記事の一次情報。CLOUD Act 非該当や AI 学習不使用などの主張は自己申告で、価格は約束の段階。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
   }
 }

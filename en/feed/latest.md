@@ -1,8 +1,8 @@
 ---
 date: 2026-09-06
-updated: 2026-09-06T04:19:00+08:00
+updated: 2026-09-06T12:19:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -283,13 +283,181 @@ On September 4, Wiki Workers United announced that US-based Wikimedia Foundation
 
 ---
 
+## 20. Coder registry compromised via its own Cloudflare account — malicious Terraform modules harvested provisioner secrets for 14 hours
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Coder security advisory GHSA-vx42-ghc9-gw65 · attack window Aug 31, 07:35–21:45 UTC · disclosed Sep 3
+- **Tags:** `supply-chain` `coder` `terraform` `cloudflare` `infostealer`
+
+Attackers didn't breach Coder's build pipeline — they "gained access to Coder's Cloudflare infrastructure and added unauthorized IP addresses to the pool," so registry.coder.com intermittently served a doctored registry whose Terraform modules acted as infostealers. The modules harvested provisioner environment variables, cloud **and AI-tooling API keys**, CI/CD credentials, config-file secrets and terminal history, OIDC tokens, SSH keys, one-time external auth tokens, and Coder database passwords — exfiltrating to the lookalike domain `coder-infra[.]com`. Coder (whose users include Dropbox, Palantir, Square, Mercedes-Benz, KKR, EnBW and the US government) publishes patched releases (2.37.0/2.36.4/2.35.7/2.34.9), a SQL query to find affected cached modules, and an unusual instruction: check firewall/DNS/VPC logs for the exfil domain *before* upgrading.
+
+**Why it matters:** the control plane was the target — the CDN account, not the registry servers, which is the same layer most teams treat as someone else's problem. Coder's own admission is the sharpest part: because the attacker's servers are outside its control, it "cannot conclusively identify every affected deployment." If you fetched Terraform modules from registry.coder.com on Aug 31, rotate everything the advisory lists.
+
+[`🔗 Coder advisory GHSA-vx42-ghc9-gw65`](https://github.com/coder/coder/security/advisories/GHSA-vx42-ghc9-gw65) · [`🔗 BleepingComputer: malicious modules pushed`](https://www.bleepingcomputer.com/news/security/coders-registry-infrastructure-compromised-to-push-malicious-modules/)
+
+---
+
+## 21. Cloud in a Bottle — Imbue launches an open-source "cloud smartphone" for self-hosting
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 218+ pts · 93 comments · ~4h ago (~08:03 UTC+8)
+- **Tags:** `self-hosting` `open-source` `containers` `agpl` `launch`
+
+Imbue (via engineer Zack Polizzi) launched Cloud in a Bottle after 6+ months of private development: an AGPL-3.0 platform where "just an Ubuntu machine with a web server" hosts a dashboard that routes HTTP(S) to rootless, hardened containerized apps — with one login across all apps, permissioned data sharing between them, opt-in platform APIs (notifications, sharing, mobile-OS-style), and a curated catalog. Zero telemetry; the managed-hosted version (with $10 trial credit) is the business model, and the self-hosted path "will always be first-class." The post preemptively dismisses the incumbents: Sandstorm (abandoned), Nextcloud (slow, enterprise-focused), YunoHost (no sandboxing), Coolify (isolated islands with separate logins).
+
+**Why it matters:** an AI lab betting 6 months on making self-hosting feel like a phone rather than a sysadmin job is a notable vote on where personal software goes — and the post's own caveats are honest: the catalog is "pretty small right now," early users need "a bit of technical familiarity (or a coding agent)," and the chicken-and-egg problem between self-hosting accessibility and open-source app supply is named, not waved away.
+
+[`🔗 Cloud in a Bottle launch post`](https://cloudinabottle.org/blog/launch-post) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49582000)
+
+---
+
+## 22. "AI handles incidents, engineers lose touch with their systems" — the Ironies of Automation arrive in on-call
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 368+ pts · 327 comments · ~20h ago (~15:52 UTC+8 Sep 5)
+- **Tags:** `sre` `incident-response` `ai-automation` `skill-erosion` `reliability`
+
+Sylvain Kalache's essay argues AI SREs that investigate alerts, form hypotheses and implement fixes are consuming exactly the routine incidents on which responders build the intuition they'll need for the novel high-severity one — Bainbridge's 1983 "Ironies of Automation" with a 2026 cast. The aviation analogy is load-bearing: engine failures are rarer than once per 100,000 flight hours, which is why the FAA mandates recurrent simulator training — and he cites TransAsia 235, where a misdiagnosed engine failure ended in a crash 117 seconds after the first warning. Predictions: average MTTR falls while complex-incident resolution times spike; teams accumulate "comprehension debt." His proposed fix uses the culprit: LLM-powered incident simulations (Rootly × Uptime Labs already run them), tabletops and chaos engineering as standard on-call readiness.
+
+**Why it matters:** it's the sharpest articulation yet of the on-call-specific version of skill erosion — watching AI explain its work is learning tennis by watching Serena. Caveat: this is argument and analogy, not measurement; the MTTR predictions are directional claims, and the essay cites no dataset of AI-handled incidents gone wrong.
+
+[`🔗 Sylvain Kalache: AI handles incidents, engineers lose touch`](https://www.sylvainkalache.com/blog/ai-handles-incidents-engineers-lose-touch-with-their-systems) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49574167)
+
+---
+
+## 23. Bryan Cantrill: "The revolt of the reader" — readers can tell, and 78% stop reading when they do
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 185+ pts · 67 comments · ~6.5h ago (~05:37 UTC+8)
+- **Tags:** `ai-writing` `authorship` `pangram` `essays` `oxide`
+
+Cantrill's Sept 5 post argues that published writing's "only purpose is to serve the reader," and readers have revolted against LLM prose: citing Cynthia Dunlop's survey of 668 developers — 78% "stop reading immediately" on detecting an LLM, 71% avoid the author afterward, 98% prefer imperfect human writing — he contends LLM ghostwriting is now strategically self-defeating, not merely tacky. The mechanism he points to is spam-history repeating: Pangram 4's detector finally has both low false positives and low false negatives, and Oxide's own RFD 576 now requires public writing to test "Pangram-clean." He closes with two pointed questions to respected authors who publish LLM-written pieces — do you think readers can't tell, or don't care? — and nudges organizations (the Rust Foundation, by name) toward authenticity policies.
+
+**Why it matters:** if detection accuracy is real, AI-authored prose acquires spam-like brand risk — the incentive flips from "get away with it" to "get caught and be remembered for it." Caveat: the Dunlop survey is the load-bearing evidence and we're citing it through Cantrill's summary, not the survey's own methodology.
+
+[`🔗 Bryan Cantrill: The revolt of the reader`](https://bcantrill.dtrace.org/2026/09/05/the-revolt-of-the-reader/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49580939)
+
+---
+
+## 24. "LLMs as a Cognitive Virus" — complexity-science heavyweights model LLM dependence as an epidemic
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 209+ pts · 174 comments · ~8h ago (~04:02 UTC+8)
+- **Tags:** `arxiv` `cognitive-risk` `llm-adoption` `modeling` `research`
+
+arXiv 2609.03344 (Sep 3) comes from Ricard Solé, Giulio Ruffini, Luis F. Seoane, Manlio de Domenico, David C. Krakauer, Michael Levin and colleagues — a compartmental epidemiological model of LLM adoption with three user states (uncoupled → coupled → persistently dependent), where social transmission, recovery and collective reinforcement interact to produce tipping points, technological lock-in, and past a critical threshold "abrupt losses in cognitive competence." The proposed countermeasure is "cognitive immunization": reducing transmission between people and keeping dependence reversible. It's a theory paper — no empirical adoption data — and the abstract's own verbs are "can be understood through" and "may."
+
+**Why it matters:** the author list is the story: when Krakauer, Solé and Levin put their names on an epidemiological framing of LLM dependence, the framing moves from op-ed to citable model. Caveats, from the paper itself: compartmental models of technology adoption have a poor prediction record, "cognitive competence" is operationalized only inside the model, and the 174-comment HN thread is mostly fighting the virus analogy rather than the math.
+
+[`🔗 arXiv 2609.03344`](https://arxiv.org/abs/2609.03344) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49580164)
+
+---
+
+## 25. Chrome again survives "delete site data when you close all windows" — and again, only for google.com
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 162+ pts · 18 comments · ~4.5h ago (~07:39 UTC+8)
+- **Tags:** `chrome` `privacy` `browser` `google` `site-data`
+
+Jeff Johnson (Lapcat Software) reports that Chrome 152.0.7977.83 persists `www.google.com` cookies, localStorage and sessionStorage despite the "Delete data sites have saved to your device when you close all windows" setting — six years after he documented and Google fixed a near-identical exemption. The repro is careful: two Macs; not signed in, Chrome sign-in disabled; default search switched to DuckDuckGo; `chrome://settings/content/all` showing zero bytes before a single Google search produces ~1,216 KB of google.com data that survives window close, quit and relaunch, and re-appears identically after deletion. As far as he can tell, Google's site is the only exempted one. He explicitly favors Hanlon's razor — likely a bug or QA failure, not conspiracy — while noting Google's wealth means "no excuse for incompetence."
+
+**Why it matters:** "delete site data on close" is a privacy control sold as a guarantee; if it silently fails for the browser vendor's own first-party domain, the control — not Google's cookies — is the story. Caveats: a one-author repro on two machines, regression window unknown, no root cause identified, and no Google response at publication.
+
+[`🔗 Lapcat: Chrome again exempts Google from user site data settings`](https://lapcatsoftware.com/articles/2026/9/1.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49581870)
+
+---
+
+## 26. nvm's repo description now carries a Solana token address — and the maintainer is promoting it
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 94.9k stars · on daily trending today
+- **Tags:** `nvm` `open-source-funding` `memecoin` `supply-chain` `github`
+
+nvm-sh/nvm — the 94,938-star Node Version Manager, installed via `curl … | bash` in READMEs everywhere — is trending today not for code but for its repo description, which now ends with a pump.fun-format token address (`$nvm: 3Arcxq…pump`). Crucially, this looks like maintainer endorsement, not compromise: recent commits (through Sep 4) are ordinary maintenance by Jordan Harband and contributors, the v0.40.7 release notes contain no token mention, and Harband's own X post reads "Thanks to today's $nvm support, i've been able to release v0.40.7 of nvm!" — framing a real release as enabled by token support.
+
+**Why it matters:** a memecoin promoted through the trust surface of one of the ecosystem's most-installed scripts is a governance event regardless of intent — the README's install command inherits the description's credibility, and OSS sustainability by token issuance is a precedent other maintainers will read as an invitation. Nothing in the code has changed; the flag is funding, not malware. Caveats: we could not independently load the X post beyond search-snippet level, no incident statement or token documentation exists in the repo, and the token's provenance is entirely unverified.
+
+[`🔗 nvm-sh/nvm (see description)`](https://github.com/nvm-sh/nvm) · [`🔗 Jordan Harband on X`](https://x.com/ljharb)
+
+---
+
+## 27. GPT-6 Astra on robot arms — 19/20 on block-in-bowl, and an honest tie where it gets hard
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 79+ pts · 32 comments · ~2.5h ago (~09:52 UTC+8)
+- **Tags:** `gpt-6-astra` `robotics` `benchmark` `embodied-ai` `evaluation`
+
+Robocurve — the third-party eval site (not OpenAI; note the borrowed `openai.` subdomain) that previously tested Claude Fable models — ran GPT-6 Astra on bimanual I2RT YAM arms against Fable 5.1: on placing a red block in a bowl, Astra scored 19/20 vs 8/20 at $0.94 vs $2.12 per run and 2.5 vs 6.8 minutes, using ~2k output tokens vs 10–16k. On the harder puzzle-insertion task, Astra managed 2/20 — *identical* to Fable 5.1, stalling "at the same final step." Methodology: 20 trials per model per task (120 logged runs, transcripts and videos published), human-graded 0–4 rubric. The page's own limitations section: grading was "operator-judged with the model known," the bowl task used different rigs for the two models, Astra ran two days later, and caching differences may understate its cost advantage.
+
+**Why it matters:** the first third-party embodied test of Astra, and its most honest finding is the tie — on the task that requires precision, the frontier model fails exactly where its predecessor failed. Treat the subdomain as marketing and the published transcripts as the data; n=20 with unblinded grading is a demo with receipts, not a leaderboard.
+
+[`🔗 Robocurve: GPT-6 Astra on robot arms`](https://openai.robocurve.org/gpt-6-astra/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49582582)
+
+---
+
+## 28. HPE patches unauthenticated ArubaOS-CX RCE (CVE-2026-73749, CVSS 9.8) — 24 flaws in one advisory, no workarounds
+
+- **Velocity:** ▮ steady
+- **Source:** HPE advisory · CVE published Sep 1 · CVSS 9.8 (HPE CNA-assigned)
+- **Tags:** `arubaos-cx` `cve-2026-73749` `rce` `networking` `hpe`
+
+CVE-2026-73749 is a buffer overflow in an ArubaOS-CX daemon: an unauthenticated remote attacker sends crafted packets to the affected service and gets code execution **with elevated privileges**. HPE scored it 9.8 Critical (CNA-assigned; NVD published Sep 1) and fixed it across five branches — 10.18.1002+, 10.17.1030+, 10.16.1060+, 10.13.1190+ and end-of-maintenance 10.10.1181+ — with no workarounds offered. The same advisory carries 23 more flaws rated 8.1–8.8: authenticated command injection, a format-string bug, stored XSS, missing CSRF, an authentication bypass, and a predictable factory-default password affecting devices an administrator hasn't yet configured. HPE states it is "not aware of active exploitation or publicly available proof-of-concept exploits."
+
+**Why it matters:** pre-auth RCE on campus/datacenter switch OS with no workaround is a patch-now bullet regardless of exploitation status — switches sit where network segmentation assumptions live. The unconfigured-device default password is the sneaky one: it attacks units in transit or on shelves. Caveats: no exploitation observed yet, and the 10.10 branch fix is terminal.
+
+[`🔗 NVD record for CVE-2026-73749`](https://nvd.nist.gov/vuln/detail/CVE-2026-73749) · [`🔗 BleepingComputer: HPE patches ArubaOS-CX RCE`](https://www.bleepingcomputer.com/news/security/hpe-patches-critical-arubaos-cx-remote-code-execution-flaw/)
+
+---
+
+## 29. pushin.eu — "Git hosting that never leaves Europe," invite-only and anti-slop by design
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 324+ pts · 149 comments · ~22h ago (~14:31 UTC+8 Sep 5)
+- **Tags:** `git` `hosting` `europe` `sovereignty` `developer-tools`
+
+Peter Ullrich's pushin.eu (invite-only beta, Leiden) hosts public and private Git repos with issues, PRs and CI on bare-metal servers in Scaleway's Paris datacenters — no US failover, which the site claims eliminates CLOUD Act exposure; no AI training on customer code by them or partners. Migration is the on-ramp: the `pun` CLI imports from GitHub preserving history, labels, issues, PRs, timestamps and attribution, and the REST API deliberately mirrors GitHub request/response shapes. The distinctive positioning is anti-slop: invite-only registration, planned vouching/reputation systems, and contribution limits aimed at agent-generated low-quality contributions. GA and paid tiers ("comparable to GitHub and GitLab") targeted for early 2027.
+
+**Why it matters:** the European-sovereignty wave that hit static hosting yesterday now reaches the forge — the layer where agent-era contribution floods actually arrive, and where "who can open a PR" is becoming a product feature. Caveats: pre-release and invite-only, the API covers only part of GitHub's surface, single-region-by-design is also single-point-of-failure, and the pricing is a promise, not a price.
+
+[`🔗 pushin.eu`](https://pushin.eu) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49573680)
+
+---
+
+## 30. Balrogg — losslessly recompress Vorbis/Opus 8–12% smaller, from Kamila Szewczyk
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 67+ pts · 9 comments · ~63h ago (Show HN)
+- **Tags:** `audio` `compression` `vorbis` `opus` `lossless`
+
+iczelia/balrogg (GPL-3.0, C99, no dependencies beyond libm) losslessly shrinks Ogg Vorbis files by typically 8–12% and Opus by 3–8% into a `.blr` container — the HN title's "up to 15%" is the tail, not the median. Effort levels `-1`–`-9` trade encode time for size; through `-4` each level adds a residue-model stage, and higher levels only widen the parameter search, so `-4`–`-9` decode identically. Vorbis tuning evaluates the complete file per candidate setting and keeps the best. Author is Kamila Szewczyk (of delta/packager fame); the Opus parser derives from libopus. The README's own warning: archives are **not** backwards- or forwards-compatible until v2.0 — treat `.blr` as a re-encode checkpoint, not an archival format.
+
+**Why it matters:** lossless recompression of already-compressed audio is one of the hardest wins left in compression, and a working tool that beats the container rather than the codec is rare. Caveats: a young project (created Sep 3, 53 stars) with an explicitly unstable format, and gains are format-dependent — Opus users see a third of what Vorbis archives get.
+
+[`🔗 iczelia/balrogg`](https://github.com/iczelia/balrogg) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49549778)
+
+---
+
+## 31. OKF Agent Memory — Git-native persistent memory for coding agents, one day old and already on Show HN
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 49+ pts · 16 comments · ~6h ago (~06:15 UTC+8)
+- **Tags:** `agent-memory` `mcp` `go` `git` `show-hn`
+
+okf-memory/okf-agent-memory (MIT, pure Go, created Sep 5) implements the "Google OKF v0.2" spec for agent memory: memory lives in a Git repository the agent reads and writes natively, with sub-300µs in-memory BM25 search, an embedded MCP server, and progressive disclosure; the author claims ~80% token-bloat reduction with zero external databases or dependencies. It lands in the most contested lane of agent infra — memory-as-what-format — where Hugging Face's Funes (session traces → dataset), LatentPress (continuous memory tokens) and memoryfields (zip of Markdown + SQLite) have each bet differently.
+
+**Why it matters:** git-native is the most auditable answer on the table — memory the agent maintains as a repo means memory you can diff, review and roll back, which is what the other formats approximate. Caveats: the repo is one day old with 113 stars, the "Google OKF v0.2" spec linkage and the 80% figure are the author's own and unbenchmarked, and this feed has not yet verified the spec document itself.
+
+[`🔗 okf-memory/okf-agent-memory`](https://github.com/okf-memory/okf-agent-memory) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49581240)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-06T04:19:00+08:00 |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI) |
+| Generated | 2026-09-06T12:19:00+08:00 |
+| Items | 31 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI, Coder Advisory, Cloud in a Bottle/Imbue, Sylvain Kalache, Bryan Cantrill/Oxide, Lapcat Software, Robocurve, pushin.eu, X/@ljharb) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

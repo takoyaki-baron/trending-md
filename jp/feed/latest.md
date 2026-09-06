@@ -1,8 +1,8 @@
 ---
 date: 2026-09-06
-updated: 2026-09-06T04:19:00+08:00
+updated: 2026-09-06T12:19:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -283,13 +283,181 @@ anomalyco/opencode——「オープンソースのコーディングエージ�
 
 ---
 
+## 20. Coder のレジストリが自社 Cloudflare アカウント経由で侵害される — 悪意ある Terraform モジュールが 14 時間かけてプロビジョナーの秘密を収穫
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Coder セキュリティアドバイザリ GHSA-vx42-ghc9-gw65 · 攻撃期間 8 月 31 日 07:35–21:45 UTC · 9 月 3 日開示
+- **Tags:** `supply-chain` `coder` `terraform` `cloudflare` `infostealer`
+
+攻撃者は Coder のビルドパイプラインを突破したのではない。「Coder の Cloudflare インフラストラクチャへのアクセスを得て、プールに不正な IP アドレスを追加した」ことで、registry.coder.com が断続的に改ざん済みレジストリを配信する状態になった。その Terraform モジュールはインフォスティーラーとして振る舞い、プロビジョナーの環境変数、クラウド**および AI ツールの API キー**、CI/CD 認証情報、設定ファイルの秘密とターミナル履歴、OIDC トークン、SSH 鍵、使い捨ての外部認証トークン、Coder データベースのパスワードを収穫し、類似ドメイン `coder-infra[.]com` へ持ち出した。Coder(ユーザーには Dropbox、Palantir、Square、メルセデス・ベンツ、KKR、EnBW、米政府が含まれる)は修正済みリリース(2.37.0/2.36.4/2.35.7/2.34.9)、影響を受けたキャッシュ済みモジュールを見つける SQL クエリ、そして珍しい指示——アップグレード**の前に**、ファイアウォール/DNS/VPC ログで持ち出しドメインを確認せよ——を公開している。
+
+**Why it matters:** 狙われたのはコントロールプレーンだ。CDN アカウントであってレジストリサーバーではない——そしてそれこそ、ほとんどのチームが「他人の問題」とみなしている層だ。最も鋭いのは Coder 自身の認める部分で、攻撃者のサーバーは自分たちの管理外にあるため「影響を受けたすべてのデプロイを確実に特定することはできない」という。8 月 31 日に registry.coder.com から Terraform モジュールを取得したなら、アドバイザリに列挙されたすべてをローテーションせよ。
+
+[`🔗 Coder アドバイザリ GHSA-vx42-ghc9-gw65`](https://github.com/coder/coder/security/advisories/GHSA-vx42-ghc9-gw65) · [`🔗 BleepingComputer:悪意あるモジュールが出荷される`](https://www.bleepingcomputer.com/news/security/coders-registry-infrastructure-compromised-to-push-malicious-modules/)
+
+---
+
+## 21. Cloud in a Bottle — Imbue がオープンソースの「クラウドスマートフォン」を発表、セルフホスティングを身近に
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 218+ pts · コメント 93 件 · ~4h 前 (~08:03 UTC+8)
+- **Tags:** `self-hosting` `open-source` `containers` `agpl` `launch`
+
+Imbue(エンジニア Zack Polizzi 名義)は 6 か月超の非公開開発を経て Cloud in a Bottle を発表した。AGPL-3.0 のプラットフォームで、「web サーバーを載せただけの Ubuntu マシン」がダッシュボードをホストし、HTTP(S) を rootless で強化されたコンテナアプリへルーティングする。全アプリ横断の単一ログイン、アプリ間の権限付きデータ共有、オプトインのプラットフォーム API(通知や共有など、モバイル OS 風)、キュレーションされたアプリカタログを備える。テレメトリはゼロ。マネージド版(10 ドルのトライアルクレジット付き)がビジネスモデルで、セルフホスト経路は「常にファーストクラス」。記事は既存勢を先回りして一蹴する:Sandstorm(放棄済み)、Nextcloud(遅い、エンタープライズ寄り)、YunoHost(サンドボックスなし)、Coolify(別ログインの孤立島)。
+
+**Why it matters:** AI ラボが 6 か月をかけて「セルフホスティングを sysadmin 仕事ではなくスマートフォンのように感じさせる」ことに賭けたのは、パーソナルソフトウェアの行き先についての注目すべき一票だ。記事自身の注意点も率直だ。カタログは「現状かなり小さい」、初期ユーザーには「少しの技術的親和性(あるいはコーディングエージェント)」が必要、そしてセルフホスティングのアクセシビリティとオープンソースアプリ供給の間の鶏と卵問題は、ごまかされず名指しされている。
+
+[`🔗 Cloud in a Bottle ローンチ記事`](https://cloudinabottle.org/blog/launch-post) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49582000)
+
+---
+
+## 22. 「AI がインシデントを処理し、エンジニアはシステムへの手応えを失う」— 自動化の皮肉がオンコールに到着
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 368+ pts · コメント 327 件 · ~20h 前(9 月 5 日 ~15:52 UTC+8)
+- **Tags:** `sre` `incident-response` `ai-automation` `skill-erosion` `reliability`
+
+Sylvain Kalache のエッセイは、アラートを調査し仮説を立て修正まで実装する AI SRE が、レスポンダーが直感を積むために必要なルーチン作業そのものを消費しつつあると論じる——異常な重大インシデントが来たときに使うはずの直感を、だ。これは Bainbridge の 1983 年「自動化の皮肉(Ironies of Automation)」の 2026 年版だ。航空の類比が論考を支えている。エンジン故障は飛行 10 万時間に 1 回未満しか起きないからこそ、FAA は半年ごとの定期的シミュレータ訓練を義務づけている——彼は TransAsia 235 便を引用する。エンジン故障の誤診が、最初の警告から 117 秒で墜落につながった事例だ。予測：平均 MTTR は下がり、複雑インシデントの解決時間は急増する。チームは「comprehension debt(理解負債)」を積む。提案する解決策は犯人自身を使うものだ:LLM 駆動のインシデントシミュレーション(Rootly × Uptime Labs がすでに実施)、テーブルトップ演習、カオスエンジニアリングをオンコール準備の標準にする。
+
+**Why it matters:** スキル侵食のオンコール版としてこれまでで最も先鋭な定式化だ——AI の作業説明を見ることは、セレーナ・ウィリアムズの試合を見てテニスを学ぶようなものだ。ただし注意：これは測定ではなく議論と類比であり、MTTR の予測は方向性の主張で、「AI 処理インシデントが失敗した」データセットは引用されていない。
+
+[`🔗 Sylvain Kalache:AI handles incidents, engineers lose touch`](https://www.sylvainkalache.com/blog/ai-handles-incidents-engineers-lose-touch-with-their-systems) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49574167)
+
+---
+
+## 23. Bryan Cantrill「The revolt of the reader」— 読者には分かる。そして 78% が分かった瞬間に読むのをやめる
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 185+ pts · コメント 67 件 · ~6.5h 前 (~05:37 UTC+8)
+- **Tags:** `ai-writing` `authorship` `pangram` `essays` `oxide`
+
+Cantrill の 9 月 5 日投稿は、公開される文章の「唯一の目的は読者に仕えること」だと論じ、読者はすでに LLM 文章への反乱を起こしていると主張する。Cynthia Dunlop による 668 人の開発者調査を引きながら——LLM と察知すると 78% が「即座に読むのをやめ」、71% が以後その著者を回避し、98% が不完全でも人間の文章を好む——LLM の代筆はもはや悪趣味なだけでなく戦略的に自滅的だと結論づける。彼が指すメカニズムはスパム史の再演だ。Pangram 4 の検出器はついに低偽陽性と低偽陰性を両立し、Oxide 自身の RFD 576 は公開文章が「Pangram-clean」であることを要求するようになった。彼は最後に、LLM 代筆記事を発表する尊敬する著者たちに二つの鋭い問いを投げる——読者に分からないと思うのか、気にしないと思うのか——そして組織(Rust Foundation が名指しされた)に真正性ポリシーを促す。
+
+**Why it matters:** 検出精度が本物なら、AI 代筆文章はスパム的なブランドリスクを帯びる。インセンティブは「うまく逃げ切る」から「捕まれば覚えられる」へ反転する。ただし注意:Dunlop 調査が支重する証拠であり、私たちはそれを Cantrill の要約経由で引用しており、調査自身の手法は検証していない。
+
+[`🔗 Bryan Cantrill:The revolt of the reader`](https://bcantrill.dtrace.org/2026/09/05/the-revolt-of-the-reader/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49580939)
+
+---
+
+## 24. 「LLM を認知ウイルスとして」— 複雑系科学の重鎮たちが LLM 依存を疫病としてモデル化
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 209+ pts · コメント 174 件 · ~8h 前 (~04:02 UTC+8)
+- **Tags:** `arxiv` `cognitive-risk` `llm-adoption` `modeling` `research`
+
+arXiv 2609.03344(9 月 3 日)の著者は Ricard Solé、Giulio Ruffini、Luis F. Seoane、Manlio de Domenico、David C. Krakauer、Michael Levin ら。LLM 採用を疫学的コンパートメントモデルで扱い、3 つのユーザー状態(非結合 → 結合 → 恒常的依存)を置き、社会的伝播・回復・集団的強化の相互作用が臨界点と技術ロックインを生み、臨界閾値を越えると「認知能力の急激な喪失」が起きうるとする。提案される対策は「認知ワクチン化(cognitive immunization)」:人と人の間の伝播を減らし、依存を可逆に保つことだ。これは純粋に理論的な論文で、実証的な採用データはなく、要約自身の動詞は「〜を通じて理解できる」「かもしれない」だ。
+
+**Why it matters:** 著者リストこそが物語だ。Krakauer、Solé、Levin が名を連ねると、LLM 依存の疫学的枠組みはコラムから引用可能なモデルへ昇格する。ただし注意は論文自身から:コンパートメントモデルの技術採用予測の実績は悪く、「認知能力」はモデル内部でしか操作化されておらず、HN の 174 コメントの大半は数理ではなくウイルスの類比と戦っている。
+
+[`🔗 arXiv 2609.03344`](https://arxiv.org/abs/2609.03344) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49580164)
+
+---
+
+## 25. Chrome が再び「すべてのウィンドウを閉じたときサイトデータを削除」をすり抜ける — しかもまた google.com だけ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 162+ pts · コメント 18 件 · ~4.5h 前 (~07:39 UTC+8)
+- **Tags:** `chrome` `privacy` `browser` `google` `site-data`
+
+Jeff Johnson(Lapcat Software)の報告によれば、Chrome 152.0.7977.83 は「すべてのウィンドウを閉じたときにサイトが端末に保存したデータを削除」が有効でも、`www.google.com` の Cookie・localStorage・sessionStorage を永続化する——彼がほぼ同一の例外を記録し Google が修正してから 6 年後だ。再現は慎重だ。2 台の Mac。未サインインで Chrome サインインは無効。既定検索エンジンを DuckDuckGo に変えて変数を排除。`chrome://settings/content/all` は Google 検索 1 回の前には 0 バイトを表示し、1 回の検索で約 1,216 KB の google.com データが出現し、ウィンドウを閉じても Chrome を終了・再起動しても生き残り、削除して繰り返しても同じ再現をする。彼の知る限り、例外なのは Google のサイトだけだ。彼は明示的にハンロンの剃刀を取る——陰謀ではなくバグか QA の失敗の可能性が高い——としつつ、Google の富をもってすれば「無能の言い訳はできない」とも書く。
+
+**Why it matters:** 「閉じるときにサイトデータを削除」は保証として売られるプライバシー制御だ。それがブラウザベンダー自身のファーストパーティドメインに対して黙って失敗するなら、物語の主役は Google の Cookie ではなくこの制御だ。注意：一人の著者による 2 台での再現、回帰の導入時期は不明、根本原因は未特定、発表時点で Google からの反応はない。
+
+[`🔗 Lapcat:Chrome again exempts Google from user site data settings`](https://lapcatsoftware.com/articles/2026/9/1.html) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49581870)
+
+---
+
+## 26. nvm のリポジトリ説明文に Solana トークンアドレスが現れる — しかもメンテナ自身が宣伝している
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 94.9k スター · 本日デイリートレンドに登場
+- **Tags:** `nvm` `open-source-funding` `memecoin` `supply-chain` `github`
+
+nvm-sh/nvm——94,938 スターの Node Version Manager、あらゆる README で `curl … | bash` でインストールされる——が今日トレンドに乗ったのはコードのためではなく、リポジトリ説明文の末尾に pump.fun 形式のトークンアドレス(`$nvm: 3Arcxq…pump`)が追加されたためだ。決定的なのは、これは乗っ取りではなくメンテナの裏書に見えることだ。9 月 4 日までの最近のコミットは Jordan Harband と貢献者による通常の保守で、v0.40.7 のリリースノートにトークンへの言及はなく、Harband 自身の X 投稿は「今日の $nvm サポートのおかげで、nvm v0.40.7 をリリースできた!」と、実際のリリースをトークン支援の賜物として位置づけている。
+
+**Why it matters:** エコシステムで最もインストールされているスクリプトのひとつの信頼面を通じて memecoin が宣伝されるのは、意図がどうあれガバナンス上のイベントだ。README のインストールコマンドは説明文の信頼を引き継ぐし、「トークン発行による OSS 持続可能性」は他のメンテナが招待状として読む前例になる。コードは何も変わっていない。旗はマルウェアではなく資金調達だ。注意：X 投稿は検索スニペット層までしか独立に確認できていない、リポジトリ内にインシデント声明やトークン文書は存在しない、トークン自身の出所は完全に未検証だ。
+
+[`🔗 nvm-sh/nvm(説明文を参照)`](https://github.com/nvm-sh/nvm) · [`🔗 Jordan Harband on X`](https://x.com/ljharb)
+
+---
+
+## 27. GPT-6 Astra をロボットアームに — ブロック・イン・ボウルは 19/20、本当に難しいところでは誠実な引き分け
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 79+ pts · コメント 32 件 · ~2.5h 前 (~09:52 UTC+8)
+- **Tags:** `gpt-6-astra` `robotics` `benchmark` `embodied-ai` `evaluation`
+
+Robocurve——かつて Claude Fable 系をテストしたサードパーティ評価サイト(OpenAI ではない。借用した `openai.` サブドメインに注意)——は、GPT-6 Astra を両腕の I2RT YAM アームで Fable 5.1 と対戦させた。赤いブロックをボウルに入れるタスクでは、Astra は 19/20 対 8/20、1 回あたりコスト 0.94 ドル対 2.12 ドル、所要 2.5 分対 6.8 分、出力トークンは約 2k 対 10〜16k。より難しいパズル挿入タスクでは、Astra は 2/20——Fable 5.1 と**まったく同じ**で、「同じ最終ステップで停滞」した。手法：モデル×タスクごとに 20 試行(合計 120 実行、トランスクリプトと動画を公開)、0〜4 の人手採点ルーブリック。ページ自身の limitations セクションが明かす：採点は「モデルを知っているオペレーターによる判定」、ボウルタスクは両モデルで別の台を使った、Astra は 2 日遅れで実行、キャッシュの差がコスト優位を過小評価している可能性がある。
+
+**Why it matters:** Astra の初のサードパーティによる身体性テストであり、最も誠実な発見はその引き分けだ——精度を要するタスクで、フロンティアモデルは前世代がつまずいたのとまったく同じ場所でつまずく。サブドメインはマーケティングとして扱い、公開されたトランスクリプトをデータとして扱え。n=20 で非ブラインド採点のこれは、レシート付きのデモであってリーダーボードではない。
+
+[`🔗 Robocurve:GPT-6 Astra on robot arms`](https://openai.robocurve.org/gpt-6-astra/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49582582)
+
+---
+
+## 28. HPE が ArubaOS-CX の未認証 RCE(CVE-2026-73749、CVSS 9.8)を修正 — 1 つのアドバイザリで 24 件、ワークアラウンドなし
+
+- **Velocity:** ▮ steady
+- **Source:** HPE アドバイザリ · CVE 公開 9 月 1 日 · CVSS 9.8(HPE CNA スコア)
+- **Tags:** `arubaos-cx` `cve-2026-73749` `rce` `networking` `hpe`
+
+CVE-2026-73749 は ArubaOS-CX のあるデーモンにおけるバッファオーバーフローだ。未認証のリモート攻撃者が細工したパケットを対象サービスに送ると、**昇格された権限**でのコード実行に至る。HPE は 9.8 Critical(CNA スコア、NVD は 9 月 1 日公開)と評価し、5 つのブランチで修正した——10.18.1002+、10.17.1030+、10.16.1060+、10.13.1190+、そしてメンテナンス終了の 10.10.1181+——ワークアラウンドは提示されていない。同じアドバイザリには 8.1〜8.8 の脆弱性がさらに 23 件ある。認証後のコマンドインジェクション、フォーマット文字列バグ、格納型 XSS、CSRF 対策の欠落、認証バイパス、そして管理者がまだ設定していないデバイスに影響する予測可能な工場出荷時デフォルトパスワード。HPE は「積極的な悪用や公開 PoC は把握していない」としている。
+
+**Why it matters:** キャンパス/データセンタースイッチ OS における事前認証 RCE にワークアラウンドなし、は悪用の有無にかかわらず「今すぐパッチ」の案件だ——スイッチはネットワークセグメンテーションの前提が成立する場所にある。未設定デバイスのデフォルトパスワードは最も陰湿な項目で、輸送中や棚にある装置を攻撃する。注意：現時点で悪用は観測されておらず、10.10 ブランチの修正は最後のものだ。
+
+[`🔗 NVD:CVE-2026-73749 レコード`](https://nvd.nist.gov/vuln/detail/CVE-2026-73749) · [`🔗 BleepingComputer:HPE が ArubaOS-CX RCE を修正`](https://www.bleepingcomputer.com/news/security/hpe-patches-critical-arubaos-cx-remote-code-execution-flaw/)
+
+---
+
+## 29. pushin.eu — 「ヨーロッパから出ない Git ホスティング」、招待制で anti-slop を設計目標に
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 324+ pts · コメント 149 件 · ~22h 前(9 月 5 日 ~14:31 UTC+8)
+- **Tags:** `git` `hosting` `europe` `sovereignty` `developer-tools`
+
+Peter Ullrich 氏の pushin.eu(招待制ベータ、ライデン)は、Scaleway のパリデータセンターのベアメタルサーバー上で、公開・非公開の Git リポジトリを issue・PR・CI 付きでホストする。米国へのフェイルオーバーはなく、サイトはこれが CLOUD Act の管轄露出を排除すると主張する。顧客コードを AI 学習に使わない(自身もパートナーも)。移行が入口だ。`pun` CLI は GitHub から履歴・ラベル・issue・PR・タイムスタンプ・帰属を保持したままインポートし、REST API は意図的に GitHub のリクエスト/レスポンス形式を模倣する。際立った位置づけは anti-slop だ。招待制登録、計画中のヴァウチング/評判システム、エージェント生成の低品質コントリビューションを狙うコントリビューション制限。GA と有料プラン(「GitHub や GitLab と同水準」)は 2027 年初頭を目指す。
+
+**Why it matters:** 昨日静的ホスティングを打った欧州主権の波が、今度は forge——エージェント時代のコントリビューション洪水が実際に到着する層——に届き、「誰が PR を開けるか」が製品機能になりつつある。注意：未リリースで招待制、API は GitHub の表面の一部しかカバーしない、設計による単一リージョンはそのまま単一障害点でもあり、価格は約束であって価格ではない。
+
+[`🔗 pushin.eu`](https://pushin.eu) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49573680)
+
+---
+
+## 30. Balrogg — Kamila Szewczyk による、Vorbis/Opus をさらに 8〜12% 無損失で小さくする圧縮器
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 67+ pts · コメント 9 件 · ~63h 前(Show HN)
+- **Tags:** `audio` `compression` `vorbis` `opus` `lossless`
+
+iczelia/balrogg(GPL-3.0、C99、libm 以外依存なし)は Ogg Vorbis ファイルを典型的に 8〜12%、Opus を 3〜8% 無損失で縮め、`.blr` コンテナに収める——HN タイトルの「最大 15%」は裾であって中央値ではない。努力レベル `-1`〜`-9` がエンコード時間とサイズを交換し、`-4` までは各レベルが残留モデルのステージを追加し、それ以上はパラメータ探索が広がるだけなので `-4`〜`-9` は同一速度でデコードされる。Vorbis チューニングは候補設定ごとにファイル全体を評価し、最良を保持する。作者は Kamila Szewczyk(delta/packager の作者)。Opus パーサーは libopus 由来。README 自身の警告：v2.0 に達するまで、アーカイブは後方・前方互換性が**ない**——`.blr` はアーカイブ形式ではなく再エンコードのチェックポイントとして扱え。
+
+**Why it matters:** すでに圧縮された音声の無損失再圧縮は、圧縮分野に残る最も難しい勝ち筋のひとつで、コーデックではなくコンテナを破る実用ツールは希少だ。注意：若いプロジェクト(9 月 3 日作成、53 スター)で形式は明示的に不安定、利得は形式依存——Opus ユーザーが得られるのは Vorbis アーカイブの 3 分の 1 だ。
+
+[`🔗 iczelia/balrogg`](https://github.com/iczelia/balrogg) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49549778)
+
+---
+
+## 31. OKF Agent Memory — コーディングエージェント向け Git ネイティブの永続メモリ、公開 1 日で Show HN に
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 49+ pts · コメント 16 件 · ~6h 前 (~06:15 UTC+8)
+- **Tags:** `agent-memory` `mcp` `go` `git` `show-hn`
+
+okf-memory/okf-agent-memory(MIT、純 Go、9 月 5 日作成)は「Google OKF v0.2」仕様を実装する:メモリはエージェントがネイティブに読み書きする Git リポジトリ内に置かれ、300µs 未満のインメモリ BM25 検索、組み込み MCP サーバー、プログレッシブディスクロージャーを備え、外部データベースも依存もゼロで約 80% のトークン肥大化削減を主張する。これはエージェントインフラで最も争われているレーン——メモリを何の形式にするか——に落ちてきた。Hugging Face の Funes(セッショントレース→データセット)、LatentPress(連続メモリトークン)、memoryfields(Markdown の zip + SQLite)はそれぞれ別の賭けをしてきた。
+
+**Why it matters:** Git ネイティブは机上で最も監査可能な答えだ。エージェントがメモリをリポジトリとして保守するということは、diff でき、レビューでき、ロールバックできるメモリということだ——他の形式が模倣しているのはまさにそれだ。注意：リポジトリは 1 日経過でスター 113、「Google OKF v0.2」の仕様リンクと 80% の数字は著者自身のもので未検証であり、本フィードもまだ仕様書自体を確認していない。
+
+[`🔗 okf-memory/okf-agent-memory`](https://github.com/okf-memory/okf-agent-memory) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49581240)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-06T04:19:00+08:00 |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI) |
+| Generated | 2026-09-06T12:19:00+08:00 |
+| Items | 31 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, Trendshift, arXiv, Hugging Face Daily Papers, BleepingComputer, NVD, Broadcom VMSA, JetBrains Blog, The Hacker News, Rapid7 Labs, postgresql.org, packagemain.tech, uutils.org, CNRS/LMF, European Commission, Freshfields, Reason, TMJ4, Wiki Workers United, HumanLayer, K-Dense AI, Coder Advisory, Cloud in a Bottle/Imbue, Sylvain Kalache, Bryan Cantrill/Oxide, Lapcat Software, Robocurve, pushin.eu, X/@ljharb) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
