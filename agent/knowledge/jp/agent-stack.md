@@ -1507,3 +1507,44 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
   地味だ:OAuth の癖、thinking-block プロトコル(Claude 5.1+ のバインディング、設定でオプトアウト)、プロバイダー
   タイムアウト(既定 5 分)が、新しいモデルが初日から使えるかを決める。保守面はスターと共に拡大:15.7k コミットに対し
   open issue 約 4.2k、open PR 1.6k。
+
+## 来歴ネイティブな研究ワークベンチ;デザイン・アズ・コード;信頼ラベル付き数学ツール;会社を生き延びる言語(09-07 12:03)
+
+- **aipoch/open-science——すべての成果物に溯源が付くローカルファーストの AI 研究ワークベンチ**(Apache-2.0、
+  3.8k★、+145/日。トリガーはローンチではなく v0.23.0 リリース)。Electron/React/Prisma-SQLite のデスクトップ
+  ワークベンチが選択式のエージェントバックエンド(Claude Code、OpenCode、Codex、CodeBuddy)を包み、Python/R
+  ノートブック、18 の内蔵科学スキル(AlphaFold2、Boltz、DiffDock、ESM-2、scGPT、Remote Compute SSH)、24 の
+  研究コネクタ(PubMed、bioRxiv、ChEMBL、Clinical Trials)。差別化は来歴チェーン:すべての成果物は不変で
+  チェックサム付きのバージョンとして、生成したコード・実行履歴・環境インベントリ・実際の会話ブランチに紐づく
+  ——検証不能なエビデンスは明示的に利用不可と印付けられる。CLI + ヘッドレス SDK 同梱。珍しく誠実:「What This
+  Is Not」セクションが競合が受ける2つの位置づけを先回りして否定し(チャット UI ではない、非公式クライアントでは
+  ない)、README は生成物が「専門家の判断、統計的レビュー、一次エビデンスに対する検証の代わりにならない」と
+  明言する。
+- **Tencent Hunyuan「Editable Visual Design」(arXiv 2609.04034、516 upvote、9 月 6 日 HF 論文 1 位)——コーディング
+  エージェントによるデザイン・アズ・コード。**VLM(要件理解、計画、コード、美的判断)が必要に応じて画像生成
+  モデルを駆動する「まず想像し、そして実行する」ループ:美的事前分布を定める想像ビジュアルを生成し、アルファ/
+  グリーンバック マッティングでテキスト無し素材を切り出し、明示的レイヤーを持つネイティブ HTML/CSS を書く。
+  検証はヘッドレスブラウザの決定論的レイアウトチェックと、描画スクリーンショットの VLM レビューの組。「Agent
+  Design Replay」が軌跡全体を再現性のためにシリアライズ。ショーケース:13 グループ 120 の編集可能レイヤーを持つ
+  情報密度の高いフィールドガイド。修復は 1〜2 ラウンドで収束。論文の誠実さが注意点そのもの:「したがって我々は
+  スコアではなくケースを報告する」——美学や編集可能性の ground-truth 指標は存在せず、出力は基盤モデルの制約を
+  受け、単一ページのデザインのみ。
+- **MathKernel——信頼ラベルを運ぶ LLM 数学ツール**(`staatsgeheim/MathKernel`、MIT、v1.3.0——初期:20★、4
+  コミット)。FastMCP 3 上で SymPy、Z3、Lean 4 + Mathlib(初回自動インストール)、mpmath 区間算術、numba、
+  CUDA/CuPy、python-flint/Arb を包む 160+ の `math_*` ツールを公開する Python ライブラリ + MCP サーバ。設計思想は
+  「エビデンス・アウェア」:すべての結果は信頼ラベルを運ぶ——`formal` > `exact` > `symbolic` > `interval_certified`
+  > `numeric` > `empirical`——主張が要求する最弱のエビデンスが全体の信頼を上限とする。バックエンド間の不一致は
+  平均されず衝突として保持され、10 進入力は `numeric` で頭打ち、レンダラは結果を提示できてもエビデンスを格上げ
+  できない。初期段階で未証明だが、正しい契約を言語化している:モデルは意図を解釈し、ツールがエビデンスを確立し、
+  来歴は暗黙ではなく型付けされる。このラベル方式がより大きな MCP 数学サーバに採用されるかを見よ——この実装で
+  なくても、その部分はコピーする価値がある。
+- **D2 が非営利へ——Terrastruct 閉鎖、D2 Studio と TALA はオープンソースへ**(`terrastruct/d2` → `d2lang/d2`、
+  25.2k★、MPL-2.0、検証済みリリースは継続。非営利は Hack Club が資金すると報道)。メンテナ alixander(Dylan)
+  Wang が HN スレッドで確認:これまで有償製品だった D2 Studio と TALA レイアウトエンジンはオープンソース化される。
+  最も鋭い一節:「D2 はこれまで手作業のコードの産物だった。その時代は終わった」——今後 Wang は「AI 貢献を歓迎し、
+  あなたの AI を AI でレビューする」、人間が残すのは書くことだけ。これは2つの移行が同時に進む稀な実弾テスト:
+  企業保有の言語が非営利ガバナンスで会社を生き延びること、そして 25k スターのコードベースが AI が書き AI が
+  レビューするコードの周りに再編されること——論者はまさにそこで割れ、ある者は OpenAI のインフラ担当者が維持する
+  プロジェクトをティーン向け資金体が支えることを疑問視した。
+- **lightpanda-io/browser —— 「エージェントのためのブラウザ」層が専用エンジンへ収束**(`lightpanda-io/browser`、Zig、AGPL-3.0、34.6k★、+116/日)。Chromium のフォークでも WebKit のパッチでもない:JS に v8、パースに html5ever、HTTP に libcurl、**レンダリングエンジンを持たない**ゼロから構築のブラウザで、AI/自動化ワークロード向け。新エージェントサーフェス:`lightpanda agent` による自然言語ブラウザ操作(Anthropic/OpenAI/Gemini/Ollama バックエンド、または `--no-llm`)、録画・再生可能な PandaScript の決定的スクリプト、接続ごとのセッション分離を持つネイティブ MCP サーバー——加えて Puppeteer/Playwright 互換の CDP と WebDriver BiDi。100 ページでメモリ約 1/16・約 9 倍高速を主張(ベンダー計測)。ゼロからの代償:Linux バイナリは glibc リンク(Alpine/musl で失敗)、ネイティブ Windows なし(WSL2 のみ)、テレメトリ既定オン、Web Platform Tests の結果は不完全、nightly ビルドのみでバージョン付きリリースなし。エージェント所有ブラウザ(Cowork、ego-lite)と同じ賭けのエンジン側:Chromium ラッパーではなく専用エンジン。
+- **heygen-com/hyperframes —— 映像がエージェントの*出力*モダリティになる**(`heygen-com/hyperframes`、TypeScript、Apache-2.0、44.7k★、+220/日、#1 trending)。タイミングを data 属性で表現した素の HTML 合成を、headless-Chrome のフレームシーカー + FFmpeg で決定的な MP4 へ(「same input, same frames, same output」)。CI と回帰テスト向け。Claude Code/Cursor/Codex に映像制作ループを教える 20 個の agent skills(`npx skills add heygen-com/hyperframes`)、アニメーションアダプタ(GSAP、CSS、Lottie、Three.js、Anime.js、WAAPI)、Studio ブラウザエディタ、AWS Lambda 分散レンダリングを同梱。Remotion との差別化は 2 軸:素の HTML vs React コンポーネント、Apache-2.0 vs ソース公開ライセンス。**アグリゲート罠チェック済み:** 同リポジトリは 4–5 月のほぼ目立たない Show HN 3 回(各 3–6 ポイント)で 44.7k 星まで育ち、今日の #1 を牽引する新規ローンチイベントはない——持続的モメンタムであり、順位ではなくリポジトリを引用。README は Remotion Lambda が「より成熟したクラウドレンダラ」だと自認。

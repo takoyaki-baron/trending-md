@@ -887,6 +887,37 @@ if (tailReview.length) {
   console.log(`      ${tailReview.slice(0, 12).join(', ')}${tailReview.length > 12 ? `, +${tailReview.length - 12} more` : ''}`);
 }
 
+/* ── Mojibake check ──
+   An earlier multi-byte edit split a zh/jp table row mid-character, leaving UTF-8-as-Latin-1
+   fragments (ä¸..., ï¼...) that rendered as stray text below the table — found 2026-09-07 in
+   agent/knowledge/{zh,jp}/index.md. The signature is exact: mojibake is Latin-1/cp1252 decoding
+   of UTF-8 bytes, so every corrupted pair is an accented-Latin (U+00C0–FF) or C1-control
+   (U+0080–9F) char adjacent to another — text that no legitimate en/zh/jp content contains
+   (single accented chars like the ñ in Jalapeño or the í in Jiří never pair). Warn each build so
+   the next split byte is one edit, not a month of rendered garbage. */
+const MOJIBAKE_RE = new RegExp('[\\u0080-\\u009F\\u00C0-\\u00FF]{2}|[\\u00C0-\\u00FF][\\u0080-\\u009F]|[\\u0080-\\u009F][\\u00C0-\\u00FF]');
+const mojiScanDirs = [path.join(ROOT, 'agent')];
+const mojiScanFiles = ['agent.md', 'action.md', 'about.md'].flatMap(f =>
+  ['en', 'zh', 'jp'].map(l => path.join(ROOT, l, f)));
+(function scanMoji(dir) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) scanMoji(p);
+    else if (e.name.endsWith('.md')) mojiScanFiles.push(p);
+  }
+})(mojiScanDirs[0]);
+const mojiHits = [];
+for (const p of mojiScanFiles) {
+  if (!fs.existsSync(p)) continue;
+  fs.readFileSync(p, 'utf8').split('\n').forEach((l, i) => {
+    if (MOJIBAKE_RE.test(l)) mojiHits.push(`${path.relative(ROOT, p)}:${i + 1}`);
+  });
+}
+if (mojiHits.length) {
+  console.log(`  ⚠ ${mojiHits.length} suspected mojibake lines (mis-decoded UTF-8 fragments) — repair or delete the corrupted span`);
+  mojiHits.slice(0, 10).forEach(h => console.log(`      ${h}`));
+}
+
 /* ── Memory-window budget check ──
    en/agent.md is the learnt agent's memory window. AGENT.md hard rule 1 keeps it a *distilled*
    summary: when a topic outgrows a thesis, the detail moves to agent/knowledge/<topic>.md and the

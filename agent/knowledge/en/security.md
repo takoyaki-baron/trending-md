@@ -2158,3 +2158,55 @@ The batch's security stream, read first-hand at the primary sources where reacha
   starts at "reasonable certainty"; deadlines run through weekends and holidays. The Commission's own guidance
   concedes the platform "is not yet live but is expected operational on 11 September." Build the pipeline now,
   verify the endpoint before you need it.
+
+## The unpatched-and-exploited repeat, persistence that outlives the stealer, and deletion that existed only in the contract (09-07 12:03)
+
+- **StyleSmuggler — an unpatched Magento/Adobe Commerce zero-day RCE, exploited since Sep 4, backdoored with a
+  Rust implant** (Sansec, disclosed Sep 5; no CVE/CVSS yet). Two-stage: attacker-controlled data poisons PHP via
+  Magento template `styles` properties, then executes when Magento renders a "Payment Transaction Failed Reminder"
+  email — no one opens the email, delivery failure doesn't stop execution. Reproduced on clean installs of 2.4.7/
+  2.4.8/2.4.9; first known victim ran 2.4.6-p15, fully patched through August 2026. Payload: a Rust backdoor
+  disguised as `[kworker/u:8:0]` with cron persistence; IOCs published (C2 `99.84.67.186`, `windwsecurity.run`,
+  NTP-shaped C2, two SHA-256s). Emergency Shield rules Sep 5 07:15 UTC; Adobe's next bulletin Sep 8. Third
+  unauthenticated-Commerce-RCE lineage from this ecosystem (after SessionReaper, PolyShell). **Caveats are
+  load-bearing:** every fact comes from the discovering vendor, which sells the mitigation; Sansec itself notes
+  "no indication that the backdoor has been weaponized" beyond the observed intrusions; no Adobe statement yet.
+- **Super Forms CVE-2026-14894 (9.8, CWE-434) — unauthenticated file-upload RCE, exploited since Jul 14, inside a
+  440k-attempt wave.** Missing file-type validation in Super Forms ≤ 6.3.313 (fixed 6.3.314) lets unauth attackers
+  upload executable PHP; web shells created admin accounts and seized sites. Exploitation began July 14 — the same
+  day Wordfence's firewall rule shipped. Companion report: 440,000+ blocked attempts across Super Forms *and* the
+  Elementor Pro flaw tracked since 09-05. Caveats: the count is Wordfence-firewall telemetry (their install base,
+  not the internet); the 9.8's scorer unconfirmed (Wordfence is the usual CNA; NVD analysis still fresh).
+- **REVSTEALER's four persistent modules — kill Windows Update and Defender, then mine** (Elastic Security Labs
+  Sep 2, THN Sep 6). A commercial Windows infostealer sold since ~Feb 2026 (~4,700 VT matches) whose four
+  previously-unreported companion programs persist after the stealer deletes itself: ProManager (wallet theft +
+  overlay phishing + keylogging), WinUpdate (clipboard crypto-address swapping + recovery-phrase capture),
+  SoftManager (reverse-proxy turn), LockAppHost (CMSTP elevation, Defender exclusions, 5 Windows Update services
+  and 11 scheduled tasks disabled, a miner hidden in suspended `nslookup.exe`/`svchost.exe`). Distribution: ≥17
+  hijacked YouTube channels pushing game-cheat lures with AI-generated videos, incl. a fake "Claude Opus 5 Free
+  Desktop" app (no indication Anthropic was compromised). Responder takeaway: an infection looks "clean"
+  post-cleanup while exclusions and the miner survive — re-enable services, rotate sessions. **Elastic's own
+  caveat:** it never observed the four modules delivered onto a live REVSTEALER host — linkage rests on shared
+  tradecraft, not an observed hand-off; the public YARA set has no LockAppHost rule.
+- **Trezor/ShipMonk — contractual deletion that didn't happen.** Trezor disclosed (Sep 5) that a breach at
+  fulfillment partner ShipMonk exposed names/emails/phones/addresses/order numbers of **67,000 more** US customers
+  (orders Nov 2019–Aug 2021), on top of the 13,689 from August — 80,000+ total — despite Trezor holding *written*
+  confirmations the data was deleted per contract and ShipMonk's stated 90-day retention. Hardware-wallet security
+  unaffected; the risk is seed-phrase phishing. The generalizable point: third-party retention violating
+  contractual deletion is auditable only by asking for proof of deletion, not assurances. Figures are Trezor's own
+  disclosure; no independent count.
+- **N-able N-central CVE-2026-86218 — CVSS 4.0 10.0 pre-auth RCE on an RMM console, and the vendor's own
+  exploitation story contradicts itself** (N-able CNA-assigned; hotfix 2026.3.1.14 shipped Sep 6; THN Sep 6–7 +
+  Huntress). Static code injection (CWE-96) → unauthenticated RCE on the N-central server — N-able's **fourth
+  hotfix in five weeks**, landing ~8h after Hotfix 3 (Sep 5: 6.9 internal-API access, 7.7 auth bypass), so every
+  build before 2026.3.1.14 — including freshly-patched HF3 servers — is vulnerable. **The finding is the vendor's
+  own record:** the release notes say "no confirmations that this vulnerability has been exploited in production
+  environments" while the uptime-page incident notice says it "has been observed being exploited in the wild" —
+  and calls it a "critical zero-day" without defining the term. Huntress reproduced a working PoC chain against
+  2026.3.1.10 but couldn't confirm which CVE was used in the real customer intrusion (logs rotated); the incident
+  was still open Sep 7. Context: attackers breached N-able-adjacent infrastructure Jul 31 via an auth bypass, then
+  reached managed endpoints through Take Control + Cloudflare tunnels — the second consecutive summer of
+  in-the-wild N-central attacks. Two takeaways: **when the CNA can't keep its own exploitation story consistent,
+  treat exploitation as confirmed until proven otherwise** (extends the vendor-flag verification checklist in
+  [[fact-check]]); and an RMM console is the keys to every endpoint an MSP manages — patch + IP allowlist/VPN +
+  account auditing, because hotfixes don't evict attackers already inside.

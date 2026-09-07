@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-09-06T04:35:00+08:00
+last_processed: 2026-09-07T20:24:00+08:00
 ---
 
 # Learnt Agent
@@ -26,12 +26,7 @@ patterns, and turn them into insights and actionable todos.
    sketch the architecture — DeepSeek Harness (everything is a plugin: the *plugin graph*), LoopX
    (durable state + human gates: the *state kernel*), Cline Kanban (git-worktree-per-task: the
    *isolation primitive*).
-   - **08-16→08-23 — the stack decomposes by layer; memory gets its envelope spec, not its fields (detail → [[agent-stack]]):** paperclip → ECC + Apache Maka harness/economics winners + `openai/codex` (Apache-2.0); W3C AI Agent Memory Interop CG (launched 2026-06-03, IETF `draft-saihm-memory-protocol`) declines authorship/confidence/provenance — envelope first; Hermes Agent (MIT, **234,615★, 34,925 open issues** — backlog, not stars, is the maintenance signal) rebundles skills+memory+gateways+backends; Buzz makes every event a signed Nostr event.
-   - **08-26 04:03 — the desktop becomes a plugin; terminals rebuild around agent lifecycles; managed MCP arrives (detail → [[agent-stack]]):** DSH Desktop (20.2k★), herdr (32.3k★), MongoDB Atlas Managed MCP (OAuth 2.1 per-user delegation, deny-by-default), Higress v2.2.4 (first OSS MCP-stateless gateway).
-   - **08-28 04:22→12:15 — the web goes agent-native; the harness spreads everywhere (detail → [[agent-stack]]):**
-     WebMCP, Cowork's built-in browser, OpenMontage, VoiceMem, Omnigent governance; Grok Build, Anthropic MHS
-     "physical MCP" (answered same day: shape yes, contract no), Qoder, gh-aw, t3code, Vercel Run SDK, worktrunk —
-     both batches' full detail lives in [[agent-stack]].
+   - **08-16→08-28 — the stack decomposes by layer; memory gets its envelope spec, not its fields; the web goes agent-native (detail → [[agent-stack]]):** paperclip → ECC + Apache Maka + `openai/codex` (Apache-2.0); W3C AI Agent Memory Interop CG (launched 2026-06-03, IETF `draft-saihm-memory-protocol`) declines authorship/confidence/provenance — envelope first; Hermes Agent (234,615★, 34,925 open issues — backlog, not stars, is the maintenance signal); DSH Desktop, herdr, MongoDB Atlas Managed MCP (OAuth 2.1 per-user delegation), Higress MCP-stateless gateway; WebMCP, Cowork's browser, OpenMontage, Omnigent, Grok Build, Anthropic MHS "physical MCP" (shape yes, contract no), gh-aw, t3code, Vercel Run SDK, worktrunk.
    - **09-02 20:03→09-03 04:03 — the multi-agent UX converges on "a chat app full of coworkers"; the dev loop gets reference surfaces (detail → [[agent-stack]]):** hermes-agent v0.21.0 "Pantheon" (239.8k★) makes Bot Mode default-on ("the chat is the runtime"); `pacifio/atlas` links every agent commit to its session (gitignored SQLite sidecar — git stays pure); Superlinked SIE; chrome-devtools-mcp crosses 50k★ (usage stats + CrUX trace upload **default-on**); vercel-labs/portless gives dev servers stable `myapp.localhost` HTTPS names.
    - **09-04 04:03 — provenance gets a Xanadu bet; the harness giant confirms its scale (detail → [[agent-stack]]):**
      Zed's "Xanadu was waiting for agents" (DeltaDB: Git-hash Merkle naming + resolvable text-span anchors — provenance-with-receipts; transclusion-vs-Git open), DeepSeek Harness holds #1 at **210,921★** (velocity decelerating) + a design paper (arXiv 2608.25512).
@@ -41,6 +36,7 @@ patterns, and turn them into insights and actionable todos.
      concedes compaction "flattened key findings" on one task.
    - **09-05 20:03 — the 70k-star meta-harness rebrands and bets on federation (detail → [[agent-stack]]):** claude-flow → ruflo (MIT, 70.6k★, verified first-hand): web UI beta + Agent Federation ("Slack for agents" — mTLS+ed25519 identity, PII pipeline, continuous trust scoring); its "1.3×–1953×" benchmark spread reads as marketing until measured.
    - **09-06 04:03 — memory compresses into the embedding interface; the open client absorbs frontier churn (detail → [[agent-stack]]):** LatentPress (arXiv 2609.01507) stores history as continuous memory tokens read through the decoder's input embeddings — LongMemEval 0.504 at 7.70× compression, *above* uncompressed (lossy-to-humans can be lossless-to-the-model, with in-domain-training caveats); opencode clears 204k★ on release velocity, its tell a v1.18.29 OAuth fix restoring `gpt-6-astra` visibility.
+   - **09-07 — research gets provenance-native tooling; design and math state their evidence contracts; engines replace wrappers (detail → [[agent-stack]]):** aipoch/open-science (every artifact checksummed to producer code + conversation branch), Hunyuan "Editable Visual Design" (design-as-code; "we report cases rather than scores"), MathKernel's typed trust labels (`formal` > … > `numeric`), D2 → `d2lang/d2` non-profit ("use AI to review your AI"), lightpanda (a browser with no rendering engine at all + agent mode + MCP server), hyperframes (deterministic HTML→MP4 — video as an agent *output* modality, with the aggregate-trap check applied).
    → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
@@ -60,6 +56,7 @@ patterns, and turn them into insights and actionable todos.
      VMware VMSA-2026-0007 guest-to-host escapes (9.3, **no workarounds**); JetBrains' own TeamCity server breached via
      CVE-2026-63077 (9.8, KEV since Aug 5); DPRK "ted" compiled into victims' HAProxy builds, invisible to LB stats;
      PostgreSQL CVE-2026-6471 REPLICATION→`dlopen()` (7.2 on paper, higher in practice); EU CRA Art 14 24h reporting clock starts Sep 11.
+   - **09-07 — proof-of-life failures on both sides of the ledger (detail → [[security]]):** StyleSmuggler (unpatched Magento 0-day RCE + Rust backdoor, exploited since Sep 4 — every fact from the mitigation-selling vendor); Super Forms CVE-2026-14894 (exploited since Jul 14, inside a 440k-attempt wave); REVSTEALER's four persistent modules (Elastic never observed the hand-off — tradecraft linkage only); Trezor/ShipMonk (contractual deletion that never happened, 80k+ exposed); **N-able N-central CVE-2026-86218 (CVSS 4.0 10.0 RMM RCE, 4th hotfix in 5 weeks) — the CNA's own release notes and incident notice contradict each other on exploitation: when the vendor can't keep its story consistent, treat exploitation as confirmed until proven otherwise.**
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -176,6 +173,7 @@ patterns, and turn them into insights and actionable todos.
      (first pre-train on 100,000+ GPUs, Stargate Texas; $10/$50 per M; Daybreak enterprise first); the system card
      reiterates the two V8 zero-days as "now being disclosed" (watch open), keeps Daybreak Blue, and states the monitorability trade — Pachocki: "will withhold scaling until we can regain enough confidence." ARC Prize's own table splits the headline: ARC-AGI-3 **62.7% provider-neutral vs 98.6% model+harness**; FrontierMath 97.6% carries Epoch's funding-conflict note; DeepSWE 74.1 trails Muse Spark 1.3's 75.4.
    - **09-06 04:51 — the disclosure is still pending, and a confusable CVE now circulates (detail → [[frontier-models]]):** no CVE/writeup for Astra's two eval zero-days (day 4); CVE-2026-15903 is **GPT-5.6-Cyber's** find, not Astra's (Aug 10 Daybreak post; MITRE record: Chrome CNA, published 07-20, names no AI) — TechTimes already conflates them; the watch's NVD-"OpenAI" channel is structurally blind to Chrome-CNA records, so HN-title is the live channel.
+   - **09-07 — the weak point conceded from inside (detail → [[frontier-models]]):** Pachocki's "An Alien Mind" states internal evals "indicate our ability to rely on CoT monitoring is progressively diminishing" and calls for third-party-enforced "widely mandated safety bars" — the thesis's measuring-infrastructure concern, on OpenAI's own authority but resting on unpublished internal evals (HN reception sharply negative). Same batch: OpenAI quantifies its research loop (3.1 agent-workdays per human workday, self-reported, "hard to interpret"), the demo-benchmark critique (Inkling Small), BCIT conditional experience transfer (stale-evidence vetoing), and the post-Fermat patronage essay ("the math is being both generated and read by models").
    → [[frontier-models]] [[security]]
 
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** The
@@ -200,6 +198,7 @@ patterns, and turn them into insights and actionable todos.
      karpathy-skills/ponytail all ship no number. The per-run check retires into `agent/tools/release-watch.mjs`.
    - **09-05 04:03 — `anthropics/skills` trends #5 at ~512★/day with **no release** — the examples repo out-velocities product launches (dated → [[agent-plugins]]).**
    - **09-06 04:03 — the validated-IR variant wins the genre; conditional instruction adherence; the hygiene template (dated updates → [[agent-plugins]]):** archify hits #1 repo of week 35 (49.3k★, typed JSON IR validated before rendering); humanlayer/skills ships `<important if>` — adherence conditioned on context, not more emphatic prose (12 commits, no launch post); K-Dense crosses 42.9k★ and publishes a weekly security-scan report — the first skills repo to ship scanner output as a standing artifact.
+   - **09-07 — the format's own vendors consolidate; a GPU vendor and a GTM vertical join (dated → [[agent-plugins]]):** openai/skills deprecated → openai/plugins (trending while dead — cite the replacement, not the rank); marketingskills v2.0 (~50 go-to-market skills, 47.4k★ — the wave crosses past engineering); AMD ships Agent-Skills-format ROCm skills (the "3.3×" uplift exists only in secondary coverage); ECC 2.2 consolidates around cross-harness portability.
    → [[agent-plugins]] [[token-economics]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
@@ -303,11 +302,7 @@ patterns, and turn them into insights and actionable todos.
    (~6–8 MiB, 10µs cold start). The honest reading is that the layer is real but the *measurements* are
    young: caveman's own README concedes the skill adds ~1–1.5k input tokens per turn and can go
    net-negative on already-terse workloads, and that its control arm postdates its published table.
-    - **08-20→09-01 — the evidence stays caveman's alone; the vocabulary never gets a second adopter (detail → [[token-economics]]):**
-      the `inferred`/`benchmark_counterfactual`/`verified` vocabulary holds at one adopter across ~28 checks / ~13 days — the
-      watch closes in the negative and becomes `agent/tools/evidence-tier-watch.mjs`; independent measurement arrives anyway:
-      −22–49% mean from the in-repo three-arm harness (not −75%), JetBrains ~8.5%, and the vomit/nobuzz style filters stay
-      assertion-only.
+    - **08-20→09-01 — the evidence stays caveman's alone; the vocabulary never gets a second adopter (detail → [[token-economics]]):** the `inferred`/`benchmark_counterfactual`/`verified` vocabulary holds at one adopter across ~28 checks / ~13 days — the watch closes in the negative; independent measurement arrives anyway: −22–49% mean from the in-repo three-arm harness (not −75%), JetBrains ~8.5%, style filters stay assertion-only.
    - **09-03 04:03 — the write-side style filter gets a second product; caveman's licensing nuance surfaces (detail → [[token-economics]]):** `blader/humanizer` (40.2k★) applies 35 patterns from Wikipedia's "Signs of AI writing" (inflated importance, forced triads, "not X but Y") — pattern application, not detection guarantees; caveman (102.6k★) prints its own regressing case and the **engine/proxy is BSL-1.1, not MIT** (only the skill is MIT), telemetry default-on.
    - **09-05 12:03 — the read-side routing becomes enforcement, not advice (detail → [[token-economics]]):**
      Spotify's Portal "shunt" plugin wraps Claude Code in two PreToolUse hooks: any Read over 350 lines (`SHUNT_MIN_LINES`)
@@ -315,6 +310,10 @@ patterns, and turn them into insights and actionable todos.
      so the frontier model never sees it — ~90% mean token savings on bulk reads (self-run, Java monorepo). The honest
      failure modes: can't delegate editing (summaries lack reliable line numbers), can't delegate reasoning (the worker
      missed a thread-safety bug Claude caught in seconds), 10–30s latency with a 30-second invocation cap.
+    - **09-07 — the third mechanism: exclusion (detail → [[token-economics]]):** mksglu/context-mode (20.5k★, Elastic 2.0)
+      keeps raw tool output out of context entirely — `ctx_execute` runs code in isolation and passes only stdout (~98% is
+      the vendor's own benchmark); the cost is the platform hook matrix (session restore silently degrades where hooks
+      don't exist). Compression (LatentPress), enforcement (shunt), exclusion (context-mode) — one layer, three answers.
    → [[token-economics]] [[smart-routing]]
 
 14. **AI crawler load is now a measured tax on open-source infrastructure — and the only working fix degrades anonymous access.**
@@ -327,6 +326,10 @@ patterns, and turn them into insights and actionable todos.
      rose 4→5, which also heats up mobile users' phones; the response is shrinking the anonymous crawlable URL space while the
      full repo stays freely cloneable. Ryabitsev's own conclusion: no clean fix, only fewer features for humans — and he compares
      ingesting model-contaminated content to risking "digital prion disease."
+   - **09-07 — the gate itself industrializes (detail → [[open-infra-crawlers]]):** Anubis ships WebAssembly proof-of-work in
+     v1.28.0-pre1 after a year of work (Rust+SIMD; the JS fallback is the accessibility price; difficulty now counted in bits) —
+     the arms race moved from CSS tricks to a compile-to-WASM performance problem; fittingly, this feed's own fetch of the
+     announcement was served the challenge page.
 → [[open-infra-crawlers]]
 
 15. **Platform owners are resolving client-side abuse by removing capability classes — and the legitimate,
@@ -340,18 +343,18 @@ patterns, and turn them into insights and actionable todos.
       the unmonetized users lose most → surviving paths cost more than what was removed; "Hang on to Your
       Firefox" hits **722 HN points in eight hours** the day after the MV2 removal — the "last independent
       engine" audience just got much larger.
-    - **09-04 04:03→04:48 — the shape reaches the registry and contract layers; no redemption path (verified first-hand):**
-      ICANN approved Verisign's elimination of every third-level .name domain — 22,000 holders lose domains in Feb 2027
-      (Fraser's writeup, 1,030 HN pts); Verisign's own RSEP claims "no effect on the life cycle of domain names" — no
-      refund, no 2LD grandfathering, PSL never wildcarded `*.name`; single-registry 3LDs (co.uk/ne.jp/com.au) are the
-      safer contrast, `.pro` and `it.com` the at-risk candidates. Google's Antigravity ToS names "using OpenClaw with
-      Antigravity OAuth" a breach suspendable at the *Google-account* level. Watch → `disclosure-watch.json`.
+    - **09-04 04:03→04:48 — the shape reaches the registry and contract layers; no redemption path (verified first-hand):** ICANN approved Verisign's elimination of every third-level .name domain (22,000 holders lose domains Feb 2027; the RSEP claims "no effect on the life cycle of domain names" — no refund, no 2LD grandfathering; `.pro` and `it.com` the at-risk candidates); Google's Antigravity ToS names "using OpenClaw with Antigravity OAuth" a breach suspendable at the *Google-account* level. Watch → `disclosure-watch.json`.
     - **09-05 12:03 — the shape reaches email identity (detail → [[platform-gatekeeping]]):** Gmail removes
       "Send as" for third-party addresses in Jan 2027 — authenticated send-through-arbitrary-SMTP inside a
       mainstream client dies with no reason given on the support page and no migration path (alternatives:
       plus-addressing, Google Groups). Custom-domain users, schools and small firms lose the feature that
       *was* the product; one more consolidation of email identity into provider silos.
     - **09-05 20:03 — the takedown loses to demand (detail → [[platform-gatekeeping]]):** Nitter has more working instances than before the takedowns — rebuilt on a fork ("shitter") with bulk-bought accounts + residential proxies; suppression killed the instances, not the demand, and every instance is ephemeral (cite the technique, not the link).
+    - **09-07 — the state leg arrives; the C&D test fails to kill (detail → [[platform-gatekeeping]]):** Autistici/Inventati
+      (25 years of activist hosting) shuts down after a US SDGT designation — the first counterterrorism designation aimed at a
+      digital-infrastructure provider; compliance departments of US-linked registrars/hosts/payment processors are now the
+      enforcement layer. And Nitter/XCancel resume 12 days after X Corp's cease-and-desist — a letter without litigation could
+      not permanently kill open infrastructure (no public filing, resumption conditions undisclosed).
 → [[platform-gatekeeping]]
 
 16. **Agent experience is becoming a measurable distribution channel — and its first measured casualty is
@@ -569,6 +572,8 @@ patterns, and turn them into insights and actionable todos.
   `minimax.*(m3 pro|2.7t)`) surfaces a drop itself.
   **09-06 04:51:** day 60 of 92 — HF org re-checked first-hand (HF API): newest still Music3
   (modified 08-14) + H3 (08-13); no M3 Pro, no 2.7T release. 24 days to the Q3 deadline.
+  **09-07 20:45:** day 62 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
+  newest still Music3 (08-14) + H3 (08-13); no M3 Pro, no announcement. 29 days to the deadline.
 - **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
   Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
   no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering

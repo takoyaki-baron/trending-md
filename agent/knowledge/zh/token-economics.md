@@ -207,3 +207,9 @@ per-token 牌价（与这里已记录的分词器增量、前缀缓存稳定性�
 - Spotify 首席 PM Dimitri Mazmanov 的文章：编码 agent 做的大部分是 I/O 而非推理——所以路由它。实现是挂在 Portal AiKA Modes（临时运行时上的声明式 agent——"agent 界的 AWS Lambda"）之上的 Claude Code 插件（"shunt"）。两个 **PreToolUse 钩子**负责执行：任何超过 350 行的文件 Read（可通过 `SHUNT_MIN_LINES` 配置）会被*拦截*并改道到跑 Gemini 2.5 Flash 的 `bulk-reader` 模式，而 `code-writer` 模式把样板代码直接写盘，前沿模型根本看不到。Java 单体仓库上的基准：批量读平均省 ~90% token（厂商自测，非独立复测）。
 - "什么行不通"一节是最好的部分：不能委托*编辑*（摘要缺少可靠行号）、不能委托*推理*（worker 漏掉了一个 Claude 几秒内抓住的微妙线程安全 bug），且有 10–30 秒延迟和 30 秒调用上限。市场安装路径：`spotify/portal-ai-plugins`。
 - 与"把路由规则写进 CLAUDE.md"的区别是 agent 基建生态反复重新发现的**执行 vs 指令**之分：模型对昂贵的读没有选择权。caveman 压缩代理（读侧）与 humanizer 写侧滤镜之外的第三个产品化象限。
+
+## context-mode —— 不压缩历史,而是让原始字节根本不进入上下文(09-07)
+
+- `mksglu/context-mode`(TypeScript,**Elastic License 2.0——不是 OSI 开源**,20.5k★,+85/日):一个让原始工具输出完全不进入模型上下文窗口的 MCP 服务器 + hooks 插件。`ctx_execute` 经隔离子进程运行 12 种语言的代码,只把 stdout 传入上下文(README 宣称:315 KB → 5.4 KB,约 98% 削减——厂商自测);会话事件持久化到每项目 SQLite(FTS5 + BM25),压缩后重建为约 2 KB 快照;"think in code" 路由器推动代理用脚本处理数据而非直接读文件。
+- 诚实的工程代价是**平台 hook 矩阵**:Claude Code、Gemini CLI、Cursor、Codex CLI 与 Copilot 有 hook;Antigravity 与 Zed 没有,Cursor 拒绝其 `sessionStart` hook,Codex 的 PreToolUse 仅支持 deny,Kiro 的 spawn hook 未接通——多个平台上的会话恢复会静默降级。搜索在 9 次调用后逐步限流。
+- 在该层中的位置:上下文经济学谱系的务实一端——LatentPress 把历史压缩进嵌入接口记忆,Spotify 的 shunt *强制*读取预算,context-mode 则直接拒绝入场。三者都认同上下文边界是优化面;分歧在于修复手段是压缩、强制还是排除。

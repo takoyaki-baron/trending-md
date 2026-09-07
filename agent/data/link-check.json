@@ -307,9 +307,81 @@
         "2026-09-04.md",
         "2026-09-05.md"
       ]
+    },
+    "https://thehackernews.com/2026/09/unpatched-magento-adobe-commerce-0-day.html": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-09-07T12:59:11.201Z",
+      "last_seen": "2026-09-07T12:59:11.201Z",
+      "feeds": [
+        "2026-09-07.md"
+      ]
+    },
+    "https://openai.com/index/an-alien-mind/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-07T12:59:11.201Z",
+      "last_seen": "2026-09-07T12:59:11.201Z",
+      "feeds": [
+        "2026-09-07.md"
+      ]
+    },
+    "https://openai.com/index/research-acceleration-view-inside-openai/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-07T12:59:11.201Z",
+      "last_seen": "2026-09-07T12:59:11.201Z",
+      "feeds": [
+        "2026-09-07.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49592508": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-07T12:59:11.201Z",
+      "last_seen": "2026-09-07T12:59:11.201Z",
+      "feeds": [
+        "2026-09-07.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49561514": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-07T12:59:11.201Z",
+      "last_seen": "2026-09-07T12:59:11.201Z",
+      "feeds": [
+        "2026-09-07.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49592366": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-07T12:59:11.201Z",
+      "last_seen": "2026-09-07T12:59:11.201Z",
+      "feeds": [
+        "2026-09-07.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=47797513": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-07T12:59:11.201Z",
+      "last_seen": "2026-09-07T12:59:11.201Z",
+      "feeds": [
+        "2026-09-07.md"
+      ]
+    },
+    "https://www.neowin.net/opinions/windows-11s-special-developer-edition-sounds-like-yet-another-marketing-misfire/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-07T12:59:11.201Z",
+      "last_seen": "2026-09-07T12:59:11.201Z",
+      "feeds": [
+        "2026-09-07.md"
+      ]
     }
   },
-  "runs": 5,
+  "runs": 6,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-05T21:18:03.196Z"
+  "last_run": "2026-09-07T12:59:11.201Z"
 }

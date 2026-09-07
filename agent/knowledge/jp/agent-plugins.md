@@ -690,3 +690,32 @@ arXiv 2608.24979 を一次確認。**FrontierChallenge**（FrontierAgent/Apodex 
   このフィードが追跡する中で、スキャナ出力を常設成果物として公開した初の skills リポジトリ。保持すべき作者自身の注意:
   163 スキルは実際のコンテキストコストになる(「全部入れないで」)、臨床スキルは「臨床判断には決して使わない」、
   スキルごとのライセンスはリポジトリの MIT と異なる、v2.43.0 のパス移行は旧インストールを壊す。
+
+## openai/skills 非推奨化;スキル形式は GPU ベンダーとマーケティング縦軸を得る(09-07 12:03)
+
+- **`openai/skills` が非推奨に——Codex スキルは `openai/plugins` へ統合。**公式「Skills Catalog for Codex」
+  (25.5k★)は残存する注目でトレンドに乗り続けているが、README は「Important」バナーで始まる:「This repository
+  is deprecated.」後継の `openai/plugins`(5.4k★、768 forks)はすべてを `plugins/<name>/` 以下へ再構成する:必須の
+  `.codex-plugin/plugin.json` マニフェストと、任意の `skills/`、`.mcp.json`、`agents/`、`commands/`、`hooks.json`
+  サーフェス、さらに `.agents/plugins/marketplace.json` のデフォルトマーケットプレイスマニフェスト。スキルのみの
+  プラグインを扱う build-plugins ガイドも同梱。`openai/skills`(その `$skill-installer` フロー)にインストールを
+  固定していたチームは別の配布メカニズムへ移される——しかも `plugin.json` マッピングは既に収束しつつあった
+  (Codex PR #35105 の ABI ノート参照)。教科書的なアグリゲイトの罠:リポジトリはトレンドに載り、その README は
+  死んでいると告げている——ランキングではなく後継を引用せよ。
+- **marketingskills v2.0——波がエンジニアリングから GTM へ跨る。**`coreyhaines31/marketingskills`(MIT、47.4k★、
+  +355/日):CRO、コピー、SEO(LLM 回答での可視性を狙う `ai-seo` を含む)、アナリティクス、広告、ライフサイクル
+  メール、解約、プライシング、revops を担う約 50 の markdown スキル——すべてが基礎の `product-marketing`
+  コンテキストスキルを相互参照し、6 つのインストール経路を文書化(npx `skills` CLI、Claude Code マーケット
+  プレイス、clone/copy、submodule、fork、SkillKit)。v2.0 は 17 スキルを改名し `page-cro`+`form-cro` を `cro` に
+  統合、完全なリネームマップを同梱。リポジトリ自身の注意点:アップグレードは手動削除が必要な v1.x の残骸
+  フォルダを残し、CLI はエージェントセッション内では `.agents/skills/` へのみ静かにインストールする——
+  `-a claude-code` を付けないと Claude Code は何も見えない。
+- **ROCm 10.0——GPU ベンダーが Agent Skills 形式を第一級のサポート面として採用。**AMD の10周年リリース
+  (8 月 27 日公開、9 月 7 日に HN へ)は、Claude/Cursor/Codex 向け Agent Skills 形式の **AMD Skills**
+  (`github.com/amd/skills`:`rocm-doctor`、Instinct/EPYC 上の LLM サービングワークフロー)、テックプレビューの
+  `rocm` CLI(`rocm serve`、`rocm examine`、エアギャップバンドル)、**Hyperloom**(オープンソースのエージェント化
+  Profile→Analyze→Plan→Optimize→Validate ループ——TraceLens-Agent、Magpie、IntelliKit、GEAK、Arbor。「数週間の
+  手動最適化を数時間へ」と主張)、RCCL の NCCL 2.30.4 上流マージ、統合 ROCm Core SDK を含む。**ファクトチェックが
+  リリース以上に重要:**二次報道(StorageReview、Wccftech)が繰り返す「ROCm 7 比で推論 3.3×」という主張は AMD 自身の
+  投稿の**どこにも現れない**——AMD が行う唯一の定量的主張は Hyperloom の週→時間。倍数ではなくブログを引用せよ。
+- **ECC 2.2 —— 9/1 記事の更新**(252k★、+1,905/日、当日の最大スター獲得)。ハーネスチューニングバンドル(68 エージェント、286 スキル、94 コマンド)は、Claude Code・Codex・Kimi Code 向けガイド付きセットアップ(`npx ecc-universal setup`)、2.1 の Plan Canvas(エージェント計画を注釈するループバックブラウザ UI)、Kimi Code インストールターゲット、Itô 経由のセルフホスト GPU 計算を追加。統合 Memory Vault(`ecc memory`)は開発中。シグナル:カテゴリは**クロスハーネス可搬性**の周りで収束しつつある——Claude Code/Codex/Kimi/Cursor を交換可能なランタイムとして扱い、プラットフォームごとの機能差を正直に文書化(Kimi の hooks 未設定、Cursor はビルドで挙動が変わる)。スター速度の上昇に合わせて繰り返したい README のセキュリティ注意:公式チャネルからのみインストール——非公式ミラーは「マルウェアを含む可能性」がある。

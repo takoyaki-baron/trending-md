@@ -1799,3 +1799,65 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   The load-bearing infrastructure of the agent era is unglamorous: OAuth quirks, thinking-block protocols (Claude
   5.1+ binding with config opt-out) and provider timeouts (5-min default) decide whether a new model is usable on
   day one. Maintenance surface scales with stars: ~4.2k open issues, 1.6k open PRs against 15.7k commits.
+
+## Provenance-native research workbench; design-as-code; typed trust labels; a language outlives its company (09-07 12:03)
+
+- **aipoch/open-science — a local-first AI research workbench where every artifact carries provenance**
+  (Apache-2.0, 3.8k★, +145/day; trigger is a v0.23.0 release, not a launch). Electron/React/Prisma-SQLite desktop
+  workbench wrapping selectable agent backends (Claude Code, OpenCode, Codex, CodeBuddy) with Python/R notebooks,
+  18 built-in scientific skills (AlphaFold2, Boltz, DiffDock, ESM-2, scGPT, Remote Compute SSH) and 24 research
+  connectors (PubMed, bioRxiv, ChEMBL, Clinical Trials). The differentiator is the provenance chain: every artifact
+  is an immutable checksummed version tied to its producer code, execution history, environment inventory and the
+  exact conversation branch that produced it — with unverifiable evidence explicitly marked unavailable. CLI +
+  headless SDK. Unusually honest: a "What This Is Not" section pre-emptively disclaims the two framings competitors
+  get (not a chat UI, not an unofficial client), and the README states generated output "does not replace expert
+  judgment, statistical review, or validation against primary evidence."
+- **Tencent Hunyuan, "Editable Visual Design" (arXiv 2609.04034, 516 upvotes, #1 HF papers Sep 6) — design-as-code
+  from a coding agent.** A VLM (requirement understanding, planning, code, aesthetic judgment) drives an
+  image-generation model on demand in an "imagine first, then act" loop: generate an imagined visual to set
+  aesthetic priors, cut out text-free assets via alpha/green-screen matting, then write native HTML/CSS with
+  explicit layers. Verification pairs deterministic layout checks in a headless browser with VLM review of rendered
+  screenshots; "Agent Design Replay" serializes the whole trajectory for reproducibility. Showcase: an
+  information-dense field guide with 120 editable layers in 13 groups; repairs converging in one or two rounds. The
+  paper's honesty is the caveat: "We therefore report cases rather than scores" — no ground-truth metric for
+  aesthetics or editability exists, output is bounded by the underlying models, single-page designs only.
+- **MathKernel — LLM math tools that carry trust labels** (`staatsgeheim/MathKernel`, MIT, v1.3.0 — early: 20★,
+  4 commits). A Python library + MCP server exposing 160+ `math_*` tools over SymPy, Z3, Lean 4 + Mathlib
+  (auto-installed), mpmath interval arithmetic, numba, CUDA/CuPy, python-flint/Arb on FastMCP 3. The design idea is
+  "evidence-aware": every result carries a trust label — `formal` > `exact` > `symbolic` > `interval_certified` >
+  `numeric` > `empirical` — and overall trust is capped by the weakest evidence a claim requires; backend
+  disagreement is preserved as a conflict, not averaged; decimal inputs cap at `numeric`; renderers can present
+  results but never upgrade their evidence. Early and unproven, but it states the right contract: the model
+  interprets intent, the tool establishes evidence, provenance is typed rather than implied. Watch whether the
+  label scheme gets adopted by bigger MCP math servers — that part is worth copying even if this implementation
+  isn't.
+- **D2 goes non-profit — Terrastruct shuts down, D2 Studio and TALA go open source**
+  (`terrastruct/d2` → `d2lang/d2`, 25.2k★, MPL-2.0, still shipping verified releases; Hack Club reportedly
+  financing the non-profit). Maintainer alixander (Dylan) Wang confirmed in the HN thread that D2 Studio and the
+  TALA layout engine — until now the paid product — will be open-sourced. The sharpest line: "D2 thus far has been
+  a product of handcrafted code. That era is over" — going forward Wang will "welcome AI contributions and… use AI
+  to review your AI," keeping only the writing human. A rare live-fire test of two transitions at once: a
+  company-owned language surviving its company via non-profit governance, and a 25k-star codebase reorganizing
+  around AI-written, AI-reviewed code — commenters split exactly there, and one questions a teens-focused funder
+  financing a project maintained by an OpenAI infrastructure person.
+- **lightpanda-io/browser — the "browser for agents" layer consolidates into purpose-built engines**
+  (`lightpanda-io/browser`, Zig, AGPL-3.0, 34.6k★, +116/day). Not a Chromium fork or a WebKit patch: a browser
+  built from nothing — v8 for JS, html5ever for parsing, libcurl for HTTP, **no rendering engine at all** — aimed
+  at AI/automation workloads. The new agentic surface: `lightpanda agent` for natural-language browser control
+  across Anthropic/OpenAI/Gemini/Ollama backends (or LLM-free with `--no-llm`), PandaScript recordable/replayable
+  deterministic scripts, and a native MCP server with per-connection session isolation — alongside CDP and
+  WebDriver BiDi compatibility with Puppeteer/Playwright. Claims ~16× less memory / ~9× faster than headless
+  Chrome over 100 pages (vendor's own). The cost of from-scratch: glibc-linked Linux binaries (fail on
+  Alpine/musl), no native Windows (WSL2 only), telemetry on by default, incomplete Web Platform Tests results,
+  nightly builds only — no versioned releases. Same bet as the agent-owned browsers (Cowork, ego-lite) from the
+  engine side: purpose-built engines, not Chromium wrappers.
+- **heygen-com/hyperframes — video becomes an agent *output* modality** (`heygen-com/hyperframes`, TypeScript,
+  Apache-2.0, 44.7k★, +220/day, #1 trending). Plain HTML compositions — timing expressed as data attributes —
+  turn into deterministic MP4s via a headless-Chrome frame-seeker plus FFmpeg ("same input, same frames, same
+  output"), aimed at CI and regression testing. Ships 20 agent skills (`npx skills add heygen-com/hyperframes`)
+  teaching Claude Code/Cursor/Codex the video-production loop, animation adapters (GSAP, CSS, Lottie, Three.js,
+  Anime.js, WAAPI), a Studio browser editor, and AWS Lambda distributed rendering. Positions against Remotion on
+  two axes: plain HTML vs React components, Apache-2.0 vs source-available. **Aggregate-trap check applied:** the
+  repo rode three near-invisible Show HNs in April–May (3–6 points each) to 44.7k stars, and no fresh launch
+  event drives today's #1 slot — sustained momentum, cite the repo, not the rank. README concedes Remotion Lambda
+  is a "more mature cloud renderer."

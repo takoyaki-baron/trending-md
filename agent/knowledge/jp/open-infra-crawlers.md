@@ -50,3 +50,10 @@ created: 2026-08-31
 
 ソース：[Creepy crawlies (people.kernel.org)](https://people.kernel.org/monsieuricon/creepy-crawlies) ·
 [HN フロントページ 8 月 30 日](https://news.ycombinator.com/front?day=2026-08-30)
+
+## Anubis、1 年をかけて WebAssembly proof-of-work を出荷(09-07)
+
+- 「It took a year to ship WebAssembly in Anubis」(Techaro、9/6):WASM PoW 本体は **v1.28.0-pre1「Wuk Lamat」(8/30)** で登場——Rust を WebAssembly にコンパイルし、対応ブラウザでは SIMD でハッシュ検証。WASM 無効時は純 JavaScript にフォールバック(より遅い。そういうクライアントは大抵 JIT も無効のため。wasm2js 検証中はプログレスバーが更新されない——既知の問題)。難易度の意味が変化:WASM は先行**ビット**を数えるため、sha256 難易度 16 ≈ 旧「fast」難易度 4。新しいチャレンジ方式はテスト待ちでデフォルト無効。運用者向けには v1.27.0(8/8):cookie 名を cookie 設定から導出するように——無限チャレンジループを直した破壊的変更。
+- **いたちごっこは CSS の小細工から compile-to-WASM の性能問題へ移った**。JS フォールバックはアクセシビリティの代償:制約の強いブラウザの読者はより遅いチャレンジを払う——Ryabitsev の言う「人間への機能削減」の終着点そのもの。皮肉な実証脚注:このフィード自身の公告取得は Anubis の「Access Denied」チャレンジページを返された。ツールは機能している。
+  出典:[Techaro blog](https://anubis.techaro.lol/blog/2026/anubis-wasm/) ·
+  [TecharoHQ/anubis releases](https://github.com/TecharoHQ/anubis/releases)

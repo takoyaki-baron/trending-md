@@ -796,3 +796,40 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
   publish scanner output as a standing artifact. Own caveats worth keeping: 163 skills add real context cost ("don't
   install them all"), clinical skills are "never for clinical decisions," per-skill licenses differ from the MIT
   repo license, and the v2.43.0 path move breaks old installs.
+
+## openai/skills deprecated; the format gains a GPU vendor and a marketing vertical (09-07 12:03)
+
+- **`openai/skills` is deprecated — Codex skills consolidate into `openai/plugins`.** The official "Skills Catalog
+  for Codex" (25.5k★) still trends on residual attention, but its README opens with an "Important" banner: "This
+  repository is deprecated." The replacement `openai/plugins` (5.4k★, 768 forks) restructures everything under
+  `plugins/<name>/` with a required `.codex-plugin/plugin.json` manifest and optional `skills/`, `.mcp.json`,
+  `agents/`, `commands/`, `hooks.json` surfaces, plus a default marketplace manifest at
+  `.agents/plugins/marketplace.json`; a build-plugins guide covers skill-only plugins. Teams that pinned installs
+  against `openai/skills` (its `$skill-installer` flows) are being moved to a different distribution mechanism —
+  and note the `plugin.json` mapping was already converging (the Codex PR #35105 ABI note). Textbook aggregate
+  trap: the repo trends while its own README says it's dead — cite the replacement, not the rank.
+- **marketingskills v2.0 — the wave crosses from engineering into go-to-market.** `coreyhaines31/marketingskills`
+  (MIT, 47.4k★, +355/day): ~50 markdown skills for CRO, copywriting, SEO (incl. `ai-seo` for LLM-answer
+  visibility), analytics, ads, lifecycle email, churn, pricing, revops — all cross-referencing a foundation
+  `product-marketing` context skill, six documented install paths (npx `skills` CLI, Claude Code marketplace,
+  clone/copy, submodule, fork, SkillKit). v2.0 renamed 17 skills and merged `page-cro`+`form-cro` → `cro`, with a
+  full rename map. The repo's own caveats: the upgrade leaves stale v1.x folders you must delete manually, and the
+  CLI silently installs only to `.agents/skills/` inside an agent session — Claude Code sees nothing unless you
+  pass `-a claude-code`.
+- **ROCm 10.0 — a GPU vendor adopts the Agent Skills format as a first-class support surface.** AMD's decade-mark
+  release (Aug 27, HN Sep 7) ships **AMD Skills** in the Agent Skills format for Claude/Cursor/Codex
+  (`github.com/amd/skills`: `rocm-doctor`, LLM-serving workflows on Instinct/EPYC), a tech-preview `rocm` CLI
+  (`rocm serve`, `rocm examine`, air-gapped bundles), **Hyperloom** (open-source agentic
+  Profile→Analyze→Plan→Optimize→Validate loop — TraceLens-Agent, Magpie, IntelliKit, GEAK, Arbor; claimed
+  "weeks of manual optimization down to hours"), RCCL merged upstream to NCCL 2.30.4, and a unified ROCm Core SDK.
+  **The fact-check matters more than the release:** secondary coverage (StorageReview, Wccftech) repeats a claimed
+  "3.3× inference uplift vs ROCm 7" that appears **nowhere in AMD's own post** — the only quantitative claim AMD
+  makes is Hyperloom's hours-vs-weeks one. Cite the blog, not the multiplier.
+- **ECC 2.2 — dated update to the Sep 1 coverage** (252k★, +1,905/day, top star-gainer). The harness-tuning bundle
+  (68 agents, 286 skills, 94 commands) shipped guided package setup (`npx ecc-universal setup`) for Claude Code,
+  Codex and Kimi Code, 2.1's Plan Canvas (loopback browser UI for annotating agent plans), a Kimi Code install
+  target, and self-hosted GPU compute via Itô; a unified Memory Vault (`ecc memory`) is in development. The signal:
+  the category consolidates around **cross-harness portability** — Claude Code/Codex/Kimi/Cursor as interchangeable
+  runtimes, with per-platform feature caveats documented honestly (hooks not configured for Kimi, Cursor behavior
+  varies by build). README security note worth repeating as star velocity climbs: install only from official
+  channels — unofficial mirrors "may contain malware."

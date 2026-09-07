@@ -43,3 +43,10 @@ created: 2026-08-31
 
 来源：[Creepy crawlies (people.kernel.org)](https://people.kernel.org/monsieuricon/creepy-crawlies) ·
 [HN 头条 8 月 30 日](https://news.ycombinator.com/front?day=2026-08-30)
+
+## Anubis 用一年时间交付 WebAssembly 工作量证明(09-07)
+
+- "It took a year to ship WebAssembly in Anubis"(Techaro,9 月 6 日):WASM PoW 本体随 **v1.28.0-pre1 "Wuk Lamat"(8 月 30 日)发布**——Rust 编译为 WebAssembly 执行哈希校验,浏览器支持时启用 SIMD;WASM 被禁用时回退纯 JavaScript(更慢,因为这些客户端通常也禁用了 JIT;wasm2js 校验期间进度条不更新——已知问题)。难度语义变化:WASM 按前导**比特**计数,故 sha256 难度 16 ≈ 旧的"快速"难度 4。新挑战方法默认禁用、待测试。对运维同样重要:v1.27.0(8 月 8 日)改为由 cookie 设置派生 cookie 名——一个修复无限挑战循环的破坏性变更。
+- **军备竞赛从 CSS 技巧升级为编译到 WASM 的性能问题**,而 JS 回退就是可访问性代价:浏览器受限的读者要付更慢的挑战——正是 Ryabitsev 所说的"给人类更少功能"的终局。一个贴切的实证脚注:本 feed 自己抓取这篇公告时收到的就是 Anubis 的"Access Denied"挑战页。工具确实有效。
+  来源:[Techaro blog](https://anubis.techaro.lol/blog/2026/anubis-wasm/) ·
+  [TecharoHQ/anubis releases](https://github.com/TecharoHQ/anubis/releases)

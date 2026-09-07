@@ -280,3 +280,20 @@ list price (same lesson as the tokenizer deltas and prefix-cache stability alrea
 - The difference from "put routing rules in CLAUDE.md" is the **enforcement-vs-instruction** split the agent-infra
   ecosystem keeps rediscovering: the model doesn't get a choice about the expensive read. Read-side counterpart to
   caveman's compression proxy and humanizer's write-side filter — the layer's third productized quadrant.
+
+## context-mode — don't compress the history, never let the raw bytes in (09-07)
+
+- `mksglu/context-mode` (TypeScript, **Elastic License 2.0 — not OSI open source**, 20.5k★, +85/day): an MCP server
+  + hooks plugin that keeps raw tool output out of the model's context window entirely. `ctx_execute` runs code in
+  12 languages via isolated subprocesses and passes only stdout into context (README claim: 315 KB → 5.4 KB, ~98%
+  reduction — vendor's own benchmark); session events persist to per-project SQLite (FTS5 + BM25) and are rebuilt
+  into a ~2 KB snapshot after compaction; a "think in code" router pushes the agent to script data processing
+  instead of reading files.
+- The honest engineering cost is the **platform hook matrix**: hooks exist for Claude Code, Gemini CLI, Cursor,
+  Codex CLI and Copilot, but Antigravity and Zed have none, Cursor rejects its `sessionStart` hook, Codex
+  PreToolUse is deny-only, and Kiro's spawn hook isn't wired — so session restore silently degrades on several
+  platforms. Search is progressively throttled after 9 calls.
+- Position in the layer: pragmatic end of the context-economics spectrum — LatentPress compresses history into
+  embedding-interface memory, Spotify's shunt *enforces* a read budget, context-mode just refuses admission. The
+  three agree the context boundary is the optimization surface; they disagree on whether the fix is compression,
+  enforcement, or exclusion.

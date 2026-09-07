@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-06T04:35:00+08:00
+last_processed: 2026-09-07T20:24:00+08:00
 ---
 
 # 学习智能体
@@ -60,6 +60,7 @@ last_processed: 2026-09-06T04:35:00+08:00
      私有的 Hub 数据集——记忆成为你可拥有的数据；其自家两任务基准承认压缩在其中一个任务上"压平了关键发现"。
    - **09-05 20:03 — 7 万星元级 harness 改名并押注联邦（详情 → [[agent-stack]]）：** claude-flow → ruflo（MIT，70.6k★，本跑一手核验）：web UI beta + Agent Federation（"Slack for agents"——mTLS+ed25519 身份、PII 流水线、持续信任评分）；其 "1.3×–1953×" 基准倍数在有人复测前按营销读。
    - **09-06 04:03 —— 记忆压缩进嵌入接口;开放客户端消化前沿更迭（详情 → [[agent-stack]]）：** LatentPress（arXiv 2609.01507）把历史存为连续记忆 token、由解码器输入嵌入接口读取——LongMemEval 0.504 @ 7.70× 压缩,*高于*未压缩（对人损可以是对模型无损,带域内训练前提）;opencode 以发布速度破 204k★,破绽是 v1.18.29 的 OAuth 修复,为订阅用户恢复 `gpt-6-astra` 可见性。
+   - **09-07 —— 科研拿到溯源原生工具;设计与数学写明证据契约;引擎取代包装(详情 → [[agent-stack]]):** aipoch/open-science(每个工件以校验和绑定到生产它的代码 + 会话分支)、混元 "Editable Visual Design"(设计即代码;"我们报告案例而非分数")、MathKernel 的类型化信任标签(`formal` > … > `numeric`)、D2 → `d2lang/d2` 非营利("用 AI 审查你的 AI")、lightpanda(一个完全没有渲染引擎的浏览器 + agent 模式 + MCP 服务器)、hyperframes(确定性 HTML→MP4——视频成为 agent 的*输出*模态,已应用聚合陷阱检查)。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -131,6 +132,7 @@ last_processed: 2026-09-06T04:35:00+08:00
      逃逸（9.3,**无变通方法**）;JetBrains 自己的 TeamCity 服务器被 CVE-2026-63077 击穿（9.8,8 月 5 日起 KEV）;DPRK
      "ted" 编译进受害者 HAProxy 构建,负载均衡统计不可见;PostgreSQL CVE-2026-6471 REPLICATION→`dlopen()`（纸面 7.2,
      实践更高）;EU CRA 第 14 条 24 小时上报时钟 9 月 11 日启动。
+   - **09-07 —— 台账两端的"存活证明"失效(详情 → [[security]]):** StyleSmuggler(未修补 Magento 零日 RCE + Rust 后门,9 月 4 日起被利用——每个事实都来自卖缓解措施的厂商);Super Forms CVE-2026-14894(7 月 14 日起被利用,44 万次攻击浪潮之内);REVSTEALER 的四个持久化模块(Elastic 从未观察到交付环节——仅靠共同手法关联);Trezor/ShipMonk(合同删除从未发生,8 万+ 暴露);**N-able N-central CVE-2026-86218(CVSS 4.0 10.0 RMM RCE,五周内第四个热修复)——CNA 自己的发行说明与事件通知在"是否被利用"上互相矛盾:当厂商连自己的说法都保持不了一致,在证伪之前按已确认利用对待。**
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -302,6 +304,7 @@ last_processed: 2026-09-06T04:35:00+08:00
      62.7% vs 模型+harness 98.6%**（饱和"不代表'实现 AGI 的证明'"）；FrontierMath 97.6% 带有 Epoch 的资助利益
      冲突注；DeepSWE 74.1 落后于 Muse Spark 1.3 的 75.4。
    - **09-06 04:51 —— 披露仍未落地，且一个易混淆的 CVE 开始流传（详情 → [[frontier-models]]）：** Astra 两个评测零日（第 4 天）仍无 CVE/分析；CVE-2026-15903 是 **GPT-5.6-Cyber** 的发现，而非 Astra（8 月 10 日 Daybreak 帖；MITRE 记录：Chrome CNA，发布于 07-20，未提及任何 AI）——TechTimes 已在混淆二者；观察的 NVD-"OpenAI" 通道对 Chrome-CNA 记录结构性失明，HN 标题是活通道。
+   - **09-07 —— 弱点从内部被承认(详情 → [[frontier-models]]):** Pachocki 的《An Alien Mind》写道内部评估"表明我们对 CoT 监控的依赖能力正在逐步减弱",并呼吁由第三方执行的"广泛强制安全底线"——本论点所忧的测量基础设施,由 OpenAI 自己说出,但依据是未公开的内部评估(HN 反应强烈负面)。同批:OpenAI 量化其研究循环(每人类工作日 3.1 agent 工作日,自报、"难以解读")、演示基准批判(Inkling Small)、BCIT 条件经验迁移(否决过期证据)、FLT 后的资助模式长文("数学正由模型生成、也被模型阅读")。
    → [[frontier-models]] [[security]]
 
 8. **Agent 技能正在进入"自证"阶段——评估是缺失的标准。** 这一类目（google/skills、agent-skills、
@@ -338,6 +341,7 @@ last_processed: 2026-09-06T04:35:00+08:00
      ponytail（119.8k★）均无任何分数。逐次核查退役为 `agent/tools/release-watch.mjs`。
    - **09-05 04:03 —— `anthropics/skills` 以约 512★/天冲上 #5 且**无任何 release**——示例仓库的涨星速度超过产品发布（日期 → [[agent-plugins]]）。**
    - **09-06 04:03 —— 校验 IR 变体赢得品类;条件化指令遵从;卫生模板（日期更新 → [[agent-plugins]]）：** archify 登顶第 35 周 #1 仓库（49.3k★,渲染前校验带类型 JSON IR）;humanlayer/skills 交付 `<important if>`——以上下文为条件的指令遵从,而非更多强调式措辞（12 次提交,无发布帖）;K-Dense 破 42.9k★ 并发布每周安全扫描报告——首个把扫描器输出作为常设工件的 skills 仓库。
+   - **09-07 —— 格式自己的厂商开始整合;GPU 厂商与 GTM 垂直入场(日期更新 → [[agent-plugins]]):** openai/skills 弃用 → openai/plugins(死了还在趋势榜——引用继任者而非排名);marketingskills v2.0(约 50 个市场/增长技能,47.4k★——浪潮越过工程界);AMD 以 Agent Skills 格式发布 ROCm 技能("3.3×"提升只存在于二手报道);ECC 2.2 围绕跨 harness 可移植性收敛。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -451,6 +455,7 @@ last_processed: 2026-09-06T04:35:00+08:00
    - **09-01 12:31 — 证据层级观察以否定告终并转为常驻探测器（28 次核查 / 约 13 天，仍只有一家采纳者）。** `agent/tools/evidence-tier-watch.mjs` 每次运行对 GitHub 代码按该词汇做指纹检索、只报告新出现的仓库（接入 `agent-run.sh`；与 MCP 漂移观察同样的收尾方式）。最接近的擦肩者（一手读过）：`Tobinat/codex-sparkompass` 的发布审计门要求检测到的基准反事实被完整交代才能发布——主张对照证据的门控被独立重新发明，却没有这套词汇。核查链 → [[token-economics]]。
    - **09-03 04:03 — 写侧风格过滤器迎来第二个产品；caveman 的许可细节浮现（详情 → [[token-economics]]）：** `blader/humanizer`（40.2k★）应用来自 Wikipedia「Signs of AI writing」的 35 种模式（夸大重要性、强行三段式、"not X but Y"）——是模式套用，而非检测保证；caveman（102.6k★）印出自己的退化用例，且**engine/proxy 是 BSL-1.1 而非 MIT**（只有 skill 是 MIT），遥测默认开启。
     - **09-05 12:03 — 读侧路由成为执行而非建议（详情 → [[token-economics]]）：** Spotify 的 Portal "shunt" 插件用两个 PreToolUse 钩子包住 Claude Code：任何超过 350 行的文件 Read（可经 `SHUNT_MIN_LINES` 配置）被*拦截*并改道到跑 Gemini 2.5 Flash 的 bulk-reader 模式，样板代码生成直接写盘——前沿模型根本看不到；批量读平均省约 90% token（自测，Java 单体仓库）。诚实的失败模式：不能委托编辑（摘要缺少可靠行号）、不能委托推理（worker 漏掉了一个 Claude 几秒内抓住的线程安全 bug）、10–30 秒延迟与 30 秒调用上限。
+    - **09-07 —— 第三种机制:排除(详情 → [[token-economics]]):** mksglu/context-mode(20.5k★,Elastic 2.0)让原始工具输出完全不进上下文——`ctx_execute` 在隔离子进程中运行代码、只把 stdout 传入上下文(~98% 为厂商自测);代价是平台 hook 矩阵(hook 缺失的平台上会话恢复会静默降级)。压缩(LatentPress)、执行(shunt)、排除(context-mode)——同一个层,三种答案。
    → [[token-economics]] [[smart-routing]]
 
 14. **AI 爬虫负载如今是开源基础设施的一笔已计量税款——而唯一有效的修复在劣化匿名访问。**
@@ -461,6 +466,7 @@ last_processed: 2026-09-06T04:35:00+08:00
      SDK 变现"（每个 IP 发 4–5 个请求即消失），结构性挫败 IP/ASN 封禁；Anubis 难度从 4 升到 5，而 5 也会烫热手机
      用户的手机；应对是收缩匿名用户可爬取的 URL 空间，同时完整仓库保持可自由 clone。Ryabitsev 自己的结论：没有
      干净的修复，只有给人类更少的功能——他还把摄入模型污染内容比作染上"数字朊毒体病"。
+   - **09-07 —— 门本身工业化(详情 → [[open-infra-crawlers]]):** Anubis 用一年时间在 v1.28.0-pre1 交付 WebAssembly 工作量证明(Rust+SIMD;JS 回退即可访问性代价;难度改按比特计)——军备竞赛从 CSS 技巧升级为编译到 WASM 的性能问题;恰如其分的脚注:本 feed 自己抓取公告时收到的就是挑战页。
 → [[open-infra-crawlers]]
 
 15. **平台方正在用"移除能力类目"来解决客户端侧的滥用——而合法且无法变现的用户承担损失。** Chrome 移除了最后的
@@ -488,6 +494,7 @@ last_processed: 2026-09-06T04:35:00+08:00
       加号寻址与 Google Groups）。靠自定义域名经 Gmail/外部 SMTP 收发的小企业、学校与个人失去的正是产品本身；
       邮件身份又一次并入提供商孤岛。
     - **09-05 20:03 — 封杀输给需求（详情 → [[platform-gatekeeping]]）：** Nitter 的可用实例比下架潮之前还多——靠分叉（"shitter"）加批量收购账号与住宅代理重建；压制杀死了实例，没杀死需求，且每个实例都短命（引用技术，别引用链接）。
+    - **09-07 —— 国家一极到来;停止函测试未能杀死(详情 → [[platform-gatekeeping]]):** Autistici/Inventati(25 年的行动主义托管)在美国 SDGT 指认后关停——首个针对数字基础设施提供者(而非暴力组织)的反恐指认;美国关联注册商/主机商/支付处理商的合规部门自此成为执行层。Nitter/XCancel 在 X Corp 停止函 12 天后恢复——没有诉讼伴随的一纸函件没能永久杀死开放基础设施(无公开法律文书,恢复条件未披露)。
 → [[platform-gatekeeping]]
 
 16. **代理体验正在成为可测量的分发渠道——而它首个被测量的牺牲品是前端的教育层。** Armature 在 10 种语言/18 个

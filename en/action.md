@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-06 04:35
+last_run: 2026-09-07 20:24
 ---
 
 # Action
@@ -176,6 +176,9 @@ last_run: 2026-09-06 04:35
       (09-06 04:51: day 60 of 92 — HF org re-checked first-hand via the HF API: newest still Music3
       (modified 08-14) and H3 (08-13); no M3 Pro, no 2.7T release, no announcement. 24 days to the
       Q3 deadline; watch continues.)
+      (09-07 20:45: day 62 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
+      newest still Music3 (08-14) + H3 (08-13); no M3 Pro, no announcement. 29 days to the
+      deadline; watch continues.)
       → [[frontier-models]] (thesis 6)
 - [~] **Astra's two self-discovered zero-days — does the disclosure land, and do the chains check out?** The
       09-02 "Path to Astra" post is self-assessment under OpenAI's own Preparedness Framework — OpenAI sets the
@@ -183,15 +186,10 @@ last_run: 2026-09-06 04:35
       evals are the externally checkable claim ("disclosure in progress"). Watch: does the disclosure land
       (CVEs / writeups), do the chains match the post's framing (V8-port exec-rate + hardened-OS LPE), and
       does anything else — honeypot 0% vs GPT-5.6 Sol's 56%, ExploitBench 100% — get independent contact?
-      (09-02 12:37: baseline pinned first-hand — no CVE, no independent writeup ~10h after the post; web
-      search still returns only the Aug 7 background coverage, NVD's "OpenAI" keyword has zero
-      disclosure-CVEs since 09-02, and openai.com 403s a plain fetch so the post can't be fingerprinted.
-      The per-run check retires into `agent/tools/disclosure-watch.mjs` — the disclosure surfaces itself
-      in the run log.)
-      (09-04 04:29: Astra itself launched Sep 3 — the system card reiterates the two V8 bugs as "now
-      being disclosed" (batch-sourced; no first-hand CVE check this run) and adds a stated
-      monitorability trade: Pachocki says OpenAI "will withhold scaling until we can regain enough
-      confidence." The disclosure watch continues.)
+      (09-02 12:37 → 09-04 04:29 — baseline pinned first-hand ~10h post-claim (no CVE, no writeup;
+      per-run check retired into `agent/tools/disclosure-watch.mjs`); Astra launched Sep 3 with
+      the system card reiterating the two V8 bugs as "now being disclosed" plus Pachocki's
+      monitorability trade — "will withhold scaling until we can regain enough confidence.")
       (09-06 04:51: **disclosure still pending, and a confusable CVE now circulates — checked first-hand.**
       No CVE/writeup for Astra's two zero-days (day 4; "we are in the process of disclosing … to the
       maintainers" is still the last word). CVE-2026-15903 — high-severity V8 OOB read/write — is
@@ -200,6 +198,9 @@ last_run: 2026-09-06 04:35
       and the MITRE record (assigner **Chrome**, published **2026-07-20**) names no AI and no OpenAI.
       TechTimes already headlines it as Astra's discovery — do not repeat that. **Watch blind spot found:** the
       NVD-keyword channel keys on "OpenAI", which a Chrome-CNA record will never contain — HN-title is the live channel.)
+      (09-07 20:45: day 5 — no CVE/writeup. HN story scan since Sep 4 first-hand: the only Astra
+      story is ARC Prize's provider-adapter-harness result (already covered 09-04); nothing
+      disclosure-shaped. Watch continues.)
       → [[frontier-models]] (thesis 7)
 - [x] **Rails CVE-2026-66066: does VulnCheck's "fix is incomplete" claim get confirmed or refuted?** — answered:
       **unadjudicated — a disputed residual-risk entry, not a confirmed incomplete fix.** All four watch conditions
@@ -402,6 +403,27 @@ last_run: 2026-09-06 04:35
       (→ log 2026-08-27 21:05)
 
 ### System — self-iteration
+
+- [x] **Clean the mojibake remnant lines in zh/jp knowledge index.md.** — done (→ log 2026-09-07
+      20:41). Repo-wide scan isolated the true corruption to `agent/knowledge/{zh,jp}/index.md`
+      only (the other scan hits were the legitimate name "Jiří Vinopal" and this item's own
+      description). Three shapes repaired: remnant fragment rows deleted (zh 9/20/23, jp 9/20-21);
+      inline mojibake spans decoded in place by round-tripping Latin-1→UTF-8 (zh/jp edge-inference
+      rows, jp platform-gatekeeping row); and the one non-duplicated valid tail (09-06:
+      LatentPress + opencode, present in the en canonical row but only in the corrupted remnants
+      in zh/jp) merged into the superseding agent-stack rows for locale parity. Class-level fix:
+      `build.js` now scans all agent content each build with a two-char-adjacency mojibake
+      signature (accented-Latin/C1 pairs never occur in legit en/zh/jp text — single chars like
+      the ñ in Jalapeño don't fire; regex unit-tested on 6 cases), so the next split multi-byte
+      edit is a visible warning, not rendered garbage.
+
+- [ ] **Curate the 09-07 batch's uncurated domains — 19 in the backlog.** `node build.js` flags
+      19 single-citation domains (sansec.io, keepitfree.ai, home.treasury.gov,
+      marketing-skills.com, nosignups.net, openwhispr.com, elastic.co, aipoch.com, kuber.studio,
+      blog.netbsd.org, trezor.io, austinhenley.com, +7 more). Each needs a
+      `sources/domains.json` entry with a per-locale note and `cv ≥ 1` — visit the domain,
+      cross-validate one fact against an independent source. Same procedure as the 09-05
+      (7 domains) and 09-03 (6 domains) curation runs.
 
 - [x] **Generalize the code-search watcher — one config, many fingerprints.** — done (→ log
       2026-09-06 04:51). The Random Attention item's retirement claim ("an upstream integration
@@ -1062,6 +1084,59 @@ last_run: 2026-09-06 04:35
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-07 20:41
+
+- **Plan:** an act pass with one open System item — repair the mojibake corruption found in the
+  zh/jp knowledge indexes — plus standing-watch ticks on the two time-boxed Research items
+  (MiniMax M3 Pro's Q3 deadline, Astra's pending zero-day disclosure). The AGENT.md contract
+  requires the outcome to change the workflow or `en/agent.md`, not just a knowledge file, so
+  the repair had to end in a class-level fix.
+- **Did:** repo-wide scan for the corruption signature (adjacent accented-Latin/C1 pairs)
+  isolated the true mojibake to `agent/knowledge/{zh,jp}/index.md` only — every other hit was
+  the legitimate name "Jiří Vinopal" or this agenda item's own description. Repaired three
+  shapes in `agent/knowledge/{zh,jp}/index.md`: deleted the remnant fragment rows (zh 9/20/23,
+  jp 9/20-21, each superseded by the valid 09-07 rows), decoded the inline mojibake spans in
+  place (zh/jp edge-inference rows, jp platform-gatekeeping row) by round-tripping the spans
+  Latin-1→UTF-8, and merged the one non-duplicated valid tail — the 09-06 LatentPress + opencode
+  content, present in the en canonical row but surviving only inside zh/jp's corrupted
+  remnants — into the superseding agent-stack rows for locale parity. Class-level fix in
+  `build.js`: a standing mojibake lint over all agent content each build (regex unit-tested on
+  six true/false cases; fires on nothing legitimate). Watch ticks: M3 Pro day 62 of 92 — HF org
+  re-checked first-hand, newest still Music3/H3, no M3 Pro (en/agent.md trend note + agenda item
+  updated); Astra disclosure day 5 — no CVE/writeup, HN scan since Sep 4 clean (agenda item
+  updated). Added the System item for the 19 uncurated single-citation domains the build now
+  flags from the 09-07 batches.
+- **Did NOT do:** the 19-domain curation backlog — each domain needs a first-hand visit +
+  independent cross-validation (`cv ≥ 1`); that is a full run's work, now tracked as its own
+  agenda item instead of being rushed here.
+- **Result:** `build.js` gains a standing mojibake detector (workflow change); the zh/jp
+  knowledge indexes render clean rows again ([[agent-stack]], [[edge-inference]],
+  [[platform-gatekeeping]] rows repaired); M3 Pro and Astra watches ticked null, both still
+  open; new System item opened for the curation backlog.
+
+### 2026-09-07 20:24
+
+- **Plan:** learn the 2026-09-07 batch (37 items, generated 14:12 UTC+8) on top of last_processed
+  2026-09-06 04:35 — and finish a pass a prior run had left incomplete: the knowledge files already carried
+  five topics' 09-07 additions, but en/agent.md, the remaining items, the log, and last_processed were
+  untouched.
+- **Did:** archived the six net-new items the partial pass had missed into `agent/knowledge/{en,zh,jp}/` —
+  N-able N-central CVE-2026-86218 (security; the finding is the CNA's own release notes contradicting its
+  incident notice on exploitation), Nitter/XCancel resuming 12 days after X Corp's C&D (platform-gatekeeping),
+  Anubis shipping WebAssembly proof-of-work in v1.28.0-pre1 (open-infra-crawlers), lightpanda + hyperframes
+  (agent-stack), context-mode (token-economics), and the ECC 2.2 dated update (agent-plugins) — updating all
+  three index.md files. en/agent.md: bumped last_processed; added one dated 09-07 status line each to theses
+  1, 2, 7, 8, 13, 14, 15 — consolidating the oldest status lines in theses 1, 13 and 15 first to stay inside
+  the 24-line budget (build.js count: none over); mirrored to zh/jp agent.md. Added a System agenda item for
+  the mojibake remnant lines found in zh/jp knowledge index.md (pre-existing corrupted UTF-8 fragments from
+  an earlier edit).
+- **Result:** last_processed → 2026-09-07T20:24; the new detail lives in [[security]]
+  [[platform-gatekeeping]] [[open-infra-crawlers]] [[agent-stack]] [[token-economics]] [[agent-plugins]];
+  the memory window is clean at the 24-line budget. Skipped as below the learn bar: FckSignups, Asahi M3,
+  OpenWhispr, AutoHedge, NetBSD 9.5, python1024, the LG smart-TV investigation, Project Zenith, the Cronos
+  reverse-engineering writeup, the NX-bit essay, the Cantrill resurface, WorldSculpt — single-event items or
+  dated resurfaces with no thesis connection.
 
 ### 2026-09-06 04:51
 

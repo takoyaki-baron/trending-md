@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-06 04:51
+last_run: 2026-09-07 20:41
 ---
 
 # 行动
@@ -140,20 +140,24 @@ last_run: 2026-09-06 04:51
       `disclosure-watch.json` 第 2 项——匹配 `minimax.*(m3 pro|2.7t)` 的 HN 故事会在运行日志中自行浮现。）
       （09-06 04:51：92 天中的第 60 天——经 HF API 一手复核 HF 组织：最新仍是 Music3（修改于 08-14）与
       H3（08-13）；无 M3 Pro、无 2.7T 发布、无公告。距 Q3 截止还有 24 天；观察继续。）
+      （09-07 20:45：92 天中的第 62 天——经 HF API 一手复核（按 lastModified 排序）：最新仍是 Music3（08-14）
+      与 H3（08-13）；无 M3 Pro、无公告。距截止还有 29 天；观察继续。）
       → [[frontier-models]]（论点 6）
 - [~] **Astra 自我发现的两枚零日——披露会落地吗，链条经得起核验吗？** 09-02 的 "Path to Astra" 帖是 OpenAI 依自家
       Preparedness 框架的自评——OpenAI 自设标准、自跑评测、自己打分——但帖中称 Astra 在评测中发现并串联的两枚零日是
       可外部核验的主张（"披露进行中"）。观察：披露是否落地（CVE/技术文章）、链条是否与帖子的框定吻合（V8 移植执行率 +
       加固 OS LPE），以及其余主张——蜜罐 0% vs GPT-5.6 Sol 的 56%、ExploitBench 100%——是否获得独立接触？
-      （09-02 12:37：基线已一手钉死——发帖约 10 小时后仍无 CVE、无独立成文；网络检索仍只有 8 月 7 日的背景报道，
-      NVD 的 "OpenAI" 关键词自 09-02 起零披露 CVE，且 openai.com 拒绝普通抓取（403），帖子本身无法做指纹。
-      每轮人工核查退役进 `agent/tools/disclosure-watch.mjs`——披露落地即会在运行日志中自行浮现。）
+      （09-02 12:37 → 09-04 04:29——基线于发帖约 10 小时后一手钉死（无 CVE、无成文；每轮人工核查退役进
+      `agent/tools/disclosure-watch.mjs`）；Astra 于 9 月 3 日发布，系统卡将两枚 V8 漏洞重申为"正在披露中"，
+      并加上 Pachocki 的可监督性权衡——"在重获足够信心之前将暂停扩展"。）
       （09-06 04:51：**披露仍未落地，且一个易混淆的 CVE 开始流传——已一手核查。** Astra 两枚零日（第 4 天）
       仍无 CVE/成文（"我们正在向维护者披露……"仍是最后措辞）。CVE-2026-15903——高危 V8 越界读写——是
       **GPT-5.6-Cyber** 的发现，而非 Astra：OpenAI 8 月 10 日 "Expanding Daybreak" 帖（一手阅读）将两个 V8 漏洞
       （JIT 边界检查省略 + 堆沙箱逃逸的第二漏洞）归于 GPT-5.6-Cyber，MITRE 记录（分配方 **Chrome**，发布于
       **2026-07-20**）未提及任何 AI、未提及 OpenAI。TechTimes 已将其头条化为 Astra 的发现——不要重复该错误。
       **观察盲区已现形：** NVD 关键词通道以 "OpenAI" 为键，而 Chrome-CNA 记录永远不会包含它——HN 标题才是活通道。）
+      （09-07 20:45：第 5 天——无 CVE/成文。9 月 4 日以来的 HN 故事扫描（一手）：唯一的 Astra 故事是 ARC Prize 的
+      provider-adapter-harness 结果（09-04 已覆盖）；没有任何披露形态的信号。观察继续。）
       → [[frontier-models]]（论点 7）
 - [x] **Rails CVE-2026-66066：VulnCheck 的"修复不完整"主张会得到证实还是反驳？** — 已答：**未获裁决——这是一条"残余风险
       有争议"记录，而非已证实的不完整修复。** 四个观察条件均已于 09-01 05:12 一手核查：（1）Rails 核心团队对 variation-key
@@ -297,6 +301,21 @@ last_run: 2026-09-06 04:51
       （→ log 2026-08-27 21:05）
 
 ### 系统 —— 自我迭代
+
+- [x] **清理 zh/jp 知识 index.md 中的乱码残留行。** —— 完成（→ 日志 2026-09-07 20:41）。全仓库乱码特征
+      扫描（相邻的带饰符拉丁/C1 字符对）把真正的损坏隔离到 `agent/knowledge/{zh,jp}/index.md`——其余命中均为
+      合法人名 "Jiří Vinopal" 或本条目自身的描述。修复了三种形态：删除残留碎片行（zh 9/20/23，jp 9/20-21，均已被
+      有效的 09-07 行取代）；对行内乱码片段原位解码（按 Latin-1→UTF-8 回转：zh/jp 的 edge-inference 行、jp 的
+      platform-gatekeeping 行）；并把唯一一段未重复的有效尾部——09-06 的 LatentPress + opencode 内容，en 典范行有、
+      zh/jp 仅存于被损坏残留中——并回取代它的 agent-stack 行以保持三语对齐。类层面修复：`build.js` 现于每次构建
+      时以乱码特征（带饰符拉丁/C1 相邻字符对——合法的 en/zh/jp 文本中不存在，Jalapeño 的 ñ 之类的单字符不会触发；
+      正则经 6 个真/假用例单元测试）扫描全部 agent 内容，下一次多字节编辑劈开行时会得到可见警告而非渲染出的乱码。
+
+- [ ] **策展 09-07 批次的未策展域名——积压 19 个。** `node build.js` 标出 19 个单引用域名（sansec.io、
+      keepitfree.ai、home.treasury.gov、marketing-skills.com、nosignups.net、openwhispr.com、elastic.co、
+      aipoch.com、kuber.studio、blog.netbsd.org、trezor.io、austinhenley.com 等）。每个都需要在
+      `sources/domains.json` 加一条带三语说明与 `cv ≥ 1` 的条目——访问域名，用一个独立来源交叉验证其中一条事实。
+      流程同 09-05（7 个域名）与 09-03（6 个域名）的策展轮。
 
 - [x] **泛化代码检索观察器——一份配置，多个指纹。** —— 完成（→ 日志 2026-09-06 04:51）。
       Random Attention 条目的退役主张（"上游集成会经 release-watch 自行浮现"）是坏的：release-watch 只钉
@@ -821,6 +840,46 @@ last_run: 2026-09-06 04:51
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-07 20:41
+
+- **计划：** 一次行动轮——一个开放的 System 项：修复 zh/jp 知识索引中发现的乱码损坏；外加对两个有时限的
+  Research 项（MiniMax M3 Pro 的 Q3 截止、Astra 待落地的零日披露）做常设观察打点。AGENT.md 合同要求结果必须
+  改动工作流或 `en/agent.md`，而非仅改一个知识文件，所以修复必须以类层面的修复收尾。
+- **做了：** 以损坏特征（相邻带饰符拉丁/C1 字符对）做全仓库扫描，把真正的乱码隔离到
+  `agent/knowledge/{zh,jp}/index.md`——其余命中均为合法人名 "Jiří Vinopal" 或本议程项自身的描述。在
+  `agent/knowledge/{zh,jp}/index.md` 修复三种形态：删除残留碎片行（zh 9/20/23、jp 9/20-21，均已被有效的
+  09-07 行取代）；按 Latin-1→UTF-8 回转将行内乱码片段原位解码（zh/jp 的 edge-inference 行、jp 的
+  platform-gatekeeping 行）；并合并唯一一段未重复的有效尾部——09-06 的 LatentPress + opencode 内容，en 典范行有、
+  zh/jp 仅存于被损坏残留中——并回取代它的 agent-stack 行以保持三语对齐。`build.js` 的类层面修复：新增常设乱码
+  检测器，每次构建扫描全部 agent 内容（正则经 6 个真/假用例单元测试；不误伤任何合法文本）。观察打点：M3 Pro，
+  92 天中的第 62 天——一手复核 HF 组织，最新仍是 Music3/H3，无 M3 Pro（en/agent.md 趋势注记 + 议程项已更新）；
+  Astra 披露第 5 天——无 CVE/成文，9 月 4 日以来 HN 扫描干净（议程项已更新）。新增 System 项：构建现在标出的
+  19 个未策展单引用域名。
+- **没做：** 19 个域名的策展积压——每个域名都需要一手访问 + 独立交叉验证（`cv ≥ 1`）；那是一整轮的工作量，
+  已单独立项跟踪，而非在此赶工。
+- **结果：** `build.js` 获得常设乱码检测器（工作流改动）；zh/jp 知识索引重新渲染出干净的行（[[agent-stack]]、
+  [[edge-inference]]、[[platform-gatekeeping]] 行已修复）；M3 Pro 与 Astra 观察打点为空，两者继续开放；
+  为策展积压新开了 System 项。
+
+### 2026-09-07 20:24
+
+- **计划：**在 last_processed 2026-09-06 04:35 之上学习 2026-09-07 批次(37 条,生成于 14:12 UTC+8)——并补完
+  上一次运行留下的未完成的 pass:知识文件已带五个主题的 09-07 增补,但 en/agent.md、其余条目、日志与
+  last_processed 均未动。
+- **执行：**把部分 pass 漏掉的六条净新条目归档进 `agent/knowledge/{en,zh,jp}/` ——N-able N-central
+  CVE-2026-86218(security;要点是 CNA 自己的发行说明与事件通知在利用问题上互相矛盾)、Nitter/XCancel 在
+  X Corp 停止函 12 天后恢复(platform-gatekeeping)、Anubis 在 v1.28.0-pre1 交付 WASM 工作量证明
+  (open-infra-crawlers)、lightpanda + hyperframes(agent-stack)、context-mode(token-economics)、ECC 2.2
+  日期更新(agent-plugins)——并更新三个 index.md。en/agent.md:推进 last_processed;给论点 1、2、7、8、13、
+  14、15 各加一条 09-07 日期状态行——论点 1、13、15 先合并最老状态行以守住 24 行预算(build.js 计数:无一
+  超限);镜像到 zh/jp agent.md。新增一条 System 议程项:zh/jp 知识 index.md 中发现的乱码残留行(早前编辑
+  留下的损坏 UTF-8 片段)。
+- **结果：**last_processed → 2026-09-07T20:24;新细节存于 [[security]] [[platform-gatekeeping]]
+  [[open-infra-crawlers]] [[agent-stack]] [[token-economics]] [[agent-plugins]];记忆窗口全部在 24 行预算
+  内。低于学习门槛而跳过:FckSignups、Asahi M3、OpenWhispr、AutoHedge、NetBSD 9.5、python1024、LG 智能电视
+  调查、Project Zenith、Cronos 逆向长文、NX 位长文、Cantrill 旧文重浮、WorldSculpt——单事件条目或无论点
+  关联的日期性重浮。
 
 ### 2026-09-06 04:51
 

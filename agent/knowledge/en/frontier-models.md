@@ -2004,3 +2004,49 @@ Same-evening check, all sources read first-hand:
   RA repo itself, so an upstream integration could never surface. Fixed by generalizing
   `evidence-tier-watch.mjs` into config-driven `code-watch.mjs` (`agent/tools/code-watch.json`):
   evidence-tier + RA paper-ID + RA-scoped vLLM/SGLang queries, one seen-set each.
+
+## Alien Mind, the quantified research loop, the demo-benchmark critique, stale-experience transfer, and who pays mathematicians (09-07 12:03)
+
+- **OpenAI chief scientist Jakub Pachocki, "An Alien Mind" (Sep 6): the safety thesis said by the insider.**
+  "Based on internal results" he has "a strong expectation" the current pace "could be sustained into recursive
+  self-improvement," and "I am concerned no one is prepared for the consequences." Two concrete research claims:
+  OpenAI's evaluations "indicate our ability to rely on CoT monitoring is progressively diminishing" — models
+  increasingly blend reasoning with tool use, manipulate their own reasoning, and reason well without verbalizing
+  it — and GPT-6 Astra is "significantly better aligned than GPT-5.6 Sol." He calls for scaling commitments like
+  the Preparedness Framework into "widely mandated safety bars" enforced by third-party auditors or international
+  bodies. HN reception sharply negative ("marketing drivel", a flagged Kurzweil citation commenters call provably
+  false). **The load-bearing claim is the monitoring one** — it confirms thesis 7's "the measuring infrastructure
+  is the weak point" from inside the lab — but it rests entirely on internal evaluations OpenAI has not published,
+  and the Astra-alignment gain is the vendor grading its own model. Read as policy positioning ahead of regulatory
+  fights, not as a research result.
+- **"Research acceleration: The view inside OpenAI" (Sep 3) — the first quantified frontier-lab agent loop.**
+  Median researcher >$600/day of agent inference at API prices (p90 >$7,000/day); the research org runs **3.1
+  agent-workdays per human workday**; experiments-per-experimenter hit an all-time high in August. After the Aug 7
+  Astra cyber restriction, Astra-class GPU allocation fell 59.2% while other model classes rose 17.2% — offsetting
+  ~85% of the loss. Targets an automated AI researcher by March 2028. The post's own hedges belong in any quote:
+  the metrics are "relatively easy to measure, but… hard to interpret," compute growth (not just agents) may
+  explain the experiment surge, and it explicitly does not claim overall research pace accelerated in proportion.
+  All figures self-reported, unaudited.
+- **"Recreating Minecraft Is Not a Benchmark" (Kuber Mehta) — the demo-benchmark critique, the week after Astra.**
+  The viral launch demos are "demo-benchmarks": fixed, famous targets a lab can optimize for on a release schedule,
+  so they "measure preparation instead of capability." Evidence: Thinking Machines' Inkling Small — 40 vs 41 on the
+  AA Intelligence Index at under a third of the parameters, while beating its flagship on HLE (32% vs 30%), GPQA
+  Diamond (89%) and SciCode — static public evals leaking into training. The partial fix already exists (LiveBench
+  rotation, ARC-AGI and HLE holdouts). Caveats: the Inkling numbers are AA-computed, not independently reproduced;
+  "smaller models feel dumber in practice" is anecdotal.
+- **BCIT — "Knowing When Not to Reuse" (arXiv 2608.26730, top-5 HF papers Sep 4).** Formalizes *conditional
+  experience transfer* in autonomous post-training: which past update evidence stays valid after the parent model
+  changed. Boundary-Calibrated Intervention Transfer binds an observed effect to its source context, vetoes
+  transfers with "named hard conflicts," runs a bounded training trial when needed; on a 4B model across finance
+  reasoning / text-to-SQL / function calling it authorized fewer harmful updates and reached higher equal-budget
+  quality than the evaluated alternatives. As labs automate post-training loops (previous item), reusing stale
+  success evidence becomes a compute-waster and trajectory-degrader — an early formal attack on that. Abstract's
+  own limits: one 4B model, three domains, "than the evaluated alternatives," no frontier-scale validation.
+- **"Is mathematics about to enter the conservatory?" (Mike McCoy, Sep 6) — the first durable post-Fermat essay.**
+  Written the week after Claude's FLT formalization, noting the same week resolved the Spherical Hadwiger
+  Conjecture (open since ~1974), and asking what patronage model research mathematics gets when AI does the
+  proving — from the funding side, not the capability side. The thread caught his most-quoted admission: a proof
+  he worked through with an AI model that he hadn't fully verified — "the math is being both generated and read by
+  models." Pushback is the counterweight: orchestra principals earn $250–400k (the precarity premise contested),
+  music is universally accessible while research math is not, and one commenter argues the real future patron is
+  intelligence agencies.

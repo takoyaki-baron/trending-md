@@ -137,3 +137,34 @@ monetize.
 - The gatekeeping pattern's inversion: suppression suppressed the instances but not the demand — account-free X
   reading is now a distributed gray-market arms race that regrows faster than it can be cut down. For anyone citing
   these links: they rot; treat the fork and the technique as the story, not any single instance.
+
+## The state acts on the provider itself — Autistici/Inventati shuts down (09-07 12:03)
+
+- **A/I — the Italian collective running privacy email/hosting (autistici.org / inventati.org) since 2001 —
+  announced Sep 6 it is shutting down all services, with the OFAC General License 36 wind-down ending Sep 25.** The
+  endgame of the 08-29 designation: the US State Department designated A/I a Specially Designated Global Terrorist
+  on Aug 26, 2026. The collective says its domain was made unreachable without notice and that continuing to
+  operate would endanger its users and people near the collective; its announcement rejects the US government's
+  characterization outright. Treasury and State press releases confirm the designation; the domain-seizure claim
+  rests on A/I's own account, and the allegations are contested and unadjudicated. The HN thread (393 pts / 265
+  comments) runs on solidarity and on what US sanctions power means for internet infrastructure.
+- **Why it extends the pattern:** every prior entry in this file was a platform removing a capability class or
+  tightening a contract. This is the state acting *directly* on the infrastructure provider — the first
+  counterterrorism designation aimed at a digital-infrastructure provider rather than a violent group — with direct
+  spillover for any US-linked registrar, host or payment processor serving controversial communities: the
+  compliance departments of those vendors are now the enforcement layer, no takedown notice required.
+
+## Nitter and XCancel resume service — 12 days after X Corp's cease-and-desist (09-07)
+
+- The two largest X/Twitter frontends came back online Sep 6 (HN #3, 779 pts), twelve days after going dark Aug 24
+  on C&D letters that alleged "unlawful use and circumvention of X's API," cited the Texas Harmful Access by
+  Computer Act and the Lanham Act, and demanded permanent takedown of *all* Nitter instances **plus the code
+  repository** by Aug 25 5pm EST. Creator Zedeus took the services offline and stopped development "for the time
+  being" while seeking legal advice, saying only they "won't be commenting further on the specifics" — then
+  resumed without publishing any terms. The repo stayed up throughout.
+- **Why it matters:** the first test of whether a C&D *without litigation* can permanently kill widely-used open
+  infrastructure — the resumption implies counsel found the claims contestable enough to risk operating. Caveats
+  are load-bearing: no public legal filing exists, any conditions of the resumption are undisclosed, and the whole
+  account rests on Zedeus's statements. The HN thread reads the episode as a live probe of scraper liability under
+  state computer-misuse laws. This closes the loop with the 09-05 note above: the takedown lost to demand once
+  already (the "shitter" fork regrew); now even the *original* targets judged the letters survivable.

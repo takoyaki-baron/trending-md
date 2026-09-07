@@ -49,3 +49,19 @@ response that works makes the service worse for humans.
 
 Sources: [Creepy crawlies (people.kernel.org)](https://people.kernel.org/monsieuricon/creepy-crawlies) ·
 [HN front page Aug 30](https://news.ycombinator.com/front?day=2026-08-30)
+
+## Anubis ships WebAssembly proof-of-work after a year (09-07)
+
+- "It took a year to ship WebAssembly in Anubis" (Techaro, Sep 6): the WASM PoW itself shipped in
+  **v1.28.0-pre1 "Wuk Lamat" (Aug 30)** — Rust compiled to WebAssembly runs the hash check with SIMD where
+  browsers support it, falling back to pure JavaScript when WASM is disabled (slower, because those clients
+  usually disable the JIT; the progress bar doesn't update during wasm2js checks — a known issue). Difficulty
+  semantics change: WASM counts leading *bits*, so sha256 difficulty 16 ≈ the old "fast" difficulty 4. New
+  challenge methods are disabled by default pending testing. Also operator-relevant: v1.27.0 (Aug 8) derives
+  cookie names from cookie settings — a breaking change that fixed infinite challenge loops.
+- **The arms race moved from CSS tricks to a compile-to-WASM performance problem**, and the JS fallback is the
+  accessibility price: readers on locked-down browsers pay a slower challenge — the same "fewer features for
+  humans" endgame Ryabitsev named. Fitting empirical footnote: this feed's own fetch of the announcement was
+  served Anubis's "Access Denied" challenge page. The tool works.
+  Sources: [Techaro blog](https://anubis.techaro.lol/blog/2026/anubis-wasm/) ·
+  [TecharoHQ/anubis releases](https://github.com/TecharoHQ/anubis/releases)

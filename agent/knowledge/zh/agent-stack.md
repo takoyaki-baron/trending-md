@@ -1271,3 +1271,35 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   `gpt-6-astra` 的可见性。agent 时代的承重基础设施毫不起眼:OAuth 怪癖、thinking-block 协议(Claude 5.1+ 绑定,
   可配置退出)与供应商超时(默认 5 分钟)决定一个新模型第一天能不能用。维护面积随星数扩张:约 4.2k open issue、
   1.6k open PR 对 15.7k 次提交。
+
+## 溯源原生科研工作台;设计即代码;带信任标签的数学工具;一门语言活过它的公司(09-07 12:03)
+
+- **aipoch/open-science——本地优先、每个产物都带溯源的 AI 科研工作台**(Apache-2.0,3.8k★,今日 +145;触发点
+  是 v0.23.0 发布而非发布事件)。Electron/React/Prisma-SQLite 桌面工作台,包装可选的 agent 后端(Claude Code、
+  OpenCode、Codex、CodeBuddy),配 Python/R notebook、18 个内置科学技能(AlphaFold2、Boltz、DiffDock、ESM-2、
+  scGPT、Remote Compute SSH)和 24 个科研连接器(PubMed、bioRxiv、ChEMBL、Clinical Trials)。差异化在溯源链:
+  每个产物都是不可变、带校验和的版本,绑定到生成它的代码、执行历史、环境清单和确切的会话分支——无法验证的
+  证据被显式标记为不可用。附 CLI + 无头 SDK。异常诚实:有"What This Is Not"一节,预先否认竞争对手常被冠以的
+  两种定位(不是聊天 UI,不是非官方客户端);README 声明生成产物"不能替代专家判断、统计审查或对一手证据的
+  验证"。
+- **腾讯混元《Editable Visual Design》(arXiv 2609.04034,516 赞,9 月 6 日 HF 论文第一)——coding agent 的
+  设计即代码。**VLM(需求理解、规划、写码、审美判断)按需驱动图像生成模型,走"先想象、后执行"循环:先生成
+  想象视觉以建立审美先验,经 alpha/绿幕抠图切出无文字素材,再写带显式图层的原生 HTML/CSS。验证 = 无头浏览器
+  中的确定性布局检查 + VLM 对渲染截图的审查;"Agent Design Replay"把整条轨迹序列化以便复现。展示:一份信息
+  密集的野外手册,120 个可编辑图层分 13 组;修复一到两轮收敛。论文的诚实即注意点:"因此我们报告案例而非
+  分数"——美学与可编辑性没有 ground-truth 指标,输出受底层模型限制,且只演示了单页设计。
+- **MathKernel——带信任标签的 LLM 数学工具**(`staatsgeheim/MathKernel`,MIT,v1.3.0——早期:20★、4 次提交)。
+  Python 库 + MCP 服务器,经 FastMCP 3 暴露 160+ 个 `math_*` 工具,包装 SymPy、Z3、Lean 4 + Mathlib(首启自动
+  安装)、mpmath 区间算术、numba、CUDA/CuPy、python-flint/Arb。设计理念是"证据感知":每个结果带信任标签——
+  `formal` > `exact` > `symbolic` > `interval_certified` > `numeric` > `empirical`——且整体信任被断言所需的
+  最弱证据封顶;后端分歧保留为冲突而非取平均;十进制输入把信任封在 `numeric`;渲染器可以呈现结果但永远不能
+  升级证据。早期、未证明,但它说对了正确的契约:模型解释意图,工具建立证据,溯源是类型化的而非隐含的。
+  观察该标签方案会不会被更大的 MCP 数学服务器采纳——那部分值得抄,即使这个实现不。
+- **D2 转非营利——Terrastruct 关停,D2 Studio 与 TALA 开源**(`terrastruct/d2` → `d2lang/d2`,25.2k★,MPL-2.0,
+  仍在发验证版;据报道 Hack Club 资助非营利)。维护者 alixander(Dylan)Wang 在 HN 帖中确认:迄今付费产品的
+  D2 Studio 与 TALA 排版引擎将开源。最锋利的一句:"D2 至此一直是手写代码的产物。那个时代结束了"——今后 Wang
+  将"欢迎 AI 贡献,并且……用 AI 审查你的 AI",只保留写作是人类。这是两个转型同时进行的罕见实弹测试:一家
+  公司持有的语言靠非营利治理活过它的公司,以及一个 25k-star 代码库围绕 AI 写、AI 审的代码重组——评论区恰好
+  在这里分裂,还有人质疑一个面向青少年的资助方资助一个 OpenAI 基础设施人员维护的项目。
+- **lightpanda-io/browser —— "给代理用的浏览器"层开始收敛为专用引擎**(`lightpanda-io/browser`,Zig,AGPL-3.0,34.6k★,+116/日)。不是 Chromium 分支也不是 WebKit 补丁:从零构建的浏览器——JS 用 v8,解析用 html5ever,HTTP 用 libcurl,**完全没有渲染引擎**——面向 AI 与自动化负载。新增代理表面:`lightpanda agent` 以自然语言控制浏览器,支持 Anthropic/OpenAI/Gemini/Ollama 后端(或 `--no-llm` 免模型),PandaScript 可录制/可重放的确定性脚本,以及带每连接会话隔离的原生 MCP 服务器——同时兼容 CDP 与 WebDriver BiDi(Puppeteer/Playwright)。宣称 100 页测试中内存约为 headless Chrome 的 1/16、速度约 9 倍(厂商自测)。从零构建的代价:Linux 二进制链接 glibc(在 Alpine/musl 上失败),无原生 Windows(仅 WSL2),遥测默认开启,Web Platform Tests 结果不完整,只有 nightly 构建——没有带版本号的发布。与代理自有浏览器(Cowork、ego-lite)同一押注的引擎侧版本:专用引擎,而非 Chromium 包装。
+- **heygen-com/hyperframes —— 视频成为代理的*输出*模态**(`heygen-com/hyperframes`,TypeScript,Apache-2.0,44.7k★,+220/日,#1 trending)。纯 HTML 合成——时序以 data 属性表达——经 headless-Chrome 帧定位器加 FFmpeg 转成确定性 MP4("same input, same frames, same output"),面向 CI 与回归测试。自带 20 个 agent skills(`npx skills add heygen-com/hyperframes`)教 Claude Code/Cursor/Codex 视频生产循环,动画适配器(GSAP、CSS、Lottie、Three.js、Anime.js、WAAPI),Studio 浏览器编辑器,以及 AWS Lambda 分布式渲染。相对 Remotion 的两个差异轴:纯 HTML vs React 组件,Apache-2.0 vs source-available。**已应用聚合陷阱检查:** 该仓库靠 4–5 月三个几乎无人注意的 Show HN(各 3–6 分)涨到 44.7k 星,且没有新的发布事件驱动今天的 #1——是持续动能,引用仓库而非排名。README 自认 Remotion Lambda 是"更成熟的云渲染器"。

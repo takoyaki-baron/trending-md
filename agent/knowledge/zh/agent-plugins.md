@@ -587,3 +587,28 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   3,000 行、416 KB 的 Cisco AI Defense Skill Scanner 日志,每周增量 + 约 30 天全量重扫)——本 feed 追踪到的第一个
   把扫描器输出作为常设工件发布的 skills 仓库。值得保留的作者自警:163 个 skill 带来真实上下文成本("别全装"),
   临床类 skill "绝不用于临床决策",per-skill 许可与仓库 MIT 许可不同,v2.43.0 的路径迁移会使旧安装失效。
+
+## openai/skills 弃用;技能格式迎来 GPU 厂商和市场营销垂直(09-07 12:03)
+
+- **`openai/skills` 已弃用——Codex 技能整合进 `openai/plugins`。**官方"Skills Catalog for Codex"(25.5k★)仍在
+  靠残余注意力上趋势榜,但其 README 以"Important"横幅开篇:"This repository is deprecated."替代品
+  `openai/plugins`(5.4k★,768 forks)把一切重组到 `plugins/<name>/` 下:必需的 `.codex-plugin/plugin.json`
+  manifest,可选 `skills/`、`.mcp.json`、`agents/`、`commands/`、`hooks.json` 面,外加
+  `.agents/plugins/marketplace.json` 默认市场 manifest;build-plugins 指南覆盖纯技能插件。此前按 `openai/skills`
+  (其 `$skill-installer` 流程)固定安装的团队被迁往另一套分发机制——且 `plugin.json` 映射此前已在收敛
+  (见 Codex PR #35105 ABI 注)。教科书级聚合陷阱:仓库在趋势榜上,而它自己的 README 说它已死——引用替代品,
+  而非排名。
+- **marketingskills v2.0——技能浪潮跨出工程进入 GTM。**`coreyhaines31/marketingskills`(MIT,47.4k★,今日
+  +355):约 50 个 markdown 技能,覆盖 CRO、文案、SEO(含面向 LLM 答案可见性的 `ai-seo`)、分析、广告、生命周期
+  邮件、流失、定价、revops——全部交叉引用基础 `product-marketing` 上下文技能,六种安装路径(npx `skills`
+  CLI、Claude Code 市场、clone/copy、submodule、fork、SkillKit)。v2.0 改名 17 个技能并合并 `page-cro`+
+  `form-cro` → `cro`,附完整改名映射。仓库自述注意点:升级会留下需手动删除的 v1.x 旧目录;CLI 在 agent 会话
+  内运行时只静默安装到 `.agents/skills/`——不传 `-a claude-code` 则 Claude Code 什么都看不到。
+- **ROCm 10.0——GPU 厂商把 Agent Skills 格式采纳为一等支持面。**AMD 十周年版本(8 月 27 日发布,9 月 7 日上
+  HN)随附 **AMD Skills**(Agent Skills 格式,面向 Claude/Cursor/Codex;`github.com/amd/skills`:`rocm-doctor`、
+  Instinct/EPYC 上的 LLM 服务工作流)、技术预览 `rocm` CLI(`rocm serve`、`rocm examine`、气隙 bundle)、
+  **Hyperloom**(开源 agent 化 Profile→Analyze→Plan→Optimize→Validate 循环——TraceLens-Agent、Magpie、
+  IntelliKit、GEAK、Arbor;声称"数周人工优化缩短到数小时")、RCCL 上游合并进 NCCL 2.30.4、统一 ROCm Core SDK。
+  **事实核查比发布本身更重要:**二手报道(StorageReview、Wccftech)转述的"相对 ROCm 7 推理提升 3.3×"在 AMD
+  自己的帖子中**并不存在**——AMD 给出的唯一量化主张是 Hyperloom 的"数周→数小时"。引用博客,不要引用倍数。
+- **ECC 2.2 —— 9 月 1 日报道的更新**(252k★,+1,905/日,当日最大涨星)。这套 harness 调优包(68 个代理、286 个技能、94 个命令)新增了面向 Claude Code、Codex 与 Kimi Code 的引导式安装(`npx ecc-universal setup`),2.1 的 Plan Canvas(用于标注代理计划的回环浏览器 UI),Kimi Code 安装目标,以及经 Itô 的自托管 GPU 算力;统一的 Memory Vault(`ecc memory`)开发中。信号:harness 调优类目正围绕**跨 harness 可移植性**收敛——Claude Code/Codex/Kimi/Cursor 被当作可互换运行时,且诚实记录每平台的功能差异(Kimi 未配置 hooks,Cursor 行为随构建而变)。随涨星速度上扬值得重复的 README 安全提示:只从官方渠道安装——非官方镜像"可能包含恶意软件"。
