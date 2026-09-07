@@ -1,8 +1,8 @@
 ---
 date: 2026-09-07
-updated: 2026-09-07T04:17:00+08:00
+updated: 2026-09-07T12:18:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -253,13 +253,153 @@ Trezor 于 9 月 5 日披露，履约合作伙伴 ShipMonk 的泄露事件又暴
 
 ---
 
+## 18. 1024 字节的 Python 解释器——直接执行、零错误处理,"为了感受自己是个人类"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 138+ pts · 54 条评论 · ~4h 前 (~08:00 UTC+8)
+- **Tags:** `python` `interpreters` `c` `code-golf` `compilers`
+
+Austin Z. Henley 用恰好 1024 字节的 C 写了一个 Python 子集解释器——不用宏、不用库、没有 AST、没有字节码。表达式在递归下降解析的同时直接求值;`while`/`for` 循环记住源码位置、每次迭代重新解析;函数以源码位置的形式存在符号表里,调用时跳转过去,由 C 调用栈天然处理块递归。它能跑带有真正 Python 语法的 FizzBuzz——`def`、冒号、缩进——而限制也写得明明白白:零错误处理("假设所有关键字都拼写正确")、变量只允许单个小写字母、每个表达式只能有一个比较。动机原话:"为了感受自己是个人类,我周末用手写代码。"
+
+**Why it matters:** 新闻不多的早晨,HN 榜首选中的不是任何智能体故事,而是一个手写解释器——而热评的批评才是真正的看点:这是一个"类 Python"玩具(`f` 就是 for 循环,`w` 就是 while),所以应把它读作"一个语言运行时最少需要多少机器"的一课,而不是 Python。评论区关于缩进语法的那条支线(为什么 tab/空格混用会迫使词法器维护非正则文法的栈)本身就值一次点击。
+
+[`🔗 austinhenley.com:python1024`](https://austinhenley.com/blog/python1024.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49591876)
+
+---
+
+## 19. ROCm 10.0——AMD 的十年之作出货 ROCm.AI:智能体技能、统一 CLI 与 Hyperloom 优化智能体
+
+- **Velocity:** ▮▮ rising
+- **Source:** AMD ROCm 博客 · 8 月 27 日发布 · ~2h 前登上 Hacker News (~10:00 UTC+8)
+- **Tags:** `amd` `rocm` `gpu` `agent-skills` `inference`
+
+自 7.x 以来的首个大版本(基于 TheRock 构建,距 ROCm 1.0 约十年)以 **ROCm.AI** 为核心:技术预览版的 `rocm` CLI(`rocm serve <model>`、`rocm examine`、支持气隙安装包)、**AMD Skills**——以 Agent Skills 格式为 Claude、Cursor 和 Codex 提供的智能体技能(`github.com/amd/skills`,覆盖 `rocm-doctor` 与 Instinct/EPYC 上的 LLM 服务工作流)——以及 **Hyperloom**,一个自动执行 Profile → Analyze → Plan → Optimize → Validate 闭环的开源智能体系统(TraceLens-Agent、Magpie、IntelliKit、GEAK、Arbor),AMD 称其把"数周的手工优化压缩到数小时"。此外:RCCL 上游合并至 NCCL 2.30.4、生产级 vLLM/SGLang 容器、统一 ROCm Core SDK 取代 Windows HIP SDK。
+
+**Why it matters:** 智能体技能格式正在被一家 GPU 厂商当作一等支持界面采纳——AMD 是在 Claude/Codex 用户已经在的地方迎接他们。关键注意事项:二手报道(StorageReview、Wccftech)反复引用"相比 ROCm 7 推理提升 3.3 倍"的说法,但**这一数字在 AMD 自己的博文中并不存在**——AMD 给出的唯一量化主张是 Hyperloom 的"数周变数小时"。请引用博客,不要引用倍数。
+
+[`🔗 AMD ROCm 博客:A Decade of Open Compute`](https://rocm.blogs.amd.com/ecosystems-and-partners/rocm-x-blog/README.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49592508)
+
+---
+
+## 20. Gamers Nexus:《216M Spy TVs》——LG 高管对着镜头讲如何"拥有整个客厅"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 46+ pts · 16 条评论 · ~2h 前 (~10:00 UTC+8)
+- **Tags:** `privacy` `smart-tv` `telemetry` `atr` `gamers-nexus`
+
+Gamers Nexus 的最新调查记录了 LG 智能电视以广告业规模进行的数据采集——2.16 亿台——核心是 LG 高密在广告主演示会上的片段:"在 LG 电视家庭中,我们可以帮助把广告投放足迹扩展到家中的其他设备""拥有客厅""We own the glass(屏幕归我们)"。对视频的评论区转述还包括: allegedly 无法关闭的麦克风、明文上传的转录文本,以及对家庭网络中所有设备(含 IP 地址)的发现与画像。
+
+**Why it matters:** 让这条新闻区别于普通 ACR 遥测故事的,是广告野心出自 LG 自己高管的嘴。注意事项同样承重:最猛的说法(常开麦克风、明文上传)在本帖中只是评论者对视频的转述,未经独立文件验证——而且没人能回答这是否扛得住欧盟隐私法。无论如何,实用建议都成立:电视不联网,或者进 VLAN。
+
+[`🔗 YouTube:216M Spy TVs – The LG Smart TV Problem`](https://www.youtube.com/watch?v=6IFVTcM28KA) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49592375)
+
+---
+
+## 21. "Editable Visual Design"——腾讯混元用编码智能体做"设计即代码",登顶 HF 论文榜
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Daily Papers · 516 赞 · 9 月 6 日批次第 1 · arXiv 2609.04034
+- **Tags:** `visual-design` `agents` `vlm` `html` `text-to-image`
+
+一种面向视觉设计的编码智能体范式:由 VLM(需求理解、规划、写码、审美判断)按需驱动图像生成模型,跑"先想象、后动手"的闭环——先生成想象画面确立审美先验,再用 alpha/绿幕抠出无文字素材,然后写出带显式图层结构的原生 HTML/CSS。验证环节把无头浏览器中的确定性布局检查与 VLM 对渲染截图的审查配对,"Agent Design Replay" 则将完整轨迹序列化以保证可复现。展示案例:一个含 13 组 120 个可编辑图层的高密度图鉴;修补通常一两轮收敛。
+
+**Why it matters:** 这是几家智能体 UX 创业公司都在押的"布局即代码、智能体当设计师"路线,这次以带完整轨迹的方法论形式发表。论文自己的坦率就是最大注意事项:"我们因此报告案例而非分数"——审美与可编辑性没有 ground-truth 指标,输出上限受底层模型约束,且只演示了单页设计。
+
+[`🔗 arXiv 2609.04034`](https://arxiv.org/abs/2609.04034) · [`🔗 Hugging Face 论文页`](https://huggingface.co/papers/2609.04034)
+
+---
+
+## 22. D2 转为非营利——Terrastruct 关停,D2 Studio 与 TALA 布局引擎开源
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 32+ pts · 15 条评论 · ~10h 前 (~02:00 UTC+8)
+- **Tags:** `diagramming` `d2` `open-source` `governance` `non-profit`
+
+D2 图表语言将转为非营利运营,其背后公司 Terrastruct 关停;规范仓库已从 `terrastruct/d2` 迁至 `d2lang/d2`(25.2k stars,MPL-2.0,仍在发布验证版本)。维护者 alixander(Dylan)Wang 在帖中确认,D2 Studio 与 TALA 布局引擎——一直是付费产品——将会开源,非营利据称由 Hack Club 资助。公告最锋利的一句:"D2 至此为止都是手工代码的产物。那个时代结束了"——今后 Wang 将"欢迎 AI 贡献,并且用 AI 来审你的 AI",只有文字写作仍由人完成。
+
+**Why it matters:** 两个转型在同一项目上同时进行实弹测试:一家公司拥有的语言如何靠非营利治理活过公司本身;以及一位维护者如何公开把 25k star 的代码库重组为"AI 写、AI 审"。评论区恰好在此分裂——有人对全 AI 开发感到担忧,也有人认为这是正确的分工;还有人质疑聚焦青少年的 Hack Club 为何资助一个由 OpenAI 基础设施人员维护的项目。
+
+[`🔗 d2lang/d2(新规范仓库)`](https://github.com/d2lang/d2) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49589768)
+
+---
+
+## 23. Windows 11 "Project Zenith"——"无干扰"开发者版,功能是文件资源管理器默认设置
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 67+ pts · 46 条评论 · ~5h 前 (~07:00 UTC+8)
+- **Tags:** `windows` `microsoft` `developer-experience` `bloatware`
+
+微软将 "Project Zenith" 宣传为"开箱即写代码的 Windows 体验",一个基本以硬件形态售卖的无干扰开发者版本。具体功能清单,按 Windows 博客原话:文件资源管理器"显示文件扩展名、隐藏文件、标题栏中的完整路径",外加默认开启详细信息窗格与长路径支持。Neowin 的判词——"又一次营销失误"——与评论区一致:ryandrake 猜测这是一个故意敷衍的产品,好让微软日后宣称"没人想要去垃圾化的 Windows";有人指出微软自己的开发者据说都用 Mac;amlib 则猜测没写出来的"主要功能"是更快地收割代码库用于 AI 训练。
+
+**Why it matters:** 整个功能清单是大多数开发者十分钟就能改完的配置——真正的新闻是微软开始把自己默认设置的缺席当作一个产品层级来卖。值得盯住的是实际出货与营销话术之间的差距:如果"开发者版"最终意味着预装工具加上遥测类服务,那么评论区的冷嘲就是准确读法。
+
+[`🔗 Neowin:又一次营销失误`](https://www.neowin.net/opinions/windows-11s-special-developer-edition-sounds-like-yet-another-marketing-misfire/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49591036)
+
+---
+
+## 24. 《数学即将进入音乐学院吗?》——费马形式化证明之后,一位数学家追问谁来资助证明者
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 25+ pts · 44 条评论 · ~4h 前 (~08:00 UTC+8) · 文章日期 9 月 6 日
+- **Tags:** `mathematics` `ai` `lean` `research` `essay`
+
+数学家 Mike McCoy 在 Claude 形式化 Lean 证明费马大定理的下一周发文,指出同一周里还有论文解决了自约 1974 年悬置的球面 Hadwiger 猜想——并追问:当 AI 承担证明,研究数学会得到什么样的资助模式。他以自己读博期间的引理为案例,而评论区抓住了他最常被引用的自白:一个他与 AI 模型一起推过、但自己未完全验证的证明——"数学正在同时被模型生成、被模型阅读"。
+
+**Why it matters:** 费马演示之后第一篇有生命力的长文,而且是从资助端而非能力端论证"音乐学院"类比——当证明搜索自动化,谁来付钱养数学家。评论区的反驳是必要的配重:美国主要乐团首席年薪 25–40 万美元(类比中"清贫"的前提有争议),音乐人人可及而研究数学不是,还有评论者断言真正的未来金主是情报机构。
+
+[`🔗 mbmccoy.dev:mathematical-conservatory`](https://mbmccoy.dev/posts/mathematical-conservatory/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49591793)
+
+---
+
+## 25. 逆向 Cronos 数据库——用匈牙利算法破解 KOD 编码的苏联时代桌面数据库
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 34+ pts · ~2d 前 (9 月 5 日 ~10:00 UTC+8)
+- **Tags:** `reverse-engineering` `databases` `forensics` `cronos`
+
+Cronos(CronosPro)是俄罗斯及后苏联国家 registries 与档案系统背后的专有数据库——"Bank" 中套 "Base",数据存于 `.dat`/`.tad` 文件对。团队收到一份被认为无法解析的转储:Cronos v4(`01.11`),其 schema 文件 `CroStru` 经过了 KOD 编码——256 字节替换表加上依赖位置与记录序号的算术。由于只有很小的 schema 被 KOD 编码(数据文件只是压缩),他们用测试数据库的字符频率给每种可能的 KOD 映射打分,然后把映射求解转化为指派问题,用 SciPy 的匈牙利算法解决——并以 `BankName` 等已知键做验证。真正起决定作用的是那个 12 字节的 extent 头:它让所有载荷字节的解码位置整体偏移。
+
+**Why it matters:** 一个"统计学/工具放大的逆向工程"的完整案例——这个趋势连评论区都点名了。而文中最尖锐的警告远远超出 Cronos:一份"值可读但表头错位"的 CSV 看起来完全正常、却在语义上已被破坏——糟糕的数据迁移与取证正是这样神不知鬼不觉地出错。
+
+[`🔗 blog.glazer.ee:Converting Cronos`](https://blog.glazer.ee/posts/converting-cronos) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49561514)
+
+---
+
+## 26. NX 位不只是安全——不可执行标志如何塑造调试、推测执行与 ARM 的怪癖
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 35+ pts · 23 条评论 · ~2d 前 (9 月 5 日 ~10:00 UTC+8)
+- **Tags:** `nx-bit` `cpus` `arm` `memory-safety` `systems`
+
+purplesyringa.moe 的客座文章主张,NX(不可执行)页位的价值远不止漏洞利用缓解:它让"释放后使用"对函数指针的破坏在故障点附近干净地触发陷阱,而不是执行残留字节、留下更清晰的崩溃现场;它在 ARM 上与推测执行相互作用(阻断 Spectre 类问题涉及的推测取指);它还暴露了 ARM 硅片偏离官方 AArch64 规范之处——文中引用了 Linux 内核针对 Apple CPU 在 hypervisor 模式下行为异常的变通方案。
+
+**Why it matters:** 这是对多数开发者脑中"NX = DEP"心智模型的系统性纠偏。评论区贡献了另一半价值:NX 远在 Spectre 之前就存在(Spectre 之后 ARM 复用了既有标志位,而非新增机制);一位维护者级别的批评直指 ARM 设计本身就是失误——Device 内存阻断数据预取却允许指令预取,而 ARM 自己把"从 Device 内存执行"标注为 UNPREDICTABLE。
+
+[`🔗 purplesyringa.moe:The NX bit is not just about security`](https://purplesyringa.moe/blog/guest/the-nx-bit-is-not-just-about-security/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49564609)
+
+---
+
+## 27. MathKernel——一个把 LLM 的数学请求路由进"带信任标签引擎"的 Show HN
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News (Show HN) · 19+ pts · 3 条评论 · ~2h 前 (~10:00 UTC+8)
+- **Tags:** `mcp` `mathematics` `llm-tools` `sympy` `formal-verification`
+
+一个 Python 库 + MCP 服务器(MIT,v1.3.0),通过 FastMCP 3 暴露 160 多个 `math_*` 工具,封装 SymPy、Z3、Lean 4 + Mathlib(首次启动自动安装)、mpmath 区间算术、numba、CUDA/CuPy 与 python-flint/Arb。设计要点是"证据感知":每个结果携带信任标签——`formal` > `exact` > `symbolic` > `interval_certified` > `numeric` > `empirical`——且整体信任度被断言所需的最弱证据封顶。引擎之间的分歧被保留为冲突而非取平均;十进制输入会把信任封顶在 `numeric` 并阻断形式化证书;渲染器可以展示结果,但永远不能升级证据等级。
+
+**Why it matters:** 一个小项目(20 stars、4 commits——早期、未经检验),但它为 LLM 数学工具说出了正确的契约:模型解释意图,工具建立证据,溯源是类型化的而非隐含的。值得观察的是信任标签方案会不会被更大的 MCP 数学服务器采纳——即便这个实现不值得用,这一部分也值得抄。
+
+[`🔗 staatsgeheim/MathKernel`](https://github.com/staatsgeheim/MathKernel) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=49592366)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-07T04:17:00+08:00 |
-| Items | 17 |
-| Sources tracked | 22 (Sansec Threat Research, The Hacker News, Hacker News, OpenAI Blog, GitHub Trending, Trendshift, keepitfree.ai, US Treasury, US State Dept, Wordfence, NVD, Asahi Linux, NetBSD Project, arXiv, Hugging Face Daily Papers, kuber.studio, aipoch, The-Swarm-Corporation, Elastic Security Labs, Trezor Blog, marketing-skills.com, nosignups.net) |
+| Generated | 2026-09-07T12:18:00+08:00 |
+| Items | 27 |
+| Sources tracked | 31 (Sansec Threat Research, The Hacker News, Hacker News, OpenAI Blog, GitHub Trending, Trendshift, keepitfree.ai, US Treasury, US State Dept, Wordfence, NVD, Asahi Linux, NetBSD Project, arXiv, Hugging Face Daily Papers, kuber.studio, aipoch, The-Swarm-Corporation, Elastic Security Labs, Trezor Blog, marketing-skills.com, nosignups.net, austinhenley.com, AMD ROCm Blog, Gamers Nexus/YouTube, mbmccoy.dev, blog.glazer.ee, purplesyringa.moe, Neowin, d2lang (GitHub), staatsgeheim/MathKernel) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

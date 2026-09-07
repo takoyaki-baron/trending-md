@@ -1,8 +1,8 @@
 ---
 date: 2026-09-07
-updated: 2026-09-07T04:17:00+08:00
+updated: 2026-09-07T12:18:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -253,13 +253,153 @@ Trezor disclosed on Sep 5 that a breach at fulfillment partner ShipMonk exposed 
 
 ---
 
+## 18. A Python interpreter in 1024 bytes — direct-execution, zero error handling, "to feel human"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 138+ pts · 54 comments · ~4h ago (~08:00 UTC+8)
+- **Tags:** `python` `interpreters` `c` `code-golf` `compilers`
+
+Austin Z. Henley wrote a Python-subset interpreter in exactly 1024 bytes of C — no macros, no libraries, no AST, no bytecode. Expressions are evaluated during recursive-descent parsing; `while`/`for` loops remember a source position and reparse on every iteration; functions are stored as source positions the symbol table jumps to, with the C call stack handling block recursion. It runs FizzBuzz with real Python syntax — `def`, colons, indentation — and limitations are stated plainly: zero error handling ("assumes that the keywords are all typed out correctly"), single-letter variables, one comparison per expression. Motivation, quoted: "To feel human, I write code by hand on the weekends."
+
+**Why it matters:** the top of HN on a slow news morning chose a hand-written interpreter over every agent story — and the top comment critique is the real content: this is a "Python-like" toy (an `f` is a for-loop, a `w` is a while), so read it as a lesson in how little machinery a language runtime needs, not as Python. The thread's indentation-grammar sidebar (why mixed tabs/spaces forces a non-regular lexer) is worth the click alone.
+
+[`🔗 austinhenley.com: python1024`](https://austinhenley.com/blog/python1024.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49591876)
+
+---
+
+## 19. ROCm 10.0 — AMD's decade mark ships ROCm.AI: agent skills, a unified CLI, and Hyperloom optimization agents
+
+- **Velocity:** ▮▮ rising
+- **Source:** AMD ROCm Blog · published Aug 27 · hit Hacker News ~2h ago (~10:00 UTC+8)
+- **Tags:** `amd` `rocm` `gpu` `agent-skills` `inference`
+
+The first major ROCm version bump since 7.x (built on TheRock, ~10 years after ROCm 1.0) centers on **ROCm.AI**: a tech-preview `rocm` CLI (`rocm serve <model>`, `rocm examine`, air-gapped bundles), **AMD Skills** — agent skills in the Agent Skills format for Claude, Cursor and Codex (`github.com/amd/skills`, covering `rocm-doctor` and LLM-serving workflows on Instinct and EPYC) — and **Hyperloom**, an open-source agentic system automating a Profile → Analyze → Plan → Optimize → Validate loop (TraceLens-Agent, Magpie, IntelliKit, GEAK, Arbor), which AMD claims cuts "weeks of manual optimization work down to hours." Also: RCCL merged upstream to NCCL 2.30.4, production vLLM/SGLang containers, and a unified ROCm Core SDK replacing the Windows HIP SDK.
+
+**Why it matters:** the agent-skills format is now being adopted by a GPU vendor as a first-class support surface — AMD is meeting Claude/Codex users where they already are. Caveat that matters: secondary coverage (StorageReview, Wccftech) repeats a claimed "3.3× inference uplift vs ROCm 7" that appears **nowhere in AMD's own post** — the only quantitative claim AMD makes is Hyperloom's hours-vs-weeks one. Cite the blog, not the multiplier.
+
+[`🔗 AMD ROCm Blog: A Decade of Open Compute`](https://rocm.blogs.amd.com/ecosystems-and-partners/rocm-x-blog/README.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49592508)
+
+---
+
+## 20. Gamers Nexus: "216M Spy TVs" — LG executives on tape describing how to "own the living room"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 46+ pts · 16 comments · ~2h ago (~10:00 UTC+8)
+- **Tags:** `privacy` `smart-tv` `telemetry` `atr` `gamers-nexus`
+
+Gamers Nexus's latest investigation documents LG smart TV data collection at advertising-industry scale — 216 million units — built around clips of LG executives at an advertiser presentation: "within an LG TV household we can help extend the ad campaign footprint to the other devices in the household," "own the living room," "We own the glass." Thread summaries of the video add microphones that allegedly can't be disabled, plain-text transcript uploads, and network-wide device discovery including IP addresses of every device on the home network.
+
+**Why it matters:** the ad-tech ambitions are documented in LG's own executives' words, which is what separates this from the usual ACR telemetry story. Caveats are load-bearing: the strongest claims (always-on mics, plaintext uploads) circulate here as commenters' summaries of the video, not independently verified documents — and no one in the thread could answer whether this survives EU privacy law. The practical advice stands regardless: no network, or a VLAN, for the TV.
+
+[`🔗 YouTube: 216M Spy TVs – The LG Smart TV Problem`](https://www.youtube.com/watch?v=6IFVTcM28KA) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49592375)
+
+---
+
+## 21. "Editable Visual Design" — Tencent Hunyuan tops HF papers with design-as-code from a coding agent
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Daily Papers · 516 upvotes · #1 of the Sep 6 batch · arXiv 2609.04034
+- **Tags:** `visual-design` `agents` `vlm` `html` `text-to-image`
+
+A Coding-Agent paradigm for visual design: a VLM (requirement understanding, planning, code, aesthetic judgment) drives an image-generation model on demand in an "imagine first, then act" loop — generate an imagined visual to set aesthetic priors, cut out text-free assets via alpha/green-screen matting, then write native HTML/CSS with explicit layers. Verification pairs deterministic layout checks in a headless browser with VLM review of rendered screenshots, and "Agent Design Replay" serializes the whole trajectory for reproducibility. Showcase: an information-dense field guide with 120 editable layers in 13 groups; repairs converging in one or two rounds.
+
+**Why it matters:** the same "layout as code, agent as designer" bet several agent-UX startups are making, published as a method with its full trajectories. The paper's own honesty is the headline caveat: "We therefore report cases rather than scores" — no ground-truth metric for aesthetics or editability exists, output is bounded by the underlying models, and only single-page designs were demonstrated.
+
+[`🔗 arXiv 2609.04034`](https://arxiv.org/abs/2609.04034) · [`🔗 Hugging Face paper page`](https://huggingface.co/papers/2609.04034)
+
+---
+
+## 22. D2 goes non-profit — Terrastruct shuts down, D2 Studio and the TALA layout engine go open source
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 32+ pts · 15 comments · ~10h ago (~02:00 UTC+8)
+- **Tags:** `diagramming` `d2` `open-source` `governance` `non-profit`
+
+The D2 diagramming language is transitioning to non-profit status as its backing company Terrastruct shuts down; the canonical repo has already moved from `terrastruct/d2` to `d2lang/d2` (25.2k stars, MPL-2.0, still shipping verified releases). Maintainer alixander (Dylan) Wang confirmed in the thread that D2 Studio and the TALA layout engine — until now the paid product — will be open-sourced, with Hack Club reportedly financing the non-profit. The announcement's sharpest line: "D2 thus far has been a product of handcrafted code. That era is over" — going forward Wang will "welcome AI contributions and… use AI to review your AI," keeping only the writing human.
+
+**Why it matters:** a rare live-fire test of two transitions at once: a company-owned language surviving its company via non-profit governance, and a maintainer openly reorganizing a 25k-star codebase around AI-written, AI-reviewed code. Commenters split exactly there — some call the all-AI development approach concerning, others the right division of labor; one questions Hack Club (a teens-focused funder) financing a project maintained by an OpenAI infrastructure person.
+
+[`🔗 d2lang/d2 (new canonical repo)`](https://github.com/d2lang/d2) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49589768)
+
+---
+
+## 23. Windows 11 "Project Zenith" — a "distraction-free" developer edition that is File Explorer defaults
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 67+ pts · 46 comments · ~5h ago (~07:00 UTC+8)
+- **Tags:** `windows` `microsoft` `developer-experience` `bloatware`
+
+Microsoft pitched "Project Zenith" as "the ready-to-code Windows experience," a distraction-free developer-focused edition sold largely as devices. The concrete feature list, per the Windows blog: File Explorer "shows file extensions, hidden files, the full path in the title bar," plus the details pane and long-path support enabled by default. Neowin's verdict — "another marketing misfire" — matched the thread: ryandrake suspected a deliberately low-effort product so Microsoft can later claim nobody wants a decrappified Windows; others noted Microsoft's own developers reportedly use Macs; amlib speculated the unstated feature is faster harvesting of codebases for AI training.
+
+**Why it matters:** the entire feature set is configuration most developers apply in ten minutes — the news is that Microsoft now sells its own defaults' absence as a product tier. Watch what ships versus what the marketing implies: if "developer edition" ends up meaning preinstalled tooling plus telemetry-adjacent services, the thread's cynicism will have been the accurate reading.
+
+[`🔗 Neowin: another marketing misfire`](https://www.neowin.net/opinions/windows-11s-special-developer-edition-sounds-like-yet-another-marketing-misfire/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49591036)
+
+---
+
+## 24. "Is mathematics about to enter the conservatory?" — a mathematician's post-Fermat essay on who funds theorem-provers
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 25+ pts · 44 comments · ~4h ago (~08:00 UTC+8) · post dated Sep 6
+- **Tags:** `mathematics` `ai` `lean` `research` `essay`
+
+Mathematician Mike McCoy writes the week after Claude's formal Lean proof of Fermat's Last Theorem, noting that in the same week a paper resolved the Spherical Hadwiger Conjecture (open since ~1974) — and asking what patronage model research mathematics gets when AI does the proving. He uses his own grad-school lemma as a case study, and the thread caught his most-quoted admission: a proof he worked through with an AI model that he hadn't fully verified — "the math is being both generated and read by models."
+
+**Why it matters:** the first durable essay to come out of the Fermat demo, and it argues the conservatory analogy from the funding side, not the capability side — who pays for mathematicians when proof-search automates. The comment pushback is the counterweight: orchestras' principals earn $250–400k (the analogy's precarity premise is contested), music is universally accessible while research math is not, and one commenter argues the real future patron is intelligence agencies.
+
+[`🔗 mbmccoy.dev: mathematical-conservatory`](https://mbmccoy.dev/posts/mathematical-conservatory/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49591793)
+
+---
+
+## 25. Reverse engineering Cronos — a KOD-encoded Soviet-era desktop database, cracked with a Hungarian algorithm
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 34+ pts · ~2d ago (~10:00 UTC+8 Sep 5)
+- **Tags:** `reverse-engineering` `databases` `forensics` `cronos`
+
+Cronos (CronosPro) is the proprietary database behind registries and archives across Russia and post-Soviet states — a "Bank" of "Bases" in `.dat`/`.tad` file pairs. The team received a dump considered unparseable: Cronos v4 (`01.11`), where the schema file `CroStru` was KOD-encoded — a 256-byte substitution table plus position- and record-number-dependent arithmetic. Since only the small schema was KOD'd (the data files were merely compressed), they scored every possible KOD mapping against byte frequencies from test databases, then solved the mapping as an assignment problem with SciPy's Hungarian algorithm — validating on known keys like `BankName`. The fix that mattered was a 12-byte extent header shifting every payload byte's decode position.
+
+**Why it matters:** a worked example of the "reverse engineering, amplified by AI/stats" trend the thread itself names — and the post's sharpest warning generalizes far past Cronos: a CSV with readable values under the wrong headers looks perfectly valid while being semantically corrupted, which is exactly how bad migrations and forensics go unnoticed.
+
+[`🔗 blog.glazer.ee: Converting Cronos`](https://blog.glazer.ee/posts/converting-cronos) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49561514)
+
+---
+
+## 26. The NX bit is not just about security — how the no-execute flag shapes debugging, speculation and ARM quirks
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 35+ pts · 23 comments · ~2d ago (~10:00 UTC+8 Sep 5)
+- **Tags:** `nx-bit` `cpus` `arm` `memory-safety` `systems`
+
+A guest post on purplesyringa.moe argues the NX (no-execute) page bit earns its place beyond exploit mitigation: it makes use-after-free corruption of a function pointer trap near the failure point instead of executing stale bytes, it interacts with speculative execution on ARM (blocking the speculative fetches implicated in Spectre-class issues), and it exposes where ARM silicon diverges from the official AArch64 specification — the article cites a Linux kernel workaround for Apple CPUs misbehaving in hypervisor mode.
+
+**Why it matters:** a systems-literate corrective to the "NX = DEP" mental model most developers carry. The comment section is half the value: NX long predates Spectre (ARM reused an existing flag post-Spectre rather than adding a mechanism), and one maintainer-grade critique argues ARM's design was simply a mistake — Device memory blocks data prefetch yet permits instruction prefetch, while ARM itself documents execution from Device memory as UNPREDICTABLE.
+
+[`🔗 purplesyringa.moe: The NX bit is not just about security`](https://purplesyringa.moe/blog/guest/the-nx-bit-is-not-just-about-security/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49564609)
+
+---
+
+## 27. MathKernel — a Show HN that routes an LLM's math through engines that carry trust labels
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News (Show HN) · 19+ pts · 3 comments · ~2h ago (~10:00 UTC+8)
+- **Tags:** `mcp` `mathematics` `llm-tools` `sympy` `formal-verification`
+
+A Python library + MCP server (MIT, v1.3.0) that exposes 160+ `math_*` tools wrapping SymPy, Z3, Lean 4 + Mathlib (auto-installed on first start), mpmath interval arithmetic, numba, CUDA/CuPy and python-flint/Arb over FastMCP 3. The design idea is "evidence-aware": every result carries a trust label — `formal` > `exact` > `symbolic` > `interval_certified` > `numeric` > `empirical` — and overall trust is capped by the weakest evidence a claim requires. Backend disagreement is preserved as a conflict, not averaged; decimal inputs cap trust at `numeric` and block formal certificates; renderers can present results but never upgrade their evidence.
+
+**Why it matters:** a small project (20 stars, 4 commits — early, unproven) that states the right contract for LLM math tooling: the model interprets intent, the tool establishes evidence, and provenance is typed rather than implied. Watch whether the trust-label scheme gets adopted by bigger MCP math servers — it is the part worth copying even if this implementation isn't.
+
+[`🔗 staatsgeheim/MathKernel`](https://github.com/staatsgeheim/MathKernel) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=49592366)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-07T04:17:00+08:00 |
-| Items | 17 |
-| Sources tracked | 22 (Sansec Threat Research, The Hacker News, Hacker News, OpenAI Blog, GitHub Trending, Trendshift, keepitfree.ai, US Treasury, US State Dept, Wordfence, NVD, Asahi Linux, NetBSD Project, arXiv, Hugging Face Daily Papers, kuber.studio, aipoch, The-Swarm-Corporation, Elastic Security Labs, Trezor Blog, marketing-skills.com, nosignups.net) |
+| Generated | 2026-09-07T12:18:00+08:00 |
+| Items | 27 |
+| Sources tracked | 31 (Sansec Threat Research, The Hacker News, Hacker News, OpenAI Blog, GitHub Trending, Trendshift, keepitfree.ai, US Treasury, US State Dept, Wordfence, NVD, Asahi Linux, NetBSD Project, arXiv, Hugging Face Daily Papers, kuber.studio, aipoch, The-Swarm-Corporation, Elastic Security Labs, Trezor Blog, marketing-skills.com, nosignups.net, austinhenley.com, AMD ROCm Blog, Gamers Nexus/YouTube, mbmccoy.dev, blog.glazer.ee, purplesyringa.moe, Neowin, d2lang (GitHub), staatsgeheim/MathKernel) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

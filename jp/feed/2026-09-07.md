@@ -1,8 +1,8 @@
 ---
 date: 2026-09-07
-updated: 2026-09-07T04:17:00+08:00
+updated: 2026-09-07T12:18:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -253,13 +253,153 @@ Trezor は9月5日、フルフィルメントパートナー ShipMonk の侵害�
 
 ---
 
+## 18. 1024バイトのPythonインタプリタ —— 直接実行・エラー処理ゼロ、「人間である感じを取り戻すために」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 138+ pts · コメント54件 · 約4h前 (~08:00 UTC+8)
+- **Tags:** `python` `interpreters` `c` `code-golf` `compilers`
+
+Austin Z. Henley が、ちょうど1024バイトの C で Python サブセットのインタプリタを書いた——マクロなし、ライブラリなし、ASTなし、バイトコードなし。式は再帰下降パースと同時に直接評価され、`while`/`for` ループはソース位置を記憶して毎イテレーション再パースする。関数はシンボルテーブルにソース位置として登録され、呼び出しでジャンプし、ブロックの再帰は C のコールスタックが自然に処理する。本物の Python 構文——`def`、コロン、インデント——の FizzBuzz が動く。限界も明示されている:エラー処理ゼロ(「キーワードは正しく打たれていると仮定する」)、変数は小文字1文字のみ、式ごとに比較は1つ。動機は本人の言葉で「人間である感じを取り戻すために、週末は手でコードを書く」。
+
+**Why it matters:** エージェント系の話題が並む中、静かな朝の HN トップに選ばれたのは手書きのインタプリタだった。そして一番の要点はトップコメントの批判——これは「Python 風」のおもちゃ(`f` が for ループ、`w` が while)であり、Python としてではなく「言語ランタイムには最低限何の機構が必要か」の教材として読むべき。インデント文法についてのコメント欄の脇道(tab/スペース混用がなぜ非正規文法のスタックを強制するか)だけでもクリックする価値がある。
+
+[`🔗 austinhenley.com:python1024`](https://austinhenley.com/blog/python1024.html) · [`🔗 Hacker News ディスカッション`](https://news.ycombinator.com/item?id=49591876)
+
+---
+
+## 19. ROCm 10.0 —— AMD の10周年バージョンが ROCm.AI を出荷:エージェントスキル、統合 CLI、Hyperloom 最適化エージェント
+
+- **Velocity:** ▮▮ rising
+- **Source:** AMD ROCm ブログ · 8月27日公開 · 約2h前に Hacker News へ (~10:00 UTC+8)
+- **Tags:** `amd` `rocm` `gpu` `agent-skills` `inference`
+
+7.x 以来となるメジャーバージョンアップ(TheRock ベース、ROCm 1.0 から約10年)の中心は **ROCm.AI**:テックプレビューの `rocm` CLI(`rocm serve <model>`、`rocm examine`、エアギャップバンドル対応)、**AMD Skills** —— Agent Skills 形式で Claude・Cursor・Codex 向けに提供するエージェントスキル(`github.com/amd/skills`、`rocm-doctor` や Instinct/EPYC 上の LLM サービングをカバー)——そして **Hyperloom**、Profile → Analyze → Plan → Optimize → Validate のループを自動化するオープンソースのエージェントシステム(TraceLens-Agent、Magpie、IntelliKit、GEAK、Arbor)。AMD はこれで「数週間の手動最適化が数時間に」だと主張する。さらに RCCL の NCCL 2.30.4 への上流マージ、プロダクション級の vLLM/SGLang コンテナ、Windows HIP SDK を置き換える統合 ROCm Core SDK。
+
+**Why it matters:** エージェントスキル形式が GPU ベンダーにファーストクラスのサポート面として採用された——AMD は Claude/Codex ユーザーが既にいる場所で会おうとしている。重要な注意点:二次報道(StorageReview、Wccftech)は「ROCm 7 比で推論3.3倍」の主張を繰り返すが、この数字は **AMD 自身のブログには一切登場しない**。AMD が提示する唯一の定量的主張は Hyperloom の「数週間→数時間」だ。倍数ではなくブログを引用すべき。
+
+[`🔗 AMD ROCm ブログ:A Decade of Open Compute`](https://rocm.blogs.amd.com/ecosystems-and-partners/rocm-x-blog/README.html) · [`🔗 Hacker News ディスカッション`](https://news.ycombinator.com/item?id=49592508)
+
+---
+
+## 20. Gamers Nexus「216M Spy TVs」—— LG の幹部が「リビングを支配する」方法を映像で語る
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 46+ pts · コメント16件 · 約2h前 (~10:00 UTC+8)
+- **Tags:** `privacy` `smart-tv` `telemetry` `atr` `gamers-nexus`
+
+Gamers Nexus の最新調査は、2億1600万台という広告業界規模での LG スマート TV のデータ収集を記録した。軸になるのは広告主向けプレゼンでの LG 幹部の発言のクリップだ——「LG TV の家庭では、広告キャンペーンのフットプリントを家の他のデバイスにまで拡張できる」「リビングルームを支配する」「We own the glass(ガラス=画面は我々のもの)」。動画についてのコメント欄の要約には、無効化できないとされるマイク、平文での書き起こしアップロード、家庭内ネットワークの全デバイス(IP アドレス含む)の検出とプロファイリングまで及ぶ。
+
+**Why it matters:** 通常の ACR テレメトリ報道とこの話を分けるのは、広告への野心が LG 自身の幹部の言葉で記録されていることだ。ただし注意点が効いてくる:最も強い主張(常時オンのマイク、平文アップロード)はここではコメント欄による動画の要約にすぎず、独立した資料検証はない——そして EU のプライバシー法でどう扱えるか、スレッドの誰も答えられなかった。実務的助言はそれでも成立する:TV はネットワークに繋がない、あるいは VLAN へ。
+
+[`🔗 YouTube:216M Spy TVs – The LG Smart TV Problem`](https://www.youtube.com/watch?v=6IFVTcM28KA) · [`🔗 Hacker News ディスカッション`](https://news.ycombinator.com/item?id=49592375)
+
+---
+
+## 21. 「Editable Visual Design」—— 腾讯混元が「デザイン・アズ・コード」のコーディングエージェントで HF 論文ランキング1位に
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Daily Papers · 516 アップボート · 9月6日バッチの1位 · arXiv 2609.04034
+- **Tags:** `visual-design` `agents` `vlm` `html` `text-to-image`
+
+ビジュアルデザインのためのコーディングエージェントパラダイム:VLM(要件理解・計画・コード・美的判断)が画像生成モデルを必要に応じて駆動し、「まず想像し、そして実行する」ループを回す——想像上のビジュアルで美的事前分布を定め、alpha/グリーンスクリーンマッティングで文字なしアセットを切り出し、明示的なレイヤー構造を持つネイティブ HTML/CSS を書く。検証はヘッドレスブラウザでの決定論的レイアウトチェックと、レンダリング結果のスクリーンショットに対する VLM レビューを組み合わせ、「Agent Design Replay」が全軌跡をシリアライズして再現性を担保する。ショーケース:13グループ120の編集可能レイヤーを持つ高密度フィールドガイド。修復は1〜2ラウンドで収束。
+
+**Why it matters:** 複数のエージェント UX スタートアップが賭けている「レイアウトはコード、デザイナーはエージェント」路線が、完全な軌跡付きの手法として発表された。最大の注意点は論文自身の正直さにある:「我々はゆえにスコアではなく事例を報告する」——美しさや編集可能性の ground-truth 指標は存在せず、出力の上限は基盤モデルに拘束され、実証はシングルページのみ。
+
+[`🔗 arXiv 2609.04034`](https://arxiv.org/abs/2609.04034) · [`🔗 Hugging Face 論文ページ`](https://huggingface.co/papers/2609.04034)
+
+---
+
+## 22. D2 が非営利へ —— Terrastruct 閉鎖、D2 Studio と TALA レイアウトエンジンがオープンソースに
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 32+ pts · コメント15件 · 約10h前 (~02:00 UTC+8)
+- **Tags:** `diagramming` `d2` `open-source` `governance` `non-profit`
+
+D2 ダイアグラム言語は、親会社 Terrastruct の閉鎖に伴い非営利体制へ移行する。正規リポジトリは既に `terrastruct/d2` から `d2lang/d2` へ移動済み(25.2k スター、MPL-2.0、検証済みリリースも継続)。メンテナの alixander(Dylan)Wang はスレッド内で、有償製品だった D2 Studio と TALA レイアウトエンジンをオープンソース化する趣旨を確認し、非営利は Hack Club が資金提供するとも伝えられている。発表の最も鋭い一文は「D2 はこれまで、手作りコードの産物だった。その時代は終わった」——今後 Wang は「AI による貢献を歓迎し、その AI を AI でレビューする」が、文章だけは人間が書く。
+
+**Why it matters:** 企業所有の言語が非営利ガバナンスで会社の死を生き延びる移行と、メンテナが 25k スターのコードベースを「AI が書き、AI がレビューする」体制へ公然と再編する移行——その二つが同じプロジェクトで同時に実弾テストされている。コメント欄はまさにそこで割れた:全 AI 開発に懸念を示す者、正しい分担だとする者、そして OpenAI のインフラ担当がメンテするプロジェクトをなぜティーン向けの Hack Club が資金するのかと問う者。
+
+[`🔗 d2lang/d2(新しい正規リポジトリ)`](https://github.com/d2lang/d2) · [`🔗 Hacker News ディスカッション`](https://news.ycombinator.com/item?id=49589768)
+
+---
+
+## 23. Windows 11「Project Zenith」 —— 「気を散らさない」開発者向けエディションの中身はエクスプローラーのデフォルト設定
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 67+ pts · コメント46件 · 約5h前 (~07:00 UTC+8)
+- **Tags:** `windows` `microsoft` `developer-experience` `bloatware`
+
+Microsoft は「Project Zenith」を「すぐにコードを書ける Windows 体験」として売り出した。主にデバイスとして販売される、気を散らすもののない開発者向けエディションだ。Windows ブログにある具体的な機能リスト:エクスプローラーが「ファイル拡張子、隠しファイル、タイトルバーにフルパスを表示」し、詳細ウィンドウと長いパスへの対応がデフォルトで有効。Neowin の評決「またしてもマーケティングのミスファイア」はスレッドとも一致した:ryandrake は、手を抜いた製品をわざと出して後で「脱ジャンク化された Windows を誰も求めない」と言わせる布石だと疑い、Microsoft の自社開発者は Mac を使っていると指摘する者もいた。amlib は、書かれていない「主機能」は AI 学習のためのコードベース収穫の高速化ではないかと推測した。
+
+**Why it matters:** 機能の全リストは、ほとんどの開発者が10分で設定する構成にすぎない。本当のニュースは、Microsoft が自社デフォルトの「不在」を製品階層として売り始めたことだ。実際の出荷内容とマーケティングの含意の差を注視すべき:もし「開発者エディション」がプリインストールツールとテレメトリ系サービスを意味するだけなら、スレッドの皮肉こそが正確な読みだったことになる。
+
+[`🔗 Neowin:またしてもマーケティングのミスファイア`](https://www.neowin.net/opinions/windows-11s-special-developer-edition-sounds-like-yet-another-marketing-misfire/) · [`🔗 Hacker News ディスカッション`](https://news.ycombinator.com/item?id=49591036)
+
+---
+
+## 24. 「数学は音楽院に入るのか?」 —— フェルマー形式化証明の翌週、数学者が「証明者を誰が支えるのか」を問う
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 25+ pts · コメント44件 · 約4h前 (~08:00 UTC+8) · 記事日付 9月6日
+- **Tags:** `mathematics` `ai` `lean` `research` `essay`
+
+数学者 Mike McCoy は、Claude によるフェルマーの最終定理の Lean 形式化証明の翌週にこのエッセイを公開した。同じ週に、約1974年以来未解決だった球面 Hadwiger 予想を解決する論文も現れたことに触れつつ、AI が証明を行う時代に研究数学はどのパトロネージュ(後援)モデルを得るのかを問う。自身の大学院時代の補題をケーススタディに使い、コメント欄が最も引用したのは彼の自白だ——AI モデルと一緒に通したものの完全には検証しきれなかった証明について「数学はモデルによって生成され、同時にモデルによって読まれている」。
+
+**Why it matters:** フェルマーデモから出た最初の寿命の長いエッセイであり、「音楽院」のアナロジーを能力側ではなく資金側から論じている点が新しい——証明探索が自動化されたとき、誰が数学者に金を払うのか。コメントの反論は必要なカウンターウェイトだ:米主要オーケストラのプリンシパルは年収25〜40万ドル(アナロジーの「不安定さ」の前提は争える)、音楽は万人に開かれているが研究数学は違う、そして真の将来のパトロンは諜報機関だとする者までいる。
+
+[`🔗 mbmccoy.dev:mathematical-conservatory`](https://mbmccoy.dev/posts/mathematical-conservatory/) · [`🔗 Hacker News ディスカッション`](https://news.ycombinator.com/item?id=49591793)
+
+---
+
+## 25. Cronos のリバースエンジニアリング —— ハンガリアン法で KOD 符号化されたソ連圏のデスクトップデータベースを解読
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 34+ pts · 約2d前 (9月5日 ~10:00 UTC+8)
+- **Tags:** `reverse-engineering` `databases` `forensics` `cronos`
+
+Cronos(CronosPro)はロシアおよび旧ソ連圏の登記・アーカイブシステムを支えるプロプライエタリなデータベース——「Bank」の中に「Base」が入る入れ子構造で、データは `.dat`/`.tad` のファイルペアに格納される。チームが受け取ったダンプは解析不能と見なされていた:Cronos v4(`01.11`)で、スキーマファイル `CroStru` が KOD 符号化——256バイトの置換表に、位置とレコード番号に依存する算術を組み合わせた保護——されていた。KOD 化は小さなスキーマだけ(データファイルは単に圧縮)だったため、テストデータベースのバイト頻度で全 KOD マッピング候補をスコアリングし、マッピングを割り当て問題として定式化して SciPy のハンガリアン法で解いた——`BankName` などの既知キーで検証。決定的だったのは12バイトのエクステントヘッダで、全ペイロードバイトのデコード位置がこれでずれていた。
+
+**Why it matters:** 「統計とツールで拡張されたリバースエンジニアリング」というトレンド(コメント欄自身が名指しした)の完成された実例。そして記事の最も鋭い警告は Cronos をはるかに超えて一般化できる:値は読めるのにヘッダがずれた CSV は、完全に正常に見えながら意味的には破壊されている——悪いデータ移行やフォレンジックはまさにこうして気づかれずに間違う。
+
+[`🔗 blog.glazer.ee:Converting Cronos`](https://blog.glazer.ee/posts/converting-cronos) · [`🔗 Hacker News ディスカッション`](https://news.ycombinator.com/item?id=49561514)
+
+---
+
+## 26. NX ビットはセキュリティだけの話ではない —— 実行不可フラグがデバッグ・投機実行・ARM の癖を形作る
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 35+ pts · コメント23件 · 約2d前 (9月5日 ~10:00 UTC+8)
+- **Tags:** `nx-bit` `cpus` `arm` `memory-safety` `systems`
+
+purplesyringa.moe のゲスト記事は、NX(実行不可)ページビットの価値がエクスプロイト緩和を超えると論じる:use-after-free による関数ポインタの破壊が、残留バイトを実行するのではなく故障点の近くできれいにトラップし、クラッシュ trace を読みやすくする。ARM では投機実行と相互作用し(Spectre 級の問題に関わる投機的フェッチを阻断)、さらに ARM シリコンが公式 AArch64 仕様から逸脱している箇所を露呈させる——記事は、hypervisor モードで挙動がおかしくなる Apple CPU に対する Linux カーネルのワークアラウンドを引用している。
+
+**Why it matters:** 多くの開発者が抱える「NX = DEP」というメンタルモデルへの体系的な修正だ。コメント欄が残りの半分の価値を持つ:NX は Spectre よりはるかに前から存在し(Spectre 後の ARM は新機構ではなく既存フラグを再利用した)、さらにメンテナ級の批評は ARM の設計そのものがミスだったと切る捨てる——Device メモリはデータプリフェッチを阻むのに命令プリフェッチは許し、ARM 自身が「Device メモリからの実行」を UNPREDICTABLE と明記している。
+
+[`🔗 purplesyringa.moe:The NX bit is not just about security`](https://purplesyringa.moe/blog/guest/the-nx-bit-is-not-just-about-security/) · [`🔗 Hacker News ディスカッション`](https://news.ycombinator.com/item?id=49564609)
+
+---
+
+## 27. MathKernel —— LLM の数学リクエストを「信頼ラベル付きエンジン」へルーティングする Show HN
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News (Show HN) · 19+ pts · コメント3件 · 約2h前 (~10:00 UTC+8)
+- **Tags:** `mcp` `mathematics` `llm-tools` `sympy` `formal-verification`
+
+Python ライブラリ + MCP サーバ(MIT、v1.3.0)。FastMCP 3 経由で160以上の `math_*` ツールを公開し、SymPy、Z3、Lean 4 + Mathlib(初回起動時に自動インストール)、mpmath の区間算術、numba、CUDA/CuPy、python-flint/Arb をラップする。設計の要点は「エビデンスアウェア」:すべての結果に信頼ラベルが付く——`formal` > `exact` > `symbolic` > `interval_certified` > `numeric` > `empirical`——そして全体の信頼度は、主張に必要な最弱のエビデンスでキャップされる。エンジン間の不一致は平均されず競合として保持され、10進リテラルの入力は信頼を `numeric` にキャップして形式証明書を遮断する。レンダラは結果を提示できるが、エビデンスを格上げすることは決してできない。
+
+**Why it matters:** 小さなプロジェクト(20スター、4コミット——初期段階、実証なし)だが、LLM 数学ツーリングの正しい契約を言語化している:モデルは意図を解釈し、ツールがエビデンスを確立し、来歴は暗黙ではなく型として与える。注目すべきは、この信頼ラベル方式がより大きな MCP 数学サーバに採用されるかどうか——この実装を使わないことになっても、借りる価値のある部分はここだ。
+
+[`🔗 staatsgeheim/MathKernel`](https://github.com/staatsgeheim/MathKernel) · [`🔗 Show HN ディスカッション`](https://news.ycombinator.com/item?id=49592366)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-07T04:17:00+08:00 |
-| Items | 17 |
-| Sources tracked | 22 (Sansec Threat Research, The Hacker News, Hacker News, OpenAI Blog, GitHub Trending, Trendshift, keepitfree.ai, US Treasury, US State Dept, Wordfence, NVD, Asahi Linux, NetBSD Project, arXiv, Hugging Face Daily Papers, kuber.studio, aipoch, The-Swarm-Corporation, Elastic Security Labs, Trezor Blog, marketing-skills.com, nosignups.net) |
+| Generated | 2026-09-07T12:18:00+08:00 |
+| Items | 27 |
+| Sources tracked | 31 (Sansec Threat Research, The Hacker News, Hacker News, OpenAI Blog, GitHub Trending, Trendshift, keepitfree.ai, US Treasury, US State Dept, Wordfence, NVD, Asahi Linux, NetBSD Project, arXiv, Hugging Face Daily Papers, kuber.studio, aipoch, The-Swarm-Corporation, Elastic Security Labs, Trezor Blog, marketing-skills.com, nosignups.net, austinhenley.com, AMD ROCm Blog, Gamers Nexus/YouTube, mbmccoy.dev, blog.glazer.ee, purplesyringa.moe, Neowin, d2lang (GitHub), staatsgeheim/MathKernel) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
