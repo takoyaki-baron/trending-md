@@ -381,3 +381,44 @@ complexity is where an unauthenticated RCE loses the points that would have made
   is genuinely limited) while orgs on EOL branches under-react to the batch's *other* bugs. Cite the
   full spread — "9.8 (NVD/VulDB) vs 4.8 (ALAS) vs Low (Apache)" — and let the reader see the
   disagreement instead of laundering one number through.
+
+## Headline parameters are the claim — bzip3's benchmark and Mador's "80 lines" (09-08)
+
+Two same-batch instances of checking the *number behind the headline* before repeating it:
+
+- **bzip3 1.5.4 (HN 315 pts, ~6h)** — README benchmark claims 546 MB vs xz's 2.06 GB across ~262 Perl source releases.
+  The thread's dominant critique, verified by re-running: the comparison ran bzip3 at a 512 MB block while zstd stayed
+  at its ~8 MB default window; re-run with `--long=29`, zstd output was over 2× *smaller* at half the CPU time, and
+  bzip3 used 12–18 GB RAM vs zstd's ~700 MB. Commenters also measured zstd -19 slightly smaller and ~145× faster to
+  decompress on a kernel tarball, noted failing CI, and challenged the caps-lock no-warranty clause (author: lifted
+  verbatim from bzip2's README). The headline ratio didn't survive matched parameters — the benchmark-astropy rule in
+  miniature, and the re-normalization is the actual news. Bonus repo-hygiene catch: the project moved to
+  `github.com/iczelia/bzip3` (from `kspalaiologs`) with the transfer unexplained on the page.
+- **Mador (`marsbos/mador`, Show HN 98 pts)** — the HN title's "80 lines" appears nowhere in the README; the
+  verifiable figure is **855 bytes minified**, and the repo is 12 commits old with no releases. Check the repo before
+  repeating the headline number — same shape as turbovec's "ICLR 2026" venue claim: the shareable number and the
+  verifiable number are different numbers until you look.
+
+Generalization: a headline that states a *configuration-dependent* quantity (window size, line count, block size)
+without its parameters is not a smaller claim — it's a different claim.
+
+## Case study: purplesyringa.moe (2026-09-08) — fabrication around a real article
+
+The 09-07 batch's NX-bit item cited a real, trending, well-written article — and attributed three
+claims to it that the article never makes (use-after-free trapping, a Spectre linkage, an Apple-CPU
+Linux workaround) plus one it explicitly *ruled out* (AArch64 spec divergence). The article's actual
+point was different and better: mispredicted `blr` → speculative *instruction* fetches from the
+bootrom, and NX as "an attribute bit, not about security at all". Root cause: the description was
+written from the HN title + plausible systems-vocabulary extrapolation, not from the page.
+
+Two lessons:
+
+1. **A real, high-quality source makes fabrication *more* convincing, not less** — the credibility
+   halo of the venue transfers onto invented claims. Read the page; there is no shortcut.
+2. **The uncurated-domain backlog is a fact-check surface.** This error was caught by the routine
+   curation pass (every cited domain needs cv ≥ 1, i.e. an actual visit), not by any dedicated
+   review — the backlog *was* the review. Keep the single-citation tail curated promptly; that is
+   where unvisited citations accumulate.
+
+Correction applied in place (en/zh/jp, item 26, velocity already at ▮ steady): rewritten to state
+only what the article says, with the errata-search outcome (spec-conformant, not a silicon bug).

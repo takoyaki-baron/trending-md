@@ -3,20 +3,20 @@
     "vllm-project/semantic-router": {
       "tag": "v0.3.0",
       "published_at": "2026-06-05T12:08:52Z",
-      "pushed_at": "2026-09-07T12:46:18Z",
-      "stars": 5638,
+      "pushed_at": "2026-09-07T16:35:25Z",
+      "stars": 5648,
       "flags": [],
       "frozen_pushed_at": null,
-      "checked": "2026-09-07T12:57:50.348Z"
+      "checked": "2026-09-07T21:03:00.407Z"
     },
     "BitRouter/BitRouter": {
       "tag": "v1.0.0-alpha.27",
       "published_at": "2026-07-18T20:42:54Z",
-      "pushed_at": "2026-09-07T12:41:24Z",
-      "stars": 225,
+      "pushed_at": "2026-09-07T17:14:12Z",
+      "stars": 226,
       "flags": [],
       "frozen_pushed_at": null,
-      "checked": "2026-09-07T12:57:50.348Z"
+      "checked": "2026-09-07T21:03:00.407Z"
     },
     "Continuum-AI-Corp/OrcaRouter-Lite": {
       "tag": "v0.1.0",
@@ -25,73 +25,73 @@
       "stars": 658,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T02:31:41Z",
-      "checked": "2026-09-07T12:57:50.348Z"
+      "checked": "2026-09-07T21:03:00.407Z"
     },
     "workweave/router": {
       "tag": null,
       "published_at": null,
       "pushed_at": "2026-09-07T07:22:09Z",
-      "stars": 4060,
+      "stars": 4090,
       "flags": [],
-      "frozen_pushed_at": null,
-      "checked": "2026-09-07T12:57:50.348Z"
+      "frozen_pushed_at": "2026-09-07T07:22:09Z",
+      "checked": "2026-09-07T21:03:00.407Z"
     },
     "obra/superpowers": {
       "tag": "v6.3.0",
       "published_at": "2026-08-12T16:58:30Z",
       "pushed_at": "2026-09-04T23:04:36Z",
-      "stars": 282668,
+      "stars": 282804,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T23:04:36Z",
-      "checked": "2026-09-07T12:57:50.348Z"
+      "checked": "2026-09-07T21:03:00.407Z"
     },
     "mattpocock/skills": {
       "tag": "v1.2.3",
       "published_at": "2026-08-06T14:05:28Z",
       "pushed_at": "2026-09-04T08:45:43Z",
-      "stars": 255752,
+      "stars": 256024,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T08:45:43Z",
-      "checked": "2026-09-07T12:57:50.348Z"
+      "checked": "2026-09-07T21:03:00.407Z"
     },
     "multica-ai/andrej-karpathy-skills": {
       "tag": null,
       "published_at": null,
       "pushed_at": "2026-04-20T10:05:04Z",
-      "stars": 210795,
+      "stars": 210883,
       "flags": [],
       "frozen_pushed_at": "2026-04-20T10:05:04Z",
-      "checked": "2026-09-07T12:57:50.348Z"
+      "checked": "2026-09-07T21:03:00.407Z"
     },
     "DietrichGebert/ponytail": {
       "tag": "v4.9.0",
       "published_at": "2026-08-07T21:15:11Z",
-      "pushed_at": "2026-09-04T12:35:29Z",
-      "stars": 130416,
-      "flags": [],
-      "frozen_pushed_at": "2026-09-04T12:35:29Z",
-      "checked": "2026-09-07T12:57:50.348Z"
-    },
-    "orval-labs/orval": {
-      "tag": "v8.29.0",
-      "published_at": "2026-09-06T22:41:39Z",
-      "pushed_at": "2026-09-07T11:34:06Z",
-      "stars": 6436,
+      "pushed_at": "2026-09-07T16:27:01Z",
+      "stars": 130833,
       "flags": [],
       "frozen_pushed_at": null,
-      "checked": "2026-09-07T12:57:50.348Z"
+      "checked": "2026-09-07T21:03:00.407Z"
+    },
+    "orval-labs/orval": {
+      "tag": "v8.30.0",
+      "published_at": "2026-09-07T15:42:33Z",
+      "pushed_at": "2026-09-07T20:06:28Z",
+      "stars": 6437,
+      "flags": [],
+      "frozen_pushed_at": null,
+      "checked": "2026-09-07T21:03:00.407Z"
     },
     "SalesforceAIResearch/Random-Attention": {
       "tag": null,
       "published_at": null,
       "pushed_at": "2026-09-04T01:34:07Z",
-      "stars": 33,
+      "stars": 42,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T01:34:07Z",
-      "checked": "2026-09-07T12:57:50.348Z"
+      "checked": "2026-09-07T21:03:00.407Z"
     }
   },
-  "runs": 20,
+  "runs": 21,
   "first_run": "2026-09-01T20:48:09.140Z",
-  "last_run": "2026-09-07T12:57:50.348Z"
+  "last_run": "2026-09-07T21:03:00.407Z"
 }

@@ -2210,3 +2210,45 @@ The batch's security stream, read first-hand at the primary sources where reacha
   treat exploitation as confirmed until proven otherwise** (extends the vendor-flag verification checklist in
   [[fact-check]]); and an RMM console is the keys to every endpoint an MSP manages — patch + IP allowlist/VPN +
   account auditing, because hotfixes don't evict attackers already inside.
+
+## The patch becomes the attack surface; the hardening setting becomes the exploit enabler (09-08)
+
+Four items, one shared lesson: the defensive action (patch, harden) is itself load-bearing in the exploit chain, and
+the scorer record is messy in every case.
+
+- **PaperCut NG/MF CVE-2026-81578 + CVE-2026-82078 — the full Rapid7 chain, and the first two emergency patches were
+  themselves bypassable.** The chain (Rapid7 ETR, disclosed Aug 27; CISA KEV Aug 31): an auth bypass where Apache
+  Tapestry validates access only to the *displayed* page, so privileged admin components can be invoked via the public
+  Error page, chained with unsafe dynamic class loading in the database connector — repointing `user-lookup.db-url`
+  at an attacker-controlled H2/JDBC URL launches an OS process via a Nashorn-backed trigger. Metasploit module exists;
+  PaperCut confirmed customer incidents. **Patch v1 was bypassable via the Home page; Rapid7 states orgs on v1 or v2
+  are "not fully protected"** — only the third patch (Sep 1, shipped outside normal QA) closes the chain. No validated
+  network IOCs yet, and PaperCut warns their absence "should not be interpreted as evidence that a system has not been
+  affected." Scorer split: vendor CVSSv4 8.8/9.4 vs KEV/NVD 9.8/9.1 — record the scorer. Print servers remain the
+  intranet's softest entry (CVE-2023-27350 is the precedent; the ransomware link there is historical, not this campaign).
+- **Telerik UI for ASP.NET AJAX — padding-oracle-to-RCE where the recommended mitigation is the exploit precondition**
+  (TantoSec, public exploit + two webshell payloads Sep 7). Chain against RadAsyncUpload: AES-CBC padding oracle
+  (CVE-2026-13182; timing variant CVE-2026-13183) + unguarded type resolution (CVE-2026-13181) → unauth RCE via a
+  mixed-mode DLL `Assembly.LoadFrom` gadget; verified 2026.1.225–2026.2.519 at ~127,000 oracle queries (~1h in the lab).
+  The twist: the chain **requires an explicit `Telerik.AsyncUpload.ConfigurationEncryptionKey` — "not met by a default
+  installation."** The hardening advice created the exploit's population. Progress also warns exploitation "leaves no
+  obvious trace in standard ASP.NET error logs"; an interim build (2026.1.421) fixed one oracle but left the postback
+  path open; custom keys don't help against the oracle. Only real fix: 2026.2.708 (AES-GCM). CVSS 8.1, scorer unnamed,
+  Progress publishes none; not KEV, no confirmed wild exploitation as of Sep 7.
+- **MikroTik "MikroTrick" — two RouterOS SSH flaws chained for unauth admin, exploited since Sep 2** (CERT Polska,
+  public Sep 5, CVSSv4 9.2 scorer unnamed on both pages). CVE-2026-67276: public-key auth bypass — RouterOS skips the
+  exponent when matching key modulus, so a forged signature verifies without the private key. CVE-2026-86060:
+  crafted-username session privesc that alters the policy mask. Compromised devices show a new privileged account
+  **"ops"** and log strings `ssh:-2@`. Four sibling CVEs (CVE-2026-67277/78/79/81, 6.3–8.8) also disclosed as exploited;
+  fixes in 7.25beta3/7.24.2/7.23.4/6.49.21 — announced via MikroTik's first-ever mobile-app push notification. The
+  hedges the aggregates dropped: neither CERT Polska nor MikroTik says which two flaws form the *observed* chain; the
+  dates don't establish zero-day vs 1-day (beta fix changelog Sep 2, announced Sep 3); public PoC exists only for the
+  auth bypass; MikroTik's default firewall normally shields management ports — exposure requires altered defaults.
+- **Apache Tomcat 9.0.121 — 11 CVEs at once, and one is an incomplete earlier fix** (fixes Aug 18 in 9.0.121/10.1.58/
+  11.0.25; disclosed Aug 25; NVD had analyzed 0 of 10 at disclosure). Includes a web.xml constraint-ordering bypass, a
+  fail-open CLIENT-CERT/SPNEGO auth bug (CWE-287), an HTTP/2 memory-exhaustion DoS, and **CVE-2026-65637 — which exists
+  because, in Apache's own words, "the fix for CVE-2026-32990 was incomplete"**: an HTTP/2 request with no authority
+  bypasses strict SNI validation the ecosystem believed closed in March. Eight of the 11 also affect EOL Tomcat 8.5
+  (final release 8.5.100, EOL Mar 2024) and per Apache "will not be fixed" — HeroDevs counts 48 unpatched post-EOL CVEs
+  over 877 days on that branch. Scorer hygiene: Apache publishes textual ratings, not CVSS; the only scored CVE is
+  CVE-2026-66299 (Apache: Low vs CISA ADP 7.5); none KEV-listed, no exploitation reported.

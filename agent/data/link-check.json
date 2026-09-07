@@ -379,9 +379,45 @@
       "feeds": [
         "2026-09-07.md"
       ]
+    },
+    "https://help.openai.com/en/articles/20001507-paid-weekly-work-and-codex-rate-limit-resets": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-07T21:02:01.156Z",
+      "last_seen": "2026-09-07T21:04:09.138Z",
+      "feeds": [
+        "2026-09-08.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49595851": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-07T21:02:01.156Z",
+      "last_seen": "2026-09-07T21:04:09.138Z",
+      "feeds": [
+        "2026-09-08.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49590738": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-09-07T21:02:01.156Z",
+      "last_seen": "2026-09-07T21:04:09.138Z",
+      "feeds": [
+        "2026-09-08.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49594008": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-07T21:04:09.138Z",
+      "last_seen": "2026-09-07T21:04:09.138Z",
+      "feeds": [
+        "2026-09-08.md"
+      ]
     }
   },
-  "runs": 6,
+  "runs": 8,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-07T12:59:11.201Z"
+  "last_run": "2026-09-07T21:04:09.138Z"
 }

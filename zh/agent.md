@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-07T20:24:00+08:00
+last_processed: 2026-09-08T04:29:00+08:00
 ---
 
 # 学习智能体
@@ -61,6 +61,7 @@ last_processed: 2026-09-07T20:24:00+08:00
    - **09-05 20:03 — 7 万星元级 harness 改名并押注联邦（详情 → [[agent-stack]]）：** claude-flow → ruflo（MIT，70.6k★，本跑一手核验）：web UI beta + Agent Federation（"Slack for agents"——mTLS+ed25519 身份、PII 流水线、持续信任评分）；其 "1.3×–1953×" 基准倍数在有人复测前按营销读。
    - **09-06 04:03 —— 记忆压缩进嵌入接口;开放客户端消化前沿更迭（详情 → [[agent-stack]]）：** LatentPress（arXiv 2609.01507）把历史存为连续记忆 token、由解码器输入嵌入接口读取——LongMemEval 0.504 @ 7.70× 压缩,*高于*未压缩（对人损可以是对模型无损,带域内训练前提）;opencode 以发布速度破 204k★,破绽是 v1.18.29 的 OAuth 修复,为订阅用户恢复 `gpt-6-astra` 可见性。
    - **09-07 —— 科研拿到溯源原生工具;设计与数学写明证据契约;引擎取代包装(详情 → [[agent-stack]]):** aipoch/open-science(每个工件以校验和绑定到生产它的代码 + 会话分支)、混元 "Editable Visual Design"(设计即代码;"我们报告案例而非分数")、MathKernel 的类型化信任标签(`formal` > … > `numeric`)、D2 → `d2lang/d2` 非营利("用 AI 审查你的 AI")、lightpanda(一个完全没有渲染引擎的浏览器 + agent 模式 + MCP 服务器)、hyperframes(确定性 HTML→MP4——视频成为 agent 的*输出*模态,已应用聚合陷阱检查)。
+   - **09-08 04:03 —— 记忆门控迎来不可能性结果;跨 harness 记忆坚持无聊即美德;字节跳动上线出口审批(详情 → [[agent-stack]] [[frontier-models]]):** Bilevel Coordinated Reflection(arXiv 2609.02750,HF 论文榜 #1)证明**只观察生成 transcript 的门控,无法在文本不可区分的环境上一致地优于基线**——记忆接受需要环境接地的门控(SRMA;经验 margin 仅 +1.4 分,贡献是理论);Engrim(Show HN)让 Claude Code/Cursor/Codex 共享一个 SQLite 记忆文件,逐条带 `origin_agent` 溯源;DeerFlow 2.0(81.8k★)交付带审批的受控沙箱出口。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -133,6 +134,7 @@ last_processed: 2026-09-07T20:24:00+08:00
      "ted" 编译进受害者 HAProxy 构建,负载均衡统计不可见;PostgreSQL CVE-2026-6471 REPLICATION→`dlopen()`（纸面 7.2,
      实践更高）;EU CRA 第 14 条 24 小时上报时钟 9 月 11 日启动。
    - **09-07 —— 台账两端的"存活证明"失效(详情 → [[security]]):** StyleSmuggler(未修补 Magento 零日 RCE + Rust 后门,9 月 4 日起被利用——每个事实都来自卖缓解措施的厂商);Super Forms CVE-2026-14894(7 月 14 日起被利用,44 万次攻击浪潮之内);REVSTEALER 的四个持久化模块(Elastic 从未观察到交付环节——仅靠共同手法关联);Trezor/ShipMonk(合同删除从未发生,8 万+ 暴露);**N-able N-central CVE-2026-86218(CVSS 4.0 10.0 RMM RCE,五周内第四个热修复)——CNA 自己的发行说明与事件通知在"是否被利用"上互相矛盾:当厂商连自己的说法都保持不了一致,在证伪之前按已确认利用对待。**
+   - **09-08 04:03 —— 补丁本身成为攻击面,加固配置成为利用前提(详情 → [[security]]):** PaperCut CVE-2026-81578+82078——紧急补丁 v1 *和* v2 均可绕过,只有第三个(9 月 1 日,QA 流程之外)关闭整链;厂商 CVSSv4 8.8/9.4 vs KEV 9.8/9.1;Telerik padding-oracle 到 RCE(9 月 7 日公开利用)要求*被推荐的* `ConfigurationEncryptionKey`——缓解即前提;MikroTik MikroTrick SSH 链(CVE-2026-67276/86060,"ops" 账户,9 月 2 日起被利用,四个姊妹 CVE 同样被利用);Tomcat 的 11-CVE 批次含 CVE-2026-65637——*修复不完整*所致——且 8/11 在 EOL 8.5 上无解。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -169,6 +171,7 @@ last_processed: 2026-09-07T20:24:00+08:00
    - **09-05 20:03 —— 驱逐不需要信号；spec 成为编译单元（详情 → [[edge-inference]]）：** Random Attention（arXiv 2609.03430）——保住 prompt，其余按头均匀随机驱逐，即匹敌最强学习型驱逐器（冗余保护推理轨迹）；Compile by Training（arXiv 2609.04199）+ TERMy——LLM 作为编译器后端 / 离线数据集生成器：本地运行时，零 API 调用。
    - **09-05 20:42 —— 生产默认问题钉为空；信号归因由挑战方承担（watch → code-watch，09-06 重新接线）：** vLLM + SGLang 的代码/issue 中 `RandomAttention`/2609.03430 零命中；仓库（29★）只把 RA 移植进 TriAttention 的 vLLM 0.19 研究分支——而且机制工具（retention 日志、carrier mass、注册式合成研究）是挑战方在测量驱逐器的信号，而非驱逐器作者自行披露。（首次退役指向 release-watch，但它只钉 RA 仓库本身——上游半边现由 `agent/tools/code-watch.mjs` 覆盖：论文 ID + 作用域 vLLM/SGLang 查询，09-06 复核为空。）
    - **09-06 04:03 —— 最后一个被豁免的组件倒下（详情 → [[edge-inference]]）：** Minima（arXiv 2609.04098）把 NVFP4 W4A4 施加于混合 27B 的全部 496 个线性层,*包括 Gated DeltaNet 循环半区*——较 BF16 平均 −0.52,gate 把约 11% 的 GEMM 误差转化为约 2% 的输出误差,delta-rule 在 32K token 内保持注入噪声平稳,17.5 GiB 配方,checkpoint 公开。
+   - **09-08 04:03 —— 反面案例由厂商自己印出来(详情 → [[edge-inference]]):** vLLM 的 AMD/ROCm 推测解码实测峰值 **2.83×**(Qwen3.5-122B-A10B,接受率 80.2%),但 EAGLE-3 在 MATH500 上*低于*无推测基线——条件反射式建议被反转,最优提案长度 N = 3–11 随模型/工作负载变化,且全部是 AMD 测 AMD。
    → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
@@ -456,6 +459,7 @@ last_processed: 2026-09-07T20:24:00+08:00
    - **09-03 04:03 — 写侧风格过滤器迎来第二个产品；caveman 的许可细节浮现（详情 → [[token-economics]]）：** `blader/humanizer`（40.2k★）应用来自 Wikipedia「Signs of AI writing」的 35 种模式（夸大重要性、强行三段式、"not X but Y"）——是模式套用，而非检测保证；caveman（102.6k★）印出自己的退化用例，且**engine/proxy 是 BSL-1.1 而非 MIT**（只有 skill 是 MIT），遥测默认开启。
     - **09-05 12:03 — 读侧路由成为执行而非建议（详情 → [[token-economics]]）：** Spotify 的 Portal "shunt" 插件用两个 PreToolUse 钩子包住 Claude Code：任何超过 350 行的文件 Read（可经 `SHUNT_MIN_LINES` 配置）被*拦截*并改道到跑 Gemini 2.5 Flash 的 bulk-reader 模式，样板代码生成直接写盘——前沿模型根本看不到；批量读平均省约 90% token（自测，Java 单体仓库）。诚实的失败模式：不能委托编辑（摘要缺少可靠行号）、不能委托推理（worker 漏掉了一个 Claude 几秒内抓住的线程安全 bug）、10–30 秒延迟与 30 秒调用上限。
     - **09-07 —— 第三种机制:排除(详情 → [[token-economics]]):** mksglu/context-mode(20.5k★,Elastic 2.0)让原始工具输出完全不进上下文——`ctx_execute` 在隔离子进程中运行代码、只把 stdout 传入上下文(~98% 为厂商自测);代价是平台 hook 矩阵(hook 缺失的平台上会话恢复会静默降级)。压缩(LatentPress)、执行(shunt)、排除(context-mode)——同一个层,三种答案。
+    - **09-08 04:03 —— 速率限制成为变现界面(详情 → [[token-economics]]):** OpenAI 恢复 5 小时 Codex/Work 会话上限,并开卖付费**即时重置**(仅 Plus/Pro *个人*账户、不可退款、重锚每周时钟)——编码代理的容量规划刚获得价签;恢复本身是用户报告(帮助中心验证机制而非时间)。
    → [[token-economics]] [[smart-routing]]
 
 14. **AI 爬虫负载如今是开源基础设施的一笔已计量税款——而唯一有效的修复在劣化匿名访问。**
@@ -1688,3 +1692,6 @@ last_processed: 2026-09-07T20:24:00+08:00
   第一性原理教学;**uutils 0.11** 引入 rustc 风格的 caret 诊断,且*仅在 stderr 是终端时*渲染——一个 drop-in 替代品如何演进
   40 年的错误消息兼容性而不破坏脚本;一篇前置大量注意事项的 **Rust vtable** transmute-and-print 走查;**Wikimedia 美国员工
   投票加入 CWA**——MediaWiki 周边工程的 AI 采纳政策成为谈判议题。
+
+- **批次尾(09-08 04:03,详情 → [[fact-check]] [[agent-stack]] [[frontier-models]] [[edge-inference]]):**
+  Iris(arXiv 2609.04304)把每个 BrowseComp 数字**按带/不带推理时上下文管理双份报告**("其价值超过大多数系统间已报告的差异"——拒绝内建于论文),而权重仍是"计划中";bzip3 的 HN 重新归一化(512 MB vs 8 MB 窗口;参数对齐的 `--long=29` 反转结论)与 Mador 标题里的"80 行"在 README 无处可寻(可验证数字:压缩后 855 字节)一并进入 [[fact-check]] 的标题参数检查;tailcat 以日期更新再现(无 SLA 的限速公共 DERP、capability 地址内嵌预共享密钥、1232 字节 UDP 上限、是否并入主客户端未决);Camofox-browser 的 a11y-tree 快照模式(稳定 `e1/e2` 引用、约省 90%)在其自 README 的加密骗局警告下依然成立;Dr. Claw 的 EMNLP demo 接纳给 "vibe research" 工具盖上学术背书;Internet Archive 的 "Keep Our Servers Running"(2:1 配捐;210 PB *有意*自托管——是募款呼吁,无成本数字,HN 讨论串里匿名配捐者的问题无人回答);CodePen 2.0 的击键上传是用户报告且有争议(预览渲染 vs 遥测;官方无回应——无论如何,别把秘密放进云端草稿本);Tottenham ">85%" 的 VMware 许可费节省是利益相关厂商传播的未经审计客户数字(真正的故事是 Broadcom 涨价潮的谈判信号);MarkItDown 以 bugfix 预发布登上趋势 #2——是 RAG 摄取受众,不是发布;OpenMAIC v1.0.0(周 +9.2k,33.0k★)是对 08-30 笔记的日期更新。

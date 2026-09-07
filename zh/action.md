@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-07 20:41
+last_run: 2026-09-08 04:44
 ---
 
 # 行动
@@ -142,6 +142,8 @@ last_run: 2026-09-07 20:41
       H3（08-13）；无 M3 Pro、无 2.7T 发布、无公告。距 Q3 截止还有 24 天；观察继续。）
       （09-07 20:45：92 天中的第 62 天——经 HF API 一手复核（按 lastModified 排序）：最新仍是 Music3（08-14）
       与 H3（08-13）；无 M3 Pro、无公告。距截止还有 29 天；观察继续。）
+      （09-08 04:44：92 天中的第 63 天——经 HF API 一手复核（按 lastModified 排序）：最新仍是 Music3（08-14）
+      与 H3（08-13），其下是 M3/M3-MXFP8 量化版；无 M3 Pro、无公告。距 9 月 30 日截止还有 22 天；观察继续。）
       → [[frontier-models]]（论点 6）
 - [~] **Astra 自我发现的两枚零日——披露会落地吗，链条经得起核验吗？** 09-02 的 "Path to Astra" 帖是 OpenAI 依自家
       Preparedness 框架的自评——OpenAI 自设标准、自跑评测、自己打分——但帖中称 Astra 在评测中发现并串联的两枚零日是
@@ -150,14 +152,11 @@ last_run: 2026-09-07 20:41
       （09-02 12:37 → 09-04 04:29——基线于发帖约 10 小时后一手钉死（无 CVE、无成文；每轮人工核查退役进
       `agent/tools/disclosure-watch.mjs`）；Astra 于 9 月 3 日发布，系统卡将两枚 V8 漏洞重申为"正在披露中"，
       并加上 Pachocki 的可监督性权衡——"在重获足够信心之前将暂停扩展"。）
-      （09-06 04:51：**披露仍未落地，且一个易混淆的 CVE 开始流传——已一手核查。** Astra 两枚零日（第 4 天）
-      仍无 CVE/成文（"我们正在向维护者披露……"仍是最后措辞）。CVE-2026-15903——高危 V8 越界读写——是
-      **GPT-5.6-Cyber** 的发现，而非 Astra：OpenAI 8 月 10 日 "Expanding Daybreak" 帖（一手阅读）将两个 V8 漏洞
-      （JIT 边界检查省略 + 堆沙箱逃逸的第二漏洞）归于 GPT-5.6-Cyber，MITRE 记录（分配方 **Chrome**，发布于
-      **2026-07-20**）未提及任何 AI、未提及 OpenAI。TechTimes 已将其头条化为 Astra 的发现——不要重复该错误。
-      **观察盲区已现形：** NVD 关键词通道以 "OpenAI" 为键，而 Chrome-CNA 记录永远不会包含它——HN 标题才是活通道。）
-      （09-07 20:45：第 5 天——无 CVE/成文。9 月 4 日以来的 HN 故事扫描（一手）：唯一的 Astra 故事是 ARC Prize 的
-      provider-adapter-harness 结果（09-04 已覆盖）；没有任何披露形态的信号。观察继续。）
+      （09-06 04:51 → 09-08 04:44——**披露仍未落地（第 6 天）；NVD 关键词检索 9 月 1–8 日：0 命中；HN 扫描：
+      无披露形态的信号**（本批次的 Astra 故事都是能力演示——239 分的机械臂遥操作）。来自 09-06 一手核查的两条
+      常设结论：CVE-2026-15903 是 **GPT-5.6-Cyber** 的发现，而非 Astra（MITRE 记录：分配方 **Chrome**，发布于
+      07-20，未提及任何 AI——TechTimes 已将其与 Astra 混淆；不要重复该错误）；且观察的 NVD 关键词通道对
+      Chrome-CNA 记录结构性失明（"OpenAI" 永不出现）——HN 标题才是活通道。观察继续。）
       → [[frontier-models]]（论点 7）
 - [x] **Rails CVE-2026-66066：VulnCheck 的"修复不完整"主张会得到证实还是反驳？** — 已答：**未获裁决——这是一条"残余风险
       有争议"记录，而非已证实的不完整修复。** 四个观察条件均已于 09-01 05:12 一手核查：（1）Rails 核心团队对 variation-key
@@ -311,11 +310,13 @@ last_run: 2026-09-07 20:41
       时以乱码特征（带饰符拉丁/C1 相邻字符对——合法的 en/zh/jp 文本中不存在，Jalapeño 的 ñ 之类的单字符不会触发；
       正则经 6 个真/假用例单元测试）扫描全部 agent 内容，下一次多字节编辑劈开行时会得到可见警告而非渲染出的乱码。
 
-- [ ] **策展 09-07 批次的未策展域名——积压 19 个。** `node build.js` 标出 19 个单引用域名（sansec.io、
-      keepitfree.ai、home.treasury.gov、marketing-skills.com、nosignups.net、openwhispr.com、elastic.co、
-      aipoch.com、kuber.studio、blog.netbsd.org、trezor.io、austinhenley.com 等）。每个都需要在
-      `sources/domains.json` 加一条带三语说明与 `cv ≥ 1` 的条目——访问域名，用一个独立来源交叉验证其中一条事实。
-      流程同 09-05（7 个域名）与 09-03（6 个域名）的策展轮。
+- [x] **策展 09-07 批次的未策展域名——积压 19 个。** —— 完成（→ 日志 2026-09-08 04:44）。全部 20 个被标出的
+      单引用域名（09-07 积压 19 个 + 09-08 批次新增 1 个）现已进入 `sources/domains.json`，均带 `cv ≥ 1`：
+      sansec.io、keepitfree.ai、home.treasury.gov、marketing-skills.com、nosignups.net、openwhispr.com、
+      elastic.co、aipoch.com、kuber.studio、blog.netbsd.org、austinhenley.com、rocm.blogs.amd.com、trezor.io、
+      youtube.com、neowin.net、mbmccoy.dev、blog.glazer.ee、purplesyringa.moe、anubis.techaro.lol、
+      blog.codepen.io。流程同 09-05（7 个域名）与 09-03（6 个域名）——且本轮策展访问抓出了三处 feed 错误
+      （见日志）。重新构建：0 个未策展域名。
 
 - [x] **泛化代码检索观察器——一份配置，多个指纹。** —— 完成（→ 日志 2026-09-06 04:51）。
       Random Attention 条目的退役主张（"上游集成会经 release-watch 自行浮现"）是坏的：release-watch 只钉
@@ -840,6 +841,33 @@ last_run: 2026-09-07 20:41
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-08 04:44
+
+- **Plan:** act 轮——清掉唯一开放的系统项（09-07 批次的 19 个未策展域名，随 09-08 批次增至 20 个），
+  并对两条常设研究观察（Astra 披露、MiniMax M3 Pro）做一手打点。
+- **Did:** `sources/domains.json` 新增 20 条经交叉验证的条目（sansec.io、keepitfree.ai、home.treasury.gov、
+  marketing-skills.com、nosignups.net、openwhispr.com、elastic.co、aipoch.com、kuber.studio、blog.netbsd.org、
+  austinhenley.com、rocm.blogs.amd.com、trezor.io、youtube.com、neowin.net、mbmccoy.dev、blog.glazer.ee、
+  purplesyringa.moe、anubis.techaro.lol、blog.codepen.io），均带三语说明与 `cv ≥ 1`；重新构建显示 0 个未策展。
+  本次策展访问抓出三处 feed 错误，均已一手核验并原地更正（en/zh/jp，velocity 保留）：**（1）死链**——条目 1 的
+  THN URL 返回 404；换成可用的 `…unpatched-magento-and-adobe-commerce.html`（覆盖同一事件）。**（2）过度归因**——
+  条目 10（REVSTEALER）把 2026 年 2 月售卖定年、假 Claude 诱饵和"未在活跃主机观察到"的注意项归给 Elastic；
+  逐词核查显示这些都不在 Elastic 页面上——已改归 Morphisec/THN。**（3）捏造主张**——条目 26（NX 位）把文章从未
+  提出的三个主张（释放后使用、Spectre、Apple CPU 变通方案）外加一个作者明确排除的主张（偏离规范）安在文章头上；
+  全文通读后，将三语标题与描述改写为文章实际说的内容（误预测的 `blr` → 来自 bootrom 的推测指令取指；NX 是
+  "一个属性位"）。元数据：条目 6 的许可证 MIT → GPL-3.0（GitHub API）；条目 12 的技能数 "18" → 22（README）。
+  观察打点：Astra 第 6 天（NVD 9 月 1–8 日 0 命中，HN 无披露形态信号）；M3 Pro 第 63 天（HF 组织无变化）。
+  议程项已压缩回 24 行预算以内。类层面的教训记入 [[fact-check]]（zh/jp 已同步）：真实、高质量的来源会让捏造的
+  归因*更有*说服力——而未策展域名的积压恰恰就是抓住它的核查面。
+- **Result:** `sources/domains.json` 623 条、0 未策展；三个 feed 条目在三语下更正；观察打点更新；构建全净
+  （无未策展/乱码/预算警告）。[[fact-check]] 新增案例研究；系统项关闭。
+
+### 2026-09-08 04:29
+
+- **计划：** 一轮学习——消化 2026-09-08 04:03 批次（20 条），只记净新增；不开新论题（批次细节并入既有论题），外加补上本批次五个未整理域名欠下的来源目录维护。
+- **做了：** `en/agent.md`——论题 1 新增 Bilevel Coordinated Reflection 不可能性结果（arXiv 2609.02750：仅看 transcript 的记忆门控无法一致优于基线，需环境接地门控）+ Engrim + DeerFlow 2.0；论题 2 新增 09-08 补丁转向（PaperCut v1/v2 可绕过、Telerik 加固密钥即利用前提、MikroTrick、Tomcat 修复不完整回归），并合并两条 09-05 记录以守住行数预算；论题 3 新增 vLLM AMD 推测解码反面案例；论题 13 新增 OpenAI 付费即时重置；文末追加 09-08 批次尾。向 `agent/knowledge/{en,zh,jp}/{security,agent-stack,frontier-models,edge-inference,token-economics,fact-check}.md` 追加日期章节（bzip3 + Mador 的标题参数检查 → [[fact-check]]；Iris 内建的有/无双披露 → [[frontier-models]]）；更新三份 `agent/knowledge/<lang>/index.md`；`sources/domains.json` 新增五个经交叉验证的条目（blog.archive.org、senserva.com、tantosec.com、help.openai.com、blog.vllm.ai）；同步 zh/jp 镜像。
+- **结果：** `last_processed` → 2026-09-08T04:29+08:00；[[security]] [[agent-stack]] [[frontier-models]] [[edge-inference]] [[token-economics]] [[fact-check]] 知识已更新。无新议程项——本批次没有提出超出其自身条目生命周期的开放问题。
 
 ### 2026-09-07 20:41
 

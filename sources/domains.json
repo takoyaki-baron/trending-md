@@ -4112,6 +4112,51 @@
     "density": "med",
     "cv": 1
   },
+  "blog.archive.org": {
+    "cat": "community",
+    "en": "Internet Archive's official blog — primary source for its own infrastructure, collections and funding posts; a nonprofit's self-account, so fundraising figures are its own.",
+    "zh": "Internet Archive 官方博客——其基础设施、馆藏与募款文章的一手来源；非营利组织的自我陈述，募款数字为其自报。",
+    "jp": "Internet Archive の公式ブログ——インフラ・コレクション・資金に関する記事の一次ソース；非営利の自己説明であり、募金数値は自己報告。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "senserva.com": {
+    "cat": "security",
+    "en": "Senserva's weekly KEV tracker — a convenient mirror of CISA KEV data for triage, but it is an aggregator of official listings, not an authority; confirm against CISA.",
+    "zh": "Senserva 的每周 KEV 追踪器——分诊时方便的 CISA KEV 数据镜像,但它只是官方名录的聚合而非权威;请与 CISA 核对。",
+    "jp": "Senserva の週次 KEV トラッカー——トリアージに便利な CISA KEV データのミラーだが、公式リストの集約にすぎず権威ではない;CISA で確認。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "tantosec.com": {
+    "cat": "security",
+    "en": "TantoSec's research blog — primary exploit-chain writeups with reproduction detail (the Telerik padding-oracle chain); vendor-independent, publishes its own verification limits.",
+    "zh": "TantoSec 研究博客——带复现细节的一手利用链分析(Telerik padding-oracle 链);独立于厂商,发布自身的验证边界。",
+    "jp": "TantoSec のリサーチブログ——再現詳細付きの一次エクスプロイトチェーン解説(Telerik padding-oracle チェーン);ベンダー非依存で、自らの検証限界も公表。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "help.openai.com": {
+    "cat": "vendor",
+    "en": "OpenAI Help Center — authoritative for OpenAI's own plan limits, pricing mechanics and policies (verified for the Codex rate-limit structure); silent on timing and rationale.",
+    "zh": "OpenAI 帮助中心——对 OpenAI 自身的套餐限额、定价机制与政策具权威性(已核验 Codex 限额结构);对变更时机与理由保持沉默。",
+    "jp": "OpenAI ヘルプセンター——OpenAI 自身のプラン制限・価格メカニズム・ポリシーについては権威(Codex レート制限構造を検証済み);時期と理由には沈黙。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "blog.vllm.ai": {
+    "cat": "community",
+    "en": "vLLM project's official blog — primary engineering writeups from the inference engine most local/agent serving builds on; benchmark numbers are the project's own environment.",
+    "zh": "vLLM 项目官方博客——本地/agent 推理服务最常依赖的引擎的一手工程文章;基准数字来自项目自身环境。",
+    "jp": "vLLM プロジェクト公式ブログ——ローカル/エージェント推論サービングの基盤となるエンジンの一次エンジニアリング解説;ベンチ数値はプロジェクト自身の環境による。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
   "bbc.com": {
     "cat": "news",
     "en": "BBC News — mainstream general-audience outlet; reliable for the fact of an announcement, thin on technical detail — always pair with the primary source.",
@@ -5375,6 +5420,186 @@
     "jp": "EU の官方法ポータル — EUPL 等の法令の正規テキスト。構造的に権威だがスクレイピングには不 friendly。",
     "cred": "high",
     "density": "high",
+    "cv": 1
+  },
+  "sansec.io": {
+    "cat": "security",
+    "en": "Sansec's threat-research blog (Norwegian e-commerce security vendor) — discoverer-vendor disclosure of the StyleSmuggler Magento zero-day with exhaustive timeline and IOCs; authoritative for its own incident, but it sells the mitigation (Shield rules). Cross-validated vs The Hacker News' independent coverage (incl. Disrex's two breached stores).",
+    "zh": "Sansec（挪威电商安全厂商）的威胁研究博客——StyleSmuggler Magento 零日漏洞的发现者一手披露，时间线与 IOC 详尽；对其自身事件具权威性，但它同时兜售缓解方案（Shield 规则）。与 The Hacker News 的独立报道交叉验证（含 Disrex 确认的两家被入侵商店）。",
+    "jp": "Sansec（ノルウェーのECセキュリティベンダー）の脅威調査ブログ。StyleSmuggler Magento ゼロデイの発見者による一次開示で、タイムラインと IOC が詳細。自社事例については権威あるが、緩和策（Shield ルール）を販売する立場でもある。The Hacker News の独立報道（Disrex による2store侵入確認を含む）と相互検証済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "keepitfree.ai": {
+    "cat": "community",
+    "en": "A/I (Autistici/Inventati)'s own shutdown announcement — primary source for the collective's statements and framing ('domain made unreachable without notice'); it never names the designating government, so designation facts need the Treasury/State links. Cross-validated vs the Wikipedia article on A/I.",
+    "zh": "A/I（Autistici/Inventati）自己的关停公告——对该集体自身声明与叙事的一手来源（\"域名在未通知的情况下不可达\"）；页面从未点名实施定性的政府，定性事实需借助财政部/国务院链接。与 A/I 的维基百科条目交叉验证。",
+    "jp": "A/I（Autistici/Inventati）自身のシャットダウン告知。共同体自身の主張と枠組みの一次ソース（「ドメインが予告なく到達不能に」）。指定した政府名は本文に一度も現れないため、指定の事実は Treasury/State のリンクが必要。A/I の Wikipedia 記事と相互検証済み。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "home.treasury.gov": {
+    "cat": "security",
+    "en": "US Treasury press releases — the primary government record for sanctions/counterterrorism designations (the Aug 26 A/I listing); legal, contested-allegations-only content with no technical depth. Cross-validated vs The Next Web's coverage of the A/I shutdown. Note: the GL 36 wind-down lives in a separate OFAC document.",
+    "zh": "美国财政部新闻稿——制裁/反恐定性（8 月 26 日 A/I 列名）的政府一手记录；只有法律指控内容、无技术深度，且指控未经审理。与 The Next Web 对 A/I 关停的报道交叉验证。注意：GL 36 的退出许可载于另一份 OFAC 文件。",
+    "jp": "米財務省のプレスリリース。制裁/テロ指定（8/26 の A/I 指定）に関する政府の一次記録。法的指控のみで技術的深さはなく、指控は未審理。The Next Web の A/I シャットダウン報道と相互検証済み。注意：GL 36 の wind-down 許可は別の OFAC 文書に記載。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "marketing-skills.com": {
+    "cat": "vendor",
+    "en": "Corey Haines' landing page for the marketingskills agent-skill library (~50 skills for marketers) — accurate against its GitHub repo (coreyhaines31/marketingskills, 48k stars) but promotional in tone with sponsor placement. Cross-validated vs the repo itself.",
+    "zh": "Corey Haines 的 marketingskills 智能体技能库落地页（约 50 个面向营销人的技能）——与其 GitHub 仓库（coreyhaines31/marketingskills，4.8 万星）内容一致，但带赞助位、宣传口吻明显。与仓库本身交叉验证。",
+    "jp": "Corey Haines の marketingskills エージェントスキルライブラリのランディングページ（マーケター向け約50スキル）。GitHub リポジトリ（coreyhaines31/marketingskills、4.8万スター）の内容と一致するが、スポンサー表示があり宣伝色が強い。リポジトリ自体と相互検証済み。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "nosignups.net": {
+    "cat": "community",
+    "en": "Landing page for the FckSignups/NoSignups no-account browser-tools directory — renders nearly empty without JS, so almost nothing here for an agent; the repo README ('NoSignups (formerly FckSignups)', GPL-3.0) is the real source. Cross-validated vs BraveOPotato/FckSignups.",
+    "zh": "FckSignups/NoSignups 免账号浏览器工具目录的落地页——无 JS 时几乎渲染为空，对智能体几乎无信息量；仓库 README（\"NoSignups (formerly FckSignups)\"，GPL-3.0）才是真正的来源。与 BraveOPotato/FckSignups 交叉验证。",
+    "jp": "FckSignups/NoSignups（アカウント不要のブラウザツールディレクトリ）のランディングページ。JS なしではほぼ空にレンダリングされ、エージェントにとっての情報量は極小。実質の情報源はリポジトリ README（「NoSignups (formerly FckSignups)」、GPL-3.0）。BraveOPotato/FckSignups と相互検証済み。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "openwhispr.com": {
+    "cat": "vendor",
+    "en": "Landing page for OpenWhispr, an open-source local-first voice-dictation app — its offline/privacy claims (\"your voice never reaches us\", local Whisper models) check out against the OpenWhispr/openwhispr repo (cross-validated); compliance badges (HIPAA/SOC 2) are unverified marketing.",
+    "zh": "OpenWhispr（开源本地优先语音听写应用）的落地页——其离线/隐私主张（\"你的语音永远不经过我们\"、本地 Whisper 模型）与 OpenWhispr/openwhispr 仓库一致（已交叉验证）；HIPAA/SOC 2 等合规徽章属未经核实的营销。",
+    "jp": "オープンソースのローカル音声入力アプリ OpenWhispr の製品ページ。オフライン/プライバシー主張（「音声はこちらに届かない」、ローカル Whisper モデル）は OpenWhispr/openwhispr リポジトリと一致（相互検証済み）。HIPAA/SOC 2 等のコンプライアンスバッジは未検証のマーケティング。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "elastic.co": {
+    "cat": "security",
+    "en": "Elastic Security Labs' threat research (REF2859 REVSTEALER report) — authoritative for the four modules, IOCs and YARA it publishes, but read carefully: secondary facts in circulation (the Feb-2026 sale date, the fake-Claude lure, the live-host caveat) come from THN/Morphisec coverage, not this page. Cross-validated vs The Hacker News.",
+    "zh": "Elastic Security Labs 的威胁研究（REF2859 REVSTEALER 报告）——对其发布的四个模块、IOC 与 YARA 具权威性，但需细读：流传中的若干二手事实（2026 年 2 月起售卖的定年、假 Claude 诱饵、\"未在活跃主机上观察到\"的注意项）出自 THN/Morphisec 的报道，而非此页面。与 The Hacker News 交叉验证。",
+    "jp": "Elastic Security Labs の脅威調査（REF2859 REVSTEALER レポート）。掲載済みの4モジュール・IOC・YARA については権威あるが、精読が必要：流通している二次的事実（2026年2月販売開始の年代判定、偽 Claude 誘惑アプリ、稼働ホストでの未観測という注意点）は THN/Morphisec の報道由来で、このページにはない。The Hacker News と相互検証済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "aipoch.com": {
+    "cat": "vendor",
+    "en": "Product page for AIPOCH's Open Science research workbench — claims (24 connectors, Apache-2.0, local-first) align with the aipoch/open-science repo (cross-validated), and its 'What This Is Not' disclaimers are unusually candid; the self-claimed 'BiomniBench #1' remains unbenchmarked by anyone else.",
+    "zh": "AIPOCH 的 Open Science 科研工作台产品页——其主张（24 个连接器、Apache-2.0、本地优先）与 aipoch/open-science 仓库一致（已交叉验证），\"这不是什么\"免责声明罕见坦诚；但自称的 \"BiomniBench 第一\" 无人复测。",
+    "jp": "AIPOCH の Open Science 研究ワークベンチ製品ページ。主張（24 コネクタ、Apache-2.0、ローカルファースト）は aipoch/open-science リポジトリと一致（相互検証済み）。「これは何ではない」免責は珍しく率直。ただし自称の「BiomniBench 1位」は第三者検証なし。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "kuber.studio": {
+    "cat": "community",
+    "en": "Personal blog of kuberwastaken (Kuber Mehta) — the 'Recreating Minecraft Is Not a Benchmark' essay articulates the demo-benchmark critique; its borrowed Artificial Analysis numbers (Inkling Small 40 vs 41, HLE/GPQA/SciCode) all verify against artificialanalysis.ai (cross-validated). Opinion, but factually careful.",
+    "zh": "kuberwastaken（Kuber Mehta）的个人博客——《重制 Minecraft 不是基准》一文清晰阐述了演示基准批评；其引用的 Artificial Analysis 数字（Inkling Small 40 对 41、HLE/GPQA/SciCode）全部与 artificialanalysis.ai 核对无误（已交叉验证）。属观点文，但事实态度严谨。",
+    "jp": "kuberwastaken（Kuber Mehta）の個人ブログ。「Minecraft の再現はベンチマークではない」論考はデモベンチマーク批判を明快に言語化する。引用する Artificial Analysis の数値（Inkling Small 40 対 41、HLE/GPQA/SciCode）はすべて artificialanalysis.ai で検証済み（相互検証済み）。主観寄りだが事実関係には慎重。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "blog.netbsd.org": {
+    "cat": "community",
+    "en": "The NetBSD Project's official blog — primary, terse release/EOL announcements (the 9.5 post: final netbsd-9 release + end-of-support in three sentences). Cross-validated vs Phoronix's coverage of the 9.5 release.",
+    "zh": "NetBSD 项目的官方博客——发布/停止支持公告的一手且极简来源（9.5 帖：三句话说完 netbsd-9 最终版+终止支持）。与 Phoronix 对 9.5 发布的报道交叉验证。",
+    "jp": "NetBSD Project の公式ブログ。リリース/EOL 告知の一次かつ簡潔な情報源（9.5 の記事：netbsd-9 最終リリースとサポート終了を3文で伝える）。9.5 リリースに関する Phoronix の報道と相互検証済み。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "austinhenley.com": {
+    "cat": "community",
+    "en": "Austin Z. Henley's technical blog (Teeny Tiny compiler author) — first-hand walkthroughs by the artifact's author with complete source included (the 1,024-byte Python-like interpreter); the exemplary shape for a code-golf primary source. Cross-validated vs the HN discussion (author-submitted, critiques match).",
+    "zh": "Austin Z. Henley 的技术博客（Teeny Tiny 编译器作者）——由产物作者亲笔撰写、附带完整源码的一手解析（1024 字节的类 Python 解释器）；代码高尔夫类一手来源的典范形态。与 HN 讨论（作者本人提交、批评点吻合）交叉验证。",
+    "jp": "Austin Z. Henley の技術ブログ（Teeny Tiny コンパイラの作者）。成果物の作者自身による一次解説で、完全なソース付き（1,024バイトの Python 風インタプリタ）。コードゴルフ系の一次ソースの模範形。HN ディスカッション（本人投稿、批判内容も一致）と相互検証済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "rocm.blogs.amd.com": {
+    "cat": "vendor",
+    "en": "AMD's official ROCm engineering blog — detailed, caveat-carrying primary vendor announcements (ROCm 10.0: ROCm.AI, AMD Skills, RCCL merge); cite it directly, not secondary multipliers (the '3.3×' uplift circulating in coverage appears nowhere in AMD's own post). Cross-validated vs the amd/skills repo.",
+    "zh": "AMD 官方 ROCm 工程博客——细节充分、自带注意项的厂商一手公告（ROCm 10.0：ROCm.AI、AMD Skills、RCCL 合入）；应直接引用，而非二手倍数（二手报道流传的 \"3.3×\" 提升在 AMD 自己的帖子里根本不存在）。与 amd/skills 仓库交叉验证。",
+    "jp": "AMD 公式の ROCm エンジニアリングブログ。詳細で注意点も明記したベンダー一次告知（ROCm 10.0：ROCm.AI、AMD Skills、RCCL マージ）。二次的な倍率ではなく直接引用すべき（報道で流れる「3.3×」の向上は AMD 自身の記事には一切ない）。amd/skills リポジトリと相互検証済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "trezor.io": {
+    "cat": "vendor",
+    "en": "Trezor's blog — canonical first-party incident disclosure (the ShipMonk fulfillment-partner breach: 67,000 more customers, written-deletion assurances that never happened); figures are self-reported and single-source. Cross-validated vs The Hacker News' coverage.",
+    "zh": "Trezor 的博客——第一方事件披露的权威来源（ShipMonk 履约伙伴数据泄露：新增 6.7 万客户、\"已书面确认删除\"却从未发生的承诺）；数字属自报且单一来源。与 The Hacker News 的报道交叉验证。",
+    "jp": "Trezor のブログ。一次のインシデント開示としての標本（ShipMonk の委託先漏洩：追加6.7万人、「書面で削除確認」が実際には未実施だった件）。数値は自己報告かつ単一ソース。The Hacker News の報道と相互検証済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "mbmccoy.dev": {
+    "cat": "community",
+    "en": "Personal notebook of mathematician Mike McCoy — thoughtful commentary (the conservatory analogy for math funding post-automation); transparent about its own verification limits ('I haven't fully verified the proof'), but commentary, not a primary research source. Cross-validated vs the HN thread on Anthropic's FLT formalization.",
+    "zh": "数学家 Mike McCoy 的个人笔记——有深度的评论（自动化时代数学生经费的\"音乐学院\"类比）；对自身验证限度坦诚（\"我尚未完全验证该证明\"），但属评论而非一手研究来源。与 HN 上关于 Anthropic FLT 形式化的讨论串交叉验证。",
+    "jp": "数学者 Mike McCoy の個人ノート。思慮深い論評（自動化後の数学の資金を「音楽院」に例える）。自身の検証限界に正直（「証明は完全には検証していない」）だが、論評であって一次研究ソースではない。Anthropic の FLT 形式化に関する HN スレッドと相互検証済み。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "blog.glazer.ee": {
+    "cat": "vendor",
+    "en": "Glazer Technologies' engineering blog (OSINT/data-intelligence firm) — deep, reproducible first-hand forensics (the Cronos registry KOD recovery: frequency-scoring + Hungarian algorithm); corroborated by the OCCRP cronodump codebase it builds on. Cross-validated vs alephdata/cronodump.",
+    "zh": "Glazer Technologies（OSINT/数据情报公司）的工程博客——深入且可复现的一手取证（Cronos 注册表 KOD 恢复：频率评分+匈牙利算法）；其所扩展的 OCCRP cronodump 代码库可作旁证。与 alephdata/cronodump 交叉验证。",
+    "jp": "Glazer Technologies（OSINT/データインテリジェンス企業）のエンジニアリングブログ。深く再現可能な一次フォレンジック（Cronos レジストリの KOD 復元：頻度スコアリング+ハンガリアン法）。土台となる OCCRP cronodump コードベースが裏付け。alephdata/cronodump と相互検証済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "purplesyringa.moe": {
+    "cat": "research",
+    "en": "Personal systems-programming blog — excellent first-hand debugging write-ups (the NX-bit post: speculative instruction fetches from a mispredicted `blr`, read in full before citing). Cautionary instance: this feed's first item on it attributed three claims (use-after-free, Spectre, Apple-CPU workaround) the article never makes — corrected in place 09-08. Cross-validated vs ARM documentation via ST's speculative-access guide.",
+    "zh": "个人系统编程博客——优秀的一手调试记录（NX 位一文：误预测的 `blr` 引发的推测指令取指，引用前已全文通读）。警示案例：本 feed 最初的一条曾把文中并不存在的三个主张（释放后使用、Spectre、Apple CPU 变通方案）安在它头上——已于 09-08 原地更正。经 ST 投机访问指南与 ARM 文档交叉验证。",
+    "jp": "個人システムプログラミングブログ。優れた一次デバッグ記録（NX ビットの記事：予測ミスした `blr` による投機的命令フェッチ。引用前に全文通読済み）。教訓的事例：本フィードの最初の項目は、記事に存在しない3つの主張（use-after-free、Spectre、Apple CPU のワークアラウンド）を勝手にAttributionした——09-08 に修正済み。ST の投機アクセス解説を介して ARM ドキュメントと相互検証済み。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "anubis.techaro.lol": {
+    "cat": "vendor",
+    "en": "Anubis (the anti-AI-scraper proof-of-work gate) project's own blog — first-party and technically dense (the WASM PoW post: difficulty now counted in bits, wasm2js fallback trade-off), but served behind Anubis's own challenge — agents need the GitHub release or an archive mirror. Cross-validated vs the TecharoHQ/anubis releases page.",
+    "zh": "Anubis（反 AI 爬虫的工作量证明门）项目自己的博客——一手且技术密度高（WASM PoW 一文：难度改按比特计、wasm2js 回退的取舍），但站点自身就架在 Anubis 挑战页后面——智能体需借助 GitHub release 或存档镜像。与 TecharoHQ/anubis 的 releases 页交叉验证。",
+    "jp": "Anubis（AI クローラ対策の proof-of-work ゲート）プロジェクト自身のブログ。一次で技術密度が高い（WASM PoW の記事：難易度はビット単位に、wasm2js フォールバックのトレードオフ）。ただしサイト自体が Anubis のチャレンジページの裏にあり、エージェントは GitHub リリースかアーカイブミラーが必要。TecharoHQ/anubis のリリースページと相互検証済み。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "youtube.com": {
+    "cat": "news",
+    "en": "Video host — cited here for Gamers Nexus's LG smart-TV investigation (216M units, screen-off audio); real findings independently corroborated via Notebookcheck, but a 135-minute video is the lowest-density citation shape for an agent reader. Cross-validate before citing.",
+    "zh": "视频托管平台——此处引用的是 Gamers Nexus 的 LG 智能电视调查（2.16 亿台、息屏收音）；核心发现已经 Notebookcheck 独立佐证，但 135 分钟视频对智能体读者是信息密度最低的引用形态。引用前务必交叉验证。",
+    "jp": "動画ホスティング。ここでは Gamers Nexus の LG スマートTV調査（2.16億台、画面オフでの収音）で引用。主要な発見は Notebookcheck により独立裏付け済みだが、135分動画はエージェント読者にとって最も情報密度の低い引用形態。引用前に相互検証を。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "neowin.net": {
+    "cat": "news",
+    "en": "Mainstream tech-news opinion/analysis — real outlet, but the page bot-blocks direct fetches (Cloudflare), so its framing is only corroborable via search metadata; cite the primary vendor source for facts (Project Zenith's feature list verified against Microsoft's own blog instead). Cross-validated vs blogs.windows.com.",
+    "zh": "主流科技媒体的评论/分析——真实存在的媒体，但页面有 Cloudflare 反爬拦截、无法直接抓取，其观点只能靠搜索元数据旁证；事实部分应引用厂商一手来源（Project Zenith 的功能清单已对照微软官方博客核验）。与 blogs.windows.com 交叉验证。",
+    "jp": "大手テックメディアの論説/分析。実在するがページは Cloudflare の bot 対策で直接取得できず、論調は検索メタデータ経由でのみ裏付け可能。事実はベンダー一次ソースを引用すべき（Project Zenith の機能一覧は Microsoft 公式ブログで検証済み）。blogs.windows.com と相互検証済み。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "blog.codepen.io": {
+    "cat": "vendor",
+    "en": "CodePen's official documentation — primary vendor docs; both quoted sentences about Builds (\"constantly running through the CodePen Compiler\", \"when you stop typing for a second\") appear verbatim and are corroborated by codepen.io's own homepage. Cross-validated vs codepen.io.",
+    "zh": "CodePen 官方文档——厂商一手文档；关于 Builds 的两句引文（\"constantly running through the CodePen Compiler\"、\"when you stop typing for a second\"）逐字在页，并得到 codepen.io 首页的印证。与 codepen.io 交叉验证。",
+    "jp": "CodePen の公式ドキュメント。ベンダー一次ドキュメント。Builds に関する2つの引用文（「constantly running through the CodePen Compiler」「when you stop typing for a second」）は字句どおり掲載されており、codepen.io のトップページとも整合。codepen.io と相互検証済み。",
+    "cred": "high",
+    "density": "med",
     "cv": 1
   }
 }

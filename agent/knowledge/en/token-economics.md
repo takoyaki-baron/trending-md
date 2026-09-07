@@ -297,3 +297,16 @@ list price (same lesson as the tokenizer deltas and prefix-cache stability alrea
   embedding-interface memory, Spotify's shunt *enforces* a read budget, context-mode just refuses admission. The
   three agree the context boundary is the optimization surface; they disagree on whether the fix is compression,
   enforcement, or exclusion.
+
+## Rate limits become a monetization surface (09-08)
+
+OpenAI reinstated the **5-hour session limit** for ChatGPT Plus / Business Standard Codex/Work users this week (Tell
+HN, 113 pts / 125 comments; user-reported — no dated OpenAI announcement found), ending a period where usage drew
+continuously from the weekly allowance. The help center confirms the current structure: 5-hour + weekly limits plus a
+new paid **"instant reset"** that immediately restores both — available only on Plus and Pro *personal* accounts,
+explicitly "not available on Free, Go, Business, Enterprise, or Edu plans," non-refundable, and it re-anchors the
+weekly reset clock. Commenters report being forced to upgrade, buy resets, or leave Codex. Why it matters: rate limits
+are now a monetization surface on a coding agent many teams build workflows around — capacity planning for Codex
+acquired a price tag. Claim discipline: OpenAI previously framed the limit's removal as temporary "incident response";
+the thread reads the reinstatement as bait-and-switch, but the *timing* claim is user-reported — the help-center page
+verifies the limit structure and reset mechanics, not when it changed.

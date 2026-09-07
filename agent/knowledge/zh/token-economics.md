@@ -213,3 +213,7 @@ per-token 牌价（与这里已记录的分词器增量、前缀缓存稳定性�
 - `mksglu/context-mode`(TypeScript,**Elastic License 2.0——不是 OSI 开源**,20.5k★,+85/日):一个让原始工具输出完全不进入模型上下文窗口的 MCP 服务器 + hooks 插件。`ctx_execute` 经隔离子进程运行 12 种语言的代码,只把 stdout 传入上下文(README 宣称:315 KB → 5.4 KB,约 98% 削减——厂商自测);会话事件持久化到每项目 SQLite(FTS5 + BM25),压缩后重建为约 2 KB 快照;"think in code" 路由器推动代理用脚本处理数据而非直接读文件。
 - 诚实的工程代价是**平台 hook 矩阵**:Claude Code、Gemini CLI、Cursor、Codex CLI 与 Copilot 有 hook;Antigravity 与 Zed 没有,Cursor 拒绝其 `sessionStart` hook,Codex 的 PreToolUse 仅支持 deny,Kiro 的 spawn hook 未接通——多个平台上的会话恢复会静默降级。搜索在 9 次调用后逐步限流。
 - 在该层中的位置:上下文经济学谱系的务实一端——LatentPress 把历史压缩进嵌入接口记忆,Spotify 的 shunt *强制*读取预算,context-mode 则直接拒绝入场。三者都认同上下文边界是优化面;分歧在于修复手段是压缩、强制还是排除。
+
+## 速率限制成为变现界面 (09-08)
+
+本周 OpenAI 对 ChatGPT Plus / Business Standard 的 Codex/Work 用户恢复了 **5 小时会话上限**(Tell HN,113 分 / 125 评论;用户报告——未找到 OpenAI 的带日期公告),结束了用量持续从每周额度中扣减的时期。帮助中心确认当前结构:5 小时 + 每周限额,外加新的付费 **"instant reset"**,可立即恢复两者——仅对 Plus 与 Pro *个人*账户开放,明确"不适用于 Free、Go、Business、Enterprise 或 Edu 套餐",不可退款,且会重锚每周重置时钟。评论者报告被迫升级、购买重置或弃用 Codex。为什么重要:速率限制已成为许多团队围绕其构建工作流的编码代理上的变现界面——Codex 的容量规划刚获得价签。主张纪律:OpenAI 曾把上限移除定性为临时"事件响应";讨论串读作 bait-and-switch,但*时机*主张是用户报告的——帮助中心页面验证的是限额结构与重置机制,而非变更时间。

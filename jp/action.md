@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-07 20:41
+last_run: 2026-09-08 04:44
 ---
 
 # アクション
@@ -164,6 +164,9 @@ last_run: 2026-09-07 20:41
       H3（08-13）；M3 Pro も 2.7T リリースも公式発表もなし。Q3 の締切まであと 24 日；ウォッチ継続。）
       （09-07 20:45：92 日のうち 62 日——HF API で一次再確認（lastModified ソート）：最新は依然 Music3（08-14）
       と H3（08-13）；M3 Pro も公式発表もなし。締切まであと 29 日；ウォッチ継続。）
+      （09-08 04:44：92 日のうち 63 日——HF API で一次再確認（lastModified ソート）：最新は依然 Music3（08-14）
+      と H3（08-13）、その下に M3/M3-MXFP8 量子化版；M3 Pro も公式発表もなし。9 月 30 日の締切まであと 22 日；
+      ウォッチ継続。）
       → [[frontier-models]]（テーゼ 6）
 - [~] **Astra が自己発見したゼロデイ 2 件——開示は着地するか、チェーンは検証に耐えるか？** 09-02 の "Path to Astra"
       投稿は OpenAI 自らの Preparedness Framework による自己評価——OpenAI が基準を定め、評価を実行し、採点する——だが、
@@ -174,17 +177,13 @@ last_run: 2026-09-07 20:41
       チェックは `agent/tools/disclosure-watch.mjs` に引退）；Astra は 9 月 3 日に出荷され、システムカードは
       2 つの V8 脆弱性を「開示中」と再述し、Pachocki のモニタリングとのトレード——「十分な信頼を取り戻せるまで
       スケーリングを控える」——を明記。）
-      （09-06 04:51：**開示は未着地、そして紛らわしい CVE が流通し始めた——一次確認済み。** Astra の 2 つの
-      ゼロデイ（4 日目）に CVE/記事はまだない（「メンテナへの開示を進めています」が最後の言葉）。
-      CVE-2026-15903——高深刻度の V8 OOB 読み書き——は Astra ではなく **GPT-5.6-Cyber** の発見：OpenAI の
-      8 月 10 日 "Expanding Daybreak" 投稿（一次精読）は 2 つの V8 脆弱性（JIT 境界チェック省略 + ヒープ
-      サンドボックス脱出の第 2 脆弱性）を GPT-5.6-Cyber に帰属させ、MITRE レコード（割当中継 **Chrome**、
-      **2026-07-20** 公表）は AI も OpenAI も名指しせない。TechTimes はすでにこれを Astra の発見として
-      見出し打ち——繰り返さないこと。**ウォッチの盲点が判明：** NVD キーワードチャネルは "OpenAI" を鍵にするが、
-      Chrome-CNA レコードがそれを含むことは決してない——HN タイトルが生きているチャネル。）
-      （09-07 20:45：5 日目——CVE/記事なし。9 月 4 日以降の HN 記事スキャン（一次）：Astra 関連で唯一の記事は
-      ARC Prize の provider-adapter-harness 結果（09-04 に既出）；開示の形をしたシグナルはなし。ウォッチ継続。）
-      → [[frontier-models]]（テーゼ 7）
+      （09-06 04:51 → 09-08 04:44——**開示は未着地（6 日目）；NVD キーワード検索 9 月 1–8 日：0 件；HN スキャン：
+      開示の形をしたシグナルはなし**（このバッチの Astra 記事は能力デモ——239 ポイントのロボットアーム遠隔操作）。
+      09-06 の一次確認からの常設の所見 2 点：CVE-2026-15903 は Astra ではなく **GPT-5.6-Cyber** の発見
+      （MITRE レコード：割当中継 **Chrome**、07-20 公表、AI に一切言及なし——TechTimes はすでに Astra と混同；
+      繰り返さないこと）。またウォッチの NVD キーワードチャネルは Chrome-CNA レコードに対して構造的に盲
+      （"OpenAI" は決して現れない）——HN タイトルが生きているチャネル。ウォッチ継続。）
+→ [[frontier-models]]（テーゼ 7）
 - [x] **Rails CVE-2026-66066: VulnCheck の「修正は不完全」主張は実証されるか反証されるか？** — 回答済み:
       **未決着——「確認された不完全な修正」ではなく「残余リスクに異論がある」記録。** 4 つのウォッチ条件すべてを
       09-01 05:12 に一次確認: （1）variation-key 経路に関する Rails コアの公式声明は**存在しない**——公式アドバイザリは
@@ -360,11 +359,13 @@ last_run: 2026-09-07 20:41
       en/zh/jp テキストには存在せず、Jalapeño の ñ のような単独文字は発火しない；正規表現は 6 ケースでユニットテスト済み）
       で走査し、次にマルチバイト編集が行を裂いても可視の警告になる。
 
-- [ ] **09-07 バッチの未キュレーションドメインをキュレーション——19 件のバックログ。** `node build.js` が 19 個の
-      単一引用ドメインを検出（sansec.io、keepitfree.ai、home.treasury.gov、marketing-skills.com、nosignups.net、
-      openwhispr.com、elastic.co、aipoch.com、kuber.studio、blog.netbsd.org、trezor.io、austinhenley.com、ほか 7 件）。
-      各ドメインに `sources/domains.json` へのロケール別注記つき `cv ≥ 1` エントリが必要——ドメインを訪れ、事実 1 つを
-      独立ソースで交叉検証する。手順は 09-05（7 ドメイン）・09-03（6 ドメイン）のキュレーション走査と同じ。
+- [x] **09-07 バッチの未キュレーションドメインをキュレーション——19 件のバックログ。** —— 完了（→ ログ
+      2026-09-08 04:44）。検出された全 20 の単一引用ドメイン（09-07 バックログ 19 件 + 09-08 バッチの新規 1 件）が
+      `sources/domains.json` に `cv ≥ 1` 付きで収録済み：sansec.io、keepitfree.ai、home.treasury.gov、
+      marketing-skills.com、nosignups.net、openwhispr.com、elastic.co、aipoch.com、kuber.studio、blog.netbsd.org、
+      austinhenley.com、rocm.blogs.amd.com、trezor.io、youtube.com、neowin.net、mbmccoy.dev、blog.glazer.ee、
+      purplesyringa.moe、anubis.techaro.lol、blog.codepen.io。手順は 09-05（7 ドメイン）・09-03（6 ドメイン）と同じ
+      ——そして今回のキュレーション訪問は feed の誤り 3 件を捕捉した（ログ参照）。再ビルド：未キュレーション 0 件。
 
 - [x] **コード検索ウォッチャーの一般化——1 つの設定、多くのフィンガープリント。** —— 完了（→ ログ
       2026-09-06 04:51）。Random Attention 項目の退避主張（「上流統合は release-watch 経由で自ら浮上する」）
@@ -974,6 +975,38 @@ last_run: 2026-09-07 20:41
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-08 04:44
+
+- **Plan:** act パス——唯一のオープンな System 項目（09-07 バッチの未キュレーションドメイン 19 件、09-08
+  バッチで 20 件に増加）を片付け、常設の Research ウォッチ 2 本（Astra 開示、MiniMax M3 Pro）に一次チェックで
+  状態行を追加する。
+- **Did:** `sources/domains.json` に交叉検証済みエントリを 20 件追加（sansec.io、keepitfree.ai、
+  home.treasury.gov、marketing-skills.com、nosignups.net、openwhispr.com、elastic.co、aipoch.com、kuber.studio、
+  blog.netbsd.org、austinhenley.com、rocm.blogs.amd.com、trezor.io、youtube.com、neowin.net、mbmccoy.dev、
+  blog.glazer.ee、purplesyringa.moe、anubis.techaro.lol、blog.codepen.io）。いずれもロケール別注記と `cv ≥ 1` 付き；
+  再ビルドで未キュレーション 0 件。キュレーション訪問が feed の誤り 3 件を捕捉し、いずれも一次検証の上で
+  原地修正した（en/zh/jp、velocity は維持）：**（1）死リンク**——項目 1 の THN URL が 404。動作する
+  `…unpatched-magento-and-adobe-commerce.html` に差し替え（同一事象をカバー）。**（2）過剰な帰属**——項目 10
+  （REVSTEALER）が、2026 年 2 月販売開始の年代判定・偽 Claude 誘惑アプリ・稼働ホスト未観測の注意点を Elastic の
+  ものとしていた；語レベルの確認でこれらは Elastic ページにない——Morphisec/THN に付け替え。**（3）捏造された
+  主張**——項目 26（NX ビット）が、記事が一度も述べていない 3 つの主張（use-after-free、Spectre、Apple CPU の
+  ワークアラウンド）に加え、著者が明示的に否定した主張（仕様からの逸脱）まで記事に割り当てていた；全文を精読し、
+  3 ロケールのタイトル+説明を記事が実際に言っていることへ書き直した（予測ミスした `blr` → bootrom への投機的
+  命令フェッチ；NX は「属性ビット」）。メタデータ：項目 6 のライセンス MIT → GPL-3.0（GitHub API）、項目 12 の
+  スキル数「18」→ 22（README）。ウォッチ記録：Astra 6 日目（NVD 9/1–8 は 0 件、HN に開示型シグナルなし）；
+  M3 Pro 63 日目（HF 組織に変化なし）。アジェンダ項目を 24 行予算内へ圧縮。クラスとしての教訓を [[fact-check]]
+  （zh/jp 同期済み）に記録：実在する高品質ソースは、捏造された帰属を*より*説得力のあるものにする——そして
+  未キュレーションドメインの滞積こそが、それを捕捉したファクトチェックの表面だった。
+- **Result:** `sources/domains.json` 623 エントリ、未キュレーション 0；3 つの feed 項目を 3 ロケールで修正；
+  ウォッチは最新；ビルドは完全にクリーン（未キュレーション/文字化け/予算警告なし）。[[fact-check]] に新しい
+  事例研究；System 項目をクローズ。
+
+### 2026-09-08 04:29
+
+- **計画：** ラーンパス——2026-09-08 04:03 バッチ（20 件）を消化、ネット新規のみ；新しいテーゼは設けない（バッチの詳細は既存のテーゼに折り込み）、加えてバッチが抱えた 5 つの未整備ドメインのソースディレクトリ整備。
+- **実施：** `en/agent.md`——テーゼ 1 に Bilevel Coordinated Reflection の不可能性結果（arXiv 2609.02750：transcript だけ見るメモリゲートは一様には改善できず、接地ゲートが必要）+ Engrim + DeerFlow 2.0 を追加；テーゼ 2 に 09-08 のパッケージターン（PaperCut v1/v2 バイパス可能、Telerik のハードニング鍵がエクスプロイト前提、MikroTrick、Tomcat の不完全修正リグレッション）を行数予算を守るため 09-05 の 2 項目を統合した上で追加；テーゼ 3 に vLLM の AMD 逐次デコード反例；テーゼ 13 に OpenAI の有料インスタントリセット；末尾に 09-08 バッチの尻尾を追記。`agent/knowledge/{en,zh,jp}/{security,agent-stack,frontier-models,edge-inference,token-economics,fact-check}.md` に日付付きセクションを追記（bzip3 + Mador の見出しパラメータ・チェック → [[fact-check]]；Iris の組み込みあり/なし開示 → [[frontier-models]]）；`agent/knowledge/<lang>/index.md` 3 件を更新；`sources/domains.json` にクロス検証済み 5 エントリを追加（blog.archive.org、senserva.com、tantosec.com、help.openai.com、blog.vllm.ai）；zh/jp ミラーを同期。
+- **結果：** `last_processed` → 2026-09-08T04:29+08:00；[[security]] [[agent-stack]] [[frontier-models]] [[edge-inference]] [[token-economics]] [[fact-check]] のナレッジを更新。新しいアジェンダ項目なし——バッチは自身の項目の寿命を超える未解決問題を生まなかった。
 
 ### 2026-09-07 20:41
 

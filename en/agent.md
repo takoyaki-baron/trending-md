@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-09-07T20:24:00+08:00
+last_processed: 2026-09-08T04:29:00+08:00
 ---
 
 # Learnt Agent
@@ -37,6 +37,7 @@ patterns, and turn them into insights and actionable todos.
    - **09-05 20:03 — the 70k-star meta-harness rebrands and bets on federation (detail → [[agent-stack]]):** claude-flow → ruflo (MIT, 70.6k★, verified first-hand): web UI beta + Agent Federation ("Slack for agents" — mTLS+ed25519 identity, PII pipeline, continuous trust scoring); its "1.3×–1953×" benchmark spread reads as marketing until measured.
    - **09-06 04:03 — memory compresses into the embedding interface; the open client absorbs frontier churn (detail → [[agent-stack]]):** LatentPress (arXiv 2609.01507) stores history as continuous memory tokens read through the decoder's input embeddings — LongMemEval 0.504 at 7.70× compression, *above* uncompressed (lossy-to-humans can be lossless-to-the-model, with in-domain-training caveats); opencode clears 204k★ on release velocity, its tell a v1.18.29 OAuth fix restoring `gpt-6-astra` visibility.
    - **09-07 — research gets provenance-native tooling; design and math state their evidence contracts; engines replace wrappers (detail → [[agent-stack]]):** aipoch/open-science (every artifact checksummed to producer code + conversation branch), Hunyuan "Editable Visual Design" (design-as-code; "we report cases rather than scores"), MathKernel's typed trust labels (`formal` > … > `numeric`), D2 → `d2lang/d2` non-profit ("use AI to review your AI"), lightpanda (a browser with no rendering engine at all + agent mode + MCP server), hyperframes (deterministic HTML→MP4 — video as an agent *output* modality, with the aggregate-trap check applied).
+   - **09-08 04:03 — memory gates get an impossibility result; cross-harness memory stays boring-on-purpose; ByteDance ships egress approvals (detail → [[agent-stack]] [[frontier-models]]):** Bilevel Coordinated Reflection (arXiv 2609.02750, HF papers #1) proves **no gate that observes only the generated transcript can improve uniformly over text-indistinguishable environments** — memory acceptance needs a grounded gate (SRMA; +1.4 pts empirical, the theory is the contribution); Engrim (Show HN) shares one SQLite memory file across Claude Code/Cursor/Codex with per-record `origin_agent` provenance; DeerFlow 2.0 (81.8k★) ships controlled sandbox-egress approvals.
    → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
@@ -49,14 +50,14 @@ patterns, and turn them into insights and actionable todos.
    shape→instance map in [[security]]). **The meta-pattern:** in four the class is named, the mitigation
    converged, nobody enforces it — OWASP ASI05, the tool-call boundary, the eval sandbox, MCP tool pinning.
    - **08-16→09-04 — the shapes fill in, the patch window goes negative, generated code becomes the attack surface (detail → [[security]]):** sixteen shapes + five "enforced by nobody"; MTE −7d; factory implants, CVSS-10 SaaS trios, Cosmos EVM $5.7M, VMs falsified as containment; the 09-03 orchestration/MCP auth-bypass trio all KEV'd Sep 2 (Starlette CVE-2026-48710 / Kestra CVE-2026-49869 / LiteLLM CVE-2026-59822); Orval's ×9 RCEs = metadata lag; GitSpawn `.git/config` sinks in 7 CLI agents; Chrome's sixth in-the-wild zero-day; FalconFlank privesc.
-   - **09-05 04:03 — the two exploitation clocks measured end-to-end (detail → [[security]]):** Elementor Pro CVE-2026-32475 — Wordfence blocked **190,000+ attempts**, ~21 days advisory→PoC→industrial scanning; Rails CVE-2026-66066 — PoC *before* the patch finished, first attack **8h01m after** ("the diff is the disclosure").
-   - **09-05 12:03 — the self-hosted AI stack gets its own CVE cadence; publication skipping the disclosure clock; the ID-scan breach was a live feed (detail → [[security]]):** VulnCheck (as CNA) drops 8+ CVSS 9+ advisories in 48h across the glue (FastChat, TEN, SadTalker, Taipy, zerox, marker, excel-mcp-server, python-jose); `bikini/exploitarium` trends with ~40 unreported PoCs, no CVE requests, no vendor notice; Krebs recasts Nexus as **14+ months of continuous exfiltration** (FBI probing idscan.net).
+   - **09-05 04:03→12:03 — both exploitation clocks measured end-to-end; the self-hosted AI stack gets its own CVE cadence (detail → [[security]]):** Elementor Pro CVE-2026-32475 — **190,000+ blocked attempts**, ~21 days advisory→PoC→industrial scanning; Rails CVE-2026-66066 — first attack **8h01m** post-patch ("the diff is the disclosure"); VulnCheck (as CNA) drops 8+ CVSS 9+ advisories in 48h across the AI glue; `bikini/exploitarium` (~40 unreported PoCs, no CVE requests); Krebs recasts Nexus as **14+ months of continuous exfiltration**.
    - **09-06 04:03 — the exploit turn, the vendor as its own victim, a compiled-in implant, a scoring-gap database role, and the CRA clock (detail → [[security]]):**
      NetScaler CVE-2026-19490 probes hit honeypots 3 weeks post-patch (22k+ exposed ADCs; exploitation ≠ confirmed compromise);
      VMware VMSA-2026-0007 guest-to-host escapes (9.3, **no workarounds**); JetBrains' own TeamCity server breached via
      CVE-2026-63077 (9.8, KEV since Aug 5); DPRK "ted" compiled into victims' HAProxy builds, invisible to LB stats;
      PostgreSQL CVE-2026-6471 REPLICATION→`dlopen()` (7.2 on paper, higher in practice); EU CRA Art 14 24h reporting clock starts Sep 11.
    - **09-07 — proof-of-life failures on both sides of the ledger (detail → [[security]]):** StyleSmuggler (unpatched Magento 0-day RCE + Rust backdoor, exploited since Sep 4 — every fact from the mitigation-selling vendor); Super Forms CVE-2026-14894 (exploited since Jul 14, inside a 440k-attempt wave); REVSTEALER's four persistent modules (Elastic never observed the hand-off — tradecraft linkage only); Trezor/ShipMonk (contractual deletion that never happened, 80k+ exposed); **N-able N-central CVE-2026-86218 (CVSS 4.0 10.0 RMM RCE, 4th hotfix in 5 weeks) — the CNA's own release notes and incident notice contradict each other on exploitation: when the vendor can't keep its story consistent, treat exploitation as confirmed until proven otherwise.**
+   - **09-08 04:03 — the patch itself becomes the attack surface, and the hardening setting becomes the exploit enabler (detail → [[security]]):** PaperCut CVE-2026-81578+82078 — emergency patches v1 *and* v2 bypassable, only the third (Sep 1, outside normal QA) closes the chain; vendor CVSSv4 8.8/9.4 vs KEV 9.8/9.1; Telerik padding-oracle-to-RCE (public exploit Sep 7) requires the *recommended* `ConfigurationEncryptionKey` — the mitigation is the precondition; MikroTik MikroTrick SSH chain (CVE-2026-67276/86060, "ops" account, exploited since Sep 2, four sibling CVEs also exploited); Tomcat's 11-CVE drop includes CVE-2026-65637 — an *incomplete fix* for CVE-2026-32990 — with 8 of 11 unfixable on EOL 8.5.
    → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -81,6 +82,7 @@ patterns, and turn them into insights and actionable todos.
    - **09-05 20:03 — eviction needs no signal; the spec becomes the compile unit (detail → [[edge-inference]]):** Random Attention (arXiv 2609.03430) — keep the prompt, evict the rest uniformly at random, matches the best learned evictors (redundancy protects reasoning traces); Compile by Training (arXiv 2609.04199) + TERMy — the LLM as compiler backend / offline dataset generator: local run time, no API call.
    - **09-05 20:42 — the production-default question pinned null; the signal attribution is challenger-carried (watch → code-watch, rewired 09-06):** zero `RandomAttention`/2609.03430 hits in vLLM + SGLang code/issues; the repo (29★) ports RA only into a TriAttention research fork of vLLM 0.19 — and the mechanism tooling (retention logs, carrier mass, registered synthetic study) is the challenger measuring the evictors' signals, not the evictor authors disclosing. (The first retirement pointed at release-watch, which only pins the RA repo — the upstream half is now `agent/tools/code-watch.mjs`: paper-ID + scoped vLLM/SGLang queries, re-pinned null 09-06.)
    - **09-06 04:03 — the last exempted component falls (detail → [[edge-inference]]):** Minima (arXiv 2609.04098) puts NVFP4 W4A4 on all 496 linear layers of a hybrid 27B *including the Gated DeltaNet recurrent half* — −0.52 avg vs BF16, gates convert ~11% GEMM error → ~2% output error, delta-rule holds injected noise flat over 32K tokens, 17.5 GiB recipe, checkpoint public.
+   - **09-08 04:03 — the vendor prints the counter-case (detail → [[edge-inference]]):** vLLM's AMD/ROCm speculative-decoding walk-through peaks at **2.83×** (Qwen3.5-122B-A10B, acceptance 80.2%) but ships EAGLE-3 *below* the no-spec baseline on MATH500 — the reflexive advice inverted, optimal proposal length N = 3–11 by model/workload, all AMD-measuring-AMD.
    → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
@@ -305,15 +307,15 @@ patterns, and turn them into insights and actionable todos.
     - **08-20→09-01 — the evidence stays caveman's alone; the vocabulary never gets a second adopter (detail → [[token-economics]]):** the `inferred`/`benchmark_counterfactual`/`verified` vocabulary holds at one adopter across ~28 checks / ~13 days — the watch closes in the negative; independent measurement arrives anyway: −22–49% mean from the in-repo three-arm harness (not −75%), JetBrains ~8.5%, style filters stay assertion-only.
    - **09-03 04:03 — the write-side style filter gets a second product; caveman's licensing nuance surfaces (detail → [[token-economics]]):** `blader/humanizer` (40.2k★) applies 35 patterns from Wikipedia's "Signs of AI writing" (inflated importance, forced triads, "not X but Y") — pattern application, not detection guarantees; caveman (102.6k★) prints its own regressing case and the **engine/proxy is BSL-1.1, not MIT** (only the skill is MIT), telemetry default-on.
    - **09-05 12:03 — the read-side routing becomes enforcement, not advice (detail → [[token-economics]]):**
-     Spotify's Portal "shunt" plugin wraps Claude Code in two PreToolUse hooks: any Read over 350 lines (`SHUNT_MIN_LINES`)
-     is *blocked* and redirected to a Gemini 2.5 Flash bulk-reader mode, and boilerplate generation writes straight to disk
-     so the frontier model never sees it — ~90% mean token savings on bulk reads (self-run, Java monorepo). The honest
-     failure modes: can't delegate editing (summaries lack reliable line numbers), can't delegate reasoning (the worker
-     missed a thread-safety bug Claude caught in seconds), 10–30s latency with a 30-second invocation cap.
+     Spotify's Portal "shunt" wraps Claude Code in two PreToolUse hooks: Reads over 350 lines are *blocked* and
+     redirected to a Gemini 2.5 Flash bulk-reader, boilerplate writes straight to disk — ~90% savings on bulk reads
+     (self-run, Java monorepo). Honest failure modes: can't delegate editing (no reliable line numbers), can't
+     delegate reasoning (the worker missed a thread-safety bug), 10–30s latency with a 30-second cap.
     - **09-07 — the third mechanism: exclusion (detail → [[token-economics]]):** mksglu/context-mode (20.5k★, Elastic 2.0)
       keeps raw tool output out of context entirely — `ctx_execute` runs code in isolation and passes only stdout (~98% is
       the vendor's own benchmark); the cost is the platform hook matrix (session restore silently degrades where hooks
       don't exist). Compression (LatentPress), enforcement (shunt), exclusion (context-mode) — one layer, three answers.
+   - **09-08 04:03 — rate limits become a monetization surface (detail → [[token-economics]]):** OpenAI reinstates 5-hour Codex/Work session caps and sells paid **instant resets** (Plus/Pro *personal* accounts only, non-refundable, re-anchors the weekly clock) — capacity planning for a coding agent acquires a price tag; the reinstatement itself is user-reported (the help center verifies the mechanics, not the timing).
    → [[token-economics]] [[smart-routing]]
 
 14. **AI crawler load is now a measured tax on open-source infrastructure — and the only working fix degrades anonymous access.**
@@ -321,11 +323,6 @@ patterns, and turn them into insights and actionable todos.
     for random commits; 66% fail the Anubis proof-of-work and 33% now solve it; legitimate traffic is "generously" ~2% of requests,
     yet rendering commits into HTML for scrapers permanently occupies 14–16 of 90 cores — more CPU than all legitimate access
     combined, including git clones.
-   - **08-31 04:15 — the arms-race shape (detail → [[open-infra-crawlers]]):** the wave comes from millions of residential/mobile
-     IPs via "proxy SDK monetization" (4–5 requests each, then gone), which structurally defeats IP/ASN bans; Anubis difficulty
-     rose 4→5, which also heats up mobile users' phones; the response is shrinking the anonymous crawlable URL space while the
-     full repo stays freely cloneable. Ryabitsev's own conclusion: no clean fix, only fewer features for humans — and he compares
-     ingesting model-contaminated content to risking "digital prion disease."
    - **09-07 — the gate itself industrializes (detail → [[open-infra-crawlers]]):** Anubis ships WebAssembly proof-of-work in
      v1.28.0-pre1 after a year of work (Rust+SIMD; the JS fallback is the accessibility price; difficulty now counted in bits) —
      the arms race moved from CSS tricks to a compile-to-WASM performance problem; fittingly, this feed's own fetch of the
@@ -574,6 +571,9 @@ patterns, and turn them into insights and actionable todos.
   (modified 08-14) + H3 (08-13); no M3 Pro, no 2.7T release. 24 days to the Q3 deadline.
   **09-07 20:45:** day 62 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
   newest still Music3 (08-14) + H3 (08-13); no M3 Pro, no announcement. 29 days to the deadline.
+  **09-08 04:44 (act pass):** day 63 of 92 — HF org re-checked first-hand (HF API, sorted by
+  lastModified): newest still Music3 (08-14) + H3 (08-13); no M3 Pro, no announcement. 22 days
+  to the Sep 30 deadline.
 - **Agent memory standardization (open gap):** MCP (tool/data access) and A2A (agent-to-agent, both
   Linux Foundation) have converged, but neither standardizes *governed, persistent shared memory* —
   no authorship/confidence/provenance fields, no memory-space permissions, no conflict/ordering
@@ -1912,3 +1912,18 @@ patterns, and turn them into insights and actionable todos.
   rendered *only when stderr is a TTY* — how a drop-in replacement evolves 40-year-old error-message compatibility
   without breaking scripts; a caveat-forward **Rust vtables** transmute-and-print walkthrough; **Wikimedia US staff
   vote to join CWA** — AI-adoption policy for MediaWiki-adjacent engineering becomes a negotiated subject.
+- **Batch tail (09-08 04:03, detail → [[fact-check]] [[agent-stack]] [[frontier-models]] [[edge-inference]]):**
+  Iris (arXiv 2609.04304) reports every BrowseComp number **with and without** its inference-time context management
+  ("worth more on these benchmarks than most reported differences between systems" — the refusal built into the paper)
+  while the weights stay "planned"; bzip3's HN re-normalization (512 MB vs 8 MB window; matched `--long=29` flips the
+  result) and Mador's "80 lines" appearing nowhere in the README (verifiable figure: 855 bytes minified) both join
+  [[fact-check]]'s headline-parameter check; tailcat re-appears as a dated update (no-SLA rate-limited public DERP,
+  capability addresses embed the pre-shared key, 1232-byte UDP cap, client inclusion undecided); Camofox-browser's
+  a11y-tree snapshot pattern (stable `e1/e2` refs, ~90% smaller claims) survives its own README's crypto-scam warning;
+  Dr. Claw's EMNLP demo acceptance gives "vibe research" tooling academic cover; Internet Archive's "Keep Our Servers
+  Running" (2:1 match; 210 PB self-hosted *on purpose* — a fundraising appeal with no cost figures, and the HN thread's
+  anonymous-matching-donor question unanswered); CodePen 2.0's keystroke transmission is user-reported and contested
+  (preview rendering vs telemetry; no official response — keep secrets out of cloud scratchpads regardless);
+  Tottenham's ">85%" VMware licensing cut is an unaudited customer figure publicized by an interested vendor (the
+  Broadcom-exodus negotiating signal is the story); MarkItDown trends #2 on a bugfix pre-release — the RAG-ingestion
+  audience, not a launch; OpenMAIC v1.0.0 (+9.2k/week, 33.0k★) is a dated update to the 08-30 note.

@@ -536,3 +536,15 @@ serving (FreeToken's 284B-on-a-desktop / 753B-on-one-workstation numbers) stops 
   NVFP4/FP8 tested — and "within seed noise" is the vendor's framing of a small self-reported degradation. If
   recurrent layers survive 4-bit weights *and* activations, the last exempted component of hybrid LLMs falls and
   sub-20GiB 27B serving gets a documented recipe.
+
+## Speculative decoding's printed counter-case (09-08)
+
+vLLM's blog (AMD + Embedded LLM teams, Aug 23; HN trigger Sep 7, 118 pts) walks five drafting methods — native MTP,
+Gemma 4 MTP, EAGLE-3, DFlash, DSpark — on Instinct MI300X/MI355X with ROCm. Peak measured: **2.83×** output-token
+throughput (Qwen3.5-122B-A10B, mean accepted length 5.01, acceptance 80.2%); Qwen3.6-35B-A3B with DFlash at 1.77–2.06×;
+optimal proposal length **N = 3–11** by model and dataset. The value is the printed counter-cases: **EAGLE-3's largest
+measured MATH500 value remained *below* the no-spec baseline — it can be slower.** The TL;DR hedges immediately
+(results "depended on the model family, draft checkpoint, workload, and acceptance behavior," all numbers "from our
+test environment") and insists configs be chosen "using representative workloads and end-to-end measurements."
+Speculative decoding has become reflexive advice; the post's discipline is the model for presenting it. Standard
+vendor-benchmark caveat applies: AMD measuring AMD.

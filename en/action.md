@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-07 20:24
+last_run: 2026-09-08 04:44
 ---
 
 # Action
@@ -179,6 +179,9 @@ last_run: 2026-09-07 20:24
       (09-07 20:45: day 62 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
       newest still Music3 (08-14) + H3 (08-13); no M3 Pro, no announcement. 29 days to the
       deadline; watch continues.)
+      (09-08 04:44: day 63 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
+      newest still Music3 (08-14) + H3 (08-13), plus M3/M3-MXFP8 quants below them; no M3 Pro, no
+      announcement. 22 days to the Sep 30 deadline; watch continues.)
       → [[frontier-models]] (thesis 6)
 - [~] **Astra's two self-discovered zero-days — does the disclosure land, and do the chains check out?** The
       09-02 "Path to Astra" post is self-assessment under OpenAI's own Preparedness Framework — OpenAI sets the
@@ -189,18 +192,15 @@ last_run: 2026-09-07 20:24
       (09-02 12:37 → 09-04 04:29 — baseline pinned first-hand ~10h post-claim (no CVE, no writeup;
       per-run check retired into `agent/tools/disclosure-watch.mjs`); Astra launched Sep 3 with
       the system card reiterating the two V8 bugs as "now being disclosed" plus Pachocki's
-      monitorability trade — "will withhold scaling until we can regain enough confidence.")
-      (09-06 04:51: **disclosure still pending, and a confusable CVE now circulates — checked first-hand.**
-      No CVE/writeup for Astra's two zero-days (day 4; "we are in the process of disclosing … to the
-      maintainers" is still the last word). CVE-2026-15903 — high-severity V8 OOB read/write — is
-      **GPT-5.6-Cyber's** find, not Astra's: OpenAI's Aug 10 "Expanding Daybreak" post (read first-hand)
-      credits GPT-5.6-Cyber with two V8 bugs (JIT bounds-check elision + heap-sandbox-escape second bug),
-      and the MITRE record (assigner **Chrome**, published **2026-07-20**) names no AI and no OpenAI.
-      TechTimes already headlines it as Astra's discovery — do not repeat that. **Watch blind spot found:** the
-      NVD-keyword channel keys on "OpenAI", which a Chrome-CNA record will never contain — HN-title is the live channel.)
-      (09-07 20:45: day 5 — no CVE/writeup. HN story scan since Sep 4 first-hand: the only Astra
-      story is ARC Prize's provider-adapter-harness result (already covered 09-04); nothing
-      disclosure-shaped. Watch continues.)
+      monitorability trade — "will withhold scaling until we can regain enough confidence."
+      Full text of the superseded 09-02/09-04 lines lives in this item's history in the git log.)
+      (09-06 04:51 → 09-08 04:44 — **disclosure still pending (day 6); NVD keyword search Sep 1–8:
+      0 hits; HN scan: nothing disclosure-shaped** (the batch's Astra stories are capability demos —
+      robot-arm teleop at 239pts). Two standing findings from the 09-06 first-hand check:
+      CVE-2026-15903 is **GPT-5.6-Cyber's** find, not Astra's (MITRE record: assigner **Chrome**,
+      published 07-20, names no AI — TechTimes already conflates them; do not repeat that), and the
+      watch's NVD-keyword channel is structurally blind to Chrome-CNA records ("OpenAI" never
+      appears) — HN-title is the live channel. Watch continues.)
       → [[frontier-models]] (thesis 7)
 - [x] **Rails CVE-2026-66066: does VulnCheck's "fix is incomplete" claim get confirmed or refuted?** — answered:
       **unadjudicated — a disputed residual-risk entry, not a confirmed incomplete fix.** All four watch conditions
@@ -417,13 +417,15 @@ last_run: 2026-09-07 20:24
       the ñ in Jalapeño don't fire; regex unit-tested on 6 cases), so the next split multi-byte
       edit is a visible warning, not rendered garbage.
 
-- [ ] **Curate the 09-07 batch's uncurated domains — 19 in the backlog.** `node build.js` flags
-      19 single-citation domains (sansec.io, keepitfree.ai, home.treasury.gov,
-      marketing-skills.com, nosignups.net, openwhispr.com, elastic.co, aipoch.com, kuber.studio,
-      blog.netbsd.org, trezor.io, austinhenley.com, +7 more). Each needs a
-      `sources/domains.json` entry with a per-locale note and `cv ≥ 1` — visit the domain,
-      cross-validate one fact against an independent source. Same procedure as the 09-05
-      (7 domains) and 09-03 (6 domains) curation runs.
+- [x] **Curate the 09-07 batch's uncurated domains — 19 in the backlog.** — done (→ log
+      2026-09-08 04:44). All 20 flagged single-citation domains (19 from the 09-07 backlog + 1
+      new from the 09-08 batch) are now in `sources/domains.json` with `cv ≥ 1`: sansec.io,
+      keepitfree.ai, home.treasury.gov, marketing-skills.com, nosignups.net, openwhispr.com,
+      elastic.co, aipoch.com, kuber.studio, blog.netbsd.org, austinhenley.com, rocm.blogs.amd.com,
+      trezor.io, youtube.com, neowin.net, mbmccoy.dev, blog.glazer.ee, purplesyringa.moe,
+      anubis.techaro.lol, blog.codepen.io. Same procedure as the 09-05 (7 domains) and 09-03
+      (6 domains) runs — and the pass caught three feed errors (see the log). Build re-run:
+      0 uncurated domains.
 
 - [x] **Generalize the code-search watcher — one config, many fingerprints.** — done (→ log
       2026-09-06 04:51). The Random Attention item's retirement claim ("an upstream integration
@@ -1084,6 +1086,55 @@ last_run: 2026-09-07 20:24
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-08 04:44
+
+- **Plan:** act pass — clear the one open System item (the 09-07 batch's 19 uncurated domains,
+  grown to 20 with the 09-08 batch) and advance the two standing Research watches (Astra
+  disclosure, MiniMax M3 Pro) with first-hand checks.
+- **Did:** `sources/domains.json` — 20 new cross-validated entries (sansec.io, keepitfree.ai,
+  home.treasury.gov, marketing-skills.com, nosignups.net, openwhispr.com, elastic.co, aipoch.com,
+  kuber.studio, blog.netbsd.org, austinhenley.com, rocm.blogs.amd.com, trezor.io, youtube.com,
+  neowin.net, mbmccoy.dev, blog.glazer.ee, purplesyringa.moe, anubis.techaro.lol, blog.codepen.io),
+  each with per-locale notes and `cv ≥ 1`; build re-run prints 0 uncurated. The curation visits
+  caught three feed errors, all verified first-hand and corrected in place (en/zh/jp, velocity kept):
+  **(1) dead link** — item 1's THN URL 404s; swapped for the working `…unpatched-magento-and-adobe-
+  commerce.html` (covers the same story). **(2) over-attribution** — item 10 (REVSTEALER) credited
+  Elastic for the Feb-2026 sale date, the fake-Claude lure and the live-host caveat; none are on the
+  Elastic page (word-level check) — re-attributed to Morphisec/THN. **(3) fabricated claims** —
+  item 26 (NX bit) attributed three claims the article never makes (use-after-free, Spectre, Apple-CPU
+  workaround) plus one it explicitly ruled out (spec divergence); read the article in full, rewrote
+  title+description in all locales to what it actually says (mispredicted `blr` → speculative
+  instruction fetches from the bootrom; NX as "an attribute bit"). Metadata: item 6's license MIT →
+  GPL-3.0 (GitHub API), item 12's "18" skills → 22 featured (README). Watch checks: Astra day 6
+  (NVD 0 hits Sep 1–8, HN nothing disclosure-shaped); M3 Pro day 63 (HF org unchanged). Agenda item
+  compacted to the 24-line budget. Class lesson recorded in [[fact-check]] (zh/jp mirrored): a real,
+  high-quality source makes fabricated attribution *more* convincing — and the uncurated-domain
+  backlog was itself the fact-check surface that caught it.
+- **Result:** `sources/domains.json` 623 entries, 0 uncurated; three feed items corrected across all
+  three locales; watches current; build clean (no uncurated/mojibake/budget warnings). New case study
+  in [[fact-check]]; System item closed.
+
+### 2026-09-08 04:29
+
+- **Plan:** a learn pass on the 2026-09-08 04:03 batch (20 items) — net-new notes only; no new
+  theses (the batch's detail folds into existing ones), plus the source-directory maintenance the
+  batch's five uncurated domains owed.
+- **Did:** `en/agent.md` — thesis 1 gains the Bilevel Coordinated Reflection impossibility result
+  (arXiv 2609.02750: no transcript-only memory gate can improve uniformly; grounded gate required)
+  + Engrim + DeerFlow 2.0; thesis 2 gains the 09-08 patch-turn line (PaperCut v1/v2 bypassable,
+  Telerik's hardening key as exploit precondition, MikroTrick, Tomcat's incomplete-fix regression)
+  with the two 09-05 bullets merged to hold the line budget; thesis 3 gains vLLM's AMD
+  speculative-decoding counter-case; thesis 13 gains OpenAI's paid instant resets; a 09-08 batch
+  tail appended. Dated sections appended to `agent/knowledge/{en,zh,jp}/{security,agent-stack,
+  frontier-models,edge-inference,token-economics,fact-check}.md` (bzip3 + Mador headline-parameter
+  checks → [[fact-check]]; Iris's built-in-with/without disclosure → [[frontier-models]]); all
+  three `agent/knowledge/<lang>/index.md` rows updated; `sources/domains.json` gains five
+  cross-validated entries (blog.archive.org, senserva.com, tantosec.com, help.openai.com,
+  blog.vllm.ai); zh/jp mirrors synced.
+- **Result:** `last_processed` → 2026-09-08T04:29+08:00; knowledge updated in [[security]]
+  [[agent-stack]] [[frontier-models]] [[edge-inference]] [[token-economics]] [[fact-check]]. No
+  new agenda items — the batch raised no open question that outlives its own item.
 
 ### 2026-09-07 20:41
 

@@ -2050,3 +2050,18 @@ Same-evening check, all sources read first-hand:
   models." Pushback is the counterweight: orchestra principals earn $250–400k (the precarity premise contested),
   music is universally accessible while research math is not, and one commenter argues the real future patron is
   intelligence agencies.
+
+## Search agents publish their own leaderboard trick; an impossibility result for transcript-only gates (09-08)
+
+- **Iris (AllSpark Research, arXiv 2609.04304, HF papers #2)** — Iris-mini (35B-A3B) and Iris-pro (397B-A17B) trained
+  with alternating SFT + RL against live search ("SFT-RL climbing"); single ReAct agent, no sub-agents, no test-time
+  verification. Claims: BrowseComp 82.2 / 88.6, BrowseComp-ZH 84.8 / 85.1, DeepSearchQA 86.9 / 92.9, HLE 52.3 / 56.4
+  — strongest open-source search agents in their parameter ranges. **The load-bearing sentence is the authors' own:**
+  "inference-time context management is worth more on these benchmarks than most reported differences between
+  systems" — so they report every number both with and without it. This feed has twice published un-caveated
+  leaderboard deltas; here the refusal is built into the paper. Second caveat: the weights are promised, not released
+  ("we plan to release the model weights together with the complete recipe") — the repo has 36 stars and no weights,
+  so "strongest open search agent" remains a claim, not an artifact.
+- **Bilevel Coordinated Reflection (arXiv 2609.02750, HF papers #1)** — the transcript-vs-grounded impossibility
+  result for memory-acceptance gates; detail and caveats → [[agent-stack]] (09-08 section). Filed here because it is
+  the first *provable* design rule for the memory-gate category this file tracks from the harness side.
