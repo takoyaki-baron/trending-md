@@ -1759,3 +1759,32 @@ XStream のデフォルトを削除しなかったため、未認証エージェ
 - **Telerik UI for ASP.NET AJAX —— padding-oracle から RCE、しかも*推奨*された緩和策がエクスプロイトの前提条件**(TantoSec、9/7 にエクスプロイトツール + webshell 2 種を公開)。RadAsyncUpload 対するチェーン:AES-CBC padding oracle(CVE-2026-13182;タイミング変種 CVE-2026-13183)+ 無防備な型解決(CVE-2026-13181)→ mixed-mode DLL `Assembly.LoadFrom` ガジェット経由の認証不要 RCE;2026.1.225–2026.2.519 で検証、oracle 約 127,000 問い合わせ(実験室で約 1 時間)。どんでん返し:チェーンには**明示的な `Telerik.AsyncUpload.ConfigurationEncryptionKey` が必要——「デフォルトインストールでは満たされない」**。ハードニングの助言自体が脆弱な母集団を作った。Progress は悪用が「標準的な ASP.NET エラーログに目立った痕跡を残さない」ことも警告;中間ビルド(2026.1.421)は一方の oracle を塞いだが postback 経路は放置;独自キーは oracle に無効。唯一の実質的修正は 2026.2.708(AES-GCM)。CVSS 8.1、スコアラー不明、Progress 自身は CVSS を公表せず;9/7 時点で KEV 外、確認済み in-the-wild 悪用なし。
 - **MikroTik「MikroTrick」—— RouterOS の SSH 脆弱性 2 件を連結した認証不要の管理者掌握、9/2 から悪用**(CERT Polska、9/5 公開、CVSSv4 9.2、いずれのページもスコアラー未記名)。CVE-2026-67276:公開鍵認証バイパス——RouterOS は鍵の modulus 突合で指数を検証しないため、秘密鍵なしで偽署名が通る。CVE-2026-86060:細工したユーザー名でポリシーマスクを改変するセッション権限昇格。侵害機器には新たな特権アカウント **「ops」** と `ssh:-2@` を含むログ文字列。同時披露の姉妹 CVE 4 件(CVE-2026-67277/78/79/81、6.3–8.8)も悪用済みとして公表;修正は 7.25beta3/7.24.2/7.23.4/6.49.21——MikroTik 初のモバイルアプリ push 通知で告知。集約報道が落とした限定:CERT Polska も MikroTik も、観測されたチェーンがどの 2 脆弱性かは特定していない;日付だけではゼロデイか 1 デイか判定不能(beta 修正 changelog 9/2、告知 9/3);公開 PoC は認証バイパスのみ;MikroTik の既定ファイアウォールは通常管理ポートを保護——露出には既定値の変更が必要。
 - **Apache Tomcat 9.0.121 —— 一度に 11 CVE、その一つは過去の不完全な修正に起因**(修正は 8/18 に 9.0.121/10.1.58/11.0.25 へ;8/25 披露;披露時点で NVD の分析済み 0/10)。web.xml の制約順序バイパス、fail-open な CLIENT-CERT/SPNEGO 認証バグ(CWE-287)、HTTP/2 メモリ枯渇 DoS、そして **CVE-2026-65637——Apache 自ら「CVE-2026-32990 の修正が不完全だった」ため存在する**:authority のない HTTP/2 リクエストが、3 月に塞がれたはずの厳格 SNI 検証をバイパス。11 件のうち 8 件は EOL の Tomcat 8.5(最終 8.5.100、2024/3 EOL)にも影響し、Apache により「修正されない」——HeroDevs は同ブランチの EOL 後無パッチ CVE を 877 日で 48 件と集計。スコアラー衛生:Apache は CVSS ではなく文章評価を公表;採点済みは CVE-2026-66299 のみ(Apache:Low vs CISA ADP 7.5);KEV 登載なし、悪用報告なし。
+
+## 9 月 Patch Tuesday：記録的 974、SAP の 10.0、StyleSmuggler のパッチ（09-09）
+
+- **Microsoft の 9/8 リリースは史上最大の単一ベンダーパッチ：** SecurityWeek 計上で 974 CVE（ZDI：Microsoft 分 972、外部 +
+  Chromium 込みで 997、Critical 114）——Windows 723、Office 222、SQL 62、Exchange 9。悪用中のゼロデイ 2 件が即日 CISA KEV へ、
+  連邦期限は 9/22：**CVE-2026-85880**（Windows ALPC ヒープオーバーフロー、SYSTEM へのローカル EoP、CVSS 7.8 CNA 賦点——
+  Tenable の Satnam Narang によれば約 4 年で 2 件目の ALPC ゼロデイ）と **CVE-2026-81963**（Windows Update Stack のリンク解決
+  欠陥、CWE-59、7.8——史上初の Update Stack ゼロデイ）。枠組みの注意は ZDI 自身のもの：急増は「AI 支援の脆弱性発見」に帰されるが、
+  「一致する活用の急増はまだ現れていない」——**件数はインシデント率ではない。**
+- **974 の注目 2 件：** **CVE-2026-69525**——Windows リモートデスクトップサービス UAF、CVSS 9.8（Microsoft CNA、Primary）、
+  `AV:N/AC:L/PR:N/UI:N`、未認証ネットワークコード実行；ZDI は今月 20 パッチを「ワーム可能」と分類；BlueKeep 級の露出プロファイル。
+  **CVE-2026-55007**——Exchange Server ダブルフリー、CVSS 8.1（Microsoft CNA）：「メールを送るだけで」コード実行——悪意ある
+  Visio 添付がサーバー側で処理され「プレビューウィンドウ不要」（ProxyLogon/ProxyShell のトリガー系譜）。誠実な限界：9/8 時点で
+  どちらも KEV 未掲載・PoC なし、そして Exchange 8.1（`AC:H`）は「ネットワーク事前認証」という見出しを上回る。
+- **SAP パッチデー（新規 19 ノート）：** **CVE-2026-44756「OVERPASS」**——CVSS 10.0（SAP CNA）、Extended Passport (EPP)
+  処理のメモリ破壊：リモート・事前認証・細工リクエスト → SAP 管理者権限での OS コマンド実行（ABAP/Java カーネル、Web Dispatcher
+  9.16）；Onapsis：「即時パッチ適用を。」 **CVE-2026-58240「S4GET」**——CVSS 9.8（SAP CNA）、NetWeaver Message Server 登録の
+  認証欠落、カーネル 9.16–9.20 → **全 S/4HANA 2025 デプロイが該当**。スコアリング規律：両スコアとも SAP 自身の賦点、バッチのもう
+  一つの 10.0（Commerce Cloud）は Onapsis によれば「未変更環境はデフォルトで非露出と報告」——スコアはデフォルト露出を反映しない。
+- **StyleSmuggler フォローアップ（09-07 項目がパッチを得る）：** Adobe APSB26-146 を 9/7 帯域外で公開——**CVE-2026-75650**、
+  CVSS 10.0（Adobe CNA）、テンプレートエンジンの CWE-1336、2.4.4–2.4.9 全ライン、composer ホットフィックス
+  （`VULN-39341-composer-patches.zip`）としてフルリリースではなく出荷；9/8 KEV 掲載。対応はパッチ**加えて全クレデンシャル
+  ローテーション**——Adobe：「暗号化キーのローテーションだけでは、既に露出した可能性のあるクレデンシャルを無効化できない。」
+  Sansec のヘッジは現有：「バックドアが武器化された兆候はまだない」；旧ブランチへの修正は「未検証」。
+- **LG OLED のストア・アンド・フォワード持ち出し**（Gamers Nexus/Level1Techs のパケットキャプチャ、The Verge 9/8 経由）：
+  小売 LG OLED は「スタンバイ中にマイク音声を録音できた;これはテレビをネットから切断しても続き、音声ファイルはオフライン保存され、
+  接続復旧後にアップロードされた」——加えてスマホ/ウォッチを探す LAN スキャン、位置と Wi-Fi の LG Ad Solutions への記録、HDMI 入力
+  全体の ACR。一般化できる点：**ストア・アンド・フォワードはエアギャップを無効化する**——切断が止めるのは伝送であって収集ではない。
+  ここでは独立再検証はしていない；記事に LG の回答なし；流通している webOS 脆弱性の角度は二次報道にのみ存在。

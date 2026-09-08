@@ -1373,3 +1373,33 @@ APEX-Agents 的 27.7，Agent-Team 模式比 ReAct 模式高 7–8 分。模式�
 
 - **Iris(AllSpark Research,arXiv 2609.04304,HF 论文 #2)** —— Iris-mini(35B-A3B)与 Iris-pro(397B-A17B),以"SFT-RL climbing"(SFT + RL 交替、对真实搜索训练);单一 ReAct 代理、无子代理、无测试时验证。数字:BrowseComp 82.2 / 88.6,BrowseComp-ZH 84.8 / 85.1,DeepSearchQA 86.9 / 92.9,HLE 52.3 / 56.4——参数量级内最强开源搜索代理。**承重句是作者自己的:**"推理时上下文管理在这些基准上的价值,超过大多数系统间已报告的差异"——因此每个数字都按带/不带该机制双份报告。本 feed 曾两次发布过去掉限定的榜单 delta;这里拒绝是内建于论文的。第二个限定:权重是承诺而非发布("我们计划与完整配方一起发布")——repo 仅 36 星、无权重,"最强开源搜索代理"仍是主张而非工件。
 - **Bilevel Coordinated Reflection(arXiv 2609.02750,HF 论文 #1)** —— 记忆接受门控的 transcript-vs-grounded 不可能性结果;细节与限定 → [[agent-stack]](09-08 节)。记入本文件,因为它是本文件从 harness 侧追踪的记忆门控品类的第一条*可证明*设计规则。
+
+## Navier–Stokes 主张与优先权争议（09-09）
+
+- **OpenAI 的帖子**（"On the Navier–Stokes Millennium Prize Problem"）：一个"显著强于 GPT-6 Astra"的内部模型
+  加上 **约 10,000 个协作 agent** 的集群，交换了 270 万条消息、约 1300 亿输出 token，在发射后约 88 小时（9 月 5 日）
+  得出 3D 不可压 Navier–Stokes 带光滑强迫项的有限时间爆破——千禧年大奖官方表述的陈述 "C" 与 "D"；Lean 形式化在
+  17 小时后"经 GPT-6 Astra"完成。帖子里就有两句承重免责："无意为此结果申领千禧年大奖"；"虽不太可能，但无法排除
+  其产品使用产生的去标识化数据帮助改进了我们的模型。"
+- **反声明（Tristan Buckmaster，NYU——已一手通读全 PDF）：** Buckmaster 与 Levent Alpöge 发表了不可压多孔介质、
+  Boussinesq、3D 不可压 Euler 带光滑强迫项的有限时间爆破（hypo-dissipative Navier–Stokes 压住不发——Lean 验证
+  尚未完成）。声明内容远超聚合报道：该纲领的思想归于 **Diego Córdoba 与 Luis Martínez-Zoroa**（"我认为
+  Martínez-Zoroa 应得菲尔兹奖"）；他们自己的工作用了多个 LLM（Claude、Codex/GPT-5.6 Sol，Astra *仅用于写稿与
+  审校*）。时间线：9 月 3 日——谣言流传 *Anthropic* 解决了重大开放问题、且有风声说他们的进展传到了 OpenAI——
+  Buckmaster 致信 OpenAI 一位知名数学家；当天回复提出提供算力"避免在此竞争"。9 月 6 日与 Sebastien Bubeck 通话：
+  曾被告知"极少人类输入"——"结果并非如此"（一整个团队、先从更容易的问题入手（含 Euler）、给我看的 prompt 也是
+  先 prompt Codex 写出来的、"疯狂数量的算力"）；双方最终**同意首个 prompt 是在其工作信息传到 OpenAI 之后的
+  "过去几天里"发出的**；他们的 Codex 会话（存有全部草稿）是否被用于训练——没有答案。两个提议均被拒绝（协调发布；
+  Buckmaster 单独署名写 OpenAI 的 NS 结果）。被引用的回复："你为什么要毁掉自己的职业生涯？""如果你不想让我客气，
+  我可以不客气。"免责是明示的："我没有看过 OpenAI 的证明……我不指控任何人"——他称自己的 Euler 稿为 "AI slop"。
+- **为何归入本文件（论点 10 谱系）：** FLT 的先例说厂商自跑的形式化不等于独立验证；这里形式化又出自 OpenAI 之手的
+  运行，无独立重建，而主张的却是千禧年大奖级命题。约 1 万 agent 的协作是迄今最大规模的多 agent 实测（→ 论点 4）；
+  优先权争议是首场围绕此类 AI 产出的作者权冲突，双方都在对冲——每句话保持归属，不做断言。
+
+## AlphaGenome Atlas：没有误差率的 1 PB 查找表（09-09）
+
+DeepMind 为**全部 90 亿个单碱基变化**预计算调控影响，蒸馏为单一 AlphaGenome Variant Impact 评分，"零编程基础"
+可查（alphagenome.google/atlas）；Broad Institute 的 DNM1 剪接位点罕见病案例、54,000+ UK Biobank 参与者上多
+22% 的非编码关联、19 个 BMI 相关区域。公告未通过的警示纪律：**全文没有任何准确度或验证指标**——输出是模型预测
+而非实验确认——博客自己承认科学家"对其余 98% 仅有有限认知"。HN 指出非商用 ToS。研究到查找表的跨越是真的；
+缺失的误差率才是故事。

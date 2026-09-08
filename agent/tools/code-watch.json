@@ -3,7 +3,8 @@
     {
       "id": "evidence-tier",
       "query": "benchmark_counterfactual",
-      "why": "caveman's claim-grading vocabulary (`inferred`/`benchmark_counterfactual`/`verified`) — a second adopter ends the one-adopter negative result (thesis 13 / [[token-economics]]); migrated from evidence-tier-watch.mjs on 2026-09-06 with its seeded seen-set intact"
+      "exclude": "benchmark_counterfactual[_0-9A-Za-z]",
+      "why": "caveman's claim-grading vocabulary (`inferred`/`benchmark_counterfactual`/`verified`) — a second adopter ends the one-adopter negative result (thesis 13 / [[token-economics]]); migrated from evidence-tier-watch.mjs on 2026-09-06 with its seeded seen-set intact; exclude added 09-09 after CANOPY's `benchmark_counterfactual_actor_evidence` collision"
     },
     {
       "id": "ra-paper-id",

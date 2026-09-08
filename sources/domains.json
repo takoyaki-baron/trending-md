@@ -3150,13 +3150,13 @@
     "cv": 1
   },
   "herdr.dev": {
-    "cat": "code",
-    "en": "herdr project site — Rust agent-terminal multiplexer (herdrdev/herdr). Cross-checked first-hand against the GitHub repo (Apache-2.0, 32.3k★).",
-    "zh": "herdr 项目官网——Rust 编写的 agent 终端多路复用器（herdrdev/herdr）。已一手对照 GitHub 仓库核验（Apache-2.0，32.3k★）。",
-    "jp": "herdr プロジェクトサイト——Rust 製エージェントターミナルマルチプレクサ（herdrdev/herdr）。GitHub リポジトリと突合（Apache-2.0、32.3k★）。",
+    "cat": "vendor",
+    "en": "herdr's blog — release notes and download claims; README carries the honest limits (processes don't survive restore), so pair blog claims with repo text.",
+    "zh": "herdr 博客——发布说明与下载数字；诚实的边界（进程不随恢复存活）在 README，博客宣称请与仓库文本配对引用。",
+    "jp": "herdr のブログ——リリースノートとダウンロード主張;誠実な限界（復元でプロセスは生き残らない）は README 側なので、ブログの主張はリポジトリ本文と対にする。",
     "cred": "med",
     "density": "med",
-    "cv": 2
+    "cv": 1
   },
   "higress.io": {
     "cat": "code",
@@ -5662,6 +5662,159 @@
     "zh": "《纽约时报》——主流记录性报纸;用于交叉确认 WeWorm 研究的发布。部分报道有付费墙;人物/时间可靠,技术深度一般。",
     "jp": "ニューヨーク・タイムズ——主流の記録紙。WeWorm 研究の公開をクロス確認するために引用。一部報道はペイウォール。誰が/いつは堅実だが技術的深さは乏しい。",
     "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "thezdi.com": {
+    "cat": "security",
+    "en": "Zero Day Initiative's advisory blog — read the scoring and 'wormable' counts first-hand; also publishes honest negative framings (exploit spike not materializing).",
+    "zh": "Zero Day Initiative 的公告博客——评分与\"蠕虫级\"计数可直接一手阅读；也会给出诚实的反面定性（利用激增尚未出现）。",
+    "jp": "Zero Day Initiative のアドバイザリブログ——スコアリングや「ワーム可能」件数を一次で読める;誠実な否定的枠付け（活用急増未出現）も公表。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "onapsis.com": {
+    "cat": "security",
+    "en": "SAP/ERP security vendor; its Patch Day analyses name CVEs and add exploitation context — vendor-interested, cross-check scores against NVD/SAP CNA records (done 09-09: OVERPASS/S4GET 10.0/9.8 SAP-CNA confirmed).",
+    "zh": "SAP/ERP 安全厂商；其补丁日分析点名 CVE 并补充利用语境——立场在厂商，分数需与 NVD/SAP CNA 记录互核（09-09 已核：OVERPASS/S4GET 10.0/9.8 SAP-CNA 一致）。",
+    "jp": "SAP/ERP セキュリティベンダー;パッチデー分析は CVE を特定し活用文脈を加える——利害関係者なので NVD/SAP CNA と突合（09-09 突合済み：OVERPASS/S4GET 10.0/9.8 SAP-CNA 一致）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "experienceleague.adobe.com": {
+    "cat": "security",
+    "en": "Adobe's official KB — primary source for Adobe Commerce patch mechanics (APSB26-146 hotfix, credential-rotation mandate); verify against the researcher (Sansec) for exploitation facts.",
+    "zh": "Adobe 官方知识库——Adobe Commerce 补丁机制的一手来源（APSB26-146 热修复、凭证轮换强制）；利用事实需与研究者（Sansec）互核。",
+    "jp": "Adobe 公式 KB——Adobe Commerce のパッチ機構の一次情報（APSB26-146 ホットフィックス、クレデンシャルローテーション義務）；悪用の事実は研究者（Sansec）と突合。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "cims.nyu.edu": {
+    "cat": "research",
+    "en": "NYU Courant faculty pages — hosts primary statements/papers (Buckmaster's Navier–Stokes statement PDF, read first-hand 09-09: allegations, timeline and hedges all present as cited).",
+    "zh": "NYU Courant 教师页面——声明/论文的一手托管地（Buckmaster 的 Navier–Stokes 声明 PDF，09-09 一手通读：指控、时间线与对冲均如所引）。",
+    "jp": "NYU Courant 教員ページ——声明・論文の一次ホスト（Buckmaster の Navier–Stokes 声明 PDF、09-09 一次読了：主張・時系列・ヘッジがすべて引用どおり）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "blog.documentfoundation.org": {
+    "cat": "community",
+    "en": "The Document Foundation's official blog — primary source for LibreOffice project positions (the six-principle \"no AI\" spec); careful, hedged institutional voice.",
+    "zh": "文档基金会官方博客——LibreOffice 项目立场的一手来源（六原则\"无 AI\"规范）；机构语调谨慎、多对冲。",
+    "jp": "The Document Foundation 公式ブログ——LibreOffice プロジェクトの立場の一次情報（6 原則の「AI なし」仕様）；機関として慎重でヘッジの多い文体。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "manualdousuario.net": {
+    "cat": "news",
+    "en": "Independent Brazilian open-source tech blog (EN/PT); broke the LibreOffice 26.8 download record — verified first-hand 09-09: the 1M+ figure and its own hedges (\"putting my money on\", \"whatever the reasons\") are present as cited.",
+    "zh": "独立巴西开源技术博客（英/葡）；首发 LibreOffice 26.8 下载纪录——09-09 一手核验：100 万+ 数字与其自身对冲（\"押注\"、\"无论原因\"）均如所引。",
+    "jp": "独立系ブラジルのオープンソース技術ブログ（英/葡）;LibreOffice 26.8 のダウンロード記録を初報——09-09 一次検証済み：100 万+ の数字と自身のヘッジ（「賭け」「理由は何であれ」）が引用どおり。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "quesma.com": {
+    "cat": "vendor",
+    "en": "Quesma's engineering blog — the CI'd Qwen3.8 27B quantization benchmark (verified first-hand 09-09: Wilson 95% CIs, $3k Modal cost, printed caveats all present); a vendor blog doing unusually honest measurement work.",
+    "zh": "Quesma 工程博客——带置信区间的 Qwen3.8 27B 量化基准（09-09 一手核验：Wilson 95% CI、$3k Modal 成本、印出的警示均在）；少见的诚实测量型厂商博客。",
+    "jp": "Quesma のエンジニアリングブログ——信頼区間付き Qwen3.8 27B 量子化ベンチ（09-09 一次検証済み：Wilson 95% CI、$3k Modal コスト、印字された但し書きがすべて存在）；珍しく誠実な測定をするベンダーブログ。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "copperhead.sh": {
+    "cat": "vendor",
+    "en": "Copperhead's product landing page — pairs with the GitHub repo; the honest \"Implemented, not yet proven\" ceiling is in the README, so cite the repo alongside.",
+    "zh": "Copperhead 产品落地页——与 GitHub 仓库配套；诚实的\"已实现，尚未证明\"天花板在 README 里，引用时请并列仓库。",
+    "jp": "Copperhead のプロダクトランディングページ——GitHub リポジトリと対で参照;誠実な「実装済み、未証明」の天井は README にあるのでリポジトリも併記。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "ishamf.dev": {
+    "cat": "community",
+    "en": "Personal dev blog of Isham Faizal — the in-browser attention visualizer write-up; author's own simplification caveats quoted in full, which is why it's citable.",
+    "zh": "Isham Faizal 的个人开发博客——浏览器内注意力可视化器长文；作者自己的简化免责被完整引用，这也是它可引用的原因。",
+    "jp": "Isham Faizal の個人開発ブログ——ブラウザ内アテンション可視化の解説記事;作者自身の簡略化の但し書きが完全に引用できること自体が引用に値する理由。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "freebsd.org": {
+    "cat": "code",
+    "en": "FreeBSD's canonical release announcements — primary source for EOL calendars and image lineup; self-disclaiming framing (\"consist mostly of bug fixes\") is in the announcement itself.",
+    "zh": "FreeBSD 官方发布公告——EOL 时间表与镜像阵容的一手来源；自谦的定性（\"主要是缺陷修复\"）就在公告里。",
+    "jp": "FreeBSD 公式リリースアナウンス——EOL 暦とイメージ一式の一次情報;自己控えめな枠付け（「主にバグ修正」）はアナウンス自体にある。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "theverge.com": {
+    "cat": "news",
+    "en": "Major consumer-tech outlet — solid reporting but carries vendors' unverified claims with attribution; for the LG story the underlying measurements are Gamers Nexus's, so cite both layers.",
+    "zh": "主流消费科技媒体——报道扎实但会带厂商未核验宣称（有归属标注）；LG 报道的底层测量出自 Gamers Nexus，引用需分层。",
+    "jp": "主要コンシューマテック媒体——報道は堅実だがベンダーの未検証主張を帰属付きで運ぶ;LG 記事の根底の測定は Gamers Nexus のものなので両層を引用。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "ai.meta.com": {
+    "cat": "vendor",
+    "en": "Meta's product pages — primary source for Meta AI product claims (Muse). JS-rendered: a plain fetch returns only the title, so verify claims against press coverage and note what the page itself does NOT state (no public detail on the Secure VM/Sentinel architecture as of 09-09).",
+    "zh": "Meta 产品页——Meta AI 产品宣称的一手来源（Muse）。JS 渲染：纯抓取只返回标题，宣称需与媒体报道互核，并注明页面本身未陈述的内容（截至 09-09，Secure VM/Sentinel 架构无公开细节）。",
+    "jp": "Meta のプロダクトページ——Meta AI 製品の主張の一次情報（Muse）。JS 描画のためプレーン取得ではタイトルのみ——主張は報道と突合し、ページ自体が述べていないこと（09-09 時点で Secure VM/Sentinel アーキテクチャの公開詳細なし）を明記。",
+    "cred": "med",
+    "density": "low",
+    "cv": 1
+  },
+  "mcpherrin.ca": {
+    "cat": "community",
+    "en": "Personal blog of a Cloudflare engineer; the RSA-512 post is first-hand by the person who ran the factorization (CADO-NFS timings, keys published, method reproducible) and its LLM-extraction step is flagged with the author's own distrust. Cross-validated: post details match the HN thread, and Steve Weis's independent VeriSign test-root factorization corroborates the method class.",
+    "zh": "一位 Cloudflare 工程师的个人博客；RSA-512 一文由实际执行分解的作者亲撰（CADO-NFS 耗时、私钥公开、方法可复现），并自带对 LLM 提取步骤的怀疑。已交叉验证：文章细节与 HN 讨论串一致，Steve Weis 独立分解 VeriSign 测试根证书亦佐证该类方法。",
+    "jp": "Cloudflare エンジニアの個人ブログ。RSA-512 記事は実際に因数分解を実行した本人による一次情報（CADO-NFS の所要時間、鍵の公開、再現可能な手法）で、LLM 抽出ステップへの疑いも著者自身が明記。クロス検証済み：記事の詳細は HN スレッドと一致し、Steve Weis による VeriSign テストルートの独立分解も手法を裏付ける。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "mathathonchallenge.com": {
+    "cat": "community",
+    "en": "The Caltech Mathathon's own site — first-hand for dates (Oct 30–Nov 1), format (100 teams, defense before mathematicians, two-stage prizes) and its dated AI-math timeline (Erdős unit-distance disproof, non-sofic group; the six-sphere result is flagged \"unverified\" by the site itself). Self-description of an event it runs, so treat scale claims ($2M+ credits) as organizer-stated. Cross-validated: the timeline matches independent coverage of those results.",
+    "zh": "Caltech Mathathon 官方站点——日期（10月30日–11月1日）、形式（100 支队伍、向数学家答辩、两轮奖项）及其 AI 数学时间线（Erdős 单位距离猜想被否证、非 sofia 群构造；六球复结构结果被站点自行标注\"未验证\"）的一手来源。属主办方自述，规模性宣称（$2M+ 算力额度）应视为组织方口径。已交叉验证：时间线与这些结果的独立报道相符。",
+    "jp": "Caltech Mathathon の公式サイト——日程（10月30日–11月1日）、形式（100 チーム、数学者へのディフェンス、二段階賞）と AI 数学タイムライン（エルデシュ単位距離問題の反証、非ソフィック群の構成；六球の複素構造の結果はサイト自身が「未検証」と明記）の一次情報。主催者自身の記述のため、規模に関する主張（$2M+ クレジット）は主催者側の説明として扱う。クロス検証済み：タイムラインはこれらの結果の独立報道と一致。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "virtualizationhowto.com": {
+    "cat": "news",
+    "en": "Independent virtualization/home-lab blog; the VDDK-pull post is evidence-led (its own 404 screenshots, ShapeBlue's Aug 25 documentation, linked Reddit support reports) and explicitly labels the deliberate-exit-barrier reading as the author's interpretation. Cross-validated: ShapeBlue's independent documentation and the HN thread confirm the downloads 404.",
+    "zh": "独立虚拟化/家庭实验室博客；VDDK 下架一文以证据为先（作者自己的 404 截图、ShapeBlue 8月25日的记录、附链接的 Reddit 支持报告），并明确将\"故意设置退出壁垒\"的解读标注为作者个人观点。已交叉验证：ShapeBlue 的独立记录与 HN 讨论串均证实下载页 404。",
+    "jp": "独立系の仮想化/ホームラボ系ブログ。VDDK 配信停止の記事は証拠重視（著者自身の 404 スクリーンショット、ShapeBlue の 8月25日の記録、リンク付き Reddit のサポート報告）で、「意図的な退出障壁」という読み解きは著者の解釈と明記している。クロス検証済み：ShapeBlue の独立記録と HN スレッドがダウンロードページの 404 を確認。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "roundcube.net": {
+    "cat": "vendor",
+    "en": "Roundcube webmail's official site — first-hand for its own security updates: the 1.6.19/1.7.4 post lists all 12 fixes with reporter credit (zero-click stored XSS via TNEF, CSS-proxy SSRF, header injections) and, notably, no CVE numbers — track by advisory. Cross-validated: the GitHub releases page (roundcube/roundcubemail) carries the same versions.",
+    "zh": "Roundcube 网页邮件官方站点——其自身安全更新的第一手来源：1.6.19/1.7.4 公告列出全部 12 项修复并署名报告者（TNEF 零点击存储型 XSS、CSS 代理 SSRF、邮件头注入），且 notable 地未提供 CVE 编号——需按公告跟踪。已交叉验证：GitHub 发布页（roundcube/roundcubemail）载有相同版本。",
+    "jp": "Roundcube ウェブメールの公式サイト——自プロダクトのセキュリティ更新の一次情報。1.6.19/1.7.4 の公告は 12 件の修正全てを報告者クレジット付きで列挙（TNEF 経由のゼロクリック格納型 XSS、CSS プロキシ SSRF、ヘッダ注入）し、CVE 番号が付与されていない点も特徴——アドバイザリ単位で追跡すること。クロス検証済み：GitHub のリリースページ（roundcube/roundcubemail）に同じバージョンが掲載。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "ladybird.org": {
+    "cat": "vendor",
+    "en": "Ladybird browser's official site — first-hand for the monthly \"This Month in Ladybird\" reports and the Alpha-2026 (Linux & macOS) target; all progress is the project's self-reported narrative (feature headlines, no independent benchmarks) — the Alpha date is a target, not a commitment. Cross-validated: the August report's topics match the HN discussion.",
+    "zh": "Ladybird 浏览器官方站点——\"This Month in Ladybird\" 月报及 Alpha 2026（Linux 与 macOS）目标的第一手来源；所有进展均为项目自述（功能标题式新闻，无独立基准测试）——Alpha 日期是目标而非承诺。已交叉验证：八月月报主题与 HN 讨论一致。",
+    "jp": "Ladybird ブラウザの公式サイト——「This Month in Ladybird」月例レポートと Alpha 2026（Linux & macOS）目標の一次情報。進捗はすべてプロジェクトの自己報告（機能見出し中心で独立ベンチマークなし）——Alpha の日程は目標であり確約ではない。クロス検証済み：8月レポートのトピックは HN の議論と一致。",
+    "cred": "med",
     "density": "med",
     "cv": 1
   }

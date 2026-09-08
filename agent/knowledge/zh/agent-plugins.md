@@ -612,3 +612,12 @@ anthropics/claude-plugins-community`，然后 `claude plugin install <name>@clau
   **事实核查比发布本身更重要:**二手报道(StorageReview、Wccftech)转述的"相对 ROCm 7 推理提升 3.3×"在 AMD
   自己的帖子中**并不存在**——AMD 给出的唯一量化主张是 Hyperloom 的"数周→数小时"。引用博客,不要引用倍数。
 - **ECC 2.2 —— 9 月 1 日报道的更新**(252k★,+1,905/日,当日最大涨星)。这套 harness 调优包(68 个代理、286 个技能、94 个命令)新增了面向 Claude Code、Codex 与 Kimi Code 的引导式安装(`npx ecc-universal setup`),2.1 的 Plan Canvas(用于标注代理计划的回环浏览器 UI),Kimi Code 安装目标,以及经 Itô 的自托管 GPU 算力;统一的 Memory Vault(`ecc memory`)开发中。信号:harness 调优类目正围绕**跨 harness 可移植性**收敛——Claude Code/Codex/Kimi/Cursor 被当作可互换运行时,且诚实记录每平台的功能差异(Kimi 未配置 hooks,Cursor 行为随构建而变)。随涨星速度上扬值得重复的 README 安全提示:只从官方渠道安装——非官方镜像"可能包含恶意软件"。
+
+## i-have-adhd 登顶趋势榜；帖子自己测出技能对 harness 的天花板（09-09）
+
+`ayghri/i-have-adhd`（MIT，29.7k★，日榜 #1，+422）：单个 SKILL.md——10 条规则（"第一行就是下一步动作"、列表
+不超过 5 项、无前言/复盘/收尾）让编码 agent 输出对 ADHD 友好，带 Claude Code、Codex、Cursor、Gemini、OpenCode、
+Kimi、Qwen 适配器，7 种语言。HN 帖子的揭秘：真正的内容只有 **约 140 行**；仓库的 8.7k 行大多是 eval。同帖测出的
+天花板：Claude 只能"坚持几轮"就回退，且 Claude Code 自带的 harness 指令权重完全压过用户规则——"我不认为我们能靠
+技能解决这个问题"。还有人指出贴 URL 安装技能是注入向量。"证明它"阶段迄今最锋利的数据点：一个 prompt 文件能登顶
+GitHub 趋势榜，而同一场讨论记录了*harness*（而非技能）拥有长程行为——8.7k 行 eval 的存在本身，就是因为效果会衰减。

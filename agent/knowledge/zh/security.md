@@ -1519,3 +1519,30 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
 - **Telerik UI for ASP.NET AJAX —— padding-oracle 到 RCE,而*推荐*的缓解配置正是利用前提**(TantoSec,9 月 7 日公开利用工具 + 两个 webshell)。针对 RadAsyncUpload 的链:AES-CBC padding oracle(CVE-2026-13182;时序变体 CVE-2026-13183)+ 无守卫的类型解析(CVE-2026-13181)→ 经混合模式 DLL `Assembly.LoadFrom` gadget 实现未认证 RCE;在 2026.1.225–2026.2.519 上验证,约 127,000 次 oracle 查询(实验室约 1 小时)。反转点:该链**要求显式配置 `Telerik.AsyncUpload.ConfigurationEncryptionKey`——"默认安装不会满足"**。加固建议本身制造了易受攻击的人群。Progress 还警告利用"在标准 ASP.NET 错误日志中不留明显痕迹";中间版本(2026.1.421)修了一个 oracle 却留下 postback 路径;自定义密钥对 oracle 无济于事。唯一真正的修复:2026.2.708(AES-GCM)。CVSS 8.1,评分方未署名,Progress 自己不发布 CVSS;截至 9 月 7 日不在 KEV、无确认在野利用。
 - **MikroTik "MikroTrick" —— 两个 RouterOS SSH 漏洞链成未认证管理员控制,9 月 2 日起被利用**(CERT Polska,9 月 5 日公开,CVSSv4 9.2,两页均未署名评分方)。CVE-2026-67276:公钥认证绕过——RouterOS 匹配密钥模数时跳过指数,伪造签名无需私钥即可通过。CVE-2026-86060:构造用户名的会话提权,篡改策略掩码。失陷设备出现新的特权账户 **"ops"** 和含 `ssh:-2@` 的日志串。同时披露的四个姊妹 CVE(CVE-2026-67277/78/79/81,6.3–8.8)也被列为已利用;修复在 7.25beta3/7.24.2/7.23.4/6.49.21——经 MikroTik 首次移动端推送通知发布。聚合报道丢掉的限定:CERT Polska 与 MikroTik 都没说观测到的链用的是哪两个漏洞;日期无法区分零日与 1-day(beta 修复 changelog 9 月 2 日,9 月 3 日公告);公开 PoC 仅覆盖认证绕过;MikroTik 默认防火墙通常保护管理端口——暴露需要改动默认配置。
 - **Apache Tomcat 9.0.121 —— 一次 11 个 CVE,其中一个是早年修复不完整所致**(修复 8 月 18 日入 9.0.121/10.1.58/11.0.25;8 月 25 日披露;披露时 NVD 已分析数:0/10)。包括 web.xml 约束排序绕过、fail-open 的 CLIENT-CERT/SPNEGO 认证 bug(CWE-287)、HTTP/2 内存耗尽 DoS,以及 **CVE-2026-65637——按 Apache 原话,"因 CVE-2026-32990 的修复不完整"而存在**:无 authority 的 HTTP/2 请求绕过生态以为 3 月已封死的严格 SNI 校验。其中 8 个同样影响 EOL 的 Tomcat 8.5(最终版 8.5.100,2024 年 3 月 EOL),且按 Apache 说法"不会被修复"——HeroDevs 统计该分支 877 天内已有 48 个 EOL 后未修补 CVE。评分卫生:Apache 发布文字评级而非 CVSS;唯一有分值的 CVE-2026-66299 为(Apache:Low vs CISA ADP 7.5);均未入 KEV、无利用报告。
+
+## 九月 Patch Tuesday：创纪录的 974、SAP 的 10.0、StyleSmuggler 的补丁（09-09）
+
+- **微软 9 月 8 日批次是史上最大的单厂商补丁：** SecurityWeek 计 974 个 CVE（ZDI：微软自数 972，含外部与
+  Chromium 为 997，114 个 Critical）——Windows 723、Office 222、SQL 62、Exchange 9。两个在野利用零日当天进
+  CISA KEV，联邦期限 9 月 22 日：**CVE-2026-85880**（Windows ALPC 堆溢出，本地提权至 SYSTEM，CVSS 7.8
+  CNA 赋分——Tenable 的 Satnam Narang 指出这是约 4 年来第二个 ALPC 零日）与 **CVE-2026-81963**（Windows
+  Update Stack 链接解析缺陷，CWE-59，7.8——史上首个 Update Stack 零日）。定性警示出自 ZDI 自己：激增归因于
+  "AI 辅助漏洞发现"，但"匹配的活跃利用激增尚未出现"——**数量不是事件率。**
+- **974 中的两个重点：** **CVE-2026-69525**——Windows 远程桌面服务 UAF，CVSS 9.8（微软 CNA，Primary），
+  `AV:N/AC:L/PR:N/UI:N`，未认证网络代码执行；ZDI 计本月 20 个补丁"均可归为蠕虫级"；BlueKeep 级暴露画像。
+  **CVE-2026-55007**——Exchange Server 双重释放，CVSS 8.1（微软 CNA）："仅通过发送一封邮件"即可代码执行——
+  恶意 Visio 附件在服务端处理，"无需预览窗格"（ProxyLogon/ProxyShell 触发谱系）。诚实边界：截至 9 月 8 日均未进
+  KEV、无公开 PoC，且 Exchange 8.1（`AC:H`）跑赢了它的"网络前认证"标题。
+- **SAP 补丁日（19 个新 note）：** **CVE-2026-44756 "OVERPASS"**——CVSS 10.0（SAP CNA），Extended Passport
+  (EPP) 处理的内存破坏：远程、前认证、构造请求 → 以 SAP 管理员权限执行 OS 命令（ABAP/Java 内核、Web Dispatcher
+  9.16）；Onapsis："立即修补。" **CVE-2026-58240 "S4GET"**——CVSS 9.8（SAP CNA），NetWeaver Message Server
+  注册缺少认证，内核 9.16–9.20 → **所有 S/4HANA 2025 部署皆受影响**。赋分纪律：两个分数都是 SAP 自赋；批次里
+  另一个 10.0（Commerce Cloud）按 Onapsis 是"未修改环境据报默认不暴露"——分数不反映默认暴露。
+- **StyleSmuggler 后续（09-07 条目等到补丁）：** Adobe APSB26-146 于 9 月 7 日带外发布——**CVE-2026-75650**，
+  CVSS 10.0（Adobe CNA），模板引擎 CWE-1336，波及 2.4.4–2.4.9 全线，以 composer 热修复（`VULN-39341-composer-
+  patches.zip`）而非完整版本交付；9 月 8 日进 KEV。处置是补丁**加全部凭证轮换**——Adobe："仅轮换加密密钥不能使
+  可能已暴露的凭证失效。" Sansec 的对冲仍然成立："目前没有迹象表明后门已被武器化"；旧分支的修复"未经验证"。
+- **LG OLED 存转发电台窃听**（Gamers Nexus/Level1Techs 抓包，经 The Verge 9 月 8 日）：零售 LG OLED"可在待机时
+  录制麦克风音频；即使断网仍继续，音频文件离线存储、恢复连接后上传"——另有扫描局域网找手机/手表、位置与 Wi-Fi
+  记录进 LG Ad Solutions、跨 HDMI 输入的 ACR。可泛化的一点：**存转发击败气隙隔离**——断开只停止传输，不停止采集。
+  此处未独立复验；报道中无 LG 回应；流传的 webOS 漏洞角度只见于二手报道。

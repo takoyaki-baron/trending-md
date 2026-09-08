@@ -15,6 +15,15 @@
 // new hits prints a one-line null — a null is a data point, not an error. Exits non-zero only when
 // every search fails (gh missing/unauthenticated), which callers treat as non-fatal. Sequential
 // execution: GitHub's code-search rate limit is 10 req/min authenticated.
+//
+// Collisions (added 2026-09-09 04:42): the evidence-tier watch's first fire was a false positive —
+// `787-10/CANOPY` writes `benchmark_counterfactual_actor_evidence` (a provenance note on its own
+// demo scenarios), which substring-matched caveman's `benchmark_counterfactual` token. Code search
+// returns the file, not the context, so a hit alone can't tell adoption from collision. Config
+// entries may now carry `"exclude": "<regex>"`: the search requests text-match fragments and any
+// hit whose fragments match the exclude regex is recorded as a collision (seen, one log line,
+// never NEW). For the evidence-tier entry the regex is `benchmark_counterfactual[_0-9A-Za-z]`
+// — i.e. the token appearing as a prefix of a longer identifier is the collision signature.
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
@@ -34,12 +43,13 @@ const now = new Date().toISOString();
 const out = [];
 let failed = 0;
 
-for (const { id, query, why } of config.watch) {
+for (const { id, query, why, exclude } of config.watch) {
   const w = state.watches[id] ?? { seen: {}, runs: 0, first_run: null };
   let hits;
   try {
     const res = execFileSync('gh', ['api', '-X', 'GET', 'search/code',
-      '-f', `q=${query}`, '-f', 'per_page=100'], { encoding: 'utf8', timeout: 60_000 });
+      '-f', `q=${query}`, '-f', 'per_page=100',
+      '-H', 'Accept: application/vnd.github.text-match+json'], { encoding: 'utf8', timeout: 60_000 });
     hits = JSON.parse(res).items ?? [];
   } catch (err) {
     failed += 1;
@@ -47,7 +57,12 @@ for (const { id, query, why } of config.watch) {
     continue;
   }
   const fingerprint = (h) => `${h.repository.full_name}::${h.path}`;
+  const exclRe = exclude ? new RegExp(exclude) : null;
+  const fragmentText = (h) => (h.text_matches ?? []).map((m) => m.fragment ?? '').join('\n');
+  const isCollision = (h) => exclRe !== null && exclRe.test(fragmentText(h));
   const newHits = hits.filter((h) => !w.seen[fingerprint(h)]);
+  const collisions = newHits.filter(isCollision);
+  const realNew = newHits.filter((h) => !isCollision(h));
   w.runs += 1;
   w.last_run = now;
   w.last_total = hits.length;
@@ -57,9 +72,13 @@ for (const { id, query, why } of config.watch) {
   } else if (w.runs === 1) {
     out.push(`${id}: seeded ${newHits.length} baseline hit(s) (run #1)`);
   } else {
-    out.push(`${id}: ${newHits.length} NEW hit(s) of ${hits.length} total (run #${w.runs}) — ${why}`);
+    out.push(`${id}: ${realNew.length} NEW hit(s) of ${hits.length} total (run #${w.runs}) — ${why}`);
   }
-  for (const h of newHits) {
+  for (const h of collisions) {
+    out.push(`  ${h.repository.full_name} — ${h.path} — collision (exclude matched), not adoption`);
+    w.seen[fingerprint(h)] = { repo: h.repository.full_name, path: h.path, html_url: h.html_url, found: now, collision: true };
+  }
+  for (const h of realNew) {
     if (w.runs > 1) out.push(`  ${h.repository.full_name} — ${h.path} — ${h.html_url}`);
     w.seen[fingerprint(h)] = { repo: h.repository.full_name, path: h.path, html_url: h.html_url, found: now };
   }

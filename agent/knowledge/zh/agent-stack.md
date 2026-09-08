@@ -1312,3 +1312,23 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 - **Camofox-browser(`jo-inc/camofox-browser`,9.6k★,今日 +285,无 HN 触发)** —— 封装 Camoufox(C++ 层 Firefox 指纹伪装)的 REST 服务器,定位为 agent 的隐身浏览层。对 agent 构建者可信的一半是 a11y-tree 快照模式——快照约为原始 HTML 的 10%,元素引用稳定(`e1`、`e2`…)——外加 14 个返回 JSON 的搜索宏、cookie/会话持久化、yt-dlp 转录。其余部分请带着限定:绕过 Google/Cloudflare/多数机器人检测"是该项目的自述且未经验证;趋势飙升没有 HN 触发(自然增长 + 出圈——README 警告有人用其名字发加密代币);首次运行 ~300 MB;`recordVideo` 仅 Chromium;反检测用例本身携带 README 未讨论的 ToS/法律风险。
 - **Dr. Claw(`OpenLAIR/dr-claw`,1,058★,EMNLP 2026 System Demonstrations)** —— 模型无关的"AI 科学家工作区",覆盖调研→构思→实验→写论文→幻灯片(Claude Code、Gemini CLI、Codex、OpenRouter;100+ 技能库;带评分的 arXiv/HF/GitHub/X 新闻流;双许可 GPL-3.0 + AGPL-3.0)。"vibe research" 工具在商业 agent 定义该品类的同一时刻获得学术背书。README 自己的表述请如实携带:其"自 2026 年 2 月起率先提出同一愿景"(对标 Anthropic Claude Science)是该项目的竞争性营销,不是独立比较。
 - **日期更新:** OpenMAIC v1.0.0(本周 +9.2k 至 33.0k★;Pro agent 工作台、DB 持久会话、可从聊天消息生成课堂的 SKILL.md)——08-30 笔记的教育 swarm 成了需求信号,repo 自身的警告未变(工作台默认关闭、开发持久化 token "无任何保密性与用户隔离"、一个 LGPL 依赖)。`tailscale/tailcat` 经 HN 再现(见 08-27 笔记):对想依赖它的人,限定本身就是故事——无稳定性保证、公共 DERP 中继限速无 SLA 且"随时可能撤销"、capability 地址内嵌预共享密钥(写进 DNS TXT 即世界可读)、无传输压缩、1232 字节 UDP 载荷上限、是否并入主客户端未决。
+
+## 消费级 agent 伸手拿王冠上的宝石；agent 触达硬件；舰队走向多机（09-09）
+
+- **Meta Muse**（9 月 8 日，美国）：持久型个人 agent——"发邮件、订旅行、降账单、填表格"，经 Link by Stripe 购买，
+  关掉应用后继续运行——上架 muse.ai、iOS/Android、WhatsApp；免费（注册要绑卡）/ Power $20 / Maximum $100；
+  按应用 opt-in 的权限包括**健康/健身与支付**。架构宣称："带自己浏览器的专属安全计算机"（Muse Secure VM）加独立的
+  系统级隔离 Sentinel agent；"看不到人们的密码或支付方式"；"不与 Meta 广告系统共享对话或数据"。广告防火墙正是
+  要盯住的宣称——TechCrunch 的警示是对的：安全宣称出自 Meta 自己，"需要安全专家更深入的调查"。首个索要
+  健康+支付+邮件权限外加浏览器控制的巨头消费级 agent。
+- **copperhead**（`copperheadhq/copperhead`，Apache-2.0 CLI，Show HN 172 分）：编辑真实 `.kicad_sch`/`.kicad_pcb`
+  s-expression 文件的 AI agent，以 markdown 设计文档为记忆，**每次修改都关进 KiCad 自己的 ERC/DRC 检查**（经
+  `kicad-cli`），验证失败即 git 快照回滚；硬件 IR 经确定性引擎编译为已验证的 KiCad 输出（"不只是 claude 或 gpt
+  的包装"）。CLI 免费自带密钥；云 $49/用户/月，开源硬件仓库免费。README 自己的天花板：agent 循环"已实现，尚未证明"
+  ——验收测试"需要真实模型，尚未观察到端到端通过"——"不是自动布线器"，也不是责任工程师。硬件是 agent 渗透最少的
+  开发领域；验证门控、git 原生的模式才是可迁移的部分。
+- **herdr v0.9.0**（`herdrdev/herdr`，Rust，Apache-2.0，36.6k★）：agent 舰队终端复用器加入**多机支持**——一个 TUI
+  管本地加保存的 SSH 机器、合并 agent 列表、自动重连；每窗格 working/blocked/idle 状态，agent 间 CLI/socket API
+  （agent 互相开窗格、互相发 prompt）。博客称 70 万+ 下载、约 1,000 个插件。README 保持诚实：恢复的会话恢复布局但
+  "原始进程*不会*存活"，且"agent CLI 仍在单机内运行；跨机 agent 协作是未来工作"。N agent × N 机器收进一个操作员
+  视图，正在成为独立的基础设施层。

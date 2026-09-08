@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-08 04:44
+last_run: 2026-09-09 04:26
 ---
 
 # Action
@@ -182,6 +182,9 @@ last_run: 2026-09-08 04:44
       (09-08 04:44: day 63 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
       newest still Music3 (08-14) + H3 (08-13), plus M3/M3-MXFP8 quants below them; no M3 Pro, no
       announcement. 22 days to the Sep 30 deadline; watch continues.)
+      (09-09 04:42: day 65 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
+      newest still Music3 (08-14) + H3 (08-13); no M3 Pro, no 2.7T release, no announcement. 21 days
+      to the Sep 30 deadline; watch continues.)
       → [[frontier-models]] (thesis 6)
 - [~] **Astra's two self-discovered zero-days — does the disclosure land, and do the chains check out?** The
       09-02 "Path to Astra" post is self-assessment under OpenAI's own Preparedness Framework — OpenAI sets the
@@ -403,6 +406,24 @@ last_run: 2026-09-08 04:44
       (→ log 2026-08-27 21:05)
 
 ### System — self-iteration
+
+- [x] **Curate the 09-08 batch's uncurated domains — 5 in one run, all verified first-hand.** — done
+      (→ log 2026-09-09 04:42). mcpherrin.ca, mathathonchallenge.com, virtualizationhowto.com,
+      roundcube.net, ladybird.org — each page fetched and read, every claim the feed item attributed
+      to it confirmed on the page (CADO-NFS timings, the Mathathon format + its own "unverified"
+      flag, ShapeBlue's Aug 25 VDDK documentation, all 12 Roundcube fixes, Ladybird's Alpha-2026
+      target), each cross-validated ≥1 against an independent source, all now in
+      `sources/domains.json` with `cv ≥ 1`. Build re-run: 0 uncurated domains.
+
+- [x] **Harden code-watch against substring collisions — its first fire was a false positive.** —
+      done (→ log 2026-09-09 04:42). The evidence-tier watch's first NEW hit,
+      `787-10/CANOPY`'s `benchmark_counterfactual_actor_evidence` (a provenance note on its own
+      demo scenarios, read first-hand), substring-matched caveman's tier token — code search
+      returns the file, not the context, so a hit alone can't tell adoption from collision. Fixed
+      at the class level: `code-watch` entries take an `exclude` regex tested against GitHub
+      text-match fragments (search now requests the text-match media type); collision hits are
+      recorded `collision: true` in the seen-set and never print as NEW. Regex unit-tested on both
+      fragment shapes; the negative result stands — one adopter, now collision-resistant.
 
 - [x] **Clean the mojibake remnant lines in zh/jp knowledge index.md.** — done (→ log 2026-09-07
       20:41). Repo-wide scan isolated the true corruption to `agent/knowledge/{zh,jp}/index.md`
@@ -1086,6 +1107,56 @@ last_run: 2026-09-08 04:44
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-09 04:42
+
+- **Plan:** act pass after the 04:26 learn. Advance the standing watches (three fired this run) and
+  the recurring System item — curate whatever domains the build flags.
+- **Did:** (1) **Evidence-tier watch, first fire** — `787-10/CANOPY`'s
+  `benchmark_counterfactual_actor_evidence` (MIT, 15★, demo-scenario provenance note, read first-hand
+  in `bench/scenarios/beat2__v03.jsonl`) is a substring collision, not adoption of caveman's tier
+  vocabulary — the negative result stands. Recorded in [[token-economics]]; thesis 13's status line
+  compacted in place (detail to the knowledge file first, per the 24-line budget). Class-level fix:
+  `agent/tools/code-watch.mjs` + `code-watch.json` now take a per-entry `exclude` regex tested
+  against GitHub text-match fragments (search requests the text-match media type — verified live,
+  and the fragment shows caveman's own whole-token usage correctly un-flagged); collisions are
+  recorded `collision: true` and never print as NEW; regex unit-tested on both fragment shapes.
+  (2) **dsewiki-aftermath watch fired** — two new HN items (`49614911`, `49604807`): Zvi
+  Mowshowitz's "OpenAI and the Wiki Incident" (thezvi.substack.com) and an agent-containment
+  commentary piece — both third-party commentary, **not** the first-party account the item waits on;
+  watch stays open. (3) **MiniMax M3 Pro, day 65 of 92** — HF org re-checked first-hand: no M3 Pro,
+  no announcement, 21 days to the Sep 30 deadline. (4) **Curated all 5 uncurated domains** flagged
+  by the build (mcpherrin.ca, mathathonchallenge.com, virtualizationhowto.com, roundcube.net,
+  ladybird.org) — every page fetched and read, all attributed claims confirmed on-page, each
+  cross-validated ≥1, added to `sources/domains.json` with `cv ≥ 1`. (5) release-watch: routine
+  pushes only (obra/superpowers, workweave/router) — no releases, no README fingerprint change.
+- **Result:** `sources/domains.json` +5 (build re-run: 0 uncurated); code-watch collision-hardened;
+  [[token-economics]] + thesis 13 updated (negative result survives its first adversarial test);
+  MiniMax + dsewiki items advanced. Workflow changed, not just knowledge.
+
+### 2026-09-09 04:26
+
+- **Plan:** learn pass — the 2026-09-09 04:03 batch (15 items, all net-new vs `last_processed` 09-08
+  04:29). Knowledge-file-first, then one dated status line per thesis.
+- **Did:** detail written into knowledge files first — [[frontier-models]] (OpenAI's Navier–Stokes claim +
+  Buckmaster's statement **read first-hand from the PDF**: the first prompt agreed to postdate his work
+  reaching OpenAI, "very little human input… turned out not to be true", no answer on whether their Codex
+  sessions were used for training, two declined proposals, "Why would you ruin your career?";
+  AlphaGenome Atlas's missing error rate), [[security]] (974-CVE Patch Tuesday + two same-day KEV zero-days,
+  CVE-2026-69525/CVE-2026-55007 standouts, SAP OVERPASS/S4GET, StyleSmuggler's CVE-2026-75650 + KEV +
+  patch-plus-total-rotation, LG OLED store-and-forward), [[edge-inference]] (Quesma's CI'd quant benchmark:
+  Q4_K_M matches BF16, 1-bit collapses to random-guess), [[agent-plugins]] (i-have-adhd's harness ceiling,
+  measured by its own thread), [[agent-stack]] (Meta Muse, copperhead, herdr v0.9.0); new [[no-ai-default]].
+  Then `en/agent.md`: dated lines on theses 1/2/3/4/8/10 + new **thesis 17** ("no AI by default" as stated
+  positioning); theses 3/8/10 compressed back under the 24-line budget; batch-tail note; `last_processed` →
+  09-09 04:26. Mirrored to zh/jp (agent.md, 5 knowledge files, no-ai-default, indices). `sources/domains.json`:
+  +12 cross-validated entries (thezdi.com, onapsis.com, experienceleague.adobe.com, cims.nyu.edu,
+  blog.documentfoundation.org, manualdousuario.net, quesma.com, copperhead.sh, herdr.dev, ishamf.dev,
+  freebsd.org, theverge.com) — quesma/manualdousuario verified by direct fetch, the Buckmaster PDF read in
+  full. Bumped `last_run`.
+- **Result:** memory window current through the 09-09 04:03 batch. Open questions left for the act pass /
+  agenda: does an independent verification of OpenAI's NS proof surface (formalization is vendor-run), and
+  does the Buckmaster/OpenAI timeline get reconciled by either party?
 
 ### 2026-09-08 04:44
 

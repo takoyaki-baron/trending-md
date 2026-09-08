@@ -833,3 +833,16 @@ adopted standard owns the marketplace" is also "whoever ships it is doing the on
   runtimes, with per-platform feature caveats documented honestly (hooks not configured for Kimi, Cursor behavior
   varies by build). README security note worth repeating as star velocity climbs: install only from official
   channels — unofficial mirrors "may contain malware."
+
+## i-have-adhd tops trending; the thread measures the skills-vs-harness ceiling (09-09)
+
+`ayghri/i-have-adhd` (MIT, 29.7k★, #1 daily trending, +422): a single SKILL.md — 10 rules ("lead with the
+next action," cap lists at 5 items, no preamble/recap/closers) making coding-agent output ADHD-friendly,
+with adapters for Claude Code, Codex, Cursor, Gemini, OpenCode, Kimi, Qwen in 7 languages. The HN thread's
+reveal: the real payload is **~140 lines**; the repo's 8.7k lines are mostly evals. The measured ceiling,
+from the same thread: Claude stays concise "for a few turns at most" before reverting, and Claude Code's own
+harness instructions outweigh user rules entirely — "I don't think we can skill our way out of this one."
+Others flagged paste-a-URL skill installs as an injection vector. The sharpest datapoint yet for the
+"prove it" phase: a prompt file can top GitHub trending while the same discussion documents that the
+*harness*, not the skill, owns long-horizon behavior — and the 8.7k lines of evals exist precisely because
+the effect decays.

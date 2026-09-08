@@ -548,3 +548,19 @@ measured MATH500 value remained *below* the no-spec baseline — it can be slowe
 test environment") and insists configs be chosen "using representative workloads and end-to-end measurements."
 Speculative decoding has become reflexive advice; the post's discipline is the model for presenting it. Standard
 vendor-benchmark caveat applies: AMD measuring AMD.
+
+## Quantization with confidence intervals: 4-bit holds, 1-bit collapses (09-09)
+
+Quesma's engineering post (Aug 26, trending Sep 8; read first-hand) is the rare quantization study with
+**Wilson 95% confidence intervals and an agentic benchmark**: ~$3,000 of rented L40S/H100/H200 time
+(Terminal-Bench 2.1 alone ~$2,308), llama.cpp, Unsloth GGUF quants of Qwen3.8 27B against a replicated BF16
+baseline on GPQA Diamond / IFBench / Terminal-Bench 2.1 (89 tasks, 98k context). Results: **Q4_K_M (17 GB)**
+—"you won't notice a difference on these benchmarks" — matched BF16 on Terminal-Bench while fitting a 24 GB
+card; **UD-Q2_K_XL (10.7 GB)** — "things break a bit" but still "the level of Opus 4.7 or Gemini 3.1 Pro,"
+writing ~25% more tokens per solved task (IFBench unchanged down to 2-bit); **UD-IQ1_S/M (6.2 GB)** —
+"scores are around the random guessing level, with the smallest model being below that threshold," and at
+`xhigh` reasoning effort it exhausts its token budget and returns empty answers — longer reasoning *hurts*
+the broken quant. This directly contradicts Unsloth's "retain around 72% top-1% accuracy" marketing:
+"that missing ~28% is decisive." The caveats are printed, which is why they're citable: the exact tested
+quant files were replaced upstream (Aug 19), Q8_0 was accidentally skipped on Terminal-Bench (interpolated),
+KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build was required.

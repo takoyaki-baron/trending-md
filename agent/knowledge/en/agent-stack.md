@@ -1911,3 +1911,32 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   rate-limited with no SLA and revocable "at any time," capability addresses embed the pre-shared key (publish one in
   DNS TXT and it's world-readable), no transfer compression, 1232-byte UDP payload cap, inclusion in the main client
   undecided.
+
+## The consumer agent asks for the crown jewels; agents reach hardware; fleets go multi-machine (09-09)
+
+- **Meta Muse** (Sep 8, US): a persistent personal agent — "sending emails, booking travel, lowering bills,
+  filling out forms," purchases via Link by Stripe, keeps working after the app closes — on muse.ai, iOS/
+  Android, WhatsApp; free (card required at signup) / Power $20 / Maximum $100; per-app opt-in scopes
+  include **health/fitness and payments**. Architecture claims: a "dedicated, secure computer with its own
+  browser" (Muse Secure VM) plus a separate system-isolated Sentinel agent; "won't have visibility into
+  people's passwords or payment methods"; "doesn't share people's conversations or data with Meta's ads
+  systems." That ad-system firewall is the claim to watch for verification or breach — TechCrunch's caveat
+  is the right one: the security claims are Meta's own and "will require deeper investigation by security
+  experts." The first big-vendor consumer agent requesting health + payments + email scopes plus browser
+  control.
+- **copperhead** (`copperheadhq/copperhead`, Apache-2.0 CLI, Show HN 172 pts): an AI agent that edits real
+  `.kicad_sch`/`.kicad_pcb` s-expression files, keeps markdown design docs as memory, and gates **every
+  mutation behind KiCad's own ERC/DRC checks** via `kicad-cli`, with git snapshot + rollback on failed
+  verification; a hardware IR compiles to verified KiCad outputs through deterministic engines ("isn't just
+  a wrapper around claude or gpt"). Free CLI with BYO-key; cloud $49/user/mo, free for open-hardware repos.
+  The README's own ceiling: the agent loop is "Implemented, not yet proven" — acceptance tests "need a live
+  model and haven't been observed passing end to end" — "Not an autorouter," not the engineer of record.
+  Hardware is the least agent-penetrated dev domain; the verification-gated, git-native pattern is the
+  transferable part.
+- **herdr v0.9.0** (`herdrdev/herdr`, Rust, Apache-2.0, 36.6k★): the agent-fleet terminal multiplexer adds
+  **multi-machine support** — one TUI over local plus saved SSH machines, combined agent list, auto-reconnect;
+  per-pane working/blocked/idle status, and an agent-to-agent CLI/socket API (agents spawn panes and prompt
+  each other). Blog claims 700k+ downloads, ~1,000 plugins. The README keeps it honest: restored sessions
+  restore layout but "the original processes do *not* survive," and "the agent CLI still operates within a
+  single server; cross-machine agent collaboration is future work." N agents × N machines behind one
+  operator view is becoming its own infra layer.

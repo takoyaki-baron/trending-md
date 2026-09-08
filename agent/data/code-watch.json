@@ -469,12 +469,42 @@
           "path": "rss/go-daily.xml",
           "html_url": "https://github.com/tkc/github-trend-rss/blob/047af8f3649584b796970fa79f5e98bf68c38acf/rss/go-daily.xml",
           "found": "2026-09-04T05:03:57.494Z"
+        },
+        "787-10/CANOPY::bench/transforms.py": {
+          "repo": "787-10/CANOPY",
+          "path": "bench/transforms.py",
+          "html_url": "https://github.com/787-10/CANOPY/blob/d1cad45fb6b169179236a801f945390c1172d620/bench/transforms.py",
+          "found": "2026-09-08T20:43:50.915Z"
+        },
+        "787-10/CANOPY::bench/scenarios/beat2__v03.jsonl": {
+          "repo": "787-10/CANOPY",
+          "path": "bench/scenarios/beat2__v03.jsonl",
+          "html_url": "https://github.com/787-10/CANOPY/blob/d1cad45fb6b169179236a801f945390c1172d620/bench/scenarios/beat2__v03.jsonl",
+          "found": "2026-09-08T20:43:50.915Z"
+        },
+        "787-10/CANOPY::bench/scenarios/beat47__v04.jsonl": {
+          "repo": "787-10/CANOPY",
+          "path": "bench/scenarios/beat47__v04.jsonl",
+          "html_url": "https://github.com/787-10/CANOPY/blob/d1cad45fb6b169179236a801f945390c1172d620/bench/scenarios/beat47__v04.jsonl",
+          "found": "2026-09-08T20:43:50.915Z"
+        },
+        "787-10/CANOPY::bench/scenarios/army_relay_reconfig__v01.jsonl": {
+          "repo": "787-10/CANOPY",
+          "path": "bench/scenarios/army_relay_reconfig__v01.jsonl",
+          "html_url": "https://github.com/787-10/CANOPY/blob/d1cad45fb6b169179236a801f945390c1172d620/bench/scenarios/army_relay_reconfig__v01.jsonl",
+          "found": "2026-09-08T20:43:50.915Z"
+        },
+        "787-10/CANOPY::bench/scenarios/army_multidomain_attack_chain__v02.jsonl": {
+          "repo": "787-10/CANOPY",
+          "path": "bench/scenarios/army_multidomain_attack_chain__v02.jsonl",
+          "html_url": "https://github.com/787-10/CANOPY/blob/d1cad45fb6b169179236a801f945390c1172d620/bench/scenarios/army_multidomain_attack_chain__v02.jsonl",
+          "found": "2026-09-08T20:43:50.915Z"
         }
       },
-      "runs": 17,
+      "runs": 20,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-07T21:02:44.578Z",
-      "last_total": 70
+      "last_run": "2026-09-08T20:56:20.350Z",
+      "last_total": 75
     },
     "ra-paper-id": {
       "seen": {
@@ -543,27 +573,51 @@
           "path": "data/latest_30d.csv",
           "html_url": "https://github.com/WangZhican/efficient-ml-landscape/blob/f47bf14ff6bcdd720f8b721969b30096def8295c/data/latest_30d.csv",
           "found": "2026-09-05T21:03:03.908Z"
+        },
+        "AkihikoWatanabe/paper_notes::docs/articles/Compression.html": {
+          "repo": "AkihikoWatanabe/paper_notes",
+          "path": "docs/articles/Compression.html",
+          "html_url": "https://github.com/AkihikoWatanabe/paper_notes/blob/786306fc749bab13307c1892db060dc841c06aed/docs/articles/Compression.html",
+          "found": "2026-09-08T20:56:20.350Z"
+        },
+        "Jimmuji/ai-daily-digest::docs/daily/2026-09-06.html": {
+          "repo": "Jimmuji/ai-daily-digest",
+          "path": "docs/daily/2026-09-06.html",
+          "html_url": "https://github.com/Jimmuji/ai-daily-digest/blob/23859b531cd40b9d06991f123fe7e5cd2d1100f0/docs/daily/2026-09-06.html",
+          "found": "2026-09-08T20:56:20.350Z"
+        },
+        "Ramil2911/hfday_parser::sent_articles.txt": {
+          "repo": "Ramil2911/hfday_parser",
+          "path": "sent_articles.txt",
+          "html_url": "https://github.com/Ramil2911/hfday_parser/blob/356732e38cdc5a907f5befbf30fe9e2b9a6d09ad/sent_articles.txt",
+          "found": "2026-09-08T20:56:20.350Z"
+        },
+        "Asstar-X/Asstar-X.github.io::feeds/huggingface-papers-data.json": {
+          "repo": "Asstar-X/Asstar-X.github.io",
+          "path": "feeds/huggingface-papers-data.json",
+          "html_url": "https://github.com/Asstar-X/Asstar-X.github.io/blob/7bb7c5291431fad05908a94bbafaa383eff47225/feeds/huggingface-papers-data.json",
+          "found": "2026-09-08T20:56:20.350Z"
         }
       },
-      "runs": 2,
+      "runs": 3,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-05T21:16:49.547Z",
-      "last_total": 11
+      "last_run": "2026-09-08T20:56:20.350Z",
+      "last_total": 4
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 4,
+      "runs": 7,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-07T21:02:44.578Z",
+      "last_run": "2026-09-08T20:56:20.350Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 4,
+      "runs": 7,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-07T21:02:44.578Z",
+      "last_run": "2026-09-08T20:56:20.350Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-07T21:02:44.578Z"
+  "last_run": "2026-09-08T20:56:20.350Z"
 }

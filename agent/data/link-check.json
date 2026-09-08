@@ -415,9 +415,27 @@
       "feeds": [
         "2026-09-08.md"
       ]
+    },
+    "https://openai.com/index/navier-stokes-solution/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-08T20:57:34.261Z",
+      "last_seen": "2026-09-08T20:57:34.261Z",
+      "feeds": [
+        "2026-09-09.md"
+      ]
+    },
+    "https://ai.meta.com/muse/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-08T20:57:34.261Z",
+      "last_seen": "2026-09-08T20:57:34.261Z",
+      "feeds": [
+        "2026-09-09.md"
+      ]
     }
   },
-  "runs": 8,
+  "runs": 9,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-07T21:04:09.138Z"
+  "last_run": "2026-09-08T20:57:34.261Z"
 }

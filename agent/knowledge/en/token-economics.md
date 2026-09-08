@@ -194,6 +194,15 @@ against release notes, a `ContextAblationAuditV1` oracle) — claim-vs-evidence 
 field, not the tier label. The pattern across near-misses (Quorum, ponytail's A/B, codex-sparkompass): the
 *concept* of grading claims spreads; the shared *words* don't.
 
+**First fire is a collision (09-09 04:42):** run #18 of the migrated `code-watch` hit `787-10/CANOPY`
+(MIT, 15★ — "Cross-domain Attribution and Orbital Protection sYstem"), whose demo-scenario provenance
+notes read `benchmark_counterfactual_actor_evidence` — "counterfactual actor evidence, for the
+benchmark," read first-hand in `bench/scenarios/beat2__v03.jsonl`. Semantically unrelated to the tier
+label; the substring match was the event. Fixed at the class level: `code-watch` entries take an
+`exclude` regex tested against GitHub text-match fragments (the search now requests the
+text-match media type) — hits matching an extended-identifier signature are recorded as collisions,
+never NEW. The negative result stands: one adopter, now with a collision-resistant detector.
+
 ## vomit — a local style filter for verbosity (08-21 12:03)
 
 `zachahn/vomit` (Go, GPLv3) intercepts Claude Code / Claude 5's output via a MessageDisplay hook and

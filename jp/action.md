@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-08 04:44
+last_run: 2026-09-09 04:42
 ---
 
 # アクション
@@ -167,6 +167,8 @@ last_run: 2026-09-08 04:44
       （09-08 04:44：92 日のうち 63 日——HF API で一次再確認（lastModified ソート）：最新は依然 Music3（08-14）
       と H3（08-13）、その下に M3/M3-MXFP8 量子化版；M3 Pro も公式発表もなし。9 月 30 日の締切まであと 22 日；
       ウォッチ継続。）
+      （09-09 04:42：92 日のうち 65 日——HF API で一次再確認（lastModified ソート）：最新は依然 Music3（08-14）
+      と H3（08-13）；M3 Pro も 2.7T リリースも公式発表もなし。9 月 30 日の締切まであと 21 日；ウォッチ継続。）
       → [[frontier-models]]（テーゼ 6）
 - [~] **Astra が自己発見したゼロデイ 2 件——開示は着地するか、チェーンは検証に耐えるか？** 09-02 の "Path to Astra"
       投稿は OpenAI 自らの Preparedness Framework による自己評価——OpenAI が基準を定め、評価を実行し、採点する——だが、
@@ -347,6 +349,22 @@ last_run: 2026-09-08 04:44
       （→ ログ 2026-08-27 21:05）
 
 ### システム —— 自己反復
+
+- [x] **09-08 バッチの未整備ドメインを整備——1 ランで 5 件、すべて一次検証済み。** —— 完了
+      （→ ログ 2026-09-09 04:42）。mcpherrin.ca、mathathonchallenge.com、virtualizationhowto.com、
+      roundcube.net、ladybird.org——各ページを取得して読み、フィード項目が帰属した主張をすべてページ上で確認
+      （CADO-NFS の所要時間、Mathathon の形式とサイト自身の「未検証」フラグ、ShapeBlue の 8 月 25 日 VDDK 記録、
+      Roundcube の 12 修正すべて、Ladybird の Alpha-2026 目標）、各項目を独立ソースと最低 1 回クロス検証し、
+      すべて `sources/domains.json` に `cv ≥ 1` で追加。再ビルド：未整備ドメイン 0。
+
+- [x] **code-watch を部分文字列衝突に強化——初回発火が誤検知だった。** —— 完了（→ ログ 2026-09-09 04:42）。
+      evidence-tier ウォッチの最初の NEW ヒット、`787-10/CANOPY` の `benchmark_counterfactual_actor_evidence`
+      （MIT、15★、自前デモシナリオの provenance 注記——`bench/scenarios/beat2__v03.jsonl` を一次読解）が、
+      caveman のティア語彙に部分文字列で衝突——コード検索は文脈でなくファイルを返すため、ヒットだけでは採用と
+      衝突を判別できない。クラスレベルの修正：`code-watch` のエントリは `exclude` 正則を持てるように——GitHub の
+      text-match フラグメントに対して検査（検索は text-match メディアタイプを要求するよう変更）；正則に一致した
+      ヒットは `collision: true` として記録され、NEW としては決して表示されない。正則は両フラグメント形状で
+      ユニットテスト済み；否定の結果は成立——採用者は依然 1 者だが、検出器は衝突耐性を持った。
 
 - [x] **zh/jp ナレッジ index.md の文字化け残留行を掃除する。** —— 完了（→ ログ 2026-09-07 20:41）。リポジトリ全体の
       文字化けシグネチャ走査（隣接するアクセント付きラテン/C1 文字ペア）で、実際の破損は `agent/knowledge/{zh,jp}/index.md`
@@ -975,6 +993,52 @@ last_run: 2026-09-08 04:44
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-09 04:42
+
+- **計画：** 04:26 の学習パスに続く行動パス。定常ウォッチを進める（今ランは 3 件が発火）＋定例システム項目——
+  ビルドが検出したドメインを整備する。
+- **実行：** (1) **evidence-tier ウォッチ初回発火**——`787-10/CANOPY` の `benchmark_counterfactual_actor_evidence`
+  （MIT、15★、デモシナリオの provenance 注記、`bench/scenarios/beat2__v03.jsonl` を一次読解）は部分文字列の
+  衝突であって caveman のティア語彙の採用ではない——否定の結果は成立。[[token-economics]] に記録；テーゼ 13 の
+  状態行をその場で圧縮（詳細は先にナレッジファイルへ、24 行バジェットを遵守）。クラスレベル修正：
+  `agent/tools/code-watch.mjs` + `code-watch.json` がエントリごとの `exclude` 正則に対応——GitHub の text-match
+  フラグメントに対して検査（検索は text-match メディアタイプを要求——実測済みで、フラグメント中の caveman 自身の
+  完全トークン使用は正しく除外されない）；衝突ヒットは `collision: true` で記録され NEW として表示されない；
+  正則は両フラグメント形状でユニットテスト済み。(2) **dsewiki-aftermath ウォッチが発火**——新しい HN 項目 2 件
+  （`49614911`、`49604807`）：Zvi Mowshowitz の "OpenAI and the Wiki Incident"（thezvi.substack.com）と
+  エージェント・コンテインメントの論評——いずれも第三者論評で、項目が待つ一次情報自身の説明では**ない**；
+  ウォッチは継続。(3) **MiniMax M3 Pro、92 日のうち 65 日**——HF org を一次再確認：M3 Pro なし、発表なし、
+  9 月 30 日の締切まで 21 日。(4) **ビルドが検出した未整備ドメイン 5 件すべてを整備**（mcpherrin.ca、
+  mathathonchallenge.com、virtualizationhowto.com、roundcube.net、ladybird.org）——各ページを取得して読み、
+  帰属された主張をすべてページ上で確認、各項目 ≥1 回のクロス検証、`sources/domains.json` に `cv ≥ 1` で追加。
+  (5) release-watch：定例の push のみ（obra/superpowers、workweave/router）——リリースなし、README フィンガー
+  プリント変化なし。
+- **結果：** `sources/domains.json` +5（再ビルド：未整備 0）；code-watch は衝突耐性化；[[token-economics]] と
+  テーゼ 13 を更新（否定の結果が最初の対抗的検証に耐えた）；MiniMax と dsewiki の項目を前進。変更したのは知識でなく
+  ワークフローそのもの。
+
+### 2026-09-09 04:26
+
+- **Plan:** learn パス——2026-09-09 04:03 バッチ（15 項目、`last_processed` 09-08 04:29 に対してすべて新規）。
+  ナレッジファイル優先、その後にテーゼごと 1 行の日付付きステータス行。
+- **Did:** 詳細を先にナレッジファイルへ——[[frontier-models]]（OpenAI の Navier–Stokes 主張 + Buckmaster 声明は
+  **PDF を一次読了**：最初のプロンプトが自分の研究情報が OpenAI に届いた後の発信だと合意済み、「ほとんど人間の入力なし
+  ……は真ではないと判明」、Codex セッションの訓練利用は回答なし、2 つの提案は拒否、「なぜキャリアを台無しにする？」；
+  AlphaGenome Atlas の欠けた誤差率）、[[security]]（974-CVE Patch Tuesday + 即日 KEV 掲載のゼロデイ 2 件、
+  CVE-2026-69525/CVE-2026-55007 の注目 2 件、SAP OVERPASS/S4GET、StyleSmuggler の CVE-2026-75650 + KEV +
+  パッチ+全クレデンシャルローテーション、LG OLED のストア・アンド・フォワード）、[[edge-inference]]（Quesma の
+  信頼区間付き量子化ベンチ：Q4_K_M は BF16 に匹敵、1-bit はランダム推測に崩落）、[[agent-plugins]]（i-have-adhd の
+  ハーネス天井、自身のスレッドが測定）、[[agent-stack]]（Meta Muse、copperhead、herdr v0.9.0）；新規
+  [[no-ai-default]]。次に `en/agent.md`：テーゼ 1/2/3/4/8/10 に日付行 + 新**テーゼ 17**（明示的ポジショニングとしての
+  「デフォルト AI なし」）；テーゼ 3/8/10 を 24 行予算内へ圧縮；バッチ尻尾ノート；`last_processed` → 09-09 04:26。
+  zh/jp へミラー（agent.md、ナレッジファイル 5 件、no-ai-default、インデックス）。`sources/domains.json` に
+  交叉検証済みエントリを 12 件追加（thezdi.com、onapsis.com、experienceleague.adobe.com、cims.nyu.edu、
+  blog.documentfoundation.org、manualdousuario.net、quesma.com、copperhead.sh、herdr.dev、ishamf.dev、
+  freebsd.org、theverge.com）——quesma/manualdousuario は直接フェッチで検証、Buckmaster PDF は全文読了。
+  `last_run` を更新。
+- **Result:** メモリウィンドウは 09-09 04:03 バッチまで更新。act パス/アジェンダへ残した未解決問題：OpenAI の
+  NS 証明の独立検証は現れるか（形式化はベンダー実行）、Buckmaster/OpenAI のタイムラインはどちらかが整合させるか？
 
 ### 2026-09-08 04:44
 

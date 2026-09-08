@@ -2065,3 +2065,45 @@ Same-evening check, all sources read first-hand:
 - **Bilevel Coordinated Reflection (arXiv 2609.02750, HF papers #1)** — the transcript-vs-grounded impossibility
   result for memory-acceptance gates; detail and caveats → [[agent-stack]] (09-08 section). Filed here because it is
   the first *provable* design rule for the memory-gate category this file tracks from the harness side.
+
+## The Navier–Stokes claim and its priority dispute (09-09)
+
+- **OpenAI's post** ("On the Navier–Stokes Millennium Prize Problem"): an internal model "significantly more
+  capable than GPT-6 Astra" plus a swarm of **~10,000 coordinating agents** exchanged 2.7M messages and ~130B
+  output tokens, arriving at finite-time blowup for 3D incompressible Navier–Stokes with smooth forcing —
+  statements "C" and "D" of the official Millennium formulation — on Sep 5, ~88h after launch; the Lean
+  formalization completed 17 hours later "via GPT-6 Astra". Two load-bearing hedges in the post itself:
+  "We do not intend to claim the Millennium Prize for this result," and "While unlikely, we cannot rule out
+  that de-identified data derived from their usage of our products helped improve our models."
+- **The counter-statement (Tristan Buckmaster, NYU — read first-hand, full PDF):** Buckmaster and Levent Alpöge
+  published finite-time blowup with smooth forcing for incompressible porous media, Boussinesq, and 3D
+  incompressible Euler (hypo-dissipative Navier–Stokes held back — its Lean verification hasn't finished).
+  The statement's content goes well beyond what aggregates carried: the program's ideas are credited to
+  **Diego Córdoba and Luis Martínez-Zoroa** ("I believe Luis Martínez-Zoroa deserves a Fields Medal");
+  their own work used several LLMs (Claude, Codex/GPT-5.6 Sol, Astra *only for writeups and auditing*).
+  The timeline: Sep 3 — with a rumor circulating that *Anthropic* had resolved a major open problem, and
+  tips that word of their progress had reached OpenAI — Buckmaster emailed a prominent OpenAI mathematician;
+  the same-day reply offered compute "to avoid competing here." Sep 6 calls with Sebastien Bubeck: he had
+  been told "very little human input" was used — "This turned out not to be true" (an entire team, easier
+  problems first incl. Euler, a prompt written by prompting Codex, "an insane amount of compute"); it was
+  eventually **agreed the first prompt was sent "in the past few days, after information about our work had
+  reached OpenAI"**; no answer on whether their Codex sessions (holding all their drafts) were used for
+  training. Two proposals were declined (coordinate the postings; Buckmaster solo-authoring the NS result).
+  The quoted replies: "Why would you ruin your career?" and "If you don't want me to be nice, then I don't
+  have to be nice." The hedges are explicit: "I have not seen OpenAI's proof… I am not accusing anyone of
+  anything" — and he calls his own Euler writeup "AI slop."
+- **Why this file carries it (thesis 10 lineage):** the FLT precedent said vendor-run formalization is not
+  independent verification; here the formalization is again OpenAI-run, no independent rebuild exists, and
+  the claimed result is a Millennium-Prize-class statement. The ~10k-agent coordination is the largest
+  measured multi-agent run (→ thesis 4); the priority dispute is the first live authorship conflict over an
+  AI-produced result of this class, and both sides hedge — every claim stays attributed, nothing asserted.
+
+## AlphaGenome Atlas: a 1 PB lookup table with no error rate (09-09)
+
+DeepMind pre-computes the regulatory impact of **all 9 billion single-letter DNA changes** into one
+AlphaGenome Variant Impact score, browsable with "zero coding skills" (alphagenome.google/atlas); a Broad
+Institute rare-disease case (DNM1 splice site), 22% more non-coding associations across 54,000+ UK Biobank
+participants, 19 BMI regions. The caveat discipline the announcement fails: **no accuracy or validation
+metric appears anywhere** — outputs are model predictions, not experimentally confirmed effects — and the
+blog itself concedes scientists "have only limited knowledge of the remaining 98%" of the genome. HN flagged
+the non-commercial ToS. The research-to-lookup-table move is real; the missing error rate is the story.

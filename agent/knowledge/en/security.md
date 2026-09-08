@@ -2252,3 +2252,41 @@ the scorer record is messy in every case.
   (final release 8.5.100, EOL Mar 2024) and per Apache "will not be fixed" — HeroDevs counts 48 unpatched post-EOL CVEs
   over 877 days on that branch. Scorer hygiene: Apache publishes textual ratings, not CVSS; the only scored CVE is
   CVE-2026-66299 (Apache: Low vs CISA ADP 7.5); none KEV-listed, no exploitation reported.
+
+## September Patch Tuesday: the record 974, SAP's 10.0, and StyleSmuggler's patch (09-09)
+
+- **Microsoft's Sep 8 release is the largest single-vendor patch batch in history:** 974 CVEs by
+  SecurityWeek's count (ZDI: 972 from Microsoft, 997 with external + Chromium, 114 Critical) — Windows 723,
+  Office 222, SQL 62, Exchange 9. Two exploited zero-days hit CISA KEV the same day with a Sep 22 federal
+  deadline: **CVE-2026-85880** (Windows ALPC heap overflow, local EoP to SYSTEM, CVSS 7.8 CNA-assigned —
+  only the second ALPC zero-day in ~4 years, per Tenable's Satnam Narang) and **CVE-2026-81963** (Windows
+  Update Stack link-resolution flaw, CWE-59, 7.8 — the first Update Stack zero-day ever). The framing
+  caveat is ZDI's own: the surge is attributed to "AI-assisted vulnerability discovery," but "a matching
+  spike in active exploits hasn't yet materialized" — **the count is not an incident rate.**
+- **The 974's standouts:** **CVE-2026-69525** — Windows Remote Desktop Services use-after-free, CVSS 9.8
+  (Microsoft CNA, Primary), `AV:N/AC:L/PR:N/UI:N`, unauthenticated network code execution; ZDI counts 20
+  patches this month as "wormable"; BlueKeep-class exposure profile. **CVE-2026-55007** — Exchange Server
+  double free, CVSS 8.1 (Microsoft CNA): code execution "just by sending an email" — a malicious Visio
+  attachment processed server-side, "no Preview Pane needed" (the ProxyLogon/ProxyShell trigger lineage).
+  Honest limits: neither KEV-listed nor PoC'd as of Sep 8, and the Exchange 8.1 (`AC:H`) outruns its
+  network-pre-auth headline.
+- **SAP Patch Day (19 new notes):** **CVE-2026-44756 "OVERPASS"** — CVSS 10.0 (SAP CNA), memory corruption
+  in Extended Passport (EPP) processing: remote, pre-auth, crafted request → OS command execution with SAP
+  admin rights (ABAP/Java kernels, Web Dispatcher 9.16); Onapsis: "immediate patching." **CVE-2026-58240
+  "S4GET"** — CVSS 9.8 (SAP CNA), missing authentication in NetWeaver Message Server registration, kernels
+  9.16–9.20 → present in **every S/4HANA 2025 deployment**. Scorer discipline: both scores SAP-assigned,
+  and for the batch's other 10.0 (Commerce Cloud) Onapsis notes "unmodified environments reportedly not
+  exposed by default" — the score does not reflect default exposure.
+- **StyleSmuggler follow-up (the 09-07 item gets its patch):** Adobe APSB26-146 out-of-band Sep 7 —
+  **CVE-2026-75650**, CVSS 10.0 (Adobe CNA), CWE-1336 in a template engine, all 2.4.4–2.4.9 lines, shipped
+  as a composer hotfix (`VULN-39341-composer-patches.zip`), not a full release; KEV Sep 8. Remediation is
+  patch **plus total credential rotation** — Adobe: "Rotating the encryption key alone does not invalidate
+  credentials that may already have been exposed." Sansec's hedges stand: "no indication that the backdoor
+  has been weaponized"; the fix "unverified" on older branches.
+- **LG OLED store-and-forward exfiltration** (Gamers Nexus/Level1Techs packet captures, via The Verge Sep 8):
+  retail LG OLEDs "were capable of recording microphone audio when in standby; this continued even after the
+  TV was disconnected from the internet, with audio files stored offline and uploaded once a connection was
+  restored" — plus LAN scanning for phones/watches, location/ Wi-Fi logging into LG Ad Solutions, ACR across
+  HDMI inputs. The generalizable point: **store-and-forward defeats air-gapping** — disconnection stops
+  transmission, not collection. Not independently re-verified; no LG response in the piece; the circulating
+  webOS-vulnerability angle exists only in secondary coverage.
