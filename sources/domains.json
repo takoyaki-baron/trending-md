@@ -5601,5 +5601,68 @@
     "cred": "high",
     "density": "med",
     "cv": 1
+  },
+  "calif.io": {
+    "cat": "security",
+    "en": "Calif (Matias Suiche's research org) — first-hand offensive-security research (WeWorm zero-click WeChat call worm); published with full disclosure timeline; exploit details withheld pending conference talk, so claims not yet independently verifiable.",
+    "zh": "Calif(Matias Suiche 的研究机构)——一手攻击性安全研究(WeWorm 微信通话零点击蠕虫);发布含完整披露时间线;漏洞细节因会议演讲待发而保留,声明暂无法独立验证。",
+    "jp": "Calif(Matias Suiche の研究組織)——一次の攻撃的安全研究(WeWorm、WeChat 通話のゼロクリックワーム)。完全な開示タイムライン付き。技術詳細は講演待ちで非公開のため、主張は未だ独立検証不可。",
+    "cred": "high",
+    "density": "high",
+    "cv": 1
+  },
+  "ciphercue.com": {
+    "en": "CipherCue blog — CDN/security vendor publishing its own HTTP-fingerprinting measurements (European CDN concentration study); transparent methodology and extensive self-stated caveats, but vendor-adjacent and cohort skewed SMB; cross-checked its 89.6% figure against the cited W3Techs reference (84.1%) and its three Cloudflare outage dates.",
+    "zh": "CipherCue 博客——发布自有 HTTP 指纹测量的 CDN/安全厂商(欧洲 CDN 集中度研究);方法透明且自带大量限制,但属厂商邻近视角且样本偏中小企业;其 89.6% 数字已与所引 W3Techs 参照(84.1%)及三次 Cloudflare 故障日期交叉核验。",
+    "jp": "CipherCue ブログ——独自の HTTP フィンガープリント測定を公表する CDN/セキュリティベンダ(欧州 CDN 集中度研究)。手法は透明で自己の注意点も豊富だが、ベンダ隣接視点でコホートは中小企業に偏る。89.6% の数値は引用した W3Techs 参照(84.1%)と Cloudflare 障害3件の日付と突合済み。",
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "jyn.dev": {
+    "cat": "community",
+    "en": "Personal blog of jyn (jyn514, Rust compiler contributor); the 'a year to fix security everywhere' essay is opinionated analysis with its caveats printed inline — benchmark figures secondhand, arguments worth tracing to primary sources.",
+    "zh": "jyn(jyn514,Rust 编译器贡献者)的个人博客;'一年内修好一切安全'一文观点鲜明且限制写明——基准数字为二手,论证值得回溯一手来源。",
+    "jp": "jyn(jyn514、Rust コンパイラコントリビュータ)の個人ブログ。「1年でセキュリティを直せ」論考は主張の強い分析で、注意点が本文に明記されている——ベンチマーク数値は二次情報であり、一次源へのトレースが有用。",
+    "cred": "med",
+    "density": "high",
+    "cv": 1
+  },
+  "weirdgloop.org": {
+    "cat": "community",
+    "en": "Weird Gloop — the nonprofit hosting the RuneScape/Minecraft wikis; its 'Google Jail' post is first-party observational SEO data from a real multi-wiki operator (mechanism inferred, not Google-confirmed).",
+    "zh": "Weird Gloop——运营 RuneScape/Minecraft wiki 的非营利组织;其'Google Jail'一文来自真实多 wiki 运营者的一手 SEO 观测数据(机制为推断,未经 Google 确认)。",
+    "jp": "Weird Gloop——RuneScape/Minecraft wiki を運営する非営利団体。「Google Jail」記事は実在の複数 wiki 運営者による一次の SEO 観測データ(メカニズムは推論で、Google の確認はない)。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "lambdaland.org": {
+    "cat": "community",
+    "en": "Ashton Wiersdorf's personal site (Emacs Bedrock author); release announcements for his own projects — accurate for what shipped, self-reported by definition.",
+    "zh": "Ashton Wiersdorf 的个人网站(Emacs Bedrock 作者);其项目的发布公告——对所发布内容准确,但属自述。",
+    "jp": "Ashton Wiersdorf の個人サイト(Emacs Bedrock 作者)。自身のプロジェクトのリリース告知——出荷内容については正確だが、定義上は自己申告。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
+  },
+  "alvins82.github.io": {
+    "cat": "community",
+    "en": "Personal GitHub Pages field-test blog; the 10 model/harness Three.js run is honest about its weak quality verification (only 6/10 screenshot-checked) — field notes, not a benchmark.",
+    "zh": "GitHub Pages 个人田野测试博客;其 10 组模型/harness 的 Three.js 实测诚实写明质量验证薄弱(仅 6/10 做了截图检查)——是田野笔记,不是基准。",
+    "jp": "GitHub Pages の個人フィールドテストブログ。10組のモデル/ハーネス Three.js 実行は品質検証の弱さ(10中6のみスクリーンショット確認)を正直に明記——ベンチマークではなくフィールドノート。",
+    "cred": "med",
+    "density": "med",
+    "cv": 1
+  },
+  "nytimes.com": {
+    "cat": "news",
+    "en": "The New York Times — mainstream press of record; used to cross-confirm the WeWorm research publication. Paywalled for some coverage; solid on who/when, less so on technical depth.",
+    "zh": "《纽约时报》——主流记录性报纸;用于交叉确认 WeWorm 研究的发布。部分报道有付费墙;人物/时间可靠,技术深度一般。",
+    "jp": "ニューヨーク・タイムズ——主流の記録紙。WeWorm 研究の公開をクロス確認するために引用。一部報道はペイウォール。誰が/いつは堅実だが技術的深さは乏しい。",
+    "cred": "high",
+    "density": "med",
+    "cv": 1
   }
 }

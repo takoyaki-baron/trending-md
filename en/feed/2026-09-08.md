@@ -1,8 +1,8 @@
 ---
 date: 2026-09-08
-updated: 2026-09-08T12:05:00+08:00
+updated: 2026-09-08T20:05:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -477,13 +477,181 @@ Teacher-Gated On-Policy Distillation (TGOPD) attacks a real failure mode of OPD:
 
 ---
 
+## 34. WeWorm — Calif publishes the first zero-click worm that spreads through WeChat calls, built with AI in days
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Calif research · published Sep 8 · New York Times coverage Sep 8 · Tencent mitigated
+- **Tags:** `weworm` `zero-click` `worm` `wechat` `ai-offense`
+
+Calif's research, published Sep 8 with NYT coverage: a memory-corruption bug in WeChat's VoIP stack lets an incoming call compromise the phone *while it is still ringing* — no answer, no tap, on both iOS and Android (demo chain: Pixel 10a → iPhone 17e → second Pixel 10a, "attacker calls victim, victim becomes attacker"). Compromise yields full WeChat account control; the only precondition is being on the victim's friend list, which Calif calls a weak barrier (compromise a friend first, then call). AI's role is the second headline: the team says AI discovered the bug, the first RCE exploit took ~2 days, the worm one more week — capabilities that previously took months. Responsible disclosure worked: reported Jul 24, Tencent shipped Android 8.0.77 / iOS 8.0.76 mitigations (Aug 21), server-side mitigations for all users by Aug 28, and confirmed RCE on Sep 4. No attacks reported; technical details are withheld pending a conference presentation.
+
+**Why it matters:** the first demonstrated zero-click, cross-platform worm spreading through phone calls — and a live measurement of how fast AI compresses offensive development. Caveats to carry: no in-the-wild exploitation, Tencent's mitigations are in place, and the withheld technical details mean the claims can't yet be independently verified.
+
+[`🔗 Calif research: WeWorm`](https://calif.io/research/weworm) · [`🔗 New York Times coverage`](https://www.nytimes.com/2026/09/08/us/politics/calif-ai-worm-wechat-hack.html)
+
+---
+
+## 35. "We have a year to fix security everywhere" — a Rust developer's countdown, started by cheap open-weight models
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 261+ pts · 250 comments · jyn.dev (Sep 4)
+- **Tags:** `ai-security` `open-weights` `policy` `offense-defense` `remediation`
+
+jyn (Rust compiler contributor, jyn514) argues GLM-5.3-flash's late-August release started a roughly one-year clock: open-weight near-frontier models plus "abliterated" third-party refusals-stripped variants (scoring 0% on Harmbench-320) put a capable hacker on ~$6k–9,500 of hardware — and the Apple M5 Mac Studio (256 GB, ~$9,500, ships Sep 22) makes local hosting trivial. Evidence: GLM-5.3 at 84.5% on CyberGym and 54.4% on ExploitBench (vs GPT-6 Astra's 100% on ExploitBench), security pros unable to stay competitive in CTFs without LLM help, and the OpenAI–Hugging Face agent-swarm incident cited as autonomous exploitation of real infrastructure. Prescriptions: government-mandated frequent penetration testing (extending DORA's TLPT, banking rules, NERC-CIP), pointing frontier models at your own code, sandboxing agents with scoped credentials, memory-safe languages, and triage/backport automation. Explicitly rejected: weight bans, blanket frontier-model bans, GPU export controls.
+
+**Why it matters:** the most-read articulation this week of the "patch everything, now" deadline — 250 HN comments of argument about it. The author's own caveats are printed: the throughput claim is unverified, abliterated models may underperform on untrained tasks, fully autonomous exploitation may still need human help, and Z.ai and OpenAI disagree on benchmark figures — all dismissed as temporary.
+
+[`🔗 jyn.dev: We have a year to fix security everywhere`](https://jyn.dev/a-year-to-fix-security/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49605691)
+
+---
+
+## 36. Dan Luu measured 26 verification techniques across ~80 agent runs each — and nothing beat no instructions
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 106+ pts · 38 comments · danluu.com (Sep 8)
+- **Tags:** `agent-eval` `verification` `tdd` `formal-methods` `harness`
+
+Dan Luu's new post runs his zstd-implementation eval under 26 prompt conditions (TDD, Lean 4, QuickCheck, Verus, Kani, TLA+, fuzzing, differential testing, "Make no mistakes"…) plus 4 skills, ~80 runs per condition per effort level on GPT-5.6 Sol. The result is a taxonomy of superficial technique-mimicry: Default (no instructions) scored above average; TDD runs wrote failing tests first in 67/160 cases vs 0/160 for Default; QuickCheck agents checked only one property in 63/160 runs; differential testing duplicated the same buggy logic twice in 135/160; TLA+ agents built models in 159/160 runs that rarely changed the Rust code; genuine Kani use appeared exactly once. The bright spot: only 10/160 fuzzing runs generated structured random inputs — and those found real bugs half the time. The Hegel skill raised cost 26–41% with no correctness gain; the ECC skill's good raw score was carried by the 7 runs that skipped reading it.
+
+**Why it matters:** "agent capability = model × harness" gets its instruction-layer measured, and the answer is that telling agents to use a technique mostly induces cargo-cult work. Carry the author's caveats: he warns against reading the worst-to-best ordering, two striking results were setup-prompt errors (null results after fixing), and the RFC-based tasks are clearer than real specs — real-world failure is likely the same or worse.
+
+[`🔗 danluu.com: How well do agents use test/verification techniques?`](https://danluu.com/agentic-testing/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49605246)
+
+---
+
+## 37. "Google Jail" — independent wikis say fresh domains stay unindexed for months
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 226+ pts · 78 comments · Weird Gloop blog (Aug 17, resurfacing)
+- **Tags:** `google-search` `seo` `wikis` `web-publishing` `discovery`
+
+The Weird Gloop post (the nonprofit behind runescape.wiki) names a phenomenon it calls "Google Jail": since a March 2024 change, brand-new domains get only their homepage indexed — every other page invisible — for months up to a year, even when those pages outrank Fandom's. ~90% of wikis launched on fresh domains since then are affected, in a segment where ~85% of traffic comes from Google. Evidence: the Hollow Knight wiki's nine-month traffic dip, hytalewiki.org ranking #1 for a top query as the *only* indexed page on the domain, and the counterexample — wikis launched as subdomains of established domains (wiki.leagueoflegends.com, overwatch.weirdgloop.org) were fully indexed within a week. Weird Gloop's workaround: launch the Overwatch and Fortnite wikis on its own subdomain first, migrate to natural domains later via 301s.
+
+**Why it matters:** the indie-wiki exodus from Fandom has a structural headwind nobody priced in — new domains are second-class until Google decides otherwise, which reshapes how any new site should launch. Caveats: this is one operator's observational data with the mechanism inferred, not confirmed by Google, and the post explicitly solicits more data from other wiki operators.
+
+[`🔗 Weird Gloop: There's a new "Google Jail" for independent wikis`](https://www.weirdgloop.org/blog/google-jail) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49604870)
+
+---
+
+## 38. Uno — discrete diffusion bolted onto an autoregressive LLM claims lossless 3× speedups, no draft model
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Daily Papers · 44 upvotes (#1) · arXiv 2609.04010
+- **Tags:** `diffusion` `decoding` `inference` `speculative-decoding` `arxiv`
+
+The top paper of the day's HF batch proposes "diffusion-augmented LLMs": keep the autoregressive distribution and its weights, add lightweight diffusion weights trained in a distillation phase the authors say adds negligible overhead to standard training, then sample multiple tokens in parallel with a sampler family called Ψ-Spec. Claims: up to 3× speedup over the base AR model, holding "at the largest batch size supported by the device," higher throughput than leading speculative decoding at every evaluated batch size, no separate draft model, and no quality degradation — an 8B "Uno" model reportedly beats the 26B open diffusion LLM DiffusionGemma and the proprietary Mercury 2 on agentic tool use, coding and long-context reasoning. Code and checkpoints at s-sahoo.github.io/uno.
+
+**Why it matters:** a third path between speculative decoding (draft-model overhead) and pure diffusion LLMs (quality loss) — and unlike Iris yesterday, the artifact exists. The caveats: all numbers are the authors' own evaluations, the abstract carries no explicit limitations section (fixed-context evaluation is the visible one), and paper-level attention (#1, 44 upvotes) is running ahead of independent reproduction.
+
+[`🔗 arXiv 2609.04010`](https://arxiv.org/abs/2609.04010) · [`🔗 Hugging Face paper page`](https://huggingface.co/papers/2609.04010)
+
+---
+
+## 39. 89.6% of European CDN users sit behind Cloudflare — a 44,143-company measurement
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 181+ pts · 158 comments · ciphercue.com (Sep 8)
+- **Tags:** `cloudflare` `cdn` `concentration-risk` `europe` `web-infrastructure`
+
+CipherCue's measurement of 44,143 European companies where a CDN was detected (HTTP fingerprinting + DNS, latest observation per company as of Sep 7): 39,547 — 89.6% — are behind Cloudflare (a W3Techs reference point: 84.1% as of Jul 28). Per-country share runs from 95.6% (Netherlands) to 78.8% (Spain, Ireland); the runners-up are Amazon (3,112 detections), Fastly (1,299 — called the nearest "unambiguous pure CDN") and Akamai (396). The post's own caveats are extensive: only CDN users are counted (not origin-only sites), vendors can double-count, the cohort skews SMB where Cloudflare's free tier is strongest, and the CDN is only the "front door" — origin hosting is what matters for GDPR/data-residency. It ties the risk to three Cloudflare outages (Nov 18 2025, Dec 5 2025, Feb 20 2026), none attributed to attack.
+
+**Why it matters:** Europe's web front doors are on one vendor, quantified — the same concentration argument the feed has tracked per-outage, now with a denominator. Keep the caveat attached: it measures "who CDN users chose," not Cloudflare's share of the whole web, and the author runs a CDN-adjacent business.
+
+[`🔗 ciphercue.com: European CDN concentration`](https://ciphercue.com/blog/european-cdn-concentration-cloudflare-nine-in-ten) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49607443)
+
+---
+
+## 40. Emacs Bedrock 2.0 — a no-third-party-packages starter kit rebuilt on Emacs 31
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 133+ pts · 29 comments · lambdaland.org (Sep 7)
+- **Tags:** `emacs` `text-editors` `starter-kit` `developer-tools`
+
+Ashton Wiersdorf released Bedrock 2.0 (Sep 7), the minimal "better defaults" Emacs starter kit: just an `early-init.el` and `init.el` meant to be copied into `~/.emacs.d/` and edited as you learn, no third-party packages in the base config. 2.0 requires Emacs 31 (released August 2026) and leans on its built-ins: `lexical-binding` throughout, `use-package` auto-install, `embark-auto-prefix-help-mode` replacing `which-key`, the built-in `grep-change-to-grep-edit-mode` replacing `wgrep`, plus tree-sitter and isearch improvements. It breaks Emacs 29 (hence the major bump), has no automatic upgrade path — diff your copy against `main` — and the author calls it "very much an incremental improvement."
+
+**Why it matters:** the pattern is the story: core Emacs is absorbing the plugin ecosystem (which-key, wgrep, completion behavior) well enough that a zero-dependency config is viable again — the same consolidation playing out in the editor world's other corners. No telemetry, per the author: "yay privacy!"
+
+[`🔗 lambdaland.org: Emacs Bedrock 2.0`](https://lambdaland.org/posts/2026-09-06-bedrock-v2/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49602490)
+
+---
+
+## 41. Show HN: a "reconstructed source code" of Stuxnet — the cyber-weapon, re-hosted for study
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News (Show HN) · 157+ pts · 46 comments · Sep 8
+- **Tags:** `stuxnet` `malware-history` `reverse-engineering` `cyber-weapon`
+
+A Show HN presents Sadpainy/Stuxnet — a repository claiming a "reconstructed source code of the infamous cyber-weapon," posted with the disclaimer "Only researchs educations purposes." The submission hit 157 points within hours. Stuxnet — the US/Israeli operation that physically destroyed Iranian IR-1 centrifuges circa 2007–2010 via sabotaged PLC code — has never had its original source published; the repo's provenance and method (decompilation? re-derivation from the binaries?) are undocumented on the page.
+
+**Why it matters:** a decade-plus after the most consequential cyber-weapon in history, its internals are being reassembled in public, by people with no connection to the original operation — a marker of how much offensive capability has commoditized, and a study artifact for anyone teaching PLC/ICS security. The caveat is the item: authenticity is unverified, so treat the code as an educational reconstruction, not ground truth — and historical-weapon source code carries real handling responsibilities.
+
+[`🔗 Sadpainy/Stuxnet`](https://github.com/Sadpainy/Stuxnet) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49603546)
+
+---
+
+## 42. Cloudflare Workers size limit jumps to 64 MiB uncompressed — free plan included
+
+- **Velocity:** ▮ steady
+- **Source:** Cloudflare Changelog (Sep 4) · resurfacing on Hacker News Sep 8
+- **Tags:** `cloudflare` `workers` `serverless` `deploy`
+
+Cloudflare's Sep 4 changelog: Workers can now deploy up to 64 MiB uncompressed, on both free and paid plans — replacing the old caps of 3 MB (free) and 10 MB compressed (paid), a >5–20× jump depending on plan. No migration needed; existing scripts are unaffected, and the platform limits docs already reflect the new ceiling.
+
+**Why it matters:** the practical ceiling that kept heavy runtimes, bundled ML preprocessing and large agent tooling off Workers just moved by an order of magnitude — relevant to anyone packaging browser-scale or agent-scale code at the edge, and to the "Workers as a real compute target" trend. It lands amid the same week's European concentration debate (item 39): one vendor loosening limits on the platform nearly 9 in 10 CDN-using European companies already sit behind.
+
+[`🔗 Cloudflare Changelog: increased Worker size limit`](https://developers.cloudflare.com/changelog/post/2026-09-04-increased-worker-size-limit/) · [`🔗 Workers platform limits`](https://developers.cloudflare.com/workers/platform/limits/)
+
+---
+
+## 43. "ZcopyReaper" — public PoC lands for Linux net/rds zerocopy flaw CVE-2026-43502
+
+- **Velocity:** ▮ steady
+- **Source:** securityonline.info (Sep 8) · NVD (published May 21) · CVSS not stated in coverage at publication
+- **Tags:** `linux-kernel` `lpe` `poc` `rdma` `patch-gap`
+
+The PoC went public Sep 8 for CVE-2026-43502, a flaw in the kernel's Reliable Datagram Sockets (`net/rds`) subsystem: a zerocopy send can fail *after* user pages have been pinned but *before* the message is attached to the sending socket, leaving the cleanup path inconsistent over pinned pages — exploitable toward local privilege escalation. The upstream fix moves zerocopy cleanup before the message is queued. The bug class has company: "PinTheft" (CVE-2026-43494) is a sibling RDS zerocopy double-free turned into page-cache overwrite/LPE. Mitigation if you can't patch: blacklist the `rds` module on hosts that don't use RDS/RDMA.
+
+**Why it matters:** the patch-PoC gap is the risk window, again — a May-disclosed kernel bug becomes a working exploit in September, on a subsystem most operators can't say whether they use. Scorer hygiene: coverage at publication cited no CVSS for this CVE; verify against your distro's tracker before prioritizing.
+
+[`🔗 securityonline.info: Public PoC for ZcopyReaper`](https://securityonline.info/zcopyreaper-linux-vulnerability/) · [`🔗 NVD: CVE-2026-43502`](https://nvd.nist.gov/vuln/detail/CVE-2026-43502)
+
+---
+
+## 44. escrcpy — the scrcpy GUI is the day's fastest-rising developer tool (+791)
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 11.2k stars · +791 today · v3.2.0 released Sep 1
+- **Tags:** `android` `scrcpy` `device-control` `desktop-apps`
+
+viarotel-org/escrcpy — an Electron GUI wrapping Genymobile's scrcpy for displaying and controlling Android devices from a desktop — is today's biggest mover among developer tools on GitHub trending. v3.2.0 shipped Sep 1 (mirroring upstream scrcpy 3.x capabilities: audio forwarding, camera capture, OTG mode), and the trending spike arrived a week later with no fresh release and no HN trigger — organic momentum, not a launch event.
+
+**Why it matters:** device-control surfaces are quietly becoming agent-infrastructure — the same "give the agent a phone" pattern driving computer-use agents needs mirrored-device panels for testing and observability, and escrcpy is the path of least resistance there. Honest trigger framing: the release is a week old, so the spike's proximate cause is unidentified; the repo is active (pushed Sep 1) and the underlying scrcpy engine is the trusted part of the stack.
+
+[`🔗 viarotel-org/escrcpy`](https://github.com/viarotel-org/escrcpy) · [`🔗 escrcpy releases (v3.2.0)`](https://github.com/viarotel-org/escrcpy/releases)
+
+---
+
+## 45. Ten model/harness pairs, one Three.js prompt — a 9× input-token spread on the same task
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 94+ pts · 53 comments · alvins82.github.io (Sep 8)
+- **Tags:** `agent-harness` `benchmark` `cost` `field-test`
+
+A field test runs one fixed prompt ("a single-page Three.js sci-fi hangar" with drones, fog, and a camera path, as one self-contained HTML file) through 10 model/harness combinations: GLM 5.3 Flash, Luna 5.6 Max, SOL 5.6 Max and Astra 6.0 Max on Codex; GLM and Qwen 3.8 27B on OMP and OpenCode; Qwen on two DSH modes. Spread: 8m48s fastest (Qwen/OpenCode) to 41m26s slowest (Qwen/OMP); input tokens from 457k (GLM/Codex) to 4.3M (GLM/OpenCode) — ~9× for the same model on the same task; tool errors 0–5. Only 6 of 10 runs had screenshots checked for quality, and one run was blocked from opening a browser at all.
+
+**Why it matters:** a second, 2026-generation confirmation of the FrontierHarness finding (17× cost spread, Sep 3): the harness, not the model, dominates cost and speed — same model, 9× token difference. The methodological caveat is stated above and matters: n=1 task, quality verification inconsistent across runs — field notes, not a benchmark.
+
+[`🔗 alvins82.github.io: hangar harness/model tests`](https://alvins82.github.io/hangar-harness-model-tests/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49605433)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-08T12:05:00+08:00 |
-| Items | 33 |
-| Sources tracked | 24 (Rapid7, Senserva KEV tracker, Internet Archive blog, Hacker News, GitHub Trending, Tailscale blog, securityonline.info, The Hacker News, Hugging Face Daily Papers, arXiv, vLLM blog, OpenAI Help Center, TantoSec, HeroDevs, CodePen docs, Ars Technica, Google DeepMind blog, mcpherrin.ca, mathathonchallenge.com, NVD, jellyfin.org/GitHub releases, virtualizationhowto.com, roundcube.net, ladybird.org) |
+| Generated | 2026-09-08T20:05:00+08:00 |
+| Items | 45 |
+| Sources tracked | 33 (Rapid7, Senserva KEV tracker, Internet Archive blog, Hacker News, GitHub Trending, Tailscale blog, securityonline.info, The Hacker News, Hugging Face Daily Papers, arXiv, vLLM blog, OpenAI Help Center, TantoSec, HeroDevs, CodePen docs, Ars Technica, Google DeepMind blog, mcpherrin.ca, mathathonchallenge.com, NVD, jellyfin.org/GitHub releases, virtualizationhowto.com, roundcube.net, ladybird.org, Calif research, New York Times, jyn.dev, danluu.com, Weird Gloop blog, ciphercue.com, Cloudflare Changelog/docs, lambdaland.org, alvins82.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

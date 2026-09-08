@@ -1,8 +1,8 @@
 ---
 date: 2026-09-08
-updated: 2026-09-08T12:05:00+08:00
+updated: 2026-09-08T20:05:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -477,13 +477,181 @@ TGOPD（Teacher-Gated On-Policy Distillation）瞄准了 OPD 一个真实的失�
 
 ---
 
+## 34. WeWorm——Calif 公开首个通过微信通话传播的零点击蠕虫，AI 数天内建成
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Calif 研究 · 9 月 8 日发布 · 纽约时报 9 月 8 日报道 · 腾讯已缓解
+- **Tags:** `weworm` `zero-click` `worm` `wechat` `ai-offense`
+
+Calif 于 9 月 8 日发布的研究(《纽约时报》同日报道):微信 VoIP 协议栈中的一个内存破坏漏洞,可以让一通**仍在振铃中**的来电直接攻陷手机——无需接听、无需点击,iOS 与 Android 双平台均受影响(演示链:Pixel 10a → iPhone 17e → 第二台 Pixel 10a,"攻击者呼叫受害者,受害者变成攻击者")。攻陷后可获得完整的微信账号控制权;唯一前提是攻击者在受害者好友列表中——Calif 称这是弱屏障(先攻陷一位好友,再借其账号呼叫)。AI 的角色是第二条头条:团队称 AI 发现了该漏洞,首个 RCE 利用约 2 天完成,蠕虫再造一周——以往需要数月的能力。负责任披露流程顺畅:7 月 24 日上报,腾讯于 Android 8.0.77 / iOS 8.0.76 发布缓解(8 月 21 日),8 月 28 日完成全量服务端缓解,9 月 4 日确认 RCE 属实。无实际攻击报告;技术细节因会议演讲待发而暂缓公开。
+
+**Why it matters:** 首个经演示的零点击、跨平台、通过电话传播的蠕虫——同时是 AI 压缩攻击性开发周期的实时测量。需随身携带的限制:无在野利用、腾讯缓解已就位,且技术细节未公开,声明尚无法独立验证。
+
+[`🔗 Calif 研究:WeWorm`](https://calif.io/research/weworm) · [`🔗 纽约时报报道`](https://www.nytimes.com/2026/09/08/us/politics/calif-ai-worm-wechat-hack.html)
+
+---
+
+## 35. "We have a year to fix security everywhere"——一位 Rust 开发者的倒计时,由廉价开源权重模型启动
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 261+ 赞 · 250 评论 · jyn.dev(9 月 4 日)
+- **Tags:** `ai-security` `open-weights` `policy` `offense-defense` `remediation`
+
+jyn(Rust 编译器贡献者,jyn514)论证:GLM-5.3-flash 8 月底的发布启动了约一年的倒计时——开源权重的近前沿模型加上第三方"abliterated"去除拒绝变体(Harmbench-320 得分 0%),让一台约 $6k–9,500 的硬件就能 24 小时运转一名能力强大的黑客;而 Apple M5 Mac Studio(256 GB,约 $9,500,9 月 22 日发售)将让本地部署变得轻而易举。证据:GLM-5.3 在 CyberGym 上 84.5%、ExploitBench 上 54.4%(对比 GPT-6 Astra 在 ExploitBench 的 100%),安全从业者没有 LLM 帮助已无法在 CTF 中保持竞争力,并援引 OpenAI–Hugging Face 智能体蜂群事件作为自主利用真实基础设施的实例。处方:政府强制的常态化渗透测试(扩展 DORA 的 TLPT、银行业规则、NERC-CIP)、用前沿模型审计自己的代码、以最小权限凭据沙箱化智能体、内存安全语言、triage/回移自动化。明确拒绝:封禁权重、全面封禁前沿模型、GPU 出口管制。
+
+**Why it matters:** 本周关于"立即修好一切"期限传播最广的论述——HN 上 250 条评论的争论即为例证。作者自己的限制写在明处:吞吐声明未经验证、abliterated 模型在未训练任务上可能表现不佳、完全自主利用可能仍需人类协助、Z.ai 与 OpenAI 对基准数字各执一词——作者认为这些都只是暂时的。
+
+[`🔗 jyn.dev: We have a year to fix security everywhere`](https://jyn.dev/a-year-to-fix-security/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49605691)
+
+---
+
+## 36. Dan Luu 实测 26 种验证技术、每种约 80 次智能体运行——没有任何一种跑赢"不给指令"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 106+ 赞 · 38 评论 · danluu.com(9 月 8 日)
+- **Tags:** `agent-eval` `verification` `tdd` `formal-methods` `harness`
+
+Dan Luu 的新文章在他的 zstd 实现评测上运行 26 种 prompt 条件(TDD、Lean 4、QuickCheck、Verus、Kani、TLA+、模糊测试、差分测试、"Make no mistakes"……)外加 4 个技能,每种条件每个努力档约 80 次运行,模型为 GPT-5.6 Sol。结果是一份"表面模仿技术"的分类学:Default(不给指令)得分高于平均;TDD 运行中有 67/160 在真正实现前就写了失败测试(Default 为 0/160);QuickCheck 智能体在 63/160 次运行中只检查了一个性质;差分测试在 135/160 次运行中把同一套有 bug 的逻辑复制了两遍;TLA+ 智能体在 159/160 次运行中构建了模型,却几乎从不改 Rust 代码;Kani 的真正有效使用恰好出现一次。亮点:只有 10/160 的模糊测试运行生成了结构化随机输入——而它们一半找到了真实 bug。Hegel 技能抬高成本 26–41% 而正确率无增益;ECC 技能的良好原始分数由跳过阅读它的 7 次运行扛起。
+
+**Why it matters:** "智能体能力 = 模型 × harness"的指令层第一次被测量,答案是指令大多诱导了货物崇拜式劳动。带上作者的限制:他警告不要解读从差到好的排序,两个惊人的结果被证实是 setup prompt 错误(修复后归零),且基于 RFC 的任务比真实规格清晰——现实中的失败只会相同或更糟。
+
+[`🔗 danluu.com: How well do agents use test/verification techniques?`](https://danluu.com/agentic-testing/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49605246)
+
+---
+
+## 37. "Google Jail"——独立 wiki 称新域名会被 Google 冷落数月
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 226+ 赞 · 78 评论 · Weird Gloop 博客(8 月 17 日,重新翻红)
+- **Tags:** `google-search` `seo` `wikis` `web-publishing` `discovery`
+
+Weird Gloop(runescape.wiki 背后的非营利组织)的文章命名了一种它称为 "Google Jail" 的现象:自 2024 年 3 月的一次变更起,全新域名只有主页被收录——其余所有页面不可见——持续数月乃至一年,即使这些页面对相应查询的排名高于 Fandom。此后在新域名上启动的 wiki 约 90% 中招,而游戏 wiki 约 85% 的流量来自 Google。证据:Hollow Knight wiki 长达九个月的流量凹陷,hytalewiki.org 以**全站唯一被收录页面**的身份在某头部查询排名第一;以及反例——以成熟域名子域形式启动的 wiki(wiki.leagueoflegends.com、overwatch.weirdgloop.org)一周内即被完整收录。Weird Gloop 的绕行方案:先在自己的子域上启动守望先锋与堡垒之夜 wiki,日后再迁移到独立域名。
+
+**Why it matters:** 从 Fandom 出走的独立 wiki 浪潮撞上了一个此前无人定价的结构性逆风——在 Google 另作决定之前,新域名就是二等公民,这改写了所有新站的启动方式。限制:这是一位运营者的观测数据,机制是推断而非 Google 确认,文章也在向其他 wiki 运营者征集更多数据。
+
+[`🔗 Weird Gloop: There's a new "Google Jail" for independent wikis`](https://www.weirdgloop.org/blog/google-jail) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49604870)
+
+---
+
+## 38. Uno——把离散扩散嫁接到自回归 LLM 上,宣称无损 3× 提速、无需草稿模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Daily Papers · 44 赞(第 1) · arXiv 2609.04010
+- **Tags:** `diffusion` `decoding` `inference` `speculative-decoding` `arxiv`
+
+当日 HF 榜首论文提出"扩散增强 LLM":保留自回归分布及其权重,增设一组在蒸馏阶段训练的轻量扩散权重(作者称对既有训练管线开销可忽略),再用名为 Ψ-Spec 的采样器族并行采样多个 token。声明:相较基础 AR 模型最高 3× 提速,且"在设备支持的最大 batch size 下依然成立",在每个评测 batch size 上吞吐都高于主流投机解码,无需独立草稿模型,无质量损失——8B 的 "Uno" 据称在智能体工具调用、编程与长上下文推理上击败 26B 开源扩散 LLM DiffusionGemma 与专有模型 Mercury 2。代码与权重见 s-sahoo.github.io/uno。
+
+**Why it matters:** 投机解码(草稿模型开销)与纯扩散 LLM(质量损失)之外的第三条路——而且不同于昨天的 Iris,产物真实存在。限制:所有数字出自作者自评,摘要无明确局限章节(可见的一条是固定上下文长度评测),论文层面的关注(榜首、44 赞)跑在独立复现之前。
+
+[`🔗 arXiv 2609.04010`](https://arxiv.org/abs/2609.04010) · [`🔗 Hugging Face 论文页`](https://huggingface.co/papers/2609.04010)
+
+---
+
+## 39. 检出 CDN 的欧洲公司中 89.6% 用 Cloudflare——一项 44,143 家公司的测量
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 181+ 赞 · 158 评论 · ciphercue.com(9 月 8 日)
+- **Tags:** `cloudflare` `cdn` `concentration-risk` `europe` `web-infrastructure`
+
+CipherCue 对 44,143 家检出 CDN 的欧洲公司(HTTP 指纹 + DNS,每家公司取截至 9 月 7 日的最新观测)的测量:39,547 家——89.6%——位于 Cloudflare 之后(W3Techs 参照值:7 月 28 日为 84.1%)。各国份额从 95.6%(荷兰)到 78.8%(西班牙、爱尔兰);亚军是 Amazon(3,112 次检出)、Fastly(1,299——被称为最接近"无歧义纯 CDN"的对象)和 Akamai(396)。文章自己的限制非常详尽:只统计 CDN 用户(不含源站直连站点),不同厂商可能重复计数,样本偏向 Cloudflare 免费档最强的中小型企业,且 CDN 只是"前门"——对 GDPR/数据驻留而言源站托管才是关键。文章将风险与三次 Cloudflare 故障(2025 年 11 月 18 日、2025 年 12 月 5 日、2026 年 2 月 20 日)相连,均未归因于攻击。
+
+**Why it matters:** 欧洲的 Web 前门被量化为系于一家厂商——本 feed 此前按单次故障追踪的集中度论证,现在有了分母。限制需随身携带:它测的是"CDN 用户选了谁",不是 Cloudflare 在整个 Web 的份额;且作者经营着一家 CDN 邻近业务。
+
+[`🔗 ciphercue.com: European CDN concentration`](https://ciphercue.com/blog/european-cdn-concentration-cloudflare-nine-in-ten) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49607443)
+
+---
+
+## 40. Emacs Bedrock 2.0——零第三方包的入门套件在 Emacs 31 上重构
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 133+ 赞 · 29 评论 · lambdaland.org(9 月 7 日)
+- **Tags:** `emacs` `text-editors` `starter-kit` `developer-tools`
+
+Ashton Wiersdorf 发布 Bedrock 2.0(9 月 7 日)——极简的"更好默认值"Emacs 入门套件:只有一个 `early-init.el` 和一个 `init.el`,复制进 `~/.emacs.d/` 后边用边改,基础配置不含任何第三方包。2.0 要求 Emacs 31(2026 年 8 月发布)并全面依赖其内建能力:`lexical-binding` 全量启用、`use-package` 自动安装、以 `embark-auto-prefix-help-mode` 取代 `which-key`、以内建 `grep-change-to-grep-edit-mode` 取代 `wgrep`,另有 tree-sitter 与 isearch 改进。它破坏 Emacs 29 兼容(因此主版本号提升),没有自动升级路径——请对自己的副本与 `main` 做 diff——作者自评"很大程度上是一次渐进改进"。
+
+**Why it matters:** 真正的故事是模式:核心 Emacs 正在吸收插件生态(which-key、wgrep、补全行为),以至于零依赖配置重新可行——编辑器世界其他角落正在上演同一场整合。作者还强调无遥测:"yay privacy!"
+
+[`🔗 lambdaland.org: Emacs Bedrock 2.0`](https://lambdaland.org/posts/2026-09-06-bedrock-v2/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49602490)
+
+---
+
+## 41. Show HN:Stuxnet 的"重构源码"——为研究而重新托管的历史级网络武器
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News(Show HN) · 157+ 赞 · 46 评论 · 9 月 8 日
+- **Tags:** `stuxnet` `malware-history` `reverse-engineering` `cyber-weapon`
+
+一个 Show HN 展示了 Sadpainy/Stuxnet——自称"臭名昭著网络武器的重构源码"的仓库,附免责声明"Only researchs educations purposes"。提交数小时内冲到 157 赞。Stuxnet——2007–2010 年前后通过破坏 PLC 代码物理摧毁伊朗 IR-1 离心机的美以行动——其原始源码从未公开;该仓库的出处与方法(反编译?从二进制重新推导?)在页面上没有任何说明。
+
+**Why it matters:** 在史上影响最大的网络武器问世十余年后,其内部结构正被与原行动毫无关联的人在公开场合重新拼装——这既是攻击能力商品化的标记,也是任何讲授 PLC/ICS 安全者的研究素材。限制就是条目本身:真实性未经验证,请将代码视为教学性重构而非事实标准——且历史武器源码附带真实的保管责任。
+
+[`🔗 Sadpainy/Stuxnet`](https://github.com/Sadpainy/Stuxnet) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49603546)
+
+---
+
+## 42. Cloudflare Workers 体积上限跃升至 64 MiB 未压缩——免费版同样适用
+
+- **Velocity:** ▮ steady
+- **Source:** Cloudflare Changelog(9 月 4 日) · 9 月 8 日重新翻红于 Hacker News
+- **Tags:** `cloudflare` `workers` `serverless` `deploy`
+
+Cloudflare 9 月 4 日 changelog:Workers 现可部署最大 64 MiB 未压缩脚本,免费版与付费版同样适用——取代旧的 3 MB(免费)与 10 MB 压缩(付费)上限,按方案不同提升 5–20 倍以上。无需迁移,既有脚本不受影响,平台限制文档已更新为新上限。
+
+**Why it matters:** 把重型运行时、打包的 ML 预处理与大型智能体工具挡在 Workers 之外的实际上限刚刚移动了一个数量级——对任何在边缘打包浏览器级或智能体级代码的人,以及对"Workers 成为真正计算目标"的趋势而言都相关。它落在同周欧洲集中度辩论(条目 39)之中:近九成使用 CDN 的欧洲公司所在的平台,正是这一家在放宽限制。
+
+[`🔗 Cloudflare Changelog: increased Worker size limit`](https://developers.cloudflare.com/changelog/post/2026-09-04-increased-worker-size-limit/) · [`🔗 Workers 平台限制`](https://developers.cloudflare.com/workers/platform/limits/)
+
+---
+
+## 43. "ZcopyReaper"——Linux net/rds 零拷贝漏洞 CVE-2026-43502 的公开 PoC 落地
+
+- **Velocity:** ▮ steady
+- **Source:** securityonline.info(9 月 8 日) · NVD(5 月 21 日发布) · 截至发布时报道未给出 CVSS
+- **Tags:** `linux-kernel` `lpe` `poc` `rdma` `patch-gap`
+
+CVE-2026-43502 的 PoC 于 9 月 8 日公开——这是内核可靠数据报套接字(`net/rds`)子系统的缺陷:零拷贝发送可能在用户页**已被固定之后**、消息**尚未挂到发送套接字之前**失败,令清理路径对已固定页面的处理陷入不一致——可被利用走向本地权限提升。上游修复将零拷贝清理移到消息入队之前。同类缺陷已有同伴:"PinTheft"(CVE-2026-43494)是同区域的 RDS 零拷贝双重释放,被转化为页缓存覆写/LPE。无法打补丁时的缓解:在不使用 RDS/RDMA 的主机上屏蔽 `rds` 模块。
+
+**Why it matters:** 补丁-PoC 间隔再次成为风险窗口——一个 5 月披露的内核缺陷在 9 月变成可用利用,而且是在一个大多数运营者说不清自己是否在用的子系统上。评分者卫生:发布时的报道未引用该 CVE 的 CVSS;排优先级前请先核对你的发行版 tracker。
+
+[`🔗 securityonline.info: Public PoC for ZcopyReaper`](https://securityonline.info/zcopyreaper-linux-vulnerability/) · [`🔗 NVD: CVE-2026-43502`](https://nvd.nist.gov/vuln/detail/CVE-2026-43502)
+
+---
+
+## 44. escrcpy——scrcpy 的图形界面成为当日涨速最快的开发者工具(+791)
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 11.2k 星 · 今日 +791 · v3.2.0 于 9 月 1 日发布
+- **Tags:** `android` `scrcpy` `device-control` `desktop-apps`
+
+viarotel-org/escrcpy——封装 Genymobile scrcpy 的 Electron 图形界面,在桌面上显示并控制 Android 设备——是今日 GitHub trending 开发者工具中涨幅最大者。v3.2.0 于 9 月 1 日发布(对齐上游 scrcpy 3.x 能力:音频转发、相机采集、OTG 模式),而趋势峰值在一周之后才到来——没有新版本,也没有 HN 触发,是有机动能而非发布事件。
+
+**Why it matters:** 设备控制界面正在悄然成为智能体基础设施——驱动 computer-use 智能体的同一套"给智能体一部手机"模式,需要镜像设备面板做测试与可观测性,而 escrcpy 是那里阻力最小的路径。诚实触发框架:发布已一周,峰值的近因未能确认;仓库活跃(9 月 1 日有推送),底层 scrcpy 引擎是栈中最可信的部分。
+
+[`🔗 viarotel-org/escrcpy`](https://github.com/viarotel-org/escrcpy) · [`🔗 escrcpy releases (v3.2.0)`](https://github.com/viarotel-org/escrcpy/releases)
+
+---
+
+## 45. 十个模型/harness 组合,同一条 Three.js prompt——输入 token 相差 9 倍
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 94+ 赞 · 53 评论 · alvins82.github.io(9 月 8 日)
+- **Tags:** `agent-harness` `benchmark` `cost` `field-test`
+
+一项田野测试用同一条固定 prompt("单页 Three.js 科幻机库",含无人机、雾效与运镜,输出为单文件自包含 HTML)跑遍 10 个模型/harness 组合:GLM 5.3 Flash、Luna 5.6 Max、SOL 5.6 Max、Astra 6.0 Max 跑 Codex;GLM 与 Qwen 3.8 27B 跑 OMP 与 OpenCode;Qwen 另跑两种 DSH 模式。差距:最快 8 分 48 秒(Qwen/OpenCode)到最慢 41 分 26 秒(Qwen/OMP);输入 token 从 457k(GLM/Codex)到 4.3M(GLM/OpenCode)——同一模型同一任务相差约 9 倍;工具错误 0–5 个。10 次运行中只有 6 次做了截图质量检查,还有一次运行根本被禁止打开浏览器。
+
+**Why it matters:** FrontierHarness 发现(17× 成本差,9 月 3 日)的第二个、2026 世代确认:主导成本与速度的是 harness,不是模型——同一模型,token 相差 9 倍。方法论限制已在上面写明且重要:单任务样本,各运行的质量验证不一致——这是田野笔记,不是基准。
+
+[`🔗 alvins82.github.io: hangar harness/model tests`](https://alvins82.github.io/hangar-harness-model-tests/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49605433)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-08T12:05:00+08:00 |
-| Items | 33 |
-| Sources tracked | 24 (Rapid7, Senserva KEV tracker, Internet Archive blog, Hacker News, GitHub Trending, Tailscale blog, securityonline.info, The Hacker News, Hugging Face Daily Papers, arXiv, vLLM blog, OpenAI Help Center, TantoSec, HeroDevs, CodePen docs, Ars Technica, Google DeepMind blog, mcpherrin.ca, mathathonchallenge.com, NVD, jellyfin.org/GitHub releases, virtualizationhowto.com, roundcube.net, ladybird.org) |
+| Generated | 2026-09-08T20:05:00+08:00 |
+| Items | 45 |
+| Sources tracked | 33 (Rapid7, Senserva KEV tracker, Internet Archive blog, Hacker News, GitHub Trending, Tailscale blog, securityonline.info, The Hacker News, Hugging Face Daily Papers, arXiv, vLLM blog, OpenAI Help Center, TantoSec, HeroDevs, CodePen docs, Ars Technica, Google DeepMind blog, mcpherrin.ca, mathathonchallenge.com, NVD, jellyfin.org/GitHub releases, virtualizationhowto.com, roundcube.net, ladybird.org, Calif research, New York Times, jyn.dev, danluu.com, Weird Gloop blog, ciphercue.com, Cloudflare Changelog/docs, lambdaland.org, alvins82.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
