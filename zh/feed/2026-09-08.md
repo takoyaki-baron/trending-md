@@ -1,8 +1,8 @@
 ---
 date: 2026-09-08
-updated: 2026-09-08T04:05:00+08:00
+updated: 2026-09-08T12:05:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -295,13 +295,195 @@ Mador(`@marsbos/mador`,MIT)是一个刻意极简的响应式 DOM 运行时:`mado
 
 ---
 
+## 21. WeatherNext 3 — DeepMind 天气模型直接从实时卫星学习，5 公里分辨率逐小时预报
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 263+ pts · 63 评论 · 回归首页（约 9 月 5 日提交） · DeepMind 9 月 3 日发布
+- **Tags:** `weather-ai` `deepmind` `forecasting` `earth-models`
+
+Google DeepMind 与 Google Research 于 9 月 3 日发布 WeatherNext 3，并援引 Brightband 的独立实时评估称其为"迄今最先进、最准确的全球天气模型"。架构上的突破在于：此前的 AI 天气模型在数值天气预报（NWP）模拟数据上训练，而它直接从实时观测中学习——融合实时地球静止卫星拼图与稀疏地面站数据，采用 Functional Generative Network 网格 transformer。关键地表变量分辨率 5 公里（其余变量 10/25 公里），对比 WeatherNext 2 的 25 公里/6 小时网格锐利约五倍，且每小时产出新预报。声称的降水提升：CRPS 较 IMERG"最高提升 60%、较 MRMS 提升 30%、对早期时效较雨量站观测提升 10%"，一天以上的预报"最高准确 50%"。已接入 Google 搜索、Gemini、地图、Maps Platform Weather API 与 Earth Engine，支持 BigQuery/GCS 访问，并新增清洁能源输出（100 米轮毂高度风速、云量、太阳辐射）。
+
+**Why it matters:** 首个逐小时产出预报、以实时卫星数据而非 NWP 再分析为基础的全球模型——这是不同的训练底座，不是增量改进。免责声明印在明面上：所有准确率声明都带"最高"二字，Google 自己声明大气"永远保有一定程度的不可预测性"，并要求官方预警以各国气象机构为准；最大提升恰好出现在历来最不可靠的预报场景——是相对改进，并非解决了降水的小尺度过程难题。
+
+[`🔗 Google DeepMind：WeatherNext 3`](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/introducing-weathernext-3/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49552299)
+
+---
+
+## 22. 借道 GNU `strip` 的 Trusting-Trust 攻击——研究者不动编译器就把整个 NixOS 后门化
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 174+ pts · 37 评论 · 约 34 小时前（9 月 7 日 ~02:00 UTC+8） · arXiv 2607.24888（7 月 27 日）
+- **Tags:** `supply-chain` `trusting-trust` `nixos` `build-security` `arxiv`
+
+Ken Thompson 经典的 trusting-trust 攻击"被广泛视为编译器专属威胁"。Julien Malka、Aman Sharma、Martin Monperrus、Stefano Zacchiroli 与 Théo Zimmermann 证明了并非如此：他们通过 **GNU strip**——一个只修改已编译 ELF 二进制、从不触碰源码的常规构建工具——交付了 Thompson 级别的攻击。被篡改的 `strip` 埋入 NixOS 引导的二进制种子后，向它处理的每个二进制注入载荷，并把自己复制进它参与构建的新 strip 二进制，逐代自我传播；载荷"在种子离开依赖闭包之后仍存活于最终标准环境中"。结果：一个完整的图形化安装镜像构建成功、零报错，而其中几乎所有二进制都已被植入后门。
+
+**Why it matters:** 信任根从编译器移动到了引导种子中的任意二进制——必须校验的是*种子*的出处，而不仅仅是编译器；多样化双编译（DDC）等经典对策的覆盖范围只针对编译器。需保留的限制：这是研究者针对特定真实 nixpkgs 修订版构建的演示，不是发现的入侵事件；摘要未给出任何野外证据，也未讨论任何已检测到的真实案例。
+
+[`🔗 arXiv 2607.24888`](https://arxiv.org/abs/2607.24888) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49575515)
+
+---
+
+## 23. 在桌面上分解 90 年代 CA 的 RSA-512 根密钥——CADO-NFS 跑 32 小时，密钥取自旧版浏览器安装包
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 158+ pts · 29 评论 · 约 6 小时前（~06:00 UTC+8） · mcpherrin.ca 9 月 7 日文章
+- **Tags:** `rsa` `cryptography` `pki` `factorization` `archive`
+
+作者分解了已倒闭多年的加拿大 CA E-Certify 的两把 512 位根密钥——其"Gold Server"（SSL）与"Gold Client"（S/MIME）根证书随 1999 年 3 月的 Netscape 4.51 发行——在本机 Ryzen 9 5950X 上用 CADO-NFS 分别耗时 32 与 29 小时。根证书取自 archive.org 的 IE/Netscape 安装包合集，并用 Claude Code 抽取成一个可浏览的站点。附赠：IE 3.02（1996 年）的"Test VeriSign Commercial Software Publisher CA"代码签名根，由 Steve Weis"用 GPU 集群约一小时"分解。背景：RSA-155（512 位）早在 1999 年就被分解；RSA-260（862 位）刚刚被分解；1024 位对资源充足的组织而言"已在可能范围内"。
+
+**Why it matters:** 这一切对今天在用的任何东西都没有影响——Netscape 2002 年移除了这些根，证书 2003-10-16 过期；复现整条链需要把时钟拨回、运行 Netscape 4.51，用作者的话说"全球符合条件的人数为零"。价值在方法：历史根证书藏在历史安装包里，而消费级硬件加上 LLM 辅助抽取让 RSA-512 变得轻而易举。作者自己的免责声明值得一并保留："我没有验证这个 LLM 输出是否完全可信，只是看起来相当合理。"
+
+[`🔗 mcpherrin.ca：我分解了 90 年代证书颁发机构的 RSA 密钥`](https://mcpherrin.ca/2026/09/07/rsa.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49604637)
+
+---
+
+## 24. Caltech Mathathon——首个研究级数学黑客松，队伍要当着数学家的面答辩
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 245+ pts · 84 评论 · 约 27 小时前（9 月 7 日 ~09:10 UTC+8）
+- **Tags:** `ai-math` `research` `hackathon` `verification`
+
+Caltech 将于 10 月 30 日至 11 月 1 日举办 40 小时的"Mathathon"，号称首个专注于研究级数学的黑客松：约 100 支队伍获得前沿 AI 模型，进攻开放猜想与理论构建，随后"当着顶尖数学家的面答辩"，由评委检验参赛者是否真正理解模型产出的内容。奖金含超过 200 万美元的 AI 额度；奖项分两轮——第二轮只在"数学社区有时间验证这些结果之后"颁发。动机部分援引了近期的 AI 驱动成果：Erdős 平面单位距离猜想的反例（悬置 80 年）与首个非 Sofic 群的显式构造（悬置 27 年）。
+
+**Why it matters:** 验证优先的奖项设计直接回应了本栏目持续记录的"演示即基准"问题——结果在人类验证之前不算数，评分对象是理解而非产出。这也是一周内的第三个信号（继 Anthropic 形式化费马大定理、费马之后的经费之问之后）：AI 加速的数学正在获得建制，而不只是演示。
+
+[`🔗 Caltech Mathathon`](https://mathathonchallenge.com/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49596055)
+
+---
+
+## 25. Jellyfin 12.0——版本号扔掉"10."，移除遗留 `/emby` 路由，无完整备份则无法回滚
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 149+ pts · 56 评论 · 约 6 小时前（~06:10 UTC+8） · 经七个 RC 后于 9 月 8 日发布 v12.0
+- **Tags:** `jellyfin` `self-hosting` `media-server` `breaking-changes`
+
+Jellyfin 12.0 于 9 月 8 日发布——这是新版本号体系下的首个版本（沿用多年的"10."前缀被弃用）。亮点：每集多版本支持、相似度/推荐与可插拔搜索提供方、三位数集号、服务端内置 ListenBrainz、FFmpeg 8.1，以及支撑更快 Resume/Next-Up/计数查询的全新关系型 `LinkedChildren` 表。破坏性变更清单很长：移除遗留 `/emby/*` 与 `/mediabrowser/*` 路由（旧第三方客户端将失效）、默认禁用遗留授权、用户名迁入带唯一索引的规范化列（仅大小写不同的重复项须在升级前处理）、移除全局字幕配置。发布说明毫不讳言："强烈建议完整备份数据目录"——数据库变更意味着没有完整还原就无法回滚——仅支持从 10.10.7 或 10.11.x 直接升级，迁移前必须移除第三方插件，升级后必须全库重扫。
+
+**Why it matters:** 最大的全开源自托管媒体服务器刚刚迎来了多年来最大的兼容性断崖，生态中的每一个第三方客户端和插件都需要对照审计。发布说明的自律（明说无法回滚、写清升级路径）是破坏性迁移该有的文档范式。
+
+[`🔗 Jellyfin releases（v12.0）`](https://github.com/jellyfin/jellyfin/releases) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49604861)
+
+---
+
+## 26. FreeIPA CVE-2026-76578（CVSS 9.8，Red Hat 评分）——未认证的 LDAP 客户端可摇身变为 FreeIPA 管理员
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 9 月 7 日收录（状态"Received"） · CVSS 9.8 Primary（Red Hat CNA） · securityonline.info 9 月 7 日
+- **Tags:** `freeipa` `keycloak-alternative` `ldap` `kerberos` `identity`
+
+FreeIPA 的自管 OTP token ACI 不要求认证，且不限制 token 条目旁可以附加哪些属性。未认证的 LDAP 客户端将其与底层数据库服务器的一个相关 ACI 求值缺陷（另行追踪）链接，即可创建攻击者控制的 Kerberos principal 并加入 administrators 组——完全接管身份服务器，无需凭据或交互。受影响：RHEL 6–10 的 `ipa` 包默认安装，包括通过跨域 Kerberos trust 集成 AD 的部署。打补丁前的缓解：将 LDAP 端口 389/636 的防火墙限制到可信主机，并禁用匿名绑定（先确认没有功能依赖它）。securityonline.info 称修复见于 FreeIPA 4.13.4——未经独立确认；该项目 GitHub 上没有任何 release。值得注意的是，先前的修复（CVE-2026-13097）只堵住了规范名碰撞，底层的未认证写访问依然敞开。
+
+**Why it matters:** 默认安装的身份基础设施出现"未认证→域管理员"，这是最坏类别的漏洞，而身份服务器是下游一切的支点。按本栏目规则记录评分者信息：9.8 是 Red Hat 自己的 CNA 评分；NVD 状态仍是"Received"（未分析）。而不完整修复的模式（13097 → 76578）与今晨 Tomcat 条目如出一辙。
+
+[`🔗 NVD：CVE-2026-76578`](https://nvd.nist.gov/vuln/detail/CVE-2026-76578) · [`🔗 securityonline.info 分析`](https://securityonline.info/freeipa-cve-2026-76578-vulnerability/)
+
+---
+
+## 27. Windows HTTP.sys CVE-2026-62735——Pwn2Own Berlin 提权漏洞的 PoC 现已公开
+
+- **Velocity:** ▮▮ rising
+- **Source:** securityonline.info 9 月 8 日 · CVSS 7.8（Microsoft CNA；NVD Analyzed） · 8 月 11 日补丁星期二已修复
+- **Tags:** `windows` `http-sys` `lpe` `poc` `pwn2own`
+
+CVE-2026-62735 的完整技术细节与可用 PoC 本周公开：这是 HTTP.sys（Windows 内核 HTTP 驱动）中的堆缓冲区溢出，由研究者 Siyeon Wi 在 Pwn2Own Berlin 2026 上演示，并已在 2026 年 8 月的补丁星期二修复。根因是 `UlpCreateInternalResponseOld` 中的整数溢出——驱动累计响应头字节数时未防护回绕，分配了过小的非分页池缓冲区；PoC 通过特定 IOCTL 提交带有约 7 万个自定义头的 HTTP 响应，溢出该缓冲区直至 SYSTEM 级代码执行。影响范围：Windows 10 1607 至 Windows 11 26H1，以及 Server 2012–2025。无变通方案；暂无确认的野外利用（EPSS 0.5%）。
+
+**Why it matters:** 风险窗口是"补丁到 PoC"的时差——8 月已修复，但公开 PoC 让未打补丁的机队变成靶子。暴露面是本地且需认证（CVE 描述写明"authorized attacker"），因此真正的风险人群是共享主机、RDS 服务器和自助终端类部署，而非开放互联网。深度利用分析仍在付费墙后，公众对其可靠性的了解比 PoC 的存在所暗示的要少。
+
+[`🔗 securityonline.info：CVE-2026-62735`](https://securityonline.info/windows-http-sys-cve-2026-62735/) · [`🔗 NVD：CVE-2026-62735`](https://nvd.nist.gov/vuln/detail/CVE-2026-62735)
+
+---
+
+## 28. pascalorg/editor——2.24 万星标的 WebGPU 三维建筑编辑器，为 AI 宿主内置 MCP 服务器
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending（日榜 #13） · 22.4k stars · 今日 +168 · MIT
+- **Tags:** `webgpu` `threejs` `mcp` `cad` `ai-agents`
+
+Pascal 的编辑器（React Three Fiber + WebGPU，Next.js/React 19 monorepo）以经过校验的节点层级建模建筑——Site → Building → Level → 墙/楼板/天花板/屋顶/分区/物品——借助空间网格做放置校验，用 three-bvh-csg 做门窗的布尔几何开洞，场景以扁平节点字典存入 IndexedDB，由脏节点追踪驱动逐帧重建。与 Agent 相关的部分是一等公民：MCP 服务器（`@pascal-app/mcp`）加 CLI（`npx @pascal-app/cli editor`）让 AI 宿主创建并操作场景，功能通过插件扩展，插件使用与内建工具相同的 manifest。
+
+**Why it matters:** 暴露 MCP 的结构化、带约束校验的领域编辑器，正是"agent 画出的建筑无法作弊"的模式——archify 校验 IR 图表的建筑学表亲。场景图之所以是 agent 能安全读写的数据，恰恰因为空间校验存在于工具之内，而非提示词之中。限制：没有打任何 release tag（main 上 1,421 次提交）、撤销/重做上限 50 步，项目之新意味着 MCP 接口还会变动。
+
+[`🔗 pascalorg/editor`](https://github.com/pascalorg/editor) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 29. Broadcom 撤下 VDDK 下载——人人用来*离开* VMware 的库现在 404 了
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 132+ pts · 55 评论 · 约 8.5 小时前（~03:30 UTC+8） · virtualizationhowto.com（ShapeBlue 8 月 25 日记录）
+- **Tags:** `vmware` `broadcom` `vddk` `migration` `lock-in`
+
+Broadcom 移除了 VMware Virtual Disk Development Kit 的公开下载页——Azure Migrate、Red Hat MTV、Nutanix Move、Platform9 vJailbreak 以及开源的 virtv2v/nbdkit 都靠这个库读取 VMware 磁盘。即便已登录 Broadcom 账号，VDDK 8 与 9 的版本路径也一律返回 404。官方没有任何声明或弃用通知；据称客服渠道的口径是 VDDK"不再提供使用或下载"，引导客户转向 Technology Alliance Program。Red Hat 表示无法再分发该专有软件；Microsoft 在 Azure Migrate 指引中加入了警告（退回代理迁移）；Proxmox 内建的 ESXi 导入不受影响。
+
+**Why it matters:** 这与今晨的托特纳姆热刺条目合流——就在客户重新议价的同时，VMware 周边的退出工具正在被加闸，任何迁移项目现在都需要加上"我们能否合法获得 VDDK"这一行。措辞要诚实："蓄意设置退出壁垒"的解读是原作者的判断；Broadcom 没有任何公开表态，且可用的迁移路径（Proxmox）依然存在。
+
+[`🔗 virtualizationhowto：离开 VMware 变得更难`](https://www.virtualizationhowto.com/2026/09/leaving-vmware-just-got-harder-after-broadcom-pulled-vddk-downloads/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49602699)
+
+---
+
+## 30. Roundcube 1.6.19 / 1.7.4——12 项 webmail 修复，含零点击存储型 XSS 与 CSS 代理 SSRF 绕过
+
+- **Velocity:** ▮ steady
+- **Source:** roundcube.net 安全更新 · 9 月 6 日发布 · 同时覆盖 1.6 LTS 与 1.7 分支
+- **Tags:** `roundcube` `webmail` `xss` `ssrf` `patch`
+
+Roundcube 于 9 月 6 日为两个分支同时发布安全更新，修复十几个上报的缺陷。头条：附件 URL 中经 TNEF MIME 标签注入的**零点击存储型 XSS**——一封邮件即可触发。其余包括：用十六进制 IPv6 映射 IPv4 地址绕过 CSS 代理的 SSRF；三处邮件头注入（subject 中的裸 CR、收件人显示名中的 C 转义 `\r`、identity 组织字段）；两处 CSS 注入/走私；两处远程内容拦截绕过（FuncIRI CSS 转义、SVG SMIL 动画）；经尾部点 FQDN 绕过 `is_local_url()`；以及 SQL 通讯录中跨用户访问联系人组成员关系。发布帖未列 CVE 编号，也无野外利用报告。
+
+**Why it matters:** Roundcube 是自托管与共享托管邮件体系中占比巨大的 webmail 层，而零点击意味着攻击只需要发出一封邮件。双分支同发意味着每一个生产实例——无论 LTS 还是当前版——都必须升级；这种有报告者署名、无 CVE 的披露方式也意味着只能靠公告追踪，而不是 NVD。
+
+[`🔗 roundcube.net：Security updates 1.6.19 and 1.7.4`](https://roundcube.net/news/2026/09/06/security-updates-1.6.19-and-1.7.4) · [`🔗 roundcube/roundcubemail releases`](https://github.com/roundcube/roundcubemail/releases)
+
+---
+
+## 31. rclone `serve s3 --auth-proxy` 默认敞开——SigV4 校验接受空密钥（CVSS 9.8，公告内附 PoC）
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub 公告 GHSA-xwwr-4h3p-r22c · 9 月 4 日发布 · 影响 ≤ 1.68.0，1.75.1 修复
+- **Tags:** `rclone` `s3` `authentication` `cwe-306` `advisory`
+
+`rclone serve s3` 配置 `--auth-proxy` 但不配置 `--auth-key` 时认证会失效放行：`authPairMiddleware` 直接取客户端 `Authorization` 头中的 access key ID，将其与默认为空字符串的 `ws.s3Secret` 配对注册——而空字符串就是合法的 HMAC 密钥。任何人都能为自己编造的 access key ID 手签 SigV4 请求并通过校验；公告内附可用 PoC（"零先验凭据即可完成一次完全认证的成功 bucket 列举"）。auth-proxy 脚本同样无法区分攻击者与合法用户——key ID 同时作为用户名和密码传入。CVSS 3.1 9.8（CWE-287/CWE-306）；发布时未分配 CVE。最小修复是让 rclone 拒绝以此配置启动；公告还标注了残留的设计局限：共享静态 auth key 之下，逐身份密钥需要协议层修改。
+
+**Why it matters:** rclone 遍布备份与数据搬运管线，而这是教科书式的 fail-open 默认值——如果你在未打补丁时跑过 `serve s3 --auth-proxy`，你的后端事实上对全网可读。值得表扬的是：公告附上了 PoC、受影响/已修复矩阵和残余局限，这正是披露应有的样子。
+
+[`🔗 GHSA-xwwr-4h3p-r22c`](https://github.com/rclone/rclone/security/advisories/GHSA-xwwr-4h3p-r22c) · [`🔗 rclone/rclone`](https://github.com/rclone/rclone)
+
+---
+
+## 32. Ladybird 八月月报——新样式引擎驱动"对引擎性能的认真推进"
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 192+ pts · 46 评论 · 约 2 天前 · ladybird.org 月报（8 月 31 日）
+- **Tags:** `ladybird` `browser` `web-engine` `performance`
+
+Ladybird 月度更新重点展示 CSS scroll snap、JavaScript 调试与会话恢复，以及项目所称"以新样式引擎对引擎性能发起的认真推进"。月报同时以视频形式发布（Twitch/YouTube）。项目既定目标——2026 年在 Linux 与 macOS 上发布首个 Alpha——维持不变。
+
+**Why it matters:** Chromium/WebKit/Gecko 三巨头之外唯一的浏览器引擎仍在向首个 alpha 扎实推进，而性能工作（不只是功能补齐）才是让 alpha 对日常用户可信的关键。限制：这是项目自报的进度——月报形式给的是功能要点与演示，而非独立基准，"认真推进"应视为有待 alpha 到来时复核的声明。
+
+[`🔗 ladybird.org：This Month in Ladybird`](https://ladybird.org/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49571096)
+
+---
+
+## 33. 《Verify Before You Distill》——逐 prompt 以实测教师可靠性为蒸馏设卡
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers（9 月 8 日榜单，4 赞） · arXiv 2609.02998（9 月 2 日）
+- **Tags:** `distillation` `on-policy` `rlvr` `training` `arxiv`
+
+TGOPD（Teacher-Gated On-Policy Distillation）瞄准了 OPD 一个真实的失败模式：反向 KL 是众数寻求的，一个自信但错误的教师会产出强烈却误导的 token 级梯度，而熵等分布信号度量的是不确定性——不是正确性。解法是逐 prompt 设卡：用一小组教师探测题由验证器打分，每个 prompt 要么路由到稠密 OPD 监督（通过），要么路由到验证器接地 GRPO（未通过）。声明结果：在 4B 与 35B 两个规模上全部六个单域设定中击败原始 OPD，多域训练下七个基准均值更高，且在异步 OPD 中教师节点 GPU 利用率从 9.8% 升至 78.9%（实测 4B 单域运行）。
+
+**Why it matters:** 它把上周《Does On-Policy Distillation Really Distill?》的发现（教师噪声随教师规模增长）落成了一个可用机制——杠杆是验证，不是规模。两点限制需随身携带：摘要页未呈现任何局限章节（采用前先读 17 页全文），且 4 个赞说明关注度落后于结果——这是早期信号，不是共识。
+
+[`🔗 arXiv 2609.02998`](https://arxiv.org/abs/2609.02998) · [`🔗 Hugging Face 论文页`](https://huggingface.co/papers/2609.02998)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-08T04:05:00+08:00 |
-| Items | 20 |
-| Sources tracked | 16 (Rapid7, Senserva KEV tracker, Internet Archive blog, Hacker News, GitHub Trending, Tailscale blog, securityonline.info, The Hacker News, Hugging Face Daily Papers, arXiv, vLLM blog, OpenAI Help Center, TantoSec, HeroDevs, CodePen docs, Ars Technica) |
+| Generated | 2026-09-08T12:05:00+08:00 |
+| Items | 33 |
+| Sources tracked | 24 (Rapid7, Senserva KEV tracker, Internet Archive blog, Hacker News, GitHub Trending, Tailscale blog, securityonline.info, The Hacker News, Hugging Face Daily Papers, arXiv, vLLM blog, OpenAI Help Center, TantoSec, HeroDevs, CodePen docs, Ars Technica, Google DeepMind blog, mcpherrin.ca, mathathonchallenge.com, NVD, jellyfin.org/GitHub releases, virtualizationhowto.com, roundcube.net, ladybird.org) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

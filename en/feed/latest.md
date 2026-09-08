@@ -1,8 +1,8 @@
 ---
 date: 2026-09-08
-updated: 2026-09-08T04:05:00+08:00
+updated: 2026-09-08T12:05:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -295,13 +295,195 @@ Mador (`@marsbos/mador`, MIT) is a deliberately minimal reactive DOM runtime: `m
 
 ---
 
+## 21. WeatherNext 3 — DeepMind's weather model learns directly from live satellites, forecasting hourly at 5 km
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 263+ pts · 63 comments · resurfacing on the front page (submitted ~Sep 5) · DeepMind announcement Sep 3
+- **Tags:** `weather-ai` `deepmind` `forecasting` `earth-models`
+
+Google DeepMind and Google Research announced WeatherNext 3 (Sep 3), which they call — citing Brightband's independent live evaluations — "the most advanced and accurate global weather model to date." The architectural break: unlike prior AI weather models trained on numerical-weather-prediction (NWP) simulations, it learns directly from real-time observations — live geostationary satellite mosaics plus sparse weather-station data, fused by a Functional Generative Network mesh transformer. Resolution is 5 km for key surface variables (10/25 km for others) against WeatherNext 2's 25 km/6-hour grid — roughly five times sharper — with a fresh forecast every hour. Claimed precipitation gains: CRPS improvements "up to 60% against IMERG, 30% for MRMS, and 10% against rain gauge measurements for early lead times," and "up to 50% more accurate" day-plus forecasts. It powers Google Search, Gemini, Maps, the Maps Platform Weather API and Earth Engine, with BigQuery/GCS access and new clean-energy outputs (100 m turbine-height wind, cloud cover, solar radiation).
+
+**Why it matters:** the first global model generating forecasts every hour, grounded in live satellite data rather than NWP reanalysis — a different training substrate, not an increment. The caveats are printed: every accuracy claim carries "up to," Google states the atmosphere "will always retain a degree of unpredictability" and defers official warnings to national weather services, and the biggest gains are precisely where forecasts were historically least reliable — relative improvement, not a fix for precipitation's small-scale processes.
+
+[`🔗 Google DeepMind: WeatherNext 3`](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/introducing-weathernext-3/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49552299)
+
+---
+
+## 22. Trusting-Trust via GNU `strip` — researchers backdoor an entire NixOS distribution without touching a compiler
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 174+ pts · 37 comments · ~34h ago (~02:00 UTC+8 Sep 7) · arXiv 2607.24888 (Jul 27)
+- **Tags:** `supply-chain` `trusting-trust` `nixos` `build-security` `arxiv`
+
+Ken Thompson's classic trusting-trust attack has been "widely regarded as a threat specific to compilers." Julien Malka, Aman Sharma, Martin Monperrus, Stefano Zacchiroli and Théo Zimmermann demonstrate otherwise: a Thompson-class attack delivered through **GNU strip** — a routine build tool that only modifies compiled ELF binaries and never touches source. A tampered `strip` planted in the NixOS bootstrap's binary seed implants a payload into every binary it processes and copies itself into the new strip binaries it helps build, propagating from one generation to the next; the payload "survives into the final standard environment after the seed leaves the dependency closure." The result: a complete graphical installer builds without errors, with nearly every binary in it backdoored.
+
+**Why it matters:** the trust root moves from the compiler to any binary in the bootstrap seed — provenance of the *seed*, not just the compiler, is what must be verified, and classic countermeasures like diverse double-compiling are scoped to compilers. Caveats: this is a researcher-built demonstration against a specific real nixpkgs revision, not a discovered compromise; the abstract states no field evidence and discusses no detected in-the-wild instance.
+
+[`🔗 arXiv 2607.24888`](https://arxiv.org/abs/2607.24888) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49575515)
+
+---
+
+## 23. Factoring a 1990s CA's RSA-512 roots on a desktop — 32 hours of CADO-NFS, keys pulled from old browser installers
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 158+ pts · 29 comments · ~6h ago (~06:00 UTC+8) · mcpherrin.ca post Sep 7
+- **Tags:** `rsa` `cryptography` `pki` `factorization` `archive`
+
+The author factored two 512-bit root CA keys from E-Certify, a long-defunct Canadian CA whose "Gold Server" (SSL) and "Gold Client" (S/MIME) roots shipped with Netscape 4.51 in March 1999 — running CADO-NFS locally on a Ryzen 9 5950X (32 and 29 hours). The roots came from archive.org collections of IE/Netscape installers, extracted into a browsable site with Claude Code. Bonus: the "Test VeriSign Commercial Software Publisher CA" code-signing root from IE 3.02 (1996), factored by Steve Weis "in about an hour using a GPU cluster." Context: RSA-155 (512-bit) fell in 1999; RSA-260 (862 bits) was just factored; 1024-bit is "within the realm of possibility" for well-resourced organizations.
+
+**Why it matters:** none of this affects anything in use today — Netscape dropped the roots in 2002 and they expired 2003-10-16; reproducing the chain requires Netscape 4.51 with the clock rolled back, which "describes zero people on the planet." The value is method: historical roots live in historical installers, and commodity hardware plus LLM-assisted extraction makes RSA-512 trivial. The author's own hedge is worth keeping: "I haven't verified this LLM output is entirely trustworthy, it looks pretty plausible."
+
+[`🔗 mcpherrin.ca: I've factored the RSA keys of a Certificate Authority from the 90s`](https://mcpherrin.ca/2026/09/07/rsa.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49604637)
+
+---
+
+## 24. Caltech Mathathon — the first hackathon for research-level mathematics, where teams defend results before mathematicians
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 245+ pts · 84 comments · ~27h ago (~09:10 UTC+8 Sep 7)
+- **Tags:** `ai-math` `research` `hackathon` `verification`
+
+Caltech will host a 40-hour "Mathathon" (Oct 30–Nov 1) billed as the first hackathon devoted to research-level mathematics: ~100 teams receive frontier AI models and attack open conjectures and theory development, then "defend their results before leading mathematicians," who grade how well participants actually understand what the model produced. Over $2M in AI credits; prizes in two stages — the second awarded only "after the math community has had time to verify these results." The motivation section cites recent AI-driven results: a disproof of Erdős's planar unit-distance conjecture (80 years open) and the first explicit construction of a non-sofic group (27 years open).
+
+**Why it matters:** the verification-first prize design directly answers the demo-benchmark problem this feed keeps cataloguing — results don't count until humans have checked them, and understanding is graded, not output. It is also the third data point in a week (after Anthropic's Fermat formalization and the post-Fermat funding essay) that AI-accelerated mathematics is acquiring institutions, not just demos.
+
+[`🔗 Caltech Mathathon`](https://mathathonchallenge.com/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49596055)
+
+---
+
+## 25. Jellyfin 12.0 — the version number drops the "10.", legacy `/emby` routes removed, rollback impossible without a full backup
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 149+ pts · 56 comments · ~6h ago (~06:10 UTC+8) · v12.0 released Sep 8 after seven RCs
+- **Tags:** `jellyfin` `self-hosting` `media-server` `breaking-changes`
+
+Jellyfin 12.0 shipped Sep 8 — the first release under the new versioning (the long-running "10." prefix is dropped). Headlines: multiple versions per episode with similarity/recommendation and pluggable search providers, triple-digit episode numbers, ListenBrainz bundled with the server, FFmpeg 8.1, and a new relational `LinkedChildren` table behind faster Resume/Next-Up/count queries. The breaking list is long: legacy `/emby/*` and `/mediabrowser/*` routes removed (old third-party clients break), legacy authorization disabled by default, usernames moved to a normalized column with a unique index (case-only duplicates must be fixed pre-upgrade), global subtitle config removed. The release notes are blunt: "a full backup of the data directory is strongly recommended" — DB changes make rollback impossible without a full restore — direct upgrades only from 10.10.7 or 10.11.x, third-party plugins must be removed before migrating, and a full library scan is required afterward.
+
+**Why it matters:** the largest fully-open self-hosted media server just shipped its biggest compatibility cliff in years, and every third-party client and plugin in the ecosystem needs auditing against it. The release-notes discipline (state the rollback impossibility, name the upgrade path) is the model for how breaking migrations should be documented.
+
+[`🔗 Jellyfin releases (v12.0)`](https://github.com/jellyfin/jellyfin/releases) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49604861)
+
+---
+
+## 26. FreeIPA CVE-2026-76578 (CVSS 9.8, Red Hat-assigned) — an unauthenticated LDAP client can become a FreeIPA administrator
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · published Sep 7 (status "Received") · CVSS 9.8 Primary (Red Hat CNA) · securityonline.info Sep 7
+- **Tags:** `freeipa` `keycloak-alternative` `ldap` `kerberos` `identity`
+
+FreeIPA's self-managed OTP token ACI requires no authentication and does not restrict which attributes may be added alongside a token entry. An unauthenticated LDAP client chains this with a related directory-server ACI-evaluation flaw (tracked separately) to create an attacker-controlled Kerberos principal and have it added to the administrators group — full administrative control of the identity server, no credentials or interaction required. Affected: default installations across RHEL 6–10 `ipa` packages, including deployments using AD integration via cross-realm Kerberos trust. Mitigations while patching: firewall LDAP ports 389/636 to trusted hosts and disable anonymous binds (after verifying nothing depends on them). securityonline.info reports the fix in FreeIPA 4.13.4 — not independently confirmed; the project's GitHub shows no releases. Notably, a prior fix (CVE-2026-13097) blocked only a canonical-name collision and left the underlying unauthenticated write access open.
+
+**Why it matters:** unauthenticated-to-domain-admin on default identity infrastructure is the worst-case class of bug, and identity servers are the pivot point for everything downstream. Scorer hygiene per the feed's rule: 9.8 is Red Hat's own CNA score; NVD's status is still "Received" (not analyzed). And the incomplete-fix pattern (13097 → 76578) repeats what Tomcat's item showed this morning.
+
+[`🔗 NVD: CVE-2026-76578`](https://nvd.nist.gov/vuln/detail/CVE-2026-76578) · [`🔗 securityonline.info analysis`](https://securityonline.info/freeipa-cve-2026-76578-vulnerability/)
+
+---
+
+## 27. Windows HTTP.sys CVE-2026-62735 — the Pwn2Own Berlin privilege-escalation bug's PoC is now public
+
+- **Velocity:** ▮▮ rising
+- **Source:** securityonline.info Sep 8 · CVSS 7.8 (Microsoft CNA; NVD Analyzed) · patched Aug 11 Patch Tuesday
+- **Tags:** `windows` `http-sys` `lpe` `poc` `pwn2own`
+
+Full technical details and a working PoC went public this week for CVE-2026-62735, a heap-based buffer overflow in HTTP.sys (Windows' kernel HTTP driver) demonstrated by researcher Siyeon Wi at Pwn2Own Berlin 2026 and patched in the August 2026 Patch Tuesday. Root cause: an integer overflow in `UlpCreateInternalResponseOld` — the driver totals header bytes without guarding against wrap-around and allocates an undersized nonpaged-pool buffer; the PoC submits an HTTP response with roughly 70,000 custom headers via a specific IOCTL, overflowing the buffer into SYSTEM-level code execution. Affected: Windows 10 1607 through Windows 11 26H1 and Server 2012–2025. No workaround; no confirmed in-the-wild exploitation (EPSS 0.5%).
+
+**Why it matters:** the patch-PoC gap is the risk window — fixed in August, but the public PoC converts unpatched fleets into targets. Exposure is local and authenticated (the CVE description says "authorized attacker"), so the population at risk is shared hosts, RDS servers and kiosk-style setups, not the open internet. The deep-dive exploitation analysis remains paywalled, so public knowledge of reliability is thinner than the PoC's existence suggests.
+
+[`🔗 securityonline.info: CVE-2026-62735`](https://securityonline.info/windows-http-sys-cve-2026-62735/) · [`🔗 NVD: CVE-2026-62735`](https://nvd.nist.gov/vuln/detail/CVE-2026-62735)
+
+---
+
+## 28. pascalorg/editor — a 22.4k-star WebGPU 3D building editor ships an MCP server for AI hosts
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending (#13 daily) · 22.4k stars · +168 today · MIT
+- **Tags:** `webgpu` `threejs` `mcp` `cad` `ai-agents`
+
+Pascal's editor (React Three Fiber + WebGPU, Next.js/React 19 monorepo) models buildings as a validated node hierarchy — Site → Building → Level → Walls/Slabs/Ceilings/Roofs/Zones/Items — with placement validation via a spatial grid, Boolean-geometry cutouts for doors and windows (three-bvh-csg), and scenes stored as a flat node dictionary in IndexedDB with dirty-node tracking driving per-frame regeneration. The agent-relevant part is first-class: an MCP server (`@pascal-app/mcp`) plus CLI (`npx @pascal-app/cli editor`) lets AI hosts create and manipulate scenes, and features extend through plugins using the same manifest as built-ins.
+
+**Why it matters:** a structured, constraint-checked domain editor exposing MCP is the "agents draw buildings they can't fudge" pattern — the architectural cousin of archify's validated-IR diagrams. The scene graph is data an agent can read and edit safely precisely because the spatial validation lives in the tool, not the prompt. Caveats: no releases tagged (1,421 commits on main), undo/redo capped at 50 steps, and the project is young enough that the MCP surface will move.
+
+[`🔗 pascalorg/editor`](https://github.com/pascalorg/editor) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 29. Broadcom pulls VDDK downloads — the library everyone uses to *leave* VMware now 404s
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 132+ pts · 55 comments · ~8.5h ago (~03:30 UTC+8) · virtualizationhowto.com (ShapeBlue documented Aug 25)
+- **Tags:** `vmware` `broadcom` `vddk` `migration` `lock-in`
+
+Broadcom removed the public download pages for the VMware Virtual Disk Development Kit — the library Azure Migrate, Red Hat MTV, Nutanix Move, Platform9 vJailbreak and open-source virtv2v/nbdkit all use to read VMware disks. Version-specific paths for VDDK 8 and 9 return 404s even for logged-in Broadcom customers. There has been no public statement or deprecation notice; via support channels, Broadcom reportedly says the VDDK is "no longer available for use or download" and directs customers to the Technology Alliance Program. Red Hat says it cannot redistribute the proprietary software; Microsoft added a warning to Azure Migrate guidance (agent-based fallback); Proxmox's built-in ESXi import is unaffected.
+
+**Why it matters:** this converges with this morning's Tottenham item — the exit tooling around VMware is being gated at the same time customers are repricing their contracts, and any migration project now needs a "can we legally obtain VDDK?" line item. Keep the framing honest: the deliberate-exit-barrier reading is the author's interpretation; Broadcom has said nothing on the record, and working migration paths (Proxmox) still exist.
+
+[`🔗 virtualizationhowto: Leaving VMware just got harder`](https://www.virtualizationhowto.com/2026/09/leaving-vmware-just-got-harder-after-broadcom-pulled-vddk-downloads/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49602699)
+
+---
+
+## 30. Roundcube 1.6.19 / 1.7.4 — 12 webmail fixes, including a zero-click stored XSS and a CSS-proxy SSRF bypass
+
+- **Velocity:** ▮ steady
+- **Source:** roundcube.net security update · releases Sep 6 · both 1.6 LTS and 1.7 branches
+- **Tags:** `roundcube` `webmail` `xss` `ssrf` `patch`
+
+Roundcube shipped security updates to both branches on Sep 6, fixing a dozen reported flaws. The headline: a **zero-click stored XSS** via TNEF MIME tag injection in the attachment URL — an email alone is enough. Also: an SSRF bypass in the CSS proxy using hexadecimal IPv6-mapped IPv4 addresses; three email-header injections (bare CR in subject, C-escaped `\r` in recipient display name, identity organization field); two CSS injection/smuggling bugs; two remote-content-blocking bypasses (FuncIRI CSS escapes, SVG SMIL animation); an `is_local_url()` bypass via trailing-dot FQDN; and cross-user access to contact-group membership in the SQL address book. No CVE numbers are listed in the release post, and no exploitation is reported.
+
+**Why it matters:** Roundcube is the webmail layer of a huge share of self-hosted and shared-hosting mail setups, and zero-click means the attack requires nothing but sending a message. The dual-branch release means every production install — LTS or current — needs to move, and the reporter-credited, CVE-less disclosure style means tracking these flaws by advisory, not by NVD.
+
+[`🔗 roundcube.net: Security updates 1.6.19 and 1.7.4`](https://roundcube.net/news/2026/09/06/security-updates-1.6.19-and-1.7.4) · [`🔗 roundcube/roundcubemail releases`](https://github.com/roundcube/roundcubemail/releases)
+
+---
+
+## 31. rclone `serve s3 --auth-proxy` fails open — SigV4 verification accepts an empty secret (CVSS 9.8, PoC in the advisory)
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub advisory GHSA-xwwr-4h3p-r22c · published Sep 4 · affects ≤ 1.68.0, patched 1.75.1
+- **Tags:** `rclone` `s3` `authentication` `cwe-306` `advisory`
+
+Running `rclone serve s3` with `--auth-proxy` but without `--auth-key` fails open: the `authPairMiddleware` takes the access key ID from the client-supplied `Authorization` header and registers it against `ws.s3Secret`, which defaults to an empty string — and an empty string is a valid HMAC key. Anyone can hand-sign a SigV4 request for an access key ID they invented and pass verification; the advisory includes the working PoC ("a fully authenticated, successful bucket listing, with zero prior credential knowledge"). The auth-proxy script can't distinguish attacker from user either — the key ID arrives as both user and password. CVSS 3.1 9.8 (CWE-287/CWE-306); no CVE assigned at publication. The minimal fix makes rclone refuse to start in this configuration, and the advisory flags a residual design limitation: with a shared static auth key, per-identity secrets would need protocol changes.
+
+**Why it matters:** rclone is everywhere in backup and data-movement pipelines, and this is a textbook fail-open default — if you ran `serve s3 --auth-proxy` unpatched, your backend was effectively world-readable. Credit where due: the advisory ships the PoC, the affected/patched matrix and the remaining limitation, which is exactly what a disclosure should look like.
+
+[`🔗 GHSA-xwwr-4h3p-r22c`](https://github.com/rclone/rclone/security/advisories/GHSA-xwwr-4h3p-r22c) · [`🔗 rclone/rclone`](https://github.com/rclone/rclone)
+
+---
+
+## 32. Ladybird's August report — a new style engine drives a "serious push on engine performance"
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 192+ pts · 46 comments · ~2d old · ladybird.org monthly report (Aug 31)
+- **Tags:** `ladybird` `browser` `web-engine` `performance`
+
+Ladybird's monthly update highlights CSS scroll snap, JavaScript debugging and session restore, plus what the project calls "a serious push on engine performance with a new style engine." The post is also published as video (Twitch/YouTube). The project's stated target — a first Alpha release in 2026 for Linux and macOS — stands.
+
+**Why it matters:** the only browser engine outside the Chromium/WebKit/Gecko triopoly keeps executing toward its first alpha, and performance work (not just feature parity) is what makes an alpha credible to daily users. Caveat: this is the project's own self-reported progress — the monthly format gives feature headlines and demos, not independent benchmarks, so treat "serious push" as a claim to re-check when alpha arrives.
+
+[`🔗 ladybird.org: This Month in Ladybird`](https://ladybird.org/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49571096)
+
+---
+
+## 33. "Verify Before You Distill" — gate on-pipeline distillation on measured teacher reliability, prompt by prompt
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers (Sep 8 listing, 4 upvotes) · arXiv 2609.02998 (Sep 2)
+- **Tags:** `distillation` `on-policy` `rlvr` `training` `arxiv`
+
+Teacher-Gated On-Policy Distillation (TGOPD) attacks a real failure mode of OPD: reverse KL is mode-seeking, so a confidently wrong teacher produces strong but misleading token-level gradients, and distributional signals like entropy capture uncertainty — not correctness. The fix is a per-prompt gate: a small set of teacher probes is scored by a verifier, and each prompt routes either to dense OPD supervision (check passed) or to verifier-grounded GRPO (check failed). Claims: beats vanilla OPD in all six single-domain settings at 4B and 35B scale, higher seven-benchmark averages under multi-domain training, and in asynchronous OPD the teacher-node GPU utilization rose from 9.8% to 78.9% in the measured 4B run.
+
+**Why it matters:** this operationalizes last week's "Does On-Policy Distillation Really Distill?" finding (teacher noise grows with teacher scale) into an actual mechanism — verification, not scale, is the lever. Two caveats kept attached: no limitations section is surfaced on the abstract page (check the full 17-page text before adopting), and at 4 upvotes the attention is lagging the result — this is an early signal, not a consensus.
+
+[`🔗 arXiv 2609.02998`](https://arxiv.org/abs/2609.02998) · [`🔗 Hugging Face paper page`](https://huggingface.co/papers/2609.02998)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-08T04:05:00+08:00 |
-| Items | 20 |
-| Sources tracked | 16 (Rapid7, Senserva KEV tracker, Internet Archive blog, Hacker News, GitHub Trending, Tailscale blog, securityonline.info, The Hacker News, Hugging Face Daily Papers, arXiv, vLLM blog, OpenAI Help Center, TantoSec, HeroDevs, CodePen docs, Ars Technica) |
+| Generated | 2026-09-08T12:05:00+08:00 |
+| Items | 33 |
+| Sources tracked | 24 (Rapid7, Senserva KEV tracker, Internet Archive blog, Hacker News, GitHub Trending, Tailscale blog, securityonline.info, The Hacker News, Hugging Face Daily Papers, arXiv, vLLM blog, OpenAI Help Center, TantoSec, HeroDevs, CodePen docs, Ars Technica, Google DeepMind blog, mcpherrin.ca, mathathonchallenge.com, NVD, jellyfin.org/GitHub releases, virtualizationhowto.com, roundcube.net, ladybird.org) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
