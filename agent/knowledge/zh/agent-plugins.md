@@ -621,3 +621,9 @@ Kimi、Qwen 适配器，7 种语言。HN 帖子的揭秘：真正的内容只有
 天花板：Claude 只能"坚持几轮"就回退，且 Claude Code 自带的 harness 指令权重完全压过用户规则——"我不认为我们能靠
 技能解决这个问题"。还有人指出贴 URL 安装技能是注入向量。"证明它"阶段迄今最锋利的数据点：一个 prompt 文件能登顶
 GitHub 趋势榜，而同一场讨论记录了*harness*（而非技能）拥有长程行为——8.7k 行 eval 的存在本身，就是因为效果会衰减。
+
+## 2026-09-09 12:03→20:03 —— 品类一分为二；技能伸进硬件流水线；图像提示成为打包工件
+
+- **技能品类肉眼可见地分裂为两种产品。** `obra/superpowers` 以 +452/天再上趋势（283.5k★，仓库活跃，v6.3.0 于 8 月 12 日，9 月 8 日仍有推送），时间是 9 月 6 日 Threads 谈其缘起之后、单文件技能浪潮之中——它是另一极：一个可组合的技能框架，实为一套软件开发*方法论*（brainstorming → plan → TDD → 子代理实现 → 代码评审，由 harness 强制执行；从约 14 个技能长成完整方法论；面向 Claude Code、Hermes、Devin CLI、Grok Build）。没有新发布驱动这次冲榜——仓库自己的纪律（TDD 过的技能、压力测试过的 prompt）就是内容。趋势榜成了这场分裂的实时市场调研：单 prompt 文件（i-have-adhd）对观点化方法论（superpowers）；悬而未决的问题不变——harness 层的指令是否会压过其中任何一者。
+- **技能伸进硬件构建流水线：** `earthtojake/text-to-cad`（MIT，14.8k★，+97/天，活跃维护）——11 个覆盖机械工程端到端的 agent 技能：CAD 建模到 STEP/STL/3MF/GLB、浏览器 CAD 查看器、经 step.parts 的现货元件选型、DXF 图纸、URDF/SRDF/SDF 机器人描述、SendCutSend 可制造性校验、DfAM 可打印检查、G-code 切片、Bambu 打印机控制——可经 `npx skills add` 或 Codex/Claude Code/Grok Build 的原生市场安装。落在 copperhead 的门控 KiCad agent 登场次日：建模、校验、选型、切片、打印正在成为 agent 可消费的链条。README 的尖锐棱角：`npx skills update` 会"静默漏掉"新增技能、退役技能永不自动移除、Codex 低于 0.142.0 会静默跳过插件。
+- **awesome-gpt-image-2 —— 日期更新**（`freestylefly/awesome-gpt-image-2`，MIT，29.6k★，+612/天）。现达 **544** 个逆向工程的 GPT-Image 2 提示案例、13 个分类（08-23 笔记记录时为 532——那是 README 描述字段的陈旧，不是 feed 错误），20+ 行业模板配避坑指南，三语 README，以及 npm 打包的 agent 技能（`gpt-image-2-style-library`），可经 `npx skills`、Claude Code 插件市场或 GitHub Packages 安装——图像模型提示术正在成为打包、版本化、agent 可消费的工件；技能经济以当年吸收测试与图表的方式吸收媒体生成。08-23 的漏斗观察仍成立（赞助位 API 聚合器 + ¥9.90 付费社区），README 的警示仍在：提示取自公开库、版权归原作、第三方商用明确不保证，GPT Image 2.5 复刻"生成条件与确切工具型号 ID 仍未核验"。

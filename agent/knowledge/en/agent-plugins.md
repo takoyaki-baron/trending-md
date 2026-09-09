@@ -846,3 +846,34 @@ Others flagged paste-a-URL skill installs as an injection vector. The sharpest d
 "prove it" phase: a prompt file can top GitHub trending while the same discussion documents that the
 *harness*, not the skill, owns long-horizon behavior — and the 8.7k lines of evals exist precisely because
 the effect decays.
+
+## 2026-09-09 12:03→20:03 — the category splits in two; skills reach the hardware pipeline; image prompting becomes a package
+
+- **The skills category visibly splits into two products.** `obra/superpowers` re-trends at +452/day
+  (283.5k★, repo active, v6.3.0 Aug 12, pushed Sep 8) days after a Sep 6 Threads conversation on its
+  origin and mid-week in the one-file-skills wave — and it is the other pole: a composable skills
+  framework that is really a software-development *methodology* (brainstorming → plan → TDD →
+  subagent-driven implementation → code review, enforced by the harness; grew from ~14 skills to a full
+  methodology; targets Claude Code, Hermes, Devin CLI, Grok Build). No new release drove the spike — the
+  repo's own discipline (TDD'd skills, pressure-tested prompts) is the content. Trending is now live
+  market research on the split: single prompt files (i-have-adhd) vs opinionated methodologies
+  (superpowers); the open question is unchanged — whether harness-level prompts override any of it.
+- **Skills reach the hardware build pipeline:** `earthtojake/text-to-cad` (MIT, 14.8k★, +97/day, actively
+  maintained) — 11 agent skills covering mechanical engineering end to end: CAD modeling to
+  STEP/STL/3MF/GLB, a browser CAD viewer, off-the-shelf component sourcing via step.parts, DXF drawings,
+  URDF/SRDF/SDF robot descriptions, SendCutSend manufacturability validation, DfAM printability checks,
+  G-code slicing, and Bambu printer control — installable via `npx skills add` or native marketplaces for
+  Codex, Claude Code, and Grok Build. Lands one day after copperhead's verification-gated KiCad agent:
+  model, validate, source, slice, print is becoming an agent-consumable chain. README sharp edges:
+  `npx skills update` "silently misses" newly added skills, retired skills are never removed
+  automatically, Codex below 0.142.0 skips the plugin silently.
+- **awesome-gpt-image-2 — dated update** (`freestylefly/awesome-gpt-image-2`, MIT, 29.6k★, +612/day). Now
+  **544** reverse-engineered GPT-Image 2 prompt cases in 13 categories (the 08-23 note recorded 532 — a
+  stale README description field, not a feed error), 20+ industrial templates with a pitfalls guide,
+  trilingual READMEs, and an npm-packaged agent skill (`gpt-image-2-style-library`) installable via
+  `npx skills`, the Claude Code plugin marketplace, or GitHub Packages — image-model prompting becoming a
+  packaged, versioned, agent-consumable artifact; the skills economy absorbing media generation the way
+  it absorbed testing and diagrams. The 08-23 funnel observation stands (sponsor-linked API aggregator +
+  ¥9.90 paid community), and the README's caveats remain: prompts drawn from public libraries with
+  copyright left to original authors, third-party commercial use explicitly not guaranteed, and the GPT
+  Image 2.5 recreations carry "generation conditions and exact tool model IDs remain unverified."

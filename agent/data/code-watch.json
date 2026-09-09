@@ -499,12 +499,18 @@
           "path": "bench/scenarios/army_multidomain_attack_chain__v02.jsonl",
           "html_url": "https://github.com/787-10/CANOPY/blob/d1cad45fb6b169179236a801f945390c1172d620/bench/scenarios/army_multidomain_attack_chain__v02.jsonl",
           "found": "2026-09-08T20:43:50.915Z"
+        },
+        "Fornida-Dev/fornida-claude-plugins::plugins/caveman/README.md": {
+          "repo": "Fornida-Dev/fornida-claude-plugins",
+          "path": "plugins/caveman/README.md",
+          "html_url": "https://github.com/Fornida-Dev/fornida-claude-plugins/blob/4eeb2ac54365a274fa73a18afadccd6fa9fa4eba/plugins/caveman/README.md",
+          "found": "2026-09-09T13:07:11.164Z"
         }
       },
-      "runs": 20,
+      "runs": 22,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-08T20:56:20.350Z",
-      "last_total": 75
+      "last_run": "2026-09-09T13:16:25.645Z",
+      "last_total": 76
     },
     "ra-paper-id": {
       "seen": {
@@ -599,25 +605,25 @@
           "found": "2026-09-08T20:56:20.350Z"
         }
       },
-      "runs": 3,
+      "runs": 4,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-08T20:56:20.350Z",
-      "last_total": 4
+      "last_run": "2026-09-09T13:16:25.645Z",
+      "last_total": 0
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 7,
+      "runs": 9,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-08T20:56:20.350Z",
+      "last_run": "2026-09-09T13:16:25.645Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 7,
+      "runs": 9,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-08T20:56:20.350Z",
+      "last_run": "2026-09-09T13:16:25.645Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-08T20:56:20.350Z"
+  "last_run": "2026-09-09T13:16:25.645Z"
 }

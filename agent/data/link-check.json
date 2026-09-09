@@ -416,26 +416,53 @@
         "2026-09-08.md"
       ]
     },
-    "https://openai.com/index/navier-stokes-solution/": {
+    "https://ai.meta.com/muse/": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-08T20:57:34.261Z",
-      "last_seen": "2026-09-08T20:57:34.261Z",
+      "last_seen": "2026-09-09T13:18:28.005Z",
       "feeds": [
         "2026-09-09.md"
       ]
     },
-    "https://ai.meta.com/muse/": {
+    "https://wallstreetcn.com/articles/3781316": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-09T13:18:28.005Z",
+      "last_seen": "2026-09-09T13:18:28.005Z",
+      "feeds": [
+        "2026-09-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49623306": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-09-08T20:57:34.261Z",
-      "last_seen": "2026-09-08T20:57:34.261Z",
+      "first_seen": "2026-09-09T13:18:28.005Z",
+      "last_seen": "2026-09-09T13:18:28.005Z",
+      "feeds": [
+        "2026-09-09.md"
+      ]
+    },
+    "https://www.nytimes.com/2026/08/10/us/flock-cameras-can-track-every-car-in-america-police-love-them-citizens-dont.html": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-09T13:18:28.005Z",
+      "last_seen": "2026-09-09T13:18:28.005Z",
+      "feeds": [
+        "2026-09-09.md"
+      ]
+    },
+    "https://www.sophos.com/en-us/blog/dissecting-a-php-web-server-rootkit": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-09T13:18:28.005Z",
+      "last_seen": "2026-09-09T13:18:28.005Z",
       "feeds": [
         "2026-09-09.md"
       ]
     }
   },
-  "runs": 9,
+  "runs": 10,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-08T20:57:34.261Z"
+  "last_run": "2026-09-09T13:18:28.005Z"
 }

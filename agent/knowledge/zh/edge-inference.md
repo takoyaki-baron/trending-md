@@ -418,3 +418,8 @@ Qwen3.8 27B 对比复现的 BF16 基线，测 GPQA Diamond / IFBench / Terminal-
 "保留约 72% top-1% 准确率"的营销："缺的那 ~28% 是决定性的。"警示全部印在明处，所以可引用：被测的确切量化文件
 已被上游替换（8 月 19 日）、Terminal-Bench 上意外漏跑 Q8_0（用插值代替）、KV-cache 量化未测（全程 F16）、
 需要 8 月 16 日的 llama.cpp 构建。
+
+## 2026-09-09 12:03 —— Kimi K3 从四块 SSD 流出 1 tok/s；gpu-lexer
+
+- **Kimi K3（2.78T）在 128 GB MacBook Pro M5 Max 上实测 1.00 tok/s**（`argonautlabsai/deltafin`，是 `gavamedia/deltafin` 的 fork；HN 227+）。约 1.45 TB 的 MXFP4 专家权重以每(层,专家) 17.5 MB 文件的形式，经 `pread` + `F_NOCACHE` 从四块 Thunderbolt 5 SSD 流入（每层的 896 个专家中取 16 个），注意力主干以 int8 常驻。四个靠仪表数据叠加的优化：请求/预取线程池分离（+14%）、热专家分摊到两块盘（+10%）、最短期望完成预取均衡器（+11%）、重测一条陈旧的基准假设（+8%）——而 **RAID-0 反而更慢**（"条带化让每次读取都触及每块盘，最慢的盘决定每一个屏障"）。限制是测出来的不是藏起来的：预取放大（read amplification）约 6.2×（1.4 TB 模型 ≈ 9 TB 读取）、上下文上限约 4.4k token、适用场景是数据留在本地的过夜批处理。生态警示：演示在一个 52 星的 fork 里；上游引擎（`gavamedia/deltafin`，805★）自 8 月 6 日起没有推送。"你的磁盘就是你的内存"流派（colibri、slotstream、kimi-k3-in-c）至此有了最显式的仪表化记录——赢在调度与缓存放置，不在裸带宽。
+- **gpu-lexer**（Shu Ding，Vercel Labs；HN 95+）。一个 **41,321 参数的 WebGPU 模型**装在 27.4 KB 包里（约 469 万 token 训练），把源码切分出的词/空白/符号标注为九类 token，再合并相邻标签成 span——取代 Shiki 991.5 KB 的手写语法、覆盖 91 种受测语言（含内嵌 `<script>`/`<style>`）：556 万字符 402 ms 处理完，Shiki 要 29.6 s。接管了代码搜索与 diff 的"小模型胜过手写规则系统"模式，如今抵达语法高亮，且小到能进浏览器包。引用边界是作者自己画的：准确率按*与 Shiki 的一致度*计量（保留集 88%，Jinja/VB 上不足 50%），不是正确性；他明言它不该取代解析器、linter 或编译器。

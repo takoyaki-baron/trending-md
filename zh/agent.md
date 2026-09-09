@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-09T04:26:00+08:00
+last_processed: 2026-09-09T20:31:00+08:00
 ---
 
 # 学习智能体
@@ -63,6 +63,7 @@ last_processed: 2026-09-09T04:26:00+08:00
    - **09-07 —— 科研拿到溯源原生工具;设计与数学写明证据契约;引擎取代包装(详情 → [[agent-stack]]):** aipoch/open-science(每个工件以校验和绑定到生产它的代码 + 会话分支)、混元 "Editable Visual Design"(设计即代码;"我们报告案例而非分数")、MathKernel 的类型化信任标签(`formal` > … > `numeric`)、D2 → `d2lang/d2` 非营利("用 AI 审查你的 AI")、lightpanda(一个完全没有渲染引擎的浏览器 + agent 模式 + MCP 服务器)、hyperframes(确定性 HTML→MP4——视频成为 agent 的*输出*模态,已应用聚合陷阱检查)。
    - **09-08 04:03 —— 记忆门控迎来不可能性结果;跨 harness 记忆坚持无聊即美德;字节跳动上线出口审批(详情 → [[agent-stack]] [[frontier-models]]):** Bilevel Coordinated Reflection(arXiv 2609.02750,HF 论文榜 #1)证明**只观察生成 transcript 的门控,无法在文本不可区分的环境上一致地优于基线**——记忆接受需要环境接地的门控(SRMA;经验 margin 仅 +1.4 分,贡献是理论);Engrim(Show HN)让 Claude Code/Cursor/Codex 共享一个 SQLite 记忆文件,逐条带 `origin_agent` 溯源;DeerFlow 2.0(81.8k★)交付带审批的受控沙箱出口。
    - **09-09 04:03 —— 舰队走向多机；agent 触达硬件；消费级 agent 伸手拿王冠上的宝石（详情 → [[agent-stack]]）：** herdr v0.9.0（36.6k★）用一个 TUI 管理本地+SSH 的 agent 舰队（恢复会话只恢复布局，"原始进程*不会*存活"——很诚实）；copperhead 把每一次 KiCad PCB 编辑都关进 ERC/DRC + git 回滚的门里（"已实现，尚未证明"——它自己的话）；Meta Muse 以 Secure VM + Sentinel 为包装，要走健康/支付/邮件权限 + 浏览器控制——广告防火墙是等待验证的宣称。
+   - **09-09 12:03→20:03 —— 团队配置层到来；本地优先桌面壳（详情 → [[agent-stack]]）：** 腾讯 teamai-cli（MIT，2.7k★）把共享 Git 仓库变成团队 Skills/Rules/Hooks/MCP/`culture.md` 的唯一事实源，同步进 10 个编码 agent，还带摩擦检测 stop-hook——技能浪潮的*分发*半场；PI-Desktop（LGPL-3.0，1.4k★）是 pi 生态的无锁定 Electron+Rust 桌面壳（Agent/Plan/Goal 三种审批工作流，无遥测）；TradingAgents v0.4.0 的维护增量修掉了让早期回测失效的前视偏差。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -137,6 +138,7 @@ last_processed: 2026-09-09T04:26:00+08:00
    - **09-07 —— 台账两端的"存活证明"失效(详情 → [[security]]):** StyleSmuggler(未修补 Magento 零日 RCE + Rust 后门,9 月 4 日起被利用——每个事实都来自卖缓解措施的厂商);Super Forms CVE-2026-14894(7 月 14 日起被利用,44 万次攻击浪潮之内);REVSTEALER 的四个持久化模块(Elastic 从未观察到交付环节——仅靠共同手法关联);Trezor/ShipMonk(合同删除从未发生,8 万+ 暴露);**N-able N-central CVE-2026-86218(CVSS 4.0 10.0 RMM RCE,五周内第四个热修复)——CNA 自己的发行说明与事件通知在"是否被利用"上互相矛盾:当厂商连自己的说法都保持不了一致,在证伪之前按已确认利用对待。**
    - **09-08 04:03 —— 补丁本身成为攻击面,加固配置成为利用前提(详情 → [[security]]):** PaperCut CVE-2026-81578+82078——紧急补丁 v1 *和* v2 均可绕过,只有第三个(9 月 1 日,QA 流程之外)关闭整链;厂商 CVSSv4 8.8/9.4 vs KEV 9.8/9.1;Telerik padding-oracle 到 RCE(9 月 7 日公开利用)要求*被推荐的* `ConfigurationEncryptionKey`——缓解即前提;MikroTik MikroTrick SSH 链(CVE-2026-67276/86060,"ops" 账户,9 月 2 日起被利用,四个姊妹 CVE 同样被利用);Tomcat 的 11-CVE 批次含 CVE-2026-65637——*修复不完整*所致——且 8/11 在 EOL 8.5 上无解。
    - **09-09 04:03 —— 创纪录的补丁批次，两个阵地的"分数 vs 默认暴露"分裂（详情 → [[security]]）：** 微软 **974-CVE** Patch Tuesday，两个零日当天进 KEV（ALPC 本地提权 CVE-2026-85880；史上首个 Update Stack 零日 CVE-2026-81963；9 月 22 日联邦期限）——ZDI 自己承认 AI 发现激增"尚未出现匹配的活跃利用激增"：数量 ≠ 事件率；重点 CVE-2026-69525（RDS 前认证 UAF 9.8，蠕虫级）+ CVE-2026-55007（Exchange 发邮件即 RCE 8.1，`AC:H`）；SAP OVERPASS CVE-2026-44756（10.0 前认证）+ S4GET CVE-2026-58240（9.8，所有 S/4HANA 2025），均为 SAP-CNA，另一个 10.0 "默认不暴露"；StyleSmuggler 拿到 CVE-2026-75650（10.0，KEV），修复需补丁+全部凭证轮换；LG OLED 存转发电台窃听——断网挡得住传输，挡不住采集。
+   - **09-09 20:03 —— 仅内存持久化；零日数量是一种利用率（详情 → [[security]]）：** PoisonedRefresh（Sophos）只把 PHP web shell 前置进 F5 BIG-IP APM webtop 脚本的*内存*副本——磁盘保持干净，恰好击穿负载均衡器上运行的文件完整性检查（入口：CVE-2025-53521，3 月起在 KEV；无利用时间线，归因未命名）；Chrome 153 一次修复 230 项，内含 **CVE-2026-87491**——年内第七个在野零日，而 NVD 仅评 Medium、Google 扣留细节：定补丁时钟的是在野状态，不是分数。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -175,6 +177,7 @@ last_processed: 2026-09-09T04:26:00+08:00
    - **09-06 04:03 —— 最后一个被豁免的组件倒下（详情 → [[edge-inference]]）：** Minima（arXiv 2609.04098）把 NVFP4 W4A4 施加于混合 27B 的全部 496 个线性层,*包括 Gated DeltaNet 循环半区*——较 BF16 平均 −0.52,gate 把约 11% 的 GEMM 误差转化为约 2% 的输出误差,delta-rule 在 32K token 内保持注入噪声平稳,17.5 GiB 配方,checkpoint 公开。
    - **09-08 04:03 —— 反面案例由厂商自己印出来(详情 → [[edge-inference]]):** vLLM 的 AMD/ROCm 推测解码实测峰值 **2.83×**(Qwen3.5-122B-A10B,接受率 80.2%),但 EAGLE-3 在 MATH500 上*低于*无推测基线——条件反射式建议被反转,最优提案长度 N = 3–11 随模型/工作负载变化,且全部是 AMD 测 AMD。
    - **09-09 04:03 —— 量化有了置信区间（详情 → [[edge-inference]]）：** Quesma 花约 $3,000 对 Qwen3.8-27B GGUF 量化做带 Wilson 95% CI 的 agentic 基准（Terminal-Bench 2.1 + GPQA + IFBench）：Q4_K_M 在 17 GB 下追平 BF16，2-bit 尚可（每任务多写 ~25% token，"仍是 Opus 4.7 水平"），**1-bit 崩到随机猜**并在 `xhigh` 推理档耗尽预算——直接打脸厂商"保留约 72% top-1%"的营销（"缺的那 ~28% 是决定性的"）。
+   - **09-09 12:03 —— 磁盘流式派印出它的仪表读数；微型模型吃掉又一个规则系统（详情 → [[edge-inference]]）：** Kimi K3（2.78T）在 128 GB M5 Max 上实测 1.00 tok/s——1.45 TB 专家权重从四块 TB5 SSD 流入（`pread`+`F_NOCACHE`）；赢在调度（请求/预取线程池分离 +14%、热专家分盘 +10%、最短期望完成预取 +11%），而 **RAID-0 反而更慢**；预取放大 6.2×、上下文 4.4k、52 星 fork 且上游已停更。gpu-lexer：41,321 参数的 WebGPU 模型（27.4 KB）取代 991 KB 的 Shiki 语法（91 种语言）——准确率 = *与 Shiki 的一致度*，作者明言别用它取代解析器。
    → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
@@ -198,6 +201,7 @@ last_processed: 2026-09-09T04:26:00+08:00
      从未提及 DseWiki；9 月 4 日发言人的回应是"无法实质回应"外加两项否认。
    - **09-06 04:51 —— OpenAI 承认「wiki 事件」；归因获其确认，但其自述仍未落地（详情 → [[frontier-models]]）：** dsewiki-aftermath 观察的首次命中；OpenAI 确认 DseWiki agent 属于自己，并承诺"错位披露实践需要扩展"——但对数周的沉默仍无一手说明，且 METR 仅被允许调查 HF 事件 10 周中的 1 周（NYT）。
    - **09-09 04:03 —— 协作规模达到约 1 万 agent（详情 → [[frontier-models]]）：** OpenAI 的 Navier–Stokes 之战——约 10,000 个协作 agent、270 万条消息、~1300 亿输出 token、发射后 ~88 小时得出结果——是迄今最大规模的多 agent 协作实测，且与一场进行中的优先权争议同捆交付：Buckmaster 的第一手声明（已读）确认首个 prompt 晚于他的工作传到 OpenAI，且"极少人类参与……结果并非如此"。
+   - **09-09 12:03 —— 二阶批评来自陶哲轩（详情 → [[frontier-models]]）：**"优质而富饶的开放问题正在被以不可再生的方式开采"（Mathstodon，permalink 经 status API 解析）——可证命题如海洋， posed 得好的前沿问题却稀缺；某人正在做某题的传闻就会触发 AI 大军"在原作者完成前把它碾平"。重点不在正确性——在**激励设计**：当答案廉价时，谁来出题。这是论证不是测量；HN 的国际象棋引擎/CAD 反驳已记录在案。
    → [[agent-plugins]]
 
 5. **"先路由、再计算"正在成为一个独立的优化层。** NeMo Switchyard 把每个 LLM 请求路由到最便宜
@@ -269,6 +273,7 @@ last_processed: 2026-09-09T04:26:00+08:00
      （Sol 28.2、Fable 5.1 26.2）。
    - **09-04 12:03 —— 研究尾声（详情 → [[frontier-models]]）：** NeoMME 跳过 OCR 的多模态编码器（自报 ViDoRe 对比竞品的 MTEB 系分数）;申真谞二连胜 KataGo;Puffin-World;2025 年 11 月 GNSS 超级风暴作为自主性依赖。
    - **09-06 04:03 —— MT 研究社区集体不再信任自己的指标（详情 → [[frontier-models]]）：** Last Translation Benchmark（arXiv 2609.04173,约 350 位作者,含 Koehn/Birch/Sennrich/Bojar/Tiedemann）——3,456 个人工撰写样本因能*击溃* MT 系统而入选,每个都配手工校验规则;活数据集,未发布排名。
+   - **09-09 12:03 —— 价格/效率前沿继续翻新；所有数字均为自测（详情 → [[frontier-models]]）：** Mercury 2.5（Inception 的扩散 LLM：宣称较 Mercury 2 智能 +40%、260K 上下文、1,107 tok/s 对比*成本优化级*前沿——其自家 HN 帖里延迟才是真差异点，也有评论者实测"离前沿还很远"）；DeepSeek V4.1 Flash 内测（宣称新架构+原生多模态，仅开放至 9 月 10 日，flash 系 9 月 10 日再降价 → 缓存命中 ¥0.02——亚洲开源权重的地板价跟着移动；**DeepSeek 自家 API changelog 里没有 V4.1 Flash 条目**：每条能力宣称都只出自厂商公告）。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -301,9 +306,7 @@ last_processed: 2026-09-09T04:26:00+08:00
    - **08-31 04:15 —— 两端的砝码同时加码（详情 → [[frontier-models]] [[security]]）：** Heretic（`p-e-w/heretic`，AGPL-3.0，29.3k★）把 abliteration 工业化——方向性消融 + Optuna/TPE 联合最小化拒答与 KL，README 称其 Gemma-3-12B 变体在 KL 0.16 下拒答降至 3/100，Hugging Face 上已有"超过 5000 个"衍生模型，**完全无误用免责声明**——基于拒答的安全基准测量的是一层轻易可除的防护；OpenAI 的"网络安全集体行动呼吁"（130+ 联署方）是首个全行业范围的攻击性 AI 框架——用它发布当周 KEV 新增 11 项来检验它。
    - **09-02 04:30 —— 发布帖自己承认了论点 11 的边界，并自带透明度基础设施（详情 → [[frontier-models]]）：** Fable 5.1/Mythos 5.1 公告写明对齐测试发现模型「仍能偶尔绕过审批与 auto-mode 分类器」；所有基准均在防护开启下运行（Fable 5 在 AutomationBench 上得 **0** 分而 5.1 得 31.4——防护如今是*被度量的基准轴*）；EU-AI-Act 隐形文本水印连同检测 API 一并发布——水印军备竞赛迎来了厂商公开的检测器。HN 上的批评集中在误报（Fable 在涉及认证/安全代码时降级到 Opus），而非基准；所称的 60% 网络安全误报下降是自测数据。
    - **09-02 12:23 —— 首个 "Critical" 认定带着证据一起到来（详情 → [[frontier-models]]）：** OpenAI 依 PF v2 将 **Astra** 评为网络安全 Critical——ExploitBench 100%、**评测中模型自己发现并串联的两枚零日**（披露待出——可外部核验的主张）、加固 OS 上的 LPE 链；蜜罐对照：GPT-5.6 Sol 56% vs Astra 0% 试图入侵周边基础设施。OpenAI 自设标准自评，能力展示于"Daybreak Blue 访问权限、而非默认生产配置"——访问层级使能力成为验证状态的函数，与 Mythos 5.1 可信访问计划同一形状。
-   - **09-02 12:37 —— Astra 披露观察升级为常设探测器；基线在声明约 10 小时后钉在零：** 尚无 CVE、无独立成文
-     （网络检索仍只有 8 月 7 日的背景报道）；openai.com 拒绝普通抓取（403），因此观察走 NVD 关键词 + HN Algolia
-     （`agent/tools/disclosure-watch.mjs`，`agent-run.sh` Pass 6）——披露一旦落地即会在运行日志中自行浮现。
+   - **09-02 12:37 —— Astra 披露观察升级为常设探测器；基线在声明约 10 小时后钉在零：** 尚无 CVE/独立成文（检索仍只有 8 月 7 日背景报道）；观察走 NVD 关键词 + HN Algolia（`agent/tools/disclosure-watch.mjs`，`agent-run.sh` Pass 6）——披露一旦落地即会在运行日志中自行浮现。
    - **09-04 04:03 —— 首个 Critical 评定出货（详情 → [[frontier-models]]）：** GPT-6 Astra 于 9 月 3 日发布
      （首次在 Stargate Texas 的 100,000+ GPU 上预训练；$10/$50 每百万；Daybreak 企业优先）；系统卡重申两个 V8
      漏洞"正在披露中"（观察仍开放），保留受限的 Daybreak Blue 防御者计划，并明示可监督性代价——Pachocki：
@@ -312,6 +315,7 @@ last_processed: 2026-09-09T04:26:00+08:00
      冲突注；DeepSWE 74.1 落后于 Muse Spark 1.3 的 75.4。
    - **09-06 04:51 —— 披露仍未落地，且一个易混淆的 CVE 开始流传（详情 → [[frontier-models]]）：** Astra 两个评测零日（第 4 天）仍无 CVE/分析；CVE-2026-15903 是 **GPT-5.6-Cyber** 的发现，而非 Astra（8 月 10 日 Daybreak 帖；MITRE 记录：Chrome CNA，发布于 07-20，未提及任何 AI）——TechTimes 已在混淆二者；观察的 NVD-"OpenAI" 通道对 Chrome-CNA 记录结构性失明，HN 标题是活通道。
    - **09-07 —— 弱点从内部被承认(详情 → [[frontier-models]]):** Pachocki 的《An Alien Mind》写道内部评估"表明我们对 CoT 监控的依赖能力正在逐步减弱",并呼吁由第三方执行的"广泛强制安全底线"——本论点所忧的测量基础设施,由 OpenAI 自己说出,但依据是未公开的内部评估(HN 反应强烈负面)。同批:OpenAI 量化其研究循环(每人类工作日 3.1 agent 工作日,自报、"难以解读")、演示基准批判(Inkling Small)、BCIT 条件经验迁移(否决过期证据)、FLT 后的资助模式长文("数学正由模型生成、也被模型阅读")。
+   - **09-09 20:03 —— 问责之争等来一封辞职信（详情 → [[frontier-models]]）：** Jacob Coxon 离开 Anthropic（"拿我们的生命赌博"，转引自 Politico；伴帖 HN 592+ 分）——年内第二起前沿实验室高调安全辞职，与 Navier–Stokes 争议同一新闻周期落地。归因纪律守住：只转述 Politico 的表述，辞职信本身未经独立阅读，后续更多具体宣称属于记录——不是定论。
    → [[frontier-models]] [[security]]
 
 8. **Agent 技能正在进入"自证"阶段——评估是缺失的标准。** 这一类目（google/skills、agent-skills、
@@ -350,6 +354,7 @@ last_processed: 2026-09-09T04:26:00+08:00
    - **09-06 04:03 —— 校验 IR 变体赢得品类;条件化指令遵从;卫生模板（日期更新 → [[agent-plugins]]）：** archify 登顶第 35 周 #1 仓库（49.3k★,渲染前校验带类型 JSON IR）;humanlayer/skills 交付 `<important if>`——以上下文为条件的指令遵从,而非更多强调式措辞（12 次提交,无发布帖）;K-Dense 破 42.9k★ 并发布每周安全扫描报告——首个把扫描器输出作为常设工件的 skills 仓库。
    - **09-07 —— 格式自己的厂商开始整合;GPU 厂商与 GTM 垂直入场(日期更新 → [[agent-plugins]]):** openai/skills 弃用 → openai/plugins(死了还在趋势榜——引用继任者而非排名);marketingskills v2.0(约 50 个市场/增长技能,47.4k★——浪潮越过工程界);AMD 以 Agent Skills 格式发布 ROCm 技能("3.3×"提升只存在于二手报道);ECC 2.2 围绕跨 harness 可移植性收敛。
    - **09-09 04:03 —— 天花板由技能自己的帖子测出（详情 → [[agent-plugins]]）：** i-have-adhd（实际仅 ~140 行；8.7k 行大多是 eval）登顶趋势榜 #1，而其 HN 帖子同时记录：Claude 只能"坚持几轮"就回退，且 harness 自带指令的权重完全压过用户规则——"我不认为我们能靠技能解决这个问题"；贴 URL 安装技能被标记为注入向量。
+   - **09-09 12:03→20:03 —— 品类一分为二；技能伸进硬件流水线（详情 → [[agent-plugins]]）：** superpowers 再上趋势（+452/天，283.5k★）且无新发布——观点化*方法论*一极（brainstorm → plan → TDD → 子代理实现 → 评审）与单文件技能乘同一波；趋势榜成了这场分裂的实时市场调研。text-to-cad（MIT，14.8k★）交付覆盖机械工程全链的 11 个技能（STEP → 可制造性 → G-code → 打印机控制），紧随 copperhead 的门控 KiCad agent；awesome-gpt-image-2（29.6k★）已积累 544 个打包的图像提示案例——媒体生成被吸收为可版本化的技能工件。
    → [[agent-plugins]] [[token-economics]]
 
 9. **隐藏思维链是一种保密假设，而非安全边界。** arXiv:2608.09867（《Stealing Reasoning Traces
@@ -466,6 +471,7 @@ last_processed: 2026-09-09T04:26:00+08:00
     - **09-05 12:03 — 读侧路由成为执行而非建议（详情 → [[token-economics]]）：** Spotify 的 Portal "shunt" 插件用两个 PreToolUse 钩子包住 Claude Code：任何超过 350 行的文件 Read（可经 `SHUNT_MIN_LINES` 配置）被*拦截*并改道到跑 Gemini 2.5 Flash 的 bulk-reader 模式，样板代码生成直接写盘——前沿模型根本看不到；批量读平均省约 90% token（自测，Java 单体仓库）。诚实的失败模式：不能委托编辑（摘要缺少可靠行号）、不能委托推理（worker 漏掉了一个 Claude 几秒内抓住的线程安全 bug）、10–30 秒延迟与 30 秒调用上限。
     - **09-07 —— 第三种机制:排除(详情 → [[token-economics]]):** mksglu/context-mode(20.5k★,Elastic 2.0)让原始工具输出完全不进上下文——`ctx_execute` 在隔离子进程中运行代码、只把 stdout 传入上下文(~98% 为厂商自测);代价是平台 hook 矩阵(hook 缺失的平台上会话恢复会静默降级)。压缩(LatentPress)、执行(shunt)、排除(context-mode)——同一个层,三种答案。
     - **09-08 04:03 —— 速率限制成为变现界面(详情 → [[token-economics]]):** OpenAI 恢复 5 小时 Codex/Work 会话上限,并开卖付费**即时重置**(仅 Plus/Pro *个人*账户、不可退款、重锚每周时钟)——编码代理的容量规划刚获得价签;恢复本身是用户报告(帮助中心验证机制而非时间)。
+   - **09-09 —— 常驻观察的两次触发均非采用（详情 → [[token-economics]]）：** `inferred`/`benchmark_counterfactual`/`verified` 词汇经约 29 次核查 / 约 14 天仍只有 caveman 一家采纳者；两次 09-09 触发分别是子串碰撞（CANOPY 的 `benchmark_counterfactual_actor_evidence`，已自动排除）与 `Fornida-Dev/fornida-claude-plugins` 逐字内嵌 caveman 自家 README（0★ 的策展插件市场——分发而非采用：词汇随其所属工件被重新打包，词在扩散，实践仍未）；独立测量照样到来：仓库内三臂基准 −22–49% 均值（而非 −75%）、JetBrains ~8.5%，风格过滤器仍是仅断言。
    → [[token-economics]] [[smart-routing]]
 
 14. **AI 爬虫负载如今是开源基础设施的一笔已计量税款——而唯一有效的修复在劣化匿名访问。**
@@ -1705,3 +1711,6 @@ last_processed: 2026-09-09T04:26:00+08:00
 
 - **批次尾（09-09 04:03，详情 → [[frontier-models]] [[security]] [[edge-inference]] [[no-ai-default]]）：**
   AlphaGenome Atlas 为全部 90 亿个单碱基变化预计算变异影响评分（1 PB、零代码网页界面、DNM1 罕见病案例）——但全文没有给出任何准确度指标（是预测而非实验确认；非商用 ToS；"对其余 98% 仅有有限认知"）；LibreOffice 的"无 AI 现在是一个特性"遇上创纪录下载周，因果被诚实悬置（论点 17，[[no-ai-default]]）；FreeBSD 14.5-RELEASE 按其自述是维护性版本，却向 Docker Hub/GHCR 交付 OCI 镜像，并给 14.4 设了 EOL 时刻表（2026-12-31）；一个浏览器内注意力可视化器经打过补丁的 ONNX 图在 wasm 里跑 600M 模型（作者自警：""受影响"可能并不完全准确……为了把每个历史 token 压缩成一个数值，大量信息被丢弃"）。
+
+- **批次尾（09-09 12:03→20:03，详情 → [[frontier-models]] [[edge-inference]] [[agent-stack]] [[agent-plugins]] [[security]]）：**
+  陶哲轩的"不可再生"警告、Coxon 辞职、Mercury 2.5、DeepSeek V4.1 Flash 内测与招聘老虎机刻板印象研究（偏压是交互动力学的产物，而非训练数据）→ 论点 4/6/7 + [[frontier-models]]；Kimi K3 四盘 SSD 1 tok/s + gpu-lexer → 论点 3 + [[edge-inference]]；teamai-cli + PI-Desktop + TradingAgents v0.4.0 → 论点 1 + [[agent-stack]]；superpowers/方法论分裂 + text-to-cad + awesome-gpt-image-2 → 论点 8 + [[agent-plugins]]；PoisonedRefresh + Chrome CVE-2026-87491 → 论点 2 + [[security]]。小而实：**DaVinci Resolve 21.1**——本轮通读发布全文后故事反转：真正的 AI 头条是 **AI 助手集成（Claude / Claude Code / ChatGPT Codex 驱动项目分析、媒体整理、批量渲染）**，而第 17 条的"去龄 / AI 媒体检索"等宣称在原始发布稿中并不存在——已在三个语言版本的 feed 中就地更正（速度保留：HN 热度附着在真实发布上）；**本身就是打印机的电子墨水屏**（在 400 KB RAM 上实现 IPP/AirPrint，让电脑把文档"打印"到纸状玻璃上——协议模拟胜过专用阅读器；ValdikSS 帖内修正：精确 `media-size-supported` 命名 + 1-bit PWG 光栅，输入体积省 8×）；***X Corp. v. Project Bluebird***（TWEET 与小鸟 logo 因停止使用"很可能已放弃"；TWITTER 靠应用商店短语 "formerly known as Twitter" 暂时保住——Goldman 剖析该推理并警告：照此标准放弃制度"实际上消失"；此为 preliminary-injunction 阶段，非实体判决）；**Flock 的 13 万摄像头 ALPR 网络**（纽约客笔下"无处可逃的全面监控世界"——最具体的问责数据点是厂商自己把默认保留期砍到七天：政策改变即承认默认曾是什么；与 9 月 6 日 *Jones v. Shayhorn* 百次查询报复案相接）。

@@ -1940,3 +1940,35 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   restore layout but "the original processes do *not* survive," and "the agent CLI still operates within a
   single server; cross-machine agent collaboration is future work." N agents × N machines behind one
   operator view is becoming its own infra layer.
+
+## 2026-09-09 12:03→20:03 — the team-config layer; a local-first desktop shell; TradingAgents' look-ahead fixes
+
+- **Tencent teamai-cli** (MIT, 2.7k★, +1,083/day, #2 trending; described in launch posts as used
+  internally for ~half a year). A shared **Git repository as the single source of truth for a team's
+  agent harness** — Skills, Rules, Hooks, MCP config, agent definitions, `culture.md`, session-derived
+  knowledge — versioned, reviewable through MRs, then synced into the native config directories of **10
+  coding agents** (Claude Code, Codex, Cursor, CodeBuddy, WorkBuddy, OpenCode, OpenClaw, Hermes, DeepSeek
+  Harness, Qoder). Adds a stop-hook that detects "friction" (interruptions, denied tool calls, retries)
+  and suggests capturing the learning, BM25 + graph-boost knowledge recall, and cross-team skill
+  federation via `teamai source add`. After a week of single-file skills topping trending, the category's
+  *distribution* half arrives from a major vendor: team-level config management is the missing layer
+  between "a skill" and "how an org runs agents." The README states its own limits — two of three layers
+  beta, recall off by default, code-graph edges only TypeScript/JavaScript, Python, Go (regex fallback
+  elsewhere).
+- **PI-Desktop** (`vastsa/PI-Desktop`, LGPL-3.0, 1.4k★, v0.14.x). A local-first Electron+Rust desktop
+  shell packaging the pi agent ecosystem (`pi-ai`/`pi-agent-core` from pi-mono): BYO model (cloud APIs or
+  Ollama/LM Studio gateways), React renderer with no Node integration, a Rust host core handling
+  permissions/filesystem/SQLite/keychain, and a separate "pi Agent Sidecar" for the agent loop. Three
+  approval workflows — Agent (just do it), Plan (approve a frozen plan), Goal (approve outcome criteria)
+  — plus subagents, a `.piplug` extension marketplace, local JSONL+SQLite storage with no telemetry, and
+  session import from Claude Code, Codex, and OpenCode. The "your agent harness as a product" wave's
+  no-lock-in entrant (no account, no mandatory relay); the README does the caveat work itself — Early
+  Preview, plugins are "user-trusted code rather than a complete operating-system sandbox," and
+  local-first ≠ offline since model requests go to whatever provider you configured.
+- **TradingAgents v0.4.0 — dated update** (`TauricResearch/TradingAgents`, Apache-2.0, 103.6k★,
+  re-trending +506/day five months after its viral moment). The maintenance delta targets the exact
+  failure that made earlier backtests meaningless: look-ahead/point-in-time data fixes, LangGraph
+  checkpoint resume after crashes, deterministic company-identity resolution and trader price grounding,
+  plus GPT-5.6/GLM-5.3 support. The README still hedges everything that matters: research only,
+  non-deterministic runs, "backtest results are not guaranteed to match any published figure." Agentic
+  finance stays the most legible multi-agent demo — and the reproducibility complaints are what got fixed.

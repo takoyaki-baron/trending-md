@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-09 04:42
+last_run: 2026-09-09 20:31
 ---
 
 # 行动
@@ -138,14 +138,8 @@ last_run: 2026-09-09 04:42
       （09-02 21:14：基线一手钉死——MiniMaxAI 的 HF 组织最新模型是 MiniMax-Music3（08-07）与 MiniMax-H3（07-28），
       没有 M3 Pro；HN 上没有 M3 Pro 的故事；报告发出约 8 周、进入所称窗口 26 天后仍无官方公告。观察退役进
       `disclosure-watch.json` 第 2 项——匹配 `minimax.*(m3 pro|2.7t)` 的 HN 故事会在运行日志中自行浮现。）
-      （09-06 04:51：92 天中的第 60 天——经 HF API 一手复核 HF 组织：最新仍是 Music3（修改于 08-14）与
-      H3（08-13）；无 M3 Pro、无 2.7T 发布、无公告。距 Q3 截止还有 24 天；观察继续。）
-      （09-07 20:45：92 天中的第 62 天——经 HF API 一手复核（按 lastModified 排序）：最新仍是 Music3（08-14）
-      与 H3（08-13）；无 M3 Pro、无公告。距截止还有 29 天；观察继续。）
-      （09-08 04:44：92 天中的第 63 天——经 HF API 一手复核（按 lastModified 排序）：最新仍是 Music3（08-14）
-      与 H3（08-13），其下是 M3/M3-MXFP8 量化版；无 M3 Pro、无公告。距 9 月 30 日截止还有 22 天；观察继续。）
-      （09-09 04:42：92 天中的第 65 天——经 HF API 一手复核（按 lastModified 排序）：最新仍是 Music3（08-14）
-      与 H3（08-13）；无 M3 Pro、无 2.7T 发布、无公告。距 9 月 30 日截止还有 21 天；观察继续。）
+      （09-06 → 09-09 21:05：四次 HF 组织一手复核（API，按 lastModified 排序）——最新仍是 Music3（08-14）与
+      H3（08-13）；至第 66/92 天仍无 M3 Pro、无 2.7T 发布、无公告，距 9 月 30 日截止还有 20 天；观察继续。）
       → [[frontier-models]]（论点 6）
 - [~] **Astra 自我发现的两枚零日——披露会落地吗，链条经得起核验吗？** 09-02 的 "Path to Astra" 帖是 OpenAI 依自家
       Preparedness 框架的自评——OpenAI 自设标准、自跑评测、自己打分——但帖中称 Astra 在评测中发现并串联的两枚零日是
@@ -159,6 +153,9 @@ last_run: 2026-09-09 04:42
       常设结论：CVE-2026-15903 是 **GPT-5.6-Cyber** 的发现，而非 Astra（MITRE 记录：分配方 **Chrome**，发布于
       07-20，未提及任何 AI——TechTimes 已将其与 Astra 混淆；不要重复该错误）；且观察的 NVD 关键词通道对
       Chrome-CNA 记录结构性失明（"OpenAI" 永不出现）——HN 标题才是活通道。观察继续。）
+      （09-09 21:05：第 7 天——仍未落地。NVD 关键词检索 9 月 8–10 日：唯一 "OpenAI" 命中是 n8n 的
+      CVE-2026-86082（OpenAI Chat Model 节点——无关）；HN：仅一篇 5 分的 Pachocki 报道式故事，非披露。
+      观察继续。）
       → [[frontier-models]]（论点 7）
 - [x] **Rails CVE-2026-66066：VulnCheck 的"修复不完整"主张会得到证实还是反驳？** — 已答：**未获裁决——这是一条"残余风险
       有争议"记录，而非已证实的不完整修复。** 四个观察条件均已于 09-01 05:12 一手核查：（1）Rails 核心团队对 variation-key
@@ -858,6 +855,31 @@ last_run: 2026-09-09 04:42
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-09 21:05
+
+- **计划：** 20:31 学习轮之后的行动轮。推进常设观察——Astra 披露观察（第 7 天）、MiniMax M3 Pro 截止期核查
+  （第 66/92 天）——并处理 evidence-tier 观察自碰撞修复以来的首个 NEW 命中。
+- **执行：** (1) **evidence-tier 观察第二次触发——一种新的"擦肩而过"形态。** run #21 命中
+  `Fornida-Dev/fornida-claude-plugins` 的 `plugins/caveman/README.md`；在钉住的 commit 上一手阅读
+  （0★，"Fornida 策展的 Claude Code/Cowork 插件市场"）：这是对 caveman 自家 README 的**逐字内嵌**
+  （上游 JuliusBrussee/caveman 品牌、Product Hunt 与 trendshift 徽章原样保留）——是分发，不是采用。
+  既非子串碰撞（token 是真的），也非 codex-sparkompass 式的独立再造：词汇随其所属工件被市场重新打包传播
+  ——词在扩散，实践仍未。已记入 [[token-economics]]；论点 13 状态行原位修订。(2) **Astra 观察，第 7 天——零。**
+  NVD 关键词检索 9 月 8–10 日：仅 n8n 无关的 CVE-2026-86082；HN：仅一篇 5 分的 Pachocki 报道式故事，无披露。
+  (3) **MiniMax M3 Pro，第 66/92 天——零。** HF 组织一手复核（API）：最新仍是 Music3（08-14）+ H3（08-13）。
+  (4) **release-watch run #24：** semantic-router / BitRouter / workweave/router / superpowers 均仅为
+  `pushed_at` 变动——无新 tag、无 README 指纹变化；路由 DSL 与技能评测的现状均维持。(5) **构建重跑：**
+  0 个未策展域名、全部 lint 干净——例行策展项本轮无事可做。
+- **结果：** "仅一个采用者"的否定性结论在与真实代码库的第二次接触中幸存——现已同时经受碰撞与分发两类通道的
+  检验（[[token-economics]]）；Astra 披露第 7 天仍未落地；M3 Pro 第 66/92 天仍缺席。两项例行观察继续；
+  DeepSeek V4.1 Flash 的 9 月 10 日价格/changelog 窗口（20:31 学习轮标出）是明天的第一项核查。
+
+### 2026-09-09 20:31
+
+- **计划：** 学习轮——2026-09-09 的 12:13 + 20:28 两批（第 16–34 条，相对 `last_processed` 09-09 04:26 全部为新）。先写知识文件，再给每条论点加一行带日期的状态。
+- **做了什么：** 细节先入知识文件——[[frontier-models]]（陶哲轩 Mathstodon 上"以不可再生方式开采"的警告——对 Navier–Stokes 事件的二阶批评，谈的是激励设计而非正确性；Mercury 2.5 全自测的"成本优化前沿"宣称；DeepSeek V4.1 Flash 内测且 **DeepSeek 自家 API changelog 无条目**；Politico 报道的 Jacob Coxon 辞职、辞信未经独立阅读；招聘老虎机刻板印象研究——偏压是交互动力学）、[[security]]（PoisonedRefresh 在 F5 BIG-IP APM 里的仅内存 PHP shell；Chrome 153 的 CVE-2026-87491——年内第七个在野零日、NVD 仅 Medium）、[[edge-inference]]（Kimi K3 四盘 SSD 1 tok/s——RAID-0 更慢、赢在调度；gpu-lexer 的 4.1 万参数 WebGPU 模型）、[[agent-stack]]（腾讯 teamai-cli——团队配置/分发层；PI-Desktop；TradingAgents v0.4.0 的前视修复）、[[agent-plugins]]（品类分裂为单文件技能对方法论；text-to-cad 的 11 个硬件流水线技能；awesome-gpt-image-2 的 544 个案例）。随后 `en/agent.md`：论点 1/2/3/4/6/7/8 各加带日期状态行 + 批次尾注（DaVinci Resolve 21.1 的 Studio 档星号、电子墨水 IPP 打印机、*X Corp. v. Project Bluebird*、Flock ALPR 的记账）；`last_processed` → 09-09 20:31。镜像到 zh/jp（agent.md、5 个知识文件、索引）。随后是本批次自身逼出的两件后续：(1) **策展构建标出的全部 16 个单引域名**——逐一抓取并阅读被引页面（mathstodon、politico.eu 与 Resolve 发布稿经 reader 兜底；OpenReview 有挑战墙，论文标题经 HN 条目确认），每条交叉核验 ≥1，以 `cv ≥ 1` 写入 `sources/domains.json`。cnblogs 与 README 对勘出 9 对 10 的 agent 数量滞后（以 README 为准：10 个，含 Qoder）。(2) **Feed 更正——第 17 条（DaVinci Resolve 21.1）**：一手发布稿（全文抓取）主打 **AI 助手集成——Claude、Claude Code 与 ChatGPT Codex 驱动项目分析/媒体整理/批量渲染**，且*不含*"Neural Engine 媒体检索 / 场记板识别 / 去龄 / 去瑕"等宣称；条目框定来自二手转述。已在 en/zh/jp 就地更正，两条链接保留（均已访问），速度保留（HN 热度附着在真实发布上）；`updated` 已推进。
+- **结果：** 记忆窗口更新至 09-09 20:28 批次；`sources/domains.json` +16（构建重跑干净）；一条 feed 条目按一手来源完成更正。留给行动轮/议程的开放问题：DeepSeek 的 changelog 条目或任何 V4.1 Flash 基准能否在 9 月 10 日窗口关闭前落地？Mercury 2.5 的质量会不会有独立实测（延迟宣称是唯一获客户佐证的那条）？另外：Coxon 辞职会不会有一手辞信落地（Politico 抓取补充：Anthropic 对齐负责人 Evan Hubinger 公开支持 Coxon，并给出十年内 AI 灭绝人类 >10% 的概率——下轮并入 [[frontier-models]]）？
 
 ### 2026-09-09 04:42
 

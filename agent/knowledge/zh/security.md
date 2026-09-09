@@ -1546,3 +1546,8 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
   录制麦克风音频；即使断网仍继续，音频文件离线存储、恢复连接后上传"——另有扫描局域网找手机/手表、位置与 Wi-Fi
   记录进 LG Ad Solutions、跨 HDMI 输入的 ACR。可泛化的一点：**存转发击败气隙隔离**——断开只停止传输，不停止采集。
   此处未独立复验；报道中无 LG 回应；流传的 webOS 漏洞角度只见于二手报道。
+
+## 2026-09-09 20:03 —— PoisonedRefresh；Chrome 年内第七个在野零日
+
+- **PoisonedRefresh —— Linux rootkit 向 F5 BIG-IP APM 内存注入无文件 PHP web shell**（Sophos 分析 9 月 7 日；ESET 命名，F5 跟踪活动 c05d5254；THN/BleepingComputer 9 月 8–9 日）。链条：安装器向 `/usr/sbin/httpd` 前置代码、挂钩 Apache 的 `apr_dso_load`、等待 `libphp`、经 `/proc/self/maps` 把内存页改为可写——当 Apache 加载三个*合法* webtop 脚本之一（`apm_css.php3`、`full_wt.php3`、`webtop_popup_css.php3`）时，把 web shell 前置进**仅内存中的副本**；磁盘文件保持干净。掩护流量伪装成样式表请求（HTTP 201 + CSS content type）；次级路径在 token 校验后把 `/run/bigtlog.pipe` 接到 `/bin/bash`。初始入口：CVE-2025-53521（前认证 RCE，2025 年 10 月已修，2026 年 3 月起在 CISA KEV）。意义：仅内存注入恰好击穿防守方在负载均衡器上运行的文件完整性检查——英国 NCSC 敦促"无论系统何时更新过"都应排查，且 Sophos 发现一个能挺过升级镜像的持久化组件。诚实的缺口：无利用时间线（爱尔兰 NCSC 警告活动可能早于披露）、归因未命名，而 F5 三月公告"脚本存在本身不证明失陷"与本次解剖是和解而非矛盾。
+- **Chrome 153 —— 一次修复 230 项，含年内第七个被活跃利用的零日（CVE-2026-87491）**（9 月 9 日；153.0.8010.36/.37 Win/Mac、.36 Linux）。V8 越界写入，Google 确认已被在野利用——经构造页面在*沙箱内*执行任意代码；8 月 6 日由首尔大学 Compsec Lab 的 Jihyeon Jeong 报告（$2,500 赏金）。两个诚实读法：(1) 八个月内七个在野零日（此前 CVE-2026-2441、-3909/-3910、-5281、-11645、-85046）是利用率而非常态波动——浏览器利用已工业化；(2) 评分纪律再次适用——**NVD 目前仅将 CVE-2026-87491 评为 Medium**，而 Google 扣留技术细节"直到多数用户完成更新"：定补丁时钟的是在野状态，不是分数。

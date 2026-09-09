@@ -2290,3 +2290,27 @@ the scorer record is messy in every case.
   HDMI inputs. The generalizable point: **store-and-forward defeats air-gapping** — disconnection stops
   transmission, not collection. Not independently re-verified; no LG response in the piece; the circulating
   webOS-vulnerability angle exists only in secondary coverage.
+
+## 2026-09-09 20:03 — PoisonedRefresh; Chrome's seventh in-the-wild zero-day
+
+- **PoisonedRefresh — a Linux rootkit injects a fileless PHP web shell into F5 BIG-IP APM memory** (Sophos
+  analysis Sep 7; ESET-named, F5-tracked activity c05d5254; THN/BleepingComputer Sep 8–9). The chain: an
+  installer prepends code to `/usr/sbin/httpd`, hooks Apache's `apr_dso_load`, waits for `libphp`, flips
+  memory pages writable via `/proc/self/maps`, and — when Apache loads any of three *legitimate* webtop
+  scripts (`apm_css.php3`, `full_wt.php3`, `webtop_popup_css.php3`) — prepends a web shell **to the
+  in-memory copy only**; disk files stay clean. Cover traffic mimics a stylesheet fetch (HTTP 201 + CSS
+  content type); a secondary path links `/run/bigtlog.pipe` to `/bin/bash` after a token check. Initial
+  access: CVE-2025-53521 (unauth RCE, patched Oct 2025, CISA KEV since March 2026). Why it matters:
+  memory-only injection defeats exactly the file-integrity checks defenders run on load balancers — the UK
+  NCSC urges investigation "regardless of when the system was updated," and Sophos found a persistence
+  component that survives upgrade images. The honest gaps: no exploitation timeline exists (Ireland's
+  NCSC warns activity may predate disclosure), attribution is unnamed, and F5's March advisory ("script
+  presence alone doesn't prove compromise") is reconciled — not contradicted — by this dissection.
+- **Chrome 153 — 230 fixes, with the year's seventh actively-exploited zero-day (CVE-2026-87491)** (Sep
+  9; 153.0.8010.36/.37 Win/Mac, .36 Linux). V8 out-of-bounds write, confirmed by Google as exploited in
+  the wild — code execution *inside the sandbox* via a crafted HTML page; reported Aug 6 by Jihyeon Jeong
+  (Seoul National University Compsec Lab, $2,500 bounty). Two honest readings: (1) seven in-the-wild
+  zero-days in eight months (after CVE-2026-2441, -3909/-3910, -5281, -11645, -85046) is a utilization
+  rate, not a fluke — browser exploitation is industrialized; (2) the scorer discipline applies again —
+  **NVD rates CVE-2026-87491 only Medium**, and Google withholds technical details "until a majority of
+  users are updated": the in-the-wild status, not the score, is what sets the patch clock.

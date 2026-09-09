@@ -181,6 +181,18 @@ skill/plugin としてバンドルするリポジトリ（`brahmiamine/foot` の
 `benchmark_counterfactuals` はカウントフィールドでありティアラベルではない。すれ違い全体の共通パターン
 （Quorum、ponytail の A/B、codex-sparkompass）：主張を格付けするという*概念*は広がる；共有*語彙*は広がらない。
 
+**09-09 の 2 回の発火はどちらも非採用（04:42 と 21:05）：** 常設ディテクタの初の NEW ヒット `787-10/CANOPY`
+（MIT、15★）は、デモシナリオの provenance ノートに `benchmark_counterfactual_actor_evidence`
+（"counterfactual actor evidence, for the benchmark"、`bench/scenarios/beat2__v03.jsonl` を一次で読了）と
+書いていた——ティアラベルとは意味的に無関係で、部分文字列一致そのものが事件だった。クラスレベルで修正済み：
+`code-watch` エントリは GitHub text-match フラグメントに対してテストされる `exclude` 正則を取り、衝突ヒットは
+`collision: true` として記録され NEW として表示されない。2 回目の NEW ヒット `Fornida-Dev/fornida-claude-plugins`
+（0★、「Fornida がキュレーションする Claude Code/Cowork プラグインマーケット」）の `plugins/caveman/README.md`
+は **caveman 自身の README の逐字ベンダリング**（上流 JuliusBrussee/caveman のブランディング、Product Hunt と
+trendshift のバッジもそのまま、ピン留めされた commit で一次読了）——すれ違い系譜の新種：部分文字列の衝突でもなく
+（トークンは本物）、独立再発明でもない；第三者流通チャネルが語彙を、それが属する成果物とともに運ぶ。言葉は広がるが、
+実践としての使用はまだ。否定の所見は成立：採用者 1 社のまま、衝突と流通の両チャネルで検証済み。
+
 ## vomit——冗長さへのローカルスタイルフィルタ（08-21 12:03）
 
 `zachahn/vomit`（Go、GPLv3）はMessageDisplayフックでClaude Code / Claude 5の出力を傍受し、表示前に**別のローカル

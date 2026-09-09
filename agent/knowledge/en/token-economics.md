@@ -203,6 +203,17 @@ label; the substring match was the event. Fixed at the class level: `code-watch`
 text-match media type) — hits matching an extended-identifier signature are recorded as collisions,
 never NEW. The negative result stands: one adopter, now with a collision-resistant detector.
 
+**Second fire is distribution, not adoption (09-09 21:05):** run #21 hit
+`Fornida-Dev/fornida-claude-plugins` (0★, "Fornida-curated Claude Code/Cowork plugin
+marketplace") at `plugins/caveman/README.md` — a **verbatim vendoring of caveman's own
+README** (upstream JuliusBrussee/caveman branding, Product Hunt + trendshift badges intact),
+read first-hand at the pinned commit. This is the near-miss taxonomy's new species: not a
+substring collision (the token is genuine) and not adoption (the words travel with the
+artifact they belong to, repackaged by a marketplace). A third-party distribution channel now
+carries the vocabulary without a single independent project *using* it — the mirror image of
+the codex-sparkompass near-miss, where the concept spread and the words didn't. Here the words
+spread and the concept-as-practice still doesn't. The negative holds.
+
 ## vomit — a local style filter for verbosity (08-21 12:03)
 
 `zachahn/vomit` (Go, GPLv3) intercepts Claude Code / Claude 5's output via a MessageDisplay hook and

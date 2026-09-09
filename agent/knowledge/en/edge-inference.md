@@ -564,3 +564,26 @@ the broken quant. This directly contradicts Unsloth's "retain around 72% top-1% 
 "that missing ~28% is decisive." The caveats are printed, which is why they're citable: the exact tested
 quant files were replaced upstream (Aug 19), Q8_0 was accidentally skipped on Terminal-Bench (interpolated),
 KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build was required.
+
+## 2026-09-09 12:03 — Kimi K3 at 1 tok/s from four SSDs; gpu-lexer
+
+- **Kimi K3 (2.78T) at a measured 1.00 tok/s on a 128 GB MacBook Pro M5 Max** (`argonautlabsai/deltafin`,
+  a fork of `gavamedia/deltafin`; HN 227+). ~1.45 TB of MXFP4 expert weights streamed as per-(layer,expert)
+  17.5 MB files from four Thunderbolt 5 SSDs via `pread` + `F_NOCACHE` (16 of 896 experts per layer), the
+  attention trunk resident in int8. Four instrumentation-driven wins stacked: split demand/prefetch thread
+  pools (+14%), hot experts spread across two drives (+10%), a least-expected-completion prefetch balancer
+  (+11%), and re-testing a stale benchmark assumption (+8%) — and **RAID-0 was slower** ("striping makes
+  every read touch every drive, so the slowest drive sets every barrier"). The limits are measured, not
+  hidden: prefill is read-amplified ~6.2× (≈9 TB of reads for a 1.4 TB model), context caps at ~4.4k
+  tokens, and the stated use case is overnight batch where data stays local. Ecosystem caveat: the demo
+  lives in a 52-star fork; the upstream engine (`gavamedia/deltafin`, 805★) hasn't been pushed since Aug 6.
+  The "your disk is your RAM" school (colibri, slotstream, kimi-k3-in-c) gains its most explicit
+  instrumentation writeup — the wins are scheduling and cache placement, not raw bandwidth.
+- **gpu-lexer** (Shu Ding, Vercel Labs; HN 95+). A **41,321-parameter WebGPU model** in a 27.4 KB bundle
+  (trained on ~4.69M tokens) labels word/whitespace/symbol splits into nine token classes, merging
+  adjacent labels into spans — replacing Shiki's 991.5 KB of hand-written grammars across 91 tested
+  languages (embedded `<script>`/`<style>` included): 5.56M characters in 402 ms vs Shiki's 29.6 s. The
+  same "small model beats a hand-written rule system" pattern that took over code search and diffing now
+  reaches syntax highlighting, at browser-bundle size. The citation boundary is the author's own: accuracy
+  is measured as *agreement with Shiki* (88% held-out, under 50% on Jinja/VB), not correctness, and he
+  explicitly says it should not replace parsers, linters, or compilers.

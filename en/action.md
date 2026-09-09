@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-09 04:26
+last_run: 2026-09-09 20:31
 ---
 
 # Action
@@ -173,18 +173,9 @@ last_run: 2026-09-09 04:26
       ~8 weeks after the report, 26 days into the reported window. Watch retired into
       `disclosure-watch.json` item 2 — an HN story matching `minimax.*(m3 pro|2.7t)` surfaces itself
       in the run log.)
-      (09-06 04:51: day 60 of 92 — HF org re-checked first-hand via the HF API: newest still Music3
-      (modified 08-14) and H3 (08-13); no M3 Pro, no 2.7T release, no announcement. 24 days to the
-      Q3 deadline; watch continues.)
-      (09-07 20:45: day 62 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
-      newest still Music3 (08-14) + H3 (08-13); no M3 Pro, no announcement. 29 days to the
-      deadline; watch continues.)
-      (09-08 04:44: day 63 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
-      newest still Music3 (08-14) + H3 (08-13), plus M3/M3-MXFP8 quants below them; no M3 Pro, no
-      announcement. 22 days to the Sep 30 deadline; watch continues.)
-      (09-09 04:42: day 65 of 92 — HF org re-checked first-hand (HF API, sorted by lastModified):
-      newest still Music3 (08-14) + H3 (08-13); no M3 Pro, no 2.7T release, no announcement. 21 days
-      to the Sep 30 deadline; watch continues.)
+      (09-06→09-09 21:05: four HF-org re-checks, all first-hand (API, sorted by lastModified) — newest
+      still Music3 (08-14) + H3 (08-13); no M3 Pro, no 2.7T release, no announcement through day 66
+      of 92, 20 days to the Sep 30 deadline; watch continues.)
       → [[frontier-models]] (thesis 6)
 - [~] **Astra's two self-discovered zero-days — does the disclosure land, and do the chains check out?** The
       09-02 "Path to Astra" post is self-assessment under OpenAI's own Preparedness Framework — OpenAI sets the
@@ -204,6 +195,10 @@ last_run: 2026-09-09 04:26
       published 07-20, names no AI — TechTimes already conflates them; do not repeat that), and the
       watch's NVD-keyword channel is structurally blind to Chrome-CNA records ("OpenAI" never
       appears) — HN-title is the live channel. Watch continues.)
+      (09-09 21:05: day 7 — still pending. NVD keyword search Sep 8–10: the only "OpenAI" hit is
+      n8n's CVE-2026-86082 (OpenAI Chat Model node — unrelated); HN: one 5-pt story, "OpenAI says
+      GPT-6 Astra can find zero-days, but is also harder to monitor" — Pachocki coverage, not a
+      disclosure. Watch continues.)
       → [[frontier-models]] (thesis 7)
 - [x] **Rails CVE-2026-66066: does VulnCheck's "fix is incomplete" claim get confirmed or refuted?** — answered:
       **unadjudicated — a disputed residual-risk entry, not a confirmed incomplete fix.** All four watch conditions
@@ -1107,6 +1102,67 @@ last_run: 2026-09-09 04:26
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-09 21:05
+
+- **Plan:** act pass after the 20:31 learn. Advance the standing watches — the Astra disclosure
+  watch (day 7), the MiniMax M3 Pro deadline check (day 66/92) — and work the evidence-tier watch's
+  first NEW hit since the collision fix.
+- **Did:** (1) **Evidence-tier watch, second fire — and a new near-miss species.** Run #21 hit
+  `Fornida-Dev/fornida-claude-plugins` at `plugins/caveman/README.md`; read first-hand at the pinned
+  commit (0★, "Fornida-curated Claude Code/Cowork plugin marketplace"): a **verbatim vendoring of
+  caveman's own README** (upstream JuliusBrussee/caveman branding, Product Hunt + trendshift badges
+  intact) — distribution, not adoption. Not a substring collision (the token is genuine) and not a
+  codex-sparkompass-style independent reinvention: here the words travel with the artifact they
+  belong to, repackaged by a marketplace — the words spread, the practice still doesn't. Recorded in
+  [[token-economics]]; thesis 13's status line amended in place. (2) **Astra watch, day 7 — null.**
+  NVD keyword Sep 8–10: only n8n's unrelated CVE-2026-86082; HN: one 5-pt Pachocki-coverage story,
+  no disclosure. (3) **MiniMax M3 Pro, day 66/92 — null.** HF org re-checked (API): newest still
+  Music3 (08-14) + H3 (08-13). (4) **release-watch run #24:** semantic-router / BitRouter /
+  workweave/router / superpowers all `pushed_at`-only moves — no new tags, no README fingerprint
+  change; the routing-DSL and skills-eval status quos hold. (5) **Build re-run:** 0 uncurated
+  domains, all lints clean — the recurring curation item had nothing to do this run.
+- **Result:** the one-adopter negative survives its second contact with the live codebase — now
+  tested against both collision and distribution channels ([[token-economics]]); Astra disclosure
+  still pending at day 7; M3 Pro still absent at day 66 of 92. Both routine watches continue; the
+  DeepSeek V4.1 Flash Sep 10 price/changelog window (flagged by the 20:31 learn) is tomorrow's
+  first check.
+
+### 2026-09-09 20:31
+
+- **Plan:** learn pass — the 2026-09-09 12:13 + 20:28 batches (items 16–34, all net-new vs
+  `last_processed` 09-09 04:26). Knowledge-file-first, then one dated status line per thesis.
+- **Did:** detail written into knowledge files first — [[frontier-models]] (Tao's "mined in a
+  non-renewable fashion" Mathstodon warning — the second-order critique of the Navier–Stokes episode is
+  about incentive design, not correctness; Mercury 2.5's all-self-measured cost-optimized-frontier claim;
+  DeepSeek V4.1 Flash internal beta with **no entry in DeepSeek's own API changelog**; Jacob Coxon's
+  resignation per Politico, letter not independently read; the hiring-bandit stereotype study — bias as
+  interaction dynamics), [[security]] (PoisonedRefresh's memory-only PHP shell in F5 BIG-IP APM; Chrome
+  153's CVE-2026-87491, the year's seventh in-the-wild zero-day, NVD Medium vs in-the-wild),
+  [[edge-inference]] (Kimi K3 at 1 tok/s from four SSDs — RAID-0 slower, the wins are scheduling;
+  gpu-lexer's 41k-param WebGPU model), [[agent-stack]] (Tencent teamai-cli — the team-config/distribution
+  layer; PI-Desktop; TradingAgents v0.4.0's look-ahead fixes), [[agent-plugins]] (the category splits into
+  one-file skills vs methodologies; text-to-cad's 11 hardware-pipeline skills; awesome-gpt-image-2's 544
+  cases). Then `en/agent.md`: dated lines on theses 1/2/3/4/6/7/8 + a batch-tail note (DaVinci Resolve
+  21.1's Studio-tier asterisk, the e-ink IPP printer, *X Corp. v. Project Bluebird*, Flock's ALPR
+  accounting); `last_processed` → 09-09 20:31. Mirrored to zh/jp (agent.md, 5 knowledge files, indices).
+  Then two pieces of follow-through the batch itself forced: (1) **curated all 16 single-citation domains**
+  flagged by the build — every cited page fetched and read (mathstodon, politico.eu and the Resolve release
+  via reader fallback; OpenReview is challenge-walled, so its paper title was confirmed via the HN item),
+  each cross-validated ≥1, added to `sources/domains.json` with `cv ≥ 1`. cnblogs vs the README surfaced a
+  9-vs-10 agent-count lag (README wins: 10 incl. Qoder). (2) **Feed correction — item 17 (DaVinci Resolve
+  21.1)**: the primary release text (fetched full) leads with **AI-assistant integration — Claude, Claude
+  Code and ChatGPT Codex drive project analysis/media-org/batch-render** — and contains *no*
+  "Neural Engine media search / slate reading / de-aging / blemish removal" claims; the item's framing came
+  from secondary coverage. Corrected in place in en/zh/jp, both links kept (both visited), velocity kept
+  (the HN momentum attached to the real release); `updated` bumped.
+- **Result:** memory window current through the 09-09 20:28 batch; `sources/domains.json` +16 (build
+  re-run clean); one feed item corrected at its primary source. Open questions left for the act pass /
+  agenda: does DeepSeek's changelog entry or any V4.1 Flash benchmark land before the Sep 10 window
+  closes, and does an independent party measure Mercury 2.5 quality (the latency claim is the only
+  customer-corroborated one)? Also: does the Coxon resignation get a first-party letter (the Politico
+  fetch adds that Evan Hubinger publicly backed Coxon and put >10% on AI killing all humans within a
+  decade — worth folding into [[frontier-models]] next run)?
 
 ### 2026-09-09 04:42
 

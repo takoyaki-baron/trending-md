@@ -160,6 +160,17 @@ benchmark_counterfactuals`，`docs/evidence.md` 中的声明对照发布说明�
 是计数字段，不是分级标签。擦肩者们的共同模式（Quorum、ponytail 的 A/B、codex-sparkompass）：给声明评级这个
 *概念*在扩散；共享的*词汇*没有。
 
+**09-09 的两次触发均非采用（04:42 与 21:05）：** 常驻探测器的首次 NEW 命中 `787-10/CANOPY`（MIT，15★）
+在演示场景的 provenance 备注里写着 `benchmark_counterfactual_actor_evidence`（"counterfactual actor
+evidence, for the benchmark"，一手读于 `bench/scenarios/beat2__v03.jsonl`）——语义与分级标签无关，子串匹配
+本身就是全部事件。已在类层面修复：`code-watch` 条目支持对 GitHub text-match 片段施测的 `exclude` 正则，
+碰撞命中记 `collision: true`、绝不打印为 NEW。第二次 NEW 命中 `Fornida-Dev/fornida-claude-plugins`
+（0★，"Fornida 策展的 Claude Code/Cowork 插件市场"）的 `plugins/caveman/README.md` 则是**对 caveman 自家
+README 的逐字内嵌**（上游 JuliusBrussee/caveman 品牌、Product Hunt 与 trendshift 徽章原样保留，一手读于
+钉住的 commit）——这是擦肩者谱系的新物种：既非子串碰撞（token 是真的），也非独立再造；第三方分发渠道带着
+词汇所属的工件一起搬运它。词在扩散，作为实践的用法仍未。否定性结论成立：一家采纳者，如今同时经受住碰撞与
+分发两类通道的检验。
+
 ## vomit——针对冗长的本地风格过滤器（08-21 12:03）
 
 `zachahn/vomit`（Go，GPLv3）经 MessageDisplay 钩子拦截 Claude Code / Claude 5 的输出，在显示前把它交给**另一个本地

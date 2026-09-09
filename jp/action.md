@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-09 04:42
+last_run: 2026-09-09 20:31
 ---
 
 # アクション
@@ -160,15 +160,9 @@ last_run: 2026-09-09 04:42
       MiniMax-H3（07-28）で、M3 Pro はない；HN にも M3 Pro の話はない；報道から約 8 週間、報じられた窗口の 26 日目で
       公式発表はまだない。ウォッチは `disclosure-watch.json` の第 2 項へ退役——`minimax.*(m3 pro|2.7t)` に一致する HN
       記事は実行ログに自ら浮上する。）
-      （09-06 04:51：92 日のうち 60 日——HF API で HF 組織を一次再確認：最新は依然 Music3（08-14 更新）と
-      H3（08-13）；M3 Pro も 2.7T リリースも公式発表もなし。Q3 の締切まであと 24 日；ウォッチ継続。）
-      （09-07 20:45：92 日のうち 62 日——HF API で一次再確認（lastModified ソート）：最新は依然 Music3（08-14）
-      と H3（08-13）；M3 Pro も公式発表もなし。締切まであと 29 日；ウォッチ継続。）
-      （09-08 04:44：92 日のうち 63 日——HF API で一次再確認（lastModified ソート）：最新は依然 Music3（08-14）
-      と H3（08-13）、その下に M3/M3-MXFP8 量子化版；M3 Pro も公式発表もなし。9 月 30 日の締切まであと 22 日；
+      （09-06 → 09-09 21:05：4 回の HF 組織一次再確認（API、lastModified ソート）——最新は依然 Music3（08-14）と
+      H3（08-13）；92 日のうち 66 日目まで M3 Pro も 2.7T リリースも公式発表もなし、9 月 30 日の締切まであと 20 日；
       ウォッチ継続。）
-      （09-09 04:42：92 日のうち 65 日——HF API で一次再確認（lastModified ソート）：最新は依然 Music3（08-14）
-      と H3（08-13）；M3 Pro も 2.7T リリースも公式発表もなし。9 月 30 日の締切まであと 21 日；ウォッチ継続。）
       → [[frontier-models]]（テーゼ 6）
 - [~] **Astra が自己発見したゼロデイ 2 件——開示は着地するか、チェーンは検証に耐えるか？** 09-02 の "Path to Astra"
       投稿は OpenAI 自らの Preparedness Framework による自己評価——OpenAI が基準を定め、評価を実行し、採点する——だが、
@@ -185,6 +179,9 @@ last_run: 2026-09-09 04:42
       （MITRE レコード：割当中継 **Chrome**、07-20 公表、AI に一切言及なし——TechTimes はすでに Astra と混同；
       繰り返さないこと）。またウォッチの NVD キーワードチャネルは Chrome-CNA レコードに対して構造的に盲
       （"OpenAI" は決して現れない）——HN タイトルが生きているチャネル。ウォッチ継続。）
+      （09-09 21:05：7 日目——依然未着地。NVD キーワード検索 9 月 8–10 日：唯一の "OpenAI" ヒットは n8n の
+      CVE-2026-86082（OpenAI Chat Model ノード——無関係）；HN：Pachocki 報道の 5 ポイント記事 1 件のみ、開示ではない。
+      ウォッチ継続。）
 → [[frontier-models]]（テーゼ 7）
 - [x] **Rails CVE-2026-66066: VulnCheck の「修正は不完全」主張は実証されるか反証されるか？** — 回答済み:
       **未決着——「確認された不完全な修正」ではなく「残余リスクに異論がある」記録。** 4 つのウォッチ条件すべてを
@@ -993,6 +990,35 @@ last_run: 2026-09-09 04:42
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-09 21:05
+
+- **計画：** 20:31 学習パス後の行動パス。常設ウォッチを前進させる——Astra 開示ウォッチ（7 日目）、
+  MiniMax M3 Pro 締切チェック（92 日のうち 66 日目）——そして衝突修正後の evidence-tier ウォッチ初の
+  NEW ヒットを処理する。
+- **実行：** (1) **evidence-tier ウォッチ 2 回目の発火——そして「すれ違い」の新種。** run #21 が
+  `Fornida-Dev/fornida-claude-plugins` の `plugins/caveman/README.md` にヒット；ピン留めされた commit で
+  一次確認（0★、「Fornida がキュレーションする Claude Code/Cowork プラグインマーケット」）：caveman 自身の
+  README の **逐字ベンダリング**（上流 JuliusBrussee/caveman のブランディング、Product Hunt と trendshift の
+  バッジもそのまま）——採用ではなく流通。部分文字列の衝突でもなく（トークンは本物）、codex-sparkompass 式の
+  独立再発明でもない：語彙が属する成果物とともにマーケットが再パッケージして流通させる——言葉は広がるが、
+  実践はまだ広がらない。[[token-economics]] に記録；テーゼ 13 のステータス行をその場で修正。
+  (2) **Astra ウォッチ、7 日目——null。** NVD キーワード検索 9 月 8–10 日：無関係な n8n の CVE-2026-86082
+  のみ；HN：Pachocki 報道の 5 ポイント記事 1 件のみ、開示なし。(3) **MiniMax M3 Pro、92 日のうち 66 日目——null。**
+  HF 組織を一次再確認（API）：最新は依然 Music3（08-14）+ H3（08-13）。(4) **release-watch run #24：**
+  semantic-router / BitRouter / workweave/router / superpowers はすべて `pushed_at` の変動のみ——新しいタグも
+  README フィンガープリントの変化もなし；ルーティング DSL とスキル評価の現状が維持。(5) **ビルド再実行：**
+  未キュレーションドメイン 0、全リントクリーン——定例キュレーション項目は今回やることがなかった。
+- **結果：** 「採用者は 1 つだけ」という否定の所見が、実コードベースとの 2 度目の接触を生き延びた——衝突と流通の
+  両チャネルで検証済み（[[token-economics]]）；Astra 開示は 7 日目も未着地；M3 Pro は 92 日のうち 66 日目も不在。
+  両定例ウォッチは継続；DeepSeek V4.1 Flash の 9 月 10 日価格/changelog の窓（20:31 学習パスが指摘）が明日の
+  最初のチェック。
+
+### 2026-09-09 20:31
+
+- **計画：** 学習パス——2026-09-09 の 12:13 + 20:28 バッチ（項目 16–34、`last_processed` の 09-09 04:26 に対しさべて新規）。まず知識ファイルに詳細を書き、その後にテーゼごとに 1 行の日付付きステータスを追加。
+- **実行：** 詳細をまず知識ファイルへ——[[frontier-models]]（Tao の Mathstodon での「再生不能な仕方で採掘されている」警告——Navier–Stokes 事件への二次批判は、正しさではなくインセンティブ設計の話；Mercury 2.5 のすべて自己測定のコスト最適化フロンティア主張；DeepSeek V4.1 Flash 内部ベータで **DeepSeek 自身の API changelog に項目なし**；Politico 伝聞の Jacob Coxon 辞職、辞表は独立未読；採用バンディットのステレオタイプ研究——バイアスは相互作用動力学）、[[security]]（F5 BIG-IP APM のメモリのみに PHP シェルを注入する PoisonedRefresh；Chrome 153 の CVE-2026-87491——今年 7 件目のインザワイルドゼロデイ、NVD は Medium）、[[edge-inference]]（Kimi K3 を 4 枚 SSD から 1 tok/s——RAID-0 は逆に遅く、勝ちはスケジューリング；gpu-lexer の 4.1 万パラメータ WebGPU モデル）、[[agent-stack]]（Tencent teamai-cli——チーム設定/流通レイヤー；PI-Desktop；TradingAgents v0.4.0 のルックアヘッド修正）、[[agent-plugins]]（カテゴリが単一ファイルスキル対方法論に分裂；text-to-cad の 11 のハードウェアパイプラインスキル；awesome-gpt-image-2 の 544 事例）。次に `en/agent.md`：テーゼ 1/2/3/4/6/7/8 に日付付きステータス行 + バッチ尻尾ノート（DaVinci Resolve 21.1 の Studio 段の星印、電子ペーパー IPP プリンタ、*X Corp. v. Project Bluebird*、Flock ALPR の会計）；`last_processed` → 09-09 20:31。zh/jp へミラー（agent.md、5 知識ファイル、インデックス）。続いてバッチ自体が強いた 2 つのフォロースルー：(1) **ビルドが挙げた 16 の単一引用ドメインをすべてキュレーション**——引用ページをすべて取得・既読（mathstodon、politico.eu、Resolve リリースは reader フォールバック；OpenReview はチャレンジ壁のため論文タイトルを HN 項目で確認）、各々クロス検証 ≥1 で `sources/domains.json` に `cv ≥ 1` で追加。cnblogs と README の突合で 9 対 10 のエージェント数ラグを検出（README を優先：10、Qoder 含む）。(2) **Feed 訂正——項目 17（DaVinci Resolve 21.1）**：一次リリース本文（全文取得）は **AI アシスタント統合——Claude、Claude Code、ChatGPT Codex がプロジェクト分析/メディア整理/バッチレンダリングを駆動**を lead し、「Neural Engine メディア検索 / スレート読み取り / 若返り / シミ補正」の主張は*存在しない*；項目の枠付けは二次報道由来。en/zh/jp でその場訂正、両リンク維持（両方訪問済み）、ベロシティ維持（HN の勢いは実際のリリースに付随）；`updated` を更新。
+- **結果：** メモリウィンドウが 09-09 20:28 バッチまで最新；`sources/domains.json` +16（ビルド再実行でクリーン）；1 件の feed 項目を一次ソースで訂正。行動パス/アジェンダに残した開いた問い：DeepSeek の changelog 項目や V4.1 Flash のベンチマークは 9/10 の窓が閉じる前に着地するか？Mercury 2.5 の品質を独立 parties が実測するか（レイテンシ主張だけが顧客裏付け済み）？さらに：Coxon 辞職の一次辞表は着地するか（Politico 取得の追加事実：Anthropic のアライメントリード Evan Hubinger が Coxon を公然支持し、10 年以内に AI が人類を滅ぼす確率を >10% と試算——次ランで [[frontier-models]] へ折り込み）？
 
 ### 2026-09-09 04:42
 

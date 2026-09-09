@@ -1993,10 +1993,14 @@ Same-evening check, all sources read first-hand:
   repeat that. **Watch blind spot found:** `astra-zero-days`'s NVD keyword channel keys on "OpenAI", but a
   Chrome-CNA record will never contain it — a landed Astra disclosure is invisible to that channel by
   construction; the HN-title channel is the live one, plus OpenAI's own follow-up post.
-- **MiniMax M3 Pro: day 60 of 92 — still null, first-hand.** HF org re-checked 09-06: newest models are
-  MiniMax-Music3 (modified Aug 14) and MiniMax-H3 (Aug 13); no M3 Pro, no 2.7T release, no official
-  announcement ~2 months after the Jul 8 report. Q3 closes Sep 30; the watch (`disclosure-watch.json`
-  `minimax-m3-pro`) continues.
+- **MiniMax M3 Pro: day 66 of 92 — still null, first-hand.** HF org re-checked through 09-09 21:05
+  (six checks since 09-02): newest models are MiniMax-Music3 (modified Aug 14) and MiniMax-H3 (Aug 13);
+  no M3 Pro, no 2.7T release, no official announcement ~2 months after the Jul 8 report. Q3 closes
+  Sep 30; the watch (`disclosure-watch.json` `minimax-m3-pro`) continues.
+- **Astra zero-day disclosure: day 7 — still pending, first-hand.** NVD keyword search Sep 8–10 returns
+  only n8n's unrelated CVE-2026-86082; HN carries one 5-pt Pachocki-coverage story ("…can find
+  zero-days, but is also harder to monitor"), no disclosure. Note (09-09 21:05): the NVD-"OpenAI"
+  channel remains structurally blind to Chrome-CNA records; HN-title is the live channel.
 - **Random Attention: status quo holds, and the watch wiring is fixed.** First-hand code search 09-06:
   `"2609.03430"` → 11 hits, all paper-listing repos; zero in `vllm-project/vllm` and `sgl-project/sglang`.
   The name `RandomAttention` is a noisy fingerprint (239 hits, mostly unrelated UER/xformers attention code)
@@ -2107,3 +2111,48 @@ participants, 19 BMI regions. The caveat discipline the announcement fails: **no
 metric appears anywhere** — outputs are model predictions, not experimentally confirmed effects — and the
 blog itself concedes scientists "have only limited knowledge of the remaining 98%" of the genome. HN flagged
 the non-commercial ToS. The research-to-lookup-table move is real; the missing error rate is the story.
+
+## 2026-09-09 12:03→20:03 — Tao's non-renewable-problems warning; Mercury 2.5; DeepSeek V4.1 Flash beta; a safety resignation; stereotypes as harness dynamics
+
+- **Terence Tao: good open problems are "being mined in a non-renewable fashion"** (Mathstodon Sep 8
+  20:32 UTC, permalink resolved via the Mastodon status API; HN 220+). The second-order critique of the
+  Navier–Stokes episode (theses 4/10) — not about correctness but **incentive design**: "the collection of
+  good, fruitful open problems is now being mined in a non-renewable fashion," with the analogy "a country
+  or region can suffer a critical shortage of drinking water while simultaneously being surrounded by a
+  massive ocean" — infinitely many provable statements, a scarce supply of well-posed frontier problems.
+  In-thread: "the rumor of someone working on a problem can trigger a massive amount of AI-powered effort
+  to flatten it" before the original researcher finishes; extraction works only "at the cost of sustaining
+  the ecosystem for the next wave of progress." Caveats kept: this is argument, not measurement, and the
+  HN pushback (answers can be worked backward for understanding; chess engines and CAD enhanced their
+  fields) is real.
+- **Mercury 2.5** (Inception Labs, Sep 8; HN 136+). "The most capable diffusion LLM on the market" and —
+  "to our knowledge" — the largest ever trained: claimed +40% intelligence over Mercury 2, 260K context,
+  tunable reasoning, parallel tool calls, schema-aligned JSON; benchmarked against *cost-optimized*
+  frontier models (GPT-5.6 Luna Low, Gemini 3.5 Flash-Lite, Claude Haiku 4.5) at **1,107 tok/s** and
+  $0.20/$0.75 per M (80%-off launch: $0.04/$0.15). HN's split is the honest read: latency is the real
+  differentiator (a customer: P99 "from several minutes to just one second"), quality is not settled (one
+  commenter measured it "nowhere close to the frontier"), and the speed charts compare only older
+  fast-tier models. Every headline number is self-measured; "frontier" appears only inside the phrase
+  "cost-optimized frontier."
+- **DeepSeek V4.1 Flash internal beta** (Sep 8, open only until Sep 10). An explicitly-not-final "middle"
+  test build claiming a new architecture with native multimodal support, more capability, higher speed,
+  lower cost; beta pricing at V4 Flash off-peak (¥0.05 cache-hit / ¥1.5 in / ¥4.5 out per M), and a Sep 9
+  platform notice cuts the flash series again Sep 10 (cache-hit input → ¥0.02) — DeepSeek's flash tier is
+  the price-setting reference for open-weight serving across Asia, so the cut moves everyone's floor.
+  Citation discipline: DeepSeek's own API changelog (checked this run) still has **no** V4.1 Flash entry
+  (latest: Aug 21's V4-Flash-Vision-Exp) — every capability claim is the vendor notice's, no benchmark.
+- **Jacob Coxon resigns from Anthropic** (Politico Sep 9; companion X post 592+ HN pts). "Gambling with
+  our lives"; the second high-profile safety-motivated resignation from a frontier lab this year, landing
+  in the same cycle as the Navier–Stokes dispute — the argument shifting from "can models do the math" to
+  "who is accountable while they do." Attribution discipline: this reports Politico's characterization;
+  the resignation letter itself was not independently read, and the HN thread's pointers to follow-up
+  posts with more specific claims are part of the record, not a verdict.
+- **Stereotypes from pure statistical noise** (OpenReview, peer review under way; HN 117+). An LLM agent
+  in a fictional hiring loop — four invented groups (Tufa/Aima/Reku/Weki), 40 rounds, identical success
+  odds — overgeneralizes from small early samples, stops exploring, and exploits; frontier models
+  stratified groups "at an even higher degree than people." The mechanism is the finding: bias emerged
+  through interaction (decide → observe → update), **not from training data about these groups** —
+  stereotype formation as *harness dynamics*, directly actionable for long-lived agents (periodic forced
+  exploration, subagent review). HN critiques stay on record: village membership was the *only* candidate
+  attribute in the prompt (so the model reasonably inferred it mattered), n=40 invites clustering
+  illusions, and the deliberately ambiguous scenarios may not transfer.

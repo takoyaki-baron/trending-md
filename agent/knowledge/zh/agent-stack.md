@@ -1332,3 +1332,9 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   （agent 互相开窗格、互相发 prompt）。博客称 70 万+ 下载、约 1,000 个插件。README 保持诚实：恢复的会话恢复布局但
   "原始进程*不会*存活"，且"agent CLI 仍在单机内运行；跨机 agent 协作是未来工作"。N agent × N 机器收进一个操作员
   视图，正在成为独立的基础设施层。
+
+## 2026-09-09 12:03→20:03 —— 团队配置层；本地优先桌面壳；TradingAgents 的前视修复
+
+- **腾讯 teamai-cli**（MIT，2.7k★，+1,083/天，趋势 #2；启动帖称内部已用约半年）。把共享 **Git 仓库当作团队 agent harness 的唯一事实源**——Skills、Rules、Hooks、MCP 配置、agent 定义、`culture.md`、会话沉淀的知识——经版本化、MR 评审，再同步进 **10 个编码 agent** 的原生配置目录（Claude Code、Codex、Cursor、CodeBuddy、WorkBuddy、OpenCode、OpenClaw、Hermes、DeepSeek Harness、Qoder）。另附检测"摩擦"的 stop-hook（打断、工具调用被拒、重试）并建议沉淀为学习、BM25 + 图增强知识召回、经 `teamai source add` 的跨团队技能联邦。单文件技能霸榜一周之后，品类的*分发*半场由大厂送到：团队级配置管理正是"一个技能"与"一个组织如何运行 agent"之间缺的那层。README 自述限制——三层中两层 beta、召回默认关闭、代码图边只覆盖 TypeScript/JavaScript、Python、Go（其余正则兜底）。
+- **PI-Desktop**（`vastsa/PI-Desktop`，LGPL-3.0，1.4k★，v0.14.x）。把 pi agent 生态（pi-mono 的 `pi-ai`/`pi-agent-core`）打包成本地优先的 Electron+Rust 桌面壳：BYO 模型（云 API 或 Ollama/LM Studio 网关）、无 Node 集成的 React 渲染层、处理权限/文件系统/SQLite/钥匙串的 Rust 宿主核心、独立的"pi Agent Sidecar"跑 agent 循环。三种审批工作流——Agent（直接做）、Plan（审批冻结计划）、Goal（审批结果判据）——另有子代理、`.piplug` 扩展市场、本地 JSONL+SQLite 存储零遥测、可从 Claude Code/Codex/OpenCode 导入会话。"你的 agent harness 成为一个产品"浪潮里的无锁定入场者（无账号、无强制中继）；README 自己做完了警示功课——Early Preview、插件是"用户信任的代码而非完整的操作系统沙箱"、本地优先 ≠ 离线（模型请求仍发往你配置的 provider）。
+- **TradingAgents v0.4.0 —— 日期更新**（`TauricResearch/TradingAgents`，Apache-2.0，103.6k★，病毒式走红五个月后以 +506/天再上趋势）。维护增量正对准让早期回测失效的那个失败：前视/时点数据修复、LangGraph 崩溃后 checkpoint 续跑、确定性的公司身份消解与交易员价格接地，另加 GPT-5.6/GLM-5.3 支持。README 仍对一切要紧处对冲：仅限研究、运行不确定、"回测结果不保证与任何已发表数字吻合"。Agentic 金融仍是最易读的多 agent 演示——而被修好的正是可复现性投诉。
