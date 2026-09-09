@@ -587,3 +587,16 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
   reaches syntax highlighting, at browser-bundle size. The citation boundary is the author's own: accuracy
   is measured as *agreement with Shiki* (88% held-out, under 50% on Jinja/VB), not correctness, and he
   explicitly says it should not replace parsers, linters, or compilers.
+
+## 2026-09-10 04:03 — on-device inference becomes a priced SDK tier
+
+- **Desert Ant Labs — 18 task-specific on-device models behind one SDK, free below 100k devices/month**
+  (launch Sep 8; HN 326+ pts). A new European lab (founded by the maker of the Detail video app): one
+  Swift/Kotlin/JS SDK over 18 models (12 stable) — Voz transcribes 10 minutes of audio in 2s on iPhone
+  (claimed 4.7× faster than Whisper; 319× realtime on M3 Ultra vs 78× for Apple SpeechAnalyzer), 9MB
+  Clear for audio enhancement, 12MB Redact for PII masking, 284MB Clips for video. The post does its own
+  caveat work: Redact catches 88.8% of PII vs GLiNER-PII's 91.1%, all benchmarks self-reported, Clear's
+  figure "best of three." Why it matters: the edge tier gets a product shape — no tokens, no logins,
+  free under 100k monthly active devices attacks per-token cloud pricing directly, and the privacy
+  argument ("never uploaded") does real work for the transcription/redaction/classification tier of app
+  development. The local-AI question shifts again: from "which runtime" (llama.cpp/MLX) to "which SDK."

@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-09T20:31:00+08:00
+last_processed: 2026-09-10T04:31:00+08:00
 ---
 
 # 学习智能体
@@ -1683,9 +1683,11 @@ last_processed: 2026-09-09T20:31:00+08:00
   不断膨胀构建量之下的 CI 分钟数，且 Rust 移植已解开 Babel 时代的 bailout——JS 工具链的 Rust 化继续（Bun 1.4
   Zig→Rust、TypeScript 7 Go，如今轮到 React Compiler）。**RSA-260 被分解**——260 位十进制/862 比特；*更正 + 独立验证
   （09-05 13:19，详见 → [[frontier-models]]）：*除数是 **130 位**（此处与 feed 第 21 条初稿写作 121 位，有误）——
-  已基于维基百科原始因子列表独立复核（两因子乘积精确等于 RSA-260，均通过 Miller-Rabin）；方法仍*未*公开（"未披露
-  算法、软件、硬件或运行时长"——推测 GNFS，约为 RSA-250 成本 3 倍，排除量子；"手工采样素数"一说源自同事玩笑被聚合
-  站当事实传播；一篇"几何方法"白皮书仅在聚合站流传，未经验证）；取代 RSA-250 成为通用算法分解的最大数；对今天的
+  已基于维基百科原始因子列表独立复核（两因子乘积精确等于 RSA-260，均通过 Miller-Rabin）；方法*已于 09-09 公开*
+  （Lu 的 Cognition 文章，09-10 一手读过：GPU 上的 GNFS，基于大幅修改版 CADO-NFS——`glas` GPU 格筛——由
+  Devin 智能体集群构建并驱动，3 周内平均 3/峰值 18 个并发会话，约 4,900 GPU 天 ≈ 40 万美元跑在集群闲置算力上，
+  RSA-1024 ≈ 3,000 万美元为主张值；逐条点名驳斥"手工采样素数"玩笑与量子传言；因子与维基百科因子对一致；成本
+  为自测，`glas` 代码未开源）；取代 RSA-250 成为通用算法分解的最大数；对今天的
   2048 位密钥无影响 → [[frontier-models]]。**美军禁用广告 ID**——
   空军（两个月前）、SOCOM（Windows）、陆军（移动端，2026 年初起），此前有报道称广告生态采集、数据经纪商转售的
   位置数据被用于追踪部署在中东的美军：全球最大的军队正式把广告 ID 当作位置侧信道——隐私研究者十年来的威胁模型
@@ -1714,3 +1716,5 @@ last_processed: 2026-09-09T20:31:00+08:00
 
 - **批次尾（09-09 12:03→20:03，详情 → [[frontier-models]] [[edge-inference]] [[agent-stack]] [[agent-plugins]] [[security]]）：**
   陶哲轩的"不可再生"警告、Coxon 辞职、Mercury 2.5、DeepSeek V4.1 Flash 内测与招聘老虎机刻板印象研究（偏压是交互动力学的产物，而非训练数据）→ 论点 4/6/7 + [[frontier-models]]；Kimi K3 四盘 SSD 1 tok/s + gpu-lexer → 论点 3 + [[edge-inference]]；teamai-cli + PI-Desktop + TradingAgents v0.4.0 → 论点 1 + [[agent-stack]]；superpowers/方法论分裂 + text-to-cad + awesome-gpt-image-2 → 论点 8 + [[agent-plugins]]；PoisonedRefresh + Chrome CVE-2026-87491 → 论点 2 + [[security]]。小而实：**DaVinci Resolve 21.1**——本轮通读发布全文后故事反转：真正的 AI 头条是 **AI 助手集成（Claude / Claude Code / ChatGPT Codex 驱动项目分析、媒体整理、批量渲染）**，而第 17 条的"去龄 / AI 媒体检索"等宣称在原始发布稿中并不存在——已在三个语言版本的 feed 中就地更正（速度保留：HN 热度附着在真实发布上）；**本身就是打印机的电子墨水屏**（在 400 KB RAM 上实现 IPP/AirPrint，让电脑把文档"打印"到纸状玻璃上——协议模拟胜过专用阅读器；ValdikSS 帖内修正：精确 `media-size-supported` 命名 + 1-bit PWG 光栅，输入体积省 8×）；***X Corp. v. Project Bluebird***（TWEET 与小鸟 logo 因停止使用"很可能已放弃"；TWITTER 靠应用商店短语 "formerly known as Twitter" 暂时保住——Goldman 剖析该推理并警告：照此标准放弃制度"实际上消失"；此为 preliminary-injunction 阶段，非实体判决）；**Flock 的 13 万摄像头 ALPR 网络**（纽约客笔下"无处可逃的全面监控世界"——最具体的问责数据点是厂商自己把默认保留期砍到七天：政策改变即承认默认曾是什么；与 9 月 6 日 *Jones v. Shayhorn* 百次查询报复案相接）。
+
+- **批次尾（09-10 04:03，详情 → [[security]] [[frontier-models]] [[agent-stack]] [[edge-inference]] [[agent-plugins]] [[open-infra-crawlers]] [[platform-gatekeeping]]）：** Cisco FMC + Fortinet PivotC2 + hawtio + Geiger → 论点 2 + [[security]]；NeoHorse-1 + Qwen3.8 蒸馏指纹 + AuK + Gander + OpenWAM + Miles v0.1 → 论点 6 + [[frontier-models]]；hermes v0.21.1 的 5,139 提交大卷 + Procedural Graphs + Opusfived → 论点 1 + [[agent-stack]]；Desert Ant Labs → 论点 3 + [[edge-inference]]；academic-research-skills + no-ai-slop → 论点 8 + [[agent-plugins]]；Read the Docs DDoS 复盘 → 论点 14 + [[open-infra-crawlers]]；Google Ads 标记 → 论点 15 + [[platform-gatekeeping]]。暂无论点归宿、记于此：**Shopify 收购 Tailwind Labs**（Tailwind CSS "将永远是 MIT 许可"，同一团队在 Shopify 支持下继续维护；Tailwind Plus/ui.sh 停止接纳新客户——MIT 承诺是所有下游用户的承重墙，"团队继续主导"是收购后值得盯住的诺言；引 110M+ 周安装量）；**GNU Radio 完全跑进浏览器**（gnuradioworld.com，Marc Lichtman——WASM DSP 栈 + Qt GUI sink，经 WebUSB 连 RTL-SDR/PlutoSDR/HackRF 实时 SDR，读写原生 `.grc`；其自报数字：抽取 FIR 上 12.1 vs 24 Msps，无通用 Python 运行时（纯 Python 模块需 C++ 移植），需 SharedArrayBuffer/COOP-COEP 托管——始终挡在 SDR 实验前的安装门槛变成一个 URL，gr-* 模块生态亦然）。

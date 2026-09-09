@@ -5961,5 +5961,68 @@
   "cred": "high",
   "density": "med",
   "cv": 1
+ },
+ "cognition.com": {
+  "cat": "vendor",
+  "en": "Cognition (Devin) corporate blog — first-party lab posts with unusually deep technical appendices; the RSA-260 post's cost tables are self-measured and the siever code was not released, so performance claims stay vendor-graded.",
+  "zh": "Cognition（Devin）官方博客 —— 一手实验室文章，技术附录异常深入；RSA-260 文中的成本表为自测、siever 代码未公开，性能主张仍属厂商自评。",
+  "jp": "Cognition（Devin）公式ブログ —— 技術付録が異常に深い一次情報。RSA-260 記事のコスト表は自己計測で、siever コードは未公開のため性能主張はベンダー自己評価のまま。",
+  "cred": "high",
+  "density": "high",
+  "cv": 2
+ },
+ "opusfived.dev": {
+  "cat": "community",
+  "en": "One-author interactive demo: keep an agent from changing anything but one button — self-declared entertainment, not a benchmark; valuable as demand-side evidence, worthless as a metric.",
+  "zh": "单人互动演示：别让智能体改动一个按钮之外的任何东西——自我声明是娱乐而非基准；作为需求侧证据有价值，作为指标无价值。",
+  "jp": "個人制作のインタラクティブデモ：エージェントに 1 つのボタン以外を触らせない——自ら娯楽であってベンチマークではないと明言；需要側の証拠として価値があり、指標としては無価値。",
+  "cred": "med",
+  "density": "low",
+  "cv": 1
+ },
+ "tailwindcss.com": {
+  "en": "Tailwind CSS official blog — the Tailwind-is-joining-Shopify announcement (09-09, Adam Wathan) is first-party; acquisition terms unstated, so deal coverage elsewhere is interpretation.",
+  "zh": "Tailwind CSS 官方博客——「Tailwind 加入 Shopify」公告（09-09，Adam Wathan）为第一方；交易条款未披露，别处的报道属于解读。",
+  "jp": "Tailwind CSS 公式ブログ——「Tailwind は Shopify に加わる」発表（09-09、Adam Wathan）は一次情報；取引条件は未公表で、他の報道は解釈。",
+  "cat": "vendor",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
+ },
+ "desertant.com": {
+  "en": "Desert Ant Labs (Paul Veugen) launch post — 18 task-specific on-device models, free under 100k devices/month; every performance number is a vendor benchmark and the post says so — privacy positioning doing real work.",
+  "zh": "Desert Ant Labs（Paul Veugen）发布文——18 个任务专用端侧模型，10 万台设备/月以下免费；每个性能数字都是厂商基准且文中自认——隐私定位在实打实发挥作用。",
+  "jp": "Desert Ant Labs（Paul Veugen）公開投稿——18 のタスク専用オンデバイスモデル、10 万台/月未満は無料；性能数値はすべてベンダーベンチマークだと本文が明記——プライバシー訴求が実働している。",
+  "cat": "vendor",
+  "cred": "med",
+  "density": "med",
+  "cv": 1
+ },
+ "gnuradioworld.com": {
+  "en": "GNU Radio flowgraph editor + runtime compiled to WebAssembly (Marc Lichtman / 777arc) — the site and README publish their own honest slowdowns (12.1 vs 24 Msps), a model of self-measured limits.",
+  "zh": "编译为 WebAssembly 的 GNU Radio 流图编辑器 + 运行时（Marc Lichtman / 777arc）——网站与 README 公布自家的真实减速数字（12.1 vs 24 Msps），是自测上限披露的示范。",
+  "jp": "WebAssembly にコンパイルされた GNU Radio フローグラフエディタ + ランタイム（Marc Lichtman / 777arc）——サイトと README が自らの正直な低速化数値（12.1 vs 24 Msps）を公表する、自己計測限界開示の模範。",
+  "cat": "code",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
+ },
+ "about.readthedocs.com": {
+  "en": "Read the Docs corporate blog — the 2026 DDoS post-mortem is first-hand ops reporting with the costs admitted (5.5M req/min, JA4 failed, IP blocking obsolete); infrastructure vendors writing their own incident records.",
+  "zh": "Read the Docs 官方博客——2026 年 DDoS 事后分析是一手运维记录并承认自身局限（550 万 req/min、JA4 失效、IP 封禁过时）；基础设施厂商自己撰写的事件档案。",
+  "jp": "Read the Docs 企業ブログ——2026 年 DDoS のポストモーテムは一次の運用記録で、自らの限界も認める（550 万 req/min、JA4 不成立、IP ブロックの陳腐化）；インフラ事業者が自らインシデント記録を書く例。",
+  "cat": "vendor",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
+ },
+ "xlii.space": {
+  "en": "Independent macOS dev's blog (RACE terminal) — the Google Ads suspension post is the affected party's first-hand account; its own edit concedes reinstatement came via HN visibility, not evidence.",
+  "zh": "独立 macOS 开发者博客（RACE 终端）——Google Ads 封号一文是当事方的一手叙述；其自身的更新承认恢复靠的是 HN 关注度而非证据。",
+  "jp": "独立系 macOS 開発者のブログ（RACE ターミナル）——Google Ads 停止の記事は当事者の一次証言；自身の編集後記が、復旧は証拠ではなく HN での可視性によるものだと認めている。",
+  "cat": "community",
+  "cred": "med",
+  "density": "med",
+  "cv": 1
  }
 }

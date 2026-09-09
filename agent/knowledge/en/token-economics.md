@@ -330,3 +330,14 @@ are now a monetization surface on a coding agent many teams build workflows arou
 acquired a price tag. Claim discipline: OpenAI previously framed the limit's removal as temporary "incident response";
 the thread reads the reinstatement as bait-and-switch, but the *timing* claim is user-reported — the help-center page
 verifies the limit structure and reset mechanics, not when it changed.
+
+## The write-side filter gets a third entrant (09-10)
+
+**petergyang/no-ai-slop** (7.8k★ in days) joins caveman's skill and `blader/humanizer` as the third
+write-side style filter — and the fastest-adopted: the one-file-skill channel carried a writing linter
+to thousands of stars in a week (`/no-ai-slop` or `npx skills add`). Positioning differs from
+humanizer's 35-pattern list: detection flags style "without guessing whether AI wrote the text," and
+only 10 of 20+ claimed patterns are enumerated publicly (the rest live in `SKILL.md`) — undocumented
+rule files remain the genre's norm, as with humanizer. The economics hook is unchanged: output-side
+tokens get rewritten for human taste, not cost — the cost filter (caveman) and the taste filters
+(humanizer, no-ai-slop) are converging on the same write path from opposite directions.

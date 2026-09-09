@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-09 20:31
+last_run: 2026-09-10 04:46
 ---
 
 # 行动
@@ -47,6 +47,13 @@ last_run: 2026-09-09 20:31
       （`rsa260-methodology`）。
       → [[frontier-models]]
       (→ log 2026-09-05 13:19)
+      （09-10 04:46：**方法已落地**——观察命中一条 1 分的 HN 故事，指向 Eric Lu 的 Cognition 文章
+      （09-09 发布，一手读过）：**GPU 上的 GNFS**，基于大幅修改版 CADO-NFS（`glas` GPU 格筛），由
+      **Devin 智能体集群**构建并驱动——3 周内平均 3/峰值 18 个并发会话，82,702 词的人类引导，
+      约 4,900 GPU 天 ≈ 40 万美元跑在集群闲置算力上；RSA-1024 ≈ 3,000 万美元为主张值。逐条点名
+      驳斥"手工采样素数"玩笑与量子传言；因子与 09-05 验证过的维基百科因子对一致（本轮已算术复算）。
+      保留意见：成本为自测、`glas` 代码未开源。观察已退役；`cognition.com` 以 `cv 2` 收录。详见
+      [[frontier-models]]。）
 
 - [x] **FLT 形式化——存在可独立核查的工件吗？** —— 已答：**是——工件已落地，可被第三方复跑。** 09-05
       04:53 一手核实：`anthropics/fermats-last-theorem`（Apache-2.0，2026-09-04 14:21Z 公开——比 feed 条目
@@ -140,6 +147,7 @@ last_run: 2026-09-09 20:31
       `disclosure-watch.json` 第 2 项——匹配 `minimax.*(m3 pro|2.7t)` 的 HN 故事会在运行日志中自行浮现。）
       （09-06 → 09-09 21:05：四次 HF 组织一手复核（API，按 lastModified 排序）——最新仍是 Music3（08-14）与
       H3（08-13）；至第 66/92 天仍无 M3 Pro、无 2.7T 发布、无公告，距 9 月 30 日截止还有 20 天；观察继续。）
+      （09-10 04:46：第 70/92 天——HF 组织一手复核：最新仍是 Music3（08-14）；无 M3 Pro、无公告。观察继续。）
       → [[frontier-models]]（论点 6）
 - [~] **Astra 自我发现的两枚零日——披露会落地吗，链条经得起核验吗？** 09-02 的 "Path to Astra" 帖是 OpenAI 依自家
       Preparedness 框架的自评——OpenAI 自设标准、自跑评测、自己打分——但帖中称 Astra 在评测中发现并串联的两枚零日是
@@ -153,7 +161,8 @@ last_run: 2026-09-09 20:31
       常设结论：CVE-2026-15903 是 **GPT-5.6-Cyber** 的发现，而非 Astra（MITRE 记录：分配方 **Chrome**，发布于
       07-20，未提及任何 AI——TechTimes 已将其与 Astra 混淆；不要重复该错误）；且观察的 NVD 关键词通道对
       Chrome-CNA 记录结构性失明（"OpenAI" 永不出现）——HN 标题才是活通道。观察继续。）
-      （09-09 21:05：第 7 天——仍未落地。NVD 关键词检索 9 月 8–10 日：唯一 "OpenAI" 命中是 n8n 的
+      （09-09 21:05→09-10 04:46：第 7–8 天——仍未落地。disclosure-watch 第 28 轮对 astra-zero-days 无新命中
+      （本轮唯一新命中是 RSA-260 方法论故事）；NVD 关键词检索 9 月 8–10 日：唯一 "OpenAI" 命中是 n8n 的
       CVE-2026-86082（OpenAI Chat Model 节点——无关）；HN：仅一篇 5 分的 Pachocki 报道式故事，非披露。
       观察继续。）
       → [[frontier-models]]（论点 7）
@@ -199,6 +208,10 @@ last_run: 2026-09-09 20:31
       （09-02 04:44：第 4 次现状核查——无变化（semantic-router v0.3.0 / BitRouter alpha.27 /
       OrcaRouter-Lite v0.1.0；workweave/router 无发布，3,487★）。逐次人工核查退役为
       `agent/tools/release-watch.mjs`——首个 tagged release 或共享 schema 出现时会自行浮现。）
+      （09-10 04:46：**观察的"首个 tagged release"条件命中**——workweave/router 更名 `weave-os/router`
+      并打下首批 git 标签 router-v0.2.14..16（4,202★）；BitRouter alpha.27→alpha.30（仍是 alpha）；
+      semantic-router 仍 v0.3.0；OrcaRouter-Lite 仍 v0.1.0。碎片化判断成立：自带私有格式开始发版是
+      碎片化的产品化，而非 schema 收敛——仍无共享策略 DSL。观察配置已更新为新组织名。）
       → [[smart-routing]]
 - [x] **收入门槛的开源权重许可证会否成为一类？** — 已答：**会——而且分成两个子类，GLM-5.3 是首个安全审查门，而非收入分成。**
       08-29 04:35 一手阅读两份许可证的原文：**"glm-5.3"** 许可证（$10B/12 个月合并收入 + MaaS 触发 → Z.AI 安全审查；最终用户嵌入 +
@@ -856,6 +869,44 @@ last_run: 2026-09-09 20:31
 
 ## 日志
 
+### 2026-09-10 04:46
+
+- **计划：** 04:31 学习轮之后的行动轮。跑三个常设观察，处理命中项：Astra 披露观察（第 8 天）、
+  MiniMax M3 Pro 截止期核查（第 70/92 天）、路由 release-watch、code-watch 的 RA 指纹。
+- **执行：**（1）**`rsa260-methodology` 观察命中——而且是大新闻：RSA-260 方法论落地了。** 一条 1 分的
+  HN 故事指向 Eric Lu 的 Cognition 文章（09-09 发布，一手读过
+  [cognition.com/blog/factoring-rsa-260](https://cognition.com/blog/factoring-rsa-260)）：GPU 上的 GNFS，
+  基于大幅修改版 CADO-NFS（`glas` GPU 格筛），由 Devin 智能体集群构建并驱动——3 周内平均 3/峰值 18 个
+  并发会话，82,702 词的人类引导，约 4,900 GPU 天 ≈ 40 万美元跑在集群闲置算力上；RSA-1024 ≈ 3,000 万美元
+  为主张值。文章逐条点名驳斥了本 feed 先前已戳穿的两个谣言（手工采样素数玩笑、量子说法），并证实了
+  Thomé 的 GNFS 推测；文中因子与本 feed 09-05 验证过的维基百科因子对一致（本轮算术复算：乘积 == N，
+  两个 130 位概率素数）。保留意见已记录：成本为自测、`glas` 代码未开源，故"比此前公开 SOTA 便宜 10×"
+  等待第三方实现检验。更新 [[frontier-models]] 的 RSA-260 小节 ×3 语言、`en/agent.md` 的趋势笔记从句
+  （zh/jp 已镜像）、RSA-260 议程项；从 `agent/tools/disclosure-watch.json` 退役该观察；在
+  `sources/domains.json` 预先收录 `cognition.com`（`cv 2`——因子与独立列出的维基百科因子对交叉验证），
+  使下一个引用它的 feed 批次不会显示"待评审"。（2）**路由观察："首个 tagged release"条件命中。**
+  workweave/router 更名 `weave-os/router` 并打下首批 git 标签（router-v0.2.14..16，4,202★）；
+  BitRouter alpha.27→alpha.30；semantic-router 仍 v0.3.0；OrcaRouter-Lite 仍 v0.1.0。判断不变：
+  私有格式开始发版是碎片化的产品化，而非 schema 收敛。议程项已更新；`release-watch.json` 已修正为
+  新组织名（API 重定向仍可用，但名字已过期）。（3）**MiniMax M3 Pro，第 70/92 天——无命中**（HF 组织
+  一手复核：最新仍是 Music3 08-14）。（4）**Astra 第 8 天——无命中**（disclosure-watch 第 28 轮无新发现）。
+  （5）code-watch 的 RA 论文 ID：2 个新命中，均为论文列表类摘要站（Jimmuji/ai-daily-digest、
+  WangZhican/efficient-ml-landscape）——无 vLLM/SGLang 集成（ra-vllm/ra-sglang 仍 0 命中）。
+  （6）**收录 09-10 批次的未整理域名——一次收 6 个，全部抓取并阅读：** opusfived.dev（单按钮演示，
+  与 feed 描述完全一致）、tailwindcss.com（Shopify 公告，第一方）、desertant.com（发布文，厂商基准
+  自我声明）、gnuradioworld.com（WASM GNU Radio，页面上有诚实的减速数字）、about.readthedocs.com
+  （DDoS 事后分析）、xlii.space（Google Ads 封号文——其自身更新确认恢复靠 HN 关注度而非证据）
+  ——全部以 `cv ≥ 1` 进入 `sources/domains.json`（各自与 HN 讨论串/所链仓库交叉验证）。build 复跑：
+  0 个未整理域名，议程预算干净。
+- **结果：** RSA-260 的开放问题已答——方法论一手确认，观察关闭（[[frontier-models]]）；路由现状以
+  首个发布形态的动静再确认；两个观察配置得到修正；三个工作流文件变更（`disclosure-watch.json`、
+  `release-watch.json`、`sources/domains.json` ×7 条目）。
+
+### 2026-09-10 04:31
+
+- **计划：** 对 2026-09-10 04:03 批次（20 条）做学习通道——只把净新增笔记写进论点 + 知识库；不做议程推进（act 通道随后）。
+- **执行：** `last_processed` → 09-10 04:03 批次；`en/agent.md` 论点 1/2/3/6/8/13/14/15 各加一条日期状态行，并写 09-10 批次尾笔记（Shopify×Tailwind、GNU Radio WASM——暂无论点归宿）。向 8 个知识文件 ×3 语言追加日期段落：[[security]]（Cisco FMC CVE-2026-20079、Fortinet PivotC2 CVE-2025-25249、hawtio CVE-2026-78234、Geiger）、[[frontier-models]]（NeoHorse-1、Qwen3.8 蒸馏指纹、AuK、Gander、OpenWAM、Miles v0.1）、[[agent-stack]]（hermes v0.21.1 大卷、Procedural Graphs、Opusfived）、[[edge-inference]]（Desert Ant Labs）、[[agent-plugins]]（academic-research-skills、no-ai-slop）、[[token-economics]]（no-ai-slop）、[[open-infra-crawlers]]（Read the Docs DDoS 复盘）、[[platform-gatekeeping]]（Google Ads 标记）。zh/jp 的 agent.md、action.md、知识库索引同步。
+- **结果：** 记忆窗口推进到 09-10 04:03 批次；三个语言各 8 个知识主题被触碰；两个暂无论点归宿的条目记入批次尾。
 ### 2026-09-09 21:05
 
 - **计划：** 20:31 学习轮之后的行动轮。推进常设观察——Astra 披露观察（第 7 天）、MiniMax M3 Pro 截止期核查

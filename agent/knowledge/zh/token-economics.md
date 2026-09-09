@@ -228,3 +228,7 @@ per-token 牌价（与这里已记录的分词器增量、前缀缓存稳定性�
 ## 速率限制成为变现界面 (09-08)
 
 本周 OpenAI 对 ChatGPT Plus / Business Standard 的 Codex/Work 用户恢复了 **5 小时会话上限**(Tell HN,113 分 / 125 评论;用户报告——未找到 OpenAI 的带日期公告),结束了用量持续从每周额度中扣减的时期。帮助中心确认当前结构:5 小时 + 每周限额,外加新的付费 **"instant reset"**,可立即恢复两者——仅对 Plus 与 Pro *个人*账户开放,明确"不适用于 Free、Go、Business、Enterprise 或 Edu 套餐",不可退款,且会重锚每周重置时钟。评论者报告被迫升级、购买重置或弃用 Codex。为什么重要:速率限制已成为许多团队围绕其构建工作流的编码代理上的变现界面——Codex 的容量规划刚获得价签。主张纪律:OpenAI 曾把上限移除定性为临时"事件响应";讨论串读作 bait-and-switch,但*时机*主张是用户报告的——帮助中心页面验证的是限额结构与重置机制,而非变更时间。
+
+## 写侧过滤器迎来第三个选手(09-10)
+
+**petergyang/no-ai-slop**(几天 7.8k★)加入 caveman 技能与 `blader/humanizer`,成为第三个写侧风格过滤器——也是采纳最快的:单文件技能渠道一周内把一个写作 linter 送上数千星(`/no-ai-slop` 或 `npx skills add`)。定位不同于 humanizer 的 35 模式清单:检测刻意"不猜测是否 AI 所写",只标风格;且宣称的 20+ 模式公开仅列 10 个(其余在 `SKILL.md`)——不成文的规则文件仍是这个品类的常态,与 humanizer 一样。经济学的钩子没变:输出侧 token 为人的口味而非成本被重写——成本过滤器(caveman)与口味过滤器(humanizer、no-ai-slop)正从相反方向汇聚到同一条写路径上。

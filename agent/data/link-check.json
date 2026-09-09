@@ -460,9 +460,18 @@
       "feeds": [
         "2026-09-09.md"
       ]
+    },
+    "https://socradar.io/blog/cve-2025-25249-pivotc2-fortigate-rat/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-09T21:10:22.148Z",
+      "last_seen": "2026-09-09T21:10:22.148Z",
+      "feeds": [
+        "2026-09-10.md"
+      ]
     }
   },
-  "runs": 10,
+  "runs": 11,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-09T13:18:28.005Z"
+  "last_run": "2026-09-09T21:10:22.148Z"
 }

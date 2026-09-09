@@ -1972,3 +1972,32 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   plus GPT-5.6/GLM-5.3 support. The README still hedges everything that matters: research only,
   non-deterministic runs, "backtest results are not guaranteed to match any published figure." Agentic
   finance stays the most legible multi-agent demo — and the reproducibility complaints are what got fixed.
+
+## 2026-09-10 04:03 — a 5,139-commit rollup; procedural memory as a new primitive; instruction-scoping as the defining agent-UX pain
+
+- **hermes-agent v0.21.1 — a rollup of 5,139 commits** (NousResearch, 243,806★, +4,221/wk; release Sep
+  7). An explicit "rollup of main since v0.21.0": 5,139 non-merge commits, 4,364 files, 632 merged PRs,
+  curated notes deferred to v0.22.0. The README's caveats are concrete: Windows Defender flags the
+  bundled `uv.exe` as a false positive (an attestation-verification procedure is published), and a dev
+  venv inside the checkout "can be wiped by a relative-path command the agent runs against its own
+  checkout." The counterweight: **5k+ open issues and 5k+ open PRs.** Commit volume in a single patch
+  rollup is unusual even for this repo and says the self-improving-agent category is consolidating
+  around Hermes — while the backlog is the part of the story the star count omits (the 08-16
+  backlog-not-stars signal, now at scale).
+- **Procedural Graphs — self-evolving "what-to-do" memory** (arXiv 2609.09153, submitted Sep 8,
+  Google-led: Yuxing Lu, Yicheng Chen, Shanchan Wu, Sercan Ö. Arık; HN 24+). "(procedure, relation,
+  procedure)" triplets as the procedural analog of knowledge graphs; a guidance model turns the local
+  subgraph into step-level hints that "bias the solver's next action without dictating it"; an LLM
+  refiner edits graph topology from failed-vs-successful trajectory contrasts, keeping only edits that
+  hold on validation. Claims: evolved graphs match or surpass hand-designed ones, can repair a flawed
+  expert prior, and beat memory-based baselines across datasets and LLMs. Agent memory has been mostly
+  episodic/factual — a self-evolving procedural layer that explicitly learns tool-ordering and
+  preconditions is a different primitive, landing directly in the MCP/skills tooling conversation.
+  Honest gap: no limitations section visible in the abstract; benchmark specifics live in the 36-page
+  body.
+- **Opusfived — HN #1 as interactive comedy about agent overreach** (opusfived.dev; 828+ pts / 339
+  comments). The visitor's task: get a Claude agent to change exactly one button blue — nothing else —
+  while watching it work live on the page. Explicitly entertainment, not a benchmark, and discloses no
+  implementation details. Demand-side evidence, not measurement: the #1 slot on HN for a pure
+  agent-behavior joke says instruction-scoping has become the defining UX pain of 2026 coding agents —
+  for harness builders, bounded and verifiable edits matter more than raw capability.

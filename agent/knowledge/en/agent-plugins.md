@@ -877,3 +877,26 @@ the effect decays.
   ¥9.90 paid community), and the README's caveats remain: prompts drawn from public libraries with
   copyright left to original authors, third-party commercial use explicitly not guaranteed, and the GPT
   Image 2.5 recreations carry "generation conditions and exact tool model IDs remain unverified."
+
+## 2026-09-10 04:03 — pipelines and anti-slop: the channel carries multi-agent workflows and writing tools
+
+- **Imbad0202/academic-research-skills — a 4-skill, 32-agent research pipeline at 47k★** (+2,430/wk;
+  changelog v3.21.2 Sep 6). Research → write → review → revise → finalize: a 13-agent deep-research
+  team (8 modes including PRISMA systematic review), a 12-agent paper pipeline (MD/DOCX/LaTeX→PDF), a
+  7-agent multi-perspective reviewer with a Devil's Advocate role, and a 10-stage orchestrator with
+  "mandatory integrity gates." The README's philosophy is "AI is your copilot, not the pilot," and its
+  caveats are unusually blunt: **"a consistently reported fabrication can pass these checks"** (it
+  verifies reported content, not whether experiments were run), live reviewer output is
+  `NOT_CALIBRATED`, and it explicitly refuses to be a "humanizer." License: **CC BY-NC 4.0 —
+  non-commercial only**, the trap downstream users will trip on. The skills ecosystem maturing past
+  single-trick repos into full multi-agent pipelines — with the author naming the assertion-not-proof
+  limit himself.
+- **petergyang/no-ai-slop — the anti-AI-voice skill race continues** (7,792★, +1,038/wk, #20 weekly —
+  7.8k in days). An install-as-a-skill linter for AI tells ("It's not X. It's Y." binary contrasts,
+  throat-clearing openers, "a testament to" puffery, fake-profound endings…), runnable as
+  `/no-ai-slop` in Claude Code/Codex/ChatGPT or via `npx skills add`. Detection mode deliberately flags
+  style "without guessing whether AI wrote the text," and the README concedes the core tension itself:
+  AI editing tends to "smooth away" personal quirks — the exact risk the skill exists to mitigate.
+  Gaps: only 10 of the claimed 20+ patterns are enumerated publicly (the rest live in `SKILL.md`), no
+  releases, not runnable standalone, and the taxonomy is English-LLM-specific — each language needs its
+  own tell list.

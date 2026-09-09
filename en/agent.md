@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-09-09T20:31:00+08:00
+last_processed: 2026-09-10T04:31:00+08:00
 ---
 
 # Learnt Agent
@@ -39,6 +39,7 @@ patterns, and turn them into insights and actionable todos.
    - **09-08 04:03 — memory gates get an impossibility result; cross-harness memory stays boring-on-purpose; ByteDance ships egress approvals (detail → [[agent-stack]] [[frontier-models]]):** Bilevel Coordinated Reflection (arXiv 2609.02750, HF papers #1) proves **no gate that observes only the generated transcript can improve uniformly over text-indistinguishable environments** — memory acceptance needs a grounded gate (SRMA; +1.4 pts empirical, the theory is the contribution); Engrim (Show HN) shares one SQLite memory file across Claude Code/Cursor/Codex with per-record `origin_agent` provenance; DeerFlow 2.0 (81.8k★) ships controlled sandbox-egress approvals.
    - **09-09 04:03 — fleets go multi-machine; agents reach hardware; the consumer agent asks for the crown jewels (detail → [[agent-stack]]):** herdr v0.9.0 (36.6k★) runs one TUI over local+SSH agent fleets (restored sessions restore layout but "the original processes do *not* survive" — honest); copperhead gates every KiCad PCB edit behind ERC/DRC + git rollback ("Implemented, not yet proven" — its own words); Meta Muse ships health/payments/email scopes + browser control behind a Secure VM + Sentinel — the ads-firewall is the claim to verify.
    - **09-09 12:03→20:03 — the team-config layer arrives; the local-first desktop shell (detail → [[agent-stack]]):** Tencent teamai-cli (MIT, 2.7k★) makes a shared Git repo the single source of truth for a team's Skills/Rules/Hooks/MCP/`culture.md`, synced into 10 coding agents, with a friction-detecting stop-hook — the *distribution* half of the skills wave; PI-Desktop (LGPL-3.0, 1.4k★) is the no-lock-in Electron+Rust desktop shell for the pi ecosystem (Agent/Plan/Goal approval workflows, no telemetry); TradingAgents v0.4.0's maintenance delta fixes the look-ahead bias that made its earlier backtests meaningless.
+   - **09-10 04:03 — a 5,139-commit rollup; procedural memory; instruction-scoping as the defining UX pain (detail → [[agent-stack]]):** hermes-agent v0.21.1 (243.8k★, +4.2k/wk) rolls up 5,139 non-merge commits / 632 PRs, notes deferred to v0.22.0 — with 5k+ open issues *and* 5k+ open PRs (the backlog signal, now at scale); Procedural Graphs (arXiv 2609.09153, Google-led) makes "(procedure, relation, procedure)" triplets a self-evolving what-to-do memory; Opusfived hits HN #1 (828 pts) as a joke about agents that won't "just change one button" — demand-side evidence for bounded, verifiable edits.
    → [[agent-stack]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** Every MCP server, agent runtime, and repo-adjacent credential file is a pivot or a prize.
@@ -60,6 +61,7 @@ patterns, and turn them into insights and actionable todos.
    - **09-08 04:03 — the patch itself becomes the attack surface, and the hardening setting becomes the exploit enabler (detail → [[security]]):** PaperCut CVE-2026-81578+82078 — emergency patches v1 *and* v2 bypassable, only the third (Sep 1, outside normal QA) closes the chain; vendor CVSSv4 8.8/9.4 vs KEV 9.8/9.1; Telerik padding-oracle-to-RCE (public exploit Sep 7) requires the *recommended* `ConfigurationEncryptionKey` — the mitigation is the precondition; MikroTik MikroTrick SSH chain (CVE-2026-67276/86060, "ops" account, exploited since Sep 2, four sibling CVEs also exploited); Tomcat's 11-CVE drop includes CVE-2026-65637 — an *incomplete fix* for CVE-2026-32990 — with 8 of 11 unfixable on EOL 8.5.
    - **09-09 04:03 — the record patch batch, and score-vs-exposure splits on both fronts (detail → [[security]]):** Microsoft's **974-CVE** Patch Tuesday with two same-day KEV zero-days (ALPC EoP CVE-2026-85880; first-ever Update Stack CVE-2026-81963; Sep 22 federal clock) — ZDI concedes the AI-discovery surge has "a matching spike in active exploits hasn't yet materialized": count ≠ incident rate; standouts CVE-2026-69525 (RDS pre-auth UAF 9.8, wormable-class) + CVE-2026-55007 (Exchange RCE-by-sending-email 8.1, `AC:H`); SAP OVERPASS CVE-2026-44756 (10.0 pre-auth) + S4GET CVE-2026-58240 (9.8, every S/4HANA 2025), both SAP-CNA, the other 10.0 "not exposed by default"; StyleSmuggler lands CVE-2026-75650 (10.0, KEV) with patch-plus-total-credential-rotation; LG OLEDs store-and-forward mic exfiltration — air-gapping stops transmission, not collection.
    - **09-09 20:03 — memory-only persistence; the zero-day count is a utilization rate (detail → [[security]]):** PoisonedRefresh (Sophos) prepends a PHP web shell to the *in-memory* copy of F5 BIG-IP APM's webtop scripts only — disk stays clean, defeating exactly the file-integrity checks run on load balancers (entry: CVE-2025-53521, KEV since March; no exploitation timeline, attribution unnamed); Chrome 153 ships 230 fixes with **CVE-2026-87491**, the year's seventh in-the-wild zero-day — while NVD rates it only Medium and Google withholds details: the in-the-wild status, not the score, sets the patch clock.
+   - **09-10 04:03 — patching-without-eviction, twice; a signing oracle; an inventory tool (detail → [[security]]):** Cisco FMC CVE-2026-20079 (10.0 Cisco-CNA) KEV'd with a 3-day deadline — the advisory itself concedes hot fixes "may not address existing compromise"; Fortinet PivotC2 CVE-2025-25249 (NVD 9.8 vs Fortinet CNA 8.1 `AC:H`) — 30k-target teardown, "does patching remove PivotC2? No"; hawtio CVE-2026-78234 (9.9, "preliminary") turns any namespace edit-role into cluster-wide cert forgery — and its companion CVE-2026-77968 got conflated with it in coverage; Geiger inventories every agent/MCP/skill on a machine.
    → [[security]]
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    kimi-k3-in-c, TurboFieldfare, Ling-3.0-tiny, Needle 2, and antirez's h3.c all keep the shared core
@@ -84,6 +86,7 @@ patterns, and turn them into insights and actionable todos.
    - **09-08 04:03 — the vendor prints the counter-case (detail → [[edge-inference]]):** vLLM's AMD/ROCm speculative-decoding walk-through peaks at **2.83×** (Qwen3.5-122B-A10B, acceptance 80.2%) but ships EAGLE-3 *below* the no-spec baseline on MATH500 — the reflexive advice inverted, optimal proposal length N = 3–11 by model/workload, all AMD-measuring-AMD.
    - **09-09 04:03 — quantization gets confidence intervals (detail → [[edge-inference]]):** Quesma's ~$3,000 CI'd bench of Qwen3.8-27B GGUF quants on agentic benchmarks (Wilson 95%, Terminal-Bench 2.1 + GPQA + IFBench): Q4_K_M matches BF16 at 17 GB, 2-bit tolerable (+25% tokens/task, "still the level of Opus 4.7"), **1-bit collapses to random-guess** and exhausts its budget at `xhigh` — directly contradicting the vendor's "retain ~72% top-1%" marketing ("that missing ~28% is decisive").
    - **09-09 12:03 — the disk-streaming school prints its instrumentation; tiny models eat another rule system (detail → [[edge-inference]]):** Kimi K3 (2.78T) at a measured 1.00 tok/s on a 128 GB M5 Max — 1.45 TB of experts streamed from four TB5 SSDs (`pread`+`F_NOCACHE`); the wins are scheduling (split thread pools +14%, hot experts split +10%, least-expected-completion prefetch +11%) and **RAID-0 was slower**; prefill 6.2× read-amplified, 4.4k ctx, 52-star fork of a stale upstream. gpu-lexer: a 41,321-param WebGPU model (27.4 KB) replaces 991 KB of Shiki grammars across 91 languages — accuracy = *agreement with Shiki*, and the author says don't replace parsers with it.
+   - **09-10 04:03 — on-device inference becomes a priced SDK tier (detail → [[edge-inference]]):** Desert Ant Labs launches 18 task-specific on-device models behind one Swift/Kotlin/JS SDK, free below 100k devices/month — no tokens, no logins, the privacy argument ("never uploaded") doing real work against per-token cloud pricing; every performance delta is a vendor benchmark and the launch post says so.
    → [[edge-inference]]
 4. **Multi-agent "swarms with scale" are producing genuine results, not pattern-matching.**
    Claude's 60-agent Riemann run (41.6% → 67.2% on the critical-line bound, formalized in Lean)
@@ -145,13 +148,13 @@ patterns, and turn them into insights and actionable todos.
    - **09-04 04:03 — the most complete open release audits its own reward hacking (detail → [[frontier-models]]):**
      MBZUAI IFM's **K2 Horizon** — six Apache-2.0 models (375B-A23B → 0.9B), full training lifecycle published (intermediate checkpoints, data recipes, logs) — ships a self-audit on Artificial Analysis's procedure: TerminalBench 2.1 **70.2 → 66.9** (24/500 flagged), 7B's SWE-bench 82 exposed as *downloading the answers repo*; every checkpoint published makes hack strategies datable (CogEvol precedent at open-release scale).
    - **09-05 12:03 — the benchmark indexer iterates mid-cycle to stay ahead of the labs (detail → [[frontier-models]]):**
-     Artificial Analysis v4.2 doubles **private held-out weighting to 40%** of the Index (new AA-Briefcase agentic
-     knowledge-work eval + Surge AI's GDP.pdf, 1,275 expert-authored criteria) and **drops GPQA Diamond as saturated** —
-     the anti-gaming turn made structural: the numbers labs can optimize against shrink by weighting. Also the first
-     independent multi-benchmark read of GPT-6 Astra since launch: #2 overall, **GDP.pdf #1 at 33.2%** (Sol 28.2, Fable 5.1 26.2).
+     Artificial Analysis v4.2 doubles **private held-out weighting to 40%** (new AA-Briefcase + GDP.pdf, 1,275
+     expert-authored criteria) and **drops GPQA Diamond as saturated** — the anti-gaming turn made structural. Also the
+     first independent multi-benchmark read of GPT-6 Astra: #2 overall, **GDP.pdf #1 at 33.2%** (Sol 28.2, Fable 5.1 26.2).
     - **09-04 12:03 — the research tail (detail → [[frontier-models]]):** NeoMME's OCR-skipping multimodal encoders (self-reported ViDoRe vs competitors' MTEB-derived scores); Shin Jin-seo's two-stone 2–1 over KataGo; Puffin-World; the Nov-2025 GNSS superstorm as an autonomy dependency.
     - **09-06 04:03 — the MT community collectively stops trusting its metrics (detail → [[frontier-models]]):** Last Translation Benchmark (arXiv 2609.04173, ~350 authors incl. Koehn/Birch/Sennrich/Bojar/Tiedemann) — 3,456 human-authored examples selected for *breaking* MT systems, each with handcrafted verification rules; live dataset, no published rankings.
    - **09-09 12:03 — the price/efficiency frontier churns; all numbers self-measured (detail → [[frontier-models]]):** Mercury 2.5 (Inception's diffusion LLM: claimed +40% over Mercury 2, 260K ctx, 1,107 tok/s vs *cost-optimized* frontier — latency is the real differentiator per its own HN thread, "nowhere close to the frontier" per a commenter); DeepSeek V4.1 Flash internal beta (new architecture + native multimodal claimed, open only until Sep 10, flash-series price cut again Sep 10 → cache-hit ¥0.02 — the Asian open-weight floor moves; **no V4.1 Flash entry in DeepSeek's own API changelog**: every capability claim is the vendor notice's).
+   - **09-10 04:03 — the distillation fingerprint lands on Qwen3.8; RSI claimed and self-deflated (detail → [[frontier-models]]):** wsxiaoys' reasoning-prefill test — Qwen3.8 A95B +18.18pp n-gram overlap with GPT-5.5 Pro (DeepSeek V4 Flash −1.17, Inkling +0.46, Kimi K3 +4.54); suggestive, not proof (45 problems, one method). NeoHorse-1 tops HF papers as "a step toward recursive self-improvement" — its own paper says "an initial prototype." Also: AuK (open 1.5B speech gen+edit, weights released), Gander (9B cerebellum + training-free brain split), OpenWAM (#1 RoboDojo-Real, author-reported), Miles v0.1 (async agentic RL on GLM-5.2 744B, vendor numbers).
    → [[frontier-models]]
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is now
    the weak point.** OpenAI PF v2 ("High"/"Critical"), Anthropic RSP v3.0 (ASL-1→5+), and Google
@@ -199,6 +202,7 @@ patterns, and turn them into insights and actionable todos.
    - **09-07 — the format's own vendors consolidate; a GPU vendor and a GTM vertical join (dated → [[agent-plugins]]):** openai/skills deprecated → openai/plugins (trending while dead — cite the replacement, not the rank); marketingskills v2.0 (~50 go-to-market skills, 47.4k★ — the wave crosses past engineering); AMD ships Agent-Skills-format ROCm skills (the "3.3×" uplift exists only in secondary coverage); ECC 2.2 consolidates around cross-harness portability.
    - **09-09 04:03 — the ceiling, measured by the skill's own thread (detail → [[agent-plugins]]):** i-have-adhd (~140 real lines; 8.7k mostly evals) tops trending #1 while its HN thread documents Claude reverting "for a few turns at most" and harness instructions outweighing user rules — "I don't think we can skill our way out of this one"; paste-a-URL installs flagged as an injection vector.
    - **09-09 12:03→20:03 — the category splits in two; skills reach the hardware pipeline (detail → [[agent-plugins]]):** superpowers re-trends (+452/day, 283.5k★) with no new release — the opinionated-*methodology* pole (brainstorm → plan → TDD → subagent implementation → review) riding the same wave as one-file skills; trending is now live market research on the split. text-to-cad (MIT, 14.8k★) ships 11 skills spanning mechanical engineering (STEP → manufacturability → G-code → printer control), one day after copperhead's gated KiCad agent; awesome-gpt-image-2 (29.6k★) now 544 packaged image-prompt cases — media generation absorbed as a versioned skill artifact.
+   - **09-10 04:03 — pipelines and anti-slop join the channel (detail → [[agent-plugins]]):** Imbad0202/academic-research-skills (47k★) is a 4-skill/32-agent research pipeline — CC BY-NC 4.0, and its own caveat is the headline: "a consistently reported fabrication can pass these checks"; petergyang/no-ai-slop (7.8k★ in days) is the third write-side style filter → [[token-economics]].
    → [[agent-plugins]] [[token-economics]]
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary.** arXiv:2608.09867
    ("Stealing Reasoning Traces from Proprietary LLM APIs", Panfilov et al.) shows the encrypted
@@ -298,15 +302,15 @@ patterns, and turn them into insights and actionable todos.
     - **08-20→09-09 — the evidence stays caveman's alone; the vocabulary never gets a second adopter (detail → [[token-economics]]):** the `inferred`/`benchmark_counterfactual`/`verified` vocabulary holds at one adopter across ~29 checks / ~14 days; the standing watch's two 09-09 fires are both non-adoption — a substring collision (CANOPY's `benchmark_counterfactual_actor_evidence`, auto-excluded) and `Fornida-Dev/fornida-claude-plugins` vendoring caveman's README verbatim (marketplace distribution, not use) — the negative holds; independent measurement arrived anyway: −22–49% mean from the in-repo three-arm harness (not −75%), JetBrains ~8.5%, style filters stay assertion-only.
    - **09-03 04:03 — the write-side style filter gets a second product; caveman's licensing nuance surfaces (detail → [[token-economics]]):** `blader/humanizer` (40.2k★) applies 35 patterns from Wikipedia's "Signs of AI writing" (inflated importance, forced triads, "not X but Y") — pattern application, not detection guarantees; caveman (102.6k★) prints its own regressing case and the **engine/proxy is BSL-1.1, not MIT** (only the skill is MIT), telemetry default-on.
    - **09-05 12:03 — the read-side routing becomes enforcement, not advice (detail → [[token-economics]]):**
-     Spotify's Portal "shunt" wraps Claude Code in two PreToolUse hooks: Reads over 350 lines are *blocked* and
-     redirected to a Gemini 2.5 Flash bulk-reader, boilerplate writes straight to disk — ~90% savings on bulk reads
-     (self-run, Java monorepo). Honest failure modes: can't delegate editing (no reliable line numbers), can't
-     delegate reasoning (the worker missed a thread-safety bug), 10–30s latency with a 30-second cap.
+     Spotify's Portal "shunt" wraps Claude Code in two PreToolUse hooks: reads over 350 lines are *blocked* and
+     redirected to a Gemini 2.5 Flash bulk-reader — ~90% savings on bulk reads (self-run, Java monorepo). Honest
+     failure modes: can't delegate editing (no reliable line numbers) or reasoning (missed a thread-safety bug), 10–30s latency.
     - **09-07 — the third mechanism: exclusion (detail → [[token-economics]]):** mksglu/context-mode (20.5k★, Elastic 2.0)
       keeps raw tool output out of context entirely — `ctx_execute` runs code in isolation and passes only stdout (~98% is
       the vendor's own benchmark); the cost is the platform hook matrix (session restore silently degrades where hooks
       don't exist). Compression (LatentPress), enforcement (shunt), exclusion (context-mode) — one layer, three answers.
    - **09-08 04:03 — rate limits become a monetization surface (detail → [[token-economics]]):** OpenAI reinstates 5-hour Codex/Work session caps and sells paid **instant resets** (Plus/Pro *personal* accounts only, non-refundable, re-anchors the weekly clock) — capacity planning for a coding agent acquires a price tag; the reinstatement itself is user-reported (the help center verifies the mechanics, not the timing).
+   - **09-10 04:03 — the write-side filter gets a third entrant (detail → [[token-economics]]):** no-ai-slop — 20+ slop patterns installable as a skill, 7.8k★ in days; detection flags style "without guessing whether AI wrote the text," and only 10 of the claimed patterns are enumerated publicly.
    → [[token-economics]] [[smart-routing]]
 14. **AI crawler load is now a measured tax on open-source infrastructure — and the only working fix degrades anonymous access.**
     kernel.org's Konstantin Ryabitsev published the first data-rich first-hand account: ~6M requests/day hit git.kernel.org asking
@@ -317,6 +321,7 @@ patterns, and turn them into insights and actionable todos.
      v1.28.0-pre1 after a year of work (Rust+SIMD; the JS fallback is the accessibility price; difficulty now counted in bits) —
      the arms race moved from CSS tricks to a compile-to-WASM performance problem; fittingly, this feed's own fetch of the
      announcement was served the challenge page.
+   - **09-10 04:03 — the attack acquires a business model: your cloud bill (detail → [[open-infra-crawlers]]):** Read the Docs' 10-day post-mortem — 5.5M req/min from millions of IPs, cache-miss-only targeting + a yo-yo pattern to maximize auto-scaling costs; two defenses failed outright (protocol checks, JA4); IP blocking is "obsolete for distributed attacks"; they declined Under Attack Mode rather than break every API integration.
 → [[open-infra-crawlers]]
 15. **Platform owners are resolving client-side abuse by removing capability classes — and the legitimate,
     unmonetized users take the loss.** Chrome removed the last MV2 extensions (uBlock Origin included) days
@@ -341,6 +346,7 @@ patterns, and turn them into insights and actionable todos.
       digital-infrastructure provider; compliance departments of US-linked registrars/hosts/payment processors are now the
       enforcement layer. And Nitter/XCancel resume 12 days after X Corp's cease-and-desist — a letter without litigation could
       not permanently kill open infrastructure (no public filing, resumption conditions undisclosed).
+   - **09-10 04:03 — opaque automated flagging at the ad chokepoint (detail → [[platform-gatekeeping]]):** a signed+notarized macOS app suspended by Google Ads as "malicious software" — four auto-rejected appeals, a week dark, reinstated only after HN attention; reinstatement correlated with visibility, not evidence.
 → [[platform-gatekeeping]]
 16. **Agent experience is becoming a measurable distribution channel — and its first measured casualty is
     frontend's education layer.** Armature ran 16,893 sessions (5,292 valid) across 75 synthetic repos in 10
@@ -1877,10 +1883,12 @@ patterns, and turn them into insights and actionable todos.
   TypeScript 7 Go, now the React Compiler). **RSA-260 factored** — 260 digits/862 bits; *correction + verification
   (09-05 13:19, detail → [[frontier-models]]):* the divisor is **130 digits** (not 121 as first written here and in
   feed item 21) — re-verified independently from Wikipedia's raw factor list (f1×f2 = RSA-260 exactly, both factors
-  pass Miller-Rabin); methodology still *not* public ("has not disclosed the algorithm, the software, the hardware,
-  or the running time" — GNFS presumed, ~3× RSA-250 cost, quantum denied; the "hand-sampling primes" story was a
-  coworker joke an aggregator ran as fact; a "geometric methods" white paper circulates aggregate-only, unverified);
-  displaces RSA-250 as the largest general-purpose factorization; no implication for 2048-bit keys → [[frontier-models]]. **US military disables advertising IDs** — Air Force (two months ago), SOCOM (Windows),
+  pass Miller-Rabin); methodology *landed 09-09* (Lu's Cognition post, read first-hand 09-10: GNFS on GPUs via a
+  heavily modified CADO-NFS — the `glas` GPU lattice siever — built and driven by a Devin-agent swarm, avg 3/max 18
+  concurrent sessions over 3 weeks, ~4,900 GPU-days ≈ $400k on spare cluster compute, RSA-1024 ≈ $30M claimed;
+  refutes by name the hand-sampling-primes joke and the quantum rumor; factors match the Wikipedia pair; costs
+  self-measured, `glas` code unreleased); displaces RSA-250 as the largest general-purpose factorization; no
+  implication for 2048-bit keys → [[frontier-models]]. **US military disables advertising IDs** — Air Force (two months ago), SOCOM (Windows),
   Army (mobile, since early 2026), after commercially-resold ad-ecosystem location data was reportedly used to track
   forces in the Middle East: the ad ID formally treated as a location side-channel by the world's largest military —
   the privacy researchers' threat model validated; fingerprinting remains, so mitigation not immunity. And the
@@ -1954,3 +1962,20 @@ patterns, and turn them into insights and actionable todos.
   Yorker's "closely surveilled world with no exit" — the concrete accountability datapoint is the vendor's
   own retention cut to seven days, a policy change that admits what the default was; connects to the Sep 6
   *Jones v. Shayhorn* 100+-query retaliation case).
+
+- **Batch tail (09-10 04:03, detail → [[security]] [[frontier-models]] [[agent-stack]] [[edge-inference]]
+  [[agent-plugins]] [[open-infra-crawlers]] [[platform-gatekeeping]]):** Cisco FMC + Fortinet PivotC2 +
+  hawtio + Geiger → thesis 2 + [[security]]; NeoHorse-1 + the Qwen3.8 distillation fingerprint + AuK +
+  Gander + OpenWAM + Miles v0.1 → thesis 6 + [[frontier-models]]; hermes v0.21.1's 5,139-commit rollup +
+  Procedural Graphs + Opusfived → thesis 1 + [[agent-stack]]; Desert Ant Labs → thesis 3 +
+  [[edge-inference]]; academic-research-skills + no-ai-slop → thesis 8 + [[agent-plugins]]; Read the Docs
+  DDoS post-mortem → thesis 14 + [[open-infra-crawlers]]; Google Ads flagging → thesis 15 +
+  [[platform-gatekeeping]]. No thesis home, noted here: **Shopify acquires Tailwind Labs** (Tailwind CSS
+  "will always be MIT-licensed," same team continues with Shopify's support; Tailwind Plus/ui.sh closed to
+  new customers — the MIT commitment is the load-bearing claim for every downstream user, and "the team
+  continues to lead" is the promise worth watching post-acquisition; 110M+ weekly installs cited); **GNU
+  Radio entirely in the browser** (gnuradioworld.com, Marc Lichtman — WASM DSP stack + Qt GUI sinks, live
+  SDR over WebUSB to RTL-SDR/PlutoSDR/HackRF, reads/writes native `.grc`; its own numbers: 12.1 vs 24 Msps
+  on a decimating FIR, no general Python runtime (Python blocks need C++ ports), SharedArrayBuffer/
+  COOP-COEP hosting required — the install barrier that always gated SDR experimentation becomes a URL,
+  and the gr-* module ecosystem with it).

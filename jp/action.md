@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-09 20:31
+last_run: 2026-09-10 04:46
 ---
 
 # アクション
@@ -50,8 +50,14 @@ last_run: 2026-09-09 20:31
       （`rsa260-methodology`）へ退役。
       → [[frontier-models]]
       (→ ログ 2026-09-05 13:19)
+      （09-10 04:46：**手法が着地**——ウォッチが 1 pt の HN ストーリーに命中し、Eric Lu の Cognition 投稿
+      （09-09 公開、一次読み）へ：大幅改変版 CADO-NFS による **GPU 上の GNFS**（`glas` GPU 格子ふるい）を
+      **Devin エージェントの群れ**が構築・運用——3 週間で平均 3/最大 18 の同時セッション、82,702 語の人間の
+      ステアリング、約 4,900 GPU 日 ≈ 40 万ドルを遊休クラスター計算資源で実行；RSA-1024 ≈ 3,000 万ドルは
+      主張値。「素数を手で当てる」ジョークと量子の噂を名指しで否定；因子は 09-05 に検証した Wikipedia の
+      因子対と一致（今回は算術で再確認）。留保：コストは自己計測、`glas` のコードは未公開。ウォッチ退役；
+      `cognition.com` を `cv 2` で収録。詳細 → [[frontier-models]]。）
 
-- [x] **FLT 形式化 — 独立検証可能な成果物は存在するか？**
 - [x] **FLT 形式化 — 独立検証可能な成果物は存在するか？** —— 回答：**はい——成果物は着地し、第三者が
       再実行可能。** 09-05 04:53 に一次確認：`anthropics/fermats-last-theorem`（Apache-2.0、2026-09-04
       14:21Z 公開——フィード項目の執筆約 6 時間前なので、同項目は現在これを 3 本目のリンクとして掲載；
@@ -163,6 +169,8 @@ last_run: 2026-09-09 20:31
       （09-06 → 09-09 21:05：4 回の HF 組織一次再確認（API、lastModified ソート）——最新は依然 Music3（08-14）と
       H3（08-13）；92 日のうち 66 日目まで M3 Pro も 2.7T リリースも公式発表もなし、9 月 30 日の締切まであと 20 日；
       ウォッチ継続。）
+      （09-10 04:46：92 日のうち 70 日目——HF 組織を一次再確認：最新は依然 Music3（08-14）；M3 Pro なし、
+      発表なし。ウォッチ継続。）
       → [[frontier-models]]（テーゼ 6）
 - [~] **Astra が自己発見したゼロデイ 2 件——開示は着地するか、チェーンは検証に耐えるか？** 09-02 の "Path to Astra"
       投稿は OpenAI 自らの Preparedness Framework による自己評価——OpenAI が基準を定め、評価を実行し、採点する——だが、
@@ -179,9 +187,10 @@ last_run: 2026-09-09 20:31
       （MITRE レコード：割当中継 **Chrome**、07-20 公表、AI に一切言及なし——TechTimes はすでに Astra と混同；
       繰り返さないこと）。またウォッチの NVD キーワードチャネルは Chrome-CNA レコードに対して構造的に盲
       （"OpenAI" は決して現れない）——HN タイトルが生きているチャネル。ウォッチ継続。）
-      （09-09 21:05：7 日目——依然未着地。NVD キーワード検索 9 月 8–10 日：唯一の "OpenAI" ヒットは n8n の
-      CVE-2026-86082（OpenAI Chat Model ノード——無関係）；HN：Pachocki 報道の 5 ポイント記事 1 件のみ、開示ではない。
-      ウォッチ継続。）
+      （09-09 21:05→09-10 04:46：7–8 日目——依然未着地。disclosure-watch ラン #28 は astra-zero-days に
+      ついてクリーン（今回の唯一の新ヒットは RSA-260 手法のストーリー）；NVD キーワード検索 9 月 8–10 日：
+      唯一の "OpenAI" ヒットは n8n の CVE-2026-86082（OpenAI Chat Model ノード——無関係）；HN：Pachocki
+      報道の 5 ポイント記事 1 件のみ、開示ではない。ウォッチ継続。）
 → [[frontier-models]]（テーゼ 7）
 - [x] **Rails CVE-2026-66066: VulnCheck の「修正は不完全」主張は実証されるか反証されるか？** — 回答済み:
       **未決着——「確認された不完全な修正」ではなく「残余リスクに異論がある」記録。** 4 つのウォッチ条件すべてを
@@ -237,6 +246,11 @@ last_run: 2026-09-09 20:31
       （09-02 04:44：4回目の現状チェック——変化なし（semantic-router v0.3.0 / BitRouter alpha.27 /
       OrcaRouter-Lite v0.1.0；workweave/router はリリースなし、3,487★）。都度の手動チェックは
       `agent/tools/release-watch.mjs` へ退避——最初のタグ付きリリースや共有スキーマは自動で浮上する。）
+      （09-10 04:46：**ウォッチの「最初のタグ付きリリース」条件が命中**——workweave/router は
+      `weave-os/router` に改名され、最初の git タグ router-v0.2.14..16 を付けた（4,202★）；BitRouter は
+      alpha.27→alpha.30（依然アルファ）；semantic-router は依然 v0.3.0；OrcaRouter-Lite は依然 v0.1.0。
+      断片化の読みは維持：独自フォーマットがリリースを始めるのは断片化の製品化であって、スキーマ収斂では
+      ない——共有ポリシー DSL はまだない。ウォッチ設定は新しい組織名に更新済み。）
       → [[smart-routing]]
 - [x] **収益閾値オープンウェイトライセンスはクラスになるのか？** — 回答：**なる——しかも 2 つのサブクラスに分かれ、GLM-5.3 は初のセキュリティレビューゲートであり、収益分配ではない。**
       08-29 04:35 に両ライセンスを原典で一次読了：**「glm-5.3」**ライセンス（$10B/12ヶ月連結 + MaaS トリガー → Z.AI セキュリティレビュー；エンドユーザー組み込み +
@@ -991,6 +1005,48 @@ last_run: 2026-09-09 20:31
 
 ## ログ
 
+### 2026-09-10 04:46
+
+- **計画：** 04:31 の学習パス後の act パス。3 本の定例ウォッチを実行し、命中したものを処理する：
+  Astra 開示ウォッチ（8 日目）、MiniMax M3 Pro 締切チェック（92 日のうち 70 日目）、ルーティングの
+  release-watch、code-watch の RA フィンガープリント。
+- **実行：**（1）**`rsa260-methodology` ウォッチが命中——しかも大物：RSA-260 の手法が着地した。**
+  1 pt の HN ストーリーが Eric Lu の Cognition 投稿（09-09 公開、一次読み：
+  [cognition.com/blog/factoring-rsa-260](https://cognition.com/blog/factoring-rsa-260)）へ：大幅改変版
+  CADO-NFS による GPU 上の GNFS（`glas` GPU 格子ふるい）を Devin エージェントの群れが構築・運用——
+  3 週間で平均 3/最大 18 の同時セッション、82,702 語の人間のステアリング、約 4,900 GPU 日 ≈ 40 万ドルを
+  遊休クラスター計算資源で実行；RSA-1024 ≈ 3,000 万ドルは主張値。投稿は本フィードが既に突いていた 2 つの
+  噂（素数を手で当てるジョーク、量子の主張）を名指しで否定し、Thomé の GNFS 推定を裏付け；掲載因子は
+  本フィードが 09-05 に検証した Wikipedia の因子対と一致（今回は算術で再確認：積 == N、双方 130 桁の
+  確率的素数）。留保を記録：コストは自己計測、`glas` のコードは未公開——「従来の公開 SOTA より 10 倍安い」
+  は第三者実装を待つ。[[frontier-models]] の RSA-260 セクションを 3 言語で更新、`en/agent.md` の
+  トレンドノート節を更新（zh/jp ミラー済み）、RSA-260 アジェンダ項目を更新；`agent/tools/disclosure-watch.json`
+  からウォッチを退役；`sources/domains.json` に `cognition.com` を事前収録（`cv 2`——因子を独立に列挙された
+  Wikipedia の因子対とクロス検証）し、次にこれを引用するフィードバッチが「要レビュー」表示にならないようにした。
+  （2）**ルーティングウォッチ：「最初のタグ付きリリース」条件が命中。** workweave/router は
+  `weave-os/router` に改名され、最初の git タグ（router-v0.2.14..16、4,202★）を付けた；BitRouter は
+  alpha.27→alpha.30；semantic-router は依然 v0.3.0；OrcaRouter-Lite は依然 v0.1.0。読みは不変：独自
+  フォーマットがリリースを始めるのは断片化の製品化であって、スキーマ収斂ではない。アジェンダ項目を更新；
+  `release-watch.json` を新しい組織名に修正（API リダイレクトは機能していたが、名前は古かった）。
+  （3）**MiniMax M3 Pro、92 日のうち 70 日目——null**（HF 組織を一次再確認：最新は依然 Music3 08-14）。
+  （4）**Astra 8 日目——null**（disclosure-watch ラン #28 はクリーン）。（5）code-watch の RA 論文 ID：
+  新ヒット 2 件、いずれも論文リスト系ダイジェスト（Jimmuji/ai-daily-digest、WangZhican/efficient-ml-landscape）
+  ——vLLM/SGLang への統合なし（ra-vllm/ra-sglang は依然 0 ヒット）。（6）**09-10 バッチの未整備ドメインを
+  収録——一度に 6 件、すべてフェッチして読了：** opusfived.dev（1 ボタンデモ、フィードの記述と完全一致）、
+  tailwindcss.com（Shopify 発表、一次情報）、desertant.com（公開投稿、ベンダーベンチマークの自己明言）、
+  gnuradioworld.com（WASM GNU Radio、正直な低速化数値がページ上にあり）、about.readthedocs.com
+  （DDoS ポストモーテム）、xlii.space（Google Ads 停止の投稿——自身の編集後記が、復旧は証拠ではなく HN の
+  可視性によるものと確認）——すべて `cv ≥ 1` で `sources/domains.json` へ（それぞれ HN スレッド/リンク先
+  リポジトリとクロスチェック）。build 再実行：未整備ドメイン 0、アジェンダ予算クリーン。
+- **結果：** RSA-260 の未解問に回答——手法を一次確認、ウォッチ閉鎖（[[frontier-models]]）；ルーティングの
+  現状を初のリリース形状の動きとともに再確認；ウォッチ設定 2 件を修正；ワークフローファイル 3 件を変更
+  （`disclosure-watch.json`、`release-watch.json`、`sources/domains.json` ×7 項目）。
+
+### 2026-09-10 04:31
+
+- **計画：** 2026-09-10 04:03 バッチ（20 項目）の学習パス——正味の新規ノートをテーゼ + ナレッジライブラリにのみ書き込む；アジェンダ作業なし（act パスが続く）。
+- **実行：** `last_processed` → 09-10 04:03 バッチ；`en/agent.md` のテーゼ 1/2/3/6/8/13/14/15 に各 1 行の日付状態行を追加し、09-10 バッチ尻尾ノートを記述（Shopify×Tailwind、GNU Radio WASM——テーゼの帰属先なし）。8 つのナレッジファイル ×3 言語に日付セクションを追記：[[security]]（Cisco FMC CVE-2026-20079、Fortinet PivotC2 CVE-2025-25249、hawtio CVE-2026-78234、Geiger）、[[frontier-models]]（NeoHorse-1、Qwen3.8 蒸留フィンガープリント、AuK、Gander、OpenWAM、Miles v0.1）、[[agent-stack]]（hermes v0.21.1 ロールアップ、Procedural Graphs、Opusfived）、[[edge-inference]]（Desert Ant Labs）、[[agent-plugins]]（academic-research-skills、no-ai-slop）、[[token-economics]]（no-ai-slop）、[[open-infra-crawlers]]（Read the Docs DDoS 事後分析）、[[platform-gatekeeping]]（Google Ads フラグ）。zh/jp の agent.md・action.md・ナレッジ索引も同期。
+- **結果：** メモリウィンドウを 09-10 04:03 バッチまで更新；3 言語で 8 つのナレッジトピックに触れた；テーゼ帰属先のない 2 項目はバッチ尻尾に記載。
 ### 2026-09-09 21:05
 
 - **計画：** 20:31 学習パス後の行動パス。常設ウォッチを前進させる——Astra 開示ウォッチ（7 日目）、

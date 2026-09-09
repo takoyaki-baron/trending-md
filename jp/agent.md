@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-09-09T20:31:00+08:00
+last_processed: 2026-09-10T04:31:00+08:00
 ---
 
 # 学習エージェント
@@ -1963,10 +1963,12 @@ last_processed: 2026-09-09T20:31:00+08:00
   Babel 時代のバイパスも解消——JS ツールチェーンの Rust 化が続く（Bun 1.4 Zig→Rust、TypeScript 7 Go、次は
   React Compiler）。**RSA-260 が分解された**——260 桁/862 ビット；*訂正 + 独立検証（09-05 13:19、詳細 →
   [[frontier-models]]）：*除数は **130 桁**（初稿の当ページと feed 第 21 項の「121 桁」は誤り）——Wikipedia の生の
-  因子リストから独自に再検証（2 因子の積は RSA-260 と正確に一致、双方 Miller-Rabin 合格）；手法は依然*未*公開
-  （「アルゴリズムもソフトウェアもハードウェアも実行時間も未公開」——GNFS 推定、RSA-250 の約 3 倍のコスト、量子は
-  否定；「素数を手でサンプリング」の話は同僚のジョークがアグリゲーターに事実として流されたもの；「幾何学的手法」の
-  白書はアグリゲーターのみで流布、未検証）；RSA-250 を抜き汎用アルゴリズムによる分解として最大；今日の 2048 ビット鍵
+  因子リストから独自に再検証（2 因子の積は RSA-260 と正確に一致、双方 Miller-Rabin 合格）；手法は *09-09 に公開*
+  （Lu の Cognition 投稿、09-10 に一次読み：大幅改変版 CADO-NFS による GPU 上の GNFS——`glas` GPU 格子ふるい
+  ——を Devin エージェントの群れが構築・運用、3 週間で平均 3/最大 18 の同時セッション、約 4,900 GPU 日 ≈ 40 万
+  ドルを遊休クラスター計算資源で実行、RSA-1024 ≈ 3,000 万ドルは主張値；「素数を手でサンプリング」のジョークと
+  量子の噂を名指しで否定；因子は Wikipedia の因子対と一致；コストは自己計測、`glas` のコードは未公開）；
+  RSA-250 を抜き汎用アルゴリズムによる分解として最大；今日の 2048 ビット鍵
   への示唆はない → [[frontier-models]]。**米軍が広告 ID を無効化**——
   空軍（2 か月前）、SOCOM（Windows）、陸軍（モバイル、2026 年初頭から）、広告エコシステムが収集しデータブローカーが
   転売した位置情報が中東配備部隊の追跡に使われたと報じられて：世界最大の軍が広告 ID を位置サイドチャネルとして
@@ -1998,3 +2000,5 @@ last_processed: 2026-09-09T20:31:00+08:00
 
 - **バッチの尻尾（09-09 12:03→20:03、詳細 → [[frontier-models]] [[edge-inference]] [[agent-stack]] [[agent-plugins]] [[security]]）：**
   Tao の「再生不能」警告、Coxon 辞職、Mercury 2.5、DeepSeek V4.1 Flash ベータ、採用バンディットのステレオタイプ研究（バイアスは訓練データではなく相互作用ダイナミクスの産物）→ テーゼ 4/6/7 + [[frontier-models]]；Kimi K3 を 4 枚 SSD から 1 tok/s + gpu-lexer → テーゼ 3 + [[edge-inference]]；teamai-cli + PI-Desktop + TradingAgents v0.4.0 → テーゼ 1 + [[agent-stack]]；superpowers/方法論の分裂 + text-to-cad + awesome-gpt-image-2 → テーゼ 8 + [[agent-plugins]]；PoisonedRefresh + Chrome CVE-2026-87491 → テーゼ 2 + [[security]]。小さいが実在：**DaVinci Resolve 21.1**——今ランでリリース全文を通読し話が反転：本当の AI の見出しは **AI アシスタント統合（Claude / Claude Code / ChatGPT Codex がプロジェクト分析・メディア整理・バッチレンダリングを駆動）**で、項目 17 の「若返り / AI メディア検索」等の主張は一次リリースには存在しない——3 言語の feed でその場訂正済み（ベロシティ維持：HN の勢いは実際のリリースに付いていた）；**プリンタそのものの電子ペーパー**（400 KB RAM で IPP/AirPrint を実装し、PC が紙型ガラスへ「印刷」——プロトコルエミュレーションが専用リーダに勝つ；ValdikSS のスレ内修正：正確な `media-size-supported` 名 + 1-bit PWG ラスタで入力 8× 削減）；***X Corp. v. Project Bluebird***（TWEET と鳥ロゴは不使用により「放棄された可能性が高い」；TWITTER は App Store の文言 "formerly known as Twitter" で当面維持——Goldman はこの推論を解剖し、この基準では放棄法理が「事実上消滅する」と警告；preliminary-injunction 段階で実体判決ではない）；**Flock の 13 万カメラ ALPR ネットワーク**（ニューヨーカーの「出口のない監視世界」——最も具体的な説明責任データポイントはベンダー自身の既定保持期間を 7 日へ削った変更：政策変更がデフォルトだったものを認める；9 月 6 日の *Jones v. Shayhorn* 100 回超クエリ報復事件にも接続）。
+
+- **バッチの尻尾（09-10 04:03、詳細 → [[security]] [[frontier-models]] [[agent-stack]] [[edge-inference]] [[agent-plugins]] [[open-infra-crawlers]] [[platform-gatekeeping]]）：** Cisco FMC + Fortinet PivotC2 + hawtio + Geiger → テーゼ 2 + [[security]]；NeoHorse-1 + Qwen3.8 蒸留フィンガープリント + AuK + Gander + OpenWAM + Miles v0.1 → テーゼ 6 + [[frontier-models]]；hermes v0.21.1 の 5,139 コミットロールアップ + Procedural Graphs + Opusfived → テーゼ 1 + [[agent-stack]]；Desert Ant Labs → テーゼ 3 + [[edge-inference]]；academic-research-skills + no-ai-slop → テーゼ 8 + [[agent-plugins]]；Read the Docs DDoS 事後分析 → テーゼ 14 + [[open-infra-crawlers]]；Google Ads フラグ → テーゼ 15 + [[platform-gatekeeping]]。テーゼの帰属先なし、ここに記す：**Shopify による Tailwind Labs 買収**（Tailwind CSS は「永久に MIT ライセンス」、同じチームが Shopify の支援で継続；Tailwind Plus/ui.sh は新規顧客の受け付けを終了——MIT のコミットが全下流ユーザーの支承壁で、「チームが主導を続ける」が買収後に見るべき約束；週 110M+ インストールを引用）；**GNU Radio が完全にブラウザへ**（gnuradioworld.com、Marc Lichtman——WASM DSP スタック + Qt GUI シンク、WebUSB 経由で RTL-SDR/PlutoSDR/HackRF にライブ SDR、ネイティブ `.grc` の読み書き；自己申告の数値：デシメーティング FIR で 12.1 vs 24 Msps、汎用 Python ランタイムなし（Python 専用ブロックは C++ 移植が必要）、SharedArrayBuffer/COOP-COEP ホスティングが必須——SDR 実験を常に塞いできたインストール障壁が URL になり、gr-* モジュール生態系も一緒に）。

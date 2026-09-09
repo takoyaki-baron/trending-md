@@ -65,3 +65,19 @@ Sources: [Creepy crawlies (people.kernel.org)](https://people.kernel.org/monsieu
   served Anubis's "Access Denied" challenge page. The tool works.
   Sources: [Techaro blog](https://anubis.techaro.lol/blog/2026/anubis-wasm/) ·
   [TecharoHQ/anubis releases](https://github.com/TecharoHQ/anubis/releases)
+
+## 2026-09-10 — the attack acquires a business model: your cloud bill
+
+- **Read the Docs' ten-day DDoS post-mortem** (blog Sep 8 on a June 2026 attack; HN 98+ pts). Peak
+  >5.5M req/min (~100× normal, 10× larger than any prior incident) from millions of IPs across hundreds
+  of ASNs; HTTP/TLS fingerprints randomized to beat JA3/JA4; targeting was **cache-miss-only** (unique
+  404s, uncached 302s) with a "yo-yo pattern" to maximize auto-scaling costs — the goal was the
+  invoice, not downtime. What held: caching 404s/redirects at the edge, bot-score + per-IP rate limits,
+  a penalty-box rule system managed via Terraform. What failed: two defenses outright
+  (protocol-inconsistency checks, JA4); and they declined Cloudflare's Under Attack Mode ("would break
+  every API integration"). Their own closing: "an extended reprieve," with residual attack traffic
+  continuing at publication. Same family as the kernel.org AI-crawler tax, different actor and motive —
+  cost-inflation extortion against a public-good docs host. The template lesson for anyone running
+  public docs infrastructure: IP blocking is "obsolete for distributed attacks."
+- Sources: [Read the Docs blog](https://about.readthedocs.com/blog/2026/09/2026-ddos-attack/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49628614)

@@ -2314,3 +2314,42 @@ the scorer record is messy in every case.
   rate, not a fluke — browser exploitation is industrialized; (2) the scorer discipline applies again —
   **NVD rates CVE-2026-87491 only Medium**, and Google withholds technical details "until a majority of
   users are updated": the in-the-wild status, not the score, is what sets the patch clock.
+
+## 2026-09-10 04:03 — patching-without-eviction, twice; a signing oracle; an inventory tool for the agent stack
+
+- **Cisco FMC CVE-2026-20079 — CVSS 10.0, KEV'd with a 3-day federal deadline** (CISA KEV Sep 9, due
+  Sep 12; Cisco PSIRT as CNA, NVD carries the 10.0 as a secondary score — the who-scored discipline
+  applies). Unauthenticated web-interface auth bypass (CWE-288) chaining to root RCE "via an improper
+  system process that is created at boot time"; CyberAuth's public PoC independently reproduced against
+  FMC 10.0.1-1 with confirmed `uid=0` (Full Disclosure, Aug 20). Advisory v2.5 confirms PSIRT became
+  aware of active exploitation in August, warns hot fixes "may not address existing compromise," and
+  ships an IoC check for `/var/tmp/license.tmp`. No workarounds. The load-bearing sentence: patching is
+  not eviction — this is a forensics ticket, not a patch-Tuesday line item.
+- **Fortinet PivotC2 CVE-2025-25249 — a 30,000-target campaign teardown, KEV'd the next day** (SOCRadar
+  Sep 8; KEV Sep 9, due Sep 12). Heap overflow in the FortiOS/FortiSwitchManager `cw_acd` CAPWAP daemon
+  (UDP 5246) deploys "PivotC2," a Node.js post-exploitation RAT whose code carries AI-assisted comments;
+  attacker files show 30,000+ targeted IPs and 178 confirmed infections (US-heavy, two full intrusions
+  with data exfiltration); SOCRadar assesses with high confidence a Russian-speaking, financially
+  motivated crew active since at least July. Scorer split of the week: **NVD 9.8 vs Fortinet's own CNA
+  8.1 (`AC:H`)** — 1.7 points between assigner and analyzer. SOCRadar's FAQ answers its own question
+  bluntly: "Does patching remove PivotC2? No." → credential rotation on `fsv_sync.dat`-harvested devices
+  is mandatory. A 10-month-old patched CVE, weaponized chain (ASLR bypass, heap grooming, ROP via
+  FortiOS's own Node.js runtime), still eating firewalls.
+- **Red Hat hawtio-operator CVE-2026-78234 — a signing oracle, not a leak (9.9, Red Hat CNA, explicitly
+  "preliminary and subject to review")**. The operator (Red Hat build of Apache Camel tooling) reads the
+  OpenShift Service CA private signing key and mints client certificates with an attacker-chosen
+  Common Name — any namespace edit-role (a common grant) flips into cluster-wide certificate forgery,
+  then RCE via Jolokia MBean invocation. Rated only *Important* because authentication is required.
+  Record discipline: the companion CVE-2026-77968 (8.2, NVD-published Sep 8, over-broad cluster-wide
+  Secret read) is a **distinct CVE, not one bug** — early coverage conflated them. Mitigation is
+  configuration (CSR API, RBAC tightening, cert rotation), not just an upgrade; no public PoC, no
+  confirmed in-the-wild exploitation so far.
+- **Geiger — `npx geiger-scan` inventories the agent stack on your machine** (`Atomburstofficial/geiger`,
+  57★, JavaScript, MIT, zero runtime deps; Show HN 33+ pts). Read-only scan of known config locations —
+  Claude Code MCP/hooks/plugins/skills/subagents; MCP hosts (Cursor, Windsurf, VS Code, Cline, Zed…);
+  agent CLIs (Codex, Gemini CLI, Aider, Goose…) — without executing npm, labeling each finding
+  EXECUTES / HOLDS-SECRETS / BROAD-FILESYSTEM / NETWORK plus an origin class (UNKNOWN-ORIGIN included),
+  with a `--diff` baseline as a drift alarm for CI/cron. Its own limits: "reads configuration, not
+  runtime behavior," misses agents in containers/WSL/other user accounts, "origin ≠ trustworthiness."
+  The inventory half of the skills-injection problem: with skills and plugins installing from GitHub at
+  trending scale, the first question is what did I actually install and what can it reach.

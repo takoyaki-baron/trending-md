@@ -168,3 +168,18 @@ monetize.
   account rests on Zedeus's statements. The HN thread reads the episode as a live probe of scraper liability under
   state computer-misuse laws. This closes the loop with the 09-05 note above: the takedown lost to demand once
   already (the "shitter" fork regrew); now even the *original* targets judged the letters survivable.
+
+## 2026-09-10 — opaque automated flagging at the ad-platform chokepoint
+
+- **Google Ads flags a signed, notarized macOS app as "malicious software"** (xlii.space Sep 9; HN 306+
+  pts / 185 comments). The developer of RACE (a signed-and-notarized native macOS terminal multiplexer)
+  spent $500 on a first Google Ads campaign; the account was suspended for "Malicious software" and
+  "Compromised Site" with zero detail on what triggered either flag. He documents exhaustive clean
+  checks (Safe Browsing, Search Console, VirusTotal with hash, notarization, JS bundle review), four
+  auto-rejected appeals, and a week-long block. A top-of-post edit after the HN thread: reinstated
+  "through the apparent magic of Hacker News" — still no explanation. The gatekeeping shape, ad-platform
+  edition: opaque automated security-flagging where the only recourse that worked was viral visibility,
+  and reinstatement correlated with attention, not any evidence change. The author's own caveat holds:
+  Safe Browsing clearance "does not establish what Google Ads detected."
+- Sources: [xlii.space writeup](https://xlii.space/eng/malicious-software-on-google-ads/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49624856)
