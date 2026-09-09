@@ -1,8 +1,8 @@
 ---
 date: 2026-09-09
-updated: 2026-09-09T12:13:00+08:00
+updated: 2026-09-09T20:10:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -323,13 +323,181 @@ Jesse Vincent's superpowers — a composable skills framework that is really a s
 
 ---
 
+## 23. Tencent open-sources teamai-cli — a Git repo as the single source of truth for a team's agent harness
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending #2 daily · +1,083 today (2.7k stars) · repo active, MIT
+- **Tags:** `tencent` `teamai-cli` `agent-config` `skills` `git`
+
+Tencent's TeamAI CLI, described in launch posts as used internally for half a year, treats a shared Git repository as the single source of truth for a team's Skills, Rules, Hooks, MCP config, agent definitions, `culture.md`, and session-derived knowledge — versioned, reviewable through MRs, then synced into the native config directories of 10 coding agents (Claude Code, Codex, Cursor, CodeBuddy, WorkBuddy, OpenCode, OpenClaw, Hermes, DeepSeek Harness, Qoder). It adds a stop-hook that detects "friction" (interruptions, denied tool calls, retries) and suggests capturing the learning, BM25 + graph-boost knowledge recall, and cross-team skill federation via `teamai source add`.
+
+**Why it matters:** after a week of single-file skills topping trending (items 4 and 22), the category's distribution half arrives from a major vendor: team-level config management is the missing layer between "a skill" and "how an org runs agents." The README states its own limits — two of three layers are beta, recall is off by default, and code-graph edges only cover TypeScript/JavaScript, Python, and Go, with regex fallback elsewhere.
+
+[`🔗 Tencent/teamai-cli`](https://github.com/Tencent/teamai-cli) · [`🔗 cnblogs: 9 款 AI 编码 Agent 的团队级统一 Harness`](https://www.cnblogs.com/itech/p/22761131)
+
+---
+
+## 24. PoisonedRefresh — a Linux rootkit injects a fileless PHP web shell into F5 BIG-IP APM memory
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Sophos analysis Sep 7 · The Hacker News / BleepingComputer Sep 8-9 · F5-tracked activity c05d5254, ESET-named PoisonedRefresh
+- **Tags:** `f5` `big-ip` `rootkit` `fileless` `webshell`
+
+Sophos published its dissection of a Linux implant found in compromised F5 BIG-IP Access Policy Manager environments: an installer prepends code to `/usr/sbin/httpd`, hooks Apache's `apr_dso_load`, waits for `libphp`, flips memory pages writable via `/proc/self/maps`, and — when Apache loads any of three legitimate webtop scripts (`apm_css.php3`, `full_wt.php3`, `webtop_popup_css.php3`) — prepends a web shell **to the in-memory copy only**; disk files stay clean. The shell answers attacker requests with HTTP 201 and a CSS content type to mimic a stylesheet fetch, and a secondary path links `/run/bigtlog.pipe` to `/bin/bash` after a token check. Initial access: CVE-2025-53521 (unauthenticated RCE, patched Oct 2025, CISA KEV since March 2026).
+
+**Why it matters:** memory-only injection defeats exactly the file-integrity checks defenders run on load balancers — the UK NCSC urges investigation "regardless of when the system was updated," and Sophos found a persistence component that survives upgrade images. The honest gaps: no exploitation timeline exists (Ireland's NCSC warns activity may predate disclosure), attribution is unnamed, and F5's own March advisory had said script presence alone doesn't prove compromise — this analysis reconciles the two claims.
+
+[`🔗 Sophos: Dissecting a PHP web server rootkit`](https://www.sophos.com/en-us/blog/dissecting-a-php-web-server-rootkit) · [`🔗 The Hacker News: F5 BIG-IP APM malware injects a PHP web shell into memory`](https://thehackernews.com/2026/09/f5-big-ip-apm-malware-injects-php-web.html)
+
+---
+
+## 25. DeepSeek opens an internal beta of V4.1 Flash — a new architecture, a two-day window, and a price cut behind it
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** DeepSeek official community notice Sep 8 · OSChina / Wallstreetcn coverage · Sep 9 platform pricing notice
+- **Tags:** `deepseek` `model-release` `multimodal` `pricing`
+
+On Sep 8 afternoon DeepSeek announced via its official channel an internal ("middle") test build of V4.1 Flash, open only until Sep 10 — explicitly not a final release. The notice claims a new model architecture with native multimodal support, more capability, higher speed, and lower cost; community testers' early reaction was "fast as hell." Beta pricing matches V4 Flash off-peak (¥0.05 cache-hit input / ¥1.5 input / ¥4.5 output per M tokens), and a Sep 9 platform notice cuts the flash series again effective Sep 10, 12:00 Beijing — cache-hit input dropping to ¥0.02.
+
+**Why it matters:** DeepSeek's flash tier is the price-setting reference for open-weight serving across Asia, so a new architecture plus a further cut moves everyone's floor. Citation discipline: DeepSeek's own API changelog (checked this run) still has **no** V4.1 Flash entry — the latest remains Aug 21's V4-Flash-Vision-Exp — so every capability claim above is the vendor notice's, not a published benchmark.
+
+[`🔗 OSChina: DeepSeek V4.1 Flash 中间版本开启内测`](https://www.oschina.net/news/502383) · [`🔗 Wallstreetcn: 刚刚，DeepSeek 新模型内测`](https://wallstreetcn.com/articles/3781316)
+
+---
+
+## 26. Chrome 153 ships 230 fixes with the year's seventh actively-exploited zero-day (CVE-2026-87491)
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google Chrome release Sep 9 · Help Net Security · NVD
+- **Tags:** `chrome` `v8` `zero-day` `cve-2026-87491`
+
+Google's Chrome 153 release (153.0.8010.36/.37 Win/Mac, .36 Linux) fixes 230 vulnerabilities, one of them — CVE-2026-87491, an out-of-bounds write in V8 — confirmed by Google as exploited in the wild: "an exploit... exists in the wild," the seventh such Chrome zero-day of 2026 (after CVE-2026-2441, -3909/-3910, -5281, -11645, and -85046, which we covered Sep 4). It was reported Aug 6 by Jihyeon Jeong of Seoul National University's Compsec Lab for a $2,500 bounty, and allows arbitrary code execution *inside the sandbox* via a crafted HTML page.
+
+**Why it matters:** two honest readings. First, the seventh in-the-wild zero-day in eight months is a utilization rate, not a fluke — browser exploitation is industrialized. Second, the scorer discipline the feed keeps demanding applies here too: NVD currently rates CVE-2026-87491 only **Medium**, and Google is withholding technical details "until a majority of users are updated" — the in-the-wild status, not the score, is what sets the patch clock.
+
+[`🔗 Help Net Security: Google fixes yet another actively exploited Chrome zero-day`](https://www.helpnetsecurity.com/2026/09/09/google-chrome-cve-2026-87491-zero-day-flaw/) · [`🔗 NVD CVE-2026-87491`](https://nvd.nist.gov/vuln/detail/CVE-2026-87491)
+
+---
+
+## 27. Court finds "Tweet" and the bird logo "likely abandoned" — X keeps TWITTER, for now, on a "formerly known as" technicality
+
+- **Velocity:** ▮▮ rising
+- **Source:** *X Corp. v. Project Bluebird Inc.*, D. Del. Sep 3, 2026 · Eric Goldman analysis · HN 127+ pts
+- **Tags:** `trademark` `x-corp` `twitter` `public-domain` `litigation`
+
+A preliminary-injunction ruling in *X Corp. v. Project Bluebird Inc.* (2026 WL 2606728) found the TWEET word mark and the Twitter bird logo "likely abandoned" — free for anyone to use. The court's evidence was non-use, not a lapsed registration: neither mark appears in X's App Store listing, X conceded at an April hearing that neither appears on x.com's homepage, and Musk's own statements and the rebrand show intent "not to resume." The court nonetheless held that the app-store phrase "Welcome to X (formerly known as Twitter)" is bona fide use sustaining the TWITTER mark — reasoning Goldman dissected and rejected, warning that if retired-name mentions block abandonment, "the doctrine effectively disappears." Project Bluebird renamed itself to tweet.app right after the ruling.
+
+**Why it matters:** the ruling is a live datapoint on what a renamed product still owns — and Goldman's caveat is the load-bearing one: this is a preliminary-injunction posture, not a merits decision, and any freed mark stays free only until someone (Project Bluebird first in line) reappropriates it.
+
+[`🔗 Eric Goldman: "Tweet" and the bird logo apparently enter the public domain`](https://blog.ericgoldman.org/archives/2026/09/tweet-and-the-bird-logo-apparently-enter-the-public-domain-but-x-maintains-its-grip-on-the-twitter-mark-for-now-x-v-project-bluebird.htm) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49621751)
+
+---
+
+## 28. "Gambling with our lives" — Jacob Coxon resigns from Anthropic with a safety warning, and HN carries the letter at 592+ points
+
+- **Velocity:** ▮▮ rising
+- **Source:** Politico (Sep 9) · HN 65+ pts · companion X post at 592+ pts via HN
+- **Tags:** `anthropic` `ai-safety` `industry` `resignation`
+
+Per Politico's reporting, Jacob Coxon — an AI researcher who worked at Anthropic and previously at OpenAI — has resigned, saying both labs are "gambling with our lives" and warning that advanced AI could kill humans. His companion post, "I resigned from Anthropic today," became one of the day's top HN stories at 592+ points; the Politico thread's commenters point to follow-up posts in which Coxon made additional and more specific claims.
+
+**Why it matters:** the second high-profile safety-motivated resignation from a frontier lab this year lands midweek, in the same news cycle as the Navier–Stokes dispute (items 1 and 16) — the argument is shifting from "can models do the math" to "who is accountable while they do." Attribution discipline: this item reports Politico's characterization; we could not independently read the resignation letter itself, and the HN thread's follow-up context is part of the record, not a verdict.
+
+[`🔗 Politico: 'Gambling with our lives': AI researcher quits Anthropic with warning`](https://www.politico.eu/article/anthropic-openai-researcher-jacob-coxon-warns-ai-could-kill-humans/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49623306)
+
+---
+
+## 29. gpu-lexer — a 27.4KB WebGPU model replaces 991KB of hand-written syntax grammars
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show-style HN · 95+ pts · gpu-lexer.vercel.app (Shu Ding, Vercel Labs)
+- **Tags:** `webgpu` `syntax-highlighting` `ml` `developer-tools`
+
+Shu Ding's gpu-lexer splits source into words/whitespace/symbols and lets a tiny WebGPU model — **41,321 parameters**, trained on ~4.69M tokens — label each part into nine token classes, merging adjacent labels into spans. It's language-agnostic by construction: one 27.4KB bundle (vs Shiki's 991.5KB of grammars) handles 91 tested languages, embedded `<script>`/`<style>` blocks included, and highlights 5.56M characters in 402ms where Shiki took 29.6s.
+
+**Why it matters:** the same "small model beats a hand-written rule system" pattern that took over code search and diffing now reaches syntax highlighting, at a size that ships in a browser bundle. The author's own limits are the citation: accuracy is measured as *agreement with Shiki* (88% held-out, under 50% on Jinja/VB), not correctness, and he explicitly says it shouldn't replace parsers, linters, or compilers.
+
+[`🔗 gpu-lexer`](https://gpu-lexer.vercel.app/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49619464)
+
+---
+
+## 30. earthtojake/text-to-cad — 11 agent skills covering the whole mechanical-engineering pipeline, from STEP files to G-code
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +97 today (14.8k stars) · MIT, actively maintained
+- **Tags:** `cad` `agent-skills` `hardware` `manufacturing`
+
+A library of agent skills for mechanical engineering: CAD modeling to STEP/STL/3MF/GLB, a browser CAD viewer, off-the-shelf component sourcing via step.parts, DXF drawings, URDF/SRDF/SDF robot descriptions, SendCutSend manufacturability validation, DfAM printability checks, G-code slicing, and Bambu printer control — installable via `npx skills add` or native marketplaces for Codex, Claude Code, and Grok Build. It lands one day after Copperhead (item 8) put a verification-gated KiCad agent on Show HN: software-side skills are arriving for hardware's *build* pipeline.
+
+**Why it matters:** agent skills are extending from editing code to driving the physical artifact chain — model, validate, source, slice, print. The README's practical sharp edges: `npx skills update` "silently misses" newly added skills, retired skills are never removed automatically, and Codex below 0.142.0 skips the plugin silently.
+
+[`🔗 earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad) · [`🔗 texttocad.dev docs`](https://texttocad.dev/)
+
+---
+
+## 31. PI-Desktop — a local-first Electron+Rust desktop shell for coding agents, 1.4k stars in its first wave
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +393 today (1.4k stars) · LGPL-3.0, v0.14.x
+- **Tags:** `desktop` `local-first` `agent-harness` `electron` `rust`
+
+vastsa/PI-Desktop packages the pi agent ecosystem (built on `pi-ai`/`pi-agent-core` from pi-mono) as a desktop app: BYO model (cloud APIs or Ollama/LM Studio gateways), a React renderer with no Node integration, a Rust host core handling permissions/filesystem/SQLite/keychain, and a separate "pi Agent Sidecar" for the agent loop. Three approval workflows — Agent (just do it), Plan (approve a frozen plan), Goal (approve outcome criteria) — plus subagents, a `.piplug` extension marketplace, local JSONL+SQLite storage with no telemetry, and session import from Claude Code, Codex, and OpenCode.
+
+**Why it matters:** the "your agent harness as a product" wave now has a local-first desktop entrant whose pitch is no lock-in — no account, no mandatory relay. The README does the honest caveat work itself: it's an Early Preview, plugins are "user-trusted code rather than a complete operating-system sandbox," and local-first ≠ offline since model requests go to whatever provider you configured.
+
+[`🔗 vastsa/PI-Desktop`](https://github.com/vastsa/PI-Desktop) · [`🔗 badlogic/pi-mono (the underlying pi harness)`](https://github.com/badlogic/pi-mono)
+
+---
+
+## 32. TradingAgents re-trends at +506/day — the 103k-star multi-agent trading firm ships look-ahead fixes in v0.4.0
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +506 today (103.6k stars) · Apache-2.0, v0.4.0 Aug 2026
+- **Tags:** `tradingagents` `multi-agent` `finance` `langgraph`
+
+TauricResearch's TradingAgents — a LangGraph framework that simulates a trading firm (fundamentals/sentiment/news/technical analysts, bullish-vs-bearish researcher debate, a trader, a risk team) — is trending again, five months past its viral moment. The relevant delta is v0.4.0 (Aug): look-ahead/point-in-time data fixes, LangGraph checkpoint resume after crashes, deterministic company-identity resolution and trader price grounding — direct answers to reproducibility complaints from earlier versions — plus GPT-5.6 and GLM-5.3 support.
+
+**Why it matters:** agentic-finance frameworks keep growing because they're the most legible demo of structured multi-agent debate; what distinguishes this maintenance cycle is that the fixes target the exact failure (look-ahead bias) that made earlier backtests meaningless. The README still hedges everything that matters: research only, non-deterministic runs, and "backtest results are not guaranteed to match any published figure."
+
+[`🔗 TauricResearch/TradingAgents`](https://github.com/TauricResearch/TradingAgents) · [`🔗 v0.4.0 release notes`](https://github.com/TauricResearch/TradingAgents/releases)
+
+---
+
+## 33. awesome-gpt-image-2 — 544 reverse-engineered GPT-Image 2 prompts packaged as an agent skill, +612 today
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +612 today (29.6k stars) · MIT
+- **Tags:** `gpt-image-2` `prompt-engineering` `agent-skills` `image-generation`
+
+freestylefly's "Prompt as Code" library turns community GPT-Image 2 examples into structured, reusable prompt protocols: 544 reverse-engineered cases in 13 categories (UI mockups, posters/typography, product/e-commerce photography, classical Chinese themes), 20+ industrial templates with a pitfalls guide, trilingual READMEs, and an npm-packaged agent skill (`gpt-image-2-style-library`) installable via `npx skills`, the Claude Code plugin marketplace, or GitHub Packages — sharing one style library with its companion generation site.
+
+**Why it matters:** image-model prompting is becoming a packaged, versioned, agent-consumable artifact rather than tribal knowledge — the skills economy is absorbing media generation the way it absorbed testing and diagrams. The README's own caveats: prompts are drawn from public libraries with copyright left to original authors, third-party commercial use is explicitly not guaranteed, and its GPT Image 2.5 ("Sunburst"/"Flare") recreations carry "generation conditions and exact tool model IDs remain unverified."
+
+[`🔗 freestylefly/awesome-gpt-image-2`](https://github.com/freestylefly/awesome-gpt-image-2) · [`🔗 companion site`](https://gpt-image2.canghe.ai/)
+
+---
+
+## 34. Flock's "closely surveilled world with no exit" — the New Yorker's accounting of a 130,000-camera ALPR network
+
+- **Velocity:** ▮ steady
+- **Source:** The New Yorker, Infinite Scroll (Sep 2026) · HN 126+ pts · NYT Aug 10 backfill
+- **Tags:** `flock-safety` `alpr` `surveillance` `privacy`
+
+The New Yorker's Infinite Scroll piece frames Flock Safety — roughly 130,000 automated license-plate-reader cameras on US streets — as building "a closely surveilled world with no exit": a network where opting out is structurally impossible, feeding law-enforcement searches by default. It lands in a documented arc: the NYT's Aug 10 report that Flock "can track every car in America," CNN's July 30 reporting on residents sawing cameras down, the ACLU's "Get the Flock Out" campaign, and Flock's own response cutting default data retention to seven days and making misuse detection mandatory.
+
+**Why it matters:** the concrete accountability datapoint is the vendor's own retention concession — a policy change is an admission of what the default was. It also connects directly to the Sep 6 item we carried (a man's plate queried 100+ times in the ALPR database after a traffic stop): the network's harms are showing up as individual-query logs, not just aggregate policy debates.
+
+[`🔗 The New Yorker: Flock wants a closely surveilled world with no exit`](https://www.newyorker.com/culture/infinite-scroll/flock-wants-a-closely-surveilled-world-with-no-exit) · [`🔗 NYT: Flock cameras can track every car in America`](https://www.nytimes.com/2026/08/10/us/flock-cameras-can-track-every-car-in-america-police-love-them-citizens-dont.html)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-09T12:13:00+08:00 |
-| Items | 22 |
-| Sources tracked | 29 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev, Mathstodon, Inception Labs, Blackmagic Design, OpenReview, nishantjosh.dev, argonautlabsai/gavamedia deltafin, blog.fsck.com) |
+| Generated | 2026-09-09T20:10:00+08:00 |
+| Items | 34 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev, Mathstodon, Inception Labs, Blackmagic Design, OpenReview, nishantjosh.dev, deltafin, blog.fsck.com, Sophos, The Hacker News, Help Net Security, OSChina, Wallstreetcn, blog.ericgoldman.org, Politico, gpu-lexer.vercel.app, texttocad.dev, The New Yorker, NYT) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

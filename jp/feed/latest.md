@@ -1,8 +1,8 @@
 ---
 date: 2026-09-09
-updated: 2026-09-09T12:13:00+08:00
+updated: 2026-09-09T20:10:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -323,13 +323,181 @@ Jesse Vincent 氏の superpowers——組合わせ可能なスキルフレーム
 
 ---
 
+## 23. Tencent が teamai-cli をオープンソース化——チームのエージェント harness の唯一の情報源として Git リポジトリを据える
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending 日次 2 位 · 本日 +1,083(計 2,700 スター)· リポジトリ活発、MIT
+- **Tags:** `tencent` `teamai-cli` `agent-config` `skills` `git`
+
+ Tencent の TeamAI CLI(公開投稿では「社内で半年間使用」と説明)は、共有 Git リポジトリを、チームの Skills・Rules・Hooks・MCP 設定・agent 定義・`culture.md`・セッションから蓄積した知識の唯一の情報源として扱う。バージョン管理され、MR レビューを経てから、10 のコーディングエージェント(Claude Code、Codex、Cursor、CodeBuddy、WorkBuddy、OpenCode、OpenClaw、Hermes、DeepSeek Harness、Qoder)のネイティブ設定ディレクトリへ同期される。「摩擦」(ユーザーの中断、拒否されたツール呼び出し、リトライ)を検知して学びの蓄積を促す stop-hook、BM25 + グラフ強化のナレッジリコール、`teamai source add` による他チームのスキルリポジトリ購読(「経験の連邦」)も備える。
+
+**Why it matters:** 単一ファイルスキルが 1 週間トレンドを席巻した後(本日項目 4・22)、このカテゴリの「流通」の側面を大手ベンダーが埋めた:チームレベルの設定管理こそ「1 個のスキル」と「組織がエージェントをどう運用するか」の間に欠けていた層だ。README が自ら限界を明記している——3 層のうち 2 層は beta、リコールはデフォルトでオフ、コードグラフのエッジは TypeScript/JavaScript・Python・Go のみで他は正規表現ヒューリスティクスにフォールバック。
+
+[`🔗 Tencent/teamai-cli`](https://github.com/Tencent/teamai-cli) · [`🔗 cnblogs:9 款 AI 编码 Agent 的团队级统一 Harness`](https://www.cnblogs.com/itech/p/22761131)
+
+---
+
+## 24. PoisonedRefresh——Linux ルートキットが F5 BIG-IP APM のメモリにファイルレス PHP ウェブシェルを注入
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Sophos 分析 9月7日 · The Hacker News / BleepingComputer 9月8-9日 · F5 追跡名 c05d5254、ESET 命名 PoisonedRefresh
+- **Tags:** `f5` `big-ip` `rootkit` `fileless` `webshell`
+
+Sophos が、侵害された F5 BIG-IP Access Policy Manager 環境から見つかった Linux インプラントの解剖を公開した:インストーラが `/usr/sbin/httpd` にコードを前置し、Apache の `apr_dso_load` をフックして `libphp` を待ち、`/proc/self/maps` 経由でメモリページを書き込み可能に変更——Apache が 3 つの正当な webtop スクリプト(`apm_css.php3`、`full_wt.php3`、`webtop_popup_css.php3`)のいずれかをロードすると、ウェブシェルを**メモリ上のコピーにのみ**前置する。ディスク上のファイルは汚されない。シェルは攻撃者のリクエストに HTTP 201 と CSS content-type で応答してスタイルシート取得に偽装し、副経路としてトークン検証後に `/run/bigtlog.pipe` を `/bin/bash` にリンクする。初期侵入は CVE-2025-53521(未認証 RCE、2025年10月に修正、2026年3月から CISA KEV)。
+
+**Why it matters:** メモリ専用の注入は、ロードバランサーで防御者が実行しているファイル完全性チェックをまさに打ち抜く——英国 NCSC は「システムをいつ更新したかに関わらず」調査を促し、Sophos はアップグレードイメージ後も生き残る永続化コンポーネントを発見した。誠実な空白:悪用の時系列は存在しない(アイルランド NCSC は活動が開示前に遡る可能性を警告)、帰属は未特定、しかも F5 自身の 3 月の勧告は「スクリプトの存在だけでは侵害の証明にならない」と述べていた——今回の分析がその 2 つの主張を突き合わせた。
+
+[`🔗 Sophos:Dissecting a PHP web server rootkit`](https://www.sophos.com/en-us/blog/dissecting-a-php-web-server-rootkit) · [`🔗 The Hacker News:F5 BIG-IP APM マルウェアがメモリに PHP ウェブシェルを注入`](https://thehackernews.com/2026/09/f5-big-ip-apm-malware-injects-php-web.html)
+
+---
+
+## 25. DeepSeek が V4.1 Flash の内部ベータを開始——新アーキテクチャ、2 日間の窓、そしてその裏の値下げ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** DeepSeek 公式コミュニティ通知 9月8日 · OSChina / Wallstreetcn 報道 · 9月9日のプラットフォーム価格通知
+- **Tags:** `deepseek` `model-release` `multimodal` `pricing`
+
+9月8日午後、DeepSeek は公式チャンネルで V4.1 Flash の内部(中間)テストビルドを発表した。窓は 9月10日までの僅か 2 日間で、最終リリースではないと明言している。通知は、ネイティブマルチモーダル対応・ higher 能力・高速・低コストを掲げる新しいモデルアーキテクチャを主張。コミュニティの初期テスターの反応は「速すぎてびっくり」。ベータ中の価格は V4 Flash のオフピークと同一(100万トークンあたり:キャッシュヒット入力 0.05 元 / 入力 1.5 元 / 出力 4.5 元)で、9月9日のプラットフォーム通知は北京時間 9月10日 12 時から flash シリーズをさらに値下げ——キャッシュヒット入力は 0.02 元へ。
+
+**Why it matters:** DeepSeek の flash ティアはアジアのオープンウェイト推論の価格基準であり、新アーキテクチャ + さらなる値下げは全員のフロアを動かす。引用規律:DeepSeek 自身の API 変更ログ(本実行で確認)には**まだ** V4.1 Flash の項目がない——最新は 8月21日の V4-Flash-Vision-Exp——ゆえに上記の能力主張はすべてベンダー通知のものであり、公開ベンチマークではない。
+
+[`🔗 OSChina:DeepSeek V4.1 Flash 中间版本开启内测`](https://www.oschina.net/news/502383) · [`🔗 Wallstreetcn:刚刚，DeepSeek 新模型内测`](https://wallstreetcn.com/articles/3781316)
+
+---
+
+## 26. Chrome 153 が 230 件の修正とともに今年 7 個目の活用中ゼロデイを封じる(CVE-2026-87491)
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google Chrome リリース 9月9日 · Help Net Security · NVD
+- **Tags:** `chrome` `v8` `zero-day` `cve-2026-87491`
+
+Google の Chrome 153 リリース(Win/Mac は 153.0.8010.36/.37、Linux は .36)は 230 件の脆弱性を修正し、そのうち CVE-2026-87491(V8 における範囲外書き込み)は Google により実環境での悪用が確認された:「この脆弱性のエクスプロイトが実環境に存在する」ことを Google が認めた 2026 年 7 個目の Chrome ゼロデイ(以前は CVE-2026-2441、-3909/-3910、-5281、-11645、そして 9月4日に本フィードが扱った -85046)。ソウル大学 Compsec Lab の Jihyeon Jeong 氏が 8月6日に報告し、2,500 ドルの賞金が支払われた。細工した HTML ページ経由でサンドボックス**内部**での任意コード実行が可能。
+
+**Why it matters:** 誠実な読みが 2 つ。第一に、8 か月で 7 個目の実環境ゼロデイは偶発ではなく稼働率だ——ブラウザエクスプロイトは工業化されている。第二に、本フィードが求め続けてきた採点者規律がここでも適用される:NVD は現在 CVE-2026-87491 を **Medium** に過ぎないと評価しており、Google は「大多数のユーザーが更新されるまで」技術詳細を公開しない——パッチ時計を動かすのはスコアではなく実環境での悪用状態だ。
+
+[`🔗 Help Net Security:Google がまた活用中の Chrome ゼロデイを修正`](https://www.helpnetsecurity.com/2026/09/09/google-chrome-cve-2026-87491-zero-day-flaw/) · [`🔗 NVD CVE-2026-87491`](https://nvd.nist.gov/vuln/detail/CVE-2026-87491)
+
+---
+
+## 27. 裁判所が「Tweet」と鳥のロゴは「放棄された可能性が高い」と認定——X は当面「formerly known as」の理屈で TWITTER を保持
+
+- **Velocity:** ▮▮ rising
+- **Source:** *X Corp. v. Project Bluebird Inc.*、デラウェア連邦地裁 2026年9月3日 · Eric Goldman 分析 · HN 127+ pts
+- **Tags:** `trademark` `x-corp` `twitter` `public-domain` `litigation`
+
+*X Corp. v. Project Bluebird Inc.*(2026 WL 2606728)の仮処分決定は、TWEET の文字商標と Twitter の鳥ロゴが「放棄された可能性が高い」——誰でも自由に使える——と認定した。裁判所の根拠は登録の失効ではなく不使用だった:どちらの標章も X の App Store 掲載に現れず、X は 4 月の審理でどちらも x.com のホームページにないことを認め、Musk 氏自身の発言とリブランドは「使用再開の意図がない」ことを示す。それでも裁判所は、アプリストアの「Welcome to X (formerly known as Twitter)」という文言が TWITTER 商標を維持する善意の使用にあたると判断した——Goldman 氏はこの推論を解剖して退け、「引退名の言及が放棄を阻止するなら、この法理は実質的に消滅する」と警告した。Project Bluebird は決定の直後に自らを tweet.app へ改名した。
+
+**Why it matters:** この決定は、名前を変えた製品が何をまだ所有するのかについての生きたデータポイントだ——そして Goldman 氏の注意書きが基底にある:これは仮処分の段階であり実体審判ではなく、解放された標章は誰か(まず Project Bluebird)が再取得するまで自由なままだ。
+
+[`🔗 Eric Goldman:「Tweet」と鳥のロゴは公に流行域に入ったように見える`](https://blog.ericgoldman.org/archives/2026/09/tweet-and-the-bird-logo-apparently-enter-the-public-domain-but-x-maintains-its-grip-on-the-twitter-mark-for-now-x-v-project-bluebird.htm) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49621751)
+
+---
+
+## 28. 「我々の命で賭けごとをしている」——Jacob Coxon 氏が安全警報とともに Anthropic を退社、辞表は HN で 592+ ポイント
+
+- **Velocity:** ▮▮ rising
+- **Source:** Politico(9月9日)· HN 65+ pts · 関連 X 投稿は HN 経由で 592+ pts
+- **Tags:** `anthropic` `ai-safety` `industry` `resignation`
+
+Politico の報道によれば、Anthropic に在籍し以前は OpenAI にいた AI 研究者 Jacob Coxon 氏が退社し、両ラボは「我々の命で賭けごとをしている」と述べ、高度な AI が人間を死に至らしめ得ると警告した。関連投稿「I resigned from Anthropic today」は 592+ ポイントでその日最大級の HN ストーリーの一つになった。Politico スレッドのコメント投稿者は、Coxon 氏がフォローアップ投稿でより具体的な主張を行ったと指摘している。
+
+**Why it matters:** 今年 2 件目の、フロンティアラボからの安全動機による高知名度退社が、Navier–Stokes 論争(本日項目 1・16)と同じニュース周期に着地した——議論は「モデルは数学できるか」から「モデルが数学をしている間、誰が責任を負うか」へ移りつつある。帰属規律:本項目は Politico の性格づけを伝えるものだ。辞表原文を独自に読むことはできず、HN スレッドのフォローアップ文脈は記録の一部であって評決ではない。
+
+[`🔗 Politico:「我々の命で賭けごとを」——AI 研究者が警報とともに Anthropic を退社`](https://www.politico.eu/article/anthropic-openai-researcher-jacob-coxon-warns-ai-could-kill-humans/) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=49623306)
+
+---
+
+## 29. gpu-lexer——27.4KB の WebGPU モデルが 991KB の手書きシンタックス文法を置き換える
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 95+ pts · gpu-lexer.vercel.app(Shu Ding 氏、Vercel Labs)
+- **Tags:** `webgpu` `syntax-highlighting` `ml` `developer-tools`
+
+Shu Ding 氏の gpu-lexer はソースを単語/空白/記号に分割し、小さな WebGPU モデル——**41,321 パラメータ**、約 469 万トークンで学習——に各部分を 9 つのトークンクラスへラベル付けさせ、隣接ラベルを span にマージする。構造上言語非依存だ:27.4KB のバンドル(Shiki の文法セット 991.5KB に対し)が、埋め込み `<script>`/`<style>` を含む 91 言語を扱い、556 万文字のハイライトを 402ms で処理した(Shiki は 29.6 秒)。
+
+**Why it matters:** 「小さいモデルが手書きルールシステムに勝つ」というパターンが、コード検索と diff を席巻した後、シンタックスハイライトに到達した——しかもブラウザバンドルに収まるサイズで。引用に値するのは著者自身の限界明示だ:精度は*Shiki との一致率*として測られており(ホールドアウト 88%、Jinja/VB は 50% 未満)、正しさではない、そしてパーサー・リンター・コンパイラの代わりにはならないと明言している。
+
+[`🔗 gpu-lexer`](https://gpu-lexer.vercel.app/) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=49619464)
+
+---
+
+## 30. earthtojake/text-to-cad——STEP ファイルから G-code まで、機械工学パイプライン全体をカバーする 11 個のエージェントスキル
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +97(計 1.48万スター)· MIT、活発に維持
+- **Tags:** `cad` `agent-skills` `hardware` `manufacturing`
+
+機械工学向けのエージェントスキル群:STEP/STL/3MF/GLB 出力の CAD モデリング、ブラウザ CAD ビューア、step.parts 経由の既製部品調達、DXF 図面、URDF/SRDF/SDF ロボット記述、SendCutSend の製造可能性検証、DfAM の印刷可能性チェック、G-code スライシング、Bambu プリンター制御——`npx skills add` または Codex・Claude Code・Grok Build のネイティブマーケットプレースでインストールできる。Copperhead(本日項目 8)が検証ゲート式の KiCad エージェントを Show HN に載せた翌日の到着だ。ソフトウェア側のスキルがハードウェアの*製造*パイプラインに届き始めている。
+
+**Why it matters:** エージェントスキルは「コードを編集する」から「物理的な成果物の連鎖を駆動する」——モデル、検証、調達、スライス、印刷——へ拡大しつつある。README 自身の実務的な棘:`npx skills update` は新規追加スキルを「静かに見逃し」、上流で引退したスキルは自動では決して削除されず、0.142.0 未満の Codex はプラグインを静かにスキップする。
+
+[`🔗 earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad) · [`🔗 texttocad.dev ドキュメント`](https://texttocad.dev/)
+
+---
+
+## 31. PI-Desktop——コーディングエージェントのためのローカルファースト Electron+Rust デスクトップシェル、初波で 1,400 スター
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +393(計 1,400 スター)· LGPL-3.0、v0.14.x
+- **Tags:** `desktop` `local-first` `agent-harness` `electron` `rust`
+
+vastsa/PI-Desktop は pi エージェントエコシステム(pi-mono の `pi-ai`/`pi-agent-core` ベース)をデスクトップアプリとしてパッケージする:モデル持ち込み(クラウド API または Ollama/LM Studio ゲートウェイ)、Node 統合なしの React レンダラー、権限/ファイルシステム/SQLite/キーチェーンを扱う Rust ホストコア、そしてエージェントループを別走する「pi Agent Sidecar」。3 つの承認ワークフロー——Agent(そのままやらせる)、Plan(凍結された計画を承認)、Goal(成果基準だけを承認)——に加え、サブエージェント、`.piplug` 拡張マーケットプレース、テレメトリなしのローカル JSONL+SQLite ストレージ、Claude Code・Codex・OpenCode からのセッション取り込み。
+
+**Why it matters:** 「あなたのエージェント harness を製品にする」波に、ロックインなし——アカウント不要、強制リレーなし——を売りにするローカルファーストのデスクトップ参加者が現れた。誠実な注意書きは README 自身がやっている:これは Early Preview であり、プラグインは「完全な OS サンドボックスではなくユーザーが信頼したコード」であり、ローカルファースト ≠ オフライン——モデルリクエストは設定したプロバイダにそのまま飛ぶ。
+
+[`🔗 vastsa/PI-Desktop`](https://github.com/vastsa/PI-Desktop) · [`🔗 badlogic/pi-mono(基盤の pi harness)`](https://github.com/badlogic/pi-mono)
+
+---
+
+## 32. TradingAgents が 1日 +506 で再びトレンドに——10.3万スターのマルチエージェント投資会社が v0.4.0 でルックアヘッドを修正
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +506(計 10.36万スター)· Apache-2.0、2026年8月 v0.4.0
+- **Tags:** `tradingagents` `multi-agent` `finance` `langgraph`
+
+TauricResearch の TradingAgents——投資会社をシミュレートする LangGraph フレームワーク(ファンダメンタル/センチメント/ニュース/テクニカルの 4 アナリスト、強気対弱気の研究者ディベート、トレーダー、リスクチーム)——が、バズから 5 か月を経て再びトレンドに浮上した。関連する差分は v0.4.0(8月)だ:ルックアヘッド/ポイントインタイムのデータ修正、クラッシュ後の LangGraph チェックポイント再開、決定論的な企業識別とトレーダーの価格グラウンディング——以前のバージョンへの再現性批判への直接の回答——に加え、GPT-5.6 と GLM-5.3 の対応。
+
+**Why it matters:** エージェント金融フレームワークは、構造化されたマルチエージェントディベートの最も読み取りやすいデモであるために成長し続けている。このメンテナンスサイクルを際立たせるのは、修正が初期のバックテストを無意味にしたまさにその失敗(ルックアヘッドバイアス)を狙っている点だ。README は重要な点すべてにまだ留保を置く:研究専用、実行は非決定論的、そして「バックテスト結果は公表済みの数値と一致する保証はない」。
+
+[`🔗 TauricResearch/TradingAgents`](https://github.com/TauricResearch/TradingAgents) · [`🔗 v0.4.0 リリースノート`](https://github.com/TauricResearch/TradingAgents/releases)
+
+---
+
+## 33. awesome-gpt-image-2——544 個のリバースエンジニアリング済み GPT-Image 2 プロンプトをエージェントスキルとしてパッケージ、本日 +612
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +612(計 2.96万スター)· MIT
+- **Tags:** `gpt-image-2` `prompt-engineering` `agent-skills` `image-generation`
+
+freestylefly 氏の「Prompt as Code」ライブラリは、コミュニティの GPT-Image 2 例を構造化された再利用可能なプロンプトプロトコルに変える:13 カテゴリ 544 個のリバースエンジニアリング済みケース(UI モック、ポスター/タイポグラフィ、商品/EC フォト、中国古典テーマ)、落とし穴ガイド付き 20 以上の実務テンプレート、英中日 3 言語の README、そして npm パッケージ化されたエージェントスキル(`gpt-image-2-style-library`)——`npx skills`、Claude Code プラグインマーケットプレース、GitHub Packages でインストールでき、姉妹の生成サイトとスタイルライブラリを共有する。
+
+**Why it matters:** 画像モデルのプロンプティングが、口承の手芸からパッケージ化・バージョン管理・エージェント消費可能な成果物へ変わりつつある——スキル経済がテストや図表を吸収したのと同じやり方でメディア生成を吸収している。README 自身の注意:プロンプトは公開ライブラリから取っており著作権は原作者に帰属し、第三者商用利用は明示的に保証されない。GPT Image 2.5(「Sunburst」/「Flare」)の再現は「生成条件と正確なツールモデル ID は未検証」のままだ。
+
+[`🔗 freestylefly/awesome-gpt-image-2`](https://github.com/freestylefly/awesome-gpt-image-2) · [`🔗 姉妹サイト`](https://gpt-image2.canghe.ai/)
+
+---
+
+## 34. Flock の「出口のない、監視され尽くした世界」——The New Yorker が 13 万台カメラの ALPR ネットワークを清算
+
+- **Velocity:** ▮ steady
+- **Source:** The New Yorker、Infinite Scroll(2026年9月)· HN 126+ pts · 8月10日の NYT 報道が後押し
+- **Tags:** `flock-safety` `alpr` `surveillance` `privacy`
+
+The New Yorker の Infinite Scroll 記事は、米国の街頭に約 13 万台ある自動ナンバープレート読み取り(ALPR)カメラ網を運用する Flock Safety を、「出口のない、監視され尽くした世界」を建設していると描く:構造的にオプトアウト不可能で、デフォルトで法執行検索に供給されるネットワークだ。裏付けのある弧の上に着地している:NYT の 8月10日報道(Flock は「アメリカのすべての車を追跡できる」)、CNN の 7月30日報道(住民が電動ノコギリでカメラを切り倒した)、ACLU の「Get the Flock Out」キャンペーン、そして Flock 自身の対応——デフォルトのデータ保持を 7 日に短縮し、悪用検知を必須化した。
+
+**Why it matters:** 最も具体的なアカウンタビリティのデータポイントは、ベンダー自身の保持期間の譲歩だ——ポリシー変更は「デフォルトがどうであったか」の自白である。そして 9月6日に本フィードが扱った項目(ある男性が交通停止の後、ALPR データベースで 100 回以上照会された)に直接つながる:このネットワークの害は、集計的な政策論争としてではなく、個別照会ログとして表面化している。
+
+[`🔗 The New Yorker:Flock は出口のない、監視され尽くした世界を望んでいる`](https://www.newyorker.com/culture/infinite-scroll/flock-wants-a-closely-surveilled-world-with-no-exit) · [`🔗 NYT:Flock のカメラはアメリカのすべての車を追跡できる`](https://www.nytimes.com/2026/08/10/us/flock-cameras-can-track-every-car-in-america-police-love-them-citizens-dont.html)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-09T12:13:00+08:00 |
-| Items | 22 |
-| Sources tracked | 29 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev, Mathstodon, Inception Labs, Blackmagic Design, OpenReview, nishantjosh.dev, argonautlabsai/gavamedia deltafin, blog.fsck.com) |
+| Generated | 2026-09-09T20:10:00+08:00 |
+| Items | 34 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev, Mathstodon, Inception Labs, Blackmagic Design, OpenReview, nishantjosh.dev, deltafin, blog.fsck.com, Sophos, The Hacker News, Help Net Security, OSChina, Wallstreetcn, blog.ericgoldman.org, Politico, gpu-lexer.vercel.app, texttocad.dev, The New Yorker, NYT) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

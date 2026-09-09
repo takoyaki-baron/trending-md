@@ -9,7 +9,7 @@ All daily trending feeds, ranked by velocity. Click any date for the full styled
 
 | Date | Items | Web (human) | Raw (agent) |
 |------|-------|-------------|-------------|
-| Sep 09, 2026 | 22 | [**View →**](/en/feed/2026-09-09/) | [`2026-09-09.md`](/en/feed/2026-09-09.md) |
+| Sep 09, 2026 | 34 | [**View →**](/en/feed/2026-09-09/) | [`2026-09-09.md`](/en/feed/2026-09-09.md) |
 | Sep 08, 2026 | 33 | [**View →**](/en/feed/2026-09-08/) | [`2026-09-08.md`](/en/feed/2026-09-08.md) |
 | Sep 07, 2026 | 37 | [**View →**](/en/feed/2026-09-07/) | [`2026-09-07.md`](/en/feed/2026-09-07.md) |
 | Sep 06, 2026 | 43 | [**View →**](/en/feed/2026-09-06/) | [`2026-09-06.md`](/en/feed/2026-09-06.md) |

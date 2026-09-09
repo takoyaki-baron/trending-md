@@ -1,8 +1,8 @@
 ---
 date: 2026-09-09
-updated: 2026-09-09T12:13:00+08:00
+updated: 2026-09-09T20:10:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -323,13 +323,181 @@ Jesse Vincent 的 superpowers——一个可组合的技能框架，实质是一
 
 ---
 
+## 23. 腾讯开源 teamai-cli——用一个 Git 仓库充当团队智能体 harness 的唯一事实来源
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub 趋势榜日榜第 2 · 今日 +1,083(共 2,700 星)· 仓库活跃，MIT 许可
+- **Tags:** `tencent` `teamai-cli` `agent-config` `skills` `git`
+
+腾讯的 TeamAI CLI——发布帖称已在内部使用半年——把共享 Git 仓库当作团队 Skills、Rules、Hooks、MCP 配置、agent 定义、`culture.md` 与会话沉淀知识的唯一事实来源：可版本化、可走 MR 评审，再同步到 10 款编码智能体(Claude Code、Codex、Cursor、CodeBuddy、WorkBuddy、OpenCode、OpenClaw、Hermes、DeepSeek Harness、Qoder)的原生配置目录。它还内置一个检测"摩擦"的 stop-hook(用户打断、工具调用被拒、重试)并建议沉淀经验，提供 BM25 + 图增强的知识召回，以及通过 `teamai source add` 订阅其他团队技能仓库的"经验联邦"。
+
+**Why it matters:** 在单文件技能霸榜一周之后(本日第 4、22 条)，这个品类的"分发"半场由大厂补齐：团队级配置管理正是"一个技能"与"一个组织如何运行智能体"之间缺失的层。README 自己写明了限制——三层中两层处于 beta、召回默认关闭、代码图边只覆盖 TypeScript/JavaScript、Python 与 Go,其余语言回退到正则启发式。
+
+[`🔗 Tencent/teamai-cli`](https://github.com/Tencent/teamai-cli) · [`🔗 博客园:9 款 AI 编码 Agent 的团队级统一 Harness`](https://www.cnblogs.com/itech/p/22761131)
+
+---
+
+## 24. PoisonedRefresh——一个 Linux rootkit 向 F5 BIG-IP APM 内存注入无文件 PHP web shell
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Sophos 分析 9 月 7 日 · The Hacker News / BleepingComputer 9 月 8-9 日 · F5 编号 c05d5254,ESET 命名 PoisonedRefresh
+- **Tags:** `f5` `big-ip` `rootkit` `fileless` `webshell`
+
+Sophos 公布了对一个发现于被入侵 F5 BIG-IP Access Policy Manager 环境的 Linux 植入体的剖析：安装器向 `/usr/sbin/httpd` 前置代码，挂钩 Apache 的 `apr_dso_load`，等待 `libphp` 加载，经 `/proc/self/maps` 把内存页改为可写——当 Apache 加载三个合法 webtop 脚本之一(`apm_css.php3`、`full_wt.php3`、`webtop_popup_css.php3`)时，把 web shell **只注入内存副本**；磁盘文件保持干净。该 shell 以 HTTP 201 加 CSS content-type 应答攻击请求，伪装成样式表获取；另有备用通道在令牌校验后把 `/run/bigtlog.pipe` 链到 `/bin/bash`。初始入口：CVE-2025-53521(未认证 RCE,2025 年 10 月已修补，2026 年 3 月起在 CISA KEV)。
+
+**Why it matters:** 纯内存注入恰好击穿防守者在负载均衡器上跑的文件完整性检查——英国 NCSC 敦促"无论系统何时更新过"都要排查，Sophos 还发现一个能在升级镜像后存活的持久化组件。诚实的空白：利用时间线不存在(爱尔兰 NCSC 警告活动可能早于披露)、归属未命名，而 F5 自己 3 月的公告曾称"脚本存在本身不能证明失陷"——本次分析把两种说法接榫了。
+
+[`🔗 Sophos:Dissecting a PHP web server rootkit`](https://www.sophos.com/en-us/blog/dissecting-a-php-web-server-rootkit) · [`🔗 The Hacker News:F5 BIG-IP APM 恶意软件向内存注入 PHP web shell`](https://thehackernews.com/2026/09/f5-big-ip-apm-malware-injects-php-web.html)
+
+---
+
+## 25. DeepSeek 开启 V4.1 Flash 内测——新架构、两天的窗口，以及背后的一次降价
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** DeepSeek 官方社群通知 9 月 8 日 · 开源中国 / 华尔街见闻报道 · 9 月 9 日平台调价公告
+- **Tags:** `deepseek` `model-release` `multimodal` `pricing`
+
+9 月 8 日下午，DeepSeek 经官方渠道宣布 V4.1 Flash 的中间测试版本开启内测，窗口仅到 9 月 10 日——明确不是正式发布。通知声称采用新模型架构，主打原生多模态支持、能力更强、速度更快、成本更低；社区实测的早期反馈是"快得飞起"。内测期价格与 V4 Flash 空闲时段一致(每百万 token:缓存命中输入 0.05 元 / 输入 1.5 元 / 输出 4.5 元)，且 9 月 9 日平台公告自北京时间 9 月 10 日 12 时起再度下调 flash 系列——缓存命中输入降至 0.02 元。
+
+**Why it matters:** DeepSeek 的 flash 档是亚洲开放权重推理的定价锚点，新架构叠加再次降价会移动所有人的地板。引用纪律：DeepSeek 自己的 API 更新日志(本次运行已核查)**尚无** V4.1 Flash 条目——最新仍是 8 月 21 日的 V4-Flash-Vision-Exp——因此上述每一项能力声明都属于厂商通知，而非已发表的基准。
+
+[`🔗 开源中国:DeepSeek V4.1 Flash 中间版本开启内测`](https://www.oschina.net/news/502383) · [`🔗 华尔街见闻:刚刚，DeepSeek 新模型内测`](https://wallstreetcn.com/articles/3781316)
+
+---
+
+## 26. Chrome 153 一次修复 230 个漏洞，含今年第七个在野利用零日(CVE-2026-87491)
+
+- **Velocity:** ▮▮ rising
+- **Source:** Google Chrome 发布 9 月 9 日 · Help Net Security · NVD
+- **Tags:** `chrome` `v8` `zero-day` `cve-2026-87491`
+
+Google 的 Chrome 153 版本(Win/Mac 为 153.0.8010.36/.37,Linux 为 .36)修复 230 个漏洞，其中 CVE-2026-87491——V8 中的越界写入——被 Google 确认遭在野利用："该漏洞的利用已存在于野外"，这是 2026 年第七个此类 Chrome 零日(此前为 CVE-2026-2441、-3909/-3910、-5281、-11645，以及我们 9 月 4 日报道过的 -85046)。漏洞由首尔国立大学 Compsec Lab 的 Jihyeon Jeong 于 8 月 6 日报告，获 2,500 美元赏金，可经构造的 HTML 页面在沙箱**内部**执行任意代码。
+
+**Why it matters:** 两点诚实解读。其一，八个月内第七个在野零日是利用率而非偶然——浏览器漏洞利用已经工业化。其二，本栏目一直坚持的评分者纪律在此同样适用：NVD 目前仅将 CVE-2026-87491 评为 **Medium**,而 Google 表示在"大多数用户完成更新"之前扣留技术细节——设定补丁时钟的是在野状态，不是分数。
+
+[`🔗 Help Net Security:Google 修复又一个在野利用的 Chrome 零日`](https://www.helpnetsecurity.com/2026/09/09/google-chrome-cve-2026-87491-zero-day-flaw/) · [`🔗 NVD CVE-2026-87491`](https://nvd.nist.gov/vuln/detail/CVE-2026-87491)
+
+---
+
+## 27. 法院认定"Tweet"与小鸟 logo"很可能已放弃"——X 暂时靠"formerly known as"保住 TWITTER
+
+- **Velocity:** ▮▮ rising
+- **Source:** *X Corp. v. Project Bluebird Inc.*，特拉华联邦地区法院 2026 年 9 月 3 日 · Eric Goldman 分析 · HN 127+ pts
+- **Tags:** `trademark` `x-corp` `twitter` `public-domain` `litigation`
+
+*X Corp. v. Project Bluebird Inc.*(2026 WL 2606728)的临时禁令裁定认定 TWEET 文字商标与 Twitter 小鸟 logo"很可能已构成放弃"——任何人可自由使用。法院依据的是不使用，而非注册失效：两个标志均未出现在 X 的 App Store 条目中，X 在 4 月听证会上承认两者均不在 x.com 首页，而 Musk 本人的言论与品牌重塑显示了"无意恢复使用"的心态。但法院仍认定应用商店里的"Welcome to X (formerly known as Twitter)"构成维持 TWITTER 商标的真实使用——Goldman 对这一推理逐点驳斥，并警告：若提及退役名称就能阻止放弃认定，"该制度实际上就消失了"。Project Bluebird 在裁定后随即将自己更名为 tweet.app。
+
+**Why it matters:** 这纸裁定是一个改了名的产品还拥有什么的现实数据点——而 Goldman 的告诫是承重墙：这只是临时禁令阶段，不是实体审决，且任何被解放的标志只在有人(Bluebird 排第一)重新占用之前保持自由。
+
+[`🔗 Eric Goldman:"Tweet" 与小鸟 logo 似乎进入公有领域`](https://blog.ericgoldman.org/archives/2026/09/tweet-and-the-bird-logo-apparently-enter-the-public-domain-but-x-maintains-its-grip-on-the-twitter-mark-for-now-x-v-project-bluebird.htm) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49621751)
+
+---
+
+## 28. "拿我们的生命赌博"——Jacob Coxon 带着安全警告从 Anthropic 辞职，辞职信在 HN 冲上 592+ 分
+
+- **Velocity:** ▮▮ rising
+- **Source:** Politico(9 月 9 日)· HN 65+ pts · 配套 X 帖子经 HN 达 592+ pts
+- **Tags:** `anthropic` `ai-safety` `industry` `resignation`
+
+据 Politico 报道，曾任职 Anthropic、此前任职 OpenAI 的 AI 研究 者 Jacob Coxon 已辞职，称两家实验室都在"拿我们的生命赌博"，并警告先进 AI 可能致人死亡。其配套帖"I resigned from Anthropic today"以 592+ 分成为当日 HN 头部故事之一;Politico 帖子的评论者指出，Coxon 在后续帖子中提出了更多、更具体的主张。
+
+**Why it matters:** 今年第二起来自前沿实验室的高调安全动机辞职，落在 Navier–Stokes 争议(本日第 1、16 条)的同一新闻周期里——争论正在从"模型能不能做数学"转向"模型做数学时谁来负责"。归属纪律：本条转述的是 Politico 的定性；我们无法独立读到辞职信原文，HN 帖中的后续上下文是记录的一部分，不是判决。
+
+[`🔗 Politico:'Gambling with our lives':AI 研究者辞职离开 Anthropic 并发出警告`](https://www.politico.eu/article/anthropic-openai-researcher-jacob-coxon-warns-ai-could-kill-humans/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49623306)
+
+---
+
+## 29. gpu-lexer——一个 27.4KB 的 WebGPU 模型替代 991KB 的手写语法高亮规则
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 95+ pts · gpu-lexer.vercel.app(Shu Ding，Vercel Labs)
+- **Tags:** `webgpu` `syntax-highlighting` `ml` `developer-tools`
+
+Shu Ding 的 gpu-lexer 先把源码切分为单词/空白/符号，再让一个微型 WebGPU 模型——**41,321 个参数**，用约 469 万 token 训练——把每个部分标注为九个 token 类别，并把相邻标签合并为 span。它在构造上就是语言无关的：一个 27.4KB 的包(对比 Shiki 991.5KB 的语法集)覆盖 91 种受测语言(含内嵌 `<script>`/`<style>` 块)，高亮 556 万字符耗时 402ms，而 Shiki 需要 29.6 秒。
+
+**Why it matters:** "小模型打赢手写规则系统"的模式在席卷代码搜索与 diff 之后，如今到达语法高亮，而且体积小到能进浏览器包。作者自己给出的限制就是引用点：精度度量的是*与 Shiki 的一致率*(留出集 88%，Jinja/VB 不足 50%),而非正确性，且他明言它不应替代解析器、linter 或编译器。
+
+[`🔗 gpu-lexer`](https://gpu-lexer.vercel.app/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49619464)
+
+---
+
+## 30. earthtojake/text-to-cad——11 个智能体技能覆盖机械工程全流水线：从 STEP 文件到 G-code
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub 趋势榜 · 今日 +97(共 1.48 万星)· MIT，维护活跃
+- **Tags:** `cad` `agent-skills` `hardware` `manufacturing`
+
+一套面向机械工程的智能体技能：CAD 建模输出 STEP/STL/3MF/GLB、浏览器 CAD 查看器、经 step.parts 采购现货元器件、DXF 图纸、URDF/SRDF/SDF 机器人描述、SendCutSend 可制造性校验、DfAM 可打印性检查、G-code 切片与 Bambu 打印机控制——可经 `npx skills add` 或 Codex、Claude Code、Grok Build 的原生市场安装。它落在 Copperhead(本日第 8 条)把校验拦截式 KiCad 智能体送上 Show HN 的次日：软件侧技能正在抵达硬件的*制造*流水线。
+
+**Why it matters:** 智能体技能正从"编辑代码"扩展到"驱动实体工件链"——建模、校验、采购、切片、打印。README 自述的锋利边缘：`npx skills update` 会"静默漏掉"新增技能，被上游退役的技能永远不会被自动移除，低于 0.142.0 的 Codex 会静默跳过插件。
+
+[`🔗 earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad) · [`🔗 texttocad.dev 文档`](https://texttocad.dev/)
+
+---
+
+## 31. PI-Desktop——面向编码智能体的本地优先 Electron+Rust 桌面外壳，首波 1,400 星
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub 趋势榜 · 今日 +393(共 1,400 星)· LGPL-3.0，v0.14.x
+- **Tags:** `desktop` `local-first` `agent-harness` `electron` `rust`
+
+vastsa/PI-Desktop 把 pi 智能体生态(基于 pi-mono 的 `pi-ai`/`pi-agent-core`)打包成桌面应用：自带模型(云端 API 或 Ollama/LM Studio 网关)、无 Node 集成的 React 渲染层、处理权限/文件系统/SQLite/钥匙串的 Rust 宿主核心，以及独立运行智能体循环的"pi Agent Sidecar"。三种审批工作流——Agent(直接干活)、Plan(批准冻结计划)、Goal(只批准结果标准)——外加子智能体、`.piplug` 扩展市场、无遥测的本地 JSONL+SQLite 存储，以及从 Claude Code、Codex、OpenCode 导入会话。
+
+**Why it matters:** "把你的智能体 harness 做成产品"的浪潮有了本地优先的桌面入场者，卖点是无锁定——无账号、无强制中继。README 自己完成了诚实的告诫工作：这是 Early Preview,插件是"用户信任的代码而非完整的操作系统沙箱"，且本地优先 ≠ 离线——模型请求仍发往你配置的任何供应商。
+
+[`🔗 vastsa/PI-Desktop`](https://github.com/vastsa/PI-Desktop) · [`🔗 badlogic/pi-mono(底层 pi harness)`](https://github.com/badlogic/pi-mono)
+
+---
+
+## 32. TradingAgents 以每日 +506 再度登上趋势榜——10.3 万星的多智能体交易公司在 v0.4.0 修复未来函数
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub 趋势榜 · 今日 +506(共 10.36 万星)· Apache-2.0，2026 年 8 月 v0.4.0
+- **Tags:** `tradingagents` `multi-agent` `finance` `langgraph`
+
+TauricResearch 的 TradingAgents——一个用 LangGraph 模拟交易公司的框架(基本面/情绪/新闻/技术四名分析师、多空研究员辩论、交易员与风控团队)——在病毒式爆红五个月后再度登上趋势榜。相关的增量是 v0.4.0(8 月)：未来函数/逐时点数据修复、崩溃后的 LangGraph 检查点恢复、确定性的公司身份解析与交易员价格接地——直接回应早期版本的可复现性批评——另加入 GPT-5.6 与 GLM-5.3 支持。
+
+**Why it matters:** 智能体金融框架持续增长，因为它是"结构化多智能体辩论"最易读的演示；这一轮维护周期的特别之处在于，修复直指让早期回测失去意义的那个失效模式(未来函数)。README 仍对一切要害保留：仅供研究、运行结果非确定，且回测结果"不保证与任何已发表数字相符"。
+
+[`🔗 TauricResearch/TradingAgents`](https://github.com/TauricResearch/TradingAgents) · [`🔗 v0.4.0 发布说明`](https://github.com/TauricResearch/TradingAgents/releases)
+
+---
+
+## 33. awesome-gpt-image-2——544 个逆向工程的 GPT-Image 2 提示词打包为智能体技能，今日 +612
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub 趋势榜 · 今日 +612(共 2.96 万星)· MIT
+- **Tags:** `gpt-image-2` `prompt-engineering` `agent-skills` `image-generation`
+
+freestylefly 的"Prompt as Code"库把社区 GPT-Image 2 示例改造成结构化、可复用的提示词协议：13 个类别共 544 个逆向工程案例(UI 界面、海报排版、产品电商摄影、国风主题)，20+ 工业级模板加踩坑指南，英中日三语 README,以及打包为 npm 的智能体技能(`gpt-image-2-style-library`)——可经 `npx skills`、Claude Code 插件市场或 GitHub Packages 安装，并与配套生成站点共享同一风格库。
+
+**Why it matters:** 图像模型提示词正在变成打包化、版本化、可被智能体消费的产物，而非口口相传的手艺——技能经济正以吸收测试与图表的方式吸收媒体生成。README 自己的告诫：提示词取自公共库、版权归原作 者，第三方商用明确不做保证；其 GPT Image 2.5("Sunburst"/"Flare")复刻"生成条件与确切工具模型 ID 仍未经验证"。
+
+[`🔗 freestylefly/awesome-gpt-image-2`](https://github.com/freestylefly/awesome-gpt-image-2) · [`🔗 配套站点`](https://gpt-image2.canghe.ai/)
+
+---
+
+## 34. Flock 的"无处可逃的全面监视世界"——The New Yorker 清点 13 万个摄像头的 ALPR 网络
+
+- **Velocity:** ▮ steady
+- **Source:** The New Yorker，Infinite Scroll 栏目(2026 年 9 月)· HN 126+ pts · NYT 8 月 10 日报道垫底
+- **Tags:** `flock-safety` `alpr` `surveillance` `privacy`
+
+The New Yorker 的 Infinite Scroll 文章把 Flock Safety——美国街头上约 13 万个自动车牌识别(ALPR)摄像头——定性为在建设"一个无处可逃的全面监视世界"：一个在结构上无法退出的网络，默认供执法检索。它落在一条有据可查的弧线上：NYT 8 月 10 日报道 Flock"能追踪美国的每一辆车"，CNN 7 月 30 日报道居民用电锯砍倒摄像头，ACLU 的"Get the Flock Out"运动，以及 Flock 自己的回应——把默认数据保留期降至 7 天并强制启用滥用检测。
+
+**Why it matters:** 最具体的问责数据点是厂商自己的保留期让步——政策修改就是一份"默认值曾经是什么"的自供状。它也直接呼应我们 9 月 6 日报道的条目(一名男子在交通拦截后，车牌在 ALPR 数据库中被查询 100 余次)：这个网络的危害正以单次查询日志的形式显形，而不仅是总量层面的政策辩论。
+
+[`🔗 The New Yorker:Flock 想要一个无处可逃的全面监视世界`](https://www.newyorker.com/culture/infinite-scroll/flock-wants-a-closely-surveilled-world-with-no-exit) · [`🔗 NYT:Flock 摄像头能追踪美国的每一辆车`](https://www.nytimes.com/2026/08/10/us/flock-cameras-can-track-every-car-in-america-police-love-them-citizens-dont.html)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-09T12:13:00+08:00 |
-| Items | 22 |
-| Sources tracked | 29 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev, Mathstodon, Inception Labs, Blackmagic Design, OpenReview, nishantjosh.dev, argonautlabsai/gavamedia deltafin, blog.fsck.com) |
+| Generated | 2026-09-09T20:10:00+08:00 |
+| Items | 34 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev, Mathstodon, Inception Labs, Blackmagic Design, OpenReview, nishantjosh.dev, deltafin, blog.fsck.com, Sophos, The Hacker News, Help Net Security, OSChina, Wallstreetcn, blog.ericgoldman.org, Politico, gpu-lexer.vercel.app, texttocad.dev, The New Yorker, NYT) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
