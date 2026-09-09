@@ -1,8 +1,8 @@
 ---
 date: 2026-09-09
-updated: 2026-09-09T04:16:00+08:00
+updated: 2026-09-09T12:13:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -225,13 +225,111 @@ Isham Faizal's interactive explainer runs a 600M-parameter model in the browser 
 
 ---
 
+## 16. Terence Tao: good open math problems are being "mined in a non-renewable fashion"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 220+ pts · ~6h ago (~06:00 UTC+8) · Mathstodon Sep 8 (permalink resolved via API)
+- **Tags:** `terence-tao` `mathematics` `ai-impact` `research-ecosystem` `navier-stokes`
+
+Since item 1 covered the OpenAI Navier–Stokes claim and the Buckmaster priority dispute, Terence Tao has added the ecosystem-level warning. On Mathstodon (Sep 8, 20:32 UTC — we resolved the permalink via the Mastodon status API), he writes that "the collection of good, fruitful open problems is now being mined in a non-renewable fashion," with the analogy that "a country or region can suffer a critical shortage of drinking water while simultaneously being surrounded by a massive ocean" — infinitely many provable statements, but a scarce supply of well-posed frontier problems. In the quoted thread posts he adds that "the rumor of someone working on a problem can trigger a massive amount of AI-powered effort to flatten it" before the original researcher finishes, and that solution-extraction tools work only "at the cost of sustaining the ecosystem for the next wave of progress."
+
+**Why it matters:** the first Millennium-scale AI result immediately produced its second-order critique from the most-cited living mathematician — not about correctness, but about incentive design: who gets to pose problems when answers are cheap and rumor travel is instant. Caveat discipline: the HN thread's pushback (answers can be worked backward for understanding; chess engines and CAD enhanced their fields) is real, and Tao's posts are argument, not measurement.
+
+[`🔗 Terence Tao on Mathstodon`](https://mathstodon.xyz/@tao/117237320796901560) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49616968)
+
+---
+
+## 17. DaVinci Resolve 21.1 — Blackmagic ships 100+ new tools, with AI media search, de-aging, and 25 new Fusion graphics nodes
+
+- **Velocity:** ▮▮ rising
+- **Source:** Blackmagic Design release Sep 8 · HN 367+ pts · ~14h ago (~22:30 UTC+8)
+- **Tags:** `davinci-resolve` `video` `fusion` `release` `ai-tools`
+
+Blackmagic announced DaVinci Resolve 21.1 on Sep 8: over 100 new tools and controls across the edit, color, and Fusion pages. The AI additions are the headline — Neural Engine tools that search media by content, read camera slate data, do de-aging and blemish removal — alongside 25 new Krokodove-based shape and 3D tools in Fusion, OpenPBR material shader support, lens-distortion calibration, and Studio-only individual MultiMaster trims on the color page. The free version carries most of the update; the ML features concentrate in Studio.
+
+**Why it matters:** the first major Resolve update of the agentic-AI era lands as an editor-side workflow release, not a generative-video play — AI is pointed at media management and retouching rather than synthesis. The caveat is the free/Studio split: the "AI" features the announcement leads with are largely paid-tier, and Blackmagic's own page doesn't publish accuracy figures for the new Neural Engine tools.
+
+[`🔗 Blackmagic Design: DaVinci Resolve 21.1`](https://www.blackmagicdesign.com/media/release/20260908-03) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49610181)
+
+---
+
+## 18. Mercury 2.5 — Inception's diffusion LLM claims cost-optimized-frontier quality at 1,107 tokens/sec, with the fine print in its own post
+
+- **Velocity:** ▮▮ rising
+- **Source:** Inception Labs blog Sep 8 · HN 136+ pts · ~6h ago (~06:00 UTC+8)
+- **Tags:** `diffusion-llm` `inception-labs` `inference-speed` `model-release`
+
+Inception Labs released Mercury 2.5, which it calls "the most capable diffusion LLM on the market" and — "to our knowledge" — the largest ever trained: a claimed 40% intelligence gain over Mercury 2, 260K context, tunable reasoning, parallel tool calls, and schema-aligned JSON output, benchmarked against cost-optimized frontier models (GPT-5.6 Luna Low, Gemini 3.5 Flash-Lite, Claude Haiku 4.5) at 1,107 tokens/sec and $0.20/$0.75 per M tokens (80%-off launch pricing: $0.04/$0.15). HN's consensus split cleanly: speed and latency are the real differentiator (a customer cites P99 falling "from several minutes to just one second"), while quality and agentic tool use remain open questions — one commenter measured it "nowhere close to the frontier," and others flagged that the speed charts compare only against older fast-tier models.
+
+**Why it matters:** the strongest production-level test yet of whether diffusion LLMs can compete outside the low-latency niche. The honest reading is in the post itself: no independent benchmarks are cited, quality evals are internal and "shaped by customer feedback," and "frontier" appears only in the phrase "cost-optimized frontier" — every headline number is self-measured.
+
+[`🔗 Inception Labs: Introducing Mercury 2.5`](https://www.inceptionlabs.ai/blog/introducing-mercury-2-5) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49616354)
+
+---
+
+## 19. Kimi K3 (2.8T) at 1 token/s on a MacBook Pro — experts streamed from four SSDs, with every failure mode printed
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 227+ pts · ~7h ago (~05:15 UTC+8) · argonautlabsai/deltafin (fork of gavamedia/deltafin)
+- **Tags:** `local-inference` `moe` `ssd-streaming` `apple-silicon` `kimi`
+
+A demonstration of running Kimi K3 (~1.45 TB of MXFP4 expert weights, 2.78T parameters) on a 128 GB MacBook Pro M5 Max at a measured 1.00 tok/s, streaming 17.5 MB per-(layer,expert) files from four Thunderbolt 5 SSDs via `pread` + `F_NOCACHE` (16 of 896 experts per layer), with the attention trunk resident in int8. Four instrumentation-driven wins stacked to the result: split demand/prefetch thread pools (+14%), hot experts across two drives (+10%), a least-expected-completion prefetch balancer (+11%), and re-testing a stale benchmark assumption (+8%) — and RAID-0 was *slower* ("striping makes every read touch every drive, so the slowest drive sets every barrier").
+
+**Why it matters:** a working datapoint for the "your disk is your RAM" school of local inference — with the limits measured, not hidden: prefill is read-amplified ~6.2× (≈9 TB of reads for a 1.4 TB model), context caps at ~4.4k tokens, and the author's use case is overnight batch jobs where data stays local. The ecosystem caveat: the demo lives in a 52-star fork; the upstream engine (`gavamedia/deltafin`, 805 stars) hasn't been pushed since Aug 6.
+
+[`🔗 argonautlabsai/deltafin`](https://github.com/argonautlabsai/deltafin) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49616257)
+
+---
+
+## 20. LLMs form group stereotypes from pure statistical noise — and a hiring-bandit study says they explore less than people
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 117+ pts · ~5h ago (~07:00 UTC+8) · OpenReview (peer review under way)
+- **Tags:** `llm-bias` `multi-armed-bandit` `agents` `research`
+
+A study adapting a human psychology experiment puts an LLM agent in a fictional hiring loop — four invented demographic groups (Tufa, Aima, Reku, Weki), 40 job rounds, identical success odds for every group — and finds models overgeneralize from small early samples, then stop exploring and exploit, building group-to-job stereotypes out of pure noise; per the paper, frontier models stratified groups "at an even higher degree than people." The claimed mechanism matters more than the score: biases emerged through interaction (decide → observe → update), not from pre-existing training data about these groups.
+
+**Why it matters:** stereotype formation as a *harness dynamics* problem — an agent's own early decisions become the evidence that locks them in — is directly actionable for anyone running long-lived agents (periodic forced exploration, subagent review). The HN thread's criticisms are substantive and stay on record: village membership was the *only* candidate attribute in the prompt, so the model reasonably inferred it mattered; n=40 invites clustering illusions; and "obviously ambiguous nonsense" scenarios may not transfer to realistic settings.
+
+[`🔗 OpenReview: novel social biases through adaptive exploration`](https://openreview.net/forum?id=pc7fqaOcAH) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49617581)
+
+---
+
+## 21. How to build a printer — an e-ink display that *is* the printer, implementing IPP so PCs print onto paper-shaped glass
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 193+ pts · ~5.5h ago (~06:40 UTC+8) · nishantjosh.dev field report
+- **Tags:** `e-ink` `ipp` `airprint` `embedded` `protocols`
+
+The inversion that carried the thread: rather than building hardware with printheads, the author implemented the network printing protocol stack (IPP/AirPrint-style) on a 400 KB-RAM e-ink device, so computers "print" documents directly onto the screen — "a paper that acts like a printer." The reason it doesn't just render PDFs is memory: "rendering PDF takes a lot out of a 400KB RAM'd device," so it accepts raster formats instead. In the thread, ValdikSS contributes real protocol fixes: declare exact screen dimensions via non-standard IPP `media-size-supported` names so the PC composes for the display, and switch to 1-bit-per-pixel PWG/Apple Raster (`print-color-mode: bi-level`) for an 8× input-size reduction.
+
+**Why it matters:** a compact demonstration that the printing stack — 25 years of technical debt, in one commenter's words — is now simple enough to implement solo on a microcontroller, and that protocol emulation beats application-specific readers for compatibility. The correctable limits are in the thread: 8-bit raster was used where 1-bit was supported, and no scaling-free page composition yet.
+
+[`🔗 nishantjosh.dev: How to build a f***ing printer`](https://nishantjosh.dev/blogs/how-to-build-a-fking-printer/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49617255)
+
+---
+
+## 22. obra/superpowers re-trends at +452/day — the 283k-star skills *methodology* rides the same wave as the one-file skills
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +452 today (283.5k stars) · repo active (pushed Sep 8)
+- **Tags:** `skills` `agent-workflow` `methodology` `claude-code`
+
+Jesse Vincent's superpowers — a composable skills framework that is really a software development methodology (brainstorming → plan → TDD → subagent-driven implementation → code review, enforced by the harness) — hit GitHub trending again at +452 stars/day, days after a Sep 6 Threads conversation on how it came to be and in the middle of this week's skills debate (items 4 and the marketingskills/i-have-adhd wave). Unlike the one-file skills topping trending, superpowers is a 6.x-versioned framework (v6.3.0, Aug 12) that grew from ~14 skills to a full methodology and now targets Claude Code, Hermes, Devin CLI, and Grok Build.
+
+**Why it matters:** the skills category is visibly splitting into two products — single prompt files (i-have-adhd, +656 today) versus opinionated methodologies (superpowers) — and the trending page is now the live market research. The open question is the same one item 4's HN thread raised: whether harness-level prompts override any of it. No new release drove this spike; the repo's own discipline (TDD'd skills, pressure-tested prompts) is the content.
+
+[`🔗 obra/superpowers`](https://github.com/obra/superpowers) · [`🔗 blog.fsck.com: Superpowers — how I'm using coding agents`](https://blog.fsck.com/2025/10/09/superpowers/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-09T04:16:00+08:00 |
-| Items | 15 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev) |
+| Generated | 2026-09-09T12:13:00+08:00 |
+| Items | 22 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev, Mathstodon, Inception Labs, Blackmagic Design, OpenReview, nishantjosh.dev, argonautlabsai/gavamedia deltafin, blog.fsck.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

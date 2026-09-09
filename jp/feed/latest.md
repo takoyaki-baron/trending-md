@@ -1,8 +1,8 @@
 ---
 date: 2026-09-09
-updated: 2026-09-09T04:16:00+08:00
+updated: 2026-09-09T12:13:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -225,13 +225,111 @@ Isham Faizal 氏のインタラクティブな解説ツールは、Transformers.
 
 ---
 
+## 16. Terence Tao 氏:質の高い未解決数学問題が「非再生的な方法で採掘されている」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 220+ pts · ~6h 前 (~06:00 UTC+8) · Mathstodon 9月8日(パーマリンクを API で検証済み)
+- **Tags:** `terence-tao` `mathematics` `ai-impact` `research-ecosystem` `navier-stokes`
+
+本日の項目 1 で OpenAI の Navier–Stokes 主張と Buckmaster の優先権論争を報じたのに続き、Terence Tao 氏がエコシステムレベルの警告を追加した。Mathstodon への投稿(9月8日 20:32 UTC——Mastodon status API でパーマリンクを検証済み)で彼は、「質が高く実りある未解決問題の集合が、現在、非再生的な方法で採掘されている」と書き、「国や地域が、巨大な海に囲まれながら飲み水の深刻な不足に苦しむ」というアナロジーを挙げる——証明可能な命題は無限にあるが、適切に定式化されたフロンティア問題の供給は希少だ。スレッド内の投稿では、「誰かがある問題に取り組んでいるという噂だけでも、元の研究者が完成する前に、膨大な AI 駆動の労力を引き寄せてそれを平らげてしまう」こと、そして「解法抽出ツール」が問題を解けるのは「次の波の進歩を支える生態系を維持する代償を払って」のことだと付け加えている。
+
+**Why it matters:** 千禧年賞級の AI による最初の成果が、現存最多引用の数学者による二次的批判を即座に生んだ——矛先は正しさではなくインセンティブ設計だ。答えが無料同然になり噂が瞬時に広まる世界で、誰が「問題を出題する権利」を持つのか。注意喚起の規律として:HN スレッドの反論は実在する(答えは理解を遡って導ける。チェスエンジンや CAD はそれぞれの分野をむしろ発展させた)。また Tao 氏の投稿は測定ではなく論述である。
+
+[`🔗 Terence Tao の Mathstodon`](https://mathstodon.xyz/@tao/117237320796901560) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49616968)
+
+---
+
+## 17. DaVinci Resolve 21.1——Blackmagic が 100 以上の新ツールを出荷:AI メディア検索、若返り・毛穴補正、Fusion の新グラフィックスノード 25 個
+
+- **Velocity:** ▮▮ rising
+- **Source:** Blackmagic Design 発表 9月8日 · HN 367+ pts · ~14h 前 (~22:30 UTC+8)
+- **Tags:** `davinci-resolve` `video` `fusion` `release` `ai-tools`
+
+Blackmagic は 9月8日、DaVinci Resolve 21.1 を発表した。編集・カラー・Fusion ページにわたり 100 以上の新ツールとコントロールが追加される。AI が headlines だ——Neural Engine にコンテンツによるメディア検索、スレートデータの読み取り、若返り、肌の瑕疵除去ツールが加わり、Fusion には Krokodove ベースの形状・3D ツール 25 個、OpenPBR マテリアルシェーダー対応、レンズ歪みキャリブレーション、Studio 専用の個別 MultiMaster トリムが入る。無料版が更新の大部分を受け持ち、機械学習機能は Studio 版に集中する。
+
+**Why it matters:** エージェント AI 時代における Resolve の最初の大型アップデートは、生成動画ではなく編集者のワークフロー側に着地した——AI はコンテンツ合成ではなくメディア管理とレタッチに向けている。注意点は無料/Studio の境界だ。発表の先頭に立つ「AI」機能の多くは有料 tier にあり、Blackmagic 自身のページも新しい Neural Engine ツールの精度データを一切公表していない。
+
+[`🔗 Blackmagic Design:DaVinci Resolve 21.1`](https://www.blackmagicdesign.com/media/release/20260908-03) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49610181)
+
+---
+
+## 18. Mercury 2.5——Inception の拡散 LLM が 1,107 トークン/秒で「コスト最適化フロンティア」級の品質を主張、細則は自らの投稿に
+
+- **Velocity:** ▮▮ rising
+- **Source:** Inception Labs ブログ 9月8日 · HN 136+ pts · ~6h 前 (~06:00 UTC+8)
+- **Tags:** `diffusion-llm` `inception-labs` `inference-speed` `model-release`
+
+Inception Labs が Mercury 2.5 をリリース。「市場で最も有能な拡散 LLM」であり——「我々の知る限り」——史上最大の拡散言語モデルという。Mercury 2 から 40% の知能向上、260K コンテキスト、調整可能な推論、並列ツール呼び出し、スキーマ整合 JSON 出力を主張し、コスト最適化フロンティアモデル(GPT-5.6 Luna Low、Gemini 3.5 Flash-Lite、Claude Haiku 4.5)を 1,107 トークン/秒・M トークンあたり入力 $0.20/出力 $0.75(期間限定 80% オフは $0.04/$0.15)で比較する。HN のコンセンサスは明快に分かれた。速度とレイテンシこそが真の差別化要因(ある顧客は P99 が「数分から 1 秒に」低下したと引用)であり、品質とエージェント的ツール使用は依然未解決——「フロンティアには程遠い」と実測した投稿者もいれば、速度チャートが旧世代の高速 tier モデルとしか比較していないと指摘する者もいた。
+
+**Why it matters:** 拡散 LLM が低レイテンシのニッチを出て正面から戦えるかを試す、これまでで最も生産レベルに近いテストだ。誠実な読み方は発表そのものにある。独立ベンチマークは一切引用されず、品質評価は社内かつ「顧客フィードバックによって形作られ」、「フロンティア」という語は「コスト最適化フロンティア」という句の中にしか現れない——ヘッドラインの数字はすべて自己測定だ。
+
+[`🔗 Inception Labs:Introducing Mercury 2.5`](https://www.inceptionlabs.ai/blog/introducing-mercury-2-5) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49616354)
+
+---
+
+## 19. Kimi K3(2.8T)を MacBook Pro で 1 トークン/秒——専門家ネットワークを SSD 4 枚からストリーミング、失敗モードはすべて印字
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 227+ pts · ~7h 前 (~05:15 UTC+8) · argonautlabsai/deltafin(gavamedia/deltafin の fork)
+- **Tags:** `local-inference` `moe` `ssd-streaming` `apple-silicon` `kimi`
+
+128 GB の MacBook Pro M5 Max 上で Kimi K3(2.78T パラメータ、MXFP4 の専門家重み約 1.45 TB)を測定 1.00 トークン/秒で動かすデモンストレーション。(レイヤー, 専門家)ごとの 17.5 MB ファイルを Thunderbolt 5 SSD 4 枚から `pread` + `F_NOCACHE` でストリーミングし(1 レイヤー 896 専門家のうち 16 を常駐)、アテンショントランクは int8 で常駐させる。計装駆動の 4 つの改善が積み重なった:需要/プリフェッチスレッドプールの分離(+14%)、ホット専門家を 2 ドライブに分散(+10%)、最小期待完了プリフェッチバランサー(+11%)、陳腐化したベンチマーク前提の再検証(+8%)——そして RAID-0 はむしろ**遅かった**(「ストライピングではすべての読み取りが全ドライブに触れるため、最も遅いドライブがすべての障壁になる」)。
+
+**Why it matters:** 「ディスクを RAM として使う」ローカル推論派の実証データポイントだ——しかも限界は隠されず測定されている:prefill は約 6.2 倍の読み取り増幅(1.4 TB モデルに約 9 TB の読み取り)、コンテキストは約 4.4k トークンで頭打ち、作者の実際のユースケースはデータをローカルに置く夜間バッチ処理だ。エコシステムの注意点:デモは 52 スターの fork にあり、上流エンジン(`gavamedia/deltafin`、805 スター)は 8月6日以降プッシュされていない。
+
+[`🔗 argonautlabsai/deltafin`](https://github.com/argonautlabsai/deltafin) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49616257)
+
+---
+
+## 20. LLM は純粋な統計的ノイズから集团ステレオタイプを形成する——採用バンディット研究が「人間より探索しない」と判定
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 117+ pts · ~5h 前 (~07:00 UTC+8) · OpenReview(査読進行中)
+- **Tags:** `llm-bias` `multi-armed-bandit` `agents` `research`
+
+人間の心理学実験をadaptした研究が、LLM エージェントを架空の採用ループに置く——4 つの架空的人口集団(Tufa、Aima、Reku、Weki)、40 ラウンドの求職、全集团の成功確率は同一——その結果、モデルは初期の小標本から過剰に一般化し、その後探索をやめて活用に切り替え、純粋なノイズから「集团→職業」のステレオタイプを構築した。論文によれば、フロンティアモデルは集团を「人間の実験よりもさらに高度に」階層化したという。スコアより主張されたメカニズムが重要だ:バイアスは相互作用を通じて生まれた(決定 → 結果の観察 → 信頼の更新)。これらの集团に関する事前の学習データからではない。
+
+**Why it matters:** ステレオタイプ形成は **harness ダイナミクス**の問題だ——エージェント自身の初期判断が、自分を固定する証拠になる——長寿命エージェントを運用するすべての人に実行可能な示唆を与える(定期的な強制探索、サブエージェントによるレビュー)。HN スレッドの批判も実質的で、記録に留める価値がある:プロンプトで「村の所属」は候補者の唯一の属性情報だったため、モデルがそれを重要と推論したのは妥当。n=40 ではクラスタリング錯覚が起きやすい。「明らかに曖昧なナンセンスなシナリオ」は現実的な設定に転移しないかもしれない。
+
+[`🔗 OpenReview:novel social biases through adaptive exploration`](https://openreview.net/forum?id=pc7fqaOcAH) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49617581)
+
+---
+
+## 21. プリンターの作り方——e インク画面がプリンター*そのもの*になる:IPP を実装し、PC から紙のようなガラスへ「印刷」する
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 193+ pts · ~5.5h 前 (~06:40 UTC+8) · nishantjosh.dev の一次レポート
+- **Tags:** `e-ink` `ipp` `airprint` `embedded` `protocols`
+
+スレッドを支えた反転:プリントヘッドを持つハードウェアを作るのではなく、作者は 400 KB RAM の e インクデバイス上にネットワーク印刷プロトコルスタック(IPP/AirPrint 方式)を実装し、コンピュータが文書を画面に直接「印刷」できるようにした——「プリンターのように振る舞う紙」だ。PDF を直接レンダリングしない理由はメモリだ:「PDF のレンダリングは 400 KB RAM のデバイスには重すぎる」ため、ラスタ形式のみを受け付ける。スレッドでは ValdikSS が本物のプロトコル修正を寄与した:非標準の IPP `media-size-supported` 名で正確な画面サイズを宣言し、PC 側に画面に合わせた組版をさせる。1 ビット/ピクセルの PWG/Apple Raster(`print-color-mode: bi-level`)に切り替えれば入力サイズを 8 分の 1 にできる。
+
+**Why it matters:** 印刷プロトコルスタック——ある投稿者の言葉では 25 年の技術的負債——が、今や一人のマイクロコントローラ実装として書けるほど単純になったことのコンパクトな証明だ。そして互換性の観点では、専用リーダーよりプロトコルエミュレーションが勝る。修正可能な限界もスレッドにある:1 ビット対応の場所で 8 ビットラスタが使われたまま、スケーリングなしのページ合成はまだ実装されていない。
+
+[`🔗 nishantjosh.dev:How to build a f***ing printer`](https://nishantjosh.dev/blogs/how-to-build-a-fking-printer/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49617255)
+
+---
+
+## 22. obra/superpowers が 1日 +452 で再びトレンドに——28.3万スターのスキル*方法論*が、単一ファイルスキルと同じ波に乗る
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +452(計 28.35万スター)· リポジトリは活発(9月8日にプッシュ)
+- **Tags:** `skills` `agent-workflow` `methodology` `claude-code`
+
+Jesse Vincent 氏の superpowers——組合わせ可能なスキルフレームワークであり、実態はソフトウェア開発方法論(ブレインストーミング → 計画 → TDD → サブエージェント駆動実装 → コードレビューを harness が強制)——が GitHub トレンドに 1日 +452 スターで再浮上した。9月6日に Threads でその経緯を語った直後であり、今週のスキル論争(本日項目 4 と marketingskills/i-have-adhd の波)の真っただ中だ。トレンドを席巻する単一ファイルスキルとは異なり、superpowers は 6.x 系でバージョン管理されたフレームワーク(v6.3.0、8月12日)で、約 14 個のスキルから完全な方法論へ成長し、現在は Claude Code、Hermes、Devin CLI、Grok Build に対応する。
+
+**Why it matters:** スキルカテゴリは目に見える形で 2 つの製品に分裂しつつある——単一のプロンプトファイル(i-have-adhd、本日 +656)と、主張の明確な方法論(superpowers)——そしてトレンドページ自体がリアルタイムの市場調査になりつつある。未解決の問いは項目 4 の HN スレッドが提起したのと同じものだ:harness レベルのプロンプトがそれらすべてを上書きするのか。今回のスパイクは新リリースが起点ではない。リポジトリ自身の規律(スキルに TDD、プロンプトの圧力テスト)がコンテンツそのものだ。
+
+[`🔗 obra/superpowers`](https://github.com/obra/superpowers) · [`🔗 blog.fsck.com:Superpowers——私のコーディングエージェントの使い方`](https://blog.fsck.com/2025/10/09/superpowers/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-09T04:16:00+08:00 |
-| Items | 15 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev) |
+| Generated | 2026-09-09T12:13:00+08:00 |
+| Items | 22 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev, Mathstodon, Inception Labs, Blackmagic Design, OpenReview, nishantjosh.dev, argonautlabsai/gavamedia deltafin, blog.fsck.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

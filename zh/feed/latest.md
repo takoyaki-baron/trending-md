@@ -1,8 +1,8 @@
 ---
 date: 2026-09-09
-updated: 2026-09-09T04:16:00+08:00
+updated: 2026-09-09T12:13:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -225,13 +225,111 @@ Isham Faizal 的交互式讲解器通过 Transformers.js 在浏览器里跑一�
 
 ---
 
+## 16. Terence Tao:优质开放数学问题正在被"以不可再生的方式开采"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 220+ pts · ~6h 前 (~06:00 UTC+8) · Mathstodon 9 月 8 日(永久链接已经 API 核验)
+- **Tags:** `terence-tao` `mathematics` `ai-impact` `research-ecosystem` `navier-stokes`
+
+继本日第 1 条报道 OpenAI 的 Navier–Stokes 主张与 Buckmaster 优先权争议之后，Terence Tao 补上了生态系统层面的警告。他在 Mathstodon 上(9 月 8 日 20:32 UTC——我们已通过 Mastodon status API 核验该永久链接)写道，"优质、富有成果的开放问题储备正在被以不可再生的方式开采"，并给出类比:"一个国家或地区可能陷入饮用水严重短缺，同时又被浩瀚海洋包围"——可证明的命题无穷无尽，但真正良设的前沿问题极其稀缺。他在帖子中补充:"某人正在研究某个问题的传闻本身，就足以触发海量 AI 驱动的力量去把它碾平"，速度远快于原创研究者完成工作；而"解法抽取工具"能解决问题，代价却是"牺牲掉支撑下一波进步的生态系统"。
+
+**Why it matters:** 首个千禧年级别的 AI 结果，随即引来了在世被引用最多的数学家的二阶批评——矛头不是正确性，而是激励设计:当答案变得廉价、传闻即时传遍全球，还有谁有资格"出题"?注意事项纪律:HN 帖子里的反驳是真实存在的(答案可以倒推理解；国际象棋引擎与 CAD 反而成就了各自领域)，且 Tao 的帖子是论述，不是测量。
+
+[`🔗 Terence Tao 的 Mathstodon`](https://mathstodon.xyz/@tao/117237320796901560) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49616968)
+
+---
+
+## 17. DaVinci Resolve 21.1——Blackmagic 一次带来 100+ 新工具:AI 媒体检索、去龄修瑕，以及 25 个新 Fusion 图形节点
+
+- **Velocity:** ▮▮ rising
+- **Source:** Blackmagic Design 发布公告 9 月 8 日 · HN 367+ pts · ~14h 前 (~22:30 UTC+8)
+- **Tags:** `davinci-resolve` `video` `fusion` `release` `ai-tools`
+
+Blackmagic 于 9 月 8 日发布 DaVinci Resolve 21.1:剪辑、调色与 Fusion 页面共新增超过 100 个工具与控件。AI 是头条——Neural Engine 新增按内容检索媒体、读取场记板数据、去龄与去瑕工具——另有 Fusion 中 25 个基于 Krokodove 的形状与 3D 工具、OpenPBR 材质着色器支持、镜头畸变校准，以及 Studio 独占的逐项 MultiMaster 调色修剪。免费版覆盖本次更新的大部分；机器学习功能集中于 Studio 版。
+
+**Why it matters:** 智能体 AI 时代 Resolve 的第一次大版本更新，落点在剪辑师工作流而非生成式视频——AI 对准的是媒体管理与修瑕，不是内容合成。注意事项是免费/Studio 的分界:公告领衔的"AI"功能大多在付费层，而 Blackmagic 自己的页面也没有为新 Neural Engine 工具给出任何精度数据。
+
+[`🔗 Blackmagic Design:DaVinci Resolve 21.1`](https://www.blackmagicdesign.com/media/release/20260908-03) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49610181)
+
+---
+
+## 18. Mercury 2.5——Inception 的扩散 LLM 宣称以 1,107 token/秒达到"成本优化前沿"质量，细则写在自己帖子里
+
+- **Velocity:** ▮▮ rising
+- **Source:** Inception Labs 博客 9 月 8 日 · HN 136+ pts · ~6h 前 (~06:00 UTC+8)
+- **Tags:** `diffusion-llm` `inception-labs` `inference-speed` `model-release`
+
+Inception Labs 发布 Mercury 2.5，称其为"市场上最强的扩散 LLM"、且——"据我们所知"——有史以来训练的最大扩散语言模型:相较 Mercury 2 智能提升 40%，260K 上下文，可调推理、并行工具调用、schema 对齐 JSON 输出，对标成本优化级前沿模型(GPT-5.6 Luna Low、Gemini 3.5 Flash-Lite、Claude Haiku 4.5)，速度 1,107 token/秒，定价每百万 token 输入 0.20 / 输出 0.75 美元(限时 8 折:0.04 / 0.15)。HN 的共识分得很清:速度与延迟才是真差异点(有客户称 P99"从数分钟降到一秒")，而质量与智能体工具使用仍是悬而未决的问题——有评论者实测"离前沿还差得远"，另有人指出其速度图表只与旧款快速档模型对比。
+
+**Why it matters:** 这是扩散 LLM 能否走出低延迟利基、进入正面竞争的最强一次生产级检验。诚实的读法就在公告自身:未引用任何独立基准，质量评测是内部的且"由客户反馈塑造"，"前沿"二字只出现在"成本优化前沿"这个短语里——每一个头条数字都是自己测的。
+
+[`🔗 Inception Labs:Introducing Mercury 2.5`](https://www.inceptionlabs.ai/blog/introducing-mercury-2-5) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49616354)
+
+---
+
+## 19. Kimi K3(2.8T)在 MacBook Pro 上跑出 1 token/秒——专家网络从四块 SSD 流式加载，每种失败模式都印在文里
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 227+ pts · ~7h 前 (~05:15 UTC+8) · argonautlabsai/deltafin(gavamedia/deltafin 的 fork)
+- **Tags:** `local-inference` `moe` `ssd-streaming` `apple-silicon` `kimi`
+
+一项演示:在 128 GB 的 MacBook Pro M5 Max 上运行 Kimi K3(2.78T 参数，约 1.45 TB 的 MXFP4 专家权重)，实测 1.00 token/秒——通过 `pread` + `F_NOCACHE` 从四块雷电 5 SSD 流式读取每(层,专家)一个的 17.5 MB 文件(每层 896 个专家中驻留 16 个)，注意力主干以 int8 常驻内存。四次由插桩驱动的优化叠加出最终结果:拆分按需/预取线程池(+14%)、热点专家分散到两块盘(+10%)、最小期望完成时间预取均衡器(+11%)、重新验证一条陈旧的基准假设(+8%)——而 RAID-0 反而**更慢**("条带化让每次读取都触碰每块盘，最慢的盘给所有操作设卡")。
+
+**Why it matters:** "把磁盘当内存"这一派本地推理的可行性数据点——而且极限是被测量出来的，不是被藏起来的:prefill 有约 6.2 倍读放大(1.4 TB 模型约 9 TB 读取)，上下文上限约 4.4k token，作者的真实用途是数据不出本地的过夜批处理。生态注意事项:演示位于一个 52 星的 fork;上游引擎(`gavamedia/deltafin`,805 星)自 8 月 6 日起就没有推送过。
+
+[`🔗 argonautlabsai/deltafin`](https://github.com/argonautlabsai/deltafin) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49616257)
+
+---
+
+## 20. LLM 从纯统计噪声中长出群体刻板印象——招聘多臂老虎机研究称它们比人更不爱探索
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 117+ pts · ~5h 前 (~07:00 UTC+8) · OpenReview(同行评审进行中)
+- **Tags:** `llm-bias` `multi-armed-bandit` `agents` `research`
+
+一项改编自人类心理学实验的研究，把 LLM 智能体放进一个虚构的招聘循环——四个虚构人口群体(Tufa、Aima、Reku、Weki)、40 轮求职、每个群体的成功概率完全相同——发现模型会从小样本早期结果中过度泛化，然后停止探索、转向利用，用纯噪声构建"群体→职业"的刻板印象;论文称前沿模型的群体分层程度"甚至高于人类"。比分数更重要的是其声称的机制:偏见经由交互产生(决策 → 观察结果 → 更新信念)，而非来自对这些群体的既有训练数据。
+
+**Why it matters:** 刻板印象形成是一个**harness 动力学**问题——智能体自己的早期决策变成把自己锁死的证据——这对任何运行长寿命智能体的人都是可执行的(周期性强制探索、子智能体复核)。HN 帖子的批评同样有分量且记录在案:提示词里"村庄归属"是候选人唯一的属性，模型合理地推断它重要;n=40 本就容易产生聚类错觉;"明显含混的虚构场景"未必能迁移到真实场景。
+
+[`🔗 OpenReview:novel social biases through adaptive exploration`](https://openreview.net/forum?id=pc7fqaOcAH) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49617581)
+
+---
+
+## 21. 如何造一台打印机——让电子墨水屏*成为*打印机:实现 IPP 协议，让电脑"打印"到纸一样的玻璃上
+
+- **Velocity:** ▮ steady
+- **Source:** HN · 193+ pts · ~5.5h 前 (~06:40 UTC+8) · nishantjosh.dev 一手报告
+- **Tags:** `e-ink` `ipp` `airprint` `embedded` `protocols`
+
+撑起整条帖子的反转:作者不是去造带打印头的硬件，而是在一台只有 400 KB 内存的电子墨水设备上实现了网络打印协议栈(IPP/AirPrint 风格)，让电脑把文档直接"打印"到屏幕上——"一张 behaving 得像打印机的纸"。不直接渲染 PDF 的原因是内存:"渲染 PDF 会榨干 400 KB RAM 的设备"，所以它只接受光栅格式。帖子里 ValdikSS 贡献了真正的协议修法:用非标准 IPP `media-size-supported` 名称声明精确的屏幕尺寸，让 PC 按屏幕构图;切到 1-bit PWG/Apple Raster(`print-color-mode: bi-level`)可把输入体积缩小 8 倍。
+
+**Why it matters:** 一个紧凑的证明:打印协议栈——用评论者的话说，25 年的技术债——如今已简单到一个人能在微控制器上独立实现；而且对兼容性而言，协议模拟胜过专用阅读器。可修正的局限就在帖子里:支持 1-bit 的地方用了 8-bit 光栅，且尚无免缩放的页面构图。
+
+[`🔗 nishantjosh.dev:How to build a f***ing printer`](https://nishantjosh.dev/blogs/how-to-build-a-fking-printer/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49617255)
+
+---
+
+## 22. obra/superpowers 以每日 +452 再度登上趋势榜——28.3 万星的技能*方法论*搭上了单文件技能的同一波浪潮
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub 趋势榜 · 今日 +452(共 28.35 万星)· 仓库活跃(9 月 8 日有推送)
+- **Tags:** `skills` `agent-workflow` `methodology` `claude-code`
+
+Jesse Vincent 的 superpowers——一个可组合的技能框架，实质是一套软件开发方法论(头脑风暴 → 计划 → TDD → 子智能体驱动实现 → 代码评审，由 harness 强制执行)——以每日 +452 星再度登上 GitHub 趋势榜；数天前(9 月 6 日)他刚在 Threads 上谈过它的来龙去脉，时点正落在本周的技能大讨论中间(本日第 4 条与 marketingskills/i-have-adhd 浪潮)。与登顶趋势榜的单文件技能不同，superpowers 是一个 6.x 版本化的框架(v6.3.0，8 月 12 日)，从约 14 个技能长成完整方法论，现已支持 Claude Code、Hermes、Devin CLI 与 Grok Build。
+
+**Why it matters:** 技能品类正肉眼可见地分裂为两种产品——单个提示词文件(i-have-adhd,今日 +656)与成体系的方法论(superpowers)——而趋势榜本身就是实时市场调研。悬而未决的仍是第 4 条 HN 帖子提出的问题:harness 级提示词是否会压过其中任何一种。此轮上涨没有新版本驱动；仓库自身的纪律(技能带 TDD、提示词经压力测试)就是内容。
+
+[`🔗 obra/superpowers`](https://github.com/obra/superpowers) · [`🔗 blog.fsck.com:Superpowers——我如何使用编码智能体`](https://blog.fsck.com/2025/10/09/superpowers/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-09T04:16:00+08:00 |
-| Items | 15 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev) |
+| Generated | 2026-09-09T12:13:00+08:00 |
+| Items | 22 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, OpenAI blog, NYU/Buckmaster statement, SecurityWeek, ZDI, CISA KEV, NVD, TDF blog, manualdousuario.net, Google blog, The Verge, Quesma, copperhead.sh, Onapsis, SAP, Sansec, Adobe KB, TechCrunch, FreeBSD.org, herdr.dev, ishamf.dev, Mathstodon, Inception Labs, Blackmagic Design, OpenReview, nishantjosh.dev, argonautlabsai/gavamedia deltafin, blog.fsck.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
