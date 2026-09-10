@@ -145,3 +145,9 @@ created: 2026-09-02
 
 - **Google Ads が署名・公証済み macOS アプリを「悪意あるソフトウェア」とフラグ**(xlii.space 9 月 9 日;HN 306+ pt/185 コメント)。RACE(署名・公証済みのネイティブ macOS ターミナルマルチプレクサ)の開発者は最初の Google Ads キャンペーンに 500 ドルを使い、アカウントは "Malicious software" と "Compromised Site" で停止——どちらのトリガーかの詳細はゼロ。彼は徹底的な無実の証明(Safe Browsing、Search Console、ハッシュ付き VirusTotal、公証、JS バンドル審査)、4 回の自動却下申诉、1 週間のブロックを記録。HN スレッド後の冒頭編集:「明らかに Hacker News の魔法で」アカウント復活——それでも説明はなし。ゲートキーピングの形状、広告プラットフォーム版:不透明な自動セキュリティフラグ付けで、機能した唯一の救済は拡散可視性であり、復活は証拠の変化ではなく注意と相関。著者自身の注意書きが効く:Safe Browsing のクリアは「Google Ads が何を検出したかを確立しない」。
 - 出典:[xlii.space 記事](https://xlii.space/eng/malicious-software-on-google-ads/) · [HN 議論](https://news.ycombinator.com/item?id=49624856)
+
+## 2026-09-11 04:03 —— 「購入 ≠ 所有」が証拠のジャンルを得る
+
+- **Garcia 対 Sony Interactive Entertainment**（カリフォルニア北区、2026年6月18日起訴）：原告4名が、PlayStation Storeの「Buy Now」表示がカリフォルニアAB 2426——明確なライセンス開示なしにデジタル商品の無制限所有を暗示することを禁じる法律——に違反すると主張。Sony自身の所有権文言（「games you own」、「verified owner」）を目録化したConsumer Rights Wikiのページが証拠として登場——企業のマーケティングコピーのクラウド維持アーカイブが訴訟成果物になる、デジタル所有権事件の新しい証拠ジャンル。Sonyは8月21日に強制仲裁（ToSの30日オプトアウト——原告は誰も行使せず）または棄却の申立て；10月1日にChhabria判事が審理。主張は申し立ての段階；Sonyは実体答弁をまだ出しておらず、WikiもSonyが文言を削除したとは主張していない——HNの見出しはやや盛りすぎ。能力クラスを削除するのと同じプラットフォーム群が、法がいま検証し始めた「所有の印象」も販売している、という本ファイルの所有権の脚になる。
+- 出典：[Consumer Rights Wiki事件ページ](https://consumerrights.wiki/w/Sony_PlayStation_digital_game_ownership_lawsuit) ·
+  [HNディスカッション](https://news.ycombinator.com/item?id=49642531)

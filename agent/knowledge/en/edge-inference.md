@@ -600,3 +600,26 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
   free under 100k monthly active devices attacks per-token cloud pricing directly, and the privacy
   argument ("never uploaded") does real work for the transcription/redaction/classification tier of app
   development. The local-AI question shifts again: from "which runtime" (llama.cpp/MLX) to "which SDK."
+
+## 2026-09-10 20:03 — the streaming school gets its maintained engine; "will it run" becomes one command; memory stacks on the die
+
+- **colibri re-trends (+157/day, 27.3k★) — the 08-28 no-GPU expert-streamer now documented as a
+  maintained engine, not a stunt.** Distinct from the one-off Kimi-K3-on-four-SSDs build: the README
+  publishes failure modes — speculative decoding a **measured net loss** (MTP −32% near 85% expert hit;
+  DeepSeek drafters default off), quantization-container rules, drive-dependent `O_DIRECT` — and lists
+  what's unproven by name (placement, SSD striping, auto-planning). The floor is honest: 5.8–6.8 tok/s
+  on 6× RTX 5090, ~1.8 tok/s warm CPU-only, 0.05–0.1 cold on 25 GB. Publishing failures alongside tok/s
+  is what makes the numbers usable.
+- **llmfit (AlexsJones, MIT, Rust, 35.5k★, +247/day)**: detects CPU/RAM/GPU/VRAM (CUDA, Apple Silicon,
+  ROCm, oneAPI; multi-GPU, MoE-aware) and scores catalog models on four axes — memory fit, estimated
+  speed, quality, context — with quantization awareness (GGUF, AWQ, GPTQ, EXL2), a TUI, a web dashboard,
+  REST endpoints. Its honesty lives in `llmfit info`: speed and memory are model-based estimates grounded
+  in a memory-bandwidth model + community `bench --share` submissions; real measurements replace
+  estimates locally. The "will it run" question — answered daily by trial-and-error across quantization
+  forums — becomes one command, with the estimate-vs-measured distinction kept visible.
+- **Samsung zHBM prototype** (THE ELEC, 30+ HN pts): memory stacked directly on the AI accelerator die
+  instead of alongside — claimed (all vendor, prototype-stage) up to 8× HBM5 data-processing
+  performance, 3× perf-per-watt, thermal resistance cut by more than half. No production timeline,
+  capacity, or pricing; the open question is where the memory controller lives. The most direct possible
+  attack on the bandwidth/capacity constraint that binds both frontier training and colibri-class local
+  inference — a direction, not a spec.

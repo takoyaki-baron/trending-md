@@ -900,3 +900,16 @@ the effect decays.
   Gaps: only 10 of the claimed 20+ patterns are enumerated publicly (the rest live in `SKILL.md`), no
   releases, not runnable standalone, and the taxonomy is English-LLM-specific — each language needs its
   own tell list.
+
+## 2026-09-11 04:03 — the skills package-manager layer arrives
+
+- **vercel-labs/skills (`npx skills`, MIT, 31.1k★, +175/day, v1.5.25 Sep 8)**: installs and manages
+  SKILL.md agent skills across 75+ coding agents (Claude Code, Codex, Cursor, Gemini CLI…) from git
+  URLs, local paths or direct downloads; very heavily trafficked (847 open issues, 343 PRs) and honest
+  about fragmentation in its own README: anonymous telemetry default-on (`DISABLE_TELEMETRY`/
+  `DO_NOT_TRACK` to opt out), `context: fork` is Claude-only, hooks exist on only three agents, with
+  10 MiB download / 25 MiB extracted / 1,000-file caps. No fresh release drives the rank — the CLI rides
+  the standardization wave (anthropics/skills, openai/plugins, marketingskills). A cross-agent skill
+  *package manager* with adoption caps documented per-agent is the infrastructure layer deciding whether
+  skills stay portable or fragment per harness — the thesis-8 "who owns the marketplace" question, now
+  with a distribution-channel contender.

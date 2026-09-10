@@ -360,3 +360,15 @@ trusted; it earns one clause here, not an entry.
   trends. Cross-family tool-less critique is the interesting primitive — a cheap structural defense against
   the drafter's own blind spots, and a candidate standard shape for the router-decision layer (thesis 5)
   that still has no shared schema.
+
+## 2026-09-10 20:03 — free-tier aggregation productized, headline pre-deflated
+
+- **diegosouzapw/OmniRoute** (MIT, 63.8k★, +591/day): one local OpenAI-compatible endpoint routing to
+  352 registered providers (152 flagged free) with quota-aware fallback, circuit breakers, key cooldown,
+  19 "combo" routing strategies, an MCP server (110 tools), 42-language localization. The README carries
+  its own asterisks: the ~1.47B free-tokens/month figure is a best-case aggregate that "move[s] both
+  ways" as providers change terms, the ~3B/mo "Radar ceiling is not a guarantee," provider counts differ
+  across sections by design (352/356/444), savings percentages are self-reported, affiliate links are
+  disclosed. The free-tier-aggregation gateway is the routing thesis's price-floor extreme — useful
+  (fallback, quota-awareness, one endpoint) but living on provider goodwill, with a headline number
+  that expires by construction.

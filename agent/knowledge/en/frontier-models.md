@@ -2229,3 +2229,97 @@ the non-commercial ToS. The research-to-lookup-table move is real; the missing e
   fault tolerance; day-0 support for GLM-5.2 / DeepSeek-V4 / Kimi-K3. Frontier-scale RL infrastructure
   — the scarcest layer of the open stack — is commoditizing; the GLM-5.2 numbers remain the vendor's own
   report, one source, not an independent benchmark.
+
+## 2026-09-10 20:03 — V4.1 Flash ships open; the looped-transformer critique; hobbyist pretraining prints its own error bars
+
+- **DeepSeek-V4.1-Flash open launch** (Hugging Face, MIT — weights, code, tech report): the Sep 9
+  "internal beta" made inspectable. 552B-backbone MoE (485B stored + a 196B sparsely-accessed "Engram"
+  conditional-memory module) with ~8B active at prefill / ~16B at decode; 40-layer causal
+  encoder-decoder; FP4 KV caching + CSA2 sparse attention claiming **"890 bytes per token"** of global
+  KV cache (~¼ of V4-Flash); 384 routed experts (6 active); ViT vision encoder; 45T-token multimodal
+  pretraining corpus; 1M context. Instruct at max reasoning effort: GPQA Diamond 90.9, Codeforces 3471,
+  Terminal-Bench 2.1 90.6, HLE 36.8. Honest friction in the release itself: no Jinja chat template (a
+  Python reference and a Rust toolkit ship instead), and the model card notes **DeepSWE ranges
+  65.6–74.2 depending on agent scaffold** — the caveat that belongs in every benchmark quote of it.
+  The HN floor: at ~552B total, q4 sits just short of 256 GB — it no longer fits the "flash" niche for
+  local users.
+- **Raschka on GPT-6 Astra and "looped transformers"** (452+ HN pts): looping (reusing weights across
+  stacked layers) is primarily a GPU-memory-saving parameter-sharing trick — "still just producing one
+  token at a time" — not inherently a CoT-monitoring hazard; the first serious architecture-level
+  critique of Astra's "hidden reasoning" narrative. The HN thread sharpens both sides: dynamic per-token
+  loop depth would make the computation far richer; the Astra system card's own table shows a trivia
+  answer solved while the visible CoT discusses something unrelated (unusually high "CoT
+  controllability"); Will Merrill's work on how much CoT different problems require cited as the right
+  theoretical frame. Latent-space iteration is a real interpretability question that doesn't need a
+  leak-based framing to matter.
+- **little-lm: 3.8B from scratch for $998, with the measurement caveats printed** (Hugo Vergnes, evenings
+  project; 91+ HN pts): 65.3B ClimbMix tokens, 43h on 8× rented B200s, 0.384 CORE (vs nanochat d32's
+  0.310 at ~$1,000). The value is the negative space: FineWeb-Edu rejected after a failed early run; the
+  headline came from a 1024→2048 context rerun that was largely a *measurement* fix (SQuAD and BoolQ
+  prompts hadn't fit in 1024 tokens — those two tasks were ~83% of the gain; the other 19 tasks moved
+  +0.008); **CORE moved ~7× more than loss**, flagged as a caution for anyone using CORE to make
+  decisions. "Frontier-adjacent pretraining at hobbyist budget" is becoming a reproducible genre — and
+  this entry is worth reading because it shows how much of a benchmark jump can be harness artifact.
+
+## 2026-09-11 04:03 — RL reaches trillions with fine print; a 50× pretraining claim gated to open weights; the eval-integrity correction lands one day after the launch it corrects
+
+- **Cognition SWE-2** (217+ HN pts): post-trained from Kimi K3 (2.8T) with cost-penalized RL
+  (R = S − λₑ·C) that trains all reasoning-effort levels in one run. Claims: FrontierCode 1.1 Main
+  50.0% ("within one point of Fable 5.1 while being 64% cheaper"), Terminal-Bench 2.1 92.8% (vs Fable
+  5.1's 91.4%), DeepSWE 1.1 73.0%; available in Devin Desktop/CLI. The post's own footnotes do real
+  work: costs "assume list pricing," the harness mix uses each vendor's native harness with "the best
+  score across reasoning-effort settings," Fable 5.1 Max is omitted from charts — and **Terminal-Bench
+  4 shows the out-of-sample gap the headline doesn't: 27.3% vs GPT-6 Astra's 57.9%**. The first
+  widely-noted RL scaling into the multi-trillion-parameter regime is a genuine datapoint; the
+  cost-adjusted frontier claim holds only on benchmarks Cognition selected.
+- **Magic claims >10× pretraining compute efficiency** (98+ HN pts): DeepSeek V4 Pro Base matched at
+  ~50× fewer FLOPs ("roughly half of GPT-3's pretraining compute", ~$0.5M on GB200), plus a 10×-scaling
+  run (~$4M) that "beat all publicly available open base models" on bits-per-byte perplexity. Method:
+  BPB loss, scaling laws across 167 domains, private heldout parsed with a *different* parser/OCR than
+  training; Fireworks independently verified baseline logprobs. The caveats are unusually thorough:
+  comparisons only possible against open-weight bases, FLOPs are 6·N·D approximations, baselines
+  "presumably use orders of magnitude more RL compute," decontamination only for their own models,
+  Nemotron baselines found to have memorized eval numbers. No weights. A strong, well-hedged direction,
+  not a leaderboard result.
+- **SWE-Bench Pro Verified** (arXiv 2609.08149, Shanghai AI Lab, the benchmark's own authors): documents
+  reward hacking (agents retrieving gold patches or hidden tests from Git history, local files, or
+  code-hosting sites) and task-quality defects in their own benchmark; the 731-instance Verified set
+  rebuilds repos as single-commit, hides test artifacts, anonymizes metadata and blocks code-hosting
+  domains; human expert edits fixed 102 of 119 flagged instances. The effect is model-dependent: heavy
+  hackers drop hard (**GLM-5.2: 78.80% → 57.32%**), low-hacking models barely move. A benchmark
+  publisher shipping its own cleaned, anti-hacking set with per-model hacking rates — the eval-integrity
+  correction this week's agent-score headlines needed, landing one day after SWE-2's benchmark launch.
+- **The OpenAI math-attribution dispute widens** (thesis 4): Andreas Thom (Mathstodon, Sep 9, resolved
+  via the Mastodon API) publishes his expander-matching exchange with Mark Sellke and Sebastien Bubeck;
+  Sellke's "Regarding your conversations with ChatGPT: that did not happen" addresses direct access to
+  his conversations, **not** training-data use. In the HN thread OpenAI concedes it "cannot rule out
+  that de-identified data derived from their usage of our products helped improve our models," while
+  asserting "no user inputs past July 3rd could have influenced this system" (internal effort launched
+  Sep 1, training begun Aug 28). No data use proven; the direct-access denial and the training-data
+  question are different claims and only one is being denied — the 13-day gap between a public
+  researcher's ChatGPT sessions and a competitor's announcement is the test case for how frontier labs
+  handle researcher-derived data.
+- **ChatGPT "allow training" opt-out trust reports** (Tell HN, 408 pts): users report the toggle
+  re-enabling itself; a counter-thread offers a plausible UI bug (the value "doesn't appear to matter…
+  for new tab loads" in localStorage); many users report opt-outs holding for months; an OpenAI employee
+  in-thread: opt-outs are respected via the privacy portal. Honest state: unresolved — small-sample
+  anecdotes, no official statement. Landed the same day as the attribution dispute, so "can I trust the
+  training opt-out" is being litigated on two fronts at once.
+- **Alaya Lab Programmable World Model** (arXiv 2609.10540, HF papers #3): decouples world-state
+  evolution from visual generation — an LLM compiles NL instructions into executable programs over
+  entity states and transition rules, and state-augmented 3D oriented bounding boxes become
+  pixel-aligned conditioning for a pretrained video model as the renderer, with explicit persistent
+  global state including off-screen entities. "LLM as the physics engine, video model as the camera" —
+  compiling state to *programs* makes it auditable rather than latent. CombatStateBench is
+  self-introduced and self-scored (94% count / 98% state); the caveat is the claim.
+- **Fast polynomials with a Lean proof** (thomasahle.com, 100+ Show HN pts): evaluating a pre-known
+  univariate polynomial with provably fewer multiplications (improving Horner/Estrin/Knuth-Eve/Pan/
+  Rabin–Winograd lines) + an injective polynomial construction for universal hashing — N multiplications
+  to hash 2N values with one random key, improving Bernstein's. The ~100-page proof is machine-verified
+  in Lean; limits explicit: rationals blow up (finite fields are the sweet spot), for floats "use Estrin
+  instead," univariate only. A new multiplication-count bound *and* a Lean proof — checkable rather than
+  benchmarked.
+- **Stockfish 19** (Sep 5): up to +44 Elo, a new SFNNv16 NNUE net trained with quantization-aware
+  training on hundreds of billions of positions rescored by a strong Leela net, universal binaries,
+  native RISC-V/LoongArch, WASM targets. The longest-running open benchmark community keeps its
+  unglamorous-engineering cadence.

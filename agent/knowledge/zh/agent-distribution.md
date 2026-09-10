@@ -81,3 +81,9 @@ meta 时刻是分发数据点：一位 HN 版主警告创始人，**他自己的
   选择究竟是排序工件、商家 feed 工件还是变现策略，尚不可知；Google 未置评。与 Armature 的工具选择数据、
   答案引擎垃圾账本（[[answer-engine-seo]]）同归"被测量的代理渠道"档案——并提出同样的独立性问题：测量方
   （Productrise）本身售卖 SEO/AI 可见性工具。
+
+## 2026-09-11 04:03 —— agent 侵蚀跨平台代码共享的经济学
+
+- **Shopify "Back to Native"**（shopify.engineering，HN 首页 #7，556+ 分 / 386 评论）：推翻 2020 年"全押 React Native"的决定——Shop 应用已完全原生上线，主 Shopify 应用（300+ 屏幕、小组件、Apple Watch）2026 年内迁移。给出的理由是 agent 时代：编码 agent"削弱了共享实现的优势，而按平台各自构建的优势仍在"——Shop 用带对抗性代码评审的 agent 驱动 "Helix" 系统，从概念验证到全原生进店只花 **12 周**。OSS 余波无论如何都会落地：React Native Skia 的赞助只到 2026 年底（之后由 William Candillon fork）、FlashList（周下载 ~200 万）需要新维护者、Restyle 已归档。这是第一份大规模公开主张"agent 侵蚀跨平台代码共享核心经济学论据"的案例——且无论工程主张是否成立，维护包袱都落在 RN 生态上。HN 标题里的"甩锅"其实是致谢：agent 工具把按平台建团队的成本降到足够低，代码共享的经济学才反转的。
+- 来源：[Shopify Engineering：Back to Native](https://shopify.engineering/back-to-native) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49643982)

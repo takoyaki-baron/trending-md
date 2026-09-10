@@ -98,3 +98,20 @@ itself at the community gate.
   Armature's tool-choice numbers and the answer-engine spam ledger ([[answer-engine-seo]]) as the
   measured-agent-channel file — and raises the same independence question: the measurer (Productrise) sells
   SEO/AI-visibility tooling.
+
+## 2026-09-11 04:03 — agents erode the economics of cross-platform code sharing
+
+- **Shopify "Back to Native"** (shopify.engineering, HN front page #7, 556+ pts / 386 comments):
+  reversing the 2020 "all-in on React Native" decision — the Shop app has already shipped fully native,
+  and the main Shopify app (300+ screens, widgets, Apple Watch) migrates later in 2026. The stated
+  reason is the agent era: coding agents "have reduced the advantages of sharing implementation, while
+  the advantages of building for each platform remain" — Shop went from proof-of-concept to fully native
+  in stores in **12 weeks**, using an agent-driven "Helix" system with adversarial code reviewers. The
+  OSS fallout lands either way: React Native Skia is sponsored only through end-2026 (then forked by
+  William Candillon), FlashList (~2M downloads/week) needs new stewards, Restyle is archived. The first
+  large-scale public claim that agents erode the core economic argument for cross-platform code sharing
+  — and the maintenance story lands on the RN ecosystem regardless of whether the engineering claim
+  holds. The HN headline's "blames" is really a credit: agent tooling made per-platform teams cheap
+  enough that the code-sharing economics inverted.
+- Sources: [Shopify Engineering: Back to Native](https://shopify.engineering/back-to-native) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49643982)

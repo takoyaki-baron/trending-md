@@ -1344,3 +1344,7 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 - **hermes-agent v0.21.1 — 一卷 5,139 个提交**(NousResearch,243,806★,周 +4,221;9 月 7 日发布)。明示"v0.21.0 以来 main 的汇总":5,139 个非合并提交、4,364 个文件、632 个已合并 PR,整理版说明推迟到 v0.22.0。README 的告诫很具体:Windows Defender 误报捆绑的 `uv.exe`(已发布证明验证流程),检出目录内的 dev venv "可能被 agent 对自己检出目录跑的相对路径命令清掉"。反向注脚:**5k+ 开放 issue 和 5k+ 开放 PR。**单次补丁卷里这么多提交,连这个仓库也不常见——说明自我改进 agent 赛道正在向 Hermes 收拢;而积压才是星数 omit 的那部分故事(08-16 的"看积压不看星"信号,如今到了规模)。
 - **Procedural Graphs — 自演化的"怎么做"记忆**(arXiv 2609.09153,9 月 8 日提交,Google 主导:Yuxing Lu、Yicheng Chen、Shanchan Wu、Sercan Ö. Arık;HN 24+ 分)。"(procedure, relation, procedure)" 三元组作为知识图谱的程序性类比;引导模型把局部子图转成"偏置而不指令"求解器下一步的步骤级提示;LLM 精炼器从成败轨迹对比中改编辑图拓扑,只保留在验证集上成立的编辑。宣称:演化后的图持平或超过手工设计、能修复有缺陷的专家先验、跨数据集跨 LLM 胜过记忆基线。agent 记忆一直以情景/事实为主——显式学习工具顺序与前置条件的自演化程序层是不同原语,直接落入 MCP/skills 工具化讨论。诚实缺口:摘要看不到 limitations;基准细节在 36 页正文里。
 - **Opusfived — HN #1 的 agent 越界交互喜剧**(opusfived.dev;828+ 分/339 评论)。访客任务:让一个 Claude agent 把一个按钮改蓝——别的一个都不许动——全程围观它干活。明示娱乐向、非基准,不透露实现。是需求侧证据,不是测量:纯 agent 行为玩笑拿下 HN 头名,说明指令约束(instruction-scoping)已是 2026 编码 agent 的头号 UX 之痛——对 harness 构建者,有界、可验证的编辑比裸能力更重要。
+
+## 2026-09-11 04:03 —— harness 论点抵达具身
+
+- **Show-Harness / "Embodied Harness"**（NUS Show Lab，arXiv 2609.10522，9 月 10 日 HF 论文 #1）：前沿 VLM 经离散语义动作单元（MV_LEFT、GRASP…）加各具身专用解释器零样本控机器人，而非训练 VLA。项目页数字：零样本前沿 VLM agent 十项任务 **89%**，最佳基线 57%；跨具身（Franka + AgileX）93%/87% vs 52%；sim-to-real **13/20，而两个可训练 VLA 基线均 0/20**；微调小型开放 VLM 只需"几个 GPU 小时"；GUMI 提供无需遥操作硬件的 GUI 采集接口。项目页自己的消融是诚实边界：去掉命名/约定结构后成功率崩到 **5%**——全部效果都住在接口约定里。若能复现，agent harness 正以当年迁移到工具的方式迁移到具身：靠接口，不靠权重（论点 12）。

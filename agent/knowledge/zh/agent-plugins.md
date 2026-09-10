@@ -632,3 +632,7 @@ GitHub 趋势榜，而同一场讨论记录了*harness*（而非技能）拥有�
 
 - **Imbad0202/academic-research-skills — 4 技能 32 agent 的科研流水线,47k★**(周 +2,430;changelog v3.21.2,9 月 6 日)。研究→写作→评审→修改→定稿:13 agent 深度研究团队(8 模式含 PRISMA 系统综述)、12 agent 论文流水线(MD/DOCX/LaTeX→PDF)、带魔鬼代言人角色的 7 agent 多视角评审、含"强制诚信门"的 10 阶段编排器。README 哲学是"AI 是副驾,不是机长",告诫异常直白:**"一条被一致谎报的结果可以通过这些检查"**(它核验的是被报告的内容,不是实验是否真跑过)、在线评审输出 `NOT_CALIBRATED`、明确拒绝做"humanizer"。许可:**CC BY-NC 4.0——禁商用**,下游用户必踩的坑。技能生态越过单技巧仓库、长成完整多 agent 流水线——作者亲口点破"断言非证明"的边界。
 - **petergyang/no-ai-slop — 反 AI 腔技能竞赛继续**(7,792★,周 +1,038,周榜 #20——几天 7.8k)。装成技能的 AI 腔 linter("不是 X,而是 Y"式二元对比、清嗓开头、"a testament to"式浮夸、假深刻结尾……),可在 Claude Code/Codex/ChatGPT 以 `/no-ai-slop` 运行或 `npx skills add` 安装。检测模式刻意只标风格、"不猜测是否 AI 所写";README 自陈核心矛盾:AI 润色倾向"磨平"个人风格——恰是该技能要防的风险。缺口:宣称 20+ 模式公开只列 10 个(其余在 `SKILL.md`)、无 release、不能独立运行,且分类学是英文 LLM 特异——每种语言需要自己的 tell 清单。
+
+## 2026-09-11 04:03 —— 技能包管理器层到来
+
+- **vercel-labs/skills（`npx skills`，MIT，31.1k★，+175/日，v1.5.25 于 9 月 8 日）**：从 git URL、本地路径或直接下载安装并管理 SKILL.md 技能，覆盖 75+ 编码 agent（Claude Code、Codex、Cursor、Gemini CLI…）；流量极重（847 个开放 issue、343 个 PR），且在 README 里对碎片化很诚实：匿名遥测默认开启（`DISABLE_TELEMETRY`/`DO_NOT_TRACK` 退出）、`context: fork` 仅 Claude、hooks 只有三个 agent 支持、上限 10 MiB 下载 / 25 MiB 解压 / 1,000 文件。今天的排名没有新版本驱动——CLI 借的是标准化浪潮（anthropics/skills、openai/plugins、marketingskills）。一个把各 agent 采纳上限写成文档的跨 agent 技能*包管理器*，正是决定技能保持可移植还是按 harness 碎片化的基础设施层——论点 8"谁拥有市场"之问，多了一个分发渠道竞争者。

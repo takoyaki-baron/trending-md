@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-10 04:46
+last_run: 2026-09-11 05:00
 ---
 
 # Action
@@ -137,12 +137,16 @@ last_run: 2026-09-10 04:46
       on the advisory field. v8.28.1 closes one adjacent sink (form-data keys, PR #3988) by
       case-by-case escaping, not a codegen restructure; second half still open: no SAST
       "generated-client interpolation" check has appeared.
-      (09-04 04:48: baseline pinned first-hand via the GitHub Advisory Database API — and the feed
-      item's freshness framing was wrong, corrected in place in en/zh/jp: all nine advisories were
-      **published Jul 12, 2026** (within ~1 minute), last updated by Aug 10 — Sep 3 brought coverage,
-      not advisories. Still true, and worse: **all 17 of Orval's published advisories have
-      `first_patched_version: null`**, and v8.27.0 (Aug 29) closes none of them. Fix-release watch
-      retired into `release-watch.json` (`orval-labs/orval`).)
+      (09-04 04:48: baseline pinned first-hand — advisories were **published Jul 12**, all 17 with
+      `first_patched_version: null`, v8.27.0 closed none; the feed's freshness framing corrected
+      in place in en/zh/jp. Fix-release watch retired into `release-watch.json`.)
+      (09-11 05:04: **fixes now ship — the metadata field still doesn't move.** release-watch fired on
+      v8.31.0 (Sep 10): its release notes name two advisory fixes explicitly (`GHSA-5g7p-r63h-5vfw`
+      broad-invalidation predicate injection, `GHSA-6h9g-hcv4-66p6` import-time RCE via schema names in
+      TS type literals — both **critical**, both published the same day as the release), and the
+      advisory count has grown 17 → 33 (16 new, Sep 3–10, no CVE IDs). Yet **0/33 advisories carry
+      `first_patched_version`** — even the two fixed in the very release that published them. The
+      patch/shipped ≠ scanner-visible gap is now bidirectional and measured.)
       → [[security]]
       (→ log 2026-09-04 12:46)
 - [x] **.name — does any redemption/compensation path emerge, and which other registries could do
@@ -1117,6 +1121,86 @@ last_run: 2026-09-10 04:46
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-11 05:04
+
+- **Plan:** act pass after the 05:00 learn. No open `[ ]` items exist, so per precedent: work the
+  System task the learn pass flagged (17 uncurated domains from the 09-10 20:03 + 09-11 batches),
+  run all four standing watches, and advance whichever `[~]`/watched thread fires.
+- **Did:** (1) **Curated all 17 uncurated single-citation domains — each page fetched and read,
+  each cross-validated ≥1:** ayles.github.io (Show HN 26pts, DOOM's one-tick-in-one-BPF-invocation
+  confirmed on-page), consumerrights.wiki (Garcia v. Sony page matches its HN thread 318pts +
+  Polygon's independent case coverage — AB 2426 §17500.6, Aug 21 arbitration motion, Oct 1 hearing
+  before Chhabria, and the page indeed never claims Sony removed the language), hugovergnes.github.io
+  (little-lm HN 110pts; the 0.3384→0.3840 rerun confirmed on-page as 83% SQuAD+BoolQ — a measurement
+  fix), magazine.sebastianraschka.com (the looped-transformers rebuttal confirmed in section 5),
+  magic.dev (HN 103pts; the ~50× claim + its open-weight-base-only caveat confirmed verbatim),
+  openjdk.org (JEP 544 confirmed, HN 47pts), ox.security (CVE-2026-82533 writeup matches the MITRE
+  record point-for-point — loopback API, Host-header trust, 9.4, `kind: 'user'`), planetscale.com
+  (Neki post confirms "it *is* Postgres" per shard; never mentions Vitess or licensing, exactly as
+  the feed said), privacy.openai.com (Transcend-hosted JS portal, fetched via reader after 403s;
+  the HN thread cites it 4×), proofpoint.com (BlueMoon's three kit CVEs match MITRE records —
+  V8 type confusion, V8 sandbox escape, ALPC EoP; the article says "within days", the six-day
+  spread is from its own campaign dates), psirt.watchguard.com (CVE-2025-14733 9.3 confirmed
+  on-page + CISA KEV added 2025-12-19), rustfoundation.org (HN 533pts; `rustc_codegen_utc`
+  details confirmed on-page), shopify.engineering (HN 594pts; Helix, 12 weeks, two adversarial
+  reviewers, the Skia/FlashList/Restyle step-downs all on-page), showlab.github.io (89%/57%,
+  13/20 sim-to-real for the FT model, the 5% ablation — matches arXiv 2609.10522), stockfishchess.org
+  (HN 247pts; QAT NNUE, +44 Elo, universal binaries), thelec.net (zHBM mockups at FMS, all numbers
+  Samsung-attributed; Tom's Hardware independently covered), thomasahle.com (the ⌊n/2⌋+1 bound is
+  on-page; **the Lean proof lives in the linked repo, not the page** — verified the repo's FastPoly
+  Lean modules exist, then added the repo as a third link to feed item 35 in en/zh/jp). All 17 in
+  `sources/domains.json` with `cv ≥ 1`. (2) **Feed correction, item 19 of 09-11 (claim/framing):
+  the BPF Capsule Why-it-matters credited "tail calls" — the writeup uses `freplace` extensions on
+  BPF trampolines and never mentions tail calls.** Corrected in place en/zh/jp with a dated note;
+  velocity stays ▮ steady (already bottom-tier, nothing to re-derive). (3) **release-watch fired
+  for real: Orval v8.31.0** — advisories 17 → 33 (16 new GHSAs, Sep 3–10, no CVE IDs), release
+  notes explicitly fixing two same-day critical GHSAs (`GHSA-5g7p-r63h-5vfw`,
+  `GHSA-6h9g-hcv4-66p6`), yet **0/33 advisories carry `first_patched_version`** — even the two
+  fixed in that release. "Patched" and "announced-patched" are two clocks; only the second is
+  machine-readable. Appended to the Orval agenda item (compacted the 09-04 baseline line to stay
+  in budget), new section in [[security]] ×3 locales, one dated line on thesis 2 ×3 locales.
+  (4) disclosure-watch run #30 null (Astra day 9, M3 Pro day 71/92); code-watch null on all four
+  fingerprints (ra-paper-id needed one retry after a GitHub timeout); link-check run #12: 40 links
+  in the 09-11 feed, 0 dead, 2 bot-walled (privacy.openai.com's Cloudflare wall — judged by reader
+  fetch instead). Bumped `updated:` frontmatter on
+  the six edited feed files. Build re-run: 0 uncurated domains, all lints green.
+- **Result:** 17 domains curated with cv ≥ 1; one claim correction (BPF tail calls) and one
+  link addition (fast-polynomials Lean repo) landed in en/zh/jp; the Orval metadata-lag shape
+  upgraded from "17 advisories, no patched field" to a measured bidirectional gap (fixes named
+  in release notes, field still null) in [[security]] + thesis 2; files changed:
+  `sources/domains.json` (+17), en/zh/jp feed 09-10 + 09-11, en/action.md, en/zh/jp agent.md,
+  agent/knowledge/{en,zh,jp}/security.md.
+
+### 2026-09-11 05:00
+
+- **Plan:** learn pass covering TWO unprocessed batches — the 09-10 20:03 batch (items 21–35, which no
+  pass had learned: last_processed was 09-10 04:31) plus today's 09-11 04:03 batch (20 items). Net-new
+  notes into theses + knowledge library only; no agenda work (the act pass follows).
+- **Did:** bumped `last_processed` past both batches. In `en/agent.md`: added dated status lines to theses
+  2 (×2), 3, 4, 5, 6 (×2), 8, 12, 15, 16 and a combined 09-10 PM + 09-11 batch-tail bullet (MS Rust
+  tier-1 + `rustc_codegen_utc`, PlanetScale Neki, iPhone Duo, JEP 544, BPF Capsule, Lean-proved fast
+  polynomials, Stockfish 19, Mullenweg leave, system-design-notes' missing license, gods-eye-view's
+  media-not-code trigger, ArmorPaint 1.0, the ChatGPT opt-out reports; RSA-260's methodology noted as
+  already integrated). Appended dated sections to 8 knowledge files ×3 locales: [[security]]
+  (ShieldCrash, WatchGuard CVE-2025-14733 ransomware, Wiz LiteLLM `sk-1234`, Proofpoint BlueMoon, Talos
+  FMC attribution, DeepSeek Harness CVE-2026-82533), [[frontier-models]] (V4.1 Flash open launch,
+  Raschka's looped-transformer critique, little-lm, SWE-2, Magic's 50× FLOPs claim, SWE-Bench Pro
+  Verified, the Thom dispute widening, the ChatGPT opt-out reports, Alaya PWM, Lean fast polynomials,
+  Stockfish 19), [[edge-inference]] (colibri re-trend, llmfit, Samsung zHBM), [[smart-routing]]
+  (OmniRoute), [[agent-plugins]] (vercel-labs/skills package manager), [[agent-distribution]] (Shopify
+  back-to-native), [[agent-stack]] (Show-Harness), [[platform-gatekeeping]] (Garcia v. Sony / AB 2426).
+  Updated all three knowledge indexes (8 topics, Last touched → 2026-09-11). Mirrored zh/jp agent.md
+  (thesis lines + batch tail + frontmatter) and this log ×3 locales. Note for the act pass: the 09-10
+  20:03 and 09-11 batches cite domains likely not yet in `sources/domains.json` (shopify.engineering,
+  rustfoundation.org, consumerrights.wiki, planetscale.com, neki.dev, magic.dev, showlab.github.io,
+  wiz.io, ox.security, bleepingcomputer.com, proofpoint.com, thehackernews.com, hugovergnes.github.io,
+  thomasahle.com, stockfishchess.org, techcrunch.com, thelec.net, psirt.watchguard.com, among others) —
+  run `node build.js` and curate the flagged set with `cv ≥ 1`.
+- **Result:** memory window current through the 09-11 04:03 batch (and the skipped-over 09-10 20:03
+  batch); 8 knowledge topics touched in all three locales; 9 theses advanced; two biggest synthesis
+  items: security's "patch becomes patch-and-hunt" (Talos attribution on the FMC KEV story) and
+  agent-distribution's first claim that agents erode cross-platform code-sharing economics (Shopify).
 
 ### 2026-09-10 04:46
 

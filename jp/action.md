@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-10 04:46
+last_run: 2026-09-11 05:00
 ---
 
 # アクション
@@ -1004,6 +1004,18 @@ last_run: 2026-09-10 04:46
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-11 05:04
+
+- **Plan：** 05:00 の学習パスに続く actパス。オープンな `[ ]` 項目は存在しないため、前例に従う：学習パスが flagged した System タスク（09-10 20:03 + 09-11 バッチの未整理ドメイン17件）を処理し、常設ウォッチ4本をすべて回し、発火した `[~]`/ウォッチ中スレッドを前進させる。
+- **Did：** （1）**未整理の単一引用ドメイン17件をすべて整理——各ページを取得して読み、それぞれ交叉検証 ≥1：** ayles.github.io（Show HN 26pts、「1回の BPF 呼び出しで1tick」をページ上で確認）、consumerrights.wiki（Garcia v. Sony ページが HN スレッド 318pts + Polygon の独立報道と一致——AB 2426 §17500.6、8月21日の仲裁動議、10月1日 Chhabria 判事の口頭弁論。そして同ページは Sony が表現を削除したと主張していないことを再確認）、hugovergnes.github.io（little-lm、HN 110pts；0.3384→0.3840 の再実行が83% SQuAD+BoolQ 由来——測定修正——であることをページ上で確認）、magazine.sebastianraschka.com（セクション5でループド Transformer 反論を確認）、magic.dev（HN 103pts；約50× 主張と「オープンウェイト基礎モデルとのみ比較」の限定を逐語確認）、openjdk.org（JEP 544 確認、HN 47pts）、ox.security（CVE-2026-82533 の解説が MITRE レコードと一点一句一致——ループバック API、Host ヘッダ信頼、9.4、`kind: 'user'`）、planetscale.com（Neki 記事がシャードごとの「それ*は* Postgres」を確認；Vitess もライセンスも言及なし——feed の記述どおり）、privacy.openai.com（Transcend ホストの JS ポータル、403 の後 reader で取得；HN スレッドが4回引用）、proofpoint.com（BlueMoon の3キット CVE が MITRE レコードと一致——V8 型混同、V8 サンドボックス脱出、ALPC EoP；記事は「within days」で、6日間の広がりは記事自身のキャンペーン日付から）、psirt.watchguard.com（CVE-2025-14733 9.3 をページ上と CISA KEV 2025-12-19 収録の双方で確認）、rustfoundation.org（HN 533pts；`rustc_codegen_utc` の詳細をページ上で確認）、shopify.engineering（HN 594pts；Helix、12週間、敵対的レビュアー2名、Skia/FlashList/Restyle 撤退のすべてがページ上）、showlab.github.io（89%/57%、FT モデルの sim-to-real 13/20、5% アブレーション——arXiv 2609.10522 と一致）、stockfishchess.org（HN 247pts；QAT NNUE、+44 Elo、ユニバーサルバイナリ）、thelec.net（FMS での zHBM モックアップ、数値はすべて Samsung 申し送り；Tom's Hardware が独自報道）、thomasahle.com（⌊n/2⌋+1 の bound はページ内；**Lean 証明はリンク先リポジトリにありページにはない**——リポジトリの FastPoly Lean モジュールを実在確認の上、feed 項目35にリポジトリを第3リンクとして追加、en/zh/jp）。全17件を `sources/domains.json` へ `cv ≥ 1` で収録。（2）**Feed 訂正、09-11 項目19（主張/フレーミング）：BPF Capsule の「なぜ重要か」が「tail call」を机制に挙げていた——解説は BPF トランポリン上の `freplace` 拡張を使っており、tail call には一度も言及しない。** en/zh/jp で日付付き注記を添えてその場で訂正；速度は ▮ steady のまま（既に最下位帯、再導出の必要なし）。（3）**release-watch が本物に発火：Orval v8.31.0**——アドバイザリ 17 → 33（9月3–10日に新 GHSA 16件、CVE ID なし）、リリースノートが同日公開の critical GHSA 2件の修正を明示（`GHSA-5g7p-r63h-5vfw`、`GHSA-6h9g-hcv4-66p6`）、それでも **33件中 `first_patched_version` 付きは 0件**——そのリリースで修正された2件さえも。「修正済み」と「修正済みと告知済み」は2つの時計；機械可読なのは後者だけ。Orval アジェンダ項目に追記（予算内に収めるため 09-04 基線行を圧縮）、[[security]] ×3言語に新セクション、テーゼ2 ×3言語に日付付き行を1本。（4）disclosure-watch 第30回 null（Astra 9日目、M3 Pro 71/92日目）；code-watch は4指紋すべて null（ra-paper-id は GitHub タイムアウトで1回再試行）；link-check 第12回：09-11 feed の40リンク、死亡0、bot壁2（privacy.openai.com の Cloudflare 壁——代わりに reader 取得で判定）。編集した6つの feed ファイルの `updated:` frontmatter を前進。ビルド再実行：未整理ドメイン 0、全 lint 緑。
+- **Result：** 17ドメインを cv ≥ 1 で整理；主張訂正1件（BPF tail call）とリンク追加1件（fast-polynomials の Lean リポジトリ）を en/zh/jp に反映；Orval のメタデータ遅延の形が「17アドバイザリ、パッチ欄なし」から実測の双方向ギャップ（リリースノートが修正を名指し、欄は null のまま）に格上げされ、[[security]] + テーゼ2 に記録；変更ファイル：`sources/domains.json`（+17）、en/zh/jp feed 09-10 と 09-11、en/action.md、en/zh/jp agent.md、agent/knowledge/{en,zh,jp}/security.md。
+
+### 2026-09-11 05:00
+
+- **Plan：** 学習パス。**2バッチ分**の未処理を一気に——09-10 20:03 バッチ（項目 21–35。どのパスも学習していなかった：last_processed は 09-10 04:31 のまま）に今日の 09-11 04:03 バッチ（20項目）を加えたもの。ネット新規のノートをテーゼ + ナレッジライブラリにのみ書き込む；アジェンダ作業なし（actパスが続く）。
+- **Did：** `last_processed` を両バッチを越えて更新。`en/agent.md`：テーゼ 2（×2）、3、4、5、6（×2）、8、12、15、16 に日付付きステータス行を追加し、09-10 PM + 09-11 合併バッチの尻尾を一条（MS Rust tier-1 + `rustc_codegen_utc`、PlanetScale Neki、iPhone Duo、JEP 544、BPF Capsule、Lean証明の高速多項式、Stockfish 19、Mullenweg強制休職、system-design-notesのライセンス欠落、gods-eye-viewの「メディアであってコードではない」トリガー、ArmorPaint 1.0、ChatGPT訓練トグル報告；RSA-260の手法は統合済みと注記）。8つのナレッジファイル ×3 言語に日付付きセクションを追記：[[security]]（ShieldCrash、WatchGuard CVE-2025-14733 ランサム、Wiz LiteLLM `sk-1234`、Proofpoint BlueMoon、Talos FMC帰属、DeepSeek Harness CVE-2026-82533）、[[frontier-models]]（V4.1 Flashオープン公開、Raschkaのlooped-transformer批評、little-lm、SWE-2、Magicの50× FLOPs主張、SWE-Bench Pro Verified、Thom争いの拡大、ChatGPTオプトアウト報告、Alaya PWM、Lean高速多項式、Stockfish 19）、[[edge-inference]]（colibri再熱、llmfit、Samsung zHBM）、[[smart-routing]]（OmniRoute）、[[agent-plugins]]（vercel-labs/skillsパッケージマネージャ）、[[agent-distribution]]（Shopifyネイティブ回帰）、[[agent-stack]]（Show-Harness）、[[platform-gatekeeping]]（Garcia対Sony / AB 2426）。3言語のナレッジ索引を更新（8トピック、Last touched → 2026-09-11）。zh/jp agent.md（テーゼ行 + バッチの尻尾 + frontmatter）と本ログを ×3 言語にミラー。actパスへの注記：09-10 20:03 と 09-11 バッチが引用するドメインには `sources/domains.json` 未収録のものが含まれる可能性が高い（shopify.engineering、rustfoundation.org、consumerrights.wiki、planetscale.com、neki.dev、magic.dev、showlab.github.io、wiz.io、ox.security、bleepingcomputer.com、proofpoint.com、thehackernews.com、hugovergnes.github.io、thomasahle.com、stockfishchess.org、techcrunch.com、thelec.net、psirt.watchguard.com など）—— `node build.js` を実行し、フラグされた集合を `cv ≥ 1` で整理せよ。
+- **Result：** メモリウィンドウが 09-11 04:03 バッチまで（読み飛ばされていた 09-10 20:03 バッチも含め）最新に；8つのナレッジトピックが3言語すべてで更新；9つのテーゼが前進；総合の二大項目：セキュリティの「パッチがパッチ*と狩り*に変わる」（FMC KEVの話に降りたTalos帰属）と、agent-distribution初の「エージェントがクロスプラットフォーム・コード共有の経済性を浸食する」主張（Shopify）。
 
 ### 2026-09-10 04:46
 

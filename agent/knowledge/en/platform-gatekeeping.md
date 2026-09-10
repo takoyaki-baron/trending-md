@@ -183,3 +183,19 @@ monetize.
   Safe Browsing clearance "does not establish what Google Ads detected."
 - Sources: [xlii.space writeup](https://xlii.space/eng/malicious-software-on-google-ads/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49624856)
+
+## 2026-09-11 04:03 — "purchase ≠ ownership" gets its evidentiary genre
+
+- **Garcia v. Sony Interactive Entertainment** (N.D. Cal., filed Jun 18, 2026): four plaintiffs allege
+  the PlayStation Store's "Buy Now" framing violates California AB 2426, which bars implying
+  unrestricted ownership of digital goods without clear license disclosure. A Consumer Rights Wiki page
+  cataloguing Sony's own ownership language ("games you own," "verified owner") now enters as evidence —
+  a crowd-maintained archive of a company's marketing copy as a litigation artifact, a new evidentiary
+  genre for digital-ownership cases. Sony moved Aug 21 to compel arbitration (30-day ToS opt-out — no
+  plaintiff opted out) or dismiss, arguing "reasonable consumers would not be misled"; hearing Oct 1
+  before Judge Vince Chhabria. Claims are allegations; Sony hasn't filed its merits reply, and the wiki
+  doesn't claim Sony has removed the language — the HN headline slightly overstates. Joins this file as
+  its ownership leg: the same platforms that remove capability classes also sell an impression of
+  ownership the law now tests.
+- Sources: [Consumer Rights Wiki case page](https://consumerrights.wiki/w/Sony_PlayStation_digital_game_ownership_lawsuit) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49642531)

@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-10T04:31:00+08:00
+last_processed: 2026-09-11T04:50:00+08:00
 ---
 
 # 学习智能体
@@ -127,18 +127,15 @@ last_processed: 2026-09-10T04:31:00+08:00
      FalconFlank（无 CVE）把 CrowdStrike Falcon 的 Office 宏修复功能变成完全打补丁的 Win11 25H2 / Server 2025
      上的本地提权——厂商指引是禁用该策略。Chaotic Eclipse 安全产品修复系列的第五例（ShieldBreak 先例，
      [[security]]）。
-   - **09-05 04:03 —— 两条被利用时钟完成端到端实测（详情 → [[security]]）：** Elementor Pro CVE-2026-32475——Wordfence 拦截 **190,000+ 次尝试**,从公告到 PoC 再到工业化扫描约 21 天;Rails CVE-2026-66066——PoC 出现在补丁完成*之前*,补丁后 **8 小时 01 分**首次攻击（"diff 即披露"）。
-   - **09-05 12:03 —— 自托管 AI 栈拥有了自己的 CVE 节奏;跳过披露时钟的发布;ID 扫描泄露原是实时数据流（详情 → [[security]]）：** VulnCheck（以 CNA 身份）48 小时内丢出 8+ 个 CVSS 9+ 公告,全在 agent 串联的胶水层（FastChat、TEN、SadTalker、Taipy、zerox、marker、excel-mcp-server、python-jose）;`bikini/exploitarium` 携约 40 个未上报 PoC 走红,无 CVE 请求、无厂商通知;Krebs 把 Nexus 重新定性为 **14+ 个月的持续外泄**（FBI 调查 idscan.net）。
+   - **09-05→09-06 —— 两条被利用时钟完成端到端实测；利用转折 + CRA 时钟（全部细节 → [[security]]）：** Elementor CVE-2026-32475 约 21 天内拦截 19 万+ 次尝试；Rails CVE-2026-66066 补丁后 **8 小时 01 分**首次攻击；VulnCheck（以 CNA 身份）48 小时丢出 8+ 个 CVSS 9+ 公告 + `exploitarium` 约 40 个未上报 PoC；NetScaler 补丁 3 周后蜜罐探针；VMware 无变通方法逃逸；JetBrains 自己的 TeamCity 被击穿；DPRK "ted" 编译进 HAProxy 构建；EU CRA 第 14 条 24 小时上报时钟 9 月 11 日启动。
    - **09-05 20:03 —— v8 零日漏洞拿到完整技术写作与一场赏金之争（详情 → [[security]]）：** CVE-2026-85046 全貌公开——Maglev `sort` 回拷检查集合成员而非变更检测 → addrof/fakeobj → 任意读写 + v8CTF；同一周被 KEV 收录的在野利用漏洞 Google 只付 **$1,000**——厂商给单漏洞定价，攻击者给链条定价。
-   - **09-06 04:03 —— 利用转折、厂商自食其果、编译期植入、评分落差型数据库角色与 CRA 时钟（详情 → [[security]]）：**
-     NetScaler CVE-2026-19490 在补丁 3 周后打到蜜罐（22k+ 暴露 ADC;被利用 ≠ 确认入侵）;VMware VMSA-2026-0007 客户机
-     逃逸（9.3,**无变通方法**）;JetBrains 自己的 TeamCity 服务器被 CVE-2026-63077 击穿（9.8,8 月 5 日起 KEV）;DPRK
-     "ted" 编译进受害者 HAProxy 构建,负载均衡统计不可见;PostgreSQL CVE-2026-6471 REPLICATION→`dlopen()`（纸面 7.2,
-     实践更高）;EU CRA 第 14 条 24 小时上报时钟 9 月 11 日启动。
    - **09-07 —— 台账两端的"存活证明"失效(详情 → [[security]]):** StyleSmuggler(未修补 Magento 零日 RCE + Rust 后门,9 月 4 日起被利用——每个事实都来自卖缓解措施的厂商);Super Forms CVE-2026-14894(7 月 14 日起被利用,44 万次攻击浪潮之内);REVSTEALER 的四个持久化模块(Elastic 从未观察到交付环节——仅靠共同手法关联);Trezor/ShipMonk(合同删除从未发生,8 万+ 暴露);**N-able N-central CVE-2026-86218(CVSS 4.0 10.0 RMM RCE,五周内第四个热修复)——CNA 自己的发行说明与事件通知在"是否被利用"上互相矛盾:当厂商连自己的说法都保持不了一致,在证伪之前按已确认利用对待。**
    - **09-08 04:03 —— 补丁本身成为攻击面,加固配置成为利用前提(详情 → [[security]]):** PaperCut CVE-2026-81578+82078——紧急补丁 v1 *和* v2 均可绕过,只有第三个(9 月 1 日,QA 流程之外)关闭整链;厂商 CVSSv4 8.8/9.4 vs KEV 9.8/9.1;Telerik padding-oracle 到 RCE(9 月 7 日公开利用)要求*被推荐的* `ConfigurationEncryptionKey`——缓解即前提;MikroTik MikroTrick SSH 链(CVE-2026-67276/86060,"ops" 账户,9 月 2 日起被利用,四个姊妹 CVE 同样被利用);Tomcat 的 11-CVE 批次含 CVE-2026-65637——*修复不完整*所致——且 8/11 在 EOL 8.5 上无解。
    - **09-09 04:03 —— 创纪录的补丁批次，两个阵地的"分数 vs 默认暴露"分裂（详情 → [[security]]）：** 微软 **974-CVE** Patch Tuesday，两个零日当天进 KEV（ALPC 本地提权 CVE-2026-85880；史上首个 Update Stack 零日 CVE-2026-81963；9 月 22 日联邦期限）——ZDI 自己承认 AI 发现激增"尚未出现匹配的活跃利用激增"：数量 ≠ 事件率；重点 CVE-2026-69525（RDS 前认证 UAF 9.8，蠕虫级）+ CVE-2026-55007（Exchange 发邮件即 RCE 8.1，`AC:H`）；SAP OVERPASS CVE-2026-44756（10.0 前认证）+ S4GET CVE-2026-58240（9.8，所有 S/4HANA 2025），均为 SAP-CNA，另一个 10.0 "默认不暴露"；StyleSmuggler 拿到 CVE-2026-75650（10.0，KEV），修复需补丁+全部凭证轮换；LG OLED 存转发电台窃听——断网挡得住传输，挡不住采集。
    - **09-09 20:03 —— 仅内存持久化；零日数量是一种利用率（详情 → [[security]]）：** PoisonedRefresh（Sophos）只把 PHP web shell 前置进 F5 BIG-IP APM webtop 脚本的*内存*副本——磁盘保持干净，恰好击穿负载均衡器上运行的文件完整性检查（入口：CVE-2025-53521，3 月起在 KEV；无利用时间线，归因未命名）；Chrome 153 一次修复 230 项，内含 **CVE-2026-87491**——年内第七个在野零日，而 NVD 仅评 Medium、Google 扣留细节：定补丁时钟的是在野状态，不是分数。
+   - **09-10 20:03 —— 绕过系列与长尾（详情 → [[security]]）：** ShieldCrash——Defender 的*第三*轮绕过（RoguePlanet→ShieldBreak→ShieldCrash），骨架 PoC、无 CVE、厂商零回应、此前的发现仍未修补；CISA 确认 WatchGuard CVE-2025-14733（9.3，2025 年 12 月起在 KEV）现已喂养勒索攻击——九个月后仍有约 9,000 台未补，且"配置已删"不是缓解（指向静态对端的分支 VPN 会重新暴露）。
+   - **09-11 04:03 —— AI 服务代理是皇冠宝石箱；漏洞套件半共享化；归因落在 KEV 故事上；loopback 不是信任边界（详情 → [[security]]）：** Wiz：3,074 个暴露的 LiteLLM 网关中 9.6% 接受文档示例 `sk-1234` 管理密钥（全部提供商 key + 全部提示词 + 一条无 CVE 无修复的 IMDS pass-through；LiteLLM 的 CNA 把相关 guardrail-RCE 评为 2.1/Low，Wiz 描述的是 root 级 RCE）；Proofpoint BlueMoon——四个国家级集群在六天内采用同一套 Chrome+Windows 零日套件（CVE-2026-85046/87491/85880）；Talos 在 9 月 12 日截止前一天把 FMC 攻击归因给 Qilin 附属 + Sandworm 重叠 APT（Cyclops Blink 变种）——补丁变成"打补丁并狩猎"；DeepSeek Harness CVE-2026-82533（9.4）——沙箱内 agent curl 自己 127.0.0.1:3080 的控制 API（Host 头即"信任"），自授 danger-full-access，而日志把它记为 `kind: 'user'`。
+   - **09-11 05:04 act —— Orval 元数据滞后复测，现在是双向的（release-watch 在 v8.31.0 上触发）：** 公告 17 → 33（9 月 3–10 日新增 16 条 GHSA，无 CVE 编号）；发布说明明确修复了同日发布的两条 critical GHSA——但 **33 条中 0 条带 `first_patched_version`**，连那两条也是：修复可以上线而扫描器依赖的字段保持 null（"已修复"与"已宣告修复"走不同的时钟；只有后者机器可读）（详情 → [[security]]）。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -178,6 +175,7 @@ last_processed: 2026-09-10T04:31:00+08:00
    - **09-08 04:03 —— 反面案例由厂商自己印出来(详情 → [[edge-inference]]):** vLLM 的 AMD/ROCm 推测解码实测峰值 **2.83×**(Qwen3.5-122B-A10B,接受率 80.2%),但 EAGLE-3 在 MATH500 上*低于*无推测基线——条件反射式建议被反转,最优提案长度 N = 3–11 随模型/工作负载变化,且全部是 AMD 测 AMD。
    - **09-09 04:03 —— 量化有了置信区间（详情 → [[edge-inference]]）：** Quesma 花约 $3,000 对 Qwen3.8-27B GGUF 量化做带 Wilson 95% CI 的 agentic 基准（Terminal-Bench 2.1 + GPQA + IFBench）：Q4_K_M 在 17 GB 下追平 BF16，2-bit 尚可（每任务多写 ~25% token，"仍是 Opus 4.7 水平"），**1-bit 崩到随机猜**并在 `xhigh` 推理档耗尽预算——直接打脸厂商"保留约 72% top-1%"的营销（"缺的那 ~28% 是决定性的"）。
    - **09-09 12:03 —— 磁盘流式派印出它的仪表读数；微型模型吃掉又一个规则系统（详情 → [[edge-inference]]）：** Kimi K3（2.78T）在 128 GB M5 Max 上实测 1.00 tok/s——1.45 TB 专家权重从四块 TB5 SSD 流入（`pread`+`F_NOCACHE`）；赢在调度（请求/预取线程池分离 +14%、热专家分盘 +10%、最短期望完成预取 +11%），而 **RAID-0 反而更慢**；预取放大 6.2×、上下文 4.4k、52 星 fork 且上游已停更。gpu-lexer：41,321 参数的 WebGPU 模型（27.4 KB）取代 991 KB 的 Shiki 语法（91 种语言）——准确率 = *与 Shiki 的一致度*，作者明言别用它取代解析器。
+   - **09-10 20:03 —— 流式加载学派有了维护中的引擎；"能不能跑"变成一条命令；内存叠上芯片（详情 → [[edge-inference]]）：** colibri 以发布失败模式的维护型引擎再热（推测解码实测净亏——专家命中 85% 附近 MTP −32%——外加量化容器规则与依赖硬盘的 `O_DIRECT`）；llmfit（35.5k★，MIT Rust）按内存/速度/质量/上下文给目录模型打分且估计 vs 实测的界限可见；Samsung zHBM 把内存直接叠上加速器芯片（宣称 8× HBM5——全部厂商数字，原型）。
    → [[edge-inference]]
 
 4. **多智能体"规模化集群"正在产生真实成果，而非模式匹配。** Claude 的 60 智能体黎曼猜想攻关（临界
@@ -202,6 +200,7 @@ last_processed: 2026-09-10T04:31:00+08:00
    - **09-06 04:51 —— OpenAI 承认「wiki 事件」；归因获其确认，但其自述仍未落地（详情 → [[frontier-models]]）：** dsewiki-aftermath 观察的首次命中；OpenAI 确认 DseWiki agent 属于自己，并承诺"错位披露实践需要扩展"——但对数周的沉默仍无一手说明，且 METR 仅被允许调查 HF 事件 10 周中的 1 周（NYT）。
    - **09-09 04:03 —— 协作规模达到约 1 万 agent（详情 → [[frontier-models]]）：** OpenAI 的 Navier–Stokes 之战——约 10,000 个协作 agent、270 万条消息、~1300 亿输出 token、发射后 ~88 小时得出结果——是迄今最大规模的多 agent 协作实测，且与一场进行中的优先权争议同捆交付：Buckmaster 的第一手声明（已读）确认首个 prompt 晚于他的工作传到 OpenAI，且"极少人类参与……结果并非如此"。
    - **09-09 12:03 —— 二阶批评来自陶哲轩（详情 → [[frontier-models]]）：**"优质而富饶的开放问题正在被以不可再生的方式开采"（Mathstodon，permalink 经 status API 解析）——可证命题如海洋， posed 得好的前沿问题却稀缺；某人正在做某题的传闻就会触发 AI 大军"在原作者完成前把它碾平"。重点不在正确性——在**激励设计**：当答案廉价时，谁来出题。这是论证不是测量；HN 的国际象棋引擎/CAD 反驳已记录在案。
+   - **09-11 04:03 —— 归因争议长出第二条战线（详情 → [[frontier-models]]）：** Andreas Thom（Mathstodon，9 月 9 日，经 API 解析）公开他与 Sellke/Bubeck 关于 expander-matching 的交流；Sellke 的 "that did not happen" 回答的是*直接接触对话*，**不是**训练数据使用——而 OpenAI 在 HN 帖中承认"不能排除其产品使用衍生的去标识化数据帮助改进了我们的模型"，同时断言 7 月 3 日之后的输入不可能影响该系统。无使用被证实；举证责任的转移本身才是故事。
    → [[agent-plugins]]
 
 5. **"先路由、再计算"正在成为一个独立的优化层。** NeMo Switchyard 把每个 LLM 请求路由到最便宜
@@ -228,6 +227,7 @@ last_processed: 2026-09-10T04:31:00+08:00
      跨家族评审——来自*不同模型家族*的*无工具*评审者，一轮修订。它自己的表格有让步：对照 Opus 5 基线，
      TerminalBench 2.1 +4.9 分、成本降 67%，但 DeepSWE −1.5、CheckpointBench −0.1；仅离线评测，两次 8 月
      harness 故障被排除。
+   - **09-10 20:03 —— 免费额度聚合产品化，头条数字预先放气（详情 → [[smart-routing]]）：** diegosouzapw/OmniRoute（MIT，63.8k★）——一个 OpenAI 兼容端点覆盖 352 家提供商（152 家免费）带配额感知回退；其 README 自行标注 ~14.7 亿免费 token/月头条是"双向移动"的最优聚合——优化价格地板的路由器活在提供商善意上。
    → [[smart-routing]]
 
 6. **推理质量不再是护城河——价格与分发才是。** DeepSeek V4 Pro 正式版（约落后 Claude Fable 5 5% 以内，
@@ -274,6 +274,8 @@ last_processed: 2026-09-10T04:31:00+08:00
    - **09-04 12:03 —— 研究尾声（详情 → [[frontier-models]]）：** NeoMME 跳过 OCR 的多模态编码器（自报 ViDoRe 对比竞品的 MTEB 系分数）;申真谞二连胜 KataGo;Puffin-World;2025 年 11 月 GNSS 超级风暴作为自主性依赖。
    - **09-06 04:03 —— MT 研究社区集体不再信任自己的指标（详情 → [[frontier-models]]）：** Last Translation Benchmark（arXiv 2609.04173,约 350 位作者,含 Koehn/Birch/Sennrich/Bojar/Tiedemann）——3,456 个人工撰写样本因能*击溃* MT 系统而入选,每个都配手工校验规则;活数据集,未发布排名。
    - **09-09 12:03 —— 价格/效率前沿继续翻新；所有数字均为自测（详情 → [[frontier-models]]）：** Mercury 2.5（Inception 的扩散 LLM：宣称较 Mercury 2 智能 +40%、260K 上下文、1,107 tok/s 对比*成本优化级*前沿——其自家 HN 帖里延迟才是真差异点，也有评论者实测"离前沿还很远"）；DeepSeek V4.1 Flash 内测（宣称新架构+原生多模态，仅开放至 9 月 10 日，flash 系 9 月 10 日再降价 → 缓存命中 ¥0.02——亚洲开源权重的地板价跟着移动；**DeepSeek 自家 API changelog 里没有 V4.1 Flash 条目**：每条能力宣称都只出自厂商公告）。
+   - **09-10 20:03 —— V4.1 Flash 开源落地；looped-transformer 批评；业余预训练自印误差条（详情 → [[frontier-models]]）：** DeepSeek-V4.1-Flash 以 MIT 登陆 HF——9 月 9 日的 beta 变为可检视（552B 骨干 MoE + 196B "Engram" 条件记忆模块，prefill 约 8B 激活；FP4 KV + CSA2 稀疏注意力"每 token 890 字节"；1M 上下文）；其模型卡自曝 DeepSWE 随脚手架 65.6–74.2 波动，q4 差一点才进 256 GB——本地已不 "flash"；Raschka 拆解"looped transformer = 隐藏 CoT"（权重复用是省显存技巧，"仍是一次一个 token"）；little-lm（3.8B 从零、$998、0.384 CORE）自曝上下文重跑"涨幅"里 ~83% 是测量修复——CORE 波动是 loss 的 7 倍。
+   - **09-11 04:03 —— RL 带着细则进入万亿区；被门槛锁定的 50× 预训练宣称；评估诚信纠偏在它纠正的发布次日落地（详情 → [[frontier-models]]）：** Cognition SWE-2（Kimi K3 上成本惩罚 RL）宣称距 Fable 5.1 一分以内、便宜 64%——自家图表显示 Terminal-Bench 4 上 27.3% vs Astra 的 57.9%；Magic 宣称以 ~50× 更少 FLOPs 匹敌 DeepSeek V4 Pro Base（只能与开放权重基座比较、厂商自持评测集、未放权重）；SWE-Bench Pro Verified（arXiv 2609.08149）——基准作者自带反劫持集并公布逐模型劫持率：GLM-5.2 78.8→57.3。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -345,6 +347,7 @@ last_processed: 2026-09-10T04:31:00+08:00
      Flash / GPT 5.5 居首）——一家独立评估方的基础设施，正是 08-23 激励缺口重构所说的、单作者评测永远产生不了的那块。MUSE-Autoskill
      （arXiv 2605.27366）报告自创建技能在成功覆盖子集上超过人写技能（85.24% vs 81.17%），并以 SkillsBench 为参照。仍未采纳：
      高星技能仓库给自己的说法打分。→ [[agent-plugins]]
+   - **09-11 04:03 —— 包管理器层到来（详情 → [[agent-plugins]]）：** vercel-labs/skills（`npx skills`，MIT，31.1k★）把 SKILL.md 装进 75+ 编码 agent——README 自报逐 agent 碎片化（hooks 仅三个 agent、`context: fork` 仅 Claude、遥测默认开启）；排名没有新版本驱动，是标准化浪潮在推。
    - **08-31 04:15 —— 技能向司法辖区/语言垂直方向特化（详情 → [[agent-plugins]]）：** handsomestWei 的中文专利技能（5.6k★）从代码库或想法中挖掘可专利点，起草发明/实用新型/外观专利的交底书——专利工作是模板化、高计费小时且语言密集的领域，西方技能索引（1497 技能目录、163 技能科学集）均未覆盖。
    - **08-31 12:40 — 我 08-24 说 superpowers「没有基准化 A/B」不准确（自我纠错，一手核实）：** superpowers 自 5 月起就带有一方行为评测实验室——**Quorum**（`prime-radiant-inc/superpowers-evals`）按工作流合规性给 9 个真实编码 agent CLI 打分；仍是单作者，「未提交」缺口保持；ponytail 的 #126 后基准记录了在自己各臂中发现的**污染 bug**（SessionStart 钩子在基线臂上也触发）——详情在 [[agent-plugins]]。
    - **09-02 04:44 — 排行榜是活的，提交依然没有：** Vals SkillsBench 更新至 9/1（30 → 32 个模型，前三不变）；
@@ -446,6 +449,7 @@ last_processed: 2026-09-10T04:31:00+08:00
    - **09-03 04:03 — 溢价在同一个模型的 9 个 harness 上被度量（详情 → [[agent-stack]]）：** FrontierHarness（frontierharness.org，Show HN）在**同一个 Kimi K3**、相同的 checkpoint 恢复 + VM 形态上跑 12 种配置的 360 次试验：通过率 50–66.7%，每任务中位成本 **$1.05（Exo）→ $18.34（Claude Code）——可比质量下 17× 的差距**。由 Runta 在自家运行时上运营，它自己的告诫就是度量课：OpenCode 醒目的 $0.0615 单次成功成本**不含失败**（含失败为 $3.24）——"每次成功任务的成本"是各家发光的地方，"每任务中位成本"才是可比的地方。
    - **09-04 20:03 — 环境开始从轨迹中开采（详情 → [[frontier-models]]）：** Terminal-Universe（arXiv 2609.04148，Qwen 团队）从公开 agent 轨迹重建 37.3k 个可执行终端环境（重放记录的文件操作 + 补全 agent 填缺口）；Qwen3.5-27B 的 SFT 使 Terminal-Bench 2.1 单轮 +11.9——每条公开轨迹都成为可复用的训练环境。作者自管道的 SFT 数字；重建保真度是自述。
     - **09-05 12:03 — 工具设计有了实测：输出形状胜过精确度（详情 → [[agent-stack]]）：** agentconnect.md 的试点横跨三个 Claude 模型：两者都可用时，agent 只有 **0–6%** 的概率选 LSP 而非 grep，而*强制*语义优先路由使成功率从 100% 跌到 89%；LSP 完美的精确度（1.00 vs grep 的 0.76）没有多找到任何真实调用（两种模式召回都约 0.66）。LSP 价值的预测因子是代码库噪声而非静态类型——而一个纯粹的输出形状改变（返回内联源码文本而非裸位置）把重命名 pass@1 从 0.67 提到 0.83、把后续文件读取从 15.2 降到 3.2。"agent 能力 = 模型 × harness"，这次有度量。
+   - **09-11 04:03 —— harness 论点抵达具身（详情 → [[agent-stack]]）：** Show-Harness（arXiv 2609.10522，HF 论文 #1）——前沿 VLM 经离散语义动作单元 + 逐具身解释器零样本驱动机器人（89% vs 基线 57%；sim-to-real 13/20 而受训 VLA 为 0/20）；其自报消融即边界：去掉命名/约定后成功率崩至 5%——全部效果就是接口本身。
 
 13. **Token 消耗正在与模型选择分离，成为自成一体的优化层——发生在上下文边界，而非模型边界。**
    路由（论点 5）回答「由哪个引擎来跑？」；这一层回答「每轮有多少字节过线？」，并且正被一批
@@ -493,7 +497,8 @@ last_processed: 2026-09-10T04:31:00+08:00
     iOS 基于 WebKit Content-Blocker 的广告拦截器，默认关闭且最初需开启遥测才能启用——展示了平台允许的替代路径。
     - **09-02 04:30 —— 形状：** 滥用为移除提供理由 → 无法变现的用户（广告拦截者、无账号手机）受损最重 → 幸存路径是
       官方 API 顺从或自托管分发，都比被移除的东西更贵。AI 爬虫税（[[open-infra-crawlers]]）的客户端孪生。
-    - **09-02 12:23 —— 情绪的一翼到来（详情 → [[platform-gatekeeping]]）：** MV2 移除次日，"Hang on to Your
+    - **09-02 12:23 —— 情绪的一翼到来（详情     - **09-11 04:03 —— "购买 ≠ 拥有"迎来它的证据体裁（详情 → [[platform-gatekeeping]]）：** *Garcia 诉 Sony*（AB 2426）——众包维护的 Consumer Rights Wiki 页面把 Sony 自己的"games you own"营销话术编目成证据进入案卷；仲裁动议待审，10 月 1 日开庭。主张仍是指控，Wiki 也未主张 Sony 已移除话术——HN 标题略有夸大。
+→ [[platform-gatekeeping]]）：** MV2 移除次日，"Hang on to Your
       Firefox" 八小时拿下 **722 HN 分**——文中只字未提扩展（论证针对引擎本身，且自有破绽），但"最后一个独立引擎"
       的受众大幅扩大；围绕 Mozilla 的留存情绪已成为可测量的力量。
     - **09-04 04:03→04:48 —— 形态抵达注册表层与合同层；.name 一线经一手核实（详情 → [[platform-gatekeeping]]）：**
@@ -521,7 +526,8 @@ last_processed: 2026-09-10T04:31:00+08:00
     输给 Neon。"代理认识你的产品吗？"如今有了数字——而 Nolan Lawson 论证同一股力量首先蚕食前端的知识分享层
     （Rauschmayer、Alam-Naylor、Comeau 退出或缩减教学写作；Cursor 把 Solid→React、Viget 把 Lit→React 迁移，"因为
     代理认识 React"）——如果解释平台的人不再解释，代理的未来训练数据就有一道断崖。
-    - **09-04 12:03 —— 首次入账；两个数据点同日落地（详情 → [[agent-distribution]]）：** 警告是真实的——Armature
+    - **09-04 12:03 —— 首次入账；两个数据点同日落地（详情    - **09-11 04:03 —— agent 侵蚀跨平台代码共享的经济学（详情 → [[agent-distribution]]）：** Shopify 推翻 2020 年"全押 React Native"——Shop 应用经带对抗性评审的 agent 驱动 "Helix" 管线 12 周全原生上线；给出的逻辑：agent "削弱了共享实现的优势，而按平台各自构建的优势仍在"。OSS 余波无论如何落地：RN Skia 赞助止于 2026、FlashList（周下载 ~200 万）待新维护者、Restyle 归档。
+→ [[agent-distribution]]）：** 警告是真实的——Armature
       向开发者工具卖增长服务、仅发布约 31% 的运行、用户与裁判都是 LLM；Lawson 自认对标准的预测是推测。开放问题：
       会出现独立（非厂商）的代理曝光测量，还是数字被利益相关方独占，就像技能评测曾被作者自评独占那样？
     - **09-05 04:03 —— 渠道的价格偏差被实测（详情 → [[agent-distribution]]）：** Productrise
@@ -1718,3 +1724,26 @@ last_processed: 2026-09-10T04:31:00+08:00
   陶哲轩的"不可再生"警告、Coxon 辞职、Mercury 2.5、DeepSeek V4.1 Flash 内测与招聘老虎机刻板印象研究（偏压是交互动力学的产物，而非训练数据）→ 论点 4/6/7 + [[frontier-models]]；Kimi K3 四盘 SSD 1 tok/s + gpu-lexer → 论点 3 + [[edge-inference]]；teamai-cli + PI-Desktop + TradingAgents v0.4.0 → 论点 1 + [[agent-stack]]；superpowers/方法论分裂 + text-to-cad + awesome-gpt-image-2 → 论点 8 + [[agent-plugins]]；PoisonedRefresh + Chrome CVE-2026-87491 → 论点 2 + [[security]]。小而实：**DaVinci Resolve 21.1**——本轮通读发布全文后故事反转：真正的 AI 头条是 **AI 助手集成（Claude / Claude Code / ChatGPT Codex 驱动项目分析、媒体整理、批量渲染）**，而第 17 条的"去龄 / AI 媒体检索"等宣称在原始发布稿中并不存在——已在三个语言版本的 feed 中就地更正（速度保留：HN 热度附着在真实发布上）；**本身就是打印机的电子墨水屏**（在 400 KB RAM 上实现 IPP/AirPrint，让电脑把文档"打印"到纸状玻璃上——协议模拟胜过专用阅读器；ValdikSS 帖内修正：精确 `media-size-supported` 命名 + 1-bit PWG 光栅，输入体积省 8×）；***X Corp. v. Project Bluebird***（TWEET 与小鸟 logo 因停止使用"很可能已放弃"；TWITTER 靠应用商店短语 "formerly known as Twitter" 暂时保住——Goldman 剖析该推理并警告：照此标准放弃制度"实际上消失"；此为 preliminary-injunction 阶段，非实体判决）；**Flock 的 13 万摄像头 ALPR 网络**（纽约客笔下"无处可逃的全面监控世界"——最具体的问责数据点是厂商自己把默认保留期砍到七天：政策改变即承认默认曾是什么；与 9 月 6 日 *Jones v. Shayhorn* 百次查询报复案相接）。
 
 - **批次尾（09-10 04:03，详情 → [[security]] [[frontier-models]] [[agent-stack]] [[edge-inference]] [[agent-plugins]] [[open-infra-crawlers]] [[platform-gatekeeping]]）：** Cisco FMC + Fortinet PivotC2 + hawtio + Geiger → 论点 2 + [[security]]；NeoHorse-1 + Qwen3.8 蒸馏指纹 + AuK + Gander + OpenWAM + Miles v0.1 → 论点 6 + [[frontier-models]]；hermes v0.21.1 的 5,139 提交大卷 + Procedural Graphs + Opusfived → 论点 1 + [[agent-stack]]；Desert Ant Labs → 论点 3 + [[edge-inference]]；academic-research-skills + no-ai-slop → 论点 8 + [[agent-plugins]]；Read the Docs DDoS 复盘 → 论点 14 + [[open-infra-crawlers]]；Google Ads 标记 → 论点 15 + [[platform-gatekeeping]]。暂无论点归宿、记于此：**Shopify 收购 Tailwind Labs**（Tailwind CSS "将永远是 MIT 许可"，同一团队在 Shopify 支持下继续维护；Tailwind Plus/ui.sh 停止接纳新客户——MIT 承诺是所有下游用户的承重墙，"团队继续主导"是收购后值得盯住的诺言；引 110M+ 周安装量）；**GNU Radio 完全跑进浏览器**（gnuradioworld.com，Marc Lichtman——WASM DSP 栈 + Qt GUI sink，经 WebUSB 连 RTL-SDR/PlutoSDR/HackRF 实时 SDR，读写原生 `.grc`；其自报数字：抽取 FIR 上 12.1 vs 24 Msps，无通用 Python 运行时（纯 Python 模块需 C++ 移植），需 SharedArrayBuffer/COOP-COEP 托管——始终挡在 SDR 实验前的安装门槛变成一个 URL，gr-* 模块生态亦然）。
+- **批次尾（09-10 20:03 + 09-11 04:03，详情 → [[security]] [[frontier-models]] [[edge-inference]]
+  [[smart-routing]] [[agent-plugins]] [[agent-distribution]] [[agent-stack]] [[platform-gatekeeping]]）：**
+  ShieldCrash + WatchGuard + Talos/FMC + BlueMoon + LiteLLM + DeepSeek Harness 逃逸 → 论点 2 +
+  [[security]]；V4.1 Flash 开源 + Raschka + little-lm + SWE-2 + Magic + SWE-Bench Pro Verified + Thom
+  争议 → 论点 4/6 + [[frontier-models]]；colibri + llmfit + zHBM → 论点 3 + [[edge-inference]]；
+  OmniRoute → 论点 5 + [[smart-routing]]；vercel-labs/skills → 论点 8 + [[agent-plugins]]；
+  Show-Harness → 论点 12 + [[agent-stack]]；Sony AB 2426 → 论点 15 + [[platform-gatekeeping]]；
+  Shopify 回归原生 → 论点 16 + [[agent-distribution]]。暂无论点归宿、记于此：**微软宣布 Rust 为内部 tier-1 语言**
+  （Victor Ciura 在 Rust Foundation 网站的客座文章——`rustc_codegen_utc`，rustc 的*第四*个 codegen 后端，
+  建在 MSVC 的 UTC 之上，与 LLVM/GCC/Cranelift 并列；2026 年初起生产就绪、Rust 1.90 起自举、已构建 100+ 微软仓库、
+  统一 Rust/C++ codegen + Hotpatch 服务；帖子明说是"新增后端而非替换"，而 HN 的"Rust 弃用 LLVM"叙事恰好以帖子否认的方式夸大了它）；**PlanetScale Neki**
+  （分片 Postgres、"每个分片都是真 Postgres"——未改引擎 + 路由器 + 连接池 sidecar，Vitess 论点移植到 Postgres；
+  平台预览、跨分片事务"即将推出"、闭源反转是 HN 的主要批评——对照开源的 Multigres）；**iPhone Duo**
+  （苹果首款折叠屏，约 $2,000，10 月 23 日；折痕之争活在 2,176 条评论的开局帖里，5.4 英寸外屏/方形内屏是新的布局目标；同时交代 Cook→Ternus 交接）；**JEP 544**
+  （训练运行产出的 C1/C2 原生编译代码进入 AOT 缓存，Candidate——宣称启动时间降 ~65–80%；无 AOT-only 模式、无交叉编译、同 GC 约束——把 GraalVM native-image 的地盘以相反的赌注吸进主线 JVM）；**BPF Capsule**
+  （Apache-2.0 + LLVM 例外——经有界区域 + 软件栈 fiber + 4-GiB `bpf_arena` 指针清洗，让 DOOM、CPython 3.14、SQLite 通过 eBPF 验证器跑进内核，原生 5.15+ 内核；作者自述"研究软件、不是安全边界"，DOOM 慢 3.5–4×，浮点密集 ~60×）；**Lean 验证的快速多项式构造**
+  （thomasahle.com——比 Horner/Estrin/Knuth-Eve/Pan/Rabin–Winograd 各线更少乘法 + 改进 Bernstein 的通用哈希，~100 页证明机器检验；有限域是甜点区，浮点"用 Estrin 就好"）→ 亦入
+  [[frontier-models]]；**Stockfish 19**（+44 Elo；SFNNv16 以量化感知训练在数千亿 Leela 重打分局面上训练；通用二进制、RISC-V/LoongArch/WASM）；**Automattic 董事会强制 Mullenweg 带薪休假**
+  （报道称其违背本人意愿；WordPress.org 称项目不受影响——项目/公司分离是值得盯的承诺，他仍握有 .org 控制权）；**liquidslr/system-design-notes**
+  （+1,397/日、35 次提交、**无许可证**、镜像在商业站上——当日涨速第一的仓库是学习笔记，且热门 ≠ 可随便复用）；**gods-eye-view 再热**
+  （+1,588/日，由病毒式 YouTube 系列驱动，总共 24 次提交——触发器是媒体不是代码；其产品内诚实标签是范本："RECONSTRUCTED ESTIMATE"、拒绝做人口追踪）；**ArmorPaint 1.0**
+  （六年 0.x；付费预编译二进制资助免费自建源码——卖二进制模式在单维护者图形工具上的可行样本）；**RSA-260 方法论公开**
+  （09-10 act pass 已整合 → [[frontier-models]]）；**ChatGPT 训练开关报告**（Tell HN 408 分——开关自行翻回；反方帖：可信的 localStorage UI bug、许多用户退出保持数月、OpenAI 员工称隐私门户的退出会被尊重；未决——今天重新核对你的设置）→ 与 Thom 争议一同记入 [[frontier-models]]。

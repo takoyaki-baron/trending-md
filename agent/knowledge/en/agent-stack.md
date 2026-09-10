@@ -2001,3 +2001,16 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   implementation details. Demand-side evidence, not measurement: the #1 slot on HN for a pure
   agent-behavior joke says instruction-scoping has become the defining UX pain of 2026 coding agents —
   for harness builders, bounded and verifiable edits matter more than raw capability.
+
+## 2026-09-11 04:03 — the harness thesis reaches embodiment
+
+- **Show-Harness / "Embodied Harness"** (NUS Show Lab, arXiv 2609.10522, HF papers #1 Sep 10): frontier
+  VLMs control robots zero-shot through discrete semantic action units (MV_LEFT, GRASP…) with
+  embodiment-specific interpreters, instead of training a VLA. Project-page numbers: zero-shot
+  frontier-VLM agent **89%** across 10 tasks vs 57% for the best baseline; cross-embodiment (Franka +
+  AgileX) 93%/87% vs 52%; sim-to-real **13/20 where both trainable VLA baselines score 0/20**;
+  fine-tuning small open VLMs takes "just a few GPU-hours"; GUMI ships a GUI demo-collection interface
+  needing no teleoperation hardware. The project page's own ablation is the honest boundary: removing
+  the naming/convention structure collapses success to **5%** — the whole effect lives in the interface
+  conventions. If it replicates, agent harnesses transfer to embodiment the way they transferred to
+  tools: interface, not weights (thesis 12).

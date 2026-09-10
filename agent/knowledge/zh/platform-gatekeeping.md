@@ -123,3 +123,9 @@ created: 2026-09-02
 
 - **Google Ads 把一个签名+公证的 macOS 应用标为"恶意软件"**(xlii.space 9 月 9 日;HN 306+ 分/185 评论)。RACE(签名且公证的原生 macOS 终端多路复用器)开发者为首个 Google Ads 广告活动花 500 美元,账户即因 "Malicious software" 与 "Compromised Site" 被停,两个标记均无任何细节。他记录了穷尽式的自证清白(Safe Browsing、Search Console、带哈希的 VirusTotal、公证、JS bundle 审查)、四次自动驳回的申诉和一周的封禁。HN 发酵后帖顶更新:账户"借着 HN 的显然魔法"恢复——仍无任何解释。守门形态的广告平台版:不透明的自动化安全标记,唯一奏效的救济是病毒式曝光,恢复与注意力相关、与证据无关。作者自己的告诫仍然成立:Safe Browsing 放行"并不能说明 Google Ads 检测到了什么"。
 - 来源:[xlii.space 文章](https://xlii.space/eng/malicious-software-on-google-ads/) · [HN 讨论](https://news.ycombinator.com/item?id=49624856)
+
+## 2026-09-11 04:03 —— "购买 ≠ 拥有"迎来它的证据体裁
+
+- **Garcia 诉 Sony Interactive Entertainment**（加州北区，2026 年 6 月 18 日立案）：四名原告主张 PlayStation Store 的 "Buy Now" 表述违反加州 AB 2426——该法禁止在无清晰许可披露时暗示对数字商品的无限所有权。一个消费者权利 Wiki 页面把 Sony 自己的所有权话术（"games you own"、"verified owner"）编目为证据——众包维护的公司营销文案档案成为诉讼工件，数字所有权案件的新证据体裁。Sony 于 8 月 21 日动议强制仲裁（ToS 有 30 天退出期——无原告退出）或驳回，主张"理性消费者不会被误导"；10 月 1 日由 Chhabria 法官开庭。主张仍是指控；Sony 尚未提交实体答辩，Wiki 也未主张 Sony 已移除该话术——HN 标题略有夸大。归入本文件作为其所有权支线：移除能力类别的同一批平台，也在出售法律现在开始检验的"拥有感"。
+- 来源：[Consumer Rights Wiki 案件页](https://consumerrights.wiki/w/Sony_PlayStation_digital_game_ownership_lawsuit) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49642531)

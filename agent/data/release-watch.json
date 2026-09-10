@@ -3,11 +3,11 @@
     "vllm-project/semantic-router": {
       "tag": "v0.3.0",
       "published_at": "2026-06-05T12:08:52Z",
-      "pushed_at": "2026-09-09T19:07:29Z",
-      "stars": 5698,
+      "pushed_at": "2026-09-10T18:59:01Z",
+      "stars": 5720,
       "flags": [],
-      "frozen_pushed_at": "2026-09-09T19:07:29Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "frozen_pushed_at": "2026-09-10T18:59:01Z",
+      "checked": "2026-09-10T21:31:52.981Z"
     },
     "BitRouter/BitRouter": {
       "tag": "v1.0.0-alpha.27",
@@ -16,16 +16,16 @@
       "stars": 226,
       "flags": [],
       "frozen_pushed_at": "2026-09-09T20:34:08Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "checked": "2026-09-10T21:31:52.981Z"
     },
     "Continuum-AI-Corp/OrcaRouter-Lite": {
       "tag": "v0.1.0",
       "published_at": "2026-05-11T02:58:59Z",
       "pushed_at": "2026-09-04T02:31:41Z",
-      "stars": 666,
+      "stars": 669,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T02:31:41Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "checked": "2026-09-10T21:31:52.981Z"
     },
     "workweave/router": {
       "tag": null,
@@ -39,68 +39,68 @@
     "obra/superpowers": {
       "tag": "v6.3.0",
       "published_at": "2026-08-12T16:58:30Z",
-      "pushed_at": "2026-09-08T21:39:23Z",
-      "stars": 283963,
+      "pushed_at": "2026-09-10T16:13:16Z",
+      "stars": 284660,
       "flags": [],
-      "frozen_pushed_at": "2026-09-08T21:39:23Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "frozen_pushed_at": "2026-09-10T16:13:16Z",
+      "checked": "2026-09-10T21:31:52.981Z"
     },
     "mattpocock/skills": {
       "tag": "v1.2.3",
       "published_at": "2026-08-06T14:05:28Z",
       "pushed_at": "2026-09-04T08:45:43Z",
-      "stars": 257802,
+      "stars": 258779,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T08:45:43Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "checked": "2026-09-10T21:31:52.981Z"
     },
     "multica-ai/andrej-karpathy-skills": {
       "tag": null,
       "published_at": null,
       "pushed_at": "2026-04-20T10:05:04Z",
-      "stars": 211867,
+      "stars": 212100,
       "flags": [],
       "frozen_pushed_at": "2026-04-20T10:05:04Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "checked": "2026-09-10T21:31:52.981Z"
     },
     "DietrichGebert/ponytail": {
       "tag": "v4.9.0",
       "published_at": "2026-08-07T21:15:11Z",
       "pushed_at": "2026-09-07T16:27:01Z",
-      "stars": 133298,
+      "stars": 134631,
       "flags": [],
       "frozen_pushed_at": "2026-09-07T16:27:01Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "checked": "2026-09-10T21:31:52.981Z"
     },
     "orval-labs/orval": {
-      "tag": "v8.30.0",
-      "published_at": "2026-09-07T15:42:33Z",
-      "pushed_at": "2026-09-09T17:07:44Z",
-      "stars": 6448,
+      "tag": "v8.31.0",
+      "published_at": "2026-09-10T14:15:37Z",
+      "pushed_at": "2026-09-10T20:41:44Z",
+      "stars": 6449,
       "flags": [],
-      "frozen_pushed_at": "2026-09-09T17:07:44Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "frozen_pushed_at": "2026-09-10T20:41:44Z",
+      "checked": "2026-09-10T21:31:52.981Z"
     },
     "SalesforceAIResearch/Random-Attention": {
       "tag": null,
       "published_at": null,
       "pushed_at": "2026-09-04T01:34:07Z",
-      "stars": 54,
+      "stars": 57,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T01:34:07Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "checked": "2026-09-10T21:31:52.981Z"
     },
     "weave-os/router": {
       "tag": null,
       "published_at": null,
-      "pushed_at": "2026-09-09T21:00:15Z",
-      "stars": 4202,
+      "pushed_at": "2026-09-10T21:29:55Z",
+      "stars": 4246,
       "flags": [],
-      "frozen_pushed_at": "2026-09-09T21:00:15Z",
-      "checked": "2026-09-09T21:09:15.085Z"
+      "frozen_pushed_at": null,
+      "checked": "2026-09-10T21:31:52.981Z"
     }
   },
-  "runs": 27,
+  "runs": 29,
   "first_run": "2026-09-01T20:48:09.140Z",
-  "last_run": "2026-09-09T21:09:15.085Z"
+  "last_run": "2026-09-10T21:31:52.981Z"
 }

@@ -6024,5 +6024,158 @@
   "cred": "med",
   "density": "med",
   "cv": 1
+ },
+ "ayles.github.io": {
+  "cat": "community",
+  "en": "Personal deep-dive writeups with working code (BPF Capsule: DOOM/CPython/SQLite in the Linux kernel) — claims are reproducible and the author lists his own limits; the canonical source for the project, not marketing.",
+  "zh": "带可运行代码的个人深度技术文章（BPF Capsule：DOOM/CPython/SQLite 跑进 Linux 内核）——结论可复现，作者自列限制；是项目的权威出处，而非营销。",
+  "jp": "動くコード付きの個人による深掘り解説（BPF Capsule：DOOM/CPython/SQLite を Linux カーネルへ）——主張は再現可能で作者自身が限界を列挙。プロジェクトの一次情報でありマーケティングではない。",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
+ },
+ "consumerrights.wiki": {
+  "cat": "community",
+  "en": "Crowd-maintained wiki archiving companies' own marketing vs. reality (Sony 'own' language, Office view-only conversion); cites court filings but is editable by anyone — treat as a discovery index, verify against the docket.",
+  "zh": "众维基，归档公司自己的营销话术与现实（Sony 的“拥有”表述、Office 只读转换）；引用法院文件但任何人可编辑——当作线索索引，务必对照案卷核实。",
+  "jp": "企業自身のマーケ表現と現実をアーカイブする群衆維持のウィキ（Sony の「所有」表現、Office 閲覧のみ変換など）。裁判資料を引用するが誰でも編集可能——手がかり索引として扱い、訴訟記録で検証を。",
+  "cred": "med",
+  "density": "high",
+  "cv": 1
+ },
+ "hugovergnes.github.io": {
+  "cat": "community",
+  "en": "Personal engineering blog (little-lm: 3.8B from scratch for $998) — publishes its own error bars, including the context-rerun that was mostly a measurement fix; self-measured but unusually honest about it.",
+  "zh": "个人工程博客（little-lm：998 美元从零训练 3.8B）——公布自己的误差来源，包括那次主要是测量修正的 context 重跑；数字自测但异常诚实。",
+  "jp": "個人エンジニアリングブログ（little-lm：998 ドルでスクラッチから 3.8B）——context 再実行が主に測定修正だった件を含め誤差を自ら公開。自己測定だが異例なほど正直。",
+  "cred": "med",
+  "density": "high",
+  "cv": 1
+ },
+ "magazine.sebastianraschka.com": {
+  "cat": "research",
+  "en": "Sebastian Raschka's Substack — architecture-level analysis (looped transformers, Astra) by a known ML educator; argument-driven and explicit about what is speculation vs. measured.",
+  "zh": "Sebastian Raschka 的 Substack——由知名 ML 教育者写的架构层分析（循环 Transformer、Astra）；以论证为主，明确区分推测与实测。",
+  "jp": "Sebastian Raschka の Substack——著名 ML 教育者によるアーキテクチャ層の分析（ループド Transformer、Astra）。議論中心で、推測と実測の区別が明確。",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
+ },
+ "magic.dev": {
+  "cat": "vendor",
+  "en": "Magic's engineering blog — the ~50x-FLOPs pretraining claim lives here with unusually complete caveats (open-weight-base-only comparisons, BPB on held-out data, 6·N·D approximation); vendor-measured, self-hedged.",
+  "zh": "Magic 的工程博客——约 50 倍 FLOPs 降低的预训练声明在此发布，附异常完整的限定（仅对比开放权重基座、held-out 数据上的 BPB、6·N·D 近似）；厂商自测，自我对冲。",
+  "jp": "Magic のエンジニアリングブログ——約50倍 FLOPs 削減の事前学習主張がこちら。異例なまでに完全な限定付き（オープンウェイト基礎モデルとのみ比較、held-out データ上の BPB、6·N·D 近似）。ベンダー測定・自己限定付き。",
+  "cred": "med",
+  "density": "high",
+  "cv": 1
+ },
+ "openjdk.org": {
+  "cat": "code",
+  "en": "Canonical home of OpenJDK JEPs — the authoritative record of JVM evolution (JEP 544 AOT code compilation etc.); primary source by definition, status field is the live signal.",
+  "zh": "OpenJDK JEP 的权威主页——JVM 演进的权威记录（JEP 544 AOT 代码编译等）；定义上的原始来源，状态字段是实时信号。",
+  "jp": "OpenJDK JEP の正規ホーム——JVM 進化の権威ある記録（JEP 544 AOT コードコンパイルなど）。定義上の一次情報で、ステータス欄が生のシグナル。",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
+ },
+ "ox.security": {
+  "cat": "security",
+  "en": "OX Security's research blog — the CVE-2026-82533 DeepSeek Harness sandbox-escape writeup matched the MITRE record point-for-point (loopback control API, Host-header trust, 9.4); vendor research that sells a product, but this one checked out.",
+  "zh": "OX Security 研究博客——CVE-2026-82533 DeepSeek Harness 沙箱逃逸分析逐点吻合 MITRE 记录（回环控制 API、Host 头信任、9.4 分）；属于卖产品的厂商研究，但这篇经得起核对。",
+  "jp": "OX Security のリサーチブログ——CVE-2026-82533 DeepSeek Harness サンドボックス脱出の解説が MITRE レコードと一点一句一致（ループバック制御 API、Host ヘッダ信頼、9.4）。製品を売るベンダー研究だが、これは検証に耐えた。",
+  "cred": "med",
+  "density": "high",
+  "cv": 1
+ },
+ "planetscale.com": {
+  "cat": "vendor",
+  "en": "PlanetScale's blog/docs — the Neki launch post confirms 'unmodified Postgres per shard' but never mentions Vitess or licensing; vendor claims hold on-page, and the HN threads do the consistency review the post skips.",
+  "zh": "PlanetScale 的博客/文档——Neki 发布文确认“每个分片都是未修改的 Postgres”，但绝口不提 Vitess 与许可证；页内声明属实，HN 讨论区补上了发布文回避的一致性审查。",
+  "jp": "PlanetScale のブログ/ドキュメント——Neki 発表記事は「シャードごとに未修正の Postgres」を確認させるが、Vitess にもライセンスにも触れない。ページ上の主張は忠実で、発表が飛ばす一貫性レビューは HN スレッドが担う。",
+  "cred": "med",
+  "density": "high",
+  "cv": 1
+ },
+ "privacy.openai.com": {
+  "cat": "vendor",
+  "en": "OpenAI's Transcend-hosted privacy portal (JS SPA) — the 'Do not train on my content' control the opt-out debate points to; official but nearly content-free to machines, so cite it as the control surface, not as a statement.",
+  "zh": "OpenAI 由 Transcend 托管的隐私门户（JS 单页应用）——opt-out 争议所指的“不得训练我的内容”控制项；官方但对机器几乎无内容，引用它是作为控制面板而非声明。",
+  "jp": "OpenAI の Transcend ホスト型プライバシーポータル（JS SPA）——オプトアウト論争が指す「私のコンテンツを学習に使わない」コントロール。公式だが機械にはほぼ無内容で、声明ではなく操作面として引用を。",
+  "cred": "high",
+  "density": "low",
+  "cv": 1
+ },
+ "proofpoint.com": {
+  "cat": "security",
+  "en": "Proofpoint Threat Insight — the BlueMoon report's kit ingredients (CVE-2026-85046/87491/85880) match MITRE records exactly; established threat-research team, attribution and timelines still analyst judgment.",
+  "zh": "Proofpoint Threat Insight——BlueMoon 报告的漏洞套件成分（CVE-2026-85046/87491/85880）与 MITRE 记录完全吻合；成熟的威胁研究团队，但归因与时间线仍是分析师判断。",
+  "jp": "Proofpoint Threat Insight——BlueMoon レポートのキット構成要素（CVE-2026-85046/87491/85880）は MITRE レコードと完全一致。熟練した脅威リサーチチームだが、帰属と期間はアナリストの判断のまま。",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
+ },
+ "psirt.watchguard.com": {
+  "cat": "security",
+  "en": "WatchGuard's official PSIRT — CVE-2025-14733 (9.3, iked OOB write) confirmed here and against CISA KEV; index pages are thin, full advisories one click deeper, and the vendor's exploitation narrative trails third-party confirmation.",
+  "zh": "WatchGuard 官方 PSIRT——CVE-2025-14733（9.3，iked 越界写）在此与 CISA KEV 双重确认；索引页信息稀薄，完整公告深一层，厂商对被利用情况的叙述滞后于第三方确认。",
+  "jp": "WatchGuard 公式 PSIRT——CVE-2025-14733（9.3、iked 範囲外書き込み）をここと CISA KEV の双方で確認。索引ページは薄く、完全なアドバイザリはワンクリック先。悪用に関するベンダーの説明は第三者の確認に後行しがち。",
+  "cred": "high",
+  "density": "med",
+  "cv": 1
+ },
+ "rustfoundation.org": {
+  "cat": "community",
+  "en": "Rust Foundation posts, including vendor guest posts (Microsoft's tier-1 announcement) — first-party facts check out on-page (rustc_codegen_utc details), read guest posts as the sponsor's own account.",
+  "zh": "Rust 基金会发布，含厂商客座文章（Microsoft tier-1 宣布）——第一方事实页内可核（rustc_codegen_utc 细节），客座文章按赞助方自述来读。",
+  "jp": "Rust Foundation の投稿。ベンダー寄稿（Microsoft の tier-1 発表）を含む——一次事実はページ上で確認可能（rustc_codegen_utc の詳細）。寄稿はスポンサー自身の説明として読む。",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
+ },
+ "shopify.engineering": {
+  "cat": "vendor",
+  "en": "Shopify's engineering blog — the Back-to-Native post contains every load-bearing detail (Helix checkpoints, two adversarial reviewers, 12 weeks, the RN-library step-downs); first-party but obviously self-favoring on the 'why'.",
+  "zh": "Shopify 工程博客——Back to Native 文包含所有承重细节（Helix 检查点、两名对抗性审查者、12 周、三个 RN 库的退出）；第一方但在“为什么”上显然自利。",
+  "jp": "Shopify のエンジニアリングブログ——Back to Native 記事は荷重を支える詳細をすべて含む（Helix のチェックポイント、敵対的レビュアー2名、12週間、RN ライブラリからの撤退）。一次情報だが「理由」については明らかに自己好意的。",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
+ },
+ "showlab.github.io": {
+  "cat": "research",
+  "en": "NUS Show Lab's project pages — Show-Harness numbers (89%/57%, 13/20 sim-to-real, the 5% ablation) match the arXiv paper (2609.10522); self-reported benchmarks, but the interface ablation is the honest part.",
+  "zh": "新加坡国立大学 Show Lab 的项目页——Show-Harness 数字（89%/57%、sim-to-real 13/20、5% 消融）与 arXiv 论文（2609.10522）一致；自报基准，但接口消融是最诚实的部分。",
+  "jp": "NUS Show Lab のプロジェクトページ——Show-Harness の数値（89%/57%、sim-to-real 13/20、5% アブレーション）は arXiv 論文（2609.10522）と一致。自己申告のベンチマークだが、インターフェース ablation が最も正直な部分。",
+  "cred": "med",
+  "density": "high",
+  "cv": 1
+ },
+ "stockfishchess.org": {
+  "cat": "community",
+  "en": "The Stockfish project's official site — release announcements (Stockfish 19: QAT-trained NNUE, +44 Elo, universal binaries, GPL) are terse and primary; test results are the project's own.",
+  "zh": "Stockfish 项目官网——发布公告（Stockfish 19：QAT 训练的 NNUE、+44 Elo、通用二进制、GPL）简洁且为一手；测试结果是项目自己的。",
+  "jp": "Stockfish プロジェクトの公式サイト——リリース告知（Stockfish 19：QAT 学習の NNUE、+44 Elo、ユニバーサルバイナリ、GPL）は簡潔で一次情報。テスト結果はプロジェクト自身のもの。",
+  "cred": "high",
+  "density": "med",
+  "cv": 1
+ },
+ "thelec.net": {
+  "cat": "news",
+  "en": "Korean electronics trade press (TheElec) — early coverage of Korean vendor prototypes (Samsung zHBM); attributes every number to the company and flags mockup-vs-silicon, but adds little independent analysis.",
+  "zh": "韩国电子行业媒体（TheElec）——对韩国厂商原型最早报道（三星 zHBM）；每个数字都注明出处并区分 mockup 与实体芯片，但独立分析增量少。",
+  "jp": "韓国のエレクトロニクス業界紙（TheElec）——韓国ベンダーのプロトタイプをいち早く報道（Samsung zHBM）。数値はすべて会社申し送りでモックアップと実機を区別するが、独自分析の付け足しは少ない。",
+  "cred": "med",
+  "density": "med",
+  "cv": 1
+ },
+ "thomasahle.com": {
+  "cat": "research",
+  "en": "Thomas Ahle's research pages — the fast-polynomials bound (⌊n/2⌋+1 multiplications) is stated here while the Lean formalization lives in the linked repo (thomasahle/fast-polynomials); cite both together.",
+  "zh": "Thomas Ahle 的研究页——fast-polynomials 的乘法次数界（⌊n/2⌋+1）在此陈述，而 Lean 形式化在链接的仓库里（thomasahle/fast-polynomials）；两者一并引用。",
+  "jp": "Thomas Ahle の研究ページ——fast-polynomials の乗算回数bound（⌊n/2⌋+1）はここに述べられ、Lean 形式化はリンク先リポジトリ（thomasahle/fast-polynomials）にある。両方セットで引用を。",
+  "cred": "high",
+  "density": "high",
+  "cv": 1
  }
 }

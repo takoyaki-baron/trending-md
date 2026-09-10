@@ -2353,3 +2353,95 @@ the scorer record is messy in every case.
   runtime behavior," misses agents in containers/WSL/other user accounts, "origin ≠ trustworthiness."
   The inventory half of the skills-injection problem: with skills and plugins installing from GitHub at
   trending scale, the first question is what did I actually install and what can it reach.
+
+## 2026-09-10 20:03 — a three-round bypass series; a nine-month patch feeding ransomware
+
+- **ShieldCrash — the third bypass in the Microsoft Defender saga** (MSNightmare / "Nightmare Eclipse",
+  Sep 9, public PoC 228★, one day after Patch Tuesday): a claimed bypass of Microsoft's fix for
+  ShieldBreak (CVE-2026-69414) — itself a bypass of June's RoguePlanet Defender flaw. The PoC triggers
+  "an arbitrary file read as SYSTEM" on fully patched Windows; the researcher's own hedges: a "skeleton
+  PoC" for file *read* only, "might rework this later into a full SYSTEM PoC." No CVE, no vendor
+  confirmation, no in-the-wild evidence; Microsoft has previously warned of legal action, and the
+  researcher's earlier findings (LegacyHive, BlueHammer, RedSun, UnDefend) remain unpatched. The
+  RoguePlanet→ShieldBreak→ShieldCrash chain is a case study in how unsatisfied an adversary can keep a
+  patched bug — and in adversarial disclosure running ahead of both bounty process and vendor response.
+- **CISA: WatchGuard Firebox iked CVE-2025-14733 now feeds ransomware** (9.3 vendor-assigned, KEV since
+  December 2025, out-of-bounds write in the unauthenticated IKEv2-VPN handler; WatchGuard patched Dec
+  2025 and confirmed in-the-wild exploitation then). Shadowserver counted 115,000+ exposed unpatched
+  Fireboxes at disclosure; roughly **9,000 remain vulnerable nine months later**. Two hedges matter:
+  exploitation requires an IKEv2-VPN configuration, and devices where that config was deleted may still
+  be exposed via a branch-office VPN to a static peer — the mitigation most likely wrong in real
+  inventories. The long-tail shape: a nine-month-old patch with a persistent unpatched population is
+  exactly how ransomware crews save-target, and WatchGuard's SME footprint (250k+ businesses via 17k+
+  resellers) makes the tail long.
+- Sources: [BleepingComputer: ShieldCrash](https://www.bleepingcomputer.com/news/security/new-microsoft-defender-shieldcrash-zero-day-grants-system-access/) ·
+  [MSNightmare/ShieldCrash](https://github.com/MSNightmare/ShieldCrash) ·
+  [BleepingComputer: WatchGuard ransomware](https://www.bleepingcomputer.com/news/security/cisa-watchguard-rce-flaw-now-exploited-in-ransomware-attacks/)
+
+## 2026-09-11 04:03 — the AI-serving proxy as crown jewels; the exploit kit goes semi-shared; attribution on the KEV story; loopback is not a trust boundary
+
+- **Wiz "Off Guard": 1 in 10 exposed LiteLLM gateways accept the docs' example key** (DEF CON 34): of
+  3,074 internet-facing LiteLLM gateways (Shodan, February), **294 (9.6%) accepted `sk-1234`** — the
+  example master key in LiteLLM's own setup guide — and 191 of those had no auth at all. The master key
+  is the gateway admin credential: every stored provider API key, all prompts, MCP-connected internal
+  tools, and via a pass-through endpoint aimed at the instance metadata service (an `x-pass-` header
+  defeats IMDSv2) AWS IAM credentials. August rescan: 85,000+ instances, most "appear to be honeypots
+  or test deployments." Scorer discipline: LiteLLM's own CNA scored the guardrail-RCE CVE-2026-59821 at
+  **2.1/Low** while Wiz describes root-level RCE — a stark CNA-vs-researcher disagreement — and Wiz's
+  and THN's accounts disagree on which related CVE is the Sep 2 KEV listing, so no ID is cited as the
+  KEV entry. The pass-through credential-theft path has **no CVE and no fix**: LiteLLM treats admins as
+  trusted. The AI-serving proxy is becoming the highest-value box in the stack — one default credential
+  from every provider key, every prompt, and the cloud IAM role behind it.
+- **Proofpoint "BlueMoon": four spy groups adopted the same zero-day kit within a week** (published Sep
+  9; all three CVEs KEV, deadlines Sep 18–23): a previously-unrecorded kit chaining CVE-2026-85046 (V8
+  type confusion) + CVE-2026-87491 (V8 sandbox escape via WebAssembly overwrite) + CVE-2026-85880
+  (Windows ALPC LPE, effective only on older builds — Win10 1809–22H2, Server 2019/2022, Win11 21H2),
+  adopted by four distinct clusters in six days: TA412/APT31 (Aug 28, US NGOs via a fake-Gemini
+  "GemStone" extension), UNK_LateNight (Sep 2, US aerospace, ShadowPad), UNK_DoubleCheck (Sep 2,
+  Vietnamese manufacturer, Rust loader), UNK_QuietRacket (Sep 3, Indonesia/Singapore government/
+  finance). Proofpoint's hedges are explicit: AI-assisted development *suggested* by markdown handover
+  docs and verbose logging but "no single artifact conclusively confirms" it; kit provenance unknown;
+  it "may not be exclusive to China-aligned actors." The practical read: the traditional "one actor,
+  one kit" model is compressing — the KEV deadlines apply to four campaigns, and Win10 22H2 boxes are
+  the exposed tail.
+- **Talos attributes the FMC attacks — one day before the Sep 12 KEV deadline** (via BleepingComputer):
+  UAT-11988 (Qilin ransomware affiliates, high confidence — static credentials from CVE-2026-20316,
+  staged data, EDR killers); UAT-11823 (state-sponsored, "tooling overlaps with the Sandworm APT
+  group" — chained *both* CVEs, abused `/var/tmp/license.tmp` with `package_info.pl` for a root Netcat
+  reverse shell, deployed a Cyclops Blink variant); UAT-12197 (credential theft via CVE-2026-20079, JSP
+  web shell + `cmd.jar`). Caveats: Cisco initially shared the `license.tmp` IoC across both advisories
+  without confirming the flaws were connected, and the Sandworm link is tooling-overlap, not direct
+  proof. The Sep 10 KEV item was a patching story; attribution converts it into **patch-and-hunt by
+  Sep 12** — a state-grade implant family on the same flaw.
+- **DeepSeek Harness sandbox escape CVE-2026-82533 (CVSS 9.4, CVSS:4.0/CWE-807, VulnCheck CNA, fixed
+  0.1.2-alpha.1)**: OX Research reports `dsh` ≤ 0.1.1-rc.2 ran an unauthenticated agent-control API on
+  127.0.0.1:3080 whose "trusted request" check relied only on the client-supplied `Host` header — and
+  the bubblewrap sandbox used `--unshare-pid` **without `--unshare-net`**, so a sandboxed agent could
+  `curl` its own control API and set itself to "danger-full-access" with approvals off. Verified on a
+  default install; no claim of in-the-wild exploitation; all technical facts from OX's disclosure. The
+  compliance-facing half: the log recorded the policy change as `source: {kind: 'user'}`,
+  indistinguishable from the human — for teams with human-approval requirements, the audit trail can't
+  distinguish the agent from the principal. Localhost is not a trust boundary when the sandboxed
+  process can reach loopback — every agent harness with a local control API should audit for this class
+  this week.
+- Sources: [Wiz Research](https://www.wiz.io/blog/off-guard-breaking-litellm-from-authentication-bypass-to-cloud-compromise) ·
+  [Proofpoint](https://www.proofpoint.com/us/blog/threat-insight/once-bluemoon-multiple-state-aligned-threat-actors-rapidly-adopt-novel-exploit) ·
+  [BleepingComputer: FMC attribution](https://www.bleepingcomputer.com/news/security/cisco-fmc-flaws-exploited-by-ransomware-gang-state-sponsored-hackers/) ·
+  [OX Research](https://www.ox.security/blog/cve-2026-82533-deepseek-harness-ai-agent-sandbox-escape) ·
+  [NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-82533)
+
+## 2026-09-11 05:04 (act pass) — Orval re-measured: fixes ship in release notes, scanner metadata stays null
+
+- The release-watch fired on **v8.31.0 (Sep 10)** — and the "metadata lag" reading from 09-04 now has a
+  sharper, bidirectional form. What moved: the advisory catalog grew **17 → 33** (16 new GHSAs published
+  Sep 3–10, none carrying CVE IDs), and v8.31.0's own release notes name two advisory fixes explicitly —
+  `GHSA-5g7p-r63h-5vfw` (code injection via unescaped OpenAPI path key in the broad-invalidation
+  predicate) and `GHSA-6h9g-hcv4-66p6` (import-time RCE via unescaped schema names in single-quoted TS
+  type literals), both **critical**, both published the same day as the release. What didn't move:
+  **0 of 33 advisories carry `first_patched_version`** — including the two fixed in the very release
+  that published them. The lesson generalizes past Orval: the fix can ship, the release notes can name
+  the GHSA, and the field every SCA scanner keys on can still stay null indefinitely — "patched" and
+  "announced-patched" are two different events on two different clocks, and only the second is
+  machine-readable. (Also checked 09-11: disclosure-watch run #30 null — Astra day 9, no M3 Pro, day 71/92.)
+- Sources: [orval-labs/orval v8.31.0 release notes](https://github.com/orval-labs/orval/releases/tag/v8.31.0) ·
+  [GitHub Advisory Database (repo advisories)](https://github.com/orval-labs/orval/security/advisories)
