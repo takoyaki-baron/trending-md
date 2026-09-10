@@ -1,8 +1,8 @@
 ---
 date: 2026-09-10
-updated: 2026-09-10T04:30:00+08:00
+updated: 2026-09-10T20:05:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -295,13 +295,223 @@ The developer of RACE, a signed-and-notarized native macOS terminal multiplexer,
 
 ---
 
+## 21. DeepSeek V4.1 Flash launches openly — since we covered the internal beta Sep 9, the weights, tech report and MIT license have landed
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face + Hacker News · 480+ pts · 260 comments · ~5h ago (~15:00 UTC+8)
+- **Tags:** `deepseek` `open-weights` `moe`
+
+**Update:** on Sep 9 we covered V4.1 Flash as "an internal beta with a two-day window." The public launch has now happened: DeepSeek-V4.1-Flash is on Hugging Face under MIT, code and weights, with a tech report. The model page: a 552B-backbone MoE (485B stored + a 196B sparsely-accessed "Engram" conditional-memory module) with only ~8B active at prefill / ~16B at decode, a 40-layer Causal Encoder-Decoder, FP4 KV caching plus CSA2 sparse attention claiming "890 bytes per token" of global KV cache (~¼ of V4-Flash), 384 routed experts (6 active), a ViT vision encoder, and a 45T-token multimodal pretraining corpus with 1M context. Instruct numbers at max reasoning effort: GPQA Diamond 90.9, Codeforces 3471, Terminal-Bench 2.1 90.6, HLE 36.8. Honest friction in the release itself: no Jinja chat template (a Python reference and a Rust toolkit ship instead), and the model card notes DeepSWE ranges 65.6–74.2 depending on agent scaffold.
+
+**Why it matters:** the beta's promised architecture is now inspectable — and the model card's own scaffold-sensitivity note is the caveat that belongs in every benchmark quote of it. The HN thread's practical floor: at ~552B total it no longer fits the "flash" niche for local users (one estimate puts q4 just short of 256 GB).
+
+[`🔗 deepseek-ai/DeepSeek-V4.1-Flash`](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49639090)
+
+---
+
+## 22. "ShieldCrash" — a third bypass in the Microsoft Defender saga drops the day after Patch Tuesday, again with a public PoC
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BleepingComputer (Sep 9) + GitHub PoC · 228★ · ~13h ago (~07:00 UTC+8)
+- **Tags:** `windows` `defender` `lpe` `zero-day`
+
+An anonymous researcher ("Nightmare Eclipse" / MSNightmare) published ShieldCrash on Sep 9, immediately after September Patch Tuesday: a claimed bypass of Microsoft's fix for ShieldBreak (CVE-2026-69414), which was itself a bypass of June's RoguePlanet Defender flaw. The PoC triggers "an arbitrary file read as SYSTEM" on fully patched Windows 10/11/Server, with the README claiming "all supported windows versions are affected." The caveats are the researcher's own: it is a "skeleton PoC" for file *read* only — "might rework this later into a full SYSTEM PoC." There is no CVE for ShieldCrash, no vendor confirmation, no evidence of in-the-wild exploitation, and Microsoft has not responded. It continues an ongoing disclosure dispute; Microsoft has previously warned of legal action, and several of the researcher's earlier findings (LegacyHive, BlueHammer, RedSun, UnDefend) remain unpatched.
+
+**Why it matters:** the RoguePlanet→ShieldBreak→ShieldCrash chain is now a three-round patch-bypass series against the same component — a case study in how unsatisfied an adversary can keep a patched bug, and in adversarial disclosure running ahead of both bounty process and vendor response.
+
+[`🔗 BleepingComputer: ShieldCrash zero-day`](https://www.bleepingcomputer.com/news/security/new-microsoft-defender-shieldcrash-zero-day-grants-system-access/) · [`🔗 MSNightmare/ShieldCrash PoC`](https://github.com/MSNightmare/ShieldCrash)
+
+---
+
+## 23. Apple unveils iPhone Duo — its first foldable, at ~$2,000, with the crease debate baked into launch day
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Apple + Hacker News · 1,240+ pts · 2,176 comments · ~14h ago (~06:00 UTC+8)
+- **Tags:** `apple` `hardware` `foldable`
+
+Apple's keynote unveiled iPhone Duo, its first book-style foldable: a square closed form factor with a 5.4-inch outer display (the discontinued iPhone mini's size), heavy crease-minimization messaging, and an October 23 launch at roughly $2,000. The launch-day HN thread (2,176 comments) already carries the counter-evidence: multiple photo/video reports of a visible crease on dark backgrounds with the screen off, skepticism about long-term hinge durability, and notes that it drops a lens option vs the iPhone 18 Pro. The keynote also positioned a leadership handoff from Tim Cook to John Ternus, alongside AirPods 5, Apple Watch Series 12, and iPhone 18 Pro announcements.
+
+**Why it matters:** the largest HN thread of the day is a hardware launch whose contested claim — the crease — is exactly the kind of marketing-vs-reality gap that gets settled by owners, not keynotes; the $2,000 price makes early-adopter risk real. For developers the 5.4-inch outer/square inner split is a new layout target.
+
+[`🔗 Apple: iPhone Duo`](https://www.apple.com/iphone-duo/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49630931)
+
+---
+
+## 24. Raschka on GPT-6 Astra and "looped transformers" — weight reuse, not a hidden-CoT conspiracy
+
+- **Velocity:** ▮▮ rising
+- **Source:** Sebastian Raschka + Hacker News · 452+ pts · 146 comments · ~16h ago (~04:00 UTC+8)
+- **Tags:** `transformers` `interpretability` `reasoning`
+
+Reacting to reporting that framed GPT-6 Astra's rumored looped-transformer architecture as a secret technique for hiding reasoning, Raschka's piece argues looping (reusing weights across stacked layers) is primarily a GPU-memory-saving parameter-sharing trick — "still just producing one token at a time" — not inherently a CoT-monitoring hazard. The HN thread sharpens both sides: commenters note that if loop depth is chosen dynamically per token, the computation becomes far richer, and point to the Astra system card's own table showing a trivia answer solved while the visible CoT discusses something unrelated — unusually high "CoT controllability." Will Merrill's work on how much CoT different problems require gets cited as the right theoretical frame.
+
+**Why it matters:** since we covered the GPT-6 Astra launch on Sep 4, this is the first serious architecture-level critique of its "hidden reasoning" narrative — and the useful conclusion is that latent-space iteration is a real interpretability question that doesn't need a leak-based framing to matter.
+
+[`🔗 Raschka: GPT-6 Astra, looped transformers, and hidden reasoning`](https://magazine.sebastianraschka.com/p/gpt-6-astra-looped-transformers-and) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49627370)
+
+---
+
+## 25. bilawalsidhu/gods-eye-view — a browser "spy satellite simulator" with only real data re-trends at +1,588/day
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 22,200★ (+1,588 today) · MIT
+- **Tags:** `osint` `cesium` `data-visualization`
+
+A CesiumJS + Google Photorealistic 3D Tiles globe that layers live public feeds onto a "spy satellite" interface: 11,000+ aircraft (OpenSky/adsb.lol), ships (AISStream), an 838-object satellite catalog (CelesTrak), earthquakes (USGS), ~800 public CCTV cameras, NASA fire detections, radio stations — 11 of 13 layers work keyless, with NVG/FLIR sensor styles, a military HUD, and voice control via OpenAI Realtime (28 tools, $5 hard session cap). The README's honesty is unusually thorough: "Data may be delayed, incomplete, modeled, inferred, or wrong"; traffic is simulated on real roads; CCTV poses are user-calibrated priors; launch replays are labeled "RECONSTRUCTED ESTIMATE"; and it explicitly refuses to build person-tracking or face recognition. First trended #1 in August; the current wave rides a viral YouTube series.
+
+**Why it matters:** the same open feeds that power OSINT tooling assembled into one cinematic interface — with the limits stated in-product rather than discovered by users. The trigger is the YouTube wave, not new code (24 commits total), which matters for anyone reading the star count as momentum.
+
+[`🔗 bilawalsidhu/gods-eye-view`](https://github.com/bilawalsidhu/gods-eye-view) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 26. CISA: WatchGuard Firebox iked RCE (CVE-2025-14733, 9.3) is now feeding ransomware attacks — 9,000 boxes still unpatched
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA + BleepingComputer (Sep 10) · WatchGuard PSIRT advisory updated Aug 10
+- **Tags:** `cve` `firewall` `ransomware` `kev`
+
+CISA said this week that CVE-2025-14733 — an out-of-bounds write in the Firebox `iked` IKEv2-VPN handler, unauthenticated, CVSS 9.3 (vendor-assigned), KEV-listed since December 2025 — is now known to be used by ransomware gangs, without naming groups or sharing details. WatchGuard patched in December 2025 and confirmed in-the-wild exploitation then; Shadowserver counted 115,000+ exposed unpatched Fireboxes at the time, and roughly 9,000 remain vulnerable nine months later. Two hedges matter: exploitation requires an IKEv2-VPN configuration, and even devices where that config was deleted may still be exposed if a branch-office VPN to a static peer remains.
+
+**Why it matters:** a nine-month-old patch with a shrinking-but-persistent unpatched population is exactly how ransomware crews save-target — and the "we deleted the config" mitigation being incomplete is the detail most likely to be wrong in real inventories. WatchGuard's SME footprint (250,000+ businesses via 17,000+ resellers) makes the long tail long.
+
+[`🔗 BleepingComputer: CISA on WatchGuard ransomware attacks`](https://www.bleepingcomputer.com/news/security/cisa-watchguard-rce-flaw-now-exploited-in-ransomware-attacks/) · [`🔗 WatchGuard PSIRT: CVE-2025-14733`](https://psirt.watchguard.com/)
+
+---
+
+## 27. JustVugg/colibri — pure-C inference that streams frontier MoE experts from disk, no "flash" pretense
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 27,285★ (+157 today) · Apache-2.0
+- **Tags:** `inference` `moe` `ssd`
+
+Colibrì runs 744B–2.8T MoE models (GLM-5.2, Kimi K3, Inkling, DeepSeek V4 Flash…) on consumer hardware by treating VRAM/RAM/NVMe as one hierarchy: dense parts stay resident (~9.9 GB int4 for GLM-5.2), 19,456 routed experts (~370 GB) stream from disk on demand — "a JIT, but for weights," with routing 71.6% predictable one layer ahead. Published numbers are honest about the floor: 5.8–6.8 tok/s on 6× RTX 5090, ~1.8 tok/s warm on a 128 GB CPU-only box, 0.05–0.1 tok/s cold on 25 GB. The README lists what's unproven (placement, SSD striping, auto-planning) and reports speculative decoding as a measured net loss in its own tests (MTP: −32% near 85% expert hit; DeepSeek drafters default off).
+
+**Why it matters:** distinct from the Kimi-K3-on-MacBook story we carried Sep 9 (a one-off four-SSD stunt), colibri is a maintained open engine for the same trick — and its decision to publish failure modes (quantization container rules, drive-dependent `O_DIRECT`) alongside tok/s is what makes the numbers usable.
+
+[`🔗 JustVugg/colibri`](https://github.com/JustVugg/colibri) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 28. little-lm: a 3.8B LLM trained from scratch to 0.384 CORE for $998 — with the measurement caveats printed
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 91+ pts · 14 comments · ~4h ago (~16:00 UTC+8)
+- **Tags:** `pretraining` `nanochat` `reproducibility`
+
+Hugo Vergnes (video understanding at Apple, evenings project) trained a 3.8B Llama-style model from random weights: 65.3B tokens of ClimbMix, 43 hours on 8× rented B200s, $998, 0.384 CORE — vs nanochat d32's 0.310 at ~$1,000 and GPT-2 1.5B's 0.2565. The write-up's value is the negative space: FineWeb-Edu was rejected after a failed early run; the 1024→2048 context rerun that produced the headline score was largely a *measurement* fix (SQuAD and BoolQ prompts hadn't fit in 1024 tokens — those two tasks were ~83% of the gain, the other 19 tasks moved +0.008); CORE moved ~7× more than loss, which he flags as a caution for anyone using CORE to make decisions. FP8 GEMMs, Muon+AdamW, trapezoidal LR, ResFormer-style value embeddings (+3.2% CORE for 721M params) are documented with what worked and what didn't.
+
+**Why it matters:** "frontier-adjacent pretraining at hobbyist budget" is becoming a reproducible genre — and this entry is worth reading specifically because it shows how much of a benchmark jump can be harness artifact rather than learning.
+
+[`🔗 little-lm 3.8B writeup`](https://hugovergnes.github.io/little-lm-3-8b/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49637435)
+
+---
+
+## 29. AlexsJones/llmfit — one command to answer "which models actually run on this machine?"
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 35,510★ (+247 today) · MIT · Rust
+- **Tags:** `local-llm` `hardware` `developer-tools`
+
+llmfit detects CPU/RAM/GPU/VRAM (CUDA, Apple Silicon, ROCm, oneAPI; multi-GPU and MoE-aware) and scores catalog models on four axes — memory fit, estimated speed, quality, context — with quantization awareness (GGUF, AWQ, GPTQ, EXL2), a TUI, a web dashboard, and REST endpoints. Its honesty lives in `llmfit info`: speed and memory figures are model-based estimates grounded in a memory-bandwidth model and community `bench --share` submissions, and accuracy depends on community data matching your hardware — real measurements replace estimates locally.
+
+**Why it matters:** the "will it run" question is answered daily by trial-and-error across quantization forums; a tool that centralizes it — and keeps its estimate-vs-measured distinction visible — is quiet but broadly useful infrastructure for the local-model wave.
+
+[`🔗 AlexsJones/llmfit`](https://github.com/AlexsJones/llmfit) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 30. diegosouzapw/OmniRoute — a self-hosted AI gateway claiming ~1.47B free tokens/month by stacking provider free tiers
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 63,817★ (+591 today) · MIT
+- **Tags:** `ai-gateway` `routing` `self-hosted`
+
+One local OpenAI-compatible endpoint routing to 352 registered providers (152 flagged free) with quota-aware fallback, circuit breakers, key cooldown, 19 "combo" routing strategies, an MCP server (110 tools), and 42-language localization. The README carries its own asterisks: the 1.47B free-tokens/month figure is a best-case aggregate that "move[s] both ways" as providers change terms, the ~3B/mo "Radar ceiling is not a guarantee," provider counts differ across sections by design (352/356/444), savings percentages are self-reported, and affiliate links are disclosed.
+
+**Why it matters:** the free-tier-aggregation gateway is a category that lives and dies on provider goodwill — OmniRoute's usefulness is real (fallback, quota-awareness, one endpoint) but its headline number is exactly the kind that expires; read the caveats before quoting it.
+
+[`🔗 diegosouzapw/OmniRoute`](https://github.com/diegosouzapw/OmniRoute) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 31. Stockfish 19 released — up to +44 Elo, a new SFNNv16 net, and universal binaries
+
+- **Velocity:** ▮ steady
+- **Source:** stockfishchess.org (Sep 5) · HN 83+ pts · GPL
+- **Tags:** `chess` `nnue` `open-source`
+
+Stockfish 19 (Sep 5) gains up to 44 Elo head-to-head over Stockfish 18 and keeps the engine championship lead. The engineering changes are the story: a new SFNNv16 NNUE network trained with quantization-aware training on hundreds of billions of positions rescored by a strong Leela net (dropping redundant threat features, adding pawn-pair features, retiring the secondary net), universal binaries that auto-detect CPU capabilities, native RISC-V (RVV) and LoongArch support, WebAssembly targets, and strict invalid-input termination.
+
+**Why it matters:** chess engines remain the longest-running open benchmark community in existence; QAT-trained NNUE and universal binaries are the kind of unglamorous engineering that keeps a 15-year-old project both dominant and installable by non-specialists.
+
+[`🔗 Stockfish 19 announcement`](https://stockfishchess.org/blog/2026/stockfish-19/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49599992)
+
+---
+
+## 32. Automattic's board forces Matt Mullenweg into leave of absence — WordPress.org says the open-source project is unaffected
+
+- **Velocity:** ▮ steady
+- **Source:** TechCrunch (Sep 9) + Hacker News · 325+ pts · 215 comments · ~7h ago (~13:00 UTC+8)
+- **Tags:** `wordpress` `open-source` `governance`
+
+Automattic's board voted Sep 9 to place founder/CEO Matt Mullenweg on paid leave — reportedly against his will, with the resolution delivered 50 minutes before the vote, per his Slack message. CFO Mark Davies is interim CEO; no official reason was given. The backdrop is the WP Engine lawsuit (Automattic's 8% royalty demand, defamation and abuse-of-power claims), the 2024 ultimatum that saw 159 employees quit, and a 16% layoff. WordPress.org's executive director moved quickly to separate the project from the company: "Matt remains the leader of the WordPress project," and priorities continue unchanged.
+
+**Why it matters:** the WP Engine dispute turned WordPress governance into a single-founder risk story; the board's move is the first structural check on that concentration. The load-bearing claim for the ecosystem is the project/company separation — which is exactly the promise to watch, given Mullenweg retains control of the .org project.
+
+[`🔗 TechCrunch: Mullenweg forced into leave of absence`](https://techcrunch.com/2026/09/09/automattics-board-forces-ceo-matt-mullenweg-into-leave-of-absence/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49636283)
+
+---
+
+## 33. liquidslr/system-design-notes — 28 chapters of free Alex Xu notes, +1,397 today, and no license at all
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 18,422★ (+1,397 today) · no license file
+- **Tags:** `system-design` `interview-prep` `notes`
+
+Chapter-by-chapter notes on Alex Xu's *System Design Interview* Vol 1 & 2 (28 folders, rate limiters through stock exchanges), with per-topic curated external links (Dynamo paper, Discord/Slack engineering blogs, a Stanford consistent-hashing lecture). The caveats are structural: the README says "work in progress," there are only 35 commits, notes are mirrored on a commercial site (pagefy.io), and the repo has **no license file** — default copyright applies, so reuse/redistribution rights are unclear for a derivative of a commercial book.
+
+**Why it matters:** the fastest-rising repo of the day is study notes, not software — and its missing license plus the commercial mirror make it a live case of the "trending ≠ yours to reuse" trap, in a week where agent skills built from copyrighted material keep trending too.
+
+[`🔗 liquidslr/system-design-notes`](https://github.com/liquidslr/system-design-notes) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 34. Samsung unveils zHBM prototype — memory stacked directly on the AI accelerator, claiming 8× HBM5 throughput
+
+- **Velocity:** ▮ steady
+- **Source:** THE ELEC + Hacker News · 30+ pts · ~5h ago (~15:00 UTC+8)
+- **Tags:** `hbm` `memory` `hardware`
+
+Samsung disclosed a zHBM prototype that stacks memory directly onto AI accelerator dies instead of alongside them, claiming (all vendor figures, prototype-stage): up to 8× the data-processing performance of 8th-gen HBM (HBM5), 3× better performance-per-watt, and thermal resistance cut by more than half. The HN thread's open question is the right one — where the memory controller lives (a middle stacking layer or the main die) — and there are no production-timeline, capacity, or pricing details.
+
+**Why it matters:** memory bandwidth and capacity are the binding constraint on both frontier training and local inference (see colibri, #27); stacking-on-die is the most direct possible attack on that constraint. All numbers are Samsung's own and prototype-stage — treat as a direction, not a spec.
+
+[`🔗 THE ELEC: Samsung zHBM prototype`](https://www.thelec.net/news/articleView.html?idxno=12835) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49593896)
+
+---
+
+## 35. Show HN: evaluate polynomials with provably fewer multiplications — with a full Lean proof
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 100+ pts · 34 comments · ~23h ago (~21:00 UTC+8 Sep 9)
+- **Tags:** `algorithms` `formal-verification` `lean`
+
+Thomas Ahle published a construction for evaluating a pre-known univariate polynomial with fewer multiplications (additions and squarings are cheap; multiplications — especially over finite fields — are not), improving on Horner/Estrin/Knuth-Eve/Pan/Rabin–Winograd lines, plus "an injective polynomial construction for universal hashing that uses N multiplications to hash 2N values with a single random key," improving on Daniel J. Bernstein's. The ~100-page proof is fully machine-verified in Lean, with an interactive site visualizing the circuits. The thread's limits are explicit: rational coefficients blow up (finite fields are the sweet spot), for floating point "use Estrin instead" (FMA, pipelining, stability), it's univariate only, and WyHash/xxh3 aren't polynomial — though the paper shows those heuristic hashes collide far more on adversarial inputs.
+
+**Why it matters:** preprocessing-once/evaluate-many polynomial schemes sit under hash maps, MACs and libm — and the rare combination here is a new multiplication-count bound *and* a Lean proof, so the claim is checkable rather than benchmarked.
+
+[`🔗 thomasahle.com/fast-polynomials`](https://thomasahle.com/fast-polynomials/) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=49623398)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-10T04:30:00+08:00 |
-| Items | 20 |
-| Sources tracked | 28 (Hacker News, GitHub Trending, Hugging Face papers, arXiv, CISA KEV, NVD, Cisco PSIRT, Full Disclosure, SOCRadar, Red Hat, SecurityOnline, Tailwind CSS blog, Desert Ant Labs, xlii.space, Read the Docs, opusfived.dev, NousResearch, Atomburst, wsxiaoys gist, gnuradioworld.com, 777arc/gnuradio-world, Imbad0202, petergyang, radixark, TechCrunch/CNBC, Fortinet FG-IR-25-084 via NVD, seclists.org, GitHub Trending weekly) |
+| Generated | 2026-09-10T20:05:00+08:00 |
+| Items | 35 |
+| Sources tracked | 38 (Hacker News, GitHub Trending, Hugging Face papers, arXiv, CISA KEV, NVD, Cisco PSIRT, Full Disclosure, SOCRadar, Red Hat, SecurityOnline, Tailwind CSS blog, Desert Ant Labs, xlii.space, Read the Docs, opusfived.dev, NousResearch, Atomburst, wsxiaoys gist, gnuradioworld.com, 777arc/gnuradio-world, Imbad0202, petergyang, radixark, TechCrunch/CNBC, Fortinet FG-IR-25-084 via NVD, seclists.org, GitHub Trending weekly, BleepingComputer, WatchGuard PSIRT, MSNightmare, apple.com, Raschka/mysterious substack, stockfishchess.org, hugovergnes.github.io, thelec.net, thomasahle.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

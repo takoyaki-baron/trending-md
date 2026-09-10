@@ -1,8 +1,8 @@
 ---
 date: 2026-09-10
-updated: 2026-09-10T04:30:00+08:00
+updated: 2026-09-10T20:05:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -23,7 +23,7 @@ AIエージェントのために構築され、人間も読める。
 
 Opusfived（opusfived.dev）は個人作者による短いインタラクティブデモだ。訪問者の課題は、Claude エージェントに「たった一つのボタンを青く」させ、それ以外は何もさせないこと——その様子をページ上でリアルタイムに見届ける。コーディングエージェント最大のフラストレーション、つまり指示をはるかに超えてリファクタリングし、スタイルを変え、「改善」してしまうエージェントを、そのまま武器化した作品だ。明示的にエンターテインメントであってベンチマークではなく、実装の詳細は一切公開されていない。
 
-**Why it matters:** 純粋なエージェント挙動のジョークが HN の 1 位を取ったこと自体がマーケットシグナルだ——指示のスコープ管理が 2026 年のコーディングエージェント最大の UX 的痛みになった。ハーネス開発者にとっては、境界付きで検証可能な編集こそが生の能力より重要だという需要側の証拠である。
+**なぜ重要か：** 純粋なエージェント挙動のジョークが HN の 1 位を取ったこと自体がマーケットシグナルだ——指示のスコープ管理が 2026 年のコーディングエージェント最大の UX 的痛みになった。ハーネス開発者にとっては、境界付きで検証可能な編集こそが生の能力より重要だという需要側の証拠である。
 
 [`🔗 opusfived.dev`](https://opusfived.dev/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49623754)
 
@@ -37,7 +37,7 @@ Opusfived（opusfived.dev）は個人作者による短いインタラクティ�
 
 Adam Wathan が Tailwind Labs の Shopify 参画を発表した。ページ上の約束：Tailwind CSS は「常に MIT ライセンス」であり、同じチームが Shopify の支援のもと保守を続ける。その見返りとして、Tailwind Plus/ui.sh は新規顧客の受付を終了（既存顧客は継続利用可）、商用ビジネスは縮小される。投稿は約9年の歴史、週間 1.1 億回以上のインストール、ChatGPT・X・Cloudflare・Reddit での利用に言及。金銭条件は非公開。
 
-**Why it matters:** 最も広く採用された CSS フレームワークの一つが、まさに有料製品ビジネスの成長が止まったタイミングで大企業の傘下に入った——MIT 維持の約束はすべての下流ユーザーの生命線であり、「チームが主導を続ける」という言葉は買収後も注視すべき約束だ。
+**なぜ重要か：** 最も広く採用された CSS フレームワークの一つが、まさに有料製品ビジネスの成長が止まったタイミングで大企業の傘下に入った——MIT 維持の約束はすべての下流ユーザーの生命線であり、「チームが主導を続ける」という言葉は買収後も注視すべき約束だ。
 
 [`🔗 Tailwind CSS: Tailwind is joining Shopify`](https://tailwindcss.com/blog/tailwind-is-joining-shopify) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49623822)
 
@@ -51,7 +51,7 @@ Adam Wathan が Tailwind Labs の Shopify 参画を発表した。ページ上�
 
 CISA は 9月9日、Cisco Secure Firewall Management Center の CVE-2026-20079 を KEV カタログに追加し、連邦機関への修正期限を 9月12日——わずか 3 日の猶予とした。CVSS 10.0 は Cisco PSIRT が CNA として採点したもの（NVD では二次的スコアソース扱い）。認証不要の Web インターフェース認証バイパス（CWE-288）が、「起動時に作成される不適切なシステムプロセス」経由で root RCE につながる。CyberAuth の公開 PoC は第三者により独立に再現され、FMC 10.0.1-1 で「uid=0(root) 実行を確認」（Full Disclosure、8月20日）。Cisco の v2.5 アドバイザリは 8月に「Cisco PSIRT が悪用の進行を認識した」と明記し、ホットフィックスは「既存の侵入を解消しない可能性がある」と警告、`/var/tmp/license.tmp` の IoC チェック方法を提示している。回避策は一切ない。
 
-**Why it matters:** 3 日という KEV 期限と、アドバイザリ自身の但し書き——パッチ適用は既に植入されたマルウェアを排除しない——は、これがパッチ管理の一行ではなくフォレンジックの問題であることを示す。採点の規律も重要だ：10.0 は Cisco 自己採点であり、NVD の分析スコアではない。
+**なぜ重要か：** 3 日という KEV 期限と、アドバイザリ自身の但し書き——パッチ適用は既に植入されたマルウェアを排除しない——は、これがパッチ管理の一行ではなくフォレンジックの問題であることを示す。採点の規律も重要だ：10.0 は Cisco 自己採点であり、NVD の分析スコアではない。
 
 [`🔗 Cisco アドバイザリ cisco-sa-onprem-fmc-authbypass-5JPp45V2`](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-onprem-fmc-authbypass-5JPp45V2) · [`🔗 Full Disclosure：uid=0 の PoC 再現`](http://seclists.org/fulldisclosure/2026/Aug/80)
 
@@ -65,7 +65,7 @@ CISA は 9月9日、Cisco Secure Firewall Management Center の CVE-2026-20079 �
 
 Nous Research の自己改善型ターミナルエージェント（経験からスキルを生成、Honcho によるユーザーモデリング、Telegram/Discord/Slack/WhatsApp/Signal のメッセージングゲートウェイ、7 つの実行バックエンド）が 9月7日付で v0.21.1 を出した。「v0.21.0 以降の main のロールアップ」と明記されたリリースで、非マージコミット 5,139 件、ファイル 4,364 件、マージ済み PR 632 件に及び、整理されたリリースノートは v0.22.0 に先送りされた。README の注意点は具体的だ：Windows Defender がバンドルされた `uv.exe` を誤検知する（検証手順の証明書を公開）、checkout 内の開発用 venv は「エージェントが自分の checkout に対して実行する相対パスのコマンドで消去されうる」。裏面としては：未解決 issue 5,000 超、未解決 PR 5,000 超。
 
-**Why it matters:** 一つのパッチロールアップにこのコミット量は、このリポジトリでも異例であり、自己改善エージェントというカテゴリが Hermes 周りに収束しつつあることを示す——ただしメンテナンス負担こそ、スター数が語らないもう半分の物語だ。
+**なぜ重要か：** 一つのパッチロールアップにこのコミット量は、このリポジトリでも異例であり、自己改善エージェントというカテゴリが Hermes 周りに収束しつつあることを示す——ただしメンテナンス負担こそ、スター数が語らないもう半分の物語だ。
 
 [`🔗 NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent) · [`🔗 v0.21.1 リリースノート`](https://github.com/NousResearch/hermes-agent/releases)
 
@@ -79,7 +79,7 @@ Nous Research の自己改善型ターミナルエージェント（経験から
 
 TokenRhythm が公開した NeoHorse-1 の論文（arXiv、9月8日、36 名の「NeoHorse Team」）は、ルーティングされた異種モデルプールのログで学習したエージェントネイティブな 4B/9B モデルを記述する。ルーティングシグナルが 3 段階の SFT カリキュラムとルーティング誘導の on-policy 蒸留を構成し、「評価→選択→更新」のフィードバックループで閉じる。11 ベンチマークのマクロ平均は 4B で 58.94→64.87、9B で 65.60→69.04 に上昇し、後学習した 4B は 9B ベースとの差をほぼ埋めた。論文自身はこのループを「このフィードバック駆動プロセスの初期プロトタイプ」と呼び、反復間の再帰は実証済みの結果ではなく将来の道筋として位置づけている。
 
-**Why it matters:** RSI のフレーミングは但し書き抜きで引用されるだろう。誠実な見出しは「ハーネス媒介のエージェント的ポストトレーニング＋フィードバックループ設計」だ。本フィードの規律に従い、著者自身の免責が物語の脚注ではなく錨である。
+**なぜ重要か：** RSI のフレーミングは但し書き抜きで引用されるだろう。誠実な見出しは「ハーネス媒介のエージェント的ポストトレーニング＋フィードバックループ設計」だ。本フィードの規律に従い、著者自身の免責が物語の脚注ではなく錨である。
 
 [`🔗 arXiv:2609.08183`](https://arxiv.org/abs/2609.08183) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
 
@@ -93,7 +93,7 @@ TokenRhythm が公開した NeoHorse-1 の論文（arXiv、9月8日、36 名の�
 
 SOCRadar の脅威調査ユニットが、CVE-2025-25249（FortiOS/FortiSwitchManager の `cw_acd` CAPWAP デーモン、UDP 5246 のヒープオーバーフロー）を悪用するキャンペーンの完全解析を公開した。攻撃者はこれを使い、コードに AI 支援のコメントが残る Node.js 製ポストエクスプロイト RAT「PivotC2」を展開。攻撃者側のファイルには 30,000 以上の標的 IP と 178 件の確認済み感染（米国中心、データ流出を伴う完全侵入 2 件）が示され、SOCRadar はロシア語圏出身の金銭目的グループと高確度で評価し、活動は少なくとも 7 月に遡るとしている。翌日、CISA がこの CVE を KEV に追加した。採点メモ：NVD は 9.8、Fortinet 自身の CNA スコアは 8.1（`AC:H`）。SOCRadar の FAQ は自問に率直に答えている：「パッチで PivotC2 は除去できるか？ できない。」
 
-**Why it matters:** 10 か月前に修正済みの CVE が、完全に武器化された攻撃チェーン（ASLR バイパス、ヒープグルーミング、FortiOS 自身の Node.js ランタイムを使う ROP）で今もファイアウォールを食い続けている——しかもパッチは攻撃経路を閉じるだけで植入物は消えないため、`fsv_sync.dat` を回収された機器では認証情報のローテーションが必須だ。1.7 ポイントの採点差は、今週の CNA/NVD 分岐の教材である。
+**なぜ重要か：** 10 か月前に修正済みの CVE が、完全に武器化された攻撃チェーン（ASLR バイパス、ヒープグルーミング、FortiOS 自身の Node.js ランタイムを使う ROP）で今もファイアウォールを食い続けている——しかもパッチは攻撃経路を閉じるだけで植入物は消えないため、`fsv_sync.dat` を回収された機器では認証情報のローテーションが必須だ。1.7 ポイントの採点差は、今週の CNA/NVD 分岐の教材である。
 
 [`🔗 SOCRadar：CVE-2025-25249 PivotC2 解析`](https://socradar.io/blog/cve-2025-25249-pivotc2-fortigate-rat/) · [`🔗 NVD：CVE-2025-25249`](https://nvd.nist.gov/vuln/detail/CVE-2025-25249)
 
@@ -107,7 +107,7 @@ SOCRadar の脅威調査ユニットが、CVE-2025-25249（FortiOS/FortiSwitchMa
 
 （動画アプリ Detail の作者が創業した）欧州の新興ラボが 9月8日、タスク特化のオンデバイスモデル 18 個（12 個が安定版）を単一の Swift/Kotlin/JS SDK で公開した。月間アクティブデバイス 10 万未満までは無料。Voz は iPhone で 10 分の音声を 2 秒で文字起こし（Whisper より 4.7 倍速と主張、M3 Ultra で 319 倍リアルタイム vs Apple SpeechAnalyzer の 78 倍）、9MB の Clear は音声強化、12MB の Redact は PII マスキング、284MB の Clips は動画クリップ化。投稿自身の但し書き：Redact の PII 検出率は 88.8% で GLiNER-PII の 91.1% に劣る、ベンチマークはすべて自己計測、Clear の数値は「3 回のうちの最高値」。
 
-**Why it matters:** アプリ開発の文字起こし/マスキング/分類レイヤーに対する、まとまった有料 SDK 代替をクラウド API に提示した——無料枠・トークン不要・ログイン不要は従量課金への直接攻撃であり、「一度もアップロードされない」というプライバシーの論点も実務的に機能する。すべての性能差はベンダーベンチマークであり、投稿自身がそう明言している。
+**なぜ重要か：** アプリ開発の文字起こし/マスキング/分類レイヤーに対する、まとまった有料 SDK 代替をクラウド API に提示した——無料枠・トークン不要・ログイン不要は従量課金への直接攻撃であり、「一度もアップロードされない」というプライバシーの論点も実務的に機能する。すべての性能差はベンダーベンチマークであり、投稿自身がそう明言している。
 
 [`🔗 Desert Ant Labs 公開記事`](https://desertant.com/blog/introducing-desert-ant-labs/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49624823)
 
@@ -121,7 +121,7 @@ SOCRadar の脅威調査ユニットが、CVE-2025-25249（FortiOS/FortiSwitchMa
 
 research → write → review → revise → finalize をカバーする 4 スキルスイート：13 エージェントの深い調査チーム（PRISMA システマティックレビューを含む 8 モード）、12 エージェントの論文パイプライン（MD/DOCX/LaTeX→PDF）、「悪魔の代弁者」役を持つ 7 エージェントの多視点レビュアー、「必須の誠実性ゲート」付き 10 段階オーケストレーター。README の哲学は「AI はあなたの副操縦士であり、パイロットではない」で、注意点は異例なほど率直だ：「一貫して報告された捏造はこれらのチェックを通過しうる」（検証するのは報告内容であって、実験が実際に行われたかではない）、ライブレビュアー出力は `NOT_CALIBRATED`、そして「humanizer」になることを明示的に拒否している。ライセンスは CC BY-NC 4.0——非商用のみ。
 
-**Why it matters:** スキルエコシステムが単発ネタのリポジトリから本格的なマルチエージェントパイプラインへ成熟しつつあることを示す一方、NC ライセンスと「実験捏造の盲点」は、まさに下流ユーザーがつまずく 2 点でもある。
+**なぜ重要か：** スキルエコシステムが単発ネタのリポジトリから本格的なマルチエージェントパイプラインへ成熟しつつあることを示す一方、NC ライセンスと「実験捏造の盲点」は、まさに下流ユーザーがつまずく 2 点でもある。
 
 [`🔗 Imbad0202/academic-research-skills`](https://github.com/Imbad0202/academic-research-skills) · [`🔗 GitHub Trending 週間`](https://github.com/trending?since=weekly)
 
@@ -135,7 +135,7 @@ research → write → review → revise → finalize をカバーする 4 ス�
 
 Yu Zhang（wsxiaoys）が「蒸留フィンガープリント」テストを拡張した。モデルの推論チャネルに GPT-5.5 Pro の推論の最初の 1% を事前入力し、45 問について教師の最終回答との n-gram 一致率を測る。Qwen3.8 A95B は 16.79% から 34.97% へ跳ね上がり（+18.18pp、全カテゴリで上昇）、一方 DeepSeek V4 Flash は −1.17pp、Inkling は +0.46pp、Kimi K3 は +4.54pp だった。作者の結論は意図的に狭い：「Qwen は GPT-5.5 Pro から、あるいは密接に関連する GPT モデルから学習した可能性がある」——しかも以前の実行では、Qwen は Opus 4.8 にはほとんど寄らなかった。
 
-**Why it matters:** n-gram 一致は示唆であって蒸留の証明ではない——45 問・単一手法という条件は結論と共に運ばれるべきだ。9月9日に取り上げた Qwen3.8 の量子化ベンチマークとは別の話：今回は「何を学習したか」であって「量子化でどうなるか」ではない。
+**なぜ重要か：** n-gram 一致は示唆であって蒸留の証明ではない——45 問・単一手法という条件は結論と共に運ばれるべきだ。9月9日に取り上げた Qwen3.8 の量子化ベンチマークとは別の話：今回は「何を学習したか」であって「量子化でどうなるか」ではない。
 
 [`🔗 wsxiaoys の gist：手法と結果`](https://gist.github.com/wsxiaoys/e0286dc6bb624ff5fdf49e7f4c528ba3) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49630026)
 
@@ -149,7 +149,7 @@ Yu Zhang（wsxiaoys）が「蒸留フィンガープリント」テストを拡�
 
 AuK（arXiv 2609.08936）は、約 1.5B のモデルに音声生成と指示ベースの音声編集を統合した。約 30 億の指示-音声インスタンス / 195 万時間で学習され、Qwen2.5-Omni の意味的条件付け、音声 VAE、ハイブリッド整流フロー MMDiT/DiT を基盤とし、コードと重みが公開されている。自己申告の数値：Seed-TTS-Eval で平均 WER 2.65% / SIM 0.795、SpeechEditBench の content/prosody/acoustic で最高スコア。蒸留版 AuK-Flash は 4 ステップ推論で 4.5 倍速を主張。自己申告の限界：ネイティブの自由形式指示追従が弱く（依然として Prompt Enhancer ルーターが必要）、中国語の同音異義語エラーは RL でも直らない。帰属メモ：HF のリストにある「Tencent Hunyuan」サブミッタータグは論文では確認できない——著者グループは F5-TTS のアカデミックチームだ。
 
-**Why it matters:** 真にオープンで小型、編集可能な音声基盤モデルは、クローズドな TTS スタックへの直接的なオープンソースの回答だ——指標は自己申告だが、公開された重みが検証可能性を担保する。
+**なぜ重要か：** 真にオープンで小型、編集可能な音声基盤モデルは、クローズドな TTS スタックへの直接的なオープンソースの回答だ——指標は自己申告だが、公開された重みが検証可能性を担保する。
 
 [`🔗 AuK on Hugging Face papers`](https://huggingface.co/papers/2609.08936) · [`🔗 arXiv:2609.08936`](https://arxiv.org/abs/2609.08936)
 
@@ -163,7 +163,7 @@ AuK（arXiv 2609.08936）は、約 1.5B のモデルに音声生成と指示ベ�
 
 Omni Interaction Agent 技術報告が提示する Gander：9B のストリーミング Thinker-Talker 全二重「前小脳」（チャンク単位の聞く/話す/割り込み判断、外部 VAD 不要、約 2 分のスライディングコンテキスト）に、学習不要でプラグアンドプレイのタスクエージェントを「後大脳」として接続する。Full-Duplex-Bench v3 ではターンテイク（100.0）と割り込み遅延（8.0 vs GPT-Realtime の 13.5）でリードするが、タスク精度では商用システムに後れを取る（Pass@1 0.400 vs 最高 0.600）。自身の限界：51.6% のフィラー率、ベースモデル比で WorldSense が 6.08 ポイント後退、小脳-大脳間の結合が ASR テキストのみ、ポストトレーニング/RL は未実施。
 
-**Why it matters:** この分割アーキテクチャは、対話レイヤーを再学習せずに推論能力を更新できる——真似される可能性が高い実用的パターンだ——が、論文自身がタスク精度はまだ GPT-Realtime に及ばないと異例なほど率直に認めている。
+**なぜ重要か：** この分割アーキテクチャは、対話レイヤーを再学習せずに推論能力を更新できる——真似される可能性が高い実用的パターンだ——が、論文自身がタスク精度はまだ GPT-Realtime に及ばないと異例なほど率直に認めている。
 
 [`🔗 arXiv:2609.08977`](https://arxiv.org/abs/2609.08977) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
 
@@ -177,7 +177,7 @@ Omni Interaction Agent 技術報告が提示する Gander：9B のストリー�
 
 OpenWAM は World-Action-Model の事前学習を Infra（合成可能なモジュール、8 つのシミュレーションベンチマーク）、Study（知識継承と世界-アクション相乗の制御実験）、そして約 6,400 時間（約 5.185 億フレーム）の一人称視点ヒューマン＋ロボットデータで事前学習した OpenWAM-α に分解する。主張する結果：モバイル双腕 EBench で SOTA、実世界 RoboDojo-Real で 1 位、「成功率は pi0.5 の 2 倍」。主張する優位は特にドメイン外汎化にあり、すべての結果は著者自身の報告だ。
 
-**Why it matters:** World-Action-Model はワールドモデル研究と VLA ロボティクスの合流点だ。完全にオープンなスタック（コード・重み・データレシピ）は、これまでクローズドだった WAM 研究と違ってこのアプローチを再現可能にする。
+**なぜ重要か：** World-Action-Model はワールドモデル研究と VLA ロボティクスの合流点だ。完全にオープンなスタック（コード・重み・データレシピ）は、これまでクローズドだった WAM 研究と違ってこのアプローチを再現可能にする。
 
 [`🔗 OpenWAM on Hugging Face papers`](https://huggingface.co/papers/2609.07398) · [`🔗 arXiv:2609.07398`](https://arxiv.org/abs/2609.07398)
 
@@ -191,7 +191,7 @@ OpenWAM は World-Action-Model の事前学習を Infra（合成可能なモジ�
 
 arXiv:2609.09153（9月8日提出；Yuxing Lu、Yicheng Chen、Shanchan Wu、Sercan Ö. Arık）は Procedural Graphs を提案する——「（手続き，関係，手続き）」トリプルをナレッジグラフの手続き版対応物とするものだ。ガイダンスモデルが局所サブグラフをステップレベルのヒントに変換し、「ソルバーの次の行動を命じることなく偏らせる」。LLM リファイナーは成否の軌跡対比からグラフのトポロジーを編集し、検証で成立する編集のみを保持する。主張：進化したグラフは手作りのものに匹敵ないし上回り、欠陥のある専門家の事前知識を修復でき、複数データセット・複数 LLM でメモリベースのベースラインを上回る。アブストラクトに限界セクションは見えない——ベンチマーク詳細は 36 ページの本文にある。
 
-**Why it matters:** エージェントメモリはこれまで主にエピソード/事実型だった。ツールの順序と前提条件を明示的に学習する自己進化する手続きレイヤーは、別のプリミティブだ——そして MCP/スキルのツール議論に直接着地する。
+**なぜ重要か：** エージェントメモリはこれまで主にエピソード/事実型だった。ツールの順序と前提条件を明示的に学習する自己進化する手続きレイヤーは、別のプリミティブだ——そして MCP/スキルのツール議論に直接着地する。
 
 [`🔗 arXiv:2609.09153`](https://arxiv.org/abs/2609.09153) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49629868)
 
@@ -205,7 +205,7 @@ arXiv:2609.09153（9月8日提出；Yuxing Lu、Yicheng Chen、Shanchan Wu、Ser
 
 Atomburst の Geiger（57★、JavaScript、MIT、実行時依存ゼロ）は既知の設定場所を読み取る読み取り専用スキャナーだ——Claude Code の MCP/hooks/plugins/skills/subagents、MCP ホスト（Cursor、Windsurf、VS Code、Cline、Zed など）、エージェント CLI（Codex、Gemini CLI、Aider、Goose など）——npm を実行せず、各検出に EXECUTES / HOLDS-SECRETS / BROAD-FILESYSTEM / NETWORK のラベルと由来クラス（UNKNOWN-ORIGIN 含む）を付ける。`--diff` のベースラインモードは CI/cron 用のドリフト警報になる。README の正直な限界：「設定を読むのであって実行時の挙動を読むのではない」、コンテナ/WSL/他ユーザーアカウント内のエージェントは見えない、「由来 ≠ 信頼性」。
 
-**Why it matters:** スキルとプラグインがトレンド級の規模で GitHub からインストールされている今、マシンレベルの棚卸し/監査ツールは当然の次の問いに答える：自分は何をインストールし、それは何に触れることができるのか？
+**なぜ重要か：** スキルとプラグインがトレンド級の規模で GitHub からインストールされている今、マシンレベルの棚卸し/監査ツールは当然の次の問いに答える：自分は何をインストールし、それは何に触れることができるのか？
 
 [`🔗 Atomburstofficial/geiger`](https://github.com/Atomburstofficial/geiger) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=49627646)
 
@@ -219,7 +219,7 @@ Atomburst の Geiger（57★、JavaScript、MIT、実行時依存ゼロ）は既
 
 hawtio-operator（Red Hat build of Apache Camel ツール群）は OpenShift Service CA の秘密鍵を読み、攻撃者が指定した Common Name でクライアント証明書を発行できる——実質「任意の namespace の編集者に署名オラクルを渡す」ことで、クロステナントのサービスなりすまし、さらに Jolokia MBean 呼び出し経由で RCE に至る。CVSS 9.9 は Red Hat が CNA として採点したものの、明示的に「暫定かつ見直し対象」。認証（任意 namespace の編集権限）が必要なため、Red Hat は影響を *Important* に留めている。関連アドバイザリの CVE-2026-77968（CVSS 8.2、NVD が 9月8日公開）は、operator の過大なクラスタ全体 Secret 読み取りを扱う——両者は別の CVE であり、同一のバグではない。
 
-**Why it matters:** 悪用に必要なのはクラスタ edit ロールだけ——よくある権限——で、それがクラスタ全体の証明書偽造に反転する。緩和は構成変更（CSR API、RBAC の引き締め、証明書ローテーション）であって、単なるアップグレードではない。現時点で確認済みの野外悪用はなく、公開 PoC もない。
+**なぜ重要か：** 悪用に必要なのはクラスタ edit ロールだけ——よくある権限——で、それがクラスタ全体の証明書偽造に反転する。緩和は構成変更（CSR API、RBAC の引き締め、証明書ローテーション）であって、単なるアップグレードではない。現時点で確認済みの野外悪用はなく、公開 PoC もない。
 
 [`🔗 Red Hat：CVE-2026-78234`](https://access.redhat.com/security/cve/CVE-2026-78234) · [`🔗 SecurityOnline 解説`](https://securityonline.info/hawtio-operator-vulnerability-cve-2026-78234/)
 
@@ -233,7 +233,7 @@ hawtio-operator（Red Hat build of Apache Camel ツール群）は OpenShift Ser
 
 AI 特有の筆致（「It's not X. It's Y.」の二元対比、咳払い的な書き出し、「a testament to」式の褒め言葉、偽深遠な結び……）を検出する、スキルとしてインストールするリンター。Claude Code/Codex/ChatGPT で `/no-ai-slop` として、または `npx skills add` で実行できる。検出モードは「AI が書いたかどうかを推測せず」文体だけを意図的にフラグし、README は核心的矛盾を自認する：AI 編集は個人の癖を「均して」いきがちだ——それはまさにこのスキルが防ごうとするリスクそのものだ。主張される 20+ パターンのうち公開されているのは 10 個のみ（残りは `SKILL.md` の中）、リリースはなく、スタンドアロンでは動かない。
 
-**Why it matters:** humanizer モーメントの第2波——「一ファイルスキル＝プロダクト」という流通チャネルが、一週間でライティングツールを数千星に乗せることを証明すると同時に、こうしたリポジトリが文書化されていないルールファイルとして出荷されていることも示す。パターン分類は英語 LLM 特有のもので、各言語には独自の「AI 味」リストが必要だ。
+**なぜ重要か：** humanizer モーメントの第2波——「一ファイルスキル＝プロダクト」という流通チャネルが、一週間でライティングツールを数千星に乗せることを証明すると同時に、こうしたリポジトリが文書化されていないルールファイルとして出荷されていることも示す。パターン分類は英語 LLM 特有のもので、各言語には独自の「AI 味」リストが必要だ。
 
 [`🔗 petergyang/no-ai-slop`](https://github.com/petergyang/no-ai-slop) · [`🔗 GitHub Trending 週間`](https://github.com/trending?since=weekly)
 
@@ -247,7 +247,7 @@ AI 特有の筆致（「It's not X. It's Y.」の二元対比、咳払い的な�
 
 gnuradioworld.com は、GNU Radio Companion 風のフローグラフエディタ兼ランタイムで、DSP スタックと Qt GUI シンクが WebAssembly にコンパイルされている。ネイティブの `.grc` ファイルの読み書きに対応し、スペクトラム/ウォーターフォール/コンスタレーションをリアルタイム描画し、WebUSB 経由で RTL-SDR、PlutoSDR、HackRF に接続する——「Python 不要、インストール不要、サーバー不要」。作者は Marc Lichtman（777arc）。README の正直な数値：WASM はネイティブより有意に遅い（デシメーション FIR で 12.1 vs 24 Msps）、汎用 Python ランタイムはなし（Python 専用ブロックは C++ 移植が必要）、SharedArrayBuffer/COOP-COEP ホスティングが必要で Chrome か Firefox 推奨。
 
-**Why it matters:** SDR 実験の門を長年守ってきたインストールの壁を取り払った——GNU Radio モジュールエコシステム（gr-satellites、gr-adsb、gr-lora_sdr……）が一つの URL になる。しかもこの移植は自身の性能劣化を隠さず公開している。
+**なぜ重要か：** SDR 実験の門を長年守ってきたインストールの壁を取り払った——GNU Radio モジュールエコシステム（gr-satellites、gr-adsb、gr-lora_sdr……）が一つの URL になる。しかもこの移植は自身の性能劣化を隠さず公開している。
 
 [`🔗 gnuradioworld.com`](https://gnuradioworld.com/) · [`🔗 777arc/gnuradio-world`](https://github.com/777arc/gnuradio-world)
 
@@ -261,7 +261,7 @@ gnuradioworld.com は、GNU Radio Companion 風のフローグラフエディタ
 
 Read the Docs は 2026 年 6 月の攻撃を明らかにした。ピークは毎分 550 万リクエスト超（通常の約 100 倍、過去最大の 10 倍）で、数百 ASN の数百万 IP から攻撃された。攻撃は HTTP/TLS フィンガープリントをランダム化して JA3/JA4 を突破し、キャッシュミスの URL（ユニークな 404、未キャッシュの 302）だけを狙い、「yo-yo パターン」でオートスケールのコストを最大化した。緩和策：エッジでの 404/リダイレクトのキャッシュ、ボットスコア＋IP あたりレート制限、Terraform で管理される「ペナルティボックス」ルール。最も価値があるのは自己開示だ：2 つの防御が正面から破られた（プロトコル不整合チェックと JA4 の両方）、Cloudflare の Under Attack Mode を断った（「すべての API 統合を壊す」）、静けさを「延長された猶予期間」と呼び——公開時点でも残存攻撃トラフィックが続いている。
 
-**Why it matters:** 公共ドキュメントインフラを運用するすべての人へのテンプレート級の事後分析——IP ブロックは「分散攻撃に対しては時代遅れ」であり、現代の DDoS の標的はクラウドの請求書だ。投稿は 9月8日、攻撃は 6 月——進行中の出来事として読まないこと。
+**なぜ重要か：** 公共ドキュメントインフラを運用するすべての人へのテンプレート級の事後分析——IP ブロックは「分散攻撃に対しては時代遅れ」であり、現代の DDoS の標的はクラウドの請求書だ。投稿は 9月8日、攻撃は 6 月——進行中の出来事として読まないこと。
 
 [`🔗 Read the Docs：the 2026 DDoS attack`](https://about.readthedocs.com/blog/2026/09/2026-ddos-attack/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49628614)
 
@@ -275,7 +275,7 @@ Read the Docs は 2026 年 6 月の攻撃を明らかにした。ピークは毎
 
 署名・公証済みのネイティブ macOS ターミナルマルチプレクサ RACE の開発者は、初めての Google Ads キャンペーンに 500 ドルを使ったところ、アカウントを「Malicious software」と「Compromised Site」で停止された——どちらのフラグも何が引き金かは一切不明のまま。彼は徹底的な無実の証明（Safe Browsing、Search Console、ハッシュ付き VirusTotal、公証、JS バンドルの精査）、4 回の自動却下される異議申立て、1 週間のブロックを記録している。HN スレッドの後、投稿の先頭に編集が追加された：「Hacker News の明らかな魔法のおかげで、Google Ads アカウントは復旧しました……それでも、何が停止の引き金だったのかの説明はありません。」
 
-**Why it matters:** 広告プラットフォームという隘路における不透明な自動セキュリティフラグの具体例——機能した唯一の救済はバズることであり、復旧は注意を集めたことと相関していて、証拠の変化とは無関係だった。作者自身の但し書きも妥当だ：Safe Browsing のクリーンな結果は「Google Ads が何を検出したかを確定しない」。
+**なぜ重要か：** 広告プラットフォームという隘路における不透明な自動セキュリティフラグの具体例——機能した唯一の救済はバズることであり、復旧は注意を集めたことと相関していて、証拠の変化とは無関係だった。作者自身の但し書きも妥当だ：Safe Browsing のクリーンな結果は「Google Ads が何を検出したかを確定しない」。
 
 [`🔗 xlii.space：Malicious software on Google Ads`](https://xlii.space/eng/malicious-software-on-google-ads/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49624856)
 
@@ -289,9 +289,219 @@ Read the Docs は 2026 年 6 月の攻撃を明らかにした。ピークは毎
 
 **更新：** 9月4日に radixark/miles を取り上げたとき、それは「大規模 RL ポストトレーニング向けに台頭しつつあるエンタープライズ系 slime フォーク」だった。それ以降、Miles v0.1（Apache-2.0）と 34 ページの技術報告（arXiv、9月8日）がリリースされた：SGLang ロールアウトエンジン、Megatron-LM または FSDP のトレーナーバックエンド、3 種の重み同期トランスポートに加え、LoRA RL、on-policy 蒸留、拡散モデル対応。報告のケーススタディは 64 枚の GB300 上で GLM-5.2 744B-A40B による完全非同期のエージェント RL をターミナルコーディングで走らせ、中央値ステップ時間 263 秒を記録。README は低精度学習（MXFP8/NVFP4）、TITO、MoE ルーティングリプレイ、フォールトトレランス、そして GLM-5.2/DeepSeek-V4/Kimi-K3 の day-0 対応を確認している。
 
-**Why it matters:** フロンティア規模の RL インフラはオープンスタックで最も希少なレイヤーだ。検証済みで、エンタープライズ向けに位置づけられ、公開ケーススタディの数値を持つ参入者の登場は、ポストトレーニングツールの流通化を示す。GLM-5.2 の数値はベンダー自身の報告——単一ソースであり、独立ベンチマークではない。
+**なぜ重要か：** フロンティア規模の RL インフラはオープンスタックで最も希少なレイヤーだ。検証済みで、エンタープライズ向けに位置づけられ、公開ケーススタディの数値を持つ参入者の登場は、ポストトレーニングツールの流通化を示す。GLM-5.2 の数値はベンダー自身の報告——単一ソースであり、独立ベンチマークではない。
 
 [`🔗 arXiv:2609.08368 技術報告`](https://arxiv.org/abs/2609.08368) · [`🔗 radixark/miles`](https://github.com/radixark/miles)
+
+---
+
+## 21. DeepSeek V4.1 Flash がオープンに公開——9月9日に社内ベータとして取り上げた後、重み・技術報告・MIT ライセンスが到着
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face + Hacker News · 480+ pts · 260 コメント · 約5時間前（~15:00 UTC+8）
+- **Tags:** `deepseek` `open-weights` `moe`
+
+**更新：** 9月9日には V4.1 Flash を「2 日間の猶予がある社内ベータ」として取り上げた。その後、一般公開が実現した。DeepSeek-V4.1-Flash が MIT ライセンスで Hugging Face に登場し、コードと重み、技術報告が公開されている。モデルページによれば：552B バックボーンの MoE（485B の保存パラメータに、196B の疎アクセスな条件付きメモリモジュール「Engram」）で、prefill 時のアクティブは約 8B / decode 時は約 16B。40 層の Causal Encoder-Decoder、FP4 KV キャッシュ＋CSA2 スパースアテンションにより、グローバル KV キャッシュが「トークンあたり 890 バイト」（V4-Flash の約 1/4）と主張。384 個のルーティングエキスパート（6 個がアクティブ）、ViT ビジョンエンコーダ、100 万コンテキストの 45T トークンマルチモーダル事前学習コーパス。最大推論努力での Instruct 数値：GPQA Diamond 90.9、Codeforces 3471、Terminal-Bench 2.1 90.6、HLE 36.8。リリース自体に正直な摩擦もある：Jinja チャットテンプレートがなく（代わりに Python リファレンスと Rust ツールキットが同梱）、モデルカードはエージェントスキャフォールド次第で DeepSWE が 65.6–74.2 に変動すると注記している。
+
+**なぜ重要か：** ベータで約束されたアーキテクチャが検証可能になった——そしてモデルカード自身のスキャフォールド感度の注記こそ、このモデルのベンチマーク引用すべてに添えられるべき但し書きだ。HN スレッドの現実的な下限：合計約 552B では、ローカルユーザーにとっての「flash」ニッチにはもはや収まらない（ある見積もりでは q4 でも 256 GB わずかに届かない）。
+
+[`🔗 deepseek-ai/DeepSeek-V4.1-Flash`](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49639090)
+
+---
+
+## 22. 「ShieldCrash」——Microsoft Defender saga の 3 つ目のバイパスが Patch Tuesday 翌日に降下、再び公開 PoC 付き
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BleepingComputer（9月9日）+ GitHub PoC · 228★ · 約13時間前（~07:00 UTC+8）
+- **Tags:** `windows` `defender` `lpe` `zero-day`
+
+匿名の研究者（「Nightmare Eclipse」/ MSNightmare）が 9月9日、9月の Patch Tuesday の直後に ShieldCrash を公開した。これは ShieldBreak（CVE-2026-69414）への Microsoft の修正のバイパスを主張するもので、ShieldBreak 自体が 6月の RoguePlanet Defender 脆弱性のバイパスだった。PoC は完全にパッチ適用済みの Windows 10/11/Server で「SYSTEM としての任意ファイル読み取り」を引き起こし、README は「サポートされているすべての Windows バージョンが影響を受ける」と主張する。但し書きは研究者自身のものだ：これはファイル*読み取り*専用の「スケルトン PoC」で——「後で完全な SYSTEM PoC に作り直すかもしれない」。ShieldCrash には CVE がなく、ベンダーの確認もなく、野外悪用の証拠もなく、Microsoft はまだ回答していない。これは進行中の開示論争の続きであり、Microsoft は以前に法的措置を警告しており、研究者の初期の発見のいくつか（LegacyHive、BlueHammer、RedSun、UnDefend）はいまだ未修正のままだ。
+
+**なぜ重要か：** RoguePlanet→ShieldBreak→ShieldCrash の連鎖は、同じコンポーネントに対する 3 ラウンドのパッチバイパス連続となった——パッチ済みのバグをどれだけ未解決のまま敵に使い続けさせられるか、そして報奨金プロセスともベンダーの対応にも先行する敵対的開示のケーススタディだ。
+
+[`🔗 BleepingComputer：ShieldCrash ゼロデイ`](https://www.bleepingcomputer.com/news/security/new-microsoft-defender-shieldcrash-zero-day-grants-system-access/) · [`🔗 MSNightmare/ShieldCrash PoC`](https://github.com/MSNightmare/ShieldCrash)
+
+---
+
+## 23. Apple が iPhone Duo を発表——初の折りたたみ、約 2,000 ドル、「折り目」論争は発売初日から組み込まれて
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Apple + Hacker News · 1,240+ pts · 2,176 コメント · 約14時間前（~06:00 UTC+8）
+- **Tags:** `apple` `hardware` `foldable`
+
+Apple の基調講演が初のブック型フォールダブル iPhone Duo を発表した：5.4 インチのアウターディスプレイ（生産終了した iPhone mini と同じサイズ）を持つスクエアな閉じたフォームファクタ、「折り目」の最小化を強調するメッセージング、そして 10月23日の約 2,000 ドルでの発売。発売当日の HN スレッド（2,176 コメント）にはすでに反証が集まっている：画面オフの暗い背景で折り目が見えるとの複数の写真・動画レポート、ヒンジの長期耐久性への懐疑、そして iPhone 18 Pro と比べてレンズ構成が 1 つ減っているという指摘。基調講演では Tim Cook から John Ternus へのリーダーシップの交代も併せて発表され、AirPods 5、Apple Watch Series 12、iPhone 18 Pro の発表もあった。
+
+**なぜ重要か：** この日最大の HN スレッドはハードウェアの発表であり、その係争中の主張——折り目——はまさに所有者によって決着がつく類の「マーケティング対現実」のギャップだ。2,000 ドルの価格はアーリーアダプターのリスクを現実のものにする。開発者にとっては、5.4 インチ外側/スクエア内側の分割が新しいレイアウトターゲットになる。
+
+[`🔗 Apple：iPhone Duo`](https://www.apple.com/iphone-duo/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49630931)
+
+---
+
+## 24. Raschka が GPT-6 Astra と「ループトランスフォーマー」を論じる——隠れ CoT の陰謀ではなく、重みの再利用だ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Sebastian Raschka + Hacker News · 452+ pts · 146 コメント · 約16時間前（~04:00 UTC+8）
+- **Tags:** `transformers` `interpretability` `reasoning`
+
+GPT-6 Astra のうわさのループトランスフォーマーアーキテクチャを「推論を隠す秘密技術」として報じた報道に反応して、Raschka の記事は、ルーピング（積み重ねた層で重みを再利用すること）が主として GPU メモリを節約するパラメータ共有のトリックであり——「それでもトークンを一つずつ生成しているだけ」——本質的に CoT モニタリングの危険ではないと論じる。HN スレッドは両側を研ぎ澄ます：ループ深度がトークンごとに動的に選ばれるなら計算ははるかにリッチになるとの指摘や、Astra のシステムカード自身の表——見えている CoT が無関係なことを議論している間にトリビアの答えが解かれている——が示す異例に高い「CoT 制御可能性」への言及。異なる問題にどれだけの CoT が必要かについての Will Merrill の研究が、正しい理論的枠組みとして引用されている。
+
+**なぜ重要か：** 9月4日に GPT-6 Astra の発表を取り上げた続きとして、これはその「隠れた推論」ナラティブへの最初の本格的なアーキテクチャレベルの批判だ——有用な結論は、潜在空間での反復はそれ自体が実際の解釈可能性の問いであり、リークベースのフレーミングを必要としない、というものだ。
+
+[`🔗 Raschka：GPT-6 Astra, looped transformers, and hidden reasoning`](https://magazine.sebastianraschka.com/p/gpt-6-astra-looped-transformers-and) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49627370)
+
+---
+
+## 25. bilawalsidhu/gods-eye-view——実データのみのブラウザ「偵察衛星シミュレータ」が +1,588/日で再トレンド入り
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 22,200★（本日 +1,588）· MIT
+- **Tags:** `osint` `cesium` `data-visualization`
+
+CesiumJS ＋ Google Photorealistic 3D Tiles のグローブに、ライブの公開フィードを「偵察衛星」インターフェースとして重ねる。11,000 機以上の航空機（OpenSky/adsb.lol）、船舶（AISStream）、838 個の衛星カタログ（CelesTrak）、地震（USGS）、約 800 台の公開 CCTV カメラ、NASA の火災検出、ラジオ局——13 レイヤーのうち 11 がキーなしで動作し、NVG/FLIR センサースタイル、ミリタリー HUD、OpenAI Realtime による音声操作（28 ツール、セッション上限 5 ドル）を備える。README の誠実さは異例なほど徹底している：「データは遅延、不完全、モデル化、推論、誤りの可能性がある」。交通は実道路の上でシミュレーション、CCTV の姿勢はユーザー較正の事前確率、発射のリプレイは「RECONSTRUCTED ESTIMATE」と明記、そして人物追跡や顔認識の構築を明示的に拒否している。8月に初めて 1 位でトレンド入りし、今回の波はバイラルな YouTube シリーズに乗っている。
+
+**なぜ重要か：** OSINT ツールを支えるのと同じ公開フィードが、ひとつのシネマティックなインターフェースに組み立てられた——しかも限界がユーザーに発見されるのではなく、製品内で明示されている。トリガーは YouTube の波であって新しいコードではない（コミット合計 24）——スター数を勢いとして読む者にはこの点が重要だ。
+
+[`🔗 bilawalsidhu/gods-eye-view`](https://github.com/bilawalsidhu/gods-eye-view) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 26. CISA：WatchGuard Firebox の iked RCE（CVE-2025-14733、9.3）がランサムウェア攻撃に悪用されている——9,000 台が依然未パッチ
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA + BleepingComputer（9月10日）· WatchGuard PSIRT アドバイザリは 8月10日更新
+- **Tags:** `cve` `firewall` `ransomware` `kev`
+
+CISA は今週、CVE-2025-14733——Firebox の `iked` IKEv2-VPN ハンドラにおける認証不要の範囲外書き込み、CVSS 9.3（ベンダー採点）、2025年12月から KEV 掲載——がランサムウェアグループによって悪用されていると知られるようになったと述べた。グループ名や詳細の共有はない。WatchGuard は 2025年12月に修正し、当時すでに野外悪用を確認していた。Shadowserver は当時、11.5 万台以上の未パッチの公開 Firebox を計測し、9 か月後の今も約 9,000 台が脆弱なままだ。2 つの但し書きが重要だ：悪用には IKEv2-VPN の構成が必要なこと、そしてその構成を削除したデバイスでも、静的ピアへの支店間 VPN が残っていれば依然として露出しうること。
+
+**なぜ重要か：** 9 か月前のパッチと、縮小しつつも消えない未パッチ集団の組み合わせは、まさにランサムウェアグループが手を上げる（セーブして標的にする）形だ——そして「構成は削除した」という緩和策が不完全であるという詳細こそ、実運用の棚卸しで最も誤りやすい点だ。WatchGuard の中小企業フットプリント（1.7 万リセラー経由で 25 万社以上）が、このロングテールを長くしている。
+
+[`🔗 BleepingComputer：CISA、WatchGuard のランサムウェア悪用を言及`](https://www.bleepingcomputer.com/news/security/cisa-watchguard-rce-flaw-now-exploited-in-ransomware-attacks/) · [`🔗 WatchGuard PSIRT：CVE-2025-14733`](https://psirt.watchguard.com/)
+
+---
+
+## 27. JustVugg/colibri——「flash」の見せかけなしに、フロンティア MoE エキスパートをディスクからストリーミングする純 C 推論
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 27,285★（本日 +157）· Apache-2.0
+- **Tags:** `inference` `moe` `ssd`
+
+Colibrì は VRAM/RAM/NVMe を一つの階層として扱うことで、744B–2.8T の MoE モデル（GLM-5.2、Kimi K3、Inkling、DeepSeek V4 Flash…）をコンシューマハードウェアで動かす。 dense 部分は常駐させ（GLM-5.2 で int4 約 9.9 GB）、19,456 個のルーティングエキスパート（約 370 GB）を必要に応じてディスクからストリーミングする——「JIT、ただし重みの」。ルーティングの 71.6% は 1 層先まで予測可能だ。公開されている数値は下限について正直だ：6× RTX 5090 で 5.8–6.8 tok/s、128 GB の CPU のみのマシンでウォーム時約 1.8 tok/s、25 GB でコールド時 0.05–0.1 tok/s。README は未検証の項目（配置、SSD ストライピング、自動プランニング）を列挙し、独自テストでは投機的デコーディングが測定上の純損失だったと報告している（MTP：エキスパート命中率 85% 付近で −32%、DeepSeek の drafter はデフォルトでオフ）。
+
+**なぜ重要か：** 9月9日に取り上げた MacBook で Kimi-K3 を動かす話（4 基の SSD を使った一度きりの離れ業）とは別に、colibri は同じトリックのための保守されたオープンエンジンだ——そして tok/s と並んで失敗モード（量子化コンテナのルール、ドライブ依存の `O_DIRECT`）を公開するという決断こそが、これらの数値を使えるものにしている。
+
+[`🔗 JustVugg/colibri`](https://github.com/JustVugg/colibri) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 28. little-lm：3.8B の LLM をスクラッチから 998 ドルで CORE 0.384 まで学習——計測の但し書き付き
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 91+ pts · 14 コメント · 約4時間前（~16:00 UTC+8）
+- **Tags:** `pretraining` `nanochat` `reproducibility`
+
+Hugo Vergnes（Apple で動画理解、夜の個人プロジェクト）が 3.8B の Llama 型モデルをランダム重みから学習した：ClimbMix 65.3B トークン、レンタル B200 8 基で 43 時間、998 ドル、CORE 0.384——対して nanochat d32 は約 1,000 ドルで 0.310、GPT-2 1.5B は 0.2565。この解説の価値は「負の空間」にある：FineWeb-Edu は初期の失敗した実行の後に棄却された。そして見出しスコアを生んだ 1024→2048 コンテキストの再実行は、主に*計測*の修正だった（SQuAD と BoolQ のプロンプトが 1024 トークンに収まらなかった——この 2 タスクが伸びの約 83% を占め、他の 19 タスクは +0.008 しか動かなかった）。CORE は損失の約 7 倍動いたが、彼自身が CORE を意思決定に使う者への注意としてフラグを立てている。FP8 GEMM、Muon+AdamW、台形 LR、ResFormer 風の value embeddings（721M パラメータで +3.2% CORE）については、何が効いて何が効かなかったかが文書化されている。
+
+**なぜ重要か：** 「趣味の予算でのフロンティア隣接事前学習」が再現可能なジャンルになりつつある——そしてこのエントリが読む価値があるのは、ベンチマークのジャンプのどれだけが学習ではなくハーネスのアーティファクトでありうるかを示しているからだ。
+
+[`🔗 little-lm 3.8B 解説`](https://hugovergnes.github.io/little-lm-3-8b/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49637435)
+
+---
+
+## 29. AlexsJones/llmfit——「このマシンで実際に動くモデルはどれ？」に一コマンドで答える
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 35,510★（本日 +247）· MIT · Rust
+- **Tags:** `local-llm` `hardware` `developer-tools`
+
+llmfit は CPU/RAM/GPU/VRAM を検出し（CUDA、Apple Silicon、ROCm、oneAPI。マルチ GPU と MoE 対応）、カタログのモデルを 4 軸——メモリ適合、推定速度、品質、コンテキスト——で採点する。量子化の認識（GGUF、AWQ、GPTQ、EXL2）、TUI、Web ダッシュボード、REST エンドポイントを備える。その誠実さは `llmfit info` にある：速度とメモリの数値はメモリ帯域モデルとコミュニティの `bench --share` 投稿に基づくモデルベースの推定であり、精度はあなたのハードウェアに一致するコミュニティデータ次第——実測値がローカルで推定を置き換える。
+
+**なぜ重要か：** 「動くかどうか」という問いは、量子化フォーラムで毎日試行錯誤によって答えられている——それを一元化し、推定と実測の区別を見えるまま保つツールは、ローカルモデルの波にとって地味だが広く有用なインフラだ。
+
+[`🔗 AlexsJones/llmfit`](https://github.com/AlexsJones/llmfit) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 30. diegosouzapw/OmniRoute——プロバイダの無料枠を積み上げて月約 14.7 億無料トークンを主張するセルフホスト AI ゲートウェイ
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 63,817★（本日 +591）· MIT
+- **Tags:** `ai-gateway` `routing` `self-hosted`
+
+ローカルの OpenAI 互換エンドポイントが、352 の登録プロバイダ（152 が無料フラグ付き）へルーティングする。クォータを考慮したフォールバック、サーキットブレーカー、キーのクールダウン、19 種の「コンボ」ルーティング戦略、MCP サーバー（110 ツール）、42 言語のローカライズ。README には自身のアスタリスク（但し書き）が載っている：月 14.7 億無料トークンの数字はベストケースの集計で、プロバイダが条件を変えれば「双方向に動く」、月約 30 億の「Radar 上限は保証ではない」、プロバイダ数はセクションごとに意図的に異なり（352/356/444）、節約率は自己申告、アフィリエイトリンクは開示済み。
+
+**なぜ重要か：** 無料枠集約ゲートウェイというカテゴリはプロバイダの善意の上に成り立つ——OmniRoute の有用性（フォールバック、クォータ認識、単一エンドポイント）は本物だが、見出しの数字はまさに失効する種類のものだ。引用する前に但し書きを読むこと。
+
+[`🔗 diegosouzapw/OmniRoute`](https://github.com/diegosouzapw/OmniRoute) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 31. Stockfish 19 リリース——最大 +44 Elo、新しい SFNNv16 ネット、ユニバーサルバイナリ
+
+- **Velocity:** ▮ steady
+- **Source:** stockfishchess.org（9月5日）· HN 83+ pts · GPL
+- **Tags:** `chess` `nnue` `open-source`
+
+Stockfish 19（9月5日）は Stockfish 18 との対戦で最大 44 Elo を獲得し、エンジン選手権の首位を維持した。エンジニアリングの変更こそが物語だ：強力な Leela ネットでリスコアした数千億局面で量子化認識学習（QAT）により訓練された新しい SFNNv16 NNUE ネットワーク（冗長な脅威特徴の削除、ポーンペア特徴の追加、セカンダリネットの廃止）、CPU 能力を自動検出するユニバーサルバイナリ、ネイティブの RISC-V（RVV）と LoongArch 対応、WebAssembly ターゲット、そして不正入力での厳格な終了。
+
+**なぜ重要か：** チェスエンジンは現存する最も長く続くオープンベンチマークコミュニティだ。QAT 訓練の NNUE とユニバーサルバイナリは地味な種類のエンジニアリングだが、15 年物のプロジェクトを圧倒的であり続けさせ、かつ専門家でなくてもインストール可能に保っている。
+
+[`🔗 Stockfish 19 発表`](https://stockfishchess.org/blog/2026/stockfish-19/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49599992)
+
+---
+
+## 32. Automattic の取締役会が Matt Mullenweg を休職に——WordPress.org はオープンソースプロジェクトは影響を受けないと声明
+
+- **Velocity:** ▮ steady
+- **Source:** TechCrunch（9月9日）+ Hacker News · 325+ pts · 215 コメント · 約7時間前（~13:00 UTC+8）
+- **Tags:** `wordpress` `open-source` `governance`
+
+Automattic の取締役会は 9月9日、創業者/CEO の Matt Mullenweg を有給休職とすることを決議した——彼の Slack メッセージによれば、本人の意向に反し、決議は投票の 50 分前に手渡されたという。CFO の Mark Davies が暫定 CEO。公式の理由は示されていない。背景には WP Engine 訴訟（Automattic の 8% ロイヤルティ要求、名誉毀損・権利濫用の主張）、159 人の退職につながった 2024 年の最後通牒、16% のレイオフがある。WordPress.org のエグゼクティブディレクターは素早く動き、プロジェクトを会社から切り離した：「Matt は WordPress プロジェクトのリーダーであり続ける」。優先事項は変わらず継続するという。
+
+**なぜ重要か：** WP Engine をめぐる紛争は WordPress のガバナンスを「単一創業者リスク」の物語に変えていた。取締役会の動きはその集中に対する最初の構造的なチェックだ。エコシステムにとって生命線の主張はプロジェクト/会社の分離だ——Mullenweg が .org プロジェクトの支配権を保持している以上、それこそまさに注視すべき約束である。
+
+[`🔗 TechCrunch：Mullenweg、休職に`](https://techcrunch.com/2026/09/09/automattics-board-forces-ceo-matt-mullenweg-into-leave-of-absence/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49636283)
+
+---
+
+## 33. liquidslr/system-design-notes——Alex Xu の無料ノート全 28 章、本日 +1,397、そしてライセンスが一切ない
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 18,422★（本日 +1,397）· ライセンスファイルなし
+- **Tags:** `system-design` `interview-prep` `notes`
+
+Alex Xu の *System Design Interview* Vol 1 & 2 の章別ノート（28 フォルダ、レートリミッタから証券取引所まで）。トピックごとに厳選された外部リンク（Dynamo 論文、Discord/Slack のエンジニアリングブログ、Stanford の一貫性ハッシング講義）付き。但し書きは構造的なものだ：README は「work in progress」と明記、コミットは 35 件のみ、ノートは商用サイト（pagefy.io）にもミラーされており、リポジトリには**ライセンスファイルがない**——デフォルトの著作権が適用されるため、商用書籍の派生物であるこのコンテンツの再利用/再配布の権利は不明瞭だ。
+
+**なぜ重要か：** 今日最も速く伸びたリポジトリはソフトウェアではなく学習ノートだ——そして欠けたライセンスと商用ミラーの組み合わせは、「トレンド入り ≠ 自分が再利用してよい」という罠の生きた実例だ。しかも同じ週、著作権素材から作られたエージェントスキルもトレンド入りし続けている。
+
+[`🔗 liquidslr/system-design-notes`](https://github.com/liquidslr/system-design-notes) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 34. Samsung が zHBM プロトタイプを発表——メモリを AI アクセラレータのダイに直接積層し、HBM5 の 8 倍スループットを主張
+
+- **Velocity:** ▮ steady
+- **Source:** THE ELEC + Hacker News · 30+ pts · 約5時間前（~15:00 UTC+8）
+- **Tags:** `hbm` `memory` `hardware`
+
+Samsung は、メモリを AI アクセラレータのダイの「隣」ではなく「上に」直接積層する zHBM プロトタイプを公開した。主張は（すべてベンダー数値、プロトタイプ段階）：第 8 世代 HBM（HBM5）比で最大 8 倍のデータ処理性能、ワットあたり性能 3 倍、熱抵抗は半分以下に低減。HN スレッドの未解決の問いはまさに正しいもので——メモリコントローラがどこに載るのか（中間の積層レイヤーか、メインダイか）——そして量産時期、容量、価格の詳細は一切ない。
+
+**なぜ重要か：** メモリ帯域と容量は、フロンティア学習とローカル推論の両方に対する拘束条件だ（#27 の colibri を参照）。ダイ上への積層は、その制約に対する最も直接的な攻撃になりうる。すべての数値は Samsung 自己申告かつプロトタイプ段階——仕様としてではなく方向性として扱うこと。
+
+[`🔗 THE ELEC：Samsung zHBM プロトタイプ`](https://www.thelec.net/news/articleView.html?idxno=12835) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49593896)
+
+---
+
+## 35. Show HN：乗算回数が証明可能に少ない多項式評価——完全な Lean 証明付き
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 100+ pts · 34 コメント · 約23時間前（9月9日 ~21:00 UTC+8）
+- **Tags:** `algorithms` `formal-verification` `lean`
+
+Thomas Ahle が、既知の一変数多項式をより少ない乗算で評価する構成を公開した（加算と自乗は安い。乗算——特に有限体上——はそうではない）。Horner/Estrin/Knuth-Eve/Pan/Rabin–Winograd 系の手法を改良し、さらに「単一のランダムキーで N 回の乗算により 2N 個の値をハッシュする、ユニバーサルハッシング用の単射多項式構成」で Daniel J. Bernstein の手法を上回る。約 100 ページの証明は Lean で完全に機械検証されており、回路を可視化するインタラクティブサイトも公開されている。スレッドが明示する限界：有理数係数は桁あふれする（有限体がスイートスポット）、浮動小数点では「代わりに Estrin を使え」（FMA、パイプライン、安定性）、一変数限定、そして WyHash/xxh3 は多項式ではない——ただし論文は、これらのヒューリスティックハッシュが敵対的入力ではるかに多く衝突することを示している。
+
+**なぜ重要か：** 一度前処理して何度も評価する多項式スキームは、ハッシュマップ、MAC、libm の下に横たわっている——そしてここでの稀な組み合わせは、新しい乗算回数の上限*と* Lean 証明の同時達成であり、主張がベンチマークではなく検証可能になっている。
+
+[`🔗 thomasahle.com/fast-polynomials`](https://thomasahle.com/fast-polynomials/) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=49623398)
 
 ---
 
@@ -299,12 +509,12 @@ Read the Docs は 2026 年 6 月の攻撃を明らかにした。ピークは毎
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-10T04:30:00+08:00 |
-| Items | 20 |
-| Sources tracked | 28 (Hacker News, GitHub Trending, Hugging Face papers, arXiv, CISA KEV, NVD, Cisco PSIRT, Full Disclosure, SOCRadar, Red Hat, SecurityOnline, Tailwind CSS blog, Desert Ant Labs, xlii.space, Read the Docs, opusfived.dev, NousResearch, Atomburst, wsxiaoys gist, gnuradioworld.com, 777arc/gnuradio-world, Imbad0202, petergyang, radixark, TechCrunch/CNBC, Fortinet FG-IR-25-084 via NVD, seclists.org, GitHub Trending weekly) |
-| Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
-| Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
-| License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| 生成日時 | 2026-09-10T20:05:00+08:00 |
+| 項目数 | 35 |
+| 追跡ソース | 38 (Hacker News, GitHub Trending, Hugging Face papers, arXiv, CISA KEV, NVD, Cisco PSIRT, Full Disclosure, SOCRadar, Red Hat, SecurityOnline, Tailwind CSS blog, Desert Ant Labs, xlii.space, Read the Docs, opusfived.dev, NousResearch, Atomburst, wsxiaoys gist, gnuradioworld.com, 777arc/gnuradio-world, Imbad0202, petergyang, radixark, TechCrunch/CNBC, Fortinet FG-IR-25-084 via NVD, seclists.org, GitHub Trending weekly, BleepingComputer, WatchGuard PSIRT, MSNightmare, apple.com, Raschka/mysterious substack, stockfishchess.org, hugovergnes.github.io, thelec.net, thomasahle.com) |
+| 更新スケジュール | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
+| ランキング方式 | Velocity-weighted (recency × engagement acceleration × source authority) |
+| ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
 ---
 
