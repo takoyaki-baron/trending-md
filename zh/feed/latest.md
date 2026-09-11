@@ -1,8 +1,8 @@
 ---
 date: 2026-09-11
-updated: 2026-09-11T04:19:00+08:00
+updated: 2026-09-11T12:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -275,7 +275,7 @@ Alaya Lab 的 PWM（arXiv 9 月 9 日，11 位作者）将世界状态演化与�
 
 BPF Capsule（Apache-2.0 with LLVM exception，约 70 提交）将普通的 C/C++/no_std Rust 编译为可通过验证器的 eBPF：把代码切分为有界"region"、用"fiber"复用软件栈、并经 4 GiB `bpf_arena` 窗口洗白指针——不打内核补丁，面向 Linux 5.15 起的原版 x86-64/arm64 内核。演示运行了 PureDOOM（单次 BPF 调用完成完整 tick + 渲染）、CPython 3.14、Lua、QuickJS、SQLite 与 llama2.c。作者自己列出的限制："研究软件，不构成安全边界"，内部没有 OS（无文件、套接字、进程、线程），所有容量在加载时固定，DOOM 比原生慢约 3.5–4 倍，浮点密集代码慢约 60 倍。
 
-**为什么重要：** 与其说是产品，不如说是对 eBPF 验证器现状的一次测量——有界循环、arena 指针与尾调用已经足以在内核里跑一个用户态运行时——这对正经用途（不直接对内核 API 写 C 的内核内数据处理）的意义大于对 DOOM 的意义。
+**为什么重要：** 与其说是产品，不如说是对 eBPF 验证器现状的一次测量——有界循环、arena 指针与 `freplace`/蹦床扩展已经足以在内核里跑一个用户态运行时——这对正经用途（不直接对内核 API 写 C 的内核内数据处理）的意义大于对 DOOM 的意义。（2026-09-11 05:04 更正：原机制列表误写为尾调用；原文使用 `freplace` 扩展 + BPF 蹦床，从未提及尾调用。）
 
 [`🔗 BPF Capsule 文章`](https://ayles.github.io/doom-in-kernel/) · [`🔗 ayles/bpf-capsule`](https://github.com/ayles/bpf-capsule)
 
@@ -295,13 +295,265 @@ BPF Capsule（Apache-2.0 with LLVM exception，约 70 提交）将普通的 C/C+
 
 ---
 
+## 21. OpenAI 将 Codex harness 产品化为 Agents API——托管会话、自托管沙箱，且明确不支持 ZDR
+
+- **热度：** ▮▮▮ trending
+- **来源：** OpenAI 开发者文档 + HN · 175+ 分 · 105 评论 · 约 8 小时前（~04:00 UTC+8）
+- **标签：** `openai` `agents` `codex` `api`
+
+OpenAI 已将 Codex harness 本身产品化：一个 beta 版 Agents API（`client.beta.agents.sessions.create`、`OpenAI-Beta: agents=v1`），构建在四个原语之上——Agent、Environment（OpenAI 托管沙箱或 `self_hosted`）、Session 与 Events——提供沙箱化代码执行、技能、MCP 连接、运行中途引导、上下文压缩、会话恢复，以及带可配置并发上限的子智能体委托，按标准模型/工具/容器费率计费。文档本身就是经核实的一手来源；我们没有找到正式的发布公告。声明的限制正是这个故事最锋利的部分：仅支持美国数据驻留，且**不支持零数据保留（ZDR）**——"选择自托管沙箱并不会使 Agents API 符合 ZDR 资格。"
+
+**为什么重要：** 每家前沿实验室现在卖的都是 harness 而不只是模型（9 月 4 日 DeepSeek Harness、Devin、现在是 OpenAI）——而明确的 ZDR 例外意味着有数据保留要求的企业在结构上被排除在自托管选项之外，这正是销售页面不会主动告诉你的约束。
+
+[`🔗 OpenAI：Agents API 概览`](https://developers.openai.com/api/docs/guides/agents-api/overview) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49649213)
+
+---
+
+## 22. GreyNoise：一支 AI 智能体集群把 PaperCut 漏洞变成波及 395 个组织的战役——首个受害者 RCE 在 4 小时内出现
+
+- **热度：** ▮▮▮ trending
+- **来源：** GreyNoise 博客（9 月 9 日）+ BleepingComputer（9 月 10 日）
+- **标签：** `papercut` `ai-agents` `offense` `intrusion`
+
+继我们 9 月 8 日报道 PaperCut NG/MF 零日利用链（CVE-2026-81578 + CVE-2026-82078）之后，GreyNoise 已公布其背后的战役：一名很可能是俄语使用者的行为者（45.142.193.132）使用 OpenAI Codex 作为智能体 harness，外加一个 DeepSeek 模型——数百个 AI 智能体负责开发、实验测试并发射漏洞利用，目标列表由 Netlas 构建。观测结果：48 个国家 395 个组织中的 ≥440 个实例；从 280 名受害者收割凭据、147 个获取 OS/域密钥、12 个拿下域管理员；受害者约半数来自教育行业，美国受灾最重。速度：空工作区 → 不到 4 小时即达成首个真实受害者 RCE；峰值时 26 秒攻陷 11 个组织；在一所美国高中，从初始访问到域管理员仅 7 分钟。后渗透环节则是常规操作——Mimikatz、Ligolo-ng、Certipy、BloodHound、NetExec，针对遗留 AD 的 noPac。GreyNoise 的限定：受害者数字是下限（仅基于其自有传感器网格），行为者的 28 国回避清单**并未**被智能体一致遵守，战役目标尚不确定。
+
+**为什么重要：** 这是首个经传感器核实的、由 AI 智能体同时完成漏洞开发与实战运营的战役——值得引用的是那些速度数字，它们把 PaperCut 补丁窗口（以及未来每一个）重新定义为以小时而非天计的竞赛。
+
+[`🔗 GreyNoise：Agents Gone Wild`](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) · [`🔗 BleepingComputer 报道`](https://www.bleepingcomputer.com/news/security/ai-powered-attack-exploited-papercut-flaws-to-hack-395-organizations/)
+
+---
+
+## 23. Anthropic 九月威胁情报报告：自主重建恶意软件、一座"漏洞利用铸造厂"，以及一个会反击的沙箱
+
+- **热度：** ▮▮▮ trending
+- **来源：** Anthropic（9 月 10 日）+ HN · 100+ 分 · 167 评论 · 约 10 小时前（~02:00 UTC+8）
+- **标签：** `ai-safety` `threat-intel` `anthropic` `agentic-abuse`
+
+Anthropic 的第四份半年报（覆盖 2025 年 12 月–2026 年 8 月）记录了四个突出案例：GTG-20006（归因与 Midnight Blizzard 一致）运行 AI 驱动的攻击循环，**自主重建了被标记的恶意软件**——确认窃取 30 万+ 身份记录与 50 万+ 公司注册记录；疑似 ShinyHunters 关联者用 Claude 从 180 万个 Android APK 中收集密钥（外泄 1TB+，含支付卡）；一个长沙团伙（GTG-10007，两名本科生）运行自主"漏洞利用铸造厂"，针对约 50 个组织在单月内产出"十几个可能的零日发现"；GTG-50020 向一家 AI 厂商的评测沙箱注入 prompt 以窃取 API 密钥，随后在四天内攻击约 30 家 AI 公司。报告自身的限定：可见性止步于生产环境，马来西亚相关参与的数字"由行为者自己的工具自报"，归因被框定为"一致而非确凿"，且 Anthropic 自身系统从未被攻破——密钥来自客户环境。
+
+**为什么重要：** "复杂度已不再是判断操作者身份的可靠信号"是值得带走的那句话——而与 GreyNoise 的 PaperCut 战役（第 22 条）同日落地，两套独立传感器网格描绘同一套智能体化攻击经济学，才是本周真正的信号。
+
+[`🔗 Anthropic 威胁情报报告（2026 年 9 月）`](https://www.anthropic.com/threat-intelligence-report-september-2026) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49647300)
+
+---
+
+## 24. NCP-ArchPreview：下概念预测以约 51% 的 token 将 8.9B 潜空间语言模型训练至 OLMo-3-7B 的 loss 水平
+
+- **热度：** ▮▮ rising
+- **来源：** Hugging Face papers #1（9 月 11 日）· arXiv 2609.10715（9 月 9 日）· 71+ 赞
+- **标签：** `latent-space` `pretraining` `efficiency` `open-weights`
+
+Intern-NCP 团队在 5.73T Dolma-3 token 上联合训练一个 8.9B 模型，目标是下一个 token 预测加上一个新的"下概念预测（Next Concept Prediction）"目标——预测从模型自身隐藏状态量化得到的离散概念（乘积量化）。宣称：以 51.3% 的 token 匹敌 OLMo-3-7B 的最终预训练 loss，下游 macro 平均高出 2.45 分（GSM8K +5.99），并在 85% 的计算量下达到严格参数对齐的 8.9B 基线的 loss；一个 17M 参数的 VQ 模块支持低成本的领域自适应，并将 DFlash2 draft 模型的平均接受长度提升 4.17%。Checkpoint（Stage1/Stage2）已发布在 Hugging Face。主张的边界写在摘要里：基线只有 OLMo-3-7B 和参数对齐的 8.9B——没有前沿模型对比。
+
+**为什么重要：** 这是迄今最大规模的公开演示：在 token 之外预测*概念*会改变预训练 scaling 曲线——如果 token 效率数字可复现，它将与下游所有效率技术复利叠加。评判它时应对标文中点名的两个基线，而不是前沿模型。
+
+[`🔗 arXiv:2609.10715`](https://arxiv.org/abs/2609.10715) · [`🔗 权重：ArchSpace-Collection`](https://huggingface.co/ArchSpace-Collection)
+
+---
+
+## 25. NVIDIA 开源其 IMO 金牌数学配方——Nemotron 3 Ultra 斩获 30/42，checkpoint、数据与提交的解答全部公开
+
+- **热度：** ▮▮ rising
+- **来源：** arXiv 2609.10712（9 月 9 日）+ Hugging Face
+- **标签：** `nemotron` `math` `reinforcement-learning` `open-weights`
+
+NVIDIA 的"An Open Recipe for IMO Gold"对 Nemotron 3 Ultra 进行后训练（SFT + RL）得到两个专家 checkpoint，然后运行迭代的生成/验证/精炼搜索管线，外加最终的高算力选择阶段——**在 IMO 2026 上以 30/42 得分超过金牌线，全程纯自然语言**，不依赖形式化证明器、外部工具或互联网。一切以 CC BY 4.0 开放：checkpoint、训练数据、代码、实际提交的 IMO 解答——外加 Nemotron-IMO-Bench（200 道新题；一个自建基准，其排行榜应与竞赛得分分开看待）。限定：这是单场比赛而非基准套件，最终选择阶段的计算成本在摘要中未说明。
+
+**为什么重要：** 继 Anthropic 用 Lean 形式化的 Fermat 工作（9 月 5 日）之后，这是另一个极点——完全不用形式化验证器的金牌级竞赛数学，且公布的材料（包括真实解答）足以支撑审计。需要打折看待的是那个自建基准。
+
+[`🔗 arXiv:2609.10712`](https://arxiv.org/abs/2609.10712) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 26. Check Point 披露两个 CVSS 9.8 的 VPN RCE——厂商自评、（迄今）未见利用，而 R81.10 没有修复
+
+- **热度：** ▮▮ rising
+- **来源：** Check Point 支持页（9 月 9 日）+ The Hacker News（9 月 10 日）
+- **标签：** `cve` `checkpoint` `vpn` `rce`
+
+CVE-2026-85102（VPN 协商期间的证书信任验证失败 → Security Gateway/Spark 上的远程代码执行（RCE），影响 Site-to-Site + Remote Access VPN）与 CVE-2026-85103（ASN.1 堆溢出 → Quantum Security Management 与网关上的 RCE），两者均为 **CVSS 9.8，由 Check Point 自己作为 CNA 评分**——NVD 仍处于"Awaiting Analysis"，因此厂商评分是唯一评分。受影响版本：R82.10 ≤ Jumbo Take 43、R82 ≤ Take 125、R81.20 ≤ Take 165；修复通过 Live Patch（9 月 9 日开始推送）或最新 Jumbo Hotfix 提供。Check Point 表示两个漏洞均为内部发现，无被利用迹象。限定条件层层叠加：RCE 仅在厂商尚未描述的"特定条件下"可触发；一名员工表示，只要存在 VPN 证书，-85103 即使 VPN blade 未启用也能触发；R81.10 既无修复也无 Live Patch；且有客户报告自动 Live Patch 推送尚未到达，公告下载链接也已失效。
+
+**为什么重要：** 这是 Check Point 自 6 月以来的第三个关键 VPN/管理漏洞周期（前两个进了 KEV）——立即打补丁，并把"无被利用证据"当作一个时间戳而非保证；利用条件缺失使基于扫描器的分诊不可靠。
+
+[`🔗 Check Point SK1000117`](https://support.checkpoint.com/results/sk/sk1000117/) · [`🔗 The Hacker News 报道`](https://thehackernews.com/2026/09/check-point-discloses-two-98-rated-vpn.html)
+
+---
+
+## 27. Forgejo ≤16.0.3：恶意模板仓库可沦为宿主机 RCE——已在 16.0.4 修复
+
+- **热度：** ▮▮ rising
+- **来源：** Forgejo 发布说明（9 月 10 日）+ HN · 156+ 分 · 59 评论 · 约 12 小时前（~00:00 UTC+8）
+- **标签：** `forgejo` `rce` `git` `supply-chain`
+
+Forgejo 将 16.0.4 标记为 **Critical**：从模板生成仓库时，变量模板展开可被滥用以创建一个 git 在 init 期间采纳的 `.git` 文件夹——恶意模板仓库可以**从 Forgejo 宿主机读取任意数据并执行任意进程**。修复方式是在展开之后、init 之前移除任何 `.git` 文件夹。同一版本还修复了受限 API token 权限绕过（token 可经"维护者编辑"路径在其权限之外进行编辑）与 draft release 附件泄露（与 Gitea CVE-2026-27660 同类）。值得注意的是，该 RCE 在发布说明中**没有 CVE 编号**。引用注记：Codeberg 的网页位于反爬虫墙之后——请引用原始 API 发布说明，而非 HTML blob URL。
+
+**为什么重要：** 模板仓库是每个自托管 forge 上受信任的半特权输入——与 GitSpawn 的 `.git` 发现（9 月 4 日）同属"你的 CI 工件就是攻击面"一类，而 CVE 缺失意味着基于扫描器的 Forgejo 实例清点会直接漏掉它。
+
+[`🔗 Forgejo 16.0.4 发布说明（raw）`](https://codeberg.org/api/v1/repos/forgejo/forgejo/raw/release-notes-published/16.0.4.md?ref=forgejo) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49645907)
+
+---
+
+## 28. YuE2：开源 3.6B 歌曲生成模型宣称与 Suno v5 相当——靠的是先写乐谱
+
+- **热度：** ▮▮ rising
+- **来源：** YuE2 项目页 + HN · 62+ 分 · 50 评论 · 约 3 小时前（~09:00 UTC+8）
+- **标签：** `music-generation` `open-weights` `mixture-of-transformers`
+
+YuE2（约 3.59B 参数，AR–NAR Mixture-of-Transformers）分两阶段生成歌曲：先写出**可编辑的 ABC 记谱法乐谱**（歌词、旋律、和弦），再据此渲染人声与伴奏。权重发布在 Hugging Face（m-a-p/YuE2-3B、YuE2-Vae、SheetSage2、MERT2），训练"主要使用 CC0 音乐与合成数据"，宣称拿到 SongBench 最高分（WildSongBench 上 6.9632 对 Suno v5 的 6.8721）。项目页自己的细则：标题数字是**由自动评估从 best-of-8 中挑选**的结果，而非人类评判；排名"因指标而异"；MERT2 结果是使用测试分数从多种表示中挑出的 best-of-multiple；且页面本身未声明许可证。
+
+**为什么重要：** 符号中间表示架构（在记谱中规划、在音频中渲染）才是有趣的主张——它让歌曲以端到端音频模型做不到的方式可检查、可编辑——但要把这个持平数字当作自动评估挑选的结果看待；页面自己就是这么说的。
+
+[`🔗 YuE2 项目页`](https://map-yue2.github.io/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49652028)
+
+---
+
+## 29. superplanehq/superplane——把积压 issue 转化为经验证 PR 的开源"工厂"，以每日 +356 星登上趋势榜
+
+- **热度：** ▮▮ rising
+- **来源：** GitHub Trending · 今日 +356 星 · 共 7,040 星 · 最后提交 2026-09-11
+- **标签：** `agent-infra` `automation` `open-source` `go`
+
+SuperPlane（Go，Apache-2.0，README 带 **beta** 徽章）将 issue 跟踪器接入智能体，把积压 issue 转化为通过其自身验证门的 PR——"high-confidence issues" 是 README 自己的界定，即模糊的工作仍留给人类。这波势头并非发布驱动：最后一个带标签的版本是 v0.30.0（7 月 27 日）；新东西是 9 月的一波推进（8 月 31 日关于 Elastic 集成的文章"failures into verified PRs"，外加 Cloud Beta），且今天仍有每日修复提交落地。
+
+**为什么重要：** issue→经验证 PR 的管线正在成为一个独立的产品品类——值得关注的差异化正是"verified"到底意味着什么，而一个公开自身验证门的 beta 开源入场者是观察它的清晰样本。
+
+[`🔗 superplanehq/superplane`](https://github.com/superplanehq/superplane) · [`🔗 SuperPlane 博客`](https://superplane.com/blog/)
+
+---
+
+## 30. Datasette 发布首批经前沿模型审计的安全版本——每个修复都执行"两个人类"规则
+
+- **热度：** ▮▮ rising
+- **来源：** Simon Willison + datasette.io · 2026-09-11 00:05 UTC 发布
+- **标签：** `datasette` `security` `llm` `audit`
+
+Datasette 1.0a39 与 0.65.4（今日发布）修复了未尊重 SQLite 大小写不敏感标识符名称的权限检查，以及 SQL 构造与缓存问题——对混合公私表的公共实例而言是关键问题。值得注意的是流程：Willison 的文章描述安全审计由 Claude Fable 5.1、GPT-5.6 与 GPT-6 Astra 执行，并遵循**两个人类规则**——一个人编写暴露每个 bug 的测试，由另一个人实现修复——并承诺"将前沿模型的安全审计纳入我们今后所有的开发工作"。
+
+**为什么重要：** 一个成熟、广泛部署的开源项目把 LLM 安全审计采纳为*标准实践*——并配上解决"谁来审查修复"问题的人类分离纪律——这是一套其他维护者可以直接照搬的具体工作流模板，而不是一个演示。
+
+[`🔗 Datasette：九月安全版本`](https://datasette.io/blog/2026/september-security-releases/) · [`🔗 simonw/datasette releases`](https://github.com/simonw/datasette/releases)
+
+---
+
+## 31. "The Deathray"——单个 WebGPU compute shader 即可冻结 M 系列 Mac，而 Apple 表示这不是安全问题
+
+- **热度：** ▮ steady
+- **来源：** auberon.xyz + HN · 108+ 分 · 70 评论 · 约 8 小时前（~04:00 UTC+8）
+- **标签：** `webgpu` `macos` `gpu` `dos`
+
+一个在共享存储 buffer 上无限忙循环的 compute shader 会让 GPU 的 vertex shader 停摆，在途工作不断堆积，直到 **WindowServer** 阻塞——桌面冻结、沙滩球转个不停，最终触发看门狗内核崩溃（kernel panic）。SSH 仍可正常工作。它在 Apple Silicon（macOS Tahoe）上的 Chrome、Firefox 和 Safari 中均可触发；作者将根因归于不可抢占的 GPU 固件（ASC 协处理器）。时间线：7 月 27 日报告 Apple；Apple 复现了它，随后在 8 月 26 日拒绝处理——崩溃/挂起"不是安全问题"。作者自己列出的限制：仅在 Tahoe 上的 M 系列 MacBook 测试过，症状因他无法解释的原因而并非总是可复现，而无限循环检测在停机问题意义上是不可能完成的——真正的修复是 GPU 抢占。对比：2023 年的 WebGL 等价物（CVE-2023-40441）拿到了 CVSS 6.5 并获得了修复。
+
+**为什么重要：** 一个网站能稳定地冻结乃至最终 panic 掉整台机器，无论 Apple 的分诊怎么说都是用户可见的伤害，而厂商"复现之后仍然拒绝"本身就是所有构建重 GPU web 应用者的必修课。
+
+[`🔗 auberon.xyz：The Deathray`](https://auberon.xyz/blog/posts/deathray/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49649124)
+
+---
+
+## 32. Plex：36,000+ 暴露的 Media Server 对连 CVE 编号都没有的漏洞仍未打补丁
+
+- **热度：** ▮ steady
+- **来源：** Plex 论坛（9 月 1 日）+ BleepingComputer（9 月 10 日）
+- **标签：** `plex` `exposure` `vulnerability-disclosure`
+
+Plex 的紧急公告覆盖 Plex Media Server ≤ 1.43.2 中的漏洞——但**没有任何 CVE 编号**（"CVE 已在申请中"）、无严重级别、无数量，仅有一句 changelog 提示（"Address potential vulnerability in the CompanionProxy"）。修复随 1.43.3——**5 月 19 日发布**——以及 Plex Desktop 1.115.0（8 月 13 日）推出；Shadowserver 自 9 月 4 日起每日扫描，报告超过 36,000 个未打补丁的暴露实例（Censys：约 30–36 万暴露 web 界面）。无确认的在野利用，但历史记录说明紧迫性：2020 年的一个 Plex RCE（CVE-2020-5741）正是 2022 年 LastPass 泄露事件的入口。Shadowserver 的原话："由于没有签发 CVE，安全社区看不到这些漏洞，限制了有效响应。"
+
+**为什么重要：** 36K 这个数字是未打补丁版本的探测结果，不是失陷证据——但一家厂商把漏洞修复压了四个月、还跳过 CVE 流程，这本身就是一次披露失败，而 NAS 包管理器的滞后（Plex 让用户手动安装）意味着暴露的长尾将缓慢收缩。
+
+[`🔗 Plex 论坛公告`](https://forums.plex.tv/t/important-security-update-for-plex-media-server-v1-43-2-and-earlier/942319) · [`🔗 BleepingComputer 报道`](https://www.bleepingcomputer.com/news/security/over-36-000-plex-servers-unpatched-against-recently-disclosed-flaws/)
+
+---
+
+## 33. SenseNova-U1.5：商汤的 8B 理解-生成-编辑统一 MoT 开放权重——不带任何基准数字
+
+- **热度：** ▮ steady
+- **来源：** Hugging Face papers · arXiv 2609.11929（9 月 10 日）· 46+ 赞
+- **标签：** `multimodal` `unified-model` `open-weights` `sensetime`
+
+SenseNova-U1.5（商汤 + 南方科技大学，约 60 位作者）是一个 8B Mixture-of-Transformers，在单一无 encoder、无 VAE 的模型中完成图像理解、生成与编辑，原生分辨率最高 4K，并通过来自美学、双语文字渲染与编辑专家的多专家 on-policy 蒸馏进行整合。权重已上线（`sensenova/SenseNova-U1.5-8B-MoT`，225 赞）。摘要的坦诚是双向的：**完全没有定量基准数字**——主张都是定性的——作者也承认"生成数据中对结构化格式的暴露有限"，训练代码（SFT/RL/蒸馏）的开源是未来承诺而非已交付。
+
+**为什么重要：** 一个 8B、三任务统一、带真实权重的模型是本地多模态群体的可用工件——但在零公开数字的情况下，一切都取决于社区评测，而结构化格式短板是第一个该测的东西。
+
+[`🔗 arXiv:2609.11929`](https://arxiv.org/abs/2609.11929) · [`🔗 权重：SenseNova-U1.5-8B-MoT`](https://huggingface.co/sensenova/SenseNova-U1.5-8B-MoT)
+
+---
+
+## 34. alphaXiv/OpenResearch——把 Claude Code/Codex/OpenCode 变成并行研究智能体的 local-first 工作区，今日 +210 星
+
+- **热度：** ▮ steady
+- **来源：** GitHub Trending · 今日 +210 星 · 共 997 星 · 最后提交 2026-09-11
+- **标签：** `research-agents` `claude-code` `local-first` `rust`
+
+OpenResearch（Rust，MIT，出自 alphaXiv 团队）将现有编程智能体编排为 local-first 工作区中的并行研究工人，保持每日发版——v0.1.122（9 月 10 日）——且**今天**有一个为 CLI + dashboard 添加 Windows 支持的提交落地。README 自己列出的限制：Windows 支持"仍处于 beta"，需要 Git for Windows；全自动研究循环与托管算力需经 openresearch.sh 账户；本地模型（LM Studio/Ollama）需要 OpenCode 特定的配置。
+
+**为什么重要：** "harness 的 harness"模式——把编程智能体当作通用劳动力复用，而非构建新的运行时——持续在分发上取胜，而研究是继编程之后第二个获得这种待遇的领域。
+
+[`🔗 alphaXiv/OpenResearch`](https://github.com/alphaXiv/OpenResearch) · [`🔗 openresearch.sh 文档`](https://openresearch.sh/docs)
+
+---
+
+## 35. MiniCPM5-2B：OpenBMB 最新端侧模型同时开放权重*与*训练数据——附带一个限定范围的 SOTA 主张
+
+- **热度：** ▮ steady
+- **来源：** GitHub Trending · 今日 +101 星 · 共 10,826 星 · 9 月 7 日发布
+- **标签：** `on-device` `small-lm` `open-weights` `minicpm`
+
+MiniCPM5-2B（Apache-2.0，9 月 7 日发布，MiniCPM5 系列继 5 月 1B 之后的第二款）以每日 +101 星再次登上趋势榜，并配有仓库内的部署与微调 Agent Skills。README 自己的界定是诚实之处：SOTA 主张是"在此对比集合内"——一个自选的 2B 对比——而"整体上与 4B 级模型具竞争力"才是需要谨慎对待的更强主张。显著的优势：OpenBMB 还开放了训练数据（UltraX-Preview、UltraData-Code、50 万条智能体 SFT 样本、8 万条 RL 样本）。
+
+**为什么重要：** 在 2B 规模，权重加数据才是"开放"中更稀缺的一半——端侧模型的可复现性通常止步于 checkpoint——而限定范围的基准主张展示了 SOTA 标签通胀问题被正确处理的样子。
+
+[`🔗 OpenBMB/MiniCPM`](https://github.com/OpenBMB/MiniCPM) · [`🔗 openbmb/MiniCPM5-2B`](https://huggingface.co/openbmb/MiniCPM5-2B)
+
+---
+
+## 36. Proof of Capture——一台 100 美元 DIY 相机用隐写术而非元数据回应 Apple 的 Reference Image
+
+- **热度：** ▮ steady
+- **来源：** merybenavente.me + HN · 77+ 分 · 51 评论 · 约 8 小时前（~04:00 UTC+8）
+- **标签：** `provenance` `c2pa` `hardware` `steganography`
+
+在 Apple 宣布 Reference Image 的第二天于 Recurse Center 构建：一台 Raspberry Pi Zero + ATECC608 安全元件对**以 DWT+DCT 频域水印形式嵌入像素内部**的感知哈希进行签名——不是元数据——因此签名能在 WhatsApp 级别的压缩与缩放中存活，私钥永不离开芯片。文章批评 Apple 跳过 C2PA、把信任根留在 Private Cloud Compute。作者自己直白声明的限制："Proof of Capture、Apple Reference Image 与 C2PA 都不能完全解决这个问题"——拍摄屏幕上显示的 AI 图像仍然能得到一张有签名的假图。
+
+**为什么重要：** 溯源方案一直在争论签名存放的*位置*（元数据 vs 像素 vs 硬件）；这是"像素加安全元件"路线的一个有效数据点——而它自己的限定就是整个体裁的诚实边界：拍摄时证明无法看到镜头前是什么。
+
+[`🔗 Proof of Capture 文章`](https://merybenavente.me/blog/proof-of-capture) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49649222)
+
+---
+
+## 37. t8y2/dbx——一个 20 MB 的 Rust 桌面数据库客户端覆盖 90+ 数据库，在三连发版日以每日 +232 星登上趋势榜
+
+- **热度：** ▮ steady
+- **来源：** GitHub Trending · 今日 +232 星 · 共 18,989 星 · 9 月 10 日 3 个发布
+- **标签：** `database` `rust` `mcp` `desktop`
+
+dbx 是一个轻量（20 MB）的 Rust 桌面数据库客户端，覆盖 90+ 数据库，内置 AI 助手与供智能体访问的 MCP 服务器；它在一天内三个发布（v0.6.10、packages-v0.4.85、agents-v0.2.107，均为 9 月 10 日）的带动下登上趋势榜，外加 Product Hunt 发布页与 Trendshift 徽章。值得掂量的限定：README 里最实在的部分是一长串赞助商名单——包括中国的 AI API 中转厂商——说明该项目通过合作伙伴关系高度货币化，而那些徽章是自我推广信号而非独立验证。
+
+**为什么重要：** "一个客户端连接所有数据库"是个旧承诺，Rust 的体积优势加上 MCP 端点让它重新成立——MCP 服务器正是把 GUI 工具变成智能体基础设施的关键，而 19k 星说明需求是真实的。
+
+[`🔗 t8y2/dbx`](https://github.com/t8y2/dbx) · [`🔗 releases`](https://github.com/t8y2/dbx/releases)
+
+---
+
+## 38. Wei-Shaw/sub2api——把 AI 订阅池化为 API 配额的自托管网关拿下 41k 星，顶着它自己的 ToS 警告
+
+- **热度：** ▮ steady
+- **来源：** GitHub Trending · 今日 +149 星 · 共 41,195 星 · v0.2.4 于 9 月 9 日发布
+- **标签：** `api-gateway` `self-hosted` `tos` `pooling`
+
+sub2api（Go + Vue，LGPL-3.0）让团队自托管一个把 Claude/OpenAI/Gemini/Grok 订阅账号池化为共享 API 配额的网关；v0.2.4（9 月 9 日）新增 MiniMax 支持与面向长流的 HTTP/2 PING keepalive。故事写在 README 自己的横幅里：项目警告使用它"**可能违反 Anthropic 及其他上游提供商的服务条款**"，并带有明确的"未获商业授权"声明，而其赞助商部分本身就是一家联盟营销的 AI 中转厂商。41k 星且仍在攀升。
+
+**为什么重要：** 灰色地带扩张到这个规模是一个市场信号——订阅定价与 API 定价的分歧已经大到足以让一个 41k 星项目存在来套利这个差价，而每家提供商的执法反应（账号封禁是有记录的失败模式）对采用它的团队而言已是真实的运营风险。
+
+[`🔗 Wei-Shaw/sub2api`](https://github.com/Wei-Shaw/sub2api) · [`🔗 releases`](https://github.com/Wei-Shaw/sub2api/releases)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-09-11T04:19:00+08:00 |
-| 条目数 | 20 |
-| 追踪来源 | 24（Hacker News, GitHub Trending, Shopify Engineering, Rust Foundation, Cognition 博客, Mathstodon, consumerrights.wiki, Proofpoint, BleepingComputer, CISA KEV, Wiz Research, OX Research, NVD, The Hacker News, arXiv, Hugging Face papers, Show Lab, magic.dev, PlanetScale/Neki, OpenJDK, armorpaint, ayles.github.io, vercel-labs/skills, OpenAI 隐私门户） |
+| 生成时间 | 2026-09-11T12:15:00+08:00 |
+| 条目数 | 38 |
+| 追踪来源 | 36（Hacker News, GitHub Trending, Shopify Engineering, Rust Foundation, Cognition 博客, Mathstodon, consumerrights.wiki, Proofpoint, BleepingComputer, CISA KEV, Wiz Research, OX Research, NVD, The Hacker News, arXiv, Hugging Face papers, Show Lab, magic.dev, PlanetScale/Neki, OpenJDK, armorpaint, ayles.github.io, vercel-labs/skills, OpenAI 隐私门户, OpenAI 开发者文档, GreyNoise, Anthropic, Check Point 支持页, Codeberg, auberon.xyz, YuE2 项目页, merybenavente.me, Plex 论坛, datasette.io, Simon Willison, SuperPlane 博客） |
 | 更新节奏 | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | 排序 | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | 许可 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
