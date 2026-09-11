@@ -2014,3 +2014,33 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   the naming/convention structure collapses success to **5%** — the whole effect lives in the interface
   conventions. If it replicates, agent harnesses transfer to embodiment the way they transferred to
   tools: interface, not weights (thesis 12).
+
+## 2026-09-11 12:03 — OpenAI productizes the harness; research becomes the second harness-of-harnesses domain
+
+- **OpenAI exposes the Codex harness as the beta Agents API** (`client.beta.agents.sessions.create`,
+  `OpenAI-Beta: agents=v1`; the docs are the verified primary — no formal announcement post found): four
+  primitives — Agent, Environment (OpenAI-hosted sandbox **or `self_hosted`**), Session, Events — with
+  sandboxed code execution, skills, MCP connections, mid-run steering, context compaction, session
+  resumption, and subagent delegation with a configurable concurrency cap, billed at standard
+  model/tool/container rates. The sharp edge is stated, not hidden: US data residency only and **no Zero
+  Data Retention — "choosing a self-hosted sandbox does not make the Agents API ZDR-eligible."** Every
+  frontier lab now sells the harness, not just the model (DeepSeek Harness Sep 4, Devin, now OpenAI); the
+  ZDR carve-out structurally excludes retention-sensitive enterprises from even the self-hosted option —
+  the constraint sales pages don't volunteer.
+- **alphaXiv/OpenResearch** (Rust, MIT, +210/day, daily releases — v0.1.122 Sep 10): orchestrates existing
+  coding agents (Claude Code/Codex/OpenCode) as parallel research workers in a local-first workspace;
+  Windows support landed today, "still in beta" (needs Git for Windows); the full-autoresearch loop and
+  managed compute route through an openresearch.sh account; local models need OpenCode-specific
+  configuration. The "harness of harnesses" pattern keeps winning on distribution — research is the second
+  domain (after coding) to get it.
+- **superplanehq/superplane** (Go, Apache-2.0, beta, +356/day, 7.0k★): wires issue trackers to agents and
+  converts backlog issues into PRs that pass its own verification gates — "high-confidence issues" is the
+  README's own scoping, so ambiguous work stays human. Momentum is not release-driven (last tag v0.30.0
+  Jul 27; an Aug 31 Elastic-integration post + a Cloud Beta + daily fix commits). The issue→verified-PR
+  pipeline is becoming a product category; the differentiator to watch is exactly what "verified" means,
+  and a beta entrant publishing its gates is a legible place to watch it.
+- **t8y2/dbx** (Rust, 20 MB, +232/day on a triple-release day): a desktop client for 90+ databases with a
+  built-in AI assistant **and an MCP server** for agent access — the MCP endpoint is what turns a GUI tool
+  into agent infrastructure. Caveat: the README's most substantial section is a sponsor roster including
+  Chinese AI API-relay vendors — heavily monetized via partnerships; the badges are self-promotional, not
+  independent validation.

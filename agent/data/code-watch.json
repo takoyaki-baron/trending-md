@@ -507,9 +507,9 @@
           "found": "2026-09-09T13:07:11.164Z"
         }
       },
-      "runs": 27,
+      "runs": 28,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-10T21:31:46.480Z",
+      "last_run": "2026-09-11T05:03:59.410Z",
       "last_total": 76
     },
     "ra-paper-id": {
@@ -615,27 +615,51 @@
           "path": "papers/03-kv-cache-long-context.md",
           "html_url": "https://github.com/WangZhican/efficient-ml-landscape/blob/1bf74485a77090799377bc36fc20aa9be2a32c77/papers/03-kv-cache-long-context.md",
           "found": "2026-09-09T20:48:34.467Z"
+        },
+        "janilbols-w/weekly-paper::data/papers/arxiv-2609.03430.json": {
+          "repo": "janilbols-w/weekly-paper",
+          "path": "data/papers/arxiv-2609.03430.json",
+          "html_url": "https://github.com/janilbols-w/weekly-paper/blob/e1466b5f58ccdcb997a66746267d6d361cfc83bc/data/papers/arxiv-2609.03430.json",
+          "found": "2026-09-11T05:03:59.410Z"
+        },
+        "qqtang-code/Paper-Reading-Collection::README.md": {
+          "repo": "qqtang-code/Paper-Reading-Collection",
+          "path": "README.md",
+          "html_url": "https://github.com/qqtang-code/Paper-Reading-Collection/blob/76567305a40890980ed18df94917a8cf741439f6/README.md",
+          "found": "2026-09-11T05:03:59.410Z"
+        },
+        "janilbols-w/weekly-paper::src/content/docs/topics/attention-kv-cache.md": {
+          "repo": "janilbols-w/weekly-paper",
+          "path": "src/content/docs/topics/attention-kv-cache.md",
+          "html_url": "https://github.com/janilbols-w/weekly-paper/blob/e1466b5f58ccdcb997a66746267d6d361cfc83bc/src/content/docs/topics/attention-kv-cache.md",
+          "found": "2026-09-11T05:03:59.410Z"
+        },
+        "WangZhican/efficient-ml-landscape::papers/13-efficient-reasoning-agents.md": {
+          "repo": "WangZhican/efficient-ml-landscape",
+          "path": "papers/13-efficient-reasoning-agents.md",
+          "html_url": "https://github.com/WangZhican/efficient-ml-landscape/blob/be32b5042b50221011fae992c87626104fff1614/papers/13-efficient-reasoning-agents.md",
+          "found": "2026-09-11T05:03:59.410Z"
         }
       },
-      "runs": 8,
+      "runs": 9,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-10T21:31:46.480Z",
-      "last_total": 0
+      "last_run": "2026-09-11T05:03:59.410Z",
+      "last_total": 6
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 14,
+      "runs": 15,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-10T21:31:46.480Z",
+      "last_run": "2026-09-11T05:03:59.410Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 14,
+      "runs": 15,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-10T21:31:46.480Z",
+      "last_run": "2026-09-11T05:03:59.410Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-10T21:31:46.480Z"
+  "last_run": "2026-09-11T05:03:59.410Z"
 }

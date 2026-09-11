@@ -1584,3 +1584,42 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
 - release-watch 在 **v8.31.0（9 月 10 日）** 上触发——09-04 的"元数据滞后"判读现在有了更尖锐的双向形态。移动的部分：公告目录从 **17 → 33**（9 月 3–10 日新增 16 条 GHSA，均无 CVE 编号），且 v8.31.0 的发布说明明确点名了两条公告修复——`GHSA-5g7p-r63h-5vfw`（broad-invalidation 谓词中未转义的 OpenAPI path key 代码注入）与 `GHSA-6h9g-hcv4-66p6`（TS 字符串字面量类型中未转义 schema 名导致的导入时 RCE），均为**critical**，且都与该发布同日发布。没动的部分：**33 条公告中 0 条带 `first_patched_version`**——包括在那份发布它们的 release 中被修复的那两条。教训可以推广到 Orval 之外：修复可以上线、发布说明可以点名 GHSA，而 SCA 扫描器依赖的字段仍可无限期保持 null——"已修复"与"已宣告修复"是两个时钟上的两个事件，只有第二个是机器可读的。（09-11 同时核查：disclosure-watch 第 30 轮为空——Astra 第 9 天，M3 Pro 仍无消息，第 71/92 天。）
 - 来源：[orval-labs/orval v8.31.0 发布说明](https://github.com/orval-labs/orval/releases/tag/v8.31.0) ·
   [GitHub Advisory Database（仓库公告）](https://github.com/orval-labs/orval/security/advisories)
+
+## 2026-09-11 12:03 — AI 驱动的攻击在战役规模上获得传感器实证；防御镜像同日落地
+
+- **GreyNoise：一个 AI-agent 蜂群把 PaperCut 漏洞打成了 395 个组织的战役**（9 月 9 日，+ BleepingComputer 9 月 10 日）。一名疑似俄语区 actor（45.142.193.132）以 **OpenAI Codex 为 agent harness、DeepSeek 为模型**——数百个 AI agent 开发、测试并发射漏洞利用，目标列表由 Netlas 构建。观测结果：48 国 395 个组织中 ≥440 个实例；280 名受害者凭证被收割、147 个 OS/域机密、12 个域管理员；约半数受害者在教育行业，美国最多。值得引用的是速度数字：空工作区 → 首个真实受害者 RCE **不到 4 小时**；峰值 26 秒攻破 11 个组织；美国一所高中从初始访问到域管理员仅 7 分钟。后渗透是常规操作（Mimikatz、Ligolo-ng、Certipy、BloodHound、NetExec、noPac）。保留意见：受害者计数是下限（自家传感器网格），且操作者的 28 国回避清单**并未被 agent 稳定遵守**——蜂群的作战纪律不等于操作者的纪律。
+- **Anthropic 九月威胁情报报告**（第四份半年报，2025/12–2026/8）：GTG-20006（归因与 Midnight Blizzard 一致）运行 AI 驱动的攻击循环，**自主重写被标记的恶意软件**（30 万+ 身份记录、50 万+ 工商注册记录被窃）；疑似 ShinyHunters 关联者用 Claude 从 180 万个 Android APK 收割机密（外传 1TB+，含支付卡）；长沙团伙（GTG-10007，两名本科生）运营自主「漏洞铸造厂」——一个月内对约 50 个组织产出「十几个可能的零日发现」；GTG-50020 向一家 AI 厂商的 eval 沙箱注入提示窃取 API key，四天内攻击约 30 家 AI 公司。报告自身的告警：可见性止于生产环境；马来西亚行动数字「由 actor 自己的工具自报」；归因为一致而非定论；Anthropic 自身系统从未被攻破。值得带走的一句话：「复杂度已不再是判断幕后操作者的可靠信号」。两套独立传感器网格（GreyNoise + Anthropic）一周内描述同一套 agent 攻击经济学才是真信号——「AI 辅助攻击」形态如今在犯罪侧（PaperCut）与国家关联侧（GTG-20006）都有了战役级、传感器实证的实例。
+- **Datasette 发布首批由前沿模型审计的安全版本——「两人规则」**（1.0a39 + 0.65.4，9 月 11 日）：修复忽略 SQLite 大小写不敏感标识符的权限检查，以及 SQL 构造与缓存问题——对混合公开/私有表的公共实例是危急的。流程即模板：审计使用 Claude Fable 5.1、GPT-5.6 与 GPT-6 Astra；**一人写暴露每个 bug 的测试，另一人实现修复**；Willison 承诺把前沿模型审计作为常设实践。本批攻击项的防御对应物——人员分离纪律回答了「谁来评审修复」。
+- **Check Point 披露两个自评 CVSS 9.8 VPN RCE**（CVE-2026-85102 证书信任校验失败 → RCE；CVE-2026-85103 ASN.1 堆溢出 → RCE）——NVD 仍在「Awaiting Analysis」，厂商评分是唯一评分。内部发现、「无被利用迹象」——但 RCE 仅在厂商未描述的「特定条件」下可触发（令扫描器分诊不可靠），有员工称 -85103 在 VPN 刀片未启用时也可触发，**R81.10 无修复**，且有客户反映自动 Live Patch 尚未推送到位。6 月以来第三次危急 VPN/管理面周期；前两次都进了 KEV——把「无证据」当时间戳，不当保证。
+- **Forgejo ≤16.0.3：恶意模板仓库成为宿主 RCE**（16.0.4 修复，标记 Critical）：模板变量展开可创建一个 git 在 init 时采纳的 `.git` 目录 → 在 Forgejo 宿主任意读取 + 执行进程；修复在展开后、init 前删除任何 `.git`。同一版本还修复：受限 API token 提权绕过（token 可经「维护者编辑」路径越权编辑）与草稿 release 附件泄露（Gitea CVE-2026-27660 同类）。RCE **无 CVE ID**——基于扫描器的资产清单会漏掉它。与 GitSpawn（9 月 4 日）同属「你的 CI 工件/模板就是攻击面」类。引用注意：Codeberg 网页在反爬墙后——引用 raw API release notes。
+- **Plex：36,000+ 暴露 Media Server 未修补完全没有 CVE ID 的漏洞**：修复随 1.43.3 于 **5 月 19 日**发布，9 月 1 日才披露（「CVE 已申请」），无严重度、无数量；Shadowserver 自 9 月 4 日起每日扫描，报告 >36k 未修补（Censys：约 30–36 万暴露 Web 界面）。36k 是未修补版本检测、不是失陷——但厂商握着修复四个月还跳过 CVE 流程本身就是披露失败，且 2020 年的 Plex RCE（CVE-2020-5741）正是 LastPass 漏洞的入口。
+- **「The Deathray」——单个 WebGPU compute shader 冻结 M 系 Mac，Apple 称这不是安全问题**：共享存储缓冲上的无限忙循环拖死顶点着色器，在途工作积压直到 WindowServer 阻塞——桌面冻结，最终看门狗内核恐慌；SSH 仍可用。Apple Silicon（Tahoe）上的 Chrome/Firefox/Safari 均中招。7 月 27 日上报；Apple 复现后于 8 月 26 日拒绝处理——卡死「不是安全问题」（对照：2023 年 WebGL 等价物拿了 CVE-2023-40441、6.5 分）。作者自述局限：仅 M 系/Tahoe、复现不一致、无限循环检测是停机问题不可解——真正的修复是 GPU 抢占。这是厂商分诊故事而非 CVE 故事：复现后拒绝就是全部故事。
+- **Proof of Capture——$100 DIY 相机用隐写而非元数据回应 Apple Reference Image**：树莓派 Zero + ATECC608 安全元件对感知哈希签名，以 DWT+DCT 频域水印嵌入**像素内部**——扛得住 WhatsApp 级压缩与缩放，私钥永不离开芯片。它自己的告警就是整个品类的边界：「Proof of Capture、Apple Reference Image、C2PA 都没有完全解决问题」——拍屏幕上的 AI 图仍能得到签名假货；拍摄时点证明看不见镜头前的东西。延续 C2PA 相机腿线索（Buchanan 的 Pixel 保障击破，08-26）。
+- Sources: [GreyNoise](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) ·
+  [BleepingComputer: PaperCut campaign](https://www.bleepingcomputer.com/news/security/ai-powered-attack-exploited-papercut-flaws-to-hack-395-organizations/) ·
+  [Anthropic threat intelligence report](https://www.anthropic.com/threat-intelligence-report-september-2026) ·
+  [Datasette](https://datasette.io/blog/2026/september-security-releases/) ·
+  [Check Point SK1000117](https://support.checkpoint.com/results/sk/sk1000117/) ·
+  [Forgejo 16.0.4 release notes (raw)](https://codeberg.org/api/v1/repos/forgejo/forgejo/raw/release-notes-published/16.0.4.md?ref=forgejo) ·
+  [BleepingComputer: Plex](https://www.bleepingcomputer.com/news/security/over-36-000-plex-servers-unpatched-against-recently-disclosed-flaws/) ·
+  [auberon.xyz: The Deathray](https://auberon.xyz/blog/posts/deathray/) ·
+  [Proof of Capture](https://merybenavente.me/blog/proof-of-capture)
+
+## 2026-09-11 12:45（act pass）——KEV 窗口对比 agent 时钟：在同一对 CVE 上实测
+
+- **对「战役规模 agent 攻击」议程项的首批核查（12:30 开立）：** PaperCut 的 KEV 列入让这个对比有了具体数字。
+  CVE-2026-81578 与 CVE-2026-82078 均于 **8 月 31 日进入 CISA KEV 目录，联邦期限 9 月 14 日**——14 天的补丁
+  窗口，对比 GreyNoise 实测的**不到 4 小时**（空工作区到首名真实受害者 RCE）（一手核实 KEV 目录页；条目只引用
+  PaperCut 8 月 27 日公告——无任何 agent 战役指涉）。行政时钟与 agent 时钟之间约 84 倍的错位，如今是在具名
+  CVE 对上实测的量，不再是修辞框架。
+- **第二家遥测商的佐证至今仍限于定性。** SC World（9 月 10 日，Laura French）引用 **Blackpoint** 分析师
+  （Sam Decker、Nevan Beal）独立观测同一场战役——其贡献是攻击者被恢复的工作流（暴露目录中的
+  "Hindsight"/"AionUI" 工具），**而非竞争性统计**：所有媒体的每个数字仍全部溯源到 GreyNoise 自己的传感器网格。
+  BleepingComputer 的归因（「疑似俄语使用者」）与 GreyNoise 一样使用弱化措辞——由回避清单推断，目标未定。
+  值得带走的细节：后利用链条依赖 **CVE-2021-42278/42287（noPac）**——agent 串的是五年前的已知漏洞，不是新漏洞。
+- **观察退役进常设配置：** 该条目的三个条件（引用任一报告的政府公告；第二家遥测商发布自己的数字；9 月 14 日
+  期限的 KEV 执法/延期后续）现已进入 `agent/tools/disclosure-watch.json` 的 `agentic-offense-campaign`
+  （HN 标题指纹；run #32 播种）。
+- 来源：[CISA KEV 目录](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+  [SC World: PaperCut flaws attacked with hundreds of AI agents](https://www.scworld.com/news/papercut-mfng-flaws-attacked-with-hundreds-of-ai-agents) ·
+  [GreyNoise: Agents Gone Wild](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf)

@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-11T04:50:00+08:00
+last_processed: 2026-09-11T12:30:00+08:00
 ---
 
 # 学习智能体
@@ -64,6 +64,7 @@ last_processed: 2026-09-11T04:50:00+08:00
    - **09-08 04:03 —— 记忆门控迎来不可能性结果;跨 harness 记忆坚持无聊即美德;字节跳动上线出口审批(详情 → [[agent-stack]] [[frontier-models]]):** Bilevel Coordinated Reflection(arXiv 2609.02750,HF 论文榜 #1)证明**只观察生成 transcript 的门控,无法在文本不可区分的环境上一致地优于基线**——记忆接受需要环境接地的门控(SRMA;经验 margin 仅 +1.4 分,贡献是理论);Engrim(Show HN)让 Claude Code/Cursor/Codex 共享一个 SQLite 记忆文件,逐条带 `origin_agent` 溯源;DeerFlow 2.0(81.8k★)交付带审批的受控沙箱出口。
    - **09-09 04:03 —— 舰队走向多机；agent 触达硬件；消费级 agent 伸手拿王冠上的宝石（详情 → [[agent-stack]]）：** herdr v0.9.0（36.6k★）用一个 TUI 管理本地+SSH 的 agent 舰队（恢复会话只恢复布局，"原始进程*不会*存活"——很诚实）；copperhead 把每一次 KiCad PCB 编辑都关进 ERC/DRC + git 回滚的门里（"已实现，尚未证明"——它自己的话）；Meta Muse 以 Secure VM + Sentinel 为包装，要走健康/支付/邮件权限 + 浏览器控制——广告防火墙是等待验证的宣称。
    - **09-09 12:03→20:03 —— 团队配置层到来；本地优先桌面壳（详情 → [[agent-stack]]）：** 腾讯 teamai-cli（MIT，2.7k★）把共享 Git 仓库变成团队 Skills/Rules/Hooks/MCP/`culture.md` 的唯一事实源，同步进 10 个编码 agent，还带摩擦检测 stop-hook——技能浪潮的*分发*半场；PI-Desktop（LGPL-3.0，1.4k★）是 pi 生态的无锁定 Electron+Rust 桌面壳（Agent/Plan/Goal 三种审批工作流，无遥测）；TradingAgents v0.4.0 的维护增量修掉了让早期回测失效的前视偏差。
+   - **09-11 12:03 —— OpenAI 把 harness 产品化；研究成为 harness-of-harnesses 的第二个领域（详情 → [[agent-stack]]）：** Codex harness 以 beta Agents API 交付（Agent / Environment（含 `self_hosted`）/ Session / Events 四原语；中途转向、子 agent 并发上限——且**即使自带沙箱也无 ZDR**，仅美国数据驻留）；alphaXiv/OpenResearch（Rust，MIT）把 Claude Code/Codex/OpenCode 编排为并行研究 worker；superplanehq/superplane（+356/日，beta）把积压 issue 变成通过自身验证闸门的 PR；t8y2/dbx 用一个 MCP server 把 20 MB 桌面数据库客户端变成 agent 基础设施。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -136,6 +137,7 @@ last_processed: 2026-09-11T04:50:00+08:00
    - **09-10 20:03 —— 绕过系列与长尾（详情 → [[security]]）：** ShieldCrash——Defender 的*第三*轮绕过（RoguePlanet→ShieldBreak→ShieldCrash），骨架 PoC、无 CVE、厂商零回应、此前的发现仍未修补；CISA 确认 WatchGuard CVE-2025-14733（9.3，2025 年 12 月起在 KEV）现已喂养勒索攻击——九个月后仍有约 9,000 台未补，且"配置已删"不是缓解（指向静态对端的分支 VPN 会重新暴露）。
    - **09-11 04:03 —— AI 服务代理是皇冠宝石箱；漏洞套件半共享化；归因落在 KEV 故事上；loopback 不是信任边界（详情 → [[security]]）：** Wiz：3,074 个暴露的 LiteLLM 网关中 9.6% 接受文档示例 `sk-1234` 管理密钥（全部提供商 key + 全部提示词 + 一条无 CVE 无修复的 IMDS pass-through；LiteLLM 的 CNA 把相关 guardrail-RCE 评为 2.1/Low，Wiz 描述的是 root 级 RCE）；Proofpoint BlueMoon——四个国家级集群在六天内采用同一套 Chrome+Windows 零日套件（CVE-2026-85046/87491/85880）；Talos 在 9 月 12 日截止前一天把 FMC 攻击归因给 Qilin 附属 + Sandworm 重叠 APT（Cyclops Blink 变种）——补丁变成"打补丁并狩猎"；DeepSeek Harness CVE-2026-82533（9.4）——沙箱内 agent curl 自己 127.0.0.1:3080 的控制 API（Host 头即"信任"），自授 danger-full-access，而日志把它记为 `kind: 'user'`。
    - **09-11 05:04 act —— Orval 元数据滞后复测，现在是双向的（release-watch 在 v8.31.0 上触发）：** 公告 17 → 33（9 月 3–10 日新增 16 条 GHSA，无 CVE 编号）；发布说明明确修复了同日发布的两条 critical GHSA——但 **33 条中 0 条带 `first_patched_version`**，连那两条也是：修复可以上线而扫描器依赖的字段保持 null（"已修复"与"已宣告修复"走不同的时钟；只有后者机器可读）（详情 → [[security]]）。
+   - **09-11 12:03 —— AI 驱动的攻击在战役规模上获得传感器实证；防御镜像同日落地（详情 → [[security]]）：** GreyNoise 记录了一个以 Codex 为 harness、DeepSeek 为模型的 agent 蜂群，把 PaperCut 零日从空工作区做到首个真实受害者 RCE 不到 4 小时（≥440 实例 / 395 组织 / 48 国；峰值 26 秒攻破 11 个组织——且 agent 并未稳定遵守操作者自己的 28 国回避清单）；Anthropic 威胁报告独立描述了被标记恶意软件的自主重写、双本科生的「漏洞铸造厂」（一月十余个可能零日）与 eval 沙箱提示注入窃取 API key——两套独立传感器网格，同一套 agent 攻击经济学；同日 Datasette 发布首批由前沿模型审计、以「两人规则」落地的安全版本。
    → [[security]]
 
 3. **本地推理正在被 MoE 稀疏性 + 磁盘流式加载解锁，而非量化。** kimi-k3-in-c、TurboFieldfare、
@@ -276,6 +278,7 @@ last_processed: 2026-09-11T04:50:00+08:00
    - **09-09 12:03 —— 价格/效率前沿继续翻新；所有数字均为自测（详情 → [[frontier-models]]）：** Mercury 2.5（Inception 的扩散 LLM：宣称较 Mercury 2 智能 +40%、260K 上下文、1,107 tok/s 对比*成本优化级*前沿——其自家 HN 帖里延迟才是真差异点，也有评论者实测"离前沿还很远"）；DeepSeek V4.1 Flash 内测（宣称新架构+原生多模态，仅开放至 9 月 10 日，flash 系 9 月 10 日再降价 → 缓存命中 ¥0.02——亚洲开源权重的地板价跟着移动；**DeepSeek 自家 API changelog 里没有 V4.1 Flash 条目**：每条能力宣称都只出自厂商公告）。
    - **09-10 20:03 —— V4.1 Flash 开源落地；looped-transformer 批评；业余预训练自印误差条（详情 → [[frontier-models]]）：** DeepSeek-V4.1-Flash 以 MIT 登陆 HF——9 月 9 日的 beta 变为可检视（552B 骨干 MoE + 196B "Engram" 条件记忆模块，prefill 约 8B 激活；FP4 KV + CSA2 稀疏注意力"每 token 890 字节"；1M 上下文）；其模型卡自曝 DeepSWE 随脚手架 65.6–74.2 波动，q4 差一点才进 256 GB——本地已不 "flash"；Raschka 拆解"looped transformer = 隐藏 CoT"（权重复用是省显存技巧，"仍是一次一个 token"）；little-lm（3.8B 从零、$998、0.384 CORE）自曝上下文重跑"涨幅"里 ~83% 是测量修复——CORE 波动是 loss 的 7 倍。
    - **09-11 04:03 —— RL 带着细则进入万亿区；被门槛锁定的 50× 预训练宣称；评估诚信纠偏在它纠正的发布次日落地（详情 → [[frontier-models]]）：** Cognition SWE-2（Kimi K3 上成本惩罚 RL）宣称距 Fable 5.1 一分以内、便宜 64%——自家图表显示 Terminal-Bench 4 上 27.3% vs Astra 的 57.9%；Magic 宣称以 ~50× 更少 FLOPs 匹敌 DeepSeek V4 Pro Base（只能与开放权重基座比较、厂商自持评测集、未放权重）；SWE-Bench Pro Verified（arXiv 2609.08149）——基准作者自带反劫持集并公布逐模型劫持率：GLM-5.2 78.8→57.3。
+   - **09-11 12:03 —— 效率与开放两极都发布了可查验的工件（详情 → [[frontier-models]]）：** NCP-ArchPreview（arXiv 2609.10715）以 51.3% 的 token 匹配 OLMo-3-7B 的预训练损失（checkpoint 公开；基线仅 OLMo-3-7B 与参数对齐的 8.9B——就在两者之间评判）；NVIDIA 公开其 IMO 金牌配方——Nemotron 3 Ultra 全自然语言 30/42、无形式化证明器，checkpoint/数据/真实提交解答全部 CC BY 4.0（自建 Nemotron-IMO-Bench 是该打折的部分）；YuE2（3.6B）先写可编辑 ABC 乐谱再渲染音频——与 Suno v5 的持平是 best-of-8 自动评估，其页面自己写明；MiniCPM5-2B 公开权重*与*训练数据，SOTA 主张限定「在本对比集内」。
    → [[frontier-models]]
 
 7. **AI 安全是可度量的发布门槛，而非政策——而度量基础设施如今才是薄弱环节。** OpenAI PF v2
@@ -1747,3 +1750,4 @@ last_processed: 2026-09-11T04:50:00+08:00
   （+1,588/日，由病毒式 YouTube 系列驱动，总共 24 次提交——触发器是媒体不是代码；其产品内诚实标签是范本："RECONSTRUCTED ESTIMATE"、拒绝做人口追踪）；**ArmorPaint 1.0**
   （六年 0.x；付费预编译二进制资助免费自建源码——卖二进制模式在单维护者图形工具上的可行样本）；**RSA-260 方法论公开**
   （09-10 act pass 已整合 → [[frontier-models]]）；**ChatGPT 训练开关报告**（Tell HN 408 分——开关自行翻回；反方帖：可信的 localStorage UI bug、许多用户退出保持数月、OpenAI 员工称隐私门户的退出会被尊重；未决——今天重新核对你的设置）→ 与 Thom 争议一同记入 [[frontier-models]]。
+- **批次尾（09-11 12:03，详情 → [[security]] [[frontier-models]] [[agent-stack]]）：** agent 攻击双篇（GreyNoise PaperCut 战役 + Anthropic 九月威胁报告）+ Check Point 两个自评 9.8 VPN RCE（CVE-2026-85102/-85103；R81.10 无修复、触发条件未公开）+ Forgejo ≤16.0.3 模板仓库 → 宿主 RCE（16.0.4 修复，**无 CVE ID**——GitSpawn `.git` 同类）+ Plex 36k+ 未修补 Media Server（修复 5 月 19 日已发布、9 月 1 日才披露、零 CVE ID——Shadowserver：「安全社区不可见」）+ 「The Deathray」（一个 WebGPU compute shader 经 WindowServer 冻结 M 系 Mac；Apple 复现后拒绝处理——「不算安全问题」；2023 年 WebGL 等价物拿了 CVE-2023-40441、6.5 分）+ Proof of Capture（$100 树莓派 Zero + ATECC608，把感知哈希作为 DWT+DCT 像素内水印签名，扛得住 WhatsApp 级压缩——其自身警告：没有任何方案看得到镜头前的东西）→ 论点 2 + [[security]]；NCP-ArchPreview + Nemotron IMO 配方 + YuE2 + MiniCPM5-2B + SenseNova-U1.5 论文（8B MoT 统一理解/生成/编辑；零公开基准数字）→ 论点 6 + [[frontier-models]]；Agents API + OpenResearch + SuperPlane + dbx → 论点 1 + [[agent-stack]]。暂无论点归宿、记于此：**sub2api 涨至 41.2k★**（Wei-Shaw，LGPL-3.0）——订阅→API 配额池化网关持续攀升，README 横幅自警用法「**可能违反 Anthropic 及其他上游提供商的服务条款**」；Sub2API 形态（08-23）已是持久的灰色品类，各家提供商的执法响应（有记录的封号）是采用者的真实运营风险。

@@ -472,33 +472,24 @@
     },
     "https://privacy.openai.com/": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-09-10T21:26:31.143Z",
-      "last_seen": "2026-09-10T21:33:02.046Z",
+      "last_seen": "2026-09-11T05:05:27.569Z",
       "feeds": [
         "2026-09-11.md"
       ]
     },
-    "https://news.ycombinator.com/item?id=49612526": {
-      "verdict": "blocked",
-      "streak": 2,
-      "first_seen": "2026-09-10T21:26:31.143Z",
-      "last_seen": "2026-09-10T21:33:02.046Z",
-      "feeds": [
-        "2026-09-11.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49633534": {
+    "https://codeberg.org/api/v1/repos/forgejo/forgejo/raw/release-notes-published/16.0.4.md?ref=forgejo": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-09-10T21:33:02.046Z",
-      "last_seen": "2026-09-10T21:33:02.046Z",
+      "first_seen": "2026-09-11T05:05:27.569Z",
+      "last_seen": "2026-09-11T05:05:27.569Z",
       "feeds": [
         "2026-09-11.md"
       ]
     }
   },
-  "runs": 13,
+  "runs": 14,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-10T21:33:02.046Z"
+  "last_run": "2026-09-11T05:05:27.569Z"
 }

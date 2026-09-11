@@ -2323,3 +2323,40 @@ the non-commercial ToS. The research-to-lookup-table move is real; the missing e
   training on hundreds of billions of positions rescored by a strong Leela net, universal binaries,
   native RISC-V/LoongArch, WASM targets. The longest-running open benchmark community keeps its
   unglamorous-engineering cadence.
+
+## 2026-09-11 12:03 — the efficiency and openness poles both publish checkable artifacts
+
+- **NCP-ArchPreview** (arXiv 2609.10715, HF papers #1 Sep 11): training an 8.9B model jointly on next-token
+  prediction and **Next Concept Prediction** — discrete concepts product-quantized from the model's own hidden
+  states — over 5.73T Dolma-3 tokens matches OLMo-3-7B's final pretraining loss with **51.3% of the tokens**,
+  beats it by 2.45 pts downstream macro-average (+5.99 GSM8K), and reaches a strictly parameter-aligned 8.9B
+  baseline's loss at 85% of the compute; a 17M-param VQ module enables cheap domain adaptation and lifts a
+  DFlash2 draft model's mean accepted length 4.17%. Checkpoints (Stage1/Stage2) public on HF. The boundary is
+  in the abstract: baselines are OLMo-3-7B and the aligned 8.9B only — **no frontier comparison**; judge it
+  against the two baselines named. Largest public demonstration yet that predicting *concepts* alongside
+  tokens moves the pretraining scaling curve.
+- **NVIDIA opens its IMO-gold recipe** (arXiv 2609.10712): Nemotron 3 Ultra post-trained (SFT + RL) into two
+  specialist checkpoints, then an iterative generate/verify/refine search with a final high-compute selection
+  stage — **30/42 at IMO 2026, above gold, entirely in natural language** (no formal prover, no external
+  tools, no internet). Everything open under CC BY 4.0: checkpoints, training data, code, the *actual
+  submitted solutions* — plus the self-introduced Nemotron-IMO-Bench (200 problems; discount it). After
+  Anthropic's Lean-formalized Fermat (Sep 5), the other pole: gold-tier competition math with **no formal
+  verifier at all**, published with enough material (including the real solutions) to audit. Single
+  competition, not a suite; final-selection compute cost unstated.
+- **YuE2** (~3.59B, AR–NAR Mixture-of-Transformers, weights on HF) generates songs in two stages: it first
+  writes an **editable ABC-notation score** (lyrics, melody, chords), then renders vocals + accompaniment
+  from it — the symbolic intermediate makes the song inspectable/editable in a way end-to-end audio models
+  aren't. Claimed SongBench top score (6.9632 vs Suno v5's 6.8721) is **best-of-8 selected by automatic
+  evaluation**, its own page says so; rankings "vary by metric"; no license stated on the page. Trained
+  "primarily on CC0 music and synthetic data."
+- **SenseNova-U1.5** (SenseTime + SUSTech, arXiv 2609.11929 — the paper landing for the weights noted 08-31):
+  an 8B Mixture-of-Transformers doing image understanding, generation and editing in one encoder-free,
+  VAE-free model at native resolutions up to 4K, consolidated via multi-expert on-policy distillation. Weights
+  live (`sensenova/SenseNova-U1.5-8B-MoT`). The abstract's honesty cuts both ways: **zero quantitative
+  benchmark numbers** — everything rests on community evals — and "limited exposure to structured formats"
+  is the first thing to test; training-code open-sourcing promised, not shipped.
+- **MiniCPM5-2B** (OpenBMB, Apache-2.0, Sep 7): the notable half of "open" is the rarer one at this size —
+  weights **plus training data** (UltraX-Preview, UltraData-Code, 500K agent SFT + 80K RL samples), with
+  in-repo deployment/fine-tuning Agent Skills. The SOTA claim is scoped "within this comparison set" (a
+  self-selected 2B set), with "competitive with 4B-class models" as the carefully-treated stronger claim —
+  scoped-benchmark honesty is still rare enough to note.

@@ -3,11 +3,11 @@
     "vllm-project/semantic-router": {
       "tag": "v0.3.0",
       "published_at": "2026-06-05T12:08:52Z",
-      "pushed_at": "2026-09-10T18:59:01Z",
-      "stars": 5720,
+      "pushed_at": "2026-09-11T04:15:27Z",
+      "stars": 5723,
       "flags": [],
-      "frozen_pushed_at": "2026-09-10T18:59:01Z",
-      "checked": "2026-09-10T21:31:52.981Z"
+      "frozen_pushed_at": null,
+      "checked": "2026-09-11T05:04:15.722Z"
     },
     "BitRouter/BitRouter": {
       "tag": "v1.0.0-alpha.27",
@@ -16,16 +16,16 @@
       "stars": 226,
       "flags": [],
       "frozen_pushed_at": "2026-09-09T20:34:08Z",
-      "checked": "2026-09-10T21:31:52.981Z"
+      "checked": "2026-09-11T05:04:15.722Z"
     },
     "Continuum-AI-Corp/OrcaRouter-Lite": {
       "tag": "v0.1.0",
       "published_at": "2026-05-11T02:58:59Z",
       "pushed_at": "2026-09-04T02:31:41Z",
-      "stars": 669,
+      "stars": 692,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T02:31:41Z",
-      "checked": "2026-09-10T21:31:52.981Z"
+      "checked": "2026-09-11T05:04:15.722Z"
     },
     "workweave/router": {
       "tag": null,
@@ -39,47 +39,47 @@
     "obra/superpowers": {
       "tag": "v6.3.0",
       "published_at": "2026-08-12T16:58:30Z",
-      "pushed_at": "2026-09-10T16:13:16Z",
-      "stars": 284660,
+      "pushed_at": "2026-09-11T03:48:04Z",
+      "stars": 284825,
       "flags": [],
-      "frozen_pushed_at": "2026-09-10T16:13:16Z",
-      "checked": "2026-09-10T21:31:52.981Z"
+      "frozen_pushed_at": null,
+      "checked": "2026-09-11T05:04:15.722Z"
     },
     "mattpocock/skills": {
       "tag": "v1.2.3",
       "published_at": "2026-08-06T14:05:28Z",
       "pushed_at": "2026-09-04T08:45:43Z",
-      "stars": 258779,
+      "stars": 259035,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T08:45:43Z",
-      "checked": "2026-09-10T21:31:52.981Z"
+      "checked": "2026-09-11T05:04:15.722Z"
     },
     "multica-ai/andrej-karpathy-skills": {
       "tag": null,
       "published_at": null,
       "pushed_at": "2026-04-20T10:05:04Z",
-      "stars": 212100,
+      "stars": 212154,
       "flags": [],
       "frozen_pushed_at": "2026-04-20T10:05:04Z",
-      "checked": "2026-09-10T21:31:52.981Z"
+      "checked": "2026-09-11T05:04:15.722Z"
     },
     "DietrichGebert/ponytail": {
       "tag": "v4.9.0",
       "published_at": "2026-08-07T21:15:11Z",
       "pushed_at": "2026-09-07T16:27:01Z",
-      "stars": 134631,
+      "stars": 134980,
       "flags": [],
       "frozen_pushed_at": "2026-09-07T16:27:01Z",
-      "checked": "2026-09-10T21:31:52.981Z"
+      "checked": "2026-09-11T05:04:15.722Z"
     },
     "orval-labs/orval": {
       "tag": "v8.31.0",
       "published_at": "2026-09-10T14:15:37Z",
-      "pushed_at": "2026-09-10T20:41:44Z",
-      "stars": 6449,
+      "pushed_at": "2026-09-11T02:17:35Z",
+      "stars": 6451,
       "flags": [],
-      "frozen_pushed_at": "2026-09-10T20:41:44Z",
-      "checked": "2026-09-10T21:31:52.981Z"
+      "frozen_pushed_at": null,
+      "checked": "2026-09-11T05:04:15.722Z"
     },
     "SalesforceAIResearch/Random-Attention": {
       "tag": null,
@@ -88,19 +88,19 @@
       "stars": 57,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T01:34:07Z",
-      "checked": "2026-09-10T21:31:52.981Z"
+      "checked": "2026-09-11T05:04:15.722Z"
     },
     "weave-os/router": {
       "tag": null,
       "published_at": null,
-      "pushed_at": "2026-09-10T21:29:55Z",
-      "stars": 4246,
+      "pushed_at": "2026-09-11T02:08:40Z",
+      "stars": 4250,
       "flags": [],
       "frozen_pushed_at": null,
-      "checked": "2026-09-10T21:31:52.981Z"
+      "checked": "2026-09-11T05:04:15.722Z"
     }
   },
-  "runs": 29,
+  "runs": 30,
   "first_run": "2026-09-01T20:48:09.140Z",
-  "last_run": "2026-09-10T21:31:52.981Z"
+  "last_run": "2026-09-11T05:04:15.722Z"
 }

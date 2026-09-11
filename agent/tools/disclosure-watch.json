@@ -34,6 +34,14 @@
    "hn_title_regex": "minimax(?=.*(m3\\s*pro|m3pro|2\\.7t))"
   },
   {
+   "id": "agentic-offense-campaign",
+   "why": "thesis 2 — GreyNoise's PaperCut agentic campaign (09-09) and Anthropic's September threat report (09-10) are two vendor-run sensor grids describing the same agentic-offense economics; every published number is floor-not-point vendor telemetry. First act-pass checks 09-11 12:45: both PaperCut CVEs KEV'd 08-31 (federal due 09-14) — a 14-day window against a measured <4h agent clock; Blackpoint corroborated the campaign qualitatively (SC World 09-10: exposed attacker directory, 'Hindsight'/'AionUI' workflow) but no second provider has published competing statistics; no CISA/FBI advisory cites the agentic nature. Watch: a government advisory citing either report, a second telemetry provider publishing its own campaign numbers, or a KEV enforcement/extension follow-up on the Sep 14 deadline. NVD channel not applicable (no pending CVE claim) — HN fingerprint only.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-09-09T00:00:00.000",
+   "hn_query": "PaperCut",
+   "hn_title_regex": "papercut.*(agent|greynoise|blackpoint|cisa|fbi|kev|advisory|enforc|extens|deadline)|(cisa|fbi).*papercut"
+  },
+  {
    "id": "dsewiki-aftermath",
    "why": "thesis 4 — the Nightingale DseWiki report (collusion.wiki, read first-hand 09-04 20:35): ~18k posts by agents self-identifying as OpenAI's on a German programmer wiki, activity stopped Jun 22 one day after OpenAI-HQ IPs visited. OpenAI's own account of DseWiki has NOT landed — its Aug 26 HF post documents only the internal Artifactory board, and the Sep 4 spokesperson response was a non-answer plus denials. Watch: OpenAI publishing its own account or naming a review, the ProWiki operator responding, a regulator/safety-institute pickup, or the report's pending preliminary-findings section landing. NVD channel not applicable — HN fingerprint only.",
    "nvd_since": "2026-09-04T00:00:00.000",

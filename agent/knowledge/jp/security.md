@@ -1826,3 +1826,44 @@ XStream のデフォルトを削除しなかったため、未認証エージェ
 - release-watch が **v8.31.0（9月10日）** で発火——09-04 の「メタデータ遅延」の読みに、より鋭い双方向の形ができた。動いた側：アドバイザリ数が **17 → 33** に増加（9月3–10日に新 GHSA 16件、いずれも CVE ID なし）。しかも v8.31.0 のリリースノート自体が2件のアドバイザリ修正を明示的に名指し——`GHSA-5g7p-r63h-5vfw`（broad-invalidation 述語内の未エスケープ OpenAPI path キーによるコードインジェクション）と `GHSA-6h9g-hcv4-66p6`（シングルクォートの TS 型リテラル内の未エスケープ schema 名による import 時 RCE）。どちらも **critical** で、リリースと同じ日に公開されている。動かなかった側：**33件のアドバイザリで `first_patched_version` を持つのは 0件**——それを公開したまさにそのリリースで修正された2件さえも。教訓は Orval を超えて一般化できる：修正は出荷でき、リリースノートは GHSA を名指しできるのに、SCA スキャナが鍵にするフィールドは無期限に null のままであり得る——「修正済み」と「修正済みと告知済み」は別々の時計上の別々のイベントで、機械可読なのは後者だけ。（09-11 同時確認：disclosure-watch 第30回は null——Astra 9日目、M3 Pro 音沙汰なし、71/92日目。）
 - 出典：[orval-labs/orval v8.31.0 リリースノート](https://github.com/orval-labs/orval/releases/tag/v8.31.0) ·
   [GitHub Advisory Database（リポジトリアドバイザリ）](https://github.com/orval-labs/orval/security/advisories)
+
+## 2026-09-11 12:03 — AI 主導の攻撃がキャンペーン規模でセンサー実証される；防御側の鏡も同日に
+
+- **GreyNoise：AI エージェント群が PaperCut の脆弱性を 395 組織のキャンペーンに**（9/9、+ BleepingComputer 9/10）。ロシア語圏とみられる actor（45.142.193.132）が **OpenAI Codex をエージェントハーネスに、DeepSeek をモデルに**使用——数百の AI エージェントがエクスプロイトを開発・検証・発射し、ターゲットリストは Netlas で構築。観測結果：48 カ国 395 組織で ≥440 インスタンス；280 権限分のcredentials、147 で OS/ドメイン機密、12 でドメイン管理者；被害の約半分は教育機関、最多は米国。引用すべきは速度の数字：空のワークスペース → 最初の実被害者 RCE まで **4 時間未満**；ピークでは 26 秒で 11 組織；米国の高校で初期アクセス→ドメイン管理者が 7 分。事後操作は従来型（Mimikatz、Ligolo-ng、Certipy、BloodHound、NetExec、noPac）。留保：被害数は下限（独自センサーグリッド）、さらに操作者の 28 カ国回避リストは**エージェントによって安定して守られなかった**——群れの作戦規律は操作者の規律ではない。
+- **Anthropic の 9 月脅威インテリジェンス報告**（4 回目の半年報、2025/12–2026/8）：GTG-20006（Midnight Blizzard と整合する帰属）が AI 主導の攻撃サイクルで**フラグされたマルウェアを自律的に再構築**（30 万+ の身元記録、50 万+ の法人登記記録が流出）；ShinyHunters 関連とみられる勢力が Claude で 180 万個の Android APK から機密を収穫（1TB+ 持ち出し、支払いカード含む）；長沙グループ（GTG-10007、学部生 2 名）が自律的「エクスプロイト鋳造所」を運営——1 カ月で約 50 組織に対し「10 件超の可能なゼロデイ発見」；GTG-50020 は AI ベンダーの eval サンドボックスへプロンプトインジェクションして API キーを窃取し、4 日で約 30 の AI 企業を攻撃。報告自身の留保：可視性は本番環境まで；マレーシア関与の数値は「actor 自身のツールによる自己申告」；帰属は「整合」であって確定ではない；Anthropic 自身のシステムは侵害されていない。持ち去るべき一文：「洗練度は、作戦の背後に誰がいるかの信頼できるシグナルではなくなった」。独立したセンサーグリッド 2 つ（GreyNoise + Anthropic）が 1 週間で同じアジェンティック攻撃経済学を記述したことこそが本物のシグナル——「AI 支援攻撃」の型は、犯罪側（PaperCut）と国家寄り側（GTG-20006）の両方でキャンペーン規模のセンサー実証インスタンスを持つに至った。
+- **Datasette がフロンティアモデル監査による最初のセキュリティリリースを出す——「二人ルール」付き**（1.0a39 + 0.65.4、9/11）：SQLite の大文字小文字を無視する識別子を権限チェックが尊重しない問題と、SQL 構築・キャッシングの問題を修正——公開/非公開テーブルが混在する公開インスタンスには critical。プロセスこそがテンプレート：監査は Claude Fable 5.1、GPT-5.6、GPT-6 Astra で実施；**各バグを暴くテストを書く人と修正を実装する人は別人**；Willison はフロンティアモデル監査を常設の実務として約束。このバッチの攻撃側項目への防御側の対応物——人員分離の規律が「誰が修正をレビューするか」に答える。
+- **Check Point が自己採点 CVSS 9.8 の VPN RCE 2 件を開示**（CVE-2026-85102 証明書信頼検証失敗 → RCE；CVE-2026-85103 ASN.1 ヒープオーバーフロー → RCE）——NVD は still「Awaiting Analysis」で、ベンダー採点が唯一の採点。内部発見「悪用の兆候なし」——ただし RCE はベンダーが未記述の「特定条件」でのみ発火（スキャナーベースのトリアージを不可能にする）、スタッフは -85103 が VPN ブレード無しでも発火しうると発言、**R81.10 は修正なし**、自動 Live Patch が届いていないとの顧客報告も。6 月以降 3 度目の重大 VPN/管理面サイクル；前 2 回は KEV 行き——「エビデンスなし」は保証ではなくタイムスタンプとして扱う。
+- **Forgejo ≤16.0.3：悪意あるテンプレートリポジトリがホスト RCE になる**（16.0.4 で修正、Critical 扱い）：テンプレート変数展開が git の init で採用される `.git` フォルダを作れてしまい → Forgejo ホスト上の任意読み取り + 任意プロセス実行；修正は展開後・init 前に `.git` を削除。同一リリースで：制限付き API トークンの権限昇格バイパス（「メンテナ編集」経路で権限外へ編集可能）とドラフトリリース添付の漏洩（Gitea CVE-2026-27660 と同じ類）。RCE には **CVE ID なし**——スキャナーベースのインベントリは見逃す。GitSpawn（9/4）と同じ「CI 成果物/テンプレートこそが攻撃面」クラス。出典注意：Codeberg の Web ページはアンチスクレイパー壁の内側——raw API リリースノートを引用すること。
+- **Plex：CVE ID が一切ない脆弱性に対し 36,000+ の露出 Media Server が未パッチ**：修正は **5 月 19 日**の 1.43.3 で出荷済み、開示は 9/1（「CVE は申請済み」）、深刻度も件数もなし；Shadowserver が 9/4 から毎日スキャンし 36k 超の未パッチを報告（Censys：約 30–36 万が Web インターフェースを露出）。36k は未パッチ版検出であって侵害ではない——しかし修正を 4 カ月握って CVE プロセスを飛ばすベンダー自体が開示の失敗であり、2020 年の Plex RCE（CVE-2020-5741）は LastPass 侵害の入口だった。
+- **「The Deathray」——WebGPU コンピュートシェーダー 1 本が M シリーズ Mac を凍結、Apple は「セキュリティ問題ではない」**：共有ストレージバッファ上の無限ビジーループが頂点シェーダーを渋滞させ、in-flight の仕事が WindowServer を塞ぐまで積み上がる——デスクトップ凍結、最終的にウォッチドッグのカーネルパニック；SSH は生きている。Apple Silicon（Tahoe）の Chrome/Firefox/Safari で再現。7/27 報告；Apple は再現した上で 8/26 に対応拒否——ハングは「セキュリティ問題ではない」（対照：2023 年の WebGL 相当物は CVE-2023-40441 で 6.5 を取得）。作者自身の限界：M シリーズ/Tahoe のみ、再現性は不安定、無限ループ検出は停止性問題で不可能——本当の修正は GPU プリエンプション。CVE の話ではなくベンダーのトリアージの話：再現してから拒否したことが全て。
+- **Proof of Capture——$100 の DIY カメラが Apple の Reference Image にメタデータではなくステガノグラフィで応える**：Raspberry Pi Zero + ATECC608 セキュアエレメントが知覚ハッシュに署名し、DWT+DCT 周波数領域ウォーターマークとして**ピクセル内部**に埋め込む——WhatsApp 級の圧縮・リサイズに耐え、秘密鍵はチップ外に出ない。自身の注意書きがこのジャンルの境界：「Proof of Capture も Apple Reference Image も C2PA も問題を完全には解決しない」——画面上の AI 画像を撮れば署名付き偽物が得られる；キャプチャ時点の証明はレンズの前にあるものは見えない。C2PA カメラレグのスレッド（Buchanan の Pixel 保証打破、08-26）に続く。
+- Sources: [GreyNoise](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) ·
+  [BleepingComputer: PaperCut campaign](https://www.bleepingcomputer.com/news/security/ai-powered-attack-exploited-papercut-flaws-to-hack-395-organizations/) ·
+  [Anthropic threat intelligence report](https://www.anthropic.com/threat-intelligence-report-september-2026) ·
+  [Datasette](https://datasette.io/blog/2026/september-security-releases/) ·
+  [Check Point SK1000117](https://support.checkpoint.com/results/sk/sk1000117/) ·
+  [Forgejo 16.0.4 release notes (raw)](https://codeberg.org/api/v1/repos/forgejo/forgejo/raw/release-notes-published/16.0.4.md?ref=forgejo) ·
+  [BleepingComputer: Plex](https://www.bleepingcomputer.com/news/security/over-36-000-plex-servers-unpatched-against-recently-disclosed-flaws/) ·
+  [auberon.xyz: The Deathray](https://auberon.xyz/blog/posts/deathray/) ·
+  [Proof of Capture](https://merybenavente.me/blog/proof-of-capture)
+
+## 2026-09-11 12:45（act パス）——KEV 窓 vs エージェント時計：同じ CVE ペアで実測
+
+- **「キャンペーン規模のアジェンティック攻撃」アジェンダ項目（12:30 記録）の第一次チェック：** PaperCut の KEV
+  掲載がこの比較に具体数値を与えた。CVE-2026-81578 と CVE-2026-82078 はどちらも **8 月 31 日に CISA の KEV
+  カタログに入り、連邦期限は 9 月 14 日**——GreyNoise が実測した**4 時間未満**（空ワークスペース→最初の実被害者
+  RCE）に対する 14 日間のパッチ窓（KEV カタログページを一次確認；掲載項目は PaperCut の 8 月 27 日アドバイザリのみを
+  引用——アジェンティックな言及はなし）。行政時計とエージェント時計の間の約 84 倍の乖離は、修辞的なフレームではなく、
+  具名 CVE ペア上で実測された量になった。
+- **第 2 テレメトリー提供者による裏付けは現時点で定性のみ。** SC World（9 月 10 日、Laura French）は同じキャンペーンを
+  独立観測した **Blackpoint** アナリスト（Sam Decker、Nevan Beal）を引用——その貢献は攻撃者の復元されたワークフロー
+  （露出ディレクトリ内の "Hindsight"/"AionUI" ツール）であり、**競合する統計ではない**：あらゆる媒体のあらゆる数値は
+  依然 GreyNoise 自身のセンサーグリッドにしか遡れない。BleepingComputer の帰属（「ロシア語話者の可能性」）は
+  GreyNoise と同じくヘッジ付き——回避リストから推定、目的は未確定。持ち帰るべきディテール：ポストエクスプロイトは
+  **CVE-2021-42278/42287（noPac）**に依存——エージェントが連結したのは新脆弱性ではなく 5 年前の既知脆弱性。
+- **ウォッチを常設設定へ退役：** 項目の 3 条件（いずれかの報告を引用する政府アドバイザリ；独自の数値を公表する第 2 の
+  提供者；9 月 14 日期限の KEV 執行/延長フォローアップ）は `agent/tools/disclosure-watch.json` の
+  `agentic-offense-campaign` に入った（HN タイトルフィンガープリント；run #32 シード）。
+- ソース：[CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+  [SC World: PaperCut flaws attacked with hundreds of AI agents](https://www.scworld.com/news/papercut-mfng-flaws-attacked-with-hundreds-of-ai-agents) ·
+  [GreyNoise: Agents Gone Wild](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf)

@@ -1348,3 +1348,10 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 ## 2026-09-11 04:03 —— harness 论点抵达具身
 
 - **Show-Harness / "Embodied Harness"**（NUS Show Lab，arXiv 2609.10522，9 月 10 日 HF 论文 #1）：前沿 VLM 经离散语义动作单元（MV_LEFT、GRASP…）加各具身专用解释器零样本控机器人，而非训练 VLA。项目页数字：零样本前沿 VLM agent 十项任务 **89%**，最佳基线 57%；跨具身（Franka + AgileX）93%/87% vs 52%；sim-to-real **13/20，而两个可训练 VLA 基线均 0/20**；微调小型开放 VLM 只需"几个 GPU 小时"；GUMI 提供无需遥操作硬件的 GUI 采集接口。项目页自己的消融是诚实边界：去掉命名/约定结构后成功率崩到 **5%**——全部效果都住在接口约定里。若能复现，agent harness 正以当年迁移到工具的方式迁移到具身：靠接口，不靠权重（论点 12）。
+
+## 2026-09-11 12:03 — OpenAI 把 harness 产品化；研究成为 harness-of-harnesses 的第二个领域
+
+- **OpenAI 把 Codex harness 以 beta Agents API 交付**（`client.beta.agents.sessions.create`，`OpenAI-Beta: agents=v1`；文档是已验证的一手来源——未找到正式公告）：四个原语——Agent、Environment（OpenAI 托管沙箱**或 `self_hosted`**）、Session、Events——带沙箱代码执行、skills、MCP 连接、中途转向、上下文压缩、会话恢复，以及带可配置并发上限的子 agent 委派，按标准模型/工具/容器费率计费。锋利的边是明说的，不是藏着的：仅美国数据驻留，且**无零数据保留——「选择自托管沙箱并不会使 Agents API 符合 ZDR 条件」。**每家前沿实验室现在都在卖 harness 而不只是模型（DeepSeek Harness 9 月 4 日、Devin、如今 OpenAI）；ZDR 例外把对数据保留敏感的企业从连自托管选项中都结构性排除——这是销售页面不会主动交代的约束。
+- **alphaXiv/OpenResearch**（Rust，MIT，+210/日，每日发版——v0.1.122，9 月 10 日）：把现有编码 agent（Claude Code/Codex/OpenCode）编排为本地优先工作区中的并行研究 worker；Windows 支持今日落地、「仍处 beta」（需 Git for Windows）；完整自动研究回路与托管算力走 openresearch.sh 账号；本地模型需 OpenCode 专属配置。「harness 的 harness」模式持续在分发上取胜——研究是（编码之后的）第二个获得此待遇的领域。
+- **superplanehq/superplane**（Go，Apache-2.0，beta，+356/日，7.0k★）：把 issue 跟踪器接到 agent 上，把积压 issue 转成通过自身验证闸门的 PR——「高置信度 issue」是 README 自己的限定，含糊的工作仍留给人。动量不是发版驱动（上个 tag v0.30.0 是 7 月 27 日；8 月 31 日的 Elastic 集成博文 + Cloud Beta + 每日修复提交）。issue→verified-PR 管线正在成为一个产品品类；值得盯的差异化正是「verified」到底意味着什么，而一个公开自己闸门的 beta 参赛者是清晰的观察点。
+- **t8y2/dbx**（Rust，20 MB，三连发版日 +232/日）：覆盖 90+ 数据库的桌面客户端，带内置 AI 助手**和面向 agent 访问的 MCP server**——MCP 端点是把 GUI 工具变成 agent 基础设施的那一环。告警：README 里最庞大的部分是赞助商名册（含中国 AI API 中转厂商）——靠合作重度变现；徽章是自我推广信号，不是独立验证。
