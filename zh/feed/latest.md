@@ -1,8 +1,8 @@
 ---
 date: 2026-09-11
-updated: 2026-09-11T12:15:00+08:00
+updated: 2026-09-11T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -547,13 +547,181 @@ sub2api（Go + Vue，LGPL-3.0）让团队自托管一个把 Claude/OpenAI/Gemini
 
 ---
 
+## 39. 九个编码智能体框架 vs. 你的笔记本——同一个本地模型，换个框架体感能差 10 倍
+
+- **热度：** ▮▮▮ trending
+- **来源：** Hacker News · 121+ 分 · 约 13 小时前（06:54 UTC+8）
+- **标签：** `coding-harnesses` `local-llm` `benchmarks` `apple-silicon`
+
+九个编码框架、八道 Exercism 练习、一台 M4 MacBook Pro（24GB）通过共享的 llama.cpp 服务器加强制代理跑 3-bit Qwen 3.8 27B：所有数字都来自 llama-server 自己的记账，绝不采用框架自报。头条发现是 prefill：pi 的开场前缀是 2,008 token，OpenCode 是 18,046——在数据中心 GPU 上是 0.2 秒对 1.8 秒，但在笔记本上是**实测 22 秒对 226 秒**才看到第一个 token，且 ~32k 上下文中只剩 94% 对 44% 可用于真正干活。旁路请求火上浇油：24 个任务里 OpenCode 发了 33 个、crush 51 个、dsh 24 个——GPU 的"忙碌"时间达到墙钟时间的 125%，两个请求同时在一张卡上排队。作者的分组：精简稳定（pi、mini-swe-agent、chad），重而克制（dsh、cline、codex、goose——goose 1.50.0 曾每轮往首条消息重渲染时间戳，把缓存命中率砸到 78%），启动即重（crush、OpenCode：干等 3–4 分钟）。chad 的进程内 MLX 引擎相对客户端/服务器模式从 7.9 提到 17.4 tok/s，其 DFlash2 草稿模型读取 23.3 对 15.9 tok/s（1.47 倍，八题全胜）。
+
+**为什么重要：** localhost 上的框架溢价是一个数量级，不是舍入误差——而这份报告的自嘲式免责声明正是值得抄的纪律：pass 门槛是简单 Python 题（"请勿解读为排名"），体感 tok/s "夜间波动可达 50%，精简组内部的差异不算发现"，而且作者承认被测框架之一（chad）是他自己写的。
+
+[`🔗 Nine coding harnesses vs. your laptop`](https://nasutton.notion.site/Nine-coding-harnesses-vs-your-laptop-3d139990182b80d59fa3cf500f0450ba) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49651221)
+
+---
+
+## 40. "So you want to use OpenRouter?"——1800 万条消息的实战笔记：同样的权重不是同一个模型
+
+- **热度：** ▮▮▮ trending
+- **来源：** Hacker News · 223+ 分 · 9 月 9 日 13:37 UTC+8 发布，仍在攀升
+- **标签：** `openrouter` `llm-routing` `reliability` `providers`
+
+Mo Moustafa（iMessage 助手 Olly，1800 万+ 条消息，约三分之一经 OpenRouter）系统梳理了"模型"与"提供商"之间的鸿沟：请求 `deepseek-v4-flash` 可能落在约 20 家主机中的任何一家，而结果天差地别——第一方实测 90% GPQA / 81% TAU-Bench，DigitalOcean 只有 75% / 58%，多数主机在工具调用上比第一方低 5–7 个百分点。故障目录：视觉模型返回 HTTP 200 却说"没有图片"或认错字母；多家主机静默忽略 `reasoning.effort`；内容为 null 的空心 200 响应（StreamLake 七月贡献了约 20% 的流量和 92% 的空响应）；按提供商而非模型生效的历史消息规则（回传空 `reasoning_content` 在 SiliconFlow 报 400，在百度/阿里/Cloudflare 没事）；生产环境与笔记本的限流不对称；量化档位是糟糕的质量代理——"看榜单选，别看比特数"。把三家"可靠"主机固定、关闭回退，两周内随着三家接连故障而全面断供。
+
+**为什么重要：** 路由层已经悄悄成为开源权重技术栈的可靠性层——同一份权重在不同主机上就是不同产品，而每个"模型跑分"其实都是"模型×主机"的分数。HN 讨论串就是大多数团队从没写过的实战手册。
+
+[`🔗 So you want to use OpenRouter?`](https://mmoustafa.com/blog/so-you-want-to-use-openrouter/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49621546)
+
+---
+
+## 41. GPT-Live-1 登陆 API——OpenAI 把语音层和大脑分开卖
+
+- **热度：** ▮▮ rising
+- **来源：** OpenAI + HN · 44+ 分 · 约 6 小时前（13:45 UTC+8）· 公告发布于 9 月 10 日 23:00 UTC+8
+- **标签：** `openai` `voice` `speech-models` `api`
+
+ChatGPT 上的全双工语音模型 GPT-Live-1 现已可在 API 中调用，前端语音层定价 $0.05/分钟——而且架构本身就是卖点：单一模型同时听和说，同时**把推理和工具调用委托给后端文本模型**（"如 GPT-6 Astra 或第三方模型"），取代串联的 STT→LLM→TTS。官方数字：Full Duplex Bench 较 GPT-Realtime-2.1 提升 30 个百分点；搭配 Astra（medium 档）时在 Tau3 排名第一；Speak 反馈称相比轮次制系统打断减少近 80%。电话（telephony）支持随本次发布上线；自定义音色需要联系销售。HN 讨论串里的反面声音：有早期测试者报告琐碎请求的委托往返要等上数分钟，多位评论者质疑模型到底能听懂多少原始音频（怀疑是转写文本在跑）——还有人贴出一个公开 demo 卡死在中途的案例。
+
+**为什么重要：**"语音前端 + 推理后端"的拆分正在成为语音智能体的标准架构——延迟预算转移到了委托跳点，而真正重要的基准（Tau3、Full Duplex Bench）也越来越多地度量"组合"而非语音模型本身。
+
+[`🔗 OpenAI：API 中的 GPT-Live-1`](https://openai.com/index/introducing-gpt-live-1-in-the-api/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49653985)
+
+---
+
+## 42. MikroTrick 进入 CISA KEV——两个 RouterOS 漏洞都背上联邦修复期限
+
+- **热度：** ▮▮ rising
+- **来源：** CISA KEV（9 月 10 日收录）· 修复期限 9 月 24 日前（BOD 26-04 分诊）
+- **标签：** `cve` `mikrotik` `kev` `routeros`
+
+继我们 9 月 8 日报道"MikroTrick"利用链之后，两个 RouterOS 漏洞现均已被 KEV 收录（9 月 10 日）：**CVE-2026-67277**——带宽测试（`btest`）服务在主会话完成认证前就接受"关联"连接，未认证攻击者可借此进行内核内存泄露与拒绝服务（CVSS 约 8.8）；**CVE-2026-86060**——SSH 登录路径的参数分隔符处理不当，以禁止字符开头的用户名可操纵受信任策略掩码并提权。相关报道还提到一个配套的 SSH 公钥比较缺陷（CVE-2026-67276）可实现用户冒充。CISA 的收录让联邦机构进入标准强制修复时钟；MikroTik 的建议是升级到当前稳定版 RouterOS 并用防火墙把 `btest` 挡在 WAN 之外。原始披露中的提醒依然成立：这是暴露在互联网上的路由器上被实际串联利用的提权路径，而路由器恰是网络设备中补丁延迟最严重的品类。
+
+**为什么重要：** KEV 收录把研究者披露变成了合规期限——而 MikroTik 的装机基数（家用路由器、ISP、嵌入式链路）恰是最不看安全公告的人群，这正是这类设备几周内进僵尸网络的路径。
+
+[`🔗 CISA KEV 目录`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`→ WindowsForum：MikroTik RouterOS 漏洞被列入 KEV`](https://windowsforum.com/news/mikrotik-routeros-flaws-added-to-cisa-kev-after-exploits.444255/)
+
+---
+
+## 43. github/spec-kit 以每日 +985 星再度霸榜——1.0 之后一周，规范驱动工具箱进入周更节奏
+
+- **热度：** ▮▮ rising
+- **来源：** GitHub Trending 第 15 名 · 今日 +985 星 · 共 135,489 星 · v1.0.6 于 9 月 10 日发布
+- **标签：** `spec-driven-development` `agents` `cli` `github`
+
+GitHub 的 MIT 许可规范驱动开发工具箱 Spec Kit（"先用任何 AI 编码智能体定义要造什么，再动手造"）乘着两个版本再度 trending：v1.0.5（9 月 8 日）与 v1.0.6（9 月 10 日）。1.0.6 的更新日志以集成加固为主——工作流中的分步集成配置、`extensions.yml` 不可读时报错而非静默跳过、生成的 skills 中保留扩展作者信息、要求捆绑扩展变更必须提升版本的 CI 守卫——延续了 1.0 后加入 bundles、扩展/预设与 `/speckit-converge` 命令的节奏。8 月 21 日的 1.0.0 里程碑（首次提交一周年）明确把版本号定义为"仅仅是个数字"，释放的是适应性优先于稳定性承诺的信号。
+
+**为什么重要：** 13.5 万星加上 1.0 后的周更说明"规范先行"工作流正在成为智能体编码的默认基础设施而非方法论随笔——更新日志里的扩展/预设目录才是值得盯的部分，因为那是 spec-kit 从模板变成平台的地方。
+
+[`🔗 github/spec-kit`](https://github.com/github/spec-kit) · [`🔗 v1.0.6 发布说明`](https://github.com/github/spec-kit/releases/tag/v1.0.6)
+
+---
+
+## 44. Claude 的未成年人账号开始消失——五月的年龄核验政策进入执行期，HN 顺手审计了核验供应商
+
+- **热度：** ▮▮ rising
+- **来源：** Hacker News · 116+ 分 · 约 1.5 小时前（18:48 UTC+8）
+- **标签：** `anthropic` `age-verification` `privacy` `compliance`
+
+Anthropic 的"Age Assurance on Claude"支持文档（仅限 18 岁以上，经 Yoti 进行自拍年龄估算、证件上传或数字身份核验）自 5 月 18 日就挂在官网——新鲜的是执行潮抵达 HN：一位家长报告 17 岁的儿子在讨论作业时提到年龄，账号即遭禁用，被标记的账号如今面临"核验或失去"的选择。文档的数据声明：Anthropic 只收到通过/不通过的结果；Yoti 在核验后即删除自拍照与证件图像。讨论串的审计比政策本身更犀利：Anthropic "从 Persona 换到 Yoti"且未给出任何理由；评论者翻出 Yoti 因生物特征数据同意问题被西班牙罚款 95 万欧元的旧账；结论在"责任管理"（COPPA/英国 AADC 风险敞口、未成年人几乎不贡献营收）与真诚的安全叙事之间分裂——antirez 的一句话可作全帖总结：Anthropic "极其擅长规避所有无用的 AI 风险，但对真正的风险毫无作为"。
+
+**为什么重要：** 在监管压力下，年龄核验正在席卷所有消费级 AI 产品，而这个帖子就是用户将实际遭遇的两种失败模式的预演——基于对话分类器的误伤封号，以及核验供应商自身的隐私前科成为产品信任叙事的一部分。
+
+[`🔗 Age Assurance on Claude（支持文档）`](https://support.claude.com/en/articles/15171100-age-assurance-on-claude) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49656225)
+
+---
+
+## 45. EvoSafeHarness——约翰·霍普金斯自动进化"按模型、按领域"的安全框架，宣称在零 ASR 下达到 CaMeL 两倍效用
+
+- **热度：** ▮ steady
+- **来源：** Hugging Face papers · arXiv 2609.05903 · 34+ 赞
+- **标签：** `agent-safety` `harnesses` `prompt-injection` `research`
+
+EvoSafeHarness 把安全框架本身当作可搜索的工件：对一个目标领域内冻结的 LLM 智能体，它联合进化一个自然语言策略和可执行代码逻辑，以模型行为、领域规格和"新鲜上下文对抗性审查"（拒绝针对基准过拟合的规则）为引导。宣称结果：DecodingTrust-Agent 的攻击成功率从 45.6% 降到 10.0%，效用代价仅 3.3 个点；在 AgentDojo 上以 0.0% ASR 达到 82.8% 效用——同等工作点上 CaMeL 效用的两倍——且该框架可原封不动迁移到未见过的 AgentDyn 套件；面对细化预算 16 的自适应 PAIR 攻击，平均 ASR 保持在 20% 以下。其分析结论：领域语义决定需要*哪些*安全关系，模型/运行时行为决定*如何以及在何处*执行。
+
+**为什么重要：** 这是本 feed 每天追踪的"框架即产品"命题，只不过指向安全而非能力——而诚实的边界在于所有数字都是基准内部数字，迁移声明也仅限于同一基准家族内的套件。
+
+[`🔗 arXiv:2609.05903`](https://arxiv.org/abs/2609.05903) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 46. Project Zero 的 MAccConc——Jann Horn 把 KCOV 变成 Linux 内核竞态条件的显微镜
+
+- **热度：** ▮ steady
+- **来源：** Google Project Zero + HN · 12+ 分 · 9 月 9 日发布
+- **标签：** `linux-kernel` `race-conditions` `security-research` `tooling`
+
+MAccConc（"Memory Access Concurrency"）把内存访问追踪——KASAN outline 插桩经 KCOV 传回用户态，识别跨线程的"通信点"（重叠访问且至少一个为写）——与"计数增强栈轨迹"提供的稳定访问标识符，以及新增的 `KCOV_SET_DI` ioctl 延迟注入结合起来，从约束式"A 先于 B"对到完全指定的上下文切换序列都能强制实现。需要 LLVM SanitizerCoverage 新特性（23.1.0）；内核补丁已提交评审但尚未进入主线。声明的范围：未披露新漏洞——演示是一个玩具级的 `dup(5)` 对 `close(5)` 竞态，自动测试器找到了那个意外但合法的执行序；CLI 工具只能处理两个线程（GUI 可更多）；栈上竞态可能漏检（ASAN 不挂钩直接栈访问）；内核 panic 时 KCOV 数据丢失。
+
+**为什么重要：** 竞态条件是"写个回归测试"基本靠传说的 bug 品类——这套工具用可复现的交错执行取代了 mdelay 加祈祷，而且它的零件清单（KCOV + KASAN + 一个新 ioctl）刻意全部复用内核 fuzzer 已经在跑的基础设施。
+
+[`🔗 MAccConc：竞态条件测试工具（Project Zero）`](https://projectzero.google/2026/09/maccconc-race-condition.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49620760)
+
+---
+
+## 47. 四色定理迎来罕见的新证明——n log n 取代 n²，8,202 个构形，依然是计算机辅助
+
+- **热度：** ▮ steady
+- **来源：** Quanta Magazine + HN · 50+ 分 · 9 月 10 日 22:46 UTC+8 发布
+- **标签：** `mathematics` `graph-theory` `computer-assisted-proof`
+
+六人团队——Mikkel Thorup、Carsten Thomassen、Ken-ichi Kawarabayashi、Bojan Mohar 加两名学生，工作始于"2015 年丹麦的一处海滩"—— posted 了新的四色定理证明（arXiv 2026 年 3 月，11 月在 FOCS 报告）。新在哪：着色算法只需 n(log n) 步而非 1997 年证明的 n²；它开采的是每个顶点都恰有六个邻居的"平坦"区域——以往证明因太难分析而绕开的领地；其不可避免集含 8,202 个构形（1997 年是 633 个）——但许多构形可并行约减互不干扰，把情形分析压缩到几步。验证方面的警示摆在最前面：它仍是计算机辅助的，且用 Georges Gonthier 的话说"在某些方面甚至比前作更复杂"。Thomassen 自己的目标仍未达成："我想要的是一个不使用计算机的证明。"
+
+**为什么重要：** 这个最臭名昭著的计算机辅助证明取得进展，是本 feed 持续追踪的整个形式化验证辩论（Anthropic 的 Lean 版费马、NVIDIA 的无证明器 IMO 金牌）的一个数据点——在这里计算机的负担*变得更重*而非更轻，而数学界依然把它算作进步。
+
+[`🔗 Quanta：四色定理迎来罕见的新证明`](https://www.quantamagazine.org/the-four-color-theorem-gets-a-rare-new-proof-20260910/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49644647)
+
+---
+
+## 48. p1neappleXpress/OpenFlux——把流量伪装进 Yandex Docs 和 WebRTC 的 Go TCP 隧道日增 +201 星
+
+- **热度：** ▮ steady
+- **来源：** GitHub Trending · 今日 +201 星 · 共 943 星 · 最近提交 2026-09-11
+- **标签：** `networking` `censorship-circumvention` `go` `tunnel`
+
+OpenFlux（Go，GPL-3.0，28 次提交，尚无 release）是一个"网络栈研究工具。带可插拔传输的 TCP 隧道"：本地 SOCKS5 代理把流量封装进第三方服务协议，送到出口节点解封转发——客户端（SOCKS5）→ 传输层 → 出口节点 → 互联网。已发布的两种传输层很能说明问题：**Yandex** 把数据包藏进 Yandex Docs 光标消息，**Max**（实验性）走俄罗斯即时通讯软件的 WebRTC DataChannel，README 自己警告可能触发账号风控。编译出的二进制名为 `universal-bypass-tool`；免责声明写道"仅限教育用途。请在你自己的机器和网络上测试。"构建目标包括 Android（NDK）与 iOS（Xcode）。
+
+**为什么重要：** 借生产力应用做流量伪装是审查规避的当前前沿——把代理流量伪装成对那些"封了就会伤及无辜"的服务的普通 API 调用——而 trend 的飙升说明需求侧是有组织的。README 自己的免责声明就是法律现实：这是双重用途工具。
+
+[`🔗 p1neappleXpress/OpenFlux`](https://github.com/p1neappleXpress/OpenFlux) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 49. System76 的 Thelio Mira AI 把 192 GB 显存放上桌面，售价 $3,299——本地 AI 硬件终于有了普通人看得懂的规格表
+
+- **热度：** ▮ steady
+- **来源：** System76 + HN · 113+ 分 · 约 13 小时前（07:10 UTC+8）
+- **标签：** `hardware` `local-ai` `linux` `workstation`
+
+Thelio Mira AI 是 System76 面向 GPU 的 Linux 工作站：基础配置 $3,299，顶配**通过双 RTX PRO 6000 达到 192 GB 显存**（1000W + 750W 双电源），显存带 ECC 以支撑长时间训练，双 PCIe 5.0 x16 插槽（x8/x8），Ryzen 9 9950X，最高 192 GB DDR5，2×5GbE + WiFi 7，预装 Pop!_OS 24.04 LTS。中间档位：96 GB 单卡 RTX PRO 6000（Max-Q 或标准版）、96 GB 双 RTX PRO 5000、48 GB 双 RTX PRO 4000、AMD R9700 方案。丹佛手工打造，内存/存储/GPU 均可用户自行升级，现货在售。
+
+**为什么重要：** 192 GB 已越过一条门槛——本 feed 追踪过的那些从 SSD 流式加载的 100B+ MoE 开源权重模型从此可以完整装进显存——而这个价位上一台有保修的商业整机是"哪个模型跑得动我的机器"工具浪潮的供给侧对应物，而且它是 Linux 优先，不是魔改游戏主机。
+
+[`🔗 System76 Thelio Mira AI`](https://system76.com/workstations/thelio-mira-ai) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49651372)
+
+---
+
+## 50. jihe520/MathModelAgent——自动写出可直接提交的数学建模论文的智能体日增 +132 星，却连许可证都没有
+
+- **热度：** ▮ steady
+- **来源：** GitHub Trending · 今日 +132 星 · 共 4,739 星 · v0.0.19 于 9 月 10 日发布
+- **标签：** `math-modeling` `agents` `paper-writing` `chinese-oss`
+
+MathModelAgent（中文 README 优先，面向国赛等建模竞赛）把建模问题端到端跑通：智能体完成建模、跑计算，并生成"一份完整的可直接提交的论文"。开发节奏很快——v0.0.17（9 月 8 日）、v0.0.18（9 月 10 日上午）、v0.0.19（9 月 10 日晚）——昨天和今天都有新提交。最扎眼的缺失：4,739 星的仓库**没有 LICENSE 文件**，按默认版权法这意味着这些 trending 代码在法律上是"保留所有权利"——可以阅读，不可复用。
+
+**为什么重要：** 竞赛驱动的智能体流水线是一个独立的中文开源品类（建模竞赛是必经的成人礼），而缺失的许可证就是这个条目自己的警示——一个 4.7k 星仓库的使用条款是"去问作者"，正是本 feed 要标记的采用陷阱，也正是 v0.0.20 一个提交就能修好的事。
+
+[`🔗 jihe520/MathModelAgent`](https://github.com/jihe520/MathModelAgent) · [`🔗 releases`](https://github.com/jihe520/MathModelAgent/releases)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-09-11T12:15:00+08:00 |
-| 条目数 | 38 |
-| 追踪来源 | 36（Hacker News, GitHub Trending, Shopify Engineering, Rust Foundation, Cognition 博客, Mathstodon, consumerrights.wiki, Proofpoint, BleepingComputer, CISA KEV, Wiz Research, OX Research, NVD, The Hacker News, arXiv, Hugging Face papers, Show Lab, magic.dev, PlanetScale/Neki, OpenJDK, armorpaint, ayles.github.io, vercel-labs/skills, OpenAI 隐私门户, OpenAI 开发者文档, GreyNoise, Anthropic, Check Point 支持页, Codeberg, auberon.xyz, YuE2 项目页, merybenavente.me, Plex 论坛, datasette.io, Simon Willison, SuperPlane 博客） |
+| 生成时间 | 2026-09-11T20:20:00+08:00 |
+| 条目数 | 50 |
+| 追踪来源 | 42（Hacker News, GitHub Trending, Shopify Engineering, Rust Foundation, Cognition 博客, Mathstodon, consumerrights.wiki, Proofpoint, BleepingComputer, CISA KEV, Wiz Research, OX Research, NVD, The Hacker News, arXiv, Hugging Face papers, Show Lab, magic.dev, PlanetScale/Neki, OpenJDK, armorpaint, ayles.github.io, vercel-labs/skills, OpenAI 隐私门户, OpenAI 开发者文档, GreyNoise, Anthropic, Check Point 支持页, Codeberg, auberon.xyz, YuE2 项目页, merybenavente.me, Plex 论坛, datasette.io, Simon Willison, SuperPlane 博客, nasutton.notion.site, mmoustafa.com, openai.com, windowsforum.com, Quanta Magazine, projectzero.google, system76.com） |
 | 更新节奏 | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | 排序 | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | 许可 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

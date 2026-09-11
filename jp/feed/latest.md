@@ -1,8 +1,8 @@
 ---
 date: 2026-09-11
-updated: 2026-09-11T12:15:00+08:00
+updated: 2026-09-11T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -547,13 +547,181 @@ sub2api（Go + Vue、LGPL-3.0）は、Claude/OpenAI/Gemini/Grok のサブスク�
 
 ---
 
+## 39. 9 つのコーディングハーネス vs. あなたのノートPC——同じローカルモデルでも、ハーネス次第で体感が 10 倍変わる
+
+- **速度：** ▮▮▮ trending
+- **ソース：** Hacker News · 121+ pts · 約 13 時間前（06:54 UTC+8）
+- **タグ：** `coding-harnesses` `local-llm` `benchmarks` `apple-silicon`
+
+9 つのコーディングハーネス、8 問の Exercism 課題、1 台の M4 MacBook Pro（24GB）で、共有の llama.cpp サーバーと強制プロキシ経由により 3-bit Qwen 3.8 27B を実行：すべての数値はハーネスの自己申告ではなく llama-server 自身の計測値。ヘッドラインの発見は prefill：pi の冒頭プレフィックスは 2,008 トークン、OpenCode は 18,046——データセンター GPU では 0.2 秒対 1.8 秒だが、ノート PC では最初のトークンまで**実測 22 秒対 226 秒**かかり、約 32k のコンテキストのうち実際の作業に残るのは 94% 対 44%。サイドリクエストが追い打ちをかける：24 課題中 OpenCode は 33 回、crush は 51 回、dsh は 24 回発行——GPU は「ビジー」状態が実時間の 125% に達し、1 枚のカードに 2 リクエストが滞留。著者のグループ分け：軽量で安定（pi、mini-swe-agent、chad）、重いが規律あり（dsh、cline、codex、goose——goose 1.50.0 は毎ターン最初のメッセージにタイムスタンプを再描画し、キャッシュ再利用率を 78% まで落としていた）、最初から重い（crush、OpenCode：3〜4 分の待ち）。chad のインプロセス MLX エンジンはクライアント/サーバー比で 7.9→17.4 tok/s に向上し、DFlash2 ドラフターは 23.3 対 15.9 tok/s を読み取り（1.47 倍、8 課題すべてで勝利）。
+
+**なぜ重要か：** localhost におけるハーネスのプレミアムは丸め誤差ではなく一桁違う——そしてこのレポートの自嘲的な免責事項こそ学ぶべき規律：pass のゲートは簡単な Python 課題（「ランキングと解釈しないでください」）、体感 tok/s は「夜間で 50% 変動するため、軽量グループ内の差は発見とは言えない」、さらに著者自身が測定対象ハーネスの一つ（chad）を作ったことを認めている。
+
+[`🔗 Nine coding harnesses vs. your laptop`](https://nasutton.notion.site/Nine-coding-harnesses-vs-your-laptop-3d139990182b80d59fa3cf500f0450ba) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49651221)
+
+---
+
+## 40. 「So you want to use OpenRouter?」——1,800 万メッセージの実戦ノート：同じ重みでも同じモデルではない
+
+- **速度：** ▮▮▮ trending
+- **ソース：** Hacker News · 223+ pts · 9 月 9 日 13:37 UTC+8 投稿、現在も上昇中
+- **タグ：** `openrouter` `llm-routing` `reliability` `providers`
+
+Mo Moustafa 氏（iMessage アシスタント Olly、1,800 万+ メッセージ、約 3 分の 1 が OpenRouter 経由）は「モデル」と「プロバイダー」の間の溝を整理する：`deepseek-v4-flash` を要求すると約 20 のホストのいずれかに着地しうるが、結果は桁違いに異なる——ファーストパーティは 90% GPQA / 81% TAU-Bench、DigitalOcean は 75% / 58%、ほとんどのホストはツール呼び出しでファーストパーティ比 5〜7 ポイント低い。障害カタログ：視覚モデルが HTTP 200 と共に「画像が提供されていない」や文字の誤認を返す、複数ホストが `reasoning.effort` を黙って無視、内容が null の空の 200（StreamLake は 7 月にトラフィックの約 20% と空レスポンスの 92% を占有）、履歴ルールがモデルではなくプロバイダー単位（空の `reasoning_content` の送り返しは SiliconFlow で 400、Baidu/Alibaba/Cloudflare では問題なし）、本番とノート PC のレート制限の非対称、そして量子化が悪質な品質プロキシであること——「ビット数ではなくボードで絞れ」。3 つの「信頼できる」ホストにフォールバック無効で固定した結果、2 週間で 3 社が相次いで障害を起こし完全な停止に。
+
+**なぜ重要か：** ルーティング層はオープンウェイト・スタックの信頼性層へと静かに変質した——同じ重みでもホストが違えば別プロダクトであり、あらゆる「モデル ベンチマーク」の数値は実際には「モデル×ホスト」の数値。HN スレッドはほとんどのチームが書かなかった実戦マニュアルだ。
+
+[`🔗 So you want to use OpenRouter?`](https://mmoustafa.com/blog/so-you-want-to-use-openrouter/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49621546)
+
+---
+
+## 41. GPT-Live-1 が API に登場——OpenAI は音声レイヤーと脳を別々に売る
+
+- **速度：** ▮▮ rising
+- **ソース：** OpenAI + HN · 44+ pts · 約 6 時間前（13:45 UTC+8）· 発表は 9 月 10 日 23:00 UTC+8
+- **タグ：** `openai` `voice` `speech-models` `api`
+
+ChatGPT の全二重音声モデル GPT-Live-1 が API から呼び出し可能に。フロントエンド音声レイヤーは $0.05/分——そしてアーキテクチャそのものが売り：単一モデルが同時に聞き・話し、**推論とツール呼び出しをバックエンドのテキストモデルに委任**する（「GPT-6 Astra やサードパーティモデルなど」）、チェーン化した STT→LLM→TTS の代わりに。公式数値：Full Duplex Bench で GPT-Realtime-2.1 比 +30 ポイント。Astra（medium）と組み合わせると Tau3 で 1 位。Speak はターン制システム比で割り込みが約 80% 減と報告。テレフォニー対応も今回リリースに含まれる。カスタム音声は営業との相談が必要。HN スレッドの反論：初期テストの一人は些細なリクエストでも委任の往復に数分かかったと報告、複数のコメント者がモデルが生音声をどこまで理解しているかを疑い（書き起こしベース処理への懐疑）、公開デモがタスク途中で固まった事例も貼られた。
+
+**なぜ重要か：**「音声フロントエンド + 推理バックエンド」分割は音声エージェントの標準アーキテクチャになりつつある——レイテンシ予算は委任ホップに移り、重要なベンチマーク（Tau3、Full Duplex Bench）は音声モデル単体ではなくペアを測るようになりつつある。
+
+[`🔗 OpenAI：API の GPT-Live-1`](https://openai.com/index/introducing-gpt-live-1-in-the-api/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49653985)
+
+---
+
+## 42. MikroTrick が CISA KEV に掲載——両 RouterOS 脆弱性に連邦修復期限が付く
+
+- **速度：** ▮▮ rising
+- **ソース：** CISA KEV（9 月 10 日追加）· 修復期限 9 月 24 日まで（BOD 26-04 対応）
+- **タグ：** `cve` `mikrotik` `kev` `routeros`
+
+9 月 8 日に「MikroTrick」チェーンを報じた後、両 RouterOS 脆弱性が KEV に掲載された（9 月 10 日追加）：**CVE-2026-67277**——帯域幅テスト（`btest`）サービスがプライマリセッションの認証完了前に「関連」接続を受け入れ、未認証攻撃者によるカーネルメモリ漏洩と DoS を可能に（CVSS 約 8.8）；**CVE-2026-86060**——SSH ログインパスの引数デリミタ処理の不備により、禁止文字で始まるユーザー名が信頼ポリシーマスクを操作し特権昇格できる。関連報道では SSH 公開鍵比較の欠陥（CVE-2026-67276）によるユーザー偽装にも言及。CISA の追加により連邦機関は標準の強制修復時計に入る。MikroTik のガイダンスは現行安定版 RouterOS への更新と、`btest` を WAN 側からファイアウォールで遮断すること。当初の開示からの注意はそのまま有効：これはインターネットに露出したルーター上で実際にチェーン利用されている特権昇格経路であり、ルーターはネットワーク機器の中で最もパッチ適用が遅れるカテゴリだ。
+
+**なぜ重要か：** KEV 掲載は研究者の開示をコンプライアンス期限に変える——そして MikroTik の設置基数（家庭用ルーター、ISP、組み込みリンク）はまさに勧告を読まない層であり、それがこの種の機器が数週間でボットネットに組み込まれる経路だ。
+
+[`🔗 CISA KEV カタログ`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`→ WindowsForum：MikroTik RouterOS の脆弱性が KEV に追加`](https://windowsforum.com/news/mikrotik-routeros-flaws-added-to-cisa-kev-after-exploits.444255/)
+
+---
+
+## 43. github/spec-kit が 1 日 +985 スターで再トレンド入り——1.0 から 1 週間、仕様駆動ツールキットは週次リリース体制に
+
+- **速度：** ▮▮ rising
+- **ソース：** GitHub Trending 15 位 · 本日 +985 スター · 累計 135,489 · v1.0.6 は 9 月 10 日リリース
+- **タグ：** `spec-driven-development` `agents` `cli` `github`
+
+GitHub の MIT ライセンスの仕様駆動開発ツールキット Spec Kit（「どんな AI コーディングエージェントでも、作る前に何を作るか定義する」）が 2 つのリリースを受けて再トレンド入り：v1.0.5（9 月 8 日）と v1.0.6（9 月 10 日）。1.0.6 のチェンジログは主に統合の強化——ワークフローのステップごとの統合設定、`extensions.yml` が読めない場合の黙ってスキップではなくエラー、生成された skills への拡張作者の保持、バンドル拡張の変更にバージョン更新を必須化する CI ガード——と、1.0 後に追加された bundles、拡張/プリセット、`/speckit-converge` コマンドの流れを継続。8 月 21 日の 1.0.0 マイルストーン（初コミット 1 周年）はバージョン番号を明示的に「ただの数字」と定義し、安定性の保証よりも適応性を優先する姿勢を示した。
+
+**なぜ重要か：** 13.5 万スターと 1.0 後の週次リリースは、仕様ファーストのワークフローが方法論のエッセイではなくエージェントコーディングの既定インフラになりつつあることを示す——注目すべきはチェンジログの拡張/プリセットカタログで、そこが spec-kit がテンプレートからプラットフォームに変わる場所だからだ。
+
+[`🔗 github/spec-kit`](https://github.com/github/spec-kit) · [`🔗 v1.0.6 リリースノート`](https://github.com/github/spec-kit/releases/tag/v1.0.6)
+
+---
+
+## 44. Claude の未成年アカウントが消え始めた——5 月の年齢確認ポリシーが執行段階へ、HN はベンダー監査を開始
+
+- **速度：** ▮▮ rising
+- **ソース：** Hacker News · 116+ pts · 約 1.5 時間前（18:48 UTC+8）
+- **タグ：** `anthropic` `age-verification` `privacy` `compliance`
+
+Anthropic の「Age Assurance on Claude」サポート文書（18 歳以上のみ、Yoti によるセルフィー年齢推定・身分証アップロード・デジタル ID での確認）は 5 月 18 日から公開されていた——新しく的是執行の波が HN に届いたこと：保護者の一人は、17 歳の息子が宿題の会話で年齢に言及しただけでアカウントを無効化されたと報告、フラグの立ったアカウントは現在「確認するか失うか」の選択を迫られている。文書のデータ主張：Anthropic は合否結果のみを受け取り、Yoti は確認後ただちにセルフィーと身分証画像を削除する。スレッドの監査はポリシーより鋭い：Anthropic は理由を示さず「Persona から Yoti に切り替えた」、コメント者は生体データの同意問題でスペインから 95 万ユーロの制裁金を科された Yoti の前科を掘り起こし、結論は「責任管理」（COPPA/英国 AADC のリスク、未成年は売上にほぼ寄与しない）と genuine な安全の物語との間で割れた——antirez の一節がスレッドの総括：「Anthropic は無意味な AI リスクをすべて回避することは信じられないほど得意だが、本当のリスクには何もしていない」。
+
+**なぜ重要か：** 規制圧力の下、年齢確認はあらゆるコンシューマー AI に波到来しつつあり、このスレッドはユーザーが実際に経験する 2 つの失敗モードの実演プレビューだ——会話ベース分類器による誤検知の凍結、そして確認ベンダー自身のプライバシー前科が製品の信頼の物語の一部になること。
+
+[`🔗 Age Assurance on Claude（サポート文書）`](https://support.claude.com/en/articles/15171100-age-assurance-on-claude) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49656225)
+
+---
+
+## 45. EvoSafeHarness——ジョンズ・ホプキンスがモデル別・ドメイン別の安全ハーネスを自動進化、ASR ゼロで CaMeL の 2 倍のユーティリティを主張
+
+- **速度：** ▮ steady
+- **ソース：** Hugging Face papers · arXiv 2609.05903 · 34+ upvotes
+- **タグ：** `agent-safety` `harnesses` `prompt-injection` `research`
+
+EvoSafeHarness は安全ハーネスそのものを探索可能な成果物として扱う：対象ドメインの凍結された LLM エージェントに対し、自然言語ポリシーと実行可能なコードロジックを共同で進化させ、モデルの挙動・ドメイン仕様・（ベンチマーク特化ルールを拒否する）「フレッシュコンテキストの対抗レビュー」に導かれる。主張される結果：DecodingTrust-Agent の攻撃成功率は 45.6%→10.0%、ユーティリティコストはわずか 3.3 ポイント。AgentDojo では 0.0% ASR で 82.8% ユーティリティ——同一動作点で CaMeL の 2 倍——で、ハーネスは未知の AgentDyn スイートへ無変更で移行。精緻化予算 16 の適応型 PAIR 攻撃に対しても平均 ASR は 20% 未満を維持。分析の結論：ドメインの意味論が*どの*安全関係が必要かを決め、モデル/ランタイムの挙動が*どこでどう*強制するかを決める。
+
+**なぜ重要か：** このフィードが毎日追っている「ハーネスこそがプロダクト」というテーゼの、能力ではなく安全への適用だ——誠実な境界として、すべての数値はベンチマーク内部の数値であり、移行の主張も同一ベンチマークファミリー内のスイートに限られる。
+
+[`🔗 arXiv:2609.05903`](https://arxiv.org/abs/2609.05903) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 46. Project Zero の MAccConc——Jann Horn が KCOV を Linux カーネルのレースコンディション顕微鏡に変える
+
+- **速度：** ▮ steady
+- **ソース：** Google Project Zero + HN · 12+ pts · 9 月 9 日投稿
+- **タグ：** `linux-kernel` `race-conditions` `security-research` `tooling`
+
+MAccConc（「Memory Access Concurrency」）は、メモリアクセス トレース——KASAN outline 計装を KCOV 経由でユーザー空間へ流し、スレッド横断の「通信ポイント」（重なるアクセス、少なくとも一方は書き込み）を特定——と、「カウント拡張スタックトレース」による安定したアクセス識別子、そして制約型の「A が B に先行」ペアから完全指定のコンテキストスイッチ列までを強制できる新しい `KCOV_SET_DI` ioctl による遅延注入を組み合わせる。LLVM SanitizerCoverage の新機能（23.1.0）が必要で、カーネルパッチはレビューに投稿されたが未マージ。明示された範囲：新たな脆弱性の開示はなし——デモは `dup(5)` 対 `close(5)` の toy レースで、自動テスターが意外だが正当な順序を発見。CLI ツールは 2 スレッドまで（GUI はそれ以上）、スタック上のレースは見逃される可能性があり（ASAN は直接スタックアクセスをフックしない）、パニック時は KCOV データが失われる。
+
+**なぜ重要か：** レースコンディションは「回帰テストを書く」がほぼ伝承と化しているバグクラスだ——このツールは mdelay と祈りを再現可能なインターリービングに置き換え、その部品表（KCOV + KASAN + 新しい ioctl）はカーネルファザーが既に実行しているインフラから意図的に構成されている。
+
+[`🔗 MAccConc：レースコンディション テストツール（Project Zero）`](https://projectzero.google/2026/09/maccconc-race-condition.html) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49620760)
+
+---
+
+## 47. 四色定理に稀な新証明——n² ではなく n log n、8,202 の構成、それでも計算機支援
+
+- **速度：** ▮ steady
+- **ソース：** Quanta Magazine + HN · 50+ pts · 9 月 10 日 22:46 UTC+8 投稿
+- **タグ：** `mathematics` `graph-theory` `computer-assisted-proof`
+
+6 人のチーム——Mikkel Thorup、Carsten Thomassen、Ken-ichi Kawarabayashi、Bojan Mohar と学生 2 名、作業は「2015 年デンマークのビーチで」開始——が新しい四色定理の証明を投稿した（arXiv 2026 年 3 月、11 月に FOCS で発表予定）。新しさは：彩色アルゴリズムは 1997 年の証明の n² ではなく n(log n) ステップで済む。各頂点がちょうど 6 つの隣接を持つ「フラット」領域を掘る——以前の証明が分析困難を理由に避けた領土。その不可避免集合は 8,202 の構成を含む（1997 年は 633）——しかし多くは互いに干渉せず並列に簡約でき、場合分けを数ステップに圧縮する。検証の注意点は最前面にある：依然として計算機支援であり、Georges Gonthier いわく「ある意味では先行版よりもさらに複雑」。Thomassen 自身の目標は未達のままだ：「私が望むのは計算機を使わない証明です」。
+
+**なぜ重要か：** 最も悪名高い計算機支援証明における進展は、このフィードが追い続けている形式検証論争全体（Anthropic の Lean 版フェルマー、NVIDIA の証明器なし IMO ゴールド）へのデータポイントだ——ここでは計算機の負担は軽くなるどころか*さらに重く*なったが、それでも数学界はそれを進歩と数える。
+
+[`🔗 Quanta：四色定理に稀な新証明`](https://www.quantamagazine.org/the-four-color-theorem-gets-a-rare-new-proof-20260910/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49644647)
+
+---
+
+## 48. p1neappleXpress/OpenFlux——トラフィックを Yandex Docs と WebRTC に紛れ込ませる Go の TCP トンネルが 1 日 +201 スター
+
+- **速度：** ▮ steady
+- **ソース：** GitHub Trending · 本日 +201 スター · 累計 943 · 最終コミット 2026-09-11
+- **タグ：** `networking` `censorship-circumvention` `go` `tunnel`
+
+OpenFlux（Go、GPL-3.0、28 コミット、リリースはまだ無し）は「ネットワークスタック研究ツール。プラグ可能なトランスポートを持つ TCP トンネル」：ローカルの SOCKS5 プロキシがトラフィックをサードパーティサービスのプロトコルに包み、出口ノードがデカプセルして転送する——クライアント（SOCKS5）→ トランスポート → 出口ノード → インターネット。同梱の 2 つのトランスポートが物語る：**Yandex** はパケットを Yandex Docs のカーソルメッセージに隠し、**Max**（実験的）はロシアのメッセンジャーの WebRTC DataChannel を使う——README 自身がアカウント制限の可能性を警告。コンパイル済みバイナリの名前は `universal-bypass-tool`；免責事項は「教育目的のみ。自分のマシンとネットワークでテストしてください」。ビルドターゲットには Android（NDK）と iOS（Xcode）を含む。
+
+**なぜ重要か：** 生産性アプリを装ったトラフィックカモフラージュは検閲回避の現在のフロンティアだ——ブロックすれば目に見える巻き添えを出すサービスへの普通の API 呼び出しにプロキシ トラフィックを偽装する——そしてトレンド急上昇は需要側が組織化していることを示す。README 自身の免責事項こそが法的現実：これはデュアルユース ツールだ。
+
+[`🔗 p1neappleXpress/OpenFlux`](https://github.com/p1neappleXpress/OpenFlux) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 49. System76 の Thelio Mira AI が 192 GB の GPU メモリを $3,299 で机に載せる——ローカル AI ハードウェアに一般人が読めるスペックシートができる
+
+- **速度：** ▮ steady
+- **ソース：** System76 + HN · 113+ pts · 約 13 時間前（07:10 UTC+8）
+- **タグ：** `hardware` `local-ai` `linux` `workstation`
+
+Thelio Mira AI は System76 の GPU 特化 Linux ワークステーション：基本構成 $3,299、最高構成は**デュアル RTX PRO 6000 で 192 GB の GPU メモリ**（1000W + 750W の 2 電源）、長時間の学習ランに備えた ECC GPU メモリ、デュアル PCIe 5.0 x16 スロット（x8/x8）、Ryzen 9 9950X、最大 192 GB DDR5、2×5GbE + WiFi 7、Pop!_OS 24.04 LTS を同梱。中間構成：96 GB 単体 RTX PRO 6000（Max-Q または標準）、96 GB デュアル RTX PRO 5000、48 GB デュアル RTX PRO 4000、AMD R9700 オプション。デンバーでハンドクラフト、RAM/ストレージ/GPU はユーザーがアップグレード可能、在庫あり。
+
+**なぜ重要か：** 192 GB は、このフィードが追ってきた SSD からストリーミングする 100B+ MoE オープンウェイトモデルのフロンティア隣接モデルがメモリに全体収まる閾値を越えている——この価格点で保証付きの市販機が手に入ることは、「どのモデルが自分のマシンで動くか」ツールの波のサプライサイドの対応物であり、改造ゲーム機ではなく Linux ファーストだ。
+
+[`🔗 System76 Thelio Mira AI`](https://system76.com/workstations/thelio-mira-ai) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49651372)
+
+---
+
+## 50. jihe520/MathModelAgent——提出可能な数学モデリング論文を自動執筆するエージェントが 1 日 +132 スター、しかしライセンスすらない
+
+- **速度：** ▮ steady
+- **ソース：** GitHub Trending · 本日 +132 スター · 累計 4,739 · v0.0.19 は 9 月 10 日リリース
+- **タグ：** `math-modeling` `agents` `paper-writing` `chinese-oss`
+
+MathModelAgent（中国語 README 優先、全国大会などのモデリングコンテスト向け）はモデリング問題をエンドツーエンドで走らせる：エージェントがモデリングを行い、計算を実行し、「提出可能な完全な論文」を生成する。開発は速い——v0.0.17（9 月 8 日）、v0.0.18（9 月 10 日午前）、v0.0.19（9 月 10 日夜）——昨日も今日もコミットが続く。最も目を引く欠落：4,739 スターのリポジトリに **LICENSE ファイルがない**。デフォルトの著作権法の下では、このトレンドのコードは法的に「無断複製不可」——読むことはできても再利用はできない。
+
+**なぜ重要か：** コンテスト駆動のエージェントパイプラインは独立した中国発 OSS ジャンルであり（モデリングコンテストは通過儀礼だ）、欠けたライセンスこそこの項目自体の警告——「作者に聞いて」が利用条件という 4.7k スターのリポジトリは、このフィードが警告する採用の罠そのものであり、v0.0.20 の 1 コミットで直せるものでもある。
+
+[`🔗 jihe520/MathModelAgent`](https://github.com/jihe520/MathModelAgent) · [`🔗 releases`](https://github.com/jihe520/MathModelAgent/releases)
+
+---
+
 ## Metadata
 
 | 項目 | 値 |
 |-------|-------|
-| 生成日時 | 2026-09-11T12:15:00+08:00 |
-| 項目数 | 38 |
-| 追跡ソース | 36（Hacker News, GitHub Trending, Shopify Engineering, Rust Foundation, Cognition ブログ, Mathstodon, consumerrights.wiki, Proofpoint, BleepingComputer, CISA KEV, Wiz Research, OX Research, NVD, The Hacker News, arXiv, Hugging Face papers, Show Lab, magic.dev, PlanetScale/Neki, OpenJDK, armorpaint, ayles.github.io, vercel-labs/skills, OpenAI プライバシーポータル, OpenAI 開発者ドキュメント, GreyNoise, Anthropic, Check Point サポート, Codeberg, auberon.xyz, YuE2 プロジェクトページ, merybenavente.me, Plex フォーラム, datasette.io, Simon Willison, SuperPlane ブログ） |
+| 生成日時 | 2026-09-11T20:20:00+08:00 |
+| 項目数 | 50 |
+| 追跡ソース | 42（Hacker News, GitHub Trending, Shopify Engineering, Rust Foundation, Cognition ブログ, Mathstodon, consumerrights.wiki, Proofpoint, BleepingComputer, CISA KEV, Wiz Research, OX Research, NVD, The Hacker News, arXiv, Hugging Face papers, Show Lab, magic.dev, PlanetScale/Neki, OpenJDK, armorpaint, ayles.github.io, vercel-labs/skills, OpenAI プライバシーポータル, OpenAI 開発者ドキュメント, GreyNoise, Anthropic, Check Point サポート, Codeberg, auberon.xyz, YuE2 プロジェクトページ, merybenavente.me, Plex フォーラム, datasette.io, Simon Willison, SuperPlane ブログ, nasutton.notion.site, mmoustafa.com, openai.com, windowsforum.com, Quanta Magazine, projectzero.google, system76.com） |
 | 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（毎日 3 回） |
 | ランキング | ベロシティ重視（鮮度 × エンゲージメント加速度 × ソースの権威） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-09-11
-updated: 2026-09-11T12:15:00+08:00
+updated: 2026-09-11T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -547,13 +547,181 @@ sub2api (Go + Vue, LGPL-3.0) lets teams self-host a gateway that pools Claude/Op
 
 ---
 
+## 39. Nine coding harnesses vs. your laptop — the same local model feels 10× different depending on which harness you pick
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 121+ pts · ~13h ago (06:54 UTC+8)
+- **Tags:** `coding-harnesses` `local-llm` `benchmarks` `apple-silicon`
+
+Nine coding harnesses, eight Exercism tasks, one M4 MacBook Pro (24GB) serving a 3-bit Qwen 3.8 27B through a shared llama.cpp server with a forcing proxy: every number comes from llama-server's own accounting, never harness self-reports. The headline finding is prefill: pi opens with a 2,008-token prefix vs OpenCode's 18,046 — 0.2s vs 1.8s on a datacenter GPU, but **measured 22s vs 226s** before the first token on a laptop, leaving 94% vs 44% of a ~32k context for actual work. Side requests compound it: over 24 tasks OpenCode fired 33, crush 51, dsh 24 — the GPU was "busy" 125% of wall clock with two requests in flight. The author's grouping: lean-and-stable (pi, mini-swe-agent, chad), heavy-but-disciplined (dsh, cline, codex, goose — goose 1.50.0 had re-rendered a timestamp into the first message every turn, tanking cache reuse to 78%), heavy-to-start (crush, OpenCode: 3–4 minutes of waiting). chad's in-process MLX engine went 7.9→17.4 tok/s over client/server, and its DFlash2 drafter read 23.3 vs 15.9 tok/s (1.47×, win on all eight tasks).
+
+**Why it matters:** the harness premium on localhost is an order of magnitude, not a rounding error — and the writeup's own hedges are the discipline to copy: the pass gate is trivial Python ("do not interpret as a ranking"), experienced tok/s "spreads up to 50% between nights, so nothing between the lean arms is a finding," and the author admits he built one of the harnesses (chad) being measured.
+
+[`🔗 Nine coding harnesses vs. your laptop`](https://nasutton.notion.site/Nine-coding-harnesses-vs-your-laptop-3d139990182b80d59fa3cf500f0450ba) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49651221)
+
+---
+
+## 40. "So you want to use OpenRouter?" — 18M messages of field notes say the same weights are not the same model
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 223+ pts · posted Sep 9, 13:37 UTC+8, still climbing
+- **Tags:** `openrouter` `llm-routing` `reliability` `providers`
+
+Mo Moustafa (iMessage assistant Olly, 18M+ messages, ~⅓ via OpenRouter) catalogs the gap between "the model" and "the provider": asking for `deepseek-v4-flash` can land on ~20 hosts whose results diverge wildly — first-party scored 90% GPQA / 81% TAU-Bench vs DigitalOcean's 75% / 58%, with most hosts 5–7 points below first-party on tool calling. The failure catalog: vision models returning HTTP 200 with "no image provided" or a misread letter; `reasoning.effort` silently ignored by several hosts; hollow 200s with null content (StreamLake caused ~20% of traffic and 92% of empty completions in July); per-provider history rules (empty `reasoning_content` echoed back = 400 on SiliconFlow, fine on Baidu/Alibaba/Cloudflare); prod-vs-laptop rate-limiting asymmetry; and quantization being a poor quality proxy — "filter on the board, not the bits." Pinning three "reliable" hosts with fallbacks off produced a full outage within two weeks as each failed in turn.
+
+**Why it matters:** the router has quietly become the reliability layer of the open-weights stack — same weights on a different host can be a different product, and every "model benchmark" number is really a model×host number. The HN thread is the field manual most teams never write.
+
+[`🔗 So you want to use OpenRouter?`](https://mmoustafa.com/blog/so-you-want-to-use-openrouter/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49621546)
+
+---
+
+## 41. GPT-Live-1 lands in the API — OpenAI sells the voice layer separately from the brain
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI + HN · 44+ pts · ~6h ago (13:45 UTC+8) · announcement Sep 10, 23:00 UTC+8
+- **Tags:** `openai` `voice` `speech-models` `api`
+
+GPT-Live-1, the full-duplex voice model from ChatGPT, is now callable in the API at $0.05/min for the front-end voice layer — with the architecture pitched as the product: one model listens and speaks simultaneously while **delegating reasoning and tool calls to a backend text model** ("like GPT-6 Astra or a third-party model"), instead of chained STT→LLM→TTS. Claimed numbers: +30 percentage points on Full Duplex Bench over GPT-Realtime-2.1; #1 on Tau3 when paired with Astra (medium effort); Speak reports interruptions cut by almost 80% vs turn-based systems. Telephony support ships; custom voices require a sales conversation. The HN thread's counterweights: delegation round-trips reportedly added minutes for trivial requests in one early test, and several commenters dispute how much raw audio the model actually understands (transcript-based processing skepticism) — plus one public demo that got stuck mid-task.
+
+**Why it matters:** the "voice front-end + reasoning back-end" split is becoming the standard voice-agent architecture — the latency budget moves to the delegation hop, and the benchmarks that matter (Tau3, Full Duplex Bench) are increasingly measuring the pair, not the voice model alone.
+
+[`🔗 OpenAI: Introducing GPT-Live-1 in the API`](https://openai.com/index/introducing-gpt-live-1-in-the-api/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49653985)
+
+---
+
+## 42. MikroTrick lands on CISA KEV — both RouterOS flaws now carry a federal patch deadline
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV (added Sep 10) · remediation due by Sep 24 (BOD 26-04 triage)
+- **Tags:** `cve` `mikrotik` `kev` `routeros`
+
+Since we covered the "MikroTrick" chain on Sep 8, both RouterOS flaws are now KEV-listed (added Sep 10): **CVE-2026-67277** — the bandwidth-test (`btest`) service accepts a "related" connection before the primary session authenticates, giving an unauthenticated attacker kernel memory disclosure and DoS (CVSS ~8.8); and **CVE-2026-86060** — improper argument-delimiter handling in the SSH login path lets usernames beginning with a prohibited character manipulate the trusted policy mask and escalate privileges. Related reporting describes a companion SSH public-key comparison flaw (CVE-2026-67276) enabling user impersonation. CISA's additions put federal agencies on the standard binding remediation clock; MikroTik's guidance is current stable RouterOS plus firewalling `btest` off WAN interfaces. The caution from the original disclosure still applies: this is an actively-chained privilege path on internet-exposed routers, the device class with the worst patch latency in networking.
+
+**Why it matters:** the KEV listing converts a researcher disclosure into a compliance deadline — and MikroTik's installed base (home routers, ISPs, embedded links) is precisely the population that doesn't read advisories, which is how these boxes end up in botnets within weeks.
+
+[`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`→ WindowsForum: MikroTik RouterOS flaws added to KEV`](https://windowsforum.com/news/mikrotik-routeros-flaws-added-to-cisa-kev-after-exploits.444255/)
+
+---
+
+## 43. github/spec-kit re-trends at +985/day — a week past 1.0, the spec-driven toolkit is shipping weekly
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending #15 · +985 stars today · 135,489 total · v1.0.6 released Sep 10
+- **Tags:** `spec-driven-development` `agents` `cli` `github`
+
+Spec Kit, GitHub's MIT toolkit for Spec-Driven Development ("define what to build before building it — with any AI coding agent"), is trending again on the heels of two releases: v1.0.5 (Sep 8) and v1.0.6 (Sep 10). The 1.0.6 changelog is mostly integration hardening — per-step integration configuration in workflows, an error instead of a silent skip when `extensions.yml` is unreadable, preservation of extension authors in generated skills, a CI guard requiring version bumps on bundled-extension changes — continuing the post-1.0 stretch that added bundles, extensions/presets, and the `/speckit-converge` command. The 1.0.0 milestone (Aug 21, one year after first commit) explicitly defined the number as "just a number," signaling adaptability over stability guarantees.
+
+**Why it matters:** 135k stars and weekly post-1.0 releases say spec-first workflows are becoming default infrastructure for agent coding rather than a methodology essay — the extension/preset catalog in the changelog is the part to watch, since that's where spec-kit turns from a template into a platform.
+
+[`🔗 github/spec-kit`](https://github.com/github/spec-kit) · [`🔗 v1.0.6 release notes`](https://github.com/github/spec-kit/releases/tag/v1.0.6)
+
+---
+
+## 44. Claude's minor accounts start disappearing — the May age-assurance policy is now being enforced, and HN is auditing the vendor
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 116+ pts · ~1.5h ago (18:48 UTC+8)
+- **Tags:** `anthropic` `age-verification` `privacy` `compliance`
+
+Anthropic's "Age Assurance on Claude" support doc (18+ only, Yoti-powered verification via selfie age estimation, ID upload, or digital ID) has been up since May 18 — what's new is the enforcement wave reaching HN: a parent reports a 17-year-old's account disabled after mentioning his age in a schoolwork conversation, and flagged accounts now get a verification-or-losing path. The doc's data claims: Anthropic receives only a pass/fail; Yoti deletes selfies/ID images after the check. The thread's audit is sharper than the policy: Anthropic "switched from Persona to Yoti" with no stated justification; commenters resurface Yoti's €950,000 Spanish fine over biometric-data consent failures; and the verdict splits between "liability management" (COPPA/UK AADC exposure, minors bring negligible revenue) and genuine safety framing — with antirez's line as the thread's summary: Anthropic is "incredibly good at avoiding all the useless AI risks, while not doing anything serious about the real risks."
+
+**Why it matters:** age assurance is arriving across consumer AI under regulatory pressure, and this thread is a working preview of the two failure modes users will actually experience — false-positive lockouts from conversation-based classifiers, and ID-verification vendors whose own privacy records become part of the product's trust story.
+
+[`🔗 Age Assurance on Claude (support doc)`](https://support.claude.com/en/articles/15171100-age-assurance-on-claude) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49656225)
+
+---
+
+## 45. EvoSafeHarness — Johns Hopkins auto-evolves a per-model, per-domain safety harness, and claims 2× CaMeL's utility at zero ASR
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face papers · arXiv 2609.05903 · 34+ upvotes
+- **Tags:** `agent-safety` `harnesses` `prompt-injection` `research`
+
+EvoSafeHarness treats the safety harness as a searchable artifact: for a frozen LLM agent in a target domain, it jointly evolves a natural-language policy and executable code logic, guided by model behavior, domain specs, and "fresh-context adversarial review" to reject benchmark-specific rules. Claimed results: DecodingTrust-Agent attack success rate 45.6% → 10.0% at a 3.3-point utility cost; on AgentDojo, 82.8% utility at 0.0% ASR — twice CaMeL's utility at the same operating point — with the harness transferring unchanged to unseen AgentDyn suites; mean ASR stays under 20% against adaptive PAIR attacks with a refinement budget of 16. Its analysis line: domain semantics determine *which* safety relations matter, model/runtime behavior determines *how and where* to enforce them.
+
+**Why it matters:** it's the same "harness is the product" thesis this feed tracks daily, pointed at safety instead of capability — and the honest boundary is that every number is benchmark-internal, with the transfer claim confined to suites in the same benchmark family.
+
+[`🔗 arXiv:2609.05903`](https://arxiv.org/abs/2609.05903) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 46. Project Zero's MAccConc — Jann Horn turns KCOV into a race-condition microscope for the Linux kernel
+
+- **Velocity:** ▮ steady
+- **Source:** Google Project Zero + HN · 12+ pts · posted Sep 9
+- **Tags:** `linux-kernel` `race-conditions` `security-research` `tooling`
+
+MAccConc ("Memory Access Concurrency") combines memory-access tracing — KASAN outline instrumentation piped to userspace through KCOV, identifying cross-thread "communication points" (overlapping accesses, at least one write) — with stable access identifiers via "count-augmented stack traces" and a new `KCOV_SET_DI` ioctl for delay injection that forces orderings, from constraint-style A-before-B pairs to fully specified context-switch sequences. An LLVM SanitizerCoverage feature (23.1.0) is required; the kernel patches are posted for review but not upstream. Stated scope: no new vulnerability disclosed — the demo is a toy `dup(5)` vs `close(5)` race where the automatic tester finds the surprising-but-valid ordering; CLI tooling handles two threads (the GUI more); on-stack races may be missed (ASAN doesn't hook direct stack accesses); KCOV data is lost on panic.
+
+**Why it matters:** race conditions are the bug class where "write a regression test" has mostly been folklore — this replaces the mdelay-and-pray method with reproducible interleavings, and its parts list (KCOV + KASAN + a new ioctl) is deliberately built from infrastructure kernel fuzzers already run.
+
+[`🔗 MAccConc: race condition testing tooling (Project Zero)`](https://projectzero.google/2026/09/maccconc-race-condition.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49620760)
+
+---
+
+## 47. The four-color theorem gets a rare new proof — n log n instead of n², 8,202 configurations, still computer-assisted
+
+- **Velocity:** ▮ steady
+- **Source:** Quanta Magazine + HN · 50+ pts · posted Sep 10, 22:46 UTC+8
+- **Tags:** `mathematics` `graph-theory` `computer-assisted-proof`
+
+A six-person team — Mikkel Thorup, Carsten Thomassen, Ken-ichi Kawarabayashi, Bojan Mohar and two students, work begun "on a Danish beach in 2015" — posted a new four-color theorem proof (arXiv March 2026, to be presented at FOCS in November). What's new: the coloring algorithm needs n(log n) steps instead of the 1997 proof's n²; it mines "flat" regions where every vertex has six neighbors, territory earlier proofs skipped as too hard; and its unavoidable set holds 8,202 configurations (vs 633 in 1997) — but many reduce in parallel without interference, cutting the case analysis to a few steps. The verification caveats are front and center: it remains computer-assisted and, per Georges Gonthier, "in some ways even more complicated than its predecessors." Thomassen's own goal stays unmet: "What I would like is a proof without the use of a computer."
+
+**Why it matters:** progress on the most-infamous computer-assisted proof is a datapoint for the whole formal-verification debate this feed tracks (Anthropic's Lean Fermat, NVIDIA's no-prover IMO gold) — here the computers got *more* load-bearing, not less, and the field still counts that as progress.
+
+[`🔗 Quanta: The Four-Color Theorem Gets a Rare New Proof`](https://www.quantamagazine.org/the-four-color-theorem-gets-a-rare-new-proof-20260910/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49644647)
+
+---
+
+## 48. p1neappleXpress/OpenFlux — a Go TCP tunnel that smuggles traffic through Yandex Docs and WebRTC hits +201/day
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +201 stars today · 943 total · last commit 2026-09-11
+- **Tags:** `networking` `censorship-circumvention` `go` `tunnel`
+
+OpenFlux (Go, GPL-3.0, 28 commits, no releases yet) is a "network stack research tool. TCP tunnel with pluggable transports": a local SOCKS5 proxy wraps traffic into third-party service protocols, ships it to an exit node that decapsulates and forwards — Client (SOCKS5) → Transport → Exit Node → Internet. The two shipped transports are telling: **Yandex** tunnels packets through Yandex Docs cursor messages, and **Max** (experimental) through WebRTC DataChannels of the Russian messenger, with the README warning of potential account restrictions. The compiled binary is named `universal-bypass-tool`; the disclaimer reads "Educational use only. Test on your own machines and networks." Build targets include Android (NDK) and iOS (Xcode).
+
+**Why it matters:** trafficcamouflage-through-productivity-apps is the current frontier of censorship circumvention — disguising proxy traffic as ordinary API calls to services that can't be blocked without visible collateral — and the trend spike says the demand side is organized. The README's own disclaimers are the legal reality: this is dual-use tooling.
+
+[`🔗 p1neappleXpress/OpenFlux`](https://github.com/p1neappleXpress/OpenFlux) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 49. System76's Thelio Mira AI puts 192 GB of GPU memory on a desk for $3,299 — local AI hardware gets a spec sheet normal people can read
+
+- **Velocity:** ▮ steady
+- **Source:** System76 + HN · 113+ pts · ~13h ago (07:10 UTC+8)
+- **Tags:** `hardware` `local-ai` `linux` `workstation`
+
+The Thelio Mira AI is System76's GPU-focused Linux workstation: base config $3,299, topping out at **192 GB of GPU memory via dual RTX PRO 6000 cards** (1000W + 750W PSUs) with ECC GPU memory for long training runs, dual PCIe 5.0 x16 slots (x8/x8), Ryzen 9 9950X, up to 192 GB DDR5, 2×5GbE + WiFi 7, shipping with Pop!_OS 24.04 LTS. Intermediate tiers: 96 GB single RTX PRO 6000 (Max-Q or standard), 96 GB dual RTX PRO 5000, 48 GB dual RTX PRO 4000, AMD R9700 options. Handcrafted in Denver, user-upgradeable RAM/storage/GPUs, listed in stock.
+
+**Why it matters:** 192 GB is past the threshold where frontier-adjacent open-weights models (the 100B+ MoEs this feed tracks streaming from SSD) fit fully in memory — a commercial, warrantied box at this price point is the supply-side counterpart to the "which model runs on my machine" tooling wave, and it's Linux-first rather than a repurposed gaming rig.
+
+[`🔗 System76 Thelio Mira AI`](https://system76.com/workstations/thelio-mira-ai) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49651372)
+
+---
+
+## 50. jihe520/MathModelAgent — an agent that writes submission-ready math-modeling papers trends at +132/day with no license at all
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +132 stars today · 4,739 total · v0.0.19 released Sep 10
+- **Tags:** `math-modeling` `agents` `paper-writing` `chinese-oss`
+
+MathModelAgent (Chinese README-first, aimed at competitions like the CUMCM) takes a modeling problem end-to-end: the agent does the modeling, runs the computation, and generates "a complete paper ready for submission." Development is fast — v0.0.17 (Sep 8), v0.0.18 (Sep 10 morning), v0.0.19 (Sep 10 evening) — with commits landing yesterday and today. The glaring omission: at 4,739 stars there is **no LICENSE file**, which under default copyright means all that trending code is legally all-rights-reserved — usable to read, not to reuse.
+
+**Why it matters:** competition-driven agent pipelines are a distinct Chinese OSS genre (modeling contests are a rite of passage), and the missing license is the item's own caveat — a 4.7k-star repo whose terms are "ask the author" is exactly the kind of adoption trap this feed flags, and exactly the thing a v0.0.20 could fix in one commit.
+
+[`🔗 jihe520/MathModelAgent`](https://github.com/jihe520/MathModelAgent) · [`🔗 releases`](https://github.com/jihe520/MathModelAgent/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-11T12:15:00+08:00 |
-| Items | 38 |
-| Sources tracked | 36 (Hacker News, GitHub Trending, Shopify Engineering, Rust Foundation, Cognition blog, Mathstodon, consumerrights.wiki, Proofpoint, BleepingComputer, CISA KEV, Wiz Research, OX Research, NVD, The Hacker News, arXiv, Hugging Face papers, Show Lab, magic.dev, PlanetScale/Neki, OpenJDK, armorpaint, ayles.github.io, vercel-labs/skills, OpenAI privacy portal, OpenAI developers docs, GreyNoise, Anthropic, Check Point support, Codeberg, auberon.xyz, YuE2 project page, merybenavente.me, Plex forums, datasette.io, Simon Willison, SuperPlane blog) |
+| Generated | 2026-09-11T20:20:00+08:00 |
+| Items | 50 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, Shopify Engineering, Rust Foundation, Cognition blog, Mathstodon, consumerrights.wiki, Proofpoint, BleepingComputer, CISA KEV, Wiz Research, OX Research, NVD, The Hacker News, arXiv, Hugging Face papers, Show Lab, magic.dev, PlanetScale/Neki, OpenJDK, armorpaint, ayles.github.io, vercel-labs/skills, OpenAI privacy portal, OpenAI developers docs, GreyNoise, Anthropic, Check Point support, Codeberg, auberon.xyz, YuE2 project page, merybenavente.me, Plex forums, datasette.io, Simon Willison, SuperPlane blog, nasutton.notion.site, mmoustafa.com, openai.com, windowsforum.com, Quanta Magazine, projectzero.google, system76.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
