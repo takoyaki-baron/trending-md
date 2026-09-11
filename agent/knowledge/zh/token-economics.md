@@ -232,3 +232,15 @@ per-token 牌价（与这里已记录的分词器增量、前缀缓存稳定性�
 ## 写侧过滤器迎来第三个选手(09-10)
 
 **petergyang/no-ai-slop**(几天 7.8k★)加入 caveman 技能与 `blader/humanizer`,成为第三个写侧风格过滤器——也是采纳最快的:单文件技能渠道一周内把一个写作 linter 送上数千星(`/no-ai-slop` 或 `npx skills add`)。定位不同于 humanizer 的 35 模式清单:检测刻意"不猜测是否 AI 所写",只标风格;且宣称的 20+ 模式公开仅列 10 个(其余在 `SKILL.md`)——不成文的规则文件仍是这个品类的常态,与 humanizer 一样。经济学的钩子没变:输出侧 token 为人的口味而非成本被重写——成本过滤器(caveman)与口味过滤器(humanizer、no-ai-slop)正从相反方向汇聚到同一条写路径上。
+
+## 第二个被测反的爆款省 token 宣称：RTK（09-12）
+
+**Quesma 对 RTK（"Rust Token Killer"，约 79k★）的 A/B 测试**——为编码 agent 压缩 shell 输出的工具——是本月第二个被基准测反的大额节省宣称（读侧压缩家族自己的独立复测是第一个）。设置：Terminal-Bench 2.1，Claude Code（Fable 5.0）+ OpenCode（DeepSeek V4 Pro），1,740 次尝试、超 $1,500 的 token 花费，每个任务开/关 RTK 各跑 5 遍。
+
+**结果：**总花费 −5%（Fable）与 +5%（DeepSeek）；按任务平均成本 +1%（统计上为零）与 **+17%（DeepSeek）**——而 RTK 自己的 `rtk gain` 宣称节省 3.492 亿 token（89%）。该指标按字节÷4 计算，还给两次 `head -1` 调用**各记了 1.205 亿 token**——那些命令本来就不会返回这么多输出。结论："我们不推荐 RTK 作为通用省钱工具。"
+
+**宣称机制与计费机制为何分叉：**更少的输出字节是真的，但计费机制——给模型更少的*输入* token——才是钱所在，而终端输出只占 Fable 输入 token 的约 11%，且提供商缓存让重读变得便宜。已声明的前提：4 个 Fable 任务因拒答被剔除，一个 9× 离群值被排除（0.45.0 的错误循环，其跑完后的 0.46.0 已修复），RTK"对更老的模型可能有更多帮助"。
+
+这把本层的模式钉死了：**测量持续击败断言**——caveman 自己的 README 承认其对照臂晚于发布表格；RTK 的反例则是把字节代理冒充 token。任何没有任务级 A/B（同任务、开/关、按成本而非字节）的省 token 宣称，现在已有两个公开反例。来源：
+[Quesma: Does RTK make AI coding cheaper?](https://quesma.com/blog/does-rtk-make-ai-coding-cheaper/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=49656471)

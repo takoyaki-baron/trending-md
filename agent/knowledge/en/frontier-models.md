@@ -2360,3 +2360,44 @@ the non-commercial ToS. The research-to-lookup-table move is real; the missing e
   in-repo deployment/fine-tuning Agent Skills. The SOTA claim is scoped "within this comparison set" (a
   self-selected 2B set), with "competitive with 4B-class models" as the carefully-treated stronger claim —
   scoped-benchmark honesty is still rare enough to note.
+
+## 09-12 04:03 — the agentic-coding quality audit, twice independently; the math community organizes; audit law arrives
+
+- **Ronacher runs GPT-6 Astra as a coding agent for 35 hours** (lucumr.pocoo.org, Sep 7; HN 415 pts):
+  ~75k net new lines, 79 commits (~$15.50/commit), ~$1,200 — delivering "absolutely nothing of value."
+  The diagnosis: Astra's RL training rewards token efficiency and long-horizon completion while barely
+  penalizing quality — "codegolfed" committed code (Python string-splicing to edit C files, magic
+  indexes, foreign C style). He names the arms race ***neijuan*** (involution): ever more effort without
+  improved output. His own caveats are the honest part: Astra is "an incredibly impressive model," his
+  full-autonomy setup was "a stupid way to prompt it," and the output might be fine for agent-only
+  codebases no human reads.
+- **Earendil measures the same phenomenon the same day** ("Measuring the sloppiness of code", HN 197 pts):
+  three metrics — verbosity (AST-Grep/clone-detection flags ÷ LOC), erosion (mass concentrated in
+  high-complexity functions), LOC delta — over SlopCodeBench (context erased between iterative
+  rounds). Agent code is ~2× as verbose (0.33±0.10 vs 0.15±0.06) and ~2× as eroded (0.68±0.20 vs
+  0.31±0.17) as established human repos; under strict all-checkpoints-pass scoring even state-of-the-art
+  models hit **0%** as bad decisions compound. AI-as-judge was rejected early — 1–10 scores were
+  "basically equivalent to a random number generator." The stated limits are the template for any slop
+  metric: Goodhart's law on the LOC metric, ambiguous problem statements, and architectural quality
+  (layering, interfaces) not measured at all. Two independent authors, one convergence: the harness
+  premium (thesis 12) has a quality-side bill, and current RL objectives don't pay it.
+- **25 Fields Medallists: "A Severe Misalignment of AI in Mathematics"** (mathandai.org, Sep 11; Tao
+  co-signs and prints the full text): mass-producing benchmark solutions "risks destroying fertile
+  ground," plus "severe attribution and plagiarism questions" over rush-announced AI proofs. The
+  escalation path is the finding: individual disputes (Navier–Stokes priority, the Thom exchange) → a
+  collective institutional response from the very top of mathematics, the same week a GOP Senate probe
+  opened into OpenAI's HF-breach response (Hawley: 16 questions + documents due Oct 1; "reckless" is his
+  characterization — the durable part is the mandated-disclosure/redaction question). Tao's own caveat —
+  "we did not have the time to have a more consultative process" — bounds the document's mandate.
+- **California SB 813 + AB 1405 signed Sep 9** — the first-in-the-nation framework for independent AI
+  verification organizations + a state auditor registry with independence/transparency standards
+  (Reuters confirms enactment; OpenAI's Lehane voiced support). The bills create the *auditor
+  ecosystem*, not new direct developer duties; no effective dates in the release. The measuring
+  infrastructure this thesis's safety items kept finding weak is acquiring statutory owners —
+  "we cannot expect industry to grade its own homework" (Bauer-Kahan).
+- Sources: [Ronacher: Astra for Coding](https://lucumr.pocoo.org/2026/9/7/astra-why/) ·
+  [Earendil: Measuring code sloppiness](https://earendil.com/posts/measuring-code-sloppiness/) ·
+  [Tao: A Severe Misalignment of AI in Mathematics](https://terrytao.wordpress.com/2026/09/11/a-severe-misalignment-of-ai-in-mathematics/) ·
+  [mathandai.org](https://mathandai.org/) ·
+  [Axios: Senate probe](https://www.axios.com/2026/09/10/openai-hugging-face-senate-investigation-hawley) ·
+  [gov.ca.gov: AI safeguards signed](https://www.gov.ca.gov/2026/09/09/governor-newsom-signs-first-in-the-nation-ai-safeguards-to-protect-californians-calls-on-the-federal-government-to-do-its-part/)

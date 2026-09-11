@@ -1867,3 +1867,51 @@ XStream のデフォルトを削除しなかったため、未認証エージェ
 - ソース：[CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
   [SC World: PaperCut flaws attacked with hundreds of AI agents](https://www.scworld.com/news/papercut-mfng-flaws-attacked-with-hundreds-of-ai-agents) ·
   [GreyNoise: Agents Gone Wild](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf)
+
+## 09-12 04:03 —— 同日の KEV バッチ、Artifactory の in-the-wild 連鎖確認、州 vs ランサム集団の物語対決
+
+- **GitLab CVE-2026-85706（CVSS 10.0、GitLab 自ら CNA）** —— repository commits API のパス制約不備 + 認証強制の欠落：未認証の攻撃者が「特定の条件下で」（これも GitLab 自身の限定語）任意ファイルを読み取り可能。9月10日に帯域外パッチ 19.3.2 / 19.2.6 / 19.1.8。**CISA が 9月11日に KEV 登録——パッチから 24 時間以内**。watchTowr は単一リクエストの probe を確認（`/api/v4/projects/{id}/repository/commits/` への `file.path` 付き POST）。同一リリースで CVE-2026-87719（9.9、EE のみ GraphQL デシリアライゼーション → Duo-Chat 認証ユーザーによる資格情報窃取）も修正。報告時点で NVD レコード未作成——CNA スコアが現時点で唯一のスコア。
+- **JFrog Artifactory —— スコア分割メモが確認済み in-the-wild メモに昇格。** Wiz が 8月15日〜9月8日の in-the-wild 連鎖を確認：CVE-2026-42018（認証バイパス——匿名アクセス無効でも内部 anonymous-user JWT を返す）→ CVE-2026-42016（トークンスコープ検証不備 → 管理者へ昇格）、場合により 5 分以内。その後、悪意ある Groovy プラグイン、Rust 製 C2 バックドア、SSH 鍵、クラスタ join key の窃取——下流サプライチェーン汚染への準備工作と読める。watchTowr は別途 CVE-2026-82329（9.8、JFrog CNA——「ファントム」join key → 管理者トークン偽造）が 9月1日から悪用されたと観測（本フィードの 08-26 記事はその単一ソースの悪用主張に印を付けていた）。42016/42018 とも 9月11日に KEV 登録。42016 のスコア不一致は継続（JFrog 8.1 vs NVD Primary 8.8）；Wiz によれば開示 6 週間後も 59% の組織が未修正；watchTowr の限定語も有効——公表時点で「大規模スキャンの証拠なし」。
+- **ScreenConnect CVE-2026-84869（CWE-269 + CWE-862）** —— アクティブセッション内の guest がホスト承認なしでファイル転送・実行可能。26.6.5 で修正（ bulletin 9月8日；アップグレード後 host クライアント再インストール + access agent 更新が必要）。9月11日に GitLab・Artifactory と同日 KEV 登録。スコア分割：**9.9（NVD/CISA-ADP）vs ConnectWise 自身の「Important, Priority 1-High」**——ベンダーの限定語がリスクを線引きする（「サーバーは影響受けない」；悪意ある guest のアクティブセッションが必要）が、KEV 掲載の RMM ツールは定義上攻撃者のプレイブックに入っている。
+- **Storm-3121/3032 の passkey テーマ ヘルプデスク フィッシング（Microsoft 脅威インテリジェンス、9月9日）** —— CVE なし、純粋な AiTM ソーシャルエンジニアリング：偽 IT の電話/SMS → 類似サインイン ドメイン（`company-name.add-passkey[.]com`）またはデバイスコード認証フローで攻撃者管理クライアントにトークン発行 → 非管理デバイスから OfficeHome にサインイン → Outlook/Teams/OneDrive へ。今日からハント可能な防御アーティファクト：`add-passkey` ドメインパターン + デバイスコード滥用。Microsoft 自身の限定語：passkey 登録は「往々にして攻撃者の真の目的ではない」；サインインは「ファイルが開かれた証明にならない」。
+- **FLHSMV が DAVID 運転免許データベース侵害を確認——一次情報源が集団の説明と矛盾。** フロリダ州の 9月11日声明：個人デバイスに不適切に保存された **Plant City 警のユーザー資格情報 1 件**経由で侵害、9月4日に把握、「迅速に緩和」——パスワードリセット欠陥で複数アカウント（FBI 特工含む）に到達し 9月3日から 20 万件超を列挙したという ShinyHunters の主張に反する。レコード数は双方とも未検証；侵害メカニズムを裁定できるのは被害者のみ。[[fact-check]] の型がここでも適用される：ランサム集団の悪用物語は主張であって結論ではない。
+- 出典：[GitLab 19.3.2 パッチノート](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-3-2-released/) ·
+  [BleepingComputer：GitLab](https://www.bleepingcomputer.com/news/security/gitlab-urges-users-to-patch-max-severity-path-traversal-flaw/) ·
+  [Wiz：Artifactory under attack](https://www.wiz.io/blog/artifactory-under-attack-in-the-wild-exploitation-of-cve-2026-42016-cve-2026-4201) ·
+  [ConnectWise 公告](https://www.connectwise.com/company/trust/security-bulletins/2026-09-08-screenconnect-bulletin) ·
+  [Microsoft：passkey テーマのソーシャルエンジニアリング](https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/) ·
+  [BleepingComputer：フロリダ州が DAVID 侵害を確認](https://www.bleepingcomputer.com/news/security/florida-confirms-dmv-database-breached-via-stolen-police-account/)
+
+## 2026-09-12 04:47(act パス)—— agentic-offense watch に第二の独立ソース、ただし限定条件はそのまま
+
+`agentic-offense-campaign` watch(09-11 立案)は GreyNoise の PaperCut キャンペーン数値の独立確認を
+求めていた。今回、2 社を一次資料で確認:
+
+- **Unit 42(Palo Alto Networks)「An AI-Assisted Cyber Attack: Inside a Unit 42 Investigation」
+  (9 月 2 日公開、9 月 3–4 日更新、本文確認済み)**——実際の侵入インシデントからの IR テレメトリ:
+  人間のオペレーターが「目標を設定し重大な意思決定を行い」、専門エージェントが実行・結果共有・
+  リアルタイムの適応を担う——Web サービス突破、マイクロサービスのマッピング、リポジトリからの
+  シークレット収集、root 認証情報の奪取、CI/CD パイプラインの悪用、被害者のクラウド AI エンド
+  ポイントの呼び出し。主要な測定値:「50 以上の MITRE ATT&CK 技術を用いた数週間分の組織的侵入
+  手口を 10 時間未満に圧縮」(人間なら約 2 週間)。**限定条件も重要:** AI の帰属は「AI 使用と
+  整合する複数の指標」(並列 LLM 呼び出し、エージェント間 Markdown ファイル、UI 要素から「高
+  信頼度」で AI 生成と判定されたスクリプト)*と攻撃者本人の交渉チャットでの主張*に依存;モデルや
+  harness の名前は不明;9 月 3 日の更新でランサムウェア→侵入に修正;さらに 10 時間は作戦全体の
+  経過時間——公開サービスへの初回エクスプロイトまでの時間ではない。結論:別インシデントで
+  「時間単位の agentic 経済学」を確認する第二の一次データソース——GreyNoise の <4h PaperCut
+  クロックや 395 組織という数値の裏付けでは**ない**。
+- **Huntress(8 月 28 日公開、9 月 10 日まで更新、本文確認済み)**——活発な悪用を確認し、素の
+  PaperCut NG `25.0.11.75758` に対して「完全な認証前 RCE チェーン」を再現したが、自社テレメトリは
+  顧客環境 2 件の悪用のみ。独立データはキャンペーン規模ではなく露出:「Huntress が追跡する約 2,500
+  の PaperCut インストールの 47% が v23 以前を実行中」。AI エージェントや GreyNoiseへの言及は
+  皆無——agentic の位置づけも競合キャンペーン数値もなし。
+
+**今回時点の条件状況:**(1)agentic 性に言及する政府勧告——**未達**(CISA/FBI 共同の PaperCut
+勧告は 2023 年の CVE-2023-27350 対する AA23-131A のみ);(2)第二プロバイダー独自のキャンペーン
+統計——**部分的前進**(Unit 42 は経済学を裏付けるが統計は裏付けない);(3)9 月 14 日の KEV
+執行/延長フォローアップ——未着、残り 2 日。watch は継続。
+
+Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-attack-inside-a-unit-42-investigation/) ·
+[Huntress: PaperCut 活発な悪用](https://www.huntress.com/blog/papercut-actively-exploited) ·
+[GreyNoise: AI オーケストレーションされたキャンペーン](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) ·
+[CISA KEV 8 月 31 日アラート](https://www.cisa.gov/news-events/alerts/2026/08/31/cisa-adds-two-known-exploited-vulnerabilities-catalog)

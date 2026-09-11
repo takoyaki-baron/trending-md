@@ -1462,3 +1462,16 @@ DeepMind 为**全部 90 亿个单碱基变化**预计算调控影响，蒸馏为
 - **YuE2**（约 3.59B，AR–NAR Mixture-of-Transformers，权重在 HF）两阶段生成歌曲：先写**可编辑的 ABC 记谱乐谱**（歌词、旋律、和弦），再据此渲染人声与伴奏——符号中间表示让歌曲可以像端到端音频模型做不到的那样被检查与编辑。宣称的 SongBench 最高分（6.9632 vs Suno v5 的 6.8721）是 **best-of-8 自动评估挑选**，其页面自己写明；排名「因指标而异」；页面未给出许可证。训练「主要使用 CC0 音乐与合成数据」。
 - **SenseNova-U1.5**（商汤 + 南科大，arXiv 2609.11929——08-31 已注记权重的论文落地）：8B Mixture-of-Transformers，在无编码器、无 VAE 的单一模型内完成图像理解、生成与编辑，原生分辨率至 4K，经多专家 on-policy 蒸馏整合。权重已上线（`sensenova/SenseNova-U1.5-8B-MoT`）。摘要的诚实双刃：**零定量基准数字**——一切取决于社区评测——「对结构化格式曝光有限」是第一个要测的点；训练代码开源是承诺而非已交付。
 - **MiniCPM5-2B**（OpenBMB，Apache-2.0，9 月 7 日）：这个尺寸上「开放」更罕见的一半——权重**加训练数据**（UltraX-Preview、UltraData-Code、50 万 agent SFT + 8 万 RL 样本），并附仓内部署/微调 Agent Skills。SOTA 主张限定「在本对比集内」（自选的 2B 集合），「与 4B 级模型有竞争力」才是需谨慎对待的更强主张——限定范围的基准诚实仍少见值得记下。
+
+## 09-12 04:03 —— agentic 编码质量审计同日两份独立结果；数学共同体组织化；审计立法落地
+
+- **Ronacher 把 GPT-6 Astra 当编码 agent 跑了 35 小时**（lucumr.pocoo.org，9 月 7 日；HN 415 分）：约 7.5 万净新增行、79 次提交（约 $15.50/提交）、约 $1,200——换来"absolutely nothing of value"。诊断：Astra 的 RL 训练奖励 token 效率与长视野完成度、几乎不罚质量——提交了"codegolfed"的代码（用 Python 字符串拼接改 C 文件、魔法下标、异质 C 风格）。他把这场军备竞赛命名为***内卷*（neijuan）**：投入越来越多、产出没有变好。他自己的限定是诚实的部分：Astra 是"极其令人印象深刻的模型"，他的完全自治设置是"一种愚蠢的提示方式"，且输出对无人阅读的纯 agent 代码库也许没问题。
+- **Earendil 同日测量了同一现象**（"Measuring the sloppiness of code"，HN 197 分）：三个指标——冗长度（AST-Grep/克隆检测标志 ÷ LOC）、侵蚀度（代码质量集中于高复杂度函数）、LOC 增量——跑在 SlopCodeBench（迭代轮次间抹除上下文）上。Agent 代码比成熟人类仓库约 **2 倍冗长**（0.33±0.10 vs 0.15±0.06）、约 **2 倍侵蚀**（0.68±0.20 vs 0.31±0.17）；在严格的全检查点通过评分下，即使最强模型也撞到 **0%**——坏决策复利式叠加。AI 当评审被早期否决——1–10 打分"基本等价于随机数生成器"。声明的局限是所有 slop 指标的模板：LOC 指标会触发 Goodhart 定律、部分题面含糊、架构质量（分层、接口）完全没测。两位独立作者、一个汇合：harness 溢价（thesis 12）有一张质量侧账单，而当前的 RL 目标不支付它。
+- **25 位菲尔兹奖得主：《AI 在数学中的严重错位》**（mathandai.org，9 月 11 日；陶哲轩联署并全文转载）：批量生产基准解答"有摧毁沃土的风险"，并对仓促官宣的 AI 证明提出"严重的署名与剽窃问题"。升级路径本身就是发现：个体争议（Navier–Stokes 优先权、Thom 往返）→ 来自数学界最顶层的集体制度化回应，同一周共和党参议院就 OpenAI 的 HF 事件响应开启调查（Hawley：16 个问题 + 10 月 1 日前交文件；"reckless"是他的定性——耐久部分是强制披露/涂黑边界）。陶哲轩自己的限定——"我们没有时间进行更充分的协商"——为该文件的授权范围划了界。
+- **加州 SB 813 + AB 1405 于 9 月 9 日签署**——全国首个独立 AI 核验组织框架 + 带独立性/透明度标准的州审计师登记处（Reuters 确认签署；OpenAI 的 Lehane 表态支持）。两部法案创造的是*审计师生态*而非新的直接开发者义务；新闻稿未给生效日期。安全条目里反复被点名的"测量基础设施薄弱点"正在获得法定归属——"我们不能指望行业给自己改作业"（Bauer-Kahan）。
+- 来源：[Ronacher: Astra for Coding](https://lucumr.pocoo.org/2026/9/7/astra-why/) ·
+  [Earendil: Measuring code sloppiness](https://earendil.com/posts/measuring-code-sloppiness/) ·
+  [陶哲轩：A Severe Misalignment of AI in Mathematics](https://terrytao.wordpress.com/2026/09/11/a-severe-misalignment-of-ai-in-mathematics/) ·
+  [mathandai.org](https://mathandai.org/) ·
+  [Axios：参院调查](https://www.axios.com/2026/09/10/openai-hugging-face-senate-investigation-hawley) ·
+  [gov.ca.gov：签署 AI 保障法案](https://www.gov.ca.gov/2026/09/09/governor-newsom-signs-first-in-the-nation-ai-safeguards-to-protect-californians-calls-on-the-federal-government-to-do-its-part/)

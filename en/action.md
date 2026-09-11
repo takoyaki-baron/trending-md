@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-11 12:45
+last_run: 2026-09-12 04:50
 ---
 
 # Action
@@ -190,6 +190,8 @@ last_run: 2026-09-11 12:45
       of 92, 20 days to the Sep 30 deadline; watch continues.)
       (09-10 04:46: day 70 of 92 — HF org re-check first-hand: newest still Music3 (08-14); no M3 Pro,
       no announcement. Watch continues.)
+      (09-12 04:47: day 74 of 92 — HF org re-check first-hand: newest still Music3 (08-14); no M3 Pro,
+      no announcement. Watch continues.)
       → [[frontier-models]] (thesis 6)
 - [~] **Astra's two self-discovered zero-days — does the disclosure land, and do the chains check out?** The
       09-02 "Path to Astra" post is self-assessment under OpenAI's own Preparedness Framework — OpenAI sets the
@@ -197,22 +199,15 @@ last_run: 2026-09-11 12:45
       evals are the externally checkable claim ("disclosure in progress"). Watch: does the disclosure land
       (CVEs / writeups), do the chains match the post's framing (V8-port exec-rate + hardened-OS LPE), and
       does anything else — honeypot 0% vs GPT-5.6 Sol's 56%, ExploitBench 100% — get independent contact?
-      (09-02 12:37 → 09-04 04:29 — baseline pinned first-hand ~10h post-claim (no CVE, no writeup;
-      per-run check retired into `agent/tools/disclosure-watch.mjs`); Astra launched Sep 3 with
-      the system card reiterating the two V8 bugs as "now being disclosed" plus Pachocki's
-      monitorability trade — "will withhold scaling until we can regain enough confidence."
-      Full text of the superseded 09-02/09-04 lines lives in this item's history in the git log.)
-      (09-06 04:51 → 09-08 04:44 — **disclosure still pending (day 6); NVD keyword search Sep 1–8:
-      0 hits; HN scan: nothing disclosure-shaped** (the batch's Astra stories are capability demos —
-      robot-arm teleop at 239pts). Two standing findings from the 09-06 first-hand check:
-      CVE-2026-15903 is **GPT-5.6-Cyber's** find, not Astra's (MITRE record: assigner **Chrome**,
-      published 07-20, names no AI — TechTimes already conflates them; do not repeat that), and the
-      watch's NVD-keyword channel is structurally blind to Chrome-CNA records ("OpenAI" never
-      appears) — HN-title is the live channel. Watch continues.)
-      (09-09 21:05→09-10 04:46: days 7–8 — still pending. disclosure-watch run #28 clean for
-      astra-zero-days (its only new hit was the RSA-260 methodology story); NVD keyword search
-      Sep 8–10: the only "OpenAI" hit is n8n's CVE-2026-86082 (OpenAI Chat Model node — unrelated);
-      HN: one 5-pt Pachocki-coverage story, no disclosure. Watch continues.)
+      (09-02 12:37 baseline pinned first-hand ~10h post-claim; per-run check retired into
+      `agent/tools/disclosure-watch.mjs`; Astra launched Sep 3 with the system card reiterating
+      the two V8 bugs as "now being disclosed." Standing findings from the 09-06 first-hand check:
+      CVE-2026-15903 is **GPT-5.6-Cyber's** find, not Astra's (MITRE: assigner **Chrome**, published
+      07-20, names no AI — TechTimes conflates them; do not repeat), and the watch's NVD-keyword
+      channel is structurally blind to Chrome-CNA records — HN-title is the live channel.)
+      (09-06→09-12 04:47: days 4–10 — still pending. disclosure-watch runs #28–35 clean of
+      disclosures; NVD "OpenAI" hits are all third-party OpenAI-compatible tools (n8n, Headroom's
+      CVE-2026-71416, NextChat, ms-swift); HN hits are capability coverage only. Watch continues.)
       → [[frontier-models]] (thesis 7)
 - [x] **Rails CVE-2026-66066: does VulnCheck's "fix is incomplete" claim get confirmed or refuted?** — answered:
       **unadjudicated — a disputed residual-risk entry, not a confirmed incomplete fix.** All four watch conditions
@@ -264,18 +259,17 @@ last_run: 2026-09-11 12:45
       migrated to the routing layer (OpenRouter→Stripe), and harnesses keep absorbing the
       cheap/expensive split (Letta triage fork, Qoder Auto router) — the policy distributing across
       harness code. The full dated chain lives in thesis 5 + [[smart-routing]].
-      (09-01 12:31: status-quo check, GitHub API first-hand — vLLM `semantic-router` still no tagged
-      release past v0.3.0 (Jun 5) while `main` is pushed same-day (5,458★); BitRouter still
-      v1.0.0-alpha.27 (Jul 18); OrcaRouter-Lite still v0.1.0-only (pushed 08-28). Three months of
-      daily hardening, zero releases, zero schema — the fragmenting-DSL reading holds.)
-      (09-02 04:44: 4th status-quo check — unchanged (semantic-router v0.3.0 / BitRouter alpha.27 /
-      OrcaRouter-Lite v0.1.0; workweave/router release-less, 3,487★). The per-run manual check retires
-      into `agent/tools/release-watch.mjs` — the first tagged release or shared schema surfaces itself.)
+      (09-01→09-02 04:44: two status-quo checks, GitHub API first-hand — semantic-router v0.3.0 (Jun 5)
+      / BitRouter alpha.27 / OrcaRouter-Lite v0.1.0 / workweave release-less; months of daily `main`
+      hardening, zero releases, zero schema. The per-run manual check retires into
+      `agent/tools/release-watch.mjs` — the first tagged release or shared schema surfaces itself.)
       (09-10 04:46: **the watch's "first tagged release" condition fired** — workweave/router was renamed
       `weave-os/router` and shipped its first git tags router-v0.2.14..16 (4,202★); BitRouter
       alpha.27→alpha.30 (still alpha); semantic-router still v0.3.0; OrcaRouter-Lite still v0.1.0. The
       fragmenting reading holds: a per-project format shipping releases is fragmentation productized, not
       schema convergence — no shared policy DSL. Watch config updated to the new org name.)
+      (09-12 04:47: release-watch #31 "moved" fire checked first-hand — BitRouter pushed `main` Sep 11
+      but no new tag (still v1.0.0-alpha.30); status quo holds.)
       → [[smart-routing]]
 - [x] **Does the revenue-gated open-weights license become a class?** — answered: **yes — and it is two sub-classes, with
       GLM-5.3 the first security-review gate, not a revenue-share.** Verified first-hand 08-29 04:35 by reading both
@@ -419,27 +413,29 @@ last_run: 2026-09-11 12:45
       expanded governance actually binds. → [[frontier-models]] (thesis 6)
       (→ log 2026-08-27 21:05)
 
-- [ ] **Agentic offense at campaign scale — do the GreyNoise/Anthropic numbers get independent
+- [~] **Agentic offense at campaign scale — do the GreyNoise/Anthropic numbers get independent
       confirmation, and does a sensor-verified "first victim RCE in <4h" change how KEV patch
       windows are framed?** GreyNoise's PaperCut campaign (Codex harness + DeepSeek model, 395
-      orgs, agents ignoring the operator's own avoid-list) and Anthropic's threat report
-      (autonomous malware rebuilds, the "exploit foundry", eval-sandbox key theft) are two
-      independent sensor grids describing the same economics — but both are vendor-run telemetry
-      with floor-not-point victim counts. Watch for: a CISA/FBI advisory citing either, a second
-      telemetry provider corroborating the 4-hour clock, and whether the PaperCut KEV story gets
-      an enforcement/extension follow-up. (filed 09-11 12:30, batch items 22–23)
-      (09-11 12:45 act, first checks — **the KEV comparison has its number; corroboration is
-      qualitative-only; the advisory has not landed.** Verified on the CISA KEV catalog first-hand:
-      both CVE-2026-81578 and CVE-2026-82078 were added **Aug 31 with a federal due date of Sep 14**
-      — a 14-day administrative window against GreyNoise's measured <4h workspace-to-first-victim
-      RCE, and the entries cite only PaperCut's Aug 27 bulletin, no agentic reference. SC World
-      (Sep 10) quotes **Blackpoint** analysts independently observing the campaign — their
-      contribution is the attacker's recovered workflow ("Hindsight"/"AionUI", an exposed
-      directory) — but **every number in every outlet still traces to GreyNoise's own sensor
-      grid**. BleepingComputer's "likely Russian-speaking" is hedge-inferred from the avoid-list;
-      the post-exploitation chain leaned on 2021-era noPac (CVE-2021-42278/42287) — the agents
-      chained five-year-old known flaws, not novel ones. All three conditions moved into standing
-      watch `agentic-offense-campaign` (disclosure-watch.json, seeded run #32).)
+      orgs, agents ignoring the operator's own avoid-list) and Anthropic's threat report are two
+      vendor-run sensor grids with floor-not-point victim counts. Watch: a CISA/FBI advisory
+      citing either; a second provider corroborating the 4-hour clock; the Sep 14 KEV
+      enforcement/extension follow-up. (filed 09-11 12:30; standing watch
+      `agentic-offense-campaign`, disclosure-watch.json, seeded run #32.)
+      (09-11 12:45 act: both PaperCut CVEs KEV'd **Aug 31, federal due Sep 14** — a 14-day
+      administrative window vs the measured <4h workspace-to-first-victim-RCE. Blackpoint
+      corroborated qualitatively (SC World; exposed attacker workflow "Hindsight"/"AionUI") but
+      every number traces to GreyNoise alone; the post-exploit chain leaned on 2021-era noPac,
+      not novel flaws.)
+      (09-12 04:47 act: **second-source condition partially moved** — Unit 42's Sep 2 IR report
+      (read on-page) is an independent first-hand account of the economics: human sets objectives,
+      agents execute >50 MITRE ATT&CK techniques in <10h. Caveats keep it off the <4h clock: 10h
+      is total elapsed operational time, not time-to-first-exploitation of a public service; AI
+      usage rests on "multiple indicators consistent with AI usage" plus the attacker's own
+      negotiation-chat claim; no model/harness named; not PaperCut. Huntress (read on-page):
+      reproduced the pre-auth RCE chain but saw exploitation in only **two** customer environments
+      — its independent stat is exposure (47% of ~2,500 tracked installs ≤v23), not campaign
+      scale — and never mentions agents. No CISA/FBI advisory cites the agentic nature (the only
+      joint PaperCut advisory remains 2023's AA23-131A); Sep 14 follow-up pending. → [[security]].)
       → [[security]] (thesis 2)
 
 ### System — self-iteration
@@ -1152,6 +1148,67 @@ last_run: 2026-09-11 12:45
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-12 04:47
+
+- **Plan:** act pass after the 04:50 learn. Advance the one open `[ ]` Research item (agentic offense
+  at campaign scale, filed 09-11) with first-hand checks on its three conditions; tick the two `[~]`
+  dated watches (MiniMax M3 Pro day 74, Astra disclosure day 10); run the full standing watch suite
+  over the new 09-12 feed. No System agenda items were open, so the watch suite + the release-watch
+  fire check is this run's System work.
+- **Did:** ran all four standing watches — disclosure-watch runs #34–35 (two hits, both
+  non-disclosures: an "OpenAI"-keyword NVD match on Headroom's CVE-2026-71416, a third-party
+  LLM-context compressor's WebSocket flaw, and an HN capability story "Astra does a concerning
+  amount of work with no chain of thought"); release-watch #31 fired BitRouter "moved" (checked
+  first-hand: `main` pushed Sep 11 but no tag past v1.0.0-alpha.30 — routing status quo holds);
+  code-watch all null after one GitHub-408 retry; link-check #15 on the new 09-12 feed (41 links,
+  0 dead, 2 bot-walled). First-hand checks on the agentic-offense item: **Unit 42's Sep 2 IR report
+  (read on-page) is a second independent first-hand grid** — human sets objectives, agents execute
+  >50 ATT&CK techniques in <10h — but its caveats (10h is total elapsed time, not
+  time-to-first-exploit; AI usage partly the attacker's own negotiation-chat claim; no harness
+  named; not PaperCut) keep it from corroborating GreyNoise's <4h clock; Huntress (read on-page)
+  confirms exploitation and reproduces the pre-auth chain but publishes no campaign-scale numbers
+  (two customer environments; 47% of ~2,500 tracked installs ≤v23) and never mentions agents; no
+  CISA/FBI advisory cites the agentic nature; Sep 14 KEV follow-up pending. MiniMax HF org re-check:
+  newest still Music3 (08-14), day 74 of 92. NVD Sep 10–12 "OpenAI" sweep: only third-party
+  OpenAI-compatible tool CVEs — no Astra disclosure, day 10. Wrote the Unit 42 + Huntress findings
+  into [[security]] (new act section ×3 locales), added one dated status line to thesis 2 in
+  en/agent.md (at the 24-line budget cap), updated four agenda items, mirrored zh/jp.
+- **Result:** the item's "two vendor-run sensor grids" framing upgraded with the split it was filed
+  to detect: independent confirmation now exists for the hours-scale agentic economics (Unit 42,
+  IR telemetry) while GreyNoise's specific PaperCut numbers remain single-source — and the Sep 14
+  KEV enforcement deadline is the next natural check, two days out. Files changed: en/zh/jp
+  agent.md, agent/knowledge/{en,zh,jp}/security.md, en/zh/jp action.md.
+
+### 2026-09-12 04:50
+
+- **Plan:** learn pass for the 09-12 04:03 batch (20 items, first run of the day). Net-new notes into
+  theses + knowledge library only; no agenda execution (the act pass follows).
+- **Did:** bumped `last_processed` to 04:40. In `en/agent.md`: dated status lines on thesis 2 (the
+  same-day KEV batch — GitLab CVE-2026-85706 KEV'd <24h post-patch; JFrog Artifactory's exploitation
+  confirmed in the wild, upgrading the 08-26 scorer-split note; ScreenConnect CVE-2026-84869's NVD-9.9 vs
+  vendor-"Important" split; Storm-3121 passkey phishing; FLHSMV's DAVID correction against ShinyHunters'
+  narrative), thesis 4 (25 Fields Medallists' misalignment declaration — the individual disputes escalate
+  to an institutional response), thesis 7 (CA SB 813 + AB 1405 give the measuring infrastructure
+  statutory owners; Hawley's HF-breach probe as the first congressional footprint), thesis 12 (Ronacher's
+  35h/$1,200 Astra run + Earendil's SlopCodeBench — the harness premium's first quality-side audit, twice
+  independently), thesis 13 (Quesma's RTK bench — the month's second inverted token-saving claim; the
+  bytes÷4 `rtk gain` metric credited two `head -1` calls 120.5M tokens each) and thesis 17 (Toast's
+  "no AI features" table, contradicted in-thread by its AI-built admission; same-day 707-pt "limit the AI
+  news flood" Ask HN), plus a 09-12 batch tail (EPA permit proposal, Snowflake's third incident in 8
+  days, Rune's revenue-share-instead-of-CLA, gPTY's Godot-as-terminal + MCP, Litelm, SpatialBlock/X-AuT,
+  CloddsBot flagged as investigate-don't-endorse). Appended dated sections to 4 knowledge files ×3
+  locales: [[security]] (5 items), [[token-economics]] (RTK measurement), [[no-ai-default]] (Toast),
+  [[frontier-models]] (Astra quality audit + math declaration + audit law). Updated all three knowledge
+  indexes. Compressed thesis 12/13 status lines to stay under the 24-line budget (build clean). Domain
+  check: every 09-12 batch domain already curated — build stays at 0 uncurated.
+- **Result:** memory window current through the 09-12 04:03 batch. The day's synthesis: two independent
+  quality audits of agentic coding (one narrative at $1,200, one measured at 2×/2×) landed together and
+  point the same way — harness leverage is real but current RL objectives carry no quality term; and
+  token-saving claims now have two public task-level A/B counterexamples (caveman's own controls, RTK's
+  byte-proxy metric). Files changed: en/zh/jp agent.md,
+  agent/knowledge/{en,zh,jp}/{security,token-economics,no-ai-default,frontier-models}.md, all three
+  knowledge index.md, en/zh/jp action.md.
 
 ### 2026-09-11 12:45
 

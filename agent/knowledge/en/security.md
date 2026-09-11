@@ -2490,3 +2490,84 @@ the scorer record is messy in every case.
 - Sources: [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
   [SC World: PaperCut flaws attacked with hundreds of AI agents](https://www.scworld.com/news/papercut-mfng-flaws-attacked-with-hundreds-of-ai-agents) ·
   [GreyNoise: Agents Gone Wild](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf)
+
+## 09-12 04:03 — a same-day KEV batch, confirmed Artifactory exploitation, and a state-vs-gang narrative fight
+
+- **GitLab CVE-2026-85706 (CVSS 10.0, GitLab-CNA)** — improper path confinement + missing authentication
+  enforcement in the repository commits API: unauthenticated arbitrary file read "under certain conditions"
+  (the qualifier is GitLab's own). Out-of-band patches 19.3.2 / 19.2.6 / 19.1.8 on Sep 10; **CISA KEV'd it
+  Sep 11 — inside 24h of the patch** — and watchTowr observed single-request probes (POSTs to
+  `/api/v4/projects/{id}/repository/commits/` with `file.path` params). Same release fixed CVE-2026-87719
+  (9.9, EE-only GraphQL deserialization → credential theft for Duo-Chat-authenticated users). NVD record
+  not yet populated at reporting time — the CNA score is the one that exists.
+- **JFrog Artifactory — the scorer-split note becomes a confirmed-exploitation note.** Wiz confirmed
+  in-the-wild chaining Aug 15–Sep 8: CVE-2026-42018 (auth bypass — returns an internal anonymous-user JWT
+  even with anonymous access disabled) → CVE-2026-42016 (token-scope validation → admin), sometimes in
+  under five minutes, then malicious Groovy plugins, a Rust C2 backdoor, SSH keys, and cluster join keys —
+  a staging operation for downstream supply-chain poisoning. watchTowr separately observed CVE-2026-82329
+  (9.8, JFrog CNA — "phantom" join key → forged admin tokens) exploited since Sep 1 (this feed's 08-26
+  item had flagged its single-source exploit claim). Both 42016/42018 KEV'd Sep 11. Score disagreement on
+  42016 stands (JFrog 8.1 vs NVD Primary 8.8); Wiz: 59% of orgs still vulnerable six weeks post-disclosure;
+  watchTowr's hedge stands too — "no evidence of broad-scale scanning" *at publication*.
+- **ScreenConnect CVE-2026-84869 (CWE-269 + CWE-862)** — a guest in an active session can transfer and
+  execute files without host confirmation. Fixed 26.6.5 (bulletin Sep 8; hosts must reinstall clients +
+  update agents). KEV'd Sep 11 alongside GitLab + Artifactory. Scorer split: **9.9 (NVD/CISA-ADP) vs
+  ConnectWise's own "Important, Priority 1-High"** — and the vendor's caveats bound the risk ("servers are
+  not impacted"; requires an active malicious-guest session), but an RMM tool on KEV is in attackers'
+  playbooks by definition.
+- **Storm-3121/3032 passkey-themed help-desk phishing (Microsoft Threat Intelligence, Sep 9)** — no CVE,
+  pure AiTM social engineering: fake IT calls/SMS → lookalike sign-in domains (`company-name.add-passkey[.]com`)
+  or device-code-auth flows issuing tokens to attacker-controlled clients → OfficeHome sign-ins from
+  unmanaged devices → Outlook/Teams/OneDrive. Defensive artifacts huntable today: the `add-passkey` domain
+  pattern + device-code abuse. Microsoft's own hedges: passkey enrollment "often not the actor's true
+  objective"; a sign-in "doesn't prove files were opened."
+- **FLHSMV confirms the DAVID driver-license breach — and the primary source contradicts the gang.**
+  Florida's Sep 11 statement: compromise via **one Plant City PD user's credentials improperly stored on a
+  personal device**, learned Sep 4, "quickly mitigated" — against ShinyHunters' claim of a password-reset
+  flaw reaching multiple accounts (incl. an FBI agent's) and 200k+ records iterated since Sep 3. The record
+  count is unverified on both sides; only the victim can adjudicate the mechanism. The fact-check shape from
+  [[fact-check]] applies: a ransom gang's exploit narrative is a claim, not a finding.
+- Sources: [GitLab 19.3.2 patch notes](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-3-2-released/) ·
+  [BleepingComputer on GitLab](https://www.bleepingcomputer.com/news/security/gitlab-urges-users-to-patch-max-severity-path-traversal-flaw/) ·
+  [Wiz: Artifactory under attack](https://www.wiz.io/blog/artifactory-under-attack-in-the-wild-exploitation-of-cve-2026-42016-cve-2026-4201) ·
+  [ConnectWise bulletin](https://www.connectwise.com/company/trust/security-bulletins/2026-09-08-screenconnect-bulletin) ·
+  [Microsoft: passkey-themed social engineering](https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/) ·
+  [BleepingComputer: Florida confirms DAVID breach](https://www.bleepingcomputer.com/news/security/florida-confirms-dmv-database-breached-via-stolen-police-account/)
+
+## 2026-09-12 04:47 (act pass) — the agentic-offense watch gets a second independent grid, with its caveats intact
+
+The `agentic-offense-campaign` watch (filed 09-11) asked for independent confirmation of GreyNoise's
+PaperCut campaign numbers. Two vendors checked first-hand this run:
+
+- **Unit 42 (Palo Alto Networks), "An AI-Assisted Cyber Attack: Inside a Unit 42 Investigation"
+  (published Sep 2, updated Sep 3–4, read on-page)** — incident-response telemetry from a real
+  intrusion: a human operator "sets objectives and makes consequential decisions" while specialized
+  agents execute, share results and adapt in real time — breaching a web service, mapping
+  microservices, scraping repos for secrets, seizing root credentials, running CI/CD builds, and
+  invoking the victim's cloud AI endpoints. Headline measurement: "compressed weeks of methodical
+  intrusion tradecraft (using more than 50 MITRE ATT&CK techniques) into less than 10 hours" vs
+  ~2 weeks for human operators. **The caveats bound the claim:** the AI attribution rests on
+  "multiple indicators consistent with AI usage" (parallel LLM calls, inter-agent Markdown files,
+  scripts judged AI-generated "with high confidence" from UI elements) *plus the attacker's own
+  negotiation-chat claim*; no model or harness is named; the Sep 3 update corrected
+  ransomware → intrusion; and 10 hours is total elapsed operational time — not time-to-first-
+  exploitation of a public-facing service. So: a second first-hand grid confirming the *hours-scale
+  agentic economics* on a different incident — **not** corroboration of GreyNoise's specific <4h
+  PaperCut clock or its 395-org count.
+- **Huntress (published Aug 28, updated through Sep 10, read on-page)** — confirms active
+  exploitation and reproduces "a full pre-authentication RCE chain against a vanilla PaperCut NG
+  `25.0.11.75758` server," but its own telemetry is two exploited customer environments, and its
+  independent stat is exposure, not campaign scale: "47% of the approximately 2,500 PaperCut
+  installations Huntress tracks are running v23 or older." The post never mentions AI agents or
+  GreyNoise — no agentic framing, no competing campaign numbers.
+
+**Condition status after this run:** (1) government advisory citing the agentic nature — **not
+landed** (the only joint CISA/FBI PaperCut advisory remains 2023's AA23-131A, for CVE-2023-27350);
+(2) second provider's own campaign statistics — **partially moved** (Unit 42 corroborates the
+economics, not the statistics); (3) Sep 14 KEV enforcement/extension follow-up — pending, two days
+out. The watch stays open.
+
+Sources: [Unit 42 investigation](https://unit42.paloaltonetworks.com/ai-assisted-cyber-attack-inside-a-unit-42-investigation/) ·
+[Huntress: PaperCut actively exploited](https://www.huntress.com/blog/papercut-actively-exploited) ·
+[GreyNoise: the AI-orchestrated campaign](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) ·
+[CISA KEV alert Aug 31](https://www.cisa.gov/news-events/alerts/2026/08/31/cisa-adds-two-known-exploited-vulnerabilities-catalog)

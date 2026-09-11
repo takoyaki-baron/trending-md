@@ -1692,3 +1692,16 @@ Biobank 参加者で 22% 増の非コーディング関連、19 の BMI 領域�
 - **YuE2**（約 3.59B、AR–NAR Mixture-of-Transformers、重みは HF）：2 段階で楽曲を生成——まず**編集可能な ABC 記譜のスコア**（歌詞・旋律・コード）を書き、そこからボーカルと伴奏をレンダリング——記号的な中間表現により、エンドツーエンドの音声モデルにはできない検査・編集が可能になる。主張する SongBench 最高点（6.9632 vs Suno v5 の 6.8721）は **best-of-8 を自動評価で選択**したもので、ページ自身が明記；順位は「指標により変動」；ページにライセンスの記載なし。訓練は「主に CC0 音楽と合成データ」。
 - **SenseNova-U1.5**（SenseTime + SUSTech、arXiv 2609.11929——08-31 に注記した重みの論文が着地）：8B Mixture-of-Transformers が、エンコーダなし・VAE なしの単一モデルで画像の理解・生成・編集を行い、ネイティブ解像度は最大 4K、多エキスパート on-policy 蒸留で統合。重みは公開済み（`sensenova/SenseNova-U1.5-8B-MoT`）。要約の誠実さは両刃：**定量的ベンチマーク数値はゼロ**——すべてコミュニティ評価次第——「構造化フォーマットへの露出が限定的」が最初に試すべき点；訓練コードの公開は約束であって未出荷。
 - **MiniCPM5-2B**（OpenBMB、Apache-2.0、9/7）：このサイズで「オープン」のより希少な半分——重み**に加えて訓練データ**（UltraX-Preview、UltraData-Code、50 万 agent SFT + 8 万 RL サンプル）、リポジトリ内のデプロイ/ファインチューニング Agent Skills 付き。SOTA 主張は「この比較集合内」とスコープ済み（自己選択の 2B 集合）、「4B クラスと競争力あり」が注意深く扱うべきより強い主張——スコープ付きベンチマークの誠実さは、記録に値するほど仍て希少。
+
+## 09-12 04:03 —— エージェントコーディング品質監査が同日 2 件独立；数学コミュニティの組織化；監査立法の到達
+
+- **Ronacher が GPT-6 Astra をコーディングエージェントとして 35 時間稼働**（lucumr.pocoo.org、9月7日；HN 415 pts）：純増約 7.5 万行、79 コミット（約 $15.50/コミット）、約 $1,200 —— 結果は「absolutely nothing of value」。診断：Astra の RL 学習はトークン効率と長期完遂を報酬し、品質をほとんど罰しない ——「codegolfed」されたコードがコミットされる（C ファイルを Python の文字列連結で編集、マジックインデックス、異質な C スタイル）。この軍拡競争を***内巻*（neijuan）**と名づけ：努力だけ増えて産出は改善しない。本人の限定語が正直な部分：Astra は「非常に印象的なモデル」、完全自律の設定は「愚かなプロンプトの仕方」、そして人間が読まないエージェント専用コードベースなら出力は問題ないかもしれない。
+- **Earendil が同日に同じ現象を計測**（"Measuring the sloppiness of code"、HN 197 pts）：3 指標 —— 冗長性（AST-Grep/クローン検出フラグ ÷ LOC）、浸食（質量が高複雑度関数に集中）、LOC 増分 —— を SlopCodeBench（反復ラウンド間でコンテキストを消去）で評価。エージェントコードは成熟した人間リポジトリより約 **2 倍冗長**（0.33±0.10 vs 0.15±0.06）、約 **2 倍浸食**（0.68±0.20 vs 0.31±0.17）；全チェックポイント合格の厳格採点では最先端モデルでも **0%** —— 悪い判断が複利で重なる。AI 審判は早々に棄却 —— 1〜10 採点は「基本的に乱数生成器と同等」。明記された限界がすべての slop 指標のテンプレ：LOC 指標の Goodhart、曖昧な問題文、アーキテクチャ品質（レイヤリング、インターフェース）は未計測。独立した著者 2 名、一つの収束：harness プレミアム（thesis 12）には品質側の請求書があり、現在の RL 目的関数はそれを払っていない。
+- **フィールズ賞受賞者 25 名：「AI in Mathematics の深刻なミスアライメント」**（mathandai.org、9月11日；Tao が署名し全文を掲載）：ベンチマーク解答の量産は「豊穣な地を破壊するリスク」があり、急ぎ発表された AI 証明には「深刻な帰属・剽窃の問題」。エスカレーションの経路こそが発見：個人の論争（Navier–Stokes の優先権、Thom の応酬）→ 数学の頂点からの集団的・制度的応答、同じ週に OpenAI の HF 対応への上院調査が開始（Hawley：16 の質問 + 10月1日締切の資料提出；「reckless」は彼の性格づけ —— 耐久部分は開示義務・黒塗りの境界）。Tao 自身の限定語 ——「より協調的なプロセスを踏む時間がなかった」—— が文書の委任範囲を画する。
+- **カリフォルニア SB 813 + AB 1405 が 9月9日署名** —— 全米初の独立 AI 検証組織フレームワーク + 独立性・透明性基準付き州監査人登録簿（Reuters が署名を確認；OpenAI の Lehane が支持を表明）。両法案は新しい直接的開発者義務ではなく*監査人エコシステム*を作る；発表に発効日はなし。安全性項目で繰り返し弱点とされた測定インフラが法定の所有者を得始めている ——「業界に自分の採点をさせるとは期待できない」（Bauer-Kahan）。
+- 出典：[Ronacher: Astra for Coding](https://lucumr.pocoo.org/2026/9/7/astra-why/) ·
+  [Earendil: Measuring code sloppiness](https://earendil.com/posts/measuring-code-sloppiness/) ·
+  [Tao: A Severe Misalignment of AI in Mathematics](https://terrytao.wordpress.com/2026/09/11/a-severe-misalignment-of-ai-in-mathematics/) ·
+  [mathandai.org](https://mathandai.org/) ·
+  [Axios：上院調査](https://www.axios.com/2026/09/10/openai-hugging-face-senate-investigation-hawley) ·
+  [gov.ca.gov：AI セーフガード法の署名](https://www.gov.ca.gov/2026/09/09/governor-newsom-signs-first-in-the-nation-ai-safeguards-to-protect-californians-calls-on-the-federal-government-to-do-its-part/)

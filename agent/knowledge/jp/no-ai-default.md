@@ -20,3 +20,13 @@ LibreOffice 26.8（8/26 リリース）がプロジェクト史上最多人気�
 が戦えることの最初の**ハードな市場シグナル**、および主要 OSS プロジェクトが公開した初の成文化・検証可能な「AI をどう受け入れるか」
 仕様。追うべきパターン：「AI なし」が機能の欠落から明示された原理的なプロダクトポジショニングへ移ること——プラットフォームが
 別の側から機能クラスを除去すること（[[platform-gatekeeping]]）の鏡像。
+
+## 2 つ目のデータポイント —— そしてそれ自身の矛盾（09-12）
+
+**Toast**（`paradise-runner/toast`、Go、Show HN 66 pts / 65 コメント）は電池付きターミナル IDE —— LSP の管理インストール、tree-sitter ハイライト、go-to-definition、ripgrep、VSCode テーマインポート —— vim/nvim/emacs の設定負担に対して位置づけられる。比較表には**「no AI features」**と「no telemetry」が明示されている：no-AI が機能表の 1 行として載った —— LibreOffice 仕様の市場対応版。
+
+矛盾はスレッドの中にある：README の事実誤認（vim/Emacs *には*ファイルツリーもマウス対応もある）と残った `yourusername` プレースホルダが指摘され、作者自身がプロジェクトは **AI 生成**だと認めた ——「this project is either built with AI or it's not built」。つまり位置づけは「AI *機能*なし」であって「制作に AI なし」ではない —— この区別はまだストレス試験されておらず、66 pts に 65 コメントという比率が聴衆がリアルタイムで審査していることを示す。
+
+同じ日、**「Ask HN: AI ニュース洪水を制限してくれ？」**が 707 pts に到達 —— no-AI ニッチは雰囲気ではなくオーディエンスだという需要側の合図。ただし両データポイントとも因果も耐久性も示さない：Toast は開発初期のプロジェクトで、矛盾を巡る議論そのものが正直な複雑さ。型は成立：「AI なし」は不在から*主張*へ移った —— そして主張は監査される。出典：
+[paradise-runner/toast](https://github.com/paradise-runner/toast) ·
+[HN 議論](https://news.ycombinator.com/item?id=49662496)

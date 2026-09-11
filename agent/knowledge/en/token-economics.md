@@ -341,3 +341,28 @@ only 10 of 20+ claimed patterns are enumerated publicly (the rest live in `SKILL
 rule files remain the genre's norm, as with humanizer. The economics hook is unchanged: output-side
 tokens get rewritten for human taste, not cost — the cost filter (caveman) and the taste filters
 (humanizer, no-ai-slop) are converging on the same write path from opposite directions.
+
+## The second viral token-saving claim measured and inverted: RTK (09-12)
+
+**Quesma's A/B of RTK ("Rust Token Killer", ~79k★)** — a tool that compresses shell output for coding
+agents — is the second big saving claim this month to be benchmarked and inverted (after the read-side
+compression family's own independent re-measurement). Setup: Terminal-Bench 2.1, Claude Code (Fable 5.0)
++ OpenCode (DeepSeek V4 Pro), 1,740 attempts, >$1,500 in tokens, every task 5× with and without RTK.
+
+**Results:** total spend −5% (Fable) and +5% (DeepSeek); task-averaged cost +1% (statistically zero) and
+**+17% (DeepSeek)** — versus RTK's own `rtk gain` claiming 349.2M tokens (89%) saved. The claimed metric
+is bytes÷4, and it credited two `head -1` calls **120.5M tokens each** for output the commands would never
+have returned. Verdict: "We do not recommend RTK as a generic cost-saving tool."
+
+**Why the claimed and billed mechanisms diverge:** fewer output bytes is real, but the billed mechanism —
+fewer *input* tokens to the model — is where the money is, and terminal output is only ~11% of Fable's
+input tokens while provider caching makes rereads cheap. Stated caveats: 4 Fable tasks dropped for
+refusals, one 9× outlier excluded (a 0.45.0 error loop fixed in 0.46.0 after their runs), and RTK
+"probably helped more with older models."
+
+This lands the layer's pattern cleanly: **measurement keeps beating assertion** — caveman's own README
+concedes its control arm postdated its table; RTK's counter is a byte-proxy masquerading as tokens. Any
+token-saving claim without a task-level A/B (same tasks, with/without, cost not bytes) now has two
+public counterexamples. Sources:
+[Quesma: Does RTK make AI coding cheaper?](https://quesma.com/blog/does-rtk-make-ai-coding-cheaper/) ·
+[HN discussion](https://news.ycombinator.com/item?id=49656471)

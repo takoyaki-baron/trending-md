@@ -1623,3 +1623,47 @@ root 提权 PoC + 演示。**评分者分歧——请记录：** NVD 评 **9.8**
 - 来源：[CISA KEV 目录](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
   [SC World: PaperCut flaws attacked with hundreds of AI agents](https://www.scworld.com/news/papercut-mfng-flaws-attacked-with-hundreds-of-ai-agents) ·
   [GreyNoise: Agents Gone Wild](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf)
+
+## 09-12 04:03 —— 同日 KEV 批次、Artifactory 在野利用确认、州政府与勒索团伙的叙事对决
+
+- **GitLab CVE-2026-85706（CVSS 10.0，GitLab 自任 CNA）**——repository commits API 的路径限制缺陷 + 认证强制缺失：未认证攻击者"在特定条件下"（GitLab 自己的限定语）可任意读文件。9 月 10 日带外补丁 19.3.2 / 19.2.6 / 19.1.8；**CISA 9 月 11 日进 KEV——距补丁不足 24 小时**，watchTowr 已观察到单请求探测（向 `/api/v4/projects/{id}/repository/commits/` 发带 `file.path` 的 POST）。同一发布修复 CVE-2026-87719（9.9，仅 EE 的 GraphQL 反序列化 → Duo-Chat 认证用户可窃取凭据）。报道时 NVD 记录尚未建档——CNA 分数是目前唯一的分数。
+- **JFrog Artifactory——记分分歧笔记升级为确认在野利用笔记。** Wiz 确认 8 月 15 日至 9 月 8 日的在野链式利用：CVE-2026-42018（认证绕过——即使关闭匿名访问也返回内部匿名用户 JWT）→ CVE-2026-42016（token 范围校验缺陷 → 提权为管理员），有时不到五分钟；随后植入恶意 Groovy 插件、Rust C2 后门、SSH 密钥并窃取集群加入密钥——像是对下游供应链投毒的踩点。watchTowr 另观察到 CVE-2026-82329（9.8，JFrog CNA——"幽灵" join key → 伪造管理员令牌）自 9 月 1 日起被利用（本feed 08-26 曾标注其单一来源利用声明）。42016/42018 均于 9 月 11 日进 KEV。42016 的记分分歧仍在（JFrog 8.1 vs NVD Primary 8.8）；Wiz：披露六周后 59% 的组织仍未修复；watchTowr 的限定同样成立——刊发时"尚无大规模扫描证据"。
+- **ScreenConnect CVE-2026-84869（CWE-269 + CWE-862）**——活跃会话中的 guest 可在未经主机确认的情况下传输并执行文件。26.6.5 修复（公告 9 月 8 日；升级后须重装 host 客户端并更新 access agent）。9 月 11 日与 GitLab、Artifactory 同日进 KEV。记分分歧：**9.9（NVD/CISA-ADP）vs ConnectWise 自己的"Important, Priority 1-High"**——厂商的限定词也框定了风险（"服务器不受影响"；需活跃恶意 guest 会话），但上了 KEV 的 RMM 工具按定义就在攻击者的作战手册里。
+- **Storm-3121/3032 passkey 主题帮工台钓鱼（微软威胁情报，9 月 9 日）**——无 CVE，纯 AiTM 社工：假冒 IT 来电/短信 → 仿冒登录域名（`company-name.add-passkey[.]com`）或设备码认证流向攻击者控制的客户端签发 token → 从非受管设备登录 OfficeHome → 触达 Outlook/Teams/OneDrive。今天就能狩猎的防御工件：`add-passkey` 域名模式 + 设备码滥用。微软自己的限定：注册 passkey"往往不是攻击者的真正目标"；一次登录"不能证明文件被打开"。
+- **FLHSMV 确认 DAVID 驾照数据库被入侵——一级来源反驳团伙说法。** 佛州 9 月 11 日声明：经**一条 improperly 存放在个人设备上的 Plant City 警局用户凭据**入侵，9 月 4 日获悉，"已迅速缓解"——反驳 ShinyHunters 关于密码重置缺陷触及多个账户（含一名 FBI 探员）并自 9 月 3 日起遍历 20 万+ 记录的说法。记录数量双方均未证实；只有受害方才能裁决入侵机制。[[fact-check]] 的形状在此适用：勒索团伙的利用叙事是主张，不是结论。
+- 来源：[GitLab 19.3.2 补丁公告](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-3-2-released/) ·
+  [BleepingComputer：GitLab](https://www.bleepingcomputer.com/news/security/gitlab-urges-users-to-patch-max-severity-path-traversal-flaw/) ·
+  [Wiz：Artifactory under attack](https://www.wiz.io/blog/artifactory-under-attack-in-the-wild-exploitation-of-cve-2026-42016-cve-2026-4201) ·
+  [ConnectWise 公告](https://www.connectwise.com/company/trust/security-bulletins/2026-09-08-screenconnect-bulletin) ·
+  [微软：passkey 主题社工](https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/) ·
+  [BleepingComputer：佛州确认 DAVID 被入侵](https://www.bleepingcomputer.com/news/security/florida-confirms-dmv-database-breached-via-stolen-police-account/)
+
+## 2026-09-12 04:47(act 轮)—— agentic-offense watch 迎来第二个独立数据源,但保留其全部限定语
+
+`agentic-offense-campaign` watch(09-11 建档)要求对 GreyNoise 的 PaperCut 战役数据做独立确认。本轮
+第一手核查了两家厂商:
+
+- **Unit 42(Palo Alto Networks),《An AI-Assisted Cyber Attack: Inside a Unit 42 Investigation》
+  (发布于 9 月 2 日,9 月 3–4 日更新,已读原文)**——来自真实入侵事件的应急响应遥测:人类操作者
+  "设定目标并做重大决策",专用 agent 负责执行、共享结果并实时调整——突破 web 服务、测绘微服务、
+  抓取仓库密钥、夺取 root 凭据、滥用 CI/CD 流水线、调用受害者的云 AI 端点。核心测量:"把数周的
+  系统性入侵战术(动用超过 50 项 MITRE ATT&CK 技术)压缩到不到 10 小时",而人类操作者约需两周。
+  **限定语同样关键:** AI 归因依赖"多处与 AI 使用一致的指标"(并行 LLM 调用、agent 间 Markdown
+  文件、依 UI 元素"高置信度"判定为 AI 生成的脚本)*外加攻击者在勒索聊天中的自述*;未点名任何
+  模型或 harness;9 月 3 日的更新把"勒索软件"改为"入侵";且 10 小时是整体作战耗时——不是对公开
+  服务的首次利用耗时。结论:第二个确认*小时级 agentic 经济学*的第一手数据源(不同事件)——
+  **并非**对 GreyNoise 的 <4h PaperCut 时钟或 395 组织数的佐证。
+- **Huntress(8 月 28 日发布,更新至 9 月 10 日,已读原文)**——确认在野利用,并对原版 PaperCut NG
+  `25.0.11.75758` 复现了"完整的前置认证 RCE 链",但其自身遥测只有两个客户环境被利用;它的独立数据
+  是暴露面而非战役规模:"Huntress 追踪的约 2,500 套 PaperCut 安装中 47% 仍在运行 v23 或更旧版本。"
+  全文未提 AI agent 或 GreyNoise——没有 agentic 表述,也没有竞争性战役数据。
+
+**本轮之后的条件状态:**(1)引用 agentic 性质的政府公告——**未落地**(唯一的 CISA/FBI PaperCut
+联合公告仍是 2023 年针对 CVE-2023-27350 的 AA23-131A);(2)第二家厂商自己的战役统计——**部分
+推进**(Unit 42 佐证了经济学,而非统计数字);(3)9 月 14 日 KEV 执法/延期后续——待观察,还剩
+两天。watch 继续开放。
+
+Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-attack-inside-a-unit-42-investigation/) ·
+[Huntress:PaperCut 在野利用](https://www.huntress.com/blog/papercut-actively-exploited) ·
+[GreyNoise:AI 编排的战役](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) ·
+[CISA KEV 8 月 31 日警报](https://www.cisa.gov/news-events/alerts/2026/08/31/cisa-adds-two-known-exploited-vulnerabilities-catalog)
