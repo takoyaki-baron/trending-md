@@ -1,8 +1,8 @@
 ---
 date: 2026-09-12
-updated: 2026-09-12T12:35:00+08:00
+updated: 2026-09-12T20:10:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 46
 license: CC-BY-4.0
 ---
 
@@ -463,13 +463,153 @@ Autom.dev documents that Google is rewriting organic result links to `google.com
 
 ---
 
+## 33. Anthropic names seven China-based AI labs in "industrial-scale" Claude distillation — Alibaba's 151M exchanges top the list
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic threat-intelligence report (Sep 11) · The Hacker News · reported Sep 11–12
+- **Tags:** `distillation` `anthropic` `threat-intelligence` `ai-labs`
+
+Anthropic's September report contains a dedicated illicit-distillation section: since February 2026 it says it identified and disrupted seven industrial-scale campaigns of covert capability extraction — fraudulent accounts, stolen cards, harvested API keys, and proxy/relay services. The named campaigns: **Alibaba-affiliated operators** (GTG-16005) — 151M exchanges May–July, "the largest distillation attack we have ever measured" (~3M/day at peak, 3,500+ fake accounts, targeting Opus 4.6/4.7 reasoning transcripts); **DeepSeek** (GTG-16001) — silently rerouted 12.1M+ customer exchanges to Claude over 14 days; **Moonshot** (GTG-16002) — ~300,000 Kimi customer requests via 5,380 fake accounts; **Z.ai** (GTG-16006) — 3.4M+ replayed reasoning traces; **Xiaomi** (GTG-16008) — replayed MiMo outputs through coding harnesses; **SenseTime** (GTG-16012) — bought user-Claude transcripts from third-party vendors; **MiniMax** (GTG-16003) — ran a proxy service through a shell company ("likely" aiming to collect exchanges, per Anthropic's own hedge). Countermeasures: resellers and unverified accounts banned from unsupported regions, internal reasoning now summarized before answering, and "preserved thinking" in Fable 5.1 encrypting reasoning against context edits.
+
+**Why it matters:** the honest edges first — every claim is Anthropic's own assertion with no independent verification and no named-lab response published, "Alibaba-affiliated" is not Alibaba, distillation itself is a legitimate technique, and Anthropic has a direct commercial interest in this framing. But it is an escalation in kind: from "threat actors abuse Claude" (the malware-rebuild and exploit-foundry parts of the same report we covered Sep 11) to an allegation that rival labs systematically strip-mine Claude at customer scale.
+
+[`🔗 Anthropic: Detecting and countering misuse of AI — September 2026`](https://www.anthropic.com/threat-intelligence-report-september-2026) · [`🔗 The Hacker News analysis`](https://thehackernews.com/2026/09/anthropic-says-seven-china-based-ai.html)
+
+---
+
+## 34. Clay Mathematics Institute acknowledges the Navier–Stokes claim — "apparently settled," evaluation "deliberately unhurried"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Clay Mathematics Institute (Sep 11) · Hacker News 196+ pts · 132 comments
+- **Tags:** `navier-stokes` `millennium-prize` `mathematics` `openai`
+
+CMI's September 11 statement — its first on the claim — pointedly confirms nothing: the problem "has **apparently** been settled," CMI "contemplate[s] the announcement," the innovations must still be "analysed and interrogated," and evaluation follows the Millennium Prize rules with a process that is "deliberately unhurried." The sole nod to AI is one clause: "the increasing ability of new technologies to accelerate mathematical research has heightened this sense of anticipation." HN worked through the fine print: the rules require publication in a peer-reviewed "qualifying outlet" plus a two-year waiting period before CMI even evaluates — so OpenAI's self-published post starts no clock (realistic eligibility ~2029), though a 2018 rewrite gives CMI discretion to relax requirements; OpenAI has said it won't claim the $1M — making the second Millennium Problem in a row, after Perelman, likely to pay out nothing.
+
+**Why it matters:** since we covered the OpenAI blowup claim (Sep 9), the attribution dispute (Sep 11), and today's item 1 declaration, this is the fourth layer — the prize's own institution speaking, and its every qualifier ("apparently," "interrogated," "unhurried") is doing the work of saying: no verification, no credit, no hurry.
+
+[`🔗 Clay Mathematics Institute: Navier-Stokes announcement`](https://www.claymath.org/news/navier-stokes-announcement/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49668706)
+
+---
+
+## 35. melgarafael/DeskcommCRM — a Brazilian self-hosted "AI sales OS" for WhatsApp trends at +505 stars/day
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +505 stars today · 1,564 total · no HN thread
+- **Tags:** `crm` `whatsapp` `self-hosted` `ai-agents`
+
+DeskcommCRM positions as the open-source alternative to Kommo/Octadesk/Intercom: a self-hosted, multi-tenant CRM (Next.js 16, TypeScript strict, Supabase) where native AI agents answer, qualify, and sell over WhatsApp via WAHA, with MCP support and LGPD compliance as stated design goals. MIT licensed, pushed today, trilingual README (pt/en/es), and a one-command VPS installer built "in partnership with HostGator." The README's own tells are worth reading as carefully as the feature list: the quick path is a `curl | bash` installer (a clone-first variant exists), and the install docs carry a HostGator affiliate link — the monetization model is baked into the setup flow.
+
+**Why it matters:** the agent-ification of vertical SaaS keeps coming from the edges — here a WhatsApp-first sales CRM out of Brazil — and its distribution model (affiliate-funded installer, single-VPS self-host) is as much a signal about who open-source AI products are for as the feature set.
+
+[`🔗 melgarafael/DeskcommCRM`](https://github.com/melgarafael/DeskcommCRM) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 36. Show HN: Bodily Oddities — 143 unusual things your body does, and how many people share each
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News (Show HN) · 271+ pts · 174 comments
+- **Tags:** `show-hn` `reference` `astro` `side-project`
+
+A browsable catalog of 143 bodily phenomena — ear rumbling, jamais vu, aphantasia, benign fasciculations, "call of the void" — each with an explanation and prevalence data (ear rumbling: 43–55% of people). Built with Astro: static pages, client-side instant search, WebP-optimized assets, RSS, and a changelog; browsing by body region (Brain leads with 50 entries), by kind (Trick, Involuntary, Perception, Reflex), or by tag. The scoping discipline is the craft: it states plainly that it "does not diagnose anything," tags like "It felt scary but it's normal" frame entries reassuringly, and entries debunk myths (attached earlobes are not single-gene — a 2017 study found 49+ genetic regions involved).
+
+**Why it matters:** a pre-AI-web genre done well — a hand-curated, honestly-scoped reference site — and its 174-comment thread is the HN crowd happily sharing their own paradoxical kinesias; no model was needed to make it land.
+
+[`🔗 vester.si: Bodily Oddities`](https://vester.si/bodily-oddities/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49649789)
+
+---
+
+## 37. IKEA ships an official Skyrim mod — "KALLAX STORAGEBORN," starring Matt Berry as a living shelf
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 242+ pts · 39 comments · Kotaku (Sep 9)
+- **Tags:** `gaming` `modding` `skyrim` `marketing`
+
+As teased from Sep 2, IKEA released a free official Skyrim Creation on Sep 9: the KALLAX shelf enters the game via a questline that triggers when your character becomes overencumbered — collect the pieces in an ancient dungeon, bless the shelf with a magical Allen-wrench weapon, and it comes alive (Matt Berry voices it), follows you, visibly stores your excess items, and is summonable with a shout that yells "IKEA!" Kotaku's verdict: "a very elaborate and genuinely funny bit of marketing" — good enough that the reviewer didn't mind the promotional angle. The community's reaction was the now-obligatory "we got an IKEA Skyrim mod before Elder Scrolls 6."
+
+**Why it matters:** brand-as-mod is a new turn for the Creations ecosystem — a fourteen-year-old game's paid-mod storefront hosting a furniture company's ad, executed well enough that the HN thread is appreciation rather than backlash.
+
+[`🔗 Kotaku: IKEA just released an official Skyrim mod`](https://kotaku.com/ikea-just-released-an-official-skyrim-mod-starring-matt-berry-as-a-shelf-2000732886) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49639647)
+
+---
+
+## 38. Mullvad: Android hardware keepalive offload lets any app send traffic outside the VPN — and Google closed the report without action
+
+- **Velocity:** ▮▮ rising
+- **Source:** Mullvad blog (Sep 10) · Hacker News 99+ pts · 16 comments
+- **Tags:** `android` `vpn` `privacy` `vulnerability`
+
+Android's keepalive UDP feature — meant for NAT traversal and offloaded to the Wi-Fi/cellular hardware — can be misused by any app, with no special permissions, to "send UDP packets on port 4500 to any server on the Internet." Because the packets originate from the network hardware, they bypass the software check that enforces "Block all connections without VPN" — leaking the device's real IP past the tunnel. The discovering researcher reported it to Google's VRP; the issue "was closed without action," the report itself is non-public, and Mullvad believes Google is unlikely to fix it since a proper fix "would require changes in the Android system." GrapheneOS is aware and working on a fix. The theoretical mitigation — exhausting the hardware's limited keepalive slots so malicious apps can't get one — is one Mullvad explicitly declines: leaked packets would still flow outside the tunnel, and a malicious app might trigger the leak before Mullvad's own app starts.
+
+**Why it matters:** the always-on-VPN guarantee has a hardware-level exception that no permission dialog covers — and the disclosed response path (VRP closed, report sealed, vendor unlikely to act) is itself the story for anyone doing threat-modeling on Android.
+
+[`🔗 Mullvad: Another way to leak traffic on Android has been discovered`](https://mullvad.net/en/blog/another-way-to-leak-traffic-on-android-has-been-discovered) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49665502)
+
+---
+
+## 39. Retrospectively Reverse-Engineering Apple's Neural Engine — a fixed-function dataflow machine, mapped to the register
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 113+ pts · 13 comments · eileen-yoon (eiln)
+- **Tags:** `apple` `hardware` `reverse-engineering` `npu`
+
+Three years after abandoning her Linux ANE driver, Eileen Yoon returned to map the M1 ANE end-to-end — motivated by the M5 folding ANE cores into the GPU, which she reads as "the beginning of the end for the standalone NPU." Verified findings: 16 cores × 128 FP16 (256 INT8) MAC lanes = 2,048 lanes; Q16.16 saturating accumulation read out as FP16 (shown via overflow probes); tanh is a 33-entry piecewise-linear LUT sampled at tanh(i/8); there is **no ISA** — "ANE is a fixed-function dataflow engine," tasks are fixed-size ControlDMA register-write descriptors; 2 MiB shared L2 plus 16× 64 KiB kernel memory, with a roofline ridge point of 162 OP/byte; and KernelDMA is load-only at ~38 GB/s vs GPU ~78 GB/s — an additive bottleneck she argues specifically hurts transformer decode. Tools (the `eiln/ane` Linux driver, `ane-notes` firmware notes) are public. Her own caveats: the ANE is "too opinionated to build a general-purpose accelerator platform around it," some layout reasoning is self-described "armchair engineering," and several register banks remain unidentified.
+
+**Why it matters:** a complete, honest architecture study of the black box in every Apple device — published just as Apple itself retires the design — and the load-only kernel-memory path is a concrete explanation for why NPUs disappoint at LLM decode.
+
+[`🔗 eiln.github.io: Retrospectively Reverse-Engineering Apple's Neural Engine`](https://eiln.github.io/posts/ane.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49670032)
+
+---
+
+## 40. asgeirtj/system_prompts_leaks — 65k stars for a CC0 dump of extracted system prompts, refreshed within days of each model launch
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +216 stars today · 65,004 total · no HN thread
+- **Tags:** `system-prompts` `leaks` `llm` `agents`
+
+The repo collects extracted system prompts — per its description, Anthropic's Claude Fable 5.1, Opus 5, Claude Design, Claude Code; OpenAI's GPT-6-Astra and Codex; Google's Gemini 3.8 Flash / 3.1 Pro / Antigravity; xAI's Grok; Cursor; Kimi and more — released under CC0-1.0 and "updated regularly": commits on Sep 8–9 added Claude Code skills and agent prompts within days of the current model generation. It is the reference the agent-harness community greps when arguing about what production systems actually instruct. The honest framing: extraction provenance is unverifiable dump-by-dump, prompts may be stale or edited post-extraction, and the entire collection exists because prompt disclosure is a ToS violation nobody can technically enforce.
+
+**Why it matters:** system prompts are the de-facto API contract of the agent era, and this repo has become their unofficial changelog — a study corpus for harness design that the vendors themselves refuse to publish.
+
+[`🔗 asgeirtj/system_prompts_leaks`](https://github.com/asgeirtj/system_prompts_leaks) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 41. SnailSploit/Claude-Red — 78 offensive-security skills for Claude trend amid the agent-skills wave
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +99 stars today · 3,349 total · no HN thread
+- **Tags:** `red-team` `skills` `claude` `offensive-security`
+
+Claude-Red is a curated library of 78 `SKILL.md` files across 23 categories — web (16), wireless (14, covering 802.11 through LoRa), exploit development (6), EDR evasion and red-team infrastructure — each a structured methodology primer that loads on conversational triggers ("mentioning SQL injection loads `offensive-sqli`"). MIT licensed; installs as a sparse git checkout into `~/.claude/skills/`. Trigger honesty: the last release (v0.3.0, the wireless suite) landed Aug 30 — it is trending on the skills-ecosystem wave, not a fresh ship. The README scopes use to "authorized red team engagements, bug bounty triage, security research, CTF preparation," and the repo's rise tracks the same arc as bikini/exploitarium (Sep 5): offense knowledge is being packaged as agent skills faster than policy is being written for it.
+
+**Why it matters:** the dual-use skills category is now a repeatable trend rather than a one-off — the methodology primers are public-domain-quality, the guardrails are a README sentence, and the gap between those two facts is the open question.
+
+[`🔗 SnailSploit/Claude-Red`](https://github.com/SnailSploit/Claude-Red) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 42. nab138/iloader — a friendly desktop sidekick for iOS sideloading trends on a double-release day
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +209 stars today · 2,996 total · releases Sep 10
+- **Tags:** `ios` `sideloading` `sidestore` `open-source`
+
+iloader is a cross-platform (TypeScript/Tauri-era desktop) utility that installs SideStore or LiveContainer + SideStore on a plugged-in iDevice, imports any IPA, and manages the pairing-file and certificate plumbing — rppairing/lockdown pairing, development-certificate viewing and revocation — with "intelligent error suggestions" for the failure modes that make sideloading miserable. MIT licensed; v2.3.2 and v2.3.3 both shipped Sep 10, which is the trigger for today's +209. The README's security posture is notable: it names ilo app and its own site as the only official sources, and explicitly flags the Homebrew cask, AUR package, and Fedora COPR package as unofficial community builds not to be trusted blindly.
+
+**Why it matters:** the EU's sideloading era still runs on hobbyist-grade desktop glue — and the README's own distrust of third-party package channels is an honest mirror of the supply-chain risk in exactly this category.
+
+[`🔗 nab138/iloader`](https://github.com/nab138/iloader) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-12T12:35:00+08:00 |
-| Items | 32 |
-| Sources tracked | 36 (Hacker News, GitHub Trending, rubyhack.ai, ABC News, dayzlegame.com, Terry Tao's blog, mathandai.org, lucumr.pocoo.org, earendil.com, Quesma, GitLab docs, BleepingComputer, Wiz Research, The Hacker News, ConnectWise, CISA KEV, Microsoft Security, Axios, Reuters, Snowflake status, Capital B News, EPA, gov.ca.gov, arXiv, Hugging Face papers, XPENG AI, FLHSMV via BleepingComputer, unstablebuild/rune, godot-pty/gpty, Brown CSC, Tinybird, Fortum, BBC News, Trezor, Surfshark, autom.dev) |
+| Generated | 2026-09-12T20:10:00+08:00 |
+| Items | 42 |
+| Sources tracked | 46 (Hacker News, GitHub Trending, rubyhack.ai, ABC News, dayzlegame.com, Terry Tao's blog, mathandai.org, lucumr.pocoo.org, earendil.com, Quesma, GitLab docs, BleepingComputer, Wiz Research, The Hacker News, ConnectWise, CISA KEV, Microsoft Security, Axios, Reuters, Snowflake status, Capital B News, EPA, gov.ca.gov, arXiv, Hugging Face papers, XPENG AI, FLHSMV via BleepingComputer, unstablebuild/rune, godot-pty/gpty, Brown CSC, Tinybird, Fortum, BBC News, Trezor, Surfshark, autom.dev, Anthropic, Clay Mathematics Institute, Mullvad, eiln.github.io, Kotaku, vester.si, melgarafael/DeskcommCRM, asgeirtj/system_prompts_leaks, SnailSploit/Claude-Red, nab138/iloader) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

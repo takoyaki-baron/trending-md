@@ -1,8 +1,8 @@
 ---
 date: 2026-09-12
-updated: 2026-09-12T12:35:00+08:00
+updated: 2026-09-12T20:10:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 46
 license: CC-BY-4.0
 ---
 
@@ -463,13 +463,153 @@ Autom.dev が記録したところによると、Google はオーガニック結
 
 ---
 
+## 33. Anthropic、7つの中国系AIラボによる「工業規模」のClaude蒸留を告発——Alibabaの1億5,100万対話が最多
+
+- **ベロシティ:** ▮▮▮ trending
+- **ソース:** Anthropic 脅威インテリジェンスレポート（9月11日）· The Hacker News · 9月11〜12日に報道
+- **タグ:** `distillation` `anthropic` `threat-intelligence` `ai-labs`
+
+Anthropic の9月レポートには、不正蒸留に特化したセクションがある：2026年2月以降、偽アカウント・盗難クレジットカード・収集したAPIキー・プロキシ/リレーサービスを用いた7件の工業規模の能力抽出キャンペーンを特定し、遮断したと述べている。告発されたキャンペーン：**Alibaba 関連の運営者**（GTG-16005）——5〜7月に1億5,100万対話、「測定した中で最大の蒸留攻撃」（ピークで約300万対話/日、3,500以上の偽アカウント、Opus 4.6/4.7 の推論トランスクリプトが狙われた）；**DeepSeek**（GTG-16001）——14日間で1,200万件超の顧客対話を無言で Claude へ再ルーティング；**Moonshot**（GTG-16002）——5,380の偽アカウント経由で約30万件の Kimi 顧客リクエストを再ルーティング；**Z.ai**（GTG-16006）——340万件超の推論トレースを再生；**Xiaomi**（GTG-16008）——コーディングハーネス経由で MiMo の出力を再生；**SenseTime**（GTG-16012）——第三者ベンダーからユーザー-Claude トランスクリプトを購入；**MiniMax**（GTG-16003）——ペーパーカンパニー経由でプロキシサービスを運営（対話収集を狙っていたのは「と見られる（likely）」と Anthropic 自身が踏み込む）。対策：非対応地域のリセラーと未検証アカウントを禁止、回答前に内部推論を要約へ変更、そして Fable 5.1 の「preserved thinking」——推論を暗号化しコンテキスト改変を防ぐ。
+
+**なぜ重要か：** まず誠実な輪郭から——すべての主張は Anthropic 自身の断定で、独立検証はなく、名指しされたラボの回答も公表されていない。「Alibaba 関連」は Alibaba そのものではない。蒸留自体は正当な技術だ。そして Anthropic にはこの枠組みへの直接的な商業的利害がある。それでもこれは質的エスカレーションだ：「脅威アクターが Claude を悪用する」（9月11日に扱った同レポートのマルウェア再構築・エクスプロイト鋳造パート）から、競合ラボが顧客規模で Claude を組織的に採掘したという告発へ。
+
+[`🔗 Anthropic：Detecting and countering misuse of AI — September 2026`](https://www.anthropic.com/threat-intelligence-report-september-2026) · [`🔗 The Hacker News 分析`](https://thehackernews.com/2026/09/anthropic-says-seven-china-based-ai.html)
+
+---
+
+## 34. クレイ数学研究所が Navier–Stokes 主張を認める——「明らかに（apparently）解決された」、評価は「意図的に急がない」
+
+- **ベロシティ:** ▮▮▮ trending
+- **ソース:** Clay Mathematics Institute（9月11日）· Hacker News 196+ pts · 132 コメント
+- **タグ：** `navier-stokes` `millennium-prize` `mathematics` `openai`
+
+CMI の9月11日付声明——この主張についての初めての言及——は何も確定しない：「問題は **apparently**（見たところ）解決された」、CMI は発表を「吟味（contemplate）している」、イノベーションはなお「分析され、問いただされ（analysed and interrogated）」ねばならず、評価はミレニアム賞の規則に従い、プロセスは「意図的に急がない（deliberately unhurried）」。AI への言及は一節のみ：「新しい技術が数学研究を加速する能力の高まりが、この期待を高めた」。HN が細部を消化した：規則では peer-review された「qualifying outlet」での出版と、CMI が評価を始める前の2年間の待機期間が必須——つまり OpenAI の自サイト公開は時計を動かしていない（現実的な受賞資格は約2029年）。ただし2018年の規則改正で CMI には要件を緩和する裁量がある。OpenAI は100万ドルを請求しないと述べており——ペレルマンに続き、2問連続で報酬ゼロのミレニアム問題になりそうだ。
+
+**なぜ重要か：** OpenAI の爆発解の主張（9月9日）、帰属争い（9月11日）、そして今日の項目1の共同宣言に続き、これは第4の層——賞を設立した機関自身が語り、その修飾語の一つ一つ（「apparently」「interrogated」「unhurried」）が「検証なし、クレジットなし、急ぐ必要なし」と語るために機能している。
+
+[`🔗 Clay Mathematics Institute：Navier-Stokes announcement`](https://www.claymath.org/news/navier-stokes-announcement/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49668706)
+
+---
+
+## 35. melgarafael/DeskcommCRM——ブラジル製セルフホスト WhatsApp「AI営業OS」が +505スター/日でトレンドに
+
+- **ベロシティ:** ▮▮ rising
+- **ソース:** GitHub Trending · 本日 +505 スター · 累計 1,564 · HN スレッドなし
+- **タグ:** `crm` `whatsapp` `self-hosted` `ai-agents`
+
+DeskcommCRM は Kommo/Octadesk/Intercom のオープンソース代替を標榜する：セルフホスト・マルチテナント CRM（Next.js 16、TypeScript strict、Supabase）で、ネイティブ AI エージェントが WAHA 経由で WhatsApp 上で対応・資格判定・販売を行う。MCP サポートと LGPD コンプライアンスが設計目標として明記されている。MIT ライセンス、本日もプッシュあり、三言語 README（葡/英/西）、そして「HostGator とのパートナーシップ」で作られたワンコマンド VPS インストーラ。README 自身の痕跡は機能リストと同じくらい注意深く読む価値がある：最短経路は `curl | bash` インストーラ（clone 先のバリアントもあり）、インストール文書には HostGator のアフィリエイトリンクが貼られている——収益化モデルがセットアップフローに組み込まれているのだ。
+
+**なぜ重要か：** 垂直 SaaS のエージェント化は周縁から来続けている——今回はブラジル発 WhatsApp ファーストの営業 CRM——そしてその流通モデル（アフィリエイト資金のインストーラ、単一 VPS のセルフホスト）は、機能セットと同じくらい「オープンソース AI 製品は誰のためのものか」を物語るシグナルだ。
+
+[`🔗 melgarafael/DeskcommCRM`](https://github.com/melgarafael/DeskcommCRM) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 36. Show HN：Bodily Oddities——あなたの身体がする143の奇妙なことと、それぞれ何人が共有しているか
+
+- **ベロシティ:** ▮▮ rising
+- **ソース:** Hacker News（Show HN）· 271+ pts · 174 コメント
+- **タグ:** `show-hn` `reference` `astro` `side-project`
+
+143の身体現象を網羅するブラウズ可能なカタログ——耳鳴り（耳小筋症攣）、jamais vu、アファンタジア、良性筋束収縮、「虚無の呼び声」——各項目に解説と有病率データ付き（耳鳴りは人の43〜55%）。Astro 製：静的ページ、クライアントサイド即時検索、WebP 最適化アセット、RSS、チェンジログ；部位別（脳が50項目で首位）、種別（Trick、Involuntary、Perception、Reflex）、タグ別にブラウズできる。要旨は範囲の規律だ：「当サイトは何も診断しません」と明記し、「怖かったけど普通です」型のタグが読者を安心させ、項目は神話も検証する（耳たぶの付着は単一遺伝子ではない——2017年の研究は49以上の遺伝子領域を検出）。
+
+**なぜ重要か：** AI以前のウェブのジャンルが、手作業でキュレーションされ誠実に範囲を切ったリファレンスサイトとしてよくできあがった——174コメントの HN スレッドでは皆が自分の奇妙な体験を楽しげに共有しており、モデルは一つも必要なかった。
+
+[`🔗 vester.si：Bodily Oddities`](https://vester.si/bodily-oddities/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49649789)
+
+---
+
+## 37. IKEA が公式 Skyrim Mod をリリース——「KALLAX STORAGEBORN」、Matt Berry が生きた棚を吹き替え
+
+- **ベロシティ:** ▮▮ rising
+- **ソース:** Hacker News · 242+ pts · 39 コメント · Kotaku（9月9日）
+- **タグ:** `gaming` `modding` `skyrim` `marketing`
+
+9月2日からのティーザーどおり、IKEA は9月9日に無料の公式 Skyrim Creation をリリースした：キャラクターが重量超過になると発火するクエストラインで KALLAX シェルフがゲームに登場——古代のダンジョンでパーツを集め、魔法の六角レンチで棚に祝福を与えると、それが生きる（Matt Berry が声を担当）。あなたについて来て、余分なアイテムを世界の中で見える形で収納し、「IKEA!」と叫ぶシャウトで召喚できる。Kotaku の評価：「非常に手の込んだ、心から面白いマーケティング」—— reviewer が宣伝であることを気にしないほどの出来。コミュニティの反応はもはや定型の「Elder Scrolls 6 より先に IKEA の Skyrim Mod が来た」。
+
+**なぜ重要か：** ブランド・アズ・モッドは Creations エコシステムの新しい展開だ——14年前のゲームの有料 Mod ストアフロントに家具会社の広告が載り、その出来が良すぎて HN スレッドは反発ではなく賞賛になっている。
+
+[`🔗 Kotaku：IKEA just released an official Skyrim mod`](https://kotaku.com/ikea-just-released-an-official-skyrim-mod-starring-matt-berry-as-a-shelf-2000732886) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49639647)
+
+---
+
+## 38. Mullvad：Android のハードウェア keepalive オフロードで、あらゆるアプリが VPN 外へ送信可能——Google は報告をアクションなしでクローズ
+
+- **ベロシティ:** ▮▮ rising
+- **ソース:** Mullvad ブログ（9月10日）· Hacker News 99+ pts · 16 コメント
+- **タグ:** `android` `vpn` `privacy` `vulnerability`
+
+Android の keepalive UDP 機能——NAT 越えのために設計され、Wi-Fi/セルラーのハードウェアへオフロードされる——は、特別な権限なしでどのアプリにも悪用でき、「インターネット上の任意のサーバーのポート4500へ UDP パケットを送信」できる。パケットがネットワークハードウェアから発信されるため、「VPN なしの接続をすべてブロック」を強制するソフトウェアチェックを回避し——デバイスの実 IP がトンネルの外に漏れる。発見した研究者は Google の VRP に報告したが、問題は「アクションなしでクローズされた」。報告自体は非公開で、Mullvad は Google が修正する可能性は低いと見ている——適切な修正「には Android システムの変更が必要」だからだ。GrapheneOS は認知しており修正に取り組んでいる。理論的な緩和策——ハードウェアの限られた keepalive スロットを使い潰して悪意あるアプリに奪わせない——を、Mullvad は明示的に拒否する：漏れるパケットはそれでもトンネル外を流れるし、悪意あるアプリは Mullvad アプリの起動前に漏洩を引き起こしうる。
+
+**なぜ重要か：** 「常時オン VPN」の保証には、どの権限ダイアログもカバーしないハードウェアレベルの例外がある——そして開示された対応経路（VRP クローズ、報告封印、ベンダー対応不能の見込み）自体が、Android で脅威モデリングをする全員への物語だ。
+
+[`🔗 Mullvad：Another way to leak traffic on Android has been discovered`](https://mullvad.net/en/blog/another-way-to-leak-traffic-on-android-has-been-discovered) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49665502)
+
+---
+
+## 39. Apple Neural Engine の回顧的リバースエンジニアリング——レジスタレベルまで書き出された固定機能データフローマシン
+
+- **ベロシティ:** ▮ steady
+- **ソース:** Hacker News · 113+ pts · 13 コメント · eileen-yoon（eiln）
+- **タグ:** `apple` `hardware` `reverse-engineering` `npu`
+
+Linux ANE ドライバを放棄して3年、Eileen Yoon は M1 ANE をエンドツーエンドで地図化しに戻ってきた——動機は M5 が ANE コアを GPU へ折り畳んだことで、彼女はこれを「スタンドアロン NPU の終わりの始まり」と読む。検証済みの発見：16コア × 128 FP16（256 INT8）MAC レーン = 2,048レーン；Q16.16 飽和累積を FP16 として読み出し（オーバーフロープローブで実証）；tanh は tanh(i/8) でサンプリングされた33エントリの区分線形 LUT；**ISA は存在しない**——「ANE は固定機能データフローエンジン」であり、タスクは固定サイズの ControlDMA レジスタ書き込み記述子；2 MiB の共有 L2 と 16× 64 KiB のカーネルメモリ、ルーフラインの脊点は 162 OP/バイト；KernelDMA は読み込み専用で約38 GB/s（GPU 約78 GB/s）——この加算的ボトルネックが transformer デコードを特に苦しめると彼女は論じる。ツール（`eiln/ane` Linux ドライバ、`ane-notes` ファームウェアノート）は公開済み。彼女自身の注意書き：ANE は「汎用アクセラレータプラットフォームを築くには志向が強すぎる」、レイアウト推論の一部は自認する「アームチェア・エンジニアリング」、未同定のレジスタバンクも複数残る。
+
+**なぜ重要か：** すべての Apple 製置にいるブラックボックスの、完全で誠実なアーキテクチャ研究——Apple 自身がその設計を引退させようとするまさにその時に公刊された——そして読み込み専用のカーネルメモリ経路は、NPU が LLM デコードで期待外れな理由の具体的な説明だ。
+
+[`🔗 eiln.github.io：Retrospectively Reverse-Engineering Apple's Neural Engine`](https://eiln.github.io/posts/ane.html) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49670032)
+
+---
+
+## 40. asgeirtj/system_prompts_leaks——CC0 の抽出済みシステムプロンプト集が6.5万スター、各モデル公開から数日で更新
+
+- **ベロシティ:** ▮ steady
+- **ソース:** GitHub Trending · 本日 +216 スター · 累計 65,004 · HN スレッドなし
+- **タグ:** `system-prompts` `leaks` `llm` `agents`
+
+このリポジトリは抽出されたシステムプロンプトを収集する——説明によれば、Anthropic の Claude Fable 5.1、Opus 5、Claude Design、Claude Code；OpenAI の GPT-6-Astra と Codex；Google の Gemini 3.8 Flash / 3.1 Pro / Antigravity；xAI の Grok；Cursor；Kimi など——CC0-1.0 で公開され「定期更新」：9月8〜9日のコミットは、現行世代モデルの公開から数日で Claude Code のスキルとエージェントプロンプトを追加した。エージェントハーネスコミュニティが本番システムが実際に何を指示しているかを議論するとき、皆が grep するリファレンスがこれだ。誠実な枠組み：抽出の出所はダンプごとに検証不能で、プロンプトは古いか抽出後に改変されている可能性があり、そしてこのコレクション全体が存在するのは、プロンプト開示が技術的には強制できない ToS 違反だからだ。
+
+**なぜ重要か：** システムプロンプトはエージェント時代の事実上の API 契約であり、このリポジトリはその非公式チェンジログになっている——ベンダー自身が公表を拒んでいる、ハーネス設計の研究コーパスだ。
+
+[`🔗 asgeirtj/system_prompts_leaks`](https://github.com/asgeirtj/system_prompts_leaks) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 41. SnailSploit/Claude-Red——Claude 向け78の攻撃的セキュリティスキルが、エージェントスキルの波に乗ってトレンドに
+
+- **ベロシティ:** ▮ steady
+- **ソース:** GitHub Trending · 本日 +99 スター · 累計 3,349 · HN スレッドなし
+- **タグ:** `red-team` `skills` `claude` `offensive-security`
+
+Claude-Red は23カテゴリ・78の `SKILL.md` を集めたキュレーションライブラリ——Web（16）、ワイヤレス（14、802.11 から LoRa まで）、エクスプロイト開発（6）、EDR 回避とレッドチームインフラ——各ファイルは会話トリガーで必要時に読み込まれる構造化された方法論入門（「SQL インジェクションに言及すると `offensive-sqli` がロードされる」）。MIT ライセンス；`~/.claude/skills/` へ sparse git checkout で導入。トリガーの誠実さ：最終リリース（v0.3.0、ワイヤレススイート）は8月30日——新しい船出ではなく、スキルエコシステムの波でトレンドに入っている。README は用途を「許可されたレッドチーム演習、バグバウンティのトリアージ、セキュリティ研究、CTF 対策」に限定し、このリポジトリの伸びは bikini/exploitarium（9月5日）と同じ弧を描く：攻撃知識がエージェントスキルとしてパッケージ化される速度が、それに対する政策が書かれる速度を追い越している。
+
+**なぜ重要か：** 二重用途スキルというカテゴリは、もはや一過性ではなく再現性のあるトレンドだ——方法論入門はパブリックドメイン並みの質に達し、ガードレールは README の一文。この2つの事実の間のギャップが、まさに未解決の問いだ。
+
+[`🔗 SnailSploit/Claude-Red`](https://github.com/SnailSploit/Claude-Red) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 42. nab138/iloader——iOS サイドローディングのフレンドリーなデスクトップ助手が、ダブルリリースの日にトレンドへ
+
+- **ベロシティ:** ▮ steady
+- **ソース:** GitHub Trending · 本日 +209 スター · 累計 2,996 · 9月10日リリース
+- **タグ:** `ios` `sideloading` `sidestore` `open-source`
+
+iloader はクロスプラットフォーム（TypeScript デスクトップアプリ）のユーティリティだ：接続した iDevice に SideStore または LiveContainer + SideStore をインストールし、任意の IPA をインポートし、ペアリングファイルと証明書の面倒な配管——rppairing/lockdown ペアリング、開発証明書の表示と失効——を管理し、サイドローディングを不幸にする失敗モードへの「インテリジェントなエラー提案」も備える。MIT ライセンス；v2.3.2 と v2.3.3 がともに9月10日にリリースされ、これが本日の +209 の引き金だ。README のセキュリティ姿勢が際立つ：このリポジトリと公式サイトだけが唯一の公式ソースであると明記し、Homebrew cask、AUR パッケージ、Fedora COPR パッケージを盲信してはならない非公式コミュニティビルドとして明示的に注意を促している。
+
+**なぜ重要か：** EU のサイドローディング時代は、いまだに趣味人グレードのデスクトップグルーコードの上で動いている——そして第三者配布チャネルへの README 自身の不信は、まさにこのカテゴリーのサプライチェーンリスクの正直な鏡だ。
+
+[`🔗 nab138/iloader`](https://github.com/nab138/iloader) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
 ## Metadata
 
 | フィールド | 値 |
 |-------|-------|
-| 生成日時 | 2026-09-12T12:35:00+08:00 |
-| 項目数 | 32 |
-| 追跡ソース | 36（Hacker News, GitHub Trending, rubyhack.ai, ABC News, dayzlegame.com, Terence Tao ブログ, mathandai.org, lucumr.pocoo.org, earendil.com, Quesma, GitLab ドキュメント, BleepingComputer, Wiz Research, The Hacker News, ConnectWise, CISA KEV, Microsoft Security, Axios, Reuters, Snowflake ステータス, Capital B News, EPA, gov.ca.gov, arXiv, Hugging Face papers, XPENG AI, FLHSMV 経由 BleepingComputer, unstablebuild/rune, godot-pty/gpty, Brown CSC, Tinybird, Fortum, BBC News, Trezor, Surfshark, autom.dev） |
+| 生成日時 | 2026-09-12T20:10:00+08:00 |
+| 項目数 | 42 |
+| 追跡ソース | 46（Hacker News, GitHub Trending, rubyhack.ai, ABC News, dayzlegame.com, Terence Tao ブログ, mathandai.org, lucumr.pocoo.org, earendil.com, Quesma, GitLab ドキュメント, BleepingComputer, Wiz Research, The Hacker News, ConnectWise, CISA KEV, Microsoft Security, Axios, Reuters, Snowflake ステータス, Capital B News, EPA, gov.ca.gov, arXiv, Hugging Face papers, XPENG AI, FLHSMV 経由 BleepingComputer, unstablebuild/rune, godot-pty/gpty, Brown CSC, Tinybird, Fortum, BBC News, Trezor, Surfshark, autom.dev, Anthropic, Clay Mathematics Institute, Mullvad, eiln.github.io, Kotaku, vester.si, melgarafael/DeskcommCRM, asgeirtj/system_prompts_leaks, SnailSploit/Claude-Red, nab138/iloader） |
 | 更新スケジュール | 04:03, 12:03, 20:03 UTC+8（毎日 3 回） |
 | ランキング | ベロシティ加重（鮮度 × エンゲージメント加速度 × ソース権威） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

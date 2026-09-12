@@ -1,8 +1,8 @@
 ---
 date: 2026-09-12
-updated: 2026-09-12T12:35:00+08:00
+updated: 2026-09-12T20:10:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 46
 license: CC-BY-4.0
 ---
 
@@ -463,13 +463,153 @@ Autom.dev 记录到 Google 正在把自然结果链接改写为 `google.com/goto
 
 ---
 
+## 33. Anthropic 点名七家中国 AI 实验室进行"工业级"Claude 蒸馏——阿里巴巴以 1.51 亿次对话居首
+
+- **热度：** ▮▮▮ trending
+- **来源：** Anthropic 威胁情报报告（9 月 11 日）· The Hacker News · 报道于 9 月 11–12 日
+- **标签：** `distillation` `anthropic` `threat-intelligence` `ai-labs`
+
+Anthropic 九月报告包含专门的违规蒸馏章节：自 2026 年 2 月以来，其称已识别并阻断七场工业规模的隐蔽能力抽取行动——手段包括欺诈账户、被盗信用卡、收集的 API 密钥和代理/中继服务。被点名的行动：**阿里巴巴关联运营者**（GTG-16005）——5 至 7 月 1.51 亿次对话，"我们测量过的最大规模蒸馏攻击"（峰值约 300 万次/天，3,500+ 欺诈账户，目标是 Opus 4.6/4.7 推理转录）；**DeepSeek**（GTG-16001）——14 天内悄悄把 1,200 多万次客户对话改路由到 Claude；**月之暗面**（GTG-16002）——通过 5,380 个假账户改路由约 30 万次 Kimi 客户请求；**智谱 Z.ai**（GTG-16006）——重放 340 多万次推理痕迹；**小米**（GTG-16008）——通过编码 harness 重放 MiMo 输出；**商汤**（GTG-16012）——向第三方供应商购买用户-Claude 转录；**MiniMax**（GTG-16003）——通过壳公司运营代理服务（Anthropic 自己的措辞是"很可能"意在收集对话）。反制措施：封禁不受支持地区的经销商与未验证账户、回答前先总结内部推理、以及 Fable 5.1 中加密推理以防上下文篡改的"preserved thinking"。
+
+**为什么重要：** 先说诚实的边界——所有指控均为 Anthropic 自家断言，无独立验证，也未公布被点名实验室的回应；"阿里巴巴关联"并不等于阿里巴巴；蒸馏本身是正当技术；而且 Anthropic 在这套叙事里有直接的商业利益。但这是性质上的升级：从"威胁行为者滥用 Claude"（9 月 11 日我们覆盖的同份报告的恶意软件重建与漏洞锻造部分）升级为指控竞争对手实验室在客户规模上系统性地攫取 Claude。
+
+[`🔗 Anthropic：Detecting and countering misuse of AI — September 2026`](https://www.anthropic.com/threat-intelligence-report-september-2026) · [`🔗 The Hacker News 分析`](https://thehackernews.com/2026/09/anthropic-says-seven-china-based-ai.html)
+
+---
+
+## 34. 克雷数学研究所回应 Navier–Stokes 主张——"显然已被解决"，评审"从容不迫"
+
+- **热度：** ▮▮▮ trending
+- **来源：** Clay Mathematics Institute（9 月 11 日）· Hacker News 196+ 分 · 132 评论
+- **标签：** `navier-stokes` `millennium-prize` `mathematics` `openai`
+
+CMI 9 月 11 日的声明——其对求解主张的首次回应——刻意什么都没确认：问题"**显然（apparently）**已被解决"，CMI 在"斟酌（contemplate）这一宣布"，创新仍需"被分析与拷问（analysed and interrogated）"，评审依千禧年大奖规则进行，流程"从容不迫"。对 AI 的唯一让步是一句话："新技术加速数学研究的能力日益增强，加剧了这种预期。"HN 把细则啃了一遍：规则要求在同行评审的"合格发表渠道"发表并经过两年等待期，CMI 才会启动评审——所以 OpenAI 在自家网站上的发布根本没启动计时器（现实中的领奖资格约在 2029 年）；不过 2018 年的规则修订给了 CMI 放宽要求的自由裁量权；OpenAI 已表示不会申领 100 万美元奖金——这将是继佩雷尔曼之后连续第二个分文不取的千禧年问题。
+
+**为什么重要：** 继我们覆盖 OpenAI 的爆破主张（9 月 9 日）、归因争议（9 月 11 日）和今日第 1 条的联合宣言之后，这是第四层——奖项设立机构亲自发声，而它的每一个限定词（"显然"、"拷问"、"不迫"）都在替它说出：没有验证，没有署名，也不着急。
+
+[`🔗 Clay Mathematics Institute：Navier-Stokes announcement`](https://www.claymath.org/news/navier-stokes-announcement/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49668706)
+
+---
+
+## 35. melgarafael/DeskcommCRM——巴西产自托管 WhatsApp"AI 销售操作系统"以 +505 星/天登上趋势
+
+- **热度：** ▮▮ rising
+- **来源：** GitHub Trending · 今日 +505 星 · 共 1,564 星 · 无 HN 讨论
+- **标签：** `crm` `whatsapp` `self-hosted` `ai-agents`
+
+DeskcommCRM 定位为 Kommo/Octadesk/Intercom 的开源替代：自托管、多租户 CRM（Next.js 16、TypeScript strict、Supabase），内置 AI 代理通过 WAHA 在 WhatsApp 上接待、甄别和成交，MCP 支持与 LGPD（巴西数据保护法）合规是其声明的设计目标。MIT 许可，今日有推送，三语 README（葡/英/西），并带一个"与 HostGator 合作"打造的一键 VPS 安装器。README 自身的痕迹值得和功能清单一样细读：最快捷径是 `curl | bash` 安装器（也提供先 clone 的变体），安装文档里挂着 HostGator 联盟链接——变现模式就焊在安装流程里。
+
+**为什么重要：** 垂直 SaaS 的代理化持续从边缘涌出——这次是巴西的 WhatsApp 优先销售 CRM——而它的分发模式（联盟链接资助的安装器、单 VPS 自托管）与其说是功能集，不如说同样是在回答"开源 AI 产品到底为谁而生"。
+
+[`🔗 melgarafael/DeskcommCRM`](https://github.com/melgarafael/DeskcommCRM) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 36. Show HN：Bodily Oddities——你的身体会做的 143 件怪事，以及各有多少人与你共有
+
+- **热度：** ▮▮ rising
+- **来源：** Hacker News（Show HN）· 271+ 分 · 174 评论
+- **标签：** `show-hn` `reference` `astro` `side-project`
+
+一个可浏览的 143 种身体现象目录——耳鸣鼓室肌收缩、jamais vu、心盲症、良性肌束颤动、"虚无召唤"——每条附解释与流行率数据（耳鸣现象：43–55% 的人有）。用 Astro 构建：静态页面、客户端即时搜索、WebP 优化资源、RSS 和更新日志；可按身体部位（脑部以 50 条居首）、按类型（Trick、Involuntary、Perception、Reflex）或按标签浏览。其范围自律正是手艺所在：明说"本站不做任何诊断"，"感觉很吓人但这是正常的"之类的标签让条目读来安心，条目还会破除迷思（耳垂贴合与否并非单基因——2017 年一项研究发现了 49+ 个相关基因区）。
+
+**为什么重要：** 前_AI 网络时代的品类被做得很好——人工策划、边界诚实的参考站——174 条评论的 HN 讨论串里大家快乐地分享各自的怪异体验；不需要任何模型，它就成立了。
+
+[`🔗 vester.si：Bodily Oddities`](https://vester.si/bodily-oddities/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49649789)
+
+---
+
+## 37. 宜家发布了官方 Skyrim 模组——"KALLAX STORAGEBORN"，Matt Berry 配音一只活书架
+
+- **热度：** ▮▮ rising
+- **来源：** Hacker News · 242+ 分 · 39 评论 · Kotaku（9 月 9 日）
+- **标签：** `gaming` `modding` `skyrim` `marketing`
+
+如 9 月 2 日起的预热，宜家于 9 月 9 日发布了免费官方 Skyrim Creation：KALLAX 层架随一条任务线进入游戏——当角色超重时触发，去远古地牢收集部件，用一把魔法内六角扳手为架子祝福，它便活了过来（Matt Berry 配音）、跟随你、可见地收纳你的多余物品，还能用一声大喊"IKEA!"的龙吼召唤。Kotaku 的评语："一场非常精心且真心好笑的营销"——好到评测者并不介意它的推广属性。社区的反应是那句必然的"我们提前拿到了宜家 Skyrim 模组，《上古卷轴 6》还没来"。
+
+**为什么重要：** 品牌-即-模组是 Creation 生态的新转向——一款十四岁游戏的付费模组商店里出现了家具公司的广告，而且执行得让 HN 讨论串变成了赞赏而非抵制。
+
+[`🔗 Kotaku：IKEA just released an official Skyrim mod`](https://kotaku.com/ikea-just-released-an-official-skyrim-mod-starring-matt-berry-as-a-shelf-2000732886) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49639647)
+
+---
+
+## 38. Mullvad：Android 硬件 keepalive 卸载让任意应用在 VPN 之外发包——而 Google 关闭了报告不予处理
+
+- **热度：** ▮▮ rising
+- **来源：** Mullvad 博客（9 月 10 日）· Hacker News 99+ 分 · 16 评论
+- **标签：** `android` `vpn` `privacy` `vulnerability`
+
+Android 的 keepalive UDP 特性——为 NAT 穿透而设计、被卸载到 Wi-Fi/蜂窝硬件——可被任意应用滥用，无需任何特殊权限，即可"向互联网上任意服务器的 4500 端口发送 UDP 包"。由于这些包源自网络硬件，它们绕过执行"未连接 VPN 时阻断所有连接"的软件检查——让设备真实 IP 泄漏到隧道之外。发现该问题的研究者已向 Google VRP 报告；问题"未经处理即被关闭"，报告本身不公开，Mullvad 认为 Google 不太可能修复，因为正确的修复"需要改动 Android 系统"。GrapheneOS 已知悉并在着手修复。理论上存在一种缓解——耗尽硬件有限的 keepalive 槽位让恶意应用抢不到——但 Mullvad 明确拒绝采用：泄漏的包仍会在隧道外流动，而且恶意应用可能在 Mullvad 应用启动前就先触发泄漏。
+
+**为什么重要：** "永远在线 VPN"的保证存在一个硬件层例外，且没有任何权限弹窗覆盖它——而披露出的响应路径（VRP 关闭、报告封存、厂商不太可能行动）本身就是每个做 Android 威胁建模的人该读的故事。
+
+[`🔗 Mullvad：Another way to leak traffic on Android has been discovered`](https://mullvad.net/en/blog/another-way-to-leak-traffic-on-android-has-been-discovered) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49665502)
+
+---
+
+## 39. 回溯性逆向苹果 Neural Engine——一台被映射到寄存器级的固定功能数据流机器
+
+- **热度：** ▮ steady
+- **来源：** Hacker News · 113+ 分 · 13 评论 · eileen-yoon（eiln）
+- **标签：** `apple` `hardware` `reverse-engineering` `npu`
+
+在放弃 Linux ANE 驱动三年后，Eileen Yoon 回来把 M1 ANE 从端到端测绘了一遍——动机是 M5 把 ANE 核心折叠进 GPU，她将其解读为"独立 NPU 终结的开端"。经验证的发现：16 核 × 128 条 FP16（256 INT8）MAC 通道 = 2,048 通道；Q16.16 饱和累加、以 FP16 读出（通过溢出探针证实）；tanh 是按 tanh(i/8) 采样的 33 项分段线性查找表；它**没有 ISA**——"ANE 是固定功能数据流引擎"，任务即固定大小的 ControlDMA 寄存器写描述符；2 MiB 共享 L2 加 16× 64 KiB 核内存储，屋顶线脊点 162 OP/字节；KernelDMA 只读、约 38 GB/s（GPU 约 78 GB/s）——她论证这一叠加瓶颈专门伤害 transformer 解码。工具（`eiln/ane` Linux 驱动、`ane-notes` 固件笔记）均已公开。她自己的告诫：ANE"太有主见，不适合围绕它建通用加速器平台"，部分版图推演是自认的"扶手椅工程"，且仍有若干寄存器组未识别。
+
+**为什么重要：** 对每台苹果设备里那颗黑盒的完整而诚实的架构研究——恰在苹果亲手让这一设计退役之际发表——而只读不写的核内存储通路，正是 NPU 在 LLM 解码上令人失望的具体解释。
+
+[`🔗 eiln.github.io：Retrospectively Reverse-Engineering Apple's Neural Engine`](https://eiln.github.io/posts/ane.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49670032)
+
+---
+
+## 40. asgeirtj/system_prompts_leaks——CC0 的系统提示词抽取库达到 6.5 万星，每次模型发布数日内即更新
+
+- **热度：** ▮ steady
+- **来源：** GitHub Trending · 今日 +216 星 · 共 65,004 星 · 无 HN 讨论
+- **标签：** `system-prompts` `leaks` `llm` `agents`
+
+该仓库收集被抽取出的系统提示词——按其描述，包括 Anthropic 的 Claude Fable 5.1、Opus 5、Claude Design、Claude Code；OpenAI 的 GPT-6-Astra 与 Codex；Google 的 Gemini 3.8 Flash / 3.1 Pro / Antigravity；xAI 的 Grok；Cursor；Kimi 等——以 CC0-1.0 发布且"定期更新"：9 月 8–9 日的提交在当前一代模型发布数日内就加入了 Claude Code 技能与代理提示词。当智能体 harness 社区争论生产系统到底下了什么指令时，它就是大家 grep 的那份参考。诚实的框架：抽取来源无法逐份验证，提示词可能过期或在抽取后被改动，而整个收藏之所以存在，是因为提示词披露是一种没人能在技术上强制执行的 ToS 违规。
+
+**为什么重要：** 系统提示词是智能体时代事实上的 API 契约，而这个仓库已成为它们非官方的更新日志——一份厂商自己拒绝发布的 harness 设计研究语料。
+
+[`🔗 asgeirtj/system_prompts_leaks`](https://github.com/asgeirtj/system_prompts_leaks) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 41. SnailSploit/Claude-Red——78 个进攻性安全技能随 agent-skills 浪潮登上趋势
+
+- **热度：** ▮ steady
+- **来源：** GitHub Trending · 今日 +99 星 · 共 3,349 星 · 无 HN 讨论
+- **标签：** `red-team` `skills` `claude` `offensive-security`
+
+Claude-Red 是一个涵盖 23 个类别的 78 份 `SKILL.md` 精选库——Web（16）、无线（14，覆盖 802.11 到 LoRa）、漏洞利用开发（6）、EDR 逃避与红队基础设施——每份都是结构化的方法论入门，按对话触发器按需加载（"提到 SQL 注入就加载 `offensive-sqli`"）。MIT 许可；以稀疏 git checkout 装入 `~/.claude/skills/`。触发的诚实之处：上次发布（v0.3.0，无线套件）落在 8 月 30 日——它是在技能生态浪潮上 trending，而非新版本带火。README 将用途限定于"授权红队行动、漏洞赏金分诊、安全研究、CTF 备赛"，而该仓库的走红与 bikini/exploitarium（9 月 5 日）划出同一条弧线：攻击知识被打包为 agent 技能的速度，快于针对它的政策被写出来的速度。
+
+**为什么重要：** 双重用途技能品类如今是可复现的趋势而非孤例——方法论入门已是公有领域级的质量，而护栏只有 README 里的一句话，这两件事之间的差距就是那个悬而未决的问题。
+
+[`🔗 SnailSploit/Claude-Red`](https://github.com/SnailSploit/Claude-Red) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 42. nab138/iloader——iOS 侧载的友好桌面助手在双发版之日登上趋势
+
+- **热度：** ▮ steady
+- **来源：** GitHub Trending · 今日 +209 星 · 共 2,996 星 · 9 月 10 日发版
+- **标签：** `ios` `sideloading` `sidestore` `open-source`
+
+iloader 是一个跨平台（TypeScript 桌面应用）工具：为插入的 iDevice 安装 SideStore 或 LiveContainer + SideStore、导入任意 IPA、并管理配对文件与证书的琐碎管道——rppairing/lockdown 配对、开发证书查看与吊销——还带针对侧载常见失败模式的"智能错误建议"。MIT 许可；v2.3.2 与 v2.3.3 均于 9 月 10 日发布，这正是今日 +209 的触发点。README 的安全姿态值得注意：它指明本仓库与官网是唯一的官方下载源，并明确将 Homebrew cask、AUR 包和 Fedora COPR 包标记为不可盲目信任的非官方社区构建。
+
+**为什么重要：** 欧盟侧载时代依然跑在爱好者级的桌面胶水代码上——而 README 对第三方分发渠道的这种不信任，恰好是这个品类自身供应链风险的诚实镜像。
+
+[`🔗 nab138/iloader`](https://github.com/nab138/iloader) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-09-12T12:35:00+08:00 |
-| 条目数 | 32 |
-| 追踪来源 | 36（Hacker News, GitHub Trending, rubyhack.ai, ABC News, dayzlegame.com, 陶哲轩博客, mathandai.org, lucumr.pocoo.org, earendil.com, Quesma, GitLab 文档, BleepingComputer, Wiz Research, The Hacker News, ConnectWise, CISA KEV, Microsoft Security, Axios, Reuters, Snowflake 状态页, Capital B News, EPA, gov.ca.gov, arXiv, Hugging Face papers, XPENG AI, FLHSMV 经 BleepingComputer, unstablebuild/rune, godot-pty/gpty, Brown CSC, Tinybird, Fortum, BBC News, Trezor, Surfshark, autom.dev） |
+| 生成时间 | 2026-09-12T20:10:00+08:00 |
+| 条目数 | 42 |
+| 追踪来源 | 46（Hacker News, GitHub Trending, rubyhack.ai, ABC News, dayzlegame.com, 陶哲轩博客, mathandai.org, lucumr.pocoo.org, earendil.com, Quesma, GitLab 文档, BleepingComputer, Wiz Research, The Hacker News, ConnectWise, CISA KEV, Microsoft Security, Axios, Reuters, Snowflake 状态页, Capital B News, EPA, gov.ca.gov, arXiv, Hugging Face papers, XPENG AI, FLHSMV 经 BleepingComputer, unstablebuild/rune, godot-pty/gpty, Brown CSC, Tinybird, Fortum, BBC News, Trezor, Surfshark, autom.dev, Anthropic, Clay Mathematics Institute, Mullvad, eiln.github.io, Kotaku, vester.si, melgarafael/DeskcommCRM, asgeirtj/system_prompts_leaks, SnailSploit/Claude-Red, nab138/iloader） |
 | 更新节奏 | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | 排序 | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | 许可 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
