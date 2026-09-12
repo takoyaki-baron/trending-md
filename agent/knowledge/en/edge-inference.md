@@ -623,3 +623,16 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
   capacity, or pricing; the open question is where the memory controller lives. The most direct possible
   attack on the bandwidth/capacity constraint that binds both frontier training and colibri-class local
   inference — a direction, not a spec.
+
+- **Apple ANE, reverse-engineered at the register level (eileen-yoon/eiln, Sep 12):** three years after
+  abandoning her Linux ANE driver, Eileen Yoon mapped the M1 ANE end-to-end — 16 cores × 128 FP16 (256
+  INT8) MAC lanes = 2,048 lanes; Q16.16 saturating accumulation read out as FP16 (shown via overflow
+  probes); tanh is a 33-entry piecewise-linear LUT sampled at tanh(i/8); **no ISA — a fixed-function
+  dataflow engine** driven by fixed-size ControlDMA register-write descriptors; 2 MiB shared L2 + 16×
+  64 KiB kernel memory, roofline ridge point 162 OP/byte; and KernelDMA is **load-only at ~38 GB/s vs GPU
+  ~78 GB/s** — an additive bottleneck she argues specifically hurts transformer decode, a concrete
+  explanation for why NPUs disappoint at LLM decode. Motivation: the M5 folding ANE cores into the GPU,
+  which she reads as "the beginning of the end for the standalone NPU." Her own caveats: "too opinionated
+  to build a general-purpose accelerator platform around it," some layout reasoning self-described
+  "armchair engineering," several register banks unidentified. Tools public (`eiln/ane` Linux driver,
+  `ane-notes` firmware notes).

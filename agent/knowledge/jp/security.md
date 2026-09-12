@@ -1915,3 +1915,7 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
 [Huntress: PaperCut 活発な悪用](https://www.huntress.com/blog/papercut-actively-exploited) ·
 [GreyNoise: AI オーケストレーションされたキャンペーン](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) ·
 [CISA KEV 8 月 31 日アラート](https://www.cisa.gov/news-events/alerts/2026/08/31/cisa-adds-two-known-exploited-vulnerabilities-catalog)
+
+- **Trezor × Brevo（9 月 9–11 日）：** 攻撃者は Trezor のサードパーティ newsletter 業者 Brevo のログイン欠陥を突き、138 のクライアントアカウントへアクセス、Trezor 自身の送信インフラを使って約 34.7 万人のオプトイン購読者に「STM32 エントロピー脆弱性」のフィッシングを送付（偽アプリにウォレットバックアップを入力させる仕組み）；フィッシングドメインは 20 分で DNS レベルで降ろし、約 2,500 名がクリック、ウォレットは無傷。2024 年のサポートポータル侵入（6.6 万ユーザー）と ShipMonk（8.1 万）に続く 3 件目のパイプライン事件——業者は違っても攻撃面は同じ：メーリングリスト；漏洩したアドレスは今後のフィッシング資産であり続ける。
+- **Surfshark（9 月 10 日）：** ヒューマンエラーの設定により内部エンジニアリングのテストサーバーと別のプロキシサーバーが露出；露出内容はシステムバイナリ、サービス設定、コード履歴内のビルド関連認証情報。時系列の開示（8 月 31 日に不審な活動検出、9 月 2 日に封じ込め、9 月 5 日までに全シークレットをローテーション）と委託された独立監査；認証情報悪用の証拠はなし。開示の質こそがポイント——だが「テストインフラ」は繰り返される初期アクセス経路になりつつあり、git 履歴のビルド認証情報はまさにサプライチェーン攻撃者が利用する踏み石。
+- **Mullvad——Android のハードウェア keepalive オフロード（9 月 10 日）：** 任意のアプリが特別な権限なしで、ハードウェアオフロードされた UDP keepalive（ポート 4500）を悪用でき、ネットワークハードウェアから発信されるパケットで「VPN なしでは全接続をブロック」を強制するソフトウェアチェックをバイパス——実 IP がトンネル外に漏れる。Google の VRP は対応なく報告をクローズ（適切な修正「には Android システムの変更が必要」）；報告書自体は非公開；GrapheneOS は修正作業中。常時オン VPN の保証には権限ダイアログでは扱えないハードウェアレベルの例外があり——そして「クローズ・非公開・修正見込みなし」というレスポンスの経路こそ、Android の脅威モデリングにおける話。

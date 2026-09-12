@@ -115,3 +115,11 @@ itself at the community gate.
   enough that the code-sharing economics inverted.
 - Sources: [Shopify Engineering: Back to Native](https://shopify.engineering/back-to-native) ·
   [HN discussion](https://news.ycombinator.com/item?id=49643982)
+
+- **Google app ads vs the developer's own dashboard (Sep 12, HN 387 pts):** a solo dev's CA$220 Dayzle
+  campaign at CA$40/day — Google's dashboard reported 21 installs in a day; his own admin panel recorded 1
+  (~60% of installs were robots). The writeup attributes phantom installs to bot farms posing as ad
+  "publishers" — faking the engagement the bidding algorithm rewards so ads keep routing to their
+  placements, with residential proxies making the traffic look legitimate. The second platform-reported
+  metric inverted under first-hand measurement this week (after Quesma's RTK bench) — and this one is the
+  purchase signal itself for indie developers.

@@ -18,12 +18,12 @@
         "49616247",
         "49661662"
       ],
-      "checked": "2026-09-11T21:07:57.778Z"
+      "checked": "2026-09-12T13:02:07.307Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
       "hn_seen": [],
-      "checked": "2026-09-11T21:07:57.778Z"
+      "checked": "2026-09-12T13:02:07.307Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -36,14 +36,14 @@
         "49558108",
         "49567594"
       ],
-      "checked": "2026-09-11T21:07:57.778Z"
+      "checked": "2026-09-12T13:02:07.307Z"
     },
     "name-termination": {
       "nvd_seen": [],
       "hn_seen": [
         "49516047"
       ],
-      "checked": "2026-09-11T21:07:57.778Z"
+      "checked": "2026-09-12T13:02:07.307Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -62,7 +62,7 @@
         "49614911",
         "49650712"
       ],
-      "checked": "2026-09-11T21:07:57.778Z"
+      "checked": "2026-09-12T13:02:07.307Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -75,10 +75,10 @@
     "agentic-offense-campaign": {
       "nvd_seen": [],
       "hn_seen": [],
-      "checked": "2026-09-11T21:07:57.778Z"
+      "checked": "2026-09-12T13:02:07.307Z"
     }
   },
-  "runs": 36,
+  "runs": 37,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-09-11T21:07:57.778Z"
+  "last_run": "2026-09-12T13:02:07.307Z"
 }

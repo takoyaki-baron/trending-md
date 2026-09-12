@@ -81,3 +81,12 @@ Sources: [Creepy crawlies (people.kernel.org)](https://people.kernel.org/monsieu
   public docs infrastructure: IP blocking is "obsolete for distributed attacks."
 - Sources: [Read the Docs blog](https://about.readthedocs.com/blog/2026/09/2026-ddos-attack/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49628614)
+
+- **Google rewrites organic result links through `google.com/goto` (autom.dev, Sep 12):** since late
+  August, logged-out and private-browsing sessions included, SERP links carry a Google-specific,
+  offline-undecodable `url` parameter — autom.dev reads it as "an opaque reference to Google's index
+  record for that page." Recovery requires requesting the /goto URL and reading the Location header
+  without following it ("You read `Location`; you do not follow through to the page"). Every scraped
+  result now costs a fresh request to Google — a latency tax and a rate-limit chokepoint for any agent or
+  pipeline treating the SERP as an API; ClearURLs-style stripping can't work because the target exists
+  only server-side.

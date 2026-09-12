@@ -55,3 +55,5 @@ created: 2026-08-31
 
 - **Read the Docs 十天 DDoS 复盘**(博客 9 月 8 日,attack 发生于 2026 年 6 月;HN 98+ 分)。峰值 >550 万请求/分钟(约为日常 100 倍、史上最大事件的 10 倍),来自数百 ASN 的数百万 IP;随机化 HTTP/TLS 指纹击败 JA3/JA4;目标**只打缓存未命中**(唯一 404、未缓存 302),并用"yo-yo 模式"最大化自动扩容成本——图的是账单,不是宕机。扛住的:边缘缓存 404/重定向、bot 评分 + 每 IP 限速、Terraform 管理的黑名单规则体系。没扛住的:两种防御当场失效(协议一致性检查、JA4);且拒绝 Cloudflare Under Attack Mode("会弄坏每一个 API 集成")。自家结语:"一段延长的缓刑",发稿时残余攻击流量仍在。与 kernel.org 的 AI 爬虫税同族,但行为者与动机不同——针对公共公益文档主机的成本膨胀勒索。给所有公共文档基建的模板教训:IP 封禁"对分布式攻击已过时"。
 - 来源:[Read the Docs 博客](https://about.readthedocs.com/blog/2026/09/2026-ddos-attack/) · [HN 讨论](https://news.ycombinator.com/item?id=49628614)
+
+- **Google 把自然结果链接改写为经 `google.com/goto`（autom.dev，9 月 12 日）：** 自 8 月下旬起——含未登录与隐私浏览会话——SERP 链接带有 Google 专有、离线不可解的 `url` 参数（autom.dev 读作“对该页面 Google 索引记录的不透明引用”）。恢复目标需请求 /goto URL 并读取 Location 头而不跟随（“你读 `Location`；不要跟到页面”）。每条被抓取的结果现在都要向 Google 发一次新请求——对任何把 SERP 当 API 的 agent 或流水线，这既是延迟税也是限流卡点；ClearURLs 式的参数剥离无效，因为目标只存在于服务端。

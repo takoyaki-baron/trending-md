@@ -2571,3 +2571,23 @@ Sources: [Unit 42 investigation](https://unit42.paloaltonetworks.com/ai-assisted
 [Huntress: PaperCut actively exploited](https://www.huntress.com/blog/papercut-actively-exploited) ·
 [GreyNoise: the AI-orchestrated campaign](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) ·
 [CISA KEV alert Aug 31](https://www.cisa.gov/news-events/alerts/2026/08/31/cisa-adds-two-known-exploited-vulnerabilities-catalog)
+
+- **Trezor × Brevo (Sep 9–11):** an attacker exploited a login flaw at Brevo, Trezor's third-party
+  newsletter provider, accessed 138 client accounts, and used Trezor's own sending infrastructure to mail
+  ~347,000 opt-in subscribers an "STM32 Entropy Vulnerability" phishing lure (enter wallet backup into a
+  fraudulent app); phishing domain down at DNS level in 20 minutes, ~2,500 clicked, wallets untouched.
+  Third pipeline incident after the 2024 support-portal hack (66k users) and ShipMonk (81k) — different
+  vendor, same attack surface: the mailing list; the leaked addresses remain a future-phishing asset.
+- **Surfshark (Sep 10):** a human-error configuration exposed an internal engineering test server plus a
+  separate proxy server; exposure included system binaries, service configurations, and build-related
+  credentials in code history. Dated timeline (detected Aug 31, contained Sep 2, secrets rotated by Sep 5)
+  and a commissioned independent audit; no evidence of credential misuse. The disclosure quality is the
+  point — but "test infrastructure" is now a recurring initial-access vector, and build credentials in git
+  history are exactly what supply-chain attackers pivot on.
+- **Mullvad — Android hardware keepalive offload (Sep 10):** any app, no special permissions, can abuse the
+  hardware-offloaded UDP keepalive (port 4500) to send packets that originate from the network hardware and
+  bypass the software check enforcing "Block all connections without VPN" — the real IP leaks past the
+  tunnel. Google's VRP closed the report without action (a proper fix "would require changes in the Android
+  system"); the report itself is non-public; GrapheneOS is working on a fix. The always-on-VPN guarantee
+  has a hardware-level exception no permission dialog covers — and the response path (closed, sealed,
+  unlikely to be fixed) is the story for Android threat-modeling.

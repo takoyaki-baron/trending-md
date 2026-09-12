@@ -2044,3 +2044,23 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   into agent infrastructure. Caveat: the README's most substantial section is a sponsor roster including
   Chinese AI API-relay vendors — heavily monetized via partnerships; the badges are self-promotional, not
   independent validation.
+
+- **nashsu/llm_wiki** (Tauri, GPL-3.0, +647/day, 18.8k★): documents → an interlinked, incrementally-built
+  persistent wiki, explicitly the Karpathy LLM-wiki pattern positioned against retrieve-over-embeddings RAG;
+  two-step chain-of-thought ingest, four-signal knowledge graph with Louvain community detection, web
+  clipper, local HTTP API + MCP server. The design's honesty is in its defaults: vector search optional and
+  disabled by default, review actions constrained to predefined types (no hallucinated actions), the agent
+  skill read-only. The second wiki-not-RAG knowledge tool to trend this month (after hyperresearch).
+- **jordan-gibbs/hyperresearch** (MIT, +153/day, 2.7k★): a Claude Code harness running a tiered 16-step
+  research pipeline with adversarial critics and cite-checking into a persistent markdown+SQLite vault that
+  later sessions search before fetching anew; scholarly search across eight databases (OpenAlex, Crossref,
+  CORE, DOAB, ClinicalTrials.gov, SEC EDGAR, FRED), Unpaywall/Europe PMC open-access recovery, resumable
+  runs, MCP server, local web UI. Its README labels its own leaderboard-topping claim a projection with
+  "Third party validation is pending" — the honesty the research-harness category usually lacks; requires
+  Claude Code on Anthropic models.
+- **asgeirtj/system_prompts_leaks** (CC0-1.0, 65k★, +216/day): extracted system prompts — Fable 5.1, Opus 5,
+  Claude Code, GPT-6-Astra, Codex, Gemini, Grok, Cursor, Kimi — refreshed within days of each model launch
+  (Sep 8–9 commits added the current Claude Code skills/agent prompts). The de-facto API contract of the
+  agent era has an unofficial changelog: provenance unverifiable dump-by-dump, prompts possibly stale or
+  edited post-extraction, and the corpus exists because prompt disclosure is a ToS violation nobody can
+  technically enforce.

@@ -913,3 +913,11 @@ the effect decays.
   *package manager* with adoption caps documented per-agent is the infrastructure layer deciding whether
   skills stay portable or fragment per harness — the thesis-8 "who owns the marketplace" question, now
   with a distribution-channel contender.
+
+- **SnailSploit/Claude-Red (+99/day, 3.3k★):** 78 offensive-security SKILL.md methodology primers across
+  23 categories (web ×16, wireless ×14 covering 802.11→LoRa, exploit development, EDR evasion, red-team
+  infrastructure), each loaded on conversational triggers ("mentioning SQL injection loads
+  `offensive-sqli`"); MIT, sparse-checkout install into `~/.claude/skills/`. Trending on the skills wave,
+  not a fresh ship (v0.3.0, the wireless suite, landed Aug 30) — the dual-use-skills trend is now
+  repeatable (after bikini/exploitarium, Sep 5): public-domain-quality methodology primers, a
+  README-sentence guardrail, and the gap between those two facts is the open question.

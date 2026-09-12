@@ -490,24 +490,24 @@
     },
     "https://www.axios.com/2026/09/10/openai-hugging-face-senate-investigation-hawley": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-09-11T20:50:50.006Z",
-      "last_seen": "2026-09-11T21:08:14.821Z",
+      "last_seen": "2026-09-12T13:02:30.755Z",
       "feeds": [
         "2026-09-12.md"
       ]
     },
     "https://www.reuters.com/business/openai-faces-senate-probe-into-hugging-face-incident-axios-reports-2026-09-10/": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-09-11T20:50:50.006Z",
-      "last_seen": "2026-09-11T21:08:14.821Z",
+      "last_seen": "2026-09-12T13:02:30.755Z",
       "feeds": [
         "2026-09-12.md"
       ]
     }
   },
-  "runs": 16,
+  "runs": 17,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-11T21:08:14.821Z"
+  "last_run": "2026-09-12T13:02:30.755Z"
 }

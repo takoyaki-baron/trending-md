@@ -6402,5 +6402,113 @@
     "en": "Zhipu (Z.ai) — GLM series vendor research posts; canonical for GLM-5.3's same-base/post-training claim (vendor-reported benchmarks). Cross-checked vs docs.z.ai (08-21).",
     "jp": "Zhipu（Z.ai）——GLMシリーズのベンダー研究記事。GLM-5.3の同一ベース/ポストトレーニングのみという主張（ベンダー発表ベンチ）の正典。docs.z.ai とクロスチェック済み（08-21）。",
     "zh": "智谱（Z.ai）——GLM 系列厂商研究文章；GLM-5.3 同底座/纯后训练说法（厂商自报基准）的权威来源。已对照 docs.z.ai 交叉核验（08-21）。"
+  },
+  "claymath.org": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Clay Mathematics Institute — first-hand for Millennium Prize announcements; deliberately hedged institutional language (\"apparently settled\") where verification is pending.",
+    "zh": "克雷数学研究所——千禧年大奖公告的一手来源；措辞刻意审慎（如“显然已被解决”），在验证完成前不给结论。",
+    "jp": "クレイ数学研究所——ミレニアム賞発表の一次情報源；検証が済むまで結論を出さない、意図的に慎重な言葉遣い（「apparently settled」）。"
+  },
+  "eiln.github.io": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Eileen Yoon's technical blog — first-hand Apple-silicon reverse engineering (ANE) with register-level measurements, overflow probes and bandwidth experiments; caveats printed.",
+    "zh": "Eileen Yoon 的技术博客——苹果芯片逆向工程（ANE）的一手资料，含寄存器级测量、溢出探针与带宽实验；坦诚标注局限。",
+    "jp": "Eileen Yoon の技術ブログ——Apple シリコンのリバースエンジニアリング（ANE）の一次情報。レジスタレベルの測定・オーバーフロープローブ・帯域実験を伴い、限界も明記。"
+  },
+  "kotaku.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Gaming news outlet (G/O Media) — good first-hand coverage of mod/industry crossovers; promotional-angle framing usually stated openly.",
+    "zh": "游戏媒体（G/O Media 旗下）——对模组/行业联名的一手报道较好；通常会明说其推广属性。",
+    "jp": "ゲームメディア（G/O Media）——Mod/業界コラボの一次報道が良好。プロモーション的側面も明示することが多い。"
+  },
+  "vester.si": {
+    "cat": "other",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal site of Demjan (vester.si) — hand-curated reference projects (Bodily Oddities: 143 entries with prevalence data); explicitly non-diagnostic, honest about scope.",
+    "zh": "Demjan 的个人网站（vester.si）——手工策划的参考项目（Bodily Oddities：143 条含流行率数据）；明确声明不做诊断，对范围坦诚。",
+    "jp": "Demjan（vester.si）の個人サイト——手作業でキュレーションされたリファレンス（Bodily Oddities：有病率データ付き143項目）。診断はしないと明記し、範囲に誠実。"
+  },
+  "rubyhack.ai": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The RubyGems researchers' own report site (Kitts/Larsen/Von Arx) — first-hand for the May 2026 OpenAI-agent package attack; the authors print their own edges (no model-log access, attribution by package forensics). Cross-checked vs ABC News + HN (09-12).",
+    "zh": "RubyGems 研究者自己的报告站（Kitts/Larsen/Von Arx）——2026 年 5 月 OpenAI agent 投毒事件的一手来源；作者自行标注边界（无模型日志访问、归因依赖包取证）。已对照 ABC News 与 HN 交叉核验（09-12）。",
+    "jp": "RubyGems の研究者自身の報告サイト（Kitts/Larsen/Von Arx）——2026 年 5 月の OpenAI エージェントによるパッケージ攻撃の一次情報；著者自身が限界を明記（モデルログへのアクセスなし、帰属はパッケージフォレンジクス）。ABC News・HN とクロスチェック済み（09-12）。"
+  },
+  "abc.net.au": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Australian Broadcasting Corporation — national-news coverage with good attribution discipline; used here as the independent second source on the RubyGems/OpenAI agent story. Cross-checked vs rubyhack.ai (09-12).",
+    "zh": "澳大利亚广播公司（ABC）——国家级新闻，署名纪律良好；此处作为 RubyGems/OpenAI agent 事件的独立第二来源。已对照 rubyhack.ai 交叉核验（09-12）。",
+    "jp": "オーストラリア放送協会（ABC）——属性開示の規律が良い全国ニュース；ここでは RubyGems/OpenAI エージェント事件の独立した第二情報源として使用。rubyhack.ai とクロスチェック済み（09-12）。"
+  },
+  "dayzlegame.com": {
+    "cat": "other",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Solo dev Nick Abe's devlog — first-hand dashboard-vs-dashboard measurement of Google app-ad install fraud (raw numbers printed); single-operator data, no independent audit, but the screenshots are the point. Cross-checked vs HN thread (09-12).",
+    "zh": "独立开发者 Nick Abe 的开发日志——对 Google 应用广告安装欺诈的后台对后台一手测量（原始数字齐全）；单一运营者数据、无独立审计，但截图就是重点。已对照 HN 讨论串交叉核验（09-12）。",
+    "jp": "個人開発者 Nick Abe の開発ログ——Google アプリ広告のインストール不正をダッシュボード対ダッシュボードで一次測定（生の数値を公開）；単一オペレーターのデータで独立監査はないが、スクリーンショットこそが要点。HN スレッドとクロスチェック済み（09-12）。"
+  },
+  "cel.cs.brown.edu": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Brown CSC lab blog — first-hand PL research writeups (the async/await nine-dimension taxonomy with a core calculus); university-affiliated, semantics-first. Cross-checked vs HN discussion (09-12).",
+    "zh": "布朗大学 CSC 实验室博客——编程语言研究的一手文章（async/await 九维度分类法 + 核心演算）；大学背景、语义优先。已对照 HN 讨论串交叉核验（09-12）。",
+    "jp": "Brown CSC ラボのブログ——PL 研究の一次解説（async/await の 9 次元分類 + コア計算）；大学所属でセマンティクス重視。HN スレッドとクロスチェック済み（09-12）。"
+  },
+  "tinybird.co": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Tinybird's engineering blog — practitioner operational knowledge (Javi Santana's ClickHouse ledger); a vendor blog, but the costs are printed next to the savings and the author is a ClickHouse contributor. Cross-checked vs HN discussion (09-12).",
+    "zh": "Tinybird 工程博客——从业者运维知识（Javi Santana 的 ClickHouse 账本）；虽是厂商博客，但代价与收益并列印出，且作者是 ClickHouse 贡献者。已对照 HN 讨论串交叉核验（09-12）。",
+    "jp": "Tinybird のエンジニアリングブログ——実務者の運用知識（Javi Santana の ClickHouse 記録）；ベンダーブログだが、コストが節約の隣に印刷され、著者は ClickHouse コントリビューター。HN スレッドとクロスチェック済み（09-12）。"
+  },
+  "fortum.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Fortum's investor/news releases — canonical for the Google Loviisa nuclear PPA (22-year term, 50% cap 2030–2049); a deal announcement is the vendor's own framing, verified against BBC coverage. Cross-checked vs bbc.com (09-12).",
+    "zh": "Fortum 的投资者/新闻发布——Google Loviisa 核电 PPA（22 年期、2030–2049 上限 50%）的权威来源；交易公告是厂商自己的表述，已对照 BBC 报道核验（09-12）。",
+    "jp": "Fortum の投資家/ニュースリリース——Google Loviisa 原子力 PPA（22 年、2030–2049 に最大 50%）の正典；取引発表はベンダー自身の語りであり、BBC 報道と照合済み（09-12）。"
+  },
+  "surfshark.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Surfshark's own incident reports — canonical for its breach disclosure but the affected party writes the record; the dated timeline + scoped exposure list is unusually good for the category, still self-attested. Cross-checked vs BleepingComputer (09-12).",
+    "zh": "Surfshark 自己的事件报告——其泄露披露的权威来源，但记录由当事方书写；带日期的时间线 + 明确范围的暴露清单在同类中罕见地好，仍是自证。已对照 BleepingComputer 交叉核验（09-12）。",
+    "jp": "Surfshark 自身のインシデント報告——同社の流出開示の正典だが、記録は当事者が書いている；日付入りタイムライン + 範囲を明示した露出リストはカテゴリとして異例に良いが、自己証明であることに変わりはない。BleepingComputer とクロスチェック済み（09-12）。"
+  },
+  "autom.dev": {
+    "cat": "other",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Autom.dev's engineering blog — the first documentation of Google's /goto SERP link rewrite; an interested party (a scraping vendor) but the behavior is independently reproducible and HN commenters confirmed it. Cross-checked vs HN discussion (09-12).",
+    "zh": "Autom.dev 工程博客——Google SERP 链接改写为 /goto 的首个文档记录；当事方（抓取服务商）有利害关系，但该行为可独立复现，HN 评论者已证实。已对照 HN 讨论串交叉核验（09-12）。",
+    "jp": "Autom.dev のエンジニアリングブログ——Google の SERP リンクの /goto リライトを最初に文書化；利害関係者（スクレイピング業者）だが、挙動は独立に再現可能で HN のコメント者も確認。HN スレッドとクロスチェック済み（09-12）。"
   }
 }

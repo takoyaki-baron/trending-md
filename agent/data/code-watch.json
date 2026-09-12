@@ -505,12 +505,60 @@
           "path": "plugins/caveman/README.md",
           "html_url": "https://github.com/Fornida-Dev/fornida-claude-plugins/blob/4eeb2ac54365a274fa73a18afadccd6fa9fa4eba/plugins/caveman/README.md",
           "found": "2026-09-09T13:07:11.164Z"
+        },
+        "fvmoraes/dwyt::docs/metrics/tokens-saved.md": {
+          "repo": "fvmoraes/dwyt",
+          "path": "docs/metrics/tokens-saved.md",
+          "html_url": "https://github.com/fvmoraes/dwyt/blob/13ce866fd17a1d4f5193e38c2a6a72522b3d5784/docs/metrics/tokens-saved.md",
+          "found": "2026-09-12T13:01:02.319Z"
+        },
+        "fvmoraes/dwyt::docs/architecture/context-optimization.md": {
+          "repo": "fvmoraes/dwyt",
+          "path": "docs/architecture/context-optimization.md",
+          "html_url": "https://github.com/fvmoraes/dwyt/blob/13ce866fd17a1d4f5193e38c2a6a72522b3d5784/docs/architecture/context-optimization.md",
+          "found": "2026-09-12T13:01:02.319Z"
+        },
+        "fvmoraes/dwyt::core/web/src/api.ts": {
+          "repo": "fvmoraes/dwyt",
+          "path": "core/web/src/api.ts",
+          "html_url": "https://github.com/fvmoraes/dwyt/blob/13ce866fd17a1d4f5193e38c2a6a72522b3d5784/core/web/src/api.ts",
+          "found": "2026-09-12T13:01:02.319Z"
+        },
+        "fvmoraes/dwyt::core/internal/server/handlers_diagnostics.go": {
+          "repo": "fvmoraes/dwyt",
+          "path": "core/internal/server/handlers_diagnostics.go",
+          "html_url": "https://github.com/fvmoraes/dwyt/blob/13ce866fd17a1d4f5193e38c2a6a72522b3d5784/core/internal/server/handlers_diagnostics.go",
+          "found": "2026-09-12T13:01:02.319Z"
+        },
+        "fvmoraes/dwyt::core/internal/telemetry/provenance.go": {
+          "repo": "fvmoraes/dwyt",
+          "path": "core/internal/telemetry/provenance.go",
+          "html_url": "https://github.com/fvmoraes/dwyt/blob/13ce866fd17a1d4f5193e38c2a6a72522b3d5784/core/internal/telemetry/provenance.go",
+          "found": "2026-09-12T13:01:02.319Z"
+        },
+        "fvmoraes/dwyt::core/internal/mcp/optimizer.go": {
+          "repo": "fvmoraes/dwyt",
+          "path": "core/internal/mcp/optimizer.go",
+          "html_url": "https://github.com/fvmoraes/dwyt/blob/13ce866fd17a1d4f5193e38c2a6a72522b3d5784/core/internal/mcp/optimizer.go",
+          "found": "2026-09-12T13:01:02.319Z"
+        },
+        "fvmoraes/dwyt::core/internal/telemetry/provenance_test.go": {
+          "repo": "fvmoraes/dwyt",
+          "path": "core/internal/telemetry/provenance_test.go",
+          "html_url": "https://github.com/fvmoraes/dwyt/blob/13ce866fd17a1d4f5193e38c2a6a72522b3d5784/core/internal/telemetry/provenance_test.go",
+          "found": "2026-09-12T13:01:02.319Z"
+        },
+        "fvmoraes/dwyt::core/internal/server/handlers_diagnostics_test.go": {
+          "repo": "fvmoraes/dwyt",
+          "path": "core/internal/server/handlers_diagnostics_test.go",
+          "html_url": "https://github.com/fvmoraes/dwyt/blob/13ce866fd17a1d4f5193e38c2a6a72522b3d5784/core/internal/server/handlers_diagnostics_test.go",
+          "found": "2026-09-12T13:01:02.319Z"
         }
       },
-      "runs": 31,
+      "runs": 32,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-11T21:07:02.140Z",
-      "last_total": 76
+      "last_run": "2026-09-12T13:01:02.319Z",
+      "last_total": 84
     },
     "ra-paper-id": {
       "seen": {
@@ -648,18 +696,18 @@
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 18,
+      "runs": 19,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-11T21:07:02.140Z",
+      "last_run": "2026-09-12T13:01:02.319Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 18,
+      "runs": 19,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-11T21:07:02.140Z",
+      "last_run": "2026-09-12T13:01:02.319Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-11T21:07:02.140Z"
+  "last_run": "2026-09-12T13:01:02.319Z"
 }

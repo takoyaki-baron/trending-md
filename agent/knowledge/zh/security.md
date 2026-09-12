@@ -1667,3 +1667,7 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
 [Huntress:PaperCut 在野利用](https://www.huntress.com/blog/papercut-actively-exploited) ·
 [GreyNoise:AI 编排的战役](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) ·
 [CISA KEV 8 月 31 日警报](https://www.cisa.gov/news-events/alerts/2026/08/31/cisa-adds-two-known-exploited-vulnerabilities-catalog)
+
+- **Trezor × Brevo（9 月 9–11 日）：** 攻击者利用 Trezor 第三方新闻信服务商 Brevo 的登录漏洞，访问 138 个客户账号，并用 Trezor 自己的发信基础设施给约 34.7 万订阅者发送“STM32 熵漏洞”钓鱼邮件（诱导把钱包备份输入假冒应用）；钓鱼域名 20 分钟内在 DNS 层下线，约 2,500 人点击，钱包未受影响。继 2024 年客服门户被黑（6.6 万用户）和 ShipMonk（8.1 万）后的第三次流水线事件——不同供应商，同一攻击面：邮件列表；泄露的地址仍是未来钓鱼的资产。
+- **Surfshark（9 月 10 日）：** 人为配置错误把一台内部工程测试服务器和一个独立代理服务器暴露到互联网；暴露内容包括系统二进制、服务配置和代码历史里的构建凭证。时间线清晰（8 月 31 日发现异常、9 月 2 日遏制、9 月 5 日前轮换全部密钥）并委托独立审计；未发现凭证被滥用的证据。披露质量是重点——但“测试基础设施”正在成为反复出现的初始访问向量，而 git 历史里的构建凭证正是供应链攻击者的跳板。
+- **Mullvad——Android 硬件 keepalive offload（9 月 10 日）：** 任意应用无需特殊权限即可滥用硬件卸载的 UDP keepalive（端口 4500），发出源自网络硬件的数据包，绕过执行“无 VPN 时阻断全部连接”的软件检查——真实 IP 绕过隧道泄露。Google 的 VRP 未采取行动即关闭报告（彻底修复“需要改动 Android 系统”）；报告本身不公开；GrapheneOS 正在修复。常开 VPN 的保证存在权限对话框管不到的硬件级例外——而这条“关闭、保密、大概率不修”的响应路径本身就是 Android 威胁建模的story。
