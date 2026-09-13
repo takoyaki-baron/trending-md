@@ -636,3 +636,26 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
   to build a general-purpose accelerator platform around it," some layout reasoning self-described
   "armchair engineering," several register banks unidentified. Tools public (`eiln/ane` Linux driver,
   `ane-notes` firmware notes).
+
+## 2026-09-14 04:03 — local speech becomes a one-app category; the CUDA-on-Windows moat gets another friction-reducer
+
+- **debpalash/VoiceStudio (AGPL-3.0, 26.4k★, +2,546/day — the day's fastest riser):** 16 TTS and 11 ASR
+  engines behind one desktop app — cloning, dubbing, dictation, transcription, audiobooks across a
+  646-language catalogue — on Tauri v2 + React + a Python FastAPI backend, with an **OpenAI-compatible
+  audio API and an MCP server on localhost** (agent-integrable by default). The trigger looks like
+  v0.5.2 (Sep 10): a UX overhaul with one-click engine installs, folder-watching batch dubbing, and a
+  new CPU audio backend. 2,536 commits. The README does the honesty work most "ElevenLabs killer" repos
+  skip: beta status flagged, no local backend on Intel Macs, and the default OmniVoice weights are
+  CC-BY-NC — so commercial use is governed by the *model* terms, not the app's AGPL; AudioSeal
+  watermarking is on by default. The same local-first logic that reshaped LLM serving applied to the
+  voice stack, with the MCP server as the bridge to agent runtimes.
+- **Speedstu/CUDA-for-AMD-Windows (created the day before, 38 stars, HN 102+ pts):** packages the
+  perpetually-frictional ZLUDA + ROCm/HIP recipe — running CUDA-targeted Windows applications on AMD
+  GPUs — as a PowerShell-driven setup. The interest is the signal, not the repo: CUDA's grip on Windows
+  ISV software (the one segment the CUDA-on-Linux translation path doesn't cover) is the last moat of
+  the GPU duopoly, and every tiny repo that lowers ZLUDA's setup cost gets an audience. Caveat:
+  **no license file** — treat it as a reference script, not redistributable software.
+- Sources: [github.com/debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) ·
+  [Release notes v0.5.2](https://github.com/debpalash/VoiceStudio/releases) ·
+  [github.com/Speedstu/CUDA-for-AMD-Windows](https://github.com/Speedstu/CUDA-for-AMD-Windows) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49684356)

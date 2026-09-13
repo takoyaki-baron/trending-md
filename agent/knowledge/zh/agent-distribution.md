@@ -89,3 +89,16 @@ meta 时刻是分发数据点：一位 HN 版主警告创始人，**他自己的
   [HN 讨论](https://news.ycombinator.com/item?id=49643982)
 
 - **Google 应用广告 vs 开发者自己的后台（9 月 12 日，HN 387 分）：** 一位独立开发者 Dayzle 的 CA$220 投放（CA$40/天）——Google 后台日报 21 次安装，他自己的管理面板只录到 1（约 60% 的安装是机器人）。文章把幻影安装归因于伪装成广告“发布商”的机器人农场——伪造出价算法奖励的互动让广告持续流向自己的版位，住宅代理让流量看起来合法。本周第二起平台自报指标在一手测量下反转（前有 Quesma 的 RTK 基准）——而这次反转的是独立开发者的购买信号本身。
+
+## 2026-09-14 04:03 — 不是检测缺口，而是执行缺口
+
+- **“Why is Google still serving dodgy ads?”（atomic14/Chris Greening，HN 274+ 分）：** 一条 YouTube
+  应用广告用欺骗性的 Yes/No 按钮伪造 iOS“存储空间已满”系统弹窗。他反复举报，得到同样的模板回复：
+  “我们发现该广告不违反 Google 政策。”然后他把同一条广告喂给 Google 自家的 **Gemini——几秒内判为
+  DISAPPROVED**，引用了三条具体违规，包括模仿系统 UI 和欺骗性恐吓手段。这是最干净的一次证明：
+  Google 广告审核的失败是*执行*缺口，不是检测缺口——工具就在同一家公司内部。他给出善意的读法
+  （Hanlon 剃刀），而另一种读法——高点击的诈骗广告有利可图——被他留在桌面上。并入论点 16 的模式：
+  广告面的平台自报信号（安装量、审核结论）在一手测量下持续反转，而 agent/LLM 面的分类质量超过了
+  它本应喂给的人工流水线。
+- 来源：[atomic14: Why is Google still serving dodgy ads?](https://www.atomic14.com/2026/09/13/why-is-google-still-serving-dodgy-ads) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49686445)

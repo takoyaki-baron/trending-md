@@ -6627,5 +6627,158 @@
     "en": "The Homebrew project's official blog — release posts with concrete deprecation dates and security-advisory detail. Cross-checked (09-13): 7.0.0 changes (Tier 3 Intel, BrewUI, brew vulns, Landlock) match the HN discussion.",
     "zh": "Homebrew 项目官方博客——发布文带有具体的弃用日期与安全公告细节。已交叉核验（09-13）：7.0.0 的变更（Intel 降至 Tier 3、BrewUI、brew vulns、Landlock）与 HN 讨论一致。",
     "jp": "Homebrew プロジェクトの公式ブログ——具体的な非推奨日とセキュリティアドバイザリの詳細を含むリリース記事。クロスチェック済み（09-13）：7.0.0 の変更（Intel の Tier 3 化、BrewUI、brew vulns、Landlock）は HN 議論と一致。"
+  },
+  "aprilnea.me": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "aprilnea's personal engineering blog — first-hand reverse-engineering writeups (strace/objdump of Claude Web's sandbox). Cross-checked (09-14): the Antspace/Firecracker findings match the author's own HN discussion thread; inferred-vs-confirmed is labeled in-post.",
+    "zh": "aprilnea 的个人工程博客——一手逆向工程文章（对 Claude Web 沙箱跑 strace/objdump）。已交叉核验（09-14）：Antspace/Firecracker 发现与作者自己的 HN 讨论帖一致；推断与确认在文中自行标注。",
+    "jp": "aprilnea の個人技術ブログ——一次情報のリバースエンジニアリング記事（Claude Web サンドボックスへの strace/objdump）。クロスチェック済み（09-14）：Antspace/Firecracker の発見は著者自身の HN 議論スレッドと一致；推論と確認の区別は本文中で明示。"
+  },
+  "bensimms.moe": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Ben's personal embedded/security teardown blog (e-scooter CAN firmware, Rust on Embassy) — hobbyist first-hand work with schematics and code on GitHub. Cross-checked (09-14): the teardown details match the HN discussion and the linked GitHub maps.",
+    "zh": "Ben 的个人嵌入式/安全拆解博客（电动滑板车 CAN 固件、Rust on Embassy）——业余一手作业，原理图与代码在 GitHub。已交叉核验（09-14）：拆解细节与 HN 讨论及链接的 GitHub 测绘一致。",
+    "jp": "Ben の個人組込み/セキュリティ分解ブログ（e-scooter の CAN ファームウェア、Rust on Embassy）——趣味の一次情報で、回路図とコードは GitHub。クロスチェック済み（09-14）：分解の詳細は HN 議論とリンク先の GitHub マッピングと一致。"
+  },
+  "goodhartlabs.com": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Goodhart Labs' blog — alignment-eval writeups with eval source linked. Cross-checked (09-14): the chess-socket rerun numbers match the author's LessWrong post; both print the same n=5–10 and classifier-truncation caveats.",
+    "zh": "Goodhart Labs 的博客——对齐评测分析并附带评测源码链接。已交叉核验（09-14）：棋局 socket 重跑数字与作者的 LessWrong 帖一致；两者印有相同的 n=5–10 与分类器截断局限。",
+    "jp": "Goodhart Labs のブログ——評価ソースへのリンク付きアライメント評価の分析。クロスチェック済み（09-14）：チェスソケット再実行の数値は著者の LessWrong 投稿と一致；双方が同じ n=5–10 と分類器切り詰めの限界を印刷。"
+  },
+  "julialang.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The Julia project's official site — release highlights posts from the language team itself. Cross-checked (09-14): the 1.13 numbers (precompilation ~30% faster, GC 35→2 ms) match the HN discussion's quoted benchmarks; primary source for any Julia release claim.",
+    "zh": "Julia 项目官方网站——语言团队自己的发布亮点文章。已交叉核验（09-14）：1.13 的数字（预编译快约 30%、GC 35→2 毫秒）与 HN 讨论引用的基准一致；Julia 发布声明的首选一手来源。",
+    "jp": "Julia プロジェクトの公式サイト——言語チーム自身によるリリースハイライト記事。クロスチェック済み（09-14）：1.13 の数値（プリコンパイル約 30% 高速、GC 35→2 ミリ秒）は HN 議論で引用されたベンチマークと一致；Julia リリース主張の第一選択一次ソース。"
+  },
+  "atomic14.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Chris Greening (atomic14)'s personal blog — maker/electronics writeups with reproducible demos and video. Cross-checked (09-14): the Gemini DISAPPROVED screenshot and policy citations match the HN discussion; single-author anecdotes, verify before generalizing.",
+    "zh": "Chris Greening（atomic14）的个人博客——带可复现演示和视频的创客/电子制作文章。已交叉核验（09-14）：Gemini 判 DISAPPROVED 的截图与政策引用与 HN 讨论一致；单一作者轶事，泛化前先核实。",
+    "jp": "Chris Greening（atomic14）の個人ブログ——再現可能なデモと動画付きメイカー/エレクトロニクス記事。クロスチェック済み（09-14）：Gemini の DISAPPROVED 判定スクリーンショットとポリシー引用は HN 議論と一致；単一著者の逸話であり、一般化前に検証を。"
+  },
+  "lesswrong.com": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "LessWrong — the rationalist community's long-form AI-safety posts; quality ranges from rigorous eval writeups to speculation, comment sections often do real peer review. Cross-checked (09-14): the chess-socket post's numbers match the author's Goodhart Labs writeup; caveats printed in-post.",
+    "zh": "LessWrong——理性主义者社群的长篇 AI 安全文章；从严谨的评测分析到思辨皆有，评论区常起到真实同行评审的作用。已交叉核验（09-14）：棋局 socket 帖的数字与作者的 Goodhart Labs 文章一致；局限印在帖内。",
+    "jp": "LessWrong——合理主義コミュニティの長文 AI セーフティ投稿；厳密な評価分析から思弁まで幅があり、コメント欄が実質のピアレビューになることも。クロスチェック済み（09-14）：チェスソケット投稿の数値は著者の Goodhart Labs 記事と一致；限界は本文中に印刷。"
+  },
+  "darioamodei.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Dario Amodei's personal essay site — primary source for the Sep 12 \"We Must Pace the Frontier\" essay (embedded evaluators/METR, antitrust-waiver coordination, four levels of China coordination up to an RSI speed limit). All three proposals and the hedges (\"pacing does not mean halting\", some measures \"gameable\") confirmed on-page 09-14; cross-validated vs the 727-pt HN discussion and contemporaneous LA Times/Bloomberg coverage.",
+    "zh": "Dario Amodei 个人文章站——9 月 12 日《We Must Pace the Frontier》一文的一手来源（嵌入式评估者/METR、反垄断豁免协调、对华协调的四级递进直至 RSI 限速）。09-14 已逐页核实三项提议与保留措辞（\"pacing does not mean halting\"、部分措施\"gameable\"）均在原文；与 727 分的 HN 讨论及同期 LA Times/Bloomberg 报道交叉验证。",
+    "jp": "Dario Amodei 個人エッセイサイト——9月12日付「We Must Pace the Frontier」の一次情報源（組み込み評価者/METR、独禁法免除の調整、RSI 速度制限までの対中協調の4段階）。09-14 に本文を直接確認し、3つの提案と留保表現（\"pacing does not mean halting\"、一部施策は\"gameable\"）の記載を確認。727pt の HN 議論および LA Times/Bloomberg の報道と相互検証済み。"
+  },
+  "jacob.gold": {
+    "cat": "community",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Jacob Gold's personal blog — the Sep 12 \"An open letter to Dario: if you mean it, open the weights!\" letter argues mandated open weights is the only non-gameable slowdown (capture critique of lab-drafted rules; capital-collapse mechanism). Confirmed on-page 09-14; cross-validated vs the HN thread's top counter-proposal comment (\"Anthropic releases models as open weights\"). Opinion, not reporting — cite as commentary.",
+    "zh": "Jacob Gold 个人博客——9 月 12 日《An open letter to Dario: if you mean it, open the weights!》公开信，主张强制开放权重是唯一无法被博弈的减速机制（对实验室参与起草规则的俘获批评；资本收缩机制）。09-14 已逐页核实；与 HN 讨论中获高票的对应评论（\"Anthropic releases models as open weights\"）交叉验证。属评论而非报道，引用时按评论处理。",
+    "jp": "Jacob Gold の個人ブログ——9月12日付「An open letter to Dario: if you mean it, open the weights!」。強制オープンウェイトこそゲーム化不可能な減速手段だと論じる（ラボ起草ルールへのキャプチャ批判、資本収縮メカニズム）。09-14 に本文を確認。HN 議論の上位賛同コメント（\"Anthropic releases models as open weights\"）と相互検証。報道ではなく論評として扱うこと。"
+  },
+  "minitap.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Minitap's company blog — the Sep 11 \"I expected better from Google\" post alleging Google's Artemis reproduced Minitap's Apache-2.0 mobile-use code with the three authors' names removed (August force-push). Every specific claim (word-for-word Hopper instructions, pyproject.toml author list, unanswered AndroidWorld submissions, the \"no evidence connecting\" hedge) confirmed on-page 09-14; cross-validated vs the 136-pt HN thread. One party's accusation, honestly hedged — treat as contested.",
+    "zh": "Minitap 公司博客——9 月 11 日《I expected better from Google》一文，指控 Google 的 Artemis 项目复用了 Minitap 的 Apache-2.0 mobile-use 代码并移除三位作者署名（8 月 force-push）。09-14 已逐条核实全部具体指控（逐字相同的 Hopper 指令、pyproject.toml 署名列表、AndroidWorld 提交无回应、\"no evidence connecting\" 保留措辞）；与 136 分的 HN 讨论交叉验证。属单方指控但保留措辞诚实——按争议内容处理。",
+    "jp": "Minitap 社ブログ——9月11日付「I expected better from Google」。Google の Artemis が同社 Apache-2.0 の mobile-use コードを複製し、3名の著者名を削除した（8月の force-push）と主張。09-14 に全具体的主張を確認（逐一致する Hopper 命令、pyproject.toml の著者リスト、回答なしの AndroidWorld 提出、「no evidence connecting」の留保）。136pt の HN 議論と相互検証。一方の主張だが留保は誠実——係争中の情報として扱うこと。"
+  },
+  "gendigital.com": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Gen Digital (Norton/Avast) Threat Labs research — primary source for the Sogou CVE-2026-51990 chain (sgbiz: argument injection → biz_helper.exe, Chromium 80 CEF with no_sandbox hardcoded, CVE-2021-38003, GRAYRABBIT RC4/raw-TCP-443 with the 6-byte key printed) and the UNC3569 attribution. Confirmed on-page 09-14; cross-validated vs The Hacker News's Sep 11 write-up (all chain details match) and NVD (CVE absent — consistent with no CVSS issued).",
+    "zh": "Gen Digital（Norton/Avast）威胁实验室研究——搜狗 CVE-2026-51990 利用链（sgbiz: 参数注入 → biz_helper.exe、硬编码 no_sandbox 的 Chromium 80 CEF、CVE-2021-38003、GRAYRABBIT 的 RC4/443 端口裸 TCP 及 6 字节密钥）与 UNC3569 归因的一手来源。09-14 已逐页核实；与 The Hacker News 9 月 11 日报道交叉验证（链条细节全部吻合），并经 NVD 确认（该 CVE 未收录——与\"未发布 CVSS\"一致）。",
+    "jp": "Gen Digital（Norton/Avast）脅威研究所のリサーチ——捜狗 CVE-2026-51990 の攻撃チェーン（sgbiz: の引数注入 → biz_helper.exe、no_sandbox をハードコードした Chromium 80 CEF、CVE-2021-38003、6バイト鍵の RC4/raw TCP 443 の GRAYRABBIT）と UNC3569 属性付けの一次情報源。09-14 に本文を確認。The Hacker News の 9/11 記事と相互検証（チェーン詳細はすべて一致）、NVD も確認（CVE 未収録——CVSS 未発行と整合）。"
+  },
+  "dwarkesh.com": {
+    "cat": "news",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Dwarkesh Podcast — long-form interviews with timestamped sections; the Sep 11 episode with Schulman/Millidge/O'Neill is the calibrated counter-programming to RSI headlines (12.0× data vs 3.7× architecture efficiency, \"almost 80% of the way\" mid-training claim, proxy-traffic distillation). Confirmed on-page 09-14 (title/date/sections all match); cross-validated vs the 118-pt HN thread whose title matches the page's own.",
+    "zh": "Dwarkesh 播客——带时间戳分段的长篇访谈。9 月 11 日 Schulman/Millidge/O'Neill 一期是对 RSI 头条新闻的校准式反向叙事（数据 12.0× vs 架构 3.7× 的效率增益、mid-training \"almost 80%\" 论断、代理流量蒸馏）。09-14 已逐页核实（标题/日期/分段均吻合）；与 118 分的 HN 讨论交叉验证（其标题与页面一致）。",
+    "jp": "Dwarkesh Podcast——タイムスタンプ付きセクションを持つ長編インタビュー。9月11日の Schulman/Millidge/O'Neill 回は RSI 見出しへの較正された対抗叙事（データ 12.0× vs アーキテクチャ 3.7× の効率利得、mid-training で「almost 80%」、プロキシ経由の蒸留）。09-14 に本文を確認（タイトル・日付・セクションが一致）。118pt の HN 議論と相互検証（タイトルがページと一致）。"
+  },
+  "latimes.com": {
+    "cat": "news",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Los Angeles Times — major metro daily; cited for the Waymo ghost-gun stop (Sep 12, Iris Kwok). Confirmed on-page 09-14 via reader (headline, Sep 3 Outer Richmond stop, \"high-risk vehicle stop\", ghost gun + marijuana + mace, juvenile bookings all present); cross-validated vs SFGate's independent Sep 11 report with matching SFPD/Waymo details. Paywall/metering: WebFetch blocked, alternate reader required.",
+    "zh": "《洛杉矶时报》——大型地方日报；此处引用其 Waymo 幽灵枪拦截报道（9 月 12 日，Iris Kwok）。09-14 经阅读器逐页核实（标题、9 月 3 日 Outer Richmond 拦停、\"high-risk vehicle stop\"、幽灵枪+大麻+防狼喷雾、少年拘留均属实）；与 SFGate 9 月 11 日的独立报道交叉验证（SFPD/Waymo 细节吻合）。注意：有付费墙，WebFetch 被拦截，需用替代阅读器。",
+    "jp": "Los Angeles Times——大手地方紙。Waymo ゴーストガン停車記事（9/12、Iris Kwok）で引用。09-14 にリーダー経由で本文を確認（見出し、9/3 Outer Richmond の停車、\"high-risk vehicle stop\"、ゴーストガン+大麻+催涙スプレー、少年院収容の記載あり）。SFGate の 9/11 独立報道と相互検証（SFPD/Waymo の詳細が一致）。ペイウォールあり：WebFetch はブロックされ、別リーダーが必要。"
+  },
+  "sfgate.com": {
+    "cat": "news",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "SFGate (Hearst) — SF Bay Area news; the Sep 11 Waymo ghost-gun report (Madilynne Medina) is the fastest first-hand account, with named SFPD spokesperson Allison Maxie and Waymo's own confirmation. Confirmed on-page 09-14 via reader; cross-validated vs the LA Times's Sep 12 follow-up. Same paywall note as latimes.com.",
+    "zh": "SFGate（Hearst 旗下）——旧金山湾区新闻；其 9 月 11 日 Waymo 幽灵枪报道（Madilynne Medina）是最快的一手叙述，含具名 SFPD 发言人 Allison Maxie 与 Waymo 自身确认。09-14 经阅读器逐页核实；与 LA Times 9 月 12 日的后续报道交叉验证。付费墙注意事项同 latimes.com。",
+    "jp": "SFGate（Hearst 系）——SF ベイエリアのニュース。9/11 の Waymo ゴーストガン記事（Madilynne Medina）は最速の一次報道で、SFPD 広報 Allison Maxie の実名と Waymo 本人の確認を含む。09-14 にリーダー経由で本文を確認。LA Times の 9/12 追跡記事と相互検証。ペイウォール注意は latimes.com に同じ。"
+  },
+  "worktrunk.dev": {
+    "cat": "code",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Official docs site for worktrunk (max-sixty/worktrunk), the git-worktree CLI for parallel agent workflows — quick-start `wt switch -x claude`, hooks, LLM commit messages, PR checkout, per-worktree ports. Confirmed on-page 09-14 including the v0.77.0 footer; cross-validated via the GitHub API (latest release v0.77.0, published 2026-09-08) and the cited Xata setup post (every flag it demonstrates exists).",
+    "zh": "worktrunk（max-sixty/worktrunk）官方文档站——面向并行智能体工作流的 git worktree CLI（快速上手 `wt switch -x claude`、hooks、LLM 提交信息、PR 检出、每工作树端口）。09-14 已逐页核实（含页脚 v0.77.0）；经 GitHub API 交叉验证（最新 release v0.77.0，2026-09-08 发布），且所引 Xata 搭配文中演示的每个参数均真实存在。",
+    "jp": "worktrunk（max-sixty/worktrunk）公式ドキュメントサイト——並列エージェントワークフロー向け git worktree CLI（クイックスタート `wt switch -x claude`、hooks、LLM コミットメッセージ、PR チェックアウト、ワークツリー毎ポート）。09-14 に本文を確認（フッターの v0.77.0 含む）。GitHub API で相互検証（最新リリース v0.77.0、2026-09-08 公開）。引用の Xata 記事が示すフラグもすべて実在。"
+  },
+  "xata.io": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Xata's engineering blog — the cited post (\"My git-worktree setup using worktrunk and caddy\") is a practitioner write-up: `wt switch -c`, `.worktreeinclude` + `wt.toml` post-create hooks, a dynamic Caddyfile mapping per-worktree ports to subdomains, plus an AI-agents bonus section. Confirmed on-page 09-14; cross-validated vs the verified worktrunk docs (every demonstrated flag/feature exists). Vendor blog promoting its own Postgres branching — note the interest.",
+    "zh": "Xata 工程博客——所引《My git-worktree setup using worktrunk and caddy》是从业者实战文：`wt switch -c`、`.worktreeinclude` + `wt.toml` post-create 钩子、将每工作树端口映射到子域名的动态 Caddyfile，以及 AI 智能体附加章节。09-14 已逐页核实；与已核实的 worktrunk 文档交叉验证（文中演示的每个参数/功能均存在）。注意：属推销自家 Postgres 分支功能的厂商博客，存在利益相关。",
+    "jp": "Xata のエンジニアリングブログ——引用の「My git-worktree setup using worktrunk and caddy」は実務者向け解説：`wt switch -c`、`.worktreeinclude` + `wt.toml` の post-create フック、ワークツリー毎ポートをサブドメインへマップする動的 Caddyfile、AI エージェントの特別セクション。09-14 に本文を確認。検証済みの worktrunk ドキュメントと相互検証（提示フラグ/機能はすべて実在）。自社 Postgres ブランチングの宣伝を兼ねるベンダーブログ——利害に注意。"
+  },
+  "ftc.gov": {
+    "cat": "other",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "US Federal Trade Commission press releases and case pages — primary government record; cited for the Jul 8 Deere right-to-repair settlement (FTC + IL/AZ/MI/MN/WI, 10-year order, fault-code reset and pairing/reprogramming obligations, \"fair and reasonable\" terms). Confirmed on-page 09-14; cross-validated vs Reuters's same-day coverage and the FTC's own case page. Government primary sources read as written — the caveat lives in what an order does NOT set (prices), so read the order, not the summary.",
+    "zh": "美国联邦贸易委员会（FTC）新闻稿与案件页——政府一手记录；此处引用 7 月 8 日 Deere 维修权和解案（FTC + 伊利诺伊/亚利桑那/密歇根/明尼苏达/威斯康星五州、10 年期命令、故障码读取清除与配对/重编程义务、\"fair and reasonable\" 条款）。09-14 已逐页核实；与路透社同日报道及 FTC 案件页交叉验证。政府一手来源按字面理解即可——但注意命令未规定的事项（如价格），应读命令原文而非摘要。",
+    "jp": "米連邦取引委員会（FTC）のプレスリリースと案件ページ——政府の一次記録。7/8 の Deere 修理権和解（FTC+IL/AZ/MI/MN/WI の5州、10年命令、フォルトコードの読み取り/消去とペアリング/再プログラミング義務、「fair and reasonable」条件）で引用。09-14 に本文を確認。Reuters の同日報道と FTC 案件ページで相互検証。政府一次資料は記載どおりに読める——ただし命令が定めない事項（価格など）に注意があり、要約ではなく命令本文を読むこと。"
+  },
+  "dealroom.co": {
+    "cat": "data",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Dealroom — startup/VC data platform with a news desk; the cited item (\"Kepler exits stealth with $470 million\", Sep 10) confirms the $468M body figure, GlobalFoundries $50M + Intel Capital + AMD Ventures + Baillie Gifford + Gates Frontier, and the $245M Commerce commitment. Confirmed on-page 09-14; cross-validated vs the Wired feature and hwbusters (ferroelectric-on-logic details). Note: Dealroom's own page never says \"ferroelectric\" — that word comes from Wired; the two sources do not fully overlap.",
+    "zh": "Dealroom——初创/风投数据平台，附新闻栏目。所引条目（\"Kepler exits stealth with $470 million\"，9 月 10 日）证实了正文 4.68 亿美元、GlobalFoundries 5000 万 + Intel Capital + AMD Ventures + Baillie Gifford + Gates Frontier，以及商务部 2.45 亿美元承诺。09-14 已逐页核实；与 Wired 特稿及 hwbusters（铁电叠层逻辑工艺细节）交叉验证。注意：Dealroom 页面通篇未提\"ferroelectric\"——该词出自 Wired；两来源并不完全重叠。",
+    "jp": "Dealroom——スタートアップ/VC データプラットフォーム（ニュース部門あり）。引用項目（「Kepler exits stealth with $470 million」、9/10）は本文の 4.68 億ドル、GlobalFoundries 5,000万ドル + Intel Capital + AMD Ventures + Baillie Gifford + Gates Frontier、商務省 2.45 億ドルのコミットを確認。09-14 に本文を確認。Wired の特集と hwbusters（ロジック上への強誘電体積層の詳細）で相互検証。注意：Dealroom のページ自体は「ferroelectric」に一切言及せず——この語は Wired 由来。両ソースは完全には重複しない。"
   }
 }

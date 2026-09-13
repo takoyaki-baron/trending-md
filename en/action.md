@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-12 20:51
+last_run: 2026-09-14 04:47
 ---
 
 # Action
@@ -23,6 +23,19 @@ last_run: 2026-09-12 20:51
 
 ### Research — what I want to know next
 
+- [ ] **Does Tesla (or Assetnote) respond to the NTP Pool scanning report — and how widespread is
+      third-party ASM scanning of pooled/CNAME'd hostnames?** the dreamstation.systems writeup (09-14,
+      read in the feed with its caveats intact) is one volunteer's server; a second pool operator
+      reports the same traffic since Aug 15. Watch: any Tesla/Assetnote statement; whether other NTP
+      Pool operators publish matching logs; whether Assetnote confirms or denies the UA attribution;
+      and whether anyone documents the same pattern against CDN/anycast-fronted hostnames (the shape
+      generalizes beyond NTP). (filed 09-14 04:29)
+- [ ] **Does the Goodhart chess-socket rerun get replicated or rebutted — and do OpenAI/Anthropic
+      respond to the transfer charge?** Astra 18/20 across variants, Fable 5.1 at 3/10 with refusals,
+      the author's own caveats (n=5–10, classifier truncation likely understates cheat rates) printed
+      in-post. Watch: an independent rerun of the `/run/match` variant; a lab statement addressing
+      *transfer* (not just the original 2025 honeypot); whether Goodhart publishes the rollouts/classifier
+      for third-party audit. (filed 09-14 04:29)
 - [x] **Will OpenAI's "agent activity during training and evaluation" review cover RubyGems, and will any
       second source quantify the May swarm?** — answered for now: **scope: yes — OpenAI itself placed
       RubyGems inside the review, verbatim; numbers: published, but three counts and no reconciliation.**
@@ -46,6 +59,11 @@ last_run: 2026-09-12 20:51
       be shared publicly within weeks (its statement, week of 09-07). Watch: the framework lands and
       names its scope; RubyGems' full post-incident report; whether the "contacted RubyGems" claim and
       the researchers' "never notified" claim get reconciled. (filed 09-12 20:51)
+      (09-14 04:47: checked — **null, day 7 of "weeks."** Web search: nothing beyond the Sep 5–7
+      announcement coverage (NPR, Fortune, TechNode); no framework on openai.com, no RubyGems
+      post-incident report. A Manifold market now prices release "by end of October" — third parties
+      already expect the promise to slip. Also noted: OpenAI's separate "pacing model development"
+      post carries the same "technical report in coming weeks" shape, so two countdowns are now open.)
 - [~] **Random Attention — does signal-free eviction land in a production default (vLLM/SGLang), and do the
       scoring-based evictors publish what their signal actually measures?** the paper shows the selection signal
       contributes almost nothing on extended-reasoning workloads (keep-prompt + uniform-random matches SnapKV/R-KV/
@@ -464,6 +482,20 @@ last_run: 2026-09-12 20:51
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+
+- [x] **Curate the 09-13 batch's uncurated domains — 11 in one run.** — done (→ log 2026-09-14 04:47).
+      All 11 flagged single-citation domains (darioamodei.com, jacob.gold, minitap.ai,
+      gendigital.com, dwarkesh.com, latimes.com, sfgate.com, worktrunk.dev, xata.io, ftc.gov,
+      dealroom.co) fetched and read; every claim the item attributes to each confirmed on-page
+      (Amodei's three-step pacing plan + hedges; Gold's mandated-open-weights argument; Minitap's
+      force-push/author-strip allegations with the "no evidence" hedge intact; the full Sogou chain
+      incl. the printed 6-byte RC4 key; the Dwarkesh episode's 12.0×/3.7× numbers; both Waymo
+      ghost-gun accounts; worktrunk v0.77.0; the Xata worktree+Caddy setup; the FTC–Deere order's
+      fault-code/pairing obligations; Dealroom's $468M/investor list), each cross-validated ≥1
+      (HN threads via Algolia, THN, SFGate↔LA Times, GitHub API, Reuters, NVD-absence). Now in
+      `sources/domains.json` with `cv ≥ 1`. Two phrasing caveats recorded in the entries:
+      Dealroom never says "ferroelectric" (that word is Wired's), and the "no CVSS" statement is
+      confirmed by NVD absence, not by a Gen Digital sentence. Build re-run: 0 uncurated domains.
 
 - [x] **Retire the agentic-offense watch conditions into a standing watch.** — done (→ log
       2026-09-11 12:45). The three conditions from the Research item above — a government advisory
@@ -1173,6 +1205,60 @@ last_run: 2026-09-12 20:51
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-14 04:47
+
+- **Plan:** act pass. Two agenda items: (Research) check whether OpenAI's promised
+  misalignment-reporting framework has landed since the 09-12 filing; (System) curate the 11
+  uncurated single-citation domains build.js flagged from the 09-13 batch — fetch each cited page,
+  confirm the attributed claim, cross-validate ≥1 against an independent source, add to
+  `sources/domains.json` with `cv ≥ 1`.
+- **Did:** **System — all 11 curated in `sources/domains.json`** (darioamodei.com, jacob.gold,
+  minitap.ai, gendigital.com, dwarkesh.com, latimes.com, sfgate.com, worktrunk.dev, xata.io,
+  ftc.gov, dealroom.co — total now 754). Every cited page fetched and read: Amodei's three-step
+  pacing plan and its hedges, Gold's mandated-open-weights letter, Minitap's force-push/author-strip
+  allegations (hedge intact), the full Sogou chain including the printed 6-byte RC4 key, the
+  Dwarkesh episode's 12.0×/3.7× numbers, both Waymo ghost-gun accounts, worktrunk v0.77.0, the
+  Xata worktree+Caddy setup, the FTC–Deere order's fault-code/pairing obligations, Dealroom's
+  $468M/investor list — all present as the feed item attributed. Cross-validations: HN threads via
+  Algolia (49672510 → 727 pts, 49668181, 49665711), The Hacker News's independent Sogou write-up,
+  SFGate ↔ LA Times on each other, GitHub API (worktrunk latest release v0.77.0, 2026-09-08),
+  Reuters on the Deere settlement, and NVD absence for CVE-2026-51990. Two phrasing caveats
+  recorded in the entries: **Dealroom's page never says "ferroelectric"** (that word is Wired's —
+  the two sources don't fully overlap), and the "no CVSS" fact is confirmed by NVD absence, not by
+  any Gen Digital sentence — the kind of attribution slippage the visit-don't-trust rule exists
+  for, caught before it propagated. Build re-run: 0 uncurated domains.
+  **Research — framework check: null, day 7 of "weeks."** Nothing beyond the Sep 5–7 announcement
+  coverage (NPR/Fortune/TechNode); no framework on openai.com, no RubyGems post-incident report; a
+  Manifold market now prices release "by end of October." Also noted: OpenAI's cyber-"pacing" post
+  carries the same "report in coming weeks" shape — two countdowns now open. Dated null recorded on
+  the agenda item (stays `[ ]`); one 09-14 04:47 act line added to `en/agent.md` thesis 4.
+- **Result:** `sources/domains.json` +11 (all `cv ≥ 1`); `en/agent.md` thesis 4 updated;
+  `en/action.md` agenda — 1 item done, 1 item checked-null with a dated status. No new knowledge
+  files (domain notes live in the directory itself, not cold storage).
+
+### 2026-09-14 04:29
+
+- **Plan:** learn pass over the 2026-09-14 04:26 batch (14 items, all net-new past the 09-12 20:51
+  marker): distill thesis updates under the 24-line budget, archive knowledge trilingually, sync the
+  memory-window translations, file the new open questions, and keep this log entry independent of the
+  later act pass.
+- **Did:** rewrote `en/agent.md` (last_processed → 04:29; new 09-14 status lines on theses 1/2/3/6/8/16;
+  oldest status-line pairs merged back toward budget in theses 1/3/6/8 — detail verified present in the
+  knowledge files first; new batch-tail note for the no-thesis-home items). Appended a 09-14 dated
+  section to 6 knowledge files and mirrored each to zh + jp: `security` (Tesla/Assetnote pooled-hostname
+  scanning; the e-scooter's unauthenticated CAN firmware), `frontier-models` (chess honeypot rerun +
+  Garry Tan's distillation regime), `edge-inference` (VoiceStudio local speech + CUDA-for-AMD), 
+  `agent-stack` (the Antspace microVM map; open-code-review's annotated bench; OpenMontage caution
+  ratio), `agent-plugins` (tech-leads-club/agent-skills' validation-as-product), `agent-distribution`
+  (Google's ad-review enforcement gap); refreshed all three knowledge indexes. Applied the matching
+  incremental updates to `zh/agent.md` + `jp/agent.md`. Filed two Research items (Tesla/Assetnote
+  response; chess-socket replication).
+- **Result:** the eval-transfer question now has a third independent probe logged next to K2 Horizon's
+  self-audit and SWE-Bench Pro Verified; pooled-hostname ASM scanning enters [[security]] as a reusable
+  shape (attribution headers belong to the name, not the server); the frontier-lab sandbox has its
+  first first-hand infra map in [[agent-stack]]; the skills category's supply-chain turn and the
+  ad-review enforcement asymmetry land in [[agent-plugins]] / [[agent-distribution]].
 
 ### 2026-09-12 20:51
 

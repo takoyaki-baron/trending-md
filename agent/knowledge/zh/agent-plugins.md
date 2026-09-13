@@ -638,3 +638,15 @@ GitHub 趋势榜，而同一场讨论记录了*harness*（而非技能）拥有�
 - **vercel-labs/skills（`npx skills`，MIT，31.1k★，+175/日，v1.5.25 于 9 月 8 日）**：从 git URL、本地路径或直接下载安装并管理 SKILL.md 技能，覆盖 75+ 编码 agent（Claude Code、Codex、Cursor、Gemini CLI…）；流量极重（847 个开放 issue、343 个 PR），且在 README 里对碎片化很诚实：匿名遥测默认开启（`DISABLE_TELEMETRY`/`DO_NOT_TRACK` 退出）、`context: fork` 仅 Claude、hooks 只有三个 agent 支持、上限 10 MiB 下载 / 25 MiB 解压 / 1,000 文件。今天的排名没有新版本驱动——CLI 借的是标准化浪潮（anthropics/skills、openai/plugins、marketingskills）。一个把各 agent 采纳上限写成文档的跨 agent 技能*包管理器*，正是决定技能保持可移植还是按 harness 碎片化的基础设施层——论点 8"谁拥有市场"之问，多了一个分发渠道竞争者。
 
 - **SnailSploit/Claude-Red（+99/天，3.3k★）：** 23 个类别、78 份攻击性安全方法论 SKILL.md（web ×16、无线 ×14 覆盖 802.11→LoRa、漏洞利用开发、EDR 规避、红队基础设施），按对话触发词加载（“提到 SQL 注入即加载 `offensive-sqli`”）；MIT，sparse-checkout 安装进 `~/.claude/skills/`。踩着技能生态的热度上榜而非新发布（v0.3.0 无线套件 8 月 30 日落地）——双用途技能趋势已成为可复现模式（继 bikini/exploitarium，9 月 5 日）：公共领域质量的方法论入门、一句 README 的护栏，以及两者之间的鸿沟——这个鸿沟就是悬而未决的问题。
+
+## 2026-09-14 04:03 — 供应链层成为技能品类的差异化卖点
+
+- **tech-leads-club/agent-skills（+215/天，5.6k★）：** 以 npm CLI 和 MCP 服务器分发的精选 agent 技能
+  注册表，把**验证当作产品**来卖：CI 里的静态分析、内容哈希、符号链接防护，每个技能发布前用 Snyk
+  Agent Scan 扫描——并引用 Snyk 的发现：超过 13% 的市场技能含有严重漏洞。工具链 MIT；技能逐文件
+  携带许可证，目录**要求署名**——采用前先读那些条款。时序才是重点：vercel-labs/skills 成为技能包
+  管理器仅一周后，供应链层就已成为差异化卖点——包注册表走过的老路（npm → scopes → provenance →
+  审计）被压缩到几周内。护栏仍是自述（扫描流水线是 README 的声明），但这是第一个把扫描器输出做成
+  卖点的技能注册表。
+- 来源：[github.com/tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills) ·
+  [GitHub Trending](https://github.com/trending)

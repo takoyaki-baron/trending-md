@@ -2064,3 +2064,33 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   agent era has an unofficial changelog: provenance unverifiable dump-by-dump, prompts possibly stale or
   edited post-extraction, and the corpus exists because prompt disclosure is a ToS violation nobody can
   technically enforce.
+
+## 2026-09-14 04:03 — the frontier-lab sandbox mapped first-hand; Alibaba ships its internal reviewer; the viral-skill-pack caution ratio recurs
+
+- **Reverse-engineering Claude Web's MicroVM uncovers "Antspace" (aprilnea.me, HN 16+ pts):** running
+  `strace`, `strings` and `objdump` inside their own Claude Code Web session, the author mapped the
+  sandbox: a **Firecracker microVM** (ACPI OEM ID `FIRECK`), a custom Rust `process_api` as PID 1,
+  `init_on_free` page zeroing between sessions, **no sshd**, and a 48.5-hour snapshot-restore gap. The
+  unstripped Go binary then gave up an undocumented `AntspaceClient` — a tarball-upload deploy protocol
+  that makes Antspace, by the author's reading, an internal Vercel competitor and the default deploy
+  target for "Baku," the claude.ai web-app builder. A first-hand infra map of how a frontier lab
+  sandboxes agents (snapshot-restore Firecracker, memory zeroing) — and the author is explicit about
+  what's inferred versus confirmed: the name's origin is a guess, and whether Antspace ever ships
+  publicly "remains to be seen."
+- **alibaba/open-code-review (`ocr`, Apache-2.0, 23.3k★, +438/day):** Alibaba's internal AI reviewer
+  open-sourced — deterministic engineering (file selection, locale-file bundling, rule templates, comment
+  positioning) paired with an LLM agent for dynamic judgments. Its **AACR-Bench** is the rare
+  agent-repo benchmark with annotated ground truth: 50 repos, 200 PRs, 1,505 annotated issues
+  cross-validated by 80+ engineers, and *named trade-offs* — higher precision and F1 than Claude Code at
+  ~1/9 the tokens, **with recall deliberately lower**. "Precision over recall" is the right default for
+  review comments; a model for how agent-repo benchmarks should report (contrast the single-headline-number
+  genre).
+- **OpenMontage re-trends at 58.3k★ — the caution ratio, again:** we visited before ranking: the repo is
+  real and structured (12 production pipelines, 100+ tools, 700+ skill files, 7.3k forks, 320 open
+  issues) but has **no releases and last pushed Sep 6** — what moved it back onto trending today is
+  unclear, and **58k stars against 449 commits** is the ratio that historically marks viral skill-packs,
+  not shipping software. Investigate before adopting.
+- Sources: [aprilnea.me: Reverse-Engineering Claude Web's MicroVM](https://aprilnea.me/en/blog/reverse-engineering-claude-code-antspace) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49653311) ·
+  [github.com/alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
+  [github.com/calesthio/OpenMontage](https://github.com/calesthio/OpenMontage)

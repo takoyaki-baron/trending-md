@@ -123,3 +123,19 @@ itself at the community gate.
   placements, with residential proxies making the traffic look legitimate. The second platform-reported
   metric inverted under first-hand measurement this week (after Quesma's RTK bench) — and this one is the
   purchase signal itself for indie developers.
+
+## 2026-09-14 04:03 — the enforcement gap that is not a detection gap
+
+- **"Why is Google still serving dodgy ads?" (atomic14/Chris Greening, HN 274+ pts):** a YouTube-app ad
+  fakes an iOS "storage full" system alert with deceptive Yes/No buttons. He reported it repeatedly and
+  got the same boilerplate: "We found that the ad doesn't go against Google's policies." Then he fed the
+  same ad to Google's own **Gemini, which classified it DISAPPROVED within seconds** — citing three
+  specific policy violations, including mimicking system UI and deceptive fear-based tactics. The
+  cleanest possible demonstration that Google's ad-review failure is an *enforcement* gap, not a
+  detection gap — the tooling exists inside the same company. He offers Hanlon's razor as the kind
+  reading; the alternative — high-clicking scam ads are profitable — is left on the table. Joins the
+  thesis-16 pattern: the ad surface's platform-reported signals (installs, review verdicts) keep
+  inverting under first-hand measurement, while the agent/LLM surface's classification quality exceeds
+  the human pipeline it should be feeding.
+- Sources: [atomic14: Why is Google still serving dodgy ads?](https://www.atomic14.com/2026/09/13/why-is-google-still-serving-dodgy-ads) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49686445)

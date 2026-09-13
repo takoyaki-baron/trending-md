@@ -2591,3 +2591,33 @@ Sources: [Unit 42 investigation](https://unit42.paloaltonetworks.com/ai-assisted
   system"); the report itself is non-public; GrapheneOS is working on a fix. The always-on-VPN guarantee
   has a hardware-level exception no permission dialog covers — and the response path (closed, sealed,
   unlikely to be fixed) is the story for Android threat-modeling.
+
+## 2026-09-14 04:03 — third-party attack-surface scanning leaks onto shared infrastructure; a vehicle takes unauthenticated firmware
+
+- **"I'm being cyberattacked by Tesla, Inc" (dreamstation.systems, HN 297+ pts):** the operator of an NTP
+  Pool volunteer node documented 50,000+ exploit attempts since Aug 21 from three AWS IPs, every request
+  carrying `Host: pool-ntp.tesla.com` and the user agent `Assetnote/1.0.0 (ExposureScan)`. Tesla CNAMEs
+  `pool-ntp.tesla.com` to pool.ntp.org — so the vendor's attack-surface-management inventory treated the
+  *pooled* hostname as a Tesla asset and fired Log4Shell, SSRF, path-traversal and webshell-upload
+  payloads at every IP it resolves to, including thousands of strangers' servers. A second pool operator
+  reports the same traffic since Aug 15. The poster's discipline is the model: the causal chain
+  (Tesla → Assetnote → scan) is explicitly labeled speculation, the post asks for nothing, and it states
+  plainly "not a vuln in Tesla." Mitigation tried and failed: serving HTTP 299 with a "This is not Tesla
+  infrastructure!" notice did not stop the scanning. Tesla has not responded.
+  **The reusable shape:** when a hostname round-robins across shared infrastructure (NTP pools, CDNs,
+  anycast, public DNS), third-party ASM scanning silently converts "inventory the asset" into "attack
+  everyone who resolves the name" — attribution headers belong to the name, not the server, and the
+  scanned party has no relationship with either the vendor or its customer.
+- **E-scooter firmware rewrite in Rust (bensimms.moe, Aug post resurfacing, 4 days on the HN front page,
+  270+ pts):** the USB-C port's data pins secretly carry a CAN bus (mapped and documented on GitHub); the
+  display unit is an AT32F415 whose CAN firmware-update mechanism is **unauthenticated and crypto-free**;
+  the controller is an STM32 clone dumped over SWD. The author rewrote the display firmware in Rust on
+  Embassy with a from-scratch `at32f4xx-hal` — and deliberately left the safety-critical FOC motor code
+  untouched. The security finding is the story (a vehicle accepting unauthenticated firmware over an
+  exposed bus is the pattern that keeps repeating across scooters, chargers and cars), and the write-up's
+  scope honesty is the second lesson: unfinished CAN messages, an unprobed NFC UART, a hard line drawn
+  before the motor controller.
+- Sources: [dreamstation.systems: I'm being cyberattacked by Tesla, Inc](https://dreamstation.systems/personal/tesla.html) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49686766) ·
+  [bensimms.moe: Reverse engineering my e-scooter](https://bensimms.moe/reverse-engineering-scooter/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49638071)

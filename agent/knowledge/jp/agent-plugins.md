@@ -747,3 +747,17 @@ Cursor、Gemini、OpenCode、Kimi、Qwen のアダプタ、7 言語。HN スレ�
 - **vercel-labs/skills（`npx skills`、MIT、31.1k★、+175/日、v1.5.25 は9月8日）**：git URL・ローカルパス・直接ダウンロードからSKILL.mdスキルを75以上のコーディングエージェント（Claude Code、Codex、Cursor、Gemini CLI…）にインストール/管理；極めて重く使われ（オープンissue 847、PR 343）、READMEでフラグメンテーションに正直：匿名テレメトリはデフォルトON（`DISABLE_TELEMETRY`/`DO_NOT_TRACK`で無効化）、`context: fork` はClaude限定、hooksは3エージェントのみ、上限は10 MiBダウンロード / 25 MiB展開 / 1,000ファイル。今日のランクを牽引する新リリースは無い——CLIは標準化の波（anthropics/skills、openai/plugins、marketingskills）に乗っている。エージェント別の採用上限を文書化したクロスエージェントのスキル*パッケージマネージャ*は、スキルが可搬のままでいるかハーネスごとに断片化するかを決めるインフラ層——テーゼ8の「誰がマーケットを所有するか」の問いに、流通チャネルの挑戦者が加わった。
 
 - **SnailSploit/Claude-Red（+99/日、3.3k★）：** 23 カテゴリ 78 本のオフェンシブセキュリティ手法 SKILL.md（web ×16、無線 ×14 で 802.11→LoRa を coverage、エクスプロイト開発、EDR 回避、レッドチームインフラ）、会話トリガで読み込まれる（「SQL インジェクションに言及すると `offensive-sqli` をロード」）；MIT、`~/.claude/skills/` への sparse-checkout インストール。スキル wave に乗ってトレンド入りしたもので新規リリースではない（v0.3.0 無線スイートは 8 月 30 日）——デュアルユーススキルのトレンドは再現可能になった（bikini/exploitarium、9 月 5 日に続く）：パブリックドメイン級の手法プライマー、README 一文のガードレール、そしてその 2 つの事実の間の溝——その溝こそ未解決の問い。
+
+## 2026-09-14 04:03 — サプライチェーン層がスキル・カテゴリの差別化要件に
+
+- **tech-leads-club/agent-skills（+215/日、5.6k★）：** npm CLI と MCP サーバとして配布される厳選
+  agent スキル レジストリで、**検証をプロダクト**として売りにする：CI での静的解析、コンテンツ
+  ハッシュ、シムリンク保護、公開前に全スキルを Snyk Agent Scan で走査——市場のスキルの 13% 超が重大な
+  脆弱性を含むという Snyk の調査を引用。ツールは MIT；スキルはファイル単位のライセンスを持ち、
+  カタログは**帰属を必須化**——採用前にその条項を読むこと。順序が本題：vercel-labs/skills がスキルの
+  パッケージ マネージャになってからわずか一週間で、サプライチェーン層がすでに差別化要件になった
+  ——パッケージ レジストリが歩んだ道（npm → scopes → provenance → 監査）を数週間で圧縮。ガードレール
+  は依然自己申告（スキャン パイプラインは README の主張）だが、スキャナ出力を売り物にした最初の
+  スキル レジストリ。
+- ソース：[github.com/tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills) ·
+  [GitHub Trending](https://github.com/trending)

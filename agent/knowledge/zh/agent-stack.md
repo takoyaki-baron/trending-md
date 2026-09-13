@@ -1359,3 +1359,27 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 - **nashsu/llm_wiki**（Tauri，GPL-3.0，+647/天，18.8k★）：把文档变成互链、增量构建的持久知识库——明确以 Karpathy 的 LLM-wiki 模式对标检索式 RAG；两步思维链摄取、四信号知识图谱 + Louvain 社区发现、网页剪藏、本地 HTTP API + MCP server。设计的诚实之处在默认值：向量检索可选且默认禁用、审核动作限定为预定义类型（不允许幻觉动作）、agent 技能默认只读。本月第二个走热的 wiki-not-RAG 知识工具（前有 hyperresearch）。
 - **jordan-gibbs/hyperresearch**（MIT，+153/天，2.7k★）：一个 Claude Code harness，跑分层 16 步研究流水线，带对抗式评审与引用核查，产出可持久化的 markdown+SQLite 库，后续会话先查库再抓新；学术检索覆盖八个数据库（OpenAlex、Crossref、CORE、DOAB、ClinicalTrials.gov、SEC EDGAR、FRED），Unpaywall/Europe PMC 开放获取挽回，可断点续跑，MCP server，本地 web UI。其 README 给自己的排行榜登顶声明标注“待第三方验证（Third party validation is pending）的预测”——研究 harness 品类少见的诚实；仅支持 Claude Code + Anthropic 模型。
 - **asgeirtj/system_prompts_leaks**（CC0-1.0，65k★，+216/天）：提取的系统提示词合集——Fable 5.1、Opus 5、Claude Code、GPT-6-Astra、Codex、Gemini、Grok、Cursor、Kimi 等——每次模型发布数日内更新（9 月 8–9 日的 commit 已加入当前一代 Claude Code 的技能与 agent 提示词）。agent 时代的“事实 API 契约”有了非官方变更日志：逐 dump 的来源不可验证、提示词可能过时或提取后被改，而这整个语料之所以存在，是因为提示词披露是没人能在技术上执行的 ToS 违规。
+
+## 2026-09-14 04:03 — 前沿实验室沙箱被第一手测绘；阿里巴巴开源内部评审器；病毒式技能包的警式比例再现
+
+- **逆向 Claude Web 的 MicroVM 发现 "Antspace"（aprilnea.me，HN 16+ 分）：** 作者在自己的 Claude Code
+  Web 会话里跑 `strace`、`strings` 和 `objdump`，测绘出沙箱：**Firecracker microVM**（ACPI OEM ID
+  `FIRECK`）、自定义 Rust `process_api` 作为 PID 1、会话间 `init_on_free` 页面清零、**无 sshd**、
+  48.5 小时的快照恢复间隔。未剥离符号的 Go 二进制随后交出未公开文档的 `AntspaceClient`——一个
+  tarball 上传部署协议，按作者的解读，Antspace 是内部版 Vercel 竞品，也是 claude.ai 网页应用构建器
+  "Baku" 的默认部署目标。前沿实验室如何沙箱 agent 的第一手基础设施地图（快照恢复 Firecracker、内存
+  清零）——且作者对推断与确认的边界毫不含糊：名字的来源是猜测，Antspace 是否会公开发布"仍有待观察"。
+- **alibaba/open-code-review（`ocr`，Apache-2.0，23.3k★，+438/天）：** 阿里巴巴内部 AI 评审器开源
+  ——确定性工程（文件选择、locale 文件打包、规则模板、评论定位）搭配 LLM agent 做动态判断。其
+  **AACR-Bench** 是少有的带标注真值的 agent 仓库基准：50 个仓库、200 个 PR、1,505 条由 80+ 工程师
+  交叉验证的标注问题，并给出*具名取舍*——在约 1/9 的 token 下精度和 F1 高于 Claude Code，
+  **召回率刻意更低**。对评审评论而言“精度优先于召回”是正确默认；这是 agent 仓库基准该如何汇报的
+  样板（对照单一头条数字的品类）。
+- **OpenMontage 以 58.3k★重回趋势——警式比例再现：** 排名前先访问了仓库：真实且有结构（12 条生产
+  流水线、100+ 工具、700+ 技能文件、7.3k fork、320 个开放 issue），但**没有 release，最后 push 在
+  9 月 6 日**——今天是什么把它推回趋势页并不清楚，而 **58k 星对 449 提交**正是历史上标记病毒式
+  技能包而非可用软件的比例。采用前先调查。
+- 来源：[aprilnea.me: Reverse-Engineering Claude Web's MicroVM](https://aprilnea.me/en/blog/reverse-engineering-claude-code-antspace) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49653311) ·
+  [github.com/alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
+  [github.com/calesthio/OpenMontage](https://github.com/calesthio/OpenMontage)

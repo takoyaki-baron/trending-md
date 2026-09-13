@@ -505,9 +505,18 @@
       "feeds": [
         "2026-09-12.md"
       ]
+    },
+    "https://www.lesswrong.com/posts/munJKF7iWMsWJLAH2/astra-and-fable-still-hack-on-simple-variants-of-alignment": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-13T21:06:17.849Z",
+      "last_seen": "2026-09-13T21:06:17.849Z",
+      "feeds": [
+        "2026-09-14.md"
+      ]
     }
   },
-  "runs": 17,
+  "runs": 18,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-12T13:02:30.755Z"
+  "last_run": "2026-09-13T21:06:17.849Z"
 }

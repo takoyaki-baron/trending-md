@@ -921,3 +921,18 @@ the effect decays.
   not a fresh ship (v0.3.0, the wireless suite, landed Aug 30) — the dual-use-skills trend is now
   repeatable (after bikini/exploitarium, Sep 5): public-domain-quality methodology primers, a
   README-sentence guardrail, and the gap between those two facts is the open question.
+
+## 2026-09-14 04:03 — the supply-chain layer becomes the skills differentiator
+
+- **tech-leads-club/agent-skills (+215/day, 5.6k★):** a curated registry of agent skills distributed as
+  an npm CLI and MCP server, pitching **validation as the product**: static analysis in CI, content
+  hashing, symlink guards, and every skill scanned with Snyk Agent Scan before publishing — citing a
+  Snyk finding that over 13% of marketplace skills contain critical vulnerabilities. MIT for the
+  tooling; skills carry per-file licenses and the catalog **requires attribution** — read those terms
+  before adopting. The sequencing matters: a week after vercel-labs/skills became the skills package
+  manager, the supply-chain layer is already the differentiator — the same path package registries
+  walked (npm → scopes → provenance → audit), compressed into weeks. Guardrails are still
+  self-asserted (the scan pipeline is the README's claim), but it's the first skills registry to make
+  the scanner output the pitch.
+- Sources: [github.com/tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills) ·
+  [GitHub Trending](https://github.com/trending)

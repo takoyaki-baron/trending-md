@@ -494,3 +494,26 @@ Q8_0 を誤ってスキップ（補間で代用）、KV-cache 量子化は未テ
 - **Samsung zHBM プロトタイプ**（THE ELEC、30+ HN pts）：メモリをAIアクセラレータダイの隣ではなくダイ上に直接スタック——主張（すべてベンダー数値、プロトタイプ段階）はHBM5比で最大8×のデータ処理性能、3×のperf-per-watt、熱抵抗半減超え。量産時期・容量・価格の情報は無く、未解決の問いはメモリコントローラがどの層に住むか。フロンティア訓練とcolibri級ローカル推論の双方を縛る帯域/容量制約への最も直接的な攻撃——スペックではなく方向性。
 
 - **Apple ANE のレジスタレベルでのリバースエンジニアリング（eileen-yoon/eiln、9 月 12 日）：** Linux ANE ドライバを放棄して 3 年、Eileen Yoon は M1 ANE をエンドツーエンドで地図化した——16 コア × 128 FP16（256 INT8）MAC レーン = 2,048 レーン；Q16.16 飽和累算を FP16 として読み出し（オーバーフロープローブで実証）；tanh は tanh(i/8) でサンプリングされた 33 項目の区分線形 LUT；**ISA なし——固定機能データフローエンジン**で、タスクは固定サイズの ControlDMA レジスタ書き込みディスクリプタ；2 MiB 共有 L2 + 16× 64 KiB カーネルメモリ、ルーフライン脊点 162 OP/byte；そして KernelDMA は**ロード専用で約 38 GB/s（GPU は約 78 GB/s）**——この加算的ボトルネックが transformer デコードを特に苦しめると彼女は論じ、NPU の LLM デコードにおける期待外れの具体的説明になる。動機は M5 が ANE コアを GPU に統合したことで、彼女はこれを「スタンドアロン NPU の終わりの始まり」と読む。本人の留保：「汎用アクセラレータプラットフォームを築くには指向性が強すぎる」、一部のレイアウト推論は自ら「アームチェア・エンジニアリング」、未同定のレジスタバンクも複数。ツールは公開済み（`eiln/ane` Linux ドライバ、`ane-notes` ファームウェアノート）。
+
+## 2026-09-14 04:03 — ローカル音声が single-app カテゴリに；CUDA-on-Windows の堀に摩擦低減がまた一つ
+
+- **debpalash/VoiceStudio（AGPL-3.0、26.4k★、+2,546/日——当日最大の急上昇）：** 16 の TTS と 11 の ASR
+  エンジンを 1 つのデスクトップアプリに統合——クローン、ダビング、音声入力、文字起こし、オーディオ
+  ブック、646 言語カタログ——スタックは Tauri v2 + React + Python FastAPI バックエンドで、**OpenAI 互換
+  オーディオ API と localhost 上の MCP サーバ**を備える（デフォルトで agent 統合可能）。トリガーは
+  v0.5.2（9 月 10 日）のようだ：UX 全面刷新、ワンクリック エンジン インストール、フォルダ監視バッチ
+  ダビング、新 CPU オーディオバックエンド。2,536 コミット。README は「ElevenLabs キラー」系リポジトリ
+  が飛ばしがちな誠実さの仕事をしている：ベータ状態の明示、Intel Mac ではローカルバックエンドなし、
+  デフォルトの OmniVoice 重みは CC-BY-NC——商用利用はアプリの AGPL ではなく*モデル*側の条項が支配；
+  AudioSeal ウォーターマークはデフォルト有効。LLM 推論を再形成したローカルファーストの論理を音声
+  スタックに適用し、MCP サーバが agent ランタイムへの橋。
+- **Speedstu/CUDA-for-AMD-Windows（作成翌日、38 スター、HN 102+ pts）：** 恒常的に摩擦の多い ZLUDA +
+  ROCm/HIP のレシピ——AMD GPU 上で CUDA 向け Windows アプリを動かす——を PowerShell 主導のセットアップ
+  にパッケージ化。注目こそがシグナルで、リポジトリではない：Windows ISV ソフトウェアへの CUDA の支配
+  （CUDA-on-Linux 翻訳パスがカバーしない唯一のセグメント）が GPU 二寡占の最後の堀であり、ZLUDA の
+  セットアップコストを下げる小さなリポジトリはすべてオーディエンスを得る。注意：**ライセンスファイル
+  なし**——再配布可能なソフトウェアではなく参照スクリプトとして扱うこと。
+- ソース：[github.com/debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) ·
+  [Release notes v0.5.2](https://github.com/debpalash/VoiceStudio/releases) ·
+  [github.com/Speedstu/CUDA-for-AMD-Windows](https://github.com/Speedstu/CUDA-for-AMD-Windows) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49684356)

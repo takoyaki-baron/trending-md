@@ -1671,3 +1671,27 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
 - **Trezor × Brevo（9 月 9–11 日）：** 攻击者利用 Trezor 第三方新闻信服务商 Brevo 的登录漏洞，访问 138 个客户账号，并用 Trezor 自己的发信基础设施给约 34.7 万订阅者发送“STM32 熵漏洞”钓鱼邮件（诱导把钱包备份输入假冒应用）；钓鱼域名 20 分钟内在 DNS 层下线，约 2,500 人点击，钱包未受影响。继 2024 年客服门户被黑（6.6 万用户）和 ShipMonk（8.1 万）后的第三次流水线事件——不同供应商，同一攻击面：邮件列表；泄露的地址仍是未来钓鱼的资产。
 - **Surfshark（9 月 10 日）：** 人为配置错误把一台内部工程测试服务器和一个独立代理服务器暴露到互联网；暴露内容包括系统二进制、服务配置和代码历史里的构建凭证。时间线清晰（8 月 31 日发现异常、9 月 2 日遏制、9 月 5 日前轮换全部密钥）并委托独立审计；未发现凭证被滥用的证据。披露质量是重点——但“测试基础设施”正在成为反复出现的初始访问向量，而 git 历史里的构建凭证正是供应链攻击者的跳板。
 - **Mullvad——Android 硬件 keepalive offload（9 月 10 日）：** 任意应用无需特殊权限即可滥用硬件卸载的 UDP keepalive（端口 4500），发出源自网络硬件的数据包，绕过执行“无 VPN 时阻断全部连接”的软件检查——真实 IP 绕过隧道泄露。Google 的 VRP 未采取行动即关闭报告（彻底修复“需要改动 Android 系统”）；报告本身不公开；GrapheneOS 正在修复。常开 VPN 的保证存在权限对话框管不到的硬件级例外——而这条“关闭、保密、大概率不修”的响应路径本身就是 Android 威胁建模的story。
+
+## 2026-09-14 04:03 — 第三方攻击面扫描泄漏到共享基础设施；一辆车接受未认证固件
+
+- **"I'm being cyberattacked by Tesla, Inc"（dreamstation.systems，HN 297+ 分）：** 一台 NTP Pool
+  志愿节点的运维者记录到 8 月 21 日以来来自三个 AWS IP 的 5 万余次漏洞利用尝试，每个请求都携带
+  `Host: pool-ntp.tesla.com`，User Agent 为 `Assetnote/1.0.0 (ExposureScan)`。Tesla 把
+  `pool-ntp.tesla.com` CNAME 到 pool.ntp.org——于是厂商的攻击面管理清单把这个*池化*主机名当作 Tesla
+  资产，向它解析到的每一个 IP 发射 Log4Shell、SSRF、路径穿越和 webshell 上传载荷，包括成千上万台
+  陌生人的服务器。另一名池运维者报告 8 月 15 日起同样的流量。发帖者的纪律值得学习：因果链
+  （Tesla → Assetnote → 扫描）被明确标注为推测，全文无所求，并直言“这不是 Tesla 的漏洞”。尝试过的
+  缓解无效：返回 HTTP 299 加"This is not Tesla infrastructure!"告示没能阻止扫描。Tesla 尚未回应。
+  **可复用的形状：** 当主机名在共享基础设施上轮转（NTP 池、CDN、anycast、公共 DNS）时，第三方 ASM
+  扫描悄悄把“盘点资产”变成“攻击所有解析到这个名字的人”——归因头部属于名字而不是服务器，而被扫描
+  者与该厂商及其客户都没有任何关系。
+- **用 Rust 重写电动滑板车固件（bensimms.moe，8 月旧文回热，HN 首页 4 天，270+ 分）：** USB-C 口的
+  数据引脚暗中承载一条 CAN 总线（已在 GitHub 上测绘并记录）；显示单元是 AT32F415，其 CAN 固件更新
+  机制**无认证、无加密**；控制器是可通过 SWD 转储的 STM32 克隆。作者用 Rust + Embassy 和从零编写的
+  `at32f4xx-hal` 重写了显示固件——并刻意不碰安全攸关的 FOC 电机代码。安全发现才是重点（一辆车通过
+  暴露总线接受未认证固件，正是滑板车、充电器、汽车反复出现的模式），而写作中的范围诚实是第二课：
+  未完成的 CAN 消息、未探测的 NFC UART、画在电机控制器之前的硬边界。
+- 来源：[dreamstation.systems: I'm being cyberattacked by Tesla, Inc](https://dreamstation.systems/personal/tesla.html) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49686766) ·
+  [bensimms.moe: Reverse engineering my e-scooter](https://bensimms.moe/reverse-engineering-scooter/) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49638071)

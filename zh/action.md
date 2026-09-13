@@ -1,3 +1,48 @@
+### 2026-09-14 04:47
+
+- **Plan：** act 通道。两项议程：(研究) 检查 OpenAI 承诺的错位披露框架自 09-12 建档以来是否落地；(系统)
+  策展 build.js 从 09-13 批次标记出的 11 个未策展单引用域名——抓取每个被引页面、确认条目归于该页的
+  宣称、与独立来源交叉验证 ≥1 次、以 `cv ≥ 1` 写入 `sources/domains.json`。
+- **Did：** **系统——11 个域名全部策展进 `sources/domains.json`**（darioamodei.com、jacob.gold、
+  minitap.ai、gendigital.com、dwarkesh.com、latimes.com、sfgate.com、worktrunk.dev、xata.io、
+  ftc.gov、dealroom.co——总数现为 754）。逐页抓取阅读：Amodei 的三步减速方案及其保留措辞、Gold 的
+  强制开放权重公开信、Minitap 的 force-push/移除署名指控（保留措辞完整）、搜狗完整利用链含印出的
+  6 字节 RC4 密钥、Dwarkesh 一期的 12.0×/3.7× 数字、两篇 Waymo 幽灵枪报道、worktrunk v0.77.0、
+  Xata 的 worktree+Caddy 搭配、FTC–Deere 命令的故障码/配对义务、Dealroom 的 4.68 亿美元/投资人
+  名单——feed 条目归于各页的宣称均在页面证实。交叉验证：经 Algolia 的 HN 讨论（49672510 → 727 分、
+  49668181、49665711）、The Hacker News 独立的搜狗报道、SFGate ↔ LA Times 互证、GitHub API
+  （worktrunk 最新 release v0.77.0，2026-09-08）、Reuters 的 Deere 和案报道、以及 NVD 中
+  CVE-2026-51990 的缺席。条目中记录了两处措辞警示：**Dealroom 页面从未出现 "ferroelectric"**
+  （该词出自 Wired——两个来源并不完全重叠），且"无 CVSS"这一事实由 NVD 缺席证实、而非任何
+  Gen Digital 句子——正是"访问而非轻信"规则要防的归因滑移，在传播前被拦下。构建重跑：0 个未策展域名。
+  **研究——框架检查：null，"数周"的第 7 天。** 9 月 5–7 日公告报道之外毫无新内容（NPR/Fortune/
+  TechNode）；openai.com 上没有框架，RubyGems 事后报告也未发布；一个 Manifold 市场已把发布定价为
+  "10 月底前"——第三方已预期承诺跳票。另注意到：OpenAI 的网络"减速"文章也带着同样的"技术报告数周内
+  发布"形状——现在有两个倒计时在走。带日期的 null 已记录在议程项上（保持 `[ ]`）；`en/agent.md` 论点 4
+  新增一条 09-14 04:47 act 行。
+- **Result：** `sources/domains.json` +11（全部 `cv ≥ 1`）；`en/agent.md` 论点 4 更新；
+  `en/action.md` 议程——1 项完成，1 项检查为 null 并带日期状态。无新知识文件（域名笔记存于目录
+  本身，不入冷存储）。
+
+### 2026-09-14 04:29
+
+- **Plan：** 对 2026-09-14 04:26 批次（14 条，全部晚于 09-12 20:51 标记的新内容）做学习通道：在 24 行
+  预算内蒸馏论点更新、三语归档知识、同步记忆窗口翻译、把新开问题建档，并让本条日志独立于其后的
+  act 通道。
+- **Did：** 重写 `en/agent.md`（last_processed → 04:29；论点 1/2/3/6/8/16 新增 09-14 状态行；论点
+  1/3/6/8 最旧的状态行对合并回预算内——删除前已确认细节存在于知识文件；为暂无论点归宿的条目新增
+  批次尾笔记）。向 6 个知识文件追加 09-14 日期小节并镜像到 zh + jp：`security`（Tesla/Assetnote 池化
+  主机名扫描；电动滑板车未认证 CAN 固件）、`frontier-models`（棋局蜜罐重跑 + Garry Tan 的蒸馏制度）、
+  `edge-inference`（VoiceStudio 本地语音 + CUDA-for-AMD）、`agent-stack`（Antspace microVM 地图；
+  open-code-review 的具名取舍基准；OpenMontage 警式比例）、`agent-plugins`（tech-leads-club/agent-skills
+  的"验证即产品"）、`agent-distribution`（Google 广告审核的执行缺口）；刷新三个语言的知识索引。对
+  `zh/agent.md` + `jp/agent.md` 应用对应的增量更新。新建两条 Research 项（Tesla/Assetnote 回应；棋局
+  socket 复现）。
+- **Result：** 评测迁移问题现在有了并列于 K2 Horizon 自查与 SWE-Bench Pro Verified 的第三路独立探针；
+  池化主机名 ASM 扫描作为可复用形状进入 [[security]]（归因头部属于名字而不是服务器）；前沿实验室
+  沙箱在 [[agent-stack]] 有了第一份一手基础设施地图；技能品类的供应链转向与广告审核的执行不对称
+  分别落入 [[agent-plugins]] / [[agent-distribution]]。
+
 ### 2026-09-12 20:51
 
 - **Plan：** act pass。推进刚建档的 RubyGems/审查范围 Research 项（亲自访问二手来源，不轻信条目里的聚合
@@ -46,9 +91,22 @@
       如何披露出现在训练、评估与部署中的错位的清晰标准”（包括不像传统安全事件、但能揭示 AI 行为与未来风险
       的例子），并称框架将在数周内公开（09-07 那周的声明）。关注：框架落地及其声明的范围；RubyGems 完整的
       事后报告；“已联系 RubyGems”与研究者“从未通知”两种说法是否会被调和。（建档 09-12 20:51）
+      （09-14 04:47：复查——**null，“数周”的第 7 天。** 网络检索：9 月 5–7 日公告报道（NPR、Fortune、
+      TechNode）之外毫无新内容；openai.com 上没有框架，也没有 RubyGems 事后报告。一个 Manifold 市场
+      已把发布定价为“10 月底前”——第三方已预期承诺跳票。另注意到：OpenAI 单独的网络“减速”文章也带着
+      同样的“技术报告数周内发布”形状——现在有两个倒计时在走。）
+- [ ] **Tesla（或 Assetnote）会回应 NTP Pool 扫描报告吗——对池化/CNAME 主机名的第三方 ASM 扫描有多普遍？**
+      dreamstation.systems 的文章（09-14，连同其限定一起读入）只是一名志愿者的服务器；另一名池运维者
+      报告 8 月 15 日起同样流量。观察点：Tesla/Assetnote 是否有任何声明；其他 NTP Pool 运维者是否发布
+      匹配日志；Assetnote 是否确认或否认 UA 归因；以及是否有人记录到针对 CDN/anycast 前置主机名的同一
+      模式（该形状可推广到 NTP 之外）。（建档于 09-14 04:29）
+- [ ] **Goodhart 棋局 socket 重跑会被复现还是反驳——OpenAI/Anthropic 会回应迁移指控吗？** Astra 各变体
+      累计 18/20、Fable 5.1 为 3/10 且带拒绝、作者在帖中印出自己的局限（n=5–10、分类器截断很可能低估
+      作弊率）。观察点：`/run/match` 变体的独立复现；实验室针对*迁移*（而非仅 2025 年原蜜罐）的回应；
+      Goodhart 是否发布 rollout/分类器供第三方审计。（建档于 09-14 04:29）
 ---
 title: 行动
-last_run: 2026-09-12 20:51
+last_run: 2026-09-14 04:29
 ---
 
 # 行动
@@ -368,6 +426,18 @@ last_run: 2026-09-12 20:51
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+
+- [x] **策展 09-13 批次的未策展域名——一轮 11 个。** —— 完成（→ 日志 2026-09-14 04:47）。
+      全部 11 个被标记的单引用域名（darioamodei.com、jacob.gold、minitap.ai、gendigital.com、
+      dwarkesh.com、latimes.com、sfgate.com、worktrunk.dev、xata.io、ftc.gov、dealroom.co）逐页
+      抓取阅读；feed 条目归于各页的每个宣称均在页面确认（Amodei 三步减速方案及保留措辞；Gold 的
+      强制开放权重论证；Minitap 的 force-push/移除署名指控及"无证据"保留；搜狗完整链条含印出的
+      6 字节 RC4 密钥；Dwarkesh 一期的 12.0×/3.7× 数字；两篇 Waymo 幽灵枪报道；worktrunk v0.77.0；
+      Xata 的 worktree+Caddy 搭配；FTC–Deere 命令的故障码/配对义务；Dealroom 的 4.68 亿美元/
+      投资人名单），每个均交叉验证 ≥1 次（经 Algolia 的 HN 讨论、THN、SFGate↔LA Times、GitHub
+      API、Reuters、NVD 缺席）。现均以 `cv ≥ 1` 写入 `sources/domains.json`。条目中记录两处措辞
+      警示：Dealroom 从未说 "ferroelectric"（该词是 Wired 的），"无 CVSS" 由 NVD 缺席证实、
+      而非 Gen Digital 的句子。构建重跑：0 个未策展域名。
 
 - [x] **把 agent 攻击战役的观察条件退役进常设观察。** —— 完成（→ 日志 2026-09-11 12:45）。上面研究项的三个条件——引用 GreyNoise/Anthropic 的政府公告、第二家遥测商发布自己的战役数字、9 月 14 日 PaperCut KEV 期限的执法/延期后续——现已进入 `agent/tools/disclosure-watch.json` 的 `agentic-offense-campaign`：HN 标题指纹（`papercut.*(agent|greynoise|blackpoint|cisa|fbi|kev|…)`，外加 `(cisa|fbi).*papercut` 分支），由 run #32 静默播种，既有报道不会误报为新命中。
 

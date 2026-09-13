@@ -1607,3 +1607,31 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
 - **nashsu/llm_wiki**（Tauri、GPL-3.0、+647/日、18.8k★）：ドキュメントを相互リンクされた増築型の永続ウィキに変える——明示的に Karpathy の LLM-wiki パターンを掲げ、検索型 RAG に対置；2 段階の chain-of-thought 取り込み、4 シグナル知識グラフ + Louvain コミュニティ検出、Web クリッパー、ローカル HTTP API + MCP サーバー。設計の誠実さはデフォルトに現れる：ベクトル検索は任意かつデフォルト無効、レビュー操作は定義済み型に限定（幻覚的操作を許さない）、エージェントスキルはデフォルト読み取り専用。今月 2 件目のトレンド入りした wiki-not-RAG 知識ツール（先に hyperresearch）。
 - **jordan-gibbs/hyperresearch**（MIT、+153/日、2.7k★）：Claude Code ハーネスで、敵対的クリティックと引用チェック付きの階層的 16 段階リサーチパイプラインを実行し、後続セッションが新規取得前に検索する永続 markdown+SQLite ボールトへ蓄積；OpenAlex・Crossref・CORE・DOAB・ClinicalTrials.gov・SEC EDGAR・FRED の 8 データベースを横断する学術検索、Unpaywall/Europe PMC によるオープンアクセス回収、再開可能な実行、MCP サーバー、ローカル Web UI。README は自らのリーダーボード首位の主張に「第三者検証は未了（Third party validation is pending）」の予測とラベル——このカテゴリに通常欠けている誠実さ；Claude Code + Anthropic モデル必須。
 - **asgeirtj/system_prompts_leaks**（CC0-1.0、65k★、+216/日）：抽出されたシステムプロンプトのコレクション——Fable 5.1、Opus 5、Claude Code、GPT-6-Astra、Codex、Gemini、Grok、Cursor、Kimi など——各モデル公開から数日で更新（9 月 8–9 日の commit で現行世代の Claude Code スキル/エージェントプロンプトを追加）。エージェント時代の事実上の API 契約に非公式チェンジログが存在する：ダンプごとの出所は検証不能、プロンプトは古い・抽出後に改変の可能性もあり、そしてこのコーパスが存在するのは、プロンプト開示が技術的に強制できない ToS 違反だから。
+
+## 2026-09-14 04:03 — フロンティアラボのサンドボックスを一次情報でマッピング；Alibaba が内部レビュアーを公開；バイラル技能パックの警戒比率が再現
+
+- **Claude Web の MicroVM を逆アセンブルして「Antspace」を発見（aprilnea.me、HN 16+ pts）：** 著者は
+  自分自身の Claude Code Web セッション内で `strace`・`strings`・`objdump` を走らせサンドボックスを
+  マッピング：**Firecracker microVM**（ACPI OEM ID `FIRECK`）、PID 1 のカスタム Rust `process_api`、
+  セッション間の `init_on_free` ページゼロ化、**sshd なし**、48.5 時間のスナップショット復元ギャップ。
+  シンボル未削除の Go バイナリからは未文書の `AntspaceClient`——tarball アップロードのデプロイ
+  プロトコル——が出ており、著者の読みでは Antspace は社内版 Vercel 競合であり、claude.ai の Web アプリ
+  ビルダー「Baku」のデフォルトデプロイ先。フロンティアラボが agent をどうサンドボックス化するかの
+  一次インフラ地図（スナップショット復元 Firecracker、メモリゼロ化）——そして推論と確認の境界を
+  明示：名前の由来は推測、Antspace が公開されるかは「まだ分からない」。
+- **alibaba/open-code-review（`ocr`、Apache-2.0、23.3k★、+438/日）：** Alibaba の社内 AI レビュアーを
+  オープンソース化——決定論的なエンジニアリング（ファイル選択、locale ファイル束ね、ルールテンプレート、
+  コメント配置）と動的判断のための LLM agent を組合わせ。その **AACR-Bench** はアノテーション付き
+  正解を持つ数少ない agent リポジトリ ベンチマーク：50 リポジトリ、200 PR、80+ エンジニアが交叉検証した
+  1,505 件の注釈付き指摘、しかも*名前を付けたトレードオフ*——Claude Code の約 1/9 トークンでより高い
+  precision と F1、**recall は意図的に低い**。レビューコメントには「precision > recall」が正しい既定値；
+  単一ヘッドライン数字の類型対して、agent リポジトリ ベンチマークの報告樣式の手本。
+- **OpenMontage が 58.3k★で再トレンド——警戒比率の再現：** ランキング前にリポジトリを確認：本物で
+  構造化されている（12 の本番パイプライン、100+ ツール、700+ スキルファイル、7.3k fork、320 オープン
+  issue）が、**リリースはゼロ、最終 push は 9 月 6 日**——何が今日トレンドに戻したのかは不明で、
+  **58k スター対 449 コミット**は歴史的にバイラル技能パックを示す比率であり、出荷するソフトウェアを
+  示さない。採用前に調査を。
+- ソース：[aprilnea.me: Reverse-Engineering Claude Web's MicroVM](https://aprilnea.me/en/blog/reverse-engineering-claude-code-antspace) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49653311) ·
+  [github.com/alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
+  [github.com/calesthio/OpenMontage](https://github.com/calesthio/OpenMontage)

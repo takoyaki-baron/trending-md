@@ -435,3 +435,22 @@ Qwen3.8 27B 对比复现的 BF16 基线，测 GPQA Diamond / IFBench / Terminal-
 - **Samsung zHBM 原型**（THE ELEC，30+ HN 分）：内存直接叠在 AI 加速器芯片上而非旁边——宣称（全部厂商数字、原型阶段）数据处理性能最高 8× HBM5、每瓦性能 3×、热阻减半以上。无量产时间表、容量、定价；悬而未决的问题是内存控制器放在哪层。这是对同时约束前沿训练与 colibri 级本地推理的带宽/容量瓶颈最直接的进攻——是方向，不是规格。
 
 - **Apple ANE 的寄存器级逆向（eileen-yoon/eiln，9 月 12 日）：** 在放弃 Linux ANE 驱动三年后，Eileen Yoon 把 M1 ANE 端到端测绘完毕——16 核 × 128 条 FP16（256 INT8）MAC 通道 = 2,048 通道；Q16.16 饱和累加以 FP16 读出（用溢出探针证实）；tanh 是按 tanh(i/8) 采样的 33 项分段线性 LUT；**没有 ISA——一台固定功能数据流引擎**，任务即固定尺寸的 ControlDMA 寄存器写描述符；2 MiB 共享 L2 + 16× 64 KiB 内核内存，屋顶线脊点 162 OP/byte；KernelDMA **仅载入、约 38 GB/s（GPU 约 78 GB/s）**——她论证这一加性瓶颈专门伤害 transformer 解码，是 NPU 在 LLM 解码上令人失望的具体解释。动机：M5 把 ANE 核心折进 GPU，她读作“独立 NPU 寿终正寝的开始”。她自己的保留意见：“观点太强，难以围绕它建通用加速器平台”，部分版图推理自嘲为“扶手椅工程”，若干寄存器组仍未识别。工具公开（`eiln/ane` Linux 驱动、`ane-notes` 固件笔记）。
+
+## 2026-09-14 04:03 — 本地语音成为单应用品类；CUDA-on-Windows 护城河再添摩擦削减器
+
+- **debpalash/VoiceStudio（AGPL-3.0，26.4k★，+2,546/天——当日最快上升）：** 一个桌面应用打包 16 个
+  TTS 和 11 个 ASR 引擎——克隆、配音、听写、转录、有声书，覆盖 646 种语言目录——技术栈为 Tauri v2 +
+  React + Python FastAPI 后端，自带 **OpenAI 兼容音频 API 和 localhost 上的 MCP 服务器**（默认可被
+  agent 集成）。触发点像 v0.5.2（9 月 10 日）：UX 大改、一键安装引擎、文件夹监听批量配音、新 CPU 音频
+  后端。2,536 个提交。README 做了多数“ElevenLabs 杀手”仓库跳过的诚实功课：标注 beta 状态、Intel Mac
+  无本地后端、默认 OmniVoice 权重为 CC-BY-NC——商业使用受*模型*条款而非应用的 AGPL 约束；AudioSeal
+  水印默认开启。重塑 LLM 推理的本地优先逻辑应用到语音栈，MCP 服务器则是通向 agent 运行时的桥。
+- **Speedstu/CUDA-for-AMD-Windows（创建仅一天，38 星，HN 102+ 分）：** 把长期充满摩擦的 ZLUDA +
+  ROCm/HIP 配方——在 AMD GPU 上运行面向 CUDA 的 Windows 应用——打包成 PowerShell 驱动的安装脚本。
+  关注度才是信号，仓库不是：CUDA 对 Windows ISV 软件的掌控（CUDA-on-Linux 翻译路径不覆盖的那一段）
+  是 GPU 双寡头的最后护城河，每个降低 ZLUDA 配置成本的小仓库都能获得受众。注意：**无许可证文件**
+  ——当作参考脚本，不是可再分发软件。
+- 来源：[github.com/debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) ·
+  [Release notes v0.5.2](https://github.com/debpalash/VoiceStudio/releases) ·
+  [github.com/Speedstu/CUDA-for-AMD-Windows](https://github.com/Speedstu/CUDA-for-AMD-Windows) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49684356)
