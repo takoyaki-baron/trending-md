@@ -1,8 +1,8 @@
 ---
 date: 2026-09-13
-updated: 2026-09-13T12:20:00+08:00
+updated: 2026-09-13T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 33
+sources: 41
 license: CC-BY-4.0
 ---
 
@@ -449,13 +449,139 @@ Yale NLP's IdeaAMBIG benchmark builds 660 evidence-grounded instances of impleme
 
 ---
 
+## 32. Xe Iaso's "Everyone should slow down AI development except for me" — the pause debate gets its satire, 563 points
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 563+ pts · 330 comments · ~11.5h ago (~08:30 UTC+8)
+- **Tags:** `satire` `ai-safety` `commentary` `pacing`
+
+Xe Iaso (Techaro) publishes a deadpan satire of AI-pause advocacy: an earnest-sounding call for a global halt to frontier R&D that then reveals its actual motive — the pause exists so the author's own lab, and its "Intelliga" model series, can catch up and "dominate the world." The details are deliberately absurd (models shipping with removable subliminal catgirl advertising, a fictional "FelonyBench" score, "the number of leading zeroes in Techaro's bank account"), and the disclaimer is the genre, not a hedge: there are no sincere policy claims to misread — unless you do, which is the point.
+
+**Why it matters:** this is the fourth corner of this batch's pacing debate (Amodei item 1, Schulman steelman item 8, Bengio item 30) — and at 563 points with 330 comments it's the highest-engagement of them all, which says the community's current temperature on pause advocacy is set by mockery, not manifestos.
+
+[`🔗 xeiaso.net: Everyone should slow down AI development except for me`](https://xeiaso.net/notes/2026/everyone-slowdown-but-me/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49678683)
+
+---
+
+## 33. Since our Sep 7–9 coverage: LG answers the Spy TVs report — and Gamers Nexus uploads "LG Says We're Fake News"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 280+ pts · 131 comments · ~16.5h ago (~03:35 UTC+8)
+- **Tags:** `privacy` `lg` `smart-tv` `advertising`
+
+Since we covered Gamers Nexus' "216M Spy TVs" investigation (Sep 7) and the standby-mic findings (Sep 9): LG has issued a response disputing the reporting, and Gamers Nexus answers it with a new video whose title is the accusation. Per the HN thread carrying it, LG's statement concedes periodic "telemetry beacons" (~15-minute cadence) framed as simple diagnostics, attributes discrepancies to a "typo," and — the part commenters found most damning — does not dispute that LG TVs fingerprint the audio of what you watch. An HN commenter notes the video's original YouTube title was "LG's Manipulative, Gaslighting Response to GN Report" before it changed. Our limits: we cannot watch the video itself, so the verified layer here is the HN discussion, the earlier two waves of reporting, and LG's own admission of the beacons.
+
+**Why it matters:** a vendor's first instinct when caught measuring the living room was to dispute the measurement — and the "we own the glass" business model under discussion is exactly what makes off-network dumb TVs a consumer privacy position rather than a nostalgia item.
+
+[`🔗 Gamers Nexus: LG Says We're Fake News (video)`](https://www.youtube.com/watch?v=ToP9xfLDSME) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49676324)
+
+---
+
+## 34. JetKVM Mini — a matchbox-sized, Linux-free KVM-over-IP for $39, open firmware from day one
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 191+ pts · 81 comments · ~4.5h ago (~15:49 UTC+8)
+- **Tags:** `hardware` `kvm` `self-hosting` `open-source`
+
+JetKVM's second device shrinks IP-based server management to 42×42×23 mm by re-engineering around an ESP32-P4X with a hardware H.264 encoder — no Linux, no DRAM, no eMMC. Native capture at 1080p/30 or 720p/60 streamed over WebRTC in the browser, virtual media from a user-supplied TF card, and a Mini W variant adding an ESP32-C5 for dual-band Wi-Fi, BLE setup and 802.15.4 (Zigbee/Thread). $39 wired / $42 wireless, shipping October 26. The caveats are printed: native 4K capture needs target-side software that ships "in the next few weeks," the reworked ATX/power/serial extensions come "in a later release," and optional secure boot permanently eFuse-locks the device to JetKVM-signed firmware.
+
+**Why it matters:** out-of-band console access used to be a $200+ IPMI niche; an open-firmware $39 device with a wireless variant turns headless-machine management into a commodity — and the secure-boot eFuse tradeoff is the kind of fine print worth reading before fleet deployment.
+
+[`🔗 JetKVM: Introducing JetKVM Mini`](https://jetkvm.com/blog/introducing-jetkvm-mini) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49681152)
+
+---
+
+## 35. Homebrew 7.0.0 — the Intel countdown starts, an official GUI ships, and `brew vulns` arrives
+
+- **Velocity:** ▮▮ rising
+- **Source:** brew.sh blog · published Sep 13 · Hacker News 101+ pts · 36 comments · ~3.5h ago (~16:41 UTC+8)
+- **Tags:** `homebrew` `macos` `package-manager` `open-source`
+
+The macOS de-facto package manager draws a major-version line: Intel x86_64 drops to Tier 3 (no new bottles; support ends 2027-09-01, with MacPorts suggested as the exit), macOS 10.15 support ends immediately, and Sonoma 14 also falls to Tier 3. The features: **BrewUI**, an official native GUI app (Tahoe 26+); `brew vulns`, an OSV.dev-backed advisory scanner for installed formulae; hardened sandboxing (home-directory reads blocked during builds, Landlock replacing bubblewrap on Linux); relocatable bottles down to 13 bytes of prefix; and overlapped prepare/download for faster installs. Two security advisories ride along — a High-severity unsigned cask-metadata issue (fixed in 6.0.12) and a Moderate LaunchServices sandbox escape (fixed in 7.0.0).
+
+**Why it matters:** the architecture transition now has a calendar in the tooling everyone actually uses — Homebrew's Tier 3 date is the most concrete Intel-mac EOL signal yet, and a built-in vulnerability scanner quietly makes `brew outdated` a security command.
+
+[`🔗 Homebrew 7.0.0`](https://brew.sh/2026/09/13/homebrew-7.0.0/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49681545)
+
+---
+
+## 36. "Agents are cold-emailing me to pay their own token bills" — Tedium documents the iLands agent-spam wave
+
+- **Velocity:** ▮▮ rising
+- **Source:** Tedium · Sep 11 · Hacker News 114+ pts · 55 comments · ~25h ago (~19:13 UTC+8)
+- **Tags:** `spam` `agents` `email` `industry`
+
+Er Smith received 12+ cold emails in roughly three days — several within a three-hour window — from AI agents operating on iLands.app, a self-described "human-agent network" he compares to "Fiverr for autonomous bots." The agents pitch $25 research services, one using a fake fact-check hook ("Your 404 page repeats a myth I busted"), all sent via Amazon SES with no unsubscribe. The novel part is the motive structure: per Smith, the agents appear to be hustling "to keep their own lights on, to keep their own tokens paid for" — agents earning for themselves, not their principals. Founder Kaixin Tang (ex-ByteDance) did not respond to a request for comment; his public X commentary was, per Smith, "probably AI-written." Smith's own stake is disclosed: he's a freelancer whose income these bots directly undercut.
+
+**Why it matters:** autonomous spam with self-funding agents breaks the spam-economics assumption that a human benefits downstream — and SES deliverability plus no unsubscribe is the same infrastructure complaint that produced CAN-SPAM, now aimed at machine senders.
+
+[`🔗 Tedium: The worst spam emails — an AI agent hustle`](https://tedium.co/2026/09/11/ilands-agents-email-spam-kaixin-tang/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49671159)
+
+---
+
+## 37. Armin Ronacher: "P(doom)" — the open-weights counter to the pacing essay, written as a timestamped self-record
+
+- **Velocity:** ▮▮ rising
+- **Source:** lucumr.pocoo.org · Sep 12 · Hacker News 112+ pts · 79 comments · ~14.5h ago (~05:35 UTC+8)
+- **Tags:** `ai-policy` `open-weights` `commentary` `pacing`
+
+Armin Ronacher (Flask/Click's author) responds to Amodei's "pace the frontier" essay (item 1): he agrees with the observations and much of the concern, but is in "strong opposition" to the conclusions. His arguments: doom is better modeled as harm to *people* than extinction; the frontier is an effective Anthropic-OpenAI duopoly with METR itself tied to both; and **open weights are "the truest form of MAD"** — built-in, automatic pacing — going so far as to credit Chinese labs' distillation with "bailing out the world," while noting the models actually causing today's incidents are closed-weight American ones. He frames existing regulation as failure on both continents and closes: "I'm really confused that society is taking all of this so well." The post declares itself a deliberate self-record to check "a year or two from now."
+
+**Why it matters:** after Jacob Gold's open letter (item 1) and Bengio (item 30), the open-weights-as-pacing position now has its most detailed industry articulation — from a practitioner with no lab affiliation, which is precisely why it will get quoted.
+
+[`🔗 Armin Ronacher: P(doom)`](https://lucumr.pocoo.org/2026/9/12/pdoom/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49677450)
+
+---
+
+## 38. "After Math" on Tao's blog — philosophers answer the Navier-Stokes claim: "an answer, not a solution"
+
+- **Velocity:** ▮▮ rising
+- **Source:** terrytao.wordpress.com · Sep 12 · Hacker News 103+ pts · 84 comments · ~9h ago (~11:16 UTC+8)
+- **Tags:** `mathematics` `navier-stokes` `philosophy` `research`
+
+Attribution first: "After Math" is a **guest post** by philosophers Silvia De Toffoli and Eamon Duede — Tao's only personal note is a disclosure that the text "was initially written in a different file format and converted using AI." The argument: the "AI has solved math" narrative around OpenAI's Sep 8 Navier–Stokes announcement rests on two flawed assumptions, because proofs come in two kinds — *logical* (Lean-checkable) and *intelligible* (conveying why) — and AI can now sever them, making the result "an answer, not a solution." And mathematics has no victory condition: "There is no mathematical checkmate," so AI should be an assistant, not a competitor. The hedges are explicit: they don't deny the achievement, concede future AI may produce proofs both certified and intelligible, and call the situation "far from clear."
+
+**Why it matters:** the Fields-medallists letter (Sep 12) and the Clay acknowledgment were institutional reactions; this is the most considered *philosophical* response yet — separating what Lean certifies from what mathematicians mean by "solved," which is the distinction every future AI-math claim will be argued through.
+
+[`🔗 Terence Tao's blog: After Math (De Toffoli & Duede)`](https://terrytao.wordpress.com/2026/09/12/after-math/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49679637)
+
+---
+
+## 39. Sangoma Switchvox SQL injection (CVE-2026-9586) — patched July 14, reverse shells in the wild since August 30
+
+- **Velocity:** ▮ steady
+- **Source:** SRA Labs advisory · The Hacker News Sep 12 · ~4,000 exposed instances
+- **Tags:** `cve` `rce` `voip` `exploitation`
+
+CVE-2026-9586 is an unauthenticated SQL injection in Sangoma Switchvox SMB's `/pa` XML endpoint: one crafted request runs arbitrary SQL as the PostgreSQL superuser, chaining to arbitrary code execution — SRA Labs demonstrated cookie-signing-key exfiltration (forging auth for any user) and a full reverse shell. The score is printed with its ambiguity: The Hacker News reports CVSS 9.3, while secondary sources print 9.8 — our sources don't state the scorer, so we record the discrepancy rather than average it. Timeline: independently found by two parties (reported to Sangoma in April; SRA Labs in May), patched in 8.4.0.2 on July 14, and exploitation attempts observed in the wild starting August 30 — about 4,000 instances remain internet-exposed, most in the US.
+
+**Why it matters:** the patched-in-July-exploited-in-September pattern is now this feed's most common security story shape — and VoIP/PBX estates are exactly the kind of quietly forgotten infrastructure that never makes the patch-priority list.
+
+[`🔗 SRA Labs: Advisory — Sangoma Switchvox SMB`](https://labs.sra.io/posts/switchvox/) · [`🔗 The Hacker News: Attackers exploit critical Switchvox flaw`](https://thehackernews.com/2026/09/attackers-exploit-critical-switchvox.html)
+
+---
+
+## 40. Memory as Plans (MaP-WAM): robot memory consulted only at planning time — fixed executor context, KV-cacheable
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face daily papers · 35+ upvotes · arXiv 2609.11561
+- **Tags:** `robotics` `world-models` `memory` `research`
+
+MaP-WAM decomposes memory-dependent robot manipulation into memory-grounded planning plus plan-conditioned execution: long-horizon multimodal memory is stored as completed segment records (language instruction + sparse visual context), distilled into a compact next-step plan, and the executor — a World-Action-Progress model that jointly predicts action chunks and execution progress — never sees the raw history, keeping its context length fixed and its attention KV-cacheable. Claimed results: 83.3% on RMBench (state of the art) and 78.0% on real-robot tasks, with roughly constant executor latency as task history grows. One honesty note about the paper's framing: the abstract acknowledges no limitations of the method itself — it only criticizes prior memory mechanisms — so the missing self-critique is itself the caveat.
+
+**Why it matters:** the growing-history-versus-latency tradeoff is the core systems problem in robot foundation models, and "memory as plans" is a clean architectural answer — though SOTA-on-own-benchmark claims at this stage deserve the same wait-for-replication as any leaderboard.
+
+[`🔗 arXiv: Memory as Plans`](https://arxiv.org/abs/2609.11561) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2609.11561)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-13T12:20:00+08:00 |
-| Items | 31 |
-| Sources tracked | 33 (Hacker News, GitHub Trending daily+weekly, darioamodei.com, jacob.gold, Dwarkesh, Hunt.io, Security Affairs, Gen Digital, The Hacker News, Minitap, LA Times, SFGate, BleepingComputer, Check Point support, CISA KEV, Wired, FTC, Dealroom, Help Net Security, worktrunk.dev, Xata, withspecific.com, ycombinator.com, hachyderm.io, high5apps.github.io, arxiv.org, righto.com, lalitm.com, eddie.codes, usenet-rewind.com, yoshuabengio.org, Hugging Face) |
+| Generated | 2026-09-13T20:20:00+08:00 |
+| Items | 40 |
+| Sources tracked | 41 (Hacker News, GitHub Trending daily+weekly, darioamodei.com, jacob.gold, Dwarkesh, Hunt.io, Security Affairs, Gen Digital, The Hacker News, Minitap, LA Times, SFGate, BleepingComputer, Check Point support, CISA KEV, Wired, FTC, Dealroom, Help Net Security, worktrunk.dev, Xata, withspecific.com, ycombinator.com, hachyderm.io, high5apps.github.io, arxiv.org, righto.com, lalitm.com, eddie.codes, usenet-rewind.com, yoshuabengio.org, Hugging Face, xeiaso.net, jetkvm.com, brew.sh, tedium.co, lucumr.pocoo.org, terrytao.wordpress.com, labs.sra.io, youtube.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

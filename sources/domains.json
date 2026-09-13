@@ -6582,5 +6582,50 @@
     "en": "Zhipu (Z.ai) — GLM series vendor research posts; canonical for GLM-5.3's same-base/post-training claim (vendor-reported benchmarks). Cross-checked vs docs.z.ai (08-21).",
     "jp": "Zhipu（Z.ai）——GLMシリーズのベンダー研究記事。GLM-5.3の同一ベース/ポストトレーニングのみという主張（ベンダー発表ベンチ）の正典。docs.z.ai とクロスチェック済み（08-21）。",
     "zh": "智谱（Z.ai）——GLM 系列厂商研究文章；GLM-5.3 同底座/纯后训练说法（厂商自报基准）的权威来源。已对照 docs.z.ai 交叉核验（08-21）。"
+  },
+  "tedium.co": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Er Smith's long-running niche internet-culture newsletter — first-hand reporting with the author's own conflicts of interest disclosed. Cross-checked (09-13): the iLands agent-spam counts and SES/no-unsubscribe details match the HN discussion of the piece.",
+    "zh": "Er Smith 主理的长期小众互联网文化通讯——一手报道，并披露作者自身的利益相关。已交叉核验（09-13）：iLands agent 垃圾邮件的计数与 SES/无退订细节与该文的 HN 讨论一致。",
+    "jp": "Er Smith 氏の長期にわたるニッチなインターネット文化ニュースレター——一次報道で、著者自身の利益相反も開示。クロスチェック済み（09-13）：iLands エージェントスパムの計数と SES/配信登録解除なしの詳細は本文の HN 議論と一致。"
+  },
+  "labs.sra.io": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Security Risk Advisors' research lab — publishes full offensive-security advisories with reproduction detail. Cross-checked (09-13): the Switchvox CVE-2026-9586 chain (cookie-key exfiltration, reverse shell) matches The Hacker News' independent writeup.",
+    "zh": "Security Risk Advisors 的研究实验室——发布带复现细节的完整攻击性安全公告。已交叉核验（09-13）：Switchvox CVE-2026-9586 攻击链（cookie 密钥窃取、反弹 shell）与 The Hacker News 的独立报道一致。",
+    "jp": "Security Risk Advisors のリサーチラボ——再現詳細を含む完全な攻撃的セキュリティアドバイザリを公開。クロスチェック済み（09-13）：Switchvox CVE-2026-9586 の攻撃チェーン（cookie 鍵持ち出し、リバースシェル）は The Hacker News の独立記事と一致。"
+  },
+  "jetkvm.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "JetKVM's vendor blog — precise hardware specs and printed caveats (secure-boot eFuse lock, deferred software), but it is the seller describing its own product. Cross-checked (09-13): specs match the HN discussion; ship date is a vendor claim.",
+    "zh": "JetKVM 的厂商博客——硬件规格精确、注意事项印在明面上（安全启动 eFuse 锁定、延期的软件），但毕竟是卖家描述自家产品。已交叉核验（09-13）：规格与 HN 讨论一致；发货日期为厂商说法。",
+    "jp": "JetKVM のベンダーブログ——ハードウェア仕様は正確で注意点も明記（セキュアブートの eFuse ロック、先送りされたソフト）だが、自社製品を語る売り手である。クロスチェック済み（09-13）：仕様は HN 議論と一致；出荷日はベンダー主張。"
+  },
+  "xeiaso.net": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Xe Iaso's personal blog — first-hand practitioner writing, clearly labeled when satirical. Cross-checked (09-13): the pause-advocacy satire's content matches the HN discussion; genre (satire) confirmed by full-text read, not the headline.",
+    "zh": "Xe Iaso 的个人博客——一线实践者写作，讽刺内容有明确标注。已交叉核验（09-13）：暂停倡导讽刺文的内容与 HN 讨论一致；体裁（讽刺）经全文阅读确认，而非只看标题。",
+    "jp": "Xe Iaso 氏の個人ブログ——実務者による一次的な書き手で、風刺は明確にラベルされる。クロスチェック済み（09-13）：ポーズ推進風刺の内容は HN 議論と一致；ジャンル（風刺）は見出しでなく全文読解で確認。"
+  },
+  "brew.sh": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The Homebrew project's official blog — release posts with concrete deprecation dates and security-advisory detail. Cross-checked (09-13): 7.0.0 changes (Tier 3 Intel, BrewUI, brew vulns, Landlock) match the HN discussion.",
+    "zh": "Homebrew 项目官方博客——发布文带有具体的弃用日期与安全公告细节。已交叉核验（09-13）：7.0.0 的变更（Intel 降至 Tier 3、BrewUI、brew vulns、Landlock）与 HN 讨论一致。",
+    "jp": "Homebrew プロジェクトの公式ブログ——具体的な非推奨日とセキュリティアドバイザリの詳細を含むリリース記事。クロスチェック済み（09-13）：7.0.0 の変更（Intel の Tier 3 化、BrewUI、brew vulns、Landlock）は HN 議論と一致。"
   }
 }

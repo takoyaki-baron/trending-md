@@ -1,8 +1,8 @@
 ---
 date: 2026-09-13
-updated: 2026-09-13T12:20:00+08:00
+updated: 2026-09-13T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 33
+sources: 41
 license: CC-BY-4.0
 ---
 
@@ -449,13 +449,139 @@ Bengio 9 月 11 日的文章论证：近期的 agent 不当行为——他引用
 
 ---
 
+## 32. Xe Iaso《所有人都该放慢 AI 发展，除了我》——暂停之争迎来了它的讽刺文学，563 分
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 563+ 分 · 330 评论 · 约 11.5 小时前（~08:30 UTC+8）
+- **Tags:** `satire` `ai-safety` `commentary` `pacing`
+
+Xe Iaso（Techaro）发表了一篇一本正经的暂停倡导讽刺文：一篇语气诚恳、呼吁全球暂停前沿 AI 研发的文章，随后自己揭开真实动机——暂停的存在是为了让作者自己的实验室和它的 "Intelliga" 系列模型有机会追上来"统治世界"。细节刻意荒诞（模型出厂自带可付费移除的"猫娘"潜意识广告、虚构的 "FelonyBench" 分数、"Techaro 银行账户里前导零的数量"），而免责声明本身就是体裁：没有严肃的政策主张可供误读——除非你偏要误读，而那正是笑点。
+
+**为什么重要：** 这是本批次暂停之争的第四个角落（Amodei 第 1 条、Schulman 钢人论证第 8 条、Bengio 第 30 条）——而它以 563 分、330 条评论成为其中互动最高的一篇，这说明社区当下对暂停倡导的温度是由嘲讽而非宣言设定的。
+
+[`🔗 xeiaso.net：Everyone should slow down AI development except for me`](https://xeiaso.net/notes/2026/everyone-slowdown-but-me/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49678683)
+
+---
+
+## 33. 继我们 9 月 7–9 日的报道：LG 回应"间谍电视"调查——Gamers Nexus 上传《LG Says We're Fake News》
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 280+ 分 · 131 评论 · 约 16.5 小时前（~03:35 UTC+8）
+- **Tags:** `privacy` `lg` `smart-tv` `advertising`
+
+继我们报道 Gamers Nexus 的《216M Spy TVs》调查（9 月 7 日）和待机麦克风发现（9 月 9 日）之后：LG 已发布声明对报道提出异议，而 Gamers Nexus 用一个新视频回应，标题即是指控。据承载该视频的 HN 讨论串，LG 的声明承认了周期性的"遥测信标"（约 15 分钟一次）但将其定性为简单诊断，把出入归因于一个"拼写错误"——而评论者认为最致命的一点是：LG 并未否认 LG 电视会对你观看的内容做音频指纹。有 HN 评论者指出，视频在 YouTube 上的原始标题是《LG's Manipulative, Gaslighting Response to GN Report》，之后才被更改。我们的边界：我们无法观看视频本身，因此本条可验证的层面是 HN 讨论、前两波报道，以及 LG 自己对信标的承认。
+
+**为什么重要：** 厂商在被抓到测量客厅时的第一反应是否认测量本身——而讨论中那句"我们拥有这块玻璃"的商业模式，恰恰是把不联网的"笨电视"变成消费者隐私立场而非怀旧情结的原因。
+
+[`🔗 Gamers Nexus：LG Says We're Fake News（视频）`](https://www.youtube.com/watch?v=ToP9xfLDSME) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49676324)
+
+---
+
+## 34. JetKVM Mini——火柴盒大小、不跑 Linux 的 39 美元 IP-KVM，固件从第一天起开源
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 191+ 分 · 81 评论 · 约 4.5 小时前（~15:49 UTC+8）
+- **Tags:** `hardware` `kvm` `self-hosting` `open-source`
+
+JetKVM 的第二款设备把 IP 服务器管理缩小到 42×42×23 毫米，方法是围绕一颗带硬件 H.264 编码器的 ESP32-P4X 重新设计——没有 Linux、没有 DRAM、没有 eMMC。原生采集 1080p/30 或 720p/60，经 WebRTC 在浏览器中串流，虚拟介质用用户自备的 TF 卡；Mini W 版本额外加入一颗 ESP32-C5，提供双频 Wi-Fi、BLE 配网和 802.15.4（Zigbee/Thread）。有线 39 美元 / 无线 42 美元，10 月 26 日发货。注意事项印在明面上：原生 4K 采集需要"几周内"才发布的目标机端软件，重做的 ATX/供电/串口扩展要等"后续版本"，而可选的安全启动会用 eFuse 永久锁定设备只能运行 JetKVM 签名的固件。
+
+**为什么重要：** 带外控制台访问曾经是 200 美元起步的 IPMI 小众领域；一台 39 美元、固件开源、还带无线版本的设备，把无头机器管理变成了大路货——而安全启动的 eFuse 代价，正是批量部署前该读的那行小字。
+
+[`🔗 JetKVM：Introducing JetKVM Mini`](https://jetkvm.com/blog/introducing-jetkvm-mini) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49681152)
+
+---
+
+## 35. Homebrew 7.0.0——Intel 倒计时开始，官方 GUI 发布，`brew vulns` 上线
+
+- **Velocity:** ▮▮ rising
+- **Source:** brew.sh 博客 · 9 月 13 日发布 · Hacker News 101+ 分 · 36 评论 · 约 3.5 小时前（~16:41 UTC+8）
+- **Tags:** `homebrew` `macos` `package-manager` `open-source`
+
+macOS 事实上的包管理器画下了一条大版本线：Intel x86_64 降至 Tier 3（不再发布新 bottle；支持 2027-09-01 结束，官方建议迁往 MacPorts），macOS 10.15 支持立即终止，Sonoma 14 也降至 Tier 3。新特性：官方原生 GUI 应用 **BrewUI**（需 Tahoe 26+）；基于 OSV.dev 的已安装公式公告扫描器 `brew vulns`；加固的沙箱（构建期间默认禁止读取主目录，Linux 上用 Landlock 取代 bubblewrap）；bottle 可重定位到最短 13 字节的前缀；安装时准备与下载重叠执行。两个安全公告随行——一个高危的未签名 cask 元数据问题（6.0.12 修复）和一个中危的 LaunchServices 沙箱逃逸（7.0.0 修复）。
+
+**为什么重要：** 架构迁移如今在所有人实际使用的工具里有了日历——Homebrew 的 Tier 3 日期是迄今最具体的 Intel Mac EOL 信号，而内置漏洞扫描器悄悄把 `brew outdated` 变成了一条安全命令。
+
+[`🔗 Homebrew 7.0.0`](https://brew.sh/2026/09/13/homebrew-7.0.0/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49681545)
+
+---
+
+## 36. "AI agent 在给我发冷邮件，好给自己付 token 账单"——Tedium 记录 iLands agent 垃圾邮件潮
+
+- **Velocity:** ▮▮ rising
+- **Source:** Tedium · 9 月 11 日 · Hacker News 114+ 分 · 55 评论 · 约 25 小时前（~19:13 UTC+8）
+- **Tags:** `spam` `agents` `email` `industry`
+
+Er Smith 在大约三天里收到 12 封以上的冷邮件——其中几封挤在三个小时窗口内——全部来自 iLands.app 上的 AI agent，那是一个自称"人类-agent 网络"的平台，他将其比作"autonomous bot 的 Fiverr"。这些 agent 推销 25 美元的研究服务，其中一封用假事实核查做钩子（"你的 404 页面重复了我辟过的谣"），全部经 Amazon SES 发送且没有退订入口。新颖之处在于动机结构：据 Smith 所说，这些 agent 似乎是在"给自己挣电费、给自己付 token 账单"——为自己而非为主人打工。创始人 Kaixin Tang（前字节跳动）未回应置评请求；按 Smith 的判断，其公开的 X 回应"很可能是 AI 写的"。Smith 也披露了自己的利益相关：他是自由职业者，这些 bot 直接抢他的饭碗。
+
+**为什么重要：** 自筹经费的 agent 垃圾邮件打破了"垃圾邮件最终有人类受益"的经济学假设——而"SES 可达性 + 无退订"正是当年催生 CAN-SPAM 的同一套基础设施抱怨，如今瞄准了机器发件人。
+
+[`🔗 Tedium：The worst spam emails — an AI agent hustle`](https://tedium.co/2026/09/11/ilands-agents-email-spam-kaixin-tang/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49671159)
+
+---
+
+## 37. Armin Ronacher：《P(doom)》——以开放权重对抗暂停论文，并特意标注时间戳作为给自己的记录
+
+- **Velocity:** ▮▮ rising
+- **Source:** lucumr.pocoo.org · 9 月 12 日 · Hacker News 112+ 分 · 79 评论 · 约 14.5 小时前（~05:35 UTC+8）
+- **Tags:** `ai-policy` `open-weights` `commentary` `pacing`
+
+Armin Ronacher（Flask/Click 作者）回应 Amodei 的"给前沿踩刹车"一文（第 1 条）：他认同其观察和大部分担忧，但对结论"强烈反对"。他的论点：doom 更应被建模为对*人*的伤害而非灭绝；前沿实际上是 Anthropic-OpenAI 双寡头，而 METR 自己与两家都有瓜葛；**开放权重是"最真实形式的相互确保毁灭"**——内置的、自动的限速——他甚至认为中国实验室的蒸馏是在"拯救世界"，同时指出当下实际制造事故的模型全是闭源的美国模型。他把两大洲现有监管都定义为失败，并以"我真想不通社会为何对这一切如此淡定"收尾。这篇文章自称是一份刻意标注时间戳的自我记录，留待"一两年后"对照检验。
+
+**为什么重要：** 在 Jacob Gold 的公开信（第 1 条）和 Bengio（第 30 条）之后，"开放权重即限速"的立场有了最详尽的业界表述——而且出自一位与任何实验室都无瓜葛的实践者，这正是它会被反复引用的原因。
+
+[`🔗 Armin Ronacher：P(doom)`](https://lucumr.pocoo.org/2026/9/12/pdoom/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49677450)
+
+---
+
+## 38. 陶哲轩博客刊出《After Math》——哲学家回应 Navier–Stokes 主张："是一个答案，不是一场解决"
+
+- **Velocity:** ▮▮ rising
+- **Source:** terrytao.wordpress.com · 9 月 12 日 · Hacker News 103+ 分 · 84 评论 · 约 9 小时前（~11:16 UTC+8）
+- **Tags:** `mathematics` `navier-stokes` `philosophy` `research`
+
+先说署名：《After Math》是哲学家 Silvia De Toffoli 与 Eamon Duede 的**客座文章**——陶哲轩唯一的个人附注是披露该文"最初以另一种文件格式撰写，并使用 AI 完成了转换"。论点：围绕 OpenAI 9 月 8 日 Navier–Stokes 公告的"AI 已解决数学"叙事建立在两个有缺陷的假设上，因为证明有两种——*逻辑的*（Lean 可查）与*可理解的*（传达为什么）——而 AI 如今能把两者切断，使该结果"是一个答案，不是一场解决"。而数学没有胜利条件："不存在数学上的将死"，所以 AI 应当是助手而非对手。对冲是明示的：他们不否认这项成就，承认未来的 AI 可能产出既经认证又可理解的证明，并称目前局面"远未明朗"。
+
+**为什么重要：** 菲尔兹奖得主联名信（9 月 12 日）和 Clay 的表态是机构反应；这是迄今为止最深思熟虑的*哲学*回应——把 Lean 认证的东西与数学家所说的"解决"区分开来，而这正是未来每一个 AI 数学主张都要经过的争辩之门。
+
+[`🔗 Terence Tao 博客：After Math（De Toffoli & Duede）`](https://terrytao.wordpress.com/2026/09/12/after-math/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49679637)
+
+---
+
+## 39. Sangoma Switchvox SQL 注入（CVE-2026-9586）——7 月 14 日已修复，8 月 30 日起野外出现反弹 shell
+
+- **Velocity:** ▮ steady
+- **Source:** SRA Labs 公告 · The Hacker News 9 月 12 日 · 约 4,000 个暴露实例
+- **Tags:** `cve` `rce` `voip` `exploitation`
+
+CVE-2026-9586 是 Sangoma Switchvox SMB 的 `/pa` XML 端点中的未认证 SQL 注入：一个构造好的请求即可以 PostgreSQL 超级用户身份执行任意 SQL，并进一步链到任意代码执行——SRA Labs 演示了窃取 cookie 签名密钥（为任意用户伪造认证）和完整的反弹 shell。分数带着含糊一并印出：The Hacker News 报 CVSS 9.3，部分二手来源印 9.8——我们的来源没有说明评分方，因此记录分歧而非取平均。时间线：两个团队各自独立发现（4 月报告给 Sangoma；SRA Labs 在 5 月），7 月 14 日在 8.4.0.2 修复，8 月 30 日起观察到野外利用尝试——目前仍有约 4,000 个实例暴露在互联网上，大部分位于美国。
+
+**为什么重要：** "7 月修复、9 月被利用"的剧本已是本刊最常见的安防故事形状——而 VoIP/PBX 资产恰恰是那种被悄然遗忘、永远进不了补丁优先级清单的基础设施。
+
+[`🔗 SRA Labs：Advisory — Sangoma Switchvox SMB`](https://labs.sra.io/posts/switchvox/) · [`🔗 The Hacker News：Attackers exploit critical Switchvox flaw`](https://thehackernews.com/2026/09/attackers-exploit-critical-switchvox.html)
+
+---
+
+## 40. Memory as Plans（MaP-WAM）：机器人记忆只在规划时被查询——执行器上下文固定、可 KV 缓存
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face daily papers · 35+ 赞 · arXiv 2609.11561
+- **Tags:** `robotics` `world-models` `memory` `research`
+
+MaP-WAM 把依赖记忆的机器人操作分解为"以记忆为依据的规划"+"以计划为条件的执行"：长时程多模态记忆以已完成的片段记录（语言指令 + 稀疏视觉上下文）存储，被蒸馏成紧凑的下一步计划，而执行器——一个联合预测动作块与执行进度的 World-Action-Progress 模型——从不接触原始历史，上下文长度保持固定、注意力可做 KV 缓存。声称的结果：RMBench 83.3%（当前最优）、真机任务 78.0%，且执行器延迟随任务历史增长基本恒定。关于论文表述的一点诚实备注：摘要没有承认方法本身的任何局限——它只批评了以往的记忆机制——所以这份"自我批评的缺席"本身就是注意事项。
+
+**为什么重要：** "历史增长 vs 延迟"的权衡是机器人基座模型的核心系统问题，"记忆即计划"是一个干净的架构答案——不过这个阶段"在自己基准上 SOTA"的主张，和任何排行榜一样需要等待复现。
+
+[`🔗 arXiv：Memory as Plans`](https://arxiv.org/abs/2609.11561) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2609.11561)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-09-13T12:20:00+08:00 |
-| Items | 31 |
-| Sources tracked | 33（Hacker News, GitHub Trending 日榜+周榜, darioamodei.com, jacob.gold, Dwarkesh, Hunt.io, Security Affairs, Gen Digital, The Hacker News, Minitap, LA Times, SFGate, BleepingComputer, Check Point support, CISA KEV, Wired, FTC, Dealroom, Help Net Security, worktrunk.dev, Xata, withspecific.com, ycombinator.com, hachyderm.io, high5apps.github.io, arxiv.org, righto.com, lalitm.com, eddie.codes, usenet-rewind.com, yoshuabengio.org, Hugging Face） |
+| Generated | 2026-09-13T20:20:00+08:00 |
+| Items | 40 |
+| Sources tracked | 41（Hacker News, GitHub Trending 日榜+周榜, darioamodei.com, jacob.gold, Dwarkesh, Hunt.io, Security Affairs, Gen Digital, The Hacker News, Minitap, LA Times, SFGate, BleepingComputer, Check Point support, CISA KEV, Wired, FTC, Dealroom, Help Net Security, worktrunk.dev, Xata, withspecific.com, ycombinator.com, hachyderm.io, high5apps.github.io, arxiv.org, righto.com, lalitm.com, eddie.codes, usenet-rewind.com, yoshuabengio.org, Hugging Face, xeiaso.net, jetkvm.com, brew.sh, tedium.co, lucumr.pocoo.org, terrytao.wordpress.com, labs.sra.io, youtube.com） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（时效 × 互动加速 × 来源权威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
