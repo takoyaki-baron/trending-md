@@ -1,8 +1,8 @@
 ---
 date: 2026-09-14
-updated: 2026-09-14T04:25:00+08:00
+updated: 2026-09-14T12:06:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 12
+sources: 19
 license: CC-BY-4.0
 ---
 
@@ -277,13 +277,257 @@ Antspace 是否会公开发布"仍有待观察"。
 
 ---
 
+## 15. Fable 5.1 解开 Cyphral Distich — 一条沉睡 370 年的密码 44 分钟告破,第二条也一样
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 598+ pts · 7小时前 (~05:06 UTC+8)
+- **Tags:** `ai-research` `cryptography` `history`
+
+Vals AI 给 Claude Fable 5.1 布置了一道开放式任务:解开 Cyphral Distich——Sir Thomas
+Urquhart《Logopandecteision》(1653) 末尾由 64 个数字组成的两行密码,至少从 1899 年起就是公开
+难题,常年位列 Klaus Schmeh 五十大未解密码榜。44 分钟、17.6 万 token、零人工干预之后,模型找到
+了几个世纪的词频分析都错过的关键:密钥不是外部的密码字母表,而是书本身。密码紧跟着 Urquhart 的
+32 条"Proquiritations",第 i 个密码数字指向第 i 条 Proquiritation 中的第 N 个单词,取首字母——
+拼出"O GOD UPHOLD KING CHARLS THE SECOND AND MAKE HIM THE SUPREME RULER OF THIS LAND"。
+每行恰好 32 个字母,两行押韵,而向查理二世的祈祷完全符合保王派 Urquhart 的立场。博文还报告
+模型用同样的方法破译了剩下的 Cyphral Octastich(285 个数字,《The Jewel》,1652)。
+
+**为什么重要:**这次破译的自洽程度在密码破解史上罕见——格律、韵脚、字母数、人物生平同时咬合——
+但注意博文自己的措辞("它看起来真的解出来了")和 8 月 31 日的发布日期:登顶 HN 头条的"重新
+翻红"才是新闻。作为一种智能体基准,它是长时程开放研究任务(且答案可验证)的好兆头。
+
+> 人类密码学家的失败尝试全都假设密钥是外部的。模型的第一步是去读整本书。
+
+[`🔗 vals.ai: Claude Fable 5.1 Solves the Cyphral Distich`](https://www.vals.ai/blogs/fable-solves-cyphral-distich) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49688695)
+
+---
+
+## 16. David Sacks 回应 Amodei 的限速檄文:"请便"——但不要监管,也不要反垄断豁免
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 284+ pts · 11小时前 (~00:52 UTC+8)
+- **Tags:** `policy` `pacing` `openai` `anthropic`
+
+针对 Amodei 的《We must pace the frontier》以及 Sam Altman 的附议,白宫 AI 与加密事务负责人
+发文称,人们"可能对我的回应感到意外:请便(go ahead)"——实验室完全可以自愿放慢自己的前沿
+发布。但他划掉的是任何执行层:没有前沿发布的监管审批制度,也不给竞争者协调限速的反垄断豁免。
+这与今天第 5 条 Garry Tan 向监管者提出的"美国蒸馏制度"诉求恰好相隔一天、方向相反。
+
+**为什么重要:**限速辩论现在桌上摆着三种截然不同的政策立场——Amodei 的实验室协调、Tan 的强制
+蒸馏开放、Sacks 的纯自由放任——而悬而未决的问题是"自愿"限速是否成立:少数竞争者协调扣留
+前沿能力,恰恰是反垄断法为之而生的行为。辩论的焦点已不再是"要不要限速",而是"谁有权让谁
+限速"。
+
+[`🔗 x.com: David Sacks on pacing the frontier`](https://x.com/DavidSacks/status/2098973625252708460) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49685991)
+
+---
+
+## 17. Signal 正在基于零知识凭证构建无手机号注册
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 125+ pts · 6小时前 (~05:47 UTC+8)
+- **Tags:** `privacy` `zero-knowledge` `signal` `registration`
+
+冲上 HN 的功能请求帖记录了 Signal-Android 仓库里落地的一系列提交:"Add basic ability to
+register numberless account"、"Hide some settings for numberless accounts",以及最能说明问题
+的"Use new zkgroup credential for numberless accounts"(均在 9 月初)。ZKP 机制对 Signal 并不
+新鲜:同一套匿名凭证系统早已支撑群组和捐赠徽章,帖子里的 Signal 参与者还把它扩展到"不泄露
+内容即可验证用户名约束"。新的是把它用于账号创建本身——手机号这个 Signal 最古老的元数据软肋
+变成了可选项。
+
+**为什么重要:**Signal 的安全模型以"不信任服务器"著称——但注册环节始终向服务器、也向所有
+知道你号码的人泄露一个硬标识。把注册迁移到 ZK 凭证上,等于关闭账号与现实身份之间最后一条
+强制关联。注意:提交存在不等于已发布——目前还没有任何发布版本或官方公告。
+
+[`🔗 Signal Community: Registration without a phone number`](https://community.signalusers.org/t/registration-without-a-phone-number/2222?page=10) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49689048)
+
+---
+
+## 18. The Events Calendar:60 万安装量的 WordPress 插件两处未认证 RCE(CVSS 9.8)——而且第一版补丁没能守住
+
+- **Velocity:** ▮ rising
+- **Source:** NVD · CVE-2026-78006 + CVE-2026-78159 · 9月12日发布
+- **Tags:** `wordpress` `rce` `cve` `wordfence`
+
+Wordfence 给 The Events Calendar(60 万活跃安装)指派了两个 CVSS 9.8 的未认证 RCE。
+CVE-2026-78159 影响 6.17.3 及更早版本;CVE-2026-78006 连 6.17.4 也一并影响——针对第一个漏洞的
+补丁可被绕过,原因是 PHP 在 pre-parse 阶段就会触发魔术方法,而
+`enable_rendering_widget_copied()` 会在 `unserialize()` 之前伪造出合法的 `wp_hash` 完整性
+属性。两处漏洞都无需认证即可利用。修复版 6.17.4.1 于 9 月 10 日上线,CVE 于 9 月 12 日发布——
+先补后披露,暂无在野利用报告。
+
+**为什么重要:**两段式 CVE 才是重点:这是一条 widget 渲染反序列化路径,而被绕过的恰恰是
+sanitizer 的防护模型本身(完整性哈希校验)。按惯例记录评分方:CVSS 9.8 是 Wordfence 指派的
+(发现方厂商),并非 NVD Analyzed——但无论评分出自谁,60 万安装量都足以让 WordPress 运维把
+这次升级列为优先事项。
+
+[`🔗 NVD: CVE-2026-78006`](https://nvd.nist.gov/vuln/detail/CVE-2026-78006) · [`🔗 NVD: CVE-2026-78159`](https://nvd.nist.gov/vuln/detail/CVE-2026-78159)
+
+---
+
+## 19. Bryan Cantrill:《恐惧的传染》——用一段实验室恶作剧自白,反驳">10% 灭绝"论
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 180+ pts · 5小时前 (~06:38 UTC+8)
+- **Tags:** `ai-safety` `commentary` `risk-communication`
+
+这位 Joyent/Oxide 工程师以一桩他自称"想带进坟墓"的自白开篇:18 岁那年,他朝坐满人的机房喊了
+一声假的"病毒!",眼睁睁看着恐慌蔓延到无法挽回的地步。随后转折:"我从未见过技术从业者如此
+不负责任地播种恐惧,直到 AI 出现"——矛头直指 Jacob Coxon"未来十年 AI 有 >10% 概率灭绝人类"
+的断言(按 Cantrill 帖子所述,Anthropic 的 Evan Hubinger 对此表示认同),以及"受惊的专家
+本身成为证据"的恐惧传染机制。
+
+**为什么重要:**这是本周安全言论漩涡中最锋利的反对声——Coxon 辞职(9月9日)、Xe Iaso 的讽刺文
+与 Amodei 的限速檄文(9月13日)、Sacks 的"请便"(今天)。Cantrill 的论证关乎认识论而非能力:
+恐惧比任何纠错证据传播得都快,而"受惊专家的数量本身成了某种证据"。把它读作对传播失败的
+批评,并据此为">10%"这个数字定级。
+
+[`🔗 bcantrill.dtrace.org: The contagion of fear`](https://bcantrill.dtrace.org/2026/09/13/the-contagion-of-fear/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49689460)
+
+---
+
+## 20. 继我们 9 月 10 日的报道:Mullenweg 重回 Automattic CEO——距董事会投票罢免仅一周
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 74+ pts · 8小时前 (~04:19 UTC+8)
+- **Tags:** `wordpress` `automattic` `governance`
+
+剧情完成反转:Automattic 于周六晚间确认,Matt Mullenweg 已以"董事会全体支持"的姿态重任董事长
+兼 CEO——距本 feed 报道的罢免投票仅过去七天。公司发言人把高管们在 X 上的声援帖子当作支持证据。
+TechCrunch 的报道并未解释罢免投票与反转之间到底发生了什么。
+
+**为什么重要:**无论内部机制如何,这一幕意味着:WordPress.com 与 wordpress.org 的掌舵权,如今
+肉眼可见地取决于维持不了一周时间的董事会投票、以及在社交媒体上收集的声誉证据——对每一家
+押注这套技术栈的公司,这都是一个治理信号。
+
+[`🔗 TechCrunch: Automattic confirms Mullenweg has returned as CEO`](https://techcrunch.com/2026/09/12/automattic-confirms-mullenweg-has-returned-as-ceo-after-attempted-ouster-by-board/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49688259)
+
+---
+
+## 21. Recurrent Looped Transformer——循环架构讨论等来了官方项目页,一天 +571 星
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 571 stars · 9月12日创建 (~12:00 UTC+8)
+- **Tags:** `transformers` `architecture` `latent-reasoning`
+
+一份单人作者的技术报告与项目页(Yifan Zhang,9 月 12 日)提出 RLT:因果编码器构建全局
+key–value 记忆,循环解码器把最终隐状态与滑窗缓存跨越每个 prompt 和响应 token 传递——处理
+t 个 token 后,时间维度的计算路径长到 t·L_D,而每 token 的计算量保持不变。三条协同设计轴线:
+模型、硬件、RL 算法。Apache-2.0,约一天 +571 星。
+
+**为什么重要:**它恰好落在 Raschka 9 月 10 日那篇"循环 transformer"讨论的延长线上,关注度是
+真实的——但请按它自己的脚注评级:"推理提升、硬件加速与 RL 扩展是本报告的研究目标,而非
+实测结果。"一份未经评审的单人预印本,头版性质明确标注为未测量;把架构草图当作提案,
+而不是成果。
+
+[`🔗 github.com/yifanzhang-pro/recurrent-looped-tranformer`](https://github.com/yifanzhang-pro/recurrent-looped-tranformer) · [`🔗 项目主页`](https://yifanzhang-pro.github.io/recurrent-looped-tranformer/)
+
+---
+
+## 22. viserys-agent——28 个流程技能把智能体的"即兴发挥"变成完整生命周期,一天 +628 星
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 628 stars · 9月12日创建 (~12:00 UTC+8)
+- **Tags:** `skills` `agents` `workflow`
+
+Viserys 把工程流程打包成智能体技能:沿 DEFINE → PLAN → BUILD → VERIFY → REVIEW → SHIP 排布的
+28 个 `SKILL.md` 工作流,每个都带步骤、退出标准和反合理化表格,另有 4 个评审人设、带 fixtures
+的评测用例、校验脚本和会话 hooks。9 月 12 日创建,约一天 628 星,尚无 release。
+
+**为什么重要:**技能市场持续分化——继 ponytail(写*更少*)和 humanizer(写*更朴素*)之后,
+这个卖的是*流程*:卖点是一致的生命周期加退出标准,胜过每个任务的临场发挥。随技能一起发布的
+`evals/` 目录是最值得盯的差异点。注意:截至发稿,该仓库**没有 LICENSE 文件**——当作参考实现,
+别当可再分发的软件。
+
+[`🔗 github.com/rizqinrr/viserys-agent`](https://github.com/rizqinrr/viserys-agent) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 23. Birdview——"别再让 AI 盲写代码":先画架构图,再让智能体动手
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 213 stars · 9月12日创建 (~12:00 UTC+8)
+- **Tags:** `agents` `architecture` `code-review`
+
+Birdview(v0.1.1,MIT)用技能加工具翻转编码智能体的默认流程:先把代码库的架构——稳定的模块
+身份、归属、关系、来源证据——生成为独立 HTML 地图,再让智能体声明它计划触碰哪些模块,让评审
+对照结构看到变更范围,"证据始终在视野内"。内置 harness 活动演示展示目标评审流;文档提供
+英文和中文。一天 +213 星。
+
+**为什么重要:**它攻击的正是昨天 Real-SWE 结果背后的失败模式(前沿智能体在企业私有代码库上
+崩溃):模型手里从来没有地图。这是一个上线一天的 v0.1.1——还很早——但"先架构、后编辑"的
+契约,是对一个已被测量的问题给出的具体回答。
+
+[`🔗 github.com/Qiuner/birdview`](https://github.com/Qiuner/birdview) · [`🔗 项目主页`](https://qiuner.github.io/birdview/)
+
+---
+
+## 24. Apple 公开配件尺寸图——开发者惊讶的是它居然是公开的
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 64+ pts · 4小时前 (~08:11 UTC+8)
+- **Tags:** `apple` `hardware` `design` `accessories`
+
+Apple 的开发者网站提供旗下设备与配件的可下载尺寸图——正是配件厂商设计保护壳、底座和支架
+所需的参考几何。HN 讨论的惊讶点在于这类资源竟然对公众开放("我完全不知道他们会把这个发布
+给普通大众"),顺带还出现了两条花絮:Apple 自己的机械 CAD 据说跑在 Windows 虚拟机里的
+Siemens NX 上;以及有人许愿汽车厂商也给安全研究者公开同款俯视图。
+
+**为什么重要:**硬件生态的生死取决于第三方配件的响应速度,而别处的默认做法是"每个设备买一台,
+再配一把游标卡尺"。公开、权威的几何数据源直接免掉了这笔税——页面很小,对硬件外设经济的
+实际价值很大。
+
+[`🔗 developer.apple.com: Dimensional Drawings`](https://developer.apple.com/accessories/dimensional-drawings/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49690174)
+
+---
+
+## 25. x86 的未定义指令为什么叫 ud2?Raymond Chen 复原了一个刻进 ISA 的 Hyrum 定律故事
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 226+ pts · 16小时前 (9月13日 ~20:30 UTC+8)
+- **Tags:** `x86` `history` `compilers`
+
+编译器会在 `[[noreturn]]` 代码后面塞 `ud2`,让失控的贯穿执行确定性地崩溃。但为什么是 2?
+Chen 复原了这段考古:在 Intel 保证"无效操作码"之前,人们靠碰巧未定义的字节序列来强制触发
+invalid-opcode 异常——并且形成了两派,分别依赖 `0F FF` 和 `0F B9`。后来新处理器不再对它们
+报错(Hyrum 定律:用户足够多,所有可观察行为都会被人依赖),Intel 被迫回应,明确保证哪些
+编码将*永远*无效。
+
+**为什么重要:**"保证无效"的指令之所以存在,是因为软件已经开始依赖"碰巧无效"——这是一个
+两字节长的寓言,解释了为什么接口连自己的"缺席"都必须作出承诺,也解释了你调试过的每一个
+编译器崩溃标记背后都有这段历史。
+
+[`🔗 devblogs.microsoft.com: Why is the x86 undefined instruction called ud2?`](https://devblogs.microsoft.com/oldnewthing/20260910-00/?p=112689) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49683262)
+
+---
+
+## 26. "反对 JPEG XL 的理由"——昔日拥趸用 2026 年的前沿实测压测该编解码器,它赢不了
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 58+ pts · 3小时前 (~09:02 UTC+8)
+- **Tags:** `image-compression` `jpeg-xl` `web`
+
+随着 jxl-rs(Rust 解码器)进入 Firefox 和 Chrome,Web 是否会推翻 2023 年的拒收决定再次成为
+活问题。图像压缩工程师 Gianni Rosato——曾为 Interop 2024 背书 JPEG XL——给出了经验层面的
+反对理由:JXL 真正的优势无损,只比无损 WebP 小约 11.9%,而且测试语料对 Web 场景并不现实;
+在真正走量的有损一侧,经过感知调优的 AV1 编码器(libaom、SVT-AV1)在 CVVDP 和 SSIMULACRA2
+上已胜过 libjxl,一个即将发布的编码器则展示了 libjxl 要追平前沿还差多远。
+
+**为什么重要:**解码器的到来正被解读为"平反在望",这是对应的技术制衡,而且诚实功课做足了——
+作者公开了自己的拥趸史,并承认指标不是真值("我没有看到足够证据"表明差距被暗中反转)。
+编解码器之争就该是这个文体:有测量、能自我批评、足够具体。
+
+[`🔗 giannirosato.com: The case against JPEG XL`](https://giannirosato.com/blog/post/case-against-jxl/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=49690554)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-14T04:25:00+08:00 |
-| Items | 14 |
-| Sources tracked | 12 (Hacker News, GitHub Trending, dreamstation.systems, LessWrong, Goodhart Labs, atomic14, TechCrunch, bensimms.moe, The Verge, julialang.org, aprilnea.me, GitHub API) |
+| Generated | 2026-09-14T12:06:00+08:00 |
+| Items | 26 |
+| Sources tracked | 19 (Hacker News, GitHub Trending/API, vals.ai, LessWrong, Goodhart Labs, dreamstation.systems, signalusers.org, NVD, bcantrill.dtrace.org, x.com, TechCrunch, atomic14, bensimms.moe, The Verge, julialang.org, aprilnea.me, developer.apple.com, devblogs.microsoft.com, giannirosato.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

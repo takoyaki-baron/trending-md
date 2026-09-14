@@ -1,8 +1,8 @@
 ---
 date: 2026-09-14
-updated: 2026-09-14T04:25:00+08:00
+updated: 2026-09-14T12:06:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 12
+sources: 19
 license: CC-BY-4.0
 ---
 
@@ -304,13 +304,285 @@ be seen."
 
 ---
 
+## 15. Fable 5.1 solves the Cyphral Distich — a 370-year-old cipher falls in 44 minutes, and the second one too
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 598+ pts · 7h ago (~05:06 UTC+8)
+- **Tags:** `ai-research` `cryptography` `history`
+
+Vals AI gave Claude Fable 5.1 an open task: solve the Cyphral Distich, the two-line cryptogram of
+64 numbers at the end of Sir Thomas Urquhart's *Logopandecteision* (1653) — an open problem since
+at least 1899, and a fixture of Klaus Schmeh's Top 50 unsolved ciphers. After 44 minutes and 176k
+tokens with zero human interjections, the model found what centuries of frequency analysis missed:
+the key isn't an external cipher alphabet but the book itself. The cryptogram sits right after
+Urquhart's 32 "Proquiritations," and the i-th cipher number indexes a word in the i-th
+Proquiritation, first letter taken — spelling out "O GOD UPHOLD KING CHARLS THE SECOND AND MAKE HIM
+THE SUPREME RULER OF THIS LAND." Each line is exactly 32 letters, the two lines rhyme, and a Royalist
+prayer to Charles II fits Urquhart perfectly. The post reports the model went on to break the
+remaining Cyphral Octastich (285 numbers, *The Jewel*, 1652) the same way.
+
+**Why it matters:** the solution is self-verifying in a way few cipher breaks are — meter, rhyme,
+letter counts and biography all click at once — but note the blog's own hedge ("it appears to have
+actually solved it") and its Aug 31 publish date: the resurfacing to HN #1 is the news. As an agent
+benchmark it's a good sign for long-horizon open-ended research tasks with a checkable answer.
+
+> Human cryptographers' failed attempts all assumed the key was external. The model's first move
+> was reading the surrounding book.
+
+[`🔗 vals.ai: Claude Fable 5.1 Solves the Cyphral Distich`](https://www.vals.ai/blogs/fable-solves-cyphral-distich) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49688695)
+
+---
+
+## 16. David Sacks on Amodei's pacing essay: "go ahead" — but no regulations, and no antitrust waiver
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 284+ pts · 11h ago (~00:52 UTC+8)
+- **Tags:** `policy` `pacing` `openai` `anthropic`
+
+Responding to Amodei's "We must pace the frontier" and Sam Altman's reported agreement, the White
+House AI & crypto czar posted that people "may be surprised by my response: go ahead" — the labs
+are free to slow their own frontier releases voluntarily. What he rules out is any enforcement
+layer: no regulatory approval regime for frontier releases, no antitrust waiver to let competitors
+coordinate the slowdown. It lands one day after Garry Tan's "American distillation regime" pitch
+(item 5) made the opposite ask of regulators.
+
+**Why it matters:** the pacing debate now has three distinct policy positions on the table —
+Amodei's lab coordination, Tan's mandated distillation access, Sacks' pure laissez-faire — and the
+open question is whether "voluntary" pacing is even coherent: coordinated withholding of capability
+by a handful of competitors is precisely the conduct antitrust law exists to catch. The debate is
+no longer whether to pace; it's who is allowed to make whom.
+
+[`🔗 x.com: David Sacks on pacing the frontier`](https://x.com/DavidSacks/status/2098973625252708460) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49685991)
+
+---
+
+## 17. Signal is building phone-number-free registration on zero-knowledge credentials
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 125+ pts · 6h ago (~05:47 UTC+8)
+- **Tags:** `privacy` `zero-knowledge` `signal` `registration`
+
+The feature-request thread that hit HN documents commits landing in Signal-Android: "Add basic
+ability to register numberless account," "Hide some settings for numberless accounts," and — the
+telling one — "Use new zkgroup credential for numberless accounts" (all early September). The ZKP
+machinery is not new to Signal: the same anonymous-credential system already backs groups and
+donation badges, and the thread's Signal participants extend it to verifying username constraints
+without revealing contents. What's new is applying it to account creation itself — the phone number,
+Signal's oldest metadata liability, becomes optional.
+
+**Why it matters:** Signal's security model famously "doesn't trust the server" — but registration
+has always leaked one hard identifier to the server and to everyone who has your number. Moving
+signup onto ZK credentials closes the last mandatory linkage between an account and a real-world
+identifier. Commit presence is not a release: there's no shipped version or announcement yet.
+
+[`🔗 Signal Community: Registration without a phone number`](https://community.signalusers.org/t/registration-without-a-phone-number/2222?page=10) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49689048)
+
+---
+
+## 18. The Events Calendar: two unauthenticated RCEs (CVSS 9.8) in a 600k-install WordPress plugin — and the first fix didn't hold
+
+- **Velocity:** ▮ rising
+- **Source:** NVD · CVE-2026-78006 + CVE-2026-78159 · published Sep 12
+- **Tags:** `wordpress` `rce` `cve` `wordfence`
+
+Wordfence assigned two CVSS 9.8 unauthenticated RCEs to The Events Calendar (600,000 active
+installs). CVE-2026-78159 affects versions up to 6.17.3; CVE-2026-78006 affects 6.17.4 too — the
+patch that shipped for the first bug was bypassable, because PHP fires magic methods during
+pre-parse and `enable_rendering_widget_copied()` forges a valid `wp_hash` integrity attribute
+before `unserialize()` is reached. Both are exploitable without authentication. The fixed 6.17.4.1
+landed Sep 10; the CVEs published Sep 12 — patch-before-disclosure, and no exploitation reported.
+
+**Why it matters:** the two-CVE sequence is the story: a widget-rendering deserialization path
+where the sanitizer's protection model (integrity-hash checking) was itself bypassable. Scorer
+context per convention: CVSS 9.8 is Wordfence-assigned (the discovering vendor), not NVD-analyzed —
+and the plugin's install base makes this a priority update for WordPress operators either way.
+
+[`🔗 NVD: CVE-2026-78006`](https://nvd.nist.gov/vuln/detail/CVE-2026-78006) · [`🔗 NVD: CVE-2026-78159`](https://nvd.nist.gov/vuln/detail/CVE-2026-78159)
+
+---
+
+## 19. Bryan Cantrill: "The contagion of fear" — a lab-prank confession against the >10% extinction claim
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 180+ pts · 5h ago (~06:38 UTC+8)
+- **Tags:** `ai-safety` `commentary` `risk-communication`
+
+The Joyent/Oxide engineer opens with a confession he says he'd have taken to the grave: as an
+18-year-old he shouted a fake "virus!" into a packed computer lab and watched panic propagate past
+the point of recall. The pivot: "I have never seen fear sown so irresponsibly by putative
+technologists as I have now with respect to AI" — aimed squarely at Jacob Coxon's ">10% chance AI
+kills all humans in the next decade" claim (which, per Cantrill's post, Anthropic's Evan Hubinger
+agreed with), and at the mechanism by which frightened experts become their own evidence.
+
+**Why it matters:** it's the sharpest counter-voice in this week's safety-discourse swirl — the
+Coxon resignation (Sep 9), the Xe Iaso satire and Amodei's pacing essay (Sep 13), Sacks' "go ahead"
+(today). Cantrill's argument is about epistemics, not capability: fear propagates faster than any
+correcting evidence, and "the sheer number of frightened experts becomes its own kind of evidence."
+Read it as a claim about communication failure, and grade the ">10%" figure accordingly.
+
+[`🔗 bcantrill.dtrace.org: The contagion of fear`](https://bcantrill.dtrace.org/2026/09/13/the-contagion-of-fear/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49689460)
+
+---
+
+## 20. Since our Sep 10 coverage: Mullenweg is back as Automattic CEO — a week after the board voted him out
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 74+ pts · 8h ago (~04:19 UTC+8)
+- **Tags:** `wordpress` `automattic` `governance`
+
+The whiplash completes: Automattic confirmed Saturday evening that Matt Mullenweg has returned as
+chairman and CEO "with full support of the board" — seven days after this feed covered the board
+vote that removed him. A company spokesperson pointed to supportive posts from top executives on X
+as evidence of the support. TechCrunch's account stops short of explaining what changed between the
+ouster vote and the reversal.
+
+**Why it matters:** whatever the internal mechanics, the episode means the stewardship of
+WordPress.com and wordpress.org now visibly turns on board votes that don't hold for a week and
+reputational evidence gathered from social media — a governance signal for every company depending
+on that stack.
+
+[`🔗 TechCrunch: Automattic confirms Mullenweg has returned as CEO`](https://techcrunch.com/2026/09/12/automattic-confirms-mullenweg-has-returned-as-ceo-after-attempted-ouster-by-board/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49688259)
+
+---
+
+## 21. Recurrent Looped Transformer — the looped-architecture discussion gets a project page, +571 stars in a day
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 571 stars · created Sep 12 (~12:00 UTC+8)
+- **Tags:** `transformers` `architecture` `latent-reasoning`
+
+A solo-author technical report and project page (Yifan Zhang, dated Sep 12) for RLT: a causal
+encoder builds global key–value memory while a recurrent decoder carries its final hidden state and
+sliding-window caches across every prompt and response token — so the temporal computation path
+grows as t·L_D after t tokens while per-token compute stays fixed. Three co-design axes: model,
+hardware, and RL algorithm. Apache-2.0, +571 stars in roughly a day.
+
+**Why it matters:** it lands in the middle of the looped-transformer conversation Raschka's piece
+opened on Sep 10, and the interest is real — but grade it by its own footnote: "reasoning
+improvements, hardware speedups, and RL scaling are research goals rather than measured results in
+this report." An unreviewed solo preprint whose headline properties are explicitly unmeasured;
+treat the architecture sketch as a proposal, not a result.
+
+[`🔗 github.com/yifanzhang-pro/recurrent-looped-tranformer`](https://github.com/yifanzhang-pro/recurrent-looped-tranformer) · [`🔗 Project website`](https://yifanzhang-pro.github.io/recurrent-looped-tranformer/)
+
+---
+
+## 22. viserys-agent — 28 process skills that turn an agent's "improvisation" into a lifecycle, +628 stars in a day
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 628 stars · created Sep 12 (~12:00 UTC+8)
+- **Tags:** `skills` `agents` `workflow`
+
+Viserys packages an engineering process as agent skills: 28 `SKILL.md` workflows along
+DEFINE → PLAN → BUILD → VERIFY → REVIEW → SHIP, with steps, exit criteria, and anti-rationalization
+tables per skill, plus 4 reviewer personas, eval cases with fixtures, validators, and session
+hooks. Created Sep 12, 628 stars in roughly a day, no release yet.
+
+**Why it matters:** the skills market keeps specializing — after ponytail (write *less*) and
+humanizer (write *plainer*), this one sells *process*: the pitch is that a consistent
+lifecycle with exit criteria beats per-task improvisation. The `evals/` directory shipping with the
+skills is the differentiator worth watching. Caveat: as of this writing the repo has **no license
+file** — treat it as a reference, not redistributable software.
+
+[`🔗 github.com/rizqinrr/viserys-agent`](https://github.com/rizqinrr/viserys-agent) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 23. Birdview — "stop letting AI code blind": map the architecture before the agent touches it
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 213 stars · created Sep 12 (~12:00 UTC+8)
+- **Tags:** `agents` `architecture` `code-review`
+
+Birdview (v0.1.1, MIT) is a skill plus tooling that flips the coding-agent default flow: first
+produce an architecture map — stable module identities, ownership, relationships, source evidence —
+as standalone HTML, then have the agent declare which modules it plans to touch so reviewers see
+change scope against structure, "with evidence in view." A live harness-activity demo shows the
+intended review flow; docs ship in English and Chinese. +213 stars in a day.
+
+**Why it matters:** it attacks the same failure mode behind yesterday's Real-SWE result (frontier
+agents collapse on private enterprise codebases): the model never had the map. It's a day-old
+v0.1.1 — early — but the "architecture first, then edit" contract is a concrete answer to a
+measured problem.
+
+[`🔗 github.com/Qiuner/birdview`](https://github.com/Qiuner/birdview) · [`🔗 Project website`](https://qiuner.github.io/birdview/)
+
+---
+
+## 24. Apple publishes its accessory dimensional drawings — and developers are surprised they're public
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 64+ pts · 4h ago (~08:11 UTC+8)
+- **Tags:** `apple` `hardware` `design` `accessories`
+
+Apple's developer site hosts downloadable dimensional drawings for its devices and accessories —
+the reference geometry accessory makers need to design cases, docks and mounts. The HN thread's
+surprise is that this resource is publicly available at all ("I had no idea they published this to
+the general public"), alongside the sidelong observation that Apple's own mechanical CAD reportedly
+runs in Siemens NX on Windows VMs, and a wish that car makers published comparable overhead
+drawings for safety researchers.
+
+**Why it matters:** physical ecosystems live or die on third-party accessory latency, and the
+quiet default elsewhere is "buy one of every device and a pair of calipers." A public, canonical
+geometry source removes that tax — small page, outsized practical value for the hardware-peripheral
+economy.
+
+[`🔗 developer.apple.com: Dimensional Drawings`](https://developer.apple.com/accessories/dimensional-drawings/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49690174)
+
+---
+
+## 25. Why is the x86 undefined instruction called ud2? Raymond Chen reconstructs a Hyrum's Law story carved into the ISA
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 226+ pts · 16h ago (~20:30 UTC+8 Sep 13)
+- **Tags:** `x86` `history` `compilers`
+
+Compilers emit `ud2` after `[[noreturn]]` code so a bad fallthrough crashes deterministically. But
+why 2? Chen reconstructs the archaeology: before Intel guaranteed an invalid opcode, people forced
+invalid-opcode exceptions with accidentally-undefined byte sequences — and two camps emerged,
+relying on `0F FF` and `0F B9` respectively. New processors then stopped faulting on them (Hyrum's
+Law: with enough users, all observable behaviors get depended upon), and Intel had to respond by
+guaranteeing which encodings would *stay* invalid.
+
+**Why it matters:** the guaranteed-invalid instruction exists because software had already come to
+depend on the *accidentally* invalid — a two-byte parable about why interfaces must promise even
+their absences, and why every compiler-emitted crash marker you've ever debugged carries this
+history.
+
+[`🔗 devblogs.microsoft.com: Why is the x86 undefined instruction called ud2?`](https://devblogs.microsoft.com/oldnewthing/20260910-00/?p=112689) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49683262)
+
+---
+
+## 26. "The case against JPEG XL" — a former proponent measures the codec against the 2026 frontier, and it doesn't win
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 58+ pts · 3h ago (~09:02 UTC+8)
+- **Tags:** `image-compression` `jpeg-xl` `web`
+
+With jxl-rs (the Rust decoder) now shipping in Firefox and Chrome, the question of the Web
+reversing its 2023 rejection is live again. Image-compression engineer Gianni Rosato — who endorsed
+JPEG XL for Interop 2024 — makes the empirical case against: JXL's genuine edge, lossless, is only
+~11.9% smaller than lossless WebP, on an unrealistic test corpus for the Web; and on the lossy side
+where volume actually lives, perceptually-tuned AV1 encoders (libaom, SVT-AV1) now beat libjxl on
+CVVDP and SSIMULACRA2, with an upcoming encoder showing how much ground libjxl would need to make
+up.
+
+**Why it matters:** the decoder's arrival is being read as rehabilitation; this is the technical
+counterweight, and it does the honesty work — the author discloses their own advocacy history and
+concedes metrics aren't ground truth ("I don't see sufficient evidence" that the gap is secretly
+reversed). Codec debates deserve exactly this genre: measured, self-critical, and specific.
+
+[`🔗 giannirosato.com: The case against JPEG XL`](https://giannirosato.com/blog/post/case-against-jxl/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49690554)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-14T04:25:00+08:00 |
-| Items | 14 |
-| Sources tracked | 12 (Hacker News, GitHub Trending, dreamstation.systems, LessWrong, Goodhart Labs, atomic14, TechCrunch, bensimms.moe, The Verge, julialang.org, aprilnea.me, GitHub API) |
+| Generated | 2026-09-14T12:06:00+08:00 |
+| Items | 26 |
+| Sources tracked | 19 (Hacker News, GitHub Trending/API, vals.ai, LessWrong, Goodhart Labs, dreamstation.systems, signalusers.org, NVD, bcantrill.dtrace.org, x.com, TechCrunch, atomic14, bensimms.moe, The Verge, julialang.org, aprilnea.me, developer.apple.com, devblogs.microsoft.com, giannirosato.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
