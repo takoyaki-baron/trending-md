@@ -1,8 +1,8 @@
 ---
 date: 2026-09-14
-updated: 2026-09-14T12:06:00+08:00
+updated: 2026-09-14T20:12:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 22
 license: CC-BY-4.0
 ---
 
@@ -576,13 +576,300 @@ reversed). Codec debates deserve exactly this genre: measured, self-critical, an
 
 ---
 
+## 27. "OEMpocalypse" — an unprivileged Android app reaches root on Samsung, Xiaomi and Oppo flagships, no permissions asked
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 88+ pts · 10h ago (~10:25 UTC+8)
+- **Tags:** `android` `security` `kernel` `exploitation`
+
+Calif researcher Lukas Maar's series (part 1 published Aug 31, resurfacing on HN today) demonstrates
+generic two-stage chains from an ordinary app to root on stock, bootloader-locked devices: a logic
+flaw in an OEM IPC endpoint crosses the sandbox boundary, then a page-level use-after-free in an
+OEM kernel driver yields root — a primitive the author says bypasses slab hardening, KASLR and CFI
+without needing a leak or a control-flow hijack. Demonstrated on Galaxy S26 Ultra/S26 (Snapdragon 8
+Elite Gen 5 / Exynos 2600), Galaxy S23, Xiaomi 17, Oppo Find X9 Ultra and OnePlus Ace 6 Ultra,
+across firmware from March 2025 to July 2026, with Verified Boot green.
+
+**Why it matters:** the kernel bugs are, in the author's own words, "not subtle — simple
+page-lifetime mistakes"; the gap is that OEM drivers ship outside the AOSP audit spotlight, and
+where SELinux policy gates the driver, an OEM IPC logic bug defeats that layer too. No CVEs yet —
+the per-OEM parts (Samsung, Xiaomi, Oppo/OnePlus/Realme) are upcoming — and each chain needs all
+of its bugs unpatched, so exposure is per-device and per-security-bulletin.
+
+> The author's stated limits: the chains are OEM-specific by design (a Samsung chain does nothing
+> on Xiaomi), Samsung's A-series may lack the vulnerable component, and the attack-surface
+> enumeration is explicitly non-exhaustive.
+
+[`🔗 calif.io: OEMpocalypse Now`](https://calif.io/research/oempocalypse) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49691152)
+
+---
+
+## 28. Since our Sep 7 coverage: XCancel is down again — "a new development in the ongoing legal proceedings"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 72+ pts · 2h ago (~17:51 UTC+8)
+- **Tags:** `nitter` `x` `legal` `censorship`
+
+Twelve days after this feed covered Nitter and XCancel resuming service on legal advice, XCancel —
+the largest Nitter-based viewer of X/Twitter — has suspended operations again. The notice cites
+"a new development in the ongoing legal proceedings," says the operators "can't share more
+details," and directs users to X itself. A similar viewer, twitterwebviewer.com, was reportedly
+taken down alongside it; commenters trade mirror instances (xxcancel.com, twit.0r.cx) and the
+Libredirect extension.
+
+**Why it matters:** the whack-a-mole is the finding — read-only access to X matters because police,
+transit agencies and emergency alerts post there and nowhere else, and each takedown removes one
+more chokepoint-free path to it. The thread's policy takeaway keeps sharpening: public bodies
+should publish on their own sites/RSS first, so that no single platform's litigation posture
+decides what citizens can read.
+
+[`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49694296) · [`🔗 xcancel.com (suspension notice)`](https://xcancel.com/)
+
+---
+
+## 29. Agent-Reach — "give your AI agent eyes to see the entire internet" is today's Trendshift #1 at +640 stars
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 80.8k stars · +640 today (~20:00 UTC+8)
+- **Tags:** `agents` `scraping` `cli` `mcp`
+
+Panniantong/Agent-Reach is a capability-layer CLI that routes an agent's web access through free,
+open-source backends instead of paid APIs — Jina Reader for pages, yt-dlp for YouTube, the `gh` CLI
+for GitHub, bili-cli for Bilibili, twitter-cli, Exa search via MCP, feedparser for RSS. Login-gated
+platforms run on locally stored cookies or browser sessions; install is a single instruction pasted
+to your agent, defaulting to read-only unless you pass `--system`. MIT.
+
+**Why it matters:** it's the aggregation layer on top of the tools your agent already has — and the
+README is candid about the real cost structure: platforms can detect cookie-based access and ban
+accounts (it recommends burners, never your main one), Reddit has no zero-config path, and backends
+break often enough that `agent-reach doctor` exists. Caveat for adopters: 80.8k stars against 375
+commits and no published releases — the same viral-ratio pattern this feed flagged on OpenMontage
+today; treat it as a well-loved config, not hardened software.
+
+[`🔗 github.com/Panniantong/Agent-Reach`](https://github.com/Panniantong/Agent-Reach) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 30. MiroFish — 72.8k stars for a swarm-intelligence "prediction engine," with a star-to-commit ratio worth reading first
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 72.8k stars · +524 today (~20:00 UTC+8)
+- **Tags:** `agents` `simulation` `prediction` `swarm`
+
+666ghj/MiroFish ingests seed material (news, policy drafts, financial signals, fiction), builds a
+"parallel digital world" of thousands of LLM agents with personas, memory and social dynamics
+(built on CAMEL-AI's OASIS), and runs simulations parsed into prediction reports you can then
+interrogate agent-by-agent. Demo predictions range from public-opinion trajectories to the lost
+ending of *Dream of the Red Chamber*; financial and political examples are listed as "coming
+soon." AGPL-3.0, Shanda Group incubation, a Trendshift #1 badge, and Bilibili demo traction.
+
+**Why it matters:** we visited before ranking, and the honest read is mixed: the system is real and
+architecturally serious (GraphRAG + persona agents + ReportAgent), but it publishes **no
+benchmarks** — its claims are qualitative — and the ratios (72.8k stars / 320 commits, last pushed
+Sep 3, no releases) mark a viral wave more than shipping software. It also requires paid external
+services (an LLM API key plus Zep Cloud for agent memory, whose free quota the README admits is
+"only sufficient for simple usage"). Investigate before adopting.
+
+[`🔗 github.com/666ghj/MiroFish`](https://github.com/666ghj/MiroFish) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 31. Chess.com's 7.3M-row dump reaches Have I Been Pwned — and the forensics say enumeration, not a classic breach
+
+- **Velocity:** ▮▮ rising
+- **Source:** Have I Been Pwned · added Sep 13 · HN 73+ pts (9h ago, ~11:26 UTC+8)
+- **Tags:** `breach` `scraping` `enumeration` `hibp`
+
+The dump circulating since August — 7.3M rows, 4.6M unique email addresses, plus names, usernames
+and locations — was formally added to HIBP on Sep 13, which is what pushed it back into the news.
+HIBP's own analysis says scraping, and the strongest signal supports something subtler than a
+database heist: ~99% of the leaked emails were *already* in prior breaches, consistent with an
+attacker feeding a pre-existing address list into Chess.com's find-friends API and harvesting what
+came back. HN's dissenting note: the dump also carries internal marketing fields (Ad Manager
+audience segments — trial-eligibility, lapsed-user cohorts, rating bands) that public scraping
+shouldn't yield. No passwords were included.
+
+**Why it matters:** the taxonomy is the story — "scraped" and "breached" are both doing work here,
+and the honest summary is *API enumeration against a known-address list, returning more than the
+public profile should contain*. Chess.com has reportedly sent users no communication; HIBP's
+added-yesterday listing makes this the moment to check your own address.
+
+[`🔗 Have I Been Pwned: Chess.com (2026)`](https://haveibeenpwned.com/Breach/Chess2026) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49691584)
+
+---
+
+## 32. RuView — presence, vitals and fall detection from $54 of ESP32s: WiFi CSI sensing pushes to 93.6k stars
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 93.6k stars · +370 today, pushed today (~20:00 UTC+8)
+- **Tags:** `wifi-sensing` `csi` `esp32` `edge-ai`
+
+ruvnet/RuView turns commodity WiFi into a camera-free sensor: a 3–6 node ESP32-S3/C6 mesh (~$54)
+reads Channel State Information, fuses subcarriers across channels, and runs edge models for
+presence, breathing (6–30 BPM), heart rate, fall detection (<200 ms) and through-wall sensing to
+~5 m — no cloud, local adaptation in ~30 s, Home Assistant/Matter integration. MIT, 1,356 commits,
+firmware pushed today.
+
+**Why it matters:** this is the rare viral hardware repo whose README does the retraction work for
+you: an earlier "100% presence" claim was withdrawn as measured on a single-class recording; the
+on-device 17-keypoint pose model is a stub (PCK@20 = 3.0% against a ≥35% target, runtime returns
+confidence 0); the unified RF world-model numbers are synthetic pending real-data validation; and
+it's explicitly "not medical devices, emergency systems, or safety-certified controls." The
+defended numbers — 82.3% held-out presence accuracy, 82.69 torso-PCK@20 on MM-Fi — are the ones to
+quote, and only those.
+
+[`🔗 github.com/ruvnet/RuView`](https://github.com/ruvnet/RuView) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 33. Dan Luu on bad benchmarks: Senior SWE-Bench's grader flips ~23% of results on re-run, and other evals that don't measure what they claim
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 39+ pts · on the front page
+- **Tags:** `benchmarks` `evaluation` `llm` `measurement`
+
+Dan Luu's new post runs three exercises in benchmark autopsies. The coding-eval one lands hardest:
+re-running Senior SWE-Bench's grading 10 times (Sonnet 4.6 as grader) flipped the official result
+~23% of the time, and swapping the grader to GPT-5.6 Sol cut "tasteful" judgments by more than
+half — yet 25.0% vs 24.4% differences are presented as meaningful. The "tasteful" label fails any
+solution ≥2× reference length, so GLM-5.2 passes at 121 LOC against a 61-line reference where one
+more line would fail; Opus 4.7's "failed" solution is semantically identical to the reference,
+just formatted as a multi-line pipeline. The napkin-math section catches the same disease in
+systems folklore (random memory access listed at 20 ns when a dependent-load measurement gives
+~100 ns), and the winter-tire section shows a widely repeated claim — "all-seasons turn to hard
+plastic below 7°C" — has no measurement behind it at all.
+
+**Why it matters:** none of these flaws take domain expertise to find — just re-running the grader
+and reading the reference solutions. After SWE-Bench Pro Verified's reward-hacking findings (Sep
+11) and the LRU null-result (Sep 13), the eval-audit genre is becoming this month's load-bearing
+literature: headline agent rankings are carrying grader noise the deltas don't survive.
+
+> Aaron Levin (ex-evals lead at Anthropic) concurred on the SWE-bench critique — but Luu's point
+> is you don't need his CV to check any of it.
+
+[`🔗 danluu.com: Bad benchmarks and evals`](https://danluu.com/exercise-7/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49655621)
+
+---
+
+## 34. opendisplay — the open-source Sidecar alternative crosses 3.3k stars, and switches MIT → GPL on the way
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 3.3k stars · +314 today (~20:00 UTC+8)
+- **Tags:** `macos` `display` `ios` `video`
+
+peetzweg/opendisplay turns an iPhone, iPad or spare Mac into a true extended second monitor for a
+Mac — not mirroring, and unlike Sidecar it works with iPhones and across Apple IDs. The pipeline:
+a `CGVirtualDisplay` (the private CoreGraphics API BetterDisplay also uses), ScreenCaptureKit
+capture, hardware H.264 via VideoToolbox, length-prefixed Annex B frames over TCP via usbmuxd
+(USB) or Bonjour (WiFi), touch returned as CGEvents. Signed, notarized DMGs ship; iOS 16+ and
+macOS 14+.
+
+**Why it matters:** the license history is the adoption-relevant detail: versions through v0.4.x
+were MIT and remain available under those terms, but new development is GPL-3.0 — check which
+line you're building on. The README is upfront that the private API could break on any macOS
+update and bars App Store distribution, there's no audio by design, and the purple
+screen-recording indicator always shows.
+
+[`🔗 github.com/peetzweg/opendisplay`](https://github.com/peetzweg/opendisplay) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 35. flowsint — a self-hosted OSINT platform for graph-based investigations trends at +279 stars
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 8.1k stars · +279 today (~20:00 UTC+8)
+- **Tags:** `osint` `graph` `investigation` `self-hosted`
+
+reconurge/flowsint is an entity-centric investigation workbench: a visual graph (FastAPI + Neo4j +
+Celery, Docker-deployed) that expands nodes through enricher modules — DNS/WHOIS/ASN, Maigret
+username search across social platforms, breach checks, Gravatar, crypto wallet tracing, crawling
+and tracker detection — with an n8n connector for automation. Apache-2.0 plus a separate
+`ETHICS.md` that prohibits surveillance, doxxing and unauthorized collection.
+
+**Why it matters:** Maltego-style link analysis has long lacked a credible open-source, self-hosted
+successor; the interesting engineering details are the hardening defaults (no default accounts,
+all services but one bound to localhost, Host-header allowlist against DNS rebinding, forced
+secret rotation). Honest caveat from the README itself: early development, incomplete test suites.
+
+[`🔗 github.com/reconurge/flowsint`](https://github.com/reconurge/flowsint) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 36. VoxCPM2 re-trends — OpenBMB's tokenizer-free TTS ships Apache-2.0 weights and 30 languages
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 37.2k stars · +204 today (~20:00 UTC+8)
+- **Tags:** `tts` `speech` `open-weights` `openbmb`
+
+OpenBMB/VoxCPM is back on trending (+204 today) — but the honest trigger note first: VoxCPM2
+itself shipped in April 2026, and we found no new release behind today's wave. The model earns the
+attention regardless: a 2B diffusion-autoregressive backbone (MiniCPM-4 base) that generates
+continuous speech in AudioVAE V2's latent space with no discrete tokenizer — 48 kHz output with
+built-in super-resolution, 30 languages plus 9 Chinese dialects, text-described voice design,
+style-controlled cloning, and 5–10 minute LoRA adaptation, all Apache-2.0 for code *and* weights,
+on ~8 GB VRAM.
+
+**Why it matters:** in a TTS market split between closed frontier voices (item 3's VoiceStudio
+aggregates them) and NC-licensed open weights, a permissively-licensed 2B with published
+Seed-TTS-eval numbers (WER 1.84 test-EN) and commercial use explicitly permitted is a genuine
+option — with the README's own caveat that Voice Design controllability varies enough to need
+1–3 generations.
+
+[`🔗 github.com/OpenBMB/VoxCPM`](https://github.com/OpenBMB/VoxCPM) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 37. frank-386 — a full i386 PC (Windows 95 included) emulated on a ~$5 Raspberry Pi Pico 2
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 75+ pts · 4h ago (~16:25 UTC+8)
+- **Tags:** `emulation` `retro` `rp2350` `hardware`
+
+rh1tech/frank-386 ports Tiny386 to the RP2350: full i386 (partially i486/i586) with optional x87,
+up to 8 MB PSRAM, VGA/HDMI at 640×480, and a full period-correct sound stack — AdLib OPL2, Sound
+Blaster 16, PC Speaker, Tandy, Covox, Disney — booting DOS, Windows 3.x, Windows 95 and Linux from
+SD-card images. MIT (with QEMU-, MAME-, SeaBIOS-derived components under their own licenses),
+firmware for four board layouts including a PiZero-form-factor RP2350.
+
+**Why it matters:** the RP2350 retro-emulation scene keeps proving $5 microcontrollers can carry
+full PC workloads, and this is the most complete x86 port yet — but read the README's Win95
+section before trying it: `setup /im` to skip the memory check and patcher9x for the startup
+"protection error" are required reading, and i486/i586 support is explicitly partial.
+
+[`🔗 github.com/rh1tech/frank-386`](https://github.com/rh1tech/frank-386) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=49693613)
+
+---
+
+## 38. Project NOMAD — the offline-first knowledge server (Wikipedia, Khan Academy, maps, local RAG) quietly passes 36.7k stars
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 36.7k stars · +26 today (~20:00 UTC+8)
+- **Tags:** `offline-first` `self-hosted` `education` `rag`
+
+Crosstalk-Solutions/project-nomad is a Docker-orchestrated "Command Center" that assembles an
+internet-free knowledge stack: offline Wikipedia and medical/survival references (Kiwix), Khan
+Academy courses with progress tracking (Kolibri), downloadable regional maps (ProtoMaps), Markdown
+notes, and optional local AI — Ollama chat with document upload and Qdrant semantic search,
+optionally on a separate host. Apache-2.0, 753 commits, minimum spec a 4 GB dual-core box; the
+README is explicit that nothing is vendor-sponsored.
+
+**Why it matters:** it's the convergence of two trends — the prepper/off-grid movement and local-AI
+self-hosting — packaged as ops tooling rather than a demo. The trigger for this week's listing
+isn't stated anywhere in the repo (we looked), so read +26 today as steady accumulation, not a
+spike. Operational caveat worth bolding: **no built-in authentication** — the README says to keep
+it off the public internet.
+
+[`🔗 github.com/Crosstalk-Solutions/project-nomad`](https://github.com/Crosstalk-Solutions/project-nomad) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-14T12:06:00+08:00 |
-| Items | 26 |
-| Sources tracked | 19 (Hacker News, GitHub Trending/API, vals.ai, LessWrong, Goodhart Labs, dreamstation.systems, signalusers.org, NVD, bcantrill.dtrace.org, x.com, TechCrunch, atomic14, bensimms.moe, The Verge, julialang.org, aprilnea.me, developer.apple.com, devblogs.microsoft.com, giannirosato.com) |
+| Generated | 2026-09-14T20:12:00+08:00 |
+| Items | 38 |
+| Sources tracked | 22 (Hacker News, GitHub Trending/API, vals.ai, LessWrong, Goodhart Labs, dreamstation.systems, signalusers.org, NVD, bcantrill.dtrace.org, x.com, TechCrunch, atomic14, bensimms.moe, The Verge, julialang.org, aprilnea.me, developer.apple.com, devblogs.microsoft.com, giannirosato.com, calif.io, haveibeenpwned.com, danluu.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

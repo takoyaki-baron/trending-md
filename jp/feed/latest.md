@@ -1,8 +1,8 @@
 ---
 date: 2026-09-14
-updated: 2026-09-14T12:06:00+08:00
+updated: 2026-09-14T20:12:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 22
 license: CC-BY-4.0
 ---
 
@@ -571,13 +571,303 @@ Rust 製デコーダ jxl-rs が Firefox と Chrome に搭載されたことで�
 
 ---
 
+## 27. 「OEMpocalypse」 — 特権のない Android アプリが Samsung・Xiaomi・Oppo のフラッグシップで root を獲得、権限は一切要求せず
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 88+ pts · 10時間前 (~10:25 UTC+8)
+- **Tags:** `android` `security` `kernel` `exploitation`
+
+Calif の研究者 Lukas Maar によるシリーズ(第1部は8月31日公開、本日 HN で再浮上)は、
+在庫ファームウェアかつブートローダロック済みの端末で、普通のアプリから root に至る汎用的な
+二段階のエクスプロイトチェーンを実証している。まず OEM IPC エンドポイントのロジック欠陥で
+サンドボックス境界を越え、次に OEM カーネルドライバのページレベルの use-after-free で root
+を得る。このプリミティブはリークも制御フロージャックも不要なため、スラブハードニング・KASLR・
+CFI を迂回できると著者は説明する。実証機種は Galaxy S26 Ultra/S26(Snapdragon 8 Elite Gen 5 /
+Exynos 2600)、Galaxy S23、Xiaomi 17、Oppo Find X9 Ultra、OnePlus Ace 6 Ultra で、
+2025年3月〜2026年7月のファームウェアにわたり、Verified Boot はグリーンのまま。
+
+**なぜ重要か:** カーネルのバグ自体は著者自身の言葉で「微妙ではない —— 素朴なページライフタイムの
+ミス」。ギャップの本体は、OEM ドライバが AOSP の監査のスポットライト外で出荷されていることで、
+SELinux ポリシーがドライバを保護していても、OEM IPC のロジックバグがその層も打ち抜く。
+CVE はまだ存在しない(Samsung・Xiaomi・Oppo/OnePlus/Realme 各社分は今後のパートで公開予定)。
+さらに各チェーンは全バグが未修正であることを要するため、露出期間は端末ごと・月次セキュリティ
+バレティンごとに個別に数えることになる。
+
+> 著者が明示する限界:チェーンは OEM 固有の設計(三星のチェーンは Xiaomi で何もしない)、
+> Samsung の A シリーズには脆弱コンポーネントが無い可能性、攻撃面の列挙は網羅的ではないと
+> 明記されている。
+
+[`🔗 calif.io: OEMpocalypse Now`](https://calif.io/research/oempocalypse) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49691152)
+
+---
+
+## 28. 9月7日の報道の続き:XCancel が再び停止 ——「係争中の法的手続きに新たな展開」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 72+ pts · 2時間前 (~17:51 UTC+8)
+- **Tags:** `nitter` `x` `legal` `censorship`
+
+本フィードが Nitter と XCancel が法的助言に基づきサービスを再開したと報じた9月7日から12日、
+最大手の Nitter 系 X/Twitter ビューア XCancel が再び停止した。告知は「係争中の法的手続きに
+新たな展開」を挙げ、運営側は「詳細を共有できない」とし、ユーザーを X 本体へ誘導している。
+類似のビューア twitterwebviewer.com も同時に落とされたと報じられ、コメント欄ではミラー
+インスタンス(xxcancel.com、twit.0r.cx)や Libredirect 拡張が交際されている。
+
+**なぜ重要か:** モグラたたきの継続こそが発見だ。X への読み取り専用アクセスが重要なのは、警察・
+交通機関・緊急警報が「そこにしか」投稿しないからであり、停止のたびに退路が一本ずつ断たれる。
+スレッドの政策上の結論も鋭さを増している:公共機関は自サイト/RSS に先に公開すべきだ、と。
+単一プラットフォームの訴訟姿勢が市民が読めるものを決める現状を変えるために。
+
+[`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49694296) · [`🔗 xcancel.com(停止告知)`](https://xcancel.com/)
+
+---
+
+## 29. Agent-Reach ——「AI エージェントにインターネット全体を見る目を」が本日の Trendshift 1位、+640 スター
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 80.8k stars · 本日 +640 (~20:00 UTC+8)
+- **Tags:** `agents` `scraping` `cli` `mcp`
+
+Panniantong/Agent-Reach は、エージェントの Web アクセスを有料 API ではなく無料のオープン
+ソースバックエンドへルーティングする能力レイヤーの CLI だ。ページは Jina Reader、YouTube は
+yt-dlp、GitHub は `gh` CLI、Bilibili は bili-cli、加えて twitter-cli、MCP 経由の Exa 検索、
+RSS は feedparser。ログイン必須のプラットフォームはローカル保存の cookie やブラウザセッション
+を使用する。インストールはエージェントに一行の指示を貼るだけで、`--system` を明示しない限り
+読み取り専用がデフォルト。MIT ライセンス。
+
+**なぜ重要か:** エージェントが既に持つツール群の上に載るアグリゲーションレイヤーだ。そして
+README は実際のコスト構造に率直だ:プラットフォームは cookie ベースのアクセスを検出して
+アカウントを停止しうる(捨てアカを推奨、メインアカウントは絶対に使うな)、Reddit にゼロ設定の
+経路はなく、バックエンドは壊れる頻度が高いので `agent-reach doctor` という自己診断コマンドが
+存在する。採用者への注意：80.8k スターに対してコミット375、公式リリースなし —— 本フィードが
+本日 OpenMontage に付けた「バイラル比率」と同じ型だ。これは磨かれたソフトウェアではなく、
+愛されている設定集として扱うこと。
+
+[`🔗 github.com/Panniantong/Agent-Reach`](https://github.com/Panniantong/Agent-Reach) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 30. MiroFish —— 群知能「予測エンジン」が72.8kスター。ただしスター対コミットの比率を先に読め
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 72.8k stars · 本日 +524 (~20:00 UTC+8)
+- **Tags:** `agents` `simulation` `prediction` `swarm`
+
+666ghj/MiroFish はシード素材(ニュース、政策案、金融シグナル、小説)を取り込み、ペルソナ・
+記憶・社会的ダイナミクスを持つ数千の LLM エージェントから「並行デジタル世界」を構築し
+(CAMEL-AI の OASIS ベース)、シミュレーションを実行して、エージェント単位で問い直せる
+予測レポートへと解析する。デモ予測は世論イベントの推移から『紅楼夢』の失われた結末まで。
+金融・政治の例は「近日公開」と記載。AGPL-3.0、Shanda Group のインキュベーション、Trendshift
+1位バッジ、Bilibili デモ動画の牵引。
+
+**なぜ重要か:** ランク付けの前にリポジトリを訪れた。誠実な評価は賛否半々だ。システムは実在し、
+アーキテクチャは本気だが(GraphRAG + ペルソナエージェント + ReportAgent)、**ベンチマークを
+一切公表していない** —— 主張はすべて定性的だ。しかも比率が物語る(72.8k スター / コミット320、
+最終プッシュ9月3日、リリースなし)のは、出荷するソフトウェアよりバイラルの波だ。有料の外部
+サービスも必須だ(LLM API キーに加え、エージェント記憶用の Zep Cloud。README 自身が無料枠は
+「簡単な利用にようやく足りる」と認めている)。採用前に調査を。
+
+[`🔗 github.com/666ghj/MiroFish`](https://github.com/666ghj/MiroFish) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 31. Chess.com の730万行のダンプが Have I Been Pwned に到達 —— フォレンジクスの結論は「古典的侵害」ではなく列挙
+
+- **Velocity:** ▮▮ rising
+- **Source:** Have I Been Pwned · 9月13日登録 · HN 73+ pts(9時間前、~11:26 UTC+8)
+- **Tags:** `breach` `scraping` `enumeration` `hibp`
+
+8月から流出していたダンプ —— 730万行、460万のユニークメールアドレスに加え氏名・ユーザー名・
+地域 —— が9月13日に正式に HIBP に登録された。これが再びニュースになったきっかけだ。HIBP
+自身の分析は「スクレイピング」と結論づけ、最も強いシグナルはデータベース強奪よりも繊細な
+経路を示唆する：漏洩メールの約99%は*以前の*侵害ですでに既知だった。これは攻撃者が既存の
+アドレスリストを Chess.com の find-friends API に流し込み、返ってきたものを収穫したという
+筋書きと整合する。HN の異論：ダンプには内部のマーケティング項目(Ad Manager のオーディエンス
+セグメント —— 試用適性、離反ユーザーコホート、レーティング帯ターゲティング)が含まれ、公開
+スクレイピングでは取得できないはずだという。パスワードは含まれていない。
+
+**なぜ重要か:** 分類学こそが物語だ。「スクレイピングされた」と「侵害された」はここでそれぞれ
+働いており、誠実な要約は *既知アドレスリストに対する API 列挙であり、公開プロファイルに
+含まれるはずのない内容まで返ってきた* となる。Chess.com はユーザーへの連絡を一切行っていない
+と報じられており、昨日の HIBP 登録は自分のアドレスを確認すべきタイミングを意味する。
+
+[`🔗 Have I Been Pwned: Chess.com (2026)`](https://haveibeenpwned.com/Breach/Chess2026) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49691584)
+
+---
+
+## 32. RuView —— 54ドルの ESP32 で在宅検知・バイタル・転倒検知：WiFi CSI センシングが93.6kスターへ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 93.6k stars · 本日 +370、本日もプッシュあり (~20:00 UTC+8)
+- **Tags:** `wifi-sensing` `csi` `esp32` `edge-ai`
+
+ruvnet/RuView は汎用 WiFi をカメラ不要のセンサーに変える。3〜6ノードの ESP32-S3/C6 メッシュ
+(約54ドル)が Channel State Information を読み取り、サブキャリアをチャネル横断で融合し、
+在宅検知・呼吸(6〜30 BPM)・心拍・転倒検知(200ms 未満)・約5m の壁越しセンシングを
+エッジモデルで実行する。クラウド不要、ローカル適応は約30秒、Home Assistant/Matter 統合。
+MIT、コミット1,356、ファームウェアは本日もプッシュされている。
+
+**なぜ重要か:** これは「撤回の作業」を読者に代わって済ませている珍しいバイラルハードウェア
+リポジトリだ。以前の「在宅検知100%」の主張は、単一クラスの録画で測定したものだったとして
+取り下げられた。デバイス上の17キーポイント姿勢モデルはスタブ(PCK@20 = 3.0%に対し目標 ≥35%、
+ランタイムは confidence 0 を返す)。統合 RF ワールドモデルの数値は実データ検証待ちの合成値。
+そして「医療機器・緊急システム・安全認証済み制御ではない」と明示している。擁護できる数値 ——
+82.3% のホールドアウト在宅検知精度、MM-Fi での胴体 PCK@20 = 82.69 —— だけを引用すべきであり、
+それ以外は引用すべきでない。
+
+[`🔗 github.com/ruvnet/RuView`](https://github.com/ruvnet/RuView) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 33. Dan Luu の「悪いベンチマーク」論：Senior SWE-Bench の採点器は再実行で約23%の結果が入れ替わる。「測ったとおりのものを測っていない」評価は他にも
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 39+ pts · フロントページに掲載中
+- **Tags:** `benchmarks` `evaluation` `llm` `measurement`
+
+Dan Luu の新しい投稿は、ベンチマークの検死を3題仕立てで行う。コーディング評価の回が最も痛い。
+Senior SWE-Bench の採点を10回再実行したところ(採点器は Sonnet 4.6)、公式結果は約23%の割合で
+入れ替わった。採点器を GPT-5.6 Sol に替えると「tasteful」判定は半減する —— それでいて 25.0% 対
+24.4% の差が意味のある差として提示されている。「tasteful」ラベルは参照解の2倍以上の長さの解答を
+落とすため、GLM-5.2 は61行の参照問題を121行で合格する —— もう1行で不合格だった。Opus 4.7 の
+「不合格」解答は参照と意味的に同一で、単に複数行パイプラインとして整形されただけだ。napkin-math
+の節はシステム界の民俗知識から同じ病を捉え(ランダムメモリアクセスは20nsと書かれるが、依存
+ロードでの実測は約100ns)、冬用タイヤの節は「オールシーズンタイヤは7°C未満で硬いプラスチックに
+なる」という広く繰り返される主張の背後に測定が全く無いことを示す。
+
+**なぜ重要か:** これらの欠陥のどれも、発見に専門知識は要らない。採点器を再実行し、参照解を
+読めばいい。SWE-Bench Pro Verified のリワードハッキング発見(9月11日)と LRU のヌル結果
+(9月13日)に続き、「評価監査」ジャンルが今月の耐荷重文献になりつつある。エージェント順位の
+見出しは、その差分が耐えられない採点ノイズを載せている。
+
+> Aaron Levin(Anthropic の元評価責任者)は SWE-bench 批判に同意している —— ただし Luu の
+> 主点は、それを検証するのに彼の経歴は要らない、ということだ。
+
+[`🔗 danluu.com: Bad benchmarks and evals`](https://danluu.com/exercise-7/) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49655621)
+
+---
+
+## 34. opendisplay —— オープンソースの Sidecar 代替が3.3kスターを突破、道中で MIT から GPL へ移行
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 3.3k stars · 本日 +314 (~20:00 UTC+8)
+- **Tags:** `macos` `display` `ios` `video`
+
+peetzweg/opendisplay は iPhone・iPad・余った Mac を Mac の真の拡張セカンドモニタに変える。
+ミラーリングではなく、Sidecar と違って iPhone に対応し Apple ID をまたいで使える。パイプライン：
+`CGVirtualDisplay`(BetterDisplay も使うプライベートな CoreGraphics API)、ScreenCaptureKit
+キャプチャ、VideoToolbox によるハードウェア H.264、usbmuxd(USB)または Bonjour(WiFi)経由の
+TCP で長さプレフィックス付き Annex B フレームを転送、タッチは CGEvent として注入。署名・
+公証済み DMG を配布。iOS 16+ と macOS 14+ が必要。
+
+**なぜ重要か:** 採用者に関係する細部はライセンスの歴史だ。v0.4.x までは MIT で、今もその条項の
+下で利用可能だが、新規開発は GPL-3.0 になった —— 自分がどの線の上にビルドするか先に確認せよ。
+README も率直だ：プライベート API は macOS のどんなアップデートでも壊れうる、App Store 配布は
+不可能、設計上音声は非対応、紫色の画面収録インジケータは常に表示される。
+
+[`🔗 github.com/peetzweg/opendisplay`](https://github.com/peetzweg/opendisplay) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 35. flowsint —— セルフホストの OSINT グラフ調査プラットフォームが +279 スターでトレンド入り
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 8.1k stars · 本日 +279 (~20:00 UTC+8)
+- **Tags:** `osint` `graph` `investigation` `self-hosted`
+
+reconurge/flowsint はエンティティ中心の調査ワークベンチだ。視覚的なグラフ(FastAPI + Neo4j +
+Celery、Docker デプロイ)のノードを、エンリッチャーモジュールで展開する —— DNS/WHOIS/ASN、
+ソーシャルプラットフォーム横断の Maigret ユーザー名検索、漏洩データ照合、Gravatar、暗号資産
+ウォレット追跡、クロールとトラッカー検出。自動化のための n8n コネクタも備える。Apache-2.0 に
+加え、監視・人肉検索・未許可の収集を明示的に禁止する `ETHICS.md` を別に持つ。
+
+**なぜ重要か:** Maltego 流のリンク分析には、信頼できるオープンソース・セルフホストの後継が
+長らく欠けていた。工学面で興味深いのはハードニングのデフォルトだ(デフォルトアカウントなし、
+1ポートを除き全サービスが localhost のみにバインド、DNS リバインディング対策の Host ヘッダ
+許可リスト、シークレット強制ローテーション)。README 自身の誠実な警告もあり：開発初期、
+テストスイートは不完全。
+
+[`🔗 github.com/reconurge/flowsint`](https://github.com/reconurge/flowsint) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 36. VoxCPM2 が再トレンド入り —— OpenBMB のトークナイザフリー TTS、Apache-2.0 の重みと30言語
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 37.2k stars · 本日 +204 (~20:00 UTC+8)
+- **Tags:** `tts` `speech` `open-weights` `openbmb`
+
+OpenBMB/VoxCPM が再びトレンドに戻ってきた(本日 +204)。だが誠実なトリガーの注記を先に：
+VoxCPM2 本体の公開は2026年4月で、本日の波の背後に新しいリリースは見つからなかった。それでも
+このモデルは注目に値する。2B の拡散オートリグレッシブバックボーン(MiniCPM-4 ベース)が、
+離散トークナイザなしで AudioVAE V2 の潜在空間に連続音声を直接生成する。48 kHz 出力に内蔵
+スーパーレゾリューション、30言語+中国語方言9種、テキスト記述からのボイスデザイン、スタイル
+制御可能なクローン、5〜10分の音声での LoRA 適応。コード*と*重みの両方が Apache-2.0、必要 VRAM
+は約8GB。
+
+**なぜ重要か:** クローズドなフロンティア音声(第3項の VoiceStudio が集約しているのはまさに
+それら)と NC ライセンスのオープン重みに割れた TTS 市場で、緩いライセンス・公開済みの
+Seed-TTS-eval 数値(WER 1.84 test-EN)・商用利用の明示的許可・わずか2Bという選択肢は本物の
+選択肢だ。ただし README 自身の注意付き：Voice Design の制御性は1〜3回の生成を要するほど
+揺れる。
+
+[`🔗 github.com/OpenBMB/VoxCPM`](https://github.com/OpenBMB/VoxCPM) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 37. frank-386 —— 約5ドルの Raspberry Pi Pico 2 上で完全な i386 PC(Windows 95 込み)をエミュレート
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 75+ pts · 4時間前 (~16:25 UTC+8)
+- **Tags:** `emulation` `retro` `rp2350` `hardware`
+
+rh1tech/frank-386 は Tiny386 を RP2350 に移植したものだ。完全な i386(部分的に i486/i586)と
+オプションの x87、最大 8 MB の PSRAM、640×480 の VGA/HDMI 出力、そして時代 正しいサウンド
+スタック一式 —— AdLib OPL2、Sound Blaster 16、PC Speaker、Tandy、Covox、Disney —— を備え、
+SDカードイメージから DOS、Windows 3.x、Windows 95、Linux を起動する。MIT(QEMU・MAME・
+SeaBIOS 由来のコンポーネントは各自行のライセンス)、ファームウェアは PiZero フォームファクタの
+RP2350 を含む4種のボードレイアウトに対応。
+
+**なぜ重要か:** RP2350 のレトロエミュレーション界隈は、5ドルのマイコンが PC のフルワークロードを
+背負えることを証明し続けており、これはこれまでで最も完全な x86 ポートだ。ただし試す前に README の
+Win95 の節を読め：メモリチェックの回避に `setup /im`、起動時の「プロテクションエラー」には
+patcher9x が必読で、i486/i586 サポートは明示的に部分的だ。
+
+[`🔗 github.com/rh1tech/frank-386`](https://github.com/rh1tech/frank-386) · [`🔗 Hacker News 議論`](https://news.ycombinator.com/item?id=49693613)
+
+---
+
+## 38. Project NOMAD —— オフラインファーストのナレッジサーバ(Wikipedia、Khan Academy、地図、ローカル RAG)が静かに36.7kスターを超える
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 36.7k stars · 本日 +26 (~20:00 UTC+8)
+- **Tags:** `offline-first` `self-hosted` `education` `rag`
+
+Crosstalk-Solutions/project-nomad は、インターネット無しで動くナレッジスタックを組み上げる
+Docker オーケストレーションの「Command Center」だ。オフライン Wikipedia と医療・サバイバル
+リファレンス(Kiwix)、進捗追跡付きの Khan Academy 講座(Kolibri)、ダウンロード可能な地域
+地図(ProtoMaps)、Markdown ノート、そしてオプションのローカル AI —— ドキュメントアップロー
+ドと Qdrant セマンティック検索付きの Ollama チャット。別ホストでの稼働も可能。Apache-2.0、
+コミット753、最小構成はメモリ4GBのデュアルコアマシン。README はベンダースポンサーが一切ない
+ことも明示している。
+
+**なぜ重要か:** 二つの潮流 —— オフグリッド/備蓄ムーブメントとローカル AI セルフホスティング ——
+の合流点であり、デモではなく運用ツールとしてパッケージされている点が新しい。今週のランクインの
+トリガーはリポジトリ内のどこにも明記されていない(確認済み)ため、本日 +26 は急騰ではなく着実な
+蓄積と読むべきだ。太字に値する運用上の警告：**認証が内蔵されていない** —— README は公開
+インターネットに出すなと明言している。
+
+[`🔗 github.com/Crosstalk-Solutions/project-nomad`](https://github.com/Crosstalk-Solutions/project-nomad) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-14T12:06:00+08:00 |
-| Items | 26 |
-| Sources tracked | 19 (Hacker News, GitHub Trending/API, vals.ai, LessWrong, Goodhart Labs, dreamstation.systems, signalusers.org, NVD, bcantrill.dtrace.org, x.com, TechCrunch, atomic14, bensimms.moe, The Verge, julialang.org, aprilnea.me, developer.apple.com, devblogs.microsoft.com, giannirosato.com) |
+| Generated | 2026-09-14T20:12:00+08:00 |
+| Items | 38 |
+| Sources tracked | 22 (Hacker News, GitHub Trending/API, vals.ai, LessWrong, Goodhart Labs, dreamstation.systems, signalusers.org, NVD, bcantrill.dtrace.org, x.com, TechCrunch, atomic14, bensimms.moe, The Verge, julialang.org, aprilnea.me, developer.apple.com, devblogs.microsoft.com, giannirosato.com, calif.io, haveibeenpwned.com, danluu.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
