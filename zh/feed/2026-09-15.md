@@ -1,8 +1,8 @@
 ---
 date: 2026-09-15
-updated: 2026-09-15T12:20:00+08:00
+updated: 2026-09-15T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 39
 license: CC-BY-4.0
 ---
 
@@ -594,13 +594,340 @@ MIT 许可。
 
 ---
 
+## 31. Gitea CVE-2026-60004（CVSS 9.8）："Red Heron" 间谍活动收割自托管代码仓库
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Acronis 威胁研究单元（经 securityonline.info）· 2026-09-15 报道
+- **Tags:** `cve` `rce` `supply-chain`
+
+Acronis 威胁研究单元公布了一起针对未打补丁的自托管 Gitea 服务器的国家级间谍活动拆解：一个
+被追踪为 **Red Heron** 的中文威胁行为体利用 CVE-2026-60004——通过公共端点提交重复补丁文件
+即可触发的代码注入（CWE-94）——入侵了横跨多个大洲的开发者平台，窃取私有仓库、收集凭据并
+部署 rootkit。补丁本身并不新：Gitea 已于 7 月 27 日在 1.27.1 中修复该漏洞。新闻在于确认的
+在野利用——30 天 EPSS 高达 86.8%。
+
+**Why it matters:** 自托管 Git 托管平台正是那些自认为规模太小不会成为目标的团队的命根子，
+而互联网上暴露的实例数以万计。"七月补丁 + 九月间谍活动"与之前的 Forgejo 模板 RCE 事件是
+同一个教训：自己托管 forge，就要自己承担补丁节奏。
+
+> 聚合站摘要表中的 "Affected: 1.17" 与 7 月 27 日修复落地于 1.27.1 相矛盾——以 1.27.1+
+> 的官方公告为准，并核实自己部署的版本。
+
+[`🔗 securityonline.info 拆解`](https://securityonline.info/gitea-rce-vulnerability-exploited/) · [`🔗 Gitea releases`](https://github.com/go-gitea/gitea/releases)
+
+---
+
+## 32. dbt Labs 开源 dbt Charts——为智能体而生的声明式仪表盘语言
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 247+ 分 · 14.9小时前（~05:22 UTC+8）
+- **Tags:** `data-engineering` `dashboards` `agents`
+
+"Charts built for Chat"——dbt Labs 开源了 dbt Charts，一种声明式仪表盘语言，卖点是给
+智能体生成的分析套上治理：智能体不再把一份报表散落成 HTML、CSS、某个图表库和一个
+Streamlit 应用，图表是单一的声明式产物，可以审查、diff 和版本管理。博客将其定位为摆脱
+虚假二选一：要么是生成代码的混乱自由，要么是"只能做 UI 暴露的功能"的 BI copilot。
+Apache-2.0，仓库 8 月中旬创建，今天仍有推送。
+
+**Why it matters:** 让图表和视频对智能体可用的"确定性产物"路线（见第 1、6 条）现在打到
+了 BI——而这里的审计痕迹更重要，因为产物驱动的是决策，不只是眼球。
+
+[`🔗 dbt Charts 博客`](https://dbtcharts.com/blog/charts-built-for-chat/) · [`🔗 dbt-labs/dbt-charts`](https://github.com/dbt-labs/dbt-charts)
+
+---
+
+## 33. Siri 的 "Model Delegation"：iOS 27 代码显示 Claude 和 ChatGPT 是一等后端
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 222+ 分 · 24小时前（~20:01 UTC+8）
+- **Tags:** `apple` `siri` `model-routing`
+
+继第 15 条 iOS 27 发布之后：代码侦探 "pdfu" 深挖了新 Siri 的私有框架，发现了 "Model
+Delegation"——一种让 Claude 像内置 ChatGPT 扩展一样作为 Siri 扩展出现的机制。在实测视频中，
+macOS 用户从 "Ask…" 菜单选择 Claude，让 Siri 把一条自然语言提醒请求路由给它，再由 Apple 的
+app intents 执行结果。安全研究人员随后探测了这些私有钩子，梳理新 Siri 接受哪些第三方后端。
+
+**Why it matters:** Apple 出货的是一个模型路由层，而不是一个模型——助手正在变成 harness，
+悬而未决的问题是第三方模型能否拿到与第一方大脑相同的设备端上下文。这是本周仓库里
+agent-harness 路由故事的消费级孪生版。
+
+[`🔗 MacRumors`](https://www.macrumors.com/2026/09/14/siri-can-be-swapped-out-for-chatgpt-claude/) · [`🔗 securityonline.info：探测钩子`](https://securityonline.info/siri-ai-private-hooks/)
+
+---
+
+## 34. 疑似蓄意破坏导致荷兰铁路大规模中断——本月欧盟第二起重大基础设施事件
+
+- **Velocity:** ▮ rising
+- **Source:** Hacker News · 174+ 分 · 1.9小时前（~18:22 UTC+8）
+- **Tags:** `infrastructure` `physical-security` `europe`
+
+荷兰铁路基础设施运营商 ProRail 报告，轨道遭疑似蓄意破坏后，荷兰中部和北部（包括阿姆斯特丹）
+出现大规模交通中断。BBC 报道仍在跟进，运营商尚未归因。它与本月欧洲关键基础设施屡遭物理
+干扰的模式相合，也在欧盟 CRA 报告义务（第 13 条）把事件披露变成法定倒计时的一天之后落地。
+
+**Why it matters:** 本站追踪 CVE 是因为软件会失效；这则新闻提醒的是 OT/铁路基础设施的失效
+方式不同——没有补丁星期二，物理冗余是唯一缓解手段。ProRail 的披露节奏是否会成为新欧盟
+规则在"物理 vs 网络分类"上的第一场考试，值得观察。
+
+[`🔗 BBC News`](https://www.bbc.com/news/articles/c8ly49w9g1edo) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49710253)
+
+---
+
+## 35. F-Droid 里有多少是 LLM 生成的？一位学生数了数：102 个样本中 72.5%
+
+- **Velocity:** ▮ rising
+- **Source:** Hacker News · 67+ 分 · 2.5小时前（~17:47 UTC+8）
+- **Tags:** `foss` `ai-impact` `supply-chain`
+
+一位学生维护者人工审查了 102 个 F-Droid 应用中 AI 生成代码的迹象——提交节奏、LLM 基础设施
+文件、README 特征——并将 74 个（72.5%）评为"主要由 AI 编写"，18 个（17.6%）为人类编写，
+10 个无法归类。诚实的框定摆在最前面："单从文本你判断不了"，这是读特征，不是代码质量分析。
+侧发现最令人毛骨悚然：一位多产贡献者的应用散布在不匹配的命名空间（"com.presley.*"、
+"com.codesail.*"）；Codeberg 托管的 5 个应用中 4 个可能违反 Codeberg 的 AI 政策；还有两个
+长期维护的应用每次改动都通过 GitHub 网页文件编辑器完成——完全不用 git。
+
+**Why it matters:** 这是每个人都在 anecdote 层面追问的问题的第一个具体分母，而且自带认识论
+说明。它与 9 月 12 日的"潦草度"测量是一对：智能体代码不只是更冗长，它正在成为应用商店
+出货的多数。
+
+[`🔗 tintotint.eu`](https://tintotint.eu/whacky-corner/f-droid_slop/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49710015)
+
+---
+
+## 36. Radius：Earendil 给 105k 星的智能体 harness Pi 包上一层商业服务
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending（日榜）· earendil-works/pi 共 105.4k 星
+- **Tags:** `agent-harness` `infrastructure` `business`
+
+Pi——开源、可自我扩展的编码智能体 harness，README 坦承**不内置权限系统**（"请容器化"）——
+再次登上趋势榜，因其母公司发布了 **Radius**：一个早期 alpha 服务，为"一切用 Pi 构建的东西"
+提供令牌、模型路由、改写、分析以及网页搜索等扩展，用 `/login radius` 即可启用。Pi 的发版
+保持每周节奏（v0.85.1，9 月 5 日），其治理特色——新贡献者的 issue 和 PR 默认自动关闭、
+维护者每日审阅——依然如故。
+
+**Why it matters:** harness 大战迎来了第一个成规模的 open-core 商业模式：105k 星的 MIT
+harness，顶上卖托管路由与分析层。缺失的权限系统现在也成了增购的语境——信任边界在 Radius
+那里被租用。
+
+[`🔗 Radius`](https://radius.earendil.com/) · [`🔗 earendil-works/pi`](https://github.com/earendil-works/pi)
+
+---
+
+## 37. Atlas——"编码智能体的版本控制"——把每次智能体运行变成检查点，Trendshift 第一
+
+- **Velocity:** ▮ rising
+- **Source:** Trendshift · GitHub Trending（日榜）· 4.5k 星
+- **Tags:** `agents` `version-control` `developer-tools`
+
+一款 macOS（Tauri）应用，把智能体运行当作一等公民的 VCS 事件：每个 commit 都是一个检查点，
+与产生它的会话关联——提示词、工具调用、推理、文件改动——数月后仍可查询。在同一代码库上
+并排运行 Claude Code、Codex、Atlas 自带的智能体或 ACP 注册表里的任何智能体，共享的设备端
+记忆让中途切换智能体不必从零开始。默认本地，同步需主动开启。
+
+**Why it matters:** Git 是为人类审查 diff 设计的；智能体工作流需要的是"溯源"——哪个智能体
+到底做了什么、为什么——而 git 没有地方放这些。这是 harness 生态一直缺失的检查点溯源层，
+跨智能体共享记忆是其最大胆的部分。
+
+[`🔗 pacifio/atlas`](https://github.com/pacifio/atlas) · [`🔗 Atlas 文档`](https://docs.tryatlas.cc/)
+
+---
+
+## 38. k-server 猜想被证明——在线算法领域 30 多年的公开问题落幕
+
+- **Velocity:** ▮ rising
+- **Source:** arXiv · 2026-09-15 提交 · HN 28+ 分
+- **Tags:** `theory` `algorithms` `research`
+
+k-server 猜想——确定性在线算法能在**每个**度量空间上达到竞争比 k，自 1980 年代末悬而未决——
+已被证明：work function 算法满足该性质。证明把 work function 表示为一个矩阵，编码到达某个
+配置的所有可行路径；min 与 plus 在其中变成形式化加法与乘法，每个 work function 值是 k 列的
+行列式；请求到达对应换基与行替换操作，摊还分析通过一个由更大矩阵构造的势函数完成。
+
+**Why it matters:** 在线算法最后几块大的奠基石之一，落在 AI 破译 370 年密码、数学职业给出
+制度化回应（第 14 条）的同一个月份——元问题现在是：这个证明的署名模式会不会成为常态。
+读原文，再看各家解读。
+
+[`🔗 arXiv:2609.15979`](https://arxiv.org/abs/2609.15979) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49709129)
+
+---
+
+## 39. LibreChat v0.8.8 推出 "Bring-Your-Own-Machine"，规模化运行编码智能体
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Releases · v0.8.8-rc3，2026-09-15
+- **Tags:** `chat-ui` `agents` `self-hosted`
+
+43.6k 星的自托管 ChatGPT 替代品因 v0.8.8-rc3 发布登上趋势榜：头号特性是实验性的
+**Bring-Your-Own-Machine**——把自有机器接入以规模化运行编码智能体——同时带来会话 Trace
+查看器与子智能体文件共享、agent/skills CRUD API 改进、GPT-6 Astra 支持以及扩展的上下文
+用量跟踪。
+
+**Why it matters:** 自托管聊天 UI 正在悄悄变成智能体编排平面：trace、子智能体文件共享、
+BYOM worker 都是 harness 特性而不是聊天特性。当你的"聊天应用"能挂 worker，你运行的就是
+一个机队管理器。
+
+[`🔗 v0.8.8-rc3 更新日志`](https://www.librechat.ai/changelog/v0.8.8-rc3) · [`🔗 danny-avila/LibreChat`](https://github.com/danny-avila/LibreChat)
+
+---
+
+## 40. OpenArch：所有现代 LLM 架构，用可读的 PyTorch 从零重写
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 139+ 分 · 28小时前（~15:55 UTC+8）
+- **Tags:** `research` `pytorch` `education`
+
+手工编写的 PyTorch 实现，覆盖 Sebastian Raschka 的 LLM 架构画廊中的架构——每个模型一个
+可读文件，把结构选择（注意力类型、归一化、位置编码、MoE 路由）显式化、可对比。README
+明确表示不与 `transformers` 竞争："本仓库为阅读而优化。"139 个 HN 分并持续攀升于日趋势榜。
+
+**Why it matters:** "读原始模型代码"的体验被生产级优化毁掉了；一份干净的从零实现语料既是
+教学工具，也是对比"代际之间到底改了什么"的 diff 工具。Raschka 画廊的锚定让它拥有大多数
+重写项目没有的策展骨架。
+
+[`🔗 anuj0456/OpenArch`](https://github.com/anuj0456/OpenArch) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49693384)
+
+---
+
+## 41. 9router 以 28.8k 星带着 RTK 省 token 卖点冲上趋势——正是基准测试拆穿过的那个声明
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（周榜）· 共 28.8k 星
+- **Tags:** `ai-gateway` `token-optimization` `benchmarking`
+
+"永不断线。用 RTK 省 20-40% token + 自动回退到免费/廉价 AI 模型"——9Router 把 Claude Code、
+Cursor、Codex 等工具路由到 40 多家提供商，叠加免费额度，并内置 RTK（token 缩减工具包）作为
+省钱引擎。值得带上我们 9 月 12 日报道的警示：Quesma 实测 RTK"省 90% token"的声明时，算上
+压缩上下文导致的输出膨胀，净成本变化为 ±5%——在 DeepSeek 上反而**贵** 17%。
+
+**Why it matters:** 订阅池化网关品类持续膨胀（sub2api、OmniRoute，现在是 9Router），但
+省 token 的营销跑在了测量前面。免费额度路由是真的；"省 20-40%"需要在您自己的流量上验证，
+它不是规格参数。
+
+[`🔗 decolua/9router`](https://github.com/decolua/9router) · [`🔗 9router.com`](https://9router.com)
+
+---
+
+## 42. Droid ASC：把 APK 当数据库查询，几秒反编译 352MB 的安卓应用
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日榜）· 1k 星 · Black Hat Europe Arsenal 工具
+- **Tags:** `android` `reverse-engineering` `security`
+
+一个从 Black Hat Europe Arsenal 议题走出来的开源工具：不让反编译器花几分钟和数 GB 内存
+构建完整索引，ASC 直接探测 Deflate 位流、即时构建稠密 Huffman 查找表，并利用 R8 编译器
+布局的确定性（常量重定位、指令去重）做跨 DEX 搜索。在 352MB 商业 APK 上实测：全局交叉
+引用搜索 1.79 秒，目标类反编译 177 毫秒，内存 141MB。README 将其定位为"为智能体/移动
+研究人员设计的前端"。
+
+**Why it matters:** 一条新闻两个趋势：安全工具正在为智能体消费者重新设计（每次查询以毫秒
+计，而非每次索引以分钟计），而"查询产物本身、跳过预处理"与本周工具层涌现的反 RAG 本能
+是同一个思路。Apache-2.0，可 pip 安装。
+
+[`🔗 MG1937/ASC`](https://github.com/MG1937/ASC) · [`🔗 Black Hat Arsenal 议题`](https://blackhat.com/europe/arsenal/schedule/index.html#droid-asc-r8-compiler-optimization-as-a-decompiler-primitive-54834)
+
+---
+
+## 43. OpenArm：面向接触密集型物理 AI 的全开源 7 自由度人形手臂
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 122+ 分 · 46小时前（9 月 13 日）
+- **Tags:** `robotics` `open-source` `hardware`
+
+Enactic 的 OpenArm 是一条完整的开源人形手臂——7 个自由度，硬件设计、固件与软件俱全——
+面向接触密集环境中的物理 AI 研究，也就是遥操作数据采集构成瓶颈的操控一侧。3.2k 星且活跃
+（一天内有推送）；周末登上了 HN 首页。
+
+**Why it matters:** 机器人学习浪潮需要手臂，就像 LLM 需要 GPU：如果操控基础模型持续进步，
+稀缺资产就是买得起、可魔改、力矩透明的数据采集硬件。开源手臂整机正在公开形成这一资产
+类别。
+
+[`🔗 enactic/openarm`](https://github.com/enactic/openarm) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49684289)
+
+---
+
+## 44. 微软从 Excel 中移除 COPILOT 函数——预览造势仅三个月后
+
+- **Velocity:** ▮ steady
+- **Source:** Microsoft Support · 官方函数页面确认
+- **Tags:** `microsoft` `excel` `ai-features`
+
+安静但可验证：微软自己的支持页面现在写着"自 2026 年 9 月 14 日起，COPILOT 函数在 Microsoft
+Excel 中不再可用。"这个让单元格在公式里调用 LLM 的函数曾是 Frontier/Insider 渠道的预览
+特性；微软指引用户改用 Copilot 窗格，它"支持许多相同的 AI 任务"，但活在网格之外。公式级
+替代方案尚无宣布。
+
+**Why it matters:** Excel 的 COPILOT() 是"AI 作为一等公式"的旗舰演示——确定性、可审计、
+在单元格内。无替代地移除它，是一个真实信号：无论发布期的宣传怎么说，让非确定性调用活在
+重算引擎里有多难。
+
+[`🔗 Microsoft：COPILOT 函数`](https://support.microsoft.com/en-us/excel/functions/copilot-function) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49706481)
+
+---
+
+## 45. "我试图让公司信守它的伦理承诺"——一位 DeepMind 前员工公开发声
+
+- **Velocity:** ▮ steady
+- **Source:** The Guardian · HN 36+ 分 · 9.8小时前（~10:25 UTC+8）
+- **Tags:** `ai-safety` `google-deepmind` `essay`
+
+Alex Turner 在《卫报》的评论文章为本周的安全离职与警告潮加上了一个 DeepMind 声音：这位
+前研究员讲述了试图阻止公司向军事用途供应 AI、让公司信守自身伦理承诺的经历，并主张公众
+应当认真对待来自内部的警告。文章与《卫报》更宽泛的报道同期刊出：DeepMind 内部人士认为
+公众听到的还不够。
+
+**Why it matters:** 本周的安全讨论从 Bengio 的智能体失范"可预测"，到 Cantrill 对恐惧蔓延的
+反驳；一位具名的 ex-DeepMind 讲述内部倡导路径失效，是另一个数据点——关于实验室内部的
+激励结构，而不是模型能力。这是一篇评论文章；请把它当作证词而非测量来掂量。
+
+[`🔗 The Guardian`](https://www.theguardian.com/technology/2026/sep/14/google-deepmind-ai-warnings) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49706941)
+
+---
+
+## 46. Redis City：把 Redis 的一切做成可漫游的 3D 模型的 Show HN
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News（Show HN）· 117+ 分 · 自 9 月 12 日起在首页
+- **Tags:** `redis` `visualization` `databases`
+
+一座可浏览的 3D 城市，Redis 的每种结构与操作都是一栋建筑：键、哈希、流、发布/订阅、过期、
+持久化——你可以把数据结构当建筑来走，看操作在其中穿行。它属于"把数据库画出来"这波
+小型浪潮：把系统教育当作一个环境，而不是一张图。
+
+**Why it matters:** 系统直觉是智能体时代的工程师读文档读不来的稀缺资源，交互式空间模型
+是它最强的教学法。它也是本周智能体生成可视化的一剂解药：这一个是为教学手工打造的，
+不是为了填空间而生成的。
+
+[`🔗 Redis City`](https://poltora.dev/redis) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49676425)
+
+---
+
+## 47. 巴西经济体的每一张发票都跑在 SOAP 1.2 上——有人把它全部整理成册
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 77+ 分 · 57小时前（9 月 13 日）
+- **Tags:** `integration` `xml` `brazil`
+
+承载巴西全部税务单据的 SEFAZ 税务 Web 服务——NF-e、NFC-e、CT-e、MDF-e——是 SOAP 1.2，
+配合绑定 e-CNPJ 的 mTLS 证书，要求符合葡萄牙语特定规范化形式的签名 XML。一位开发者把
+完整、经生产验证的分发端点 Postman 集合打包发布，把口口相传的集成知识变成可运行的产物。
+HN 评论区已变成互助小组。
+
+**Why it matters:** 世界上最有意思的 API 往往不是时髦的那些：一整个国家的财税管道跑在
+2000 年代的 XML 标准配上真实的密码学仪式之上，那个经济体里的每个开发者都带着伤疤。
+"以集合形式发布文档"也悄悄成为开源仓库最有用的形态之一。
+
+[`🔗 stoix-dev/sefaz-webservices-postman`](https://github.com/stoix-dev/sefaz-webservices-postman) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49679653)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-15T04:20:00Z |
-| Items | 30 |
-| Sources tracked | 29 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs and advisories, EU Commission, Apple Newsroom, courts, security research blogs) |
+| Generated | 2026-09-15T12:20:00Z |
+| Items | 47 |
+| Sources tracked | 39 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs and advisories, EU Commission, Apple Newsroom, courts, security research blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

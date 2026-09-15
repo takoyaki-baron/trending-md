@@ -1,8 +1,8 @@
 ---
 date: 2026-09-15
-updated: 2026-09-15T12:20:00+08:00
+updated: 2026-09-15T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 39
 license: CC-BY-4.0
 ---
 
@@ -667,13 +667,374 @@ MIT ライセンス。
 
 ---
 
+## 31. Gitea CVE-2026-60004（CVSS 9.8）：「Red Heron」スパイ活動がセルフホストのリポジトリを収奪
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Acronis 脅威リサーチユニット（securityonline.info 経由）· 2026-09-15 報道
+- **Tags:** `cve` `rce` `supply-chain`
+
+Acronis の脅威リサーチユニットが、未パッチのセルフホスト Gitea サーバーに対する国家関与の
+スパイ活動を解剖した：**Red Heron** と追跡される中国語圏の脅威アクターが CVE-2026-60004
+——公開エンドポイント経由で重複するパッチファイルを送信するだけで到達できるコード注入
+（CWE-94）——を武器化し、複数大陸の開発者プラットフォームに侵入して、プライベートリポジトリ
+の窃取、認証情報の収集、ルートキットの配備を行った。パッチ自体は新しいものではない：Gitea は
+7 月 27 日の 1.27.1 で修正済み。ニュースは確認された in-the-wild 悪用だ——30 日 EPSS は 86.8%。
+
+**Why it matters:** セルフホストの Git フォージは「自分は小さすぎて狙われない」と思っている
+チームまさにその宝物であり、インターネットに露出したインスタンスは数万に及ぶ。「7 月の
+パッチ + 9 月のスパイ活動」は、以前の Forgejo テンプレート RCE と同じ教訓だ：フォージを
+自分でホストするなら、パッチ運用も自分の責任。
+
+> 集約サイトのサマリ表にある「Affected: 1.17」は、7 月 27 日に修正が 1.27.1 に入ったことと
+> 矛盾する——1.27.1 以降の公式アドバイザリを正とし、自分のバージョンを確認すること。
+
+[`🔗 securityonline.info 解説`](https://securityonline.info/gitea-rce-vulnerability-exploited/) · [`🔗 Gitea releases`](https://github.com/go-gitea/gitea/releases)
+
+---
+
+## 32. dbt Labs が dbt Charts をオープンソース化——エージェントのための宣言的ダッシュボード言語
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 247+ pts · 14.9時間前（~05:22 UTC+8）
+- **Tags:** `data-engineering` `dashboards` `agents`
+
+「Charts built for Chat」——dbt Labs が dbt Charts をオープンソース化した。宣言的な
+ダッシュボード言語で、売りはエージェント生成の分析へのガバナンスだ：エージェントが 1 つの
+レポートを HTML、CSS、チャートライブラリ、Streamlit アプリに散らばる代わりに、チャートは
+レビュー・diff・バージョン管理できる単一の宣言的アーティファクトになる。ブログはこれを、
+生成コードの混沌とした自由と「UI が公開する範囲しかできない」BI copilot という偽の二択からの
+脱出として位置づける。Apache-2.0、リポジトリは 8 月半ば作成、今日もプッシュあり。
+
+**Why it matters:** 図やビデオをエージェント対応させた「決定論的アーティファクト」の路線
+（1、6 項参照）が BI に到達した——ここでは監査証跡がさらに重要だ。出力は眼球ではなく
+意思決定を動かすからだ。
+
+[`🔗 dbt Charts ブログ`](https://dbtcharts.com/blog/charts-built-for-chat/) · [`🔗 dbt-labs/dbt-charts`](https://github.com/dbt-labs/dbt-charts)
+
+---
+
+## 33. Siri の「Model Delegation」：iOS 27 のコードが Claude と ChatGPT を一等後端として示す
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 222+ pts · 24時間前（~20:01 UTC+8）
+- **Tags:** `apple` `siri` `model-routing`
+
+15 項の iOS 27 発売を受けて：コード探索者の "pdfu" が新 Siri のプライベートフレームワークを
+掘り、"Model Delegation" を発見した——内蔵の ChatGPT 拡張とまったく同じように Claude を
+Siri 拡張として現せる仕組みだ。実演動画では、macOS ユーザーが「Ask…」メニューから Claude を
+選び、Siri に自然言語のリマインダー要求をルーティングさせ、Apple の app intents が結果を
+実行する。セキュリティ研究者たちはその後、プライベートフックを調べて新 Siri がどの
+サードパーティ後端を受け付けるかを整理した。
+
+**Why it matters:** Apple が出荷したのはモデルではなくモデルルーティング層だ——アシスタントは
+ハーネスになりつつあり、未解決の問いはサードパーティモデルがファーストパーティの脳と同じ
+オンデバイスコンテキストを得られるかだ。今週のリポジトリを支配するエージェントハーネス
+ルーティング物語の、消費者向けの双子だ。
+
+[`🔗 MacRumors`](https://www.macrumors.com/2026/09/14/siri-can-be-swapped-out-for-chatgpt-claude/) · [`🔗 securityonline.info：フックの検証`](https://securityonline.info/siri-ai-private-hooks/)
+
+---
+
+## 34. 実犯工作の疑いでオランダの鉄道が大規模停止——今月 EU で 2 件目の重大インフラ事案
+
+- **Velocity:** ▮ rising
+- **Source:** Hacker News · 174+ pts · 1.9時間前（~18:22 UTC+8）
+- **Tags:** `infrastructure` `physical-security` `europe`
+
+オランダの鉄道インフラ運営者 ProRail は、線路への実犯工作の疑いにより、アムステルダムを含む
+オランダ中部・北部で大規模な輸送障害が発生したと報告した。BBC の報は進行中で、運営者はまだ
+犯行の帰属を示していない。今月の欧州重要インフラへの物理的妨害のパターンと重なり、EU の CRA
+報告義務（13 項）がインシデント開示を法的カウントダウンにした翌日の出来事だ。
+
+**Why it matters:** 本サイトが CVE を追うのはソフトウェアが壊れるからだ；これは OT・鉄道
+インフラの壊れ方が違うことのリマインダーだ——パッチチューズデーはなく、物理的冗長性だけが
+緩和策だ。ProRail の開示の歩みが「物理 vs サイバー」の分類をめぐる新 EU ルールの最初の
+試験台になるか、注視したい。
+
+[`🔗 BBC News`](https://www.bbc.com/news/articles/c8ly49w9g1edo) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49710253)
+
+---
+
+## 35. F-Droid のどれだけが LLM 生成か？学生が数えた：102 アプリ中 72.5%
+
+- **Velocity:** ▮ rising
+- **Source:** Hacker News · 67+ pts · 2.5時間前（~17:47 UTC+8）
+- **Tags:** `foss` `ai-impact` `supply-chain`
+
+学生メンテナンス者が 102 の F-Droid アプリを手作業で調べ、AI 生成コードの兆候——コミットの
+歩み、LLM インフラファイル、README の癖——を確認し、74 個（72.5%）を「大部分 AI が執筆」、
+18 個（17.6%）を人間、10 個を分類不能と判定した。誠実な枠付けが最初にある：「テキストだけでは
+分からない」。これは癖読みであってコード品質分析ではない。側面の発見が最も不気味だ：ある
+多作なコントリビューターのアプリが一致しない名前空間に散らばり（"com.presley.*"、
+"com.codesail.*"）、Codeberg ホストの 5 アプリ中 4 つが Codeberg の AI ポリシーに違反する
+可能性があり、さらに長期継続中の 2 アプリは全変更を GitHub の web ファイルエディタで
+行っていた——git を使わずに。
+
+**Why it matters:** 誰もが anecdote レベルで問うてきた問いの、最初の具体的な分母が、認識論の
+説明付きで届いた。9 月 12 日の「雑さ」測定と対をなす：エージェントコードは冗長なだけでなく、
+アプリストアに出荷されるものの多数派になりつつある。
+
+[`🔗 tintotint.eu`](https://tintotint.eu/whacky-corner/f-droid_slop/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49710015)
+
+---
+
+## 36. Radius：Earendil が 105k スターのエージェントハーネス Pi に商用サービス層を被せる
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending（日次）· earendil-works/pi 計 105.4k スター
+- **Tags:** `agent-harness` `infrastructure` `business`
+
+Pi——オープンソースで自己拡張可能なコーディングエージェントハーネス。README は**権限システムを
+内蔵しない**ことを率直に明記している（「コンテナ化せよ」）——親会社が **Radius** を発表した
+ことで再びトレンドに：Pi で構築されたものすべてにトークン、モデルルーティング、リライト、
+分析、web 検索などの拡張を提供する初期アルファサービスで、`/login radius` で有効化できる。
+Pi のリリースは週次の歩みを保ち（v0.85.1、9 月 5 日）、ガバナンスの特徴——新規コントリビュー
+ターの issue と PR はデフォルトで自動クローズされ、毎日レビューされる——もそのままだ。
+
+**Why it matters:** ハーネス戦争に初めてのスケールの open-core ビジネスモデルが登場した：
+105k スターの MIT ハーネスの上に、ホスト型ルーティング・分析層を売る。欠けていた権限
+システムは今やアップセルの文脈でもある——信頼境界は Radius でレンタルされる。
+
+[`🔗 Radius`](https://radius.earendil.com/) · [`🔗 earendil-works/pi`](https://github.com/earendil-works/pi)
+
+---
+
+## 37. Atlas——「コーディングエージェントのためのバージョン管理」——全エージェント実行を
+チェックポイント化、Trendshift 1 位
+
+- **Velocity:** ▮ rising
+- **Source:** Trendshift · GitHub Trending（日次）· 4.5k スター
+- **Tags:** `agents` `version-control` `developer-tools`
+
+macOS（Tauri）アプリで、エージェントの実行を第一級の VCS イベントとして扱う：すべての
+コミットはチェックポイントとして、それを作ったセッション——プロンプト、ツール呼び出し、
+推論、ファイル変更——に紐付き、数カ月後も照会できる。Claude Code、Codex、Atlas 独自の
+エージェント、ACP レジストリの何者でも同じコードベース上に並べて実行でき、共有のオンデバイス
+メモリにより、タスク途中のエージェント切替もゼロからやり直さない。デフォルトでローカル、
+同期はオプトイン。
+
+**Why it matters:** Git は diff をレビューする人間のために設計された；エージェントワークフローが
+必要なのは「どのエージェントが何を、なぜ行ったか」という来歴で、Git にはそれを置く場所が
+ない。ハーネス生態系に欠けていたチェックポイント来歴層であり、エージェント横断の共有メモリ
+が最も大胆な部分だ。
+
+[`🔗 pacifio/atlas`](https://github.com/pacifio/atlas) · [`🔗 Atlas ドキュメント`](https://docs.tryatlas.cc/)
+
+---
+
+## 38. k-server 予想が証明される——オンラインアルゴリズムの 30 年超の未解決問題が落ちる
+
+- **Velocity:** ▮ rising
+- **Source:** arXiv · 2026-09-15 投稿 · HN 28+ pts
+- **Tags:** `theory` `algorithms` `research`
+
+k-server 予想——決定論的オンラインアルゴリズムが**あらゆる**計量空間で競争比 k を達成できる、
+という 1980 年代末以来の未解決問題——が証明された：work function アルゴリズムが予想を満たす。
+証明は work function を、ある構成に至るすべての実行可能経路を符号化する行列として表現する。
+min と plus は形式的な加法と乗法になり、各 work function の値は k 列の行列式になる。要求の
+到着は基底変換と行置換として現れ、償却解析はより大きな行列から構成したポテンシャル関数に
+よって行われる。
+
+**Why it matters:** オンラインアルゴリズムの最後の大きな礎石のひとつが、AI が 370 年の暗号を
+解読し数学界が制度的回答を出した（14 項）同じ月に落ちた——メタの問いは、この証明の著者
+パターンが常態になるかどうかだ。各家の解釈の前に原論文を読むこと。
+
+[`🔗 arXiv:2609.15979`](https://arxiv.org/abs/2609.15979) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49709129)
+
+---
+
+## 39. LibreChat v0.8.8 が「Bring-Your-Own-Machine」を搭載——コーディングエージェントを規模拡大
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Releases · v0.8.8-rc3、2026-09-15
+- **Tags:** `chat-ui` `agents` `self-hosted`
+
+43.6k スターのセルフホスト ChatGPT 代替が v0.8.8-rc3 リリースでトレンドに：目玉は実験的な
+**Bring-Your-Own-Machine**——自分のマシンを接続してコーディングエージェントを規模拡大
+できる——に加え、会話 Trace ビューアとサブエージェントのファイル共有、agent/skills CRUD API
+の改善、GPT-6 Astra 対応、拡張されたコンテキスト使用量トラッキング。
+
+**Why it matters:** セルフホストのチャット UI が静かにエージェントオーケストレーションの
+プレーンになりつつある：trace、サブエージェントのファイル共有、BYOM worker はどれもハーネスの
+機能であってチャットの機能ではない。「チャットアプリ」が worker を接続できるなら、それは
+フリートマネージャだ。
+
+[`🔗 v0.8.8-rc3 変更履歴`](https://www.librechat.ai/changelog/v0.8.8-rc3) · [`🔗 danny-avila/LibreChat`](https://github.com/danny-avila/LibreChat)
+
+---
+
+## 40. OpenArch：すべての現代 LLM アーキテクチャを読める PyTorch でゼロから再実装
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 139+ pts · 28時間前（~15:55 UTC+8）
+- **Tags:** `research` `pytorch` `education`
+
+Sebastian Raschka の LLM アーキテクチャギャラリーにあるアーキテクチャの手書き PyTorch 実装
+——モデルごとに 1 つの読めるファイルで、構造上の選択（attention タイプ、正規化、位置エン
+コーディング、MoE ルーティング）を明示的に比較可能に。README は `transformers` と競合しない
+ことを明言している：「このリポジトリは読むために最適化している」。139 HN pts を付け、日次
+トレンドで上昇中。
+
+**Why it matters:** 「元のモデルコードを読む」体験は本番最適化によって壊れている；クリーンな
+ゼロからのコーパスは教育ツールであると同時に、「世代間で何が変わったのか」を比較する diff
+ツールでもある。Raschka ギャラリーへのアンカーにより、ほとんどの再実装にないキュレーション
+された背骨を得ている。
+
+[`🔗 anuj0456/OpenArch`](https://github.com/anuj0456/OpenArch) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49693384)
+
+---
+
+## 41. 9router が RTK トークン削減を売りに 28.8k スターでトレンドに——ベンチマークが論破した
+あの主張そのもの
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（週次）· 計 28.8k スター
+- **Tags:** `ai-gateway` `token-optimization` `benchmarking`
+
+「コーディングを止めるな。RTK でトークンを 20-40% 削減 + 無料・低価格 AI モデルへの自動
+フォールバック」——9Router は Claude Code、Cursor、Codex などを 40 以上のプロバイダに
+ルーティングし、フリーティアの積み重ねを行い、節約エンジンとして RTK（トークン削減
+ツールキット）を同梱する。9 月 12 日の本サイト報道の警告を携行したい：Quesma が RTK の
+「90% トークン削減」主張を実際に計測したところ、圧縮されたコンテキストによる出力増を数えると
+正味コスト変化は ±5%——DeepSeek では逆に **17% 高く**なった。
+
+**Why it matters:** サブスクリプションプーリングゲートウェイのカテゴリは拡大を続けている
+（sub2api、OmniRoute、そして 9Router）が、トークン削減のマーケティングは測定を先行して
+いる。フリーティアルーティングは本物だ；「20-40% 削減」の行は、スペックではなく自分の
+トラフィックで検証すべき主張だ。
+
+[`🔗 decolua/9router`](https://github.com/decolua/9router) · [`🔗 9router.com`](https://9router.com)
+
+---
+
+## 42. Droid ASC：APK をデータベースとして照会し、352MB の Android アプリを数秒で逆コンパイル
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日次）· 1k スター · Black Hat Europe Arsenal ツール
+- **Tags:** `android` `reverse-engineering` `security`
+
+Black Hat Europe Arsenal のブリーフィングから生まれたオープンソースツール：逆コンパイラに
+数分と数 GB をかけて完全なインデックスを展開させる代わりに、ASC は Deflate ビットストリームを
+直接探査し、密な Huffman ルックアップテーブルをその場で構築し、R8 コンパイラのレイアウトの
+決定論（定数再配置、命令重複排除）を武器に cross-DEX 検索を行う。352MB の商用 APK での
+実測：グローバル相互参照検索 1.79 秒、対象クラスの逆コンパイル 177 ミリ秒、メモリ 141MB。
+README は「Agents/モバイルリサーチャー向けに設計されたフロントエンド」と位置づける。
+
+**Why it matters:** ひとつのニュースに二つのトレンド：セキュリティツールがエージェント消費者
+のために再設計されている（インデックス構築に数分ではなく、クエリごとにミリ秒）、そして
+「アーティファクトを照会し、前処理を省く」のは今週ツール層に現れている反 RAG の本能と同じ
+発想だ。Apache-2.0、pip でインストール可能。
+
+[`🔗 MG1937/ASC`](https://github.com/MG1937/ASC) · [`🔗 Black Hat Arsenal ブリーフィング`](https://blackhat.com/europe/arsenal/schedule/index.html#droid-asc-r8-compiler-optimization-as-a-decompiler-primitive-54834)
+
+---
+
+## 43. OpenArm：接触の多い物理 AI 向け、完全オープンソースの 7 自由度ヒューマノイドアーム
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 122+ pts · 46時間前（9 月 13 日）
+- **Tags:** `robotics` `open-source` `hardware`
+
+Enactic の OpenArm は完全なオープンソースのヒューマノイドアームだ——7 自由度、ハードウェア
+設計、ファームウェア、ソフトウェアが揃い、接触の多い環境での物理 AI 研究、すなわち
+テレオペレーションによるデータ収集がボトルネックになる操作側を狙う。3.2k スターで活発
+（1 日以内にプッシュ）；週末に HN フロントページに乗った。
+
+**Why it matters:** ロボット学習の波には、LLM に GPU が必要だったようにアームが必要だ：操作の
+基盤モデルが改善を続けるなら、希少な資産は手頃で、改造可能で、トルクが透明なデータ収集用
+ハードウェアだ。オープンソースのアームスタックがその資産クラスとして公開形成されつつある。
+
+[`🔗 enactic/openarm`](https://github.com/enactic/openarm) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49684289)
+
+---
+
+## 44. Microsoft が Excel から COPILOT 関数を削除——プレビューの宣伝からわずか 3 カ月
+
+- **Velocity:** ▮ steady
+- **Source:** Microsoft Support · 公式関数ページで確認
+- **Tags:** `microsoft` `excel` `ai-features`
+
+静かだが検証可能：Microsoft 自身のサポートページに「2026 年 9 月 14 日以降、COPILOT 関数は
+Microsoft Excel で利用できなくなりました」と記載されている。セルが数式の一部として LLM を
+呼べるこの関数は Frontier/Insider チャネルのプレビューだった；Microsoft は Copilot ペインの
+利用を案内しているが、それは「多くの同じ AI タスク」に対応するもののグリッドの外に暮らして
+いる。数式レベルの代替の発表はない。
+
+**Why it matters:** Excel の COPILOT() は「AI を一等の数式に」の旗艦デモだった——決定論的、
+監査可能、セルの中。代替なくの削除は、ローンチ時のメッセージが何であれ、非決定論的な呼び出し
+を再計算エンジンの内側で生かすことがどれほど難しいかについての本物のシグナルだ。
+
+[`🔗 Microsoft：COPILOT 関数`](https://support.microsoft.com/en-us/excel/functions/copilot-function) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49706481)
+
+---
+
+## 45. 「私は会社に倫理的コミットメントを守らせようとした」——DeepMind 元社員が公に語る
+
+- **Velocity:** ▮ steady
+- **Source:** The Guardian · HN 36+ pts · 9.8時間前（~10:25 UTC+8）
+- **Tags:** `ai-safety` `google-deepmind` `essay`
+
+Alex Turner による Guardian の寄稿が、今週の安全性に関する退職と警告の流れに DeepMind の声を
+加えた：元研究者は、軍事目的への AI 供給をめぐって会社に自らの倫理的コミットメントを守らせよう
+とした経験を語り、公衆は内部からの警告を真剣に受け止めるべきだと論じる。Guardian のより広い
+記事——DeepMind 内部の人々がなぜ公衆は十分に聞いていないと考えるか——と併せて掲載された。
+
+**Why it matters:** 今週の安全性言説は、Bengio のエージェントの不正直は「予測可能」という主張
+から、Cantrill の恐怖伝染への反論まで走った；名指しの ex-DeepMind による社内アドボカシーの
+道が機能しなかった証言は、別のデータポイントだ——モデルの能力ではなく、ラボ内部のインセン
+ティブについての。これは寄稿である；測定ではなく証言として重みづけすること。
+
+[`🔗 The Guardian`](https://www.theguardian.com/technology/2026/sep/14/google-deepmind-ai-warnings) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49706941)
+
+---
+
+## 46. Redis City：Redis のすべてを歩き回れる 3D モデルにした Show HN
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News（Show HN）· 117+ pts · 9 月 12 日からフロントページ
+- **Tags:** `redis` `visualization` `databases`
+
+Redis のすべての構造と操作が建物になった、歩ける 3D 都市：キー、ハッシュ、ストリーム、
+pub/sub、期限切れ、永続化——データ構造を建築として歩き、操作がその中を動くのを見られる。
+「データベースを描き出す」小さな波のひとつで、システム教育を図ではなく環境として扱う。
+
+**Why it matters:** システムの直感は、エージェント時代のエンジニアがドキュメントを読んででは
+得られない希少なリソースで、インタラクティブな空間モデルはそのための最良の教育法だ。今週の
+エージェント生成ビジュアライゼーションへの有用な対重でもある：これは教えるために手作りされ、
+隙間を埋めるために生成されたのではない。
+
+[`🔗 Redis City`](https://poltora.dev/redis) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49676425)
+
+---
+
+## 47. ブラジル経済のすべての請求書が SOAP 1.2 で動いている——誰かがその全てを目録化した
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 77+ pts · 57時間前（9 月 13 日）
+- **Tags:** `integration` `xml` `brazil`
+
+ブラジルの全ての税務文書を運ぶ SEFAZ 税務当局の Web サービス——NF-e、NFC-e、CT-e、MDF-e
+——は SOAP 1.2 で、e-CNPJ に紐づく mTLS 証明書を伴い、ポルトガル語固有の正規化形式に従う
+署名済み XML を要求する。ある開発者が、実運用で検証済みの配布エンドポイントの完全な
+Postman コレクションをパッケージ化し、口伝だった統合知識を実行可能なアーティファクトにした。
+HN のスレッドは自助グループになっている。
+
+**Why it matters:** 世界で最も面白い API は、めったにトレンドのものではない：一国全体の財務
+パイプラインが 2000 年代の XML 標準と本物の暗号の儀式で動いており、その経済のすべての
+開発者が傷跡を抱えている。「コレクションとしてのドキュメント」はまた静かに、オープンソース
+リポジトリが取れる最も有用な形態のひとつでもある。
+
+[`🔗 stoix-dev/sefaz-webservices-postman`](https://github.com/stoix-dev/sefaz-webservices-postman) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49679653)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-15T04:20:00Z |
-| Items | 30 |
-| Sources tracked | 29 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs and advisories, EU Commission, Apple Newsroom, courts, security research blogs) |
+| Generated | 2026-09-15T12:20:00Z |
+| Items | 47 |
+| Sources tracked | 39 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs and advisories, EU Commission, Apple Newsroom, courts, security research blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

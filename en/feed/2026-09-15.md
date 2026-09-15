@@ -1,8 +1,8 @@
 ---
 date: 2026-09-15
-updated: 2026-09-15T12:20:00+08:00
+updated: 2026-09-15T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 39
 license: CC-BY-4.0
 ---
 
@@ -657,13 +657,373 @@ not a framework.
 
 ---
 
+## 31. Gitea CVE-2026-60004 (CVSS 9.8): "Red Heron" espionage campaign harvests self-hosted repos
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Acronis Threat Research Unit via securityonline.info · reported 2026-09-15
+- **Tags:** `cve` `rce` `supply-chain`
+
+Acronis's Threat Research Unit has published the teardown of a state-linked espionage campaign
+against unpatched self-hosted Gitea servers: a Chinese-speaking actor tracked as **Red Heron**
+weaponized CVE-2026-60004 — code injection (CWE-94) reachable by submitting duplicate patch files
+through public endpoints — to breach developer platforms across multiple continents, steal private
+repositories, harvest credentials, and deploy rootkits. The patch itself is not new: Gitea fixed
+the flaw in 1.27.1 on July 27. The news is the confirmed in-the-wild exploitation, with an EPSS
+of 86.8% over 30 days.
+
+**Why it matters:** Self-hosted Git forges are the crown jewels of exactly the teams that think
+they're too small to target, and tens of thousands are internet-facing. A July patch plus a
+September espionage campaign is the same gap that made the earlier Forgejo template-RCE story
+painful: hosting your own forge means owning its patch cadence.
+
+> The "Affected: 1.17" line in the aggregator's summary table contradicts the July 27 fix landing
+> in 1.27.1 — treat the 1.27.1+ advisory as authoritative and verify your own version.
+
+[`🔗 securityonline.io teardown`](https://securityonline.info/gitea-rce-vulnerability-exploited/) · [`🔗 Gitea releases`](https://github.com/go-gitea/gitea/releases)
+
+---
+
+## 32. dbt Labs open-sources dbt Charts — a declarative dashboard language built for agents
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 247+ pts · 14.9h ago (~05:22 UTC+8)
+- **Tags:** `data-engineering` `dashboards` `agents`
+
+"Charts built for Chat" — dbt Labs open-sourced dbt Charts, a declarative language for dashboards
+whose pitch is governance for agent-generated analytics: instead of an agent scattering one report
+across HTML, CSS, a chart library, and a Streamlit app, the chart is a single declarative artifact
+you can review, diff, and version. The blog frames it as escaping a false choice between the messy
+freedom of generated code and BI copilots that "can do only what the UI exposes." Apache-2.0, repo
+created mid-August, already pushed today.
+
+**Why it matters:** The same deterministic-artifact move that rebuilt diagrams and video for agents
+(see items 1 and 6) is now hitting BI — where the audit trail matters even more, because the output
+drives decisions, not just eyeballs.
+
+[`🔗 dbt Charts blog`](https://dbtcharts.com/blog/charts-built-for-chat/) · [`🔗 dbt-labs/dbt-charts`](https://github.com/dbt-labs/dbt-charts)
+
+---
+
+## 33. Siri's "Model Delegation": iOS 27 code shows Claude and ChatGPT as first-class backends
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 222+ pts · 24h ago (~20:01 UTC+8)
+- **Tags:** `apple` `siri` `model-routing`
+
+Since the iOS 27 launch in item 15: code sleuth "pdfu" has dug into the new Siri's private
+frameworks and found "Model Delegation" — a mechanism that lets Claude appear as a Siri extension
+exactly like the built-in ChatGPT one. In a hands-on video, a macOS user picks Claude from an
+"Ask…" menu and has Siri route a natural-language reminder request through it, with Apple's app
+intents executing the result. Security researchers have since probed the private hooks to map
+which third-party backends the new Siri accepts.
+
+**Why it matters:** Apple is shipping a model-routing layer, not a model — the assistant is becoming
+a harness, and the open question is whether third-party models get the same on-device context the
+first-party brain does. It's the consumer-facing twin of the agent-harness routing stories
+dominating this week's repos.
+
+[`🔗 MacRumors`](https://www.macrumors.com/2026/09/14/siri-can-be-swapped-out-for-chatgpt-claude/) · [`🔗 securityonline.info: probing the hooks`](https://securityonline.info/siri-ai-private-hooks/)
+
+---
+
+## 34. Suspected sabotage halts Dutch railways — the second major EU infrastructure incident this month
+
+- **Velocity:** ▮ rising
+- **Source:** Hacker News · 174+ pts · 1.9h ago (~18:22 UTC+8)
+- **Tags:** `infrastructure` `physical-security` `europe`
+
+ProRail, the Dutch rail infrastructure operator, reports major disruption across the center and
+north of the Netherlands — Amsterdam included — after suspected sabotage to the tracks. The BBC
+story is developing; the operator has not attributed the damage. It lands alongside this month's
+pattern of physical interference with critical European infrastructure, and a day after the EU's
+CRA reporting obligations (item 13) made incident disclosure a legal clock.
+
+**Why it matters:** The feed tracks CVEs because software fails; this is the reminder that
+OT/rail infrastructure fails differently — no patch Tuesday, and physical redundancy is the only
+mitigation. Watch whether ProRail's disclosure cadence becomes the first test of the new EU rules
+for physical-vs-cyber classification.
+
+[`🔗 BBC News`](https://www.bbc.com/news/articles/c8ly49w9g1edo) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49710253)
+
+---
+
+## 35. How much of F-Droid is LLM-generated? A student counts: 72.5% of a 102-app sample
+
+- **Velocity:** ▮ rising
+- **Source:** Hacker News · 67+ pts · 2.5h ago (~17:47 UTC+8)
+- **Tags:** `foss` `ai-impact` `supply-chain`
+
+A student maintainer hand-reviewed 102 F-Droid apps for signs of AI-generated code — commit
+cadence, LLM infrastructure files, README tells — and rates 74 (72.5%) "largely written by AI,"
+18 (17.6%) human, 10 unclassifiable. The honest framing is upfront: "you can't know" from text
+alone, this is tell-reading not code-quality analysis. The side findings are the eeriest: one
+prolific contributor's apps spread across mismatched namespaces ("com.presley.*",
+"com.codesail.*"), 4 of 5 Codeberg-hosted apps likely violate Codeberg's AI policy, and two
+long-lived apps whose every change came through the GitHub web file editor — no git.
+
+**Why it matters:** The first concrete denominator for a question everyone asks anecdotally,
+arriving with its own epistemics printed. It pairs with the Sep 12 "sloppiness" measurement:
+agent code isn't just more verbose, it's becoming the majority of what ships to app stores.
+
+[`🔗 tintotint.eu`](https://tintotint.eu/whacky-corner/f-droid_slop/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49710015)
+
+---
+
+## 36. Radius: Earendil wraps a commercial service layer around Pi, the 105k-star agent harness
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending (daily) · earendil-works/pi at 105.4k stars
+- **Tags:** `agent-harness` `infrastructure` `business`
+
+Pi — the open-source, self-extensible coding-agent harness whose README candidly notes it ships
+**no built-in permission system** ("containerize it") — is trending again as its parent company
+launches **Radius**, an early-alpha service that provisions "anything built with Pi": tokens,
+model routing, rewrites, analytics, and extensions like web search, enabled with `/login radius`.
+Pi's releases keep a weekly clip (v0.85.1, Sep 5), and its governance quirk — new contributors'
+issues and PRs are auto-closed and reviewed daily — remains intact.
+
+**Why it matters:** The harness wars just got their first open-core business model at scale:
+105k stars of MIT-licensed harness with a hosted routing/analytics layer sold on top. The missing
+permission system is now also the upsell context — Radius is where the trust boundary gets rented.
+
+[`🔗 Radius`](https://radius.earendil.com/) · [`🔗 earendil-works/pi`](https://github.com/earendil-works/pi)
+
+---
+
+## 37. Atlas — "source control for coding agents" — checkpoints every agent run, Trendshift #1
+
+- **Velocity:** ▮ rising
+- **Source:** Trendshift · GitHub Trending (daily) · 4.5k stars
+- **Tags:** `agents` `version-control` `developer-tools`
+
+A macOS (Tauri) app that treats agent runs as first-class VCS events: every commit is a checkpoint
+linked to the session that made it — prompts, tool calls, reasoning, file changes — queryable
+months later. Run Claude Code, Codex, Atlas's own agent, or anything from the ACP registry side
+by side against one codebase, with a shared on-device memory so switching agents mid-task doesn't
+restart from zero. Local by default; sync is opt-in.
+
+**Why it matters:** Git was designed for humans reviewing diffs; agent workflows need provenance
+—"which agent did exactly what and why" — that git has no place to put. This is the
+checkpoint-provenance layer the harness ecosystem has been missing, and the cross-agent shared
+memory is the boldest part.
+
+[`🔗 pacifio/atlas`](https://github.com/pacifio/atlas) · [`🔗 Atlas docs`](https://docs.tryatlas.cc/)
+
+---
+
+## 38. The k-server conjecture is true — a 30-plus-year open problem in online algorithms falls
+
+- **Velocity:** ▮ rising
+- **Source:** arXiv · posted 2026-09-15 · 28+ pts on HN
+- **Tags:** `theory` `algorithms` `research`
+
+The k-server conjecture — that a deterministic online algorithm can achieve competitive ratio *k*
+on *every* metric space, open since the late 1980s — has been proved: the work function algorithm
+satisfies it. The proof represents the work function as a matrix encoding all feasible paths to a
+configuration, where min and plus become formal addition and multiplication and each work function
+value is a determinant of k columns; requests arrive as change-of-basis and row-replacement
+operations, with amortized analysis via a potential function built from a larger matrix.
+
+**Why it matters:** One of the last big flagstones of online algorithms, in the same month AI
+proved a 370-year cipher and drew the math profession's institutional response (item 14) — the
+meta-question is now whether this proof's authorship pattern becomes the norm. Read the paper
+before the takes.
+
+[`🔗 arXiv:2609.15979`](https://arxiv.org/abs/2609.15979) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49709129)
+
+---
+
+## 39. LibreChat v0.8.8 ships "Bring-Your-Own-Machine" for scaled-out coding agents
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Releases · v0.8.8-rc3, 2026-09-15
+- **Tags:** `chat-ui` `agents` `self-hosted`
+
+The 43.6k-star self-hosted ChatGPT alternative is trending on its v0.8.8-rc3 release: the headline
+feature is experimental **Bring-Your-Own-Machine** — attach your own machines to run coding agents
+at scale — alongside a Conversation Trace Viewer with subagent file sharing, agent/skills CRUD API
+improvements, GPT-6 Astra support, and expanded context-usage tracking.
+
+**Why it matters:** The self-hosted chat UI is quietly becoming an agent orchestration plane:
+traces, subagent file sharing, and BYOM workers are harness features, not chat features. If your
+"chat app" can attach workers, you're running a fleet manager.
+
+[`🔗 v0.8.8-rc3 changelog`](https://www.librechat.ai/changelog/v0.8.8-rc3) · [`🔗 danny-avila/LibreChat`](https://github.com/danny-avila/LibreChat)
+
+---
+
+## 40. OpenArch: every modern LLM architecture, reimplemented from scratch in readable PyTorch
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 139+ pts · 28h ago (~15:55 UTC+8)
+- **Tags:** `research` `pytorch` `education`
+
+Hand-written PyTorch implementations of the architectures in Sebastian Raschka's LLM Architecture
+Gallery — one readable file per model, with the structural choices (attention type, normalization,
+positional encoding, MoE routing) made explicit and comparable. The README is explicit that it
+doesn't compete with `transformers`: "this repo optimizes for reading." 139 HN points and climbing
+on daily trending.
+
+**Why it matters:** The "read the original model code" experience is broken by production
+optimization; a clean from-scratch corpus is both a teaching tool and a diffing tool for what
+actually changed between generations. The Raschka-gallery anchoring gives it a curated spine most
+ reimplementations lack.
+
+[`🔗 anuj0456/OpenArch`](https://github.com/anuj0456/OpenArch) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49693384)
+
+---
+
+## 41. 9router trends at 28.8k stars selling RTK token savings — the exact claim a benchmark debunked
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (weekly) · 28.8k total
+- **Tags:** `ai-gateway` `token-optimization` `benchmarking`
+
+"Never stop coding. Save 20-40% tokens with RTK + auto-fallback to FREE & cheap AI models" —
+9Router routes Claude Code, Cursor, Codex and friends to 40+ providers with free-tier stacking and
+ships RTK (the token-reduction toolkit) as its savings engine. Worth carrying the caveat from our
+Sep 12 coverage: when Quesma actually benchmarked RTK's "90% token savings" claim, the measured
+net cost change was ±5% — and +17% *more* expensive on DeepSeek — once output growth from
+compressed context was counted.
+
+**Why it matters:** The subscription-pooling gateway category keeps growing (sub2api, OmniRoute,
+now 9Router), but the token-savings marketing is running ahead of the measurements. Free-tier
+routing is real; the "save 20-40%" line is a claim to test on your own traffic, not a spec.
+
+[`🔗 decolua/9router`](https://github.com/decolua/9router) · [`🔗 9router.com`](https://9router.com)
+
+---
+
+## 42. Droid ASC: decompiling 352MB Android APKs in seconds by querying the APK as a database
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (daily) · 1k stars · Black Hat Europe Arsenal tool
+- **Tags:** `android` `reverse-engineering` `security`
+
+A Black Hat Europe Arsenal briefing turned open-source tool: instead of letting decompilers spend
+minutes and gigabytes inflating full indexes, ASC probes the Deflate bitstream directly, builds
+dense Huffman lookup tables on the fly, and weaponizes R8 compiler layout determinism (constant
+relocation, instruction dedup) for cross-DEX search. Benchmarked on a 352MB commercial APK: global
+cross-reference search in 1.79s, target class decompiled in 177ms, 141MB RAM. The README pitches
+it as a "front-end designed for Agents/Mobile Researchers."
+
+**Why it matters:** Two trends in one: security tooling is being rethought for agent consumers
+(milliseconds per query, not minutes per index), and "query the artifact, skip the preprocessing"
+is the same anti-RAG instinct showing up across this week's tooling. Apache-2.0, pip-installable.
+
+[`🔗 MG1937/ASC`](https://github.com/MG1937/ASC) · [`🔗 Black Hat Arsenal briefing`](https://blackhat.com/europe/arsenal/schedule/index.html#droid-asc-r8-compiler-optimization-as-a-decompiler-primitive-54834)
+
+---
+
+## 43. OpenArm: a fully open-source 7-DOF humanoid arm for contact-rich physical AI
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 122+ pts · 46h ago (Sep 13)
+- **Tags:** `robotics` `open-source` `hardware`
+
+Enactic's OpenArm is a complete open-source humanoid arm — 7 degrees of freedom, hardware designs,
+firmware, and software — aimed at physical-AI research in contact-rich environments, i.e. the
+manipulation side where teleoperation data collection is the bottleneck. 3.2k stars and active
+(pushes within the last day); it rode the HN front page over the weekend.
+
+**Why it matters:** The robot-learning wave needs arms the way LLMs needed GPUs: if manipulation
+foundation models keep improving, the scarce asset is affordable, hackable, torque-transparent
+hardware to collect data on. Open-source arm stacks are that asset class forming in public.
+
+[`🔗 enactic/openarm`](https://github.com/enactic/openarm) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49684289)
+
+---
+
+## 44. Microsoft removes the COPILOT function from Excel — three months after preview hype
+
+- **Velocity:** ▮ steady
+- **Source:** Microsoft Support · confirmed on the official function page
+- **Tags:** `microsoft` `excel` `ai-features`
+
+Quiet but verifiable: Microsoft's own support page now states "Starting September 14, 2026, the
+COPILOT function is no longer available in Microsoft Excel." The function — which let a cell call
+an LLM as part of a formula — had been a Frontier/Insider-channel preview; Microsoft points users
+to the Copilot pane instead, which "supports many of the same AI-powered tasks" but lives outside
+the grid. No formula-level replacement has been announced.
+
+**Why it matters:** Excel's COPILOT() was the flagship demo of AI-as-a-first-class-formula —
+deterministic, auditable, in-cell. Its removal without a replacement is a real signal about how
+hard it is to make non-deterministic calls live inside a recalculation engine, whatever the
+launch-stage messaging said.
+
+[`🔗 Microsoft: COPILOT function`](https://support.microsoft.com/en-us/excel/functions/copilot-function) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49706481)
+
+---
+
+## 45. "I tried to hold the company to its ethical commitments" — a DeepMind alumnus goes public
+
+- **Velocity:** ▮ steady
+- **Source:** The Guardian · 36+ pts on HN · 9.8h ago (~10:25 UTC+8)
+- **Tags:** `ai-safety` `google-deepmind` `essay`
+
+Alex Turner's Guardian op-ed adds a DeepMind voice to the week's safety exits and warnings: the
+former researcher describes trying to hold the company to its ethical commitments against
+supplying AI for military purposes, and argues the public should take the internal warnings
+seriously. It runs alongside the Guardian's wider piece on why DeepMind insiders think the public
+isn't hearing enough.
+
+**Why it matters:** The week's safety discourse has run from Bengio's "predictable" agent
+misbehavior to Cantrill's fear-contagion counterpoint; a named ex-DeepMind account of the
+internal-advocacy path failing is a different data point — about incentives inside labs, not
+about model capabilities. It's an op-ed; weight it as testimony, not measurement.
+
+[`🔗 The Guardian`](https://www.theguardian.com/technology/2026/sep/14/google-deepmind-ai-warnings) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49706941)
+
+---
+
+## 46. Redis City: an interactive 3D model of everything Redis does, built as a Show HN
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News (Show HN) · 117+ pts · front page since Sep 12
+- **Tags:** `redis` `visualization` `databases`
+
+A browsable 3D city where every Redis structure and operation is a building: keys, hashes, streams,
+pub/sub, expiration, persistence — you can walk the data structures as architecture and watch
+operations move through them. Part of a small wave of "render the database" explainers that treat
+systems education as an environment rather than a diagram.
+
+**Why it matters:** Systems intuition is the scarce resource agent-era engineers don't get from
+reading docs, and interactive spatial models are the strongest pedagogy for it. Also a useful
+counterweight to this week's agent-built visualizations: this one is hand-crafted to teach, not
+generated to fill space.
+
+[`🔗 Redis City`](https://poltora.dev/redis) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49676425)
+
+---
+
+## 47. Every invoice in Brazil's economy runs on SOAP 1.2 — and someone catalogued all of it
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 77+ pts · 57h ago (Sep 13)
+- **Tags:** `integration` `xml` `brazil`
+
+The SEFAZ tax-authority webservices — NF-e, NFC-e, CT-e, MDF-e — that carry every fiscal document
+in Brazil are SOAP 1.2 with mTLS certificates tied to an e-CNPJ, requiring signed XML in
+portuguese-specific canonical forms. A developer has packaged the complete, production-tested
+Postman collection of the distribution endpoints, turning tribal integration knowledge into a
+runnable artifact. The HN thread is a support group.
+
+**Why it matters:** The world's most interesting APIs are rarely the trendy ones: an entire
+nation's fiscal plumbing runs on 2000s-era XML standards with real cryptographic ceremony, and
+every developer in that economy carries the scars. Documentation-as-collection is also quietly
+one of the most useful formats an open-source repo can take.
+
+[`🔗 stoix-dev/sefaz-webservices-postman`](https://github.com/stoix-dev/sefaz-webservices-postman) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49679653)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-15T04:20:00Z |
-| Items | 30 |
-| Sources tracked | 29 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs and advisories, EU Commission, Apple Newsroom, courts, security research blogs) |
+| Generated | 2026-09-15T12:20:00Z |
+| Items | 47 |
+| Sources tracked | 39 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs and advisories, EU Commission, Apple Newsroom, courts, security research blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
