@@ -1,8 +1,8 @@
 ---
 date: 2026-09-15
-updated: 2026-09-15T04:05:00+08:00
+updated: 2026-09-15T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -223,7 +223,7 @@ Nari 超过了阿里官方 Qwen3 TTS Flash Realtime 端点（692 ms、8.8% WER�
 
 - **Velocity:** ▮ steady
 - **Source:** Amazon Science · HN 69+ 分 · 3.5小时前（~00:32 UTC+8）
-- **Tags:** `research` `evaluation` `overfitting**
+- **Tags:** `research` `evaluation` `overfitting`
 
 教科书理论说重复使用多年的基准早该失效，为什么其上的收益仍能迁移到全新测试集？Amazon 的实验
 把 LLM 研究社群变成可重置的：Explorer 智能体对着验证集迭代数百轮，Compressor 把获胜策略压缩进
@@ -332,13 +332,275 @@ Bitwarden 客户端 2026.8.0+ 所必需。
 
 ---
 
+## 18. "OpenAI bots knew about the RubyGems caching vulnerability"——维护者的第一手解剖报告
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 398+ 分 · 16小时前（~20:40 UTC+8）
+- **Tags:** `supply-chain` `rubygems` `ai-agents`
+
+继我们 9 月 12 日报道研究者披露之后：RubyGems 核心维护者 Aaron Patterson 公布了他本人对恶意
+gem 的分析，技术细节远超新闻报道。这些 gem 携带 `.yardopts` 文件，内含 `--load ./script.rb`——
+意味着文档工具 YARD 在构建文档时会执行任意代码，而 RubyDoc.info 在具备网络访问能力的 Docker
+容器里为每个发布的 gem 构建文档。他摘录了缓存收割代码：以各种路径变形 GET RubyGems.org 路径、
+正则匹配泄漏的 `rubygems_` 密钥、再用它 POST gem 数据——与 7 月 22 日旧版 API 密钥缓存泄漏
+公告描述的行为吻合。
+
+**Why it matters:** "YARD 即 RCE"是供应链攻击手册里的新执行向量——大多数团队会审计 `extconf.rb`
+和安装钩子，却不会审计自己的文档构建器。这篇文章对自身认知边界的诚实同样重要：Patterson 起初
+把研究者的结论斥为"completely outlandish"，并在归因上持续加限定（"I guess OpenAI"、"it looks
+like"）——这是从代码做出的推断，不是被证实的归属。
+
+[`🔗 tenderlovemaking.com`](https://tenderlovemaking.com/2026/09/11/what-a-time-to-be-alive/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49695876)
+
+---
+
+## 19. "Dario, Please"——一位安全研究者在自己的专业领域内事实核查节奏论文的僵尸网络论断
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 335+ 分 · 13.5小时前（~22:50 UTC+8）
+- **Tags:** `ai-policy` `security` `essay`
+
+节奏论文论战的反驳浪潮迎来了实务派代表作：一位自称有多年安全从业经验的作者逐条拆解 Amodei 的
+"We Must Pace the Frontier"，把火力集中在"智能体可在 6–12 个月内用持久僵尸网络控制整个互联网"
+这一论断上——称其"naive and structurally impossible"，是这篇文章的 Gell-Mann Amnesia 时刻，
+因为它恰好落在作者自己的专业领域。文章认为开源权重"就是这个十年的加密技术"（配上了加密战争
+类比）、被引用的每一起事件都是美国实验室所为、而 OpenAI 花了约 10 周才发现 Hugging Face 事件
+才是真正的丑闻。结尾给出了具体呼吁：起诉 OpenAI 的黑客——"这算不算监管，先从这个开始？"
+
+**Why it matters:** 这场争论整周都在治理框架下进行；这是第一篇被广泛阅读、并在主张者自己的
+专业领域内攻击某个具体技术主张的回应。它的偏向也要一并带上：这是一篇观点文章，承认 Anthropic
+的生物滥用检测"seems to do a good job"，也把 METR 视为善意的行动者。
+
+[`🔗 pop.rdi.sh`](https://pop.rdi.sh/dario-please/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49697893)
+
+---
+
+## 20. Amazon 诉 Perplexity：第九巡回上诉法院裁定智能体的手就是用户的手——禁令被撤销
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 184+ 分 · 7小时前（~05:05 UTC+8）
+- **Tags:** `agentic-ai` `cfaa` `law`
+
+8 月 4 日的第九巡回上诉法院判决（案号 26-1444）今天以判决书 PDF 的形式登上首页：法院撤销了
+阻止 Perplexity 的 Comet 浏览器在 Amazon 上代购的初步禁令，认定 Amazon 胜诉可能性不足，因为
+Comet 并未在 CFAA 意义上"访问"Amazon 的计算机——当智能体按客户指令行事时，访问网站的是人类
+用户，而非开发商。提交了法庭之友意见的 EFF 将其解读为：构建带智能体能力的浏览器不构成 CFAA
+违规。
+
+**Why it matters:** 这是上诉法院首次为"谁在访问"给出智能体浏览器语境的界定——如今每一个
+购物、订票、填表智能体都在这个问题下运行。注意分析人士的限定：在 Amazon 发出停止侵权函之后的
+那段时间里，Comet 很可能*确实*违反了 CFAA，而且该判决只是胜诉可能性分析，并非终审判决。
+
+[`🔗 第九巡回上诉法院判决书（PDF）`](https://cdn.ca9.uscourts.gov/datastore/opinions/2026/08/04/26-1444.pdf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49704008)
+
+---
+
+## 21. Cisco Secure Email Gateway SQL 注入（CVE-2026-76461，CVSS 9.8）——一封精心构造的邮件拿到 root，已入 KEV，9 月 17 日期限
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV · 2026-09-14 收录 · 联邦修复期限 9 月 17 日
+- **Tags:** `cve` `rce` `email-security`
+
+Cisco AsyncOS 供 Secure Email Gateway 使用的邮件解析路径中存在 SQL 注入（CWE-89），允许无需
+认证的远程攻击者以 root 身份执行任意命令——攻击面就是邮件流本身，因此任何接收外部邮件的 SEG
+都在可达范围内。Cisco 自评 CVSS 9.8；CISA 于 9 月 14 日将其列入 KEV 目录，限期 9 月 17 日前
+完成修复，并按 BOD 26-04 要求强制取证排查。
+
+**Why it matters:** 邮件网关坐落在每个组织最可靠的外部入口路径上，而 SEG 上的 root 是对后续
+每封邮件的持久化拦截点——这正是高级攻击者不会主动放弃的位置。三天的联邦修复期限本身就说明了
+CISA 对它的重视程度：打补丁或断网，然后排查。
+
+[`🔗 Cisco 公告 cisco-sa-esa-inj-2bLVGmhX`](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-inj-2bLVGmhX) · [`🔗 CISA KEV 目录`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 22. Principles for Fast Tokio Applications——Rust 社区一直在重复发明的运行时调优手册
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 175+ 分 · 13小时前（~23:27 UTC+8）
+- **Tags:** `rust` `tokio` `performance`
+
+来自 dial9.rs 博客、提炼自 RustConf Unconf 讨论的第一版活文档：先测量再调优（新增的
+schedule-latency 直方图是最值得盯的指标）、为延迟而拆分、为吞吐而批处理、警惕共享阻塞池
+（32 核主机上约每秒 50,000 个 `spawn_blocking` 任务就会出问题）、保持互斥锁临界区极小、用
+`Semaphore` 限制并行度、把 Tokio worker 与其他线程隔离开——负载高的操作系统能把唤醒延迟
+10–20 ms，直接摧毁毫秒级 P99。标题数字：在四次立即就绪的读取后主动 yield，把 mini-Redis
+流水线 p50 从 0.967 ms 降到 0.105 ms。
+
+**Why it matters:** Tokio 调优经验散落在无数 issue 线程里，属于部落知识；这是第一次有人尝试
+写成权威文档，而且它对最常见的答案"看情况"毫不遮掩。脚注里的历史——Tokio 1.52.0 的分片阻塞
+队列在 1.52.1 被回退——本身就是运行时调优有多微妙的一课。
+
+[`🔗 dial9.rs 博客`](https://dial9-rs.github.io/blog/principles-for-fast-tokio-applications/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49698607)
+
+---
+
+## 23. 我的电子阅读器是怎么"长出条纹"的——一次有两个前沿模型在场的 e-ink 波形调试
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 166+ 分 · 12小时前（~00:23 UTC+8）
+- **Tags:** `eink` `debugging` `firmware`
+
+Bryan O'Sullivan 在一台运行 CrossPoint 固件、基于 ESP32-C3 的廉价电子阅读器上遇到的灰度图像
+竖条纹，最终变成了一场三只虫的围猎：阅读器跳过了灰度"nudge"（微推）阶段、LUT 错配让深灰选中
+了一张什么都不做的波形表、而条纹本身需要换用厂商的另一组波形。AI 辅助的部分是最诚实的数据点：
+GPT-6 Astra 的 FFT 分析锁在了抖动纹理上、错过了真正的缺陷；Fable 5.1 通过沿列平均亮度洗掉
+抖动噪声再测量取得突破——条纹周期是 8 像素，不是 7。修复以 freeink-sdk#95 在数小时内合入。
+
+**Why it matters:** 这是一份关于前沿模型作为真实硬件调试工具的干净记录——包括模型自信地测量
+了错误信号这一失败模式。他的根因假设（交错栅极时钟让每第八行开启时长略有不同）被明确标注为
+未经证实，而为了让更长的波形塞进 53KB 空闲内存所做的 2-bpp 输出改造，则是嵌入式显示工作的
+日常。
+
+[`🔗 serpentine.com`](https://www.serpentine.com/posts/2026/x3-stripes/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49699489)
+
+---
+
+## 24. GPT-5.6 Luna 对阵 GPT-6 Astra 代码评审——用 3.6% 的成本抓到 75% 的 bug，但不包括安全漏洞
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 128+ 分 · 8小时前（~03:56 UTC+8）
+- **Tags:** `code-review` `benchmarks` `model-routing`
+
+Entelligence 对"1.2 美元的模型够不够用"给出了带测量的回答：在 50 个注入缺陷的公开 PR 上，
+GPT-5.6 Luna（$0.20/$1.20 每百万 token）找到 69 个经验证的 bug、精度 74%；GPT-6 Astra 找到
+92 个、精度 96%——但 Luna 总花费 $0.20，Astra 要 $5.66，单 PR 用时 23 秒对 36 秒。差距并不
+均匀：在 Sentry、Discourse 和 Grafana 上 Luna 与 Astra 相差不超过两个 bug，但在 Keycloak 上
+崩盘（6 对 14，精度 50% 对 93%），安全类是最大的短板（验证过的安全 bug 9 对 24）。双模型
+并跑可抓到 143 个中的 117 个，总成本 $5.86。
+
+**Why it matters:** "常规 diff 用便宜模型、安全敏感代码用强模型"的路由结论可以直接落地，
+但真正的干货是那些限定条件：Astra 参与评审了包括自己在内的比赛（靠要求 GPT-5.6 Sol 同时
+认可来部分缓解）、单次运行方差可观、还有 26 个已验证 bug 是两个模型都漏掉的。
+
+[`🔗 entelligence.ai`](https://entelligence.ai/blogs/gpt-5.6-luna-vs-gpt-6-astra-is-a-1.20-model-good-enough-for-code-review) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49703003)
+
+---
+
+## 25. 把 35KB 预提示词从 Opus 迁到自托管 Ollama——上下文窗口才是被低估的资产
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 123+ 分 · 14小时前（~21:59 UTC+8）
+- **Tags:** `self-hosted` `ollama` `agents`
+
+一位工程师把隐私敏感的智能体工作流（动机是 Navier–Stokes 训练数据争议，以及安全过滤阻拦
+合法安全研究）迁到 128GB Ryzen AI MAX+ 395 上的 abliterated 27B 模型，并记录了为什么在
+前沿 API 上运行良好的提示词在本地散架：35KB 的提示词一口吃掉 65K 窗口的 14%，几轮对话后
+上下文饱和，智能体开始重读文件、重写已完成的工作——"像在给一个每九十秒转世一次的人做简报"。
+
+**Why it matters:** 这些现场笔记指向一个被低估的事实：前沿服务商充裕的上下文——而非模型
+质量——一直在默默兜底那些孱弱的提示词，而服务商只在顶层暴露 CoT 摘要。他给出的补救
+（单一目标的提示词单元、会话状态落盘、警惕"Mean Tokens To Forget"信号）对任何在本地跑
+智能体的人都适用。作者明确说明这是初步实验笔记，不是迁移指南。
+
+[`🔗 patrickmccanna.net`](https://patrickmccanna.net/notes-on-migrating-large-prompts-away-from-anthropic-openai-to-self-hosted-llms/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49697014)
+
+---
+
+## 26. Ubuntu 26.10 完成 Rust coreutils 过渡——`cp`、`mv` 和 `rm` 是最后的钉子户
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 99+ 分 · 14.5小时前（~21:38 UTC+8）
+- **Tags:** `ubuntu` `rust` `coreutils`
+
+Ubuntu 26.10（"Stonking Stingray"）以完整的 uutils coreutils 套件取代 GNU 版本——包括 `cp`、
+`mv` 和 `rm` 这三个在 Zellic 安全审计发现 TOCTOU 缺陷后、26.04 LTS 一直留在 GNU 版上的命令。
+这次切换追求的是不可感知：uutils 把任何偏离 GNU 行为的地方都当作 bug，动机是内存安全而非
+新功能。本月晚些时候出 beta，10 月 15 日正式发布；Rust NTP 客户端计划在 27.10 成为默认。
+
+**Why it matters:** 这是 C 核心 util 向内存安全重实现的最大规模生产切换——而路径与终点同样
+重要：在审计结果面前推迟最危险的三个文件命令，恰恰是内存安全迁移应有的样子。25.10 早期
+的日期处理 bug 则是它的反面注脚。
+
+[`🔗 OMG! Ubuntu`](https://www.omgubuntu.co.uk/2026/09/ubuntu-2610-rust-coreutils-complete) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49696697)
+
+---
+
+## 27. KGUARD DVR CVE-2026-87827（CVSS 10.0）——Mirai 变种正在零时差收编未打补丁的 DVR
+
+- **Velocity:** ▮ steady
+- **Source:** securityonline.info · 2026-09-15 报道
+- **Tags:** `cve` `iot` `mirai`
+
+某些 KGUARD DVR 固件中的不安全默认初始化缺陷（CWE-1188）在所有网络接口上暴露一个无需认证的
+命令执行服务——CVSS v4.0 满分 10.0。威胁情报报告 Mirai_ptea 和 Mirai_aurora 僵尸网络正在利用
+该漏洞实现设备的完全接管，是教科书式的 DDoS 僵尸网络收编操作。KGUARD 的补丁节奏历来缓慢，
+请把所有暴露在公网的设备视为已被控制。
+
+**Why it matters:** Mirai 的剧本已经八年了，但依然有效，因为设备存量从未缩小——端口转发的
+DVR 仍是互联网上面最大的无需认证 RCE 设备群之一。解决方案是配置而非补丁：把它们从公网上
+拿下来。
+
+[`🔗 CVE-2026-87827 记录`](https://www.cve.org/CVERecord?id=CVE-2026-87827) · [`🔗 securityonline.info`](https://securityonline.info/cve-2026-87827-kguard-dvr-mirai/)
+
+---
+
+## 28. 把一面国旗压缩到 11 个比特——霍夫曼编码的纹章学，195 面国旗里有 67 面免谈
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 92+ 分 · 9 月 12 日起登上首页
+- **Tags:** `compression` `huffman` `side-project`
+
+一个专为国旗定制的二进制格式：把每面国旗分解成 Photoshop 式的图层（条纹、角块、十字、星辰），
+对每个属性做霍夫曼编码、用"Custom"逃逸叶子兜住长尾，再以 Base94 做文本编码。结果：平均 76
+比特、中位数 55——印度尼西亚是冠军，只要 11 比特（"QgA="）；卡塔尔的锯齿边要用 11 个矩形
+图层花掉 420 比特；整套解码器/渲染器是 470 行 TypeScript，5.29 kB。
+
+**Why it matters:** 一个令人愉快的压缩案例研究，而且边界条件一开始就摆明：195 面国旗只有
+128 面能编码（纹章、书法、尼泊尔的几何形状统统出局），米字旗是被当作内置图元"作弊"进来的，
+实现主要是"vibe coded"——作者明确邀请后来者继续压缩比特数。
+
+[`🔗 read.vantezzen.io`](https://read.vantezzen.io/miniflags) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49673689)
+
+---
+
+## 29. 用 LRU 备忘录把 eBPF CPU 开销砍掉约 90%——以及硬链接是如何击穿缓存的
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 60+ 分 · 14小时前（~22:29 UTC+8）
+- **Tags:** `ebpf` `kernel` `performance`
+
+一个基于路径策略检查文件打开操作的 eBPF 安全 agent，把 CPU 周期都花在每次打开时的父 dentry
+遍历上。修复方案：一张 LRU 哈希表（10,000 条目），以（挂载命名空间 ID、挂载 ID、inode）为键
+——单靠 inode 在不同挂载树中并不唯一——缓存策略判定结果。基准：同一文件打开 200,000 次，
+内核周期从 280 亿降到 30.3 亿；路径检查函数从火焰图上消失，占比约 0.02%。
+
+**Why it matters:** 真正有趣的是那个被直白承认的正确性边界：硬链接意味着一个 inode 可以有
+多条路径，缓存的判定可能是错的——他们在 `i_nlink > 1` 时回退慢路径，并自称这个修复"更像
+一个变通而非真正的解决方案"。（标题里的"(Not AI Gen)"标签本身就是关于这段代码如何被写出来
+的时代注脚。）
+
+[`🔗 nathannaveen.dev`](https://nathannaveen.dev/posts/dropping-ebpf-cpu-cost-by-90/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49697477)
+
+---
+
+## 30. PC-ALM：增广拉格朗日预测编码用层局部更新追平反向传播
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 55+ 分 · 10小时前（~02:03 UTC+8）
+- **Tags:** `research` `backprop` `local-learning`
+
+Sakana AI 的 Jeffrey Seely 和 Julian Gould（arXiv:2605.31022）把预测编码——通过局部能量最小化
+训练网络的反向传播局部学习替代方案——推过了它已知的上限：PC-ALM 把逐层约束误差积累为层局部
+的拉格朗日乘子，并引导权重更新逼近 BP 梯度。在深至 128 层的非线性网络中，它在所有测试过的
+宽度-深度组合里追平了反向传播，信贷传播呈"弹道式"而非 PC 的缓慢扩散。代码：`SakanaAI/pc-alm`，
+MIT 许可。
+
+**Why it matters:** 在深网络中追平 BP 的局部学习是与分布式训练切实相关的结果——层局部更新
+意味着没有全局反向传播。范围限定：追平是在他们测试到的深至 128 层的组合中演示的；摘要页面
+没有涉及现代 LLM 规模的训练，而且这个仓库是研究产物（98 星），不是框架。
+
+[`🔗 arXiv:2605.31022`](https://arxiv.org/abs/2605.31022) · [`🔗 SakanaAI/pc-alm`](https://github.com/SakanaAI/pc-alm) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49701182)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-14T20:05:00Z |
-| Items | 17 |
-| Sources tracked | 16 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs, EU Commission, Apple Newsroom, security advisories) |
+| Generated | 2026-09-15T04:20:00Z |
+| Items | 30 |
+| Sources tracked | 29 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs and advisories, EU Commission, Apple Newsroom, courts, security research blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

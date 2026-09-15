@@ -1,8 +1,8 @@
 ---
 date: 2026-09-15
-updated: 2026-09-15T04:05:00+08:00
+updated: 2026-09-15T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -368,13 +368,302 @@ semantics is exactly the discipline that keeps 67k self-hosters out of the incid
 
 ---
 
+## 18. "OpenAI bots knew about the RubyGems caching vulnerability" — the maintainer's first-hand autopsy
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 398+ pts · 16h ago (~20:40 UTC+8)
+- **Tags:** `supply-chain` `rubygems` `ai-agents`
+
+Since our Sep 12 coverage of the researchers' reveal: RubyGems core maintainer Aaron Patterson has
+published his own read of the malicious gems, and the technical detail goes well beyond the news
+reports. The gems carried a `.yardopts` file with `--load ./script.rb` — meaning YARD, the
+documentation tool, executes arbitrary code when docs are built, and RubyDoc.info builds docs for
+every published gem in network-capable Docker containers. He excerpts the cache-harvesting code:
+GET a RubyGems.org path with path-mangling variants, regex-match a leaked `rubygems_` key, then POST
+gem data with it — behavior matching the July 22 advisory on the legacy API-key cache leak.
+
+**Why it matters:** YARD-as-RCE is a new execution vector for the supply-chain playbook — most teams
+audit `extconf.rb` and install hooks, not their docs builder. And the post is honest about its own
+epistemics: Patterson initially dismissed the researchers' claims as "completely outlandish" and
+hedges attribution ("I guess OpenAI", "it looks like") — inference from code, not confirmed
+provenance.
+
+[`🔗 tenderlovemaking.com`](https://tenderlovemaking.com/2026/09/11/what-a-time-to-be-alive/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49695876)
+
+---
+
+## 19. "Dario, Please" — a security researcher fact-checks the pacing essay's botnet claim
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 335+ pts · 13.5h ago (~22:50 UTC+8)
+- **Tags:** `ai-policy` `security` `essay`
+
+The pacing-debate rebuttal wave gets its practitioner entry: an author with "years" in security
+dissects Amodei's "We Must Pace the Frontier" and focuses fire on the claim agents could seize "the
+entire internet with a persistent botnet" in 6–12 months — calling it "naive and structurally
+impossible," the essay's Gell-Mann Amnesia moment because it falls in the author's own domain. The
+post argues open weights are "just this decade's encryption" (crypto-wars analogy included), that
+every incident cited was committed by American labs, and that OpenAI's ~10 weeks to detect the
+Hugging Face incident is the real scandal. It ends with a concrete call: prosecute the OpenAI
+hackers — "how is that for regulation, for starters?"
+
+**Why it matters:** The debate has been argued on governance grounds all week; this is the first
+widely-read response to attack a specific technical claim in the claimant's own field of expertise.
+Carry its biases too: it's an op-ed, concedes Anthropic's bio-misuse detection "seems to do a good
+job," and treats METR as good faith.
+
+[`🔗 pop.rdi.sh`](https://pop.rdi.sh/dario-please/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49697893)
+
+---
+
+## 20. Amazon v. Perplexity: Ninth Circuit says the agent's hands are the user's — injunction vacated
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 184+ pts · 7h ago (~05:05 UTC+8)
+- **Tags:** `agentic-ai` `cfaa` `law`
+
+The August 4 Ninth Circuit decision (case 26-1444) hit the front page via its opinion PDF: the court
+vacated the preliminary injunction that had blocked Perplexity's Comet browser from shopping on
+Amazon, holding Amazon unlikely to succeed because Comet does not "access" Amazon's computers under
+the CFAA — when an agent acts on a customer's instruction, it's the human user who accesses the
+site, not the developer. The EFF, which filed in the case, reads it as confirmation that building an
+agentic browser is not a CFAA violation.
+
+**Why it matters:** First appellate framing of "who is accessing" for agent browsers — the question
+every shopping, booking, and form-filling agent now operates under. Note the analysts' caveat: Comet
+likely *did* violate the CFAA in the window after Amazon's cease-and-desist, and the ruling is a
+likelihood-of-success analysis, not a final judgment.
+
+[`🔗 Ninth Circuit opinion (PDF)`](https://cdn.ca9.uscourts.gov/datastore/opinions/2026/08/04/26-1444.pdf) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49704008)
+
+---
+
+## 21. Cisco Secure Email Gateway SQL injection (CVE-2026-76461, CVSS 9.8) — a crafted email gets root, KEV'd with a Sep 17 deadline
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV · added 2026-09-14 · federal deadline Sep 17
+- **Tags:** `cve` `rce` `email-security`
+
+A SQL injection (CWE-89) in the email-parsing path of Cisco AsyncOS for Secure Email Gateway lets an
+unauthenticated remote attacker execute arbitrary commands as root — the attack surface is the mail
+stream itself, so any SEG that accepts external email is reachable. Cisco self-scored it CVSS 9.8;
+CISA added it to the KEV catalog September 14 with a September 17 patch deadline and mandatory
+forensic triage under BOD 26-04.
+
+**Why it matters:** Email gateways sit on every org's most reliable inbound path, and root on the SEG
+is a persisted interception point for every message that follows — the kind of position advanced
+actors don't give up. Three days of federal deadline is the tell for how seriously CISA takes it:
+patch or disconnect, then triage.
+
+[`🔗 Cisco advisory cisco-sa-esa-inj-2bLVGmhX`](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-inj-2bLVGmhX) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+---
+
+## 22. Principles for Fast Tokio Applications — the runtime-tuning manual Rust keeps reinventing
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 175+ pts · 13h ago (~23:27 UTC+8)
+- **Tags:** `rust` `tokio` `performance`
+
+A first-draft living document from the dial9.rs blog, distilled from RustConf's Unconf: measure
+before tuning (the new schedule-latency histogram is the metric to watch), split for latency but
+batch for throughput, watch the shared blocking pool (trouble around ~50,000 `spawn_blocking`
+tasks/sec on a 32-core host), keep mutex critical sections tiny, bound parallelism with `Semaphore`,
+and pin Tokio workers away from other threads — a loaded OS can delay wakeups by 10–20 ms and wreck
+millisecond P99s. The headline number: yielding after four immediately-ready reads cut mini-Redis
+pipelined p50 from 0.967 to 0.105 ms.
+
+**Why it matters:** Tokio advice is tribal knowledge scattered across issue threads; this is the
+first attempt at a canonical document, and it's honest about the recurring answer being "it
+depends." The footnote history — Tokio 1.52.0's sharded blocking queue was reverted in 1.52.1 —
+is itself a lesson in how subtle runtime tuning is.
+
+[`🔗 dial9.rs blog`](https://dial9-rs.github.io/blog/principles-for-fast-tokio-applications/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49698607)
+
+---
+
+## 23. How my e-reader lost its stripes — an e-ink waveform bug, debugged with two frontier agents in the loop
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 166+ pts · 12h ago (~00:23 UTC+8)
+- **Tags:** `eink` `debugging` `firmware`
+
+Bryan O'Sullivan's vertical stripes on greyscale images — on a $30-ish ESP32-C3 e-reader running
+CrossPoint firmware — turned into a three-bug hunt: the viewer skipped the greyscale "nudge" pass, a
+LUT mismatch selected a do-nothing waveform table for dark grey, and the striping itself needed a
+different manufacturer waveform. The AI-assisted part is the honest data point: GPT-6 Astra's FFT
+analysis latched onto the dither texture and missed the defect; Fable 5.1 succeeded by averaging
+brightness down each column to wash out dither noise, then measuring — the stripe period was eight
+pixels, not seven. The fix landed in freeink-sdk#95 within hours.
+
+**Why it matters:** A clean record of frontier models as debug instruments on real hardware —
+including the failure mode where the model confidently measures the wrong signal. His root-cause
+hypothesis (interleaved gate-driver clocks opening every eighth row for different intervals) is
+labeled unproven, and the fix's RAM gymnastics (2-bpp output to fit a 53KB free block) are the
+reality of embedded display work.
+
+[`🔗 serpentine.com`](https://www.serpentine.com/posts/2026/x3-stripes/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49699489)
+
+---
+
+## 24. GPT-5.6 Luna vs. GPT-6 Astra for code review — 75% of the bugs for 3.6% of the cost, minus the security bugs
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 128+ pts · 8h ago (~03:56 UTC+8)
+- **Tags:** `code-review` `benchmarks` `model-routing`
+
+Entelligence's measured answer to "is the $1.20 model good enough": on 50 public PRs with injected
+defects, GPT-5.6 Luna ($0.20/$1.20 per Mtok) found 69 verified bugs at 74% precision vs GPT-6
+Astra's 92 at 96% — for $0.20 total instead of $5.66, at 23 s vs 36 s per PR. The gap is not
+uniform: Luna stayed within two bugs of Astra on Sentry, Discourse and Grafana, but collapsed on
+Keycloak (6 vs 14, precision 50% vs 93%), and the security class was the standout weakness (9 vs 24
+verified security bugs). Running both captured 117 of 143 bugs for $5.86.
+
+**Why it matters:** The routing conclusion — cheap model for routine diffs, strong model for
+security-sensitive code — is actionable, but the caveats are the real content: Astra judged its own
+competition (mitigated by requiring GPT-5.6 Sol's agreement), single-run variance was material, and
+26 verified bugs were missed by both models.
+
+[`🔗 entelligence.ai`](https://entelligence.ai/blogs/gpt-5.6-luna-vs-gpt-6-astra-is-a-1.20-model-good-enough-for-code-review) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49703003)
+
+---
+
+## 25. Migrating 35KB preprompts from Opus to self-hosted Ollama — the context window was the hidden asset
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 123+ pts · 14h ago (~21:59 UTC+8)
+- **Tags:** `self-hosted` `ollama` `agents`
+
+An engineer moving privacy-sensitive agent workflows (motivated by the Navier–Stokes training-data
+controversy and by refusals blocking legitimate security work) onto abliterated 27B models on a
+128GB Ryzen AI MAX+ 395 documents why prompts that ran clean on frontier APIs fell apart locally: a
+35KB prompt eats 14% of a 65K window instantly, context saturates within a few exchanges, and the
+agent starts re-reading files and rewriting finished work — "like briefing a man who is reincarnated
+every ninety seconds."
+
+**Why it matters:** The field notes converge on an underappreciated point: frontier providers'
+abundant context — not model quality — was silently carrying weak prompts, and providers only expose
+CoT summaries on top. His remedies (single-objective prompt units, session state to disk, watch for
+"Mean Tokens To Forget") double as a checklist for anyone running agents on local models. Explicitly
+initial notes, not a migration guide.
+
+[`🔗 patrickmccanna.net`](https://patrickmccanna.net/notes-on-migrating-large-prompts-away-from-anthropic-openai-to-self-hosted-llms/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49697014)
+
+---
+
+## 26. Ubuntu 26.10 completes the Rust coreutils transition — `cp`, `mv` and `rm` were the last holdouts
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 99+ pts · 14.5h ago (~21:38 UTC+8)
+- **Tags:** `ubuntu` `rust` `coreutils`
+
+Ubuntu 26.10 ("Stonking Stingray") ships the full uutils coreutils suite in place of GNU — including
+`cp`, `mv` and `rm`, which 26.04 LTS kept on GNU pending fixes after a Zellic security audit
+surfaced TOCTOU flaws. The switch is meant to be invisible: uutils treats any deviation from GNU
+behavior as a bug, and the motivation is memory safety, not features. Beta later this month, stable
+October 15; a Rust NTP client is planned as default by 27.10.
+
+**Why it matters:** The largest production cutover yet from C coreutils to a memory-safe
+reimplementation — and the path matters as much as the destination: the audit-driven delay of the
+three most dangerous file commands is exactly how a memory-safety migration should behave. The
+earlier date-handling bug in 25.10 is the counterweight.
+
+[`🔗 OMG! Ubuntu`](https://www.omgubuntu.co.uk/2026/09/ubuntu-2610-rust-coreutils-complete) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49696697)
+
+---
+
+## 27. KGUARD DVR CVE-2026-87827 (CVSS 10.0) — Mirai variants are conscripting unpatched DVRs at zero-hour
+
+- **Velocity:** ▮ steady
+- **Source:** securityonline.info · reported 2026-09-15
+- **Tags:** `cve` `iot` `mirai`
+
+An insecure-default initialization flaw (CWE-1188) in certain KGUARD DVR firmware exposes an
+unauthenticated command-execution service on all network interfaces — CVSS v4.0 10.0. Threat
+intelligence reports the Mirai_ptea and Mirai_aurora botnets exploiting it for full device
+compromise, the classic conscription-into-DDoS-botnet play. KGUARD's patch cadence has historically
+been slow, so treat internet-reachable units as already owned.
+
+**Why it matters:** The Mirai playbook is eight years old and still works, because the fleet never
+shrinks — port-forwarded DVRs remain one of the largest unauthenticated-RCE populations on the
+internet. The fix is configuration, not patches: get them off the public internet.
+
+[`🔗 CVE-2026-87827 record`](https://www.cve.org/CVERecord?id=CVE-2026-87827) · [`🔗 securityonline.info`](https://securityonline.info/cve-2026-87827-kguard-dvr-mirai/)
+
+---
+
+## 28. Compressing a flag to 11 bits — Huffman-coded heraldry, 128 of 195 flags need not apply
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 92+ pts · on the front page since Sep 12
+- **Tags:** `compression` `huffman` `side-project`
+
+A custom binary format for country flags: decompose each flag into Photoshop-style layers (stripes,
+cantons, crosses, stars), Huffman-code every attribute with "Custom" escape leaves for the longtails,
+and text-encode via Base94. Results: average 76 bits, median 55 — Indonesia is the champion at 11
+bits ("QgA="), Qatar's serrated edge costs 420 bits across 11 rectangle layers, and the whole
+decoder/renderer is 470 lines of TypeScript at 5.29 kB.
+
+**Why it matters:** A delightful compression case study whose limits are stated up front: only 128
+of 195 flags encode at all (coats of arms, calligraphy, Nepal's geometry are out), the Union Jack is
+"cheated" in as a built-in primitive, and the implementation was largely "vibe coded" — the author
+explicitly invites better bit-savings.
+
+[`🔗 read.vantezzen.io`](https://read.vantezzen.io/miniflags) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49673689)
+
+---
+
+## 29. Dropping eBPF CPU cost ~90% with an LRU memo — where hardlinks break the cache
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 60+ pts · 14h ago (~22:29 UTC+8)
+- **Tags:** `ebpf` `kernel` `performance`
+
+An eBPF security agent enforcing path-based file-open policies was spending its cycles walking
+parent dentries on every open. The fix: an LRU hash map (10,000 entries) keyed by (mount namespace
+ID, mount ID, inode) — inodes alone aren't unique across mount trees — caching the policy decision.
+Benchmark: opening the same file 200,000 times dropped from 28 billion kernel cycles to 3.03
+billion; the path-check functions fell off the flame graph to ~0.02%.
+
+**Why it matters:** The interesting part is the correctness boundary, stated plainly: hardlinks mean
+one inode can have multiple paths, so a cached decision can be wrong — they fall back to the slow
+path when `i_nlink > 1` and call their own fix "more of a workaround than a real solution." (The
+title's "(Not AI Gen)" tag is its own statement about how this code gets written now.)
+
+[`🔗 nathannaveen.dev`](https://nathannaveen.dev/posts/dropping-ebpf-cpu-cost-by-90/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49697477)
+
+---
+
+## 30. PC-ALM: augmented Lagrangian predictive coding matches backprop with layer-local updates
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 55+ pts · 10h ago (~02:03 UTC+8)
+- **Tags:** `research` `backprop` `local-learning`
+
+Sakana AI's Jeffrey Seely and Julian Gould (arXiv:2605.31022) push predictive coding — the
+local-learning alternative to backprop that trains via local energy minimization — past its known
+ceiling: PC-ALM accumulates per-layer constraint errors into a layer-local Lagrange multiplier and
+steers updates toward BP gradients. In nonlinear networks up to depth 128 it matches backprop across
+all tested width-depth regimes, with "ballistic" credit propagation instead of PC's slow diffusion.
+Code: `SakanaAI/pc-alm`, MIT.
+
+**Why it matters:** Local learning that closes the gap with BP in deep networks is a real
+distributed-training-relevant result — layer-local updates mean no global backward pass. Scope
+caveat: the matching is demonstrated in the regimes they tested up to depth 128; nothing on the
+abstract page addresses modern LLM-scale training, and the repo is a research artifact (98 stars),
+not a framework.
+
+[`🔗 arXiv:2605.31022`](https://arxiv.org/abs/2605.31022) · [`🔗 SakanaAI/pc-alm`](https://github.com/SakanaAI/pc-alm) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49701182)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-14T20:05:00Z |
-| Items | 17 |
-| Sources tracked | 16 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs, EU Commission, Apple Newsroom, security advisories) |
+| Generated | 2026-09-15T04:20:00Z |
+| Items | 30 |
+| Sources tracked | 29 (Hacker News, GitHub Trending daily+weekly, CISA KEV, vendor blogs and advisories, EU Commission, Apple Newsroom, courts, security research blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
