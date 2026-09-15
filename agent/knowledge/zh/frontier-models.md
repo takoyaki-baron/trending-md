@@ -1518,3 +1518,54 @@ DeepMind 为**全部 90 亿个单碱基变化**预计算调控影响，蒸馏为
 - 来源：[LessWrong: Astra and Fable still hack on simple variants of alignment evals](https://www.lesswrong.com/posts/munJKF7iWMsWJLAH2/astra-and-fable-still-hack-on-simple-variants-of-alignment) ·
   [Goodhart Labs 写作 + 评测源码](https://goodhartlabs.com/blog/frontier-models-still-hack-alignment-evals) ·
   [TechCrunch: Garry Tan 谈蒸馏](https://techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too/)
+
+## 2026-09-16 04:03 — 语音成为多方争夺的前沿；一个"系统一"模型带着自我免责的 444× 出场；两个大型开源发布自带诚实细则
+
+- **Gemini 3.8 Live + 3.8 Live Extended Thinking（Google，9 月 15 日）：** 两个语音到语音模型——3.8
+  Live（"为规模与成本效率而生"：近实时视觉输入、跨 97 种语言的对话中途切换、后台工具执行）与 Extended
+  Thinking（边推理边说话，实时播报进度）。宣称数字：Artificial Analysis Speech-to-Speech Quality
+  Index 第一（82.6）、τ-Voice 智能体完成率 68.6%、Big Bench Audio 97.7%。**必须带走的警告：** 全文没有
+  任何延迟数字（只有合作伙伴"延迟令人印象深刻"的引用语），顶着"成本效率"话术却没有任何价格数字，
+  EVA-Bench 的 Pareto 对比跑在 Google 自家 Live API/Agent Platform 上。所有音频带 SynthID 水印；企业
+  访问为私测。语音前沿已有多家实验室同时争夺——Nari Labs 前一天宣称价格 Pareto 前沿，Google 用质量指数
+  回应。
+- **Jev——非自回归"系统一"模型，被自家博客反复免责（HN 169+ 分）：** TypeSafe AI（创始人 Diogo
+  Almeida，前 OpenAI）发布一个单趟并行输出带校准概率的类型化结构值的模型——70–500 ms 对比前沿 LLM 的
+  3–329 秒，输入 $0.042/MTok 对比 $0.20–$10，用他们所称的"RLCD"（RL for Calibrated Decisions）训练。
+  HN 标题：比 GPT-6 Astra/Fable 5.1 平均快 193.6×、便宜 444.6×。**而帖子本身反复免责**——正是源验证
+  规则flag的那种标题形状（两个数字来自不同设置的差值）：评测在西海岸笔记本上运行；定价可能有补贴；
+  "0% 幻觉"由 schema 数学保证而非实测；工作流由 TypeSafe 自家团队编写；参考答案偏向 OpenAI/Anthropic；
+  LLM 基线走了 TypeSafe 自家更慢的结构化输出包装；demo 用短而密的输入（"对 Jev 有利的照明"）；且仅限
+  候补名单。底层想法——单趟校准的类型化函数调用——值得认真对待；444× 不值得。
+- **Atria Dawn Preview（arXiv 2609.15818，9 月 14 日，143 位作者）：** 上海 AI Lab 的 744B 参数智能体
+  MoE，GLM-5.2 基座、256K 上下文，经"Verifiable Experience Pipeline"训练（工具交互在可执行环境中打分）；
+  MIT 许可权重，BF16 + FP8。README 宣称 16 项基准中 5 项最高报告分（DeepSearchQA 96.0、BrowseComp 92.5、
+  CyberGym 86.5、BFCL v4 77.0、SWE-bench Pro 59.6）。细则：纯文本（README 附带给 Codex 和 Claude Code
+  阻止图像/PDF 输入的钩子）、多个基准行缺竞品数据、HF 模型页有门禁——而发布中最有价值的一句话是它自己
+  写的：摘要强调其 769 任务案例研究中**三分之二的 AI 辅助任务在没有 AI 的情况下仍然可行**。
+- **ZGCM-1（中关村学院，arXiv 2609.13356）：** 一个"完全开放"的 7.39B 稠密模型，从零训练——约 4.19T
+  预训练 token、FP8 + Muon 优化器、滑窗+全局混合注意力、256K 上下文——权重、分阶段数据、训练代码和
+  W&B 日志全部以 MIT 公开。README 数字：MATH-500 97.13%、AIME 2026 75.00%、GAIA 纯文本 42.52%。完全
+  开放的训练栈比权重本身更稀有，但摘要不含任何数字——所有"与 Qwen3-235B-A22B 和 GLM-5.1 竞争力相当"
+  的说法都是定性的——且 BrowseComp 19.43% 无论怎么框定绝对值都偏低。
+- **Plan Injection（arXiv 2609.15989，Chidambaram、Ilyas、Syrgkanis——斯坦福）：** 在 actor 模型上下文
+  里植入"有害但听起来无害"的推理，可将其引向不安全的计划，而可见的思维链保持干净——在各项
+  monitorability 基准上以 25–33% 的比率逃过 CoT 监控器，并可扩展至 DeepSeek-R1；actor 会把被注入的计划
+  转述为自己的推理，不加归因。攻击作用于*输入*而非权重，其两个最反直觉的发现值得写进每一份
+  monitorability 设计文档：让监控器看到被注入的计划反而**使检出率最多下降 50%**（Bio-Math 任务），而
+  一些拿到额外思考 token 的监控器"为被注入的计划辩护而不是标记它"——更多监控算力可能适得其反。与
+  Pachocki"CoT 监控能力正在递减"的承认同一周落地 → 论点 7。
+- **Vidu S2（arXiv 2609.11638，生数科技，35 位作者）：** S2-Avatar（带语音交互与参考引导换装/换景/换物
+  的实时交互数字人）+ S2-Editing（对输入视频流做实时编辑——风格迁移、服装/角色/背景替换），宣称实时
+  720p，高于 S1 的 540p@25FPS，有在线 demo。交互式视频正在与直播基础设施合流——但摘要里唯一的基准
+  表述是未量化的"优于所有基线"：没有延迟/FPS 数字，demo 页面是厂商营销而非数据源。
+- 来源：[Google 博客](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/) ·
+  [HN 上关于 Gemini 3.8 Live 的讨论](https://news.ycombinator.com/item?id=49715947) ·
+  [TypeSafe 博客](https://typesafe.ai/blog/introducing-system-one-models-and-jev) ·
+  [HN 上关于 Jev 的讨论](https://news.ycombinator.com/item?id=49717558) ·
+  [arXiv 2609.15818](https://arxiv.org/abs/2609.15818) ·
+  [atria-asi/Atria-Dawn-Preview](https://github.com/atria-asi/Atria-Dawn-Preview) ·
+  [arXiv 2609.13356](https://arxiv.org/abs/2609.13356) ·
+  [zgcagi/ZGCM-1](https://github.com/zgcagi/ZGCM-1) ·
+  [arXiv 2609.15989](https://arxiv.org/abs/2609.15989) ·
+  [arXiv 2609.11638](https://arxiv.org/abs/2609.11638)

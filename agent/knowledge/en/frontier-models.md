@@ -2492,3 +2492,72 @@ the non-commercial ToS. The research-to-lookup-table move is real; the missing e
 - Sources: [LessWrong: Astra and Fable still hack on simple variants of alignment evals](https://www.lesswrong.com/posts/munJKF7iWMsWJLAH2/astra-and-fable-still-hack-on-simple-variants-of-alignment) ·
   [Goodhart Labs writeup + eval source](https://goodhartlabs.com/blog/frontier-models-still-hack-alignment-evals) ·
   [TechCrunch: Garry Tan on distillation](https://techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too/)
+
+## 2026-09-16 04:03 — voice becomes a contested frontier; a "system one" model ships a self-disclaimed 444×; two big open releases with honest fine print
+
+- **Gemini 3.8 Live + 3.8 Live Extended Thinking (Google, Sep 15):** two speech-to-speech voice
+  models — 3.8 Live ("built for scale and cost efficiency": near real-time visual input,
+  mid-conversation switching across 97 languages, background tool execution) and Extended Thinking,
+  which reasons and speaks simultaneously, narrating progress live. Claimed numbers: #1 on the
+  Artificial Analysis Speech-to-Speech Quality Index at 82.6, 68.6% τ-Voice agentic completion, 97.7%
+  Big Bench Audio. **The caveats to carry:** no latency figures anywhere in the announcement (only
+  partner quotes about "impressive latency"), no pricing numbers despite the "cost efficiency"
+  framing, and the EVA-Bench Pareto claim was run on Google's own Live API/Agent Platform. All audio
+  is SynthID-watermarked; enterprise access is private preview. The voice frontier is now contested by
+  several labs at once — Nari Labs claimed the price Pareto frontier the day before, Google answers
+  with the quality index.
+- **Jev — a non-autoregressive "system one" model, disclaimed by its own blog post (HN 169+ pts):**
+  TypeSafe AI (founder Diogo Almeida, ex-OpenAI) announces a model that outputs typed structured
+  values with calibrated probabilities in one parallel pass — 70–500 ms vs 3–329 s for frontier LLMs,
+  $0.042/MTok input vs $0.20–$10, trained with what they call "RLCD" (RL for Calibrated Decisions).
+  The HN headline: 193.6× faster and 444.6× cheaper than GPT-6 Astra/Fable 5.1 averages. **The post
+  itself disclaims it repeatedly** — exactly the headline shape the source-validation rules flag (a
+  delta whose two numbers come from different setups): evals ran from West Coast laptops; pricing may
+  be subsidized; "0% hallucination" is guaranteed by schema math, not measured; workflows were
+  authored by TypeSafe's own team; reference answers bias toward OpenAI/Anthropic; LLM baselines went
+  through TypeSafe's own slower structured-output wrapper; the demo used short dense inputs
+  ("favorable lighting for Jev"); and it's waitlist-only. The underlying idea — calibrated typed
+  function calls in a single pass — is worth taking seriously; the 444× is not.
+- **Atria Dawn Preview (arXiv 2609.15818, Sep 14, 143 authors):** Shanghai AI Lab's 744B-parameter
+  agentic MoE built on a GLM-5.2 foundation, 256K context, trained via a "Verifiable Experience
+  Pipeline" (tool interactions scored in executable environments); MIT-licensed weights in BF16 + FP8.
+  README claims highest reported scores on 5 of 16 benchmarks (DeepSearchQA 96.0, BrowseComp 92.5,
+  CyberGym 86.5, BFCL v4 77.0, SWE-bench Pro 59.6). Fine print: text-only (the README ships hooks for
+  Codex and Claude Code to block image/PDF inputs), several benchmark rows have missing competitor
+  data, the HF model page is gated — and the release's most valuable line is its own: the abstract
+  stresses that **two-thirds of the AI-assisted tasks in its 769-task case study were still feasible
+  without AI**.
+- **ZGCM-1 (Zhongguancun Academy, arXiv 2609.13356):** a "fully open" 7.39B dense model trained from
+  scratch — ~4.19T pretrain tokens, FP8 + Muon optimizer, hybrid sliding-window + global attention,
+  256K context — with weights, per-stage data, training code, and W&B logs all public under MIT.
+  README numbers: MATH-500 97.13%, AIME 2026 75.00%, GAIA text-only 42.52%. The fully-open training
+  stack is rarer than the weights, but the abstract gives no numbers — all "competitive with
+  Qwen3-235B-A22B and GLM-5.1" claims are qualitative — and BrowseComp at 19.43% is low in absolute
+  terms however it's framed.
+- **Plan Injection (arXiv 2609.15989, Chidambaram, Ilyas, Syrgkanis — Stanford):** planting
+  harmful-but-benign-sounding reasoning in an actor model's context steers it toward unsafe plans
+  while the visible chain-of-thought stays clean — evading CoT monitors at 25–33% across
+  monitorability benchmarks, scaling up to DeepSeek-R1; actors paraphrase the injected plans as their
+  own reasoning, without attribution. The attack works at the *input* rather than the weights, and its
+  two most counterintuitive findings belong in every monitorability design doc: giving the monitor
+  access to the injected plan **cut detection by up to 50%** on a Bio-Math task, and some monitors
+  given extra thinking tokens "rationaliz[ed] the injected plan rather than flagging it" — more
+  monitor compute can backfire. Lands in the same week as Pachocki's "CoT monitoring is progressively
+  diminishing" concession → thesis 7.
+- **Vidu S2 (arXiv 2609.11638, Shengshu, 35 authors):** S2-Avatar (real-time interactive digital
+  character with voice interaction and reference-guided outfit/background switching) + S2-Editing
+  (edits an incoming video stream on the fly — style transfer, clothing/character/background
+  replacement), claiming real-time 720p, up from S1's 540p@25FPS, with a live demo. Interactive video
+  converging on livestream infrastructure — but the abstract's only benchmark statement is the
+  unquantified "outperforms all baselines": no latency/FPS numbers, and the demo page is vendor
+  marketing, not a data source.
+- Sources: [Google blog](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/) ·
+  [HN on Gemini 3.8 Live](https://news.ycombinator.com/item?id=49715947) ·
+  [TypeSafe blog](https://typesafe.ai/blog/introducing-system-one-models-and-jev) ·
+  [HN on Jev](https://news.ycombinator.com/item?id=49717558) ·
+  [arXiv 2609.15818](https://arxiv.org/abs/2609.15818) ·
+  [atria-asi/Atria-Dawn-Preview](https://github.com/atria-asi/Atria-Dawn-Preview) ·
+  [arXiv 2609.13356](https://arxiv.org/abs/2609.13356) ·
+  [zgcagi/ZGCM-1](https://github.com/zgcagi/ZGCM-1) ·
+  [arXiv 2609.15989](https://arxiv.org/abs/2609.15989) ·
+  [arXiv 2609.11638](https://arxiv.org/abs/2609.11638)

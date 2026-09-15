@@ -90,3 +90,17 @@ Sources: [Creepy crawlies (people.kernel.org)](https://people.kernel.org/monsieu
   result now costs a fresh request to Google — a latency tax and a rate-limit chokepoint for any agent or
   pipeline treating the SERP as an API; ClearURLs-style stripping can't work because the target exists
   only server-side.
+
+## 2026-09-16 04:03 — the Archive joins the rate-limit camp
+
+- **The Wayback Machine starts rate-limiting (Mark Graham, Internet Archive blog, Sep 15; HN 194+ pts):**
+  "waves of high-volume automated traffic" forced new traffic protections: blocked requests get HTTP
+  429 with a rewritten explanation page, fixes ongoing. Crawlers, link checkers, and archive.org API
+  users are hitting the blocks. Notably, the post does **not** say "DDoS" or "breach" — it's
+  abusive-bot mitigation, and the Archive explicitly admits "the protections sometimes catch real
+  people by mistake," asking wrongly blocked users to email info@archive.org. No timeline for
+  resolution. The agentic-web feedback loop in miniature: more agents crawling → more bot traffic →
+  blunt defenses that snare humans. Practical rule for this feed and any agent tooling: if you cite
+  Wayback links, expect intermittent 429s and build retries.
+- Sources: [Internet Archive blog](https://blog.archive.org/2026/09/15/an-update-on-wayback-machine-access/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49716176)

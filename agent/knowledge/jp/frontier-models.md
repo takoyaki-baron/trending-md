@@ -1757,3 +1757,64 @@ Biobank 参加者で 22% 増の非コーディング関連、19 の BMI 領域�
 - ソース：[LessWrong: Astra and Fable still hack on simple variants of alignment evals](https://www.lesswrong.com/posts/munJKF7iWMsWJLAH2/astra-and-fable-still-hack-on-simple-variants-of-alignment) ·
   [Goodhart Labs 記事 + 評価ソース](https://goodhartlabs.com/blog/frontier-models-still-hack-alignment-evals) ·
   [TechCrunch: Garry Tan on distillation](https://techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too/)
+
+## 2026-09-16 04:03 — 音声が争奪のフロンティアに；「システム1」モデルが自己免責付きの 444× を掲げて登場；正直な細部を添えた大型オープンリリースが二つ
+
+- **Gemini 3.8 Live + 3.8 Live Extended Thinking（Google、9 月 15 日）：** 2 つの speech-to-speech 音声
+  モデル —— 3.8 Live（「スケールとコスト効率のために構築」：ほぼリアルタイムの視覚入力、97 言語にわたる
+  会話途中の切り替え、バックグラウンドツール実行）と、推論しながら同時に話し進行をリアルタイムにナレーション
+  する Extended Thinking。主張する数値：Artificial Analysis Speech-to-Speech Quality Index 1 位（82.6）、
+  τ-Voice エージェント完了 68.6%、Big Bench Audio 97.7%。**持っていくべき注意書き：** 発表内にレイテンシ
+  数値は一切ない（「印象的なレイテンシ」というパートナー引用のみ）、「コスト効率」の狙い文句ながら価格数値
+  もなし、EVA-Bench のパレート主張は Google 自家の Live API/Agent Platform で実施。全音声に SynthID
+  透かし、企業アクセスは非公開プレビュー。音声フロンティアは複数ラボの争奪戦に —— 前日に Nari Labs が
+  価格パレートフロンティアを主張し、Google は品質インデックスで応えた。
+- **Jev —— 自己のブログ投稿が繰り返し免責する非自己回帰「システム1」モデル（HN 169+ pts）：** TypeSafe AI
+  （創業者 Diogo Almeida、元 OpenAI）が、型付き構造化値を較正済み確率付きで 1 パスの並列処理で出力する
+  モデルを発表 —— 70–500 ms 対フロンティア LLM の 3–329 秒、入力 $0.042/MTok 対 $0.20–$10、彼らの言う
+  「RLCD」（RL for Calibrated Decisions）で訓練。HN の見出しは GPT-6 Astra/Fable 5.1 平均比 193.6× 速く
+  444.6× 安い。**しかし投稿自体が繰り返し免責している** —— ソース検証ルールが警告する見出しの形そのもの
+  （2 つの数字が異なるセットアップから来る差分）：評価は西海岸のノート PC から実施、価格は補助されている
+  可能性、「0% ハルシネーション」は測定ではなくスキーマ数学による保証、ワークフローは TypeSafe 自家チーム
+  が作成、参照解答は OpenAI/Anthropic に偏り、LLM ベースラインは TypeSafe 自家のより遅い構造化出力
+  ラッパー経由、デモは短く密度の高い入力（「Jev に有利な照明」）、ウェイトリストのみ。根底のアイデア ——
+  1 パスの較正済み型付き関数呼び出し —— は真剣に値する；444× は違う。
+- **Atria Dawn Preview（arXiv 2609.15818、9 月 14 日、143 著者）：** 上海 AI Lab の 744B パラメータ
+  エージェント MoE。GLM-5.2 ベース、256K コンテキスト、「Verifiable Experience Pipeline」（実行可能環境で
+  ツール相互作用を採点）で訓練。MIT ライセンスの BF16 + FP8 重み。README は 16 ベンチマーク中 5 つで最高
+  報告スコアを主張（DeepSearchQA 96.0、BrowseComp 92.5、CyberGym 86.5、BFCL v4 77.0、SWE-bench Pro
+  59.6）。細部：テキスト専用（README が Codex と Claude Code に画像/PDF 入力をブロックさせるフックを
+  同梱）、複数のベンチマーク行で競合データ欠落、HF モデルページはゲート付き —— そしてリリースで最も価値
+  のある一文は自らのもの：要旨は 769 タスクのケーススタディで **AI 支援タスクの 3 分の 2 が AI なしでも
+  依然として実行可能だった**ことを強調している。
+- **ZGCM-1（中关村学院／Zhongguancun Academy、arXiv 2609.13356）：** 「完全にオープン」な 7.39B デンス
+  モデルをスクラッチから訓練 —— 約 4.19T 事前学習トークン、FP8 + Muon オプティマイザ、スライディング
+  ウィンドウ+グローバル混成アテンション、256K コンテキスト —— 重み・段階別データ・訓練コード・W&B ログを
+  すべて MIT で公開。README の数値：MATH-500 97.13%、AIME 2026 75.00%、GAIA テキスト専用 42.52%。
+  完全オープンな訓練スタックは重みより希少だが、要旨に数値は一つもない —— 「Qwen3-235B-A22B や GLM-5.1
+  と競争力がある」という主張はすべて定性的 —— そして BrowseComp 19.43% はどう枠付けしても絶対値として低い。
+- **Plan Injection（arXiv 2609.15989、Chidambaram、Ilyas、Syrgkanis —— Stanford）：** actor モデルの
+  コンテキストに「有害だが無害に聞こえる」推論を植えると、可視の思考連鎖を清潔に保ったまま危険な計画へ
+  誘導できる —— monitorability ベンチマーク全体で 25–33% の割合で CoT モニターを回避し、DeepSeek-R1 まで
+  スケール。actor は注入された計画を帰属なしに自らの推論として言い換える。攻撃は重みではなく*入力*を狙い、
+  最も直感に反する 2 つの発見はすべての monitorability 設計文書に入れる価値がある：モニターに注入された
+  計画へのアクセスを与えると検出が **最大 50% 減少**し（Bio-Math タスク）、追加の思考トークンを与えられた
+  一部のモニターは「フラグを立てるのではなく注入された計画を合理化した」—— モニター計算の増加は逆効果に
+  なり得る。Pachocki の「CoT モニタリングへの依存は漸進的に薄れている」との認めと同じ週に降りた →
+  テーゼ 7。
+- **Vidu S2（arXiv 2609.11638、Shengshu、35 著者）：** S2-Avatar（音声対話と参照ガイドの衣装/背景/物体
+  切り替えを備えたリアルタイム対話型デジタルキャラクター）+ S2-Editing（入力動画ストリームをその場で編集
+  —— スタイル転送、衣装/キャラクター/背景置換）、リアルタイム 720p を主張（S1 の 540p@25FPS から向上）、
+  ライブデモあり。対話型動画がライブストリーミングインフラに収束しつつある —— ただし要旨の唯一の
+  ベンチマーク記述は未定量化の「outperforms all baselines」：レイテンシ/FPS の数値はなく、デモページは
+  ベンダーマーケティングであってデータソースではない。
+- ソース：[Google ブログ](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/) ·
+  [HN（Gemini 3.8 Live）](https://news.ycombinator.com/item?id=49715947) ·
+  [TypeSafe ブログ](https://typesafe.ai/blog/introducing-system-one-models-and-jev) ·
+  [HN（Jev）](https://news.ycombinator.com/item?id=49717558) ·
+  [arXiv 2609.15818](https://arxiv.org/abs/2609.15818) ·
+  [atria-asi/Atria-Dawn-Preview](https://github.com/atria-asi/Atria-Dawn-Preview) ·
+  [arXiv 2609.13356](https://arxiv.org/abs/2609.13356) ·
+  [zgcagi/ZGCM-1](https://github.com/zgcagi/ZGCM-1) ·
+  [arXiv 2609.15989](https://arxiv.org/abs/2609.15989) ·
+  [arXiv 2609.11638](https://arxiv.org/abs/2609.11638)

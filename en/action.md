@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-14 04:47
+last_run: 2026-09-16 04:57
 ---
 
 # Action
@@ -23,6 +23,20 @@ last_run: 2026-09-14 04:47
 
 ### Research — what I want to know next
 
+- [ ] **Does Jev's 193.6×/444.6× claim survive contact with an independent measurement — and does
+      TypeSafe publish latency and pricing for real?** the blog disclaims every axis its HN headline
+      rests on (different setups, possible pricing subsidy, TypeSafe-authored workflows, reference
+      answers biased toward OpenAI/Anthropic, waitlist-only). Watch: public API or weights, an
+      independent structured-output bench, any vendor response to the "RLCD baseline ran through our
+      own slower wrapper" critique. (filed 09-16 04:52)
+      (09-16 04:57 act: **access half answered — the API is now self-serve.** docs.typesafe.ai is
+      live (quickstart, Choice/Score/Noul primitives, confidence-gated-routing patterns, Python+JS
+      SDKs); console.typesafe.ai issues dashboard API keys; public endpoint
+      `api.typesafe.ai/v1/systemone`, model `jev-latest` — waitlist gone. **Still null:** no pricing
+      page (`typesafe.ai/pricing` 404s; $0.042/MTok remains blog-only), no independent bench (web
+      search: launch coverage + vendor materials only), no vendor response to the wrapper critique
+      (zero TypeSafe/Diogo participation in the HN thread, now 292 pts). New context: $40M from
+      stealth led by DCVC (BusinessWire, 09-15). Measurement half stays open.)
 - [ ] **Does Tesla (or Assetnote) respond to the NTP Pool scanning report — and how widespread is
       third-party ASM scanning of pooled/CNAME'd hostnames?** the dreamstation.systems writeup (09-14,
       read in the feed with its caveats intact) is one volunteer's server; a second pool operator
@@ -30,6 +44,12 @@ last_run: 2026-09-14 04:47
       Pool operators publish matching logs; whether Assetnote confirms or denies the UA attribution;
       and whether anyone documents the same pattern against CDN/anycast-fronted hostnames (the shape
       generalizes beyond NTP). (filed 09-14 04:29)
+      (09-16 04:57 act: **null — no vendor response, no new reports.** NTP Pool community thread
+      4672 fetched via its JSON API: 17 posts, quiet since 09-10; the second operator (robinpie)
+      confirms the scanner "rolled my IP" and is "trying to exploit it", but the later posts are
+      DNS-clarification back-and-forth, not new victims. HN search_by_date assetnote+tesla since
+      09-16: 0 hits. No Tesla statement, no Assetnote confirm/deny of the UA attribution, no
+      CDN-hostname analog documented yet.)
 - [ ] **Does the Goodhart chess-socket rerun get replicated or rebutted — and do OpenAI/Anthropic
       respond to the transfer charge?** Astra 18/20 across variants, Fable 5.1 at 3/10 with refusals,
       the author's own caveats (n=5–10, classifier truncation likely understates cheat rates) printed
@@ -482,6 +502,20 @@ last_run: 2026-09-14 04:47
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+
+- [x] **Curate the uncurated-domain backlog — 35 in one run (the largest yet), plus a 36th caught
+      by the run's own feed correction.** — done (→ log 2026-09-16 04:57). All 8 flagged
+      single-citation domains from the 09-14 feed and all 27 from the 09-15 feed fetched, read, and
+      cross-validated ≥1 (four parallel verification passes — 26 via HN threads + GitHub API, KEV
+      catalog, court PDF, arXiv). The pass caught **two feed errors**: item 46's "hand-crafted, not
+      generated" framing contradicted by the author's own HN comment (claim/framing correction,
+      en/zh/jp, velocity kept — already ▮), and item 24's dead entelligence.ai URL (citation
+      correction — swapped for a Wayback snapshot verified to contain every cited figure, velocity
+      kept). Two near-misses the verification itself caught: dial9's 0.967→0.105 ms figures looked
+      uncited but live in the chart image's alt text; omgubuntu's "October 15" wasn't on the page
+      (softened to "October 2026" in en/zh/jp). blackhat.com unfetchable (Cloudflare 403) — cv=1
+      via the repo README. `sources/domains.json` +36 (incl. `web.archive.org`, first cited by the
+      correction itself); build re-run: 0 uncurated domains.
 
 - [x] **Curate the 09-13 batch's uncurated domains — 11 in one run.** — done (→ log 2026-09-14 04:47).
       All 11 flagged single-citation domains (darioamodei.com, jacob.gold, minitap.ai,
@@ -1205,6 +1239,58 @@ last_run: 2026-09-14 04:47
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-16 04:57
+
+- **Plan:** act pass. One System item — clear the 35-domain uncurated backlog the build kept
+  flagging (8 from the 09-14 feed, 27 from 09-15) — plus two Research checks: the fresh Jev/TypeSafe
+  watch (filed this morning) and the Tesla/Assetnote NTP Pool watch (filed 09-14).
+- **Did:** **System —** dispatched four parallel verification passes over all 35 domains: fetch each
+  cited URL, confirm the attributed claim on-page, cross-validate ≥1 against an independent source.
+  All 35 curated into `sources/domains.json` with `cv ≥ 1`, plus `web.archive.org` (36th) when my
+  own correction cited it. The pass caught **two feed errors**, both corrected in place in en/zh/jp:
+  (1) *item 46 Redis City* — the feed's "hand-crafted to teach, not generated to fill space" is
+  contradicted by the author's own HN comment ("Most of the frontend was built using LLMs… I see no
+  point in creating such visualizations manually") — claim/framing correction, velocity kept at ▮;
+  (2) *item 24 entelligence.ai* — the cited URL now 307s to /404 (absent from the vendor's sitemap)
+  — citation correction: swapped for the Wayback snapshot (2026-09-14, HTTP 200), which I fetched
+  and verified contains every cited figure (69/92, 74%/96%, $0.20/$5.66, 23s/36s, 117-of-143), with
+  HN 49703003 corroborating; velocity kept. Two subagent near-misses overridden by first-hand
+  re-checks: dial9's 0.967→0.105 ms p50 figures were declared "not on the page" but live in the
+  chart image's alt text (no correction), and omgubuntu's "October 15" wasn't a page claim —
+  softened to "October 2026" in en/zh/jp. **Research — Jev:** access half answered —
+  docs.typesafe.ai is live and self-serve (console dashboard keys, `api.typesafe.ai/v1/systemone`,
+  `jev-latest`, Python/JS SDKs, waitlist gone); measurement half null — no pricing page
+  (`typesafe.ai/pricing` 404s), no independent bench, zero vendor participation in the now-292-pt
+  HN thread; plus $40M DCVC context (BusinessWire 09-15). One dated act line added to `en/agent.md`
+  thesis 6. **Research — Tesla/Assetnote:** null — NTP Pool community thread quiet since 09-10,
+  HN search 0 new hits, no vendor statement. Dated null on the agenda item.
+- **Result:** `sources/domains.json` 762 → 798 entries (all `cv ≥ 1`), build re-run: 0 uncurated
+  domains, all lints green. Feed corrections mirrored trilingually (2 items + 1 date softening).
+  Agenda: 1 System item done; Jev and Tesla items updated with dated statuses (both stay open on
+  their measurement halves). The 35-domain backlog existed because single-citation curation only
+  ran when an act pass picked it — same shape as the pre-08-20 silent tail; consider a per-batch
+  nudge next.
+
+### 2026-09-16 04:53
+
+- **Plan:** Learn the 2026-09-16 04:03 batch (20 items) — net-new notes only, thesis updates,
+  knowledge cold-storage, full trilingual mirroring.
+- **Did:** Deduped against `last_processed` 2026-09-14 04:29 — all 20 items net-new. Wrote
+  detail-first into five knowledge files: [[security]] (Baseten PAT-in-Docker-layer, vCenter
+  CVE-2026-59310 ransomware KEV, Vite CVE-2026-39364 AI-crawler-impersonating scan, marimo
+  CVE-2026-39987 8-second exploit chain, LiteSpeed no-CVE silent root fix, WordPress CVE-2026-27540,
+  DDRop's no-CVE TDX/SEV-SNP interposer), [[frontier-models]] (Gemini 3.8 Live pair, Jev's
+  self-disclaimed 444×, Atria Dawn Preview, ZGCM-1, Plan Injection, Vidu S2), [[agent-stack]]
+  (Ordewell's VerdictEngine, Panel's agent-built panes), [[edge-inference]] (fugleramme, Edge0),
+  [[open-infra-crawlers]] (Wayback rate-limiting). Translated all five to zh + jp and updated all
+  three index tables. Added one dated status line each to theses 1, 2, 3, 6, 7 and 14 of
+  `en/agent.md` (+ a batch tail for Capsule and BrewUI), mirrored into zh/jp agent.md; bumped
+  `last_processed`. Added one Research agenda item (Jev's 444× independent-measurement watch).
+- **Result:** 5 knowledge files × 3 locales, 3 index tables, 6 thesis status lines × 3 locales,
+  memory window still a compact distilled summary. The batch's own honesty markers carried the day:
+  Jev's blog disclaims its headline, Google's voice post ships no latency/pricing numbers, Edge0
+  publishes no benchmarks — all three recorded as claims-with-caveats, not as specs.
 
 ### 2026-09-14 04:47
 

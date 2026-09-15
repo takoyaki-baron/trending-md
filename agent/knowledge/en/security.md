@@ -2621,3 +2621,79 @@ Sources: [Unit 42 investigation](https://unit42.paloaltonetworks.com/ai-assisted
   [HN discussion](https://news.ycombinator.com/item?id=49686766) ·
   [bensimms.moe: Reverse engineering my e-scooter](https://bensimms.moe/reverse-engineering-scooter/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49638071)
+
+## 2026-09-16 04:03 — 2013-era mistakes at production scale; patches without CVEs; hardware attacks outside the threat model
+
+- **Strix → Baseten: a production GitHub PAT in a Docker layer (HN 120+ pts):** evaluating Baseten
+  black-box, Strix found an anonymously-accessible Harbor container registry, pulled the `baseten-app`
+  image, and extracted a live GitHub PAT from its build history — a `RUN` step had expanded
+  `GITHUB_TOKEN` into the command, so Docker recorded it permanently. The token (org member
+  `basetenbot`, `repo` scope) had admin+push on the main product repo, the GitOps repo driving
+  production, and the Homebrew tap — and though the image was built in March 2023, the token still
+  worked in July 2026. Baseten rotated it the afternoon after the July 13 report. The writeup's
+  explicit "what we did not do" section (no customer repo cloned, nothing pushed, read-only calls
+  only) is part of why the disclosure landed well. **The reusable shape:** layer history is forever,
+  and a `repo`-scoped PAT inside a GitOps pipeline *is* production control — the most consequential
+  cloud exposures of 2026 keep being a decade-old mistake classes.
+- **CISA flags vCenter CVE-2026-59310 ransomware-used (KEV update Sep 15):** directory/path traversal
+  (CWE-22) in the vCenter Syslog server, CVSS 9.8 per Broadcom's advisory, patched July 29, KEV-added
+  Aug 18, now `knownRansomwareCampaignUse: "Known"` with mandatory forensic triage under BOD 26-04.
+  DFIR firm QUIRSO tracks a suspected APT compromising 361+ IPs across 47 countries since Aug 3,
+  persisting via the open-source `reverse_ssh` framework. Honesty caveats: no gang named (CISA "yet to
+  share any details"), Shadowserver sees 450+ exposed vCenter servers, and nobody knows how many are
+  patched. vCenter is the management plane of the hypervisor estate — a ransomware flag landing two
+  months after the patch says unpatched estates are being swept for staging, not just probed.
+- **Exposed Vite dev servers mass-scanned for cloud credentials — CVE-2026-39364 (GHSA-v2wj-q39q-566r,
+  CVSS 8.2):** the `server.fs.deny` block is bypassed by appending `?raw` / `?import&raw` /
+  `?import&url&inline` query params, serving `.env`, `rootkey.csv`, `.azure/accessTokens.json`, and
+  `terraform.tfstate` with HTTP 200. F5's honeynets saw 807 session-grouped attacks (~32,000 raw
+  events) in August — up from a three-month baseline of 1,732 file-read events — largely from Google
+  Cloud IPs, **impersonating ClaudeBot, GPTBot, and Googlebot**: the campaign dresses itself up as the
+  AI crawlers everyone whitelists. Patched in Vite 7.3.2 / 8.0.5 since April. F5's own caveat is the
+  honesty marker: honeypot attempts, not confirmed thefts ("actual exfiltration of specific credentials
+  or Terraform state is not verified"), and exploitation needs three conditions to line up.
+- **marimo CVE-2026-39987 → an AWS bastion foothold in 8 seconds (Sysdig TRT, Sep 11):** the pre-auth
+  RCE (disclosed and patched in April: `/terminal/ws` skips the `validate_auth()` check other
+  WebSocket endpoints apply; fixed in 0.23.0) was exploited by a *human* actor who swept the local /24,
+  stole AWS keys from the host environment and the app's Redis backend, called
+  `secretsmanager:GetSecretValue` across five regions via hand-written boto3, and authenticated to an
+  internet-facing bastion **8 seconds** after the WebSocket opened. Sysdig found no LLM-generated
+  scripts, and the actor ignored a planted prompt-injection probe twice (absence-of-evidence
+  attribution). The initial credential harvest predates Sysdig's visibility window by 28+ hours —
+  dwell-time math: a prepared human operator moves faster than most alerting pipelines.
+- **LiteSpeed Enterprise root escalation, patched silently (cPanel advisory Sep 14):** LiteSpeed Web
+  Server Enterprise before 6.3.7 lets a low-privilege hosting account gain root on shared servers,
+  bypassing account isolation including CageFS; both vendors urge forcing the update. Described as
+  "critical" — but **no CVE ID, no CVSS, and a Sep 15 CVE-records check finds nothing**. Third
+  LiteSpeed root-class bug since May (the previous two were both KEV-listed). What "silent" costs
+  defenders: no technical description, changelog entries that don't say which fix applies, no IOCs —
+  and 6.3.6 was still listed "stable" on the download page after the fix shipped. No exploitation
+  evidence yet.
+- **WordPress Wholesale Lead Capture CVE-2026-27540 under mass attack (9.8, Wordfence-assigned):**
+  unauthenticated arbitrary file upload in the WooCommerce plugin (≤ 2.0.3.1) — the AJAX action
+  `wwlc_file_upload_handler` draws its extension allowlist from the user-controlled `file_settings`
+  parameter, so attackers simply add `php` and drop webshells. 100,000+ attempts blocked (spikes June
+  4–17, July 1, Aug 30); the fix shipped Feb 20 in 2.0.3.2. An eight-month-old patch and a
+  still-running wave is the WordPress long-tail problem in one number — with its caveat: blocked
+  *attempts*, not confirmed compromises; WPScan's record still "not yet verified."
+- **DDRoop — a $159 DDR5 interposer breaks confidential computing's freshness guarantee (ACM CCS 2026;
+  KU Leuven, ETH Zurich, Durham, Google):** the interposer silently drops writes so the CPU reads stale
+  encrypted data — scalable memory encryption protects confidentiality and integrity but not
+  *freshness*. On Intel TDX: full control of a protected VM, including forged launch measurements and
+  attestation; on AMD SEV-SNP: page-copy attacks. First active interposer attack on DDR5 and the first
+  to break current TDX integrity. **Both vendors declined to assign a CVE**, holding physical
+  interposer attacks outside their threat model — no patch, only design pressure. Limits stated by the
+  authors: TDX's cryptographic-integrity mode untested (the lab system lacked it), Arm CCA untested,
+  attacker needs both server software control and brief physical access; NVIDIA confidential GPUs
+  unaffected (on-package memory).
+- Sources: [Strix blog](https://www.strix.ai/blog/baseten-harbor-github-pat-takeover) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49716476) ·
+  [BleepingComputer on vCenter](https://www.bleepingcomputer.com/news/security/cisa-critical-vmware-vcenter-rce-flaw-now-exploited-by-ransomware-gangs/) ·
+  [SecurityWeek](https://www.securityweek.com/critical-vmware-vcenter-vulnerability-in-attackers-crosshairs/) ·
+  [GHSA-v2wj-q39q-566r](https://github.com/advisories/GHSA-v2wj-q39q-566r) ·
+  [F5 Labs](https://www.f5.com/labs/articles/cloud-takeover-mass-scanning-for-exposed-vite-endpoints-cve-2026-39364) ·
+  [Sysdig TRT](https://www.sysdig.com/blog/machine-speed-hold-the-ai-hand-rolled-marimo-cve-2026-39987-exploit) ·
+  [cPanel advisory](https://support.cpanel.net/hc/en-us/articles/43483286674583-Security-LiteSpeed-Enterprise-security-advisory-September-14-2026) ·
+  [BleepingComputer on WWLC](https://www.bleepingcomputer.com/news/security/hackers-target-wordpress-sites-via-third-party-woocommerce-plugin/) ·
+  [DDRoop project page](https://ddropattack.eu/) ·
+  [The Hacker News](https://thehackernews.com/2026/09/new-ddrop-attack-breaks-intel-tdx-and.html)

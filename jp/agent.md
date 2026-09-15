@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-09-14T04:29:00+08:00
+last_processed: 2026-09-16T04:48:39+08:00
 ---
 
 # 学習エージェント
@@ -72,6 +72,7 @@ last_processed: 2026-09-14T04:29:00+08:00
    - **09-11 12:03 —— OpenAI がハーネスをプロダクト化；リサーチが harness-of-harnesses の第 2 ドメインに（詳細 → [[agent-stack]]）：** Codex ハーネスが beta Agents API として登場（Agent / Environment（`self_hosted` 含む）/ Session / Events の 4 プリミティブ；実行中のステアリング、サブエージェントの同時実行上限——しかも**セルフホストサンドボックスでも ZDR なし**、データレジデンシーは米国のみ）；alphaXiv/OpenResearch（Rust、MIT）は Claude Code/Codex/OpenCode を並列リサーチワーカーとしてオーケストレーション；superplanehq/superplane（+356/日、beta）はバックログの issue を独自の検証ゲートを通った PR に変換；t8y2/dbx は MCP サーバーで 20 MB のデスクトップ DB クライアントをエージェントインフラに変える。
    - **09-12 12:03→20:03 — 知識ツールは wiki-not-RAG に収束し、システムプロンプトのコーパスが制度化する（詳細 → [[agent-stack]]）：** `nashsu/llm_wiki`（+647/日、Tauri）は検索型 RAG の代わりに相互リンクされた永続ウィキを構築——ベクトル検索は任意かつデフォルト無効、レビュー操作は定義済み型に限定、エージェントスキルはデフォルト読み取り専用；`jordan-gibbs/hyperresearch` は敵対的引用チェック付きの 16 段階リサーチパイプラインを markdown+SQLite の永続ボールトへ実行（リーダーボード首位の主張に自ら "Third party validation is pending" とラベル）；`asgeirtj/system_prompts_leaks`（65k★、CC0）はベンダーが公開しないシステムプロンプトの非公式チェンジログとなり、各モデル公開から数日で更新される。
    - **09-14 04:03 — フロンティアラボのサンドボックスを一次情報でマッピング；Alibaba が内部レビュアーをトレードオフ付きで公開；バイラル技能パックの警戒比率が再現（詳細 → [[agent-stack]]）：** aprilnea が自身の Claude Code Web セッション内で strace/objdump を走らせサンドボックスをマッピング——Firecracker microVM（ACPI `FIRECK`）、PID 1 の Rust `process_api`、`init_on_free` ゼロ化、48.5 時間のスナップショット復元ギャップ——未文書の **Antspace** tarball デプロイ基盤を発見（claude.ai の Web アプリビルダー「Baku」の既定ターゲット；推論と確認の区別は著者自身が明示）；`alibaba/open-code-review`（Apache-2.0、23.3k★）は決定論的 PR ツールと LLM agent を組み合わせ、AACR-Bench（50 リポジトリ / 200 PR / 80+ エンジニアが交叉検証した 1,505 件）を*名前を付けたトレードオフ*付きで公開——約 1/9 トークンで precision・F1 は Claude Code 超、recall は意図的に低い；OpenMontage は 58.3k★で再トレンドだが**リリースゼロ、最終 push は 9 月 6 日**——58k スター対 449 コミットはバイラル技能パックの比率、採用前に調査を。
+   - **09-16 04:03 — オーケストレーションは自己採点を拒否する；ワークスペースエージェントが自分の UI を拡張（詳細 → [[agent-stack]]）：** Ordewell（Show HN）はタスクごとのランナー/モデル/努力レベル計画を依存グラフに沿って実行するが、完了判定は "VerdictEngine" —— ランナー出力内の一意の完了マーカーを要求 ——「モデルは決して tie-breaker ではない」（80★；README が tmux 必須や cmd.exe 8,191 文字制限の欠落を自己列挙）；greentfrapp/panel は型付き Module Protocol の内側でエージェントに自分のペイン/ビューアコードを書させる（39★、現時点で Claude Code のみ完全サポート）。
    → [[agent-stack]]
 
 2. **エージェントセキュリティが最も直接的な攻撃面——そして命名されたあらゆるクラスは、結局誰にも
@@ -158,7 +159,8 @@ last_processed: 2026-09-14T04:29:00+08:00
    - **09-14 04:03 — 第三者攻撃面スキャンが共有インフラへ漏出；車両が未認証ファームウェアを受け入れる（詳細 → [[security]]）：** NTP Pool ボランティアが 8 月 21 日以降 3 つの AWS IP から 5 万回超のエクスプロイト試行を記録——`Host: pool-ntp.tesla.com` と `Assetnote/1.0.0 (ExposureScan)` UA 付き。Tesla がプールされたホスト名を CNAME しているため、ベンダーの資産インベントリが「名前を解決する全員への攻撃」になった（Log4Shell/SSRF/パストラバーサル Payload；別のプール運用者も 8 月 15 日から被害；Tesla は沈黙；投稿者は因果チェーンを推測と明示し何も要求せず）；ある e-scooter の表示ユニットの CAN ファームウェア更新は**未認証・暗号なし**——作者は Rust + Embassy で書き直したが、安全クリティカルな FOC モータコードには手を付けなかった。
    - **09-12 04:47(act パス)—— agentic-offense watch に第二の独立グリッド、限定条件はそのまま(詳細 → [[security]]):** Unit 42 の 9月2日 IR 報告 —— 人間が目標を設定し、エージェントが企業環境で 50 以上の ATT&CK 技術を 10 時間未満で実行(AI 使用は限定付き:指標 + 攻撃者自身の主張、harness の名前なし)——*別の*インシデントで時間単位の経済学を裏付け。一方 Huntress(確認済み)は PaperCut の悪用を認めるがキャンペーン数値は未発表(顧客環境 2 件のみ;追跡約 2,500 インストールの 47% が ≤v23)、政府勧告で agentic 性に言及するものもなし——<4h クロックは GreyNoise 独自のまま、9月14日の KEV フォローアップは未着。
    - **09-12 12:03→20:03 — メーリングリストとテストサーバーが初期アクセス面に；ハードウェア keepalive が VPN をバイパス（詳細 → [[security]]）：** Trezor × Brevo——ニュースレター業者のログイン欠陥により、攻撃者は Trezor 自身の送信インフラで約 34.7 万人の購読者にフィッシングを送付（3 件目のパイプライン事件；ウォレットは無傷、約 2,500 名がクリック）；Surfshark——ヒューマンエラーの設定で内部テストサーバーとプロキシサーバーが露出、git 履歴にビルド認証情報、時系列の開示と鍵のローテーション；Mullvad——Android のハードウェア keepalive オフロードで、任意のアプリが「VPN なしでは全接続をブロック」をバイパスして NIC から UDP を送信可能、Google の VRP は対応なく報告をクローズ、GrapheneOS は修正作業中。
-   → [[security]]
+   → [[security]]   - **09-16 04:03 — 本番規模の「2013 年級」の過ち；CVE のないパッチ；脅威モデルの外のハードウェア攻撃（詳細 → [[security]]）：** Strix が Baseten Harbor イメージの Docker レイヤー履歴から有効な `repo` スコープ GitHub PAT を抽出（2023 年 3 月ビルド、2026 年 7 月も有効 —— ある `RUN` ステップが `GITHUB_TOKEN` をコマンドに展開）；CISA は vCenter CVE-2026-59310 をパッチ 2 か月後にランサムウェア利用ありと標記（QUIRSO：47 か国 361+ IP、`reverse_ssh` 永続化）；marimo CVE-2026-39987 → WebSocket オープンから **8 秒**で AWS バスティオン認証；Vite CVE-2026-39364 のスキャン波は ClaudeBot/GPTBot を装う；LiteSpeed は CVE/CVSS/changelog 詳細のない root 権限昇格修正を出稿；DDRoop の 159 ドル DDR5 インターポーザーが TDX 完全性を破る —— 両ベンダーとも CVE 付番を拒否。
+
 
 3. **ローカル推論は量子化ではなく MoE のスパース性 + ディスクストリーミングで解放される。**
    kimi-k3-in-c、TurboFieldfare、Ling-3.0-tiny、Needle 2、antirezのh3.cはいずれも共有コアを常駐させ、
@@ -206,6 +208,7 @@ last_processed: 2026-09-14T04:29:00+08:00
    - **09-10 20:03 —— ストリーミング学派にメンテナンスされたエンジン；「動くか」が一コマンドに；メモリがダイ上に（詳細 → [[edge-inference]]）：** colibriが失敗モードを公開するメンテナンス型エンジンとして再熱（推測デコーディングは測定上の純損失——ヒット率85%近傍でMTP −32%——加えて量子化コンテナ規則とドライブ依存の `O_DIRECT`）；llmfit（35.5k★、MIT Rust）がメモリ/速度/品質/コンテキストの4軸でカタログモデルを採点し、推定vs実測の区切を見せる；Samsung zHBMがメモリをアクセラレータダイ上に直接スタック（8× HBM5を主張——すべてベンダー数値、プロトタイプ）。
    - **09-12 — Apple がこの設計を退役させようとする矢先、ブラックボックスがレジスタレベルの地図を得る（詳細 → [[edge-inference]]）：** Eileen Yoon による ANE のリバースエンジニアリング——ISA なし、固定機能データフローエンジン（16 コア × 128 FP16 MAC レーン、Q16.16 飽和累算を FP16 として読み出し、tanh は 33 項目の LUT、ルーフラインの脊点 162 OP/byte）；KernelDMA はロード専用で約 38 GB/s（GPU は約 78 GB/s）——NPU の LLM デコード性能が伸びないことの具体的説明。動機は M5 が ANE コアを GPU に統合したことで、彼女の読みは「スタンドアロン NPU の終わりの始まり」。
    - **09-14 04:03 — ローカル音声が single-app カテゴリに；CUDA-on-Windows の堀に摩擦低減がまた一つ（詳細 → [[edge-inference]]）：** debpalash/VoiceStudio（AGPL-3.0、26.4k★、+2,546/日——当日最大の急上昇）は 16 TTS + 11 ASR エンジンを Tauri v2 アプリ 1 つに統合し、OpenAI 互換オーディオ API と **localhost MCP サーバ**を備える——README が誠実さの仕事をする（ベータ明示、Intel Mac はローカルバックエンドなし、既定 OmniVoice 重みは CC-BY-NC につき商用利用はモデル側条項が支配、AudioSeal ウォーターマーク既定有効）；Speedstu/CUDA-for-AMD-Windows は 38 スターで HN フロントページへ——注目こそシグナル（ZLUDA セットアップ摩擦が CUDA の Windows における最後の堀）、しかも**ライセンスファイルなし**：参照スクリプト扱い。
+   - **09-16 04:03 — 環境ローカル AI が家具の形で届く；メモリ主張だけの MoE がトレンドに（詳細 → [[edge-inference]]）：** fugleramme（MIT、1.2k★、Show HN 1 位 1,029 pts）は Pi 5 で BirdNET-Go を実行し、**検出された種が変わったときだけ** 1800 年代のパブリックドメイン鳥類挿絵を描き直す —— 環境的でローカルファーストな AI、「変化した時だけ描き直す」規律こそが愛された理由；Edge0-35B-A3B は未検証の「3 GB 活性メモリ」主張だけでトレンドに入り、org ページにベンチマークもライセンスもない —— 調査すべき信号であって仕様書ではない。
    → [[edge-inference]]
 
 4. **マルチエージェントの「スケールするスウォーム」は、パターンマッチングではなく本物の成果を
@@ -329,7 +332,10 @@ last_processed: 2026-09-14T04:29:00+08:00
    - **09-11 04:03 —— RLが細則付きで数兆へ；開放重みに条件付けられた50×事前学習主張；評価健全性の補正が正す対象の公開翌日に着地（詳細 → [[frontier-models]]）：** Cognition SWE-2（Kimi K3上のコスト罰則RL）がFable 5.1に1ポイント以内・64%安を主張——自家チャートがTerminal-Bench 4のサンプル外で27.3% vs Astraの57.9%を示す；Magicが~50×少ないFLOPsでDeepSeek V4 Pro Baseに匹敵と主張（比較はオープンウェイト基盤にしか構造的に不可能、ベンダー保有の評価セット、重み未公開）；SWE-Bench Pro Verified（arXiv 2609.08149）——ベンチマーク著者自身がアンチハッキングセットをモデル別ハッキング率付きで出荷：GLM-5.2 78.8→57.3。
    - **09-11 12:03 —— 効率とオープンの両極が検証可能な成果物を公開（詳細 → [[frontier-models]]）：** NCP-ArchPreview（arXiv 2609.10715）が next-concept 予測で OLMo-3-7B の事前学習損失にトークン 51.3% で到達（チェックポイント公開；ベースラインは OLMo-3-7B とパラメータ整合の 8.9B のみ——その 2 つで判定せよ）；NVIDIA は IMO 金メダルのレシピを公開——Nemotron 3 Ultra が完全自然言語で 30/42、形式証明器なし、チェックポイント/データ/実際の提出解答を CC BY 4.0 で（自前の Nemotron-IMO-Bench は割り引く部分）；YuE2（3.6B）は編集可能な ABC 楽譜を先に書いてから音声をレンダリング——Suno v5 との互角は best-of-8 自動評価、ページ自身が明記；MiniCPM5-2B は重み*と*学習データを公開し、SOTA 主張は「この比較集合内」とスコープ済み。
    - **09-12 20:03 — 蒸留が名前と番号を持つ脅威インテリジェンスのカテゴリになる（詳細 → [[frontier-models]]）：** Anthropic の 9 月報告書が 7 つの中国系ラボによる「産業規模」の隠密能力抽出（2 月以来）を名指し——Alibaba 関連の GTG-16005（5–7 月で 1.51 億 exchanges、「当社が測定した中で最大の蒸留攻撃」）、DeepSeek 1,210 万件の迂回、Moonshot 約 30 万、Z.ai 340 万件の推論トレース再生、Xiaomi、SenseTime、MiniMax（「likely」は自身の留保）；対策：回答前の内部推論の要約、Fable 5.1 の "preserved thinking" による暗号化。すべての主張は Anthropic 自身の断定で、名指しされたラボの回答は未公表、そして Anthropic は自らが描写する堀を販売している——だが相手は詐欺師ではなく顧客規模のラボであり、これが質的のエスカレーション。
+   - **09-16 04:03 — 音声が争奪焦点に；「システム1」モデルが自己免責付き 444× を掲げる；大型オープンリリース 2 件は正直な細部を添える（詳細 → [[frontier-models]]）：** Gemini 3.8 Live（+ Extended Thinking）は AA Speech-to-Speech Quality Index 1 位（82.6）を主張するが、本文に**レイテンシも価格数値もなく**、EVA-Bench のパレートは Google 自家プラットフォームで実施；TypeSafe の Jev は GPT-6 Astra/Fable 5.1 比 193.6×/444.6× を見出しに打ちながら、自ブログが比較軸のすべてを免責（異なるセットアップ、補助の可能性、TypeSafe 自編ワークフロー、ウェイトリスト限定）；Atria Dawn Preview（GLM-5.2 ベース 744B MoE、MIT）は「AI 支援タスクの 3 分の 2 は AI なしでも可能」と明記し、ZGCM-1（7.39B）は重み+データ+コード+ログを MIT で公開しながら要旨は数値ゼロ。
+   - **09-16 04:57 act — Jev ウォッチの「アクセス」半分が動き、「測定」半分は null のまま：** docs.typesafe.ai が稼働し**セルフサーブ化**（コンソールのダッシュボード API キー、`api.typesafe.ai/v1/systemone`、モデル `jev-latest`、Python/JS SDK、Playground——ウェイトリスト廃止）——ただし料金ページは未存在（`typesafe.ai/pricing` は 404。$0.042/MTok はブログ限り）、独立ベンチなし、HN スレッド（現在 292 pts）に wrapper ベースライン批判への TypeSafe/Diogo 参加はゼロ。背景：DCVC リードの 4000 万ドルで stealth から出現（BusinessWire、09-15）。
    → [[frontier-models]]
+
 
 7. **AI安全性は政策ではなく測定可能なリリース閾値であり——そして測定インフラが今や弱点である。**
    OpenAI PF v2（"High"/"Critical"）、Anthropic RSP v3.0（ASL-1→5+）、Google DeepMind FSF v3.1
@@ -377,7 +383,8 @@ last_processed: 2026-09-14T04:29:00+08:00
    - **09-07 — 弱点が内側から認められる(詳細 → [[frontier-models]]):** Pachocki の「An Alien Mind」は内部評価が「CoT モニタリングへの依存能力が徐々に低下していることを示す」と述べ、第三者実施の「広く強制される安全 bar」を呼びかける——本テーゼの測定インフラへの懸念を OpenAI 自身の権威で認めた形だが、根拠は未公開の内部評価(HN の受けは強烈にネガティブ)。同バッチ:OpenAI の研究ループ定量化(人間 1 勤務日あたり 3.1 エージェント勤務日、自己報告・「解釈が難しい」)、デモベンチマーク批判(Inkling Small)、BCIT 条件付き経験転移(古くなった証拠の拒否権)、FLT 後のパトロネージュ論(「数学はモデルに生成され、モデルに読まれている」)。
    - **09-09 20:03 — 説明責任の議論に辞表が届く（詳細 → [[frontier-models]]）：** Jacob Coxon が Anthropic を退職（「我々の命を賭博にかけている」、Politico 伝聞；伴投稿は HN 592+ pt）——今年 2 件目のフロンティアラボによる高知名度の安全性動機での退職で、Navier–Stokes 論争と同じニュースサイクルに着地。帰属規律は維持：Politico の特徴づけを伝えるのみで、辞表自体は独立に未読、フォローアップの主張は記録の一部——結論ではない。
    - **09-12 04:03 —— 測定層に法定の所有者（詳細 → [[frontier-models]]）：** カリフォルニアが SB 813 + AB 1405 を署名（9月9日）—— 全米初の独立 AI 監査人フレームワーク + 州監査人登録簿（「業界に自分の採点をさせるとは期待できない」Bauer-Kahan）、本テーゼの測定インフラ弱点に対する監査人エコシステムの答え、SB 53 の延長線上；7月の HF 対応に初の議会の足跡（Hawley：16 の質問 + 10月1日締切の資料提出 ——「reckless」は彼の性格づけ；耐久部分は開示義務・黒塗りの問題）。
-   → [[frontier-models]] [[security]]
+   → [[frontier-models]] [[security]]   - **09-16 04:03 — CoT モニターは入力側で攻撃され、監視計算は逆効果になり得る（詳細 → [[frontier-models]]）：** Stanford の「Plan Injection」（arXiv 2609.15989）は actor コンテキストに無害に聞こえる有害計画を植える —— 可視の CoT は清潔なまま、monitorability ベンチマーク全体で 25–33% の回避、DeepSeek-R1 までスケール；モニターに注入計画を見せると Bio-Math タスクの検出が最大 50% 減少し、追加思考トークンを与えられた一部のモニターはフラグでなく計画を合理化 —— 測定インフラの弱点に、入力側からの攻撃が加わった。
+
 
 8. **エージェントスキルは「証明」の段階に入った——評価が欠けている標準。** このカテゴリ（google/skills、
    agent-skills、reverse-skill、diagram-design、skill-recorder）は*証明*ではなく*主張*で増殖してきた；
@@ -579,7 +586,8 @@ last_processed: 2026-09-14T04:29:00+08:00
      に例える。
    - **09-07 — 門そのものが工業化される(詳細 → [[open-infra-crawlers]]):** Anubis が 1 年をかけて v1.28.0-pre1 で WebAssembly proof-of-work を出荷(Rust+SIMD;JS フォールバックはアクセシビリティの代償;難易度はビット計数に)——いたちごっこは CSS の小細工から compile-to-WASM の性能問題へ;皮肉な脚注:このフィード自身の公告取得が返したのはチャレンジページだった。
    - **09-12 20:03 — SERP が API でなくなる（詳細 → [[open-infra-crawlers]]）：** Google はオーガニック結果のリンクを `google.com/goto` 経由のリライトに変更、エンコードはオフラインで復号不可（未ログインも含め 8 月下旬から）——スクレイピングした結果 1 件ごとに Google への新規リクエストが必要になる：SERP を API として扱うすべてのエージェントにとって、レイテンシ税でありレート制限の chokepoint。
-→ [[open-infra-crawlers]]
+→ [[open-infra-crawlers]]   - **09-16 04:03 — アーカイブがレート制限陣営に加わる（詳細 → [[open-infra-crawlers]]）：** Wayback Machine は「大量の高ボリューム自動トラフィックの波」に HTTP 429 を返す（投稿は DDoS に言及せず、「保護が時に実在の人を誤って捕まえる」と認め、解決タイムラインは未示）—— クローラー、リンクチェッカー、API ユーザーが網に掛かる；Wayback リンクを引用するツールにはリトライが必要。
+
 
 15. **プラットフォーム事業者は、クライアント側の悪用を機能クラスの削除で解決しつつある——そして正当かつ
     収益化されていないユーザーが損失を負う。** Chrome は最後の Manifest V2 拡張を削除した（uBlock Origin を含む）；
@@ -2062,3 +2070,11 @@ last_processed: 2026-09-14T04:29:00+08:00
   書き直された Compose UI を出荷（9 月 11 日、暗号学的検証済みタグ）——より深いのはセキュリティ工学の方：メッセージ内容の解析アロケーション上限（敵対的入力に対するパーサメモリの境界——逐次型メッセージングアプリが欠いてきたのと同じ防御クラス）、制限付き widget receiver、不変な PendingIntent；**Brown CSC による async/await 設計空間の分類**——9 つの次元（開始時/終了時/キャンセル）、7 ランタイム、自明なプログラムに 4 つの異なる答え——並行コード移植前のチェックリスト；**Tinybird による ClickHouse 運用の記録**（シャーディングよりレプリカ、ゼロダウンタイム upgrade まで 4 年、「ClickHouse を扱うすべての会社が ingestion で血を流す」、ベストプラクティスで 3–4× のハードウェア節約、ソースコードの読解が要件）；**Google × Fortum の Loviisa 原子力 22 年 PPA**（2030–2049 に最大 50%、€13B のフィンランド AI 投資の中——PPA → 設備延命 → データセンター立地という具体メカニズム）；**melgarafael/DeskcommCRM**（+505/日——ブラジル発 WhatsApp ファーストの AI 営業 CRM、配布モデルは HostGator アフィリエイトリンク入り `curl | bash` インストーラ）；**Mi-Ripple**（Miyang-AI、arXiv 2609.11317——反復 AI 画像編集が残す「デジタル リップル」を命名・測定；スペクトルノッチフィルタ + 清浄化参照による再生成、例は著者自身のもののみ）；**Bodily Oddities**（有病率データ付き 143 項目の手作業キュレーション参照サイト——pre-AI-web の参照ジャンルの見本）と **IKEA の公式 Skyrim mod**（Creations ストアでの brand-as-mod、スレッドが賞賛になる出来）；**nab138/iloader**（同日 2 リリースで +209/日——EU サイドローディングは依然ホビイスト級のデスクトップ糊で動き、README が非公式パッケージ経路を信用しない姿勢はこのカテゴリのサプライチェーンリスクの鏡）。
 
 - **バッチ末尾（09-14 04:03、テーゼの帰属なし——ここに記録）：** **alibaba/open-code-review の AACR-Bench** はアノテーション付き正解と名前を付けたトレードオフを持つ数少ない agent リポジトリ ベンチマーク（レビューコメントには precision > recall が正しい既定値）→ [[agent-stack]]；**The Verge の車データ Stepback** が全弧を歩く——GM の OnStar Smart Driver テレメトリは FTC の前例のない 5 年禁止まで LexisNexis/Verisk に売られ、Mozilla は主要自動車メーカーすべてのプライバシー姿勢を「ひどい」と評価、下院 DRIVER Act はアクセス・削除権を認めつつ収集・販売は続行を許す：アクセス権は収集制限ではなく、政権の対案「Freedom Car」の切断権は誰も提案していない命題の修正；**bensimms.moe の e-scooter ファームウェア書き直し**は範囲の誠実さの手本（未完成の CAN メッセージ、未探査の NFC UART、モータコントローラ手前の明確な一線）→ [[security]]；**Julia 1.13** はレイテンシ リリース——プリコンパイル約 30% 高速、GC は sysimage オブジェクトをスキップ（素の `GC.gc()` 35→2 ミリ秒）、RapidhashNano が MurmurHash3 を置換しシード互換性の破壊を文書化、全コミットで TTFX CI ジョブ——コミュニティ十年の oldest 採用障壁を回帰ゲートに変えた；**tonhowtf/omniget**（+547/日、11.5k★）は yt-dlp を SHA-256 検証・自動更新の「エンジン」としてラップしコース抽出器を備える——README は DRM・ペイウォールを回避しないと明言、検証付きバンドルはマルウェアまみれのダウンローダー GUI エコシステムへの静かな反論。
+- **バッチ末尾（09-16 04:03、テーゼの帰属先なし——ここに記録）：** **Capsule**（Show HN、227 pts）が
+  アプリ全体 —— HTML/CSS UI、スキーマ、ライブ SQLite データベース —— を 1 つの移植可能な `.capsule`
+  ファイルにパッケージし、デスクトップホストプレーヤーでデータ事前読み込み付きで開く：「アプリ as
+  ドキュメント」、自己完結 HTML の系譜に正しい基盤；非オープンソース、GitHub リポジトリなし、そして製品
+  ページはライブ SQLite の書き込みがどう共有ファイルへ反映されるかを一切説明しない（開いた問い）。
+  **Homebrew BrewUI**（+356/日、1.3k★）—— 公式 SwiftUI パッケージ GUI。注目すべきは設計の姿勢：
+  「Homebrew が何をしているか決して隠さない」—— brew を再実装せず最小 PATH で `/bin/zsh --no-rcs` を
+  shell 実行（macOS Tahoe 26+、AGPL-3.0、リリースはまだなし）。

@@ -1383,3 +1383,23 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   [HN 讨论](https://news.ycombinator.com/item?id=49653311) ·
   [github.com/alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
   [github.com/calesthio/OpenMontage](https://github.com/calesthio/OpenMontage)
+
+## 2026-09-16 04:03 — 模型永远不给自己阅卷；智能体扩展自己的 UI
+
+- **Ordewell（Show HN，43+ 分）：** 一个只读规划智能体先研究仓库、提出澄清问题，产出类型化、可编辑的
+  编码智能体任务计划——每个任务自带运行器（Claude Code、Codex、OpenCode）、模型与努力等级——再沿依赖图
+  执行（默认 3 并行，最多 5）。有意思的不是编排本身，而是完成判定规则："VerdictEngine" 要求运行器输出
+  中出现唯一的完成标记——**"模型永远不是仲裁者。"** 早期阶段（80 星），README 列出的真实缺口：所有平台
+  都需要 tmux（Windows 走 WSL）、npm 安装的智能体 CLI 会撞上 cmd.exe 的 8,191 字符上限、Web 面板只输出
+  JSON。与把 Terminal-Bench 失败率打下来的 plan/approve/verify 分层（→ 论点 4）和 humanlayer 的
+  `<important if>` 条件指令工作（→ [[agent-plugins]]）同属一个物种：验证活在模型之外。
+- **Panel（greentfrapp/panel，Show HN，44+ 分）：** 一个 dock 式研究工作区（聊天、文件、PDF、真正的
+  Jupyter kernel），智能体可以读写文件、跑长时后台命令，而且——最独特的一点——**在内置面板不够用时，
+  自己编写自定义面板/查看器代码**。一套 Skills 风格、类型化输入输出的"Module Protocol"让智能体自建的
+  模块可观察、可校验。大多数智能体工作区止步于工具调用；让智能体在类型化协议内扩展自己的 UI，是曲线上
+  一个真正不同的点。README 很坦白：目前只有 Claude Code 完整支持、模块尚不能配合 OpenAI API、模块只能
+  经聊天启动；39 星。
+- 来源：[ordewell/ordewell](https://github.com/ordewell/ordewell) ·
+  [Show HN 讨论](https://news.ycombinator.com/item?id=49712276) ·
+  [greentfrapp/panel](https://github.com/greentfrapp/panel) ·
+  [Show HN 讨论](https://news.ycombinator.com/item?id=49712621)

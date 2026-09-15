@@ -2094,3 +2094,27 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   [HN discussion](https://news.ycombinator.com/item?id=49653311) ·
   [github.com/alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
   [github.com/calesthio/OpenMontage](https://github.com/calesthio/OpenMontage)
+
+## 2026-09-16 04:03 — the model never grades its own homework; the agent extends its own UI
+
+- **Ordewell (Show HN, 43+ pts):** a read-only planner agent researches the repo, asks clarifying
+  questions, and produces a typed, editable plan of coding-agent tasks — each with its own runner
+  (Claude Code, Codex, OpenCode), model, and effort level — then executes against the dependency graph
+  (default 3 parallel, max 5). The interesting stance isn't the orchestration, it's the completion
+  rule: a "VerdictEngine" requires a unique completion marker in runner output — **"the model is never
+  the tie-breaker."** Early days (80 stars) with real gaps listed in the README: tmux required on every
+  platform (Windows under WSL), npm-installed agent CLIs hit cmd.exe's 8,191-char limit, the web
+  dashboard serves JSON only. Same species as the plan/approve/verify layering that cut Terminal-Bench failures
+  (→ thesis 4) and humanlayer's `<important if>` conditional-instruction work (→ [[agent-plugins]]):
+  verification lives outside the model.
+- **Panel (greentfrapp/panel, Show HN, 44+ pts):** a dock-style research workspace (chat, files, PDFs,
+  real Jupyter kernels) where the agent can read/write files, run long-running background commands,
+  and — the distinctive bit — **write custom pane/viewer code when the built-in panes aren't enough**.
+  A "Module Protocol" of Skills-like typed inputs/outputs keeps agent-built modules observable and
+  validable. Most agent workspaces stop at tool-calling; making the agent extend its own UI inside a
+  typed protocol is a genuinely different point on the curve. Candid README: only Claude Code fully
+  supported, modules don't work with the OpenAI API yet, modules launch only via chat; 39 stars.
+- Sources: [ordewell/ordewell](https://github.com/ordewell/ordewell) ·
+  [Show HN discussion](https://news.ycombinator.com/item?id=49712276) ·
+  [greentfrapp/panel](https://github.com/greentfrapp/panel) ·
+  [Show HN discussion](https://news.ycombinator.com/item?id=49712621)

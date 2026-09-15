@@ -1695,3 +1695,63 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [HN 讨论](https://news.ycombinator.com/item?id=49686766) ·
   [bensimms.moe: Reverse engineering my e-scooter](https://bensimms.moe/reverse-engineering-scooter/) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49638071)
+
+## 2026-09-16 04:03 — 生产级规模的"2013 年代"低级错误；没有 CVE 的补丁；被排除在威胁模型之外的硬件攻击
+
+- **Strix → Baseten：藏在 Docker 镜像层里的生产 GitHub PAT（HN 120+ 分）：** Strix 黑盒评估 Baseten
+  时发现一个可匿名访问的 Harbor 容器仓库，拉取 `baseten-app` 镜像后从构建历史中提取到一个仍然有效的
+  GitHub PAT——某个 `RUN` 步骤把 `GITHUB_TOKEN` 展开进了命令本身，Docker 便永久记录了它。该令牌（组织成员
+  `basetenbot`，`repo` 作用域）对主产品仓库、驱动生产的 GitOps 仓库和 Homebrew tap 都有 admin+push 权限
+  ——镜像构建于 2023 年 3 月，令牌在 2026 年 7 月依然有效。Baseten 在 7 月 13 日报告当日下午完成轮换。
+  披露文中明确的"我们没有做什么"部分（未克隆任何客户仓库、未推送任何内容、仅只读调用）是这次披露口碑好的
+  一部分。**可复用的形状：** 层历史是永恒的，而 GitOps 流水线里一个 `repo` 作用域的 PAT *就是*生产控制权
+  ——2026 年最具冲击力的云暴露事件仍然是最老旧的错误类别。
+- **CISA 将 vCenter CVE-2026-59310 标记为勒索软件在用（9 月 15 日 KEV 更新）：** vCenter Syslog
+  服务器的目录/路径穿越（CWE-22），按 Broadcom 公告 CVSS 9.8，7 月 29 日已修补，8 月 18 日入 KEV，现在
+  `knownRansomwareCampaignUse: "Known"`，并按 BOD 26-04 强制取证排查。DFIR 公司 QUIRSO 追踪到一个疑似
+  APT 自 8 月 3 日起攻陷 47 国 361+ 个 IP，通过开源 `reverse_ssh` 框架持久化。诚实警告：无团伙命名
+  （CISA"尚未分享任何细节"），Shadowserver 看到约 450+ 台暴露的 vCenter，且没人知道多少已打补丁。
+  vCenter 是虚拟化集群的管理平面——补丁发布两个月后才落下勒索软件标记，说明未修补环境正被批量清剿用于
+  横向驻留，而不只是被探测。
+- **暴露的 Vite 开发服务器被批量扫描云凭证——CVE-2026-39364（GHSA-v2wj-q39q-566r，CVSS 8.2）：** 在
+  URL 后追加 `?raw` / `?import&raw` / `?import&url&inline` 即可绕过 `server.fs.deny`，以 HTTP 200 直接
+  返回 `.env`、`rootkey.csv`、`.azure/accessTokens.json` 和 `terraform.tfstate`。F5 蜜网在 8 月记录到
+  807 组会话级攻击（约 32,000 条原始事件）——远超三个月基线 1,732 次文件读取——主要来自 Google Cloud IP，
+  **且伪装成 ClaudeBot、GPTBot 和 Googlebot**：攻击活动把自己打扮成人人都在白名单里的 AI 爬虫。Vite
+  7.3.2 / 8.0.5 自 4 月起已修补。F5 自己的警告是本条的诚实标记：蜜罐尝试而非确认失窃（"实际的凭证或
+  Terraform 状态外泄未经证实"），且利用需要三个条件同时成立。
+- **marimo CVE-2026-39987 → 8 秒拿到 AWS 堡垒机立足点（Sysdig TRT，9 月 11 日）：** 该预认证 RCE（4 月
+  已披露并修补：`/terminal/ws` 跳过了其他 WebSocket 端点都会做的 `validate_auth()` 检查，0.23.0 修复）
+  被一名*人类*攻击者利用：扫本地 /24、从宿主环境和应用 Redis 后端窃取 AWS 密钥、用手写 boto3 跨五个区域
+  调用 `secretsmanager:GetSecretValue`，并在 WebSocket 打开后**8 秒**完成一台公网堡垒机的认证。Sysdig
+  未发现 LLM 生成的脚本，攻击者两次无视了预置的提示注入探针（这属于证据缺席式归因）。初始凭证窃取比
+  Sysdig 的可见窗口还早 28+ 小时——驻留时间算术：一个有备而来的人类操作者比大多数告警管线更快。
+- **LiteSpeed Enterprise 提权漏洞被静默修补（cPanel 公告，9 月 14 日）：** LiteSpeed Web Server
+  Enterprise 6.3.7 之前版本允许低权限托管账户在共享服务器上获取 root，绕过包括 CageFS 在内的账户隔离；
+  两家厂商都敦促强制升级。被描述为"严重"——但**没有 CVE 编号、没有 CVSS，9 月 15 日查 CVE-records 一无所获**。
+  这是 5 月以来第三个 LiteSpeed root 级漏洞（前两个均入 KEV）。"静默"让防御者付出的代价：无技术描述、
+  changelog 条目不说哪个修复适用、无 IOC——而且修复发布后 6.3.6 仍在下载页上标着"stable"。暂无利用证据。
+- **WordPress Wholesale Lead Capture CVE-2026-27540 遭批量攻击（9.8，Wordfence 评级）：** WooCommerce
+  插件（≤ 2.0.3.1）中的未认证任意文件上传——AJAX 动作 `wwlc_file_upload_handler` 的扩展名白名单取自
+  用户可控的 `file_settings` 参数，攻击者只要加上 `php` 就能投放 webshell。Wordfence 已拦截 100,000+
+  次尝试（6 月 4–17 日、7 月 1 日、8 月 30 日三个波峰）；修复早在 2 月 20 日随 2.0.3.2 发布。八个月前的
+  补丁配上仍在进行的攻击波，一个数字讲完 WordPress 长尾问题——附带其警告：被拦截的*尝试*不等于确认失陷；
+  WPScan 记录仍标"未验证"。
+- **DDRoop——159 美元的 DDR5 interposer 击穿机密计算的新鲜性保证（ACM CCS 2026；KU Leuven、ETH Zurich、
+  Durham、Google）：** interposer 静默丢弃写入，让 CPU 读到过期的加密数据——可扩展内存加密保护机密性与
+  完整性，却不保护*新鲜性*。在 Intel TDX 上取得受保护 VM 的完全控制，包括伪造启动度量和 attestation；在
+  AMD SEV-SNP 上实现页拷贝攻击。这是首个 DDR5 主动 interposer 攻击，也是首个击穿现行 TDX 完整性的攻击。
+  **两家厂商均拒绝分配 CVE**，把物理 interposer 攻击排除在威胁模型之外——没有补丁，只有设计压力。作者
+  自述的限制：TDX 的密码学完整性模式未测（实验系统不支持）、Arm CCA 未测、攻击者需同时掌握服务器软件
+  控制权与短暂物理接触；NVIDIA 机密 GPU 不受影响（内存封装在片上）。
+- 来源：[Strix 博客](https://www.strix.ai/blog/baseten-harbor-github-pat-takeover) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49716476) ·
+  [BleepingComputer vCenter 报道](https://www.bleepingcomputer.com/news/security/cisa-critical-vmware-vcenter-rce-flaw-now-exploited-by-ransomware-gangs/) ·
+  [SecurityWeek](https://www.securityweek.com/critical-vmware-vcenter-vulnerability-in-attackers-crosshairs/) ·
+  [GHSA-v2wj-q39q-566r](https://github.com/advisories/GHSA-v2wj-q39q-566r) ·
+  [F5 Labs](https://www.f5.com/labs/articles/cloud-takeover-mass-scanning-for-exposed-vite-endpoints-cve-2026-39364) ·
+  [Sysdig TRT](https://www.sysdig.com/blog/machine-speed-hold-the-ai-hand-rolled-marimo-cve-2026-39987-exploit) ·
+  [cPanel 公告](https://support.cpanel.net/hc/en-us/articles/43483286674583-Security-LiteSpeed-Enterprise-security-advisory-September-14-2026) ·
+  [BleepingComputer WWLC 报道](https://www.bleepingcomputer.com/news/security/hackers-target-wordpress-sites-via-third-party-woocommerce-plugin/) ·
+  [DDRoop 项目页](https://ddropattack.eu/) ·
+  [The Hacker News](https://thehackernews.com/2026/09/new-ddrop-attack-breaks-intel-tdx-and.html)

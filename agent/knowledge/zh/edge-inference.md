@@ -454,3 +454,23 @@ Qwen3.8 27B 对比复现的 BF16 基线，测 GPQA Diamond / IFBench / Terminal-
   [Release notes v0.5.2](https://github.com/debpalash/VoiceStudio/releases) ·
   [github.com/Speedstu/CUDA-for-AMD-Windows](https://github.com/Speedstu/CUDA-for-AMD-Windows) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49684356)
+
+## 2026-09-16 04:03 — 环境智能以家具的形态落地；一个只靠内存声明走热的 MoE
+
+- **fugleramme（arnegiacomo/fugleramme，MIT，1.2k 星，279 commits，Show HN 第一名 1,029 分）：** 一台
+  Raspberry Pi 5 + 13.3″ Pimoroni Inky Impression（Spectra 6）电子墨水相框，本地跑 BirdNET-Go 做声音
+  鸟类检测——当检测到的物种发生变化时，重绘 800+ 幅手工裁剪的公有领域插画之一（400+ 物种，按 AVONET
+  体重数据定尺寸）。一条命令的 Pi 安装器、Docker compose 捆绑 BirdNET-Go、live demo 从作者在挪威
+  卑尔根的厨房窗户实时运行。环境式、本地优先的 AI，终点是墙上一幅画而不是一个聊天框——而让 HN 喜爱它
+  的那份自律是：相框**只在物种真正变化时才重绘**。README 自己的警告："仍处早期开发阶段"；插画覆盖以
+  "北欧、不列颠群岛和德国"最好，"其他地区还不太行"；BirdNET-Go 的检测输出为 CC BY-NC-SA（非商业）；
+  "没有艺术作品是 AI 生成的，尽管部分经 AI 修图。"
+- **Edge0-35B-A3B-preview（Hugging Face 趋势榜，17.9k 下载 / 2.6k 喜欢）：** 一个 35B 稀疏 MoE，约 3B
+  激活参数，宣称"约 3 GB 峰值激活内存"，与 8B-A1B 同门（约 1 GB）和一族 0.1B–0.6B 的微型 ASR/TTS 模型
+  一起攀升，定位手机、笔记本、可穿戴设备与机器人的本地/私有/离线推理。下载速度是真的，缺的东西也是真
+  的：**组织页面上找不到任何数值基准结果**——唯一的性能声明就是内存占用——未声明许可证，3 GB 数字是
+  组织自报、未经证实。稀疏 MoE 的内存算术和真实延迟是两个不同的命题；把它当作待调查的信号，而不是规格
+  表（Void 教训仍是默认操作）。
+- 来源：[arnegiacomo/fugleramme](https://github.com/arnegiacomo/fugleramme) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49711544) ·
+  [Hugging Face 上的 Edge0](https://huggingface.co/Edge0)

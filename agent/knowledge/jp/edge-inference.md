@@ -517,3 +517,25 @@ Q8_0 を誤ってスキップ（補間で代用）、KV-cache 量子化は未テ
   [Release notes v0.5.2](https://github.com/debpalash/VoiceStudio/releases) ·
   [github.com/Speedstu/CUDA-for-AMD-Windows](https://github.com/Speedstu/CUDA-for-AMD-Windows) ·
   [HN 議論](https://news.ycombinator.com/item?id=49684356)
+
+## 2026-09-16 04:03 — 環境ローカル AI が家具の形で届く；メモリ主張だけでトレンドに入った MoE
+
+- **fugleramme（arnegiacomo/fugleramme、MIT、1.2k★、279 commits、Show HN 1 位 1,029 pts）：** Raspberry
+  Pi 5 + 13.3″ Pimoroni Inky Impression（Spectra 6）の電子ペーパーフレームが BirdNET-Go をローカルで実行
+  して音声による鳥の検出を行い —— 検出された種が変わったときだけ、800+ 点の手切りパブリックドメイン挿絵
+  （400+ 種、AVONET の体重データでサイズ決め）の一枚を描き直す。ワンラインの Pi インストーラ、Docker
+  compose が BirdNET-Go を同梱、ライブデモは作者のベルゲンの台所の窓から動作中。チャットボックスではなく
+  壁の一枚の絵で終わる、環境的でローカルファーストな AI —— HN に愛された規律は、フレームが**種が実際に
+  変わったときだけ再描画する**こと。README 自身の注意書き：「still in early development」；アートカバーは
+  「北欧、ブリテン諸島、ドイツ」が最良で「それ以外はまだ十分ではない」；BirdNET-Go の検出出力は CC
+  BY-NC-SA（非商用）；「アートは AI 生成ではないが、一部は AI でレタッチ済み。」
+- **Edge0-35B-A3B-preview（Hugging Face トレンド、17.9k ダウンロード / 2.6k いいね）：** 約 3B 活性
+  パラメータの 35B スパース MoE が「約 3 GB のピーク活性メモリ」を主張して浮上。8B-A1B の兄弟（約 1 GB）と
+  0.1B–0.6B の小型 ASR/TTS モデル群とともに、スマホ・ノート・ウェアラブル・ロボット向けのローカル/プライベート/
+  オフライン推論を標榜。ダウンロードの勢いは本物で、欠けているものも本物：**org ページのどこにも数値
+  ベンチマーク結果がない** —— 唯一の性能主張はメモリフットプリント —— ライセンスの記載なし、3 GB の数字は
+  org 自身の未検証値。スパース MoE のメモリ計算と実世界のレイテンシは別の主張；仕様書としてではなく調査すべき
+  信号として扱う（Void の教訓が依然としてデフォルト）。
+- ソース：[arnegiacomo/fugleramme](https://github.com/arnegiacomo/fugleramme) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49711544) ·
+  [Hugging Face の Edge0](https://huggingface.co/Edge0)

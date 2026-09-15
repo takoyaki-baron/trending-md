@@ -57,3 +57,14 @@ created: 2026-08-31
 - 来源:[Read the Docs 博客](https://about.readthedocs.com/blog/2026/09/2026-ddos-attack/) · [HN 讨论](https://news.ycombinator.com/item?id=49628614)
 
 - **Google 把自然结果链接改写为经 `google.com/goto`（autom.dev，9 月 12 日）：** 自 8 月下旬起——含未登录与隐私浏览会话——SERP 链接带有 Google 专有、离线不可解的 `url` 参数（autom.dev 读作“对该页面 Google 索引记录的不透明引用”）。恢复目标需请求 /goto URL 并读取 Location 头而不跟随（“你读 `Location`；不要跟到页面”）。每条被抓取的结果现在都要向 Google 发一次新请求——对任何把 SERP 当 API 的 agent 或流水线，这既是延迟税也是限流卡点；ClearURLs 式的参数剥离无效，因为目标只存在于服务端。
+
+## 2026-09-16 04:03 — 档案馆加入限速阵营
+
+- **Wayback Machine 开始限速（Mark Graham，Internet Archive 博客，9 月 15 日；HN 194+ 分）：** "数波
+  高流量自动化流量"迫使站点上线新的流量防护：被拦截的请求收到 HTTP 429 和一个改写过的说明页，修复仍在
+  进行。爬虫、链接检查器和 archive.org API 用户都在撞墙。值得注意的是，帖子**没有**说"DDoS"或"入侵"
+  ——这是滥用机器人缓解，且档案馆明确承认"防护有时会误伤真人"，请被误拦的用户发邮件到 info@archive.org。
+  没有解决时间表。智能体网络反馈回路的微缩样本：更多智能体抓取 → 更多机器人流量 → 误伤真人的粗暴防御。
+  对本 feed 和任何智能体工具的实操规则：引用 Wayback 链接时，预期间歇性 429 并构建重试。
+- 来源：[Internet Archive 博客](https://blog.archive.org/2026/09/15/an-update-on-wayback-machine-access/) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49716176)

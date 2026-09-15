@@ -514,9 +514,18 @@
       "feeds": [
         "2026-09-14.md"
       ]
+    },
+    "https://support.cpanel.net/hc/en-us/articles/43483286674583-Security-LiteSpeed-Enterprise-security-advisory-September-14-2026": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-15T21:25:55.009Z",
+      "last_seen": "2026-09-15T21:25:55.009Z",
+      "feeds": [
+        "2026-09-16.md"
+      ]
     }
   },
-  "runs": 18,
+  "runs": 19,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-13T21:06:17.849Z"
+  "last_run": "2026-09-15T21:25:55.009Z"
 }

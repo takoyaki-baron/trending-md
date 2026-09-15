@@ -1947,3 +1947,74 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [HN 議論](https://news.ycombinator.com/item?id=49686766) ·
   [bensimms.moe: Reverse engineering my e-scooter](https://bensimms.moe/reverse-engineering-scooter/) ·
   [HN 議論](https://news.ycombinator.com/item?id=49638071)
+
+## 2026-09-16 04:03 — 本番規模で起きた「2013 年級」の過ち；CVE のないパッチ；脅威モデルの外に置かれたハードウェア攻撃
+
+- **Strix → Baseten：Docker レイヤーに埋まっていた本番 GitHub PAT（HN 120+ pts）：** Strix は Baseten を
+  ブラックボックス評価する中で、匿名アクセス可能な Harbor コンテナレジストリを発見し、`baseten-app`
+  イメージのビルド履歴から有効な GitHub PAT を抽出した —— ある `RUN` ステップが `GITHUB_TOKEN` をコマンド
+  に展開しており、Docker がそれを永久に記録していた。このトークン（組織メンバー `basetenbot`、`repo`
+  スコープ）は、主製品リポジトリ・本番を駆動する GitOps リポジトリ・Homebrew tap に対して admin+push 権限
+  を持ち、イメージは 2023 年 3 月ビルドなのにトークンは 2026 年 7 月も有効だった。Baseten は 7 月 13 日
+  報告の午後にローテーション完了。開示文の明示的な「私たちがしなかったこと」セクション（顧客リポジトリを
+  複製しない、何も push しない、読み取り専用呼び出しのみ）が、この開示が良く受け止められた理由の一部。
+  **再利用可能な型：** レイヤー履歴は永遠に残り、GitOps パイプライン内の `repo` スコープ PAT はそのものが
+  本番コントロールである —— 2026 年の最も重大なクラウド露出は、今も十年前の過ちクラスであり続けている。
+- **CISA が vCenter CVE-2026-59310 をランサムウェア利用ありと標記（9 月 15 日 KEV 更新）：** vCenter
+  Syslog サーバーのディレクトリ/パストラバーサル（CWE-22）。Broadcom アドバイザリで CVSS 9.8、7 月 29 日
+  パッチ済み、8 月 18 日 KEV 掲載、今回 `knownRansomwareCampaignUse: "Known"` となり BOD 26-04 に基づく
+  フォレンジック調査が必須に。DFIR 企業 QUIRSO は 8 月 3 日以降、47 か国 361+ IP を侵害した疑いのある APT
+  を追跡しており、オープンソースの `reverse_ssh` フレームワークで永続化。誠実さの注意書き：ギャングの
+  名前なし（CISA「まだ詳細を共有していない」）、Shadowserver は 450+ の露出 vCenter を観測、パッチ適用状況
+  は誰も知らない。vCenter はハイパーバイザー資産の管理プレーン —— パッチから 2 か月後にランサムウェア
+  フラグが付くのは、未パッチ資産が単に probe されているのでなく Staging 用に一掃されていることを意味する。
+- **公開 Vite 開発サーバーへのクラウド認証情報大量スキャン —— CVE-2026-39364（GHSA-v2wj-q39q-566r、
+  CVSS 8.2）：** URL に `?raw` / `?import&raw` / `?import&url&inline` を付けるだけで `server.fs.deny` を
+  バイパスでき、`.env`、`rootkey.csv`、`.azure/accessTokens.json`、`terraform.tfstate` が HTTP 200 で
+  返る。F5 のハニーネットは 8 月に 807 のセッショングループ化攻撃（約 32,000 生イベント）を観測 ——
+  3 か月ベースラインの 1,732 ファイル読み取りから急増 —— 主に Google Cloud の IP からで、**ClaudeBot、
+  GPTBot、Googlebot を装っていた**：攻撃キャンペーンが、誰もがホワイトリストに入れる AI クローラーに
+  扮装していた。Vite 7.3.2 / 8.0.5 で 4 月から修正済み。F5 自身の注意書きが誠実さの印：ハニーポットへの
+  攻撃試行であって窃取の確認ではない（「実際の認証情報や Terraform 状態の持ち出しは未検証」）、かつ攻撃成立には 3 条件の重なりが必要。
+- **marimo CVE-2026-39987 → 8 秒で AWS バスティオンの足掛かり（Sysdig TRT、9 月 11 日）：** 4 月に開示・
+  修正済みの pre-auth RCE（`/terminal/ws` が他の WebSocket エンドポイントが行う `validate_auth()` を
+  スキップ、0.23.0 で修正）を*人間の*攻撃者が悪用：ローカル /24 を掃討し、ホスト環境とアプリの Redis
+  バックエンドから AWS キーを盗み、手書き boto3 で 5 リージョンの `secretsmanager:GetSecretValue` を
+  呼び出し、WebSocket オープンから**8 秒**でインターネット露出バスティオンに認証した。Sysdig は
+  LLM 生成スクリプトを確認せず、攻撃者は仕掛けられたプロンプトインジェクション探針を 2 回無視した
+  （証拠の不在による帰属）。最初の認証情報窃取は Sysdig の可視窓の 28+ 時間前 —— 駐留時間の算術：
+  準備した人間のオペレーターは大半のアラートパイプラインより速い。
+- **LiteSpeed Enterprise の root 権限昇格、静かに修正（cPanel アドバイザリ、9 月 14 日）：** LiteSpeed
+  Web Server Enterprise 6.3.7 未満で、低権限ホスティングアカウントが CageFS を含むアカウント分離を迂回し
+  共有サーバーで root を取得可能。両ベンダーが強制更新を推奨。「critical」と説明されながら —— **CVE 番号
+  なし、CVSS なし、9 月 15 日時点で CVE-records を検索しても何も出ない**。5 月以来 3 つ目の LiteSpeed
+  root 級バグ（前の 2 つはいずれも KEV 掲載）。「サイレント」が防御者に課すコスト：技術説明なし、どの修正
+  が当該か書かれない changelog、IOC なし —— しかも修正公開後もダウンロードページでは 6.3.6 が「stable」の
+  まま。悪用の証拠はまだない。
+- **WordPress Wholesale Lead Capture CVE-2026-27540 が大量攻撃下に（9.8、Wordfence 評定）：**
+  WooCommerce プラグイン（≤ 2.0.3.1）の未認証任意ファイルアップロード —— AJAX アクション
+  `wwlc_file_upload_handler` が拡張子許可リストをユーザー制御の `file_settings` パラメータから取るため、
+  攻撃者は `php` を追加して webshell を置くだけ。100,000+ の試行をブロック（6 月 4–17 日、7 月 1 日、
+  8 月 30 日に山）。修正は 2 月 20 日の 2.0.3.2 で出済み。8 か月前のパッチと今も続く攻撃波は、WordPress
+  ロングテール問題を一つの数字で語る —— 注意書き付き：ブロックされた*試行*であって侵害の確認ではない；
+  WPScan の記録は「未検証」のまま。
+- **DDRoop —— 159 ドルの DDR5 インターポーザーが機密コンピューティングの新鮮性保証を破る（ACM CCS 2026；
+  KU Leuven、ETH Zürich、Durham、Google）：** インターポーザーが書き込みを静かに落とし、CPU に古い
+  暗号化データを読ませる —— スケーラブルメモリ暗号化は機密性と完全性は守るが*新鮮性*は守らない。
+  Intel TDX では保護 VM の完全制御（起動測定とアテステーションの偽造を含む）、AMD SEV-SNP では
+  ページコピー攻撃に成功。DDR5 への初の能動インターポーザー攻撃であり、現行 TDX 完全性を破った初の
+  ケースでもある。**両ベンダーとも CVE の付番を拒否**し、物理インターポーザー攻撃を脅威モデルの外に置いた
+  —— パッチはなく、設計への圧力だけ。著者らの限界の明示：TDX の暗号完全性モードは未検証（実験システムが
+  非対応）、Arm CCA 未検証、攻撃者にはサーバーソフトウェア制御と短時間の物理アクセスの両方が必要；
+  NVIDIA の機密 GPU は影響なし（メモリはパッケージ内）。
+- ソース：[Strix ブログ](https://www.strix.ai/blog/baseten-harbor-github-pat-takeover) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49716476) ·
+  [BleepingComputer（vCenter）](https://www.bleepingcomputer.com/news/security/cisa-critical-vmware-vcenter-rce-flaw-now-exploited-by-ransomware-gangs/) ·
+  [SecurityWeek](https://www.securityweek.com/critical-vmware-vcenter-vulnerability-in-attackers-crosshairs/) ·
+  [GHSA-v2wj-q39q-566r](https://github.com/advisories/GHSA-v2wj-q39q-566r) ·
+  [F5 Labs](https://www.f5.com/labs/articles/cloud-takeover-mass-scanning-for-exposed-vite-endpoints-cve-2026-39364) ·
+  [Sysdig TRT](https://www.sysdig.com/blog/machine-speed-hold-the-ai-hand-rolled-marimo-cve-2026-39987-exploit) ·
+  [cPanel アドバイザリ](https://support.cpanel.net/hc/en-us/articles/43483286674583-Security-LiteSpeed-Enterprise-security-advisory-September-14-2026) ·
+  [BleepingComputer（WWLC）](https://www.bleepingcomputer.com/news/security/hackers-target-wordpress-sites-via-third-party-woocommerce-plugin/) ·
+  [DDRoop プロジェクトページ](https://ddropattack.eu/) ·
+  [The Hacker News](https://thehackernews.com/2026/09/new-ddrop-attack-breaks-intel-tdx-and.html)

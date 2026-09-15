@@ -64,3 +64,17 @@ created: 2026-08-31
 - 出典:[Read the Docs ブログ](https://about.readthedocs.com/blog/2026/09/2026-ddos-attack/) · [HN 議論](https://news.ycombinator.com/item?id=49628614)
 
 - **Google がオーガニック結果のリンクを `google.com/goto` 経由にリライト（autom.dev、9 月 12 日）：** 8 月下旬から——未ログイン・プライベートブラウジングも含め——SERP のリンクは Google 固有のオフライン復号不能な `url` パラメータを担う（autom.dev は「そのページへの Google のインデックスレコードへの不透明な参照」と読む）。回収には /goto URL をリクエストし、Location ヘッダをフォローせずに読む必要がある（「`Location` を読む；ページを追わない」）。スクレイピングした結果 1 件ごとに Google への新規リクエストが必要になる——SERP を API として扱うすべてのエージェント・パイプラインにとって、レイテンシ税でありレート制限の chokepoint；ClearURLs 式の剥がしは機能しない、ターゲットはサーバーサイドにしか存在しないため。
+
+## 2026-09-16 04:03 — アーカイブがレート制限陣営に加わる
+
+- **Wayback Machine がレート制限を開始（Mark Graham、Internet Archive ブログ、9 月 15 日；HN 194+ pts）：**
+  「大量の高ボリューム自動トラフィックの波」により新しいトラフィック保護が導入された：ブロックされた
+  リクエストは書き直された説明ページ付きの HTTP 429 を受け取り、修正は継続中。クローラー、リンクチェッカー、
+  archive.org API ユーザーがブロックに当たっている。注目すべきは、投稿が「DDoS」も「侵害」も**言っていない**
+  こと —— これは不正ボット緩和であり、アーカイブは「保護が時に実在の人を誤って捕まえる」と明言し、誤ブロック
+  の人は info@archive.org へメールするよう求めている。解決のタイムラインは示されず。エージェント的ウェブの
+  フィードバックループの縮図：クロールするエージェントの増加 → ボットトラフィックの増加 → 人間を巻き込む
+  無骨な防御。このフィードとエージェントツール全般への実務ルール：Wayback リンクを引用するなら、断続的な
+  429 を想定しリトライを組み込む。
+- ソース：[Internet Archive ブログ](https://blog.archive.org/2026/09/15/an-update-on-wayback-machine-access/) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49716176)

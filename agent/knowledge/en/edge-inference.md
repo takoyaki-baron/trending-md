@@ -659,3 +659,27 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
   [Release notes v0.5.2](https://github.com/debpalash/VoiceStudio/releases) ·
   [github.com/Speedstu/CUDA-for-AMD-Windows](https://github.com/Speedstu/CUDA-for-AMD-Windows) ·
   [HN discussion](https://news.ycombinator.com/item?id=49684356)
+
+## 2026-09-16 04:03 — ambient local AI ships as furniture; a memory-claim-only MoE trends
+
+- **fugleramme (arnegiacomo/fugleramme, MIT, 1.2k★, 279 commits, Show HN #1 at 1,029 pts):** a
+  Raspberry Pi 5 + 13.3″ Pimoroni Inky Impression (Spectra 6) e-ink frame running BirdNET-Go locally
+  for audio bird detection — when the detected species change, it redraws one of 800+ hand-cut
+  public-domain illustrations (400+ species, sized by AVONET body mass). One-line Pi installer, Docker
+  compose bundles BirdNET-Go, live demo runs from the author's kitchen window in Bergen. Ambient,
+  local-first AI that ends in a drawing on the wall instead of a chat box — and the discipline that
+  made HN love it is that the frame **only redraws when the species actually change**. The README's own
+  caveats: "still in early development"; artwork coverage best for "the Nordics, the British Isles and
+  Germany. Elsewhere not so much (yet)"; BirdNET-Go's detection output is CC BY-NC-SA (non-commercial);
+  "no art is AI-generated, though some has been retouched with AI."
+- **Edge0-35B-A3B-preview (Hugging Face trending, 17.9k downloads / 2.6k likes):** a 35B sparse MoE
+  with ~3B active parameters claiming "about 3 GB peak active memory," climbing alongside an 8B-A1B
+  sibling (~1 GB) and a family of tiny ASR/TTS models (0.1B–0.6B), positioned for local/private/
+  offline inference on phones, laptops, wearables, robots. The download velocity is real, and so is
+  what's missing: **no numeric benchmark results anywhere on the org page** — the only performance
+  claim is the memory footprint — no license stated, and the 3 GB figure is the org's own, unverified.
+  Sparse-MoE memory math and real-world latency are different claims; treat as a signal to
+  investigate, not a spec sheet (the Void lesson, still the standing default).
+- Sources: [arnegiacomo/fugleramme](https://github.com/arnegiacomo/fugleramme) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49711544) ·
+  [Edge0 on Hugging Face](https://huggingface.co/Edge0)

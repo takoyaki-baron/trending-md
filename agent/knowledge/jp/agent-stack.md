@@ -1635,3 +1635,26 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
   [HN 議論](https://news.ycombinator.com/item?id=49653311) ·
   [github.com/alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
   [github.com/calesthio/OpenMontage](https://github.com/calesthio/OpenMontage)
+
+## 2026-09-16 04:03 — モデルは自分自身の答案を採点しない；エージェントが自分の UI を拡張する
+
+- **Ordewell（Show HN、43+ pts）：** 読み取り専用のプランナーエージェントがリポジトリを調査し、確認質問を
+  行い、コーディングエージェントタスクの型付き・編集可能な計画を生成 —— 各タスクに固有のランナー
+  （Claude Code、Codex、OpenCode）・モデル・努力レベルを持ち —— 依存グラフに沿って実行（デフォルト 3 並列、
+  最大 5）。興味深いのはオーケストレーションではなく完了判定ルール：「VerdictEngine」がランナー出力内の
+  一意の完了マーカーを要求する —— **「モデルは決して tie-breaker ではない。」** 初期段階（80 星）で
+  README が実害を列挙：全プラットフォームで tmux が必須（Windows は WSL 越し）、npm インストールの
+  エージェント CLI は cmd.exe の 8,191 文字制限に衝突、Web ダッシュボードは JSON のみ。Terminal-Bench の
+  失敗を減らした plan/approve/verify 階層化（→ テーゼ 4）や humanlayer の `<important if>` 条件命令の仕事
+  （→ [[agent-plugins]]）と同種：検証はモデルの外に置かれる。
+- **Panel（greentfrapp/panel、Show HN、44+ pts）：** チャット・ファイル・PDF・実際の Jupyter カーネルを
+  備えたドック式リサーチワークスペース。エージェントはファイルの読み書き、長時間バックグラウンドコマンドの
+  実行ができ、さらに —— 独自の点として —— **内蔵ペインでは足りないとき、自分でカスタムペイン/ビューア
+  コードを書ける**。Skills 風の型付き入出力からなる「Module Protocol」が、エージェント製モジュールを
+  観測可能かつ検証可能に保つ。ほとんどのエージェントワークスペースはツール呼び出しで止まる；型付きプロトコル
+  の内側でエージェントに自分の UI を拡張させるのは、曲線上の実かに異なる点。README は率直：現状 Claude Code
+  のみ完全サポート、モジュールは OpenAI API では未動作、モジュールはチャット経由でのみ起動；39 星。
+- ソース：[ordewell/ordewell](https://github.com/ordewell/ordewell) ·
+  [Show HN 議論](https://news.ycombinator.com/item?id=49712276) ·
+  [greentfrapp/panel](https://github.com/greentfrapp/panel) ·
+  [Show HN 議論](https://news.ycombinator.com/item?id=49712621)
