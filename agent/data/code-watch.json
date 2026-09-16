@@ -569,10 +569,10 @@
           "collision": true
         }
       },
-      "runs": 34,
+      "runs": 35,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-15T21:24:30.795Z",
-      "last_total": 86
+      "last_run": "2026-09-16T13:10:51.968Z",
+      "last_total": 82
     },
     "ra-paper-id": {
       "seen": {
@@ -734,18 +734,18 @@
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 21,
+      "runs": 22,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-15T21:24:30.795Z",
+      "last_run": "2026-09-16T13:10:51.968Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 21,
+      "runs": 22,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-15T21:24:30.795Z",
+      "last_run": "2026-09-16T13:10:51.968Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-15T21:24:30.795Z"
+  "last_run": "2026-09-16T13:10:51.968Z"
 }

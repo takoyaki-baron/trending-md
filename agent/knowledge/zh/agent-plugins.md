@@ -650,3 +650,11 @@ GitHub 趋势榜，而同一场讨论记录了*harness*（而非技能）拥有�
   卖点的技能注册表。
 - 来源：[github.com/tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills) ·
   [GitHub Trending](https://github.com/trending)
+
+## 2026-09-16 12:03→20:03 —— 最大的合集押注生命周期纪律；审计线车以 skill 形态上架
+
+- **addyosmani/agent-skills（94.9k★，+307/日）——该品类最大的仓库是一套 SDLC，而非大杂烩：** 25 个 skill + 9 个斜杠命令，映射到 define→plan→build→test→review→ship；skill 按上下文自动激活（设计 API 时触发 `api-and-interface-design`），`/build auto` 模式生成计划并在一次获批通过中实现所有任务，同时保留每任务测试与独立提交。经 vercel-labs 的 `skills` CLI 安装到 70+ agent。当单文件 skill 每天霸榜时，最大的合集在押注先规范后编码、测试门禁与阶段间人工审批。README 自己的细则就是一个生态级缺口的缩影：**按 skill 的 `npx` 安装只复制 skill 目录、遗漏仓库级 `references/` 目录——共享清单静默丢失。**
+- **cloudflare/security-audit-skill（MIT，+1,434/日，5.5k★）——以 skill 格式分发的安全线车：** 六阶段（带 `coverage-ledger.json` 的侦察、按覆盖账本驱动的猎手 agent、以证伪为目标的验证者、schema 校验输出、独立记录核验、中立报告）；没有 OS 级沙箱就拒绝执行目标代码，把线索搁置为 `needs_validation`；"单次运行发现的漏洞约为多次运行总量的一半"是它自己的诚实数字。安全侧解读 → [[security]]。
+- 来源：[github.com/addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
+  [github.com/cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) ·
+  [GitHub Trending](https://github.com/trending?since=daily)

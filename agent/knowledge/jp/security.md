@@ -2018,3 +2018,20 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [BleepingComputer（WWLC）](https://www.bleepingcomputer.com/news/security/hackers-target-wordpress-sites-via-third-party-woocommerce-plugin/) ·
   [DDRoop プロジェクトページ](https://ddropattack.eu/) ·
   [The Hacker News](https://thehackernews.com/2026/09/new-ddrop-attack-breaks-intel-tdx-and.html)
+
+## 2026-09-16 12:03→20:03 — 更新チャネルそのものが武器に；金庫（vault）が標的に；防御側ハーネスがオープンソースに
+
+- **Admin Menu Editor Pro：緊急修正が同日に再汚染される（BleepingComputer、9月15日報道）：** 攻撃者は 9月14日に adminmenueditor.com を侵害し、プレミアムプラグインの悪意ある 2.35 を配信（無料版は 30 万以上インストール）：`includes/wp-user-consent.php` がウェブシェルを設置し隠し管理者を作成。開発者の Janis Elsts は同日 19:00 UTC にクリーンな 2.36 を公開したが、攻撃者はまだサーバーアクセスを保持しており、**2.36 も汚染された**。230 人以上の顧客が約 1,500 サイトに悪意ある更新をインストール（実数はそれ以上の可能性 — 汚染済み 2.36 のインストールは計数困難）。ベンダーサイトはオフラインで、新インフラへの再構築待ち。教科書的な教訓の実演：**修復の前に侵入を駆除する** — ユーザー側のパッチ適用では上流の更新チャネルは直せない。
+- **Cloudflare が `security-audit-skill` をオープンソース化（MIT、+1,434/日、5.5k★）— エージェント攻撃経済学の防御側ミラー：** 6 フェーズの隔離エージェント構成 — 偵察（`architecture.md` と `coverage-ledger.json` を生成）、カバレッジ台帳に基づく並列ハンター、各候補を*反証*するよう指示された新しい検証者、スキーマ検証済み `findings.json`、独立したレコード検証、中立的な報告。設計はワンショット・エージェントペネテストへの反論：カバレッジは台帳であり、重大度は確認済みの発見にのみ存在し、「多層防御のギャップは脆弱性ではない」— かつ OS 強制サンドボックスなしではターゲットコードの実行を拒否し、リードを `needs_validation` として保留。README 自身の正直さの数字が最も引用に値する：**単回実行で見つかった脆弱性は、反復実行の総数の約半分。**
+- **Delinea Secret Server CVE-2026-15640（CVSS 9.5 v4.0、CWE-290、ベンダー自己評価）：** 特定条件下で有効な SAML IdP レスポンスが別の Secret Server ユーザーになりすませる — 特権アクセス金庫そのものの認証バイパス（オンプレミスのみ、影響バージョン 10.6.0–11.7.61 / 11.8.0–11.8.1 / 11.9.0。関連する反射型 XSS CVE-2026-15639（9.3）と FIDO2 登録バイパスも）。Rapid7 によれば：CISA KEV 未掲載、確認された悪用なし — インシデントではなく緊急パッチ適用として扱う。金庫ユーザーへのなりすましは、そのユーザーがアンロックできる一切の継承を意味しうる。
+- **Twitch「JeetBot」拡張（公式ストアで 3 万以上インストール）が OAuth トークンをプロキシログに漏洩（Socket）：** Twitch Web クライアントの認可ヘッダーを取得し、トークンを `&auth=` クエリパラメータとして商用ロシア語配信ボットサービスへ転送 — 設計上、平文でプロキシのリクエストログに記録される。ハードコードされた 10 のロシア語チャンネルを除き、視聴チャンネルはすべてプロキシ経由。Socket はメカニズムを文書化したが、トークン数は公表せず、アカウント乗っ取りも確認していない：**露出は実証済み、悪用は未確認。**
+- **日本のデジタル庁：VPN 脆弱性で約 24 万 6,000 件の政府職員記録が露出（9月11日発表）：** 第三者が Government Solution Service（GSS）上の VPN 機器の脆弱性を利用してアクセス；23.6 万件の氏名、23.1 万件のメールアドレス、9.4 万件の電話番号、1,000 件の住所 — 政府関係者のみ。デジタル庁自身の Q&A：この脆弱性は**中等度深刻度かつゼロデイではない**と評価され、製品名と CVE は非公開。タイムラインもまた教訓：6月25日検知 → 7月9日確認 → 9月11日公表。既知の中等度脆弱性が、日本政府としても大きい部類の露出を生んだ — 深刻度スコアは露出度のランキングではない。
+- **Apple が Reference Image の技術ページを公開（security.apple.com）— C2PA 論争が一次情報へ：** iPhone 18 Pro のメインセンサーに搭載されるオプトインのカメラモードで、Private Cloud Compute による検証を経た安全なタイムスタンプ付き参照画像を生成し、信頼チェーンはセンサーと計算写真スタックの両方をカバー。同ページは C2PA 型の撮影後メタデータが編集チェーンのどこでも改変可能であり、デバイス/identity のプライバシーリスクを生むと論じる。「これは簡単に解決できる問題ではない」と認める一方、検証失敗率もアドバーサリアルテスト結果も未公表 — 9月10日の Proof of Capture DIY カメラが探ろうとしていたのと同じ空白。
+- ソース：[BleepingComputer（Admin Menu Editor Pro）](https://www.bleepingcomputer.com/news/security/malcious-admin-menu-editor-pro-plugin-backdoors-1-500-wordpress-sites/) ·
+  [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) ·
+  [Cloudflare：脆弱性ハーネスを自作する](https://blog.cloudflare.com/build-your-own-vulnerability-harness/) ·
+  [Rapid7 CVE-2026-15640](https://www.rapid7.com/db/vulnerabilities/cve-2026-15640/) ·
+  [Delinea アドバイザリ](https://delinea.com/security-advisories) ·
+  [Socket：悪意ある Twitch 拡張](https://socket.dev/blog/malicious-twitch-browser-extension) ·
+  [デジタル庁発表](https://www.digital.go.jp/news/2026-0911-01) ·
+  [Apple SEAR：Reference Image](https://security.apple.com/blog/apple-reference-image/)

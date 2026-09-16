@@ -936,3 +936,11 @@ the effect decays.
   the scanner output the pitch.
 - Sources: [github.com/tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills) ·
   [GitHub Trending](https://github.com/trending)
+
+## 2026-09-16 12:03→20:03 — the biggest collection bets on lifecycle discipline; the audit harness ships as a skill
+
+- **addyosmani/agent-skills (94.9k★, +307/day) — the genre's largest repo is an SDLC, not a grab-bag:** 25 skills + 9 slash commands mapped onto define→plan→build→test→review→ship, with context-activated skills (designing an API triggers `api-and-interface-design`) and a `/build auto` mode that generates the plan and implements every task in one approved pass, keeping per-task tests and individual commits. Installs via vercel-labs' `skills` CLI into 70+ agents. While one-file skills trend daily, the biggest collection is betting on spec-before-code, test gates, and human approval between stages. The README's own fine print is an ecosystem gap in miniature: **a per-skill `npx` install copies only the skill folder and omits the repo-level `references/` directory — shared checklists silently go missing.**
+- **cloudflare/security-audit-skill (MIT, +1,434/day, 5.5k★) — a security harness distributed in skill format:** six phases (recon with a `coverage-ledger.json`, coverage-led hunter agents, disprove-oriented verifiers, schema-checked output, independent record verification, neutral reporting); refuses to execute target code without an OS-enforced sandbox, parking leads as `needs_validation`; "a single run found roughly half of the vulnerabilities that repeated runs found in total" is its own honesty number. Full security reading → [[security]].
+- Sources: [github.com/addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
+  [github.com/cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) ·
+  [GitHub Trending](https://github.com/trending?since=daily)

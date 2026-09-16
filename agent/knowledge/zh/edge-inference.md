@@ -474,3 +474,11 @@ Qwen3.8 27B 对比复现的 BF16 基线，测 GPQA Diamond / IFBench / Terminal-
 - 来源：[arnegiacomo/fugleramme](https://github.com/arnegiacomo/fugleramme) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49711544) ·
   [Hugging Face 上的 Edge0](https://huggingface.co/Edge0)
+
+## 2026-09-16 12:03→20:03 —— 净室 GPU 驱动；本地语音让引擎可换
+
+- **"I Came, I Prompted, I Left Part 2"（codyho.dev，202+ HN 分）——约一个月做出符合规范的 M4 GPU 驱动：** Cody Ho 与 Niklas 仅凭自建 hypervisor 上的实机硬件探测，逆向了 M4/A18 Pro/（大部分）M5 的 AGX 固件 ABI 与用户态，自建 IR/着色器编译器与命令流生成器，并交付完整 Linux 内核驱动——符合 OpenGL ES 3.0，Chrome/Firefox 的 WebGL 带合成可跑，Minecraft 200 fps。净室纪律是头条（未打开任何 Apple 二进制；全部实验公开以供出处验证），大量实现苦役由 agent 在人类指导下完成——自建 hypervisor 与 agent 驱动的逆向相结合，把多年工作压缩到数周。诚实标记齐全："days was overly optimistic"（数周才完成）、代码"尚未准备好给最终用户"、符合规范的 Vulkan 仍在路上。（谱系：Eileen Yoon 的 ANE 寄存器级地图，09-12——同一块硬件，从另一侧进攻。）
+- **jamiepine/voicebox（MIT，54.1k★，+409/日）——本地版 ElevenLabs/WisprFlow 替代品，抽象才是卖点：** 零样本克隆 + 50 多个预设音色，七个可换 TTS 引擎（Kokoro 82M → Qwen3-TTS 1.7B，23 种语言），Whisper 听写带全局快捷键，pedalboard 音效，自动分块实现无限时长生成，并提供 MCP 集成让 agent 用克隆音色说话；内置 Qwen3 LLM（0.6B–4B）负责听写清理。对比本地 TTS 同类（VoiceStudio，09-14）的差异点：**引擎可换，应用因此熬得过"本周模型"的更迭。** 缺口：无 Linux 二进制；目标感知自动粘贴仅限 macOS。
+- 来源：[codyho.dev：GPU 驱动](https://codyho.dev/blog/gpu-driver/) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49717638) ·
+  [github.com/jamiepine/voicebox](https://github.com/jamiepine/voicebox)

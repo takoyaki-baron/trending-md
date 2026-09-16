@@ -543,7 +543,11 @@ function extractSources() {
 
   for (const f of files) {
     const body = parseFrontmatter(fs.readFileSync(path.join(dir, f), 'utf8')).body;
-    const sections = body.split(/\n## \d+\. /);
+    // The '\n' prefix makes the FIRST item's header fire the split: parseFrontmatter strips the
+    // frontmatter up to `## 1.`, so body starts without a leading newline and item 1's citations
+    // were silently dropped from the sources page + uncurated warning (found 2026-09-16 by
+    // agent/tools/uncurated-report.mjs cross-checking counts: github.com 670 vs 673).
+    const sections = ('\n' + body).split(/\n## \d+\. /);
     for (let i = 1; i < sections.length; i++) {
       totalItems++;
       const hosts = new Set();

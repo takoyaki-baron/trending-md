@@ -1403,3 +1403,11 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   [Show HN 讨论](https://news.ycombinator.com/item?id=49712276) ·
   [greentfrapp/panel](https://github.com/greentfrapp/panel) ·
   [Show HN 讨论](https://news.ycombinator.com/item?id=49712621)
+
+## 2026-09-16 12:03→20:03 —— agent 拥有虚拟设备农场与受治理的测试世界
+
+- **Lakr233/vphone-cli（MIT，+907/日，13.1k★）——Apple Silicon 上的可脚本化虚拟 iPhone：** 通过 Apple Virtualization.framework 在 macOS 15+ 主机上把打过补丁的 iPhone IPSW 启动为 VM（README 称使用 PCC 研究 VM 基础设施），自动完成下载 → 补丁 → DFU 恢复 → 自定义固件 → 首次启动；五种固件变体从无补丁档到 `exp` 档（完整越狱 + 反 VM 检测研究补丁，自动安装 Sileo 与 TrollStore）。宿主控制 socket 把截图、触摸、滑动、剪贴板暴露给配套的 `vphone-mcp` 服务器——对真实 iOS 构建做 AI 驱动的端到端测试。代价印在包装上：需要放宽 SIP/AMFI、不支持嵌套 VM、日本/欧盟地区安装失败（VM 无法满足的监管校验）。
+- **rapiddweller/datamimic CE（MIT，Show HN）——以受治理的测试数据对抗 fixture 捏造失败：** 面向受监管行业的确定性优先合成测试数据引擎，现在瞄准 agent 工作流：不让编码 agent 即兴捏造 fixture，而是生成模式一致、CI/CD 可复现、带外键与跨系统关系的数据；MCP 就绪，仓库自带 `AGENTS.md`。它点名的失败很微妙也很结构化：**agent 同时也在编写测试所运行的世界，捏造的 fixture 与捏造的代码安静地互相印证。** 尚在早期——HN 讨论仍在追问跨系统外键支持之类的基础问题。
+- 来源：[github.com/Lakr233/vphone-cli](https://github.com/Lakr233/vphone-cli) ·
+  [github.com/rapiddweller/datamimic](https://github.com/rapiddweller/datamimic) ·
+  [Show HN 讨论](https://news.ycombinator.com/item?id=49722276)

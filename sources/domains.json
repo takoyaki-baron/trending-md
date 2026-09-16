@@ -7212,5 +7212,41 @@
     "en": "Japan's Digital Agency official announcements — primary source for the GSS VPN breach; incident facts cross-checked against BleepingComputer's report.",
     "zh": "日本数字厅官方公告——GSS VPN 泄露事件的一手信源；事件事实已与 BleepingComputer 报道交叉核对。",
     "jp": "デジタル庁の公式発表——GSS VPN 侵害事故の一次情報。事故事実は BleepingComputer の報道とクロスチェック済み。"
+  },
+  "mistral.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Mistral AI's announcement blog. First-hand for its own releases, but every capability claim is the vendor's own (the Firefox Smart Window post names no specific model, and the ZDR claim is contractual, not an audit). Cross-validated against Mozilla's parallel Firefox 148 post, which confirms the partnership and the opt-in framing.",
+    "zh": "Mistral AI 的发布公告博客。对其自身发布是一手来源，但所有能力声明都出自厂商本身（Firefox Smart Window 文章未指明具体模型，ZDR 声明是合同性表述而非审计）。已与 Mozilla 并行的 Firefox 148 文章交叉核验，确认了合作关系与自主加入的定位。",
+    "jp": "Mistral AI の発表ブログ。自社リリースの一次情報だが、能力に関する主張はすべてベンダー自身のもの（Firefox Smart Window の記事は具体的モデルを明示せず、ZDR 主張は監査ではなく契約上の表明）。Mozilla の Firefox 148 記事と突合済み — 提携とオプトイン方式は確認。"
+  },
+  "rheinmetall.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Rheinmetall's newsroom — first-hand for the Battlesuite Onboard/Tactical API spec drop, but it is corporate communications: what shipped is documentation, with no code, no license terms examined, and no independent assessment. Cross-validated against the front-page HN discussion and the official GitHub organization.",
+    "zh": "Rheinmetall 新闻室——Battlesuite Onboard/Tactical API 规范发布的一手来源，但属于企业宣传：实际发布的只是文档，没有代码，许可条款未查证，也无独立评估。已与 HN 首页讨论及官方 GitHub 组织交叉核验。",
+    "jp": "Rheinmetall のニュースルーム — Battlesuite Onboard/Tactical API 仕様公開の一次情報だが、企業広報である：公開されたのはドキュメントのみで、コードやライセンス条項の検証、独立評価はない。HN トップページの議論および公式 GitHub 組織と突合済み。"
+  },
+  "status.salesforce.com": {
+    "cat": "data",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Salesforce's status page — authoritative for restoration times and incident scoping during the Sep 16 global outage, but it is the affected party's own ledger: no root cause, no impact quantification. Cross-validated against The Register's early flag and the HN thread.",
+    "zh": "Salesforce 状态页——9 月 16 日全球故障期间对恢复时间和影响范围是权威的，但这是受影响方自己的记录：无根因、无量化影响。已与 The Register 的早期报道及 HN 讨论交叉核验。",
+    "jp": "Salesforce のステータスページ — 9月16日の全グローバル障害における復旧時刻とインシデント範囲の一次情報だが、当事者自身の記録である：根本原因の開示や影響の定量はなし。The Register の初期報道および HN 議論と突合済み。"
+  },
+  "delinea.com": {
+    "cat": "security",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Delinea's security advisories — the CNA's own record for the Secret Server CVE-2026-15640 cluster, so the 9.5 score is vendor-assigned; treat severity with scorer provenance attached. Cross-validated against Rapid7's independent CVE entry, which also confirms it is not on CISA KEV and no confirmed exploitation.",
+    "zh": "Delinea 安全公告——Secret Server CVE-2026-15640 漏洞簇的 CNA 自身记录，因此 9.5 分为厂商自评；引用时必须附带评分者来源。已与 Rapid7 的独立 CVE 条目交叉核验，后者还确认其未列入 CISA KEV、无已确认的利用。",
+    "jp": "Delinea のセキュリティアドバイザリ — Secret Server CVE-2026-15640 群の CNA 自身の記録であり、9.5 スコアはベンダー自己評価。引用時は採点者の出所を添えること。Rapid7 の独立 CVE エントリと突合済み — CISA KEV 未掲載・確認された悪用なしも確認。"
   }
 }

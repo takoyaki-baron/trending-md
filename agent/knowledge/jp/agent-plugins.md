@@ -761,3 +761,11 @@ Cursor、Gemini、OpenCode、Kimi、Qwen のアダプタ、7 言語。HN スレ�
   スキル レジストリ。
 - ソース：[github.com/tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills) ·
   [GitHub Trending](https://github.com/trending)
+
+## 2026-09-16 12:03→20:03 — 最大のコレクションがライフサイクル規律に賭ける；監査ハーネスが skill として出荷される
+
+- **addyosmani/agent-skills（94.9k★、+307/日）— ジャンル最大のリポジトリは寄せ集めではなく SDLC：** 25 skill + 9 スラッシュコマンドを define→plan→build→test→review→ship に対応付け、skill はコンテキストで自動アクティブ化（API 設計時に `api-and-interface-design` が発火）、`/build auto` モードは計画を生成し承認済みの単一パスで全タスクを実装 — タスクごとのテストと個別コミットを維持。vercel-labs の `skills` CLI で 70+ エージェントにインストール可能。シングルファイル skill が日々トレンドに入るなか、最大のコレクションは spec-before-code・テストゲート・ステージ間の人間承認に賭けている。README 自身の細則はエコシステム規模のギャップの縮図：**skill 単位の `npx` インストールは skill フォルダのみをコピーし、リポジトリ直下の `references/` ディレクトリを漏らす — 共有チェックリストが静かに失われる。**
+- **cloudflare/security-audit-skill（MIT、+1,434/日、5.5k★）— skill フォーマットで配布されるセキュリティハーネス：** 6 フェーズ（`coverage-ledger.json` 付き偵察、カバレッジ台帳主導のハンター agent、反証志向の検証者、スキーマ検証出力、独立レコード検証、中立報告）；OS 強制サンドボックスなしではターゲットコードの実行を拒否し、リードを `needs_validation` として保留；「単回実行で脆弱性の約半分」は自らの正直さの数字。セキュリティ側の読み → [[security]]。
+- ソース：[github.com/addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
+  [github.com/cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) ·
+  [GitHub Trending](https://github.com/trending?since=daily)

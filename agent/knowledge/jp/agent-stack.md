@@ -1658,3 +1658,11 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
   [Show HN 議論](https://news.ycombinator.com/item?id=49712276) ·
   [greentfrapp/panel](https://github.com/greentfrapp/panel) ·
   [Show HN 議論](https://news.ycombinator.com/item?id=49712621)
+
+## 2026-09-16 12:03→20:03 — エージェントが仮想デバイスファームと統治されたテスト世界を手にする
+
+- **Lakr233/vphone-cli（MIT、+907/日、13.1k★）— Apple Silicon 上のスクリプト可能な仮想 iPhone：** Apple の Virtualization.framework 経由で macOS 15+ ホストにパッチ済み iPhone IPSW を VM として起動（README は PCC リサーチ VM インフラの利用を記述）、ダウンロード → パッチ → DFU リストア → カスタムファームウェア → 初回起動を自動化；5 つのファームウェアバリアントはパッチなし版から `exp` 版（完全脱獄 + anti-VM-detection リサーチパッチ、Sileo と TrollStore を自動インストール）まで。ホスト制御ソケットがスクリーンショット・タッチ・スワイプ・クリップボードを companion の `vphone-mcp` サーバーへ露出 — 実 iOS ビルドの AI 駆動 E2E テストの構え。コストは箱に印字済み：SIP/AMFI の緩和が必要、ネストした VM は不可、日本/EU リージョンではセットアップ失敗（VM が満たせない規制チェック）。
+- **rapiddweller/datamimic CE（MIT、Show HN）— fixture 捏造の失敗に対する統治されたテストデータ：** 規制産業向けの決定論優先の合成テストデータエンジンがエージェントワークフローに照準：コーディング agent に場当たり的な fixture を捏造させず、スキーマ整合的で CI/CD 再現可能、外部キーとシステム横断の関係を持つデータを生成；MCP 対応、リポジトリには `AGENTS.md` 同梱。それが名指す失敗は微妙かつ構造的：**agent はテストが走る世界そのものも書く — 捏造された fixture は捏造されたコードと静かに合意してしまう。** まだ初期 — HN スレッドはシステム横断の FK サポートといった基本を突いている最中。
+- ソース：[github.com/Lakr233/vphone-cli](https://github.com/Lakr233/vphone-cli) ·
+  [github.com/rapiddweller/datamimic](https://github.com/rapiddweller/datamimic) ·
+  [Show HN 議論](https://news.ycombinator.com/item?id=49722276)

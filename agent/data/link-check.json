@@ -517,15 +517,69 @@
     },
     "https://support.cpanel.net/hc/en-us/articles/43483286674583-Security-LiteSpeed-Enterprise-security-advisory-September-14-2026": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-15T21:25:55.009Z",
-      "last_seen": "2026-09-15T21:25:55.009Z",
+      "last_seen": "2026-09-16T13:12:30.106Z",
+      "feeds": [
+        "2026-09-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49712278": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-16T13:12:30.106Z",
+      "last_seen": "2026-09-16T13:12:30.106Z",
+      "feeds": [
+        "2026-09-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49712276": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-16T13:12:30.106Z",
+      "last_seen": "2026-09-16T13:12:30.106Z",
+      "feeds": [
+        "2026-09-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49712621": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-16T13:12:30.106Z",
+      "last_seen": "2026-09-16T13:12:30.106Z",
+      "feeds": [
+        "2026-09-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49657121": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-16T13:12:30.106Z",
+      "last_seen": "2026-09-16T13:12:30.106Z",
+      "feeds": [
+        "2026-09-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49721435": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-16T13:12:30.106Z",
+      "last_seen": "2026-09-16T13:12:30.106Z",
+      "feeds": [
+        "2026-09-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49695408": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-16T13:12:30.106Z",
+      "last_seen": "2026-09-16T13:12:30.106Z",
       "feeds": [
         "2026-09-16.md"
       ]
     }
   },
-  "runs": 19,
+  "runs": 20,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-15T21:25:55.009Z"
+  "last_run": "2026-09-16T13:12:30.106Z"
 }

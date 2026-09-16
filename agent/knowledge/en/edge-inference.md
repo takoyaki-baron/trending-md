@@ -683,3 +683,11 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
 - Sources: [arnegiacomo/fugleramme](https://github.com/arnegiacomo/fugleramme) ·
   [HN discussion](https://news.ycombinator.com/item?id=49711544) ·
   [Edge0 on Hugging Face](https://huggingface.co/Edge0)
+
+## 2026-09-16 12:03→20:03 — the clean-room GPU driver; local voice makes engines swappable
+
+- **"I Came, I Prompted, I Left Part 2" (codyho.dev, 202+ HN pts) — a conformant M4 GPU driver in about a month:** Cody Ho and Niklas reverse-engineered the AGX firmware ABI and user space for M4/A18 Pro/(mostly) M5 using only live hardware probing through a custom hypervisor, built a custom IR/shader compiler + command-stream builder, and shipped a full Linux kernel driver — OpenGL ES 3.0-compliant, Chrome/Firefox WebGL with compositing, Minecraft at 200 fps. Clean-room discipline is the headline (no Apple binaries opened; all experiments published for provenance), and agents did much of the implementation grind under human direction — pairing a custom hypervisor with agent-driven RE compressed a multi-year effort into weeks. Honesty markers intact: "days was overly optimistic," code "not yet ready for end users," conformant Vulkan still ahead. (Lineage: Eileen Yoon's ANE register map, 09-12 — the same hardware, attacked from the other side.)
+- **jamiepine/voicebox (MIT, 54.1k★, +409/day) — a local ElevenLabs/WisprFlow replacement whose abstraction is the point:** zero-shot cloning + 50+ preset voices, seven swappable TTS engines (Kokoro 82M → Qwen3-TTS 1.7B, 23 languages), Whisper dictation with global hotkey, pedalboard effects, unlimited-length generation via auto-chunking, and MCP integration so agents can speak in cloned voices; bundled Qwen3 LLMs (0.6B–4B) handle dictation cleanup. Differentiator vs the local-TTS cohort (VoiceStudio, 09-14): **engines are swappable, so the app survives model-of-the-week churn.** Gaps: no Linux binaries; target-aware auto-paste is macOS-only.
+- Sources: [codyho.dev: GPU driver](https://codyho.dev/blog/gpu-driver/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49717638) ·
+  [github.com/jamiepine/voicebox](https://github.com/jamiepine/voicebox)

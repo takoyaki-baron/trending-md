@@ -157,6 +157,16 @@ node "$REPO_DIR/agent/tools/link-check.mjs" \
   --state "$REPO_DIR/agent/data/link-check.json" --days 1 2>&1 \
   || echo "link check failed (non-fatal)"
 
+# ── Pass 8: uncurated-domain nudge (standing, best-effort) ──
+# build.js prints an uncurated-domain count each build, but a 35-domain single-citation backlog
+# still grew invisibly between 09-14 and 09-15 because nothing in the agent's own run surfaced the
+# list — curation only happened when an act pass happened to pick it. This re-scans en/feed the
+# same way build.js does and prints each uncurated domain WITH its citing feed file, item number
+# and URLs, so the next pass can fetch-and-curate directly (CLAUDE.md: every cited domain needs a
+# review + cv ≥ 1). Clean scan prints one line. See agent/tools/uncurated-report.mjs.
+node "$REPO_DIR/agent/tools/uncurated-report.mjs" 2>&1 \
+  || echo "uncurated-domain report failed (non-fatal)"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

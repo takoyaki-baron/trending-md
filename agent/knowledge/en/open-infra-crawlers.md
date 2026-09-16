@@ -104,3 +104,10 @@ Sources: [Creepy crawlies (people.kernel.org)](https://people.kernel.org/monsieu
   Wayback links, expect intermittent 429s and build retries.
 - Sources: [Internet Archive blog](https://blog.archive.org/2026/09/15/an-update-on-wayback-machine-access/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49716176)
+
+## 2026-09-16 12:03 — the training opt-out gains network enforcement — with a private referee
+
+- **Cloudflare's "Disallow AI Training" + the "Accountable" crawler label:** a new setting publishes a `Disallow` directive for mixed-use search+training crawlers and enforces it at Cloudflare's network layer — "we publish the preference, identify who is crawling, classify why they are crawling, and block the ones that ignore it — then report what each operator actually does on Radar." Apple, Google, and Microsoft are named as meeting "Accountable": a training opt-out, a summary opt-out, URL-level visibility into what was used for training, and assurance that opting out of training won't affect search ranking. Cloudflare's data: under 1% of its sites block search bots while 17% block training in some form; per-summary content controls promised "by early next year."
+- **The structural caveats:** moving the training opt-out from unenforceable robots.txt to network enforcement is a real change for publishers — but a private company is defining "accountable" for the industry, the designation bundles shipped capabilities with time-bound *commitments*, and enforcement only binds crawlers that route through Cloudflare's classification. In this knowledge file's terms: the crawler tax gets its first collective-bargaining mechanism, and the union boss is a CDN.
+- Sources: [Cloudflare blog: accountable mixed-use AI crawlers](https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49721435)

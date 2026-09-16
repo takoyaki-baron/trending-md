@@ -1755,3 +1755,20 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [BleepingComputer WWLC 报道](https://www.bleepingcomputer.com/news/security/hackers-target-wordpress-sites-via-third-party-woocommerce-plugin/) ·
   [DDRoop 项目页](https://ddropattack.eu/) ·
   [The Hacker News](https://thehackernews.com/2026/09/new-ddrop-attack-breaks-intel-tdx-and.html)
+
+## 2026-09-16 12:03→20:03 —— 更新渠道本身成为武器；金库成为奖品；防御侧审计线车上架为开源
+
+- **Admin Menu Editor Pro：紧急修复当日即被再次投毒（BleepingComputer，9 月 15 日）：** 攻击者于 9 月 14 日攻陷 adminmenueditor.com 并推送了恶意 2.35 版本（免费版安装量 30 万+）：`includes/wp-user-consent.php` 安装 web shell 并创建隐藏管理员。开发者 Janis Elsts 当天 19:00 UTC 推送干净版 2.36——但攻击者仍握有服务器权限，**2.36 也被投毒**。至少 230 名客户在约 1,500 个站点上装了恶意更新（实际数字可能更高——被投毒的 2.36 安装难以统计）；厂商站点已下线，等待在新基础设施上重建。教科书教训的真实上演：**先驱逐入侵、再修复**——客户端打补丁无法修复上游更新渠道。
+- **Cloudflare 开源 `security-audit-skill`（MIT，+1,434/日，5.5k★）——agentic 攻击经济学的防御镜像：** 六个隔离 agent 阶段——侦察（写 `architecture.md` 与 `coverage-ledger.json`）、按覆盖账本并行狩猎、由被指示*证伪*每个候选发现的全新验证者复核、schema 校验的 `findings.json`、独立记录核验、中立报告。该设计是对一次性 agent 渗透的驳斥：覆盖是一本账，严重级别只存在于已确认的发现上，"纵深防御缺口不是漏洞"——且在没有 OS 级沙箱时拒绝执行目标代码，把线索搁置为 `needs_validation`。README 自己的诚实数字最该被引用：**单次运行发现的漏洞约为多次运行总量的一半。**
+- **Delinea Secret Server CVE-2026-15640（CVSS 9.5 v4.0，CWE-290，厂商自评）：** 在特定条件下，一个合法的 SAML IdP 响应可冒充另一名 Secret Server 用户——发生在特权访问金库本身的认证绕过（仅本地部署，受影响版本 10.6.0–11.7.61 / 11.8.0–11.8.1 / 11.9.0；伴随 9.3 分反射型 XSS CVE-2026-15639 与一个 FIDO2 注册绕过）。据 Rapid7：未列入 CISA KEV、无已确认的利用——按紧急打补丁对待，而非按事件处置。冒充一名金库用户，可能意味着继承该用户能解锁的一切。
+- **Twitch "JeetBot" 扩展（官方商店 3 万+ 安装）把 OAuth token 泄漏进代理日志（Socket）：** 捕获 Twitch 网页客户端的授权头，并把 token 作为 `&auth=` 查询参数转发给一家商业俄语直播机器人服务——按设计就明文落进代理的请求日志。除十个硬编码豁免的俄语频道外，所有被观看频道都走代理。Socket 记录了机制但未公布 token 数量、也未确认任何接管：**暴露已被证实，滥用尚未证实。**
+- **日本数字厅：VPN 漏洞暴露约 24.6 万条政府人员记录（9 月 11 日公告）：** 第三方利用政府解决方案服务（GSS）上 VPN 设备的漏洞入侵；23.6 万姓名、23.1 万邮箱、9.4 万电话、1,000 地址——仅限政府相关人员的记录。数字厅自己的问答：该漏洞被评为**中等严重性、并非零日**，产品与 CVE 均未公布。时间线是另一课：6 月 25 日发现 → 7 月 9 日确认 → 9 月 11 日公告。一个已知的中等严重性漏洞照样造成日本政府史上较大规模的暴露之一——严重性评分不是暴露程度排名。
+- **Apple 发布 Reference Image 技术页（security.apple.com）——C2PA 之争回到一手来源：** iPhone 18 Pro 主摄上的可选拍摄模式，生成经 Private Cloud Compute 验证的安全时间戳参考图像，信任链覆盖传感器与计算摄影栈；该文主张 C2PA 式的拍摄后元数据在编辑链任何环节都可被篡改，并带来设备/身份隐私风险。它承认"这不是一个容易解决的问题"——但未公布任何验证失败率、也未公布对抗测试结果：正是 9 月 10 日 Proof of Capture DIY 相机想要探测的空白。
+- 来源：[BleepingComputer：Admin Menu Editor Pro](https://www.bleepingcomputer.com/news/security/malcious-admin-menu-editor-pro-plugin-backdoors-1-500-wordpress-sites/) ·
+  [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) ·
+  [Cloudflare：自建漏洞挖掘线车](https://blog.cloudflare.com/build-your-own-vulnerability-harness/) ·
+  [Rapid7 CVE-2026-15640](https://www.rapid7.com/db/vulnerabilities/cve-2026-15640/) ·
+  [Delinea 安全公告](https://delinea.com/security-advisories) ·
+  [Socket：恶意 Twitch 扩展](https://socket.dev/blog/malicious-twitch-browser-extension) ·
+  [日本数字厅公告](https://www.digital.go.jp/news/2026-0911-01) ·
+  [Apple SEAR：Reference Image](https://security.apple.com/blog/apple-reference-image/)

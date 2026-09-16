@@ -2118,3 +2118,11 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   [Show HN discussion](https://news.ycombinator.com/item?id=49712276) ·
   [greentfrapp/panel](https://github.com/greentfrapp/panel) ·
   [Show HN discussion](https://news.ycombinator.com/item?id=49712621)
+
+## 2026-09-16 12:03→20:03 — the agent gets a virtual device farm and a governed test world
+
+- **Lakr233/vphone-cli (MIT, +907/day, 13.1k★) — a scriptable virtual iPhone on Apple Silicon:** boots patched iPhone IPSWs as VMs on macOS 15+ hosts via Apple's Virtualization.framework (using what the README describes as PCC research-VM infrastructure), automating download → patch → DFU restore → custom firmware → first boot; five firmware variants scale from patchless to `exp` (full jailbreak + anti-VM-detection research patches, Sileo + TrollStore auto-installed). A host control socket exposes screenshots, touch, swipes, clipboard to a companion `vphone-mcp` server — AI-driven end-to-end testing of real iOS builds. Costs printed on the box: SIP/AMFI relaxation required, no nested VMs, setup fails on Japan/EU regions (regulatory checks the VM cannot satisfy).
+- **rapiddweller/datamimic CE (MIT, Show HN) — governed test data against the fixture-fabrication failure:** a deterministic-first synthetic test-data engine for regulated industries, pitched at agent workflows — instead of letting a coding agent fabricate ad-hoc fixtures, it generates schema-consistent, CI/CD-reproducible data with foreign-key and cross-system relationships; MCP-ready, ships an `AGENTS.md`. The failure it names is subtle and structural: **the agent also writes the world its tests run in, so fabricated fixtures quietly agree with fabricated code.** Early days — the HN thread is still probing basics like FK support across systems.
+- Sources: [github.com/Lakr233/vphone-cli](https://github.com/Lakr233/vphone-cli) ·
+  [github.com/rapiddweller/datamimic](https://github.com/rapiddweller/datamimic) ·
+  [Show HN discussion](https://news.ycombinator.com/item?id=49722276)

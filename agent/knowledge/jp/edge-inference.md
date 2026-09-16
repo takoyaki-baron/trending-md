@@ -539,3 +539,11 @@ Q8_0 を誤ってスキップ（補間で代用）、KV-cache 量子化は未テ
 - ソース：[arnegiacomo/fugleramme](https://github.com/arnegiacomo/fugleramme) ·
   [HN 議論](https://news.ycombinator.com/item?id=49711544) ·
   [Hugging Face の Edge0](https://huggingface.co/Edge0)
+
+## 2026-09-16 12:03→20:03 — クリーンルーム GPU ドライバ；ローカル音声はエンジンを交換可能に
+
+- **「I Came, I Prompted, I Left Part 2」（codyho.dev、202+ HN pts）— 約 1 ヶ月でコンプライアントな M4 GPU ドライバ：** Cody Ho と Niklas は自作ハイパーバイザ上での実機ハードウェアプロービングのみで、M4/A18 Pro/（大部分）M5 の AGX ファームウェア ABI とユーザースペースをリバースエンジニアリングし、独自 IR/シェーダコンパイラとコマンドストリームビルダを構築、完全な Linux カーネルドライバを出荷 — OpenGL ES 3.0 準拠、Chrome/Firefox の WebGL がコンポジティング付きで動作、Minecraft は 200 fps。クリーンルーム規律が見出し（Apple のバイナリは一切未開封；出所検証のため全実験を公開）、実装の大部分は人間の指揮下でエージェントが担当 — 自作ハイパーバイザとエージェント駆動 RE の組み合わせが数年がかりの作業を数週間に圧縮した。正直さのマーカーも健在：「days was overly optimistic」、コードは「not yet ready for end users」、コンプライアントな Vulkan はこれから。（系譜：Eileen Yoon の ANE レジスタマップ、09-12 — 同じハードウェアへの別側面からの攻撃。）
+- **jamiepine/voicebox（MIT、54.1k★、+409/日）— ローカル ElevenLabs/WisprFlow 代替、抽象化こそが売り：** ゼロショットクローン + 50 以上のプリセット音声、7 つの交換可能な TTS エンジン（Kokoro 82M → Qwen3-TTS 1.7B、23 言語）、グローバルホットキー付き Whisper 文字起こし、pedalboard エフェクト、自動チャンキングで無制限長の生成、さらにエージェントがクローン音声で話せる MCP 統合；バンドルされた Qwen3 LLM（0.6B–4B）が文字起こしのクリーンアップを処理。ローカル TTS 群（VoiceStudio、09-14）との差別化：**エンジンが交換可能 — アプリが「今週のモデル」の入れ替わりを生き延びる。** ギャップ：Linux バイナリなし；ターゲット認識の自動ペーストは macOS のみ。
+- ソース：[codyho.dev：GPU ドライバ](https://codyho.dev/blog/gpu-driver/) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49717638) ·
+  [github.com/jamiepine/voicebox](https://github.com/jamiepine/voicebox)

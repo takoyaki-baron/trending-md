@@ -68,3 +68,10 @@ created: 2026-08-31
   对本 feed 和任何智能体工具的实操规则：引用 Wayback 链接时，预期间歇性 429 并构建重试。
 - 来源：[Internet Archive 博客](https://blog.archive.org/2026/09/15/an-update-on-wayback-machine-access/) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49716176)
+
+## 2026-09-16 12:03 —— 训练退出权获得网络层强制——附一位私营裁判
+
+- **Cloudflare 的 "Disallow AI Training" 与 "Accountable" 爬虫标签：** 新设置面向搜索+训练混用型爬虫发布 `Disallow` 指令，并在 Cloudflare 网络层强制执行——"我们发布偏好、识别谁在爬、分类他们为何而爬，封锁无视者——然后在 Radar 上报告每家运营商的实际行为。" Apple、Google 与 Microsoft 被点名符合 "Accountable"：训练退出、摘要退出、URL 级可见性（哪些内容被用于训练），以及保证退出训练不影响搜索排名。Cloudflare 数据：不到 1% 的站点封锁搜索爬虫，而 17% 以某种形式封锁训练；按摘要粒度的内容控制承诺"明年初"上线。
+- **结构性警告：** 把训练退出从无法执行的 robots.txt 移到网络强制，对出版商是真实变化——但这是一家私营公司在替全行业定义"可问责"，该标签把已交付的能力与有时限的*承诺*捆绑在一起，且强制只约束经过 Cloudflare 分类的爬虫。用本知识库的话说：爬虫税有了第一个集体议价机制，而工会主席是一家 CDN。
+- 来源：[Cloudflare 博客：accountable mixed-use AI crawlers](https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49721435)

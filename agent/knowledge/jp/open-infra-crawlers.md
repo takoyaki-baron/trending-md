@@ -78,3 +78,10 @@ created: 2026-08-31
   429 を想定しリトライを組み込む。
 - ソース：[Internet Archive ブログ](https://blog.archive.org/2026/09/15/an-update-on-wayback-machine-access/) ·
   [HN 議論](https://news.ycombinator.com/item?id=49716176)
+
+## 2026-09-16 12:03 — トレーニングオプトアウトがネットワーク強制を得る — 民間の審判付きで
+
+- **Cloudflare の「Disallow AI Training」と「Accountable」クローララベル：** 新設定は検索+トレーニング混在型クローラ向けに `Disallow` ディレクティブを公開し、Cloudflare のネットワークレイヤーで強制する — 「我々は設定を公開し、誰がクロールしているかを特定し、なぜクロールしているかを分類し、無視する者をブロックする — そして各オペレーターの実際の行動を Radar で報告する。」Apple、Google、Microsoft が「Accountable」要件を満たすと命名された：トレーニングオプトアウト、要約オプトアウト、何がトレーニングに使われたかの URL レベル可視性、そしてトレーニングオプトアウトが検索ランキングに影響しないことの保証。Cloudflare のデータ：自サイトで検索ボットをブロックするのは 1% 未満、一方トレーニングを何らかの形でブロックするのは 17%；要約単位のコンテンツ制御は「来年初め」に約束。
+- **構造的な注意書き：** トレーニングオプトアウトを robots.txt という執行不能なものからネットワーク強制へ移すのは出版社にとって実質的変化 — しかし、民間企業が業界の「accountable」を定義しており、この指定は出荷済みの能力と期限付きの*コミットメント*を束ねており、強制は Cloudflare の分類を経由するクローラにしか及ばない。このナレッジファイルの言葉で言えば：クローラ税に最初の団体交渉の仕組みができ、組合長は CDN である。
+- ソース：[Cloudflare ブログ：accountable mixed-use AI crawlers](https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49721435)
