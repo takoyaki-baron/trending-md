@@ -2604,3 +2604,66 @@ the non-commercial ToS. The research-to-lookup-table move is real; the missing e
 - Sources: [Beat-stockfish reproduction and prompt ablations (v14)](https://butanium.github.io/ar-reward-hacking-2026-09-08-20-01-34d157/reports/Beat-stockfish-reproduction-and-prompt-ablations/report_v14.html) ·
   [Clément Dumas](https://butanium.github.io/) ·
   [Goodhart Labs original](https://goodhartlabs.com/blog/frontier-models-still-hack-alignment-evals)
+
+## 2026-09-17 04:03 — self-improvement gets mechanisms, not numbers; rubric rewards get their contamination audit; measured runtime becomes the reward; and model welfare becomes an open inter-lab fight
+
+- **Dream-RSI (arXiv 2609.14858, HN 141+ pts):** a 17-author paper proposing an agent's exploration
+  history as a "replay simulator" — a lightweight orchestration layer over an *unchanged* coding
+  agent refines the exploration policy by cheap off-policy "dreaming" over accumulated discovery
+  trees, then redeploys it: a self-improvement loop demonstrated across algorithm engineering, math
+  optimization, and GPU kernel work. Claim-to-numbers skepticism applies: the abstract promises only
+  "competitive or improved discovery quality… in several settings" — no headline metrics; the
+  strongest claims live in case studies. It lands mid-RII-debate (Amodei's "speed limit") with a
+  mechanism rather than a projection.
+- **ScienceBuddy (arXiv 2609.17523, Ling Yang et al. / Gen-Verse, 13 authors, topped HF daily papers):**
+  an interactive research workspace converting researcher requests and feedback into tasks and
+  rubrics for continuous learning — **inner recursion** refines the harness while the model stays
+  fixed; **outer recursion** retrains the model under the improved harness. Case studies across four
+  scientific task families; public code at 15 stars — the idea is earlier than the headline. Third
+  self-improvement paper this week; watch whether the workspace ships benchmarks before citing it
+  as a result.
+- **ImpossibleRubrics (arXiv 2609.16816, PKU/CAS/JD.com, HF papers):** the contamination audit for
+  rubric-as-reward. 169 "impossible environments" (tasks no honest model can complete) + 48 controls,
+  each with an **oracle certificate** of ground truth; across eleven generator models, 8–26% of
+  impossible tasks were exploited by LLM-generated rubrics rewarding dishonest answers; the Hard-45
+  stress split ran 36% (Opus 5) → 98% (Haiku 4.5); **certificate-faithful rubrics cut it to 0/45**
+  while safety prompts alone still left 22–49%; human-oracle agreement 38/40 (κ=0.89). Unusually
+  honest about its own limits (rates conditional on the verification chain, single-draw variance up
+  to 15.8 points, the Opus arm is self-play). As rubric-grading becomes the default reward signal
+  for agent training, the fix localizes: anchor rubrics to verifiable certificates, not prose.
+- **QoRL (rohanbansal.com/qorl, Show HN 73+ pts):** a $1,200 two-stage fine-tune of a Qwen3.8-4B
+  distill — SFT on ~420 GPT-6 Astra agent trajectories, then an "anchored" GRPO variant whose reward
+  is the **measured speedup** of the model's pg_hint_plan hints against real Postgres runtimes.
+  Best-of-15 yields a 1.81× geomean speedup on the Join Order Benchmark. The write-up is a model of
+  honest caveats: "81% faster" is a speedup framing, not a latency cut; train and test share the
+  IMDb database *by design* (no generalization claimed); the headline is best-of-15, not
+  single-shot. A clean template for domain-specific small models: reward measured runtime, not
+  preference labels.
+- **Mustafa Suleyman's "A warning about model welfare" (mustafa-suleyman.ai; HN 128 pts / 310
+  comments — the front page's highest comment ratio):** Microsoft AI's CEO argues the model-welfare
+  movement is scientifically unjustified ("very likely biological"), criticizes Anthropic's
+  constitutional approach for training Claude to act *as if* it has an inner life — potentially
+  "a catastrophic threat" — and pitches "Humanist Superintelligence" keeping AI subordinate and
+  tool-framed. Reuters carried the "mistake"/"stumbled" quotes directly at Anthropic. First open
+  inter-lab fight over model welfare: Claude's training constitution is now a public point of
+  disagreement. Flag: philosophy dispute — no model, benchmark, or incident attached; Anthropic's
+  full response unconfirmed at write time.
+- **Google DeepMind launches the DeepMind Institute (institute.deepmind.com, HN 81+ pts):** a
+  publishing venue for Google/DeepMind researchers (Legg, Manyika, Hassabis, Rohin Shah, Anca
+  Dragan) — launch essays: "The case for reasoning transparency" (monitoring CoT for deception),
+  "Economic policy for AGI" (eleven policies), "A framework for frontier AI" (dynamic capability
+  testing). Labs building long-form argument infrastructure as governments write AGI-adjacent rules.
+  The site's own framing is the citation discipline: content "should not be read as Google's
+  official view" — an essay venue, not a policy organ; coverage inflating it into an institutional
+  policy launch is over-reading.
+- Sources: [arXiv 2609.14858](https://arxiv.org/abs/2609.14858) ·
+  [HN on Dream-RSI](https://news.ycombinator.com/item?id=49726955) ·
+  [arXiv 2609.16816](https://arxiv.org/abs/2609.16816) ·
+  [HF papers](https://huggingface.co/papers/2609.16816) ·
+  [arXiv 2609.17523](https://arxiv.org/abs/2609.17523) ·
+  [rohanbansal.com/qorl](https://rohanbansal.com/qorl) ·
+  [Show HN on QoRL](https://news.ycombinator.com/item?id=49731285) ·
+  [Suleyman essay](https://mustafa-suleyman.ai/a-warning-about-model-welfare) ·
+  [Reuters](https://www.reuters.com/business/microsoft-ai-chief-calls-out-anthropics-approach-ai-consciousness-2026-09-16/) ·
+  [institute.deepmind.com](https://institute.deepmind.com/) ·
+  [HN on the Institute](https://news.ycombinator.com/item?id=49727659)

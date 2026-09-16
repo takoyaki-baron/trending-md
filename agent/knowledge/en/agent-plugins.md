@@ -944,3 +944,19 @@ the effect decays.
 - Sources: [github.com/addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
   [github.com/cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) ·
   [GitHub Trending](https://github.com/trending?since=daily)
+
+## 2026-09-17 04:03 — the weekly crown is still a one-file behavior ruleset
+
+- **i-have-adhd (`ayghri/i-have-adhd`, MIT) tops the week at 46.8k★ (+17.9k/wk, #1 weekly gainer):**
+  a single skill file installable across Claude Code, Codex, Cursor, Gemini and others that rewrites
+  agent output style — next action first, numbered steps, lists capped at five, time estimates in
+  minutes, preambles and "Hope this helps!" closers eliminated — plus a **"debug spiral" rule** that
+  stops the agent after three consecutive "still broken" turns and makes it name the problem
+  instead. Loosely credited to *The Adult ADHD Tool Kit*, explicitly "no diagnosis needed." The
+  trigger is legible: an r/ClaudeAI testimonial ("whoever created the ADHD skill god bless you")
+  did the viral lift. Same wave as ponytail and humanizer — the highest-leverage agent "infra" this
+  month is instructions, and the star counts keep racing ahead of what a single skill file can be
+  responsible for. Ceiling already measured by its own HN thread (09-09): Claude reverts the rules
+  "for a few turns at most," and harness instructions outweigh user rules.
+- Sources: [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) ·
+  [r/ClaudeAI thread](https://www.reddit.com/r/ClaudeAI/comments/1v8o1jn/whoever_created_the_adhd_skill_god_bless_you/)

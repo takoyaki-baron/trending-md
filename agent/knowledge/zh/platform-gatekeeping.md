@@ -129,3 +129,15 @@ created: 2026-09-02
 - **Garcia 诉 Sony Interactive Entertainment**（加州北区，2026 年 6 月 18 日立案）：四名原告主张 PlayStation Store 的 "Buy Now" 表述违反加州 AB 2426——该法禁止在无清晰许可披露时暗示对数字商品的无限所有权。一个消费者权利 Wiki 页面把 Sony 自己的所有权话术（"games you own"、"verified owner"）编目为证据——众包维护的公司营销文案档案成为诉讼工件，数字所有权案件的新证据体裁。Sony 于 8 月 21 日动议强制仲裁（ToS 有 30 天退出期——无原告退出）或驳回，主张"理性消费者不会被误导"；10 月 1 日由 Chhabria 法官开庭。主张仍是指控；Sony 尚未提交实体答辩，Wiki 也未主张 Sony 已移除该话术——HN 标题略有夸大。归入本文件作为其所有权支线：移除能力类别的同一批平台，也在出售法律现在开始检验的"拥有感"。
 - 来源：[Consumer Rights Wiki 案件页](https://consumerrights.wiki/w/Sony_PlayStation_digital_game_ownership_lawsuit) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49642531)
+
+## 2026-09-17 04:03 — 审核队列本身成为瓶颈
+
+- **Google Play 审核现在经常超过一周（HN 309+ 分，295 评论）：** Conversations（XMPP 客户端）开发者
+  Daniel Gultsch 记录了经常超过一周的 Play 商店审核等待——Signal 报告"4 小时到 5 天"，CoMaps 等了
+  约 16 天——并将积压归因于**AI 生成的垃圾应用淹没审核流水线**。HN 帖子里其他维护者补充了佐证的
+  时间线，包括**安全更新卡在队列里**、协同发布被打乱。门禁视角：以周计的审核流水线是与安全相关
+  的瓶颈——它让数百万已安装应用的 CVE 修复被推迟数周——而疑似肇因与用技能填满本 feed 的生成式
+  浪潮同源，正在用提交填满应用商店。Google 未公布任何队列统计；证据是维护者证言，广泛但属轶事。
+  Mastodon 永久链接已通过 status API 验证（创建于 2026-09-16T11:17:57Z）。
+- 来源：[Daniel Gultsch on Mastodon](https://gultsch.social/@daniel/117280438824908947) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49724927)

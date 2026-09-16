@@ -2126,3 +2126,33 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
 - Sources: [github.com/Lakr233/vphone-cli](https://github.com/Lakr233/vphone-cli) ·
   [github.com/rapiddweller/datamimic](https://github.com/rapiddweller/datamimic) ·
   [Show HN discussion](https://news.ycombinator.com/item?id=49722276)
+
+## 2026-09-17 04:03 — worktree orchestration becomes a distro; the classroom swarm goes 1.0; the harness disappears into the chat box
+
+- **firstmate (`kunchenguid/firstmate`, MIT, 6.2k★, +1,056/wk):** an "agent distro" — you talk to a
+  supervising agent that spawns crewmate agents in parallel terminals, each in its own isolated git
+  worktree, with lifecycles/progress/PR flow managed through a **zero-token event-based supervisor**;
+  rides on top of the Claude Code / Codex / Cursor CLIs rather than replacing them. Multi-agent
+  orchestration keeps converging on the same primitives from independent directions (one chat
+  surface, N workers, worktree isolation, event-driven-not-polling supervision); firstmate's bet is
+  the zero-token watcher — coordination priced in terminals, not model calls.
+- **OpenMAIC v1.0 (`THU-MAIC/OpenMAIC`, 37.4k★, +3.7k/wk):** Tsinghua-affiliated "Open Multi-Agent
+  Interactive Classroom" — a topic or uploaded PDF becomes a full interactive lesson: AI teacher,
+  AI classmates, quizzes, interactive whiteboard, TTS, orchestrated on LangGraph. v1.0.0 (Aug 27)
+  added the agent workbench; the project **relicensed AGPL → MIT** on the way — education
+  infrastructure maximizing adoption over copyleft. Multi-agent "simulation of a social process"
+  keeps beating single-model answers where learning is the point.
+- **Anthropic folds Cowork into Claude (+ Claude Docs, Claude Slides):** the agentic work app merges
+  into the main chat client — long-running background tasks that survive a closed laptop can launch
+  from any conversation, inheriting its context, skills, and connectors; Docs and Slides ship inside
+  the same surface with PowerPoint/PDF export, scheduled recurring tasks, and phone-based progress
+  check-ins. The same consolidation OpenAI made with Codex: the agent harness disappears into the
+  chat box and "Claude" becomes a place where work keeps running when you leave. Beta caveats worth
+  carrying: Pro/Max first over "coming weeks," Enterprise admins gate features with 30 days' notice,
+  default mode "asks before taking an action."
+- Sources: [kunchenguid/firstmate](https://github.com/kunchenguid/firstmate) ·
+  [Trendshift](https://trendshift.io/repositories/58278) ·
+  [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) ·
+  [openmaic.chat](https://openmaic.chat/) ·
+  [Anthropic: Cowork is now Claude](https://claude.com/blog/cowork-is-now-claude) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49729412)

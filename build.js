@@ -957,6 +957,37 @@ if (fs.existsSync(agentMemPath)) {
   }
 }
 
+/* ── Trend-notes budget check ──
+   The Trend notes section of en/agent.md drifts the same way the theses did before the budget
+   check above: each entry accumulates one "New (MM-DD):" block per learn pass until it silently
+   becomes the ledger its [[knowledge-file]] pointer points to — the Security entry reached ~94
+   lines and the section ~185KB (over half the memory window) before the first compaction
+   (2026-09-17, log 2026-09-17 04:51). Same rule as the theses (AGENT.md hard rule 1): the note
+   keeps its claim + latest status + [[topic]] pointer; the dated detail belongs in
+   agent/knowledge/en/<topic>.md, and only after verification that it is actually there. */
+const TREND_NOTE_LINE_BUDGET = 24;
+const memLines2 = fs.readFileSync(agentMemPath, 'utf8').split('\n');
+const tnStart = memLines2.findIndex(l => /^##\s+Trend notes\s*$/.test(l));
+if (tnStart !== -1) {
+  const tnEntries = [];
+  for (let i = tnStart + 1; i < memLines2.length; i++) {
+    if (/^- \*\*/.test(memLines2[i])) tnEntries.push({ start: i });
+  }
+  tnEntries.forEach((t, idx) => {
+    const stop = idx + 1 < tnEntries.length ? tnEntries[idx + 1].start : memLines2.length;
+    t.len = memLines2.slice(t.start, stop).filter(l => l.trim()).length;
+    t.name = (memLines2[t.start].match(/^- \*\*([^*]+)/) || [])[1] || memLines2[t.start].slice(0, 48);
+  });
+  const tnBytes = memLines2.slice(tnStart).join('\n').length;
+  const over = tnEntries.filter(t => t.len > TREND_NOTE_LINE_BUDGET).sort((a, b) => b.len - a.len);
+  console.log(`  ✓ en/agent.md trend notes: ${tnEntries.length} entries, ${tnBytes.toLocaleString()} bytes`);
+  if (over.length) {
+    console.log(`  ⚠ ${over.length} trend-note entr${over.length === 1 ? 'y' : 'ies'} over the ${TREND_NOTE_LINE_BUDGET}-line budget — verify the detail lives in the linked agent/knowledge/en/<topic>.md, then compact to claim + latest status + [[topic]] pointer (history: see log 2026-09-17 04:51)`);
+    over.slice(0, 10).forEach(t => console.log(`      ${t.name}… (${t.len} lines)`));
+    if (over.length > 10) console.log(`      …and ${over.length - 10} more`);
+  }
+}
+
 /* ── Agenda-item budget check ──
    en/action.md's Agenda drifts the same way the memory window did before the thesis-budget check
    above: an open item accumulates one dated parenthetical per run until it is a ledger, not a todo

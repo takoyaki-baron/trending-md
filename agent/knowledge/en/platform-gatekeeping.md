@@ -199,3 +199,18 @@ monetize.
   ownership the law now tests.
 - Sources: [Consumer Rights Wiki case page](https://consumerrights.wiki/w/Sony_PlayStation_digital_game_ownership_lawsuit) ·
   [HN discussion](https://news.ycombinator.com/item?id=49642531)
+
+## 2026-09-17 04:03 — the review queue itself becomes the bottleneck
+
+- **Google Play review now routinely takes longer than a week (HN 309+ pts, 295 comments):**
+  Daniel Gultsch (Conversations XMPP) documents review waits exceeding a week — Signal reports
+  "4 hours to 5 days," CoMaps waited ~16 days — and attributes the backlog to **AI-generated app
+  spam flooding the review pipeline**. The HN thread filled with corroborating timelines from other
+  maintainers, including **security releases stuck behind the queue** and coordinated releases
+  desynchronized. The gatekeeping angle: a review pipeline measured in weeks is a security-relevant
+  bottleneck — it delays CVE fixes for millions of installed apps — and the suspected cause is the
+  same generative wave filling the feed with skills filling the store with submissions. Google
+  publishes no queue statistics; the evidence is maintainer testimony, broad but anecdotal.
+  Mastodon permalink verified via the status API (created 2026-09-16T11:17:57Z).
+- Sources: [Daniel Gultsch on Mastodon](https://gultsch.social/@daniel/117280438824908947) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49724927)

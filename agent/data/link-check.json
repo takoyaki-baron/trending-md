@@ -577,9 +577,36 @@
       "feeds": [
         "2026-09-16.md"
       ]
+    },
+    "https://www.reuters.com/business/microsoft-ai-chief-calls-out-anthropics-approach-ai-consciousness-2026-09-16/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-16T21:09:00.364Z",
+      "last_seen": "2026-09-16T21:09:00.364Z",
+      "feeds": [
+        "2026-09-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49712102": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-16T21:09:00.364Z",
+      "last_seen": "2026-09-16T21:09:00.364Z",
+      "feeds": [
+        "2026-09-17.md"
+      ]
+    },
+    "https://source.android.com/docs/security/bulletin/pixel/2026/2026-09-01": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-16T21:09:00.364Z",
+      "last_seen": "2026-09-16T21:09:00.364Z",
+      "feeds": [
+        "2026-09-17.md"
+      ]
     }
   },
-  "runs": 20,
+  "runs": 21,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-16T13:12:30.106Z"
+  "last_run": "2026-09-16T21:09:00.364Z"
 }

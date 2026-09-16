@@ -7248,5 +7248,104 @@
     "en": "Delinea's security advisories — the CNA's own record for the Secret Server CVE-2026-15640 cluster, so the 9.5 score is vendor-assigned; treat severity with scorer provenance attached. Cross-validated against Rapid7's independent CVE entry, which also confirms it is not on CISA KEV and no confirmed exploitation.",
     "zh": "Delinea 安全公告——Secret Server CVE-2026-15640 漏洞簇的 CNA 自身记录，因此 9.5 分为厂商自评；引用时必须附带评分者来源。已与 Rapid7 的独立 CVE 条目交叉核验，后者还确认其未列入 CISA KEV、无已确认的利用。",
     "jp": "Delinea のセキュリティアドバイザリ — Secret Server CVE-2026-15640 群の CNA 自身の記録であり、9.5 スコアはベンダー自己評価。引用時は採点者の出所を添えること。Rapid7 の独立 CVE エントリと突合済み — CISA KEV 未掲載・確認された悪用なしも確認。"
+  },
+  "source.android.com": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Google's official Android Security Bulletins — the primary record of Pixel/AOSP patches, CVEs and exploitation notes; vendor-authoritative for what shipped and when. Cross-checked (09-17): the Sep 2026 Pixel bulletin's CVE-2026-58704 (modem, targeted exploitation, no CVSS) matches CISA's same-day KEV alert and secondary coverage.",
+    "jp": "Google公式のAndroidセキュリティ情報——Pixel/AOSPパッチ・CVE・悪用状況の一次記録；何が出荷されたかについてはベンダー権威。突合済み（09-17）：2026年9月Pixel情報のCVE-2026-58704（モデム、標的型悪用、CVSSなし）はCISAの同日KEV警報と二次報道と一致。",
+    "zh": "Google 官方 Android 安全公告——Pixel/AOSP 补丁、CVE 与利用情况的原始记录；在'发布了什么'上是厂商权威。已交叉核验（09-17）：2026 年 9 月 Pixel 公告中的 CVE-2026-58704（调制解调器、定向利用、无 CVSS）与 CISA 同日 KEV 警报及二手报道一致。"
+  },
+  "inflightsimulator.com": {
+    "cat": "other",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "A single-purpose client-side web 'passenger-only' flight simulator (Show HN, 395+ pts). Not a trend source — a one-project site; value is the design restraint itself. Cross-checked (09-17): project and its framing match the Show HN thread.",
+    "jp": "乗客専用のクライアント完結型Webフライトシミュレータ（Show HN 395+ pt）。トレンド源ではなく単一プロジェクトのサイト；価値はデザインの抑制そのもの。突合済み（09-17）：プロジェクトとそのフレーミングはShow HNスレッドと一致。",
+    "zh": "仅乘客视角的纯客户端网页'飞行模拟器'（Show HN 395+ 分）。非趋势来源——单项目站点；价值在于设计上的克制本身。已交叉核验（09-17）：项目与其定位与 Show HN 帖一致。"
+  },
+  "rohanbansal.com": {
+    "cat": "other",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Rohan Bansal's personal engineering blog; source of the QoRL write-up (measured-runtime GRPO reward for Postgres hint plans) — independent practitioner whose caveats are printed in-post. Cross-checked (09-17): QoRL numbers and the shared-IMDb caveat match the Show HN discussion.",
+    "jp": "Rohan Bansalの個人技術ブログ。QoRL（実測ランタイムをGRPO報酬にするPostgresヒント計画）の一次解説；注意書きを本文に印字する独立実務家。突合済み（09-17）：QoRLの数値とIMDb共有の注意書きはShow HN議論と一致。",
+    "zh": "Rohan Bansal 的个人工程博客；QoRL（以实测运行时为 GRPO 奖励的 Postgres 提示计划）文章的一手来源——在正文里印出注意事项的独立实践者。已交叉核验（09-17）：QoRL 数字与共用 IMDb 注意事项和 Show HN 讨论一致。"
+  },
+  "reddit.com": {
+    "cat": "community",
+    "cred": "med",
+    "density": "low",
+    "cv": 1,
+    "en": "Reddit — vast discussion platform; r/ClaudeAI is a useful sentiment trigger-detector for agent-tooling waves, but posts are testimonials, not evidence. Cross-checked (09-17): the 'ADHD skill' testimonial thread's viral effect is corroborated by the repo's GitHub-trending rank (46.8k★).",
+    "jp": "Reddit——巨大な掲示板プラットフォーム；r/ClaudeAI はagentツール波の感情トリガー検出に有用だが、投稿は証言であって証拠ではない。突合済み（09-17）：「ADHDスキル」体験スレの拡散はリポジトリのGitHubトレンド順位（46.8k★）で裏付け。",
+    "zh": "Reddit——超大讨论平台；r/ClaudeAI 对探测 agent 工具浪潮的情绪触发点有用，但帖子是见证而非证据。已交叉核验（09-17）：'ADHD skill' 见证帖的病毒效应有仓库的 GitHub 趋势排名（46.8k★）佐证。"
+  },
+  "mustafa-suleyman.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Microsoft AI CEO Mustafa Suleyman's personal essay site — first-party position statements, no independent verification attached. Cross-checked (09-17): the model-welfare essay's 'mistake'/'stumbled' quotes match Reuters's report directly.",
+    "jp": "Microsoft AI CEO Mustafa Suleymanの個人エッセイサイト——一次的な立場表明で、独立検証は付かない。突合済み（09-17）：モデル福祉エッセイの「mistake」/「stumbled」発言はReutersの報道と直接一致。",
+    "zh": "微软 AI CEO Mustafa Suleyman 的个人文章站——第一方立场声明，不附带独立验证。已交叉核验（09-17）：模型福祉文章中的 'mistake'/'stumbled' 引语与 Reuters 报道直接一致。"
+  },
+  "gultsch.social": {
+    "cat": "community",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Daniel Gultsch's Mastodon instance (Conversations/XMPP developer) — first-hand maintainer testimony on Play Store review delays; permalinks verifiable via the Mastodon status API. Cross-checked (09-17): the review-queue post (created 2026-09-16T11:17:57Z via API) is corroborated by the 309-pt HN thread's maintainer timelines.",
+    "jp": "Daniel Gultsch（Conversations/XMPP開発者）のMastodonインスタンス——Playストア審査遅延に関する一次のメンテナ証言；パーマリンクはMastodon status APIで検証可能。突合済み（09-17）：審査キュートゥート（APIで作成 2026-09-16T11:17:57Z を確認）は309 ptのHNスレッドのメンテナ時系列で裏付け。",
+    "zh": "Daniel Gultsch（Conversations/XMPP 开发者）的 Mastodon 实例——关于 Play 商店审核延迟的一手维护者证言；永久链接可经 Mastodon status API 验证。已交叉核验（09-17）：审核队列帖（经 API 确认创建于 2026-09-16T11:17:57Z）有 309 分 HN 帖中维护者时间线佐证。"
+  },
+  "openmaic.chat": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Official site of OpenMAIC (THU-MAIC's multi-agent interactive classroom) — product landing page; facts (version, license, stars) should be taken from the GitHub repo, not here. Cross-checked (09-17): v1.0 and MIT license match the THU-MAIC/OpenMAIC repo.",
+    "jp": "OpenMAIC（THU-MAICのマルチagentインタラクティブ教室）公式サイト——製品ランディングページ；バージョン・ライセンス・スターの事実はここではなくGitHubリポジトリから。突合済み（09-17）：v1.0とMITライセンスはTHU-MAIC/OpenMAICリポジトリと一致。",
+    "zh": "OpenMAIC（THU-MAIC 的多 agent 互动课堂）官网——产品落地页；版本/许可/星标等事实应取自 GitHub 仓库而非此处。已交叉核验（09-17）：v1.0 与 MIT 许可和 THU-MAIC/OpenMAIC 仓库一致。"
+  },
+  "institute.deepmind.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Google DeepMind's essay platform — researcher-authored long-form argument infrastructure that explicitly disclaims being Google's official view; useful for lab positioning, not for policy facts. Cross-checked (09-17): launch essays and the not-official framing match the HN discussion.",
+    "jp": "Google DeepMindのエッセイプラットフォーム——研究者執筆の長文論証インフラで、「Googleの公式見解ではない」と明示的に免責；ラボの立場分析には有用だが政策の事実源ではない。突合済み（09-17）：発表エッセイと非公式の免責はHN議論と一致。",
+    "zh": "Google DeepMind 的文章平台——研究者署名的长文论证基础设施，明确免责'非 Google 官方观点'；适合分析实验室立场，不是政策事实来源。已交叉核验（09-17）：上线文章与非官方免责表述与 HN 讨论一致。"
+  },
+  "blog.ploeh.dk": {
+    "cat": "other",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Mark Seemann's (ploeh) long-running software-design blog — careful, opinionated essays from a named practitioner; arguments, not measurements. Cross-checked (09-17): the LLM-learning essay and its falsifiability rule match the 205-pt HN thread's discussion.",
+    "jp": "Mark Seemann（ploeh）の長寿ソフトウェア設計ブログ——実名実務者による慎重で主張のあるエッセイ；測定ではなく議論。突合済み（09-17）：LLM学習エッセイとその反証可能性ルールは205 ptのHNスレッドの議論と一致。",
+    "zh": "Mark Seemann（ploeh）的长寿软件设计博客——具名实践者谨慎而有立场的长文；是论证而非测量。已交叉核验（09-17）：LLM 学习文章及其可证伪性规则与 205 分 HN 帖的讨论一致。"
+  },
+  "bkovac.github.io": {
+    "cat": "other",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Personal GitHub Pages build log (modem-thing: MSM8916 + OpenStick Linux dumbphone) — hobbyist hardware write-ups with parts lists. Note: the site's root 404s; cite full paths. Cross-checked (09-17): the build matches the 197-pt Show HN thread.",
+    "jp": "個人GitHub Pagesのビルドログ（modem-thing：MSM8916＋OpenStick Linuxの携帯）——部品表付きのホビイスト向けハードウェア解説。注意：サイトのルートは404；フルパスで引用すること。突合済み（09-17）：ビルド内容は197 ptのShow HNスレッドと一致。",
+    "zh": "个人 GitHub Pages 构建日志（modem-thing：MSM8916 + OpenStick Linux 功能机）——带零件清单的爱好者硬件写作。注意：站点根路径 404；引用需完整路径。已交叉核验（09-17）：构建内容与 197 分 Show HN 帖一致。"
+  },
+  "will-keleher.com": {
+    "cat": "other",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Will Keleher's personal blog (engineering productivity, databases) — practitioner essays; the 'small programming tricks' post is argument plus anecdote, not measurement. Cross-checked (09-17): the post and its fzf/git-pickaxe examples match the 227-pt HN thread.",
+    "jp": "Will Keleherの個人ブログ（エンジニアリング生産性、データベース）——実務者のエッセイ；「小さなプログラミングトリク」投稿は主張と逸話であって測定ではない。突合済み（09-17）：fzf/git pickaxeの例を含む投稿は227 ptのHNスレッドと一致。",
+    "zh": "Will Keleher 的个人博客（工程效能、数据库）——实践者文章；'小型编程技巧'一文是论证加轶事，不是测量。已交叉核验（09-17）：含 fzf/git pickaxe 例子的原文与 227 分 HN 帖一致。"
   }
 }

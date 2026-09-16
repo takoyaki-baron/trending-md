@@ -1772,3 +1772,44 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [Socket：恶意 Twitch 扩展](https://socket.dev/blog/malicious-twitch-browser-extension) ·
   [日本数字厅公告](https://www.digital.go.jp/news/2026-0911-01) ·
   [Apple SEAR：Reference Image](https://security.apple.com/blog/apple-reference-image/)
+
+## 2026-09-17 04:03 — 当日入 KEV 的核心设备绕过；VoIP 硬编码密钥；定向调制解调器零日；以及真正重要的攻击面是一把螺丝刀
+
+- **Cisco ISE CVE-2026-76460（CVSS 10.0，Cisco 自评 CNA，向量 AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H）：**
+  通过 CWE-648（特权 API 误用）实现的未认证身份验证绕过，Cisco 警告"可能获得 root 权限的命令执行"
+  ——经一个 TAC 支持工单发现，确认被主动利用，并在公告发布**当天被 KEV 收录**（9 月 16 日；当批
+  共 32 份公告 / 79 个 CVE）。无 workaround——仅有 iACL 缓解——且 Cisco 建议对可疑节点**重装镜像**，
+  因为 root 权限让攻击者可以销毁证据（IOC：检查 `ise-kong/access.log` 中的 `dummyuser`）。ISE 是
+  网络的策略大脑（NAC、802.1X、posture），pre-auth root 路径属 crown-jewel 级别。补丁：ISE 3.1 P12
+  → 3.5 P4。同一批次还发布了尚未被利用的 FMC/FTD 高危：Java 反序列化 CVE-2026-20242（9.8）、
+  sftunnel CVE-2026-20324（9.9）。
+- **Issabel PBX CVE-2026-89026（CVSS 9.8，可用报道中评分方未署名）：** Issabel 框架（开源 Issabel
+  PBX 的 web 层）出厂自带一个**所有部署完全相同的硬编码 HS256 签名密钥**——知道它即可伪造 admin
+  token，到达 Asterisk manager 的 "originate" 端点并带 System 应用执行任意 OS 命令（Asterisk 用户
+  身份）。Shadowserver 于 9 月 9 日检测到在野利用。发布卫生教训：修复是**一个让安装生成唯一密钥的
+  GitHub commit——不是版本化发布**，因此"我打上补丁了吗"没有版本号可查。每个组织的电话都经过其
+  PBX：伪造 token 的 RCE 既是窃听位置也是滩头阵地。
+- **来自 Google 与 Acronis 九月安全更新的两个当日 KEV：** Pixel **CVE-2026-58704**，modem 子组件
+  权限提升，Google 称"可能正受到有限的、定向的利用"——Pixel 上的定向调制解调器零日通常意味着
+  特定人群是目标，而非大规模活动；手机 modem 是手机最深的攻击面（毗邻 baseband、OS 完全唤醒前
+  即可达）。评分透明度：**任何地方都没有公布 CVSS**，包括 KEV 记录。Acronis **CVE-2026-87886**
+  （7.8，CWE-276 默认权限错误）——cPanel/WHM Backup 插件与 Plesk 扩展中的本地权限提升，在检测到
+  "有限的、定向的利用"后修补；7.8 分在二手报道中流传，无可归属的 CNA。备份是另一顶皇冠：谁拥有
+  备份代理，谁就拥有每一次恢复。
+- **Flock ALPR 物理拆解（Wired；HN 370+ 分）：** "stegan0gram" 团体物理获取一台 Flock Safety 相机，
+  提取其 Android 分区并解密存储——文件系统上存放的密钥解开了 21 天的运行日志：**约 50,200 辆车、
+  约 160 万张图片**，全部运行在 2017 年的 Linux 3.18 内核上，还包含超出"仅车牌"宣称用途的
+  人员检测能力；Wired 报道执法人员凭据已在暗网市场流通。这是拆解而非网络入侵——Flock 的"从未
+  被黑"指的是远程入侵，**在技术上仍然成立**；它推翻的是产品叙事（"不录像"的相机实际保存着数周
+  的细粒度行踪历史）。规模注意事项：一台相机、21 天窗口，数字来自 Wired 的索引文本（正文有付费
+  墙/反爬）加多个二手来源——并非来自 Flock。可泛化的安静安全教训：真正重要的攻击面是一把螺丝刀，
+  26 年的 MechaCon 式硬件机密也敌不过一个有通风橱和耐心的人（同周：PS2 CXP102064 完整 dump）。
+- 来源：[Cisco 公告 cisco-sa-ISE-ABP-VNSW7Tn5](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-ISE-ABP-VNSW7Tn5) ·
+  [Cisco 9 月 16 日通告](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) ·
+  [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+  [Pixel 2026 年 9 月更新公告](https://source.android.com/docs/security/bulletin/pixel/2026/2026-09-01) ·
+  [SecurityOnline：Issabel](https://securityonline.info/issabel-pbx-vulnerability-exploited/) ·
+  [CybersecurityNews：Issabel](https://cybersecuritynews.com/issabel-pbx-command-execution-vulnerability/) ·
+  [CybersecurityNews：Acronis](https://cybersecuritynews.com/acronis-plugin-vulnerability-exploited/) ·
+  [Wired：Flock 拆解](https://www.wired.com/story/hackers-flock-camera-data-shows-how-system-works/) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49726586)

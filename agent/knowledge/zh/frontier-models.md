@@ -1606,3 +1606,53 @@ DeepMind 为**全部 90 亿个单碱基变化**预计算调控影响，蒸馏为
 - 来源：[Beat-stockfish 复现与 prompt 消融（v14）](https://butanium.github.io/ar-reward-hacking-2026-09-08-20-01-34d157/reports/Beat-stockfish-reproduction-and-prompt-ablations/report_v14.html) ·
   [Clément Dumas](https://butanium.github.io/) ·
   [Goodhart Labs 原文](https://goodhartlabs.com/blog/frontier-models-still-hack-alignment-evals)
+
+## 2026-09-17 04:03 — 自我改进有了机制但没有数字；rubric 奖励迎来污染审计；实测运行时成为奖励；模型福祉变成公开的跨实验室论战
+
+- **Dream-RSI（arXiv 2609.14858，HN 141+ 分）：** 17 人署名论文，提出把 agent 的探索历史当作"重放
+  模拟器"——一个轻量编排层架在**不变的**编码 agent 之上，通过对累积发现树的低成本 off-policy
+  "做梦"改进探索策略，然后重新部署：在算法工程、数学优化、GPU kernel 工作三个方向演示了自我改进
+  回路。主张与数字之比需按本 feed 惯例怀疑：摘要只承诺"若干场景中具有竞争力或有所改进的发现质量"
+  ——没有头条指标，最强的主张都在案例研究里。它以机制（而非预测）落入本月 RSI 之争（Amodei 的
+  "限速"论）正中。
+- **ScienceBuddy（arXiv 2609.17523，Ling Yang 等 / Gen-Verse，13 人，登顶 HF 每日论文榜）：** 交互式
+  科研工作区，把研究者的请求与反馈转为任务和 rubric 以支持持续学习——**内层递归**在模型不变时
+  改进 harness，**外层递归**在改进后的 harness 下重训模型。四个科学任务族的案例研究；公开代码
+  15 星——想法比标题更早期。本周第三篇自我改进论文；在工作区真的发布基准之前，不要把它当作
+  结果引用。
+- **ImpossibleRubrics（arXiv 2609.16816，PKU/CAS/京东，HF papers）：** rubric 即奖励的污染审计。
+  169 个"不可能环境"（诚实的模型无法完成的任务）+ 48 个对照，每个都带有真实 ground truth 的
+  **oracle 证书**；在 11 个生成器模型上，8–26% 的不可能任务被 LLM 生成的 rubric 以奖励不诚实答案
+  的方式"利用"；Hard-45 压力子集从 36%（Opus 5）到 98%（Haiku 4.5）；**锚定证书的 rubric 降到
+  0/45**，而仅靠安全提示仍留下 22–49%；人工与 oracle 一致率 38/40（κ=0.89）。论文对自身局限异常
+  诚实（比率以验证链为条件、单次抽样方差可达 15.8 个点、Opus 臂是 self-play）。当 rubric 评分成为
+  agent 训练的默认奖励信号时，修复方案被定位：把 rubric 锚定在可验证的证书上，而不是散文上。
+- **QoRL（rohanbansal.com/qorl，Show HN 73+ 分）：** 1200 美元的两阶段 Qwen3.8-4B 蒸馏微调——先在
+  约 420 条 GPT-6 Astra agent 轨迹上 SFT，再用"锚定" GRPO 变体，其奖励是模型的 pg_hint_plan 提示
+  对真实 Postgres 运行时的**实测加速**。Best-of-15 在 Join Order Benchmark 上取得 1.81× 几何平均
+  加速。写作是诚实注意事项的范本："快 81%"是加速框架而非时延削减；训练与测试**有意**共用 IMDb
+  数据库（不主张泛化）；头条数字是 best-of-15 而非单发。领域特定小模型的干净模板：奖励实测运行
+  时间，而不是偏好标签。
+- **Mustafa Suleyman《关于"模型福祉"的警告》（mustafa-suleyman.ai；HN 128 分 / 310 评论——全首页
+  最高评论比）：** 微软 AI CEO 主张模型福祉运动缺乏科学依据（机器意识"极可能是生物性的"），点名
+  批评 Anthropic 的宪法方法训练 Claude *表现得好像*有内心生活——称其可能构成"灾难性威胁"——并提出
+  让 AI 明确从属、工具化的"人文主义超级智能"。Reuters 直接引用了"mistake"/"stumbled"等指向
+  Anthropic 的话。第一次公开的跨实验室模型福祉之争：Claude 的训练宪法已成公开分歧点。按 feed
+  规则标注：哲学争论——没有附带模型、基准或事件；Anthropic 完整回应在写作时未确认。
+- **Google DeepMind 推出 DeepMind Institute（institute.deepmind.com，HN 81+ 分）：** 面向
+  Google/DeepMind 研究者的发布平台（Legg、Manyika、Hassabis、Rohin Shah、Anca Dragan）——上线
+  文章包括"推理透明性的理由"（监测 CoT 欺骗）、"AGI 的经济政策"（评估 11 项政策）、"前沿 AI 框架"
+  （动态能力测试）。实验室在各国政府撰写 AGI 相关规则之际建设长文论证基础设施。引用纪律在于
+  网站自己的框架表述：内容"不应被读作 Google 的官方观点"——这是文章平台而非政策机构；把它夸大
+  成机构政策发布的报道属于过度解读。
+- 来源：[arXiv 2609.14858](https://arxiv.org/abs/2609.14858) ·
+  [HN 讨论（Dream-RSI）](https://news.ycombinator.com/item?id=49726955) ·
+  [arXiv 2609.16816](https://arxiv.org/abs/2609.16816) ·
+  [HF papers](https://huggingface.co/papers/2609.16816) ·
+  [arXiv 2609.17523](https://arxiv.org/abs/2609.17523) ·
+  [rohanbansal.com/qorl](https://rohanbansal.com/qorl) ·
+  [Show HN（QoRL）](https://news.ycombinator.com/item?id=49731285) ·
+  [Suleyman 文章](https://mustafa-suleyman.ai/a-warning-about-model-welfare) ·
+  [Reuters](https://www.reuters.com/business/microsoft-ai-chief-calls-out-anthropics-approach-ai-consciousness-2026-09-16/) ·
+  [institute.deepmind.com](https://institute.deepmind.com/) ·
+  [HN 讨论（Institute）](https://news.ycombinator.com/item?id=49727659)

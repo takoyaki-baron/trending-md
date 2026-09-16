@@ -1666,3 +1666,33 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
 - ソース：[github.com/Lakr233/vphone-cli](https://github.com/Lakr233/vphone-cli) ·
   [github.com/rapiddweller/datamimic](https://github.com/rapiddweller/datamimic) ·
   [Show HN 議論](https://news.ycombinator.com/item?id=49722276)
+
+## 2026-09-17 04:03 — worktree オーケストレーションがディストロに、教室スワームが 1.0 へ、ハーネスはチャットボックスに消える
+
+- **firstmate（`kunchenguid/firstmate`、MIT、6.2k★、+1,056/週）：** 「agent ディストロ」——監督
+  agent と会話すると、並列ターミナルにそれぞれ独立した git worktree の crewmate agent を spawn し、
+  ライフサイクル・進捗・PR フローを**ゼロトークンのイベント駆動スーパーバイザー**で管理；Claude
+  Code / Codex / Cursor CLI の上に乗る（置き換えではない）。マルチ agent オーケストレーションは
+  独立した方向から同じ原語に収束し続けている（1 つのチャット面、N ワーカー、worktree 隔離、
+  ポーリングでなくイベント駆動の監督）；firstmate の賭けはゼロトークン watcher——協調のコストを
+  モデル呼び出しではなくターミナルで払う。
+- **OpenMAIC v1.0（`THU-MAIC/OpenMAIC`、37.4k★、+3.7k/週）：** 清華大学系チームの「Open Multi-Agent
+  Interactive Classroom」——トピックかアップロードした PDF が完全なインタラクティブな授業になる：
+  AI 教師、AI クラスメイト、クイズ、インタラクティブ ホワイトボード、TTS、LangGraph でオーケス
+  トレート。v1.0.0（8月27日）で agent ワークベンチを追加；途中で**AGPL から MIT へ再ライセンス**——
+  教育インフラがコピーレフトより採用を選んだ。学習が目的である領域では、マルチ agent「社会プロセス
+  のシミュレーション」が単一モデルの回答に勝ち続けている。
+- **Anthropic が Cowork を Claude に統合（＋ Claude Docs、Claude Slides）：** agent ワークアプリが
+  メインのチャットクライアントに統合——ノート PC を閉じても生き続ける長時間バックグラウンド
+  タスクを任意の会話から開始でき、その文脈・スキル・コネクタを継承；Docs と Slides は同じ面に
+  同梱され、PowerPoint/PDF エクスポート、定時繰り返しタスク、スマホからの進捗チェックインに対応。
+  OpenAI が Codex でやったのと同じ統合：agent ハーネスがチャットボックスに消え、「Claude」が質問
+  応答面から、自分が離れた後も仕事が走り続ける場所になる。運ぶ価値のあるベータの注意書き：
+  Pro/Max から「数週間かけて」展開；Enterprise 管理者は 30 日通知で機能をゲート；既定モードは
+  「アクションの前に確認」。
+- ソース：[kunchenguid/firstmate](https://github.com/kunchenguid/firstmate) ·
+  [Trendshift](https://trendshift.io/repositories/58278) ·
+  [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) ·
+  [openmaic.chat](https://openmaic.chat/) ·
+  [Anthropic：Cowork is now Claude](https://claude.com/blog/cowork-is-now-claude) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49729412)

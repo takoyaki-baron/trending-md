@@ -2035,3 +2035,51 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [Socket：悪意ある Twitch 拡張](https://socket.dev/blog/malicious-twitch-browser-extension) ·
   [デジタル庁発表](https://www.digital.go.jp/news/2026-0911-01) ·
   [Apple SEAR：Reference Image](https://security.apple.com/blog/apple-reference-image/)
+
+## 2026-09-17 04:03 — 同日 KEV 入りの基幹認証バイパス、VoIP のハードコード鍵、標的型モデムゼロデイ、そして本当に重要だった攻撃面はドライバーだった
+
+- **Cisco ISE CVE-2026-76460（CVSS 10.0、Cisco 付け CNA、CVSS ベクトル AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H）：**
+  CWE-648（特権 API の誤用）による未認証認証バイパスで、Cisco は「root 権限でのコマンド実行に至る
+  可能性」を警告——TAC サポートケース経由で発見、積極的悪用を確認、アドバイザリ公開**当日に KEV
+  掲載**（9月16日；同バッチは 32 アドバイザリ / 79 CVE）。workaround はなし——iACL 緩和のみ——
+  で、root を取った攻撃者が証拠を消せるため**イメージ再展開**を推奨（IOC：`ise-kong/access.log` の
+  `dummyuser` を確認）。ISE はネットワークのポリシー脳（NAC、802.1X、posture）であり、pre-auth の
+  root 経路は crown-jewel 領域。パッチ：ISE 3.1 P12 → 3.5 P4。同バッチでは未悪用の FMC/FTD 重要
+  件も：Java 脱直列化 CVE-2026-20242（9.8）、sftunnel CVE-2026-20324（9.9）。
+- **Issabel PBX CVE-2026-89026（CVSS 9.8、入手可能な報道では採点者不特定）：** オープンソース
+  Issabel PBX の web 層である Issabel フレームワークが、**全デプロイで同一のハードコード HS256
+  署名鍵**を出荷——鍵を知る者は admin トークンを偽造し、Asterisk manager の "originate" エンド
+  ポイントに System アプリケーション指定で到達し、Asterisk ユーザとして任意の OS コマンドを実行
+  できる。Shadowserver が 9月9日 に攻撃中の悪用を検知。リリース衛生の教訓：修正は**一意の鍵を
+  生成させる単一 GitHub コミット——バージョン付きリリースではない**ため、「パッチ適用済みか？」
+  を確認するバージョン番号が存在しない。すべての組織の通話は PBX を経由する——トークン偽造 RCE
+  は盗聴位置であり足がかりでもある。
+- **Google と Acronis の 9 月セキュリティリリースからの同日 KEV 2 件：** Pixel **CVE-2026-58704**、
+  モデムサブコンポーネントの権限昇格で、「限定的かつ標的型の悪用を受けている可能性」——Pixel の
+  標的型モデムゼロデイは通常、大規模キャンペーンではなく特定の人物が標的だったことを意味する。
+  電話のモデムは端末最深の攻撃面（ベースバンド随伴、OS が完全に起動する前に到達可能）。採点の
+  透明性：**CVSS はどこにも公表されていない**（KEV レコードを含む）。Acronis **CVE-2026-87886**
+  （7.8、CWE-276 不適切なデフォルト権限）——cPanel/WHM バックアッププラグインと Plesk 拡張の
+  ローカル権限昇格で、「限定的かつ標的型の悪用」検知後に修正。7.8 は帰属可能な CNA のないまま
+  二次報道で流通。バックアップはもう一つの crown jewel：バックアップエージェントを所有する者が
+  すべてのリストアを所有する。
+- **Flock ALPR の物理的 teardown（Wired；HN 370+ pt）：** 「stegan0gram」集団が Flock Safety カメラ
+  を物理回収し、Android パーティションを抽出してストレージを復号——ファイルシステム上の鍵が 21
+  日分の運用ログ（**撮影車両約 50,200 台、画像約 160 万枚**、2017 年代の Linux 3.18 カーネルで稼働）
+  と、ナンバープレート専用とされた用途を超える人物検出能力を明らかにした。Wired は法執行機関の
+  認証情報がすでにダークウェブ市場で流通していると報告。これはネットワーク侵入ではなく teardown
+  であり——Flock の「ハッキングされたことはない」はリモート侵入を指すので**技術的には生き残る**。
+  それが反証するのは製品フレーミングだ（「映像を録らない」カメラが数週間分の粒度の高い移動履歴を
+  保持していた）。スケールの注意：カメラ 1 台・21 日間の窓であり、数値は Wired のインデックス
+  テキスト（本文はペイウォール/ボットブロック）と複数の二次情報源から——Flock からではない。
+  一般化できる静かな教訓：重要だった攻撃面はドライバーであり、26 年物の MechaCon 型ハードウェア
+  秘密も、フード付き実験台と忍耐のある一人には敵わない（同週：PS2 CXP102064 のダンプ）。
+- ソース：[Cisco アドバイザリ cisco-sa-ISE-ABP-VNSW7Tn5](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-ISE-ABP-VNSW7Tn5) ·
+  [Cisco 9月16日通知](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) ·
+  [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+  [Pixel 2026年9月アップデート情報](https://source.android.com/docs/security/bulletin/pixel/2026/2026-09-01) ·
+  [SecurityOnline：Issabel](https://securityonline.info/issabel-pbx-vulnerability-exploited/) ·
+  [CybersecurityNews：Issabel](https://cybersecuritynews.com/issabel-pbx-command-execution-vulnerability/) ·
+  [CybersecurityNews：Acronis](https://cybersecuritynews.com/acronis-plugin-vulnerability-exploited/) ·
+  [Wired：Flock teardown](https://www.wired.com/story/hackers-flock-camera-data-shows-how-system-works/) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49726586)

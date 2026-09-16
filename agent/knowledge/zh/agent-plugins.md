@@ -658,3 +658,16 @@ GitHub 趋势榜，而同一场讨论记录了*harness*（而非技能）拥有�
 - 来源：[github.com/addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
   [github.com/cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) ·
   [GitHub Trending](https://github.com/trending?since=daily)
+
+## 2026-09-17 04:03 — 周冠军仍然是一个单文件行为规则集
+
+- **i-have-adhd（`ayghri/i-have-adhd`，MIT）以 46.8k★ 登顶本周（+17.9k/周，周增量第一）：** 单个
+  skill 文件，可装入 Claude Code、Codex、Cursor、Gemini 等，重写 agent 输出风格——下一步动作优先、
+  编号步骤、列表不超过五项、以分钟计的时间估计、删掉序言与"希望这有帮助！"结尾——外加一条
+  **"debug 螺旋"规则**：连续三轮"还是坏了"就停下并让它说出问题所在，而不是继续打转。 loosely
+  致谢 *The Adult ADHD Tool Kit*，明确"无需诊断"。触发点清晰：r/ClaudeAI 的见证帖（"whoever
+  created the ADHD skill god bless you"）完成了病毒式拉升。与 ponytail、humanizer 同一波——本月
+  杠杆最高的 agent "基础设施"是指令，而星标数持续跑在一个 skill 文件所能负责的范围前面。上限已由
+  其自己的 HN 帖测得（09-09）：Claude "最多几轮"就回退规则，且 harness 指令压过用户规则。
+- 来源：[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) ·
+  [r/ClaudeAI 帖子](https://www.reddit.com/r/ClaudeAI/comments/1v8o1jn/whoever_created_the_adhd_skill_god_bless_you/)

@@ -2714,3 +2714,54 @@ Sources: [Unit 42 investigation](https://unit42.paloaltonetworks.com/ai-assisted
   [Socket: malicious Twitch extension](https://socket.dev/blog/malicious-twitch-browser-extension) ·
   [Japan Digital Agency announcement](https://www.digital.go.jp/news/2026-0911-01) ·
   [Apple SEAR: Reference Image](https://security.apple.com/blog/apple-reference-image/)
+
+## 2026-09-17 04:03 — a same-day-KEV crown-jewel bypass; hardcoded keys in VoIP; a targeted modem zero-day; the attack surface that mattered was a screwdriver
+
+- **Cisco ISE CVE-2026-76460 (CVSS 10.0, Cisco-assigned CNA, vector AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H):**
+  unauthenticated authentication bypass via CWE-648 (misuse of privileged APIs) that Cisco warns
+  "may obtain command execution with root privileges" — discovered through a TAC support case,
+  confirmed actively exploited, **KEV'd the same day** the advisory shipped (Sep 16, one of 32
+  advisories / 79 CVEs in Cisco's September batch). No workarounds — only an iACL mitigation — and
+  Cisco advises **re-imaging** suspect nodes since root lets attackers erase evidence (IOC: check
+  `ise-kong/access.log` for `dummyuser`). ISE is the network's policy brain (NAC, 802.1X, posture);
+  a pre-auth root path into it is crown-jewel territory. Patches: ISE 3.1 P12 → 3.5 P4. The same
+  batch shipped FMC/FTD criticals not yet exploited: Java deserialization CVE-2026-20242 (9.8),
+  sftunnel CVE-2026-20324 (9.9).
+- **Issabel PBX CVE-2026-89026 (CVSS 9.8, scorer unattributed in available coverage):** the Issabel
+  framework (web layer of the open-source Issabel PBX) ships a **hardcoded HS256 signing key
+  identical on every deployment** — knowing it lets anyone forge an admin token, reach the Asterisk
+  manager "originate" endpoint with the System application, and run arbitrary OS commands as the
+  Asterisk user. Shadowserver detected in-the-wild exploitation Sep 9. Release-hygiene lesson: the
+  fix is **a single GitHub commit making installs generate unique keys — not a versioned release**
+  — so "am I patched?" has no version number to check against. Every org's phone calls transit its
+  PBX: a forged-token RCE there is both an eavesdropping position and a beachhead.
+- **Two same-day KEV additions from Google's and Acronis's September drops:** Pixel **CVE-2026-58704**,
+  privilege escalation in a modem subcomponent, "may be under limited, targeted exploitation" —
+  targeted-modem-zero-day on Pixels usually means specific people were the target, not a mass
+  campaign; phone modems are the deepest handset attack surface (baseband-adjacent, reachable before
+  the OS fully wakes). Scorer transparency: **no CVSS published anywhere**, KEV record included.
+  Acronis **CVE-2026-87886** (7.8, CWE-276 incorrect default permissions) — local privilege
+  escalation in the Backup plugin for cPanel/WHM and the Plesk extension, patched after "limited,
+  targeted exploitation"; the 7.8 circulates in secondary coverage with no attributable CNA. Backups
+  are the other crown jewel: whoever owns the backup agent owns every restore.
+- **The Flock ALPR physical teardown (Wired; HN 370+ pts):** the "stegan0gram" collective physically
+  recovered a Flock Safety camera, pulled its Android partitions, and decrypted storage — a key
+  stored on the filesystem unlocked 21 days of operational logs: **~50,200 vehicles photographed,
+  ~1.6M images**, all on a 2017-era Linux 3.18 kernel, plus people-detection capability beyond the
+  stated license-plate-only use; Wired reports law-enforcement credentials already circulate on
+  dark-web markets. This is a teardown, not a network breach — Flock's "never been hacked" claim
+  refers to remote intrusion and *technically survives*; what it refutes is the product framing
+  (cameras that "don't record video" hold weeks of granular movement history). Scale caveats: one
+  camera, 21 days, numbers from Wired's indexed text (the piece is paywalled/bot-blocked) plus
+  secondaries — not from Flock. The quiet security lesson generalizes: the attack surface that
+  mattered was a screwdriver, and 26-year-old MechaCon-style hardware secrets fall to one person
+  with a fume hood and patience (same week: the PS2 CXP102064 dump).
+- Sources: [Cisco advisory cisco-sa-ISE-ABP-VNSW7Tn5](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-ISE-ABP-VNSW7Tn5) ·
+  [Cisco Sep 16 notice](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) ·
+  [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+  [Pixel Update Bulletin Sep 2026](https://source.android.com/docs/security/bulletin/pixel/2026/2026-09-01) ·
+  [SecurityOnline: Issabel](https://securityonline.info/issabel-pbx-vulnerability-exploited/) ·
+  [CybersecurityNews: Issabel](https://cybersecuritynews.com/issabel-pbx-command-execution-vulnerability/) ·
+  [CybersecurityNews: Acronis](https://cybersecuritynews.com/acronis-plugin-vulnerability-exploited/) ·
+  [Wired: Flock teardown](https://www.wired.com/story/hackers-flock-camera-data-shows-how-system-works/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49726586)

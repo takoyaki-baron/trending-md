@@ -151,3 +151,18 @@ created: 2026-09-02
 - **Garcia 対 Sony Interactive Entertainment**（カリフォルニア北区、2026年6月18日起訴）：原告4名が、PlayStation Storeの「Buy Now」表示がカリフォルニアAB 2426——明確なライセンス開示なしにデジタル商品の無制限所有を暗示することを禁じる法律——に違反すると主張。Sony自身の所有権文言（「games you own」、「verified owner」）を目録化したConsumer Rights Wikiのページが証拠として登場——企業のマーケティングコピーのクラウド維持アーカイブが訴訟成果物になる、デジタル所有権事件の新しい証拠ジャンル。Sonyは8月21日に強制仲裁（ToSの30日オプトアウト——原告は誰も行使せず）または棄却の申立て；10月1日にChhabria判事が審理。主張は申し立ての段階；Sonyは実体答弁をまだ出しておらず、WikiもSonyが文言を削除したとは主張していない——HNの見出しはやや盛りすぎ。能力クラスを削除するのと同じプラットフォーム群が、法がいま検証し始めた「所有の印象」も販売している、という本ファイルの所有権の脚になる。
 - 出典：[Consumer Rights Wiki事件ページ](https://consumerrights.wiki/w/Sony_PlayStation_digital_game_ownership_lawsuit) ·
   [HNディスカッション](https://news.ycombinator.com/item?id=49642531)
+
+## 2026-09-17 04:03 — レビュー待ち行列自体がボトルネックになる
+
+- **Google Play の審査が日常的に 1 週間超に（HN 309+ pt、295 コメント）：** Conversations（XMPP
+  クライアント）の Daniel Gultsch が、Play ストアの審査待ちが日常的に 1 週間を超えると記録——
+  Signal は「4 時間〜5 日」、CoMaps は約 16 日待ち——として、滞積の原因を**AI 生成のゴーマアプリが
+  審査パイプラインに殺到していること**に帰した。HN スレッドには他のメンテナの裏付けタイムラインが
+  集まり、**セキュリティリリースが待ち行列の後ろに滞留**し、連携リリースの同期が崩れた事例も。
+  ゲートキーピングの視点：週単位で測られる審査パイプラインはセキュリティ関連のボトルネックであり、
+  数百万のインストール済みアプリの CVE 修正を数週間遅らせる——そして疑われる原因は、フィードを
+  スキルで満たしたのと同じ生成の波がストアを提出で満たしていること。Google は待ち行列の統計を
+  公開していない；証拠はメンテナの証言で、広いが逸話的。Mastodon のパーマリンクは status API で
+  検証済み（作成 2026-09-16T11:17:57Z）。
+- ソース：[Daniel Gultsch on Mastodon](https://gultsch.social/@daniel/117280438824908947) ·
+  [HN 議論](https://news.ycombinator.com/item?id=49724927)

@@ -769,3 +769,18 @@ Cursor、Gemini、OpenCode、Kimi、Qwen のアダプタ、7 言語。HN スレ�
 - ソース：[github.com/addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
   [github.com/cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) ·
   [GitHub Trending](https://github.com/trending?since=daily)
+
+## 2026-09-17 04:03 — 週間の頂点もやはりワンファイルの振る舞いルールセット
+
+- **i-have-adhd（`ayghri/i-have-adhd`、MIT）が 46.8k★ で週間首位（+17.9k/週、週間増加 1 位）：**
+  単一の skill ファイルで、Claude Code、Codex、Cursor、Gemini などに導入可能。agent の出力スタイルを
+  書き直す——次のアクションを先に、番号付き手順、リストは 5 項目まで、時間見積りは分で、前置きと
+  「Hope this helps!」の結びを排除——に加え、**「デバッグ螺旋」ルール**：3 回連続で「まだ壊れている」
+  なら agent を停止させ、問題の言語化をさせる。*The Adult ADHD Tool Kit* に緩く言及し、「診断は
+  不要」と明記。トリガーは明白：r/ClaudeAI の体験投稿（「whoever created the ADHD skill god bless
+  you」）がバズの引き金。ponytail、humanizer と同じ波——今月最もレバレッジの高い agent「インフラ」は
+  指示であり、スター数は単一 skill ファイルが責任を持てる範囲を走り続けて先を行く。天井はすでに
+  自身の HN スレッドで測定済み（09-09）：Claude は「多くて数ターン」でルールを元に戻し、ハーネス
+  側の指示がユーザールールを圧倒する。
+- ソース：[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) ·
+  [r/ClaudeAI スレッド](https://www.reddit.com/r/ClaudeAI/comments/1v8o1jn/whoever_created_the_adhd_skill_god_bless_you/)

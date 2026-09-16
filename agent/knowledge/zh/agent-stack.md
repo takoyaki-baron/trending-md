@@ -1411,3 +1411,28 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 - 来源：[github.com/Lakr233/vphone-cli](https://github.com/Lakr233/vphone-cli) ·
   [github.com/rapiddweller/datamimic](https://github.com/rapiddweller/datamimic) ·
   [Show HN 讨论](https://news.ycombinator.com/item?id=49722276)
+
+## 2026-09-17 04:03 — worktree 编排成为发行版；课堂蜂群发布 1.0；harness 消失进聊天框
+
+- **firstmate（`kunchenguid/firstmate`，MIT，6.2k★，+1,056/周）：** 一个"agent 发行版"——你与一个
+  监督 agent 对话，它在并行终端中派出各自的 git worktree 里隔离的 crewmate agent，生命周期/进度/
+  PR 流由**零 token 的事件驱动监督器**管理；架在 Claude Code / Codex / Cursor CLI 之上而非取代它们。
+  多 agent 编排正从独立方向收敛到同一组原语（一个聊天面板、N 个 worker、worktree 隔离、事件驱动
+  而非轮询的监督）；firstmate 的赌注是零 token watcher——协调成本按终端计价，不按模型调用计价。
+- **OpenMAIC v1.0（`THU-MAIC/OpenMAIC`，37.4k★，+3.7k/周）：** 清华背景团队的"Open Multi-Agent
+  Interactive Classroom"——一个主题或上传的 PDF 变成完整的互动课程：AI 教师、AI 同学、测验、互动
+  白板、TTS，在 LangGraph 上编排。v1.0.0（8 月 27 日）加入 agent 工作台；项目途中**从 AGPL 改许可
+  为 MIT**——教育基础设施在采用率与 copyleft 之间选择了前者。在"学习"本身是目的的领域，多 agent
+  "社会过程模拟"持续胜过单模型回答。
+- **Anthropic 把 Cowork 并入 Claude（+ Claude Docs、Claude Slides）：** agent 工作应用并入主聊天
+  客户端——合上笔记本也能存活的长时间后台任务可从任意对话发起，继承其上下文、技能与连接器；
+  Docs 与 Slides 在同一面板内发布，支持导出 PowerPoint/PDF、定时循环任务、手机进度签到。与 OpenAI
+  对 Codex 的合并同构：agent harness 消失进聊天框，"Claude"从问答面板变成一个你离开后工作仍在
+  运行的地方。值得携带的 beta 注意事项：Pro/Max 先行、"未来几周"推开；Enterprise 管理员以 30 天
+  通知门控功能；默认模式"采取行动前先询问"。
+- 来源：[kunchenguid/firstmate](https://github.com/kunchenguid/firstmate) ·
+  [Trendshift](https://trendshift.io/repositories/58278) ·
+  [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) ·
+  [openmaic.chat](https://openmaic.chat/) ·
+  [Anthropic：Cowork is now Claude](https://claude.com/blog/cowork-is-now-claude) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49729412)
