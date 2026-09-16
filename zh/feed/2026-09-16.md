@@ -1,8 +1,8 @@
 ---
 date: 2026-09-16
-updated: 2026-09-16T12:15:00+08:00
+updated: 2026-09-16T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -594,13 +594,227 @@ CVE 编号均未公布。
 
 ---
 
+## 30. Cloudflare 开源其安全审计 skill —— 支撑其漏洞发现体系的六阶段 harness
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 今日 +1,434 · 总 5.5k
+- **Tags:** `agent-skills` `security-audit` `vulnerability-discovery`
+
+Cloudflare 发布了 `security-audit-skill`——一个 MIT 许可的编码智能体 skill，编排相互隔离的
+智能体走完六个阶段：侦察（写出 `architecture.md` 和 `coverage-ledger.json`）、由并行 hunter
+智能体按覆盖账本进行漏洞猎取、由被要求**证伪**候选发现的全新验证器做候选校验、输出经 schema
+校验的结构化 `findings.json`、独立记录复核、以及目标无关的报告（`REPORT.md`、
+`FINDINGS-DETAIL.md`、`NEEDS-VALIDATION.md`）。它是 Cloudflare"构建你自己的漏洞发现 harness"
+博文中所述生产系统的开源种子。
+
+**Why it matters:** 这套设计是对"一次性 agent 渗透测试"的反驳：覆盖是一张账本、严重性只存在于
+已确认的发现上、"纵深防御缺口不是漏洞"。README 自己的诚实数字最值得带走——"单次运行发现的
+漏洞大约只有多次累计运行的一半"——而且在没有 OS 级沙箱的情况下，该 skill 拒绝执行目标代码，
+把线索标记为 `needs_validation` 搁置。
+
+[`🔗 cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill) · [`🔗 Build your own vulnerability harness`](https://blog.cloudflare.com/build-your-own-vulnerability-harness/)
+
+---
+
+## 31. vphone-cli：在你的 Apple Silicon Mac 上跑一台虚拟 iPhone——还带 MCP 服务器供智能体测试
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 今日 +907 · 总 13.1k
+- **Tags:** `ios` `virtualization` `mcp`
+
+Lakr233 的 vphone-cli 通过 Apple 的 Virtualization.framework，在 macOS 15+ 主机上把打过补丁的
+iPhone IPSW 作为虚拟机启动——README 称其基于 PCC 研究 VM 基础设施——自动化完成下载 → 补丁 →
+DFU 恢复 → 自定义固件安装 → 首次启动。五个固件变体从"不打补丁"一路到 `exp`（完整越狱加反 VM
+检测研究补丁，自动安装 Sileo 和 TrollStore）。宿主控制 socket 向配套的 `vphone-mcp` 服务器
+开放截屏、触控、滑动和剪贴板——正是对真实 iOS 构建做 AI 驱动端到端测试的配置。MIT 许可，
+373 次提交，已针对 iOS 27 测试版验证。
+
+**Why it matters:** macOS 上的 iOS 测试一直只有模拟器或真机农场两条路；可脚本化的虚拟 iPhone
+把真机农场变成 CI——而可被 MCP 调用的那台，就是智能体的工具。代价也印在包装上：需要放宽
+SIP/AMFI、不支持嵌套虚拟机，且日本/欧盟地区设置会失败（VM 无法满足的监管检查）。
+
+[`🔗 Lakr233/vphone-cli`](https://github.com/Lakr233/vphone-cli) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 32. StepAudio 3：StepFun 的实时语音模型，边推理边说话
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv · 9月12日 · HF papers 趋势榜
+- **Tags:** `speech-to-speech` `realtime` `voice-agents`
+
+StepFun 发布 StepAudio 3 Realtime（arXiv 2609.14005，90 位作者），一个围绕"听-说-思-行"持续
+循环构建的音频语言基础模型：对声学线索的深度感知、为自然停顿/附和/打断建模同步音频流的
+"无缝双工"、以及在说话的同时并行执行私有推理的"边想边说"。集成的语音 agent 可异步执行工具
+而不打断对话。宣称数字：Artificial Analysis 全双工基准总体 98.9、τ-Voice 宏平均成功率 56.0%、
+MMSU 90.6。姊妹报告（arXiv 2609.16034）覆盖 StepAudio 3 Music。
+
+**Why it matters:** 真正有意思的是架构主张而不是分数：把深思熟虑从对话的关键路径上挪走，而不是
+在推理质量和延迟之间做交换。限定语：摘要里没有任何延迟数字，而 73.0 的推理分数来自 StepFun
+自己的基准 StepAudioChat。
+
+[`🔗 arXiv 2609.14005`](https://arxiv.org/abs/2609.14005) · [`🔗 HF papers 趋势榜`](https://huggingface.co/papers)
+
+---
+
+## 33. Delinea Secret Server：企业密码保险库自身的 SAML 仿冒漏洞（CVE-2026-15640，CVSS 9.5）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Rapid7 / Delinea 公告 · 9月16日发布
+- **Tags:** `cve` `saml` `pam`
+
+Delinea 披露了 Secret Server 本地部署版的一组漏洞，领衔的是 CVE-2026-15640（CVSS v4.0 评分
+9.5，CWE-290）：特定条件下，一份有效的 SAML IdP 响应可被用来仿冒另一位 Secret Server 用户
+——这是特权访问保险库里的认证绕过，而保险库里存着所有人的其他凭据。受影响版本横跨
+10.6.0–11.7.61、11.8.0–11.8.1 和 11.9.0 分支；配套的还有反射型 XSS（CVE-2026-15639，9.3）和
+一个 FIDO2 注册绕过。仅影响本地部署——Delinea Cloud 不受影响。
+
+**Why it matters:** PAM 保险库是认证绕过最坏的宿主——仿冒一个保险库用户，可能等于继承该用户
+能解锁的一切。评分者出处在这里很重要：9.5 是厂商自评（Delinea 是 CNA），且据 Rapid7 该漏洞
+未进入 CISA KEV、无确认的在野利用——把它当作紧急修补事项，而不是一场事故。
+
+[`🔗 Rapid7 CVE 条目`](https://www.rapid7.com/db/vulnerabilities/cve-2026-15640/) · [`🔗 Delinea 安全公告`](https://delinea.com/security-advisories)
+
+---
+
+## 34. Mistral x Mozilla：Firefox Smart Window 以 Mistral 模型开启测试，承诺零数据留存
+
+- **Velocity:** ▮▮ rising
+- **Source:** Mistral 博客 · 9月16日宣布 · HN 112+ 分
+- **Tags:** `firefox` `ai-browsing` `privacy`
+
+Mistral 与 Mozilla 宣布合作：Mistral 成为 Firefox Smart Window（测试版）背后的模型供应方
+——一个解读复杂搜索、帮你找回看岔开的内容、并可跨已打开标签页工作的 AI 浏览助手——现已在
+法国和北美上线，英国/德国"年内跟进"。Mozilla 的 Firefox 148 博文将主题定为用户控制：AI 功能
+由用户逐项选择启用。Mistral 声明对话默认不保存在 Mozilla 服务器上，且其作为合作伙伴同意零
+数据留存。
+
+**Why it matters:** 一家主要的非美模型家族，进入了一款旗舰西方浏览器 AI 功能的默认位置——而
+"开放技术需要开放分发"的主权式叙事，是冲着 Chromium-AI 捆绑去的。细则：多语言/区域微调是
+愿景不是功能；没有指名任何具体模型；零留存是一纸合同声明，不是审计结论。
+
+[`🔗 Mistral 公告`](https://mistral.ai/news/mistral-x-mozilla/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49723408)
+
+---
+
+## 35. 莱茵金属开源 Battlesuite 的 Onboard 与 Tactical API——以规格发布的形式做国防互操作
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 236+ 分 · 头条
+- **Tags:** `defense` `interoperability` `open-source`
+
+这家德国军火商在其官方 GitHub 组织上发布了 Battlesuite 战斗管理生态的首批接口规格：Onboard
+API 和 Tactical API，供第三方与其 BMS 及数据交换套件集成（9月9日宣布——今天 HN 头条上的讨论
+是对文档真正落地做出的反应）。叙事核心是模块化：国防 IT 希望各厂商无需定制集成合同即可互通。
+
+**Why it matters:** 国防软件历来是科技行业最封闭的集成面，而发布机器可读的接口规格会引来一个
+真正不同的生态——连同 HN 讨论正在激辩的两用性问题。请把它读作规格发布，而不是代码发布：
+落地的是文档。
+
+[`🔗 莱茵金属公告`](https://www.rheinmetall.com/en/media/news-watch/news/2026/09/2026-09-09-rheinmetall-releases-battlesuite-interfaces-as-open-source) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49718928)
+
+---
+
+## 36. Salesforce 全球宕机——就发生在自家的 Dreamforce 大会期间
+
+- **Velocity:** ▮▮ rising
+- **Source:** Salesforce 状态页 · HN 59+ 分
+- **Tags:** `outage` `saas` `incident`
+
+9 月 16 日，Salesforce 核心服务发生全球性宕机，时间恰逢其自办的 Dreamforce 大会；The Register
+在 UTC 清晨即予标记。Salesforce 状态页确认核心服务已于 15:22 UTC 恢复（经监控观察），并承诺
+"事后进行完整调查"；另一波影响 Platform Events 和 Change Data Capture（事件延迟或乱序）的
+故障也已解决。根因尚未公布。
+
+**Why it matters:** 当全球一大片 CRM 的"记账系统"在会议中途熄灯，运营层面的教训与本月 Snowflake
+的几起事故如出一辙：状态页的透明来得很快，但值得盯住的是根因层面的诚实——目前还没有。
+
+[`🔗 Salesforce 状态页`](https://status.salesforce.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49724488)
+
+---
+
+## 37. Voicebox：5.4 万星的本地版 ElevenLabs + WisprFlow 替代品
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +409 · 总 54.1k
+- **Tags:** `tts` `voice-cloning` `local-ai`
+
+jamiepine 的 Voicebox 是一个 MIT 许可、完全在端侧运行的桌面语音工作室：零样本克隆加 50+ 预设
+音色、七个可互换的 TTS 引擎（从 82M 的 Kokoro 到 1.7B 的 Qwen3-TTS，23 种语言）、全局热键的
+Whisper 听写、基于 Spotify pedalboard 的效果器、自动分块实现的无限长度生成——还有 MCP 集成，
+让智能体能用克隆音色说话。内置的 Qwen3 LLM（0.6B–4B）负责听写清理和"声音个性"。
+
+**Why it matters:** 与近期趋势榜上一票本地 TTS 应用相比，它的差异化在抽象层：引擎可互换，
+应用因此能在"每周换模型"的浪潮中存活。平台缺口也是真实的——Linux 没有预编译包，定向听写
+自动粘贴目前仅限 macOS。
+
+[`🔗 jamiepine/voicebox`](https://github.com/jamiepine/voicebox) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 38. Datamimic：别再让你的编码智能体自造测试世界
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 45+ 分
+- **Tags:** `test-data` `synthetic-data` `mcp`
+
+rapiddweller 的 DATAMIMIC CE（MIT）是一个面向强监管行业的"确定性优先"合成测试数据引擎，
+如今对准了智能体工作流：不让编码智能体临时编造测试夹具，而是生成受治理、符合 schema、可在
+CI/CD 中复现的测试数据，带外键和跨系统关系——并且 MCP-ready，仓库里就放着 `AGENTS.md`。
+
+**Why it matters:** 智能体写的测试会以一种隐蔽的方式失效：测试所运行的世界也是这个智能体写的，
+于是编造的夹具与编造的代码悄悄地互相印证。确定性、外部治理的测试数据是一个合理的解法。
+尚处早期——HN 讨论还在追问跨系统外键支持这类基本问题。
+
+[`🔗 rapiddweller/datamimic`](https://github.com/rapiddweller/datamimic) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=49722276)
+
+---
+
+## 39. tinycast：内存占用低于 100 MB 的原生 macOS 启动器，还能跑 Raycast 扩展
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +1,076 · 总 5.2k
+- **Tags:** `macos` `launcher` `swiftui`
+
+一个免费、AGPL-3.0 的 SwiftUI/AppKit 启动器，零第三方依赖：模糊搜索应用、剪贴板历史（文本+
+图片）、带单位/汇率/加密货币换算的内联计算器、34 种窗口管理动作、代码片段、快捷指令集成，
+以及默认关闭、使用你自己的密钥的 AI 快捷操作。头牌卖点是兼容性——它能运行现有的 Raycast
+扩展，并以原生 SwiftUI 渲染而非塞进 Web 视图。
+
+**Why it matters:** 启动器市场已经聚合在 Raycast 的围栏花园里；一个原生重实现却反过来*消费*
+在位者的扩展生态，是个罕见而务实的互操作选择。注意它的治理方式：功能集被刻意封闭（"别的
+启动器有这个功能"不构成新增理由）、未经批准的 PR 会自动关闭、macOS 15 不再维护。
+
+[`🔗 abue-ammar/tinycast`](https://github.com/abue-ammar/tinycast) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 40. 《AI for Games in the Foundation Model Era》：一张 120 页的地图，标注 AI 现在扮演的六种角色
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 9月15日 · HF papers 93+ 赞
+- **Tags:** `survey` `game-ai` `world-models`
+
+一篇 120 页的综述（27 幅图、21 张表）按"AI 输出的即时用途"把游戏领域的基础模型研究分为六个
+角色：游玩/行动、玩家与游戏建模、游戏设计、构建与维护游戏、运行时生成/自适应、以及测试与
+评估。其核心论点：这些研究线索各自孤立发展，因此哪些能力能推广到具体游戏、引擎和接口之外
+并不清楚——开放问题是跨角色迁移能力时"同时重建证据"。
+
+**Why it matters:** 游戏已经悄悄成为这个领域里更诚实的 agent 基准之一——有界、可打分、天然
+抗拒数据污染。综述自己的局限一节才是最有用的部分：只有有界的游戏对局有标准化的评估；学习
+出的世界里的持久状态、以及有代表性的自动化测试"仍属未充分建立"。
+
+[`🔗 arXiv 2609.16679`](https://arxiv.org/abs/2609.16679) · [`🔗 HF papers 趋势榜`](https://huggingface.co/papers)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-16T04:15:00Z |
-| Items | 29 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, vendor pages, codyho.dev, Cloudflare blog, adminmenueditor.com, Apple SEAR, Socket, Japan Digital Agency, vendor pages) |
+| Generated | 2026-09-16T12:20:00Z |
+| Items | 40 |
+| Sources tracked | 31 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, codyho.dev, Cloudflare blog, adminmenueditor.com, Apple SEAR, Socket, Japan Digital Agency, vendor pages, Mistral blog, Salesforce status, Rheinmetall, Rapid7, Delinea advisories, rapiddweller) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

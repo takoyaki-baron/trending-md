@@ -1,8 +1,8 @@
 ---
 date: 2026-09-16
-updated: 2026-09-16T12:15:00+08:00
+updated: 2026-09-16T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -656,13 +656,254 @@ lesson: Jun 25 detection → Jul 9 confirmation → Sep 11 public announcement.
 
 ---
 
+## 30. Cloudflare open-sources its security-audit skill — the six-phase harness behind its vulnerability discovery
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · +1,434 today · 5.5k total
+- **Tags:** `agent-skills` `security-audit` `vulnerability-discovery`
+
+Cloudflare published `security-audit-skill`, an MIT-licensed coding-agent skill that orchestrates
+isolated agents through six phases: reconnaissance (writes `architecture.md` plus a
+`coverage-ledger.json`), coverage-led hunting by parallel hunter agents, candidate validation by
+fresh verifiers instructed to *disprove* each finding, structured output to schema-checked
+`findings.json`, independent record verification, and target-neutral reporting (`REPORT.md`,
+`FINDINGS-DETAIL.md`, `NEEDS-VALIDATION.md`). It's the open seed of the production discovery
+harness described in Cloudflare's "Build your own vulnerability harness" post.
+
+**Why it matters:** The design is a rebuttal to one-shot agent pentesting: coverage is a ledger,
+severity exists only on confirmed findings, and "defense-in-depth gaps are not vulnerabilities."
+The README's own honesty number is the one to carry — "a single run found roughly half of the
+vulnerabilities that repeated runs found in total" — and without an OS-enforced sandbox the skill
+refuses to execute target code, parking leads as `needs_validation`.
+
+[`🔗 cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill) · [`🔗 Build your own vulnerability harness`](https://blog.cloudflare.com/build-your-own-vulnerability-harness/)
+
+---
+
+## 31. vphone-cli: a virtual iPhone on your Apple Silicon Mac — with an MCP server for agent-driven testing
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · +907 today · 13.1k total
+- **Tags:** `ios` `virtualization` `mcp`
+
+Lakr233's vphone-cli boots patched iPhone IPSWs as VMs on macOS 15+ hosts via Apple's
+Virtualization.framework — using what the README describes as PCC research-VM infrastructure —
+automating download → patch → DFU restore → custom-firmware install → first boot. Five firmware
+variants scale from patchless up to `exp` (full jailbreak plus anti-VM-detection research patches,
+Sileo and TrollStore auto-installed). A host control socket exposes screenshots, touch, swipes, and
+clipboard to a companion `vphone-mcp` server — the setup for AI-driven end-to-end testing of real
+iOS builds. MIT, 373 commits, tested against iOS 27 betas.
+
+**Why it matters:** iOS testing on macOS has meant simulators or a device farm; a scriptable
+virtual iPhone turns the farm into CI — and an MCP-callable one turns it into an agent tool. The
+costs are printed on the box: SIP/AMFI relaxation required, no nested VMs, and setup fails on
+Japan/EU regions (regulatory checks the VM can't satisfy).
+
+[`🔗 Lakr233/vphone-cli`](https://github.com/Lakr233/vphone-cli) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 32. StepAudio 3: StepFun's realtime speech model reasons while it talks
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv · Sep 12 · HF papers trending
+- **Tags:** `speech-to-speech` `realtime` `voice-agents`
+
+StepFun published StepAudio 3 Realtime (arXiv 2609.14005, 90 authors), an audio-language foundation
+model built on a continuous listen-converse-think-act loop: deep perception of acoustic cues,
+"seamless duplex" modeling of synchronized streams for natural pauses, backchannels and
+interruptions, and "think-while-speaking," which runs private reasoning in parallel with spoken
+delivery. An integrated voice agent executes tools asynchronously without halting the conversation.
+Claimed numbers: 98.9 overall on Artificial Analysis's Full-Duplex Bench, 56.0% macro success on
+τ-Voice, 90.6 MMSU. A companion report (arXiv 2609.16034) covers StepAudio 3 Music.
+
+**Why it matters:** The interesting claim is architectural, not the scores: deliberation moved off
+the conversational critical path instead of trading reasoning quality for latency. The caveats:
+the abstract gives no latency figures at all, and the 73.0 reasoning headline is on StepAudioChat —
+StepFun's own benchmark.
+
+[`🔗 arXiv 2609.14005`](https://arxiv.org/abs/2609.14005) · [`🔗 HF papers trending`](https://huggingface.co/papers)
+
+---
+
+## 33. Delinea Secret Server: SAML impersonation (CVE-2026-15640, CVSS 9.5) in the enterprise vault itself
+
+- **Velocity:** ▮▮ rising
+- **Source:** Rapid7 / Delinea advisories · published Sep 16
+- **Tags:** `cve` `saml` `pam`
+
+Delinea disclosed a cluster of flaws in Secret Server on-premises, headlined by CVE-2026-15640
+(CVSS 9.5 on the v4.0 scale, CWE-290): under certain conditions a valid SAML IdP response can
+impersonate another Secret Server user — an authentication bypass in the privileged-access vault
+that holds everyone else's credentials. Affected versions span 10.6.0–11.7.61, 11.8.0–11.8.1, and
+11.9.0 branches; a related reflected XSS (CVE-2026-15639, 9.3) and a FIDO2 registration bypass
+round out the set. On-premises only — Delinea Cloud is unaffected.
+
+**Why it matters:** A PAM store is the worst possible host for an auth bypass — impersonating one
+vault user can mean inheriting everything that user can unlock. Scorer provenance matters here:
+9.5 is vendor-assigned (Delinea is the CNA), and per Rapid7 the flaw is not on CISA KEV with no
+confirmed exploitation — treat it as urgent patching, not an incident.
+
+[`🔗 Rapid7 CVE entry`](https://www.rapid7.com/db/vulnerabilities/cve-2026-15640/) · [`🔗 Delinea security advisories`](https://delinea.com/security-advisories)
+
+---
+
+## 34. Mistral x Mozilla: Firefox's Smart Window goes beta on Mistral models, with zero data retention
+
+- **Velocity:** ▮▮ rising
+- **Source:** Mistral blog · announced Sep 16 · HN 112+ pts
+- **Tags:** `firefox` `ai-browsing` `privacy`
+
+Mistral and Mozilla announced a partnership making Mistral the model provider behind Firefox Smart
+Window (beta) — an AI browsing assistant that interprets complex searches, recalls content you
+navigated away from, and works over your open tabs — live now in France and North America, with
+UK/Germany "later this year." Mozilla's parallel Firefox 148 post frames the theme as user
+control: AI features users opt into individually. Mistral states conversations aren't saved on
+Mozilla's servers by default and that it agreed to zero data retention.
+
+**Why it matters:** A major non-US model family inside a flagship Western browser's AI default —
+and the sovereignty framing ("open tech needs open distribution") is a direct shot at the
+Chromium-AI bundling. The fine print: the multilingual/regional fine-tuning is vision, not
+feature; no specific model is named; and the ZDR claim is a contractual statement, not an audit.
+
+[`🔗 Mistral announcement`](https://mistral.ai/news/mistral-x-mozilla/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49723408)
+
+---
+
+## 35. Rheinmetall open-sources Battlesuite's Onboard and Tactical APIs — defense interoperability as a spec drop
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 236+ pts · front page
+- **Tags:** `defense` `interoperability` `open-source`
+
+The German arms maker published the first interface specifications of its Battlesuite
+battle-management ecosystem on an official GitHub organization: an Onboard API and a Tactical API
+for third-party integration with its BMS and data-exchange suite (announced Sep 9 — the HN thread
+on the front page today is reacting to the documentation actually landing). The framing is
+modularity: defense IT wants vendors to interoperate without bespoke integration contracts.
+
+**Why it matters:** Defense software has historically been the least open integration surface in
+tech, and publishing machine-readable interface specs invites a genuinely different ecosystem —
+along with the dual-use questions the HN thread is actively debating. Read it as a spec drop, not
+a code release: what shipped is documentation.
+
+[`🔗 Rheinmetall announcement`](https://www.rheinmetall.com/en/media/news-watch/news/2026/09/2026-09-09-rheinmetall-releases-battlesuite-interfaces-as-open-source) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49718928)
+
+---
+
+## 36. Salesforce global outage — during its own Dreamforce conference
+
+- **Velocity:** ▮▮ rising
+- **Source:** Salesforce status · HN 59+ pts
+- **Tags:** `outage` `saas` `incident`
+
+Salesforce suffered a global outage of core services on Sep 16, coinciding with its own Dreamforce
+conference; The Register flagged it early morning UTC. Salesforce's status page confirms core
+services were restored as of 15:22 UTC following monitoring, with "a full investigation" promised
+afterward; a separate disruption to Platform Events and Change Data Capture (delayed or
+out-of-order events) was also resolved. Root cause has not been published.
+
+**Why it matters:** When the system of record for a large slice of the world's CRM goes dark
+mid-conference, the operational lesson is the same as this month's Snowflake incidents:
+status-page transparency came fast, but root-cause honesty is what to watch for — and it isn't
+there yet.
+
+[`🔗 Salesforce status`](https://status.salesforce.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49724488)
+
+---
+
+## 37. Voicebox: a local ElevenLabs-and-WisprFlow replacement at 54k stars
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +409 today · 54.1k total
+- **Tags:** `tts` `voice-cloning` `local-ai`
+
+jamiepine's Voicebox is an MIT-licensed desktop voice studio running entirely on-device: zero-shot
+cloning plus 50+ preset voices, seven swappable TTS engines (Kokoro 82M up to Qwen3-TTS 1.7B,
+23 languages), Whisper-based dictation with global hotkey, effects via Spotify's pedalboard,
+unlimited-length generation by auto-chunking — and MCP integration so agents can speak in cloned
+voices. Bundled Qwen3 LLMs (0.6B–4B) handle dictation cleanup and voice personalities.
+
+**Why it matters:** The differentiator versus the many local-TTS apps trending lately is the
+abstraction: engines are swappable, so the app survives the model-of-the-week churn. The platform
+gaps are real though — Linux has no binaries, and target-aware dictation auto-paste is
+macOS-only today.
+
+[`🔗 jamiepine/voicebox`](https://github.com/jamiepine/voicebox) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 38. Datamimic: stop letting your coding agent invent its own test world
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 45+ pts
+- **Tags:** `test-data` `synthetic-data` `mcp`
+
+rapiddweller's DATAMIMIC CE (MIT) is a deterministic-first synthetic test-data engine aimed at
+regulated industries, now pitched at agent workflows: instead of letting a coding agent fabricate
+ad-hoc fixtures, it generates governed, schema-consistent, CI/CD-reproducible data with
+foreign-key and cross-system relationships — and ships MCP-ready, with an `AGENTS.md` in the repo.
+
+**Why it matters:** Agent-written tests fail in a subtle way: the agent also writes the world the
+tests run in, so fabricated fixtures quietly agree with fabricated code. Deterministic,
+externally governed test data is a plausible fix. Early days — the HN thread is still probing
+basics like FK support across systems.
+
+[`🔗 rapiddweller/datamimic`](https://github.com/rapiddweller/datamimic) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=49722276)
+
+---
+
+## 39. tinycast: a native macOS launcher under 100 MB of RAM that runs Raycast extensions
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +1,076 today · 5.2k total
+- **Tags:** `macos` `launcher` `swiftui`
+
+A free, AGPL-3.0 SwiftUI/AppKit launcher with zero third-party dependencies: fuzzy app search,
+clipboard history (text + images), inline calculator with unit/currency/crypto conversion, 34
+window-management actions, snippets, Shortcuts integration, and AI quick actions disabled by
+default using your own key. The headliner is compatibility — it runs existing Raycast extensions,
+rendered natively as SwiftUI rather than in a web view.
+
+**Why it matters:** The launcher market had consolidated on Raycast's walled garden; a native
+reimplementation that *consumes* the incumbent's extension ecosystem is an unusual, pragmatic
+interoperability move. Note the governance: features are deliberately closed ("another launcher
+has it" isn't accepted as justification), unapproved PRs auto-close, and macOS 15 is no longer
+maintained.
+
+[`🔗 abue-ammar/tinycast`](https://github.com/abue-ammar/tinycast) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 40. "AI for Games in the Foundation Model Era" — a 120-page map of the six roles AI now plays
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · Sep 15 · HF papers 93+ upvotes
+- **Tags:** `survey` `game-ai` `world-models`
+
+A 120-page survey (27 figures, 21 tables) organizes foundation-model research in games into six
+roles by the immediate use of AI output: playing/acting, modeling players and games, designing
+games, building/maintaining games, runtime generation/adaptation, and testing/evaluation. Its core
+argument: these threads developed in isolation, so it's unclear what generalizes beyond specific
+games, engines, and interfaces — and the open problem is transferring capability across roles
+"while re-establishing evidence" in each new setting.
+
+**Why it matters:** Games have quietly become one of the field's more honest agent benchmarks —
+bounded, scoreable, hostile to contamination. The survey's own limits section is the useful part:
+evaluation is only standardized for bounded game-playing; persistent state in learned worlds and
+representative automated testing "remain less established."
+
+[`🔗 arXiv 2609.16679`](https://arxiv.org/abs/2609.16679) · [`🔗 HF papers trending`](https://huggingface.co/papers)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-16T04:15:00Z |
-| Items | 29 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, codyho.dev, Cloudflare blog, adminmenueditor.com, Apple SEAR, Socket, Japan Digital Agency, vendor pages) |
+| Generated | 2026-09-16T12:20:00Z |
+| Items | 40 |
+| Sources tracked | 31 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, codyho.dev, Cloudflare blog, adminmenueditor.com, Apple SEAR, Socket, Japan Digital Agency, vendor pages, Mistral blog, Salesforce status, Rheinmetall, Rapid7, Delinea advisories, rapiddweller) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-09-16
-updated: 2026-09-16T12:15:00+08:00
+updated: 2026-09-16T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -648,13 +648,253 @@ Twitch ウェブクライアントの authorization ヘッダーを捕捉し、O
 
 ---
 
+## 30. Cloudflare がセキュリティ監査 skill をオープンソース化——脆弱性ディスカバリーを支える 6 フェーズのハーネス
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 本日 +1,434 · 累計 5.5k
+- **Tags:** `agent-skills` `security-audit` `vulnerability-discovery`
+
+Cloudflare が `security-audit-skill` を公開した。MIT ライセンスのコーディングエージェント用
+スキルで、分離されたエージェント群を 6 フェーズでオーケストレーションする：偵察
+（`architecture.md` と `coverage-ledger.json` を生成）、カバレッジ台帳に基づく並列ハンター
+エージェントによる脆弱性探索、各候補の**反証**を指示された新しい検証器による候補バリデーション、
+スキーマ検証済み `findings.json` への構造化出力、レコード単位の独立検証、そして対象非依存の
+レポーティング（`REPORT.md`、`FINDINGS-DETAIL.md`、`NEEDS-VALIDATION.md`）。これは「Build your
+own vulnerability harness」で述べられた本番ディスカバリーシステムのオープンな種だ。
+
+**Why it matters:** この設計は「ワンショットのエージェントペネトレーションテスト」への反論だ：
+カバレッジは台帳であり、重大度は確認済みの発見にのみ存在し、「多層防御の欠落は脆弱性ではない」。
+README 自身の正直な数字が最も携行に値する——「1 回のランンで見つかる脆弱性は、繰り返しランンの
+累計の約半分」——そして OS 強制のサンドボックスがない場合、このスキルは対象コードの実行を
+拒否し、手がかりを `needs_validation` として保留する。
+
+[`🔗 cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill) · [`🔗 Build your own vulnerability harness`](https://blog.cloudflare.com/build-your-own-vulnerability-harness/)
+
+---
+
+## 31. vphone-cli：Apple Silicon Mac 上で仮想 iPhone を起動——エージェントテスト用 MCP サーバー付き
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 本日 +907 · 累計 13.1k
+- **Tags:** `ios` `virtualization` `mcp`
+
+Lakr233 の vphone-cli は、Apple の Virtualization.framework を介して、パッチ済み iPhone IPSW を
+macOS 15+ ホスト上の VM として起動する——README が PCC 研究 VM インフラと説明するものを利用し、
+ダウンロード → パッチ → DFU リストア → カスタムファームウェアインストール → 初回起動を自動化
+する。5 つのファームウェアバリアントは「パッチなし」から `exp`（完全脱獄＋アンチ VM 検出研究
+パッチ、Sileo と TrollStore を自動インストール）まで段階的。ホスト制御ソケットはスクリーン
+ショット・タッチ・スワイプ・クリップボードを companion の `vphone-mcp` サーバーに開放する——
+実 iOS ビルドへの AI 駆動 E2E テストのための構成だ。MIT、373 コミット、iOS 27 ベータで検証済み。
+
+**Why it matters:** macOS 上の iOS テストはシミュレーターか実機ファームの二択だった。スクリプト
+可能な仮想 iPhone はファームを CI に変え——MCP から呼び出せるなら、エージェントのツールになる。
+コストも箱に印字されている：SIP/AMFI の緩和が必須、ネストした VM は不可、日本/EU リージョンの
+セットアップは失敗する（VM が満たせない規制チェック）。
+
+[`🔗 Lakr233/vphone-cli`](https://github.com/Lakr233/vphone-cli) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 32. StepAudio 3：StepFun のリアルタイム音声モデル、話しながら推論する
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv · 9月12日 · HF papers トレンド
+- **Tags:** `speech-to-speech` `realtime` `voice-agents`
+
+StepFun が StepAudio 3 Realtime（arXiv 2609.14005、著者 90 名）を公開した。連続的な
+「listen-converse-think-act」ループを軸に構築された音声言語基盤モデルである：音響的手がかりの
+深い知覚、自然な沈黙・相槌・割り込みを同期音声ストリームでモデル化する「シームレス デュプレックス」、
+発話と並行してプライベートな推論を実行する「think-while-speaking」。統合された音声エージェントは
+会話を止めずにツールを非同期実行する。公称数値：Artificial Analysis の全二重ベンチ 98.9、
+τ-Voice でのマクロ成功率 56.0%、MMSU 90.6。姉妹レポート（arXiv 2609.16034）は StepAudio 3 Music
+を扱う。
+
+**Why it matters:** 面白いのはスコアではなくアーキテクチャの主張だ：推論の質とレイテンシを交換
+するのではなく、熟考を会話のクリティカルパスから外した。但し書き：アブストラクトにレイテンシの
+数値は一切なく、73.0 の推論スコアは StepFun 自社のベンチマーク StepAudioChat 上のものだ。
+
+[`🔗 arXiv 2609.14005`](https://arxiv.org/abs/2609.14005) · [`🔗 HF papers トレンド`](https://huggingface.co/papers)
+
+---
+
+## 33. Delinea Secret Server：エンタープライズ金庫そのものの SAML なりすまし（CVE-2026-15640、CVSS 9.5）
+
+- **Velocity:** ▮▮ rising
+- **Source:** Rapid7 / Delinea アドバイザリ · 9月16日公開
+- **Tags:** `cve` `saml` `pam`
+
+Delinea は Secret Server オンプレミスの一連の脆弱性を開示した。筆頭は CVE-2026-15640
+（CVSS v4.0 スケールで 9.5、CWE-290）：一定の条件下で、有効な SAML IdP レスポンスを使って別の
+Secret Server ユーザーになりすませる——全員の他の認証情報を保管する特権アクセス金庫における
+認証バイパスだ。影響バージョンは 10.6.0–11.7.61、11.8.0–11.8.1、11.9.0 系に及ぶ。関連の反射型
+XSS（CVE-2026-15639、9.3）と FIDO2 登録バイパスもセットで公開された。オンプレミスのみ——
+Delinea Cloud は影響を受けない。
+
+**Why it matters:** PAM 金庫ほど認証バイパスに worst な宿主はない——金庫ユーザーの 1 人に
+なりすますことは、そのユーザーが解錠できるすべてを継承することに等しいかもしれない。採点者の
+出自がここでは重要だ：9.5 はベンダー自己採点（Delinea が CNA）であり、Rapid7 によれば CISA KEV
+には載っておらず確認された悪用もない——これはインシデントではなく、緊急のパッチ適用事項として
+扱うべきものだ。
+
+[`🔗 Rapid7 CVE エントリ`](https://www.rapid7.com/db/vulnerabilities/cve-2026-15640/) · [`🔗 Delinea セキュリティアドバイザリ`](https://delinea.com/security-advisories)
+
+---
+
+## 34. Mistral x Mozilla：Firefox の Smart Window が Mistral モデルでベータへ、ゼロデータリテンションを掲げて
+
+- **Velocity:** ▮▮ rising
+- **Source:** Mistral ブログ · 9月16日発表 · HN 112+ pts
+- **Tags:** `firefox` `ai-browsing` `privacy`
+
+Mistral と Mozilla が提携を発表した。Mistral が Firefox Smart Window（ベータ）——複雑な検索の
+解釈、見て離れたコンテンツの呼び出し、開いているタブ全体にわたる動作をする AI ブラウジング
+アシスタント——のモデル提供者となり、現在フランスと北米で稼働、UK/ドイツは「年内に続く」。
+Mozilla の Firefox 148 の投稿はテーマをユーザー制御に置く：AI 機能はユーザーが個別にオプトイン
+する。Mistral は、会話が既定で Mozilla のサーバーに保存されないこと、そしてパートナーとして
+ゼロデータリテンションに同意したことを述べている。
+
+**Why it matters:** 主要な非米モデルファミリーが、看板級の西側ブラウザーの AI デフォルト位置に
+入った——そして「開いた技術には開いた流通が必要」という主権の語りは、Chromium-AI の束ね売りへの
+正面からの一撃だ。細目：多言語/地域向けファインチューニングはビジョンであって機能ではなく、
+具体的なモデル名はなく、ZDR の主張は契約上の声明であって監査結果ではない。
+
+[`🔗 Mistral 発表`](https://mistral.ai/news/mistral-x-mozilla/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49723408)
+
+---
+
+## 35. ラインメタルが Battlesuite の Onboard/Tactical API をオープンソース化——仕様ドロップとしての防衛インターオペラビリティ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 236+ pts · フロントページ
+- **Tags:** `defense` `interoperability` `open-source`
+
+ドイツの防衛大手は、公式 GitHub 組織上で Battlesuite 戦闘管理エコシステムの最初のインターフェース
+仕様を公開した：サードパーティが同社の BMS とデータ交換スイートに統合するための Onboard API と
+Tactical API（9月9日発表——今日フロントページに載った HN スレッドは、ドキュメントが実際に
+出揃ったことへの反応だ）。語られるのはモジュール性だ：防衛 IT は、個別の統合契約なしにベンダー
+間で相互運用できることを求めている。
+
+**Why it matters:** 防衛ソフトウェアは歴史的にテック業界で最も閉じた統合サーフェスであり、
+機械可読のインターフェース仕様の公開は、本当に異なる生態系を呼び込む——HN スレッドが現在
+活発に議論している dual-use の問いとともに。これはコードのリリースではなく仕様ドロップとして
+読むべきだ：出てきたのはドキュメントである。
+
+[`🔗 ラインメタル発表`](https://www.rheinmetall.com/en/media/news-watch/news/2026/09/2026-09-09-rheinmetall-releases-battlesuite-interfaces-as-open-source) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49718928)
+
+---
+
+## 36. Salesforce のグローバル障害——自社の Dreamforce 開催中に
+
+- **Velocity:** ▮▮ rising
+- **Source:** Salesforce ステータス · HN 59+ pts
+- **Tags:** `outage` `saas` `incident`
+
+9月16日、Salesforce のコアサービスがグローバルにダウンした。時期は自社主催の Dreamforce
+カンファレンスと重なり、The Register が UTC 早朝にフラグを立てた。Salesforce のステータス
+ページは、監視を経てコアサービスが 15:22 UTC 時点で復旧したことを確認し、事後の「完全な
+調査」を約束している。Platform Events と Change Data Capture（イベントの遅延や順不同）に
+影響した別の障害も解決済み。根本原因はまだ公表されていない。
+
+**Why it matters:** 世界の CRM のかなりの部分の「記録システム」が会議の最中に消えたとき、運用の
+教訓は今月の Snowflake の一連の事故と同じだ：ステータスページの透明性は速かったが、見るべきは
+根本原因に対する誠実さ——それはまだそこにない。
+
+[`🔗 Salesforce ステータス`](https://status.salesforce.com/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49724488)
+
+---
+
+## 37. Voicebox：5.4万スターのローカル版 ElevenLabs + WisprFlow の代替
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +409 · 累計 54.1k
+- **Tags:** `tts` `voice-cloning` `local-ai`
+
+jamiepine の Voicebox は、MIT ライセンスで完全にオンデバイスで動くデスクトップ音声スタジオだ：
+ゼロショット克隆と 50+ プリセット音声、交換可能な 7 つの TTS エンジン（82M の Kokoro から 1.7B の
+Qwen3-TTS まで、23 言語）、グローバルホットキーの Whisper ベース音声入力、Spotify の pedalboard
+によるエフェクト、自動チャンキングによる無制限長の生成——そして MCP 統合により、エージェントが
+克隆音声で話せる。同梱の Qwen3 LLM（0.6B–4B）がディクテーションの清書と「音声の個性」を担う。
+
+**Why it matters:** 近ごろトレンドに載る多数のローカル TTS アプリに対する差別化は抽象化の層だ：
+エンジンが交換可能なので、アプリは「週替わりのモデル」の入れ替わりを生き延びられる。プラット
+フォームのギャップも本物だ——Linux にバイナリがなく、ターゲットを認識するディクテーションの
+自動ペーストは現時点で macOS 専用。
+
+[`🔗 jamiepine/voicebox`](https://github.com/jamiepine/voicebox) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 38. Datamimic：コーディングエージェントにテスト世界を勝手に作らせるのをやめよう
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 45+ pts
+- **Tags:** `test-data` `synthetic-data` `mcp`
+
+rapiddweller の DATAMIMIC CE（MIT）は、強く規制された業界向けの「決定論ファースト」の合成
+テストデータエンジンで、いまエージェントワークフローに狙いを定めている：コーディング
+エージェントにその場しのぎのフィクスチャを作らせる代わりに、ガバナンスされた、スキーマ整合の、
+CI/CD で再現可能なテストデータを外部キーとシステム横断の関係つきで生成する——そして
+MCP-ready で、リポジトリには `AGENTS.md` が置かれている。
+
+**Why it matters:** エージェントの書いたテストは subtle な仕方で壊れる：テストが走る世界も同じ
+エージェントが書いており、でっち上げのフィクスチャがでっち上げのコードと静かに一致してしまうのだ。
+決定論的で外部ガバナンスのテストデータは、もっともらしい処方箋だ。まだ初期段階——HN スレッドは
+システム横断の FK サポートといった基本を突き止めようとしているところだ。
+
+[`🔗 rapiddweller/datamimic`](https://github.com/rapiddweller/datamimic) · [`🔗 Show HN ディスカッション`](https://news.ycombinator.com/item?id=49722276)
+
+---
+
+## 39. tinycast：RAM 100 MB 未満のネイティブ macOS ランチャー、Raycast 拡張も動く
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +1,076 · 累計 5.2k
+- **Tags:** `macos` `launcher` `swiftui`
+
+無料・AGPL-3.0 の SwiftUI/AppKit 製ランチャーで、サードパーティ依存ゼロ：ファジーなアプリ
+検索、クリップボード履歴（テキスト＋画像）、単位/通貨/暗号資産換算つきのインライン電卓、34 の
+ウィンドウ管理アクション、スニペット、ショートカット統合、そして既定でオフ・自分のキーを使う
+AI クイックアクション。目玉は互換性——既存の Raycast 拡張を動かし、Web ビューではなくネイティブ
+の SwiftUI として描画する。
+
+**Why it matters:** ランチャー市場は Raycast の囲い込みに収束していた。その incumbent の拡張
+生態系を*消費する*側に回るネイティブ再実装というのは、珍しくて実務的なインターオペラビリティの
+一手だ。ガバナンスにも注意：機能セットは意図的に閉じられ（「他のランチャーにもある」は新機能の
+根拠として認められない）、承認されていない PR は自動クローズ、macOS 15 はメンテ対象外。
+
+[`🔗 abue-ammar/tinycast`](https://github.com/abue-ammar/tinycast) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 40. 「AI for Games in the Foundation Model Era」——AI が今担う 6 つの役割を描く 120 ページの地図
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 9月15日 · HF papers で 93+ 賛成票
+- **Tags:** `survey` `game-ai` `world-models`
+
+120 ページのサーベイ（図 27、表 21）が、ゲームにおける基盤モデル研究を「AI 出力の即時用途」
+によって 6 つの役割に整理する：プレイ/行動、プレイヤーとゲームのモデリング、ゲームデザイン、
+ゲームの構築・保守、実行時の生成/適応、そしてテストと評価。中心的な主張はこうだ：これらの研究
+系統は互いに隔絶して発展したため、特定のゲーム・エンジン・インターフェースの外側に何が一般化
+するのかは不明——そして開いた問題は、役割をまたいで能力を移す際に「証拠を再構築しながら」
+移すことだ。
+
+**Why it matters:** ゲームは、この分野でより誠実なエージェントベンチマークの一つになりつつ
+ある——有限、スコア化可能、そして汚染に強い。サーベイ自身の限界セクションこそ有用な部分だ：
+評価が標準化されているのは有限のゲーム対局だけ。学習された世界における永続状態や、代表的な
+自動テストは「まだ十分に確立されていない」。
+
+[`🔗 arXiv 2609.16679`](https://arxiv.org/abs/2609.16679) · [`🔗 HF papers トレンド`](https://huggingface.co/papers)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-16T04:15:00Z |
-| Items | 29 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, vendor pages, codyho.dev, Cloudflare blog, adminmenueditor.com, Apple SEAR, Socket, Japan Digital Agency, vendor pages) |
+| Generated | 2026-09-16T12:20:00Z |
+| Items | 40 |
+| Sources tracked | 31 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, codyho.dev, Cloudflare blog, adminmenueditor.com, Apple SEAR, Socket, Japan Digital Agency, vendor pages, Mistral blog, Salesforce status, Rheinmetall, Rapid7, Delinea advisories, rapiddweller) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
