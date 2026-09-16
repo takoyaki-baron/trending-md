@@ -1,8 +1,8 @@
 ---
 date: 2026-09-16
-updated: 2026-09-16T04:25:00+08:00
+updated: 2026-09-16T12:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -442,13 +442,219 @@ Edge0-35B-A3B-preview——約 3B のアクティブパラメータを持つ 35B
 
 ---
 
+## 21. 「I Came, I Prompted, I Left」第2部：1ヶ月で仕様準拠の M4 GPU ドライバを構築
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 202+ pts · 8時間前（~03:30 UTC+8）
+- **Tags:** `gpu-driver` `reverse-engineering` `agents`
+
+Cody Ho と Niklas が、M4 Mac Mini（および「MacBook Neo」）向けに完全に OpenGL ES 3.0 準拠の
+GPU ドライバを約1ヶ月で構築しました——本来「数年かかる」作業です。ライブのハードウェアプローブ
+のみを手がかりに AGX ファームウェア ABI と M4・A18 Pro・（ほぼ）M5 のユーザースペースをリバース
+エンジニアリングし、独自の IR/シェーダコンパイラとコマンドストリームビルダーを作り、完全な
+Linux カーネルドライバを実装——Chrome と Firefox の WebGL 合成が動作し、Minecraft は 200fps。
+最も注目すべきはクリーンルームの規律です：Apple のバイナリは一切開かず、著者が以前構築した
+ハイパーバイザーで取得したハードウェアトレースのみを使用し、成果の出自を検証できるよう全実験を
+公開しています。
+
+**Why it matters:** 「I came, I prompted, I left」の続編です——人間が方向づけを行い、LLM
+エージェントが実装の大部分を担う形で、ハイパーバイザー+エージェント駆動リバースエンジニアリング
+の組み合わせが数年の作業を数週間に圧縮しました。記事自身の正直な注記も重要です：「日単位は
+楽観的すぎた」（実際は数週間）、コードは「まだエンドユーザー向けの準備ができていない」、準拠
+Vulkan はこれから。
+
+[`🔗 codyho.dev`](https://codyho.dev/blog/gpu-driver/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49717638)
+
+---
+
+## 22. Admin Menu Editor Pro のサプライチェーン攻撃——バックドア入り更新が1日に2回配信される
+
+- **Velocity:** ▮▮ rising
+- **Source:** BleepingComputer + ベンダー勧告 · 9月15日報道
+- **Tags:** `supply-chain` `wordpress` `backdoor`
+
+攻撃者が 9月14日に adminmenueditor.com を侵害し、Admin Menu Editor Pro プラグイン（30万インストール
+の無料版の有償版）に対して悪意ある 2.35 更新を配信しました：同梱の `includes/wp-user-consent.php`
+がウェブシェルを設置し、隠し管理者アカウントを作成します。開発者の Janis Elsts は同日の 19:00 UTC
+にクリーンな 2.36 を配信しました——しかし攻撃者は依然としてサーバーへのアクセスを保持しており、
+2.36 も再度汚染されました。少なくとも 230 名の顧客が約 1,500 サイトに悪意ある更新をインストール
+しており、Elsts は汚染された 2.36 のインストール数を数えるのが難しいため実数はさらに多いと警告して
+います。ベンダーサイトは現在オフライン：「新しいインフラ上で再構築が完了するまで、販売・プラグイン
+更新チェック・ダウンロードを無効化しています。」
+
+**Why it matters:** 教科書的な教訓がリアルタイムで再現されました：侵入を排除する前に修復したため、
+緊急修正版そのものが再度侵害されたのです。第14項の未パッチサイトへの攻撃とは異なり、これは
+上流——ベンダー自身の更新チャネルが武器であり、顧客側のパッチ適用では防げません。
+
+[`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/malcious-admin-menu-editor-pro-plugin-backdoors-1-500-wordpress-sites/) · [`🔗 ベンダー勧告`](https://adminmenueditor.com/)
+
+---
+
+## 23. Cloudflare の「Disallow AI Training」：検索には残り、学習は拒否——そしてクローラーへの「Accountable」認定
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare ブログ · 35+ pts · 2時間前（~10:25 UTC+8）
+- **Tags:** `ai-crawlers` `robots-txt` `publishing`
+
+新しい設定により、サイトは「検索+学習」の混合用途クローラーに対して `Disallow` ディレクティブを
+公開し、Cloudflare のネットワーク層で強制できます：「当社が選好を公開し、誰がクロールしているかを
+特定し、なぜクロールしているかを分類し、無視するものをブロックし、Radar で各オペレーターの実際の
+行動を報告します。」Apple・Google・Microsoft が新しい「Accountable」認定を満たすと明記されました：
+学習オプトアウト、要約オプトアウト、学習に使われたページの URL レベルの可視性、そして「学習の
+オプトアウトが検索順位に影響しない」保証。Cloudflare のデータ：検索ボットをブロックするサイトは
+1% 未満だが、何らかの形で学習をブロックするサイトは 17%。要約ごとのコンテンツ量制御は「来年
+初頭」に提供予定です。
+
+**Why it matters:** 学習オプトアウトを強制不可能な robots.txt からネットワーク層の強制へ移す——
+パブリッシャーにとっては実質的な変化です。ただし構造的な留保も必要です：1つの民間企業が業界の
+「accountable」を定義しており、この認定は出荷済みの機能と期限付きの*コミットメント*をまとめており、
+強制は Cloudflare の分類を通るクローラーにしか及びません。
+
+[`🔗 Cloudflare ブログ`](https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49721435)
+
+---
+
+## 24. 継続学習のメカニズムは合成できる：JHU が 28倍の長期記憶保持とその代償を報告
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face papers · 270+ 賛成票
+- **Tags:** `continual-learning` `memorization` `training`
+
+ジョンズ・ホプキンス大学（Alvin Zhang、Daniel Khashabi、Tianmin Shu；arXiv 2609.06986）は
+「長期間にわたる記憶（long-horizon memorization）」を定義しました：モデルが継続的な教師あり
+ファインチューニングで 100 の質問応答タスクを順次学習し、過去の生データへのアクセスも推論時の
+タスク識別子もない状態です。素朴な逐次ファインチューニングの保持率は 1.2%、最良の単一メカニズム
+でも 8.1%。3種類のアンカー（データ/関数/重み）にわたるメカニズムの合成 + merged LoRA で平均
+保持率 34.9% に到達——3データセットすべてでトップ3に入る唯一の合成構成です——記憶の半減期を
+1〜2タスクから 19〜44タスクへ延長しました。要因分析では replay と merged LoRA の主効果が最大で、
+両者に統計的に有意な超加算的相互作用があります。
+
+**Why it matters:** エージェントメモリは同じ壁に何度もぶつかっており、この論文は単一のトリック
+ではなく設計空間の地図を与えてくれます。論文自身の限界も結論に含めるべきです：これは汎化ではなく
+記憶（学習クエリで評価）；全手法が GSM8K/MATH/MMLU-Redux で catastrophic forgetting を起こしたまま；
+保持曲線は低下し続ける——忘却は防止ではなく、延期されたのです。
+
+[`🔗 arXiv 2609.06986`](https://arxiv.org/abs/2609.06986) · [`🔗 HF papers`](https://huggingface.co/papers/2609.06986)
+
+---
+
+## 25. addyosmani/agent-skills：skills ウェーブ最大のコレクションは 9.49万スターの SDLC
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 本日 +307 · 累計 94.9k
+- **Tags:** `agent-skills` `coding-agents` `workflow`
+
+Addy Osmani の「AI コーディングエージェント向けプロダクション品質のエンジニアリングスキル」——
+25 スキルと 9 つのスラッシュコマンドが define→plan→build→test→review→ship のライフサイクルに
+マッピングされ、スキルは文脈で自動アクティブ化（API 設計で `api-and-interface-design` を発火）、
+`/build auto` モードは計画を生成して1回の承認ですべてのタスクを実装しつつ、タスクごとのテストと
+個別コミットを維持します。vercel-labs の `skills` CLI で 70+ のエージェントにインストール可能。
+
+**Why it matters:** 1ファイルのスキルが毎日トレンド入りする中、このジャンル最大のリポジトリが
+賭けているのはライフサイクルの規律——コードの前に仕様、テストゲート、段階間の人間の承認です。
+README 自身の細則：スキル単位の `npx` インストールはスキルフォルダのみをコピーし、リポジトリ
+レベルの `references/` ディレクトリを省略するため、共有チェックリストが黙って欠落します——
+エコシステム全体のパッケージング問題の縮図です。
+
+[`🔗 addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) · [`🔗 vercel-labs/skills CLI`](https://github.com/vercel-labs/skills)
+
+---
+
+## 26. Kinesis —— Meta のニューラルバンドで Mac を操作する
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 119+ pts · 34 コメント
+- **Tags:** `hardware` `emg` `macos`
+
+ネイティブ macOS アプリ（Swift 6、macOS 14+、Apple Silicon と Intel 両対応）が Meta の EMG
+ニューラルバンドとペアリングし、そのジェスチャーをシステム入力にマッピングします：デスクトップ
+間のスワイプ、Mission Control、音楽操作、ピンチ&回転での音量・輝度調整——マッピングは
+カスタマイズ可能で、セットアップ内に練習モードがあり、メニューバーに常駐します。作者は PoC を
+公開の `neural-band-poc` リポジトリでの「astra を使った実験」に帰しており、プロトコル部分の作業は
+検証・再利用可能です。
+
+**Why it matters:** Meta はバンドを閉じたプラットフォーム向け入力デバイスとして出荷しましたが、
+9コミットの週末リポジトリがそれをシステム全体の Mac 入力バスに変えます。警告も楽しみに比例します：
+スター 71、コード署名に関する議論なし、しかもアクセシビリティ権限の付与は完全な入力制御権の委譲を
+意味します——インストールはそのつもりで。
+
+[`🔗 callbacked/kinesis`](https://github.com/callbacked/kinesis) · [`🔗 Show HN ディスカッション`](https://news.ycombinator.com/item?id=49695408)
+
+---
+
+## 27. 9月10日の報道のその後：Apple が Reference Image の技術ページを公開——C2PA 批判も込みで
+
+- **Velocity:** ▮ steady
+- **Source:** security.apple.com · 47+ pts · 2時間前（~10:07 UTC+8）
+- **Tags:** `provenance` `c2pa` `privacy`
+
+Apple のセキュリティエンジニアリング&アーキテクチャ（SEAR）とカメラ&写真チームが、Apple
+Reference Image の仕組みを公開しました：iPhone 18 Pro / Pro Max のメインセンサーに初搭載される
+オプトインのカメラモードで、Private Cloud Compute による検証を経た、安全にタイムスタンプされた
+参照画像を生成し、信頼チェーンはセンサーと計算写真スタックの両方をカバーします。ページは、
+C2PA 型の「撮影後のメタデータ付与」は編集チェーンのどの箇所でも改ざんされうること、そして画像を
+デバイスや個人に紐づけることが写真家にプライバシーリスクをもたらすことを論じています。9月10日に
+弊フィードが報じた Proof of Capture——100ドルの DIY カメラでステガノグラフィにより Reference
+Image に応答した——以降、この議論は一次情報源へ移りました。
+
+**Why it matters:** Apple 自らのページが難所を認めており（「これは簡単に解決できる問題では
+ない」）、設計をメタデータではなく PCC の検証可能性に賭けています。ページが定量化していない
+部分：検証失敗率も敵対的テストの結果もない——まさに Proof of Capture が探ろうとしたギャップです。
+
+[`🔗 Apple SEAR`](https://security.apple.com/blog/apple-reference-image/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49721322)
+
+---
+
+## 28. インストール数3万の Twitch 拡張が OAuth トークンをプロキシログに漏らす
+
+- **Velocity:** ▮ steady
+- **Source:** Socket · 9月14日報道
+- **Tags:** `oauth` `browser-extensions` `token-leak`
+
+Socket による「Twitch Enhanced Viewer | JeetBot」の分析——Chrome・Firefox の公式ストアに
+掲載され、3万以上のインストールと、広告ブロック・1080p 強制・地域制限解除を謳う拡張——によれば、
+Twitch ウェブクライアントの authorization ヘッダーを捕捉し、OAuth トークンをロシア語の商用
+ストリーミングボットサービスへ送信します。トークンは `&auth=` クエリパラメータとしてプロキシ
+経由の動画プレイリスト要求に付加され、その結果、平文のままプロキシサーバーのリクエストログに
+記録され、運営者が容易に取得できます。視聴したすべてのチャンネルがプロキシされ、拡張のコードに
+ハードコードされた10のロシア語チャンネルだけが除外されます。
+
+**Why it matters:** URL に載ったトークンは設計上のログ漏洩であり、あの機能リストこそ拡張を
+インストールさせる典型的な餌です。Socket はメカニズムとハードコードされた除外を文書化していますが、
+トークン数は公表しておらず、アカウント侵害の確認もありません——露出は実証済み、悪用は未実証です。
+
+[`🔗 Socket`](https://socket.dev/blog/malicious-twitch-browser-extension) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/twitch-extension-with-30k-installs-exposes-users-oauth-tokens/)
+
+---
+
+## 29. 日本のデジタル庁：VPN 脆弱性により約24.6万件の政府職員記録が露出
+
+- **Velocity:** ▮ steady
+- **Source:** デジタル庁発表 · 9月11日公表、9月14日報道
+- **Tags:** `data-breach` `vpn` `japan`
+
+デジタル庁は、第三者が Government Solution Service（GSS）で使用されている VPN 機器の脆弱性を
+悪用してシステムにアクセスしたと発表しました——6月25日に運用保守スタッフのアカウントからの
+大規模なファイルアクセスを検知して調査を開始し、7月9日に第三者の侵入を確認。露出の可能性がある
+データ：氏名 236,000件、メールアドレス 231,000件、電話番号 94,000件、住所 1,000件——政府職員、
+公務員、関連事業者が対象で、一般国民のデータは含まれません。庁の Q&A では当該 VPN 脆弱性は中程度
+の深刻度評価でありゼロデイではないとしていますが、製品名も CVE も公表されていません。
+
+**Why it matters:** 中程度の深刻度とされる既知の脆弱性が、日本政府の大規模な情報露出の一つを
+もたらしました——深刻度スコアは露出のランキングではありません。もう一つの教訓はタイムラインです：
+6月25日検知 → 7月9日確認 → 9月11日公表。
+
+[`🔗 デジタル庁発表`](https://www.digital.go.jp/news/2026-0911-01) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/japans-digital-agency-says-vpn-flaw-exposed-246-000-personnel-records/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-15T20:25:00Z |
-| Items | 20 |
-| Sources tracked | 20 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, vendor pages) |
+| Generated | 2026-09-16T04:15:00Z |
+| Items | 29 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, vendor pages, codyho.dev, Cloudflare blog, adminmenueditor.com, Apple SEAR, Socket, Japan Digital Agency, vendor pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -7176,5 +7176,41 @@
     "en": "Internet Archive Wayback Machine — the fallback citation for pages that die after the feed publishes them. First used 09-16 for the deleted entelligence.ai benchmark post: the 09-14 snapshot (HTTP 200) was fetched and verified to contain every figure the feed item cites (69/92 bugs, 74%/96% precision, $0.20/$5.66, 23s/36s, 117-of-143), independently corroborated by HN 49703003 comments quoting the same per-review costs.",
     "zh": "互联网档案馆 Wayback Machine——feed 发布后页面失效时的兜底引用。09-16 首次用于已删除的 entelligence.ai 基准文章：抓取 09-14 快照（HTTP 200）并核验其包含条目引用的全部数字（69/92 bug、74%/96% 精确率、$0.20/$5.66、23s/36s、117/143），并经 HN 49703003 评论区引用的相同单次审查成本独立佐证。",
     "jp": "Internet Archive Wayback Machine——フィード公開後にページが消えた際の代替引用元。09-16 に削除された entelligence.ai のベンチマーク記事で初使用：09-14 のスナップショット（HTTP 200）を取得し、項目が引用する全数値（69/92 バグ、74%/96% 精度、$0.20/$5.66、23s/36s、117/143）を含むことを検証。HN 49703003 コメント欄が引用する同一のレビュー単価とも交叉検証済み。"
+  },
+  "codyho.dev": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Cody Ho's personal engineering blog — deep systems RE writeups (hypervisor, AGX GPU driver) with published provenance. The M4 driver post was cross-checked against its HN discussion.",
+    "zh": "Cody Ho 的个人工程博客——深度系统逆向文章（hypervisor、AGX GPU 驱动），并公开工作来源。M4 驱动文已与其 HN 讨论交叉核对。",
+    "jp": "Cody Ho の個人エンジニアリングブログ——ハイパーバイザーや AGX GPU ドライバなど深いシステム RE の記事。出自も公開。M4 ドライバ記事は HN 議論とクロスチェック済み。"
+  },
+  "adminmenueditor.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Vendor site for the Admin Menu Editor Pro WordPress plugin — during the Sep 14 compromise it hosts the first-hand incident advisory; currently offline by design (rebuild in progress).",
+    "zh": "WordPress 插件 Admin Menu Editor Pro 的厂商站点——9月14日入侵事件期间承载第一手事件公告；目前按计划下线（重建中）。",
+    "jp": "WordPress プラグイン Admin Menu Editor Pro のベンダーサイト——9月14日の侵害時には一次情報のインシデント勧告を掲載。現在は意図的にオフライン（再構築中）。"
+  },
+  "security.apple.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Apple Security Engineering and Architecture (SEAR) blog — first-hand vendor documentation of Apple's security architecture (Reference Image, PCC). Claims are vendor-authored; benchmark gaps noted.",
+    "zh": "Apple 安全工程与架构团队（SEAR）博客——Apple 安全体系结构（Reference Image、PCC）的一手厂商文档。内容为厂商自述，基准缺口已被标注。",
+    "jp": "Apple の SEAR（Security Engineering and Architecture）ブログ——Reference Image や PCC など Apple のセキュリティアーキテクチャの一次ドキュメント。ベンダー自述のためベンチマークの欠落に注意。"
+  },
+  "digital.go.jp": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Japan's Digital Agency official announcements — primary source for the GSS VPN breach; incident facts cross-checked against BleepingComputer's report.",
+    "zh": "日本数字厅官方公告——GSS VPN 泄露事件的一手信源；事件事实已与 BleepingComputer 报道交叉核对。",
+    "jp": "デジタル庁の公式発表——GSS VPN 侵害事故の一次情報。事故事実は BleepingComputer の報道とクロスチェック済み。"
   }
 }

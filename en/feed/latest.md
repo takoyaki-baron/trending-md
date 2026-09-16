@@ -1,8 +1,8 @@
 ---
 date: 2026-09-16
-updated: 2026-09-16T04:25:00+08:00
+updated: 2026-09-16T12:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -446,13 +446,223 @@ latency are different claims; treat this as a signal to investigate, not a spec 
 
 ---
 
+## 21. "I Came, I Prompted, I Left Part 2" — a conformant M4 GPU driver built in one month
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 202+ pts · 8h ago (~03:30 UTC+8)
+- **Tags:** `gpu-driver` `reverse-engineering` `agents`
+
+Cody Ho and Niklas built a fully OpenGL ES 3.0-compliant GPU driver for the M4 Mac Mini (and the
+"MacBook Neo") in about a month — a process that "normally takes years." They reverse-engineered the
+AGX firmware ABI and user space for the M4, A18 Pro, and (mostly) M5 using only live hardware
+probing, built a custom IR/shader compiler and command-stream builder, and implemented a full Linux
+kernel driver — with Chrome and Firefox running WebGL with working compositing, and Minecraft at
+200 fps. The clean-room discipline is the headline: no Apple binaries were opened, only hardware
+traces from the hypervisor the author built previously, with all experiments published for
+provenance verification.
+
+**Why it matters:** This is the sequel to "I came, I prompted, I left" — LLM agents did much of the
+implementation grind under human direction, and pairing a custom hypervisor with agent-driven RE
+compressed a multi-year effort into weeks. The post's own honesty markers: "days was overly
+optimistic" (it took weeks), the code is "not yet ready for end users," and conformant Vulkan is
+still ahead.
+
+[`🔗 codyho.dev`](https://codyho.dev/blog/gpu-driver/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49717638)
+
+---
+
+## 22. Admin Menu Editor Pro supply-chain attack — a backdoored update served twice in one day
+
+- **Velocity:** ▮▮ rising
+- **Source:** BleepingComputer + vendor advisory · reported Sep 15
+- **Tags:** `supply-chain` `wordpress` `backdoor`
+
+An attacker compromised adminmenueditor.com on Sep 14 and pushed a malicious 2.35 update of the
+Admin Menu Editor Pro plugin (the premium twin of a 300k+-install free plugin): an included
+`includes/wp-user-consent.php` installed a web shell and created a hidden administrator account.
+Developer Janis Elsts noticed and pushed a clean 2.36 the same day at 19:00 UTC — but the attacker
+still had server access and compromised 2.36 too. At least 230 customers installed the malicious
+update on ~1,500 sites; Elsts warns the real count could be higher because trojanized-2.36 installs
+are hard to count. The vendor site is now offline: "sales, plugin update checks, and downloads are
+disabled until the site is rebuilt on new infrastructure."
+
+**Why it matters:** The textbook lesson made live: the emergency fix was re-compromised because the
+intrusion wasn't evicted before remediating. Unlike item 14's attacks on unpatched sites, this is
+upstream — the vendor's own update channel was the weapon, which no customer-side patching can
+prevent.
+
+[`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/malcious-admin-menu-editor-pro-plugin-backdoors-1-500-wordpress-sites/) · [`🔗 Vendor advisory`](https://adminmenueditor.com/)
+
+---
+
+## 23. Cloudflare's "Disallow AI Training": stay in search, refuse training — and an "Accountable" label for crawlers
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare blog · 35+ pts · 2h ago (~10:25 UTC+8)
+- **Tags:** `ai-crawlers` `robots-txt` `publishing`
+
+A new setting lets sites publish a `Disallow` directive for mixed-use search+training crawlers and
+enforces it at Cloudflare's network layer: "we publish the preference, identify who is crawling,
+classify why they are crawling, and block the ones that ignore it — then report what each operator
+actually does on Radar." Apple, Google, and Microsoft are named as meeting the new "Accountable"
+designation: a training opt-out, a summary opt-out, URL-level visibility into what was used for
+training, and assurance that opting out of training won't affect search ranking. Cloudflare's data:
+under 1% of its sites block search bots, while 17% block training in some form. Per-summary content
+controls are promised "by early next year."
+
+**Why it matters:** It moves the training opt-out from unenforceable robots.txt to network
+enforcement — a real change for publishers. But the caveats are structural: a private company is
+defining "accountable" for the industry, the designation bundles shipped capabilities with
+time-bound *commitments*, and the enforcement only binds crawlers that route through Cloudflare's
+classification.
+
+[`🔗 Cloudflare blog`](https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49721435)
+
+---
+
+## 24. Continual learning mechanisms compose — JHU reports 28× better long-horizon memorization, and what it costs
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face papers · 270+ upvotes
+- **Tags:** `continual-learning` `memorization` `training`
+
+Johns Hopkins (Alvin Zhang, Daniel Khashabi, Tianmin Shu; arXiv 2609.06986) defines "long-horizon
+memorization": a model learns 100 query-answer tasks sequentially via continual supervised
+fine-tuning, with no access to earlier raw examples and no task identifiers at inference. Naive
+sequential fine-tuning retains 1.2%; the best single mechanism 8.1%; composing mechanisms across
+three anchors (data/function/weight) plus merged LoRA reaches 34.9% average retention — the only
+composition ranking top-3 on all three datasets — and extends memory half-life from 1–2 tasks to
+19–44. A factorial analysis finds replay and merged LoRA have the largest main effects, with a
+statistically significant super-additive interaction.
+
+**Why it matters:** Agent memory keeps hitting the same wall, and this maps the design space
+instead of proposing one trick. The paper's own limits belong in the takeaway: it's memorization,
+not generalization (evaluated on training queries); every method still catastrophically forgets on
+GSM8K/MATH/MMLU-Redux; and retention curves keep declining — forgetting is delayed, not prevented.
+
+[`🔗 arXiv 2609.06986`](https://arxiv.org/abs/2609.06986) · [`🔗 HF papers`](https://huggingface.co/papers/2609.06986)
+
+---
+
+## 25. addyosmani/agent-skills — the skills wave's biggest collection is a 94.9k-star SDLC
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +307 today · 94.9k total
+- **Tags:** `agent-skills` `coding-agents` `workflow`
+
+Addy Osmani's "Production-grade engineering skills for AI coding agents" — 25 skills and 9 slash
+commands mapped onto define→plan→build→test→review→ship, with skills that auto-activate by context
+(designing an API triggers `api-and-interface-design`) and a `/build auto` mode that generates the
+plan and implements every task in a single approved pass, keeping per-task tests and individual
+commits. Installs via the vercel-labs `skills` CLI into 70+ agents.
+
+**Why it matters:** While one-file skills trend daily, the largest repo in the genre is betting on
+lifecycle discipline — spec before code, test gates, human approval between stages. The README's
+own fine print: a per-skill `npx` install copies only the skill folder and omits the repo-level
+`references/` directory, so shared checklists silently go missing — an ecosystem-wide packaging
+gap in miniature.
+
+[`🔗 addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) · [`🔗 vercel-labs/skills CLI`](https://github.com/vercel-labs/skills)
+
+---
+
+## 26. Kinesis — control your Mac with the Meta Neural Band
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 119+ pts · 34 comments
+- **Tags:** `hardware` `emg` `macos`
+
+A native macOS app (Swift 6, macOS 14+, Apple Silicon and Intel) that pairs with Meta's EMG neural
+band and maps its gestures to system input: swipe between desktops, open Mission Control, control
+music, pinch-and-turn for volume or brightness — with user-definable mappings, a practice mode in
+setup, and a menu-bar home. The author credits the PoC to tinkering "with astra" in a public
+`neural-band-poc` repo, so the protocol work is inspectable and reusable.
+
+**Why it matters:** Meta shipped the band as a closed-platform input device; a 9-commit weekend repo
+turns it into a system-wide Mac input bus. The caveats are proportionate to the fun: 71 stars, no
+code-signing discussion, and enabling Accessibility grants full input control — install with that
+in mind.
+
+[`🔗 callbacked/kinesis`](https://github.com/callbacked/kinesis) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=49695408)
+
+---
+
+## 27. Since our Sep 10 coverage: Apple publishes the Reference Image technical page — C2PA critique included
+
+- **Velocity:** ▮ steady
+- **Source:** security.apple.com · 47+ pts · 2h ago (~10:07 UTC+8)
+- **Tags:** `provenance` `c2pa` `privacy`
+
+Apple Security Engineering and Architecture (SEAR) and Camera & Photos have published how Apple
+Reference Image works: an opt-in camera mode debuting on the main sensor of the iPhone 18 Pro and
+Pro Max that creates a securely timestamped reference image verified through Private Cloud Compute,
+with a chain of trust covering both the sensor and the computational-photography stack. The page
+argues C2PA-style post-capture metadata is vulnerable to compromise anywhere in the editing chain
+and creates privacy risks by tying images to a device or identity. Since we covered Proof of
+Capture on Sep 10 — the $100 DIY camera answering Reference Image with steganography — the debate
+has moved to primary sources.
+
+**Why it matters:** Apple's own page concedes the hard part ("this is not a simple problem to
+address") and stakes the design on PCC verifiability rather than metadata. What it doesn't
+quantify: no verification failure rates, no adversarial-testing results — the same gap Proof of
+Capture was built to probe.
+
+[`🔗 Apple SEAR`](https://security.apple.com/blog/apple-reference-image/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49721322)
+
+---
+
+## 28. A Twitch browser extension with 30k installs leaks OAuth tokens into proxy logs
+
+- **Velocity:** ▮ steady
+- **Source:** Socket · reported Sep 14
+- **Tags:** `oauth` `browser-extensions` `token-leak`
+
+Socket's analysis of "Twitch Enhanced Viewer | JeetBot" — listed in the official Chrome and Firefox
+stores with 30k+ installs, advertised as ad-blocking, 1080p-forcing, region-unlocking — found it
+captures the Twitch web client's authorization header and forwards the OAuth token to a commercial
+Russian-language streaming-bot service, appended as an `&auth=` query parameter on proxied
+video-playlist requests. Tokens therefore land in cleartext in the proxy's request logs, retrievable
+by the operator. Every watched channel is proxied except ten Russian-language channels hardcoded
+into the extension.
+
+**Why it matters:** A token in a URL is log leakage by design, and the feature list is exactly the
+lure pattern that gets extensions installed. Socket documents the mechanism and the hardcoded
+exemptions but publishes no token counts and confirms no account takeovers — the exposure is
+demonstrated, the abuse is not.
+
+[`🔗 Socket`](https://socket.dev/blog/malicious-twitch-browser-extension) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/twitch-extension-with-30k-installs-exposes-users-oauth-tokens/)
+
+---
+
+## 29. Japan's Digital Agency: a VPN flaw exposed ~246,000 government personnel records
+
+- **Velocity:** ▮ steady
+- **Source:** Digital Agency announcement · Sep 11, reported Sep 14
+- **Tags:** `data-breach` `vpn` `japan`
+
+Japan's Digital Agency says a third party used a vulnerability in a VPN device on the Government
+Solution Service (GSS) to access the system — discovered Jul 9 after the agency began investigating
+large-scale file access from a maintenance-and-operations staff account on Jun 25. Potentially
+exposed: 236,000 names, 231,000 email addresses, 94,000 phone numbers, and 1,000 addresses of
+government employees, public officials, and associated businesses — no general-public data. The
+agency's Q&A says the VPN flaw was rated medium severity and was not a zero-day; the product and
+CVE remain unnamed.
+
+**Why it matters:** A medium-severity, already-known flaw still produced one of the larger Japanese
+government exposures — severity ratings are not exposure rankings. And the timeline is the other
+lesson: Jun 25 detection → Jul 9 confirmation → Sep 11 public announcement.
+
+[`🔗 Digital Agency announcement`](https://www.digital.go.jp/news/2026-0911-01) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/japans-digital-agency-says-vpn-flaw-exposed-246-000-personnel-records/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-15T20:25:00Z |
-| Items | 20 |
-| Sources tracked | 20 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, vendor pages) |
+| Generated | 2026-09-16T04:15:00Z |
+| Items | 29 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, codyho.dev, Cloudflare blog, adminmenueditor.com, Apple SEAR, Socket, Japan Digital Agency, vendor pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

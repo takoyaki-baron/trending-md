@@ -1,8 +1,8 @@
 ---
 date: 2026-09-16
-updated: 2026-09-16T04:25:00+08:00
+updated: 2026-09-16T12:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -409,13 +409,198 @@ Edge0-35B-A3B-preview，一个 35B 稀疏 MoE（约 3B 激活参数），宣称"
 
 ---
 
+## 21. 《I Came, I Prompted, I Left》第二部：一个月造出符合标准的 M4 GPU 驱动
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 202+ 分 · 8小时前（~03:30 UTC+8）
+- **Tags:** `gpu-driver` `reverse-engineering` `agents`
+
+Cody Ho 和 Niklas 用大约一个月为 M4 Mac Mini（以及"MacBook Neo"）造出了完全符合 OpenGL ES 3.0
+的 GPU 驱动——这件事"通常要花数年"。他们仅靠实时硬件探测，逆向了 AGX 固件 ABI 和 M4、A18 Pro
+以及（大部分）M5 的用户态组件，自研了 IR/着色器编译器和命令流构建器，并实现了完整的 Linux 内核
+驱动——Chrome 和 Firefox 的 WebGL 合成已经能跑，Minecraft 跑到 200 帧。最值得注意的是净室纪律：
+全程没有打开任何 Apple 二进制，只用作者此前自建 hypervisor 抓到的硬件 trace，并把全部实验公开
+以便验证工作来源。
+
+**Why it matters:** 这是"I came, I prompted, I left"的续篇——LLM agent 在人的方向指引下承担了
+大量实现苦工，自建 hypervisor 加上 agent 驱动的逆向工程，把通常数年的工作压缩到几周。帖子自己
+的诚实标注也值得带走："按天计算过于乐观"（实际花了数周）、代码"尚未达到最终用户可用状态"、
+符合标准的 Vulkan 还在前方。
+
+[`🔗 codyho.dev`](https://codyho.dev/blog/gpu-driver/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49717638)
+
+---
+
+## 22. Admin Menu Editor Pro 供应链攻击：一天之内两次投毒的更新
+
+- **Velocity:** ▮▮ rising
+- **Source:** BleepingComputer + 厂商公告 · Sep 15 报道
+- **Tags:** `supply-chain` `wordpress` `backdoor`
+
+攻击者于 9 月 14 日攻陷 adminmenueditor.com，向 Admin Menu Editor Pro 插件（30 万安装量的免费版
+的商业版）推送了恶意的 2.35 更新：内含的 `includes/wp-user-consent.php` 会安装 web shell 并
+创建隐藏管理员账号。开发者 Janis Elsts 发现后于同日 19:00 UTC 推送了干净的 2.36——但攻击者
+仍然握有服务器权限，2.36 也被再次投毒。至少 230 名客户在约 1,500 个网站上安装了恶意更新；
+Elsts 警告真实数字可能更高，因为被投毒的 2.36 安装难以统计。厂商网站现已下线："在新基础设施
+重建完成前，销售、插件更新检查和下载均已停用。"
+
+**Why it matters:** 教科书式的教训实时上演：因为入侵没有先被清除，紧急修复版本身也被再次攻陷。
+与第 14 条攻击未打补丁站点不同，这是上游供应链——厂商自己的更新通道就是武器，任何客户侧的
+补丁都无法防范。
+
+[`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/malcious-admin-menu-editor-pro-plugin-backdoors-1-500-wordpress-sites/) · [`🔗 厂商公告`](https://adminmenueditor.com/)
+
+---
+
+## 23. Cloudflare 的"Disallow AI Training"：留在搜索里、拒绝训练——外加给爬虫的"Accountable"标签
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare 博客 · 35+ 分 · 2小时前（~10:25 UTC+8）
+- **Tags:** `ai-crawlers` `robots-txt` `publishing`
+
+新设置让网站可以对"搜索+训练"混合用途爬虫发布 `Disallow` 指令，并在 Cloudflare 网络层强制执行：
+"我们发布偏好，识别谁在爬取、归类它们为什么爬取，封锁无视者——然后在 Radar 上报告每家运营商
+的实际行为。"Apple、Google 和 Microsoft 被点名为满足新"Accountable"资格的运营商：提供训练
+退出机制、摘要退出机制、哪些页面被用于训练的 URL 级可见性，以及"退出训练不影响搜索排名"的
+保证。Cloudflare 的数据：不到 1% 的站点封锁搜索爬虫，而 17% 以某种方式封锁训练。按摘要控制
+内容用量"明年年初"推出。
+
+**Why it matters:** 它把训练退出从无法执行的 robots.txt 挪到了网络层强制——对出版方是真实变化。
+但结构性保留也要带上：是一家私人公司在为全行业定义"accountable"，该资格把已上线的能力和
+带时限的*承诺*打包在一起，而且执行只对经过 Cloudflare 分类的爬虫有效。
+
+[`🔗 Cloudflare 博客`](https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49721435)
+
+---
+
+## 24. 持续学习机制可以组合：JHU 报告 28 倍的长期记忆保持，以及代价
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face papers · 270+ 赞
+- **Tags:** `continual-learning` `memorization` `training`
+
+约翰·霍普金斯大学（Alvin Zhang、Daniel Khashabi、Tianmin Shu；arXiv 2609.06986）定义了"长程
+记忆"任务：模型通过持续监督微调顺序学习 100 个问答任务，无法访问此前的原始样本，推理时也没有
+任务标识。朴素顺序微调只保留 1.2%；最佳单一机制 8.1%；而跨三种"锚点"（数据/函数/权重）组合
+机制并配合 merged LoRA 达到 34.9% 的平均保留率——唯一在全部三个数据集上都进前三的组合——
+并把记忆半衰期从 1–2 个任务延长到 19–44 个。因子分析显示 replay 和 merged LoRA 主效应最大，
+且两者存在统计显著的超加性交互。
+
+**Why it matters:** Agent 记忆反复撞的是同一堵墙，这篇论文给出的不是又一个单点技巧，而是一张
+设计空间地图。论文自己的限制应该写进结论：这是记忆不是泛化（用训练问句评估）；所有方法在
+GSM8K/MATH/MMLU-Redux 上仍然灾难性遗忘；保留曲线持续下降——遗忘被推迟，而非阻止。
+
+[`🔗 arXiv 2609.06986`](https://arxiv.org/abs/2609.06986) · [`🔗 HF papers`](https://huggingface.co/papers/2609.06986)
+
+---
+
+## 25. addyosmani/agent-skills：skills 浪潮中最大的收藏库，是一个 9.49 万星的软件开发生命周期
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 今日 +307 · 总 94.9k
+- **Tags:** `agent-skills` `coding-agents` `workflow`
+
+Addy Osmani 的"面向 AI 编程 agent 的生产级工程技能"——25 个 skill 加 9 个 slash 命令，映射到
+define→plan→build→test→review→ship 生命周期，skill 会按上下文自动激活（设计 API 触发
+`api-and-interface-design`），还有 `/build auto` 模式：一次批准后自动生成计划并实现每个任务，
+同时保留逐任务的测试和独立提交。可通过 vercel-labs 的 `skills` CLI 安装到 70+ 个 agent。
+
+**Why it matters:** 单文件 skill 每天都在上趋势榜，而这个品类里最大的仓库押的是生命周期纪律——
+先规格后代码、测试门槛、阶段之间的人工批准。README 自己的细则：按单个 skill 执行 `npx` 安装
+只会复制 skill 目录、省略仓库级 `references/` 目录，共享检查清单会悄悄缺失——这是整个生态
+打包问题的缩影。
+
+[`🔗 addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) · [`🔗 vercel-labs/skills CLI`](https://github.com/vercel-labs/skills)
+
+---
+
+## 26. Kinesis —— 用 Meta 神经腕带控制你的 Mac
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 119+ 分 · 34 评论
+- **Tags:** `hardware` `emg` `macos`
+
+一个原生 macOS 应用（Swift 6，macOS 14+，支持 Apple Silicon 和 Intel），与 Meta 的 EMG 神经
+腕带配对，把手势映射为系统输入：切换桌面、打开调度中心、控制音乐、捏合旋转调节音量或亮度——
+支持自定义映射、设置里的练习模式，常驻菜单栏。作者把 PoC 归功于"用 astra 折腾"出的一只公开
+`neural-band-poc` 仓库，协议层面的工作可查阅、可复用。
+
+**Why it matters:** Meta 把腕带作为封闭平台的输入设备发售；一个 9 次提交的周末仓库把它变成了
+全系统的 Mac 输入总线。警告与乐趣成正比：71 颗星、没有讨论代码签名，而且开启辅助功能权限
+等于交出完整输入控制权——安装前想清楚。
+
+[`🔗 callbacked/kinesis`](https://github.com/callbacked/kinesis) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=49695408)
+
+---
+
+## 27. 继我们 9 月 10 日的报道之后：Apple 公布 Reference Image 技术页面——连对 C2PA 的批评也一起
+
+- **Velocity:** ▮ steady
+- **Source:** security.apple.com · 47+ 分 · 2小时前（~10:07 UTC+8）
+- **Tags:** `provenance` `c2pa` `privacy`
+
+Apple 安全工程与架构团队（SEAR）与相机和照片团队公布了 Apple Reference Image 的工作原理：
+一种在 iPhone 18 Pro 和 Pro Max 主摄上首发的可选拍照模式，生成经 Private Cloud Compute 验证的、
+带安全时间戳的参考图像，信任链同时覆盖传感器和计算摄影栈。页面论证了 C2PA 式的"拍摄后附加
+元数据"在编辑链路的任何一环都可能被篡改，并且把图像与设备或身份绑定会给摄影师带来隐私风险。
+自我们 9 月 10 日报道 Proof of Capture——用 100 美元 DIY 相机以隐写术回应 Reference Image——
+以来，这场争论已经回到一手信源。
+
+**Why it matters:** Apple 自己的页面承认了最难的部分（"这不是一个容易解决的问题"），并把设计
+押在 PCC 可验证性而非元数据上。页面没有量化的部分：没有验证失败率、没有对抗测试结果——
+这正是 Proof of Capture 要去探测的缺口。
+
+[`🔗 Apple SEAR`](https://security.apple.com/blog/apple-reference-image/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49721322)
+
+---
+
+## 28. 3 万安装量的 Twitch 浏览器扩展把 OAuth token 泄进代理日志
+
+- **Velocity:** ▮ steady
+- **Source:** Socket · Sep 14 报道
+- **Tags:** `oauth` `browser-extensions` `token-leak`
+
+Socket 对"Twitch Enhanced Viewer | JeetBot"的分析发现：这款在 Chrome 和 Firefox 官方商店上架、
+安装量 3 万+、宣传为去广告/强制 1080p/解锁区域限制的扩展，会截获 Twitch 网页客户端的
+authorization 头，把 OAuth token 发送给一家俄语商业直播机器人服务——作为 `&auth=` 查询参数
+附在被代理的视频播放列表请求上。因此 token 以明文落入代理服务器的请求日志，运营方可直接读取。
+用户观看的每个频道都会被代理，唯独代码里硬编码的十个俄语频道除外。
+
+**Why it matters:** 出现在 URL 里的 token 等于按设计泄进日志，而那份功能清单正是诱使安装扩展的
+经典套路。Socket 记录了机制和硬编码豁免，但没有公布 token 数量、也未确认任何账号失窃——
+暴露已被证实，滥用尚未证实。
+
+[`🔗 Socket`](https://socket.dev/blog/malicious-twitch-browser-extension) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/twitch-extension-with-30k-installs-exposes-users-oauth-tokens/)
+
+---
+
+## 29. 日本数字厅：VPN 漏洞暴露约 24.6 万条政府人员记录
+
+- **Velocity:** ▮ steady
+- **Source:** 数字厅公告 · Sep 11 发布，Sep 14 报道
+- **Tags:** `data-breach` `vpn` `japan`
+
+日本数字厅通报：第三方利用政府解决方案服务（GSS）所用 VPN 设备的漏洞入侵系统——该厅 6 月 25 日
+检测到一个运维人员账号的大规模文件访问后启动调查，7 月 9 日确认第三方入侵。可能暴露的数据：
+236,000 个姓名、231,000 个邮箱、94,000 个电话号码和 1,000 个地址，涉及政府职员、公职人员及
+相关企业——不含普通民众数据。数字厅的问答称该 VPN 漏洞定级为中等严重性、并非零日；产品与
+CVE 编号均未公布。
+
+**Why it matters:** 一个中等严重性、早已知的漏洞，照样造成了日本政府规模最大的暴露之一——
+严重性评分不等于暴露程度排名。另一个教训是时间线：6 月 25 日发现 → 7 月 9 日确认 → 9 月 11 日
+公开发布。
+
+[`🔗 数字厅公告`](https://www.digital.go.jp/news/2026-0911-01) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/japans-digital-agency-says-vpn-flaw-exposed-246-000-personnel-records/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-15T20:25:00Z |
-| Items | 20 |
-| Sources tracked | 20 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, vendor pages) |
+| Generated | 2026-09-16T04:15:00Z |
+| Items | 29 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, Google blog, arXiv, Hugging Face, TypeSafe, Internet Archive, CISA KEV, BleepingComputer, SecurityWeek, Wordfence/WPScan, F5 Labs, Sysdig, cPanel, The Hacker News, Strix, GitHub advisories, vendor pages, codyho.dev, Cloudflare blog, adminmenueditor.com, Apple SEAR, Socket, Japan Digital Agency, vendor pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
