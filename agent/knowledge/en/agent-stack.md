@@ -2156,3 +2156,22 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   [openmaic.chat](https://openmaic.chat/) ·
   [Anthropic: Cowork is now Claude](https://claude.com/blog/cowork-is-now-claude) ·
   [HN discussion](https://news.ycombinator.com/item?id=49729412)
+
+## 2026-09-17 12:03→20:03 — the browser joins the harness as a real, logged-in surface
+
+- **Tencent BrowserSkill (MIT, Rust CLI + browser extension, 3.6k★, +1,350 today, no tagged release —
+  README references v0.3.0, Releases section empty; Chrome/Edge only, Firefox "planned"):** lets
+  shell-capable agents — Cursor, Claude Code, Codex, Pi, Hermes Agent, DeepSeek Harness and more —
+  operate your *actual* browser with your *actual* logins, without hijacking it. Request path:
+  `bsk` CLI → local daemon → WebSocket (127.0.0.1) → extension → a dedicated **visible Agent
+  Window**; user tabs are only "borrowed" with explicit confirm; CAPTCHAs, logins and confirmations
+  route through a human-help request. **v0.3.0 closed the escape hatches** — `--unattended` and
+  `BSK_REQUEST_HELP=off` can no longer bypass extension-side confirmations.
+- **Position in the landscape:** browser-use tooling splits between cloud browser farms and
+  screenshot-driven control; BrowserSkill takes a third position — reuse real login state, keep a
+  human watching, integrate with whatever harness already runs. The design's weak point is honest
+  in the architecture: a local daemon authorized to drive logged-in sessions is a high-value target
+  (the crown-jewel shape from [[security]]), so the non-bypassable confirmation defaults are the
+  load-bearing decision.
+- Sources: [Tencent/BrowserSkill](https://github.com/Tencent/BrowserSkill) ·
+  [README](https://github.com/Tencent/BrowserSkill/blob/main/README.md)

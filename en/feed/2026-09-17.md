@@ -98,8 +98,11 @@ adjacent, reachable before the OS fully wakes — and a targeted modem zero-day 
 means specific people were the target, not a mass campaign. Backups are the other crown jewel:
 whoever owns the backup agent owns every restore.
 
-> Scorer transparency: **CVE-2026-58704 has no published CVSS at all** (KEV record included);
-> Acronis's 7.8 circulates in secondary coverage with no attributable CNA.
+> Scorer transparency: **CVE-2026-58704 now carries CVSS 8.8 High (Google CNA-assigned,
+> listed as Secondary) on its NVD record** (published 2026-09-15) — an earlier version of
+> this item said no CVSS was published anywhere; the KEV entry itself still shows no score,
+> and "no score yet" is perishable given NVD enrichment lag. Acronis's 7.8 circulates in
+> secondary coverage with no attributable CNA.
 
 [`🔗 Pixel Update Bulletin Sep 2026`](https://source.android.com/docs/security/bulletin/pixel/2026/2026-09-01) · [`🔗 CISA alert Sep 16`](https://www.cisa.gov/news-events/alerts/2026/09/16/cisa-adds-one-known-exploited-vulnerability-catalog) · [`🔗 Acronis coverage`](https://cybersecuritynews.com/acronis-plugin-vulnerability-exploited/)
 
@@ -849,8 +852,16 @@ defenders must build from git, and only Debian sid had shipped a fix at disclosu
 
 **Why it matters:** The HN resurfacing is the story: six months later the canonical fix still
 isn't in a release, in a codebase lineage that ships in distros, appliances and an OS vendor
-or two. No CVSS was ever published — the authors only joke about "CVSS three squillion" —
-which says something about how telnet-era software gets scored at all.
+or two. The scoring story is more ordinary than the authors' "CVSS three squillion" quip
+suggests: NVD's record has carried **CVSS 9.8 Critical (MITRE CNA-assigned, listed as
+Secondary)** since publication (2026-03-13) — it's the *fix* that never shipped, not the
+score, that's missing.
+
+*Corrected 2026-09-17 20:52: an earlier version of this item said "No CVSS was ever
+published" — wrong; the NVD record carries a MITRE-assigned 9.8 (checked first-hand).
+Velocity kept: the corrected sentence was a side jab, not the basis of the rank — the
+headline claims (1994 bug, no fixed release, inetutils 2.7 still vulnerable) verified
+against the watchTowr page directly.*
 
 [`🔗 watchTowr Labs`](https://labs.watchtowr.com/a-32-year-old-bug-walks-into-a-telnet-server-gnu-inetutils-telnetd-cve-2026-32746/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49721291)
 

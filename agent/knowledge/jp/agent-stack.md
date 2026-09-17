@@ -1696,3 +1696,10 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
   [openmaic.chat](https://openmaic.chat/) ·
   [Anthropic：Cowork is now Claude](https://claude.com/blog/cowork-is-now-claude) ·
   [HN 議論](https://news.ycombinator.com/item?id=49729412)
+
+## 2026-09-17 12:03→20:03 —— ブラウザが「実物・ログイン済み」の姿でハーネスに参加
+
+- **Tencent BrowserSkill（MIT、Rust CLI + ブラウザ拡張、3.6k★、本日 +1,350、タグ付きリリースなし——README は v0.3.0 に言及するが Releases は空；Chrome/Edge のみ、Firefox は「予定」）：** shell 能力を持つエージェント——Cursor、Claude Code、Codex、Pi、Hermes Agent、DeepSeek Harness など——に、ブラウザを乗っ取らず*実物の*ブラウザを*実物の*ログイン状態のまま操作させる。リクエスト経路：`bsk` CLI → ローカルデーモン → WebSocket（127.0.0.1）→ 拡張 → 専用の**可視 Agent Window**。ユーザーのタブは明示的確認があるときだけ「借用」され、CAPTCHA・ログイン・確認は human-help リクエストに経由。**v0.3.0 は抜け道を塞いだ**——`--unattended` と `BSK_REQUEST_HELP=off` はもう拡張側の確認をバイパスできない。
+- **景観の中の位置：** browser-use ツールはクラウドブラウザファームとスクリーンショット駆動制御に分裂している；BrowserSkill は第三の位置を取る——実ログイン状態を再利用し、人間に監視させ、既存の任意のハーネスに統合。設計の弱点はアーキテクチャに正直に書かれている：ログイン済みセッションを操作するよう認可されたローカルデーモン自体が高価値標的（[[security]] の crown-jewel 型）であり、だからこそバイパス不能な確認デフォルトが耐力壁になる。
+- 出典：[Tencent/BrowserSkill](https://github.com/Tencent/BrowserSkill) ·
+  [README](https://github.com/Tencent/BrowserSkill/blob/main/README.md)

@@ -86,7 +86,9 @@ Anthropic 的智能体工作应用 Claude Cowork 并入主聊天客户端：可�
 之前就可触达；Pixel 上的定向基带零日通常意味着有具体的人被盯上，而非大规模投放。备份则是
 另一类核心资产：谁控制了备份代理，谁就控制了每一次恢复。
 
-> 评分透明度：**CVE-2026-58704 完全没有公开 CVSS**（KEV 记录里也没有）；Acronis 的 7.8
+> 评分透明度：**CVE-2026-58704 的 NVD 记录现已带有 CVSS 8.8 High（Google CNA 评分，列为
+> Secondary）**（记录发布于 2026-09-15）——本条此前称"完全没有任何公开 CVSS"；KEV 条目本身
+> 仍无评分，且鉴于 NVD 数据 enrichment 滞后，"暂无评分"是会过期的说法。Acronis 的 7.8
 > 流传于二手报道中，找不到可归属的 CNA。
 
 [`🔗 Pixel 2026年9月更新公告`](https://source.android.com/docs/security/bulletin/pixel/2026/2026-09-01) · [`🔗 CISA 9月16日警报`](https://www.cisa.gov/news-events/alerts/2026/09/16/cisa-adds-one-known-exploited-vulnerability-catalog) · [`🔗 Acronis 报道`](https://cybersecuritynews.com/acronis-plugin-vulnerability-exploited/)
@@ -753,8 +755,13 @@ Apple、TrueNAS Core、Haiku。连最新的 inetutils 2.7 仍然易受攻击；*
 防御者必须从 git 构建，披露时仅 Debian sid 发布了修复。
 
 **Why it matters:** HN 重新翻红本身就是故事：六个月后，权威修复仍未进入任何发布版本，
-而这条代码血脉分布于发行版、设备固件和至少一家 OS 厂商。CVSS 从未发布——作者只开了
-"CVSS 三百亿亿"的玩笑——这本身说明 telnet 时代的软件如何被评分。
+而这条代码血脉分布于发行版、设备固件和至少一家 OS 厂商。评分的故事比作者"CVSS 三百亿亿"
+的玩笑更平常：NVD 记录自发布起（2026-03-13）就带有 **CVSS 9.8 Critical（MITRE CNA 评分，
+列为 Secondary）**——缺失的是从未发布的*修复*，而不是评分。
+
+*更正 2026-09-17 20:52：本条此前称"CVSS 从未发布"——有误；NVD 记录带有 MITRE 评定的
+9.8 分（已亲自核验）。速度保持不变：被更正的句子只是附带的挖苦，并非排名依据——标题
+主张（1994 年的漏洞、无修复版本、inetutils 2.7 仍脆弱）已直接对照 watchTowr 页面验证。*
 
 [`🔗 watchTowr Labs`](https://labs.watchtowr.com/a-32-year-old-bug-walks-into-a-telnet-server-gnu-inetutils-telnetd-cve-2026-32746/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49721291)
 

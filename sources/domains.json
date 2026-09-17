@@ -7392,5 +7392,59 @@
     "en": "Will Keleher's personal blog (engineering productivity, databases) — practitioner essays; the 'small programming tricks' post is argument plus anecdote, not measurement. Cross-checked (09-17): the post and its fzf/git-pickaxe examples match the 227-pt HN thread.",
     "jp": "Will Keleherの個人ブログ（エンジニアリング生産性、データベース）——実務者のエッセイ；「小さなプログラミングトリク」投稿は主張と逸話であって測定ではない。突合済み（09-17）：fzf/git pickaxeの例を含む投稿は227 ptのHNスレッドと一致。",
     "zh": "Will Keleher 的个人博客（工程效能、数据库）——实践者文章；'小型编程技巧'一文是论证加轶事，不是测量。已交叉核验（09-17）：含 fzf/git pickaxe 例子的原文与 227 分 HN 帖一致。"
+  },
+  "filipovski.net": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal technical blog of Nikola Filipovski — deep practitioner writeups on backup strategy and data durability (\"Backups Aren't Simple\"). First-hand, no product to sell; the six-month restore-test discipline is its own recommendation. Page facts verified against its HN discussion.",
+    "zh": "Nikola Filipovski 的个人技术博客——备份策略与数据持久性的深度实践文章（《Backups Aren't Simple》）。一手经验、无产品推销，“每六个月测试恢复”的纪律本身就是建议。页面事实已对照其 HN 讨论验证。",
+    "jp": "Nikola Filipovski の個人技術ブログ——バックアップ戦略とデータ耐久性についての深い実践記事（「Backups Aren't Simple」）。一次情報かつ商用なし。「6ヶ月ごとにリストアを検証する」規律そのものが推奨。ページの事実は HN 議論と照合済み。"
+  },
+  "labs.watchtowr.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "watchTowr Labs research blog — original vulnerability research with working PoCs (GNU inetutils telnetd CVE-2026-32746). Its own hedges are the value: it explicitly scopes what was demonstrated (arbitrary-free primitive, not full RCE). Cross-validated against NVD's MITRE-assigned 9.8 record.",
+    "zh": "watchTowr Labs 研究博客——带可用 PoC 的原创漏洞研究（GNU inetutils telnetd CVE-2026-32746）。其自身的限定措辞最有价值：明确界定所演示的范围（arbitrary-free 原语，非完整 RCE）。已对照 NVD 的 MITRE 9.8 记录交叉验证。",
+    "jp": "watchTowr Labs のリサーチブログ——動く PoC 付きのオリジナルな脆弱性研究（GNU inetutils telnetd CVE-2026-32746）。価値は自身の留保記述：実証範囲を明示（arbitrary-free プリミティブで完全 RCE ではない）。NVD の MITRE 9.8 レコードと交叉検証済み。"
+  },
+  "servo.org": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Official Servo engine blog — project announcements and maintenance retrospectives. The one-year sponsorship retrospective publishes rare first-hand maintenance metrics (8 new maintainers, 1,150 PRs reviewed). Numbers self-reported, but the funded role is public on OpenCollective.",
+    "zh": "Servo 引擎官方博客——项目公告与维护回顾。其一周年赞助回顾发布了罕见的第一手维护指标（8 名新维护者、评审 1,150 个 PR）。数字为自报，但该受资助职位在 OpenCollective 上公开可查。",
+    "jp": "Servo エンジン公式ブログ——プロジェクト告知とメンテナンス回顧。1周年スポンサー回顧は希少な一次メンテナンス指標を公開（新メンテナ 8 名、レビュー 1,150 PR）。数値は自己報告だが、支援された役職は OpenCollective で公開。"
+  },
+  "jakeasmith.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal blog of Jake A. Smith (PHP/Composer ecosystem) — the http_build_url() deprecation post is a first-hand maintainer account of managed decay, with the xz-era reasoning stated plainly. Single author; install counts self-reported.",
+    "zh": "Jake A. Smith 的个人博客（PHP/Composer 生态）——http_build_url() 弃用公告是维护者关于“有管理的退役”的第一手叙述，xz 时代的理由陈述清晰。单一作者；安装量为自报。",
+    "jp": "Jake A. Smith の個人ブログ（PHP/Composer エコシステム）——http_build_url() 非推奨化の記事は「管理された退役」についてのメンテナ自身の一次記述で、xz 時代の理由づけが明快。単一著者、インストール数は自己報告。"
+  },
+  "neovim.io": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "low",
+    "en": "Official Neovim site — minimal by design; its value here is as a checkable primary artifact (the footer's Bitcoin donation address, verified live on the page). Project facts, no editorial.",
+    "zh": "Neovim 官网——设计极简；其价值在于可作为可核验的第一手工件（页脚的比特币捐赠地址已在实时页面上核验）。只有项目事实，无评论。",
+    "jp": "Neovim 公式サイト——意図的に最小構成。価値は検証可能な一次成果物として（フッターの Bitcoin 寄付アドレスをライブページで確認済み）。事実のみ、論説なし。"
+  },
+  "a6mzero.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal hardware-tinkering blog — first-hand agent-built PCB accounts (Fable 5 + KiCad MCP) with the failure ledger printed (65 DRC errors, footprint mistakes, hand-routed connections). Candid about what wasn't personally verified; all claims single-source.",
+    "zh": "个人硬件改装博客——AI 建造 PCB 的第一手记录（Fable 5 + KiCad MCP），失败清单齐全（65 个 DRC 错误、封装错误、手工布线）。对未经本人验证之处坦诚；所有主张均为单一来源。",
+    "jp": "個人ハードウェア工作ブログ——エージェント製 PCB の一次記録（Fable 5 + KiCad MCP）、失敗台帳も完備（DRC エラー 65、フットプリント誤り、手動配線）。未検証部分に正直だが、主張はすべて単一ソース。"
   }
 }

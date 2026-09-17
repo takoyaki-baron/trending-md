@@ -90,6 +90,13 @@ underlying pages — this produced a two-layer false signal in a single item.
 6. **Who scored it** — for a CVE, record the scorer with the score. `CVSS 9.0 (CNA-assigned, NVD
    Deferred)` is a materially different statement from `CVSS 9.0 (NVD Analyzed)`, and the two have
    disagreed twice in one week (Oracle WebCenter's CWE, Elementor's Patchstack-assigned 9.0/`AC:H`).
+   **"No CVSS published" is a perishable claim — check the NVD record, never coverage** (added
+   2026-09-17 after two same-day corrections, telnetd CVE-2026-32746 and Pixel CVE-2026-58704:
+   both carried CNA-assigned scores on NVD while the feed asserted absence). Absence asserted from
+   an article, a KEV entry, or a joke ("CVSS three squillion") is not absence; NVD enrichment also
+   lags record publication, so "no score yet" can invert within days. One-call check before
+   publishing any absence claim:
+   `curl -s "https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-…"` → look at `metrics`.
 
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first

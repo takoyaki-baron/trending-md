@@ -567,12 +567,49 @@
           "html_url": "https://github.com/LinkinPony/ptcg-rl-public/blob/929324c1f2f0c06db57051ad6bf2c8de78c7c365/src/tools/native_exact_consequence_benchmark.py",
           "found": "2026-09-15T21:24:30.795Z",
           "collision": true
+        },
+        "sunyrain/AutoPlanner::cascade_planner/legacy/eval_runtime/benchmarks.py": {
+          "repo": "sunyrain/AutoPlanner",
+          "path": "cascade_planner/legacy/eval_runtime/benchmarks.py",
+          "html_url": "https://github.com/sunyrain/AutoPlanner/blob/a306f106bb34b67e792cc21d6edeaca0a9cf26ce/cascade_planner/legacy/eval_runtime/benchmarks.py",
+          "found": "2026-09-17T13:13:30.607Z",
+          "collision": true
+        },
+        "baohonf/awa-samples::00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/docs/WRAP-BENCHMARK.md": {
+          "repo": "baohonf/awa-samples",
+          "path": "00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/docs/WRAP-BENCHMARK.md",
+          "html_url": "https://github.com/baohonf/awa-samples/blob/a972bff06102cb19d7758e5299241f702036f79e/00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/docs/WRAP-BENCHMARK.md",
+          "found": "2026-09-17T13:13:30.607Z"
+        },
+        "baohonf/awa-samples::00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/README.md": {
+          "repo": "baohonf/awa-samples",
+          "path": "00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/README.md",
+          "html_url": "https://github.com/baohonf/awa-samples/blob/a972bff06102cb19d7758e5299241f702036f79e/00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/README.md",
+          "found": "2026-09-17T13:13:30.607Z"
+        },
+        "baohonf/awa-samples::00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/docs/technical/product-model.md": {
+          "repo": "baohonf/awa-samples",
+          "path": "00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/docs/technical/product-model.md",
+          "html_url": "https://github.com/baohonf/awa-samples/blob/a972bff06102cb19d7758e5299241f702036f79e/00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/docs/technical/product-model.md",
+          "found": "2026-09-17T13:13:30.607Z"
+        },
+        "baohonf/awa-samples::00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/docs/technical/accounting-and-evidence.md": {
+          "repo": "baohonf/awa-samples",
+          "path": "00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/docs/technical/accounting-and-evidence.md",
+          "html_url": "https://github.com/baohonf/awa-samples/blob/a972bff06102cb19d7758e5299241f702036f79e/00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/docs/technical/accounting-and-evidence.md",
+          "found": "2026-09-17T13:13:30.607Z"
+        },
+        "baohonf/awa-samples::00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/benchmarks/render_charts.py": {
+          "repo": "baohonf/awa-samples",
+          "path": "00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/benchmarks/render_charts.py",
+          "html_url": "https://github.com/baohonf/awa-samples/blob/a972bff06102cb19d7758e5299241f702036f79e/00-器官供体/ccb-ecosystem/JuliusBrussee__caveman/benchmarks/render_charts.py",
+          "found": "2026-09-17T13:13:30.607Z"
         }
       },
-      "runs": 36,
+      "runs": 37,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-16T21:07:25.588Z",
-      "last_total": 82
+      "last_run": "2026-09-17T13:13:30.607Z",
+      "last_total": 87
     },
     "ra-paper-id": {
       "seen": {
@@ -734,18 +771,18 @@
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 23,
+      "runs": 24,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-16T21:07:25.588Z",
+      "last_run": "2026-09-17T13:13:30.607Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 23,
+      "runs": 24,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-16T21:07:25.588Z",
+      "last_run": "2026-09-17T13:13:30.607Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-16T21:07:25.588Z"
+  "last_run": "2026-09-17T13:13:30.607Z"
 }

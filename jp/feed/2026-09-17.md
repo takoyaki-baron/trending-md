@@ -94,8 +94,11 @@ Acronis の **CVE-2026-87886**（CVSS 7.8、不適切な既定権限、CWE-276�
 特定の誰かが狙われていることを通常意味する。バックアップはもう一つの王冠だ：バックアップ
 エージェントを掌握した者はすべてのリストアを掌握する。
 
-> スコアの透明性：**CVE-2026-58704 には公開 CVSS が一切ない**（KEV レコードにも）。
-> Acronis の 7.8 は二次報道で流通しており、帰属できる CNA が見つからない。
+> スコアの透明性：**CVE-2026-58704 の NVD レコードには現在 CVSS 8.8 High（Google CNA 採点、
+> Secondary 掲載）が載っている**（レコード公開 2026-09-15）——本項は当初「どこにも公開 CVSS
+> がない」と記載していた；KEV エントリ自体は依然スコアなしで、NVD のエンリッチ遅延を考えれば
+> 「まだスコアなし」は腐りやすい表現。Acronis の 7.8 は二次報道で流通しており、帰属できる
+> CNA が見つからない。
 
 [`🔗 Pixel 2026年9月アップデート情報`](https://source.android.com/docs/security/bulletin/pixel/2026/2026-09-01) · [`🔗 CISA 9月16日アラート`](https://www.cisa.gov/news-events/alerts/2026/09/16/cisa-adds-one-known-exploited-vulnerability-catalog) · [`🔗 Acronis 関連報道`](https://cybersecuritynews.com/acronis-plugin-vulnerability-exploited/)
 
@@ -838,8 +841,15 @@ git からビルドするしかなく、開示時に修正を出していたの�
 
 **Why it matters:** HN での再浮上こそが物語だ：6 か月後も正規の修正はいまだどのリリース
 にも入っていない。そのコード系譜はディストロ、アプライアンス、そして少なくとも 1 社の
-OS ベンダーに搭載されている。CVSS は一度も公表されていない——著者らは「CVSS 三千億」
-と冗談を言うだけ——それ自体が telnet 時代のソフトウェアのスコアリング事情を物語る。
+OS ベンダーに搭載されている。スコアリングの話は著者らの「CVSS 三千億」ジョークが示唆する
+より平凡だ：NVD レコードは公開時（2026-03-13）から **CVSS 9.8 Critical（MITRE CNA 採点、
+Secondary として掲載）** を担っている——欠けているのはスコアではなく、一度もリリースされ
+なかった*修正*の方だ。
+
+*訂正 2026-09-17 20:52：本項は当初「CVSS は一度も公表されていない」と記載した——誤り。
+NVD レコードには MITRE 採点の 9.8 が載っている（一次確認済み）。ベロシティは維持：訂正
+された文は脇の皮肉であって順位の根拠ではない——見出しの主張（1994 年のバグ、修正リリース
+なし、inetutils 2.7 も脆弱のまま）は watchTowr ページそのもので検証済み。*
 
 [`🔗 watchTowr Labs`](https://labs.watchtowr.com/a-32-year-old-bug-walks-into-a-telnet-server-gnu-inetutils-telnetd-cve-2026-32746/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=49721291)
 

@@ -1792,7 +1792,10 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
 - **来自 Google 与 Acronis 九月安全更新的两个当日 KEV：** Pixel **CVE-2026-58704**，modem 子组件
   权限提升，Google 称"可能正受到有限的、定向的利用"——Pixel 上的定向调制解调器零日通常意味着
   特定人群是目标，而非大规模活动；手机 modem 是手机最深的攻击面（毗邻 baseband、OS 完全唤醒前
-  即可达）。评分透明度：**任何地方都没有公布 CVSS**，包括 KEV 记录。Acronis **CVE-2026-87886**
+  即可达）。评分透明度（*09-17 20:52 更正——"任何地方都没有公布 CVSS"一说有误：NVD 记录
+  （发布于 09-15）带有 **CVSS 8.8 High，Google CNA 评分，列为 Secondary**；已经 NVD API 核验。
+  KEV 条目本身仍无评分，且 NVD 数据滞后使"暂无评分"成为会过期的说法——写作时应查记录，
+  切勿依据报道断言缺失*）。Acronis **CVE-2026-87886**
   （7.8，CWE-276 默认权限错误）——cPanel/WHM Backup 插件与 Plesk 扩展中的本地权限提升，在检测到
   "有限的、定向的利用"后修补；7.8 分在二手报道中流传，无可归属的 CNA。备份是另一顶皇冠：谁拥有
   备份代理，谁就拥有每一次恢复。
@@ -1813,3 +1816,16 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [CybersecurityNews：Acronis](https://cybersecuritynews.com/acronis-plugin-vulnerability-exploited/) ·
   [Wired：Flock 拆解](https://www.wired.com/story/hackers-flock-camera-data-shows-how-system-works/) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49726586)
+
+## 2026-09-17 12:03→20:03 —— 32 岁的老 bug 仍无修复版本；被恢复的条码签名密钥；首次因动能战争导致的云数据永久丢失
+
+- **GNU inetutils telnetd CVE-2026-32746（DREAM Security Research Team / watchTowr，2026 年 3 月）六个月后迎来 HN 热议——但至今没有修复版本：** LINEMODE SLC 协商处理中的预认证 BSS 溢出，**自 1994 年起就存在**——客户端提供的 SLC 三元组落入固定的 0x6C 字节全局变量且无边界检查，破坏约 400 字节的相邻变量。watchTowr 在 32 位 Debian 上演示了任意释放写原语 + 堆指针泄漏，明确表示*并非*完整 RCE（强依赖环境，在嵌入式 libc 上更容易）。这段代码被复制到各处：Ubuntu、Debian、FreeBSD、NetBSD、Citrix NetScaler、Apple、TrueNAS Core、Haiku。最新的 inetutils 2.7 仍然易受攻击；防御者只能从 git 构建（披露时只有 Debian sid 出了修复）。**评分（*09-17 20:52 更正*）**：此前"从未发布过 CVSS"的记载有误——NVD 记录（发布于 2026-03-13）带有 **CVSS 9.8 Critical，MITRE CNA 评分，列为 Secondary**（已经 NVD API 核验）；作者"CVSS 三万万亿"的玩笑是真的，但这个玩笑被本 feed（很可能还有其他媒体）当成了"无评分"的事实转述。修订后的教训：核验记录，而非段子——真正缺席的是*修复*，那才是要害。
+- **"Keys Not Included"——美国驾照条码签名密钥被恢复（ryan.science，HN 45+ 分）：** 加州用*公开的*密钥签署 PDF417 驾照条码——IDEMIA 构建的 W3C Verifiable Credential，位于 `ZC` 子文件，`ecdsa-xi-2023`，密钥挂在公开的 `did:web` URL——而 Canadian Bank Note 却为五个州（NY、VA、NC、SC、WI）用*未公开的*密钥签署条码。利用 **ECDSA 公钥恢复**：3 张真实纽约卡锁定同一个共享 P-256 密钥，6 张弗吉尼亚样本锁定另一把。两把恢复出的公钥均已公开并附浏览器验证器；一张签名格式正确但密钥错误的伪造纽约样本立即验证失败。**恢复公钥只能实现验证、不能伪造。** 落点是制度性的：同一家供应商已经在加州规模上运行可公开验证的条码，却不向其他地方提供——"签名要么是公开行为，要么什么都不是"；障碍是被验证的意愿，不是工程。
+- **AWS 确认巴林 + 一个阿联酋可用区（mec1-az2）客户数据永久丢失：** 3 月 1 日伊朗无人机袭击损坏三个数据中心后，AWS 不会重开受袭设施，数据仅存于受影响位置的客户已失去数据。这是首次确认的、因动能军事行动导致的云客户数据永久丢失——把"区域冗余"从抽象概念变成某人按工作负载做出的（或没做的）选择。冲突区数据中心暴露现在是架构评审项，不是合规复选框。（WSJ 有付费墙；事实经 Reuters + Data Center Dynamics 交叉验证。）
+- 来源：[watchTowr Labs](https://labs.watchtowr.com/a-32-year-old-bug-walks-into-a-telnet-server-gnu-inetutils-telnetd-cve-2026-32746/) ·
+  [HN：telnetd](https://news.ycombinator.com/item?id=49721291) ·
+  [ryan.science：Keys Not Included](https://ryan.science/blog/keys-not-included) ·
+  [HN：keys](https://news.ycombinator.com/item?id=49735930) ·
+  [Reuters：AWS 巴林](https://www.reuters.com/world/middle-east/amazons-aws-is-unable-restore-access-bahrain-one-uae-cloud-data-zone-after-war-2026-09-15/) ·
+  [Data Center Dynamics](https://www.datacenterdynamics.com/en/news/aws-unable-to-restore-access-to-data-centers-hit-by-iran-strikes/) ·
+  [HN：AWS](https://news.ycombinator.com/item?id=49719249)

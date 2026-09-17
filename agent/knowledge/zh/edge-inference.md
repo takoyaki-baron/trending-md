@@ -482,3 +482,16 @@ Qwen3.8 27B 对比复现的 BF16 基线，测 GPQA Diamond / IFBench / Terminal-
 - 来源：[codyho.dev：GPU 驱动](https://codyho.dev/blog/gpu-driver/) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49717638) ·
   [github.com/jamiepine/voicebox](https://github.com/jamiepine/voicebox)
+
+## 2026-09-17 12:03→20:03 —— NVIDIA 把 Rust 变成 CUDA 一等语言；三元权重打包跌破 1.58 比特"下限"
+
+- **NVIDIA 发布 "Introducing CUDA Rust"——官方两条用 Rust 写 GPU kernel 的路径**，由厂商自己出货编译器路径（社区 Rust-on-GPU 项目已存在多年；此举让 Rust 与 CUDA C++/Python 并列为一等 kernel 语言）：
+  - **cuda-oxide**（NVlabs）——自定义 `rustc` codegen 后端：`#[kernel]` 函数经 Rust MIR → Pliron IR → LLVM IR → PTX，用安全 Rust 写逐线程 SIMT kernel（安全靠逐线程独占 `DisjointSlice` 写 + 校验过的 launch 契约；shared memory 仍需 `unsafe`）。
+  - **cutile-rs**（crates.io 上的 `cutile`）——tile 路径：操作张量 tile，由编译器经 CUDA Tile IR JIT 处理线程映射 + 内存布局，**稳定版 Rust 1.89+** 即可；已跑在 NVIDIA 之外的 Hugging Face Grout 推理引擎与 mistral.rs 中。
+  - 带上 NVIDIA 自己的告警："两个项目都处于早期、均未达到生产可用"，"覆盖不完整、API 会变"，仅限 Linux、计算能力 8.0+。
+- **BITCOS（arXiv 2609.16338，Georganas/Heinecke/Dubey，Intel）：** 对 29 个三元模型的符号分布测量显示零权重高达 **51.5%**；BITCOS 利用该偏斜设计分布自适应布局（稠密存在位图 + 压缩符号向量，每权重 2−z 比特）：最稀疏模型上 **1.485 比特/权重——低于 log₂3 ≈ 1.585 的下限，因为该下限假设符号均匀分布**；29 个模型中 26 个胜过五值三态打包，对比生产级三元 matvec kernel 最高 1.28× 加速，解码 CPU +1.18× / Xe2 GPU +1.27×。诚实的告警：29 个中有 3 个*反而更差*、收益取决于每个模型的零密度、kernel 针对 Intel 硬件（AVX-512/AVX2/Xe2）。
+- 来源：[NVIDIA Developer Blog](https://developer.nvidia.com/blog/introducing-cuda-rust-two-tracks-for-writing-gpu-kernels/) ·
+  [NVlabs/cuda-oxide](https://github.com/NVlabs/cuda-oxide) ·
+  [HN：CUDA Rust](https://news.ycombinator.com/item?id=49724881) ·
+  [arXiv 2609.16338](https://arxiv.org/abs/2609.16338) ·
+  [HN：BITCOS](https://news.ycombinator.com/item?id=49732931)

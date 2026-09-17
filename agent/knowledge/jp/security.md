@@ -2058,7 +2058,10 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   モデムサブコンポーネントの権限昇格で、「限定的かつ標的型の悪用を受けている可能性」——Pixel の
   標的型モデムゼロデイは通常、大規模キャンペーンではなく特定の人物が標的だったことを意味する。
   電話のモデムは端末最深の攻撃面（ベースバンド随伴、OS が完全に起動する前に到達可能）。採点の
-  透明性：**CVSS はどこにも公表されていない**（KEV レコードを含む）。Acronis **CVE-2026-87886**
+  透明性（*09-17 20:52 訂正——「どこにも CVSS が公表されていない」は誤り：NVD レコード
+  （公開 09-15）には **CVSS 8.8 High、Google CNA 採点、Secondary 掲載** がある。NVD API で
+  確認済み。KEV エントリ自体は依然スコアなしで、NVD のエンリッチ遅延を考えると「まだスコア
+  なし」は腐りやすい——執筆時にレコードを確認し、報道から不在を断言しない*）。Acronis **CVE-2026-87886**
   （7.8、CWE-276 不適切なデフォルト権限）——cPanel/WHM バックアッププラグインと Plesk 拡張の
   ローカル権限昇格で、「限定的かつ標的型の悪用」検知後に修正。7.8 は帰属可能な CNA のないまま
   二次報道で流通。バックアップはもう一つの crown jewel：バックアップエージェントを所有する者が
@@ -2083,3 +2086,16 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [CybersecurityNews：Acronis](https://cybersecuritynews.com/acronis-plugin-vulnerability-exploited/) ·
   [Wired：Flock teardown](https://www.wired.com/story/hackers-flock-camera-data-shows-how-system-works/) ·
   [HN 議論](https://news.ycombinator.com/item?id=49726586)
+
+## 2026-09-17 12:03→20:03 —— 32歳のバグに未だ修正版なし。復元されたバーコード署名鍵。運動戦による初のクラウドデータ永久喪失
+
+- **GNU inetutils telnetd CVE-2026-32746（DREAM Security Research Team / watchTowr、2026年3月）が半年後に HN で再燃——それでも修正版は未リリース：** LINEMODE SLC 交渉ハンドラにおける pre-auth BSS オーバーフロー。**1994年から存在**——クライアント指定の SLC トリプルが境界チェックなしで固定 0x6C バイトのグローバル変数に入り、隣接変数約400バイトを破壊する。watchTowr は32ビット Debian で arbitrary-free 書き込みプリミティブ + ヒープポインタ漏えいを実証し、完全な RCE では*ない*と明示（環境強依存、組み込み libc では容易）。系統は至る所にコピーされた：Ubuntu、Debian、FreeBSD、NetBSD、Citrix NetScaler、Apple、TrueNAS Core、Haiku。最新の inetutils 2.7 も依然脆弱。防御者は git からビルドするしかない（公開時点で修正を出したのは Debian sid のみ）。**採点（*09-17 20:52 訂正*）**：以前の「CVSS は一度も公表されていない」という記録は誤り——NVD レコード（公開 2026-03-13）には **CVSS 9.8 Critical、MITRE CNA 採点、Secondary 掲載** がある（NVD API で確認済み）。著者らの "CVSS three squillion" ジョークは本物だが、そのジョークが本フィード（そしておそらく他の媒体でも）「スコアなし」という事実として転記された。修正後の教訓：ジョークではなくレコードを検証する——本当に欠けているのは*修正*であり、それこそが要だ。
+- **"Keys Not Included"——米運転免許証バーコードの署名鍵を復元（ryan.science、HN 45+ pts）：** カリフォルニアは PDF417 免許証バーコードを*公開済み*鍵で署名している——IDEMA 製の W3C Verifiable Credential を `ZC` サブファイルに、`ecdsa-xi-2023`、鍵は公開 `did:web` URL——一方 Canadian Bank Note は5州（NY、VA、NC、SC、WI）のバーコードを*未公開*鍵で署名していた。**ECDSA の公開鍵復元**を利用し、実物の NY カード3枚で共有 P-256 鍵1つを、VA のサンプル6枚でもう1つを特定。復元された鍵はブラウザ検証器と共に公開済み。鍵違いだが形式の正しい署名を持つ偽造 NY サンプルは即座に検証失敗。**公開鍵の復元は検証を可能にするだけで、偽造はできない。** 教訓は制度的：同じベンダーがカリフォルニア規模で公開検証可能なバーコードを運用しながら、他では一切出荷していない——「署名は公開行為か、無か」；障害は engineering ではなく、検証される意思だった。
+- **AWS、バリン + UAE の1アベイラビリティゾーン（mec1-az2）の顧客データ永久喪失を確認：** 3月1日のイラン無人機攻撃で3つのデータセンターが損傷。AWS は被災施設を再開せず、影響箇所にのみデータを置いていた顧客はデータを失った。運動による軍事行動で確認された初のクラウド顧客データ永久喪失——「リージョン冗長性」を抽象概念から、誰かがワークロード単位で行った（あるいは行わなかった）選択へ変換。紛争地域データセンター曝露はコンプライアンス項目ではなくアーキテクチャレビュー項目になった。（WSJ はペイウォール；事実は Reuters + Data Center Dynamics でクロスチェック済み。）
+- 出典：[watchTowr Labs](https://labs.watchtowr.com/a-32-year-old-bug-walks-into-a-telnet-server-gnu-inetutils-telnetd-cve-2026-32746/) ·
+  [HN：telnetd](https://news.ycombinator.com/item?id=49721291) ·
+  [ryan.science：Keys Not Included](https://ryan.science/blog/keys-not-included) ·
+  [HN：keys](https://news.ycombinator.com/item?id=49735930) ·
+  [Reuters：AWS バリン](https://www.reuters.com/world/middle-east/amazons-aws-is-unable-restore-access-bahrain-one-uae-cloud-data-zone-after-war-2026-09-15/) ·
+  [Data Center Dynamics](https://www.datacenterdynamics.com/en/news/aws-unable-to-restore-access-to-data-centers-hit-by-iran-strikes/) ·
+  [HN：AWS](https://news.ycombinator.com/item?id=49719249)

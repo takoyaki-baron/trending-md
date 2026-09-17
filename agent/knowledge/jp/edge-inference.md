@@ -547,3 +547,16 @@ Q8_0 を誤ってスキップ（補間で代用）、KV-cache 量子化は未テ
 - ソース：[codyho.dev：GPU ドライバ](https://codyho.dev/blog/gpu-driver/) ·
   [HN 議論](https://news.ycombinator.com/item?id=49717638) ·
   [github.com/jamiepine/voicebox](https://github.com/jamiepine/voicebox)
+
+## 2026-09-17 12:03→20:03 —— NVIDIA が Rust を CUDA の第一級言語に。3値重みのパッキングが 1.58 ビットの「下限」を切る
+
+- **NVIDIA が "Introducing CUDA Rust" を公開——Rust で GPU カーネルを書く公式トラック2本**、コンパイラパスを出すのはベンダー自身（コミュニティの Rust-on-GPU プロジェクトは年年あった；これで Rust が CUDA C++/Python と並ぶ第一級カーネル言語に）：
+  - **cuda-oxide**（NVlabs）——カスタム `rustc` codegen バックエンド：`#[kernel]` 関数が Rust MIR → Pliron IR → LLVM IR → PTX を流れ、安全な Rust でスレッド単位 SIMT カーネルを書く（安全性はスレッド単位の排他的 `DisjointSlice` 書き込み + 検証済み launch 契約による；shared memory は依然 `unsafe` 必須）。
+  - **cutile-rs**（crates.io の `cutile`）——タイルベースのトラック：テンソルタイルを操作し、スレッドマッピング + メモリレイアウトは CUDA Tile IR JIT が処理。** stable Rust 1.89+** で動作。NVIDIA 外の Hugging Face Grout 推論エンジンと mistral.rs で既に稼働。
+  - NVIDIA 自身の注意事項をそのまま：「両プロジェクトとも初期段階であり本番対応ではない」「カバレッジは不完全で API は変更される」、Linux 専用、compute capability 8.0+。
+- **BITCOS（arXiv 2609.16338、Georganas/Heinecke/Dubey、Intel）：** 29の3値モデルでのシンボル分布測定で、ゼロが重みの最大 **51.5%** と判明。BITCOS はこの偏りを分布適応レイアウト（密 presence ビットマップ + 圧縮符号ベクトル、重みあたり 2−z ビット）で突く：最も疎なモデルで **1.485 ビット/重み——シンボル均一を仮定する log₂3 ≈ 1.585 の下限を下回る**。29モデル中26で5-trit パッキングに勝ち、生産級3値 matvec カーネル比で最大 1.28× 高速化、デコードは CPU +1.18× / Xe2 GPU +1.27×。正直な注意点：29中3つでは*負ける*、利得は各モデルのゼロ密度に条件付き、カーネルは Intel ハードウェア（AVX-512/AVX2/Xe2）向け。
+- 出典：[NVIDIA Developer Blog](https://developer.nvidia.com/blog/introducing-cuda-rust-two-tracks-for-writing-gpu-kernels/) ·
+  [NVlabs/cuda-oxide](https://github.com/NVlabs/cuda-oxide) ·
+  [HN：CUDA Rust](https://news.ycombinator.com/item?id=49724881) ·
+  [arXiv 2609.16338](https://arxiv.org/abs/2609.16338) ·
+  [HN：BITCOS](https://news.ycombinator.com/item?id=49732931)

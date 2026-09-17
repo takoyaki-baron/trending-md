@@ -671,3 +671,14 @@ GitHub 趋势榜，而同一场讨论记录了*harness*（而非技能）拥有�
   其自己的 HN 帖测得（09-09）：Claude "最多几轮"就回退规则，且 harness 指令压过用户规则。
 - 来源：[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) ·
   [r/ClaudeAI 帖子](https://www.reddit.com/r/ClaudeAI/comments/1v8o1jn/whoever_created_the_adhd_skill_god_bless_you/)
+
+## 2026-09-17 12:03→20:03 —— spec 框架迎来 HN 现实检验；Cowork 的能力层以仓库形态出货
+
+- **OpenSpec（Fission-AI，MIT，v1.13.0；"68k stars"是项目自述——未经核实）迎来 HN 日（95 分）：** 把要构建的东西捕获为 markdown spec + agent skill，并提供 CLI（`openspec view`）让 agent 与人类**不烧 token 读文件**即可检视 spec 与待定变更——这才是真正的新机制——另有五个 slash 命令（`/opsx:explore`、`propose`、`apply`、`verify`、`archive`）。这个帖是本月最平衡的 spec 工作流辩论：支持者报告内部评测表现好、"比 SpecKit 轻"；批评者反驳每次变更都会产出需要人工 review 的 AI-slop markdown、spec 语料"几乎立刻过时"、整个结构是"控制的幻觉"。spec-rot 异议持续撞上 spec-driven 浪潮（spec-kit 1.0、ponytail、archify）——这次双方都带着操作细节而来，不是喊口号。
+- **anthropics/knowledge-work-plugins（Apache-2.0，24.4k★，乘 Cowork 发布东风，今日 +287，无 tag 发布）：** Cowork 并入 Claude 的开源配套——11+ 个职能（销售、法务、财务、数据、客服、市场、产品、生物研究、企业搜索）的插件包，每个把 skill、MCP 连接器、slash 命令、子 agent 打包成纯 markdown/JSON；经 `claude plugin install sales@knowledge-work-plugins` 或 claude.com/plugins 安装。连接器勾勒出企业集成面：HubSpot、Snowflake、Databricks、Benchling、PubMed、Linear、Figma。定制是明确的设计目标（换 `.mcp.json`、改 skill 文件、fork 后提 PR）——harness 即可编辑文件的模式从编码扩展到每个办公室职能。24k 星是发布-wave 关注度；热度退去后值得复查。
+- **YuE2 交付 `yue2-music` agent skill**（SKILL.md），让编码 agent 生成/转写/编辑 ABC 乐谱——demo 沿 9 个 agent 编辑步骤、14 个版本走完一首歌；zero-shot 翻唱经 SheetSage2 转写 + 重渲染（有乐谱 0.647 CLEWS mAP，无乐谱 0.006）。编辑发生在*乐谱空间*（符号层）而非音频空间——可检视中间状态的赌注（archify、OpenSpec）用到音乐上。权重 CC BY-NC。
+- 来源：[openspec.dev](https://openspec.dev/) ·
+  [HN：OpenSpec](https://news.ycombinator.com/item?id=49734264) ·
+  [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) ·
+  [Cowork 发布文](https://claude.com/blog/cowork-is-now-claude) ·
+  [multimodal-art-projection/YuE](https://github.com/multimodal-art-projection/YuE)

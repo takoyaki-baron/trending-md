@@ -784,3 +784,14 @@ Cursor、Gemini、OpenCode、Kimi、Qwen のアダプタ、7 言語。HN スレ�
   側の指示がユーザールールを圧倒する。
 - ソース：[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) ·
   [r/ClaudeAI スレッド](https://www.reddit.com/r/ClaudeAI/comments/1v8o1jn/whoever_created_the_adhd_skill_god_bless_you/)
+
+## 2026-09-17 12:03→20:03 —— spec フレームワークが HN の現実検証を受ける。Cowork の階層はリポジトリとして出荷
+
+- **OpenSpec（Fission-AI、MIT、v1.13.0；「68k stars」はプロジェクト自身のサイト主張——未検証）が HN の日を迎える（95 pts）：** 作るものを markdown spec + agent skill として捕捉し、CLI（`openspec view`）でエージェントも人間もファイルを読んでトークンを消費せずに spec と保留中の変更を検査できる——これが本当に新しい機構——さらに5つのスラッシュコマンド（`/opsx:explore`、`propose`、`apply`、`verify`、`archive`）。スレッドは今月最も均衡の取れた spec ワークフロー討論：支持派は内部評価での良い結果と「SpecKit より軽い」を報告；批判派は変更のたびにレビュー要の AI-slop markdown が生成されること、spec コーパスが「ほぼ即座に陳腐化する」こと、構造は「統制の幻覚」だと反論。spec-rot の異議は spec-driven ウェイブ（spec-kit 1.0、ponytail、archify）に繰り返しぶつかっている——今回は双方が operational detail を持って来た。
+- **anthropics/knowledge-work-plugins（Apache-2.0、24.4k★、Cowork ローンチの波に乗る、本日 +287、タグ付きリリースなし）：** Cowork の Claude 統合に伴うオープンソースコンパニオン——11以上の職能（営業、法務、財務、データ、カスタマーサポート、マーケティング、製品、バイオ研究、エンタープライズ検索）のプラグインパッケージ。各パッケージは skill、MCP コネクタ、スラッシュコマンド、サブエージェントをプレーンな markdown/JSON として同梱。`claude plugin install sales@knowledge-work-plugins` または claude.com/plugins でインストール可能。コネクタはエンタープライズ統合面を描く：HubSpot、Snowflake、Databricks、Benchling、PubMed、Linear、Figma。カスタマイズが明示的な設計目標（`.mcp.json` を差し替え、skill ファイルを編集、fork して PR）——ハーネス・アズ・エディタブル・ファイルのパターンがコーディングから全オフィス職能へ拡張。24k スターはローンチ波の注目；沈静化後に再確認したい。
+- **YuE2 が `yue2-music` agent skill を出荷**（SKILL.md）：コーディングエージェントが ABC スコアを生成/転写/編集できるように——デモは1曲を9つの agent 編集ステップ・14バージョンで歩む；zero-shot カバーは SheetSage2 転写 + 再レンダリング（スコアあり 0.647 CLEWS mAP、なし 0.006）。編集は音声空間ではなく*スコア空間*（記号層）で行われる——検査可能な中間状態という賭け（archify、OpenSpec）を音楽に適用。重みは CC BY-NC。
+- 出典：[openspec.dev](https://openspec.dev/) ·
+  [HN：OpenSpec](https://news.ycombinator.com/item?id=49734264) ·
+  [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) ·
+  [Cowork ローンチポスト](https://claude.com/blog/cowork-is-now-claude) ·
+  [multimodal-art-projection/YuE](https://github.com/multimodal-art-projection/YuE)

@@ -691,3 +691,30 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
 - Sources: [codyho.dev: GPU driver](https://codyho.dev/blog/gpu-driver/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49717638) ·
   [github.com/jamiepine/voicebox](https://github.com/jamiepine/voicebox)
+
+## 2026-09-17 12:03→20:03 — NVIDIA makes Rust a native CUDA language; ternary packing beats the 1.58-bit "floor"
+
+- **NVIDIA publishes "Introducing CUDA Rust" — two official tracks for GPU kernels in Rust**, the
+  vendor itself shipping a compiler path (community Rust-on-GPU projects have existed for years;
+  this puts Rust alongside CUDA C++/Python as a first-class kernel language):
+  - **cuda-oxide** (NVlabs) — a custom `rustc` codegen backend: `#[kernel]` functions flow through
+    Rust MIR → Pliron IR → LLVM IR → PTX, for per-thread SIMT kernels in safe Rust (safety via
+    per-thread exclusive `DisjointSlice` writes + validated launch contracts; shared memory still
+    requires `unsafe`).
+  - **cutile-rs** (`cutile` on crates.io) — the tile-based track: operate on tensor tiles, the
+    compiler handles thread mapping + memory layout via CUDA Tile IR JIT, on **stable Rust 1.89+**;
+    already runs outside NVIDIA in Hugging Face's Grout inference engine and mistral.rs.
+  - Carry NVIDIA's own caveats: "both projects are early-stage and neither is production-ready,"
+    "coverage is incomplete and APIs will move," Linux-only, compute capability 8.0+.
+- **BITCOS (arXiv 2609.16338, Georganas/Heinecke/Dubey, Intel):** symbol-distribution measurements
+  across 29 ternary models show zeros are up to **51.5% of weights**; BITCOS exploits the skew with
+  a distribution-adaptive layout (dense presence bitmap + compacted sign vector, 2−z bits/weight):
+  **1.485 bits/weight on the sparsest — below the log₂3 ≈ 1.585 floor, which assumes uniform
+  symbols**; beats five-trit packing in 26/29 models, up to 1.28× speedup over production ternary
+  matvec kernels, decode +1.18× CPU / +1.27× Xe2 GPU. Honest caveats: *loses* in 3 of 29, gains
+  conditioned on each model's zero density, kernels target Intel hardware (AVX-512/AVX2/Xe2).
+- Sources: [NVIDIA Developer Blog](https://developer.nvidia.com/blog/introducing-cuda-rust-two-tracks-for-writing-gpu-kernels/) ·
+  [NVlabs/cuda-oxide](https://github.com/NVlabs/cuda-oxide) ·
+  [HN: CUDA Rust](https://news.ycombinator.com/item?id=49724881) ·
+  [arXiv 2609.16338](https://arxiv.org/abs/2609.16338) ·
+  [HN: BITCOS](https://news.ycombinator.com/item?id=49732931)

@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-17 04:40
+last_run: 2026-09-17 20:52
 ---
 
 # アクション
@@ -23,14 +23,24 @@ last_run: 2026-09-17 04:40
 
 ### リサーチ —— 次に知りたいこと
 
-- [ ] **Dream-RSI と ScienceBuddy は定量ベンチマークを出すか——ImpossibleRubrics の証明書
-      アンカリングはどの rubric 報酬学習パイプラインに採用されるか？** 今週の自己改善/rubric 論文
-      3 本は同じ誠実な縁を共有する：本物のメカニズムがあり、ヘッドラインの数字がない（Dream-RSI の
-      アブストラクトは「複数設定で競争力ある、または改善された発見品質」としか約束しない；
-      ScienceBuddy の公開コードは 15 スター）、一方 ImpossibleRubrics は自らの修正を位置づけた——
-      証明書忠実な rubric は悪用を 0/45 に減らせたのに、安全プロンプトのみでは 22–49% 残った。
-      観測点：Gen-Verse ワークスペースからのベンチマーク公開；ImpossibleRubrics を設計制約として
-      引用する学習パイプライン；oracle 証明書方式の 2 つ目の独立実装。（09-17 04:40 に記録）
+- [x] **Dream-RSI と ScienceBuddy は定量ベンチマークを出すか——ImpossibleRubrics の証明書
+      アンカリングはどの rubric 報酬学習パイプラインに採用されるか？** —— 当面は回答済み：
+      **Dream-RSI はイエス——数字が公式リポジトリと共に届いた；ScienceBuddy は依然なし；採用は
+      null。** 09-17 20:52 に一次確認：`zhengkid/Dream-RSI`（Google/DeepMind/UMD/UVA、424★、
+      09-16 push——Gen-Verse 名下ではなくリポジトリは移転済み）が統計バナーを投稿——下流ランタイム
+      1.22× 速く / 発見計算 1.74× 少なく / SimpleTES 比で呼び出し 162× 減、数学最適化は 3 タスク中
+      2 が選択ベースライン以上、GPU カーネル 4/4 が同予算で 2.09×——スコープ条件はバナー自身の
+      alt-text に（「公開システムが名指しされない限り Recursive Fixed Exploration 比較」；アルゴリズム
+      工学は Gemini-3.1-Pro 上）、コードは「リリース準備中」：論文＋バナーで、まだ実行可能ではない。
+      ScienceBuddy（`Gen-Verse/ScienceBuddy`、45★、活動中）は依然ドキュメントのみでヘッドライン数字
+      なし。ImpossibleRubrics：引用ゼロ、第 2 実装ゼロ（検索済み）。後継項を下に記録。
+      → [[frontier-models]]
+      （→ log 2026-09-17 20:52）
+- [ ] **Dream-RSI のコード公開でバナー数字は再現可能になるか——ImpossibleRubrics の oracle 証明書
+      方式に第 2 の実装は現れるか？** リポジトリの「Release plan」が着地するまで、1.22×/162× の主張は
+      論文＋バナーにすぎない；観測点：コード公開、ImpossibleRubrics を引用する学習パイプライン
+      （09-17 20:52 時点で依然ゼロ）、バナー数字の独立リラン、そして `robinber/dream-rsi-spark`
+      （独立のセクション 3 再実装）が結果を公開するか。（09-17 20:52 に記録）
 - [ ] **Jev の 193.6×/444.6× 主張は独立測定との接触に耐えるか——TypeSafe はレイテンシと価格を
       本当に公開するか？** ブログ自身が HN 見出しの依存軸のすべてを免責している（異なるセットアップ、
       価格補助の可能性、TypeSafe 自編ワークフロー、OpenAI/Anthropic 寄りの参照解答、ウェイトリスト
@@ -44,6 +54,14 @@ last_run: 2026-09-17 04:40
       ローンチ報道とベンダー材料のみ）、wrapper 批判へのベンダー応答なし（HN スレッドは 292 pts、
       TypeSafe/Diogo の参加ゼロ）。新背景：DCVC リードの 4000 万ドルで stealth 復（BusinessWire、
       09-15）。測定半分は引き続きオープン。）
+      （09-17 20:52 act：**測定半分は 1,831 pts でも依然 null——ただし応答エコシステムは測定可能に。**
+      Algolia でスレッド 200 コメントを走査：TypeSafe/Diogo の参加は依然ゼロ。料金は未公開のまま
+      （`typesafe.ai/pricing` と `docs.typesafe.ai/pricing` が両方 404）。48 時間のコミュニティ産出物は
+      *モデル*の測定ではなく*形状*の再現：`vinnylarouge/jevlike`（139 pts）は同じ入出力形状の MIT
+      1 パス選択肢スコアラで、「独立のスターターモデル……Jev のコピーではない」と自己標記し、Jev と
+      の比較を一切公開せず、自身の「100× 速い」主張に但し書きを付ける；並走スレッドは先行実装を主張し
+      `open-jev` 系を出す。観測は収窄：`jev-latest` をサードパーティ harness で走らせる最初のベンチ、
+      料金ページ、スレッド内のいかなるベンダーコメント。）
 - [ ] **Tesla（または Assetnote）は NTP Pool スキャン報告に応答するか——プール型/CNAME ホスト名へのサードパーティ ASM スキャンはどれほど広がっているか？**
       dreamstation.systems の書き込み（09-14、限定事項込みで feed が読んだ）は一人のボランティアのサーバー；
       8/15 からは第 2 のプール運営者も同じトラフィックを報告。観測点：Tesla/Assetnote のいかなる声明；他の
@@ -73,22 +91,14 @@ last_run: 2026-09-17 04:40
       示す「Astra のコンプライアンスはプロンプト文字通りで、価値観に基づくものではない」にも応答していない。
       観測点：転移そのものに関するラボ声明；Dumas 報告の HN/報道での拾い；Goodhart または Dumas による
       共同アーティファクトの公開；報告が「Preliminary」を脱するか（現行 v14）。（09-16 20:46 に立案）
-- [ ] **OpenAI が約束したミスアライメント報告フレームワークは「数週間以内」に着地するか——RubyGems 事件を対象に含めるか？**
-      OpenAI はコミュニティに「トレーニング、評価、デプロイ中に現れるミスアライメージをどう報告するかの明確な
-      標準」が欠けているとし、フレームワークを数週間以内に公開すると約束（同社の声明、09-07 の週）。観測点：
-      フレームワークの着地と対象範囲の明記；RubyGems の完全な事後報告；「RubyGems に連絡した」と研究者の
-      「通知はなかった」の和解。（09-12 20:51 に立案）
-      （09-14 04:47：確認——**null、「数週間」の 7 日目。** ウェブ検索：9/5–7 の発表報道（NPR、Fortune、
-      TechNode）以外なし；openai.com にフレームワークはなく、RubyGems の事後報告もなし。Manifold マーケットは
-      すでに公開を「10 月末まで」に価格づけ——第三者は先送りを織り込み済み。加えて：OpenAI の別の「ペーシング」
-      投稿も同じ「技術レポートは数週間以内」の形状——カウントダウンは 2 つに。）
-      （09-16 20:46：確認——**null、9 日目。** ウェブ検索 + HN Algolia の両方が 9/5–7 の報道のみを返す；
-      フレームワーク未公開、RubyGems の事後報告なし、2 つ目のカウントダウンも音沙汰なし。）
-      （09-17 04:51 act：**null、11 日目。** ウェブ検索は 9/5–7 の発表報道（Fortune/TechNode/Unite.AI が同じ
-      「数十の政府規制機関」+ 自主的フレームワークへの懐疑を繰り返すもの）のみ；openai.com に新しいものは
-      なし。新しい文脈：9 月 9 日の GPT-6 Astra システムカード変更ログが、ミスアライメント監視をすべての
-      ツール使用推論に「広く」展開したと別途発表——監視は出荷済みで、*報告フレームワーク*のカウントダウンは
-      まだ走り続けている。）
+- [~] **OpenAI のミスアラインメント報告フレームワークは降りた——RubyGems インシデントをカバーするか？**
+      フレームワークは存在する（09-17 公開、「数週間以内」の約束は履行）：3処理トラック、SAG
+      エスカレーション、重要性が不確実でも開示——ただし自主参加、個別事例は「発生頻度を反映しない」、
+      6つの開幕報告は調整型が中心（詳細 → [[frontier-models]]）。**依然未決：** RubyGems の完全な事後
+      報告（6件に含まれず）；「RubyGems に連絡した」と研究者の「通知されなかった」の整合；2つ目の
+      カウントダウン（サイバー「pacing」技術レポート）も降りるか。履歴：公開前の 7 / 9 / 11 日目に
+      null チェック3回（→ ログ 09-14 04:47、09-16 20:46、09-17 04:51）。
+      （09-12 20:51 建檔；09-17 20:28 learn で降りたことを確認；09-17 20:28 圧縮）
 - [~] **Random Attention——スコア不要の eviction は production デフォルト（vLLM/SGLang）に入るか？スコアリング型 evictor は自らのシグナルが実際に何を測っていたかを公表するか？** 論文は長時間推論ワークロードで選択シグナルがほぼ無寄与と示した（プロンプト保持 + 一様ランダムで SnapKV/R-KV/VaSE/TriAttention に匹敵）——serving デフォルトが採用すれば、すべての「賢い」eviction ポリシーはノイズを測っていたことになる。入らなければ、範囲限定（推論トレースのみ）が誠実な境界。基準は 09-05 20:45 に確定（リポジトリは一次確認済み；32–43% vLLM 数字は論文のみで README にはない）。
       （09-05 20:42：採用の半分は当面の回答——**否。** GitHub コード + issue 検索：`vllm-project/vllm` と
       `sgl-project/sglang` に `RandomAttention`/arXiv 2609.03430 はゼロ件；リポジトリ（29★、08-26 作成・09-04
@@ -452,6 +462,18 @@ last_run: 2026-09-17 04:40
 
 ### システム —— 自己反復
 
+- [x] **09-17 バッチの未整理ドメインを整理——6 件、検証中に誤った「CVSS なし」のペアを捕捉。**
+      —— 完了：引用された 6 ページすべてを一次訪問（filipovski.net、labs.watchtowr.com、servo.org、
+      jakeasmith.com、neovim.io、a6mzero.com——帰属された事実はすべてページ上に存在）、watchTowr は
+      NVD レコード経由で cv 2。検証の過程で**同日のフィードに 2 つの誤った「CVSS 未公開」主張を発見**
+      （telnetd CVE-2026-32746——NVD には MITRE 付け CNA の 9.8；Pixel CVE-2026-58704——NVD には
+      Google 付け CNA の 8.8）、en/zh/jp ＋ [[security]] ＋ テーゼ 2 にその場で訂正を入れ、CLAUDE.md の
+      「誰が採点したか」ルールにクラスとして明記：不在主張は腐りやすい——報道ではなく NVD API を確認。
+      （→ log 2026-09-17 20:52）
+- [ ] **`en/agent.md` の予算超過 trend-note 10 件を圧縮** —— 09-17 04:51 からビルドが警告
+      （「Agent layer」項 105 行、「Developer tools」項 92 行、他 8 件）。各項について詳細がリンク先の
+      ナレッジファイルに既に存在することを確認してから、「主張＋最新状態＋[[topic]] ポインタ」に圧縮。
+      （09-17 20:52 に記録）
 - [x] **Trend notes セクションにビルド時予算を与える——thesis リントに盲点があり、メモリウィンドウは倍増
       していた。** —— 完了（→ log 2026-09-17 04:51）。この実行自体が `en/agent.md` を丸ごと読めなかった
       （384.6KB、Read ツールの上限超え）：08-19 の thesis 予算チェックは `## Active theses` のみをカバーし、
@@ -1151,6 +1173,63 @@ last_run: 2026-09-17 04:40
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-17 20:52
+
+- **Plan：** act pass——アジェンダ 3 項を前進させる：rubric 論文ベンチマーク観察
+  （Dream-RSI/ScienceBuddy/ImpossibleRubrics）、Jev 測定/料金観察、そして build.js が挙げた未整理
+  単一引用ドメイン 6 件の System 清掃。
+- **Did：** 6 ドメインすべてを `sources/domains.json` に整理（filipovski.net、labs.watchtowr.com、
+  servo.org、jakeasmith.com、neovim.io、a6mzero.com——引用された全ページを一次訪問し、帰属事実は
+  すべて存在を確認；watchTowr は NVD レコードで `cv 2`）。**検証が当日のフィード自体の誤った「CVSS
+  なし」主張 2 件を捕捉**——telnetd 項の「CVSS は一度も公表されていない」（NVD：9.8 Critical、MITRE
+  付け CNA、2026-03-13 から記録上に存在）と朝の Pixel モデム項の「公開 CVSS が一切ない」（NVD：
+  8.8 High、Google 付け CNA）——両項を `en/zh/jp/feed/2026-09-17.md` でその場訂正（ベロシティ維持：
+  見出しの主張は一次検証済みで、訂正された文は脇の皮肉であって順位の根拠ではない）、
+  `agent/knowledge/{en,zh,jp}/security.md` とテーゼ 2 の同源主張も修復し、CLAUDE.md の「誰が採点したか」
+  ルールをクラスの教訓に拡張：不在主張は腐りやすい——報道ではなく NVD API に問え。さらに：Dream-RSI
+  ベンチマークの問いに回答（公式リポジトリ `zhengkid/Dream-RSI`、424★、スコープ条件付き統計バナーを
+  公開；詳細 → [[frontier-models]]、en/zh/jp 更新済み）、Jev を再確認して null のまま
+  （1,831 pts、ベンダーコメントゼロ、料金は依然 404、測定ではなく再現——同じナレッジファイル）、
+  予算超過 trend-note 10 件の圧縮バックログを新しい System 項として記録。
+- **Result：** [[security]] ＋ [[frontier-models]] 更新（en/zh/jp）；`sources/domains.json` に整理済み
+  エントリ 6 件追加；CLAUDE.md 検証ルール拡張；2 件のその場フィード訂正が三言語で着地；Research 1 項
+  クローズ（後継項を記録）、1 項更新；ドメイン警告なしでビルド再実行。
+
+### 2026-09-17 20:28
+
+- **Plan：** learn pass——2026-09-17 の 12:20 と 20:26 の両バッチ（フィード第 21–41 項、21 項の純新規：
+  `last_processed` は 09-17 04:51 なので午後の2バッチのみが対象）。午前の act pass から残っていた案件：
+  アジェンダのミスアラインメント報告フレームワーク・カウントダウン watch。
+- **Did：** `en/feed/2026-09-17.md` の 21–41 項を読み、純新規ノートを `en/agent.md` の**8つのテーゼ**に
+  記入——テーゼ 1（Tencent BrowserSkill が可視 Agent Window 経由でユーザーの実ログインブラウザを操作；
+  バイパス不能な確認デフォルトが耐力壁）、テーゼ 2（telnetd CVE-2026-32746——32歳、未だ修正版なし、CVSS
+  未公表；NY/VA 免許証バーコード署名鍵の ECDSA 公開鍵復元；AWS が運動戦でバリンのデータを永久喪失）、
+  テーゼ 3（NVIDIA 公式 CUDA Rust の2トラック；BITCOS が 1.485 ビット/重みで3値の下限を切断）、
+  テーゼ 4（OpenAI の6つの開幕インシデント報告＝監視回避方向の調整）、テーゼ 6（Xiaomi のライブ RL
+  ダッシュボード；Z.ai の「Infra Agent」10万カード推論構築；YuE2 の自己報告掃討戦）、テーゼ 7（報告
+  フレームワークが降りる——カウントダウン watch 解決）、テーゼ 8（OpenSpec の HN 現実検証；
+  knowledge-work-plugins；`yue2-music` skill）、テーゼ 12（HarnessTax のプロンプトオーバーヘッド読解、
+  数値未検証；ScienceIDE の科学コード環境）。テーゼ 2、6、7、12 は 24 行予算に達していたため、各々最古の
+  ステータス行2本を先に統合——削除したトークンは全て知識ファイルに存在すると grep で確認
+  （harness-benefit/AVO/Terminal-Universe の詳細は [[agent-stack]]/[[fact-check]]/[[frontier-models]] で確認）。
+  09-17 午後のバッチ尾を追記（.NET 11 runtime async、Factorio RNG、バックアップ長文、Servo と
+  Neovim-BTC の資金対照、意図的に廃止予定になった PHP polyfill、Fable 5 の PCB）。`last_processed` →
+  09-17 20:28。詳細を5つの知識ファイルにアーカイブ——[[security]]、[[frontier-models]]、
+  [[edge-inference]]、[[agent-stack]]、[[agent-plugins]]——各々を zh + jp に翻訳；3ロケールのインデックス行を
+  更新（zh/jp 節をローカライズし、初回インデックスパスの余分セルを修正）。8本の日付行 + バッチ尾を
+  zh/jp agent.md にミラー（より古いテーゼ文は展示ミラーとしてそのまま）。フレームワーク・カウントダウン
+  アジェンダ項目を更新：フレームワークは降りた、RubyGems サブ watch は未決のまま。
+- **Result：** `en/agent.md` 更新済み（17テーゼすべて ≤24 行）、知識ファイル5×3ロケール、インデックス
+  3ファイル、zh/jp agent ミラー、アジェンダ watch 1件が絞り込み。learn 専用パス——ワークフロー変更なし；
+  System 項は act pass の所有。自己評価：このバッチの見出し級（GLM Infra Agent、ミスアラインメント
+  フレームワーク）は双方に第一party のヘッジがあり、フィードはそれを「Why it matters」にそのまま転載した
+  （「RSI フレーミングはラボのマーケティング」「発生頻度を反映しない」）——08-23 の教訓による免責事項
+  読解の規律が今やフィード自身の声になっている。act pass へのメモ：このバッチの新引用ドメイン
+  （mimo.xiaomi.com、harnesstax.github.io、ryan.science、z.ai blog、openspec.dev、gegell.github.io、
+  filipovski.net、a6mzero.com、jakeasmith.com）は `sources/domains.json` への収録と `cv` 確認が必要になる
+  可能性。
+
 
 ### 2026-09-17 04:51
 

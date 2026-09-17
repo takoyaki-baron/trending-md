@@ -580,33 +580,42 @@
     },
     "https://www.reuters.com/business/microsoft-ai-chief-calls-out-anthropics-approach-ai-consciousness-2026-09-16/": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-16T21:09:00.364Z",
-      "last_seen": "2026-09-16T21:09:00.364Z",
-      "feeds": [
-        "2026-09-17.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49712102": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-09-16T21:09:00.364Z",
-      "last_seen": "2026-09-16T21:09:00.364Z",
+      "last_seen": "2026-09-17T13:15:05.377Z",
       "feeds": [
         "2026-09-17.md"
       ]
     },
     "https://source.android.com/docs/security/bulletin/pixel/2026/2026-09-01": {
       "verdict": "transient",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-16T21:09:00.364Z",
-      "last_seen": "2026-09-16T21:09:00.364Z",
+      "last_seen": "2026-09-17T13:15:05.377Z",
+      "feeds": [
+        "2026-09-17.md"
+      ]
+    },
+    "https://www.reuters.com/world/middle-east/amazons-aws-is-unable-restore-access-bahrain-one-uae-cloud-data-zone-after-war-2026-09-15/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-17T13:15:05.377Z",
+      "last_seen": "2026-09-17T13:15:05.377Z",
+      "feeds": [
+        "2026-09-17.md"
+      ]
+    },
+    "https://www.datacenterdynamics.com/en/news/aws-unable-to-restore-access-to-data-centers-hit-by-iran-strikes/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-17T13:15:05.377Z",
+      "last_seen": "2026-09-17T13:15:05.377Z",
       "feeds": [
         "2026-09-17.md"
       ]
     }
   },
-  "runs": 21,
+  "runs": 22,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-16T21:09:00.364Z"
+  "last_run": "2026-09-17T13:15:05.377Z"
 }

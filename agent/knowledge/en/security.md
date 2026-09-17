@@ -2739,7 +2739,11 @@ Sources: [Unit 42 investigation](https://unit42.paloaltonetworks.com/ai-assisted
   privilege escalation in a modem subcomponent, "may be under limited, targeted exploitation" —
   targeted-modem-zero-day on Pixels usually means specific people were the target, not a mass
   campaign; phone modems are the deepest handset attack surface (baseband-adjacent, reachable before
-  the OS fully wakes). Scorer transparency: **no CVSS published anywhere**, KEV record included.
+  the OS fully wakes). Scorer transparency *(corrected 09-17 20:52 — the "no CVSS published
+  anywhere" claim was wrong: NVD's record, published 09-15, carries **CVSS 8.8 High, Google
+  CNA-assigned, listed as Secondary**; verified via the NVD API. The KEV entry itself still shows
+  no score, and NVD enrichment lag makes "no score yet" perishable — check the record at write
+  time, never assert absence from coverage)*.
   Acronis **CVE-2026-87886** (7.8, CWE-276 incorrect default permissions) — local privilege
   escalation in the Backup plugin for cPanel/WHM and the Plesk extension, patched after "limited,
   targeted exploitation"; the 7.8 circulates in secondary coverage with no attributable CNA. Backups
@@ -2765,3 +2769,45 @@ Sources: [Unit 42 investigation](https://unit42.paloaltonetworks.com/ai-assisted
   [CybersecurityNews: Acronis](https://cybersecuritynews.com/acronis-plugin-vulnerability-exploited/) ·
   [Wired: Flock teardown](https://www.wired.com/story/hackers-flock-camera-data-shows-how-system-works/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49726586)
+
+## 2026-09-17 12:03→20:03 — a 32-year-old bug with no fixed release; recovered barcode signing keys; the first permanent cloud-data loss from kinetic war
+
+- **GNU inetutils telnetd CVE-2026-32746 (DREAM Security Research Team / watchTowr, March 2026) gets
+  its HN day six months on — and still has no fixed release:** a pre-auth BSS overflow in the LINEMODE
+  SLC negotiation handler, present **since 1994** — client-supplied SLC triplets land in a fixed
+  0x6C-byte global with no bounds check, corrupting ~400 bytes of adjacent variables. watchTowr
+  demonstrated an arbitrary-free write primitive + heap pointer leak on 32-bit Debian, explicitly
+  *not* full RCE (heavily environment-dependent, easier on embedded libc). The lineage was copied
+  everywhere: Ubuntu, Debian, FreeBSD, NetBSD, Citrix NetScaler, Apple, TrueNAS Core, Haiku. Even
+  inetutils 2.7 remains vulnerable; defenders must build from git (only Debian sid shipped a fix at
+  disclosure). **Scoring *(corrected 09-17 20:52)*:** the earlier note here — "no CVSS was ever
+  published" — was wrong: NVD's record (published 2026-03-13) carries **CVSS 9.8 Critical,
+  MITRE CNA-assigned, listed as Secondary** (verified via the NVD API); the authors' "CVSS three
+  squillion" joke is real, but the joke got repeated as an absence-of-score fact by this feed and
+  likely others. Revised lesson: verify the record, not the quip — and the *fix* still never
+  shipped, which is the part that matters.
+- **"Keys Not Included" — US driver's-license barcode signing keys recovered (ryan.science, HN 45+
+  pts):** California signs its PDF417 license barcodes with *published* keys — an IDEMIA-built W3C
+  Verifiable Credential in the `ZC` subfile, `ecdsa-xi-2023`, key at a public `did:web` URL — while
+  Canadian Bank Note quietly signs barcodes for five states (NY, VA, NC, SC, WI) with *unpublished*
+  keys. Exploiting **ECDSA public-key recovery**, three real New York cards pin down one shared
+  P-256 key; six Virginia samples pin another. Both recovered keys are published with a browser-only
+  verifier; a counterfeit NY sample with a well-formed but wrong-key signature fails instantly.
+  **Recovering a public key enables verification, not forgery.** The punchline is institutional: the
+  same vendor already operates publicly-verifiable barcodes at California scale and ships them
+  nowhere else — "a signature is a public act or it is nothing"; the willingness to be verified was
+  the obstacle, not the engineering.
+- **AWS confirms permanent customer-data loss in Bahrain + one UAE zone (mec1-az2) after March 1
+  Iranian drone strikes** damaged three data centers; AWS will not reopen the struck facilities, and
+  customers whose data lived only in the affected locations have lost it. The first confirmed
+  permanent loss of cloud customer data to kinetic military action — converting "region redundancy"
+  from abstraction to a per-workload choice someone made (or didn't). Conflict-zone data-center
+  exposure is now an architecture review item, not a compliance checkbox. (WSJ paywalled; facts
+  cross-checked against Reuters + Data Center Dynamics.)
+- Sources: [watchTowr Labs](https://labs.watchtowr.com/a-32-year-old-bug-walks-into-a-telnet-server-gnu-inetutils-telnetd-cve-2026-32746/) ·
+  [HN: telnetd](https://news.ycombinator.com/item?id=49721291) ·
+  [ryan.science: Keys Not Included](https://ryan.science/blog/keys-not-included) ·
+  [HN: keys](https://news.ycombinator.com/item?id=49735930) ·
+  [Reuters: AWS Bahrain](https://www.reuters.com/world/middle-east/amazons-aws-is-unable-restore-access-bahrain-one-uae-cloud-data-zone-after-war-2026-09-15/) ·
+  [Data Center Dynamics](https://www.datacenterdynamics.com/en/news/aws-unable-to-restore-access-to-data-centers-hit-by-iran-strikes/) ·
+  [HN: AWS](https://news.ycombinator.com/item?id=49719249)

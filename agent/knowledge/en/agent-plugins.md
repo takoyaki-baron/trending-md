@@ -960,3 +960,36 @@ the effect decays.
   "for a few turns at most," and harness instructions outweigh user rules.
 - Sources: [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) ·
   [r/ClaudeAI thread](https://www.reddit.com/r/ClaudeAI/comments/1v8o1jn/whoever_created_the_adhd_skill_god_bless_you/)
+
+## 2026-09-17 12:03→20:03 — the spec framework gets its HN reality check; Cowork's layer ships as a repo
+
+- **OpenSpec (Fission-AI, MIT, v1.13.0; "68k stars" is the project's own site claim — unverified)
+  gets its HN day (95 pts):** captures what to build as markdown specs + agent skills, with a CLI
+  (`openspec view`) letting agents and humans inspect specs and pending changes **without burning
+  tokens reading files** — the genuinely new mechanic — plus five slash commands (`/opsx:explore`,
+  `propose`, `apply`, `verify`, `archive`). The thread is the most balanced spec-workflow debate
+  this month: fans report good internal-eval results and "less heavy than SpecKit"; critics counter
+  that every change spawns AI-slop markdown needing review, the spec corpus "almost immediately
+  becomes out of date," and the structure is "an illusion of control." The spec-rot objection keeps
+  meeting the spec-driven wave (spec-kit 1.0, ponytail, archify) — both sides showed up with
+  operational detail, not vibes.
+- **anthropics/knowledge-work-plugins (Apache-2.0, 24.4k★ riding the Cowork launch wave, +287
+  today, no tagged releases):** the open-source companion to the Cowork-into-Claude launch — plugin
+  packages for 11+ job functions (sales, legal, finance, data, customer support, marketing, product,
+  bio-research, enterprise search), each bundling skills, MCP connectors, slash commands and
+  sub-agents as plain markdown/JSON; installable via `claude plugin install
+  sales@knowledge-work-plugins` or claude.com/plugins. Connectors map the enterprise integration
+  surface: HubSpot, Snowflake, Databricks, Benchling, PubMed, Linear, Figma. Customization is the
+  explicit design goal (swap `.mcp.json`, edit skill files, fork and PR) — the
+  harness-as-editable-files pattern extended from coding into every office job function. The 24k
+  stars are launch-wave attention; re-check once it decays.
+- **YuE2 ships a `yue2-music` agent skill** (SKILL.md) so coding agents generate/transcribe/edit ABC
+  scores — a demo walks one song through 9 agentic edit steps / 14 versions; zero-shot covers via
+  SheetSage2 transcription + re-render (0.647 CLEWS mAP vs 0.006 without a score). Editing happens
+  in *score space* (symbolic) rather than audio space — the inspectable-intermediate-state bet
+  (archify, OpenSpec) applied to music. Weights CC BY-NC.
+- Sources: [openspec.dev](https://openspec.dev/) ·
+  [HN: OpenSpec](https://news.ycombinator.com/item?id=49734264) ·
+  [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) ·
+  [Cowork launch post](https://claude.com/blog/cowork-is-now-claude) ·
+  [multimodal-art-projection/YuE](https://github.com/multimodal-art-projection/YuE)

@@ -1436,3 +1436,10 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   [openmaic.chat](https://openmaic.chat/) ·
   [Anthropic：Cowork is now Claude](https://claude.com/blog/cowork-is-now-claude) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49729412)
+
+## 2026-09-17 12:03→20:03 —— 浏览器以"真实、已登录"的形态加入 harness
+
+- **Tencent BrowserSkill（MIT，Rust CLI + 浏览器扩展，3.6k★，今日 +1,350，无 tag 发布——README 提及 v0.3.0，Releases 一栏为空；仅 Chrome/Edge，Firefox "计划中"）：** 让具备 shell 能力的 agent——Cursor、Claude Code、Codex、Pi、Hermes Agent、DeepSeek Harness 等——用你的*真实*浏览器和*真实*登录态操作，而非劫持浏览器。请求路径：`bsk` CLI → 本地 daemon → WebSocket（127.0.0.1）→ 扩展 → 一个专用的**可见 Agent Window**；用户标签页仅在明确确认后才被"借用"；CAPTCHA、登录、确认走 human-help 请求。**v0.3.0 堵死了逃生口**——`--unattended` 与 `BSK_REQUEST_HELP=off` 不再能绕过扩展侧确认。
+- **在格局中的位置：** browser-use 工具分裂为云浏览器农场与截图驱动控制两派；BrowserSkill 走第三条路——复用真实登录态、让人在旁监督、接入你已有的任意 harness。设计的弱点在架构里写得诚实：一个被授权驱动已登录会话的本地 daemon 本身就是高价值目标（[[security]] 里的 crown-jewel 形态），所以不可绕过的确认默认值才是承重墙。
+- 来源：[Tencent/BrowserSkill](https://github.com/Tencent/BrowserSkill) ·
+  [README](https://github.com/Tencent/BrowserSkill/blob/main/README.md)
