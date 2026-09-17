@@ -1829,3 +1829,23 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [Reuters：AWS 巴林](https://www.reuters.com/world/middle-east/amazons-aws-is-unable-restore-access-bahrain-one-uae-cloud-data-zone-after-war-2026-09-15/) ·
   [Data Center Dynamics](https://www.datacenterdynamics.com/en/news/aws-unable-to-restore-access-to-data-centers-hit-by-iran-strikes/) ·
   [HN：AWS](https://news.ycombinator.com/item?id=49719249)
+
+## 2026-09-18 04:03 —— 五个月前的 10.0 开始燃烧；DNS 层同步补丁；截图服务失去链接密钥层
+
+- **WSO2 API Manager CVE-2026-5430（CVSS 10.0 v3.1，CNA/Secondary 评定，NVD "Analyzed"——评分方已经 NVD API 核验）：** 4.1.0–4.6.0 及配套 Control Plane/Traffic Manager/Universal Gateway 中的 JWT 算法混淆——接受不支持的签名算法 → 伪造 admin JWT、完全账户接管。2026 年 4/5 月已修复（WSO2-2026-5328）；watchTowr 蜜罐 9 月 13 日捕获"内嵌管理员权限"的伪造 JWT——攻击者先打错了产品；在真品上重放即成功。watchTowr 的说法："横向移动即服务。"保留的限定：确认的是利用*尝试*，实际入侵仅"存疑"。又一个慢补丁的 10.0，这次烧在 API 网关这块核心设备上。
+- **Check Point 管理服务器 CVE-2026-91843（9.8，Check Point 评定；NVD 仍为 "Received"——评分方已经 NVD API 核验）：** Security Management / Multi-Domain SM / Log Server / Multi-Domain Log Server 的**未认证登录进程**中的栈溢出——"可能允许攻击者以 root 权限远程执行任意代码。"影响 R82.20、R82.10 Take ≤44、R82 Take ≤126、R81.20 Take ≤166 及 EoS 版本；经 LivePatch take（sk185114）修复。这是管理平面而非网关——向每台防火墙下发策略的设备。暂无利用/PoC；CISA SSVC：利用 "none"、可自动化 yes。检测行 "Administrator failed to log in: Username too long" 让回溯追猎变得简单——双刃。
+- **Docker Sandboxes 逃逸链 CVE-2026-77179（9.4，Docker 评定，v4.0）+ CVE-2026-79994（8.7）：** macOS 上 virtio-fs 宿主服务器在重新打开已删除文件时跟随符号链接 → 访客把父目录换成符号链接，即可按 VMM 用户读/改宿主文件（"可能导致宿主代码执行"）；第二个缺陷是访客-宿主 Unix socket 中继的 TOCTOU → 任意宿主 AF_UNIX socket。影响 Sandboxes 0.28.0–0.41.x，0.42.0 修复，未见利用。agent 相关边缘：`sbx run` 默认读写共享 cwd，`--clone` 缓解挡宿主*写*但**不挡读**——`.env` 仍然暴露。正是 agent 对不可信代码的威胁模型；并入沙箱逃逸形态（ExploitGym、Cloudflare 远程 Spectre）。
+- **CrowdSec 确认私有源码 5 月泄露——经 TanStack 供应链事件**（声明 9 月 17 日）：9 月 16 日获知其私有 GitHub 仓库（SaaS 控制台代码、AWS 例程、连接器）泄露；"TanStack 事件极可能是泄露载体"——一枚可读私有代码的 CI/CD token。CrowdSec 否认 "~300 repos" 标题（剔除 130+ 公开仓库后约 170 个私有），称泄露中无客户数据/PII/凭据，token 排查"目前未发现"，全部凭据已轮换。声明自设前提——泄露代码已过时四个月、"仅 5 月短窗口内可利用"——承担了重活；读一手声明，别读"300 仓库被黑"的报道。TanStack 事件自此有了具名的二阶受害者。
+- **DNS 补丁周（9 月 17 日）：** Unbound 1.26.1 修复 **CVE-2026-81642**——DNSKEY 记录的 owner-name 压缩指针指向自身 RDATA，溢出摘要缓冲；所有 ≤1.26.0 版本受影响，**9.1 v4.0 由 NLnet Labs 自行评定**（NVD "Awaiting Analysis"——经 API 核验；同一公告含 CVE-2026-82717，Anthropic 的 Ben Morris 报告的 CNAME 合成堆破坏，8.4）。限定：NLnet Labs 列出的影响是 DoS——RCE "可能"而非已证实。同日 ISC 在 9.20.29/9.21.26 修复 **14 个 BIND 9 DoS 级缺陷**，含 CVE-2026-77692（一个带无效 SIG(0) 记录的构造 DoH 请求即可击溃 `named`）。两个部署最广的 DNS 代码库在 48 小时内协同打补丁；Unbound 的攻击只需一个会查询解析器的恶意 zone。
+- **Gyazo 泄露（Helpfeel 公告 9 月 16 日）：** 图片上传服务器被未授权访问 → 任意命令 → 数据库：约 2,362 万用户记录（姓名、邮箱、密码哈希、会话 ID、设备 ID）与约 4.9 亿图片元数据记录——可构造 URL 的图片 ID、EXIF 位置、OCR 文本、私有图片的哈希口令。4.9 亿条主要是 2019 年 1 月及以前注册的图片（约占全部图片数据 14.4%），另有经过滤查询拉取的 240 万张独立集合。时间线：访问 9 月 11 日、9 月 15 日报 PPC、9 月 16 日公开；公司"无法排除"部分私有图片被查看。链接密钥保护的截图是默认开发工作流工具——图片 ID 一旦泄露，链接即可构造：凭据 + 机密截图双重暴露。旧 Gyazo 链接按公开对待。
+- Sources: [SecurityWeek: WSO2](https://www.securityweek.com/enterprises-warned-of-attacks-exploiting-wso2-vulnerability/) ·
+  [The Hacker News: WSO2](https://thehackernews.com/2026/09/active-exploitation-attempts-target.html) ·
+  [Check Point sk1000155](https://support.checkpoint.com/results/sk/sk1000155) ·
+  [NVD: CVE-2026-91843](https://nvd.nist.gov/vuln/detail/CVE-2026-91843) ·
+  [The Hacker News: Docker](https://thehackernews.com/2026/09/critical-docker-sandboxes-flaw-lets.html) ·
+  [CrowdSec statement](https://www.crowdsec.net/blog/crowdsec-statement-source-code-exposure) ·
+  [HN: CrowdSec](https://news.ycombinator.com/item?id=49742355) ·
+  [NLnet Labs advisory](https://nlnetlabs.nl/downloads/unbound/CVE-2026-81642.txt) ·
+  [SecurityWeek: BIND](https://www.securityweek.com/isc-patches-14-vulnerabilities-in-bind-9-security-update/) ·
+  [Helpfeel notice](https://corp.helpfeel.com/en/news/news-20260916) ·
+  [The Hacker News: Gyazo](https://thehackernews.com/2026/09/gyazo-breach-exposes-2362-million-user.html)

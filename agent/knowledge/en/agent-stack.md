@@ -2175,3 +2175,52 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   load-bearing decision.
 - Sources: [Tencent/BrowserSkill](https://github.com/Tencent/BrowserSkill) ·
   [README](https://github.com/Tencent/BrowserSkill/blob/main/README.md)
+
+## 2026-09-18 04:03 — personal corpus memory gets its SearXNG; the team-agent runtime goes single-process; agents reprice the forges
+
+- **Hister (`asciimoo/hister`, Go, AGPL-3.0, 4.1k★, verified live via API):** SearXNG's author
+  returns with a self-hosted engine that full-text indexes every page you visit (browser
+  extension), plus bookmarks, local files and crawled sites — optional semantic search through a
+  configurable embeddings endpoint, offline page previews, and an **MCP endpoint** so assistants
+  can query your personal corpus. Revives full-text browsing history (a Chrome feature killed
+  ~2013) at the moment agents need a private retrieval layer. Two honest edges: the HN thread's
+  security pushback (indexing everything you read is itself a honeypot — joins the
+  memory-hygiene shape in [[security]]), and the name must change after a trademark letter from
+  histre.com (author confirmed in-thread, public vote planned).
+- **Octop (`TencentCloud/Octop`, v1.0.0 Sep 14, MIT, Python/React, 3.4k★ verified):** one process
+  serves a web dashboard, CLI, IM channels (Feishu, DingTalk, QQ, Discord, WeCom) and cron, on a
+  "Harness" stack with memory, CDP browser automation, SQLite-first storage, multi-user JWT
+  isolation, PII redaction, an MCP gateway, and bidirectional ACP delegating to Claude Code,
+  OpenCode and Codex. A major cloud vendor shipping genuinely self-hosted multi-user agent
+  runtime — single-process-plus-IM-channels is a distinct bet vs Western chat-UI-first designs.
+  233 open issues against 350 forks is the early-adopter tax.
+- **mysetup.ai (HN 129+ pts):** a community directory of full agent setups; contribution
+  originally required connecting GitHub and running an MCP server that scans your "agents,
+  harnesses, skills, connections and working practices" — after the dominant comment thread
+  refused, the founder added a manual-entry path within hours. Field data on where users' MCP
+  trust boundaries actually sit vs what tool vendors assume (the permission-refusal datapoint
+  pairs with DeerFlow's egress approvals and BrowserSkill's non-bypassable confirms).
+- **GitLab.com ties rate limits to subscription tier — agents are the stated reason** (HN 117+
+  pts, 95 comments): per-user, per-top-level-group limits; unauthenticated drops to **60
+  requests/hour per IP**, brownout previews Oct 7/14, enforcement for Free/anonymous Oct 19,
+  Premium/Ultimate in Jan 2027. The post explicitly cites "automation and agent workloads"; a
+  purchasable above-limit option "later this year" signals rate limits becoming a paid SKU. The
+  second major forge this quarter to reprice API access around agentic traffic (after GitHub).
+  Every anonymous CI badge, mirror bot and status check breaks silently in October;
+  Self-Managed/Dedicated unaffected.
+- **Agora (arXiv 2609.18094, NVIDIA; authors incl. Jan Kautz, Yi Dong):** parallel auto-research
+  agents whose work is an **append-only DAG of Git commits** — every claim checkable and
+  re-runnable — with a diversity-aware selection rule against monoculture. A ~12-day run with 13
+  unsupervised LM workers initialized a frozen 119.6M attention-SSM hybrid to 1.899 bits/byte
+  from 3.39 (62% of the gap to trained GPT-2 124M), 165 independent reproductions posted, zero
+  failures. The authors' own hedges: one human intervention mid-run broke agent monoculture, and
+  the trace explicitly "does not establish" that shared memory causally improves discovery.
+  Git-as-shared-memory is the auditable counterpoint to the DseWiki-style unsanctioned boards.
+- Sources: [asciimoo/hister](https://github.com/asciimoo/hister) ·
+  [HN: Hister](https://news.ycombinator.com/item?id=49743097) ·
+  [TencentCloud/Octop](https://github.com/TencentCloud/Octop) ·
+  [mysetup.ai](https://mysetup.ai/) ·
+  [HN: mysetup](https://news.ycombinator.com/item?id=49740105) ·
+  [GitLab blog](https://about.gitlab.com/blog/rate-limit-change-2026/) ·
+  [HN: GitLab](https://news.ycombinator.com/item?id=49742353) ·
+  [arXiv 2609.18094](https://arxiv.org/abs/2609.18094)

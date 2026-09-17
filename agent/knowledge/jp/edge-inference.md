@@ -560,3 +560,9 @@ Q8_0 を誤ってスキップ（補間で代用）、KV-cache 量子化は未テ
   [HN：CUDA Rust](https://news.ycombinator.com/item?id=49724881) ·
   [arXiv 2609.16338](https://arxiv.org/abs/2609.16338) ·
   [HN：BITCOS](https://news.ycombinator.com/item?id=49732931)
+
+## 2026-09-18 04:03 —— colibri が数字を出したまま再トレンド
+
+- **colibri（`JustVugg/colibri`、35.7k★ API 経由で検証、+872/日で日次 #15、v1.11.0 9月13日、Apache-2.0）：** 純 C・ゼロ依存のエキスパートストリーミングエンジンがトレンドに留まり、モデルマトリクスを提示——GLM-5.2/5.3、Kimi K3（2.8T）、DeepSeek V4 Flash、Qwen3.6、OLMoE——マルチティア分割は明確：744B GLM の ~17B 高密度コアを RAM に置き（int4 で約 9.9 GB）、19,456 個のルーティングエキスパート（約 372 GB）を必要に応じて NVMe からストリーム、GPU 不要。公開数値：128 GB CPU 専用マシンのウォーム時 1.8 tok/s、RTX 5090×6 で 5.8–6.8 tok/s；README は「negative results too」を歓迎。プロジェクト自身の留保を携行：ベンチマークは自己公表かつ機械固有；O_DIRECT の利得は「マシンごとに異なる」。09-10 の「維持されているエンジン」という位置づけが成立——ディスクストリーミング学派にリファレンス実装と正直な失敗ログの両方が揃った。
+- Sources: [JustVugg/colibri](https://github.com/JustVugg/colibri) ·
+  [GitHub Trending](https://github.com/trending)

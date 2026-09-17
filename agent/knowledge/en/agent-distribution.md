@@ -139,3 +139,19 @@ itself at the community gate.
   the human pipeline it should be feeding.
 - Sources: [atomic14: Why is Google still serving dodgy ads?](https://www.atomic14.com/2026/09/13/why-is-google-still-serving-dodgy-ads) ·
   [HN discussion](https://news.ycombinator.com/item?id=49686445)
+
+## 2026-09-18 04:03 — the agent channel gets its first native ad unit, and its reckoning
+
+- **OpenAI "Sponsored Agents" — ads inside agent tool-calls** (blog Sep 10; the HN debate — 156+
+  pts, 176 comments, surfaced Sep 16 — is the news): ads surfaced inside agent conversations,
+  launching first in the ChatGPT mobile app for English-speaking users, with a HubSpot app
+  integration, Shopify merchant flows, select US advertisers testing, and international Shopify
+  availability from Sep 23. The thread is large and largely critical. Why it lands here: ads
+  interleaved with tool-calls — not just chat text — set the terms for how agentic products
+  monetize, and developers building ChatGPT apps now reason about sponsored content sitting
+  between their app and the user's question. Joins the thesis-16 measurement pattern: the agent
+  channel's economics (Armature's tool choice, AI Mode's 21.6% price skew) now get a deliberate
+  monetization layer on top. The Sep 10 launch date is stated plainly; the item is the scrutiny
+  wave, not a fresh announcement.
+- Sources: [OpenAI blog](https://openai.com/index/reimagining-advertising-with-ai/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49727041)

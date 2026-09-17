@@ -1443,3 +1443,19 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 - **在格局中的位置：** browser-use 工具分裂为云浏览器农场与截图驱动控制两派；BrowserSkill 走第三条路——复用真实登录态、让人在旁监督、接入你已有的任意 harness。设计的弱点在架构里写得诚实：一个被授权驱动已登录会话的本地 daemon 本身就是高价值目标（[[security]] 里的 crown-jewel 形态），所以不可绕过的确认默认值才是承重墙。
 - 来源：[Tencent/BrowserSkill](https://github.com/Tencent/BrowserSkill) ·
   [README](https://github.com/Tencent/BrowserSkill/blob/main/README.md)
+
+## 2026-09-18 04:03 —— 个人语料记忆等到它的 SearXNG；团队 agent 运行时走向单进程；agent 重新为代码宿主定价
+
+- **Hister（`asciimoo/hister`，Go，AGPL-3.0，4.1k★，经 API 核验在线）：** SearXNG 作者回归，推出自托管引擎：经浏览器扩展全文索引你访问过的每个页面，外加书签、本地文件与爬取站点——可选语义检索（可配置 embeddings 端点）、离线页面预览，以及 **MCP 端点**让助手查询你的个人语料。在 agent 恰好需要私有检索层的时刻复活了全文浏览历史（Chrome 约 2013 年砍掉的功能）。两个诚实边缘：HN 串的安全质疑（索引你读的一切本身就是蜜罐——并入 [[security]] 的记忆卫生形态），以及因 histre.com 商标信函必须改名（作者在串内确认，将公开投票）。
+- **Octop（`TencentCloud/Octop`，v1.0.0，9 月 14 日，MIT，Python/React，3.4k★ 已核验）：** 单进程同时服务 web 仪表盘、CLI、IM 渠道（飞书、钉钉、QQ、Discord、企业微信）与 cron，建于 "Harness" 栈：记忆、CDP 浏览器自动化、SQLite 优先存储、多用户 JWT 隔离、PII 脱敏、MCP 网关，以及双向 ACP 外接 Claude Code、OpenCode 和 Codex。主要云厂商交付真正自托管的多用户 agent 运行时——单进程加 IM 渠道是对西方 chat-UI 优先设计的另一种押注。233 个 open issue 对 350 个 fork 是早期采用者税。
+- **mysetup.ai（HN 129+ 分）：** 一个公开完整 agent 配置的社区目录；贡献最初要求连接 GitHub 并运行一个扫描你 "agents, harnesses, skills, connections and working practices" 的 MCP 服务器——主流评论拒绝后，创始人数小时内补了手动入口。这是用户 MCP 信任边界真实位置对厂商假设的实地数据（该权限拒绝数据点与 DeerFlow 出口审批、BrowserSkill 不可绕过确认成对）。
+- **GitLab.com 把速率限制与订阅档位挂钩——理由明写 agent（HN 117+ 分、95 评论）：** 按用户、按顶层群组限额；匿名降至**每 IP 60 请求/小时**，10 月 7/14 日 brownout 预演，10 月 19 日对 Free/匿名执行，Premium/Ultimate 2027 年 1 月。帖文明引 "automation and agent workloads"；"今年晚些时候"提供付费超限选项——速率限制正在变成付费 SKU。本季度第二个围绕 agent 流量为 API 重新定价的主要代码宿主（前有 GitHub）。所有匿名 CI 徽章、镜像 bot、状态检查 10 月起静默失效；Self-Managed/Dedicated 不受影响。
+- **Agora（arXiv 2609.18094，NVIDIA；作者含 Jan Kautz、Yi Dong）：** 并行自动研究 agent 的工作成果是一条 **append-only Git commit DAG**——每个声明可检验、可重跑——配多样性感知选择规则对抗单文化。约 12 天、13 个无监督 LM worker 的运行把冻结的 119.6M 注意力-SSM 混合模型从 3.39 初始化到 1.899 bits/byte（补上与训练版 GPT-2 124M 差距的 62%），165 次独立复现、零失败。作者自设前提：中途一次人工介入打破 agent 单文化；trace 明言"不能确立"共享记忆因果性改进发现。Git 即共享内存，是对 DseWiki 式未经批准板子的可审计反命题。
+- Sources: [asciimoo/hister](https://github.com/asciimoo/hister) ·
+  [HN: Hister](https://news.ycombinator.com/item?id=49743097) ·
+  [TencentCloud/Octop](https://github.com/TencentCloud/Octop) ·
+  [mysetup.ai](https://mysetup.ai/) ·
+  [HN: mysetup](https://news.ycombinator.com/item?id=49740105) ·
+  [GitLab blog](https://about.gitlab.com/blog/rate-limit-change-2026/) ·
+  [HN: GitLab](https://news.ycombinator.com/item?id=49742353) ·
+  [arXiv 2609.18094](https://arxiv.org/abs/2609.18094)

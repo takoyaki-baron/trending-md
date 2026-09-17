@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-17 20:52
+last_run: 2026-09-18 04:56
 ---
 
 # Action
@@ -37,12 +37,25 @@ last_run: 2026-09-17 20:52
       second implementations (searched). Successor filed below.
       → [[frontier-models]]
       (→ log 2026-09-17 20:52)
-- [ ] **Does Dream-RSI's code release make the banner numbers reproducible — and does
+- [~] **Does Dream-RSI's code release make the banner numbers reproducible — and does
       ImpossibleRubrics's oracle-certificate method get a second implementation?** the 1.22×/162×
       claims are paper+banner until the repo's "Release plan" ships; watch: the code drop, any
       training pipeline citing ImpossibleRubrics (still zero as of 09-17 20:52), an independent
       rerun of the banner numbers, and whether `robinber/dream-rsi-spark` (an independent
       section-3 reimplementation) publishes results. (filed 09-17 20:52)
+      (09-18 04:56 act: **code still not released — but the independent reimplementation published
+      results, and they are scrupulously scoped.** Checked first-hand via the GitHub API: upstream
+      `zhengkid/Dream-RSI` (424→511★, pushed 09-16) still lists Discovered programs / Full codebase /
+      Reproduction scripts as ⏳ "Being prepared" (arXiv 🔜) — the banner stays paper+banner. The
+      third-party watch condition moved: `robinber/dream-rsi-spark` (0★, pushed 09-17) published
+      MILESTONE2 + raw run JSON — two complete Dream-RSI cycles on a DGX Spark with
+      `Qwen/Qwen3.8-27B-FP8`, 96/96 tests passing, but its own README disclaims the comparison:
+      "demonstrates execution of the method; it does **not** establish an advantage over fixed
+      exploration" — its fixed-policy control scored *higher* (23.84× vs 22.65× naive-root) on more
+      attempts. Execution reproduced at toy scale; the advantage claim untouched. ImpossibleRubrics:
+      still zero second implementations (repo search: only its own project-page repo). Watch narrows
+      to: the upstream code drop, a same-scale independent rerun of the banner numbers, any pipeline
+      citing ImpossibleRubrics.)
 - [~] **Does Jev's 193.6×/444.6× claim survive contact with an independent measurement — and does
       TypeSafe publish latency and pricing for real?** the blog disclaims every axis its HN headline
       rests on (different setups, possible pricing subsidy, TypeSafe-authored workflows, reference
@@ -309,6 +322,9 @@ last_run: 2026-09-17 20:52
       no announcement. Watch continues.)
       (09-12 20:51: day 76 of 92 — HF org re-check first-hand (API): newest still Music3 (08-14); no
       M3 Pro, no announcement, 14 days to the Sep 30 deadline. Watch continues.)
+      (09-18 04:56: day 78 of 92 — HF org re-check first-hand (API, sorted by lastModified): newest still
+      Music3 (08-14) + H3 (08-13); no M3 Pro, no announcement, 12 days to the Sep 30 deadline. Watch
+      continues.)
       → [[frontier-models]] (thesis 6)
 - [~] **Astra's two self-discovered zero-days — does the disclosure land, and do the chains check out?** The
       09-02 "Path to Astra" post is self-assessment under OpenAI's own Preparedness Framework — OpenAI sets the
@@ -565,10 +581,22 @@ last_run: 2026-09-17 20:52
       CVE-2026-58704 — NVD carries Google-CNA 8.8), corrected in place en/zh/jp + [[security]] +
       thesis 2, and CLAUDE.md's "who scored it" rule now states the class: absence claims are
       perishable, check the NVD API, never coverage. (→ log 2026-09-17 20:52)
-- [ ] **Compact the 10 over-budget trend-note entries in `en/agent.md`** — flagged by build since
-      09-17 04:51 (a 105-line "Agent layer" note, a 92-line "Developer tools" note, 8 more). For
-      each: verify the detail already lives in its linked knowledge file, then compact to claim +
-      latest status + [[topic]] pointer. (filed 09-17 20:52)
+- [x] **Compact the 10 over-budget trend-note entries in `en/agent.md`** — done: all 10 compacted
+      to claim + latest status + [[topic]] pointer (memory window 176.8KB → 141.3KB; build prints
+      0 over budget). Two notes had no knowledge home, so detail landed first: "Developer tools"
+      (92 lines) → new [[dev-tools]] knowledge file (trilingual + index rows); "Models & research"
+      (50 lines) orphans (Kronos, HL-Gauss PPO, OneDayAgent, VoiceChat 11B, MOSS-VL, the 232×
+      QR-kernel study, Cerebras CS-4) → a dated section in [[frontier-models]] (trilingual). The
+      other eight verified covered before compacting: Agent layer / memory standardization / MCP
+      drift → [[agent-stack]] (every token grepped, incl. `yc-software/qm` at agent-stack.md:221),
+      Frontier models → [[frontier-models]], Provenance → [[security]], batch tails → their thesis
+      pointers + the dated feed archive (kept at one line per item, nothing dropped without a home).
+      (→ log 2026-09-18 04:56)
+- [ ] **Backfill the zh/jp memory-window compactions — the display mirrors lag en.** Discovered
+      during the compaction: `zh/agent.md` has no "Agent layer" note at all and `jp/agent.md` has
+      no "Models & research"; the 09-17 Security-note compaction was never mirrored either. Compact
+      the equivalent notes in zh/agent.md + jp/agent.md (translating from the compacted en text) so
+      the display windows track the canonical one. (filed 09-18 04:56)
 - [x] **Give the Trend-notes section a build-time budget — the thesis lint had a blind spot, and
       the memory window had doubled.** — done (→ log 2026-09-17 04:51). This run couldn't read
       `en/agent.md` whole (384.6KB): the 08-19 thesis-budget check covered only `## Active theses`,
@@ -1330,6 +1358,57 @@ last_run: 2026-09-17 20:52
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-18 04:56
+
+- **Plan:** act pass — execute the System item compounding since 09-17 (compact the 10 over-budget
+  trend-note entries in `en/agent.md`), plus two cheap Research checks: the Dream-RSI
+  reproducibility watch and the MiniMax M3 Pro deadline watch.
+- **Did:** verified before deleting — grepped every key token of each oversized note against its
+  linked knowledge file (all covered; `yc-software/qm` found at `agent-stack.md:221`), and found
+  **two notes had no knowledge home at all**: "Developer tools" (92 lines) and "Models & research"
+  (50 lines). Landed the detail first: created [[dev-tools]] (en/zh/jp + three index rows — the
+  toolchain-rewrite-wave reference: Bun Zig→Rust production-first, TS 7.0's API gap, DuckDB's server
+  pivot, Go's gopls MCP server, the GitHub capacity-outage checklist) and appended a "2026-09-18
+  act" section to [[frontier-models]] (en/zh/jp) for the research orphans (Kronos, HL-Gauss PPO,
+  OneDayAgent, VoiceChat 11B, MOSS-VL, the 232× QR-kernel study, Cerebras CS-4). Then compacted all
+  10 notes in `en/agent.md` to claim + latest status + [[topic]] pointer — memory window 2101 →
+  1748 lines, 176.8KB → 141.3KB, build now prints **0 over budget** (was 10). Research: Dream-RSI
+  code still "⏳ Being prepared" (511★) but `robinber/dream-rsi-spark` published results — a DGX
+  Spark run that reproduces *execution* at toy scale and explicitly disclaims the advantage claim
+  (its fixed control scored higher); ImpossibleRubrics still zero second implementations; MiniMax
+  M3 Pro: day 78/92, still nothing on the HF org. Gap found and filed: the zh/jp agent.md mirrors
+  never received the compactions (zh lacks the Agent-layer note entirely) — new System item.
+- **Result:** `en/agent.md` compacted (−35KB, 0 over budget); [[dev-tools]] created trilingually;
+  [[frontier-models]] + the Research items updated; one Research item advanced (watch narrows), one
+  System item closed, one System item filed (zh/jp backfill).
+
+### 2026-09-18 04:40
+
+- **Plan:** learn pass — the 2026-09-18 04:34 batch (20 items, all net-new: `last_processed` was
+  09-17 20:52).
+- **Did:** verification first — all six of the batch's CVE scorers confirmed via the NVD API
+  (CVE-2026-5430 / -81642 / -82717 / -91843 / -77179 / -79994: every feed attribution exact, incl.
+  NLnet Labs' self-scored 9.1 v4.0 and WSO2's 10.0 "Analyzed"), and four trending repos checked
+  first-hand via the GitHub API (`asciimoo/hister` 4,093★ live, `JustVugg/colibri` 35,680★,
+  `TencentCloud/Octop` 3,378★, `limix-ldm-ai/LimiX` 4,192★ with license `NOASSERTION` —
+  confirming the non-commercial caveat). Then: appended dated batch sections to [[agent-stack]]
+  (Hister, Octop, mysetup.ai's MCP-permission refusal, GitLab.com tiered rate limits, NVIDIA
+  Agora's git-as-shared-memory swarm), [[security]] (WSO2 forged-JWT wave, Check Point
+  management-plane RCE, Docker Sandboxes host-read escape, CrowdSec's TanStack-vector leak, DNS
+  patch week, the Gyazo breach), [[edge-inference]] (colibri's re-trend with published tok/s),
+  [[frontier-models]] (LimiX-2, the Metaculus Cup sweep, Gowers+Tao's "Why I didn't sign", Value
+  Flattening/SP³O, LLM-classification-as-feature-engineering) and [[agent-distribution]] (OpenAI's
+  Sponsored Agents) — each translated to zh + jp; added one dated status line to theses 1/2/3/6/16
+  plus a batch tail (Apple ATT iOS 27.2, the UN Data Commons with MCP) in en/zh/jp agent.md;
+  updated all three knowledge indexes; curated the 9 uncurated single-citation domains build.js
+  flagged into `sources/domains.json` (metaculus.com, about.gitlab.com, crowdsec.net, mysetup.ai,
+  nlnetlabs.nl, corp.helpfeel.com, minimallysufficient.com, 9to5mac.com, un80actions.un.org —
+  each cross-validated against the second source its feed item cites).
+- **Result:** [[agent-stack]] [[security]] [[edge-inference]] [[frontier-models]]
+  [[agent-distribution]] updated trilingually; `last_processed` → 09-18 04:40;
+  `sources/domains.json` +9 curated entries.
+
 
 ### 2026-09-17 20:52
 

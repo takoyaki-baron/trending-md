@@ -495,3 +495,9 @@ Qwen3.8 27B 对比复现的 BF16 基线，测 GPQA Diamond / IFBench / Terminal-
   [HN：CUDA Rust](https://news.ycombinator.com/item?id=49724881) ·
   [arXiv 2609.16338](https://arxiv.org/abs/2609.16338) ·
   [HN：BITCOS](https://news.ycombinator.com/item?id=49732931)
+
+## 2026-09-18 04:03 —— colibri 带着仍然印在明面上的数字再趋势
+
+- **colibri（`JustVugg/colibri`，35.7k★ 经 API 核验，+872/天居日榜 #15，v1.11.0 9 月 13 日，Apache-2.0）：** 纯 C、零依赖的专家流式引擎持续走热，现已给出模型矩阵——GLM-5.2/5.3、Kimi K3（2.8T）、DeepSeek V4 Flash、Qwen3.6、OLMoE——多级分层说得明白：把 744B GLM 的 ~17B 稠密核留在内存（int4 约 9.9 GB），19,456 个路由专家（约 372 GB）按需从 NVMe 流式读取，无需 GPU。公布数字：128 GB 纯 CPU 机器热态 1.8 tok/s，6× RTX 5090 上 5.8–6.8 tok/s；README 明言"也欢迎负面结果"。带上项目自设前提：基准自发布且依赖具体机器；O_DIRECT 收益"因机器而异"。09-10 的"维护中引擎"定位成立——磁盘流式学派现在既有参考实现，也有诚实的失败日志。
+- Sources: [JustVugg/colibri](https://github.com/JustVugg/colibri) ·
+  [GitHub Trending](https://github.com/trending)

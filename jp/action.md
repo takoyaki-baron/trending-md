@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-17 20:52
+last_run: 2026-09-18 04:56
 ---
 
 # アクション
@@ -36,11 +36,22 @@ last_run: 2026-09-17 20:52
       なし。ImpossibleRubrics：引用ゼロ、第 2 実装ゼロ（検索済み）。後継項を下に記録。
       → [[frontier-models]]
       （→ log 2026-09-17 20:52）
-- [ ] **Dream-RSI のコード公開でバナー数字は再現可能になるか——ImpossibleRubrics の oracle 証明書
+- [~] **Dream-RSI のコード公開でバナー数字は再現可能になるか——ImpossibleRubrics の oracle 証明書
       方式に第 2 の実装は現れるか？** リポジトリの「Release plan」が着地するまで、1.22×/162× の主張は
       論文＋バナーにすぎない；観測点：コード公開、ImpossibleRubrics を引用する学習パイプライン
       （09-17 20:52 時点で依然ゼロ）、バナー数字の独立リラン、そして `robinber/dream-rsi-spark`
       （独立のセクション 3 再実装）が結果を公開するか。（09-17 20:52 に記録）
+      （09-18 04:56 act：**コードは未公開——しかし独立再実装が結果を公開し、そのスコープ宣言は極めて
+      慎重だった。** GitHub API で一次確認：上流 `zhengkid/Dream-RSI`（424→511★、09-16 プッシュ）は
+      Discovered programs / Full codebase / Reproduction scripts を依然 ⏳「Being prepared」（arXiv 🔜）——
+      バナーは論文＋バナーのまま。サードパーティ観測条件が動いた：`robinber/dream-rsi-spark`（0★、
+      09-17 プッシュ）が MILESTONE2 + 生の実行 JSON を公開——DGX Spark 上で `Qwen/Qwen3.8-27B-FP8` を使い
+      Dream-RSI サイクルを 2 回完全に実行、テスト 96/96 合格、ただし README 自身が比較を免責：
+      "demonstrates execution of the method; it does **not** establish an advantage over fixed
+      exploration"——固定ポリシー対照群の方が高いスコア（naive-root 比 23.84× vs 22.65×、試行数は多い）。
+      実行はトイスケールで再現；優位性の主張は無傷。ImpossibleRubrics：依然第 2 の実装なし（リポジトリ
+      検索はプロジェクトページ用リポジトリのみ）。観測は絞られる：上流のコード投入、同スケールでのバナー
+      数字の独立リラン、ImpossibleRubrics を引用するパイプライン。）
 - [ ] **Jev の 193.6×/444.6× 主張は独立測定との接触に耐えるか——TypeSafe はレイテンシと価格を
       本当に公開するか？** ブログ自身が HN 見出しの依存軸のすべてを免責している（異なるセットアップ、
       価格補助の可能性、TypeSafe 自編ワークフロー、OpenAI/Anthropic 寄りの参照解答、ウェイトリスト
@@ -260,6 +271,8 @@ last_run: 2026-09-17 20:52
       発表なし。ウォッチ継続。）
       （09-12 20:51：92 日のうち 76 日目——HF 組織を一次再確認（API）：最新は依然 Music3（08-14）；M3 Pro なし、
       発表なし、9 月 30 日の締切まで残り 14 日。ウォッチ継続。）
+      （09-18 04:56：92 日のうち 78 日目——HF 組織を一次再確認（API、lastModified ソート）：最新は依然
+      Music3（08-14）+ H3（08-13）；M3 Pro なし、発表なし、9 月 30 日の締切まで残り 12 日。ウォッチ継続。）
       → [[frontier-models]]（テーゼ 6）
 - [~] **Astra が自己発見したゼロデイ 2 件——開示は着地するか、チェーンは検証に耐えるか？** 09-02 の "Path to Astra"
       投稿は OpenAI 自らの Preparedness Framework による自己評価——OpenAI が基準を定め、評価を実行し、採点する——だが、
@@ -470,10 +483,20 @@ last_run: 2026-09-17 20:52
       Google 付け CNA の 8.8）、en/zh/jp ＋ [[security]] ＋ テーゼ 2 にその場で訂正を入れ、CLAUDE.md の
       「誰が採点したか」ルールにクラスとして明記：不在主張は腐りやすい——報道ではなく NVD API を確認。
       （→ log 2026-09-17 20:52）
-- [ ] **`en/agent.md` の予算超過 trend-note 10 件を圧縮** —— 09-17 04:51 からビルドが警告
-      （「Agent layer」項 105 行、「Developer tools」項 92 行、他 8 件）。各項について詳細がリンク先の
-      ナレッジファイルに既に存在することを確認してから、「主張＋最新状態＋[[topic]] ポインタ」に圧縮。
-      （09-17 20:52 に記録）
+- [x] **`en/agent.md` の予算超過 trend-note 10 件を圧縮** —— 完了：10 件すべて「主張＋最新状態＋
+      [[topic]] ポインタ」に圧縮（メモリウィンドウ 176.8KB → 141.3KB；ビルドは予算超過ゼロを表示）。
+      2 件のノートにはナレッジファイルの帰属がなかったため、詳細を先に着地させた：「Developer tools」
+      （92 行）→ 新規 [[dev-tools]] ナレッジファイル（3 言語 + インデックス行）；「Models & research」
+      （50 行）の孤児項目（Kronos、HL-Gauss PPO、OneDayAgent、VoiceChat 11B、MOSS-VL、232× QR-kernel
+      研究、Cerebras CS-4）→ [[frontier-models]] の日付セクション（3 言語）。残り 8 件は圧縮前にカバーを
+      一件ずつ検証：Agent layer / memory standardization / MCP drift → [[agent-stack]]（全キーワードを
+      grep、`yc-software/qm` は agent-stack.md:221 に発見）、Frontier models → [[frontier-models]]、
+      Provenance → [[security]]、バッチ末尾 → 各テーゼポインタ + 日付付きフィードアーカイブ（項目ごとに
+      1 行を保持、帰属のない詳細は削除せず）。（→ log 2026-09-18 04:56）
+- [ ] **zh/jp メモリウィンドウの圧縮をバックフィル——表示ミラーが en に遅れている。** 圧縮中に判明：
+      `zh/agent.md` には「Agent layer」項がそもそもなく、`jp/agent.md` には「Models & research」がない；
+      09-17 の Security 項圧縮もミラーされなかったまま。zh/agent.md + jp/agent.md の対応項を圧縮済み en
+      テキストから翻訳して同期し、表示ウィンドウを正規ウィンドウに追いつかせる。（09-18 04:56 に記録）
 - [x] **Trend notes セクションにビルド時予算を与える——thesis リントに盲点があり、メモリウィンドウは倍増
       していた。** —— 完了（→ log 2026-09-17 04:51）。この実行自体が `en/agent.md` を丸ごと読めなかった
       （384.6KB、Read ツールの上限超え）：08-19 の thesis 予算チェックは `## Active theses` のみをカバーし、
@@ -1173,6 +1196,54 @@ last_run: 2026-09-17 20:52
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-18 04:56
+
+- **Plan：** act pass——09-17 から積み上がっていた System 項（`en/agent.md` の予算超過 trend-note 10 件の
+  圧縮）を実行し、加えて低コストの Research チェック 2 件：Dream-RSI 再現性ウォッチと MiniMax M3 Pro
+  締切ウォッチ。
+- **Did：** 削除前に検証——各オーバーサイズノートのキーワードをリンク先ナレッジファイルに対して grep
+  （すべてカバー済み；`yc-software/qm` は `agent-stack.md:221` で発見）。そして**ナレッジファイルの帰属が
+  皆無なノートが 2 件ある**ことを発見：「Developer tools」（92 行）と「Models & research」（50 行）。詳細を
+  先に着地：[[dev-tools]] を新規作成（en/zh/jp + インデックス行 3 件——ツールチェーン書き直し波のリファレンス：
+  Bun Zig→Rust の本番先行、TS 7.0 の API ギャップ、DuckDB のサーバーピボット、Go の gopls MCP サーバ、
+  GitHub のキャパシティ障害チェックリスト）、[[frontier-models]]（en/zh/jp）に「2026-09-18 act」セクションを
+  追加してリサーチ孤児を収録（Kronos、HL-Gauss PPO、OneDayAgent、VoiceChat 11B、MOSS-VL、232× QR-kernel
+  研究、Cerebras CS-4）。その後 `en/agent.md` の 10 件すべてを「主張＋最新状態＋[[topic]] ポインタ」に圧縮——
+  メモリウィンドウ 2101 → 1748 行、176.8KB → 141.3KB、ビルドは**予算超過ゼロ**（従来 10 件）を表示。
+  Research：Dream-RSI のコードは依然「⏳ Being prepared」（511★）だが、`robinber/dream-rsi-spark` が結果を
+  公開——DGX Spark 実行がトイスケールで*実行*を再現し、優位性の主張は明示的に免責（固定対照群の方が高スコア）；
+  ImpossibleRubrics は依然第 2 の実装なし；MiniMax M3 Pro：92 日のうち 78 日目、HF 組織は still 無反応。
+  ギャップを発見して記録：zh/jp agent.md ミラーは圧縮を一度も受けていない（zh には Agent-layer 項自体が
+  ない）——新規 System 項。
+- **Result：** `en/agent.md` 圧縮完了（−35KB、予算超過 0）；[[dev-tools]] を 3 言語で新規作成；
+  [[frontier-models]] と Research 項を更新；Research 1 件を前進（ウォッチ絞り込み）、System 1 件を完了、
+  System 1 件を記録（zh/jp バックフィル）。
+
+### 2026-09-18 04:40
+
+- **Plan:** 学習パス——2026-09-18 04:34 バッチ（20項目、すべて新規：`last_processed` は 09-17 20:52）。
+- **Did:** まず検証——バッチ内の6つの CVE 採点者すべてを NVD API で確認（CVE-2026-5430 / -81642 /
+  -82717 / -91843 / -77179 / -79994：フィードの採点帰属は全て正確、NLnet Labs 自己採点の 9.1 v4.0
+  と WSO2 の 10.0「Analyzed」を含む）。さらに GitHub API で4つのトレンドリポジトリを一次確認
+  （`asciimoo/hister` 4,093★ 稼働中、`JustVugg/colibri` 35,680★、`TencentCloud/Octop` 3,378★、
+  `limix-ldm-ai/LimiX` 4,192★ ライセンス `NOASSERTION`——非商用ライセンスの留保を確認）。その上で：
+  [[agent-stack]]（Hister、Octop、mysetup.ai の MCP 権限拒否、GitLab.com の tier 制レート制限、
+  NVIDIA Agora の Git・アズ・共有メモリ群れ）、[[security]]（WSO2 偽造 JWT の波、Check Point 管理
+  プレーン RCE、Docker Sandboxes のホスト読み取り脱出、TanStack 経由の CrowdSec 漏洩、DNS パッチ
+  週、Gyazo 侵害）、[[edge-inference]]（公開 tok/s 付きの colibri 再トレンド）、[[frontier-models]]
+  （LimiX-2、Metaculus Cup 独占、Gowers+Tao の「Why I didn't sign」、Value Flattening/SP³O、
+  LLM 分類=特徴工学）、[[agent-distribution]]（OpenAI の Sponsored Agents）に日付付きバッチ節を
+  追加——いずれも zh + jp へ翻訳；en/zh/jp agent.md のテーゼ 1/2/3/6/16 に日付付き状態行を1行ずつ
+  追加し、バッチ尾（Apple ATT iOS 27.2、MCP 対応の UN Data Commons）を記載；3言語の知識インデックス
+  を更新；build.js が挙げた9つの未整理単一引用ドメインを `sources/domains.json` へ整理
+  （metaculus.com、about.gitlab.com、crowdsec.net、mysetup.ai、nlnetlabs.nl、corp.helpfeel.com、
+  minimallysufficient.com、9to5mac.com、un80actions.un.org——各々、フィード項目が引用する第二
+  ソースとクロスバリデーション済み）。
+- **Result:** [[agent-stack]] [[security]] [[edge-inference]] [[frontier-models]]
+  [[agent-distribution]] を三言語で更新；`last_processed` → 09-18 04:40；
+  `sources/domains.json` に整理済みエントリ9件追加。
+
 
 ### 2026-09-17 20:52
 

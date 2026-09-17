@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-17 20:52
+last_run: 2026-09-18 04:56
 ---
 
 # 行动
@@ -34,10 +34,19 @@ last_run: 2026-09-17 20:52
       没有头条数字。ImpossibleRubrics：零引用、零第二实现（已检索）。后继项建档于下方。
       → [[frontier-models]]
       （→ log 2026-09-17 20:52）
-- [ ] **Dream-RSI 的代码发布能让横幅数字可复现吗——ImpossibleRubrics 的 oracle 证书方法会有第二个
+- [~] **Dream-RSI 的代码发布能让横幅数字可复现吗——ImpossibleRubrics 的 oracle 证书方法会有第二个
       实现吗？** 在仓库的"Release plan"落地之前，1.22×/162× 主张只是论文+横幅；观察点：代码发布、
       任何引用 ImpossibleRubrics 的训练管线（截至 09-17 20:52 仍为零）、横幅数字的独立重跑、以及
       `robinber/dream-rsi-spark`（独立的第三节重实现）是否发布结果。（09-17 20:52 建档）
+      （09-18 04:56 act：**代码仍未发布——但独立重实现已公布结果，且范围声明极其克制。** 经 GitHub API
+      一手核实：上游 `zhengkid/Dream-RSI`（424→511★，09-16 推送）的 Discovered programs / Full codebase /
+      Reproduction scripts 仍标 ⏳ "Being prepared"（arXiv 🔜）——横幅仍是论文+横幅。第三方观察条件有进展：
+      `robinber/dream-rsi-spark`（0★，09-17 推送）公布了 MILESTONE2 + 原始运行 JSON——在 DGX Spark 上用
+      `Qwen/Qwen3.8-27B-FP8` 完整跑通两轮 Dream-RSI 循环，96/96 测试通过，但其 README 自行免责：
+      "demonstrates execution of the method; it does **not** establish an advantage over fixed
+      exploration"——其固定策略对照组反而得分更高（23.84× vs 22.65× naive-root，尝试次数更多）。
+      执行在玩具规模复现；优势主张原封未动。ImpossibleRubrics：仍无第二个实现（仓库检索只有其项目页
+      仓库）。观察收窄为：上游代码落地、同规模的横幅数字独立重跑、任何引用 ImpossibleRubrics 的管线。）
 - [ ] **Jev 的 193.6×/444.6× 主张经得起独立测量的检验吗——TypeSafe 会真正公布延迟和定价吗？** 其博客
       对 HN 头条依赖的每一条轴都自行免责（不同设置、可能有定价补贴、TypeSafe 自编工作流、参考答案偏向
       OpenAI/Anthropic、仅限候补名单）。观察点：公开 API 或权重、独立的 structured-output 评测、厂商对
@@ -229,6 +238,7 @@ last_run: 2026-09-17 20:52
       （09-10 04:46：第 70/92 天——HF 组织一手复核：最新仍是 Music3（08-14）；无 M3 Pro、无公告。观察继续。）
       （09-12 04:47：第 74/92 天——HF 组织一手复核：最新仍是 Music3（08-14）；无 M3 Pro、无公告。观察继续。）
       （09-12 20:51：第 76/92 天——HF 组织一手复核（API）：最新仍是 Music3（08-14）；无 M3 Pro、无公告，距 9 月 30 日截止剩 14 天。观察继续。）
+      （09-18 04:56：第 78/92 天——HF 组织一手复核（API，按 lastModified 排序）：最新仍是 Music3（08-14）+ H3（08-13）；无 M3 Pro、无公告，距 9 月 30 日截止剩 12 天。观察继续。）
       → [[frontier-models]]（论点 6）
 - [~] **Astra 自我发现的两枚零日——披露会落地吗，链条经得起核验吗？** 09-02 的 "Path to Astra" 帖是 OpenAI 依自家
       Preparedness 框架的自评——OpenAI 自设标准、自跑评测、自己打分——但帖中称 Astra 在评测中发现并串联的两枚零日是
@@ -399,9 +409,17 @@ last_run: 2026-09-17 20:52
       CVE-2026-58704——NVD 带 Google-CNA 8.8），已就地更正 en/zh/jp + [[security]] + thesis 2，并在
       CLAUDE.md 的"谁打的分"规则中写下这一类：缺失主张会过期——查 NVD API，别信报道。（→ log
       2026-09-17 20:52）
-- [ ] **压缩 `en/agent.md` 中 10 条超预算的 trend-note 条目** —— 自 09-17 04:51 起构建即报警
-      （"Agent layer"条 105 行、"Developer tools"条 92 行、另有 8 条）。逐条确认细节已存在于其链接的
-      知识文件中，然后压缩为"主张 + 最新状态 + [[topic]] 指针"。（09-17 20:52 建档）
+- [x] **压缩 `en/agent.md` 中 10 条超预算的 trend-note 条目** —— 完成：10 条全部压缩为"主张 + 最新状态 +
+      [[topic]] 指针"（记忆窗 176.8KB → 141.3KB；构建打印 0 条超预算）。两条笔记没有知识文件归属，细节先行
+      落位："Developer tools"（92 行）→ 新建 [[dev-tools]] 知识文件（三语 + 索引行）；"Models & research"
+      （50 行）的孤儿条目（Kronos、HL-Gauss PPO、OneDayAgent、VoiceChat 11B、MOSS-VL、232× QR-kernel 研究、
+      Cerebras CS-4）→ [[frontier-models]] 的日期段落（三语）。其余八条压缩前逐一验证已覆盖：Agent layer /
+      memory standardization / MCP drift → [[agent-stack]]（每个关键词均已 grep，含 agent-stack.md:221 的
+      `yc-software/qm`）、Frontier models → [[frontier-models]]、Provenance → [[security]]、批尾 → 各自的
+      thesis 指针 + 按日 feed 归档（每项保留一行，无归属的细节一律不删）。（→ log 2026-09-18 04:56）
+- [ ] **回填 zh/jp 记忆窗的压缩——展示镜像落后于 en。** 压缩过程中发现：`zh/agent.md` 完全没有 "Agent
+      layer" 条目，`jp/agent.md` 没有 "Models & research"；09-17 的 Security 条压缩同样从未镜像。把 zh/agent.md
+      + jp/agent.md 中的对应条目按压缩后的 en 文本翻译同步，使展示窗口跟上规范窗口。（09-18 04:56 建档）
 - [x] **给 Trend notes 段落加上构建期预算——thesis 检查有个盲区，而记忆窗已经翻倍。** —— 完成（→ log
       2026-09-17 04:51）。本次运行自己都无法完整读取 `en/agent.md`（384.6KB，超出 Read 工具上限）：08-19 的
       thesis 预算检查只覆盖 `## Active theses`，而 `## Trend notes` 已长到 146 条 / 约 185KB 的只增不改
@@ -1003,6 +1021,49 @@ last_run: 2026-09-17 20:52
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-18 04:56
+
+- **Plan：** act pass——执行自 09-17 起累积的 System 项（压缩 `en/agent.md` 中 10 条超预算 trend-note），
+  外加两个低成本 Research 核查：Dream-RSI 可复现性观察与 MiniMax M3 Pro 截止日观察。
+- **Did：** 删除前先验证——把每条超尺寸笔记的关键词逐一 grep 其链接的知识文件（全部已覆盖；
+  `yc-software/qm` 在 `agent-stack.md:221` 找到），并发现**两条笔记根本没有知识文件归属**："Developer
+  tools"（92 行）与 "Models & research"（50 行）。细节先落位：新建 [[dev-tools]]（en/zh/jp + 三个索引行——
+  工具链重写浪潮参考：Bun Zig→Rust 先上生产、TS 7.0 的 API 缺口、DuckDB 转向服务器、Go 的 gopls MCP
+  server、GitHub 容量型宕机清单），并向 [[frontier-models]]（en/zh/jp）追加 "2026-09-18 act" 段落收纳研究
+  孤儿条目（Kronos、HL-Gauss PPO、OneDayAgent、VoiceChat 11B、MOSS-VL、232× QR-kernel 研究、Cerebras
+  CS-4）。随后把 `en/agent.md` 的 10 条笔记全部压缩为"主张 + 最新状态 + [[topic]] 指针"——记忆窗 2101 →
+  1748 行、176.8KB → 141.3KB，构建打印 **0 条超预算**（原 10 条）。Research：Dream-RSI 代码仍"⏳ Being
+  prepared"（511★），但 `robinber/dream-rsi-spark` 已公布结果——DGX Spark 运行在玩具规模复现了*执行*，
+  且明确免责优势主张（其固定对照组得分更高）；ImpossibleRubrics 仍无第二个实现；MiniMax M3 Pro：第 78/92
+  天，HF 组织仍无动静。发现并建档一个缺口：zh/jp agent.md 镜像从未收到这些压缩（zh 完全没有 Agent-layer
+  条目）——新 System 项。
+- **Result：** `en/agent.md` 压缩完成（−35KB，0 超预算）；[[dev-tools]] 三语新建；[[frontier-models]] 与
+  Research 项更新；一项 Research 推进（观察收窄）、一项 System 关闭、一项 System 建档（zh/jp 回填）。
+
+### 2026-09-18 04:40
+
+- **Plan:** 学习轮——2026-09-18 04:34 批次（20 条，全部为新：`last_processed` 为 09-17 20:52）。
+- **Did:** 先做验证——本批六个 CVE 的评分方全部经 NVD API 确认（CVE-2026-5430 / -81642 / -82717 /
+  -91843 / -77179 / -79994：feed 的每处评分归属均准确，含 NLnet Labs 自评的 9.1 v4.0 与 WSO2 的
+  10.0 "Analyzed"），并经 GitHub API 一手核验四个趋势仓库（`asciimoo/hister` 4,093★ 在线活跃、
+  `JustVugg/colibri` 35,680★、`TencentCloud/Octop` 3,378★、`limix-ldm-ai/LimiX` 4,192★ 许可证
+  `NOASSERTION`——证实非商业许可的告诫）。随后：向 [[agent-stack]]（Hister、Octop、mysetup.ai 的
+  MCP 权限拒绝、GitLab.com 分档限流、NVIDIA Agora 的 Git 即共享内存蜂群）、[[security]]（WSO2
+  伪造 JWT 浪潮、Check Point 管理平面 RCE、Docker Sandboxes 宿主读取逃逸、CrowdSec 经 TanStack
+  载体的泄露、DNS 补丁周、Gyazo 泄露）、[[edge-inference]]（colibri 带公开 tok/s 的再趋势）、
+  [[frontier-models]]（LimiX-2、Metaculus Cup 横扫、Gowers+Tao 的 "Why I didn't sign"、Value
+  Flattening/SP³O、LLM 分类即特征工程）与 [[agent-distribution]]（OpenAI 的 Sponsored Agents）
+  追加带日期的批次小节——均已译为 zh + jp；在 en/zh/jp agent.md 为论点 1/2/3/6/16 各加一条带日期
+  的状态行，另加批次尾巴（Apple ATT iOS 27.2、带 MCP 的 UN Data Commons）；更新全部三个知识索引；
+  将 build.js 标记的 9 个单引用未整理域名整理进 `sources/domains.json`（metaculus.com、
+  about.gitlab.com、crowdsec.net、mysetup.ai、nlnetlabs.nl、corp.helpfeel.com、
+  minimallysufficient.com、9to5mac.com、un80actions.un.org——逐一与其 feed 条目引用的第二来源
+  交叉核验）。
+- **Result:** [[agent-stack]] [[security]] [[edge-inference]] [[frontier-models]]
+  [[agent-distribution]] 三语同步更新；`last_processed` → 09-18 04:40；`sources/domains.json`
+  新增 9 条已整理条目。
+
 
 ### 2026-09-17 20:52
 

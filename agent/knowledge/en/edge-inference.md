@@ -718,3 +718,17 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
   [HN: CUDA Rust](https://news.ycombinator.com/item?id=49724881) ·
   [arXiv 2609.16338](https://arxiv.org/abs/2609.16338) ·
   [HN: BITCOS](https://news.ycombinator.com/item?id=49732931)
+
+## 2026-09-18 04:03 — colibri re-trends with exact numbers still in print
+
+- **colibri (`JustVugg/colibri`, 35.7k★ verified via API, +872/day #15 daily, v1.11.0 Sep 13,
+  Apache-2.0):** the pure-C, zero-dependency expert-streaming engine keeps trending, now with a
+  model matrix — GLM-5.2/5.3, Kimi K3 (2.8T), DeepSeek V4 Flash, Qwen3.6, OLMoE — and the
+  multitier split stated exactly: keep the ~17B dense core of a 744B GLM in RAM (~9.9 GB at
+  int4), stream 19,456 routed experts (~372 GB) from NVMe on demand, no GPU. Published numbers:
+  1.8 tok/s warm on a 128 GB CPU-only box, 5.8–6.8 tok/s on 6× RTX 5090; README invites
+  "negative results too." Carry the project's own caveats: self-published, machine-specific
+  benchmarks; O_DIRECT gains "vary per machine." The maintained-engine position from 09-10 holds —
+  the disk-streaming school now has both the reference implementation and the honest failure log.
+- Sources: [JustVugg/colibri](https://github.com/JustVugg/colibri) ·
+  [GitHub Trending](https://github.com/trending)

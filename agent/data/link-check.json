@@ -613,9 +613,18 @@
       "feeds": [
         "2026-09-17.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=49742355": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-17T21:17:03.021Z",
+      "last_seen": "2026-09-17T21:17:03.021Z",
+      "feeds": [
+        "2026-09-18.md"
+      ]
     }
   },
-  "runs": 22,
+  "runs": 23,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-17T13:15:05.377Z"
+  "last_run": "2026-09-17T21:17:03.021Z"
 }

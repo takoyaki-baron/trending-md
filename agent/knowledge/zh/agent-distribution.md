@@ -102,3 +102,9 @@ meta 时刻是分发数据点：一位 HN 版主警告创始人，**他自己的
   它本应喂给的人工流水线。
 - 来源：[atomic14: Why is Google still serving dodgy ads?](https://www.atomic14.com/2026/09/13/why-is-google-still-serving-dodgy-ads) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49686445)
+
+## 2026-09-18 04:03 —— agent 渠道拿到第一个原生广告单元及其清算
+
+- **OpenAI "Sponsored Agents"——agent 工具调用内部的广告**（博客 9 月 10 日；HN 争论——156+ 分、176 评论、9 月 16 日浮出——才是新闻）：广告出现在 agent 对话内部，先在英语用户的 ChatGPT 移动端上线，含 HubSpot 应用集成、Shopify 商家流程、部分美国广告主测试，9 月 23 日起 Shopify 国际可用。讨论串大而批判为主。为何记在这里：与工具调用交错（而不只是聊天文本）的广告，定下了 agent 产品如何货币化的条款；构建 ChatGPT 应用的开发者从此要为"夹在自己应用与用户提问之间的赞助内容"做推理。并入论点 16 的测量模式：Armature 的工具选择、AI Mode 的 21.6% 价格偏斜测的是渠道的*意外*经济学，如今有意为之的货币化层叠加上来。9 月 10 日发布日期明白写着；本条是审视浪潮，不是新公告。
+- Sources: [OpenAI blog](https://openai.com/index/reimagining-advertising-with-ai/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49727041)

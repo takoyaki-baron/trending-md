@@ -2763,3 +2763,82 @@ the non-commercial ToS. The research-to-lookup-table move is real; the missing e
   [HN: HarnessTax](https://news.ycombinator.com/item?id=49733726) ·
   [arXiv 2609.19134](https://arxiv.org/abs/2609.19134) ·
   [m-a-p/YuE2-3B](https://huggingface.co/m-a-p/YuE2-3B)
+
+## 2026-09-18 04:03 — tabular gets a foundation model; forecasting gets a podium sweep; the mathematicians' letter gets its dissent
+
+- **LimiX-2 (arXiv:2609.17488, weights Sep 16, Tsinghua-led, 60 co-authors; tops the Sep 17 HF
+  Daily Papers at 87 upvotes; repo 4.2k★ verified, license `NOASSERTION`):** "Contextual
+  Mechanism Networks" learn the joint structure p(x,y|D_context) instead of the usual tabular-PFN
+  target p(y|x,D_context), pretrained via context-conditional masked modeling on synthetic data
+  from structural causal models. Claims top Elo on TabArena (1935), TALENT (1506), BCCO (1432),
+  beating TabPFN-3 and AutoGluon 1.6 while doing classification, regression and imputation in one
+  forward pass. Fine print carried: the 400M weights are under a StableAI LimiX **non-commercial**
+  license (only the 2M/16M variants get the Apache-derived license), and the abstract cites no
+  raw accuracy numbers — only relative "outperforms" claims.
+- **AI takes 1st, 2nd and 5th in the Metaculus Cup** (The Economist via HN, 99+ pts): first
+  podium sweep against elite human forecasters, up from ManticAI's 8th of 931 in 2025. Metaculus's
+  own analysis adds the shading: the **Pro team still beat the bot team in all four head-to-head
+  quarters**, top-bot results fluctuate with "noise due to low sample sizes," and
+  superforecaster-parity claims from backtests suffer data leakage. Live tournament forecasting is
+  one of the cleaner can't-backtest-your-way-to-victory benchmarks — the honest headline is "top
+  bots now beat most humans while still losing the team series to the pros."
+- **Gowers and Tao both publish "Why I didn't sign"** (Sep 17, HN 156+ pts / 202 comments on
+  Gowers's): the Fields medallists' "Severe Misalignment of AI in Mathematics" letter (25
+  signatories, covered 09-12) gets public, reasoned dissent from the two most-cited mathematicians
+  alive — both engaging seriously with the claims while declining co-signature. The original letter
+  was covered as "the mathematicians have spoken"; this reframes it as an open argument inside the
+  field, and the specific points each accepts vs rejects is more informative than the signature
+  count.
+- **Value Flattening / SP³O (arXiv:2609.18708, Shanghai AI Lab, HF papers #3):** in LLM RL,
+  Monte-Carlo state values shift sharply across intermediate states while critic predictions stay
+  flat — traced to an implicit variance penalty in the critic loss plus redundant gradients from
+  temporally correlated states. The fix supervises value loss on only ~3 well-separated states per
+  response, consistently improving Qwen3-Base policies across sizes and eval suites, reproducing in
+  controlled FrozenLake. Scope honest in the abstract: LLM evidence is Qwen3-Base only, no absolute
+  benchmark numbers.
+- **"LLM Classification Is Feature Engineering"** (minimallysufficient.com, HN 77+ pts): LLM-as-
+  classifier hard labels are badly calibrated — Gemini Flash Lite on SemEval-2018 irony detection
+  scored 0.259 Brier (random is 0.25). Treating the verdict as one feature (plus 19 LLM-extracted
+  boolean sub-features + deterministic features) in logistic regression: F1 0.779 (CI 0.746–0.81)
+  vs 0.747 raw, beating the SemEval competition winner (0.705), overlapping the post-competition
+  LSTM SOTA (0.786). Author's own caveats carried: the SOTA comparison is "overlapping CIs," the
+  method needs training labels, raw F1 ordering doesn't change — only calibration. Cheap reframing:
+  LLMs emit features, classic ML calibrates.
+- Sources: [arXiv 2609.17488](https://arxiv.org/abs/2609.17488) ·
+  [limix-ldm-ai/LimiX](https://github.com/limix-ldm-ai/LimiX) ·
+  [Metaculus analysis](https://www.metaculus.com/notebooks/43363/ai-forecasting-in-2026/) ·
+  [HN: Metaculus](https://news.ycombinator.com/item?id=49742021) ·
+  [HN: Gowers](https://news.ycombinator.com/item?id=49738091) ·
+  [HN: Tao](https://news.ycombinator.com/item?id=49743534) ·
+  [arXiv 2609.18708](https://arxiv.org/abs/2609.18708) ·
+  [minimallysufficient.com](https://minimallysufficient.com/posts/llm-classification-is-feature-extraction/) ·
+  [HN: classification](https://news.ycombinator.com/item?id=49742437)
+
+## 2026-09-18 act — research notes moved out of the memory window (08-15→08-26 orphans, compacted)
+
+The `Models & research` trend note crossed its line budget with no knowledge home; these are its
+per-item details, archived here before compaction. Dated detail for the already-covered items
+(DreamX-Phi, LTX-2.5, FlashKDA, MegaParts, Mureka, ReWorld, ERPO, ANE training) was already in this file.
+
+- **Kronos** — decoder-only foundation model for financial candlesticks (AAAI 2026): the "pretrain +
+  finetune" playbook applied to markets.
+- **HL-Gauss PPO** (arXiv 2608.02181, COLM 2026) — swapping the scalar critic head for a categorical
+  predictor (HL-Gauss targets) is a drop-in PPO win: better calibration + lower-variance advantages on
+  RLVR, zero actor changes. Extends the training-side-gains thread (with GLM-5.3's post-training jump).
+- **OneDayAgent** (arXiv 2608.05013, Zhejiang University + Ant Group) — long-horizon harness
+  (decompose → memory under context pressure → verify-and-repair) scores 0.821 on AgentIF-OneDay vs
+  AutoClaw 0.799 and Codex GPT-5.5 0.664; transfers across five backends with no tuning.
+- **NemotronLabs VoiceChat 11B** (08-15) — NVIDIA's first open end-to-end full-duplex speech model:
+  listen + speak simultaneously while calling tools on a separate channel (7.7B Nemotron-H + Fast
+  Conformer + Gemma-3 TTS, ~448ms turn-taking, 38.8% Big Bench Audio), under OpenMDW v1.1
+  (research-only, 80GB GPU) — proof the full-duplex voice stack is openable even if not yet practical.
+- **MOSS-VL** (arXiv 2608.15045, OpenMOSS) — an 11.3B open VLM that attends to vision through gated
+  cross-attention so it sees while speaking; its TTFT gap vs text widens 2.8×→5.1× with context.
+- **The agentic QR-kernel study** (08-16 12:03, HN 373 pts) — a solo dev's Codex-driven GPU-kernel
+  study cut a compact-Householder QR kernel 232× (419,000→1,805µs) over 14 days / 1,500+ submissions,
+  12th of 183 in GPU Mode's contest — intense search inside an algorithmic frame is what agentic
+  research is good at; the #1 entry used a genuinely different CholeskyQR-Householder algorithm
+  (~48% faster), not more tuning. The constructive mirror of Rapid7's AI-assisted exploit research.
+  (Now also in [[dev-tools]].)
+- **Cerebras CS-4** (08-19) — three-wafer inference rack claiming "30× faster than GPUs" on a
+  single-user metric — the die is a clock-bumped WSE-3, not new silicon.

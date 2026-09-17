@@ -1703,3 +1703,19 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
 - **景観の中の位置：** browser-use ツールはクラウドブラウザファームとスクリーンショット駆動制御に分裂している；BrowserSkill は第三の位置を取る——実ログイン状態を再利用し、人間に監視させ、既存の任意のハーネスに統合。設計の弱点はアーキテクチャに正直に書かれている：ログイン済みセッションを操作するよう認可されたローカルデーモン自体が高価値標的（[[security]] の crown-jewel 型）であり、だからこそバイパス不能な確認デフォルトが耐力壁になる。
 - 出典：[Tencent/BrowserSkill](https://github.com/Tencent/BrowserSkill) ·
   [README](https://github.com/Tencent/BrowserSkill/blob/main/README.md)
+
+## 2026-09-18 04:03 —— 個人コーパスメモリが自らの SearXNG を得る。チームエージェントランタイムが単一プロセスへ。フォージがエージェントを再価格化
+
+- **Hister（`asciimoo/hister`、Go、AGPL-3.0、4.1k★、API 経由で稼働確認）：** SearXNG 作者の帰還——ブラウザ拡張で訪問した全ページを全文索引するセルフホストエンジン。ブックマーク・ローカルファイル・クロール済みサイトも対象。設定可能な embeddings エンドポイント経由の任意セマンティック検索、オフラインページプレビュー、そしてアシスタントが個人コーパスへ問い合わせるための **MCP エンドポイント**。エージェントがプライベート検索レイヤーを必要とする瞬間に、全文閲覧履歴（Chrome が約2013年に殺した機能）を復活させた。正直な二つの縁：HN スレッドのセキュリティ反発（読んだもの全部の索引化それ自体がハニーポット——[[security]] のメモリ衛生シェイプに合流）、histre.com の商標状により改名必須（作者がスレッド内で確認、公開投票を予定）。
+- **Octop（`TencentCloud/Octop`、v1.0.0 9月14日、MIT、Python/React、3.4k★ 検証済み）：** 単一プロセスで web ダッシュボード、CLI、IM チャネル（Feishu、DingTalk、QQ、Discord、WeCom）、cron を供給。「Harness」スタックの上にメモリ、CDP ブラウザ自動化、SQLite ファーストストレージ、マルチユーザー JWT 分離、PII マスキング、MCP ゲートウェイ、そして Claude Code・OpenCode・Codex へ委譲する双方向 ACP。主要クラウドベンダーが真正にセルフホストのマルチユーザーエージェントランタイムを出荷——単一プロセス+IMチャネルは西洋のチャット UI ファースト設計とは別の賭け。350 fork に対する open issue 233 はアーリーアダプター税。
+- **mysetup.ai（HN 129+ pts）：** 完全なエージェントセットアップを公開するコミュニティディレクトリ。コントリビューションが元々 GitHub 接続と「agents, harnesses, skills, connections and working practices」をスキャンする MCP サーバーの実行を要求——支配的なコメントスレッドが拒否したため、創業者は数時間で手動入力経路を追加。ツールベンダーの仮定に対するユーザーの MCP 信頼境界の実地データ（この権限拒否データ点は DeerFlow の egress 承認、BrowserSkill のバイパス不能確認と対になる）。
+- **GitLab.com がレート制限をサブスクリプション tier に紐付け——理由に明記された「エージェント」（HN 117+ pts、95 コメント）：** ユーザー・トップレベルグループ単位の制限。未認証は **IP あたり 60 リクエスト/時間**へ、10月7/14日に brownout 予行、10月19日に Free/匿名へ施行、Premium/Ultimate は 2027年1月。投稿は「automation and agent workloads」を明示引用；「今年後半」に上限超過の有償オプション——レート制限が有料 SKU になるシグナル。今四半期、エージェントトラフィックを巡って API を再価格化した2つ目の主要フォージ（GitHub に続き）。匿名 CI バッジ、ミラーボット、ステータスチェックは10月に静かに壊れる；Self-Managed/Dedicated は影響なし。
+- **Agora（arXiv 2609.18094、NVIDIA；著者に Jan Kautz、Yi Dong）：** 並列自動研究エージェントの成果物が **append-only な Git commit の DAG**——全主張が検証・再実行可能——モノカルチャー対策の多様性認識選択ルール付き。約12日間・13の無監督 LM worker のランで、凍結した 119.6M attention-SSM ハイブリッドを 3.39 から 1.899 bits/byte へ初期化（学習済み GPT-2 124M とのギャップの62%を縮小）、独立再現165件・失敗ゼロ。著者自身の留保：ラン中に人手介入1回でエージェントのモノカルチャーを打破、trace は共有メモリが発見を因果的に改善すると「確立しない」と明言。Git・アズ・共有メモリは、DseWiki 型の無認可ボードへの監査可能な対命題。
+- Sources: [asciimoo/hister](https://github.com/asciimoo/hister) ·
+  [HN: Hister](https://news.ycombinator.com/item?id=49743097) ·
+  [TencentCloud/Octop](https://github.com/TencentCloud/Octop) ·
+  [mysetup.ai](https://mysetup.ai/) ·
+  [HN: mysetup](https://news.ycombinator.com/item?id=49740105) ·
+  [GitLab blog](https://about.gitlab.com/blog/rate-limit-change-2026/) ·
+  [HN: GitLab](https://news.ycombinator.com/item?id=49742353) ·
+  [arXiv 2609.18094](https://arxiv.org/abs/2609.18094)

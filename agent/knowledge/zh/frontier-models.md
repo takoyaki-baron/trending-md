@@ -1689,3 +1689,43 @@ DeepMind 为**全部 90 亿个单碱基变化**预计算调控影响，蒸馏为
   [HN：HarnessTax](https://news.ycombinator.com/item?id=49733726) ·
   [arXiv 2609.19134](https://arxiv.org/abs/2609.19134) ·
   [m-a-p/YuE2-3B](https://huggingface.co/m-a-p/YuE2-3B)
+
+## 2026-09-18 04:03 —— 表格数据等到基础模型；预测拿到领奖台；数学家信件拿到异议
+
+- **LimiX-2（arXiv:2609.17488，权重 9 月 16 日发布，清华牵头，60 位共同作者；9 月 17 日 HF Daily Papers 榜首 87 赞；仓库 4.2k★ 已核验，许可证 `NOASSERTION`）：** "Contextual Mechanism Networks" 学习联合结构 p(x,y|D_context)，而非通常 tabular-PFN 的目标 p(y|x,D_context)，预训练用从结构因果模型采样的合成数据做上下文条件掩码建模。宣称 TabArena（1935）、TALENT（1506）、BCCO（1432）Elo 居首，胜过 TabPFN-3 与 AutoGluon 1.6，且一次前向完成分类、回归与插补。保留的小字：400M 权重受 StableAI LimiX **非商业**许可约束（仅 2M/16M 变体拿到 Apache 衍生许可），摘要不引原始精度数字——只有相对"优于"声明。
+- **AI 在 Metaculus Cup 拿下第 1、2、5 名**（The Economist 经 HN，99+ 分）：首次对精英人类预测者拿下整个领奖台，较 2025 年 ManticAI 第 8/931 大幅跃升。Metaculus 自家分析补上必要阴影：**Pro 队在全部四个季度对局中仍击败 bot 队**，头部 bot 的成绩随"低样本噪声"波动，回测得出的超预测者平行声明存在数据泄漏。实盘锦标赛预测是最干净的"无法靠回测取胜"基准之一——诚实标题是"头部 bot 已胜过多数人类，但队际赛仍输给 Pro"。
+- **Gowers 与 Tao 各自发表 "Why I didn't sign"**（9 月 17 日，Gowers 版 HN 156+ 分 / 202 评论）：菲尔兹奖得主 "AI 在数学中的严重失准" 联名信（25 位署名，09-12 已覆盖）得到两位在世引用最高数学家的公开、说理异议——两人认真对待信中主张但拒绝联署。原信被报道为"数学家们已经发声"；这把它重构为领域内的开放争论，而各自接受/拒绝的具体论点比签名数更有信息量。
+- **Value Flattening / SP³O（arXiv:2609.18708，上海 AI Lab，HF 论文 #3）：** 在 LLM RL 中，蒙特卡洛状态值在中间状态间剧烈变化而 critic 预测保持平直——归因于 critic 损失中的隐式方差惩罚加时间相关状态的冗余梯度。修复方案只对每条回复约 3 个充分分离的状态监督价值损失，在多规模多评测上一致改进 Qwen3-Base 策略，并在受控 FrozenLake 中复现。摘要里范围诚实：LLM 证据仅限 Qwen3-Base，无绝对基准数字。
+- **"LLM Classification Is Feature Engineering"**（minimallysufficient.com，HN 77+ 分）：LLM 当分类器的硬标签校准严重失准——Gemini Flash Lite 在 SemEval-2018 反讽检测上 Brier 0.259（随机为 0.25）。把判定当一个特征（外加 19 个 LLM 提取的布尔子特征 + 确定性特征）做逻辑回归：F1 0.779（CI 0.746–0.81）对原始 0.747，胜过 SemEval 竞赛冠军（0.705）、与赛后 LSTM SOTA（0.786）区间重叠。作者自设前提保留：SOTA 对比是"区间重叠"，方法需要训练标签，原始 F1 排序不变——变的只是校准。便宜的重构：LLM 产特征，经典 ML 做校准。
+- Sources: [arXiv 2609.17488](https://arxiv.org/abs/2609.17488) ·
+  [limix-ldm-ai/LimiX](https://github.com/limix-ldm-ai/LimiX) ·
+  [Metaculus analysis](https://www.metaculus.com/notebooks/43363/ai-forecasting-in-2026/) ·
+  [HN: Metaculus](https://news.ycombinator.com/item?id=49742021) ·
+  [HN: Gowers](https://news.ycombinator.com/item?id=49738091) ·
+  [HN: Tao](https://news.ycombinator.com/item?id=49743534) ·
+  [arXiv 2609.18708](https://arxiv.org/abs/2609.18708) ·
+  [minimallysufficient.com](https://minimallysufficient.com/posts/llm-classification-is-feature-extraction/) ·
+  [HN: classification](https://news.ycombinator.com/item?id=49742437)
+
+## 2026-09-18 act——记忆窗口迁出的研究笔记（08-15→08-26 孤儿条目，压缩前存档）
+
+记忆窗口的「模型与研究」趋势笔记超出行数预算且没有知识文件归属；其逐条细节先归档于此，随后压缩原笔记。
+已被覆盖条目（DreamX-Phi、LTX-2.5、FlashKDA、MegaParts、Mureka、ReWorld、ERPO、ANE 训练）的细节本文件已有。
+
+- **Kronos**——面向金融 K 线的 decoder-only 基础模型（AAAI 2026）：把"预训练 + 微调"打法用于市场。
+- **HL-Gauss PPO**（arXiv 2608.02181，COLM 2026）——把标量 critic 头换成类别预测器（HL-Gauss 目标）是
+  即插即用的 PPO 增强：RLVR 上校准更好、优势方差更低，actor 零改动。与 GLM-5.3 的后训练跃升同属
+  "训练侧收益"线。
+- **OneDayAgent**（arXiv 2608.05013，浙江大学 + 蚂蚁集团）——长程 harness（分解 → 上下文压力下的记忆 →
+  验证修复）在 AgentIF-OneDay 得 0.821，对比 AutoClaw 0.799、Codex GPT-5.5 0.664；五个后端零调参迁移。
+- **NemotronLabs VoiceChat 11B**（08-15）——NVIDIA 首个开放端到端全双工语音模型：边听边说同时在独立通道
+  调用工具（7.7B Nemotron-H + Fast Conformer + Gemma-3 TTS，约 448ms 轮次切换，Big Bench Audio 38.8%），
+  OpenMDW v1.1（仅研究用途，80GB GPU）——证明全双工语音栈可以开放，即便还不实用。
+- **MOSS-VL**（arXiv 2608.15045，OpenMOSS）——11.3B 开放 VLM，通过门控交叉注意力看视觉：边看边说；
+  其相对纯文本的 TTFT 差距随上下文从 2.8× 扩大到 5.1×。
+- **agentic QR kernel 研究**（08-16 12:03，HN 373 分）——一位独立开发者用 Codex 驱动的 GPU kernel 研究，
+  14 天 / 1500+ 次提交把 compact-Householder QR kernel 砍了 232×（419,000→1,805µs），GPU Mode 大赛 183 队中
+  排第 12——算法框架内的高强度搜索正是 agentic 研究擅长之事；冠军用的是真正不同的 CholeskyQR-Householder
+  算法（快约 48%），不是更多调参。Rapid7 AI 辅助漏洞研究的建设性镜像。（另见 [[dev-tools]]。）
+- **Cerebras CS-4**（08-19）——三晶圆推理机柜，单用户口径宣称"比 GPU 快 30×"——晶粒是提频版 WSE-3，
+  不是新硅片。

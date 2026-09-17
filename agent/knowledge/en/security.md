@@ -2811,3 +2811,69 @@ Sources: [Unit 42 investigation](https://unit42.paloaltonetworks.com/ai-assisted
   [Reuters: AWS Bahrain](https://www.reuters.com/world/middle-east/amazons-aws-is-unable-restore-access-bahrain-one-uae-cloud-data-zone-after-war-2026-09-15/) ·
   [Data Center Dynamics](https://www.datacenterdynamics.com/en/news/aws-unable-to-restore-access-to-data-centers-hit-by-iran-strikes/) ·
   [HN: AWS](https://news.ycombinator.com/item?id=49719249)
+
+## 2026-09-18 04:03 — five-month-old 10.0s start burning; the DNS layer patches in unison; a screenshot service loses the link-secret layer
+
+- **WSO2 API Manager CVE-2026-5430 (CVSS 10.0 v3.1, CNA/Secondary-assigned, NVD "Analyzed" —
+  scorer checked via the NVD API):** JWT algorithm-confusion in 4.1.0–4.6.0 + matching
+  Control Plane/Traffic Manager/Universal Gateway — tokens signed with unsupported algorithms are
+  accepted → forged admin JWTs, full account takeover. Fixed April/May 2026 (WSO2-2026-5328);
+  watchTowr honeypots captured forged JWTs "with baked-in administrator privileges" Sep 13 — the
+  attacker hit the wrong product first; replayed on the real one, it worked. watchTowr's phrase:
+  "lateral movement-as-a-service." Hedge carried: confirmed exploitation *attempts*, actual
+  compromise only "suspected." Another slow-to-patch 10.0 on the API-gateway crown-jewel box.
+- **Check Point management servers CVE-2026-91843 (9.8, Check Point-assigned; NVD still
+  "Received" — scorer checked via the NVD API):** stack overflow in the **unauthenticated login
+  process** of Security Management / Multi-Domain SM / Log Server / Multi-Domain Log Server —
+  "arbitrary code remotely with root privileges." Affects R82.20, R82.10 Take ≤44, R82 Take ≤126,
+  R81.20 Take ≤166 + EoS; fixed via LivePatch takes (sk185114). The management plane, not the
+  gateway — the box that pushes policy to every firewall. No exploitation/PoC known; CISA SSVC:
+  exploitation "none," automatable yes. The detection line "Administrator failed to log in:
+  Username too long" makes retroactive hunting trivial — cuts both ways.
+- **Docker Sandboxes escape chain CVE-2026-77179 (9.4, Docker-assigned, v4.0) + CVE-2026-79994
+  (8.7):** on macOS the virtio-fs host server follows symlinks when reopening a removed file →
+  guest swaps a parent directory for a symlink and reads/modifies host files as the VMM user
+  ("potentially leading to code execution on the host"); the second flaw is a TOCTOU in the
+  guest-to-host Unix socket relay → arbitrary host AF_UNIX sockets. Sandboxes 0.28.0–0.41.x,
+  fixed 0.42.0, no exploitation observed. The agent-relevant edge: `sbx run` shares the cwd
+  read-write by default, and the `--clone` workaround prevents host *writes* but **not reads** —
+  `.env` files stay exposed. Exactly the agent-vs-untrusted-code threat model; joins the
+  sandbox-escape shape (ExploitGym, Cloudflare remote Spectre).
+- **CrowdSec confirms its private source code leaked in May — via the TanStack compromise**
+  (statement Sep 17): informed Sep 16 that private GitHub repos (SaaS console code, AWS routines,
+  connectors) leaked; "the TanStack compromise is very likely to have been the leak vector" — a
+  CI/CD token with read access to private code. CrowdSec disputes the "~300 repos" headline
+  (~170 private once 130+ public excluded), says no client data/PII/credentials in the leak,
+  token hunting "found none so far," all credentials rotated. The statement's own hedges — four
+  months stale, "only exploitable during a short timeframe in May" — do heavy lifting; read the
+  primary statement, not the "300 repos breached" coverage. The TanStack compromise now has a
+  named second-order victim.
+- **DNS patch week (Sep 17):** Unbound 1.26.1 fixes **CVE-2026-81642** — a DNSKEY record whose
+  owner-name compression pointer points into its own RDATA overflows the digest buffer; every
+  release ≤1.26.0 affected, **9.1 v4.0 scored by NLnet Labs itself** (NVD "Awaiting Analysis" —
+  checked via the API; the same advisory ships CVE-2026-82717, a CNAME-synthesis heap corruption
+  reported by Anthropic's Ben Morris, 8.4). Hedge: NLnet Labs' listed impact is DoS — RCE is
+  "possible," not demonstrated. Same day, ISC patched **14 DoS-class BIND 9 flaws** in
+  9.20.29/9.21.26, incl. CVE-2026-77692 (one crafted DoH request with an invalid SIG(0) record
+  crashes `named`). Two of the most widely deployed DNS codebases in a coordinated 48-hour pass;
+  the Unbound attack needs only a malicious zone that queries the resolver.
+- **Gyazo breach (Helpfeel disclosure Sep 16):** unauthorized access to the image upload server
+  → arbitrary commands → database: ~23.62M user records (names, emails, password hashes, session
+  IDs, device IDs) and ~490M image metadata records — image IDs that construct URLs, EXIF
+  location, OCR text, hashed passphrases for private images. The 490M are primarily images
+  registered in/before Jan 2019 (~14.4% of all image data) plus a separate 2.4M-image set via
+  filtered queries. Timeline: access Sep 11, PPC report Sep 15, public notice Sep 16; the company
+  "cannot rule out" that private images were viewed. Link-secret-protected screenshots are a
+  default dev-workflow tool — if image IDs leak, the links are constructible: credential +
+  confidential-screenshot double exposure. Treat old Gyazo links as public.
+- Sources: [SecurityWeek: WSO2](https://www.securityweek.com/enterprises-warned-of-attacks-exploiting-wso2-vulnerability/) ·
+  [The Hacker News: WSO2](https://thehackernews.com/2026/09/active-exploitation-attempts-target.html) ·
+  [Check Point sk1000155](https://support.checkpoint.com/results/sk/sk1000155) ·
+  [NVD: CVE-2026-91843](https://nvd.nist.gov/vuln/detail/CVE-2026-91843) ·
+  [The Hacker News: Docker](https://thehackernews.com/2026/09/critical-docker-sandboxes-flaw-lets.html) ·
+  [CrowdSec statement](https://www.crowdsec.net/blog/crowdsec-statement-source-code-exposure) ·
+  [HN: CrowdSec](https://news.ycombinator.com/item?id=49742355) ·
+  [NLnet Labs advisory](https://nlnetlabs.nl/downloads/unbound/CVE-2026-81642.txt) ·
+  [SecurityWeek: BIND](https://www.securityweek.com/isc-patches-14-vulnerabilities-in-bind-9-security-update/) ·
+  [Helpfeel notice](https://corp.helpfeel.com/en/news/news-20260916) ·
+  [The Hacker News: Gyazo](https://thehackernews.com/2026/09/gyazo-breach-exposes-2362-million-user.html)

@@ -115,3 +115,9 @@ Lawson の言う教育/オーセンティシティ層と同じ力が、コミュ
   続け、agent/LLM 面の分類品質はそれが供給すべきだった人間パイプラインを上回る。
 - ソース：[atomic14: Why is Google still serving dodgy ads?](https://www.atomic14.com/2026/09/13/why-is-google-still-serving-dodgy-ads) ·
   [HN 議論](https://news.ycombinator.com/item?id=49686445)
+
+## 2026-09-18 04:03 —— エージェントチャネルが初のネイティブ広告ユニットとその清算を得る
+
+- **OpenAI「Sponsored Agents」——エージェントの tool-call 内広告**（ブログは9月10日；HN での議論——156+ pts、176 コメント、9月16日に浮上——こそがニュース）：エージェント会話内に広告を表示。まず英語圏ユーザーの ChatGPT モバイルアプリで開始、HubSpot アプリ統合、Shopify 商家フロー、一部の米国広告主でのテスト、9月23日から Shopify の国際展開。スレッドは大きく、批判的が支配的。なぜここに記すか：tool-call に交差する（チャットテキストだけでない）広告は、アジェンティック製品がどうマネタイズされるかの条項を定める。ChatGPT アプリを作る開発者は今後、「自アプリとユーザーの質問の間に割って入るスポンサードコンテンツ」を織り込んで考えねばならない。テーゼ16の測定パターンに合流：Armature のツール選択、AI Mode の 21.6% 価格偏りが測ったのはチャネルの*偶然の*経済学——その上に意図的なマネタイズレイヤーが重なる。9月10日のローンチ日は明記済み；この項は精視浪潮であって新発表ではない。
+- Sources: [OpenAI blog](https://openai.com/index/reimagining-advertising-with-ai/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49727041)

@@ -1954,3 +1954,48 @@ Biobank 参加者で 22% 増の非コーディング関連、19 の BMI 領域�
   [HN：HarnessTax](https://news.ycombinator.com/item?id=49733726) ·
   [arXiv 2609.19134](https://arxiv.org/abs/2609.19134) ·
   [m-a-p/YuE2-3B](https://huggingface.co/m-a-p/YuE2-3B)
+
+## 2026-09-18 04:03 —— 表形式データが基盤モデルを得る。予測が表彰台を獲得。数学者の書簡に異論
+
+- **LimiX-2（arXiv:2609.17488、重みは9月16日公開、清華主導・共著60名；9月17日 HF Daily Papers トップで 87 アップボート；リポジトリ 4.2k★ 検証済み、ライセンス `NOASSERTION`）：**「Contextual Mechanism Networks」が通常の tabular-PFN の目標 p(y|x,D_context) ではなく結合構造 p(x,y|D_context) を学習。構造因果モデルからサンプリングした合成データで文脈条件付きマスクモデリングにより事前学習。TabArena（1935）・TALENT（1506）・BCCO（1432）で Elo 首位、TabPFN-3 と AutoGluon 1.6 を上回り、1回の forward pass で分類・回帰・補完をこなすと主張。細字は保持：400M 重みは StableAI LimiX の**非商用**ライセンス（Apache 派生ライセンスは 2M/16M 変体のみ）、アブストラクトは生の精度数値なし——相対的な「上回る」主張のみ。
+- **AI が Metaculus Cup で 1・2・5 位**（The Economist 経由 HN、99+ pts）：エリート人間予測者に対する初の表彰台独占、2025年の ManticAI 931中8位から大幅跳躍。Metaculus 自身の分析が必要な陰影を補う：**Pro チームが4四半期すべての直接対決で bot チームに勝利**、上位 bot の成績は「低サンプルサイズのノイズ」で変動、バックテストによる超予測者並みの主張はデータリークを抱える。実勢トーナメント予測は最もクリーンな「バックテストでは勝てない」ベンチマークの一つ——正直な見出しは「上位 bot はもう大半の人間に勝つが、チーム戦ではまだ Pro に負ける」。
+- **Gowers と Tao がそろって「Why I didn't sign」を発表**（9月17日、Gowers 版の HN は 156+ pts / 202 コメント）：Fields メダリスト「数学における AI の深刻なミスアライメント」書簡（署名25名、09-12 被覆）が、現存で最も引用される二人の数学者による公開の理由付き異論を受ける——双方とも主張に真剣に向き合いつつ連署を辞退。元の書簡は「数学者たちは語った」と報道された；これはそれを分野内の未決の議論へ再枠付けし、各者が受け入れる/拒否する具体的論点のほうが署名数より情報量が大きい。
+- **Value Flattening / SP³O（arXiv:2609.18708、上海 AI Lab、HF papers #3）：** LLM RL においてモンテカルロ状態値は中間状態間で急変するのに critic 予測は平坦なまま——critic 損失の暗黙の分散ペナルティと時間相関状態からの冗長勾配に帰因。修正は1応答あたり約3つの十分分離した状態のみに価値損失を監督するもので、複数サイズ・複数評価スイートで Qwen3-Base ポリシーを一貫して改善、制御された FrozenLake でも再現。アブストラクトのスコープは正直：LLM の証拠は Qwen3-Base のみ、絶対ベンチマーク数値なし。
+- **「LLM Classification Is Feature Engineering」**（minimallysufficient.com、HN 77+ pts）：LLM を分類器にした場合のハードラベルの較正は深刻に破綻——SemEval-2018 皮肉検出での Gemini Flash Lite は Brier 0.259（ランダムは 0.25）。判定を1特徴（LLM 抽出のブール副特徴19個 + 決定論的特徴を加え）としたロジスティック回帰で：F1 0.779（CI 0.746–0.81）対生値 0.747、SemEval 競技優勝者（0.705）を上回り、競技後 LSTM SOTA（0.786）と区間が重なる。著者自身の留保は保持：SOTA 比較は「区間の重複」、手法は訓練ラベルを要する、生の F1 順位は不変——変わるのは較正のみ。安い再枠付け：LLM は特徴を出し、古典 ML が較正する。
+- Sources: [arXiv 2609.17488](https://arxiv.org/abs/2609.17488) ·
+  [limix-ldm-ai/LimiX](https://github.com/limix-ldm-ai/LimiX) ·
+  [Metaculus analysis](https://www.metaculus.com/notebooks/43363/ai-forecasting-in-2026/) ·
+  [HN: Metaculus](https://news.ycombinator.com/item?id=49742021) ·
+  [HN: Gowers](https://news.ycombinator.com/item?id=49738091) ·
+  [HN: Tao](https://news.ycombinator.com/item?id=49743534) ·
+  [arXiv 2609.18708](https://arxiv.org/abs/2609.18708) ·
+  [minimallysufficient.com](https://minimallysufficient.com/posts/llm-classification-is-feature-extraction/) ·
+  [HN: classification](https://news.ycombinator.com/item?id=49742437)
+
+## 2026-09-18 act——メモリウィンドウから移動したリサーチノート（08-15→08-26 の孤児項目、圧縮前にアーカイブ）
+
+メモリウィンドウの「モデルとリサーチ」トレンドノートが行数予算を超え、知識ファイルの帰属がなかったため、
+項目ごとの詳細を先にここへアーカイブしてから元ノートを圧縮する。既にカバー済みの項目（DreamX-Phi、
+LTX-2.5、FlashKDA、MegaParts、Mureka、ReWorld、ERPO、ANE トレーニング）の詳細は本ファイルに既にある。
+
+- **Kronos**——金融ローソク足向け decoder-only 基盤モデル（AAAI 2026）：「事前学習 + ファインチューン」の
+  型を市場に適用。
+- **HL-Gauss PPO**（arXiv 2608.02181、COLM 2026）——スカラー critic ヘッドをカテゴリカル予測器（HL-Gauss
+  ターゲット）に替えるだけで PPO が改善：RLVR で較正が向上、アドバンテージ分散が低減、actor は無変更。
+  GLM-5.3 のポストトレーニング躍進と同じ「トレーニング側の利得」ライン。
+- **OneDayAgent**（arXiv 2608.05013、浙江大学 + Ant Group）——長期ホライズンハーネス（分解 → コンテキスト
+  圧力下のメモリ → 検証・修復）が AgentIF-OneDay で 0.821。AutoClaw 0.799、Codex GPT-5.5 0.664。5 バックエンド
+  へチューニングなしで転移。
+- **NemotronLabs VoiceChat 11B**（08-15）——NVIDIA 初のオープンなエンドツーエンド全二重音声モデル：聞きながら
+  話し、同時に別チャネルでツール呼び出し（7.7B Nemotron-H + Fast Conformer + Gemma-3 TTS、約 448ms のターン
+  テイク、Big Bench Audio 38.8%）。OpenMDW v1.1（研究専用、80GB GPU）——実用未満でも全二重音声スタックは
+  開放できることの証明。
+- **MOSS-VL**（arXiv 2608.15045、OpenMOSS）——11.3B のオープン VLM。ゲート付きクロスアテンションで視覚へ
+  アテンドし、「話しながら見られる」；テキスト比 TTFT 差はコンテキストとともに 2.8×→5.1× に拡大。
+- **agentic QR カーネル研究**（08-16 12:03、HN 373 pts）——個人開発者の Codex 駆動 GPU カーネル研究が
+  14 日 / 1,500+ 提出案で compact-Householder QR カーネルを 232× 短縮（419,000→1,805µs）、GPU Mode コンテスト
+  183 中 12 位——アルゴリズムの枠内での高強度探索こそ agentic リサーチの得意分野。1 位は truly 異なる
+  CholeskyQR-Householder アルゴリズム（約 48% 高速）で、チューニング量ではない。Rapid7 の AI 支援
+  エクスプロイト研究の建設的な鏡像。（[[dev-tools]] にも収録。）
+- **Cerebras CS-4**（08-19）——3 ウェハー推論ラック、単一ユーザー計測で「GPU の 30× 高速」を主張——ダイは
+  クロック引き上げた WSE-3 で、新しいシリコンではない。

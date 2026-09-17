@@ -2099,3 +2099,23 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [Reuters：AWS バリン](https://www.reuters.com/world/middle-east/amazons-aws-is-unable-restore-access-bahrain-one-uae-cloud-data-zone-after-war-2026-09-15/) ·
   [Data Center Dynamics](https://www.datacenterdynamics.com/en/news/aws-unable-to-restore-access-to-data-centers-hit-by-iran-strikes/) ·
   [HN：AWS](https://news.ycombinator.com/item?id=49719249)
+
+## 2026-09-18 04:03 —— 5か月前の 10.0 が燃え始める。DNS レイヤーが一斉パッチ。スクリーンショット service がリンク秘密レイヤーを失う
+
+- **WSO2 API Manager CVE-2026-5430（CVSS 10.0 v3.1、CNA/Secondary 付け、NVD「Analyzed」——採点者は NVD API 経由で確認済み）：** 4.1.0–4.6.0 と対応する Control Plane/Traffic Manager/Universal Gateway における JWT アルゴリズム混乱——未対応の署名アルゴリズムのトークンが受理され、管理者 JWT の偽造と完全なアカウント乗っ取りへ。2026年4/5月に修正済み（WSO2-2026-5328）；watchTowr のハニーポットが9月13日に「管理者権限を焼き込んだ」偽造 JWT を捕捉——攻撃者はまず間違った製品を攻撃、本物で再生したら成功した。watchTowr の言い回し：「ラテラルムーブメント as a サービス。」留保は保持：確認されたのは攻撃*試行*、実際の侵害は「疑い」のもう一つのパッチの遅い 10.0 が API ゲートウェイの王冠宝石箱で燃えている。
+- **Check Point 管理サーバー CVE-2026-91843（9.8、Check Point 付け；NVD は依然「Received」——採点者は NVD API 経由で確認済み）：** Security Management / Multi-Domain SM / Log Server / Multi-Domain Log Server の**未認証ログインプロセス**におけるスタックオーバーフロー——「攻撃者が root 権限でリモートから任意コードを実行できる可能性」。R82.20、R82.10 Take ≤44、R82 Take ≤126、R81.20 Take ≤166 と EoS リリースに影響；LivePatch take（sk185114）で修正。ゲートウェイではなく管理プレーン——全ファイアウォールへポリシーを配布する箱。利用/PoC 未確認；CISA SSVC：exploitation「none」、automatable yes。検出ログ行「Administrator failed to log in: Username too long」が遡及ハンティングを容易にする——双方に作用。
+- **Docker Sandboxes 脱出チェーン CVE-2026-77179（9.4、Docker 付け、v4.0）+ CVE-2026-79994（8.7）：** macOS で virtio-fs ホストサーバーが削除済みファイルの再オープン時にシンボリックリンクを追う → ゲストが親ディレクトリをシンボリックリンクに差し替え、VMM ユーザーとしてホストファイルを読み/変更できる（「ホストでのコード実行に至る可能性」）。第二の欠陥はゲスト→ホスト Unix socket リレーの TOCTOU → 任意のホスト AF_UNIX socket。Sandboxes 0.28.0–0.41.x が影響、0.42.0 で修正、利用は未観測。エージェント関連の縁：`sbx run` はデフォルトで cwd を読み書き共有し、`--clone` 緩和はホスト*書き込み*を防ぐが**読みは防げない**——`.env` は露出したまま。まさにエージェント対非信頼コードの脅威モデル；サンドボックス脱出シェイプ（ExploitGym、Cloudflare リモート Spectre）に合流。
+- **CrowdSec がプライベートソースコードの5月流出を確認——TanStack 侵害が経路**（声明 9月17日）：9月16日、プライベート GitHub リポジトリ（SaaS コンソールコード、AWS ルーティン、コネクタ）の流出を告知された；「TanStack 侵害が漏洩経路である可能性が非常に高い」——プライベートコードへの読み取り権限を持つ CI/CD トークン。CrowdSec は「~300 リポジトリ」の見出しに異議（公開 130+ を除けばプライベートは約170）、漏洩に顧客データ・PII・認証情報はなし、トークン探索は「今のところ未発見」、全認証情報をローテーション済み。声明自身の留保——流出コードは4か月古い、「5月の短い期間のみ利用可能」——が重い仕事をしている。一次声明を読み、「300 リポジトリ侵害」の報道を読むな。TanStack 侵害に名指しの二次被害者ができた。
+- **DNS パッチ週（9月17日）：** Unbound 1.26.1 が **CVE-2026-81642** を修正——owner-name 圧縮ポインタが自己 RDATA 内を指す DNSKEY レコードがダイジェストバッファをオーバーフロー；≤1.26.0 の全リリースが影響、**9.1 v4.0 は NLnet Labs 自らの採点**（NVD「Awaiting Analysis」——API 経由で確認；同一アドバイザリに CVE-2026-82717、Anthropic の Ben Morris が報告した CNAME 合成ヒープ破壊、8.4）。留保：NLnet Labs の掲げる影響は DoS——RCE は「可能性」で実証されていない。同日、ISC が 9.20.29/9.21.26 で **BIND 9 の DoS 級欠陥14件**を修正、CVE-2026-77692 を含む（無効な SIG(0) レコードを含む細工 DoH リクエスト1発で `named` がクラッシュ）。最も広く展開された二つの DNS コードベースが48時間の協調パッチに；Unbound の攻撃に必要なのはリゾルバへ問い合わせる恶意ゾーン一つ。
+- **Gyazo 侵害（Helpfeel 公表 9月16日）：** 画像アップロードサーバーへの未認証アクセス → 任意コマンド → データベース：ユーザー記録約2,362万件（氏名、メール、パスワードハッシュ、セッション ID、デバイス ID）と画像メタデータ約4.9億件——URL を構成できる画像 ID、EXIF 位置情報、OCR テキスト、非公開画像のハッシュ済みパスフレーズ。4.9億件は主に2019年1月以前に登録された画像（全画像データの約14.4%）、別途フィルタ済みクエリで取得された240万画像の集合。タイムライン：アクセス9月11日、9月15日に PPC へ報告、9月16日に公表；会社は非公開画像の閲覧を「排除できない」。リンク秘密保護のスクリーンショットは標準的な開発ワークフローツール——画像 ID が漏れればリンクは構成可能：認証情報と機密スクリーンショットの二重露出。古い Gyazo リンクは公開物として扱え。
+- Sources: [SecurityWeek: WSO2](https://www.securityweek.com/enterprises-warned-of-attacks-exploiting-wso2-vulnerability/) ·
+  [The Hacker News: WSO2](https://thehackernews.com/2026/09/active-exploitation-attempts-target.html) ·
+  [Check Point sk1000155](https://support.checkpoint.com/results/sk/sk1000155) ·
+  [NVD: CVE-2026-91843](https://nvd.nist.gov/vuln/detail/CVE-2026-91843) ·
+  [The Hacker News: Docker](https://thehackernews.com/2026/09/critical-docker-sandboxes-flaw-lets.html) ·
+  [CrowdSec statement](https://www.crowdsec.net/blog/crowdsec-statement-source-code-exposure) ·
+  [HN: CrowdSec](https://news.ycombinator.com/item?id=49742355) ·
+  [NLnet Labs advisory](https://nlnetlabs.nl/downloads/unbound/CVE-2026-81642.txt) ·
+  [SecurityWeek: BIND](https://www.securityweek.com/isc-patches-14-vulnerabilities-in-bind-9-security-update/) ·
+  [Helpfeel notice](https://corp.helpfeel.com/en/news/news-20260916) ·
+  [The Hacker News: Gyazo](https://thehackernews.com/2026/09/gyazo-breach-exposes-2362-million-user.html)
