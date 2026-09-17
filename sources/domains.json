@@ -2302,6 +2302,15 @@
     "jp": "サイバーセキュリティニュースブログ。エクスプロイト解説と勧告に速い。二次メディア——ベンダー勧告と要突合。",
     "zh": "网络安全新闻博客——对漏洞利用分析与公告跟进快；二手聚合媒体，需向厂商公告核实。"
   },
+  "gegell.github.io": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal technical blog (gegell) — deep hobbyist reverse-engineering writeups. Cross-checked (09-17): its Factorio taus88 RNG state-reconstruction walkthrough matches the discussion on HN (in-game circuit predictor, quality-roll mapping), and the quoted 2014 taus88 rationale is consistent with Factorio's own dev comments.",
+    "jp": "個人技術ブログ（gegell）——趣味者による深いリバースエンジニアリング解説。クロスチェック済み（09-17）：Factorio taus88 RNGの状態再構築の解説はHNの議論（ゲーム内回路予測器、品質ロールへのマッピング）と一致し、引用された2014年のtaus88選定理由もFactorio開発側の発言と整合。",
+    "zh": "个人技术博客（gegell）——爱好者深度逆向工程长文。已交叉核验（09-17）：其 Factorio taus88 随机数状态重建教程与 HN 讨论（游戏内电路预测器、品质 roll 映射）一致，引用的 2014 年 taus88 选型理由也与 Factorio 开发者发言相符。"
+  },
   "gentic.news": {
     "cat": "news",
     "cred": "med",
@@ -2535,6 +2544,15 @@
     "en": "Hardwareluxx — German hardware/tech-news site; solid on consumer-software and browser news. Cross-checked (08-16): its uBlock Origin Facebook ad-blocking story matches racunalniske-novice.com's report.",
     "jp": "Hardwareluxx——ドイツのハードウェア/テックニュースサイト。コンシューマーソフトとブラウザのニュースに強い。突合済み（08-16）：uBlock OriginのFacebook広告ブロック報道はracunalniske-novice.comの報道と一致。",
     "zh": "Hardwareluxx——德国硬件/科技新闻站；对消费软件与浏览器新闻较扎实。已交叉核验（08-16）：其 uBlock Origin Facebook 广告拦截报道与 racunalniske-novice.com 的报道一致。"
+  },
+  "harnesstax.github.io": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 0,
+    "density": "low",
+    "en": "HarnessTax study site — benchmarks how much coding-agent harnesses matter vs the model. Caveat (09-17): JS-only app, static fetches render no numbers; its findings could only be read second-hand via the HN thread. Not yet independently cross-validated — needs cv=1 before its figures are cited.",
+    "jp": "HarnessTax研究サイト——コーディングエージェントのハーネスがモデルに対してどれだけ重要かを測定。注意（09-17）：JSのみのアプリで静的フェッチでは数値が表示されず、所見はHNスレッド経由の二次情報のみ。独立したクロス検証は未実施——数値引用前にcv=1が必要。",
+    "zh": "HarnessTax 研究站点——测量编码智能体 harness 相对模型本身的影响。注意（09-17）：纯 JS 应用，静态抓取无法渲染数字，发现只能通过 HN 讨论二手获得。尚未独立交叉核验——引用其数字前需要 cv=1。"
   },
   "harvey.ai": {
     "cat": "vendor",
@@ -3616,6 +3634,15 @@
     "jp": "Microsoft Security Blog（microsoft.com/en-us/security）。自社環境の脅威インテリジェンスとパッチ指針の一次情報。自社に関わる攻撃キャンペーン（例：TerminalFix リバーストンネル侵入、08-30）については信頼できるが、記述は Defender の検出有利に寄りがち —— 独立系トラッカーと併用。",
     "zh": "Microsoft 安全博客（microsoft.com/en-us/security）——微软自家生态威胁情报与补丁指引的一手来源；对其自身攻击战役（如 TerminalFix 反向隧道入侵，08-30）权威，但叙述总是偏向 Defender 的防护效果——需与独立追踪源配对。"
   },
+  "mimo.xiaomi.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Xiaomi's MiMo model site — primary source for MiMo releases and the live mimo-v2.6 RL training dashboard. Cross-checked (09-17): dashboard title and self-description (\"training metrics of the mimo-v2.6-pro and mimo-v2.6-flash reinforcement-learning runs, live from the trainer's logs\") confirmed; it is a websocket app, so displayed metrics are vendor telemetry only.",
+    "jp": "XiaomiのMiMoモデルサイト——MiMoリリースとライブのmimo-v2.6 RL学習ダッシュボードの一次情報源。クロスチェック済み（09-17）：ダッシュボードのタイトルと自己説明（「mimo-v2.6-proとmimo-v2.6-flashのRLランの学習メトリクス、トレーナーのログからライブ」）を確認。WebSocketアプリのため表示メトリクスはベンダーテレメトリに限る。",
+    "zh": "小米 MiMo 模型官网——MiMo 发布与 mimo-v2.6 RL 实时训练面板的第一手来源。已交叉核验（09-17）：面板标题与自述（\"mimo-v2.6-pro 与 mimo-v2.6-flash 强化学习运行的训练指标，来自训练器日志的实时数据\"）已确认；其为 websocket 应用，展示指标仅属厂商自报遥测。"
+  },
   "minimax.io": {
     "cat": "vendor",
     "cred": "med",
@@ -4154,6 +4181,15 @@
     "en": "Open-source trade press; reliable for FOSS project announcements and interviews. Cross-checked (08-15): its Prime Agent piece (\"open-sourced, MIT, self-improving coding harness\") matches the GitHub repo verbatim, but benchmark figures (95.5% ARC-AGI-3) live on the vendor's blog, not the README — confirm numbers against repo/vendor.",
     "jp": "オープンソース専門メディア。FOSSプロジェクトの発表・インタビューに信頼性。突合済み（08-15）：Prime Agent記事（「OSS化・MIT・自己改善型コーディングハーネス」）はGitHubリポジトリと一致するが、ベンチ数値（ARC-AGI-3 95.5%）はベンダーブログ由来でREADMEにはない——数値はリポジトリ/ベンダーで確認を。",
     "zh": "开源行业媒体；对开源项目发布与访谈的报道较为可靠。已交叉核验（08-15）：其 Prime Agent 报道（“开源、MIT、自改进编码 harness”）与 GitHub 仓库一致，但基准数字（ARC-AGI-3 95.5%）出自厂商博客而非 README——数字请对照仓库/厂商核实。"
+  },
+  "openspec.dev": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Fission-AI's OpenSpec site — spec-driven development framework for coding agents (MIT, `@fission-ai/openspec`). Cross-checked (09-17): repo slug, MIT license, v1.13.0 and the five /opsx commands match the GitHub repo and HN thread; star counts on the site (68k) are self-reported marketing numbers.",
+    "jp": "Fission-AIのOpenSpecサイト——コーディングエージェント向けスペック駆動開発フレームワーク（MIT、`@fission-ai/openspec`）。クロスチェック済み（09-17）：リポジトリslug、MITライセンス、v1.13.0、5つの/opsxコマンドはGitHubリポジトリとHNスレッドと一致。サイト上のスター数（68k）は自己申告のマーケティング数値。",
+    "zh": "Fission-AI 的 OpenSpec 官网——面向编码智能体的规格驱动开发框架（MIT，`@fission-ai/openspec`）。已交叉核验（09-17）：仓库 slug、MIT 许可证、v1.13.0 与五个 /opsx 命令均与 GitHub 仓库及 HN 讨论一致；站上星数（68k）为自报营销数字。"
   },
   "opentrailpaper.com": {
     "cat": "community",
@@ -4972,6 +5008,15 @@
     "en": "Ruurtjan Pul's personal blog — practitioner engineering write-ups; cited for the 'P99 0 ms* autocomplete' post over 240M domains, whose honest asterisk (holds only near the single European server) is in the headline itself.",
     "jp": "Ruurtjan Pul の個人ブログ——実務者によるエンジニアリング解説。2.4 億ドメインを対象にした『P99 0 ms* autocomplete』で引用。誠実なアスタリスク注記（単一ヨーロッパサーバー近傍でのみ成立）が見出し自体にある。",
     "zh": "Ruurtjan Pul 的个人博客——一线工程随笔；因《P99 0 ms* autocomplete》（覆盖 2.4 亿域名）被引用，其诚实的星号说明（仅在单一欧洲服务器附近成立）就写在标题里。"
+  },
+  "ryan.science": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Ryan Fahey's personal research blog — careful primary crypto/RE work with reproducible artifacts. Cross-checked (09-17): its PDF417 barcode key-recovery post cites verifiable primary documents (CA DMV technical overview, did:web key document, SEC 1 spec), publishes recovered P-256 keys and a browser verifier, and matches the HN discussion.",
+    "jp": "Ryan Faheyの個人研究ブログ——再現可能な成果物を伴う慎重な一次暗号/RE研究。クロスチェック済み（09-17）：PDF417バーコード鍵復元の記事は検証可能な一次文書（CA DMVの技術概説、did:web鍵ドキュメント、SEC 1仕様）を引用し、復元したP-256鍵とブラウザ検証器を公開、HNの議論とも一致。",
+    "zh": "Ryan Fahey 的个人研究博客——带可复现产物的严谨一手密码学/逆向研究。已交叉核验（09-17）：其 PDF417 条码密钥恢复一文引用了可验证的一手文档（加州 DMV 技术概览、did:web 密钥文档、SEC 1 规范），公布了恢复的 P-256 公钥和浏览器验证器，与 HN 讨论一致。"
   },
   "safedep.io": {
     "cat": "security",

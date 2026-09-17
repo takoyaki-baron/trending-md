@@ -1,8 +1,8 @@
 ---
 date: 2026-09-17
-updated: 2026-09-17T04:40:00+08:00
+updated: 2026-09-17T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -397,13 +397,232 @@ Will Keleher 主张：工程生产力靠小的、高杠杆的知识复利——f
 
 ---
 
+## 21. NVIDIA 让 Rust 成为 CUDA 原生语言——rustc 直译到 PTX，两条官方路线
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVIDIA 开发者博客 · 9月16日 · HN 421+ 分，155 评论（~20小时前）
+- **Tags:** `nvidia` `rust` `cuda` `gpu`
+
+NVIDIA 发布 "Introducing CUDA Rust"：用 Rust 编写 GPU 内核的两条官方路径，对应 CUDA 的
+SIMT 与 Tile 两种编程模型。**cuda-oxide** 是自定义的 `rustc` codegen 后端——`#[kernel]`
+函数经 Rust MIR、Pliron IR 框架和 LLVM IR 一路编译到 PTX——让你用安全的 Rust 写逐线程的
+SIMT 内核（安全性来自每线程独占写 `DisjointSlice` 与发射前校验的 launch 契约）。
+**cutile-rs**（crates.io 上叫 `cutile`）是 tile 路线：你只操作张量 tile，线程映射和内存
+布局由编译器经 CUDA Tile IR JIT 处理，跑在 stable Rust 1.89+ 上。cutile 已在 NVIDIA 之外
+落地：Hugging Face 的 Grout 推理引擎和 mistral.rs。
+
+**Why it matters:** 社区的 Rust-on-GPU 项目存在多年；这次是厂商自己出货一条编译器路径，
+Rust 与 CUDA C++/Python 并列成为一等内核语言。NVIDIA 自己的限定语要一起带上："两个项目
+都处于早期，均未达到生产可用"、"覆盖不全、API 会变"，SIMT 路线的共享内存仍需 `unsafe`，
+且两者都要求 Linux + compute capability 8.0+。
+
+[`🔗 NVIDIA 开发者博客`](https://developer.nvidia.com/blog/introducing-cuda-rust-two-tracks-for-writing-gpu-kernels/) · [`🔗 NVlabs/cuda-oxide`](https://github.com/NVlabs/cuda-oxide) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49724881)
+
+---
+
+## 22. 小米正在直播 MiMo 2.6 的强化学习训练——奖励曲线直接从训练器日志流出
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** mimo.xiaomi.com · HN 317+ 分，83 评论 · ~8小时前（~03:55 UTC+8）
+- **Tags:** `xiaomi` `mimo` `reinforcement-learning` `transparency`
+
+`mimo.xiaomi.com/rl/` 上线了一个公开面板，实时流出 **mimo-v2.6-pro** 与
+**mimo-v2.6-flash** 两个 RL 后训练运行的训练指标——页面自述"直接来自训练器日志"，训练
+还在进行中就能看到奖励曲线和步数指标。这是 MiMo-V2 策略的延续：把后训练的规模化对准
+智能体任务而非基准问答。
+
+**Why it matters:** 实验室习惯发布打磨过的事后报告；把*进行中*的奖励曲线直接挂出来是
+另一个物种——一半是透明度，一半是承诺装置，也是朝公开权重竞赛观众的一次精准炫耀。HN
+评论者很快点出限定语：面板只覆盖 RL 阶段，而后训练远不止 RL。
+
+> 核验说明：该面板是实时 websocket 应用——静态抓取只能看到外壳（"reconnecting…"），
+> 展示中的具体数字在发稿时无法独立确认。曲线请视为小米自报遥测，直到有第三方深挖。
+
+[`🔗 mimo-v2.6 RL 面板`](https://mimo.xiaomi.com/rl/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49732270)
+
+---
+
+## 23. AWS 确认：3 月伊朗无人机袭击后，巴林区域和阿联酋一个可用区的数据永久丢失
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Reuters/WSJ · HN 277+ 分，235 评论 · ~21小时前（~14:50 UTC+8）
+- **Tags:** `aws` `cloud` `data-loss` `infrastructure`
+
+AWS 表示，无法恢复仅托管在**巴林区域**和阿联酋一个可用区（**mec1-az2**）中的客户数据——
+3 月 1 日伊朗无人机袭击了巴林和阿联酋的三座数据中心。被袭设施将不再重开。部分客户的
+数据只存在于受影响的位置——这些数据没了。
+
+**Why it matters:** 这是首次确认的、由实际军事行动造成的云客户数据永久丢失，它把一个
+抽象概念（"区域冗余"）变成了一张账单：复制是有人针对每个工作负载做过的选择，而这些
+客户的选择是区域内部署。冲突区数据中心暴露现在是一项具体的架构审查项，不是合规
+复选框。
+
+> WSJ 原文付费墙；巴林/mec1-az2 事实已先与 Reuters、Data Center Dynamics 交叉核对后方才
+> 引用。
+
+[`🔗 Reuters`](https://www.reuters.com/world/middle-east/amazons-aws-is-unable-restore-access-bahrain-one-uae-cloud-data-zone-after-war-2026-09-15/) · [`🔗 Data Center Dynamics`](https://www.datacenterdynamics.com/en/news/aws-unable-to-restore-access-to-data-centers-hit-by-iran-strikes/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49719249)
+
+---
+
+## 24. .NET 11 性能：可选的运行时 async 把异步二进制体积砍半，异步异常便宜约 5 倍
+
+- **Velocity:** ▮▮ rising
+- **Source:** Microsoft DevBlogs · 9月15日 · HN 219+ 分 · ~23小时前（~13:00 UTC+8）
+- **Tags:** `dotnet` `performance` `jit` `runtime`
+
+Stephen Toub 的年度长文随 .NET 11 RC 期发布（基准对比 11.0.0-rc.1）。头条是全新的
+**runtime async** 实现（通过 `runtime-async=on` 可选开启，目标是在 .NET 12 成为默认）：
+10 层 async 样本的二进制体积减半（10,752 → 5,632 字节），同步完成的调用链从 21.2 降到
+6.15 ns 且零分配，深度 30 的异步链异常开销降到 0.17–0.21 倍、分配减少约 90%。JIT 侧新增
+扩展的去抽象与逃逸分析、泛型虚方法去虚拟化、delegate 瘦身 8 字节、边界检查合并。
+
+**Why it matters:** `async/await` 是 .NET 使用最广的特性之一，而这是从运行时层面推倒重来，
+不是编译器补丁——这类改动要过几年才会以全分布式的提速形式显现。已知缺口要带上：runtime
+async 尚未覆盖 `async void`、异步迭代器和自定义 task-like 类型。
+
+[`🔗 Performance Improvements in .NET 11`](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-11/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49711424)
+
+---
+
+## 25. 逆向 Factorio 的随机数：游戏内电路预测品质 Rolls，两年磨一剑
+
+- **Velocity:** ▮▮ rising
+- **Source:** gegell.github.io · HN 163+ 分 · ~32小时前提交，重回首页
+- **Tags:** `reverse-engineering` `rng` `games`
+
+作者对 Factorio 的 `taus88` 随机数生成器采样输出、从观测重建内部状态、预测未来的 roll、
+再映射到品质结果——然后把整套预测器实现为**游戏内的电路网络**：只有当 RNG 状态对齐会
+roll 出传奇品质时，游戏才会去合成传奇物品，转化率高得像作弊，但并不是。
+
+**Why it matters:** 除了观赏性，这是一份干净的案例研究：2014 年那句"我们选 taus88 主要
+因为它是 boost 生成器里最快的"一旦玩家攒够观测次数、足以发起状态重建攻击，就会迅速
+老化——2000 年代在线扑克已经为同一课付过学费。评论者称这两年的工作量是论文级的；这篇
+文章配得上。
+
+[`🔗 gegell.github.io/posts/factorio-rng`](https://gegell.github.io/posts/factorio-rng/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49674451)
+
+---
+
+## 26. BITCOS：三值 LLM 权重存到"1.58-bit 下限"以下——因为零在实践中占大头
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2609.16338 · HN 160+ 分 · ~8小时前（~04:10 UTC+8）
+- **Tags:** `arxiv` `quantization` `inference` `kernels`
+
+Georganas、Heinecke 和 Dubey 测量了 29 个三值模型的符号分布，发现零最多占全部权重的
+51.5%。BITCOS 利用这种偏斜，用分布自适应布局——稠密存在位图加紧凑符号向量——每权重
+成本为 2−z bit（z 为零密度）。它在 29 个模型中的 26 个上胜过标准五 trit 打包，最稀疏的
+模型上达到 **1.485 bit/权重**（低于 log₂3 ≈ 1.585 的信息论下限——那个下限假设符号均匀
+分布），对生产级三值 matvec 内核最高 1.28 倍加速，端到端解码在 CPU 上最高提升 1.18 倍、
+Xe2 GPU 上 1.27 倍。
+
+**Why it matters:** 1.585-bit 下限一直被当作三值打包的终点；这证明该下限假设的均匀性在
+真实权重里并不存在。老实的限定语：该布局在 29 个模型中的 3 个上*更差*，所有收益都以
+具体模型恰好具有的零密度为条件，且优化内核面向 Intel 硬件（AVX-512/AVX2/Xe2）。
+
+[`🔗 arXiv 2609.16338`](https://arxiv.org/abs/2609.16338) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49732931)
+
+---
+
+## 27. OpenSpec：68k 星的编码智能体规格框架迎来 HN 时刻——赞誉与现实检验齐飞
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 95+ 分，37 评论 · ~8小时前（~04:35 UTC+8）
+- **Tags:** `agents` `spec-driven-development` `cli`
+
+Fission-AI 的 OpenSpec（MIT，v1.13.0，官网自称 68k 星）把"要构建什么"沉淀为 markdown
+规格加智能体技能，并用一个 CLI（`openspec view`）让人和智能体免于烧 token 读文件就能
+检查规格与待定变更——五个斜杠命令（`/opsx:explore`、`propose`、`apply`、`verify`、
+`archive`）覆盖全流程。HN 这条帖子是本月最均衡的一次规格工作流辩论：支持者报告它在内部
+评测中表现良好、"比 SpecKit 轻"；批评者则说每次变更都会产生需要人工审阅的 AI-slop
+markdown 文档、规格库"几乎立刻过时"、这种结构是"控制的幻觉"。
+
+**Why it matters:** 规格驱动浪潮（spec-kit 1.0、ponytail、archify）一再撞上同一个反对
+意见——规格会腐烂——而 OpenSpec 这条帖子的价值恰恰在于双方都带着操作细节出场而不是
+喊口号。CLI 免 token 的规格检查是这里真正的新机制。
+
+> 68k 星与"每两秒新建一份规格"是项目官网自报数据，未经独立核实。
+
+[`🔗 openspec.dev`](https://openspec.dev/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49734264)
+
+---
+
+## 28. HarnessTax 问：运行环境（harness）对编码智能体到底多重要——HN 回答："大头是提示词开销"
+
+- **Velocity:** ▮ steady
+- **Source:** harnesstax.github.io · HN 68+ 分，20 评论 · ~8小时前（~04:25 UTC+8）
+- **Tags:** `benchmarks` `agents` `harness`
+
+一项新研究（"How Much Does the Harness Matter for Coding Agents?"）让同一批开源权重模型
+穿过多个 harness——Pi、OpenCode、Claude Code、Codex、Kilo Code 外加一个自研——以隔离
+智能体性能中模型与脚手架各占多少。据讨论，可测的"税"主要是**系统提示/token 开销**
+（Pi 这类精简 harness 在任何工作开始前注入的内容少得多），且供应商中间层与 harness 同样
+重要：同一模型在 deepinfra 上 harness 差异很小，在 together.ai 上却有一个 harness 表现
+糟糕。"针对特定供应商的优化不保证最佳配对。"
+
+**Why it matters:** 本月的 harness 话语（Quesma 对 RTK 的证伪、"九种编码 harness"）一直
+在同一个问题外围绕圈而缺少专门测量；这是一次尝试。评论区就是诚实的同行评审："harness"
+与"agent"被混为一谈，Claude Code/Codex 提示词里的安全样板在做原始 token 计数不会计入的
+工作，而外部沙箱化的 token 成本几乎为零。
+
+> 核验说明：该站点是 JS 应用，静态抓取渲染不出数字——以上发现来自 HN 讨论，研究本身的
+> 数字在发稿时无法独立确认。把它当作一场值得参与的讨论，而不是可引用的结果。
+
+[`🔗 harnesstax.github.io`](https://harnesstax.github.io/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49733726)
+
+---
+
+## 29. "Keys Not Included"：纽约州与弗吉尼亚州驾照条码签名公钥被恢复
+
+- **Velocity:** ▮ steady
+- **Source:** ryan.science · HN 45+ 分，10 评论 · ~7小时前（~05:20 UTC+8）
+- **Tags:** `cryptography` `pdf417` `identity` `reverse-engineering`
+
+Ryan Fahey 注意到：加州用*公开*的密钥签署驾照条码——`ZC` 子文件里是一枚 IDEMIA 构建的
+W3C Verifiable Credential，用 `ecdsa-xi-2023` 签名，公钥挂在公开的 `did:web` URL 上——
+而 Canadian Bank Note 却在悄悄为五个州（NY、VA、NC、SC、WI）签署条码，密钥*不公开*。
+利用 ECDSA 的公钥恢复性质：三张真实的纽约卡钉出一个共享的 P-256 公钥；六份弗吉尼亚
+样本钉出另一枚。两枚恢复的公钥现已公布，并配了一个纯浏览器验证器；一份伪造纽约样本
+签名格式完好但密钥错误，瞬间验伪。恢复公钥只支持验证，不能伪造签名。
+
+**Why it matters:** 结论是制度性的，不是密码学的：服务全美 31 个辖区的同一家供应商，已经
+在加州规模上运行可公开验证的条码，却不在其他任何地方交付。"签名要么是公开行为，要么
+什么都不是"——工程早已完成，障碍是愿意被验证。在三个州，任何扫驾照的人现在都可以
+密码学验真。
+
+[`🔗 ryan.science/blog/keys-not-included`](https://ryan.science/blog/keys-not-included) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49735930)
+
+---
+
+## 30. 继我们 9 月 11 日的报道：YuE2 携智能体音乐编辑技能重新 trending——并自报横扫 Suno v5/v6
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +332/天 · 9.4k 星
+- **Tags:** `music-generation` `agents` `open-weights`
+
+自我们 9 月 11 日报道 YuE2（3.6B 分数优先的歌曲生成器）以来，M-A-P 团队的仓库因一批新增
+再次 trending：一个 **`yue2-music` 智能体技能**（SKILL.md 包），让编码智能体生成、转录、
+编辑 ABC 乐谱——demo 让一首歌走过 9 个智能体编辑步骤、14 个版本；借助 SheetSage2 转录
+再重渲染实现零样本翻唱（有谱 0.647 CLEWS mAP，无谱 0.006）；以及一张 9 月 12 日日期的
+WildSongBench 表：YuE2（best-of-8）以 6.9632 SongBench 均分在 17 个设置中登顶，包括
+Suno v5/v6 与 Mureka 9。
+
+**Why it matters:** 有意思的转变是架构性的：模型被包成智能体技能，编辑发生在乐谱空间
+（符号层）而非音频空间——与 archify、OpenSpec 相同的"智能体需要可检视的中间状态"下注，
+这次用在音乐上。限定语带上：基准为自报、best-of-8 选择；权重为 CC BY-NC（商用需授权）
+——带星号的"开放"。
+
+[`🔗 multimodal-art-projection/YuE`](https://github.com/multimodal-art-projection/YuE) · [`🔗 Hugging Face 上的 m-a-p/YuE2-3B`](https://huggingface.co/m-a-p/YuE2-3B)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-09-16T20:40:00Z |
-| Items | 20 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, CISA KEV, Cisco PSIRT, arXiv, Hugging Face papers, 厂商博客, Wired, Reuters) |
+| Generated | 2026-09-17T04:20:00Z |
+| Items | 30 |
+| Sources tracked | 33 (Hacker News, GitHub Trending, CISA KEV, Cisco PSIRT, arXiv, Hugging Face papers, 厂商博客 (NVIDIA、Microsoft、小米、Anthropic), Wired, Reuters, Data Center Dynamics, 独立研究博客) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（时效 × 互动加速 × 来源权威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

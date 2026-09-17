@@ -1,8 +1,8 @@
 ---
 date: 2026-09-17
-updated: 2026-09-17T04:40:00+08:00
+updated: 2026-09-17T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -449,13 +449,259 @@ a feed otherwise full of agent pipelines.
 
 ---
 
+## 21. NVIDIA makes Rust a native CUDA language — rustc-to-PTX, two official tracks
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVIDIA Developer Blog · Sep 16 · HN 421+ pts, 155 comments (~20h ago)
+- **Tags:** `nvidia` `rust` `cuda` `gpu`
+
+NVIDIA published "Introducing CUDA Rust": two official paths for writing GPU kernels in Rust,
+mirroring CUDA's SIMT and Tile programming models. **cuda-oxide** is a custom `rustc` codegen
+backend — `#[kernel]` functions flow through Rust MIR, the Pliron IR framework and LLVM IR down
+to PTX — for writing per-thread SIMT kernels in safe Rust (safety via per-thread exclusive
+`DisjointSlice` writes and validated launch contracts). **cutile-rs** (`cutile` on crates.io) is
+the tile-based track: you operate on tensor tiles and the compiler handles thread mapping and
+memory layout via CUDA Tile IR JIT, on stable Rust 1.89+. cutile already runs outside NVIDIA, in
+Hugging Face's Grout inference engine and mistral.rs.
+
+**Why it matters:** Community Rust-on-GPU projects have existed for years; this is the vendor
+itself shipping a compiler path, which puts Rust alongside CUDA C++/Python as a first-class
+kernel language. Carry NVIDIA's own caveats forward: "Both projects are early-stage and neither
+is production-ready," "coverage is incomplete and APIs will move," shared memory in the SIMT
+track still requires `unsafe`, and both require Linux with compute capability 8.0+.
+
+[`🔗 NVIDIA Developer Blog`](https://developer.nvidia.com/blog/introducing-cuda-rust-two-tracks-for-writing-gpu-kernels/) · [`🔗 NVlabs/cuda-oxide`](https://github.com/NVlabs/cuda-oxide) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49724881)
+
+---
+
+## 22. Xiaomi is streaming MiMo 2.6's reinforcement-learning runs live — reward curves straight from the trainer
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** mimo.xiaomi.com · HN 317+ pts, 83 comments · ~8h ago (~03:55 UTC+8)
+- **Tags:** `xiaomi` `mimo` `reinforcement-learning` `transparency`
+
+A public dashboard at `mimo.xiaomi.com/rl/` streams the training metrics of the **mimo-v2.6-pro**
+and **mimo-v2.6-flash** RL post-training runs, described on the page as coming "live from the
+trainer's logs" — reward curves and step metrics visible while training is still running. It
+extends the MiMo-V2 strategy of post-training scaling aimed at agentic tasks rather than
+benchmark Q&A.
+
+**Why it matters:** Labs publish polished post-hoc reports; publishing the reward curve
+*mid-run* is a different genre — part transparency, part commitment device, and a marketing
+flex aimed at exactly the audience watching the open-weights race. HN commenters were quick to
+note the fine print: the dashboard covers the RL phase only, and post-training involves more
+than RL.
+
+> Verification note: the dashboard is a live websocket app — static fetches show only the shell
+> ("reconnecting…"), so the specific numbers on display could not be independently confirmed at
+> write time. Treat the curves as Xiaomi's own telemetry until third parties dig in.
+
+[`🔗 mimo-v2.6 RL dashboard`](https://mimo.xiaomi.com/rl/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49732270)
+
+---
+
+## 23. AWS confirms permanent data loss in Bahrain and one UAE zone after March's Iranian drone strikes
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Reuters/WSJ · HN 277+ pts, 235 comments · ~21h ago (~14:50 UTC+8)
+- **Tags:** `aws` `cloud` `data-loss` `infrastructure`
+
+AWS says it cannot restore access to customer data hosted exclusively in its **Bahrain region**
+and one UAE availability zone (**mec1-az2**), after Iranian drone strikes damaged three data
+centers in Bahrain and the UAE on March 1. The company will not reopen the struck facilities.
+Some customers had data that lived only in the affected locations — and that data is gone.
+
+**Why it matters:** This is the first confirmed permanent loss of cloud customer data from
+kinetic military action, and it converts an abstraction ("region redundancy") into a bill:
+replication is a choice someone made per-workload, and for these customers the choice was
+region-local. Conflict-zone data-center exposure is now a concrete architecture review item,
+not a compliance checkbox.
+
+> WSJ's report is paywalled; the Bahrain/mec1-az2 facts were confirmed against Reuters and
+> Data Center Dynamics before citing.
+
+[`🔗 Reuters`](https://www.reuters.com/world/middle-east/amazons-aws-is-unable-restore-access-bahrain-one-uae-cloud-data-zone-after-war-2026-09-15/) · [`🔗 Data Center Dynamics`](https://www.datacenterdynamics.com/en/news/aws-unable-to-restore-access-to-data-centers-hit-by-iran-strikes/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49719249)
+
+---
+
+## 24. .NET 11 performance: opt-in runtime async halves async binary size and makes async exceptions ~5× cheaper
+
+- **Velocity:** ▮▮ rising
+- **Source:** Microsoft DevBlogs · Sep 15 · HN 219+ pts · ~23h ago (~13:00 UTC+8)
+- **Tags:** `dotnet` `performance` `jit` `runtime`
+
+Stephen Toub's annual mega-post lands with .NET 11 at RC stage (benchmarks vs 11.0.0-rc.1). The
+headline is the new **runtime async** implementation (opt-in via `runtime-async=on`, intended to
+become the default in .NET 12): a 10-layer async sample halves in binary size (10,752 → 5,632
+bytes), synchronously-completing chains drop from 21.2 to 6.15 ns with zero allocation, and
+exceptions crossing async chains at depth 30 fall to 0.17–0.21× with ~90% less allocation. The
+JIT side adds expanded deabstraction and escape analysis, devirtualization of generic virtual
+methods, 8-byte-slimmer delegates, and bounds-check coalescing.
+
+**Why it matters:** `async/await` is one of .NET's most-used features, and this is a from-scratch
+runtime rework of it rather than a compiler patch — the kind of change that only shows up as a
+distribution-wide speedup years later. Known gaps to carry: runtime async doesn't yet cover
+`async void`, async iterators, or custom task-like types.
+
+[`🔗 Performance Improvements in .NET 11`](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-11/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49711424)
+
+---
+
+## 25. Reversing Factorio's RNG: an in-game circuit that predicts quality rolls, two years in the making
+
+- **Velocity:** ▮▮ rising
+- **Source:** gegell.github.io · HN 163+ pts · submitted ~32h ago, resurged to the front page
+- **Tags:** `reverse-engineering` `rng` `games`
+
+The author samples outputs from Factorio's `taus88` generator, reconstructs the internal state
+from observations, predicts future rolls, maps them to quality outcomes — and then implements
+the whole predictor as an **in-game circuit network**: the game only crafts legendary items
+when the RNG state lines up to roll legendary, converting base items at a rate that looks like
+cheating and isn't.
+
+**Why it matters:** Beyond the showpiece, it's a clean case study in why 2014-era "we chose
+taus88 mainly because it is the fastest from boost's generators" ages badly once players get
+enough observations to mount a state-reconstruction attack — the same lesson online poker paid
+for in the 2000s. Commenters call the two-year effort thesis-level; the writeup earns it.
+
+[`🔗 gegell.github.io/posts/factorio-rng`](https://gegell.github.io/posts/factorio-rng/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49674451)
+
+---
+
+## 26. BITCOS: ternary LLM weights stored below the "1.58-bit floor" — because zeros dominate in practice
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2609.16338 · HN 160+ pts · ~8h ago (~04:10 UTC+8)
+- **Tags:** `arxiv` `quantization` `inference` `kernels`
+
+Georganas, Heinecke and Dubey measure symbol distributions across 29 ternary models and find
+zeros account for up to 51.5% of all weights. BITCOS exploits that skew with a
+distribution-adaptive layout — a dense presence bitmap plus a compacted sign vector — costing
+2−z bits per weight, where z is zero density. It beats the standard five-trit packing in 26 of
+29 models, hits **1.485 bits per weight** on the sparsest (below the log₂3 ≈ 1.585 information
+floor, which assumes uniform symbols), and yields up to 1.28× speedup over production
+ternary matvec kernels, with end-to-end decode gains up to 1.18× on CPUs and 1.27× on Xe2 GPUs.
+
+**Why it matters:** The 1.585-bit floor was treated as where ternary packing ends; this shows
+the floor assumes uniformity the real weights don't have. The honest caveats: the layout
+*loses* in 3 of 29 models, all gains are conditioned on whatever zero density a given model
+happens to exhibit, and the optimized kernels target Intel hardware (AVX-512/AVX2/Xe2).
+
+[`🔗 arXiv 2609.16338`](https://arxiv.org/abs/2609.16338) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49732931)
+
+---
+
+## 27. OpenSpec: the 68k-star spec framework for coding agents gets its HN day — praise and a reality check
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 95+ pts, 37 comments · ~8h ago (~04:35 UTC+8)
+- **Tags:** `agents` `spec-driven-development` `cli`
+
+Fission-AI's OpenSpec (MIT, v1.13.0, the site claims 68k stars) captures what to build as
+markdown specs plus agent skills, with a CLI (`openspec view`) that lets agents and humans
+inspect specs and pending changes without burning tokens reading files — and five slash
+commands (`/opsx:explore`, `propose`, `apply`, `verify`, `archive`) covering the full loop. The
+HN thread is the most balanced spec-workflow debate this month: fans report it scored well in
+internal evals and is "less heavy than SpecKit"; critics say every change spawns AI-slop
+markdown docs needing review, the spec corpus "almost immediately becomes out of date," and the
+structure is "an illusion of control."
+
+**Why it matters:** The spec-driven wave (spec-kit at 1.0, ponytail, archify) keeps meeting the
+same objection — specs rot — and OpenSpec's thread is valuable precisely because both sides
+show up with operational detail rather than vibes. Token-free spec inspection via CLI is the
+genuinely new mechanic here.
+
+> The 68k stars and "a new spec every two seconds" are the project's own site claims, not
+> independently verified.
+
+[`🔗 openspec.dev`](https://openspec.dev/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49734264)
+
+---
+
+## 28. HarnessTax asks how much the harness matters for coding agents — HN answers "mostly, it's the prompt overhead"
+
+- **Velocity:** ▮ steady
+- **Source:** harnesstax.github.io · HN 68+ pts, 20 comments · ~8h ago (~04:25 UTC+8)
+- **Tags:** `benchmarks` `agents` `harness`
+
+A new study ("How Much Does the Harness Matter for Coding Agents?") puts the same open-weight
+models through multiple harnesses — Pi, OpenCode, Claude Code, Codex, Kilo Code plus a bespoke
+one — to isolate how much of agent performance is the model versus the scaffolding. Per the
+discussion, the measurable "tax" is largely **system-prompt/token overhead** (leaner harnesses
+like Pi inject far less before any work starts), and provider middleware matters as much as the
+harness: the same model showed little harness difference on deepinfra but one harness struggled
+badly on together.ai. "Provider-specific optimization does not guarantee the best pairing."
+
+**Why it matters:** This month's harness discourse (Quesma's RTK debunk, "nine coding
+harnesses") keeps circling one question without a dedicated measurement; this is an attempt at
+one. The comment thread is the honest peer review: "harness" is being conflated with "agent,"
+the security boilerplate in Claude Code/Codex prompts is doing work a raw token count doesn't
+credit, and external sandboxing costs roughly zero tokens anyway.
+
+> Verification note: the site is a JS app and static fetches render no numbers — the findings
+> above come from the HN discussion, and the study's own figures could not be independently
+> confirmed at write time. Treat this as a discussion worth having, not a result to cite.
+
+[`🔗 harnesstax.github.io`](https://harnesstax.github.io/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49733726)
+
+---
+
+## 29. "Keys Not Included": the barcode signing keys for New York and Virginia driver's licenses, recovered
+
+- **Velocity:** ▮ steady
+- **Source:** ryan.science · HN 45+ pts, 10 comments · ~7h ago (~05:20 UTC+8)
+- **Tags:** `cryptography` `pdf417` `identity` `reverse-engineering`
+
+Ryan Fahey noticed that California signs its license barcodes with *published* keys — an
+IDEMIA-built W3C Verifiable Credential in the `ZC` subfile, signed with `ecdsa-xi-2023`, key at
+a public `did:web` URL — while Canadian Bank Note quietly signs barcodes for five states (NY,
+VA, NC, SC, WI) with *unpublished* keys. Exploiting ECDSA's public-key-recovery property, three
+real New York cards pin down one shared P-256 key; six Virginia samples pin down another. Both
+recovered keys are now published, with a browser-only verifier; a counterfeit NY sample with a
+well-formed but wrong-key signature fails instantly. Recovering a public key enables
+verification, not forgery.
+
+**Why it matters:** The punchline is institutional, not cryptographic: the same vendor that
+serves 31 US jurisdictions already operates publicly-verifiable barcodes at the scale of
+California, and ships them nowhere else. "A signature is a public act or it is nothing" — the
+engineering was finished; the willingness to be verified was the obstacle. Anyone scanning IDs
+in three states can now check them cryptographically.
+
+[`🔗 ryan.science/blog/keys-not-included`](https://ryan.science/blog/keys-not-included) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49735930)
+
+---
+
+## 30. Since our Sep 11 coverage: YuE2 re-trends with an agentic music-editing skill — and a self-reported sweep of Suno v5/v6
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +332/day · 9.4k stars
+- **Tags:** `music-generation` `agents` `open-weights`
+
+Since we covered YuE2 on Sep 11 (the 3.6B score-first song generator), the M-A-P team's repo
+has re-trended on a batch of additions: a **`yue2-music` agent skill** (SKILL.md package) that
+lets coding agents generate, transcribe and edit ABC scores — the demo walks one song through 9
+agentic edit steps and 14 versions; zero-shot covers via SheetSage2 transcription then
+re-rendering (0.647 CLEWS mAP vs 0.006 without a score); and a Sep 12-dated WildSongBench
+table where YuE2 (best-of-8) tops 17 settings including Suno v5/v6 and Mureka 9 at 6.9632
+SongBench Avg.
+
+**Why it matters:** The interesting shift is architectural: the model is being wrapped as an
+agent skill so editing happens in score space (symbolic) rather than audio space — the same
+"agents need inspectable intermediate state" bet as archify and OpenSpec, applied to music.
+Carry the caveats: the benchmark is self-reported with best-of-8 selection, and weights are
+CC BY-NC (commercial use requires a license) — "open" with an asterisk.
+
+[`🔗 multimodal-art-projection/YuE`](https://github.com/multimodal-art-projection/YuE) · [`🔗 m-a-p/YuE2-3B on Hugging Face`](https://huggingface.co/m-a-p/YuE2-3B)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-16T20:40:00Z |
-| Items | 20 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, CISA KEV, Cisco PSIRT, arXiv, Hugging Face papers, vendor blogs, Wired, Reuters) |
+| Generated | 2026-09-17T04:20:00Z |
+| Items | 30 |
+| Sources tracked | 33 (Hacker News, GitHub Trending, CISA KEV, Cisco PSIRT, arXiv, Hugging Face papers, vendor blogs (NVIDIA, Microsoft, Xiaomi, Anthropic), Wired, Reuters, Data Center Dynamics, independent research blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
