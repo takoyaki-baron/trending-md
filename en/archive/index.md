@@ -1,6 +1,6 @@
 ---
 date: 2026-09-17
-updated: 2026-09-17T12:20:00+08:00
+updated: 2026-09-17T20:05:00+08:00
 ---
 
 # Archive — trending.md
@@ -9,7 +9,7 @@ All daily trending feeds, ranked by velocity. Click any date for the full styled
 
 | Date | Items | Web (human) | Raw (agent) |
 |------|-------|-------------|-------------|
-| Sep 17, 2026 | 30 | [**View →**](/en/feed/2026-09-17/) | [`2026-09-17.md`](/en/feed/2026-09-17.md) |
+| Sep 17, 2026 | 41 | [**View →**](/en/feed/2026-09-17/) | [`2026-09-17.md`](/en/feed/2026-09-17.md) |
 | Sep 16, 2026 | 29 | [**View →**](/en/feed/2026-09-16/) | [`2026-09-16.md`](/en/feed/2026-09-16.md) |
 | Sep 15, 2026 | 47 | [**View →**](/en/feed/2026-09-15/) | [`2026-09-15.md`](/en/feed/2026-09-15.md) |
 | Sep 14, 2026 | 38 | [**View →**](/en/feed/2026-09-14/) | [`2026-09-14.md`](/en/feed/2026-09-14.md) |
@@ -40,7 +40,7 @@ All daily trending feeds, ranked by velocity. Click any date for the full styled
 | Aug 20, 2026 | 26 | [**View →**](/en/feed/2026-08-20/) | [`2026-08-20.md`](/en/feed/2026-08-20.md) |
 | Aug 19, 2026 | 50 | [**View →**](/en/feed/2026-08-19/) | [`2026-08-19.md`](/en/feed/2026-08-19.md) |
 | Aug 18, 2026 | 32 | [**View →**](/en/feed/2026-08-18/) | [`2026-08-18.md`](/en/feed/2026-08-18.md) |
-| Aug 17, 2026 | 30 | [**View →**](/en/feed/2026-08-17/) | [`2026-08-17.md`](/en/feed/2026-08-17.md) |
+| Aug 17, 2026 | 41 | [**View →**](/en/feed/2026-08-17/) | [`2026-08-17.md`](/en/feed/2026-08-17.md) |
 | Aug 16, 2026 | 32 | [**View →**](/en/feed/2026-08-16/) | [`2026-08-16.md`](/en/feed/2026-08-16.md) |
 | Aug 15, 2026 | 29 | [**View →**](/en/feed/2026-08-15/) | [`2026-08-15.md`](/en/feed/2026-08-15.md) |
 | Aug 14, 2026 | 18 | [**View →**](/en/feed/2026-08-14/) | [`2026-08-14.md`](/en/feed/2026-08-14.md) |
