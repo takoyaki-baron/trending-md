@@ -1,8 +1,8 @@
 ---
 date: 2026-09-18
-updated: 2026-09-18T04:10:00+08:00
+updated: 2026-09-18T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -412,13 +412,325 @@ Jan Kautz 与 Yi Dong）让并行的自动研究 agent 把工作记录为 Git �
 
 ---
 
+## 21. Bend 2 重磅回归："一门用证明挡住 AI 错误的语言"——顺带抹掉了自己的提交历史
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 353+ 分，181 评论 · 8小时前（~04:36 UTC+8）
+- **Tags:** `programming-languages` `formal-verification` `gpu` `agents`
+
+Victor Taelin 将 Bend（bendlang/bend，20.6k stars，Apache-2.0，最近一次推送 9月18日）
+重塑为"Bend 2"：Python 语法的代码可编译为原生代码和 GPU 程序，并配有 Lean/Rocq 风格的
+证明检查型类型检查器，约 1 秒内完成验证——AI agent 每次修改后都可校验 `LAWS.bend`
+中的不变量。"合并一个 bug 在数学上是不可能的：那是一条定理。"但那 20,615 个 star 是
+2024 年老项目带来的：改名后的仓库历史被**压缩为单个 commit**，44 位贡献者的工作被移到
+HigherOrderCO/Bend1——这正是 HN 讨论串里最响亮的批评（"抹掉历史是引起怀疑的绝佳
+方式"）。
+
+**Why it matters:** "LAWS.bend = 有机器可查证明背书的 AGENTS.md"——这个卖点精准打在
+agent 代码审查的缺口上。但请把细则和卖点一起读：作者承认编译器目前"有大量 gambiarra
+和 AI slop"，所有基准均自测（Apple M4 Max），官网自己也写着"预期有 bug"。
+
+[`🔗 bend-lang.com`](https://bend-lang.com/) · [`🔗 github.com/bendlang/bend`](https://github.com/bendlang/bend) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49746163)
+
+---
+
+## 22. PrismML 的 Bonsai 2 27B：装进 5.9 GB 三值权重的 27B 模型，Apache-2.0 开放
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 297+ 分，95 评论 · 7小时前（~05:13 UTC+8）
+- **Tags:** `quantization` `ternary` `open-weights` `inference`
+
+PrismML（Caltech 孵化）发布 Ternary Bonsai 2 27B：以 {−1,0,+1} 三值权重加 FP16 分组缩放
+重建 Qwen3.8-27B——每权重 1.76 有效比特、5.9 GB、262K 上下文——GGUF/MLX 权重已
+上线 Hugging Face，Apache-2.0 许可（并非期货；Simon Willison 已在讨论串里跑通 GGUF）。
+自报成绩：聚合得分 83.9 对全精度 85.4（"保留 98.2%"），RTX 5090 上 143 tok/s。
+
+**Why it matters:** 如果三值化真的能在 27B 规模站住，27B 级模型将成为消费级 GPU 的
+默认选项。但"near-lossless"是厂商的措辞——该模型**在几乎所有类别上都略低于全精度
+基线**（视觉 78.59 对 81.64），必须使用 Prism 自己的 llama.cpp fork（一位 Intel B70
+用户一无所获），完整数字只存在于白皮书 PDF 而非模型卡。
+
+[`🔗 prismml.com/news/bonsai-2-27b`](https://prismml.com/news/bonsai-2-27b) · [`🔗 HF: prism-ml/Ternary-Bonsai-2-27B-gguf`](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49746618)
+
+---
+
+## 23. "Astra for Law" 迎来 HN 大审判——386 个点数与 9月9日 的公告对线
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 386+ 分，412 评论 · 8小时前（~04:17 UTC+8）
+- **Tags:** `openai` `legal` `vertical-ai` `benchmarks`
+
+HN 讨论才是新闻：OpenAI 落款 **9月9日** 的"Astra for Law"博文登上首页，评论达 412 条。
+它将 GPT-6 Astra 接入约 500 万份美国判例（Free Law Project/CourtListener 语料）和 2500+
+条"法律指令"，以受控准入方式卖给律所；Harvey 与 Legora 被点名为 API 合作伙伴。声称成绩：
+在 Vals AI Legal Research Bench 上 54.0% 对"仅 Astra+网络搜索"的 38.7%——而基线是在
+同样的"最高推理档"下运行的。
+
+**Why it matters:** 这是垂直化前沿模型的模板——也是它们被审视的模板。讨论串的主要
+批评恰好是公告没有回答的：头条基准用的是**私有验证集**，所有数字自报，全文没有给出
+任何幻觉率数据。
+
+[`🔗 OpenAI 博客`](https://openai.com/index/astra-for-law/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49745940)
+
+---
+
+## 24. Qwen3.8-Omni-Flash：阿里的全模态模型只走 API——音频价格砍掉 98%
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 90+ 分 · 5小时前（~07:05 UTC+8）
+- **Tags:** `qwen` `multimodal` `alibaba` `api`
+
+阿里向 Model Studio 新增 `qwen3.8-omni-flash`：原生文本/图像/音频/视频输入、1M 上下文，
+面向 agentic 视频工作流（视频剪辑、电影解说、"Video2Note"），声称在 29 个基准上平均
+超越 Qwen3.5-Omni-Plus 25%、音频"超过" Gemini 3.8 Flash——同时把音频输入定价下调
+超过 98%（约 $0.15/$0.47 每百万 token，对比 Gemini 的 $1.5/$9.0），并提供 Realtime
+WebSocket/WebRTC 端点。
+
+**Why it matters:** 一个发布，两个信号：全模态能力正在被当作大宗商品重新定价；而 Qwen
+的 Omni 系列坚定地**闭源**——HF 上没有对应仓库（该组织上次上传是 8月27日），真正开源
+的只是工具链（Qwen-MM-Plugins、Qwen-Live Harness）。另外按阿里自己的表格，Gemini 3.8
+Flash 在多个列出的基准上仍然领先（AgenticVBench 45.0 对 36.8）。
+
+[`🔗 Qwen 博客`](https://qwen.ai/blog?id=qwen3.8-omni-flash) · [`🔗 github.com/QwenLM/Qwen-MM-Plugins`](https://github.com/QwenLM/Qwen-MM-Plugins) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49747925)
+
+---
+
+## 25. Plugin4Shell：插件 SHA 固定绕过让 Claude Code、Codex、Copilot 与 Gemini CLI 全部零点击 RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** AIR Security 研究 · HN 40+ 分 · 8小时前（~04:05 UTC+8）
+- **Tags:** `supply-chain` `coding-agents` `plugins` `rce`
+
+AIR Security（9月17日）披露了插件/skill SHA 固定机制的绕过：agent 会检出市场固定的那个
+commit，却从不校验它是否真的落在了那里——控制插件仓库的攻击者可以让检出解析到恶意
+代码，而固定看起来依然有效。结果是对宿主的零点击 RCE，报告覆盖 Claude Code、OpenAI
+Codex、GitHub Copilot 和 Gemini CLI。按厂商给出的时间线：Claude Code 已在 2.1.179 修复
+（6月17日），Codex 已在 0.146.0 修复（8月12日验证），**Copilot 未修复**，Google 于
+8月4日 确认永不修复 Gemini CLI（已弃用）。
+
+**Why it matters:** 本周报道过的所有 skill/插件生态都默认"固定 SHA 即安全边界"；这项
+研究说边界其实是 git 托管方的检出语义。同时带上限定语：无 CVE 编号，"数百万 agent 受
+影响"的说法来自一家出售 agent 安全产品的厂商，利用是研究报告而非野外观察。
+
+[`🔗 AIR Security: Plugin4Shell`](https://www.air.security/blog-posts/plugin4shell) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49745809)
+
+---
+
+## 26. 思科 9月16日 补丁大礼包：FMC 18 个 CVE、ISE 20 个 CVE，含第二个 CVSS 10.0 认证绕过
+
+- **Velocity:** ▮▮ rising
+- **Source:** 思科公告 + SecurityWeek · 9月16–17日
+- **Tags:** `cve` `cisco` `firewall` `patching`
+
+思科 9月16日 的公告批量修复了 Secure Firewall Management Center 的 18 个漏洞——包括
+CVE-2026-20324（sftunnel 认证后 root RCE，9.9）和 CVE-2026-20242（Java 反序列化 RCE，
+9.8）——以及 Identity Services Engine 的 20 个漏洞，其中有一个**全新的**未认证 REST API
+认证绕过，评分 10.0（CVE-2026-76423——区别于我们 9月17日 报道过的被 KEV 收录的零日
+CVE-2026-76460，后者在同一批修复中发布）。Nexus Dashboard 也获得补丁。
+
+**Why it matters:** 昨天是 Check Point 的管理平面，今天思科一次来两遍。读分值要仔细：
+两个头条 CVE 都是**思科 PSIRT 自评，NVD 仍为"Awaiting Analysis"**——而且思科自己承认
+三个 ISE 漏洞是在公开披露之后才修复的。真正被在野外利用的 FMC 漏洞是 3月/7月 的旧
+CVE，不是这一批。
+
+[`🔗 思科预告公告`](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) · [`🔗 SecurityWeek`](https://www.securityweek.com/cisco-fixes-dozens-of-flaws-across-fmc-ise-and-nexus-dashboard/)
+
+---
+
+## 27. "Hacking OpenAI"：一个论坛 RCE 通到了员工的 ChatGPT 账户——供词里带着细则
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 53+ 分 · 2小时前（~10:47 UTC+8）
+- **Tags:** `security-research` `openai` `bug-bounty` `sso`
+
+AI 安全厂商 Hacktron 发布了 7月 事件的复盘：community.openai.com 上 Discourse→
+ImageMagick 链路的 HEIC 上传可触达 libheif 的堆溢出，拿到论坛 RCE——由于上游修复从未
+被标记为安全版本，它**没有 CVE**，Debian 12/13 和 Discourse 的 Docker 镜像长期带着漏洞
+版本。结合一个 SSO 配置错误，研究者称他们进入了员工的 ChatGPT/Codex 账户，并在内部
+monorepo 里开了一个 PR；OpenAI 支付 6,500 美元，约 14 小时内修复了 SSO 缺陷。
+
+**Why it matters:** 两个教训都值得带走：上游不加安全标签的修复会让每一家下游发行版静默
+中招；而 SSO 距离"能自主行动的 AI 账户"只差一次跳板。限定语同样要带：OpenAI 明确将
+Discourse 测试**排除在漏洞赏金范围外**（RCE 本身未获授权），作者也承认为了让模型放行，
+把自己的实例伪装成了 CTF 靶场——证据全部为自行提交的红框截图。
+
+[`🔗 Hacktron 复盘`](https://www.hacktron.ai/blog/hacking-openai) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49749656)
+
+---
+
+## 28. DeepSeek-V4.1-Flash：读得便宜、写得精简的因果编码器-解码器——权重以 MIT 开放
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv + Hugging Face · 论文 9月17日，权重 9月10日 起可用
+- **Tags:** `deepseek` `moe` `kv-cache` `open-weights`
+
+DeepSeek 发布 V4.1-Flash 论文（arXiv:2609.19969），而权重自 9月10日 起已挂在 Hugging
+Face——39 万次下载、3,024 赞、**MIT 许可**。这个 552B MoE 采用因果编码器-解码器结构：
+解码时激活 16B 参数/token，预填充时仅激活 8B，瞄准输入繁重的 agentic 工作负载；KV 压缩
+（跨层 CSA2 + FP4 KV）把缓存压到 890 字节/token（约为 V4-Flash 的 1/4），"SWA Bounded
+Replay"再将持久化缓存砍掉约 7/8。上下文 1M。
+
+**Why it matters:** 这套经济学直指 agent 场景——输入 token 占大头：非对称的
+prefill/decode 激活加上四分之一尺寸的 KV 缓存，是一个成本模型而不只是架构。限定语：
+"尽管缓存更小仍优于基线"是作者自己的说法——摘要里没有基准表格、没有局限性章节，也
+没有给出推理代码仓库，只有 checkpoint。
+
+[`🔗 arXiv:2609.19969`](https://arxiv.org/abs/2609.19969) · [`🔗 HF: deepseek-ai/DeepSeek-V4.1-Flash`](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash)
+
+---
+
+## 29. Zoom 的 harness 消融实验：176 组对照说明上下文管理比规划更重要
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers · 榜首，26 赞（9月18日批次）
+- **Tags:** `agents` `evaluation` `harness` `paper`
+
+《An Empirical Study of Harness Design for Coding Agents》（arXiv:2609.20804，Zoom
+Communications，43 页）与昨日的 HarnessTax 是不同的工作：它不比较现成 harness，而是
+自建一个轻量 harness，在 176 组对照设置（4 个模型 × SWE-Bench Verified + Terminal-Bench
+2.1）中消融规划、动作空间与上下文管理三个组件。结论：预算紧张时上下文管理最关键；
+基于规则的上下文裁剪比 LLM 摘要更省；规划对弱模型是精度脚手架，对强模型只是省钱；
+具备 bash 能力的模型只用 bash 工具即可，成本低得多。
+
+**Why it matters:** "harness 影响多大"这个问题终于有了第一个受控数据集——答案也很不
+浪漫：把工程精力花在上下文管理上，而不是提示词上。注意适用范围：四个模型、两个基准、
+未发布代码。
+
+[`🔗 arXiv:2609.20804`](https://arxiv.org/abs/2609.20804) · [`🔗 Hugging Face Daily Papers`](https://huggingface.co/papers)
+
+---
+
+## 30. FamousSparrow 更换后门：ESET 发现 SparroWocky 自 2025年8月 起攻击拉美政府
+
+- **Velocity:** ▮ steady
+- **Source:** ESET WeliveSecurity · 9月17日
+- **Tags:** `apt` `malware` `espionage`
+
+ESET 报告，对中国 side 的 APT FamousSparrow（与 Earth Estries/Salt Typhoon 存在重叠，
+2019 年起活跃）已用此前未被报道的模块化 C++ 后门 **SparroWocky** 取代 SparrowDoor，
+目标为拉美政府机构：内存加载 COFF 插件、MinHide 线程隐藏、SilentMoonwalk 变体的调用栈
+伪装、经 Mbed TLS 代理的 TLS 通信。ESET 将地区升级与中国对美国加大拉美投入的反应相
+联系。
+
+**Why it matters:** 又一个证据表明间谍工具正在围绕红队武器库普及过的规避原语（COFF
+loader、栈伪装）完成专业化。注意来源自己的限定语：该后门在披露时已存在一年以上
+（"至少 2025年8月"），与 Salt Typhoon 的重叠被谨慎地表述为"存在某种程度的重叠"，
+而非归属结论。
+
+[`🔗 ESET WeliveSecurity`](https://www.welivesecurity.com/en/eset-research/beware-sparrowock-backdoor-bites-commands-catch/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/china-aligned-famoussparrow-deploys.html)
+
+---
+
+## 31. Parallels Desktop 本地提权（CVE-2026-90894）：修复只存在于 Intel Mac 装不上的版本里
+
+- **Velocity:** ▮ steady
+- **Source:** JFrog 研究（9月14–15日）· THN 报道 9月16日
+- **Tags:** `cve` `parallels` `macos` `lpe`
+
+JFrog 的 Yuval Moravchick 发现 Parallels Desktop 的 root 进程 `prl_disp_service` 监听在
+全局可写 socket 上，且接受任意本地对端凭证；向 `PrlSrv_InstallAppliance` 传入含双引号的
+恶意 appliance 路径，可把 `--use-compress-program` 注入 root 运行的 `tar`——拿到 root
+shell，已在 26.4.0 验证。**CVE-2026-90894，CVSS 7.8——JFrog 自评（Secondary）；NVD
+记录仍为"Received"，尚未分析。** 影响版本：< 27.0.0；已在 Parallels Desktop 27 修复。
+
+**Why it matters:** 真正难看的是升级路径：Parallels 27 不支持 Intel Mac，因此整条 26.x
+产品线——包括当前的 26.4.2——将持续可利用且无补丁。攻击属本地利用（暂无野外利用
+报告），但在共享的 CI/开发机上，"本地"是个很低的门槛。
+
+[`🔗 JFrog 研究`](https://research.jfrog.com/vulnerabilities/parallels-desktop-is-vulnerable-to-a-local-privilege-escalation-via-appliance-extract-argument-injection-cve-2026-90894/) · [`🔗 NVD 记录`](https://nvd.nist.gov/vuln/detail/CVE-2026-90894)
+
+---
+
+## 32. Flet 1.0：四年的"Python 版 Flutter"迎来稳定性里程碑
+
+- **Velocity:** ▮ steady
+- **Source:** Flet 发布（9月14日）· HN 73+ 分 · 8小时前（~04:44 UTC+8）
+- **Tags:** `python` `flutter` `cross-platform` `release`
+
+Flet——把 Python 应用编译到 Flutter 目标（iOS、Android、Web、桌面）的框架——历经约
+4 年于 9月14日 发布 v1.0.0，16,856 stars，持续活跃开发（9月18日 仍有推送）。这是一个
+庞大且诚实"破坏性"的版本：移除了长期弃用的 API（`app()`→`run()`、`ElevatedButton`→
+`Button`、`Page.go()`→`push_route()`），并带来头条新特性——**client actions**：带手势
+门控的处理器，让文件选择器、剪贴板、分享面板在 iOS Safari 上于原始点击内直接执行，
+无需一次 Python 往返。
+
+**Why it matters:** 一个带着真实破坏性变更的 1.0 是一份宣言：API 从此就是契约——而
+client actions 修复的正是服务端驱动 UI 框架通常无能为力的那类移动端 bug（异步手势死
+区）。迁移是必需的；67KB 的发布说明不是白写的。
+
+[`🔗 flet.dev`](https://flet.dev/) · [`🔗 github.com/flet-dev/flet`](https://github.com/flet-dev/flet) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49746290)
+
+---
+
+## 33. Skillsync（YC W26）发布"AI 聊天界的 Pandoc"——会话可以在 agent 之间搬家
+
+- **Velocity:** ▮ steady
+- **Source:** Launch HN · 53+ 分，52 评论 · 12小时前（~00:22 UTC+8）
+- **Tags:** `agents` `interoperability` `yc` `launch`
+
+Skillsync 的 Launch HN 主张：AI 会话不应被单一 agent 圈禁。产品可以把完整的编码 agent
+会话——消息、推理、工具结果——在 Claude Code、Codex、OpenCode、Cursor 之间迁移；开源
+核心是 **skillsynchq/txcript**（Rust 库 + CLI + WASM，Apache-2.0，上架 crates.io/npm），
+一个会话格式转换层，其上再以 MCP 提供历史会话召回。
+
+**Why it matters:** 在模型可以随时互换之后，会话格式正在成为新的锁定载体——"AI 聊天
+的 Pandoc"是这套逻辑指向的互操作生意。HN 的反驳也成立并可外推：转换本身"已被轻易
+解决"；真正可防守的是跨 agent 的 schema 与检索层，而围绕它的 SaaS 是闭源的。
+
+[`🔗 Launch HN`](https://news.ycombinator.com/item?id=49743049) · [`🔗 github.com/skillsynchq/txcript`](https://github.com/skillsynchq/txcript)
+
+---
+
+## 34. Uber 的重试风暴算术：重试按 R^d 放大，那就让最深处的服务认领错误
+
+- **Velocity:** ▮ steady
+- **Source:** Uber 工程博客 · HN 67+ 分 · 7小时前（~05:14 UTC+8）
+- **Tags:** `reliability` `microservices` `retries` `postmortem`
+
+Uber 工程博客（9月17日）复盘 2025年11月 的一起事故：调用链 5 层以下的某个服务故障后，
+逐跳重试按 R^d 放大。修复方案是"错误认领（error ownership）"——只有当某服务没有失败
+的下游调用时，它才"拥有"这个错误——通过服务依赖分析系统与 `x-uber-error-claim` 请求头
+实现，把重试约束在认领错误的边缘。结果：全网止住约 950 万次无谓请求；面向用户 API 的
+最大重试风暴半径从 25 降到 3。
+
+**Why it matters:** 重试预算是标准答案，而这篇文章恰好给出它的边界——即便如此，降级
+服务上仍会新增 46–135% 流量。文中的限定语也如实交代：预算只在基础错误率约 10% 以内
+有效，高故障率下约 2% 的错误会被错误地"不认领"，且该保证要求链路上至少有一跳配置了
+重试。
+
+[`🔗 Uber 博客`](https://www.uber.com/us/en/blog/protecting-against-retry-storms/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49746628)
+
+---
+
+## 35. Telstra 的"2006 年时光倒流"故障复盘：GPS 周数 19.6 年翻转，加上一张被遗忘的备用卡
+
+- **Velocity:** ▮ steady
+- **Source:** Netnod 博客 · HN 24+ 分 · 3小时前（~09:05 UTC+8）
+- **Tags:** `gnss` `time-sync` `outage` `postmortem`
+
+分发瑞典国家时间的 Netnod 依据 Telstra 委托的外部 TAP 调查，重构了其 7月8日 移动网络
+大故障——通话、短信、紧急呼叫、列车、支付终端全部受累：墨尔本一张 GPS 接收卡于
+2025年10月 作为临时方案启用，自 2020年 升级后固件从未更新，重启后把年份当成了 2006
+（GPS 的 10 比特周计数每 1,024 周≈19.6 年翻转一次；断电的卡会丢失纪元）。它以无人抗衡
+的 stratum-1 身份传播错误时间，而 2020年 时代引入的跨站点对等又造成"定时环路"，让多个
+时间源收敛到同一个错误值。
+
+**Why it matters:** 每个环节单独看都无可指摘——"协议没有错，错的是架构。" 2010年 前后
+部署的每一套 GPS 设施，如今都进入了 1,024 周翻转的射程之内；而"一台固件陈旧的休眠节点
+赢得选举"会发生什么，这就是模板。Netnod 自己的限定语：TAP 报告并未说明*为何*改用对等
+结构，那部分是作者的推断。
+
+[`🔗 Netnod 博客`](https://www.netnod.se/blog/telstra-outage-night-network-decided-year-was-2006) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49748957)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-18T04:10:00+08:00 |
-| Items | 20 |
-| Sources tracked | 20 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, NVD, 厂商公告, 安全媒体) |
+| Generated | 2026-09-18T12:20:00+08:00 |
+| Items | 35 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, Hugging Face, NVD, 厂商公告, 厂商博客, 安全媒体) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (每日 3 次) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

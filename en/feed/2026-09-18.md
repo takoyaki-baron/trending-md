@@ -1,8 +1,8 @@
 ---
 date: 2026-09-18
-updated: 2026-09-18T04:10:00+08:00
+updated: 2026-09-18T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -447,13 +447,349 @@ the data-agent space.
 
 ---
 
+## 21. Bend 2 relaunches as "a language that blocks AI mistakes via proof" — and squashes its own history
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 353+ pts, 181 comments · 8h ago (~04:36 UTC+8)
+- **Tags:** `programming-languages` `formal-verification` `gpu` `agents`
+
+Victor Taelin relaunched Bend (bendlang/bend, 20.6k stars, Apache-2.0, last push Sep 18) as
+"Bend 2": Python-syntax code compiling to native and GPU with a Lean/Rocq-style proof-checking
+type checker that verifies in ~1s, so an AI agent can check `LAWS.bend` invariants after every
+edit — "merging a bug is mathematically impossible: it is a theorem." But the 20,615 stars are
+carried over from the 2024 project: the renamed repo's history was **squashed to a single
+commit**, with 44 contributors' work moved to HigherOrderCO/Bend1 — the loudest criticism in
+the HN thread ("nuking your history is one hell of a way to raise eyebrows").
+
+**Why it matters:** The pitch — `LAWS.bend` as AGENTS.md backed by machine-checked proof — is
+aimed exactly at the agent-code-review gap. Read the fine print alongside the pitch: the author
+admits the compiler contains "a lot of gambiarra and AI slop for now," all benchmarks are
+self-published (Apple M4 Max), and the site says "expect bugs."
+
+[`🔗 bend-lang.com`](https://bend-lang.com/) · [`🔗 github.com/bendlang/bend`](https://github.com/bendlang/bend) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49746163)
+
+---
+
+## 22. PrismML's Bonsai 2 27B: a 27B model in 5.9 GB of ternary weights, open under Apache-2.0
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 297+ pts, 95 comments · 7h ago (~05:13 UTC+8)
+- **Tags:** `quantization` `ternary` `open-weights` `inference`
+
+PrismML (a Caltech spinout) released Ternary Bonsai 2 27B: Qwen3.8-27B rebuilt with
+{−1,0,+1} ternary weights plus FP16 group-wise scaling — 1.76 effective bits/weight, 5.9 GB,
+262K context — with live GGUF/MLX weights on Hugging Face under Apache-2.0 (not vaporware;
+Simon Willison ran the GGUF in the thread). Self-reported retention: 83.9 vs 85.4 aggregate
+("98.2%"), 143 tok/s on an RTX 5090.
+
+**Why it matters:** If ternary actually holds at 27B scale, 27B-class models become
+consumer-GPU default. But "near-lossless" is the vendor's framing — the model **trails the
+full-precision baseline in nearly every category** (vision 78.59 vs 81.64), it requires
+Prism's own llama.cpp fork (an Intel B70 owner got nothing usable), and full numbers live in a
+whitepaper PDF rather than the model card.
+
+[`🔗 prismml.com/news/bonsai-2-27b`](https://prismml.com/news/bonsai-2-27b) · [`🔗 HF: prism-ml/Ternary-Bonsai-2-27B-gguf`](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49746618)
+
+---
+
+## 23. "Astra for Law" gets its HN reckoning — 386 points argue with a Sep 9 announcement
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 386+ pts, 412 comments · 8h ago (~04:17 UTC+8)
+- **Tags:** `openai` `legal` `vertical-ai` `benchmarks`
+
+The HN debate is the news: OpenAI's "Astra for Law" post — dated **Sep 9** — hit the front
+page with 412 comments. It's GPT-6 Astra wired to ~5M US case-law opinions (Free Law
+Project/CourtListener) and 2,500+ legal instructions, sold gated to law firms; Harvey and
+Legora are named API partners. Claim: 54.0% vs 38.7% for Astra-plus-web-search on the Vals AI
+Legal Research Bench — with the baseline run at the same "highest reasoning effort."
+
+**Why it matters:** A template for verticalized frontier models — and for how they get
+scrutinized. The thread's top criticisms are the ones the post doesn't answer: the headline
+benchmark is a **private validation set**, all numbers are self-reported, and there is
+no hallucination-rate figure anywhere in the announcement.
+
+[`🔗 OpenAI blog`](https://openai.com/index/astra-for-law/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49745940)
+
+---
+
+## 24. Qwen3.8-Omni-Flash: Alibaba's omni-modal model goes API-only — with a 98% audio-price cut
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 90+ pts · 5h ago (~07:05 UTC+8)
+- **Tags:** `qwen` `multimodal` `alibaba` `api`
+
+Alibaba added `qwen3.8-omni-flash` to Model Studio: native text/image/audio/video input with
+1M context, positioned for agentic video workflows (video editing, movie commentary,
+"Video2Note"), claiming +25% average over Qwen3.5-Omni-Plus across 29 benchmarks and audio
+"exceeding" Gemini 3.8 Flash — while cutting audio-input pricing >98% (~$0.15/$0.47 per 1M
+tokens vs Gemini's $1.5/$9.0). Realtime WebSocket/WebRTC endpoint included.
+
+**Why it matters:** Two data points in one release: omni-modal is now being repriced like a
+commodity, and Qwen's Omni series is firmly **closed-weights** — no HF repo exists (the org's
+last upload was Aug 27); what shipped openly is tooling (Qwen-MM-Plugins, Qwen-Live Harness).
+And per Alibaba's own table, Gemini 3.8 Flash still wins several listed benchmarks
+(AgenticVBench 45.0 vs 36.8).
+
+[`🔗 Qwen blog`](https://qwen.ai/blog?id=qwen3.8-omni-flash) · [`🔗 github.com/QwenLM/Qwen-MM-Plugins`](https://github.com/QwenLM/Qwen-MM-Plugins) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49747925)
+
+---
+
+## 25. Plugin4Shell: a plugin SHA-pinning bypass yields zero-click RCE in Claude Code, Codex, Copilot and Gemini CLI
+
+- **Velocity:** ▮▮ rising
+- **Source:** AIR Security research · HN 40+ pts · 8h ago (~04:05 UTC+8)
+- **Tags:** `supply-chain` `coding-agents` `plugins` `rce`
+
+AIR Security (Sep 17) describes a bypass of plugin/skill SHA-pinning: the agent checks out the
+exact commit the marketplace pinned but never verifies it actually landed there — so an
+attacker controlling the plugin's repo can make the checkout resolve to malicious code while
+the pin looks honored. Zero-click host RCE, reported across Claude Code, OpenAI Codex, GitHub
+Copilot and Gemini CLI. Per the vendor's timeline: Claude Code fixed in 2.1.179 (Jun 17),
+Codex fixed in 0.146.0 (verified Aug 12), **Copilot unpatched**, and Google confirmed Aug 4
+it will never patch Gemini CLI (deprecated).
+
+**Why it matters:** The skill/plugin ecosystems we've covered all week assume pinned SHAs are
+a security boundary; this says the boundary is the git host's checkout semantics. Carry the
+hedges: no CVE ID exists, the "millions of agents" framing comes from a vendor selling an
+agent-security marketplace, and exploitation is reported, not observed in the wild.
+
+[`🔗 AIR Security: Plugin4Shell`](https://www.air.security/blog-posts/plugin4shell) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49745809)
+
+---
+
+## 26. Cisco's September 16 bundle: 18 FMC and 20 ISE CVEs, including a second CVSS 10.0 ISE auth bypass
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cisco advisories + SecurityWeek · Sep 16–17
+- **Tags:** `cve` `cisco` `firewall` `patching`
+
+Cisco's Sep 16 advisory drop patches 18 flaws in Secure Firewall Management Center — including
+CVE-2026-20324 (sftunnel authenticated root RCE, 9.9) and CVE-2026-20242 (Java
+deserialization RCE, 9.8) — plus 20 in Identity Services Engine, among them a **new**
+unauthenticated REST-API auth bypass scored 10.0 (CVE-2026-76423 — distinct from the
+KEV'd zero-day CVE-2026-76460 we covered Sep 17, which ships fixed in the same bundle).
+Nexus Dashboard also patched.
+
+**Why it matters:** The same management-plane lesson as yesterday's Check Point item, twice
+over. Read the scores carefully: both headline CVEs are **Cisco PSIRT-assigned, NVD still
+"Awaiting Analysis"** — and Cisco notes three ISE flaws were patched only after public
+disclosure. The FMC bugs actually exploited in the wild are the older March/July ones, not
+this batch.
+
+[`🔗 Cisco advance notice`](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) · [`🔗 SecurityWeek`](https://www.securityweek.com/cisco-fixes-dozens-of-flaws-across-fmc-ise-and-nexus-dashboard/)
+
+---
+
+## 27. "Hacking OpenAI": a forum RCE turned into an employee's ChatGPT account — with the fine print in the confession
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 53+ pts · 2h ago (~10:47 UTC+8)
+- **Tags:** `security-research` `openai` `bug-bounty` `sso`
+
+Hacktron (an AI-security vendor) published a writeup of July events: a heap overflow in
+libheif, reachable via HEIC uploads through Discourse→ImageMagick on community.openai.com,
+gave RCE on the forum — and because the upstream fix was never labeled a security release, it
+carried **no CVE** and Debian 12/13 plus Discourse's Docker image shipped vulnerable
+versions. Chained with an SSO misconfiguration, the researchers say they reached an employee's
+ChatGPT/Codex account and opened a PR in the internal monorepo; OpenAI paid $6,500 and fixed
+the SSO flaw in ~14 hours.
+
+**Why it matters:** Two lessons travel: untagged security fixes upstream silently downgrade
+every downstream distro, and SSO is a single pivot away from AI accounts that can act. Carry
+the caveats: OpenAI explicitly **excluded Discourse testing from bounty scope** (the RCE
+itself was unauthorized), and the authors admit they disguised their instance as a CTF target
+to get past the model's refusals — evidence, self-reported and redacted.
+
+[`🔗 Hacktron writeup`](https://www.hacktron.ai/blog/hacking-openai) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49749656)
+
+---
+
+## 28. DeepSeek-V4.1-Flash: a causal encoder-decoder that reads cheap and writes less — weights under MIT
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv + Hugging Face · paper Sep 17, weights since Sep 10
+- **Tags:** `deepseek` `moe` `kv-cache` `open-weights`
+
+DeepSeek published the V4.1-Flash paper (arXiv:2609.19969) behind weights that have been on
+Hugging Face since Sep 10 — 390K downloads, 3,024 likes, **MIT-licensed**. The 552B MoE uses
+a Causal Encoder-Decoder that activates 16B params/token at decode but only 8B at prefill,
+aimed at input-heavy agentic workloads; KV compression (cross-layer CSA2 + FP4 KV) brings the
+cache to 890 bytes/token (~¼ of V4-Flash), with "SWA Bounded Replay" cutting persistent cache
+~⅛ more. 1M context.
+
+**Why it matters:** The economics are aimed squarely at agents, where input tokens dominate:
+asymmetric prefill/decode activation plus a quarter-size KV cache is a cost model, not just an
+architecture. The hedge: "outperforms the baseline despite the smaller cache" is the authors'
+claim — the abstract carries no benchmark tables or limitations section, and no inference
+repo is linked, only checkpoints.
+
+[`🔗 arXiv:2609.19969`](https://arxiv.org/abs/2609.19969) · [`🔗 HF: deepseek-ai/DeepSeek-V4.1-Flash`](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash)
+
+---
+
+## 29. Zoom's harness ablation: 176 matched runs say context management matters more than planning
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers · #1, 26 upvotes (Sep 18 batch)
+- **Tags:** `agents` `evaluation` `harness` `paper`
+
+"An Empirical Study of Harness Design for Coding Agents" (arXiv:2609.20804, Zoom
+Communications, 43pp) is different work from yesterday's HarnessTax: instead of comparing
+existing harnesses, the authors build one lightweight harness and ablate planning, action
+space and context management across 176 matched settings (4 models × SWE-Bench Verified +
+Terminal-Bench 2.1). Findings: context management matters most when budget is tight;
+rule-based context elision beats LLM summarization on cost; planning is an accuracy scaffold
+for weak models but merely a cost saver for strong ones; bash-capable models do fine with
+bash-only tools at much lower cost.
+
+**Why it matters:** The harness-ablation question just got its first controlled dataset —
+and its answer is unglamorous: spend your engineering on context management, not prompts.
+Note the scope: four models, two benchmarks, no code released.
+
+[`🔗 arXiv:2609.20804`](https://arxiv.org/abs/2609.20804) · [`🔗 Hugging Face Daily Papers`](https://huggingface.co/papers)
+
+---
+
+## 30. FamousSparrow swaps backdoors: ESET finds SparroWocky hitting Latin American governments since August 2025
+
+- **Velocity:** ▮ steady
+- **Source:** ESET WeliveSecurity · Sep 17
+- **Tags:** `apt` `malware` `espionage`
+
+ESET reports the China-aligned APT FamousSparrow (overlapping Earth Estries/Salt Typhoon,
+active since ≥2019) has replaced SparrowDoor with a previously unreported modular C++
+backdoor, **SparroWocky**, deployed against Latin American government targets: in-memory COFF
+plugin loading, thread hiding via MinHook, call-stack spoofing with a SilentMoonwalk variant,
+and TLS proxied through Mbed TLS. ESET links the regional escalation to China's reaction to
+increased US interest in Latin America.
+
+**Why it matters:** Another data point that espionage tooling now professionalizes around
+evasion primitives (COFF loaders, stack spoofing) that red-team tooling commoditized. The
+source's own hedges: the backdoor is over a year old at disclosure ("at least August 2025"),
+and the Salt Typhoon overlap is hedged as "some level of overlap," not attribution.
+
+[`🔗 ESET WeliveSecurity`](https://www.welivesecurity.com/en/eset-research/beware-sparrowock-backdoor-bites-commands-catch/) · [`🔗 The Hacker News`](https://thehackernews.com/2026/09/china-aligned-famoussparrow-deploys.html)
+
+---
+
+## 31. Parallels Desktop root LPE (CVE-2026-90894): the fix only exists in a version Intel Macs can't install
+
+- **Velocity:** ▮ steady
+- **Source:** JFrog research (Sep 14–15) · THN writeup Sep 16
+- **Tags:** `cve` `parallels` `macos` `lpe`
+
+JFrog's Yuval Moravchick found Parallels Desktop's root `prl_disp_service` listens on a
+world-writable socket and accepts any local peer's credentials; feeding a crafted appliance
+path (containing a double quote) into `PrlSrv_InstallAppliance` injects `--use-compress-program`
+into a root-run `tar` — root shell, confirmed on 26.4.0. **CVE-2026-90894, CVSS 7.8 —
+JFrog-assigned (Secondary); NVD record still "Received," no NVD analysis.** Affected: < 27.0.0;
+fixed in Parallels Desktop 27.
+
+**Why it matters:** The ugly part is the upgrade path: Parallels 27 doesn't support Intel Macs,
+so the entire 26.x line — including current 26.4.2 — stays exploitable with no fix. Local-only
+(no in-the-wild exploitation reported), but on a shared CI/dev Mac "local" is a low bar.
+
+[`🔗 JFrog research`](https://research.jfrog.com/vulnerabilities/parallels-desktop-is-vulnerable-to-a-local-privilege-escalation-via-appliance-extract-argument-injection-cve-2026-90894/) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-90894)
+
+---
+
+## 32. Flet 1.0: four years of "Flutter for Python" reaches a stability milestone
+
+- **Velocity:** ▮ steady
+- **Source:** Flet release (Sep 14) · HN 73+ pts · 8h ago (~04:44 UTC+8)
+- **Tags:** `python` `flutter` `cross-platform` `release`
+
+Flet — Python apps compiled to Flutter targets (iOS, Android, web, desktop) — shipped v1.0.0
+on Sep 14 after ~4 years, with 16,856 stars and active development (pushed Sep 18). The
+release is large and honestly breaking: deprecated APIs removed (`app()`→`run()`,
+`ElevatedButton`→`Button`, `Page.go()`→`push_route()`), plus the headline new feature —
+**client actions**, gesture-gated handlers that run file-pickers/clipboard/share-sheets inside
+the original tap on iOS Safari without a Python round-trip.
+
+**Why it matters:** A 1.0 with real breaking changes is a statement that the API is now the
+contract — and client actions fix the class of mobile bugs (async gesture dead zones) that
+server-driven-UI frameworks usually can't. Migration is required; the release notes are 67KB
+for a reason.
+
+[`🔗 flet.dev`](https://flet.dev/) · [`🔗 github.com/flet-dev/flet`](https://github.com/flet-dev/flet) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49746290)
+
+---
+
+## 33. Skillsync (YC W26) launches "Pandoc for AI chats" — sessions that move between agents
+
+- **Velocity:** ▮ steady
+- **Source:** Launch HN · 53+ pts, 52 comments · 12h ago (~00:22 UTC+8)
+- **Tags:** `agents` `interoperability` `yc` `launch`
+
+Skillsync's Launch HN pitch: AI chat sessions shouldn't be siloed per agent. The product moves
+whole coding-agent sessions — messages, reasoning, tool results — between Claude Code, Codex,
+OpenCode, Cursor and others; the open core is **skillsynchq/txcript** (Rust library + CLI +
+WASM, Apache-2.0, crates.io/npm), a conversion layer between session formats, with MCP-based
+recall of past sessions on top.
+
+**Why it matters:** Session formats are becoming the lock-in vector now that models are
+interchangeable — a "Pandoc for AI chats" is the interoperability play that logic implies. The
+HN pushback is fair and travels: conversion itself is "trivially solved"; the defensible part
+is the cross-agent schema and search layer, and the SaaS around it is closed.
+
+[`🔗 Launch HN`](https://news.ycombinator.com/item?id=49743049) · [`🔗 github.com/skillsynchq/txcript`](https://github.com/skillsynchq/txcript)
+
+---
+
+## 34. Uber's retry-storm math: retries amplify as R^d, so make the deepest service own the error
+
+- **Velocity:** ▮ steady
+- **Source:** Uber Engineering blog · HN 67+ pts · 7h ago (~05:14 UTC+8)
+- **Tags:** `reliability` `microservices` `retries` `postmortem`
+
+Uber's engineering blog (Sep 17) dissects a Nov 2025 incident where a service 5+ levels deep
+in the call chain failed: naive per-hop retries amplify as R^d. The fix is "error ownership" —
+a service owns an error only if it has no failing outbound call — implemented with a Service
+Dependency Analysis system and an `x-uber-error-claim` header so retries confine to the
+error-owning edge. Results: ~9.5M spurious requests stopped mesh-wide; max retry-storm radius
+across user-facing APIs 25→3.
+
+**Why it matters:** Retry budgets are the standard answer and the post itself shows their
+limit — they'd still have added 46–135% traffic on the degraded service. The caveats are
+carried honestly: budgets only hold to ~10% base error rate, ~2% incorrect unclaims at high
+failure rates, and the guarantee needs at least one retrying hop.
+
+[`🔗 Uber blog`](https://www.uber.com/us/en/blog/protecting-against-retry-storms/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49746628)
+
+---
+
+## 35. Telstra's 2006 time-loop outage, dissected: a 19.6-year GPS week rollover plus one forgotten workaround card
+
+- **Velocity:** ▮ steady
+- **Source:** Netnod blog · HN 24+ pts · 3h ago (~09:05 UTC+8)
+- **Tags:** `gnss` `time-sync` `outage` `postmortem`
+
+Netnod (Sweden's national-time distributor) reconstructs Telstra's July 8 mobile outage —
+calls, SMS, emergency calls, trains, payment terminals — via the external TAP investigation: a
+GPS receiver card in Melbourne, activated in Oct 2025 as a workaround and never firmware-
+updated since a 2020 upgrade, restarted and assumed the year was 2006 (GPS's 10-bit week
+counter rolls every 1,024 weeks ≈ 19.6 years; a powered-off card loses the epoch). Becoming an
+unopposed stratum-1 source, it propagated bad time, and 2020-era cross-site peering created
+"timing loops" where sources converged on the wrong value.
+
+**Why it matters:** Every component was individually defensible — "the protocol worked; the
+architecture did not." The 1,024-week rollover is now within living memory of every GPS
+deployment made before ~2010, and this is the template for what happens when one dormant node
+with stale firmware wins the election. Netnod's own caveat: the TAP report is not clear on
+*why* peering was changed; that part is the author's inference.
+
+[`🔗 Netnod blog`](https://www.netnod.se/blog/telstra-outage-night-network-decided-year-was-2006) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49748957)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-18T04:10:00+08:00 |
-| Items | 20 |
-| Sources tracked | 20 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, NVD, vendor advisories, security press) |
+| Generated | 2026-09-18T12:20:00+08:00 |
+| Items | 35 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, Hugging Face, NVD, vendor advisories, vendor blogs, security press) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
