@@ -1,8 +1,8 @@
 ---
 date: 2026-09-18
-updated: 2026-09-18T12:20:00+08:00
+updated: 2026-09-18T20:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -779,13 +779,369 @@ Uber のエンジニアリングブログ（9月17日）が 2025年11月 のイ�
 
 ---
 
+## 36. ZCode——Zhipu 純正のコーディングエージェントデスクトップアプリが、ワークスペース全体を Git 履歴ごと静かにアップロードしていた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 83+ pts · 16 コメント · 6時間前（~10:35 UTC+8）
+- **Tags:** `privacy` `supply-chain` `zhipu` `coding-agents`
+
+ディスク容量を空けようとした研究者が、`~/.zcode` が 700MB 超に達していることを発見。
+その中には 345MB のワークスペースに対する 564 回の失敗アップロードを示すメタデータ
+付きの 313MB の `.enc` ファイルがあった。そこで Electron の `app.asar` をリバース
+エンジニアリングし、フローを復元した：プロンプトのたびとタスク完了時に、クライアントは
+`zcode.z.ai` から RSA 公開鍵と OSS 署名を取得し、ワークスペースを tar.gz にパックして
+ローカルで暗号化し、Aliyun OSS へ直接 POST する。あるスナップショットの平文マニフェスト
+（42,411 ファイル）では `.git` がペイロードの 86.6% を占める：LFS 資産 196MB、コミット
+オブジェクト 102MB、未プッシュのブランチ名を含む reflog——さらに `.git/config` 内の
+内部ホスト名や、後のコミットで削除済みのシークレットまで。RSA 秘密鍵はサーバー側に
+あるため、作者曰くユーザーにもクライアントにも送信済みデータを復号する手段がない。
+「体験の最適化」「Repo Snapshot Indexing」の 2 つの UI トグルでは収集は止まらず、
+有効な JWT だけがゲートだ。同日公開された別の検証記事も中核の発見を裏付けている。
+
+**Why it matters:** コーディングエージェントの信頼境界は、リポジトリ全体——履歴、
+reflog、シークレット——を訓練インフラへ送るデスクトップアプリによって決められつつ
+ある。留保もセットで：これは一人の研究者による一つのクライアントバージョンのリバース
+であり、ベンダーの回答はまだなく、サーバー側の保持状況も未確認。「最適化プログラムは
+デフォルトでオフ」というプライバシーポリシーの記述こそ、この発見が矛盾していると
+みえる部分だ。
+
+[`🔗 ferstar ブログ：リバースエンジニアリング検証`](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) · [`🔗 tokenstead.ai：独立検証`](https://tokenstead.ai/guides/zcode-silent-git-history-upload) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49752422)
+
+---
+
+## 37. NYT 訴 OpenAI 訴訟の黒塗り解除資料：Microsoft 自身のデータで Copilot が NYT クリックスルーを最大 93% 減少と判明
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** 新たに黒塗り解除された資料に基づく TechCrunch · HN 246+ pts · 175 コメント · 8時間前（~09:45 UTC+8）
+- **Tags:** `ai-policy` `copyright` `litigation` `openai`
+
+New York Times の OpenAI・Microsoft に対する著作権訴訟で、新たに黒塗りが解除された資料
+（証拠書類の多くは依然非公開）から、2023–24 年の内部発言が明らかになった：Microsoft
+Applied Science ディレクターの Brent Hecht はウェブスクレイピングを「人類史上最大の
+労働の窃盗」と呼び、Copilot が通常の Bing 検索比で NYT クリックスルーを最大 93% 減らす
+という Microsoft 自身のデータを受けて、LLM 事業のコンテンツサプライチェーンへの
+「ドゥームループ」を警告していた。ChatGPT 責任者の Nick Turley はチャットボットによる
+代替を出版社への「実存的脅威」と述べ、Satya Nadella は宣誓証言でチャットボットが一次
+ソースへの訪問を代替すると認め、有料コンテンツでの訓練を知っていれば再訓練を要求した
+だろうと述べた。資料は Bing インデックス由来のスクレイピング、ペイウォール回避の
+戦略、著作権表示の除去も主張しており、中間訓練データからは 91,692+ 部の出版社作品の
+コピーが見つかっている。
+
+**Why it matters:** これは原告側の最も強い証拠——被告自身の社員が代替による害を記録して
+おり、フェアユース防御はこれを吸収しなければならない。報道に必須の文脈：裁判所は
+「訓練＝フェアユース」で全体的にまだ AI 企業側についており、政権も最近 OpenAI の立場を
+支持する意見書を提出している。
+
+[`🔗 TechCrunch`](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49752056)
+
+---
+
+## 38. OpenJev：コミュニティが Jev の主張をブラウザ内・3090 一枚でローカル検証
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 177+ pts · 96 コメント · 7時間前（~09:42 UTC+8）
+- **Tags:** `open-source` `replication` `inference` `wasm`
+
+OpenJev（TheoLeeCJ/openjev、1.4k スター、MIT、今朝もプッシュ）は「Jev のようなものを
+家の 3090 で動かせるか？」を問うブラウザ完結型の再現実験だ。wllama（WASM 版 llama.cpp）で
+Qwen3 0.6B、MiniCPM5 2B、Qwen3.5 4B をピン留めした GGUF ビルドで実行。バックエンド
+なし、入力はページ外に出ない。同じロード済みモデルからの 2 つの読み出し経路——選択肢の
+logits を直接読むか、モデルに確率を JSON として生成させるか——を比較する。結果：4B
+モデルは 84.5% TypeSafe。9月16日 に取り上げたホステッド Jev の 88.3% には届かない。
+ページはこれを率直に示し、留保も併記する：スコアは表示選択肢上の softmax であって
+較正された信頼度ではなく、量子化版は Jev の BF16 とは異なる。
+
+**Why it matters:** 議論のあるベンダー主張を決着させる最短ルートは、数字を公開した
+ローカル再現だ——そしてこのプロジェクトは「同等」ではなく自分の劣後を公開した。Jev
+公開から 2 日で、「40-400 倍安い」というフレーミングに、誰もが実行できるコミュニティ
+検証の参照点ができた。
+
+[`🔗 openjev.com`](https://openjev.com/) · [`🔗 github.com/TheoLeeCJ/openjev`](https://github.com/TheoLeeCJ/openjev) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49752041)
+
+---
+
+## 39. FEX-Emu による x86-TSO 徹底解説：エミュレーションが遅くなる本当の理由をコア別に実測
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 173+ pts · 35 コメント · 5時間前（~12:09 UTC+8）
+- **Tags:** `emulation` `arm` `memory-model` `performance`
+
+FEX-Emu チーム（Snapdragon 上の Linux ゲーミングを支えるユーザーモード x86-on-ARM
+エミュレータ）が「災厄」を解説した：ARM の緩いメモリモデル上で x86 の Total Store
+Ordering を再現すること。コア別マイクロベンチが詰まった投稿の発見：LRCPC の
+acquire-load は Apple のハードウェア TSO トグル（M1 でストアスループットの約 24% を
+犠牲）に比べれば「絆創膏」にすぎない。非アライメントアクセスの penalty は Cortex-X4 で
+約 50%、Oryon-3 のロードで約 70%。64 バイト境界を跨ぐ split-lock は Zen で約 660ns、
+インラインアトミックは 1.44ns（約 458 倍）。最良の ARM ですらアライメント済みアトミック
+は x86 の約 3 倍遅い。そして決定打は非キャッシュメモリ：ライトコンバインのストア帯域は
+Zen 比 最大 816 倍劣化し、Silksong などのゲームは PCIe-GPU ボードで 1 FPS 未満になる。
+
+**Why it matters:** x86 ゲーム資産を走らせたいすべての ARM チップにハードウェア TSO
+トグルとコヒーレントキャッシュライン設計が必要だという工学的論証だ。限界も自己申告
+されている：split-lock のエミュレーションはベストエフォートでデータを引き裂き得る、
+提案する修正は「ハードウェア設計者ではない」エミュレータ作者によるもの、数値は FEX
+自身のマイクロベンチであってエンドツーエンドのゲームフレームレートではない。
+
+[`🔗 FEX-Emu ブログ`](https://fex-emu.com/Scourge-of-emulation/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49750094)
+
+---
+
+## 40. Thomas Ptacek：「How to Write with an LLM」——校正者としては使え、代筆者にはしない
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 200+ pts · 126 コメント · 10時間前（~07:48 UTC+8）
+- **Tags:** `writing` `technique` `llm` `community`
+
+Thomas Ptacek（sockpuppet.org）が LLM と書く方法を発表した：自分で草稿を書き、モデルは
+あくまで校正者として使う。ルール1：「LLM が提案した言葉を一つも使ってはならない」——
+モデルは雑誌見出しのトーンで書き、声を平たんで均してしまう。「読者は LLM の言葉を
+1 兆分の数 ppt の精度で嗅ぎ分ける」。ルール2：励ましを禁じる。反射的な褒め言葉は、
+本来書き直すはずだった弱い初稿の直感を温存させる。彼のワークフロー：モデルに機械的
+な欠点（受動態、つなぎ言葉、重複表現）を列挙させ、該当箇所を自分で書き直し、文脈なしの
+別のモデルにどちらの版が良いか判定させる。Codex や Claude といったコーディング CLI に
+編集プロンプトを流す小さな HTMX/SQLite のワークショップツールも公開した。
+
+**Why it matters:** 今月いちばく引用されている「LLM 時代の執筆」論文が、ライティング
+指導者ではなくセキュリティエンジニアから出た——しかもそのルールは審美的でなく
+実行可能だ。自覚的な脚注も持って帰る価値がある：GPT-5 はこの記事を 20% 長すぎと判定し
+「たぶん正しい」——彼はそれでもそのままにした。
+
+[`🔗 sockpuppet.org`](https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49747070)
+
+---
+
+## 41. RustFS が 32.9k スターでトレンド上位——Apache-2.0 の MinIO 代替がリリースを続ける
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +559 スター/日 · 今朝 1.0.1-preview.5 をリリース
+- **Tags:** `storage` `rust` `s3` `self-hosted`
+
+Rust 製の S3 互換分散オブジェクトストア RustFS は、本日の最速成長インフラリポジトリ
+（+559 スター/日、32.9k）で、今朝も新しいプレビューリリース（1.0.1-preview.5、3 日で
+3 個目）を出した。README は MinIO を明示的に意識する——「MinIO のシンプルさ + Rust の
+メモリ安全性」——そして AGPL にも：「寛容な Apache 2.0」対「制限的な AGPL v3」、さらに
+MinIO のテレメトリ（「許可のない国境越えデータ送信を防止」）への一撃。互換性マトリクス
+では S3 コア・バージョニング・オブジェクトロック・SSE・IAM が利用可能、S3 Tables
+（Iceberg REST）と MinIO ディスク形式互換はプレビュー。最近のリリースでは KMS
+（Vault/AWS）、Entra ID OIDC ロールマッピング、プール拡張/退役が追加された。
+
+**Why it matters:** MinIO の AGPL 転換とテレメトリ姿勢が空位を作り、RustFS はその
+最大の挑戦者だ。しかもリリースが速く、「preview」タグがこの話で最も正直な部分に
+なっている。細部に注意：README の性能セクションは RAM 4GB での自己公開ストレステスト
+と比較動画であって、再現可能なベンチマークではない。
+
+[`🔗 github.com/rustfs/rustfs`](https://github.com/rustfs/rustfs) · [`🔗 リリース`](https://github.com/rustfs/rustfs/releases)
+
+---
+
+## 42. Waymo がシンガポール進出を発表——来年マッピング開始、2027 年規制承認、2028 年営業運行
+
+- **Velocity:** ▮ steady
+- **Source:** Waymo 発表 · HN 112+ pts · 129 コメント · 5時間前（~11:49 UTC+8）
+- **Tags:** `autonomous-vehicles` `waymo` `industry`
+
+Waymo はシンガポールにロボタクシーサービスを持ち込む：「全地域」での手動マッピングと
+検証走行を来年開始、2027 年に陸上交通庁（LTA）へ自動運転システムの承認を申請する意向、
+2028 年の営業サービス開始を目標に、運輸省および LTA と連携する。発表は米国での実績
+（公道 3 億 km 超、15 都市超、負傷事故 94% 減と主張）を強調し、シンガポールをロンドン・
+東京の準備リストに加えた。
+
+**Why it matters:** シンガポールは民間ロボタクシー車両が運行する市場としてこれまでで
+最も高密度で公共交通指向——米国の郊外とはまったく異なるストレステストだ。タイムラインは
+正直に読む：2028 年は「意向」とされ、まだこのドライバーを評価していない規制当局の
+承認が前提だ。
+
+[`🔗 Waymo: Waymo in Singapore`](https://waymo.com/waymo-in-singapore/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49749981)
+
+---
+
+## 43. Jemalloc 5.4.0：インターネットの半分を支えるアロケータが 160 コミットの「技術的負債返済」リリース
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub リリース（9月17日）· HN 194+ pts · 54 コメント · 5時間前（~12:20 UTC+8）
+- **Tags:** `memory-allocator` `c` `release` `infrastructure`
+
+Firefox、Redis、FreeBSD そして無数の C/C++ サービスに組み込まれているアロケータ
+Jemalloc が、9月17日 に 5.4.0 をリリース：160+ コミットが技術的負債の清算、リファクタ、
+バグ修正、テストカバレッジ、オプション整理に集中し、移植性の改善と、HugeTLB ページなど
+再回収不能なマッピングをピン留めする新しい `EXTENT_ALLOC_FLAG_PINNED` フックも追加。
+前版 5.3.1 は 2026年4月（390+ コミット）——2022–2025 の静かな時期を経て、このプロジェクト
+は異例なハイペースで動いている。
+
+**Why it matters:** これほど多くを支える依存がリリースするとき、「目玉機能がない」こと
+こそが要点だ——クリーンアップとオプション削除こそが、ピン留めされた本番ビルドを壊す
+ものだから。Redis/FreeBSD クラスのスタックでアロケータバージョンを追っている運用チームは、
+次のロールアウトの前にオプション整理リストを読むべきだ。
+
+[`🔗 Jemalloc 5.4.0 リリース`](https://github.com/jemalloc/jemalloc/releases/tag/5.4.0) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49750152)
+
+---
+
+## 44. 「Infinite-Parameter LLMs」：ハイパーネットワークが実データから重みを「コンパイル」する——現時点では評価プロトコルまで
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 148+ pts · 39 コメント · 17時間前（~00:55 UTC+8）
+- **Tags:** `research` `hypernetworks` `architecture` `paper`
+
+「Infinite-Parameter LLMs」（arXiv:2609.18842、Hernández-Lobato グループ、Cambridge）は
+固定のパラメータバンクを置き換えることを提案する：コンパクトなハイパーネットワークが
+実行時データを共有基底ネットワークの低ランク変調に変え、生成器の潜在コードについて
+オンラインで更新されるベイズ的信念を保持する——つまり実効的な重みはストレージから読む
+のではなく、セッションごとに再導出される。主張される利点：固定のモデルフットプリントで
+「実質無限」のコンパイル可能な重み空間、償却された計算、文脈ウィンドウの解放、ターン間の
+永続性。
+
+**Why it matters:** これは重み生成の方向性（weight-space 学習）を論理的帰結まで押し進めた
+もので、正直さはアブストラクトそのものにある：**実験数値は一切報告されていない**。
+出てきたのは「まさにこれを in-context learning と検索に対して試す評価プロトコル」だ。
+結果としてではなく、研究上の賭けとして扱うべきだ。
+
+[`🔗 arXiv:2609.18842`](https://arxiv.org/abs/2609.18842) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49743483)
+
+---
+
+## 45. NVIDIA の SoL-Pi：RSI をハーネス工学に応用——トークン交通量を 45-49% 削減（自己申告）
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers · #2、38 票（9月18日 バッチ）
+- **Tags:** `agents` `harness` `rsi` `paper`
+
+SoL-Pi（arXiv:2609.20519、Song Han、Ligeng Zhu、Enze Xie ら NVIDIA 系の著者）は再帰的
+自己改善をハーネス層に適用する：自動研究ループを多様化する環境群へスケールし、候補改善は
+選択されて初めて保持される——最終的に 4 つの機構が生き残った（アクション実行、コンテキスト
+圧縮、観測処理、委任読み取り）。51 タスクの EdgeBench での主張：GPT-5.6 Sol と Opus 5 で
+Pi ハーネスと同等の精度を保ちながら、記録されたトークン交通量を 44.7–49.0% 削減、API
+コストは約 1/3、Pi 比で時給 $4.36–$5.71 相当の節約。
+
+**Why it matters:** 再帰改善の波は研究発見ループ（Agora、Dream-RSI）からエージェントの
+配管へ移り、選択圧が編集を行う。スコープはアブストラクトの名詞に書かれている：単一の
+51 タスクベンチ、「recorded」の交通量、節約額は「estimated」——第三者による再実行は
+まだない。
+
+[`🔗 arXiv:2609.20519`](https://arxiv.org/abs/2609.20519) · [`🔗 Hugging Face Daily Papers`](https://huggingface.co/papers)
+
+---
+
+## 46. 「When EOS Tokens Disagree」：on-policy 蒸留が生徒を冗長にするのは、教師と生徒の「止まり方」が違うから
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers · #3、32 票（9月18日 バッチ）
+- **Tags:** `distillation` `training` `research` `paper`
+
+「When EOS Tokens Disagree」（arXiv:2609.20511、UNC SciML、コード公開）は、on-policy
+蒸留で生徒の応答が長くなり生成予算を使い果たする理由を診断する：**終端トークンの不一致**
+——Qwen3、Llama、Gemma の 3 ファミリーすべてで、基底の生徒と後訓練された教師は、宣言上の
+停止集合が同一であっても、異なる EOS トークンに停止確率を置いている。これは生徒自身の
+終端行動を抑えつつ、教師のそれを確実には移さない。機能的に等価な EOS トークンを同じ
+「意味的停止アクション」として扱うと、3 ファミリーすべてで長さ膨張が大幅に緩和された。
+
+**Why it matters:** 冗長なエージェントは直接のコスト要因（上の SoL-Pi が存在する理由の
+一部は、蒸留が膨らませたものの圧縮だ）であり、これが機構的で修正可能な原因を与えた。
+著者自身の限界線：終端の不一致は「重要だが網羅的ではない」——整合後も訓練後期特有の
+長さ膨張が残る。
+
+[`🔗 arXiv:2609.20511`](https://arxiv.org/abs/2609.20511) · [`🔗 github.com/UNCSciML/opd-eos`](https://github.com/UNCSciML/opd-eos)
+
+---
+
+## 47. Anki 26.09：間隔反復アプリの定番がセキュリティ修正をリリース——ローカルファイル読み取りとデッキ経由のファイル実行
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub リリース（9月14–15日）· トレンドで +430 スター/日
+- **Tags:** `security` `release` `desktop-apps` `anki`
+
+Rust 製の間隔反復アプリ Anki（31k スター）が、9月14日 に 26.09、9月15日 に 26.09.2 を
+リリース——両版とも「⚠️ できるだけ早くアップグレードを」と明記。セキュリティ修正：
+ノートがエディタで表示された際にローカルファイルを読み取れる問題、エディタの「画像を
+開く」コンテキストメニューが拡張子を検証せず、共有デッキが一部のシステムで危険な
+ファイルを実行できた問題。26.09.2 ではデッキ説明内の外部リンクが概要ページを操作できる
+問題と Windows の起動クラッシュも修正。またレガシーの `anki.importing`/`anki.exporting`
+モジュールを削除し、一部アドオンが動かなくなる。
+
+**Why it matters:** 共有デッキは誰も監査しないサプライチェーンだ——デッキはデータで
+あり、このリリースはそれを信頼されたものとして扱うのをやめた。3000 万ユーザークラスの
+アプリが「デッキ経由のファイル実行」を静かに修正するのは、CVE を取れないままupgrade
+に値するデスクトップアプリセキュリティ話の典型だ。
+
+[`🔗 Anki 26.09 リリースノート`](https://github.com/ankitects/anki/releases/tag/26.09) · [`🔗 github.com/ankitects/anki`](https://github.com/ankitects/anki)
+
+---
+
+## 48. ByteShape の ShapeLearn 量子化で Qwen 3.8 27B が 16 GB カードに載る——ベンダー自己ベンチ、方法論は公開
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 77+ pts · 15 コメント · 7時間前（~10:04 UTC+8）
+- **Tags:** `quantization` `gguf` `inference` `local-llm`
+
+ByteShape（トロント）が Qwen 3.8 27B の完全な ShapeLearn GGUF 量子化ランを公開：
+IQ2_XXS（2.56 bpw）から IQ4_XS（3.84 bpw）までの 5 段階を、RTX Pro 6000 から
+RTX 4080/5060 Ti まででテスト——GPU-4 ティアは 11.0 GB に収まり、16 GB カードを狙う——
+さらに組み込み MTP ドラフトヘッドか 1.1 GB の外部 DFlash2 ドラフトモデルによる
+投機的デコーディング。スコアは BF16 ベースラインで正規化し、instruct（GSM8K、IFEval、
+MMLU、LiveCodeBench V6）と thinking（BFCL V4、ACEBench）の両スイートを llama.cpp
+b10430 で実行。
+
+**Why it matters:** コンシューマ GPU の量子化カルチャーは、かつての雰囲気に代わって
+KLD ダイバージェンスの忠実度カーブを公開するようになった。この投稿は免責も正しい位置に
+置いている：ベンダーの自己ベンチであること、投機的デコーディングのプロットは「デコード
+方式間の品質同等性を独立には立証しない」こと、Bartowski の新しい量子化はテスト後の
+ものであること、そして VRAM 収まりはコンテキスト長とサービング設定次第であること。
+
+[`🔗 byteshape.com：ShapeLearn Qwen 3.8 27B`](https://byteshape.com/blogs/Qwen3.8-27B/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49749393)
+
+---
+
+## 49. TSMC の A14 ノード詳細が IEDM セッションで判明：SRAM セル 0.017μm² 未満、2028 年量産
+
+- **Velocity:** ▮ steady
+- **Source:** IEDM 2026 プログラム · HN 114+ pts · 47 コメント · 2日前（9月16日）
+- **Tags:** `semiconductors` `tsmc` `hardware`
+
+IEDM 2026 のセッション公示（12月14日、サンフランシスコ）が TSMC の A14 プラットフォーム
+論文を明らかにした：NanoFlex Pro プラットフォーム上の第 2 世代ナノシートトランジスタ、
+「世界最小の SRAM、セルサイズ <0.017μm²」、N2 比で速度 +10–15%、消費電力 -25–30%、
+密度 +約 20%——さらに TSV 対応、4.5μm の SoIC ボンディングピッチ、そして「2028 年量産
+が順調に進行中」。
+
+**Why it matters:** ポスト 2nm の AI シリコンの日程はすべて A14 ノードを基準に組まれて
+いる。SRAM セルの数値がヘッドラインなのは、SRAM スケーリングこそが推論アクセラレータの
+オンチップキャッシュを制約するからだ。ただしこれはシリコンではなくセッション要旨——
+数値は TSMC 自身のもので、IEDM 論文は歴史的にほぼ主張の範囲内に収まってきたが、2028 年
+量産はあくまでスケジュール主張だ。
+
+[`🔗 IEDM 2026 Session 3-2`](https://iedm26.mapyourshow.com/8_0/sessions/session-details.cfm?scheduleid=331) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49714096)
+
+---
+
+## 50. 締め切り当日：攻撃に悪用されている Chrome の V8 ゼロデイ、連邦機関のパッチ時計が今日尽きる
+
+- **Velocity:** ▮ steady
+- **Source:** CISA KEV カタログ · 締め切り 2026-09-18
+- **Tags:** `cve` `chrome` `v8` `kev`
+
+CVE-2026-85046——細工されたページで Chrome サンドボックス内コード実行を許す V8 の型混同、
+Chrome 152.0.7977.82 で修正——は 9月4日 に CISA の KEV カタログに追加され、本日
+（9月18日）が BOD 26-04 の下で連邦機関の修復締め切りだ。Google はこれを 2026 年で 6 件目の
+悪用されている Chrome 脆弱性として修正済み。**CVSS 8.8（Google による採点、NVD は
+「Analyzed」）**——critical ではなく high だが、KEV に入ったのはスコアのためではなく、
+実際に使われているからだ。
+
+**Why it matters:** 採点の教訓がまた繰り返される：悪用されている 8.8 は、悪用されていない
+10.0 より優先される。パッチの優先順位を動かすのは CVSS の帯域ではなく KEV の締め切りだ。
+Chromium 埋め込み側（Edge、Opera、Electron アプリ）は独自のリリースサイクルで修正を
+継承する——特に Electron アプリは Chrome から数週間遅れる。
+
+[`🔗 CISA KEV カタログ`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`🔗 NVD レコード`](https://nvd.nist.gov/vuln/detail/CVE-2026-85046)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-18T12:20:00+08:00 |
-| Items | 35 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, Hugging Face, NVD, ベンダーアドバイザリ, ベンダーブログ, セキュリティ報道) |
+| Generated | 2026-09-18T20:25:00+08:00 |
+| Items | 50 |
+| Sources tracked | 38 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, Hugging Face, NVD, CISA KEV, ベンダーアドバイザリ, ベンダーブログ, セキュリティ報道) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (1日3回) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

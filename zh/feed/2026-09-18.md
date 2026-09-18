@@ -1,8 +1,8 @@
 ---
 date: 2026-09-18
-updated: 2026-09-18T12:20:00+08:00
+updated: 2026-09-18T20:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -724,13 +724,330 @@ Uber 工程博客（9月17日）复盘 2025年11月 的一起事故：调用链 
 
 ---
 
+## 36. ZCode——智谱官方编码 agent 桌面端被曝静默上传整个工作区，包括完整 Git 历史
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 83+ 分 · 16 评论 · 6小时前（~10:35 UTC+8）
+- **Tags:** `privacy` `supply-chain` `zhipu` `coding-agents`
+
+一位研究者清理磁盘时发现 `~/.zcode` 目录超过 700MB，其中有一个 313MB 的 `.enc` 文件，
+元数据显示针对 345MB 工作区的 564 次失败上传尝试——随后他逆向了 Electron 的 `app.asar`，
+复原了完整流程：每次提交 prompt 和任务完成时，客户端向 `zcode.z.ai` 请求 RSA 公钥和
+OSS 签名，把工作区打成 tar.gz、本地加密后直接 POST 到阿里云 OSS。某快照的明文清单
+（42,411 个文件）显示 `.git` 占载荷的 86.6%：196MB 的 LFS 资产、102MB 的提交对象、
+含未推送分支名的 reflog——还有 `.git/config` 里的内部主机名，以及后续提交中已删除的
+密钥。RSA 私钥始终在服务端，作者因此认为用户和客户端都无法解密已上传的内容；两个
+UI 开关（"优化体验""Repo Snapshot Indexing"）都不能阻止采集，采集只受一个有效 JWT
+约束。同日发布的第二篇独立分析佐证了核心发现。
+
+**Why it matters:** 编码 agent 的信任边界正在由桌面应用划定，而这些应用会把整个仓库
+——历史、reflog、密钥——全部送往训练基础设施。保留限定语：这是单一研究者对单一
+客户端版本的逆向，厂商尚未回应，服务端留存情况也未获证实；隐私政策中"优化计划默认
+关闭"的表述，正是这一发现看起来与之矛盾的地方。
+
+[`🔗 ferstar 博客：逆向分析`](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) · [`🔗 tokenstead.ai：独立分析`](https://tokenstead.ai/guides/zcode-silent-git-history-upload) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49752422)
+
+---
+
+## 37. NYT 诉 OpenAI 案新解密文件：微软自家数据显示 Copilot 令 NYT 点击率最多下降 93%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** TechCrunch（新解密文件）· HN 246+ 分 · 175 评论 · 8小时前（~09:45 UTC+8）
+- **Tags:** `ai-policy` `copyright` `litigation` `openai**
+
+《纽约时报》诉 OpenAI 与微软版权案新近去除涂黑的文件（部分证据仍处于封存状态）披露了
+2023–24 年的内部表态：微软应用科学总监 Brent Hecht 称网络抓取是"人类历史上最大规模的
+劳动盗窃"，并在微软自家数据显示 Copilot 令 NYT 点击率相较普通 Bing 搜索最多下降 93%
+之后，警告 LLM 业务的内容供应链面临"末日循环"。ChatGPT 负责人 Nick Turley 称聊天机器
+人的替代效应对出版商是"生存威胁"；Satya Nadella 在宣誓作证时承认聊天机器人替代了对
+原始来源的访问，并表示如果早知道 OpenAI 用付费墙内容训练，他会要求重新训练。文件还
+指控源自 Bing 索引的抓取、绕过付费墙的策略、删除版权声明，以及中期训练数据中发现
+91,692+ 份出版商作品副本。
+
+**Why it matters:** 这些是原告最有力的证据——被告自己的员工记录了替代性损害，合理
+使用抗辩必须消化这些内容。报道必须携带的语境：法院在"训练即合理使用"上总体仍偏向
+AI 公司，且本届政府最近提交了支持 OpenAI 立场的法庭之友意见书。
+
+[`🔗 TechCrunch`](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49752056)
+
+---
+
+## 38. OpenJev：社区在浏览器里、用一块 3090 本地验证 Jev 的说法
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 177+ 分 · 96 评论 · 7小时前（~09:42 UTC+8）
+- **Tags:** `open-source` `replication` `inference` `wasm`
+
+OpenJev（TheoLeeCJ/openjev，1.4k 星，MIT，今天早上还在推送）是一个纯浏览器复现实验，
+问题直白："我们能在家里用 3090 跑类似 Jev 的东西吗？"——通过 wllama（WASM 版
+llama.cpp）以固定 GGUF 构建运行 Qwen3 0.6B、MiniCPM5 2B 和 Qwen3.5 4B，无后端，输入
+不离开页面。它比较同一已加载模型的两种读取路径：直接读取选项 logits，还是让模型把
+概率生成为 JSON。结果：4B 模型达到 84.5% TypeSafe，而我们 9月16日 报道过的托管版 Jev
+为 88.3%——页面对此直陈不讳，并保留了限定语：其分数是显示选项上的 softmax，并非
+校准置信度，且量化版本与 Jev 的 BF16 不同。
+
+**Why it matters:** 解决有争议的厂商声明，最快的方法是发布数字的本地复现——而这个
+项目公布的是自己的差距，而不是宣称持平。Jev 发布两天后，"便宜 40-400 倍"的说法终于
+有了一个人人可运行的社区验证参照点。
+
+[`🔗 openjev.com`](https://openjev.com/) · [`🔗 github.com/TheoLeeCJ/openjev`](https://github.com/TheoLeeCJ/openjev) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49752041)
+
+---
+
+## 39. FEX-Emu 深拆 x86-TSO：逐核实测模拟到底慢在哪
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 173+ 分 · 35 评论 · 5小时前（~12:09 UTC+8）
+- **Tags:** `emulation` `arm` `memory-model` `performance`
+
+FEX-Emu 团队（为 Snapdragon 上的 Linux 游戏提供动力的用户态 x86-on-ARM 模拟器）讲清了
+"祸根"：在 ARM 宽松内存模型上复现 x86 的全序存储（TSO）。这篇贴满逐核微基准的博文
+发现：LRCPC acquire-load 与苹果的硬件 TSO 开关相比只是"创可贴"（后者在 M1 上损失约
+24% 的存储吞吐）；非对齐访问惩罚在 Cortex-X4 上约 50%，Oryon-3 的 load 约 70%；跨
+64 字节的 split-lock 在 Zen 上耗时约 660ns，而行内原子操作仅 1.44ns（约 458 倍），即便
+最好的 ARM 结果也比 x86 的对齐原子操作慢约 3 倍。真正的杀手是非缓存内存：写合并存储
+带宽最差比 Zen 慢 816 倍，令《丝之歌》等游戏在 PCIe-GPU 板子上跑不到 1 FPS。
+
+**Why it matters:** 这是每一块想运行 x86 游戏生态的 ARM 芯片都需要硬件 TSO 开关与
+coherent-cacheline 设计的工程论证——而且它点明了自己的局限：split-lock 模拟只是尽力
+而为、可能撕裂数据，所提修法出自"并非硬件架构师"的模拟器作者，数字是 FEX 自家的
+微基准，不是端到端游戏帧率。
+
+[`🔗 FEX-Emu 博客`](https://fex-emu.com/Scourge-of-emulation/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49750094)
+
+---
+
+## 40. Thomas Ptacek：《如何与 LLM 一起写作》——让它当文字编辑，绝不当代笔
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 200+ 分 · 126 评论 · 10小时前（~07:48 UTC+8）
+- **Tags:** `writing` `technique` `llm` `community`
+
+Thomas Ptacek（sockpuppet.org）发布了他与 LLM 协作写作的方法：自己起草，然后只把模型
+当文字编辑。规则一："LLM 建议的每一个词你都不能用"——模型写的是杂志标题腔，会磨平
+你的声音，"读者能以万亿分之几的灵敏度嗅出 LLM 的词"。规则二：禁止鼓励，因为条件反射
+式的夸奖会让写作者保留本应推翻的初稿直觉。他的工作流：让模型列出机械性毛病（被动语
+态、填充词、重复措辞），自己重写受影响的段落，再让一个无上下文的模型裁决哪个版本更好。
+他还发布了一个 HTMX/SQLite 的小型写作工坊工具，把编辑 prompt 路由到 Codex、Claude 等
+编码 CLI。
+
+**Why it matters:** 本月被推荐最多的"LLM 时代写作"文章出自安全工程师而非写作教练——
+而且它的规则是可执行的，不是审美的。那条自觉的脚注同样值得带走：GPT-5 判定这篇文章
+超长 20%，"大概是对的"，他照样保留。
+
+[`🔗 sockpuppet.org`](https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49747070)
+
+---
+
+## 41. RustFS 冲上 32.9k 星——Apache-2.0 的 MinIO 替代品保持高频发版
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +559 星/天 · 今天早上发布 1.0.1-preview.5
+- **Tags:** `storage` `rust` `s3` `self-hosted`
+
+RustFS，一个用 Rust 写的 S3 兼容分布式对象存储，是今天涨速最快的基础设施仓库
+（+559 星/天，达 32.9k），并在今天早上再发一个预览版（1.0.1-preview.5，三天内的第三
+个）。README 明确对标 MinIO——"MinIO 的简单性 + Rust 的内存安全"——并直指 AGPL：
+"宽松的 Apache 2.0"对比"限制性的 AGPL v3"，还顺带讽刺 MinIO 的遥测（"防止未经授权的
+跨境数据外发"）。兼容性矩阵显示 S3 核心、版本控制、对象锁、SSE 和 IAM 均已可用；
+S3 Tables（Iceberg REST）和 MinIO 磁盘格式兼容为预览；近期版本加入了 KMS（Vault/AWS）、
+Entra ID OIDC 角色映射和池扩容/退役。
+
+**Why it matters:** MinIO 转向 AGPL 和遥测姿态留出了空档；RustFS 是对这一空档最有力
+的争夺者，而且发版快到"preview"标签成了这个故事里最诚实的部分。注意细节：README 的
+性能部分是 4GB 内存上的自发布压测加一段对比视频，不是可复现的基准。
+
+[`🔗 github.com/rustfs/rustfs`](https://github.com/rustfs/rustfs) · [`🔗 发布页`](https://github.com/rustfs/rustfs/releases)
+
+---
+
+## 42. Waymo 宣布落地新加坡——明年开始绘图，2027 申请监管批准，2028 载客
+
+- **Velocity:** ▮ steady
+- **Source:** Waymo 官方公告 · HN 112+ 分 · 129 评论 · 5小时前（~11:49 UTC+8）
+- **Tags:** `autonomous-vehicles` `waymo` `industry`
+
+Waymo 将把自动驾驶出租车服务带到新加坡：明年在"全区域"开始人工驾驶的绘图与验证，
+2027 年寻求陆路交通管理局（LTA）对其自动驾驶系统的批准，目标 2028 年向乘客开放商业
+服务——全程与交通部和 LTA 协作。公告强调其美国战绩（公共道路 3 亿+ 公里、15+ 城市、
+宣称伤亡事故减少 94%），并将新加坡加入伦敦、东京的筹备名单。
+
+**Why it matters:** 新加坡是迄今为止密度最高、公交导向最强的私家 robotaxi 潜在市场
+——与美国的郊区是完全不同的压力测试。请诚实地读这份时间表：2028 年只是"意向"，且
+以一个尚未评估过这辆车的监管机构为前提。
+
+[`🔗 Waymo：Waymo in Singapore`](https://waymo.com/waymo-in-singapore/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49749981)
+
+---
+
+## 43. Jemalloc 5.4.0：支撑互联网大半根基的分配器发布 160 提交的"还债"版本
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub 发布（9月17日）· HN 194+ 分 · 54 评论 · 5小时前（~12:20 UTC+8）
+- **Tags:** `memory-allocator` `c` `release` `infrastructure`
+
+Jemalloc——内嵌于 Firefox、Redis、FreeBSD 以及无数 C/C++ 服务的内存分配器——于
+9月17日 发布 5.4.0：160+ 提交聚焦技术债清理、重构、bug 修复、测试覆盖与选项清理，
+外加可移植性改进和新的 `EXTENT_ALLOC_FLAG_PINNED` 钩子（用于固定 HugeTLB 页等不可
+回收映射）。它的上一版 5.3.1 在 2026年4月（390+ 提交）——经历过 2022–2025 的沉寂期
+之后，这个项目正处在罕见的高频节奏中。
+
+**Why it matters:** 依赖如此承重的项目发版时，"没有头条特性"恰恰是重点——清理与
+选项移除正是弄坏锁定版本生产构建的东西。运维 Redis/FreeBSD 级技术栈、跟踪分配器
+版本的团队，应在下一次发布前先读选项清理清单。
+
+[`🔗 Jemalloc 5.4.0 发布`](https://github.com/jemalloc/jemalloc/releases/tag/5.4.0) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49750152)
+
+---
+
+## 44. 《无限参数 LLM》：超网络用实时数据"编译"权重——目前只是一套评测协议
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 148+ 分 · 39 评论 · 17小时前（~00:55 UTC+8）
+- **Tags:** `research` `hypernetworks` `architecture` `paper`
+
+《Infinite-Parameter LLMs》（arXiv:2609.18842，Hernández-Lobato 组，剑桥）提出替代
+固定参数库：一个紧凑超网络把运行时数据变成共享基座网络的低秩调制，并对生成器的隐
+编码维持一个在线更新的贝叶斯信念——有效权重在每个会话中重新推导，而不是从存储读出。
+声称的收益：模型体积固定而"可编译权重的空间无限大"、摊销计算、腾出上下文窗口、跨
+轮次持久记忆。
+
+**Why it matters:** 这是权重生成方向（weight-space 学习者）推向逻辑终点的版本——而
+诚实就写在摘要里：**没有报告任何实验数字**。发布的只是"一套恰好针对它的评测协议，
+对比 in-context learning 与检索"。把它当作研究押注，而不是结果。
+
+[`🔗 arXiv:2609.18842`](https://arxiv.org/abs/2609.18842) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49743483)
+
+---
+
+## 45. NVIDIA 的 SoL-Pi：把 RSI 用在 harness 工程上——自报削减 45-49% 的 token 流量
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers · 第2名，38 赞（9月18日批次）
+- **Tags:** `agents` `harness` `rsi` `paper`
+
+SoL-Pi（arXiv:2609.20519，NVIDIA 系作者，含 Song Han、Ligeng Zhu、Enze Xie）把递归
+自我改进应用到 harness 层：自动研究循环在日益多样的环境中扩展，候选改进只有被选中
+才保留——最终四种机制幸存（动作执行、上下文压缩、观测处理、委托阅读）。在 51 个任务
+的 EdgeBench 上声称：在 GPT-5.6 Sol 和 Opus 5 上与 Pi harness 精度相当，同时削减实测
+token 流量 44.7–49.0%、API 成本约三分之一，相对 Pi 每小时约省 $4.36–$5.71。
+
+**Why it matters:** 递归改进的浪潮正从"科研发现循环"（Agora、Dream-RSI）转向 agent
+管道，由选择压力来做编辑。范围限定就写在摘要的名词里：单一 51 任务基准、"recorded"
+流量、节省额是"estimated"——尚无第三方复跑。
+
+[`🔗 arXiv:2609.20519`](https://arxiv.org/abs/2609.20519) · [`🔗 Hugging Face Daily Papers`](https://huggingface.co/papers)
+
+---
+
+## 46. 《当 EOS Token 意见不一》：on-policy 蒸馏让学生变啰嗦，因为师生"停法"不同
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers · 第3名，32 赞（9月18日批次）
+- **Tags:** `distillation` `training` `research` `paper`
+
+《When EOS Tokens Disagree》（arXiv:2609.20511，UNC SciML，代码已发布）诊断了 on-policy
+蒸馏中学生回复长度膨胀直至耗尽生成预算的原因：**终止 token 不匹配**——在 Qwen3、
+Llama 和 Gemma 三个家族中，基础学生与后训练教师的停止概率落在不同的 EOS token 上，
+即便两者声明的停止集合完全一致；这压制了学生自己的终止行为，又未能可靠迁移教师的。
+把功能等价的 EOS token 视为同一个"语义停止动作"，可在三个家族中大幅缓解长度膨胀。
+
+**Why it matters:** 啰嗦的 agent 是直接的成本项（上面的 SoL-Pi 存在的部分原因就是压缩
+蒸馏带来的冗余），而这篇论文给出了一个机制性的、可修的成因。作者自己划的边界：终止
+不匹配"重要但非全部"——对齐之后仍残留一种后期训练特有的长度膨胀。
+
+[`🔗 arXiv:2609.20511`](https://arxiv.org/abs/2609.20511) · [`🔗 github.com/UNCSciML/opd-eos`](https://github.com/UNCSciML/opd-eos)
+
+---
+
+## 47. Anki 26.09：老牌间隔重复应用发布安全修复——本地文件读取与卡组夹带文件执行
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub 发布（9月14–15日）· trending 上 +430 星/天
+- **Tags:** `security` `release` `desktop-apps` `anki`
+
+基于 Rust 的间隔重复应用 Anki（31k 星）于 9月14日 发布 26.09，9月15日 追加 26.09.2
+——两个版本都标注"⚠️ 请尽快升级"。安全修复包括：笔记在编辑器中查看时可读取本地文件；
+编辑器的"打开图片"右键动作不校验文件扩展名，允许共享卡组在某些系统上执行危险文件。
+26.09.2 另修复卡组描述中的外部链接可操纵概览页的问题，以及一个 Windows 启动崩溃；
+本版同时移除了遗留的 `anki.importing`/`anki.exporting` 模块，会破坏部分插件。
+
+**Why it matters:** 共享卡组是一条无人审计的供应链——卡组是数据，而这个版本不再把
+它当可信数据。一个 3000 万用户级的应用悄然修复"卡组夹带文件执行"，正是那种永远拿
+不到 CVE、但值得立刻升级的桌面应用安全故事。
+
+[`🔗 Anki 26.09 发布说明`](https://github.com/ankitects/anki/releases/tag/26.09) · [`🔗 github.com/ankitects/anki`](https://github.com/ankitects/anki)
+
+---
+
+## 48. ByteShape 的 ShapeLearn 量化把 Qwen 3.8 27B 塞进 16 GB 显卡——厂商自测，方法公开
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 77+ 分 · 15 评论 · 7小时前（~10:04 UTC+8）
+- **Tags:** `quantization` `gguf` `inference` `local-llm`
+
+ByteShape（多伦多）发布了针对 Qwen 3.8 27B 的完整 ShapeLearn GGUF 量化：五个档位从
+IQ2_XXS（2.56 bpw）到 IQ4_XS（3.84 bpw），在 RTX Pro 6000 一路测到 RTX 4080/5060 Ti
+——GPU-4 档只需 11.0 GB，瞄准 16 GB 显卡——并通过内嵌 MTP 草稿头或 1.1 GB 的外挂
+DFlash2 草稿模型实现投机解码。分数以 BF16 基线归一化，覆盖 instruct（GSM8K、IFEval、
+MMLU、LiveCodeBench V6）与 thinking（BFCL V4、ACEBench）两套基准，运行于 llama.cpp
+b10430。
+
+**Why it matters:** 消费级 GPU 量化文化如今发布的是 KLD 散度保真曲线，而过去发布的
+是氛围。这篇 post 把免责声明放在了正确的位置：这是厂商自测，投机解码曲线"不能独立
+确立解码方法间的质量等价"，Bartowski 的新量化晚于测试，显存是否装得下取决于上下文
+长度与服务配置。
+
+[`🔗 byteshape.com：ShapeLearn Qwen 3.8 27B`](https://byteshape.com/blogs/Qwen3.8-27B/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49749393)
+
+---
+
+## 49. TSMC A14 节点细节经 IEDM 议程曝光：SRAM 单元小于 0.017μm²，2028 量产
+
+- **Velocity:** ▮ steady
+- **Source:** IEDM 2026 议程 · HN 114+ 分 · 47 评论 · 2天前（9月16日）
+- **Tags:** `semiconductors` `tsmc` `hardware`
+
+IEDM 2026 的一场议程页面（12月14日，旧金山）披露了 TSMC 的 A14 平台论文：NanoFlex Pro
+平台上的第二代纳米片晶体管、"世界最小的 SRAM，单元尺寸 <0.017μm²"，对比 N2：速度提升
+10–15%、功耗降低 25–30%、密度提升约 20%——外加 TSV 支持、4.5μm 的 SoIC 键合间距，
+以及"2028 年量产在轨"。
+
+**Why it matters:** 后 2nm 时代的 AI 硅片排期都在对着 A14 这个节点做；SRAM 单元数字
+是头条，因为 SRAM 缩放正是约束推理加速器片上缓存的瓶颈。注意这只是会议摘要而非硅片
+——数字出自 TSMC 自家，IEDM 论文历来大体落在宣称范围内，但 2028 量产仍是排期声明。
+
+[`🔗 IEDM 2026 Session 3-2`](https://iedm26.mapyourshow.com/8_0/sessions/session-details.cfm?scheduleid=331) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49714096)
+
+---
+
+## 50. 截止日：Chrome 遭在野利用的 V8 零日，联邦机构补丁时钟今天走完
+
+- **Velocity:** ▮ steady
+- **Source:** CISA KEV 目录 · 截止日 2026-09-18
+- **Tags:** `cve` `chrome` `v8` `kev`
+
+CVE-2026-85046——V8 类型混淆，经构造页面可在 Chrome 沙箱内执行代码，已在 Chrome
+152.0.7977.82 修复——于 9月4日 进入 CISA KEV 目录，今天（9月18日）是 BOD 26-04 下的
+联邦修复截止日。Google 已将其作为 2026 年第六个遭在野利用的 Chrome 漏洞完成修补。
+**CVSS 8.8（Google 评分，NVD "Analyzed"）**——是 high 而非 critical，但被列入 KEV 是
+因为它在被利用，与分数无关。
+
+**Why it matters:** 评分的教训再次重演：8.8 分加在野利用，比 10.0 分加无人利用更优先；
+驱动补丁分级的是 KEV 截止日，不是 CVSS 区间。Chromium 嵌入方（Edge、Opera、Electron
+应用）按各自的发布节奏继承修复——Electron 应用尤其要落后 Chrome 数周。
+
+[`🔗 CISA KEV 目录`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`🔗 NVD 记录`](https://nvd.nist.gov/vuln/detail/CVE-2026-85046)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-18T12:20:00+08:00 |
-| Items | 35 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, Hugging Face, NVD, 厂商公告, 厂商博客, 安全媒体) |
+| Generated | 2026-09-18T20:25:00+08:00 |
+| Items | 50 |
+| Sources tracked | 38 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, Hugging Face, NVD, CISA KEV, 厂商公告, 厂商博客, 安全媒体) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (每日 3 次) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-09-18
-updated: 2026-09-18T12:20:00+08:00
+updated: 2026-09-18T20:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -132,7 +132,7 @@ leakage.
 
 **Why it matters:** Live tournament forecasting is one of the cleaner can't-backtest-your-way-
 to-victory benchmarks, so a podium sweep is a real milestone — but the honest headline is
-"AI个体的 top bots now beat most humans while still losing the team series to the pros."
+"the top bots now beat most humans while still losing the team series to the pros."
 
 [`🔗 Metaculus analysis notebook`](https://www.metaculus.com/notebooks/43363/ai-forecasting-in-2026/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49742021)
 
@@ -783,13 +783,373 @@ with stale firmware wins the election. Netnod's own caveat: the TAP report is no
 
 ---
 
+## 36. ZCode, Zhipu's coding agent desktop app, silently uploads your entire workspace — including full Git history
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 83+ pts, 16 comments · 6h ago (~10:35 UTC+8)
+- **Tags:** `privacy` `supply-chain` `zhipu` `coding-agents`
+
+A researcher freeing disk space found `~/.zcode` at 700MB+ including a 313MB `.enc` blob with
+564 failed upload attempts against a 345MB workspace — then reverse-engineered the Electron
+`app.asar` and reconstructed the flow: on every prompt and task completion, the client requests
+an RSA public key and OSS signatures from `zcode.z.ai`, packs the workspace into a tar.gz,
+encrypts it, and POSTs it to Aliyun OSS. A plaintext manifest of one snapshot (42,411 files)
+shows `.git` is 86.6% of the payload: 196MB of LFS assets, 102MB of commit objects, reflogs
+with unpushed branch names — plus `.git/config` internal hostnames and secrets deleted in later
+commits. The RSA private key stays server-side, so the author argues neither the user nor the
+client can decrypt what was sent; two UI toggles ("Optimize Experience," "Repo Snapshot
+Indexing") don't stop the capture, which is gated only on a valid JWT. A second writeup
+published the same day corroborates the core finding.
+
+**Why it matters:** The trust boundary for coding agents is being set by desktop apps that
+ship whole repositories — history, reflogs, secrets and all — to training infrastructure.
+Carry the caveats: this is one researcher's reverse-engineering of one client version, with no
+vendor response yet and no server-side confirmation of retention; the privacy policy's
+"optimization program is off by default" line is what this finding appears to contradict.
+
+[`🔗 ferstar blog: reverse-engineering writeup`](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) · [`🔗 tokenstead.ai: independent writeup`](https://tokenstead.ai/guides/zcode-silent-git-history-upload) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49752422)
+
+---
+
+## 37. Unredacted NYT v. OpenAI filings: Microsoft's own data showed Copilot cut NYT click-through up to 93%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** TechCrunch on newly unredacted filings · HN 246+ pts, 175 comments · 8h ago (~09:45 UTC+8)
+- **Tags:** `ai-policy` `copyright` `litigation` `openai`
+
+Newly unredacted filings in the New York Times' copyright suit against OpenAI and Microsoft
+(several exhibits still sealed) reveal internal statements from 2023–24: Microsoft applied-
+science director Brent Hecht called web scraping "the largest theft of labor in human
+history" and warned of a "doom loop" for the content supply chain, after Microsoft's own data
+showed Copilot cut NYT click-through rates by up to 93% versus standard Bing search. ChatGPT
+head Nick Turley called chatbot substitution an "existential threat" for publishers; Satya
+Nadella testified under oath that chatbots substitute for visiting the source and that, had he
+known OpenAI trained on paywalled material, he would have required retraining. The filings
+also allege Bing-Index-derived scraping, paywall-circumvention tactics, and stripped copyright
+notices, with 91,692+ copies of publisher works found in mid-training datasets.
+
+**Why it matters:** These are the plaintiffs' strongest exhibits — the defendants' own
+employees documenting substitution harm that fair-use defenses must now absorb. Context the
+coverage must carry: courts have still generally favored AI companies on training-as-fair-use,
+and the administration recently filed a brief supporting OpenAI's position.
+
+[`🔗 TechCrunch`](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49752056)
+
+---
+
+## 38. OpenJev: the community tests Jev's claims locally — in your browser, on a 3090
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 177+ pts, 96 comments · 7h ago (~09:42 UTC+8)
+- **Tags:** `open-source` `replication` `inference` `wasm`
+
+OpenJev (TheoLeeCJ/openjev, 1.4k stars, MIT, pushed this morning) is a browser-only
+replication experiment asking "can we run something like Jev on a 3090 at home?" — running
+Qwen3 0.6B, MiniCPM5 2B and Qwen3.5 4B as pinned GGUF builds via wllama (WASM llama.cpp), no
+backend, inputs never leaving the page. It compares two readout paths from the same loaded
+model: reading option logits directly versus asking the model to generate its probabilities as
+JSON. Result: the 4B model reaches 84.5% TypeSafe versus 88.3% for the hosted Jev we covered
+Sep 16 — which the page states plainly, alongside the hedges that its scores are softmax over
+displayed options, not calibrated confidence, and that quantization differs from Jev's BF16.
+
+**Why it matters:** The fastest way to settle a disputed vendor claim is a local replication
+with published numbers — and this one publishes its own shortfall instead of claiming parity.
+Two days after Jev's launch, the "40-400× cheaper" framing now has a community-verified
+reference point anyone can run.
+
+[`🔗 openjev.com`](https://openjev.com/) · [`🔗 github.com/TheoLeeCJ/openjev`](https://github.com/TheoLeeCJ/openjev) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49752041)
+
+---
+
+## 39. FEX-Emu's x86-TSO deep dive: what actually makes emulation slow, measured per core
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 173+ pts, 35 comments · 5h ago (~12:09 UTC+8)
+- **Tags:** `emulation` `arm` `memory-model` `performance`
+
+The FEX-Emu team (the usermode x86-on-ARM emulator behind Linux gaming on Snapdragon) laid
+out the "scourge": reproducing x86's Total Store Ordering on ARM's relaxed memory model. The
+post, dense with per-core microbenchmarks, finds LRCPC acquire-loads are "bandages" compared
+with Apple's hardware TSO toggle (which costs ~24% of store throughput on M1); unaligned
+access penalties run ~50% on Cortex-X4 and ~70% on loads for Oryon-3; a 64-byte-crossing
+split-lock costs ~660ns on Zen versus 1.44ns for an in-line atomic (~458×), and even the best
+ARM result is ~3× slower than x86 for aligned atomics. The killer is uncached memory: write-
+combined stores run up to 816× worse in bandwidth than Zen, leaving games like Silksong below
+1 FPS on PCIe-GPU boards.
+
+**Why it matters:** This is the engineering case for hardware TSO toggles and coherent-
+cacheline designs in every ARM chip that wants to run the x86 game canon — and it names its
+own limits: split-lock emulation is best-effort and can tear data, the fixes proposed are from
+emulator authors "not hardware architects," and the numbers are FEX's own microbenchmarks, not
+end-to-end game frames.
+
+[`🔗 FEX-Emu blog`](https://fex-emu.com/Scourge-of-emulation/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49750094)
+
+---
+
+## 40. Thomas Ptacek: "How to Write with an LLM" — copyeditor, never ghostwriter
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 200+ pts, 126 comments · 10h ago (~07:48 UTC+8)
+- **Tags:** `writing` `technique` `llm` `community`
+
+Thomas Ptacek (sockpuppet.org) published his writing-with-LLMs method: draft it yourself, then
+use the model strictly as a copyeditor. Rule One: "You may not use a single word an LLM
+suggests to you" — models write in a magazine-headline register that flattens voice, and
+"readers can detect LLM words in the parts per trillion." Rule Two: forbid encouragement,
+because reflexive praise makes writers preserve weak first-draft instincts. His workflow: have
+the model list mechanical flaws (passive voice, filler, repeated phrasing), rewrite the
+affected sections yourself, then have a context-free model judge which version is better. He
+also shipped a small HTMX/SQLite workshopping tool that routes editing prompts through coding
+CLIs.
+
+**Why it matters:** The most-recommended writing-in-the-LLM-era essay of the month comes from
+a security engineer, not a writing coach — and its rules are operational, not aesthetic. The
+self-aware footnote travels: GPT-5 judged the piece 20% too long, "probably correct," and he
+kept it anyway.
+
+[`🔗 sockpuppet.org`](https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49747070)
+
+---
+
+## 41. RustFS trends at 32.9k stars — the Apache-2.0 MinIO alternative keeps shipping previews
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +559 stars/day · 1.0.1-preview.5 released this morning
+- **Tags:** `storage` `rust` `s3` `self-hosted`
+
+RustFS, an S3-compatible distributed object store written in Rust, is today's fastest-rising
+infrastructure repo (+559 stars/day to 32.9k) and cut a new preview release this morning
+(1.0.1-preview.5, third in three days). The README positions it explicitly against MinIO —
+"simplicity of MinIO with memory safety of Rust" — and against AGPL: "Permissive Apache 2.0"
+versus "restrictive AGPL v3," plus a swipe at MinIO's telemetry ("guards against unauthorized
+cross-border data egress"). The compatibility matrix shows S3 core, versioning, object lock,
+SSE and IAM as available; S3 Tables (Iceberg REST) and MinIO on-disk compatibility are
+preview; recent releases added KMS (Vault/AWS), Entra ID OIDC role mapping, and pool
+expansion.
+
+**Why it matters:** MinIO's AGPL turn and telemetry posture created the opening; RustFS is
+the best-capitalized claim on it, and it's shipping fast enough that the preview tag is the
+honest part of the story. Note the fine print: the README's performance section is a
+self-published stress test on 4GB of RAM with a comparison video, not a reproducible
+benchmark.
+
+[`🔗 github.com/rustfs/rustfs`](https://github.com/rustfs/rustfs) · [`🔗 releases`](https://github.com/rustfs/rustfs/releases)
+
+---
+
+## 42. Waymo announces Singapore — mapping next year, regulatory approval 2027, riders 2028
+
+- **Velocity:** ▮ steady
+- **Source:** Waymo announcement · HN 112+ pts, 129 comments · 5h ago (~11:49 UTC+8)
+- **Tags:** `autonomous-vehicles` `waymo` `industry`
+
+Waymo will bring robotaxi service to Singapore: manual mapping and validation drives across
+"all regions" begin next year, it intends to seek Land Transport Authority approval for its
+autonomous system in 2027, and it targets opening commercial service to riders in 2028 —
+working with the Ministry of Transport and LTA throughout. The announcement leans on its US
+record (300M+ km on public roads, 15+ cities, a claimed 94% reduction in injury-causing
+crashes) and adds Singapore to the London/Tokyo preparation list.
+
+**Why it matters:** Singapore is the densest, most transit-oriented market yet where a private
+robotaxi fleet would operate — a genuinely different stress test than US suburbs. Read the
+timeline honestly: the 2028 date is stated as an intention, contingent on a regulator that has
+not yet evaluated the driver.
+
+[`🔗 Waymo: Waymo in Singapore`](https://waymo.com/waymo-in-singapore/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49749981)
+
+---
+
+## 43. Jemalloc 5.4.0: the allocator under much of the internet ships a 160-commit debt-cleanup release
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub release (Sep 17) · HN 194+ pts, 54 comments · 5h ago (~12:20 UTC+8)
+- **Tags:** `memory-allocator` `c` `release` `infrastructure`
+
+Jemalloc — the allocator embedded in Firefox, Redis, FreeBSD and countless C/C++ services —
+released 5.4.0 on Sep 17: 160+ commits focused on technical-debt cleanup, refactorings, bug
+fixes, test coverage and option cleanups, plus portability improvements and a new
+`EXTENT_ALLOC_FLAG_PINNED` hook for pinning non-reclaimable mappings such as HugeTLB pages.
+It follows 5.3.1 (April 2026, 390+ commits) — the project is in an unusually active cadence
+after the 2022–2025 quiet stretch.
+
+**Why it matters:** When a dependency this load-bearing ships, "no headline features" is the
+point — cleanups and option removals are exactly what breaks pinned production builds. Ops
+teams tracking allocator versions for Redis/FreeBSD-class stacks should read the option
+cleanup list before the next rollout.
+
+[`🔗 Jemalloc 5.4.0 release`](https://github.com/jemalloc/jemalloc/releases/tag/5.4.0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49750152)
+
+---
+
+## 44. "Infinite-Parameter LLMs": a hypernetwork compiles weights from live data — as an evaluation protocol, for now
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 148+ pts, 39 comments · 17h ago (~00:55 UTC+8)
+- **Tags:** `research` `hypernetworks` `architecture` `paper`
+
+"Infinite-Parameter LLMs" (arXiv:2609.18842, Hernández-Lobato group, Cambridge) proposes
+replacing the fixed parameter bank: a compact hypernetwork turns runtime data into a low-rank
+modulation of a shared base network, carrying a Bayesian belief over the generator's latent
+code that updates online — so effective weights are re-derived each session instead of read
+from storage. The claimed benefits: fixed model footprint with an "effectively infinite" space
+of compilable weights, amortized compute, a freed context window, and persistence across
+turns.
+
+**Why it matters:** It's the weight-generation direction (hotnets, weight-space learners)
+pushed to its logical endpoint — and the honesty is in the abstract itself: **no empirical
+numbers are reported**. What ships is "an evaluation protocol that tests exactly this against
+in-context learning and retrieval." Treat it as a research bet, not a result.
+
+[`🔗 arXiv:2609.18842`](https://arxiv.org/abs/2609.18842) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49743483)
+
+---
+
+## 45. NVIDIA's SoL-Pi: RSI applied to harness engineering — 45-49% token traffic cut, self-reported
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers · #2, 38 upvotes (Sep 18 batch)
+- **Tags:** `agents` `harness` `rsi` `paper`
+
+SoL-Pi (arXiv:2609.20519, NVIDIA-affiliated authors including Song Han, Ligeng Zhu and Enze
+Xie) applies recursive-self-improvement at the harness layer: auto-research loops are scaled
+across increasingly diverse environments, and candidate improvements are kept only if selected
+— four mechanisms survive (action execution, context compaction, observation handling,
+delegated reading). Claimed results on a 51-task EdgeBench: comparable accuracy to the Pi
+harness on GPT-5.6 Sol and Opus 5 while cutting recorded token traffic 44.7–49.0% and API cost
+by roughly a third, worth an estimated $4.36–$5.71/hour versus Pi.
+
+**Why it matters:** The recursive-improvement wave moves from research-discovery loops (Agora,
+Dream-RSI) to agent plumbing, with selection pressure doing the editing. The scope is carried
+in the abstract's own nouns: one 51-task benchmark, "recorded" traffic, savings "estimated" —
+no third-party run exists yet.
+
+[`🔗 arXiv:2609.20519`](https://arxiv.org/abs/2609.20519) · [`🔗 Hugging Face Daily Papers`](https://huggingface.co/papers)
+
+---
+
+## 46. "When EOS Tokens Disagree": on-policy distillation makes students verbose because teachers and students stop differently
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Daily Papers · #3, 32 upvotes (Sep 18 batch)
+- **Tags:** `distillation` `training` `research` `paper`
+
+"When EOS Tokens Disagree" (arXiv:2609.20511, UNC SciML, code released) diagnoses why
+students in on-policy distillation inflate response length until they exhaust the generation
+budget: a **termination-token mismatch** — across Qwen3, Llama and Gemma families, base
+students and post-trained teachers place stopping probability on different EOS tokens even
+when their declared stopping sets are identical, suppressing the student's own termination
+without reliably transferring the teacher's. Treating functionally equivalent EOS tokens as a
+shared semantic stopping action substantially mitigates the inflation in all three families.
+
+**Why it matters:** Verbose agents are a direct cost line (SoL-Pi above exists partly to
+compact what distillation bloated), and this gives a mechanistic, fixable cause. The authors'
+own boundary: termination mismatch is "important, but not exhaustive" — a distinct late-training
+inflation persists after alignment.
+
+[`🔗 arXiv:2609.20511`](https://arxiv.org/abs/2609.20511) · [`🔗 github.com/UNCSciML/opd-eos`](https://github.com/UNCSciML/opd-eos)
+
+---
+
+## 47. Anki 26.09: the spaced-replication staple ships security fixes for local-file reads and deck-borne file execution
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub releases (Sep 14–15) · +430 stars/day on trending
+- **Tags:** `security` `release` `desktop-apps` `anki`
+
+Anki, the Rust-based spaced-repetition app (31k stars), released 26.09 on Sep 14 followed by
+26.09.2 on Sep 15 — both flagged "⚠️ Please upgrade as soon as possible." The security fixes:
+notes could read local files when viewed in the editor, and the "Open image" context-menu
+action didn't validate file extensions, allowing shared decks to execute dangerous files on
+some systems. 26.09.2 adds a fix for external links in deck descriptions manipulating the
+overview page, plus a Windows startup-crash fix; the release also removes the legacy
+`anki.importing`/`anki.exporting` modules, breaking some add-ons.
+
+**Why it matters:** Shared decks are a supply chain nobody audits — a deck is data that this
+release stopped treating as trusted. A 30M-user app quietly shipping deck-borne file
+execution fixes is exactly the class of desktop-app security story that never gets a CVE and
+still deserves the upgrade.
+
+[`🔗 Anki 26.09 release notes`](https://github.com/ankitects/anki/releases/tag/26.09) · [`🔗 github.com/ankitects/anki`](https://github.com/ankitects/anki)
+
+---
+
+## 48. ByteShape's ShapeLearn quants put Qwen 3.8 27B on a 16 GB card — vendor benchmarks, published methodology
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 77+ pts, 15 comments · 7h ago (~10:04 UTC+8)
+- **Tags:** `quantization` `gguf` `inference` `local-llm`
+
+ByteShape (Toronto) published its full ShapeLearn GGUF quantization run for Qwen 3.8 27B:
+five levels from IQ2_XXS (2.56 bpw) to IQ4_XS (3.84 bpw), tested on RTX Pro 6000 down to
+RTX 4080/5060 Ti — the GPU-4 tier fits 11.0 GB, targeting 16 GB cards — plus speculative
+decoding via an embedded MTP draft head or a 1.1 GB external DFlash2 draft. Scores are
+normalized to a BF16 baseline across instruct (GSM8K, IFEval, MMLU, LiveCodeBench V6) and
+thinking (BFCL V4, ACEBench) suites, run on llama.cpp b10430.
+
+**Why it matters:** Consumer-GPU quantization culture now publishes KLD-divergence fidelity
+curves where it once published vibes. The post carries its own disclaimers in the right
+places: it's vendor self-benchmarking, speculative-decoding plots "do not independently
+establish quality equivalence," Bartowski's newer quants postdated testing, and VRAM fit
+depends on context length and serving config.
+
+[`🔗 byteshape.com: ShapeLearn Qwen 3.8 27B`](https://byteshape.com/blogs/Qwen3.8-27B/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49749393)
+
+---
+
+## 49. TSMC's A14 node details surface in an IEDM session: sub-0.017μm² SRAM, 2028 production
+
+- **Velocity:** ▮ steady
+- **Source:** IEDM 2026 program · HN 114+ pts, 47 comments · 2 days ago (Sep 16)
+- **Tags:** `semiconductors` `tsmc` `hardware`
+
+An IEDM 2026 session listing (Dec 14, San Francisco) reveals TSMC's A14 platform paper:
+second-generation nano-sheet transistors on the NanoFlex Pro platform, "the world's smallest
+SRAM with a cell size <0.017μm²," and versus N2: 10–15% speed gain, 25–30% power reduction,
+~20% density increase — plus TSV support, a 4.5μm SoIC bond pitch, and volume production "on
+track for 2028."
+
+**Why it matters:** A14 is the node the post-2nm AI-silicon wave is being scheduled against;
+the SRAM cell number is the headline because SRAM scaling is what constrains on-chip cache
+for inference accelerators. It's a session abstract, not silicon — numbers are TSMC's own and
+IEDM papers have historically landed within claimed envelopes, but 2028 volume production
+remains a schedule claim.
+
+[`🔗 IEDM 2026 session 3-2`](https://iedm26.mapyourshow.com/8_0/sessions/session-details.cfm?scheduleid=331) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49714096)
+
+---
+
+## 50. Deadline day: federal agencies' patch clock runs out today for Chrome's actively-exploited V8 zero-day
+
+- **Velocity:** ▮ steady
+- **Source:** CISA KEV catalog · deadline 2026-09-18
+- **Tags:** `cve` `chrome` `v8` `kev`
+
+CVE-2026-85046 — type confusion in V8 allowing code execution inside Chrome's sandbox via a
+crafted page, fixed in Chrome 152.0.7977.82 — was added to CISA's KEV catalog on Sep 4, and
+today (Sep 18) is the federal remediation deadline under BOD 26-04. Google has patched it as
+the sixth actively-exploited Chrome vulnerability of 2026. **CVSS 8.8 (Google-assigned,
+NVD "Analyzed")** — high, not critical, but KEV-listed because it is being used, not because
+of the score.
+
+**Why it matters:** The scoring lesson repeats: an 8.8 with active exploitation outranks a
+10.0 with none, and KEV deadlines, not CVSS bands, are what drive patch triage. Chromium
+embedders (Edge, Opera, Electron apps) inherit the fix on their own release cadence — Electron
+apps in particular lag Chrome by weeks.
+
+[`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-85046)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-18T12:20:00+08:00 |
-| Items | 35 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, Hugging Face, NVD, vendor advisories, vendor blogs, security press) |
+| Generated | 2026-09-18T20:25:00+08:00 |
+| Items | 50 |
+| Sources tracked | 38 (Hacker News, GitHub Trending, HF Daily Papers, arXiv, Hugging Face, NVD, CISA KEV, vendor advisories, vendor blogs, security press) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+
+[Previous day](../archive/2026-09-17.md) · [Raw .md](./2026-09-18.md) · [Archive](../archive/index.md)
