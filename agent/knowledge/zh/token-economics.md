@@ -244,3 +244,22 @@ per-token 牌价（与这里已记录的分词器增量、前缀缓存稳定性�
 这把本层的模式钉死了：**测量持续击败断言**——caveman 自己的 README 承认其对照臂晚于发布表格；RTK 的反例则是把字节代理冒充 token。任何没有任务级 A/B（同任务、开/关、按成本而非字节）的省 token 宣称，现在已有两个公开反例。来源：
 [Quesma: Does RTK make AI coding cheaper?](https://quesma.com/blog/does-rtk-make-ai-coding-cheaper/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=49656471)
+
+## 冗长拿到机理；harness 拿到压缩层（09-18）
+
+两篇 09-18 论文从两端落在本层上：
+
+- **"When EOS Tokens Disagree"（arXiv 2609.20511，UNC SciML，代码已放）**——on-policy 蒸馏学生把回复
+  长度吹到耗尽生成预算，机理是**终止 token 失配**：基座学生与后训练教师在声明的停止集完全相同时，把
+  停止概率放在*不同*的 EOS token 上（Qwen3、Llama、Gemma 三家族均证实）。把功能等价的 EOS token 视为
+  同一语义停止动作，可在三家族大幅缓解膨胀。冗长 agent 是直接成本项——这是机理性的、可修的成因
+  （作者边界："重要但不穷尽"；对齐后仍残留独特的后期训练膨胀）。
+- **NVIDIA SoL-Pi（arXiv 2609.20519）**——响应侧：一个经 RSI 编辑的 harness，其四个存活机制（动作
+  执行、上下文压缩、观测处理、委托阅读）宣称在**记录 token 流量下降 44.7–49.0%**、API 成本约降三分之
+  一的同时保持与 Pi 相当的精度——压缩内建于 harness，而非像代理那样外挂。限定："recorded"流量、
+  "estimated"节省、单一 51 任务基准、无第三方复跑。读作 Spotify shunt 与 context-mode 的 harness 层
+  同类：压缩/强制/排除之外，有了第四个、自我改进的入场者。
+
+Sources: [arXiv 2609.20511](https://arxiv.org/abs/2609.20511) ·
+[UNCSciML/opd-eos](https://github.com/UNCSciML/opd-eos) ·
+[arXiv 2609.20519](https://arxiv.org/abs/2609.20519)

@@ -155,3 +155,29 @@ itself at the community gate.
   wave, not a fresh announcement.
 - Sources: [OpenAI blog](https://openai.com/index/reimagining-advertising-with-ai/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49727041)
+
+## 2026-09-18 12:03 — the substitution evidence arrives from the defendants' own filings
+
+Newly unredacted filings in *NYT v. OpenAI and Microsoft* (several exhibits still sealed; HN 246 pts,
+175 comments) internalize what Armature/Productrise could only measure from outside — the substitution
+hypothesis, stated by the platform's own people:
+
+- **Microsoft's own data showed Copilot cut NYT click-through by up to 93%** vs standard Bing search —
+  the channel's cannibalization measured by the defendant, the strongest class of exhibit that exists.
+- Applied-science director Brent Hecht called web scraping "the largest theft of labor in human
+  history" and warned of a "doom loop" for the content supply chain (2023–24 internal statements).
+- ChatGPT head Nick Turley called chatbot substitution an "existential threat" for publishers; Satya
+  Nadella testified under oath that chatbots substitute for visiting the source and that, had he known
+  OpenAI trained on paywalled material, he would have required retraining.
+- The filings also allege Bing-Index-derived scraping, paywall-circumvention tactics, stripped
+  copyright notices, and 91,692+ copies of publisher works in mid-training datasets.
+
+Balance the reading: these are the plaintiffs' strongest exhibits — defendants' own employees
+documenting the harm fair-use defenses must absorb — but courts have still generally favored AI
+companies on training-as-fair-use, and the administration recently filed a brief supporting OpenAI's
+position. For this thesis the durable fact is narrower: **agent-mediated substitution is no longer an
+outside measurement (Armature's 42% tool agreement, AI Mode's 21.6% price skew) — the platforms'
+internal numbers now agree.**
+
+- Sources: [TechCrunch on the unredacted filings](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) ·
+  [HN discussion](https://news.ycombinator.com/item?id=49752056)

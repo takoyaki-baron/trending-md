@@ -55,3 +55,68 @@ Limbo は無修正の Doom を SQLite VDBE バイトコードとして実行（�
 が公称距離の 7–13× 過大を指摘：Void の教訓をオープンハードウェアに）；llama.cpp v0.3.0（`mtmd` マルチモーダル
 統合、ggml v0.22.0）；nautilus_trader 2.x Rust ネイティブ API；microduck_rl（Microduck の sim-to-real
 ループのトレーニング側）。
+
+## 2026-09-18 12:03→20:03 —— リリースとポストモーテムのバッチ
+
+- **Flet 1.0**（9月14日、16.9k★、9月18日も push あり）——「Python の Flutter」が約 4 年で 1.0 に到達。
+  声明としての破壊的変更（非推奨 API の削除：`app()`→`run()`、`ElevatedButton`→`Button`、
+  `Page.go()`→`push_route()`；リリースノート 67KB）。ヘッドライン機能：**client actions**——ジェスチャ
+  ゲートのハンドラが iOS Safari の元のタップ内でファイルピッカー/クリップボード/共有シートを Python
+  往復なしで実行——サーバードリブン UI が通常直せない非同期ジェスチャ死地のクラスを修正。移行必須の
+  1.0 = API が契約になったということ。
+- **RustFS**——S3 互換の Rust オブジェクトストアが 32.9k★（+559/日）でトレンドに、1.0.1-preview.5 を
+  リリース（3 日で 3 つ目の preview）。位置づけは明示：Apache-2.0 対 MinIO の AGPL、さらに反テレメトリの
+  一撃。互換マトリクス：S3 コア/バージョニング/オブジェクトロック/SSE/IAM は利用可；S3 Tables（Iceberg
+  REST）と MinIO ディスク互換は preview；最近のリリースで KMS（Vault/AWS）、Entra ID OIDC ロール
+  マッピング、プール拡張を追加。細部：README の性能節は 4GB RAM の自己発表ストレステスト+動画で、
+  再現可能なベンチマークではない。preview タグこそ正直な部分——MinIO の AGPL 転換が空位を作り、
+  RustFS はそれを狙う最良の資本を持つ候補。
+- **Jemalloc 5.4.0**（9月17日、HN 194 pts）——160+ コミットの技術的負債の清算、リファクタ、テスト
+  カバレッジ、オプション整理 + 新規 `EXTENT_ALLOC_FLAG_PINNED` フック（HugeTLB クラスの再利用不可
+  マッピングのピン留め）；5.3.1（2026 年 4 月、390+ コミット）に続く——2022–2025 の静寂期後として
+  異例に活発な cadence。これだけの酒矢の依存（Firefox、Redis、FreeBSD）では「ヘッドライン機能なし」
+  こそが要点：オプションの削除こそ pinned 本番ビルドを壊すもの。
+- **FEX-Emu の x86-TSO 深掘り**（HN 173 pts）——x86-on-ARM エミュレーションがどこで遅いのか、コアごと
+  の計測：LRCPC acquire-load は Apple のハードウェア TSO トグル比で「絆創膏」（M1 で store スループット
+  の ~24% を消費）；非整列ペナルティは Cortex-X4 で ~50%、Oryon-3 の load で ~70%；64 バイト
+  split-lock は Zen で ~660ns、整列アトミック 1.44ns（~458×）；最良の ARM 整列アトミックでも x86 より
+  ~3× 遅い；uncached write-combined store は帯域で最大 **816×** 悪化（PCIe-GPU ボードで Silksong <1
+  FPS）。x86 ゲームの正典を走らせたい全 ARM チップにハードウェア TSO トグルを、という工学的論証。
+  自らの限界：split-lock エミュレーションはベストエフォートでデータを撕裂し得る；修正案はエミュレータ
+  作者によるもので「ハードウェア設計者からではない」；マイクロベンチであってエンドツーエンドの
+  フレームではない。
+- **Uber のリトライストームの数学**（エンジニアリングブログ、HN 67 pts）——2025 年 11 月、呼び出し
+  チェーン 5+ 層の深いサービスの障害：ホップごとの素朴なリトライは **R^d** で増幅する。修正：エラー
+  オーナーシップ——失敗している発信呼びを持たないサービスだけがエラーを所有する——Service Dependency
+  Analysis システム + `x-uber-error-claim` ヘッダで実装；メッシュ全体で約 950 万の偽リクエストを停止、
+  ユーザー向け API の最大ストーム半径 25→3。正直な限界も携行：リトライ予算だけでは劣化サービスに
+  46–135% 追加していた；予算はベースエラー率 ~10% までしか保持；高失敗率で ~2% の誤った unclaim。
+- **Telstra の 2006 タイムループ障害**（TAP 調査の Netnod による再構成）——2025 年 10 月に workaround
+  として有効化された GPS レシーバカード、2020 年のアップグレード以降ファームウェア更新されず、再起動後
+  年を **2006** と仮定（GPS の 10 ビット週カウンタは 1,024 週 ≈ 19.6 年ごとにロール；電源を落とした
+  カードはエポックを失う）。stratum-1 の選挙に勝って誤った時刻を伝播させ、2020 年代のサイト間 peering
+  が誤値に収束するタイミングループを作った——通話、SMS、緊急通報、列車、決済端末が全滅。「プロトコルは
+  動いた；アーキテクチャが動かなかった。」1,024 週ロールは 2010 年以前の全 GPS 配備の生存期間内に
+  入っている；Netnod の留保：peering がなぜ変わったか TAP レポートは不明確——そこは著者の推論。
+- **TSMC A14 の詳細が IEDM 2026 セッション一覧から表面化**（HN 114 pts）——NanoFlex Pro プラットフォーム
+  の第 2 世代ナノシートトランジスタ；**<0.017μm²** セルの「世界最小 SRAM」（オンチップ推論キャッシュに
+  こそ効く数字）；N2 比：速度 +10–15%、電力 −25–30%、密度 +20%；TSV 対応、4.5μm SoIC ボンディング
+  ピッチ；量産「2028 年に順調」。セッション要旨であってシリコンではない——数値は TSMC 自身、2028 は
+  スケジュール主張。
+- **Bend 2**（bendlang/bend、20.6k★、Apache-2.0）——Python 構文 → ネイティブ/GPU、Lean/Rocq 風の証明
+  チェック型チェッカーでエージェントの編集のたびに約 1 秒で `LAWS.bend` の不変条件を検証——「バグの
+  マージは数学的に不可能：それは定理。」狙いはまさにエージェントコードレビューのギャップ（証明裏付けの
+  AGENTS.md）。細部：20,615 星は 2024 年の旧リポジトリから引き継がれ、その履歴は**単一コミットに潰され
+  た**（44 名の貢献者の作業は HigherOrderCO/Bend1 へ——HN で最も大きい批判）；作者はコンパイラに
+  「今は多量の gambiarra と AI slop」があると認める；ベンチマークは自己公表；「expect bugs」。
+  （仕様=実行可能契約の読み → テーゼ 10、[[agent-plugins]]。）
+- Sources: [flet.dev](https://flet.dev/) ·
+  [flet-dev/flet](https://github.com/flet-dev/flet) ·
+  [rustfs/rustfs](https://github.com/rustfs/rustfs) ·
+  [Jemalloc 5.4.0](https://github.com/jemalloc/jemalloc/releases/tag/5.4.0) ·
+  [FEX-Emu: Scourge of emulation](https://fex-emu.com/Scourge-of-emulation/) ·
+  [Uber blog](https://www.uber.com/us/en/blog/protecting-against-retry-storms/) ·
+  [Netnod: Telstra outage](https://www.netnod.se/blog/telstra-outage-night-network-decided-year-was-2006) ·
+  [IEDM 2026 session 3-2](https://iedm26.mapyourshow.com/8_0/sessions/session-details.cfm?scheduleid=331) ·
+  [bend-lang.com](https://bend-lang.com/) ·
+  [bendlang/bend](https://github.com/bendlang/bend)

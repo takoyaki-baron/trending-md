@@ -1849,3 +1849,66 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [SecurityWeek: BIND](https://www.securityweek.com/isc-patches-14-vulnerabilities-in-bind-9-security-update/) ·
   [Helpfeel notice](https://corp.helpfeel.com/en/news/news-20260916) ·
   [The Hacker News: Gyazo](https://thehackernews.com/2026/09/gyazo-breach-exposes-2362-million-user.html)
+
+## 2026-09-18 12:03→20:03 — 插件 pin 不是边界；管理平面再次沦陷；未打标的修复让下游发行版裸奔
+
+- **Plugin4Shell（AIR Security，9 月 17 日）**——编码 agent 插件/技能 SHA-pin 机制的绕过：agent 会
+  checkout 市场钉住的精确 commit，却**从不验证该 commit 是否真的落在那里**——控制插件仓库的攻击者
+  可以让 checkout 解析到恶意代码，而 pin 看似依然成立——在 Claude Code、OpenAI Codex、GitHub
+  Copilot、Gemini CLI 上均报告零点击宿主 RCE。按厂商自己的时间线：Claude Code 已在 2.1.179 修复
+  （6 月 17 日），Codex 在 0.146.0 修复（8 月 12 日验证），**Copilot 未修复**，Google 8 月 4 日确认
+  永不修复 Gemini CLI（已弃用）。保留限定：无 CVE 编号；"数百万 agent"的说法出自一家贩卖 agent
+  安全市场的厂商；利用是报告而非野外观测。并入技能供应链谱系（vercel-labs/skills、tech-leads-club
+  的验证主张、Claude-Red）：整套 pin 清单假设的边界，其实是 git 宿主的 checkout 语义。
+- **Cisco 9 月 16 日大礼包**——18 个 FMC CVE（含 CVE-2026-20324 sftunnel 认证后 root RCE 9.9；
+  CVE-2026-20242 Java 反序列化 RCE 9.8）+ 20 个 ISE CVE，其中第二个 10.0 分未认证 REST-API 认证绕过
+  CVE-2026-76423——与 9 月 17 日已覆盖的 KEV 零日 CVE-2026-76460 是两个漏洞，后者随同一批修复——另
+  有 Nexus Dashboard。评分纪律：两个头条 CVE 均为 **Cisco PSIRT 自评，NVD 仍 "Awaiting Analysis"**；
+  Cisco 自认三个 ISE 漏洞在公开披露后才修复；野外被实际利用的 FMC 漏洞是更早的 3 月/7 月那批。
+- **"Hacking OpenAI"（Hacktron 对 7 月事件的复盘）**——community.openai.com 上经
+  Discourse→ImageMagick 的 HEIC 上传触达 libheif 堆溢出，拿到论坛 RCE；由于上游修复**未按安全更新
+  打标**，没有 CVE，Debian 12/13 与 Discourse 官方 Docker 镜像都在带洞版本上。再链一个 SSO 配置
+  错误，研究者进入了员工的 ChatGPT/Codex 账号、在内部 monorepo 开了 PR；OpenAI 支付 $6,500，约 14
+  小时修复 SSO。保留限定：Discourse 测试明确不在赏金范围内（RCE 本身未获授权），作者也承认把实例
+  伪装成 CTF 靶场绕过模型拒答。两条可迁移教训：上游未打标的安全修复会静默降级每个下游发行版；SSO
+  距离"能行动的 AI 账号"只有一跳。
+- **Parallels Desktop CVE-2026-90894（7.8，JFrog 以 Secondary 评级提交；NVD "Received"）**——root
+  `prl_disp_service` 监听全局可写 socket、接受任意本地对端凭据；在设备路径里塞入双引号即可向 root
+  运行的 `tar` 注入 `--use-compress-program`（26.4.0 上确认）。丑陋处在于升级路径：**只在 Parallels
+  27 修复，而 27 不支持 Intel Mac**——整条 26.x 线（含当前 26.4.2）无修复地保持可利用。仅限本地，
+  但在共享 CI/开发 Mac 上"本地"是低门槛。
+- **Anki 26.09 / 26.09.2**（"请尽快升级"）——笔记在编辑器中查看时可读取本地文件；"打开图片"不校验
+  扩展名，**共享卡组可在部分系统上执行危险文件**；26.09.2 另修卡组描述外链问题并移除旧版
+  `anki.importing`/`anki.exporting`（破坏部分插件）。全程无 CVE——3000 万用户应用的卡组供应链被
+  静默修复；无 CVE 桌面应用类的又一例。
+- **FamousSparrow → SparroWocky（ESET）**——这个中国背景 APT（与 Earth Estries/Salt Typhoon 的重合
+  被留有余地地表述为"某种程度的重叠"，非归属结论）用此前未报告的模块化 C++ 后门替换 SparrowDoor，
+  打击拉美政府目标：内存 COFF 插件加载、MinHook 线程隐藏、SilentMoonwalk 变体的调用栈伪装、经
+  Mbed TLS 代理的 TLS。后门在披露时已存在一年以上（"至少 2025 年 8 月"）——间谍工具正围绕红队
+  商品化的规避原语完成职业化。
+- **KEV 大限日（9 月 18 日）**——CVE-2026-85046（V8 类型混淆，Chrome 152.0.7977.82 修复，2026 年
+  第六个在野利用的 Chrome 零日）迎来 BOD 26-04 联邦修复大限。评分教训重复：**CVSS 8.8
+  （Google-CNA，NVD "Analyzed"）**——高不至危，进 KEV 是因为在被利用；KEV 时钟按利用走，不按评分。
+  Chromium 嵌入方（Edge、Opera、Electron）按各自节奏继承修复，Electron 滞后数周。
+- **ZCode（智谱编码 agent 桌面端）静默上传整个工作区**——研究者逆向 Electron `app.asar`：每次提问
+  与任务完成，客户端从 `zcode.z.ai` 获取 RSA 公钥与 OSS 签名，把工作区打成 tar.gz 加密后 POST 到
+  阿里云 OSS。一份明文快照清单（42,411 个文件）显示 **`.git` 占载荷的 86.6%**：196MB LFS 资产、
+  102MB commit 对象、带未推送分支名的 reflog、`.git/config` 内部主机名、后续 commit 中已删除的
+  秘密。RSA 私钥在服务端；"优化体验""Repo Snapshot Indexing"两个开关都拦不住采集，唯一门槛是有
+  效 JWT——与隐私政策"优化计划默认关闭"的表述相矛盾。同日第二篇独立复盘佐证核心发现；尚无厂商
+  回应，服务端留存未确认。Anthropic 蒸馏报告式信任失灵的桌面端规模版（另见 [[agent-stack]]）。
+- Sources: [AIR Security: Plugin4Shell](https://www.air.security/blog-posts/plugin4shell) ·
+  [HN: Plugin4Shell](https://news.ycombinator.com/item?id=49745809) ·
+  [Cisco advance notice](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) ·
+  [SecurityWeek: Cisco](https://www.securityweek.com/cisco-fixes-dozens-of-flaws-across-fmc-ise-and-nexus-dashboard/) ·
+  [Hacktron: Hacking OpenAI](https://www.hacktron.ai/blog/hacking-openai) ·
+  [HN: Hacking OpenAI](https://news.ycombinator.com/item?id=49749656) ·
+  [JFrog: Parallels LPE](https://research.jfrog.com/vulnerabilities/parallels-desktop-is-vulnerable-to-a-local-privilege-escalation-via-appliance-extract-argument-injection-cve-2026-90894/) ·
+  [NVD: CVE-2026-90894](https://nvd.nist.gov/vuln/detail/CVE-2026-90894) ·
+  [Anki 26.09 release](https://github.com/ankitects/anki/releases/tag/26.09) ·
+  [ESET: SparroWocky](https://www.welivesecurity.com/en/eset-research/beware-sparrowock-backdoor-bites-commands-catch/) ·
+  [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+  [NVD: CVE-2026-85046](https://nvd.nist.gov/vuln/detail/CVE-2026-85046) ·
+  [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·
+  [tokenstead: ZCode](https://tokenstead.ai/guides/zcode-silent-git-history-upload) ·
+  [HN: ZCode](https://news.ycombinator.com/item?id=49752422)

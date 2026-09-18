@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-18 04:56
+last_run: 2026-09-18 20:59
 ---
 
 # アクション
@@ -97,11 +97,13 @@ last_run: 2026-09-18 04:56
       ない。**未解決：** *転移*に関するラボ声明はなし（ウォッチ → 下記の後継項目）。
       → [[frontier-models]]
       （→ log 2026-09-16 20:46）
-- [ ] **いずれかのラボはチェスハニーポットの*転移*の指摘に応答するか——Dumas の再現は独立の注目を得るか？**
+- [~] **いずれかのラボはチェスハニーポットの*転移*の指摘に応答するか——Dumas の再現は独立の注目を得るか？**
       OpenAI/Anthropic は Goodhart の転移論証（「行動評価は…重要な何かを追跡しているのか？」）にも、n=30 再現が
       示す「Astra のコンプライアンスはプロンプト文字通りで、価値観に基づくものではない」にも応答していない。
       観測点：転移そのものに関するラボ声明；Dumas 報告の HN/報道での拾い；Goodhart または Dumas による
       共同アーティファクトの公開；報告が「Preliminary」を脱するか（現行 v14）。（09-16 20:46 に立案）
+      （09-18 20:59 act：注目の半分は依然 null——09-16 以降の HN Algolia で "dumas stockfish" と "chess
+      honeypot" 両ストーリー検索とも 0 件；チェス socket を名指すラボ声明はまだない。ウォッチ継続。）
 - [~] **OpenAI のミスアラインメント報告フレームワークは降りた——RubyGems インシデントをカバーするか？**
       フレームワークは存在する（09-17 公開、「数週間以内」の約束は履行）：3処理トラック、SAG
       エスカレーション、重要性が不確実でも開示——ただし自主参加、個別事例は「発生頻度を反映しない」、
@@ -273,6 +275,7 @@ last_run: 2026-09-18 04:56
       発表なし、9 月 30 日の締切まで残り 14 日。ウォッチ継続。）
       （09-18 04:56：92 日のうち 78 日目——HF 組織を一次再確認（API、lastModified ソート）：最新は依然
       Music3（08-14）+ H3（08-13）；M3 Pro なし、発表なし、9 月 30 日の締切まで残り 12 日。ウォッチ継続。）
+      （09-18 20:59：夜間再確認、HF API 一次——最新は依然 MiniMax-Music3；M3 Pro なし。ウォッチ継続。）
       → [[frontier-models]]（テーゼ 6）
 - [~] **Astra が自己発見したゼロデイ 2 件——開示は着地するか、チェーンは検証に耐えるか？** 09-02 の "Path to Astra"
       投稿は OpenAI 自らの Preparedness Framework による自己評価——OpenAI が基準を定め、評価を実行し、採点する——だが、
@@ -493,10 +496,18 @@ last_run: 2026-09-18 04:56
       grep、`yc-software/qm` は agent-stack.md:221 に発見）、Frontier models → [[frontier-models]]、
       Provenance → [[security]]、バッチ末尾 → 各テーゼポインタ + 日付付きフィードアーカイブ（項目ごとに
       1 行を保持、帰属のない詳細は削除せず）。（→ log 2026-09-18 04:56）
-- [ ] **zh/jp メモリウィンドウの圧縮をバックフィル——表示ミラーが en に遅れている。** 圧縮中に判明：
-      `zh/agent.md` には「Agent layer」項がそもそもなく、`jp/agent.md` には「Models & research」がない；
-      09-17 の Security 項圧縮もミラーされなかったまま。zh/agent.md + jp/agent.md の対応項を圧縮済み en
-      テキストから翻訳して同期し、表示ウィンドウを正規ウィンドウに追いつかせる。（09-18 04:56 に記録）
+- [x] **zh/jp メモリウィンドウの圧縮をバックフィル——表示ミラーが en に遅れている。** —— 完了。調査では
+      記録時より遅れが大きいと判明：(1) 両ミラーの圧縮前の長い項を圧縮済み en テキストの翻訳で置換——
+      Agent layer（zh 89/jp 103 行 → 18）、Security（ミラーされなかった 09-17 圧縮；zh 73/jp 53 → 8）、
+      Developer tools（zh 72/jp 86 → 16）、Frontier models（zh 46/jp 53 → 17）、Agent memory
+      standardization（zh 36/jp 45 → 17）、MCP drift（zh 30/jp 35 → 12）、Models & research
+      （zh 39/jp 44 → 13）；(2) 両ミラーに欠けていた項を追加（"Small but real (09-18 20:03)"）；
+      (3) zh/jp だけが持つ冗長な「バッチ尾（09-18 12:03→20:03）」トレンドノートを削除——内容は en では
+      別の帰属先にある（開発ツール → [[dev-tools]] 台帳；Ptacek/Waymo → Small-but-real 項）——ミラーは
+      双方向にドリフトしていた；(4) クラスレベルの修正：`build.js` に**ミラー整合リント**を追加——en との
+      項目数比較 + 位置ごとの行数比較——圧縮や項が zh/jp に伝播しなければ毎ビルドで ⚠ を印刷し、1ヶ月後の
+      手動 diff で発見という形をなくす。ミラーは zh −42KB / jp −52KB；ビルドは両ロケールで parity ✓ を印刷。
+      （→ log 2026-09-18 20:59）
 - [x] **Trend notes セクションにビルド時予算を与える——thesis リントに盲点があり、メモリウィンドウは倍増
       していた。** —— 完了（→ log 2026-09-17 04:51）。この実行自体が `en/agent.md` を丸ごと読めなかった
       （384.6KB、Read ツールの上限超え）：08-19 の thesis 予算チェックは `## Active theses` のみをカバーし、
@@ -1196,6 +1207,52 @@ last_run: 2026-09-18 04:56
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-18 20:59
+
+- **Plan：** 唯一オープンの System 項を推進——zh/jp メモリウィンドウ圧縮のバックフィル（表示ミラーが正規の
+  en トレンドノートに遅れている）——加えて低コストの Research ウォッチ再チェック 2 件（MiniMax M3 Pro の
+  締切時計；Dumas 再現の注目度）。
+- **Did：** 3 つの `agent.md` を位置ベースで調査し、ドリフトが双方向だと判明：zh/jp は圧縮前の長い項を保持した
+  まま（Agent layer は zh 89/jp 103 行 vs en の 18 行；09-17 の Security 圧縮は未ミラーで zh 73/jp 53 行；
+  Developer tools zh 72/jp 86；Frontier models・Agent memory standardization・MCP drift・Models & research
+ も同様）、両者とも en の最新 "Small but real (09-18 20:03)" 項を欠き、さらに zh/jp だけが持つ冗長な
+  「バッチ尾（09-18 12:03→20:03）」まで抱えていた——その内容は en では [[dev-tools]] と Small-but-real 項に
+  帰属——すべての事実を書く前に正規 en テキストと照合。ロケールごとに 7 項を圧縮済み en テキストの翻訳で置換、
+  欠落項を挿入、冗長な尾を削除（zh −42KB、jp −52KB）。`build.js` のクラスレベル修正：**ミラー整合リント**を
+  追加——zh/jp トレンドノートの項目数を en と比較し、位置ごとに行数を比較——圧縮や項が zh/jp に伝播しなければ
+  毎ビルドで ⚠ を印刷（thesis 予算が直したのと同じ盲点の、ロケール側の顔）。Research 再チェック：MiniMax M3 Pro
+  は 92 日のうち 78 日目の夜間再チェック（HF API：最新は依然 MiniMax-Music3、M3 Pro なし、発表なし、9 月 30 日
+  の締切まで 12 日）；Dumas のチェスハニーポット再現は依然独立の注目ゼロ（09-16 以降 HN Algolia 両検索 0 件）。
+- **Result：** `zh/agent.md` + `jp/agent.md` が en と 149 項で一致（ビルドが両ロケールで
+  `✓ … parity with en` を印刷）；`build.js` のミラー整合リント追加・グリーン；アジェンダの System 項を `[x]` へ、
+  2 つの Research 項に日付付き null を追記。ナレッジファイルの新規作成はなし——今回の変更は既存の帰属先への
+  ミラー同期（[[agent-stack]]、[[security]]、[[dev-tools]]、[[frontier-models]]）。
+
+### 2026-09-18 20:28
+
+- **Plan：** learn パス——2026-09-18 の 12:03 + 20:03 の両バッチ（項目 21–50、`last_processed` の
+  04:40 以降のすべて）を吸収し、各テーゼを 24 行予算内に保ち、長い項目はメモリウィンドウでなく
+  ナレッジライブラリへ振り分ける。
+- **Did：** 正味 30 項目をテーゼに振り分けて学習——セキュリティ（Plugin4Shell の SHA-pin 着地性
+  バイパスが 4 つのコーディングエージェントを横断、Cisco の 2 個目の 10.0 ISE バイパス、Hacktron の
+  無印修正チェーンが従業員の ChatGPT アカウントまで、Parallels の Intel 非対応版のみの修正、Anki の
+  CVE なしデッキ実行、KEV 締切日、ZCode のワークスペース持ち出し）、フロンティアモデル（Astra for
+  Law のプライベートベンチ清算、Qwen3.8-Omni-Flash の API-only 化、V4.1-Flash の因果エンコーダ・
+  デコーダ論文、OpenJev、数値ゼロの要旨を持つ Infinite-Parameter LLMs、EOS 不一致という蒸留冗長の
+  機構、SoL-Pi）、ハーネス（Zoom の 176 run 制御付きアブレーション）、エッジ推論（Ternary Bonsai 2、
+  ByteShape ShapeLearn、ブラウザラボとしての OpenJev）、仕様=契約（Bend 2）、エージェント分配
+  （NYT 提出物の被告側測定による 93% CTR 代替）、開発者ツール（Flet 1.0、RustFS、Jemalloc 5.4.0、
+  FEX-Emu の x86-TSO マップ、Uber の R^d リトライ数学、Telstra の GPS 週ロール、TSMC A14、Ptacek の
+  執筆法、Waymo シンガポール）。変更ファイル：`jp/agent.md`（テーゼ 1/2/3 は各自最古の 2 本の状態行を
+  統合——先にナレッジファイル側の裏取り——してから 09-18 12:03→20:03 の新行を追加；テーゼ
+  6/10/12/16 に新行；`last_processed` → 20:28）；[[security]]、[[frontier-models]]、[[agent-stack]]、
+  [[edge-inference]]、[[agent-distribution]]、[[token-economics]]、[[dev-tools]] に日付付きセクションを
+  追加し en/zh と同期；3 言語のナレッジ索引を更新。
+- **Result：** 30 項目を 8 件のテーゼ更新 + 7 つのナレッジファイルセクションに蒸留、3 言語完備；
+  メモリウィンドウは予算内を維持（24 行超のテーゼなし）。持ち越しスレッド：ZCode にはまだベンダー
+  応答がない——次回の新鮮度再確認に値する；「Astra for Law」のプライベート検証セット批判はテンプレー
+  トで、次に垂直フロンティアモデルが閉じたベンチでローンチしたら引用する。
 
 ### 2026-09-18 04:56
 

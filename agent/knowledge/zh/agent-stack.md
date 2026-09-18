@@ -1459,3 +1459,32 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   [GitLab blog](https://about.gitlab.com/blog/rate-limit-change-2026/) ·
   [HN: GitLab](https://news.ycombinator.com/item?id=49742353) ·
   [arXiv 2609.18094](https://arxiv.org/abs/2609.18094)
+
+## 2026-09-18 12:03→20:03 —— 会话格式成为锁定向量；桌面 agent 应用成为外泄信道；harness 消融进入受控实验
+
+- **Skillsync（YC W26）——"AI 聊天的 Pandoc"**（Launch HN，53 分/52 评论）：完整编码 agent 会话——
+  消息、推理、工具结果——在 Claude Code、Codex、OpenCode、Cursor 之间迁移。开放核心是
+  `skillsynchq/txcript`（Rust 库 + CLI + WASM，Apache-2.0，crates.io/npm），会话格式之间的转换层，
+  其上再用 MCP 召回历史会话。模型可互换之后，会话格式正在成为锁定向量——记忆标准化线索早已暗示的
+  互操作打法。HN 的反驳公允且可迁移：转换本身"平凡可解"；可防守的是跨 agent 的 schema 与搜索层，
+  而开放核心外的 SaaS 是闭源的。
+- **ZCode（智谱编码 agent 桌面端）静默上传整个工作区**——安全侧细节见 [[security]]；agent-stack 视角
+  的读法：编码 agent 的信任边界正由桌面应用决定——它们把整个仓库（历史、reflog、秘密）送进训练
+  基础设施，唯一门槛是有效 JWT，UI 开关卡不住采集。与 Anthropic 蒸馏报告在协议规模测到的同一形状，
+  如今出现在消费级桌面规模。
+- **Zoom 的"编码 agent harness 设计实证研究"（arXiv 2609.20804，43 页，HF papers #1）**——与
+  HarnessTax 是两种工作：不是比较现成 harness，而是自建一个轻量 harness，在 **176 组匹配设置**
+  （4 模型 × SWE-Bench Verified + Terminal-Bench 2.1）上消融规划、动作空间与上下文管理。结论：预算
+  紧张时上下文管理最要紧；**基于规则的上下文删节在成本上胜过 LLM 摘要**；规划对弱模型是精度脚手架，
+  对强模型只是省钱手段；会 bash 的模型用纯 bash 工具就能以低得多的成本干活。harness 消融问题终于
+  拿到首个受控数据集——答案毫不华丽：把工程花在上下文管理，别花在提示词。范围：4 模型、2 基准、
+  未放代码。
+- **NVIDIA SoL-Pi（arXiv 2609.20519）**——把 RSI 指向 harness 本身（数字与限定 → [[frontier-models]]）：
+  以"选择压筛选生成的改进"保住四个机制——动作执行、上下文压缩、观测处理、委托阅读——harness 像
+  Dream-RSI 编辑发现策略那样编辑自己的管道。
+- Sources: [Launch HN: Skillsync](https://news.ycombinator.com/item?id=49743049) ·
+  [skillsynchq/txcript](https://github.com/skillsynchq/txcript) ·
+  [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·
+  [HN: ZCode](https://news.ycombinator.com/item?id=49752422) ·
+  [arXiv 2609.20804](https://arxiv.org/abs/2609.20804) ·
+  [arXiv 2609.20519](https://arxiv.org/abs/2609.20519)

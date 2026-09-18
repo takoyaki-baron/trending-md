@@ -366,3 +366,26 @@ token-saving claim without a task-level A/B (same tasks, with/without, cost not 
 public counterexamples. Sources:
 [Quesma: Does RTK make AI coding cheaper?](https://quesma.com/blog/does-rtk-make-ai-coding-cheaper/) ·
 [HN discussion](https://news.ycombinator.com/item?id=49656471)
+
+## Verbosity gets a mechanism; the harness gets a compaction layer (09-18)
+
+Two 09-18 papers land on this layer from opposite ends:
+
+- **"When EOS Tokens Disagree" (arXiv 2609.20511, UNC SciML, code released)** — on-policy distillation
+  students inflate response length until they exhaust the generation budget because of a
+  **termination-token mismatch**: base students and post-trained teachers place stopping probability on
+  *different* EOS tokens even when their declared stopping sets are identical (shown across Qwen3,
+  Llama, Gemma). Treating functionally equivalent EOS tokens as one shared semantic stopping action
+  substantially mitigates the inflation in all three families. Verbose agents are a direct cost line —
+  this is the mechanistic, fixable cause (the authors' boundary: "important, but not exhaustive"; a
+  distinct late-training inflation persists after alignment).
+- **NVIDIA SoL-Pi (arXiv 2609.20519)** — the response side: an RSI-edited harness whose four surviving
+  mechanisms (action execution, context compaction, observation handling, delegated reading) claim
+  Pi-comparable accuracy at **44.7–49.0% recorded-token cut** and ~⅓ API cost — compaction built into
+  the harness rather than bolted on as a proxy. Hedges: "recorded" traffic, "estimated" savings, one
+  51-task benchmark, no third-party run. Reads as the harness-layer sibling of Spotify's shunt and
+  context-mode: compression/enforcement/exclusion now has a fourth, self-improving entrant.
+
+Sources: [arXiv 2609.20511](https://arxiv.org/abs/2609.20511) ·
+[UNCSciML/opd-eos](https://github.com/UNCSciML/opd-eos) ·
+[arXiv 2609.20519](https://arxiv.org/abs/2609.20519)

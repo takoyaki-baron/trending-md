@@ -1719,3 +1719,35 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
   [GitLab blog](https://about.gitlab.com/blog/rate-limit-change-2026/) ·
   [HN: GitLab](https://news.ycombinator.com/item?id=49742353) ·
   [arXiv 2609.18094](https://arxiv.org/abs/2609.18094)
+
+## 2026-09-18 12:03→20:03 —— セッション形式がロックインのベクトルに。デスクトップエージェントアプリが浸出路に。ハーネス アブレーションが制御実験に
+
+- **Skillsync（YC W26）——「AI チャットの Pandoc」**（Launch HN、53 pts/52 コメント）：コーディング
+  エージェントのセッション丸ごと——メッセージ、推論、ツール結果——を Claude Code・Codex・OpenCode・
+  Cursor の間で移動。オープンコアは `skillsynchq/txcript`（Rust ライブラリ + CLI + WASM、Apache-2.0、
+  crates.io/npm）で、セッション形式間の変換レイヤー、その上に過去セッションの MCP ベース回顧。モデルが
+  交換可能になった今、セッション形式がロックインのベクトルになりつつある——メモリ標準化の系譜が示唆
+  していた相互運用プレー。HN の反論は公正で移転可能：変換そのものは「自明に解決済み」；守れるのは
+  クロスエージェントのスキーマと検索層で、オープンコアを囲む SaaS はクローズド。
+- **ZCode（Zhipu のコーディングエージェント デスクトップアプリ）がワークスペース全体を黙ってアップロー
+  ド**——セキュリティ側の詳細は [[security]]；agent-stack からの読み：コーディングエージェントの信頼
+  境界を、リポジトリ丸ごと——履歴・reflog・秘密——を訓練インフラへ送るデスクトップアプリが決めつつ
+  あり、有効な JWT だけが gates で UI トグルは取得を止められない。Anthropic 蒸留レポートがプロトコル
+  規模で測ったのと同じ形が、今やコンシューマデスクトップ規模で。
+- **Zoom「An Empirical Study of Harness Design for Coding Agents」（arXiv 2609.20804、43pp、HF papers
+  #1）**——HarnessTax とは別の仕事：既存ハーネスを比較するのでなく、軽量ハーネスを自作し、**176 の
+  マッチした設定**（4 モデル × SWE-Bench Verified + Terminal-Bench 2.1）で計画・アクション空間・コンテ
+  キスト管理をアブレーション。所見：予算がタイトなとき最も効くのはコンテキスト管理；**ルールベースの
+  コンテキスト削除がコスト面で LLM 要約に勝つ**；計画は弱いモデルには精度の足場、強いモデルには単なる
+  節約手段；bash を扱えるモデルは bash-only ツールで十分低コスト。ハーネスアブレーション問題が最初の
+  制御データセットを得た——答えは地味：エンジニアリングはプロンプトでなくコンテキスト管理に注げ。
+  スコープ：4 モデル、2 ベンチマーク、コード未公開。
+- **NVIDIA SoL-Pi（arXiv 2609.20519）**——RSI をハーネス自体に向ける（数値と留保 →
+  [[frontier-models]]）：生成された改善を選択圧でふるい、4 機構を残す——アクション実行、コンテキスト
+  圧縮、観測処理、委任読み取り——Dream-RSI が発見戦略を編集したように、ハーネスが自らの配管を編集する。
+- Sources: [Launch HN: Skillsync](https://news.ycombinator.com/item?id=49743049) ·
+  [skillsynchq/txcript](https://github.com/skillsynchq/txcript) ·
+  [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·
+  [HN: ZCode](https://news.ycombinator.com/item?id=49752422) ·
+  [arXiv 2609.20804](https://arxiv.org/abs/2609.20804) ·
+  [arXiv 2609.20519](https://arxiv.org/abs/2609.20519)

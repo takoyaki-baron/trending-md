@@ -501,3 +501,32 @@ Qwen3.8 27B 对比复现的 BF16 基线，测 GPQA Diamond / IFBench / Terminal-
 - **colibri（`JustVugg/colibri`，35.7k★ 经 API 核验，+872/天居日榜 #15，v1.11.0 9 月 13 日，Apache-2.0）：** 纯 C、零依赖的专家流式引擎持续走热，现已给出模型矩阵——GLM-5.2/5.3、Kimi K3（2.8T）、DeepSeek V4 Flash、Qwen3.6、OLMoE——多级分层说得明白：把 744B GLM 的 ~17B 稠密核留在内存（int4 约 9.9 GB），19,456 个路由专家（约 372 GB）按需从 NVMe 流式读取，无需 GPU。公布数字：128 GB 纯 CPU 机器热态 1.8 tok/s，6× RTX 5090 上 5.8–6.8 tok/s；README 明言"也欢迎负面结果"。带上项目自设前提：基准自发布且依赖具体机器；O_DIRECT 收益"因机器而异"。09-10 的"维护中引擎"定位成立——磁盘流式学派现在既有参考实现，也有诚实的失败日志。
 - Sources: [JustVugg/colibri](https://github.com/JustVugg/colibri) ·
   [GitHub Trending](https://github.com/trending)
+
+## 2026-09-18 12:03→20:03 —— 三值权重迎来第二个开放挑战者；量化文化继续公布自己的误差条；浏览器复现实验室到来
+
+- **PrismML Ternary Bonsai 2 27B**（Caltech 衍生；HN 297 分）：用 {−1,0,+1} 三值权重 + FP16 分组缩放
+  重建 Qwen3.8-27B——**有效 1.76 位/权重、5.9 GB**、262K 上下文——GGUF/MLX 权重已在 HF 上以
+  Apache-2.0 发布（Simon Willison 在讨论串里真跑通了 GGUF——不是期货）。自报：83.9 对 85.4 综合
+  （"98.2% 保持率"）、RTX 5090 上 143 tok/s。限定："near-lossless"是厂商话术——它**在几乎每个类别都
+  落后全精度基线**（视觉 78.59 对 81.64），且必须用 Prism 自己的 llama.cpp fork（Intel B70 用户什么都
+  跑不起来）；完整数字在白皮书 PDF 里而非模型卡。若三值在 27B 规模站得住，27B 级将成为消费级 GPU
+  默认——09-17 BITCOS 的零密度条件性拿到了工业级测试案例。
+- **ByteShape ShapeLearn GGUF 量化**（HN 77 分，厂商博文）：完整公布 Qwen 3.8 27B 的量化 run——
+  IQ2_XXS（2.56 bpw）到 IQ4_XS（3.84 bpw）五档，从 RTX Pro 6000 测到 4080/5060 Ti；GPU-4 档 11.0 GB
+  目标 16 GB 卡；经内嵌 MTP 草稿头或 1.1 GB 外置 DFlash2 草稿做投机解码；在 llama.cpp b10430 上按
+  BF16 归一化，覆盖 instruct（GSM8K、IFEval、MMLU、LiveCodeBench V6）与 thinking（BFCL V4、
+  ACEBench）两套。消费级 GPU 量化文化如今公布 KLD 散度保真曲线，而不再是氛围——且免责声明放对了
+  位置（厂商自测；投机解码图"不能独立确立质量等价"；Bartowski 的新量化晚于测试；显存是否装得下取决
+  于上下文与部署配置）。与 Quesma 的 CI 化基准（09-09）一起，构成量化宣称光谱上"测量"的那一端。
+- **OpenJev（TheoLeeCJ/openjev，MIT，1.4k★）**——浏览器作为复现实验室：固定版本 GGUF（Qwen3 0.6B /
+  MiniCPM5 2B / Qwen3.5 4B）经 wllama（WASM llama.cpp）页内运行，无后端，输入不出页面——拿到
+  **84.5% 对托管 Jev 的 88.3%**，并公布自身差距（softmax-over-options，非校准置信度；量化与 BF16
+  不同）。这也是 web-llm 主张过的零安装隐私端，如今被用来做社区基准测试。（模型侧解读 →
+  [[frontier-models]]。）
+- Sources: [prismml.com/news/bonsai-2-27b](https://prismml.com/news/bonsai-2-27b) ·
+  [HF: prism-ml/Ternary-Bonsai-2-27B-gguf](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) ·
+  [HN: Bonsai 2](https://news.ycombinator.com/item?id=49746618) ·
+  [byteshape.com: ShapeLearn Qwen 3.8 27B](https://byteshape.com/blogs/Qwen3.8-27B/) ·
+  [HN: ByteShape](https://news.ycombinator.com/item?id=49749393) ·
+  [openjev.com](https://openjev.com/) ·
+  [TheoLeeCJ/openjev](https://github.com/TheoLeeCJ/openjev)

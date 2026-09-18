@@ -49,3 +49,57 @@ GPU 驱动）；OpenLogi（本地优先 Rust HID++）；Linux 7.2（缓存感知
 10.5 GHz 相控阵雷达——独立拆解指出标称距离夸大 7–13×：Void 教训用于开源硬件）；llama.cpp v0.3.0（`mtmd`
 多模态整合，ggml v0.22.0）；nautilus_trader 2.x Rust 原生 API；microduck_rl（Microduck sim-to-real 循环
 的训练半边）。
+
+## 2026-09-18 12:03→20:03 —— 发布与复盘批次
+
+- **Flet 1.0**（9 月 14 日，16.9k★，9 月 18 日仍在推送）——"Python 版 Flutter"历时约 4 年到达 1.0，
+  以真实的破坏性变更作声明（弃用 API 移除：`app()`→`run()`、`ElevatedButton`→`Button`、
+  `Page.go()`→`push_route()`；发布说明 67KB）。头条特性：**client actions**——手势门控的处理器在 iOS
+  Safari 原始点击内部运行文件选择器/剪贴板/分享面板，无需 Python 往返，修掉了 server-driven UI 通常
+  修不了的异步手势死区一类 bug。带强制迁移的 1.0 = API 从此是契约。
+- **RustFS**——S3 兼容的 Rust 对象存储以 32.9k★（+559/天）走上趋势，发布 1.0.1-preview.5（三天第三个
+  preview）。定位挑明：Apache-2.0 对 MinIO 的 AGPL，外加反遥测的一枪。兼容矩阵：S3 核心/版本化/
+  对象锁/SSE/IAM 可用；S3 Tables（Iceberg REST）与 MinIO 磁盘兼容为 preview；近期发布加入 KMS
+  （Vault/AWS）、Entra ID OIDC 角色映射、池扩容。细节：README 的性能部分是 4GB 内存的自行压测加视频，
+  不是可复现基准。preview 标签才是诚实之处——MinIO 的 AGPL 转向制造了空位；RustFS 是资本最足的竞争者。
+- **Jemalloc 5.4.0**（9 月 17 日，HN 194 分）——160+ commit 的技术债清理、重构、测试覆盖与选项清理，
+  新增 `EXTENT_ALLOC_FLAG_PINNED` 钩子（HugeTLB 类不可回收映射的钉住）；接在 5.3.1（2026 年 4 月，
+  390+ commit）之后——2022–2025 沉寂期后节奏反常地活跃。对这种量级的依赖（Firefox、Redis、FreeBSD），
+  "无头条特性"恰是重点：选项移除正是打破 pinned 生产构建的东西。
+- **FEX-Emu 的 x86-TSO 深潜**（HN 173 分）——x86-on-ARM 模拟慢在哪，逐核测量：LRCPC acquire-load
+  相比 Apple 硬件 TSO 开关只是"创可贴"（M1 上耗掉 ~24% store 吞吐）；非对齐惩罚 Cortex-X4 约 50%、
+  Oryon-3 load 约 70%；64 字节 split-lock 在 Zen 上约 660ns，对齐原子 1.44ns（~458×）；最好的 ARM
+  对齐原子仍比 x86 慢约 3×；uncached 写合并 store 带宽最多差 **816×**（Silksong 在 PCIe-GPU 板上
+  <1 FPS）。这是每个想跑 x86 游戏正典的 ARM 芯片该配硬件 TSO 开关的工程论证。自设边界：split-lock
+  模拟是尽力而为、可能撕裂数据；修复方案出自模拟器作者"而非硬件架构师"；是微基准，不是端到端帧率。
+- **Uber 的重试风暴数学**（工程博客，HN 67 分）——2025 年 11 月一起调用链 5+ 层深的服务故障：逐跳
+  重试按 **R^d** 放大。修法："错误所有权"——只有没有失败出站调用的服务才拥有某个错误——经服务依赖
+  分析系统 + `x-uber-error-claim` 头实现；全网止住约 950 万次虚假请求，面向用户 API 的最大风暴半径
+  25→3。诚实的边界已带上：仅靠重试预算在降级服务上仍会加 46–135% 流量；预算只在基线错误率 ~10% 内
+  成立；高失败率下 ~2% 错误解认领。
+- **Telstra 的 2006 时间循环故障**（Netnod 对 TAP 调查的复盘）——2025 年 10 月作为 workaround 启用的
+  GPS 接收卡，自 2020 年升级后再未刷固件，重启后把年份当作 **2006**（GPS 10 位周计数每 1,024 周
+  ≈ 19.6 年翻转；断电的卡丢失纪元）。它赢得 stratum-1 选举后传播坏时间，2020 年代际的跨站 peering
+  造成收敛于错误值的时间环路——电话、短信、紧急呼叫、火车、支付终端全灭。"协议没坏；架构坏了。"
+  1,024 周翻转已进入 2010 年前部署的所有 GPS 的有生之年；Netnod 的保留：TAP 报告未讲清 peering 为何
+  改动——那部分是作者的推断。
+- **TSMC A14 细节经 IEDM 2026 议程曝光**（HN 114 分）——NanoFlex Pro 平台上的二代纳米片晶体管；
+  **<0.017μm²** 单元的"世界最小 SRAM"（对片上推理缓存这才是关键数字）；对比 N2：速度 +10–15%、功耗
+  −25–30%、密度 +20%；TSV 支持、4.5μm SoIC 键合间距；量产"2028 按计划"。是会议摘要，不是硅片
+  ——数字是 TSMC 自己的，2028 是排期主张。
+- **Bend 2**（bendlang/bend，20.6k★，Apache-2.0）——Python 语法 → 原生/GPU，带 Lean/Rocq 风格的证明
+  检查型 checker，每次 agent 编辑后约 1 秒验证 `LAWS.bend` 不变量——"合并一个 bug 在数学上不可能：
+  它是一条定理。"瞄准的正是 agent 代码审查缺口（证明背书的 AGENTS.md）。细节：20,615 星继承自 2024
+  年的旧仓库，其历史被**压扁成单个 commit**（44 位贡献者的工作移到 HigherOrderCO/Bend1——HN 最响的
+  批评）；作者自认编译器里"眼下有大量 gambiarra 和 AI slop"；基准自发布；"expect bugs"。
+  （规范即可执行契约的解读 → 论点 10、[[agent-plugins]]。）
+- Sources: [flet.dev](https://flet.dev/) ·
+  [flet-dev/flet](https://github.com/flet-dev/flet) ·
+  [rustfs/rustfs](https://github.com/rustfs/rustfs) ·
+  [Jemalloc 5.4.0](https://github.com/jemalloc/jemalloc/releases/tag/5.4.0) ·
+  [FEX-Emu: Scourge of emulation](https://fex-emu.com/Scourge-of-emulation/) ·
+  [Uber blog](https://www.uber.com/us/en/blog/protecting-against-retry-storms/) ·
+  [Netnod: Telstra outage](https://www.netnod.se/blog/telstra-outage-night-network-decided-year-was-2006) ·
+  [IEDM 2026 session 3-2](https://iedm26.mapyourshow.com/8_0/sessions/session-details.cfm?scheduleid=331) ·
+  [bend-lang.com](https://bend-lang.com/) ·
+  [bendlang/bend](https://github.com/bendlang/bend)

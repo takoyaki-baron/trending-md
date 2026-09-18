@@ -732,3 +732,38 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
   the disk-streaming school now has both the reference implementation and the honest failure log.
 - Sources: [JustVugg/colibri](https://github.com/JustVugg/colibri) ·
   [GitHub Trending](https://github.com/trending)
+
+## 2026-09-18 12:03→20:03 — ternary gets a second open challenger; quant culture keeps publishing its error bars; the browser replication arrives
+
+- **PrismML Ternary Bonsai 2 27B** (Caltech spinout; HN 297 pts): Qwen3.8-27B rebuilt with {−1,0,+1}
+  ternary weights + FP16 group-wise scaling — **1.76 effective bits/weight, 5.9 GB**, 262K context —
+  with live GGUF/MLX weights on Hugging Face under Apache-2.0 (Simon Willison ran the GGUF in the
+  thread — not vaporware). Self-reported: 83.9 vs 85.4 aggregate ("98.2% retention"), 143 tok/s on an
+  RTX 5090. The hedges: "near-lossless" is vendor framing — it **trails the full-precision baseline in
+  nearly every category** (vision 78.59 vs 81.64), requires Prism's own llama.cpp fork (an Intel B70
+  owner got nothing usable), and full numbers live in a whitepaper PDF rather than the model card. If
+  ternary holds at 27B, 27B-class becomes consumer-GPU default — the BITCOS zero-density conditionality
+  (09-17) now has an industrial test case.
+- **ByteShape ShapeLearn GGUF quants** (HN 77 pts, vendor post): the full Qwen 3.8 27B run published —
+  five levels from IQ2_XXS (2.56 bpw) to IQ4_XS (3.84 bpw), tested RTX Pro 6000 → 4080/5060 Ti; the
+  GPU-4 tier fits 11.0 GB targeting 16 GB cards; speculative decoding via an embedded MTP draft head or
+  a 1.1 GB external DFlash2 draft; scores BF16-normalized across instruct (GSM8K, IFEval, MMLU,
+  LiveCodeBench V6) and thinking (BFCL V4, ACEBench) suites on llama.cpp b10430. Consumer-GPU
+  quantization culture now publishes KLD-divergence fidelity curves where it once published vibes —
+  with the disclaimers in the right places (vendor self-benchmarking, spec-decode plots "do not
+  independently establish quality equivalence," Bartowski's newer quants postdated testing, VRAM fit
+  depends on context/serving config). Joins Quesma's CI'd bench (09-09) as the measured end of the
+  quant-claims spectrum.
+- **OpenJev (TheoLeeCJ/openjev, MIT, 1.4k★)** — the browser as a replication lab: pinned GGUF builds
+  (Qwen3 0.6B / MiniCPM5 2B / Qwen3.5 4B) running in-page via wllama (WASM llama.cpp), no backend,
+  inputs never leaving the page — reaching **84.5% vs hosted Jev's 88.3%** and publishing its own
+  shortfall (softmax-over-options, not calibrated confidence; different quantization than BF16). Also
+  the zero-install privacy end web-llm argued (08-21), now used for community benchmarking. (Model-side
+  reading → [[frontier-models]].)
+- Sources: [prismml.com/news/bonsai-2-27b](https://prismml.com/news/bonsai-2-27b) ·
+  [HF: prism-ml/Ternary-Bonsai-2-27B-gguf](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) ·
+  [HN: Bonsai 2](https://news.ycombinator.com/item?id=49746618) ·
+  [byteshape.com: ShapeLearn Qwen 3.8 27B](https://byteshape.com/blogs/Qwen3.8-27B/) ·
+  [HN: ByteShape](https://news.ycombinator.com/item?id=49749393) ·
+  [openjev.com](https://openjev.com/) ·
+  [TheoLeeCJ/openjev](https://github.com/TheoLeeCJ/openjev)

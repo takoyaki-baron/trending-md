@@ -986,6 +986,48 @@ if (tnStart !== -1) {
     over.slice(0, 10).forEach(t => console.log(`      ${t.name}… (${t.len} lines)`));
     if (over.length > 10) console.log(`      …and ${over.length - 10} more`);
   }
+
+  /* ── zh/jp mirror-parity check (2026-09-18 20:59, log) ──
+     zh/agent.md + jp/agent.md are display mirrors of the canonical en trend notes, but nothing
+     forced compactions to propagate: zh still carried the 89-line pre-compaction "Agent layer"
+     note and jp the 103-line one a day after en was compacted to 18, jp had no "Models & research"
+     equivalent, and neither locale had the newest batch-tail entry — 40KB+ of stale display text
+     found only by a manual diff (log 2026-09-18 20:59). Same class of blind spot as the thesis
+     budget: the check covered only the canonical file. Entries are compared positionally (the
+     locales share one order); a mirror entry flags when it is both much longer than its en
+     counterpart (compaction not mirrored) and over the budget itself, and a count mismatch flags
+     missing entries. */
+  const MIRROR_TN_HEADERS = { zh: /^##\s+趋势笔记\s*$/, jp: /^##\s+トレンドノート\s*$/ };
+  for (const [loc, headerRe] of Object.entries(MIRROR_TN_HEADERS)) {
+    const mPath = path.join(ROOT, loc, 'agent.md');
+    if (!fs.existsSync(mPath)) continue;
+    const mLines = fs.readFileSync(mPath, 'utf8').split('\n');
+    const mStart = mLines.findIndex(l => headerRe.test(l));
+    if (mStart === -1) { console.log(`  ⚠ ${loc}/agent.md: trend-notes header not found`); continue; }
+    const mEntries = [];
+    for (let i = mStart + 1; i < mLines.length; i++) {
+      if (/^- \*\*/.test(mLines[i])) mEntries.push({ start: i });
+    }
+    mEntries.forEach((t, idx) => {
+      const stop = idx + 1 < mEntries.length ? mEntries[idx + 1].start : mLines.length;
+      t.len = mLines.slice(t.start, stop).filter(l => l.trim()).length;
+      t.name = (mLines[t.start].match(/^- \*\*([^*]+)/) || [])[1] || mLines[t.start].slice(0, 48);
+    });
+    if (mEntries.length !== tnEntries.length) {
+      console.log(`  ⚠ ${loc}/agent.md trend notes: ${mEntries.length} entries vs en's ${tnEntries.length} — the display mirror is missing ${Math.abs(tnEntries.length - mEntries.length)} entr${Math.abs(tnEntries.length - mEntries.length) === 1 ? 'y' : 'ies'} (or has extra); re-sync from the canonical en notes`);
+    }
+    const lagging = mEntries
+      .map((t, idx) => ({ ...t, en: tnEntries[idx] }))
+      .filter(t => t.en && t.len > t.en.len + 6 && t.len > TREND_NOTE_LINE_BUDGET + 6);
+    if (lagging.length) {
+      console.log(`  ⚠ ${loc}/agent.md trend notes: ${lagging.length} entr${lagging.length === 1 ? 'y' : 'ies'} lag the canonical en compaction — translate the compacted en note, don't keep the pre-compaction text`);
+      lagging.slice(0, 10).forEach(t => console.log(`      entry ${mEntries.indexOf(t) + 1} ${t.name}… (${t.len} lines vs en ${t.en.len})`));
+      if (lagging.length > 10) console.log(`      …and ${lagging.length - 10} more`);
+    }
+    if (mEntries.length === tnEntries.length && !lagging.length) {
+      console.log(`  ✓ ${loc}/agent.md trend notes: ${mEntries.length} entries, parity with en`);
+    }
+  }
 }
 
 /* ── Agenda-item budget check ──

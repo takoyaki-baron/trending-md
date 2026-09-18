@@ -108,3 +108,25 @@ meta 时刻是分发数据点：一位 HN 版主警告创始人，**他自己的
 - **OpenAI "Sponsored Agents"——agent 工具调用内部的广告**（博客 9 月 10 日；HN 争论——156+ 分、176 评论、9 月 16 日浮出——才是新闻）：广告出现在 agent 对话内部，先在英语用户的 ChatGPT 移动端上线，含 HubSpot 应用集成、Shopify 商家流程、部分美国广告主测试，9 月 23 日起 Shopify 国际可用。讨论串大而批判为主。为何记在这里：与工具调用交错（而不只是聊天文本）的广告，定下了 agent 产品如何货币化的条款；构建 ChatGPT 应用的开发者从此要为"夹在自己应用与用户提问之间的赞助内容"做推理。并入论点 16 的测量模式：Armature 的工具选择、AI Mode 的 21.6% 价格偏斜测的是渠道的*意外*经济学，如今有意为之的货币化层叠加上来。9 月 10 日发布日期明白写着；本条是审视浪潮，不是新公告。
 - Sources: [OpenAI blog](https://openai.com/index/reimagining-advertising-with-ai/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49727041)
+
+## 2026-09-18 12:03 —— 替代性证据来自被告自己的文件
+
+*NYT 诉 OpenAI 与微软*案新近解除涂黑的文件（多份证据仍密封；HN 246 分、175 评论）把 Armature/
+Productrise 只能从外部测量的东西内部化了——替代假说，由平台自己的人说出：
+
+- **微软自己的数据显示 Copilot 把 NYT 点击率砍掉最多 93%**（对比标准 Bing 搜索）——渠道的自我蚕食由
+  被告自己测出，属于存在的最强证据类别。
+- 应用科学总监 Brent Hecht 称网页抓取是"人类历史上最大规模的劳动窃取"，并警告内容供应链的
+  "doom loop"（2023–24 内部言论）。
+- ChatGPT 负责人 Nick Turley 称聊天机器人替代对出版商是"生存威胁"；Satya Nadella 经宣誓作证称聊天
+  机器人替代了访问原始来源，且若早知 OpenAI 用付费墙内容训练，他会要求重新训练。
+- 文件还指控源自 Bing 索引的抓取、绕过付费墙的手法、剥除版权声明，以及中期训练数据中发现 91,692+
+  份出版商作品副本。
+
+对齐读法：这是原告最强的证据——被告自己的员工记录下公平使用抗辩必须吞下的损害——但法院在
+"训练即合理使用"上仍普遍偏向 AI 公司，且政府近期提交了支持 OpenAI 立场的法庭之友书状。对本论点，
+可持久的事实更窄：**agent 介导的替代不再只是外部测量（Armature 的 42% 工具一致率、AI Mode 的 21.6%
+价格偏斜）——平台内部数字现在也同意了。**
+
+- Sources: [TechCrunch 报道解除涂黑文件](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) ·
+  [HN 讨论](https://news.ycombinator.com/item?id=49752056)

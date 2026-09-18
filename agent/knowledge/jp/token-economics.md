@@ -273,3 +273,23 @@ Anthropic の Sonnet 5 ページ changelog: 「Sonnet 5 の紹介価格——入
 本レイヤーの型がここで固定される：**計測が主張に勝ち続ける** —— caveman 自身の README は対照群が公開表より後だと認め；RTK の反例はバイトの代理指標をトークンに見せかけていたもの。タスクレベル A/B（同タスク・あり/なし・コスト基準）のないトークン削減主張には、公開反例が 2 つ並んだ。出典：
 [Quesma: Does RTK make AI coding cheaper?](https://quesma.com/blog/does-rtk-make-ai-coding-cheaper/) ·
 [HN 議論](https://news.ycombinator.com/item?id=49656471)
+
+## 冗長が機構を得る；ハーネスが圧縮レイヤーを得る（09-18）
+
+09-18 の 2 論文が、両端からこのレイヤーに着地する：
+
+- **「When EOS Tokens Disagree」（arXiv 2609.20511、UNC SciML、コード公開）**——on-policy 蒸留の学生が
+  生成予算を使い切るまで応答長を膨らませる機構は**終止トークンの不一致**：ベースの学生とポスト
+  トレーニングの教師は、宣言された停止集合が同一でも*異なる* EOS トークンに停止確率を置く（Qwen3・
+  Llama・Gemma の 3 ファミリで実証）。機能的に等価な EOS を同一の意味的停止アクションとして扱えば、
+  3 ファミリすべてで膨張が大幅に緩和。冗長なエージェントは直接のコスト項——これは機構的で修正可能な
+  原因（著者の境界：「重要だが網羅的ではない」；アライメント後も独特な後期トレーニング膨張が残る）。
+- **NVIDIA SoL-Pi（arXiv 2609.20519）**——応答側：RSI で編集されたハーネスの 4 つの生存機構（アクション
+  実行、コンテキスト圧縮、観測処理、委任読み取り）が、**記録トークントラフィック 44.7–49.0% 削減**・
+  API コスト約 ⅓ 減で Pi 相当の精度を主張——圧縮がプロキシの外付けでなくハーネスに内蔵。留保：
+  「recorded」トラフィック、「estimated」削減、51 タスクの単一ベンチマーク、第三者実行なし。Spotify の
+  shunt と context-mode のハーネス層の兄弟と読める：圧縮/強制/除外に、4 番目の自己改善する参入者。
+
+Sources: [arXiv 2609.20511](https://arxiv.org/abs/2609.20511) ·
+[UNCSciML/opd-eos](https://github.com/UNCSciML/opd-eos) ·
+[arXiv 2609.20519](https://arxiv.org/abs/2609.20519)

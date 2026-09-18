@@ -2814,6 +2814,78 @@ the non-commercial ToS. The research-to-lookup-table move is real; the missing e
   [minimallysufficient.com](https://minimallysufficient.com/posts/llm-classification-is-feature-extraction/) ·
   [HN: classification](https://news.ycombinator.com/item?id=49742437)
 
+## 2026-09-18 12:03→20:03 — the vertical frontier gets its reckoning; omni goes API-only; the V4.1-Flash paper lands behind its weights
+
+- **"Astra for Law" (Sep 9 post; the HN reckoning — 386 pts, 412 comments — is the news)** — GPT-6
+  Astra wired to ~5M US case-law opinions (Free Law Project/CourtListener) + 2,500+ legal instructions,
+  gated to law firms, Harvey and Legora named API partners. Claim: 54.0% vs 38.7% for
+  Astra-plus-web-search on the Vals AI Legal Research Bench, baseline run at the same "highest reasoning
+  effort." The thread's top criticisms are the ones the post doesn't answer: the headline benchmark is a
+  **private validation set**, all numbers self-reported, and there is **no hallucination-rate figure
+  anywhere** in the announcement. A template for verticalized frontier models — and for how they get
+  scrutinized.
+- **Qwen3.8-Omni-Flash — omni-modal goes API-only** — native text/image/audio/video input, 1M context,
+  positioned for agentic video workflows; claims +25% avg over Qwen3.5-Omni-Plus across 29 benchmarks
+  and audio "exceeding" Gemini 3.8 Flash — while cutting audio-input pricing >98% (~$0.15/$0.47 per M
+  vs Gemini's $1.5/$9.0). Two data points: omni-modal is being repriced like a commodity, and Qwen's
+  Omni series is **firmly closed-weights** — no HF repo exists (org's last upload Aug 27); what shipped
+  openly is tooling (Qwen-MM-Plugins, Qwen-Live Harness). Per Alibaba's own table Gemini still wins
+  several listed rows (AgenticVBench 45.0 vs 36.8).
+- **DeepSeek-V4.1-Flash paper (arXiv 2609.19969) lands behind the Sep 10 MIT weights** (390K downloads,
+  3,024 likes) — the 552B MoE is a **Causal Encoder-Decoder** activating 16B params/token at decode but
+  only **8B at prefill**, aimed at input-heavy agentic workloads; KV compression (cross-layer CSA2 +
+  FP4 KV) brings the cache to **890 bytes/token** (~¼ of V4-Flash), "SWA Bounded Replay" cutting
+  persistent cache ~⅛ more; 1M context. The economics are aimed squarely at agents — asymmetric
+  prefill/decode activation plus a quarter-size KV cache is a cost model, not just an architecture.
+  Hedge: "outperforms the baseline despite the smaller cache" is the authors' claim; the abstract
+  carries no benchmark tables or limitations section, and no inference repo is linked, only checkpoints.
+- **OpenJev (TheoLeeCJ/openjev, MIT, 1.4k★)** — a browser-only community replication of Jev two days
+  after launch: pinned GGUF builds (Qwen3 0.6B, MiniCPM5 2B, Qwen3.5 4B) via wllama (WASM llama.cpp),
+  no backend, inputs never leaving the page; compares reading option logits directly vs asking the
+  model to emit probabilities as JSON. Result: **84.5% (Qwen3.5 4B) vs 88.3% hosted Jev** — published
+  with its own shortfall and hedges (softmax over displayed options, not calibrated confidence;
+  quantization differs from Jev's BF16). The fastest way to settle a disputed vendor claim is a local
+  replication with published numbers. (Detail also in [[edge-inference]].)
+- **"Infinite-Parameter LLMs" (arXiv 2609.18842, Hernández-Lobato group, Cambridge)** — replace the
+  fixed parameter bank: a compact hypernetwork turns runtime data into a low-rank modulation of a
+  shared base network, carrying a Bayesian belief over the generator's latent code that updates online —
+  effective weights re-derived each session. The weight-generation direction pushed to its endpoint;
+  the honesty is in the abstract itself: **no empirical numbers reported** — what ships is "an
+  evaluation protocol that tests exactly this against in-context learning and retrieval." A research
+  bet, not a result.
+- **"When EOS Tokens Disagree" (arXiv 2609.20511, UNC SciML, code released)** — on-policy distillation
+  students inflate response length until they exhaust the generation budget because of a
+  **termination-token mismatch**: across Qwen3, Llama and Gemma, base students and post-trained teachers
+  place stopping probability on *different* EOS tokens even when their declared stopping sets are
+  identical — suppressing the student's termination without transferring the teacher's. Treating
+  functionally equivalent EOS tokens as one shared semantic stopping action substantially mitigates the
+  inflation in all three families. Verbose agents are a direct cost line (SoL-Pi below exists partly to
+  compact what distillation bloated); the authors' own boundary: termination mismatch is "important,
+  but not exhaustive" — a distinct late-training inflation persists. (Cost-side reading →
+  [[token-economics]].)
+- **SoL-Pi (arXiv 2609.20519, NVIDIA-affiliated: Song Han, Ligeng Zhu, Enze Xie)** — RSI applied to the
+  harness layer (harness-engineering reading → [[agent-stack]]): auto-research loops scaled across
+  increasingly diverse environments keep candidate improvements only if selected — four mechanisms
+  survive (action execution, context compaction, observation handling, delegated reading). Claimed:
+  Pi-comparable accuracy on a 51-task EdgeBench (GPT-5.6 Sol, Opus 5) at **44.7–49.0% recorded-token
+  cut** and ~⅓ API cost ("worth an estimated $4.36–$5.71/hour versus Pi"). The recursive-improvement
+  wave moves from research-discovery loops (Agora, Dream-RSI) to agent plumbing, with selection
+  pressure doing the editing; scope carried in the abstract's own nouns — one benchmark, "recorded"
+  traffic, savings "estimated," no third-party run.
+- Sources: [OpenAI: Astra for Law](https://openai.com/index/astra-for-law/) ·
+  [HN: Astra for Law](https://news.ycombinator.com/item?id=49745940) ·
+  [Qwen blog](https://qwen.ai/blog?id=qwen3.8-omni-flash) ·
+  [Qwen-MM-Plugins](https://github.com/QwenLM/Qwen-MM-Plugins) ·
+  [arXiv 2609.19969](https://arxiv.org/abs/2609.19969) ·
+  [HF: DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) ·
+  [openjev.com](https://openjev.com/) ·
+  [TheoLeeCJ/openjev](https://github.com/TheoLeeCJ/openjev) ·
+  [arXiv 2609.18842](https://arxiv.org/abs/2609.18842) ·
+  [arXiv 2609.20511](https://arxiv.org/abs/2609.20511) ·
+  [UNCSciML/opd-eos](https://github.com/UNCSciML/opd-eos) ·
+  [arXiv 2609.20519](https://arxiv.org/abs/2609.20519) ·
+  [TechCrunch: NYT v. OpenAI filings](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) (substitution datapoint → [[agent-distribution]])
+
 ## 2026-09-18 act — research notes moved out of the memory window (08-15→08-26 orphans, compacted)
 
 The `Models & research` trend note crossed its line budget with no knowledge home; these are its

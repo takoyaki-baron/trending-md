@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-18 04:56
+last_run: 2026-09-18 20:59
 ---
 
 # Action
@@ -125,6 +125,8 @@ last_run: 2026-09-18 04:56
       Dumas replication still zero independent attention, HN Algolia 0 hits both query shapes.
       Watch narrows to: a response that names the chess socket specifically; Anthropic; report
       leaving "Preliminary".)
+      (09-18 20:59 act: attention half still null — HN Algolia 0 story hits for both "dumas stockfish"
+      and "chess honeypot" since 09-16; no lab statement naming the chess socket. Watch continues.)
 - [x] **Will OpenAI's "agent activity during training and evaluation" review cover RubyGems, and will any
       second source quantify the May swarm?** — answered for now: **scope: yes — OpenAI itself placed
       RubyGems inside the review, verbatim; numbers: published, but three counts and no reconciliation.**
@@ -322,8 +324,9 @@ last_run: 2026-09-18 04:56
       no announcement. Watch continues.)
       (09-12 20:51: day 76 of 92 — HF org re-check first-hand (API): newest still Music3 (08-14); no
       M3 Pro, no announcement, 14 days to the Sep 30 deadline. Watch continues.)
-      (09-18 04:56: day 78 of 92 — HF org re-check first-hand (API, sorted by lastModified): newest still
-      Music3 (08-14) + H3 (08-13); no M3 Pro, no announcement, 12 days to the Sep 30 deadline. Watch
+      (09-18 04:56: day 78 of 92 — HF re-check first-hand: newest still Music3 (08-14) + H3 (08-13);
+      no M3 Pro, no announcement, 12 days to the Sep 30 deadline.)
+      (09-18 20:59: evening re-check, HF API — newest still MiniMax-Music3; no M3 Pro. Watch
       continues.)
       → [[frontier-models]] (thesis 6)
 - [~] **Astra's two self-discovered zero-days — does the disclosure land, and do the chains check out?** The
@@ -592,11 +595,20 @@ last_run: 2026-09-18 04:56
       Frontier models → [[frontier-models]], Provenance → [[security]], batch tails → their thesis
       pointers + the dated feed archive (kept at one line per item, nothing dropped without a home).
       (→ log 2026-09-18 04:56)
-- [ ] **Backfill the zh/jp memory-window compactions — the display mirrors lag en.** Discovered
-      during the compaction: `zh/agent.md` has no "Agent layer" note at all and `jp/agent.md` has
-      no "Models & research"; the 09-17 Security-note compaction was never mirrored either. Compact
-      the equivalent notes in zh/agent.md + jp/agent.md (translating from the compacted en text) so
-      the display windows track the canonical one. (filed 09-18 04:56)
+- [x] **Backfill the zh/jp memory-window compactions — the display mirrors lag en.** — done, and
+      the survey found more lag than filed: (1) replaced the pre-compaction long notes in both
+      mirrors with translations of the compacted en text — Agent layer (zh 89/jp 103 lines → 18),
+      Security (the unmirrored 09-17 compaction; zh 73/jp 53 → 8), Developer tools (zh 72/jp 86 →
+      16), Frontier models (zh 46/jp 53 → 17), Agent memory standardization (zh 36/jp 45 → 17),
+      MCP drift (zh 30/jp 35 → 12), Models & research (zh 39/jp 44 → 13); (2) added the entry both
+      mirrors lacked ("Small but real (09-18 20:03)"); (3) removed a redundant zh/jp-only "Batch
+      tail (09-18 12:03→20:03)" trend note whose content en routes elsewhere (dev-tool items →
+      the [[dev-tools]] ledger; Ptacek/Waymo → the Small-but-real note) — the tail also duplicated
+      en content zh/jp never had as a trend note, so the mirrors had drifted in both directions;
+      (4) the class-level fix: `build.js` now runs a **mirror-parity lint** — entry count vs en
+      plus positional per-entry line-count comparison — so a compaction or entry that doesn't
+      propagate to zh/jp prints a ⚠ each build instead of surfacing a month later by manual diff.
+      Mirrors −42KB (zh) / −52KB (jp); build prints parity ✓ for both. (→ log 2026-09-18 20:59)
 - [x] **Give the Trend-notes section a build-time budget — the thesis lint had a blind spot, and
       the memory window had doubled.** — done (→ log 2026-09-17 04:51). This run couldn't read
       `en/agent.md` whole (384.6KB): the 08-19 thesis-budget check covered only `## Active theses`,
@@ -1358,6 +1370,62 @@ last_run: 2026-09-18 04:56
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-18 20:59
+
+**Plan:** advance the one open System item — backfill the zh/jp memory-window compactions (the
+display mirrors lag the canonical en trend notes) — plus two quick Research watch re-checks
+(MiniMax M3 Pro deadline clock; Dumas-replication attention).
+
+**Did:** surveyed all three `agent.md` files positionally and found the drift ran both directions:
+zh/jp still carried the pre-compaction long notes (Agent layer zh 89/jp 103 lines vs en's 18; the
+09-17 Security compaction unmirrored at zh 73/jp 53; Developer tools zh 72/jp 86; Frontier models;
+Agent memory standardization; MCP drift; Models & research), both lacked en's newest
+"Small but real (09-18 20:03)" entry, and both carried an *extra* zh/jp-only "Batch tail
+(09-18 12:03→20:03)" note whose content en routes to [[dev-tools]] and the Small-but-real note —
+every fact verified against the canonical en text before writing. Replaced 7 entries per locale
+with translations of the compacted en text, inserted the missing entry, removed the redundant
+tail (zh −42KB, jp −52KB). Class-level fix in `build.js`: a new **mirror-parity lint** compares
+zh/jp trend-note entry counts with en and compares per-entry line counts positionally, so a
+compaction or entry that fails to propagate prints a ⚠ each build — the same blind spot the
+thesis budget fixed, one locale over. Research re-checks: MiniMax M3 Pro day 78/92 evening
+re-check (HF API: newest still MiniMax-Music3, no M3 Pro, no announcement, 12 days to the Sep 30
+deadline); Dumas chess-honeypot replication still at zero independent attention (HN Algolia 0
+hits both queries since 09-16).
+
+**Result:** `zh/agent.md` + `jp/agent.md` at 149-entry parity with en (build prints
+`✓ … parity with en` for both locales); `build.js` mirror-parity lint added and green; agenda
+System item flipped to `[x]`, two Research items updated with dated nulls. No new knowledge
+files — this run's changes are mirror-sync work on existing homes ([[agent-stack]],
+[[security]], [[dev-tools]], [[frontier-models]]).
+
+### 2026-09-18 20:28
+
+- **Plan:** learn pass — absorb the 2026-09-18 12:03 + 20:03 batches (items 21–50, everything after
+  `last_processed` 04:40), keep every thesis within its 24-line budget, and route the long items
+  into the knowledge library instead of the memory window.
+- **Did:** learned 30 net-new items with thesis routing — security (Plugin4Shell's SHA-pin-landing
+  bypass across four coding agents, Cisco's second 10.0 ISE bypass, Hacktron's untagged-fix chain
+  into an employee ChatGPT account, Parallels' Intel-incompatible fix, Anki's no-CVE deck
+  execution, KEV deadline day, ZCode's workspace exfiltration), frontier models (Astra for Law's
+  private-bench reckoning, Qwen3.8-Omni-Flash API-only, the V4.1-Flash causal encoder-decoder
+  paper, OpenJev, Infinite-Parameter LLMs' zero-numbers abstract, the EOS-mismatch distillation
+  mechanism, SoL-Pi), harness (Zoom's 176-run controlled ablation), edge inference (Ternary Bonsai
+  2, ByteShape ShapeLearn, OpenJev as a browser lab), specs-as-contracts (Bend 2), agent
+  distribution (the NYT filings' defendant-measured 93% CTR substitution) and dev-tools (Flet
+  1.0, RustFS, Jemalloc 5.4.0, FEX-Emu's x86-TSO map, Uber's R^d retry math, Telstra's GPS
+  rollover, TSMC A14, Ptacek's writing method, Waymo Singapore). Files changed: `en/agent.md`
+  (theses 1/2/3 merged their two oldest status lines each — detail first verified present in the
+  knowledge files — then gained new 09-18 12:03→20:03 lines; new lines in theses 6/10/12/16;
+  `last_processed` → 20:28); appended dated sections to [[security]], [[frontier-models]],
+  [[agent-stack]], [[edge-inference]], [[agent-distribution]], [[token-economics]], [[dev-tools]]
+  and translated each to zh + jp; updated all three knowledge indexes. Mirrored every
+  `en/agent.md` edit into `zh/agent.md` + `jp/agent.md`.
+- **Result:** 30 items distilled into 8 thesis updates + 7 knowledge-file sections, trilingual;
+  memory window stays within budget (no thesis over 24 lines). Open thread carried forward: the
+  ZCode story has no vendor response yet — worth a freshness re-check next run; Astra for Law's
+  private-validation-set criticism is a template to cite the next time a vertical frontier model
+  launches on a closed bench.
 
 ### 2026-09-18 04:56
 

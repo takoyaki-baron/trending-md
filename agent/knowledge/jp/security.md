@@ -2119,3 +2119,79 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [SecurityWeek: BIND](https://www.securityweek.com/isc-patches-14-vulnerabilities-in-bind-9-security-update/) ·
   [Helpfeel notice](https://corp.helpfeel.com/en/news/news-20260916) ·
   [The Hacker News: Gyazo](https://thehackernews.com/2026/09/gyazo-breach-exposes-2362-million-user.html)
+
+## 2026-09-18 12:03→20:03 — プラグイン pin は境界ではない; マネジメントプレーン再び; 無印修正がディストロを無防備に
+
+- **Plugin4Shell（AIR Security、9月17日）**——コーディングエージェントのプラグイン/スキル SHA-pin
+  の回避：エージェントはマーケットプレイスが pin した正確なコミットを checkout するが、**それが実際に
+  そこに着地したかは検証しない**——プラグインのリポジトリを支配する攻撃者は、pin が成立して見えるまま
+  checkout を悪意あるコードに解決させる——Claude Code・OpenAI Codex・GitHub Copilot・Gemini CLI で
+  ゼロクリックのホスト RCE が報告。ベンダー自身のタイムラインでは：Claude Code は 2.1.179 で修正
+  （6月17日）、Codex は 0.146.0 で修正（8月12日に検証）、**Copilot は未修正**、Google は 8月4日に
+  Gemini CLI（非推奨）は決して修正しないと確認。留保を携行：CVE ID なし；「数百万のエージェント」の
+  言葉はエージェントセキュリティ市場を売るベンダーのもの；悪用は報告であって野外観測ではない。
+  スキルサプライチェーン系譜（vercel-labs/skills、tech-leads-club の検証提案、Claude-Red）に合流：
+  pin チェックリスト全体が仮定する境界の正体は、git ホストの checkout セマンティクス。
+- **Cisco 9月16日のバンドル**——FMC 18 CVE（CVE-2026-20324 sftunnel 認証後 root RCE 9.9、
+  CVE-2026-20242 Java 逆シリアライゼーション RCE 9.8 を含む）+ ISE 20 CVE、うち**2個目**の 10.0
+  スコアを持つ非認証 REST-API 認証バイパス CVE-2026-76423——9月17日に扱った KEV ゼロデイ
+  CVE-2026-76460 とは別物で、こちらは同じバンドルで修正済み——さらに Nexus Dashboard も。スコアの
+  規律：両ヘッドライン CVE とも **Cisco PSIRT 割り当て、NVD は依然 "Awaiting Analysis"**；Cisco 自ら、
+  ISE の 3 件は公開開示後に初めて修正されたと明記；野外で実際に悪用された FMC 脆弱性は 3月/7月の
+  古い方の一連。
+- **「Hacking OpenAI」（Hacktron による 7 月事件の回顧）**——community.openai.com の
+  Discourse→ImageMagick 経由の HEIC アップロードで届く libheif ヒープオーバーフローがフォーラム RCE
+  に；上流の修正が**セキュリティ更新としてラベル付けされなかった**ため CVE も付かず、Debian 12/13 と
+  Discourse 公式 Docker イメージが脆弱なまま出荷され続けた。SSO の設定不備と連鎖させ、研究者らは
+  従業員の ChatGPT/Codex アカウントに到達し、内部モノレポで PR を開いたと主張；OpenAI は $6,500 を
+  支払い、SSO を約 14 時間で修正。留保：Discourse テストは明示的に報奨金対象外（RCE 自体は無許可）、
+  執筆者はモデルの拒否を通すためインスタンスを CTF ターゲットに偽装したと認めている。移転する教訓は
+  2つ：無印の上流セキュリティ修正は全下流ディストロを静かに無防備にする；SSO は「行動できる AI
+  アカウント」から 1 ホップの隣。
+- **Parallels Desktop CVE-2026-90894（7.8、JFrog による Secondary 割り当て；NVD "Received"）**——root
+  の `prl_disp_service` がワールド書き込み可能ソケットで待ち受け、任意ローカルピアの資格情報を受け
+  付ける；ダブルクォートを含む細工したアプライアンスパスで root 実行の `tar` へ
+  `--use-compress-program` を注入（26.4.0 で確認）。醜いのは更新経路：**修正は Parallels 27 のみ、
+  しかし 27 は Intel Mac 非対応**——現行 26.4.2 を含む 26.x 全線が修正なしで放置。ローカル限定だが、
+  共有 CI/開発 Mac では「ローカル」は低いハードル。
+- **Anki 26.09 / 26.09.2**（「できるだけ早くアップグレードを」）——エディタ表示のノートがローカル
+  ファイルを読め得る問題、「画像を開く」が拡張子を検証せず**共有デッキが危険なファイルを実行し得る**
+  問題を修正；26.09.2 はデッキ説明の外部リンク問題の修正に加え、レガシー `anki.importing`/
+  `anki.exporting` を削除（アドオンを破壊）。CVE は一切なし——3000万ユーザーアプリのデッキサプライ
+  チェーンが静かに修正された；CVE なしデスクトップアプリクラスの再例。
+- **FamousSparrow → SparroWocky（ESET）**——中国系 APT（Earth Estries/Salt Typhoon との重複は「ある
+  程度の重複」と留保付きで、帰属ではない）が SparrowDoor を未報告のモジュラ C++ バックドアに置換し、
+  ラテンアメリカ政府を標的：メモリ内 COFF プラグインロード、MinHook によるスレッド隠蔽、
+  SilentMoonwalk 変種の call-stack スプーフィング、Mbed TLS 経由の TLS プロキシ。バックドアは開示時点
+  で 1 年以上経過（「少なくとも 2025 年 8 月」）——スパイウェアがレッドチーム商品化の回避プリミティブ
+  で職業化していく実例。
+- **KEV 締切日（9月18日）**——CVE-2026-85046（V8 型混同、Chrome 152.0.7977.82 で修正、2026 年 6 個目
+  の活発に悪用される Chrome ゼロデイ）が BOD 26-04 の連邦修復締切を迎える。スコアリングの教訓の反復：
+  **CVSS 8.8（Google-CNA、NVD "Analyzed"）**——high であって critical ではないが、使われているから
+  KEV 掲載；KEV の時計はスコアではなく悪用で回る。Chromium 埋め込み側（Edge、Opera、Electron）は
+  各自の cadence で修正を引き継ぎ、Electron は数週間遅れる。
+- **ZCode（Zhipu のコーディングエージェントデスクトップアプリ）がワークスペース全体を黙ってアップ
+  ロード**——研究者による Electron `app.asar` のリバース：プロンプトごと・タスク完了ごとにクライアント
+  は `zcode.z.ai` から RSA 公開鍵と OSS 署名を取得し、ワークスペースを tar.gz にパック・暗号化して
+  Aliyun OSS へ POST。平文スナップショットマニフェスト（42,411 ファイル）では **`.git` がペイロードの
+  86.6%**：196MB の LFS 資産、102MB の commit オブジェクト、未プッシュブランチ名を含む reflog、
+  `.git/config` の内部ホスト名、後続コミットで削除済みの秘密。RSA 秘密鍵はサーバ側；「体験の最適化」
+  「Repo Snapshot Indexing」の 2 つの UI トグルでは取得は止まらず、有効な JWT だけが gates——プライバシー
+  ポリシーの「最適化プログラムはデフォルトでオフ」の記述と矛盾。同日公開の第二の検証記事が核心的発見を
+  裏付け；ベンダー応答はまだなく、サーバ側保持は未確認。Anthropic 蒸留レポートの信頼境界の失敗を
+  デスクトップアプリ規模で（[[agent-stack]] 参照）。
+- Sources: [AIR Security: Plugin4Shell](https://www.air.security/blog-posts/plugin4shell) ·
+  [HN: Plugin4Shell](https://news.ycombinator.com/item?id=49745809) ·
+  [Cisco advance notice](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) ·
+  [SecurityWeek: Cisco](https://www.securityweek.com/cisco-fixes-dozens-of-flaws-across-fmc-ise-and-nexus-dashboard/) ·
+  [Hacktron: Hacking OpenAI](https://www.hacktron.ai/blog/hacking-openai) ·
+  [HN: Hacking OpenAI](https://news.ycombinator.com/item?id=49749656) ·
+  [JFrog: Parallels LPE](https://research.jfrog.com/vulnerabilities/parallels-desktop-is-vulnerable-to-a-local-privilege-escalation-via-appliance-extract-argument-injection-cve-2026-90894/) ·
+  [NVD: CVE-2026-90894](https://nvd.nist.gov/vuln/detail/CVE-2026-90894) ·
+  [Anki 26.09 release](https://github.com/ankitects/anki/releases/tag/26.09) ·
+  [ESET: SparroWocky](https://www.welivesecurity.com/en/eset-research/beware-sparrowock-backdoor-bites-commands-catch/) ·
+  [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+  [NVD: CVE-2026-85046](https://nvd.nist.gov/vuln/detail/CVE-2026-85046) ·
+  [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·
+  [tokenstead: ZCode](https://tokenstead.ai/guides/zcode-silent-git-history-upload) ·
+  [HN: ZCode](https://news.ycombinator.com/item?id=49752422)

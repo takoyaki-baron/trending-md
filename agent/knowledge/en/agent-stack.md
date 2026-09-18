@@ -2224,3 +2224,38 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   [GitLab blog](https://about.gitlab.com/blog/rate-limit-change-2026/) ·
   [HN: GitLab](https://news.ycombinator.com/item?id=49742353) ·
   [arXiv 2609.18094](https://arxiv.org/abs/2609.18094)
+
+## 2026-09-18 12:03→20:03 — session formats become the lock-in vector; the desktop agent app becomes an exfiltration channel; the harness ablation goes controlled
+
+- **Skillsync (YC W26) — "Pandoc for AI chats"** (Launch HN, 53 pts/52 comments): whole coding-agent
+  sessions — messages, reasoning, tool results — moving between Claude Code, Codex, OpenCode, Cursor.
+  The open core is `skillsynchq/txcript` (Rust library + CLI + WASM, Apache-2.0, crates.io/npm), a
+  conversion layer between session formats, with MCP-based recall of past sessions on top. Session
+  formats are becoming the lock-in vector now that models are interchangeable — the interoperability
+  play the memory-standardization thread implied. HN's pushback is fair and travels: conversion itself
+  is "trivially solved"; the defensible part is the cross-agent schema and search layer, and the SaaS
+  around the open core is closed.
+- **ZCode (Zhipu's coding-agent desktop app) silently uploads the entire workspace** — security-side
+  detail in [[security]]; the agent-stack reading: the trust boundary for coding agents is being set by
+  desktop apps that ship whole repositories — history, reflogs, secrets — to training infrastructure,
+  gated only on a valid JWT, with UI toggles that don't stop capture. The same shape as the Anthropic
+  distillation report measured at protocol scale, now at consumer-desktop scale.
+- **Zoom's "An Empirical Study of Harness Design for Coding Agents" (arXiv 2609.20804, 43pp, HF papers
+  #1)** — different work from HarnessTax: instead of comparing existing harnesses, build one lightweight
+  harness and ablate planning, action space and context management across **176 matched runs**
+  (4 models × SWE-Bench Verified + Terminal-Bench 2.1). Findings: context management matters most when
+  budget is tight; **rule-based context elision beats LLM summarization on cost**; planning is an
+  accuracy scaffold for weak models but merely a cost saver for strong ones; bash-capable models do
+  fine with bash-only tools at much lower cost. The harness-ablation question gets its first controlled
+  dataset — and the answer is unglamorous: spend engineering on context management, not prompts. Scope:
+  four models, two benchmarks, no code released.
+- **NVIDIA SoL-Pi (arXiv 2609.20519)** — RSI pointed at the harness itself (numbers + hedges →
+  [[frontier-models]]): selection-over-generated-improvements keeps four mechanisms — action execution,
+  context compaction, observation handling, delegated reading — a harness that edits its own plumbing
+  the way Dream-RSI edits discovery strategies.
+- Sources: [Launch HN: Skillsync](https://news.ycombinator.com/item?id=49743049) ·
+  [skillsynchq/txcript](https://github.com/skillsynchq/txcript) ·
+  [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·
+  [HN: ZCode](https://news.ycombinator.com/item?id=49752422) ·
+  [arXiv 2609.20804](https://arxiv.org/abs/2609.20804) ·
+  [arXiv 2609.20519](https://arxiv.org/abs/2609.20519)

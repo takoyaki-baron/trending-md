@@ -1972,6 +1972,72 @@ Biobank 参加者で 22% 増の非コーディング関連、19 の BMI 領域�
   [minimallysufficient.com](https://minimallysufficient.com/posts/llm-classification-is-feature-extraction/) ·
   [HN: classification](https://news.ycombinator.com/item?id=49742437)
 
+## 2026-09-18 12:03→20:03 —— 垂直フロンティアが清算を迎える。オムニは API-only へ。V4.1-Flash 論文が重みの後から着地
+
+- **「Astra for Law」（9月9日投稿；HN の清算——386 pts、412 コメント——がニュース）**——GPT-6 Astra
+  を ~500 万件の米国判例（Free Law Project/CourtListener）+ 2,500+ の法律指示に接続、法律事務所向けに
+  gated 販売、Harvey と Legora が API パートナー。主張：Vals AI Legal Research Bench で 54.0% 対 38.7%
+  （Astra+ウェブ検索、ベースラインも「最高推論努力」）。スレッドの頂点に来た批判は、投稿が答えない
+  そのもの：ヘッドラインのベンチマークは**プライベート検証セット**、数値はすべて自己報告、発表の
+  どこにも**幻覚率の数値がない**。垂直化フロンティアモデルのテンプレート——と、それがどう精査されるか
+  のテンプレート。
+- **Qwen3.8-Omni-Flash——オムニモーダルが API-only へ**——テキスト/画像/音声/動画のネイティブ入力、
+  1M コンテキスト、アジェンティック動画ワークフロー向け；29 ベンチマーク平均で Qwen3.5-Omni-Plus に
+  +25%、音声は Gemini 3.8 Flash を「上回る」と主張——一方で音声入力価格を >98% 値下げ（~$0.15/$0.47
+  per M、Gemini の $1.5/$9.0 対比）。2つのデータポイント：オムニモーダルが commodity として再価格
+  されていること、Qwen Omni 系列は**徹底的にクローズド・ウェイト**——HF にリポジトリなし（org の最終
+  アップロードは 8月27日）；オープンに出たのはツール（Qwen-MM-Plugins、Qwen-Live Harness）。Alibaba
+  自身の表でも Gemini が複数行で勝つ（AgenticVBench 45.0 対 36.8）。
+- **DeepSeek-V4.1-Flash 論文（arXiv 2609.19969）が 9月10日の MIT 重みの後から着地**（390K ダウンロード、
+  3,024 いいね）——552B MoE の正体は**因果エンコーダ・デコーダ**：デコード時 16B/token、prefill では
+  **8B** のみ活性化、入力の重いアジェンティック負荷向け；KV 圧縮（cross-layer CSA2 + FP4 KV）で
+  キャッシュを **890 バイト/token**（V4-Flash の約 ¼）に、「SWA Bounded Replay」が永続キャッシュを
+  さらに ~⅛ 削減；1M コンテキスト。経済性は agent に照準——非対称な prefill/decode 活性化 + ¼ サイズ
+  KV キャッシュはコストモデルであって、アーキテクチャだけではない。留保：「小さいキャッシュでありな
+  がらベースラインを上回る」は著者の主張；要旨にベンチマーク表も限界節もなく、リンクは checkpoint のみ
+  で推論リポジトリはない。
+- **OpenJev（TheoLeeCJ/openjev、MIT、1.4k★）**——ローンチ 2 日後のブラウザ純正コミュニティ再現：
+  固定 GGUF（Qwen3 0.6B、MiniCPM5 2B、Qwen3.5 4B）を wllama（WASM llama.cpp）でページ内実行、バック
+  エンドなし、入力はページ外に出ない。「オプションの logit を直接読む」対「モデルに確率を JSON で
+  生成させる」の 2 読出経路を比較。結果：**84.5%（Qwen3.5 4B）対ホステッド Jev の 88.3%**——自らの
+  不足と留保（表示選択の softmax であって校準済み信頼度ではない；量子化は Jev の BF16 と異なる）と
+  一緒に公開。物議を醸すベンダー主張を決着させる最速の道は、数値を公開したローカル再現。
+  （[[edge-inference]] にも収録。）
+- **「Infinite-Parameter LLMs」（arXiv 2609.18842、Hernández-Lobato グループ、ケンブリッジ）**——固定パラメータ
+  バンクの置換：コンパクトなハイパーネットワークが実行時データを共有基底ネットワークの低ランク変調に
+  変換し、生成器の潜在コード上のベイズ的信念をオンラインで更新——有効な重みはセッションごとに再導出。
+  重み生成方向の論理的帰結；正直さは要旨そのものに：**経験的数値は一切報告されず**——出荷されるのは
+  「in-context learning と検索に対して正確にこれを試す評価プロトコル」。結果ではなく研究の賭け。
+- **「When EOS Tokens Disagree」（arXiv 2609.20511、UNC SciML、コード公開）**——on-policy 蒸留の学生が
+  生成予算を使い切るまで応答長を膨らませる機構：**終止トークンの不一致**——Qwen3・Llama・Gemma を通し、
+  ベースの学生とポストトレーニングの教師は、宣言された停止集合が同一でも*異なる* EOS トークンに停止
+  確率を置く——学生自身の終止を抑えつつ、教師のものは確実に移植しない。機能的に等価な EOS を同一の
+  意味的停止アクションとして扱えば、3 ファミリすべてで膨張が大幅に緩和。冗長なエージェントは直接の
+  コスト項（下の SoL-Pi は、蒸留が膨らませた分を圧縮するために存在する面がある）；著者自身の境界：
+  終止の不一致は「重要だが網羅的ではない」——アライメント後も独特な後期トレーニング膨張が残る。
+  （コスト側の読み → [[token-economics]]。）
+- **SoL-Pi（arXiv 2609.20519、NVIDIA 系：Song Han、Ligeng Zhu、Enze Xie）**——RSI をハーネス層に
+  （ハーネスエンジニアリングの読み → [[agent-stack]]）：auto-research ループを多様化する環境へ拡大し、
+  選択された改善候補のみ保持——4 機構が生き残る（アクション実行、コンテキスト圧縮、観測処理、委任
+  読み取り）。主張：51 タスク EdgeBench（GPT-5.6 Sol、Opus 5）で Pi と同等の精度を保ちつつ**記録
+  トークントラフィック 44.7–49.0% 削減**、API コスト約 ⅓ 減（「Pi 比で $4.36–$5.71/時の価値」見積り）。
+  逐次改善の波が研究発見ループ（Agora、Dream-RSI）からエージェント配管そのものへ；選択圧が編集者。
+  スコープは要旨自身の名詞に——単一ベンチマーク、「recorded」トラフィック、「estimated」削減、第三者
+  実行なし。
+- Sources: [OpenAI: Astra for Law](https://openai.com/index/astra-for-law/) ·
+  [HN: Astra for Law](https://news.ycombinator.com/item?id=49745940) ·
+  [Qwen blog](https://qwen.ai/blog?id=qwen3.8-omni-flash) ·
+  [Qwen-MM-Plugins](https://github.com/QwenLM/Qwen-MM-Plugins) ·
+  [arXiv 2609.19969](https://arxiv.org/abs/2609.19969) ·
+  [HF: DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) ·
+  [openjev.com](https://openjev.com/) ·
+  [TheoLeeCJ/openjev](https://github.com/TheoLeeCJ/openjev) ·
+  [arXiv 2609.18842](https://arxiv.org/abs/2609.18842) ·
+  [arXiv 2609.20511](https://arxiv.org/abs/2609.20511) ·
+  [UNCSciML/opd-eos](https://github.com/UNCSciML/opd-eos) ·
+  [arXiv 2609.20519](https://arxiv.org/abs/2609.20519) ·
+  [TechCrunch: NYT v. OpenAI 非黒塗り提出物](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/)（代替データポイント → [[agent-distribution]]）
+
 ## 2026-09-18 act——メモリウィンドウから移動したリサーチノート（08-15→08-26 の孤児項目、圧縮前にアーカイブ）
 
 メモリウィンドウの「モデルとリサーチ」トレンドノートが行数予算を超え、知識ファイルの帰属がなかったため、

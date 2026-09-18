@@ -566,3 +566,35 @@ Q8_0 を誤ってスキップ（補間で代用）、KV-cache 量子化は未テ
 - **colibri（`JustVugg/colibri`、35.7k★ API 経由で検証、+872/日で日次 #15、v1.11.0 9月13日、Apache-2.0）：** 純 C・ゼロ依存のエキスパートストリーミングエンジンがトレンドに留まり、モデルマトリクスを提示——GLM-5.2/5.3、Kimi K3（2.8T）、DeepSeek V4 Flash、Qwen3.6、OLMoE——マルチティア分割は明確：744B GLM の ~17B 高密度コアを RAM に置き（int4 で約 9.9 GB）、19,456 個のルーティングエキスパート（約 372 GB）を必要に応じて NVMe からストリーム、GPU 不要。公開数値：128 GB CPU 専用マシンのウォーム時 1.8 tok/s、RTX 5090×6 で 5.8–6.8 tok/s；README は「negative results too」を歓迎。プロジェクト自身の留保を携行：ベンチマークは自己公表かつ機械固有；O_DIRECT の利得は「マシンごとに異なる」。09-10 の「維持されているエンジン」という位置づけが成立——ディスクストリーミング学派にリファレンス実装と正直な失敗ログの両方が揃った。
 - Sources: [JustVugg/colibri](https://github.com/JustVugg/colibri) ·
   [GitHub Trending](https://github.com/trending)
+
+## 2026-09-18 12:03→20:03 —— 三値重みに 2 番目のオープン挑戦者。量子化文化は自らの誤差範囲を公開し続ける。ブラウザ再現ラボが到来
+
+- **PrismML Ternary Bonsai 2 27B**（Caltech スピンアウト；HN 297 pts）：{−1,0,+1} の三値重み + FP16
+  グループスケーリングで Qwen3.8-27B を再構築——**実効 1.76 ビット/重み、5.9 GB**、262K コンテキスト
+  ——GGUF/MLX 重みが Hugging Face に Apache-2.0 で実在（Simon Willison がスレッドで GGUF を実際に動かし
+  た——蒸留品ではない）。自己報告：83.9 対 85.4 総合（「98.2% 保持」）、RTX 5090 で 143 tok/s。留保：
+  「near-lossless」はベンダーの言い回し——**ほぼ全カテゴリで全精度ベースラインに劣後**（ビジョン 78.59
+  対 81.64）、Prism 独自の llama.cpp fork が必要（Intel B70 ユーザーは何も動かせず）、完全な数値は
+  モデルカードでなくホワイトペーパー PDF。三値が 27B で成立すれば 27B クラスがコンシューマ GPU の
+  デフォルトになり得る——09-17 BITCOS のゼロ密度条件付き性に産業規模のテストケース。
+- **ByteShape ShapeLearn GGUF 量子化**（HN 77 pts、ベンダー投稿）：Qwen 3.8 27B のフル run を公開
+  ——IQ2_XXS（2.56 bpw）から IQ4_XS（3.84 bpw）まで 5 段階、RTX Pro 6000 から 4080/5060 Ti まで計測；
+  GPU-4 ティアは 11.0 GB で 16 GB カードを狙う；内蔵 MTP ドラフトヘッドか 1.1 GB の外付け DFlash2
+  ドラフトによる推測デコーディング；llama.cpp b10430 上で BF16 正規化、instruct（GSM8K、IFEval、MMLU、
+  LiveCodeBench V6）と thinking（BFCL V4、ACEBench）の両スイート。コンシューマ GPU 量子化文化は、
+  雰囲気を公表していた時代から KLD ダイバージェンスの忠実度曲線を公表する時代へ——しかも免責が正しい
+  位置にある（ベンダー自己計測；推測デコーディングのプロットは「品質の等価性を独立には立証しない」；
+  Bartowski の新しい量子化はテスト後；VRAM 収まりはコンテキストと提供構成次第）。Quesma の CI 付き
+  ベンチ（09-09）と並び、量子化主張スペクトラムの「測った」側。
+- **OpenJev（TheoLeeCJ/openjev、MIT、1.4k★）**——ブラウザが再現ラボに：固定 GGUF（Qwen3 0.6B /
+  MiniCPM5 2B / Qwen3.5 4B）を wllama（WASM llama.cpp）でページ内実行、バックエンドなし、入力はページ
+  外に出ない——**84.5% 対ホステッド Jev の 88.3%** を達成し、自らの不足を公開（softmax-over-options
+  で校準済み信頼度ではない；量子化は BF16 と異なる）。web-llm が主張したゼロインストールのプライバシー
+  端が、今やコミュニティベンチマークに使われている。（モデル側の読み → [[frontier-models]]。）
+- Sources: [prismml.com/news/bonsai-2-27b](https://prismml.com/news/bonsai-2-27b) ·
+  [HF: prism-ml/Ternary-Bonsai-2-27B-gguf](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) ·
+  [HN: Bonsai 2](https://news.ycombinator.com/item?id=49746618) ·
+  [byteshape.com: ShapeLearn Qwen 3.8 27B](https://byteshape.com/blogs/Qwen3.8-27B/) ·
+  [HN: ByteShape](https://news.ycombinator.com/item?id=49749393) ·
+  [openjev.com](https://openjev.com/) ·
+  [TheoLeeCJ/openjev](https://github.com/TheoLeeCJ/openjev)

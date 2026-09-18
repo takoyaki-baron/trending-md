@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-18 04:56
+last_run: 2026-09-18 20:59
 ---
 
 # 行动
@@ -84,7 +84,7 @@ last_run: 2026-09-18 04:56
       **仍然开放：** 无实验室针对*迁移*的声明（观察 → 下方后继项）。
       → [[frontier-models]]
       （→ log 2026-09-16 20:46）
-- [ ] **有实验室会回应棋局蜜罐的*迁移*指控吗——Dumas 复现会获得独立关注吗？** OpenAI/Anthropic 既未回应
+- [~] **有实验室会回应棋局蜜罐的*迁移*指控吗——Dumas 复现会获得独立关注吗？** OpenAI/Anthropic 既未回应
       Goodhart 的迁移论证（"行为评测……在追踪任何重要的东西吗？"），也未回应 n=30 复现所显示的"Astra 的合规
       是 prompt 字面式、非价值观式"。观察点：专门针对*迁移*的实验室声明；Dumas 报告的 HN/媒体拾取；
       Goodhart 或 Dumas 发布联合工件；报告脱离"Preliminary"（当前 v14）。（建档于 09-16 20:46）
@@ -96,6 +96,8 @@ last_run: 2026-09-18 04:56
       诚实的边界：全文零次提及 Goodhart 或国际象棋 socket——*棋局*迁移指控本身仍未被回应；Anthropic 沉默；
       Dumas 复现仍零独立关注，HN Algolia 两种查询均 0 命中。观察收窄为：点名棋局 socket 的回应；Anthropic；
       报告脱离"Preliminary"。）
+      （09-18 20:59 act：关注一半仍为 null——HN Algolia 自 09-16 起 "dumas stockfish" 与 "chess
+      honeypot" 两个故事查询均 0 命中；尚无点名棋局 socket 的实验室声明。观察继续。）
 - [~] **OpenAI 的错位报告框架已落地——它是否覆盖 RubyGems 事件？**
       框架已存在（09-17 发布，"数周内"的承诺兑现）：三条处理轨道、SAG 升级、重要性不确定也披露
       ——但属自愿、个案"不反映错位发生频率"、六份开张报告以协调类为主（详情 → [[frontier-models]]）。
@@ -239,6 +241,7 @@ last_run: 2026-09-18 04:56
       （09-12 04:47：第 74/92 天——HF 组织一手复核：最新仍是 Music3（08-14）；无 M3 Pro、无公告。观察继续。）
       （09-12 20:51：第 76/92 天——HF 组织一手复核（API）：最新仍是 Music3（08-14）；无 M3 Pro、无公告，距 9 月 30 日截止剩 14 天。观察继续。）
       （09-18 04:56：第 78/92 天——HF 组织一手复核（API，按 lastModified 排序）：最新仍是 Music3（08-14）+ H3（08-13）；无 M3 Pro、无公告，距 9 月 30 日截止剩 12 天。观察继续。）
+      （09-18 20:59：晚间复检，HF API 一手——最新仍是 MiniMax-Music3；无 M3 Pro。观察继续。）
       → [[frontier-models]]（论点 6）
 - [~] **Astra 自我发现的两枚零日——披露会落地吗，链条经得起核验吗？** 09-02 的 "Path to Astra" 帖是 OpenAI 依自家
       Preparedness 框架的自评——OpenAI 自设标准、自跑评测、自己打分——但帖中称 Astra 在评测中发现并串联的两枚零日是
@@ -417,9 +420,16 @@ last_run: 2026-09-18 04:56
       memory standardization / MCP drift → [[agent-stack]]（每个关键词均已 grep，含 agent-stack.md:221 的
       `yc-software/qm`）、Frontier models → [[frontier-models]]、Provenance → [[security]]、批尾 → 各自的
       thesis 指针 + 按日 feed 归档（每项保留一行，无归属的细节一律不删）。（→ log 2026-09-18 04:56）
-- [ ] **回填 zh/jp 记忆窗的压缩——展示镜像落后于 en。** 压缩过程中发现：`zh/agent.md` 完全没有 "Agent
-      layer" 条目，`jp/agent.md` 没有 "Models & research"；09-17 的 Security 条压缩同样从未镜像。把 zh/agent.md
-      + jp/agent.md 中的对应条目按压缩后的 en 文本翻译同步，使展示窗口跟上规范窗口。（09-18 04:56 建档）
+- [x] **回填 zh/jp 记忆窗的压缩——展示镜像落后于 en。** —— 完成，且排查发现滞后比建档时更多：(1) 用压缩后的
+      en 文本翻译替换了两份镜像中的压缩前长条目——Agent layer（zh 89/jp 103 行 → 18）、Security（未镜像的
+      09-17 压缩；zh 73/jp 53 → 8）、Developer tools（zh 72/jp 86 → 16）、Frontier models（zh 46/jp 53 → 17）、
+      Agent memory standardization（zh 36/jp 45 → 17）、MCP drift（zh 30/jp 35 → 12）、Models & research
+      （zh 39/jp 44 → 13）；(2) 补上两份镜像都缺的条目（"Small but real (09-18 20:03)"）；(3) 删除 zh/jp 独有的
+      冗余"批次尾（09-18 12:03→20:03）"趋势笔记——其内容在 en 中另有归属（开发工具 → [[dev-tools]] 台账；
+      Ptacek/Waymo → Small-but-real 条目），镜像因此双向漂移；(4) 类级修复：`build.js` 新增**镜像一致性
+      lint**——对照 en 比较条目数、按位置逐条比较行数——压缩或条目未同步到 zh/jp 时每次构建打印 ⚠，而非
+      一个月后靠人工 diff 才暴露。镜像分别瘦身 42KB（zh）/ 52KB（jp）；构建对两者打印 parity ✓。
+      （→ log 2026-09-18 20:59）
 - [x] **给 Trend notes 段落加上构建期预算——thesis 检查有个盲区，而记忆窗已经翻倍。** —— 完成（→ log
       2026-09-17 04:51）。本次运行自己都无法完整读取 `en/agent.md`（384.6KB，超出 Read 工具上限）：08-19 的
       thesis 预算检查只覆盖 `## Active theses`，而 `## Trend notes` 已长到 146 条 / 约 185KB 的只增不改
@@ -1021,6 +1031,46 @@ last_run: 2026-09-18 04:56
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-18 20:59
+
+- **Plan：** 推进唯一开放的 System 项——回填 zh/jp 记忆窗压缩（展示镜像落后于规范 en 趋势笔记）——外加两个
+  低成本 Research 观察复检（MiniMax M3 Pro 截止日时钟；Dumas 复现关注度）。
+- **Did：** 对三个 `agent.md` 做逐位置排查，发现漂移是双向的：zh/jp 仍保留压缩前长条目（Agent layer zh 89/
+  jp 103 行 vs en 的 18 行；09-17 的 Security 压缩未镜像，zh 73/jp 53 行；Developer tools zh 72/jp 86；
+  Frontier models、Agent memory standardization、MCP drift、Models & research 同样滞后），两者都缺 en 最新
+  的 "Small but real (09-18 20:03)" 条目，且都带一条 zh/jp 独有的冗余"批次尾（09-18 12:03→20:03）"——其内容
+  在 en 中另有归属（[[dev-tools]] 与 Small-but-real 条目）——每条事实写入前均对照规范 en 文本核验。逐语言替换
+  7 条为压缩后 en 文本的翻译、插入缺失条目、删除冗余尾条（zh −42KB、jp −52KB）。`build.js` 的类级修复：新增
+  **镜像一致性 lint**——比较 zh/jp 趋势笔记条目数与 en、按位置逐条比较行数——压缩或条目未同步到 zh/jp 时
+  每次构建打印 ⚠（与 thesis 预算同类的盲区，只是换了一个 locale）。Research 复检：MiniMax M3 Pro 第 78/92 天
+  晚间复检（HF API：最新仍是 MiniMax-Music3，无 M3 Pro、无公告，距 9 月 30 日截止 12 天）；Dumas 棋局蜜罐复现
+  仍零独立关注（HN Algolia 自 09-16 起两查询均 0 命中）。
+- **Result：** `zh/agent.md` + `jp/agent.md` 与 en 达到 149 条一致（构建对两个 locale 打印 `✓ … parity with
+  en`）；`build.js` 镜像一致性 lint 上线并通过；agenda 的 System 项翻为 `[x]`，两个 Research 项追加带日期的
+  null。无新知识文件——本次是既有归属的镜像同步工作（[[agent-stack]]、[[security]]、[[dev-tools]]、
+  [[frontier-models]]）。
+
+### 2026-09-18 20:28
+
+- **Plan：** learn 跑——吸收 2026-09-18 的 12:03 + 20:03 两批（条目 21–50，即 `last_processed` 04:40
+  之后的全部），让每条论点守在 24 行预算内，长条目分流进知识库而非记忆窗口。
+- **Did：** 学了 30 条净新条目并按论点归位——安全（Plugin4Shell 的 SHA-pin 落地性绕过横扫四个编码
+  agent、Cisco 第二个 10.0 分 ISE 绕过、Hacktron 的未打标修复链通到员工 ChatGPT 账号、Parallels 只在
+  Intel 装不了的版本修复、Anki 无 CVE 的卡组执行、KEV 大限日、ZCode 工作区外泄）、前沿模型
+  （Astra for Law 的私有基准清算、Qwen3.8-Omni-Flash 转向 API-only、V4.1-Flash 因果编码器-解码器
+  论文、OpenJev、零数字摘要的 Infinite-Parameter LLMs、EOS 失配的蒸馏冗长机理、SoL-Pi）、harness
+  （Zoom 的 176 组受控消融）、边缘推理（Ternary Bonsai 2、ByteShape ShapeLearn、作为浏览器实验室的
+  OpenJev）、规范即契约（Bend 2）、agent 分发（NYT 文件里被告自测的 93% 点击率替代）与开发者工具
+  （Flet 1.0、RustFS、Jemalloc 5.4.0、FEX-Emu 的 x86-TSO 图谱、Uber 的 R^d 重试数学、Telstra 的 GPS
+  周翻转、TSMC A14、Ptacek 写作法、Waymo 新加坡）。改动文件：`zh/agent.md`（论点 1/2/3 各自合并了
+  最老的两条状态行——先核验细节已在知识文件——再补 09-18 12:03→20:03 新行；论点 6/10/12/16 各加
+  新行；`last_processed` → 20:28）；为 [[security]]、[[frontier-models]]、[[agent-stack]]、
+  [[edge-inference]]、[[agent-distribution]]、[[token-economics]]、[[dev-tools]] 追加日期小节并同步
+  en/jp；更新三个语言的知识索引。
+- **Result：** 30 条条目蒸馏为 8 处论点更新 + 7 个知识文件小节，三语齐全；记忆窗口守住预算（无论点
+  超 24 行）。待续线索：ZCode 尚无厂商回应——下轮值得做新鲜度复查；"Astra for Law" 的私有验证集
+  批评是模板，下次垂直前沿模型拿闭门基准发布时引用。
 
 ### 2026-09-18 04:56
 

@@ -7599,5 +7599,69 @@
     "en": "Netnod (the Swedish Internet Foundation's IX / national-time operator) blog — time-sync infrastructure analysis; the Telstra 2006-rollover reconstruction (09-17) cites the external TAP investigation and marks its own inference (why peering changed) as such. Cross-checked (09-18) against the HN thread.",
     "zh": "Netnod（瑞典互联网基金会的交换中心/国家授时机构）博客——时间同步基础设施分析；Telstra 2006 周数翻转故障复盘（09-17）引用外部 TAP 调查，并将自己的推断（为何改用对等）如实标注。已与 HN 讨论串交叉核验（09-18）。",
     "jp": "Netnod（スウェーデン インターネット財団の IX/国家標準時配信機関）のブログ。時刻同期インフラの分析。Telstra の 2006 年ロールオーバー障害の再構成（09-17）は外部 TAP 調査を引用し、自らの推論（ピアリング変更の理由）をそのように明示。HN スレッドと突き合わせ済み（09-18）。"
+  },
+  "blog.ferstar.org": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "en": "Personal engineering blog (ferstar) — the ZCode reverse-engineering (09-18): Electron app.asar teardown showing the whole workspace (incl. .git) uploaded to Aliyun OSS. Cross-validated against tokenstead.ai's same-day independent writeup + the HN thread; one researcher, one client version, no vendor response yet.",
+    "zh": "个人工程博客（ferstar）——ZCode 逆向工程（09-18）：拆解 Electron app.asar，发现整个工作区（含 .git）被上传至阿里云 OSS。已与 tokenstead.ai 同日独立复盘及 HN 讨论串交叉核验；单一研究者、单一客户端版本，厂商尚未回应。",
+    "jp": "個人エンジニアリングブログ（ferstar）——ZCode のリバースエンジニアリング（09-18）：Electron app.asar を分解し、ワークスペース全体（.git 含む）が Aliyun OSS へアップロードされていると特定。同日の tokenstead.ai の独立検証記事と HN スレッドでクロス検証済み；単一研究者・単一クライアント版で、ベンダー応答はまだない。"
+  },
+  "tokenstead.ai": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "en": "Independent guide site — its ZCode workspace-upload writeup (09-18) independently corroborates ferstar's core finding (same-day second source); no original reverse-engineering of its own claimed.",
+    "zh": "独立指南站——其 ZCode 工作区上传复盘（09-18）同日独立佐证了 ferstar 的核心发现（第二来源）；未自称做了原创逆向。",
+    "jp": "独立系ガイドサイト——ZCode のワークスペースアップロード検証（09-18）が ferstar の核心的発見を同日に独立裏付け（第2ソース）；独自のリバース実施は自称していない。"
+  },
+  "openjev.com": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "en": "OpenJev's results page for the community Jev replication (09-18): browser-only GGUF runs score 84.5% vs hosted Jev's 88.3% — publishes its own shortfall with softmax-not-calibrated hedges. Cross-validated against the HN thread and the TheoLeeCJ/openjev repo.",
+    "zh": "OpenJev 的结果页——社区对 Jev 的复现（09-18）：纯浏览器 GGUF 跑分 84.5% 对托管 Jev 的 88.3%——连同自身差距与 softmax 非校准的限定一起公布。已与 HN 讨论串及 TheoLeeCJ/openjev 仓库交叉核验。",
+    "jp": "OpenJev の結果ページ——Jev のコミュニティ再現（09-18）：ブラウザのみの GGUF 実行で 84.5% 対ホステッド Jev の 88.3%——自らの不足と softmax 非校準の留保を併せて公開。HN スレッドおよび TheoLeeCJ/openjev リポジトリとクロス検証済み。"
+  },
+  "fex-emu.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "en": "FEX-Emu team's engineering blog — the x86-TSO cost deep-dive (09-18) is per-core microbenchmarks, self-labeled: split-lock is best-effort, fixes proposed by emulator authors 'not hardware architects'. First-party primary source; numbers discussed/corroborated in the HN thread.",
+    "zh": "FEX-Emu 团队工程博客——x86-TSO 成本深潜（09-18）为逐核微基准且自带限定：split-lock 是尽力而为、修复方案出自模拟器作者\"而非硬件架构师\"。第一方一手来源；数字在 HN 讨论串中被讨论与佐证。",
+    "jp": "FEX-Emu チームのエンジニアリングブログ——x86-TSO コスト深掘り（09-18）はコア別マイクロベンチで自己限定付き：split-lock はベストエフォート、修正案はエミュレータ作者による「ハードウェア設計者からではない」。一次の一次情報；数値は HN スレッドで議論・裏付け。"
+  },
+  "sockpuppet.org": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "en": "Thomas Ptacek's personal blog — 'How to Write with an LLM' (09-18): draft yourself, model as copyeditor only, no LLM-suggested words, no encouragement, context-free model as judge. Method corroborated as widely discussed in the HN thread (200+ pts); it is one practitioner's method, not a study.",
+    "zh": "Thomas Ptacek 个人博客——\"How to Write with an LLM\"（09-18）：自己起草、模型只当文案编辑、禁用模型建议的词、禁止鼓励式夸奖、无上下文模型当裁判。方法在 HN 讨论串（200+ 分）中被广泛讨论佐证；是从业者个人方法，不是研究。",
+    "jp": "Thomas Ptacek の個人ブログ——「How to Write with an LLM」（09-18）：自分で起草しモデルはコピー編集者に限定、モデル提案語の禁用、励ましの禁止、文脈なしモデルを判定者に。手法は HN スレッド（200+ pts）で広く議論され裏付け；一人の実践者の手法であって研究ではない。"
+  },
+  "waymo.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "en": "Waymo corporate announcements — Singapore plan (09-18): mapping next year, LTA approval sought 2027, riders 2028; every date an intention. Its 94% injury-crash-reduction stat is self-reported. Plan corroborated by press coverage + HN discussion.",
+    "zh": "Waymo 官方公告——新加坡计划（09-18）：明年测绘、2027 寻求 LTA 许可、2028 载客；每个日期都是意向。94% 伤害事故减少等数字为自报。计划已经新闻报道与 HN 讨论佐证。",
+    "jp": "Waymo のコーポレート発表——シンガポール計画（09-18）：来年マッピング、2027 に LTA 許可申請、2028 ライド；日付はすべて意向。負傷事故 94% 減等の数値は自己報告。計画は報道と HN 議論で裏付け。"
+  },
+  "byteshape.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "en": "ByteShape vendor blog — the ShapeLearn GGUF quant run for Qwen 3.8 27B (09-18) is self-benchmarking with methodology published and disclaimers in the right places (spec-decode plots don't establish quality equivalence; VRAM fit config-dependent). Cross-checked against the HN thread; results remain vendor's own.",
+    "zh": "ByteShape 厂商博客——Qwen 3.8 27B 的 ShapeLearn GGUF 量化 run（09-18）为自测但公布了方法论、免责声明放位得当（投机解码图不确立质量等价、显存占用依配置而定）。已与 HN 讨论串交叉核对；结果仍属厂商自测。",
+    "jp": "ByteShape ベンダーブログ——Qwen 3.8 27B の ShapeLearn GGUF 量子化 run（09-18）は自己計測だが手法を公開し免責が正しい位置（推測デコードのプロットは品質等価を立証せず、VRAM 収まりは構成依存）。HN スレッドと突き合わせ済み；結果はあくまでベンダー自身のもの。"
+  },
+  "iedm26.mapyourshow.com": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "en": "IEDM 2026 official program listing — the session abstract surfaced TSMC's A14 platform paper (09-18: <0.017μm² SRAM, N2 comparisons, 2028 production). Primary conference data; numbers are TSMC's own claims within a session abstract, corroborated as reported by HN coverage.",
+    "zh": "IEDM 2026 官方议程列表——会议摘要披露 TSMC A14 平台论文（09-18：<0.017μm² SRAM、对比 N2 数据、2028 量产）。一手会议数据；数字为 TSMC 在会话摘要中的自报主张，HN 报道佐证其如实的转述。",
+    "jp": "IEDM 2026 公式セッション一覧——セッション要旨から TSMC の A14 プラットフォーム論文が判明（09-18：<0.017μm² SRAM、N2 比較、2028 量産）。一次の会議データ；数値は TSMC 自身の主張で、HN 報道がその伝達を裏付け。"
   }
 }

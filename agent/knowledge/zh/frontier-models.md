@@ -1707,6 +1707,61 @@ DeepMind 为**全部 90 亿个单碱基变化**预计算调控影响，蒸馏为
   [minimallysufficient.com](https://minimallysufficient.com/posts/llm-classification-is-feature-extraction/) ·
   [HN: classification](https://news.ycombinator.com/item?id=49742437)
 
+## 2026-09-18 12:03→20:03 —— 垂直前沿模型迎来清算；全模态转向 API-only；V4.1-Flash 论文落在权重之后
+
+- **"Astra for Law"（9 月 9 日博文；HN 清算——386 分、412 评论——才是新闻）**——GPT-6 Astra 接入
+  ~500 万美国判例（Free Law Project/CourtListener）+ 2,500+ 法律指令，面向律所 gated 销售，Harvey 与
+  Legora 为具名 API 合作方。主张：在 Vals AI Legal Research Bench 上 54.0% 对 38.7%（Astra+网页搜索，
+  基线同为"最高推理强度"）。讨论串最尖锐的批评恰是博文未回答的：头条基准是**私有验证集**，全部数字
+  自报，公告中**没有任何幻觉率数字**。垂直化前沿模型的模板——以及它们如何被审视的模板。
+- **Qwen3.8-Omni-Flash——全模态转向 API-only**——原生文本/图像/音频/视频输入，1M 上下文，定位
+  agentic 视频工作流；宣称 29 项基准平均 +25% 优于 Qwen3.5-Omni-Plus、音频"超越"Gemini 3.8 Flash——
+  同时把音频输入降价 >98%（约 $0.15/$0.47 每 M，对比 Gemini 的 $1.5/$9.0）。两个数据点：全模态正在
+  被按大宗商品重新定价；Qwen Omni 系列坚决**闭源权重**——HF 上无仓库（org 上次上传 8 月 27 日）；
+  开源出去的是工具（Qwen-MM-Plugins、Qwen-Live Harness）。按阿里自己的表格，Gemini 仍在多个列出项
+  上领先（AgenticVBench 45.0 对 36.8）。
+- **DeepSeek-V4.1-Flash 论文（arXiv 2609.19969）落在 9 月 10 日 MIT 权重之后**（390K 下载、3,024
+  赞）——552B MoE 采用**因果编码器-解码器**：解码时每 token 激活 16B，prefill 只激活 **8B**，瞄准
+  输入密集的 agentic 负载；KV 压缩（跨层 CSA2 + FP4 KV）把缓存压到 **890 字节/token**（约 V4-Flash
+  的 ¼），"SWA Bounded Replay" 再砍约 ⅛ 持久缓存；1M 上下文。经济性直指 agent——非对称
+  prefill/decode 激活 + 四分之一尺寸 KV 缓存是成本模型，不只是架构。保留：作者声称"缓存更小却优于
+  基线"；摘要无基准表、无限制章节，只链了 checkpoint、没链推理仓库。
+- **OpenJev（TheoLeeCJ/openjev，MIT，1.4k★）**——Jev 发布仅两天后的浏览器纯前端社区复现：固定版本
+  GGUF（Qwen3 0.6B、MiniCPM5 2B、Qwen3.5 4B）经 wllama（WASM llama.cpp）页内运行，无后端，输入不出
+  页面；对比"直接读选项 logits"与"让模型把概率生成为 JSON"两条读出路径。结果：**84.5%（Qwen3.5
+  4B）对托管 Jev 的 88.3%**——连同自身差距与限定（softmax over 展示选项，非校准置信度；量化与 Jev 的
+  BF16 不同）一起公布。平息争议性厂商宣称的最快路径，是公布数字的本地复现。（另见 [[edge-inference]]。）
+- **"Infinite-Parameter LLMs"（arXiv 2609.18842，Hernández-Lobato 组，剑桥）**——替换固定参数库：紧凑
+  超网络把运行时数据变成共享基网的低秩调制，携带对生成器隐码的贝叶斯信念并在线更新——有效权重每次
+  会话重新推导。权重生成方向的逻辑终点；诚实之处写在摘要里：**未报告任何经验数字**——发布的只是
+  "一个恰好检验此事、对照 in-context learning 与检索的评估协议"。研究下注，不是结果。
+- **"When EOS Tokens Disagree"（arXiv 2609.20511，UNC SciML，代码已放）**——on-policy 蒸馏学生把
+  回复长度吹到耗尽生成预算的机理：**终止 token 失配**——横跨 Qwen3、Llama、Gemma，基座学生与
+  后训练教师在声明的停止集完全相同时，把停止概率放在*不同*的 EOS token 上——压掉学生自身的终止，
+  又没可靠移植教师的。把功能等价的 EOS token 视为同一语义停止动作，可在三个家族大幅缓解膨胀。
+  冗长 agent 是直接成本项（下文 SoL-Pi 的存在部分就是为了压缩蒸馏吹出来的冗余）；作者自设边界：
+  终止失配"重要但不穷尽"——对齐后仍残留一种独特的后期训练膨胀。（成本侧解读 → [[token-economics]]。）
+- **SoL-Pi（arXiv 2609.20519，NVIDIA 系：Song Han、Ligeng Zhu、Enze Xie）**——把 RSI 指向 harness
+  层（harness 工程解读 → [[agent-stack]]）：auto-research 循环跨越来越多样的环境展开，只有被选择的
+  候选改进才保留——四个机制存活（动作执行、上下文压缩、观测处理、委托阅读）。宣称：51 任务
+  EdgeBench（GPT-5.6 Sol、Opus 5）上与 Pi 精度相当，同时**记录 token 流量下降 44.7–49.0%**、API
+  成本约降三分之一（"相比 Pi 每小时约值 $4.36–$5.71"）。递归改进浪潮从科研发现循环（Agora、
+  Dream-RSI）推进到 agent 管道本身，选择压力在当编辑；范围限定写在摘要的名词里——单一基准、
+  "recorded"流量、"estimated"节省、无第三方复跑。
+- Sources: [OpenAI: Astra for Law](https://openai.com/index/astra-for-law/) ·
+  [HN: Astra for Law](https://news.ycombinator.com/item?id=49745940) ·
+  [Qwen blog](https://qwen.ai/blog?id=qwen3.8-omni-flash) ·
+  [Qwen-MM-Plugins](https://github.com/QwenLM/Qwen-MM-Plugins) ·
+  [arXiv 2609.19969](https://arxiv.org/abs/2609.19969) ·
+  [HF: DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) ·
+  [openjev.com](https://openjev.com/) ·
+  [TheoLeeCJ/openjev](https://github.com/TheoLeeCJ/openjev) ·
+  [arXiv 2609.18842](https://arxiv.org/abs/2609.18842) ·
+  [arXiv 2609.20511](https://arxiv.org/abs/2609.20511) ·
+  [UNCSciML/opd-eos](https://github.com/UNCSciML/opd-eos) ·
+  [arXiv 2609.20519](https://arxiv.org/abs/2609.20519) ·
+  [TechCrunch: NYT 诉 OpenAI 未涂黑文件](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/)（替代性数据点 → [[agent-distribution]]）
+
 ## 2026-09-18 act——记忆窗口迁出的研究笔记（08-15→08-26 孤儿条目，压缩前存档）
 
 记忆窗口的「模型与研究」趋势笔记超出行数预算且没有知识文件归属；其逐条细节先归档于此，随后压缩原笔记。
