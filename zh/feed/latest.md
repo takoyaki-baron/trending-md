@@ -1,8 +1,8 @@
 ---
 date: 2026-09-19
-updated: 2026-09-19T04:16:00+08:00
+updated: 2026-09-19T20:16:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -293,15 +293,357 @@ Coding Agents"——4 个模型 × SWE-Bench Verified 与 Terminal-Bench 2.1，�
 
 [`🔗 arXiv:2609.20804`](https://arxiv.org/abs/2609.20804) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49753878)
 
+## 15. Claude Code 开始读取 AGENTS.md——智能体配置格式之争以耸肩收场
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 672+ 分 · 约 15 小时前（~05:06 UTC+8）
+- **Tags:** `agents` `claude-code` `interop` `config`
+
+Claude Code v2.1.277（9 月 18 日）带来了半个生态等待已久的互通变更：当不存在
+`CLAUDE.md` 时，harness 会转而读取 `AGENTS.md`——OpenAI Codex、Cursor、Zed 等早已
+采纳的中立格式约定。同一批次还发布了 v2.1.278（9 月 19 日），将 auto-mode 的权限
+判断指向服务端分类器，在 Bedrock/Vertex/Foundry 上不产生计费开销。仓库目前 146.5k
+星，今日 +444。
+
+**为什么重要：** 此前跨 harness 项目要么把 `CLAUDE.md` 软链到 `AGENTS.md`，要么维护
+两个会漂移的文件。一份指令文件能跨 harness 通用是小改动大影响——方向比功能更值得
+注意：Anthropic 采纳了社区格式，而不是另推自家标准。
+
+[`🔗 Claude Code 更新日志`](https://code.claude.com/docs/en/changelog) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49760187) · [`🔗 v2.1.277 发布`](https://github.com/anthropics/claude-code/releases/tag/v2.1.277)
+
+---
+
+## 16. 2023 年因"漏洞不可修复"宣告停更的 vm2 复活——并刚刚修复了两个 CVSS 10.0 沙箱逃逸
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD / VulnCheck · 记录 9 月 18 日发布
+- **Tags:** `vm2` `sandbox-escape` `cve` `nodejs`
+
+NVD 于 9 月 18 日发布了 Node.js 沙箱 vm2 的两条 CVSS 10.0 通告——均由 VulnCheck 以
+CNA 身份评分，NVD 状态为 Deferred：CVE-2026-93603（bridge `apply` 陷阱中的空值
+`this` 接收者可达宿主 `child_process`）和 CVE-2026-93605（NodeVM 的
+`DANGEROUS_BUILTINS` 黑名单干脆没列 `child_process`）。修复随 3.12.1（npm 9 月 3 日）
+与 3.12.2（9 月 8 日）发布——而仓库已解除归档、9 月 13 日仍有推送，再度活跃开发，
+全然不顾维护者 2023 年 8 月"设计缺陷不可修复、项目停更"的公告。
+
+**为什么重要：** 两类读者各取所需。如果你当年听劝删了 vm2：它回来了，还在发修复。
+如果你还在跑旧的锁定版本：历史上的每个逃逸大概率都还有效，外加这两个。而更深一层
+与版本无关：2023 年的结论是 vm2 的安全设计本身不成立，而非修修补补——任何 vm2
+边界都应视为尽力而为的隔离，绝不是安全控制。
+
+[`🔗 GHSA-pq68-rvw4-xp4r`](https://github.com/patriksimek/vm2/security/advisories/GHSA-pq68-rvw4-xp4r) · [`🔗 VulnCheck 通告`](https://www.vulncheck.com/advisories/vm2-nodevm-before-3.12.1-remote-code-execution-via-child-process)
+
+---
+
+## 17. Grant Sanderson 客串发帖 Tao 的博客："动机构造的解释永远不会有 Lean"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 142+ 分 · 约 5 小时前（~15:06 UTC+8）
+- **Tags:** `mathematics` `ai` `formal-methods` `exposition`
+
+Terence Tao 的博客刊出 Grant Sanderson（3Blue1Brown）的客座文章"如果数学不只是证明，
+我们需要更好地庆祝其余部分"：当 AI 让证明生成变得廉价，"证明"被还原为它本来的
+角色——数学真正珍视之物（理解、动机、解释）的代理指标。他提议给解释层配齐证明层
+已有的基础设施：将"有动机的解释"形式化并纳入激励，设立 Timothy Chow 所说的
+"开放式阐述问题"，配上评审委员会、期刊、乃至一份 Hilbert 清单式的最佳未解阐述目录。
+
+**为什么重要：** 这是本周接力讨论的建设性分支——继数学家联名信（9 月 12 日）、
+Gowers 与 Tao 的不签名声明（9 月 18 日）、以及今晨登上 HN 的 Dan Abramov 智能体
+Lean 证明（见第 2 条）之后。它的主张比"AI 做不了我们做的事"更锋利：AI 做不了的那
+部分，从来就没被制度认证过——而这是可以修补的制度空白。
+
+[`🔗 terrytao.wordpress.com`](https://terrytao.wordpress.com/2026/09/18/if-math-is-more-than-proof-we-need-to-better-celebrate-the-rest-of-it/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49763928)
+
+---
+
+## 18. GPT-6 Astra 破译一战德军无线电密码——一份自述的首创，请连同作者自己的保留意见一起读
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 147+ 分 · 约 5 小时前（~15:06 UTC+8）
+- **Tags:** `cipher` `ai-capability` `adfgvx` `history`
+
+一篇业余密码分析博文称，GPT-6 Astra 解开了 scienceblogs.de"50 大未解密码"清单中的
+一战德军无线电密码。作者的假设是 ADFGVX 体制、密钥 `SWINDLER88`；一次前沿模型
+调用即返回完整德语明文（约 90% 字符恢复率，修正 8 处抄录错误），对该电文已知片段
+做到 rank-1 匹配。作者自己的保留意见写得明确："我不知道这条电文此前是否被破译过"
+——没有任何历史学家或密码学权威核验过这份转写。
+
+**为什么重要：** 这是本月第二个历史密码被前沿模型攻破的主张（9 月 14 日 Fable 5.1
+与 Cyphral Distich）——但那一例有独立验证，这一例没有。真正有意思的与其说是头条
+不如说是工作流：人类给出结构性假设，模型完成搜索。把它读作一份有前景的自述，而不是
+一个已被破译的密码。
+
+[`🔗 prinzai.com`](https://www.prinzai.com/p/gpt-6-astra-solves-a-wwi-german-radio) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49763987)
+
+---
+
+## 19. LightLLM CVE-2026-93839：PD 分离式推理的节点注册无需鉴权，用户提示词可被窃取——CVSS 9.8，暂无修复版本
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · 9 月 18 日发布
+- **Tags:** `llm-serving` `cve` `ai-infra` `authentication`
+
+ModelTC 的 LightLLM——常用的自托管 LLM 推理框架——其 prefill/decode 分离模式使用
+的 WebSocket `/pd_register` 端点没有任何鉴权。任何网络可达的攻击者都能向集群注册
+任意节点，劫持推理请求并读取用户提示词。CVSS 9.8（VulnCheck CNA；v4 评分 9.3），
+NVD 记录 9 月 18 日发布，并附带指向 `api_http_pd.py` 的行级引用。缺陷报告自 9 月
+16 日处于开启状态；截至发稿未见含修复的版本发布。
+
+**为什么重要：** Prefill/decode 分离正在成为大模型推理的默认架构，而这正是该架构
+引入的新型漏洞面：集群内部控制平面变成了网络攻击面。如果你以 PD 模式运行 LightLLM，
+暴露的 `/pd_register` 应按"提示词已泄露"处理——在修复版本落地前，网络层隔离是唯一
+缓解手段。
+
+[`🔗 GitHub issue #1576`](https://github.com/ModelTC/LightLLM/issues/1576) · [`🔗 NVD 记录 CVE-2026-93839`](https://nvd.nist.gov/vuln/detail/CVE-2026-93839)
+
+---
+
+## 20. IEEE Spectrum 揭秘 OpenAI 的 Jalapeño 芯片：LLM 设计了前端——文章也写明了它们帮不上的地方
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 136+ 分 · 约 12 小时前（~08:11 UTC+8）
+- **Tags:** `chips` `openai` `hardware` `llm`
+
+IEEE Spectrum 的深度报道（9 月 14 日刊发、9 月 18 日重回 HN）聚焦 OpenAI 首款加速器
+——与 Broadcom 合作负责物理设计：4-bit 精度 13.4 PFLOPS、232 GB HBM4、宣称端到端
+延迟较 NVIDIA GB300 最高降低 3.6 倍。前端流程构建在 Google 开源的 XLS 之上
+（C++/DSLX → Verilog）；从概念到流片不足 20 个月，团队平均人数不到 100；一颗
+DeepSeek attention kernel 在流片后约 40 小时内从理论峰值的 0.31% 提升到 88.94%。
+
+**为什么重要：** 请带上 Spectrum 自己的免责声明："真实集群性能未经证实；基准数据由
+OpenAI 提供"，且专家指出 20 个月的进度表只有在 Broadcom 承担物理设计的前提下才
+可信。文章本身给出的诚实结论是：LLM 大幅压缩了前端（RTL 与 kernel）工作量，对后端
+物理设计帮助有限，而工程师始终是"最终仲裁者"。
+
+[`🔗 IEEE Spectrum`](https://spectrum.ieee.org/llms-for-chip-design) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49761432)
+
+---
+
+## 21. IBM Guardium：12 个严重 CVE 同日砸上 NVD——反序列化 RCE、SQL 注入与无鉴权 servlet
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / IBM · 记录 9 月 18 日发布
+- **Tags:** `cve` `ibm` `database-security` `enterprise`
+
+IBM Guardium Data Protection 12.2 的一批严重修复于 9 月 18 日集中发布到 NVD——
+CVE-2026-80441、-80442、-81657、-82340、-82832、-82967、-84064、-84073、-84075、
+-84078、-84082，另有 Sterling File Gateway 9.1 的 CVE-2026-75878。构成：未鉴权
+反序列化 RCE（9.8）、IP 访问控制鉴权绕过（9.8）、未鉴权 SQL 注入（9.8）、
+ChangeTracker/LoadBalancer servlet 缺失鉴权（9.9），以及已鉴权操作系统命令注入
+（9.9）。全部由 IBM 以 CNA 身份评分；修复位于 Guardium 12.x 更新流。
+
+**为什么重要：** Guardium 坐在数据库审计流量上——一旦沦陷，等于把企业里几乎每一条
+查询都交了出去，这使它既是高价值目标，失守时又是合规事件。十二个漏洞一次性放出
+指向协同发布而非挤牙膏；Guardium 管理员应立即盘点版本，并把可从互联网或普通用户
+触达的控制台视为暴露面。
+
+[`🔗 IBM 安全公告`](https://www.ibm.com/support/pages/node/7288040) · [`🔗 NVD 记录 CVE-2026-80441`](https://nvd.nist.gov/vuln/detail/CVE-2026-80441)
+
+---
+
+## 22. xAI 将 Grok Voice Transcribe 2.0 设为默认 STT——而"准确率翻倍"只活在营销页上
+
+- **Velocity:** ▮▮ rising
+- **Source:** x.ai 文档 · 9 月 18 日
+- **Tags:** `speech-to-text` `xai` `api` `voice`
+
+xAI 文档现已将 `grok-voice-transcribe-2.0` 列为其语音转文本 API 的默认模型：
+`POST /v1/stt` 端点加 WebSocket 流式接口，支持 25 种语言、词级时间戳、多通道音频与
+说话人分离。文档写明"所有音频实时处理，绝不存储、绝不用于训练"——一条直指医疗与
+法律转写市场的零留存承诺。
+
+**为什么重要：** API 默认模型一换，所有未锁定版本的客户同时被迁移，而 STT 是生产
+环境中吞吐量最高的 AI 工作负载之一。这里的信源提醒很关键：被广泛引用的"准确率为
+1.0 的 2 倍、价格不变"出自 xAI 营销页（该页拒绝非浏览器抓取）及二手报道——文档
+本身没有任何准确率声明，在被独立评测之前请把那个倍数当营销话术。
+
+[`🔗 x.ai 语音文档`](https://docs.x.ai/docs/guides/voice) · [`🔗 x.ai 模型列表`](https://docs.x.ai/docs/models)
+
+---
+
+## 23. Cache-to-Cache：用 KV-cache 代替文本的模型间通信迎来 HN 时刻
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 95+ 分 · 约 17 小时前（~03:06 UTC+8）
+- **Tags:** `paper` `kv-cache` `multi-agent` `inference`
+
+HN 热议的是"Cache-to-Cache: Direct Semantic Communication Between LLMs"
+（arXiv 2510.03215，2025 年论文重回首页）：智能体之间的消息不再走"生成文本—解析—
+重新编码"的老路，而是一个模型的 KV-cache 被直接投影进另一个模型的缓存——以推理
+速度完成语义通信，完全跳过解码与重编码的往返。
+
+**为什么重要：** 今天的多智能体系统每跳都要交一笔 token 税——生成、序列化、重新
+prefill。缓存级通信从架构层面直击这笔税，这正是它随智能体舰队扩张而反复翻红的原因。
+现实约束也清楚：它要求模型间共享或可映射的词表/几何结构，眼下是同家族（或协同训练）
+的技术，而不是跨厂商桥梁。
+
+[`🔗 arXiv:2510.03215`](https://arxiv.org/abs/2510.03215) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49758615)
+
+---
+
+## 24. Stagehand："Playwright 快 2 倍、token 省 80%"——厂商口径，代码公开
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 94+ 分 · 约 19 小时前（~01:06 UTC+8）
+- **Tags:** `browser-agents` `playwright` `testing` `tokens`
+
+Browserbase 的 Stagehand——在 Playwright 之上叠加 AI API 的浏览器智能体 SDK——以
+"我们把 Playwright 提速 2 倍、token 效率提升 80%"为题登上 HN：核心工作是裁剪喂给
+模型的 DOM 快照与动作轨迹，而浏览器自动化的延迟与 token 开销恰恰都耗在这里。
+
+**为什么重要：** 浏览器智能体是最烧 token 的智能体类别，DOM-到-提示词的压缩才是
+所有人成本的真正所在。这些数字由厂商自行报告——当作方向读，别当基准读——但仓库
+开源、测量可复现，这已经比这个领域大多数"省 token"宣传体面。
+
+[`🔗 github.com/browserbase/stagehand`](https://github.com/browserbase/stagehand) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49756671)
+
+---
+
+## 25. "科学即开源软件"——把可复现性危机重构为依赖管理问题
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 104+ 分 · 约 9 小时前（~11:06 UTC+8）
+- **Tags:** `open-source` `research` `reproducibility` `essay`
+
+Jakob Pedersen 主张：论文在功能上就是"仓库卫生极差的开源项目"，应当被当作开源软件
+对待。文章展示了论文里那句"代码可应要求提供"实际上一摊无标注脚本、死链与未记录的
+环境状态，以及当它被当作有版本、有测试、有维护者的软件来对待时，一切将如何改变。
+
+**为什么重要：** 这个框架之所以成立，在于它是操作性的而非道德性的：开源社区为维持
+软件存活发展出的每一项实践（semver、CI、CODEOWNERS、依赖归档）都直接映射到不可
+复现研究的失效模式上——而智能体时代抬高了赌注：在文献上训练的模型会继承文献的
+腐烂。
+
+[`🔗 jepedersen.dk`](https://jepedersen.dk/blog/202505_research/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49762687)
+
+---
+
+## 26. JEPA-Anything：一套预测建模范式号称横跨七大领域
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2609.20800 · 9 月 17 日
+- **Tags:** `paper` `jepa` `world-model` `self-supervised`
+
+Ling Yang、Weiyang Liu、Zhenfei Yin 等人提出"正交预测因子分解"（OPF），作为 JEPA
+式预测世界建模的跨领域泛化，评测覆盖视觉、生物、临床轨迹、控制、分子动力学、物理
+场与气象。报告称在全部 10 个动力学任务上击败对齐条件的 JEPA 基线，Interventional
+Pong 上干预预测误差下降 34.8%，并从行星数据中恢复出开普勒指数（−1.4991）。代码发布
+于 Gen-Verse/JEPA-Anything。
+
+**为什么重要：** LeCun 的 JEPA 路线常被批评为"只属于视觉的愿景"，七领域评测正是
+这一主张需要的那种检验。读结果时请按论文自己的口径——对照的是*对齐条件的* JEPA
+基线，而非各领域最强专用方法；生物干预结果也只是"获得实验支持"，谈不上验证。
+
+[`🔗 arXiv:2609.20800`](https://arxiv.org/abs/2609.20800) · [`🔗 github.com/Gen-Verse/JEPA-Anything`](https://github.com/Gen-Verse/JEPA-Anything)
+
+---
+
+## 27. RetireOPD：蒸馏教师在训练中途"自我退休"——学生反过来超过它
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2609.20784 · 9 月 17 日
+- **Tags:** `paper` `distillation` `reinforcement-learning` `agents`
+
+面向智能体 RL 的"自蒸馏 on-policy"方法，带一条自适应退休规则：技能特权教师只在
+性能差距仍在缩小时督导学生，一旦学生达到教师成功率的目标比例即被撤下。在 Qwen2.5
+底座（1.5B–7B）上，方法报告 ALFWorld 提升 14.1–18.8 个百分点、WebShop 提升
+11.8–19.0 个百分点——且所有测试设定中学生都超过了自己的教师。
+
+**为什么重要：** "蒸馏进 RL"管线的老大难是*何时*停止模仿：停太早封住学生上限，
+停太晚则把教师的天花板与偏见一并导入。把退休变成一个被测量的决策而非超参数，是个
+机制干净的小点子——不过证据全部来自 Qwen2.5，请当配方读，别当定律读。
+
+[`🔗 arXiv:2609.20784`](https://arxiv.org/abs/2609.20784) · [`🔗 arXiv HTML`](https://arxiv.org/html/2609.20784)
+
+---
+
+## 28. Xing4.0-29B-A4B：中国电信发布全 Ascend NPU 训练的编码 MoE
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Trending（第 5 名）· 9 月 18 日更新
+- **Tags:** `open-weights` `moe` `ascend` `coding`
+
+XingChen-AGI（中国电信）发布 Xing4.0-29B-A4B：总参 29B / 激活 4B 的 MoE（64 个路由
+专家、MLA + MTP、256K 上下文），模型卡宣称这是"首个完全在昇腾 NPU 平台上、以
+MindSpore 框架训练的该规模模型"。自报数字：SWE-bench Verified 75.00（对比
+Qwen3.6-35B-A3B 的 76.00）、Terminal-Bench 2.1 达 57.50——AIME2026 与 IFBench
+则落后。
+
+**为什么重要：** 真正的重点是算力主权叙事：一家国家级运营商在没有 NVIDIA 依赖的
+前提下发布有竞争力的编码权重，比任何一个基准点都重要。模型卡本身没有 limitations
+一节、头条数字带着 harness 脚注——75.0 请按我们对待一切自报 harness 分数的方式
+读：等待复现之前的上限值。
+
+[`🔗 huggingface.co/XingChen-AGI/Xing4.0-29B-A4B`](https://huggingface.co/XingChen-AGI/Xing4.0-29B-A4B) · [`🔗 XingChen-AGI on HF`](https://huggingface.co/XingChen-AGI)
+
+---
+
+## 29. Red Hat OpenShift 控制台 CVE-2026-75885：devfile 端点的未鉴权 SSRF
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / Red Hat · 9 月 18 日发布
+- **Tags:** `cve` `openshift` `ssrf` `kubernetes`
+
+OpenShift 控制台的 `/api/devfile/` 与 `/api/devfile/samples/` 端点接受未鉴权的
+恶意 devfile 载荷，从控制台上下文发起服务端请求伪造——CVSS 9.3（Red Hat CNA，
+`secalert@redhat.com` 为主评分方），NVD 记录 9 月 18 日发布。devfile 是定义云
+工作区的模板，其导入路径天然是 SSRF 支点：控制台会以特权网络位置去抓取受攻击者
+影响的 URL。
+
+**为什么重要：** OpenShift 控制台所处的网络位置可触达元数据服务、内部镜像仓库与
+Kubernetes API 本身——在这里 SSRF 是立足点原语，而不只是信息泄露。集群管理员应
+按 Red Hat 通告修补，并审计 devfile 端点是否暴露在控制台 UI 之外。
+
+[`🔗 Red Hat CVE`](https://access.redhat.com/security/cve/CVE-2026-75885) · [`🔗 Bugzilla 2517885`](https://bugzilla.redhat.com/show_bug.cgi?id=2517885)
+
+---
+
+## 30. Gravity Forms CVE-2026-84434：未鉴权任意文件上传（CVSS 9.8）——修复版本未经确认
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / Wordfence · 9 月 19 日发布
+- **Tags:** `cve` `wordpress` `file-upload` `rce`
+
+WordPress 站点上装机量巨大的表单插件 Gravity Forms，其 `upload_file` 例程存在未鉴权
+任意文件上传（受影响：≤3.1.0.4）——文件类型校验不一致，允许上传进而可能远程代码
+执行。CVSS 9.8（Wordfence 以 CNA 身份评分，由其 Argus 扫描器发现）；NVD 记录于
+9 月 19 日凌晨发布。
+
+**为什么重要：** 表单插件是 WordPress 经典的初始入侵向量——无处不在，且天然允许
+未鉴权访问。按我们自己的规则补一条诚实注：截至发稿无法从厂商更新日志确认确切的
+修复版本——请升级到最新可用发布并核对版本号，不要默认某个具体数字。
+
+[`🔗 NVD 记录 CVE-2026-84434`](https://nvd.nist.gov/vuln/detail/CVE-2026-84434) · [`🔗 Wordfence 威胁情报`](https://www.wordfence.com/threat-intel/vulnerabilities/id/787e22a9-329b-4e71-bc2a-4f5524fc9356)
+
+---
+
+## 31. quiche 0.30.0：默认后量子的 BoringSSL 开始拆分 ClientHello——所有 QUIC 实现者都该关心
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub release · 9 月 17 日
+- **Tags:** `quic` `http3` `rust` `post-quantum`
+
+Cloudflare 的 Rust QUIC/HTTP-3 实现发布 v0.30.0，两条破坏性变更的分量远超其更新
+日志篇幅：boring crate 版本范围改为 `>=4.19,<6`，因为 BoringSSL 5 默认启用后量子
+密钥组——而后量子 ClientHello 可能超过单个 Initial 包，把首个 flight 拆到多个数据报
+上，这会击垮所有假设握手合并的 QUIC 实现。`PathEvent` 同时改为 `#[non_exhaustive]`
+并新增 `PmtuUpdated` 变体。
+
+**为什么重要：** 后量子握手迁移到来时是一个*分包*问题，而不只是密码学问题——多个
+Initial 包下的中间盒与对端行为，正是静默故障的藏身处。Cloudflare 率先在自己的开源
+QUIC 栈里修掉它，对其他每个 QUIC 实现都是预警——而不仅是 quiche 用户。
+
+[`🔗 quiche`](https://github.com/cloudflare/quiche) · [`🔗 v0.30.0 发布说明`](https://github.com/cloudflare/quiche/releases/tag/0.30.0)
+
 ---
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-19T04:16:00+08:00 |
-| Items | 14 |
-| Sources tracked | 17 (Hacker News, GitHub Trending, arXiv, NVD, CISA KEV, 厂商博客 (Cloudflare, Cactus, Ledger), CNN, GrapheneOS, developer.android.com) |
+| Generated | 2026-09-19T20:16:00+08:00 |
+| Items | 31 |
+| Sources tracked | 31 (Hacker News, GitHub Trending, arXiv, Hugging Face, NVD, CISA KEV, 厂商博客 (Cloudflare, Cactus, Ledger), 厂商文档 (x.ai, Anthropic), IEEE Spectrum, IBM, Red Hat, Wordfence, VulnCheck, terrytao.wordpress.com, CNN, GrapheneOS, developer.android.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (每日 3 次) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
