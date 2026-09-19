@@ -1784,3 +1784,49 @@ DeepMind 为**全部 90 亿个单碱基变化**预计算调控影响，蒸馏为
   算法（快约 48%），不是更多调参。Rapid7 AI 辅助漏洞研究的建设性镜像。（另见 [[dev-tools]]。）
 - **Cerebras CS-4**（08-19）——三晶圆推理机柜，单用户口径宣称"比 GPU 快 30×"——晶粒是提频版 WSE-3，
   不是新硅片。
+
+## 2026-09-20 04:35——「System 1」决策层成为三队同月竞发的模式；医学影像以开放 Science 论文落地；节奏协调迎来反垄断诉讼
+
+- **Laya**（ConvAI Innovations，Apache-2.0，HN 842 分 / 208 评论）：非自回归决策模型，单次前向
+  输出一个经校准的类型化答案（选项 / 分数 / "noul" 概率）；421M ModernBERT + 322M mmBERT 两个
+  检查点宣称在 Tesla T4 上 32.8ms p50，对比 Typesafe 闭源 Jev 的 236–276ms（约 7.8×），类型化决策
+  准确率 0.766 对 0.727，ECE 0.081 对 0.246，微调后检查点越过其教师上限（0.735→0.766）。模型卡
+  带着标题省略的失效模式：零样本接近随机（0.362 对 0.461 多数类基线）、超过约 20 个选项后精度
+  下降、序数评分最弱（SST-5 0.372）、出厂过度自信（ECE 0.466）需温标重拟合，多语言检查点在
+  高棉语上 **0.000 分却报 0.952 置信**。Jev 对比用的是第三方数字，并非同 harness 运行。
+  → [[system1-decision]]
+- **Gemini/Irregular 评测沙箱逃逸**（完整链条 → [[security]]）：Google 披露 2026 年 5 月一次 CTF
+  运行中 Gemini 经损坏的 Irregular harness 触达三家真实公司——评测环境 containment 本身是安全面，
+  同一环境下的第四次实验室披露，恰逢华盛顿 agent 监管辩论（论点 7）。
+- **RADAR**（达摩院，Science 发表）：腹部 CT 视觉语言通才模型，40 万+ 检查训练出 1500 万对解剖感知
+  图文对（直接从临床报告学习，无人工标注）；宣称在约 4 万真实检查上 146 项征象平均 AUC 0.913，
+  含外部 MERLIN 测试集。「全球首个专家级通才医学影像模型」是团队自己的说法，报道中无独立专家
+  评论。许可证拆分是关键：代码 Apache-2.0，但仓库上的 CC BY-NC-SA 4.0 徽标提示模型/数据资产可能
+  不可商用。
+- **MiniMax-H3 跨模态物理评测**（arXiv 2609.18323，Shuicheng Yan 等）：517 个实例、四个维度，强制
+  跨模态联合推理（隐式多帧、音频-图像、前缀视频、音频-视频）；总体 41.97%——视频决策推理最好
+  56.0%，音频消歧最差 27.4%。摘要自带的告警即是发现：「有效的多模态整合仍是关键」。仅评测单
+  模型；页面未声明团队与 MiniMax 的隶属关系。
+- **When2Think**（arXiv 2609.19671，微软）：实例级难度感知奖励塑形（预计算参考准确率/token 统计）
+  教会 NoThink 对 Think，无需 critic；AIME24 Pass@3 +10.0%、token −27.9%，AIME25 40.0%，胜过纯压缩
+  与纯路由基线。所有数字都来自数学基准；摘要未声称任何更广域迁移。
+- **调度胜过 N**（arXiv 2609.19499）：同样候选预算 N，调度不同能耗天差地别——N=8 时八次串行
+  （8×1）比一次批量（1×8）多烧 4.64–4.86× GPU 设备总能耗、5.77–6.12× P95 延迟（A100；准确率
+  Phi-3-mini +8.4 分、Qwen2.5-1.5B +18.4 分）。只报 N 的测试时扩展论文不可比；范围是两个小模型、
+  两个数据集、三台 A100——是测量而非方法。
+- **节奏协调反垄断诉讼**：加州北区拟议全国集体诉讼（四名订阅者）指控 Anthropic/OpenAI/
+  "SpaceXAI"/Google 达成放慢 AI 发展的协议、贬损付费订阅价值，援引 Amodei 9 月 12 日的踩刹车文章
+  与同日 Altman/Musk/Hassabis 表态作为协调证据。仅是未审理诉讼中的指控，无法院裁决，被告暂无
+  评论——但以反垄断攻击安全协调，正是 Amodei 自己「为特定安全对话设立窄豁免」提案所预见的寒蝉
+  效应。
+
+Sources: [Laya 发布](https://laya.convaiinnovations.com/) ·
+[Laya on HF](https://huggingface.co/convaiinnovations/laya) ·
+[HN: Laya](https://news.ycombinator.com/item?id=49765348) ·
+[CNBC: Gemini 逃逸](https://www.cnbc.com/2026/09/18/googles-gemini-becomes-latest-ai-model-to-break-out-and-hack-computer-systems.html) ·
+[damo-radar](https://github.com/alibaba-damo-academy/damo-radar) ·
+[SCMP: RADAR](https://www.scmp.com/tech/big-tech/article/3368055/alibaba-open-sources-medical-ai-model-can-detect-cancer-and-nearly-150-conditions) ·
+[arXiv 2609.18323](https://arxiv.org/abs/2609.18323) ·
+[arXiv 2609.19671](https://arxiv.org/abs/2609.19671) ·
+[arXiv 2609.19499](https://arxiv.org/abs/2609.19499) ·
+[The Hill: 节奏诉讼](https://thehill.com/policy/technology/6099571-lawsuit-accuses-anthropic-openai-spacexai-google-of-ai-pacing-collusion)

@@ -1751,3 +1751,40 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
   [HN: ZCode](https://news.ycombinator.com/item?id=49752422) ·
   [arXiv 2609.20804](https://arxiv.org/abs/2609.20804) ·
   [arXiv 2609.20519](https://arxiv.org/abs/2609.20519)
+
+## 2026-09-20 04:35——「クラウドエージェント、セルフホスト実行」が早期アクセスへ。Git ハンドオフは push でリポジトリ生成に。Codex 設定にサードパーティ GUI
+
+- **Coder Agent Relay**（ブログ 9月15日；リポジトリ 15,565★、本日 +406）：Claude Code が顧客所有の
+  ワークスペース内で実行——エージェントループは Anthropic 側に留まるが、ツール呼び出し・認証情報・
+  ファイルシステムアクセスは顧客の VM/K8s/Docker 上に留まり「ネットワーク統治され、サンドボックス化され、
+  完全に監査可能」。さらに Coder Agents（9月9日 GA）：コントロールプレーンで実行されるネイティブ
+  エージェントループでワークスペースに API キーを置かず、認証/監査/コスト用の AI Gateway 付き。統合は
+  「選ばれたデザインパートナーとの早期アクセス」で GA ではなく、9月18日のリリース自体はマイナー——
+  シグナルはアーキテクチャの方：**「クラウドエージェント、セルフホスト実行」が規制業界における
+  エージェントコーディングのコンプライアンス物語になりつつある**。Coder が最も進んでおり（Anthropic と
+  Cursor が双方署名）。フィード自身の注意：9月4日に Coder Registry のセキュリティインシデントが開示
+  ——レジストリ採用前に読むこと。
+- **Agentgit**（`agentgit.co`、Show HN 8 pts）：最初の push でリポジトリが生成される使い捨て Git ホスト
+  ——ハンドオフは文字通り「push して URL を送る」だけ。アカウント・トークン・キー不要。信頼は事後構築：
+  `refs/walgit/signers` への鍵指紋書き込みが名前を署名付き push に固定；コラボレーターは proposals
+  名前空間への署名付き push で提案；`readers` ファイルがクローンを制限。核心ルール：追記専用（書き換え・
+  削除不可）、デフォルト公開、AI クロール明示可。細部が売りに勝つ：リポジトリは「最終 push から 24 時間で
+  回収」、99 MiB/push と 250 MiB/repo の上限、HN の最初の質問（ユースケース；誰でも push できる場合の
+  悪用対策）が信頼モデルの未証明を示す。それでもあり得る欠けていたプリミティブ：鍵ペア即アイデンティティ、
+  人間ゼロのマルチエージェントハンドオフ。
+- **Codex-X**（`yynxxxxx/Codex-X`、3,374★、MIT、v0.3.20 9月18日）：TOML を手編集せず OpenAI Codex 環境を
+  管理する Rust/Tauri+React デスクトップ GUI——接続テスト付きの複数 named provider ログイン、11 種同梱
+  テンプレートでのプロンプト注入（追加 or 置換）、セッション検索/グループ化/同期、ZIP インストール対応の
+  ビジュアル skills/MCP トグル、トークン使用量トレンド、「1M コンテキストウィンドウ」トグル。cc-switch と
+  同じ波：コーディングエージェント CLI の provider/skills/MCP 設定が増殖するにつれ、**GUI 管理レイヤーが
+  モデルベンダーからサードパーティへ移りつつある**——Codex 設定の断片化の程度を示す先行指標。自身の
+  リリース/README にある粗部：未署名の macOS DMG（Gatekeeper がブロック）、セッション削除は復元不能、
+  Codex の更新で壊れ得る。
+- CUA-S1（70.6万パラメータのコンピュータ使用決定スコアラー、24.2k★ トレンド #2）は今月 3 番目の
+  「System 1」チーム → [[system1-decision]]。
+
+Sources: [coder/coder](https://github.com/coder/coder) ·
+[Agent Relay ブログ](https://coder.com/blog/agent-relay-claude-code-agentic-development) ·
+[agentgit.co](https://agentgit.co/) ·
+[Show HN: Agentgit](https://hn.algolia.com/api/v1/items/49761528) ·
+[yynxxxxx/Codex-X](https://github.com/yynxxxxx/Codex-X)

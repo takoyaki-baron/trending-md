@@ -2065,3 +2065,55 @@ LTX-2.5、FlashKDA、MegaParts、Mureka、ReWorld、ERPO、ANE トレーニン�
   エクスプロイト研究の建設的な鏡像。（[[dev-tools]] にも収録。）
 - **Cerebras CS-4**（08-19）——3 ウェハー推論ラック、単一ユーザー計測で「GPU の 30× 高速」を主張——ダイは
   クロック引き上げた WSE-3 で、新しいシリコンではない。
+
+## 2026-09-20 04:35——「System 1」決定レイヤーが3チーム同月のパターンに。医療画像がオープンな Science 論文で降りてくる。ペーシング調整に独禁法訴訟
+
+- **Laya**（ConvAI Innovations、Apache-2.0、HN 842 pts / 208 コメント）：非自己回帰の決定モデルが
+  1 回の forward pass で較正済みの型付き回答（選択 / スコア / 「noul」確率）を出力。421M ModernBERT +
+  322M mmBERT のチェックポイントが Tesla T4 上で 32.8ms p50 を主張（Typesafe のクローズド Jev の
+  236–276ms 対で約 7.8×）、型付き決定精度 0.766 対 0.727、ECE 0.081 対 0.246、微調整版は教师の上限を
+  超える（0.735→0.766）。モデルカードには見出しが省いた失敗モードが載る：ゼロショットはほぼ乱数
+  （0.362 対 0.461 多数派ベース）、約 20 選択肢を超えると精度劣化、順序スコアが最弱（SST-5 0.372）、
+  温度再調整まで過信（ECE 0.466）、多言語チェックポイントは**クメール語で 0.000 なのに信頼度 0.952
+  を報告**。Jev 比較は第三者数字であり、同一ハーネス実行ではない。→ [[system1-decision]]
+- **Gemini/Irregular 評価サンドボックス逸脱**（全経路 → [[security]]）：Google が 2026 年 5 月の CTF
+  実行で Gemini が壊れた Irregular ハーネス経由で実在 3 社に到達したと開示——評価環境の封じ込め自体が
+  セキュリティ面であり、同一環境からの 4 例目のラボ開示。ワシントンのエージェント規制議論の最中
+  （テーゼ 7）。
+- **RADAR**（DAMO Academy、Science 掲載）：腹部 CT の視覚言語ジェネラリスト。40 万+ 検査から臨床
+  レポート由来の 1,500 万解剖学アウェアな画像-テキストペアを学習（手アノテーション不要）；約 4 万
+  実検査上で 146 所見・平均 AUC 0.913 を主張、外部 MERLIN テストセット含む。「世界初のエキスパート
+  レベル汎用医用画像モデル」はチーム自身の framesetting で、報道に独立した専門家コメントは無し。
+  ライセンス分裂が落とし穴：コードは Apache-2.0、ただしリポジトリの CC BY-NC-SA 4.0 バッジはモデル/
+  データ資産が非商用の可能性を示唆。
+- **MiniMax-H3 クロスモーダル物理評価**（arXiv 2609.18323、Shuicheng Yan ら）：517 インスタンス・
+  4 次元でクロスモーダル結合推論を強制（暗黙マルチフレーム、音声-画像、prefix 動画、音声-動画）；
+  全体 41.97%——動画ベースの意思決定推論が最高 56.0%、音声ベースの曖昧性解消が最悪 27.4%。要旨自身の
+  注意書きが発見そのもの：「効果的なマルチモーダル統合が依然鍵」。単一モデルのみ評価；ページには
+  チームと MiniMax の所属関係の記載が無い。
+- **When2Think**（arXiv 2609.19671、Microsoft）：インスタンス単位の難度認識報酬整形（事前計算した
+  参照精度/トークン統計）で NoThink 対 Think を学習、critic 不要；AIME24 Pass@3 +10.0% で
+  トークン −27.9%、AIME25 40.0%、圧縮専用・ルーティング専用ベースラインを上回る。数字はすべて数学
+  ベンチマーク；より広い領域への転移は主張されていない。
+- **スケジューリングが N に勝つ**（arXiv 2609.19499）：同じ候補予算 N でもスケジュール次第でエネルギー
+  が激変——N=8 で 8 回逐次（8×1）は 1 回バッチ（1×8）の 4.64–4.86× の GPU デバイス総エネルギーと
+  5.77–6.12× の P95 レイテンシを消費（A100；精度は Phi-3-mini +8.4pt、Qwen2.5-1.5B +18.4pt）。N だけ報告
+  するテスト時計算論文は比較不能；範囲は小型モデル 2 つ・データセット 2 つ・A100 3 台——手法ではなく
+  測定。
+- **ペーシング調整の独禁法訴訟**：カリフォルニア北区への proposed 全国クラスアクション（加入者 4 名）が、
+  Anthropic/OpenAI/「SpaceXAI」/Google の AI 開発減速合意が有料サブスクリプションの価値を毀損すると
+  独禁法違反を主張し、Amodei の 9月12日ペーシングエッセイと同日の Altman/Musk/Hassabis の発言を調整の
+  証拠として引用。未勝訴の訴えにおける申し立てであり、裁判所の判断は無く、被告は即時コメント無し——
+  しかし安全性調整への独禁法攻撃は、Amodei 自らの「特定の安全対話のための狭い免除」提案が予期した
+  chilling effect そのもの。
+
+Sources: [Laya リリース](https://laya.convaiinnovations.com/) ·
+[Laya on HF](https://huggingface.co/convaiinnovations/laya) ·
+[HN: Laya](https://news.ycombinator.com/item?id=49765348) ·
+[CNBC: Gemini 逸脱](https://www.cnbc.com/2026/09/18/googles-gemini-becomes-latest-ai-model-to-break-out-and-hack-computer-systems.html) ·
+[damo-radar](https://github.com/alibaba-damo-academy/damo-radar) ·
+[SCMP: RADAR](https://www.scmp.com/tech/big-tech/article/3368055/alibaba-open-sources-medical-ai-model-can-detect-cancer-and-nearly-150-conditions) ·
+[arXiv 2609.18323](https://arxiv.org/abs/2609.18323) ·
+[arXiv 2609.19671](https://arxiv.org/abs/2609.19671) ·
+[arXiv 2609.19499](https://arxiv.org/abs/2609.19499) ·
+[The Hill: ペーシング訴訟](https://thehill.com/policy/technology/6099571-lawsuit-accuses-anthropic-openai-spacexai-google-of-ai-pacing-collusion)

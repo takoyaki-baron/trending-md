@@ -7663,5 +7663,95 @@
     "en": "IEDM 2026 official program listing — the session abstract surfaced TSMC's A14 platform paper (09-18: <0.017μm² SRAM, N2 comparisons, 2028 production). Primary conference data; numbers are TSMC's own claims within a session abstract, corroborated as reported by HN coverage.",
     "zh": "IEDM 2026 官方议程列表——会议摘要披露 TSMC A14 平台论文（09-18：<0.017μm² SRAM、对比 N2 数据、2028 量产）。一手会议数据；数字为 TSMC 在会话摘要中的自报主张，HN 报道佐证其如实的转述。",
     "jp": "IEDM 2026 公式セッション一覧——セッション要旨から TSMC の A14 プラットフォーム論文が判明（09-18：<0.017μm² SRAM、N2 比較、2028 量産）。一次の会議データ；数値は TSMC 自身の主張で、HN 報道がその伝達を裏付け。"
+  },
+  "services.nvd.nist.gov": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "NVD's JSON API (CVE 2.0) — the machine-readable CVE feed this feed uses for one-call scorer checks (\"look at metrics\"); cross-validated against CNA pages (Mint CVE-2026-82672: EEF scores match; Keycloak: Red Hat 'preliminary' noted).",
+    "zh": "NVD 的 JSON API（CVE 2.0）——本 feed 用来一次调用核对 CVE 评分的机器可读数据源（「看 metrics」）；已与 CNA 页面交叉核验（Mint CVE-2026-82672：与 EEF 分数一致；Keycloak：注意到 Red Hat「初步」标注）。",
+    "jp": "NVD の JSON API（CVE 2.0）——本フィードが CVE スコアを 1 コールで確認するのに使う機械可読フィード（「metrics を見る」）；CNA ページと突合済み（Mint CVE-2026-82672：EEF スコアと一致；Keycloak：Red Hat「暫定」表記を確認）。"
+  },
+  "cna.erlef.org": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Erlang Ecosystem Foundation CNA — authoritative advisories for BEAM-ecosystem CVEs (Mint CVE-2026-82672); cross-validated against the NVD record (same CVSS 4.0 6.3, fixed 1.10.1).",
+    "zh": "Erlang 生态基金会 CNA——BEAM 生态 CVE 的权威公告源（Mint CVE-2026-82672）；已与 NVD 记录交叉核验（同为 CVSS 4.0 6.3，1.10.1 修复）。",
+    "jp": "Erlang Ecosystem Foundation の CNA——BEAM エコシステム CVE の権威あるアドバイザリ（Mint CVE-2026-82672）；NVD レコードと突合済み（同一 CVSS 4.0 6.3、1.10.1 修正）。"
+  },
+  "databreaches.net": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Independent breach-reporting outlet; cross-validated (09-20): its Clop/ShinyHunters account matches BleepingComputer's and both flag the Grav CMS initial-access claim as the attackers' unverified assertion — a good instinct for labeling what is claim vs fact.",
+    "zh": "独立数据泄露报道媒体；已交叉核验（09-20）：其 Clop/ShinyHunters 报道与 BleepingComputer 一致，且两者都标注 Grav CMS 入侵向量是攻击者未经证实的说法——区分「声称」与「事实」的直觉很好。",
+    "jp": "独立系侵害報道メディア；突合済み（09-20）：Clop/ShinyHunters 記事は BleepingComputer と一致し、両者とも Grav CMS 初期侵入の主張を攻撃者側の未検証主張として明記——主張と事実の切り分けが良い。"
+  },
+  "coder.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Coder's vendor blog — Agent Relay announcement; cross-validated against the coder/coder repo (stars, GA dates, early-access status all consistent), but roadmap claims are vendor framing.",
+    "zh": "Coder 的厂商博客——Agent Relay 公告；已与 coder/coder 仓库交叉核验（星数、GA 日期、早鸟状态一致），但路线图式说法属厂商框架。",
+    "jp": "Coder のベンダーブログ——Agent Relay 発表；coder/coder リポジトリと突合済み（スター、GA 日付、早期アクセス状況は一致）。ただしロードマップ的記述はベンダー framesetting。"
+  },
+  "laya.convaiinnovations.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "ConvAI Innovations' Laya release post; the headline claims are vendor benchmarks, but the linked model card does the honesty work (zero-shot floor, Khmer 0.000) — cite it together with HF, never alone. Jev numbers are third-party, not same-harness.",
+    "zh": "ConvAI Innovations 的 Laya 发布页；头条数字是厂商基准，但链接的模型卡做了诚实功课（零样本下限、高棉语 0.000）——引用时必须连同 HF 一起，不可单独。Jev 数字是第三方，非同 harness。",
+    "jp": "ConvAI Innovations の Laya リリース投稿；見出しの数字はベンダーベンチだが、リンク先モデルカードは誠実（ゼロショットの下限、クメール語 0.000）——HF とセットで引用し単独では使わない。Jev 数字は第三者、同一ハーネスではない。"
+  },
+  "agentgit.co": {
+    "cat": "code",
+    "cred": "low",
+    "cv": 1,
+    "density": "low",
+    "en": "Agentgit's own site (push-to-create Git remote for agent handoff); facts (24h collection, size limits, signers refs) verified against the site + Show HN thread, but it is a days-old unproven service — repos are public-by-default and collected after 24h; treat as an experiment, not infrastructure.",
+    "zh": "Agentgit 自己的站点（push 即建仓的 agent 交接 Git 远端）；事实（24 小时回收、体积上限、signers refs）已对照站点与 Show HN 帖核实，但它是上线仅数日、未经检验的服务——仓库默认公开、24 小时后回收；当作实验而非基础设施。",
+    "jp": "Agentgit 自身のサイト（push でリポジトリ生成のエージェントハンドオフ用 Git リモート）；事実（24 時間回収、サイズ上限、signers refs）はサイトと Show HN スレッドで確認済みだが、公開数日の未証明サービス——リポジトリはデフォルト公開・24 時間で回収；インフラではなく実験として扱う。"
+  },
+  "hn.algolia.com": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "HN's official Algolia search/items API — the reliable way to resolve Show HN threads and measure attention when the HTML front page rate-limits; cross-validated against news.ycombinator.com item pages (same scores/comments).",
+    "zh": "HN 官方 Algolia 搜索/条目 API——当 HTML 首页限流时解析 Show HN 帖与测量热度的可靠途径；已与 news.ycombinator.com 条目页交叉核验（分数/评论一致）。",
+    "jp": "HN 公式の Algolia 検索/items API——HTML フロントがレート制限する際に Show HN スレッドを解決し注目度を測る信頼できる手段；news.ycombinator.com のアイテムページと突合済み（スコア/コメント一致）。"
+  },
+  "sdcc.sourceforge.net": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "SDCC's canonical project site (small-device C compiler); cross-validated (09-20): the 4.6.0 release notes match the HN discussion and its own honesty markers (PIC16/PIC18 'unmaintained') are on-site — also the place to confirm release dates against resubmission-triggered trends.",
+    "zh": "SDCC 的官方项目站（小型器件 C 编译器）；已交叉核验（09-20）：4.6.0 发布说明与 HN 讨论一致，其自身的诚实标注（PIC16/PIC18「无人维护」）就在站上——也是核对「重投型趋势」真实发布日期的地方。",
+    "jp": "SDCC の公式プロジェクトサイト（小型デバイス用 C コンパイラ）；突合済み（09-20）：4.6.0 リリースノートは HN 議論と一致し、自身の正直な明記（PIC16/PIC18「未メンテ」）もサイト上——再投稿起因のトレンドに対して真のリリース日を確認する場所でもある。"
+  },
+  "abcnews.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "ABC News (AP wire) — mainstream wire coverage; cross-validated (09-20): its pacing-collusion lawsuit story matches The Hill's on parties, venue and claims; keep 'allegations' attached, wires add no independent court documents.",
+    "zh": "ABC News（AP 通稿）——主流通讯社报道；已交叉核验（09-20）：其节奏协调诉讼报道与 The Hill 在当事方、法院与指控上一致；保留「指控」限定，通稿不提供独立法庭文件。",
+    "jp": "ABC News（AP 通信）——主流ワイヤー報道；突合済み（09-20）：ペーシング調整訴訟記事は The Hill と当事者・法廷・主張が一致；「申し立て」の留保を保持し、ワイヤーは独立した裁判文書を追加しない。"
+  },
+  "docs.x.ai": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "xAI's first-party API documentation (models list, voice guide) — the ground truth for xAI model IDs, pricing and limits; useful precisely because the marketing site blocks non-browser fetchers and makes stronger claims than the docs do (the docs carry no accuracy claims). Cross-validated 09-19: model/pricing facts on the docs matched the item's numbers.",
+    "zh": "xAI 的一方 API 文档（模型列表、语音指南）——xAI 模型 ID、定价与限额的地面真相；恰因营销站拦截非浏览器抓取器且比文档说了更强的话（文档不含任何精度声明）而有用。已交叉核验（09-19）：文档中的模型/定价事实与条目数字一致。",
+    "jp": "xAI の一次 API ドキュメント（モデル一覧、音声ガイド）——xAI のモデル ID・料金・制限の ground truth；マーケティングサイトが非ブラウザフェッチャをブロックし、ドキュメントより強い主張をする（ドキュメントに精度主張は無い）からこそ有用。突合済み（09-19）：ドキュメントのモデル/料金事実は記事の数字と一致。"
   }
 }

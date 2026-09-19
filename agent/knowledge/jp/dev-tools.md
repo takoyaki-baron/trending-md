@@ -120,3 +120,36 @@ Limbo は無修正の Doom を SQLite VDBE バイトコードとして実行（�
   [IEDM 2026 session 3-2](https://iedm26.mapyourshow.com/8_0/sessions/session-details.cfm?scheduleid=331) ·
   [bend-lang.com](https://bend-lang.com/) ·
   [bendlang/bend](https://github.com/bendlang/bend)
+
+## 2026-09-20 04:35——PlanetScale がオープンな Postgres の上にクローズドソース BM25 を賭ける。レトロコンピューティングが測られる
+
+- **Tin**（PlanetScale、「Text INdex」、9月16日 GA、クローズドソース）：BM25 全文検索が Postgres の
+  ネイティブインデックスタイプに——`CREATE INDEX … USING tin(col)` と `==>` 演算子；BM25 top-k、
+  ブール/フレーズ/span、ファジー/ワイルドカード/正規表現。設計のトリック：Postgres のネイティブ 48 ビット
+  `ctid` をドキュメント ID に使い（ID マッピングテーブル不要）、ページ+オフセットを 2 レベルのビットマップに
+  エンコードしてConcat結合をベクトル化 AND/OR に、カウントは POPCNT；85 GB / 1.5億ドキュメントコーパスで
+  代替比 ≥8× スループットを主張。ベンチマーク表の前に注意書きを読む：クローズドソース（唯一の公開
+  リポジトリ `planetscale/lead` は明示的に「非 production」；Tin の開発者がスレッドで専有モデルを擁護）、
+  ベンチマーククエリは合成、インデックスはコーパスの約 60% を消費、走れなかった競合は一部ワークロードから
+  除外、著者自身が結果を「信じがたい」と認める。大手 Postgres ホストがスクラッチから検索エンジンを建てる
+  のは統合 BM25 が標準装備になりつつあることの合図——そして Tin は**オープンな Postgres の上の専有
+  拡張**の最新の最も鋭いテストケース。
+- **zxdesk**（mindbox77/zxdesk、HN 119 pts）：未拡張の 48K ZX Spectrum 用に Z80 アセンブリで書かれた
+  ウィンドウ式グラフィカルデスクトップ——z オーダー付きウィンドウ、プルダウンメニュー、ヒープ、イベント
+  キュー、ファイルマネージャ；ウィンドウドラッグが単一の 69,888 T-state フレーム内で完了（真の 50 Hz）。
+  README はハードウェアベンチマーキングエッセイを兼ねる：実測の画面コンテンションコストは約 14.7%
+  （俗説の 50% ではない）、 Spectrum は `DI` ウィンドウ中の割り込みを遅延でなく*喪失*する（INT は 32 T-state
+  しかアサートされない）——「owed push」技法で回避；4 つの実測最適化でドラッグは 96,010→59,858
+  T-states へ。割り込み喪失の発見はエッジトリガ割り込み設計一般に一般化できる。注意：単一コミットの
+  リポジトリ、スター 58、永続化は esxDOS 拡張ハードに依存。
+- **SDCC 4.6.0 が HN の日を得る**（119 pts）：小型 MCU 向け GPL のリターゲタブル C コンパイラ（MCS-51、
+  eZ80/SM83/Z80N を含む Z80 ファミリ、HC08/S08、STM8、PDK、6502/65C02）が C2y の `_Countof`/`containerof`、
+  C23 `constexpr`、Rabbit 4000/5000/6000 ポートを追加。正直なトリガー開示：4.6.0 自体は 6月22日リリース
+  ——新リリースではなく HN への再投稿。NGI0 Commons Fund（目標は LTO）+ Sovereign Tech Fund が資金提供；
+  自身のページは PIC16/PIC18 を「未メンテ」と明記し、arm64 macOS ビルドも無し。
+
+Sources: [PlanetScale: Tin](https://planetscale.com/blog/introducing-tin) ·
+[HN: Tin](https://news.ycombinator.com/item?id=49766611) ·
+[mindbox77/zxdesk](https://github.com/mindbox77/zxdesk) ·
+[HN: zxdesk](https://news.ycombinator.com/item?id=49766676) ·
+[sdcc.sourceforge.net](https://sdcc.sourceforge.net/)

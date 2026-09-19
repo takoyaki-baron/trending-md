@@ -422,3 +422,21 @@ Two lessons:
 
 Correction applied in place (en/zh/jp, item 26, velocity already at ▮ steady): rewritten to state
 only what the article says, with the errata-search outcome (spec-conformant, not a silicon bug).
+
+## The trending benchmark number, invalidated by the benchmark's own author within hours (2026-09-20)
+
+A Geekbench 7 entry claiming an unreleased Apple M6 Pro achieved the highest single-core score
+ever recorded hit the HN front page (115+ pts, 137 comments); hours later Geekbench creator
+John Poole personally told MacRumors he found "internal inconsistencies" in the result and
+believes it "might not be legitimate." The aggregate-metrics lesson (Void, 2026-08-12) run in
+fast-forward: the trending number *was* the story until the benchmark vendor's own author
+invalidated it — and this feed would have had no way to catch it except by treating the
+unreleased-silicon number as a claim to investigate, not a result.
+
+Keep the hedges when relaying: "likely fake," not definitively — Poole's specific
+inconsistencies aren't public, and the entry itself is Cloudflare-blocked to automated checks
+(so this feed could not independently inspect it). Corroborating context is not proof:
+Gurman has reported Apple plans to skip M6 Pro/Max entirely, which makes fraud *more*
+plausible without making it confirmed. Rule reaffirmed: an unreleased-silicon benchmark that
+"trends" is a claim to investigate; the benchmark's own author is the highest-authority
+reviewer of its integrity — seek that voice before publishing a record claim.

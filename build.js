@@ -1028,6 +1028,64 @@ if (tnStart !== -1) {
       console.log(`  ✓ ${loc}/agent.md trend notes: ${mEntries.length} entries, parity with en`);
     }
   }
+
+  /* ── zh/jp thesis structural check (2026-09-20 05:06, log) ──
+     The 09-20 04:50 run found theses 15/16 in both mirrors with entry headers merged mid-line
+     ("（详情     - **09-11 04:03 …" — the 09-02 entry's tail displaced below a later entry)
+     and one en status entry missing entirely — damage invisible to the trend-notes parity above,
+     which counts 趋势笔记/トレンドノート entries only. Two structural signatures, checked on the
+     canonical en theses as well, catch the damage class without a line-count baseline:
+     (1) a line carrying two `- **MM-DD` entry starts = two entries merged (and truncated);
+     (2) a `→ [[topic]]` closer line still carrying `）：**` = a displaced entry tail.
+     (Per-thesis status-line *counts* are deliberately not compared en↔mirror: the mirrors still
+     carry pre-compaction text (zh/jp ~2-3× en on theses 1/2/6), a backfill problem, not
+     corruption — tracked on the action-page Agenda.) */
+  const THESIS_SEC = {
+    en: { h: /^##\s+Active theses\s*$/, end: /^##\s+Trend notes\s*$/ },
+    zh: { h: /^##\s+当前论点\s*$/, end: /^##\s+趋势笔记\s*$/ },
+    jp: { h: /^##\s+現在のテーゼ\s*$/, end: /^##\s+トレンドノート\s*$/ },
+  };
+  const scanTheses = (loc) => {
+    const p = path.join(ROOT, loc, 'agent.md');
+    if (!fs.existsSync(p)) return null;
+    const lines = fs.readFileSync(p, 'utf8').split('\n');
+    const { h, end } = THESIS_SEC[loc];
+    const start = lines.findIndex(l => h.test(l));
+    if (start === -1) return null;
+    let stop = lines.length;
+    for (let i = start + 1; i < lines.length; i++) if (end.test(lines[i])) { stop = i; break; }
+    const sec = lines.slice(start, stop);
+    const nTheses = sec.filter(l => /^\d+\.\s/.test(l)).length;
+    const merged = [];
+    const dangling = [];
+    sec.forEach((l, i) => {
+      if ((l.match(/- \*\*\d{2}-\d{2}/g) || []).length >= 2) merged.push({ ln: i + start + 1, t: l.trim().slice(0, 56) });
+      if (/^\s*→\s*\[\[/.test(l) && /）：\*\*/.test(l)) dangling.push({ ln: i + start + 1, t: l.trim().slice(0, 56) });
+    });
+    return { nTheses, merged, dangling };
+  };
+  const enTh = scanTheses('en');
+  if (enTh) {
+    const enProbs = [...enTh.merged, ...enTh.dangling];
+    if (enProbs.length) {
+      console.log(`  ⚠ en/agent.md theses: ${enTh.merged.length} merged + ${enTh.dangling.length} displaced entry line(s) — repair the canonical before the mirrors copy the damage`);
+      enProbs.slice(0, 5).forEach(x => console.log(`      line ${x.ln}: ${x.t}`));
+    }
+    for (const loc of ['zh', 'jp']) {
+      const m = scanTheses(loc);
+      if (!m) { console.log(`  ⚠ ${loc}/agent.md: theses section not found`); continue; }
+      const probs = [];
+      if (m.merged.length) probs.push(`${m.merged.length} merged entry line(s)`);
+      if (m.dangling.length) probs.push(`${m.dangling.length} displaced tail(s)`);
+      if (m.nTheses !== enTh.nTheses) probs.push(`${m.nTheses} theses vs en ${enTh.nTheses}`);
+      if (probs.length) {
+        console.log(`  ⚠ ${loc}/agent.md theses: ${probs.join('; ')} — re-sync from the canonical en theses`);
+        [...m.merged, ...m.dangling].slice(0, 5).forEach(x => console.log(`      line ${x.ln}: ${x.t}`));
+      } else {
+        console.log(`  ✓ ${loc}/agent.md theses: ${m.nTheses} theses, no merged/displaced entry lines`);
+      }
+    }
+  }
 }
 
 /* ── Agenda-item budget check ──

@@ -103,3 +103,31 @@ GPU 驱动）；OpenLogi（本地优先 Rust HID++）；Linux 7.2（缓存感知
   [IEDM 2026 session 3-2](https://iedm26.mapyourshow.com/8_0/sessions/session-details.cfm?scheduleid=331) ·
   [bend-lang.com](https://bend-lang.com/) ·
   [bendlang/bend](https://github.com/bendlang/bend)
+
+## 2026-09-20 04:35——PlanetScale 把闭源 BM25 塞进 Postgres；复古计算被认真测量
+
+- **Tin**（PlanetScale，"Text INdex"，9 月 16 日 GA，闭源）：BM25 全文搜索成为 Postgres 原生索引
+  类型——`CREATE INDEX … USING tin(col)` 配 `==>` 操作符；BM25 top-k、布尔/短语/span、模糊/通配/
+  正则。设计窍门：用 Postgres 原生 48 位 `ctid` 作文档 ID（无 ID 映射表），页号+偏移编码为两级
+  位图，使合取变成向量化 AND/OR、计数用 POPCNT；宣称在 85 GB / 1.5 亿文档语料上比替代品快
+  ≥8×。先读告警再看基准表：闭源（唯一公开仓库 `planetscale/lead` 明示「非生产用途」；一位 Tin
+  开发者在帖中为专有模式辩护）、基准查询为合成、索引约为语料体积的 60%、某竞品因跑不了部分
+  负载被剔除，作者自认结果「难以置信」。主流 Postgres 托管商从零自建搜索引擎说明集成 BM25 正在
+  成为标配——而 Tin 是**开放 Postgres 之上的专有扩展**最尖锐的新测试案例。
+- **zxdesk**（mindbox77/zxdesk，HN 119 分）：为未扩容的 48K ZX Spectrum 用 Z80 汇编写的窗口图形
+  桌面——z 序窗口、下拉菜单、堆、事件队列、文件管理器；窗口拖拽在单个 69,888 T-state 帧内完成
+  （真 50 Hz）。README 同时是一篇硬件测量随笔：实测屏幕争用成本约 14.7%（而非传说中的 50%），
+  且 Spectrum 在 `DI` 窗口内的中断会*丢失*而非推迟（INT 仅保持 32 个 T 状态）——用「欠一次推送」
+  技术绕过；四次实测优化把拖拽从 96,010 降到 59,858 T-states。中断丢失的发现可推广到一切边沿
+  触发中断设计。告警：单 commit 仓库、58 星、持久化依赖 esxDOS 扩展硬件。
+- **SDCC 4.6.0 迎来 HN 之日**（119 分）：面向小型 MCU 的 GPL 可重定向 C 编译器（MCS-51、Z80 家族
+  含 eZ80/SM83/Z80N、HC08/S08、STM8、PDK、6502/65C02）新增 C2y `_Countof`/`containerof`、C23
+  `constexpr`、Rabbit 4000/5000/6000 移植。诚实的触发说明：4.6.0 于 6 月 22 日发布——这是 HN 重投，
+  不是新版本。由 NGI0 Commons Fund（目标 LTO）+ Sovereign Tech Fund 资助；其自家页面写明
+  PIC16/PIC18「无人维护」，且无 arm64 macOS 构建。
+
+Sources: [PlanetScale: Tin](https://planetscale.com/blog/introducing-tin) ·
+[HN: Tin](https://news.ycombinator.com/item?id=49766611) ·
+[mindbox77/zxdesk](https://github.com/mindbox77/zxdesk) ·
+[HN: zxdesk](https://news.ycombinator.com/item?id=49766676) ·
+[sdcc.sourceforge.net](https://sdcc.sourceforge.net/)

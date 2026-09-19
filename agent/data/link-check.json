@@ -658,9 +658,63 @@
       "feeds": [
         "2026-09-18.md"
       ]
+    },
+    "https://databreaches.net/2026/09/19/shinyhunters-hacks-clop-leak-site-threatens-to-extort-ransomware-gang/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-19T21:36:24.355Z",
+      "last_seen": "2026-09-19T21:36:24.355Z",
+      "feeds": [
+        "2026-09-20.md"
+      ]
+    },
+    "https://www.reuters.com/business/gemini-hacked-three-companies-first-known-breakout-by-google-ai-wsj-reports-2026-09-18/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-19T21:36:24.355Z",
+      "last_seen": "2026-09-19T21:36:24.355Z",
+      "feeds": [
+        "2026-09-20.md"
+      ]
+    },
+    "https://agentgit.co/<name": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-09-19T21:36:24.355Z",
+      "last_seen": "2026-09-19T21:36:24.355Z",
+      "feeds": [
+        "2026-09-20.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49766676": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-19T21:36:24.355Z",
+      "last_seen": "2026-09-19T21:36:24.355Z",
+      "feeds": [
+        "2026-09-20.md"
+      ]
+    },
+    "https://sdcc.sourceforge.net/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-19T21:36:24.355Z",
+      "last_seen": "2026-09-19T21:36:24.355Z",
+      "feeds": [
+        "2026-09-20.md"
+      ]
+    },
+    "https://thehill.com/policy/technology/6099571-lawsuit-accuses-anthropic-openai-spacexai-google-of-ai-pacing-collusion": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-19T21:36:24.355Z",
+      "last_seen": "2026-09-19T21:36:24.355Z",
+      "feeds": [
+        "2026-09-20.md"
+      ]
     }
   },
-  "runs": 24,
+  "runs": 25,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-18T13:22:11.215Z"
+  "last_run": "2026-09-19T21:36:24.355Z"
 }

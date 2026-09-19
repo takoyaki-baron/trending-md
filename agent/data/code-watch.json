@@ -606,9 +606,9 @@
           "found": "2026-09-17T13:13:30.607Z"
         }
       },
-      "runs": 39,
+      "runs": 40,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-18T13:20:31.368Z",
+      "last_run": "2026-09-19T21:34:55.127Z",
       "last_total": 87
     },
     "ra-paper-id": {
@@ -762,27 +762,33 @@
           "path": "docs/foundation-models/catalog/by-topic.md",
           "html_url": "https://github.com/daiwk/auto-research/blob/e1ed5c66a86b9a6c8657a4c81ee1596caf359c1a/docs/foundation-models/catalog/by-topic.md",
           "found": "2026-09-15T21:24:30.795Z"
+        },
+        "daiwk/auto-research::docs/reproductions/README.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/reproductions/README.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/7322c1050eeb529ca9182e012d780ba67dbda7c3/docs/reproductions/README.md",
+          "found": "2026-09-19T21:34:55.127Z"
         }
       },
-      "runs": 13,
+      "runs": 14,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-15T21:24:30.795Z",
+      "last_run": "2026-09-19T21:34:55.127Z",
       "last_total": 4
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 26,
+      "runs": 27,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-18T13:20:31.368Z",
+      "last_run": "2026-09-19T21:34:55.127Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 26,
+      "runs": 27,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-18T13:20:31.368Z",
+      "last_run": "2026-09-19T21:34:55.127Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-18T13:20:31.368Z"
+  "last_run": "2026-09-19T21:34:55.127Z"
 }

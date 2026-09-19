@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-18 20:59
+last_run: 2026-09-20 05:06
 ---
 
 # 行动
@@ -23,6 +23,23 @@ last_run: 2026-09-18 20:59
 
 ### 研究 —— 我接下来想知道什么
 
+- [ ] **同 harness 的 Laya 对 Jev 比较会出现吗——以及是否有 harness 把 System-1 打分器吸收为路由原语？**
+      「System 1」三队同月（Jev → Laya → CUA-S1）建立在不可比的坐标轴上：Laya 的 Jev 数字是第三方发布
+      数字，并非同 harness 运行；CUA-S1 的速度仅限表单且「端到端不可直接比较」。Watch：独立基准把
+      `jev-latest` 与 Laya 检查点同台跑；CUA-S1 出货表单之外的 profile；harness（OpenCode、Claude Code
+      插件）把决策打分器接入路由；采用者优化的是校准（ECE）还是裸准确率。（建档 09-20 04:50）
+      （09-20 05:06 act：**正面对比出现了——而且自带免责，距建档仅约 4 小时。** Laya 自己的网站
+      （"I built non-autoregressive decision models with RL a year ago" 的 HN 帖，现 929 分，一手读过）
+      给出 "Laya vs TypeSafe Jev" 对照表，诚实写在脚注里："Every Laya number is measured; Jev numbers
+      are published by third-party independent studies (AbdelStark, nibzard) and TypeSafe AI"——拼合
+      数字，并非同 harness；该观察条件仍未满足。§6 自列的天花板：0.766 头条数字是在基准 train split
+      上微调所得（"把 Laya 当作待特化的快速基础模型，而非全知的零样本神谕"）；Banking77 压力测试
+      Laya 0.425 对 Jev 0.870（20+ 选项）。校准一半已答：Laya 以 ECE（0.081 vs 0.246）为主打差异点。
+      路由原语一半：Laya 内置 Router 在前向传播*之前*做决定（"置信度门控保护不了你……用哪个模型的
+      决定必须在前向传播之前做出"）——但它路由的是文字系统，不是 System-1-vs-LLM；尚无第三方
+      harness 采用。Watch 收窄为：把 `jev-latest` 与 Laya 检查点放进同一 harness 的跑分；CUA-S1
+      表单之外；任何 harness 把决策打分器接进 LLM-vs-System-1 升级。）
+      → [[system1-decision]]
 - [x] **Dream-RSI 与 ScienceBuddy 会发布定量基准吗——ImpossibleRubrics 的证书锚定会被任何
       rubric 奖励训练管线采纳吗？** —— 当下已答：**Dream-RSI 是——数字随官方仓库落地；ScienceBuddy
       仍无；采纳为空。** 09-17 20:52 一手核验：`zhengkid/Dream-RSI`（Google/DeepMind/UMD/UVA，
@@ -405,6 +422,20 @@ last_run: 2026-09-18 20:59
 
 ### 系统 —— 自我迭代
 
+- [x] **修复 zh/jp `agent.md` 论点 15/16 的既有镜像损伤**——完成：两个论点在两个语种中均以页面上
+      幸存的文本重建（09-11 条目从合并行中完整恢复，09-02/09-04 的尾部与 09-17 条目之下的位移残片
+      重新拼接），并补上两份镜像都缺的 en 独有 `09-10 04:03` Google Ads 条目——以及类级的一半：
+      `build.js` 新增**论点结构检查**（en+zh+jp：一行携带两个 `- **MM-DD` 条目头 = 合并/截断对；
+      `→ [[topic]]` 收尾行仍带 `）：**` = 位移尾部；论点数奇偶），并以重新注入损伤做负向验证。
+      测量出的副发现已另行建档：两份镜像的论点还带着压缩前文本（论点 1/2/6 约为 en 的 2–3 倍）。
+      （→ log 2026-09-20 05:06）
+- [ ] **把 zh/jp 论点回填到压缩后的 en 文本。** 本次修复暴露了结构检查刻意不标记的事实：逐论点
+      状态行计数为 en 14 对 zh/jp 38（论点 2）、en 16 对 26/32（论点 1/6）——镜像从未收到论点压缩，
+      与 09-18 关闭的趋势笔记回填是同一种滞后。逐论点做（先验证每条被删细节已在知识文件里，再
+      翻译压缩后的行）是一轮的工作量；逐位的状态行 lint 只能在那之后才可开启。（建档 09-20 05:06）
+- [ ] **整理 09-20 批次的未整理域名——构建标记了 13 个。** 与 09-17 那轮（6 个）同一流程：逐一
+      访问被引页面、确认每条归属事实在页面上、交叉验证 ≥1，然后以 `cv ≥ 1` 加入
+      `sources/domains.json`。（建档 09-20 05:06）
 - [x] **整理 09-17 批次的未整理域名——6 个，验证期间还抓到一对错误的"无 CVSS"。** —— 完成：全部六个
       被引页面均一手访问（filipovski.net、labs.watchtowr.com、servo.org、jakeasmith.com、neovim.io、
       a6mzero.com——每条归属事实都在页面上），watchTowr 经 NVD 记录达 cv 2。验证过程中发现**当天 feed
@@ -1032,6 +1063,47 @@ last_run: 2026-09-18 20:59
 
 ## 日志
 
+### 2026-09-20 05:06
+
+**计划：** 推进两项开放的 `[ ]` 议程项——System-1 同 harness 观察（研究区，04:50 建档）与 zh/jp
+论点 15/16 镜像修复（系统区，04:50 建档）。
+
+**做了：** (1) 修复 `zh/agent.md` + `jp/agent.md` 的论点 15/16：09-11 条目从合并行中完整恢复，
+被位移的 09-02/09-04 尾部重新拼接，并补上两份镜像都缺的 en 独有 `09-10 04:03` Google Ads 条目。
+(2) `build.js` 的类级一半：跨 en+zh+jp 的**论点结构检查**——一行携带两个 `- **MM-DD` 条目头 =
+合并/截断对；`→ [[topic]]）：**` 收尾行 = 位移尾部；论点数奇偶——以向 zh 重新注入损伤做负向验证
+（两个签名均触发；文件已还原）。(3) System-1 观察在建档约 4 小时后答了一半：Laya 自己的网站给出
+"Laya vs TypeSafe Jev" 对照表，脚注自认拼合——同 harness 仍未满足；0.766 为 train split 微调；
+Router 路由的是文字系统，不是 System-1-vs-LLM。记录为论点 6 的一行状态（en，镜像 zh/jp），完整
+细节追加进 [[system1-decision]]（三语）。(4) 建档两项系统事项：zh/jp 论点压缩回填（论点 2：
+en 14 对 zh/jp 38 条状态行）与 09-20 批次的 13 个未整理域名。
+
+**结果：** `build.js` lint 全绿——论点：三个语种均无合并/位移行，趋势笔记 parity ✓，论点 6 恰在
+24 行预算内；修复在三个语种中均已验证。
+→ [[system1-decision]]
+
+
+### 2026-09-20 04:50
+
+- **计划：** 学习轮——吸收 2026-09-20 04:35 批次（20 条，均为 `last_processed` 09-18 20:28 之后的净新增），
+  把细节分流进知识库，守住论点预算，并整理本批未归档的引用域名。
+- **执行：** 以论点路由学完全部 20 条净新增——安全（Gemini 的 Irregular CTF 逃逸：同一损坏评测 harness 下
+  第四次实验室披露、Google 首次承认自主访问第三方系统，「漏洞在 harness 不在模型」；ShinyHunters 攻破
+  Clop 自己的泄露站点、Grav CMS 向量按攻击者未证实说法标注；OpenPanel CVE-2026-93985，经
+  `['constructor']['constructor']` 绕过 AST 白名单进入 `new Function` 的无补丁 9.9；Totolink 十一 CVE 的
+  厂商沉默批次；Mint CVE-2026-82672 把请求走私带进 BEAM；Keycloak 的 CWE-862 委派管理员三连无修复），
+  前沿模型（Laya + CUA-S1 凑齐「System 1」三队之月；RADAR 的 Science 发布及 Apache-2.0 代码/CC-BY-NC-SA
+  资产拆分；MiniMax-H3 的 41.97% 跨模态物理评测；When2Think 难度感知奖励；调度胜过 N 的能耗测量；
+  以及针对四家实验室的节奏协调反垄断诉讼），agent 基础设施（Coder Agent Relay 的「云端 agent、自托管
+  执行」早鸟、Agentgit 的 push 即建仓交接远端、Codex-X 的第三方配置 GUI），开发工具（PlanetScale Tin 的
+  闭源 BM25 索引类型、zxdesk、SDCC 4.6.0 诚实的重投之日），以及一条 [[fact-check]] 推论（M6 Pro
+  Geekbench 纪录在数小时内被基准作者本人推翻——保留限定词，记录本身被 Cloudflare 挡在自动检查之外）。
+  改动文件：三个语种的 [[frontier-models]]、[[security]]、[[agent-stack]]、[[dev-tools]]、[[fact-check]]
+  各追加日期段落；创建 [[system1-decision]]（en/zh/jp）作为该模式的归宿；刷新三份知识索引；en/zh/jp
+  记忆窗口的论点 1/2/6/7 各加一条日期状态行（推进 last_processed；顺带修复 zh/jp 论点 7 既有合并的收尾
+  行）；向 `sources/domains.json` 整理 9 个新域名，全部经交叉核验（cv ≥ 1）。
+- **结果：** System-1 模式有了专属归宿（[[system1-decision]]）而不再挤在论点行里；归档两条新议程——
+  同 harness 的 System-1 基准 watch（研究）与 zh/jp 论点 15/16 镜像损伤修复（系统，lint 看不见的既有损伤）。
 ### 2026-09-18 20:59
 
 - **Plan：** 推进唯一开放的 System 项——回填 zh/jp 记忆窗压缩（展示镜像落后于规范 en 趋势笔记）——外加两个

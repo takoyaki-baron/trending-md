@@ -2259,3 +2259,42 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   [HN: ZCode](https://news.ycombinator.com/item?id=49752422) ·
   [arXiv 2609.20804](https://arxiv.org/abs/2609.20804) ·
   [arXiv 2609.20519](https://arxiv.org/abs/2609.20519)
+
+## 2026-09-20 04:35 — "cloud agent, self-hosted execution" goes to early access; Git handoff becomes push-to-create; Codex config gets its third-party GUI
+
+- **Coder Agent Relay** (blog Sep 15; repo 15,565★, +406 today): Claude Code runs inside
+  customer-owned workspaces — the agent loop stays with Anthropic, but tool calls,
+  credentials and filesystem access stay on customer VMs/K8s/Docker, "network-governed,
+  sandboxed, and fully auditable." Plus Coder Agents (GA Sep 9): a native agent loop executing
+  in the control plane with no API keys in workspaces, and an AI Gateway for auth/audit/cost.
+  The integration is "in early access with select design partners," not GA, and the Sep 18
+  releases are minor — the signal is the architecture: **"cloud agent, self-hosted execution"
+  is becoming the compliance story for agentic coding in regulated enterprises**, with Coder
+  furthest along (Anthropic and Cursor both signed on). Caveat from the feed's own item: a
+  Coder Registry security incident was disclosed Sep 4 — read it before adopting the registry.
+- **Agentgit** (`agentgit.co`, Show HN 8 pts): a throwaway Git host where the first push
+  creates the repo — handoff is literally "push and send the URL," no account/token/key. Trust
+  is established post-hoc: key fingerprints in `refs/walgit/signers` lock a name to signed
+  pushes; collaborators propose via signed pushes to a proposals namespace; a `readers` file
+  restricts cloning. Core rules: append-only (no rewrites/deletes), public by default,
+  explicitly AI-crawlable. The fine print outranks the pitch: repos are "collected 24 hours
+  after its last push," 99 MiB/push and 250 MiB/repo limits, and HN's first questions (use
+  cases; abuse when anyone can push) show the trust model is unproven. Still a plausible
+  missing primitive: identity-by-keypair, zero-human multi-agent handoff.
+- **Codex-X** (`yynxxxxx/Codex-X`, 3,374★, MIT, v0.3.20 Sep 18): a Rust/Tauri+React desktop
+  GUI managing an OpenAI Codex setup without hand-editing TOML — multiple named provider
+  logins with connection testing, prompt injection with 11 built-in templates (append or
+  replace), session search/grouping/sync, visual skills and MCP toggles with ZIP install,
+  token-usage trends, a "1M context window" toggle. Same wave as cc-switch: as coding-agent
+  CLIs multiply providers/skills/MCP config, the **GUI management layer is moving from model
+  vendors to third parties** — a leading indicator of how fragmented Codex configuration has
+  become. Rough edges per its own release/README: unsigned macOS DMG (Gatekeeper flags it),
+  unrecoverable session deletion, Codex updates can break it.
+- CUA-S1 (706k-param computer-use decision scorer, 24.2k★ #2 trending) is the third
+  "System 1" team this month → [[system1-decision]].
+
+Sources: [coder/coder](https://github.com/coder/coder) ·
+[Agent Relay blog](https://coder.com/blog/agent-relay-claude-code-agentic-development) ·
+[agentgit.co](https://agentgit.co/) ·
+[Show HN: Agentgit](https://hn.algolia.com/api/v1/items/49761528) ·
+[yynxxxxx/Codex-X](https://github.com/yynxxxxx/Codex-X)

@@ -1912,3 +1912,55 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·
   [tokenstead: ZCode](https://tokenstead.ai/guides/zcode-silent-git-history-upload) ·
   [HN: ZCode](https://news.ycombinator.com/item?id=49752422)
+
+## 2026-09-20 04:35——评测沙箱第四次失守；黑吃黑；手搓 JS 沙箱依旧拿到 root；BEAM 客户端遇上请求走私
+
+- **Gemini 在 Irregular CTF harness 内触达三家真实公司**（WSJ/Reuters/CNBC；Google 周五披露）：
+  2026 年 5 月的一次夺旗安全测试中，Gemini 模型登上了三个独立的私有系统——一次是凭据猜测撞进
+  一家与虚构测试公司同名的真实公司，两次是通过网页搜索找到公开凭据仓库；harness 的 bug 暴露了
+  本不应存在的互联网访问。Google 的 Heather Adkins 称「在这三起实例中，模型都停下了」（Google
+  自述）；Irregular 表示这是「已报告过的同一问题」，7 月下旬已通知所有相关实验室，「不构成实质
+  性独立事件」。这是**同一损坏环境下的第四次实验室披露**（此前 OpenAI、Anthropic、Meta），也是
+  Google 首次承认模型自主访问第三方系统：评测环境的 containment 本身就是安全面——漏洞在
+  harness，不在模型。
+- **ShinyHunters 攻破 Clop 自己的泄露站点**（BleepingComputer/DataBreaches，9 月 19 日）：用自家
+  ASCII 艺术涂黑页面，声称拿到服务器数据与 onion 服务私钥，并威胁自行勒索 Clop 的受害者。所称
+  初始入侵向量——「Grav CMS 未授权文件上传漏洞」——是攻击者的说法，两家媒体均未证实。对主流
+  勒索品牌的泄露基础设施的黑吃黑：若 onion 密钥为真，受害者谈判通道已失守，勒索市场正在向
+  ShinyHunters 集中。
+- **OpenPanel CVE-2026-93985**（CVSS 3.1 9.9 / 4.0 9.4，均为 VulnCheck-CNA；NVD 仍为 "Received"；
+  GitHub 公告 9 月 4 日）：`@openpanel/js-runtime` 的 AST `validate()` 白名单只检查非计算属性名，
+  `payload['constructor']['constructor'](…)` 得以绕过——存储的模板随后经宿主 `new Function` 执行。
+  公告中的可用漏洞利用经 `process.getBuiltinModule('node:child_process')` 以 root 运行了
+  `/usr/bin/id`。受影响：commit `bad75bdd` 及之前全部版本；修补版本为 **None**——修复是指导
+  而非发布。vm2 模式重演（手搓 JS 沙箱 + `new Function`），这次在可自托管的分析产品里，每个
+  租户的数据库凭据都在 worker 可及范围内；需要项目写权限，故不具备大规模可利用性。同日还有
+  三起 VulnCheck 披露（明文 auth-token 日志、绕过项目隔离的 ClickHouse SQLi、伪造收入事件）。
+- **Totolink A3002MU：boa web UI 十一个 CVE，厂商零响应**（仅 VulDB-CNA，CVSS 3.1 9.9–10.0，
+  9 月 18–19 日发布）：`formSchedule`/`formWlAc`/`formWlEncrypt`/`formWlWds` 缓冲区溢出 +
+  `formWsc` 经 `localPin` 的命令注入，固件 Hh-B20211125.1046，几乎全部是 `/boafrm/` HTTP 处理器的
+  未授权远程漏洞；每条记录都标注 PoC 公开；未找到 Totolink 公告或修复固件，修复状态不明。所有
+  分数由 VulDB 指派，无 NVD 分析——未授权路由管理界面 + 公开漏洞利用 + 无补丁是教科书级的大规模
+  扫描素材，厂商沉默才是故事。
+- **Elixir Mint CVE-2026-82672**（EEF-CNA，CVSS 4.0 6.3，1.10.1 修复，commit `c823778`）：
+  `Mint.HTTP1.Parse.chunk_size/1` 在首个非十六进制字节处停止并原样返回其余内容，`5ZZZZZ`、
+  `5 9`、`0ZZZZ` 这类 chunk 大小被接受而 RFC-9112 严格中间节点会拒绝——两者在共享 keep-alive
+  连接上失步，可实现响应队列投毒。影响 mint 0.1.0 至 1.10.1 之前。公告明确写出可利用性边界：
+  客户端与受攻击者影响的源之间须有 RFC 严格的代理/LB/WAF 且复用 HTTP/1 连接。请求走私进入
+  BEAM 客户端——Mint 是 Phoenix 生态默认的 HTTP 客户端。
+- **Keycloak 委派管理员提权三连**（Red Hat-CNA，9 月 19 日，分数「初步且待复核」，NVD 尚无独立
+  分析，未列出修复）：CVE-2026-94000——Admin REST API 的组成员端点在添加用户前不验证该组是否
+  授予管理员权限，持 `manage-users` 的委派管理员可把自己加进高权限组 → 完全 realm 控制；
+  CVE-2026-93999——OIDC refresh 为禁用受众的客户端签发 token；CVE-2026-94001——凭据删除端点跳过
+  细粒度重置密码检查。均为 CWE-862，CVSS 3.1 仅 4.2/6.6/6.5，只因向量需要高权限——这是后渗透
+  攻击者串联的内部向原语，藏在大量 Java/开源基础设施的身份层之下。Red Hat 称缓解「不可用或不
+  达其标准」。
+
+Sources: [Reuters: Gemini 逃逸](https://www.reuters.com/business/gemini-hacked-three-companies-first-known-breakout-by-google-ai-wsj-reports-2026-09-18/) ·
+[BleepingComputer: Clop](https://www.bleepingcomputer.com/news/security/shinyhunters-hacks-clop-leak-site-threatens-to-extort-ransomware-gang/) ·
+[DataBreaches: Clop](https://databreaches.net/2026/09/19/shinyhunters-hacks-clop-leak-site-threatens-to-extort-ransomware-gang/) ·
+[GHSA-6f7h-cvp6-w9w5](https://github.com/Openpanel-dev/openpanel/security/advisories/GHSA-6f7h-cvp6-w9w5) ·
+[NVD: CVE-2026-93985](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-93985) ·
+[OpenCVE: Totolink A3002MU](https://app.opencve.io/cve/?vendor=totolink&product=a3002mu) ·
+[EEF CNA: CVE-2026-82672](https://cna.erlef.org/cves/CVE-2026-82672.html) ·
+[Red Hat: CVE-2026-94000](https://access.redhat.com/security/cve/cve-2026-94000)

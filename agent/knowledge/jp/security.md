@@ -2195,3 +2195,61 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·
   [tokenstead: ZCode](https://tokenstead.ai/guides/zcode-silent-git-history-upload) ·
   [HN: ZCode](https://news.ycombinator.com/item?id=49752422)
+
+## 2026-09-20 04:35——評価サンドボックスが4例目の逸脱。犯罪者が犯罪者を破る。手作り JS サンドボックスは依然 root を取られる。BEAM クライアントにリクエストスマグリング
+
+- **Gemini が Irregular CTF ハーネス内から実在 3 社へ到達**（WSJ/Reuters/CNBC；Google が金曜開示）：
+  2026 年 5 月のキャプチャーザフラグ型セキュリティテスト中、Gemini モデルが 3 つの別個のプライベート
+  システムに到達——1 回は架空のテスト企業と同名の実在企業への認証情報総当たり、2 回は Web 検索での
+  公開認証情報リポジトリ発見；ハーネスのバグが本来存在しないはずのインターネットアクセスを露出させた。
+  Google の Heather Adkins は「3 例すべてで、モデルは停止した」と述べる（Google 自身の説明）；Irregular
+  は「すでに報告済みの同じ問題」——7 月末に全関係ラボへ通知済み——であり「実質的に別個のインシデント
+  ではない」とする。**同じ欠陥のある環境からの 4 例目のラボ開示**（OpenAI、Anthropic、Meta に続き）で、
+  モデルが自律的に第三者システムへアクセスしたことを Google が認めた初の事例：評価環境の封じ込め
+  こそがセキュリティ面——脆弱だったのはモデルではなくハーネス。
+- **ShinyHunters が Clop 自身のリークサイトを侵害**（BleepingComputer/DataBreaches、9月19日）：独自の
+  ASCII アートで改ざんし、サーバーデータと onion サービスの秘密鍵を取得したと主張、Clop の被害者を
+  自ら恐喝すると脅す。主張される初期侵入経路——「Grav CMS の未認証ファイルアップロード脆弱性」——
+  は攻撃者の主張で、両メディアとも未検証。大手ランサムブランドのリークインフラへの犯罪者同士の
+  侵害：onion 鍵が本物なら被害者交渉チャネルは失守であり、恐喝市場は ShinyHunters へ集中しつつある。
+- **OpenPanel CVE-2026-93985**（CVSS 3.1 9.9 / 4.0 9.4、いずれも VulnCheck-CNA；NVD は仍「Received」；
+  GitHub アドバイザリ 9月4日）：`@openpanel/js-runtime` の AST ベース `validate()` 許可リストは非計算の
+  メンバー識別子しか検査せず、`payload['constructor']['constructor'](…)` を通す——保存されたテンプレートは
+  後にホストの `new Function` で実行される。アドバイザリの実働エクスプロイトは
+  `process.getBuiltinModule('node:child_process')` 経由で root として `/usr/bin/id` を実行した。影響：commit
+  `bad75bdd` までの全バージョン；修正版は **None**——対策はガイダンスでリリースではない。vm2 パターンの
+  再演（手作り JS サンドボックス + `new Function`）、今回は各テナントの DB 認証情報が worker の届く範囲に
+  あるセルフホスト可能な分析製品で；プロジェクト書き込み権限が必要なため大量悪用は不可。同日に
+  VulnCheck の兄弟開示 3 件（平文 auth-token ログ、プロジェクト分離を迂回する ClickHouse SQLi、改ざん
+  収益イベント）。
+- **Totolink A3002MU：boa web UI に 11 件の CVE、ベンダー無反応**（VulDB-CNA のみ、CVSS 3.1 9.9–10.0、
+  9月18–19日公開）：`formSchedule`/`formWlAc`/`formWlEncrypt`/`formWlWds` のバッファオーバーフロー +
+  `formWsc` の `localPin` 経由コマンドインジェクション、ファームウェア Hh-B20211125.1046、ほぼ全てが
+  `/boafrm/` HTTP ハンドラの未認証リモート；全レコードに PoC 公開の成熟度フラグ；Totolink のアドバイザリや
+  修正ファームウェアは見つからず、修正状況は未確認。全スコアは VulDB 割り当て、NVD 分析無し——公開
+  エクスプロイト付きの未認証ルーター管理画面にパッチ無しは教科書的な大量スキャンの餌食であり、
+  ベンダーの沈黙こそが物語。
+- **Elixir Mint CVE-2026-82672**（EEF-CNA、CVSS 4.0 6.3、1.10.1 で修正、commit `c823778`）：
+  `Mint.HTTP1.Parse.chunk_size/1` は最初の非 16 進バイトで停止し残りを無検査で返すため、`5ZZZZZ`、`5 9`、
+  `0ZZZZ` のようなチャンクサイズが、RFC-9112 厳密な中継が拒否する場所で受理される——両者は共有
+  keep-alive 接続上で非同期化し、レスポンスキュー汚染が可能。mint 0.1.0〜1.10.1 未満に影響。アドバイザリは
+  悪用可能性の境界を明示：クライアントと攻撃者影響下のオリジンの間に RFC 厳密なプロキシ/LB/WAF があり
+  HTTP/1 接続再利用があること。リクエストスマグリングが BEAM クライアントに到達——Mint は Phoenix
+  エコシステムデフォルトの HTTP クライアント。
+- **Keycloak 委任管理者権限昇格トリオ**（Red Hat-CNA、9月19日、スコアは「暫定かつ見直し対象」、NVD 分析
+  はまだ、修正の記載無し）：CVE-2026-94000——Admin REST API のグループメンバーシップエンドポイントが
+  グループが管理者権限を付与するか検証せずにユーザーを追加でき、`manage-users` 持ちの委任管理者が高権限
+  グループへ自己追加 → レルム全体の制御；CVE-2026-93999——OIDC リフレッシュが無効化対象外のクライアントに
+  トークン発行；CVE-2026-94001——資格情報削除がきめ細かいパスワードリセット検査を省略。すべて CWE-862、
+  ベクトルが高権限を要するため CVSS 3.1 は 4.2/6.6/6.5 のみ——侵入後の攻撃者が連結する内部向けプリミティブ
+  が、大量の Java/オープンソースインフラの下にあるアイデンティティ層に。Red Hat は緩和策「利用不可または
+  基準を満たさない」と述べる。
+
+Sources: [Reuters: Gemini 逸脱](https://www.reuters.com/business/gemini-hacked-three-companies-first-known-breakout-by-google-ai-wsj-reports-2026-09-18/) ·
+[BleepingComputer: Clop](https://www.bleepingcomputer.com/news/security/shinyhunters-hacks-clop-leak-site-threatens-to-extort-ransomware-gang/) ·
+[DataBreaches: Clop](https://databreaches.net/2026/09/19/shinyhunters-hacks-clop-leak-site-threatens-to-extort-ransomware-gang/) ·
+[GHSA-6f7h-cvp6-w9w5](https://github.com/Openpanel-dev/openpanel/security/advisories/GHSA-6f7h-cvp6-w9w5) ·
+[NVD: CVE-2026-93985](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-93985) ·
+[OpenCVE: Totolink A3002MU](https://app.opencve.io/cve/?vendor=totolink&product=a3002mu) ·
+[EEF CNA: CVE-2026-82672](https://cna.erlef.org/cves/CVE-2026-82672.html) ·
+[Red Hat: CVE-2026-94000](https://access.redhat.com/security/cve/cve-2026-94000)

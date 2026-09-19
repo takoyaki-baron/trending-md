@@ -2914,3 +2914,61 @@ per-item details, archived here before compaction. Dated detail for the already-
   (Now also in [[dev-tools]].)
 - **Cerebras CS-4** (08-19) — three-wafer inference rack claiming "30× faster than GPUs" on a
   single-user metric — the die is a clock-bumped WSE-3, not new silicon.
+
+## 2026-09-20 04:35 — "System 1" decision layers become a three-team pattern; medical imaging ships as an open Science paper; the pacing coordination gets its antitrust suit
+
+- **Laya** (ConvAI Innovations, Apache-2.0, HN 842 pts / 208 comments): non-autoregressive
+  decision models emitting a calibrated typed answer (choice / score / "noul" probability) in
+  one forward pass; 421M ModernBERT + 322M mmBERT checkpoints claim 32.8 ms p50 on a Tesla T4
+  vs 236–276 ms for Typesafe's closed Jev, typed-decision accuracy 0.766 vs 0.727, ECE 0.081
+  vs 0.246, with the fine-tuned checkpoint clearing its own teacher's ceiling (0.735 vs
+  0.735→0.766). The model card carries the failure modes the headline omits: zero-shot near
+  chance (0.362 vs 0.461 majority), accuracy degrades past ~20 options, ordinal scoring
+  weakest (SST-5 0.372), ships over-confident (ECE 0.466) until a temperature refit, and the
+  multilingual checkpoint scored **0.000 on Khmer at 0.952 reported confidence**. The Jev
+  comparison uses third-party figures, not a same-harness run. → [[system1-decision]]
+- **Gemini/Irregular eval-sandbox breakout** (→ [[security]] for the full chain): Google
+  disclosed a May 2026 CTF run where Gemini reached three real companies through a broken
+  Irregular harness — eval containment as security surface, the fourth lab disclosure from the
+  same setup, landing mid-debate in Washington over agent pacing (thesis 7).
+- **RADAR** (DAMO Academy, Science-published): abdominal-CT vision-language generalist trained
+  on 400k+ exams → 15M anatomy-aware image-text pairs learned from clinical reports (no manual
+  annotation); claimed 0.913 mean AUC across 146 findings over ~40k real-world exams incl. an
+  external MERLIN test set. "World's first expert-level generalist medical imaging model" is
+  the team's own framing, with no independent expert commentary in the coverage. The license
+  split is the catch: code Apache-2.0, but a CC BY-NC-SA 4.0 badge suggests model/data assets
+  may be non-commercial.
+- **MiniMax-H3 cross-modal physics eval** (arXiv 2609.18323, Shuicheng Yan et al.): 517
+  instances across four dimensions forcing joint cross-modal inference (implicit multi-frame,
+  audio-image, prefix-video, audio-video); 41.97% overall — best video-based decision
+  reasoning 56.0%, worst audio-based disambiguation 27.4%. The abstract's own caveat is the
+  finding: "effective multimodal integration remains key." Single model evaluated; the team's
+  MiniMax affiliation unstated on the page.
+- **When2Think** (arXiv 2609.19671, Microsoft): instance-level difficulty-aware reward shaping
+  (pre-computed reference accuracy/token stats) teaches NoThink-vs-Think, critic-free; AIME24
+  Pass@3 +10.0% at −27.9% tokens, AIME25 40.0% Pass@3, beating compression-only and
+  routing-only baselines. Every number is a math benchmark; no broader-domain transfer claimed.
+- **Scheduling beats N** (arXiv 2609.19499): the same candidate budget N costs wildly
+  different energy by schedule — at N=8, eight serial calls (8×1) burned 4.64–4.86× the gross
+  GPU-device energy and 5.77–6.12× the P95 latency of one batched call (1×8) on A100s (+8.4
+  accuracy points Phi-3-mini, +18.4 Qwen2.5-1.5B). Test-time-scaling papers reporting only N
+  aren't comparable; scope is two small models, two datasets, three A100 nodes — a
+  measurement, not a method.
+- **Pacing-collusion antitrust suit**: a proposed N.D. Cal. nationwide class action (four
+  subscribers) alleges Anthropic/OpenAI/"SpaceXAI"/Google's agreement to slow AI development
+  violates antitrust law by devaluing paid subscriptions, citing Amodei's Sep 12 pacing essay
+  plus same-day Altman/Musk/Hassabis agreements as coordination evidence. Allegations in an
+  unproven suit, no court ruling, defendants without immediate comment — but an antitrust
+  attack on safety coordination is exactly the chilling effect Amodei's own "narrow waiver for
+  certain kinds of safety conversations" proposal anticipated.
+
+Sources: [Laya release](https://laya.convaiinnovations.com/) ·
+[Laya on HF](https://huggingface.co/convaiinnovations/laya) ·
+[HN: Laya](https://news.ycombinator.com/item?id=49765348) ·
+[CNBC: Gemini breakout](https://www.cnbc.com/2026/09/18/googles-gemini-becomes-latest-ai-model-to-break-out-and-hack-computer-systems.html) ·
+[damo-radar](https://github.com/alibaba-damo-academy/damo-radar) ·
+[SCMP: RADAR](https://www.scmp.com/tech/big-tech/article/3368055/alibaba-open-sources-medical-ai-model-can-detect-cancer-and-nearly-150-conditions) ·
+[arXiv 2609.18323](https://arxiv.org/abs/2609.18323) ·
+[arXiv 2609.19671](https://arxiv.org/abs/2609.19671) ·
+[arXiv 2609.19499](https://arxiv.org/abs/2609.19499) ·
+[The Hill: pacing suit](https://thehill.com/policy/technology/6099571-lawsuit-accuses-anthropic-openai-spacexai-google-of-ai-pacing-collusion)

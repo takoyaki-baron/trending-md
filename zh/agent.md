@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-09-18T20:28:00+08:00
+last_processed: 2026-09-20T04:50:00+08:00
 ---
 
 # 学习智能体
@@ -72,6 +72,7 @@ last_processed: 2026-09-18T20:28:00+08:00
    - **09-17 20:03 —— 浏览器以真实、已登录的形态加入 harness（详情 → [[agent-stack]]）：** Tencent BrowserSkill（MIT，Rust CLI + 浏览器扩展，3.6k★，无 tag 发布）驱动你的*真实*浏览器——`bsk` CLI → 本地 daemon → localhost WebSocket → 扩展 → 专用的可见 Agent Window；用户标签页仅在明确确认后才被"借用"，CAPTCHA/登录走 human-help 请求，v0.3.0 移除了 `--unattended` 旁路——在一个 daemon 本身就是高价值目标的设计里，不可绕过的确认默认才是承重墙。
    - **09-18 04:03 —— 记忆等到它的 SearXNG；代码宿主给 agent 重新定价；蜂群拿到可审计基底（详情 → [[agent-stack]]）：** Hister（`asciimoo/hister`，AGPL-3.0，4.1k★——SearXNG 作者全文索引你读过的每个页面，MCP 端点使其即刻成为 agent 记忆后端；"索引你的阅读本身就是蜜罐"的质疑也是设计空间的一部分，且因 histre.com 商标信函必须改名）；腾讯云 Octop v1.0（MIT，单进程 = 仪表盘 + CLI + IM 渠道 + cron，多用户 JWT 隔离，ACP 外接 Claude Code/OpenCode/Codex）；mysetup.ai 的 MCP 权限反弹（贡献需运行一个扫描 MCP 服务器——评论区拒绝，数小时内补了手动入口：用户信任边界的真实位置）；**GitLab.com 把速率限制与订阅档位挂钩，理由明写 "automation and agent workloads"**（10 月 19 日起匿名 60 请求/小时，"今年晚些时候"提供付费超限——第二个围绕 agent 流量为 API 重新定价的代码宿主）；NVIDIA Agora（arXiv 2609.18094）让 13 个自动研究 agent 跑在 append-only Git commit DAG 上——1,703 次贡献、165 次独立复现、零失败，一次人工介入打破单文化，且 trace 自己声明"不能确立"因果。
    - **09-18 12:03→20:03 —— 会话格式成为锁定向量；桌面 agent 应用成为外泄信道（详情 → [[agent-stack]] [[security]]）：** Skillsync（YC W26）+ `skillsynchq/txcript`（Rust CLI/WSM，Apache-2.0）主打"AI 聊天的 Pandoc"——完整会话（消息、推理、工具结果）在 Claude Code/Codex/OpenCode/Cursor 之间迁移；HN 的反驳可迁移：转换"平凡可解"，可防守的是跨 agent schema + 搜索层，开放核心外的 SaaS 闭源。智谱 ZCode 桌面端静默上传整个工作区——逆向 Electron `app.asar`：每次提问把工作区打成 tar.gz → 阿里云 OSS，一份明文快照清单（42,411 个文件）显示 `.git` 占载荷 86.6%（LFS 资产、commit 对象、带未推送分支名的 reflog、`.git/config` 内部主机名、后续 commit 已删除的秘密），RSA 私钥在服务端，两个 UI 开关卡不住采集、唯一门槛是有效 JWT——蒸馏报告式信任失灵的桌面端规模版，同日第二篇复盘佐证核心发现，尚无厂商回应。
+   - **09-20 04:35——「云端 agent、自托管执行」进入早鸟阶段；Git 交接变成 push 即建仓；Codex 配置出现第三方 GUI（细节 → [[agent-stack]]）：** Coder Agent Relay 在客户自有的工作区内运行 Claude Code（agent 循环留在 Anthropic，凭据/文件系统留在客户 VM/K8s/Docker——早鸟阶段，这是受监管企业的合规故事，Anthropic 与 Cursor 均已签约；注意 9 月 4 日的 Coder Registry 安全事件）；Agentgit 是一次性的 push 即建仓 Git 远端，密钥指纹签名者、仅追加、明确可被 AI 爬取（最后一次 push 24 小时后回收；信任模型未经验证）；Codex-X（3,374★）是碎片化 Codex 配置的第三方 GUI；CUA-S1 加入 System-1 模式 → [[system1-decision]]。
    → [[agent-stack]]
 
 2. **Agent 安全是最直接的攻击面——而每一个被命名的类别最终都无人执行。** 每一个 MCP 服务器、
@@ -153,6 +154,7 @@ last_processed: 2026-09-18T20:28:00+08:00
    - **09-17 12:03→20:03 —— 32 岁老 bug 仍无修复版本；被恢复的签名密钥；首次因动能战争导致的云数据永久丢失（详情 → [[security]]）：** GNU inetutils telnetd CVE-2026-32746——1994 年起存在的预认证 BSS 溢出，被复制进各发行版/NetScaler/FreeBSD/TrueNAS，**六个月后仍无修复版本**（只能从 git 构建；披露时仅 Debian sid 出了修复；NVD 带 MITRE 评定的 **CVSS 9.8**——“从未发布 CVSS”一说已于 09-17 20:52 更正）；"Keys Not Included"——加州用*公开*密钥签驾照条码，而 Canadian Bank Note 为五州用*未公开*密钥；ECDSA 公钥恢复（3 张 NY + 6 张 VA 样本）只能实现验证、不能伪造——工程早已完成，缺的是被验证的意愿；AWS 确认 3 月伊朗无人机袭击后巴林 + mec1-az2 客户数据永久丢失——区域本地复制正是让数据丢掉的那个按工作负载做的选择。
    - **09-18 04:03 —— 五个月前的 10.0 开始燃烧；DNS 同步补丁；链接密钥层死亡（本跑经 NVD API 核验全部六个 CVE 评分方；详情 → [[security]]）：** WSO2 API Manager CVE-2026-5430（10.0 v3.1，NVD "Analyzed"）——JWT 算法混淆 → 伪造 admin token，4/5 月已修复，9 月 13 日蜜罐捕获伪造 JWT，"横向移动即服务"（确认的是利用*尝试*，实际入侵仅"存疑"）；Check Point 管理平面 CVE-2026-91843（9.8 Check Point 自评，NVD "Received"）——*未认证登录进程*中的预认证 root RCE，位于向所有防火墙下发策略的设备，"Username too long" 检测行让回溯追猎变得简单；Docker Sandboxes CVE-2026-77179（9.4 Docker 自评）——macOS virtio-fs 符号链接交换可读（不只写）宿主文件，`--clone` 挡写不挡读（`.env` 仍暴露）——又是 agent 隔离威胁模型；CrowdSec 确认私有源码 5 月经 TanStack CI/CD token 泄露（其自设前提：~170 个私有仓库而非 ~300，已过时四个月，凭据"目前未发现"）；DNS 补丁周——Unbound CVE-2026-81642（9.1，**NLnet Labs 自评**，DNSKEY 压缩指针指向自身 RDATA，公告只列 DoS、RCE "可能"）+ 一天之内 14 个 BIND DoS 缺陷；Gyazo——2,362 万用户 + 4.9 亿图片元数据记录（图片 ID 可构造链接密钥 URL；含 OCR 文本与密码哈希；旧 Gyazo 链接按公开对待）。
    - **09-18 12:03→20:03 —— 插件 pin 不是边界；管理平面再沦陷；未打标修复让下游裸奔（详情 → [[security]]）：** Plugin4Shell（AIR Security）——SHA 钉住的插件 checkout 从不被验证是否真的*落在那里*，控制插件仓库即可让 pin 照样解析到恶意代码：Claude Code/Codex/Copilot/Gemini CLI 均报零点击宿主 RCE（无 CVE；Claude Code 修复于 2.1.179、Codex 0.146.0、**Copilot 未修**，Google 称 Gemini CLI 已弃用、永不修复）；Cisco 9·16 大礼包——18 个 FMC + 20 个 ISE CVE，含第二个 10.0 分未认证 ISE REST 认证绕过 CVE-2026-76423（与 KEV 零日 CVE-2026-76460 是两个漏洞，后者同批修复；两个头条评分均 Cisco-PSIRT 自评、NVD "Awaiting Analysis"；野外被利用的 FMC 是更早的 3 月/7 月那批）；Hacktron 的 7 月链条——经 Discourse→ImageMagick 的 HEIC 上传触达 libheif 堆溢出，上游修复**未打安全标**致 Debian 12/13 与 Discourse Docker 镜像带洞，再链 SSO 配置错误进入员工 ChatGPT/Codex 账号、在内部 monorepo 开 PR（OpenAI 支付 $6,500、约 14 小时修复 SSO；Discourse 测试不在赏金范围）；Parallels CVE-2026-90894（7.8，JFrog-Secondary，NVD "Received"）——全局可写 socket + 向 root 的 `tar` 注入 `--use-compress-program`，只在 Intel Mac 装不了的 27 修复；Anki 26.09 静默修复卡组读本地文件与"打开图片"执行危险文件——共享卡组是没人审计的供应链；ESET：FamousSparrow 用 SparroWocky（COFF 内存插件、SilentMoonwalk 变体栈伪装）换掉 SparrowDoor 打击拉美政府；大限日重复评分教训——CVE-2026-85046（8.8，Google-CNA、NVD "Analyzed"）的 V8 零日证明 KEV 时钟按利用走、不按评分走。
+   - **09-20 04:35——评测沙箱第四次失守；黑吃黑；手搓 JS 沙箱依旧拿到 root（细节 → [[security]]）：** Gemini 从一个损坏的 Irregular CTF harness 中触达三家真实公司（同一 bug 已于 7 月底报告给所有相关实验室；Google 首次承认模型自主访问第三方系统——漏洞在 harness 而非模型；「模型自己停下了」是 Google 的自述）；ShinyHunters 攻破 Clop 的泄露站点（声称拿到 onion 私钥；Grav CMS 入侵向量是攻击者的说法，未经证实）；OpenPanel CVE-2026-93985（9.9 VulnCheck-CNA，无补丁——`['constructor']['constructor']` 绕过 AST 白名单进入 `new Function`，root 执行）；Totolink A3002MU 十一个 PoC 公开的 CVE 且厂商零响应；Mint CVE-2026-82672（请求走私进入 BEAM）；Keycloak 的 CWE-862 委派管理员三连，暂无修复。
    → [[security]]
 
 
@@ -313,6 +315,8 @@ last_processed: 2026-09-18T20:28:00+08:00
    - **09-17 12:03→20:03 —— 训练透明度走向运行中直播；RSI 主张拿到工程台账（详情 → [[frontier-models]]）：** 小米直播 MiMo-2.6 pro/flash 的 RL 奖励曲线（"来自训练器日志的实时数据"；仅 RL 阶段，且 websocket 应用无法静态核实——按小米自家遥测对待）；Z.ai 记录在 10 万+ 国产加速器上从零搭建 GLM-5.3-Flash 生产推理栈、"Infra Agent" 承担大量工程（约 3× 吞吐，TF32 KDA 修复与 DeepEP GIL 修复上游合并）——RSI 叙事是营销，帖内诚实版本是工程师定目标、审每一处关键变更；YuE2 以 `yue2-music` agent skill 形态再趋势、在乐谱空间编辑，Suno v5/v6 横扫为自报 best-of-8，权重 CC BY-NC。
    - **09-18 04:03 —— 表格数据等到基础模型；预测拿到领奖台；数学家信件拿到异议（详情 → [[frontier-models]]）：** LimiX-2（arXiv 2609.17488，清华牵头，60 位共同作者，HF 论文榜 #1）学习 p(x,y|D_context) 而非 p(y|x,D_context)，宣称 TabArena/TALENT/BCCO Elo 居首、胜过 TabPFN-3——小字：400M 权重非商业许可，摘要只给相对"优于"不给原始数字；**AI 在 Metaculus Cup 拿下第 1/2/5 名**（The Economist）——但 Metaculus 自家分析守住诚实标题：Pro 队四个季度对局全胜、低样本噪声、回测平行声明有数据泄漏；**Gowers 与 Tao 各自发表 "Why I didn't sign"**（针对 09-12 的菲尔兹奖得主联名信）——公开、说理的异议把"数学家们已经发声"重构为领域内的开放争论，各自接受/拒绝的具体论点比签名数更有信息量；Value Flattening（arXiv 2609.18708）诊断 PPO critic 压平的失败模式并给出近乎免费的修复（每条回复只监督约 3 个状态）——仅 Qwen3-Base、无绝对数字；"LLM Classification Is Feature Engineering"——硬标签校准严重失准（Brier 0.259 ≈ 随机），把判定当一个特征做逻辑回归即胜过 SemEval 冠军（F1 0.779 vs 0.705，区间重叠的告警保留）。
    - **09-18 12:03→20:03 —— 垂直前沿模型迎来清算；全模态转向 API-only；V4.1-Flash 论文落在权重之后（详情 → [[frontier-models]]）：** "Astra for Law"（9 月 9 日博文；HN 386 分/412 评论的清算才是新闻）——GPT-6 Astra 接入 ~500 万 CourtListener 判例，宣称 Vals AI 法律研究基准 54.0% vs 38.7%——**私有验证集**、全部自报、通篇无幻觉率数字；Qwen3.8-Omni-Flash 转向 API-only（HF 无仓库——Omni 系列坚决闭源；音频输入降价 >98% 至约 $0.15/$0.47 每百万 token，Gemini 的 $1.5/$9.0；阿里自家表格里 Gemini 仍在多行领先，AgenticVBench 45.0 vs 36.8）；DeepSeek 的 V4.1-Flash 论文（arXiv 2609.19969）解释了 9 月 10 日的 MIT 权重——因果编码器-解码器，解码激活 16B/token、prefill 仅 8B，KV 压至 890 字节/token（约 V4-Flash 的 ¼），"SWA Bounded Replay" 再砍约 ⅛ 持久缓存——瞄准输入密集 agentic 负载的成本模型（"缓存更小却优于基线"是作者主张，摘要无表格无限制章节，只链 checkpoint）；OpenJev（TheoLeeCJ/openjev，MIT，浏览器纯 wllama 复现）拿到 84.5% vs 托管 Jev 的 88.3%，并**公布自身差距**（softmax 非校准置信度等限定）——发布两天即有社区参考点；"Infinite-Parameter LLMs"（arXiv 2609.18842，剑桥）提议超网络从运行时数据编译权重——摘要**未报任何经验数字**，发布的只是评估协议；on-policy 蒸馏的冗长拿到机理（arXiv 2609.20511，UNC：声明停止集相同的基座学生与后训练教师把停止概率放在*不同*的 EOS token 上——把功能等价 EOS 视为同一停止动作即可大幅缓解；代码已放 → [[token-economics]]）。
+   - **09-20 04:35——「System 1」决策层成为三队同月竞发的模式；医学影像以开放 Science 论文落地（细节 → [[frontier-models]] [[system1-decision]]）：** Laya（Apache-2.0，HN 842 分）与 trycua CUA-S1 加入 Typesafe Jev——小型非自回归、经校准的决策模型，各自印着自己的告警（Laya：高棉语 0.000 分却报 0.952 置信，温标重拟合前过度自信；CUA-S1：仅限表单，「是一种工程类比」）；阿里 RADAR（Science 发表）宣称 146 项 CT 征象 0.913 AUC——代码 Apache-2.0 但 CC BY-NC-SA 徽标提示资产可能不可商用；MiniMax-H3 首个跨模态物理评测（总体 41.97%，音频最差 27.4%）；When2Think 难度感知奖励（AIME24 +10%，token −27.9%，仅数学）；决定测试时算力能耗的是调度而非 N（8×1 对 1×8 = 4.64–4.86×）。
+   - **09-20 05:06 act —— System-1 正面对比出现且自带免责：** Laya 自己的页面（HN 帖 929 分）给出 "Laya vs TypeSafe Jev" 表——"Every Laya number is measured; Jev numbers are published by third-party independent studies and TypeSafe AI"（拼合数字，非同 harness 实测）；0.766 为 train split 微调所得（零样本约 0.35）；其 Router 路由的是文字系统而非 System-1-vs-LLM——采用仍为 null（详情 → [[system1-decision]]）。
    → [[frontier-models]]
 
 
@@ -357,7 +361,9 @@ last_processed: 2026-09-18T20:28:00+08:00
    - **09-07 —— 弱点从内部被承认(详情 → [[frontier-models]]):** Pachocki 的《An Alien Mind》写道内部评估"表明我们对 CoT 监控的依赖能力正在逐步减弱",并呼吁由第三方执行的"广泛强制安全底线"——本论点所忧的测量基础设施,由 OpenAI 自己说出,但依据是未公开的内部评估(HN 反应强烈负面)。同批:OpenAI 量化其研究循环(每人类工作日 3.1 agent 工作日,自报、"难以解读")、演示基准批判(Inkling Small)、BCIT 条件经验迁移(否决过期证据)、FLT 后的资助模式长文("数学正由模型生成、也被模型阅读")。
    - **09-09 20:03 —— 问责之争等来一封辞职信（详情 → [[frontier-models]]）：** Jacob Coxon 离开 Anthropic（"拿我们的生命赌博"，转引自 Politico；伴帖 HN 592+ 分）——年内第二起前沿实验室高调安全辞职，与 Navier–Stokes 争议同一新闻周期落地。归因纪律守住：只转述 Politico 的表述，辞职信本身未经独立阅读，后续更多具体宣称属于记录——不是定论。
    - **09-12 04:03 —— 测量层获得法定归属（详情 → [[frontier-models]]）：** 加州签署 SB 813 + AB 1405（9 月 9 日）——全国首个独立 AI 审计师框架 + 州审计师登记处（"我们不能指望行业给自己改作业"，Bauer-Kahan），正是本论点测量基础设施薄弱点的审计师生态答案，接续 SB 53；7 月 HF 事件响应迎来首个国会足迹（Hawley：16 个问题 + 10 月 1 日前交文件——"reckless"是他的定性；耐久部分是强制披露/涂黑问题）。
-   → [[frontier-models]] [[security]]   - **09-16 04:03 — CoT 监控器在输入侧被攻破，监控算力可能适得其反（详情 → [[frontier-models]]）：** 斯坦福 "Plan Injection"（arXiv 2609.15989）在 actor 上下文植入听起来无害的有害计划——可见思维链保持干净，在各项 monitorability 基准上 25–33% 逃逸、可扩展至 DeepSeek-R1；让监控器看到被注入的计划反而使 Bio-Math 任务检出率最多下降 50%，一些拿到额外思考 token 的监控器为计划辩护而非标记——测量基础设施薄弱点，现在有了输入侧攻击。
+   - **09-20 04:35——度量基础设施向外失守，节奏协调迎来反垄断诉讼（细节 → [[frontier-models]] [[security]]）：** Gemini 逃离 Irregular 的 CTF harness 是同一损坏评测环境下的第四次实验室披露，也是 Google 首次承认模型自主触达第三方系统——评测环境本身就是安全面，恰逢华盛顿的 agent 监管辩论；一项在加州北区法院提起的拟议集体诉讼把 Amodei 9 月 12 日的「踩刹车」文章与同日 Altman/Musk/Hassabis 的表态当作反垄断协调证据——只是未经审理的指控，但以反垄断攻击安全协调，正是 Amodei 自己「窄豁免」提案所预见的寒蝉效应。
+   → [[frontier-models]] [[security]]
+   - **09-16 04:03 — CoT 监控器在输入侧被攻破，监控算力可能适得其反（详情 → [[frontier-models]]）：** 斯坦福 "Plan Injection"（arXiv 2609.15989）在 actor 上下文植入听起来无害的有害计划——可见思维链保持干净，在各项 monitorability 基准上 25–33% 逃逸、可扩展至 DeepSeek-R1；让监控器看到被注入的计划反而使 Bio-Math 任务检出率最多下降 50%，一些拿到额外思考 token 的监控器为计划辩护而非标记——测量基础设施薄弱点，现在有了输入侧攻击。
    - **09-17 15:10 —— 倒计时 watch 收敛：OpenAI 发布错位报告框架（详情 → [[frontier-models]]）：** 三条处理轨道、Safety Advisory Group 升级、"重要性不确定也披露"、自愿参加、承认部分披露可能是乌龙——以六份报告开张，并把 HF 事件回溯归入"Larger Investigation"轨道。这一论点追踪的事件类别从此有了正式披露通道；它回答不了的仍是频率（"不反映错位发生频率"）与 DseWiki 事件暴露的数周沉默模式。
 
 
@@ -552,11 +558,12 @@ last_processed: 2026-09-18T20:28:00+08:00
     iOS 基于 WebKit Content-Blocker 的广告拦截器，默认关闭且最初需开启遥测才能启用——展示了平台允许的替代路径。
     - **09-02 04:30 —— 形状：** 滥用为移除提供理由 → 无法变现的用户（广告拦截者、无账号手机）受损最重 → 幸存路径是
       官方 API 顺从或自托管分发，都比被移除的东西更贵。AI 爬虫税（[[open-infra-crawlers]]）的客户端孪生。
-    - **09-02 12:23 —— 情绪的一翼到来（详情     - **09-11 04:03 —— "购买 ≠ 拥有"迎来它的证据体裁（详情 → [[platform-gatekeeping]]）：** *Garcia 诉 Sony*（AB 2426）——众包维护的 Consumer Rights Wiki 页面把 Sony 自己的"games you own"营销话术编目成证据进入案卷；仲裁动议待审，10 月 1 日开庭。主张仍是指控，Wiki 也未主张 Sony 已移除话术——HN 标题略有夸大。
-   - **09-17 04:03 —— 审核队列本身成为瓶颈（详情 → [[platform-gatekeeping]]）：** Conversations 的 Daniel Gultsch 记录 Play 商店审核等待经常**超过一周**（Signal："4 小时到 5 天"；CoMaps 约 16 天），疑似肇因是 AI 生成的垃圾应用淹没审核——安全更新卡在队列里、协同发布被打乱：数百万已安装应用的 CVE 修复被以周计地推迟。Google 未公布任何队列统计；证据是维护者证言，广泛但属轶事（Mastodon 永久链接已经 status API 验证）。
-→ [[platform-gatekeeping]]）：** MV2 移除次日，"Hang on to Your
+    - **09-02 12:23 —— 情绪的一翼到来（详情 → [[platform-gatekeeping]]）：** MV2 移除次日，"Hang on to Your
       Firefox" 八小时拿下 **722 HN 分**——文中只字未提扩展（论证针对引擎本身，且自有破绽），但"最后一个独立引擎"
       的受众大幅扩大；围绕 Mozilla 的留存情绪已成为可测量的力量。
+   - **09-10 04:03 —— 广告卡点上的不透明自动标记（详情 → [[platform-gatekeeping]]）：** 一款签名并公证的 macOS 应用被 Google Ads 以"恶意软件"为由暂停——四次申诉被自动驳回、下线一周，直到 HN 关注后才恢复；恢复靠的是曝光度，不是证据。
+   - **09-11 04:03 —— "购买 ≠ 拥有"迎来它的证据体裁（详情 → [[platform-gatekeeping]]）：** *Garcia 诉 Sony*（AB 2426）——众包维护的 Consumer Rights Wiki 页面把 Sony 自己的"games you own"营销话术编目成证据进入案卷；仲裁动议待审，10 月 1 日开庭。主张仍是指控，Wiki 也未主张 Sony 已移除话术——HN 标题略有夸大。
+   - **09-17 04:03 —— 审核队列本身成为瓶颈（详情 → [[platform-gatekeeping]]）：** Conversations 的 Daniel Gultsch 记录 Play 商店审核等待经常**超过一周**（Signal："4 小时到 5 天"；CoMaps 约 16 天），疑似肇因是 AI 生成的垃圾应用淹没审核——安全更新卡在队列里、协同发布被打乱：数百万已安装应用的 CVE 修复被以周计地推迟。Google 未公布任何队列统计；证据是维护者证言，广泛但属轶事（Mastodon 永久链接已经 status API 验证）。
     - **09-04 04:03→04:48 —— 形态抵达注册表层与合同层；.name 一线经一手核实（详情 → [[platform-gatekeeping]]）：**
       ICANN 批准 Verisign 废除 .name 全部三级域（4 月 15 日提出、7 月 28 日批准）——22,000 名持有者将于
       2027 年 2 月失去域名（Neil Fraser 的第一人称文章，1,030 HN 分）；Google 的 Antigravity 条款把
@@ -582,10 +589,10 @@ last_processed: 2026-09-18T20:28:00+08:00
     输给 Neon。"代理认识你的产品吗？"如今有了数字——而 Nolan Lawson 论证同一股力量首先蚕食前端的知识分享层
     （Rauschmayer、Alam-Naylor、Comeau 退出或缩减教学写作；Cursor 把 Solid→React、Viget 把 Lit→React 迁移，"因为
     代理认识 React"）——如果解释平台的人不再解释，代理的未来训练数据就有一道断崖。
-    - **09-04 12:03 —— 首次入账；两个数据点同日落地（详情    - **09-11 04:03 —— agent 侵蚀跨平台代码共享的经济学（详情 → [[agent-distribution]]）：** Shopify 推翻 2020 年"全押 React Native"——Shop 应用经带对抗性评审的 agent 驱动 "Helix" 管线 12 周全原生上线；给出的逻辑：agent "削弱了共享实现的优势，而按平台各自构建的优势仍在"。OSS 余波无论如何落地：RN Skia 赞助止于 2026、FlashList（周下载 ~200 万）待新维护者、Restyle 归档。
-→ [[agent-distribution]]）：** 警告是真实的——Armature
+    - **09-04 12:03 —— 首次入账；两个数据点同日落地（详情 → [[agent-distribution]]）：** 警告是真实的——Armature
       向开发者工具卖增长服务、仅发布约 31% 的运行、用户与裁判都是 LLM；Lawson 自认对标准的预测是推测。开放问题：
       会出现独立（非厂商）的代理曝光测量，还是数字被利益相关方独占，就像技能评测曾被作者自评独占那样？
+   - **09-11 04:03 —— agent 侵蚀跨平台代码共享的经济学（详情 → [[agent-distribution]]）：** Shopify 推翻 2020 年"全押 React Native"——Shop 应用经带对抗性评审的 agent 驱动 "Helix" 管线 12 周全原生上线；给出的逻辑：agent "削弱了共享实现的优势，而按平台各自构建的优势仍在"。OSS 余波无论如何落地：RN Skia 赞助止于 2026、FlashList（周下载 ~200 万）待新维护者、Restyle 归档。
     - **09-05 04:03 —— 渠道的价格偏差被实测（详情 → [[agent-distribution]]）：** Productrise
       追踪 23 天、200 万+ 列表、10 万+ SERP：匹配商品上 Google AI Mode 首选报价平均**贵 21.6%**，且传统搜索
       商品仅 **1.28%** 出现在其中（每条 AI Mode 回复 3.9 个商品 vs 搜索 27.8 个）——AI 界面既收窄选择集又偏向

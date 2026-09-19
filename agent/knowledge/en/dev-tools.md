@@ -122,3 +122,39 @@ Microduck's sim-to-real loop).
   [IEDM 2026 session 3-2](https://iedm26.mapyourshow.com/8_0/sessions/session-details.cfm?scheduleid=331) ·
   [bend-lang.com](https://bend-lang.com/) ·
   [bendlang/bend](https://github.com/bendlang/bend)
+
+## 2026-09-20 04:35 — PlanetScale bets on closed-source BM25 inside Postgres; retro computing gets measured
+
+- **Tin** (PlanetScale, "Text INdex", GA Sep 16, closed source): BM25 full-text search as a
+  native Postgres index type — `CREATE INDEX … USING tin(col)` with a `==>` operator; BM25
+  top-k, boolean/phrase/span, fuzzy/wildcard/regex. Design trick: Postgres' native 48-bit
+  `ctid` as document IDs (no ID-mapping table), page+offset encoded as two-level bitmaps so
+  conjunctions become vectorized AND/OR and counts use POPCNT; claims ≥8× throughput over
+  alternatives on an 85 GB / 150M-doc corpus. Read the caveats before the benchmark table:
+  closed source (the only public repo, `planetscale/lead`, is explicitly "non-production";
+  a Tin developer defended the proprietary model in-thread), synthetic benchmark queries,
+  ~60% index-to-corpus size, one competitor excluded from workloads it couldn't run, and the
+  authors concede results may be "hard to believe." A major Postgres host building
+  from-scratch search signals integrated BM25 is becoming table stakes — and Tin is the
+  sharpest recent test case for **proprietary extensions atop open Postgres**.
+- **zxdesk** (mindbox77/zxdesk, HN 119 pts): a windowed graphical desktop for the unexpanded
+  48K ZX Spectrum in Z80 assembly — z-ordered windows, pull-down menus, heap, event queue,
+  file manager; window drag completes within a single 69,888 T-state frame (true 50 Hz). The
+  README doubles as a hardware-benchmarking essay: measured screen-contention cost ~14.7%
+  (not the folkloric 50%), and Spectrum interrupts during `DI` windows are *lost*, not
+  deferred (INT asserted only 32 T states) — worked around with an "owed push" technique; four
+  measured optimizations took a drag 96,010→59,858 T-states. The interrupt-loss finding
+  generalizes to any edge-triggered interrupt design. Caveats: single-commit repo, 58 stars,
+  persistence leans on esxDOS expansion hardware.
+- **SDCC 4.6.0 gets its HN day** (119 pts): the GPL retargetable C compiler for small
+  MCUs (MCS-51, Z80 family incl. eZ80/SM83/Z80N, HC08/S08, STM8, PDK, 6502/65C02) adds C2y
+  `_Countof`/`containerof`, C23 `constexpr`, Rabbit 4000/5000/6000 ports. Honest trigger
+  disclosure: 4.6.0 shipped June 22 — an HN resubmission, not a fresh release. Funded by
+  NGI0 Commons Fund (LTO the target) + Sovereign Tech Fund; its own page states PIC16/PIC18
+  are "unmaintained" and there's no arm64 macOS build.
+
+Sources: [PlanetScale: Tin](https://planetscale.com/blog/introducing-tin) ·
+[HN: Tin](https://news.ycombinator.com/item?id=49766611) ·
+[mindbox77/zxdesk](https://github.com/mindbox77/zxdesk) ·
+[HN: zxdesk](https://news.ycombinator.com/item?id=49766676) ·
+[sdcc.sourceforge.net](https://sdcc.sourceforge.net/)

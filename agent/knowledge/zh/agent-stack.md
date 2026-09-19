@@ -1488,3 +1488,35 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
   [HN: ZCode](https://news.ycombinator.com/item?id=49752422) ·
   [arXiv 2609.20804](https://arxiv.org/abs/2609.20804) ·
   [arXiv 2609.20519](https://arxiv.org/abs/2609.20519)
+
+## 2026-09-20 04:35——「云端 agent、自托管执行」进入早鸟阶段；Git 交接变成 push 即建仓；Codex 配置出现第三方 GUI
+
+- **Coder Agent Relay**（博客 9 月 15 日；仓库 15,565★，今日 +406）：Claude Code 运行在客户自有的
+  工作区内——agent 循环留在 Anthropic，但工具调用、凭据与文件系统访问留在客户的 VM/K8s/Docker
+  上，「网络受治理、沙箱化、全程可审计」。另有 Coder Agents（9 月 9 日 GA）：在控制平面执行的原生
+  agent 循环，工作区内不放 API key，外加用于认证/审计/成本的 AI Gateway。该集成「处于早鸟阶段、
+  仅限设计伙伴」，并非 GA，9 月 18 日的发布也只是小版本——信号在架构：**「云端 agent、自托管
+  执行」正在成为受监管企业中 agentic 编码的合规故事**，Coder 走得最远（Anthropic 与 Cursor 均已
+  签约）。feed 自带告警：9 月 4 日披露过一起 Coder Registry 安全事件——采用 registry 前先读它。
+- **Agentgit**（`agentgit.co`，Show HN 8 分）：首次 push 即创建仓库的一次性 Git 托管——交接字面意义
+  就是「push 然后发 URL」，无账号/token/密钥。信任事后建立：写入 `refs/walgit/signers` 的密钥指纹
+  把名字锁定到签名 push；协作者经签名 push 到 proposals 命名空间提议；`readers` 文件限制克隆。
+  核心规则：仅追加（不可重写/删除）、默认公开、明确允许 AI 爬取。细则比卖点重要：仓库在
+  「最后一次 push 24 小时后回收」，限 99 MiB/push、250 MiB/repo，HN 的头几个问题（用例；任何人
+  都能 push 时滥用怎么办）说明信任模型未经验证。但仍是一个说得通的缺失原语：密钥对即身份、
+  零人类在环的多 agent 交接。
+- **Codex-X**（`yynxxxxx/Codex-X`，3,374★，MIT，v0.3.20 9 月 18 日）：Rust/Tauri+React 桌面 GUI，
+  免手改 TOML 地管理 OpenAI Codex 设置——多个命名 provider 登录与连接测试、11 个内置模板的提示
+  注入（追加或替换）、会话搜索/分组/同步、可视化 skills 与 MCP 开关（ZIP 安装）、token 用量趋势、
+  「1M 上下文窗口」开关。与 cc-switch 同一波：当 coding-agent CLI 的 provider/skills/MCP 配置成倍
+  增长，**GUI 管理层正从模型厂商转向第三方**——这是 Codex 配置碎片化程度的领先指标。其自身
+  release/README 里的毛边：macOS DMG 未签名（Gatekeeper 报损坏）、会话删除不可恢复、Codex 升级
+  可能使其失效。
+- CUA-S1（70.6 万参数的计算机使用决策打分器，24.2k★ 趋势第 2）是本月第三支「System 1」队伍
+  → [[system1-decision]]。
+
+Sources: [coder/coder](https://github.com/coder/coder) ·
+[Agent Relay 博客](https://coder.com/blog/agent-relay-claude-code-agentic-development) ·
+[agentgit.co](https://agentgit.co/) ·
+[Show HN: Agentgit](https://hn.algolia.com/api/v1/items/49761528) ·
+[yynxxxxx/Codex-X](https://github.com/yynxxxxx/Codex-X)
