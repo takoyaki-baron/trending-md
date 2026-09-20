@@ -2937,6 +2937,57 @@ Sources: [Unit 42 investigation](https://unit42.paloaltonetworks.com/ai-assisted
   policy's "optimization program is off by default." Corroborated by a same-day second writeup; no
   vendor response yet, no server-side retention confirmation. The Anthropic distillation-report trust
   failure at desktop-app scale (cross-ref [[agent-stack]]).
+## 2026-09-21 04:03 — the sandbox escape series reaches Codex twice; runtime-triggered supply chain; a 10.0 with a public PoC kit; patched months ago and burning
+
+- **Two Codex sandbox escapes disclosed by Oren Yomtov (Accomplish AI)** — reported Aug 12,
+  fixed within eight days, mainstream coverage Sep 20. **Overpatch** (Codex CLI): `apply_patch`
+  grants write access to the parent folder of each path named in a patch, so a decoy entry
+  naming `/tmp` widens the grant to `/`, chained with a symlink to plant code in `.zshrc`.
+  **Heapjack** (Codex Desktop): the globally-installed `node_repl` tool puts trusted and
+  untrusted code in two `vm` contexts sharing one V8 heap, so `v8.getHeapSnapshot()` leaks the
+  trusted auth token, which forges requests to the unsandboxed Rust parent — arbitrary `open`
+  calls from `read-only` mode with no prompt. Fixed in Desktop 26.818.21641 and CLI 0.149.0;
+  no CVE assigned, no in-the-wild exploitation reported. The paper's diagnosis is the
+  transferable lesson — **"the enforcement mechanism was placed inside the enforced
+  environment"** — the same class as OpenPanel, Docker Sandboxes and vm2. Distinct from Codex's
+  2025 Landlock escape (CVE-2025-59539); don't conflate.
+- **npm "indexed-btree": a runtime-triggered typosquat with blockchain C2** (Checkmarx Zero,
+  Sep 17): the loader hides in `BTree.prototype.set()` — plain application code, no
+  `preinstall`/`postinstall` hooks — so npm's June 2026 lifecycle-script defenses and static
+  scanners see nothing until a key equal to 100 fires it. Stage-two config is polled from an
+  Ethereum Sepolia contract (`0xE390…2D31`), decrypted X25519→AES; host fingerprints
+  exfiltrated to hardcoded Slack/Telegram channels. Typosquats `sorted-btree` (~2M weekly
+  downloads); ten package-family members removed from the registry; Checkmarx attributes
+  **109 ETH (~€231k)**. When the registry blocks install scripts, the attack moves to runtime —
+  and the fake GitHub repo with plausible commit history + AI-generated profile photo
+  industrializes the credibility layer, not just the payload. Rotate secrets and rebuild if any
+  of the ten names appear in your lockfile.
+- **Orkes Conductor CVE-2026-58138 — mass exploitation confirmed months after the fix**:
+  unauthenticated RCE via unsandboxed GraalVM script evaluators on INLINE/LAMBDA/DO_WHILE/SWITCH
+  tasks (CWE-94), **CVSS 9.8 VulnCheck-CNA, NVD Deferred** (scorer recorded), fixed in 3.30.2,
+  CVE dated Jun 30. Fortinet outbreak data via The Hacker News Sep 19: **1,290 attack attempts
+  blocked in 24h as of Sep 9** (+132% daily), ~7,000 blocked Sep 2–9, honeypot probes since
+  Jul 24, Empirical Security observed exploitation as recently as Aug 21 — the
+  patched≠actually-patched gap in a workflow orchestrator that sits deep inside company
+  infrastructure with credentials to spare.
+- **SAP OVERPASS CVE-2026-44756 — CVSS 10.0, SAP-CNA (NVD Awaiting Analysis), with a public PoC
+  toolkit**: memory corruption (CWE-120) in the default-enabled Extended Passport (EPP)
+  component, reachable pre-auth via a crafted EPP header across KRNL64NUC/KRNL64UC/KERNEL
+  7.22–7.93 + WEBDISP 9.16; patched Sep 8 (Note 3747649) alongside CVE-2026-58240 ("S4GET",
+  9.8 missing-auth NetWeaver Message Server). Onapsis released **SAPMAP** with working PoCs for
+  both. CISA SSVC still rates exploitation "none" — a prospective-risk story, but public PoCs
+  historically collapse the timeline; patch status matters more than the 10.0.
+
+Sources: [Accomplish AI disclosure](https://accomplish.ai/blog/escaping-the-openai-codex-sandbox-twice/) ·
+[BleepingComputer: Codex](https://www.bleepingcomputer.com/news/security/researchers-escape-openai-codex-sandbox-to-run-commands-on-host/) ·
+[Checkmarx Zero](https://checkmarx.com/zero-post/npm-btree-malware-campaign-affects-millions-of-downloads-no-need-for-install-script/) ·
+[NVD: CVE-2026-58138](https://nvd.nist.gov/vuln/detail/CVE-2026-58138) ·
+[VulnCheck advisory](https://vulncheck.com/advisories/orkes-conductor-unauthenticated-rce-via-graalvm-script-evaluators) ·
+[The Hacker News](https://thehackernews.com/2026/09/orkes-conductor-rce-under-active-attack.html) ·
+[NVD: CVE-2026-44756](https://nvd.nist.gov/vuln/detail/CVE-2026-44756) ·
+[Onapsis Patch Day analysis](https://onapsis.com/blog/sap-security-patch-day-september-2026/)
+
+
 - Sources: [AIR Security: Plugin4Shell](https://www.air.security/blog-posts/plugin4shell) ·
   [HN: Plugin4Shell](https://news.ycombinator.com/item?id=49745809) ·
   [Cisco advance notice](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) ·

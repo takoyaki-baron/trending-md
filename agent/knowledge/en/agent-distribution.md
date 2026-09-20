@@ -179,5 +179,25 @@ position. For this thesis the durable fact is narrower: **agent-mediated substit
 outside measurement (Armature's 42% tool agreement, AI Mode's 21.6% price skew) — the platforms'
 internal numbers now agree.**
 
+## 2026-09-21 04:03 — the ChatGPT account becomes a cross-site measurement graph
+
+- **OpenAI's ad collector links off-site browsing to your ChatGPT account** (Ionut Bochodi
+  teardown; 338-pt HN front page): the collector at `bzr.openai.com` ("bazaar") sets a `__obi`
+  cookie — `SameSite=none; Secure`, 1-year Max-Age — on `.openai.com`, which OpenAI's
+  measurement SDK sends back from advertiser sites along with page data. Observed on 12
+  commercial sites (Chewy, Wayfair, Eventbrite, HelloFresh, Coursera, SeatGeek) with hashed
+  emails/phones plus clear-text postal code, city and region — postal code the most-harvested
+  field. Tokens carry `consent_decision: analytics_allowed`, so users who refused marketing
+  consent still get synced. Carry the author's own hedges: observed only on Chrome for Android
+  (Safari ITP and iOS browsers block it), only ~1 in 5 ChatGPT sessions emits a sync token, and
+  **the account join itself is inferred from the design, not observed** — OpenAI acknowledged
+  his Sep 14 inquiry and answered neither question. Even discounted, the structural finding
+  stands: Meta's cross-site measurement graph rebuilt around a ChatGPT account, with "analytics
+  consent" doing the legal work.
+
+Sources: [buchodi.com teardown](https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/) ·
+[HN discussion](https://news.ycombinator.com/item?id=49776729)
+
+
 - Sources: [TechCrunch on the unredacted filings](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49752056)

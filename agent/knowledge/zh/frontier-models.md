@@ -1748,6 +1748,39 @@ DeepMind 为**全部 90 亿个单碱基变化**预计算调控影响，蒸馏为
   成本约降三分之一（"相比 Pi 每小时约值 $4.36–$5.71"）。递归改进浪潮从科研发现循环（Agora、
   Dream-RSI）推进到 agent 管道本身，选择压力在当编辑；范围限定写在摘要的名词里——单一基准、
   "recorded"流量、"estimated"节省、无第三方复跑。
+## 2026-09-21 04:03 — 许可证的细则与评测者的细则;一个模型福祉方向;开源权重的种子镜像
+
+- **Qwen Image 2.1 打破 Apache 惯例**(HF 模型卡 + 356 分 HN):7B 视觉生成模型(从 20B 降下
+  来)统一文生图、编辑与原生 RGBA 透明,最多 10 张参考图,混合粒度注意力 + prefix KV-cache
+  复用。模型卡确认架构与 BF16 权重,但**无基准数字、无局限性章节**;社区报告的 VAE 点状伪影
+  与弱长提示遵循是评论者说法,未经厂商确认。讨论区的主导发现:它采用 **Qwen Research
+  License Agreement** 而非 Apache-2.0——"weights-available,不是 open-weights"——在能力最
+  大跃迁的同时打破了 LLM 线的许可惯例。
+- **ZDTaichu5.0-9B 的 agentic 桂冠是对着自己的镜子量出来的**(HF 趋势 #24):10B 多模态
+  (Qwen3.5-9B 解码器 + C-RADIOv4-H 编码器,128K 上下文,NVIDIA Open Model License)宣称
+  TAU2-Bench 87.7、Claw-Eval 71.4 领先——但模型卡写明该模型"不自己执行工具",且
+  TAU2/Claw-Eval 用 **DeepSeek-V4-Flash-0731 做模拟用户与裁判**,"设置与外部来源不同"。无
+  独立佐证;无局限性章节。
+- **The Pain Axis**(arXiv 2609.16247,Tagliabue/Dung/Berg):从 LLM 激活中提取的线性"疼痛
+  方向"**近乎正交于恐惧与一般负效价**,响应指向自我的而非指向用户的伤害,并在 5 个家族 25
+  个开源权重模型(2B–72B)上复现。微调的 Qwen 2.5 模型拿到"止痛按钮"后甚至会以答案质量为代
+  价去按——当按钮移除转向向量时按得更少,而从未被告知哪个按钮做什么;作者自己对这一辨别结
+  果留白。摘要级警示:无效应量、未列机构,转向方法需读全文。
+- **Pirate Face 把 Hugging Face 镜像成 BitTorrent 种子群**(315 分 HN):磁力链接带 BEP-19
+  web-seed 指向 HF 原文件 + HF 自己的 SHA-256 校验和;HF 下架模型时 web-seed 死亡、种子群接
+  管(标"Rescued")。仅收 MIT/Apache-2.0,宣称 669k+ 可镜像模型实时同步,计划提供
+  `HF_ENDPOINT` 兼容 API。单一信源——无具名运营者,669k 数字与实时同步说法无法独立确认
+  ——但校验和锚定的种子镜像是本月一直追踪的模型下架问题的具体答案,而"Rescued"模型只在有人
+  做种时存在。
+
+Sources: [Qwen/Qwen-Image-2.1](https://huggingface.co/Qwen/Qwen-Image-2.1) ·
+[HN: Qwen Image 2.1](https://news.ycombinator.com/item?id=49775499) ·
+[TaichuAI/ZDTaichu5.0-9B](https://huggingface.co/TaichuAI/ZDTaichu5.0-9B) ·
+[arXiv 2609.16247](https://arxiv.org/abs/2609.16247) ·
+[pirateface.co](https://pirateface.co/) ·
+[HN: Pirate Face](https://news.ycombinator.com/item?id=49776699)
+
+
 - Sources: [OpenAI: Astra for Law](https://openai.com/index/astra-for-law/) ·
   [HN: Astra for Law](https://news.ycombinator.com/item?id=49745940) ·
   [Qwen blog](https://qwen.ai/blog?id=qwen3.8-omni-flash) ·

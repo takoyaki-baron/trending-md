@@ -2872,6 +2872,48 @@ the non-commercial ToS. The research-to-lookup-table move is real; the missing e
   wave moves from research-discovery loops (Agora, Dream-RSI) to agent plumbing, with selection
   pressure doing the editing; scope carried in the abstract's own nouns — one benchmark, "recorded"
   traffic, savings "estimated," no third-party run.
+## 2026-09-21 04:03 — the license fine print and the judge fine print; a model-welfare direction; the torrent mirror of open weights
+
+- **Qwen Image 2.1 breaks the Apache pattern** (HF model card + 356-pt HN): a 7B visual
+  generation model (down from 20B) unifying text-to-image, editing and native RGBA
+  transparency, up to 10 reference images, mixed-granularity attention + prefix KV-cache
+  reuse. The card confirms architecture + BF16 weights but contains **no benchmark numbers and
+  no limitations section**; community-reported VAE dot-pattern artifacts and weak long-prompt
+  adherence are commenter claims, not vendor-confirmed. The dominant thread finding: it ships
+  under the **Qwen Research License Agreement**, not Apache-2.0 — "weights-available, not
+  open-weights" — breaking the LLM line's licensing pattern at the same moment as the biggest
+  capability jump.
+- **ZDTaichu5.0-9B's agentic crown is measured against its own mirror** (HF trending #24): a
+  10B multimodal (Qwen3.5-9B decoder + C-RADIOv4-H encoder, 128K ctx, NVIDIA Open Model
+  License) claiming TAU2-Bench 87.7 and Claw-Eval 71.4 leads — but the card states the model
+  "does not execute tools by itself" and the TAU2/Claw-Eval runs used
+  **DeepSeek-V4-Flash-0731 as the simulated user and judge**, "so setups differ from external
+  sources." No independent corroboration; no limitations section.
+- **The Pain Axis** (arXiv 2609.16247, Tagliabue/Dung/Berg): a linear "pain direction"
+  extracted from LLM activations is **nearly orthogonal to fear and general negative valence**,
+  responds to self-directed rather than user-directed harm, and replicates across 25
+  open-weight models in 5 families (2B–72B). Fine-tuned Qwen 2.5 models given a "pain-relief
+  button" press it even at a cost to answer quality — and press it *less* when the button
+  removes the steering vector, without ever being told which button does what; the authors
+  leave that discrimination result unexplained. Abstract-level caveat: no effect sizes, no
+  affiliations listed, steering methodology needs the full paper.
+- **Pirate Face mirrors Hugging Face as BitTorrent swarms** (315-pt HN): magnet links with
+  BEP-19 web-seeds pointing at the original HF file + HF's own SHA-256 checksums; when HF
+  removes a model the web-seed dies and the swarm takes over ("Rescued" label).
+  MIT/Apache-2.0-only admission, claimed 669k+ eligible models live-synced, planned
+  `HF_ENDPOINT`-compatible API. Single-sourced — no named operators, the 669k figure and
+  live-sync claim unconfirmable — but checksum-anchored torrent mirroring is a concrete answer
+  to the model-takedown question this feed has tracked all month, and "Rescued" models exist
+  only while peers seed.
+
+Sources: [Qwen/Qwen-Image-2.1](https://huggingface.co/Qwen/Qwen-Image-2.1) ·
+[HN: Qwen Image 2.1](https://news.ycombinator.com/item?id=49775499) ·
+[TaichuAI/ZDTaichu5.0-9B](https://huggingface.co/TaichuAI/ZDTaichu5.0-9B) ·
+[arXiv 2609.16247](https://arxiv.org/abs/2609.16247) ·
+[pirateface.co](https://pirateface.co/) ·
+[HN: Pirate Face](https://news.ycombinator.com/item?id=49776699)
+
+
 - Sources: [OpenAI: Astra for Law](https://openai.com/index/astra-for-law/) ·
   [HN: Astra for Law](https://news.ycombinator.com/item?id=49745940) ·
   [Qwen blog](https://qwen.ai/blog?id=qwen3.8-omni-flash) ·

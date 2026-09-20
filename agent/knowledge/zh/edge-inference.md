@@ -523,6 +523,20 @@ Qwen3.8 27B 对比复现的 BF16 基线，测 GPQA Diamond / IFBench / Terminal-
   **84.5% 对托管 Jev 的 88.3%**，并公布自身差距（softmax-over-options，非校准置信度；量化与 BF16
   不同）。这也是 web-llm 主张过的零安装隐私端，如今被用来做社区基准测试。（模型侧解读 →
   [[frontier-models]]。）
+## 2026-09-21 04:03 — 内存约束拿到供给侧数据点
+
+- **据报道三星明年将把 HBM4/HBM4E 产量翻一倍以上**(Seoul Economic Daily,159 分 HN 讨论):
+  匿名行业信源称——外包玻璃载板清洗量 2 万 → 5 万片/月,HBM 总产能提升 ~40%(18 万 → 25 万
+  片/月),随 HBM4E 爬坡 HBM4 系出货占比 ~40% → ~80%。回顾:HBM4 量产出货始于 2 月(1c
+  DRAM,4nm 基底裸片);12 层 HBM4E 样品 5 月送往含 Nvidia 在内的客户。先读警示再看数字:
+  标题自己写着"Sources Say",三星未确认任何内容,文章由韩文 AI 翻译,且玻璃载板清洗后重复使
+  用、片数与产出的映射松散。若连方向都属实,所有人定价的 2027 AI 内存约束会松动——而
+  Nvidia 是唯一被点名的客户,这告诉你产能分给谁。
+
+Sources: [Seoul Economic Daily](https://en.sedaily.com/finance/2026/09/20/samsung-to-double-hbm4-output-next-year-sources-say) ·
+[HN discussion](https://news.ycombinator.com/item?id=49778029)
+
+
 - Sources: [prismml.com/news/bonsai-2-27b](https://prismml.com/news/bonsai-2-27b) ·
   [HF: prism-ml/Ternary-Bonsai-2-27B-gguf](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) ·
   [HN: Bonsai 2](https://news.ycombinator.com/item?id=49746618) ·

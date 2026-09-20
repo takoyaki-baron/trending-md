@@ -988,6 +988,24 @@ the effect decays.
   SheetSage2 transcription + re-render (0.647 CLEWS mAP vs 0.006 without a score). Editing happens
   in *score space* (symbolic) rather than audio space — the inspectable-intermediate-state bet
   (archify, OpenSpec) applied to music. Weights CC BY-NC.
+## 2026-09-21 04:03 — the eval argument gets its practitioner's voice
+
+- **Dan McKinley's "Prompts Aren't Real"** (evaluation.club talk transcript; 71-pt HN thread
+  after nine failed/duplicate submissions): making consumer-facing agents reliable means the
+  durable artifacts are pass^k suites, LLM judges, adversarial scenario generation, GEPA-style
+  prompt optimizers, holdout sets and production monitoring — prompts are "ephemeral.
+  Disposable." The line running through the thread: **"Handing someone a prompt without a
+  measure is a form of AI psychosis."** His own caveats are the honest part — LLM judges become
+  projects of their own, optimizers can overfit the test set (hence holdouts) — and the claim
+  is scoped to production consumer agents, explicitly exempting hobby use. As agent harnesses
+  become the industry's default interface, prompt-craft as the least durable skill in the stack
+  is a hiring and code-review question, not a take — the demand-side echo of the skills "prove
+  it" phase this topic tracks.
+
+Sources: [evaluation.club](https://evaluation.club) ·
+[HN discussion](https://news.ycombinator.com/item?id=49777111)
+
+
 - Sources: [openspec.dev](https://openspec.dev/) ·
   [HN: OpenSpec](https://news.ycombinator.com/item?id=49734264) ·
   [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) ·

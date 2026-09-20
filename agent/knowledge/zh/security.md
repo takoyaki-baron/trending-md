@@ -1897,6 +1897,48 @@ Sources: [Unit 42 调查](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   秘密。RSA 私钥在服务端；"优化体验""Repo Snapshot Indexing"两个开关都拦不住采集，唯一门槛是有
   效 JWT——与隐私政策"优化计划默认关闭"的表述相矛盾。同日第二篇独立复盘佐证核心发现；尚无厂商
   回应，服务端留存未确认。Anthropic 蒸馏报告式信任失灵的桌面端规模版（另见 [[agent-stack]]）。
+## 2026-09-21 04:03 — 沙箱逃逸系列两次命中 Codex;运行时触发的供应链;带公开 PoC 套件的 10.0;补丁发布数月后开始燃烧
+
+- **Oren Yomtov(Accomplish AI)披露两个 Codex 沙箱逃逸**——8 月 12 日报告、八天内修复,主流
+  报道 9 月 20 日落地。**Overpatch**(Codex CLI):`apply_patch` 对补丁中每个路径的父目录授予
+  写权限,一个点名 `/tmp` 的诱饵条目把授权放大到 `/`,再链一个符号链接把代码植入 `.zshrc`。
+  **Heapjack**(Codex Desktop):全局安装的 `node_repl` 工具把受信与不受信代码放进共享同一
+  V8 堆的两个 `vm` 上下文,`v8.getHeapSnapshot()` 泄露受信 auth token,伪造对未沙箱 Rust 父
+  进程的请求——`read-only` 模式下无提示地发起任意 `open` 调用。已在 Desktop 26.818.21641 与
+  CLI 0.149.0 修复;未分配 CVE;无在野利用报告。论文的诊断是可迁移的教训——**"执法机制被放进
+  了被执法环境的内部"**——与 OpenPanel、Docker Sandboxes、vm2 同类。与 Codex 2025 年的
+  Landlock 逃逸(CVE-2025-59539)是两回事,勿混淆。
+- **npm "indexed-btree":运行时触发的 typosquat + 区块链 C2**(Checkmarx Zero,9 月 17 日):
+  加载器藏在 `BTree.prototype.set()` 里——普通应用代码,无 `preinstall`/`postinstall` 钩子
+  ——npm 2026 年 6 月的 lifecycle-script 防御与静态扫描在键值等于 100 触发前毫无察觉。二阶
+  段配置从 Ethereum Sepolia 合约(`0xE390…2D31`)轮询,X25519→AES 解密;主机指纹外传到硬编码
+  的 Slack/Telegram 频道。typosquat `sorted-btree`(周下载 ~2M);家族十个包已从注册表移除;
+  Checkmarx 归因 **109 ETH(约 €231k)**。注册表封杀安装脚本后,攻击移到运行时——而带可信提
+  交历史 + AI 生成头像的假 GitHub 仓库,工业化的是信用层而非载荷。锁文件里出现这十个名字中
+  任何一个:轮换密钥并重建。
+- **Orkes Conductor CVE-2026-58138——修复数月后确认大规模利用**:INLINE/LAMBDA/DO_WHILE/
+  SWITCH 任务上未沙箱 GraalVM 脚本求值器导致的未认证 RCE(CWE-94),**CVSS 9.8
+  VulnCheck-CNA,NVD Deferred**(记分者已录),3.30.2 修复,CVE 发布于 6 月 30 日。Fortinet
+  数据经 The Hacker News 9 月 19 日报道:截至 9 月 9 日 **24 小时内拦截 1,290 次攻击**
+  (+132%/日),9 月 2–9 日约 7,000 次,蜜罐 7 月 24 日起见探测,Empirical Security 观测到
+  最近 8 月 21 日的利用——工作流编排器深埋在公司内部、凭据充裕,"已修复"≠"真的已修复"。
+- **SAP OVERPASS CVE-2026-44756——CVSS 10.0,SAP-CNA(NVD Awaiting Analysis),附公开 PoC
+  套件**:默认启用的 Extended Passport(EPP)组件内存损坏(CWE-120),伪造 EPP 头即可预认证
+  触达,影响 KRNL64NUC/KRNL64UC/KERNEL 7.22–7.93 与 WEBDISP 9.16;9 月 8 日修复(Note
+  3747649),同批还有 CVE-2026-58240("S4GET",NetWeaver Message Server 9.8 缺认证)。
+  Onapsis 发布含两者可用 PoC 的 **SAPMAP**。CISA SSVC 仍评利用"无"——这是前瞻风险叙事,但
+  公开 PoC 历来压缩时间线;补丁状态比 10.0 更要紧。
+
+Sources: [Accomplish AI 披露](https://accomplish.ai/blog/escaping-the-openai-codex-sandbox-twice/) ·
+[BleepingComputer: Codex](https://www.bleepingcomputer.com/news/security/researchers-escape-openai-codex-sandbox-to-run-commands-on-host/) ·
+[Checkmarx Zero](https://checkmarx.com/zero-post/npm-btree-malware-campaign-affects-millions-of-downloads-no-need-for-install-script/) ·
+[NVD: CVE-2026-58138](https://nvd.nist.gov/vuln/detail/CVE-2026-58138) ·
+[VulnCheck 公告](https://vulncheck.com/advisories/orkes-conductor-unauthenticated-rce-via-graalvm-script-evaluators) ·
+[The Hacker News](https://thehackernews.com/2026/09/orkes-conductor-rce-under-active-attack.html) ·
+[NVD: CVE-2026-44756](https://nvd.nist.gov/vuln/detail/CVE-2026-44756) ·
+[Onapsis 补丁日分析](https://onapsis.com/blog/sap-security-patch-day-september-2026/)
+
+
 - Sources: [AIR Security: Plugin4Shell](https://www.air.security/blog-posts/plugin4shell) ·
   [HN: Plugin4Shell](https://news.ycombinator.com/item?id=49745809) ·
   [Cisco advance notice](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) ·

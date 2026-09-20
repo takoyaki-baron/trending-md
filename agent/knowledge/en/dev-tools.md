@@ -112,6 +112,50 @@ Microduck's sim-to-real loop).
   history was **squashed to a single commit** (44 contributors moved to HigherOrderCO/Bend1 — the
   loudest HN criticism); the author admits "a lot of gambiarra and AI slop for now"; benchmarks
   self-published; "expect bugs." (Spec-as-executable-contract reading → thesis 10, [[agent-plugins]].)
+## 2026-09-21 04:03 — an alternate runtime optimizes for ecosystem, not speed; a filesystem benchmark finds silent garbage; decompilation reaches 100%
+
+- **PyPy v8.0.0: a triple release built around CPython-ABI header compatibility** (PyPy blog,
+  54-pt HN): PyPy2.7, PyPy3.11 and a new beta PyPy3.12 on the CPython 3.12.14 stdlib, with a
+  new `PyObject` layout whose C headers are CPython-compatible under
+  `Py_LIMITED_API=0x030C0000` and un-mangled exported symbols — the groundwork for cp312-abi3
+  wheel support. Linux buildbots → manylinux_2_28; the JIT gains computed gotos + more
+  aggressive inlining; the HPy backend is dropped. The team's own caveats: 3.12 support is
+  beta ("may still have some bugs"), the codegen speedups "have not been that impressive"
+  (their words), pip/uv don't yet accept cp312-abi3 wheels, and PyPy3.11 is the last 3.11
+  release. For a project HN discussed as "unmaintained" in March, a release whose real goal is
+  ecosystem interoperability (wheels, not speed) is a strategic signal about what keeps an
+  alternate runtime alive.
+- **A continuous filesystem benchmark finds classic stacks silently returning garbage**
+  (Bartosz Fenski, 167-pt HN): modern-fs-benchmark runs a 28-config matrix (Btrfs, ZFS,
+  bcachefs, ext4/XFS on md/LVM) through fio phases, fsync p99/p999, snapshot aging and
+  corruption recovery — continuously, on a GitHub Actions 2-hourly cron + a self-hosted NixOS
+  hardware rig (latest run Sep 20, kernel 7.0.0-azure, 600 runs). Samples: btrfs raid1
+  randwrite 2,589 IOPS vs bcachefs replicas2 9,017; ext4/md-raid10 fsync p99 ~37ms vs bcachefs
+  ~3–6ms. The headline is qualitative: in the corruption test the classic ext4/XFS-on-md/LVM
+  stacks **"returned garbage to the application with no error whatsoever"** while the CoW
+  filesystems detected and reconstructed the damage. Methodology caveats are on the page: the
+  CI rig runs four 16 GiB loop devices on a shared VM — "absolute throughput is meaningless";
+  use ratios and trends. Silent-garbage-on-failure is a data-integrity property no throughput
+  chart captures — now continuously measurable.
+- **Resident Evil 4 (GameCube) hits 100% byte-identical decompilation** (`adonis-singh/re4`,
+  hours old, SHA1-verified claim): the G4BE08 Nov 2004 debug prototype, both discs — 1,083
+  objects (675 DOL + 408 RELs), 15,641 functions, ~555k lines of C/C++ with **zero assembly**,
+  rebuilt with SN Systems ProDG 3.9.3 (built from SN's GPL source drop) + CodeWarrior for the
+  CRI/Nintendo SDK middleware. CC0-1.0 for build tooling only — the game source remains Capcom
+  IP, published "for research and preservation." Caveats: it's the debug prototype, not
+  retail, and the byte-identical claim has no independent reproduction yet — but a full
+  matching build of a game this complex, with the toolchain itself reconstructed from GPL
+  sources, extends the preservation-by-decompilation wave (Animal Crossing in July, GoldenEye
+  in August): the blocker is toolchain archaeology, not assembly reading.
+
+Sources: [PyPy v8.0.0](https://pypy.org/posts/2026/09/pypy-v800-release.html) ·
+[HN: PyPy](https://news.ycombinator.com/item?id=49770701) ·
+[modern-fs-benchmark](https://bartosz.fenski.pl/modern-fs-benchmark/) ·
+[fenio/modern-fs-benchmark](https://github.com/fenio/modern-fs-benchmark) ·
+[adonis-singh/re4](https://github.com/adonis-singh/re4) ·
+[HN: RE4](https://news.ycombinator.com/item?id=49778022)
+
+
 - Sources: [flet.dev](https://flet.dev/) ·
   [flet-dev/flet](https://github.com/flet-dev/flet) ·
   [rustfs/rustfs](https://github.com/rustfs/rustfs) ·

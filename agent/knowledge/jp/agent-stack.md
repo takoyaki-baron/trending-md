@@ -1745,6 +1745,42 @@ Origin の*レビュー*の答えに加えて*ストレージ*の答え（ステ
 - **NVIDIA SoL-Pi（arXiv 2609.20519）**——RSI をハーネス自体に向ける（数値と留保 →
   [[frontier-models]]）：生成された改善を選択圧でふるい、4 機構を残す——アクション実行、コンテキスト
   圧縮、観測処理、委任読み取り——Dream-RSI が発見戦略を編集したように、ハーネスが自らの配管を編集する。
+## 2026-09-21 04:03 — ファクトリーパターンに運用手帳ができる。worktree 基盤と RAG→agent の合流はトリガーではなく勢いで伸びる
+
+- **Will Larson が実プロジェクトで「ソフトウェアファクトリーパターン」を運用**(lethain.com、
+  34 pt HN):彼の `/linear-project-loop` エージェントスキルは Linear プロジェクトを Notion
+  RFC と Datadog/Snowflake 指標に対して監査し、ブロックされていないタスクを消化し、プロジェ
+  クト説明が古くなると再起動する(用語は Justin McCarthy、2026 年 2 月に帰属)。価値はプロン
+  プトより長い前提条件リスト:1 月から Claude Code エンジニア、3 月からスタッフに Cowork、エ
+  ンジニア当たり約 10 ローカルワークスペース、Jira→Linear 移行、ループが監査する指標への
+  MCP アクセス。ローカルの一次の未量化実験だと明言——「十分機能しているので、この振る舞いを
+  Imprint のオーケストレーション済み内部ハーネス(『Agent Fleet』、Stripe の Minions を参考
+  に設計)へ移すつもり」。
+- **worktrunk v0.78.0 が週次リリースで 8k★ を越える**(max-sixty/worktrunk、Rust、
+  MIT/Apache-2.0、週間トレンド #9):`wt switch/list/remove-merge`、リポジトリローカルフック、
+  共有ビルドキャッシュ、ワンショットエージェント起動、`.claude-plugin` +
+  `gemini-extension.json`。v0.78.0(9 月 16 日)は Pi-agent プラグイン分割 + フックコンテキ
+  ストキー改名——異例に速い周期での破壊的変更 2 件(5,142 commits)。このフィード自身のトリ
+  ガールールで:新しい HN スレッドはない(最高投稿も ≤14 pt で数か月前)——成長は並列エージ
+  ェントワークフローの波と止まないリリースに乗っている:worktree 管理がパワーユーザーの技か
+  らデフォルトのエージェントインフラになりつつある。
+- **騰訊 WeKnora が 28k★ を越える:RAG プラットフォームが ReAct エージェントになった**
+  (MIT、週間 #4、週 +4,867★):v0.8.0(9 月 3 日)が急上昇の乗り手——**29 個の MCP ツール**
+  とスキルカタログをオーケストレートする ReAct エージェントがセッション永続の
+  Docker/E2B/Cube サンドボックス上で動き、セッション跨ぎの長期記憶、GraphRAG/HNSW 検索、
+  DeepSeek ハーネスプラグイン、LiteLLM 対応、ナレッジグラフ + ロールバック付きの相互リンク
+  Markdown wiki を自動生成する「Wiki Mode」。トリガールールで誠実に:リリースは 2.5 週間前
+  で HN の存在感はほぼゼロ——新規ローンチではなく持続モメンタム + Trendshift 配置。だがセル
+  フホスト RAG+agent スタックに週 4,867 星は、需要がベクトル DB ではなく検索を包むエージェン
+  ト足場にあることを物語る。
+
+Sources: [lethain.com](https://lethain.com/software-factory-experiment/) ·
+[HN: software factory](https://news.ycombinator.com/item?id=49777913) ·
+[max-sixty/worktrunk](https://github.com/max-sixty/worktrunk) ·
+[Tencent/WeKnora](https://github.com/Tencent/WeKnora) ·
+[WeKnora v0.8.0](https://github.com/Tencent/WeKnora/releases/tag/v0.8.0)
+
+
 - Sources: [Launch HN: Skillsync](https://news.ycombinator.com/item?id=49743049) ·
   [skillsynchq/txcript](https://github.com/skillsynchq/txcript) ·
   [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·

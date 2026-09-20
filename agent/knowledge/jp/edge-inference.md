@@ -591,6 +591,22 @@ Q8_0 を誤ってスキップ（補間で代用）、KV-cache 量子化は未テ
   外に出ない——**84.5% 対ホステッド Jev の 88.3%** を達成し、自らの不足を公開（softmax-over-options
   で校準済み信頼度ではない；量子化は BF16 と異なる）。web-llm が主張したゼロインストールのプライバシー
   端が、今やコミュニティベンチマークに使われている。（モデル側の読み → [[frontier-models]]。）
+## 2026-09-21 04:03 — メモリ制約に供給側のデータポイント
+
+- **Samsung が来年 HBM4/HBM4E の生産を 2 倍以上に引き上げる見報道**(Seoul Economic Daily、
+  159 pt HN):業界筋(非匿名化されていない)によると——外部委託のガラスキャリア洗浄量が月
+  2 万 → 5 万枚、HBM 全体容量 ~40% 増(18 万 → 25 万枚/月)、HBM4E ランプに合わせ HBM4 ファ
+  ミリーの出荷比率 ~40% → ~80%。再確認:HBM4 の量産出荷は 2 月開始(1c DRAM、4nm ベースダ
+  イ)。12 層 HBM4E サンプルは 5 月に Nvidia を含む顧客へ。数字の前に注意書きを:見出し自体
+  が「Sources Say」、Samsung は何も確認せず、記事は韓国語からの AI 翻訳、ガラスキャリアは洗
+  浄後に再利用されるため枚数と産出量の対応は緩い。方向だけでも正しければ、市場が 2027 年に織
+  り込む AI メモリ制約は緩む——Nvidia が名指された唯一の顧客であることは、割り当てがどこへ行
+  くかを物語る。
+
+Sources: [Seoul Economic Daily](https://en.sedaily.com/finance/2026/09/20/samsung-to-double-hbm4-output-next-year-sources-say) ·
+[HN discussion](https://news.ycombinator.com/item?id=49778029)
+
+
 - Sources: [prismml.com/news/bonsai-2-27b](https://prismml.com/news/bonsai-2-27b) ·
   [HF: prism-ml/Ternary-Bonsai-2-27B-gguf](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) ·
   [HN: Bonsai 2](https://news.ycombinator.com/item?id=49746618) ·

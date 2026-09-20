@@ -128,5 +128,22 @@ Productrise 只能从外部测量的东西内部化了——替代假说，由�
 可持久的事实更窄：**agent 介导的替代不再只是外部测量（Armature 的 42% 工具一致率、AI Mode 的 21.6%
 价格偏斜）——平台内部数字现在也同意了。**
 
+## 2026-09-21 04:03 — ChatGPT 账号成为跨站测量图谱
+
+- **OpenAI 的广告采集器把站外浏览与你的 ChatGPT 账号关联**(Ionut Bochodi 解剖文;338 分 HN
+  头条):位于 `bzr.openai.com`("bazaar")的采集器在 `.openai.com` 上种下 `__obi`
+  cookie——`SameSite=none; Secure`、1 年 Max-Age——OpenAI 的测量 SDK 再从广告主站点随页面数
+  据回传。在 12 个商业站点观察到(Chewy、Wayfair、Eventbrite、HelloFresh、Coursera、
+  SeatGeek),带哈希邮箱/电话加明文邮编、城市与地区——邮编是被采集最多的字段。token 携带
+  `consent_decision: analytics_allowed`,拒绝了营销同意的用户照样被同步。带上作者自己的限
+  定:仅在 Chrome for Android 上观察到(Safari ITP 与 iOS 浏览器拦截它),约 1/5 的 ChatGPT
+  会话发出同步 token,而且**账号关联本身是从设计推断的、并非实测**——OpenAI 确认收到他 9 月
+  14 日的问询但两个问题都没回答。即便打了折扣,结构性结论依然成立:Meta 的跨站测量图谱围绕
+  ChatGPT 账号重建,"分析同意"在做法律层面的活。
+
+Sources: [buchodi.com 解剖文](https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/) ·
+[HN discussion](https://news.ycombinator.com/item?id=49776729)
+
+
 - Sources: [TechCrunch 报道解除涂黑文件](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49752056)

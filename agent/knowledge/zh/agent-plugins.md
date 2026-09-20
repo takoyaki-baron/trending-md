@@ -682,3 +682,17 @@ GitHub 趋势榜，而同一场讨论记录了*harness*（而非技能）拥有�
   [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) ·
   [Cowork 发布文](https://claude.com/blog/cowork-is-now-claude) ·
   [multimodal-art-projection/YuE](https://github.com/multimodal-art-projection/YuE)
+
+## 2026-09-21 04:03 — 评估论证拿到从业者的声音
+
+- **Dan McKinley 的 "Prompts Aren't Real"**(evaluation.club 演讲全文;九次投稿失败/重复后
+  上 71 分 HN):让面向消费者的 agent 可靠,耐用工件是 pass^k 套件、LLM 裁判、对抗性场景生
+  成、GEPA 式提示优化器、holdout 集与生产监控——提示词"短暂、可丢弃"。贯穿讨论区的那句
+  话:**"把一个不给度量的提示词交出去,是一种 AI 精神病。"** 他自己的警示是诚实部分——LLM
+  裁判会变成独立项目、优化器会过拟合测试集(所以要有 holdout)——且论断限定于生产级消费
+  agent,明确豁免玩具用途。当 agent harness 成为行业默认界面,"提示词技艺是技术栈里最不耐用
+  的技能"就是一个招聘与代码评审问题,而不是一篇观点——正是本主题追踪的技能"自证"阶段在需求
+  侧的回声。
+
+Sources: [evaluation.club](https://evaluation.club) ·
+[HN discussion](https://news.ycombinator.com/item?id=49777111)

@@ -760,6 +760,23 @@ KV-cache quantization untested (F16 throughout), and an Aug-16 llama.cpp build w
   shortfall (softmax-over-options, not calibrated confidence; different quantization than BF16). Also
   the zero-install privacy end web-llm argued (08-21), now used for community benchmarking. (Model-side
   reading → [[frontier-models]].)
+## 2026-09-21 04:03 — the memory constraint gets a supply-side datapoint
+
+- **Samsung reportedly to more than double HBM4/HBM4E output next year** (Seoul Economic
+  Daily, 159-pt HN thread): from unnamed industry sources — outsourced glass-carrier cleaning
+  volume 20k → 50k sheets/month, overall HBM capacity up ~40% (180k → 250k wafers/month),
+  HBM4-family share of shipments ~40% → ~80% as HBM4E ramps. Recaps: HBM4 mass-production
+  shipments began February (1c DRAM, 4nm base die); 12-layer HBM4E samples to customers
+  including Nvidia in May. Read the caveats before the numbers: the headline itself says
+  "Sources Say," Samsung confirmed nothing, the article is AI-translated from Korean, and glass
+  carriers are reused after cleaning, so sheet volume maps loosely to output. If even the
+  direction is right, the AI-memory constraint everyone is pricing for 2027 loosens — and
+  Nvidia being the only named customer tells you where the allocation goes.
+
+Sources: [Seoul Economic Daily](https://en.sedaily.com/finance/2026/09/20/samsung-to-double-hbm4-output-next-year-sources-say) ·
+[HN discussion](https://news.ycombinator.com/item?id=49778029)
+
+
 - Sources: [prismml.com/news/bonsai-2-27b](https://prismml.com/news/bonsai-2-27b) ·
   [HF: prism-ml/Ternary-Bonsai-2-27B-gguf](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) ·
   [HN: Bonsai 2](https://news.ycombinator.com/item?id=49746618) ·

@@ -1482,6 +1482,36 @@ MinIO 之后运行——面向 agent 规模的代码托管线程，如今在 Ori
 - **NVIDIA SoL-Pi（arXiv 2609.20519）**——把 RSI 指向 harness 本身（数字与限定 → [[frontier-models]]）：
   以"选择压筛选生成的改进"保住四个机制——动作执行、上下文压缩、观测处理、委托阅读——harness 像
   Dream-RSI 编辑发现策略那样编辑自己的管道。
+## 2026-09-21 04:03 — 工厂模式有了操作手册;worktree 基建与 RAG→agent 的汇合靠惯性而非触发点
+
+- **Will Larson 在真实项目上运行"软件工厂模式"**(lethain.com,34 分 HN 讨论):他的
+  `/linear-project-loop` agent skill 对照 Notion RFC 与 Datadog/Snowflake 指标审计 Linear
+  项目、处理非阻塞任务、在项目描述过期时重启(术语归于 Justin McCarthy,2026 年 2 月)。价
+  值在前提清单,它比提示词长:1 月起全员 Claude Code 工程师、3 月起 staff 用 Cowork、每工程
+  师约 10 个本地工作区、一次 Jira→Linear 迁移、MCP 连到循环所审计的指标。他明确这是一场本
+  地、初步、未量化的实验——"运转得够好,我预计会把这套行为搬上" Imprint 编排的内部 harness
+  ("Agent Fleet",仿 Stripe 的 Minions)。
+- **worktrunk v0.78.0 以周发布节奏越过 8k★**(max-sixty/worktrunk,Rust,MIT/Apache-2.0,周
+  趋势 #9):`wt switch/list/remove-merge`、仓库级钩子、共享构建缓存、一次性 agent 启动、
+  `.claude-plugin` + `gemini-extension.json`。v0.78.0(9 月 16 日)加入 Pi-agent 插件拆分 +
+  钩子上下文键改名——异常快的节奏里带两个破坏性变更(5,142 commits)。按本 feed 自己的触发
+  规则:没有新鲜的 HN 帖(最好的帖子 ≤14 分且数月前)——增长骑的是平行 agent 工作流浪潮加
+  不停发布:worktree 管理正成为默认 agent 基建,而非高级用户技巧。
+- **腾讯 WeKnora 越过 28k★:RAG 平台变成了 ReAct agent**(MIT,周趋势 #4,周 +4,867★):
+  v0.8.0(9 月 3 日)是这波飙升的坐骑——ReAct agent 编排 **29 个 MCP 工具**加技能目录,跑
+  在会话持久的 Docker/E2B/Cube 沙箱上,带跨会话长期记忆、GraphRAG/HNSW 检索、DeepSeek
+  harness 插件、LiteLLM 支持,以及自动生成互链 Markdown wiki(含知识图谱与回滚)的 "Wiki
+  Mode"。按触发规则诚实框定:发布已 2.5 周,HN 上几乎无存在感——是持续动能 + Trendshift 位
+  置,不是新发布。但一个自托管 RAG+agent 栈单周 4,867 星说明:需求是包在检索外面的 agent 脚
+  手架,不是又一个向量库。
+
+Sources: [lethain.com](https://lethain.com/software-factory-experiment/) ·
+[HN: software factory](https://news.ycombinator.com/item?id=49777913) ·
+[max-sixty/worktrunk](https://github.com/max-sixty/worktrunk) ·
+[Tencent/WeKnora](https://github.com/Tencent/WeKnora) ·
+[WeKnora v0.8.0](https://github.com/Tencent/WeKnora/releases/tag/v0.8.0)
+
+
 - Sources: [Launch HN: Skillsync](https://news.ycombinator.com/item?id=49743049) ·
   [skillsynchq/txcript](https://github.com/skillsynchq/txcript) ·
   [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·

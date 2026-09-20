@@ -93,6 +93,42 @@ GPU 驱动）；OpenLogi（本地优先 Rust HID++）；Linux 7.2（缓存感知
   年的旧仓库，其历史被**压扁成单个 commit**（44 位贡献者的工作移到 HigherOrderCO/Bend1——HN 最响的
   批评）；作者自认编译器里"眼下有大量 gambiarra 和 AI slop"；基准自发布；"expect bugs"。
   （规范即可执行契约的解读 → 论点 10、[[agent-plugins]]。）
+## 2026-09-21 04:03 — 另一个运行时为生态而非速度优化;文件系统基准发现静默垃圾;反编译达到 100%
+
+- **PyPy v8.0.0:围绕 CPython-ABI 头兼容的三连发**(PyPy 博客,54 分 HN):PyPy2.7、PyPy3.11
+  与新的 beta PyPy3.12(CPython 3.12.14 标准库)同时发布,新的 `PyObject` 布局在
+  `Py_LIMITED_API=0x030C0000` 下 C 头与 CPython 兼容、导出符号不再名字修饰——为 cp312-abi3
+  wheel 支持铺路。Linux buildbot → manylinux_2_28;JIT 增加计算型 goto 与更激进的内联;HPy
+  后端被弃。团队自己的警示:3.12 支持是 beta("可能仍有 bug"),代码生成提速"没那么惊艳"
+  (原话),pip/uv 尚不接受 cp312-abi3 wheel,PyPy3.11 是最后一个 3.11 版本。对一个 3 月还
+  被 HN 讨论为"无人维护"的项目,一次真正目标是生态互操作(wheel,而非速度)的发布,是关于
+  什么能让替代运行时活下去的战略信号。
+- **一个持续运行的文件系统基准发现经典栈静默返回垃圾**(Bartosz Fenski,167 分 HN):
+  modern-fs-benchmark 把 28 种配置矩阵(Btrfs、ZFS、bcachefs,md/LVM 上的 ext4/XFS)持续跑
+  过 fio 各阶段、fsync p99/p999、快照老化与损坏恢复——GitHub Actions 每两小时 cron + 自托管
+  NixOS 硬件机(最近一次 9 月 20 日,内核 7.0.0-azure,600 轮)。样本:btrfs raid1 随机写
+  2,589 IOPS vs bcachefs replicas2 9,017;ext4/md-raid10 fsync p99 ~37ms vs bcachefs
+  ~3–6ms。头条是定性的:损坏测试里经典 ext4/XFS-on-md/LVM 栈**"把垃圾返回给应用且毫无报
+  错"**,而 CoW 文件系统检测并重建了损伤。方法论警示就写在页面上:CI 机在共享 VM 上跑四个
+  16GiB 回环设备——"绝对吞吐无意义",用比值与趋势。"失败时静默给垃圾"是一种任何吞吐图表都
+  不捕捉的数据完整性性质——现在可以被持续测量了。
+- **《生化危机 4》(GameCube)达成 100% 字节级一致反编译**(`adonis-singh/re4`,发布数小时,
+  SHA1 验证的声明):G4BE08 2004 年 11 月调试原型、双碟——1,083 个目标文件(675 DOL + 408
+  REL)、15,641 个函数、约 55.5 万行 C/C++、**零汇编**,用 SN Systems ProDG 3.9.3(从 SN 的
+  GPL 源码构建)+ CodeWarrior(负责 CRI/任天堂 SDK 中间件)重建。CC0-1.0 仅覆盖构建工具——
+  游戏源码仍是 Capcom IP,以"研究与保存"为目的发布。警示:这是调试原型而非零售版,字节级
+  一致声明尚无独立复现——但一个如此复杂的游戏的完整匹配构建、连同从 GPL 源码重建的工具链本
+  身,把"以反编译做保存"的浪潮(7 月动物之森、8 月黄金眼)再推一步:瓶颈是工具链考古,不是
+  读汇编。
+
+Sources: [PyPy v8.0.0](https://pypy.org/posts/2026/09/pypy-v800-release.html) ·
+[HN: PyPy](https://news.ycombinator.com/item?id=49770701) ·
+[modern-fs-benchmark](https://bartosz.fenski.pl/modern-fs-benchmark/) ·
+[fenio/modern-fs-benchmark](https://github.com/fenio/modern-fs-benchmark) ·
+[adonis-singh/re4](https://github.com/adonis-singh/re4) ·
+[HN: RE4](https://news.ycombinator.com/item?id=49778022)
+
+
 - Sources: [flet.dev](https://flet.dev/) ·
   [flet-dev/flet](https://github.com/flet-dev/flet) ·
   [rustfs/rustfs](https://github.com/rustfs/rustfs) ·

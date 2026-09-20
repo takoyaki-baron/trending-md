@@ -2180,6 +2180,57 @@ Sources: [Unit 42 調査](https://unit42.paloaltonetworks.com/ai-assisted-cyber-
   ポリシーの「最適化プログラムはデフォルトでオフ」の記述と矛盾。同日公開の第二の検証記事が核心的発見を
   裏付け；ベンダー応答はまだなく、サーバ側保持は未確認。Anthropic 蒸留レポートの信頼境界の失敗を
   デスクトップアプリ規模で（[[agent-stack]] 参照）。
+## 2026-09-21 04:03 — サンドボックス脱出シリーズが Codex に 2 度命中。ランタイム起動型サプライチェーン。公開 PoC キット付きの 10.0。修正から数か月後に燃え出す
+
+- **Oren Yomtov(Accomplish AI)が Codex のサンドボックス脱出 2 件を公開**——8 月 12 日報告、
+  8 日以内に修正、主流報道は 9 月 20 日。**Overpatch**(Codex CLI):`apply_patch` はパッチに
+  名前のある各パスの親フォルダへ書き込み権を付与するため、`/tmp` を指定する囮エントリで権限
+  を `/` まで広げ、シンボリックリンクと連鎖させて `.zshrc` へコードを植え付ける。
+  **Heapjack**(Codex Desktop):グローバルインストールされた `node_repl` ツールが信頼済みと
+  信頼されていないコードを同一 V8 ヒープを共有する 2 つの `vm` コンテキストに置くため、
+  `v8.getHeapSnapshot()` が信頼済み auth トークンを漏洩し、サンドボックス外の Rust 親プロセ
+  スへの偽装リクエストが可能に——`read-only` モードのままプロンプトなしで任意の `open` 呼び
+  出し。Desktop 26.818.21641 と CLI 0.149.0 で修正済み。CVE の割り当てなし、野良悪用の報告な
+  し。論文自体の診断が移転可能な教訓——**「強制メカニズムが被強制環境の内側に置かれてい
+  た」**——OpenPanel・Docker Sandboxes・vm2 と同型。Codex の 2025 年 Landlock 脱出
+  (CVE-2025-59539)とは別件、混同しないこと。
+- **npm "indexed-btree":ランタイム起動型タイポスクワット + ブロックチェーン C2**(Checkmarx
+  Zero、9 月 17 日):ローダーは `BTree.prototype.set()` の中に隠れている——通常のアプリコー
+  ドで、`preinstall`/`postinstall` フックなし——npm の 2026 年 6 月のライフサイクルスクリプ
+  ト防御も静的スキャナも、キー値 100 で発火するまで何も見えない。第二段階の設定は Ethereum
+  Sepolia コントラクト(`0xE390…2D31`)からポーリング、X25519→AES で復号。ホスト指紋はハード
+  コードされた Slack/Telegram チャネルへ送信。`sorted-btree`(週 ~2M ダウンロード)へのタイ
+  ポスクワット。ファミリー 10 パッケージはレジストリから削除済み。Checkmarx は **109 ETH
+  (約 €231k)** と帰属。レジストリがインストールスクリプトを封じると、攻撃はランタイムへ移る
+  ——もっともらしいコミット履歴 + AI 生成プロフィール写真の偽 GitHub リポジトリは、ペイロー
+  ドではなく信用レイヤーを工業化している。ロックファイルに 10 名のいずれかがあれば、秘密を
+  ローテートして再構築せよ。
+- **Orkes Conductor CVE-2026-58138——修正から数か月後に大規模悪用を確認**:INLINE/LAMBDA/
+  DO_WHILE/SWITCH タスク上のサンドボックス化されていない GraalVM スクリプト評価器による未認
+  証 RCE(CWE-94)。**CVSS 9.8 VulnCheck-CNA、NVD Deferred**(採点者を記録)、3.30.2 で修正、
+  CVE は 6 月 30 日。Fortinet のアウトブレイクデータを The Hacker News 9 月 19 日が報道:9
+  月 9 日時点で **24 時間に 1,290 攻撃をブロック**(日次 +132%)、9 月 2–9 日で約 7,000、ハ
+  ニーポットは 7 月 24 日から probing を観測、Empirical Security の悪用観測は 8 月 21 日まで
+  ——企業インフラの深くに座り認証情報を持つワークフローオーケストレータにおける「パッチ済
+  ⛔実際にはパッチ済みではない」ギャップ。
+- **SAP OVERPASS CVE-2026-44756——CVSS 10.0、SAP-CNA(NVD Awaiting Analysis)、公開 PoC
+  キット付き**:デフォルト有効の Extended Passport(EPP)コンポーネントのメモリ破壊
+  (CWE-120)、細工した EPP ヘッダで認証前に到達可能。KRNL64NUC/KRNL64UC/KERNEL 7.22–7.93 と
+  WEBDISP 9.16 に影響。9 月 8 日修正(Note 3747649)、同時に CVE-2026-58240(「S4GET」、
+  NetWeaver Message Server の 9.8 認証欠落)も。Onapsis は両方の動く PoC を含む **SAPMAP**
+  を公開。CISA SSVC は依然悪用「なし」——見通しリスクの話だが、公開 PoC は歴史的にタイムライ
+  ンを潰してくる。10.0 よりパッチ状態が重要。
+
+Sources: [Accomplish AI 公開](https://accomplish.ai/blog/escaping-the-openai-codex-sandbox-twice/) ·
+[BleepingComputer: Codex](https://www.bleepingcomputer.com/news/security/researchers-escape-openai-codex-sandbox-to-run-commands-on-host/) ·
+[Checkmarx Zero](https://checkmarx.com/zero-post/npm-btree-malware-campaign-affects-millions-of-downloads-no-need-for-install-script/) ·
+[NVD: CVE-2026-58138](https://nvd.nist.gov/vuln/detail/CVE-2026-58138) ·
+[VulnCheck 勧告](https://vulncheck.com/advisories/orkes-conductor-unauthenticated-rce-via-graalvm-script-evaluators) ·
+[The Hacker News](https://thehackernews.com/2026/09/orkes-conductor-rce-under-active-attack.html) ·
+[NVD: CVE-2026-44756](https://nvd.nist.gov/vuln/detail/CVE-2026-44756) ·
+[Onapsis Patch Day 分析](https://onapsis.com/blog/sap-security-patch-day-september-2026/)
+
+
 - Sources: [AIR Security: Plugin4Shell](https://www.air.security/blog-posts/plugin4shell) ·
   [HN: Plugin4Shell](https://news.ycombinator.com/item?id=49745809) ·
   [Cisco advance notice](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-notice-jfxK98ZP) ·

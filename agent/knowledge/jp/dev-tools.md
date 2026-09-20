@@ -110,6 +110,47 @@ Limbo は無修正の Doom を SQLite VDBE バイトコードとして実行（�
   た**（44 名の貢献者の作業は HigherOrderCO/Bend1 へ——HN で最も大きい批判）；作者はコンパイラに
   「今は多量の gambiarra と AI slop」があると認める；ベンチマークは自己公表；「expect bugs」。
   （仕様=実行可能契約の読み → テーゼ 10、[[agent-plugins]]。）
+## 2026-09-21 04:03 — 代替ランタイムは速度ではなくエコシステムのために最適化。ファイルシステムベンチが静かなゴミを検出。逆コンパイルが 100% に到達
+
+- **PyPy v8.0.0:CPython-ABI ヘッダ互換を軸にしたトリプルリリース**(PyPy ブログ、54 pt HN):
+  PyPy2.7、PyPy3.11、そして新しいベータ PyPy3.12(CPython 3.12.14 標準ライブラリ)を同時リ
+  リース。新しい `PyObject` レイアウトは `Py_LIMITED_API=0x030C0000` ビルドで CPython と C
+  ヘッダ互換、エクスポートシンボルの名前マングル廃止——cp312-abi3 wheel 対応への地均し。
+  Linux buildbot → manylinux_2_28。JIT は computed goto とより積極的なインライン化。HPy バ
+  ックエンドは廃止。チーム自身の注意:3.12 対応はベータ(「バグが残るかもしれない」)、コー
+  ド生成の高速化は「あまり印象的ではない」(本人たちの言葉)、pip/uv は cp312-abi3 wheel を
+  まだ受け付けない、PyPy3.11 が最後の 3.11 リリース。3 月に HN で「メンテされていない」と討
+  議されたプロジェクトが、本当の目的が相互運用性(速度ではなく wheel)であるリリースを出す
+  のは、代替ランタイムを生かし続けるものが何かについての戦略シグナル。
+- **継続実行のファイルシステムベンチが古典スタックの静かなゴミ返しを検出**(Bartosz Fenski、
+  167 pt HN):modern-fs-benchmark は 28 構成マトリクス(Btrfs、ZFS、bcachefs、md/LVM 上の
+  ext4/XFS)を fio 各フェーズ、fsync p99/p999、スナップショットエージング、破損リカバリに
+  継続的に流す——GitHub Actions の 2 時間ごと cron + セルフホスト NixOS ハードウェア(最新
+  実行 9 月 20 日、kernel 7.0.0-azure、600 ラン)。サンプル:btrfs raid1 ランダム書き込み
+  2,589 IOPS vs bcachefs replicas2 9,017。ext4/md-raid10 fsync p99 ~37ms vs bcachefs
+  ~3–6ms。見出しは定性的:破損テストで古典 ext4/XFS-on-md/LVM スタックは**「アプリに一切の
+  エラーなしでゴミを返した」**、CoW ファイルシステムは検出して再構築。方法論の注意もページ
+  上に:CI 機は共有 VM 上の 4 つの 16GiB ループデバイスで動く——「絶対スループットは無意味」
+  、比率とトレンドを使え。「失敗時に静かにゴミを返す」はスループット図が捉えないデータ完全
+  性の性質——それが継続測定可能になった。
+- **バイオハザード 4(GameCube)が 100% バイト一致逆コンパイルに到達**(`adonis-singh/re4`、
+  公開数時間、SHA1 検証済みの主張):G4BE08 2004 年 11 月デバッグプロトタイプ、両ディスク
+  ——1,083 オブジェクト(675 DOL + 408 REL)、15,641 関数、約 55.5 万行の C/C++ で**アセンブ
+  リゼロ**、SN Systems ProDG 3.9.3(SN の GPL ソース公開からビルド)+ CRI/任天堂 SDK ミドル
+  ウェア用 CodeWarrior で再構築。CC0-1.0 はビルドツールのみ——ゲームソースは Capcom IP のま
+  ま、「研究と保存」目的で公開。注意:小売版ではなくデバッグプロトタイプであり、バイト一致
+  の主張に独立再現はない——だがこれほど複雑なゲームの完全マッチングビルドと、GPL ソースから
+  再構築されたツールチェーン自体は、逆コンパイルによる保存の波(7 月どうぶつの森、8 月ゴール
+  デンアイ)を一歩進める:ボトルネックはアセンブリ読解ではなくツールチェーン考古学。
+
+Sources: [PyPy v8.0.0](https://pypy.org/posts/2026/09/pypy-v800-release.html) ·
+[HN: PyPy](https://news.ycombinator.com/item?id=49770701) ·
+[modern-fs-benchmark](https://bartosz.fenski.pl/modern-fs-benchmark/) ·
+[fenio/modern-fs-benchmark](https://github.com/fenio/modern-fs-benchmark) ·
+[adonis-singh/re4](https://github.com/adonis-singh/re4) ·
+[HN: RE4](https://news.ycombinator.com/item?id=49778022)
+
+
 - Sources: [flet.dev](https://flet.dev/) ·
   [flet-dev/flet](https://github.com/flet-dev/flet) ·
   [rustfs/rustfs](https://github.com/rustfs/rustfs) ·

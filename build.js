@@ -1037,9 +1037,10 @@ if (tnStart !== -1) {
      canonical en theses as well, catch the damage class without a line-count baseline:
      (1) a line carrying two `- **MM-DD` entry starts = two entries merged (and truncated);
      (2) a `→ [[topic]]` closer line still carrying `）：**` = a displaced entry tail.
-     (Per-thesis status-line *counts* are deliberately not compared en↔mirror: the mirrors still
-     carry pre-compaction text (zh/jp ~2-3× en on theses 1/2/6), a backfill problem, not
-     corruption — tracked on the action-page Agenda.) */
+     (Per-thesis status-line *dates* ARE compared en↔mirror as of 2026-09-21 04:51: the
+     pre-compaction backfill landed (log 2026-09-21), so each thesis's status-line date sequence
+     must now be identical in all three locales — a missed compaction or a drifted entry prints ⚠
+     at build instead of surfacing a month later by manual diff.) */
   const THESIS_SEC = {
     en: { h: /^##\s+Active theses\s*$/, end: /^##\s+Trend notes\s*$/ },
     zh: { h: /^##\s+当前论点\s*$/, end: /^##\s+趋势笔记\s*$/ },
@@ -1056,13 +1057,22 @@ if (tnStart !== -1) {
     for (let i = start + 1; i < lines.length; i++) if (end.test(lines[i])) { stop = i; break; }
     const sec = lines.slice(start, stop);
     const nTheses = sec.filter(l => /^\d+\.\s/.test(l)).length;
+    // per-thesis status-line dates, in order — the en↔mirror parity baseline
+    const thesisDates = [];
+    sec.forEach(l => {
+      if (/^\d+\.\s/.test(l)) thesisDates.push([]);
+      else if (thesisDates.length) {
+        const d = l.match(/^\s*- \*\*(\d{2}-\d{2})/);
+        if (d) thesisDates[thesisDates.length - 1].push(d[1]);
+      }
+    });
     const merged = [];
     const dangling = [];
     sec.forEach((l, i) => {
       if ((l.match(/- \*\*\d{2}-\d{2}/g) || []).length >= 2) merged.push({ ln: i + start + 1, t: l.trim().slice(0, 56) });
       if (/^\s*→\s*\[\[/.test(l) && /）：\*\*/.test(l)) dangling.push({ ln: i + start + 1, t: l.trim().slice(0, 56) });
     });
-    return { nTheses, merged, dangling };
+    return { nTheses, thesisDates, merged, dangling };
   };
   const enTh = scanTheses('en');
   if (enTh) {
@@ -1078,11 +1088,17 @@ if (tnStart !== -1) {
       if (m.merged.length) probs.push(`${m.merged.length} merged entry line(s)`);
       if (m.dangling.length) probs.push(`${m.dangling.length} displaced tail(s)`);
       if (m.nTheses !== enTh.nTheses) probs.push(`${m.nTheses} theses vs en ${enTh.nTheses}`);
+      const dateDiffs = [];
+      m.thesisDates.forEach((dates, i) => {
+        const en = enTh.thesisDates[i] || [];
+        if (dates.join(',') !== en.join(',')) dateDiffs.push(`thesis ${i + 1} (en ${en.length} entries vs ${dates.length})`);
+      });
+      if (dateDiffs.length) probs.push(`status-line dates diverge: ${dateDiffs.join(', ')}`);
       if (probs.length) {
         console.log(`  ⚠ ${loc}/agent.md theses: ${probs.join('; ')} — re-sync from the canonical en theses`);
         [...m.merged, ...m.dangling].slice(0, 5).forEach(x => console.log(`      line ${x.ln}: ${x.t}`));
       } else {
-        console.log(`  ✓ ${loc}/agent.md theses: ${m.nTheses} theses, no merged/displaced entry lines`);
+        console.log(`  ✓ ${loc}/agent.md theses: ${m.nTheses} theses, status-line dates match en, no merged/displaced entry lines`);
       }
     }
   }

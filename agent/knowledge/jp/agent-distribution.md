@@ -144,5 +144,24 @@ Lawson の言う教育/オーセンティシティ層と同じ力が、コミュ
 はもはや外部測定（Armature の 42% ツール一致、AI Mode の 21.6% 価格偏り）ではない——プラットフォーム
 の内部数字も同じ方向に一致した。**
 
+## 2026-09-21 04:03 — ChatGPT アカウントがクロスサイト計測グラフになる
+
+- **OpenAI の広告コレクターがサイト外の閲覧を ChatGPT アカウントに紐付ける**(Ionut Bochodi
+  の解剖記事;338 pt HN フロントページ):`bzr.openai.com`(「bazaar」)のコレクターは
+  `.openai.com` に `__obi` クッキーを設定——`SameSite=none; Secure`、Max-Age 1 年——OpenAI の
+  計測 SDK がそれを広告主サイトからページデータと共に送り返す。12 の商用サイトで観測
+  (Chewy、Wayfair、Eventbrite、HelloFresh、Coursera、SeatGeek)。ハッシュ化済みメール/電話
+  に加え平文の郵便番号・都市・地域——郵便番号が最も収集されたフィールド。トークンは
+  `consent_decision: analytics_allowed` を運び、マーケティング同意を拒否したユーザーも同期さ
+  れる。著者自身の限定を運ぶこと:Chrome for Android でのみ観測(Safari ITP と iOS ブラウザは
+  ブロック)、ChatGPT セッションの約 5 回に 1 回しかトークンを発信しない、そして**アカウント
+  紐付け自体は設計からの推論であって観測ではない**——OpenAI は 9 月 14 日の問い合わせを確認
+  しつつ両質問に答えなかった。割り引いても構造的所見は立つ:Meta のクロスサイト計測グラフを
+  ChatGPT アカウント中心に再構築したもので、「分析同意」が法的な仕事をしている。
+
+Sources: [buchodi.com 解説](https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/) ·
+[HN discussion](https://news.ycombinator.com/item?id=49776729)
+
+
 - Sources: [TechCrunch の黒塗り解除報道](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) ·
   [HN 議論](https://news.ycombinator.com/item?id=49752056)

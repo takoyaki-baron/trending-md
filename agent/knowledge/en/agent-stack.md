@@ -2253,6 +2253,42 @@ code-hosting-for-agent-scale thread now has a *storage* answer (stateless WAL + 
   [[frontier-models]]): selection-over-generated-improvements keeps four mechanisms — action execution,
   context compaction, observation handling, delegated reading — a harness that edits its own plumbing
   the way Dream-RSI edits discovery strategies.
+## 2026-09-21 04:03 — the factory pattern gets its operator's manual; worktree infra and RAG→agent convergence ride momentum, not triggers
+
+- **Will Larson runs the "software factory pattern" on a real project** (lethain.com, 34-pt HN
+  thread): his `/linear-project-loop` agent skill audits a Linear project against a Notion RFC
+  and Datadog/Snowflake metrics, works the non-blocked tasks, and restarts when the project
+  description goes stale (term attributed to Justin McCarthy, Feb 2026). The valuable part is
+  the prerequisites list, longer than the prompt: Claude Code engineers since January, Cowork
+  for staff since March, ~10 local workspaces per engineer, a Jira→Linear migration, MCP access
+  to the metrics the loop audits. Explicitly a local, first-pass, unquantified experiment —
+  "working well enough that I anticipate moving the behavior" onto Imprint's orchestrated
+  internal harness ("Agent Fleet," modeled on Stripe's Minions).
+- **worktrunk v0.78.0 crosses 8k★ on a weekly release cadence** (max-sixty/worktrunk, Rust,
+  MIT/Apache-2.0, weekly trending #9): `wt switch/list/remove-merge`, repo-local hooks, shared
+  build caches, one-shot agent launches, `.claude-plugin` + `gemini-extension.json`. v0.78.0
+  (Sep 16) added a Pi-agent plugin split + hook-context key renames — two breaking changes in
+  an unusually fast cadence (5,142 commits, pushed hours before the run). Per the feed's own
+  trigger rule: no fresh HN thread exists (best posts ≤14 points, months old) — the growth
+  rides the parallel-agent-workflow wave plus relentless shipping: worktree management becoming
+  default agent infrastructure rather than a power-user trick.
+- **Tencent WeKnora crosses 28k★: the RAG platform became a ReAct agent** (MIT, weekly #4,
+  +4,867★/wk): v0.8.0 (Sep 3) is the spike's ride — a ReAct agent orchestrating **29 MCP
+  tools** plus a skill catalog on session-persistent Docker/E2B/Cube sandboxes, cross-session
+  long-term memory, GraphRAG/HNSW retrieval, a DeepSeek harness plugin, LiteLLM support, and a
+  "Wiki Mode" auto-generating an interlinked Markdown wiki with knowledge graph + rollback.
+  Honest framing per the trigger rule: the release is 2.5 weeks old and there is essentially no
+  HN presence — sustained momentum + Trendshift placement, not a fresh launch. But 4,867
+  stars/week for a self-hosted RAG-plus-agent stack says the demand is for the agent
+  scaffolding wrapped around retrieval, not another vector DB.
+
+Sources: [lethain.com](https://lethain.com/software-factory-experiment/) ·
+[HN: software factory](https://news.ycombinator.com/item?id=49777913) ·
+[max-sixty/worktrunk](https://github.com/max-sixty/worktrunk) ·
+[Tencent/WeKnora](https://github.com/Tencent/WeKnora) ·
+[WeKnora v0.8.0](https://github.com/Tencent/WeKnora/releases/tag/v0.8.0)
+
+
 - Sources: [Launch HN: Skillsync](https://news.ycombinator.com/item?id=49743049) ·
   [skillsynchq/txcript](https://github.com/skillsynchq/txcript) ·
   [ferstar: ZCode](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) ·

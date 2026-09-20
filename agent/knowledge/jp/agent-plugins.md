@@ -795,3 +795,19 @@ Cursor、Gemini、OpenCode、Kimi、Qwen のアダプタ、7 言語。HN スレ�
   [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) ·
   [Cowork ローンチポスト](https://claude.com/blog/cowork-is-now-claude) ·
   [multimodal-art-projection/YuE](https://github.com/multimodal-art-projection/YuE)
+
+## 2026-09-21 04:03 — 評価の議論に実務者の声
+
+- **Dan McKinley の "Prompts Aren't Real"**(evaluation.club の講演書き起こし;9 回の投稿失
+  敗/重複の後に 71 pt HN):コンシューマー向けエージェントを信頼できるものにするとは、耐久成
+  果物が pass^k スイート、LLM 審判、敵対的シナリオ生成、GEPA 流プロンプト最適化器、holdout
+  セット、本番モニタリングであることで、プロンプトは「一時的。使い捨て」。スレッドを貫く一
+  言:**「尺度なしでプロンプトを渡すことは一種の AI 精神病である。」** 彼自身の注意書きが誠実
+  な部分——LLM 審判はそれ自体がプロジェクトになり、最適化器はテストセットに過適合しうる(だ
+  から holdout)——そして主張は本番コンシューマーエージェントに限定され、ホビー用途は明示的
+  に免除。エージェントハーネスが業界のデフォルト界面になる中で、「プロンプト職人がスタック
+  で最も耐久性のないスキルである」ことは観測ではなく採用とコードレビューの問題——このトピッ
+  クが追うスキルの「証明させる」段階の需要側のこだま。
+
+Sources: [evaluation.club](https://evaluation.club) ·
+[HN discussion](https://news.ycombinator.com/item?id=49777111)
