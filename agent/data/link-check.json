@@ -715,51 +715,105 @@
     },
     "https://thehackernews.com/2026/09/orkes-conductor-rce-under-active-attack.html": {
       "verdict": "dead",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-09-20T21:51:32.443Z",
-      "last_seen": "2026-09-21T05:04:07.700Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
       "feeds": [
         "2026-09-21.md"
       ]
     },
     "https://news.ycombinator.com/item?id=49768833": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-21T05:04:07.700Z",
-      "last_seen": "2026-09-21T05:04:07.700Z",
-      "feeds": [
-        "2026-09-21.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49777111": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-09-21T05:04:07.700Z",
-      "last_seen": "2026-09-21T05:04:07.700Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
       "feeds": [
         "2026-09-21.md"
       ]
     },
     "https://news.ycombinator.com/item?id=49770701": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-21T05:04:07.700Z",
-      "last_seen": "2026-09-21T05:04:07.700Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
       "feeds": [
         "2026-09-21.md"
       ]
     },
-    "https://news.ycombinator.com/item?id=49775082": {
+    "https://news.ycombinator.com/item?id=49775499": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-21T12:55:21.232Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
+      "feeds": [
+        "2026-09-21.md"
+      ]
+    },
+    "https://huggingface.co/Qwen/Qwen-Image-2.1": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-21T12:55:21.232Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
+      "feeds": [
+        "2026-09-21.md"
+      ]
+    },
+    "https://www.bleepingcomputer.com/news/security/researchers-escape-openai-codex-sandbox-to-run-commands-on-host/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-21T12:55:21.232Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
+      "feeds": [
+        "2026-09-21.md"
+      ]
+    },
+    "https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-21T12:55:21.232Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
+      "feeds": [
+        "2026-09-21.md"
+      ]
+    },
+    "https://pirateface.co/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-21T12:55:21.232Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
+      "feeds": [
+        "2026-09-21.md"
+      ]
+    },
+    "https://accomplish.ai/blog/escaping-the-openai-codex-sandbox-twice/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-09-21T12:55:21.232Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
+      "feeds": [
+        "2026-09-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49777913": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-09-21T05:04:07.700Z",
-      "last_seen": "2026-09-21T05:04:07.700Z",
+      "first_seen": "2026-09-21T12:55:21.232Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
+      "feeds": [
+        "2026-09-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49780064": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-21T12:55:21.232Z",
+      "last_seen": "2026-09-21T12:55:21.232Z",
       "feeds": [
         "2026-09-21.md"
       ]
     }
   },
-  "runs": 27,
+  "runs": 28,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-21T05:04:07.700Z"
+  "last_run": "2026-09-21T12:55:21.232Z"
 }

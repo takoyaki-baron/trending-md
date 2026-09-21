@@ -1,6 +1,22 @@
 {
  "watch": [
   {
+   "repo": "wfzyx/von",
+   "why": "System-1 clone race (thesis 6 / [[system1-decision]]): the 09-21 12:49 citation-integrity catch — README headline 71.5% v2 macro vs the cited jabr suite's own 66.7, a 91.23% 'SOTA' headline contradicting its own table, T=1.0367-vs-1.1692, and a ViZDoom row (9.38 kills) absent from the cited morethanamachine post. Any push is a chance the README-vs-suite gap got repaired; verify the numbers, not just the diff"
+  },
+  {
+   "repo": "jabr/classifier-benchmark",
+   "why": "System-1 same-harness suite (thesis 6 / [[system1-decision]]): the independent 4-model run that dominates the class comparison; its own file says v2 is 'preliminary — shared with the Von project for review before being promoted to the headline comparison in the README'. Watch for a second maintainer, non-synthetic cases, or v2 promotion out of preliminary"
+  },
+  {
+   "repo": "0xNatoshi/jev-codex-router",
+   "why": "System-1 routing primitive (thesis 6 / [[system1-decision]]): the first real harness adoption — Jev picks model+thinking-effort per Codex turn (15 pairs, one Choice question, fail-open, kill switch, local decision log); its −60% backtest is self-disclaimed simulation. A release or routing-policy change = the primitive hardening; also the thesis-11 tool-call-boundary question in miniature (a model judging every call)"
+  },
+  {
+   "repo": "NeOMakinG/kev-model-router",
+   "why": "System-1 routing primitive, open-weight side (thesis 6 / [[system1-decision]]): model routing powered by Kev (the open replica) — if the router role replicates on open weights, the control point ([[smart-routing]] lock-in thesis) is not proprietary"
+  },
+  {
    "repo": "vllm-project/semantic-router",
    "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): the fragmenting-DSL reading predicts daily main-hardening with zero tagged releases past v0.3.0 Themis and no shared schema; a new tag means the reading needs a re-check"
   },

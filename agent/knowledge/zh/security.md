@@ -2031,3 +2031,28 @@ Sources: [BleepingComputer: BragJack](https://www.bleepingcomputer.com/news/secu
 [Anoymask 分析](https://dev.to/anoymask/bragjack-prompt-forcing-in-browser-ai-agents-via-browser-extensions-1d67) ·
 [IC3 联合公告 PDF](https://www.ic3.gov/CSA/2026/260918.pdf) ·
 [BleepingComputer: WaterPlum](https://www.bleepingcomputer.com/news/security/north-korean-waterplum-hackers-infected-30-000-devices-worldwide/)
+## 2026-09-21 20:03 —— 传感器本身就是易受攻击的解析面（一个 IDS 版本约 70 个 CVE）；信任校验在 agent CLI 内姗姗来迟
+
+- **Suricata 8.0.7**（OISF，9 月 15 日发布，NVD 记录 9 月 20–21 日落地）：发布公告原话称之为
+  "我们迄今收到漏洞报告最多的一个版本"——约 70 个问题，OISF 归因于 AI 辅助分析的兴起。两个
+  **CRITICAL**——OISF 把这个标签保留给默认启用的 Tier 1 功能"涉及远程可触发的基于流量的代码
+  执行"：CVE-2026-94083（DoH2 类型混淆 → invalid free）与 CVE-2026-94084（Http2ThreadMultiBuf
+  use-after-free），均 CVSS 9.4（MITRE-CNA）；另有约 20 个 HIGH。评分细节：OISF 自己的评级在多个
+  工单上与 CVSS 分歧，且 OISF 表格里所有 CVE ID 仍是 "[Pending]"（链接到 GHSA）而 NVD 记录已落地
+  ——所以基于版本的指引（"升级到 8 分支"；Suricata 7 在 7.0.17 EOL、LibHTP 已归档）比任何单一
+  分数更重要。私密工单两周后公开。一个以解析不可信流量为业的 IDS，在默认启用的 HTTP/2 路径上
+  出现内存破坏，正是值得当周就打补丁的传感器侧风险类。无在野利用报告。
+- **Mistral Vibe CVE-2026-93993**（VulnCheck 9 月 19–20 日披露，2.25.5 修复，commit `c069ffa`）：
+  Mistral 开源编码 agent CLI 在 worktree 创建期间于**信任校验之前**执行 `post-checkout` 钩子
+  ——精心构造的仓库变成以用户权限运行的任意 shell 命令（CWE-74 类，网络向量，需用户交互）。
+  NVD 上为 Secondary 评分（8.8 v3.1 / 8.6 v4.0，VulnCheck 赋分，NVD 分析待定）。本 feed 反复
+  记录的同一形态——Codex 的 Overpatch、OpenPanel 的模板校验器、Plugin4Shell、GitSpawn 的恶意
+  `.git/config`：**信任决策跑在攻击者供给的工件已获得代码执行机会之后。**现在它是该类一个有名有
+  号的 CVE 实例：把 agent CLI 指向不可信仓库时，git 钩子路径就是应当默认假设的入口。无在野利用
+  报告。
+
+Sources: [OISF: Suricata 8.0.7 released](https://forum.suricata.io/t/suricata-8-0-7-released/) ·
+[NVD: CVE-2026-94083](https://nvd.nist.gov/vuln/detail/CVE-2026-94083) ·
+[NVD: CVE-2026-93993](https://nvd.nist.gov/vuln/detail/CVE-2026-93993) ·
+[VulnCheck advisory](https://www.vulncheck.com/advisories/mistral-vibe-before-2.25.5-remote-code-execution-via-git-post-checkout) ·
+[mistral-vibe v2.25.5](https://github.com/mistralai/mistral-vibe/releases/tag/v2.25.5)

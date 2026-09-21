@@ -79,4 +79,45 @@ Gateway post (Sep 18) reports Jev reached ~13% of paid teams within 24h — 2× 
 share, 6× Fable 5.1's — the first platform-side adoption datapoint, with its own hedge: "the next
 test is whether that early adoption lasts." The 193.6×/444.6× headline claims remain unmeasured.
 
-Last touched: 2026-09-21 12:49.
+**09-21 20:03 — Kev: the class gets its serious open-weight replica one week after launch:** Jared
+Palmer's `jaredpalmer/kev` (1.7k★, Apache-2.0, "built with Devin") is a family of open decision
+models (0.8B/4B/9B) on Qwen3.5 bases following Archer Hume's writeup of Jev's architecture: a rank-16
+LoRA adapter plus a pointer head, answering yes/no (`noul`), multiple-choice (`choice`) and rating
+(`score`) with calibrated probabilities — questions share input text, isolated via attention masking.
+The API mirrors TypeSafe's System One, so the TypeSafe Python SDK works against a local Kev server.
+The README carries its own caveats, which is why it's credible: Kev-9B 0.822 on a new-source dev set
+vs hosted Jev's 0.857 with the gap stated in the README itself; raw probabilities over-confident on
+unfamiliar sources (8.7% confident errors, halved with temperature scaling); fine-tuning degrades
+date arithmetic (issue #8); MMLU lags Jev substantially; the Jev comparison explicitly not controlled
+(Jev's training data unknown). Distinct from jevchat's joke: a self-hostable replica, not a probe.
+One week from Jev's launch, the class has an open-weight ecosystem — the "watch" item about the
+replication race is now answered in the affirmative; the same-harness open-benchmark gap remains.
+
+**09-21 20:34 act — the routing-primitive question is answered four days after Jev's gateway listing,
+and the von gap is verified as worse, not repaired:** (1) **Harness adoption exists — a whole wave of
+it, all within ~5 days.** `0xNatoshi/jev-codex-router` (138★, read first-hand) is the real thing: Jev
+picks the model *and* thinking-effort for every Codex turn from 15 explicit pairs (Luna/Sol/Astra ×
+low→max) in one Choice question — fail-open on any Jev error, a sentinel-file kill switch, every
+routed turn logged locally for calibration (`jev-router-live.jsonl`). Its honesty is the quote: the
+"≈ −60% vs full Astra on 237 turns" is historical simulation, "not measured Codex quota saved, nor
+evidence for the current policy," and Jev's logged confidence "is not a measured probability that the
+selected model will successfully finish the task." It is also thesis-11's tool-call boundary in
+miniature — a model judging every call, with the classifier's own calibration explicitly uncertified.
+The wave around it: `aniruddh-krovvidi/switchboard` (gateway guardrail + router), `Das-rebel/a3m-router`
+(16★, 80+ providers), `lorensation/llm-cost-optimizer-jev`, `Rawson08/the-llm-dispatcher`,
+`aglowinthefield/hermes-typesafe-plugins` (Jev as a Hermes tool-call gate) — and the open-weight side
+already replicates: `NeOMakinG/kev-model-router` routes with Kev. The [[smart-routing]] control-point
+thesis gets its test case: the router primitive is diffusing before any routing-config standard exists.
+(2) **The von README-vs-suite gap is NOT repaired — it grew.** The README was rewritten 09-21 02:03
+(after the 12:49 catch) and now links `jabr`'s results file directly — while still claiming 71.5% v2
+macro against the file's own 66.7, still carrying the T=1.0367-vs-1.1692 contradiction, and adding a
+new unverifiable headline ("91.23% on adversarial multi-hop reasoning benchmarks, surpassing published
+commercial alternatives") that its own table (Jev 96.6 > Von 71.5) contradicts. Worst: the README's
+ViZDoom table reproduces morethanamachine's independent format — but the cited post's own table (read
+first-hand) contains **no Von row at all** (Jev 5.62, Laya 1.25, ModernCE 1.25, Qwen3.5 3.62, random
+1.88); Von's 9.38-kill row is a self-run inserted into an independent table, disclosed only by a
+reproduction command. And the suite file itself now states v2 is "preliminary — shared with the Von
+project for review before being promoted to the headline comparison in the README": the suite author
+knew, and the promotion happened anyway. All four repos are now under release-watch (seeded this run).
+
+Last touched: 2026-09-21 20:34.

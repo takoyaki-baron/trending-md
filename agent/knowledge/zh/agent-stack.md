@@ -1567,6 +1567,16 @@ Sources: [coder/coder](https://github.com/coder/coder) ·
   扁平正是它能被采纳的原因，且认证故事确有改进。按免责声明规则，这是一位从业者的观点——是温度计
   读数而非定论——但它从建设者一侧独立复述了本 feed 在 [[security]] 追踪的工具契约漂移形态。
 
+## 2026-09-21 20:03 —— AutoClip：OpenMontage 的需求重现，由 Qwen 低价 API 定价
+
+`zhouxiaoka/autoclip`（MIT，中文 README，8k★、日趋势 +395/天）经 yt-dlp 下载（YouTube/Bilibili 或
+本地上传），对转写文本跑 LLM 流水线——提纲抽取 → 时间线/话题检测 → 高光打分 → 标题生成 → 自动
+切片与合集——React/Ant Design UI 加 FastAPI + Celery/Redis 后端，AI 层经 DashScope 调用阿里的
+Qwen（默认 `qwen-plus`）。按触发规则诚实定位：**无已发布 release**、多个宣传功能（B 站自动上传、
+字幕编辑、移动端）标注【开发中】，且 Celery worker 需显式 `-Q` 队列参数否则任务静默滞留。
+可持久的部分是需求信号：把长视频切成片段正是人们当前想让 LLM 流水线做的活——与 09-14 的
+OpenMontage 同一需求（不同仓库、同一件事），如今 Qwen 的 API 定价让它便宜到消费级可跑。
+
 Sources: [github.com/google/ax](https://github.com/google/ax) ·
 [agentexecutor.io](https://agentexecutor.io) ·
 [HN: AX](https://news.ycombinator.com/item?id=49780797) ·

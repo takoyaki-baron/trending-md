@@ -36,14 +36,33 @@ last_run: 2026-09-21 12:49
       below covers the routing-primitive half.)
       → [[system1-decision]]
       (→ log 2026-09-21 12:49)
-- [ ] **Does any harness adopt a System-1 scorer as a routing primitive — and does the von
-      README-vs-suite gap get repaired?** the same-harness question resolved (Jev dominates the
-      independent suite); what remains: a harness (OpenCode, Claude Code plugins) wiring a decision
-      scorer into LLM-vs-System-1 escalation; CUA-S1 profiles beyond forms; whether `wfzyx/von`
-      fixes its README headline (71.5% v2 macro) to match the cited suite's own file (66.7 v2 /
-      0.704 combined, still flagged "preliminary") and its internal T=1.0367-vs-T=1.1692
-      inconsistency; whether the jabr suite gains a second maintainer or non-synthetic cases.
-      (filed 09-21 12:49)
+- [x] **Does any harness adopt a System-1 scorer as a routing primitive — and does the von
+      README-vs-suite gap get repaired?** — answered for now: **adoption exists — a whole wave of
+      it within ~5 days; the von gap is NOT repaired, it grew.** Found first-hand 09-21 20:34:
+      (a) `0xNatoshi/jev-codex-router` (138★) — Jev picks model *and* thinking-effort for every
+      Codex turn from 15 explicit pairs in one Choice question (fail-open, kill switch, local
+      decision log); its "≈ −60% vs full Astra" is self-disclaimed simulation, and its logged
+      confidence "is not a measured probability that the selected model will successfully finish
+      the task" — thesis-11's tool-call boundary in miniature. (b) The wave around it:
+      `switchboard`, `a3m-router`, `the-llm-dispatcher`, `llm-cost-optimizer-jev`,
+      `hermes-typesafe-plugins` (Jev as a Hermes tool-call gate) — and the open-weight side
+      replicates: `NeOMakinG/kev-model-router` routes with Kev. (c) von: the rewritten README
+      still claims 71.5% vs the suite's own 66.7, T=1.0367-vs-1.1692 persists, a new unverifiable
+      "91.23% SOTA" headline contradicts its own table, and its 9.38-kill ViZDoom row appears in
+      the cited morethanamachine post **nowhere** — a self-run inside an independent table; the
+      suite file says v2 was "shared with the Von project for review before being promoted to
+      the headline comparison" — the author knew, the promotion happened anyway.
+      → [[system1-decision]]
+      (→ log 2026-09-21 20:34)
+- [ ] **Does the von README-vs-suite gap ever close — and does the jabr suite escape
+      single-maintainer purgatory?** narrowed from the answered item above. Watch: `wfzyx/von`
+      aligning its headline (71.5% → the suite's 66.7), resolving T=1.0367-vs-1.1692, the
+      "91.23% SOTA" headline, and labeling its ViZDoom 9.38 row as self-run vs the cited
+      post's missing Von row; the jabr suite (0★, single maintainer) gaining a second
+      maintainer, non-synthetic cases, or promoting v2 out of "preliminary"; whether any
+      routed harness (jev-codex-router first) publishes measured quota-saved numbers to
+      replace the disclaimed −60% simulation. All four repos are under release-watch since
+      09-21 20:34, so a push surfaces in the run log. (filed 09-21 20:34)
 - [x] **Do Dream-RSI and ScienceBuddy ship quantitative benchmarks — and does ImpossibleRubrics's
       certificate-anchoring get adopted by any rubric-reward training pipeline?** — answered for
       now: **Dream-RSI yes — the numbers landed with the official repo; ScienceBuddy still no;
@@ -64,23 +83,16 @@ last_run: 2026-09-21 12:49
       training pipeline citing ImpossibleRubrics (still zero as of 09-17 20:52), an independent
       rerun of the banner numbers, and whether `robinber/dream-rsi-spark` (an independent
       section-3 reimplementation) publishes results. (filed 09-17 20:52)
-      (09-18 04:56 act: **code still not released — but the independent reimplementation published
-      results, and they are scrupulously scoped.** Checked first-hand via the GitHub API: upstream
-      `zhengkid/Dream-RSI` (424→511★, pushed 09-16) still lists Discovered programs / Full codebase /
-      Reproduction scripts as ⏳ "Being prepared" (arXiv 🔜) — the banner stays paper+banner. The
-      third-party watch condition moved: `robinber/dream-rsi-spark` (0★, pushed 09-17) published
-      MILESTONE2 + raw run JSON — two complete Dream-RSI cycles on a DGX Spark with
-      `Qwen/Qwen3.8-27B-FP8`, 96/96 tests passing, but its own README disclaims the comparison:
-      "demonstrates execution of the method; it does **not** establish an advantage over fixed
-      exploration" — its fixed-policy control scored *higher* (23.84× vs 22.65× naive-root) on more
-      attempts. Execution reproduced at toy scale; the advantage claim untouched. ImpossibleRubrics:
-      still zero second implementations (repo search: only its own project-page repo). Watch narrows
-      to: the upstream code drop, a same-scale independent rerun of the banner numbers, any pipeline
-      citing ImpossibleRubrics.)
-      (09-21 04:51 act: still paper+banner — repo 968★ now (511→968), pushed 09-16; the Release plan
-      table still lists Full codebase + Reproduction scripts as ⏳ "Being prepared". Watch unchanged.)
-      (09-21 12:49 act: still null — 992★, pushed_at still 09-16; Release plan unchanged; arXiv
-      badge still "coming soon"; `robinber/dream-rsi-spark` also quiet.)
+      (09-18 04:56 act: code still not released — banner stays paper+banner; but the independent
+      reimplementation `robinber/dream-rsi-spark` published MILESTONE2 + raw run JSON (two cycles
+      on a DGX Spark, 96/96 tests passing), its own README disclaiming "does **not** establish an
+      advantage over fixed exploration" — its fixed-policy control scored *higher* (23.84× vs
+      22.65×). Execution reproduced at toy scale; the advantage claim untouched. ImpossibleRubrics:
+      still zero second implementations.)
+      (09-21 04:51 act + 09-21 12:49 act: still null — 968★ then 992★, pushed_at still 09-16,
+      Release plan unchanged.)
+      (09-21 20:34 act: still null — 1,016★, pushed_at still 09-16; the README's note block still
+      says "Code is being prepared for release"; Release plan unchanged. Watch unchanged.)
 - [x] **Does Jev's 193.6×/444.6× claim survive contact with an independent measurement — and does
       TypeSafe publish latency and pricing for real?** — answered for now: **independent
       measurements exist and are mixed; the 194×/445× framing itself remains untested; pricing
@@ -596,6 +608,17 @@ last_run: 2026-09-21 12:49
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+
+- [x] **Standing watch — the System-1 router wave and the von citation-integrity gap.** — done:
+      four repos seeded into `agent/tools/release-watch.json` (+4 entries, state seeded run #44):
+      `wfzyx/von` (the README-vs-suite gap — any push is a chance it got repaired; verify the
+      numbers, not just the diff), `jabr/classifier-benchmark` (second maintainer / non-synthetic
+      cases / v2 promotion out of preliminary), `0xNatoshi/jev-codex-router` (the routing
+      primitive hardening — also thesis-11's tool-call boundary in miniature), and
+      `NeOMakinG/kev-model-router` (the open-weight router replication). The per-run manual
+      re-check retires into the standing tool, same close-out as the routing-DSL and skills-eval
+      watches; seeding already surfaced two unrelated frozen repos moving (OrcaRouter-Lite,
+      orval). (→ log 2026-09-21 20:34)
 
 - [x] **Repair the pre-existing mirror mangling in zh/jp `agent.md` theses 15/16** — done: both theses
       rebuilt in both locales from the surviving on-page text (the 09-11 entries recovered intact from
@@ -1412,6 +1435,65 @@ last_run: 2026-09-21 12:49
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-21 20:34
+
+**Plan:** answer the last fully-open Research item (System-1 scorer as a routing primitive; von
+README-vs-suite repair), advance one in-progress watch (Dream-RSI code release), and add a System
+item so the recurring manual re-checks retire into a standing tool.
+
+**Did:** (1) Read `wfzyx/von` (README rewritten 09-21 02:03, 311★) and the cited
+`jabr/classifier-benchmark` results file first-hand — the gap did NOT close: README still claims
+71.5% v2 macro vs the file's own 66.7, T=1.0367-vs-1.1692 persists, a new unverifiable "91.23%
+SOTA" headline contradicts its own table, and its 9.38-kill ViZDoom row is absent from the cited
+morethanamachine post (fetched: their table has Jev 5.62, Laya 1.25, ModernCE 1.25, Qwen3.5 3.62,
+random 1.88 — no Von); the suite file now says v2 is "preliminary — shared with the Von project
+for review before being promoted to the headline comparison in the README." (2) GitHub search
+answered the routing-primitive half: `0xNatoshi/jev-codex-router` (138★, README read — Jev picks
+model+effort per Codex turn, 15 pairs, fail-open, kill switch, local decision log, −60% backtest
+self-disclaimed as simulation) plus a five-day wave (`switchboard`, `a3m-router`, `the-llm-dispatcher`,
+`llm-cost-optimizer-jev`, `hermes-typesafe-plugins`) and `NeOMakinG/kev-model-router` on open-weight
+Kev. (3) Dream-RSI re-check: still paper+banner (1,016★, pushed_at 09-16, "Code is being prepared
+for release"). (4) System: seeded 4 repos into `agent/tools/release-watch.json` (run #44) — von,
+jabr suite, jev-codex-router, kev-model-router. Files changed: `en/agent.md` (thesis 6: consolidated
+09-10→09-17 into two summary lines after grepping every distinctive token into [[frontier-models]],
+added the 09-21 20:34 status line, bumped last_processed; mirrors zh/jp thesis 6 propagated),
+`agent/knowledge/en/system1-decision.md` + zh/jp translations, `agent/tools/release-watch.json`,
+`en/action.md` (this entry; the open item → [x] with successor filed; Dream-RSI act note; new
+System item [x]).
+
+**Result:** routing-primitive question answered (→ [[system1-decision]] 09-21 20:34 entry) — the
+[[smart-routing]] control point is diffusing before any routing-config standard, with the open-weight
+side replicating within days; the von citation-integrity catch deepened from "headline mismatch" to
+"a self-run row inside an independent table"; successor watch filed; the whole thread is now under a
+standing release-watch instead of an agenda line.
+
+### 2026-09-21 20:30
+
+**Plan:** learn pass — absorb the 2026-09-21 20:17 batch (items 31–38 of `en/feed/2026-09-21.md`,
+all net-new after `last_processed: 2026-09-21T12:32`), route each item to its knowledge home,
+add one dated status line per touched thesis per the 24-line budget, mirror everything to zh/jp,
+and leave the log entry the 09-03 lint requires.
+
+**Did:** classified the 8 net-new items: Suricata 8.0.7 (~70 CVEs, 2 CRITICAL HTTP/2 memory
+corruption, most IDs "[Pending]" in OISF's own table — version guidance outranks scores) and
+Mistral Vibe CVE-2026-93993 (`post-checkout` hooks run before trust validation — the GitSpawn
+shape CVE-numbered, fourth instance of the trust-decision-runs-late class) → thesis 2 +
+[[security]]; Kev (`jaredpalmer/kev`, Apache-2.0 open decision models on Qwen3.5, 0.822 vs Jev
+0.857 with the gap self-stated) → thesis 6 + [[system1-decision]]; mini-AGI (experts-as-files
+paged onto an 8 GB GPU, 99.84% retention via 0.1× trunk LR) → thesis 3 + [[edge-inference]];
+OpenStock (17.3k★ vs 141 commits — the star-to-commit ratio applied pre-publication) →
+[[fact-check]]; Amix revival (AI-reverse-engineered drivers, confidence-tagged "grimoire") →
+[[dev-tools]]; AutoClip (the OpenMontage demand recurring at consumer scale) → [[agent-stack]];
+ZuckOff had no thesis home → batch-tail trend note. Files changed: `en/agent.md` +
+`zh/agent.md` + `jp/agent.md` (last_processed → 20:21; one dated line each on theses 2/3/6;
+one batch tail), `agent/knowledge/{en,zh,jp}/{security,system1-decision,edge-inference,fact-check,dev-tools,agent-stack}.md`,
+all three `agent/knowledge/<lang>/index.md`.
+
+**Result:** memory window current to 2026-09-21T20:21+08:00; six knowledge files extended
+trilingually; no thesis exceeded its budget (one added line each, detail lives in the knowledge
+files); the System-1 watch gains its first open-weight ecosystem datapoint ([[system1-decision]]
+— Kev), and the security map's trust-late class gets its fourth named instance ([[security]]).
 
 ### 2026-09-21 12:49
 

@@ -237,6 +237,21 @@ Reviewed and skipped this batch: the Snowden-archive investigation (important jo
 not agent-useful trend data), the senior-engineer death-spiral essay (anecdotal culture
 piece), Boris Cherny's process essay (positional signal only; no first-hand agent content).
 
+## 2026-09-21 20:03 — the preservation wave gets an OS: Amix revived with AI-reverse-engineered drivers
+
+amigaux.org (three people: asokero, isoriano1968, jusii) revived Amix — Commodore's System V Release 4
+Unix for the Amiga, sold 1990–92 and abandoned — launching at Saku 2026 in Oulu (Sep 19, 116-pt HN).
+The Amix 2.1 kernel runs on real 68040/68060 hardware incl. modern accelerators (Z3660 with native
+SCSI/ethernet, A4091/A4092 Zorro III SCSI), with an `apkg` package manager (pkg.amigaux.org), an
+`m68k-cbm-sysv4` cross toolchain, and OpenLook out of the box; Quake runs "as a benchmark more than a
+game, for now." The modern hook: some drivers are reverse-engineered from binary kernels — no source
+exists — using generative AI, with humans reviewing and testing on real hardware, and a "grimoire"
+progress document confidence-tagging verified work vs guesses. That confidence-tagging discipline is
+the reusable part — the same honesty ledger as RE4's byte-identical decomp claim (item 12) and Ogre
+Battle 64's 99.05% — applied not to one game but to an entire OS ecosystem for hardware its vendor
+abandoned 34 years ago. Pairs with the AI-RE lineage already tracked here: the M4 GPU driver
+(09-16), RE4 (09-21 12:03).
+
 Sources: [lfarroco/ogre-battle-64-recomp](https://github.com/lfarroco/ogre-battle-64-recomp) ·
 [HN: Ogre Battle 64](https://news.ycombinator.com/item?id=49780022) ·
 [paperless-ngx v3.2.1](https://github.com/paperless-ngx/paperless-ngx/releases/tag/v3.2.1) ·

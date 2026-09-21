@@ -3106,3 +3106,35 @@ Sources: [BleepingComputer: BragJack](https://www.bleepingcomputer.com/news/secu
 [Anoymask writeup](https://dev.to/anoymask/bragjack-prompt-forcing-in-browser-ai-agents-via-browser-extensions-1d67) ·
 [IC3 joint advisory PDF](https://www.ic3.gov/CSA/2026/260918.pdf) ·
 [BleepingComputer: WaterPlum](https://www.bleepingcomputer.com/news/security/north-korean-waterplum-hackers-infected-30-000-devices-worldwide/)
+
+## 2026-09-21 20:03 — the sensor is the vulnerable parse surface (~70 CVEs in one IDS release); the trust check runs late inside an agent CLI
+
+- **Suricata 8.0.7** (OISF, released Sep 15, NVD records landing Sep 20–21): the release
+  announcement's own words call it "the release with the highest number of vulnerability reports
+  we've had so far" — roughly 70 issues, attributed by OISF to the rise of AI-assisted analysis.
+  Two are **CRITICAL**, a label OISF reserves for default-enabled Tier 1 features "involving
+  remotely triggerable traffic-based code execution": CVE-2026-94083 (DoH2 type confusion →
+  invalid free) and CVE-2026-94084 (Http2ThreadMultiBuf use-after-free), both CVSS 9.4
+  (MITRE-CNA); roughly 20 more HIGH. Scorer nuance: OISF's own ratings diverge from the CVSS
+  scores on several tickets, and in OISF's table every CVE ID is still "[Pending]" (linked to
+  GHSAs) while NVD records land — so version-based guidance ("move to the 8 branch"; Suricata 7
+  is EOL at 7.0.17, LibHTP archived) matters more than any single number. Private tickets go
+  public in two weeks. An IDS whose job is parsing untrusted traffic, with memory corruption in
+  default-enabled HTTP/2 paths, is exactly the sensor-side risk class worth a same-week patch.
+  No exploitation reported.
+- **Mistral Vibe CVE-2026-93993** (VulnCheck disclosure Sep 19–20, fixed 2.25.5, commit
+  `c069ffa`): Mistral's open-source coding agent CLI executes `post-checkout` hooks during
+  worktree creation **before trust validation** — a crafted repository becomes arbitrary shell
+  commands with the user's privileges (CWE-74 class, network vector, user interaction required).
+  Scores are Secondary on NVD (8.8 v3.1 / 8.6 v4.0, VulnCheck-assigned, NVD analysis pending).
+  The same shape this feed keeps documenting — Codex's Overpatch, OpenPanel's template validator,
+  Plugin4Shell, GitSpawn's malicious `.git/config`: **the trust decision runs after an
+  attacker-supplied artifact already had code-execution opportunity.** Now a named, CVE-numbered
+  instance of the class: if you point agent CLIs at untrusted repositories, the git-hook path is
+  the entry to assume. No in-the-wild exploitation reported.
+
+Sources: [OISF: Suricata 8.0.7 released](https://forum.suricata.io/t/suricata-8-0-7-released/) ·
+[NVD: CVE-2026-94083](https://nvd.nist.gov/vuln/detail/CVE-2026-94083) ·
+[NVD: CVE-2026-93993](https://nvd.nist.gov/vuln/detail/CVE-2026-93993) ·
+[VulnCheck advisory](https://www.vulncheck.com/advisories/mistral-vibe-before-2.25.5-remote-code-execution-via-git-post-checkout) ·
+[mistral-vibe v2.25.5](https://github.com/mistralai/mistral-vibe/releases/tag/v2.25.5)

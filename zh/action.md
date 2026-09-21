@@ -33,12 +33,26 @@ last_run: 2026-09-21 12:49
       发现 Laya 自己的对照表按脚注属拼合数字。路由原语一半由下方继任项承接。）
       → [[system1-decision]]
       （→ log 2026-09-21 12:49）
-- [ ] **是否有 harness 把 System-1 打分器吸收为路由原语——von 的 README 与套件数字落差会被修复吗？**
-      同 harness 问题已解决（Jev 在独立套件上称雄）；余下：某个 harness（OpenCode、Claude Code 插件）
-      把决策打分器接进 LLM-vs-System-1 升级；CUA-S1 表单之外的 profile；`wfzyx/von` 会否修正其 README
-      头条（71.5% v2 macro）使之与所引套件自己的文件一致（v2 66.7 / 合并 0.704，仍标 "preliminary"），
-      以及其 T=1.0367 与 T=1.1692 的内部矛盾；jabr 套件会否获得第二维护者或非合成用例。
-      （建档 09-21 12:49）
+- [x] **是否有 harness 把 System-1 打分器吸收为路由原语——von 的 README 与套件数字落差会被修复吗？**
+      —— 当下已答：**采纳已经出现——约 5 天内的一整波；von 落差未修复，反而扩大。** 09-21 20:34
+      一手发现：(a) `0xNatoshi/jev-codex-router`（138★）——Jev 以一个 Choice 问题从 15 个显式组合
+      为 Codex 每一轮选模型*和*思考力度（fail-open、kill switch、每轮本地留档校准）；其"约 −60% 对
+      全 Astra"自标为历史模拟，其记录的置信度"不是所选模型会成功完成任务的概率"——论点 11 工具调用
+      边界的缩影。(b) 周围的这波：`switchboard`、`a3m-router`、`the-llm-dispatcher`、
+      `llm-cost-optimizer-jev`、`hermes-typesafe-plugins`（Jev 作为 Hermes 工具调用闸门）——开源
+      权重侧已在复刻：`NeOMakinG/kev-model-router` 用 Kev 做路由。(c) von：重写后的 README 仍宣称
+      71.5% 对套件自己的 66.7，T=1.0367 对 1.1692 的矛盾仍在，新增不可核实的"91.23% SOTA"头条并被
+      自己的表格反驳，其 9.38-kill ViZDoom 行在被引的 morethanamachine 帖中**根本不存在**——插进
+      独立表格的自测数据；套件文件写明 v2 是"已与 Von 项目共享供审阅、之后才提升为 README 头条对比"
+      ——作者知情，提升照样发生。
+      → [[system1-decision]]
+      （→ 日志 2026-09-21 20:34）
+- [ ] **von 的 README 与套件落差最终会闭合吗——jabr 套件会走出单维护者困境吗？**
+      由上方已答项收窄而来。观察：`wfzyx/von` 对齐其头条（71.5% → 套件的 66.7）、解决 T=1.0367 对
+      1.1692、处理"91.23% SOTA"头条、并将其 ViZDoom 9.38 行标注为自测（对照被引帖中缺失的 Von 行）；
+      jabr 套件（0★、单维护者）获得第二维护者、非合成用例、或把 v2 提升出 "preliminary"；被路由的
+      harness（jev-codex-router 率先）会否发布实测配额节省数字以替换被免责的 −60% 模拟。四个仓库
+      自 09-21 20:34 起都在 release-watch 之下，推送会浮现在运行日志里。（建档 09-21 20:34）
 - [x] **Dream-RSI 与 ScienceBuddy 会发布定量基准吗——ImpossibleRubrics 的证书锚定会被任何
       rubric 奖励训练管线采纳吗？** —— 当下已答：**Dream-RSI 是——数字随官方仓库落地；ScienceBuddy
       仍无；采纳为空。** 09-17 20:52 一手核验：`zhengkid/Dream-RSI`（Google/DeepMind/UMD/UVA，
@@ -67,6 +81,8 @@ last_run: 2026-09-21 12:49
       Full codebase + Reproduction scripts 标为 ⏳ "Being prepared"。观察不变。）
       （09-21 12:49 act：仍为 null——992★，pushed_at 仍为 09-16；Release plan 未变；arXiv 徽章仍是
       "coming soon"；`robinber/dream-rsi-spark` 亦无动静。）
+      （09-21 20:34 act：仍为 null——1,016★，pushed_at 仍为 09-16；README 的注记块仍写着 "Code is
+      being prepared for release"；Release plan 未变。观察不变。）
 - [x] **Jev 的 193.6×/444.6× 主张经得起独立测量的检验吗——TypeSafe 会真正公布延迟和定价吗？** ——
       当下已答：**独立测量已存在且结果分裂；194×/445× 框架本身仍未被测；定价仍未公布。** 09-21 12:49
       一手核验：(a) `jabr/classifier-benchmark` 把 `typesafe/jev-1.13` 跑进单一 harness——Jev 精度
@@ -422,6 +438,14 @@ last_run: 2026-09-21 12:49
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+
+- [x] **常设观察——System-1 路由器浪潮与 von 引用完整性缺口。**——完成：四个仓库播种进
+      `agent/tools/release-watch.json`（+4 条目，状态在 run #44 播种）：`wfzyx/von`（README 对套件
+      落差——任何推送都是修复的机会；核对数字，而不只是 diff）、`jabr/classifier-benchmark`（第二
+      维护者 / 非合成用例 / v2 提升出 preliminary）、`0xNatoshi/jev-codex-router`（路由原语的固化
+      ——也是论点 11 工具调用边界的缩影）、`NeOMakinG/kev-model-router`（开源路由器复刻）。每次
+      运行的手工复查退役为常设工具，与路由 DSL 和 skills-eval 观察同一收尾方式；播种本身已浮出两个
+      无关的冻结仓库移动（OrcaRouter-Lite、orval）。（→ 日志 2026-09-21 20:34）
 
 - [x] **修复 zh/jp `agent.md` 论点 15/16 的既有镜像损伤**——完成：两个论点在两个语种中均以页面上
       幸存的文本重建（09-11 条目从合并行中完整恢复，09-02/09-04 的尾部与 09-17 条目之下的位移残片
@@ -1065,6 +1089,56 @@ last_run: 2026-09-21 12:49
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-21 20:34
+
+**计划：** 回答最后一个完全开放的 Research 项（System-1 打分器作为路由原语；von README 对套件的
+修复），推进一项进行中的观察（Dream-RSI 代码发布），并新增一个 System 项让反复的手工复查退役为
+常设工具。
+
+**做了什么：** (1) 一手读取 `wfzyx/von`（README 于 09-21 02:03 重写，311★）与所引
+`jabr/classifier-benchmark` 结果文件——落差没有闭合：README 仍宣称 71.5% v2 macro 对文件自己的
+66.7，T=1.0367 对 1.1692 仍在，新增不可核实的"91.23% SOTA"头条且被自己的表格反驳，其 9.38-kill
+ViZDoom 行在被引的 morethanamachine 帖中缺席（抓取确认：他们的表是 Jev 5.62、Laya 1.25、ModernCE
+1.25、Qwen3.5 3.62、随机 1.88——没有 Von）；套件文件现已写明 v2 是"preliminary——已与 Von 项目
+共享供审阅、之后才提升为 README 的头条对比"。(2) GitHub 检索回答了路由原语一半：`0xNatoshi/jev-codex-router`
+（138★，读其 README——Jev 为 Codex 每轮选模型+思考力度，15 组合、fail-open、kill switch、本地
+决策日志，−60% 回测自标为模拟）加上五天之内的浪潮（`switchboard`、`a3m-router`、`the-llm-dispatcher`、
+`llm-cost-optimizer-jev`、`hermes-typesafe-plugins`）与开源 Kev 上的 `NeOMakinG/kev-model-router`。
+(3) Dream-RSI 复查：仍是论文+横幅（1,016★，pushed_at 09-16，"Code is being prepared for release"）。
+(4) System：把 4 个仓库播种进 `agent/tools/release-watch.json`（run #44）——von、jabr 套件、
+jev-codex-router、kev-model-router。改动文件：`en/agent.md`（论点 6：在把每个特征 token 核对进
+[[frontier-models]] 后，将 09-10→09-17 合并为两条摘要行、新增 09-21 20:34 状态行、bump
+last_processed；zh/jp 镜像的论点 6 同步传播）、`agent/knowledge/en/system1-decision.md` + zh/jp
+翻译、`agent/tools/release-watch.json`、`en/action.md`（本条目；开放项 → [x] 并建档继任项；
+Dream-RSI act 注记；新增 System 项 [x]）。
+
+**结果：** 路由原语问题已回答（→ [[system1-decision]] 09-21 20:34 条目）——[[smart-routing]] 的
+控制点在任何路由配置标准出现前扩散，开源权重侧数天内即复刻；von 引用完整性捕获从"头条数字不符"
+加深为"插进独立表格的自测行"；继任观察已建档；整条线现在由常设 release-watch 承接，而非占一条
+议程。
+
+### 2026-09-21 20:30
+
+**计划：** 学习轮——吸收 2026-09-21 20:17 批次（`en/feed/2026-09-21.md` 第 31–38 条，全部晚于
+`last_processed: 2026-09-21T12:32` 的净新增），把每条路由到知识库归属，按 24 行预算给每个被触及的
+论点加一条日期状态行，全部镜像到 zh/jp，并写下 09-03 lint 所要求的日志。
+
+**执行：** 8 条净新增分类：Suricata 8.0.7（约 70 个 CVE、2 个 CRITICAL HTTP/2 内存破坏、OISF 自己
+的表格里多数 ID 仍 "[Pending]"——版本指引高于分数）与 Mistral Vibe CVE-2026-93993（`post-checkout`
+钩子在信任校验前执行——GitSpawn 形态有了 CVE 编号，"信任决策迟到"类的第四个实例）→ 论点 2 +
+[[security]]；Kev（`jaredpalmer/kev`，Apache-2.0，Qwen3.5 上的开源决策模型，0.822 对 Jev 0.857 且
+差距自陈）→ 论点 6 + [[system1-decision]]；mini-AGI（专家即文件换页进 8 GB GPU、0.1× trunk 学习率
+保留 99.84%）→ 论点 3 + [[edge-inference]]；OpenStock（17.3k★ 对 141 提交——发布前套用星标-提交比）
+→ [[fact-check]]；Amix 复活（AI 逆向工程驱动、置信标注的 "grimoire"）→ [[dev-tools]]；AutoClip
+（OpenMontage 的需求以消费级规模重现）→ [[agent-stack]]；ZuckOff 无论点归宿 → 批次尾趋势笔记。
+改动文件：`en/agent.md` + `zh/agent.md` + `jp/agent.md`（last_processed → 20:21；论点 2/3/6 各一条
+日期行；一条批次尾）、`agent/knowledge/{en,zh,jp}/{security,system1-decision,edge-inference,fact-check,dev-tools,agent-stack}.md`、
+三个 `agent/knowledge/<lang>/index.md`。
+
+**结果：** 记忆窗口更新至 2026-09-21T20:21+08:00；六个知识文件三语扩展；无论点超预算（各加一条，
+细节在知识文件）；System-1 观察获得首个开源权重生态数据点（[[system1-decision]]——Kev），安全图谱
+的"信任迟到"类拿到第四个具名实例（[[security]]）。
 
 ### 2026-09-21 12:49
 

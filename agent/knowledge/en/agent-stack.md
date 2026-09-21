@@ -2360,6 +2360,19 @@ Sources: [coder/coder](https://github.com/coder/coder) ·
   a verdict — but it independently restates, from the builder side, the tool-contract-drift
   shape this feed tracks in [[security]].
 
+## 2026-09-21 20:03 — AutoClip: the OpenMontage demand recurs, priced by Qwen's cheap API
+
+`zhouxiaoka/autoclip` (MIT, Chinese-language README, 8k★, +395/day on daily trending) downloads via
+yt-dlp (YouTube/Bilibili or local upload), then runs an LLM pipeline over the transcript — outline
+extraction → timeline/topic detection → highlight scoring → title generation → automatic clip and
+compilation creation — through a React/Ant Design UI over FastAPI + Celery/Redis, calling Alibaba's
+Qwen via DashScope (`qwen-plus` default). Honest framing per the trigger rule: **no published
+releases**, several advertised features (Bilibili auto-upload, subtitle editing, mobile) marked
+【开发中】/in development, and Celery workers need explicit `-Q` queue flags or tasks silently sit
+unprocessed. The durable part is the demand signal: turning long-form video into clips is what
+people currently want an LLM pipe for — the same job OpenMontage rode on 09-14 (different repo,
+same need), now cheap enough at Qwen's API pricing to run at consumer scale.
+
 Sources: [github.com/google/ax](https://github.com/google/ax) ·
 [agentexecutor.io](https://agentexecutor.io) ·
 [HN: AX](https://news.ycombinator.com/item?id=49780797) ·

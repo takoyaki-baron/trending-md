@@ -224,6 +224,20 @@ Sources: [PlanetScale: Tin](https://planetscale.com/blog/introducing-tin) ·
 トレンドデータではない）、シニアエンジニア死亡螺旋エッセイ（逸話的な文化記事）、Boris Cherny の
 プロセスエッセイ（位置取りのシグナルのみ；一次のエージェント内容なし）。
 
+## 2026-09-21 20:03 — 保存波に OS が加わる：AI 逆エンジニアリングドライバで Amix が復活
+
+amigaux.org（3名：asokero、isoriano1968、jusii）が Amix——Commodore が 1990–92 年に販売し放棄した
+Amiga 用 System V Release 4 Unix——を復活させ、9月19日にオウルの Saku 2026 で発表（HN 116 pts）。
+Amix 2.1 カーネルは実機の 68040/68060 で動作（現代のアクセラレータ含む：ネイティブ SCSI/イーサの
+Z3660、A4091/A4092 Zorro III SCSI）、`apkg` パッケージマネージャ（pkg.amigaux.org）、
+`m68k-cbm-sysv4` クロスツールチェーン、OpenLook を同梱；Quake は動作、「今はゲームというより
+ベンチマーク」。現代的なフック：一部ドライバはソースが存在せず、生成 AI がバイナリカーネルから
+リバースエンジニアリングし、人間がレビューして実機でテスト、検証済みと推測を確信度タグ付けした
+「grimoire」進捗文書付き。この確信度タグ付けの規律こそ再利用可能な部分——RE4 のバイト一致逆コンパイル
+主張や Ogre Battle 64 の 99.05% と同じ正直な台帳——だが対象はゲーム1本ではなく、ベンダーが34年前に
+見捨てたハードウェア上の OS エコシステム全体。既収録の AI-RE 系譜と対：M4 GPU ドライバ（09-16）、
+RE4（09-21 12:03）。
+
 Sources: [lfarroco/ogre-battle-64-recomp](https://github.com/lfarroco/ogre-battle-64-recomp) ·
 [HN: Ogre Battle 64](https://news.ycombinator.com/item?id=49780022) ·
 [paperless-ngx v3.2.1](https://github.com/paperless-ngx/paperless-ngx/releases/tag/v3.2.1) ·

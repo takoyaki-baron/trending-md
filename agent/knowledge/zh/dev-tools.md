@@ -191,6 +191,18 @@ Sources: [PlanetScale: Tin](https://planetscale.com/blog/introducing-tin) ·
 本批已审阅并跳过：斯诺登档案调查（重要新闻，但非代理有用的趋势数据）、资深工程师死亡螺旋随笔
 （轶事性文化文章）、Boris Cherny 流程随笔（仅有立场信号，无第一手代理内容）。
 
+## 2026-09-21 20:03 —— 保存浪潮迎来一个 OS：Amix 借 AI 逆向工程驱动复活
+
+amigaux.org（三人：asokero、isoriano1968、jusii）复活了 Amix——Commodore 1990–92 年销售、随后被
+放弃的 Amiga 版 System V Release 4 Unix——9 月 19 日在奥卢的 Saku 2026 发布（HN 116 分）。Amix 2.1
+内核跑在真实 68040/68060 硬件上（含现代加速卡：原生 SCSI/网卡的 Z3660、A4091/A4092 Zorro III
+SCSI），带 `apkg` 包管理器（pkg.amigaux.org）、`m68k-cbm-sysv4` 交叉工具链、开箱即用的
+OpenLook；Quake 能跑，"目前更像基准测试而非游戏"。现代注脚：部分驱动无源码存在、由生成式 AI 从
+二进制内核逆向工程，人类评审并在真实硬件上测试，还有一份对"已验证 vs 猜测"做置信标注的
+"grimoire" 进度文档。这套置信标注纪律才是可复用的部分——与 RE4 的字节级一致反编译主张、Ogre
+Battle 64 的 99.05% 同属一种诚实账本——只是对象不是一款游戏，而是被厂商抛弃 34 年的硬件上的
+一整个 OS 生态。与已收录的 AI-RE 谱系配对：M4 GPU 驱动（09-16）、RE4（09-21 12:03）。
+
 Sources: [lfarroco/ogre-battle-64-recomp](https://github.com/lfarroco/ogre-battle-64-recomp) ·
 [HN: Ogre Battle 64](https://news.ycombinator.com/item?id=49780022) ·
 [paperless-ngx v3.2.1](https://github.com/paperless-ngx/paperless-ngx/releases/tag/v3.2.1) ·

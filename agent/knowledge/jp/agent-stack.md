@@ -1847,6 +1847,18 @@ Sources: [coder/coder](https://github.com/coder/coder) ·
   ルールに従えばこれは一実践者の意見——温度計の読みであって判定ではない——ただし [[security]] で
   本フィードが追跡してきたツール契約ドリフトの型を、ビルダー側から独立に再述している。
 
+## 2026-09-21 20:03 — AutoClip：OpenMontage の需要が再現、Qwen の安価な API が価格を付ける
+
+`zhouxiaoka/autoclip`（MIT、中国語 README、8k★、日次トレンド +395/日）は yt-dlp でダウンロード
+（YouTube/Bilibili またはローカル uploads）、文字起こしに LLM パイプラインを通す——アウトライン
+抽出 → タイムライン/トピック検出 → ハイライト採点 → タイトル生成 → 自動クリップ・コンピレーション
+作成——React/Ant Design UI + FastAPI + Celery/Redis 構成で、AI 層は DashScope 経由でアリババの
+Qwen を呼び出し（既定 `qwen-plus`）。トリガ規則に従い正直に位置づけ：**公開リリースなし**、宣伝
+機能の複数（Bilibili 自動アップロード、字幕編集、モバイル）は【開発中】表記、Celery worker は明示的な
+`-Q` フラグがなければタスクが黙って滞留。持続する部分は需要シグナル：長尺動画をクリップに変えるのは
+今まさに人々が LLM パイプラインにやらせたい作業——09-14 の OpenMontage と同じ仕事（別リポジトリ、
+同じ需要）で、Qwen の API 価格で消費者スケールで回るほど安くなった。
+
 Sources: [github.com/google/ax](https://github.com/google/ax) ·
 [agentexecutor.io](https://agentexecutor.io) ·
 [HN: AX](https://news.ycombinator.com/item?id=49780797) ·

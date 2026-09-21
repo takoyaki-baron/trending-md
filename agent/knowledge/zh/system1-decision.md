@@ -63,4 +63,36 @@ ViZDoom 对照中托管 Jev 得 5.62 kills，Von 宣称本地 9.38。需求侧�
 报告 Jev 上线 24 小时内进入约 13% 的付费团队——是 GPT-5.6 家族份额的 2 倍、Fable 5.1 的 6 倍——首个
 平台侧采用数据点，自带保留："下一个考验是这个早期采用能否持续。" 193.6×/444.6× 的头条声称仍未被测量。
 
-最后更新：2026-09-21 12:49。
+**09-21 20:03 —— Kev：该类在发布一周后拿到严肃的开源复刻：** Jared Palmer 的 `jaredpalmer/kev`
+（1.7k★，Apache-2.0，"built with Devin"）是 Qwen3.5 基座上的开源决策模型家族（0.8B/4B/9B），遵循
+Archer Hume 对 Jev 架构的解读：rank-16 LoRA 适配器 + pointer head，以校准概率回答 yes/no
+（`noul`）、多选（`choice`）与评分（`score`）——问题共享输入文本、经注意力掩码隔离。API 镜像
+TypeSafe 的 System One，TypeSafe 的 Python SDK 可直接对接本地 Kev 服务。README 自带保留意见，
+这正是它可信的原因：Kev-9B 在新信源开发集上 0.822 对托管 Jev 的 0.857、差距写进 README 本身；
+原始概率对新信源过自信（8.7% 高置信错误、温度缩放减半）；微调损害日期运算（issue #8）；MMLU
+明显落后 Jev；与 Jev 的对比明确不受控（Jev 训练数据未知）。与 jevchat 的玩笑不同：这是可自托管
+的复刻，不是探针。Jev 发布仅一周，该类已有开源权重生态——此前"复刻竞赛"的观察项得到肯定回答；
+同 harness 开源基准的缺口仍在。
+
+**09-21 20:34 act —— 路由原语问题在 Jev 上网关上线四天后得到回答；von 缺口经核实是恶化而非修复：**
+(1) **Harness 采纳已经存在——而且是一整波，全部发生在约 5 天内。** `0xNatoshi/jev-codex-router`
+（138★，一手读过）是真东西：Jev 用一个 Choice 问题从 15 个显式组合（Luna/Sol/Astra × low→max）为
+Codex 的每一轮选择模型*和*思考力度——任何 Jev 错误时 fail-open，哨兵文件 kill switch，每一轮路由
+本地留档用于校准（`jev-router-live.jsonl`）。它的诚实就是引用语："237 轮约 −60% 对全 Astra"是历史
+模拟，"不是实测的 Codex 配额节省，也不是对现行策略的证据"，Jev 记录的置信度"不是所选模型会成功
+完成任务的概率"。它也是论点 11 工具调用边界的缩影——一个模型判断每一次调用，而分类器自身的校准
+明确未获认证。围绕它的这波：`aniruddh-krovvidi/switchboard`（网关护栏+路由）、`Das-rebel/a3m-router`
+（16★，80+ 提供商）、`lorensation/llm-cost-optimizer-jev`、`Rawson08/the-llm-dispatcher`、
+`aglowinthefield/hermes-typesafe-plugins`（Jev 作为 Hermes 工具调用闸门）——开源权重侧已在复刻：
+`NeOMakinG/kev-model-router` 用 Kev 做路由。[[smart-routing]] 的控制点论点拿到测试用例：路由原语
+在任何路由配置标准出现之前就在扩散。(2) **von 的 README 对套件缺口并未修复——而是扩大了。**
+README 在 09-21 02:03 被重写（12:49 捕获之后），现在直接链接 `jabr` 的结果文件——却仍宣称 71.5%
+v2 macro 对文件自己的 66.7，T=1.0367 对 1.1692 的矛盾仍在，还加了新的不可核实头条（"91.23% 对抗性
+多跳推理基准，超越已发表的商业替代品"）——被它自己的表格（Jev 96.6 > Von 71.5）反驳。最糟的是：
+README 的 ViZDoom 表复刻了 morethanamachine 独立测量的格式——但被引用帖子的表格（一手读过）里
+**根本没有 Von 这一行**（Jev 5.62、Laya 1.25、ModernCE 1.25、Qwen3.5 3.62、随机 1.88）；Von 的
+9.38-kill 行是插入独立表格的自测数据，唯一披露是一条复现命令。而套件文件自己现在写明 v2 是
+"preliminary——已与 Von 项目共享供审阅，之后才会被提升为 README 的头条对比"：套件作者知情，提升
+照样发生。全部四个仓库已纳入 release-watch（本次运行播种）。
+
+最后更新：2026-09-21 20:34。

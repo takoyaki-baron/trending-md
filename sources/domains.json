@@ -8122,5 +8122,41 @@
     "en": "Zhipu (Z.ai) — GLM series vendor research posts; canonical for GLM-5.3's same-base/post-training claim (vendor-reported benchmarks). Cross-checked vs docs.z.ai (08-21).",
     "jp": "Zhipu（Z.ai）——GLMシリーズのベンダー研究記事。GLM-5.3の同一ベース/ポストトレーニングのみという主張（ベンダー発表ベンチ）の正典。docs.z.ai とクロスチェック済み（08-21）。",
     "zh": "智谱（Z.ai）——GLM 系列厂商研究文章；GLM-5.3 同底座/纯后训练说法（厂商自报基准）的权威来源。已对照 docs.z.ai 交叉核验（08-21）。"
+  },
+  "zuckoff.app": {
+    "cat": "community",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Independent developer's product page for the ZuckOff BLE camera-glasses detector; facts verified against the live site, but the operator is unnamed beyond a contact email.",
+    "zh": "ZuckOff（蓝牙摄像头眼镜探测器）的开发者产品页；事实已对线上站点核实，但运营者仅留联系邮箱，身份不明。",
+    "jp": "BLEカメラ眼鏡検出アプリ ZuckOff の開発者製品ページ。実サイトに対して事実確認済みだが、運営者は連絡用メール以外不明。"
+  },
+  "wired.me": {
+    "cat": "news",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Wired's Middle East edition; covered the ZuckOff glasses detector same-day. Existence and subject confirmed via the HN thread; article body not independently fetched this run.",
+    "zh": "Wired 中东版；当天报道了 ZuckOff 眼镜探测器。已通过 HN 讨论串确认文章存在与主题；本次未独立抓取正文。",
+    "jp": "Wired 中東版。ZuckOff 眼鏡検出アプリを同日報道。HN スレッド経由で存在と主題は確認、本文は今回未取得。"
+  },
+  "forum.suricata.io": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "OISF's official release/advisory forum — primary source for Suricata security releases; the 8.0.7 announcement's CVE-pending table and criticality definitions were read in full.",
+    "zh": "OISF 官方发布/公告论坛——Suricata 安全发布的原始来源；已完整阅读 8.0.7 公告中 CVE 待定表与危急级定义。",
+    "jp": "OISF の公式リリース・アドバイザリフォーラム —— Suricata セキュリティリリースの一次情報源。8.0.7 発表の CVE 未確定表と重要度定義を全文確認済み。"
+  },
+  "amigaux.org": {
+    "cat": "community",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "The Amix (Amiga SVR4 Unix) revival project's own site; detailed and unusually honest (confidence-tagged 'grimoire'), but a small self-published project — claims are self-reported.",
+    "zh": "Amix（Amiga SVR4 Unix）复兴项目官网；细节丰富且异常坦诚（带置信度标签的 grimoire），但属小型自发布项目，主张均为自报。",
+    "jp": "Amix（Amiga SVR4 Unix）復興プロジェクトの公式サイト。詳細かつ異例なほど誠実（信頼度タグ付き grimoire）だが、小規模な自主公開プロジェクトで主張は自己報告。"
   }
 }

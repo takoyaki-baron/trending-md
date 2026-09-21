@@ -2334,3 +2334,31 @@ Sources: [BleepingComputer: BragJack](https://www.bleepingcomputer.com/news/secu
 [Anoymask 解説](https://dev.to/anoymask/bragjack-prompt-forcing-in-browser-ai-agents-via-browser-extensions-1d67) ·
 [IC3 合同勧告 PDF](https://www.ic3.gov/CSA/2026/260918.pdf) ·
 [BleepingComputer: WaterPlum](https://www.bleepingcomputer.com/news/security/north-korean-waterplum-hackers-infected-30-000-devices-worldwide/)
+## 2026-09-21 20:03 — センサー自体が攻撃される解析面（1 IDS リリースで約70 CVE）；信頼チェックは agent CLI の内部で後回し
+
+- **Suricata 8.0.7**（OISF、9月15日リリース、NVD レコードは9月20–21日に着信）：リリース告知の
+  言葉をそのままに「これまでで最も多くの脆弱性報告が寄せられたリリース」——約70件、OISF は
+  AI 支援解析の増加を原因に挙げる。うち2件が **CRITICAL**——OISF がデフォルト有効の Tier 1 機能
+  「リモートからトリガ可能なトラフィック起因コード実行を含む」ために予約するラベル：
+  CVE-2026-94083（DoH2 型混同 → invalid free）と CVE-2026-94084（Http2ThreadMultiBuf
+  use-after-free）、いずれも CVSS 9.4（MITRE-CNA）；さらに約20件が HIGH。スコアリングの細部：
+  OISF 自身の評価は複数チケットで CVSS と乖離し、OISF の表では全 CVE ID がまだ「[Pending]」（GHSA
+  リンク）のまま NVD レコードが着信——ゆえにバージョンベースのガイダンス（「8 ブランチへ」；
+  Suricata 7 は 7.0.17 で EOL、LibHTP はアーカイブ済み）がどの単一スコアよりも重要。非公開チケット
+  は2週間後に公開。信頼できないトラフィックの解析を業とする IDS が、デフォルト有効の HTTP/2 経路に
+  メモリ破壊を抱えるのは、当週中のパッチに値するセンサー側リスククラスそのもの。悪用の報告なし。
+- **Mistral Vibe CVE-2026-93993**（VulnCheck が9月19–20日に公開、2.25.5 で修正、commit
+  `c069ffa`）：Mistral のオープンソースコーディングエージェント CLI が、worktree 作成中に
+  `post-checkout` フックを**信頼検証より前に**実行——細工されたリポジトリがユーザー権限での
+  任意シェルコマンドになる（CWE-74 クラス、ネットワークベクトル、ユーザー操作が必要）。NVD では
+  Secondary スコア（8.8 v3.1 / 8.6 v4.0、VulnCheck 賦値、NVD 分析待ち）。このフィードが繰り返し
+  記録してきたのと同じ型——Codex の Overpatch、OpenPanel のテンプレート検証器、Plugin4Shell、
+  GitSpawn の悪意ある `.git/config`：**信頼判断が、攻撃者供給のアーティファクトが既にコード実行の
+  機会を得た後に回る。**これでクラスに名前と CVE 番号が付いた実例ができた：agent CLI を信頼できない
+  リポジトリに向けるなら、git フック経路をデフォルトの侵入前提とみなすべき。悪用の報告なし。
+
+Sources: [OISF: Suricata 8.0.7 released](https://forum.suricata.io/t/suricata-8-0-7-released/) ·
+[NVD: CVE-2026-94083](https://nvd.nist.gov/vuln/detail/CVE-2026-94083) ·
+[NVD: CVE-2026-93993](https://nvd.nist.gov/vuln/detail/CVE-2026-93993) ·
+[VulnCheck advisory](https://www.vulncheck.com/advisories/mistral-vibe-before-2.25.5-remote-code-execution-via-git-post-checkout) ·
+[mistral-vibe v2.25.5](https://github.com/mistralai/mistral-vibe/releases/tag/v2.25.5)

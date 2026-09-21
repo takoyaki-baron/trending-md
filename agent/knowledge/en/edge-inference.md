@@ -784,3 +784,25 @@ Sources: [Seoul Economic Daily](https://en.sedaily.com/finance/2026/09/20/samsun
   [HN: ByteShape](https://news.ycombinator.com/item?id=49749393) ·
   [openjev.com](https://openjev.com/) ·
   [TheoLeeCJ/openjev](https://github.com/TheoLeeCJ/openjev)
+
+## 2026-09-21 20:03 — the disk-streaming school reaches continual learning: experts as files, one 8 GB GPU
+
+`volotat/mini-AGI` (Alexey Borsky, MIT, Show HN 136 pts) makes training and inference the same
+operation: a byte-level model (256 byte values + 9 structural markers, no tokenizer), PonderNet-style
+adaptive halting applied up to 24 times per character, and a growing/pruning Mixture-of-Experts pool
+where **each expert is a file on disk paged onto the GPU as needed** (~540M total params, 32
+resident) — the disk-streaming trick from [[agent-stack]]'s MoE-serving school applied to the
+continual-learning problem. The headline result is anti-forgetting: running the trunk at 0.1× the
+experts' learning rate held measured forgetting to **+0.0067 nats after 524k characters — 99.84%
+retained, vs ~50% for other configurations**. Trains from scratch on a single 8 GB CUDA GPU
+(reference rig: RTX 3070 Laptop).
+
+The README does the honest-framing work: "as of now this is a small toy-level model," **weights not
+published** ("a couple of weeks away"), outputs repetitive, and the nats/char benchmark carries ~0.03
+run-to-run variance from nondeterministic CUDA expert dispatch. Treat it as an existence proof that
+continual learning fits in modest hardware — measured in nats, not vibes — not a capable model.
+Watch: the promised weights release (the claim is unfalsifiable until then), and whether the
+expert-paging scheme survives contact with real workloads.
+
+Sources: [volotat/mini-AGI](https://github.com/volotat/mini-AGI) ·
+[HN discussion](https://news.ycombinator.com/item?id=49783133)
