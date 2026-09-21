@@ -1,8 +1,8 @@
 ---
 date: 2026-09-21
-updated: 2026-09-21T04:45:00+08:00
+updated: 2026-09-21T12:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -141,14 +141,14 @@ npm の2026年6月のライフサイクルスクリプト防御も静的スキ�
 発火するまで何も見えない。第2段階の設定は Ethereum Sepolia のスマートコントラクト
 （`0xE390…2D31`）からポーリングされ、X25519→AES で復号され、ホストのフィンガープリントは
 ハードコードされた Slack と Telegram チャネルに持ち出される。メインパッケージは
-`sorted-btree`（週次約200万ダウンロード）のタイポスクワットで、ファミリーの10パッケージ
+`sorted-btree`（週次約200万ダウンロード）のタイポスクワットで、ファミリーの9パッケージ
 （btree-core、btree-leaderboard、…）はレジストリから削除済み。Checkmarx はこの運用に
 帰属する**109 ETH（約23.1万ユーロ）**を計上している。
 
 **Why it matters:** 回避手法はテーゼの実証だ：レジストリがインストールスクリプトを堵げば、
 攻撃は振る舞い分析でしか見えないランタイムへ移る。もっともらしいコミット履歴と AI 生成の
 プロフィール写真を持つ偽 GitHub リポジトリがもう半分だ——攻撃者はペイロードだけでなく
-信頼性レイヤーを工業化している。10個のパッケージ名のどれかが lockfile にあれば、シークレットを
+信頼性レイヤーを工業化している。9個のパッケージ名のどれかが lockfile にあれば、シークレットを
 ローテートして再構築すること。
 
 [`🔗 Checkmarx Zero 解説`](https://checkmarx.com/zero-post/npm-btree-malware-campaign-affects-millions-of-downloads-no-need-for-install-script/) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/malicious-npm-packages-evade-install-script-defenses-at-runtime/)
@@ -409,13 +409,333 @@ Qwen 2.5 モデルが回答品質を犠牲にしてでもボタンを押し—�
 
 ---
 
+## 18. Google が AX v0.3.0 をオープンソース化——「1クラスタあたり数十億のエージェントワークロード」を目指す Kubernetes 風オーケストレーター
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 297+ pts · 113 comments · ~5.5h ago (~06:32 UTC+8)
+- **Tags:** `agent-infra` `orchestration` `google` `open-source`
+
+AX（`google/ax`、Go、Apache-2.0）は、大規模なエージェントワークロードのための宣言型
+コントロールプレーンだ。Kubernetes 風の `ax.io/v1alpha1` マニフェストが4つのプリミティブを
+定義する——**Task**（CPU/メモリ制限付きのサンドボックス化された非信頼コード実行）、
+**Workspace**（Git リポジトリ・MCP サーバー・スキルの事前配線）、**Gateway**
+（ホスト許可リストによるネットワークフェンシングと認証情報の注入）、**Model**
+（モデル/シークレット設定の一元管理）。アイドル中のエージェントはチェックポイント化され、
+サブ秒のサスペンド/レジュームが可能。タスクは共有ワーカー上に高密度で多重化される。
+v0.3.0 は昨日（9月20日）リリース。リポジトリ自体は2026年3月に作られたが、HN への投稿は新しい。
+
+**Why it matters:** ページ上の但し書きを読み込むこと：API は `v1alpha1` で、README には
+「メジャーな破壊的変更」が来る旨の明示的な警告があり、AX は実際のサンドボックス実行層を
+Agent Substrate に「大きく依存」している——オーケストレーターはサンドボックスではない。
+本当のシグナルは、Google が「エージェントをクラスターワークロードの一クラス」として
+形式化しつつあることだ。Kubernetes がサービスに与えたのと同じ宣言型プリミティブのパターンで：
+エージェントフリートが次のマイクロサービスなら、これはそのコントロールプレーンへの主張だ。
+
+[`🔗 agentexecutor.io`](https://agentexecutor.io) · [`🔗 GitHub リポジトリ`](https://github.com/google/ax) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49780797)
+
+---
+
+## 19. 「スノーデンアーカイブに何が起きたか」——99% が未公開のままだった理由を追う匿名の調査
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 232+ pts · 140 comments · ~5.5h ago (~06:35 UTC+8)
+- **Tags:** `surveillance` `journalism` `archives` `investigation`
+
+libroot.org の調査（同サイトの匿名の運営者による発表で、20人以上の関係者・機関に取材したと
+述べている）は、アーカイブが沈黙へ向かった経緯を追う：ガーディアンは2014年2月、シュピーゲルは
+2015年1月、NYT/ProPublica は2015年8月に発行を停止し、最後まで残った The Intercept は
+2019年3月にアーカイブを閉鎖し、5月29日に最終批次を公開した。数字こそが物語だ：ガーディアンは
+約58,000文書を保有しながら約30文書（0.05%）しか公開せず、約50,000文書の「Pandora」アーカイブの
+公開は全体の約1%にとどまった。The Intercept が閉鎖について示した4つの説明は11日間で変わり続けた
+（Poitras が予算の1.5%に過ぎないと示した「予算削減」、「もはや価値がない」、
+「編集上の優先事項」、そして Greenwald の「他のパートナーを探す」）。
+
+**Why it matters:** 記事の核心的な発見は陰謀論的ではなく認識論的なものだ：提示されたすべての
+説明は、別の発言と矛盾するか、検証不能か、そもそも説明されていない——そして保管者たちは
+集合体的に回答を拒んだ。著者らは検証できない部分を明示している：The Intercept がコピーを
+破棄したという主張はただ一人の匿名内部関係者に依拠しており、2013年に配布されたバックアップ
+コピーがまだ読み取り可能かどうか（鍵なしで暗号化されている可能性がある）も分からない。
+10年経って、アーカイブ自体の行方が記録不在になった——それがこの不穏な結論だ。
+
+[`🔗 libroot.org 調査`](https://libroot.org/posts/what-happened-to-the-snowden-archive) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49780820)
+
+---
+
+## 20. 「FOSS に誰も金を払わないなら、払わせればいい」——seldo のレジストリ計測提案がメンテナー資金の行き詰まりを突く
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 163+ pts · 152 comments · ~7h ago (~05:04 UTC+8)
+- **Tags:** `open-source` `sustainability` `registries` `funding`
+
+Laurie Voss（seldo、npm 共同創業者）は、フリーライドの存在によりすべての自発的資金モデルが
+構造的に破綻すると論じる——30年間のチップ、財団、企業の誓約、代替ライセンスはすべて、
+払う人と払わない人が同一のソフトウェアを得る以上に失敗してきた。それゆえ、メンテナーの約60%が
+無報酬なのはバグではなく「均衡」なのだ。彼の仕組み：レジストリ（npm、PyPI、Docker Hub）は
+すでに企業利用を計量し、すでにサプライチェーンベンダー（JFrog、Snyk、Sonatype）経由で
+年間10億ドル超の請求を行っている——ならばレジストリが大企業にサブスクリプションを課し、
+固定のロイヤルティ分配を、それらの顧客の依存ツリーにある全パッケージへ比例・自動で支払えばよい。
+「計量器を運用する者が、計量に値するものを作った者に払う。」
+
+**Why it matters:** 彼は自説への反論に本文中で答えている——無料ミラー（無料の代替があるにも
+かかわらず Docker の収益は1,200万→2億700万美元に成長）、「Tidelift の焼き直しでは」
+（既存の請求書に乗るので新しい購買判断が不要）、「不正は」（「無報酬メンテナーの不正率は
+現在100%」——つまり誰にも払われていない）。エージェント経済の視点が最も切れ味を増す部分だ：
+エージェントはレジストリ経由で OSS を消費しながら、無報酬メンテナーにセキュリティ負荷を
+生み出している。これは提案であって出荷されたものではない——ただし、その計量器を作った本人からの提案だ。
+
+[`🔗 seldo.com`](https://seldo.com/posts/nobody-pays-for-open-source-we-can-force-them-to/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49780064)
+
+---
+
+## 21. シニアエンジニアの死のスパイラル——オーバーワークをインポスター症候群の失敗モードとして解剖する
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 151+ pts · 97 comments · ~14h ago (~22:16 UTC+8)
+- **Tags:** `engineering-culture` `burnout` `career` `management`
+
+Sunil Pai のエッセイが名付けたパターン：有能なエンジニアが大きな役割やプロジェクトを任され、
+「実際よりシニアなエンジニアをコスプレ」しようとして、進捗の遅れを隠すために沈黙し、英雄的な
+救出劇に賭ける——週60〜80時間、「ポジティブな報告だけ」のスタンドアップ、恥と孤立へ滑り落ち、
+バーンアウトや PIP で終わる。処方箋は：会社が雇ったのは今の自分だと前提する；一段「レベルを下げて」
+最高のチームメイトになる（バグ、雑務、ドキュメント）；大きな努力より日々の小さな前進に最適化する；
+そして過剰にコミュニケーションし、誰にも進捗を推測させない。彼はさらに、リモートワークと
+コーディングエージェントが、かつて「見えなさ」を見抜きにくくしていた環境構造を取り払ったと付け加える。
+
+**Why it matters:** 但し書きとともに読むこと：これは明示的に逸話ベースだ——一人の書き手が
+観察したパターンを友人への助言の形で記したもので、データはない。だがエージェント時代の
+ディテールが今を突いている：エージェントは「生産的に見えること」と「実際には行き詰まっていること」
+を両立させ、隠蔽のコストを下げるどころか上げる。97コメントのスレッドこそがシグナルだ——
+明らかに神経に触れた。
+
+[`🔗 sunilpai.dev`](https://sunilpai.dev/posts/the-senior-engineer-death-spiral/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49776130)
+
+---
+
+## 22. Po-Shen Loh が Tao のブログにゲスト投稿：「人間の数学者はまだ必要か？」——答えではなく公理として
+
+- **Velocity:** ▮▮ rising
+- **Source:** Terry Tao ブログ / Hacker News · 148+ pts · 117 comments · ~17h ago (~18:49 UTC+8)
+- **Tags:** `mathematics` `ai-safety` `research` `policy`
+
+まず署名に注意：この投稿は **Po-Shen Loh**（CMU）によるもので、2026年9月19日に Terence Tao の
+ブログへゲスト投稿された——Tao 本人の執筆ではない。OpenAI が9月8日に AI 生成の Navier–Stokes
+特異点解（Lean で検証済みと称する証明付き）を発表し、Cowen/Gans が数学者に適応を迫る反論を
+展開したのを受け、Loh は数学界が明示的な公理を採用すべきだと提唱する——
+「我々（人類）は人類の繁栄を助けるべきである」——そして彼の唯一の硬い証拠を挙げる：
+「自分よりはるかに有能な種が、意思決定を劣る種に委ねた例は一つもない」。彼の経済的な楔は：
+AI 監視の仕事は有資格者を育成できる速度より速く増えるため、専門家育成パイプラインを守ることが
+最終的に AI 開発の減速を強いる——「さもなくば災害によって強いられる」というものだ。
+
+**Why it matters:** 但し書きは本文中にある：彼は公理が議論の余地があることを認め
+（「種差別主義者と呼ぶ人もいる」）、先進的 AI のアライメントが達成可能だと証明する堅牢な
+証拠は存在しないと認め、この論証チェーン全体を他で見たことがないとも認めている。彼自身が
+AI のヘビーユーザー（Claude Code、Codex）でもある。これは今月このフィードが最も追跡してきた
+テーマの只中に着地する——数学者たちの公開書簡、異議を唱える者たち、そして今や人間の専門知識が
+なぜまだ構造的に重要かという経済的論証。
+
+[`🔗 Tao ブログ（Loh ゲスト投稿）`](https://terrytao.wordpress.com/2026/09/19/why-do-we-need-human-mathematicians-anymore/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49774521)
+
+---
+
+## 23. 生物学のミレニアム問題——FutureHouse の Edison が賞金なしの検証可能な12の重大チャレンジを公開
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 135+ pts · 110 comments · ~16h ago (~20:17 UTC+8)
+- **Tags:** `biology` `ai-for-science` `benchmarks` `research`
+
+Edison Scientific / FutureHouse（Sam Rodriques、Michaela Hinks）が、生物学の未解決問題
+12件を、それぞれ明示的な定量的成功基準付きで公開した：原始スープからの無支援の自己複製細胞の
+実証；99%超の生存率での成体マウスの可逆的ガラス化；ポリペプチドを読み取りそれをコードする
+核酸を書く逆翻訳酵素の構築；天然 Rubisco の特異性/回転数トレードオフの打破；ゼロショットの
+細胞侵入性タンパク質結合剤の設計；3′→5′ 方向の「5′ ポリメラーゼ」の完全セット；
+天然ニトロゲナーゼと相同性のない窒素固定——など。一部の問題は外部から寄稿された
+（Erika Alden DeBenedicitis の四重遺伝コード細胞）。
+
+**Why it matters:** サイトは「何でないか」に正直だ：Clay のミレニアム賞とは異なり、
+**賞金も審査団体も正式な検証プロセスもない**——基準は自称・自己採点で、部分点が組み込まれ、
+1つの問題はすでにスキャフォールド工学の範囲を見積もれずに拡大された。それでも注目に値する
+理由：AI for science 研究所がデモではなく反証可能な定量的ターゲットを公開している——
+これは実質的に自らを評価ハーネスとして提案するもので、このフィードのベンチマーク懐疑論の系譜が
+ずっと求めてきた一歩だ。
+
+[`🔗 millenniumproblems.bio`](https://millenniumproblems.bio/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49775082)
+
+---
+
+## 24. Boris Cherny：「私はよく間違える」——Claude Code の生みの親による6ステップのプロセス、タイトル自体が限定を添える
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 133+ pts · 116 comments · ~11.5h ago (~00:41 UTC+8)
+- **Tags:** `engineering-culture` `product` `management`
+
+Boris Cherny（Claude Code の生みの親、『Programming TypeScript』の著者——経歴はページ自体には
+ない）が短いプロセス論を発表した：ほぼすべての問題に対して6ステップのループを回す——
+入手可能な情報を棚卸し、欠けた情報を集め、問題を定義し、明確でシンプルなアプローチを定義し、
+ゴールを定義し、緊急感を持って行動する——そして新しい情報が入れば意図的にループに戻る。
+タイトルの「間違い」が要点だ：彼は訂正されることを最も好む結果と捉え、同じフィードバックを
+自分にもするよう招き、「このメタプロセスの一部がメタ的に間違っているなら、変更する用意がある」
+と締めている。
+
+**Why it matters:** HN のタイトルが省いた細部を読むこと：この投稿には**具体的な失敗に関する
+本人の逸話が一切ない**——「間違い」は他者に観察される失敗モード（通常はステップ3か4の省略が
+複雑な計画と不明瞭な成功基準を生む）として現れ、フレームワーク自体が暫定的だと明示されている。
+興味は位置そのものにある：最も著名なエージェントツールのビルダーが「先験を速く更新せよ」という
+マニフェストを発表すること自体が、そのエコシステムがどう見られたいかについてのシグナルだ。
+
+[`🔗 borischerny.com`](https://borischerny.com/management,/product/2026/09/19/I-am-often-wrong.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49777467)
+
+---
+
+## 25. BragJack：悪意あるブラウザ拡張1つで5つの AI ブラウザエージェントを乗っ取り——Google と Microsoft は賞金を払い修正済み
+
+- **Velocity:** ▮▮ rising
+- **Source:** Forever Security 研究 / BleepingComputer · 9月16〜17日に開示、報道は9月20日まで継続
+- **Tags:** `agent-security` `browser-extensions` `prompt-forcing` `cve`
+
+Gal Weizman（Forever Security）が「BragJack」/**Prompt Forcing** を開示した：広告ブロッカー
+レベルの権限を持つ単一の拡張（Chromium の `declarativeNetRequest`）が、ブラウザの AI
+エージェントが信頼するトラフィックを書き換える——Chrome ではセキュリティヘッダーの弱体化と
+スクリプトのリダイレクトにより、コードが Gemini コンテキスト内で実行され特権コンポーネントへ
+到達；Edge ではレースコンディションが一時的に「Think」/「Do」モード分離をバイパスした。
+同じ拡張が5つのターゲットすべてを落とした：Chrome の Gemini Live、Microsoft Edge Copilot、
+Opera Neon、Perplexity Comet、そして Anthropic の Claude in Chrome。2つの CVE が採番され
+修正済み：**CVE-2026-0628**（Chrome、143.0.7499.192 で修正、賞金7,000ドル）と
+**CVE-2026-55945**（Edge、150.0.4078.48 で修正）；賞金総額は2万ドルを超えた。
+
+**Why it matters:** Weizman の描き分けは再利用可能な概念だ：古典的なプロンプトインジェクションは
+エージェントが読むコンテンツに敵対的な指示を隠すが、Prompt Forcing はエージェントに偽造プロンプト
+全体と指示を与え、**それ自身の正当な権限で**実行させる——そのため悪意ある操作は信頼された
+ソフトウェアから発せられ、エンドポイント検知が苦手とする領域になる。まず Chrome と Edge を更新
+すること；PoC は研究目的で、実環境での悪用報告はない。すべてのエージェントブラウザが共有する
+拡張権限の表面は、思想実験ではなく実証済みの攻撃クラスになった。
+
+[`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/) · [`🔗 Anoymask 解説（dev.to）`](https://dev.to/anoymask/bragjack-prompt-forcing-in-browser-ai-agents-via-browser-extensions-1d67)
+
+---
+
+## 26. jevchat：誰かが Jev——1回のフォワードパスの「System 1」モデル——を（しょぼい）チャットボットにした
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 102+ pts · 35 comments · ~10h ago (~01:51 UTC+8)
+- **Tags:** `jev` `llm` `sampling` `show-hn`
+
+生後1日のリポジトリ（`kyle-pena-nlp/jevchat`、36スター）は、このフィードが9月16日の公開時に
+取り上げた Typesafe の非自己回帰・単一フォワードパスモデル Jev に、各ステップでただ一つの
+質問を投げる：「ユーザーの質問とここまで書かれた返答を与えたとき、次のシンボルは何か？」
+Jev はアルファベット（切り詰めたトークンリストを含む）に停止オプションを加えた集合上の確率分布を
+返し、サンプラーが抽出・追加・繰り返す。README は率直だ：「面白半分のアイデアで、コストは
+かなり非現実的で、結果は爆笑もの」——さらにサンプリングアルゴリズムを記述した著者の実験を
+Claude が加速して実装したと注記している。
+
+**Why it matters:** 本物の実験をしているジョークプロジェクトだ：回答全体を1パスでスコアリングする
+モデルを、無理やり自己回帰サンプリングに通すとどうなるか。答えは（しょぼくも）魅惑的で、HN の
+スレッドはこれを Jev のキャリブレーションへの偶然のプローブとして扱っている——1シンボルずつの
+処理は、まさに Jev が決して動作しないよう設計されたレジームだからだ。9月16日の Jev 公開を
+報じた件の続報として：これはコミュニティの派生物であり、Typesafe の公式リリースではない。
+
+[`🔗 GitHub リポジトリ`](https://github.com/kyle-pena-nlp/jevchat) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49778162)
+
+---
+
+## 27. 「なぜ MCP は最初から悪い考えだったのか」——68ポイント、77コメントのプロトコル再検証
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 68+ pts · 77 comments · ~8h ago (~03:44 UTC+8)
+- **Tags:** `mcp` `agent-infra` `protocols` `opinion`
+
+Maharshi Patel のエッセイは、MCP が間違った問題を解いたと論じる：ツールの*トランスポート*を
+標準化しながら、難しい部分——認証、権限付与、信頼、ツール記述の品質——を各サーバーの後付けの
+ままに残し、N 個のサーバーが N 通りのセキュリティ態勢を持ち、プロンプトインジェクションの
+攻撃面がツール記述フォーマットそのものに焼き込まれる結果になった。コメント欄は本文より重い
+（68ポイントで77コメント）。馴染みの反論——MCP のフラットさこそが採用を可能にした、
+認証ストーリーは実際に改善している——も展開された。
+
+**Why it matters:** 但し書きルールに従うこと：これは一人の実務家による意見記事であり、標準化団体の
+事後検証ではない—— verdict ではなく温度計の読みとして扱うこと。だが温度は本物だ：MCP は今や
+エージェントエコシステム全体の構造材であり、その上に構築する人々は痛みをますます公開するように
+なっている。77コメントの議論こそがここでの本当の成果物だ。
+
+[`🔗 maharship.com`](https://maharship.com/blog/why-mcp-was-always-a-bad-idea/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49779329)
+
+---
+
+## 28. WaterPlum（「Contagious Interview」）：4カ国共同勧告が3万台の感染デバイスと約1,070万ドルの暗号資産窃取を北朝鮮に帰属
+
+- **Velocity:** ▮ steady
+- **Source:** IC3 共同勧告（9月18日）/ BleepingComputer · ~3d ago
+- **Tags:** `north-korea` `supply-chain` `malware` `advisory`
+
+日本の警察庁/国家サイバーセキュリティ事務局、米 FBI、豪 ASD/ACSC、独 BND/BfV の共同勧告が、
+「WaterPlum」（別名 Contagious Interview）を北朝鮮313総局に公開帰属させた：100カ国以上で
+**最低3万台のデバイスが感染**（2025年12月〜2026年7月）、**7,000以上の暗号資産ウォレット**から
+認証情報や資金が流出し、約**1,070万米ドル（17億円）**が北朝鮮へ送金された。攻撃ベクトルはこの
+キャンペーンを開発者ストーリーにしたものと同じ：偽の就職面接とコーディングテスト——偽の
+AI/暗号/NFT リクルーター、悪意ある VS Code プロジェクト、カメラを付けない理由づけに使われる
+面接线の顔すり替え。マルウェアファミリー：BeaverTail（npm）、InvisibleFerret（Python）、
+OtterCookie、OtterCandy、StoatWaffle（Node.js）。
+
+**Why it matters:** 勧告はまた、日本が北朝鮮 IT 労働者の「ラップトップファーム」を初めて摘発した
+ことも記録している——攻撃者があなたの求職者である詐欺の物理的な側面だ。開発者向けの緩和策は
+不変であり、繰り返す価値がある：未知のコードはサンドボックスで実行し、プロジェクトファイルに
+ペイロード取得コマンドがないか検査し、実際に誰を雇っているのかを確認すること。
+
+[`🔗 IC3 勧告（PDF）`](https://www.ic3.gov/CSA/2026/260918.pdf) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/north-korean-waterplum-hackers-infected-30-000-devices-worldwide/)
+
+---
+
+## 29. Ogre Battle 64 の再コンパイルが99.05%に到達——N64 の名作をネイティブ PC 移植、完全マッチまで1週間
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / Hacker News · 47+ pts · 15 comments · ~7h ago (~04:59 UTC+8)
+- **Tags:** `decompilation` `recompilation` `game-preservation` `n64`
+
+`lfarroco/ogre-battle-64-recomp`（8月24日作成、今回の実行の数時間前までプッシュ）は、
+『Ogre Battle 64: Person of Lordly Caliber』（北米 Rev A）を N64Recomp ツールチェーンで
+ネイティブ x86-64 実行ファイルへ静的再コンパイルするプロジェクトだ——Zelda 64 recomp
+シリーズと同じアプローチ。**完成度99.05%**を報告し、2012年世代の GPU で D3D12/Vulkan/Metal で
+動作し、RAM 2GB のみを要求し、ゲームデータを一切含まない——ROM ダンプは自己調達だ。
+キーボードだけで遊べる；リポジトリは著作権で保護されたアセットを含まないと明示している。
+
+**Why it matters:** このフィードが RE4 の完全バイト一致逆コンパイルを取り上げた1週間後、
+同じ保存の波が別の顔を見せた：再コンパイルはマッチする C コードを一切必要としない——
+元のマシンコードをネイティブへ直接リフトする。一人のメンテナーが1ヶ月でプレイ可能な
+クロスプラットフォーム移植に到達できる理由だ。技術は違えど結論は同じ：ツールチェーンは
+「保存目的の移植」をスタジオの仕事ではなく趣味のプロジェクトにするまでに成熟した。
+
+[`🔗 GitHub リポジトリ`](https://github.com/lfarroco/ogre-battle-64-recomp) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49780022)
+
+---
+
+## 30. paperless-ngx が v3.2.0 と v3.2.1 を相次いでリリース、ドキュメントマネージャーが45.6kスターで GitHub Trending に登場
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 45,634 stars · v3.2.0 は9月19日、v3.2.1 は9月20日
+- **Tags:** `self-hosted` `documents` `ocr` `python`
+
+paperless-ngx（GPL-3.0、Python）——スキャン文書をインデックスし OCR をかけるコミュニティ運営の
+ドキュメント管理システム——が GitHub のデイリートレンドに登場し、今回の実行の数時間前まで
+プッシュされていた。トリガーはリリースペースだ：v3.2.0（9月19日）の翌日に v3.2.1 バグフィックス
+リリースが続いた——陳腐化したメール取得オーバーラップチェックを自発行期限のロックに置き換え、
+Tantivy インデックスファイル欠落時に検索インデックスを自動再構築、合字テキストレイヤ修正を
+取り込む ocrmypdf 17.12 への更新、flower 設定フラグの修正。
+
+**Why it matters:** このフィード自身のトリガールールに従えば、これは単一のバイラルな瞬間ではなく
+「持続的勢い＋リリース」だ——新しい HN スレッドはない。だが45.6kスターのセルフホスト文書
+インフラが、セキュリティ関連の信頼性修正を翌日ターンアラウンドで静かに出し続けているのは、
+Void の教訓が確認せよと言っていた健全なメンテナンスシグナルそのものだ：スター数と同じ速さで
+コミットログが本当に動いているトレンドリポジトリ。
+
+[`🔗 GitHub リポジトリ`](https://github.com/paperless-ngx/paperless-ngx) · [`🔗 v3.2.1 リリース`](https://github.com/paperless-ngx/paperless-ngx/releases/tag/v3.2.1)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-21T04:45:00+08:00 |
-| Items | 17 |
-| Sources tracked | 18（Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、VulnCheck、Onapsis、Checkmarx Zero、BleepingComputer、The Hacker News、PyPy blog、lethain.com、evaluation.club、buchodi.com、pirateface.co、Seoul Economic Daily、bartosz.fenski.pl、Accomplish AI） |
+| Generated | 2026-09-21T12:15:00+08:00 |
+| Items | 30 |
+| Sources tracked | 29（Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、VulnCheck、Onapsis、Checkmarx Zero、BleepingComputer、The Hacker News、PyPy blog、lethain.com、evaluation.club、buchodi.com、pirateface.co、Seoul Economic Daily、bartosz.fenski.pl、Accomplish AI、agentexecutor.io、github.com、libroot.org、seldo.com、sunilpai.dev、terrytao.wordpress.com、millenniumproblems.bio、borischerny.com、maharship.com、dev.to、ic3.gov） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（毎日3回） |
 | Ranking | Velocity 加重（鮮度 × エンゲージメント加速 × ソース権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
