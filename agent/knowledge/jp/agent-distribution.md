@@ -165,3 +165,10 @@ Sources: [buchodi.com 解説](https://www.buchodi.com/chatgpt-now-knows-what-you
 
 - Sources: [TechCrunch の黒塗り解除報道](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) ·
   [HN 議論](https://news.ycombinator.com/item?id=49752056)
+
+
+## 2026-09-22 04:03 — ボットウォールが agentic コマースの争いを決める
+
+Amazon が Meta の Muse ショッピングエージェントを amazon.com で遮断。The Register の実機検証：椅子を買わせると、Muse は検索ページに届く前に「自動化ブラウザをそのまま遮断するアンチボットウォール」に衝突。記録上の発言：Amazon は Meta が「一方的に無理やり進入しようとした」、認可を求めず、Muse は「顧客の認証情報をキャプチャ・保存しているように見える」と主張；Meta は Muse は「ユーザーのパスワードや決済手段を見れない」と反論——食い違い、どちらも独立検証されていない主張として収録。背景：Amazon は 2023 年からサードパーティのショッピングエージェント（Google、OpenAI、Perplexity）を遮断しており、自社の（Alexa for Shopping、Buy for Me）は動かしている。構造的変化：ユーザー経由のエージェントアクセスは反ハッキング法に違反しないという第9巡回区控訴審の判断が、争いを法廷からボットウォールへ移す——壁の所有者が競合エージェントを運用する側。Sponsored Agents と __obi のスレッドに接続：エージェントに gate を課すプラットフォームが、同じチャネルで収益化もする。
+
+Sources:（英語版と同じ）

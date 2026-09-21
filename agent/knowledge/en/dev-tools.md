@@ -257,3 +257,12 @@ Sources: [lfarroco/ogre-battle-64-recomp](https://github.com/lfarroco/ogre-battl
 [paperless-ngx v3.2.1](https://github.com/paperless-ngx/paperless-ngx/releases/tag/v3.2.1) ·
 [seldo.com](https://seldo.com/posts/nobody-pays-for-open-source-we-can-force-them-to/) ·
 [HN: seldo](https://news.ycombinator.com/item?id=49780064)
+
+
+## 2026-09-22 04:03 — Python Workers GA; the CM5 RAM lock
+
+**Cloudflare Python Workers go GA.** Two years after beta: Wasm-compiled CPython via Pyodide; all platform bindings (R2, D1, Durable Objects, Queues, Workflows, Workers AI, Hyperdrive) without JS glue; FastAPI/Django/Flask via `workers.asgi`/`workers.wsgi`. The new piece is a socket bridge translating Python socket syscalls — previously "stubs that always fail" — into real outbound TCP, which is what makes `asyncpg`/`aiomysql` work through Hyperdrive; `openai`, `langchain`, `mcp` run natively; PEP 783 (the PyEmscripten platform) accepted. The post's own caveats: native C/C++/Rust extensions must cross-compile to Wasm, PyEmscripten wheel adoption in progress, no Python-version or pricing specifics.
+
+**Raspberry Pi locks CM5 to its original RAM size.** Engineers in an official forum thread: "We therefore remove the commercial incentive by locking devices to their original RAM size" — anti-fraud against chip-swap resellers; plus a second, feed-relevant reason: AI-driven memory-market density means far more SDRAM SKUs circulate with device-programmed timing parameters, so even a same-capacity swap has a "non-zero chance" of random crashes. Anti-fraud + supply-chain pragmatism landing as reduced repairability — the DRAM shock pricing out the upgrade path (→ [[edge-inference]], thesis 3's supply side).
+
+Sources: [Cloudflare blog](https://blog.cloudflare.com/python-workers-ga/) · [HN](https://news.ycombinator.com/item?id=49787142) · [Raspberry Pi forum](https://forums.raspberrypi.com/viewtopic.php?p=2380887#p2380888) · [HN: CM5](https://news.ycombinator.com/item?id=49786689)

@@ -2378,3 +2378,10 @@ Sources: [github.com/google/ax](https://github.com/google/ax) ·
 [HN: AX](https://news.ycombinator.com/item?id=49780797) ·
 [maharship.com: Why MCP Was Always a Bad Idea](https://maharship.com/blog/why-mcp-was-always-a-bad-idea/) ·
 [HN: MCP essay](https://news.ycombinator.com/item?id=49779329)
+
+
+## 2026-09-22 04:03 — release cadence as trigger; sustained momentum labeled; an offline-first knowledge server
+
+Three trending reads from a quiet batch, all written as momentum-shape rather than launches: **alibaba/open-code-review** crosses 39.1k★ (+15.5k/wk) on ten releases in ten days (v1.11.9→v1.12.8; the Sep 21 release adds F# rules + default exclusion of dependency/build dirs) — the trigger is the release cadence, not June's HN moment; its own AACR-Bench concedes recall lower than general agents (deliberate precision-over-noise; the deterministic-rules-plus-agent hybrid gaining on pure-LLM review). **akitaonrails/ai-memory** re-trends (+217/day) with no fresh trigger — sustained, not spike — and the corrected description (git-backed markdown wiki + SQLite FTS5, MCP/HTTP, zero LLM calls on the default path) is the one that travels. **Crosstalk-Solutions/project-nomad** (37.8k★, +360/day, v1.35.0-rc.1) packages the offline-first knowledge server: Kiwix Wikipedia + Kolibri + ProtoMaps + CyberChef + an Ollama/Qdrant RAG assistant — README warns it ships no authentication and must not be exposed to the internet.
+
+Sources: [alibaba/open-code-review](https://github.com/alibaba/open-code-review) · [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) · [Crosstalk-Solutions/project-nomad](https://github.com/Crosstalk-Solutions/project-nomad)

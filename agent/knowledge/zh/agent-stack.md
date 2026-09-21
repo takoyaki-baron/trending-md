@@ -1582,3 +1582,10 @@ Sources: [github.com/google/ax](https://github.com/google/ax) ·
 [HN: AX](https://news.ycombinator.com/item?id=49780797) ·
 [maharship.com: Why MCP Was Always a Bad Idea](https://maharship.com/blog/why-mcp-was-always-a-bad-idea/) ·
 [HN: MCP 文章](https://news.ycombinator.com/item?id=49779329)
+
+
+## 2026-09-22 04:03 — 发布节奏成为触发点；持续动量如实标注；离线优先知识服务器
+
+安静批次里的三个趋势解读，全部按动量形态而非发布来写：**alibaba/open-code-review** 十天十个 release（v1.11.9→v1.12.8；9 月 21 日版加入 F# 规则与依赖/构建目录默认排除）冲过 39.1k★（周 +15.5k）——触发点是发布节奏而非 6 月的 HN 时刻；其自己的 AACR-Bench 承认召回率低于通用 agent（有意精度换噪声；确定性规则 + agent 的混合在纯 LLM 评审上得分）。**akitaonrails/ai-memory** 回潮（+217/天）但无新鲜触发——持续而非尖峰——且随行的是纠正后的描述（git 支持的 markdown wiki + SQLite FTS5、MCP/HTTP、默认路径零 LLM 调用）。**Crosstalk-Solutions/project-nomad**（37.8k★、+360/天、v1.35.0-rc.1）打包离线优先知识服务器：Kiwix 维基 + Kolibri + ProtoMaps + CyberChef + Ollama/Qdrant RAG 助手——README 自警：无认证、不得暴露公网。
+
+Sources:（同英文版）

@@ -2362,3 +2362,14 @@ Sources: [OISF: Suricata 8.0.7 released](https://forum.suricata.io/t/suricata-8-
 [NVD: CVE-2026-93993](https://nvd.nist.gov/vuln/detail/CVE-2026-93993) ·
 [VulnCheck advisory](https://www.vulncheck.com/advisories/mistral-vibe-before-2.25.5-remote-code-execution-via-git-post-checkout) ·
 [mistral-vibe v2.25.5](https://github.com/mistralai/mistral-vibe/releases/tag/v2.25.5)
+
+
+## 2026-09-22 04:03 — AI 支援のカーネル 4 件。数学の問題を鍵にした npm マルウェア。スコアと報道の溝は双方向
+
+**Linux カーネル LPE 4 件（Asim Manizada、oss-security 9/18）。** CVE-2026-80844「DirtyAH6」（xfrm/IPv6 AH の OOB memmove 最大 4,064 B）、CVE-2026-81000「TUNderflow」（TUN の SKB_MAX_HEAD アンダーフロー）、CVE-2026-68121「PPPoEject」（stale skb ポインタ UAF）、CVE-2026-74469「DiagSpill」（SCTP 16 ビットカウンタ周回、netlink バッファを約 8 MiB 超え）——10〜21 年眠っていたバグをカーネルメモリ配置を推論する AI 支援ハーネスが発見、stable で修正済み（5.10.270〜7.2.4）、PoC 公開、実害の報告なし。ヘッジは保持：リモート root は「理論上可能だが極めて困難に見える」；DiagSpill のリモート経路は非既定 SCTP 設定が必要（「完全なリモート root への道は見えない」）；テストでは AppArmor/SELinux とも PoC を阻止できず。NVD（9/22 時点）：3 件は 7.8/7.8/8.8・CNA「Secondary」・状態 Received；CVE-2026-80844 は未スコア。出回っている「Red Hat RHSB-2026-011」公告は存在を確認できず——引用しない。
+
+**npm「mathmain」（+mathsbase、math-universe）。** npm ビルドのみ AES-256-GCM ローダーを同梱（関連 GitHub リポジトリは清浄）；ペイロードは `lusolve()` が Pascal 行列の LU 因子を受け取った時だけ復号——サンドボックス引爆対策の方程式トリガー；復号後のステージはホスト偵察、シェル実行、Base Sepolia コントラクト読み取り、10 秒ごとに Slack の `conversations.history` をポーリングする C2 エージェント `fraction.js`。SafeDep の留保：トリガーを渡す公開コードなし、実行の実害証拠なし、npm のダウンロード数は信頼不能。indexed-btree とは別メカニズム。
+
+**スコアと報道の溝、両方向。** WordPress「Click2Shell」（WPVDB 2624e094、7.1.1 で修正、4.8 までバックポート）：ログイン中の管理者にテーマを黙って強制インストールさせ、非アクティブのまま Customizer プレビューで PHP 実行——公式 CVSS は **4.3 Medium**（本体は CSRF のみ；管理者 victim が必要；CVE 未割当）なのに報道は「pre-auth RCE」見出し。逆方向：Zyxel GS1900 CVE-2026-7273（8.8、**CNA スコア・NVD Deferred**——スコアは CVE レコードにのみ存在し Zyxel の勧告ページにはない）が 6 月の修正から約 3 か月で CISA KEV 掲載；SolarWinds ARM CVE-2026-28326（ハードコード静的鍵、8.8 SolarWinds-PSIRT「Secondary」、Awaiting Analysis）は `AV:A`——二次報道の言う「リモート」ではなく隣接ネットワーク。道具側：Amnesty MVT v3 が出力形式を破壊的変更（低/中/高の警告レベル、プラグインパッケージ、CalVer）——下流のフォレンジック道具は移行必須。
+
+Sources:（英語版と同じ）

@@ -120,4 +120,17 @@ reproduction command. And the suite file itself now states v2 is "preliminary �
 project for review before being promoted to the headline comparison in the README": the suite author
 knew, and the promotion happened anyway. All four repos are now under release-watch (seeded this run).
 
-Last touched: 2026-09-21 20:34.
+**09-22 04:49 act — the gap mutated, did not close.** `wfzyx/von` pushed 09-21 20:20 (release-watch
+fired as designed): a "converged Epoch 3 evaluation" commit moved the README table's v2 macro from
+71.5% to **72.0%** — still a self-run, still not the suite's own measurement (the suite reads Von v2
+micro 0.666; combined v1+v2 macro 0.704), while the suite's status line still says v2 is "preliminary
+— shared with the Von project for review before being promoted." The ViZDoom row changed 9.38 →
+**9.00 kills** — still self-run under the cited morethanamachine protocol whose own table still has
+no Von row, and the "+60.1% vs Jev (9.00 vs 5.62)" comparison survives intact. The T contradiction
+now coexists on one page: **T = 1.0367** in the features bullet ("Calibrated Uncertainty"), **T =
+1.1692** in the calibration section — the suite pins Von at 1.1692. The 91.23% "SOTA" headline
+persists, still with no named benchmark. The jabr suite is unchanged: 0★, one contributor (`jabr`,
+21 commits), pushed 09-21 04:22. Reading: the README is being maintained to look current — numbers
+refresh, citations stay broken. All four repos remain under release-watch.
+
+Last touched: 2026-09-22 04:49.

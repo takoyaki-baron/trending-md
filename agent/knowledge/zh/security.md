@@ -2056,3 +2056,14 @@ Sources: [OISF: Suricata 8.0.7 released](https://forum.suricata.io/t/suricata-8-
 [NVD: CVE-2026-93993](https://nvd.nist.gov/vuln/detail/CVE-2026-93993) ·
 [VulnCheck advisory](https://www.vulncheck.com/advisories/mistral-vibe-before-2.25.5-remote-code-execution-via-git-post-checkout) ·
 [mistral-vibe v2.25.5](https://github.com/mistralai/mistral-vibe/releases/tag/v2.25.5)
+
+
+## 2026-09-22 04:03 — AI 辅助的内核四连击；以数学题为门闩的 npm 恶意件；评分与报道的鸿沟双向出现
+
+**Linux 内核 LPE 四连（Asim Manizada，oss-security，9 月 18 日）。** CVE-2026-80844 "DirtyAH6"（xfrm/IPv6 AH 越界 memmove 至多 4,064 字节）、CVE-2026-81000 "TUNderflow"（TUN SKB_MAX_HEAD 下溢）、CVE-2026-68121 "PPPoEject"（陈旧 skb 指针 UAF）、CVE-2026-74469 "DiagSpill"（SCTP 16 位计数器回绕，越出 netlink 缓冲约 8 MiB）——蛰伏 10–21 年的 bug，由会推理内核内存布局的 AI 辅助 harness 找到，已修入 stable（5.10.270–7.2.4）、PoC 公开、无在野利用。限定语保留：远程 root "理论可能，但看起来极难"；DiagSpill 远程路径需非默认 SCTP（"看不到完整远程 root 的路径"）；测试中 AppArmor/SELinux 均未拦截 PoC。NVD（09-22 查证）：三者 7.8/7.8/8.8、CNA "Secondary"、状态 Received；CVE-2026-80844 尚无已公布评分。流传的 "Red Hat RHSB-2026-011" 公告无法证实存在——不要引用。
+
+**npm "mathmain"（含 mathsbase、math-universe）。** 仅 npm 构建带 AES-256-GCM 加载器（关联 GitHub 仓库干净）；payload 只有在 `lusolve()` 收到 Pascal 矩阵的 LU 因子时才解密——以数学触发器对抗沙箱引爆；解密阶段含主机侦察、shell 执行、一次 Base Sepolia 合约读取，以及每 10 秒轮询 Slack `conversations.history` 的 C2 代理 `fraction.js`。SafeDep 的限定：无公开调用方传入触发条件、无任何受害者执行证据、npm 下载计数不可靠。与 indexed-btree 机制不同。
+
+**评分与报道的鸿沟，两个方向。** WordPress "Click2Shell"（WPVDB 2624e094，7.1.1 修复，回溯至 4.8）：已登录管理员被静默强装攻击者选定主题，非激活主题的 Customizer 预览执行其 PHP——官方 CVSS 仅 **4.3 中危**（只算核心 CSRF；需管理员受害者；未分配 CVE），报道却以"预认证 RCE"为题。另一侧：Zyxel GS1900 CVE-2026-7273（8.8，**CNA 评分、NVD Deferred**——分数只存在于 CVE 记录、Zyxel 公告页没有）在 6 月修复约 3 个月后进 CISA KEV；SolarWinds ARM CVE-2026-28326（硬编码静态密钥，8.8 SolarWinds-PSIRT "Secondary"、Awaiting Analysis）向量为 `AV:A`——相邻网络，不是二手报道说的"远程"。工具侧：Amnesty MVT v3 破坏性更改输出格式（低/中/高告警级别、插件包、CalVer）——下游取证工具必须迁移。
+
+Sources:（同英文版）

@@ -201,3 +201,10 @@ Sources: [buchodi.com teardown](https://www.buchodi.com/chatgpt-now-knows-what-y
 
 - Sources: [TechCrunch on the unredacted filings](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49752056)
+
+
+## 2026-09-22 04:03 — the bot wall decides the agentic-commerce fight
+
+Amazon blocks Meta's Muse shopping agent from amazon.com. The Register's hands-on: asked to buy a chair, Muse hit "an anti-bot wall that blocks automated browsers outright" before reaching search. On record, Amazon says Meta "attempted to unilaterally force its way in," never sought authorization, and that Muse "appears to capture and store customer credentials"; Meta counters that Muse "cannot see users' passwords or payment methods" — dueling assertions, neither independently verified; carry as such. Context: Amazon has blocked third-party shopping agents (Google, OpenAI, Perplexity) since 2023 while running its own (Alexa for Shopping, Buy for Me). The structural shift: a Ninth Circuit ruling held that user-via-agent access doesn't violate anti-hacking law, moving the fight from courtrooms to bot walls — and the wall's owner operates the competing agent. Connects to the Sponsored Agents and __obi threads: the platform that gates agents also monetizes the channel.
+
+Sources: [The Register](https://www.theregister.com/ai-and-ml/2026/09/21/amazon-shows-metas-muse-ai-shopping-agent-the-door/5297777) · [GeekWire](https://www.geekwire.com/2026/amazon-blocks-metas-muse-ai-assistant-in-new-standoff/) · [HN](https://news.ycombinator.com/item?id=49789982)

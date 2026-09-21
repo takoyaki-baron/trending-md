@@ -2189,3 +2189,16 @@ Sources: [Tao ブログ: Loh ゲスト投稿](https://terrytao.wordpress.com/202
 [HN: Millennium Problems](https://news.ycombinator.com/item?id=49775082) ·
 [kyle-pena-nlp/jevchat](https://github.com/kyle-pena-nlp/jevchat) ·
 [HN: jevchat](https://news.ycombinator.com/item?id=49778162)
+
+
+## 2026-09-22 04:03 — Grok 4.7 の譲る表。Kimi K3 の流通の節目。要約に印刷された正直さの条項
+
+**Grok 4.7（9/21）。** 4.6 と同価格（$2/$6 毎百万；「fast」は 2 倍）、500k コンテキスト、複数時間タスクの長い RL。xAI 自身の表が 5 行を Fable 5.1 Max に譲る（CursorBench 51.8 対 46.3、Terminal-Bench 57.9 対 38.0、HealthBench、AA Briefcase、GDPval Elo 1735 対 1695）——主張はリーダーシップでなく価格性能。Artificial Analysis の独立計測：Intelligence Index 46（202 中 16 位）、「かなり遅い」（39.3 tok/s、151 位）、非常に冗長（評価出力 240M tokens 対中央値 94M）。安全数値（「危険な双用途プロンプトの 3.3% のみ通過」）は内部評価；パラメータ数非開示。
+
+**Kimi K3 が Amazon Bedrock で GA（9/18）。** 2.8T のオープンウェイト、ネイティブビジョン、1M コンテキスト、明示的プロンプトキャッシュ（オープンウェイトとして Bedrock 初）。毎日経済ニュース（9/21、Moonshot 確認として）は中国オープンウェイトモデル初の「北米クラウド収益分配」合意を確認——本物だが条件は非開示；AWS 自身の発表は収益に一切触れない。合意を報じ、合意の経済性は報じない。
+
+**要約に印刷された正直さの条項。** NVIDIA NemotronLabs VoiceChat 11B の論文（arXiv 2609.21967；Mamba/Transformer ハイブリッド、約 55 万時間、約 448 ms のターンテイキング、OpenMDW v1.1）：ツール引数精度 42.2%、エンドツーエンド Pass@1 33%、オフライン関数呼び出しはシミュレーション（事前作成 JSON）；システムプロンプトは ASCII のみ。「ツール呼び出し付きオープン全二重として初」は本物——本番グレードは、NVIDIA 自身の数値では言えない。Qwen RecreationWorld（arXiv 2609.22000、MIT、Ubuntu/macOS/Windows/Android/Web の 250 環境）：エージェントは稼働中の参照アプリを外側から再現し、*振る舞い*（プログラマティック+視覚アサーション）で採点、ソース類似性ではない——GPT-6 Astra は全体 58.1% で首位だが全プログラマティックテスト通過は 2.8%；生成アプリは「より小さくよりモノリシック」；リポジトリ自身の表でフロンティア評価は約 $115.80/タスク；リポジトリは数日齢（コミット 3）。
+
+**日付付き更新。** Heretic がプロジェクトページを公開（heretic-project.org）し 2 度目の HN の日——32.1k★、5,000+ のコミュニティ消融モデル、使用上の警告なし（08-31 の対抗ノートは有効）。Fable 5 の思考トークン中央値が 8 月に落ちたという一人計測が広く流通——自己計測・未検証、データポイントとして収録（→ テーゼ 6/13；リサーチ監視項目として立案済み）。
+
+Sources:（英語版と同じ）

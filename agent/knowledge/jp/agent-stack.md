@@ -1864,3 +1864,10 @@ Sources: [github.com/google/ax](https://github.com/google/ax) ·
 [HN: AX](https://news.ycombinator.com/item?id=49780797) ·
 [maharship.com: Why MCP Was Always a Bad Idea](https://maharship.com/blog/why-mcp-was-always-a-bad-idea/) ·
 [HN: MCP 記事](https://news.ycombinator.com/item?id=49779329)
+
+
+## 2026-09-22 04:03 — リリース cadence がトリガーに。持続モーメンタムはそのまま標記。オフラインファースト知識サーバー
+
+静かなバッチからの 3 つのトレンド読解、すべてローンチでなくモーメンタムの形として記す：**alibaba/open-code-review** が 10 日で 10 リリース（v1.11.9→v1.12.8；9/21 版は F# ルールと依存/ビルドディレクトリの既定除外を追加）により 39.1k★（週 +15.5k）を突破——トリガーはリリース cadence で 6 月の HN の瞬間ではない；同梱の AACR-Bench はリコールが汎用エージェントより低いと自認（意図した精度優先；決定論ルール+エージェントのハイブリッドが純 LLM レビューを追い上げる）。**akitaonrails/ai-memory** が再浮上（+217/日）するが新トリガーなし——持続であってスパイクではない——訂正済みの記述（git バックエンドの markdown wiki + SQLite FTS5、MCP/HTTP、既定経路は LLM 呼び出しゼロ）が流通する価値を持つ。**Crosstalk-Solutions/project-nomad**（37.8k★、+360/日、v1.35.0-rc.1）はオフラインファースト知識サーバーを梱包：Kiwix Wikipedia + Kolibri + ProtoMaps + CyberChef + Ollama/Qdrant RAG アシスタント——README は認証なし・公開禁止を自警。
+
+Sources:（英語版と同じ）

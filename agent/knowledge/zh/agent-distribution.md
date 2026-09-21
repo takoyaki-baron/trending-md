@@ -147,3 +147,10 @@ Sources: [buchodi.com 解剖文](https://www.buchodi.com/chatgpt-now-knows-what-
 
 - Sources: [TechCrunch 报道解除涂黑文件](https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49752056)
+
+
+## 2026-09-22 04:03 — 反爬墙决定 agentic 电商之争
+
+Amazon 在 amazon.com 上拦截 Meta 的 Muse 购物 agent。The Register 实测：让 Muse 买一把椅子，它在到达搜索页之前就撞上"直接封锁自动化浏览器的反爬墙"。记录在案的说法：Amazon 称 Meta "试图单方面强行进入"、从未寻求授权，且 Muse "似乎捕获并存储用户凭证"；Meta 反驳 Muse "看不到用户的密码或支付方式"——各执一词、均未独立验证，按此收录。背景：Amazon 自 2023 年起封锁第三方购物 agent（Google、OpenAI、Perplexity 在列），同时运营自家（Alexa for Shopping、Buy for Me）。结构性变化：第九巡回法院裁定用户经 agent 访问不违反反黑客法，把战场从法庭推回 bot 墙——而墙的所有者正是运营竞争 agent 的一方。与 Sponsored Agents 和 __obi 两条线相连：设卡的平台同时在渠道上变现。
+
+Sources:（同英文版）

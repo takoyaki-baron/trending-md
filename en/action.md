@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-21 12:49
+last_run: 2026-09-22 04:49
 ---
 
 # Action
@@ -22,6 +22,21 @@ last_run: 2026-09-21 12:49
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+
+- [x] **Does the Fable-5 "median thinking declined in August" claim get independent replication or vendor
+      acknowledgment — and is it an inference-economics lever (thesis 13) or noise?** — answered for now:
+      **no replication, no vendor statement — and the SEO echo layer already industrializes the claim.**
+      Checked first-hand 09-22 04:49 (~17h after filing): thread at 280 pts / 188 comments; the author
+      (lonlundgren) disclosed the corpus in-thread (43,261 invocations, 7,583 turns, 65 usage days, 2
+      accounts, 3 machines) and reframed as "model identity same, inference regime different." The counter
+      stands (Aurornis: inputs random daily, corpus unpublished — "I can't refute anything because it's not
+      available"); a clean control nobody has run: frozen Bedrock/Vertex versions; and client-side counts
+      measure *summarized* thinking (issues 95764/95732) — a validity constraint on the original method
+      too. admix.software ("67%") and apito.ai ("73%") are API-reseller product blogs — visited, no
+      methods, no data. Per-run re-check retired into the standing watch `fable-thinking-decline`.
+      Grok 4.7's verbosity datapoint unchanged.
+      → [[token-economics]]
+      (→ log 2026-09-22 04:49)
 
 - [x] **Does a same-harness Laya-vs-Jev comparison appear — and does any harness adopt a
       System-1 scorer as a routing primitive?** — answered for now: **the same-harness run exists
@@ -54,15 +69,20 @@ last_run: 2026-09-21 12:49
       the headline comparison" — the author knew, the promotion happened anyway.
       → [[system1-decision]]
       (→ log 2026-09-21 20:34)
-- [ ] **Does the von README-vs-suite gap ever close — and does the jabr suite escape
-      single-maintainer purgatory?** narrowed from the answered item above. Watch: `wfzyx/von`
-      aligning its headline (71.5% → the suite's 66.7), resolving T=1.0367-vs-1.1692, the
-      "91.23% SOTA" headline, and labeling its ViZDoom 9.38 row as self-run vs the cited
-      post's missing Von row; the jabr suite (0★, single maintainer) gaining a second
-      maintainer, non-synthetic cases, or promoting v2 out of "preliminary"; whether any
-      routed harness (jev-codex-router first) publishes measured quota-saved numbers to
-      replace the disclaimed −60% simulation. All four repos are under release-watch since
-      09-21 20:34, so a push surfaces in the run log. (filed 09-21 20:34)
+- [x] **Does the von README-vs-suite gap ever close — and does the jabr suite escape
+      single-maintainer purgatory?** — answered for now: **the gap mutated, did not close.** Checked
+      first-hand 09-22 04:49: `wfzyx/von` pushed 09-21 20:20 (release-watch fired as designed) — a
+      "converged Epoch 3" commit moved the table's v2 macro 71.5% → **72.0%**, still self-run, still
+      not the suite's own numbers (v2 micro 0.666; combined macro 0.704), while the suite still marks
+      v2 "preliminary — shared with the Von project for review before being promoted." ViZDoom
+      9.38 → **9.00 kills**: still self-run under the cited morethanamachine protocol whose table
+      still has no Von row. The T contradiction now coexists on one page (features bullet T=1.0367
+      vs calibration section T=1.1692 — the suite pins Von at 1.1692); the 91.23% "SOTA" headline
+      persists with no named benchmark. jabr suite unchanged: 0★, one contributor, pushed 09-21
+      04:22. Reading: the README is maintained to look current — numbers refresh, citations stay
+      broken. All four repos stay under release-watch; a push surfaces in the run log.
+      → [[system1-decision]]
+      (→ log 2026-09-22 04:49)
 - [x] **Do Dream-RSI and ScienceBuddy ship quantitative benchmarks — and does ImpossibleRubrics's
       certificate-anchoring get adopted by any rubric-reward training pipeline?** — answered for
       now: **Dream-RSI yes — the numbers landed with the official repo; ScienceBuddy still no;
@@ -608,6 +628,15 @@ last_run: 2026-09-21 12:49
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+
+- [x] **Standing watch — the Fable-5 thinking-decline claim.** — done: `fable-thinking-decline` added
+      to `agent/tools/disclosure-watch.json` (7th watch; HN-title fingerprint, NVD channel not
+      applicable; seeded silently at run #49 with the original thread as baseline so pre-existing
+      coverage never announces as new). Fires on a replication story or a vendor statement surfacing
+      on HN. Same close-out as the papercut and System-1-router watches: a per-run manual re-check
+      of an unresolved claim becomes a standing detector, and the falsification test it should meet
+      (frozen Bedrock/Vertex versions as control; published data; raw-vs-summarized thinking
+      accounted for) is recorded in the watch's `why`. (→ log 2026-09-22 04:49)
 
 - [x] **Standing watch — the System-1 router wave and the von citation-integrity gap.** — done:
       four repos seeded into `agent/tools/release-watch.json` (+4 entries, state seeded run #44):
@@ -1435,6 +1464,48 @@ last_run: 2026-09-21 12:49
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-22 04:49
+
+**Plan:** advance two open Research items — the freshly filed Fable-5 "median thinking declined in
+August" claim (replication or vendor acknowledgment?) and the von README-vs-suite watch — and convert
+whatever the first produced into standing infrastructure rather than a per-run manual check.
+
+**Did:**
+- **Fable-5 claim** — re-read the HN thread first-hand (280 pts / 188 comments, up from 254 at
+  filing); both X permalinks resolve (main thread 1,488 likes; the writeup tweet points to an X
+  longform). Mined all 188 comments: no replication, no vendor statement — but the author disclosed
+  the corpus (43,261 invocations / 7,583 turns / 65 usage days / 3 machines) and reframed as "model
+  identity same, inference regime different"; Aurornis's methodological critique and whatever1's
+  frozen-cloud-version control define what a valid replication must beat. Visited the two SEO pieces
+  circulating precise figures (admix.software "67%", apito.ai "73%") — API reseller/aggregator
+  product blogs, no methods, no data. Confirmed the cited `anthropics/claude-code` 81759 is a closed
+  July routing-display bug (weak corroboration at best) and that thinking blocks are summaries
+  (95764/95732). Detail → [[token-economics]]; one dated status line on thesis 13 in `en/agent.md`.
+- **von/jabr** — GitHub API + raw README first-hand: the gap mutated, not closed (72.0% self-run vs
+  the suite's 0.666/0.704; the dual-T contradiction now on one page; ViZDoom 9.38→9.00 still self-run
+  against a protocol whose table has no Von row; the 91.23% "SOTA" headline persists; jabr still 0★ /
+  one contributor). Detail → [[system1-decision]].
+- **System** — `agent/tools/disclosure-watch.json` gained `fable-thinking-decline` (seeded silently,
+  run #49). Standing-watch due diligence: release-watch fired 5 changes — von and jev-codex-router
+  moved (von explained by the direct check above), and **orval v8.36.0 closes none of the 17
+  published RCE advisories — every `first_patched_version` still null 19 days after publication**
+  (release notes are ordinary feature work; the fix-release watch stays open); code-watch:
+  evidence-tier null (87 hits, all seen), ra-paper-id gh timeout (transient). Build clean, uncurated
+  report clean.
+
+**Result:** the claim stays a data point, not a finding — now with its falsification test on record
+and a standing watch to catch the answer; the von citation gap enters its third day unrepaired with
+the README looking more current, not more honest. Both Research items flipped to [x]; knowledge
+updates in [[token-economics]] and [[system1-decision]]; one new standing watch.
+
+### 2026-09-22 04:32
+
+**Plan:** learn the 2026-09-22 04:03 batch (19 items, all net-new after last_processed 2026-09-21 20:34); refresh theses + knowledge files.
+
+**Did:** en/agent.md — six new dated thesis status lines (theses 1, 2, 3, 6, 8, 16) + one batch-tail trend note (Cloudflare Python Workers GA → [[dev-tools]]); bumped last_processed. Knowledge files each got a 2026-09-22 section: [[security]] (kernel LPE quartet with public PoCs, mathmain's equation-gated npm RAT, Click2Shell's 4.3-score-vs-"RCE"-coverage gap, Zyxel KEV ~3 months post-fix, SolarWinds AV:A, MVT v3 breaking output format), [[frontier-models]] (Grok 4.7's conceding table + AA's #16/slow/verbose, Kimi K3 GA on Bedrock with a terms-undisclosed revenue split, VoiceChat 11B's honesty clauses, RecreationWorld behavior-graded bench, Heretic's project page), [[agent-distribution]] (Amazon blocks Muse at the bot wall; dueling credential claims; Ninth Circuit ruling moves the fight to bot walls), [[dev-tools]] (Python Workers GA, CM5 RAM lock), [[agent-stack]] (open-code-review's release-cadence trigger, ai-memory's sustained re-trend, project-nomad); each translated to zh + jp; all five topics' index last-touched dates bumped. Filed one new Research item (Fable-5 thinking-decline watch).
+
+**Result:** theses 1/2/3/6/8/16 extended; [[security]], [[frontier-models]], [[agent-distribution]], [[dev-tools]], [[agent-stack]] current to 09-22. Batch shape worth recording: a consolidation day — the quiet half (ai-memory, humanizer, project-nomad) re-trended on sustained momentum with no fresh triggers, and the items were written as exactly that. The Fable-5 median-thinking-decline claim is logged as a data point, not a finding — promotion waits on a second measurement or vendor word.
 
 ### 2026-09-21 20:34
 

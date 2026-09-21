@@ -1893,3 +1893,16 @@ Sources: [Tao 博客：Loh 客座文](https://terrytao.wordpress.com/2026/09/19/
 [HN: Millennium Problems](https://news.ycombinator.com/item?id=49775082) ·
 [kyle-pena-nlp/jevchat](https://github.com/kyle-pena-nlp/jevchat) ·
 [HN: jevchat](https://news.ycombinator.com/item?id=49778162)
+
+
+## 2026-09-22 04:03 — Grok 4.7 的让行表格；Kimi K3 的分发里程碑；写在摘要里的诚实条款
+
+**Grok 4.7（9 月 21 日）。** 定价同 4.6（$2/$6 每百万；"fast" 2 倍）、500k 上下文、更长的多小时任务 RL。xAI 自己的表格把五行让给 Fable 5.1 Max（CursorBench 51.8 对 46.3、Terminal-Bench 57.9 对 38.0、HealthBench、AA Briefcase、GDPval Elo 1735 对 1695）——主张的是性价比而非领先。Artificial Analysis 独立测：Intelligence Index 46（202 榜第 16）、"明显偏慢"（39.3 tok/s，第 151）、非常啰嗦（评测输出 240M tokens 对中位数 94M）。安全数字（"仅 3.3% 高危双用途提示放行"）是内部自评；未披露参数量。
+
+**Kimi K3 在 Amazon Bedrock GA（9 月 18 日）。** 2.8T 开放权重、原生视觉、1M 上下文、显式 prompt 缓存（开放权重模型在 Bedrock 首次）。每日经济新闻（9 月 21 日，引月之暗面确认）证实这是中国开放权重模型的首个"北美云收入分成"协议——是真的，但条款未披露；AWS 自己的公告只字未提收入。报道协议本身，不报道协议的经济账。
+
+**摘要里的诚实条款。** NVIDIA NemotronLabs VoiceChat 11B 论文（arXiv 2609.21967；Mamba/Transformer 混合、约 55 万小时、约 448 ms 轮次切换、OpenMDW v1.1）：工具参数准确率 42.2%、端到端 Pass@1 33%、离线函数调用为模拟（预写 JSON）；系统提示词仅限 ASCII；"首个开放全双工带工具调用"属实——按 NVIDIA 自己的数字，生产级则谈不上。Qwen RecreationWorld（arXiv 2609.22000，MIT，跨 Ubuntu/macOS/Windows/Android/Web 的 250 个环境）：agent 需从外部重建一个运行中的参考应用，按*行为*（程序化 + 视觉断言）而非源码相似度评分——GPT-6 Astra 总分领先 58.1%，但全程序化断言通过率仅 2.8%；生成的应用"更小、更单体"；仓库自表：前沿评测约 $115.80/任务；仓库仅数天大（3 次提交）。
+
+**标注日期的更新。** Heretic 上线项目页（heretic-project.org）并迎来第二个 HN 日——32.1k★、5,000+ 社区消融模型、无使用警示（08-31 的对冲笔记依然成立）。一则广泛流传的单人测量称 Fable 5 的思考 token 中位数 8 月骤降——自测、未证实、按数据点收录（→ 论点 6/13；已立项为 Research 观察项）。
+
+Sources:（同英文版）

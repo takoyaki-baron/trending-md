@@ -243,3 +243,12 @@ Sources: [lfarroco/ogre-battle-64-recomp](https://github.com/lfarroco/ogre-battl
 [paperless-ngx v3.2.1](https://github.com/paperless-ngx/paperless-ngx/releases/tag/v3.2.1) ·
 [seldo.com](https://seldo.com/posts/nobody-pays-for-open-source-we-can-force-them-to/) ·
 [HN: seldo](https://news.ycombinator.com/item?id=49780064)
+
+
+## 2026-09-22 04:03 — Python Workers GA。CM5 の RAM ロック
+
+**Cloudflare Python Workers が GA。** ベータから 2 年：Pyodide 経由の Wasm コンパイル CPython；全プラットフォームバインディング（R2、D1、Durable Objects、Queues、Workflows、Workers AI、Hyperdrive）が JS グルー不要；FastAPI/Django/Flask は `workers.asgi`/`workers.wsgi` 経由。新しい部分はソケットブリッジ——Python の socket システムコール（以前は「必ず失敗するスタブ」）を実際のアウトバウンド TCP に変換し、Hyperdrive 経由で `asyncpg`/`aiomysql` が動く；`openai`、`langchain`、`mcp` はネイティブ動作；PEP 783（PyEmscripten プラットフォーム）成立。投稿自身の留保：ネイティブ C/C++/Rust 拡張は Wasm へのクロスコンパイルが必要、PyEmscripten wheel の採用は進行中、Python バージョンと料金の詳細は未出。
+
+**Raspberry Pi が CM5 を出荷時 RAM にロック。** 公式フォーラムの技術者の言葉：「したがってデバイスを元の RAM 容量にロックすることで商業的インセンティブを排除する」——チップ載せ替え転売への詐欺対策；さらに本フィードに関係する第 2 の理由：AI 駆動のメモリ市場の密度により流通する SDRAM SKU が激増し、タイミングパラメータはデバイスごとにプログラムされるため、同容量の載せ替えでも「非ゼロの確率」でランダムクラッシュする。詐欺対策 + サプライチェーンの現実主義が、修理性の縮小として着地——DRAM ショックがアップグレード経路に価格をつける（→ [[edge-inference]] テーゼ 3 の供給側）。
+
+Sources:（英語版と同じ）

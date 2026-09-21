@@ -47,6 +47,14 @@
    "nvd_since": "2026-09-04T00:00:00.000",
    "hn_query": "OpenAI",
    "hn_title_regex": "openai.*(dsewiki|collusion|wiki|message.?board|nightingale)"
+  },
+  {
+   "id": "fable-thinking-decline",
+   "why": "thesis 13 / token-economics — Lon Lundgren's 5-method self-measurement (HN 280 pts, 09-21) that Fable 5's median thinking tokens dropped in August, timing it to subscription availability. Checked 09-22 04:49: no independent replication, no Anthropic statement; the SEO echo layer (admix.software 67%, apito.ai 73% — API resellers, not measurements) already commoditizes it, and thread counter-analysis (Aurornis: uncontrolled corpus; issue 95764: thinking blocks are summaries) defines what a valid replication must beat. The clean test nobody has run: frozen cloud versions (Bedrock/Vertex) as control. Watch fires on a replication story or vendor statement.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-09-21T16:00:00.000",
+   "hn_query": "fable",
+   "hn_title_regex": "fable(?=.*(think|median|token|replicat|degrad|measur))|thinking.*(declin|drop|replicat)"
   }
  ]
 }

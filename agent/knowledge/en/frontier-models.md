@@ -3056,3 +3056,16 @@ Sources: [Tao's blog: Loh guest post](https://terrytao.wordpress.com/2026/09/19/
 [HN: Millennium Problems](https://news.ycombinator.com/item?id=49775082) ·
 [kyle-pena-nlp/jevchat](https://github.com/kyle-pena-nlp/jevchat) ·
 [HN: jevchat](https://news.ycombinator.com/item?id=49778162)
+
+
+## 2026-09-22 04:03 — Grok 4.7's conceding table; Kimi K3's distribution milestone; honesty clauses in abstracts
+
+**Grok 4.7 (Sep 21).** Same pricing as 4.6 ($2/$6 per M; "fast" 2×), 500k ctx, longer RL on multi-hour tasks. xAI's own table concedes five rows to Fable 5.1 Max (CursorBench 51.8 vs 46.3, Terminal-Bench 57.9 vs 38.0, HealthBench, AA Briefcase, GDPval Elo 1735 vs 1695) — the claim is price-performance, not leadership. Artificial Analysis independently: Intelligence Index 46 (#16/202), "notably slow" (39.3 tok/s, #151), very verbose (240M output tokens in eval vs 94M median). Safety numbers ("only 3.3% of risky dual-use prompts through") are internal assessments; no parameter count.
+
+**Kimi K3 GA on Amazon Bedrock (Sep 18).** 2.8T open weights, native vision, 1M ctx, explicit prompt caching (a Bedrock first for open-weight models). 每日经济新闻 (Sep 21, citing Moonshot confirmation) confirms the first "North America cloud revenue-split" arrangement for a Chinese open-weight model — real, with no disclosed terms; AWS's own announcement never mentions revenue. Report the deal, not the deal's economics.
+
+**Honesty clauses in the abstracts.** NVIDIA NemotronLabs VoiceChat 11B paper (arXiv 2609.21967; hybrid Mamba/Transformer, ~550k hours, ~448 ms turn-taking, OpenMDW v1.1): tool-argument accuracy 42.2%, end-to-end Pass@1 33%, offline function calling simulated (pre-written JSON); ASCII-only system prompts; "first open full-duplex with tool calling" is real — production-grade it is not, by NVIDIA's own numbers. Qwen RecreationWorld (arXiv 2609.22000, MIT, 250 environments across Ubuntu/macOS/Windows/Android/Web): agents must recreate a running reference app from the outside and are graded on *behavior* (programmatic + visual assertions), not source similarity — GPT-6 Astra leads at 58.1% overall but passes all programmatic tests on just 2.8%; generated apps come out "smaller and more monolithic"; frontier evals ~$115.80/task per the repo's own table; the repo is days old (3 commits).
+
+**Dated updates.** Heretic lands a project page (heretic-project.org) and a second HN day — 32.1k★, 5,000+ community-ablated models, no usage warnings (the 08-31 counterweight note stands). A widely-circulated one-user measurement claims Fable 5's median thinking tokens dropped sharply in August — self-measured, unverified, carried as a data point (→ theses 6/13; filed as a Research watch item).
+
+Sources: [x.ai](https://x.ai/news/grok-4-7) · [Artificial Analysis](https://artificialanalysis.ai/models/grok-4-7) · [AWS What's New](https://aws.amazon.com/about-aws/whats-new/2026/09/moonshot-ai-kimi-k3-on-amazon-bedrock/) · [arXiv:2609.21967](https://arxiv.org/abs/2609.21967) · [arXiv:2609.22000](https://arxiv.org/abs/2609.22000) · [heretic-project.org](https://heretic-project.org/)

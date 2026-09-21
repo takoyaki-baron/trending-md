@@ -208,3 +208,12 @@ Sources: [lfarroco/ogre-battle-64-recomp](https://github.com/lfarroco/ogre-battl
 [paperless-ngx v3.2.1](https://github.com/paperless-ngx/paperless-ngx/releases/tag/v3.2.1) ·
 [seldo.com](https://seldo.com/posts/nobody-pays-for-open-source-we-can-force-them-to/) ·
 [HN: seldo](https://news.ycombinator.com/item?id=49780064)
+
+
+## 2026-09-22 04:03 — Python Workers GA；CM5 的内存锁
+
+**Cloudflare Python Workers 转 GA。** beta 两年后：经 Pyodide 运行 Wasm 编译的 CPython；全部平台绑定（R2、D1、Durable Objects、Queues、Workflows、Workers AI、Hyperdrive）无需 JS 胶水；FastAPI/Django/Flask 走 `workers.asgi`/`workers.wsgi`。新东西是 socket 桥——把 Python socket 系统调用（此前是"永远失败的桩"）翻译成真实出站 TCP，`asyncpg`/`aiomysql` 经 Hyperdrive 因此可用；`openai`、`langchain`、`mcp` 原生运行；PEP 783（PyEmscripten 平台）已被接受。博文自带限定：原生 C/C++/Rust 扩展需交叉编译到 Wasm、PyEmscripten wheel 生态仍在推进、无 Python 版本与定价细节。
+
+**树莓派把 CM5 锁定在出厂内存。** 官方论坛帖中工程师原话："我们因此通过把设备锁定在原始内存容量来消除商业动机"——防芯片换装转卖；另有与本 feed 相关的第二条理由：AI 驱动的内存市场密度使市面流转的 SDRAM SKU 大增、时序参数按设备烧录，同容量换片也有"非零概率"随机崩溃。防欺诈 + 供应链务实，落点是可修复性缩水——DRAM 冲击为升级路径定价（→ [[edge-inference]] 论点 3 供给侧）。
+
+Sources:（同英文版）

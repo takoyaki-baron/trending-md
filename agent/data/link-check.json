@@ -811,9 +811,27 @@
       "feeds": [
         "2026-09-21.md"
       ]
+    },
+    "https://www.geekwire.com/2026/amazon-blocks-metas-muse-ai-assistant-in-new-standoff/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-21T21:09:14.277Z",
+      "last_seen": "2026-09-21T21:09:14.277Z",
+      "feeds": [
+        "2026-09-22.md"
+      ]
+    },
+    "https://forums.raspberrypi.com/viewtopic.php?p=2380887#p2380888": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-21T21:09:14.277Z",
+      "last_seen": "2026-09-21T21:09:14.277Z",
+      "feeds": [
+        "2026-09-22.md"
+      ]
     }
   },
-  "runs": 28,
+  "runs": 29,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-21T12:55:21.232Z"
+  "last_run": "2026-09-21T21:09:14.277Z"
 }

@@ -389,3 +389,47 @@ Two 09-18 papers land on this layer from opposite ends:
 Sources: [arXiv 2609.20511](https://arxiv.org/abs/2609.20511) ·
 [UNCSciML/opd-eos](https://github.com/UNCSciML/opd-eos) ·
 [arXiv 2609.20519](https://arxiv.org/abs/2609.20519)
+
+## The Fable-5 "median thinking declined in August" claim — first standing check, still single-sourced (09-22 act)
+
+Filed 09-22 04:32 off a 254-pt HN thread; re-checked first-hand ~17h later (04:49). The claim: Lon
+Lundgren (@Lon on X, `lonlundgren` on HN) measured Fable 5's median thinking tokens five different
+ways and found a sharp August drop, timed to the model becoming permanently available to subscription
+plans. Thread grew to 280 pts / 188 comments in that window; both X permalinks resolve (main thread
+1,488 likes; the writeup tweet points to an X longform article).
+
+**Still null:** no independent replication anywhere; no Anthropic statement (a commenter explicitly
+calls for both). The nearest Anthropic primary source is the April post ["An update on recent Claude
+Code quality reports"](https://www.anthropic.com) — that was the earlier February episode, a different
+incident.
+
+**What the thread added:**
+- The author's corpus disclosure in-thread: production traffic, 65 usage days, 2 subscription
+  accounts, 3 machines, 25 project groups, 213 sessions, **43,261 invocations / 7,583 turns** — and a
+  reframe: "the model identity had remained the same, but the inference regime being delivered behind
+  that model had not."
+- The methodological counter (Aurornis): the corpus is the uncontrolled variable — inputs were random
+  and different every day, the data is unpublished, and the method is a MITM proxy over the author's
+  own production traffic ("I can't refute anything because it's not available").
+- A clean falsification test nobody has run (whatever1): frozen cloud versions (Bedrock/Vertex) don't
+  rotate — a thinking-depth decline there vs. the consumer surface would isolate the "inference
+  regime" claim from workload composition.
+- A measurement-validity constraint on the original method itself: client-side thinking-token counts
+  measure **summarized** thinking, not raw reasoning (`anthropics/claude-code` issues 95764, 95732).
+
+**The echo layer industrializes within a day:** admix.software ("Thinking Depth Dropped 67%") and
+apito.ai ("Dropped 73%", claiming the default effort level was lowered high→medium) both circulated
+within hours of the thread. Visited this run: both are product pages — an AI-model aggregator and a
+Chinese Anthropic API reseller respectively — with no methods, no data, no byline. The precise-sounding
+percentages have no primary measurement behind them; this is how a "data point, not a finding" becomes
+a fake stat in one news cycle.
+
+The claim stays filed under inference economics, not degradation: if thinking tokens are the priced
+output dimension (they bill as output tokens under adaptive thinking), a vendor optimizing median
+thinking down is exactly the squeeze this file tracks — but it is unproven, and the burden is now
+precisely defined.
+
+Sources: [HN thread](https://news.ycombinator.com/item?id=49789224) ·
+[X thread](https://x.com/Lon/status/2101793422487204027) ·
+[X writeup](https://x.com/Lon/status/2101034933284417614) ·
+[claude-code issue 95764](https://github.com/anthropics/claude-code/issues/95764)
