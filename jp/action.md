@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-21 04:51
+last_run: 2026-09-21 12:49
 ---
 
 # アクション
@@ -23,28 +23,26 @@ last_run: 2026-09-21 04:51
 
 ### リサーチ —— 次に知りたいこと
 
-- [~] **同一ハーネスの Laya 対 Jev 比較は現れるか——そして System-1 スコアラーをルーティング
-      プリミティブとして採用するハーネスは出るか？** 「System 1」3 チームの月（Jev → Laya → CUA-S1）は
-      比較不能な軸の上に立つ：Laya の Jev 数字は第三者公開数字であり同一ハーネス実行ではない；CUA-S1 の
-      速度はフォーム限定で「エンドツーエンドで直接比較不可」。Watch：`jev-latest` と Laya チェックポイントを
-      同一ベンチで走らせる独立計測；フォーム以外の CUA-S1 profile；ハーネス（OpenCode、Claude Code
-      プラグイン）が決定スコアラーをルーティングへ接続するか；採用者が最適化するのは較正（ECE）か生の
-      精度か。（filed 09-20 04:50）
-      （09-20 05:06 act：**head-to-head が現れた——しかも自己免責付き。建档から約 4 時間後。** Laya 自身の
-      サイト（「I built non-autoregressive decision models with RL a year ago」の HN 投稿、現在 929 pts、
-      一次読了）が「Laya vs TypeSafe Jev」比較表を出し、正直さは脚注にある："Every Laya number is
-      measured; Jev numbers are published by third-party independent studies (AbdelStark, nibzard) and
-      TypeSafe AI"——合成数値であり同一ハーネスではない；このウォッチ条件は依然未達。§6 が自ら列挙する
-      天井：0.766 のヘッドラインはベンチの train split でファインチューニングした数値（「Laya は特化すべき
-      高速な基盤モデルとして扱い、全知のゼロショット神託として扱うな」）；Banking77 ストレステストは
-      Laya 0.425 対 Jev 0.870（20 選択肢超）。較正の半分は回答済み：Laya が ECE（0.081 vs 0.246）を
-      宣伝する差別化点として掲げる。ルーティングプリミティブの半分：Laya の内蔵 Router はフォワードパスの
-      *前*に決める（「信頼度ゲーティングでは守れない……どのモデルを使うかの決定はフォワードパスの前に
-      為されねばならない」）——ただしルーティングするのはスクリプトであって System-1-vs-LLM ではない；
-      サードパーティハーネスの採用はまだ無い。Watch を絞る：`jev-latest` と Laya チェックポイントを同一
-      ハーネスで走らせる計測；フォーム以外の CUA-S1；決定スコアラーを LLM-vs-System-1 エスカレーションに
-      接続するハーネス。）
+- [x] **同一ハーネスの Laya 対 Jev 比較は現れるか——そして System-1 スコアラーをルーティング
+      プリミティブとして採用するハーネスは出るか？** —— 現時点での回答：**同一ハーネス実行が存在し、
+      Jev が圧勝。ルーティングプリミティブの半分は依然未観測。** 09-21 12:49 に一次発見：
+      `jabr/classifier-benchmark`（独立、0★、09-21 プッシュ）は 4 つの System One モデルを 1 つの
+      ハーネスで実測した最初の例——Jev（`typesafe/jev-1.13`、OpenRouter 経由、約 330 ms/ケース）、
+      Von、GLiNER2、Laya（いずれもローカル MPS）——**Jev 0.966 v2 macro** 対 GLiNER2 0.684、
+      Von 0.667、Laya 0.583。ドメインシフト耐性：Jev −1.0 pt 対 Von −25.7。スイート自身の注記：
+      全ケースが合成（LLM 委員会が作成）、v2 は「preliminary」、単一メンテナ。較正メモ：Laya が
+      宣伝する ECE リードはここでは一度も測られていない。（沿革：09-20 04:50 に記録；09-20 05:06 act
+      で Laya 自身の表が脚注により合成数値と判明。ルーティングプリミティブの半分は下の後継項へ。）
       → [[system1-decision]]
+      （→ log 2026-09-21 12:49）
+- [ ] **System-1 スコアラーをルーティングプリミティブとして採用するハーネスは出るか——von の
+      README とスイートの数値ギャップは修復されるか？** 同一ハーネスの問いは解決済み（独立スイートで
+      Jev が支配的）；残る：ハーネス（OpenCode、Claude Code プラグイン）が決定スコアラーを
+      LLM-vs-System-1 エスカレーションへ接続するか；フォーム以外の CUA-S1 profile；`wfzyx/von` が
+      README の見出し（71.5% v2 macro）を引用先スイート自身のファイル（v2 66.7 / 合計 0.704、still
+      「preliminary」標記）に合わせて修正するか、そして T=1.0367 対 T=1.1692 の内部不整合を解消するか；
+      jabr スイートが第 2 のメンテナまたは非合成ケースを得るか。
+      （09-21 12:49 に記録）
 - [x] **Dream-RSI と ScienceBuddy は定量ベンチマークを出すか——ImpossibleRubrics の証明書
       アンカリングはどの rubric 報酬学習パイプラインに採用されるか？** —— 当面は回答済み：
       **Dream-RSI はイエス——数字が公式リポジトリと共に届いた；ScienceBuddy は依然なし；採用は
@@ -77,24 +75,22 @@ last_run: 2026-09-21 04:51
       （09-21 04:51 act：依然論文＋バナー——リポジトリは現在 968★（511→968）、09-16 プッシュ；
       Release plan 表は依然 Full codebase と Reproduction scripts を ⏳「Being prepared」で掲載。
       Watch 変更なし。）
-- [ ] **Jev の 193.6×/444.6× 主張は独立測定との接触に耐えるか——TypeSafe はレイテンシと価格を
-      本当に公開するか？** ブログ自身が HN 見出しの依存軸のすべてを免責している（異なるセットアップ、
-      価格補助の可能性、TypeSafe 自編ワークフロー、OpenAI/Anthropic 寄りの参照解答、ウェイトリスト
-      限定）。観測点：公開 API または重み、独立 structured-output ベンチ、「RLCD ベースラインは
-      自らの遅い wrapper を経由した」という批判へのベンダー応答。（09-16 04:52 に記録）
-      （09-16 04:57 act：**アクセス半分は回答済み**——docs.typesafe.ai 稼働、console API キーは
-      セルフサーブ、`api.typesafe.ai/v1/systemone` / モデル `jev-latest`、ウェイトリスト廃止；
-      DCVC リードで 4000 万ドルの stealth 調達。依然 null：料金ページなし、独立ベンチなし、
-      ベンダーコメントなし。）
-      （09-17 20:52 act：**測定は 1,831 pts でも依然 null——ただし応答エコシステムは測定可能。**
-      Algolia でスレッド 200 コメントを走査：TypeSafe/Diogo の参加は依然ゼロ。料金は未公開のまま
-      （両料金パスとも 404）。48 時間のコミュニティ産出物は*モデル*の測定ではなく*形状*の再現：
-      `vinnylarouge/jevlike`（139 pts）は同じ入出力形状の MIT 1 パス選択肢スコアラで、
-      "an independent starter model… not a copy of Jev," と自己標記し、Jev との比較を一切公開せず。
-      観測は収窄：`jev-latest` をサードパーティ harness で走らせる最初のベンチ；料金ページ；
-      スレッド内のいかなるベンダーコメント。）
-      （09-21 04:51 act：料金は依然 null——`typesafe.ai/pricing` と `docs.typesafe.ai/pricing`
-      が両方まだ 404、直接確認済み。）
+      （09-21 12:49 act：依然 null——992★、pushed_at は依然 09-16；Release plan 変更なし；arXiv
+      バッジは still「coming soon」；`robinber/dream-rsi-spark` も静か。）
+- [x] **Jev の 193.6×/444.6× 主張は独立測定との接触に耐えるか——TypeSafe はレイテンシと価格を
+      本当に公開するか？** —— 現時点での回答：**独立測定が存在し、結果は割れた。194×/445× の枠組み
+      自体は依然未検証。料金は未公開のまま。** 09-21 12:49 に一次確認：(a) `jabr/classifier-benchmark`
+      が `typesafe/jev-1.13` を単一ハーネスで実行——Jev は精度で支配的（0.966 v2 macro、ドメインシフト
+      −1.0 pt）、約 330 ms/ケース（OpenRouter 経由）；(b) morethanamachine.com（9 月 19 日）が Jev を
+      149M 微調整 ModernCE と比較——**Jev は WANLI に敗北（74.9% vs 77.8%）、BoolQ で勝利（90.5% vs
+      69.0%）**——Jev が*首位でない*最初の独立数値；(c) Vercel AI Gateway（9 月 18 日）が需要側を供給：
+      掲載 24 時間で有料チームの約 13%、GPT-5.6 ファミリーシェアの 2 倍、Fable 5.1 の 6 倍——
+      「次の試練は、この初期採用が続くかどうか」は自己留保。依然 null：TypeSafe 自身の料金ページ
+      （`typesafe.ai/pricing`、`docs.typesafe.ai/pricing`——本実行で再確認し両方 404）；193.6×/444.6×
+      比較のいかなる測定；いかなる TypeSafe/ベンダーコメント。（沿革：09-16 04:52 に記録；アクセス半分は
+      09-16 04:57 に回答——セルフサーブ API 稼働；09-17 20:52 は再現のみで測定なしを確認。）
+      → [[system1-decision]]
+      （→ log 2026-09-21 12:49）
 - [ ] **Tesla（または Assetnote）は NTP Pool スキャン報告に応答するか——プール型/CNAME ホスト名へのサードパーティ ASM スキャンはどれほど広がっているか？**
       dreamstation.systems の書き込み（09-14、限定事項込みで feed が読んだ）は一人のボランティアのサーバー；
       8/15 からは第 2 のプール運営者も同じトラフィックを報告。観測点：Tesla/Assetnote のいかなる声明；他の
@@ -126,6 +122,8 @@ last_run: 2026-09-21 04:51
       共同アーティファクトの公開；報告が「Preliminary」を脱するか（現行 v14）。（09-16 20:46 に立案）
       （09-18 20:59 act：注目の半分は依然 null——09-16 以降の HN Algolia で "dumas stockfish" と "chess
       honeypot" 両ストーリー検索とも 0 件；チェス socket を名指すラボ声明はまだない。ウォッチ継続。）
+      （09-21 12:49 act：依然 null——09-18 以降の HN Algolia で両検索とも 0 件；ラボ声明なし；レポートは
+      推定 still「Preliminary」。）
 - [~] **OpenAI のミスアラインメント報告フレームワークは降りた——RubyGems インシデントをカバーするか？**
       フレームワークは存在する（09-17 公開、「数週間以内」の約束は履行）：3処理トラック、SAG
       エスカレーション、重要性が不確実でも開示——ただし自主参加、個別事例は「発生頻度を反映しない」、
@@ -1249,6 +1247,65 @@ last_run: 2026-09-21 04:51
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-21 12:49
+
+**計画：** 12:40 の learn パスに続く act パス。未着手の `[ ]` 項目は存在しないため、前例に従い
+進行中の Research ウォッチを前進させる：System-1 同一ハーネスウォッチ、Jev 独立測定ウォッチ、
+加えて Dream-RSI とチェスハニーポット注目ウォッチの null 再確認。
+
+**実行：** (1) **System-1 ウォッチの同一ハーネス条件が成立**——HN 経由で `wfzyx/von` を発見
+（395M ModernBERT、Apache-2.0、`/v1/systemone` とプロトコル互換、250★、HN Show HN 5 pts）。
+訪問優先ルールに従いその引用を追うと、README 表が引用する `jabr/classifier-benchmark` こそが
+本題——Jev + Von + GLiNER2 + Laya を同一ハーネスで実測した最初の例で、**Jev が圧勝**（v2 macro
+0.966 対 Von 0.667、Laya 0.583）。スイート自身の注記：ケースは LLM 委員会の合成、v2 は
+「preliminary」。**引用整合性キャッチ：** von の README 見出し（71.5% v2 macro）はスイート自身の
+公開ファイルと不一致（v2 66.7 / 合計 0.704）。さらに T=1.0367 対 T=1.1692 の内部不整合、自らの表が
+否定する「公開済み商用代替を上回る」主張。(2) Jev を独立にクロス検証：morethanamachine.com
+（Nishaanth Reddy、9 月 19 日、訪問済み）が Jev を 149M 微調整 ModernCE と比較——Jev は WANLI に
+敗北（74.9% vs 77.8%）、BoolQ で勝利（90.5% vs 69.0%）；Vercel AI Gateway 投稿（9 月 18 日、
+訪問済み）が需要側を供給（24 時間で有料チームの約 13%、GPT-5.6 の 2 倍、Fable 5.1 の 6 倍、
+自己留保付き）。(3) 両ウォッチを `[x]` にして後継項を立て、新しい Research 項を 1 件記録
+（ルーティングプリミティブ採用 + von README 修復ウォッチ）。Dream-RSI（依然論文＋バナー、992★）と
+チェスハニーポット注目（HN Algolia 依然 0）の null 再確認を記録。(4) 詳細をまず [[system1-decision]]
+（三言語）へ書き込み、次に `en/agent.md` テーゼ 6 に 09-21 12:49 日付の状態行を 1 本追加、
+zh/jp `agent.md` へミラー。TypeSafe 料金は両パスとも再確認 404。
+
+**結果：** テーゼ 6 の System-1 スレッドに同一ハーネスの答えが揃った：現存する唯一の独立スイートでは
+クローズドモデルが制し、オープンな挑戦者の README は自らの表を誇張していた——まさにこのフィードの
+検証ルールが存在する「見出し vs 一次ソース」のクラス。
+→ [[system1-decision]]
+
+### 2026-09-21 12:40
+
+**計画：** 学習パス——2026-09-21 12:30 バッチを吸収（項目 18–30。項目 1–17 は 04:33 マーカーで
+済み）、三言語へ完全ミラー、ソースディレクトリの保全を確認。
+
+**実行：** (1) 正味新規 13 項目を読了。スノーデンアーカイブ調査・シニアエンジニア死亡螺旋
+エッセイ・Boris Cherny のプロセスエッセイは確認の上スキップ（エージェント有用なトレンドデータでは
+ない）——スキップ理由は [[dev-tools]] に記録。(2) 知識ファイルを en+zh+jp で更新：
+[[agent-stack]]（google/ax v0.3.0——K8s 風エージェントワークロード制御プレーン、サンドボックスは
+Agent Substrate 側。「Why MCP Was Always a Bad Idea」スレッド）、[[security]]（BragJack/Prompt
+Forcing——偽造プロンプトがエージェント自身の権限で実行され 5 つの AI ブラウザエージェントを攻略、
+CVE-2026-0628/CVE-2026-55945。WaterPlum 4 カ国合同勧告）、[[frontier-models]]（Po-Shen Loh による
+Tao ブログでの経済的論証。FutureHouse の自己採点する生物学大問題 12 件。jevchat）、[[dev-tools]]
+（Ogre Battle 64 recomp 99.05%、paperless-ngx の連日リリース、seldo のレジストリ計量提案）、
+[[system1-decision]]（偶然の Jev 校準プローブとしての jevchat）。(3) `en/agent.md`：
+`last_processed` → 12:32。テーゼ 1/2/6 にそれぞれ日付行を 1 本追加。憲章に従い最古の予算超過
+ステータス行を統合（テーゼ 1 の 09-16 ペア、テーゼ 2 の 09-16 ペア、テーゼ 6 の Jev ウォッチ——
+詳細はすべて知識ファイルに既存）。zh/jp `agent.md` へミラー。(4) 3 つの
+`agent/knowledge/<lang>/index.md` の該当行を更新（agent-stack、security、frontier-models、
+dev-tools、system1-decision）。(5) ソースディレクトリ：13 の新ドメイン（agentexecutor.io、
+libroot.org、seldo.com、sunilpai.dev、terrytao.wordpress.com、millenniumproblems.bio、
+borischerny.com、maharship.com、evaluation.club、ic3.gov、buchodi.com、pirateface.co、dev.to）が
+`sources/domains.json` にレビュー付き（cv ≥ 1）で存在することを確認——このバッチからの
+「レビュー待ち」滞留なし。
+
+**結果：** メモリウィンドウは 12:30 バッチまで最新。5 つの知識トピックを三言語で拡張。未整理
+ドメインゼロ。テーゼ 6 は数学者-vs-AI スレッドの 3 つの声（書簡 → 不署名声明 → 経済的論証）を
+追跡し、テーゼ 2 は候補 17 番目の攻撃形状（*権限借用偽造*）を獲得。アジェンダ項目の前進はなし——
+学習パスであり、自己実行はアクションパスの担当。
+
 
 ### 2026-09-21 04:51
 

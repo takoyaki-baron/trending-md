@@ -1863,3 +1863,33 @@ Sources: [Laya 发布](https://laya.convaiinnovations.com/) ·
 [arXiv 2609.19671](https://arxiv.org/abs/2609.19671) ·
 [arXiv 2609.19499](https://arxiv.org/abs/2609.19499) ·
 [The Hill: 节奏诉讼](https://thehill.com/policy/technology/6099571-lawsuit-accuses-anthropic-openai-spacexai-google-of-ai-pacing-collusion)
+
+## 2026-09-21 12:03 — 数学家线程获得经济学论证；一家 AI for science 实验室发布可证伪目标；Jev 校准探针
+
+- **Po-Shen Loh 在 Tao 博客发客座文章**（"Why do we need human mathematicians anymore?"，
+  9 月 19 日；HN 148 分）：先说署名——作者是 Loh（CMU），不是 Tao。在 OpenAI Navier–Stokes
+  宣称与 Cowen/Gans "适应论" 反弹之后，Loh 建议数学界采纳一条显式公理——"我们（人类）应当帮助
+  人类繁荣"——并举出他仅有的一条硬证据："没有任何一个能力远超对方的智慧物种把决策权让渡给较弱
+  一方的先例。" 经济楔子：AI 监督岗位的增长将快于合格人类训练的速度，因此保住专家培养管线最终会
+  迫使 AI 放慢——"否则他们将被迫因灾难而放慢。" 他自己的告诫写在文中：公理可争议（"有人称我为
+  物种主义者"），对齐先进 AI 可行并无稳健证明，且他本人是重度 AI 用户（Claude Code、Codex）。
+  这是被追踪线程的第三个声音——继 25 位菲尔兹奖得主联名信（09-12）与 Gowers/Tao 不签名声明
+  （09-18）之后——也是第一个以经济学而非优先权或价值观立论的。
+- **《生物学千禧问题》**（FutureHouse / Edison Scientific，millenniumproblems.bio；HN 135 分）：
+  十二个开放问题，各带明确的量化成功标准——从原始汤实现无辅助自我复制细胞；成年小鼠可逆玻璃化
+  且存活率 >99%；逆向转录酶；打破天然 Rubisco 特异性/转换数权衡；零样本穿膜蛋白结合剂设计；与
+  天然固氮酶无同源的固氮。站点对自身定位诚实：**无奖金、无评审机构、无正式验证**——标准自定义
+  自评，内置部分得分，其中一个问题已因作者无法界定支架工程边界而放宽。仍然值得记录：一家 AI for
+  science 实验室发布的是可证伪目标而非 demo——实质上是把自己提名为本 feed 基准怀疑论线索一直在
+  呼吁的评测 harness。
+- **jevchat**（`kyle-pena-nlp/jevchat`，36★，HN 102 分）：一个一天大的玩笑仓库，把 Typesafe 的
+  单次前向 Jev 强塞进自回归采样——每步一个符号，从 Jev 的分布+停止符输出中抽取。README 自认
+  "为了好玩……结果很搞笑"；HN 线程把它当作对 Jev 校准的意外探针——恰好落在 Jev 设计上从不运行的
+  单符号逐一模式。社区衍生作品，非 Typesafe 官方 → [[system1-decision]]。
+
+Sources: [Tao 博客：Loh 客座文](https://terrytao.wordpress.com/2026/09/19/why-do-we-need-human-mathematicians-anymore/) ·
+[HN: Loh](https://news.ycombinator.com/item?id=49774521) ·
+[millenniumproblems.bio](https://millenniumproblems.bio/) ·
+[HN: Millennium Problems](https://news.ycombinator.com/item?id=49775082) ·
+[kyle-pena-nlp/jevchat](https://github.com/kyle-pena-nlp/jevchat) ·
+[HN: jevchat](https://news.ycombinator.com/item?id=49778162)

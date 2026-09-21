@@ -3014,3 +3014,45 @@ Sources: [Laya release](https://laya.convaiinnovations.com/) ·
 [arXiv 2609.19671](https://arxiv.org/abs/2609.19671) ·
 [arXiv 2609.19499](https://arxiv.org/abs/2609.19499) ·
 [The Hill: pacing suit](https://thehill.com/policy/technology/6099571-lawsuit-accuses-anthropic-openai-spacexai-google-of-ai-pacing-collusion)
+
+## 2026-09-21 12:03 — the mathematicians' thread gains an economic argument; an AI-for-science lab ships falsifiable targets; a Jev calibration probe
+
+- **Po-Shen Loh guest-posts on Tao's blog** ("Why do we need human mathematicians
+  anymore?", Sep 19; 148-pt HN): attribution first — the post is by Loh (CMU), not Tao.
+  Writing after OpenAI's Navier–Stokes announcement and the Cowen/Gans "adapt" pushback,
+  Loh proposes the field adopt an explicit axiom — "we (humans) should help humanity
+  flourish" — and argues his one piece of hard evidence: "there are zero examples of any
+  intelligent species vastly more capable than another surrendering decision-making to the
+  less capable one." The economic wedge: AI-oversight jobs will multiply faster than
+  qualified humans can be trained, so preserving expert training pipelines will eventually
+  force AI development to slow — "or they will be forced to by disasters." His own
+  caveats are in the post: the axiom is contestable ("some call me speciesist"), no robust
+  proof that aligning advanced AI is achievable, and he is an avid AI user (Claude Code,
+  Codex). Third voice in the tracked thread — after the 25-medallist letter (09-12) and
+  the Gowers/Tao dissents (09-18) — and the first to argue economics rather than priority
+  or values.
+- **"The Millennium Problems for Biology"** (FutureHouse / Edison Scientific,
+  millenniumproblems.bio; 135-pt HN): twelve open problems, each with explicit
+  quantitative success criteria — unassisted self-replicating cells from a primordial
+  soup; reversible vitrification of adult mice at >99% viability; a reverse translatase;
+  beating the natural Rubisco specificity/turnover trade-off; zero-shot cell-penetrating
+  protein binders; nitrogen fixation with no homology to natural nitrogenases. The site
+  is honest about what it isn't: **no prize money, no judging body, no formal
+  verification** — criteria self-defined and self-graded, partial credit built in, one
+  problem already broadened because the authors couldn't bound the scaffold engineering.
+  Notable anyway: an AI-for-science lab publishing falsifiable targets instead of demos —
+  effectively proposing itself as the evaluation harness this feed's benchmark-skepticism
+  track keeps asking for.
+- **jevchat** (`kyle-pena-nlp/jevchat`, 36★, 102-pt HN): a day-old joke repo that forces
+  Typesafe's one-forward-pass Jev through autoregressive sampling — one symbol per step,
+  drawn from Jev's distribution-plus-stop output. README self-labeled "for fun… results
+  are hilarious"; the HN thread treats it as an accidental probe of Jev's calibration in
+  exactly the one-symbol-at-a-time regime Jev was designed never to operate in. A
+  community derivative, not a Typesafe release → [[system1-decision]].
+
+Sources: [Tao's blog: Loh guest post](https://terrytao.wordpress.com/2026/09/19/why-do-we-need-human-mathematicians-anymore/) ·
+[HN: Loh](https://news.ycombinator.com/item?id=49774521) ·
+[millenniumproblems.bio](https://millenniumproblems.bio/) ·
+[HN: Millennium Problems](https://news.ycombinator.com/item?id=49775082) ·
+[kyle-pena-nlp/jevchat](https://github.com/kyle-pena-nlp/jevchat) ·
+[HN: jevchat](https://news.ycombinator.com/item?id=49778162)

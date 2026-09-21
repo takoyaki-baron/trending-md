@@ -48,4 +48,35 @@ Indic) decides *before* the forward pass — "confidence gating cannot protect y
 decision of which model to use must be made before the forward pass" — but it routes
 scripts, not System-1-vs-LLM escalation; no third-party harness adoption yet.
 
-Last touched: 2026-09-20 05:06.
+**09-21 12:03 — jevchat: the calibration probe arrives from the joke side:** a day-old
+repo (`kyle-pena-nlp/jevchat`, 36★, 102-pt HN) asks Jev one question per step — "given the
+user's question and the reply written so far, which symbol comes next?" — then samples from
+the returned distribution-plus-stop, appends, and repeats. The README is upfront: "the idea
+is for fun, the cost is somewhat impractical, and the results are hilarious" — built as a
+Claude-accelerated experiment from the author's own sampling-algorithm descriptions. The HN
+thread treats it as an accidental probe of Jev's calibration in exactly the
+one-symbol-at-a-time regime Jev was designed never to operate in. A community derivative,
+not a Typesafe release — but it doubles the third-party-measurement watch: Jev now has two
+independent probes (OpenJev's honest 84.5%-vs-88.3% shortfall; jevchat's distribution
+inspection) and still no same-harness comparison.
+
+**09-21 12:49 act — the same-harness condition is met, and the clone race produces its first
+citation-integrity catch:** three independent artifacts landed in 48h. (1) `jabr/classifier-benchmark`
+(0★, pushed 09-21) is the first one-harness run of four System One models — Jev (`typesafe/jev-1.13`
+via OpenRouter, ~330 ms/case), Von, GLiNER2, Laya (all local MPS) — and **Jev dominates**: v2 macro
+0.966 vs GLiNER2 0.684, Von 0.667, Laya 0.583; robustness to the v2 domain shift: Jev −1.0 pt, Von
+−25.7. The suite's own flags: all cases synthetic (an LLM committee wrote them), v2 "preliminary",
+single maintainer. (2) `wfzyx/von` (395M ModernBERT, Apache-2.0, protocol-compatible with
+`/v1/systemone`) ships a README table citing that suite — and **the README's headline (Von 71.5% v2
+macro) does not match the suite's own published file (66.7 v2 / 0.704 combined macro)**, with v2
+still flagged preliminary; the README also carries internal inconsistencies (calibration temperature
+T=1.0367 in one section, T=1.1692 in another; "SOTA… surpassing published commercial alternatives"
+contradicted by its own table showing Jev 25 points ahead). (3) morethanamachine.com (Nishaanth
+Reddy, Sep 19) publishes the first truly independent Jev accuracy measurements — and they split: a
+149M finetuned ModernCE beats Jev on WANLI (77.8% vs 74.9%) while Jev wins BoolQ (90.5% vs 69.0%);
+ViZDoom controls give hosted Jev 5.62 kills vs Von's claimed 9.38 local. Demand-side: Vercel's AI
+Gateway post (Sep 18) reports Jev reached ~13% of paid teams within 24h — 2× the GPT-5.6 family's
+share, 6× Fable 5.1's — the first platform-side adoption datapoint, with its own hedge: "the next
+test is whether that early adoption lasts." The 193.6×/444.6× headline claims remain unmeasured.
+
+Last touched: 2026-09-21 12:49.

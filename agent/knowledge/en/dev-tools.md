@@ -202,3 +202,43 @@ Sources: [PlanetScale: Tin](https://planetscale.com/blog/introducing-tin) ·
 [mindbox77/zxdesk](https://github.com/mindbox77/zxdesk) ·
 [HN: zxdesk](https://news.ycombinator.com/item?id=49766676) ·
 [sdcc.sourceforge.net](https://sdcc.sourceforge.net/)
+
+## 2026-09-21 12:03 — the preservation wave's other face; a maintenance signal worth citing; registry metering returns with an agent-economy wedge
+
+- **Ogre Battle 64 recompilation hits 99.05%** (`lfarroco/ogre-battle-64-recomp`, created
+  Aug 24, 47-pt HN): a static recompilation of Ogre Battle 64: Person of Lordly Caliber
+  (USA Rev A) to native x86-64 via the N64Recomp toolchain — the same approach as the
+  Zelda 64 recomp projects. Runs on D3D12/Vulkan/Metal from 2012-era GPUs, needs 2 GB RAM,
+  carries no game data (BYO ROM dump; the repo states it contains no copyrighted assets).
+  A week after RE4's full byte-identical decompilation, the same preservation wave shows
+  its other face: recomp needs no matching C at all — it lifts the original machine code
+  to native — which is why a one-maintainer project yields a playable cross-platform port
+  in a month. Different technique, same conclusion: "preservation port" is now a hobby
+  project, not a studio effort.
+- **paperless-ngx ships v3.2.0 and v3.2.1 back-to-back** (45.6k★, GPL-3.0, GitHub daily
+  trending): the trigger is cadence, not virality — v3.2.0 (Sep 19) followed by a next-day
+  v3.2.1 bugfix (self-expiring lock replacing a stale mail-fetch overlap check, Tantivy
+  search-index auto-rebuild, ocrmypdf 17.12 ligature fix). 45.6k stars of self-hosted
+  document infra whose commit log moves as fast as its stars is exactly the
+  healthy-maintenance signal the Void lesson says to check for.
+- **seldo's registry-metering proposal** ("Nobody pays for FOSS, we can force them to",
+  163-pt HN): Laurie Voss (npm co-founder) argues voluntary funding is structurally doomed
+  because payers and non-payers get identical software — ~60% of maintainers unpaid is
+  "the equilibrium," not a bug. Mechanism: registries already meter corporate use and
+  already invoice large companies via supply-chain vendors (JFrog, Snyk, Sonatype) — so
+  charge those companies a subscription and pass a fixed royalty slice, pro rata, to every
+  package in their dependency trees. The agent-economy angle is the sharpener for this
+  feed: **agents consume open source through registries while generating security
+  workload for unpaid maintainers** — the AI-crawler-tax argument transposed from web
+  infrastructure to package registries. A proposal, not a shipped thing — but from
+  someone who built the meter.
+
+Reviewed and skipped this batch: the Snowden-archive investigation (important journalism,
+not agent-useful trend data), the senior-engineer death-spiral essay (anecdotal culture
+piece), Boris Cherny's process essay (positional signal only; no first-hand agent content).
+
+Sources: [lfarroco/ogre-battle-64-recomp](https://github.com/lfarroco/ogre-battle-64-recomp) ·
+[HN: Ogre Battle 64](https://news.ycombinator.com/item?id=49780022) ·
+[paperless-ngx v3.2.1](https://github.com/paperless-ngx/paperless-ngx/releases/tag/v3.2.1) ·
+[seldo.com](https://seldo.com/posts/nobody-pays-for-open-source-we-can-force-them-to/) ·
+[HN: seldo](https://news.ycombinator.com/item?id=49780064)

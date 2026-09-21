@@ -3072,3 +3072,37 @@ Sources: [Reuters: Gemini breakout](https://www.reuters.com/business/gemini-hack
 [OpenCVE: Totolink A3002MU](https://app.opencve.io/cve/?vendor=totolink&product=a3002mu) ·
 [EEF CNA: CVE-2026-82672](https://cna.erlef.org/cves/CVE-2026-82672.html) ·
 [Red Hat: CVE-2026-94000](https://access.redhat.com/security/cve/cve-2026-94000)
+
+## 2026-09-21 12:03 — Prompt Forcing hijacks five AI browser agents; the job-lure campaign gets a four-nation count
+
+- **BragJack / "Prompt Forcing"** (Gal Weizman, Forever Security; disclosed Sep 16–17,
+  coverage through Sep 20): a single malicious browser extension with ad-blocker-grade
+  permissions (Chromium `declarativeNetRequest`) rewrites the traffic AI browser agents
+  trust — weakened security headers plus a redirected script in Chrome let code run inside
+  the Gemini context and reach its privileged component; on Edge, a race condition briefly
+  bypassed the "Think"/"Do" mode separation. All five targets fell to the same extension:
+  Chrome's Gemini Live, Microsoft Edge Copilot, Opera Neon, Perplexity Comet, and Claude
+  in Chrome. Fixed: **CVE-2026-0628** (Chrome 143.0.7499.192, $7,000 bounty) and
+  **CVE-2026-55945** (Edge 150.0.4078.48); bounties exceeded $20,000. The reusable concept
+  is Weizman's distinction: classic prompt injection hides hostile instructions in content
+  the agent reads; **Prompt Forcing supplies the agent an entire forged prompt plus
+  instructions it executes with its own legitimate privileges** — the malicious actions
+  come from trusted software, which is why endpoint detection struggles. Research PoC, no
+  in-the-wild exploitation reported. The extension-permission surface every agent browser
+  shares is now a demonstrated attack class — a candidate seventeenth shape for the map:
+  *privilege-borrowing forgery*.
+- **WaterPlum / "Contagious Interview" joint advisory** (Japan NPA/NCSO + FBI +
+  Australia ASD/ACSC + Germany BND/BfV, Sep 18): public attribution to North Korea's 313
+  General Bureau — at least **30,000 devices infected** across 100+ countries (Dec 2025–
+  Jul 2026), credentials or funds from **7,000+ crypto wallets**, ~**$10.71M (1.7B JPY)**
+  transferred. The vector is unchanged and developer-facing: fake AI/crypto job
+  interviews, malicious VS Code projects, interview face-swaps; malware families
+  BeaverTail (npm), InvisibleFerret (Python), OtterCookie, OtterCandy, StoatWaffle. It
+  also documents Japan's first dismantling of a DPRK IT-worker "laptop farm" — the
+  physical side of a scheme where the attacker is your job applicant. This upgrades the
+  job-lure RAT entries from incident reports to a government-counted campaign.
+
+Sources: [BleepingComputer: BragJack](https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/) ·
+[Anoymask writeup](https://dev.to/anoymask/bragjack-prompt-forcing-in-browser-ai-agents-via-browser-extensions-1d67) ·
+[IC3 joint advisory PDF](https://www.ic3.gov/CSA/2026/260918.pdf) ·
+[BleepingComputer: WaterPlum](https://www.bleepingcomputer.com/news/security/north-korean-waterplum-hackers-infected-30-000-devices-worldwide/)

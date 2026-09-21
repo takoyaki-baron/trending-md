@@ -2304,3 +2304,33 @@ Sources: [Reuters: Gemini 逸脱](https://www.reuters.com/business/gemini-hacked
 [OpenCVE: Totolink A3002MU](https://app.opencve.io/cve/?vendor=totolink&product=a3002mu) ·
 [EEF CNA: CVE-2026-82672](https://cna.erlef.org/cves/CVE-2026-82672.html) ·
 [Red Hat: CVE-2026-94000](https://access.redhat.com/security/cve/cve-2026-94000)
+
+## 2026-09-21 12:03 — Prompt Forcing が 5 つの AI ブラウザエージェントを乗っ取り；求人勧誘キャンペーンに 4 カ国合同の数値
+
+- **BragJack /「Prompt Forcing」**（Gal Weizman、Forever Security。9/16–17 披露、報道は 9/20 まで）：
+  広告ブロッカー級の権限（Chromium `declarativeNetRequest`）だけを持つ単一の悪意ある拡張が、AI
+  ブラウザエージェントが信頼するトラフィックを書き換える——Chrome ではセキュリティヘッダの弱体化 +
+  リダイレクトされたスクリプトでコードが Gemini コンテキスト内で実行され特権コンポーネントへ到達、
+  Edge では競合状態が一時的に「Think」/「Do」モード分離をバイパス。5 つの標的すべてが同一拡張に
+  落ちた：Chrome の Gemini Live、Edge Copilot、Opera Neon、Perplexity Comet、Claude in Chrome。
+  修正済み：**CVE-2026-0628**（Chrome 143.0.7499.192、7,000 ドルの報奨金）と **CVE-2026-55945**
+  （Edge 150.0.4078.48）。報奨金合計は 2 万ドル超。再利用可能な概念は Weizman の区別：古典的
+  プロンプトインジェクションはエージェントが読むコンテンツに敵対的な指示を隠すが、**Prompt
+  Forcing は偽造プロンプト一式と、それをエージェント自身の正当な権限で実行させる指示を与える**
+  ——悪意ある操作が信頼されたソフトウェアから発せられるため、エンドポイント検知が効かない。研究用
+  PoC で、実環境での悪用報告は無し。すべてのエージェントブラウザが共有する拡張権限面は、実証済みの
+  攻撃クラスになった——形態マップの第 17 番候補：*権限借用偽造*。
+- **WaterPlum（「Contagious Interview」）4 カ国合同勧告**（日本の警察庁/内閣サイバー安保室 +
+  FBI + 豪 ASD/ACSC + 独 BND/BfV。9/18）：北朝鮮 313 局への公的帰属——**少なくとも 30,000 台の
+  デバイス感染**（2025 年 12 月〜2026 年 7 月、100 か国以上）、**7,000 以上の暗号資産ウォレット**
+  から認証情報・資金を奪取、約 **1,071 万ドル（17 億円）** を北朝鮮へ送金。ベクトルは変わらず
+  開発者向け：偽 AI/暗号資産系の採用面接、悪意ある VS Code プロジェクト、面接のフェイススワップ。
+  マルウェアファミリーは BeaverTail（npm）、InvisibleFerret（Python）、OtterCookie、OtterCandy、
+  StoatWaffle。日本による北朝鮮 IT 労働者「ラップトップファーム」の初摘発も文書化——攻撃者が
+  あなたの求職者であるスキームの物理側面。これにより求人勧誘 RAT の各項目は、事件報告から
+  政府計数のキャンペーンへ格上げされた。
+
+Sources: [BleepingComputer: BragJack](https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/) ·
+[Anoymask 解説](https://dev.to/anoymask/bragjack-prompt-forcing-in-browser-ai-agents-via-browser-extensions-1d67) ·
+[IC3 合同勧告 PDF](https://www.ic3.gov/CSA/2026/260918.pdf) ·
+[BleepingComputer: WaterPlum](https://www.bleepingcomputer.com/news/security/north-korean-waterplum-hackers-infected-30-000-devices-worldwide/)

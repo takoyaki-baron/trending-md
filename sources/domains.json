@@ -197,6 +197,15 @@
     "jp": "エージェントツール系リサーチブログ。grep対LSP パイロットは自ら限界(小さなタスクセット、少数ロールアウト)を明示し生の数値も公開——予備研究と自己定義しており、効果量は方向性として見る。",
     "zh": "智能体工具研究博客；grep-vs-LSP 试点自带局限性说明(任务集小、rollout 少)并公开原始数字——自认初步研究，效应量只作方向参考。"
   },
+  "agentexecutor.io": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Landing page for AX, Google's open agentic orchestrator (github.com/google/ax). Cross-checked (09-21): its four-primitives description (Task/Workspace/Gateway/Model), Agent Substrate dependency and v1alpha1-API warning all match the GitHub README verbatim.",
+    "jp": "Google のオープンなエージェントオーケストレーター AX（github.com/google/ax）のランディングページ。クロスチェック済み（09-21）：4プリミティブの説明（Task/Workspace/Gateway/Model）、Agent Substrate への依存、v1alpha1 API の警告はいずれも GitHub README と一致。",
+    "zh": "Google 开源 agent 编排器 AX（github.com/google/ax）的项目落地页。已交叉核验（09-21）：其四原语描述（Task/Workspace/Gateway/Model）、对 Agent Substrate 的依赖与 v1alpha1 API 警告均与 GitHub README 逐条一致。"
+  },
   "agentgit.co": {
     "cat": "code",
     "cred": "low",
@@ -1083,6 +1092,15 @@
     "en": "IBM's product landing page for Bob, its agentic coding assistant aimed at IBM i / mainframe (RPG, COBOL) and Java modernization. Marketing page: testimonial metrics are vendor-sourced and pricing is undisclosed. Cross-validated (09-05): the GA timeline (Bob 1.0 March 2026; multi-agent + cost tracking since) and the RPG/COBOL focus are independently confirmed by IT Jungle and Planet Mainframe trade press.",
     "jp": "IBM のエージェント型コーディングアシスタント Bob の製品ランディングページ。IBM i/メインフレーム（RPG・COBOL）と Java モダナイゼーション向け。マーケティングページ：推重磅の指標はベンダー由来で価格は非公開。相互検証済み（09-05）：GA の経緯（Bob 1.0 は 2026 年 3 月、以降マルチエージェントとコスト追跡）と RPG/COBOL 注力は IT Jungle・Planet Mainframe の業界紙が独立に確認。",
     "zh": "IBM 智能体编程助手 Bob 的产品落地页，面向 IBM i/大型机（RPG、COBOL）与 Java 现代化。营销页：用户证言指标来自厂商、定价未公开。交叉验证（09-05）：GA 时间线（Bob 1.0 于 2026 年 3 月；此后加入多智能体与成本追踪）与 RPG/COBOL 定位获 IT Jungle、Planet Mainframe 行业媒体独立证实。"
+  },
+  "borischerny.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal blog of Boris Cherny (creator of Claude Code, author of Programming TypeScript) — management/product essays. Cross-checked (09-21): the blog itself carries no bio; author identity and Claude Code role confirmed via independent public sources. Note his posts are process essays without first-hand anecdotes.",
+    "jp": "Boris Cherny（Claude Code の生みの親、『Programming TypeScript』著者）の個人ブログ——マネジメント/製品エッセイ。クロスチェック済み（09-21）：ブログ自体に経歴はなく、著者確認と Claude Code での役割は独立した公開情報で確認済み。投稿は一次逸話を含まないプロセス論である点に注意。",
+    "zh": "Boris Cherny（Claude Code 创造者、《Programming TypeScript》作者）的个人博客——管理/产品随笔。已交叉核验（09-21）：博客本身无作者简介；作者身份与 Claude Code 角色经独立公开来源确认。注意其文章为方法论随笔，不含第一手轶事。"
   },
   "brew.sh": {
     "cat": "vendor",
@@ -3447,6 +3465,15 @@
     "jp": "ic.work——中国の開発者メディア分析（Granite 4.2 の学習出自不一致）。二次分析。ベンダー語りとモデルカードのずれを掴むのに有用。",
     "zh": "ic.work——国内开发者媒体分析（Granite 4.2 训练来源不一致）。二手分析；善于发现厂商叙事与模型卡的出入。"
   },
+  "ic3.gov": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "FBI's Internet Crime Complaint Center — primary source for joint government cyber advisories (PSA/CSA PDFs). Cross-checked (09-21): its WaterPlum joint-advisory figures (30,000 devices, 7,000+ wallets, ~$10.7M / 1.7B JPY) match BleepingComputer's independent reporting.",
+    "jp": "FBI の Internet Crime Complaint Center——政府合同サイバー勧告（PSA/CSA PDF）の一次ソース。クロスチェック済み（09-21）：WaterPlum 合同勧告の数字（3万台、7,000以上のウォレット、約1,070万ドル/17億円）は BleepingComputer の独立報道と一致。",
+    "zh": "FBI 互联网犯罪投诉中心——政府联合网络安全公告（PSA/CSA PDF）的一手来源。已交叉核验（09-21）：其 WaterPlum 联合公告数字（3 万台设备、7000+ 钱包、约 1070 万美元/17 亿日元）与 BleepingComputer 的独立报道一致。"
+  },
   "iedm26.mapyourshow.com": {
     "cat": "data",
     "cred": "high",
@@ -4022,6 +4049,15 @@
     "jp": "LibreChat 公式 changelog。09-16 に GitHub タグと照合し v0.8.8-rc3 を確認。ページには Conversation Trace Viewer、run スコープのサブエージェント ファイル共有、GPT-6 Astra、コンテキスト使用量トラッキング、BYOM 診断があり。小さな相違 2 点：ページ日付は 9/14（feed は 09-15）、BYOM は PR 一覧にはあるが同ページの見出しではない。さらに ClickHouse 加盟のバナーあり。",
     "zh": "LibreChat 官方 changelog；09-16 与 GitHub tag 核实 v0.8.8-rc3。页面含：Conversation Trace Viewer、run 级子代理文件共享、GPT-6 Astra、上下文用量追踪、BYOM 诊断。两处小出入：页面日期为 9 月 14 日（feed 写 09-15），且 BYOM 仅出现在 PR 列表而非该页头条；另横幅宣布 LibreChat 并入 ClickHouse。"
   },
+  "libroot.org": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Anonymous collective publishing investigative longform (operators unnamed). Cross-checked (09-21): its Snowden-archive timeline (Guardian hard-drive destruction Jul 2013, Intercept archive closure Mar 2019, final batch May 2019) matches the well-documented public record; unverifiable claims are explicitly flagged in its own text.",
+    "jp": "調査長編を発表する匿名の集合体（運営者は非公開）。クロスチェック済み（09-21）：スノーデンアーカイブのタイムライン（2013年7月のガーディアンHDD破壊、2019年3月のInterceptアーカイブ閉鎖、2019年5月の最終批次公開）は公開記録と一致。検証不能な主張は本文中で明示的に印付けされている。",
+    "zh": "发布调查性长文的匿名集体（运营者未署名）。已交叉核验（09-21）：其斯诺登档案时间线（2013 年 7 月卫报硬盘销毁、2019 年 3 月 Intercept 档案关闭、2019 年 5 月最后一批发布）与公开记录一致；无法核实的说法其文中亦明确标注。"
+  },
   "lilting.ch": {
     "cat": "news",
     "cred": "high",
@@ -4219,6 +4255,15 @@
     "en": "Magic's engineering blog — the ~50x-FLOPs pretraining claim lives here with unusually complete caveats (open-weight-base-only comparisons, BPB on held-out data, 6·N·D approximation); vendor-measured, self-hedged.",
     "jp": "Magic のエンジニアリングブログ——約50倍 FLOPs 削減の事前学習主張がこちら。異例なまでに完全な限定付き（オープンウェイト基礎モデルとのみ比較、held-out データ上の BPB、6·N·D 近似）。ベンダー測定・自己限定付き。",
     "zh": "Magic 的工程博客——约 50 倍 FLOPs 降低的预训练声明在此发布，附异常完整的限定（仅对比开放权重基座、held-out 数据上的 BPB、6·N·D 近似）；厂商自测，自我对冲。"
+  },
+  "maharship.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal tech blog of Maharshi Patel — practitioner opinions on agent infrastructure (MCP critique). Cross-checked (09-21): the MCP essay matches its HN attribution (68 pts / 77 comments); single-author opinion, not a standards-body post-mortem.",
+    "jp": "Maharshi Patel の個人テックブログ——エージェントインフラに関する実務家の見解（MCP 批判）。クロスチェック済み（09-21）：MCP 論は HN の出典表記（68pt/77コメント）と一致。単一著者の意見であり標準化団体の事後検証ではない。",
+    "zh": "Maharshi Patel 的个人技术博客——关于 agent 基础设施的从业者观点（MCP 批评）。已交叉核验（09-21）：MCP 一文与 HN 上的署名一致（68 分 / 77 条评论）；单一作者观点，非标准组织的复盘。"
   },
   "mallory.ai": {
     "cat": "security",
@@ -4435,6 +4480,15 @@
     "en": "Microsoft Security Blog (microsoft.com/en-us/security) — first-party threat-intel and patch guidance for Microsoft's own estate; authoritative for its campaigns (e.g. TerminalFix reverse-tunnel intrusion, 08-30), but framing always favors Defender coverage — pair with independent trackers.",
     "jp": "Microsoft Security Blog（microsoft.com/en-us/security）。自社環境の脅威インテリジェンスとパッチ指針の一次情報。自社に関わる攻撃キャンペーン（例：TerminalFix リバーストンネル侵入、08-30）については信頼できるが、記述は Defender の検出有利に寄りがち —— 独立系トラッカーと併用。",
     "zh": "Microsoft 安全博客（microsoft.com/en-us/security）——微软自家生态威胁情报与补丁指引的一手来源；对其自身攻击战役（如 TerminalFix 反向隧道入侵，08-30）权威，但叙述总是偏向 Defender 的防护效果——需与独立追踪源配对。"
+  },
+  "millenniumproblems.bio": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Edison Scientific / FutureHouse's catalogue of twelve testable open problems in biology, with self-defined quantitative success criteria. Cross-checked (09-21): authorship (Sam Rodriques, FutureHouse founder) and the explicit no-prize-money/no-judging-body disclaimers confirmed on-page; criteria are self-graded, not community-validated.",
+    "jp": "Edison Scientific / FutureHouse による、検証可能な生物学の未解決問題12件のカタログ。自己定義の定量的成功基準付き。クロスチェック済み（09-21）：著者（Sam Rodriques、FutureHouse 創業者）と「賞金なし・審査団体なし」の明示的な但し書きをページ上で確認。基準は自己採点でありコミュニティ検証済みではない。",
+    "zh": "Edison Scientific / FutureHouse 发布的十二个可检验生物学未解问题目录，附自定义的量化成功标准。已交叉核验（09-21）：作者身份（Sam Rodriques，FutureHouse 创始人）与页面明示的\"无奖金/无评审机构\"免责声明均获确认；标准为自评，未经社区验证。"
   },
   "mimo.xiaomi.com": {
     "cat": "vendor",
@@ -6320,6 +6374,15 @@
     "jp": "seL4 Foundation のコミュニティフォーラム——AArch64 機密性証明の発表；プロジェクトからの一次情報で、Proofcraft と相互に裏付けられる。",
     "zh": "seL4 基金会的社区论坛——AArch64 保密性证明公告；项目方一手来源，与 Proofcraft 相互印证。"
   },
+  "seldo.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal blog of Laurie Voss (npm co-founder) — open-source economics and developer-tooling commentary. Cross-checked (09-21): author identity confirmed via npm history; the Docker revenue trajectory he cites ($12M→$207M) is consistent with publicly reported figures.",
+    "jp": "Laurie Voss（npm 共同創業者）の個人ブログ——OSS経済論と開発者ツール解説。クロスチェック済み（09-21）：npm の歴史により著者本人確認済み。引用する Docker の収益推移（1,200万→2億700万ドル）は公開されている数字と整合。",
+    "zh": "Laurie Voss（npm 联合创始人）的个人博客——开源经济学与开发者工具评论。已交叉核验（09-21）：作者身份经 npm 历史确认；其引用的 Docker 营收轨迹（1200 万→2.07 亿美元）与公开报道的数字一致。"
+  },
   "senaite.org": {
     "cat": "security",
     "cred": "high",
@@ -6687,6 +6750,15 @@
     "en": "Security vendor blog (Strix) — offensive-testing disclosures. The Baseten PAT-in-Docker-layer writeup cross-checked against its own HN thread (134+ pts); the explicit \"what we did not do\" section is the credibility marker.",
     "jp": "セキュリティベンダーのブログ（Strix）——攻撃的テストの開示。Baseten Docker レイヤー PAT の記事は自社の HN スレッド（134+ pts）とクロスチェック；明示的な「私たちがしなかったこと」セクションが信頼性の印。",
     "zh": "安全厂商博客（Strix）——攻击性测试披露。Baseten Docker 层 PAT 文章与其 HN 帖（134+ 分）交叉核对；明确的\"我们没有做什么\"部分是可信度标记。"
+  },
+  "sunilpai.dev": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal blog of Sunil Pai (engineer/writer) — engineering-culture essays. Cross-checked (09-21): the death-spiral essay matches its HN attribution (151 pts); content is explicitly first-person anecdote, not data — treat claims as opinion.",
+    "jp": "Sunil Pai（エンジニア/ライター）の個人ブログ——エンジニアリング文化のエッセイ。クロスチェック済み（09-21）：死のスパイラル論は HN の出典表記（151pt）と一致。内容は明示的に一人称の逸話でありデータではない——主張は意見として扱うこと。",
+    "zh": "Sunil Pai（工程师/作者）的个人博客——工程文化随笔。已交叉核验（09-21）：死亡螺旋一文与 HN 上的署名一致（151 分）；内容明确为第一人称轶事而非数据——其说法应视为观点。"
   },
   "superlinked.com": {
     "cat": "vendor",

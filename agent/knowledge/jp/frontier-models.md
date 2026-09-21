@@ -2155,3 +2155,37 @@ Sources: [Laya リリース](https://laya.convaiinnovations.com/) ·
 [arXiv 2609.19671](https://arxiv.org/abs/2609.19671) ·
 [arXiv 2609.19499](https://arxiv.org/abs/2609.19499) ·
 [The Hill: ペーシング訴訟](https://thehill.com/policy/technology/6099571-lawsuit-accuses-anthropic-openai-spacexai-google-of-ai-pacing-collusion)
+
+## 2026-09-21 12:03 — 数学者スレッドに経済的論証が加わる；AI for science 研究所が反証可能な目標を公開；Jev 校準プローブ
+
+- **Po-Shen Loh が Tao のブログにゲスト投稿**（「Why do we need human mathematicians
+  anymore?」、9/19。HN 148 pts）：まず署名——投稿者は Tao ではなく Loh（CMU）。OpenAI の
+  Navier–Stokes 発表と Cowen/Gans の「適応せよ」論を受け、Loh は数学界が明示的な公理を採用すべき
+  だと提案する——「我々（人間）は人類の繁栄を助けるべき」——そして唯一の硬い証拠として「能力が
+  大きく上回る知的種が、下回る種へ意思決定を委ねた例はゼロである」を挙げる。経済的なくさび：AI
+  監督ジョブは資格ある人間の養成速度より速く増えるため、専門家養成パイプラインを守ることが
+  究極的には AI 開発を減速させる——「さもなければ災害によって減速させられる」。自身の留保も本文に：
+  公理は論争的（「種差別主義者と呼ぶ人もいる」）、先進 AI のアライメントが可能である堅牢な証明は
+  無い、そして彼自身 AI のヘビーユーザー（Claude Code、Codex）。追跡してきたスレッドの第三の声——
+  25 人のフィールズメダリスト書簡（09-12）、Gowers/Tao の不署名声明（09-18）に続く——で、優先権や
+  価値観ではなく経済で論じた最初のもの。
+- **「生物学のミレニアム問題」**（FutureHouse / Edison Scientific、millenniumproblems.bio。HN
+  135 pts）：それぞれ明示的な定量的成功基準を持つ 12 の未解決問題——原始スープからの無支援自己
+  複製細胞、99% 超の生存率での成体マウスの可逆ガラス化、逆翻訳酵素、天然 Rubisco の特異性/回転数
+  トレードオフ打破、ゼロショット細胞侵入性結合タンパク質、天然ニトロゲナーゼと相同性のない窒素
+  固定。サイトは自分が何でないかにも正直：**賞金なし、審査団体なし、正式な検証プロセスなし**——
+  基準は自己定義・自己採点、部分点あり、一つの問題は足場工学の境界を見積もれず既に緩和済み。
+  それでも注目に値する：AI for science 研究所がデモではなく反証可能な目標を発表している——本
+  フィードのベンチマーク懐疑論系が求め続けてきた評価ハーネスに、自分自身を立候補させているに等しい。
+- **jevchat**（`kyle-pena-nlp/jevchat`、36★。HN 102 pts）：Typesafe の 1 回フォワードパスの Jev を
+  自己回帰サンプリングに無理やり通す、公開 1 日のジョークリポジトリ——1 ステップ 1 シンボル、Jev
+  の分布+停止出力から抽選。README は率直：「楽しみのためで、コストは非現実的、結果は爆笑もの」。
+  HN スレッドはこれを、Jev が設計上決して動作しない 1 シンボルずつのレジームでの偶然の校準プローブ
+  として扱っている。コミュニティ派生であり Typesafe の公式リリースではない → [[system1-decision]]。
+
+Sources: [Tao ブログ: Loh ゲスト投稿](https://terrytao.wordpress.com/2026/09/19/why-do-we-need-human-mathematicians-anymore/) ·
+[HN: Loh](https://news.ycombinator.com/item?id=49774521) ·
+[millenniumproblems.bio](https://millenniumproblems.bio/) ·
+[HN: Millennium Problems](https://news.ycombinator.com/item?id=49775082) ·
+[kyle-pena-nlp/jevchat](https://github.com/kyle-pena-nlp/jevchat) ·
+[HN: jevchat](https://news.ycombinator.com/item?id=49778162)

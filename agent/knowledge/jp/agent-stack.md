@@ -1824,3 +1824,31 @@ Sources: [coder/coder](https://github.com/coder/coder) ·
 [agentgit.co](https://agentgit.co/) ·
 [Show HN: Agentgit](https://hn.algolia.com/api/v1/items/49761528) ·
 [yynxxxxx/Codex-X](https://github.com/yynxxxxx/Codex-X)
+
+## 2026-09-21 12:03 — Google がエージェント群の制御プレーンを宣言；MCP の利用者自身が痛みを公開
+
+- **google/ax v0.3.0**（Apache-2.0、Go。9/21 に HN 297 pts でローンチ。ただしリポジトリ自体は
+  2026 年 3 月から存在）：大規模なエージェントワークロードを実行するための Kubernetes 風宣言的
+  制御プレーン。`ax.io/v1alpha1` マニフェストが 4 つのプリミティブを定義——**Task**（CPU/メモリ
+  制限付きサンドボックス化された非信頼実行）、**Workspace**（Git リポジトリ・MCP サーバー・
+  スキルを事前接続）、**Gateway**（host-allowlist のネットワークフェンシング + 認証情報注入）、
+  **Model**（モデル/シークレット設定の一元管理）。アイドル状態のエージェントはチェックポイント化
+  され、サブ秒の suspend/resume が可能。ページ自体の細部に注意：API は `v1alpha1` で README が
+  「major breaking changes」を明示警告、実際のサンドボックス実行は「Agent Substrate に強く依存」
+  ——オーケストレーターはサンドボックスではない。シグナルはこれ：Google が Kubernetes が
+  マイクロサービスに与えたのと同じ宣言的プリミティブの型で「エージェントをクラスタワークロードの
+  一クラスとして」正式化しつつある——制御プレーン層への権利主張であり、それを最も実行できる
+  ベンダーからのもの。
+- **「Why MCP Was Always a Bad Idea」**（Maharshi Patel。68 pts / 77 コメント——コメントの方が
+  本文より重い）：MCP はツールの*トランスポート*を標準化し、難しい部分——認証・権限・信頼・
+  ツール記述の品質——をサーバーごとの後回しにした結果、N サーバーに N 個のセキュリティ態勢と、
+  ツール記述フォーマット自体に焼き込まれたプロンプトインジェクション面を生んだ、という診断。
+  スレッドの反論：MCP のフラットさこそが採用の理由であり、認証の話は実際に改善している。免責
+  ルールに従えばこれは一実践者の意見——温度計の読みであって判定ではない——ただし [[security]] で
+  本フィードが追跡してきたツール契約ドリフトの型を、ビルダー側から独立に再述している。
+
+Sources: [github.com/google/ax](https://github.com/google/ax) ·
+[agentexecutor.io](https://agentexecutor.io) ·
+[HN: AX](https://news.ycombinator.com/item?id=49780797) ·
+[maharship.com: Why MCP Was Always a Bad Idea](https://maharship.com/blog/why-mcp-was-always-a-bad-idea/) ·
+[HN: MCP 記事](https://news.ycombinator.com/item?id=49779329)

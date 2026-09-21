@@ -40,4 +40,27 @@ and TypeSafe AI"——拼合数字，并非同 harness 实测；同 harness 的�
 模型的决定必须在前向传播之前做出"——但它路由的是文字系统，不是 System-1-vs-LLM 升级；第三方
 harness 的采用仍无。
 
-最后更新：2026-09-20 05:06。
+**09-21 12:03 — jevchat：校准探针从玩笑一侧到来：**一个一天大的仓库（`kyle-pena-nlp/jevchat`，
+36★，HN 102 分）每步只问 Jev 一个问题——"给定用户的问题和已写出的回复，下一个符号是什么？"——
+然后从返回的分布+停止选项中抽样、追加、重复。README 直言："为了好玩，成本颇不实际，结果很搞笑"
+——是作者用 Claude 加速、从自己的采样算法描述构建的实验。HN 线程把它当作对 Jev 校准的意外探针——
+恰好落在 Jev 设计上从不运行的单符号逐一模式。社区衍生作品，非 Typesafe 官方——但它让第三方测量
+观察名单翻倍：Jev 现在有两个独立探针（OpenJev 诚实的 84.5% 对 88.3% 差距；jevchat 的分布检视），
+同 harness 对比仍然为零。
+
+**09-21 12:49 act —— 同 harness 条件达成，克隆竞赛产出首个引用完整性捕获：** 48 小时内落地三份独立
+工件。(1) `jabr/classifier-benchmark`（0★，09-21 推送）是首个对四个 System One 模型的单 harness
+实测——Jev（`typesafe/jev-1.13`，经 OpenRouter，约 330 ms/例）、Von、GLiNER2、Laya（均为本地
+MPS）——**Jev 压倒性领先**：v2 macro 0.966 对 GLiNER2 0.684、Von 0.667、Laya 0.583；域偏移稳健性：
+Jev −1.0 分，Von −25.7。该套件自带的标注：全部用例为合成（一个 LLM 委员会编写）、v2 "preliminary"、
+单一维护者。(2) `wfzyx/von`（395M ModernBERT，Apache-2.0，与 `/v1/systemone` 协议兼容）的 README
+表格引用了该套件——**但 README 头条数字（Von 71.5% v2 macro）与套件自己发布的文件不符（v2 66.7 /
+合并 macro 0.704）**，且 v2 仍被标注 preliminary；README 还有内部不一致（校准温度一处写 T=1.0367、
+另一处 T=1.1692；"SOTA……超越已发表的商业替代品"被它自己的表格反驳——表里 Jev 领先 25 分）。(3)
+morethanamachine.com（Nishaanth Reddy，9 月 19 日）发布首批真正独立的 Jev 精度测量——且结果分裂：
+149M 微调 ModernCE 在 WANLI 上胜过 Jev（77.8% 对 74.9%），Jev 在 BoolQ 上胜出（90.5% 对 69.0%）；
+ViZDoom 对照中托管 Jev 得 5.62 kills，Von 宣称本地 9.38。需求侧：Vercel AI Gateway 帖（9 月 18 日）
+报告 Jev 上线 24 小时内进入约 13% 的付费团队——是 GPT-5.6 家族份额的 2 倍、Fable 5.1 的 6 倍——首个
+平台侧采用数据点，自带保留："下一个考验是这个早期采用能否持续。" 193.6×/444.6× 的头条声称仍未被测量。
+
+最后更新：2026-09-21 12:49。

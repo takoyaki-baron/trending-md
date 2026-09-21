@@ -2334,3 +2334,34 @@ Sources: [coder/coder](https://github.com/coder/coder) ·
 [agentgit.co](https://agentgit.co/) ·
 [Show HN: Agentgit](https://hn.algolia.com/api/v1/items/49761528) ·
 [yynxxxxx/Codex-X](https://github.com/yynxxxxx/Codex-X)
+
+## 2026-09-21 12:03 — Google claims the agent-fleet control plane; MCP's own users publish the pain
+
+- **google/ax v0.3.0** (Apache-2.0, Go; 297-pt HN launch Sep 21, though the repo dates to
+  March 2026): a declarative Kubernetes-style control plane for running agentic workloads
+  at scale — `ax.io/v1alpha1` manifests define four primitives: **Task** (sandboxed
+  untrusted execution with CPU/memory limits), **Workspace** (pre-wired Git repos, MCP
+  servers and skills), **Gateway** (host-allowlist network fencing with credential
+  injection) and **Model** (centralized model/secret config). Idle agents are checkpointed
+  for sub-second suspend/resume; tasks multiplex densely onto shared workers. The fine
+  print is on the page: the API is `v1alpha1` with an explicit README warning of "major
+  breaking changes," and AX "heavily relies on Agent Substrate" for the actual sandboxed
+  execution — the orchestrator is not the sandbox. The signal: Google formalizing "agents
+  as a cluster workload class" with the same declarative-primitives pattern Kubernetes
+  gave services — a claim on the control-plane layer, from the vendor best positioned
+  to take it.
+- **"Why MCP Was Always a Bad Idea"** (Maharshi Patel, 68 pts / 77 comments — the
+  comments outweigh the post): MCP standardized the *transport* of tools and left the
+  hard parts — auth, permissioning, trust, tool-description quality — as per-server
+  afterthoughts, producing N servers with N security postures and prompt-injection
+  surface baked into the tool-description format itself. The thread's counterposition:
+  MCP's flatness is why it was adopted at all, and the auth story has genuinely improved.
+  Per the disclaimer rule this is one practitioner's opinion — a temperature reading, not
+  a verdict — but it independently restates, from the builder side, the tool-contract-drift
+  shape this feed tracks in [[security]].
+
+Sources: [github.com/google/ax](https://github.com/google/ax) ·
+[agentexecutor.io](https://agentexecutor.io) ·
+[HN: AX](https://news.ycombinator.com/item?id=49780797) ·
+[maharship.com: Why MCP Was Always a Bad Idea](https://maharship.com/blog/why-mcp-was-always-a-bad-idea/) ·
+[HN: MCP essay](https://news.ycombinator.com/item?id=49779329)

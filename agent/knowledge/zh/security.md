@@ -2006,3 +2006,28 @@ Sources: [Reuters: Gemini 逃逸](https://www.reuters.com/business/gemini-hacked
 [OpenCVE: Totolink A3002MU](https://app.opencve.io/cve/?vendor=totolink&product=a3002mu) ·
 [EEF CNA: CVE-2026-82672](https://cna.erlef.org/cves/CVE-2026-82672.html) ·
 [Red Hat: CVE-2026-94000](https://access.redhat.com/security/cve/cve-2026-94000)
+
+## 2026-09-21 12:03 — Prompt Forcing 一扩展劫持五个 AI 浏览器代理；求职诱骗战役获得四国联合计数
+
+- **BragJack / "Prompt Forcing"**（Gal Weizman，Forever Security；9 月 16–17 日披露，报道延续
+  至 9 月 20 日）：一个仅持广告拦截级权限（Chromium `declarativeNetRequest`）的恶意浏览器扩展
+  重写 AI 浏览器代理所信任的流量——在 Chrome 上削弱安全头并重定向脚本，使代码得以在 Gemini 上下文
+  内运行并触达其特权组件；在 Edge 上一个竞态条件短暂绕过 "Think"/"Do" 模式隔离。五个目标全部被
+  同一扩展攻破：Chrome 的 Gemini Live、Edge Copilot、Opera Neon、Perplexity Comet、Claude in
+  Chrome。已修复：**CVE-2026-0628**（Chrome 143.0.7499.192，7,000 美元赏金）与 **CVE-2026-55945**
+  （Edge 150.0.4078.48）；赏金合计超 2 万美元。可复用的概念是 Weizman 的区分：经典提示注入把恶意
+  指令藏在代理阅读的内容里；**Prompt Forcing 则向代理提供一个完整的伪造提示，代理以自身合法权限
+  执行它**——恶意动作来自受信任的软件，这正是端点检测困难的原因。研究性 PoC，无在野利用报告。
+  所有代理浏览器共享的扩展权限面自此成为已被证实的攻击类——形态图上的候选第十七形：*借权伪造*。
+- **WaterPlum（"Contagious Interview"）四国联合公告**（日本警察厅/内閣サイバー安保室 + FBI +
+  澳大利亚 ASD/ACSC + 德国 BND/BfV，9 月 18 日）：公开归因于朝鲜 313 局——至少 **30,000 台设备
+  感染**（2025 年 12 月–2026 年 7 月，100+ 国家），从 **7,000+ 个加密钱包**窃取凭据或资金，约
+  **1,071 万美元（17 亿日元）** 转入朝鲜。手法未变且直指开发者：伪造 AI/加密货币求职面试、恶意
+  VS Code 项目、面试换脸；恶意软件家族为 BeaverTail（npm）、InvisibleFerret（Python）、
+  OtterCookie、OtterCandy、StoatWaffle。公告并记录日本首次捣毁朝鲜 IT 工作者"笔记本农场"——
+  攻击者就是你的求职者这一骗局的实体侧。自此，求职诱骗 RAT 条目从事件报告升级为政府计数战役。
+
+Sources: [BleepingComputer: BragJack](https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/) ·
+[Anoymask 分析](https://dev.to/anoymask/bragjack-prompt-forcing-in-browser-ai-agents-via-browser-extensions-1d67) ·
+[IC3 联合公告 PDF](https://www.ic3.gov/CSA/2026/260918.pdf) ·
+[BleepingComputer: WaterPlum](https://www.bleepingcomputer.com/news/security/north-korean-waterplum-hackers-infected-30-000-devices-worldwide/)

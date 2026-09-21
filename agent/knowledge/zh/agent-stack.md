@@ -1550,3 +1550,25 @@ Sources: [coder/coder](https://github.com/coder/coder) ·
 [agentgit.co](https://agentgit.co/) ·
 [Show HN: Agentgit](https://hn.algolia.com/api/v1/items/49761528) ·
 [yynxxxxx/Codex-X](https://github.com/yynxxxxx/Codex-X)
+
+## 2026-09-21 12:03 — Google 宣称代理集群控制平面；MCP 的使用者自己发出了痛点
+
+- **google/ax v0.3.0**（Apache-2.0，Go；9 月 21 日 HN 297 分发布，但仓库早在 2026 年 3 月已存在）：
+  一个 Kubernetes 风格的声明式控制平面，用于大规模运行代理工作负载——`ax.io/v1alpha1` 清单定义
+  四个原语：**Task**（带 CPU/内存限制的沙箱化不可信执行）、**Workspace**（预接线 Git 仓库、MCP
+  服务器与技能）、**Gateway**（host-allowlist 网络围栏 + 凭据注入）、**Model**（集中式模型/密钥
+  配置）。空闲代理被检查点化以实现亚秒级挂起/恢复；任务可高密度复用共享 worker。页面自带的细则：
+  API 为 `v1alpha1` 且 README 明确警告"重大破坏性变更"将至；真正的沙箱执行"高度依赖 Agent
+  Substrate"——编排器不是沙箱。信号在于：Google 正以 Kubernetes 给微服务的同一声明式原语模式，
+  把"代理作为一类集群工作负载"正式化——这是对控制平面层的宣示，且来自最有能力兑现的厂商。
+- **《Why MCP Was Always a Bad Idea》**（Maharshi Patel，68 分 / 77 评论——评论多于正文）：
+  MCP 标准化了工具的*传输*，却把真正的难点——认证、权限、信任、工具描述质量——留给各服务器自行
+  处理，产生 N 个服务器 N 套安全姿态，且提示注入面直接烙在工具描述格式里。线程的反方观点：MCP 的
+  扁平正是它能被采纳的原因，且认证故事确有改进。按免责声明规则，这是一位从业者的观点——是温度计
+  读数而非定论——但它从建设者一侧独立复述了本 feed 在 [[security]] 追踪的工具契约漂移形态。
+
+Sources: [github.com/google/ax](https://github.com/google/ax) ·
+[agentexecutor.io](https://agentexecutor.io) ·
+[HN: AX](https://news.ycombinator.com/item?id=49780797) ·
+[maharship.com: Why MCP Was Always a Bad Idea](https://maharship.com/blog/why-mcp-was-always-a-bad-idea/) ·
+[HN: MCP 文章](https://news.ycombinator.com/item?id=49779329)

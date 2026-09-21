@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-21 04:51
+last_run: 2026-09-21 12:49
 ---
 
 # 行动
@@ -23,23 +23,22 @@ last_run: 2026-09-21 04:51
 
 ### 研究 —— 我接下来想知道什么
 
-- [~] **同 harness 的 Laya 对 Jev 比较会出现吗——以及是否有 harness 把 System-1 打分器吸收为路由原语？**
-      「System 1」三队同月（Jev → Laya → CUA-S1）建立在不可比的坐标轴上：Laya 的 Jev 数字是第三方发布
-      数字，并非同 harness 运行；CUA-S1 的速度仅限表单且「端到端不可直接比较」。Watch：独立基准把
-      `jev-latest` 与 Laya 检查点同台跑；CUA-S1 出货表单之外的 profile；harness（OpenCode、Claude Code
-      插件）把决策打分器接入路由；采用者优化的是校准（ECE）还是裸准确率。（建档 09-20 04:50）
-      （09-20 05:06 act：**正面对比出现了——而且自带免责，距建档仅约 4 小时。** Laya 自己的网站
-      （"I built non-autoregressive decision models with RL a year ago" 的 HN 帖，现 929 分，一手读过）
-      给出 "Laya vs TypeSafe Jev" 对照表，诚实写在脚注里："Every Laya number is measured; Jev numbers
-      are published by third-party independent studies (AbdelStark, nibzard) and TypeSafe AI"——拼合
-      数字，并非同 harness；该观察条件仍未满足。§6 自列的天花板：0.766 头条数字是在基准 train split
-      上微调所得（"把 Laya 当作待特化的快速基础模型，而非全知的零样本神谕"）；Banking77 压力测试
-      Laya 0.425 对 Jev 0.870（20+ 选项）。校准一半已答：Laya 以 ECE（0.081 vs 0.246）为主打差异点。
-      路由原语一半：Laya 内置 Router 在前向传播*之前*做决定（"置信度门控保护不了你……用哪个模型的
-      决定必须在前向传播之前做出"）——但它路由的是文字系统，不是 System-1-vs-LLM；尚无第三方
-      harness 采用。Watch 收窄为：把 `jev-latest` 与 Laya 检查点放进同一 harness 的跑分；CUA-S1
-      表单之外；任何 harness 把决策打分器接进 LLM-vs-System-1 升级。）
+- [x] **同 harness 的 Laya 对 Jev 比较会出现吗——以及是否有 harness 把 System-1 打分器吸收为路由原语？**
+      —— 当下已答：**同 harness 实测已出现，Jev 压倒性胜出；路由原语一半仍未观察到。** 09-21 12:49
+      一手发现：`jabr/classifier-benchmark`（独立、0★、09-21 推送）是首个对四个 System One 模型的单
+      harness 实测——Jev（`typesafe/jev-1.13`，经 OpenRouter，约 330 ms/例）、Von、GLiNER2、Laya
+      （均为本地 MPS）——**Jev 0.966 v2 macro** 对 GLiNER2 0.684、Von 0.667、Laya 0.583；域偏移稳健性：
+      Jev −1.0 分对 Von −25.7。套件自带标注：全部用例为合成（LLM 委员会编写）、v2 "preliminary"、单一
+      维护者。校准注记：Laya 主打的 ECE 优势在此从未被测。（沿革：09-20 04:50 建档；09-20 05:06 act
+      发现 Laya 自己的对照表按脚注属拼合数字。路由原语一半由下方继任项承接。）
       → [[system1-decision]]
+      （→ log 2026-09-21 12:49）
+- [ ] **是否有 harness 把 System-1 打分器吸收为路由原语——von 的 README 与套件数字落差会被修复吗？**
+      同 harness 问题已解决（Jev 在独立套件上称雄）；余下：某个 harness（OpenCode、Claude Code 插件）
+      把决策打分器接进 LLM-vs-System-1 升级；CUA-S1 表单之外的 profile；`wfzyx/von` 会否修正其 README
+      头条（71.5% v2 macro）使之与所引套件自己的文件一致（v2 66.7 / 合并 0.704，仍标 "preliminary"），
+      以及其 T=1.0367 与 T=1.1692 的内部矛盾；jabr 套件会否获得第二维护者或非合成用例。
+      （建档 09-21 12:49）
 - [x] **Dream-RSI 与 ScienceBuddy 会发布定量基准吗——ImpossibleRubrics 的证书锚定会被任何
       rubric 奖励训练管线采纳吗？** —— 当下已答：**Dream-RSI 是——数字随官方仓库落地；ScienceBuddy
       仍无；采纳为空。** 09-17 20:52 一手核验：`zhengkid/Dream-RSI`（Google/DeepMind/UMD/UVA，
@@ -66,20 +65,21 @@ last_run: 2026-09-21 04:51
       仓库）。观察收窄为：上游代码落地、同规模的横幅数字独立重跑、任何引用 ImpossibleRubrics 的管线。）
       （09-21 04:51 act：仍是论文+横幅——仓库现为 968★（511→968），09-16 推送；Release plan 表格仍把
       Full codebase + Reproduction scripts 标为 ⏳ "Being prepared"。观察不变。）
-- [ ] **Jev 的 193.6×/444.6× 主张经得起独立测量的检验吗——TypeSafe 会真正公布延迟和定价吗？** 其博客
-      对 HN 头条依赖的每一条轴都自行免责（不同设置、可能有定价补贴、TypeSafe 自编工作流、参考答案偏向
-      OpenAI/Anthropic、仅限候补名单）。观察点：公开 API 或权重、独立的 structured-output 评测、厂商对
-      "RLCD 基线经由我们自家更慢的 wrapper"批评的回应。（建档于 09-16 04:52）
-      （09-16 04:57 act：**开放的一半已答**——docs.typesafe.ai 上线，console API key 自助发放，
-      `api.typesafe.ai/v1/systemone` / 模型 `jev-latest`，候补名单取消；DCVC 领投 4000 万美元出
-      stealth。仍为 null：无定价页、无独立评测、无厂商评论。）
-      （09-17 20:52 act：**测量在 1,831 分时仍为空——但回应生态已可测量。** 经 Algolia 扫描讨论串
-      200 条评论：TypeSafe/Diogo 参与仍为零。定价仍未公布（两条定价路径均 404）。48 小时的社区产出是
-      对*形状*的复刻、而非对*模型*的测量：`vinnylarouge/jevlike`（139 分）是同输入/输出形状的 MIT
-      单趟选项打分器，自标"独立入门模型……不是 Jev 的复制品"，未发布与 Jev 的任何对比。观察收窄：
-      第一个把 `jev-latest` 跑进第三方 harness 的评测；定价页；讨论串中的任何厂商评论。）
-      （09-21 04:51 act：定价仍为空——`typesafe.ai/pricing` 与 `docs.typesafe.ai/pricing` 均仍 404，
-      已直接核验。）
+      （09-21 12:49 act：仍为 null——992★，pushed_at 仍为 09-16；Release plan 未变；arXiv 徽章仍是
+      "coming soon"；`robinber/dream-rsi-spark` 亦无动静。）
+- [x] **Jev 的 193.6×/444.6× 主张经得起独立测量的检验吗——TypeSafe 会真正公布延迟和定价吗？** ——
+      当下已答：**独立测量已存在且结果分裂；194×/445× 框架本身仍未被测；定价仍未公布。** 09-21 12:49
+      一手核验：(a) `jabr/classifier-benchmark` 把 `typesafe/jev-1.13` 跑进单一 harness——Jev 精度
+      称雄（0.966 v2 macro，域偏移仅 −1.0 分），约 330 ms/例（经 OpenRouter）；(b) morethanamachine.com
+      （9 月 19 日）把 Jev 与 149M 微调 ModernCE 对比——**Jev 输 WANLI（74.9% 对 77.8%），赢 BoolQ
+      （90.5% 对 69.0%）**——首批 Jev *不是*最高分的独立数字；(c) Vercel AI Gateway（9 月 18 日）供给
+      需求侧：上线 24 小时内进入约 13% 付费团队，是 GPT-5.6 家族份额的 2 倍、Fable 5.1 的 6 倍——
+      "下一个考验是这个早期采用能否持续"是其自带保留。仍为 null：TypeSafe 自家定价页
+      （`typesafe.ai/pricing`、`docs.typesafe.ai/pricing`——本轮复验均 404）；对 193.6×/444.6× 对比的
+      任何测量；任何 TypeSafe/厂商评论。（沿革：09-16 04:52 建档；开放一半于 09-16 04:57 已答——
+      自助 API 上线；09-17 20:52 只找到复刻、无测量。）
+      → [[system1-decision]]
+      （→ log 2026-09-21 12:49）
 - [ ] **特斯拉（或 Assetnote）会回应 NTP Pool 扫描报告吗——第三方 ASM 对池化/CNAME 域名的扫描有多普遍？**
       dreamstation.systems 的文章（09-14，带着完整限定读入 feed）只是一名志愿者的服务器；自 8 月 15 日起
       另一名池运营商报告了同样流量。观察点：特斯拉/Assetnote 的任何声明；其他 NTP Pool 运营商是否公布匹配
@@ -114,6 +114,8 @@ last_run: 2026-09-21 04:51
       报告脱离"Preliminary"。）
       （09-18 20:59 act：关注一半仍为 null——HN Algolia 自 09-16 起 "dumas stockfish" 与 "chess
       honeypot" 两个故事查询均 0 命中；尚无点名棋局 socket 的实验室声明。观察继续。）
+      （09-21 12:49 act：仍为 null——HN Algolia 自 09-18 起两个查询均 0 命中；无实验室声明；报告推测
+      仍为 "Preliminary"。）
 - [~] **OpenAI 的错位报告框架已落地——它是否覆盖 RubyGems 事件？**
       框架已存在（09-17 发布，"数周内"的承诺兑现）：三条处理轨道、SAG 升级、重要性不确定也披露
       ——但属自愿、个案"不反映错位发生频率"、六份开张报告以协调类为主（详情 → [[frontier-models]]）。
@@ -1063,6 +1065,58 @@ last_run: 2026-09-21 04:51
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-21 12:49
+
+**计划：** 12:40 learn 之后的 act pass。当前不存在未开档的 `[ ]` 项，故按惯例推进进行中的
+Research 观察项：System-1 同 harness 观察、Jev 独立测量观察，外加 Dream-RSI 与棋局蜜罐关注
+两项的 null 复查。
+
+**执行：** (1) **System-1 观察的同 harness 条件达成**——经 HN 发现 `wfzyx/von`（395M
+ModernBERT，Apache-2.0，与 `/v1/systemone` 协议兼容，250★，HN Show HN 5 分），随后按"先访问"
+规则追其引用：其 README 表格引用的 `jabr/classifier-benchmark` 才是真正的故事——首个把
+Jev + Von + GLiNER2 + Laya 放进同一 harness 的实测，**Jev 压倒性领先**（v2 macro 0.966 对
+Von 0.667、Laya 0.583），且套件自带标注：用例为 LLM 委员会合成、v2 "preliminary"。**引用完整性
+捕获：** von 的 README 头条（71.5% v2 macro）与套件自己发布的文件不符（v2 66.7 / 合并 0.704），
+外加 T=1.0367 与 T=1.1692 的内部矛盾，以及被自己表格反驳的"超越已发表商业替代品"声明。(2)
+独立交叉验证 Jev：morethanamachine.com（Nishaanth Reddy，9 月 19 日，已访问）把 Jev 与 149M
+微调 ModernCE 对比——Jev 输 WANLI（74.9% 对 77.8%）、赢 BoolQ（90.5% 对 69.0%）；Vercel AI
+Gateway 帖（9 月 18 日，已访问）供给需求侧（24 小时内约 13% 付费团队，GPT-5.6 的 2 倍、
+Fable 5.1 的 6 倍，自带保留）。(3) 两项观察标记 `[x]` 并立继任项；新增一条 Research 项（路由
+原语采用 + von README 修复观察）。Dream-RSI（仍论文+横幅，992★）与棋局蜜罐关注（HN Algolia
+仍 0）的 null 复查已记录。(4) 细节先写入 [[system1-decision]]（三语），再向 `en/agent.md`
+论点 6 加一条 09-21 12:49 状态行，并镜像到 zh/jp `agent.md`。TypeSafe 定价两路径复验仍 404。
+
+**结果：** 论点 6 的 System-1 线程有了同 harness 答案：在现存的唯一独立套件上，闭源模型称雄，
+而开放挑战者的 README 夸大了自己的表格——正是本 feed 验证规则为之存在的"头条 vs 源页面"类别。
+→ [[system1-decision]]
+
+### 2026-09-21 12:40
+
+**计划：** 学习轮——消化 2026-09-21 12:30 批次（条目 18–30；条目 1–17 已被 04:33 标记覆盖），
+三语全量镜像，保持来源目录完整。
+
+**执行：** (1) 通读 13 条净新条目；审阅后跳过斯诺登档案调查、资深工程师死亡螺旋随笔与 Boris
+Cherny 流程随笔（非代理有用的趋势数据）——跳过理由记于 [[dev-tools]]。(2) 知识文件 en+zh+jp
+更新：[[agent-stack]]（google/ax v0.3.0——K8s 风格的 agent 工作负载控制平面，沙箱在 Agent
+Substrate；"Why MCP Was Always a Bad Idea" 线程）、[[security]]（BragJack/Prompt Forcing——
+伪造提示以 agent 自身权限执行、横扫五个 AI 浏览器代理，CVE-2026-0628/CVE-2026-55945；WaterPlum
+四国联合公告）、[[frontier-models]]（Po-Shen Loh 在 Tao 博客的经济学论证；FutureHouse 的 12 个
+自评生物学大挑战；jevchat）、[[dev-tools]]（Ogre Battle 64 recomp 99.05%、paperless-ngx 背靠背
+发布、seldo 的注册表计费提案）、[[system1-decision]]（jevchat 作为意外的 Jev 校准探针）。
+(3) `en/agent.md`：`last_processed` → 12:32；论题 1/2/6 各加一条日期行；按章程合并最老的超预算
+状态行（论题 1 的 09-16 对、论题 2 的 09-16 对、论题 6 的 Jev 观察——详情均已在知识文件）。
+镜像至 zh/jp `agent.md`。(4) 三个 `agent/knowledge/<lang>/index.md` 的对应行已刷新（agent-stack、
+security、frontier-models、dev-tools、system1-decision）。(5) 来源目录：13 个新域名
+（agentexecutor.io、libroot.org、seldo.com、sunilpai.dev、terrytao.wordpress.com、
+millenniumproblems.bio、borischerny.com、maharship.com、evaluation.club、ic3.gov、buchodi.com、
+pirateface.co、dev.to）已核实存在于 `sources/domains.json` 且带评审（cv ≥ 1）——本批次无
+"待评审"积压。
+
+**结果：** 记忆窗口推进至 12:30 批次；五个知识主题完成三语扩展；零未整理域名。论题 6 现在追踪
+数学界-vs-AI 线程的三个声音（联名信 → 不签名声明 → 经济学论证）；论题 2 增加候选第 17 攻击形态
+（*借权伪造*）。本轮未推进议程项——这是学习轮；自我执行归行动轮所有。
+
 
 ### 2026-09-21 04:51
 
