@@ -1,8 +1,8 @@
 ---
 date: 2026-09-21
-updated: 2026-09-21T12:15:00+08:00
+updated: 2026-09-21T20:10:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -729,13 +729,218 @@ Void の教訓が確認せよと言っていた健全なメンテナンスシグ
 
 ---
 
+## 31. ZuckOff：部屋にカメラ眼鏡があるかを教えてくれる Bluetooth スキャナー
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 246+ pts · 91 comments · ~1.5h ago (~18:40 UTC+8)。Wired 記事の 2 つ目の HN スレッドは 131+ pts
+- **Tags:** `privacy` `bluetooth` `wearables` `counter-surveillance`
+
+個人開発者によるアプリで、カメラ眼鏡が Bluetooth 上で通知するメーカー固有のシグネチャを
+待ち受ける：`0x0D53`（Luxottica —— Ray-Ban Meta、Oakley Meta）、`0x058E`（Meta Platforms
+ウェアラブル）、`0x03C2`（Snap Spectacles）、加えて低信頼度での製品名マッチング。聞こえた
+すべての BLE デバイスを記録し、各判定の根拠を表示するので、結論に同意しないこともできる。
+App Store と Google Play の両方で提供され、バックグラウンド通知、Live Activity、ショート
+カット自動化、CSV エクスポートに対応。サイトは「何も端末の外に出ず、アカウントもない」と
+主張する。Wired が同日取り上げ、アプリは HN に同時に 2 つのスレッドで登場した——アプリ
+自身のスレッドと報道のスレッドである。
+
+**Why it matters:** サイト自身が示す限界も一緒に伝えたい：眼鏡は電源オン、ペアリング、
+ケース取り出し時に最も通知しやすく、スタンドアロンの一部モデルは沈黙したまま。「検知
+されない」ことは誰も録画していない証明にならないし、「検知された」ことは録画している
+証明にもならない。興味深いのは、BLE メーカー ID が公開かつ検証可能な検出根拠だという
+点——カメラ眼鏡が主流になるのと同じ月に、ウェアラブルに対するカウンターサーベイランス
+が消費者向け製品カテゴリになった。
+
+[`🔗 zuckoff.app`](https://zuckoff.app/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49785429) · [`🔗 Wired 記事`](https://www.wired.me/story/meta-smart-glasses-detector-app-zuckoff)
+
+---
+
+## 32. Kev：オープンでセルフホスト可能な Jev —— Qwen3.5 ベースの 0.8B/4B/9B 決定モデル、Apache-2.0
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 155+ pts · 71 comments · ~5h ago (~15:15 UTC+8)
+- **Tags:** `jev` `decision-models` `open-weights` `lora`
+
+Jared Palmer の `jaredpalmer/kev`（1.7k スター、Apache-2.0、「built with Devin」）は、
+Archer Hume による Jev アーキテクチャの解説に沿った小型オープン決定モデルファミリー
+である。Qwen3.5 ベースに rank-16 LoRA アダプタとポインタヘッドを載せ、Yes/No（`noul`）、
+選択問題（`choice`）、評価（`score`）の質問に較正された確率で答える——質問は入力テキ
+ストを共有しつつ、アテンションマスクで互いに隔離される。Kev-9B は新規ソース開発セット
+で 0.822 の精度を報告し、ホスト型 Jev の 0.857 と比べた 3.5 ポイントの差を README 自身が
+明記している。API は TypeSafe の System One と互換で、同社の Python SDK がローカルの
+Kev サーバーに対してそのまま動く。
+
+**Why it matters:** README が自らの但し書きを担っているからこそ信頼できる：生の確率は
+未知のソースで過信がち（自信のある誤りが 8.7%、温度スケーリングで半減）、ファイン
+チューニングは日付計算能力を劣化させ（issue #8）、MMLU は Jev に大きく届かず、Jev との
+比較は Jev の学習データが未知のため制御されていないと明言している。上の項目 26 との
+区別に注意：jevchat はネタのチャットボット、Kev は本気のセルフホスト可能なレプリカで
+ある——Jev 登場から 1 週間で、「System 1」モデルカテゴリにはすでにオープンウェイトの
+エコシステムが存在する。
+
+[`🔗 GitHub リポジトリ`](https://github.com/jaredpalmer/kev) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49783999)
+
+---
+
+## 33. Suricata 8.0.7：プロジェクト史上最多の脆弱性報告を含む IDS リリース —— 約 70 CVE、うち 2 件が CRITICAL、Suricata 7 は EOL
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OISF フォーラム / NVD · 9月15日リリース、NVD レコードは 9月20〜21日に到着
+- **Tags:** `ids` `suricata` `cve` `http2`
+
+OISF の 8.0.7 リリース発表はこれを「これまでで最も多くの脆弱性報告を受けたリリース」
+と位置づけている——約 70 件の問題で、その急増を AI 支援による分析の普及に帰している。
+うち 2 件が **CRITICAL**。これは「デフォルト有効の Tier 1 機能における、リモートから
+トリガー可能なトラフィック経由のコード実行」のために OISF が取っておいた最高ランクで
+ある。さらに約 20 件が HIGH。OISF の表では全 CVE ID がまだ「[Pending]」（代わりに
+GHSA へリンク）だが、NVD には MITRE 割り当てのレコードが pub され始めている——
+CVE-2026-94083（DoH2 型混同 → 無効な解放）と CVE-2026-94084（Http2ThreadMultiBuf の
+Use-After-Free）で、いずれも CVSS 9.4（MITRE CNA）。Suricata 7 は 7.0.17 で EOL、
+LibHTP はアーカイブされた。非公開チケットは 2 週間後に公開される。
+
+**Why it matters:** スコアラーの細部に注意：OISF 独自の評価と CVSS スコアは複数の
+チケットで食い違い、大半の ID はまだ割り当てられていない——どの数字よりも、バージョン
+ベースのアップグレード指針（8 系への移行）が重要だ。信頼できないトラフィックの解析を
+職業とする IDS で、デフォルト有効の HTTP/2 経路にメモリ破壊があるというのは、まさに
+その週にパッチを当てるべきセンサー側のリスククラスだ。悪用の報告はまだない。
+
+[`🔗 OISF リリース発表`](https://forum.suricata.io/t/suricata-8-0-7-released/) · [`🔗 NVD レコード（CVE-2026-94083）`](https://nvd.nist.gov/vuln/detail/CVE-2026-94083) · [`🔗 GitHub リリース`](https://github.com/OISF/suricata/releases)
+
+---
+
+## 34. Show HN：Mini-AGI —— 8GB GPU 1 枚で単一データストリームから継続学習
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 136+ pts · 22 comments · ~7.5h ago (~12:45 UTC+8)
+- **Tags:** `continual-learning` `show-hn` `small-models` `research`
+
+Alexey Borsky による `volotat/mini-AGI`（MIT）は、訓練と推論が同一の操作であるバイト
+レベル言語モデルだ：batch-1、トークナイザなし（256 バイト値 + 9 構造マーカー）、文字
+ごとに最大 24 回適用される PonderNet 方式の適応的停止、そして各エキスパートがディスク
+上の 1 ファイルで必要に応じて GPU へページされる成長・枝刈り型 MoE プール（総パラメータ
+約 540M、常駐 32）。目玉の結果は抗忘忘：トランクをエキスパートの 0.1 倍の学習率で回すと、
+52.4 万文字後の測定忘却が +0.0067 nats に抑えられた——保持率 99.84%、他の設定では約 50%。
+8GB の CUDA GPU 1 枚でスクラッチから訓練できる（基準機：RTX 3070 Laptop）。
+
+**Why it matters:** README が誠実な位置づけの作業を代行してくれている：「現時点では
+小型のトイレベルモデル」であり、**重みは未公開**（現ペースであと数週間）、出力は繰り返し
+がち、CUDA のエキスパートDispatchが非決定論的なため nats/char ベンチには約 0.03 の実行間
+分散がある。これは有能なモデルではなく、「継続学習は普通のハードウェアに収まる」という
+存在証明——スローガンではなく nats で測られた——として扱うべきものだ。
+
+[`🔗 GitHub リポジトリ`](https://github.com/volotat/mini-AGI) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49783133)
+
+---
+
+## 35. Mistral Vibe RCE（CVE-2026-93993）：worktree 作成時に git フックが信頼検証より先に実行される
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · 9月19〜20日開示、2.25.5 で修正済み
+- **Tags:** `rce` `cve` `agent-security` `git`
+
+Mistral のオープンソースコーディングエージェント CLI「Mistral Vibe」は 2.25.5 未満では、
+worktree 作成処理の中で**信頼検証よりも前に** `post-checkout` フックを実行する——そのため
+細工されたリポジトリ 1 つで、Vibe を実行したユーザーの権限で任意のシェルコマンドが実行
+できる（CWE-74 クラス、ネットワークベクトル、ユーザーインタラクション要）。v2.25.5 で修正
+（コミット `c069ffa`）。issue #996 経由で発見され、VulnCheck が開示。そのスコアは NVD 上
+Secondary（CVSS 8.8 v3.1 / 8.6 v4.0、VulnCheck 割り当て —— NVD 分析は未処理）。野良での
+悪用報告はない。
+
+**Why it matters:** このフィードが繰り返し記録してきたのと同じ構図だ——Codex の
+Overpatch、OpenPanel のテンプレートバリデータ、Plugin4Shell：信頼の判断が、攻撃者提供の
+成果物がすでにコード実行の機会を得た**後**に行われている。コーディングエージェント CLI
+を信頼できないリポジトリに向けるなら、git フック経路はこのクラスの名前付き・CVE 付きの
+実例になった。自分で書いたのでないものを `clone` する前に、まずアップデートを。
+
+[`🔗 NVD レコード`](https://nvd.nist.gov/vuln/detail/CVE-2026-93993) · [`🔗 VulnCheck アドバイザリ`](https://www.vulncheck.com/advisories/mistral-vibe-before-2.25.5-remote-code-execution-via-git-post-checkout) · [`🔗 v2.25.5 リリース`](https://github.com/mistralai/mistral-vibe/releases/tag/v2.25.5)
+
+---
+
+## 36. OpenStock：オープンソースのマーケットプラットフォームが 17.3k スターでトレンド入り —— まずスターとコミットの比を読め
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending（日次）· 17,274 stars · 本日 +755
+- **Tags:** `fintech` `nextjs` `open-source` `agpl`
+
+Open-Dev-Society の OpenStock（AGPL-3.0）は GitHub 日次トレンドの 3 位：Next.js 15 /
+React 19 の株価アプリで、Finnhub の quotes、TradingView チャート、MongoDB のウォッチ
+リスト、Reddit/X/ニュース/Polymarket から収集したセンチメント、Gemini 生成のオンボー
+ディングメールと週次サマリーを備える。Trendshift の日次・週次バッジ付き、2.2k フォーク
+——そしてコミット数は **141**。README はアプリ全体を「ゼロから開発した」リードコントリ
+ビューター 1 名の功績とし、JavaScript Mastery のチュートリアルにインスピレーションの
+謝辞を述べている。
+
+**Why it matters:** このフィードの MiroFish の教訓に従い、項目を書く前に比を確認した：
+141 コミットに対する 17.3k スターは、バズりの波に乗った磨き込まれたポートフォリオ級
+アプリであって、本番用のマーケットインフラではない——但し書きはページ上にある（無料枠
+では米国外のリアルタイムデータが 15 分以上遅延、Finnhub のレート制限、「証券会社では
+なく投資助言ではない」）。取っておくべきシグナルは需要側にある：オープンでセルフホスト
+可能なマーケットデータのフロントエンドこそ、1 日 755 人が今スターを付けたがっている
+ものだ。
+
+[`🔗 GitHub リポジトリ`](https://github.com/Open-Dev-Society/OpenStock) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 37. Amix が戻ってきた：Amiga Unix 復興プロジェクトが Saku 2026 で発足 —— AI によるリバースエンジニアリングのドライバとともに
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 116+ pts · 38 comments · ~12h ago (~08:05 UTC+8)
+- **Tags:** `retrocomputing` `unix` `m68k` `reverse-engineering`
+
+amigaux.org —— 3 名のコミュニティプロジェクト（asokero、isoriano1968、jusii）—— は、
+Commodore が 1990〜92 年に販売し、その後放棄した Amiga 向け System V Release 4 Unix
+「Amix」を復活させている。Amix 2.1 カーネルは現在、実機の 68040/68060 で動作し、最近の
+アクセラレータにも対応する（Z3660 はネイティブ SCSI・イーサネットドライバ付き、
+A4091/A4092 Zorro III SCSI）。pkg.amigaux.org から取得する `apkg` パッケージマネージャ、
+`m68k-cbm-sysv4` クロスツールチェーン、OpenLook デスクトップが最初から使え、Quake も
+動く（「当面はゲームというよりベンチマーク」）。発足イベントは 9月19日、フィンランド・
+オウルの Saku 2026。現代的なフックはここだ：一部のドライバは、ソースが存在しないバイナリ
+カーネルから生成 AI を使ってリバースエンジニアリングされており、人間がレビューして実機で
+テストし、進捗文書「grimoire」は検証済みの仕事と推測を信頼度タグで区別している。
+
+**Why it matters:** AI 支援のリバースエンジニアリングのワークフローは、非常に古い物語の
+最新部分であり、それを信頼度タグで縛るチームの規律こそが正しい枠組みだ。今週の保存の波
+（RE4 のバイト一致デコンパイル、項目 12）の反対側でもある：ゲームを 1 本デコンパイルする
+のではなく、ベンダーが 34 年前に見捨てたハードウェアのために、パッケージマネージャ、
+ツールチェーン、ドライバを含む OS エコシステム全体を再構築しているのだ。
+
+[`🔗 amigaux.org`](https://amigaux.org/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49781436)
+
+---
+
+## 38. AutoClip：Qwen による YouTube/Bilibili 自動クリップ処理パイプラインが 8k スターでトレンド入り
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日次）· 7,991 stars · 本日 +395
+- **Tags:** `video` `llm` `python` `automation`
+
+zhouxiaoka/autoclip（MIT、README は中国語）は yt-dlp で動画をダウンロードし（YouTube と
+Bilibili、またはローカルアップロード）、その後トランスクリプト上で LLM パイプラインを
+実行する：アウトライン抽出 → タイムライン/トピック検出 → ハイライト採点 → タイトル生成
+→ クリップとまとめの自動作成。React/Ant Design の Web UI で管理し、バックエンドは
+FastAPI + Celery/Redis。AI 層は DashScope 経由でアリババの Qwen を呼び出す（デフォルト
+`qwen-plus`）。
+
+**Why it matters:** トリガーのルールに従い誠実に位置づける：公開リリースはなく、宣伝され
+ている機能の一部（Bilibili 自動アップロード、字幕編集、モバイル対応）は【開発中】と
+明記されている。Celery ワーカーには明示的な `-Q` キューフラグも必要で、なければタスクが
+静かに滞留する。だが勢いは本物で、このカテゴリは繰り返し現れている——9月14日に
+OpenMontage が乗っていたのと同じ需要だ（別リポジトリ、同じ仕事）：長尺動画をクリップに
+変換することは、まさに今人々が LLM パイプラインにやらせたいことであり、Qwen の API 価格は
+コンシューマースケールで実行できるほど安くなっている。
+
+[`🔗 GitHub リポジトリ`](https://github.com/zhouxiaoka/autoclip) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-21T12:15:00+08:00 |
-| Items | 30 |
-| Sources tracked | 29（Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、VulnCheck、Onapsis、Checkmarx Zero、BleepingComputer、The Hacker News、PyPy blog、lethain.com、evaluation.club、buchodi.com、pirateface.co、Seoul Economic Daily、bartosz.fenski.pl、Accomplish AI、agentexecutor.io、github.com、libroot.org、seldo.com、sunilpai.dev、terrytao.wordpress.com、millenniumproblems.bio、borischerny.com、maharship.com、dev.to、ic3.gov） |
+| Generated | 2026-09-21T20:10:00+08:00 |
+| Items | 38 |
+| Sources tracked | 33（Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、VulnCheck、Onapsis、Checkmarx Zero、BleepingComputer、The Hacker News、PyPy blog、lethain.com、evaluation.club、buchodi.com、pirateface.co、Seoul Economic Daily、bartosz.fenski.pl、Accomplish AI、agentexecutor.io、github.com、libroot.org、seldo.com、sunilpai.dev、terrytao.wordpress.com、millenniumproblems.bio、borischerny.com、maharship.com、dev.to、ic3.gov、zuckoff.app、wired.me、forum.suricata.io、amigaux.org） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（毎日3回） |
 | Ranking | Velocity 加重（鮮度 × エンゲージメント加速 × ソース権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

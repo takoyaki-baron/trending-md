@@ -1,8 +1,8 @@
 ---
 date: 2026-09-21
-updated: 2026-09-21T12:15:00+08:00
+updated: 2026-09-21T20:10:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -672,13 +672,196 @@ v3.2.0（9 月 19 日）之后第二天紧跟 v3.2.1 修复版——用自过期
 
 ---
 
+## 31. ZuckOff：一个蓝牙扫描器，告诉你房间里有没有摄像头眼镜
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 246+ pts · 91 comments · ~1.5h ago (~18:40 UTC+8)；Wired 报道的第二个 HN 讨论串 131+ pts
+- **Tags:** `privacy` `bluetooth` `wearables` `counter-surveillance`
+
+一位独立开发者的应用，专门监听摄像头眼镜在蓝牙上广播的厂商专属签名：`0x0D53`
+（Luxottica——Ray-Ban Meta、Oakley Meta）、`0x058E`（Meta Platforms 可穿戴设备）、
+`0x03C2`（Snap Spectacles），另以较低置信度匹配产品名。它会记录听到的每一个 BLE
+设备，并展示每条判定的证据，让你可以不认同它的结论。应用同时在 App Store 和
+Google Play 上架，带后台提醒、实时活动、快捷指令自动化与 CSV 导出；网站声称
+"什么都不离开你的手机，也没有账号"。Wired 当天跟进报道，应用同时在 HN 上出现两次
+——应用讨论串和报道讨论串。
+
+**Why it matters:** 请带上网站自己声明的局限：眼镜在开机、配对或取出充电盒时信号
+最响，一些独立型号保持静默，而且"没检测到"不能证明没人在录音，正如"检测到"也
+不能证明有人在录音。有意思的地方在于：BLE 厂商 ID 是公开、可验证的检测依据——
+针对可穿戴设备的反侦察已经成为一个消费级产品品类，恰逢摄像头眼镜普及的当月。
+
+[`🔗 zuckoff.app`](https://zuckoff.app/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49785429) · [`🔗 Wired 报道`](https://www.wired.me/story/meta-smart-glasses-detector-app-zuckoff)
+
+---
+
+## 32. Kev：开放、可自托管的 Jev——基于 Qwen3.5 的 0.8B/4B/9B 决策模型，Apache-2.0
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 155+ pts · 71 comments · ~5h ago (~15:15 UTC+8)
+- **Tags:** `jev` `decision-models` `open-weights` `lora`
+
+Jared Palmer 的 `jaredpalmer/kev`（1.7k 星，Apache-2.0，"built with Devin"）是一族
+小型开放决策模型，遵循 Archer Hume 对 Jev 架构的解读：在 Qwen3.5 底座上加 rank-16
+LoRA 适配器与指针头，以校准概率回答是非题（`noul`）、多选题（`choice`）与评分题
+（`score`）——问题共享输入文本，但通过注意力掩码相互隔离。Kev-9B 在新来源开发集上
+报告 0.822 准确率，对比托管版 Jev 的 0.857，README 自己写明了 3.5 分的差距。API 与
+TypeSafe 的 System One 一致，后者的 Python SDK 可以直接对接本地 Kev 服务器。
+
+**Why it matters:** README 自带免责声明，这正是它可信的原因：原始概率在不熟悉的
+来源上过度自信（8.7% 的自信错误，温度缩放后减半），微调会损害日期运算能力
+（issue #8），MMLU 显著落后于 Jev，且与 Jev 的对比明确不可控——Jev 的训练数据未知。
+注意与上文第 26 条的区别：jevchat 是个玩笑聊天机器人，Kev 是认真的可自托管复刻——
+Jev 发布仅一周，"System 1" 模型品类已经有了开放权重生态。
+
+[`🔗 GitHub 仓库`](https://github.com/jaredpalmer/kev) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49783999)
+
+---
+
+## 33. Suricata 8.0.7：项目史上漏洞报告最多的 IDS 版本——约 70 个 CVE、2 个危急，Suricata 7 生命周期终止
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OISF 论坛 / NVD · 9 月 15 日发布，NVD 记录 9 月 20–21 日陆续落地
+- **Tags:** `ids` `suricata` `cve` `http2`
+
+OISF 的 8.0.7 发布公告称其为"我们收到漏洞报告数量最多的一次发布"——约 70 个问题，
+他们将其归因于 AI 辅助分析的兴起。其中两个被评为 **CRITICAL**，这是 OISF 保留给
+默认启用的 Tier 1 特性中"可远程触发的基于流量的代码执行"的最高级别；另有约 20 个
+HIGH。在 OISF 的表格中所有 CVE 编号仍为 "[Pending]"（改为链接 GHSA），但 NVD 已
+开始发布 MITRE 分配的记录——包括 CVE-2026-94083（DoH2 类型混淆 → 无效释放）与
+CVE-2026-94084（Http2ThreadMultiBuf 释放后使用），均为 CVSS 9.4（MITRE CNA）。
+Suricata 7 自 7.0.17 起生命周期终止，LibHTP 已归档。私有工单将在两周后公开。
+
+**Why it matters:** 注意评分方细节：OISF 自己的评级与 CVSS 分数在若干工单上存在
+分歧，且大多数编号尚未分配——基于版本的升级指引（迁移到 8 分支）比任何单个数字
+更重要。一个职责就是解析不可信流量的 IDS，在默认启用的 HTTP/2 路径上出现内存
+破坏，正是值得当周就打补丁的传感器侧风险类别。暂无被利用报告。
+
+[`🔗 OISF 发布公告`](https://forum.suricata.io/t/suricata-8-0-7-released/) · [`🔗 NVD 记录（CVE-2026-94083）`](https://nvd.nist.gov/vuln/detail/CVE-2026-94083) · [`🔗 GitHub 发布页`](https://github.com/OISF/suricata/releases)
+
+---
+
+## 34. Show HN：Mini-AGI——在一块 8GB 显卡上从单一数据流持续学习
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 136+ pts · 22 comments · ~7.5h ago (~12:45 UTC+8)
+- **Tags:** `continual-learning` `show-hn` `small-models` `research`
+
+Alexey Borsky 的 `volotat/mini-AGI`（MIT）是一个字节级语言模型，训练与推理是同一个
+操作：batch-1、无分词器（256 个字节值 + 9 个结构标记）、每字符最多应用 24 次的
+PonderNet 式自适应停机，以及一个可增长/可修剪的专家混合池——每个专家是磁盘上的
+一个文件，按需换页到 GPU（总参数约 540M，常驻 32 个）。核心结果是抗遗忘：以专家
+学习率 0.1× 的速度运行主干，在 52.4 万字符后测得遗忘仅为 +0.0067 nats——保留率
+99.84%，其他配置约 50%。在单块 8GB CUDA 显卡上即可从零训练（参考机型：RTX 3070
+笔记本 GPU）。
+
+**Why it matters:** README 替你完成了诚实定性的工作："就目前而言这是一个玩具级
+小模型"，**权重尚未发布**（按当前速度还需几周），输出重复，且由于 CUDA 专家调度
+的非确定性，nats/char 基准有约 0.03 的运行间方差。把它当作"持续学习可以塞进普通
+硬件"的存在性证明——用 nats 而非口号来度量——而不是一个有能力的模型。
+
+[`🔗 GitHub 仓库`](https://github.com/volotat/mini-AGI) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49783133)
+
+---
+
+## 35. Mistral Vibe RCE（CVE-2026-93993）：worktree 创建时 git 钩子在信任校验之前执行
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · 9 月 19–20 日披露，已在 2.25.5 修复
+- **Tags:** `rce` `cve` `agent-security` `git`
+
+Mistral 的开源编程代理 CLI Mistral Vibe 在 2.25.5 之前，会在 worktree 创建过程中、
+**信任校验之前**执行 `post-checkout` 钩子——因此一个精心构造的仓库就能以运行 Vibe
+用户的权限执行任意 shell 命令（CWE-74 类，网络向量，需要用户交互）。已在 v2.25.5
+修复（提交 `c069ffa`）；经 issue #996 发现，由 VulnCheck 披露，其评分在 NVD 上为
+Secondary（CVSS 8.8 v3.1 / 8.6 v4.0，VulnCheck 分配——NVD 分析待定）。暂无在野
+利用报告。
+
+**Why it matters:** 这正是本 feed 反复记录的同一形态——Codex 的 Overpatch、
+OpenPanel 的模板校验器、Plugin4Shell：信任决策发生在攻击者提供的工件已经获得代码
+执行机会之后。如果你会让编程代理 CLI 接触不可信仓库，git 钩子路径现在已经是该类
+问题有名有号的 CVE 实例；在你 `clone` 任何非你手写的东西之前先升级。
+
+[`🔗 NVD 记录`](https://nvd.nist.gov/vuln/detail/CVE-2026-93993) · [`🔗 VulnCheck 公告`](https://www.vulncheck.com/advisories/mistral-vibe-before-2.25.5-remote-code-execution-via-git-post-checkout) · [`🔗 v2.25.5 发布`](https://github.com/mistralai/mistral-vibe/releases/tag/v2.25.5)
+
+---
+
+## 36. OpenStock：开源行情平台趋势上榜 17.3k 星——先看星数与提交数之比
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending（日榜）· 17,274 stars · 今日 +755
+- **Tags:** `fintech` `nextjs` `open-source` `agpl`
+
+Open-Dev-Society 的 OpenStock（AGPL-3.0）位列 GitHub 日榜第 3：一个 Next.js 15 /
+React 19 行情应用，带 Finnhub 报价、TradingView 图表、MongoDB 自选列表、从
+Reddit/X/新闻/Polymarket 抓取的情绪数据，以及 Gemini 生成的引导邮件与每周摘要。
+带 Trendshift 日/周徽章，2.2k fork——而提交数只有 **141**。README 将整个应用归于
+一位主贡献者"从零开发"，并致谢 JavaScript Mastery 的教程启发。
+
+**Why it matters:** 按 MiroFish 教训先做功课再写条目：141 个提交对应 17.3k 星，
+是一个借病毒式传播走红的精致作品集级应用，而不是生产级行情基础设施——免责声明
+就写在页面上（免费档非美国实时数据延迟 15 分钟以上、Finnhub 有限流、"不是券商、
+不构成投资建议"）。值得保留的信号在需求侧：一个开放、可自托管的行情数据前端，
+正是每天 755 个人此刻想加星的东西。
+
+[`🔗 GitHub 仓库`](https://github.com/Open-Dev-Society/OpenStock) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 37. Amix 回来了：Amiga Unix 复兴项目在 Saku 2026 发布——带 AI 逆向的驱动
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 116+ pts · 38 comments · ~12h ago (~08:05 UTC+8)
+- **Tags:** `retrocomputing` `unix` `m68k` `reverse-engineering`
+
+amigaux.org——一个三人社区项目（asokero、isoriano1968、jusii）——正在复兴 Amix，
+即 Commodore 1990–92 年销售、随后被放弃的 Amiga 版 System V Release 4 Unix。Amix 2.1
+内核如今可在真实 68040/68060 硬件上运行，包括现代加速卡（Z3660，带原生 SCSI 与
+以太网驱动；A4091/A4092 Zorro III SCSI），配有从 pkg.amigaux.org 拉取的 `apkg` 包
+管理器、`m68k-cbm-sysv4` 交叉工具链，开箱即用的 OpenLook 桌面；Quake 能跑，"暂时
+更像基准测试而非游戏"。发布活动为 9 月 19 日在芬兰奥卢的 Saku 2026。现代亮点：
+部分驱动正借助生成式 AI 从二进制内核逆向而来——源代码并不存在——由人类复核并在
+真实硬件上测试，进度文档"grimoire"以置信度标签区分已验证工作与猜测。
+
+**Why it matters:** AI 辅助逆向的工作流是这个古老故事里最新的部分，团队以置信度
+标签约束它的纪律正是恰当的框架。这也是本周数字保存浪潮（RE4 字节级一致反编译，
+第 12 条）的另一端：不是反编译一款游戏，而是为一个厂商 34 年前就放弃的硬件重建
+整个操作系统生态——包管理器、工具链、驱动。
+
+[`🔗 amigaux.org`](https://amigaux.org/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49781436)
+
+---
+
+## 38. AutoClip：基于 Qwen 的 YouTube/Bilibili 自动切片流水线趋势上榜 8k 星
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日榜）· 7,991 stars · 今日 +395
+- **Tags:** `video` `llm` `python` `automation`
+
+zhouxiaoka/autoclip（MIT，中文 README）通过 yt-dlp 下载视频（YouTube 与 Bilibili，
+或本地上传），随后在转写文本上运行 LLM 流水线：大纲提取 → 时间线/主题检测 →
+高光打分 → 标题生成 → 自动创建切片与合集，通过 React/Ant Design 的 Web UI 管理，
+后端为 FastAPI + Celery/Redis。AI 层经 DashScope 调用阿里巴巴 Qwen（默认
+`qwen-plus`）。
+
+**Why it matters:** 按触发器规则诚实定性：没有已发布版本，若干宣传中的功能
+（B站自动上传、字幕编辑、移动端支持）标注【开发中】；Celery worker 还需要显式的
+`-Q` 队列参数，否则任务会静默滞留。但增速是真实的，而且这个品类反复出现——与
+9 月 14 日 OpenMontage 所承载的是同一种需求（不同仓库、同一件事）：把长视频切成
+切片正是人们此刻最想让 LLM 流水线去做的事，而 Qwen 的 API 定价已经便宜到消费级
+规模可用。
+
+[`🔗 GitHub 仓库`](https://github.com/zhouxiaoka/autoclip) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-21T12:15:00+08:00 |
-| Items | 30 |
-| Sources tracked | 29（Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、VulnCheck、Onapsis、Checkmarx Zero、BleepingComputer、The Hacker News、PyPy blog、lethain.com、evaluation.club、buchodi.com、pirateface.co、Seoul Economic Daily、bartosz.fenski.pl、Accomplish AI、agentexecutor.io、github.com、libroot.org、seldo.com、sunilpai.dev、terrytao.wordpress.com、millenniumproblems.bio、borischerny.com、maharship.com、dev.to、ic3.gov） |
+| Generated | 2026-09-21T20:10:00+08:00 |
+| Items | 38 |
+| Sources tracked | 33（Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、VulnCheck、Onapsis、Checkmarx Zero、BleepingComputer、The Hacker News、PyPy blog、lethain.com、evaluation.club、buchodi.com、pirateface.co、Seoul Economic Daily、bartosz.fenski.pl、Accomplish AI、agentexecutor.io、github.com、libroot.org、seldo.com、sunilpai.dev、terrytao.wordpress.com、millenniumproblems.bio、borischerny.com、maharship.com、dev.to、ic3.gov、zuckoff.app、wired.me、forum.suricata.io、amigaux.org） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | Velocity 加权（时效 × 互动加速 × 信源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

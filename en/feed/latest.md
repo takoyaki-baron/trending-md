@@ -1,8 +1,8 @@
 ---
 date: 2026-09-21
-updated: 2026-09-21T12:15:00+08:00
+updated: 2026-09-21T20:10:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -753,13 +753,216 @@ check for: a trending repo whose commit log actually moves as fast as its stars.
 
 ---
 
+## 31. ZuckOff: a Bluetooth scanner that tells you when camera glasses are in the room
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 246+ pts · 91 comments · ~1.5h ago (~18:40 UTC+8); second HN thread on the Wired coverage at 131+ pts
+- **Tags:** `privacy` `bluetooth` `wearables` `counter-surveillance`
+
+An independent developer's app that listens for the Bluetooth manufacturer-specific
+signatures camera glasses announce: `0x0D53` (Luxottica — Ray-Ban Meta, Oakley Meta),
+`0x058E` (Meta Platforms wearables), `0x03C2` (Snap Spectacles), plus product-name
+matching at lower confidence. It logs every BLE device it hears and shows the evidence
+behind each flag, so you can disagree with the verdict. Ships on both the App Store and
+Google Play, with background alerts, a Live Activity, Shortcuts automation and CSV export;
+the site claims "nothing leaves your phone and there is no account." Wired picked it up
+the same day, and the app hit HN twice at once — the app thread and the coverage thread.
+
+**Why it matters:** Carry the site's own limits: glasses announce loudest at power-on,
+pairing or case removal, some standalone models stay silent, and silence isn't proof
+no one is recording any more than a hit is proof someone is. The interesting part is
+that BLE manufacturer IDs are a public, verifiable detection basis — counter-surveillance
+for wearables is now a consumer product category, arriving the same month camera glasses
+went mainstream.
+
+[`🔗 zuckoff.app`](https://zuckoff.app/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49785429) · [`🔗 Wired coverage`](https://www.wired.me/story/meta-smart-glasses-detector-app-zuckoff)
+
+---
+
+## 32. Kev: an open, self-hostable Jev — 0.8B/4B/9B decision models on Qwen3.5, Apache-2.0
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 155+ pts · 71 comments · ~5h ago (~15:15 UTC+8)
+- **Tags:** `jev` `decision-models` `open-weights` `lora`
+
+Jared Palmer's `jaredpalmer/kev` (1.7k stars, Apache-2.0, "built with Devin") is a family
+of small open decision models following Archer Hume's writeup of Jev's architecture: a
+rank-16 LoRA adapter plus a pointer head on Qwen3.5 bases, answering yes/no (`noul`),
+multiple-choice (`choice`) and rating (`score`) questions with calibrated probabilities —
+questions share input text but are isolated via attention masking. Kev-9B reports 0.822
+accuracy on a new-source development set vs hosted Jev's 0.857, and the README states the
+3.5-point gap itself. The API mirrors TypeSafe's System One, so their Python SDK works
+against a local Kev server.
+
+**Why it matters:** The README carries its own caveats, which is why it's credible: raw
+probabilities are over-confident on unfamiliar sources (8.7% confident errors, halved with
+temperature scaling), fine-tuning degrades date arithmetic (issue #8), MMLU lags Jev
+substantially, and the Jev comparison is explicitly not controlled since Jev's training
+data is unknown. Note the distinction from item 26 above: jevchat is a joke chatbot, Kev
+is a serious self-hostable replica — one week after Jev's launch, the "System 1" model
+class already has an open-weight ecosystem.
+
+[`🔗 GitHub repo`](https://github.com/jaredpalmer/kev) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49783999)
+
+---
+
+## 33. Suricata 8.0.7: the IDS release with the most vulnerability reports in project history — ~70 CVEs, 2 critical, Suricata 7 EOL
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OISF forum / NVD · released Sep 15, NVD records landing Sep 20–21
+- **Tags:** `ids` `suricata` `cve` `http2`
+
+OISF's 8.0.7 release announcement calls it "the release with the highest number of
+vulnerability reports we've had so far" — roughly 70 issues, which they attribute to the
+rise of AI-assisted analysis. Two are rated **CRITICAL**, a label OISF reserves for
+default-enabled Tier 1 features "involving remotely triggerable traffic-based code
+execution"; roughly 20 more are HIGH. In OISF's table every CVE ID is still "[Pending]"
+(linked to GHSAs instead), but NVD has begun publishing MITRE-assigned records — including
+CVE-2026-94083 (DoH2 type confusion → invalid free) and CVE-2026-94084
+(Http2ThreadMultiBuf use-after-free), both CVSS 9.4 (MITRE CNA). Suricata 7 is EOL as of
+7.0.17, and LibHTP is archived. Private tickets go public in two weeks.
+
+**Why it matters:** Note the scorer nuance: OISF's own ratings and the CVSS scores
+diverge on several tickets, and most IDs aren't assigned yet — version-based upgrade
+guidance (move to the 8 branch) matters more than any single number. An IDS whose job is
+parsing untrusted traffic, with memory corruption in default-enabled HTTP/2 paths, is
+exactly the sensor-side risk class worth a same-week patch. No exploitation reported.
+
+[`🔗 OISF release announcement`](https://forum.suricata.io/t/suricata-8-0-7-released/) · [`🔗 NVD record (CVE-2026-94083)`](https://nvd.nist.gov/vuln/detail/CVE-2026-94083) · [`🔗 GitHub releases`](https://github.com/OISF/suricata/releases)
+
+---
+
+## 34. Show HN: Mini-AGI — continual learning from a single data stream on one 8GB GPU
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 136+ pts · 22 comments · ~7.5h ago (~12:45 UTC+8)
+- **Tags:** `continual-learning` `show-hn` `small-models` `research`
+
+Alexey Borsky's `volotat/mini-AGI` (MIT) is a byte-level language model that trains and
+infers as the same operation: batch-1, no tokenizer (256 byte values + 9 structural
+markers), PonderNet-style adaptive halting applied up to 24 times per character, and a
+growing/pruning Mixture-of-Experts pool where each expert is a file on disk paged onto the
+GPU as needed (~540M total params, 32 resident). The headline result is anti-forgetting:
+running the trunk at 0.1× the experts' learning rate held measured forgetting to +0.0067
+nats after 524k characters — 99.84% retained, vs ~50% for other configurations. Trains
+from scratch on a single 8 GB CUDA GPU (reference rig: RTX 3070 Laptop).
+
+**Why it matters:** The README does the honest-framing work for you: "as of now this is a
+small toy-level model," **weights are not published** (a couple of weeks away), outputs
+are repetitive, and the nats/char benchmark has ~0.03 run-to-run variance from
+nondeterministic CUDA expert dispatch. Treat it as an existence proof that continual
+learning fits in modest hardware — measured in nats, not vibes — not a capable model.
+
+[`🔗 GitHub repo`](https://github.com/volotat/mini-AGI) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49783133)
+
+---
+
+## 35. Mistral Vibe RCE (CVE-2026-93993): git hooks run before trust validation in worktree creation
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · disclosed Sep 19–20, fixed in 2.25.5
+- **Tags:** `rce` `cve` `agent-security` `git`
+
+Mistral's open-source coding agent CLI, Mistral Vibe, before 2.25.5 executes `post-checkout`
+hooks during worktree creation **before trust validation** — so a crafted repository turns
+into arbitrary shell commands with the privileges of the user running Vibe (CWE-74 class,
+network vector, user interaction required). Fixed in v2.25.5 (commit `c069ffa`); found via
+issue #996 and disclosed by VulnCheck, whose scores are Secondary on NVD (CVSS 8.8 v3.1 /
+8.6 v4.0, VulnCheck-assigned — NVD analysis pending). No in-the-wild exploitation reported.
+
+**Why it matters:** The same shape this feed keeps documenting — Codex's Overpatch,
+OpenPanel's template validator, Plugin4Shell: the trust decision happens after an
+attacker-supplied artifact has already had code-execution opportunity. If you point agent
+CLIs at untrusted repositories, the git-hook path is now a named, CVE-numbered instance of
+that class; update before you `clone` anything you didn't write.
+
+[`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-93993) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/mistral-vibe-before-2.25.5-remote-code-execution-via-git-post-checkout) · [`🔗 v2.25.5 release`](https://github.com/mistralai/mistral-vibe/releases/tag/v2.25.5)
+
+---
+
+## 36. OpenStock: an open-source market platform trends at 17.3k stars — read the star-to-commit ratio first
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending (daily) · 17,274 stars · +755 today
+- **Tags:** `fintech` `nextjs` `open-source` `agpl`
+
+Open-Dev-Society's OpenStock (AGPL-3.0) is #3 on GitHub daily trending: a Next.js 15 /
+React 19 stock-tracking app with Finnhub quotes, TradingView charts, MongoDB watchlists,
+sentiment pulled from Reddit/X/news/Polymarket, and Gemini-generated onboarding emails and
+weekly summaries. Trendshift daily/weekly badges, 2.2k forks — and **141 commits**. The
+README credits one lead contributor with developing "the entire application from the
+ground up," plus tutorial inspiration from JavaScript Mastery.
+
+**Why it matters:** Applying this feed's own MiroFish lesson before writing the item:
+17.3k stars on 141 commits is a polished portfolio-grade app riding a viral moment, not
+production market infrastructure — and the caveats are on the page (non-US real-time data
+is 15+ minutes delayed on free tiers, Finnhub rate limits, "not a brokerage, not financial
+advice"). The signal worth keeping is the demand side: an open, self-hostable front end to
+market data is what 755 people a day currently want to star.
+
+[`🔗 GitHub repo`](https://github.com/Open-Dev-Society/OpenStock) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 37. Amix is back: the Amiga Unix revival launches at Saku 2026 — with AI-reverse-engineered drivers
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 116+ pts · 38 comments · ~12h ago (~08:05 UTC+8)
+- **Tags:** `retrocomputing` `unix` `m68k` `reverse-engineering`
+
+amigaux.org — a three-person community effort (asokero, isoriano1968, jusii) — is reviving
+Amix, Commodore's System V Release 4 Unix for the Amiga, sold 1990–92 and abandoned. The
+Amix 2.1 kernel now runs on real 68040/68060 hardware including modern accelerators
+(Z3660 with native SCSI and ethernet drivers, A4091/A4092 Zorro III SCSI), with an `apkg`
+package manager pulling from pkg.amigaux.org, an `m68k-cbm-sysv4` cross toolchain, and the
+OpenLook desktop ready out of the box; Quake runs, "as a benchmark more than a game, for
+now." The launch event was Sept 19 at Saku 2026 in Oulu, Finland. The modern hook: some
+drivers are being reverse-engineered from binary kernels — no source exists — using
+generative AI, with humans reviewing and testing on real hardware, and a "grimoire"
+progress document that confidence-tags verified work versus guesses.
+
+**Why it matters:** The AI-assisted-RE workflow is the current part of a very old story,
+and the team's confidence-tagging discipline is exactly the right framing for it. It's
+also the other end of this week's preservation wave (RE4's byte-identical decompilation,
+item 12): not decompiling a game, but rebuilding an entire OS ecosystem — package manager,
+toolchain, drivers — for hardware its vendor abandoned 34 years ago.
+
+[`🔗 amigaux.org`](https://amigaux.org/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49781436)
+
+---
+
+## 38. AutoClip: a Qwen-powered YouTube/Bilibili auto-clipping pipeline trends at 8k stars
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (daily) · 7,991 stars · +395 today
+- **Tags:** `video` `llm` `python` `automation`
+
+zhouxiaoka/autoclip (MIT, Chinese-language README) downloads videos via yt-dlp (YouTube
+and Bilibili, or local upload), then runs an LLM pipeline over the transcript: outline
+extraction → timeline/topic detection → highlight scoring → title generation → automatic
+clip and compilation creation, managed through a React/Ant Design web UI over a
+FastAPI + Celery/Redis backend. The AI layer calls Alibaba's Qwen via DashScope
+(`qwen-plus` default).
+
+**Why it matters:** Honest framing per the trigger rule: no published releases, and
+several advertised features (Bilibili auto-upload, subtitle editing, mobile support) are
+marked 【开发中】 — in development; the Celery workers also need explicit `-Q` queue flags
+or tasks silently sit unprocessed. But the velocity is real and the category keeps
+recurring — this is the same demand OpenMontage was riding on Sept 14 (different repo,
+same job): turning long-form video into clips is what people currently want an LLM pipe
+for, and Qwen's API pricing is cheap enough to do it at consumer scale.
+
+[`🔗 GitHub repo`](https://github.com/zhouxiaoka/autoclip) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-21T12:15:00+08:00 |
-| Items | 30 |
-| Sources tracked | 29 (Hacker News, GitHub Trending, Hugging Face, arXiv, NVD, VulnCheck, Onapsis, Checkmarx Zero, BleepingComputer, The Hacker News, PyPy blog, lethain.com, evaluation.club, buchodi.com, pirateface.co, Seoul Economic Daily, bartosz.fenski.pl, Accomplish AI, agentexecutor.io, github.com, libroot.org, seldo.com, sunilpai.dev, terrytao.wordpress.com, millenniumproblems.bio, borischerny.com, maharship.com, dev.to, ic3.gov) |
+| Generated | 2026-09-21T20:10:00+08:00 |
+| Items | 38 |
+| Sources tracked | 33 (Hacker News, GitHub Trending, Hugging Face, arXiv, NVD, VulnCheck, Onapsis, Checkmarx Zero, BleepingComputer, The Hacker News, PyPy blog, lethain.com, evaluation.club, buchodi.com, pirateface.co, Seoul Economic Daily, bartosz.fenski.pl, Accomplish AI, agentexecutor.io, github.com, libroot.org, seldo.com, sunilpai.dev, terrytao.wordpress.com, millenniumproblems.bio, borischerny.com, maharship.com, dev.to, ic3.gov, zuckoff.app, wired.me, forum.suricata.io, amigaux.org) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
