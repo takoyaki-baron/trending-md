@@ -812,26 +812,35 @@
         "2026-09-21.md"
       ]
     },
-    "https://www.geekwire.com/2026/amazon-blocks-metas-muse-ai-assistant-in-new-standoff/": {
+    "https://forums.raspberrypi.com/viewtopic.php?p=2380887#p2380888": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-21T21:09:14.277Z",
-      "last_seen": "2026-09-21T21:09:14.277Z",
+      "last_seen": "2026-09-22T05:10:41.320Z",
       "feeds": [
         "2026-09-22.md"
       ]
     },
-    "https://forums.raspberrypi.com/viewtopic.php?p=2380887#p2380888": {
+    "https://www.reuters.com/world/us/faa-halts-some-us-east-coast-flights-due-communication-issues-2026-09-21/": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-09-21T21:09:14.277Z",
-      "last_seen": "2026-09-21T21:09:14.277Z",
+      "first_seen": "2026-09-22T05:10:41.320Z",
+      "last_seen": "2026-09-22T05:10:41.320Z",
+      "feeds": [
+        "2026-09-22.md"
+      ]
+    },
+    "https://blog.lastpass.com/posts/lastpass-delphos-report-rapuncel-infostealer": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-22T05:10:41.320Z",
+      "last_seen": "2026-09-22T05:10:41.320Z",
       "feeds": [
         "2026-09-22.md"
       ]
     }
   },
-  "runs": 29,
+  "runs": 30,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-21T21:09:14.277Z"
+  "last_run": "2026-09-22T05:10:41.320Z"
 }
