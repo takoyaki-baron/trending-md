@@ -2,6 +2,7 @@
   "items": {
     "astra-zero-days": {
       "nvd_seen": [
+        "CVE-2025-14486",
         "CVE-2026-19590",
         "CVE-2026-19591",
         "CVE-2026-19592",
@@ -21,12 +22,36 @@
         "49616247",
         "49661662"
       ],
-      "checked": "2026-09-22T05:10:11.481Z"
+      "hf_seen": [],
+      "checked": "2026-09-22T13:09:27.558Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
       "hn_seen": [],
-      "checked": "2026-09-22T05:10:11.481Z"
+      "hf_seen": [
+        "MiniMaxAI/MiniMax-H3",
+        "MiniMaxAI/MiniMax-M1-40k",
+        "MiniMaxAI/MiniMax-M1-40k-hf",
+        "MiniMaxAI/MiniMax-M1-80k",
+        "MiniMaxAI/MiniMax-M1-80k-hf",
+        "MiniMaxAI/MiniMax-M2",
+        "MiniMaxAI/MiniMax-M2.1",
+        "MiniMaxAI/MiniMax-M2.5",
+        "MiniMaxAI/MiniMax-M2.7",
+        "MiniMaxAI/MiniMax-M3",
+        "MiniMaxAI/MiniMax-M3-MXFP8",
+        "MiniMaxAI/MiniMax-Music3",
+        "MiniMaxAI/MiniMax-Text-01",
+        "MiniMaxAI/MiniMax-Text-01-hf",
+        "MiniMaxAI/MiniMax-VL-01",
+        "MiniMaxAI/SynLogic-32B",
+        "MiniMaxAI/SynLogic-7B",
+        "MiniMaxAI/SynLogic-Mix-3-32B",
+        "MiniMaxAI/VTP-Base-f16d64",
+        "MiniMaxAI/VTP-Large-f16d64",
+        "MiniMaxAI/VTP-Small-f16d64"
+      ],
+      "checked": "2026-09-22T13:09:27.558Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -39,14 +64,16 @@
         "49558108",
         "49567594"
       ],
-      "checked": "2026-09-22T05:10:11.481Z"
+      "hf_seen": [],
+      "checked": "2026-09-22T13:09:27.558Z"
     },
     "name-termination": {
       "nvd_seen": [],
       "hn_seen": [
         "49516047"
       ],
-      "checked": "2026-09-22T05:10:11.481Z"
+      "hf_seen": [],
+      "checked": "2026-09-22T13:09:27.558Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -66,7 +93,8 @@
         "49650712",
         "49767558"
       ],
-      "checked": "2026-09-22T05:10:11.481Z"
+      "hf_seen": [],
+      "checked": "2026-09-22T13:09:27.558Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -81,17 +109,19 @@
       "hn_seen": [
         "49695605"
       ],
-      "checked": "2026-09-22T05:10:11.481Z"
+      "hf_seen": [],
+      "checked": "2026-09-22T13:09:27.558Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
       "hn_seen": [
         "49789224"
       ],
-      "checked": "2026-09-22T05:10:11.481Z"
+      "hf_seen": [],
+      "checked": "2026-09-22T13:09:27.558Z"
     }
   },
-  "runs": 51,
+  "runs": 58,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-09-22T05:10:11.481Z"
+  "last_run": "2026-09-22T13:09:27.558Z"
 }

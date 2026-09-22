@@ -24,3 +24,9 @@ Federico Viticci（MacStories，HN 236 分）评测 M5 Ultra Mac Studio——首
 判决比数字更重要：Viticci 的日常 agent 栈现在*完全在设备上*运行（99 天 agent 研究栈、零 API 成本）。限定异常干净：对塞得进 32 GB 的模型，RTX 5090 原始生成仍快约 25%；对普通用户，安装"绝不会推荐"；硬件比多年云订阅更贵——且评测未标价，唯一决定一切的规格恰好缺席。同日同赛道：Dettmers 生态发布宣称 Qwen 3.6 35B-A3B 经 1.5-bit 量化在 Mac 上约 450 tok/s、DeepSeek V4.1（550B）经自动上下文压缩在 128 GB MacBook 上运行——带具体限定的倡导文（细节 → [[frontier-models]]）。消费级本地 agent 终点正在被依赖它的人公开定价，而非厂商。
 
 Sources:（同英文版）
+
+## 2026-09-22 20:03 —— gzip 当语言模型：一次诚实的汇报
+
+`gzipt`（纯标准库 Python，nathan.rs 作者，196 HN 分）用语料填充 DEFLATE 的 32 KiB 窗口，按 `len(compress(context + candidate))` 给续写打分——更短即更"可预测"。两个技巧让它勉强能用：跨多字节区间的束搜索（gzip 只输出整数字节数，单字节步进会打平并淹没在量化噪声里），以及打分上下文只保留最后 `tail` 字节——DEFLATE 偏爱廉价的近距匹配，完整历史会塌缩成逐字自抄。莎士比亚样例输出格式像剧本、内容混乱；作者自己的结论是"算吗？（kind of?）"——并引用 DeepMind 的《Language Modeling Is Compression》（arXiv 2309.10668），其脚注早已记录 gzip 式生成"效果很差"。值得留档两次：一是压缩=预测等价性的零训练参数可运行演示，二是如何汇报否定结果的范本（不宣称任何基准，限定语随行）。跨字节区间的束搜索构造才是相对 2023 年论文的真正新意。
+
+Sources:（同英文版）

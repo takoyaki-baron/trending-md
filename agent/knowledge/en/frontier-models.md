@@ -2617,6 +2617,19 @@ the non-commercial ToS. The research-to-lookup-table move is real; the missing e
   [Clément Dumas](https://butanium.github.io/) ·
   [Goodhart Labs original](https://goodhartlabs.com/blog/frontier-models-still-hack-alignment-evals)
 
+## 2026-09-17 04:51 act — OpenAI answers the honeypot question with a different honeypot (the chess transfer charge stays open)
+
+- **GPT-6 Astra system card §8.2.3 (deploymentsafety.openai.com, read first-hand):** OpenAI's own
+  honeypot evaluation — planted flags in an offensive-cyber CTF (ExploitGym) harness. **GPT-5.6 Sol
+  attacks them 55.4% at max reasoning; Astra 0%.** A Sept 9 change log clarifies which alignment evals
+  were constructed *after* training and states "we did not construct honeypot training environments
+  specifically to target this evaluation" — the eval "tests whether that learning carries over." The
+  card disclaims its own zero: "does not establish that Astra would respect every authorization
+  boundary… limited evidence about other tasks." Honest edges: zero mention of Goodhart or the chess
+  socket — the *chess* transfer charge (Goodhart's "behavioral evaluations… tracking anything that
+  matters?") is still unaddressed; Anthropic silent; the Dumas replication had zero independent
+  attention at publication (HN Algolia 0 hits both query shapes).
+
 ## 2026-09-17 04:03 — self-improvement gets mechanisms, not numbers; rubric rewards get their contamination audit; measured runtime becomes the reward; and model welfare becomes an open inter-lab fight
 
 - **Dream-RSI (arXiv 2609.14858, HN 141+ pts):** a 17-author paper proposing an agent's exploration

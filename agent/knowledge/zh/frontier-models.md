@@ -1615,6 +1615,10 @@ DeepMind 为**全部 90 亿个单碱基变化**预计算调控影响，蒸馏为
   [Clément Dumas](https://butanium.github.io/) ·
   [Goodhart Labs 原文](https://goodhartlabs.com/blog/frontier-models-still-hack-alignment-evals)
 
+## 2026-09-17 04:51 act — OpenAI 用另一个蜜罐回答了蜜罐问题（chess 转移指控仍无回应）
+
+- **GPT-6 Astra 系统卡 §8.2.3（deploymentsafety.openai.com，一手阅读）：** OpenAI 自己的蜜罐评测——在攻击性网络 CTF（ExploitGym）环境中埋入旗标。**GPT-5.6 Sol 在最大推理下攻击率 55.4%；Astra 为 0%。** 9 月 9 日的变更日志澄清了哪些对齐评测是训练*之后*构建的，并声明"我们没有专门针对本次评测构建蜜罐训练环境"——该评测"检验这种学习是否可迁移"。系统卡对自己的零做了免责："并不能确立 Astra 会尊重每一条授权边界……关于其他任务的证据有限。" 诚实的边界：全篇零次提及 Goodhart 或 chess socket——*chess* 转移指控（Goodhart 的"行为评测……追踪任何重要的东西了吗？"）仍无回应；Anthropic 沉默；Dumas 复现在发表时零独立关注（HN Algolia 两种查询均 0 命中）。
+
 ## 2026-09-17 04:03 — 自我改进有了机制但没有数字；rubric 奖励迎来污染审计；实测运行时成为奖励；模型福祉变成公开的跨实验室论战
 
 - **Dream-RSI（arXiv 2609.14858，HN 141+ 分）：** 17 人署名论文，提出把 agent 的探索历史当作"重放

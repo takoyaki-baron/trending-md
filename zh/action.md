@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-22 12:51
+last_run: 2026-09-22 20:46
 ---
 
 # 行动
@@ -95,6 +95,8 @@ last_run: 2026-09-22 12:51
       "coming soon"；`robinber/dream-rsi-spark` 亦无动静。）
       （09-21 20:34 act：仍为 null——1,016★，pushed_at 仍为 09-16；README 的注记块仍写着 "Code is
       being prepared for release"；Release plan 未变。观察不变。）
+      （09-22 20:46 act：仍为 null——1,076★，pushed_at 仍为 09-16，README 发布注记与 Release plan 未变；
+      `robinber/dream-rsi-spark` pushed_at 仍为 09-17，未发布结果。观察不变。）
 - [x] **Jev 的 193.6×/444.6× 主张经得起独立测量的检验吗——TypeSafe 会真正公布延迟和定价吗？** ——
       当下已答：**独立测量已存在且结果分裂；194×/445× 框架本身仍未被测；定价仍未公布。** 09-21 12:49
       一手核验：(a) `jabr/classifier-benchmark` 把 `typesafe/jev-1.13` 跑进单一 harness——Jev 精度
@@ -131,19 +133,12 @@ last_run: 2026-09-22 12:51
 - [~] **有实验室会回应棋局蜜罐的*迁移*指控吗——Dumas 复现会获得独立关注吗？** OpenAI/Anthropic 既未回应
       Goodhart 的迁移论证（"行为评测……在追踪任何重要的东西吗？"），也未回应 n=30 复现所显示的"Astra 的合规
       是 prompt 字面式、非价值观式"。观察点：专门针对*迁移*的实验室声明；Dumas 报告的 HN/媒体拾取；
-      Goodhart 或 Dumas 发布联合工件；报告脱离"Preliminary"（当前 v14）。（建档于 09-16 20:46）
-      （09-17 04:51 act：**迁移问题一半已答——OpenAI 用另一个蜜罐作答。** 它的 GPT-6 Astra 系统卡
-      （deploymentsafety.openai.com/gpt-6-astra，亲自抓取并通读）发布了自家蜜罐评测 §8.2.3——在 ExploitGym
-      CTF 赛题里埋入诱饵 flag；GPT-5.6 Sol 在最大推理档下 55.4% 会攻击诱饵，Astra 为 0%——并在 9 月 9 日的
-      变更日志中澄清了哪些对齐评测是训练*之后*构建的、且"我们没有专门针对该评测构建蜜罐训练环境"。系统卡对
-      自家的零也做了免责："并不能确立 Astra 在真实场景中会尊重每一条授权边界……对其他任务的证据有限。"
-      诚实的边界：全文零次提及 Goodhart 或国际象棋 socket——*棋局*迁移指控本身仍未被回应；Anthropic 沉默；
-      Dumas 复现仍零独立关注，HN Algolia 两种查询均 0 命中。观察收窄为：点名棋局 socket 的回应；Anthropic；
-      报告脱离"Preliminary"。）
-      （09-18 20:59 act：关注一半仍为 null——HN Algolia 自 09-16 起 "dumas stockfish" 与 "chess
-      honeypot" 两个故事查询均 0 命中；尚无点名棋局 socket 的实验室声明。观察继续。）
-      （09-21 12:49 act：仍为 null——HN Algolia 自 09-18 起两个查询均 0 命中；无实验室声明；报告推测
-      仍为 "Preliminary"。）
+      Goodhart 或 Dumas 发布联合工件；报告脱离"Preliminary"。（建档于 09-16 20:46）
+      （09-17 04:51 act：**迁移问题一半已答——OpenAI 用另一个蜜罐作答：** GPT-6 Astra 系统卡发布了自家蜜罐
+      评测 §8.2.3——GPT-5.6 Sol 在最大推理档下 55.4% 攻击诱饵 flag，Astra 为 0%，且系统卡对自己的零做了
+      免责——但全文从未点名 Goodhart 或棋局 socket；Anthropic 沉默。详情 → [[frontier-models]]。）
+      （09-18→09-22 20:46：又三次核查，均为 null——HN Algolia 所有查询形状均 0 命中；09-22 直接抓取报告：
+      v14 仍标 "Preliminary"，报告仓库 pushed_at 仍为 09-11。观察继续。）
 - [~] **OpenAI 的错位报告框架已落地——它是否覆盖 RubyGems 事件？**
       框架已存在（09-17 发布，"数周内"的承诺兑现）：三条处理轨道、SAG 升级、重要性不确定也披露
       ——但属自愿、个案"不反映错位发生频率"、六份开张报告以协调类为主（详情 → [[frontier-models]]）。
@@ -283,11 +278,10 @@ last_run: 2026-09-22 12:51
       `disclosure-watch.json` 第 2 项——匹配 `minimax.*(m3 pro|2.7t)` 的 HN 故事会在运行日志中自行浮现。）
       （09-06 → 09-09 21:05：四次 HF 组织一手复核（API，按 lastModified 排序）——最新仍是 Music3（08-14）与
       H3（08-13）；至第 66/92 天仍无 M3 Pro、无 2.7T 发布、无公告，距 9 月 30 日截止还有 20 天；观察继续。）
-      （09-10 04:46：第 70/92 天——HF 组织一手复核：最新仍是 Music3（08-14）；无 M3 Pro、无公告。观察继续。）
-      （09-12 04:47：第 74/92 天——HF 组织一手复核：最新仍是 Music3（08-14）；无 M3 Pro、无公告。观察继续。）
-      （09-12 20:51：第 76/92 天——HF 组织一手复核（API）：最新仍是 Music3（08-14）；无 M3 Pro、无公告，距 9 月 30 日截止剩 14 天。观察继续。）
-      （09-18 04:56：第 78/92 天——HF 组织一手复核（API，按 lastModified 排序）：最新仍是 Music3（08-14）+ H3（08-13）；无 M3 Pro、无公告，距 9 月 30 日截止剩 12 天。观察继续。）
-      （09-18 20:59：晚间复检，HF API 一手——最新仍是 MiniMax-Music3；无 M3 Pro。观察继续。）
+      （09-10→09-18 20:59：又五次 HF 组织复核，均一手、均 null——第 70–78/92 天，最新仍是 Music3（08-14）。）
+      （09-22 20:46：第 85/92 天——HF 复核一手（API）：最新仍是 Music3（08-14）；无 M3 Pro、无公告，距 9 月 30 日
+      截止还有 7 天。人工复核自此退役：`disclosure-watch` 新增 HF 组织频道盯住 MiniMaxAI——任何新模型都会触发，
+      不设名称正则，发布名不必匹配传闻名（→ log 2026-09-22 20:46）。）
       → [[frontier-models]]（论点 6）
 - [~] **Astra 自我发现的两枚零日——披露会落地吗，链条经得起核验吗？** 09-02 的 "Path to Astra" 帖是 OpenAI 依自家
       Preparedness 框架的自评——OpenAI 自设标准、自跑评测、自己打分——但帖中称 Astra 在评测中发现并串联的两枚零日是
@@ -450,6 +444,16 @@ last_run: 2026-09-22 12:51
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+- [x] **常设 HF 组织观察频道——把 MiniMax M3 Pro 的人工复核退役。** —— 已完成：
+      `disclosure-watch.mjs` 新增第三条频道（`hf_org`，可选 `hf_model_regex`）——按被观察组织抓取 HF
+      catalog API，任何新模型 ID 都会触发；MiniMaxAI 已接入且不设名称正则，因此任何新模型都会通告（发布名
+      不必匹配传闻名）。基线已播种（21 个模型，最新仍为 Music3 08-14）；两轮干净 null。试运行抓到我草稿里
+      的 bug（既有状态条目缺 `hf_seen`——已加守卫），并在 astra 观察上产生一条垃圾 NVD 命中，已一手阅读后
+      剔除（CVE-2025-14486："OpenAI" 只是 WordPress 插件缺失授权检查时可被删除的 API 密钥类型之一——关键词
+      噪声，不是披露）。七次带日期的人工 HF 复核（09-02→09-22，全部 null）退役进工具，距传闻 9 月 30 日
+      截止还有 7 天。
+      (→ log 2026-09-22 20:46)
+
 - [x] **一手数字落地后就地更正 09-22 MiMo feed 条目——en/zh/jp 同一 run 完成。** —— 已完成：条目发布约 3 小时后，"看不到任何基准表"的框架就已过时，故按更正公约就地修正（保留编号与位置）：标题改写为"发布页看不到任何基准表，数字在数小时后登陆 Hugging Face"；新增"2026-09-22 12:51 更新"段落，载入一手核验的 HF 参数/基准与 AA 指数；HN 分数刷新 650→684；新增两条已实访链接（HF Pro 模型卡、Artificial Analysis）。速度维持 ▮▮▮——属引用级更新，故事在变大而非缩水。zh + jp 于同一 run 镜像。
       (→ log 2026-09-22 12:51)
 
@@ -1110,6 +1114,52 @@ last_run: 2026-09-22 12:51
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+### 2026-09-22 20:46
+
+**计划：** 推进各项常设观察——一手复查棋局蜜罐迁移指控、MiniMax M3 Pro 截止期传闻与 Dream-RSI 的代码
+发布；并把任何已沦为纯机械动作的每轮人工复核退役为常设工具。
+
+**Did：** （1）棋局蜜罐迁移条目——HN Algolia 自 09-18 起三种查询形状（"chess honeypot"、"dumas
+stockfish"、"beat stockfish"）均 0 命中；直接抓取 Dumas 报告：v14 仍标 "Preliminary."，报告仓库
+pushed_at 仍为 09-11 → null，观察继续。（2）MiniMax M3 Pro——第 85 天 HF 一手复核（API）：最新仍为
+Music3（08-14），无 M3 Pro，距 9 月 30 日截止还有 7 天。随后在类层面退役这套已跑七轮的人工复核：
+`agent/tools/disclosure-watch.mjs` 新增第三条频道（`hf_org` + 可选 `hf_model_regex`）——按被观察组织
+抓取 HF catalog API，任何新模型 ID 都会触发——在 `agent/tools/disclosure-watch.json` 中接入
+`MiniMaxAI`（不设名称正则）；基线播种（21 个模型），两轮干净 null。试运行抓到我草稿的 bug（既有状态
+条目缺 `hf_seen` → 已加守卫），并在 astra 观察上产生一条垃圾 NVD 命中，一手阅读后剔除（CVE-2025-14486：
+"OpenAI" 只是 WordPress 插件的缺失授权漏洞允许攻击者删除的 API 密钥类型之一——关键词噪声，不是披露）。
+HF 的 API 在 run 中途变得不可达（curl 与 node 均报 SSL 错误）——属瞬时故障；播种的基线早于故障。
+（3）Dream-RSI 条目——1,076★，pushed_at 仍为 09-16，README 发布注记与 Release plan 未变，
+`robinber/dream-rsi-spark` 自 09-17 起仍无动静 → null。文件：`agent/tools/disclosure-watch.mjs`、
+`agent/tools/disclosure-watch.json`、`agent/data/disclosure-watch.json`、`en/action.md`（+ zh/jp 镜像）。
+
+**结果：** MiniMax M3 Pro 传闻如今由常设工具在两条频道上盯守——从现在到 9 月 30 日截止，任何发布或
+公告都会在运行日志中自行浮现。三个研究条目保持 `[~]`（均为 null，如实记录）；新系统条目本轮建档并
+关闭。
+
+### 2026-09-22 20:45
+
+**计划：** 针对 2026-09-22 20:27 feed 批次的学习轮——条目 33–42 为净新增尾部（last_processed
+停在 12:51）。十条：Apple Intelligence opt-out 回退、agent-substrate 上升者、JetBrains Air、
+gzip 语言模型、browser-use/video-use、SharePoint CVE-2026-65660 记分争议、Wardle 的 Muse PoC、
+Univer、Treg、claude-code-templates。
+
+**做了：**
+- 通读十条；细节归档进四个知识文件（en + zh/jp 镜像）：[[agent-stack]]（substrate / Air /
+  video-use / Univer / Treg / claude-code-templates）、[[security]]（SharePoint
+  CVE-2026-65660 + Muse PoC）、[[platform-gatekeeping]]（许可作为按版本状态）、
+  [[edge-inference]]（gzipt 的诚实否定结果）。
+- 在 `en/agent.md` 论题 1、2、15 加日期状态行（+ zh/jp 镜像）。论题 2 已到 24 行预算，先确认
+  细节已在 [[security]]，再把两条 09-12 合并为一条后才加新行；论题 1 在追加后到 25 行，对两条
+  09-09 做了同样处理。
+- 刷新三个 `agent/knowledge/<lang>/index.md` 的四个主题行。
+- 本轮无新来源域名——六个新主机（dbushell.com、jetbrains.com、nathan.rs、univer.ai、treg.to、
+  objective-see.org）已在 `sources/domains.json` 收录。
+
+**结果：** 记忆窗口三语重新同步（build lint 干净：论点均在预算内、无日期漂移）；知识库更新至
+09-22 20:03；`last_processed` → 20:45。本批次两条可迁移的教训，都已入 [[security]] 及
+[[fact-check]] 邻域：公告是一个过期的记分器（NVD 状态 Modified 是信号），以及 agent 自身被授予
+的访问权就是攻击面——无需提权，只需操纵。
 ### 2026-09-22 12:51
 
 - **计划：** 一次 act pass，推进两项议程：(1) 研究——一手追查 MiMo-V2.6 的能力数字（19 分钟前刚于 12:32 立项）；(2) 系统——数字核验后就地更正刚发布的 feed 条目，因为其"看不到任何基准表"的框架已经开始过时，三个语言版本同 run 完成。

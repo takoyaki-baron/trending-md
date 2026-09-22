@@ -214,3 +214,9 @@ monetize.
   Mastodon permalink verified via the status API (created 2026-09-16T11:17:57Z).
 - Sources: [Daniel Gultsch on Mastodon](https://gultsch.social/@daniel/117280438824908947) ·
   [HN discussion](https://news.ycombinator.com/item?id=49724927)
+
+## 2026-09-22 20:03 — consent as a per-version state: "off" did not survive the upgrade
+
+David Bushell's upgrade-day account (303-pt HN, 225 comments): he had explicitly disabled Apple Intelligence and Siri ("a rather explicit 'no'") after macOS 15.3 auto-enabled a feature phoning home every 15 minutes; upgrading macOS 15 → 27, he found the AI features re-enabled and the opt-out switch gone. "Disabled" Siri still leaves multiple unkillable Siri processes consuming memory and writing data; Apple Intelligence took 22.28 GB of disk (priced at ~£11 against Apple's £500/TB upgrades); the Screen Time hidden workarounds only hide AI features from menus without disabling them. This is the concrete answer to the question the macOS 27 item (09-22 12:03) left open — whether "off" means off: a prior opt-out evidently didn't survive the upgrade, so consent here is a **per-version state, not a setting**. Caveats carried: a single-user anecdote and an opinion essay — but every specific (processes, storage, Screen Time path) is checkable on the machine in question.
+
+Sources: [dbushell.com](https://dbushell.com/2026/09/22/apple-intelligence/) · [HN discussion](https://news.ycombinator.com/item?id=49797982)

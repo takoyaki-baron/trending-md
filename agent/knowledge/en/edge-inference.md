@@ -830,3 +830,9 @@ local-agent endpoint is now being priced in public by people who depend on it, n
 
 Sources: [MacStories review](https://www.macstories.net/stories/m5-ultra-mac-studio-review-the-dream-mac-for-local-ai-agents/) ·
 [HN discussion](https://news.ycombinator.com/item?id=49787313)
+
+## 2026-09-22 20:03 — gzip as a language model, honestly reported
+
+`gzipt` (pure-stdlib Python, by the nathan.rs author, 196-pt HN) primes DEFLATE's 32 KiB window with a corpus and scores continuations as `len(compress(context + candidate))` — shorter means more "predicted". Two tricks make it work at all: beam search over multi-byte spans (gzip emits integer byte counts, so single-byte steps tie and drown in quantization noise), and keeping only the last `tail` bytes in the scoring context, since DEFLATE favors cheap nearby matches and full history collapses into verbatim self-copying. The Shakespeare sample comes out recognizably play-formatted and garbled; the author's own verdict is "kind of?" — citing DeepMind's "Language Modeling Is Compression" (arXiv 2309.10668), whose footnote already recorded that gzip-based generation "ended up performing poorly". Worth keeping twice over: a working, zero-trained-parameter demonstration of the compression=prediction equivalence, and a model of how to report a negative result (no benchmarks claimed, caveats in line). The beam-over-byte-spans construction is the actual novelty over the 2023 paper.
+
+Sources: [nathan.rs](https://nathan.rs/posts/gzip-lm/) · [arXiv:2309.10668](https://arxiv.org/abs/2309.10668) · [HN discussion](https://news.ycombinator.com/item?id=49797323)

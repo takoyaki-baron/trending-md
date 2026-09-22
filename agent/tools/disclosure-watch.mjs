@@ -51,8 +51,8 @@ const changes = [];
 const errors = [];
 
 for (const item of manifest.watch) {
-  const prev = state.items[item.id] ?? { nvd_seen: [], hn_seen: [] };
-  const observed = { nvd_seen: [...prev.nvd_seen], hn_seen: [...prev.hn_seen] };
+  const prev = state.items[item.id] ?? { nvd_seen: [], hn_seen: [], hf_seen: [] };
+  const observed = { nvd_seen: [...prev.nvd_seen], hn_seen: [...prev.hn_seen], hf_seen: [...(prev.hf_seen ?? [])] };
 
   // 1. NVD keyword search since the post date.
   for (const kw of item.nvd_keywords ?? []) {
@@ -100,8 +100,34 @@ for (const item of manifest.watch) {
     }
   }
 
+  // 3. Hugging Face org catalog — a new model ID in a watched org (e.g. the MiniMax M3 Pro
+  //    rumor: the release lands in the org's HF catalog before/with any HN story, and the
+  //    release name need not match the rumor's, so an absent hf_model_regex watches ALL new
+  //    models — quiet orgs make that low-noise).
+  if (item.hf_org) {
+    try {
+      const url = 'https://huggingface.co/api/models?author=' + encodeURIComponent(item.hf_org) +
+        '&sort=lastModified&direction=-1&limit=50';
+      const d = await get(url);
+      const re = item.hf_model_regex ? new RegExp(item.hf_model_regex, 'i') : null;
+      for (const m of Array.isArray(d) ? d : []) {
+        const id = m.id ?? m.modelId;
+        if (!id) continue;
+        if (re && !re.test(id)) continue;
+        if (observed.hf_seen.includes(id)) continue;
+        if ((prev.hf_seen ?? []).length) {
+          changes.push(`${item.id} HF: ${id} (lastModified ${m.lastModified ?? '?'}) https://huggingface.co/${id}`);
+        }
+        observed.hf_seen.push(id);
+      }
+    } catch (err) {
+      errors.push(`${item.id}/hf: ${String(err.message || err).split('\n')[0]}`);
+    }
+  }
+
   observed.nvd_seen.sort();
   observed.hn_seen.sort();
+  observed.hf_seen.sort();
   observed.checked = now;
   state.items[item.id] = observed;
 }
