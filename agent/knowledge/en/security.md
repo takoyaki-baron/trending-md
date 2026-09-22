@@ -3149,3 +3149,45 @@ Sources: [OISF: Suricata 8.0.7 released](https://forum.suricata.io/t/suricata-8-
 **The scorer-vs-coverage gap, both directions.** WordPress "Click2Shell" (WPVDB 2624e094, fixed 7.1.1 Sep 17, backported to 4.8): a logged-in admin silently force-installs an attacker-chosen theme and the Customizer preview executes its PHP while inactive — official CVSS **4.3 medium** (scored for the core CSRF only; needs an admin victim; no CVE assigned) vs "pre-auth RCE" headlines. The other direction: Zyxel GS1900 CVE-2026-7273 (8.8 **CNA-assigned, NVD Deferred** — the score exists only in the CVE record, not on Zyxel's advisory page) hit CISA KEV ~3 months after the June fix; SolarWinds ARM CVE-2026-28326 (hardcoded static key, 8.8 SolarWinds-PSIRT "Secondary", Awaiting Analysis) is `AV:A` — adjacent network, not "remote" as secondary coverage frames it. Tooling: Amnesty MVT v3 breaks its output format (low/medium/high warning levels, plugin packages, CalVer) — downstream forensics tooling must migrate.
 
 Sources: [oss-security](https://www.openwall.com/lists/oss-security/2026/09/18/3) · [SafeDep](https://safedep.io/mathmain-encrypted-loader/) · [BleepingComputer](https://www.bleepingcomputer.com/news/security/wordpress-click2shell-flaw-lets-hackers-execute-php-on-the-server/) · [Zyxel advisory](https://www.zyxel.com/global/en/support/security-advisories/zyxel-security-advisory-for-stack-based-buffer-overflow-vulnerability-in-gs1900-series-switches-06-16-2026) · [SolarWinds advisory](https://www.solarwinds.com/trust-center/security-advisories/cve-2026-28326) · [mvt-project/mvt](https://github.com/mvt-project/mvt)
+
+
+## 2026-09-22 12:03 — BYOVD under a fake brand; the developer endpoint as the kill chain; the physical layer again
+
+**Fake LastPass Authenticator (LastPass TIME team + Delphos Labs Sep 17; THN Sep 21).** A
+fraudulent GitHub org ("LastPass-Authenticator") ranking for download searches leads to 148 MB
+junk-padded ZIPs that size-limited scanners skip: legitimate renamed `vsdbg.exe` + malicious
+`vsdbg.dll` for DLL side-loading → SYSTEM via three escalation methods → kernel driver
+`Alinubx.sys`, signed through Microsoft's Windows Hardware Compatibility Publisher chain, 0/70 on
+VirusTotal, absent from Microsoft's vulnerable-driver blocklist. From the kernel it terminates 145
+AV/EDR process names, then the "Rapuncel" stealer harvests 24+ browsers' passwords, wallets and
+session tokens — defeating Chrome/Edge app-bound encryption by injecting into the browser itself;
+the same server hosted impersonation pages for 40+ brands. The renamed driver is a known one —
+CnCrypt's `CcProtect.sys`, already in LOLDrivers; the rename alone dropped detections 7/70 → 0/70.
+Microsoft declined to treat it as a vulnerability (not a Microsoft component). LastPass' line is
+the one to carry: "Microsoft attestation proves a driver passed through a trust pipeline. It does
+not prove the driver is safe." Hunt by lineage (service `NvFsFilter`, signer "Henan Dafeng
+Software"), not hash.
+
+**TraderTraitor resurfaces on a no-crypto victim (SentinelLabs Sep 18).** Jade Sleet/UNC4899 (the
+Bybit $1.5B crew) hit an India-based IT services provider through a DevOps engineer's Apple
+Silicon Mac: job-interview lures → a weaponized Terraform dependency **lock file** —
+`terraform init` pulls attacker-hosted modules. Two Rust ARM64 backdoors: FLATROOF (Telegram C2,
+browser data, terminal history, `login.keychain-db`) and ROOFDECK (Nostr decentralized C2,
+cryptographically signed commands, Launch Agent persistence). Detected Mar 18, dormant until Mar
+29 — beaconing began **seconds after a workspace opened in Cursor**; an updated ROOFDECK landed
+Apr 20, one day after LayerZero publicly acknowledged the KelpDAO hack — the payload update
+tracked the public disclosure clock. Developer endpoints are the supply chain; interview lures +
+`terraform init` are a repeatable kill chain against them.
+
+**One cut fiber line grounded four airports (Reuters, 216-pt HN).** Sept 21: the FAA halted
+incoming flights at JFK, Newark, Boston and Philadelphia after a construction crew cut a
+**backup** fiber line serving Philadelphia TRACON; thousands of delays before the telecom path
+was restored the same day. The redundancies worked as designed and it still snarled a metro
+airspace — resilience failures cluster on the unglamorous physical layer (same lesson as AWS
+Bahrain's region-local replication). "Backup" is a topology, not a guarantee, until the failover
+is rehearsed.
+
+Sources: [The Hacker News](https://thehackernews.com/2026/09/fake-lastpass-authenticator-installer.html) ·
+[LastPass/Delphos report](https://blog.lastpass.com/posts/lastpass-delphos-report-rapuncel-infostealer) ·
+[SentinelLabs](https://www.sentinelone.com/labs/dont-call-us-well-call-your-apis-tradertraitor-backdoors-resurface-on-victim-with-no-crypto-ties/) ·
+[Reuters](https://www.reuters.com/world/us/faa-halts-some-us-east-coast-flights-due-communication-issues-2026-09-21/)

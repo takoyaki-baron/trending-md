@@ -1906,3 +1906,18 @@ Sources: [Tao 博客：Loh 客座文](https://terrytao.wordpress.com/2026/09/19/
 **标注日期的更新。** Heretic 上线项目页（heretic-project.org）并迎来第二个 HN 日——32.1k★、5,000+ 社区消融模型、无使用警示（08-31 的对冲笔记依然成立）。一则广泛流传的单人测量称 Fable 5 的思考 token 中位数 8 月骤降——自测、未证实、按数据点收录（→ 论点 6/13；已立项为 Research 观察项）。
 
 Sources:（同英文版）
+
+
+## 2026-09-22 12:03 — 只发布价格的旗舰；数学家建制化；小实验室押注生态
+
+**小米 MiMo-V2.6（HN 650 分）。** 一次发布三个全模态模型——**Pro**（旗舰推理，主打长程任务与安全工作）、**Flash**（高吞吐办公负载）、**Pro-UltraSpeed**（宣称输出最高 20× 提速），另有 ¥14.9/月的 "MiMo Claw" agent 套餐；API + MiMo Chat/Desktop。定价激进：Pro 输入 ¥3/MTok（缓存命中 ¥0.025）/输出 ¥6；Flash ¥1/¥0.02/¥2。V2.5 标记即将下线。注意事项即故事本身：发布页**零基准分数、零参数量**——页面上唯一的对比（"对标 Claude Opus 4.6"）指的是即将下线的 V2.5-Pro（1T 总参 / 42B 激活），而小米自己的直播 RL 面板显示其在 DeepSWE 1.1 上为 19%，对比 Kimi K3/Fable/Astra 的 69–74%。一个 650 分的 HN 帖讨论的全是价格点——在独立数字落地前，把能力当作未定价项。
+
+**MiMo-V2.6 更新（09-22 12:51 act — 数字落地，但不在发布页上）。** 发布页*至今*对 V2.6 仍是零分数、零参数量、无上下文长度（发布约 8 小时后一手复核；价格已补全，含 UltraSpeed ¥0.25/¥30/¥60）。数字改为在 Hugging Face 到场：`XiaomiMiMo/MiMo-V2.6-Pro-RL`——稀疏 MoE，**1.02T 总参 / 42B 激活**，1M 上下文，**MIT**，权重已发布；`MiMo-V2.6-Flash-RL`——**309B/15B**，1M 上下文，MIT。自报成绩是混合而非精选式的：DeepSWE v1.1 **71.9/67.9**（对比直播面板上 V2.5-Pro 的 19%——按模型卡，RL run 的提升是真的），但 Terminal Bench 4.0 仅 **34.9/28.8**，ExploitGym **17.8/6.0**。独立对照：HN 网友贴表把 TB4.0 的 34.9 对着 GPT-6 Astra 59.6 / Fable 5.1 55.1 / Opus 5 49.0（贴表未验证，但 MiMo 那格与模型卡一致）；另一位网友自己的 KillSwitch-Bench 中 Pro 为 38.8，对比 Opus 66.9 / Astra 57.9 / Fable 46.7。Artificial Analysis 独立测得：**Intelligence Index 46（v4.3.2），开源权重大参数级第一**——与 Grok 4.7 同分——$0.435/$0.87 每 MTok，125 tok/s，1.0T/42B 得到印证。重新定级：极便宜的开源权重 MoE，AA 指数上约为 Grok-4.7 级，独立 agentic 表上明显居中游——不是 Opus 级。值得记住的模式：营销页保持零数字，真正的规格表住在模型卡上——连不好看的行也一并住在那里。
+
+**AGMAI（9 月 21 日，Tao 博客客座帖）。** 数学与人工智能顾问组——九名成员（Gowers、Hairer、De Lellis、Witten、Vakil、Wood、Tillmann、Srivastava、Charles），无薪，"独立于任何 AI 公司"，挂靠高等研究院，公开建议、明确**无决策权**。缘起：OpenAI 邀请成员加入外部顾问委员会；他们反而组建了独立团体。首个任务：就 OpenAI 宣称"解决了 100+ 个长期悬而未决的问题"的批量成果如何协调发布提供建议。评论区异议也是记录的一部分——Burt Totaro 等人质疑无薪顾问的正当性是否掩盖了 OpenAI 保留发布节奏与披露的完全控制权。所宣称结果的验证尚未公开开始。这是 Fields 信 → Gowers/Tao 异议一线的建制化。
+
+**Dettmers 开源周——"研究的单位是生态"。** 两个开源项目 + 四篇论文作为一次互相咬合的押注：小实验室靠发生态而非发论文保持前沿相邻，全在"几块 GPU"上完成：自主优化 CUDA/Metal 内核的长时无人值守 agent harness；宣称离线运行即可击败前沿实验室 deep-research、Sakana AI、ScientistOne 的全本地自主研究系统；**CliffCompaction**（自动压缩使百万到亿级 token 会话成本降约 50%；按博文为 KernelBench SOTA）；把节省再投资到多次 rollout 的测试时扩展方法。本地主张细节：Qwen 3.6 35B-A3B 经 1.5-bit 量化在 Mac 上约 450 tok/s；DeepSeek V4.1（550B）经自动上下文压缩在 128 GB MacBook 上运行。自带立场的倡导文，但限定具体：自主生物信息学运行 ~2 小时产出有用的启发式*下界*而未达整体 SOTA；测试时方法"尚不适合日常工程"；发布跳票一天。
+
+**"Spymarks, not watermarks"（HN 215 分）。** Brandon Thomas 提议用 *spymark* 指代未经知情同意即让作品可追踪的隐蔽信号，把 *watermark* 留给可见的良性类型。证据：SynthID-O 在一张 512×512 图像中编码 136 位 payload（数据库标识符 + 纠错）；音频方案藏入 128 位 payload、可在压缩与转码后存活（audiowmark，2018）；打印机点阵先例可追溯至 1980 年代。文章诚实地自我定位为框架干预而非漏洞披露——风险场景是条件式的、演示明确虚构、标准元数据（EXIF、ID3）因可检查而被排除。经得起审视的结构性要点：payload *可以*携带按用户标识符、能在清洗后存活、且现行部署中没有任何东西阻止这种关联。
+
+Sources:（同英文版）

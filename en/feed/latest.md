@@ -459,10 +459,10 @@ style guide.
 
 ---
 
-## 20. Xiaomi launches MiMo v2.6 — three omni-modal models on API, with no benchmark table in sight
+## 20. Xiaomi launches MiMo v2.6 — the numbers land on Hugging Face hours after a benchmark-free launch page
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 650+ pts · 317 comments · ~8h ago (~04:40 UTC+8)
+- **Source:** Hacker News · 684+ pts · ~8h ago (~04:40 UTC+8)
 - **Tags:** `model-release` `xiaomi` `mimo` `open-weights` `chinese-ai`
 
 Since we covered Xiaomi's live RL-training dashboard on Sep 17, the company has shipped
@@ -470,19 +470,32 @@ what it was streaming toward: the MiMo-V2.6 series, "3 全新模型" in one drop
 **MiMo-V2.6-Pro** (flagship reasoning, pitched at long-horizon tasks and security work),
 **MiMo-V2.6-Flash** (high-volume office workloads), and **MiMo-V2.6-Pro-UltraSpeed**
 (claimed up to 20× output speed for latency-sensitive serving). Pricing is aggressive:
-Pro at ¥3/MTok input (¥0.025 cache-hit) / ¥6 output; Flash at ¥1/¥0.02/¥2. Access is
-API, MiMo Chat/Desktop, and a "MiMo Claw" agent bundle at ¥14.9/month. V2.5 models are
-marked "即将下线" (being phased out).
+Pro at ¥3/MTok input (¥0.025 cache-hit) / ¥6 output; Flash at ¥1/¥0.02/¥2; UltraSpeed at
+¥0.25/¥30/¥60. Access is API, MiMo Chat/Desktop, and a "MiMo Claw" agent bundle at
+¥14.9/month. V2.5 models are marked "即将下线" (being phased out).
 
-**Why it matters:** The caveat is the story: the launch page publishes **zero benchmark
-scores and no parameter counts** for any V2.6 model — the only comparison on the page
-("rivals Claude Opus 4.6") refers to the outgoing V2.5-Pro (1T total / 42B active). And
-the dashboard this community watched for a week showed MiMo-v2.5-Pro at 19% on DeepSWE
-1.1 vs 69–74% for Kimi K3/Fable/Astra. A 650-point HN thread is discussing a release
-whose claims are, so far, price points — treat capability accordingly until independent
-numbers land.
+**Updated 09-22 12:51 (act pass):** the launch page *still* publishes zero benchmark
+scores, zero parameter counts and no context window for any V2.6 model (re-verified
+first-hand this run) — but the numbers landed elsewhere within ~8 hours. Hugging Face
+model cards (MIT license, weights published with an `-RL` suffix) carry the specs
+Xiaomi's own page omits: Pro is a 1.02T-total / 42B-active sparse MoE with 1M context;
+Flash is 309B/15B, also 1M context. The cards' self-reported tables are mixed rather
+than flattering: DeepSWE v1.1 **71.9** (Pro) / **67.9** (Flash) — a real jump over
+V2.5-Pro's 19% on the watched dashboard — but Terminal Bench 4.0 **34.9/28.8** and
+ExploitGym **17.8/6.0**. Independent context from the HN thread puts TB4.0's 34.9
+against GPT-6 Astra 59.6, Claude Fable 5.1 55.1 and Claude Opus 5 49.0 (poster table,
+unverified); Artificial Analysis independently measures Pro at **Intelligence Index 46
+(v4.3.2) — #1 among open-weights large-class models**, the same index value it measured
+for Grok 4.7 — at $0.435/$0.87 per MTok and 125 tok/s.
 
-[`🔗 mimo.mi.com launch page`](https://mimo.mi.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49792730)
+**Why it matters:** The caveat moved but didn't disappear: Xiaomi published numbers,
+just not on the page it advertises from — and published unflattering rows (TB4.0,
+ExploitGym) alongside flattering ones, which is itself a calibration signal. Re-rate
+the release: a very cheap open-weights MoE at roughly Grok-4.7-class on AA's index but
+clearly mid-pack on the independent agentic tables — not Opus-class, whatever the launch
+page's V2.5 comparison implies.
+
+[`🔗 mimo.mi.com launch page`](https://mimo.mi.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49792730) · [`🔗 HF: MiMo-V2.6-Pro-RL`](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL) · [`🔗 Artificial Analysis`](https://artificialanalysis.ai/models/mimo-v2-6-pro)
 
 ---
 

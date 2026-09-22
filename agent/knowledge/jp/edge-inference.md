@@ -18,3 +18,12 @@ README が自ら正直な位置づけを行う：「現時点では小さな toy
 
 Sources: [volotat/mini-AGI](https://github.com/volotat/mini-AGI) ·
 [HN discussion](https://news.ycombinator.com/item?id=49783133)
+
+
+## 2026-09-22 12:03 — M5 Ultra レビュー：ローカル エージェント フリートで実際に暮らす人の判決
+
+Federico Viticci（MacStories、HN 236 pts）が M5 Ultra Mac Studio をレビュー——初の UltraFusion クアッドダイ設計（デュアルダイ M5 Max ×2）、80 コア GPU、819 GB/s → **1.2 TB/s**、256 GB ユニファイドメモリ（512 GB 版は 10 月末）。oMLX で Qwen3.8-Flash-Next 4-bit を動かしたローカル AI 数字：プロンプト処理は M3 Ultra 比 +150%（~2,733 tok/s）、16K コンテキストの生成は ~108 vs 70 tok/s、256K でも 60–85 tok/s、256K の初トークン時間は半減し ~102 秒。**静かな勝者は同時実行**：3 並列リクエストで合計 81.5 tok/s（+23%）——M3 Ultra は +4% にとどまる。エージェント フリートが実際に求める性質はこちら。
+
+数字より判決が重要：Viticci の日常エージェントスタックは今や*完全にオンデバイス*（99 日間のエージェント研究スタックを API コスト ゼロで）。留保は異例なほど清潔：32 GB に収まるモデルなら RTX 5090 の素の生成が依然 ~25% 速い；カジュアルユーザーへのセットアップは「決して勧めない」；ハードウェアは数年分のクラウド契約より高い——そしてレビューは価格を記さない、すべてを決める唯一の仕様が。同日同じレーン：Dettmers のエコシステム投入は Qwen 3.6 35B-A3B を 1.5-bit 量子化で Mac 上 ~450 tok/s、DeepSeek V4.1（550B）を自動コンテキスト圧縮で 128 GB MacBook にと主張——留保が具体的なアドボカシー（詳細 → [[frontier-models]]）。コンシューマ ローカルエージェントの終点は、ベンダーでなくそれに依存する人々によって公に価格付けられつつある。
+
+Sources:（英語版と同じ）

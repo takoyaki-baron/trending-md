@@ -217,3 +217,14 @@ Sources: [lfarroco/ogre-battle-64-recomp](https://github.com/lfarroco/ogre-battl
 **树莓派把 CM5 锁定在出厂内存。** 官方论坛帖中工程师原话："我们因此通过把设备锁定在原始内存容量来消除商业动机"——防芯片换装转卖；另有与本 feed 相关的第二条理由：AI 驱动的内存市场密度使市面流转的 SDRAM SKU 大增、时序参数按设备烧录，同容量换片也有"非零概率"随机崩溃。防欺诈 + 供应链务实，落点是可修复性缩水——DRAM 冲击为升级路径定价（→ [[edge-inference]] 论点 3 供给侧）。
 
 Sources:（同英文版）
+
+
+## 2026-09-22 12:03 — CI 成为验证瓶颈，全程量化；Git 的 3.0 之问；Sun 的教训
+
+**Linear 为 AI 编码时代改造 CI——并写下每一个数字（HN 170 分）。** 问题是结构性的：1 月以来 agent 令测试套件翻了四倍，agent 的每次迭代都在等 CI。改造：离开 GitHub Actions 换更快的第三方 runner（job 平均 −34%、`tsc` −52%）、原生 `tsgo` 编译器（周中位类型检查 −73%）、重写 ESLint 规则把 TypeScript 从 lint 中彻底剔除（−68%）、自定义 composite checkout + 持久 git 镜像、放弃 `node_modules` 缓存（恢复 28 秒 vs 重建 7.5 秒）、以及最大的单项收益——opt-in 的 `isolate: false` Vitest 项目让安全文件共享模块注册表（约占月度 runner 开销 17%，正确性风险最高，按文件保持 opt-in）。净效果：PR 等待从 >6 分钟降到约 5 分钟——*尽管*套件翻了四倍；不做这些工作会是约 11 分钟。一份罕见的全程量化工程日志（批处理七个小检查每月 87,000 runner 分钟；分片何时划算的 setup 成本数学）。模式可推广到本 thesis 的 harness 轨道：当 agent 生成代码，瓶颈移向验证，CI 调优成为一等工程学科。
+
+**Git 2.56 本周发布——3.0 之问正式摆上台面（LWN，HN 53 分）。** 约 700 个非合并提交：实验性 `git history drop`、`git add --resolved`（只暂存已解决文件、遇残留冲突标记即中止）、`git refs create/delete/update/rename`、`git branch --delete-merged`。更大的：Junio Hamano 正式询问社区下一个版本是否应为 **3.0**，四项兼容性破坏在讨论中——默认 SHA-256（自 2.42 起非实验性；GitLab 与 Forgejo 已就绪，GitHub 状态不明）、对象 ID 仅小写、reftable 成为默认引用存储、Rust 成为构建依赖。"这不是人气竞赛，甚至也不是民主"——决定权在他。旧仓库继续受支持；新默认值会传播十年，所有读取 Git 对象格式的工具都必须就绪。
+
+**Cantrill："Sun 做错了什么"（HN 533 分）。** Sun 工程师（1998–2010）、现 Oxide 联合创始人，回答 OxCon 上年轻工程师的提问："Sun 已经对经营企业的机械性工作感到厌倦"——核心是 2006 年一篇博客，来自*想*买 Sun 硬件却打不通电话的创业公司 Joyent，而 Dell 对深夜网页表单有回应；那位叫 Steve 的 Dell 客户经理后来与他共同创立了 Oxide。对在 AI 热潮市场里交付基础设施的所有人的概括："一家对经营企业的机械性工作感到厌倦的公司不可能成功——无论其战略多么出色。"
+
+Sources:（同英文版）

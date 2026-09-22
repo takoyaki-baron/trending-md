@@ -8212,5 +8212,95 @@
   "en": "Vendor trust-center advisories for its own products. The ARM CVE-2026-28326 advisory (fixed 2026.2.1, no workarounds) matches the NVD record checked this run — 8.8 SolarWinds-PSIRT \"Secondary\", AV:A adjacent vector, i.e. not the \"unauthenticated remote RCE\" of secondary coverage. Cross-checked (09-22).",
   "zh": "厂商信任中心为其自身产品发布的公告。ARM CVE-2026-28326 公告（2026.2.1 修复、无变通）与本次查证的 NVD 记录一致——8.8、SolarWinds-PSIRT \"Secondary\"、AV:A 相邻向量，并非二手报道的\"未认证远程 RCE\"。已交叉核验（09-22）。",
   "jp": "自社製品のトラストセンター勧告。ARM CVE-2026-28326 勧告（2026.2.1 で修正、回避策なし）は今回確認した NVD レコードと一致——8.8、SolarWinds-PSIRT「Secondary」、AV:A 隣接ベクトルで、二次報道の「リモート RCE」ではない。突合済み（09-22）。"
+ },
+ "mimo.mi.com": {
+  "cat": "vendor",
+  "cred": "low",
+  "cv": 1,
+  "density": "low",
+  "en": "Xiaomi's MiMo official launch page — product and pricing only; as of 09-22 it publishes zero benchmark scores and zero parameter counts, so treat capability claims as marketing. Cross-checked (09-22): its only comparison refers to outgoing V2.5-Pro, whose 19% DeepSWE figure comes from Xiaomi's own streamed dashboard (HN thread).",
+  "jp": "Xiaomi MiMo の公式公開ページ——製品と価格のみ；09-22 時点でベンチマーク スコア ゼロ・パラメータ数 ゼロ、能力主張はマーケティングとして扱う。クロス検証（09-22）：ページ唯一の比較は提供終了予定の V2.5-Pro を指し、その 19% DeepSWE 数値は Xiaomi 自身の配信ダッシュボード由来（HN スレッド）。",
+  "zh": "小米 MiMo 官方发布页——只有产品与定价；截至 09-22 零基准分数、零参数量，能力主张按营销处理。交叉验证（09-22）：页面唯一对比指向即将下线的 V2.5-Pro，其 19% DeepSWE 数字来自小米自己的直播面板（HN 帖）。"
+ },
+ "agmai.org": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Advisory Group on Mathematics and Artificial Intelligence — nine unpaid mathematicians (Gowers, Hairer, Tao-adjacent IAS hosting) independent of any AI company. Cross-checked (09-22): membership and mandate match the Tao blog guest post and HN discussion.",
+  "jp": "Advisory Group on Mathematics and Artificial Intelligence——9 名の無報酬数学者（Gowers、Hairer ら）、いかなる AI 企業からも独立。クロス検証（09-22）：メンバーと職務は Tao ブログ ゲスト投稿および HN 議論と一致。",
+  "zh": "数学与人工智能顾问组——九名无薪数学家（Gowers、Hairer 等），独立于任何 AI 公司。交叉验证（09-22）：成员与使命与 Tao 博客客座帖及 HN 讨论一致。"
+ },
+ "brand.io": {
+  "cat": "other",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Branding company's research essay (the 'spymarks' naming intervention for covert AI-content tracking) — honest about being framing, not breach disclosure; payload facts (SynthID-O 136 bits) cross-checked against the HN discussion.",
+  "jp": "ブランディング会社のリサーチ エッセイ（隠蔽 AI コンテンツ追跡への「spymarks」命名介入）——フレーミングであり漏洩開示でないと正直に自認；payload の事実（SynthID-O 136 ビット）は HN 議論とクロス検証済み。",
+  "zh": "品牌公司的研究文章（为隐蔽 AI 内容追踪命名的 \"spymarks\" 干预）——诚实自认是框架干预而非漏洞披露；payload 事实（SynthID-O 136 位）与 HN 讨论交叉验证。"
+ },
+ "timdettmers.com": {
+  "cat": "research",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Dettmers (CMU) lab blog — the 'unit of research is the ecosystem' coordinated-release post; self-labeled advocacy with concrete caveats, benchmarks self-run. Cross-checked (09-22): claims summarized consistently in the HN thread; treat numbers as unverified until the releases land.",
+  "jp": "Dettmers（CMU）研究室ブログ——「研究の単位はエコシステム」の協調リリース投稿；自己規定のアドボカシーで留保は具体的、ベンチマークは自己実行。クロス検証（09-22）：主張は HN スレッドで一貫して要約；リリース着地まで数字は未検証として扱う。",
+  "zh": "Dettmers（CMU）实验室博客——\"研究的单位是生态\"协同发布文；自认倡导文、限定具体、基准自测。交叉验证（09-22）：主张在 HN 帖中被一致转述；发布落地前数字按未验证处理。"
+ },
+ "blog.colinbreck.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Colin Breck's personal engineering blog — the 'I don't want to read what you didn't write' reader-revolt essay; opinion piece, survey numbers second-hand. Cross-checked (09-22): Oxide/Pangram and Cantrill-quote claims match the HN discussion.",
+  "jp": "Colin Breck の個人エンジニアリング ブログ——「I don't want to read what you didn't write」読者反乱エッセイ；意見文でサーベイ数字は二次情報。クロス検証（09-22）：Oxide/Pangram と Cantrill 引用の主張は HN 議論と一致。",
+  "zh": "Colin Breck 的个人工程博客——《I don't want to read what you didn't write》读者反叛文；观点文、调查数字为二手。交叉验证（09-22）：Oxide/Pangram 与 Cantrill 引语主张与 HN 讨论一致。"
+ },
+ "macstories.net": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Federico Viticci's Apple-focused publication — hands-on reviews with unusually clean caveats (M5 Ultra local-AI numbers self-run via oMLX, price not stated). Cross-checked (09-22): benchmark figures consistent with the HN discussion.",
+  "jp": "Federico Viticci の Apple 特化メディア——ハンズオン レビューで留保が異例に清潔（M5 Ultra のローカル AI 数値は oMLX による自己実行、価格は未記載）。クロス検証（09-22）：ベンチマーク数値は HN 議論と一致。",
+  "zh": "Federico Viticci 的 Apple 向出版物——上手评测、限定异常干净（M5 Ultra 本地 AI 数字经 oMLX 自测、价格未标）。交叉验证（09-22）：基准数字与 HN 讨论一致。"
+ },
+ "linear.app": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Linear's engineering blog (linear.app/now) — fully-quantified CI rework log; self-run measurements by an interested vendor but with an honest risk ledger. Cross-checked (09-22): numbers consistently summarized in the HN discussion.",
+  "jp": "Linear のエンジニアリング ブログ（linear.app/now）——完全定量の CI 改造ログ；利害関係ベンダーの自己実行だが正直なリスク台帳付き。クロス検証（09-22）：数値は HN 議論で一貫して要約。",
+  "zh": "Linear 工程博客（linear.app/now）——全程量化的 CI 改造日志；利益相关厂商自测，但有诚实的风险账本。交叉验证（09-22）：数字在 HN 讨论中被一致转述。"
+ },
+ "blog.lastpass.com": {
+  "cat": "security",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "LastPass corporate blog — security-team research (with Delphos Labs) on the fake-LastPass BYOVD campaign; affected vendor but with the quotable trust-pipeline line. Cross-checked (09-22): IOCs and driver lineage match The Hacker News coverage.",
+  "jp": "LastPass 企業ブログ——偽 LastPass BYOVD キャンペーンに関するセキュリティ チーム（Delphos Labs と）の調査；被害ベンダーでありながら引用に値する「信頼パイプライン」の一言を含む。クロス検証（09-22）：IOC とドライバ系譜は The Hacker News の報道と一致。",
+  "zh": "LastPass 企业博客——安全团队（与 Delphos Labs）关于假 LastPass BYOVD 战役的研究；受影响厂商但给出可引用的\"信任管道\"论断。交叉验证（09-22）：IOC 与驱动谱系与 The Hacker News 报道一致。"
+ },
+ "sentinelone.com": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "SentinelLabs primary threat research (TraderTraitor/Jade Sleet macOS report) — first-hand forensics with a dated timeline. Cross-checked (09-22): campaign facts match The Hacker News summary.",
+  "jp": "SentinelLabs の一次脅威リサーチ（TraderTraitor/Jade Sleet macOS 報告）——日付付きタイムラインの一次フォレンジック。クロス検証（09-22）：キャンペーンの事実は The Hacker News の要約と一致。",
+  "zh": "SentinelLabs 一线威胁研究（TraderTraitor/Jade Sleet macOS 报告）——带日期时间线的一手取证。交叉验证（09-22）：战役事实与 The Hacker News 摘要一致。"
+ },
+ "support.apple.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "low",
+  "en": "Apple official support documentation — authoritative for what a setting claims to do, silent on what it does not cover (storage/model downloads). Cross-checked (09-22): per-feature controls match the HN/Reddit threads discussing the gaps.",
+  "jp": "Apple 公式サポート文書——設定が何をすると主張するかには権威あるが、カバーしない部分（ストレージ/モデル ダウンロード）には沈黙。クロス検証（09-22）：機能別スイッチはギャップを議論する HN/Reddit スレッドと一致。",
+  "zh": "Apple 官方支持文档——对设置声称做什么具有权威性，对未覆盖的部分（存储/模型下载）保持沉默。交叉验证（09-22）：逐功能开关与 HN/Reddit 讨论缺口的帖子一致。"
  }
 }

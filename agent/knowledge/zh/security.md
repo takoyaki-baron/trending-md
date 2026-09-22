@@ -2067,3 +2067,14 @@ Sources: [OISF: Suricata 8.0.7 released](https://forum.suricata.io/t/suricata-8-
 **评分与报道的鸿沟，两个方向。** WordPress "Click2Shell"（WPVDB 2624e094，7.1.1 修复，回溯至 4.8）：已登录管理员被静默强装攻击者选定主题，非激活主题的 Customizer 预览执行其 PHP——官方 CVSS 仅 **4.3 中危**（只算核心 CSRF；需管理员受害者；未分配 CVE），报道却以"预认证 RCE"为题。另一侧：Zyxel GS1900 CVE-2026-7273（8.8，**CNA 评分、NVD Deferred**——分数只存在于 CVE 记录、Zyxel 公告页没有）在 6 月修复约 3 个月后进 CISA KEV；SolarWinds ARM CVE-2026-28326（硬编码静态密钥，8.8 SolarWinds-PSIRT "Secondary"、Awaiting Analysis）向量为 `AV:A`——相邻网络，不是二手报道说的"远程"。工具侧：Amnesty MVT v3 破坏性更改输出格式（低/中/高告警级别、插件包、CalVer）——下游取证工具必须迁移。
 
 Sources:（同英文版）
+
+
+## 2026-09-22 12:03 — 假品牌下的 BYOVD；开发者终端即杀伤链；物理层再次登场
+
+**假 LastPass Authenticator（LastPass TIME 团队 + Delphos Labs 9 月 17 日；THN 9 月 21 日）。** 一个冒名 GitHub 组织（"LastPass-Authenticator"）占据下载搜索排名，导向 148 MB 垃圾填充 ZIP——体积限制型扫描器直接跳过：合法改名的 `vsdbg.exe` + 恶意 `vsdbg.dll` 做 DLL 侧载 → 三种提权方法到 SYSTEM → 内核驱动 `Alinubx.sys`，经微软 Windows Hardware Compatibility Publisher 签名链签名，VirusTotal 0/70，不在微软易受攻击驱动屏蔽名单内。从内核终止 145 个 AV/EDR 进程名，随后 "Rapuncel" 窃密器收割 24+ 浏览器的密码、钱包与会话 token——通过注入浏览器进程本身击败 Chrome/Edge app-bound 加密；同一服务器还托管了 40+ 品牌的仿冒页。改名的驱动是已知款——CnCrypt 的 `CcProtect.sys`，已在 LOLDrivers 目录；仅改名就让检出从 7/70 降到 0/70。微软拒绝视其为漏洞（非微软组件）。值得带走的是 LastPass 那句话："微软认证证明驱动通过了信任管道。它不证明驱动是安全的。"按谱系狩猎（服务名 `NvFsFilter`、签名者 "Henan Dafeng Software"），而非哈希。
+
+**TraderTraitor 在无加密货币关联的受害者身上复现（SentinelLabs 9 月 18 日）。** Jade Sleet/UNC4899（Bybit 15 亿美元案的团伙）经一名 DevOps 工程师的 Apple Silicon Mac 攻入一家印度 IT 服务商：求职面试诱饵 → 武器化的 Terraform 依赖**锁文件**——`terraform init` 会拉取攻击者托管的模块。两个 Rust ARM64 后门：FLATROOF（Telegram C2、浏览器数据、终端历史、`login.keychain-db`）与 ROOFDECK（Nostr 去中心化 C2、加密签名命令、Launch Agent 持久化）。3 月 18 日检出、休眠至 3 月 29 日——beacon 在 **Cursor 工作区打开后数秒**开始；更新版 ROOFDECK 于 4 月 20 日落地，恰在 LayerZero 公开承认 KelpDAO 被黑的次日——payload 更新跟随着公开披露时钟。开发者终端就是供应链；面试诱饵 + `terraform init` 已是对它们的可复用杀伤链。
+
+**一根被剪的光纤瘫痪四个机场（Reuters，HN 216 分）。** 9 月 21 日：施工队剪断费城 TRACON 的一条**备用**光纤后，FAA 对 JFK、纽瓦克、波士顿、费城暂停进港航班；同日恢复前数千航班延误。冗余按设计工作了，仍使整个都市空域瘫痪数小时——韧性失效聚集在不光鲜的物理层（与 AWS 巴林区域本地复制同一课）。"备用"只是拓扑而非保证——直到故障切换被演练过。
+
+Sources:（同英文版）

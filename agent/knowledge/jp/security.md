@@ -2373,3 +2373,14 @@ Sources: [OISF: Suricata 8.0.7 released](https://forum.suricata.io/t/suricata-8-
 **スコアと報道の溝、両方向。** WordPress「Click2Shell」（WPVDB 2624e094、7.1.1 で修正、4.8 までバックポート）：ログイン中の管理者にテーマを黙って強制インストールさせ、非アクティブのまま Customizer プレビューで PHP 実行——公式 CVSS は **4.3 Medium**（本体は CSRF のみ；管理者 victim が必要；CVE 未割当）なのに報道は「pre-auth RCE」見出し。逆方向：Zyxel GS1900 CVE-2026-7273（8.8、**CNA スコア・NVD Deferred**——スコアは CVE レコードにのみ存在し Zyxel の勧告ページにはない）が 6 月の修正から約 3 か月で CISA KEV 掲載；SolarWinds ARM CVE-2026-28326（ハードコード静的鍵、8.8 SolarWinds-PSIRT「Secondary」、Awaiting Analysis）は `AV:A`——二次報道の言う「リモート」ではなく隣接ネットワーク。道具側：Amnesty MVT v3 が出力形式を破壊的変更（低/中/高の警告レベル、プラグインパッケージ、CalVer）——下流のフォレンジック道具は移行必須。
 
 Sources:（英語版と同じ）
+
+
+## 2026-09-22 12:03 — 偽ブランドの下の BYOVD；開発者エンドポイントが殺傷チェーン；物理層の再登場
+
+**偽 LastPass Authenticator（LastPass TIME チーム + Delphos Labs 9/17；THN 9/21）。** ダウンロード検索で上位に出る偽 GitHub org（「LastPass-Authenticator」）が、サイズ制限スキャナがスキップする 148 MB のパディング済み ZIP に誘導：正規品の改名 `vsdbg.exe` + 悪意ある `vsdbg.dll` による DLL サイドローディング → 3 つの昇格経路で SYSTEM → カーネルドライバ `Alinubx.sys`、Microsoft の Windows Hardware Compatibility Publisher 署名チェーンで署名済み、VirusTotal 0/70、Microsoft の脆弱ドライバ blocklist に不在。カーネルから 145 個の AV/EDR プロセス名を終端させ、次いで「Rapuncel」ステーラーが 24+ ブラウザのパスワード・ウォレット・セッショントークンを回収——ブラウザプロセス自体への注入で Chrome/Edge の app-bound 暗号化を突破；同じサーバが 40+ ブランドの偽装ページもホスト。改名されたドライバは既知のもの——CnCrypt の `CcProtect.sys`、LOLDrivers に収録済み；改名だけで検出が 7/70 → 0/70 に。Microsoft は脆弱性として扱うことを拒否（Microsoft コンポーネントではない）。持ち去るべきは LastPass の一節：「Microsoft の認証はドライバが信頼パイプラインを通過したことを証明する。ドライバが安全であることは証明しない。」ハッシュでなく系譜で狩る（サービス `NvFsFilter`、署名者「Henan Dafeng Software」）。
+
+**TraderTraitor が暗号資産と無関係の被害者に再出現（SentinelLabs 9/18）。** Jade Sleet/UNC4899（Bybit 15 億ドル事件の集団）が、DevOps エンジニアの Apple Silicon Mac 経由でインドの IT サービス企業に侵入：採用面接の lure → 武器化された Terraform 依存**ロックファイル**——`terraform init` が攻撃者ホストのモジュールを引き込む。2 つの Rust ARM64 バックドア：FLATROOF（Telegram C2、ブラウザデータ、ターミナル履歴、`login.keychain-db`）と ROOFDECK（Nostr 分散型 C2、暗号署名コマンド、Launch Agent 永続化）。3 月 18 日に検出、3 月 29 日まで休眠——**Cursor でワークスペースが開かれた数秒後に**ビーコン開始；更新版 ROOFDECK は 4 月 20 日、LayerZero が KelpDAO ハックを公認した翌日に着地——ペイロード更新は公開開示時計を追跡。開発者エンドポイントこそサプライチェーン；面接 lure + `terraform init` はそれに対する再利用可能な殺傷チェーンとなった。
+
+**一本の光ファイバー切断が 4 空港を停止（Reuters、HN 216 pts）。** 9 月 21 日：工事作業員がフィラデルフィア TRACON に供給する**バックアップ**光ファイバーを切断し、FAA が JFK・ニューアーク・ボストン・フィラデルフィアへの到着便を停止；同日中に通信経路が復旧するまで数千便が遅延。冗長性は設計通り機能し、それでも都市圏空域が数時間麻痺——レジリエンスの失敗は地味な物理層に集中する（AWS バーレーンのリージョン ローカル複製と同じ教訓）。「バックアップ」は、フェイルオーバーが演练されるまでは保証ではなくトポロジにすぎない。
+
+Sources:（英語版と同じ）

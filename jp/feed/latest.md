@@ -435,10 +435,10 @@ blader の humanizer は、テキストから AI 文章の癖を取り除くプ�
 
 ---
 
-## 20. Xiaomi が MiMo v2.6 をリリース — 3 つのオムニモーダルモデルが API に登場、ただしベンチマーク表は未公開
+## 20. Xiaomi が MiMo v2.6 をリリース — ベンチマーク表のないローンチページの数時間後、数値は Hugging Face に到着
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 650+ pts · 317 comments · ~8h ago (~04:40 UTC+8)
+- **Source:** Hacker News · 684+ pts · ~8h ago (~04:40 UTC+8)
 - **Tags:** `model-release` `xiaomi` `mimo` `open-weights` `chinese-ai`
 
 9 月 17 日に本フィードが取り上げた Xiaomi のライブ RL トレーニングダッシュボードに続き、
@@ -446,17 +446,30 @@ blader の humanizer は、テキストから AI 文章の癖を取り除くプ�
 **MiMo-V2.6-Pro**（フラッグシップ推論、長時間タスクとセキュリティワーク向け）、
 **MiMo-V2.6-Flash**（高頻度のオフィスワークロード向け）、**MiMo-V2.6-Pro-UltraSpeed**
 （最大 20 倍の出力速度を謳い、レイテンシ敏感な本番サービング向け）。価格は攻撃的：Pro は
-入力 ¥3/100 万トークン（キャッシュヒット ¥0.025）、出力 ¥6。Flash は ¥1/¥0.02/¥2。提供は
-API、MiMo Chat/Desktop、そして月額 ¥14.9 の「MiMo Claw」エージェントバンドル。V2.5 シリー
-ズは「近日終了」の印付き。
+入力 ¥3/100 万トークン（キャッシュヒット ¥0.025）、出力 ¥6。Flash は ¥1/¥0.02/¥2。
+UltraSpeed は ¥0.25/¥30/¥60。提供は API、MiMo Chat/Desktop、そして月額 ¥14.9 の「MiMo
+Claw」エージェントバンドル。V2.5 シリーズは「近日終了」の印付き。
 
-**Why it matters:** 注意書きこそがストーリーだ：ローンチページは全 V2.6 モデルについて
-**ベンチマークスコアもパラメータ数も一切公表していない**——ページ上の唯一の比較（「Claude
-Opus 4.6 に対抗」）は退役間近の V2.5-Pro（1T 総パラメータ/42B アクティブ）を指す。そして
-コミュニティが 1 週間見守ったダッシュボードでは、MiMo-v2.5-Pro は DeepSWE 1.1 で 19% に対
-し、Kimi K3/Fable/Astra は 69–74% だった。650 ポイントの HN スレッドが、現時点では価格
-しか中身のないリリースを議論している——独立した数値が届くまで、能力主張はそのように扱う
-べきだ。
+**2026-09-22 12:51 更新（act pass）：** ローンチページは*現在も*全 V2.6 モデルについて
+ベンチマークスコア・パラメータ数・コンテキスト長を一切公表していない（本 run で一次確認）
+——しかし数値は約 8 時間以内に別の場所に到着した。Hugging Face のモデルカード（MIT ライ
+センス、`-RL` 接尾辞付きの重み公開）は Xiaomi 自らのページが欠いているスペックを載せてい
+る：Pro は 1.02T 総/42B アクティブのスパース MoE、1M コンテキスト。Flash は 309B/15B、
+これも 1M。カードの自己申告スコアは称賛というより混合だ：DeepSWE v1.1 は **71.9**（Pro）/
+**67.9**（Flash）——見守られたダッシュボードでの V2.5-Pro の 19% からは実質的な跳躍——
+一方 Terminal Bench 4.0 は **34.9/28.8**、ExploitGym は **17.8/6.0**。HN スレッドの独立文脈
+では TB4.0 の 34.9 は GPT-6 Astra 59.6、Claude Fable 5.1 55.1、Claude Opus 5 49.0 と並べら
+れる（投稿者表、未検証）；Artificial Analysis は Pro を独立に **Intelligence Index 46
+（v4.3.2）——オープンウェイト大型クラスで 1 位**と測定、Grok 4.7 と同値——価格は
+$0.435/$0.87/100 万トークン、125 tok/s。
+
+**Why it matters:** 注意書きは動いたが消えてはない：Xiaomi は数値を公表した——ただし宣伝
+しているページではなく、そして見栄えの良い行（TB4.0、ExploitGym）と一緒に見栄えの悪い行
+も公表していること自体が一つの較正シグナルだ。このリリースを再評価する：AA 指数ではほぼ
+Grok-4.7 クラスの極めて安いオープンウェイト MoE だが、独立の agentic 表では明確に中位——
+ローンチページの V2.5 比較が暗示することとは裏腹に、Opus クラスではない。
+
+[`🔗 mimo.mi.com ローンチページ`](https://mimo.mi.com/) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=49792730) · [`🔗 HF: MiMo-V2.6-Pro-RL`](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL) · [`🔗 Artificial Analysis`](https://artificialanalysis.ai/models/mimo-v2-6-pro)
 
 [`🔗 mimo.mi.com ローンチページ`](https://mimo.mi.com/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49792730)
 

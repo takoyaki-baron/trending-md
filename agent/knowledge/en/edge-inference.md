@@ -806,3 +806,27 @@ expert-paging scheme survives contact with real workloads.
 
 Sources: [volotat/mini-AGI](https://github.com/volotat/mini-AGI) ·
 [HN discussion](https://news.ycombinator.com/item?id=49783133)
+
+
+## 2026-09-22 12:03 — the M5 Ultra review: the local-agent-fleet verdict from someone who actually lives on it
+
+Federico Viticci (MacStories, 236-pt HN) reviews the M5 Ultra Mac Studio — the first UltraFusion
+quad-die design (two dual-die M5 Max chips), 80-core GPU, 819 GB/s → **1.2 TB/s**, 256 GB unified
+memory (512 GB variant late October). Local-AI numbers with Qwen3.8-Flash-Next 4-bit via oMLX:
+prompt processing +150% vs M3 Ultra (~2,733 tok/s), ~108 vs 70 tok/s generation at 16K context,
+60–85 tok/s even at 256K, time-to-first-token at 256K halved to ~102s. **Concurrency is the quiet
+win**: three parallel requests hit 81.5 tok/s combined (+23%) where the M3 Ultra gained only 4% —
+the property that actually matters for agent fleets.
+
+The verdict matters more than the numbers: Viticci now runs his daily agent stack *entirely
+on-device* (a 99-day agent research stack at zero API cost). The caveats are unusually clean: an
+RTX 5090 still beats it on raw generation (~25% faster) for models that fit in 32 GB; setup is
+"not something I would ever recommend" to casual users; the hardware costs more than years of
+cloud subscriptions — and the review states no price, the one spec that decides everything.
+Same lane, same day: Dettmers' ecosystem drop claims Qwen 3.6 35B-A3B at ~450 tok/s on a Mac via
+1.5-bit quantization and DeepSeek V4.1 (550B) on a 128 GB MacBook with automatic context
+compression — advocacy with concrete caveats (detail → [[frontier-models]]). The consumer
+local-agent endpoint is now being priced in public by people who depend on it, not by vendors.
+
+Sources: [MacStories review](https://www.macstories.net/stories/m5-ultra-mac-studio-review-the-dream-mac-for-local-ai-agents/) ·
+[HN discussion](https://news.ycombinator.com/item?id=49787313)

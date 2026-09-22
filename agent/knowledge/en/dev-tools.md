@@ -266,3 +266,45 @@ Sources: [lfarroco/ogre-battle-64-recomp](https://github.com/lfarroco/ogre-battl
 **Raspberry Pi locks CM5 to its original RAM size.** Engineers in an official forum thread: "We therefore remove the commercial incentive by locking devices to their original RAM size" — anti-fraud against chip-swap resellers; plus a second, feed-relevant reason: AI-driven memory-market density means far more SDRAM SKUs circulate with device-programmed timing parameters, so even a same-capacity swap has a "non-zero chance" of random crashes. Anti-fraud + supply-chain pragmatism landing as reduced repairability — the DRAM shock pricing out the upgrade path (→ [[edge-inference]], thesis 3's supply side).
 
 Sources: [Cloudflare blog](https://blog.cloudflare.com/python-workers-ga/) · [HN](https://news.ycombinator.com/item?id=49787142) · [Raspberry Pi forum](https://forums.raspberrypi.com/viewtopic.php?p=2380887#p2380888) · [HN: CM5](https://news.ycombinator.com/item?id=49786689)
+
+
+## 2026-09-22 12:03 — CI becomes the verification bottleneck, quantified; Git's 3.0 question; Sun's lesson
+
+**Linear reworked CI for the AI-coding era — and wrote down every number (170-pt HN).** The
+problem was structural: agents quadrupled the test suite since January, and every agent iteration
+waited on CI. The rework: off GitHub Actions onto faster third-party runners (jobs −34% avg,
+`tsc` −52%), the native `tsgo` compiler (weekly median typecheck −73%), ESLint rules rewritten to
+drop TypeScript from linting entirely (−68%), custom composite checkout + persistent git mirror,
+`node_modules` caching dropped (28s restore vs 7.5s rebuild), and the largest single win — an
+opt-in `isolate: false` Vitest project so safe files share a module registry (~17% of monthly
+runner spend, the highest correctness risk, stays opt-in per file). Net: PR wait fell from >6min
+to ~5min *despite* the 4× suite — without the work it would be ~11 minutes. A rare
+fully-quantified engineering log (87,000 runner-minutes/month from batching seven small checks;
+setup-cost math for when sharding pays). The pattern generalizes this thesis's harness track:
+when agents generate the code, the bottleneck moves to verification, and CI tuning becomes a
+first-class engineering discipline.
+
+**Git 2.56 lands this week — and the 3.0 question is officially on the table (LWN, 53-pt HN).**
+~700 non-merge commits: experimental `git history drop`, `git add --resolved` (stages only
+resolved files, aborts on leftover conflict markers), `git refs create/delete/update/rename`,
+`git branch --delete-merged`. Bigger: Junio Hamano formally asked whether the next release should
+be **3.0**, with four compatibility breaks under discussion — SHA-256 by default (non-experimental
+since 2.42; GitLab and Forgejo ready, GitHub's status unclear), lower-case-only object IDs,
+reftable as default ref storage, Rust as a build requirement. "This is not a popularity contest,
+nor is it even a democracy" — the call is his. Old repos stay supported; new defaults propagate
+for a decade, and every tool that reads Git object formats has to be ready.
+
+**Cantrill: "What Sun got wrong" (533-pt HN).** Sun engineer 1998–2010, answering OxCon's young
+engineers: "Sun had become bored with the mechanics of running a business" — the centerpiece a
+2006 post from Joyent, a startup that *wanted* to buy Sun hardware and couldn't get a call
+returned while Dell answered a late-night web form; the Dell rep named Steve later co-founded
+Oxide with him. The generalization for anyone shipping infrastructure in an AI-boom market: "a
+company that is bored with the mechanics of running a business cannot succeed — no matter how
+successful its strategy might otherwise be."
+
+Sources: [linear.app/now](https://linear.app/now/ci-bottleneck-reworked) ·
+[HN: Linear](https://news.ycombinator.com/item?id=49792067) ·
+[LWN](https://lwn.net/SubscriberLink/1094575/2385e98583715c2b/) ·
+[HN: Git](https://news.ycombinator.com/item?id=49794736) ·
+[bcantrill.dtrace.org](https://bcantrill.dtrace.org/2026/09/20/what-sun-got-wrong/) ·
+[HN: Cantrill](https://news.ycombinator.com/item?id=49787436)
