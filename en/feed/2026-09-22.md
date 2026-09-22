@@ -1,8 +1,8 @@
 ---
 date: 2026-09-22
-updated: 2026-09-22T04:10:00+08:00
+updated: 2026-09-22T12:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 23
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -459,13 +459,352 @@ style guide.
 
 ---
 
+## 20. Xiaomi launches MiMo v2.6 — three omni-modal models on API, with no benchmark table in sight
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 650+ pts · 317 comments · ~8h ago (~04:40 UTC+8)
+- **Tags:** `model-release` `xiaomi` `mimo` `open-weights` `chinese-ai`
+
+Since we covered Xiaomi's live RL-training dashboard on Sep 17, the company has shipped
+what it was streaming toward: the MiMo-V2.6 series, "3 全新模型" in one drop —
+**MiMo-V2.6-Pro** (flagship reasoning, pitched at long-horizon tasks and security work),
+**MiMo-V2.6-Flash** (high-volume office workloads), and **MiMo-V2.6-Pro-UltraSpeed**
+(claimed up to 20× output speed for latency-sensitive serving). Pricing is aggressive:
+Pro at ¥3/MTok input (¥0.025 cache-hit) / ¥6 output; Flash at ¥1/¥0.02/¥2. Access is
+API, MiMo Chat/Desktop, and a "MiMo Claw" agent bundle at ¥14.9/month. V2.5 models are
+marked "即将下线" (being phased out).
+
+**Why it matters:** The caveat is the story: the launch page publishes **zero benchmark
+scores and no parameter counts** for any V2.6 model — the only comparison on the page
+("rivals Claude Opus 4.6") refers to the outgoing V2.5-Pro (1T total / 42B active). And
+the dashboard this community watched for a week showed MiMo-v2.5-Pro at 19% on DeepSWE
+1.1 vs 69–74% for Kimi K3/Fable/Astra. A 650-point HN thread is discussing a release
+whose claims are, so far, price points — treat capability accordingly until independent
+numbers land.
+
+[`🔗 mimo.mi.com launch page`](https://mimo.mi.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49792730)
+
+---
+
+## 21. Bryan Cantrill: "What Sun got wrong" — strategic brilliance, operational indifference, death
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 533+ pts · 311 comments · ~14h ago (~22:30 UTC+8)
+- **Tags:** `tech-history` `sun-microsystems` `engineering-culture` `oxide`
+
+Cantrill (Sun engineer 1998–2010, now Oxide co-founder) answers the young engineers who
+asked, at OxCon, what Sun actually did wrong. His answer: "Sun had become bored with the
+mechanics of running a business." The centerpiece is a 2006 blog post, "The Sun Doesn't
+Shine on Me," written by a fast-growing startup (Joyent) that *wanted* to buy Sun
+hardware running OpenSolaris and couldn't get a call returned — while Dell answered a
+late-night web form with an account rep who did "95% of all of the work." The epilogue
+lands like a short story: Cantrill left Sun for that startup, Joyent, and the Dell rep
+named Steve later co-founded Oxide with him.
+
+**Why it matters:** The essay's generalization is the takeaway for anyone shipping
+infrastructure in an AI-boom market: "a company that is bored with the mechanics of
+running a business cannot succeed — no matter how successful its strategy might
+otherwise be." Cantrill anchors it to his 2011 HN comment he still stands behind 15
+years later — a rare case of a decade-old hot take aging *into* correctness.
+
+[`🔗 bcantrill.dtrace.org`](https://bcantrill.dtrace.org/2026/09/20/what-sun-got-wrong/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49787436)
+
+---
+
+## 22. "I don't want to read what you didn't write" — Colin Breck's essay becomes the reader-revolt reference text
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 415+ pts · 137 comments · ~6h ago (~07:00 UTC+8)
+- **Tags:** `ai-writing` `technical-writing` `engineering-culture` `communication`
+
+Breck (systems/database engineer, recently through a CIDR paper cycle) argues that AI
+fails *as the author* of text meant for other humans, while being genuinely useful as
+tool: verifier of claims against source code, BibTeX completer, TikZ diagram drawer —
+it even caught a notation error four expert reviewers missed. But "asking AI to write
+paragraphs? Never valuable. Not once," with one exception he concedes: the abstract,
+"the paper's most mechanical, abstracted section." The core mechanism is context
+asymmetry — the prompter can skim because they built the context; the reader must read
+every line "peering into the internals of a machine."
+
+**Why it matters:** The essay lands mid-wave — it cites the Cynthia Dunlop survey (78%
+of developers stop reading articles they suspect are AI-authored) and notes Oxide now
+mandates the Pangram AI-detector for public writing, while Cantrill's own line ("to use
+an LLM to write is to void the social contract between writer and reader") is doing
+circulation. The practical residue: verify, edit, cite — never author. Caveat: it's an
+opinion essay; the survey numbers are second-hand.
+
+[`🔗 blog.colinbreck.com`](https://blog.colinbreck.com/i-dont-want-to-read-what-you-didnt-write/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49794330)
+
+---
+
+## 23. "Spymarks, not watermarks" — a naming intervention for covert AI-content tracking
+
+- **Velocity:** ▮ rising
+- **Source:** Hacker News · 215+ pts · 40 comments · ~5h ago (~07:35 UTC+8)
+- **Tags:** `watermarking` `privacy` `synthid` `provenance`
+
+Brandon Thomas (brand.io) proposes "spymark" for hidden signals that make work
+traceable without knowledge or consent — reserving "watermark" for the visible,
+benign kind. The evidence assembled: SynthID-O encodes a 136-bit payload in a 512×512
+image (enough for a database identifier plus error correction); audio schemes hide
+128-bit payloads that survive compression and re-encoding (audiowmark, 2018, predates
+the LLM era); and the printer-dot precedent goes back to the 1980s. The industry
+counterpoint — spymarking helps identify AI-generated content — is stated, not
+strawmanned.
+
+**Why it matters:** The article is honest about being a framing intervention, not a
+breach disclosure: the risk scenarios are conditional ("imagine a future..."), the
+demos are explicitly fictional, and standardized metadata (EXIF, ID3) is excluded as
+inspectable. The point that survives scrutiny is structural: payloads *can* carry
+per-user identifiers, they survive laundering, and nothing in current deployments
+prevents the linkage — the term you use decides whether that registers as a feature.
+
+[`🔗 brand.io/article/spymarks`](https://brand.io/article/spymarks/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49794615)
+
+---
+
+## 24. M5 Ultra Mac Studio review: 1.2 TB/s unified memory makes local agent fleets boring — in the good way
+
+- **Velocity:** ▮ rising
+- **Source:** MacStories / Hacker News · 236+ pts · 235 comments · ~14h ago (~22:20 UTC+8)
+- **Tags:** `apple` `local-llm` `hardware` `mac-studio`
+
+Federico Viticci reviews the M5 Ultra Mac Studio — the first UltraFusion quad-die
+design (two dual-die M5 Max chips), 80-core GPU, 819 GB/s → 1.2 TB/s bandwidth, 256 GB
+unified memory (512 GB variant due late October). Local-AI numbers with Qwen3.8-Flash-
+Next 4-bit via oMLX: prompt processing +150% vs M3 Ultra (~2,733 tok/s), ~108 vs 70
+tok/s generation at 16K context, 60–85 tok/s even at 256K, and time-to-first-token at
+256K halved to ~102s. Concurrency is the quiet win: three parallel requests hit 81.5
+tok/s combined (+23%) where the M3 Ultra gained only 4%.
+
+**Why it matters:** The verdict matters more than the numbers: Viticci now runs his
+daily agent stack entirely on-device (a 99-day agent research stack at zero API cost),
+and the review's caveats are unusually clean — an RTX 5090 still beats it on raw speed
+(~25% faster generation) for models that fit in 32 GB, setup is "not something I would
+ever recommend" to casual users, and the hardware costs more than years of cloud
+subscriptions. No price stated in the review — the one spec that decides everything is
+the one not printed.
+
+[`🔗 MacStories review`](https://www.macstories.net/stories/m5-ultra-mac-studio-review-the-dream-mac-for-local-ai-agents/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49787313)
+
+---
+
+## 25. Linear reworked CI for the AI-coding era — and wrote down every number
+
+- **Velocity:** ▮ rising
+- **Source:** Linear / Hacker News · 170+ pts · 176 comments · ~9h ago (~03:55 UTC+8)
+- **Tags:** `ci-cd` `developer-tools` `ai-coding` `typescript`
+
+Linear's problem was structural: agents quadrupled their test suite since January, and
+every agent iteration waited on CI. The rework: off GitHub Actions onto faster
+third-party runners (jobs −34% avg, `tsc` −52%), the native `tsgo` compiler (weekly
+median typecheck −73%), ESLint rules rewritten to drop TypeScript from linting
+entirely (−68%), checkout replaced with a custom composite action plus a persistent
+git mirror, `node_modules` caching dropped (restore cost 28s vs 7.5s to rebuild), and
+their largest single win — an opt-in `isolate: false` Vitest project so safe files
+share a module registry (~17% of monthly runner spend). Net: PR wait fell from >6min
+to ~5min *despite* the 4× suite; without the work it would be ~11 minutes.
+
+**Why it matters:** The post is a rare fully-quantified CI engineering log — 87,000
+runner-minutes/month from batching seven small checks, setup-cost math for when
+sharding pays, and an honest risk ledger (`isolate: false` carries the highest
+correctness risk and stays opt-in per file). The pattern generalizes: when agents
+generate the code, the bottleneck moves to verification, and CI tuning becomes a
+first-class engineering discipline.
+
+[`🔗 linear.app/now`](https://linear.app/now/ci-bottleneck-reworked) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49792067)
+
+---
+
+## 26. Mathematicians form an independent advisory group — their first task: OpenAI's batch of "100+ resolved open problems"
+
+- **Velocity:** ▮ rising
+- **Source:** Terry Tao's blog / HN · 106+ pts · 51 comments · ~18h ago (~18:30 UTC+8)
+- **Tags:** `openai` `mathematics` `ai-research` `governance`
+
+The Advisory Group on Mathematics and Artificial Intelligence (AGMAI, hosted at the
+Institute for Advanced Study) launched Sept 21 via a guest post on Terence Tao's blog:
+nine members (Gowers, Hairer, De Lellis, Witten, Vakil, Wood, Tillmann, Srivastava,
+Charles), unpaid, "independently of any AI company," with public recommendations and
+explicitly no decision-making authority. The origin: OpenAI approached members about
+an external advisory board; they instead formed an independent group. First mandate —
+advising OpenAI on how to coordinate the release of a large batch of significant
+mathematical results OpenAI says its internal model produced, which OpenAI's own
+announcement claims "resolved more than 100 long-standing open problems."
+
+**Why it matters:** This is the release-coordination question institutionalized: when
+a lab claims a century of results at once, who checks them, and at what pace? The
+comment section's dissent is part of the story — Burt Totaro and others question
+whether unpaid advisory legitimacy masks the fact that OpenAI retains full control of
+pacing and disclosure. The verification of the claimed results themselves hasn't
+started publicly.
+
+[`🔗 Terry Tao's blog (guest post)`](https://terrytao.wordpress.com/2026/09/21/advisory-group-on-mathematics-and-artificial-intelligence/) · [`🔗 agmai.org`](https://agmai.org/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49790389)
+
+---
+
+## 27. Tim Dettmers' lab declares "the unit of research is the ecosystem" — six releases, one interlocking bet on small-lab AI
+
+- **Velocity:** ▮ rising
+- **Source:** timdettmers.com / Hacker News · 120+ pts · 60 comments · ~11h ago (~01:30 UTC+8)
+- **Tags:** `academic-ai` `open-source` `agents` `quantization`
+
+Dettmers (CMU) published the argument behind his lab's coordinated release: two
+open-source projects and four papers as one ecosystem, built on "a couple of GPUs."
+The pieces: an agent harness that autonomously optimizes repos (CUDA/Metal kernels)
+over long unattended sessions; a fully local autonomous research system claimed to
+beat frontier-lab deep-research systems, Sakana AI and ScientistOne while running
+offline; "CliffCompaction," an auto-compaction method enabling million-to-100M-token
+sessions at ~50% cost cut (state of the art on KernelBench, per the post); and a
+test-time-scaling method that reinvests the savings into multiple rollouts. Demo
+numbers: Qwen 3.6 35B-A3B at ~450 tok/s on Mac via 1.5-bit quantization; DeepSeek
+V4.1 (550B) on a 128 GB MacBook with automatic context compression.
+
+**Why it matters:** The post is advocacy — Dettmers says so, and the caveats are
+concrete: the autonomous bioinformatics run produced a useful heuristic lower bound in
+~2 hours but did not reach state of the art overall; the test-time-scaling method is
+"not practical for everyday engineering work yet"; releases slipped a day. The claim
+to watch is the load-bearing one: that small labs can stay frontier-adjacent by
+shipping ecosystems rather than papers. Releases begin today.
+
+[`🔗 timdettmers.com`](https://timdettmers.com/2026/09/21/dlab-open-source-week/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49791647)
+
+---
+
+## 28. Fake LastPass Authenticator ships a Microsoft-signed kernel driver that kills 145 security tools
+
+- **Velocity:** ▮ rising
+- **Source:** LastPass TIME team + Delphos Labs (Sep 17) · The Hacker News (Sep 21)
+- **Tags:** `byovd` `infostealer` `supply-chain` `malware`
+
+A fraudulent GitHub org ("LastPass-Authenticator") ranking for download searches leads
+to 148 MB junk-padded ZIPs that size-limited scanners skip. Inside: a legitimate
+renamed `vsdbg.exe` plus a malicious `vsdbg.dll` for DLL side-loading → SYSTEM via
+three escalation methods → kernel driver `Alinubx.sys`, signed through Microsoft's
+Windows Hardware Compatibility Publisher chain, zero detections on VirusTotal and
+absent from Microsoft's vulnerable-driver blocklist. From the kernel it terminates 145
+AV/EDR process names, then the "Rapuncel" stealer harvests 24+ browsers' passwords,
+crypto wallets, and session tokens — defeating Chrome/Edge app-bound encryption by
+injecting into the browser itself. The same attacker server hosted impersonation pages
+for 40+ brands.
+
+**Why it matters:** The renamed driver is a known one — CnCrypt's `CcProtect.sys`,
+already in the LOLDrivers catalog; the rename alone dropped detections from 7/70 to
+0/70. Microsoft declined to treat it as a vulnerability (not a Microsoft component).
+LastPass' own line is the one to quote: "Microsoft attestation proves a driver passed
+through a trust pipeline. It does not prove the driver is safe." Hunt by lineage
+(service `NvFsFilter`, signer "Henan Dafeng Software"), not hash.
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/09/fake-lastpass-authenticator-installer.html) · [`🔗 LastPass/Delphos report`](https://blog.lastpass.com/posts/lastpass-delphos-report-rapuncel-infostealer)
+
+---
+
+## 29. One cut fiber line grounded flights at JFK, Newark, Boston and Philadelphia
+
+- **Velocity:** ▮ rising
+- **Source:** Reuters / Hacker News · 216+ pts · 121 comments · ~9h ago (~03:10 UTC+8)
+- **Tags:** `infrastructure` `faa` `resilience` `fiber`
+
+On Sept 21 the FAA halted incoming flights at major East Coast airports after a
+construction crew cut a **backup** fiber-optic line serving Philadelphia TRACON
+(terminal radar approach control). Ground stops rippled to JFK, Newark, Boston and
+Philadelphia; thousands of flights were delayed before the FAA restored the telecom
+path later the same day, saying it would not restart "until we make sure the airspace
+is safe."
+
+**Why it matters:** The redundancies worked as designed and it still snarled a
+metro airspace for hours — a single physical cut took out the surviving path at the
+same time. It's the same lesson as this month's Dutch-railway halt and the Bahrain
+data-loss incident: resilience failures cluster on the unglamorous physical layer,
+and "backup" is only a topology, not a guarantee, until the failover is rehearsed.
+
+[`🔗 Reuters`](https://www.reuters.com/world/us/faa-halts-some-us-east-coast-flights-due-communication-issues-2026-09-21/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49791509)
+
+---
+
+## 30. macOS 27 ships AI features you can finally turn off — but users say the models still download
+
+- **Velocity:** ▮ steady
+- **Source:** Apple Support / HN · 259+ pts · 177 comments · ~11h ago (~01:00 UTC+8)
+- **Tags:** `apple` `apple-intelligence` `macos-27` `privacy`
+
+Apple published official per-feature controls for Apple Intelligence on Mac (macOS 27
+"Golden Gate"): Siri AI can be turned off with a fallback to "Use Siri Classic,"
+Messages/Mail/Notification summaries, Smart Replies, Journal writing prompts and
+voicemail suggestions each get individual switches, and Screen Time can restrict the
+lot. The catch users found: the support page says nothing about storage, and a
+separately-trending thread documents a workaround to stop macOS from downloading the
+on-device AI models at all — while an Ask HN thread argues full Siri disablement
+remains elusive.
+
+**Why it matters:** Opt-out granularity is real progress after a year of
+bundle-everything defaults; the open question the threads expose is whether "off"
+means *not downloaded* or just *not used*. Note the fine print Apple does state:
+server-side models are subject to daily usage limits, with expanded access "possibly
+for a fee in the future" — the local/cloud boundary has a price tag attached now.
+
+[`🔗 Apple Support`](https://support.apple.com/guide/mac-help/turn-restrict-access-apple-intelligence-mchlb2e44f94/mac) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49790409) · [`🔗 storage workaround thread`](https://www.reddit.com/r/MacOSBeta/comments/1vlnf13/workaround_to_avoid_downloading_ai_models_and/)
+
+---
+
+## 31. TraderTraitor's macOS backdoors resurface on a victim with no crypto ties — dormant 11 days, then beacons seconds after a Cursor workspace opens
+
+- **Velocity:** ▮ steady
+- **Source:** SentinelLabs (Sep 18) · The Hacker News (Sep 21)
+- **Tags:** `north-korea` `macos-malware` `supply-chain` `developer-security`
+
+SentinelLabs reports the North Korea-linked group (Jade Sleet/TraderTraitor/UNC4899 —
+the Bybit $1.5B crew) hit an India-based IT services provider through a DevOps
+engineer's Apple Silicon Mac: job-interview lures leading to a weaponized Terraform
+dependency lock file — `terraform init` pulls attacker-hosted modules. Two Rust ARM64
+backdoors: FLATROOF (Telegram C2, steals browser data, terminal history and
+`login.keychain-db`) and ROOFDECK (Nostr-based decentralized C2, cryptographically
+signed commands, Launch Agent persistence). Detected Mar 18, dormant until Mar 29 —
+when beaconing began seconds after a workspace opened in Cursor. An updated ROOFDECK
+landed Apr 20, one day after LayerZero publicly acknowledged the KelpDAO hack.
+
+**Why it matters:** Two details generalize beyond crypto-heist targets: the trigger
+was the victim *opening their dev environment*, and the payload update tracked the
+public disclosure clock. Developer endpoints are the supply chain — and interview
+lures plus `terraform init` are now a repeatable kill chain against them.
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/09/jade-sleet-linked-to-indian-it-provider.html) · [`🔗 SentinelLabs report`](https://www.sentinelone.com/labs/dont-call-us-well-call-your-apis-tradertraitor-backdoors-resurface-on-victim-with-no-crypto-ties/)
+
+---
+
+## 32. Git 2.56 lands this week — and the 3.0 question is officially on the table
+
+- **Velocity:** ▮ steady
+- **Source:** LWN / Hacker News · 53+ pts · 19 comments · ~7h ago (~05:30 UTC+8)
+- **Tags:** `git` `version-control` `sha256` `developer-tools`
+
+Git 2.56 (~700 non-merge commits, expected late September) ships experimental
+`git history drop`, `git add --resolved` (stages only resolved files, aborts on
+leftover conflict markers), `git refs create/delete/update/rename`, and
+`git branch --delete-merged`. Bigger: Junio Hamano formally asked the community this
+month whether the next release should be **3.0**, with four compatibility breaks under
+discussion — SHA-256 by default (non-experimental since 2.42; GitLab and Forgejo
+ready, GitHub's status unclear), lower-case-only object IDs, reftable as default ref
+storage, and Rust as a build requirement. Hamano: "this is not a popularity contest,
+nor is it even a democracy" — the call is his.
+
+**Why it matters:** The SHA-256 default is the one with ecosystem consequences —
+every tool that reads Git object formats, plus every forge, has to be ready, and old
+repos stay supported but new defaults propagate for a decade. Note what's *not* under
+discussion: any change that breaks old repos. The 3.0 decision is expected this year
+if it happens at all.
+
+[`🔗 LWN`](https://lwn.net/SubscriberLink/1094575/2385e98583715c2b/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49794736)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-22T04:10:00+08:00 |
-| Items | 19 |
-| Sources tracked | 23 (Hacker News, GitHub Trending, x.ai, Artificial Analysis, The Register, GeekWire, Cloudflare blog, oss-security, securityonline.info, NVD, arXiv, GitHub, Hugging Face, Raspberry Pi forums, SafeDep, BleepingComputer, WPScan, Zyxel, CISA KEV, SolarWinds, AWS, 每日经济新闻, X) |
+| Generated | 2026-09-22T12:25:00+08:00 |
+| Items | 32 |
+| Sources tracked | 38 (Hacker News, GitHub Trending, x.ai, Artificial Analysis, The Register, GeekWire, Cloudflare blog, oss-security, securityonline.info, NVD, arXiv, GitHub, Hugging Face, Raspberry Pi forums, SafeDep, BleepingComputer, WPScan, Zyxel, CISA KEV, SolarWinds, AWS, 每日经济新闻, X, mimo.mi.com, bcantrill.dtrace.org, blog.colinbreck.com, brand.io, MacStories, linear.app, terrytao.wordpress.com, agmai.org, timdettmers.com, The Hacker News, LastPass blog, SentinelLabs, Reuters, Apple Support, LWN) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

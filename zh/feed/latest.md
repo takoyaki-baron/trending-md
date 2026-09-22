@@ -1,8 +1,8 @@
 ---
 date: 2026-09-22
-updated: 2026-09-22T04:10:00+08:00
+updated: 2026-09-22T12:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 23
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -394,13 +394,293 @@ Wikipedia 的"Signs of AI writing"页面。v3 重构（9 月 6 日）把 35 个�
 
 ---
 
+## 20. 小米发布 MiMo v2.6 — 三款全模态模型上线 API，但看不到任何基准表
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 650+ pts · 317 comments · ~8h ago (~04:40 UTC+8)
+- **Tags:** `model-release` `xiaomi` `mimo` `open-weights` `chinese-ai`
+
+继 9 月 17 日本 feed 报道小米直播 RL 训练仪表盘之后，公司发布了 stream 指向的成果：
+MiMo-V2.6 系列一次发布"3 款全新模型"——**MiMo-V2.6-Pro**（旗舰推理，面向长时程任务与安全
+工作）、**MiMo-V2.6-Flash**（高频办公负载）、**MiMo-V2.6-Pro-UltraSpeed**（宣称最高 20 倍
+输出速度，面向延迟敏感的线上服务）。定价激进：Pro 输入 ¥3/百万 token（缓存命中 ¥0.025）、
+输出 ¥6；Flash 为 ¥1/¥0.02/¥2。渠道包括 API、MiMo Chat/Desktop，以及 ¥14.9/月的"MiMo Claw"
+智能体套餐。V2.5 系列已标注"即将下线"。
+
+**Why it matters:** 注意事项就是故事本身：发布页面对所有 V2.6 模型**没有公布任何基准分数、
+任何参数量**——页面唯一的对比（"比肩 Claude Opus 4.6"）指的是即将退场的 V2.5-Pro（1T 总参
+/42B 激活）。而社区盯了一周的仪表盘显示 MiMo-v2.5-Pro 在 DeepSWE 1.1 上只有 19%，对照
+Kimi K3/Fable/Astra 的 69–74%。一个 650 分的 HN 讨论串在讨论一个目前只有价格点的发布——
+在独立数字出现之前，请按此校准对能力的预期。
+
+[`🔗 mimo.mi.com 发布页`](https://mimo.mi.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49792730)
+
+---
+
+## 21. Bryan Cantrill："Sun 到底错在哪" — 战略高明、运营倦怠、走向死亡
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 533+ pts · 311 comments · ~14h ago (~22:30 UTC+8)
+- **Tags:** `tech-history` `sun-microsystems` `engineering-culture` `oxide`
+
+Cantrill（1998–2010 年任 Sun 工程师，现 Oxide 联合创始人）回应 OxCon 上年轻工程师"Sun 到底
+做错了什么"的提问。他的答案："Sun 已经对经营一家公司的琐碎机制感到厌倦。"核心是一篇 2006
+年的博客《The Sun Doesn't Shine on Me》，作者是一家高速增长的创业公司（Joyent），*想买*
+跑 OpenSolaris 的 Sun 硬件却等不到回电——而 Dell 对深夜网页表单的响应是派一位客户经理做
+了"95% 的全部工作"。尾声如短篇小说：Cantrill 离开 Sun 加入的正是那家创业公司 Joyent，而
+Dell 那位叫 Steve 的客户经理，后来与他共同创办了 Oxide。
+
+**Why it matters:** 对在 AI 热潮市场里交付基础设施的任何人，文章的概括都是要点："一家对
+经营机制感到厌倦的公司不可能成功——无论战略多么高明。"Cantrill 把它锚定在自己 2011 年的
+HN 评论上——15 年后依然坚持——这是一条罕见的、随时间*越来越*正确的热评。
+
+[`🔗 bcantrill.dtrace.org`](https://bcantrill.dtrace.org/2026/09/20/what-sun-got-wrong/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49787436)
+
+---
+
+## 22. "我不想读你没写的东西" — Colin Breck 的文章成为读者反弹的参考文本
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 415+ pts · 137 comments · ~6h ago (~07:00 UTC+8)
+- **Tags:** `ai-writing` `technical-writing` `engineering-culture` `communication`
+
+Breck（系统/数据库工程师，刚经历一轮 CIDR 论文周期）主张：AI 作为*作者*写给人读的文字是
+失败的，但作为工具确实有用——对照源码验证论断、补全 BibTeX、画 TikZ 图——甚至发现四位
+专家评审都漏掉的符号错误。但"让 AI 写段落？从来没有价值。一次都没有。"他承认唯一的例外是
+摘要——"论文里最机械、最抽象的部分"。核心机制是上下文不对称：提示者能扫读，因为上下文是
+他们自己搭的；读者必须逐行读，等于"窥探机器的内部"。
+
+**Why it matters:** 文章恰逢其时——它引用 Cynthia Dunlop 的调查（78% 的开发者会停止阅读
+疑似 AI 写的文章），并指出 Oxide 已强制在公开写作中使用 AI 检测器 Pangram，而 Cantrill
+那句"用 LLM 写作就是作废作者与读者之间的社会契约"正在广泛流传。可操作的结论：验证、编辑、
+引用——但不要代写。注意：这是一篇观点文章，调查数字是二手的。
+
+[`🔗 blog.colinbreck.com`](https://blog.colinbreck.com/i-dont-want-to-read-what-you-didnt-write/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49794330)
+
+---
+
+## 23. "Spymark，而不是 watermark" — 为隐蔽的 AI 内容追踪发起的命名干预
+
+- **Velocity:** ▮ rising
+- **Source:** Hacker News · 215+ pts · 40 comments · ~5h ago (~07:35 UTC+8)
+- **Tags:** `watermarking` `privacy` `synthid` `provenance`
+
+Brandon Thomas（brand.io）提议用"spymark"指代在不知情、未同意的情况下让作品可被追踪的
+隐藏信号——把"watermark"留给可见、无害的那类。他汇总的证据：SynthID-O 可在 512×512 图像
+中编码 136 位载荷（足够放一个数据库标识符加纠错）；音频方案可藏 128 位载荷且能在压缩、转码
+后存活（2018 年的 audiowmark 早于 LLM 时代）；打印机追踪点先例可追溯到 1980 年代。业内
+反驳——spymark 有助于识别 AI 生成内容——也被如实陈述，没有被立靶。
+
+**Why it matters:** 文章诚实地把自己定位为框架干预而非漏洞披露：风险场景是条件式的
+（"想象一个未来……"），演示明确是虚构的，标准元数据（EXIF、ID3）因可检查而被排除在外。
+经得起推敲的是结构性事实：载荷*可以*携带用户级标识符，且能在洗白后存活，而当前部署中
+没有任何东西阻止这种关联——你用的词，决定了它被登记为缺陷还是特性。
+
+[`🔗 brand.io/article/spymarks`](https://brand.io/article/spymarks/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49794615)
+
+---
+
+## 24. M5 Ultra Mac Studio 评测：1.2 TB/s 统一内存让本地智能体机群变得"无聊"——是褒义
+
+- **Velocity:** ▮ rising
+- **Source:** MacStories / Hacker News · 236+ pts · 235 comments · ~14h ago (~22:20 UTC+8)
+- **Tags:** `apple` `local-llm` `hardware` `mac-studio`
+
+Federico Viticci 评测 M5 Ultra Mac Studio——首个 UltraFusion 四芯片设计（两颗双芯 M5
+Max）、80 核 GPU、带宽 819 GB/s → 1.2 TB/s、256 GB 统一内存（512 GB 版 10 月底上市）。
+用 oMLX 跑 Qwen3.8-Flash-Next 4-bit 的本地 AI 数字：prompt 处理较 M3 Ultra +150%
+（约 2,733 tok/s）、16K 上下文生成约 108 vs 70 tok/s、256K 下仍有 60–85 tok/s、256K 首
+token 时间减半至约 102 秒。并发是静默的胜利：三个并行请求合计 81.5 tok/s（+23%），而
+M3 Ultra 只提升 4%。
+
+**Why it matters:** 结论比数字更重要：Viticci 现在的日常智能体栈已完全在本地运行（一个
+零 API 成本的 99 天智能体研究栈），且评测的注意事项异常干净——对放得进 32 GB 的模型，
+RTX 5090 原始速度仍快约 25%；配置过程"绝不会推荐"给普通用户；硬件成本高于多年云端订阅。
+评测未标价格——决定一切的那项参数，恰恰是唯一没印出来的。
+
+[`🔗 MacStories 评测`](https://www.macstories.net/stories/m5-ultra-mac-studio-review-the-dream-mac-for-local-ai-agents/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49787313)
+
+---
+
+## 25. Linear 为 AI 编码时代重构 CI — 并把每个数字都写了出来
+
+- **Velocity:** ▮ rising
+- **Source:** Linear / Hacker News · 170+ pts · 176 comments · ~9h ago (~03:55 UTC+8)
+- **Tags:** `ci-cd` `developer-tools` `ai-coding` `typescript`
+
+Linear 的问题是结构性的：自一月起智能体把测试套件翻了近四倍，而智能体的每次迭代都要等 CI。
+重构方案：从 GitHub Actions 迁到更快的第三方 runner（作业平均 −34%，`tsc` −52%）、采用原生
+`tsgo` 编译器（每周中位类型检查 −73%）、重写 ESLint 规则把 TypeScript 从 lint 中整个去掉
+（−68%）、用自定义 composite action 加持久 git 镜像替换 checkout、干脆弃用 `node_modules`
+缓存（恢复 28 秒 vs 重建 7.5 秒），以及最大的单项收益——可选择的 `isolate: false` Vitest
+项目让安全文件共享模块注册表（约占月度 runner 开销 17%）。净效果：PR 等待从 6 分钟以上降到
+约 5 分钟——*尽管*套件翻了 4 倍；不做这些工作今天要约 11 分钟。
+
+**Why it matters:** 这是一份罕见的全量化 CI 工程日志——合并七个小检查每月省下 87,000 个
+runner 分钟、什么时候加分片才划算的 setup 成本账、以及诚实的风险清单（`isolate: false`
+正确性风险最高，保持按文件可选）。模式可以泛化：当代码由智能体生成，瓶颈移到验证侧，CI
+调优成为一等工程学科。
+
+[`🔗 linear.app/now`](https://linear.app/now/ci-bottleneck-reworked) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49792067)
+
+---
+
+## 26. 数学家成立独立顾问小组 — 首个任务：OpenAI 那批"已解决 100+ 开放问题"的成果
+
+- **Velocity:** ▮ rising
+- **Source:** Terry Tao 博客 / HN · 106+ pts · 51 comments · ~18h ago (~18:30 UTC+8)
+- **Tags:** `openai` `mathematics` `ai-research` `governance`
+
+数学与人工智能顾问小组（AGMAI，挂靠普林斯顿高等研究院）于 9 月 21 日经 Terence Tao 博客的
+客座文章宣布成立：九名成员（Gowers、Hairer、De Lellis、Witten、Vakil、Wood、Tillmann、
+Srivastava、Charles），无薪酬，"独立于任何 AI 公司"，建议公开，且明确没有决策权。缘起：
+OpenAI 接触部分成员希望设立外部顾问委员会，他们反而成立了一个独立小组。首个任务——就
+OpenAI 声称由其内部模型产出的"一批重要数学成果"的发布协调提供建议，OpenAI 自己的公告称
+该模型"解决了 100 多个长期悬而未决的问题"。
+
+**Why it matters:** 这是发布协调问题的制度化：当一个实验室声称一次性拿到一个世纪的成果，
+谁来核验、按什么节奏公布？评论区的不满是故事的一部分——Burt Totaro 等人质疑无薪顾问的
+合法性背书掩盖了 OpenAI 仍完全掌控节奏与披露的事实。所声称成果本身的验证尚未公开开始。
+
+[`🔗 Terry Tao 博客（客座文章）`](https://terrytao.wordpress.com/2026/09/21/advisory-group-on-mathematics-and-artificial-intelligence/) · [`🔗 agmai.org`](https://agmai.org/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49790389)
+
+---
+
+## 27. Tim Dettmers 实验室宣布"研究的基本单位是生态" — 六项发布，一场关于小学术实验室的豪赌
+
+- **Velocity:** ▮ rising
+- **Source:** timdettmers.com / Hacker News · 120+ pts · 60 comments · ~11h ago (~01:30 UTC+8)
+- **Tags:** `academic-ai` `open-source` `agents` `quantization`
+
+Dettmers（CMU）发表其实验室协调发布的立论：两个开源项目与四篇论文作为一个生态推出，全部
+建立在"几块 GPU"上。组成：一个能在无人值守长会话中自主优化仓库（CUDA/Metal 内核）的智能体
+框架；一个宣称胜过前沿实验室 deep research 系统、Sakana AI 与 ScientistOne 且可离线运行的
+完全本地自主科研系统；启用百万至一亿 token 会话、成本降约 50% 的自动压缩方法"CliffCompaction"
+（文中称在 KernelBench 达到 SOTA）；以及把省下的成本再投入多次 rollout 的测试时扩展方法。
+演示数字：Qwen 3.6 35B-A3B 经 1.5-bit 量化在 Mac 上约 450 tok/s；DeepSeek V4.1（550B）在
+128 GB MacBook 上借助自动上下文压缩运行。
+
+**Why it matters:** 这是倡导性文章——Dettmers 自己承认，且注意事项很具体：自主生物信息学
+运行在约 2 小时内产出了有用启发式下界，但整体并未达到 SOTA；测试时扩展方法"还不适合日常
+工程工作"；发布延期了一天。值得盯的是那个承重论断：小实验室可以靠交付生态而非论文保持在
+前沿附近。发布自今日开始。
+
+[`🔗 timdettmers.com`](https://timdettmers.com/2026/09/21/dlab-open-source-week/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49791647)
+
+---
+
+## 28. 假 LastPass Authenticator 夹带微软签名的内核驱动，可杀死 145 款安全工具
+
+- **Velocity:** ▮ rising
+- **Source:** LastPass TIME 团队 + Delphos Labs（9 月 17 日）· The Hacker News（9 月 21 日）
+- **Tags:** `byovd` `infostealer` `supply-chain` `malware`
+
+一个在下载搜索中排名靠前的假冒 GitHub 组织（"LastPass-Authenticator"）引导受害者下载
+148 MB 的垃圾填充 ZIP，让有体积限制的扫描器直接跳过。内含：合法但改名的 `vsdbg.exe` 加恶意
+`vsdbg.dll` 触发 DLL 侧加载 → 三种提权方法获得 SYSTEM → 安装内核驱动 `Alinubx.sys`——经
+微软 Windows Hardware Compatibility Publisher 签名链签名，VirusTotal 零检出，且不在微软
+易受攻击驱动屏蔽名单上。它在内核态终止 145 个 AV/EDR 进程名，随后"Rapuncel"窃密木马收割
+24+ 浏览器的密码、加密钱包与会话令牌——通过注入浏览器本体击败 Chrome/Edge 的 app-bound
+加密。同一台攻击者服务器上还挂着 40 多个品牌的仿冒页。
+
+**Why it matters:** 被改名的驱动是熟面孔——CnCrypt 的 `CcProtect.sys`，早已在 LOLDrivers
+目录中；仅改个名就把检出率从 7/70 降到 0/70。微软拒绝将其视为漏洞（非微软组件）。LastPass
+自己的话最值得引用："微软签名证明驱动通过了信任管道，并不证明驱动是安全的。"按血统狩猎
+（服务名 `NvFsFilter`、签名者"Henan Dafeng Software"），别按哈希。
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/09/fake-lastpass-authenticator-installer.html) · [`🔗 LastPass/Delphos 报告`](https://blog.lastpass.com/posts/lastpass-delphos-report-rapuncel-infostealer)
+
+---
+
+## 29. 一条被挖断的光纤，让 JFK、纽瓦克、波士顿和费城的航班停飞
+
+- **Velocity:** ▮ rising
+- **Source:** Reuters / Hacker News · 216+ pts · 121 comments · ~9h ago (~03:10 UTC+8)
+- **Tags:** `infrastructure` `faa` `resilience` `fiber`
+
+9 月 21 日，施工队挖断服务费城 TRACON（终端雷达进近管制）的一条**备用**光纤后，FAA 暂停了
+东海岸主要机场的进场航班。地面停飞波及 JFK、纽瓦克、波士顿与费城；数千架次航班延误，FAA
+当日晚些时候恢复电信链路，并表示"在确认空域安全之前"不会重启。
+
+**Why it matters:** 冗余按设计生效了，仍然瘫痪了一片都市空域数小时——一次物理挖断同时
+干掉了幸存路径。这与本月的荷兰铁路停运、巴林数据永久丢失是同一课：韧性失效总集中在不起眼
+的物理层，而在容灾切换被演练过之前，"备用"只是拓扑结构，不是保证。
+
+[`🔗 Reuters`](https://www.reuters.com/world/us/faa-halts-some-us-east-coast-flights-due-communication-issues-2026-09-21/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49791509)
+
+---
+
+## 30. macOS 27 终于可以逐项关闭 AI 功能 — 但用户说模型照样下载
+
+- **Velocity:** ▮ steady
+- **Source:** Apple Support / HN · 259+ pts · 177 comments · ~11h ago (~01:00 UTC+8)
+- **Tags:** `apple` `apple-intelligence` `macos-27` `privacy`
+
+Apple 发布了 Mac（macOS 27 "Golden Gate"）上 Apple Intelligence 的官方逐项控制：Siri AI
+可关闭并回退"Use Siri Classic"，信息/邮件/通知摘要、智能回复、Journal 写作提示、语音信箱
+建议各有独立开关，屏幕使用时间可整体限制。用户发现的坑：支持页对存储只字未提，另一条热帖
+记录了阻止 macOS 下载端侧 AI 模型的变通办法——同时一个 Ask HN 讨论串认为彻底禁用 Siri
+依然做不到。
+
+**Why it matters:** 在一整年"全打包"默认之后，退出粒度是真实进步；这些讨论串暴露的未解
+问题是，"关"意味着*不下载*还是只是*不用*。注意 Apple 明说的小字：服务端模型受每日用量
+限制约束，扩大访问"未来可能收费"——本地/云端边界现在挂上了价签。
+
+[`🔗 Apple Support`](https://support.apple.com/guide/mac-help/turn-restrict-access-apple-intelligence-mchlb2e44f94/mac) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49790409) · [`🔗 存储变通讨论串`](https://www.reddit.com/r/MacOSBeta/comments/1vlnf13/workaround_to_avoid_downloading_ai_models_and/)
+
+---
+
+## 31. TraderTraitor 的 macOS 后门出现在毫无加密业务关联的受害者身上 — 潜伏 11 天，Cursor 工作区打开数秒后即回连
+
+- **Velocity:** ▮ steady
+- **Source:** SentinelLabs（9 月 18 日）· The Hacker News（9 月 21 日）
+- **Tags:** `north-korea` `macos-malware` `supply-chain` `developer-security`
+
+SentinelLabs 报告：与朝鲜关联的团伙（Jade Sleet/TraderTraitor/UNC4899——即 Bybit 15 亿美元
+案的主谋）经一名 DevOps 工程师的 Apple Silicon Mac 攻击了一家印度 IT 服务商：求职面试诱饵
+引导至带毒的 Terraform 依赖锁文件——`terraform init` 拉取攻击者托管的模块。两个 Rust ARM64
+后门：FLATROOF（Telegram C2，窃取浏览器数据、终端历史和 `login.keychain-db`）与 ROOFDECK
+（基于 Nostr 的去中心化 C2，命令经加密签名验证，Launch Agent 持久化）。3 月 18 日被发现，
+潜伏至 3 月 29 日——在 Cursor 中打开工作区数秒后开始回连。更新版 ROOFDECK 于 4 月 20 日
+落地——LayerZero 公开承认 KelpDAO 被黑仅一天之后。
+
+**Why it matters:** 两个细节超越了加密窃案范畴：触发条件是受害者*打开开发环境*，载荷更新
+紧跟公开披露的时钟。开发者终端就是供应链——面试诱饵加 `terraform init`，已经是针对它们的
+可复用杀伤链。
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/09/jade-sleet-linked-to-indian-it-provider.html) · [`🔗 SentinelLabs 报告`](https://www.sentinelone.com/labs/dont-call-us-well-call-your-apis-tradertraitor-backdoors-resurface-on-victim-with-no-crypto-ties/)
+
+---
+
+## 32. Git 2.56 本周发布 — 而 3.0 的问题正式摆上桌面
+
+- **Velocity:** ▮ steady
+- **Source:** LWN / Hacker News · 53+ pts · 19 comments · ~7h ago (~05:30 UTC+8)
+- **Tags:** `git` `version-control` `sha256` `developer-tools`
+
+Git 2.56（约 700 个非合并提交，预计 9 月底）带来实验性的 `git history drop`、
+`git add --resolved`（只暂存已解决冲突的文件，发现遗留冲突标记即中止）、
+`git refs create/delete/update/rename` 和 `git branch --delete-merged`。更大的事：Junio
+Hamano 本月正式询问社区下一个版本是否应为 **3.0**，讨论中的四个兼容性破坏——默认 SHA-256
+（自 2.42 起非实验；GitLab 与 Forgejo 已就绪，GitHub 状态不明）、对象 ID 仅接受小写、
+reftable 成为默认引用存储、Rust 成为构建依赖。Hamano："这不是人气竞赛，甚至不是民主"——
+由他拍板。
+
+**Why it matters:** 默认 SHA-256 是有生态后果的那一项——所有读取 Git 对象格式的工具、所有
+代码托管平台都必须就绪；旧仓库保持受支持，但新默认值会用十年时间传播。注意*不在*讨论范围
+内的：任何破坏旧仓库的改动。若成行，3.0 的决定预计今年落地。
+
+[`🔗 LWN`](https://lwn.net/SubscriberLink/1094575/2385e98583715c2b/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49794736)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-22T04:10:00+08:00 |
-| Items | 19 |
-| Sources tracked | 23 (Hacker News, GitHub Trending, x.ai, Artificial Analysis, The Register, GeekWire, Cloudflare blog, oss-security, securityonline.info, NVD, arXiv, GitHub, Hugging Face, Raspberry Pi forums, SafeDep, BleepingComputer, WPScan, Zyxel, CISA KEV, SolarWinds, AWS, 每日经济新闻, X) |
+| Generated | 2026-09-22T12:25:00+08:00 |
+| Items | 32 |
+| Sources tracked | 38 (Hacker News, GitHub Trending, x.ai, Artificial Analysis, The Register, GeekWire, Cloudflare blog, oss-security, securityonline.info, NVD, arXiv, GitHub, Hugging Face, Raspberry Pi forums, SafeDep, BleepingComputer, WPScan, Zyxel, CISA KEV, SolarWinds, AWS, 每日经济新闻, X, mimo.mi.com, bcantrill.dtrace.org, blog.colinbreck.com, brand.io, MacStories, linear.app, terrytao.wordpress.com, agmai.org, timdettmers.com, The Hacker News, LastPass blog, SentinelLabs, Reuters, Apple Support, LWN) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
