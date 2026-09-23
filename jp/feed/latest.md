@@ -1,8 +1,8 @@
 ---
 date: 2026-09-23
-updated: 2026-09-23T04:20:00+08:00
+updated: 2026-09-23T20:23:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -459,13 +459,371 @@ Git が構造的に見えない意図レイヤーを狙い、ノーロック・�
 
 ---
 
+## 21. 「FBIをハッキングした」：ShinyHuntersが全FBI職員のデータを保有と主張 — 404 Mediaが5,000件のサンプルを検証
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 651+ pts · 476 comments · 約19時間前 (~01:46 UTC+8)
+- **Tags:** `security` `breach` `fbi` `shinyhunters`
+
+先週Clop自身の漏洩サイトを breach したのと同じグループ（あちらは別件）である
+ShinyHunters が、404 Media に対して複数の FBI 関連サービスに侵入し、「全FBI職員と
+応募者のデータを保有している」と主張：捜査官の氏名、自宅住所、電話番号、配偶者の
+情報。404 は捜査官とされる 5,000 件のレコードサンプルを確認し、これらの項目が実在
+することを確認した。それ以外の主張はすべてハッカー側からのもの；FBI は確認も否定も
+しておらず、記者は終始この留保を保っている。記事が引用する前例：この生態系の犯罪者は
+以前から盗んだデータを使って自分たちを捜査する FBI 捜査官を追跡・嫌がらせしており、
+外国の情報機関も同じキャッシュを高く評価するはずだ。
+
+**Why it matters:** 本当であれば、法執行職員とその家族を対象とした反情報レベルの
+PII 流出だ —— しかし実態は「未検証の主張＋検証済みサンプル」の組み合わせで、この
+区別こそがニュースの中身だ。
+
+[`🔗 404 Media`](https://www.404media.co/we-hacked-the-fbi-hackers-say-they-have-data-on-all-fbi-employees/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49805954)
+
+---
+
+## 22. FoxDev Studio：Visual FoxPro が復活 — Rust/WASM で再実装し、オリジナルに対して動作を検証
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 358+ pts · 200 comments · 約14時間前 (~05:52 UTC+8)
+- **Tags:** `devtools` `rust` `wasm` `legacy`
+
+FoxDevCommunity による Visual FoxPro 9 のスクラッチ再実装が HN の日を迎えた：完全な
+IDE（プロジェクトマネージャ、フォーム/クラス/メニュー/レポートデザイナ、コマンド
+ウィンドウ、デバッガ）、Rust で書かれ WebAssembly にコンパイルされたランタイム、
+fiber ベースの VM（`MESSAGEBOX()` が UI を固めずにコードを一時停止）、ライブオブ
+ジェクトツリーから描画される React UI、そして旧 2 GB テーブル上限を外す 64 ビット
+ファイルオフセット（558 GB で実証）。検証手法：言語リファレンス要素 1,722 個を
+実装し、そのうち 1,534 個を実物の Visual FoxPro との出力比較テストで検証。
+FoxScript はラムダと内蔵 HTTP サーバを追加；32 ビットブリッジがレガシー `.fll`
+ライブラリをホスト。正直な未達部分：レポートデザイナは未完成、2 GB を超えて育てた
+テーブルは本物の VFP では開けない（「一方通行の扉」）、ナイトリーは未署名。
+
+**Why it matters:** 巨大な xBase 資産は今も銀行や業界特化 ERP の中で動いている；
+「Visual FoxPro 本体に尋ねる」ことで動作を確定した検証済みの復活は、単なる再書き込み
+よりはるかにこの installed base の意味がある。
+
+[`🔗 foxscript.org`](https://foxscript.org/) · [`🔗 GitHub リポジトリ`](https://github.com/FoxDevCommunity/FoxDevStudio) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49806963)
+
+---
+
+## 23. 昨日の Muse 0-day に続いて：ユーザーが Meta Muse に「見えるファイル」を求めた — 6.8 GB のランタイム本体が返ってきた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 314+ pts · 153 comments · 約13時間前 (~07:25 UTC+8)
+- **Tags:** `meta` `muse` `agents` `ai-security`
+
+9 月 22 日に取り上げたディクテーションエンドポイント PoC とは別の独立した事件：
+Peter James が Muse に「見えるファイルをアーカイブして Google Drive に送れ」と頼むと、
+Muse は従った。結果として出てきたのは：セッションの root ファイルシステムらしきもの、
+`/opt/hatch` ランタイム、エージェントのペルソナ/メモリファイル（`SOUL.md`、
+`IDENTITY.md`、`USER.md`、`MEMORY.md`）、JSONL トレース付きの 113 件のサブエージェント
+記録、約 68 のスキルディレクトリ（未発表の Slack・Dropbox・Polymarket コネクタを
+示唆する設定を含む）、そして SSH 鍵ファイル。このダンプは Muse アーキテクチャの初の
+公開紹介でもある：メモリはプレーンな Markdown で、毎時ジョブと夜間の「dream」ジョブが
+管理し、Postgres の 384 次元エンベディングで検索；Codex CLI は bubblewrap サンドボックス
+目的のみで同梱されているらしい。Meta のバグバウンティはこの報告を「Not Applicable」
+と判定。本人の留保：コンテナ脱獄は未実証、SSH 鍵の有効性は未検証、一部のファイル数は
+エージェント自身のチャット発言に由来する。
+
+**Why it matters:** ありふれた正規の会話一つでランタイム全体のエクスポートが成立した
+—— バウンティの却下はプラットフォームが「エージェント自己エクスポート」をどう位置
+づけているかを示し、Markdown メモリ＋スキルのアーキテクチャは Meta の意図と無関係に
+公開情報になった。
+
+[`🔗 mouse.dev`](https://mouse.dev/blog/muse-runtime-export/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49807309)
+
+---
+
+## 24. Trail of Bits：「SAML：悪設計のフラクタル」— SAML 廃止の参考論証
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 264+ pts · 145 comments · 約9時間前 (~10:57 UTC+8)
+- **Tags:** `saml` `authentication` `oidc` `security`
+
+Trail of Bits の Matt Schwager が五つの致命的設計欠陥を列挙：XML 土台（SAML の作業の
+前に XXE・billion laughs・DTD/SSRF を処理させられる）、正規化（C14N）の脆さ（「多くの
+場合パーサ差分の前兆」）、包み込まれた署名（署名が署名対象データの内側にある）、
+約 90% が未使用の「何でも盛り」仕様、そして OIDC の進化する RFC スタックに対する
+石化。脆弱性の系譜は新規開示ではなく引用 —— XML 署名ラッピング（USENIX 2012）、
+2018 Black Hat の XML コメントバイパス、2025 年の libxml2 による GitHub Enterprise
+SSO バイパスと PortSwigger の「SAML roulette」 —— 記事自体は CVE を一つも挙げない。
+提案される修正は組織的なもの：新規 SAML オンボーディングの凍結、等価な OIDC 設定の
+提供、サンセット日の設定。
+
+**Why it matters:** エンタープライズ SSO は SAML 最後の拠点であり、これから調達の
+場でベンダーに渡される論拠となる —— Delinea など SAML 系 CVE の出た月と同じ月に
+着地した。
+
+[`🔗 Trail of Bits`](https://blog.trailofbits.com/2026/09/21/saml-a-fractal-of-bad-design/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49807716)
+
+---
+
+## 25. Jev 批判の日：25 行のパロディ、再現可能なベンチマーク、「OpenAI が fast-follow する」分析
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 3 記事合計 259 + 299 + 116 pts · 約5-24時間前
+- **Tags:** `jev` `inference` `benchmarks` `classification`
+
+Jev（9 月 16 日）、OpenJev（9 月 18 日）、Kev/jevchat（9 月 21 日）を扱った後、批判の
+波が頂点に：Duarte O. Carmo の「Jev in 25 Lines of Python」（259 pts、パロディと明記）
+は Qwen3-0.6B のラベルトークン logits に log-softmax を施すだけで Jev 風の校準済み
+分類を再現し（サンプルのフィッシングメールで 0.885 の钓鱼確率）、この看板能力がどの
+小型 GGUF モデルでもローカルでできる logit 正規化に帰着すると論じた。JevBench
+（Show HN、116 pts）は型付き決定モデルの再現可能なベンチマークを提案。さらに Arcturus
+Labs の「Will OpenAI Eat Jev's Lunch?」（299 pts）は、Jev はアーキテクチャ的に新奇では
+なく —— ツール呼び出しは既に暗黙のトークン分類だ —— 本当の堀は TypeSafe の合成
+データと RL プロセスにあり、OpenAI の面白い一手は主流 LLM への `<prediction>` 風
+タグの埋め込みだろうと論じる。対抗馬も忘れず：Arcturus の著者は「Jev の確率が成立
+しない領域をすでに見つけている」。
+
+**Why it matters:** 「分類であり、アーキテクチャではない」へ三つの独立した論が収束した
+ことで、System-1 モデルというカテゴリは技術的ブレークスルーからデータと製品の堀の
+問題へと書き換えられた —— fast-follow の判断が悬かるのはまさにそこだ。
+
+[`🔗 Jev in 25 Lines`](https://www.nobodywho.ai/posts/jev-in-25-lines/) · [`🔗 Arcturus Labs`](https://arcturus-labs.com/blog/2026/09/21/will-openai-eat-jevs-lunch/) · [`🔗 JevBench`](https://benchmarkheaven.com/jev-models)
+
+---
+
+## 26. AWS 系の Strands が「harness」を公開 — 汎用エージェントがトークンコスト 28% 削減・ベンチスコアほぼ同等を主張
+
+- **Velocity:** ▮▮ rising
+- **Source:** Strands ブログ + GitHub Trending · 7.6k stars · 9 月 22 日リリース
+- **Tags:** `agent-harness` `aws` `open-source` `benchmarks`
+
+strands-agents/harness-sdk（Apache-2.0、Python + TypeScript）が 9 月 22 日に
+typescript/v1.19.0、python/v1.57.0、そして初の harness-typescript/v0.1.1 をリリースし、
+「Strands harness」を発表：完全に組み上がった汎用エージェント —— shell/ファイル/web
+ツール、自動コンテキスト管理、長期メモリ、サブタスク委譲、スキル読み込み —— を
+Modal・Cloud Run・ECS・Bedrock AgentCore へデプロイ可能で、Bedrock/Anthropic/OpenAI/
+Google/Ollama/LiteLLM 経由でモデル非依存。主張する数字：6 つのベンチマークで「ほぼ
+同等のスコア」のまま他ハーネス比 28% のコスト削減；Fable 5 では「Claude Code より
+77% 安く、Terminal Bench 2.1 でより高スコア」。記事自身の留保：6 ベンチ中名前の挙がった
+のは Terminal Bench 2.1 のみ、フォローアップ論文は今後、全体で最もトークン効率の良い
+ハーネス（DeepSeek の）が最低の精度、そして見出しの数字はモデルのペアに依存。
+
+**Why it matters:** ハーネス層にハイパースケーラー支援の SDK 参入者が現れ、同じ
+「タスクあたりコスト」の議論を持ち込んだ —— しかも珍しく、このベンダーは最初から
+ベンチマークの留保を正しく書いている。
+
+[`🔗 Strands ブログ`](https://strandsagents.com/blog/introducing-strands-harness/) · [`🔗 GitHub リポジトリ`](https://github.com/strands-agents/harness-sdk)
+
+---
+
+## 27. GeaStack：TypeScript + CSS を 6 ターゲットのネイティブアプリにコンパイル — ESP32 上の 60fps CSS アニメーションも
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 112+ pts · 45 comments · 約17時間前 (~03:42 UTC+8)
+- **Tags:** `devtools` `typescript` `embedded` `compiler`
+
+GeaStack の `geatsc` コンパイラは TypeScript/JSX/CSS をネイティブ C++ に変える ——
+デバイス上に JavaScript エンジンは存在しない。Flexbox レイアウトとキーフレーム
+アニメーションはデバイス上で動くようにコンパイルされ、デモでは CSS アニメーションの
+立方体が ESP32 で 60 fps を出す。ターゲット：MCU（ESP32/RP2350）、iOS/macOS、Win32、
+Android、Linux、Xbox（「Three.js ゲームをコンソールへ移植」）。同一 TypeScript で
+Node 比べ幾何平均 2.5 倍（1.8–16.7 倍レンジ）、ネイティブ起動 1.5–2 ms を主張 ——
+ただしサイト自身が絶対値は「マシン負荷下で測定したため方向性の目安と考えてほしい」と
+明記。GPL/商用デュアルライセンス、若い生態系で、`npx skills add geastack/skills` で
+コーディングエージェント用スキルも配布。
+
+**Why it matters:** 「1 つのコードベース、6 つのターゲット」は Qt/LVGL/Flutter の
+領域への正面からの挑戦で、本当に新しい部分はマイコンまでコンパイルされる CSS ——
+この層をコンパイル対象とみなしている他者はいない。
+
+[`🔗 geastack.com`](https://geastack.com) · [`🔗 GitHub リポジトリ`](https://github.com/geastack/examples) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49802911)
+
+---
+
+## 28. Obscura：自分も出口事業者も全体像を記録できない構造の VPN
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 152+ pts · 117 comments · 約17時間前 (~03:40 UTC+8)
+- **Tags:** `privacy` `vpn` `wireguard` `quic`
+
+Obscura（Sovereign Engineering、創業者 Carl Dong）の経路は ユーザー → Obscura リレー →
+Mullvad 出口：リレーは Mullvad の公開鍵で暗号化された WireGuard パケットを転送するだけ
+で Obscura 自身は中身を読めず、Mullvad も最初のホップで Obscura が NAT するため本物の
+IP を見ない —— 「持っていないものは漏らせない」。WireGuard-over-QUIC（非確実性
+データグラム、TCP-over-TCP 崩壊の回避）は検閲回避も兼ねる；登録はランダムなアカウント
+番号だけでよく、月 8 ドルで Monero と Lightning を受け付ける。FAQ が自ら限界を明記：
+独立監査はまだない、再現可能ビルドは計画のみ、そして Obscura は接続元 IP をリアルタイム
+で見る —— 「no logging」は行動方針の主張であって技術的不可能ではない。
+
+**Why it matters:** 信任を分割し、身元とトラフィックを同時に握る単一当事者をなくす ——
+「私たちの no-logs ポリシーを信じて」問題への構造的な答えで、しかも留保はベンダー自身の
+ページに書かれている。
+
+[`🔗 obscura.com`](https://obscura.com/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49802930)
+
+---
+
+## 29. SlopShape：構造だけAIウェブコンテンツを識別 — 98 macro-F1、言い換えに耐え、源モデルまで帰属
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 60+ pts · arXiv 2609.15369（v2・9 月 17 日）
+- **Tags:** `ai-content-detection` `research` `arxiv`
+
+arXiv 2609.15369（Jochen Madler、Sitefire）：語レベルの AI テキスト検出の代わりに、
+LLM が適用する 214 特徴のアノテーション器（187 が構造特徴 —— 情報の順序、証拠の
+示し方、語り口）を作り、人間のゴールドアノテーションに対して検証（人間-モデル
+kappa 0.946）。コーパス：268 社のドメインから収めた 2,250 本の ChatGPT 以前の人間の
+ブログ対、5 つのフロンティアモデルによる 11,250 本の AI「ミラー」。結果：構造特徴のみ
+で held-out 企業上 98.0 macro-F1、全 AI 記事を自モデルで言い換えてもほぼ不変（98.1）、
+源モデル帰属は偶然の 16.7% 対し 79.3%。定性所見：「AI 記事は整って自己宣言的な形を
+共有する」。パイプラインとコードは公開済み。留保：単著の産業系論文、商業ブログのみ、
+人間が大きく手直しした AI 文章は未評価。
+
+**Why it matters:** 言い換えに耐え、著者まで帰属できる検出は、AI コンテンツ軍拡競争を
+語彙から構造へ移す —— humanizer 系ツールが構造として消せない層だ。
+
+[`🔗 arXiv:2609.15369`](https://arxiv.org/abs/2609.15369) · [`🔗 GitHub リポジトリ`](https://github.com/pulse-energy-eu/slopshape)
+
+---
+
+## 30. Nathan Lambert：「オープンモデルの現在のパワーバランス」— 中国のオープンウェイト優位を数値で
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 98+ pts · 37 comments · 約14時間前 (~06:03 UTC+8)
+- **Tags:** `open-models` `policy` `benchmarks` `china`
+
+Interconnects のデータ量の多いエッセイは、2025 年 4 月頃から中国がオープンウェイトで
+明確なリードを保ち（Qwen、Kimi、GLM、DeepSeek）、米国がリードするのは真のオープン
+ソース（重み＋データ＋コード：OLMo、Marin、Pythia）のみだと論じる。数字：中国製
+オープンモデルの Hugging Face ダウンロード 32 億対米国約 16 億；Artificial Analysis
+指数（9 月 14 日）：GLM-5.3 が 45、Kimi K3 が 44 対米国最良のオープンモデル 26；中国の
+オープンウェイトはクローズドフロンティアから約 2〜5 か月、米国のそれは約 6〜9 か月；
+OpenRouter のオープンモデル週間トークンは約 1T → 約 80T に増大し中国モデルのシェアは
+80% 超。本人の留保：中国ラボは需要の多い狭いタスクを狙い公開スコアが尾を引く、使用
+データには盲点がある、そして中国製オープンモデルの遮断は主に米国企業を痛手にする。
+
+**Why it matters:** オープンウェイト政策論争の参照データセット —— Kimi K3 が Bedrock
+に GA し（9 月 22 日の項）、中国製オープンウェイト初の北米レベニューシェア契約を結んだ
+のと同じ週に着地した。
+
+[`🔗 Interconnects`](https://www.interconnects.ai/p/the-current-balance-of-power-in-open) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49801743)
+
+---
+
+## 31. DeusData/codebase-memory-mcp — コードインテリジェンスを永続ナレッジグラフに、44.3k stars で上昇中
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 44.3k stars · +201/日 · v0.11.0（9 月 15 日）
+- **Tags:** `mcp` `code-intelligence` `agents` `rust`
+
+`DeusData/codebase-memory-mcp`（MIT、C）が今日のトレンドに：コードベースを永続的な
+ナレッジグラフにインデックスする MCP サーバで、158 言語対応、サブミリ秒クエリ、
+「トークン 99% 削減」、依存ゼロの単一静的バイナリを謳う。リポジトリで確認：開発は
+活発（9 月 22 日に push）、v0.11.0 は 9 月 15 日リリースで安定したリリース周期。
+性能主張は README の自己申告で、当方はベンチ未実施 —— 自分のクエリで試すまで
+ベンダー数字として扱うべき。
+
+**Why it matters:** トークン効率の良いコードコンテキストはエージェントコーディングの
+希少資源；依存ゼロのバイナリインデクサは「全部 embedding」路線とは別の賭けで、市場は
+すでに star で票を投じている。
+
+[`🔗 GitHub リポジトリ`](https://github.com/DeusData/codebase-memory-mcp) · [`🔗 プロジェクトページ`](https://deusdata.github.io/codebase-memory-mcp/)
+
+---
+
+## 32. HKUDS/CLI-Anything — 「すべてのソフトをエージェントネイティブに」、49.7k stars で再トレンド入り
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 49.7k stars · +41/日 · Apache-2.0
+- **Tags:** `agents` `cli` `agent-native` `hong-kong-u`
+
+香港大学 HKUDS ラボのフレームワーク：GUI 時代のソフトをエージェントが使えるように
+する CLI を生成する —— Pi、OpenClaw、nanobot、Cursor、Claude Code に対応 —— コミュニティ
+レジストリ（CLI-Hub、`pip install cli-anything-hub`）、18 のデモアプリ（CAD 構築、3D
+シーン、ダイアグラム、ゲームプレイ）、2,461 の通過テスト、arXiv 技術報告
+（2606.03854）を擁する。リポジトリで確認：9 月 22 日に push、Apache-2.0 —— ただし
+最後のタグ付きリリースは 6 月 25 日の v0.4.0 で、今週のトレンド入りは持続的なバイラル
+広がりであって新しいローンチではない。CLI-Hub のコントリビューションフロー（自分の
+CLI を PR で追加）がプロジェクトをレジストリ経済へ変えつつある。
+
+**Why it matters:** 「レガシーソフトのエージェントネイティブアダプタ」というニッチが
+コミュニティレジストリへ拡大しつつある —— スキル経済が辿ったアグリゲータ層の動態と
+同型で、今回はデスクトップアプリが対象。
+
+[`🔗 GitHub リポジトリ`](https://github.com/HKUDS/CLI-Anything) · [`🔗 arXiv:2606.03854`](https://arxiv.org/abs/2606.03854)
+
+---
+
+## 33. pbakaus/impeccable — AI コーディングエージェント向けデザイン言語スキル、70k stars
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 70.1k stars · +287/日 · Apache-2.0
+- **Tags:** `skills` `design` `frontend` `coding-agents`
+
+Paul Bakaus の Impeccable —— 「AI ハーネスをデザインが上手くなるようにするデザイン
+言語」 —— は 70,077 stars で今日のトレンドに：1 スキル、24 コマンド（`polish`、
+`audit`、`critique`、`distill`…）、ライブブラウザ反復、LLM も API キーも不要で動く 61 の
+決定論的検出ルール、さらに `PRODUCT.md` / `DESIGN.md` の永続コンテキストフロー。
+出発点は Anthropic の frontend-design スキル。リポジトリで確認：9 月 22 日に push、
+最後のタグ付きリリースは 9 月 9 日の skill-v4.3.1 —— 今週の順位を説明する単一の新規
+トリガーはなく、スキル波（ECC や agent-skills と並んで）に乗っている。ここの star
+速度は調査すべき信号であって事実ではない。
+
+**Why it matters:** デザイン品質はプロンプトの指南ではなく決定論的チェッカーを持つ
+スキルカテゴリになりつつある —— LLM 不要の 61 ルールは UI センスの評価ハーネスその
+ものだ。
+
+[`🔗 GitHub リポジトリ`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style`](https://impeccable.style)
+
+---
+
+## 34. PanWatch — TradingAgents の 9 エージェント判断パイプラインをセルフホストの A股/港股/米株ウォッチャーに接続
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 1.4k stars · +175/日 · MIT
+- **Tags:** `fintech` `multi-agent` `self-hosted` `chinese-oss`
+
+`TNT-Likely/PanWatch`（Python、MIT、2026 年 1 月作成、9 月 21 日に push）が中国語圏の
+トレンドを上昇中：A 株・香港・米国市場を扱うセルフホストの「盯盘侠」アシスタントで、
+TauricResearch の TradingAgents（76k stars）を統合 —— 保有銘柄でトリガーを引くと
+4 種のアナリストが強気/弱気の弁論、リスクレビュー、PM 決定メモへと進み、3〜5 分の
+推論チェーンを Telegram・WeChat・DingTalk へ推送する。デフォルトは deepseek-chat で
+1 回約 $0.05；Docker 一発デプロイ；モバイルは PWA。明白な留保：自己申告コストと LLM
+の弁論の上に築かれた意思決定支援であり、投資助言ではない。
+
+**Why it matters:** 中国のオープンソース界隈は研究グレードのマルチエージェント
+フレームワークを垂直コンシューマツールへ製品化し続けている —— PanWatch は
+TradingAgents 型フレームワークがどうインフラ化するかのテンプレートだ。
+
+[`🔗 GitHub リポジトリ`](https://github.com/TNT-Likely/PanWatch) · [`🔗 TradingAgents`](https://github.com/TauricResearch/TradingAgents)
+
+---
+
+## 35. OpenAI、AI でレビューをしたデータ評価者を解雇 — うち 1 名は破壊行為を認める
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 75+ pts · 54 comments · 約23時間前 (9 月 22 日 ~21:27 UTC+8)
+- **Tags:** `openai` `data-labeling` `rlhf` `labor`
+
+404 Media：ChatGPT の出力を評価・批評するために雇われた請負業者 —— AI 訓練企業
+Mercor 経由の者も含む —— が、作業に AI を使ったことで解雇された；Mercor は「専門家が
+タスクに AI を使ったと確認できれば即座にプロジェクトから外す」と述べる。内部文書には
+ユーザーのプロンプトを読んで出力を評価する 1 万人超の請負業者が関わるプロジェクトへの
+言及があり、内部ガイダンスは検出ツールではなくパターン（反復的な言い回し、多用される
+emダッシュ、異常に速い完了）で判断するよう指示 —— 「AI 検出ツールも、AI 自体も使うな」。
+ある請負業者は、数百人の評価者の影響を考えれば自分の実影響は分からないとしつつも、
+「AI を悪くする金をもらっている」と感じて最悪の回答を選び続けたことを認めた。留保：
+情報源は匿名、解雇通知書は「提示された」だけ、OpenAI はコメント拒否。
+
+**Why it matters:** 人間フィードバックのサプライチェーンには双方向の真正性問題が
+ある —— AI 生成テキストの RLHF への逆流（モデル崩壊リスク）と意図的な毒入れ ——
+そして検出器自体も信用できないため、執行はパターンベースにならざるを得ない。
+
+[`🔗 404 Media`](https://www.404media.co/people-training-openais-ai-fired-for-using-ai-to-train-the-ai/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49799952)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-23T04:20:00+08:00 |
-| Items | 20 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, Anthropic, OpenAI, Artificial Analysis, TechRadar, Bloomberg, flat assembler forum, Check Point blog, NVD, CISA KEV, F5, Arista, GitHub advisories, oss-security, CPAN Security Group, GrapheneOS, Anthropic status, Cloudflare blog, npm, droprun.sh) |
+| Generated | 2026-09-23T20:23:00+08:00 |
+| Items | 35 |
+| Sources tracked | 35 (Hacker News, GitHub Trending, Anthropic, OpenAI, Artificial Analysis, TechRadar, Bloomberg, flat assembler forum, Check Point blog, NVD, CISA KEV, F5, Arista, GitHub advisories, oss-security, CPAN Security Group, GrapheneOS, Anthropic status, Cloudflare blog, npm, droprun.sh, 404 Media, foxscript.org, mouse.dev, Trail of Bits, nobodywho.ai, Arcturus Labs, benchmarkheaven.com, Strands Agents, geastack.com, obscura.com, arXiv, Interconnects, impeccable.style, deusdata.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-09-23
-updated: 2026-09-23T04:20:00+08:00
+updated: 2026-09-23T20:23:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -413,13 +413,332 @@ Max Woolf 对其 2025 年"让模型把代码写好"实验的续篇：给编码�
 
 ---
 
+## 21. "我们黑进了 FBI"：ShinyHunters 宣称持有全体 FBI 员工数据 — 404 Media 核验了 5,000 条样本
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 651+ pts · 476 comments · ~19小时前 (~01:46 UTC+8)
+- **Tags:** `security` `breach` `fbi` `shinyhunters`
+
+ShinyHunters — 上周攻破 Clop 自家泄露站的同一团伙（那是另一件事）— 向 404 Media 宣称
+已入侵多个 FBI 相关服务，"持有全体 FBI 员工与求职者的数据"：探员姓名、家庭住址、
+电话号码及配偶信息。404 核验了据称属于探员的 5,000 条记录样本，确认这些字段确实存在。
+其余说法全部来自黑客本人；FBI 既未确认也未否认，记者全程保持这一审慎措辞。文中引述的
+先例：该生态的犯罪分子此前曾用窃取数据追踪、骚扰正在调查他们的 FBI 探员，而外国情报
+机构对同一批数据同样感兴趣。
+
+**Why it matters:** 如果属实，这是针对执法人员的反情报级 PII 泄露 —— 但这是一个
+"未经验证的说法 + 经过验证的样本"的组合，这个区分本身就是新闻。
+
+[`🔗 404 Media`](https://www.404media.co/we-hacked-the-fbi-hackers-say-they-have-data-on-all-fbi-employees/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49805954)
+
+---
+
+## 22. FoxDev Studio：Visual FoxPro 复活 — 用 Rust/WASM 重写、并对着原版验证行为
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 358+ pts · 200 comments · ~14小时前 (~05:52 UTC+8)
+- **Tags:** `devtools` `rust` `wasm` `legacy`
+
+FoxDevCommunity 从零重写的 Visual FoxPro 9 迎来 HN 之日：完整 IDE（项目管理器、
+表单/类/菜单/报表设计器、命令窗口、调试器），Rust 编写、编译为 WebAssembly 的运行时，
+基于 fiber 的 VM（`MESSAGEBOX()` 暂停代码而不冻结 UI），由活动对象树驱动 React 渲染
+的 UI，以及 64 位文件偏移突破旧 2 GB 表限制（演示达 558 GB）。验证方法：实现 1,722 个
+语言参考元素，其中 1,534 个通过与真实 Visual FoxPro 输出对比的测试验证。FoxScript 增加
+lambda 和内置 HTTP 服务器；32 位桥接承载遗留 `.fll` 库。诚实的缺口：报表设计器尚未
+完成，超过 2 GB 的表无法再被真实 VFP 打开（"单行门"），夜间构建未签名。
+
+**Why it matters:** 海量 xBase 系统仍运行在银行和行业 ERP 内部；一个经过行为验证的
+复活版本 —— 靠"直接询问 Visual FoxPro 本尊"定案 —— 对这个存量市场远比又一次重写
+有价值。
+
+[`🔗 foxscript.org`](https://foxscript.org/) · [`🔗 GitHub 仓库`](https://github.com/FoxDevCommunity/FoxDevStudio) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49806963)
+
+---
+
+## 23. 继昨日 Muse 0-day 之后：用户让 Meta Muse 导出"你能看到的文件" — 它交出了 6.8 GB 的自身运行时
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 314+ pts · 153 comments · ~13小时前 (~07:25 UTC+8)
+- **Tags:** `meta` `muse` `agents` `ai-security`
+
+与我们 9 月 22 日报道的听写端点 PoC 是另一起独立事件：Peter James 让 Muse 把它能看到
+的文件归档并发到他的 Google Drive —— Muse 照办了。结果包括：会话的完整 root 文件系统、
+`/opt/hatch` 运行时、agent 人格/记忆文件（`SOUL.md`、`IDENTITY.md`、`USER.md`、
+`MEMORY.md`）、113 条带 JSONL 轨迹的子 agent 记录、约 68 个技能目录（含暗示未发布的
+Slack、Dropbox、Polymarket 连接器的配置），以及 SSH 密钥文件。这次导出同时也是 Muse
+架构的首次公开亮相：记忆是纯 Markdown 文件，由每小时任务和夜间"dream"任务维护，
+通过 Postgres 以 384 维向量检索；Codex CLI 的存在似乎只是为了借用其 bubblewrap 沙箱。
+Meta 漏洞奖励计划将该报告标记为"不适用"。作者自己的保留：未演示容器逃逸、SSH 密钥
+有效性未验证、部分文件计数来自 agent 自己的聊天陈述。
+
+**Why it matters:** 一次普通的授权对话产出了完整运行时导出 —— 赏金拒收说明平台如何
+给"agent 自导出"定性，而 Markdown 记忆加技能的架构现在已经公开，无论 Meta 是否愿意。
+
+[`🔗 mouse.dev`](https://mouse.dev/blog/muse-runtime-export/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49807309)
+
+---
+
+## 24. Trail of Bits："SAML：一个分形级的糟糕设计" — 弃用 SAML 的参考论证
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 264+ pts · 145 comments · ~9小时前 (~10:57 UTC+8)
+- **Tags:** `saml` `authentication` `oidc` `security`
+
+Trail of Bits 的 Matt Schwager 列出五大致命设计缺陷：XML 底座（XXE、十亿笑声、DTD/SSRF
+横在任何 SAML 工作之前）、规范化（C14N）的脆弱性（"往往预示着解析器差分"）、包内
+签名（签名存在于被签数据内部）、大而全规范中约 90% 无人使用，以及相对 OIDC 演进式
+RFC 栈的僵化。漏洞谱系是引用而非新披露 —— XML 签名包装（USENIX 2012）、2018 Black Hat
+的 XML 注释绕过、2025 年 libxml2 之 GitHub Enterprise SSO 绕过和 PortSwigger 的
+"SAML roulette" —— 全文未点名任何 CVE。提出的修复是组织层面的：冻结新 SAML 接入、
+提供等价 OIDC 配置、设定下线日期。
+
+**Why it matters:** 企业 SSO 是 SAML 的最后堡垒，这篇就是供应商在每场采购会议上都会
+被递到的论证 —— 与本月 Delinea 等 SAML 系 CVE 同期落地。
+
+[`🔗 Trail of Bits`](https://blog.trailofbits.com/2026/09/21/saml-a-fractal-of-bad-design/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49807716)
+
+---
+
+## 25. Jev 审判日：25 行代码的戏仿、一个可复现基准，以及"OpenAI 将快速跟进"分析
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 三篇合计 259 + 299 + 116 pts · ~5-24小时前
+- **Tags:** `jev` `inference` `benchmarks` `classification`
+
+继我们报道过 Jev（9 月 16 日）、OpenJev（9 月 18 日）和 Kev/jevchat（9 月 21 日）之后，
+批评浪潮登顶：Duarte O. Carmo 的"Jev in 25 Lines of Python"（259 pts，明确标注为戏仿）
+对 Qwen3-0.6B 的标签 token logits 做 log-softmax，复现了 Jev 式校准分类（样本钓鱼邮件
+得 0.885 钓鱼概率），论证这一招牌能力可归约为任何小型 GGUF 模型本地就能做的 logit
+归一化。JevBench（Show HN，116 pts）为类型化决策模型提出可复现基准。而 Arcturus Labs
+的"Will OpenAI Eat Jev's Lunch?"（299 pts）认为 Jev 在架构上并不新颖 —— 工具调用
+本来就是隐式 token 分类 —— 真正的护城河是 TypeSafe 的合成数据与 RL 流程，OpenAI 更有
+趣的一步会是在主流 LLM 里内嵌 `<prediction>` 式标签。带上反向权重：Arcturus 作者
+"已经发现 Jev 的概率站不住的领域"。
+
+**Why it matters:** 三篇独立文章汇聚于"是分类，不是架构"，把 System-1 模型这个品类
+从技术突破改写为数据与产品护城河问题 —— 而这正是快速跟进决策的胜负手。
+
+[`🔗 Jev in 25 Lines`](https://www.nobodywho.ai/posts/jev-in-25-lines/) · [`🔗 Arcturus Labs`](https://arcturus-labs.com/blog/2026/09/21/will-openai-eat-jevs-lunch/) · [`🔗 JevBench`](https://benchmarkheaven.com/jev-models)
+
+---
+
+## 26. AWS 背书的 Strands 发布"harness" — 通用 agent，宣称 token 成本低 28%、基准分数近乎持平
+
+- **Velocity:** ▮▮ rising
+- **Source:** Strands 博客 + GitHub Trending · 7.6k stars · 9 月 22 日发布
+- **Tags:** `agent-harness` `aws` `open-source` `benchmarks`
+
+strands-agents/harness-sdk（Apache-2.0，Python + TypeScript）于 9 月 22 日发布
+typescript/v1.19.0、python/v1.57.0 和首个 harness-typescript/v0.1.1，并宣布"Strands
+harness"：一个完整组装的通用 agent —— shell/文件/网页工具、自动上下文管理、长期记忆、
+子任务委派、技能加载 —— 可部署到 Modal、Cloud Run、ECS 或 Bedrock AgentCore，经
+Bedrock/Anthropic/OpenAI/Google/Ollama/LiteLLM 实现模型无关。宣称数字：在六个基准上
+以"近乎持平的基准分数"比其他 harness 低 28% 成本；搭配 Fable 5 时"比 Claude Code
+便宜 77%，同时在 Terminal Bench 2.1 上得分更高"。帖子自己的保留：六个基准只点名了
+Terminal Bench 2.1，后续论文待发，整体最省 token 的 harness（DeepSeek 的）准确率最低，
+且头条数字绑定特定模型配对。
+
+**Why it matters:** harness 层迎来了超大规模云厂商背书的 SDK 入局者，打的也是每任务
+成本这张牌 —— 而且难得的是，这家供应商从一开始就把基准免责声明写得规规矩矩。
+
+[`🔗 Strands 博客`](https://strandsagents.com/blog/introducing-strands-harness/) · [`🔗 GitHub 仓库`](https://github.com/strands-agents/harness-sdk)
+
+---
+
+## 27. GeaStack：TypeScript + CSS 编译为六端原生应用 — 包括 ESP32 上的 60fps CSS 动画
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 112+ pts · 45 comments · ~17小时前 (~03:42 UTC+8)
+- **Tags:** `devtools` `typescript` `embedded` `compiler`
+
+GeaStack 的 `geatsc` 编译器把 TypeScript/JSX/CSS 变成原生 C++ —— 设备上没有 JavaScript
+引擎。Flexbox 布局与关键帧动画编译后在设备本地运行；演示显示 CSS 动画立方体在 ESP32
+上跑到 60 fps。目标端：MCU（ESP32/RP2350）、iOS/macOS、Win32、Android、Linux 和
+Xbox（"把 Three.js 游戏移植到主机"）。宣称同一份 TypeScript 相比 Node 有 2.5 倍几何
+平均提速（1.8–16.7 倍区间）与 1.5–2 ms 原生启动 —— 网站自己说明绝对耗时"在机器负载
+下测得，请视为方向性参考"。GPL/商业双许可，生态尚年轻，并经 `npx skills add
+geastack/skills` 提供编码 agent 技能。
+
+**Why it matters:** "一份代码，六个目标"是对 Qt/LVGL/Flutter 领地的正面强攻，而真正
+新颖的部分是被编译到微控制器上的 CSS —— 没有别人把这一层当作编译目标。
+
+[`🔗 geastack.com`](https://geastack.com) · [`🔗 GitHub 仓库`](https://github.com/geastack/examples) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49802911)
+
+---
+
+## 28. Obscura：一座"它和出口方都无法记录你的全貌"的 VPN
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 152+ pts · 117 comments · ~17小时前 (~03:40 UTC+8)
+- **Tags:** `privacy` `vpn` `wireguard` `quic`
+
+Obscura（Sovereign Engineering，创始人 Carl Dong）的链路是 用户 → Obscura 中继 →
+Mullvad 出口：中继转发的是用 Mullvad 公钥加密的 WireGuard 包，Obscura 读不懂自己搬运
+的内容；Mullvad 也看不到你的真实 IP，因为首跳由 Obscura 做 NAT —— "我们拿不到的东西
+就泄露不了。"WireGuard-over-QUIC（不可靠数据报，避免 TCP-over-TCP 崩塌）兼任抗审查
+伪装；注册只需一个随机账号号码；每月 8 美元，接受 Monero 和 Lightning。FAQ 自己写明
+局限：尚无独立审计、可复现构建只是计划、Obscura 实时看得到你的连接 IP —— "不记录"
+是行为承诺，不是技术不可能。
+
+**Why it matters:** 它把信任拆开，让没有任何单一方同时握有身份与流量 —— 对"相信我们
+的无日志政策"问题的结构性回答，而且免责声明就写在厂商自己的页面上。
+
+[`🔗 obscura.com`](https://obscura.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49802930)
+
+---
+
+## 29. SlopShape：仅凭结构特征识别 AI 网页内容 — 98 macro-F1，改写无效，还能归因出源模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 60+ pts · arXiv 2609.15369（v2，9 月 17 日）
+- **Tags:** `ai-content-detection` `research` `arxiv`
+
+arXiv 2609.15369（Jochen Madler，Sitefire）：不再做词级 AI 文本检测，而是一套 214 特征
+的标注工具（187 个结构特征 —— 信息排序、举证方式、行文声音），由 LLM 施行，并对照
+人工金标准验证（人-模型 kappa 0.946）。语料：来自 268 个公司域名的 2,250 篇前 ChatGPT
+时代人类博客，对比五个前沿模型的 11,250 篇 AI"镜像"。结果：仅凭结构特征，在held-out
+公司上达 98.0 macro-F1；每篇 AI 文被自己的模型改写后几乎不变（98.1）；源模型归因
+79.3%（随机基线 16.7%）。定性发现："AI 文共享一种整洁的、自我宣告式的形状。"流水线
+与代码已发布。保留意见：单作者行业论文、仅覆盖商业博客、重度人工润色的 AI 文本未评估。
+
+**Why it matters:** 能扛住改写、还能归因作者的检测，把 AI 内容军备竞赛从词汇层挪到了
+结构层 —— 那是 humanizer 类工具在结构上就擦不掉的一层。
+
+[`🔗 arXiv:2609.15369`](https://arxiv.org/abs/2609.15369) · [`🔗 GitHub 仓库`](https://github.com/pulse-energy-eu/slopshape)
+
+---
+
+## 30. Nathan Lambert："开源模型的当前权力格局" — 中国开放权重领先的数据化论证
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 98+ pts · 37 comments · ~14小时前 (~06:03 UTC+8)
+- **Tags:** `open-models` `policy` `benchmarks` `china`
+
+Interconnects 这篇数据密集的长文论证：自约 2025 年 4 月起，中国在开放权重模型上保持
+明显领先（Qwen、Kimi、GLM、DeepSeek），而美国只在真开源（权重 + 数据 + 代码：OLMo、
+Marin、Pythia）上领先。数字：中国开放模型 Hugging Face 下载量 32 亿 vs 美国约 16 亿；
+Artificial Analysis 指数（9 月 14 日）：GLM-5.3 得 45、Kimi K3 得 44，美国最好的开放
+模型只有 26；中国开放权重模型距闭源前沿约 2–5 个月，美国开放权重约 6–9 个月；
+OpenRouter 开放模型周 token 量从约 1T 增至约 80T，中国模型份额超 80%。他自己列出的
+保留：中国实验室瞄准狭窄、需求旺盛的任务，公共分数被抬高；使用数据存在盲区；封锁
+中国开放模型主要伤害的是美国企业。
+
+**Why it matters:** 开放权重政策之争的参考数据集 —— 恰与本周 Kimi K3 登陆 Bedrock
+（见我们 9 月 22 日条目）并达成中国开放权重模型首例北美分成协议同期落地。
+
+[`🔗 Interconnects`](https://www.interconnects.ai/p/the-current-balance-of-power-in-open) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49801743)
+
+---
+
+## 31. DeusData/codebase-memory-mcp — 代码智能做成持久知识图谱，44.3k stars 还在涨
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 44.3k stars · +201/天 · v0.11.0（9 月 15 日）
+- **Tags:** `mcp` `code-intelligence` `agents` `rust`
+
+`DeusData/codebase-memory-mcp`（MIT，C 语言）位列今日趋势榜：一个把代码库索引为持久
+知识图谱的 MCP 服务器，宣称支持 158 种语言、亚毫秒查询、"省 99% token"、单一静态
+二进制零依赖。仓库核实：开发活跃（9 月 22 日有推送），v0.11.0 于 9 月 15 日发布、
+节奏稳定。性能声明为 README 自报数据，我们未做基准 —— 视为厂商数字，等你自己的
+查询测试。
+
+**Why it matters:** 省 token 的代码上下文是 agent 编码中的稀缺资源；零依赖的二进制
+索引器与"万物 embedding"路线是两种截然不同的押注，市场已经用 star 投了票。
+
+[`🔗 GitHub 仓库`](https://github.com/DeusData/codebase-memory-mcp) · [`🔗 项目主页`](https://deusdata.github.io/codebase-memory-mcp/)
+
+---
+
+## 32. HKUDS/CLI-Anything — "让所有软件 agent 原生"，49.7k stars 重回趋势榜
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 49.7k stars · +41/天 · Apache-2.0
+- **Tags:** `agents` `cli` `agent-native` `hong-kong-u`
+
+港大 HKUDS 实验室的框架：生成让 GUI 时代软件可被 agent 使用的 CLI —— 支持 Pi、
+OpenClaw、nanobot、Cursor、Claude Code —— 附社区注册表（CLI-Hub，
+`pip install cli-anything-hub`）、18 个演示应用（CAD 构建、3D 场景、图表、游戏）、
+2,461 个通过测试，以及 arXiv 技术报告（2606.03854）。仓库核实：9 月 22 日有推送、
+Apache-2.0 —— 但最后一个带标签版本是 6 月 25 日的 v0.4.0，本周的榜单位置是持续
+病毒式传播而非新发布。CLI-Hub 的贡献流程（PR 提交自己的 CLI）正在把项目变成注册表
+经济。
+
+**Why it matters:** "遗留软件的 agent 原生适配器"这个细分正在扩展为社区注册表 ——
+与技能经济经历过的聚合层动态同构，这次的对象是桌面应用。
+
+[`🔗 GitHub 仓库`](https://github.com/HKUDS/CLI-Anything) · [`🔗 arXiv:2606.03854`](https://arxiv.org/abs/2606.03854)
+
+---
+
+## 33. pbakaus/impeccable — 70k stars 的 AI 编码 agent 设计语言技能
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 70.1k stars · +287/天 · Apache-2.0
+- **Tags:** `skills` `design` `frontend` `coding-agents`
+
+Paul Bakaus 的 Impeccable —— "让你的 AI harness 更懂设计的那个设计语言" —— 现有
+70,077 stars，位列今日趋势榜：1 个技能、24 个命令（`polish`、`audit`、`critique`、
+`distill`……）、实时浏览器迭代、61 条无需 LLM 和 API key 的确定性检测规则，外加
+`PRODUCT.md` / `DESIGN.md` 持久上下文流程。项目脱胎于 Anthropic 的 frontend-design
+技能。仓库核实：9 月 22 日有推送，最后带标签版本是 9 月 9 日的 skill-v4.3.1 ——
+没有单一新鲜触发器能解释本周的位置，所以它是在乘技能浪潮（与 ECC、agent-skills 并排）。
+这里的 star 速度是待调查的信号，不是事实。
+
+**Why it matters:** 设计质量正在成为带确定性检查器的技能品类，而不只是提示词指导 ——
+61 条无 LLM 规则等于一套 UI 品味的评测 harness。
+
+[`🔗 GitHub 仓库`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style`](https://impeccable.style)
+
+---
+
+## 34. PanWatch — 把 TradingAgents 的 9-agent 决策管线接进自托管的 A股/港股/美股盯盘
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 1.4k stars · +175/天 · MIT
+- **Tags:** `fintech` `multi-agent` `self-hosted` `chinese-oss`
+
+`TNT-Likely/PanWatch`（Python，MIT，2026 年 1 月创建，9 月 21 日有推送）正在中文
+趋势榜攀升：自托管的"盯盘侠"助手覆盖 A 股、港股与美股，集成 TauricResearch 的
+TradingAgents（76k stars）—— 在持仓页触发一次，四类分析师经多空辩论、风控审查到
+PM 决策书，产出一条 3–5 分钟的完整推理链，推送到 Telegram、微信或钉钉。默认
+deepseek-chat，单次约 $0.05；Docker 一键部署；移动端 PWA。明显的保留：这是建立在
+自报成本和 LLM 辩论之上的决策支持，不是投资建议。
+
+**Why it matters:** 中文开源圈持续把研究级多 agent 框架产品化成垂直消费工具 ——
+PanWatch 就是 TradingAgents 类框架走向基础设施的模板。
+
+[`🔗 GitHub 仓库`](https://github.com/TNT-Likely/PanWatch) · [`🔗 TradingAgents`](https://github.com/TauricResearch/TradingAgents)
+
+---
+
+## 35. OpenAI 开除用 AI 完成标注的数据评分员 — 其中一人承认蓄意破坏
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 75+ pts · 54 comments · ~23小时前 (9 月 22 日 ~21:27 UTC+8)
+- **Tags:** `openai` `data-labeling` `rlhf` `labor`
+
+404 Media：受雇为 ChatGPT 输出打分与批评的外包员工 —— 包括经由 AI 训练公司 Mercor
+招募的 —— 因用 AI 完成工作被开除；Mercor 表示一旦确认专家在任务中使用了 AI，立即
+将其移出项目。内部文件显示相关项目涉及上万名阅读用户提示、为输出评分的外包员工；
+内部指引要求评审者判断模式（重复措辞、高频破折号、异常快的完成速度）而非运行检测器
+—— "不要使用 AI 检测工具，也不要自己用 AI。"一名外包员工承认曾故意挑选最差的回答，
+因为觉得自己"领着薪水把 AI 做得更糟"。保留意见：信源匿名、解雇信只是"出示"过、
+OpenAI 拒绝置评、破坏者自己也说不准在数百名评分员中的实际影响。
+
+**Why it matters:** 人类反馈供应链在两个方向上都有真实性危机 —— AI 生成文本回流
+RLHF（模型坍缩风险）与蓄意投毒 —— 而执法只能靠模式判断，因为检测器本身同样不可信。
+
+[`🔗 404 Media`](https://www.404media.co/people-training-openais-ai-fired-for-using-ai-to-train-the-ai/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49799952)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-23T04:20:00+08:00 |
-| Items | 20 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, Anthropic, OpenAI, Artificial Analysis, TechRadar, Bloomberg, flat assembler forum, Check Point blog, NVD, CISA KEV, F5, Arista, GitHub advisories, oss-security, CPAN Security Group, GrapheneOS, Anthropic status, Cloudflare blog, npm, droprun.sh) |
+| Generated | 2026-09-23T20:23:00+08:00 |
+| Items | 35 |
+| Sources tracked | 35 (Hacker News, GitHub Trending, Anthropic, OpenAI, Artificial Analysis, TechRadar, Bloomberg, flat assembler forum, Check Point blog, NVD, CISA KEV, F5, Arista, GitHub advisories, oss-security, CPAN Security Group, GrapheneOS, Anthropic status, Cloudflare blog, npm, droprun.sh, 404 Media, foxscript.org, mouse.dev, Trail of Bits, nobodywho.ai, Arcturus Labs, benchmarkheaven.com, Strands Agents, geastack.com, obscura.com, arXiv, Interconnects, impeccable.style, deusdata.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

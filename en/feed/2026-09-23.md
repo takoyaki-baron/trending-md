@@ -1,8 +1,8 @@
 ---
 date: 2026-09-23
-updated: 2026-09-23T04:20:00+08:00
+updated: 2026-09-23T20:23:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -483,13 +483,378 @@ choices are the right instincts for fleet reliability.
 
 ---
 
+## 21. "We hacked the FBI": ShinyHunters claims data on all FBI employees — 404 Media reviews a 5,000-record sample
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 651+ pts · 476 comments · ~19h ago (~01:46 UTC+8)
+- **Tags:** `security` `breach` `fbi` `shinyhunters`
+
+ShinyHunters — the same group that breached Clop's own leak site last week, a separate
+event — told 404 Media it has breached multiple FBI-related services and "holds data on
+all FBI employees and applicants": agents' names, home addresses, phone numbers and
+spouse details. 404 reviewed a sample of 5,000 records said to be of alleged agents and
+confirmed those fields are present. The claims otherwise come solely from the hackers;
+there is no FBI confirmation or denial, and the reporters carry that hedge throughout.
+The cited precedents: criminals from this ecosystem previously used stolen data to track
+and harass FBI agents investigating them, and foreign intelligence services would value
+the same cache.
+
+**Why it matters:** If accurate, this is counterintelligence-grade PII on law-enforcement
+personnel and their families — but it is an unverified claim attached to a verified
+sample, and that distinction is the story.
+
+[`🔗 404 Media`](https://www.404media.co/we-hacked-the-fbi-hackers-say-they-have-data-on-all-fbi-employees/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49805954)
+
+---
+
+## 22. FoxDev Studio: Visual FoxPro revived — a Rust/WASM reimplementation verified against the original
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 358+ pts · 200 comments · ~14h ago (~05:52 UTC+8)
+- **Tags:** `devtools` `rust` `wasm` `legacy`
+
+FoxDevCommunity's from-scratch reimplementation of Visual FoxPro 9 got its HN day: a full
+IDE (project manager, form/class/menu/report designers, Command Window, debugger), a
+runtime written in Rust and compiled to WebAssembly on a fiber-based VM (so
+`MESSAGEBOX()` pauses code without freezing the UI), React-rendered UI driven from the
+live object tree, and 64-bit file offsets that lift the old 2 GB table limit (demonstrated
+at 558 GB). Verification method: 1,722 language-reference elements implemented, 1,534
+verified by tests comparing output against real Visual FoxPro. FoxScript adds lambdas and
+a built-in HTTP server; a 32-bit bridge hosts legacy `.fll` libraries. Honest gaps: the
+report designer isn't done, tables grown past 2 GB won't reopen in real VFP ("a one-way
+door"), and nightlies are unsigned.
+
+**Why it matters:** Enormous xBase estates still run inside banks and vertical ERP; a
+behavior-verified revival — settled "by asking Visual FoxPro itself" — matters to that
+installed base far more than another rewrite would.
+
+[`🔗 foxscript.org`](https://foxscript.org/) · [`🔗 GitHub repo`](https://github.com/FoxDevCommunity/FoxDevStudio) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49806963)
+
+---
+
+## 23. Since yesterday's Muse 0-day: a user asked Meta's Muse for "the files you can see" — and it exported 6.8 GB of its own runtime
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 314+ pts · 153 comments · ~13h ago (~07:25 UTC+8)
+- **Tags:** `meta` `muse` `agents` `ai-security`
+
+A separate incident from the dictation-endpoint PoC we covered Sept 22: Peter James asked
+Muse to archive the files it could see and send them to his Google Drive — it complied.
+The result: the session's apparent root filesystem, the `/opt/hatch` runtime, agent
+persona/memory files (`SOUL.md`, `IDENTITY.md`, `USER.md`, `MEMORY.md`), 113 subagent
+records with JSONL traces, ~68 skill directories (including configs hinting at unreleased
+Slack, Dropbox and Polymarket connectors), and SSH key files. The dump doubles as the
+first public architecture look: memory is plain Markdown curated by hourly jobs plus a
+nightly "dream" job, searched via Postgres with 384-dimensional embeddings; Codex CLI is
+bundled apparently only for its bubblewrap sandboxing. Meta's bug bounty marked the
+report "Not Applicable." His own hedges: no container escape demonstrated, SSH-key
+status unverified, some file counts are the agent's own chat claims.
+
+**Why it matters:** An ordinary authorized conversation produced a full runtime export —
+and the bounty rejection shows how platforms classify agent-self-export, while the
+Markdown-memory-and-skills architecture is now public whether Meta intended it or not.
+
+[`🔗 mouse.dev`](https://mouse.dev/blog/muse-runtime-export/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49807309)
+
+---
+
+## 24. Trail of Bits: "SAML: A fractal of bad design" — the reference case for deprecating SAML
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 264+ pts · 145 comments · ~9h ago (~10:57 UTC+8)
+- **Tags:** `saml` `authentication` `oidc` `security`
+
+Matt Schwager's Trail of Bits essay lays out five fatal design flaws: the XML substrate
+(XXE, billion laughs, DTD/SSRF before any SAML work starts), canonicalization fragility
+("often a precursor to parser differential"), enveloped signatures (the signature lives
+inside the data being signed), a kitchen-sink spec where ~90% goes unused, and
+ossification versus OIDC's evolving RFC stack. The vulnerability lineage is cited rather
+than newly disclosed — XML signature wrapping (USENIX 2012), the 2018 Black Hat XML
+comment bypass, 2025's libxml2 GitHub Enterprise SSO bypass and PortSwigger's "SAML
+roulette" — and the post names no CVEs. The fix proposed is organizational: freeze new
+SAML onboarding, offer equivalent OIDC configs, set a sunset date.
+
+**Why it matters:** Enterprise SSO is SAML's last stronghold, and this is the argument
+vendors will now be handed in every procurement call — landing the same month as
+SAML-adjacent CVEs like Delinea's.
+
+[`🔗 Trail of Bits`](https://blog.trailofbits.com/2026/09/21/saml-a-fractal-of-bad-design/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49807716)
+
+---
+
+## 25. The Jev reckoning day: a 25-line parody, a reproducible benchmark, and the "OpenAI will fast-follow" analysis
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 259 + 299 + 116 pts across three posts · ~5-24h ago
+- **Tags:** `jev` `inference` `benchmarks` `classification`
+
+Since we covered Jev (Sept 16), OpenJev (Sept 18) and Kev/jevchat (Sept 21), the
+critique wave crested: Duarte O. Carmo's "Jev in 25 Lines of Python" (259 pts) —
+explicitly labeled parody — reproduces Jev-style calibrated classification by
+log-softmaxing a Qwen3-0.6B's label-token logits (0.885 phishing probability on his
+sample email), arguing the headline capability reduces to logit normalization any small
+GGUF model can do locally. JevBench (Show HN, 116 pts) proposes reproducible benchmarking
+for typed decision models. And Arcturus Labs' "Will OpenAI Eat Jev's Lunch?" (299 pts)
+argues Jev isn't architecturally novel — tool calling already is implicit token
+classification — so the real moat is TypeSafe's synthetic data and RL process, and the
+interesting OpenAI move would be a `<prediction>`-style tag inside mainstream LLMs. Carry
+the counterweight: the Arcturus author "already found domains where Jev's probabilities
+don't hold up."
+
+**Why it matters:** Three independent takes converging on "classification, not
+architecture" reframes the System-1-model category from a technical breakthrough into a
+data-and-product moat question — which is exactly what a fast-follow decision turns on.
+
+[`🔗 Jev in 25 Lines`](https://www.nobodywho.ai/posts/jev-in-25-lines/) · [`🔗 Arcturus Labs`](https://arcturus-labs.com/blog/2026/09/21/will-openai-eat-jevs-lunch/) · [`🔗 JevBench`](https://benchmarkheaven.com/jev-models)
+
+---
+
+## 26. AWS-backed Strands ships "harness" — a general-purpose agent claiming 28% lower token cost at near-equal benchmark scores
+
+- **Velocity:** ▮▮ rising
+- **Source:** Strands blog + GitHub Trending · 7.6k stars · releases Sept 22
+- **Tags:** `agent-harness` `aws` `open-source` `benchmarks`
+
+strands-agents/harness-sdk (Apache-2.0, Python + TypeScript) shipped typescript/v1.19.0,
+python/v1.57.0 and a first harness-typescript/v0.1.1 on Sept 22, alongside the "Strands
+harness" announcement: a fully assembled general-purpose agent — shell/file/web tools,
+automatic context management, long-term memory, subtask delegation, skill loading —
+deployable to Modal, Cloud Run, ECS or Bedrock AgentCore, model-agnostic via
+Bedrock/Anthropic/OpenAI/Google/Ollama/LiteLLM. Claimed numbers: 28% lower cost than
+other harnesses at "nearly equal benchmark scores" across six benchmarks; with Fable 5,
+"77% less than Claude Code while scoring higher on Terminal Bench 2.1." The post's own
+hedges: only Terminal Bench 2.1 is named, a follow-up paper is promised, the most
+token-efficient harness overall (DeepSeek's) had the lowest accuracy, and the headline
+figure is model-pairing-specific.
+
+**Why it matters:** The harness layer gets a hyperscaler-backed SDK entrant with a
+cost-per-task argument — and, notably, a vendor framing its benchmark caveats correctly
+from the start.
+
+[`🔗 Strands blog`](https://strandsagents.com/blog/introducing-strands-harness/) · [`🔗 GitHub repo`](https://github.com/strands-agents/harness-sdk)
+
+---
+
+## 27. GeaStack: TypeScript + CSS compiled to native apps on six targets — including 60fps CSS animation on an ESP32
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 112+ pts · 45 comments · ~17h ago (~03:42 UTC+8)
+- **Tags:** `devtools` `typescript` `embedded` `compiler`
+
+GeaStack's `geatsc` compiler turns TypeScript/JSX/CSS into native C++ — no JavaScript
+engine on device. Flexbox layout and keyframe animations compile to run on the device
+itself; their demo shows a CSS-animated cube at 60 fps on an ESP32. Targets: MCUs
+(ESP32/RP2350), iOS/macOS, Win32, Android, Linux and Xbox ("port Three.js games to
+console"). Claims 2.5× geomean speedup over Node on the same TypeScript (1.8–16.7×
+range) and 1.5–2 ms native startup — with the site itself saying absolute times were
+"measured under machine load, so treat as directional." GPL/commercial dual-licensed,
+young ecosystem, and it ships coding-agent skills via `npx skills add geastack/skills`.
+
+**Why it matters:** "One codebase, six targets" is a swing at Qt/LVGL/Flutter territory,
+and the genuinely novel part is compiled CSS down to microcontrollers — a layer nobody
+else treats as a compilation target.
+
+[`🔗 geastack.com`](https://geastack.com) · [`🔗 GitHub repo`](https://github.com/geastack/examples) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49802911)
+
+---
+
+## 28. Obscura: a VPN architected so neither it nor its exit provider can log your full picture
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 152+ pts · 117 comments · ~17h ago (~03:40 UTC+8)
+- **Tags:** `privacy` `vpn` `wireguard` `quic`
+
+Obscura (Sovereign Engineering, founder Carl Dong) routes user → Obscura relay → Mullvad
+exit: relays forward WireGuard packets encrypted to Mullvad's public key, so Obscura
+can't read what it carries, and Mullvad never sees your real IP because Obscura NATs the
+first hop — "We can't leak what we don't have." WireGuard-over-QUIC (unreliable
+datagrams, no TCP-over-TCP meltdown) doubles as censorship evasion; signup needs only a
+randomized account number; $8/month with Monero and Lightning accepted. The FAQ's own
+limits: no independent audit yet, reproducible builds are planned not shipping, and
+Obscura still sees your connecting IP in real time — "no logging" is a behavioral claim,
+not a technical impossibility.
+
+**Why it matters:** It splits trust so no single party holds both identity and traffic —
+a structural answer to the "trust our no-logs policy" problem, with the caveats stated
+on the vendor's own page.
+
+[`🔗 obscura.com`](https://obscura.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49802930)
+
+---
+
+## 29. SlopShape: AI web content identified from structure alone — 98 macro-F1, survives rewording, attributes the source model
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 60+ pts · arXiv 2609.15369 (v2 Sept 17)
+- **Tags:** `ai-content-detection` `research` `arxiv`
+
+arXiv 2609.15369 (Jochen Madler, Sitefire): instead of word-level AI-text detection, a
+214-feature annotation instrument (187 structural — ordering, evidence, voicing) applied
+by an LLM, validated against human gold annotations (human-model kappa 0.946). Corpus:
+2,250 pre-ChatGPT human blog posts from 268 company domains vs 11,250 AI "mirrors" from
+five frontier models. Results: 98.0 macro-F1 on held-out companies from structural
+features alone, essentially unchanged (98.1) when every AI post is reworded by its own
+model, and 79.3% source-model attribution against a 16.7% chance rate. Qualitative
+finding: "AI posts share a tidy, self-announcing shape." Pipeline and code released.
+Caveats: single-author industry paper, commercial blogs only, and heavily human-edited
+AI text isn't evaluated.
+
+**Why it matters:** Detection that survives rewording and attributes authorship moves the
+AI-content arms race from vocabulary to structure — the layer humanizer-style tools
+structurally can't scrub.
+
+[`🔗 arXiv:2609.15369`](https://arxiv.org/abs/2609.15369) · [`🔗 GitHub repo`](https://github.com/pulse-energy-eu/slopshape)
+
+---
+
+## 30. Nathan Lambert: "The current balance of power in open models" — China's open-weight lead, quantified
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 98+ pts · 37 comments · ~14h ago (~06:03 UTC+8)
+- **Tags:** `open-models` `policy` `benchmarks` `china`
+
+Interconnects' data-heavy essay argues China has held a clear open-weight lead since
+~April 2025 (Qwen, Kimi, GLM, DeepSeek) while the US leads only true open-source
+(weights + data + code: OLMo, Marin, Pythia). Numbers: 3.2B Hugging Face downloads for
+Chinese open models vs ~1.6B American; Artificial Analysis Index (Sept 14): GLM-5.3 at
+45 and Kimi K3 at 44 vs a best US open model at 26; Chinese open-weight models sit ~2–5
+months behind the closed frontier vs ~6–9 for American ones; OpenRouter weekly open-model
+tokens grew ~1T → ~80T with 80%+ Chinese share. His own caveats: Chinese labs target
+narrow, demand-heavy tasks that flatter public scores; usage data has blind spots; and
+blocking Chinese open models would mainly hurt US enterprises.
+
+**Why it matters:** The reference dataset for the open-weight policy argument — landing
+the same week Kimi K3 went GA on Bedrock (our Sept 22 item) with the first NA
+revenue-split deal for a Chinese open-weight model.
+
+[`🔗 Interconnects`](https://www.interconnects.ai/p/the-current-balance-of-power-in-open) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49801743)
+
+---
+
+## 31. DeusData/codebase-memory-mcp — code intelligence as a persistent knowledge graph, 44.3k stars and climbing
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 44.3k stars · +201/day · v0.11.0 Sept 15
+- **Tags:** `mcp` `code-intelligence` `agents` `rust`
+
+`DeusData/codebase-memory-mcp` (MIT, C) is on today's trending list: an MCP server that
+indexes codebases into a persistent knowledge graph, claiming 158 languages, sub-ms
+queries, "99% fewer tokens," and a single static binary with zero dependencies. Verified
+on the repo: active development (pushed Sept 22), v0.11.0 shipped Sept 15 on a steady
+release cadence. The performance claims are README-self-reported and we haven't
+benchmarked them — treat as vendor numbers pending your own query test.
+
+**Why it matters:** Token-efficient code context is the scarce resource in agent coding;
+a dependency-free binary indexer is a different bet than the embedding-everything
+approach, and the market has voted with stars.
+
+[`🔗 GitHub repo`](https://github.com/DeusData/codebase-memory-mcp) · [`🔗 Project page`](https://deusdata.github.io/codebase-memory-mcp/)
+
+---
+
+## 32. HKUDS/CLI-Anything — "making all software agent-native," 49.7k stars and back on trending
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 49.7k stars · +41/day · Apache-2.0
+- **Tags:** `agents` `cli` `agent-native` `hong-kong-u`
+
+HKU's HKUDS lab built a framework that generates CLIs making GUI-era software usable by
+agents — Pi, OpenClaw, nanobot, Cursor, Claude Code — with a community registry
+(CLI-Hub, `pip install cli-anything-hub`), 18 demo apps (CAD builds, 3D scenes,
+diagrams, gameplay), 2,461 passing tests, and an arXiv tech report (2606.03854).
+Verified on the repo: pushed Sept 22, Apache-2.0 — but the last tagged release is v0.4.0
+from June 25, so this week's trending placement is sustained virality, not a fresh
+launch. The CLI-Hub contribution flow (PR to add your own CLI) is turning the project
+into a registry economy.
+
+**Why it matters:** The "agent-native adapter for legacy software" niche is scaling into
+a community registry — the same aggregator-layer dynamic the skills economy went through,
+applied to desktop applications.
+
+[`🔗 GitHub repo`](https://github.com/HKUDS/CLI-Anything) · [`🔗 arXiv:2606.03854`](https://arxiv.org/abs/2606.03854)
+
+---
+
+## 33. pbakaus/impeccable — the 70k-star design-language skill for AI coding agents
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 70.1k stars · +287/day · Apache-2.0
+- **Tags:** `skills` `design` `frontend` `coding-agents`
+
+Paul Bakaus's Impeccable — "the design language that makes your AI harness better at
+design" — is 70,077 stars and on today's trending list: one skill, 24 commands
+(`polish`, `audit`, `critique`, `distill`…), live browser iteration, and 61
+deterministic detector rules that run with no LLM and no API key, plus a `PRODUCT.md` /
+`DESIGN.md` durable-context flow. It started from Anthropic's frontend-design skill.
+Verified on the repo: pushed Sept 22, last tagged release skill-v4.3.1 on Sept 9 — no
+single fresh trigger explains this week's placement, so it's riding the skills wave
+(alongside ECC and agent-skills). Star velocity here is a signal to investigate, not a
+fact.
+
+**Why it matters:** Design quality is emerging as a skills category with deterministic
+checkers, not just prompt guidance — 61 no-LLM rules amount to an eval harness for UI
+taste.
+
+[`🔗 GitHub repo`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style`](https://impeccable.style)
+
+---
+
+## 34. PanWatch — a self-hosted AI market watcher wiring TradingAgents' 9-agent pipeline into A-share/HK/US monitoring
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 1.4k stars · +175/day · MIT
+- **Tags:** `fintech` `multi-agent` `self-hosted` `chinese-oss`
+
+`TNT-Likely/PanWatch` (Python, MIT, created Jan 2026, pushed Sept 21) is climbing the
+Chinese trending charts: a self-hosted "盯盘侠" assistant covering A-shares, Hong Kong
+and US markets, integrating TauricResearch's TradingAgents (76k stars) — a trigger on
+any holding runs four analyst types through a bull/bear debate, risk review and a PM
+decision memo, outputting a 3–5 minute reasoning chain pushed to Telegram, WeChat or
+DingTalk. Defaults to deepseek-chat at ~$0.05 per analysis; Docker one-command deploy;
+PWA for mobile. The obvious caveat: it's decision support built on self-reported costs
+and an LLM debate, not investment advice.
+
+**Why it matters:** The Chinese open-source scene keeps productizing research-grade
+multi-agent frameworks into vertical consumer tools — PanWatch is the template for how
+TradingAgents-style frameworks become infrastructure.
+
+[`🔗 GitHub repo`](https://github.com/TNT-Likely/PanWatch) · [`🔗 TradingAgents`](https://github.com/TauricResearch/TradingAgents)
+
+---
+
+## 35. OpenAI fires data raters for using AI to do the rating — and one admits sabotage
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 75+ pts · 54 comments · ~23h ago (Sept 22 ~21:27 UTC+8)
+- **Tags:** `openai` `data-labeling` `rlhf` `labor`
+
+404 Media: contractors hired to rate and critique ChatGPT outputs — including through
+AI-training firm Mercor — were fired for using AI to do their work; Mercor says it
+removes anyone confirmed to have used AI on a task. Internal documents reference
+projects with more than ten thousand contractors reading user prompts; guidance tells
+reviewers to judge patterns (repetitive phrasing, heavy em-dash use, unusually fast
+completion) rather than run detectors — "Do not use AI detection tools, or AI yourself."
+One contractor admitted deliberately picking the worst responses because they felt
+"paid to make AI worse." Hedges: anonymous sources, the termination letter was only
+"presented," OpenAI declined to comment, and the saboteur doubts their own impact
+among hundreds of raters.
+
+**Why it matters:** The human-feedback supply chain has an authenticity problem in both
+directions — AI-generated text flowing back into RLHF (model-collapse risk) and
+deliberate poisoning — and enforcement is pattern-based because detectors can't be
+trusted either.
+
+[`🔗 404 Media`](https://www.404media.co/people-training-openais-ai-fired-for-using-ai-to-train-the-ai/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49799952)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-23T04:20:00+08:00 |
-| Items | 20 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, Anthropic, OpenAI, Artificial Analysis, TechRadar, Bloomberg, flat assembler forum, Check Point blog, NVD, CISA KEV, F5, Arista, GitHub advisories, oss-security, CPAN Security Group, GrapheneOS, Anthropic status, Cloudflare blog, npm, droprun.sh) |
+| Generated | 2026-09-23T20:23:00+08:00 |
+| Items | 35 |
+| Sources tracked | 35 (Hacker News, GitHub Trending, Anthropic, OpenAI, Artificial Analysis, TechRadar, Bloomberg, flat assembler forum, Check Point blog, NVD, CISA KEV, F5, Arista, GitHub advisories, oss-security, CPAN Security Group, GrapheneOS, Anthropic status, Cloudflare blog, npm, droprun.sh, 404 Media, foxscript.org, mouse.dev, Trail of Bits, nobodywho.ai, Arcturus Labs, benchmarkheaven.com, Strands Agents, geastack.com, obscura.com, arXiv, Interconnects, impeccable.style, deusdata.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

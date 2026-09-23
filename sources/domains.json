@@ -8347,5 +8347,194 @@
     "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
+  },
+  "foxscript.org": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "FoxDev Studio's official site — the Visual FoxPro 9 reimplementation project (Rust/WASM runtime, 64-bit tables). Cross-checked (09-23): implementation counts, gap list and 2 GB 'one-way door' warning match the GitHub repo and its releases.",
+    "jp": "FoxDev Studio公式サイト——Visual FoxPro 9再実装プロジェクト（Rust/WASMランタイム、64ビットテーブル）。突合済み（09-23）：実裂数・未達リスト・2GBの「一方通行の扉」警告はGitHubリポジトリとリリースと一致。",
+    "zh": "FoxDev Studio 官网——Visual FoxPro 9 重实现项目（Rust/WASM 运行时、64 位表）。已交叉核验（09-23）：实现数量、缺口清单与 2 GB“单行门”警告与 GitHub 仓库及其发布一致。"
+  },
+  "mouse.dev": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Peter James's engineering blog — personal first-hand experiments. Cross-checked (09-23): the Muse runtime-export writeup's artifacts (SOUL.md/MEMORY.md files, /opt/hatch paths, 68 skill dirs) are self-measured and the author states his own hedges (no escape demonstrated); consistent with Ars/Wardle's separate Muse 0-day reporting.",
+    "jp": "Peter Jamesの技術ブログ——個人の一次実験記録。突合済み（09-23）：Museランタイム・エクスポート記事の成果物（SOUL.md/MEMORY.md、/opt/hatchパス、68スキルdir）は自己測定で、著者自身が留保を明記（脱獄は未実証）；Ars/Wardleの別件Muse 0-day報道と整合。",
+    "zh": "Peter James 的技术博客——个人一手实验记录。已交叉核验（09-23）：Muse 运行时导出一文中的产物（SOUL.md/MEMORY.md、/opt/hatch 路径、68 个技能目录）为作者自测，且作者自己写明保留（未演示逃逸）；与 Ars/Wardle 另案的 Muse 0-day 报道相符。"
+  },
+  "nobodywho.ai": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Duarte O. Carmo's project/blog site (NobodyWho) — hosts the 'Jev in 25 Lines' parody. Cross-checked (09-23): its logit-normalization explanation of Jev matches Arcturus Labs' independent analysis of the same mechanism; post is explicitly labeled parody.",
+    "jp": "Duarte O. Carmoのプロジェクト/ブログサイト（NobodyWho）——「Jev in 25 Lines」パロディを掲載。突合済み（09-23）：Jevのlogit正規化説明はArcturus Labsの独立分析と一致；記事はパロディと明記。",
+    "zh": "Duarte O. Carmo 的项目/博客站（NobodyWho）——载有“Jev in 25 Lines”戏仿文。已交叉核验（09-23）：其对 Jev 的 logit 归一化解释与 Arcturus Labs 的独立分析一致；文章明确标注为戏仿。"
+  },
+  "arcturus-labs.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Arcturus Labs (John Berryman) search/AI engineering blog — technical analysis with working precedents cited. Cross-checked (09-23): its tool-calling-as-classification argument cites verifiable 2024 analyses and matches nobodywho.ai's independent Jev decomposition; conclusions framed as argument, not measurement.",
+    "jp": "Arcturus Labs（John Berryman）の検索/AIエンジニアリングブログ——検証可能な先行事例を引いた技術分析。突合済み（09-23）：ツール呼び出し＝分類の議論は検証可能な2024年の分析を引用し、nobodywho.aiの独立したJev分解と一致；結論は測定ではなく論証として枠付け。",
+    "zh": "Arcturus Labs（John Berryman）的搜索/AI 工程博客——引用可查证先例的技术分析。已交叉核验（09-23）：其“工具调用即分类”论证引用了可查证的 2024 年分析，并与 nobodywho.ai 对 Jev 的独立分解一致；结论定位为论证而非测量。"
+  },
+  "benchmarkheaven.com": {
+    "cat": "data",
+    "cred": "low",
+    "cv": 1,
+    "density": "med",
+    "en": "JevBench's landing page — a Show HN proposal for reproducible typed-decision-model benchmarking. Single-page project site with no published results yet; verified only that the page matches its Show HN submission (09-23). Treat as a proposal, not a benchmark.",
+    "jp": "JevBenchのランディングページ——型付き決定モデルの再現可能ベンチマークというShow HN提案。結果未公開のシングルページサイト；Show HN投稿との一致のみ確認（09-23）。ベンチマークではなく提案として扱うこと。",
+    "zh": "JevBench 的落地页——一个关于可复现类型化决策模型基准的 Show HN 提案。尚无公开结果的单页项目站；仅核实页面与其 Show HN 提交一致（09-23）。应视为提案而非基准。"
+  },
+  "geastack.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "GeaStack's official site — TS/CSS-to-native-C++ compiler across six targets. Cross-checked (09-23): targets, GPL/commercial dual license and benchmark caveats ('measured under machine load') match the geastack/examples repo; vendor self-benchmarked.",
+    "jp": "GeaStack公式サイト——TS/CSSをネイティブC++へコンパイルする6ターゲットのコンパイラ。突合済み（09-23）：ターゲット、GPL/商用デュアルライセンス、ベンチの留保（「マシン負荷下で測定」）はgeastack/examplesリポジトリと一致；ベンチはベンダー自己測定。",
+    "zh": "GeaStack 官网——将 TS/CSS 编译为原生 C++ 的六端编译器。已交叉核验（09-23）：目标平台、GPL/商业双许可及基准免责（“在机器负载下测得”）与 geastack/examples 仓库一致；基准为厂商自测。"
+  },
+  "obscura.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Obscura VPN's official site — two-party relay (Obscura relay + Mullvad exit) architecture. Cross-checked (09-23): relay/exit trust-split description and stated limits (no audit yet, reproducible builds planned) match its HN discussion; vendor marketing, but unusually self-critical FAQ.",
+    "jp": "Obscura VPN公式サイト——二当事者リレー（Obscuraリレー＋Mullvad出口）アーキテクチャ。突合済み（09-23）：リレー/出口の信頼分割の説明と明示された限界（監査未実施、再現可能ビルドは計画）はHN議論と一致；ベンダーマーケティングだがFAQは異例に自己批判的。",
+    "zh": "Obscura VPN 官网——双主体中继（Obscura 中继 + Mullvad 出口）架构。已交叉核验（09-23）：中继/出口信任拆分说明及明示局限（尚无审计、可复现构建仅计划中）与 HN 讨论一致；属厂商宣传，但 FAQ 少见地自我批评。"
+  },
+  "interconnects.ai": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Nathan Lambert's Interconnects — RLHF/open-models analysis with published datasets (ATOM tracker). Cross-checked (09-23): its AA Index and Kimi K3/Bedrock figures align with artificialanalysis.ai and this feed's own Sept 22 item; the author flags his own data blind spots in-text.",
+    "jp": "Nathan LambertのInterconnects——RLHF/オープンモデル分析（ATOMトラッカー等の公開データ付き）。突合済み（09-23）：AA IndexやKimi K3/Bedrockの数字はartificialanalysis.aiと本フィードの9月22日項と整合；著者自身がデータの盲点を本文で明示。",
+    "zh": "Nathan Lambert 的 Interconnects——带公开数据集（ATOM 追踪器）的 RLHF/开放模型分析。已交叉核验（09-23）：其 AA 指数与 Kimi K3/Bedrock 数字与 artificialanalysis.ai 及本站 9 月 22 日条目一致；作者在正文中自行标注数据盲区。"
+  },
+  "impeccable.style": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Impeccable's docs site — the design-language skill by Paul Bakaus. Cross-checked (09-23): 24 commands and 61 deterministic detector rules match the pbakaus/impeccable README; feature marketing backed by a public repo.",
+    "jp": "Impeccableのドキュメントサイト——Paul Bakausのデザイン言語スキル。突合済み（09-23）：24コマンドと61の決定論的検出ルールはpbakaus/impeccableのREADMEと一致；公開リポジトリに裏付けられた機能マーケティング。",
+    "zh": "Impeccable 文档站——Paul Bakaus 的设计语言技能。已交叉核验（09-23）：24 个命令与 61 条确定性检测规则与 pbakaus/impeccable README 一致；功能宣传有公开仓库背书。"
+  },
+  "deusdata.github.io": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "GitHub Pages project site for DeusData's codebase-memory-mcp. Cross-checked (09-23): feature claims (158 languages, sub-ms queries) mirror the repo README verbatim — self-reported, not independently benchmarked.",
+    "jp": "DeusDataのcodebase-memory-mcp用GitHub Pagesサイト。突合済み（09-23）：機能主張（158言語、サブmsクエリ）はリポジトリREADMEの逐語コピー——自己申告であり独立ベンチなし。",
+    "zh": "DeusData codebase-memory-mcp 的 GitHub Pages 项目页。已交叉核验（09-23）：功能声明（158 种语言、亚毫秒查询）与仓库 README 逐字一致——自报数据，无独立基准。"
+  },
+  "strandsagents.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Strands Agents' official docs/blog (AWS-backed open-source agent SDK). Cross-checked (09-23): its harness cost claims (28% lower, 77% vs Claude Code with Fable 5) are self-reported on six benchmarks with only Terminal Bench 2.1 named — but the release tags cited (typescript/v1.19.0, harness-typescript/v0.1.1) are real on GitHub.",
+    "jp": "Strands Agents公式ドキュメント/ブログ（AWS系オープンソースエージェントSDK）。突合済み（09-23）：ハーネスのコスト主張（28%削減、Fable 5でClaude Code比77%）は6ベンチの自己申告で名前の挙がったのはTerminal Bench 2.1のみ——ただし引用されたリリースタグ（typescript/v1.19.0、harness-typescript/v0.1.1）はGitHubに実在。",
+    "zh": "Strands Agents 官方文档/博客（AWS 背书的开源 agent SDK）。已交叉核验（09-23）：其 harness 成本声明（降 28%、Fable 5 下对比 Claude Code 降 77%）为六个基准上的自报数据、仅点名 Terminal Bench 2.1——但引用的发布标签（typescript/v1.19.0、harness-typescript/v0.1.1）在 GitHub 上真实存在。"
+  },
+  "404media.co": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "404 Media — independent journalist-owned tech/security outlet, strong on insider and labor reporting. Cross-checked (09-23): its FBI-breach story attributes claims to the hackers and hedges throughout ('alleged agents'); its OpenAI rater story flags anonymous sources and unverified termination letters. Claims-vs-evidence separation is consistently explicit.",
+    "jp": "404 Media——ジャーナリスト所有の独立系テック/セキュリティ媒体。内部者・労働報道に強い。突合済み（09-23）：FBI侵入記事は主張をハッカー側に帰属させ全文で留保（「afvoされる捜査官」扱い）；OpenAI評価者記事は匿名ソースと未検証の解雇通知を明示。主張と証拠の分離が常に明示的。",
+    "zh": "404 Media——记者所有的独立科技/安全媒体，内幕与劳动报道见长。已交叉核验（09-23）：其 FBI 入侵报道将说法归于黑客并全程留保（“据称的探员”）；OpenAI 评分员报道明示匿名信源与未经核实的解雇信。主张与证据的区分始终明确。"
+  },
+  "techradar.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Consumer tech outlet — fast coverage, sometimes thin sourcing. Cross-checked (09-23): its iOS persistent-ads report matches Apple's previously announced March 2026 App Store ad expansion; the piece itself flags that some units may be a bug, not intentional placement.",
+    "jp": "家電テック系メディア——速報型で情報源が薄い場合あり。突合済み（09-23）：iOS常設広告記事はAppleが前年公示した2026年3月のApp Store広告拡大と整合；記事自体が一部はバグの可能性を明記。",
+    "zh": "消费科技媒体——报道快，但信源有时单薄。已交叉核验（09-23）：其 iOS 常驻广告报道与 Apple 此前公布的 2026 年 3 月 App Store 广告扩张相符；文章本身指出部分广告位可能是 bug 而非有意投放。"
+  },
+  "board.flatassembler.net": {
+    "cat": "community",
+    "cred": "low",
+    "cv": 1,
+    "density": "med",
+    "en": "flat assembler community forum — the primary source for the AMD rdrand 'never returns 0' finding. Cross-checked (09-23): thread content matches HN resurfacing, but the finding is a May 2026 forum observation with no AMD confirmation — an open curiosity, not a confirmed defect.",
+    "jp": "flat assemblerコミュニティフォーラム——AMD rdrandが「0を返さない」発見の一次情報源。突合済み（09-23）：スレッド内容はHNでの再浮上と一致するが、発見は2026年5月のフォーラム観察でAMDの確認なし——確定した欠陥ではなく未解決の好奇対象。",
+    "zh": "flat assembler 社区论坛——AMD rdrand“从不返回 0”发现的一手来源。已交叉核验（09-23）：帖子内容与 HN 重新翻出相符，但该发现是 2026 年 5 月的论坛观察、AMD 未确认——是待解的疑点而非已确认缺陷。"
+  },
+  "blog.checkpoint.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Check Point's official blog — vendor advisories with IOCs and exploitation characterization. Cross-checked (09-23): CVE-2026-85102/93616 disclosure matches CISA KEV same-day addition and NVD records; its 'handful of pinpointed attacks' phrasing is unusually precise for a vendor.",
+    "jp": "Check Point公式ブログ——IOCと攻撃状況の characterization を含むベンダー勧告。突合済み（09-23）：CVE-2026-85102/93616の開示はCISA KEVの同日追加とNVD記録と一致；「少数の標的型攻撃」という表現はベンダーとしては異例に正確。",
+    "zh": "Check Point 官方博客——含 IOC 与利用情况定性的厂商公告。已交叉核验（09-23）：CVE-2026-85102/93616 披露与 CISA KEV 同日收录及 NVD 记录一致；“少量精准打击攻击”的措辞对厂商而言异常精确。"
+  },
+  "my.f5.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "F5's official support/knowledge base — PSIRT advisories for BIG-IP et al. Cross-checked (09-23): CVE-2026-94127 details match the NVD record and the German/Finnish/Italian CERT alerts. Note: advisory pages are JS-walled and may need NVD-side confirmation.",
+    "jp": "F5公式サポート/ナレッジベース——BIG-IP等のPSIRT勧告。突合済み（09-23）：CVE-2026-94127の詳細はNVD記録および独・芬・伊のCERT警報と一致。注：勧告ページはJSウォールで、NVD側での確認が必要な場合がある。",
+    "zh": "F5 官方支持/知识库——BIG-IP 等 PSIRT 公告。已交叉核验（09-23）：CVE-2026-94127 细节与 NVD 记录及德/芬/意三国 CERT 警报一致。注意：公告页面有 JS 墙，可能需经 NVD 侧确认。"
+  },
+  "bloomberg.com": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "Bloomberg — investigative business/tech reporting, paywalled graphics-heavy features. Cross-checked (09-23): the Iran school strike reconstruction attributes to anonymous officials, notes Pentagon non-comment and Palantir's dispute — attribution discipline intact even on explosive stories.",
+    "jp": "Bloomberg——調査報道系のビジネス/テック報道（ペイウォール、グラフィック多用）。突合済み（09-23）：イラン学校爆撃の再構成記事は匿名当局者に帰属し、国防総日のノーコメントとPalantirの争議を明記——衝撃的な話題でも帰属の規律は保たれている。",
+    "zh": "Bloomberg——调查报道型商业/科技媒体（付费墙、重图表）。已交叉核验（09-23）：其伊朗学校空袭重建报道归于匿名官员，并注明五角大楼拒绝置评与 Palantir 的异议——即便在爆炸性报道上也保持归因纪律。"
+  },
+  "status.claude.com": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Anthropic's status page — primary source for incident timelines. Cross-checked (09-23): the Sept 21-22 multi-model incident timeline matches the HN discussion; carries only timelines, no root-cause writeups.",
+    "jp": "Anthropicのステータスページ——インシデント時系列の一次情報源。突合済み（09-23）：9月21-22日の複数モデル障害の時系列はHN議論と一致；時系列のみで根本原因の解説はない。",
+    "zh": "Anthropic 状态页——事故时间线的一手来源。已交叉核验（09-23）：9 月 21–22 日多模型事故时间线与 HN 讨论一致；仅有时间线，无根因分析。"
+  },
+  "droprun.sh": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Drop's project site — the rootless Linux sandbox (Go, gVisor support) by Jan Wrobel. Cross-checked (09-23): pitch and architecture match the wrr/drop repo and its Show HN thread; young solo project, docs acknowledged as thin in the thread.",
+    "jp": "Dropのプロジェクトサイト——Jan WrobelによるルートレスLinuxサンドボックス（Go、gVisor対応）。突合済み（09-23）：主張とアーキテクチャはwrr/dropリポジトリおよびShow HNスレッドと一致；若い個人プロジェクトで、スレッド内でドキュメントの薄さが認められている。",
+    "zh": "Drop 项目站——Jan Wrobel 的无 root Linux 沙箱（Go，支持 gVisor）。已交叉核验（09-23）：定位与架构与 wrr/drop 仓库及其 Show HN 讨论一致；年轻的个人项目，帖子里也承认文档薄弱。"
+  },
+  "arista.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Arista's official security advisories — precise preconditions and affected-version ranges. Cross-checked (09-23): advisory 0183's VeloCloud preconditions (public Edge cert only) match the NVD record and KEV addition; includes honest 'no single definitive IOC' phrasing.",
+    "jp": "Arista公式セキュリティ勧告——正確な前提条件と影響バージョン範囲。突合済み（09-23）：勧告0183のVeloCloud前提条件（公開Edge証明書のみ）はNVD記録およびKEV追加と一致；「単一の決定的IOCはない」という正直な文言付き。",
+    "zh": "Arista 官方安全公告——前提条件与受影响版本范围精确。已交叉核验（09-23）：公告 0183 的 VeloCloud 前提（仅需公开 Edge 证书）与 NVD 记录及 KEV 收录一致；附有“无单一确定性 IOC”的诚实措辞。"
+  },
+  "minimaxir.com": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Max Woolf's blog — reproducible LLM experiments with published prompts and benchmarks. Cross-checked (09-23): the agentic-iteration post publishes its own benchmark numbers and failure modes; author self-flags results as author-demonstrated, single-domain, not third-party replicated.",
+    "jp": "Max Woolfのブログ——プロンプトとベンチを公開する再現可能なLLM実験。突合済み（09-23）：agentic-iteration記事は自らのベンチ数値と失敗モードを公開；結果は著者実証・単一ドメイン・第三者検証なしと自身が明記。",
+    "zh": "Max Woolf 的博客——公布提示词与基准的可复现 LLM 实验。已交叉核验（09-23）：agentic-iteration 一文公开了其基准数字与失败模式；作者自行注明结果为作者演示、单一领域、未经第三方复现。"
   }
 }
