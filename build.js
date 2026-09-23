@@ -194,7 +194,11 @@ function parseFrontmatter(text) {
 /* ── Structured data extractor for JSON-LD ── */
 function extractItems(body) {
   const items = [];
-  const sections = body.split(/\n## \d+\. /);
+  // The '\n' prefix makes the FIRST item's header fire the split (same bug class as the
+  // sources-page split below): without it, item 1 is consumed into sections[0] and the
+  // anchor/JSON-LD numbering shifts down by one (found 2026-09-24 comparing h2 order
+  // against id="item-N" anchors).
+  const sections = ('\n' + body).split(/\n## \d+\. /);
   for (let i = 1; i < sections.length; i++) {
     const sec = sections[i];
     const lines = sec.split('\n');

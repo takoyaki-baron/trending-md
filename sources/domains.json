@@ -8536,5 +8536,86 @@
     "en": "Max Woolf's blog — reproducible LLM experiments with published prompts and benchmarks. Cross-checked (09-23): the agentic-iteration post publishes its own benchmark numbers and failure modes; author self-flags results as author-demonstrated, single-domain, not third-party replicated.",
     "jp": "Max Woolfのブログ——プロンプトとベンチを公開する再現可能なLLM実験。突合済み（09-23）：agentic-iteration記事は自らのベンチ数値と失敗モードを公開；結果は著者実証・単一ドメイン・第三者検証なしと自身が明記。",
     "zh": "Max Woolf 的博客——公布提示词与基准的可复现 LLM 实验。已交叉核验（09-23）：agentic-iteration 一文公开了其基准数字与失败模式；作者自行注明结果为作者演示、单一领域、未经第三方复现。"
+  },
+  "cryptocellar.org": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Frode Weierud's Crypto Cellar Research — long-running Enigma/cryptologic history research site and co-author of the Enigma message-breaking project. Cross-checked (09-24): its GPT-6 Astra MVUEH (message Nr. 172) break matches the HN discussion of the same post, and the recovered key is stated as verified on inspection; caveats (unanalyzed logs, unlocated archive scan) are carried in the post itself.",
+    "zh": "Frode Weierud 的 Crypto Cellar Research——长期运行的 Enigma/密码学史研究站点，Enigma 破译项目参与者。已交叉核验（09-24）：其 GPT-6 Astra MVUEH（Nr. 172 电文）破译与同一博文的 HN 讨论一致，恢复密钥称经检查验证；文中自带限定（日志未分析、档案扫描件未找到）。",
+    "jp": "Frode Weierud 氏の Crypto Cellar Research——長年続く Enigma・暗号史研究サイトで、Enigma解読プロジェクトの参加者。突合済み（09-24）：GPT-6 Astra による MVUEH（ Nr. 172）解読は同一記事の HN 議論と一致し、復元鍵は目視検証済みと記載。留保（ログ未分析・アーカイブ走査未発見）も本文に明記。"
+  },
+  "blog.szypowi.cz": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal engineering blog; source of the Claude Code AGENTS.md telemetry-gating analysis (canary-secret test + bundle inspection, issue #95690). Cross-checked (09-24): HN discussion corroborates the repro and the missing-warning behavior; the post itself does not confirm a fix despite the HN '[fixed]' title.",
+    "zh": "个人工程博客；Claude Code AGENTS.md 遥测门控分析的金丝雀密钥测试与 bundle 检查来源（issue #95690）。已交叉核验（09-24）：HN 讨论佐证了复现步骤与无警告行为；尽管 HN 标题写 [fixed]，博文本身并未确认已修复。",
+    "jp": "個人エンジニアリングブログ。Claude Code の AGENTS.md テレメトリゲート分析（カナリアシークレットテスト＋バンドル検査、issue #95690）の情報源。突合済み（09-24）：HN 議論が再現手順と警告なしの挙動を裏付け。HN タイトルの [fixed] に反し、本文は修正未確認。"
+  },
+  "drivingbench.com": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "DrivingBench — frontier models physically driving a real Toyota Corolla on a cone course; publishes per-run token/cost/progress logs. Cross-checked (09-24): its GPT-6 Astra completion (100%, 2nd attempt, $7.74) matches the HN discussion; site carries its own 'research software, use at your own risk' disclaimer and notes 3 shared-context attempts and GPS-derived distance.",
+    "zh": "DrivingBench——让前沿模型物理驾驶真 Toyota Corolla 跑绕桩赛道的基准站，公布每次运行的 token/成本/进度日志。已交叉核验（09-24）：其 GPT-6 Astra 完赛记录（第二次尝试 100%，$7.74）与 HN 讨论一致；站点自带\"研究软件、风险自负\"声明，并写明 3 次共享上下文尝试与 GPS 推算距离。",
+    "jp": "DrivingBench——フロンティアモデルが本物の Toyota Corolla をパイロンコースで物理運転するベンチマーク。実行ごとのトークン/コスト/進捗ログを公開。突合済み（09-24）：GPT-6 Astra の完走記録（2回目で100%、$7.74）は HN 議論と一致。「研究用ソフトウェア、自己責任」の免責と、3回のコンテキスト共有試行・GPS由来距離を明記。"
+  },
+  "unreallabs.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Unreal Labs engineering blog (agent harness vendor). Cross-checked (09-24): its Unreal Agent cost claim (Terminal-Bench 4.0 57.9% at $1,428 vs Codex $2,350) matches the HN discussion; vendor self-reported, single model configuration, and it flags non-OpenAI providers rejecting its dual tool-result format.",
+    "zh": "Unreal Labs 工程博客（agent harness 厂商）。已交叉核验（09-24）：其 Unreal Agent 成本主张（Terminal-Bench 4.0 57.9%/$1,428 对 Codex $2,350）与 HN 讨论一致；属厂商自报、单一模型配置，并自述部分非 OpenAI 供应商会拒绝其双份工具结果格式。",
+    "jp": "Unreal Labs のエンジニアリングブログ（エージェントハーネスベンダー）。突合済み（09-24）：Unreal Agent のコスト主張（Terminal-Bench 4.0 57.9%・$1,428 対 Codex $2,350）は HN 議論と一致。ベンダー自己申告・単一モデル構成で、非 OpenAI プロバイダが二重ツール結果フォーマットを拒否する点も自己言及。"
+  },
+  "radicle.dev": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Official Radicle project blog — P2P code-collaboration protocol disclosures and releases. Cross-checked (09-24): its transport-layer disclosure (plaintext node traffic + Node ID impersonation) matches the HN discussion; the post's own guidance (treat synced private repos as leaked; Tor/VPN insufficient; iroh fix wire-incompatible) is the primary statement.",
+    "zh": "Radicle 项目官方博客——P2P 代码协作协议的披露与发布。已交叉核验（09-24）：其传输层缺陷披露（明文节点流量 + Node ID 冒充）与 HN 讨论一致；文中指导（已同步私有仓库视为泄露、Tor/VPN 不够、iroh 修复不兼容旧协议）为一次声明。",
+    "jp": "Radicle プロジェクト公式ブログ——P2Pコード協調プロトコルの開示とリリース。突合済み（09-24）：トランスポート層の開示（平文ノード通信＋Node ID なりすまし）は HN 議論と一致。「同期済みプライベートリポジトリは漏洩扱い」「Tor/VPN は不十分」「iroh 修正はワイヤ非互換」の指針は一次声明。"
+  },
+  "tomcat.apache.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Apache Tomcat official security pages — canonical fixed-version lists for Tomcat CVEs. Cross-checked (09-24): its CVE-2026-76183 entries (WebSocket security-constraint bypass, fixed 11.0.26/10.1.60/9.0.122) match the oss-security disclosure by Mark Thomas.",
+    "zh": "Apache Tomcat 官方安全页——Tomcat CVE 的权威修复版本清单。已交叉核验（09-24）：其 CVE-2026-76183 条目（WebSocket 安全约束绕过，修复于 11.0.26/10.1.60/9.0.122）与 Mark Thomas 的 oss-security 披露一致。",
+    "jp": "Apache Tomcat 公式セキュリティページ——Tomcat CVE の権威ある修正版リスト。突合済み（09-24）：CVE-2026-76183 の記載（WebSocket セキュリティ制約バイパス、11.0.26/10.1.60/9.0.122 で修正）は Mark Thomas 氏の oss-security 開示と一致。"
+  },
+  "hacchoomiso.github.io": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Independent security researcher blog. Cross-checked (09-24): its SGLang CVE-2026-93088 writeup (unauthenticated ZeroMQ ROUTER socket in the multimodal disaggregation orchestrator) is referenced on the NVD record itself and matches NVD's description; no vendor patch was referenced at publication time.",
+    "zh": "独立安全研究者博客。已交叉核验（09-24）：其 SGLang CVE-2026-93088 分析（多模态分片编排器中未认证的 ZeroMQ ROUTER socket）本身被 NVD 记录引用，与 NVD 描述一致；发布时点无厂商补丁引用。",
+    "jp": "独立系セキュリティ研究者のブログ。突合済み（09-24）：SGLang CVE-2026-93088 の解説（マルチモーダル分散オーケストレータの未認証 ZeroMQ ROUTER ソケット）は NVD レコード自体に参照され、説明と一致。公開時点でベンダーパッチの参照なし。"
+  },
+  "stripe.dev": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Stripe's developer-facing engineering blog. Cross-checked (09-24): its Knowledge AI Platform writeup (1,000+ internal tools, 83% weekly-active, deepagents harness) matches the HN discussion; impact numbers are the company's own and the post keeps 'internal and uncontrolled' caveats attached.",
+    "zh": "Stripe 面向开发者的工程博客。已交叉核验（09-24）：其知识 AI 平台复盘（1,000+ 内部工具、83% 周活跃、deepagents harness）与 HN 讨论一致；影响数字为公司自报，文中保留\"内部且不可控\"的限定。",
+    "jp": "Stripe の開発者向けエンジニアリングブログ。突合済み（09-24）：Knowledge AI Platform の解説（社内ツール1,000超、週次アクティブ83%、deepagents ハーネス）は HN 議論と一致。インパクト数値は同社自己申告で、「社内かつ統制されていない」留保が本文に付随。"
+  },
+  "harry7557558.github.io": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Author's GitHub Pages host for Spirula Studio's web viewer demo — live 3DGS renders linked from the repo README (Megascapes Library / SuperSplat examples). Cross-checked (09-24): the viewer works standalone and the README/gallery cross-reference it; it is a demo, not documentation.",
+    "zh": "作者的 GitHub Pages,托管 Spirula Studio 的 web 查看器演示——repo README 链接的实时 3DGS 渲染（Megascapes Library / SuperSplat 示例）。已交叉核验（09-24）：查看器可独立运行，README/画廊相互引用；这是演示页而非文档。",
+    "jp": "作者の GitHub Pages。Spirula Studio の web ビューアデモをホスト——repo README からリンクされたライブ 3DGS レンダリング（Megascapes Library / SuperSplat の例）。突合済み（09-24）：ビューアは単独で動作し、README/ギャラリーと相互参照。デモでありドキュメントではない。"
   }
 }
