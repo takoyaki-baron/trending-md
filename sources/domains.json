@@ -8617,5 +8617,86 @@
     "en": "Author's GitHub Pages host for Spirula Studio's web viewer demo — live 3DGS renders linked from the repo README (Megascapes Library / SuperSplat examples). Cross-checked (09-24): the viewer works standalone and the README/gallery cross-reference it; it is a demo, not documentation.",
     "zh": "作者的 GitHub Pages,托管 Spirula Studio 的 web 查看器演示——repo README 链接的实时 3DGS 渲染（Megascapes Library / SuperSplat 示例）。已交叉核验（09-24）：查看器可独立运行，README/画廊相互引用；这是演示页而非文档。",
     "jp": "作者の GitHub Pages。Spirula Studio の web ビューアデモをホスト——repo README からリンクされたライブ 3DGS レンダリング（Megascapes Library / SuperSplat の例）。突合済み（09-24）：ビューアは単独で動作し、README/ギャラリーと相互参照。デモでありドキュメントではない。"
+  },
+  "f-droid.org": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "F-Droid, the volunteer-run FOSS app store for Android. Fetched 09-25: the 2.0 announcement (Kotlin/Compose rewrite, Android pre-approval API installer, Android 6 dropped, panic app-wipe temporarily gone) matches what the HN discussion (622 pts) debated; regressions are documented in the announcement itself.",
+    "jp": "F-Droid、ボランティア運営のAndroid向けFOSSアプリストア。09-25に取得：2.0発表（Kotlin/Compose書き直し、Android事前承認APIインストーラー、Android 6終了、パニック消去の一時欠落）はHN議論（622 pts）の論点と一致。後退項目は発表自身が明記。",
+    "zh": "F-Droid，志愿者运营的 Android 开源应用商店。09-25 抓取：2.0 公告（Kotlin/Compose 重写、Android 预批准 API 安装器、弃用 Android 6、恐慌清除应用功能暂时缺失）与 HN 讨论（622 分）的焦点一致；功能回退在公告中自行写明。"
+  },
+  "macanorak.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal tech blog (MacAnorak). Fetched 09-25: the two-tier-encryption piece is a careful primary-account history of the UK TCN vs Apple ADP fight (dates, Wyden/Davidson letter, IPT complaint) consistent with the publicly reported record; single-author, so verify numbers against original filings.",
+    "jp": "個人技術ブログ（MacAnorak）。09-25に取得：英国TCNとApple ADPの闘いを丁寧にたどる一次証言的記事（日付、Wyden/Davidson書簡、IPT申し立て）は公表記録と一致。単独執筆のため数字は原文資料で要確認。",
+    "zh": "个人技术博客（MacAnorak）。09-25 抓取：英国 TCN 与 Apple ADP 之争的长文梳理（时间线、Wyden/Davidson 信函、IPT 申诉）与公开报道记录一致；单一作者，关键数字请对照原始文件核验。"
+  },
+  "successfulsoftware.net": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Andy Brice's blog on indie software business. Fetched 09-25: the GitHub brand-imitation malware post is first-person with dated evidence (VirusTotal results, the altered DMG background); the repo's removal after the HN front page hit is the author's own account.",
+    "jp": "Andy Briceのインディーソフトウェアビジネス Blog。09-25に取得：GitHub模倣マルウェアの記事は一次体験記で、日付付き証拠（VirusTotal結果、差し替えられたDMG背景）付き。HNフロントページ到達後のリポジトリ削除は著者自身の説明。",
+    "zh": "Andy Brice 关于独立软件业务的博客。09-25 抓取：GitHub 仿冒恶意软件一文为第一人称记录，带日期证据（VirusTotal 结果、被替换的 DMG 背景图）；登上 HN 首页后仓库被删除是作者自述。"
+  },
+  "xda-developers.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Android/hardware news site. Fetched 09-25: the ESP32-P4 Linux piece matches vendor specs (dual-core RISC-V, C5 companion for Wi-Fi 6/BT 5.4, 32-64MB PSRAM); listicle-style framing, so keep chip claims anchored to Espressif docs.",
+    "jp": "Android/ハードウェア系ニュースサイト。09-25に取得：ESP32-P4 Linux 記事はベンダ仕様（デュアルコア RISC-V、Wi-Fi 6/BT 5.4 用 C5 コンパニオン、32-64MB PSRAM）と一致。リスト形式の記事が多いため、チップ仕様はEspressif文書で確認すること。",
+    "zh": "Android/硬件新闻站。09-25 抓取：ESP32-P4 Linux 一文与厂商规格一致（双核 RISC-V、C5 伴随芯片提供 Wi-Fi 6/BT 5.4、32-64MB PSRAM）；行文偏榜单体，芯片参数请以乐鑫文档为准。"
+  },
+  "bastardica.mitpit.com": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Project site for Bastardica, a browser-based hybrid-font generator (Pyodide + fontTools, OpenType liga substitution). Fetched 09-25: the technical mechanism and licensing caveats are on the page itself; lineage to Times New Bastard confirmed via the Show HN thread.",
+    "jp": "Bastardicaのプロジェクトサイト。ブラウザ内で動く混合フォント生成器（Pyodide + fontTools、OpenType liga 置換）。09-25に取得：技術的仕組みとライセンス注意はページ自体に明記。Times New Bastard との系譜はShow HNスレッドで確認。",
+    "zh": "Bastardica 项目站，浏览器内混合字体生成器（Pyodide + fontTools，OpenType liga 替换）。09-25 抓取：技术机制与许可注意事项均写在页面本身；与 Times New Bastard 的渊源经 Show HN 讨论串确认。"
+  },
+  "linebender.org": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Linebender — the Rust graphics ecosystem organization (wgpu-adjacent projects, Xilem, Vello). Fetched 09-25: the Fearless SIMD 1.0 post states its own safety architecture (kernel! macro, audited transmute), adoption counts and the 3-year security-update commitment; consistent with the project's 2018/2025 predecessor posts.",
+    "jp": "Linebender——Rustグラフィックスエコシステム組織（wgpu関連、Xilem、Vello）。09-25に取得：Fearless SIMD 1.0 の記事は安全性アーキテクチャ（kernel!マクロ、監査済みtransmute）、採用数、3年セキュリティ更新のコミットメントを自ら明記。2018/2025の predecessor 記事とも整合。",
+    "zh": "Linebender——Rust 图形生态组织（wgpu 相关项目、Xilem、Vello）。09-25 抓取：Fearless SIMD 1.0 文章写明自身安全架构（kernel! 宏、经审计的 transmute）、采用量与 3 年安全更新承诺；与该项目 2018/2025 年的前作文章一致。"
+  },
+  "danielmangum.com": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Daniel Mangum's engineering blog (low-level systems: Go runtime, Kubernetes, embedded security). Fetched 09-25: the J-Link memory-cache post documents a reproducible debugging finding (SetEnableMemCache, ReadMemAP bypass) consistent with SEGGER documentation behavior.",
+    "jp": "Daniel Mangumの技術ブログ（低レイヤ系：Goランタイム、Kubernetes、組込みセキュリティ）。09-25に取得：J-Linkメモリキャッシュの記事は再現可能なデバッグ発見（SetEnableMemCache、ReadMemAPバイパス）を記録し、SEGGER文書の挙動と整合。",
+    "zh": "Daniel Mangum 的工程博客（底层系统：Go 运行时、Kubernetes、嵌入式安全）。09-25 抓取：J-Link 内存缓存一文记录了可复现的调试发现（SetEnableMemCache、ReadMemAP 绕过），与 SEGGER 文档行为一致。"
+  },
+  "aikido.dev": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "Aikido Security's research blog (supply-chain and appsec). Cross-checked: the GitLab issue-by-email push-to-main writeup (09-23) and the Graphalgo Terraform-provider report (09-24) both matched The Hacker News coverage and the underlying repos/advisories; PoC-level detail is first-party.",
+    "jp": "Aikido Securityの調査ブログ（サプライチェーンとアプリセキュリティ）。突合済み：GitLabメール経由push-to-main記事（09-23）とGraphalgo Terraformプロバイダーレポート（09-24）はいずれもThe Hacker News報道および対象リポジトリ/勧告と一致。PoCレベルの詳細は一次情報。",
+    "zh": "Aikido Security 研究博客（供应链与应用安全）。已交叉核验：GitLab 邮件建议题 push-to-main 文（09-23）与 Graphalgo Terraform 供应链报告（09-24）均与 The Hacker News 报道及底层仓库/公告一致；PoC 级细节为一手信息。"
+  },
+  "blog.talosintelligence.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "Cisco Talos threat intelligence blog. Cross-checked: the CLOSEDQUORUM AI-delegated-C2 report (09-22) matched THN's independent writeup including the inert-build caveat, and Talos rule/hash indicators (Snort 1:66984) were published alongside; long-established vendor research shop.",
+    "jp": "Cisco Talosの脅威インテリジェンスブログ。突合済み：CLOSEDQUORUM（AI委譲C2）レポート（09-22）は不活性ビルドの注意書きを含めTHNの独立記事と一致し、Snort 1:66984やハッシュ指標も同時公開。老舗ベンダー調査組織。",
+    "zh": "Cisco Talos 威胁情报博客。已交叉核验：CLOSEDQUORUM AI 委托 C2 报告（09-22）与 THN 的独立报道一致（包括未激活构建的注意事项），Snort 规则 1:66984 与哈希指标同步发布；老牌厂商研究机构。"
   }
 }
