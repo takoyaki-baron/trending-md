@@ -1,8 +1,8 @@
 ---
 date: 2026-09-25
-updated: 2026-09-25T12:15:00+08:00
+updated: 2026-09-25T20:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -412,13 +412,167 @@ terryds/bestvaluemodel 把 Artificial Analysis 智能指数中的每个模型与
 
 ---
 
+## 30. DAWO：荷兰政府正基于 NixOS 打造替代 Microsoft 的数字工作环境
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** HN 386+ pts · 173 comments · ~4小时前 (~16:06 UTC+8)
+- **Tags:** `nixos` `government` `open-source` `digital-sovereignty`
+
+DAWO 是荷兰政府面向"数字自主工作环境"的开放社区——它是一份共享蓝图而非单一产品，划分为四类可检视、可替换的构件：AI、操作系统（DAWO-NixOS，"可复现工作环境的安装块"）、云与协作软件。项目由 MinBZK（内政与王国关系部）牵头，代码公开在 code.overheid.nl 与 Codeberg 上，公布的五项目标以数字自主和政府 IT 可验证性为首。站点对自身处于早期毫不讳言：没有发布路线图、预算或采用里程碑——目前可见的活动是工作会、文档与试点。
+
+**为什么重要：** 欧洲的数字主权浪潮不断产出"我们要换掉办公套件"式的宣告；这一次明确选定了 NixOS，把可复现性——正是让政府桌面可审计的那种性质——作为承重的架构选择。
+
+[`🔗 dawo.community`](https://www.dawo.community/en/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49841563)
+
+---
+
+## 31. Meta 下架了在 Meta 内部拍摄的 AI 眼镜视频——理由是"霸凌与骚扰"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Reddit via HN · 614+ pts · ~28小时前 (~16:23 UTC+8)
+- **Tags:** `meta` `ai-glasses` `content-moderation` `privacy`
+
+荷兰讽刺创作者 Roel Maalderink 与数字权利组织 Bits of Freedom 合作，造访 Meta 阿姆斯特丹办公室，用 Meta 自家的摄像眼镜拍下了 Meta 自己的员工。员工被拍摄时的不适正是这支作品的要点：硬件的录制指示灯存在的意义就是让人知道正在被拍摄，而这条视频演示的就是那种感受。Meta 以霸凌与骚扰政策为由将视频从 Facebook 和 Instagram 下架；YouTube 版本现在的标题是"Meta 的员工讨厌 Meta 的眼镜。Meta 删掉了视频。"HN 的讨论串演变成了视频本想引发的同意权辩论——评论者在"公共场所拍摄不情愿的对象是虚伪还是新闻"上分成两派。
+
+**为什么重要：** 为保护用户免受骚扰而建的审核规则，被用来压制对公司自身产品的批评——而被压制的那个论点（录制指示灯并不会让监控变得令人舒适）恰恰是 Meta 的眼镜业务必须回答的问题。
+
+[`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49827794) · [`🔗 "Meta's staff hated Meta's glasses. Meta deleted the video."（YouTube）`](https://www.youtube.com/watch?v=MvrL144yhNs)
+
+---
+
+## 32. Rails World 2026 主题演讲：Hey 的邮件后端由代理用 Rust 重写——DHH 自称已从编程退休
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN 356+ pts · 387 comments · ~45小时前 (~23:33 UTC+8, Sep 23)
+- **Tags:** `rails` `rust` `agentic-coding` `keynote`
+
+Rails World 2026 开幕主题演讲里没有任何 Rails 路线图——评论者反复提到"找不到 Rails 内容"——而这种缺席恰恰框定了 DHH 选择宣布的东西：Hey.com 的邮件后端已用代理式编码以 Rust 重新实现，声称服务器部署减少约 90%；他的团队用代理交付并维护六款原生移动应用（在试过让 UX 员工做 vibe-coding 并看着它失败之后——编码由工程师完成）；他还表示"我已经从职业程序员退休了"。收尾的框架是 p(bloom) 对 p(doom)，并将 Rails 定位为非常适合代理式编码——该框架现在在 rubyonrails.org/ai 上发布自己的 AI 模型基准。
+
+**为什么重要：** 最看好 AI 的主流框架创始人，其旗舰级具体成果是一场换语言的生产环境重写——而他自家团队"让非工程师写提示词"实验的失败，是代理生产力文献里罕见的一手负面数据点。
+
+[`🔗 Rails World 2026 开幕主题演讲（视频）`](https://www.youtube.com/watch?v=vDjW_dRyKXY) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49817680)
+
+---
+
+## 33. CVE-2025-13032 第二篇：Avast 内核驱动，从 double-fetch 到 SYSTEM
+
+- **Velocity:** ▮▮ rising
+- **Source:** SAFA Team · HN 66+ pts · ~5小时前 (~15:03 UTC+8)
+- **Tags:** `cve` `avast` `kernel` `exploitation`
+
+SAFA Team 发布了其 Avast Antivirus 研究的最终篇：CVE-2025-13032（Avast 沙箱内核驱动中的 double-fetch，影响 Windows 上 25.3 之前的 Avast/AVG）在最新 Windows 11 系统上的完整利用全过程。利用链：受控的分页池溢出通过堆喷射、经 MDL 内省泄露内核地址、为避免清理时蓝屏而做的刻意修复，最终经令牌窃取取得 SYSTEM，将损坏 IORing 对象的 `RegBuffers` 数组后变为任意内核读写。评分上存在一处值得记录的实时分歧：厂商 CNA（Gen Digital）给出 9.9 critical，NVD 给出 7.8 high。
+
+**为什么重要：** 端点安全内核驱动本身就是特权攻击面，而一条在现代 Windows 上端到端公开的完整利用链——包括多数文章略去的防蓝屏管线——对攻防双方都是参考材料。
+
+[`🔗 SAFA Team 研究文章`](https://www.safateam.com/intelligence-hub/research/technical-articles/cve-2025-13032-entering-and-breaking-the-avast-antivirus-sandbox-part-2) · [`🔗 NVD 记录：CVE-2025-13032`](https://nvd.nist.gov/vuln/detail/CVE-2025-13032)
+
+---
+
+## 34. Adobe Commerce/Magento CVE-2026-71362 进入 CISA KEV——CVSS 9.1 授权不当，无需用户交互
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / CISA KEV · CVSS 9.1 (Adobe PSIRT CNA, NVD Analyzed) · KEV added Sept 24
+- **Tags:** `cve` `kev` `magento` `adobe`
+
+CVE-2026-71362 是 Adobe Commerce 与 Magento 中的一个授权不当缺陷，可导致权限提升——攻击者无需任何用户交互即可获得对敏感资源的提升访问。Adobe 自家 PSIRT 评定其为 CVSS 9.1 critical（AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N），NVD 已分析并佐证，修复随 Adobe 的 APSB26-92 公告发布。9 月 24 日被加入 KEV 意味着它已进入"在野利用"范畴——对一个 Commerce 部署而言，这意味着联邦补丁时限的启动，以及"正被主动瞄准"的现实假设。
+
+**为什么重要：** 电商后端的授权缺陷直接压在支付与客户数据流之上——而 KEV 收录所传达的信号是：除了研究员，还有别人正在使用它。
+
+[`🔗 NVD 记录：CVE-2026-71362`](https://nvd.nist.gov/vuln/detail/CVE-2026-71362) · [`🔗 Adobe APSB26-92`](https://helpx.adobe.com/security/products/magento/apsb26-92.html)
+
+---
+
+## 35. Paperclip："如果 OpenClaw 是员工，Paperclip 就是公司"——代理编排登上趋势第一，83.4k★
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · paperclipai/paperclip · 83.4k★ · trending #1 · v2026.916.1 released Sept 21
+- **Tags:** `agents` `orchestration` `nodejs` `open-source`
+
+Paperclip 是一个 MIT 许可的 Node.js 服务器 + React UI，用于把一支 AI 代理团队当作一家公司来运营：定义一个目标（"把 AI 笔记应用做到第一、做到 100 万美元 MRR"），雇一组组织架构（CEO、CTO、工程师、设计师、市场——任意机器人、任意提供商），然后在一个仪表盘里批准战略、设定预算、监控工作与成本。代理自带——OpenClaw、Claude Code、Codex、Cursor、纯 bash 或 HTTP 端点皆可。在任务管理器表层之下，它内置组织架构、预算、治理与目标对齐；发布节奏稳定（本月三个版本，最新为 9 月 21 日）。
+
+**为什么重要：** 编码代理之上的那一层正在聚合成一个独立的产品品类——管理、治理与成本控制，而非代码生成——83k 星说明需求是真实的，无论交付率最终如何。
+
+[`🔗 paperclipai/paperclip`](https://github.com/paperclipai/paperclip) · [`🔗 docs.paperclip.ing`](https://docs.paperclip.ing)
+
+---
+
+## 36. Anthropic 官方 Claude Code 插件目录：314 个插件、36.7k 星，README 顶部就是一条供应链警告
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub · anthropics/claude-plugins-official · 36.7k★ · pushed today
+- **Tags:** `claude-code` `plugins` `marketplace` `agent-infra`
+
+`/plugin install {name}@claude-plugins-official` 背后的 Anthropic 官方目录正攀升趋势榜：其 marketplace 清单中列有 314 个插件，分为 `/plugins`（内部，含参考实现）与 `/external_plugins`（"必须满足质量与安全标准方可通过审批"的伙伴与社区提交）。两个设计细节值得注意：插件名被声明为不可变 slug——重命名需要在 `marketplace.json` 中有顶层 `renames` 映射，使既有安装自动迁移——且 README 的第一个内容块就是信任警告，声明 Anthropic"不控制插件中包含哪些 MCP 服务器、文件或其他软件"，也无法验证它们可用或不会变更。
+
+**为什么重要：** 插件注册表正在成为代理时代的包管理器；不可变命名契约加上醒目的供应链免责声明，正是 Plugin4Shell 研究之后必要的制度化记忆。
+
+[`🔗 anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) · [`🔗 GitHub 每日趋势`](https://github.com/trending)
+
+---
+
+## 37. Topcoat v0.9：Rails 形态的 Rust Web 框架加入服务器推送
+
+- **Velocity:** ▮ steady
+- **Source:** Tokio blog · Sept 24 · ~26小时前
+- **Tags:** `rust` `web-framework` `tokio` `release`
+
+Topcoat——出自 Carl Lerche（前 Rails 核心团队、Tokio 联合创建者）与 Julien Scholz 之手的"全家桶全栈 Rust 框架"——发布 v0.9，新增基于长连 WebSocket 连接的服务器推送，服务器可以（类聊天式）把 UI 更新推送到完全交互式的视图。它建立在 v0.8 的信号追踪之上：服务器渲染期间读取某个信号会触发自动的部分重取，配合保焦点与输入状态的 HTML morphing，另有用于流式更新与悬念式加载的 `live!`/`emit!` 宏。Toasty ORM 获得 `update!` 宏与一等公民的 JSONB 文档字段。Lerche 的卖点是：在一个"约 20 MB 内存"的运行时里实现 Rails 级生产力，且 Rust 的约定让 LLM 生成的代码更便宜、更不易出错。没有公布任何基准测试。
+
+**为什么重要：** 作者阵容使其成为迄今为止最认真的 Rails 式全栈 Rust 尝试——而"约定帮助代理写代码"这一明确论点，是一个瞄准 AI 编码时代的框架设计主张。
+
+[`🔗 Tokio 博客`](https://tokio.rs/blog/2026-09-24-topcoat-server-applications) · [`🔗 tokio-rs/topcoat`](https://github.com/tokio-rs/topcoat)
+
+---
+
+## 38. SpeakerMem-R1：多方对话正是代理记忆系统崩溃之处
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv / Hugging Face daily papers · ~82 upvotes · #1 paper of Sept 24
+- **Tags:** `llm` `memory` `multi-party-dialogue` `research`
+
+SpeakerMem-R1（arXiv:2609.26780）直击单用户代理记忆与群组对话之间的鸿沟：记忆系统必须区分谁说了什么、每句话关于谁、人们如何彼此认知、共享状态如何变化——而现有的通用 LLM 记忆系统在多方基准上会丢失人物与群体关系。其设计是一个双轨存储——带说话人标注的逐字消息加上派生状态，组织为人物级与群体级两种视图——查询时按实体、事件与时间组合。Writer-R1 用 SpeakerLevenshtein 与说话人条件化的 GRPO 训练，在保持本地部署的同时削减归因与更新错误。
+
+**为什么重要：** 代理记忆热潮几乎完全聚焦单用户；群组中的归因与关系状态是下一个瓶颈，而这篇论文精确地指出了它。
+
+[`🔗 arXiv:2609.26780`](https://arxiv.org/abs/2609.26780) · [`🔗 Hugging Face daily papers`](https://huggingface.co/papers?date=2026-09-24)
+
+---
+
+## 39. "Opus 5.5 擅长做讲解视频"：把前沿 LLM 当作整条视频管线的发布
+
+- **Velocity:** ▮ rising
+- **Source:** HN 298+ pts · 156 comments · ~16小时前 (~04:28 UTC+8)
+- **Tags:** `opus` `video` `llm` `product-launch`
+
+launchvideo.io 是一个用 Claude Opus 5.5 端到端生成讲解视频的服务——脚本、画面与剪辑——其 Show-HN 式发布收获了 298 分与一场 156 条评论的争论：产出到底算不算好。要弄清证据是什么：这是厂商自己的展示，不是基准；真正有意义的论断是方向性的。有趣的信号在于演示选择的赛道——讲解视频（在图示之上做结构化叙述）而非电影级生成——在这一细分里，LLM 的规划与代码驱动的合成确实有可能胜过纯扩散管线。
+
+**为什么重要：** 又一个数据点表明"模型即生产线"模式正从编码走向媒体——认识论与代码演示相同：一个有说服力的演示证明能力存在，而非它能泛化。
+
+[`🔗 launchvideo.io`](https://launchvideo.io) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49836374)
+
+---
+
+## 40. Show HN：以自解密 HTML 页面形态实现的气隙文件加密
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 74+ pts · 27 comments · ~29小时前 (~15:22 UTC+8, Sep 24)
+- **Tags:** `encryption` `offline` `html` `air-gap`
+
+ts-cms-ep-sfx 在本地加密文件并产出一个自解密的 HTML 页面：解密时只需在任意浏览器中打开该页——解密机器上无需安装任何软件，也不需要信任任何已安装的工具。演示在 cms-sfx-demo.apeleg.com 运行，库在 GitHub 上（ApelegHQ/ts-cms-ep-sfx，2024 年创建，46★，小而真实）。讨论串里出现了自然的告诫：HTML 文件本身从此成为受信工件——谁能在加密与解密之间篡改它，谁就能换成一个窃取密钥的页面——因此文件的保管链与加密算法本身同等重要。
+
+**为什么重要：** 这是跨越气隙、什么都装不了的场合下的一种务实模式——安全模型从"信任机器"变为"信任一个文件"，视你的威胁模型而定，它要么是特性，要么就是全部漏洞。
+
+[`🔗 在线演示`](https://cms-sfx-demo.apeleg.com/) · [`🔗 ApelegHQ/ts-cms-ep-sfx`](https://github.com/ApelegHQ/ts-cms-ep-sfx)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-09-25T12:15:00+08:00 |
-| Items | 29 |
-| Sources tracked | 27 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com, Google Research, blog.arusekk.pl, status.gitlab.com, Tom's Hardware, Res Obscura, Solvy Tech blog, Notes from Poland, bestmodelforyourbudget.terrydjony.com) |
+| Generated | 2026-09-25T20:25:00+08:00 |
+| Items | 40 |
+| Sources tracked | 36 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, CISA KEV, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com, Google Research, blog.arusekk.pl, status.gitlab.com, Tom's Hardware, Res Obscura, Solvy Tech blog, Notes from Poland, bestmodelforyourbudget.terrydjony.com, dawo.community, Reddit, YouTube, safateam.com, helpx.adobe.com, docs.paperclip.ing, tokio.rs, launchvideo.io, cms-sfx-demo.apeleg.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (每日 3 次) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,6 +1,6 @@
 ---
 date: 2026-09-25
-updated: 2026-09-25T12:15:00+08:00
+updated: 2026-09-25T20:25:00+08:00
 ---
 
 # Archive — trending.md
@@ -10,7 +10,7 @@ All daily trending feeds, ranked by velocity. Click any date for the full styled
 | Date | Items | Web (human) | Raw (agent) |
 |------|-------|-------------|-------------|
 
-| Sep 25, 2026 | 29 | [**View →**](/en/feed/2026-09-25/) | [`2026-09-25.md`](/en/feed/2026-09-25.md) |
+| Sep 25, 2026 | 40 | [**View →**](/en/feed/2026-09-25/) | [`2026-09-25.md`](/en/feed/2026-09-25.md) |
 | Sep 24, 2026 | 42 | [**View →**](/en/feed/2026-09-24/) | [`2026-09-24.md`](/en/feed/2026-09-24.md) |
 | Sep 23, 2026 | 35 | [**View →**](/en/feed/2026-09-23/) | [`2026-09-23.md`](/en/feed/2026-09-23.md) |
 | Sep 22, 2026 | 42 | [**View →**](/en/feed/2026-09-22/) | [`2026-09-22.md`](/en/feed/2026-09-22.md) |
@@ -19,7 +19,7 @@ All daily trending feeds, ranked by velocity. Click any date for the full styled
 | Sep 19, 2026 | 31 | [**View →**](/en/feed/2026-09-19/) | [`2026-09-19.md`](/en/feed/2026-09-19.md) |
 | Sep 18, 2026 | 50 | [**View →**](/en/feed/2026-09-18/) | [`2026-09-18.md`](/en/feed/2026-09-18.md) |
 | Sep 17, 2026 | 41 | [**View →**](/en/feed/2026-09-17/) | [`2026-09-17.md`](/en/feed/2026-09-17.md) |
-| Sep 16, 2026 | 29 | [**View →**](/en/feed/2026-09-16/) | [`2026-09-16.md`](/en/feed/2026-09-16.md) |
+| Sep 16, 2026 | 40 | [**View →**](/en/feed/2026-09-16/) | [`2026-09-16.md`](/en/feed/2026-09-16.md) |
 | Sep 15, 2026 | 47 | [**View →**](/en/feed/2026-09-15/) | [`2026-09-15.md`](/en/feed/2026-09-15.md) |
 | Sep 14, 2026 | 38 | [**View →**](/en/feed/2026-09-14/) | [`2026-09-14.md`](/en/feed/2026-09-14.md) |
 | Sep 13, 2026 | 40 | [**View →**](/en/feed/2026-09-13/) | [`2026-09-13.md`](/en/feed/2026-09-13.md) |
@@ -45,13 +45,13 @@ All daily trending feeds, ranked by velocity. Click any date for the full styled
 | Aug 24, 2026 | 20 | [**View →**](/en/feed/2026-08-24/) | [`2026-08-24.md`](/en/feed/2026-08-24.md) |
 | Aug 23, 2026 | 39 | [**View →**](/en/feed/2026-08-23/) | [`2026-08-23.md`](/en/feed/2026-08-23.md) |
 | Aug 22, 2026 | 28 | [**View →**](/en/feed/2026-08-22/) | [`2026-08-22.md`](/en/feed/2026-08-22.md) |
-| Aug 21, 2026 | 29 | [**View →**](/en/feed/2026-08-21/) | [`2026-08-21.md`](/en/feed/2026-08-21.md) |
+| Aug 21, 2026 | 40 | [**View →**](/en/feed/2026-08-21/) | [`2026-08-21.md`](/en/feed/2026-08-21.md) |
 | Aug 20, 2026 | 26 | [**View →**](/en/feed/2026-08-20/) | [`2026-08-20.md`](/en/feed/2026-08-20.md) |
 | Aug 19, 2026 | 50 | [**View →**](/en/feed/2026-08-19/) | [`2026-08-19.md`](/en/feed/2026-08-19.md) |
 | Aug 18, 2026 | 32 | [**View →**](/en/feed/2026-08-18/) | [`2026-08-18.md`](/en/feed/2026-08-18.md) |
 | Aug 17, 2026 | 41 | [**View →**](/en/feed/2026-08-17/) | [`2026-08-17.md`](/en/feed/2026-08-17.md) |
 | Aug 16, 2026 | 32 | [**View →**](/en/feed/2026-08-16/) | [`2026-08-16.md`](/en/feed/2026-08-16.md) |
-| Aug 15, 2026 | 29 | [**View →**](/en/feed/2026-08-15/) | [`2026-08-15.md`](/en/feed/2026-08-15.md) |
+| Aug 15, 2026 | 40 | [**View →**](/en/feed/2026-08-15/) | [`2026-08-15.md`](/en/feed/2026-08-15.md) |
 | Aug 14, 2026 | 18 | [**View →**](/en/feed/2026-08-14/) | [`2026-08-14.md`](/en/feed/2026-08-14.md) |
 | Aug 13, 2026 | 25 | [**View →**](/en/feed/2026-08-13/) | [`2026-08-13.md`](/en/feed/2026-08-13.md) |
 | Aug 12, 2026 | 37 | [**View →**](/en/feed/2026-08-12/) | [`2026-08-12.md`](/en/feed/2026-08-12.md) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-09-25
-updated: 2026-09-25T12:15:00+08:00
+updated: 2026-09-25T20:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -412,13 +412,167 @@ terryds/bestvaluemodel は、Artificial Analysis の Intelligence Index の全�
 
 ---
 
+## 30. DAWO：オランダ政府が NixOS 上で Microsoft 代替の職場環境を構築中
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** HN 386+ pts · 173 comments · 約4時間前 (~16:06 UTC+8)
+- **Tags:** `nixos` `government` `open-source` `digital-sovereignty`
+
+DAWO はオランダ政府の「デジタルに自律的な職場環境」のためのオープンコミュニティです——単一の製品ではなく共有のブループリントとして、AI、オペレーティングシステム（DAWO-NixOS、「再現可能な職場のためのインストールブロック」）、クラウド、コラボレーションソフトウェアという、検査・置換可能な 4 つのビルディングブロックカテゴリに整理されています。内務王国関係省（MinBZK）が主導し、コードは code.overheid.nl と Codeberg で公開、デジタル自律と政府 IT の検証可能性を先頭に掲げた 5 つの目標を定めています。サイト自身が初期段階であることに率直です。ロードマップ、予算、採用マイルストーンは未公開——見える活動は作業セッション、ドキュメント、パイロットです。
+
+**なぜ重要か:** 欧州のデジタル主権の波は「オフィスを乗り換える」という発表を生み続けていますが、今回はとりわけ NixOS を選びました。政府のデスクトップを監査可能にする特性——再現性——を、アーキテクチャの要となる選択に据えたのです。
+
+[`🔗 dawo.community`](https://www.dawo.community/en/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49841563)
+
+---
+
+## 31. Meta が Meta 社内で撮影された AI メガネ動画を削除——理由は「いじめとハラスメント」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Reddit via HN · 614+ pts · 約28時間前 (~16:23 UTC+8)
+- **Tags:** `meta` `ai-glasses` `content-moderation` `privacy`
+
+オランダの風刺クリエイター Roel Maalderink がデジタル権利団体 Bits of Freedom とともに Meta のアムステルダム事務所を訪れ、Meta 製カメラメガネで Meta 自身の従業員を撮影しました。録画されたことへのスタッフの不快感こそが作品の主題です。ハードウェアの録画インジケーターは、まさに人々が撮影されていることを知るために存在し、この動画はそれがどんな感覚なのかの実演です。Meta は「いじめ・ハラスメントポリシー」を理由に Facebook と Instagram から動画を削除しました。YouTube 版のタイトルは今や「Meta's staff hated Meta's glasses. Meta deleted the video.」になっています。HN のスレッドは、動画が仕組んだはずの同意をめぐる議論そのものになりました——同意しない対象を公衆の場で録画することは偽善かジャーナリズムかでコメント欄が割れています。
+
+**なぜ重要か:** ユーザーをハラスメントから守るために作られたモデレーションルールが、自社製品への批判の抑圧に使われました——そして抑圧された議論（録画インジケーターがあっても監視は心地よくならない）こそ、Meta のメガネ事業が答えるべき問いそのものです。
+
+[`🔗 HN 議論`](https://news.ycombinator.com/item?id=49827794) · [`🔗 「Meta's staff hated Meta's glasses. Meta deleted the video.」（YouTube）`](https://www.youtube.com/watch?v=MvrL144yhNs)
+
+---
+
+## 32. Rails World 2026 基調講演：Hey のメールバックエンドをエージェントで Rust に書き直し——DHH は「プログラマーを引退した」と宣言
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN 356+ pts · 387 comments · 約45時間前 (~23:33 UTC+8, Sep 23)
+- **Tags:** `rails` `rust` `agentic-coding` `keynote`
+
+Rails World 2026 の開幕基調講演には Rails のロードマップが一切なく——コメント欄では「Rails content not found」が繰り返し指摘されました——その不在こそが、DHH が代わりに発表した内容に枠組みを与えています。Hey.com のメールバックエンドがエージェンティックコーディングによって Rust で再実装され、サーバーデプロイを約 90% 削減と主張。チームは 6 つのネイティブモバイルアプリをエージェントで出荷・保守しています（「UX スタッフに vibe-coding させる」試みは失敗し、コードを書いたのはエンジニアでした）。そして「プロのプログラマーとして引退した」と述べました。締めの枠組みは p(bloom) 対 p(doom) で、Rails はエージェンティックコーディングに適したフレームワークとして位置づけ——フレームワーク自身が rubyonrails.org/ai で AI モデルベンチマークを公開するに至っています。
+
+**なぜ重要か:** AI に最も前向きなメインストリームフレームワークの創業者の看板の成果が、別言語での本番書き直しです——そして自チームの「エンジニア以外がプロンプトを書く」実験の失敗は、エージェント生産性の文献における希少な一次の否定的データポイントです。
+
+[`🔗 Rails World 2026 開幕基調講演（動画）`](https://www.youtube.com/watch?v=vDjW_dRyKXY) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49817680)
+
+---
+
+## 33. CVE-2025-13032 第 2 弾：Avast のカーネルドライバー、double-fetch から SYSTEM まで
+
+- **Velocity:** ▮▮ rising
+- **Source:** SAFA Team · HN 66+ pts · 約5時間前 (~15:03 UTC+8)
+- **Tags:** `cve` `avast` `kernel` `exploitation`
+
+SAFA Team が Avast アンチウイルス研究の最終編を公開しました。CVE-2025-13032——Avast のサンドボックスカーネルドライバーにおける double-fetch（Windows の 25.3 未満の Avast/AVG に影響）——の完全なエクスプロイト手順を、最新の Windows 11 システム上で示しています。チェーンは以下の通りです。制御可能な paged-pool オーバーフローを、ヒープスプレーと MDL イントロスペクションによるカーネルアドレスリークを経て、IORing オブジェクトの `RegBuffers` 配列を破壊することで任意カーネル読み書きへ変換し、ティアダウン時のブルースクリーンを避けるための意図的な修復を施し、最後にトークン窃取で SYSTEM を獲得します。スコアには記録に値する生きた食い違いもあります。ベンダー CNA（Gen Digital）の 9.9 critical に対し、NVD は 7.8 high です。
+
+**なぜ重要か:** エンドポイントセキュリティのカーネルドライバーはそれ自体が特権的な攻撃面であり——最新 Windows での完全なエクスプロイトチェーンが、大半の解説が省く BSOD 回避の配管まで含めてエンドツーエンドで公開されたことは、攻撃側・防御側双方のリファレンスになります。
+
+[`🔗 SAFA Team 研究記事`](https://www.safateam.com/intelligence-hub/research/technical-articles/cve-2025-13032-entering-and-breaking-the-avast-antivirus-sandbox-part-2) · [`🔗 NVD：CVE-2025-13032`](https://nvd.nist.gov/vuln/detail/CVE-2025-13032)
+
+---
+
+## 34. Adobe Commerce/Magento の CVE-2026-71362 が CISA KEV に掲載——CVSS 9.1 の認可不備、ユーザー操作不要
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / CISA KEV · CVSS 9.1 (Adobe PSIRT CNA, NVD Analyzed) · KEV 追加 9月24日
+- **Tags:** `cve` `kev` `magento` `adobe`
+
+CVE-2026-71362 は Adobe Commerce と Magento における認可不備（incorrect authorization）の脆弱性で、権限昇格につながります——攻撃者はユーザー操作なしで、機密リソースへの昇格したアクセスを得られます。Adobe 自身の PSIRT が CVSS 9.1 critical（AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N）と採点し、NVD が分析・裏付け、修正は Adobe の APSB26-92 アドバイザリで提供済みです。9月24日の KEV 追加により、実際に悪用されている領域に入りました。Commerce のデプロイにとってこれは、連邦政府のパッチ適用期限と、能動的な標的化を想定すべきという実務上の前提を意味します。
+
+**なぜ重要か:** コマースバックエンドの認可バグは、決済と顧客データのフローの真上にあります——そして KEV 掲載は、研究者以外の誰かがこれを使っているという合図です。
+
+[`🔗 NVD：CVE-2026-71362`](https://nvd.nist.gov/vuln/detail/CVE-2026-71362) · [`🔗 Adobe APSB26-92`](https://helpx.adobe.com/security/products/magento/apsb26-92.html)
+
+---
+
+## 35. Paperclip：「OpenClaw が従業員なら、Paperclip は会社」——エージェントオーケストレーションが 83.4k★ でトレンド 1 位
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · paperclipai/paperclip · 83.4k★ · trending #1 · v2026.916.1 リリース 9月21日
+- **Tags:** `agents` `orchestration` `nodejs` `open-source`
+
+Paperclip は、AI エージェントのチームを一つの事業として運行するための MIT ライセンスの Node.js サーバー + React UI です。目標を定め（「売上 100 万ドル MRR の、1 位の AI ノートアプリを作れ」）、組織図を雇い（CEO、CTO、エンジニア、デザイナー、マーケター——任意のボット、任意のプロバイダー）、戦略を承認し、予算を設定し、作業とコストを 1 つのダッシュボードから監視します。エージェントは持ち込み可能——OpenClaw、Claude Code、Codex、Cursor、素の bash、HTTP エンドポイント。タスクマネージャーの表面の下には、組織図、予算、ガバナンス、目標整合を実装。リリースのペースは安定しています（今月 3 リリース、最新は 9月21日）。
+
+**なぜ重要か:** コーディングエージェントの上のレイヤーは、コード生成ではなく管理・ガバナンス・コスト制御という、それ自体のプロダクトカテゴリへ統合されつつあります——そして 83k 星は、納品率がどうなるにせよ、需要が本物だと言っています。
+
+[`🔗 paperclipai/paperclip`](https://github.com/paperclipai/paperclip) · [`🔗 docs.paperclip.ing`](https://docs.paperclip.ing)
+
+---
+
+## 36. Anthropic 公式の Claude Code プラグインディレクトリ：314 プラグイン、36.7k★、README の先頭にサプライチェーン警告
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub · anthropics/claude-plugins-official · 36.7k★ · 本日プッシュ
+- **Tags:** `claude-code` `plugins` `marketplace` `agent-infra`
+
+`/plugin install {name}@claude-plugins-official` の裏にある Anthropic 管理のディレクトリがトレンドを上昇中です。マーケットプレイスのマニフェストには 314 のプラグインが掲載され、`/plugins`（内部、リファレンス実装付き）と `/external_plugins`（「承認のための品質とセキュリティ基準を満たさなければならない」パートナー・コミュニティ投稿）に分かれています。目を引く設計の詳細が 2 つあります。プラグイン名が不変のスラッグと宣言されている点——改名には `marketplace.json` のトップレベル `renames` マップが必要で、既存インストールは自動移行されます——そして README の最初の内容ブロックが信頼に関する警告である点。Anthropic は「プラグインに含まれる MCP サーバー、ファイル、その他のソフトウェアを管理しない」であり、それらが動作すること・変わらないことを検証できない、としています。
+
+**なぜ重要か:** プラグインレジストリはエージェント時代のパッケージマネージャーになりつつあります。不変の名前契約と目立つ場所のサプライチェーン免責の組み合わせは、Plugin4Shell 研究が必要としたまさにその制度的記憶です。
+
+[`🔗 anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) · [`🔗 GitHub デイリートレンド`](https://github.com/trending)
+
+---
+
+## 37. Topcoat v0.9：Rails 型の Rust ウェブフレームワークにサーバープッシュが加わる
+
+- **Velocity:** ▮ steady
+- **Source:** Tokio ブログ · 9月24日 · 約26時間前
+- **Tags:** `rust` `web-framework` `tokio` `release`
+
+Topcoat——Carl Lerche（元 Rails コアチーム、Tokio 共同作成者）と Julien Scholz による「電池付きフルスタック Rust フレームワーク」——が v0.9 をリリースし、長寿命 WebSocket 接続上のサーバープッシュに対応しました。サーバーから完全にインタラクティブなビューへ UI 更新（チャット風）をプッシュできます。v0.8 のシグナルトラッキングの上に構築されており、サーバーレンダリング中にシグナルを読むと、フォーカスと入力状態を保持する HTML モーフィング付きの自動部分再フェッチがトリガーされます。ストリーミング更新とサスペンス風ローディングのための `live!`/`emit!` マクロも備えます。Toasty ORM には `update!` マクロと第一級の JSONB ドキュメントフィールドが加わりました。Lerche の売り文句は、「約 20 MB の RAM」のランタイムで Rails 級の生産性を実現すること、そして Rust の規約が LLM 生成コードをより安く、エラーの少ないものにする、というものです。ベンチマークは未公開です。
+
+**なぜ重要か:** この著者陣だからこそ、Rails 型フルスタック Rust への最も本気の挑戦です——そして「規約がエージェントのコード記述を助ける」という明示的な主張は、AI コーディング時代に向けられたフレームワーク設計のテーゼです。
+
+[`🔗 Tokio ブログ`](https://tokio.rs/blog/2026-09-24-topcoat-server-applications) · [`🔗 tokio-rs/topcoat`](https://github.com/tokio-rs/topcoat)
+
+---
+
+## 38. SpeakerMem-R1：マルチパーティ対話こそ、エージェントメモリシステムが崩壊する場所
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv / Hugging Face デイリーペーパー · 約82 upvotes · 9月24日の論文 1 位
+- **Tags:** `llm` `memory` `multi-party-dialogue` `research`
+
+SpeakerMem-R1（arXiv:2609.26780）は、単一ユーザーのエージェントメモリとグループ会話の間のギャップを攻撃します。メモリシステムは、誰が何を言ったか、各発言が誰に関するものか、人々が互いをどう認知しているか、共有状態がどう変化するかを区別しなければならず——既存の汎用 LLM メモリシステムは、マルチパーティベンチマーク上で人物関係とグループ関係を失います。設計はデュアルトラックのストアです。話者ラベル付きの逐語メッセージと派生状態を、人物レベルとグループレベルのビューに整理し、クエリ時にエンティティ・イベント・時間で結合します。Writer-R1 は SpeakerLevenshtein と話者条件付き GRPO で学習され、帰属と更新のエラーを削減しつつ、デプロイはローカルのまま保ちます。
+
+**なぜ重要か:** エージェントメモリの隆盛はほぼ完全に単一ユーザーのものです。グループにおける帰属と関係状態が次のボトルネックであり、この論文はそれを正確に名指ししています。
+
+[`🔗 arXiv:2609.26780`](https://arxiv.org/abs/2609.26780) · [`🔗 Hugging Face デイリーペーパー`](https://huggingface.co/papers?date=2026-09-24)
+
+---
+
+## 39. 「Opus 5.5 は解説動画が得意」——フロンティア LLM を動画パイプライン丸ごととして扱うローンチ
+
+- **Velocity:** ▮ rising
+- **Source:** HN 298+ pts · 156 comments · 約16時間前 (~04:28 UTC+8)
+- **Tags:** `opus` `video` `llm` `product-launch`
+
+launchvideo.io は Claude Opus 5.5 で解説動画をエンドツーエンド（脚本、映像、編集）に生成するサービスで、その Show-HN 流のローンチは 298 ポイントと、出力が本当に良いのかをめぐる 156 コメントの論争を集めました。証拠が何であるかははっきりさせておくべきです。これはベンダー自身のショーケースでありベンチマークではなく、意味を持つ主張は方向性を示すものにとどまります。興味深い信号は、デモが競争する場をどこに選んだかです。映画級の生成ではなく解説動画（図解の上の構造化されたナレーション）——LLM の計画とコード駆動の合成が、拡散だけのパイプラインを現実的に追い越せる区分です。
+
+**なぜ重要か:** モデル・アズ・プロダクションパイプラインのパターンがコーディングからメディアへ移りつつある、さらなるデータポイントです——コードデモと同じ認識論を伴います。説得力のあるデモが証明するのは能力の存在であって、一般化するということではない、ということです。
+
+[`🔗 launchvideo.io`](https://launchvideo.io) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49836374)
+
+---
+
+## 40. Show HN：エアギャップのファイル暗号化を、自己復号する HTML ページとして
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 74+ pts · 27 comments · 約29時間前 (~15:22 UTC+8, Sep 24)
+- **Tags:** `encryption` `offline` `html` `air-gap`
+
+ts-cms-ep-sfx はファイルをローカルで暗号化し、単一の自己復号 HTML ページを出力します。復号するには、そのページを任意のブラウザで開くだけ——復号するマシンへのソフトウェアインストールは不要で、インストール済みツールを信頼する必要もありません。デモは cms-sfx-demo.apeleg.com で動作し、ライブラリは GitHub にあります（ApelegHQ/ts-cms-ep-sfx、2024 年作成、46★ の小規模ながら実在）。スレッドで自然に持ち上がった注意点はこうです。HTML ファイル自体が今や信頼の対象物であるということ——暗号化と復号の間でそのファイルを改変できる者は、鍵を盗むページへ差し替えられます——つまりファイルのチェーンオブカストディが、暗号方式そのものと同じくらい重要になります。
+
+**なぜ重要か:** 何もインストールできない場所でエアギャップを越えるための実用的なパターンです。セキュリティモデルは「マシンを信頼」から「一つのファイルを信頼」へ移ります。これは脅威モデル次第で、機能にもなり全体が脆弱性にもなります。
+
+[`🔗 ライブデモ`](https://cms-sfx-demo.apeleg.com/) · [`🔗 ApelegHQ/ts-cms-ep-sfx`](https://github.com/ApelegHQ/ts-cms-ep-sfx)
+
+---
+
 ## Metadata
 
 | フィールド | 値 |
 |-------|-------|
-| Generated | 2026-09-25T12:15:00+08:00 |
-| Items | 29 |
-| Sources tracked | 27 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com, Google Research, blog.arusekk.pl, status.gitlab.com, Tom's Hardware, Res Obscura, Solvy Tech blog, Notes from Poland, bestmodelforyourbudget.terrydjony.com) |
+| Generated | 2026-09-25T20:25:00+08:00 |
+| Items | 40 |
+| Sources tracked | 36 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, CISA KEV, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com, Google Research, blog.arusekk.pl, status.gitlab.com, Tom's Hardware, Res Obscura, Solvy Tech blog, Notes from Poland, bestmodelforyourbudget.terrydjony.com, dawo.community, Reddit, YouTube, safateam.com, helpx.adobe.com, docs.paperclip.ing, tokio.rs, launchvideo.io, cms-sfx-demo.apeleg.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (1日3回) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

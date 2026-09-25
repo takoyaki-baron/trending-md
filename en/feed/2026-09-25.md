@@ -1,8 +1,8 @@
 ---
 date: 2026-09-25
-updated: 2026-09-25T12:15:00+08:00
+updated: 2026-09-25T20:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -751,13 +751,278 @@ instead of a ranking vibe.
 
 ---
 
+## 30. DAWO: the Dutch government is building a Microsoft-alternative workplace on NixOS
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** HN 386+ pts · 173 comments · ~4h ago (~16:06 UTC+8)
+- **Tags:** `nixos` `government` `open-source` `digital-sovereignty`
+
+DAWO is the Dutch government's open community for a "digitally autonomous workplace"
+— a shared blueprint rather than one product, organized into four inspectable,
+replaceable building-block categories: AI, operating system (DAWO-NixOS, "installation
+blocks for a reproducible workplace"), cloud, and collaboration software. It is led
+from MinBZK (the Ministry of the Interior and Kingdom Relations), with code public on
+code.overheid.nl and Codeberg, and five stated goals headed by digital autonomy and
+verifiability of government IT. The site is candid about being early: no roadmap,
+budget or adoption milestones are published — the visible activity is working
+sessions, docs and pilots.
+
+**Why it matters:** Europe's digital-sovereignty wave keeps producing "we'll switch
+offices" announcements; this one picks NixOS specifically, making reproducibility —
+the property that makes a government desktop auditable — the load-bearing
+architectural choice.
+
+[`🔗 dawo.community`](https://www.dawo.community/en/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49841563)
+
+---
+
+## 31. Meta took down the AI-glasses video filmed at Meta — for "bullying and harassment"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Reddit via HN · 614+ pts · ~28h ago (~16:23 UTC+8)
+- **Tags:** `meta` `ai-glasses` `content-moderation` `privacy`
+
+Dutch satirical creator Roel Maalderink, working with digital-rights organization
+Bits of Freedom, visited Meta's Amsterdam office and filmed Meta's own employees with
+Meta's own camera glasses. The staff's discomfort at being recorded was the point of
+the piece: the hardware's recording indicator exists precisely so people know when
+they're being filmed, and the video is the demonstration of what that feels like.
+Meta removed the video from Facebook and Instagram citing its bullying-and-harassment
+policy; the YouTube version now carries the title "Meta's staff hated Meta's glasses.
+Meta deleted the video." HN's thread turned into the consent debate the video was
+ staging — with commenters split on whether public-place recording of unwilling
+subjects is hypocrisy or journalism.
+
+**Why it matters:** The moderation rule built to protect users from harassment was
+applied to suppress criticism of the company's own product — and the suppressed
+argument (recording indicators don't make surveillance comfortable) is exactly the
+one Meta's glasses business needs to answer.
+
+[`🔗 HN discussion`](https://news.ycombinator.com/item?id=49827794) · [`🔗 "Meta's staff hated Meta's glasses. Meta deleted the video." (YouTube)`](https://www.youtube.com/watch?v=MvrL144yhNs)
+
+---
+
+## 32. Rails World 2026 keynote: Hey's email backend rewritten in Rust by agents — and DHH says he's retired from programming
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN 356+ pts · 387 comments · ~45h ago (~23:33 UTC+8, Sep 23)
+- **Tags:** `rails` `rust` `agentic-coding` `keynote`
+
+The Rails World 2026 opening keynote contained no Rails roadmap — commenters
+repeatedly noted "Rails content not found" — and that absence frames what DHH chose
+to announce instead: Hey.com's email backend has been reimplemented in Rust using
+agentic coding, with a claimed ~90% reduction in server deployment; his team shipped
+and maintains six native mobile apps with agents (after trying UX staff as the
+vibe-coders and watching it fail — engineers did the coding); and he stated "I have
+retired from being a professional programmer." The closing framing was p(bloom)
+versus p(doom), with Rails positioned as well-suited to agentic coding — the
+framework now publishes its own AI model benchmarks at rubyonrails.org/ai.
+
+**Why it matters:** The most AI-bullish mainstream framework founder's flagship
+concrete result is a production rewrite in a different language — and his own team's
+failed "non-engineers prompt it" experiment is a rare first-hand negative datapoint
+in the agent-productivity literature.
+
+[`🔗 Rails World 2026 Opening Keynote (video)`](https://www.youtube.com/watch?v=vDjW_dRyKXY) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49817680)
+
+---
+
+## 33. CVE-2025-13032, part 2: Avast's kernel driver, from double-fetch to SYSTEM
+
+- **Velocity:** ▮▮ rising
+- **Source:** SAFA Team · HN 66+ pts · ~5h ago (~15:03 UTC+8)
+- **Tags:** `cve` `avast` `kernel` `exploitation`
+
+SAFA Team published the final part of its Avast Antivirus research: a complete
+exploitation walkthrough of CVE-2025-13032 — a double-fetch in Avast's sandbox kernel
+driver (affecting Avast/AVG before 25.3 on Windows) — on an up-to-date Windows 11
+system. The chain: the controlled paged-pool overflow becomes arbitrary kernel
+read/write by corrupting the `RegBuffers` array of an IORing object, via heap spray,
+kernel-address leak through MDL introspection, deliberate repairs to avoid a blue
+screen on teardown, and finally SYSTEM via token theft. The score carries a live
+disagreement worth recording: 9.9 critical from the vendor CNA (Gen Digital)
+versus 7.8 high from NVD.
+
+**Why it matters:** Endpoint-security kernel drivers are themselves privileged attack
+surface, and a full modern-Windows exploit chain published end-to-end — including the
+BSOD-avoidance plumbing most writeups skip — is reference material for both sides.
+
+[`🔗 SAFA Team research`](https://www.safateam.com/intelligence-hub/research/technical-articles/cve-2025-13032-entering-and-breaking-the-avast-antivirus-sandbox-part-2) · [`🔗 NVD: CVE-2025-13032`](https://nvd.nist.gov/vuln/detail/CVE-2025-13032)
+
+---
+
+## 34. Adobe Commerce/Magento CVE-2026-71362 lands on CISA KEV — CVSS 9.1 incorrect authorization, no user interaction
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / CISA KEV · CVSS 9.1 (Adobe PSIRT CNA, NVD Analyzed) · KEV added Sept 24
+- **Tags:** `cve` `kev` `magento` `adobe`
+
+CVE-2026-71362 is an incorrect-authorization flaw in Adobe Commerce and Magento that
+yields privilege escalation — an attacker can gain elevated access to sensitive
+resources with no user interaction required. Adobe's own PSIRT scored it CVSS 9.1
+critical (AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N), NVD analyzed and corroborated, and
+the fix ships in Adobe's APSB26-92 advisory. The KEV addition on September 24 puts
+it in exploited-in-the-wild territory, which for a Commerce deployment means the
+federal patch clock and the practical assumption of active targeting.
+
+**Why it matters:** Authorization bugs in commerce backends sit directly on payment
+and customer data flows — and a KEV listing is the signal that someone besides the
+researcher is using it.
+
+[`🔗 NVD: CVE-2026-71362`](https://nvd.nist.gov/vuln/detail/CVE-2026-71362) · [`🔗 Adobe APSB26-92`](https://helpx.adobe.com/security/products/magento/apsb26-92.html)
+
+---
+
+## 35. Paperclip: "if OpenClaw is an employee, Paperclip is the company" — agent orchestration hits trending #1 at 83.4k★
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · paperclipai/paperclip · 83.4k★ · trending #1 · v2026.916.1 released Sept 21
+- **Tags:** `agents` `orchestration` `nodejs` `open-source`
+
+Paperclip is an MIT-licensed Node.js server + React UI for running a team of AI
+agents as a business: define a goal ("Build the #1 AI note-taking app to $1M MRR"),
+hire an org chart (CEO, CTO, engineers, designers, marketers — any bot, any
+provider), then approve strategy, set budgets and monitor work and cost from one
+dashboard. Bring-your-own agents — OpenClaw, Claude Code, Codex, Cursor, plain bash
+or HTTP endpoints. Under the task-manager surface it ships org charts, budgets,
+governance and goal alignment; the release cadence has been steady (three releases
+this month, latest September 21).
+
+**Why it matters:** The layer above coding agents is consolidating into a product
+category of its own — management, governance and cost control rather than code
+generation — and 83k stars says the demand is real, whatever the delivery rate
+turns out to be.
+
+[`🔗 paperclipai/paperclip`](https://github.com/paperclipai/paperclip) · [`🔗 docs.paperclip.ing`](https://docs.paperclip.ing)
+
+---
+
+## 36. Anthropic's official Claude Code plugin directory: 314 plugins, 36.7k stars, and a supply-chain warning at the top of its README
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub · anthropics/claude-plugins-official · 36.7k★ · pushed today
+- **Tags:** `claude-code` `plugins` `marketplace` `agent-infra`
+
+The Anthropic-managed directory behind `/plugin install {name}@claude-plugins-official`
+is climbing trending with 314 plugins listed in its marketplace manifest, split into
+`/plugins` (internal, with a reference implementation) and `/external_plugins`
+(partner and community submissions that "must meet quality and security standards
+for approval"). Two design details stand out: plugin names are declared an immutable
+slug — renames require a top-level `renames` map in `marketplace.json` so existing
+installs auto-migrate — and the README's first content block is a trust warning that
+Anthropic "does not control what MCP servers, files, or other software are included
+in plugins" and cannot verify they work or won't change.
+
+**Why it matters:** The plugin registry is becoming the package manager of the agent
+era; an immutable-name contract plus a prominent supply-chain disclaimer is exactly
+the institutional memory that the Plugin4Shell research made necessary.
+
+[`🔗 anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) · [`🔗 GitHub daily trending`](https://github.com/trending)
+
+---
+
+## 37. Topcoat v0.9: the Rails-shaped Rust web framework adds server push
+
+- **Velocity:** ▮ steady
+- **Source:** Tokio blog · Sept 24 · ~26h ago
+- **Tags:** `rust` `web-framework` `tokio` `release`
+
+Topcoat — the "batteries-included full-stack Rust framework" from Carl Lerche
+(ex-Rails core team, Tokio co-creator) and Julien Scholz — shipped v0.9 with server
+push over long-lived WebSocket connections, so the server can push UI updates
+(chat-style) to fully interactive views. It builds on v0.8's signal tracking, where
+reading a signal during server rendering triggers automatic partial refetches with
+HTML morphing that preserves focus and input state, plus `live!`/`emit!` macros for
+streaming updates and suspense-style loading. The Toasty ORM gains an `update!` macro
+and first-class JSONB document fields. Lerche's pitch: Rails-grade productivity in a
+runtime at "~20 MB of RAM," with Rust's conventions making LLM-generated code cheaper
+and less error-prone. No benchmarks are published.
+
+**Why it matters:** The authorship makes this the most serious attempt yet at
+Rails-style full-stack Rust — and the explicit "conventions help agents write code"
+argument is a framework-design thesis aimed at the AI-coding era.
+
+[`🔗 Tokio blog`](https://tokio.rs/blog/2026-09-24-topcoat-server-applications) · [`🔗 tokio-rs/topcoat`](https://github.com/tokio-rs/topcoat)
+
+---
+
+## 38. SpeakerMem-R1: multi-party dialogue is where agent memory systems fall apart
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv / Hugging Face daily papers · ~82 upvotes · #1 paper of Sept 24
+- **Tags:** `llm` `memory` `multi-party-dialogue` `research`
+
+SpeakerMem-R1 (arXiv:2609.26780) attacks the gap between single-user agent memory
+and group conversation: memory systems must distinguish who said what, whom each
+statement concerns, how people perceive one another, and how shared states change —
+and existing general-purpose LLM memory systems lose person and group relations on
+multi-party benchmarks. The design is a dual-track store — speaker-labeled verbatim
+messages plus derived states, organized into person-level and group-level views —
+combined by entity, event and time at query time. Writer-R1 is trained with
+SpeakerLevenshtein and speaker-conditioned GRPO to cut attribution and update errors
+while keeping deployment local.
+
+**Why it matters:** The agent-memory boom has been almost entirely single-user;
+attribution and relational state in groups is the next bottleneck, and this paper
+names it precisely.
+
+[`🔗 arXiv:2609.26780`](https://arxiv.org/abs/2609.26780) · [`🔗 Hugging Face daily papers`](https://huggingface.co/papers?date=2026-09-24)
+
+---
+
+## 39. "Opus 5.5 is good at explainer videos" — a launch that treats a frontier LLM as the whole video pipeline
+
+- **Velocity:** ▮ rising
+- **Source:** HN 298+ pts · 156 comments · ~16h ago (~04:28 UTC+8)
+- **Tags:** `opus` `video` `llm` `product-launch`
+
+launchvideo.io is a service generating explainer videos end-to-end with Claude Opus
+5.5 — script, visuals and edit — and its Show-HN-style launch drew 298 points and a
+156-comment argument about whether the output is actually good. Be clear about what
+the evidence is: this is a vendor's own showcase, not a benchmark; the claim that
+matters is directional. The interesting signal is where the demo chose to compete —
+explainers (structured narration over diagrams) rather than cinematic generation,
+which is the segment where an LLM's planning and code-driven composition plausibly
+beat diffusion-only pipelines.
+
+**Why it matters:** Another datapoint that the model-as-production-pipeline pattern
+is moving from coding into media — with the same epistemics as code demos: a
+compelling demo proves capability exists, not that it generalizes.
+
+[`🔗 launchvideo.io`](https://launchvideo.io) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49836374)
+
+---
+
+## 40. Show HN: air-gapped file encryption as a self-decrypting HTML page
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 74+ pts · 27 comments · ~29h ago (~15:22 UTC+8, Sep 24)
+- **Tags:** `encryption` `offline` `html` `air-gap`
+
+ts-cms-ep-sfx encrypts files locally and emits a single self-decrypting HTML page:
+to decrypt, you open the page in any browser — no software installation on the
+decrypting machine, nothing that requires trusting an installed tool. The demo runs
+at cms-sfx-demo.apeleg.com and the library is on GitHub (ApelegHQ/ts-cms-ep-sfx,
+created 2024, small but real at 46★). The natural caveat came up in the thread: the
+HTML file itself is now the trusted artifact — whoever can modify it between
+encryption and decryption can swap in a key-stealing page — so the chain of custody
+of the file matters as much as the crypto.
+
+**Why it matters:** A pragmatic pattern for crossing air gaps where you can install
+nothing — the security model moves from "trust the machine" to "trust one file,"
+which is either a feature or the whole vulnerability, depending on your threat model.
+
+[`🔗 Live demo`](https://cms-sfx-demo.apeleg.com/) · [`🔗 ApelegHQ/ts-cms-ep-sfx`](https://github.com/ApelegHQ/ts-cms-ep-sfx)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-25T12:15:00+08:00 |
-| Items | 29 |
-| Sources tracked | 27 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com, Google Research, blog.arusekk.pl, status.gitlab.com, Tom's Hardware, Res Obscura, Solvy Tech blog, Notes from Poland, bestmodelforyourbudget.terrydjony.com) |
+| Generated | 2026-09-25T20:25:00+08:00 |
+| Items | 40 |
+| Sources tracked | 36 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, CISA KEV, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com, Google Research, blog.arusekk.pl, status.gitlab.com, Tom's Hardware, Res Obscura, Solvy Tech blog, Notes from Poland, bestmodelforyourbudget.terrydjony.com, dawo.community, Reddit, YouTube, safateam.com, helpx.adobe.com, docs.paperclip.ing, tokio.rs, launchvideo.io, cms-sfx-demo.apeleg.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
