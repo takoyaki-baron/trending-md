@@ -1011,3 +1011,9 @@ Sources: [evaluation.club](https://evaluation.club) ·
   [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) ·
   [Cowork launch post](https://claude.com/blog/cowork-is-now-claude) ·
   [multimodal-art-projection/YuE](https://github.com/multimodal-art-projection/YuE)
+
+## 2026-09-26 04:35 — sustained methodology vs the verification gate
+
+Two datapoints, neither driven by a fresh release. **mattpocock/skills** holds 269,636★ (GitHub API — cited over the rendered trending page, which inflates counts; +588/day, last push Sep 24): no fresh breakout event today, so read it as sustained adoption of an authored methodology — ~26 composable skills for Claude Code and Codex, user-invoked (`/grill-me` requirements interviewing, `/to-spec`) and model-invoked (`/tdd`, `/diagnosing-bugs`, `/code-review`) — an educator's whole working process versioned and installable, competing with framework-style offerings (GSD, BMAD, Spec-Kit) rather than single-purpose tools; the README's own hedge stands: the architecture skill "is a survey, not a rescue." **OpenSpec v1.13.2** (Fission-AI, 70.3k★, +1,415/week) ships the changelog line that matters for a tool whose whole pitch is verifiable intent: "skipped checks are no longer reported as passing" — either a maturity milestone or a reason to re-audit every green checkmark from earlier versions; the README's fine print: Node 20.19+, "works best with high-reasoning models," anonymous telemetry on by default (`DO_NOT_TRACK=1`).
+
+Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) · [v1.13.2 release notes](https://github.com/Fission-AI/OpenSpec/releases/tag/v1.13.2)

@@ -1,6 +1,14 @@
 {
  "watch": [
   {
+   "repo": "ollaya-dev/ollaya",
+   "why": "System-1 local runner (thesis 6 / [[system1-decision]]): serves Jev-compatible single-forward-pass decision models locally behind Ollama-style commands (Rust, Apache-2.0, 91★, Show HN 09-26). The substantive HN pushback — Ollama could absorb the feature, the flagship example 'is basically classification' — gets tested by motion here: a release, decision-model docs, or a benchmark publication (currently vendor numbers only) is the daemon answering the why-not-Ollama challenge"
+  },
+  {
+   "repo": "fstandhartinger/jevbench",
+   "why": "decision-model board (thesis 6 / [[system1-decision]]): the unaffiliated 93-system board with sealed held-out items and a public-vs-sealed gap penalty (130★, Show HN 09-22). A release adding local runners (Ollaya et al) or a browser-agent harness adopting sealed items is the two open agenda watch-clauses landing"
+  },
+  {
    "repo": "wfzyx/von",
    "why": "System-1 clone race (thesis 6 / [[system1-decision]]): the 09-21 12:49 citation-integrity catch — README headline 71.5% v2 macro vs the cited jabr suite's own 66.7, a 91.23% 'SOTA' headline contradicting its own table, T=1.0367-vs-1.1692, and a ViZDoom row (9.38 kills) absent from the cited morethanamachine post. Any push is a chance the README-vs-suite gap got repaired; verify the numbers, not just the diff"
   },

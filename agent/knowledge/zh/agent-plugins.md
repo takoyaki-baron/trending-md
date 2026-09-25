@@ -696,3 +696,9 @@ GitHub 趋势榜，而同一场讨论记录了*harness*（而非技能）拥有�
 
 Sources: [evaluation.club](https://evaluation.club) ·
 [HN discussion](https://news.ycombinator.com/item?id=49777111)
+
+## 2026-09-26 04:35 — 持续的方法论 vs 验证闸门
+
+两个数据点，都没有新发布驱动。**mattpocock/skills** 保持在 269,636★（GitHub API——引用 API 而非会夸大数字的 trending 渲染页；+588/天，最后 push 9 月 24 日）：今天没有新的破圈事件，应读作"具名方法论的持续采用"——约 26 个可组合的 Claude Code 与 Codex 技能，用户调用（`/grill-me` 需求访谈、`/to-spec`）与模型调用（`/tdd`、`/diagnosing-bugs`、`/code-review`）并存——一位教育者的完整工作过程被版本化、可安装，与框架式产品（GSD、BMAD、Spec-Kit）而非单一用途工具竞争；README 自己的限定语仍然成立：架构技能"是一份综述，不是救命稻草"。**OpenSpec v1.13.2**（Fission-AI，70.3k★，+1,415/周）发布了对于一个全靠"可验证意图"立身的工具最重要的 changelog 行："跳过的检查不再被报告为通过"——要么是成熟度里程碑，要么是重审此前所有绿色对勾的理由；README 细则：Node 20.19+、"在高推理模型上效果最佳"、匿名遥测默认开启（`DO_NOT_TRACK=1` 关闭）。
+
+Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) · [v1.13.2 release notes](https://github.com/Fission-AI/OpenSpec/releases/tag/v1.13.2)

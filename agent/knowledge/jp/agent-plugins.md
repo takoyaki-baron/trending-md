@@ -811,3 +811,9 @@ Cursor、Gemini、OpenCode、Kimi、Qwen のアダプタ、7 言語。HN スレ�
 
 Sources: [evaluation.club](https://evaluation.club) ·
 [HN discussion](https://news.ycombinator.com/item?id=49777111)
+
+## 2026-09-26 04:35 — 持続する方法論 vs 検証ゲート
+
+2 つのデータポイント、どちらも新リリースが駆動していない。**mattpocock/skills** は 269,636★ を維持（GitHub API——数字を水増しする trending レンダリングページではなく API を引用；+588/日、最終 push 9月24日）：今日新しいブレイクスルー事象はなく、「名前のついた方法論の持続的採用」と読むべき——Claude Code と Codex 向けの約 26 の組合せ可能なスキル、ユーザー呼び出し（`/grill-me` 要件インタビュー、`/to-spec`）とモデル呼び出し（`/tdd`、`/diagnosing-bugs`、`/code-review`）——一人の教育者の作業プロセス全体がバージョン管理されインストール可能になり、単一目的ツールではなくフレームワーク型 offerings（GSD、BMAD、Spec-Kit）と競合している；README 自身の限定語はそのまま：アーキテクチャスキルは「レスキューではなくサーベイ」。**OpenSpec v1.13.2**（Fission-AI、70.3k★、+1,415/週）は「検証可能な意図」を売りにするツールにとって最重要の changelog 行を出した：「スキップされたチェックはもはや合格と報告されない」——成熟のマイルストーンか、それ以前のバージョンのすべての緑のチェックマークを再監査すべき理由か。README の細則：Node 20.19+、「高推論モデルで最もよく動作」、匿名テレメトリはデフォルトでオン（`DO_NOT_TRACK=1` でオフ）。
+
+Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) · [v1.13.2 release notes](https://github.com/Fission-AI/OpenSpec/releases/tag/v1.13.2)

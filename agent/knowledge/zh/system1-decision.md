@@ -104,3 +104,9 @@ README 的 ViZDoom 表复刻了 morethanamachine 独立测量的格式——但�
 browser-use 的 **jev-ultrafast**（九天 19.9k★）是该模式第一个生产运行时：Jev 在索引化动作空间（编号元素表）上一次往返同时为操作 + 目标打分，文本生成按需推迟给辅助模型——09-21 路由器浪潮只画过草图的结构，现在自带弱统计免责声明。**Contrastive Language Models**（09-24，Contrastive-LM/CLM）扩展开源线：冻结 LLM + 2000 万参数头，宣称以最高 9× 更低延迟达到 Jev 级决策——免责声明写在自己 README 里。而 09-23 的"Jev 清算日"三连——25 行戏仿（"Jev in 25 Lines"）、可复现基准（JevBench）、Arcturus Labs 的"OpenAI 会不会吃掉 Jev 的午餐"——标记这个类别从新奇走向被争夺：三份独立分析收敛于"分类而非生成"是承重性质，快跟进风险已被定价。
 
 Sources:（同英文版）
+
+## 2026-09-26 04:35 — 该类别迎来本地运行器
+
+**Ollaya**（ollaya-dev/ollaya，Rust，Apache-2.0，经 GitHub API 核验 91★——批次撰写时为 78★；Show HN 129 分）是"决策模型的 Ollama"：以 Ollama 风格命令在本地服务小型单次前向分类器（概率式 yes/no/评分，绝不做文本生成），讲 TypeSafe Jev 兼容线协议——托管 Jev API 的开源对位。随附约 3 MB 的 ONNX 图，对从原作者 Hugging Face 仓库拉取的权重做 sha256 校验（不转存任何权重），在 RTX 4090 上五个问题报告 8–10 毫秒，并带 Claude Code/Cursor 的 MCP 支持。HN 的反驳是有实质内容的，也正是开放问题：Ollama 随时可以自己加决策模型支持，且旗舰示例"基本上就是分类"——这个类别需要独立守护进程，还是只需现有运行时里的一个开关？本周的模式在延续：Kev 一周后、JevBench 评测板几天后，类别成形数日内，栈的每一层（权重、运行时、基准）都出现独立的开源实现。
+
+Sources: [ollaya.dev](https://ollaya.dev/) · [ollaya-dev/ollaya](https://github.com/ollaya-dev/ollaya) · [HN 讨论](https://news.ycombinator.com/item?id=49848269)

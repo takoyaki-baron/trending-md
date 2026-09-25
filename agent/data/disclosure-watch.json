@@ -24,7 +24,8 @@
         "49661662"
       ],
       "hf_seen": [],
-      "checked": "2026-09-25T13:18:32.193Z"
+      "osv_seen": [],
+      "checked": "2026-09-25T21:22:59.438Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -52,7 +53,8 @@
         "MiniMaxAI/VTP-Large-f16d64",
         "MiniMaxAI/VTP-Small-f16d64"
       ],
-      "checked": "2026-09-25T13:18:32.193Z"
+      "osv_seen": [],
+      "checked": "2026-09-25T21:22:59.438Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -66,7 +68,8 @@
         "49567594"
       ],
       "hf_seen": [],
-      "checked": "2026-09-25T13:18:32.193Z"
+      "osv_seen": [],
+      "checked": "2026-09-25T21:22:59.438Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -74,7 +77,8 @@
         "49516047"
       ],
       "hf_seen": [],
-      "checked": "2026-09-25T13:18:32.193Z"
+      "osv_seen": [],
+      "checked": "2026-09-25T21:22:59.438Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -95,7 +99,8 @@
         "49767558"
       ],
       "hf_seen": [],
-      "checked": "2026-09-25T13:18:32.193Z"
+      "osv_seen": [],
+      "checked": "2026-09-25T21:22:59.438Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -111,7 +116,8 @@
         "49695605"
       ],
       "hf_seen": [],
-      "checked": "2026-09-25T13:18:32.193Z"
+      "osv_seen": [],
+      "checked": "2026-09-25T21:22:59.438Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -119,10 +125,18 @@
         "49789224"
       ],
       "hf_seen": [],
-      "checked": "2026-09-25T13:18:32.193Z"
+      "osv_seen": [],
+      "checked": "2026-09-25T21:22:59.438Z"
+    },
+    "ghappier-provenance": {
+      "nvd_seen": [],
+      "hn_seen": [],
+      "hf_seen": [],
+      "osv_seen": [],
+      "checked": "2026-09-25T21:22:59.438Z"
     }
   },
-  "runs": 59,
+  "runs": 61,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-09-25T13:18:32.193Z"
+  "last_run": "2026-09-25T21:22:59.438Z"
 }

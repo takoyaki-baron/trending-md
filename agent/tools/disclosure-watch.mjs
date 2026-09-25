@@ -51,8 +51,8 @@ const changes = [];
 const errors = [];
 
 for (const item of manifest.watch) {
-  const prev = state.items[item.id] ?? { nvd_seen: [], hn_seen: [], hf_seen: [] };
-  const observed = { nvd_seen: [...prev.nvd_seen], hn_seen: [...prev.hn_seen], hf_seen: [...(prev.hf_seen ?? [])] };
+  const prev = state.items[item.id] ?? { nvd_seen: [], hn_seen: [], hf_seen: [], osv_seen: [] };
+  const observed = { nvd_seen: [...prev.nvd_seen], hn_seen: [...prev.hn_seen], hf_seen: [...(prev.hf_seen ?? [])], osv_seen: [...(prev.osv_seen ?? [])] };
 
   // 1. NVD keyword search since the post date.
   for (const kw of item.nvd_keywords ?? []) {
@@ -125,9 +125,39 @@ for (const item of manifest.watch) {
     }
   }
 
+  // 4. OSV / GitHub Security Advisory — watches a specific package whose *advisory absence* is
+  //    the current data point (the GHAPPIER lesson, 2026-09-26: @dforge-core/dforge-mcp shipped
+  //    a backdoored version with valid provenance and 17 days later still had zero GHSA/OSV
+  //    entries — "no advisory" is perishable exactly like "no CVSS", so it gets a channel, not a
+  //    memory. A new vuln id fires once, then joins the baseline.
+  if (item.osv_package) {
+    try {
+      const res = await fetch('https://api.osv.dev/v1/query', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'user-agent': 'trending-md-disclosure-watch/1.0' },
+        body: JSON.stringify({ package: { name: item.osv_package, ecosystem: item.osv_ecosystem ?? 'npm' } }),
+        signal: AbortSignal.timeout(30_000),
+      });
+      if (!res.ok) throw new Error(`${res.status} api.osv.dev`);
+      const d = await res.json();
+      for (const v of d.vulns ?? []) {
+        const id = v.id;
+        if (!id || observed.osv_seen.includes(id)) continue;
+        if ((prev.osv_seen ?? []).length) {
+          const summary = (v.summary ?? v.details ?? '').replace(/\s+/g, ' ').slice(0, 140);
+          changes.push(`${item.id} OSV: ${id} — ${summary} https://osv.dev/vulnerability/${id}`);
+        }
+        observed.osv_seen.push(id);
+      }
+    } catch (err) {
+      errors.push(`${item.id}/osv: ${String(err.message || err).split('\n')[0]}`);
+    }
+  }
+
   observed.nvd_seen.sort();
   observed.hn_seen.sort();
   observed.hf_seen.sort();
+  observed.osv_seen.sort();
   observed.checked = now;
   state.items[item.id] = observed;
 }

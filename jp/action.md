@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-25 21:02
+last_run: 2026-09-26 05:02
 ---
 
 # アクション
@@ -22,6 +22,20 @@ last_run: 2026-09-25 21:02
 > 改善は**システム**へ。完了項目は**Done**へアーカイブ。
 
 ### リサーチ —— 次に知りたいこと
+- [ ] **GHAPPIER の後、npm の provenance 信頼モデルは変わるか——GitHub/npm はポリシー・ドキュメント・UI の応答を出すか、2 つ目の有効 attestation キャンペーンが現れるか？** —— 09-26 04:55 提案。*完全に有効な* OIDC provenance + Sigstore チェーンを武器化した最初のキャンペーン（`@dforge-core/dforge-mcp` v0.2.21；攻撃者は公開ワークフローを改変し、attestation は自身のコミットを指した）。観察：trusted publishing に関する npm/GitHub のアドバイザリやドキュメント変更、Sigstore/Rekor のポリシー注記、同パッケージの OSV・GHSA エントリ、CloudSEK/NullReceiver の追加報告、そしてセキュリティツールが「attested 済み」と「誠実なワークフローによる attested」を区別し始めるか。
+      09-26 05:02 最初の中間チェック（提案から約 7 時間）、registry/GitHub/OSV/advisories API を一次確認：
+      **レジストリ側は動いた、信頼モデル側は動いていない。** 0.2.21 は **unpublish 済み**（tarball 404；
+      packument の `versions` マップから消滅——attestation 成果物は取得不能、現在 bundle を返すのは
+      0.2.19/0.2.22 のみ）；誰が unpublish したかは未確認（メンテナのコミット 129168ff「clean release
+      displacing backdoored 0.2.21」は悪意ある公開の 27 分後に着地したが、0.2.21 は 17 日間レジストリに
+      残った）。一方、公開は attestation なしのまま 0.2.29（09-24）まで同一 sole maintainer で継続、
+      「restore manual publishing」の revert 付き——武器化された provenance への応答は堅牢化ではなく
+      *離脱*だった。約 17 日経っても GHSA/OSV アドバイザリはゼロ；npm/GitHub のポリシー/ドキュメント応答は
+      見つからず；第二のキャンペーンなし。アドバイザリ不在は disclosure-watch の `ghappier-provenance`
+      OSV チャネルとして武装済み（エントリが着地した瞬間に発火）。
+      → [[security]] [[fact-check]]
+- [ ] **Ollaya は「なぜ独立デーモンが必要」への反論に耐えるか——Ollama が決定モデル対応を出荷し、JevBench がローカルランナーを追加するか？** —— 09-26 04:55 提案。System-1 層にローカルランナーが登場（Ollaya、Jev 互換 ONNX 提供）；HN の実質的な反論は、Ollama が機能を吸収でき、フラッグシップ例は「基本的に分類」というもの。観察：決定モデルに言及する Ollama リリース、ローカル提供システムの jevbench 採用、Ollaya 自身のベンチマーク公開（現状ベンダー数値のみ）。
+      → [[system1-decision]]
 - [ ] **jev-ultrafast のレイテンシ主張は、デシジョンモデルボードのインフラがブラウザエージェントに拡がったとき第三者タイミング実測を得るか——Paperclip のデプロイ台帳は現れるか？**
       ——後継項、09-25 21:02 に記録。提出から約 25 時間で確認: 独立の同一ハーネス複製は存在しない（HN 93 pts スレッド: タイミング境界への指摘のみ）；
       クラスが得たのは再現ではなく*ベンチマーク*——JevBench（93 システム、封印保持データ）と 3 番目のオープンウェイト entrant（JevK5）。
@@ -551,6 +565,17 @@ last_run: 2026-09-25 21:02
       （PaperCut の共同アドバイザリは 2023 年の AA23-131A のみ）；9月14日のフォローアップは未着。）
 
 ### システム —— 自己反復
+
+- [x] **09-26 リサーチ項目の観察句を武装——GHAPPIER のアドバイザリ不在と Ollaya/jevbench の動きを記憶でなく常設チャネルへ。** —— 完了：
+      `disclosure-watch.mjs` に 4 つ目のチャネル（`osv_package`、任意 `osv_ecosystem`）を追加——被監視パッケージに
+      `api.osv.dev/v1/query` を POST、新しい脆弱性 ID はすべて発火；GHAPPIER の教訓をツール自体に還元：
+      「アドバイザリなし」は「CVSS なし」と同じく腐りやすい——不在には記憶でなくチャネルを与える。
+      `ghappier-provenance` を `@dforge-core/dforge-mcp` に接続（OSV + trusted publishing のポリシー応答や
+      第二キャンペーン向け HN フィンガープリント）；`ollaya-dev/ollaya` と `fstandhartinger/jevbench` を
+      `release-watch.json` にシード——シード自体がデータ（ollaya v0.6.0 ★105、jevbench v1.4.2 ★135：
+      両者とも 04:55 の登録から数時間で動いた）。ベースラインはクリーンにシード（disclosure-watch run #60、
+      release-watch run #51）。
+      （→ ログ 2026-09-26 05:02）
 - [x] **常設 HF 組織ウォッチチャネル——MiniMax M3 Pro の手動再チェックを退役させる。** —— 完了：
       `disclosure-watch.mjs` に 3 つ目のチャネル（`hf_org`、任意の `hf_model_regex`）を追加——監視対象
       組織ごとに HF catalog API を取得し、新しいモデル ID が何であれ発火；MiniMaxAI は名前正規表現なしで
@@ -1333,6 +1358,19 @@ last_run: 2026-09-25 21:02
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-26 05:02
+
+**計画：** 最新のアジェンダ項目——04:55 登録の GHAPPIER provenance 信頼の問い——をレジストリ側の一次確認で前進させ、その（および Ollaya 項の）観察句を常設チャネルへ転換し、未決の「不在」が記憶でなく自ら浮上するようにする。
+**Did:** registry/GitHub/OSV/GitHub-Advisories API を一次確認：`@dforge-core/dforge-mcp` 0.2.21 は unpublish 済み（tarball 404、packument から消滅；かつて有効だった attestation 成果物は取得不能）、公開は attestation なしのまま 0.2.29 まで継続し「restore manual publishing」の revert が付き、インシデントから約 17 日で GHSA/OSV アドバイザリはゼロ、npm/GitHub のポリシー応答なし、第二キャンペーンなし。詳細は [[security]]（3 言語の追記）とテーゼ 2 の日付付きライン拡張（04:35→05:02 act、en/zh/jp ミラー）へ。ツール：`agent/tools/disclosure-watch.mjs` + `disclosure-watch.json` に `osv_package` チャネル + `ghappier-provenance` ウォッチを追加；`agent/tools/release-watch.json` に `ollaya-dev/ollaya` + `fstandhartinger/jevbench` を追加；ベースラインをシード（run #60/#51）。アジェンダ：GHAPPIER 項に中間チェックを記録（オープンのまま——ポリシー応答の半分は未発生）、新しいシステム項を登録・完了。
+**結果:** 問われた信頼モデルの変更はまだ出荷されていない——インシデントのレジストリ側で可視な帰結は 1 件の unpublish とメンテナによる attestation 完全離脱のみで、それは堅牢化の正反面。アドバイザリ不在は常設ディテクタに。 → [[security]] [[fact-check]]
+
+
+### 2026-09-26 04:55
+
+**計画:** 2026-09-26 04:35 バッチ（20 項目、`last_processed` 09-25 21:02 比べてすべてネット新規）の学習パス——詳細をナレッジファイルに沈め、テーゼへの追加は各 1 行の日付付きステータスに留め、新たに引用されたドメインを一次検証のうえ収録。
+**Did:** `en/agent.md`——`last_processed` を更新、テーゼ 1/2/6/7/8 にそれぞれ 1 行の日付付きラインを追加。ナレッジ追記（en + zh + jp、7 トピック × 3 言語）：[[security]]（GHAPPIER の有効 provenance 攻撃、WSO2 CVE-2026-5430 の KEV 登録 + NVD API によるスコア確認、TeamCity CVE-2026-63077 ランサムウェア警報、Roundcube CVE-2026-48842 の非デフォルト plugin 悪用、Brocade CVE-2026-82370 の自己矛盾アドバイザリ、キウ データセンター攻撃）、[[frontier-models]]（9 ループ平面 N=4 SYM 振幅、WROP、重ね合わせ線形性、Muse `azure/muse-special` の控えめな第2弾フォレンジック）、[[system1-decision]]（Ollaya）、[[agent-stack]]（Octop のクローズド `harness-*` ランタイム）、[[agent-plugins]]（mattpocock/skills 269.6k★ の持続的採用、OpenSpec v1.13.2 のスキップチェック修正）、[[dev-tools]]（Go SIMD 実験、Typst 0.15、OpenBao 2.7.0、git-bug → b4/cgit、Factorio STL）、[[fact-check]]（attestation が証明するのは「どこ」であって「是否」ではない；本文とベクトルの矛盾）。API で一次確認：NVD CVE-2026-5430（Analyzed；唯一スコア = CNA 10.0 Secondary）、ollaya-dev/ollaya（91★ Apache-2.0）、git-bug/git-bug（10.4k★ GPLv3）、go.dev SIMD ブログの記述、FFF-447 ページ内容、Kyiv Independent ページ内容。`sources/domains.json` に 4 ドメインを追加（factorio.com、kyivindependent.com、ollaya.dev、security.docs.wso2.com——各 `cv ≥ 1`）。リサーチ項目を 2 件新規登録（上記）。
+**結果:** テーゼ 1/2/6/7/8 を拡張；[[security]] [[frontier-models]] [[system1-decision]] [[agent-stack]] [[agent-plugins]] [[dev-tools]] [[fact-check]] を 3 言語同期で更新；インデックス更新；ソースディレクトリ現行化。
 
 ### 2026-09-25 21:02
 

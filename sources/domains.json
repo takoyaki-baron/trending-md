@@ -1578,6 +1578,15 @@
     "jp": "Anthropicのプロダクト/ブログドメイン（Claude Code、Claude）——Claudeリリースの一次情報。突合済み（08-16）：Auto Modeデフォルトの発表はSimon Willisonの独立報道と一致（8月14日、Pro/Max/Team、分類器が不可逆/破壊的/範囲外の動作をブロック）；Trajectory Labsの数値（720件のホールドアウト攻撃、0/720 vs 5.83%/19.03%）はcode.claude.comのパーミッションモード文書および独立メディア（the-decoder、byteiota）と一致。",
     "zh": "Anthropic 的产品/博客域名（Claude Code、Claude）——Claude 发布的一手来源。已交叉核验（08-16）：其 Auto Mode 默认开启的公告与 Simon Willison 的独立报道一致（8 月 14 日，Pro/Max/Team，分类器拦截不可逆/破坏性/越界动作）；其 Trajectory Labs 数据（720 次留出攻击、0/720 vs 5.83%/19.03%）与 code.claude.com 权限模式文档及独立媒体（the-decoder、byteiota）一致。"
   },
+  "claude.dev": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Anthropic's claude.dev engineering blog — first-party engineering postmortems with named authors and full measurement detail (13 p75 RUM metrics, CI ratchets, stated limits). Cross-checked (09-25): the 3.1x geometric-mean sprint post's numbers (fresh load 3,085->550 ms; Cowork send 928->48 ms) match the post verbatim, limits included.",
+    "zh": "Anthropic 的 claude.dev 工程博客——第一方工程复盘,作者署名、测量细节完整(13 项 p75 真实用户指标、CI 棘轮、明示局限)。交叉验证(09-25):3.1 倍几何均值冲刺帖的数字(冷加载 3,085->550 ms;Cowork 发送 928->48 ms)与原文逐字一致,局限部分也在。",
+    "jp": "Anthropic の claude.dev エンジニアリングブログ——第一級の工程振り返りで、著者名と測定詳細が完全(13 項目の p75 RUM 指標、CI ラチェット、限界の明記)。クロスチェック済み(09-25):3.1 倍幾何平均スプリント記事の数値(新規ロード 3,085→550ms、Cowork 送信 928→48ms)は本文と一字一句一致。"
+  },
   "claudemarketplaces.com": {
     "cat": "other",
     "cred": "low",
@@ -2873,6 +2882,15 @@
     "en": "F5 Labs threat research (honeynets, dev-server exploitation campaigns). The Vite CVE-2026-39364 report self-labels honeypot attempts as unconfirmed exfiltration — measured telemetry with printed caveats.",
     "jp": "F5 Labs の脅威リサーチ（ハニーネット、開発サーバー攻撃キャンペーン）。Vite CVE-2026-39364 報告はハニーポット試行を自ら明示し持ち出しは未確認——注意書き付きの実測テレメトリ。",
     "zh": "F5 Labs 威胁研究（蜜网、开发服务器攻击活动）。Vite CVE-2026-39364 报告自标蜜罐尝试、外泄未证实——实测遥测附有明确警告。"
+  },
+  "factorio.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Wube Software's official Factorio blog (Friday Facts) — first-party engineering writeups; FFF-447 documented the 247-STL asset release with the Prusa collaboration's printing notes. Cross-validated against the page contents + HN discussion (09-26).",
+    "zh": "Wube Software 官方 Factorio 博客（Friday Facts）——第一方工程随笔；FFF-447 记录了 247 个 STL 资产发布及与 Prusa 合作的打印笔记。已与页面内容 + HN 讨论交叉核验（09-26）。",
+    "jp": "Wube Software の公式 Factorio ブログ（Friday Facts）——一次情報のエンジニアリング解説；FFF-447 は 247 STL アセット公開と Prusa 協業の印刷ノートを記録。ページ内容 + HN 議論と突合済み（09-26）。"
   },
   "fastpotify.rocks": {
     "cat": "code",
@@ -4247,6 +4265,15 @@
     "jp": "KVキャッシュ研究ブログ。深いLLM推論記事 —— MoE/アテンション系に高シグナル。",
     "zh": "KV 缓存研究博客；深入的 LLM 推理文章 —— 对 MoE/注意力工作信号价值高。"
   },
+  "kyivindependent.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Ukraine's English-language news outlet — strong wartime first-hand reporting with ministry attributions (Kyiv data-centre strikes, ~100k households offline per Digital Transformation Ministry); claims it flags as unconfirmed were carried as such. Cross-validated against the page contents + the HN/BBC version (09-26).",
+    "zh": "乌克兰英文新闻媒体——战时第一手报道有力，附部委归属（基辅数据中心打击，数字化转型部称约 10 万户离线）；其自标未证实的主张按原样引用。已与页面内容 + HN/BBC 版本交叉核验（09-26）。",
+    "jp": "ウクライナの英語系ニュース媒体——省庁の帰属付きの戦時一次報道が強い（キウ データセンター攻撃、数字化转型省により約 10 万世帯オフライン）；未確認と自己表示する主張はそのまま掲載。ページ内容 + HN/BBC 版と突合済み（09-26）。"
+  },
   "labs.cloudsecurityalliance.org": {
     "cat": "security",
     "cred": "high",
@@ -4354,6 +4381,15 @@
     "en": "Laude Institute's official site — primary source for its own agent-harness releases (e.g. Headlong). Cross-checked (08-25): the Headlong announcement's details (Bash microharness, persistent agents) match Runtime Wire's coverage.",
     "jp": "Laude Institute の公式サイト——自社のエージェントハーネス公開（例：Headlong）の一次情報源。突合済み（08-25）：Headlong 発表の詳細（Bashマイクロハーネス、永続エージェント）は Runtime Wire の報道と一致。",
     "zh": "Laude Institute 官方网站——其自身智能体框架发布（如 Headlong）的一手来源。已交叉核验（08-25）：Headlong 公告的细节（Bash 微框架、持久化智能体）与 Runtime Wire 报道一致。"
+  },
+  "launchvideo.io": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "LaunchVideo — code-driven explainer/launch-video generator: Claude Opus 5.5 authors HTML/JS 'film as code', rendered deterministically via a virtual clock; open source (diggerhq/shipvideo). Cross-checked (09-25): model attribution (Opus 5.5 via OpenComputer, no video model) and the no-video-model composition method are on the page; demo-first vendor, capability shown ≠ generalizes.",
+    "zh": "LaunchVideo——代码驱动的解说/发布视频生成器:Claude Opus 5.5 以 \"film as code\" 方式编写 HTML/JS,经虚拟时钟确定性渲染;开源(diggerhq/shipvideo)。交叉验证(09-25):模型归因(Opus 5.5 经 OpenComputer,无视频模型)与无视频模型的合成方法均在页面上;演示优先的厂商站,能力演示≠普遍适用。",
+    "jp": "LaunchVideo——コード駆動の解説/ローンチ動画ジェネレーター:Claude Opus 5.5 が「film as code」として HTML/JS を書き、仮想クロックで決定論的にレンダリング。オープンソース(diggerhq/shipvideo)。クロスチェック済み(09-25):モデル帰属(Opus 5.5 経由 OpenComputer、動画モデル不使用)と構成手法はページ上に明記。デモ優先のベンダーサイト。"
   },
   "laya.convaiinnovations.com": {
     "cat": "vendor",
@@ -5496,6 +5532,15 @@
     "en": "Long-running Chinese high-tech industry portal covering semiconductors, energy and AI; mixes original analysis with vendor PR, confirm commercial claims separately.",
     "jp": "中国の老舗ハイテク業界ポータル。半導体・エネルギー・AIを網羅し独自分析と企業PRが混在、商業的主張は個別確認を。",
     "zh": "中国老牌高科技行业门户，覆盖半导体、能源与 AI，原创分析与厂商软文混杂，商业声明需单独核实。"
+  },
+  "ollaya.dev": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Landing page for Ollaya, a local runner for Jev-compatible decision models — young project (ollaya-dev/ollaya verified via GitHub API: 91★, Apache-2.0); performance figures are self-run. Cross-validated against the GitHub repo metadata (09-26).",
+    "zh": "Ollaya 的落地页——Jev 兼容决策模型的本地运行器——年轻项目（经 GitHub API 核验 ollaya-dev/ollaya：91★，Apache-2.0）；性能数字为自测。已与 GitHub 仓库元数据交叉核验（09-26）。",
+    "jp": "Ollaya のランディングページ——Jev 互換決定モデルのローカルランナー——若いプロジェクト（GitHub API で ollaya-dev/ollaya を確認：91★、Apache-2.0）；性能数値は自己計測。GitHub リポジトリメタデータと突合済み（09-26）。"
   },
   "omarchy.org": {
     "cat": "other",
@@ -6878,6 +6923,15 @@
     "jp": "Apple の SEAR（Security Engineering and Architecture）ブログ——Reference Image や PCC など Apple のセキュリティアーキテクチャの一次ドキュメント。ベンダー自述のためベンチマークの欠落に注意。",
     "zh": "Apple 安全工程与架构团队（SEAR）博客——Apple 安全体系结构（Reference Image、PCC）的一手厂商文档。内容为厂商自述，基准缺口已被标注。"
   },
+  "security.docs.wso2.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "WSO2's official security advisories — authoritative for its CVEs (CVE-2026-5430's 10.0 is vendor/CNA-assigned; note the advisory itself never mentions exploitation). Cross-validated against the NVD API record, which carries the CNA score as Secondary only (09-26).",
+    "zh": "WSO2 官方安全公告——其 CVE 的权威来源（CVE-2026-5430 的 10.0 为厂商/CNA 评分；注意公告本身从未提及在野利用）。已与 NVD API 记录交叉核验——NVD 仅以 Secondary 承载该 CNA 评分（09-26）。",
+    "jp": "WSO2 の公式セキュリティ勧告——同社 CVE の一次情報（CVE-2026-5430 の 10.0 はベンダー/CNA による；勧告自体は悪用に一切触れない点に注意）。NVD API レコードと突合済み——NVD は当該 CNA スコアを Secondary のみで掲載（09-26）。"
+  },
   "securityaffairs.com": {
     "cat": "security",
     "cred": "med",
@@ -7362,6 +7416,15 @@
     "en": "Andy Brice's blog on indie software business. Fetched 09-25: the GitHub brand-imitation malware post is first-person with dated evidence (VirusTotal results, the altered DMG background); the repo's removal after the HN front page hit is the author's own account.",
     "jp": "Andy Briceのインディーソフトウェアビジネス Blog。09-25に取得：GitHub模倣マルウェアの記事は一次体験記で、日付付き証拠（VirusTotal結果、差し替えられたDMG背景）付き。HNフロントページ到達後のリポジトリ削除は著者自身の説明。",
     "zh": "Andy Brice 关于独立软件业务的博客。09-25 抓取：GitHub 仿冒恶意软件一文为第一人称记录，带日期证据（VirusTotal 结果、被替换的 DMG 背景图）；登上 HN 首页后仓库被删除是作者自述。"
+  },
+  "suhacker.ai": {
+    "cat": "community",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Suha Sabi Hussain's research-integrity blog (self-described former Trail of Bits) — single-author methodological audits of industry AI-security papers. Cross-checked (09-25): every specific claim in the FLAWED audit (19 citations, AutoPatchBench/PatchBench/NDSS omissions, 'peer review' = thanks to three colleagues) matches the post; opinionated by design, treat author credentials as self-stated.",
+    "zh": "Suha Sabi Hussain 的研究诚信博客(自述前 Trail of Bits 研究员)——针对业界 AI 安全论文的单人方法论审计。交叉验证(09-25):FLAWED 审计中的每个具体主张(19 篇引用、AutoPatchBench/PatchBench/NDSS 遗漏、\"同行评审\"实为致谢三位同行)均与原文一致;立场鲜明,作者资历系自述。",
+    "jp": "Suha Sabi Hussain の研究誠実性ブログ(自称 Trail of Bits 元研究員)——業界の AI セキュリティ論文に対する個人による方法論監査。クロスチェック済み(09-25):FLAWED 監査の具体的主張(引用 19 件、AutoPatchBench/PatchBench/NDSS の未引用、「 peer review 」は同僚 3 名への謝辞)はすべて本文と一致。著者の経歴は自己申告。"
   },
   "sunilpai.dev": {
     "cat": "community",
@@ -8851,32 +8914,5 @@
     "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
-  },
-  "claude.dev": {
-    "cat": "vendor",
-    "cred": "high",
-    "density": "high",
-    "cv": 1,
-    "en": "Anthropic's claude.dev engineering blog — first-party engineering postmortems with named authors and full measurement detail (13 p75 RUM metrics, CI ratchets, stated limits). Cross-checked (09-25): the 3.1x geometric-mean sprint post's numbers (fresh load 3,085->550 ms; Cowork send 928->48 ms) match the post verbatim, limits included.",
-    "zh": "Anthropic 的 claude.dev 工程博客——第一方工程复盘,作者署名、测量细节完整(13 项 p75 真实用户指标、CI 棘轮、明示局限)。交叉验证(09-25):3.1 倍几何均值冲刺帖的数字(冷加载 3,085->550 ms;Cowork 发送 928->48 ms)与原文逐字一致,局限部分也在。",
-    "jp": "Anthropic の claude.dev エンジニアリングブログ——第一級の工程振り返りで、著者名と測定詳細が完全(13 項目の p75 RUM 指標、CI ラチェット、限界の明記)。クロスチェック済み(09-25):3.1 倍幾何平均スプリント記事の数値(新規ロード 3,085→550ms、Cowork 送信 928→48ms)は本文と一字一句一致。"
-  },
-  "suhacker.ai": {
-    "cat": "community",
-    "cred": "med",
-    "density": "high",
-    "cv": 1,
-    "en": "Suha Sabi Hussain's research-integrity blog (self-described former Trail of Bits) — single-author methodological audits of industry AI-security papers. Cross-checked (09-25): every specific claim in the FLAWED audit (19 citations, AutoPatchBench/PatchBench/NDSS omissions, 'peer review' = thanks to three colleagues) matches the post; opinionated by design, treat author credentials as self-stated.",
-    "zh": "Suha Sabi Hussain 的研究诚信博客(自述前 Trail of Bits 研究员)——针对业界 AI 安全论文的单人方法论审计。交叉验证(09-25):FLAWED 审计中的每个具体主张(19 篇引用、AutoPatchBench/PatchBench/NDSS 遗漏、\"同行评审\"实为致谢三位同行)均与原文一致;立场鲜明,作者资历系自述。",
-    "jp": "Suha Sabi Hussain の研究誠実性ブログ(自称 Trail of Bits 元研究員)——業界の AI セキュリティ論文に対する個人による方法論監査。クロスチェック済み(09-25):FLAWED 監査の具体的主張(引用 19 件、AutoPatchBench/PatchBench/NDSS の未引用、「 peer review 」は同僚 3 名への謝辞)はすべて本文と一致。著者の経歴は自己申告。"
-  },
-  "launchvideo.io": {
-    "cat": "vendor",
-    "cred": "med",
-    "density": "med",
-    "cv": 1,
-    "en": "LaunchVideo — code-driven explainer/launch-video generator: Claude Opus 5.5 authors HTML/JS 'film as code', rendered deterministically via a virtual clock; open source (diggerhq/shipvideo). Cross-checked (09-25): model attribution (Opus 5.5 via OpenComputer, no video model) and the no-video-model composition method are on the page; demo-first vendor, capability shown ≠ generalizes.",
-    "zh": "LaunchVideo——代码驱动的解说/发布视频生成器:Claude Opus 5.5 以 \"film as code\" 方式编写 HTML/JS,经虚拟时钟确定性渲染;开源(diggerhq/shipvideo)。交叉验证(09-25):模型归因(Opus 5.5 经 OpenComputer,无视频模型)与无视频模型的合成方法均在页面上;演示优先的厂商站,能力演示≠普遍适用。",
-    "jp": "LaunchVideo——コード駆動の解説/ローンチ動画ジェネレーター:Claude Opus 5.5 が「film as code」として HTML/JS を書き、仮想クロックで決定論的にレンダリング。オープンソース(diggerhq/shipvideo)。クロスチェック済み(09-25):モデル帰属(Opus 5.5 経由 OpenComputer、動画モデル不使用)と構成手法はページ上に明記。デモ優先のベンダーサイト。"
   }
 }

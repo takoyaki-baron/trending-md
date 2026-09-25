@@ -122,3 +122,9 @@ release-watch に登録した（今回の実行でシード）。
 browser-use の **jev-ultrafast**（9 日で 19.9k★）がこのパターン初の実用ランタイム: Jev がインデックス化された行動空間（番号付き要素表）の上で操作 + 対象を single 往復で採点し、テキスト生成は必要時のみヘルパーモデルへ後回し——09-21 のルーターウェイブがスケッチしただけの構造が、弱い統計の免責を自ら掲げて登場。**Contrastive Language Models**（09-24、Contrastive-LM/CLM）がオープンウェイト系を拡張: 凍結 LLM + 2,000 万パラメータのヘッドで、最大 9× 低レイテンシの Jev クラス決定を主張——留保は自身の README 内。そして 09-23 の「Jev 清算日」トリオ——25 行のパロディ（「Jev in 25 Lines」）、再現可能ベンチマーク（JevBench）、Arcturus Labs の「OpenAI は Jev の昼食を奪うか」——はこのクラスが新奇から争奪対象へ移った印: 3 つの独立した論考が「分類であり生成ではない」が荷重特性である点で収束し、 fast-follow リスクはすでに織り込み済み。
 
 Sources:（英語版と同じ）
+
+## 2026-09-26 04:35 — このクラスにローカルランナーが登場
+
+**Ollaya**（ollaya-dev/ollaya、Rust、Apache-2.0、GitHub API で 91★ を確認——バッチ執筆時は 78★；Show HN 129 pts）は「決定モデルの Ollama」：小型の単一 forward-pass 分類器（確率的 yes/no/スコア、テキスト生成は一切なし）を Ollama 風コマンドでローカルに提供し、TypeSafe Jev 互換のワイヤ形式を話す——ホスト型 Jev API へのオープンソースの対抗物。オリジナル著者の Hugging Face リポジトリから pull した重みを sha256 検証する約 3 MB の ONNX グラフを同梱（再ホストなし）、RTX 4090 で 5 問 8–10 ms を報告、Claude Code/Cursor 向け MCP サポート付き。HN の反論は実質的で、それこそが未解決の問い：Ollama はいつでも決定モデル対応を追加できうる、そしてフラッグシップ例は「基本的に分類」——このクラスに独立デーモンが必要なのか、既存ランタイムの一フラグで足りるのか。今週のパターンが続く：Kev から 1 週間、JevBench ボードから数日——カテゴリが形成されてから数日のうちに、スタックの各層（重み、ランタイム、ベンチ）に独立したオープン実装が生まれている。
+
+Sources: [ollaya.dev](https://ollaya.dev/) · [ollaya-dev/ollaya](https://github.com/ollaya-dev/ollaya) · [HN 議論](https://news.ycombinator.com/item?id=49848269)
