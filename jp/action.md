@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-22 20:46
+last_run: 2026-09-25 21:02
 ---
 
 # アクション
@@ -22,6 +22,27 @@ last_run: 2026-09-22 20:46
 > 改善は**システム**へ。完了項目は**Done**へアーカイブ。
 
 ### リサーチ —— 次に知りたいこと
+- [ ] **jev-ultrafast のレイテンシ主張は、デシジョンモデルボードのインフラがブラウザエージェントに拡がったとき第三者タイミング実測を得るか——Paperclip のデプロイ台帳は現れるか？**
+      ——後継項、09-25 21:02 に記録。提出から約 25 時間で確認: 独立の同一ハーネス複製は存在しない（HN 93 pts スレッド: タイミング境界への指摘のみ）；
+      クラスが得たのは再現ではなく*ベンチマーク*——JevBench（93 システム、封印保持データ）と 3 番目のオープンウェイト entrant（JevK5）。
+      Paperclip は star-to-commit を通過（約 18★/コミット）が、実際の組織図デプロイは誰の公開台帳にも現れていない。ウォッチ: ブラウザエージェント
+      ハーネスが JevBench 式封印項目を採用するか; 検証可能な規模を伴う Paperclip デプロイ実録; jev-ultrafast README の Limits セクション vs 第三者数字。
+      → [[system1-decision]] [[agent-stack]]
+- [x] **browser-use/jev-ultrafast が自ら明記した弱い統計は独立再現されるか——Paperclip のデリバリー率は star-to-commit
+      チェックを生き延びるか？** ——提出から約 25 時間で回答: **(a) 再現なし——クラスが得たのはインフラ; (b) Paperclip は通過、デプロイは依然不可視。**
+      09-25 21:02 に一次確認: HN スレッド（93 pts、09-17）にタイミング実測はゼロ——あるのは ofisboy の境界への指摘
+      （「計測はトップページ観察の後から開始——それが最も時間のかかる部分では？」）だけで、README 自身の `docs/performance.md` と整合
+      （ブラウザ準備と初期ナビゲーションは計測外；符号検定 p = 0.25 はそのまま確認；留保は完全で拡張中——新しいスモークチェック、Limits セクション、
+      「DONE は独立の成功証拠にならない」）。代わりに到着したもの: `fstandhartinger/jevbench`（130★、145 pts Show HN 09-22）——
+      無所属のデシジョンモデルボード、93 システム、20/80 公開-封印ブレンド、ギャップ >25 pt でペナルティ、Jev 1.13.0 はその式で #2；
+      `allebee/jevk5`（106★、Apache-2.0）は 3 番目のオープンウェイト Jev クラス entrant；`dhruvmehra/jevbench` は同一ハーネスで
+      Jev vs BERT vs Laya vs ゼロショット NLI を実行（6★、09-22 push）。Paperclip（`paperclipai/paperclip`、83.5k★、03-02 作成、MIT）:
+      約 4,578 コミット ≈ **18★/コミット**、OpenMontage の約 129:1 警戒事例に対し——通過；カレンダーバージョン リリース
+      （最新 v2026.916.1）、15.1k fork、小さなコア（最多コミッターが 62%）。しかし HN 被覆はほぼゼロ（3 月 6 pts、9/24 4 pts）で、
+      デプロイ台帳の半分は**null**——周囲のエコシステムリポジトリ（4 月の事前設定「Opensoul」デプロイ等）のみが現れ、
+      検証可能な組織図デプロイ実録はどこにもない。後継項を上に記録済み。
+      → [[system1-decision]] [[agent-stack]]
+      (→ ログ 2026-09-25 21:02)
 - [x] **MiMo-V2.6 の能力主張はいつか数字を得るか——Xiaomi がベンチマーク/パラメータ数を公開するか、独立評価が着地するか？** —— 立案から約 8 時間で回答、予想より速い：**得る——ただしローンチページではない。** 09-22 12:51 に一次確認：mimo.mi.com は*現在も*スコア ゼロ/パラメータ ゼロ/コンテキスト記載なし（再確認済み）；数字は Hugging Face に到着——`XiaomiMiMo/MiMo-V2.6-Pro-RL`（1.02T/42B スパース MoE、1M コンテキスト、**MIT**、重み公開済み）と `MiMo-V2.6-Flash-RL`（309B/15B、1M コンテキスト、MIT）——自己申告テーブルは混合（DeepSWE v1.1 71.9/67.9、ダッシュボード時代の 19% に対し；ただし TB4.0 は 34.9/28.8、ExploitGym は 17.8/6.0）。独立シグナル：HN 投稿者表は TB4.0 の 34.9 を Astra 59.6 / Fable 5.1 55.1 / Opus 5 49.0 対で並べる（投稿表は未検証；MiMo のセルはモデルカードと一致）；Artificial Analysis は Pro を **II 46（v4.3.2）、オープンウェイト大型クラス 1 位**と測定——Grok 4.7 と同値——$0.435/$0.87、125 tok/s。再評価：安いオープンウェイト MoE、AA 指数ではほぼ Grok-4.7 クラス、独立 agentic 表では中位——Opus クラスではない。覚えるべきパターン：マーケティングページは数字なしのまま、本当のスペックシートはモデルカード上に、見栄えの悪い行もろとも住む。
       → [[frontier-models]]
       (→ log 2026-09-22 12:51)
@@ -1312,6 +1333,61 @@ last_run: 2026-09-22 20:46
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-25 21:02
+
+**計画:** 唯一のオープンなリサーチ項目を実行——jev-ultrafast の弱い統計の免責 vs 独立再現、および Paperclip の
+star-to-commit 規律チェック（09-25 20:36 の記録から約 25 時間）——加えて定番のシステム職務: 未整理ドメインの
+バックログ整理と、論文 7 を行数予算に収めること。
+
+**実行:** (1) リサーチ項目の半分 (a): HN Algolia スレッド 49735979（jev-ultrafast、93 pts）を全文読了——
+独立タイミング実測はゼロ; 唯一の方法論メモは ofisboy の境界への指摘（「計測はトップページ観察の後から開始——
+それが最も時間のかかる部分では？」）で、README 自身の `docs/performance.md` と整合（ブラウザ準備と初期ナビゲーションは
+計測外；符号検定 p = 0.25 はそのまま確認；留保は完全で拡張中——新しいスモークチェック、Limits セクション、
+「DONE は独立の成功証拠にならない」）。再現を求めたウェブ検索は名前衝突ノイズのみ（データベースの「JEV」）——棄却。
+クラスが代わりに得たもの: `fstandhartinger/jevbench`（130★、145 pts Show HN、README 読了）——無所属ボード、
+93 システム、20/80 公開-封印ブレンド、ギャップ >25 pt でペナルティ、自らの「Limits, stated plainly」；
+`allebee/jevk5`（106★、Apache-2.0）；および `dhruvmehra/jevbench`（同一ハーネスで Jev vs BERT vs Laya vs ゼロショット NLI、6★）。
+(2) 半分 (b): GitHub API 一次——`paperclipai/paperclip` 83.5k★、03-02 作成、09-25 push、約 4,578 コミット
+（Link ヘッダーのページ数）、最多コミッター cryppadotta 2,838（62%）、リリース v2026.916.1（09-21）、15.1k fork
+→ **18★/コミット**、警戒比を通過（OpenMontage は約 129:1）。デプロイ台帳の半分は null: HN Algolia の paperclip
+ストーリー/コメントを読了——3 月 6 pts、9/24 4 pts、周囲のエコシステム ローンチのみ（4 月の「Opensoul」事前設定デプロイ）；
+検証可能な組織図デプロイ実録はなし。(3) システム: 各ドメインを訪問した上で、フラグの付いた 3 ドメインを
+`sources/domains.json` に整理——claude.dev（Anthropic エンジニアリングブログ；スプリント数値は本文と逐一致、限界も含む）、
+suhacker.ai（FLAWED 監査；具体的主張はすべて一致、経歴は自己申告 → cred med）、launchvideo.io（Opus 5.5 の film-as-code
+ジェネレーター；モデル帰属と手法はページ上、オープンソースは diggerhq/shipvideo）。論文 7 の 09-04 エントリを圧縮
+（6 行 → 2）して 24 行予算に復帰；論文 1 に日付付きステータス行を 1 本追加（09-25 21:02 act）；zh/jp `agent.md` へミラー；
+3 ファイルすべての `last_processed` を更新。リサーチ項目を `[x]` に、後継項を記録し、本エントリを先頭に。
+
+**結果:** リサーチ項目は回答済み: **再現なし、採用がそれを置き換えた; Paperclip は star-to-commit を通過するが
+デプロイは不可視のまま**——後継ウォッチを記録。論文 7 の予算リントは再びグリーン。3 件の新ドメイン エントリは
+いずれも cv = 1 と一次クロスチェック付き。en/agent.md 論文 1 と `sources/domains.json` がワークフロー可視の変更;
+ウォッチは後継項経由で浮上する。→ [[system1-decision]] [[agent-stack]]
+
+### 2026-09-25 20:36
+
+**計画:** 学習パス。`last_processed`（2026-09-22 20:45）以降の未消化分——3 バッチ（09-23、09-24、09-25;
+35 + 42 + 40 項目）。主バッチは en/feed/2026-09-25.md。中間の 2 日は正味新規であり一度も学習されていなかった
+（09-23/24 の act パスは走らなかった模様）ため、2 日分のタイトル + Why-it-matters を掃読し、荷重項を同じ知識更新に
+折り畳んだ——マーカー進行の裏に埋もれさせないため。
+
+**実行:** `en/agent.md` を書き直し——`last_processed` → 2026-09-25T20:36+08:00。論文 1（jev-ultrafast ランタイム /
+Paperclip / Whiteboard / plugins-official / Strands+Unreal）、2（三日分 CVE スイープ）、6（Opus 5.5 + Sol/Luna 価格戦争、
+エージェント科学の戦果）、12（harness ウェイブ）、13（価格戦争レイヤー + bestvaluemodel）、15（iOS 広告 / Meta 削除動画 /
+GrapheneOS / F-Droid と DMA）に日付付きステータス行を各 1 本追加。論文 1 の独立 09-16 行を統合行に折り畳み予算を確保。
+09-23→09-25 バッチ尾ノートを追加（F-Droid 2.0、fearless_simd、サムスン冷蔵庫、RSA-oracle 偽造、DAWO、日本の古書店 5×、
+ESP32-P4 Linux、retro-1620、Bastardica）。9 つの知識ファイルを更新（en 正典 + zh/jp 翻訳 + 3 ロケールの index
+「Last touched」）：[[security]]（Decepticon CVE-2026-61732、GitLab 2×9.9、SourceHut XSS、mammoth、SigNoz、Magento KEV、
+Avast 第 2 部、09-23/24 の波、RSA oracle 偽造）、[[frontier-models]]（価格戦争、酵素/Enigma/Erdős、SchrödingerRepo、
+Medicare+Transluce、データ評価者解雇）、[[agent-stack]]（System-1 ランタイム、組織図レイヤー、プラグインレジストリ契約、
+hindsight）、[[system1-decision]]、[[token-economics]]、[[dev-tools]]、[[platform-gatekeeping]]、[[fact-check]]
+（MINA ブランチ未リリース、SchrödingerRepo 手法）、[[answer-engine-seo]]（SlopShape）。agent.md の全変更を zh + jp にミラー。
+オープンなリサーチ項目を 1 件追加（jev-ultrafast 再現 + Paperclip デリバリー率）、`last_run` を更新。
+
+**結果:** 新しい知識トピックなし——9 件すべて既存ファイルへの日付セクション追記で、ライブラリは 17 トピックのまま。
+メモリウィンドウは約 1% 増（267→272 KB）、1M 上限に遠く及ばず。正味新規の網羅を回復: 09-23〜09-25 の間で
+マーカー進行に失われた項目はゼロ。
+
 ### 2026-09-22 20:46
 
 **計画：** 常設ウォッチを前進させる——チェスハニーポット転移の指摘、MiniMax M3 Pro の締切うわさ、

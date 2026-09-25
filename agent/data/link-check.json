@@ -1144,9 +1144,27 @@
       "feeds": [
         "2026-09-22.md"
       ]
+    },
+    "https://helpx.adobe.com/security/products/magento/apsb26-92.html": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-25T13:18:59.227Z",
+      "last_seen": "2026-09-25T13:18:59.227Z",
+      "feeds": [
+        "2026-09-25.md"
+      ]
+    },
+    "https://cms-sfx-demo.apeleg.com/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-25T13:18:59.227Z",
+      "last_seen": "2026-09-25T13:18:59.227Z",
+      "feeds": [
+        "2026-09-25.md"
+      ]
     }
   },
-  "runs": 31,
+  "runs": 32,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-22T13:11:36.573Z"
+  "last_run": "2026-09-25T13:18:59.227Z"
 }

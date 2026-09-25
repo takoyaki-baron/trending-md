@@ -134,3 +134,9 @@ persists, still with no named benchmark. The jabr suite is unchanged: 0★, one 
 refresh, citations stay broken. All four repos remain under release-watch.
 
 Last touched: 2026-09-22 04:49.
+
+## 2026-09-25 20:36 — the class ships in a production agent runtime
+
+browser-use's **jev-ultrafast** (19.9k★ in nine days) is the pattern's first production runtime: Jev scores operation + target over an indexed action space (numbered element table) in one round trip, text generation deferred to a helper model only when needed — the architecture the 09-21 router wave only sketched, now carrying its own weak-statistics disclaimer. **Contrastive Language Models** (09-24, Contrastive-LM/CLM) extends the open-weight track: a frozen LLM + a 20M-parameter head claims Jev-class decisions at up to 9× lower latency, with the caveats in its own README. And the 09-23 "Jev reckoning day" trio — a 25-line parody ("Jev in 25 Lines"), a reproducible benchmark (JevBench), and Arcturus Labs' "will OpenAI eat Jev's lunch" analysis — marks the class's transition from novelty to contested category: three independent takes converging on "classification, not generation" as the load-bearing property, with fast-follow risk priced in.
+
+Sources: [browser-use/jev-ultrafast](https://github.com/browser-use/jev-ultrafast) · [Contrastive-LM/CLM](https://github.com/Contrastive-LM/CLM) · [Jev in 25 Lines](https://www.nobodywho.ai/posts/jev-in-25-lines/)

@@ -334,3 +334,9 @@ Sources: [HN スレッド](https://news.ycombinator.com/item?id=49789224) ·
 [X スレッド](https://x.com/Lon/status/2101793422487204027) ·
 [X 長文](https://x.com/Lon/status/2101034933284417614) ·
 [claude-code issue 95764](https://github.com/anthropics/claude-code/issues/95764)
+
+## 2026-09-25 20:36 — 価格戦争がリーダーボードの行から請求書へ
+
+**Opus 5.5 が Fable クラス比約 40% 安で登場、約 90 分後に GPT-6 Sol/Luna が対抗**——フロンティアの価格競争が能力声明の脚注ではなく見出しイベントそのものに。両リリースページとも細則を添付。harness 側のコスト台帳に最大級のベンダー主張が 2 件追加: AWS Strands「harness」（トークン −28%、スコアほぼ同等）と Unreal Agent（モデルを待らせないことで −40%）——いずれもベンダー自己実施・未検証で、RTK や caveman と同じ実測プレミアム台帳へ。エッセイ層が追いつく: 「Tokens too cheap to meter」（jyn.dev）が知能はインフラになりつつあると論じる——反応型の論考が続いた今週の Jev 議論の肯定側。さらに **bestvaluemodel**（terryds、Show HN 167 点）が実際に予算を立てる問いを製品化: 日次更新の価値フロンティア（Artificial Analysis Intelligence Index 対 3:1 ブレンド価格、対数軸、フロンティア =「より安くてより賢いものは存在しない」、極端に安い低能モデルが線を引っ張らない最低スコアフィルタ付き）、注意事項ページも自己完結——キャッシュ入力割引・バッチ価格・高速モード・指数のリベースは対象外。
+
+Sources:（英語版と同じ）

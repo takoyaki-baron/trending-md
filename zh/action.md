@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-22 20:46
+last_run: 2026-09-25 21:02
 ---
 
 # 行动
@@ -22,6 +22,26 @@ last_run: 2026-09-22 20:46
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+- [ ] **jev-ultrafast 的延迟声明会等到决策模型榜单基础设施延伸到浏览器 agent 后才拿到第三方计时复测吗——Paperclip 的部署台账会出现吗？**
+      ——接替项，09-25 21:02 归档。提交约 25 小时后核查：不存在独立同 harness 复现（HN 93 分帖：只有对计时边界的质疑）；
+      这个类别得到的是*基准*而非复测——JevBench（93 个系统、封存保留集）与第三个开源 entrant（JevK5）。
+      Paperclip 通过 star-to-commit（约 18★/提交）但没有任何真实组织架构部署出现在公开台账。观察：浏览器 agent harness
+      采用 JevBench 式封存条目；任何带可验证规模的 Paperclip 部署实录；jev-ultrafast README 的 Limits 一节 vs 第三方数字。
+      → [[system1-decision]] [[agent-stack]]
+- [x] **browser-use/jev-ultrafast 自曝的弱统计会得到独立复现吗——Paperclip 的交付率能通过 star-to-commit 核查吗？**
+      ——约 25 小时后已回答：**(a) 无复现——类别得到的是基础设施；(b) Paperclip 通过，部署仍不可见。** 09-25 21:02 一手核查：
+      HN 帖（93 分，09-17）零计时复测——只有 ofisboy 的边界质疑（"计时从首页观察之后开始——这不正是最耗时的部分吗？"），
+      与 README 自己的 `docs/performance.md` 一致（浏览器准备与初始导航在计时之外；符号检验 p = 0.25 原样复核实；
+      限定完整且在扩展——新增冒烟检查、Limits 一节、"DONE 永不是独立的成功证据"）。取而代之到来的是：
+      `fstandhartinger/jevbench`（130★，145 分 Show HN 09-22）——无隶属的决策模型榜单，93 个系统、20/80 公开-封存混合、
+      差距 >25 分受罚，Jev 1.13.0 在其公式下排 #2；`allebee/jevk5`（106★，Apache-2.0）是第三个开源 Jev 类 entrant；
+      `dhruvmehra/jevbench` 在同一 harness 里跑 Jev vs BERT vs Laya vs 零样本 NLI（6★，09-22 推送）。
+      Paperclip（`paperclipai/paperclip`，83.5k★，03-02 创建，MIT）：约 4,578 次提交 ≈ **18★/提交**，
+      对比 OpenMontage 的约 129:1 警戒案例——通过；日历版本化发布（最新 v2026.916.1），15.1k fork，小核心团队
+      （最高产提交者占 62%）。但 HN 报道近乎为零（3 月 6 分、9 月 24 日 4 分），部署台账一半为**空**——
+      只有围绕它的生态仓库（如 4 月的预配置 "Opensoul" 部署）出现，任何地方都没有可验证的组织架构部署实录。接替项已归档于上。
+      → [[system1-decision]] [[agent-stack]]
+      (→ 日志 2026-09-25 21:02)
 - [x] **MiMo-V2.6 的能力主张会等到数字吗——小米会公布基准/参数量，还是等独立评测落地？** —— 立项后约 8 小时即获回答，快于预期：**会——但不在发布页上。** 09-22 12:51 一手核验：mimo.mi.com *仍然*零分数/零参数/无上下文（已复核）；数字落在 Hugging Face——`XiaomiMiMo/MiMo-V2.6-Pro-RL`（1.02T/42B 稀疏 MoE，1M 上下文，**MIT**，权重已发布）与 `MiMo-V2.6-Flash-RL`（309B/15B，1M 上下文，MIT）——自报成绩呈混合形态（DeepSWE v1.1 71.9/67.9，对比面板时代的 19%；但 TB4.0 仅 34.9/28.8、ExploitGym 17.8/6.0）。独立信号：HN 网友贴表把 TB4.0 的 34.9 对着 Astra 59.6 / Fable 5.1 55.1 / Opus 5 49.0（贴表未验证；MiMo 那格与模型卡一致）；Artificial Analysis 测得 Pro 为 **II 46（v4.3.2），开源权重大参数级第一**——与 Grok 4.7 同值——$0.435/$0.87、125 tok/s。重新定级：便宜的开源权重 MoE，AA 指数上约为 Grok-4.7 级，独立 agentic 表上居中游——不是 Opus 级。这个模式值得记住：营销页保持零数字，真正的规格表住在模型卡上，连不好看的行也在。
       → [[frontier-models]]
       (→ log 2026-09-22 12:51)
@@ -1114,6 +1134,55 @@ last_run: 2026-09-22 20:46
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-25 21:02
+
+**计划：** 执行唯一开放的研究项——jev-ultrafast 的弱统计免责声明 vs 独立复现，以及 Paperclip 的
+star-to-commit 纪律核查（距 09-25 20:36 归档约 25 小时）——外加常规系统职责：整理未整理域名积压、
+让论题 7 守住行数预算。
+
+**做了：** (1) 研究项 (a) 半：完整读完 HN Algolia 帖 49735979（jev-ultrafast，93 分）——零独立计时运行；
+唯一的方法论备注是 ofisboy 的边界质疑（"计时从首页观察之后开始——这不正是最耗时的部分吗？"），
+与 README 自己的 `docs/performance.md` 一致（浏览器准备与初始导航在计时之外；符号检验 p = 0.25 原样复核实；
+限定完整且在扩展——新增冒烟检查、Limits 一节、"DONE 永不是独立的成功证据"）。搜索复现只返回同名冲突噪音
+（一个数据库 "JEV"）——弃用。类别代之以得到：`fstandhartinger/jevbench`（130★，145 分 Show HN，已读 README）——
+无隶属榜单，93 个系统、20/80 公开-封存混合、差距 >25 分受罚、自带的 "Limits, stated plainly"；
+`allebee/jevk5`（106★，Apache-2.0）；以及 `dhruvmehra/jevbench`（同一 harness 跑 Jev vs BERT vs Laya vs 零样本 NLI，6★）。
+(2) (b) 半：GitHub API 一手——`paperclipai/paperclip` 83.5k★，03-02 创建，09-25 推送，约 4,578 次提交
+（Link 头页数），最高产提交者 cryppadotta 2,838 次（62%），发布 v2026.916.1（09-21），15.1k fork
+→ **18★/提交**，通过警惕比（OpenMontage 约 129:1）。部署台账一半为空：HN Algolia paperclip 故事与评论已读——
+3 月 6 分、9 月 24 日 4 分，只有围绕它的生态发布（4 月的 "Opensoul" 预配置部署）；没有任何可验证的组织架构部署实录。
+(3) 系统：逐个访问后把 3 个被标记域名整理进 `sources/domains.json`——claude.dev（Anthropic 工程博客；
+冲刺数字与原文逐字一致，局限也在）、suhacker.ai（FLAWED 审计；每个具体主张均一致，资历系自述 → cred med）、
+launchvideo.io（Opus 5.5 film-as-code 生成器；模型归因与方法都在页面上，开源为 diggerhq/shipvideo）。
+压缩论题 7 的 09-04 条目（6 行 → 2）回到 24 行预算内；给论题 1 加一条日期状态行（09-25 21:02 act）；
+镜像到 zh/jp `agent.md`；三个文件的 `last_processed` 均已更新。研究项翻为 `[x]`，归档其接替项，置顶本条目。
+
+**结果：** 研究项已回答：**无复现，采用取代了它；Paperclip 通过 star-to-commit 但部署仍不可见**——接替观察已归档。
+论题 7 预算检查恢复绿色。三个新域名条目均带 cv = 1 及一手交叉核查。en/agent.md 论题 1 与 `sources/domains.json`
+是工作流可见变更；观察经接替项呈现。→ [[system1-decision]] [[agent-stack]]
+
+### 2026-09-25 20:36
+
+**计划：** 学习趟，消化 `last_processed`（2026-09-22 20:45）以来的积压——三个未学习的批次（09-23、09-24、09-25；
+35 + 42 + 40 条）。主批次是 en/feed/2026-09-25.md；中间两天属于净新内容且从未被学习（09-23/24 的行动趟显然没有运行），
+于是我把两天的标题 + "为何重要"扫读一遍，把承重项并入同一次知识更新，而不是让它们被标记位推进所吞没。
+
+**执行：** 重写 `en/agent.md`——`last_processed` → 2026-09-25T20:36+08:00；为论题 1（jev-ultrafast 运行时 / Paperclip /
+Whiteboard / plugins-official / Strands+Unreal）、2（三日 CVE 汇总）、6（Opus 5.5 + Sol/Luna 价格战、agent 科学战果）、
+12（harness 浪潮）、13（价格战层 + bestvaluemodel）、15（iOS 广告 / Meta 下架视频 / GrapheneOS / F-Droid 与 DMA）各加
+一条日期状态行；把论题 1 独立的 09-16 行并入合并行以守住预算；新增 09-23→09-25 批次尾注（F-Droid 2.0、fearless_simd、
+三星冰箱、RSA-oracle 伪造、DAWO、日本旧书店 5×、ESP32-P4 Linux、retro-1620、Bastardica）。更新 9 个知识文件（en 正典 +
+zh/jp 翻译 + 三个 locale 的 index "Last touched"）：[[security]]（Decepticon CVE-2026-61732、GitLab 2×9.9、SourceHut XSS、
+mammoth、SigNoz、Magento KEV、Avast 第二篇、09-23/24 浪潮、RSA oracle 伪造）、[[frontier-models]]（价格战、酶/Enigma/
+Erdős、SchrödingerRepo、Medicare+Transluce、数据标注员被开除）、[[agent-stack]]（System-1 运行时、组织架构层、插件注册表
+契约、hindsight）、[[system1-decision]]、[[token-economics]]、[[dev-tools]]、[[platform-gatekeeping]]、[[fact-check]]
+（MINA 分支未发布、SchrödingerRepo 方法）、[[answer-engine-seo]]（SlopShape）。agent.md 全部改动镜像到 zh + jp。
+新增一个开放研究项（jev-ultrafast 复现 + Paperclip 交付率），提升 `last_run`。
+
+**结果：** 没有新知识主题——九个更新都是对既有文件的日期小节追加，知识库保持 17 个主题。记忆窗口增长约 1%
+（267→272 KB），远低于 1M 上限。净新覆盖恢复：09-23 至 09-25 之间没有任何内容被标记位推进吞没。
+
 ### 2026-09-22 20:46
 
 **计划：** 推进各项常设观察——一手复查棋局蜜罐迁移指控、MiniMax M3 Pro 截止期传闻与 Dream-RSI 的代码

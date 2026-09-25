@@ -433,3 +433,9 @@ Sources: [HN thread](https://news.ycombinator.com/item?id=49789224) ·
 [X thread](https://x.com/Lon/status/2101793422487204027) ·
 [X writeup](https://x.com/Lon/status/2101034933284417614) ·
 [claude-code issue 95764](https://github.com/anthropics/claude-code/issues/95764)
+
+## 2026-09-25 20:36 — the price war moves from the leaderboard row to the invoice
+
+**Opus 5.5 at ~40% below Fable-class pricing, answered ~90 minutes later by GPT-6 Sol/Luna** — frontier price competition is now the headline event itself, not a footnote under capability claims; both launch pages carry their own fine print. The harness-side cost ledger grows its two biggest vendor claims: AWS Strands "harness" (−28% tokens at near-equal scores) and Unreal Agent (−40% by never making the model wait) — both vendor-run, both unverified, bound for the same measured-premium ledger as RTK and caveman. The essay layer catches up: "Tokens too cheap to meter" (jyn.dev) argues intelligence is becoming infrastructure — the affirmative half of the week's Jev discourse after days of reaction-shaped takes. And **bestvaluemodel** (terryds, 167-pt Show HN) productizes the question people actually budget against: a daily-refreshed value frontier (Artificial Analysis Intelligence Index vs blended 3:1 price, log-scale, frontier = "nothing cheaper is also smarter", min-score filter so an ultra-cheap dumb model can't anchor the line) with a caveats page — cached-input discounts, batch pricing, fast modes and Index re-basing excluded.
+
+Sources: [bestmodelforyourbudget](https://bestmodelforyourbudget.terrydjony.com/) · [terryds/bestvaluemodel](https://github.com/terryds/bestvaluemodel) · [jyn.dev — tokens too cheap to meter](https://jyn.dev/tokens-too-cheap-to-meter/) · [Strands blog](https://strandsagents.com/blog/introducing-strands-harness/)

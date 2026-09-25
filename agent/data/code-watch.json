@@ -611,12 +611,43 @@
           "html_url": "https://github.com/BobIvans/studious-pancake/blob/75e78b2b0f8af5884df5e0859b7ac9a42ca1a5b4/src/research/pr357_requirements.py",
           "found": "2026-09-22T05:08:38.840Z",
           "collision": true
+        },
+        "tamas-hub/codex-routecraft::tests/test_routecraft_control_center_runtime.py": {
+          "repo": "tamas-hub/codex-routecraft",
+          "path": "tests/test_routecraft_control_center_runtime.py",
+          "html_url": "https://github.com/tamas-hub/codex-routecraft/blob/bca1914b0bc50b8d66fd113f45936b57521afaa7/tests/test_routecraft_control_center_runtime.py",
+          "found": "2026-09-25T13:17:05.244Z",
+          "collision": true
+        },
+        "riyasahaa23/genetic-universe::apps/api/app/trio/api.py": {
+          "repo": "riyasahaa23/genetic-universe",
+          "path": "apps/api/app/trio/api.py",
+          "html_url": "https://github.com/riyasahaa23/genetic-universe/blob/60b4c3f83656428d193587fbad3515c82db69a7b/apps/api/app/trio/api.py",
+          "found": "2026-09-25T13:17:05.244Z"
+        },
+        "riyasahaa23/genetic-universe::apps/api/app/api/compat/benchmarks.py": {
+          "repo": "riyasahaa23/genetic-universe",
+          "path": "apps/api/app/api/compat/benchmarks.py",
+          "html_url": "https://github.com/riyasahaa23/genetic-universe/blob/60b4c3f83656428d193587fbad3515c82db69a7b/apps/api/app/api/compat/benchmarks.py",
+          "found": "2026-09-25T13:17:05.244Z"
+        },
+        "ubuntuokos/Final-Architecture-v3.0::src/fa3_caveman_gate.py": {
+          "repo": "ubuntuokos/Final-Architecture-v3.0",
+          "path": "src/fa3_caveman_gate.py",
+          "html_url": "https://github.com/ubuntuokos/Final-Architecture-v3.0/blob/1e0db0cbdc31ac63807e9da661aeddd41f4b3f4e/src/fa3_caveman_gate.py",
+          "found": "2026-09-25T13:17:05.244Z"
+        },
+        "ubuntuokos/Final-Architecture-v3.0::canonical/contracts/FA3-CONTEXT-TRANSFORM-CONTRACTS-001.json": {
+          "repo": "ubuntuokos/Final-Architecture-v3.0",
+          "path": "canonical/contracts/FA3-CONTEXT-TRANSFORM-CONTRACTS-001.json",
+          "html_url": "https://github.com/ubuntuokos/Final-Architecture-v3.0/blob/1e0db0cbdc31ac63807e9da661aeddd41f4b3f4e/canonical/contracts/FA3-CONTEXT-TRANSFORM-CONTRACTS-001.json",
+          "found": "2026-09-25T13:17:05.244Z"
         }
       },
-      "runs": 47,
+      "runs": 48,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-22T13:08:03.285Z",
-      "last_total": 88
+      "last_run": "2026-09-25T13:17:05.244Z",
+      "last_total": 93
     },
     "ra-paper-id": {
       "seen": {
@@ -802,18 +833,18 @@
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 34,
+      "runs": 35,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-22T13:08:03.285Z",
+      "last_run": "2026-09-25T13:17:05.244Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 34,
+      "runs": 35,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-22T13:08:03.285Z",
+      "last_run": "2026-09-25T13:17:05.244Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-22T13:08:03.285Z"
+  "last_run": "2026-09-25T13:17:05.244Z"
 }

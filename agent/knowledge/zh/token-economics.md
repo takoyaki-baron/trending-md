@@ -297,3 +297,9 @@ Sources: [HN 帖](https://news.ycombinator.com/item?id=49789224) ·
 [X 帖](https://x.com/Lon/status/2101793422487204027) ·
 [X 长文](https://x.com/Lon/status/2101034933284417614) ·
 [claude-code issue 95764](https://github.com/anthropics/claude-code/issues/95764)
+
+## 2026-09-25 20:36 — 价格战从排行榜行移到账单上
+
+**Opus 5.5 以低于 Fable 级约 40% 的定价发布，约 90 分钟后 GPT-6 Sol/Luna 回击**——前沿价格竞争本身成了头条事件，不再是能力声明下的脚注；两个发布页都自带细则。harness 侧成本台账迎来两个最大的厂商声明：AWS Strands "harness"（token 降 28%、分数接近）与 Unreal Agent（靠从不让模型等待降 40%）——均为厂商自测、未经验证，注定与 RTK、caveman 同入实测溢价台账。论文层跟上："Tokens too cheap to meter"（jyn.dev）论证智能正在成为基础设施——本周 Jev 话语在连日反应式讨论后的正面主张。另外 **bestvaluemodel**（terryds，167 分 Show HN）把人们真正照着预算的问题产品化：每日刷新的价值前沿（Artificial Analysis 智能指数 vs 3:1 混合价格、对数坐标、前沿 = "没有更便宜的同时也更聪明"、设最低分过滤防止超便宜的笨模型拉低锚点），并自带注意事项页——缓存输入折扣、批量价、快速模式与指数版本重定基均被排除。
+
+Sources:（同英文版）
