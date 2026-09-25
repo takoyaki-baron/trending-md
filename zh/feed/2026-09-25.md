@@ -1,8 +1,8 @@
 ---
 date: 2026-09-25
-updated: 2026-09-25T04:35:00+08:00
+updated: 2026-09-25T12:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -216,13 +216,209 @@ Laura Shea、Miro Haller、Adam Suhl、Nadia Heninger（UC San Diego）与 Emman
 
 ---
 
+## 16. Project Suncatcher 首颗 TPU 卫星即将入轨——Google 的"太空机器学习"登月计划迎来发射窗口
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Google Research 博客 · HN 139+ pts · 254 comments · ~14小时前 (~21:53 UTC+8)
+- **Tags:** `google` `space` `ml-infrastructure` `tpu`
+
+Google 的 Project Suncatcher——探索可扩展 ML 算力能否部署在近地轨道的登月计划（卫星在轨道上可捕获"最高八倍于地面"的太阳能）——距离首次硬件验证只剩几天：一颗原型卫星将搭乘 SpaceX 即将执行的 Transporter-18 拼车任务升空，与 Planet 合作开发。这篇工程文章对测试内容的交代异常具体：约 10 g 的持续发射载荷（芯片局部达 50–100 g）通过了三轴振动测试；在 UC Davis Crocker 核实验室一边跑负载一边接受质子轰击的 Trillium TPU，总电离剂量扛过了五年任务的当量；而通过热管加辐射板进行的真空散热，目前仅在热真空舱中验证。2027 年的里程碑是两颗卫星测试高带宽短距激光链路。团队自己的告诫毫不客气："有些事情只能在太空里测试"，这次发射是探索性而非验证性的，而且如今的激光系统恰好为相反的场景而造（低带宽、长距离）。
+
+**为什么重要：** 这篇文章给出了"带 TPU 的卫星"与"轨道上的数据中心"之间的真实价差——辐射和发射出乎意料地可生存，而散热与激光互连才是未经证实的承重结构。
+
+[`🔗 Google Research 博客`](https://blog.google/innovation-and-ai/models-and-research/google-research/google-project-suncatcher-facts/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49830606)
+
+---
+
+## 17. SourceHut 账户接管：CI 构建日志里的 ANSI 转义序列被渲染为活体 XSS，长达 4.5 年
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Arusekk · HN 90+ pts · 13 comments · ~8小时前 (~03:54 UTC+8)
+- **Tags:** `security` `xss` `ci` `ansi2html`
+
+Arusekk 的文章还原了 `ansi2html` 的漏洞（CVE-2026-92973）——builds.sr.ht 用它渲染 CI 日志：该库把 ANSI OSC 8 超链接序列转成 `<a>` 标签时，既没能正确处理属性逃逸，也不拦截 `javascript:` URL，攻击者由此可以植入 `onfocus=` 处理器，在任何查看该任务页面的用户会话中执行。注入甚至不需要账户——向启用了 CI 的公开邮件列表发一个补丁，或让任何远程资源被打印进日志，就够了。由于页面携带受害者的 CSRF token，而 builds.sr.ht 又持有 sr.ht 本体的部署密钥，作者将其定为账户接管且可蠕虫化传播。这个缺陷存在了约 4.5 年；builds.sr.ht 于 8 月 4 日上线了自动消毒的临时方案，真正的修复于 9 月 2 日落在 ansi2html 1.9.4。一个意味深长的注脚：作者提出的 CVSS 4.0 向量意在论证"高危或严重，而不只是中等"——而他对 VulnCheck 擅自改动向量的做法直言不讳地恼火。
+
+**为什么重要：** 不可信文本经渲染层到达用户是最古老的 XSS 形态——而 CI 日志在几乎所有代码托管平台上都是攻击者可写入的输入。
+
+[`🔗 blog.arusekk.pl`](https://blog.arusekk.pl/posts/srht-account-takeover/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49835996)
+
+---
+
+## 18. browser-use 发布 "jev-ultrafast"：把每次页面观察都变成可索引动作空间的 Web 代理——九天 19.9k★
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · browser-use/jev-ultrafast · 19.9k★ · 9 月 16 日创建，今日有推送
+- **Tags:** `agents` `browser-automation` `jev` `system-1`
+
+browser-use 的新仓库把 TypeSafe 的 Jev 决策模型与重构的代理循环结合：每次页面观察变成一张编号元素表，一次 Jev 请求同时选出操作（CLICK / TYPE_TEXT / SELECT / SCROLL / WAIT / DONE / BLOCKED）和目标——目标头只包含兼容元素，因此两个决策只需一次网络往返。只有当选中 `TYPE_TEXT` 时才由小型辅助模型生成文本（录制演示使用关闭推理的 `inception/mercury-2.5`）。仓库自带的测量数据异常诚实：旗舰 Google Flights 演示验证通过耗时 7.073 秒；六轮对照运行的对比显示中位耗时 9.45 秒 → 7.09 秒（降低 25%，浏览器协议调用 1,092 → 101）——但 README 自己写明"三组对照不足以支撑强统计结论（双侧符号检验 p = 0.25）"，且这是"小型受控输入对比，不是广义代理基准"。MIT 许可，附 Browser Use Cloud 候补名单。
+
+**为什么重要：** "System-1 决策模型"模式（每次往返一个打分选择，仅在需要时生成文本）正在成为真实的代理运行时架构——而这个仓库把自己的弱统计数据和头条数字并排发布，这比速度本身更稀有。
+
+[`🔗 browser-use/jev-ultrafast`](https://github.com/browser-use/jev-ultrafast) · [`🔗 性能测量`](https://github.com/browser-use/jev-ultrafast/blob/main/docs/performance.md)
+
+---
+
+## 19. GitLab 的艰难一夜：GitLab.com 宕机 2.5 小时，同日的补丁版本修复两个 CVSS 9.9 RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** status.gitlab.com · HN 58+ pts · 28 comments · ~5小时前 (~07:10 UTC+8)
+- **Tags:** `gitlab` `outage` `security-release` `cve`
+
+GitLab.com 于 9 月 24 日 23:02 UTC 开始大面积返回 503，波及网站、API、Git 操作、两个 Registry、Pages、CI/CD Runner 和 SAML SSO；25 分钟后定位原因，至 9 月 25 日 03:36 UTC 全部 23 个组件恢复运营——约 2.5 小时的中断，目前处于监控状态。同日，GitLab 的补丁版本（19.2.7 / 19.3.3 / 19.4.1）修复了两个 CVSS 9.9 的认证后远程代码执行漏洞，均位于 CI/CD 配置解析：一个双重释放（CVE-2026-89078）、一个整数溢出（CVE-2026-93577），都由特制正则触发，都经 HackerOne 报告，都由 GitLab 以 CNA 身份评分。机制上两者无关——但今晚忙着打补丁的自托管管理员，和盯着 503 的 SaaS 用户，收到了关于他们代码托管平台的同一条信息。
+
+**为什么重要：** 任意认证用户都能通过 CI 配置触发的两个 CVSS 9.9 属于"立即升级"级别——而宕机恰好保证了这个发布会被认真阅读。
+
+[`🔗 NVD：CVE-2026-89078`](https://nvd.nist.gov/vuln/detail/CVE-2026-89078) · [`🔗 NVD：CVE-2026-93577`](https://nvd.nist.gov/vuln/detail/CVE-2026-93577) · [`🔗 GitLab 状态页`](https://status.gitlab.com/)
+
+---
+
+## 20. 日本二手书店销量暴涨 5 倍——背后是按"吨"收购、疑似运往海外 AI 扫描销毁设施的买家
+
+- **Velocity:** ▮▮ rising
+- **Source:** Tom's Hardware · HN 77+ pts · 122 comments · ~13小时前 (~22:51 UTC+8)
+- **Tags:** `ai-training-data` `publishing` `copyright` `japan`
+
+Tom's Hardware 报道了训练数据竞赛的一个惊人副作用：日本二手书店销量约为平日的 5 倍，买家不是读者，而是身份不明的按"吨"收购者——其中包括一批发往美国的 50 吨订单，疑似最终进入先扫描书籍用于 AI 训练、再将其销毁的设施。AI 用途仍是怀疑而非证实，报道也将买家描述为匿名；有据可查的是采购的规模与模式，以及日本社会对印刷品被当作数据集原料物理消耗的文化忧虑。HN 讨论区立刻把它与"AI for research"倡导者反复提及的档案获取瓶颈联系起来：最值得被训练的手稿恰恰是没人数字化的那些——而这条流水线一步完成"数字化加销毁"。
+
+**为什么重要：** 实体书籍正在成为"抓取"目标——而这个"抓取器"是一台碎纸机——一个数据获取故事同时也是文化遗产保护故事。
+
+[`🔗 Tom's Hardware`](https://www.tomshardware.com/tech-industry/artificial-intelligence/japanese-used-bookstores-see-5x-sales-surge-as-books-are-being-bought-by-the-ton-one-50-ton-order-sent-to-the-us-for-ai-scanning-and-destruction-multitude-of-suspicious-bulk-buys-thought-to-end-up-in-foreign-ai-scan-and-shred-facilities) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49831456)
+
+---
+
+## 21. "AI 实验室该资助历史研究了"：一位历史学家让前沿模型跑遍 17 世纪档案——并写下哪里会翻车
+
+- **Velocity:** ▮▮ rising
+- **Source:** Res Obscura（Benjamin Breen）· HN 97+ pts · 14 comments · ~9小时前 (~03:14 UTC+8)
+- **Tags:** `llm` `digital-humanities` `research` `history`
+
+历史学家 Benjamin Breen 的文章主张前沿模型已在档案研究上跨过门槛，并附上实据：一个 Opus 代理从 Samuel Hartlib 的数字化档案下载了 5,000 多个文件，并派出子代理搜索 Google Books；GPT-6 Astra 得出 John Dee 的《Liber Loagaeth》大部分是无意义音节而非密码——并通过字符频率分析显示 Edward Kelley 随时间推移越写越敷衍，且与 Dee 的日记交叉验证；还有一个可能全新的发现：Newton 与 Hartlib 对同一种物质（匈牙利矾）使用了**不同**的变位词，且数量吻合。Breen 同时把账算得诚实：Opus 部分破译的查理五世密信早已被破译（一封在 1530 年代，一封在 1916 年）——模型跳过了"文献检索"这一步；Newton 发现只是"看起来"新；真正的瓶颈是绝大多数近代早期手稿尚未数字化。他提出三项建议：数字化并开放档案、给历史学家免费算力、由历史学家提名可解的"千禧年问题"。
+
+**为什么重要：** 一线研究者对"LLM 代理在哪里真正为档案研究增值、又在哪里栽在已被解决的问题上"的克制记录——后者是厂商演示永远不会提的部分。
+
+[`🔗 Res Obscura`](https://resobscura.substack.com/p/ai-labs-need-to-start-funding-historical) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49835531)
+
+---
+
+## 22. "Dynamic Abliteration"：冻结权重下的运行时拒绝抑制——一个清楚自己是什么的 PoC
+
+- **Velocity:** ▮▮ rising
+- **Source:** Madhukar Anand（Solvy Tech 博客）· HN 105+ pts · 40 comments · ~13小时前 (~22:33 UTC+8)
+- **Tags:** `alignment` `llm` `steering` `open-weights`
+
+不同于会永久修改权重的传统 abliteration，这篇文章在推理时干预拒绝行为：PyTorch forward hook 在 Qwen3-4B 的第 12–20 层拦截残差流，注入 `门控 × 投影(n-gram 记忆)`，其中受 Engram 启发的模块——动态 sigmoid 门控、O(1) 的四表 n-gram 哈希、可学习的逐层投影——只在出现拒绝触发时激活。训练只用 2,000 条 PKU-SafeRLHF 样本，在单张 A100 上耗时 8.92 分钟，基础权重全程冻结。文章坦陈了动机性失败：alpha 1.2 的单层 steering 依然产出拒绝，因为下游层会重建该行为。而它没有评估的是：任何滥用风险——作者明确表示被 steering 的模型会服从有害请求，整体定位为单一模型上的概念验证，并注明代码由 AI 生成。
+
+**为什么重要：** 冻结权重的运行时 steering 是一项常被当作"破坏"来讨论的技术的可部署版本——而文章对统计与安全限度的坦诚，让它成为可用的参考点。
+
+[`🔗 Solvy Tech 博客`](https://blog.madhukaraphatak.in/non-destructive-refusal-supression-using-engram) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49831201)
+
+---
+
+## 23. 华沙附近 Starlink 地面站起火，被定性为针对关键基础设施的疑似纵火
+
+- **Velocity:** ▮▮ rising
+- **Source:** Notes from Poland · HN 167+ pts · 172 comments · ~18小时前 (~17:52 UTC+8)
+- **Tags:** `starlink` `infrastructure` `sabotage` `poland`
+
+周三晚 9 点前后，华沙以南 Wola Krobowska 的一座地面站起火——该设施由波兰国营电信 Exatel 所有，据数字事务部长 Krzysztof Gawkowski 称"为波兰全境提供互联网传输，也通往乌克兰"，与立陶宛的一座站点共同服务中东欧地区。警方与国内安全局（ABW）因涉嫌蓄意点火而介入；Gawkowski 称这是"一场意图冲击关键电信基础设施的纵火袭击"，"作案手法显然是俄式的"——但其他官员保持审慎：安全部门发言人 Jacek Dobrzyński 表示"现在谈原因或动机为时尚早"。归因上的克制是这篇文章诚实的部分；而战略事实并不含糊：Starlink 在战区的地面基础设施正在遭到物理攻击，乌克兰的连接经由波兰的建筑中转。
+
+**为什么重要：** 卫星互联网对地面站的依赖，正不断把"太空基础设施"变回普通的、可燃烧的、政治上可读的地产。
+
+[`🔗 Notes from Poland`](https://notesfrompoland.com/2026/09/24/starlink-ground-station-in-poland-hit-by-fire-in-suspected-arson-attack/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49828409)
+
+---
+
+## 24. mammoth.js：.docx 样式中的原型污染可串联出本地文件泄露——1.12.2 已修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · CVE-2026-97151 · CVSS 8.4 (CVSS 4.0, MITRE CNA) · 9 月 24 日发布
+- **Tags:** `cve` `prototype-pollution` `nodejs` `docx`
+
+被广泛使用的 docx→HTML 转换器 mammoth，在读取特制文档中的样式定义时允许向 `Object.prototype` 写入任意属性。更锐利的是利用链：在 1.11.0 至 1.12.1 中，在同一进程内连续转换多份文档并把转换后 HTML 返回给提交方的应用，可被攻击者污染出 `externalFileAccess: true`，进而向文档提交者泄露服务器本地文件。已在 1.12.2 修复（NVD 引用了两个提交）。受影响的形态——服务器把用户上传的文档转成 HTML 再回传——是互联网上最常见的文档处理模式之一，而原型污染恰是能在框架级消毒之下存活的那类 bug，因为它发生在模板层之下。
+
+**为什么重要：** "顺手转一下 docx"是各地文档流水线的承重基础设施——这是本月第二次提醒：转换环节是攻击面，不是工具函数。
+
+[`🔗 NVD 记录`](https://nvd.nist.gov/vuln/detail/CVE-2026-97151) · [`🔗 mwilliamson/mammoth.js`](https://github.com/mwilliamson/mammoth.js)
+
+---
+
+## 25. SigNoz：空的默认 JWT 密钥让任何人伪造管理员会话——含不可撤销的 30 天刷新令牌
+
+- **Velocity:** ▮ rising
+- **Source:** NVD / VulnCheck · CVE-2026-97055 · CVSS 9.2 (CVSS 4.0, VulnCheck) / 8.1 (v3.1) · 9 月 24 日发布，v0.143.0 修复
+- **Tags:** `cve` `signoz` `jwt` `observability`
+
+开源可观测平台 SigNoz 出厂时，JWT 签名密钥（`SIGNOZ_TOKENIZER_JWT_SECRET`）默认为空字符串——而 `Config.Validate()` 不会拒绝空值，于是未配置密钥的部署在用空 HMAC 密钥签署和校验会话 token。由于 JWT provider 曾是默认选项，所有此类部署都暴露在外：只要知道某个已有用户的 ID（可从 `/api/v2/sessions/context` 未认证获取，连组织 ID 一起），未认证攻击者即可为该用户——包括管理员——伪造有效 token。在 `/api/v2/sessions/rotate` 兑换的伪造刷新令牌无法撤销，默认有效期 30 天。v0.143.0 在选用 jwt provider 时强制要求密钥，并把默认切换为 opaque token。可观测平台是这类 bug 最糟糕的宿主：它保存着整个技术栈吐出的每一条日志、追踪与指标。
+
+**为什么重要：** "空默认凭据"类 bug 持续落在可自托管的基础设施上——而一个能换来 30 天不可撤销会话的伪造原语，会把可观测工具变成持久化访问。
+
+[`🔗 NVD 记录`](https://nvd.nist.gov/vuln/detail/CVE-2026-97055) · [`🔗 修复提交`](https://github.com/SigNoz/signoz/commit/67895d366d)
+
+---
+
+## 26. m3e-canvas：在浏览器里画 Material 3 Expressive 界面，再以提示词交给编码代理——8.2k★、Trendshift 当日第一
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · lnkiai/m3e-canvas · 8.2k★ · Trendshift 当日第一
+- **Tags:** `material-design` `design-tools` `generative-ui` `vibe-coding`
+
+m3e-canvas 是一个完全在浏览器中运行的 Material 3 Expressive 界面拖拽编辑器（Next.js 静态导出、React 19，全部存于 localStorage、无后端）：支持带点击/滑动转场的多屏手机与桌面流程、M3E 四个维度（色彩、形状、字体、动效）的主题化、磁吸连线。真正的设计决策在于：它刻意不生成代码——而是输出自然语言提示词（日语、英语、中文或韩语，目标为 Android 或 Web），由你粘贴进 Claude Code、Codex、Gemini CLI 或 Cursor。可选的 AI 助手使用你自己的 API key，直连提供商。文档写明的限制：移动端编辑仅支持单屏和按钮，分享链接与 AI 起草功能仍为 beta。
+
+**为什么重要：** 从设计到代理的交接正在定型为提示词而非代码——画布负责意图，编码代理负责实现。
+
+[`🔗 lnkiai/m3e-canvas`](https://github.com/lnkiai/m3e-canvas) · [`🔗 在线演示`](https://lnkiai.github.io/m3e-canvas/)
+
+---
+
+## 27. Compositor：免费开源的"Mac 版 Photoshop 替代品"三天连发三个版本
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub · robbietilton/Compositor · 5.4k★ · 9 月 23–24 日发布 v1.2.9–v1.2.11
+- **Tags:** `macos` `image-editing` `open-source` `native-apps`
+
+Compositor 是一款原生 macOS 图像编辑器（MIT，要求 macOS 26.5+），为合成与后期处理而生：GPU 渲染图层特效的图层系统、剪贴蒙版、调整图层、Photoshop 全套混合模式、非破坏性变换、修图工具（污点修复、仿制图章、内容感知填充）、Camera Raw 滤镜，以及支持 Photoshop 快捷键重映射的 PSD/PSB 导入。作者自述动机：Photoshop 的价格，以及 GIMP 打乱了他合成工作的流程。发布节奏——三天内三个签名、公证的 DMG 版本——与功能清单同等重要。README 对导入保真度很诚实：PSD/PSB 仅支持 8 位 RGB（明确不支持 CMYK），矢量与竖排文字导入即栅格化，只有文件夹、蒙版、混合模式和简单横排文字保持可编辑。
+
+**为什么重要：** 一个可信的原生 Photoshop 形态编辑器是开源创意软件栈最后的大缺口——PSD 往返的这些限制，恰恰将决定它能否转化在职专业人士。
+
+[`🔗 robbietilton/Compositor`](https://github.com/robbietilton/Compositor) · [`🔗 发布页`](https://github.com/robbietilton/Compositor/releases)
+
+---
+
+## 28. Search：一款约 3 MB 的 macOS WebKit 浏览器——没有工具栏、没有账户、没有遥测
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 62+ pts · 24 comments · ~19小时前 (~17:11 UTC+8)
+- **Tags:** `browser` `macos` `webkit` `minimalism`
+
+Office Commun 的 Search（MIT，约 12,700 行 Swift，零第三方依赖）是一款刻意极简、基于 macOS 系统 WebKit 的浏览器：一个地址/搜索栏、标签页，仅此而已——没有工具栏、起始页、侧栏、账户或同步。工程含量高于概念本身：通过 `WKContentRuleList` 实现请求发出前即生效的网络级广告拦截、惰性标签恢复（重新打开的标签在被点击前零开销）、按站点持久化的元素隐藏、独立 Cookie 罐的隐私标签，以及经 WebKit 自带扩展引擎加 API shim 实现的 Chrome 扩展支持。密码保存在 macOS 钥匙串，支持从 Chrome、Arc、Brave、Edge 一键导入。除页面加载外，唯一的对外请求是每日一次的更新检查。
+
+**为什么重要：** 当浏览器不断堆叠代理、工作区和 AI 侧栏，一款原生做好 2010 年核心功能集的 3 MB 浏览器，是对"现代浏览器里有多少其实是可选项"的有力陈述。
+
+[`🔗 driceroland/Search`](https://github.com/driceroland/Search) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49828120)
+
+---
+
+## 29. Best LLM for every budget：每日刷新的价格/智能前沿图，对自己的局限毫不讳言
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 167+ pts · 105 comments · ~14小时前 (~22:09 UTC+8)
+- **Tags:** `llm` `benchmarks` `pricing` `data-visualization`
+
+terryds/bestvaluemodel 把 Artificial Analysis 智能指数中的每个模型与其混合 API 价格（3:1 输入输出比，按每百万 token）画在对数坐标图上，由 GitHub Actions 定时任务每日刷新，并在相邻快照间给出"发生了什么变化"的差异。核心对象是"价值前沿"：即"没有更便宜者同时更聪明"的模型——计算方式是保留每个得分高于一切更便宜者的模型，每个模型只保留一行（仅最佳 effort 变体），并设最低分过滤以防超便宜的低智模型拉偏前沿线。方法论页面写明自身局限：缓存输入折扣、批量定价和快速模式均被排除，且指数在版本之间会重定基线，因此分数只能在同一快照内比较。
+
+**为什么重要：** 多数 LLM 排行榜回答"哪个最强"；这个回答人们真正预算面对的问题——并且展示前沿的计算过程，而不是一个排名氛围。
+
+[`🔗 bestmodelforyourbudget`](https://bestmodelforyourbudget.terrydjony.com/) · [`🔗 terryds/bestvaluemodel`](https://github.com/terryds/bestvaluemodel)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-09-25T04:35:00+08:00 |
-| Items | 15 |
-| Sources tracked | 17 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com) |
+| Generated | 2026-09-25T12:15:00+08:00 |
+| Items | 29 |
+| Sources tracked | 27 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com, Google Research, blog.arusekk.pl, status.gitlab.com, Tom's Hardware, Res Obscura, Solvy Tech blog, Notes from Poland, bestmodelforyourbudget.terrydjony.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (每日 3 次) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-09-25
-updated: 2026-09-25T04:35:00+08:00
+updated: 2026-09-25T12:15:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -54,7 +54,7 @@ Samsung スマート冷蔵庫に配信された SmartThings ソフトウェア�
 - **Source:** Successful Software · HN 211+ pts · 88 comments · 約7時間前 (~21:30 UTC+8)
 - **Tags:** `supply-chain` `github` `malware` `trust-safety`
 
-Andy Brice のデータ処理製品 Easy Data Transform の名前とロゴをコピーしたリポジトリが GitHub に出現。偽の Mac .dmg は VirusTotal で複数のマルウェア警告を触发し、攻撃者はディスクイメージの背景画像すら差し替え、「マルウェア警告は無視せよ」とダウンロード者に伝えていました。Brice は 8月31日に通報し自動返信のみ。9月10日に VirusTotal の証拠を追加提出。23 日間の沈黙の後に「This is pisspoor. Do better GitHub」と公開——投稿が HN フロントページに到達してから約 10 分でリポジトリは削除されました（「全くの偶然です、間違いなく！」）。コメント欄には 6月から未解決の類似事例の報告も。著者の教訓はユーザーに向けたものです。ベンダー公式サイトから直接ダウンロードし、プラットフォームが模倣品を能動的に取り締まるのは期待するな、と。
+Andy Brice のデータ処理製品 Easy Data Transform の名前とロゴをコピーしたリポジトリが GitHub に出現。偽の Mac .dmg は VirusTotal で複数のマルウェア警告をトリガーし、攻撃者はディスクイメージの背景画像すら差し替え、「マルウェア警告は無視せよ」とダウンロード者に伝えていました。Brice は 8月31日に通報し自動返信のみ。9月10日に VirusTotal の証拠を追加提出。23 日間の沈黙の後に「This is pisspoor. Do better GitHub」と公開——投稿が HN フロントページに到達してから約 10 分でリポジトリは削除されました（「全くの偶然です、間違いなく！」）。コメント欄には 6月から未解決の類似事例の報告も。著者の教訓はユーザーに向けたものです。ベンダー公式サイトから直接ダウンロードし、プラットフォームが模倣品を能動的に取り締まるのは期待するな、と。
 
 **なぜ重要か:** GitHub 上のブランド模倣マルウェア配信は「危害」ではなく「拡散力」でスケールするサプライチェーン経路であり——削除の SLA は「Hacker News のフロントページ」であるように見えます。
 
@@ -216,13 +216,209 @@ Laura Shea、Miro Haller、Adam Suhl、Nadia Heninger（UC San Diego）と Emman
 
 ---
 
+## 16. Project Suncatcher の初の TPU 衛星がまもなく軌道へ——Google の「宇宙機械学習」ムーンショットに打ち上げ日が付く
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Google Research ブログ · HN 139+ pts · 254 comments · 約14時間前 (~21:53 UTC+8)
+- **Tags:** `google` `space` `ml-infrastructure` `tpu`
+
+Google の Project Suncatcher——スケーラブルな ML 計算資源を低軌道に置けるかを探るムーンショット（衛星は「地上の最大 8 倍」の太陽光を捕えられる）——が、初のハードウェア検証まであと数日に迫りました。SpaceX の次期 Transporter-18 ライドシェアに原型衛星を搭載し、Planet と共同開発します。技術記事はテスト内容に異例なまで具体的です。持続約 10 g の打ち上げ荷重（チップ局部は 50–100 g）を 3 軸振動試験で生存。UC Davis の Crocker 核実験室でワークロードを動かしながら陽子を照射された Trillium TPU は、5 年ミッション相当の全線量（TID）を超えて持ちこたえました。一方、ヒートパイプとラジエーターによる真空冷却は、まだ熱真空チャンバー内での検証にとどまります。2027 年のマイルストーンは 2 基の衛星による高帯域・短距離レーザーリンクの試験。チーム自身の注意書きは率直です。「一部のことは宇宙でしか試せない」、この打ち上げは実証ではなく探索である、そして今日のレーザーシステムは正反対の領域（低帯域・長距離）向けに作られている、と。
+
+**なぜ重要か:** この記事は「TPU を載せた衛星」と「軌道上のデータセンター」の間の実際のギャップを値付けします。放射線と打ち上げは予想外に生存可能で、未証明の耐荷重部は冷却とレーザー相互接続だ、と。
+
+[`🔗 Google Research ブログ`](https://blog.google/innovation-and-ai/models-and-research/google-research/google-project-suncatcher-facts/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49830606)
+
+---
+
+## 17. SourceHut アカウント乗っ取り：CI ビルドログ内の ANSI エスケープシーケンスが 4.5 年間、ライブ XSS として描画されていた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Arusekk · HN 90+ pts · 13 comments · 約8時間前 (~03:54 UTC+8)
+- **Tags:** `security` `xss` `ci` `ansi2html`
+
+Arusekk の記事は、builds.sr.ht が CI ログ描画に使う `ansi2html` の脆弱性（CVE-2026-92973）を追跡します。このライブラリは ANSI OSC 8 ハイパーリンクシーケンスを `<a>` タグへ変換する際、属性からの脱出を正しく処理せず、`javascript:` URL も遮断していませんでした。攻撃者は `onfocus=` ハンドラを仕込め、ジョブページを閲覧した人のセッション内で実行されます。注入にアカウントは不要——CI を有効化した公開メーリングリストへのパッチ投稿や、ログに印字される任意のリモートリソースで十分でした。ページには被害者の CSRF トークンが載り、builds.sr.ht は sr.ht 本体のデプロイキーも保持するため、著者はこれをアカウント乗っ取りかつワーム可能と評定。欠陥は約 4.5 年間放置され、builds.sr.ht は 8月4日に自動サニタイズの暫定対応、本修正は 9月2日の ansi2html 1.9.4 で提供されました。示唆的な後日談：著者は「単なる中程度ではなく高または重大」と主張する CVSS 4.0 ベクトルを提案したのに、VulnCheck がそれを勝手に改変したことに公然と苛立ちを示しています。
+
+**なぜ重要か:** 描画レイヤーを通じて届く信頼できないテキストは、最も古い形の XSS です。そして CI ログは、ほぼすべてのフォージにおいて攻撃者が書き込める入力です。
+
+[`🔗 blog.arusekk.pl`](https://blog.arusekk.pl/posts/srht-account-takeover/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49835996)
+
+---
+
+## 18. browser-use が「jev-ultrafast」をリリース：すべての観測をインデックス化されたアクション空間にする Web エージェント——9 日で 19.9k★
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · browser-use/jev-ultrafast · 19.9k★ · 9月16日作成、本日プッシュ
+- **Tags:** `agents` `browser-automation` `jev` `system-1`
+
+browser-use の新リポジトリは、TypeSafe の Jev 決定モデルを組み替えたエージェントループと組み合わせます。各ページ観測は番号付き要素テーブルになり、Jev への 1 リクエストが操作（CLICK / TYPE_TEXT / SELECT / SCROLL / WAIT / DONE / BLOCKED）とターゲットの両方を選択——ターゲットヘッドには互換要素のみが含まれるため、2 つの決定が 1 回のネットワークラウンドトリップで済みます。テキストは `TYPE_TEXT` が選ばれたときだけ小さな補助モデルが生成（録画デモでは推論無効の `inception/mercury-2.5` を使用）。リポジトリ自身の測定は異例なほど誠実です。看板の Google Flights デモは 7.073 秒で検証済み、6 ラン対照比較の中央値は 9.45 秒 → 7.09 秒（25% 低減、ブラウザプロトコル呼び出し 1,092 → 101）——ただし README 自ら「3 ペアでは強い統計的主張には足りない（両側符号検定 p = 0.25）」、これは「広範なエージェントベンチマークではなく小規模な制御入力比較」だと明記しています。MIT ライセンス、Browser Use Cloud のウェイトリスト付き。
+
+**なぜ重要か:** System-1 決定モデルのパターン（ラウンドトリップごとに 1 回のスコア付き選択、必要なときだけテキスト生成）が、本物のエージェントランタイムアーキテクチャになりつつあります——そしてこのリポジトリは、見出しの数字の隣に自らの弱い統計を並べて publish しています。速度以上に珍しいのはこちらです。
+
+[`🔗 browser-use/jev-ultrafast`](https://github.com/browser-use/jev-ultrafast) · [`🔗 パフォーマンス測定`](https://github.com/browser-use/jev-ultrafast/blob/main/docs/performance.md)
+
+---
+
+## 19. GitLab の荒れた夜：GitLab.com が約 2.5 時間の障害——同じ日に CVSS 9.9 の RCE を 2 件修正するパッチリリース
+
+- **Velocity:** ▮▮ rising
+- **Source:** status.gitlab.com · HN 58+ pts · 28 comments · 約5時間前 (~07:10 UTC+8)
+- **Tags:** `gitlab` `outage` `security-release` `cve`
+
+GitLab.com は 9月24日 23:02 UTC から 503 エラーを大規模に返し始め、Web サイト、API、Git 操作、両レジストリ、Pages、CI/CD ランナー、SAML SSO に波及。25 分後に原因を特定し、9月25日 03:36 UTC までに全 23 コンポーネントが復旧——約 2.5 時間の障害で、現在は監視中です。同じ日、GitLab のパッチリリース（19.2.7 / 19.3.3 / 19.4.1）は、CI/CD 設定パースにおける CVSS 9.9 の認証済みリモートコード実行を 2 件修正しました。特別細工された正規表現で発生する double free（CVE-2026-89078）と整数オーバーフロー（CVE-2026-93577）。両方とも HackerOne 経由で、GitLab が CNA としてスコアリング。メカニズムは無関係ですが——今夜パッチを当てているセルフホスト管理者と、503 を見つめていた SaaS ユーザーは、自分のフォージについての同じメッセージを受け取りました。
+
+**なぜ重要か:** 認証済みユーザーなら誰でも CI 設定経由で到達できる CVSS 9.9 が 2 件は、すべてのセルフホスト GitLab にとって「今すぐアップグレード」の領域です。障害のおかげで、このリリースが確実に読まれることになりました。
+
+[`🔗 NVD：CVE-2026-89078`](https://nvd.nist.gov/vuln/detail/CVE-2026-89078) · [`🔗 NVD：CVE-2026-93577`](https://nvd.nist.gov/vuln/detail/CVE-2026-93577) · [`🔗 GitLab ステータス`](https://status.gitlab.com/)
+
+---
+
+## 20. 日本の古書店で売上が 5 倍——背景には「トン単位」で買い上げ、海外の AI スキャン&シュレッダー施設に回される本
+
+- **Velocity:** ▮▮ rising
+- **Source:** Tom's Hardware · HN 77+ pts · 122 comments · 約13時間前 (~22:51 UTC+8)
+- **Tags:** `ai-training-data` `publishing` `copyright` `japan`
+
+Tom's Hardware が報じたのは、学習データ争奪戦の驚くべき副作用です。日本の古書店で売上が平時の約 5 倍に増加。買っているのは読者ではなく、正体不明の「トン単位」の大量購入者——その中には米国へ送られた 50 トンの一注文もあり、書物を AI 学習用にスキャンした後に破棄する施設へ回されたと疑われています。AI 向けという点は疑いであり確認されたわけではなく、報道も購入者を匿名と描述。記録されているのは購入の規模とパターン、そして印刷物がデータセットの原料として物理的に消費されることへの日本国内の文化的懸念です。HN の議論は即座に、「AI for research」論者が繰り返し指摘するアーカイブアクセスのボトルネックと結びつけました。学習に最も価値のある写本こそ、誰もデジタル化していないもの——そしてこのパイプラインは「デジタル化と破棄」を一工程で行う、と。
+
+**なぜ重要か:** 物理的な書物が「スクレイピング」対象になりつつあります——しかもその「スクレイパー」はシュレッダーです。データ収集の物語であると同時に、文化財保存の物語でもあります。
+
+[`🔗 Tom's Hardware`](https://www.tomshardware.com/tech-industry/artificial-intelligence/japanese-used-bookstores-see-5x-sales-surge-as-books-are-being-bought-by-the-ton-one-50-ton-order-sent-to-the-us-for-ai-scanning-and-destruction-multitude-of-suspicious-bulk-buys-thought-to-end-up-in-foreign-ai-scan-and-shred-facilities) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49831456)
+
+---
+
+## 21. 「AI ラボは歴史研究に資金を注ぐべき」：歴史学者がフロンティアモデルを 17 世紀のアーカイブに走らせ、どこで壊れるかも書き留めた
+
+- **Velocity:** ▮▮ rising
+- **Source:** Res Obscura（Benjamin Breen）· HN 97+ pts · 14 comments · 約9時間前 (~03:14 UTC+8)
+- **Tags:** `llm` `digital-humanities` `research` `history`
+
+歴史学者 Benjamin Breen のエッセイは、フロンティアモデルがアーカイブ研究で閾値を超えたと主張し、実証を添えます。Opus エージェントは Samuel Hartlib のデジタル化アーカイブから 5,000 以上のファイルをダウンロードし、Google Books を検索するサブエージェントを生やした。GPT-6 Astra は John Dee の『Liber Loagaeth』が暗号ではなく大部分が無意味な音節だと結論——文字頻度分析で Edward Kelley が時とともに手を抜くようになったことを示し、Dee の日記とクロスチェックしました。さらに、Newton と Hartlib が同じ物質（ハンガリー・ヴィトリオール）に**異なる**アナグラムを使い、数量も一致していたという、おそらく新しい発見も。一方で Breen は採点を誠実に保ちます。Opus が部分的に解読した Charles V の暗号文はすでに解読済み（1 通は 1530 年代に、1 通は 1916 年に）——モデルは「机調査」を飛ばした。Newton の発見は「新しいように見える」だけ。そして本当のボトルネックは、近世初期の写本の大半が未デジタル化であること。彼の提案は 3 つ。アーカイブをデジタル化して開放する、歴史学者に無償コンピュートを与える、歴史学者が解ける「ミレニアム問題」をノミネートする、です。
+
+**なぜ重要か:** LLM エージェントがどこでアーカイブ研究に本当に価値を追加し、どこで既解決の問題につまずくか——ベンダーのデモが決して語らない後者まで含めた、現場研究者の抑制された記録です。
+
+[`🔗 Res Obscura`](https://resobscura.substack.com/p/ai-labs-need-to-start-funding-historical) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49835531)
+
+---
+
+## 22. 「Dynamic Abliteration」：重みを凍結したまま推論時の拒否抑制——自分が何であるかを認めている PoC
+
+- **Velocity:** ▮▮ rising
+- **Source:** Madhukar Anand（Solvy Tech ブログ）· HN 105+ pts · 40 comments · 約13時間前 (~22:33 UTC+8)
+- **Tags:** `alignment` `llm` `steering` `open-weights`
+
+恒久的な重み変更を行う従来の abliteration の代わりに、この記事は推論時に拒否挙動へ介入します。PyTorch の forward hook が Qwen3-4B の 12–20 層で残差ストリームを遮り、`ゲート × 射影(n-gram メモリ)` を注入する——Engram に着想を得たモジュール（動的 sigmoid ゲート、O(1) の 4 テーブル n-gram ハッシュ、学習された層ごとの射影）は、拒否トリガーが現れたときだけ発火します。学習は PKU-SafeRLHF の 2,000 サンプルで A100 1 枚・8.92 分、ベース重みは凍結したまま。記事は動機となった失敗にも率直です。alpha 1.2 の単一層 steering でも拒否が再生成される——下流の層が挙動を再構成するためです。評価されていないのは：悪用に関する何らかの評価——著者は steered モデルが有害な要求に従うことを明言し、全体を 1 モデル上の概念実証と位置づけ、コードが AI 生成であることも注記しています。
+
+**なぜ重要か:** 重み凍結のランタイム steering は、しばしば「破壊行為」として語られる技術のデプロイ可能版です——そして統計的・安全上の限界への率直さが、この記事を使える参照点にしています。
+
+[`🔗 Solvy Tech ブログ`](https://blog.madhukaraphatak.in/non-destructive-refusal-supression-using-engram) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49831201)
+
+---
+
+## 23. ワルシャワ近郊の Starlink 地上局で火災——重要インフラを狙った放火の疑いとして扱われる
+
+- **Velocity:** ▮▮ rising
+- **Source:** Notes from Poland · HN 167+ pts · 172 comments · 約18時間前 (~17:52 UTC+8)
+- **Tags:** `starlink` `infrastructure` `sabotage` `poland`
+
+水曜日の午後 9 時頃、ワルシャワ南方の Wola Krobowska にある地上局で火災が発生。同施設はポーランド国営通信 Exatel が所有し、デジタル大臣 Krzysztof Gawkowski によれば「ポーランド国内の通信、そしてウクライナへの伝送」を担い、リトアニアの局とともに中東欧地域をサービスしています。警察と国内保安庁（ABW）は故意の放火の疑いで出動。Gawkowski は「重要通信インフラに打撃を与える意図の放火攻撃」で「犯行手法は明らかにロシア的」と述べた一方、他の当局者は慎重です。保安報道官 Jacek Dobrzyński は「原因や動機を語るにはまだ早すぎる」と。帰属の控えめさがこの記事の誠実な部分ですが、戦略的事実は曖昧ではありません。戦場にある Starlink の地上インフラが物理的に攻撃されており、ウクライナの接続はポーランドの建物を経由している、ということです。
+
+**なぜ重要か:** 衛星インターネットの地上局への依存は、「宇宙インフラ」をありふれた、燃える、政治的に読める不動産へと変え続けています。
+
+[`🔗 Notes from Poland`](https://notesfrompoland.com/2026/09/24/starlink-ground-station-in-poland-hit-by-fire-in-suspected-arson-attack/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49828409)
+
+---
+
+## 24. mammoth.js：.docx スタイルのプロトタイプ汚染がローカルファイル漏洩に連鎖——1.12.2 で修正
+
+- **Velocity:** ▮ rising
+- **Source:** NVD · CVE-2026-97151 · CVSS 8.4 (CVSS 4.0, MITRE CNA) · 9月24日公開
+- **Tags:** `cve` `prototype-pollution` `nodejs` `docx`
+
+広く使われる docx→HTML コンバーター mammoth は、細工されたドキュメントのスタイル定義を読む際、`Object.prototype` への任意プロパティ追加を許しました。より鋭いのは連鎖の方です。1.11.0〜1.12.1 では、同一プロセス内で複数ドキュメントを変換し変換後 HTML を返すアプリケーションが、`externalFileAccess: true` への汚染を経由して、サーバーのローカルファイルの内容をドキュメント提供者へ漏洩しえました。1.12.2 で修正（NVD に 2 つのコミットを参照）。影響を受けるパターン——ユーザーアップロード文書をサーバーが HTML に変換して送り返す——はウェブ上で最も一般的な文書処理形態の一つであり、プロトタイプ汚染はまさにテンプレートレイヤーより下で発生するため、フレームワークレベルのサニタイズをすり抜ける種類のバグです。
+
+**なぜ重要か:** 「docx を変換しておいて」はあらゆる文書パイプラインの耐荷重インフラです。今月 2 度目のリマインダー：変換ステップはユーティリティではなく攻撃面です。
+
+[`🔗 NVD レコード`](https://nvd.nist.gov/vuln/detail/CVE-2026-97151) · [`🔗 mwilliamson/mammoth.js`](https://github.com/mwilliamson/mammoth.js)
+
+---
+
+## 25. SigNoz：空のデフォルト JWT シークレットで誰でも管理者セッションを偽造可能——取り消せない 30 日のリフレッシュトークン込み
+
+- **Velocity:** ▮ rising
+- **Source:** NVD / VulnCheck · CVE-2026-97055 · CVSS 9.2 (CVSS 4.0, VulnCheck) / 8.1 (v3.1) · 9月24日公開、v0.143.0 で修正
+- **Tags:** `cve` `signoz` `jwt` `observability`
+
+オープンソースのオブザーバビリティプラットフォーム SigNoz は、JWT トークナイザーの署名シークレット（`SIGNOZ_TOKENIZER_JWT_SECRET`）がデフォルトで空文字列のまま出荷され、`Config.Validate()` は空値を拒否しないため、未設定のデプロイは空の HMAC キーでセッショントークンへ署名・検証していました。JWT プロバイダーがデフォルトだったため、そのようなデプロイはすべて露出していました。既存ユーザーの ID（組織 ID とともに `/api/v2/sessions/context` から認証なしで取得可能）を知っている認証なしの攻撃者が、そのユーザー——管理者を含む——の有効なトークンを偽造できます。`/api/v2/sessions/rotate` で交換される偽造リフレッシュトークンは取り消し不能で、デフォルトで 30 日間有効です。v0.143.0 は jwt プロバイダー選択時にシークレットを必須とし、デフォルトを opaque トークンへ切り替えました。オブザーバビリティプラットフォームは、この種のバグにとって最悪の宿主です。スタックが出力するすべてのログ、トレース、メトリクスを保持しているのですから。
+
+**なぜ重要か:** 「空のデフォルト認証情報」バグはセルフホスト可能なインフラに落ち続けています——そして 30 日間取り消し不能なセッションに換わる偽造プリミティブは、オブザーバビリティツールを永続化されたアクセスへ変えます。
+
+[`🔗 NVD レコード`](https://nvd.nist.gov/vuln/detail/CVE-2026-97055) · [`🔗 修正コミット`](https://github.com/SigNoz/signoz/commit/67895d366d)
+
+---
+
+## 26. m3e-canvas：ブラウザで Material 3 Expressive 画面をスケッチし、プロンプトとしてコーディングエージェントへ——8.2k★、Trendshift 当日 1 位
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · lnkiai/m3e-canvas · 8.2k★ · Trendshift 当日 1 位
+- **Tags:** `material-design` `design-tools` `generative-ui` `vibe-coding`
+
+m3e-canvas は、Material 3 Expressive の UI 画面を完全にブラウザ内で作れるドラッグ＆ドロップエディタです（Next.js 静的エクスポート、React 19、すべて localStorage に保存、バックエンドなし）。タップ/スワイプ遷移付きの複数画面フロー、M3E の 4 軸（カラー、シェイプ、タイポグラフィ、モーション）にわたるテーマ設定、マグネット接続を備えます。効いている設計判断：コードは意図的に生成しません。日本語・英語・中国語・韓国語の自然言語プロンプト（Android または Web 向け）を出力し、それを Claude Code、Codex、Gemini CLI、Cursor に貼り付けます。オプションの AI アシスタントは自分の API キーを使い、プロバイダーと直接通信。明記された制限：モバイル編集は単一画面・ボタンのみ、共有リンクと AI 下書きはベータ版です。
+
+**なぜ重要か:** デザインからエージェントへのハンドオフは、コードではなくプロンプトに落ち着きつつあります。キャンバスは意図を、コーディングエージェントは実装を担う、という分担です。
+
+[`🔗 lnkiai/m3e-canvas`](https://github.com/lnkiai/m3e-canvas) · [`🔗 ライブデモ`](https://lnkiai.github.io/m3e-canvas/)
+
+---
+
+## 27. Compositor：無料オープンソースの「Mac 向け Photoshop 代替」が 3 日で 3 リリース
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub · robbietilton/Compositor · 5.4k★ · 9月23–24日に v1.2.9–v1.2.11 をリリース
+- **Tags:** `macos` `image-editing` `open-source` `native-apps`
+
+Compositor はネイティブ macOS の画像エディタ（MIT、macOS 26.5+ 必須）で、合成と後処理のために作られています。GPU 描画のレイヤーエフェクトを持つレイヤーシステム、クリッピングマスク、調整レイヤー、Photoshop の全ブレンドモード、非破壊トランスフォーム、レタッチツール（スポット修復、コピースタンプ、コンテンツ対応塗りつぶし）、Camera Raw フィルター、Photoshop 風のリマップ可能なショートカット付き PSD/PSB インポート。作者の動機は明言済み：Photoshop の価格と、合成ワークフローを乱す GIMP。リリースのペース——3 日で署名・公証済み DMG の 3 リリース——は機能リストと同じくらい重要です。README はインポート忠実度に正直です。PSD/PSB は 8 ビット RGB のみ（CMYK は明示的に非対応）、ベクターと縦書きテキストはインポート時にピクセル化し、フォルダ・マスク・ブレンドモード・シンプルな横書きテキストだけが編集可能のまま残ります。
+
+**なぜ重要か:** 説得力のあるネイティブの Photoshop 型エディタは、オープンソースクリエイティブスタックの最後の大穴です。PSD 往復のこれらの制限こそが、現役のプロを転換させるかどうかを決めます。
+
+[`🔗 robbietilton/Compositor`](https://github.com/robbietilton/Compositor) · [`🔗 リリース`](https://github.com/robbietilton/Compositor/releases)
+
+---
+
+## 28. Search：ツールバーなし、アカウントなし、テレメトリーなし——約 3 MB の macOS WebKit ブラウザ
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 62+ pts · 24 comments · 約19時間前 (~17:11 UTC+8)
+- **Tags:** `browser` `macos` `webkit` `minimalism`
+
+Office Commun の Search（MIT、約 12,700 行の Swift、サードパーティ依存ゼロ）は、macOS のシステム WebKit に載った意図的に最小主義なブラウザです。アドレス/検索フィールド 1 つとタブ、それだけ——ツールバー、スタートページ、サイドバー、アカウント、同期は一切なし。エンジニアリングはコンセプト以上に中身があります。リクエスト発火前に動く `WKContentRuleList` によるネットワークレベル広告ブロック、遅延タブ復元（クリックされるまで再開タブはコストゼロ）、サイトごとの永続的要素非表示、独立した Cookie ジャーを持つプライベートタブ、そして WebKit 純正拡張エンジンと API シムによる Chrome 拡張サポート。パスワードは macOS キーチェーンに置かれ、Chrome・Arc・Brave・Edge からのワンクリックインポートに対応。ページ読み込み以外の外部通信は 1 日 1 回の更新チェックのみです。
+
+**なぜ重要か:** ブラウザがエージェントやワークスペース、AI サイドバーを積み上げるなか、2010 年代のコア機能セットをネイティブでこなす 3 MB のブラウザは、「モダンブラウザのどれだけが実はオプションなのか」についての有効な声明です。
+
+[`🔗 driceroland/Search`](https://github.com/driceroland/Search) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49828120)
+
+---
+
+## 29. Best LLM for every budget：毎日更新される価格/知能フロンティアチャート——自分の限界にも正直
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 167+ pts · 105 comments · 約14時間前 (~22:09 UTC+8)
+- **Tags:** `llm` `benchmarks` `pricing` `data-visualization`
+
+terryds/bestvaluemodel は、Artificial Analysis の Intelligence Index の全モデルをブレンド API 価格（3:1 の入出力比、100 万トークンあたり）に対して対数スケールでプロットし、GitHub Actions の cron で毎日更新、「何が変わったか」の差分をスナップショット間で表示します。中核は「バリューフロンティア」：「より安くてより賢い」ものが存在しないモデル——すべての安価なモデルより高スコアのモデルを残す計算方式で、モデルごとに 1 行（ベスト effort バリアントのみ）、低スコアフィルターで超安価な低知能モデルがラインを引っ張らないよう配置。手法ページは自らの限界を明記します。キャッシュ入力割引、バッチ価格、高速モードは除外。Index はバージョン間でベースが張り直されるため、スコアは同一スナップショット内でしか比較できません。
+
+**なぜ重要か:** 多くの LLM リーダーボードは「何が最強か」を最適化します。これは人々が実際に予算を組む問いに答え、ランキングの雰囲気ではなくフロンティアの計算過程を見せます。
+
+[`🔗 bestmodelforyourbudget`](https://bestmodelforyourbudget.terrydjony.com/) · [`🔗 terryds/bestvaluemodel`](https://github.com/terryds/bestvaluemodel)
+
+---
+
 ## Metadata
 
 | フィールド | 値 |
 |-------|-------|
-| Generated | 2026-09-25T04:35:00+08:00 |
-| Items | 15 |
-| Sources tracked | 17 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com) |
+| Generated | 2026-09-25T12:15:00+08:00 |
+| Items | 29 |
+| Sources tracked | 27 (Hacker News, GitHub Trending, GitHub repos/advisories, F-Droid, MacAnorak, Ars Technica, Successful Software, NVD, XDA Developers, Bastardica, Linebender, arXiv, Hugging Face, IACR ePrint, danielmangum.com, Google Research, blog.arusekk.pl, status.gitlab.com, Tom's Hardware, Res Obscura, Solvy Tech blog, Notes from Poland, bestmodelforyourbudget.terrydjony.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (1日3回) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
