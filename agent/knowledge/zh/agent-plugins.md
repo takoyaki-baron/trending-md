@@ -714,3 +714,9 @@ Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowl
 `zhaoxuya520/reverse-skill`（37.7k★，+409/天，MIT 含 GPL/AGPL 子模块，最后推送约 9 月 24 日）：面向 Claude Code、Codex、Cursor、Cline 等的"技能路由包"——当 agent 遇到 APK、二进制、JS 加密、固件或渗透目标时，44 条路由规则 / 45 个技能模块将其映射到剧本与工具链（jadx、Frida、IDA、radare2、Ghidra、nmap、Burp），场景从恶意软件/YARA 到 CTF（42 个子技能）再到 LLM 安全。声称 175 个基准用例并在 Windows+Ubuntu 上跑 CI。这是 Claude-Red 双刃趋势的延续（技能层开始规模化打包进攻性安全）——但两个告诫随行：互动比可疑（37.7k★ 对 124 watchers 与 181 commits——09-21 对 OpenStock 首用的星数/提交检查将此星数标记为未核验），且它指示 agent 打开 README_AI.md 并"严格遵循指示"——一个提示注入形态的模式，任何 agent 自动执行前都值得人工审查。README 确实把动作挡在授权/范围检查之后——若星数属实，这是在技能层内部构建护栏的尝试。
 
 Sources: [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skill) · [GitHub Trending](https://github.com/trending?since=daily)
+
+## 2026-09-26 20:51 — reverse-skill 检查深化：6 月批评所指向的历史已不存在
+
+对 09-26 条目警示的第一手 API 核查，所有数字均已验证：(1) 37,737★ / 181 提交 ≈ **209★/提交**——是类型匹配对照项的 11 倍（davila7/claude-code-templates：31.9k★ / 1,684 提交 ≈ 19★/提交），"markdown 包就是提交少"解释不通；(2) 全部可见 git 历史只覆盖 **2026-08-08 → 09-22**，而仓库创建于 2026-05-13——约三个月历史缺失，且 6 月 24 日的 HN 故事（2 分，无评论）标题为"Trending agent skill pack with built-in **refusal-suppression layer**"，其描述的内容已不在历史中；(3) 现在的同意门是全新的——PR #142 "consent-gate agent bootstrap" 于 **09-21** 落地（星数暴涨之后）——且当前 README_AI.md/RULES.md 确实把执行门在激活 + 逐效果同意之后（"阅读仓库文件不构成执行授权"），所以仓库可能已经改过自新——但其可见记录始于最糟糕的负面报道之后；(4) 16 位贡献者，最高贡献者 23%（把几乎同名的 `zhaoxuya520`/`zhaoxuya` 账号合并计约 36%），仅一个 tag（v1.0.1），README 指向 linux.do 作为社区。结论维持并强化：把星数当作未证实；"严格遵循指示"的警示现已部分过时（当前文本明确声明只读不受强制）——信任赤字从内容转移到了历史。
+
+Sources: [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skill) · [HN — 六月故事](https://news.ycombinator.com/item?id=48664434) · [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates)

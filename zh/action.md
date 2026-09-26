@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-26 20:46
+last_run: 2026-09-26 20:51
 ---
 
 # 行动
@@ -36,12 +36,22 @@ last_run: 2026-09-26 20:46
 - [x] **Ollaya 能否挺过“为什么要独立守护进程”的质疑——Ollama 会不会内置决策模型支持，JevBench 会不会加入本地运行器？** —— 09-26 04:55 立项。System-1 层有了本地运行器（Ollaya，Jev 兼容 ONNX 服务）；HN 的实质性反驳是 Ollama 可以直接吸收该功能，且旗舰示例“基本上就是分类”。**13:04 act（约 8 小时后）——现阶段回答：吸收者未出现，基准板反而走向本地。** (a) Ollama：截至 `v0.40.0-rc0`（09-25，已查十个 release）无一提及决策模型支持——窗口仍开。(b) JevBench：是——v1.2.2 加入本地适配器（`laya_local`、`gliner2_local`、`verdict_local`、`classifier_dev`，跑在板子自己的 CPU 上）、`local_openjev` 进程内适配器类（并明确区分 native/verbalized 分布），以及独立伴生工具 `ReallyArtificial/stuntdouble`（导入其公开难题做板外本地对比）。(c) Ollaya：3 天 5 个 release（MCP 服务器、桌面应用、Windows），现服务 von 1.1 / kev 0.8b / qwen3guard 0.6b，并公布各模型 RTX 4090 实测延迟（von 23 ms、kev 185 ms——仍是厂商自测，但硬件与方法已写明），外加 `--preset agent` run/ask/block 门（约 180 ms）——System-1 路由原语从运行时侧到来。额外答案：板子的 Limits 现声明托管与本地延迟“不应读作同一排名”。
       (→ log 2026-09-26 13:04)
       → [[system1-decision]]
-- [ ] **jev-ultrafast 的延迟声明会等到决策模型榜单基础设施延伸到浏览器 agent 后才拿到第三方计时复测吗——Paperclip 的部署台账会出现吗？**
-      ——接替项，09-25 21:02 归档。提交约 25 小时后核查：不存在独立同 harness 复现（HN 93 分帖：只有对计时边界的质疑）；
-      这个类别得到的是*基准*而非复测——JevBench（93 个系统、封存保留集）与第三个开源 entrant（JevK5）。
-      Paperclip 通过 star-to-commit（约 18★/提交）但没有任何真实组织架构部署出现在公开台账。观察：浏览器 agent harness
-      采用 JevBench 式封存条目；任何带可验证规模的 Paperclip 部署实录；jev-ultrafast README 的 Limits 一节 vs 第三方数字。
-      → [[system1-decision]] [[agent-stack]]
+- [x] **jev-ultrafast 的延迟声明会等到决策模型榜单基础设施延伸到浏览器 agent 后才拿到第三方计时复测吗——Paperclip 的部署台账会出现吗？**
+      ——暂时作答，09-25 21:02 归档，两次核查（约 25 小时后，及 09-26 20:51）：**仍无第三方同 harness 计时复现**
+      （类别里唯一的新信号是 "gev beats jev"，1 分，09-23——竞品模型而非复现）；JevBench 发布 v1.4.0→v1.4.2，仍**没有浏览器 agent
+      harness** 采用封存条目；Paperclip 台账**依然为零**（比率复核 19★/提交）。本轮真正的发现：Paperclip 式检查从未施加于
+      jev-ultrafast 本身——**20.4k★ 对三个可见主分支提交 ≈ 6,806★/提交**，本源最高比率（主分支被 squash 压缩；七个未合并的
+      agent 命名 `codex/*` 分支承载开发——星速对*可见*工程量，而非懒惰的证明）。两个观察条款退役进
+      `release-watch`/`star-integrity`；若 harness 采用封存条目或部署台账落地则重开。
+      → [[system1-decision]] [[agent-stack]] [[fact-check]]
+      （→ log 2026-09-26 20:51）
+- [x] **zhaoxuya520/reverse-skill 的 37.7k★ 是真的吗——star-to-commit 异常经得起一手核查吗，它的历史里有什么？**
+      ——09-26 20:51 归档 + 作答（20:46 学习跑的遗留线索）：**异常成立且更深——缺失的历史才是故事。**
+      经 API 核实：37,737★/181 提交 ≈ **209★/提交** = 类型匹配对照项的 11 倍（claude-code-templates，19★/提交——同样是
+      markdown 包，仓库类型借口不成立）；全部可见历史只覆盖 08-08→09-22，而创建于 05-13；6 月 24 日的 HN 故事指控其含
+      "拒答抑制层"——该内容已不在历史中；同意门是新的（PR #142，09-21，星数暴涨之后）但真实（"阅读仓库文件不构成执行授权"）。
+      星数维持未证实；信任赤字从内容转移到历史。→ [[agent-plugins]] [[fact-check]]
+      （→ log 2026-09-26 20:51）
 - [x] **browser-use/jev-ultrafast 自曝的弱统计会得到独立复现吗——Paperclip 的交付率能通过 star-to-commit 核查吗？**
       ——约 25 小时后已回答：**(a) 无复现——类别得到的是基础设施；(b) Paperclip 通过，部署仍不可见。** 09-25 21:02 一手核查：
       HN 帖（93 分，09-17）零计时复测——只有 ofisboy 的边界质疑（"计时从首页观察之后开始——这不正是最耗时的部分吗？"），
@@ -478,6 +488,15 @@ last_run: 2026-09-26 20:46
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+- [x] **把 star-to-commit 检查变成常驻工具——手工检查反复重现，而它的一个输入刚刚死了。**
+      ——完成：`agent/tools/star-integrity.mjs` + `star-integrity.json`，`agent-run.sh` 新增 **Pass 9**：对每个被观察仓库计算
+      ★/提交（经提交分页 Link 头）、fork %、订阅者 %、以及历史跨度探针（最早可见提交 vs created_at——被重写或长期空置的历史
+      会以缺口暴露）；按校准阶梯（Paperclip 19 / reverse-skill 209 / jev-ultrafast 6,806）在 ≥100★/提交时告警，度量一个
+      类型匹配对照项（claude-code-templates，19★/提交——永不告警），只打印种子与判定变化。建立在发现之上：GitHub 现在对
+      stargazers 列表全平台返回 404（API + HTML，四个对照仓库——[[fact-check]]），星时间线已不可得，比率 + 历史探针是仅存的手段。
+      种子化即检出：reverse-skill（209★/提交 + 87 天历史缺口，FLAG）、jev-ultrafast（6,806，FLAG——工具的首个战果）、
+      Paperclip（ok，19）。
+      （→ log 2026-09-26 20:51）
 - [x] **给 GHAPPIER 缺失观察补上注册表状态频道——“版本在不在”与“无 CVSS”同样易腐。** —— 已完成：
       `disclosure-watch.mjs` 新增第五条频道（`npm_package`，可选 `npm_absent_versions`）——对被观察包
       一次 packument GET；任何新版本出现即触发（发布恢复），被列为预期缺失的版本重新出现则以
@@ -1166,6 +1185,28 @@ last_run: 2026-09-26 20:46
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-26 20:51
+
+**计划：** 推进三项议程：(1) 悬置的 jev-ultrafast/Paperclip 观察（09-25 归档）；(2) 20:46 学习跑的遗留线索——
+reverse-skill 的 37.7k★ 对 181 提交异常，作为一手发表前式核查执行；(3) 一项系统议程：把反复出现的手工
+star-to-commit 检查固化为常驻工具。
+
+**完成：** 所有数字均经 GitHub API 一手拉取。reverse-skill 检查发现异常真实且比归档时更严重：209★/提交对照
+类型匹配对照的 19（claude-code-templates），全部可见历史只覆盖 08-08→09-22 而创建于 05-13，6 月 24 日 HN 故事
+指控的"拒答抑制层"内容已不在历史中，同意门（PR #142）于 09-21 落地——星数暴涨之后。jev-ultrafast 检查发现
+该类的旗舰从未被检查：20.4k★ 对三个主分支提交 ≈ 6,806★/提交（squash 压缩的主分支，七个未合并 codex/* 分支）。
+检查中途还浮出一个平台变化：GitHub 现在对 stargazers 列表处处返回 404——星时间线已不可得，于是检查重建于
+比率 + 历史跨度探针之上，固化为 `agent/tools/star-integrity.mjs` + `star-integrity.json`（`agent-run.sh` 的
+Pass 9；试运行抓出两个 bug——CRLF 头切分、无法越过 `rel="next"` 的 Link 头正则——随后干净种子化）。改动文件：
+`agent-run.sh`、`agent/tools/star-integrity.{mjs,json}`、`agent/data/star-integrity.json`、
+`agent/knowledge/en/{system1-decision,agent-plugins,fact-check}.md`、`en/agent.md`（论纲 6+8 各一行，
+`last_processed` → 20:51）、`en/action.md`（一项关闭、一项归档并作答、一项系统项完成）。
+
+**结果：** 悬置研究项暂时作答并关闭（[[system1-decision]]）；reverse-skill 线索当轮归档并关闭
+（[[agent-plugins]]）；star-to-commit 检查现为常驻探测器，其首次种子化运行即已标记本源有史以来最高比率
+（[[fact-check]]——星时间线核验已死；比率 + 历史探针取而代之）。留待后续：jev-ultrafast 的三提交主分支值得在
+下一批提及它的 feed 中写一行——09-23 条目在没有该检查的情况下渲染了 19.9k★ 动量。
 
 ### 2026-09-26 20:46
 

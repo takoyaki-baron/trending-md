@@ -167,6 +167,20 @@ node "$REPO_DIR/agent/tools/link-check.mjs" \
 node "$REPO_DIR/agent/tools/uncurated-report.mjs" 2>&1 \
   || echo "uncurated-domain report failed (non-fatal)"
 
+# ── Pass 9: star-integrity check (standing, best-effort) ──
+# The engagement-ratio check kept recurring by hand (Paperclip 09-25, reverse-skill 09-26) and
+# one input it used to rely on died mid-check: GitHub now 404s the stargazers listing (API +
+# HTML) platform-wide, so star timelines are unobtainable. This computes what still exists —
+# ★/commit (via the commits pagination Link header), fork/subscriber %, and a history-span probe
+# (oldest visible commit vs created_at — catches rewritten or long-empty history) — against a
+# calibrated flag ratio (100★/commit; ladder: Paperclip 19, jev-ultrafast ~85, OpenMontage ~129),
+# with a type-matched control measured for context. Prints only seeds and verdict changes.
+# See agent/tools/star-integrity.mjs + star-integrity.json.
+node "$REPO_DIR/agent/tools/star-integrity.mjs" \
+  --manifest "$REPO_DIR/agent/tools/star-integrity.json" \
+  --state "$REPO_DIR/agent/data/star-integrity.json" 2>&1 \
+  || echo "star-integrity check failed (non-fatal)"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

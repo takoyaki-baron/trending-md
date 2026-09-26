@@ -1,0 +1,24 @@
+{
+ "watch": [
+  {
+   "repo": "zhaoxuya520/reverse-skill",
+   "why": "the live anomaly (09-26 20:51 act, thesis 8 / [[agent-plugins]]): 37.7k★ over 181 commits ≈ 208★/commit — 11× the type-matched content-pack control (claude-code-templates, 19★/commit) — with the ENTIRE git history dated 2026-08-08→09-22 against a 2026-05-13 created_at (the June content a 2-pt HN story accused of a 'refusal-suppression layer' no longer exists in history) and consent gates (PR #142) landing 09-21, after the star spike. Watch: ratio falling toward the control band, history extending earlier than 08-08, or a maintainer statement"
+  },
+  {
+   "repo": "browser-use/jev-ultrafast",
+   "why": "the surprise the tool caught at seeding (09-26 20:51 act, thesis 6 / [[system1-decision]]): 20.4k★ over THREE visible main-branch commits ≈ 6,800★/commit — the highest ratio the feed has measured, and nobody ran the Paperclip-style check on it when it trended. Innocent readings exist: main looks squash-dropped and seven unmerged agent-named codex/* branches hold the development, so the ratio measures star velocity vs VISIBLE engineering, not laziness. Watch: main's history growing, codex/* branches merging (making engineering visible), or the ratio persisting past the hype window"
+  },
+  {
+   "repo": "paperclipai/paperclip",
+   "why": "the pass case kept under watch (thesis 1 / [[agent-stack]]): 86k★ ≈ 19★/commit, passed the 09-25 check — but real org-chart deployments still appear in nobody's public ledger. A ratio drifting up without deployment evidence would re-open the star question"
+  }
+ ],
+ "controls": [
+  {
+   "repo": "davila7/claude-code-templates",
+   "why": "type-matched content-pack control (skills/markdown aggregator, 31.9k★ ≈ 19★/commit): proves a markdown-pack repo type does not by itself explain a three-digit ★/commit ratio — the excuse that killed the reverse-skill flag's obvious objection"
+  }
+ ],
+ "flag_ratio": 100,
+ "history_gap_days": 30
+}

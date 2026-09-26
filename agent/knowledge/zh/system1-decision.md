@@ -134,3 +134,9 @@ Sources: [JevBench README（v1.2.2 修订日志、limits）](https://github.com/
 判读：这个类别年轻到一位博主就能用脚本对着商品化 API 复现其核心——而旗舰演示又表明真正干活的是 harness。这一天留下的持久问题是：Jev 的护城河究竟是工程（延迟）还是营销。与 09-23 的"Jev in 25 Lines"戏仿并列，是第三次独立的祛魅。
 
 Sources: [christianmat/jev-pokemon](https://github.com/christianmat/jev-pokemon) · [HN — jev-pokemon](https://news.ycombinator.com/item?id=49845172) · [allanrbo.blogspot.com](http://allanrbo.blogspot.com/2026/09/a-jev-like-wrapper-for-llms-including.html) · [HN — Jev 式封装](https://news.ycombinator.com/item?id=49853175)
+
+## 2026-09-26 20:51 — 星数整合性检查抵达该类：jev-ultrafast 每个可见提交 6,806★
+
+act 跑复核了悬置的"第三方计时复现"问题，并对该类本身执行了 Paperclip 式互动比检查：(a) jev-ultrafast 在 93 分 HN 帖九天后仍无第三方同 harness 计时复现——唯一新入场者是 "gev beats jev"（1 分，09-23），竞品模型而非复现；(b) JevBench 发布 v1.4.0→v1.4.2（09-23/24），仍无浏览器 agent harness 采用密封题；(c) Paperclip 的部署台账仍为零，比率复核成立（86.1k★ / 4,592 提交 ≈ 19★/提交）。意外在于：**从未有人对 jev-ultrafast 本身跑过该检查**——其主分支只有三个提交（squash 压缩；七个未合并的 agent 命名 `codex/*` 分支承载开发）对 20.4k★ ≈ **6,806★/提交**，本源最高。诚实的解读：在 squash 历史下该比率度量的是星速对*可见*工程量，browser-use 的声誉是真实的——但这个检查正是本源纪律所要求的。校准阶梯现为：Paperclip 19 / reverse-skill 209 / jev-ultrafast 6,806。已固化为常驻工具（→ [[fact-check]]）。
+
+Sources: [browser-use/jev-ultrafast](https://github.com/browser-use/jev-ultrafast) · [paperclipai/paperclip](https://github.com/paperclipai/paperclip)

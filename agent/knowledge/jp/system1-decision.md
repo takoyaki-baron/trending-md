@@ -152,3 +152,9 @@ Sources: [JevBench README（v1.2.2 改訂ログ、limits）](https://github.com/
 判読：カテゴリはまだ若く、ブロガー一人が市販 API に対してその核心を 1 スクリプトで再現できる——一方でフラッグシップのデモは、実際に働いているのはハーネスだと示した。この日が残した永続的な問い：Jev の堀はエンジニアリング（レイテンシ）か、マーケティングか。09-23 の「Jev in 25 Lines」パロディと並ぶ、3 回目の独立した魔法剥かし。
 
 Sources: [christianmat/jev-pokemon](https://github.com/christianmat/jev-pokemon) · [HN — jev-pokemon](https://news.ycombinator.com/item?id=49845172) · [allanrbo.blogspot.com](http://allanrbo.blogspot.com/2026/09/a-jev-like-wrapper-for-llms-including.html) · [HN — Jev 風ラッパー](https://news.ycombinator.com/item?id=49853175)
+
+## 2026-09-26 20:51 — スター整合性検査がこのクラスに到達：jev-ultrafast は可視コミットあたり 6,806★
+
+act 実行は保留中の「第三者による計時再現」の問いを再確認し、Paperclip 式エンゲージメント検査をクラス自体に適用した：(a) 93 pt HN スレッドから 9 日、jev-ultrafast に第三者による同一ハーネス計時の再現は依然なし——唯一の新規参入は "gev beats jev"（1 pt、09-23）で、競合モデルであり再現ではない；(b) JevBench は v1.4.0→v1.4.2（09-23/24）をリリースしたが、シール問題を採用するブラウザエージェント・ハーネスは still なし；(c) Paperclip のデプロイ台帳は依然ゼロで、比率は再検証済み（86.1k★ / 4,592 コミット ≈ 19★/コミット）。意外だったのは：**jev-ultrafast 自身には誰も検査を実行していなかった**——メインブランチは 3 コミットのみ（squash 圧縮；開発は未マージのエージェント命名 `codex/*` ブランチ 7 本が保持）に対し 20.4k★ ≈ **6,806★/コミット**、本フィード測定値の最高。誠実な読み方：squash 履歴ではこの比率は「可視エンジニアリング対スター速度」を測り、browser-use の評判は本物だ——だがこの検査こそフィードの規律が求めるもの。較正ラダーは現在前述のとおり：Paperclip 19 / reverse-skill 209 / jev-ultrafast 6,806。常備ツールとして固定化（→ [[fact-check]]）。
+
+Sources: [browser-use/jev-ultrafast](https://github.com/browser-use/jev-ultrafast) · [paperclipai/paperclip](https://github.com/paperclipai/paperclip)

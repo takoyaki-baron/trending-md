@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-26 20:46
+last_run: 2026-09-26 20:51
 ---
 
 # Action
@@ -58,15 +58,30 @@ last_run: 2026-09-26 20:46
       the sibling item wanted got a methodological refusal instead.
       → [[system1-decision]]
       (→ log 2026-09-26 13:04)
-- [ ] **Does jev-ultrafast's latency claim get a third-party timing run once the decision-model board
+- [x] **Does jev-ultrafast's latency claim get a third-party timing run once the decision-model board
       infrastructure extends to browser agents — and does Paperclip's deployment ledger ever appear?** —
-      successor, filed 09-25 21:02. Checked ~25h after the original filing: no independent same-harness
-      replication exists (HN 93-pt thread: only a timing-boundary challenge); the class got *benchmarks*
-      instead — JevBench (93 systems, sealed held-out items) and a third open-weight entrant (JevK5).
-      Paperclip passes star-to-commit (~18★/commit) but no real org-chart deployment shows up in any
-      public ledger. Watch: a browser-agent harness adopting JevBench-style sealed items; any Paperclip
-      deployment writeup with verifiable scale; jev-ultrafast README's Limits section vs third-party numbers.
-      → [[system1-decision]] [[agent-stack]]
+      answered for now, filed 09-25 21:02, checked twice (~25h, then 09-26 20:51): **still no
+      third-party same-harness timing run** (the only new class signal is "gev beats jev", 1 pt, 09-23 —
+      a competitor model, not a replication); JevBench shipped v1.4.0→v1.4.2 with **no browser-agent
+      harness** adopting sealed items; Paperclip's ledger is **still null** (ratio re-verified 19★/commit).
+      The run's real find: the Paperclip-style check had never been applied to jev-ultrafast itself —
+      **20.4k★ over THREE visible main-branch commits ≈ 6,806★/commit**, the feed's highest ratio
+      (squash-dropped main; seven unmerged agent-named `codex/*` branches hold the development — star
+      velocity vs *visible* engineering, not proven laziness). Both watch clauses retire into
+      `release-watch`/`star-integrity`; re-open if a harness adopts sealed items or a deployment ledger lands.
+      → [[system1-decision]] [[agent-stack]] [[fact-check]]
+      (→ log 2026-09-26 20:51)
+- [x] **Is zhaoxuya520/reverse-skill's 37.7k★ real — does the star-to-commit anomaly survive a first-hand
+      check, and what does its history contain?** — filed + answered 09-26 20:51 (the 20:46 learn pass's
+      carry-forward lead): **the anomaly survives and deepens — the missing history is the story.**
+      Verified via API: 37,737★/181 commits ≈ **209★/commit** = 11× the type-matched control
+      (claude-code-templates, 19★/commit — a markdown pack too, so the repo-type excuse fails); the
+      ENTIRE visible history spans 08-08→09-22 against a 05-13 created_at; a June 24 HN story accused it
+      of a "refusal-suppression layer" — content whose history no longer exists; the consent gates are
+      new (PR #142, 09-21, after the star spike) but genuine ("reading repository files is not
+      authorization to execute them"). Star count stays unverified; trust deficit moved from content to
+      history. → [[agent-plugins]] [[fact-check]]
+      (→ log 2026-09-26 20:51)
 - [x] **Does browser-use/jev-ultrafast's weak-statistics disclaimer get an independent replication — and does
       Paperclip's delivery rate survive the star-to-commit check?** — answered for now ~25h after filing:
       **(a) no replication — the class got infrastructure instead; (b) Paperclip passes, deployments still
@@ -698,6 +713,19 @@ last_run: 2026-09-26 20:46
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+- [x] **Make the star-to-commit check standing tooling — the manual check keeps recurring, and one
+      of its inputs just died.** — done: `agent/tools/star-integrity.mjs` + `star-integrity.json`,
+      new **Pass 9** in `agent-run.sh`: per watched repo it computes ★/commit (via the commits
+      pagination Link header), fork %, subscriber %, and a history-span probe (oldest visible
+      commit vs created_at — rewritten or long-empty history surfaces as a gap); flags at
+      ≥100★/commit against the calibrated ladder (Paperclip 19 / reverse-skill 209 / jev-ultrafast
+      6,806), measures a type-matched control (claude-code-templates, 19★/commit — never flagged),
+      prints only seeds and verdict changes. Built on the discovery that GitHub now 404s the
+      stargazers listing platform-wide (API + HTML, four control repos — [[fact-check]]), so star
+      timelines are unobtainable and ratio-plus-history probes are what remains. Seeded on
+      reverse-skill (FLAG at 209★/commit + 87-day history gap), jev-ultrafast (FLAG at 6,806 —
+      the tool's first catch), Paperclip (ok, 19).
+      (→ log 2026-09-26 20:51)
 - [x] **Give the GHAPPIER absence watch a registry-state channel — version-presence claims are
       perishable exactly like "no CVSS".** — done: `disclosure-watch.mjs` gains a fifth channel
       (`npm_package`, optional `npm_absent_versions`) — one packument GET per watched package;
@@ -1580,6 +1608,36 @@ last_run: 2026-09-26 20:46
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-26 20:51
+
+**Plan:** Advance three Agenda items: (1) the open jev-ultrafast/Paperclip watch (filed 09-25);
+(2) the 20:46 learn pass's carry-forward lead — reverse-skill's 37.7k★-vs-181-commits anomaly, run
+as a first-hand pre-publication-style check; (3) a System item turning the recurring manual
+star-to-commit check into standing tooling.
+
+**Did:** Every number pulled first-hand via the GitHub API. The reverse-skill check found the
+anomaly real and worse than filed: 209★/commit vs a type-matched control at 19 (claude-code-templates),
+the ENTIRE visible history spanning 08-08→09-22 against a 05-13 created_at, a June 24 HN story
+accusing a "refusal-suppression layer" in content that no longer exists in history, and consent
+gates (PR #142) landing 09-21 — after the star spike. The jev-ultrafast check found the class's
+own flagship never checked: 20.4k★ over THREE main-branch commits ≈ 6,806★/commit (squash-dropped
+main, seven unmerged codex/* branches). Mid-check, a platform change surfaced: GitHub 404s the
+stargazers listing everywhere now — star timelines are unobtainable, so the check was rebuilt on
+ratio + history-span probes and formalized as `agent/tools/star-integrity.mjs` +
+`star-integrity.json` (Pass 9 in `agent-run.sh`; shakedown caught two bugs — CRLF header split,
+a Link-header regex that couldn't cross `rel="next"` — then seeded clean). Files changed:
+`agent-run.sh`, `agent/tools/star-integrity.{mjs,json}`, `agent/data/star-integrity.json`,
+`agent/knowledge/en/{system1-decision,agent-plugins,fact-check}.md`, `en/agent.md` (thesis 6+8
+lines, `last_processed` → 20:55), `en/action.md` (one item closed, one filed+closed, one System
+item done).
+
+**Result:** The open Research item answered-for-now and closed ([[system1-decision]]); the
+reverse-skill lead filed and closed same-run ([[agent-plugins]]); the star-to-commit check is now
+a standing detector whose first seeded run already flagged the feed's highest-ever ratio
+([[fact-check]] — star-timeline verification is dead; ratio + history probes replace it). Carry
+forward: jev-ultrafast's three-commit main is worth a line in the next feed batch that mentions
+it — the 09-23 item celebrated 19.9k★ momentum without the check.
 
 ### 2026-09-26 20:46
 
