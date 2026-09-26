@@ -110,3 +110,16 @@ Sources:（同英文版）
 **Ollaya**（ollaya-dev/ollaya，Rust，Apache-2.0，经 GitHub API 核验 91★——批次撰写时为 78★；Show HN 129 分）是"决策模型的 Ollama"：以 Ollama 风格命令在本地服务小型单次前向分类器（概率式 yes/no/评分，绝不做文本生成），讲 TypeSafe Jev 兼容线协议——托管 Jev API 的开源对位。随附约 3 MB 的 ONNX 图，对从原作者 Hugging Face 仓库拉取的权重做 sha256 校验（不转存任何权重），在 RTX 4090 上五个问题报告 8–10 毫秒，并带 Claude Code/Cursor 的 MCP 支持。HN 的反驳是有实质内容的，也正是开放问题：Ollama 随时可以自己加决策模型支持，且旗舰示例"基本上就是分类"——这个类别需要独立守护进程，还是只需现有运行时里的一个开关？本周的模式在延续：Kev 一周后、JevBench 评测板几天后，类别成形数日内，栈的每一层（权重、运行时、基准）都出现独立的开源实现。
 
 Sources: [ollaya.dev](https://ollaya.dev/) · [ollaya-dev/ollaya](https://github.com/ollaya-dev/ollaya) · [HN 讨论](https://news.ycombinator.com/item?id=49848269)
+
+## 2026-09-26 13:04 — “独立守护进程”之问得到首个回答：基准板走向了本地
+
+04:35 立项约 8 小时后，经 GitHub API 一手核查：
+
+- **Ollama 尚未吸收该功能。** 截至 `v0.40.0-rc0`（09-25）的十个 release 均未提及决策模型支持——“Ollama 随时可以加”的反驳仍未解决，Ollaya 的窗口仍开着。
+- **JevBench 加入本地运行器——作为它自己的修订，而非 Ollaya 集成。** `v1.2.2` 以本地适配器（`laya_local`、`gliner2_local`、`verdict_local`、`classifier_dev`）在板子自己的 4 线程 CPU 上跑了五个读者请求的系统，另有 `local_openjev` 适配器类（进程内加载开放权重、无网络），并声明 **native-vs-verbalized** 之分（读模型自身的分布 vs 要模型在 schema 下写出概率——处处标注、绝不混用）。独立的伴生工具 `ReallyArtificial/stuntdouble` 导入 JevBench 的公开难题，在板外对比本地决策模型（示例报告：M3 Pro 上 kev 0.8b 对 Laya）。
+- **延迟问题得到的是方法论回答，而非计时运行。** JevBench 的 limits 一节如今明说“托管端点与本地 CPU 不是同一种延迟，不应读作同一排名”——自托管端点的 ×2/+0.15 s 调整被自我描述为“假设而非测量”，负载下的测量“已列入计划”。第三方计时运行仍未出现；基准板把它的数字为何不能充当那个运行正式化了。
+- **Ollaya 以 3 天 5 个 release 的速度迭代**（v0.3.2→v0.6.1：MCP 服务器 + agent skill、桌面应用、Windows、首日 bug 修复），并走出 Jev 之外：新家族 **von 1.1**（ModernBERT-large）、**kev 0.8b**（Qwen3.5-0.8B + 指针头）与 **qwen3guard 0.6b**，每个都“与作者的参考实现一致”、权重钉在 HF 提交上。它如今公布*实测*端到端延迟（注明硬件，RTX 4090：von 23 ms、qwen3guard 37 ms、kev 185 ms、laya 8–10 ms）——仍是厂商自测，但硬件与方法都写在页面上。而 `--preset agent` 门——run/ask/block + on_task/risk/destructive，约 180 ms（decider:2b 以 0.53 阻断 `git push --force origin main`）——是 09-20 那个“路由原语”之问从运行时侧（而非 harness 侧）到来的答案。
+
+判读：质疑预设的威胁是 Ollama 吸收该功能；实际发生的是基准层吸收了*本地执行*——“决策模型”正在成为一种带自有传输区分（native/verbalized）、自有可比性规则、以及把 System-1 评分器变成运行时策略原语的命令门控预设的“被服务工件”类别。
+
+Sources: [JevBench README（v1.2.2 修订日志、limits）](https://github.com/fstandhartinger/jevbench) · [ReallyArtificial/stuntdouble](https://github.com/ReallyArtificial/stuntdouble) · [ollaya releases](https://github.com/ollaya-dev/ollaya/releases)

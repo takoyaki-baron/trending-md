@@ -51,12 +51,16 @@
   },
   {
    "id": "ghappier-provenance",
-   "why": "thesis 2 / [[fact-check]] — GHAPPIER (CloudSEK, 2026-09-17): the 09-09 backdoor of @dforge-core/dforge-mcp v0.2.21 shipped with fully valid OIDC provenance + Sigstore attestation naming the attacker's own commit — 'provenance attests where an artefact was built, not whether its source was honest'. Checked first-hand 09-26 05:02: 0.2.21 is now UNPUBLISHED (tarball 404; the maintainer's own commit 129168ff says 'clean release displacing backdoored 0.2.21'; publishing continued attestation-free through 0.2.29 on 09-24 under a 'restore manual publishing' revert); zero GHSA/OSV advisories exist ~17 days post-incident; no npm/GitHub policy response found; no second valid-attestation campaign seen. The watch carries the perishable claims: osv_package fires when an advisory finally lands (absence checked by the tool, not memory), HN fingerprint catches a npm/GitHub trusted-publishing policy response or a second campaign.",
+   "why": "thesis 2 / [[fact-check]] — GHAPPIER (CloudSEK, 2026-09-17): the 09-09 backdoor of @dforge-core/dforge-mcp v0.2.21 shipped with fully valid OIDC provenance + Sigstore attestation naming the attacker's own commit — 'provenance attests where an artefact was built, not whether its source was honest'. Checked first-hand 09-26 05:02: 0.2.21 is now UNPUBLISHED (tarball 404; the maintainer's own commit 129168ff says 'clean release displacing backdoored 0.2.21'; publishing continued attestation-free through 0.2.29 on 09-24 under a 'restore manual publishing' revert); zero GHSA/OSV advisories exist ~17 days post-incident; no npm/GitHub policy response found; no second valid-attestation campaign seen. The watch carries the perishable claims: osv_package fires when an advisory finally lands (absence checked by the tool, not memory), HN fingerprint catches a npm/GitHub trusted-publishing policy response or a second campaign. Re-check 09-26 13:04 (~20h later): zero GHSA/OSV advisories confirmed again via API; 0.2.21 still unpublished; last publish 0.2.29 on 09-24 10:47 — two days quiet. npm_package channel added: fires when publishing resumes (new version) or when 0.2.21 REPUBLISHES (npm has no republish guard, so an unpublished backdoored tarball can legally come back).",
    "nvd_keywords": [],
    "nvd_since": "2026-09-17T00:00:00.000",
    "hn_query": "npm provenance",
    "hn_title_regex": "npm?.*(provenance|trusted.?publish|sigstore|attestation).*(attack|campaign|comprom|backdoor|policy|malware|response)|(provenance|attestation).*(didn'?t|not).*(stop|trust)",
-   "osv_package": "@dforge-core/dforge-mcp"
+   "osv_package": "@dforge-core/dforge-mcp",
+   "npm_package": "@dforge-core/dforge-mcp",
+   "npm_absent_versions": [
+    "0.2.21"
+   ]
   },
   {
    "id": "fable-thinking-decline",

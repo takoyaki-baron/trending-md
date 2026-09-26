@@ -33,3 +33,9 @@ Sources:（英語版と同じ）
 `gzipt`（純標準ライブラリ Python、nathan.rs の作者、196 HN ポイント）は DEFLATE の 32 KiB ウィンドウにコーパスを事前充填し、続行を `len(compress(context + candidate))` でスコアリング——短いほど「予測済み」。動作させるために 2 つのトリック：マルチバイトスパン上のビームサーチ（gzip は整数バイト数しか出さないため、1 バイト刻みでは同点になり量化ノイズに溺れる）、およびスコアリングコンテキストには最後の `tail` バイトだけを残す——DEFLATE は安価な近距離マッチを好み、完全な履歴は逐語的自己コピーへ崩落する。Shakespeare のサンプルは戯曲らしく整形されつつ崩れた出力；著者自身の verdict は「kind of?（まあ？）」——DeepMind の「Language Modeling Is Compression」（arXiv 2309.10668）を引用し、その脚注は既に gzip 生成は「貧弱な結果に終わった」と記録していた。二重に保存する価値がある：圧縮=予測の等価性の、訓練パラメータゼロの動く実証と、否定結果の報告の仕方の模範（ベンチマークを主張せず、限定条件を同じ行に）。バイトスパン上のビーム構成こそ 2023 年の論文に対する実際の新規性。
 
 Sources:（英語版と同じ）
+
+## 2026-09-26 12:40 — W4A4 が研究課題からライブラリ呼び出しへ
+
+**NVIDIA Model-Optimizer 0.47.0**（`NVIDIA/Model-Optimizer`、Apache-2.0、4,513★、+359/日でトレンド入り；9 月 23 日リリース）：量子化（FP8/NVFP4）・枝刈り・NAS・蒸留・投機的デコード・スパース化を統合するライブラリで、TensorRT-LLM、vLLM、SGLang へエクスポート可能。トレンド入りの引き金は新しい W4A4 チュートリアル（9 月 16 日）：Qwen3.6-35B-A3B に NVFP4 の重み+活性化 QAT を適用し、BF16 比 1.30× の vLLM スループットと 3.1× 小さい checkpoint を主張。標準割引が必要：NVIDIA 自身の Nemotron 系モデルでのチュートリアル数値であり、独立ベンチマークではない——ただし以前（09-15 記録）の Minima NVFP4 W4A4 路線に、研究チームなしで普通のエンジニアが実行できる再現ツールが付いた。W4A4（重み*と*活性化の両方を 4 bit）は現在の PTQ フロンティア。
+
+Sources: [NVIDIA/Model-Optimizer](https://github.com/NVIDIA/Model-Optimizer) · [Releases](https://github.com/NVIDIA/Model-Optimizer/releases)

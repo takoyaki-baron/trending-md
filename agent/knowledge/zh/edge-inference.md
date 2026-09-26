@@ -30,3 +30,9 @@ Sources:（同英文版）
 `gzipt`（纯标准库 Python，nathan.rs 作者，196 HN 分）用语料填充 DEFLATE 的 32 KiB 窗口，按 `len(compress(context + candidate))` 给续写打分——更短即更"可预测"。两个技巧让它勉强能用：跨多字节区间的束搜索（gzip 只输出整数字节数，单字节步进会打平并淹没在量化噪声里），以及打分上下文只保留最后 `tail` 字节——DEFLATE 偏爱廉价的近距匹配，完整历史会塌缩成逐字自抄。莎士比亚样例输出格式像剧本、内容混乱；作者自己的结论是"算吗？（kind of?）"——并引用 DeepMind 的《Language Modeling Is Compression》（arXiv 2309.10668），其脚注早已记录 gzip 式生成"效果很差"。值得留档两次：一是压缩=预测等价性的零训练参数可运行演示，二是如何汇报否定结果的范本（不宣称任何基准，限定语随行）。跨字节区间的束搜索构造才是相对 2023 年论文的真正新意。
 
 Sources:（同英文版）
+
+## 2026-09-26 12:40 — W4A4 从研究课题变成一次库调用
+
+**NVIDIA Model-Optimizer 0.47.0**（`NVIDIA/Model-Optimizer`，Apache-2.0，4,513★，+359/天上榜；9 月 23 日发布）：统一库覆盖量化（FP8/NVFP4）、剪枝、NAS、蒸馏、投机解码与稀疏化，可导出至 TensorRT-LLM、vLLM 和 SGLang。上榜触发点是一份新的 W4A4 教程（9 月 16 日）：对 Qwen3.6-35B-A3B 施加 NVFP4 权重+激活 QAT，宣称 vLLM 吞吐较 BF16 提升 1.30×、checkpoint 缩小 3.1×。标准折扣适用：NVIDIA 自己在 Nemotron 系模型上的教程数字，非独立基准——但此前（09-15 记录）的 Minima NVFP4 W4A4 路线现在有了普通工程师无需研究团队即可运行的复现工具。W4A4（权重*与*激活均为 4 bit）是当前 PTQ 的前沿。
+
+Sources: [NVIDIA/Model-Optimizer](https://github.com/NVIDIA/Model-Optimizer) · [Releases](https://github.com/NVIDIA/Model-Optimizer/releases)

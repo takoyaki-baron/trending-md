@@ -128,3 +128,16 @@ Sources:（英語版と同じ）
 **Ollaya**（ollaya-dev/ollaya、Rust、Apache-2.0、GitHub API で 91★ を確認——バッチ執筆時は 78★；Show HN 129 pts）は「決定モデルの Ollama」：小型の単一 forward-pass 分類器（確率的 yes/no/スコア、テキスト生成は一切なし）を Ollama 風コマンドでローカルに提供し、TypeSafe Jev 互換のワイヤ形式を話す——ホスト型 Jev API へのオープンソースの対抗物。オリジナル著者の Hugging Face リポジトリから pull した重みを sha256 検証する約 3 MB の ONNX グラフを同梱（再ホストなし）、RTX 4090 で 5 問 8–10 ms を報告、Claude Code/Cursor 向け MCP サポート付き。HN の反論は実質的で、それこそが未解決の問い：Ollama はいつでも決定モデル対応を追加できうる、そしてフラッグシップ例は「基本的に分類」——このクラスに独立デーモンが必要なのか、既存ランタイムの一フラグで足りるのか。今週のパターンが続く：Kev から 1 週間、JevBench ボードから数日——カテゴリが形成されてから数日のうちに、スタックの各層（重み、ランタイム、ベンチ）に独立したオープン実装が生まれている。
 
 Sources: [ollaya.dev](https://ollaya.dev/) · [ollaya-dev/ollaya](https://github.com/ollaya-dev/ollaya) · [HN 議論](https://news.ycombinator.com/item?id=49848269)
+
+## 2026-09-26 13:04 — 「独立デーモン」の問いに最初の回答：ボードはローカル化した
+
+04:35 の登録から約 8 時間後、GitHub API で一次確認：
+
+- **Ollama はまだ機能を吸収していない。** `v0.40.0-rc0`（09-25）までの 10 リリースに決定モデル対応への言及なし——“Ollama はいつでも追加できる”反論は未解決で、Ollaya の窓はまだ開いている。
+- **JevBench がローカルランナーを追加——Ollaya 統合ではなく独自のリビジョンとして。** `v1.2.2` は読者リクエストの 5 システムをローカルアダプタ（`laya_local`、`gliner2_local`、`verdict_local`、`classifier_dev`）でボード自身の 4 スレッド CPU で採点し、`local_openjev` アダプタクラス（オープンウェイトをインプロセスでロード、ネットワークなし）と **native-vs-verbalized** の区別（モデル自身の分布を読むか、schema の下で確率を書き出させるか——どこでもラベル付け、決して混同しない）を追加。独立コンパニオン `ReallyArtificial/stuntdouble` は JevBench の公開難問をインポートしてボード外でローカル決定モデルを比較する（例：M3 Pro での kev 0.8b vs Laya）。
+- **レイテンシの問いにはタイミング実行ではなく方法論的な回答が付いた。** JevBench の limits 節は「ホスト型エンドポイントとローカル CPU は同じ種類のレイテンシではない、一つのランキングとして読むべきではない」と明記——自己ホスト型への ×2/+0.15 s 調整は「仮定であって測定ではない」と自己説明され、負荷下の測定を計画と明記。第三者タイミング実行は未観測；ボードは自らの数字がなぜそれになれないかを正式化した。
+- **Ollaya は 3 日で 5 リリースの速度で反復**（v0.3.2→v0.6.1：MCP サーバー + agent skill、デスクトップアプリ、Windows、初日バグ修正）し、Jev を超えて拡大：新ファミリー **von 1.1**（ModernBERT-large）、**kev 0.8b**（Qwen3.5-0.8B + ポインタヘッド）、**qwen3guard 0.6b**——各々「著者のリファレンス実装と一致」、ウェイトは HF コミットにピン留め。*実測*エンドツーエンド・レイテンシをハードウェア明記で公開（RTX 4090：von 23 ms、qwen3guard 37 ms、kev 185 ms、laya 8–10 ms）——依然ベンダー計測だが、ハードウェアと手法がページに載っている。そして `--preset agent` ゲート——run/ask/block + on_task/risk/destructive、約 180 ms（decider:2b が `git push --force origin main` を 0.53 でブロック）——は 09-20 の「ルーティング primitif」の問いにハーネス側でなくランタイム側から到来した答え。
+
+読解：反論が想定した脅威は Ollama による機能吸収だった。実際に起きたのはベンチマーク層による*ローカル実行*の吸収——“決定モデル”は固有のトランスポート区別（native/verbalized）、固有の比較可能性ルール、System-1 スコアラーを実行時ポリシー primitif に変えるコマンドゲート preset を備えた「提供される成果物クラス」になりつつある。
+
+Sources: [JevBench README（v1.2.2 改訂ログ、limits）](https://github.com/fstandhartinger/jevbench) · [ReallyArtificial/stuntdouble](https://github.com/ReallyArtificial/stuntdouble) · [ollaya releases](https://github.com/ollaya-dev/ollaya/releases)

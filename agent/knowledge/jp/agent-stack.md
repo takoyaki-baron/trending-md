@@ -1889,3 +1889,13 @@ Sources:（英語版と同じ）
 TencentCloud Octop が再浮上（週 +1,608★——総スターの 32%が一週間で；v1.0.2b2、9月23日）、README 自身の細則が物語：プラットフォームはオープン（Python/FastAPI + React、単一プロセス、Web UI + cron + IM チャネル統合——Feishu、DingTalk、QQ、Telegram、Discord、WeCom——状態はすべて `~/.octop/` 下にローカル、双方向 ACP で Claude Code・Codex・OpenCode に委譲）、しかしコアの `harness-*` ランタイムは**まだオープンソースではない**（「公開され次第リンクを追加」）、ベータタグ付き、推奨インストールは Tencent COS URL からの `curl | bash`。大手クラウドベンダーがローカルファーストのマルチエージェントホームサーバを出荷すること自体が市場シグナル；「オープンソースのプラットフォーム、クローズドのランタイム」は注視すべき分割——skills 経済が繰り返しぶつかる open-core 境界が、今度はランタイム層に。
 
 Sources: [TencentCloud/Octop](https://github.com/TencentCloud/Octop) · [GitHub Trending](https://github.com/trending?since=weekly)
+
+## 2026-09-26 12:40 — デスクトップが第三の軸に；教科書レイヤーが形になる；OS の問いが主流へ
+
+**Cline がデスクトップへ**（`cline/cline`、69,336★、+676/週）：長らく VS Code 拡張だったものが「SDK、IDE 拡張、または CLI アシスタントとしての自律コーディングエージェント」を自称するように——core v4.1.21 + CLI v3.0.65（9 月 24 日）、desktop v0.0.36（9 月 25 日）、desktop v0.0.37（9 月 26 日）：3 日で 3 リリース。スタンドアロンデスクトップは、コーディングエージェント市場の第三の軸（エディタ拡張と CLI に次ぐ）として初の本気の試み——69k★ プロジェクトでの 0.0.x タグは、スタンドアロン agent GUI が出身のエディタ拡張に勝つか誰もまだ知らないという正直なシグナル。
+
+**教科書レイヤー**（`bojieli/ai-agent-book` v2.0、51,031★、+2,485/週、作成からわずか 1 年）：李博杰（Li Bojie）の『深入理解 AI Agent：设计原理与工程实践』——10 章、109 のハンズオン演習、章ごとのコード、PDF/EPUB + Web リーダー、15 のコミュニティ翻訳。v2.0 でインタラクション（観測/行動空間）の第 6 章を追加；姉妹巻 `ai-infra-book` を予告。エージェントエンジニアリングの正典教科書は、西洋の MOOC ではなく演習式の練習を備えた中国語 OSS プロジェクトを中心に形成されつつある——README 自身の注意書き：非中国語訳は「中国語原文に遅延する可能性がある」。
+
+**〈What even is an OS now?〉**（Thomas Ptacek、sockpuppet.org；HN 116 pts / 208+ コメント）：AI の本当の破壊はバックエンド/フロントエンドでも Web/ネイティブでもなく、プログラマとユーザーの境界線上にある——パワーユーザーが英語で単一の対象読者向けの bespoke アプリを生成できるとき、OS の核心的役割（「アプリケーション同士を partition により分離すること」）は侵食される。partition は「見知らぬ専門家が書いたソフトウェア」のために設計されたのであり、自著・由来既知・常に変異するコードのためではない。これは同時にローンチ発表——Fly.io を離れ、オンデマンドでアプリを作る電話を作る——で、利益相反は冒頭で開示されている（「私が自分の簿を語っていることは最初に言っておく」）。電話が出荷されるかは別として、208 コメントの論争自体がテーゼが刺さっていることを示す：サンドボックスと隔離は信頼できない第三者ソフトウェアを想定しており、自己生成ソフトウェアはその前提を壊す。
+
+Sources: [cline/cline](https://github.com/cline/cline) · [desktop v0.0.37](https://github.com/cline/cline/releases/tag/desktop-v0.0.37) · [bojieli/ai-agent-book](https://github.com/bojieli/ai-agent-book) · [sockpuppet.org](https://sockpuppet.org/blog/2026/09/25/what-even-is-an-os-now/) · [HN](https://news.ycombinator.com/item?id=49850305)

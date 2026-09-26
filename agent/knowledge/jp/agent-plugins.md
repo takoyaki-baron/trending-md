@@ -817,3 +817,9 @@ Sources: [evaluation.club](https://evaluation.club) ·
 2 つのデータポイント、どちらも新リリースが駆動していない。**mattpocock/skills** は 269,636★ を維持（GitHub API——数字を水増しする trending レンダリングページではなく API を引用；+588/日、最終 push 9月24日）：今日新しいブレイクスルー事象はなく、「名前のついた方法論の持続的採用」と読むべき——Claude Code と Codex 向けの約 26 の組合せ可能なスキル、ユーザー呼び出し（`/grill-me` 要件インタビュー、`/to-spec`）とモデル呼び出し（`/tdd`、`/diagnosing-bugs`、`/code-review`）——一人の教育者の作業プロセス全体がバージョン管理されインストール可能になり、単一目的ツールではなくフレームワーク型 offerings（GSD、BMAD、Spec-Kit）と競合している；README 自身の限定語はそのまま：アーキテクチャスキルは「レスキューではなくサーベイ」。**OpenSpec v1.13.2**（Fission-AI、70.3k★、+1,415/週）は「検証可能な意図」を売りにするツールにとって最重要の changelog 行を出した：「スキップされたチェックはもはや合格と報告されない」——成熟のマイルストーンか、それ以前のバージョンのすべての緑のチェックマークを再監査すべき理由か。README の細則：Node 20.19+、「高推論モデルで最もよく動作」、匿名テレメトリはデフォルトでオン（`DO_NOT_TRACK=1` でオフ）。
 
 Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) · [v1.13.2 release notes](https://github.com/Fission-AI/OpenSpec/releases/tag/v1.13.2)
+
+## 2026-09-26 12:40 — プラグイン土地獲合戦がナレッジワーカーの席まで（09-17 初記録のトラクションデータ）
+
+`anthropics/knowledge-work-plugins` が **25,633★（+889/週、9 月 25 日時点で push）** でトレンド入り——ここで 09-17 に初記録したリポジトリのトラクションデータポイント。開発者ではなくナレッジワーカー向けの Apache-2.0 Cowork プラグイン 11 本：生産性、営業、カスタマーサポート、プロダクトマネジメント、マーケティング、法務、ファイナンス、データ、エンタープライズ検索、バイオリサーチ、プラグイン管理——それぞれ skills、MCP コネクタ、スラッシュコマンド、サブエージェントをバンドルし、`claude plugin marketplace add` でインストール。トレンド入りした 3 つ目の Anthropic プラグイン/スキル系リポジトリ（claude-plugins-official、financial-services に次ぐ）。注視すべき依存：各プラグインの価値はサードパーティコネクタ（Slack、HubSpot、Snowflake…）に人質に取られており、それらは Anthropic の管理下にない——開発者側リポジトリと同じ信頼サーフェスが、今度は法務とファイナンスのデータに向いている。
+
+Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [GitHub Trending（週間）](https://github.com/trending?since=weekly)

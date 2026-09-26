@@ -1941,3 +1941,13 @@ Anthropic 的 "Yes, Claude can do nine loops"（物理学家 Liam Fitzpatrick �
 **Muse 取证第二篇**（mouse.dev，HN 46 分）：Meta Muse 的一个后台 subagent 会话运行在被编目为 `azure/muse-special` 的模型上（返回 `gpt_responses_v1` 条目与 OpenAI 风格的 `call_` 工具调用 ID），与已发布模型目录中的 `azure/gpt-5.6-sol` 并列。作者自己的措辞是审慎的（"我的最佳猜测"是 OpenAI 模型；日志没有说明路由器为何选它）；HN 热评（包括一位自认 Meta AI 员工者）反驳称可能是 Meta 自己的模型套了 OpenAI 兼容 API；蒸馏窃取被明确排除（第三方推理保持加密，RL 服务器拒收此类 blob）。证据支持的是"Meta 的旗舰 agent 可以路由到竞争对手标签的端点"，而非标题式的"Meta 在用 OpenAI 模型"——无论哪种，agent 产品内的不透明模型路由都已成为披露问题，而文件系统取证是唯一的审计线索。
 
 Sources: [Anthropic research](https://www.anthropic.com/research/yes-claude-can-do-nine-loops) · [HN](https://news.ycombinator.com/item?id=49848033) · [arXiv 2609.28654](https://arxiv.org/abs/2609.28654) · [arXiv 2609.29845](https://arxiv.org/abs/2609.29845) · [mouse.dev — muse-special](https://mouse.dev/blog/muse-special/) · [HN](https://news.ycombinator.com/item?id=49848095)
+
+## 2026-09-26 12:40 — 视频的编排层拥有了自己的 397B 模型；后训练有了可复现配方；"有趣"有了度量
+
+**WanPE**（arXiv 2609.30221，阿里 Wan 团队）：397B 参数的提示增强模型，基于 105 万条真实视频训练以掌握导演级分镜规划——通过视频接地反向构建生成镜头级计划，Semantic-Consistency GRPO 跨镜头、跨时间保真用户需求。驱动 Wan3.0；宣称在 WanPEval（约 1.1 万次盲测成对评估）上、5–15 秒区间人类偏好较原始提示提升 10.66–18.84 分、30 秒区间提升 50.86 分。读细则：所有数字都来自作者自己的竞技场，且 30 秒档的措辞只是"与 Seedance 2.5 保持相当"——不是更好。它印证的趋势：开源视频栈（如同图像与代码）的前沿已从生成器移到围绕它的编排层——而 397B 是公开过的最大提示增强模型之一。
+
+**Rufus-Air**（arXiv 2609.29421，亚马逊 22 位作者按字母排序）：一份"在 GLM-4.5-Air-Base（106B-A12B）上开放且可复现的后训练配方"——八个串行阶段：SFT → Reasoning RL → Coding RL → IF RL → General Agent → Coding Agent → Search Agent → RLHF，从硬可验证奖励走向较软的评审信号，主要直接使用公开数据，"无需新的人工标注或内部蒸馏教师"。发现：多样的 SFT 决定能力下限、难度过滤保持 RL 提示有效、"奖励可靠性"决定阶段顺序。宣称超过官方 GLM-4.5-Air 后训练版本——自报，摘要无外部榜单。无论如何都是稀缺产物：一个大实验室的流水线被描述到他人可以复核"排序是否真的重要"（agent 在 reasoning 之后、RLHF 收尾）的程度。
+
+**"有趣"成为可度量对象**（arXiv 2609.28603，含 Remi Munos、Julia Kempe）：内在有趣度被操作化为**证明长度 ÷ 陈述长度**——短陈述要求长证明——并报告其与定理下游效用的外在度量强相关。训练出的 27B 模型"预测证明难度比前沿通用模型更准"，且按该指标优化后与 Mathlib 的实质/完全重合从 91.9% 降到 30.6%——产出更多分布外定理。承重假设是他们自己的：比值是代理指标，效用相关性才是整条流水线的意义所在。当模型大规模猜想并证明定理时，瓶颈已移到筛选——这是对可学习筛选信号的第一次尝试。
+
+Sources: [arXiv 2609.30221](https://arxiv.org/abs/2609.30221) · [arXiv 2609.29421](https://arxiv.org/abs/2609.29421) · [arXiv 2609.28603](https://arxiv.org/abs/2609.28603) · [HF 每日论文](https://huggingface.co/papers?date=2026-09-25)

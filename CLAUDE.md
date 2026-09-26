@@ -97,6 +97,13 @@ underlying pages — this produced a two-layer false signal in a single item.
    lags record publication, so "no score yet" can invert within days. One-call check before
    publishing any absence claim:
    `curl -s "https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-…"` → look at `metrics`.
+   **Package-registry state is perishable the same way** (added 2026-09-26, GHAPPIER follow-up):
+   "unpublished", "removed", "still downloadable" and "no advisory" for a cited npm/PyPI package
+   are version-presence claims that invert without notice — a backdoored version can be
+   unpublished by an unknown party and can legally be republished (registries have no republish
+   guard). One-call check before publishing any version-presence claim:
+   `curl -s "https://registry.npmjs.org/<pkg>"` → look at `versions` + `dist-tags.latest`.
+   Record *who* unpublished/removed as unconfirmed unless a source states it.
 
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first

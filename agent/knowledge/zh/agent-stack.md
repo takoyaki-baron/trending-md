@@ -1607,3 +1607,13 @@ Sources:（同英文版）
 TencentCloud Octop 再度热门（一周 +1,608★——占其总星数的 32%；v1.0.2b2，9 月 23 日），而 README 自己的细则就是故事：平台是开放的（Python/FastAPI + React，单进程，Web UI + cron + IM 渠道集成——飞书、钉钉、QQ、Telegram、Discord、企业微信——全部状态本地存于 `~/.octop/`，双向 ACP 可委派 Claude Code、Codex、OpenCode），但核心 `harness-*` 运行时**尚未开源**（"链接将在发布后添加"），带着 beta 标签，推荐安装方式是从腾讯 COS URL `curl | bash`。大云厂商出货本地优先的多 agent 家庭服务器是市场信号；"开源平台、封闭运行时"是要盯住的分割——skills 经济一再撞上的 open-core 边界，如今出现在运行时层。
 
 Sources: [TencentCloud/Octop](https://github.com/TencentCloud/Octop) · [GitHub Trending](https://github.com/trending?since=weekly)
+
+## 2026-09-26 12:40 — 桌面端成为第三轴；教科书层成形；OS 之问进入主流
+
+**Cline 走向桌面**（`cline/cline`，69,336★，+676/周）：长期作为 VS Code 扩展存在，如今自述为"以 SDK、IDE 扩展或 CLI 助手形态存在的自主编码 agent"——core v4.1.21 + CLI v3.0.65（9 月 24 日）、desktop v0.0.36（9 月 25 日）、desktop v0.0.37（9 月 26 日）：三天三个版本。独立桌面界面是编码 agent 市场的第三条轴（继编辑器插件和 CLI 之后）获得的第一次认真尝试——而 69k★ 项目上的 0.0.x 版本号正是诚实的信号：还没人知道独立 agent GUI 能否胜过它出身的编辑器扩展。
+
+**教科书层**（`bojieli/ai-agent-book` v2.0，51,031★，+2,485/周，创建仅一年）：李博杰的《深入理解 AI Agent：设计原理与工程实践》——10 章、109 个动手实验、逐章代码、PDF/EPUB + 网页阅读器、15 个社区翻译。v2.0 新增第 6 章"交互"（扩展观察与动作空间）；姊妹卷 `ai-infra-book` 已预告。agent 工程的正典教科书正在围绕一个中文开源项目（自带实验式练习）成形，而不是西方 MOOC——README 自己的告示：非中文译本"可能滞后于中文原文"。
+
+**〈What even is an OS now?〉**（Thomas Ptacek，sockpuppet.org；HN 116 分 / 208+ 评论）：AI 真正的颠覆不在后端/前端或 Web/原生，而在程序员与用户的分界线上——当高级用户用英语生成只为一个受众定制的应用时，OS 的核心职责（"把不同应用相互隔离"）被侵蚀，因为隔离是为"来自陌生专家"的软件设计的，而不是自著、来源已知、持续变异的代码。这同时也是一篇发布宣言——他将离开 Fly.io，去做一台按需生成应用的手机——并且开头就披露利益冲突（"你们都知道我在给自己站台"）。手机能否出货另说，208 条评论的论战本身说明命题成立：沙箱与隔离模型假定了不受信的第三方软件，而自生成软件打破了这一前提。
+
+Sources: [cline/cline](https://github.com/cline/cline) · [desktop v0.0.37](https://github.com/cline/cline/releases/tag/desktop-v0.0.37) · [bojieli/ai-agent-book](https://github.com/bojieli/ai-agent-book) · [sockpuppet.org](https://sockpuppet.org/blog/2026/09/25/what-even-is-an-os-now/) · [HN](https://news.ycombinator.com/item?id=49850305)

@@ -51,8 +51,8 @@ const changes = [];
 const errors = [];
 
 for (const item of manifest.watch) {
-  const prev = state.items[item.id] ?? { nvd_seen: [], hn_seen: [], hf_seen: [], osv_seen: [] };
-  const observed = { nvd_seen: [...prev.nvd_seen], hn_seen: [...prev.hn_seen], hf_seen: [...(prev.hf_seen ?? [])], osv_seen: [...(prev.osv_seen ?? [])] };
+  const prev = state.items[item.id] ?? { nvd_seen: [], hn_seen: [], hf_seen: [], osv_seen: [], npm_seen: [] };
+  const observed = { nvd_seen: [...prev.nvd_seen], hn_seen: [...prev.hn_seen], hf_seen: [...(prev.hf_seen ?? [])], osv_seen: [...(prev.osv_seen ?? [])], npm_seen: [...(prev.npm_seen ?? [])] };
 
   // 1. NVD keyword search since the post date.
   for (const kw of item.nvd_keywords ?? []) {
@@ -154,10 +154,41 @@ for (const item of manifest.watch) {
     }
   }
 
+  // 5. npm registry packument state — watches a package whose *version-presence* is the
+  //    current data point (GHAPPIER follow-up, 2026-09-26 13:04: the backdoored 0.2.21 of
+  //    @dforge-core/dforge-mcp was unpublished by someone still unknown; "unpublished" and
+  //    "publishing stopped" are perishable exactly like "no advisory"). One packument GET:
+  //    a NEW version fires (publishing resumed — possibly another campaign), and a version
+  //    listed in `npm_absent_versions` reappearing fires as REPUBLISHED (the registry has no
+  //    republish guard, so an unpublished backdoored tarball can legally come back).
+  if (item.npm_package) {
+    try {
+      const url = 'https://registry.npmjs.org/' + encodeURIComponent(item.npm_package);
+      const d = await get(url);
+      const versions = Object.keys(d.versions ?? {});
+      const latest = d['dist-tags']?.latest ?? '?';
+      const absent = item.npm_absent_versions ?? [];
+      for (const v of versions) {
+        if (observed.npm_seen.includes(v)) continue;
+        if ((prev.npm_seen ?? []).length) {
+          if (absent.includes(v)) {
+            changes.push(`${item.id} npm: ${v} REPUBLISHED — was unpublished, latest is now ${latest} https://www.npmjs.com/package/${item.npm_package}`);
+          } else {
+            changes.push(`${item.id} npm: new version ${v} (latest ${latest}) https://www.npmjs.com/package/${item.npm_package}`);
+          }
+        }
+        observed.npm_seen.push(v);
+      }
+    } catch (err) {
+      errors.push(`${item.id}/npm: ${String(err.message || err).split('\n')[0]}`);
+    }
+  }
+
   observed.nvd_seen.sort();
   observed.hn_seen.sort();
   observed.hf_seen.sort();
   observed.osv_seen.sort();
+  observed.npm_seen.sort();
   observed.checked = now;
   state.items[item.id] = observed;
 }
