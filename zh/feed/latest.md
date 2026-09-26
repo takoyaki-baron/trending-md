@@ -1,8 +1,8 @@
 ---
 date: 2026-09-26
-updated: 2026-09-26T12:30:00+08:00
+updated: 2026-09-26T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 35
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -552,13 +552,139 @@ Wifite3 是对经典 Wifite 审计工具的从零重写：以纯 Python（PyUSB 
 
 ---
 
+## 40. Block 开源 Buzz：人类与 Agent 同频道协作的 Nostr 工作区
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 34.7k★ · +175/day · Apache-2.0
+- **Tags:** `nostr` `agents` `collaboration` `self-hosted`
+
+Buzz（Block, Inc. 出品）是一个可自托管的工作区，人类与 AI Agent 在同一频道里协作，跑在你自己掌控的 Nostr 中继上：每条消息、每个 reaction、工作流步骤、代码评审批准和 git 事件都是同一日志里的签名事件，Agent 拥有"与人类相同的操作面"——仓库、补丁（NIP-34）、评审、YAML 工作流、画布、语音 huddle。附带 Tauri+React 桌面端、Flutter 移动端、JSON 进出 CLI，以及对接 Goose、Codex 和 Claude Code 的 ACP harness；后端是 Rust 中继加 Postgres/Redis/S3。README 对就绪度罕见地诚实：功能分为可用 / 进行中 / 设想三档，并明确警告不要"围绕 💭 那一列规划你的合规方案"。
+
+**为什么重要：** 一家大型金融科技公司押注 Nostr 作为人机协作协议层——共享签名密钥与审计日志是它区别于 Slack 形态 Agent 集成的关键：后者的 Agent 行为对人类使用的同一日志不可见。
+
+[`🔗 block/buzz`](https://github.com/block/buzz) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 41. 陪审团裁定 Facebook 在剑桥分析案中欺骗用户罪名成立
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CBS News/AP · HN 261+ pts · 9月25日裁决 (~09:00 UTC+8)
+- **Tags:** `privacy` `meta` `policy` `litigation`
+
+新墨西哥州圣塔菲的州陪审团裁定 Facebook 在用户隐私保护问题上欺骗用户，此案由州总检察长 Raúl Torrez 提起、历经两周庭审，核心是剑桥分析丑闻——那个采集了约 8700 万个资料页的个性测验。陪审团认定超过 200 万项违规（覆盖新墨西哥全州人口），其中包括在丑闻后对数据中介调查的误导性陈述；下一步由法官而非陪审团量刑，州方正寻求每项违规 5000 美元的顶格罚款。收窄此案背景的一条事实：8 月达成的最高 180 亿美元多州儿童安全和解协议免除了 Meta 未来在剑桥分析上的责任——新墨西哥是唯一例外（佛州拒绝签署），且该州今年已在另一起未成年人安全案中赢得 9.42 亿美元。Meta 表示不服并将继续抗辩，主张其按自己的方式运营平台属于第一修正案权利。
+
+**为什么重要：** 唯一存活的剑桥分析案拿到的是判决而非和解——按违规笔数乘以 5000 美元的量刑算式，才是平台工程团队该细读的部分。
+
+[`🔗 CBS News`](https://www.cbsnews.com/news/facebook-liable-deceiving-users-cambridge-analytica/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49852302)
+
+---
+
+## 42. Show HN：Jev 玩宝可梦红——四枚徽章，决策模型调用花费不到 0.5 美元
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 214+ pts · 88 comments · ~14小时前
+- **Tags:** `jev` `decision-models` `agents` `games`
+
+christianmat/jev-pokemon（GPL-2.0，62★）在 Node Game Boy 模拟器上运行宝可梦红，由 Jev——TypeSafe 的单次前向传播决策模型——做出每一个选择：harness 读取游戏内存，列出合法选项及相关事实（属性克制、距离），Jev 负责挑选；它只按按钮，从不写内存。四枚徽章的 API 成本不到 0.5 美元（实时速度下每 24 小时约 1–1.7 美元）。评论区完成了同行评审：多人认为它"被轨道化"——harness 提供了 A* 寻路和里程碑目标，有用户用最小上下文复现，结果 Jev 连大木研究所都走不到——模型还会陷入循环，并犯下给喷火龙学"反击"而放弃唯一火系招式的低级错误。Jev 不接受图像输入，因此读取 ROM 内存是硬性前提。
+
+**为什么重要：** 这是决策模型卖点（以约 $0.042/M tokens 的价格做出正确选择）迄今最好的演示，同时也诚实呈现了它的边界——harness 才是智能，作者自己承认：Jev 管战术、推理模型管战略的混合"才是最优解"。
+
+[`🔗 christianmat/jev-pokemon`](https://github.com/christianmat/jev-pokemon) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49845172)
+
+---
+
+## 43. Amit Sahai 在 Tao 的博客发文："我们需要多得多的数学家"
+
+- **Velocity:** ▮▮ rising
+- **Source:** terrytao.wordpress.com（客座文章）· HN 174+ pts · 224 comments · ~10小时前
+- **Tags:** `mathematics` `ai` `essay` `research`
+
+密码学家 Amit Sahai 在 Terence Tao 的博客发表客座文章：当 AI 产出的数学成果人类难以验证甚至难以跟上时，答案不是更少的数学家，而是多得多——他回忆本科同学里那些理解新想法远慢于最快的学生、随后放弃数学研究的人，并主张数学正在进入"一个谦卑的时代"，每个数学家都将体会跟不上的感觉。对于 AI 设计的系统，他要求在批准之前先有"人类共同体去理解设计为何成立"，并落脚于"人类能动性是一种根本价值"。（HN 上有一半评论起初把文章误认成 Tao 本人所写。）
+
+**为什么重要：** 本月 Tao 博客第三篇重磅客座文章（前有 Po-Shen Loh 和 Grant Sanderson）——围绕 AI 数学的"验证 vs 理解"之争，如今有了一个具体的政策主张：把人类理解力当作安全基础设施来扩容。
+
+[`🔗 terrytao.wordpress.com`](https://terrytao.wordpress.com/2026/09/24/were-gonna-need-a-lot-more-mathematicians/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49852717)
+
+---
+
+## 44. Conversations 转为免费，开发者与 Google Play 分手
+
+- **Velocity:** ▮▮ rising
+- **Source:** gultsch.de · HN 97+ pts · ~3小时前 (~17:00 UTC+8)
+- **Tags:** `foss` `google-play` `android` `xmpp`
+
+标志性开源 Android XMPP 客户端 Conversations 的开发者 Daniel Gultsch 已终止其 Google Play 付费发行，应用转为免费。他列出的理由：15% 的抽成、找不到人的客服（"根本没办法在 Google 那里说上一个活人"），以及他已不再依赖这笔收入——"多年来我一直觉得自己在和 Google 处于一段有毒的关系里，我留下的唯一原因是经济依赖……Google 不再配得到我和我的钱。我受够了。"这个应用曾供他付了多年房租；HN 评论区分裂成"抽成养活了应用审核"与"不担责的垄断收租"两派。
+
+**为什么重要：** 极少数靠 Play 付费发行真正跑通商业模式的开源 Android 应用，如今公开抛弃这一模式——独立 Android FOSS 剩下的变现路径只有捐赠和联合资助，而两者都更难。
+
+[`🔗 gultsch.de`](https://gultsch.de/posts/breaking-up-with-google-play/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49855315)
+
+---
+
+## 45. 继我们 9 月 23 日的报道之后：WordPress CVE-2026-87902 进入 CISA KEV
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA（9月25日收录）· CVSS 8.1（NVD 上的 Secondary 来源；NVD 分析仍为 "Undergoing Analysis"）
+- **Tags:** `cve` `kev` `wordpress` `update`
+
+继我们 9 月 23 日报道 WordPress 核心路径穿越漏洞之后：CISA 于 9 月 25 日将 CVE-2026-87902 收入已知被利用漏洞目录，依据是"活跃利用的证据"——距离该 CVE 9 月 22 日发布仅三天。NVD 描述与已报道的漏洞一致：未认证攻击者可让 `get_page_template()` 包含一个指定的可读本地 `.php` 文件，只有当服务器与主题的前提条件同时满足时才会导致 RCE。一个值得知道的标注分歧：CISA 的警报将其命名为"远程文件包含漏洞"，而 NVD/CVE 的表述是通过页面模板解析的本地文件包含。NVD 上的 8.1 分来自 Secondary 来源，并非 NVD 自身分析，后者仍在进行中。
+
+**为什么重要：** 从披露到 KEV 只用三天，对这样一个"RCE 有条件"的漏洞来说已是快车道——"仅在前提条件满足时"这句限定语承担了太多分量，而联邦机构现在必须按 BOD 26-04 的整改时限处理它。
+
+[`🔗 CISA 警报`](https://www.cisa.gov/news-events/alerts/2026/09/25/cisa-adds-one-known-exploited-vulnerability-catalog) · [`🔗 NVD 记录`](https://nvd.nist.gov/vuln/detail/CVE-2026-87902)
+
+---
+
+## 46. zhaoxuya520/reverse-skill：37.7k★ 的路由包，把编码 Agent 变成逆向/渗透编排器
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 37.7k★ · +409/day · 最近推送 ~9月24日
+- **Tags:** `reverse-engineering` `agent-skills` `security` `dual-use`
+
+一个面向 Claude Code、Codex、Cursor、Cline 等工具的"技能路由包"：当 Agent 碰到 APK、二进制、JS 加密、固件或渗透目标时，44 条路由规则 / 45 个技能模块会把它映射到对应的剧本与工具链（jadx、Frida、IDA、radare2、Ghidra、nmap、Burp），场景覆盖恶意软件/YARA、CTF（42 个子技能）到 LLM 安全。自称拥有 175 个基准用例并在 Windows+Ubuntu 上跑 CI；MIT 许可，含 GPL/AGPL 子模块。在点星或运行之前有两点注意：互动比异常——37.7k★ 对应的却是 124 个 watcher 和 181 次 commit——星数应视为未经验证；而且它指示 Agent 打开 README_AI.md 并"严格遵循其中的指令"，这种形似提示注入的模式值得在任何 Agent 自动执行前先人工审读。README 将动作门控在授权/范围检查之后。
+
+**为什么重要：** 技能经济已经抵达进攻性安全领域，有趣的是它的形态：一个在调用工具前强制范围/授权检查的路由器，是试图把护栏建进技能层本身——前提是那些星是真的。
+
+[`🔗 zhaoxuya520/reverse-skill`](https://github.com/zhaoxuya520/reverse-skill) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 47. "给 LLM 的单函数 Jev 式包装"：一个产品品类的 30 行对冲物
+
+- **Velocity:** ▮ steady
+- **Source:** allanrbo.blogspot.com · HN 97+ pts · 27 comments · ~6小时前 (~14:00 UTC+8)
+- **Tags:** `jev` `llm` `classification` `logprobs`
+
+一位博主把 Jev 决策模型 API 的核心实现为通用 LLM 之上的单个函数，连视觉模型也能用：给出字母选项，强制单 token 补全，读取 top-token 的 logprob，归一化为每个选项的概率。支持三种问题类型（选择 / 是否 / 打分），每种 2–20 个选项，可对接 llama.cpp（RTX 3090 上的 Gemma 4 12B QAT，每帧三个问题约 1 FPS）和 OpenAI 的 Responses 端点（gpt-6-luna，约 0.2 FPS），博文中附完整独立 Python 脚本。评论区完成了审计：没有校准和集外选项处理；与语法约束解码重叠；评论区链接的 Mushroom-Systems/lichen 声称这种提示方法在 Jev 自己的指标上击败了 Jev；还有反方观点——在句子结束检测等实时任务上，通用 LLM 的尾延迟比 Jev 更差。
+
+**为什么重要：** 决策模型这个品类年轻到一个博主就能用 commodity API 在一个脚本里重实现其核心——这场讨论最终落在的问题是：Jev 的护城河究竟是工程（延迟）还是营销。
+
+[`🔗 allanrbo.blogspot.com`](http://allanrbo.blogspot.com/2026/09/a-jev-like-wrapper-for-llms-including.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49853175)
+
+---
+
+## 48. mobile-mcp：Agent 通过无障碍树驱动 iOS 和 Android，而不是截图
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 7.1k★ · +143/day · Apache-2.0
+- **Tags:** `mcp` `mobile` `automation` `agents`
+
+mobile-next/mobile-mcp 是一个 MCP 服务器，为 Agent 提供一套跨 iOS 和 Android 的统一 API——通过 `simctl`/`adb` 覆盖模拟器与真机：点按、滑动、手势、应用安装与启动、截图与录屏、设备日志与崩溃报告、GPS 伪造、剪贴板、深链。关键的设计选择是：它优先使用无障碍树快照而非视觉模型，削减每次动作的 token 成本，树不可用时再回退截图。可通过 stdio 本地运行，或以可选 Bearer 认证的 Streamable HTTP 运行；除非设置 `MOBILEMCP_DISABLE_TELEMETRY=1`，否则会上报匿名遥测（PostHog/Scarf）。
+
+**为什么重要：** 手机自动化一直是 XCUITest/Espresso 专家的领域；无障碍树优先的 MCP 把存量真机变成 Agent 可操作的面——可用于测试、抓取，以及一切随之而来的事情。
+
+[`🔗 mobile-next/mobile-mcp`](https://github.com/mobile-next/mobile-mcp) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-09-26T12:30:00+08:00 |
-| 条目数 | 39 |
-| 追踪信源 | 35 (Hacker News, GitHub Trending/API, Go blog, CNBC, Factorio FFF, Anthropic Research, ollaya.dev, arXiv, Hugging Face, CISA KEV/ICS advisories, NVD, WSO2, JetBrains/BleepingComputer, Kyiv Independent, CloudSEK, mouse.dev, LWN, OpenBao, Broadcom, swarmtraces.org, Microsoft 365 Insider blog, sockpuppet.org, aymannadeem.com, Zenity Labs, The Register, Aikido Security, Chrome Releases, TechRadar, LLVM blog, epestr.com) |
+| 生成时间 | 2026-09-26T20:20:00+08:00 |
+| 条目数 | 48 |
+| 追踪信源 | 40 (Hacker News, GitHub Trending/API, Go blog, CNBC, Factorio FFF, Anthropic Research, ollaya.dev, arXiv, Hugging Face, CISA KEV/ICS advisories, NVD, WSO2, JetBrains/BleepingComputer, Kyiv Independent, CloudSEK, mouse.dev, LWN, OpenBao, Broadcom, swarmtraces.org, Microsoft 365 Insider blog, sockpuppet.org, aymannadeem.com, Zenity Labs, The Register, Aikido Security, Chrome Releases, TechRadar, LLVM blog, epestr.com, block/buzz, CBS News/AP, terrytao.wordpress.com, gultsch.de, allanrbo.blogspot.com) |
 | 更新时间表 | 04:03, 12:03, 20:03 UTC+8 (每日 3 次) |
 | 排名机制 | Velocity-weighted (recency × engagement acceleration × source authority) |
 | 许可证 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

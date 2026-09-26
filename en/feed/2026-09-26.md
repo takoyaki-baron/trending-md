@@ -1,8 +1,8 @@
 ---
 date: 2026-09-26
-updated: 2026-09-26T12:30:00+08:00
+updated: 2026-09-26T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 35
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -982,13 +982,248 @@ pattern in itself.
 
 ---
 
+## 40. Block open-sources Buzz: a Nostr-based workspace where humans and agents share channels
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 34.7k★ · +175/day · Apache-2.0
+- **Tags:** `nostr` `agents` `collaboration` `self-hosted`
+
+Buzz (built by Block, Inc.) is a self-hostable team workspace where humans and AI
+agents collaborate in the same channels on a Nostr relay you control: every message,
+reaction, workflow step, code-review approval and git event is a signed event in a
+single log, with agents getting "the same surface area as humans" — repos, patches
+(NIP-34), reviews, YAML workflows, canvases, huddles. Ships a Tauri+React desktop
+app, Flutter mobile clients, a JSON-in/JSON-out CLI, and an ACP harness for Goose,
+Codex and Claude Code; the backend is a Rust relay over Postgres/Redis/S3. The
+README is unusually honest about readiness: features are tiered working / in
+progress / speculative, with an explicit warning not to "plan your compliance
+program around the 💭 column yet."
+
+**Why it matters:** A major fintech betting on Nostr as the human-agent protocol
+layer — the shared signing keys and audit trail are the differentiator against
+Slack-shaped agent integrations, where agent actions are invisible to the same log
+humans use.
+
+[`🔗 block/buzz`](https://github.com/block/buzz) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 41. Jury finds Facebook liable for deceiving users in the Cambridge Analytica case
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CBS News/AP · HN 261+ pts · verdict Sep 25 (~09:00 UTC+8)
+- **Tags:** `privacy` `meta` `policy` `litigation`
+
+A New Mexico state jury in Santa Fe found Facebook liable for deceiving users about
+privacy protections, in the two-week trial brought by AG Raúl Torrez centered on
+Cambridge Analytica — the personality quiz that harvested ~87 million profiles.
+Jurors found more than 2 million violations (New Mexico's whole population),
+including misleading the public about post-scandal data-broker investigations; the
+judge, not the jury, now sets penalties, with the state seeking the maximum $5,000
+per violation. Context that narrows the field: August's up-to-$18B multistate
+child-safety settlement released Meta from future Cambridge Analytica liability
+everywhere except New Mexico (Florida declined to sign), and the state already won
+$942M in a separate minors-safety trial this year. Meta says it disagrees and will
+keep defending, arguing a First Amendment right to run its platforms as it sees fit.
+
+**Why it matters:** The only surviving Cambridge Analytica case went to a verdict,
+not a settlement — and the per-violation penalty math ($5,000 × every affected
+user) is the part platform engineers should read.
+
+[`🔗 CBS News`](https://www.cbsnews.com/news/facebook-liable-deceiving-users-cambridge-analytica/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49852302)
+
+---
+
+## 42. Show HN: Jev Plays Pokémon Red — four gym badges for under $0.50 of decision-model calls
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 214+ pts · 88 comments · ~14h ago
+- **Tags:** `jev` `decision-models` `agents` `games`
+
+christianmat/jev-pokemon (GPL-2.0, 62★) runs Pokémon Red on a Node Game Boy
+emulator where Jev — TypeSafe's single-forward-pass decision model — makes every
+choice: the harness reads game RAM, lists legal options with facts (type matchups,
+distances), and Jev picks; it only presses buttons, never writes memory. Four
+badges earned for under $0.50 in API cost (~$1–1.70 per 24h at real-time speed).
+The comment section did the peer review: several called it "railroady" since the
+harness supplies A* pathfinding and milestone goals — one user replicated it with
+minimal context and Jev couldn't even reach Professor Oak's lab — and the model
+gets stuck in loops and made a Charizard-level blunder teaching Counter over its
+only fire move. Jev takes no image input, so ROM memory-reads are a hard
+requirement.
+
+**Why it matters:** The best demonstration yet of both the decision-model pitch
+(correct choices at ~$0.042/M tokens) and its honest limit — the harness is the
+intelligence, and the author says so: mixing Jev for tactics with a reasoning
+model for strategy "would be optimal."
+
+[`🔗 christianmat/jev-pokemon`](https://github.com/christianmat/jev-pokemon) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49845172)
+
+---
+
+## 43. Amit Sahai on Tao's blog: "We're gonna need a lot more mathematicians"
+
+- **Velocity:** ▮▮ rising
+- **Source:** terrytao.wordpress.com (guest post) · HN 174+ pts · 224 comments · ~10h ago
+- **Tags:** `mathematics` `ai` `essay` `research`
+
+Cryptographer Amit Sahai guest-posts on Terence Tao's blog: as AI produces
+mathematical results humans struggle to verify or even follow, the answer is not
+fewer mathematicians but dramatically more — he recalls undergraduate classmates
+who could only grasp new ideas far more slowly than the fastest students and
+subsequently abandoned research math, and argues mathematics is entering "a time
+for humility" in which every mathematician will know what it feels like to be
+unable to keep up. On AI-designed systems he wants "communities of humans to
+understand why the design works" before approving them, grounding it in "human
+agency is a value of fundamental importance." (Half the HN thread initially
+misattributed the post to Tao himself.)
+
+**Why it matters:** The third high-profile guest post on Tao's blog this month
+(after Po-Shen Loh and Grant Sanderson) — the verification-vs-meaning debate over
+AI mathematics now has a concrete policy proposal: scale human comprehension as
+safety infrastructure.
+
+[`🔗 terrytao.wordpress.com`](https://terrytao.wordpress.com/2026/09/24/were-gonna-need-a-lot-more-mathematicians/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49852717)
+
+---
+
+## 44. Conversations goes free as its developer breaks up with Google Play
+
+- **Velocity:** ▮▮ rising
+- **Source:** gultsch.de · HN 97+ pts · ~3h ago (~17:00 UTC+8)
+- **Tags:** `foss` `google-play` `android` `xmpp`
+
+Daniel Gultsch, developer of the canonical open-source Android XMPP client
+Conversations, has ended its paid Google Play distribution and made the app free.
+His stated reasons: the 15% commission, support that goes nowhere ("there is no
+way to talk to a human at Google"), and the fact that he no longer depends on the
+revenue — "For years I've felt like I was in a toxic relationship with Google, and
+the only reason I stayed was economic dependency… Google doesn't deserve me and my
+money anymore. I'm done." The app paid his rent for years; the HN thread split
+between "the commission funds app review" and "a monopoly extracting rent without
+accountability."
+
+**Why it matters:** One of the few Android FOSS apps that ever made paid-Play
+distribution work is publicly abandoning the model — the remaining monetization
+paths for independent Android FOSS are now donations and consortium funding, both
+harder.
+
+[`🔗 gultsch.de`](https://gultsch.de/posts/breaking-up-with-google-play/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49855315)
+
+---
+
+## 45. Since our Sep 23 coverage: WordPress CVE-2026-87902 lands on CISA KEV
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA (added Sep 25) · CVSS 8.1 (Secondary source on NVD; NVD analysis still "Undergoing Analysis")
+- **Tags:** `cve` `kev` `wordpress` `update`
+
+Since we covered the WordPress core path-traversal bug on September 23: CISA added
+CVE-2026-87902 to the Known Exploited Vulnerabilities catalog on September 25,
+"based on evidence of active exploitation," three days after the CVE's September
+22 publication. The NVD description matches the reported bug — unauthenticated
+attackers can make `get_page_template()` include a chosen readable local `.php`
+file, with RCE only if server and theme pre-conditions are met. One labeling
+discrepancy worth knowing: CISA's alert titles it a "Remote File Inclusion
+Vulnerability" while the NVD/CVE framing is local file inclusion via
+page-template resolution. The CVSS 8.1 on NVD is carried from a Secondary source,
+not an NVD analysis, which is still in progress.
+
+**Why it matters:** Disclosure to KEV in three days is the fast lane for a bug
+whose RCE is conditional — the "only if pre-conditions are met" hedge is doing a
+lot of work, and federal agencies now have a BOD 26-04 remediation clock running
+on it.
+
+[`🔗 CISA alert`](https://www.cisa.gov/news-events/alerts/2026/09/25/cisa-adds-one-known-exploited-vulnerability-catalog) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-87902)
+
+---
+
+## 46. zhaoxuya520/reverse-skill: a 37.7k★ routing pack that turns coding agents into RE/pentest orchestrators
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 37.7k★ · +409/day · last push ~Sep 24
+- **Tags:** `reverse-engineering` `agent-skills` `security` `dual-use`
+
+A "skill router pack" for Claude Code, Codex, Cursor, Cline and friends: when the
+agent hits an APK, binary, JS encryption, firmware or pentest target, 44 routing
+rules / 45 skill modules map it to a playbook and toolchain (jadx, Frida, IDA,
+radare2, Ghidra, nmap, Burp), across scenarios from malware/YARA to CTF (42
+sub-skills) to LLM security. Claims 175 benchmark cases with CI on
+Windows+Ubuntu; MIT-licensed with GPL/AGPL submodules. Two cautions before you
+star or run it: the engagement ratio is odd — 37.7k★ against 124 watchers and 181
+commits — so treat the star count as unverified; and it instructs agents to open
+README_AI.md and "follow the instructions strictly," a prompt-injection-shaped
+pattern that deserves manual review before any agent auto-executes it. The README
+gates actions behind an authorization/scope check.
+
+**Why it matters:** The skills economy has reached offensive security, and the
+interesting part is the shape: a router that forces scope/authorization checks
+before tool use is an attempt to build guardrails into the skill layer itself —
+assuming the stars are real.
+
+[`🔗 zhaoxuya520/reverse-skill`](https://github.com/zhaoxuya520/reverse-skill) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 47. "A single function Jev-like wrapper for LLMs": the 30-line counterweight to a product category
+
+- **Velocity:** ▮ steady
+- **Source:** allanrbo.blogspot.com · HN 97+ pts · 27 comments · ~6h ago (~14:00 UTC+8)
+- **Tags:** `jev` `llm` `classification` `logprobs`
+
+A blogger implements the core of the Jev decision-model API as a single function
+over general-purpose LLMs, vision included: present lettered options, force a
+one-token completion, read the top-token logprobs, normalize into per-option
+probabilities. Three question types (choice / yes-no / score), 2–20 options each,
+working against llama.cpp (Gemma 4 12B QAT on an RTX 3090, ~1 FPS for three
+questions per frame) and OpenAI's Responses endpoint (gpt-6-luna, ~0.2 FPS), with
+a full standalone Python script in the post. The comments supply the audit: no
+calibration or out-of-set handling; overlap with grammar-constrained decoding;
+Mushroom-Systems/lichen (comment-linked) claims this prompting approach beats Jev
+on its own metrics; and a counterpoint that general LLMs have worse tail latency
+than Jev for real-time tasks like end-of-sentence detection.
+
+**Why it matters:** The entire decision-model category is young enough that one
+blogger can reimplement its core against commodity APIs in a script — the durable
+question the thread lands on is whether Jev's moat is engineering (latency) or
+marketing.
+
+[`🔗 allanrbo.blogspot.com`](http://allanrbo.blogspot.com/2026/09/a-jev-like-wrapper-for-llms-including.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49853175)
+
+---
+
+## 48. mobile-mcp: agents drive iOS and Android through the accessibility tree, not screenshots
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 7.1k★ · +143/day · Apache-2.0
+- **Tags:** `mcp` `mobile` `automation` `agents`
+
+mobile-next/mobile-mcp is an MCP server that gives agents one platform-agnostic
+API over iOS and Android — emulators, simulators and real devices via `simctl`/
+`adb`: taps, swipes, gestures, app install/launch, screenshots and recording,
+device logs and crash reports, GPS spoofing, clipboard, deep links. The design
+choice that matters: it prefers accessibility-tree snapshots over vision models,
+cutting the per-action token cost, with screenshot fallback when the tree is
+insufficient. Runs locally over stdio or Streamable HTTP with optional bearer
+auth; it phones home anonymous telemetry (PostHog/Scarf) unless
+`MOBILEMCP_DISABLE_TELEMETRY=1`.
+
+**Why it matters:** Phone automation has been an XCUITest/Espresso-specialist
+domain; a11y-tree-first MCP turns the installed base of real devices into an
+agent-actionable surface — for testing, scraping, and everything else that
+implies.
+
+[`🔗 mobile-next/mobile-mcp`](https://github.com/mobile-next/mobile-mcp) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-26T12:30:00+08:00 |
-| Items | 39 |
-| Sources tracked | 35 (Hacker News, GitHub Trending/API, Go blog, CNBC, Factorio FFF, Anthropic Research, ollaya.dev, arXiv, Hugging Face, CISA KEV/ICS advisories, NVD, WSO2, JetBrains/BleepingComputer, Kyiv Independent, CloudSEK, mouse.dev, LWN, OpenBao, Broadcom, swarmtraces.org, Microsoft 365 Insider blog, sockpuppet.org, aymannadeem.com, Zenity Labs, The Register, Aikido Security, Chrome Releases, TechRadar, LLVM blog, epestr.com) |
+| Generated | 2026-09-26T20:20:00+08:00 |
+| Items | 48 |
+| Sources tracked | 40 (Hacker News, GitHub Trending/API, Go blog, CNBC, Factorio FFF, Anthropic Research, ollaya.dev, arXiv, Hugging Face, CISA KEV/ICS advisories, NVD, WSO2, JetBrains/BleepingComputer, Kyiv Independent, CloudSEK, mouse.dev, LWN, OpenBao, Broadcom, swarmtraces.org, Microsoft 365 Insider blog, sockpuppet.org, aymannadeem.com, Zenity Labs, The Register, Aikido Security, Chrome Releases, TechRadar, LLVM blog, epestr.com, block/buzz, CBS News/AP, terrytao.wordpress.com, gultsch.de, allanrbo.blogspot.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-09-26
-updated: 2026-09-26T12:30:00+08:00
+updated: 2026-09-26T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 35
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -552,13 +552,139 @@ Brainfuck を手書きする代わりに、作者はコンパイラを作りま�
 
 ---
 
+## 40. Block が Buzz をオープンソース化：人間とエージェントが同じチャンネルで協働する Nostr ワークスペース
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 34.7k★ · +175/day · Apache-2.0
+- **Tags:** `nostr` `agents` `collaboration` `self-hosted`
+
+Buzz（Block, Inc. 制作）は、人間と AI エージェントが同じチャンネルで協働するセルフホスト可能なワークスペースです。自分で管理する Nostr リレー上で動き、すべてのメッセージ・リアクション・ワークフローステップ・コードレビュー承認・git イベントが単一のログにおける署名済みイベントとして記録され、エージェントは「人間と同じ操作面」を持ちます——リポジトリ、パッチ（NIP-34）、レビュー、YAML ワークフロー、キャンバス、ハドル。Tauri+React デスクトップアプリ、Flutter モバイルクライアント、JSON 入出力の CLI、そして Goose・Codex・Claude Code 向けの ACP ハーネスを同梱。バックエンドは Postgres/Redis/S3 上の Rust リレーです。README は完成度について珍しいほど正直で、機能を「動作中 / 進行中 / 構想中」に階層分けし、「💭 の列を基にコンプライアンス計画を立てないでください」と明示的に警告しています。
+
+**なぜ重要か：** 大手フィンテックが Nostr を人間・エージェント共通のプロトコル層として採用したことには意味があります。共有署名キーと監査ログこそが、Slack 型のエージェント統合——人間の使う同じログにエージェントの行動が見えないあれ——との差別化ポイントです。
+
+[`🔗 block/buzz`](https://github.com/block/buzz) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 41. 陪審員が Facebook について、Cambridge Analytica 事件におけるユーザー欺瞞で責任ありと認定
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CBS News/AP · HN 261+ pts · 9月25日判決 (~09:00 UTC+8)
+- **Tags:** `privacy` `meta` `policy` `litigation`
+
+ニューメキシコ州サンタフェの州陪審員が、ユーザーのプライバシー保護についてユーザーを欺いたとして Facebook の責任を認めました。州司法長官 Raúl Torrez が提起し、2週間にわたって審理されたこの裁判の中心は Cambridge Analytica 事件——約 8,700 万のプロフィールからデータを収集した性格診断クイズ——です。陪審員は 200 万件超の違反（ニューメキシコ州の全人口に相当）を認定し、その中にはスキャンダル後のデータブローカー調査に関する誤解を招く説明も含まれます。次は陪審員ではなく裁判官が罰金額を決め、州は違反 1 件あたり上限の 5,000 ドルを求めています。見通しを狭める事実として、8 月の最大 180 億ドルの複数州児童安全和解は、将来の Cambridge Analytica 責任を Meta から免除しましたが、ニューメキシコ州だけは例外でした（フロリダ州は署名せず）。同州は今年、別の未成年安全裁判ですでに 9 億 4,200 万ドルを勝ち取っています。Meta は判決に不同意で、「記録を歪める試み」への防御を続けるとし、プラットフォームを自らの判断で運営する自由は修正第 1 条の権利だと主張しています。
+
+**なぜ重要か：** 唯一生き残った Cambridge Analytica 訴訟が和解ではなく判決に至りました。違反件数 × 5,000 ドルという罰金算定のロジックこそ、プラットフォーム技術者が読むべき部分です。
+
+[`🔗 CBS News`](https://www.cbsnews.com/news/facebook-liable-deceiving-users-cambridge-analytica/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49852302)
+
+---
+
+## 42. Show HN：Jev がポケモン赤をプレイ——4 個のバッジを意思決定モデルの呼び出し 0.50 ドル未満で
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 214+ pts · 88 comments · 約14時間前
+- **Tags:** `jev` `decision-models` `agents` `games`
+
+christianmat/jev-pokemon（GPL-2.0、62★）は、Node 製 Game Boy エミュレータ上でポケモン赤を動かし、TypeSafe の単一フォワードパス意思決定モデルである Jev にすべての選択をさせます。ハーネスはゲームの RAM を読み、合法的な選択肢と事実（タイプ相性、距離）を列挙し、Jev が選びます。ボタンを押すだけで、ゲームメモリには決して書き込みません。4 個のバッジを API コスト 0.50 ドル未満で獲得（リアルタイム速度で 24 時間あたり約 1〜1.7 ドル）。コメント欄がピアレビューを行いました：ハーネスが A* 経路探索とマイルストーン目標を供給しているため「レール敷き済み」との指標が複数あり、最小限のコンテキストで再現したユーザーでは Jev はオーキド研究所にすらたどり着けず、モデルはループにはまり、唯一の炎タイプ技を捨てて「カウンター」を覚えさせるという初歩的ミスも犯しました。Jev は画像入力を受け付けないため、ROM のメモリ読み出しは必須条件です。
+
+**なぜ重要か：** 意思決定モデルの売り（約 $0.042/M トークンで正しい選択）の最良の実証であると同時に、その正直な限界の実証でもあります。ハーネスこそが知性であり、作者自身が「Jev を戦術に、推論モデルを戦略に使う混合が最適だろう」と認めています。
+
+[`🔗 christianmat/jev-pokemon`](https://github.com/christianmat/jev-pokemon) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49845172)
+
+---
+
+## 43. Tao のブログに Amit Sahai が寄稿：「私たちにはもっとずっと多くの数学者が必要になる」
+
+- **Velocity:** ▮▮ rising
+- **Source:** terrytao.wordpress.com（ゲスト投稿）· HN 174+ pts · 224 comments · 約10時間前
+- **Tags:** `mathematics` `ai` `essay` `research`
+
+暗号学者 Amit Sahai が Terence Tao のブログにゲスト投稿しました。AI が人間が検証しづらい、追いかけさえ難しい数学的成果を生み出すようになった今、必要なのはより少ない数学者ではなく、はるかに多くの数学者だと。彼は、新しい概念を最も速い学生よりはるかに遅くしか理解できず、やがて研究数学を諦めた学部時代の同級生を回想し、数学は「謙虚さの時代」に入りつつあり、すべての数学者が追いつけない感覚を知ることになると論じます。AI が設計したシステムについては、承認の前に「その設計がなぜ機能するのかを人間のコミュニティが理解する」ことを求め、「人間の主体性は根本的に重要な価値である」という一点に着地します。（HN コメントの半分は、当初これを Tao 本人の記事と誤認していました。）
+
+**なぜ重要か：** 今月 Tao のブログに載った 3 本目の注目ゲスト投稿（Po-Shen Loh、Grant Sanderson に続く）です。AI 数学をめぐる「検証 vs 理解」の議論に、具体的な政策提案——人間の理解力を安全インフラとして拡張する——が加わりました。
+
+[`🔗 terrytao.wordpress.com`](https://terrytao.wordpress.com/2026/09/24/were-gonna-need-a-lot-more-mathematicians/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49852717)
+
+---
+
+## 44. Conversations が無料化——開発者は Google Play との関係を解消
+
+- **Velocity:** ▮▮ rising
+- **Source:** gultsch.de · HN 97+ pts · 約3時間前 (~17:00 UTC+8)
+- **Tags:** `foss` `google-play` `android` `xmpp`
+
+定番オープンソース Android XMPP クライアント Conversations の開発者 Daniel Gultsch は、Google Play での有料配信を終了し、アプリを無料にしました。理由として挙げたのは、15% の手数料、誰にもたどり着けないサポート（「Google で生身の人間と話す方法は一切ない」）、そしてもはやこの収入に依存していないこと——「何年もの間、私は Google と毒性のある関係にあると感じていました。留まっていた唯一の理由は経済的依存です……Google はもう私と私のお金に値しません。おしまいです。」このアプリは長年、彼の家賃を払ってきました。HN のスレッドは「手数料はアプリ審査の対価」と「説明責任のない独占の地代収取」の二派に分かれました。
+
+**なぜ重要か：** Play の有料配信で商業的に成功した数少ないオープンソース Android アプリが、そのモデルを公に放棄しました。独立系 Android FOSS に残された収益化の道は寄付とコンソーシアム出資だけで、どちらもより困難です。
+
+[`🔗 gultsch.de`](https://gultsch.de/posts/breaking-up-with-google-play/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49855315)
+
+---
+
+## 45. 9月23日の報道の続き：WordPress CVE-2026-87902 が CISA KEV に登録
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA（9月25日追加）· CVSS 8.1（NVD 上の Secondary ソース。NVD 分析はまだ "Undergoing Analysis"）
+- **Tags:** `cve` `kev` `wordpress` `update`
+
+9月23日に WordPress コアのパストラバーサル脆弱性を取り上げたの続きです。CISA は 9 月 25 日、CVE-2026-87902 を「悪用の活発な証拠」に基づき既知悪用脆弱性カタログ（KEV）に追加しました。CVE の 9 月 22 日公表からわずか 3 日後です。NVD の説明は報告された脆弱性と一致します。認証されていない攻撃者が `get_page_template()` に選択した読み取り可能なローカル `.php` ファイルを include させられ、サーバーとテーマの前提条件が両方揃った場合にのみ RCE に至る、というものです。知っておくべき表記の食い違いがあります。CISA の警告はこれを「リモートファイルインクルージョン脆弱性」と題していますが、NVD/CVE の記述はページテンプレート解決を経由するローカルファイルインクルージョンです。NVD 上の 8.1 は Secondary ソースから流用されたもので、NVD 自身の分析はまだ進行中です。
+
+**なぜ重要か：** 公開から KEV 登録まで 3 日は、「RCE は条件付き」の脆弱性としては高速経路です。「前提条件が揃った場合のみ」という但し書きに多くの仕事を負わせており、連邦機関はいま BOD 26-04 の修復期限に縛られることになりました。
+
+[`🔗 CISA 警告`](https://www.cisa.gov/news-events/alerts/2026/09/25/cisa-adds-one-known-exploited-vulnerability-catalog) · [`🔗 NVD レコード`](https://nvd.nist.gov/vuln/detail/CVE-2026-87902)
+
+---
+
+## 46. zhaoxuya520/reverse-skill：コーディングエージェントをリバースエンジニアリング/ペネトレーションのオーケストレータに変える 37.7k★ のルーティングパック
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 37.7k★ · +409/day · 最終プッシュ ~9月24日
+- **Tags:** `reverse-engineering` `agent-skills` `security` `dual-use`
+
+Claude Code、Codex、Cursor、Cline など向けの「スキルルーティングパック」です。エージェントが APK、バイナリ、JS 暗号化、ファームウェア、ペネトレーションのターゲットに遭遇すると、44 のルーティングルール / 45 のスキルモジュールがプレイブックとツールチェーン（jadx、Frida、IDA、radare2、Ghidra、nmap、Burp）へマッピングします。マルウェア/YARA から CTF（42 サブスキル）、LLM セキュリティまで網羅。175 のベンチマークケースを Windows+Ubuntu の CI で回すと自称し、MIT ライセンス（GPL/AGPL のサブモジュール付き）。スターをつけたり実行したりする前の注意が二つ。エンゲージメント比率が異常です——37.7k★ に対し watcher 124、コミット 181—— star 数は未検証として扱うべきです。さらに、エージェントに README_AI.md を開いて「その指示に厳密に従う」よう命じており、プロンプトインジェクション的なこのパターンは、エージェントに自動実行させる前に手動レビューに値します。README はアクションを認可/スコープチェックの後ろにゲートしています。
+
+**なぜ重要か：** スキルエコノミーが攻撃的セキュリティに到達しました。面白いのはその形態です。ツール使用の前にスコープ/認可チェックを強制するルーターは、ガードレールをスキル層そのものに組み込もうとする試みです——その星数が本物である限り。
+
+[`🔗 zhaoxuya520/reverse-skill`](https://github.com/zhaoxuya520/reverse-skill) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 47. 「LLM 向け single 関数の Jev 風ラッパー」：ある製品カテゴリへの 30 行の対抗馬
+
+- **Velocity:** ▮ steady
+- **Source:** allanrbo.blogspot.com · HN 97+ pts · 27 comments · 約6時間前 (~14:00 UTC+8)
+- **Tags:** `jev` `llm` `classification` `logprobs`
+
+あるブロガーが、Jev 意思決定モデル API の核心を汎用 LLM 上の一つの関数として実装しました。ビジョンモデルにも対応します。文字選択肢を提示し、1 トークンの補完を強制し、top-token の logprob を読み、選択肢ごとの確率へ正規化する、というものです。3 つの質問タイプ（選択 / はい・いいえ / スコア）、各 2〜20 選択肢に対応し、llama.cpp（RTX 3090 上の Gemma 4 12B QAT、1 フレーム 3 質問で約 1 FPS）と OpenAI の Responses エンドポイント（gpt-6-luna、約 0.2 FPS）で動作。完全なスタンドアロン Python スクリプトを投稿に同梱。コメント欄が監査を担いました。キャリブレーションもセット外の回答処理もない、文法制約デコードとの重複、コメントでリンクされた Mushroom-Systems/lichen はこのプロンプティング手法が Jev 自身の指標で Jev を上回ると主張、そしてリアルタイムタスク（文末検出など）では汎用 LLM のテールレイテンシが Jev より悪いという反論。
+
+**なぜ重要か：** 意思決定モデルというカテゴリは、一人のブロガーが commodity API に対してその核心を一つのスクリプトで再実装できるほど若い。スレッドがたどり着いた根強い問いは、Jev の堀がエンジニアリング（レイテンシ）なのかマーケティングなのか、ということです。
+
+[`🔗 allanrbo.blogspot.com`](http://allanrbo.blogspot.com/2026/09/a-jev-like-wrapper-for-llms-including.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49853175)
+
+---
+
+## 48. mobile-mcp：エージェントがスクリーンショットではなくアクセシビリティツリーで iOS と Android を操作する
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 7.1k★ · +143/day · Apache-2.0
+- **Tags:** `mcp` `mobile` `automation` `agents`
+
+mobile-next/mobile-mcp は、iOS と Android の両方に一つのプラットフォーム非依存 API をエージェントに与える MCP サーバーです。`simctl`/`adb` 経由でエミュレータ、シミュレータ、実機をカバーし、タップ、スワイプ、ジェスチャ、アプリのインストール/起動、スクリーンショットと録画、デバイスログとクラッシュレポート、GPS スプーフィング、クリップボード、ディープリンクを扱います。重要な設計選択は、ビジョンモデルよりもアクセシビリティツリーのスナップショットを優先し、アクションごとのトークンコストを削減する一方、ツリーが不十分な場合はスクリーンショットへフォールバックすることです。stdio でローカル実行、またはオプションの Bearer 認証付き Streamable HTTP で動作します。`MOBILEMCP_DISABLE_TELEMETRY=1` を設定しない限り、匿名テレメトリ（PostHog/Scarf）を送信します。
+
+**なぜ重要か：** モバイル自動化は XCUITest/Espresso の専門家の領域でした。アクセシビリティツリー優先の MCP は、既存の実機のストックをエージェント操作可能なサーフェスに変えます——テストやスクレイピング、そしてそれが含意するすべてのために。
+
+[`🔗 mobile-next/mobile-mcp`](https://github.com/mobile-next/mobile-mcp) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
 ## Metadata
 
 | フィールド | 値 |
 |-------|-------|
-| Generated | 2026-09-26T12:30:00+08:00 |
-| Items | 39 |
-| Sources tracked | 35 (Hacker News, GitHub Trending/API, Go ブログ, CNBC, Factorio FFF, Anthropic Research, ollaya.dev, arXiv, Hugging Face, CISA KEV/ICS アドバイザリ, NVD, WSO2, JetBrains/BleepingComputer, Kyiv Independent, CloudSEK, mouse.dev, LWN, OpenBao, Broadcom, swarmtraces.org, Microsoft 365 Insider ブログ, sockpuppet.org, aymannadeem.com, Zenity Labs, The Register, Aikido Security, Chrome Releases, TechRadar, LLVM ブログ, epestr.com) |
+| Generated | 2026-09-26T20:20:00+08:00 |
+| Items | 48 |
+| Sources tracked | 40 (Hacker News, GitHub Trending/API, Go ブログ, CNBC, Factorio FFF, Anthropic Research, ollaya.dev, arXiv, Hugging Face, CISA KEV/ICS アドバイザリ, NVD, WSO2, JetBrains/BleepingComputer, Kyiv Independent, CloudSEK, mouse.dev, LWN, OpenBao, Broadcom, swarmtraces.org, Microsoft 365 Insider ブログ, sockpuppet.org, aymannadeem.com, Zenity Labs, The Register, Aikido Security, Chrome Releases, TechRadar, LLVM ブログ, epestr.com, block/buzz, CBS News/AP, terrytao.wordpress.com, gultsch.de, allanrbo.blogspot.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (1日3回) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
