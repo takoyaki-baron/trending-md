@@ -153,3 +153,11 @@ Sources:（同英文版）
 **Apple 在 iOS 加入持久广告、没有关闭开关**（TechRadar；HN 122+ 评论）——付费 OS 上的广告升级，开发者侧的影响（注意力经济、导流）如今都要经过 Apple 自己的界面。**Meta 下架了 Meta 眼镜讽刺视频**（Roel Maalderink × Bits of Freedom——在 Meta 阿姆斯特丹办公室用 Meta 自家眼镜拍摄 Meta 自己的员工，员工的不适正是作品要点），理由是"霸凌与骚扰"政策：为保护用户而设的审核规则，被用来压制"录制指示灯并不能让被监视变得舒服"这一论点——内容政策成了对付产品批评的工具；YouTube 版标题直接改成"Meta 的员工讨厌 Meta 的眼镜。Meta 删了视频。"**GrapheneOS 称 2027 年"很有机会"随新机预装出货**（Mastodon）——去 Google 化强化 Android 若获 OEM 分发，将是整本守门台账的对冲数据点。另外 **F-Droid 2.0** 的统一安装器之所以存在，部分因为欧盟 DMA 让非商业商店也能用 Android 预批准 API——监管在悄悄为志愿 FOSS 商店服务（→ [[dev-tools]]）。
 
 Sources:（同英文版）
+
+## 2026-09-26 20:03 — 标准 Android FOSS 客户端的付费 Play 时代终结；剑桥分析案迎来判决
+
+**Conversations 转为免费**（gultsch.de；HN 97 分）：Daniel Gultsch 终止这款标准开源 Android XMPP 客户端的 Google Play 付费发行，应用转为免费。他给出的理由：15% 抽成、无处可去的支持（"在 Google 没有任何办法找到一个真人"）、以及不再依赖这笔收入——"多年来我觉得自己身处一段与 Google 的有毒关系，留下来的唯一原因是经济依赖……Google 不再配得到我和我的钱。我受够了。"这个应用曾多年付他的房租；HN 评论区在"抽成养活应用审核"与"无问责的垄断收租"之间分裂。这位 09-17 记录 Play 审核队列超过一周的作者如今彻底离开商店——极少数把付费 Play 发行跑通的 Android FOSS 应用公开放弃该模式，余下的变现路径（捐赠、财团资助）都更难。
+
+**剑桥分析案 Facebook 被判担责**（新墨西哥州陪审团，圣塔菲；判决 9 月 25 日；HN 261 分）：在 AG Raúl Torrez 为期两周、围绕收割约 8700 万档案的性格测试的庭审中，陪审团认定 Facebook 在隐私保护上欺骗用户——逾 200 万项违规（全州人口规模），包括在丑闻后关于数据经纪调查误导公众。量刑由法官而非陪审团决定；州方寻求每项违规最高 $5,000。收窄局面的背景：8 月高达 $180 亿的多州儿童安全和解免除了 Meta 在新墨西哥以外的一切未来剑桥分析责任（佛罗里达拒绝签署），且该州今年已在另一起未成年人安全庭审中赢得 $9.42 亿。Meta 表示不认同并将继续抗辩，主张其宪法第一修正案下的平台运营权。与工程师相关的部分是逐违规罚金算术：$5,000 × 每一个受影响用户。
+
+Sources: [gultsch.de](https://gultsch.de/posts/breaking-up-with-google-play/) · [HN — Conversations](https://news.ycombinator.com/item?id=49855315) · [CBS News](https://www.cbsnews.com/news/facebook-liable-deceiving-users-cambridge-analytica/) · [HN — 判决](https://news.ycombinator.com/item?id=49852302)

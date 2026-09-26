@@ -123,3 +123,14 @@ Sources: [ollaya.dev](https://ollaya.dev/) · [ollaya-dev/ollaya](https://github
 判读：质疑预设的威胁是 Ollama 吸收该功能；实际发生的是基准层吸收了*本地执行*——“决策模型”正在成为一种带自有传输区分（native/verbalized）、自有可比性规则、以及把 System-1 评分器变成运行时策略原语的命令门控预设的“被服务工件”类别。
 
 Sources: [JevBench README（v1.2.2 修订日志、limits）](https://github.com/fstandhartinger/jevbench) · [ReallyArtificial/stuntdouble](https://github.com/ReallyArtificial/stuntdouble) · [ollaya releases](https://github.com/ollaya-dev/ollaya/releases)
+
+## 2026-09-26 20:03 — 该类别先被演示，随后被一个脚本复现
+
+同日的两个数据点，从两端夹住了这个类别：
+
+- **Jev 玩宝可梦红**（`christianmat/jev-pokemon`，GPL-2.0，62★；Show HN 214 分 / 88 评论）：在 Node Game Boy 模拟器上跑宝可梦红，Jev 做每一个决策——harness 读游戏 RAM、列出带事实（属性克制、距离）的合法选项，Jev 来挑；它只按按键，从不写内存。四个徽章的 API 花费不到 $0.50（实时速度约每天 $1–1.70；约 $0.042/M tokens）。评论区自己完成了同行评审：多人称其"轨道化"——harness 提供了 A* 寻路与里程碑目标，一位用户以最小上下文复现后 Jev 连大木博士的研究所都到不了；它会陷入循环，还把唯一的火系招式替换成counter（反击）级的失误。Jev 不接受图像输入，ROM 内存读取因此是硬性前提。作者自己给出的判词把这个限度说透了：Jev 管战术、推理模型管战略的混合"才是最优"——智能在 harness 里。
+- **30 行的对位**（allanrbo.blogspot.com；HN 97 分 / 27 评论）：一位博主把 Jev 决策模型 API 的核心在通用 LLM 上重实现为单个函数——字母编号选项、强制单 token 补全、读 top-token logprobs 归一化为每选项概率；选择/是否/评分三类问题、每题 2–20 个选项、含视觉；在 llama.cpp（RTX 3090 上的 Gemma 4 12B QAT，每帧三个问题约 1 FPS）与 OpenAI Responses 端点（gpt-6-luna，约 0.2 FPS）上均可运行，完整独立 Python 脚本附于文中。评论提供了审计：无校准与集合外处理；与语法约束解码重叠；评论区的 Mushroom-Systems/lichen 称这一提示法在其自身指标上胜过 Jev；也有反方观点——通用 LLM 的尾延迟比 Jev 差，不适合句尾检测等实时任务。
+
+判读：这个类别年轻到一位博主就能用脚本对着商品化 API 复现其核心——而旗舰演示又表明真正干活的是 harness。这一天留下的持久问题是：Jev 的护城河究竟是工程（延迟）还是营销。与 09-23 的"Jev in 25 Lines"戏仿并列，是第三次独立的祛魅。
+
+Sources: [christianmat/jev-pokemon](https://github.com/christianmat/jev-pokemon) · [HN — jev-pokemon](https://news.ycombinator.com/item?id=49845172) · [allanrbo.blogspot.com](http://allanrbo.blogspot.com/2026/09/a-jev-like-wrapper-for-llms-including.html) · [HN — Jev 式封装](https://news.ycombinator.com/item?id=49853175)

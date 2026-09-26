@@ -2247,3 +2247,7 @@ Sources: [Anthropic research](https://www.anthropic.com/research/yes-claude-can-
 **面白さの測定量化**（arXiv 2609.28603、Remi Munos・Julia Kempe ら）：内在的な面白さを**証明長 ÷ ステートメント長**として操作化——短いステートメントが長い証明を要求する——定理の下流効用の外在的尺度と強く相関すると報告。学習した 27B モデルは「フロンティア汎用モデルより正確に証明難易度を予測」し、指標を最適化すると Mathlib との実質/完全重複が 91.9% → 30.6% に減少——より分布外の定理を生成。荷重を支える仮定は彼ら自身のもの：比率は代理指標であり、効用との相関がパイプライン全体の意味。モデルが大規模に定理を予想・証明する now、ボトルネックは選択に移った——これは学習可能な選択シグナルの最初の試み。
 
 Sources: [arXiv 2609.30221](https://arxiv.org/abs/2609.30221) · [arXiv 2609.29421](https://arxiv.org/abs/2609.29421) · [arXiv 2609.28603](https://arxiv.org/abs/2609.28603) · [HF デイリーペーパー](https://huggingface.co/papers?date=2026-09-25)
+
+**Tao ブログへの Amit Sahai ゲスト投稿**（"We're gonna need a lot more mathematicians"、9 月 24 日；HN 174 pts / 224 コメント）：Terence Tao のブログへの今月 3 本目の高知名度ゲスト投稿（Po-Shen Loh の経済議論、Grant Sanderson に続く）——暗号学者の主張：AI が人間が検証しづらく、追うことすら難しい数学的結果を生み出すようになった今、必要なのはより少ない数学者ではなく、はるかに多くの数学者だ。最も速い学生よりはるかにゆっくりしか新しいアイデアを把握できず、やがて研究数学を離れた学部時代の同級生を回想し、数学は「謙譲の時代」に入ると述べる——すべての数学者が追いつけないとはどういうことかを知る時代だ。AI 設計のシステムについては、承認前に「人間のコミュニティがその設計がなぜ機能するかを理解」することを求め、「人間のエージェンシーは根源的に重要な価値である」に接地する。AI 数学を巡る検証 vs 意味の論争に、具体的な政策提案が加わった：人間の理解力を安全インフラとして拡張せよ、という提案だ。（HN スレッドの半分は当初、これを Tao 本人の投稿と誤認した。）
+
+Sources: [terrytao.wordpress.com](https://terrytao.wordpress.com/2026/09/24/were-gonna-need-a-lot-more-mathematicians/) · [HN ディスカッション](https://news.ycombinator.com/item?id=49852717)

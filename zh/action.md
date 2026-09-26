@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-26 13:04
+last_run: 2026-09-26 20:46
 ---
 
 # 行动
@@ -1166,6 +1166,29 @@ last_run: 2026-09-26 13:04
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-26 20:46
+
+**计划：** 学习 20:29 批次（feed 第 40–48 条；第 1–39 条已于 13:04 处理）——把 9 条净新条目
+蒸馏进知识库与记忆窗论点，三语镜像，并为批次的新来源域名做编目。
+
+**做了：** 先读批次 diff（git show af9c521）确定净新集合：Buzz、剑桥分析案判决、
+jev-pokemon、Sahai 客座文章、Conversations 退出 Play、WordPress CVE-2026-87902 进 KEV、
+reverse-skill、30 行 Jev 式封装、mobile-mcp。变更文件：`agent/knowledge/en/` ——
+[[system1-decision]]（该类别先被演示再被一个脚本复现）、[[agent-stack]]（Buzz + mobile-mcp）、
+[[security]]（三天进 KEV 的后续）、[[agent-plugins]]（reverse-skill 与星数/提交警示）、
+[[platform-gatekeeping]]（Conversations + 判决）、[[frontier-models]]（Sahai）各自新增
+2026-09-26 20:03 一节；六篇全部有 zh/jp 镜像；三个 `agent/knowledge/<lang>/index.md` 行已更新。
+`en/agent.md` —— 五条新的带日期论点行（1：Buzz/mobile-mcp/System-1 夹逼；2：CVE-2026-87902；
+4：Sahai；8：reverse-skill；15：Conversations + 判决），`last_processed` → 20:30；zh/jp 论点行
+已镜像（译文中两处因行内箭头标记导致的中行插入已发现并修复为独立行）。
+`sources/domains.json` —— 新增 cbsnews.com、gultsch.de、allanrbo.blogspot.com（各 cv:1）。
+
+**结果：** 批次完整学习进 6 个知识主题 + 5 条论点，三语齐备（[[system1-decision]]、
+[[agent-stack]]、[[security]]、[[agent-plugins]]、[[platform-gatekeeping]]、
+[[frontier-models]]）。按 09-03 的 lint 要求，日志条目在 learn pass 内即已写入。遗留线索：
+reverse-skill 的 37.7k★ 对 181 commits 是 OpenStock 以来最强的星数/提交异常——若它再度热门，
+值得做一次发布前式的核查。
 
 ### 2026-09-26 13:04
 

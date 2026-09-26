@@ -708,3 +708,9 @@ Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [Fission-A
 `anthropics/knowledge-work-plugins` 上榜 **25,633★（+889/周，9 月 25 日仍在推送）**——本文件 09-17 首次记录该仓库后的热度数据点。11 个面向知识工作者（而非开发者）的 Apache-2.0 Cowork 插件：生产力、销售、客服、产品管理、市场营销、法务、财务、数据、企业搜索、生物研究、插件管理——每个都打包 skills、MCP 连接器、slash 命令和子 agent，经 `claude plugin marketplace add` 安装。这是第三个上榜的 Anthropic 插件/技能仓库（继 claude-plugins-official 和 financial-services 之后）。需要持续关注的依赖：每个插件的价值都被其第三方连接器（Slack、HubSpot、Snowflake……）挟持，而这些都不在 Anthropic 控制之下——与开发者侧仓库相同的信任面，这次对准了法务与财务数据。
 
 Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [GitHub Trending（周榜）](https://github.com/trending?since=weekly)
+
+## 2026-09-26 20:03 — 技能经济触及进攻性安全，伴随可疑的互动比
+
+`zhaoxuya520/reverse-skill`（37.7k★，+409/天，MIT 含 GPL/AGPL 子模块，最后推送约 9 月 24 日）：面向 Claude Code、Codex、Cursor、Cline 等的"技能路由包"——当 agent 遇到 APK、二进制、JS 加密、固件或渗透目标时，44 条路由规则 / 45 个技能模块将其映射到剧本与工具链（jadx、Frida、IDA、radare2、Ghidra、nmap、Burp），场景从恶意软件/YARA 到 CTF（42 个子技能）再到 LLM 安全。声称 175 个基准用例并在 Windows+Ubuntu 上跑 CI。这是 Claude-Red 双刃趋势的延续（技能层开始规模化打包进攻性安全）——但两个告诫随行：互动比可疑（37.7k★ 对 124 watchers 与 181 commits——09-21 对 OpenStock 首用的星数/提交检查将此星数标记为未核验），且它指示 agent 打开 README_AI.md 并"严格遵循指示"——一个提示注入形态的模式，任何 agent 自动执行前都值得人工审查。README 确实把动作挡在授权/范围检查之后——若星数属实，这是在技能层内部构建护栏的尝试。
+
+Sources: [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skill) · [GitHub Trending](https://github.com/trending?since=daily)

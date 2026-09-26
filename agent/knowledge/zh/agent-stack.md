@@ -1617,3 +1617,11 @@ Sources: [TencentCloud/Octop](https://github.com/TencentCloud/Octop) · [GitHub 
 **〈What even is an OS now?〉**（Thomas Ptacek，sockpuppet.org；HN 116 分 / 208+ 评论）：AI 真正的颠覆不在后端/前端或 Web/原生，而在程序员与用户的分界线上——当高级用户用英语生成只为一个受众定制的应用时，OS 的核心职责（"把不同应用相互隔离"）被侵蚀，因为隔离是为"来自陌生专家"的软件设计的，而不是自著、来源已知、持续变异的代码。这同时也是一篇发布宣言——他将离开 Fly.io，去做一台按需生成应用的手机——并且开头就披露利益冲突（"你们都知道我在给自己站台"）。手机能否出货另说，208 条评论的论战本身说明命题成立：沙箱与隔离模型假定了不受信的第三方软件，而自生成软件打破了这一前提。
 
 Sources: [cline/cline](https://github.com/cline/cline) · [desktop v0.0.37](https://github.com/cline/cline/releases/tag/desktop-v0.0.37) · [bojieli/ai-agent-book](https://github.com/bojieli/ai-agent-book) · [sockpuppet.org](https://sockpuppet.org/blog/2026/09/25/what-even-is-an-os-now/) · [HN](https://news.ycombinator.com/item?id=49850305)
+
+## 2026-09-26 20:03 — Block 押注 Nostr 作为人机协作协议；手机成为 a11y 树的 MCP 表面
+
+**Buzz**（`block/buzz`，Apache-2.0，34.7k★，+175/天）：Block 出品的可自托管团队工作区，人类与 AI agent 在你自控的 Nostr 中继上的同一频道协作——每条消息、reaction、工作流步骤、代码评审批准与 git 事件都是同一日志里的签名事件，agent 获得"与人类相同的能力面"：仓库、补丁（NIP-34）、评审、YAML 工作流、画布、huddle。随附 Tauri+React 桌面应用、Flutter 移动端、JSON 进/JSON 出的 CLI，以及面向 Goose、Codex 与 Claude Code 的 ACP harness；后端为 Postgres/Redis/S3 之上的 Rust 中继。README 对就绪度异常诚实——功能按可用/开发中/构想分层，并明确警告"还别围绕💭列规划你的合规项目"。相对 Slack 形态 agent 集成的差异化：共享签名密钥与 agent 行为真正落账的审计轨迹——一家大型金融科技公司押注本 feed 自 08-30 起追踪的签名事件工作区模式，如今到了 Inc. 规模。
+
+**mobile-mcp**（`mobile-next/mobile-mcp`，Apache-2.0，7.1k★，+143/天）：给 agent 提供跨 iOS 与 Android 单一平台无关 API 的 MCP 服务器——经 `simctl`/`adb` 覆盖模拟器与真机：点按、滑动、手势、应用安装/启动、截屏与录屏、设备日志与崩溃报告、GPS 伪造、剪贴板、deep link。关键的设计选择：优先无障碍树快照而非视觉模型——削减每步动作的 token 成本，树不足时回退截屏。本地经 stdio 或 Streamable HTTP 运行，可选 bearer 认证；除非 `MOBILEMCP_DISABLE_TELEMETRY=1`，会上报匿名遥测（PostHog/Scarf）。手机自动化一直是 XCUITest/Espresso 专家领域；a11y 树优先的 MCP 把真机的存量装机变成 agent 可操作表面——测试、抓取，以及一切随之而来的事。
+
+Sources: [block/buzz](https://github.com/block/buzz) · [GitHub Trending](https://github.com/trending?since=daily) · [mobile-next/mobile-mcp](https://github.com/mobile-next/mobile-mcp)

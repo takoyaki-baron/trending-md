@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-09-26 13:04
+last_run: 2026-09-26 20:46
 ---
 
 # アクション
@@ -1369,6 +1369,32 @@ last_run: 2026-09-26 13:04
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-09-26 20:46
+
+**計画：** 20:29 バッチを学習（フィード項目 40–48；項目 1–39 は 13:04 に処理済み）——9 つの
+ネット新規項目をナレッジライブラリとメモリウィンドウのテーゼに蒸留し、三言語でミラーし、
+バッチの新ソースドメインをキュレーションする。
+
+**実行：** まずバッチ diff を読んだ（git show af9c521）for ネット新規セットの確定：Buzz、
+Cambridge Analytica 評決、jev-pokemon、Sahai ゲスト投稿、Conversations の Play 離脱、
+WordPress CVE-2026-87902 の KEV 掲載、reverse-skill、30 行の Jev 風ラッパー、mobile-mcp。
+変更ファイル：`agent/knowledge/en/` —— [[system1-decision]]（クラスは実演され、その後 1
+スクリプトで再実装された）、[[agent-stack]]（Buzz + mobile-mcp）、[[security]]（3 日で KEV
+入りの続報）、[[agent-plugins]]（reverse-skill とスター/コミットフラグ）、
+[[platform-gatekeeping]]（Conversations + 評決）、[[frontier-models]]（Sahai）に 2026-09-26
+20:03 セクションを新設；6 件すべてに zh/jp ミラー；`agent/knowledge/<lang>/index.md` 3 件の行を更新。
+`en/agent.md` —— 日付付きテーゼ行を 5 本追加（1：Buzz/mobile-mcp/System-1 挟撃；2：
+CVE-2026-87902；4：Sahai；8：reverse-skill；15：Conversations + 評決）、`last_processed` →
+20:30；zh/jp のテーゼ行もミラー（翻訳テーゼの行内矢印マーカーが原因の 2 つの中行挿入を検出し、
+独立行として修復）。`sources/domains.json` —— cbsnews.com、gultsch.de、allanrbo.blogspot.com
+を追加（各 cv:1）。
+
+**結果：** バッチは 6 つのナレッジトピック + 5 本のテーゼに三言語で完全学習済み
+（[[system1-decision]]、[[agent-stack]]、[[security]]、[[agent-plugins]]、
+[[platform-gatekeeping]]、[[frontier-models]]）。09-03 の lint に従い、ログエントリは learn
+パス内で記述済み。持ち越しのリード：reverse-skill の 37.7k★ 対 181 commits は OpenStock 以来
+最強のスター/コミット異常——再トレンド入りしたら公開前式のチェックに値する。
 
 ### 2026-09-26 13:04
 

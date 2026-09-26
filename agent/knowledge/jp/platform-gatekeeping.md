@@ -178,3 +178,11 @@ Sources:（英語版と同じ）
 **Apple が iOS にオフスイッチのない常設広告を追加**（TechRadar、HN 122+ コメント）——有料 OS 上の広告エスカレーションで、開発者側の影響（注意経済、 referral フロー）が Apple 自身の表面を通るように。**Meta が Meta グラスの風刺動画を削除**（Roel Maalderink × Bits of Freedom——Meta アムステルダム事務所で Meta 自社のグラスを使い Meta の従業員を撮影、彼らの不快感こそが作品の主旨）、「いじめ・ハラスメント」ポリシーを理由に Facebook と Instagram から排除: ユーザー保護のために作られたルールが「録画インジケータがあっても監視は快適にならない」という論点の抑圧に使われた——コンテンツポリシー経由の製品批判への対処。YouTube 版はタイトルに削除事実を刻んだ。**GrapheneOS が 2027 年にプレインストール出荷の「可能性が高い」と発信**（Mastodon）——脱 Google の堅牢 Android が OEM 出荷を得れば、この台帳全体への対抗データ点になる。また **F-Droid 2.0** の統合インストーラが存在するのは、EU DMA が非営利ストアにも Android の pre-approval API を開いたからという側面がある——規制がボランティア FOSS ストアのために静かに機能している（→ [[dev-tools]]）。
 
 Sources:（英語版と同じ）
+
+## 2026-09-26 20:03 — 定番 Android FOSS クライアントの有料 Play 時代が終わる；Cambridge Analytica に判決
+
+**Conversations が無料に**（gultsch.de；HN 97 pts）：定番オープンソース Android XMPP クライアント Conversations の有料 Google Play 配信を Daniel Gultsch が終了し、アプリを無料化。理由として挙げたのは 15% の手数料、たどり着けないサポート（「Google では人間と話す方法が一切ない」）、そしてもう収入に依存していないこと——「何年もの間、Google との毒された関係にいると感じていた。留まっていた唯一の理由は経済的依存だった……Google はもう私と私のお金に値しない。おしまいだ。」このアプリは何年も彼の家賃を払ってきた。HN スレッドは「手数料はアプリ審査の資金」と「説明責任のない独占の地代収奪」に割れた。09-17 に Play の 1 週間超え審査待ちを記録した本人が、今度はストアそのものから離脱——有料 Play 配信を成り立たせた数少ない Android FOSS アプリが公にこのモデルを放棄し、残った収益化の道（寄付、コンソーシアム資金）はどちらもより困難。
+
+**Cambridge Analytica 裁判で Facebook に責任ありの評決**（ニューメキシコ州陪審、サンタフェ；評決 9 月 25 日；HN 261 pts）：AG Raúl Torrez が率いた 2 週間の裁判——約 8,700 万プロファイルを収穫した性格診断クイズを中心に、陪審は Facebook がプライバシー保護についてユーザーを欺いたと認定——200 万超の違反（州の全人口規模）、スキャンダル後のデータブローカー調査を巡る公的誤導も含む。量刑を決めるのは陪審ではなく裁判官で、州は違反 1 件あたり最大 $5,000 を求める。局面を狭める文脈：8 月の最大 $180 億の複数州児童安全和解が、ニューメキシコを除くすべての地域で Meta を将来の Cambridge Analytica 責任から解放していた（フロリダは署名拒否）、州は今年、別の未成年安全裁判で既に $9.42 億を勝ち取っている。Meta は不同意を表明し、憲法修正第 1 条に基づくプラットフォーム運営の権利を主張して防戦を続けるという。エンジニアが読むべきは違反単位の罰金算術：$5,000 × 影響を受けた全ユーザー。
+
+Sources: [gultsch.de](https://gultsch.de/posts/breaking-up-with-google-play/) · [HN — Conversations](https://news.ycombinator.com/item?id=49855315) · [CBS News](https://www.cbsnews.com/news/facebook-liable-deceiving-users-cambridge-analytica/) · [HN — 評決](https://news.ycombinator.com/item?id=49852302)

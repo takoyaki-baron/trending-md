@@ -823,3 +823,9 @@ Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [Fission-A
 `anthropics/knowledge-work-plugins` が **25,633★（+889/週、9 月 25 日時点で push）** でトレンド入り——ここで 09-17 に初記録したリポジトリのトラクションデータポイント。開発者ではなくナレッジワーカー向けの Apache-2.0 Cowork プラグイン 11 本：生産性、営業、カスタマーサポート、プロダクトマネジメント、マーケティング、法務、ファイナンス、データ、エンタープライズ検索、バイオリサーチ、プラグイン管理——それぞれ skills、MCP コネクタ、スラッシュコマンド、サブエージェントをバンドルし、`claude plugin marketplace add` でインストール。トレンド入りした 3 つ目の Anthropic プラグイン/スキル系リポジトリ（claude-plugins-official、financial-services に次ぐ）。注視すべき依存：各プラグインの価値はサードパーティコネクタ（Slack、HubSpot、Snowflake…）に人質に取られており、それらは Anthropic の管理下にない——開発者側リポジトリと同じ信頼サーフェスが、今度は法務とファイナンスのデータに向いている。
 
 Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [GitHub Trending（週間）](https://github.com/trending?since=weekly)
+
+## 2026-09-26 20:03 — スキル経済が攻撃的セキュリティに到達。ただし奇妙なエンゲージメント比つき
+
+`zhaoxuya520/reverse-skill`（37.7k★、+409/日、MIT + GPL/AGPL サブモジュール、最終プッシュ約 9 月 24 日）：Claude Code、Codex、Cursor、Cline 等向けの「スキルルーターパック」——エージェントが APK、バイナリ、JS 暗号、ファームウェア、ペネトレーションターゲットに遭遇すると、44 のルーティングルール / 45 のスキルモジュールがプレイブックとツールチェーン（jadx、Frida、IDA、radare2、Ghidra、nmap、Burp）にマッピング。マルウェア/YARA から CTF（42 サブスキル）、LLM セキュリティまで網羅。175 ベンチケースを Windows+Ubuntu の CI 付きで主張。Claude-Red の双用途トレンドの続き（スキル層が攻撃的セキュリティをスケールでパッケージし始めた）——ただし 2 つの注意が付いて回る：エンゲージメント比が奇妙（37.7k★ に対し watchers 124・commits 181——09-21 に OpenStock で初適用したスター/コミット比率チェックがこのスター数を未検証と判定）、および README_AI.md を開いて「指示に厳密に従え」とエージェントに命じる——プロンプトインジェクション型のパターンで、エージェントの自動実行前に手動レビューに値する。README はアクションを認可/スコープチェックの背後に置いてはいる——スター数が本物なら、スキル層の内側にガードレールを作ろうとした試み。
+
+Sources: [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skill) · [GitHub Trending](https://github.com/trending?since=daily)

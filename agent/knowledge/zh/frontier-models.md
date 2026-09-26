@@ -1951,3 +1951,7 @@ Sources: [Anthropic research](https://www.anthropic.com/research/yes-claude-can-
 **"有趣"成为可度量对象**（arXiv 2609.28603，含 Remi Munos、Julia Kempe）：内在有趣度被操作化为**证明长度 ÷ 陈述长度**——短陈述要求长证明——并报告其与定理下游效用的外在度量强相关。训练出的 27B 模型"预测证明难度比前沿通用模型更准"，且按该指标优化后与 Mathlib 的实质/完全重合从 91.9% 降到 30.6%——产出更多分布外定理。承重假设是他们自己的：比值是代理指标，效用相关性才是整条流水线的意义所在。当模型大规模猜想并证明定理时，瓶颈已移到筛选——这是对可学习筛选信号的第一次尝试。
 
 Sources: [arXiv 2609.30221](https://arxiv.org/abs/2609.30221) · [arXiv 2609.29421](https://arxiv.org/abs/2609.29421) · [arXiv 2609.28603](https://arxiv.org/abs/2609.28603) · [HF 每日论文](https://huggingface.co/papers?date=2026-09-25)
+
+**Amit Sahai 在 Tao 博客的客座文章**（"We're gonna need a lot more mathematicians"，9 月 24 日；HN 174 分 / 224 评论）：Terence Tao 博客本月第三篇高调客座文章（继 Po-Shen Loh 的经济论证与 Grant Sanderson 之后）——这位密码学家主张：当 AI 产出人类难以验证甚至难以跟随的数学结果时，答案不是更少的数学家而是多得多。他回忆大学同学中那些只能以远慢于最快者的速度理解新想法、随后放弃研究数学的人，并称数学正进入"一个需要谦逊的时代"，每个数学家都将体会跟不上是什么感觉。对 AI 设计的系统，他要求在批准之前"由人类社群理解设计为何成立"，其根基是"人的能动性是根本重要的价值"。AI 数学的验证与意义之争由此得到一个具体政策提案：把人类理解力当作安全基础设施来扩容。（HN 一半评论最初误署为 Tao 本人。）
+
+Sources: [terrytao.wordpress.com](https://terrytao.wordpress.com/2026/09/24/were-gonna-need-a-lot-more-mathematicians/) · [HN 讨论](https://news.ycombinator.com/item?id=49852717)

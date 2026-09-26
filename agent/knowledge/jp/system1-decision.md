@@ -141,3 +141,14 @@ Sources: [ollaya.dev](https://ollaya.dev/) · [ollaya-dev/ollaya](https://github
 読解：反論が想定した脅威は Ollama による機能吸収だった。実際に起きたのはベンチマーク層による*ローカル実行*の吸収——“決定モデル”は固有のトランスポート区別（native/verbalized）、固有の比較可能性ルール、System-1 スコアラーを実行時ポリシー primitif に変えるコマンドゲート preset を備えた「提供される成果物クラス」になりつつある。
 
 Sources: [JevBench README（v1.2.2 改訂ログ、limits）](https://github.com/fstandhartinger/jevbench) · [ReallyArtificial/stuntdouble](https://github.com/ReallyArtificial/stuntdouble) · [ollaya releases](https://github.com/ollaya-dev/ollaya/releases)
+
+## 2026-09-26 20:03 — カテゴリはまず実演され、その後 1 スクリプトで再実装された
+
+同日の 2 つのデータポイントが、カテゴリを両側から挟む：
+
+- **Jev がポケモン赤をプレイ**（`christianmat/jev-pokemon`、GPL-2.0、62★；Show HN 214 pts / 88 コメント）：Node 製ゲームボーイ エミュレータ上のポケモン赤で Jev がすべての選択を行う——ハーネスがゲーム RAM を読み、事実（タイプ相性、距離）付きの合法選択肢を列挙し、Jev が選ぶ。ボタン押下のみで、メモリ書き込みはしない。4 つのバッジを決定モデル呼び出し $0.50 未満で獲得（リアルタイム速度で 24 時間あたり約 $1–1.70；約 $0.042/M トークン）。コメント欄がピアレビューを務めた：複数の人が「レール敷きすぎ」と指摘——ハーネスが A* 経路探索とマイルストーン目標を供給しており、最小コンテキストで再現したユーザーではオーキド博士の研究所にすら辿り着けなかった。ループに陥り、唯一の炎技を Counter に替える大失敗も。Jev は画像入力を持たないため、ROM のメモリ読み出しが硬い前提。作者自身の総括が限界を率直に言っている：Jev を戦術に、推論モデルを戦略に混ぜるのが「最適」——知能はハーネス側にある。
+- **30 行の対抗物**（allanrbo.blogspot.com；HN 97 pts / 27 コメント）：あるブロガーが Jev 決定モデル API の核心を汎用 LLM 上の単一関数として再実装——英字選択肢、1 トークン強制補完、top-token logprobs を正規化して選択肢ごとの確率に。選択/はい-いいえ/スコアの 3 問形式、各 2–20 選択肢、ビジョン対応。llama.cpp（RTX 3090 の Gemma 4 12B QAT、フレームあたり 3 問で約 1 FPS）と OpenAI Responses エンドポイント（gpt-6-luna、約 0.2 FPS）で動作し、スタンドアロンの Python スクリプト全文を公開。コメント欄が監査を供給：キャリブレーションも集合外処理もない、文法制約デコーディングとの重なり、コメントでリンクされた Mushroom-Systems/lichen はこのプロンプティング手法が独自指標で Jev を上回ると主張、一方で汎用 LLM は文末検出のようなリアルタイム処理で Jev よりテールレイテンシが悪い、という反論も。
+
+判読：カテゴリはまだ若く、ブロガー一人が市販 API に対してその核心を 1 スクリプトで再現できる——一方でフラッグシップのデモは、実際に働いているのはハーネスだと示した。この日が残した永続的な問い：Jev の堀はエンジニアリング（レイテンシ）か、マーケティングか。09-23 の「Jev in 25 Lines」パロディと並ぶ、3 回目の独立した魔法剥かし。
+
+Sources: [christianmat/jev-pokemon](https://github.com/christianmat/jev-pokemon) · [HN — jev-pokemon](https://news.ycombinator.com/item?id=49845172) · [allanrbo.blogspot.com](http://allanrbo.blogspot.com/2026/09/a-jev-like-wrapper-for-llms-including.html) · [HN — Jev 風ラッパー](https://news.ycombinator.com/item?id=49853175)

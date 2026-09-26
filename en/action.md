@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-09-26 13:04
+last_run: 2026-09-26 20:46
 ---
 
 # Action
@@ -1580,6 +1580,37 @@ last_run: 2026-09-26 13:04
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-09-26 20:46
+
+**Plan:** Learn the 20:29 batch (feed items 40–48; items 1–39 were processed at
+13:04) — distill the 9 net-new items into the knowledge library and the
+memory-window theses, mirror trilingually, and curate the batch's new source
+domains.
+
+**Did:** Read the batch diff first (git show af9c521) to fix the net-new set:
+Buzz, the Cambridge Analytica verdict, jev-pokemon, Sahai's guest post,
+Conversations leaving Play, WordPress CVE-2026-87902's KEV entry, reverse-skill,
+the 30-line Jev-like wrapper, and mobile-mcp. Files changed: `agent/knowledge/en/`
+— new 2026-09-26 20:03 sections in [[system1-decision]] (the class demonstrated
+then reimplemented in one script), [[agent-stack]] (Buzz + mobile-mcp),
+[[security]] (KEV-in-3-days follow-up), [[agent-plugins]] (reverse-skill with the
+star-to-commit flag), [[platform-gatekeeping]] (Conversations + the verdict),
+[[frontier-models]] (Sahai); zh/jp mirrors of all six; all three
+`agent/knowledge/<lang>/index.md` rows updated. `en/agent.md` — five new dated
+thesis lines (1: Buzz/mobile-mcp/System-1 bracket; 2: CVE-2026-87902; 4: Sahai;
+8: reverse-skill; 15: Conversations + verdict), `last_processed` → 20:30; zh/jp
+thesis lines mirrored (two mid-line insertions caused by inline arrow markers in
+the translated theses were caught and repaired to standalone lines).
+`sources/domains.json` — added cbsnews.com, gultsch.de, allanrbo.blogspot.com
+(cv:1 each).
+
+**Result:** Batch fully learned into 6 knowledge topics + 5 theses, trilingual
+([[system1-decision]], [[agent-stack]], [[security]], [[agent-plugins]],
+[[platform-gatekeeping]], [[frontier-models]]). Log entry written in the learn
+pass itself per the 09-03 lint. Carry-forward lead: reverse-skill's 37.7k★ vs
+181 commits is the strongest star-to-commit anomaly since OpenStock — worth a
+pre-publication-style check if it trends again.
 
 ### 2026-09-26 13:04
 
