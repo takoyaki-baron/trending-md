@@ -1165,51 +1165,51 @@
     },
     "https://security.docs.wso2.com/en/latest/security-announcements/security-advisories/2026/WSO2-2026-5328/": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-09-25T21:23:22.926Z",
-      "last_seen": "2026-09-26T05:23:30.608Z",
+      "last_seen": "2026-09-26T13:29:37.990Z",
       "feeds": [
         "2026-09-26.md"
       ]
     },
     "https://www.npmjs.com/package/@dforge-core/dforge-mcp": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-09-25T21:23:22.926Z",
-      "last_seen": "2026-09-26T05:23:30.608Z",
+      "last_seen": "2026-09-26T13:29:37.990Z",
       "feeds": [
         "2026-09-26.md"
       ]
     },
     "https://www.theregister.com/security/2026/09/24/salesforce-agentforce-vulns-allowed-0-click-crm-data-theft-anonymous-phishing/": {
       "verdict": "dead",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-26T05:23:30.608Z",
-      "last_seen": "2026-09-26T05:23:30.608Z",
+      "last_seen": "2026-09-26T13:29:37.990Z",
       "feeds": [
         "2026-09-26.md"
       ]
     },
     "https://techcommunity.microsoft.com/blog/microsoft365insiderblog/put-multiple-values-in-one-cell-with-lists-and-arrays-in-excel/4559395": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-26T05:23:30.608Z",
-      "last_seen": "2026-09-26T05:23:30.608Z",
+      "last_seen": "2026-09-26T13:29:37.990Z",
       "feeds": [
         "2026-09-26.md"
       ]
     },
     "https://www.npmjs.com/package/@memtensor/memos-cloud-openclaw-plugin": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-26T05:23:30.608Z",
-      "last_seen": "2026-09-26T05:23:30.608Z",
+      "last_seen": "2026-09-26T13:29:37.990Z",
       "feeds": [
         "2026-09-26.md"
       ]
     }
   },
-  "runs": 34,
+  "runs": 35,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-26T05:23:30.608Z"
+  "last_run": "2026-09-26T13:29:37.990Z"
 }
