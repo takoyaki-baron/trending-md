@@ -285,3 +285,23 @@ Sources: [Go ブログ](https://go.dev/blog/simd-experiment) · [HN](https://new
 **rayfuck — 23 MB の Brainfuck で書かれたレイトレーサ**（`mTvare6/rayfuck`、HN 46 pts）：手書き BF ではなくコンパイラパイプライン：C → SSA 風形式 → 中間 DSL（`add`、`mul`、`sqrt`、`if`、`while`）→ BF。LLM は一つの仕事に意図的に限定（C から SSA への変換——機械的変換であってコンパイラ全体ではない）。Q16.16 マルチセル固定小数点（Q8.8 は却下：地面の球に半径 1000 が必要）；プログラムは 23 MB で「画像本体より大きい」；スループットは約 1 ピクセル/分。最も良いのは著者の正直さ：ヒーロー画像は C 版による近似レンダリングで、JIT 高速化後の実際の BF 出力は「精度誤差のせいだろうが、ゴッホの絵みたいに見える」。記録された失敗台帳は磨き込まれたデモに勝る。
 
 Sources: [Microsoft 365 Insider ブログ](https://techcommunity.microsoft.com/blog/microsoft365insiderblog/put-multiple-values-in-one-cell-with-lists-and-arrays-in-excel/4559395) · [HN — Excel](https://news.ycombinator.com/item?id=49849832) · [LLVM ブログ](https://blog.llvm.org/posts/2026-09-24-rememberingjohannesdoerfert/) · [epestr.com](https://epestr.com/blog/writing-a-ray-tracer-in-brainfuck/) · [mTvare6/rayfuck](https://github.com/mTvare6/rayfuck)
+
+## 2026-09-27
+
+**Floci——AWS/Azure/GCP/OCI の無料 MIT ローカルエミュレータ**（`floci-io/floci`、25.7k★、HN 132）：Quarkus + GraalVM Mandrel のネイティブバイナリ（24 ms 起動、アイドル 13 MiB）が localhost 上でクラウドサービスを動かす、アカウントもトークンも不要——:4566 で 119 の AWS サービス、無料の LocalStack 代替と明示的に位置づけ（2026 年 3 月のトークン義務化が引き金）、さらに Azure 28 / GCP 25 / OCI 8 サービス；一部はモックでなく実エンジン：Lambda は Docker コンテナで実行、RDS は本物の PostgreSQL/MySQL、ElastiCache は本物の Redis。注意点：AWS 以外の網羅は薄い、Lambda は Docker socket が必要、「100% プロトコル忠実度」はプロジェクト自身の主張。
+
+**GNOME Toolpak——CLI ツール向け Flatpak 式パッケージング**（9/26）：不変デスクトップ（Silverblue、GNOME OS）の隙間を埋める——rpm-ostree レイヤリングは「システムを完全に壊しうる」、Toolbox/distrobox コンテナはホストをデバッグできず、Flatpak は CLI にはサンドボックスが強すぎる。Flatpak の /usr–/app 分割を採りつつ dm-verity + 署名つき Discoverable Disk Image を使用、ツールごとに 1 マウント名前空間、無制限のシステムアクセス、ツール間依存なし；ビルドはコンテンツアドレス可能ストアの BuildStream 上。プロトタイプ進行中（Prototypefund）；ビルド環境の話は明示的に後回し；署名「アプリストア」モデルの信頼/レビューはすでにコメント欄で議論に。
+
+**Loongson LA664 が `amadd` を静かに落とす**（jia.je、HN 74）：3A6000/3C6000-S（LA664 コア）では、データバリア接尾辞なしのアトミック命令（`amadd` vs `amadd_db`）が、異なる物理コアのスレッドが同一アドレスで LASX ベクトル読みを交错させると更新を静かに落としうる——敵対的テストで失敗率最大 100%；`_db` 変種は 0%。失われた参照カウント増分 → *safe* Rust での use-after-free（`Arc`、`mpsc`）。発端は Debian `normaliz` の OpenMP カウンタが収束しないこと（2 月）、8 月に AI の助けを借りて glibc の LASX 加速 `memcpy` をトリガと特定；修正は未文書化 CSR MCSR24 の bit 13 を立てるファームウェア（テストファームウェア 9/9）。「安全な」Rust はハードウェアアトミックが実際にアトミックであることに依存している。
+
+**safe-not-safe——安全でない Postgres マイグレーションのブラウザローカルリンタ**（Show HN 111）：libpg_query（PG 17）を WASM にコンパイルし web worker で実行——「SQL はブラウザから出ない」——ルールエンジンがロック/可用性リスク（`CREATE INDEX CONCURRENTLY`、`NOT VALID` + `VALIDATE CONSTRAINT` パターン）を検出、CLI もあり（`npx safe-not-safe check`）。静的ヒューリスティクスのみ——実際のロック挙動や `lock_timeout` は観測できない；31★、ライセンスファイルはまだない。
+
+**Go Concurrency Distilled**（Anton Zhiyanov、HN 83）：キャンセル原因（`WithCancelCause`）、`synctest` フェイククロックパッケージ、pprof/フライトレコーダ診断つき M-on-N スケジューラまで網羅する無料ミニブック；全サンプルがブラウザで動く。「初心者向けガイドではなく手早い復習用」と位置づけ——そして明示的に「AI-free」（→ [[no-ai-default]]）。
+
+**Neomacs が 1.5k★ で再トレンド**（`eval-exec/neomacs`、HN 42）：3 度目の「C を超える Emacs」の試みはエコシステムをそのまま保つ——設定、パッケージ、Elisp——そして約 30 万行の C コアを Rust で再実装し GPU 表示エンジンを載せる；Lisp ツリーは `emacs-31.1` に同期し、**GNU Emacs 自体を行動等価性のテストオラクル**として使用。バイト互換 Elisp をハード制約にする点が、過去の書き直しを殺した失敗モードを回避する鍵（WIP バナーはそのまま）。
+
+**Ken Shirriff が 8087 の FPTAN をダイレベルでリバース**（righto.com、HN 46）：1,648 命令のマイクロコード ROM を復元——上位ビットは 16 ステップの CORDIC、微小残差には [1,2] Padé 近似 3x/(3−x²)（多項式では不可能な π/2 での正接の発散を模倣できるから有理関数）、除算は一度も実行しない（チップは分離した X と Y を返す）、さらに「チップに物理的に存在しない指数」を持つ固定小数点で 64 ビット整数演算。典型的に約 450 サイクル；ホスト 8086 エミュレーション約 13,000 µs に対し約 90 µs。1980 年の演算ハードウェア設計選択が、今日のアクセラレータ設計者の問いに直接対応する。
+
+**Postgres の `SELECT DISTINCT` はスケールしない——再帰 CTE によるルーズインデックススキャン**（DBOS、HN 98）：Postgres にはルーズインデックススキャン演算子がなく、パーティションキューのワークロードは 3 つのパーティションキーを見つけるために 100 万行を走査；MySQL にはあり、2018 年のパッチは 4 年で頓挫、PG18 のスキップスキャンも述語一致行を全て読む。解法：ソート済みインデックス上で `min()` を繰り返し取る再帰 CTE、1 ステップで 1 個の DISTINCT 値——パーティション行数 1K→1M でレイテンシはフラット（通常クエリは線形増加）。著者自身の注意：「驚くほど読みにくい」。
+
+Sources: [floci.io](https://floci.io) · [GNOME ブログ](https://blogs.gnome.org/alatiera/2026/09/26/introducing-toolpak/) · [jia.je](https://jia.je/hardware/2026/09/24/loongson-cpu-erratum-en/) · [safenotsafe.dev](https://safenotsafe.dev/) · [antonz.org](https://antonz.org/go-concurrency-distilled/) · [eval-exec/neomacs](https://github.com/eval-exec/neomacs) · [righto.com](https://www.righto.com/2026/09/8087-tangent-cordic.html) · [DBOS](https://www.dbos.dev/blog/postgres-select-distinct-does-not-scale)

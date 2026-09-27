@@ -4,6 +4,9 @@
       "nvd_seen": [
         "CVE-2025-14486",
         "CVE-2026-100528",
+        "CVE-2026-100609",
+        "CVE-2026-100647",
+        "CVE-2026-100654",
         "CVE-2026-19590",
         "CVE-2026-19591",
         "CVE-2026-19592",
@@ -27,7 +30,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-26T13:29:04.204Z"
+      "checked": "2026-09-27T05:12:27.502Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -57,7 +60,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-26T13:29:04.204Z"
+      "checked": "2026-09-27T05:12:27.502Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -75,7 +78,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-26T13:29:04.204Z"
+      "checked": "2026-09-27T05:12:27.502Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -85,7 +88,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-26T13:29:04.204Z"
+      "checked": "2026-09-27T05:12:27.502Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -108,7 +111,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-26T13:29:04.204Z"
+      "checked": "2026-09-27T05:12:27.502Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -126,7 +129,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-26T13:29:04.204Z"
+      "checked": "2026-09-27T05:12:27.502Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -136,7 +139,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-26T13:29:04.204Z"
+      "checked": "2026-09-27T05:12:27.502Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -190,10 +193,10 @@
         "0.2.4",
         "0.2.5"
       ],
-      "checked": "2026-09-26T13:29:04.204Z"
+      "checked": "2026-09-27T05:12:27.502Z"
     }
   },
-  "runs": 65,
+  "runs": 66,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-09-26T13:29:04.204Z"
+  "last_run": "2026-09-27T05:12:27.502Z"
 }

@@ -39,3 +39,7 @@ Sources:（英語版と同じ）
 **NVIDIA Model-Optimizer 0.47.0**（`NVIDIA/Model-Optimizer`、Apache-2.0、4,513★、+359/日でトレンド入り；9 月 23 日リリース）：量子化（FP8/NVFP4）・枝刈り・NAS・蒸留・投機的デコード・スパース化を統合するライブラリで、TensorRT-LLM、vLLM、SGLang へエクスポート可能。トレンド入りの引き金は新しい W4A4 チュートリアル（9 月 16 日）：Qwen3.6-35B-A3B に NVFP4 の重み+活性化 QAT を適用し、BF16 比 1.30× の vLLM スループットと 3.1× 小さい checkpoint を主張。標準割引が必要：NVIDIA 自身の Nemotron 系モデルでのチュートリアル数値であり、独立ベンチマークではない——ただし以前（09-15 記録）の Minima NVFP4 W4A4 路線に、研究チームなしで普通のエンジニアが実行できる再現ツールが付いた。W4A4（重み*と*活性化の両方を 4 bit）は現在の PTQ フロンティア。
 
 Sources: [NVIDIA/Model-Optimizer](https://github.com/NVIDIA/Model-Optimizer) · [Releases](https://github.com/NVIDIA/Model-Optimizer/releases)
+
+**llama.cpp で prompt-lookup ドラフト 42× 高速化——純データ構造、精度変化ゼロ**（9/27、HN）：n-gram 推測は 541 MB コーパス上でドラフトトークンあたり 165 µs を費やしていた；4 つの最適化が M4 Pro で 3.98 µs まで削った——ステップ毎の map コピー廃止（ドラフトのみで 4.5–25.6×）、セグメント化フラットハッシュマップ、内側マップをソート済みベクトルに置換（2-gram の 64% は後継が 1 つだけでハッシュマップは無駄）、静的キャッシュに Lemire の不変 `constmap`（読み込み 6.3–16× 高速化）。荷重を支える正直さ：受理率は元実装と「ほぼ同一」——これはキャッシングであってより良い推測ではない、しかも単一マシンのベンチマーク。ローカル推論高速化主張の正直な版：モデル挙動を一切変えず、同じ推測を安くしただけと明示している。
+
+Sources: [jadidbourbaki.github.io](https://jadidbourbaki.github.io/blog/prompt-lookup-llama-cpp/) · [HN](https://news.ycombinator.com/item?id=49859982)

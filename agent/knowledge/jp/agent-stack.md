@@ -1907,3 +1907,17 @@ Sources: [cline/cline](https://github.com/cline/cline) · [desktop v0.0.37](http
 **mobile-mcp**（`mobile-next/mobile-mcp`、Apache-2.0、7.1k★、+143/日）：エージェントに iOS と Android を横断する 1 つのプラットフォーム非依存 API を与える MCP サーバー——`simctl`/`adb` 経由でエミュレータ・シミュレータ・実機をカバー：タップ、スワイプ、ジェスチャ、アプリのインストール/起動、スクリーンショットと録画、デバイスログとクラッシュレポート、GPS スプーフィング、クリップボード、ディープリンク。重要な設計選択は、ビジョンモデルよりアクセシビリティツリースナップショットを優先すること——アクションごとのトークンコストを削減し、ツリーが不十分な場合はスクリーンショットにフォールバック。stdio または Streamable HTTP でローカル実行、bearer 認証は任意。`MOBILEMCP_DISABLE_TELEMETRY=1` を設定しない限り匿名テレメトリ（PostHog/Scarf）を送信。モバイル自動化は XCUITest/Espresso 専門家の領域だった——a11y ツリー優先の MCP は実機のインストール基盤をエージェント操作可能なサーフェスに変える。テスト、スクレイピング、そしてそれが含意するすべてのために。
 
 Sources: [block/buzz](https://github.com/block/buzz) · [GitHub Trending](https://github.com/trending?since=daily) · [mobile-next/mobile-mcp](https://github.com/mobile-next/mobile-mcp)
+
+## 2026-09-27
+
+**Orca——「Agent Development Environment」にカテゴリリーダー**（`stablyai/orca`、MIT、78.8k★、+6,537/週、週間 8 位）：コーディングエージェントの*艦隊*向け管理レイヤー——1 エージェント 1 git worktree、結果比較+マージ、30+ の名指し CLI（Claude Code、Codex、Cursor、Cline、Goose）を**持ち込みサブスク**で駆動（オーケストレーションのみ、モデルアクセスは販売しない）；デスクトップアプリ + iOS/Android コンパニオン、`orca serve` でリモート/SSH worktree、4 日で v1.4.209→v1.4.212（「毎日出荷」が公称ケイデンス）。README 一次情報の注意書き：テレメトリ既定オン（文書化済み、オプトアウト可）、大量の未解決 issue。IDE → ADE の枠組みは製品カテゴリになり、持ち込みサブスク経済で 6 か月 78.8k★ は需要の証拠——テーゼ 1 の worktree 分離レイヤーにリーダー誕生。
+
+**chatgpt-on-wechat が CowAgent に改称**（`zhayujie/CowAgent`、47,125★）：4 年物で最大級の中国語 WeChat GPT ボットが改称し、パーソナル agent ハーネスへ再位置付け——タスク計画、コンピュータ制御、ワンクリック装着の Skill Hub、自動「Deep Dream」蒸留つき 3 層メモリ、ナレッジグラフ管理、マルチエージェントチーム、ネイティブ MCP——WeChat/Feishu/DingTalk/Telegram/Slack チャネルと 10+ プロバイダをカバー。改称は API リダイレクトで検証済み；現在のスター速度は控えめ——再位置付けの物語であってスパイクではない。シグナル：最大級の中国語 AI アシスタントプロジェクトが西側エコシステムと同じ harness + スキル + MCP の語彙を採用——インフラの-consensus は言語分割に依存しない。
+
+**Drawgent——コーディングエージェントが動く Excalidraw キャンバスを編集**（tangled.org/yanndegat…/drawgent、単一 Rust バイナリ、Show HN 63 pts）：自分のエージェント（Claude Code、Codex、opencode）を ACP + MCP キャンバスツール（`get_scene`、`add_mermaid`、`add_elements`…）でローカル Excalidraw エディタに接続；チャットパネルで指示するか、図形のそばに `AGENT:` ノートを置く——エージェントがキャンバスをスクリーンショットし、シーンを編集し、ノートを `DONE` にする。README の注意書き：レンダラは headless Chrome が必要（ネイティブは「計画中」）、Claude attach モードには Claude Code の*フォーク*が必要（実行中ターミナルセッションへの注入は公开手段なし）、Opus 5.5 との共著シングルコミットリポジトリ——ごく初期。キャンバスごとの MCP ツール設計は盗める；YC 支援の Whiteboard（9/25）と合わせ、空間ワークスペースジャンルは entrant 2 つ。
+
+**Reladraw——相対配置ダイアグラム DSL、Show HN 1 位**（`reladraw/reladraw`、Apache-2.0、v0.7.1、217 pts）：オートレイアウト（Mermaid、Graphviz、D2）と絶対配置（draw.io、Excalidraw）の間に意図的に位置：全位置は*他要素との相対*で宣言（`right of app`、`above-left of cluster.hub`）、座標は一切なし；リゾルバは各軸を最小距離集合として最長パスで解く——「答えは 1 つ、探索なし」、描画は決定論的。エージェント対応が設計に組み込み済み：言語が学習データより新しいためインストール可能スキルを同梱（`npx skills add reladraw/reladraw`）。自己申告の限界：言語は不安定、ノード回避エッジルーティングは未実装。目標ユースケースはエージェントによるダイアグラム*編集*——ピクセル座標はエージェントに読むべきものを与えず、オートレイアウトは制御できるものを与えない。
+
+**OpenClaw のゲートウェイが初の体系的監査を受ける**——2 日で約 40 CVE（詳細 → [[security]]）；exec 承認スコーピングバグ（承認がワーキングディレクトリに紐づかない）が本バッチの agent インフラ設計教訓。
+
+Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent](https://github.com/zhayujie/CowAgent) · [drawgent](https://tangled.org/yanndegat.tngl.sh/drawgent) · [reladraw](https://github.com/reladraw/reladraw) · [HN——Reladraw](https://news.ycombinator.com/item?id=49858513)

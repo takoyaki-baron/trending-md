@@ -30,3 +30,5 @@ LibreOffice 26.8（8/26 リリース）がプロジェクト史上最多人気�
 同じ日、**「Ask HN: AI ニュース洪水を制限してくれ？」**が 707 pts に到達 —— no-AI ニッチは雰囲気ではなくオーディエンスだという需要側の合図。ただし両データポイントとも因果も耐久性も示さない：Toast は開発初期のプロジェクトで、矛盾を巡る議論そのものが正直な複雑さ。型は成立：「AI なし」は不在から*主張*へ移った —— そして主張は監査される。出典：
 [paradise-runner/toast](https://github.com/paradise-runner/toast) ·
 [HN 議論](https://news.ycombinator.com/item?id=49662496)
+
+**Go Concurrency Distilled（2026-09-27）**——Anton Zhiyanov の無料 Go 並行性ミニブック（HN 83 pts）が「AI-free」の位置づけを明言：LibreOffice の成文化仕様、Toast のターミナル IDE に続く 3 例目で、*リファレンス/教育資材*では初——ラベルはオフィススイート、開発ツール、学習リソースを横断するように。

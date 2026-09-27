@@ -2122,3 +2122,23 @@ Sources: [swarmtraces.org](https://swarmtraces.org/) · [HN — Swarm Traces](ht
 **WordPress CVE-2026-87902 三天进 KEV**（CISA 于 9 月 25 日加入——本 feed 9 月 23 日报道的后续）：CVE 于 9 月 22 日发布仅三天，CISA 即以"存在被利用证据"为由收录。NVD 描述与所报漏洞一致——未认证攻击者让 `get_page_template()` 包含指定的可读本地 `.php` 文件，仅当服务器与主题满足前置条件时才构成 RCE。两个记录要点：NVD 上的 8.1 分来自 **Secondary 来源而非 NVD 分析**（仍在 "Undergoing Analysis"）；以及一处标注分歧——CISA 公告标题称"远程文件包含"，而 NVD/CVE 的表述是经页面模板解析的*本地*文件包含。披露到 KEV 只用三天，对一个 RCE 有条件的漏洞而言是最快通道——"仅当满足前置条件"这一限定语承担了大量工作，且联邦机构现在面对运行中的 BOD 26-04 修复时钟。
 
 Sources: [CISA 公告](https://www.cisa.gov/news-events/alerts/2026/09/25/cisa-adds-one-known-exploited-vulnerability-catalog) · [NVD：CVE-2026-87902](https://nvd.nist.gov/vuln/detail/CVE-2026-87902)
+
+## 2026-09-27 —— 下架不是修复；agent 网关迎来审计
+
+**Kiteworks 要求全球全部装机停机六小时**（9 月 25 日披露）：安全文件共享厂商邮件要求全球客户在 9 月 26 日（周六）关机六小时，理由是"来自联邦情报部门的可信威胁情报"——而其自身声明称"我们未发现任何 Kiteworks 系统被入侵……当前版本 9.5.1 已修复所有已知漏洞"，且**不存在任何 CVE**；客服所说的"潜在零日攻击"（经 Heise）未经证实。非同寻常的信号是预防性全球停机本身；标题跑在了第一手声明前面。
+
+**Mini Shai-Hulud 自我复活**（9 月 16–25 日）：5 月 18 日在 323 包事件中被投毒的 `actions-cool/issues-helper` 与 `actions-cool/maintain-one-comment` 于 9 月 16 日被重新启用，**release tag 仍指向恶意 `index.js`**——凡按可变 tag 引用的工作流都会在下一次运行时恢复执行载荷；GitHub 于 9 月 25 日再禁用，`issues-helper` 现已因 TOS 被封。Socket 自己的限定：依赖图中约 15,000 个仓库"不等于全部被入侵"；按 tag 而非 commit 固定的比例未知。**不移除 tag 的下架会自动复活攻击**——下架不是修复；9 月 16–25 日窗口的 CI 密钥需要轮换。
+
+**Elementor CSRF 绕过，约 200 万站点**（4.3.2 修复）：Elementor 4.3.0/4.3.1（1000 万+ 安装）只要请求 URI *任意位置*出现字面字符串 `elementor/v1/events/`——包括攻击者可写的查询串——就跳过 WordPress 核心对 cookie 认证 REST 请求的 nonce 检查，因此任何 REST 路由（核心或插件）都可选择退出 CSRF 防护；Patchstack 的披露展示了一封邮件里的普通链接经 `/wp/v2/users` 在原装站点上创建管理员。CVSS 8.8（Patchstack 评分）；**截至 9 月 26 日仍无 CVE 编号**。与 8 月起追踪的大规模被利用的 Elementor Pro RCE CVE-2026-32475 同族。
+
+**ShinyHunters 击破 PeopleSoft 的 WAF 缓解**（Mandiant/GTIG）：针对 Oracle PeopleSoft CVE-2026-35273（9.8 未认证 RCE，`/PSEMHUB/*`，NVD 载 Oracle-CNA 评分）的漏洞利用被改为请求 `/%50SEMHUB/`——百分号编码的 P——因为许多 WAF 与反代在解码前按字面路径匹配，而 WebLogic 会解码。只有封端点而非打补丁的服务器重新暴露。通用教训：任何基于路径的 WAF 规则都应假定可被编码绕过。
+
+**一条 Twitch 聊天消息 → 直播者电脑上的代码执行**（SCRT）：第三方聊天覆盖层把观众消息以原始 HTML 插入（XSS）→ OBS 内嵌 Chromium 以 `no_sandbox = true` 运行 → OBS 捆绑的 V8 落后两年，携带 CVE-2024-7971（微软记录为 DPRK Citrine Sleet 在野利用的 V8 类型混淆）——本可 containment 的沙箱本来就是关的。零点击即获得 Windows 上的原生执行。修复已并入 OBS Studio 33.0（CEF 128+、重新启用沙箱）；诚实的范围说明：全新安装需要覆盖层渲染观众可控 HTML。"内嵌 Chromium、带着陈旧版本发布、为兼容性关掉沙箱"是远超 OBS 的模板。
+
+**Cloudflare Containers 跨租户数据泄露**（9 月 19 日全舰队修复）：dm-thin 池开启了 `skip_block_zeroing`，被删容器的磁盘块重新分配给其他租户时携带残留数据——研究员 Oren Yomtov（Accomplish，9 月 4 日报告）在 24 次生产环境尝试中 18 次发现残留。Cloudflare 自己的限定：暴露的数据来自*已删除*容器，攻击者无法选择拿到谁的数据。Cloudflare Sandboxes——"运行不可信 AI-agent 代码"的产品——运行在受影响底层之上。
+
+**Ghidra 反编译器本身就是攻击面**（VulnCheck，至 12.1.4）：CVE-2026-100504 `leftshift128` 中经负 p-code 位移触发的栈越界写（CVSS 7.3 v4.0 / 7.0 v3.1，VulnCheck 评分）、CVE-2026-100503 `Funcdata::opInsertAfter` 堆 UAF（4.8）、CVE-2026-100505 `StringManager::getCodepoint` 堆越界读（4.8）——由*反编译*一个特制二进制触发。分析师自己的工具链加入 RE 目标清单，同一周 RE 技能包正在 coding agent 圈走红。
+
+**OpenClaw 的清算：两天约 40 个 CVE**（NVD 9 月 26–27 日，VulnCheck CNA）：这个开源 agent 网关及其集成包（Discord/Slack/Matrix/WhatsApp/飞书/LINE/语音通话）加 iOS 应用迎来了首次系统性对抗审计。批次最重：CVE-2026-100551（**9.0**——iOS 应用 2026.7.1–2026.8.11 在 Control UI 不强制已保存的网关 TLS pin）；CVE-2026-100567（8.9 网关校验器）；CVE-2026-100530（8.5——可复用的 exec 审批**未绑定工作目录**，已批准的命令可在别处运行）；CVE-2026-100559（8.6——转义换行符混淆 exec 允许列表解析）。按记录本身多数已在 2026.8.1–2026.9.3 修复；评分为 VulnCheck 所赋，厂商可能有异议。该模式——审批绕过、策略作用域 bug——恰是提示注入着陆的表面；设计教训可推广：**审批必须绑定其被授予时的上下文**。
+
+Sources: [BleepingComputer——Kiteworks](https://www.bleepingcomputer.com/news/security/kiteworks-urges-6-hour-server-shutdown-over-potential-zero-day-attacks/) · [Heise](https://www.heise.de/news/Kiteworks-empfiehlt-Kunden-temporaeres-Herunterfahren-der-Server-11048599.html) · [BleepingComputer——GitHub Actions 再启用](https://www.bleepingcomputer.com/news/security/github-actions-re-enabled-with-mini-shai-hulud-payload-still-active/) · [Patchstack——Elementor](https://patchstack.com/articles/cross-site-request-forgery-in-elementor-plugin-affecting-2-million-sites) · [The Hacker News——Elementor](https://thehackernews.com/2026/09/elementor-csrf-flaw-lets-attackers-take.html) · [BleepingComputer——PeopleSoft](https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/) · [SCRT——OBS 链](https://blog.scrt.ch/2026/09/22/how-one-twitch-chat-message-became-code-execution-on-a-streamers-pc/) · [Cloudflare——Containers 跨租户](https://blog.cloudflare.com/containers-cross-tenant-vulnerability/) · [NVD：CVE-2026-100504](https://nvd.nist.gov/vuln/detail/CVE-2026-100504) · [NVD：CVE-2026-100551](https://nvd.nist.gov/vuln/detail/CVE-2026-100551)

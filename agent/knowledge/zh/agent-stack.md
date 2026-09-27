@@ -1625,3 +1625,17 @@ Sources: [cline/cline](https://github.com/cline/cline) · [desktop v0.0.37](http
 **mobile-mcp**（`mobile-next/mobile-mcp`，Apache-2.0，7.1k★，+143/天）：给 agent 提供跨 iOS 与 Android 单一平台无关 API 的 MCP 服务器——经 `simctl`/`adb` 覆盖模拟器与真机：点按、滑动、手势、应用安装/启动、截屏与录屏、设备日志与崩溃报告、GPS 伪造、剪贴板、deep link。关键的设计选择：优先无障碍树快照而非视觉模型——削减每步动作的 token 成本，树不足时回退截屏。本地经 stdio 或 Streamable HTTP 运行，可选 bearer 认证；除非 `MOBILEMCP_DISABLE_TELEMETRY=1`，会上报匿名遥测（PostHog/Scarf）。手机自动化一直是 XCUITest/Espresso 专家领域；a11y 树优先的 MCP 把真机的存量装机变成 agent 可操作表面——测试、抓取，以及一切随之而来的事。
 
 Sources: [block/buzz](https://github.com/block/buzz) · [GitHub Trending](https://github.com/trending?since=daily) · [mobile-next/mobile-mcp](https://github.com/mobile-next/mobile-mcp)
+
+## 2026-09-27
+
+**Orca——"Agent 开发环境"迎来品类领先者**（`stablyai/orca`，MIT，78.8k★，+6,537/周，周榜第 8）：面向编码 agent *舰队*的管理层——每个 agent 独占一个 git worktree、结果对比+合并，驱动 30 多个命名 CLI（Claude Code、Codex、Cursor、Cline、Goose），用**你自己的订阅**（只做编排，不出售模型访问）；桌面应用 + iOS/Android 伴侣、`orca serve` 提供远程/SSH worktree，四天内从 v1.4.209 发到 v1.4.212（自称"每日发布"）。README 第一手限定：遥测默认开启（已文档化、可关闭）、大量未决 issue。IDE → ADE 的表述已成产品品类，78.8k★/约 6 个月的自带订阅经济学是需求证据——论题 1 的 worktree 隔离层有了领先者。
+
+**chatgpt-on-wechat 更名 CowAgent**（`zhayujie/CowAgent`，47,125★）：这个四年历史、曾是最大中文微信 GPT 机器人的项目更名并重新定位为个人 agent harness——任务规划、电脑控制、一键安装的 Skill Hub、带自动"Deep Dream"蒸馏的三层记忆、知识图谱维护、多 agent 团队、原生 MCP——覆盖微信/飞书/钉钉/Telegram/Slack 渠道与 10+ 模型提供商。更名经 API 重定向验证；当前星标速度平平——是重新定位的故事，不是爆发。信号：最大的中文 AI 助手项目采纳了与西方生态相同的 harness + 技能 + MCP 词汇——基础设施共识不分语种。
+
+**Drawgent——编码 agent 编辑实时 Excalidraw 画布**（tangled.org/yanndegat…/drawgent，单个 Rust 二进制，Show HN 63 分）：经 ACP + MCP 画布工具（`get_scene`、`add_mermaid`、`add_elements`…）把你已装的 agent（Claude Code、Codex 或 opencode）桥接到本地 Excalidraw 编辑器；通过聊天面板提问，或在形状旁放一张 `AGENT:` 便签——agent 截图画布、编辑场景、把便标为 `DONE`。README 限定：渲染器需要 headless Chrome（"计划中"的原生渲染器）、Claude attach 模式需要 Claude Code *分支*（没有公开方式向运行中的终端会话注入）、与 Opus 5.5 合著的单提交仓库——非常早期。每个画布一组 MCP 工具的设计值得偷师；加上 YC 支持的 Whiteboard（9 月 25 日），空间工作区品类已有两个 entrant。
+
+**Reladraw——相对布局图表 DSL，Show HN 第一**（`reladraw/reladraw`，Apache-2.0，v0.7.1，217 分）：刻意落在自动布局（Mermaid、Graphviz、D2）与绝对定位（draw.io、Excalidraw）之间：所有位置都*相对于其他元素*声明（`right of app`、`above-left of cluster.hub`），全程无坐标；求解器把每个轴当作最小距离集、用最长路径求解——"一个答案、无搜索"，渲染确定。为 agent 而生：自带可安装 skill（`npx skills add reladraw/reladraw`），因为语言太新、训练数据里没有。自带限定：语言未稳定、尚无避障连线。目标用例是 agent *编辑*图表——像素坐标给 agent 没有可读的信息，自动布局则没有可控的信息。
+
+**OpenClaw 的网关迎来首次系统审计**——两天约 40 个 CVE（详情 → [[security]]）；exec 审批作用域 bug（审批未绑定工作目录）是本批的 agent 基础设施设计教训。
+
+Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent](https://github.com/zhayujie/CowAgent) · [drawgent](https://tangled.org/yanndegat.tngl.sh/drawgent) · [reladraw](https://github.com/reladraw/reladraw) · [HN——Reladraw](https://news.ycombinator.com/item?id=49858513)

@@ -36,3 +36,7 @@ Sources:（同英文版）
 **NVIDIA Model-Optimizer 0.47.0**（`NVIDIA/Model-Optimizer`，Apache-2.0，4,513★，+359/天上榜；9 月 23 日发布）：统一库覆盖量化（FP8/NVFP4）、剪枝、NAS、蒸馏、投机解码与稀疏化，可导出至 TensorRT-LLM、vLLM 和 SGLang。上榜触发点是一份新的 W4A4 教程（9 月 16 日）：对 Qwen3.6-35B-A3B 施加 NVFP4 权重+激活 QAT，宣称 vLLM 吞吐较 BF16 提升 1.30×、checkpoint 缩小 3.1×。标准折扣适用：NVIDIA 自己在 Nemotron 系模型上的教程数字，非独立基准——但此前（09-15 记录）的 Minima NVFP4 W4A4 路线现在有了普通工程师无需研究团队即可运行的复现工具。W4A4（权重*与*激活均为 4 bit）是当前 PTQ 的前沿。
 
 Sources: [NVIDIA/Model-Optimizer](https://github.com/NVIDIA/Model-Optimizer) · [Releases](https://github.com/NVIDIA/Model-Optimizer/releases)
+
+**llama.cpp 中 prompt-lookup 草拟提速 42×——纯数据结构工作、精度零变化**（9 月 27 日，HN）：n-gram 投机在 541 MB 语料上每草拟 token 花费 165 µs；四项优化在 M4 Pro 上降到 3.98 µs——取消每步 map 拷贝（仅草拟环节 4.5–25.6×）、分段扁平哈希 map、以有序向量替代内层 map（64% 的 2-gram 只有一个后继，哈希 map 纯属浪费）、以 Lemire 不可变 `constmap` 承载静态缓存（加载快 6.3–16×）。承重的诚实之处：接受率与原实现"几乎相同"——这是缓存，不是更好的投机，且是单机基准。本地推理提速写作的诚实版本：明确声明未改变任何模型行为、只是让同样的猜测更便宜。
+
+Sources: [jadidbourbaki.github.io](https://jadidbourbaki.github.io/blog/prompt-lookup-llama-cpp/) · [HN](https://news.ycombinator.com/item?id=49859982)

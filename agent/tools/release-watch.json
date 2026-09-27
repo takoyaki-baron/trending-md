@@ -63,6 +63,14 @@
   {
    "repo": "SalesforceAIResearch/Random-Attention",
    "why": "signal-free KV eviction (thesis 3 / [[edge-inference]]): watches the RA repo itself for a release/productionization signal; the upstream-integration half (vLLM/SGLang code) is covered by code-watch since 2026-09-06 — this entry alone could never see an upstream integration"
+  },
+  {
+   "repo": "zhengkid/Dream-RSI",
+   "why": "Dream-RSI code release (thesis 6 / [[frontier-models]]): the 1.22×/162× banner numbers are paper+banner until the README's 'Release plan' ships — six manual re-checks over 10 days (09-17→09-27) all null, pushed_at frozen at 09-16, note block still 'Code is being prepared for release'. Retired into release-watch 09-27 12:59: the code drop surfaces itself"
+  },
+  {
+   "repo": "robinber/dream-rsi-spark",
+   "why": "Dream-RSI independent reimplementation (thesis 6 / [[frontier-models]]): the DGX Spark section-3 rerun whose own README disclaims an advantage (fixed-policy control scored higher, 23.84× vs 22.65×) — a new push may post the first independent banner-number rerun; any posted result must be read with its own disclaimers attached"
   }
  ]
 }

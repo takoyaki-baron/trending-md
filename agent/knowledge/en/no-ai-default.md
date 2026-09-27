@@ -44,3 +44,5 @@ durability: Toast is an early-development project, and the contradiction debate 
 complication. The pattern holds: "no AI" has moved from absence to *claim* — and claims get audited.
 Sources: [paradise-runner/toast](https://github.com/paradise-runner/toast) ·
 [HN discussion](https://news.ycombinator.com/item?id=49662496)
+
+**Go Concurrency Distilled (2026-09-27)** — Anton Zhiyanov's free Go concurrency mini-book (HN 83 pts) states "AI-free" positioning outright: the third "no AI" instance after LibreOffice's codified spec and Toast's terminal IDE, and the first in *reference/education* material — the label now spans office suites, dev tools, and learning resources.

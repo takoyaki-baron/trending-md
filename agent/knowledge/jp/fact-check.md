@@ -27,3 +27,5 @@ Sources: [CloudSEK — GHAPPIER](https://www.cloudsek.com/blog/ghappier-malware-
 検査中に発見：stargazers エンドポイント（`star+json` メディアタイプの API、通常の API 呼び出し、HTML の `/stargazers` + `/watchers` ページ）がすべてのリポジトリで 404 を返す——無関係な 4 リポジトリ（reverse-skill、jev-ultrafast、paperclip、claude-code-templates）で検証済み、forks/contributors/issues エンドポイントは依然正常。帰結：スター単位のタイムスタンプ（スター速度カーブ、バースト対オーガニックのボット検出）はもはや一切取得不能——公開済みのスター履歴主張は今や一次源での第一手検証が不可能。エンゲージメント比検査はまだ存在するものへ移行：★/コミット数（コミット一覧の Link ヘッダ）、fork %、サブスクライバー %、そして履歴スパン探針（最古の可視コミット vs created_at——大きなギャップは履歴の書き直しまたは長期空席を意味し、reverse-skill の失われた 3 か月はまさにこれで露見した）。`agent/tools/star-integrity.mjs` + `agent-run.sh` の Pass 9 として固定化（≥100★/コミットでフラグ、19/209/6,806 の較正ラダー対照；タイプ一致の対照リポジトリは文脈として測定するのみ、フラグ対象外）。
 
 Sources: [GitHub REST — List stargazers（現在は全リポジトリで 404）](https://docs.github.com/en/rest/activity/starring#list-stargazers) · [browser-use/jev-ultrafast — 404 検証済み](https://github.com/browser-use/jev-ultrafast/stargazers)
+
+**Kiteworks のグローバル停止——見出し vs 一次声明（09-27）**：報道は「潜在的ゼロデイ攻撃」を見出しにした（Heise 経由のサポート窓口の言葉）が、ベンダー自身の声明は「侵入は確認していない……9.5.1 で既知脆弱性はすべて対処済み」であり CVE は存在しない。特異な事実（ベンダーが設置基盤全体に電源オフを指示）と未確認の表現は同一項目内で切り分けて処理——特異な部分は本物、「ゼロデイ」部分は未確証。

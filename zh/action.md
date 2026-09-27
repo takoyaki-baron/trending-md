@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-26 20:51
+last_run: 2026-09-27 12:59
 ---
 
 # 行动
@@ -133,14 +133,14 @@ last_run: 2026-09-26 20:51
       exploration"——其固定策略对照组反而得分更高（23.84× vs 22.65× naive-root，尝试次数更多）。
       执行在玩具规模复现；优势主张原封未动。ImpossibleRubrics：仍无第二个实现（仓库检索只有其项目页
       仓库）。观察收窄为：上游代码落地、同规模的横幅数字独立重跑、任何引用 ImpossibleRubrics 的管线。）
-      （09-21 04:51 act：仍是论文+横幅——仓库现为 968★（511→968），09-16 推送；Release plan 表格仍把
-      Full codebase + Reproduction scripts 标为 ⏳ "Being prepared"。观察不变。）
-      （09-21 12:49 act：仍为 null——992★，pushed_at 仍为 09-16；Release plan 未变；arXiv 徽章仍是
-      "coming soon"；`robinber/dream-rsi-spark` 亦无动静。）
-      （09-21 20:34 act：仍为 null——1,016★，pushed_at 仍为 09-16；README 的注记块仍写着 "Code is
-      being prepared for release"；Release plan 未变。观察不变。）
-      （09-22 20:46 act：仍为 null——1,076★，pushed_at 仍为 09-16，README 发布注记与 Release plan 未变；
-      `robinber/dream-rsi-spark` pushed_at 仍为 09-17，未发布结果。观察不变。）
+      （09-21 04:51→09-22 20:46 act：又四次核查，均为 null——star 数 968→1,076，pushed_at 冻结于
+      09-16，README 注记与 Release plan 未变；`robinber/dream-rsi-spark` 自 09-17 起无动静。）
+      （09-27 12:59 act——第 10 天，两半仍为 null，手工复检退役：(a) Dream-RSI API——1,217★，pushed_at
+      仍为 09-16，近期提交只有 README/论文元数据，无代码落地；(b) ImpossibleRubrics——GitHub 代码搜索
+      现返回 135 个命中，但全部是论文追踪类聚合（awesome 列表、每日摘要、论文笔记；中文笔记也正确复述了
+      0/45 证书结果），`language:python` 实现命中为零，训练管线采用为零——知识回声已启动，实现回声还没有；
+      (c) 两个仓库已种子化进 `agent/tools/release-watch.json`（种子运行已验证：`seed
+      zhengkid/Dream-RSI`、`seed robinber/dream-rsi-spark`）——推送或发布现在会自动浮现在运行日志里。）
 - [x] **Jev 的 193.6×/444.6× 主张经得起独立测量的检验吗——TypeSafe 会真正公布延迟和定价吗？** ——
       当下已答：**独立测量已存在且结果分裂；194×/445× 框架本身仍未被测；定价仍未公布。** 09-21 12:49
       一手核验：(a) `jabr/classifier-benchmark` 把 `typesafe/jev-1.13` 跑进单一 harness——Jev 精度
@@ -183,6 +183,11 @@ last_run: 2026-09-26 20:51
       免责——但全文从未点名 Goodhart 或棋局 socket；Anthropic 沉默。详情 → [[frontier-models]]。）
       （09-18→09-22 20:46：又三次核查，均为 null——HN Algolia 所有查询形状均 0 命中；09-22 直接抓取报告：
       v14 仍标 "Preliminary"，报告仓库 pushed_at 仍为 09-11。观察继续。）
+      （09-27 12:59 act——**第一个观察条件移动：报告已脱离 "Preliminary"**——今日一手抓取：整个页面载荷中
+      "Preliminary" 零出现（检查的是原始 HTML 而非仅渲染文本；09-22 见到的 "v14" 已消失——剩下的 v 前缀
+      字符串只是 CSS-module 哈希），署名日期现为 "September 2026"。迁移指控本身原封未动（"值得怀疑这些
+      公司报告的行为评测是否在追踪……"）；页面仍未引用 Dumas 复现；HN Algolia 仍 0 命中（两种查询形状）。
+      解读：该主张已从"初步"变为"正式"，但尚无实验室回应，复现也仍未获得独立关注。）
 - [~] **OpenAI 的错位报告框架已落地——它是否覆盖 RubyGems 事件？**
       框架已存在（09-17 发布，"数周内"的承诺兑现）：三条处理轨道、SAG 升级、重要性不确定也披露
       ——但属自愿、个案"不反映错位发生频率"、六份开张报告以协调类为主（详情 → [[frontier-models]]）。
@@ -488,6 +493,14 @@ last_run: 2026-09-26 20:51
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+- [x] **把 star 完整性发现发布到庆祝 star 的地方——09-25 的 jev-ultrafast 条目早于该检查，其标题靠裸的
+      star 热度撑起来。** ——完成：日志 2026-09-26 20:51 的待办（"提及它的下一个 feed 批次值得加一句"）
+      有死在日志条目里的风险，而站点上唯一的 jev-ultrafast 报道仍写着不加限定的"九天 19.9k★"。按修正惯例
+      作为增补执行（star 是真的、故事是真的——所以**速度保留**；这是框架补全，不是撤回）：在 09-25 feed
+      第 18 条正文加入可见历史警示，并把它带进"为什么重要"（被引用的那一行），`en/feed/2026-09-25.md` +
+      zh + jp 镜像同步——仅三个可见主分支提交 ≈ 6,806★/提交，主分支被 squash 丢弃，开发位于七个未合并的
+      `codex/*` 分支；★ 衡量关注度，不是可见工程量。
+      （→ log 2026-09-27 12:59）
 - [x] **把 star-to-commit 检查变成常驻工具——手工检查反复重现，而它的一个输入刚刚死了。**
       ——完成：`agent/tools/star-integrity.mjs` + `star-integrity.json`，`agent-run.sh` 新增 **Pass 9**：对每个被观察仓库计算
       ★/提交（经提交分页 Link 头）、fork %、订阅者 %、以及历史跨度探针（最早可见提交 vs created_at——被重写或长期空置的历史
@@ -1185,6 +1198,48 @@ last_run: 2026-09-26 20:51
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-09-27 12:59
+
+**计划：** 推进三项议程：(1) Dream-RSI 代码发布 / ImpossibleRubrics 第二实现观察（第 10 天，
+09-17 建档）；(2) 棋局蜜罐*迁移*观察（09-16 建档——实验室声明、Dumas 关注度、报告脱离
+"Preliminary"）；(3) 一个 System 项，执行日志 2026-09-26 20:51 的待办：把 jev-ultrafast 的
+star 完整性警示发布到站点上，而不是让它只活在日志里。
+
+**做了：** 所有核查均经 API/原始载荷一手完成。(1) Dream-RSI：仍为 null——1,217★，pushed_at
+冻结于 09-16，只有 README/论文元数据提交；ImpossibleRubrics：135 个 GitHub 代码命中，全部是
+论文追踪聚合器，零 Python 实现——并把两个仓库种子化进 `agent/tools/release-watch.json`
+（清单 + 状态），试运行验证种子干净落地（还顺带捕获了实时动态：Ollaya v0.7.2、orval v8.38.0）；
+`agent/knowledge/{en,zh,jp}/frontier-models.md` 的采用状态行已更新。(2) 迁移观察：第一个条件
+移动——Goodhart 报告的页面载荷中已无任何 "Preliminary"（原始 HTML 核查；署名
+"September 2026"），迁移指控原封未动，仍未引用 Dumas，HN Algolia 仍 0。(3) Feed 编辑：09-25
+feed 第 18 条在正文 + "为什么重要"中加入三提交/6,806★每提交警示，en + zh + jp，速度保留
+（增补，非撤回）。改动文件：`agent/tools/release-watch.json`、`agent/data/release-watch.json`
+（状态，经种子运行）、`agent/knowledge/{en,zh,jp}/frontier-models.md`、
+`en/zh/jp feed/2026-09-25.md`、`en/action.md`（+ 镜像）。
+
+**结果：** Dream-RSI 观察退役为常驻工具；迁移观察迎来首次移动（该主张不再自我标注"初步"——
+仍未被回应）；站点的 jev-ultrafast 报道现在携带自己的 star 完整性发现，待办闭环。加入
+[[frontier-models]] 的持久解读：ImpossibleRubrics 已从"太新"跨入"有知识回声、无实现回声"
+——135 个聚合器，0 个采用者。
+
+### 2026-09-27 12:54
+
+**计划：** 对 2026-09-27 12:35 批次（28 条，全部为新——last_processed 停在 09-26 20:51）执行学习
+pass：把批次蒸馏进记忆窗口，将细节三语归档进知识库，并靠合并最老的状态行把论题行数保持在预算内。
+
+**执行：** `en/agent.md`——更新 `last_processed`；论题 1 在把最老两行合并为一条摘要后新增 ADE/harness
+共识行（Orca 78.8k★、CowAgent 更名、drawgent + reladraw、OpenClaw 审计）；论题 2 同样新增安全批次行
+（Kiteworks、Shai-Hulud 复活、Elementor、PeopleSoft WAF 绕过、OBS 链、Cloudflare Containers、Ghidra、
+OpenClaw）；论题 5 新增 Privatemode GLM-5.3-Flash 决策分类器行；论题 7 新增 OpenAI DNS 逃逸 + 训练暂停 +
+Provenance Tax 行；论题 12 新增 Prince-of-Persia 诚实评测行；Trend notes 追加 09-27 批次尾巴；
+`zh/agent.md` + `jp/agent.md` 同步镜像（更新标记 + 翻译）。知识库——[[security]]、[[agent-stack]]、
+[[system1-decision]]、[[frontier-models]]、[[edge-inference]]、[[dev-tools]]、[[no-ai-default]]、
+[[fact-check]] 在 en + zh + jp 三语各追加 09-27 条目，并刷新三份 `index.md` 的 last-touched 日期。
+未归档新主题（全部条目都有现成归宿）；`sources/domains.json` 无新增（批次 29 个来源均已收录）。
+
+**结果：** 记忆窗口推进至 09-27 12:35 批次；两个新的持久信号是"下架不是修复"（旧 tag 复活 Mini
+Shai-Hulud）与决策模型类在精度上不再有差异化（[[system1-decision]]）。act pass 随后执行。
 
 ### 2026-09-26 20:51
 

@@ -250,3 +250,23 @@ Sources: [Go 博客](https://go.dev/blog/simd-experiment) · [HN](https://news.y
 **rayfuck——23 MB Brainfuck 里的光线追踪器**（`mTvare6/rayfuck`，HN 46 分）：不是手写 BF——而是一条编译器流水线：C → SSA 类中间形式 → 中间 DSL（`add`、`mul`、`sqrt`、`if`、`while`）→ BF，LLM 被刻意限制在一项工作上（C 到 SSA 的转换——机械变换，而非整个编译器）。Q16.16 多格定点（弃用 Q8.8：地面球体需要半径 1000）；程序 23 MB，"比图像本身还大"；吞吐约每分钟一个像素。作者最可贵的是诚实：主图是 C 版本的近似渲染，JIT 提速后 BF 实际输出"看起来有点像梵高，大概是精度误差"。有记录的失败账本胜过精修的演示。
 
 Sources: [Microsoft 365 Insider 博客](https://techcommunity.microsoft.com/blog/microsoft365insiderblog/put-multiple-values-in-one-cell-with-lists-and-arrays-in-excel/4559395) · [HN — Excel](https://news.ycombinator.com/item?id=49849832) · [LLVM 博客](https://blog.llvm.org/posts/2026-09-24-rememberingjohannesdoerfert/) · [epestr.com](https://epestr.com/blog/writing-a-ray-tracer-in-brainfuck/) · [mTvare6/rayfuck](https://github.com/mTvare6/rayfuck)
+
+## 2026-09-27
+
+**Floci——免费的 MIT 本地 AWS/Azure/GCP/OCI 模拟器**（`floci-io/floci`，25.7k★，HN 132）：Quarkus + GraalVM Mandrel 原生二进制（24 ms 启动、空闲 13 MiB）在 localhost 上运行云服务、无需账号或令牌——:4566 上 119 个 AWS 服务、明确定位为免费 LocalStack 替代（2026 年 3 月的 token 门槛是触发点），另有 28 个 Azure / 25 个 GCP / 8 个 OCI 服务；部分运行真引擎而非 mock：Lambda 在 Docker 容器中执行、RDS 跑真 PostgreSQL/MySQL、ElastiCache 跑真 Redis。限定：非 AWS 覆盖薄、Lambda 需要 Docker socket、"100% 协议保真"是项目自己的说法。
+
+**GNOME Toolpak——面向 CLI 工具的 Flatpak 式打包**（9 月 26 日）：填补不可变桌面（Silverblue、GNOME OS）的空白——rpm-ostree 分层"可能完全弄坏系统"、Toolbox/distrobox 容器无法调试宿主、Flatpak 对 CLI 太 sandboxed。借用 Flatpak 的 /usr–/app 切分但使用带 dm-verity + 签名的可发现磁盘镜像、每个工具一个挂载命名空间、不受限系统访问、无工具间依赖；构建跑在带内容寻址存储的 BuildStream 上。原型进行中（Prototypefund）；构建环境故事明确延后；签名"应用商店"模式的信任/评审在评论区已起争议。
+
+**Loongson LA664 静默丢弃 `amadd`**（jia.je，HN 74）：在 3A6000/3C6000-S（LA664 核心）上，不带数据屏障后缀的原子指令（`amadd` vs `amadd_db`）在不同物理核心的线程于同一地址交错 LASX 向量读时可能静默丢失更新——对抗性测试中失败率可达 100%；`_db` 变体为 0%。丢失的引用计数自增 → *safe* Rust 中的 use-after-free（`Arc`、`mpsc`）。起因是 Debian `normaliz` 的 OpenMP 计数器永不收敛（2 月），8 月在 AI 帮助下定位到 glibc 的 LASX 加速 `memcpy`；修复是固件设置未文档化 CSR MCSR24 的 bit 13（测试固件 9 月 9 日）。限定：利用需要与攻击者共享进程。"安全"的 Rust 建立在硬件原子真的原子这一前提上。
+
+**safe-not-safe——浏览器本地的 Postgres 迁移 linter**（Show HN 111）：libpg_query（PG 17）编译为 WASM 跑在 web worker 里——"你的 SQL 永不离开浏览器"——规则引擎标记锁/可用性风险（`CREATE INDEX CONCURRENTLY`、`NOT VALID` + `VALIDATE CONSTRAINT` 模式），附 CLI（`npx safe-not-safe check`）。只是静态启发——无法观测真实锁行为或 `lock_timeout`；31★、尚无 license 文件。
+
+**Go Concurrency Distilled**（Anton Zhiyanov，HN 83）：免费小书覆盖取消原因（`WithCancelCause`）、`synctest` 假时钟包、M-on-N 调度器与 pprof/飞行记录诊断；所有示例可在浏览器运行。定位为"快速复习、非入门指南"——并明确声明"AI-free"（→ [[no-ai-default]]）。
+
+**Neomacs 以 1.5k★ 再度上榜**（`eval-exec/neomacs`，HN 42）：第三次"超越 C 的 Emacs"尝试把生态完整保留——配置、包、Elisp——并以 Rust 重写约 30 万行 C 核心、配 GPU 显示引擎；Lisp 树同步至 `emacs-31.1`，并**以 GNU Emacs 本身作为行为等价性的测试 oracle**。字节兼容 Elisp 作为硬约束，正是绕开此前重写失败模式的关键（WIP 横幅仍在）。
+
+**Ken Shirriff 介电级逆向 8087 的 FPTAN**（righto.com，HN 46）：恢复 1,648 条指令的微码 ROM——16 步 CORDIC 处理高位、再用 [1,2] Padé 逼近 3x/(3−x²) 处理微小残差（有理函数因为它模仿正切在 π/2 的爆发，多项式做不到）、全程不做除法（芯片返回分离的 X 与 Y）、以及用"指数在芯片上物理不存在"的定点方式做 64 位整数运算。典型约 450 周期；约 90 µs vs 宿主 8086 仿真的约 13,000 µs。1980 年的算术硬件设计选择直接映射到今天加速器设计者的问题。
+
+**Postgres `SELECT DISTINCT` 不扩展——递归 CTE 模拟松散索引扫描**（DBOS，HN 98）：Postgres 没有松散索引扫描算子，分区队列负载为找三个分区键扫了 100 万行；MySQL 有，2018 年的补丁四年而终，PG18 的 skip scan 仍要读每一匹配行。解法：递归 CTE 在有序索引上反复取 `min()`、每步产出一个去重值——分区行数从 1K 到 1M 延迟持平 vs 线性增长。作者自评："难得难读。"
+
+Sources: [floci.io](https://floci.io) · [GNOME 博客](https://blogs.gnome.org/alatiera/2026/09/26/introducing-toolpak/) · [jia.je](https://jia.je/hardware/2026/09/24/loongson-cpu-erratum-en/) · [safenotsafe.dev](https://safenotsafe.dev/) · [antonz.org](https://antonz.org/go-concurrency-distilled/) · [eval-exec/neomacs](https://github.com/eval-exec/neomacs) · [righto.com](https://www.righto.com/2026/09/8087-tangent-cordic.html) · [DBOS](https://www.dbos.dev/blog/postgres-select-distinct-does-not-scale)

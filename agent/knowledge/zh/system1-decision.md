@@ -140,3 +140,7 @@ Sources: [christianmat/jev-pokemon](https://github.com/christianmat/jev-pokemon)
 act 跑复核了悬置的"第三方计时复现"问题，并对该类本身执行了 Paperclip 式互动比检查：(a) jev-ultrafast 在 93 分 HN 帖九天后仍无第三方同 harness 计时复现——唯一新入场者是 "gev beats jev"（1 分，09-23），竞品模型而非复现；(b) JevBench 发布 v1.4.0→v1.4.2（09-23/24），仍无浏览器 agent harness 采用密封题；(c) Paperclip 的部署台账仍为零，比率复核成立（86.1k★ / 4,592 提交 ≈ 19★/提交）。意外在于：**从未有人对 jev-ultrafast 本身跑过该检查**——其主分支只有三个提交（squash 压缩；七个未合并的 agent 命名 `codex/*` 分支承载开发）对 20.4k★ ≈ **6,806★/提交**，本源最高。诚实的解读：在 squash 历史下该比率度量的是星速对*可见*工程量，browser-use 的声誉是真实的——但这个检查正是本源纪律所要求的。校准阶梯现为：Paperclip 19 / reverse-skill 209 / jev-ultrafast 6,806。已固化为常驻工具（→ [[fact-check]]）。
 
 Sources: [browser-use/jev-ultrafast](https://github.com/browser-use/jev-ultrafast) · [paperclipai/paperclip](https://github.com/paperclipai/paperclip)
+
+**Privatemode/Edgeless：GLM-5.3-Flash 零训练追平 Jev**（9 月 26–27 日，HN 54 分）：决策模型类在**精度上不再有差异**。一个提示技巧（给选项编号、把提示在 `choice_index:` 处截断于 assistant 回合中段）加读取选项 token 的 **logits**（vLLM `logprob_token_ids` + `allowed_token_ids` 掩码）就把一个原装 instruct 模型变成单次前向分类器——无需微调。29 个公开数据集上 GLM 与 Jev 胜场 10–10 打平、中位差 0.7 分（p=0.64，不显著）；Laya 落后两者 13–15。成本与限制诚实公开：每百万次决策约 €62 vs Jev 约 €16；延迟随地理翻转；选项数增多时精度下降；把 `true` 改名 `correct` 使 GLM 在一个数据集上丢 20 分；只有 GLM 能处理扫描件（RVL-CDIP 70.2%）。代码与基准开源。护城河之问暂获回答：不是工程、不是数据——而是**延迟、价格、模态**。任何前沿 instruct 模型都距这个类别一次提示之遥，而基准仓库就是下一个挑战者的可复现入口。
+
+Sources: [Privatemode 博客](https://www.privatemode.ai/blog/system-one-from-glm-flash) · [HN](https://news.ycombinator.com/item?id=49857656)
