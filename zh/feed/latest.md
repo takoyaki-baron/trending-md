@@ -1,6 +1,6 @@
 ---
 date: 2026-09-27
-updated: 2026-09-27T20:58:00+08:00
+updated: 2026-09-27T21:00:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 37
 license: CC-BY-4.0
@@ -635,7 +635,7 @@ Authors Guild 在其案诉微软/OpenAI 的解封书状页面上，主打的说�
 
 ---
 
-## 31. Flowise SSO 登录路径可窃取被邀请用户的访问权——CVSS 9.2（v4.0），且仍无修复版本
+## 31. Flowise SSO 邀请令牌接管 CVE 在项目自行归档 44 天后落地——不会有修复版本了
 
 - **Velocity:** ▮▮ rising
 - **Source:** NVD · 9 月 26 日发布 · VulnCheck 评分
@@ -647,15 +647,25 @@ Authors Guild 在其案诉微软/OpenAI 的解封书状页面上，主打的说�
 服务器会把一次性邀请令牌复制进传给 `AccountService.register()` 的数据里——
 令牌、邮箱、有效期检查全部自动通过。能在任一已配置 SSO 提供方以"待邀请者邮箱
 声明"完成认证的攻击者，即可在邀请有效期内（默认 24 小时）获得该用户的组织访问权。
-影响所有 ≤ 3.1.4 版本；公告明确写道"截至公告发布时尚无已修复版本"，而 Flowise
-在 GitHub 上的最新 release 仍是 flowise@3.1.4（7 月 29 日）。同批还有
-CVE-2026-100608（8.7）——队列模式下无需认证即可访问的 BullMQ 管理面板。仓库
-55.5k★。
+影响所有 ≤ 3.1.4 版本。同批还有 CVE-2026-100608（8.7）——队列模式下无需认证
+即可访问的 BullMQ 管理面板。仓库 55.5k★。
 
-**为什么重要：** 智能体基础设施的 CVE 浪潮现已覆盖可视化 agent 构建器这一层，
-而且这个洞还没有升级路径——在修复版发布前，自托管 SSO 模式的用户都暴露在外。
+**更新于 09-27 20:46（仓库状态更正）：**"仍无修复版本"是一种等待式表述——
+其实没有什么可等的。FlowiseAI/Flowise 已于 **2026 年 8 月 13 日起归档、只读**
+（已经 API 与仓库横幅双重验证）：维护者于 7 月 29 日——与最终版 3.1.4 同日、
+即代码冻结日——宣布 EOL，8 月 13 日将仓库转入 Public Archive，8 月 31 日退出
+Discord，npm 包与 Docker 镜像标记为 deprecated。给出的理由是开发者转向编码
+智能体（"僵化的低代码工作流在复杂度面前很快触及上限"），并引导用户前往
+discussion #6727"fork 代码、规划下一步"。公告里"截至公告发布时尚无已修复
+版本"的措辞，在这个仓库上的最终答案是**永远不会有了**。
 
-[`🔗 NVD：CVE-2026-100606`](https://nvd.nist.gov/vuln/detail/CVE-2026-100606) · [`🔗 FlowiseAI/Flowise`](https://github.com/FlowiseAI/Flowise)
+**为什么重要：** Void 教训在 CVE 赛道上重演——NVD 记录查得规规矩矩（两个
+评分都在、归属正确），但仓库本身没有打开；一次 API 调用（`archived: true`、
+`pushed_at: 8 月 13 日`）就能区分"修复版发布前暴露"和"无限期暴露"。55.5k★
+用户群如今守着一个 EOL 的认证边界：要么迁移、要么 fork——归档项目的 CVE
+应视为永久暴露，而不是待补丁状态。
+
+[`🔗 NVD：CVE-2026-100606`](https://nvd.nist.gov/vuln/detail/CVE-2026-100606) · [`🔗 FlowiseAI/Flowise`](https://github.com/FlowiseAI/Flowise) · [`🔗 The Future of Flowise (#6727)`](https://github.com/FlowiseAI/Flowise/discussions/6727)
 
 ---
 

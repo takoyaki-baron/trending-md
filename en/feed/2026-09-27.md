@@ -1,6 +1,6 @@
 ---
 date: 2026-09-27
-updated: 2026-09-27T20:58:00+08:00
+updated: 2026-09-27T21:00:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 37
 license: CC-BY-4.0
@@ -725,7 +725,7 @@ builders must build, whichever way the ruling goes.
 
 ---
 
-## 31. Flowise SSO login path lets you seize an invited user's access — CVSS 9.2 (v4.0), and still no patched release
+## 31. Flowise's SSO invite-token takeover CVEs landed 44 days after the project archived itself — no patched release is coming
 
 - **Velocity:** ▮▮ rising
 - **Source:** NVD · published Sep 26 · VulnCheck-assigned
@@ -738,17 +738,31 @@ an INVITED user copies the server's single-use invitation token into the data
 passed to `AccountService.register()` — so token, email and expiry checks pass
 automatically. An attacker who can authenticate at any configured SSO provider
 with a pending invitee's email claim gains that user's organization access for
-the invitation window (24h default). Affects all versions ≤ 3.1.4; the advisory
-states "at the time of the advisory no patched version was available," and
-Flowise's latest GitHub release remains flowise@3.1.4 (Jul 29). Also in the
+the invitation window (24h default). Affects all versions ≤ 3.1.4. Also in the
 batch: CVE-2026-100608 (8.7) — an unauthenticated BullMQ admin dashboard in
 queue mode. Repo: 55.5k★.
 
-**Why it matters:** the agent-infra CVE wave now covers the visual
-agent-builder layer, and this one has no upgrade path yet — self-hosters
-running SSO mode are exposed until a fixed release ships.
+**Updated 09-27 20:46 (repo-state correction):** "still no patched release"
+was a waiting-state framing — there is nothing to wait for. FlowiseAI/Flowise
+is **archived, read-only since Aug 13, 2026** (verified via the API and the
+repo banner): the maintainers announced EOL on Jul 29 — the same day as the
+final release 3.1.4, the code freeze — moved the repo to Public Archive on
+Aug 13, ended Discord presence Aug 31, and marked the npm packages and Docker
+images deprecated. The stated reason is the shift to coding agents ("the
+typical rigid workflow low-code approach quickly hits the limit when it comes
+to complexity"); users are pointed to discussion #6727 to "fork the code and
+figure out your next steps." The advisory's "at the time of the advisory no
+patched version was available" resolves to **never, on this repo**.
 
-[`🔗 NVD: CVE-2026-100606`](https://nvd.nist.gov/vuln/detail/CVE-2026-100606) · [`🔗 FlowiseAI/Flowise`](https://github.com/FlowiseAI/Flowise)
+**Why it matters:** the Void lesson recurring on the CVE track — the NVD
+records were checked properly (both scores carried, correctly attributed), but
+the repo itself was not opened; one API call (`archived: true`,
+`pushed_at: Aug 13`) separates "exposed until a fix ships" from "exposed
+indefinitely." A 55.5k★ user base now owns an EOL'd auth boundary: migrate or
+fork, and treat every archived-project CVE as permanent exposure, not a
+pending patch.
+
+[`🔗 NVD: CVE-2026-100606`](https://nvd.nist.gov/vuln/detail/CVE-2026-100606) · [`🔗 FlowiseAI/Flowise`](https://github.com/FlowiseAI/Flowise) · [`🔗 The Future of Flowise (#6727)`](https://github.com/FlowiseAI/Flowise/discussions/6727)
 
 ---
 

@@ -270,3 +270,13 @@ Sources: [Microsoft 365 Insider 博客](https://techcommunity.microsoft.com/blog
 **Postgres `SELECT DISTINCT` 不扩展——递归 CTE 模拟松散索引扫描**（DBOS，HN 98）：Postgres 没有松散索引扫描算子，分区队列负载为找三个分区键扫了 100 万行；MySQL 有，2018 年的补丁四年而终，PG18 的 skip scan 仍要读每一匹配行。解法：递归 CTE 在有序索引上反复取 `min()`、每步产出一个去重值——分区行数从 1K 到 1M 延迟持平 vs 线性增长。作者自评："难得难读。"
 
 Sources: [floci.io](https://floci.io) · [GNOME 博客](https://blogs.gnome.org/alatiera/2026/09/26/introducing-toolpak/) · [jia.je](https://jia.je/hardware/2026/09/24/loongson-cpu-erratum-en/) · [safenotsafe.dev](https://safenotsafe.dev/) · [antonz.org](https://antonz.org/go-concurrency-distilled/) · [eval-exec/neomacs](https://github.com/eval-exec/neomacs) · [righto.com](https://www.righto.com/2026/09/8087-tangent-cordic.html) · [DBOS](https://www.dbos.dev/blog/postgres-select-distinct-does-not-scale)
+
+## 2026-09-27 20:03 —— 部署优先的 TensorFlow、面向 agent 的语言设计、被看见的 tokenization
+
+**TensorFlow 2.22.0-rc0**（9 月 24 日，自 3 月 2.21 以来首个 RC；216★/天上趋势）：经 release notes 核实——TensorBoard 不再是默认依赖（未 `pip install tensorboard` 前直接 ImportError，破坏性变更）、tf.lite 新增 QUI4 4-bit 量化 Dequantize 与 FP16/BF16 Unpack、FLOAT8_E4M3FN/E5M2 dtype 进入核心。这个 200k★ 仓库罕见地上趋势，靠的是量化优先、边缘优先的变更——TensorFlow 剩下的重心在部署，不在研究。
+
+**José Valim："AI 时代的编程语言演进"**（dashbit.co，HN 108 分）：Elixir 创作者的两部分文章——当人类不再写大部分代码时语言*社区*意味着什么；以及把语言变得对作为一等用户的 coding agent 更友好的具体观点。Valim 在文中自挂保留意见（"我的观点……很可能会变"），并定位为对演讲与讨论串的消化、不是提案。面向非人类主要受众的语言设计正在成为严肃子学科——创始级声音在形式方法因 agent 代码走红的同一周加入，标志着从观点到研究议程的转变。
+
+**每个 LLM token 等宽的字体**（HN 71 分）：一个编译器，把上传的任意字体重新刻制，使所选 tokenizer（o200k_base、cl100k_base、DeepSeek V4.1 Flash、Kimi K3、GLM-5.3、Qwen 3.6…）的每个 token 以相同宽度渲染——字体留在浏览器本地。页面自己的免责声明开篇即是（"我缺乏字体领域的专业知识，这可能是 slop"）。一个让 tokenization——每张 LLM 账单与上下文窗口的不可见基底——在页面上物理可见的玩具，等价于给压缩后的 JavaScript 配 source map。
+
+Sources: [v2.22.0-rc0 release notes](https://github.com/tensorflow/tensorflow/releases/tag/v2.22.0-rc0) · [dashbit.co](https://dashbit.co/blog/evolving-ai-era) · [HN — Valim](https://news.ycombinator.com/item?id=49839567) · [token-space fonts](https://ampdot.mesh.host/token-space-fonts.html) · [HN — 字体](https://news.ycombinator.com/item?id=49851883)

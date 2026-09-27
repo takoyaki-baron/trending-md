@@ -40,3 +40,9 @@ Sources: [NVIDIA/Model-Optimizer](https://github.com/NVIDIA/Model-Optimizer) · 
 **llama.cpp 中 prompt-lookup 草拟提速 42×——纯数据结构工作、精度零变化**（9 月 27 日，HN）：n-gram 投机在 541 MB 语料上每草拟 token 花费 165 µs；四项优化在 M4 Pro 上降到 3.98 µs——取消每步 map 拷贝（仅草拟环节 4.5–25.6×）、分段扁平哈希 map、以有序向量替代内层 map（64% 的 2-gram 只有一个后继，哈希 map 纯属浪费）、以 Lemire 不可变 `constmap` 承载静态缓存（加载快 6.3–16×）。承重的诚实之处：接受率与原实现"几乎相同"——这是缓存，不是更好的投机，且是单机基准。本地推理提速写作的诚实版本：明确声明未改变任何模型行为、只是让同样的猜测更便宜。
 
 Sources: [jadidbourbaki.github.io](https://jadidbourbaki.github.io/blog/prompt-lookup-llama-cpp/) · [HN](https://news.ycombinator.com/item?id=49859982)
+
+## 2026-09-27 20:03 —— 带宽自适应 MoE 服务跑进游戏 PC，触发未经证实
+
+**FreeToken**（`FlashML-org/FreeToken`，13,873★，v0.1.3 于 9 月 16 日，arXiv 2608.16157）：把数据中心级 MoE 服务搬到桌面——带宽自适应的 CPU-GPU 专家协同执行、LRU 专家缓存与弹性 VRAM 重分配，目标是 DeepSeek-V4-Flash、Qwen3.6-35B-A3B 与 GLM-5.2 的 MXFP4/NVFP4/FP8/BF16，在 RTX 30/40/50 上以 OpenAI/Anthropic 兼容 API 提供服务。仓库与论文都已读过；保留意见随之同行："blistering interactive speeds"是项目自己的说法、无独立基准验证，且更早的 HN 提交只有个位数得分——这次 star 飙升缺乏明确外部触发。MoE 稀疏性加自适应专家放置仍是 290B 级模型跑进消费级硬件的可信路径（论点 3 的流派）；等基准复现后再独立跟进。
+
+Sources: [FlashML-org/FreeToken](https://github.com/FlashML-org/FreeToken) · [arXiv 2608.16157](https://arxiv.org/abs/2608.16157)

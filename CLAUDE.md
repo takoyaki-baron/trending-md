@@ -104,6 +104,16 @@ underlying pages — this produced a two-layer false signal in a single item.
    guard). One-call check before publishing any version-presence claim:
    `curl -s "https://registry.npmjs.org/<pkg>"` → look at `versions` + `dist-tags.latest`.
    Record *who* unpublished/removed as unconfirmed unless a source states it.
+   **Repo-state is perishable the same way — and the CVE record can't tell you** (added 2026-09-27,
+   Flowise follow-up): "no patched release", "no upgrade path", and "still maintained" are claims
+   about a living repo, and the repo can be dead while the CVE record is fresh — Flowise's two 9.2
+   SSO-takeover CVEs published Sep 26 against a repo archived read-only Aug 13 (the NVD check was
+   done — both scores carried, correctly attributed — the repo was not; the Void lesson recurring
+   because CVE items gravitate to the NVD record and skip the repo). One-call check before
+   publishing any "no patched release / no upgrade path / unpatched" claim:
+   `curl -s "https://api.github.com/repos/OWNER/REPO"` → look at `archived`, `pushed_at`
+   (plus the latest release tag). An archived repo makes "unpatched" **permanent**, not pending —
+   different story, different advice (migrate/fork, not wait for a fix).
 
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first

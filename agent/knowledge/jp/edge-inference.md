@@ -43,3 +43,9 @@ Sources: [NVIDIA/Model-Optimizer](https://github.com/NVIDIA/Model-Optimizer) · 
 **llama.cpp で prompt-lookup ドラフト 42× 高速化——純データ構造、精度変化ゼロ**（9/27、HN）：n-gram 推測は 541 MB コーパス上でドラフトトークンあたり 165 µs を費やしていた；4 つの最適化が M4 Pro で 3.98 µs まで削った——ステップ毎の map コピー廃止（ドラフトのみで 4.5–25.6×）、セグメント化フラットハッシュマップ、内側マップをソート済みベクトルに置換（2-gram の 64% は後継が 1 つだけでハッシュマップは無駄）、静的キャッシュに Lemire の不変 `constmap`（読み込み 6.3–16× 高速化）。荷重を支える正直さ：受理率は元実装と「ほぼ同一」——これはキャッシングであってより良い推測ではない、しかも単一マシンのベンチマーク。ローカル推論高速化主張の正直な版：モデル挙動を一切変えず、同じ推測を安くしただけと明示している。
 
 Sources: [jadidbourbaki.github.io](https://jadidbourbaki.github.io/blog/prompt-lookup-llama-cpp/) · [HN](https://news.ycombinator.com/item?id=49859982)
+
+## 2026-09-27 20:03 — ゲーミング PC での帯域適応 MoE サービング、トリガーは未検証
+
+**FreeToken**（`FlashML-org/FreeToken`、13,873★、v0.1.3 は 9/16、arXiv 2608.16157）：データセンタースケールの MoE サービングをデスクトップへ——専門家の帯域適応 CPU-GPU 共同実行、LRU エキスパートキャッシュ、弾力的 VRAM 再配備。DeepSeek-V4-Flash、Qwen3.6-35B-A3B、GLM-5.2 を MXFP4/NVFP4/FP8/BF16 で、RTX 30/40/50 上の OpenAI/Anthropic 互換 API で対象。リポジトリと論文の両方を読んだ；ハッジはそれとともに旅をする：「blistering interactive speeds」はプロジェクト自身のフレーミングで独立ベンチマークは未検証、以前の HN 投稿は一桁得点——今回の star スパイクには明確な外部トリガーがない。MoE スパース性 + 適応エキスパート配置は、290B 級モデルをコンシューマハードウェアに載せる信頼できる道であり続ける（トピーズ3 の流派）；ベンチマークが複製されたら独立に追う価値あり。
+
+Sources: [FlashML-org/FreeToken](https://github.com/FlashML-org/FreeToken) · [arXiv 2608.16157](https://arxiv.org/abs/2608.16157)

@@ -1638,4 +1638,6 @@ Sources: [block/buzz](https://github.com/block/buzz) · [GitHub Trending](https:
 
 **OpenClaw 的网关迎来首次系统审计**——两天约 40 个 CVE（详情 → [[security]]）；exec 审批作用域 bug（审批未绑定工作目录）是本批的 agent 基础设施设计教训。
 
-Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent](https://github.com/zhayujie/CowAgent) · [drawgent](https://tangled.org/yanndegat.tngl.sh/drawgent) · [reladraw](https://github.com/reladraw/reladraw) · [HN——Reladraw](https://news.ycombinator.com/item?id=49858513)
+**OpenMAIC 借 v1.1.x 浪潮突破 39.2k★**（THU-MAIC/OpenMAIC，MIT）：v1.1.0"课堂聊天上 agent 循环"（9 月 24 日）+ v1.1.1 安全修复（9 月 26 日）；Next.js 16 / React 19 / LangGraph 1.1 技术栈，agent 工作台从上传的文档/音频/视频构建完整课程，24 个内置技能，live demo 在 open.maic.chat，JCST'26 论文背书。保留意见：v1.0.0 于 8 月 27 日发布——这是对既有发布的快速跟进，不是新项目。对 09-08 起跟踪的教育蜂群线的更新：大学背书、论文锚定的多 agent 教学平台达到开源规模。
+
+Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent](https://github.com/zhayujie/CowAgent) · [drawgent](https://tangled.org/yanndegat.tngl.sh/drawgent) · [reladraw](https://github.com/reladraw/reladraw) · [HN——Reladraw](https://news.ycombinator.com/item?id=49858513) · [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) · [live demo](https://open.maic.chat/)

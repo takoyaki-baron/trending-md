@@ -720,3 +720,11 @@ Sources: [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skil
 对 09-26 条目警示的第一手 API 核查，所有数字均已验证：(1) 37,737★ / 181 提交 ≈ **209★/提交**——是类型匹配对照项的 11 倍（davila7/claude-code-templates：31.9k★ / 1,684 提交 ≈ 19★/提交），"markdown 包就是提交少"解释不通；(2) 全部可见 git 历史只覆盖 **2026-08-08 → 09-22**，而仓库创建于 2026-05-13——约三个月历史缺失，且 6 月 24 日的 HN 故事（2 分，无评论）标题为"Trending agent skill pack with built-in **refusal-suppression layer**"，其描述的内容已不在历史中；(3) 现在的同意门是全新的——PR #142 "consent-gate agent bootstrap" 于 **09-21** 落地（星数暴涨之后）——且当前 README_AI.md/RULES.md 确实把执行门在激活 + 逐效果同意之后（"阅读仓库文件不构成执行授权"），所以仓库可能已经改过自新——但其可见记录始于最糟糕的负面报道之后；(4) 16 位贡献者，最高贡献者 23%（把几乎同名的 `zhaoxuya520`/`zhaoxuya` 账号合并计约 36%），仅一个 tag（v1.0.1），README 指向 linux.do 作为社区。结论维持并强化：把星数当作未证实；"严格遵循指示"的警示现已部分过时（当前文本明确声明只读不受强制）——信任赤字从内容转移到了历史。
 
 Sources: [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skill) · [HN — 六月故事](https://news.ycombinator.com/item?id=48664434) · [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates)
+
+## 2026-09-27 20:03 —— 图表技能品类规模化；技能模式在爱好领域端到端落地
+
+**archify 达 72.5k★**（`tt-a1i/archify`，MIT，9 月 27 日仍有推送；对第 35 周 validated-IR 品类冠军的更新，此前 49.3k★）：把仓库或想法变成自包含的交互式 HTML——架构、工作流、时序、数据流与生命周期图，带动效——设计上*可对照代码库验证*，可用于 Cursor、Claude Code、Codex CLI 与 OpenCode。创建于 4 月 15 日；最近完整发布 v2.16.0（8 月 30 日），处于 v2.17.0-dev 线。已做审视：触发分散——GitHub 趋势榜加中文社区渠道（README 里的微信群/QQ 群）、无 HN 帖——且 Nous Hermes 目录条目注明只处理公开 GitHub 仓库。技能经济当下最大的消费级爆款是*文档*：agent 让架构图与仓库保持同步，正在成为一等用例而非演示。
+
+**chess-postmortem-skills**（`brumar/chess-postmortem-skills`，Show HN 73 分，仓库创建于 9 月 25 日，56★）：给它一个 lichess 链接加录制的思考音频——它在本地用 whisper.cpp 转录、按 PGN 时钟时间把句子对齐到着法、用自然语言盘问 Stockfish，产出带注释的 PGN、HTML 查看器与解说视频。两天的单人仓库、一个完整示例——是动量、不是成熟度。但"技能"模式在爱好领域的端到端落地——本地转录 → 工具编排 → 可发布产物——是任何小众工作流本周就能照抄的模板。
+
+Sources: [tt-a1i/archify](https://github.com/tt-a1i/archify) · [Hermes 技能目录条目](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-archify) · [brumar/chess-postmortem-skills](https://github.com/brumar/chess-postmortem-skills) · [HN — 棋局复盘](https://news.ycombinator.com/item?id=49857528)

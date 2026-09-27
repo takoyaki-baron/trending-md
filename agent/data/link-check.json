@@ -1210,60 +1210,24 @@
     },
     "https://www.heise.de/news/Kiteworks-empfiehlt-Kunden-temporaeres-Herunterfahren-der-Server-11048599.html": {
       "verdict": "dead",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-27T05:12:55.934Z",
-      "last_seen": "2026-09-27T05:12:55.934Z",
-      "feeds": [
-        "2026-09-27.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49856149": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-09-27T05:12:55.934Z",
-      "last_seen": "2026-09-27T05:12:55.934Z",
+      "last_seen": "2026-09-27T13:01:46.982Z",
       "feeds": [
         "2026-09-27.md"
       ]
     },
     "https://www.phoronix.com/news/Toolpak": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-27T05:12:55.934Z",
-      "last_seen": "2026-09-27T05:12:55.934Z",
-      "feeds": [
-        "2026-09-27.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49858513": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-09-27T05:12:55.934Z",
-      "last_seen": "2026-09-27T05:12:55.934Z",
-      "feeds": [
-        "2026-09-27.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49859982": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-09-27T05:12:55.934Z",
-      "last_seen": "2026-09-27T05:12:55.934Z",
-      "feeds": [
-        "2026-09-27.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49859299": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-09-27T05:12:55.934Z",
-      "last_seen": "2026-09-27T05:12:55.934Z",
+      "last_seen": "2026-09-27T13:01:46.982Z",
       "feeds": [
         "2026-09-27.md"
       ]
     }
   },
-  "runs": 36,
+  "runs": 37,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-27T05:12:55.934Z"
+  "last_run": "2026-09-27T13:01:46.982Z"
 }

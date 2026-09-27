@@ -305,3 +305,13 @@ Sources: [Microsoft 365 Insider ブログ](https://techcommunity.microsoft.com/b
 **Postgres の `SELECT DISTINCT` はスケールしない——再帰 CTE によるルーズインデックススキャン**（DBOS、HN 98）：Postgres にはルーズインデックススキャン演算子がなく、パーティションキューのワークロードは 3 つのパーティションキーを見つけるために 100 万行を走査；MySQL にはあり、2018 年のパッチは 4 年で頓挫、PG18 のスキップスキャンも述語一致行を全て読む。解法：ソート済みインデックス上で `min()` を繰り返し取る再帰 CTE、1 ステップで 1 個の DISTINCT 値——パーティション行数 1K→1M でレイテンシはフラット（通常クエリは線形増加）。著者自身の注意：「驚くほど読みにくい」。
 
 Sources: [floci.io](https://floci.io) · [GNOME ブログ](https://blogs.gnome.org/alatiera/2026/09/26/introducing-toolpak/) · [jia.je](https://jia.je/hardware/2026/09/24/loongson-cpu-erratum-en/) · [safenotsafe.dev](https://safenotsafe.dev/) · [antonz.org](https://antonz.org/go-concurrency-distilled/) · [eval-exec/neomacs](https://github.com/eval-exec/neomacs) · [righto.com](https://www.righto.com/2026/09/8087-tangent-cordic.html) · [DBOS](https://www.dbos.dev/blog/postgres-select-distinct-does-not-scale)
+
+## 2026-09-27 20:03 — デプロイ優先の TensorFlow、エージェントのための言語設計、可視化されたトークン化
+
+**TensorFlow 2.22.0-rc0**（9/24、3 月の 2.21 以来初の RC；216★/日でトレンド）：リリースノートで検証——TensorBoard はデフォルト依存でなくなる（`pip install tensorboard` まで ImportError；破壊的変更）、tf.lite に QUI4 4-bit 量子化 Dequantize と FP16/BF16 Unpack、FLOAT8_E4M3FN/E5M2 dtype がコアに。20 万★リポジトリの稀なトレンドスパイクは量子化ファースト・エッジファースト——TensorFlow の残る重心が研究でなくデプロイにあることの表示。
+
+**José Valim：「AI 時代のプログラミング言語の進化」**（dashbit.co、HN 108 pts）：Elixir の作者による二部エッセイ——人間がコードの大部分を書かなくなるとき言語*コミュニティ*は何を意味するか、そして coding agent を一等ユーザーとしてより扱いやすい言語にするための具体的な意見。Valim はテキスト内に自らのハッジを付す（「私の意見は……おそらく変わる」）と、講演とスレッドのdigest であり提案ではないと位置づける。非人間の第一読者のための言語設計が真剣な下位分野になりつつある——形式手法がエージェントコードでバズったのと同じ週にファウンダーレベルの声が加わったことは、ホットテイクから研究アジェンダへの転換を示す。
+
+**すべての LLM トークンが同幅のフォント**（HN 71 pts）：アップロードされた任意のフォントを選択したトークナイザー（o200k_base、cl100k_base、DeepSeek V4.1 Flash、Kimi K3、GLM-5.3、Qwen 3.6…）の各トークンが同一幅で描けるよう再刻字するコンパイラ——フォントはブラウザ内に留まる。ページ自身の注意書きがプロジェクトを開く（「フォントの専門知識がないので、これは slop かもしれない」）。すべての LLM 請求とコンテキストウィンドウの不可視の基盤であるトークン化をページ上で物理的に可読にする玩具——minified JavaScript へのソースマップと同じ動き。
+
+Sources: [v2.22.0-rc0 リリースノート](https://github.com/tensorflow/tensorflow/releases/tag/v2.22.0-rc0) · [dashbit.co](https://dashbit.co/blog/evolving-ai-era) · [HN — Valim](https://news.ycombinator.com/item?id=49839567) · [token-space fonts](https://ampdot.mesh.host/token-space-fonts.html) · [HN — フォント](https://news.ycombinator.com/item?id=49851883)

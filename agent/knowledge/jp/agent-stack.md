@@ -1920,4 +1920,6 @@ Sources: [block/buzz](https://github.com/block/buzz) · [GitHub Trending](https:
 
 **OpenClaw のゲートウェイが初の体系的監査を受ける**——2 日で約 40 CVE（詳細 → [[security]]）；exec 承認スコーピングバグ（承認がワーキングディレクトリに紐づかない）が本バッチの agent インフラ設計教訓。
 
-Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent](https://github.com/zhayujie/CowAgent) · [drawgent](https://tangled.org/yanndegat.tngl.sh/drawgent) · [reladraw](https://github.com/reladraw/reladraw) · [HN——Reladraw](https://news.ycombinator.com/item?id=49858513)
+**OpenMAIC が v1.1.x の波で 39.2k★ を突破**（THU-MAIC/OpenMAIC、MIT）：v1.1.0「エージェントループ上のクラスルームチャット」（9/24）+ v1.1.1 セキュリティ修正（9/26）；Next.js 16 / React 19 / LangGraph 1.1 スタック、エージェントワークベンチがアップロードされた文書・音声・動画からコース全体を構築、内蔵スキル 24、ライブデモは open.maic.chat、JCST'26 論文が裏付け。留保：v1.0.0 は 8/27 リリース——新規プロジェクトではなく既存ローンチへの高速フォロー。09-08 から追跡してきた教育スウォーム系列の更新：大学支援・論文裏付けのマルチエージェント教育プラットフォームが OSS スケールに達した。
+
+Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent](https://github.com/zhayujie/CowAgent) · [drawgent](https://tangled.org/yanndegat.tngl.sh/drawgent) · [reladraw](https://github.com/reladraw/reladraw) · [HN——Reladraw](https://news.ycombinator.com/item?id=49858513) · [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) · [ライブデモ](https://open.maic.chat/)
