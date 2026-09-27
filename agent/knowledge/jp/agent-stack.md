@@ -1923,3 +1923,11 @@ Sources: [block/buzz](https://github.com/block/buzz) · [GitHub Trending](https:
 **OpenMAIC が v1.1.x の波で 39.2k★ を突破**（THU-MAIC/OpenMAIC、MIT）：v1.1.0「エージェントループ上のクラスルームチャット」（9/24）+ v1.1.1 セキュリティ修正（9/26）；Next.js 16 / React 19 / LangGraph 1.1 スタック、エージェントワークベンチがアップロードされた文書・音声・動画からコース全体を構築、内蔵スキル 24、ライブデモは open.maic.chat、JCST'26 論文が裏付け。留保：v1.0.0 は 8/27 リリース——新規プロジェクトではなく既存ローンチへの高速フォロー。09-08 から追跡してきた教育スウォーム系列の更新：大学支援・論文裏付けのマルチエージェント教育プラットフォームが OSS スケールに達した。
 
 Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent](https://github.com/zhayujie/CowAgent) · [drawgent](https://tangled.org/yanndegat.tngl.sh/drawgent) · [reladraw](https://github.com/reladraw/reladraw) · [HN——Reladraw](https://news.ycombinator.com/item?id=49858513) · [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) · [ライブデモ](https://open.maic.chat/)
+
+## 2026-09-28 04:03 —— 異種マルチハーネス・オーケストレーション（OpenRig）。git-on-object-store 形態に2例目（Walgit）
+
+**OpenRig**（`mvschwarz/openrig`、Apache-2.0、853★、+114/日、v0.5.17 は 9/27）：YAML 1 枚で定義したエージェントチームが、**Claude Code と Codex の席を単一リードエージェントの下で同時起動**、tmux 上の永続システムとして管理 —— *異種*フリート・オーケストレーションの稀な OSS 実装（多くのオーケストレータは同一ハーネスの N 席）。ほぼ日次リリース（3 日で v0.5.15–17）。README の目立つ警告が正直な部分で、再掲に値する：rig の起動は**あなたのマシンに provider hook とワークスペース信頼設定を書き込む**——「OpenRig がマシンに変更するもの」は文書化済み、先にバックアップを。単一メンテナ、初期段階。
+
+**Walgit**（`rgodha24/walgithub`、MIT、59★、HN 59 pts）：ステートレス git-on-object-store 形態（08-25 に初記録）の再例で、さらに圧縮 —— データベースなし、リーダーなし、意味のあるローカル状態なし：任意の S3/GCS バケットに向けた 1 バイナリが、smart HTTP v0/v2 fetch/push、`bundle-uri` の静的クローン、Git LFS、Web UI、SDK 付き JSON API、リポジトリ単位の push ポリシー、webhook を提供。「walgit を走らせる全マシンは使い捨てキャッシュ。バケットこそがリポジトリ」—— マシンより大きいリポジトリも可。公開数日、単独作者、デプロイも監査もなし——成熟度でなくアーキテクチャの方向性として引用。
+
+ソース：[mvschwarz/openrig](https://github.com/mvschwarz/openrig) · [openrig v0.5.17](https://github.com/mvschwarz/openrig/releases) · [rgodha24/walgithub](https://github.com/rgodha24/walgithub) · [HN — Walgit](https://news.ycombinator.com/item?id=49852832)

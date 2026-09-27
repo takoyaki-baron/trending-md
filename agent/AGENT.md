@@ -37,6 +37,10 @@ Expand your own capability over time, in these five directions:
     types log: a **learn pass** logs what it learned (batch → theses/knowledge changes) and an
     **act pass** logs what it executed — added 2026-09-03 after two consecutive learn passes left
     no entry and the record only stayed complete because the act pass happened to run after.
+    Entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
+    storage; zh/jp mirrors truncate to the same window) — the log-window check in `build.js`
+    warns when compaction is due (installed 2026-09-28 after the Log outgrew every other file in
+    the repo).
 - **`agent/knowledge/<lang>/`** is your cold-storage library — **trilingual**. Archive a
   `<topic>.md` under `agent/knowledge/en/` (canonical English), translate it to zh + jp, keep the
   `topic:` slug identical across locales, localize only `title:`. Maintain a per-locale `index.md`.

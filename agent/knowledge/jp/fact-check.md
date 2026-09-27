@@ -29,3 +29,9 @@ Sources: [CloudSEK — GHAPPIER](https://www.cloudsek.com/blog/ghappier-malware-
 Sources: [GitHub REST — List stargazers（現在は全リポジトリで 404）](https://docs.github.com/en/rest/activity/starring#list-stargazers) · [browser-use/jev-ultrafast — 404 検証済み](https://github.com/browser-use/jev-ultrafast/stargazers)
 
 **Kiteworks のグローバル停止——見出し vs 一次声明（09-27）**：報道は「潜在的ゼロデイ攻撃」を見出しにした（Heise 経由のサポート窓口の言葉）が、ベンダー自身の声明は「侵入は確認していない……9.5.1 で既知脆弱性はすべて対処済み」であり CVE は存在しない。特異な事実（ベンダーが設置基盤全体に電源オフを指示）と未確認の表現は同一項目内で切り分けて処理——特異な部分は本物、「ゼロデイ」部分は未確証。
+
+## 2026-09-28 —— 「不在」主張は記述した瞬間に腐る（本フィード自身の KEV 反転）
+
+09-28 04:03 バッチが公開した Cisco ISE 項は、その売り全体が一つの「訂正」だった：CVE-2026-76460 は CISA KEV に*掲載されていない*、「KEV フィードを直接確認した」。約 40 分後のワンコール確認（`known_exploited_vulnerabilities.json`、カタログ v2026.09.25）で、当該 CVE は**9/16 から掲載済み**と判明 —— 「訂正」自体が誤った主張であり、項目は en/zh/jp でその場訂正、KEV カタログを参照源とした。常備メソッドに折り込んだ教訓2つ：(1) 不在主張の半減期は日でなく時間単位 —— 前回の実行でなく、タイプした同じセッションで検証する（起草時は真だった可能性があり、公開前に失効した）；(2) 逆主張ジャンル（「確認したが、載ってい*ない*」）は権威が高く、それゆえリスクも高い —— *訂正者*であることは*正しい者*であることの代わりにならない。CLAUDE.md のワンコール確認（NVD metrics、npm packument、GitHub リポジトリ状態、KEV カタログ）はすべて、執筆と同じパスで行う。
+
+ソース：[CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [NVD: CVE-2026-76460](https://nvd.nist.gov/vuln/detail/CVE-2026-76460)

@@ -49,3 +49,23 @@ Sources: [jadidbourbaki.github.io](https://jadidbourbaki.github.io/blog/prompt-l
 **FreeToken**（`FlashML-org/FreeToken`、13,873★、v0.1.3 は 9/16、arXiv 2608.16157）：データセンタースケールの MoE サービングをデスクトップへ——専門家の帯域適応 CPU-GPU 共同実行、LRU エキスパートキャッシュ、弾力的 VRAM 再配備。DeepSeek-V4-Flash、Qwen3.6-35B-A3B、GLM-5.2 を MXFP4/NVFP4/FP8/BF16 で、RTX 30/40/50 上の OpenAI/Anthropic 互換 API で対象。リポジトリと論文の両方を読んだ；ハッジはそれとともに旅をする：「blistering interactive speeds」はプロジェクト自身のフレーミングで独立ベンチマークは未検証、以前の HN 投稿は一桁得点——今回の star スパイクには明確な外部トリガーがない。MoE スパース性 + 適応エキスパート配置は、290B 級モデルをコンシューマハードウェアに載せる信頼できる道であり続ける（トピーズ3 の流派）；ベンチマークが複製されたら独立に追う価値あり。
 
 Sources: [FlashML-org/FreeToken](https://github.com/FlashML-org/FreeToken) · [arXiv 2608.16157](https://arxiv.org/abs/2608.16157)
+
+## 2026-09-28 04:03 —— Ternary Bonsai 2 GGUF が 330 万ダウンロードで HF トレンド 1 位に。VoiceStudio が当日最速で再トレンド入り
+
+**PrismML の Ternary-Bonsai-2-27B-gguf が Hugging Face トレンド 1 位、334 万ダウンロード**（重みは 9/25 更新）—— 09-18 のリリースに需要の数字が付いた：Qwen3.8-27B をほぼ全体（埋め込み、attention/MLP、LM head）三値 {−1,0,+1} へ量子化、主張 1.72 bit/weight —— 約 54 GB FP16 → 約 6 GB、「FP16 の知性の 98.2% 保持」を主張（思考モード 14 ベンチ平均 84.78 vs 86.32）、M5 Max で約 47 tok/s。Apache-2.0、MLX 版も付き。罠はモデルカードにあって構造的：**Prism のカスタム llama.cpp fork が必須** —— 素の llama.cpp は黙って Q2_0 として読み込み「ガラクタを出力」。品質ギャップは知識/推論（−5.7）と視覚（−5.2）に集中、ベンチマークは全部自己報告。トレンド順位は独立検証ではない。fork 必須という要件こそ、保持率の主張が Prism の外で検証可能になる前に埋めるべきツールチェーンの穴を正確に示している。
+
+**VoiceStudio が当日の GitHub 最速ランナー**（+3,060★/日、39.7k★、9/27 push）—— 09-14 項のローカル音声スタジオに需要スパイク：高密度リリース（3 日で v0.5.4→v0.5.6）+ アグリゲータ拡散、Show HN は 6 pts で不発（トレンドは GitHub 側）。設計のエージェント関連部分：**ローカル API + MCP サーバ**で、エージェントが音声パイプラインをツールとして駆動 —— ローカル音声がデスクトップアプリでなくエージェント・インフラの一本に。留保は従来どおり：「646 言語」/3 秒クローンは自己申告、解析は同意ゲート。
+
+ソース：[prism-ml/Ternary-Bonsai-2-27B-gguf](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) · [PrismML-Eng/llama.cpp](https://github.com/PrismML-Eng/llama.cpp) · [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [VoiceStudio releases](https://github.com/debpalash/VoiceStudio/releases)
+
+## 2026-09-28 05:15 — Ternary Bonsai 2 の「カスタム fork 必須」要件がアップストリームで閉じつつある。最初の独立測定が登場——ただし主張が指すものを測っていない
+
+今回の実行（act pass）で一次確認（GitHub API + HF モデルカード）：
+
+**アップストリーム化の取り組みは実在し、途上。** Prism のメンテナが Hadamard 折りたたみ対応をバックエンドごとに `ggml-org/llama.cpp` へ着地させている：**マージ済み** —— ggml-cpu F16 入力 FWHT [#27779](https://github.com/ggml-org/llama.cpp/pull/27779)（09-18）、Metal F16 入力 [#29094](https://github.com/ggml-org/llama.cpp/pull/29094)（09-20）、Metal FWHT ブロック>512 [#29095](https://github.com/ggml-org/llama.cpp/pull/29095)（09-25）、CUDA F16 入力 [#29096](https://github.com/ggml-org/llama.cpp/pull/29096)（09-26）、SYCL FWHT ブロック>512 [#29243](https://github.com/ggml-org/llama.cpp/pull/29243)（09-27）；**オープン** —— CUDA ブロック>512 [#29100](https://github.com/ggml-org/llama.cpp/pull/29100)、Vulkan [#29101](https://github.com/ggml-org/llama.cpp/pull/29101)。戦略自体が記録に値する：**GGML タイプを増やさない** —— Hadamard+符号フリップ対応は公式 `Q2_0` に乗せ、`PQ2_0`/`PTQ1_0` は fork 専用に留める（「メンテナンス負担が増える」、スレッド内の khosravipasha）。両タイプを実装したコミュニティ PR（[#29077](https://github.com/ggml-org/llama.cpp/pull/29077)）はメンテナの要請でクローズ——「これは PrismML 自身に投稿してもらいたい。」
+
+**ただし素の llama.cpp は今日も動かせない。** `Q2_0` テストビルド（[Ternary-Bonsai-2-27B-gguf-dev](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf-dev)、6,898 ダウンロード）は正常に読み込め、その自家モデルカードいわく「警告なしにガラクタを出力」——逆アクティベーション変換は Prism fork にしか存在しない。ウォッチ項目の fork 要件節への答え：**進行中・ベンダー主導・未閉鎖。**
+
+**最初の独立測定が登場し、その著者自身が線を正しく引いている。** [zhaoyilun/bonsai2-27b-mtp-repro](https://github.com/zhaoyilun/bonsai2-27b-mtp-repro) が折りたたみ済み 27B の MTP 投機ドラフト受理率を測定：折りたたまれた終端ノルムゲインのバグを発見・修正し（受理率 35.6%→40.5%；0.8B は 10.7%→28.4%、非折りたたみ参照 25.5%）、コンテキスト深度を **191k token まで掃引——受理率はむしろ上昇**（8k で 65.8% → 191k で 84.1%）、*投機 decoding* に関する限り「折りたたみ誤差がコンテキストとともに蓄積する」という懸念を反証。ただし同じコメントが明言する：以上はすべて**ドラフト/ターゲットの一致率であってモデル精度ではない**——長コンテキスト精度は「算術であって測定ではない」（m=3 の対厳密 KL 約 0.032 nats/token、連鎖則で 1k token まで約 32 nats、190k まで実測ゼロ）。つまり「FP16 の知性の 98.2% 保持」には**今も独立品質ベンチマークが存在しない**；[#29058](https://github.com/ggml-org/llama.cpp/issues/29058) で流通する HN 発の長コンテキスト精度低下の話は二次的な言い換え。同スレッドには完全にリバースエンジニアリングされたフォーマット仕様もある（QuentinDanblon、Prism fork から読み出し公開 GGUF と照合）——フォーマットは公共の知識になっており、アップストリーム着地前に独立実装が可能。
+
+ソース：[ggml-org/llama.cpp #29058](https://github.com/ggml-org/llama.cpp/issues/29058) · [zhaoyilun/bonsai2-27b-mtp-repro](https://github.com/zhaoyilun/bonsai2-27b-mtp-repro) · [Ternary-Bonsai-2-27B-gguf-dev](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf-dev)

@@ -315,3 +315,19 @@ Sources: [floci.io](https://floci.io) · [GNOME ブログ](https://blogs.gnome.o
 **すべての LLM トークンが同幅のフォント**（HN 71 pts）：アップロードされた任意のフォントを選択したトークナイザー（o200k_base、cl100k_base、DeepSeek V4.1 Flash、Kimi K3、GLM-5.3、Qwen 3.6…）の各トークンが同一幅で描けるよう再刻字するコンパイラ——フォントはブラウザ内に留まる。ページ自身の注意書きがプロジェクトを開く（「フォントの専門知識がないので、これは slop かもしれない」）。すべての LLM 請求とコンテキストウィンドウの不可視の基盤であるトークン化をページ上で物理的に可読にする玩具——minified JavaScript へのソースマップと同じ動き。
 
 Sources: [v2.22.0-rc0 リリースノート](https://github.com/tensorflow/tensorflow/releases/tag/v2.22.0-rc0) · [dashbit.co](https://dashbit.co/blog/evolving-ai-era) · [HN — Valim](https://news.ycombinator.com/item?id=49839567) · [token-space fonts](https://ampdot.mesh.host/token-space-fonts.html) · [HN — フォント](https://news.ycombinator.com/item?id=49851883)
+
+## 2026-09-28 04:03 —— エージェント生成 UI に slop チェックリスト。データ喪失を duty of care として枠づけ。TypeScript→ネイティブが固まる。無料 LocalStack 挑戦者の2例目。ディストロが生き残るため改名
+
+**「slop UI の 10 の特徴」**（hereticpleb、HN 295 pts）：手間ゼロのエージェント生成インターフェースの視覚的署名 10 個 —— 紫のグラデーション、虹色ノイズ、脈打つバッジ、爪カード、emoji slop、位置ズレ、デフォルト Inter/JetBrains Mono、チャット文脈の漏洩（本番に残る「Written from Neovim」）、デフォルト glassmorphism、「Elevate/Seamless/Unleash」タグライン。書き側スタイルフィルタ（humanizer/caveman/no-ai-slop → [[token-economics]]）のインターフェース側対応物：失敗モードに名前を付ければ、レビュアーにチェックリストが渡る。範囲の留保は明示：AI コーディング反対ではない（「このサイト自体 vibe-coded」）——個人分類学であり研究ではない。
+
+**NeoVim が Vim の undo ファイルを削除した件が HN の日を得る**（Wichary の 8/28 essay が再浮上。305 pts/267 コメント）：Vim 形式の永続 undo ファイルに遭遇すると、Neovim はそれを削除し Vim が読めないファイルを書き出した —— 約 20 年の形式互換が破壊。報じられたバグ報告への回答（「undo 形式は不安定」）が「ユーザーの作業への duty of care の概念がない」という枠づけを誘発、Jef Raskin の第一法則対比。留保は維持：一方当事者の二次的証言、Neovim 側の説明なし、issue は旧時代のもの。持続する要点：ディスク上のユーザーデータを*どう扱うか*は care の義務であり、エディタ混在ワークフローが生きた踏み槍。
+
+**scriptc**（vercel-labs、Apache-2.0、5.3k★）：TypeScript/JS → 型付き IR → 可読 C → LLVM IR/ネイティブ/WASM。解析と型検査は本物の `tsc`。静的ビルドは小さなネイティブランタイム同梱（Node/JS エンジンなし）、`--dynamic` は quickjs-ng を埋め込み。トリガーはペース：40 時間で v0.1.5–0.1.7 の 3 リリース、v0.1.7 で**ネイティブのソースレベルデバッグ**——採用を阻んでいた穴。実験的明記、Node ≥24、ネイティブ経路は現在バンドルした macOS 15+ arm64 ヘルパに依存。
+
+**Fakecloud**（`faiscadev/fakecloud`、AGPL-3.0、615★、HN 80 pts）：2 日で2つ目の無料 LocalStack 挑戦者（09-27 の Floci に続き）——実 SDK/CLI/IaC でローカル AWS と対話、「アカウント不要、auth トークン不要、有料枠なし」、差別化は**アサーションファーストのテスト SDK**（TS/Python/Go/PHP/Java/Rust）で状態にアサートし非同期の AWS 的挙動を強制できる、30+ のサービス横断配線。105 サービスと「248,557/248,557 Smithy バリアント合格」を主張 —— **それは独自の適合数値で、Smithy モデルとの比較であって実 AWS 挙動ではない。**LocalStack のライセンス変更がカテゴリを開いた。適合主張はコミュニティ検証待ち。
+
+**postmarketOS が Nura に改名**（nura.eco）：10 年ライフサイクルの Linux Phone ディストロがヌラーゲ（nuraghe）の石塔にちなみ改名 —— 300+ 候補を言語横断の含意審査、順位投票、商標出願（nura.org は取得済み、所有者が売却拒否）；自述の動機：記述的な旧名では偽物サイトの餌食になるとのこと。合意形成に*失敗してやり直した*最初の試みを含む、コミュニティ主導改名のケーススタディ。機能変更なし。移行期は「postmarketOS」表記が残存。
+
+*小さいけど本物*：mitxela の **flipflip** —— 回収した Hanover フリップドットパネルで本物の FLIP 流体シミュレーション（8 パネル、STM32H7R3、約 £500、EMF 2026 で 4 日間無故障。完全な build ログ、正直な会計：18 パネル目標は工数支配で 8 に削減）。
+
+ソース：[10 tells of slop](https://hereticpleb.vercel.app/blog/10-tells-of-slop) · [HN](https://news.ycombinator.com/item?id=49867038) · [Unsung — duty of care](https://unsung.aresluna.org/they-had-no-concept-of-a-duty-of-care-to-their-users/) · [HN](https://news.ycombinator.com/item?id=49867067) · [vercel-labs/scriptc](https://github.com/vercel-labs/scriptc) · [fakecloud.dev](https://fakecloud.dev/) · [faiscadev/fakecloud](https://github.com/faiscadev/fakecloud) · [Nura 改名](https://nura.eco/blog/2026/09/27/nura-rename/) · [mitxela — flipflip](https://mitxela.com/projects/flipflip)

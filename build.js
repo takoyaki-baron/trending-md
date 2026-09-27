@@ -1142,6 +1142,42 @@ if (fs.existsSync(actionAgendaPath)) {
     console.log(`  ⚠ ${over.length} agenda item(s) over the ${AGENDA_ITEM_LINE_BUDGET}-line budget — compact to claim + dated status lines; history belongs in the linked knowledge files`);
     over.forEach(t => console.log(`      [${t.bucket}] ${t.name}… (${t.len} lines)`));
   }
+
+  /* ── Log-window budget check ──
+     The `## Log` section grew unbounded the same way the memory window did before its
+     compaction (155 entries / 342KB by 2026-09-28 — over half the file, mirrors at 492–620KB):
+     every run prepends and nothing ever left. Rule: entries older than 14 days are archived to
+     agent/action-log/archive-en.md (en-only cold storage), and the zh/jp mirrors truncate to the
+     same date window. Checked here so the next compaction is prompted by the build, not by a
+     human noticing. */
+  const LOG_WINDOW_DAYS = 14;
+  const logIdx = aLines.findIndex(l => /^## Log\s*$/.test(l));
+  if (logIdx !== -1) {
+    const liveDates = [...aLines.slice(logIdx).join('\n').matchAll(/^### (\d{4}-\d{2}-\d{2}) \d{2}:\d{2}$/gm)]
+      .map(m => m[1]);
+    if (liveDates.length) {
+      const cutoff = new Date(Date.now() - LOG_WINDOW_DAYS * 86400000).toISOString().slice(0, 10);
+      const stale = liveDates.filter(d => d < cutoff);
+      const logKB = Math.round(aLines.slice(logIdx).join('\n').length / 1024);
+      console.log(`  ✓ en/action.md log: ${liveDates.length} live entries (${liveDates[liveDates.length - 1]} → ${liveDates[0]}, ${logKB}KB)`);
+      if (stale.length) {
+        console.log(`  ⚠ ${stale.length} log entr${stale.length === 1 ? 'y' : 'ies'} older than ${LOG_WINDOW_DAYS} days (oldest ${stale[stale.length - 1]}) — archive to agent/action-log/archive-en.md and truncate the zh/jp mirrors to the same window`);
+      }
+      // mirrors must truncate to the same date window (each locale uses its own "## Log" heading)
+      for (const [loc, heading] of [['zh', '日志'], ['jp', 'ログ']]) {
+        const mPath = path.join(ROOT, loc, 'action.md');
+        if (!fs.existsSync(mPath)) continue;
+        const mLines = fs.readFileSync(mPath, 'utf8').split('\n');
+        const mIdx = mLines.findIndex(l => new RegExp(`^## ${heading}\\s*$`).test(l));
+        const mDates = mIdx === -1 ? [] : [...mLines.slice(mIdx).join('\n').matchAll(/^### (\d{4}-\d{2}-\d{2}) \d{2}:\d{2}$/gm)].map(m => m[1]);
+        const missed = liveDates.filter(d => !mDates.includes(d)).length;
+        const staleM = mDates.filter(d => d < cutoff).length;
+        if (missed || staleM) {
+          console.log(`  ⚠ ${loc}/action.md log window drift: ${missed} live en date(s) absent, ${staleM} stale date(s) past the ${LOG_WINDOW_DAYS}-day cutoff — mirrors truncate to en's window`);
+        }
+      }
+    }
+  }
 }
 
 /* ── Agent link-integrity check ──
@@ -1178,16 +1214,24 @@ if (fs.existsSync(EN_KNOWLEDGE_DIR)) {
   }
 }
 const actionPath = path.join(ROOT, 'en', 'action.md');
+const LOG_ARCHIVE_PATH = path.join(ROOT, 'agent', 'action-log', 'archive-en.md');
 if (fs.existsSync(actionPath)) {
   const actionSrc = fs.readFileSync(actionPath, 'utf8');
+  // Pointers may target the live log or the cold archive (log-window compaction, 2026-09-28)
   const logHeaders = new Set([...actionSrc.matchAll(RE_LOG_HEADER)].map(m => m[1]));
+  let archivedCount = 0;
+  if (fs.existsSync(LOG_ARCHIVE_PATH)) {
+    const archHeaders = [...fs.readFileSync(LOG_ARCHIVE_PATH, 'utf8').matchAll(RE_LOG_HEADER)].map(m => m[1]);
+    archHeaders.forEach(h => logHeaders.add(h));
+    archivedCount = archHeaders.length;
+  }
   const logPtrs = [...actionSrc.matchAll(RE_LOG_PTR)].map(m => m[1]);
   const orphanPtrs = logPtrs.filter(p => !logHeaders.has(p));
   if (orphanPtrs.length) {
-    console.log(`  ⚠ ${orphanPtrs.length} orphaned (→ log …) pointer(s) with no matching "### YYYY-MM-DD HH:MM" header in en/action.md`);
+    console.log(`  ⚠ ${orphanPtrs.length} orphaned (→ log …) pointer(s) with no matching "### YYYY-MM-DD HH:MM" header in en/action.md or agent/action-log/archive-en.md`);
     [...new Set(orphanPtrs)].forEach(p => console.log(`      ${p}`));
   } else {
-    console.log(`  ✓ agent log-integrity: ${logHeaders.size} log entries, all ${logPtrs.length} (→ log …) pointers resolve`);
+    console.log(`  ✓ agent log-integrity: ${logHeaders.size} log entries (${archivedCount} archived), all ${logPtrs.length} (→ log …) pointers resolve`);
   }
 }
 

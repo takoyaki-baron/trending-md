@@ -280,3 +280,19 @@ Sources: [floci.io](https://floci.io) · [GNOME 博客](https://blogs.gnome.org/
 **每个 LLM token 等宽的字体**（HN 71 分）：一个编译器，把上传的任意字体重新刻制，使所选 tokenizer（o200k_base、cl100k_base、DeepSeek V4.1 Flash、Kimi K3、GLM-5.3、Qwen 3.6…）的每个 token 以相同宽度渲染——字体留在浏览器本地。页面自己的免责声明开篇即是（"我缺乏字体领域的专业知识，这可能是 slop"）。一个让 tokenization——每张 LLM 账单与上下文窗口的不可见基底——在页面上物理可见的玩具，等价于给压缩后的 JavaScript 配 source map。
 
 Sources: [v2.22.0-rc0 release notes](https://github.com/tensorflow/tensorflow/releases/tag/v2.22.0-rc0) · [dashbit.co](https://dashbit.co/blog/evolving-ai-era) · [HN — Valim](https://news.ycombinator.com/item?id=49839567) · [token-space fonts](https://ampdot.mesh.host/token-space-fonts.html) · [HN — 字体](https://news.ycombinator.com/item?id=49851883)
+
+## 2026-09-28 04:03 —— 智能体生成的 UI 有了 slop 对照清单；数据丢失被框定为照护义务；TypeScript 转原生持续加固；第二个免费 LocalStack 挑战者；一个发行版为活下去而改名
+
+**"slop UI 的十个特征"**（hereticpleb，HN 295 分）：零投入智能体生成界面的十个视觉签名——紫色渐变、彩虹配色污染、脉冲徽章、指甲盖卡片、emoji slop、错位、默认 Inter/JetBrains Mono、聊天上下文泄漏（"Written from Neovim"留在生产）、默认玻璃拟态、"Elevate/Seamless/Unleash"标语。写侧风格过滤器（humanizer/caveman/no-ai-slop → [[token-economics]]）的界面侧对应物：给失败模式起名字，评审者就有了清单。范围限定明确：不反对 AI 编程（"本站本身就是 vibe-coded"）——个人分类学，不是研究。
+
+**NeoVim 删除 Vim 撤销文件迎来 HN 热议**（Wichary 8 月 28 日文章翻红；305 分/267 评论）：遇到 Vim 格式持久化撤销文件时，Neovim 将其删除并写出 Vim 无法再读的文件——约 20 年格式兼容毁于一旦；据称 bug 报告得到的回复（"撤销格式本就不稳定"）触发了"对用户毫无照护之责"的框定，对标 Jef Raskin 第一定律。保留限定：一方当事人的二手转述、无 Neovim 官方说法、issue 出自较早时期。持久要点：软件*如何对待*磁盘上的用户数据是照护义务，混用编辑器的工作流是活的脚枪。
+
+**scriptc**（vercel-labs，Apache-2.0，5.3k★）：TypeScript/JS → 类型化 IR → 可读 C → LLVM IR/原生/WASM，解析与类型检查用真 `tsc`；静态构建附带小型原生运行时（无 Node/JS 引擎），`--dynamic` 内嵌 quickjs-ng。触发点是节奏：40 小时内 v0.1.5–0.1.7 三连发，v0.1.7 加入**原生源码级调试**——挡住真实采用的那块缺口。自述实验性、需 Node ≥24、原生路径目前依赖捆绑的 macOS 15+ arm64 helper。
+
+**Fakecloud**（`faiscadev/fakecloud`，AGPL-3.0，615★，HN 80 分）：两天内第二个免费 LocalStack 挑战者（继 09-27 的 Floci）——真 SDK/CLI/IaC 对接本地 AWS，"无账号、无 auth token、无付费层"，差异化在**断言优先的测试 SDK**（TS/Python/Go/PHP/Java/Rust），可对状态断言并按需强制异步 AWS 式行为，30+ 跨服务接线。宣称 105 个服务、"248,557/248,557 Smithy 变体通过"——**它自己的符合度数字，对照的是 Smithy 模型，不是真实 AWS 行为。**LocalStack 的授权变更打开了品类；符合度主张等社区实测。
+
+**postmarketOS 更名 Nura**（nura.eco）：十年生命周期的 Linux 手机发行版以努拉吉石塔为名更名——300+ 候选经跨语言语义审查、排序投票、商标申请（nura.org 被占、所有者拒售）；自述动机：描述性旧名使用户暴露于仿冒欺诈。社区主导改名的案例研究，含一次*失败后重来*的首轮共识。"postmarketOS"字样在过渡期保留。功能无变化。
+
+*小而实*：mitxela 的 **flipflip**——在回收的 Hanover 翻转点阵屏上跑真 FLIP 流体模拟（8 块屏、STM32H7R3、约 500 英镑、EMF 2026 四天无故障；完整建造日志、账目诚实：18 屏目标因人工砍到 8 屏）。
+
+来源：[10 tells of slop](https://hereticpleb.vercel.app/blog/10-tells-of-slop) · [HN](https://news.ycombinator.com/item?id=49867038) · [Unsung — 照护义务](https://unsung.aresluna.org/they-had-no-concept-of-a-duty-of-care-to-their-users/) · [HN](https://news.ycombinator.com/item?id=49867067) · [vercel-labs/scriptc](https://github.com/vercel-labs/scriptc) · [fakecloud.dev](https://fakecloud.dev/) · [faiscadev/fakecloud](https://github.com/faiscadev/fakecloud) · [Nura 更名公告](https://nura.eco/blog/2026/09/27/nura-rename/) · [mitxela — flipflip](https://mitxela.com/projects/flipflip)

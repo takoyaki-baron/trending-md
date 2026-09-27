@@ -9049,5 +9049,95 @@
     "en": "Reasonable's engineering blog — the TLA+ tutorial is hands-on and documents its trigger, but the firm discloses it is promoting its own tooling in the same space. Cross-checked against the HN discussion and the referenced Cherny material.",
     "zh": "Reasonable 的工程博客——TLA+ 教程可上手且写明触发背景，但公司同时披露在该领域推广自家工具，存在利益关联。已与 HN 讨论及其引用的 Cherny 材料交叉核验。",
     "jp": "Reasonable のエンジニアリングブログ。TLA+ チュートリアルは実践的で経緯も明記だが、同分野の自社ツール宣伝を自ら開示しており利益相反に注意。HN 議論および引用された Cherny 資料とクロスチェック済み。"
+  },
+  "threatdown.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "ThreatDown (Malwarebytes) threat-research blog; first-hand malware forensics with honest attribution limits. Cross-checked (09-28): its CARBONATO post matches BleepingComputer's independent writeup on the Docker/Hermes-agent mechanics, Telegram C2 and Oct 2024–Aug 2026 evidence window.",
+    "zh": "ThreatDown（Malwarebytes）威胁研究博客；一手恶意软件取证，对归因局限保持诚实。已交叉核验（09-28）：其 CARBONATO 文章与 BleepingComputer 的独立报道在 Docker/Hermes 智能体机制、Telegram C2 及 2024年10月–2026年8月证据窗口上一致。",
+    "jp": "ThreatDown（Malwarebytes）の脅威リサーチブログ。一次のマルウェアフォレンジクスで、帰属の限界にも正直。突合済み（09-28）：CARBONATO 記事は BleepingComputer の独立記事と Docker/Hermes エージェントの機構・Telegram C2・2024年10月〜2026年8月のエビデンス期間で一致。"
+  },
+  "fireworks.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Fireworks AI blog; inference-platform vendor, publishes benchmark numbers with unusually explicit self-disclaimers (Research Preview status, self-reported evals). Cross-checked (09-28): Ember-1 claims match the HN discussion framing; all evals remain vendor-run.",
+    "zh": "Fireworks AI 博客；推理平台厂商，发布基准数字时附带异常明确的自我免责（Research Preview 状态、自报评估）。已交叉核验（09-28）：Ember-1 的说法与 HN 讨论的框架一致；所有评估仍为厂商自测。",
+    "jp": "Fireworks AI のブログ。推論プラットフォームベンダーで、ベンチ数値に例外的に明示的な自己留保（Research Preview 状態、自己申告評価）を付ける。突合済み（09-28）：Ember-1 の主張は HN 議論の枠組みと一致。評価はすべてベンダー実施のまま。"
+  },
+  "unsung.aresluna.org": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Marcin Wichary's personal blog on software history and UI; careful about labeling second-hand accounts as second-hand (flags that Neovim's side is absent). Cross-checked (09-28): the quoted Chisnall account is presented as one user's retelling, consistent with the HN thread's pushback.",
+    "zh": "Marcin Wichary 的个人博客，关注软件史与 UI；对二手转述标注得很谨慎（明确指出文章缺少 Neovim 一方说法）。已交叉核验（09-28）：所引 Chisnall 叙述以一方当事人转述呈现，与 HN 讨论串的反驳相一致。",
+    "jp": "Marcin Wichary のソフトウェア史と UI についての個人ブログ。二次的な語りを二次として丁寧に明示（Neovim 側の説明が無い点も指摘）。突合済み（09-28）：引用された Chisnall の体験は一方当事者の再話として提示され、HN 議論での反発と整合。"
+  },
+  "mitxela.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "mitxela's hardware-hack project log; complete build write-ups with honest cost/labor accounting. Cross-checked (09-28): the flip-dot build log matches the HN discussion, and the build is exhibited (EMF 2026), i.e. physically demonstrated.",
+    "zh": "mitxela 的硬件改造项目日志；完整的建造记录，成本与工时账目诚实。已交叉核验（09-28）：翻转点阵建造日志与 HN 讨论一致，且装置实际展出（EMF 2026），即经过实物验证。",
+    "jp": "mitxela のハードウェア改造プロジェクトログ。コストと工数の会計まで正直な完全ビルド記録。突合済み（09-28）：フリップドットのビルドログは HN 議論と一致し、実際に展示（EMF 2026）された実物の実証を伴う。"
+  },
+  "hereticpleb.vercel.app": {
+    "cat": "community",
+    "cred": "low",
+    "cv": 1,
+    "density": "med",
+    "en": "Anonymous personal blog; opinion taxonomy, not research — author self-identifies as vibe-coded and anti-nothing. Cross-checked (09-28): the '10 tells' list matches its own HN discussion; value is as a shared vocabulary, not as evidence.",
+    "zh": "匿名个人博客；观点分类学而非研究——作者自称网站本身是 vibe-coded、不持反对立场。已交叉核验（09-28）：\"slop UI 十特征\"与其 HN 讨论串一致；价值在于共享词汇表而非证据。",
+    "jp": "匿名の個人ブログ。意見の分類学であり研究ではない——作者自身が「当サイトも vibe-coded」と認め、反対立場ではないと明言。突合済み（09-28）：「slop UI の10の特徴」は自らの HN 議論と一致。価値は共有語彙であって証拠ではない。"
+  },
+  "eoinhiggins.substack.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Eoin Higgins's newsletter (journalist, The Flashpoint); argument-driven AI accountability coverage that quotes its own counterpoints (OpenAI's response included). Cross-checked (09-28): the 'no rogue agents' essay's facts align with the HN discussion and the OpenAI reports it cites.",
+    "zh": "Eoin Higgins 的 newsletter（记者，The Flashpoint）；以论点驱动的 AI 问责报道，会同时引用对立观点（包括 OpenAI 的回应）。已交叉核验（09-28）：\"不存在失控智能体\"一文的事实与其 HN 讨论串及所引 OpenAI 报告一致。",
+    "jp": "Eoin Higgins のニュースレター（ジャーナリスト、The Flashpoint）。論点駆動の AI アカウンタビリティ報道で、反論（OpenAI の回答を含む）も自ら引用。突合済み（09-28）：「暴走するエージェントは存在しない」の事実関係は HN 議論および引用された OpenAI レポートと整合。"
+  },
+  "fakecloud.dev": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Project site for the Fakecloud local AWS emulator; conformance numbers (248,557/248,557 Smithy variants) are self-reported against Smithy models, not real AWS. Cross-checked (09-28): claims match the GitHub README; HN thread provides independent scrutiny but no third-party benchmark yet.",
+    "zh": "Fakecloud 本地 AWS 模拟器的项目站；一致性数字（248,557/248,557 个 Smithy 变体）是按 Smithy 模型自测，并非对真实 AWS 验证。已交叉核验（09-28）：宣称与 GitHub README 一致；HN 讨论提供独立审视但尚无第三方基准。",
+    "jp": "ローカル AWS エミュレータ Fakecloud のプロジェクトサイト。適合性数値（Smithy バリアント 248,557/248,557）は Smithy モデルに対する自己申告で、実 AWS との検証ではない。突合済み（09-28）：主張は GitHub README と一致。HN 議論が独立検証を与えるが第三者ベンチは未だ無し。"
+  },
+  "nura.eco": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Official site of Nura (formerly postmarketOS); first-party announcement source for the rename, including the failed first consensus attempt. Cross-checked (09-28): rename details match the HN discussion of the announcement.",
+    "zh": "Nura（原 postmarketOS）官方网站；更名公告的第一方来源，包括首次共识尝试失败的经历。已交叉核验（09-28）：更名细节与该公告的 HN 讨论串一致。",
+    "jp": "Nura（旧 postmarketOS）公式サイト。改称の一次発信源で、最初の合意形成の失敗経緯も含む。突合済み（09-28）：改称の詳細はアナウンスの HN 議論と一致。"
+  },
+  "ihatethefuture.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "patrickxia's engineering blog; first-person essays that state their own predictive track record and counterarguments. Cross-checked (09-28): the 'normalization of inexplicable failures' essay matches its HN discussion, including the author's self-hedges.",
+    "zh": "patrickxia 的工程博客；第一人称长文，会写明自己的预测记录与反面论点。已交叉核验（09-28）：\"无法解释的失败正在被正常化\"与其 HN 讨论串一致，包括作者的自我限定。",
+    "jp": "patrickxia のエンジニアリングブログ。自身の予測実績や反論まで書き明かす一人称のエッセイ。突合済み（09-28）：「説明のつかない失敗の正常化」は HN 議論と一致。作者自身の留保も含む。"
+  },
+  "changeradar.ai": {
+    "cat": "data",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Third-party API/model-deprecation tracker; useful countdown view of vendor deprecation pages. Cross-checked (09-28): its OpenAI retirement dates (gpt-3.5-turbo-instruct / -1106, Sept 28 2026) match platform.openai.com/docs/deprecations exactly.",
+    "zh": "第三方 API/模型弃用追踪站；以倒计时形式呈现厂商弃用页面，颇为实用。已交叉核验（09-28）：其 OpenAI 退役日期（gpt-3.5-turbo-instruct / -1106，2026年9月28日）与 platform.openai.com/docs/deprecations 完全一致。",
+    "jp": "サードパーティの API/モデル非推奨トラッカー。ベンダーの非推奨ページをカウントダウン形式で見られるのが有用。突合済み（09-28）：OpenAI の退役日付（gpt-3.5-turbo-instruct / -1106、2026年9月28日）は platform.openai.com/docs/deprecations と完全一致。"
   }
 }

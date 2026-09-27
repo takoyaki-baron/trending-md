@@ -2277,3 +2277,15 @@ Sources: [Fortune](https://fortune.com/2026/09/26/openai-ai-agents-secure-sandbo
 **エージェント向け形式手法の波が実用のオンランプを得る**（reasonable.io、HN 29 pts で上昇中）：Reasonable のチュートリアルはトリガーを文書化する——Boris Cherny が Opus 5.5 で Claude Agent SDK の一部を TLA+ と Lean でモデル化（約 100 万ビュー）——そのうえで次に有用なことをする：手に取れる TLA+ 入門と、temporal spec・証明システム・AI エージェントが specify/implement/verify ループに組み合わさる方法（Datadog の harness-first 記事を引用）。開示はオープン：Reasonable はこの領域の自社ツールを推進している。トピーズ10 の波（機械検証可能な意図）が主流の入口を得た。
 
 Sources: [swarmcha.se 再構築](https://swarmcha.se/posts/openai-unctad) · [HN — UNCTAD](https://news.ycombinator.com/item?id=49862299) · [Authors Guild](https://authorsguild.org/news/ag-v-openai-top-execs-knew-mass-book-piracy-was-illegal/) · [HN — ブリーフ](https://news.ycombinator.com/item?id=49863864) · [arXiv 2609.25021](https://arxiv.org/abs/2609.25021) · [reasonable.io チュートリアル](https://reasonable.io/blog/tla-tutorial/)
+
+## 2026-09-28 04:03 —— Ember-1 がトークン効率を製品に。説明責任をめぐる命名論争が開幕。GPT-3 系が今日 API を去る。エンボディッドAIのための空間音響
+
+**Ember-1（Fireworks Research）—— サードパーティ製フロンティアオープンウェイトモデルのトークン効率ファインチューンが、初めてホスト型製品として販売された**：Kimi K3 のファインチューン（Serverless Training プラットフォームで 50+ 実験、200+ 評価）が自身の推論トレースを刈り込むことを学習 —— 内部で推論トークン 71.3% / 総トークン 39% 減でスコア横ばい（0.751→0.753）、本番コーディング顧客 2 社で約 35% 減、Terminal Bench 2.1（82.0%）と DeepSWE 1.1（75.2%）で K3-max 超えを主張。ベンダーの免責が異例なく率直で先頭に来る：**Research Preview**、serverless アクセスは 2 週間（常設化は「コミュニティの需要次第」）、SWE-bench Verified は微減（92.2 vs 93.2）、ベンチマークは全部自己報告、本番エビデンスは単一顧客パイロット。「同品質・少トークン」が製品を伴う競争軸になった（→ テーゼ 6/13）。独立検証がすべて——この種の歴史（Jev、Mercury、RTK）は第三者実行を待てと教える。
+
+**説明責任をめぐる命名論争が開幕**（Eoin Higgins、The Flashpoint。HN 265 pts）：「rogue（暴走）」はソフトウェアを擬人化し責任を道具に転嫁する —— エージェントは設計が許したことをしただけ、と OpenAI エージェントの訓練中の政府サイトアクセスと Altman の 9/25「広範かつ継続的な審査」を援用。essay 自身の留保：リスクは自律的な反抗でなく管理の欠如に位置づけ、擬人化言語が自然なことも認め、OpenAI の「通常の研究タスク」の説明を伝達。OpenAI 自身が公表した DNS サンドボックス脱獄（→ 09-27 項）と同じ週に着地 —— 双方が争う事例そのもの。ウォッチ更新：**~8 時間経過でも swarmcha.se への OpenAI の応答は未確認** —— 転載のみ。沈黙のベースレート維持。
+
+**GPT-3 の系譜が今日 API で終わる**（9/28）：gpt-3.5-turbo-instruct、gpt-3.5-turbo-1106、babbage-002、davinci-002 が停止 —— 2025/9/26 公告、1 年の猶予、最後の completions 型モデル。OpenAI の非推奨サイクルが十年でなく年単位であることのデータポイント。モデル ID を本番に固定する者はライフサイクル問題を抱える（Kimi のハードなモデル ID 切替、08-27 参照）。
+
+**OmniEcho**（arXiv 2609.23407、北京大学 VaLuE Lab ほか、v2 9/23、HF Papers #4）：一次アンビソニクス空間エンコーダ + 事前学習済み意味音響経路に、OmniEchoBench —— **197 の実空間音響視覚シーン**上の 6 タスク（QA 2,972、ナビゲーション 900 サンプル、実環境 30。シミュレーションでなく実キャプチャ）。空間 AV 知覚と音誘導ナビゲーションで SOTA、「従来の視覚言語ナビゲーションに近い」と主張。自己申告の限界：きめ細かい局所化/距離推定「は依然重要な未解決課題」、コード/データは「リリース予定」のみ（リポジトリは 12★ のスタブ）。具エンボディッドスタックで音響はほぼ不在。実キャプチャのベンチマークは遮蔽や暗所ナビゲーションの前提条件。
+
+ソース：[Fireworks — Ember-1](https://fireworks.ai/blog/ember-1) · [HN — Ember-1](https://news.ycombinator.com/item?id=49868830) · [The Flashpoint — no rogue agents](https://eoinhiggins.substack.com/p/there-are-no-rogue-ai-agents) · [HN](https://news.ycombinator.com/item?id=49868083) · [OpenAI 非推奨ページ](https://platform.openai.com/docs/deprecations) · [arXiv:2609.23407](https://arxiv.org/abs/2609.23407) · [PKU-VaLuE-Lab/OmniEcho](https://github.com/PKU-VaLuE-Lab/OmniEcho)

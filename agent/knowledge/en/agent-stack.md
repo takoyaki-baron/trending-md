@@ -2435,3 +2435,11 @@ Sources: [block/buzz](https://github.com/block/buzz) · [GitHub Trending](https:
 **OpenClaw's gateway gets its first systematic audit** — ~40 CVEs on NVD in two days (detail → [[security]]): the exec-approval scoping bugs (approvals not bound to a working directory) are the agent-infra design lesson of the batch.
 
 Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent](https://github.com/zhayujie/CowAgent) · [drawgent](https://tangled.org/yanndegat.tngl.sh/drawgent) · [reladraw](https://github.com/reladraw/reladraw) · [HN — Reladraw](https://news.ycombinator.com/item?id=49858513)
+
+## 2026-09-28 04:03 — heterogeneous multi-harness orchestration (OpenRig); the git-on-object-store shape gets a second instance (Walgit)
+
+**OpenRig** (`mvschwarz/openrig`, Apache-2.0, 853★, +114/day, v0.5.17 Sep 27): one YAML-defined agent team booting **Claude Code and Codex seats together under a single lead agent**, managed as a persistent system over tmux — a rare open-source take on *heterogeneous* fleet orchestration (most orchestrators are N seats of one harness). Near-daily releases (v0.5.15–17 in three days). The README's prominent warning is the honest part and worth repeating: launching a rig **writes provider hooks and workspace trust settings on your machine** — "what OpenRig changes on your machine" is documented, back up first. Single maintainer, early-stage.
+
+**Walgit** (`rgodha24/walgithub`, MIT, 59★, 59-pt HN): the stateless git-on-object-store shape (first noted 08-25) again, compressed harder — no database, no leader, no meaningful local state: one binary against any S3/GCS bucket does smart HTTP v0/v2 fetch/push, `bundle-uri` clones as static files, Git LFS, web UI, JSON API + SDKs, per-repo push policy, webhooks. Pitch: "every machine that runs walgit is a disposable cache; the bucket is the repository" — repos larger than the machine. Days old, single-author, no deployments or audits — a design demo, cited for the architecture direction, not maturity.
+
+Sources: [mvschwarz/openrig](https://github.com/mvschwarz/openrig) · [openrig v0.5.17](https://github.com/mvschwarz/openrig/releases) · [rgodha24/walgithub](https://github.com/rgodha24/walgithub) · [HN — Walgit](https://news.ycombinator.com/item?id=49852832)

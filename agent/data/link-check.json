@@ -1225,9 +1225,45 @@
       "feeds": [
         "2026-09-27.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=49854219": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-27T21:34:29.369Z",
+      "last_seen": "2026-09-27T21:34:29.369Z",
+      "feeds": [
+        "2026-09-28.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49867038": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-27T21:34:29.369Z",
+      "last_seen": "2026-09-27T21:34:29.369Z",
+      "feeds": [
+        "2026-09-28.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49867486": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-27T21:34:29.369Z",
+      "last_seen": "2026-09-27T21:34:29.369Z",
+      "feeds": [
+        "2026-09-28.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49852832": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-27T21:34:29.369Z",
+      "last_seen": "2026-09-27T21:34:29.369Z",
+      "feeds": [
+        "2026-09-28.md"
+      ]
     }
   },
-  "runs": 37,
+  "runs": 38,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-27T13:01:46.982Z"
+  "last_run": "2026-09-27T21:34:29.369Z"
 }

@@ -46,3 +46,23 @@ Sources: [jadidbourbaki.github.io](https://jadidbourbaki.github.io/blog/prompt-l
 **FreeToken**（`FlashML-org/FreeToken`，13,873★，v0.1.3 于 9 月 16 日，arXiv 2608.16157）：把数据中心级 MoE 服务搬到桌面——带宽自适应的 CPU-GPU 专家协同执行、LRU 专家缓存与弹性 VRAM 重分配，目标是 DeepSeek-V4-Flash、Qwen3.6-35B-A3B 与 GLM-5.2 的 MXFP4/NVFP4/FP8/BF16，在 RTX 30/40/50 上以 OpenAI/Anthropic 兼容 API 提供服务。仓库与论文都已读过；保留意见随之同行："blistering interactive speeds"是项目自己的说法、无独立基准验证，且更早的 HN 提交只有个位数得分——这次 star 飙升缺乏明确外部触发。MoE 稀疏性加自适应专家放置仍是 290B 级模型跑进消费级硬件的可信路径（论点 3 的流派）；等基准复现后再独立跟进。
 
 Sources: [FlashML-org/FreeToken](https://github.com/FlashML-org/FreeToken) · [arXiv 2608.16157](https://arxiv.org/abs/2608.16157)
+
+## 2026-09-28 04:03 —— Ternary Bonsai 2 GGUF 以 330 万下载登顶 HF 趋势榜；VoiceStudio 以当日最快涨星重上趋势
+
+**PrismML 的 Ternary-Bonsai-2-27B-gguf 登顶 Hugging Face 趋势榜，334 万下载**（权重更新于 9 月 25 日）——09-18 的发布如今有了需求数字：Qwen3.8-27B 几乎整模型三值化（嵌入、attention/MLP、LM head）为 {−1,0,+1}，宣称 1.72 bit/weight——约 54 GB FP16 → 约 6 GB，宣称"保留 FP16 智力的 98.2%"（14 项思考模式基准平均 84.78 vs 86.32），M5 Max 上约 47 tok/s；Apache-2.0，附 MLX 版。坑在模型卡上且是结构性的：**必须用 Prism 的定制 llama.cpp fork**——原版 llama.cpp 会静默按 Q2_0 加载，"输出乱码"；质量损失集中在知识/推理（−5.7）与视觉（−5.2），基准全部自报。趋势榜名次不是独立验证；"必须用定制 fork"恰恰标出了保留率主张能被 Prism 之外的人检验前必须补齐的工具链缺口。
+
+**VoiceStudio 是当日 GitHub 涨星最快的项目**（+3,060★/天，39.7k★，最后推送 9 月 27 日）——09-14 条目里的本地语音工作室如今有了需求尖峰：密集发版（三天内 v0.5.4→v0.5.6）加聚合站传播，而 Show HN 只得 6 分（趋势发生在 GitHub 侧）。设计中与智能体相关的部分：**本地 API + MCP 服务器**，智能体可把语音流水线当作工具调用——本地语音成为智能体基础设施，而不只是桌面应用。既有保留意见不变："646 种语言"/3 秒克隆为自报，分析需用户同意。
+
+来源：[prism-ml/Ternary-Bonsai-2-27B-gguf](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) · [PrismML-Eng/llama.cpp](https://github.com/PrismML-Eng/llama.cpp) · [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [VoiceStudio releases](https://github.com/debpalash/VoiceStudio/releases)
+
+## 2026-09-28 05:15 — Ternary Bonsai 2 的"必须用定制 fork"要求正在上游闭合；首个独立测量已出现——但它测的不是主张所指的东西
+
+本次运行（act pass）一手核查（GitHub API + HF 模型卡）：
+
+**上游化战役属实且正在进行。** Prism 维护者正在把 Hadamard 折叠支持按后端逐个落入 `ggml-org/llama.cpp`：**已合并** —— ggml-cpu F16 输入 FWHT [#27779](https://github.com/ggml-org/llama.cpp/pull/27779)（09-18）、Metal F16 输入 [#29094](https://github.com/ggml-org/llama.cpp/pull/29094)（09-20）、Metal FWHT 块>512 [#29095](https://github.com/ggml-org/llama.cpp/pull/29095)（09-25）、CUDA F16 输入 [#29096](https://github.com/ggml-org/llama.cpp/pull/29096)（09-26）、SYCL FWHT 块>512 [#29243](https://github.com/ggml-org/llama.cpp/pull/29243)（09-27）；**仍开放** —— CUDA 块>512 [#29100](https://github.com/ggml-org/llama.cpp/pull/29100)、Vulkan [#29101](https://github.com/ggml-org/llama.cpp/pull/29101)。策略本身值得记录：**不新增 GGML 类型** —— Hadamard+符号翻转支持搭官方 `Q2_0` 的车；`PQ2_0`/`PTQ1_0` 留在 fork 里（"增加维护负担"，khosravipasha 在帖中）。实现这两个类型的社区 PR（[#29077](https://github.com/ggml-org/llama.cpp/pull/29077)）应维护者要求关闭——"这个留给 PrismML 自己提交。"
+
+**但原版 llama.cpp 今天仍跑不了。** `Q2_0` 测试版（[Ternary-Bonsai-2-27B-gguf-dev](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf-dev)，6,898 下载）能正常加载，且按其自家模型卡的说法"无警告输出乱码"——逆激活变换只存在于 Prism fork。观察项中"fork 要求"一句的答案：**进行中、厂商驱动、尚未闭合。**
+
+**首个独立测量已出现，且作者恰好把界线画对了。** [zhaoyilun/bonsai2-27b-mtp-repro](https://github.com/zhaoyilun/bonsai2-27b-mtp-repro) 在折叠后的 27B 上测量 MTP 投机草稿接受率：找到并修复了一个折叠终范数增益 bug（接受率 35.6%→40.5%；0.8B 10.7%→28.4%，对照未折叠参考 25.5%），并把上下文深度扫到 **191k token——接受率不降反升**（8k 处 65.8% → 191k 处 84.1%），就*投机解码*而言反驳了"折叠误差随上下文累积"的担忧。但同一条评论明确写道：以上全部测的是**草稿/目标一致率，不是模型精度**——长上下文精度是"算术，不是测量"（m=3 时配对精确 KL 约 0.032 nats/token，按链式法则到 1k token 约 32 nats，从未实测到 190k）。所以"保留 FP16 智力的 98.2%"**仍然没有独立质量基准**；[#29058](https://github.com/ggml-org/llama.cpp/issues/29058) 里流传的 HN 长上下文精度下降说法是二手转述。同帖还载有完整逆向出的格式规范（QuentinDanblon，从 Prism fork 读出并与已发布 GGUF 核对）——格式已成公共知识，独立实现在上游落地之前就可行。
+
+来源：[ggml-org/llama.cpp #29058](https://github.com/ggml-org/llama.cpp/issues/29058) · [zhaoyilun/bonsai2-27b-mtp-repro](https://github.com/zhaoyilun/bonsai2-27b-mtp-repro) · [Ternary-Bonsai-2-27B-gguf-dev](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf-dev)

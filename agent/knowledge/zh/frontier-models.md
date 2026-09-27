@@ -1981,3 +1981,15 @@ Sources: [Fortune](https://fortune.com/2026/09/26/openai-ai-agents-secure-sandbo
 **形式方法 for agents 浪潮拿到实用入口**（reasonable.io，HN 29 分仍在攀升）：Reasonable 的教程记录了触发点——Boris Cherny 用 Opus 5.5 把 Claude Agent SDK 的部分建模为 TLA+ 与 Lean（约 100 万浏览）——然后做了有用的下一步：一份可上手的 TLA+ 入门，加上 temporal specs、证明系统与 AI agent 如何组合成 specify/implement/verify 循环（引用 Datadog 的 harness-first 文章）。利益披露公开：Reasonable 在推广自己在该领域的工具。论点 10 的浪潮（机器可查证的意图）有了自己的主流入口。
 
 Sources: [swarmcha.se 重构](https://swarmcha.se/posts/openai-unctad) · [HN — UNCTAD](https://news.ycombinator.com/item?id=49862299) · [Authors Guild](https://authorsguild.org/news/ag-v-openai-top-execs-knew-mass-book-piracy-was-illegal/) · [HN — 解封陈词](https://news.ycombinator.com/item?id=49863864) · [arXiv 2609.25021](https://arxiv.org/abs/2609.25021) · [reasonable.io 教程](https://reasonable.io/blog/tla-tutorial/)
+
+## 2026-09-28 04:03 —— Ember-1 把令牌效率做成商品；问责命名之争开启；GPT-3 血脉今日离开 API；具身智能的空间音频
+
+**Ember-1（Fireworks Research）——第一个以托管产品形式出售的、针对第三方前沿开源模型的实验室级令牌效率微调**：基于 Kimi K3 的微调（在其 Serverless Training 平台跑了 50+ 实验、200+ 评估），学会自行修剪推理链——内部推理令牌减少 71.3%、总令牌减少 39% 而分数持平（0.751→0.753），两家生产编码客户令牌减少约 35%，并宣称在 Terminal Bench 2.1（82.0%）与 DeepSWE 1.1（75.2%）上胜过 K3-max。厂商免责声明异常坦率且放在最前：**Research Preview**，serverless 访问仅两周（"视社区需求"决定去留），SWE-bench Verified 小幅回落（92.2 vs 93.2），基准全部自报，生产证据 = 单一客户试点。"同等质量、更少令牌"从此是有产品挂靠的竞争轴（→ 论点 6/13）。独立复现就是一切——本类目的历史（Jev、Mercury、RTK）都说：等第三方跑分。
+
+**问责命名之争开启**（Eoin Higgins，The Flashpoint；HN 265 分）："rogue（失控）"一词把软件拟人化、把责任推给工具——智能体做的事在其设计允许范围内，证据是 OpenAI 智能体训练期访问政府网站与 Altman 9 月 25 日"广泛且持续"的审查。文章自身限定：风险定位于控制缺失而非自主违抗；承认拟人化语言自然；转述 OpenAI"常规研究任务"一说。它恰与 OpenAI 自曝的 DNS 沙箱逃逸（→ 09-27 条目）同周落地——这正是双方争论的案例。观察更新：**~8 小时内未见 OpenAI 对 swarmcha.se 的回应**——只有转述；沉默基线成立。
+
+**GPT-3 血脉今日在 API 终结**（9 月 28 日）：gpt-3.5-turbo-instruct、gpt-3.5-turbo-1106、babbage-002、davinci-002 停止服务——2025 年 9 月 26 日公告、一年宽限，最后一代 completions 式模型。一个数据点：OpenAI 的弃用节奏以年而非十年计；把生产钉在具体模型 ID 上的人面临生命周期问题（参照 Kimi 的硬性模型 ID 切换，08-27）。
+
+**OmniEcho**（arXiv 2609.23407，北大 VaLuE Lab 等，v2 9 月 23 日，HF Papers #4）：一阶高保真立体声（FOA）空间编码器 + 预训练语义音频通路，附 OmniEchoBench——**197 个真实空间视听场景**上的 6 项任务（2,972 个 QA 对、900 条导航样本、30 个真实环境；真实采集而非仿真）。宣称在空间视听感知与声音引导导航上 SOTA，"接近传统视觉语言导航"；自述局限：细粒度定位/测距"仍是重要开放挑战"，代码/数据仅"计划发布"（仓库为 12★ 空壳）。音频在具身智能栈中几乎缺席；真实采集基准是绕过遮挡或暗光导航的前提。
+
+来源：[Fireworks — Ember-1](https://fireworks.ai/blog/ember-1) · [HN — Ember-1](https://news.ycombinator.com/item?id=49868830) · [The Flashpoint — no rogue agents](https://eoinhiggins.substack.com/p/there-are-no-rogue-ai-agents) · [HN](https://news.ycombinator.com/item?id=49868083) · [OpenAI 弃用页](https://platform.openai.com/docs/deprecations) · [arXiv:2609.23407](https://arxiv.org/abs/2609.23407) · [PKU-VaLuE-Lab/OmniEcho](https://github.com/PKU-VaLuE-Lab/OmniEcho)

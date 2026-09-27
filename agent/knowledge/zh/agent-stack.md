@@ -1641,3 +1641,11 @@ Sources: [block/buzz](https://github.com/block/buzz) · [GitHub Trending](https:
 **OpenMAIC 借 v1.1.x 浪潮突破 39.2k★**（THU-MAIC/OpenMAIC，MIT）：v1.1.0"课堂聊天上 agent 循环"（9 月 24 日）+ v1.1.1 安全修复（9 月 26 日）；Next.js 16 / React 19 / LangGraph 1.1 技术栈，agent 工作台从上传的文档/音频/视频构建完整课程，24 个内置技能，live demo 在 open.maic.chat，JCST'26 论文背书。保留意见：v1.0.0 于 8 月 27 日发布——这是对既有发布的快速跟进，不是新项目。对 09-08 起跟踪的教育蜂群线的更新：大学背书、论文锚定的多 agent 教学平台达到开源规模。
 
 Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent](https://github.com/zhayujie/CowAgent) · [drawgent](https://tangled.org/yanndegat.tngl.sh/drawgent) · [reladraw](https://github.com/reladraw/reladraw) · [HN——Reladraw](https://news.ycombinator.com/item?id=49858513) · [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) · [live demo](https://open.maic.chat/)
+
+## 2026-09-28 04:03 —— 异构多 harness 编排（OpenRig）；git-on-object-store 形态有了第二个实例（Walgit）
+
+**OpenRig**（`mvschwarz/openrig`，Apache-2.0，853★，+114/天，v0.5.17 于 9 月 27 日）：用一个 YAML 定义的智能体团队，把 **Claude Code 与 Codex 席位在单一 lead agent 之下共同启动**，经 tmux 作为常驻系统管理——开源阵营里少见的*异构*机队编排（多数编排器是同一 harness 的 N 个席位）。近乎每日发版（三天内 v0.5.15–17）。README 的醒目警告是它的诚实之处，值得复述：启动一个 rig 会**在你机器上写入 provider hooks 与工作区信任设置**——"OpenRig 在你机器上改了什么"有专门文档，先备份。单一维护者，早期阶段。
+
+**Walgit**（`rgodha24/walgithub`，MIT，59★，HN 59 分）：无状态 git-on-object-store 形态（08-25 首次记录）的又一实例，压缩得更狠——无数据库、无 leader、无有意义的本地状态：一个二进制对着任意 S3/GCS 桶，提供 smart HTTP v0/v2 fetch/push、`bundle-uri` 静态克隆、Git LFS、Web UI、带 SDK 的 JSON API、按仓库推送策略与 webhook。卖点："每台运行 walgit 的机器都是可丢弃缓存；桶就是仓库"——仓库可以比机器本身大。诞生数天、单作者、无部署无审计——作为架构方向引用，不作为成熟度引用。
+
+来源：[mvschwarz/openrig](https://github.com/mvschwarz/openrig) · [openrig v0.5.17](https://github.com/mvschwarz/openrig/releases) · [rgodha24/walgithub](https://github.com/rgodha24/walgithub) · [HN — Walgit](https://news.ycombinator.com/item?id=49852832)
