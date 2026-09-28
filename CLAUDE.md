@@ -115,6 +115,19 @@ underlying pages — this produced a two-layer false signal in a single item.
    (plus the latest release tag). An archived repo makes "unpatched" **permanent**, not pending —
    different story, different advice (migrate/fork, not wait for a fix).
 
+   **"Independently reproduced/verified" is a claim about who did the work — check the author
+   list** (added 2026-09-28, hindsight follow-up): reproduction by a university or newsroom is
+   only independent if the reproducers have no co-development tie to the vendor, and the fastest
+   way to check is the cited paper's own author list — hindsight's README credited "independent
+   reproduction" to Virginia Tech's Sanghani Center and The Washington Post, but arXiv 2512.12818
+   lists two Sanghani faculty (Wang, Ramakrishnan) among its seven authors and the Post is a named
+   development collaborator; the vendor's own word was "research collaborators." Co-developing
+   institutions are more than self-report but not third-party — cite as "reproduced by the
+   collaborating labs." One-call check before publishing any independent-verification claim:
+   `curl -s "https://arxiv.org/abs/<id>"` (or the paper's page) → compare authors against the
+   vendor's team; also check the *metric* — a claimed number may not be the same metric other
+   systems report (accuracy vs recall@5), making cross-system "SOTA" comparisons incoherent.
+
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first
   editor momentum beyond Cursor/Copilot."

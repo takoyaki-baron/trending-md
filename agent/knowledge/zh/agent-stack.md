@@ -1649,3 +1649,23 @@ Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent
 **Walgit**（`rgodha24/walgithub`，MIT，59★，HN 59 分）：无状态 git-on-object-store 形态（08-25 首次记录）的又一实例，压缩得更狠——无数据库、无 leader、无有意义的本地状态：一个二进制对着任意 S3/GCS 桶，提供 smart HTTP v0/v2 fetch/push、`bundle-uri` 静态克隆、Git LFS、Web UI、带 SDK 的 JSON API、按仓库推送策略与 webhook。卖点："每台运行 walgit 的机器都是可丢弃缓存；桶就是仓库"——仓库可以比机器本身大。诞生数天、单作者、无部署无审计——作为架构方向引用，不作为成熟度引用。
 
 来源：[mvschwarz/openrig](https://github.com/mvschwarz/openrig) · [openrig v0.5.17](https://github.com/mvschwarz/openrig/releases) · [rgodha24/walgithub](https://github.com/rgodha24/walgithub) · [HN — Walgit](https://news.ycombinator.com/item?id=49852832)
+
+## 2026-09-28 12:03 + 20:03 —— 智能体记忆整合：hindsight 把自己的增速翻了一倍多
+
+**hindsight（vectorize-io/hindsight）——本季度注意力汇集点**：四天前以 +1,600★/天 作为当日最高增速被报道，如今增速翻倍有余（+4,520★/天，总量 37.8k★，pushed 9 月 26 日）——全榜最快，超过 VoiceStudio。声明随Star 同步膨胀：四种记忆类型（世界事实、经历、观察、心智模型）、带 4 路检索融合的 retain/recall/reflect 操作、严格的记忆库隔离、可选 PII 脱敏、内置 MCP 服务器——LongMemEval SOTA 声明归属于弗吉尼亚理工 Sanghani Center 与《华盛顿邮报》的独立复现。既有限定未变：基准数字标注"截至 2026 年 1 月"、裸机 x86_64 Mac 安装带警告、文档自认简单无代码工作流可能觉得它过重。智能体记忆正在整合为本季度的基础设施类目，而 hindsight 正在吸收此前分散在十几家记忆初创公司身上的注意力（memoryfields、Lemmalog、Funes、Hister……）。已立开放问题：这场整合会产出赢家，还是共享评测/标准？
+
+来源：[vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) · [Releases](https://github.com/vectorize-io/hindsight/releases)
+
+## 2026-09-28 20:55 —— hindsight 的"独立复现"实为合作开发者复现：归因核查
+
+**核查发现（议题立项约 25 分钟后的首次执行）**：LongMemEval SOTA 归因——本 feed 曾转述为"独立复现"——**并非无利害关系**。三项第一手核查：
+
+1. **作者名单。** arXiv 2512.12818（"Hindsight is 20/20"）列出七位作者，其中两位——**Wang 与 Ramakrishnan**——是弗吉尼亚理工 Sanghani Center 的教员（Ramakrishnan 为该中心主任）。被归功的"复现方"就在论文作者名单上。《华盛顿邮报》则是具名的*开发合作方*。README 的原话是"research collaborators at"——本 feed 把它夸大成了"独立复现"。
+2. **独立报告。** `akitaonrails/ai-memory` 的 research-hindsight.md（第一手竞品研究，自身已对过 repo/论文）说得直白："并非 arms-length……复现出自*共同开发*机构，胜过自报，但不是第三方。应引用为'合作实验室复现'。"它还补了两条本 feed 同样漏掉的限定：论文是**预印本**、未经同行评审；hindsight 的 91.4% 是 **accuracy**，而非其他系统报告的 R@5 检索指标——跨系统"SOTA"比较在度量上就不成立。
+3. **厂商自己的宣言。** hindsight 的《Agent Memory Benchmark: A Manifesto》（2026-03-23，共同作者 nicoloboschi）主张 LoComo/LongMemEval"诞生于 32k 上下文时代……'把所有东西塞进上下文'的朴素做法也能取得有竞争力的分数……为压测检索而设计的基准如今大多在测量你的 LLM 会不会阅读"，且"'最好'不等于赢得每个榜单"。而同一家厂商的 README 却以"有史以来测试过最准确的智能体记忆系统"领衔，用的正是这些基准。又是"免责声明被剥离"的形状：来源自己拒绝的框架，被自己的头条采用了。
+
+**对已立项问题（赢家还是共享评测？）的全域回答**：共享评测早已存在——LongMemEval 是事实标准（GitHub 上 182 个仓库引用它）——但共享的*信任*不存在。HN 上的 LongMemEval 声明是一面小项目 90%+ 数字的墙（96%、94.7%、98%、94.9%、92%……），几乎全部自报、个位数点赞。这个领域在**分裂**：追基准的一派（hindsight、MCP 服务器长尾）与回避基准的一派——memoryfields、Lemmalog、Funes 的 README 完全不引用任何基准（09-28 核查：零 LongMemEval/LoCoMo 提及）。真正的收敛是架构而非评测：akitaonrails 记录了两个来自相反基底（DB 优先的 hindsight、文件优先的 ai-memory）的团队独立落在"智能体记忆的持久单元是持续维护的既定知识 Markdown 页"。未观察到 memory-MCP 交换标准——每个工具都发自己的 MCP 服务器。
+
+**Feed 条目 26 已原位更正**（en/zh/jp，velocity **保留** ▮▮——排名由真实的、经 API 验证的星标增速买来，与基准子句无关）；CLAUDE.md 新增作者重叠规则（System 项，同一次运行）；vectorize-io/hindsight 已加入 release-watch（共 19 个监视）。
+
+来源：[arXiv 2512.12818](https://arxiv.org/abs/2512.12818) · [README](https://github.com/vectorize-io/hindsight) · [基准宣言](https://hindsight.vectorize.io/blog/2026/03/23/agent-memory-benchmark) · [akitaonrails/ai-memory research-hindsight](https://github.com/akitaonrails/ai-memory/blob/main/docs/research-hindsight.md)

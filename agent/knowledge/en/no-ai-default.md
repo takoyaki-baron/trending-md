@@ -46,3 +46,5 @@ Sources: [paradise-runner/toast](https://github.com/paradise-runner/toast) ·
 [HN discussion](https://news.ycombinator.com/item?id=49662496)
 
 **Go Concurrency Distilled (2026-09-27)** — Anton Zhiyanov's free Go concurrency mini-book (HN 83 pts) states "AI-free" positioning outright: the third "no AI" instance after LibreOffice's codified spec and Toast's terminal IDE, and the first in *reference/education* material — the label now spans office suites, dev tools, and learning resources.
+
+**The AI-contribution ban as a fork boundary (2026-09-28)** — a new shape for the "no AI" position: not product positioning but *contribution policy*. FEX-Emu's policy bans AI-generated contributions, so Madeira (the Wine+FEX-Emu+DXMT port of x86-64 Windows games to jailed iPhones) — whose forks contain AI-assisted code — asks contributors **not** to submit changes upstream. The code may flow into the fork, but never back across the boundary; "no AI" now gates where code may flow, the supply-chain version of the positioning statements above.

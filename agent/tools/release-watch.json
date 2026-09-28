@@ -71,6 +71,10 @@
   {
    "repo": "robinber/dream-rsi-spark",
    "why": "Dream-RSI independent reimplementation (thesis 6 / [[frontier-models]]): the DGX Spark section-3 rerun whose own README disclaims an advantage (fixed-policy control scored higher, 23.84× vs 22.65×) — a new push may post the first independent banner-number rerun; any posted result must be read with its own disclaimers attached"
+  },
+  {
+   "repo": "vectorize-io/hindsight",
+   "why": "agent-memory attention sink (thesis 1 / [[agent-stack]]): 39.6k★, the quarter's fastest riser; its LongMemEval SOTA attribution was corrected 09-28 to co-developer reproduction (2 of 7 paper authors are VT Sanghani faculty; WaPo a named dev collaborator — CLAUDE.md author-overlap rule seeded by it). A push/release is a chance the README's 'independently reproduced by research collaborators' phrasing or the benchmark claims change — verify the wording, not just the diff"
   }
  ]
 }

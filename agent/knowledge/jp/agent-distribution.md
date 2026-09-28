@@ -172,3 +172,11 @@ Sources: [buchodi.com 解説](https://www.buchodi.com/chatgpt-now-knows-what-you
 Amazon が Meta の Muse ショッピングエージェントを amazon.com で遮断。The Register の実機検証：椅子を買わせると、Muse は検索ページに届く前に「自動化ブラウザをそのまま遮断するアンチボットウォール」に衝突。記録上の発言：Amazon は Meta が「一方的に無理やり進入しようとした」、認可を求めず、Muse は「顧客の認証情報をキャプチャ・保存しているように見える」と主張；Meta は Muse は「ユーザーのパスワードや決済手段を見れない」と反論——食い違い、どちらも独立検証されていない主張として収録。背景：Amazon は 2023 年からサードパーティのショッピングエージェント（Google、OpenAI、Perplexity）を遮断しており、自社の（Alexa for Shopping、Buy for Me）は動かしている。構造的変化：ユーザー経由のエージェントアクセスは反ハッキング法に違反しないという第9巡回区控訴審の判断が、争いを法廷からボットウォールへ移す——壁の所有者が競合エージェントを運用する側。Sponsored Agents と __obi のスレッドに接続：エージェントに gate を課すプラットフォームが、同じチャネルで収益化もする。
 
 Sources:（英語版と同じ）
+
+## 2026-09-28 12:03 + 20:03 —— Claude Marketplace：調達経済学の到着；AI Overview への不満がデプロイ格差を指名
+
+**Claude Marketplace**（Anthropic 9/23、9/27 に広範な報道）：3 つのカタログを 1 つのストアフロントに統合——2,000 以上のコネクタとプラグイン（Atlassian、Google、Microsoft、Notion、Salesforce……）、CrowdStrike・Cursor・Harvey・Legora・Lovable・Snowflake・Hebbia の Claude 搭載エージェント/製品、Claude Partner Network 経由のコンサル/サービスパートナー（Accenture、BCG、Deloitte）。数より重要な 2 点：買い手は**コミット済み Anthropic 支出の一部**をパートナー製品に充てられる——AI に適用されたクラウドマーケットプレイスの調達経済学、あらゆるエンタープライズクラウドのエコシステムを築いた仕組み——そして開発者は **MCP と Agent Skills** で公開する。Claude Code プラグインディレクトリ（314 プラグイン、9/25）と同じオープン標準であり、このマーケットプレイスはその顧客向けスーパーセット。今のプラットフォーム戦争の主戦場はモデル品質ではなくディストリビューション。
+
+**AI Overview への不満（932 pts、当日最多讨论）**——[[frontier-models]] を交叉参照：ハーネスとデプロイ済み安価モデルの格差が、研究上の限界ではなく消費者製品の失敗として着地。ディストリビューション thesis にとって、これは AI Mode の実測 21.6% 価格偏倚の需要側の鏡：ユーザーが体験するのはモデルではなく、デプロイ判断（クエリ規模での安価モデル）の方。
+
+Sources: [Anthropic 発表](https://claude.com/blog/claude-marketplace) · [BleepingComputer](https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-turns-claude-into-an-ai-marketplace-with-2-000-plus-plugins-and-connectors/) · [sancho.bearblog.dev](https://sancho.bearblog.dev/google-weird/) · [HN](https://news.ycombinator.com/item?id=49870367)

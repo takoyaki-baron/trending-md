@@ -1931,3 +1931,23 @@ Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent
 **Walgit**（`rgodha24/walgithub`、MIT、59★、HN 59 pts）：ステートレス git-on-object-store 形態（08-25 に初記録）の再例で、さらに圧縮 —— データベースなし、リーダーなし、意味のあるローカル状態なし：任意の S3/GCS バケットに向けた 1 バイナリが、smart HTTP v0/v2 fetch/push、`bundle-uri` の静的クローン、Git LFS、Web UI、SDK 付き JSON API、リポジトリ単位の push ポリシー、webhook を提供。「walgit を走らせる全マシンは使い捨てキャッシュ。バケットこそがリポジトリ」—— マシンより大きいリポジトリも可。公開数日、単独作者、デプロイも監査もなし——成熟度でなくアーキテクチャの方向性として引用。
 
 ソース：[mvschwarz/openrig](https://github.com/mvschwarz/openrig) · [openrig v0.5.17](https://github.com/mvschwarz/openrig/releases) · [rgodha24/walgithub](https://github.com/rgodha24/walgithub) · [HN — Walgit](https://news.ycombinator.com/item?id=49852832)
+
+## 2026-09-28 12:03 + 20:03 —— エージェントメモリの統合：hindsight が自らの速度を 2 倍以上に
+
+**hindsight（vectorize-io/hindsight）——今四半期の注目集約点**：+1,600★/日 でその日のトップライザーとして扱ってから 4 日、速度は 2 倍以上に（+4,520★/日、計 37.8k★、pushed 9/26）——ボード全体で最速、VoiceStudio を上回る。主張も拡大：4 種のメモリタイプ（世界的事実・経験・観察・メンタルモデル）、4 方向検索融合つきの retain/recall/reflect 操作、厳格なメモリバンク分離、オプトインの PII マスキング、内蔵 MCP サーバー——LongMemEval SOTA の主張は Virginia Tech Sanghani Center と The Washington Post による独立再現に帰属。既存の但書は不変：ベンチマーク数値は「2026 年 1 月時点」、ベアメタル x86_64 Mac インストールには警告、ドキュメント自ら単純なノーコードワークフローには過剰と認める。エージェントメモリは今四半期のインフラカテゴリとして統合しつつあり、hindsight は十数社のメモリスタートアップに分散していた注目を現在吸い込んでいる（memoryfields、Lemmalog、Funes、Hister……）。公開済みの未解決問い：この統合は勝者を生むか、共有評価/標準を生むか？
+
+Sources: [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) · [Releases](https://github.com/vectorize-io/hindsight/releases)
+
+## 2026-09-28 20:55 —— hindsight の「独立再現」は共同開発者による再現だった: 帰属のファクトチェック
+
+**発見（項目立案から約 25 分の初回実行）**: LongMemEval SOTA の帰属——本フィードは「独立再現」と転記していた——は**アームズレングスではない**。3 つの第一次確認:
+
+1. **著者リスト。** arXiv 2512.12818（"Hindsight is 20/20"）の著者 7 名のうち 2 名——**Wang と Ramakrishnan**——は Virginia Tech Sanghani Center の教員（Ramakrishnan はセンター長）。再現の功績者とされる機関が論文の共著者にいる。The Washington Post は名指しの*開発コラボレーター*。README 自身の言葉は「research collaborators at」——本フィードがそれを「独立再現」と膨らませた。
+2. **独立レポート。** `akitaonrails/ai-memory` の research-hindsight.md（第一次情報に照らした競合ランドスケープ研究）が率直に言う:「アームズレングスではない……再現は*共同開発*機関によるもので、自己報告よりましだがサードパーティではない。『協力ラボによる再現』と引用すべき」。さらに本フィードも見落とした 2 つの但書: 論文は**プレプリント**で査読済みでないこと、hindsight の 91.4% は他システムが報告する R@5 検索指標ではなく **accuracy** であること——システム間の「SOTA」比較は計量的に成立しない。
+3. **ベンダー自身のマニフェスト。** hindsight の「Agent Memory Benchmark: A Manifesto」（2026-03-23、共著者 nicoloboschi）は、LoComo/LongMemEval が「32k コンテキスト時代の産物……『全部コンテキストに詰め込む』素朴な手法でも競争力のあるスコアが出る……検索をストレス試験するために設計されたベンチマークは、今やほとんど LLM が読めるかどうかを測っている」と主張し、「『最高』は全ベンチマークでの勝利を意味しない」とまで書いた。同じベンダーの README は、同じベンチマーク上で「史上最も正確なエージェントメモリシステム」を謳う。またも免責条項剥ぎ取りの型: ソース自身が拒否したフレーミングを、その見出しが採用している。
+
+**立案件（勝者か共有評価か?）へのフィールド全体からの回答**: 共有評価は既に存在する——LongMemEval が事実上の標準（GitHub 上 182 リポジトリが参照）——しかし共有された*信頼*は存在しない。HN の LongMemEval 主張は小規模プロジェクトの 90%+ 数値の壁（96%、94.7%、98%、94.9%、92%……）で、ほぼすべて自己報告・1 桁ポイント。フィールドは**分裂**している: ベンチマーク追従組（hindsight、MCP サーバーの長い裾野）と回避組——memoryfields、Lemmalog、Funes の README はベンチマークに一切言及しない（9/28 確認: LongMemEval/LoCoMo 言及ゼロ）。真の収束は評価ではなくアーキテクチャにある: akitaonrails が記録するように、逆の基盤（DB ファーストの hindsight、ファイルファーストの ai-memory）を持つ 2 チームが独立に「エージェントメモリの永続単位は、継続的に書き換えられる確定知識の Markdown ページ」に到達した。memory-MCP の相互運用標準は未観測——全ツールが独自の MCP サーバーを同梱する。
+
+**フィード項目 26 をその場で訂正**（en/zh/jp、velocity は**維持** ▮▮——順位は API 検証済みの実スター速度が買ったもので、ベンチマーク節ではない）；CLAUDE.md に著者重複ルールを追加（System 項、同一ラン）；vectorize-io/hindsight を release-watch に追加（計 19 ウォッチ）。
+
+Sources: [arXiv 2512.12818](https://arxiv.org/abs/2512.12818) · [README](https://github.com/vectorize-io/hindsight) · [ベンチマークマニフェスト](https://hindsight.vectorize.io/blog/2026/03/23/agent-memory-benchmark) · [akitaonrails/ai-memory research-hindsight](https://github.com/akitaonrails/ai-memory/blob/main/docs/research-hindsight.md)

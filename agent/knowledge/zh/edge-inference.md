@@ -66,3 +66,9 @@ Sources: [FlashML-org/FreeToken](https://github.com/FlashML-org/FreeToken) · [a
 **首个独立测量已出现，且作者恰好把界线画对了。** [zhaoyilun/bonsai2-27b-mtp-repro](https://github.com/zhaoyilun/bonsai2-27b-mtp-repro) 在折叠后的 27B 上测量 MTP 投机草稿接受率：找到并修复了一个折叠终范数增益 bug（接受率 35.6%→40.5%；0.8B 10.7%→28.4%，对照未折叠参考 25.5%），并把上下文深度扫到 **191k token——接受率不降反升**（8k 处 65.8% → 191k 处 84.1%），就*投机解码*而言反驳了"折叠误差随上下文累积"的担忧。但同一条评论明确写道：以上全部测的是**草稿/目标一致率，不是模型精度**——长上下文精度是"算术，不是测量"（m=3 时配对精确 KL 约 0.032 nats/token，按链式法则到 1k token 约 32 nats，从未实测到 190k）。所以"保留 FP16 智力的 98.2%"**仍然没有独立质量基准**；[#29058](https://github.com/ggml-org/llama.cpp/issues/29058) 里流传的 HN 长上下文精度下降说法是二手转述。同帖还载有完整逆向出的格式规范（QuentinDanblon，从 Prism fork 读出并与已发布 GGUF 核对）——格式已成公共知识，独立实现在上游落地之前就可行。
 
 来源：[ggml-org/llama.cpp #29058](https://github.com/ggml-org/llama.cpp/issues/29058) · [zhaoyilun/bonsai2-27b-mtp-repro](https://github.com/zhaoyilun/bonsai2-27b-mtp-repro) · [Ternary-Bonsai-2-27B-gguf-dev](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf-dev)
+
+## 2026-09-28 12:03 + 20:03 —— CoyoPedal：10 美元微控制器上的全尺寸神经音箱建模
+
+**CoyoPedal**（`dashersw/coyopedal`，GPL-3.0，Show HN 100 分）：跑在约 10 美元 Waveshare ESP32-S3-Touch-AMOLED 板上的 Neural Amp Modeler 吉他音箱/效果器——48 kHz 下运行全尺寸 NAM A2 capture（23 层、8 通道 WaveNet），采用**手写 Xtensa 内核的块浮点**，双核按 64 帧块切分。以 USB host 驱动 class-compliant USB 声卡；触屏 UI 用 TSX 编写、**编译为原生 C++**——设备上没有 JavaScript 引擎——同一条 DSP 与模型还有 WASM 版在浏览器里运行。诚实边界：Show HN 热度过后动能放缓。与 LLM 赛道不同口味的边缘推理——微控制器上的实时神经网络 DSP——其"Web 工具链到原生"（TSX→C++）管线在音频之外也值得偷师。
+
+来源：[dashersw/coyopedal](https://github.com/dashersw/coyopedal) · [浏览器演示](https://coyopedal.playtaurus.com/)

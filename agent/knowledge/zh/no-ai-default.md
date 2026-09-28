@@ -29,3 +29,5 @@ created: 2026-09-09
 [HN 讨论](https://news.ycombinator.com/item?id=49662496)
 
 **Go Concurrency Distilled（2026-09-27）**——Anton Zhiyanov 的免费 Go 并发小书（HN 83 分）直接声明"AI-free"定位：继 LibreOffice 的成文规范与 Toast 终端 IDE 之后的第三个"无 AI"实例，也是第一个出现在*参考/教育*材料中的——该标签现已横跨办公套件、开发工具与学习资源。
+
+**AI 贡献禁令作为 fork 边界（2026-09-28）**——"无 AI"立场的新形态：不是产品定位，而是*贡献政策*。FEX-Emu 的政策禁止 AI 生成的贡献，于是 Madeira（把 x86-64 Windows 游戏移植到未越狱 iPhone 的 Wine+FEX-Emu+DXMT 项目）——其 fork 含 AI 辅助代码——要求贡献者**不要**向上游提交修改。代码可以流进 fork，但永不回流越过边界；"无 AI"现在决定代码能流向哪里，是上述定位声明的供应链版本。

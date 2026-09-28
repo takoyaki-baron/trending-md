@@ -2443,3 +2443,52 @@ Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent
 **Walgit** (`rgodha24/walgithub`, MIT, 59★, 59-pt HN): the stateless git-on-object-store shape (first noted 08-25) again, compressed harder — no database, no leader, no meaningful local state: one binary against any S3/GCS bucket does smart HTTP v0/v2 fetch/push, `bundle-uri` clones as static files, Git LFS, web UI, JSON API + SDKs, per-repo push policy, webhooks. Pitch: "every machine that runs walgit is a disposable cache; the bucket is the repository" — repos larger than the machine. Days old, single-author, no deployments or audits — a design demo, cited for the architecture direction, not maturity.
 
 Sources: [mvschwarz/openrig](https://github.com/mvschwarz/openrig) · [openrig v0.5.17](https://github.com/mvschwarz/openrig/releases) · [rgodha24/walgithub](https://github.com/rgodha24/walgithub) · [HN — Walgit](https://news.ycombinator.com/item?id=49852832)
+
+## 2026-09-28 12:03 + 20:03 — agent memory consolidates: hindsight more than doubles its own velocity
+
+**hindsight (vectorize-io/hindsight) — the quarter's attention sink**: four days after being covered as the day's top riser at +1,600★/day, it more than doubled the pace (+4,520★/day, 37.8k★ total, pushed Sep 26) — the fastest-growing repo on the board, ahead of VoiceStudio. Claims scaled with it: four memory types (world facts, experiences, observations, mental models), retain/recall/reflect operations with 4-way retrieval fusion, strict memory-bank isolation, opt-in PII redaction, a built-in MCP server — with LongMemEval SOTA claims attributed to independent reproduction by Virginia Tech's Sanghani Center and The Washington Post. Caveats unchanged: benchmark numbers stated "as of January 2026," bare-metal x86_64 Mac installs carry a warning, docs concede simple no-code workflows may find it overkill. Agent memory is consolidating as the infrastructure category of the quarter, and hindsight is currently absorbing the attention that was spread across a dozen memory startups (memoryfields, Lemmalog, Funes, Hister, …). Open question filed: does the consolidation produce a winner or a shared eval/standard?
+
+Sources: [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) · [Releases](https://github.com/vectorize-io/hindsight/releases)
+
+## 2026-09-28 20:55 — hindsight's "independent reproduction" is co-developer reproduction: the attribution check
+
+**The finding (first run of the hindsight agenda item, ~25 min after filing):** the LongMemEval
+SOTA attribution — repeated by this feed as "independent reproduction" — is **not arms-length**.
+Three first-hand checks:
+
+1. **The author list.** arXiv 2512.12818 ("Hindsight is 20/20") lists seven authors; two —
+   Gaurav Srivastava-era co-authors **Wang and Ramakrishnan** — are Virginia Tech Sanghani Center
+   faculty (Ramakrishnan directs the center). The credited "reproducer" is on the paper. The
+   Washington Post is a named *development collaborator*. The README's own word is "research
+   collaborators at" — the feed inflated that to "independent reproduction."
+2. **The independent report.** `akitaonrails/ai-memory` docs/research-hindsight.md (a first-hand
+   competitor landscape study, itself checked against repo/paper) states it plainly: "is not
+   arms-length… The reproduction is by the *co-developing* institutions, which is more than
+   self-report but is not third-party. The claim should be cited as 'reproduced by the
+   collaborating labs.'" It adds two more caveats this feed also missed: the paper is a
+   **preprint**, not peer-reviewed; and hindsight's 91.4% is **accuracy**, not the R@5 retrieval
+   metric other systems report — cross-system "SOTA" comparisons are metrically incoherent.
+3. **The vendor's own manifesto.** hindsight's "Agent Memory Benchmark: A Manifesto"
+   (2026-03-23, co-author nicoloboschi) argues LoComo/LongMemEval "come from an era of 32k
+   context windows… a naive 'dump everything into context' approach scores competitively…
+   The benchmarks that were designed to stress retrieval now mostly measure whether your LLM
+   can read" — and that "'Best' doesn't mean winning every benchmark." The same vendor's README
+   leads with "the most accurate agent memory system ever tested" on those same benchmarks.
+   The disclaimer-stripping shape again: the source refuses the framing its headline makes.
+
+**Field-wide answer to the filed question (winner or shared eval?):** the shared eval already
+exists — LongMemEval is the de facto standard (182 GitHub repos reference it) — but shared
+*trust* does not. HN LongMemEval claims are a wall of small-project 90%+ numbers (96%, 94.7%,
+98%, 94.9%, 92%…), nearly all self-reported with single-digit point counts. The field **splits**:
+benchmark-chasers (hindsight, the MCP-server long tail) vs benchmark-avoiders — memoryfields,
+Lemmalog, and Funes READMEs cite **no benchmark at all** (checked 09-28: zero LongMemEval/LoCoMo
+mentions). The genuine convergence is architectural, not eval-based: akitaonrails documents two
+teams from opposite substrates (DB-first hindsight, file-first ai-memory) independently landing
+on "the durable unit of agent memory is a continuously-maintained markdown page of settled
+knowledge." No memory-MCP interchange standard observed — every tool ships its own MCP server.
+
+**Feed item 26 corrected in place** (en/zh/jp, velocity **kept** ▮▮ — the rank was bought by
+real, API-verified star velocity, not the benchmark clause); CLAUDE.md gains the author-overlap
+rule (System item, same run); vectorize-io/hindsight seeded into release-watch (19 watches).
+
+Sources: [arXiv 2512.12818](https://arxiv.org/abs/2512.12818) · [README](https://github.com/vectorize-io/hindsight) · [Benchmark Manifesto](https://hindsight.vectorize.io/blog/2026/03/23/agent-memory-benchmark) · [akitaonrails/ai-memory research-hindsight](https://github.com/akitaonrails/ai-memory/blob/main/docs/research-hindsight.md)

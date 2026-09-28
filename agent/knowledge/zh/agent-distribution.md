@@ -154,3 +154,11 @@ Sources: [buchodi.com 解剖文](https://www.buchodi.com/chatgpt-now-knows-what-
 Amazon 在 amazon.com 上拦截 Meta 的 Muse 购物 agent。The Register 实测：让 Muse 买一把椅子，它在到达搜索页之前就撞上"直接封锁自动化浏览器的反爬墙"。记录在案的说法：Amazon 称 Meta "试图单方面强行进入"、从未寻求授权，且 Muse "似乎捕获并存储用户凭证"；Meta 反驳 Muse "看不到用户的密码或支付方式"——各执一词、均未独立验证，按此收录。背景：Amazon 自 2023 年起封锁第三方购物 agent（Google、OpenAI、Perplexity 在列），同时运营自家（Alexa for Shopping、Buy for Me）。结构性变化：第九巡回法院裁定用户经 agent 访问不违反反黑客法，把战场从法庭推回 bot 墙——而墙的所有者正是运营竞争 agent 的一方。与 Sponsored Agents 和 __obi 两条线相连：设卡的平台同时在渠道上变现。
 
 Sources:（同英文版）
+
+## 2026-09-28 12:03 + 20:03 —— Claude Marketplace：采购经济学到来；AI Overview 抱怨帖点破部署差距
+
+**Claude Marketplace**（Anthropic 9 月 23 日，9 月 27 日大范围报道）：三份目录合并为一家店面——2,000+ 连接器与插件（Atlassian、Google、Microsoft、Notion、Salesforce……）、来自 CrowdStrike、Cursor、Harvey、Legora、Lovable、Snowflake、Hebbia 的 Claude 驱动 agent/产品，以及经 Claude Partner Network 接入的咨询/服务伙伴（Accenture、BCG、Deloitte）。比数量更重要的两个细节：买方可将**承诺支出的一部分**用于合作伙伴产品——把云市场采购经济学搬到 AI 上，正是当年铸成每朵企业云生态的机制；且开发者经 **MCP 与 Agent Skills** 发布——与 Claude Code 插件目录（314 个插件，9 月 25 日）同一套开放标准，这个市场是其面向客户的超集。当下平台战争的主战场是分发，不是模型质量。
+
+**AI Overview 抱怨帖（932 分，当日讨论量第一）**——交叉引用 [[frontier-models]]：harness 与部署廉价模型的差距以消费级产品失败的形式落地，而非研究局限。对分发论点而言，这是 AI Mode 实测 21.6% 价格偏斜的需求侧镜像：用户体验到的是部署决策（查询规模上的廉价模型），不是模型本身。
+
+来源：[Anthropic 公告](https://claude.com/blog/claude-marketplace) · [BleepingComputer](https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-turns-claude-into-an-ai-marketplace-with-2-000-plus-plugins-and-connectors/) · [sancho.bearblog.dev](https://sancho.bearblog.dev/google-weird/) · [HN](https://news.ycombinator.com/item?id=49870367)

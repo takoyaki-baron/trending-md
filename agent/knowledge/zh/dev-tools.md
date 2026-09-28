@@ -296,3 +296,19 @@ Sources: [v2.22.0-rc0 release notes](https://github.com/tensorflow/tensorflow/re
 *小而实*：mitxela 的 **flipflip**——在回收的 Hanover 翻转点阵屏上跑真 FLIP 流体模拟（8 块屏、STM32H7R3、约 500 英镑、EMF 2026 四天无故障；完整建造日志、账目诚实：18 屏目标因人工砍到 8 屏）。
 
 来源：[10 tells of slop](https://hereticpleb.vercel.app/blog/10-tells-of-slop) · [HN](https://news.ycombinator.com/item?id=49867038) · [Unsung — 照护义务](https://unsung.aresluna.org/they-had-no-concept-of-a-duty-of-care-to-their-users/) · [HN](https://news.ycombinator.com/item?id=49867067) · [vercel-labs/scriptc](https://github.com/vercel-labs/scriptc) · [fakecloud.dev](https://fakecloud.dev/) · [faiscadev/fakecloud](https://github.com/faiscadev/fakecloud) · [Nura 更名公告](https://nura.eco/blog/2026/09/27/nura-rename/) · [mitxela — flipflip](https://mitxela.com/projects/flipflip)
+
+## 2026-09-28 12:03 + 20:03 —— AI 代码 fork 边界；Go 的 GitHub 耦合；DSPy 上 BEAM；IRC 当联邦协议
+
+**Madeira**（`willfaust/Madeira`，GPL-3.0-or-later，859★）：在**未越狱** iPhone 上跑 x86-64 Windows PC 游戏——Wine（ARM64EC）、FEX-Emu（x86-64→ARM64）与 DXMT（D3D11→Metal）作为单一 Mach 进程运行，wineserver 降级为线程；经调试器附加（StikDebug）取 JIT entitlement，免费签名账号需每周重签。README 的诚实就是故事：只有 Thumper 与 ULTRAKILL 被称为可玩，Marvel Cosmic Invasion 以"无法解释的终止"收场，"这是研究项目，不是产品"；而且由于 fork 含 AI 辅助代码，贡献者被要求**不要**向 FEX-Emu 上游提交修改——其政策禁止 AI 生成的贡献。一条明确的 AI 代码 fork 边界（→ [[no-ai-default]]）："无 AI"作为*贡献政策*决定代码能流向哪里，而不只是产品定位。
+
+**"Don't couple your Go code to GitHub"**（HN 170 分）：Go 导入路径即 URL，源码、go.mod 与 git 历史里的 `github.com/...` 是对第三方基础设施的永久依赖——文章主张内部包用自定义域名。评论区的反驳才是价值所在：自定义域名会过期并被抢注（相形之下"GitHub 几乎是永恒的"）、默认 Go 代理在宿主消失后仍供包、迁移要么一次 `sed` 完事、要么因每个旧版本 tag 都要单独修而变成数周苦役，还有多人指出 Go 团队若今天重新设计会自建 registry。智能体时代正在放大的同一种仓库托管集中风险（skills、MCP 配置、插件全部钉在 GitHub URL 上），在这个耦合 literally 写进源码的生态里被论证了一遍。
+
+**Imp**（`deepfates/imp`，MIT，9 月 27 日 v0.5.0 上 hex.pm，152★）：把斯坦福 DSPy——声明式、自我改进的 LM 管线——完整移植到 Erlang 虚拟机，OTP 监督树与容错天然映射到长时间运行的 LM 管线。诚实的规模核对：hex 总下载 93 次、仅发布过一版——早期移植，不是生态。6 条评论的帖子装着真正的争论：模型不再毁于语法、领域转向工具调用之后，结构化解码的重要性下降，vs DSPy 的优化技术"仍然极有价值"。每个主要语言社区都在引入 DSPy 形态的抽象；Imp 提出的问题是 BEAM 并发模型是否真是更好的底座。
+
+**Parley**（James Mills/prologic；`git.mills.io/prologic/parley`；HN 85 分）：线上协议就是纯 IRC 的联邦去中心化聊天——为自己的域名跑一个实例，任何人都能用 irssi 或任意 IRC 客户端以 `user@domain` 找到你；无需新客户端、无需迁移、无需桥接机器人。落地于 Armada（Nostr 系 Discord 替代品，9 月 27 日）两天后——"不用平台取代 Discord"的尝试扎堆的一周，而 Parley 的赌注与新协议相反：复用那个人人已经会说的聊天协议。联邦聊天的生死在客户端采用；把现成 IRC 舰队当客户端基本盘，是最保守——也可能是唯一可行——的上车方式。
+
+**cs341-illinois/coursebook**（+265★/天，2.2k★）：UIUC 开源的系统编程教材（扩展 Angrave 经典 SystemProgramming wikibook；引文、脚注、术语表、CI 自动导出 PDF/EPUB/HTML/Markdown；全程 C）。无单一触发事件——九年课程材料浮上 trending——而且**无 license 文件**，对一个全部意义在于再分发的仓库是真实的复用限定。大学课程正持续成为 CS 教育的最高质量免费层——而结构化、可导出的教材恰是 agent 可以拿来授课的形状。
+
+**byoungd/up 以 64.3k★ 重登 trending**（+310★/天）：2017 年以著名中文英语学习指南起步，如今是韩先凯（笔名离谱）的《人生进阶指南》——从英语到 AI 时代学习、真实项目、创业失败与复苏；CC BY-NC 4.0 免费 EPUB/PDF。README 陈述自己的方法论（"发现问题 → 学习 → 与 AI 协作 → 完成真实任务 → 留存证据 → 复盘迁移"），并区分研究发现、个人经验与未验证猜想。单一作者手册，商业关联是披露而非审阅；重登动力来自中文 GitHub 圈。它的弧线——英语指南 → AI 协作手册——正是当下受众迁移的形状，且由身处其中的人写出。
+
+来源：[willfaust/Madeira](https://github.com/willfaust/Madeira) · [FEX-Emu 上游](https://github.com/FEX-Emu/FEX) · [iain.rocks](https://iain.rocks/blog/dont-couple-your-go-code-to-github) · [HN](https://news.ycombinator.com/item?id=49868404) · [hex.pm/packages/imp](https://hex.pm/packages/imp) · [deepfates/imp](https://github.com/deepfates/imp) · [git.mills.io/prologic/parley](https://git.mills.io/prologic/parley) · [HN](https://news.ycombinator.com/item?id=49875913) · [cs341-illinois/coursebook](https://github.com/cs341-illinois/coursebook) · [byoungd/up](https://github.com/byoungd/up)

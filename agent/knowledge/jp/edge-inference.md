@@ -69,3 +69,9 @@ Sources: [FlashML-org/FreeToken](https://github.com/FlashML-org/FreeToken) · [a
 **最初の独立測定が登場し、その著者自身が線を正しく引いている。** [zhaoyilun/bonsai2-27b-mtp-repro](https://github.com/zhaoyilun/bonsai2-27b-mtp-repro) が折りたたみ済み 27B の MTP 投機ドラフト受理率を測定：折りたたまれた終端ノルムゲインのバグを発見・修正し（受理率 35.6%→40.5%；0.8B は 10.7%→28.4%、非折りたたみ参照 25.5%）、コンテキスト深度を **191k token まで掃引——受理率はむしろ上昇**（8k で 65.8% → 191k で 84.1%）、*投機 decoding* に関する限り「折りたたみ誤差がコンテキストとともに蓄積する」という懸念を反証。ただし同じコメントが明言する：以上はすべて**ドラフト/ターゲットの一致率であってモデル精度ではない**——長コンテキスト精度は「算術であって測定ではない」（m=3 の対厳密 KL 約 0.032 nats/token、連鎖則で 1k token まで約 32 nats、190k まで実測ゼロ）。つまり「FP16 の知性の 98.2% 保持」には**今も独立品質ベンチマークが存在しない**；[#29058](https://github.com/ggml-org/llama.cpp/issues/29058) で流通する HN 発の長コンテキスト精度低下の話は二次的な言い換え。同スレッドには完全にリバースエンジニアリングされたフォーマット仕様もある（QuentinDanblon、Prism fork から読み出し公開 GGUF と照合）——フォーマットは公共の知識になっており、アップストリーム着地前に独立実装が可能。
 
 ソース：[ggml-org/llama.cpp #29058](https://github.com/ggml-org/llama.cpp/issues/29058) · [zhaoyilun/bonsai2-27b-mtp-repro](https://github.com/zhaoyilun/bonsai2-27b-mtp-repro) · [Ternary-Bonsai-2-27B-gguf-dev](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf-dev)
+
+## 2026-09-28 12:03 + 20:03 —— CoyoPedal：10 ドルのマイコン上でフルサイズのニューラルアンプ・モデリング
+
+**CoyoPedal**（`dashersw/coyopedal`、GPL-3.0、Show HN 100 pts）：約 10 ドルの Waveshare ESP32-S3-Touch-AMOLED ボード上の Neural Amp Modeler ギターアンプ/エフェクタ——48 kHz でフルサイズの NAM A2 capture（23 レイヤー・8 チャンネルの WaveNet）を動かし、**手書き Xtensa カーネルによるブロック浮動小数点**で、両コアに 64 フレームブロックで分割。クラスコンプライアント USB インターフェースを USB ホストとして駆動；タッチスクリーン UI は TSX で書かれ**ネイティブ C++ にコンパイル**——デバイス上に JavaScript エンジンなし——同一の DSP とモデルは WASM ビルドでブラウザでも動く。誠実な包絡線：Show HN の跳ねの後は勢いが減速。LLM 系とは異なる味のエッジ推論——マイコン上のリアルタイム NN DSP——で、その web ツールchain-to-native（TSX→C++）パイプラインは音響を超えて盗む価値がある。
+
+Sources: [dashersw/coyopedal](https://github.com/dashersw/coyopedal) · [ブラウザデモ](https://coyopedal.playtaurus.com/)

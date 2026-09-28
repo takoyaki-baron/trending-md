@@ -30,7 +30,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-27T21:34:03.879Z"
+      "checked": "2026-09-28T13:16:03.014Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -60,7 +60,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-27T21:34:03.879Z"
+      "checked": "2026-09-28T13:16:03.014Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -78,7 +78,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-27T21:34:03.879Z"
+      "checked": "2026-09-28T13:16:03.014Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -88,7 +88,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-27T21:34:03.879Z"
+      "checked": "2026-09-28T13:16:03.014Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -111,7 +111,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-27T21:34:03.879Z"
+      "checked": "2026-09-28T13:16:03.014Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -129,7 +129,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-27T21:34:03.879Z"
+      "checked": "2026-09-28T13:16:03.014Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -139,7 +139,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-27T21:34:03.879Z"
+      "checked": "2026-09-28T13:16:03.014Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -191,13 +191,14 @@
         "0.2.29",
         "0.2.3",
         "0.2.30",
+        "0.2.31",
         "0.2.4",
         "0.2.5"
       ],
-      "checked": "2026-09-27T21:34:03.879Z"
+      "checked": "2026-09-28T13:16:03.014Z"
     }
   },
-  "runs": 68,
+  "runs": 69,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-09-27T21:34:03.879Z"
+  "last_run": "2026-09-28T13:16:03.014Z"
 }

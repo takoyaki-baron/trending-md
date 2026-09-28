@@ -1226,44 +1226,26 @@
         "2026-09-27.md"
       ]
     },
-    "https://news.ycombinator.com/item?id=49854219": {
+    "https://wiki.zimbra.com/wiki/Zimbra_Security_Advisories": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-09-27T21:34:29.369Z",
-      "last_seen": "2026-09-27T21:34:29.369Z",
+      "first_seen": "2026-09-28T13:16:34.752Z",
+      "last_seen": "2026-09-28T13:16:34.752Z",
       "feeds": [
         "2026-09-28.md"
       ]
     },
-    "https://news.ycombinator.com/item?id=49867038": {
+    "https://news.ycombinator.com/item?id=49853476": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-09-27T21:34:29.369Z",
-      "last_seen": "2026-09-27T21:34:29.369Z",
-      "feeds": [
-        "2026-09-28.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49867486": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-09-27T21:34:29.369Z",
-      "last_seen": "2026-09-27T21:34:29.369Z",
-      "feeds": [
-        "2026-09-28.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49852832": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-09-27T21:34:29.369Z",
-      "last_seen": "2026-09-27T21:34:29.369Z",
+      "first_seen": "2026-09-28T13:16:34.752Z",
+      "last_seen": "2026-09-28T13:16:34.752Z",
       "feeds": [
         "2026-09-28.md"
       ]
     }
   },
-  "runs": 38,
+  "runs": 39,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-27T21:34:29.369Z"
+  "last_run": "2026-09-28T13:16:34.752Z"
 }

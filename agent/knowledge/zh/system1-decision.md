@@ -144,3 +144,9 @@ Sources: [browser-use/jev-ultrafast](https://github.com/browser-use/jev-ultrafas
 **Privatemode/Edgeless：GLM-5.3-Flash 零训练追平 Jev**（9 月 26–27 日，HN 54 分）：决策模型类在**精度上不再有差异**。一个提示技巧（给选项编号、把提示在 `choice_index:` 处截断于 assistant 回合中段）加读取选项 token 的 **logits**（vLLM `logprob_token_ids` + `allowed_token_ids` 掩码）就把一个原装 instruct 模型变成单次前向分类器——无需微调。29 个公开数据集上 GLM 与 Jev 胜场 10–10 打平、中位差 0.7 分（p=0.64，不显著）；Laya 落后两者 13–15。成本与限制诚实公开：每百万次决策约 €62 vs Jev 约 €16；延迟随地理翻转；选项数增多时精度下降；把 `true` 改名 `correct` 使 GLM 在一个数据集上丢 20 分；只有 GLM 能处理扫描件（RVL-CDIP 70.2%）。代码与基准开源。护城河之问暂获回答：不是工程、不是数据——而是**延迟、价格、模态**。任何前沿 instruct 模型都距这个类别一次提示之遥，而基准仓库就是下一个挑战者的可复现入口。
 
 Sources: [Privatemode 博客](https://www.privatemode.ai/blog/system-one-from-glm-flash) · [HN](https://news.ycombinator.com/item?id=49857656)
+
+## 2026-09-28 12:03 + 20:03 —— "Jev in the Wild"：生态首次拿到定量地图
+
+**arXiv:2609.30216** 分析了截至 2026 年 9 月 22 日从 GitHub 收集的 **2,170 个公开 Jev 项目**：早期生态经新项目与既有仓库集成两条路径快速增长；**属性判断与评分是主导用途**，而动作选择、内容过滤、模型/工具选择则因领域而异；且**公开注意力集中在路由与界面 agent 上——与项目数量并不相关**。论文自述限定：单一来源、单一时点的 GitHub 公开项目快照；私有与内部部署不可见。经过数周的 Jev 叙事——戏仿、基准、包装器、本地运行器、精度分层——这是第一个非轶事数据点：决策模型生态究竟在用它做什么。注意力与数量背离本身就是分发论点的发现：可见的声量只抽样了路由这一片。
+
+来源：[arXiv:2609.30216](https://arxiv.org/abs/2609.30216) · [HF Papers](https://huggingface.co/papers/2609.30216)
