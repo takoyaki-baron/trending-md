@@ -2011,3 +2011,21 @@ Sources: [swarmcha.se 重构](https://swarmcha.se/posts/openai-unctad) · [HN �
 **"Prompting Claude Opus 5.5"——按版本发布的 harness 调优手册已成体裁**（官方文档；HN 136 分）：不是发布——只是文档——却是今晨 HN 在读的 AI 头条：与 Opus 5 的行为差异、effort 校准、API/聊天两种表面的 thinking 行为、无人值守与多智能体任务、安全护栏拒答、复杂视觉输入。声明基线：输出 token 生成快 30% 以上、倾向用更少 token 完成同一任务、现有 Opus 5 提示词"无需修改即可良好工作"。模型行为已变成足够大的移动靶，厂商要为每个版本维护 harness 调优手册，社区把它当头版读物——文档体裁本身就是趋势（→ 论点 12）。
 
 来源：[BleepingComputer — agent 图片上传](https://www.bleepingcomputer.com/news/artificial-intelligence/openais-ai-agents-accidentally-uploaded-user-provided-images-to-third-party-sites) · [OpenAI 声明](https://openai.com/index/hugging-face-incident-and-the-road-ahead/) · [sancho.bearblog.dev](https://sancho.bearblog.dev/google-weird/) · [HN](https://news.ycombinator.com/item?id=49870367) · [arXiv:2609.31473](https://arxiv.org/abs/2609.31473) · [arXiv:2609.31394](https://arxiv.org/abs/2609.31394) · [Cartesian Hand](https://generalroboticslab.com/cartesian_handv1) · [HN](https://news.ycombinator.com/item?id=49853476) · [基准页面](https://earnanhonestdollar.com/bench) · [HN](https://news.ycombinator.com/item?id=49868753) · [Prompting Opus 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) · [HN](https://news.ycombinator.com/item?id=49874728)
+
+## 2026-09-29 04:03 — Sonnet 5.5 重置中端价位并公开标注自己的评测勘误;FuseReg、Qwen-Image-2.1、PISA
+
+**Claude Sonnet 5.5**(9 月 28 日):$2/M 输入、$10/M 输出(与 Sonnet 5 相同),快 30%+,迄今最快的 Sonnet,1M token 上下文。厂商表:Terminal-Bench 4.0 70.6%(Sonnet 5 为 10.3%)、CursorBench 4.0 55.5%、OSWorld 2.1 80.1%;Artificial Analysis 独立测得 Intelligence Index 56,**216 个模型中第 3**。首个带网络安全专项防护的 Sonnet——高风险 cyber 任务在新的 Cyber Verification Program 下回退到 Sonnet 5(两档防护模式再现,参见 Flash Cyber Fairwind)——另有反蒸馏分类器。**限定条件以公开脚注形式随发布**——这才是更罕见的部分:Anthropic 声明 Opus 5.5 "在复杂、开放性工作中仍明显更强";发布前的 structured-outputs bug"可能低估"了部分分数;与 GPT-6 Sol 的对比可能受一个已修复的图像 bug 影响;AA 标注其异常冗长(评测中 410M 输出 token,中位数 88M)。HN 上流传的"在 Artificial Analysis 上胜过 Fable 5.1"之说,**在我们能找到的任何 AA 页面上都不存在**——已核实,不予复述。厂商评测表由人手工制成,勘误现在也成了发布物的一部分。
+
+**FuseReg**(arXiv:2609.31620,USC PSI Lab,16 位作者含 Randall Balestriero,9 月 25 日;HF 每日论文第一,113 赞):用"在预训练编码器层的*随机子集*上训练"取代手工挑选进入表示自编码器的层;在 ImageNet-256 + DINOv3-L 上,一个 FuseReg decoder 无需重训即可从全层、稀疏、单层融合中重建;仅换 decoder 即可让 RAEv2 DiT-XL 生成器不动的非引导 gFID 降 27%,两阶段都正则化在 DiT-Base 上降 29%。限定:摘要无 limitations 小节;全部数字限于 ImageNet-256 特定编码器/DiT 规模——泛化性未验证。表示自编码器是当前扩散图像模型的地基,这是生态本周就会去试的即插式升级。
+
+**Qwen-Image-2.1**(7B,32 层 single-stream DiT,9 月 14 日)锚定了大半张 HF 趋势榜——本尊第 4,生态衍生在第 2/8/16/18(Comfy-Org 重打包 435 万下载、unsloth GGUF、turbo 变体、一个 106 万下载的无审查 GGUF)。统一文生图 + 编辑:原生 RGBA 透明(生成、编辑、抠出透明图层)、最多 10 张参考图且保持身份、混合粒度注意力 + prefix KV-cache 复用。**模型卡没有任何评测**——只有定性说法和展示图;**Qwen Research License**,非开放商用(打破 Apache 惯例,→ 09-21 条目);无托管推理服务。原生透明 + 多参考编辑的开放组合很罕见;许可证挡住了商用采用。
+
+**PISA**(arXiv:2609.31093,作者含 Lightning-attention 系的 Zhen Qin,9 月 25 日):攻击 block-sparse attention 中剩余的二次开销——对每个 query-block 对打分——用池化的粗到细 key 层级(O(log N) 层)+ LogSumExp 打分逐层缩小候选:O(N log N) 选择,fused Triton kernel 从不实体化分数矩阵。**摘要自带的范围限定:** 无绝对数字;常识推理仅与基线*相当*,赢在检索;仅语言建模评测。若在 LM 评测之外成立,它将落在全注意力(贵)与固定模式稀疏(检索上损失大)之间。
+
+Sources: [Anthropic — Sonnet 5.5](https://www.anthropic.com/claude-sonnet-5-5) · [Artificial Analysis](https://artificialanalysis.ai/models/claude-sonnet-5-5) · [HN](https://news.ycombinator.com/item?id=49881850) · [arXiv:2609.31620](https://arxiv.org/abs/2609.31620) · [HF paper page](https://huggingface.co/papers/2609.31620) · [Qwen/Qwen-Image-2.1](https://huggingface.co/Qwen/Qwen-Image-2.1) · [arXiv:2609.31093](https://arxiv.org/abs/2609.31093) · [HF paper page](https://huggingface.co/papers/2609.31093)
+
+## 2026-09-29 05:06 — act：Ember-1 约 36 小时——评论数三倍，复现仍然不存在
+
+对令牌效率主张（厂商：推理 token −71.3%、质量持平）的第三次核查：HN 主帖（573 分，[id 49868830](https://news.ycombinator.com/item?id=49868830)）评论在约 8 小时内从 39 → 244——注意力在动，验证没有。读帖新增的内容：(a) **基准选择批评**——有评论者对发布文做了 grep："Pareto" 8 处、"Opus 5.5" 0 处，即最强的前沿竞品在"前沿"主张里直接缺席；(b) **与 Kimi K3 同价**——评论者引用（本次未经厂商页面核实）：Ember-1 恰好按 Kimi K3 的 $3.00/$0.30/$15.00 定价，"同样权重、更少干活"也可读成"同样的钱、更少的产出"；(c) 围绕训练数据 FAQ 与"为你的用例优化 Ember-1"加购话术的**数据隐私怀疑子线程**（"整个东西就是广告"）；(d) 基于社区对比图风格相似性的**蒸馏谱系猜测**（Qwen + Gemini 3 Flash）——未核实，不作为事实复述。第三方同 harness 复现仍为零；仍是 Research Preview，无去留决定。类目规律成立：厂商数字先到，社区*观点*很快到，社区*测量*晚到或不来。
+
+Sources: [HN discussion](https://news.ycombinator.com/item?id=49868830) · [fireworks.ai/blog/ember-1](https://fireworks.ai/blog/ember-1)

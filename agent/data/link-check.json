@@ -749,15 +749,6 @@
         "2026-09-21.md"
       ]
     },
-    "https://huggingface.co/Qwen/Qwen-Image-2.1": {
-      "verdict": "transient",
-      "streak": 1,
-      "first_seen": "2026-09-21T12:55:21.232Z",
-      "last_seen": "2026-09-21T12:55:21.232Z",
-      "feeds": [
-        "2026-09-21.md"
-      ]
-    },
     "https://www.bleepingcomputer.com/news/security/researchers-escape-openai-codex-sandbox-to-run-commands-on-host/": {
       "verdict": "transient",
       "streak": 1,
@@ -1243,9 +1234,27 @@
       "feeds": [
         "2026-09-28.md"
       ]
+    },
+    "https://www.reuters.com/business/anthropic-targets-financial-advisers-with-new-claude-tool-2026-09-14": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-28T21:21:23.288Z",
+      "last_seen": "2026-09-28T21:21:23.288Z",
+      "feeds": [
+        "2026-09-29.md"
+      ]
+    },
+    "https://www.npmjs.com/package/@dzhng/jevgrep": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-09-28T21:21:23.288Z",
+      "last_seen": "2026-09-28T21:21:23.288Z",
+      "feeds": [
+        "2026-09-29.md"
+      ]
     }
   },
-  "runs": 39,
+  "runs": 40,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-28T13:16:34.752Z"
+  "last_run": "2026-09-28T21:21:23.288Z"
 }

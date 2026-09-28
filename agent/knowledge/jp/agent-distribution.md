@@ -180,3 +180,11 @@ Sources:（英語版と同じ）
 **AI Overview への不満（932 pts、当日最多讨论）**——[[frontier-models]] を交叉参照：ハーネスとデプロイ済み安価モデルの格差が、研究上の限界ではなく消費者製品の失敗として着地。ディストリビューション thesis にとって、これは AI Mode の実測 21.6% 価格偏倚の需要側の鏡：ユーザーが体験するのはモデルではなく、デプロイ判断（クエリ規模での安価モデル）の方。
 
 Sources: [Anthropic 発表](https://claude.com/blog/claude-marketplace) · [BleepingComputer](https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-turns-claude-into-an-ai-marketplace-with-2-000-plus-plugins-and-connectors/) · [sancho.bearblog.dev](https://sancho.bearblog.dev/google-weird/) · [HN](https://news.ycombinator.com/item?id=49870367)
+
+## 2026-09-29 04:03 — 垂直 monorepo の到来。ベンダーが自社のエージェントTraffic比率をロードマップの根拠として公開
+
+**anthropics/financial-services** — GitHub 週間 #1、38,025★(今週 +2,606):ベンダー所有の monorepo に、名前付き金融ワークフローエージェント(Pitch Agent、Model Builder、GL Reconciler、KYC Screener…)を収録。Claude Cowork プラグインとしてインストール可能、または Managed Agents API でデプロイ可能。トレンドの引き金：「Claude for Financial Advisors」のローンチ(~9/14。Reuters が Schwab/BlackRock/Vanguard のデータ接続を報道)+ リポジトリログの 9/14「Financial Advisors」commit。**限定：**README バナーは出力が「人間のサインオフ段階置き」であり投資・法助言ではないと強調。リリースなし、最終 push は 9/21——スターは製品ローンチの勢いと Anthropic エコシステムの宣伝であって、新しいコードではない。初の大規模な垂直特化エージェント配布プレイ——スキルを製品機能ではなくベンダー monorepo からのインストール可能プラグインとして出荷。あらゆるエンタープライズソフトウェアベンダーが真似するパターン。
+
+**Cloudflare のエージェント利用数値**(`cf` 本体は → [[agent-stack]]):エージェント駆動の Wrangler 利用 ~25%(2026/3)→ 48%、エージェントの日次コマンド種類数は約 2 倍——ベンダーが自社のエージェントトラフィック比率を、エージェント消費者向けにプライマリ CLI を作り直す明示的な根拠として公開。エージェントチャネルはインフラのロードマップを動かすほど大きくなり、ベンダーはそれを口に出すようになった。
+
+Sources: [anthropics/financial-services](https://github.com/anthropics/financial-services) · [Reuters launch coverage](https://www.reuters.com/business/anthropic-targets-financial-advisers-with-new-claude-tool-2026-09-14) · [Cloudflare blog](https://blog.cloudflare.com/cloudflare-cf-cli-launch/)

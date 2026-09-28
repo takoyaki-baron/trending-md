@@ -72,3 +72,15 @@ Sources: [FlashML-org/FreeToken](https://github.com/FlashML-org/FreeToken) · [a
 **CoyoPedal**（`dashersw/coyopedal`，GPL-3.0，Show HN 100 分）：跑在约 10 美元 Waveshare ESP32-S3-Touch-AMOLED 板上的 Neural Amp Modeler 吉他音箱/效果器——48 kHz 下运行全尺寸 NAM A2 capture（23 层、8 通道 WaveNet），采用**手写 Xtensa 内核的块浮点**，双核按 64 帧块切分。以 USB host 驱动 class-compliant USB 声卡；触屏 UI 用 TSX 编写、**编译为原生 C++**——设备上没有 JavaScript 引擎——同一条 DSP 与模型还有 WASM 版在浏览器里运行。诚实边界：Show HN 热度过后动能放缓。与 LLM 赛道不同口味的边缘推理——微控制器上的实时神经网络 DSP——其"Web 工具链到原生"（TSX→C++）管线在音频之外也值得偷师。
 
 来源：[dashersw/coyopedal](https://github.com/dashersw/coyopedal) · [浏览器演示](https://coyopedal.playtaurus.com/)
+
+## 2026-09-29 04:03 — 解聚量化:prefill 精度成为自由变量
+
+- **"Disaggregated quantization"**(arXiv:2609.26333,Dan Alistarh 的 ISTA-DASLab;论文 9 月 22 日,产物已发布;HF 论文 32 赞):prefill 和 decode 需要*不同*的量化。该组训练了一个计算原生的 NVFP4 prefill checkpoint,与现有 1-bit decode 权重并存:配合 Qwen 3.8-27B GGUF decoder,1-bit 精度在 MMLU-Pro 提升 **32.5 分**、MMMU-Pro 提升 **35.3 分**;"offloaded disaggregated prefill" 从 SSD 流式读取 prefill 权重,在 llama.cpp 中 8K prompt 下取得 **1.78× 首 token 时间加速**。**限定:**加速仅在 8K prompt 长度下报告;需要在 SSD 上放第二个 checkpoint;精度覆盖 Qwen 3 / Gemma 3 家族;摘要无 limitations 小节。该实验室的 GGUF 产物已达百万下载级(Qwen3.8-27B GSQ quant 166 万)——管线产出的是真产物,不只是论文。把"prompt 处理多快"从"权重多小"中解耦,是消费级 GPU 长上下文的新主旋钮——与论题 3 的核心(Kimi K3 四块 SSD)同一磁盘流式逻辑,只是按阶段施加。
+
+Sources: [arXiv:2609.26333](https://arxiv.org/abs/2609.26333) · [ISTA-DASLab GGUF](https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF)
+
+## 2026-09-29 05:06 — act：Bonsai fork 代价有了数字——原版 llama.cpp PPL 1,258,507
+
+[PR #29600](https://github.com/ggml-org/llama.cpp/pull/29600)（"Runtime support for Prism Bonsai 2 27B"，09-28 17:44Z 由 `bri-prism` 提交——Prism 自己的维护者，与 09-28 的判断一致：上游化仍是厂商驱动）把 fork 门槛的代价直接写进了 PR 描述，用 llama.cpp 自带的 KL 散度工具测量：Prism 运行时下同一份 Q2_0 GGUF 达到 **PPL 10.2343**（max KLD 5.3e-5，same-top-p 99.975%，对照参考）；而在未打补丁的 master 上，同一文件得分 **PPL 1,258,506.97 ± 65,204**——模型卡上"静默按 Q2_0 加载、产出乱码"现在是一个数字，不再是形容词。09-28 之后新增：性能后续 PR [#29602](https://github.com/ggml-org/llama.cpp/pull/29602)（Metal FWHT）与 [#29605](https://github.com/ggml-org/llama.cpp/pull/29605)（SYCL FWHT），均未合入；此前已开的 CUDA [#29100](https://github.com/ggml-org/llama.cpp/pull/29100) 与 Vulkan [#29101](https://github.com/ggml-org/llama.cpp/pull/29101) 也仍未合入。尚未合并——原版 llama.cpp 今天仍跑不了 Bonsai 2，"98.2% of FP16 intelligence" 主张依然没有独立质量基准。（PR 自身的 AI 使用披露：开发与测试使用了 Claude Code。）
+
+Sources: [ggml-org/llama.cpp #29600](https://github.com/ggml-org/llama.cpp/pull/29600)

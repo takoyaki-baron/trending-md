@@ -162,3 +162,11 @@ Sources:（同英文版）
 **AI Overview 抱怨帖（932 分，当日讨论量第一）**——交叉引用 [[frontier-models]]：harness 与部署廉价模型的差距以消费级产品失败的形式落地，而非研究局限。对分发论点而言，这是 AI Mode 实测 21.6% 价格偏斜的需求侧镜像：用户体验到的是部署决策（查询规模上的廉价模型），不是模型本身。
 
 来源：[Anthropic 公告](https://claude.com/blog/claude-marketplace) · [BleepingComputer](https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-turns-claude-into-an-ai-marketplace-with-2-000-plus-plugins-and-connectors/) · [sancho.bearblog.dev](https://sancho.bearblog.dev/google-weird/) · [HN](https://news.ycombinator.com/item?id=49870367)
+
+## 2026-09-29 04:03 — 垂直 monorepo 到来;厂商公布自家 agent 流量占比作为路线图依据
+
+**anthropics/financial-services** — GitHub 周榜第 1,38,025★(本周 +2,606):厂商所有的垂直 monorepo,收录命名的金融工作流 agent(Pitch Agent、Model Builder、GL Reconciler、KYC Screener……),可作为 Claude Cowork 插件安装或经 Managed Agents API 部署。趋势触发因素:"Claude for Financial Advisors" 发布(~9 月 14 日,Reuters 报道接入 Schwab/BlackRock/Vanguard 数据)+ 仓库日志中 9 月 14 日的 "Financial Advisors" commit。**限定:**README 横幅强调输出"经人工签核",不构成投资/法律建议;无 releases,最后 push 9 月 21 日——star 是产品发布动能加 Anthropic 生态推广,不是新代码。首个大规模垂直专属 agent 分发打法——技能以可安装插件形式出自厂商 monorepo,而非产品特性;每个企业软件厂商都会照抄的模式。
+
+**Cloudflare 的 agent 用量数字**(→ [[agent-stack]] 看 `cf` 本体):agent 驱动的 Wrangler 用量 ~25%(2026 年 3 月)→ 48%,agent 每天使用的不同命令数约 2 倍——厂商公布自家 agent 流量占比,作为围绕 agent 消费者重建主 CLI 的明确依据。agent 渠道已大到能推动基础设施路线图,且厂商开始明说。
+
+Sources: [anthropics/financial-services](https://github.com/anthropics/financial-services) · [Reuters launch coverage](https://www.reuters.com/business/anthropic-targets-financial-advisers-with-new-claude-tool-2026-09-14) · [Cloudflare blog](https://blog.cloudflare.com/cloudflare-cf-cli-launch/)

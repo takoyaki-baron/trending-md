@@ -9139,5 +9139,32 @@
     "en": "Third-party API/model-deprecation tracker; useful countdown view of vendor deprecation pages. Cross-checked (09-28): its OpenAI retirement dates (gpt-3.5-turbo-instruct / -1106, Sept 28 2026) match platform.openai.com/docs/deprecations exactly.",
     "zh": "第三方 API/模型弃用追踪站；以倒计时形式呈现厂商弃用页面，颇为实用。已交叉核验（09-28）：其 OpenAI 退役日期（gpt-3.5-turbo-instruct / -1106，2026年9月28日）与 platform.openai.com/docs/deprecations 完全一致。",
     "jp": "サードパーティの API/モデル非推奨トラッカー。ベンダーの非推奨ページをカウントダウン形式で見られるのが有用。突合済み（09-28）：OpenAI の退役日付（gpt-3.5-turbo-instruct / -1106、2026年9月28日）は platform.openai.com/docs/deprecations と完全一致。"
+  },
+  "upguard.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "UpGuard's research blog — original exposure studies with methodology disclosed (scan scope, sampling bias). Cross-checked (09-29): its 16,326-readable-Supabase-databases finding matches BleepingComputer's independent report and the RLS-default mechanism is quoted from Supabase's own docs; its stated caveats ('skews toward PII… users table') were carried into coverage.",
+    "jp": "UpGuardの調査ブログ。手法（走査範囲・サンプリング偏向）を開示する独自の漏洩調査。クロスチェック済み（09-29）：読み取り可能なSupabase DB 16,326件の発見はBleepingComputerの独立報道と一致し、RLSデフォルトの仕様はSupabase自身のドキュメントから引用。同社の注意点（「usersテーブル照会のためPIIに偏る」）も報道に反映された。",
+    "zh": "UpGuard 的研究博客——原创暴露面研究，披露方法论（扫描范围、抽样偏差）。已交叉核验（09-29）：其“16,326 个可公开读取的 Supabase 数据库”发现与 BleepingComputer 的独立报道一致，RLS 默认机制引自 Supabase 自己的文档；其自述注意事项（“因查询 users 表而偏向 PII”）也已带入报道。"
+  },
+  "usemagpie.ai": {
+    "cat": "vendor",
+    "cred": "low",
+    "cv": 1,
+    "density": "med",
+    "en": "Promotional landing page for magpie (yetone/magpie), a local model-routing gateway for coding agents — vendor self-description only; feature claims (protocol translation, intent routing, account pooling) verified against the repo README, not independently benchmarked.",
+    "jp": "コーディングエージェント向けローカル・モデルルーティングゲートウェイ magpie（yetone/magpie）の宣伝ランディングページ——ベンダーの自己説明のみ。機能の主張（プロトコル翻訳・意図ルーティング・アカウントプーリング）はリポジトリREADMEと照合したが、独立ベンチマークはない。",
+    "zh": "magpie（yetone/magpie）的推广落地页——面向编码智能体的本地模型路由网关。仅为厂商自述；功能声明（协议翻译、意图路由、账号池化）已与仓库 README 核对，但无独立评测。"
+  },
+  "definitelynotwindows.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Unofficial interactive parody OS site ('Windows 11½') — satire exaggerating current subscription/ads practices; explicitly disclaims Microsoft affiliation and requests no real credentials. Cross-checked (09-29): its virality (288+ HN points) verified via Algolia; useful only as a sentiment signal, never as a factual source.",
+    "jp": "非公式のインタラクティブなパロディOSサイト（「Windows 11½」）——サブスク・広告慣行を誇張した風刺。Microsoftとの無関係を明示し、実認証情報は求めない。クロスチェック済み（09-29）：拡散度（HN 288+ポイント）はAlgoliaで確認。事実源としては使えず、センチメントのシグナルとしてのみ有用。",
+    "zh": "非官方的交互式恶搞操作系统网站（“Windows 11½”）——把现行订阅/广告惯例推向极端的讽刺作品；明确声明与微软无关、不索取真实凭据。已交叉核验（09-29）：其传播度（HN 288+ 分）经 Algolia 确认；仅可作为情绪信号，绝不可作为事实来源。"
   }
 }

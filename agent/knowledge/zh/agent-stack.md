@@ -1669,3 +1669,17 @@ Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent
 **Feed 条目 26 已原位更正**（en/zh/jp，velocity **保留** ▮▮——排名由真实的、经 API 验证的星标增速买来，与基准子句无关）；CLAUDE.md 新增作者重叠规则（System 项，同一次运行）；vectorize-io/hindsight 已加入 release-watch（共 19 个监视）。
 
 来源：[arXiv 2512.12818](https://arxiv.org/abs/2512.12818) · [README](https://github.com/vectorize-io/hindsight) · [基准宣言](https://hindsight.vectorize.io/blog/2026/03/23/agent-memory-benchmark) · [akitaonrails/ai-memory research-hindsight](https://github.com/akitaonrails/ai-memory/blob/main/docs/research-hindsight.md)
+
+## 2026-09-29 04:03 — 首个面向 agent 的大型云厂商 CLI;agent 约束进入硅片;"代码之后"的空白有了技能
+
+**Cloudflare 发布 `cf`**(开放 beta):从零重写的 Wrangler 继任者,覆盖**全部 3,000+ Cloudflare API 操作**(Wrangler 约 280 个),由新开源的 Forge 管线从 OpenAPI schema 生成,默认 JSON 输出,并通过自然语言 `cf cli search` 索引在首次 `--help` 时向 agent 自我介绍。声明的触发因素是 Cloudflare 自己的数字:agent 驱动的 Wrangler 用量从 ~25%(2026 年 3 月)升至**"上周"的 48%**,且 agent 每天使用的不同命令数约是人类的两倍。博客自带的限定:Rust/Python 及依赖 esbuild 的 Workers 仍委托给 Wrangler;beta 结束后 Wrangler 将获得最后一个主版本加 **18 个月维护**——每个 Cloudflare 项目都有了明确的迁移期限。仓库才几天大,无采用数据。首个围绕 agent 消费者设计主 CLI 的大型基础设施厂商。
+
+**NVIDIA Open Agent Safety Platform**(9 月 28 日):**OpenShell**,Apache-2.0 沙箱运行时,把运维指令转换为可验证策略(允许的文件、网络、工具、进程、凭据);**Sentry**,BlueField-4 DPU 参考设计,在一个"对 agent 不可见"的隔离芯片上监控 agent 活动——在 Vera Rubin 机架上它位于节点通往模型的唯一通路上——毫秒级隔离加 kill switch。合作伙伴:Anthropic、Salesforce、JPMorganChase、Citi。**报道附带的限定:** The Decoder 指出 NVIDIA 未给出 Sentry 检出逃逸的可靠性数据;Sentry 检查请求、身份和访问——**不检查 agent 推理**——通过已批准通道的 prompt injection exfiltration 仍然无解;CNBC"本可阻止 HuggingFace 事件"的说法强于 NVIDIA 原文(仅称支持检测);GA 时间只有"一次软件更新"的说法。首个把带外 agent 约束产品化的超大规模硅片厂商——对今夏沙箱逃逸系列的机构级回应,且诚实写明了局限(周边,非意图)。
+
+**golive-skill**(mikehasa,v0.1.0-alpha.5,9 月 23 日起 ~175★/天):瞄准技术栈中工具最少的环节——应用写完之后:检测需要什么、规划基础设施变更、要求批准、用用户自己的登录执行(Vercel/Netlify、Supabase/Neon、Porkbun/GoDaddy DNS、Resend、Stripe test-mode)、验证、记录、可拆除。**README 异常坦诚:**回滚"范围窄、需 opt-in、绝不自动",且仅支持 Netlify;promotion/rollback 是 mock 覆盖、"未实测验证";明文 0600 凭据文件"不是 keychain";并点名了结构性漏洞——确认标志只是 agent 代你传递的参数:"已登录你提供商的 agent 完全可以不经 golive plan 直接写入。" 这是账户类技能应如何区分"代码强制"与"仅是给 agent 的指示"的模板。
+
+**Cua 更名为"computer-use 2.0"**(周榜第 13,26,833★):macOS/Windows/Linux 开源桌面自动化驱动(`cua-driver-rs` v0.30.3)、隔离云桌面"Fleets"、Apple Silicon 本地 macOS/Linux VM(Lume)、CUA-S1 专家决策模型——driver + fleet + eval 三层整合于一套。限定:README 高度漏斗形(商业 `run.cua.ai` 置顶、trendshift 徽章);基准声明未经独立验证。
+
+**Tencent WeKnora v0.8.2**(9 月 24 日;周榜第 6,30,919★):沙箱化 agent 工具统一、**按工具粒度的 MCP 启用开关**、管理员建号 UI,以及路径穿越修复(本地前缀、任务 ID、wiki 排序参数)。维护活跃(9 月 28 日有 push);文档中文优先。知识平台吸收 agent 治理特性,是 RAG × agent 基建的安静合流。
+
+Sources: [Cloudflare blog](https://blog.cloudflare.com/cloudflare-cf-cli-launch/) · [cloudflare/cf](https://github.com/cloudflare/cf) · [HN](https://news.ycombinator.com/item?id=49879577) · [NVIDIA developer blog](https://developer.nvidia.com/blog/nvidia-open-agent-safety-platform-a-reference-for-continuous-in-silicon-agent-monitoring/) · [The Decoder](https://the-decoder.com/nvidia-wants-to-keep-ai-agents-on-a-short-leash-with-a-watchdog-built-into-its-chips) · [mikehasa/golive-skill](https://github.com/mikehasa/golive-skill) · [trycua/cua](https://github.com/trycua/cua) · [Tencent/WeKnora](https://github.com/Tencent/WeKnora) · [v0.8.2 release notes](https://github.com/Tencent/WeKnora/releases)

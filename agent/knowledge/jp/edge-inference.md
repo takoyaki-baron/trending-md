@@ -75,3 +75,15 @@ Sources: [FlashML-org/FreeToken](https://github.com/FlashML-org/FreeToken) · [a
 **CoyoPedal**（`dashersw/coyopedal`、GPL-3.0、Show HN 100 pts）：約 10 ドルの Waveshare ESP32-S3-Touch-AMOLED ボード上の Neural Amp Modeler ギターアンプ/エフェクタ——48 kHz でフルサイズの NAM A2 capture（23 レイヤー・8 チャンネルの WaveNet）を動かし、**手書き Xtensa カーネルによるブロック浮動小数点**で、両コアに 64 フレームブロックで分割。クラスコンプライアント USB インターフェースを USB ホストとして駆動；タッチスクリーン UI は TSX で書かれ**ネイティブ C++ にコンパイル**——デバイス上に JavaScript エンジンなし——同一の DSP とモデルは WASM ビルドでブラウザでも動く。誠実な包絡線：Show HN の跳ねの後は勢いが減速。LLM 系とは異なる味のエッジ推論——マイコン上のリアルタイム NN DSP——で、その web ツールchain-to-native（TSX→C++）パイプラインは音響を超えて盗む価値がある。
 
 Sources: [dashersw/coyopedal](https://github.com/dashersw/coyopedal) · [ブラウザデモ](https://coyopedal.playtaurus.com/)
+
+## 2026-09-29 04:03 — 分離量子化(disaggregated quantization):prefill 精度が自由変数になる
+
+- **「Disaggregated quantization」**(arXiv:2609.26333、Dan Alistarh の ISTA-DASLab。論文 9/22、成果物は出荷中。HF 論文 32 票)：prefill と decode には*異なる*量子化が要る。このグループは計算ネイティブな NVFP4 prefill チェックポイントを学習し、既存の 1-bit decode 重みと並べた。Qwen 3.8-27B GGUF デコーダと組み合わせると、1-bit 単体比で MMLU-Pro **+32.5 点**、MMMU-Pro **+35.3 点**。さらに「offloaded disaggregated prefill」が prefill 重みを SSD からストリーミングし、llama.cpp の 8K プロンプトで weight-only 推論比 **1.78× の time-to-first-token 高速化**。**限定：**高速化は 8K プロンプト長でのみ報告。SSD 上に第 2 チェックポイントが必要。精度は Qwen 3 / Gemma 3 ファミリのみ。アブストラクトに limitations セクションなし。同ラボの GGUF 成果物は既に百万 DL 規模(Qwen3.8-27B GSQ quant で 166 万)——パイプラインは論文だけでなく実物を出している。「プロンプト処理がどれだけ速いか」を「重みがどれだけ小さいか」から切り離すのは、コンシューマ GPU 長コンテキストの新しい主ノブ——thesis 3 の核心(Kimi K3 を 4 枚の SSD から)と同じディスクストリーミング論理をフェーズ単位で適用したもの。
+
+Sources: [arXiv:2609.26333](https://arxiv.org/abs/2609.26333) · [ISTA-DASLab GGUF](https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF)
+
+## 2026-09-29 05:06 — act：Bonsai の fork コストに数字が付く——素の llama.cpp で PPL 1,258,507
+
+[PR #29600](https://github.com/ggml-org/llama.cpp/pull/29600)（「Runtime support for Prism Bonsai 2 27B」、09-28 17:44Z に `bri-prism` がオープン——Prism 自身のメンテナーであり、09-28 の読み通り上流化はベンダー主導のまま）が、fork 要件のコストを PR 本文自体に、llama.cpp 独自の KL ダイバージェンス harness で測定して記録している:Prism ランタイムでは同一の Q2_0 GGUF が **PPL 10.2343**（max KLD 5.3e-5、same-top-p 99.975%、参照対比）。一方、未パッチの master では同じファイルが **PPL 1,258,506.97 ± 65,204**——モデルカードの「黙って Q2_0 として読み込み、garbage を出す」が形容詞ではなく数値になった。09-28 以降の追加:性能フォローアップ [#29602](https://github.com/ggml-org/llama.cpp/pull/29602)(Metal FWHT) と [#29605](https://github.com/ggml-org/llama.cpp/pull/29605)(SYCL FWHT) がオープン、いずれも未マージ。既出の CUDA [#29100](https://github.com/ggml-org/llama.cpp/pull/29100) と Vulkan [#29101](https://github.com/ggml-org/llama.cpp/pull/29101) も未マージのまま。まだマージされていない——素の llama.cpp は今日も Bonsai 2 を実行できず、「98.2% of FP16 intelligence」の主張には依然として独立品質ベンチマークがない。（PR 自身の AI 利用開示:開発とテストに Claude Code を使用。）
+
+Sources: [ggml-org/llama.cpp #29600](https://github.com/ggml-org/llama.cpp/pull/29600)

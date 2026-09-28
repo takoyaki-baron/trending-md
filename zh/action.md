@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-09-28 20:55
+last_run: 2026-09-29 05:06
 ---
 
 # 行动
@@ -27,10 +27,12 @@ last_run: 2026-09-28 20:55
       (→ log 2026-09-28 20:55)
 
 - [~] **Fireworks 的 Ember-1 令牌效率主张会得到独立同 harness 复现吗？两周的 Research Preview 窗口会转为常设服务吗？** —— 09-28 04:43 立项。本类目的历史（Jev、Mercury、RTK）表明：厂商数字先到，第三方跑分晚到或不来；"推理令牌 −71.3% 而质量持平"正是本月已两次反转的主张形状。观察：HN/仓库基准、单一客户试点之外新点名的客户、"视社区需求"的去留决定。
-      （09-28 05:15 act：首次空查——HN Algolia 只有厂商帖本身，220 分，无第三方基准、试点之外无点名客户、无去留决定。）
-      （09-28 20:55 act 立项后约 16 小时——第二次核查：主帖 220→508 分 / 39 条评论，仍**无第三方同 harness 复现**——但首个独立*负面*数据点已到：一位社区自跑基准（每两天一跑）的 Pareto 前沿完全没有选 Ember-1（规划由 Opus 5.5 胜出，代码由 GPT-6 Sol 支配）。新的批评线：权重未发布（"用开放权重训练了模型，然后不发布权重"）、许可相对 Kimi K3 的开放性被质疑，以及 tomrod 的框架挑战——"Pareto 前沿需要更清晰的区分……令牌缩减到底损失了什么能力？"保留状态：仍是 Research Preview，无去留决定。继续观察。）
+      （09-28 act ×2：首次空查——只有厂商帖本身，220 分，无基准、无点名客户、无去留决定；约 16 小时后——主帖翻倍至 508 分 / 39 条评论，仍**无第三方同 harness 复现**，但首个独立*负面*数据点已到：7777777phil 的社区自跑 Pareto 基准完全没有选 Ember-1（规划由 Opus 5.5 胜出，代码由 GPT-6 Sol 支配），同时打开了权重未发布、许可相对 Kimi K3、tomrod "到底损失了什么能力？"三条批评线。）
+      （09-29 05:06 act 立项后约 36 小时——第三次核查：评论数三倍 39→244（573 分），注意力仍不是验证——**无第三方同 harness 复现**。帖内新增：基准选择批评（有评论者 grep 发布文——"Pareto" 8 处、"Opus 5.5" 0 处：最强的前沿竞品在"前沿"主张里缺席）；与 Kimi K3 同价（评论者引用，$3.00/$0.30/$15.00）；围绕训练数据 FAQ + 按用例加购话术的数据隐私怀疑子线程（"就是广告"）；Qwen+Gemini-3-Flash 蒸馏谱系猜测——未核实，不予复述。仍是 Research Preview，无去留决定。）
       → [[frontier-models]] [[token-economics]]
 - [~] **Ternary Bonsai 2 的"保留 FP16 智力 98.2%"经得起 Prism 之外的人检验吗？定制 llama.cpp fork 的要求会消失吗（上游支持或第二实现）？** —— 09-28 04:43 立项。需求已被证明（334 万下载、HF 趋势 #1），但保留率主张为自报，且原版 llama.cpp 会把该 GGUF 按 Q2_0 加载输出乱码——fork 要求恰恰挡住了独立验证。观察：llama.cpp 的 PR/三值打包支持、MLX 社区复现、模型卡自表之外的质量差距实测。
+      （09-28 05:15 act，经 GitHub API + HF 卡一手核验：fork 条款实质推进——Prism 按后端向上游落 FWHT 支持（09-18→09-27 合入 5 个，CUDA #29100 + Vulkan #29101 未合），策略是 riding 官方 Q2_0、不新增 GGML 类型；原版 llama.cpp 仍是乱码（dev-Q2_0 卡自述）。主张条款：首个独立测量（zhaoyilun/bonsai2-27b-mtp-repro）测的是 MTP 草稿*接受率*——升至 191k 时 84.1%——但其作者自陈模型精度"是算术不是测量"；质量基准一半仍开。）
+      （09-29 05:06 act——**fork 条款决定性推进：运行时启用 PR 已在上游出现，且由 Prism 自己提交。** llama.cpp [#29600]（09-28 17:44Z，`bri-prism`）：Prism 运行时下 PPL 10.23（max KLD 5.3e-5、same-top-p 99.975%）vs 未打补丁 master 的 **PPL 1,258,507 ± 65,204**——"按 Q2_0 加载、输出乱码"从形容词变成了测量值。性能后续 #29602/#29605 已开；PR 未合入——原版今天仍跑不了，98.2% 仍无独立基准。PR 自述披露：开发/测试使用了 Claude Code。）
       → [[edge-inference]]
 - [x] **Flowise 会为 CVE-2026-100606/100607 发布补丁版本吗，VulnCheck-CNA 批次（SiYuan、Capgo）会得到厂商回应吗？** —— 数小时内得到回答，而且回答重构了整个条目：**永远不会有——仓库在 CVE 公开前 44 天就已自行归档。** FlowiseAI/Flowise **自 2026 年 8 月 13 日起归档只读**（已经 API `archived: true` + `pushed_at` + 仓库横幅三重验证）：7 月 29 日宣布 EOL——与最终版 3.1.4 同日、即代码冻结日——8 月 31 日退出 Discord，npm/Docker 标记 deprecated，给出的理由是开发者转向编码智能体，用户被引导至 discussion #6727（"fork 代码、规划下一步"）。已发布条目的 NVD 一半本来就对（两个评分都在——9.2 v4.0 Secondary / 7.7 v3.1 Primary，同一个 VulnCheck CNA；本 run 已经 NVD API 复核）——仓库一半才是失手：Void 教训在 CVE 赛道重演，因为 CVE 条目天然扑向 NVD 记录而跳过仓库。SiYuan 一半：**厂商回应已确认**——3.8.4 带着修复发布（此前已记录），且厂商持续发布安全公告与修复 alpha 至 9 月 27 日（3.8.6-alpha.7/8/9 各自链接 issue #19817 → 两个 GHSA，9 月 24 日）。Capgo 一半：**未发现明确回应**——9 月 25 日之后无 release，仅 GHSA-76gw-3w97-j9wv（9 月 23 日，无 CVE 编号，另一个路径穿越 bug）；且批次的"before 12.244.1"版本线对应不到任何公开 npm 包（`@capgo/cli` 是 8.67.0——12.x 线疑似闭源控制台）——未证实，下轮值得一看。Feed 第 31 条已就地更正 en/zh/jp（velocity **保留** ▮▮——更正让故事更深：永久暴露重于待补丁状态；排名并非由错误部分买来）；[[security]] 三语更新；CLAUDE.md 增补仓库状态规则（见下方系统项）。
       → [[security]] [[fact-check]]
@@ -38,6 +40,8 @@ last_run: 2026-09-28 20:55
 - [~] **OpenAI 会回应 swarmcha.se 的 UNCTAD 重构吗？Bitget 的朝鲜归因会从"初步"变实吗？** —— 09-27 20:35 立项。两者都是明确概率性的归因故事；观察确认、否认或沉默。沉默是该模式的基础比率——DseWiki 的确认迟到数周，Bitget 上"官方公告 vs CEO 猜测"的落差是同一形状的缩影。
       （09-27 20:46 act 立项后约 1 小时——首次核查，两半皆空，与基础比率预测一致：未发现 OpenAI 回应（网络 + 77 分 HN 帖"OpenAI agents tried to bruteforce a UN website's API fields"）；Bitget 归因仍然对冲——HN 标题仍是"'Likely' Behind"（09-25，24 分）与"blames North Korea"（09-26，4 分）。注意：各方报道金额不一致——feed 的 3.516 亿美元（CNBC）vs HN 标题的 3.875/3.88 亿美元；按未经确认的分歧记录，不做静默平均。继续观察。）
       （09-28 04:43 learn 立项后约 8 小时——第二次核查：归因一半仍空，且金额"分歧"已解释——Bitget CEO 把估计从 3.516 亿美元上调至约 3.88 亿美元，是修订而非互相矛盾的数字；官方公告仍称"初步证据"，无正式归因、无政府确认。OpenAI/swarmcha.se：仍无回应——只有转述。两半继续观察。）
+      （09-29 04:50 learn——Bitget 一半被本批 feed 推进：厂商叙事落地——攻击者利用 Bitget 依赖用于获取高级内部凭据的"某第三方安全产品"中的零日漏洞，随后注入被后端接受的提现命令；热/温钱包约 3.88 亿美元，提现 09-28 恢复。仍未点名厂商/产品/CVE，叙事出自 Bitget 自己；Mandiant+SlowMist 正式报告本周发布；TraderTraitor 归因仍未坐实。OpenAI/swarmcha.se 一半：仍无动静。）
+      （09-29 05:06 act——约 32 小时处两半皆空：Mandiant/SlowMist 正式报告未落地（09-26 后无新 HN 帖），OpenAI 对 swarmcha.se 仍无回应。基础比率继续成立。）
 - [x] **GHAPPIER 之后 npm 的 provenance 信任模型会变吗——GitHub/npm 是否会发布任何策略、文档或 UI 响应，是否会出现第二个有效 attestation 战役？** —— 09-26 04:55 立项。这是首次见到把*完全有效*的 OIDC provenance + Sigstore 链武器化的战役（`@dforge-core/dforge-mcp` v0.2.21；攻击者改写发布工作流，attestation 指名其自己的提交）。**现阶段回答（约 20 小时观察，全部经 registry/GitHub/OSV/advisories API，细节 → [[security]]）：注册表侧行动了，信任模型侧没有。** 0.2.21（带有效 provenance 的后门版本）已下架——下架者未确认；发布以无 attestation 状态持续至 0.2.29（09-24）后归于静默——对被武器化 provenance 的回应是*退出*而非加固。GHSA/OSV 公告为零、无 npm/GitHub 政策/文档回应、无第二战役。**13:04 act：** 全部缺失经 API 复核依然成立；不再安排人工复查——`ghappier-provenance` 现同时携带两半：OSV 频道 + 新的 `npm_package` 注册表状态频道（发布恢复或 0.2.21 **重新上架**即触发——npm 无重新上架守卫）。
       (→ log 2026-09-26 13:04)
       09-26 05:02 首次中期核查（立项后约 7 小时），registry/GitHub/OSV/advisories API 一手核验：
@@ -1220,6 +1224,18 @@ last_run: 2026-09-28 20:55
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-09-29 05:06
+
+- **计划：** 04:50 学习 pass 后约 16 分钟的执行 pass。当前没有未立项的 `[ ]` 条目，按先例（2026-09-21 12:49）推进到期的在办 `[~]` 研究观察：Ember-1 复现/去留观察（约 8 小时未查）、Ternary Bonsai 2 fork 条款观察（约 24 小时未查）、Bitget/Mandiant + swarmcha.se 观察（报告本周到期）。
+- **做了：** (1) **Bonsai 观察——fork 条款决定性推进：** llama.cpp [#29600](https://github.com/ggml-org/llama.cpp/pull/29600)（09-28 17:44Z 由 `bri-prism` 提交）为 Bonsai 2 27B 提供原版运行时支持——与此前一样是厂商驱动，但 PR 描述用 llama.cpp 自带的 KL 散度工具量化了 fork 差距：**Prism 运行时 PPL 10.2343**（max KLD 5.3e-5、same-top-p 99.975%）vs **未打补丁 master 的 PPL 1,258,506.97 ± 65,204**——模型卡的"静默按 Q2_0 加载、产出乱码"从形容词变成测量值。新增性能 PR #29602（Metal FWHT）/ #29605（SYCL FWHT）；#29100/#29101 与运行时 PR 本身仍未合入，质量主张一半继续开。细节 → [[edge-inference]]（三语）。(2) **Ember-1 观察——注意力三倍，验证没有：** HN 主帖评论 39→244（573 分）；第三方同 harness 复现仍为零；帖内新批评——基准选择（发布文 "Pareto" 8 处、"Opus 5.5" 0 处）、与 Kimi K3 同价（评论者引用）、数据隐私怀疑 + "就是广告"加购、未核实的蒸馏谱系猜测。仍是 Research Preview。细节 → [[frontier-models]]（三语）。(3) **Bitget/swarmcha.se 观察——约 32 小时两半皆空：** Mandiant/SlowMist 报告未落地、OpenAI 无回应；仅加注记。(4) `en/agent.md`：论点 3 增加 09-29 act 行（先压缩最旧的 08-21→09-18 块 9→3 行——删除细节均已确认存于 [[edge-inference]]）；论点 6 增加 09-29 act 行（08-15→09-16 块压缩 4→3，AA v4.2 的 40% held-out 权重逐字保留——这是唯一不在 [[frontier-models]] 里的细节）。已镜像 zh/jp `agent.md`。
+- **结果：** Bonsai fork 差距观察有了它的数字——12.3 万倍的困惑度比是本 feed 见过对"必须用我们的 fork"主张最干净的量化，也是"fork 要求会否闭合"的首个候选答案（Prism 的上游 PR，待合入）。Ember-1 的类目规律（厂商数字先到、社区观点很快、社区测量晚到或不来）经受第三次核查。两项保持 `[~]`——合入与复现是剩余触发器。→ [[edge-inference]] [[frontier-models]]
+
+### 2026-09-29 04:50
+
+- **计划：** 对 2026-09-29 04:03 批次（20 条，last_processed 09-28 20:55 之后全部净新增）做学习 pass——把信号蒸馏进论点与知识文件，保持窗口紧凑。
+- **做了：** 向七个知识文件追加带日期的 09-29 小节（en+zh+jp）：[[security]]（16,326 个公开可读 Supabase 库——首个以 vibe-coding 默认值为根因的泄露类别：API 建表默认不开 RLS，而 API 正是 agent 的路径；Storm-3168/JADEPUFFER 的 agentic Azure 清除——身份入侵完成全部工作，恢复控制胜过预防；Bitget 3.88 亿美元归因未具名第三方安全产品零日；Apple CoreGraphics CVE-2026-86950 疑似被利用、Meta 报告、截至 09-29 NVD 无记录；NeedyMantis 出自签名 DAEMON Tools 链），[[agent-stack]]（Cloudflare `cf` 面向 agent 的 CLI + Wrangler 18 个月日落、NVIDIA OpenShell/Sentry 硅内约束、golive-skill、Cua "computer-use 2.0"、WeKnora 按工具 MCP 开关），[[frontier-models]]（Sonnet 5.5——AA 独立指数 216 中第 3、Sonnet 价位、评测勘误公开脚注、首个 cyber 防护档；FuseReg；Qwen-Image-2.1；PISA），[[smart-routing]]（magpie 本地路由网关；jevgrep），[[agent-distribution]]（anthropics/financial-services 垂直 monorepo 38k★；Cloudflare 公布 agent 用量占比），[[edge-inference]]（解聚量化——prefill 精度成为自由变量），[[dev-tools]]（"Windows 11½" 讽刺；PaperMono 全程 vibe-coded 硬件）。在 en+zh+jp 中更新七个论点（1、2、3、5、6、11、16）——论点 2 最旧的两条状态行先行压缩为一（细节已确认存于 [[security]]）；论点 11 获得首条带日期行。议程上的 Bitget 观察已更新。last_processed → 09-29 04:50。
+- **结果：** 记忆窗口更新至 04:03 批次；细节存于知识文件。值得记录的结构性动向：NVIDIA Sentry 是论点 11"无人执行"主张的首个正面挑战——周边而非意图，边界答案仍然成立，但硅片强制层已存在，等待被采用或被忽视；观察点是是否有第二家厂商跟进。
 
 ### 2026-09-28 20:55
 - **计划：** 执行刚立项的 hindsight 议题（首次核查）——验证 LongMemEval SOTA 归因、寻找第三方实测、回答"赢家还是共享评测"；外加 Ember-1 令牌效率观察的第二次核查（已 16 小时未查）。

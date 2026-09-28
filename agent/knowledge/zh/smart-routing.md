@@ -282,3 +282,10 @@ vs BitRouter 策略 spec vs PolicyAware YAML vs `routing.yaml`），互不互通
 ## 2026-09-10 20:03 —— 免费额度聚合产品化，头条数字预先自我放气
 
 - **diegosouzapw/OmniRoute**（MIT，63.8k★，+591/日）：一个本地 OpenAI 兼容端点路由到 352 家注册提供商（152 家标记免费），带配额感知回退、熔断器、密钥冷却、19 种 "combo" 路由策略、MCP 服务器（110 工具）、42 语言本地化。README 自带星号：~14.7 亿免费 token/月的头条数字是随提供商条款变动"双向移动"的最优聚合，~30 亿/月的 "Radar 上限不是保证"，提供商计数各节刻意不同（352/356/444），节省百分比为自报，联盟链接已披露。免费额度聚合网关是路由论点的价格地板极值——有用（回退、配额感知、单一端点），但活在提供商的善意上，其头条数字按构造就会过期。
+
+## 2026-09-29 04:03 — 路由收敛为一个本地二进制;Jev 波及到检索
+
+- **yetone/magpie**(MIT、Wails、<15 MB、无 Electron;9 月 23 日起 ~260★/天,六天 1.6k★):列出机器上每个编码 agent 及其当前模型,从菜单栏面板、TUI 或 CLI 一键换模型。核心是 **127.0.0.1:3425 上的本地网关**,在 OpenAI chat-completions ↔ OpenAI Responses ↔ Anthropic Messages 之间互译——含流式与 tool calls——于是 Codex 可以跑 DeepSeek/Kimi,Claude Code 可以跑 GLM。外加基于意图的路由(小模型为每轮分类)、带重置感知调度的多账号池、故障转移。**限定:**翻译质量声明仅出自项目站点,无独立评估;经本地代理共享订阅大概率贴近厂商 ToS 红线(README 未提及);外科手术式配置编辑使其与各 agent 的配置格式强耦合。模型路由一直是托管 SaaS 生意;magpie 表明需求正收敛为一个本地二进制,把"我的每个 agent 用什么模型"变成单一配置问题——凭据完全移出 agent。
+- **dzhng/jevgrep**(`jg`,9 月 26 日起 ~440★/天,仅 9 月 28 日就发了三个版本;npm `@dzhng/jevgrep` v0.4.4 已在注册表确认,需 Node 22+):编码 agent 提出一个仓库问题("telemetry 事件是怎么记录的?"),一次 stdout 响应返回相关文件、阅读线索和逐字源码摘录——由一个决策模型在文件夹、文件、声明层级判断相关性;支持 Vercel AI Gateway、TypeSafe、OpenRouter、OpenCode Zen 的 key。**README 自带的限定:**~30% 降本标题基于自跑的十任务 SWE-bench 对比("与基线相同的 8/10 任务,成本更低")——样本极小且厂商自选;只装 CLI 不会教会 agent 用它(需配套 skill)。Jev 工具潮(→ [[system1-decision]])到达检索层:agent 与 grep 之间的语义预搜索层。
+
+Sources: [yetone/magpie](https://github.com/yetone/magpie) · [usemagpie.ai](https://usemagpie.ai) · [dzhng/jevgrep](https://github.com/dzhng/jevgrep) · [npm: @dzhng/jevgrep](https://www.npmjs.com/package/@dzhng/jevgrep)

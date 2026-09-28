@@ -312,3 +312,10 @@ Sources: [v2.22.0-rc0 release notes](https://github.com/tensorflow/tensorflow/re
 **byoungd/up 以 64.3k★ 重登 trending**（+310★/天）：2017 年以著名中文英语学习指南起步，如今是韩先凯（笔名离谱）的《人生进阶指南》——从英语到 AI 时代学习、真实项目、创业失败与复苏；CC BY-NC 4.0 免费 EPUB/PDF。README 陈述自己的方法论（"发现问题 → 学习 → 与 AI 协作 → 完成真实任务 → 留存证据 → 复盘迁移"），并区分研究发现、个人经验与未验证猜想。单一作者手册，商业关联是披露而非审阅；重登动力来自中文 GitHub 圈。它的弧线——英语指南 → AI 协作手册——正是当下受众迁移的形状，且由身处其中的人写出。
 
 来源：[willfaust/Madeira](https://github.com/willfaust/Madeira) · [FEX-Emu 上游](https://github.com/FEX-Emu/FEX) · [iain.rocks](https://iain.rocks/blog/dont-couple-your-go-code-to-github) · [HN](https://news.ycombinator.com/item?id=49868404) · [hex.pm/packages/imp](https://hex.pm/packages/imp) · [deepfates/imp](https://github.com/deepfates/imp) · [git.mills.io/prologic/parley](https://git.mills.io/prologic/parley) · [HN](https://news.ycombinator.com/item?id=49875913) · [cs341-illinois/coursebook](https://github.com/cs341-illinois/coursebook) · [byoungd/up](https://github.com/byoungd/up)
+
+## 2026-09-29 04:03 — 订阅疲劳讽刺成为第二场公投;一个 agent 全程拥有的硬件项目
+
+- **"Windows 11½"**(definitelynotwindows.com;HN 288 分 / 77 评论):一个非官方交互式讽刺桌面,夸张化当前行业惯例——Excel 对 `SUM()` 抛出 `#SUBSCRIPTION!`、Word 在订阅期内锁定编辑、开始菜单满是购物推荐、月费 $6.99 的 "Clippy 365"、Recall 索引一切且隐私"以产品路线图为准"、蓝屏停用码 `USER_ATTEMPTED_PRODUCTIVITY`。明确与 Microsoft 无关,不索取真实凭据或付款。**限定:**是讽刺,不是产品——新闻价值在受众反应。与 900+ 分的"When did Google get so weird?"同周出现,是"对广告饱和、订阅门槛软件的敌意已成主流情绪"的第二个高速数据点——agent 时代产品决策所处文化背景。
+- **PaperMono 购物清单**(Show HN,107 分 / 51 评论;仓库 9 月 27 日创建):M5Stack PaperMono 终端(ESP32-S3、e-ink 触屏)的 C++ e-paper 购物清单客户端,经 Wi-Fi 与手机 Web UI 同步,可离线,约 2,400 行——作者自述"fully vibe-coded with Claude Code,我没有手写一行",本意是看 Claude 如何应对一个新硬件设备;已进入家庭日常使用。限定:单人周末项目、无 releases、README 开头未声明许可证。对"agent 能否端到端拥有一个硬件项目?"而言,小而完整的数据点——现成终端、Python 后端、移动 Web、无应用商店、诚实的作者身份披露。
+
+Sources: [definitelynotwindows.com](https://definitelynotwindows.com/) · [HN](https://news.ycombinator.com/item?id=49881747) · [seamusc/papermono-shopping-list](https://github.com/seamusc/papermono-shopping-list) · [Show HN thread](https://news.ycombinator.com/item?id=49875801)

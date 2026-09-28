@@ -642,12 +642,36 @@
           "path": "canonical/contracts/FA3-CONTEXT-TRANSFORM-CONTRACTS-001.json",
           "html_url": "https://github.com/ubuntuokos/Final-Architecture-v3.0/blob/1e0db0cbdc31ac63807e9da661aeddd41f4b3f4e/canonical/contracts/FA3-CONTEXT-TRANSFORM-CONTRACTS-001.json",
           "found": "2026-09-25T13:17:05.244Z"
+        },
+        "broadinstitute/warp-sandbox-podman::claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/WRAP-BENCHMARK.md": {
+          "repo": "broadinstitute/warp-sandbox-podman",
+          "path": "claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/WRAP-BENCHMARK.md",
+          "html_url": "https://github.com/broadinstitute/warp-sandbox-podman/blob/b12c845ee211cebd298b969af1b61b9974aeb726/claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/WRAP-BENCHMARK.md",
+          "found": "2026-09-28T21:19:07.620Z"
+        },
+        "broadinstitute/warp-sandbox-podman::claude-sandbox-shared/.claude/plugins/marketplaces/caveman/README.md": {
+          "repo": "broadinstitute/warp-sandbox-podman",
+          "path": "claude-sandbox-shared/.claude/plugins/marketplaces/caveman/README.md",
+          "html_url": "https://github.com/broadinstitute/warp-sandbox-podman/blob/b12c845ee211cebd298b969af1b61b9974aeb726/claude-sandbox-shared/.claude/plugins/marketplaces/caveman/README.md",
+          "found": "2026-09-28T21:19:07.620Z"
+        },
+        "broadinstitute/warp-sandbox-podman::claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/technical/product-model.md": {
+          "repo": "broadinstitute/warp-sandbox-podman",
+          "path": "claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/technical/product-model.md",
+          "html_url": "https://github.com/broadinstitute/warp-sandbox-podman/blob/b12c845ee211cebd298b969af1b61b9974aeb726/claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/technical/product-model.md",
+          "found": "2026-09-28T21:19:07.620Z"
+        },
+        "broadinstitute/warp-sandbox-podman::claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/technical/accounting-and-evidence.md": {
+          "repo": "broadinstitute/warp-sandbox-podman",
+          "path": "claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/technical/accounting-and-evidence.md",
+          "html_url": "https://github.com/broadinstitute/warp-sandbox-podman/blob/b12c845ee211cebd298b969af1b61b9974aeb726/claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/technical/accounting-and-evidence.md",
+          "found": "2026-09-28T21:19:07.620Z"
         }
       },
-      "runs": 55,
+      "runs": 56,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-28T13:14:10.092Z",
-      "last_total": 93
+      "last_run": "2026-09-28T21:19:07.620Z",
+      "last_total": 97
     },
     "ra-paper-id": {
       "seen": {
@@ -839,18 +863,18 @@
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 42,
+      "runs": 43,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-28T13:14:10.092Z",
+      "last_run": "2026-09-28T21:19:07.620Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 42,
+      "runs": 43,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-28T13:14:10.092Z",
+      "last_run": "2026-09-28T21:19:07.620Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-28T13:14:10.092Z"
+  "last_run": "2026-09-28T21:19:07.620Z"
 }
