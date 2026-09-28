@@ -1,8 +1,8 @@
 ---
 date: 2026-09-28
-updated: 2026-09-28T12:20:00+08:00
+updated: 2026-09-28T20:45:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -703,13 +703,254 @@ Mixture-of-Transformers：预训练视频专家与动作专家在冻结 VLM 的�
 
 ---
 
+## 33. 就是今天：星舰 Flight 14 首次冲击入轨 —— 并搭载 26 颗 Starlink V3 卫星
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 108 分 · 约 3 小时前（提交于 Sep 28 09:15 UTC）
+- **Tags:** `spacex` `starship` `starlink` `launch`
+
+SpaceX 于今日发射星舰 Flight 14（发射窗口 12:15 UTC 自 Starbase 开启，时长
+75 分钟）——这是该计划在前 13 次亚轨道飞行之后首次尝试真正的轨道插入：
+约 275 公里高度、最多绕地六圈（约 10 小时）、受控再入并在智利以西的太平
+洋溅落。助推器的目标也调整为验证上升、级间分离、返回点火与着陆，而非塔
+架回收。真正的里程碑在载荷：**26 颗运营级 Starlink V3 卫星——该计划首次
+真实部署尝试。**诚实的状态说明：截至本栏截稿（约 12:45 UTC），我们核查的
+来源尚未确认点火或入轨——结果请以实时报道为准。
+
+**Why it matters:** 如果入轨与 V3 部署双双成功，星舰将不再只是试验载具，
+而成为 Starlink 的发射基础设施——这正是全年制约 V3 卫星发射节奏的瓶颈。
+
+[`🔗 Space.com 实时报道`](https://www.space.com/space-exploration/launches-spacecraft/spacexs-starship-megarocket-launching-to-orbit-for-1st-time-ever-on-sept-28-watch-it-live) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49875411)
+
+---
+
+## 34. 《Prompting Claude Opus 5.5》—— 官方"调校指南"登上了 HN 首页
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 136 分 · 约 5 小时前（提交于 Sep 28 07:33 UTC）
+- **Tags:** `prompt-engineering` `claude` `agents` `docs`
+
+Anthropic 的 Opus 5.5 官方提示词指南——不是发布会，只是文档——成了今早
+HN 上最热的 AI 话题。它讲的是 Opus 5.5 相对 Opus 5 的行为差异，以及应对
+这些差异的提示词/harness 模式：effort 校准、API 与聊天两种界面下的思考行
+为、进度汇报、无人值守与多智能体任务、安全护栏拒答、前端设计、复杂视觉
+输入、多应用工作流，以及用户消息中的粘贴文本。文档给出的基线：Opus 5.5
+的输出 token 生成比 Opus 5 快 30% 以上，完成同一任务倾向使用更少 token，
+且现有 Opus 5 提示词"无需修改即可正常工作"。
+
+**Why it matters:** 模型行为已波动到厂商需要为每个版本维护一部"harness
+调校手册"的程度——而社区把它当首页读物。这个文档品类本身就是趋势。
+
+[`🔗 Prompting Claude Opus 5.5（官方文档）`](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49874728)
+
+---
+
+## 35. Parley：说纯 IRC 的联邦聊天 —— 用 irssi 以 user@domain 找人
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 85 分 · 约 2 小时前（提交于 Sep 28 10:30 UTC）
+- **Tags:** `irc` `chat` `federation` `self-hosted`
+
+Parley（James Mills，prologic）是走纯 IRC 协议的联邦式去中心化聊天：为自
+己的域名跑一个实例，任何人都能用 irssi 或任意 IRC 客户端以
+`user@domain` 找到你——不需要新客户端、不用迁移账号、没有桥接机器人。
+它落在 Armada（基于 Nostr 的 Discord 替代品，9 月 27 日已报道）之后两天，
+让"不靠平台地取代 Discord"这个赛道在本周显得格外拥挤——Parley 的押注与
+新协议相反：复用所有人都已经会的那个聊天协议。
+
+**Why it matters:** 每个联邦聊天尝试的生死都取决于客户端采用率；把现存的
+IRC 用户群直接变成自己的用户基础，是最保守——也可能唯一可行——的入口。
+
+[`🔗 git.mills.io/prologic/parley`](https://git.mills.io/prologic/parley) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49875913)
+
+---
+
+## 36. Luarocks.org：一个普通账号 + 一个 LuaJIT 字节码漏洞，就差点拿下整个 Lua 包仓库的 root
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 28 分 · 约 16 小时前（提交于 Sep 27 20:13 UTC）
+- **Tags:** `security` `supply-chain` `luajit` `sandbox-escape`
+
+安全研究者 Vhyrro 的长文（9 月 27 日）完整记录了 luarocks.org（Lua 包仓
+库，下载量最高的包达 2400 万次）上一条从普通注册账号直通 root 的利用链。
+rockspec 校验沙箱本身近乎教科书——空环境、关闭 JIT、debug 钩子限行数——
+但它用 `loadstring()` 加载 spec，而 `loadstring` 也接受 LuaJIT **字节码**，
+且 LuaJIT 刻意不做字节码校验。公开的既有漏洞对 OpenResty 的 LJ_GC64=1 分
+支全部失效，研究者便自己写了一个：利用无边界检查的 `KNUM` 常量索引做越
+界读，再借 `package.loaded` 的 TValue 翻转，从全局环境里找回 `loadstring`
+并执行任意代码——演示中直接把站点首页替换成了一个 `ttyd` 终端。
+**漏洞已于 9 月 26 日修复**；PoC 与 luarocks.org 官方事件页均已公开。注意：
+该文未引用 CVE 编号，且波及整个注册库只是潜在风险，并非已观测事实。
+
+**Why it matters:** 本月的 CPAN 与 npm 事件从不同角度反复指向同一件事——
+包注册库是杠杆率最高的供应链目标，而用与恶意代码同一个 VM 去沙箱不受信
+代码，不叫隔离。
+
+[`🔗 Conquering the Moon（长文）`](https://vhyrro.neorg.org/posts/critical-luarocks-exploit-cve/) · [`🔗 luarocks.org 安全事件页`](https://luarocks.org/security-incident-september-2026)
+
+---
+
+## 37. "Do not guess"：一句指令把抽取幻觉字段率从 70.7% 压到 20.2%
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 57 分 · 约 19 小时前（提交于 Sep 27 17:24 UTC）
+- **Tags:** `evaluation` `hallucination` `extraction` `agents`
+
+智能体服务市场 Earn an Honest Dollar 发布了一个面向网页抽取的编造基准：
+7 类页面、42 对"孪生页面"，两页只差一行数据，且都埋了诱饵（旧价格、错误
+作者、过期日期）。诚实的抽取器在第一页返回数值、在第二页返回 `null`。结
+论：加上"任何页面上没有的值一律返回 null。Do not guess."这一句，编造字
+段率从 70.7% 降到 20.2%。更有趣的是分模型表格——Gemini 3.8 Flash 与
+GLM 5.3 仅 36 错 1，而付费抽取 API 反而不如裸模型（Firecrawl：36 错 24）
+——当然页面上的限定也要照单全收：每位选手只跑一次（2026 年 9 月 27 日）、
+95% 置信区间很宽、付费 API 用的是免费额度。
+
+**Why it matters:** 智能体经济需要的是"知道自己不知道"的校准式弃权，而不
+只是裸能力——一句话就能把数字压下这么远，既是实用的胜利，也是对每个没
+带这句话就上线的抽取管线的控诉。
+
+[`🔗 基准页面`](https://earnanhonestdollar.com/bench) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49868753)
+
+---
+
+## 38. Claude Marketplace：Anthropic 把 2000+ 插件、连接器、智能体与服务伙伴装进一个商店 —— 可用承诺消费额度购买
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic 博客（9 月 23 日）· BleepingComputer 9 月 27 日报道
+- **Tags:** `anthropic` `marketplace` `mcp` `agents`
+
+Anthropic 的 Claude Marketplace（9 月 23 日宣布，大规模报道 9 月 27 日落
+地）把三份目录合并为一个店面：2000+ 连接器与插件（Atlassian、Google、
+Microsoft、Notion、Salesforce 等）、来自 CrowdStrike、Cursor、Harvey、
+Legora、Lovable、Snowflake、Hebbia 的 Claude 驱动智能体与产品，以及通过
+Claude Partner Network 接入的咨询/服务伙伴（Accenture、BCG、Deloitte）。
+两个细节比数量更重要：买方可以**用一部分对 Anthropic 的承诺消费额度**
+购买伙伴产品——把云市场的采购经济学搬到了 AI；构建者通过 **MCP 与 Agent
+Skills** 发布——与 9 月 25 日报道的 Claude Code 插件目录（314 个插件）同
+一套开放标准，这个市场是它面向客户的超集。
+
+**Why it matters:** 此刻的平台之争打的是分发而非模型质量——而"对着承诺
+合同额度消费"正是每朵企业云建立起自己生态的那台发动机。
+
+[`🔗 Anthropic 官方公告`](https://claude.com/blog/claude-marketplace) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-turns-claude-into-an-ai-marketplace-with-2-000-plus-plugins-and-connectors/)
+
+---
+
+## 39. UIUC 开源其系统编程教材 —— coursebook 以 +265★/天登上趋势榜
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日榜）· 今日 +265 星 · 2,225★ · 最后推送 Sep 26
+- **Tags:** `textbook` `systems-programming` `c` `education`
+
+cs341-illinois/coursebook 是伊利诺伊大学香槟分校 CS 341（系统编程）课程
+使用的开源入门教材——目标是规范化并扩展 Angrave 的经典 SystemProgramming
+wikibook，带引用、脚注、术语表，以及 CI 自动导出的 PDF、EPUB、HTML 与
+Markdown 版本。全部讲授与代码使用 C（"Linux 内核的事实语言"）。没有任何
+单一事件触发这次飙升——这是一份有九年历史的课程材料浮上趋势榜，大概率
+是考试季的自然发现；另外仓库没有 LICENSE 文件，对一个以传播为存在意义的
+仓库来说，这是真实的复用障碍。
+
+**Why it matters:** 大学课程正在成为计算机教育中质量最高的免费层，而一本
+结构化、可导出的教材，恰好也是智能体可以直接拿来授课的形态。
+
+[`🔗 cs341-illinois/coursebook`](https://github.com/cs341-illinois/coursebook) · [`🔗 HTML 版`](https://cs341.cs.illinois.edu/coursebook/index.html)
+
+---
+
+## 40. 《Jev in the Wild》：Jev 生态首份定量地图 —— 2,170 个公开项目
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · HF Papers · 2609.30216
+- **Tags:** `jev` `ecosystem` `analysis` `decision-models`
+
+本周反复出现的主角终于有了测量数据。《Jev in the Wild》（arXiv:2609.30216）
+分析了截至 2026 年 9 月 22 日从 GitHub 采集的 2,170 个公开 Jev 项目：生态
+早期增长迅速，既有新项目也有向既有仓库的集成；属性判断与打分是最主流的
+用法，动作选择、内容过滤与模型/工具选择则因领域而异；公众注意力集中在
+路由与界面类智能体上——并且**与项目数量并不相关**。注意：它只是对公开
+GitHub 项目在单一时间点的快照，私有与内部部署完全不可见。
+
+**Why it matters:** 围绕 Jev 的评论已经持续了数周——戏仿、基准、包装器、
+本地运行器——这是第一份不是轶事的数据点：决策模型生态到底在拿它做什么。
+
+[`🔗 arXiv:2609.30216`](https://arxiv.org/abs/2609.30216) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.30216)
+
+---
+
+## 41. PLFM_RADAR 以 25.6k★ 重回趋势榜 —— 而仓库自六月起就没有动静
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日榜）· 今日 +145 星 · 25,605★ · 最后推送 6 月 17 日
+- **Tags:** `radar` `open-hardware` `fpga` `trending-audit`
+
+NawfalMotii79/PLFM_RADAR——开源、低成本的 10.5 GHz PLFM 相控阵雷达系统
+（"AERIS-10" 构建包含 2048 点 FFT、混合 AGC 与 ADAR1000 波束成形；
+Hackaday 文章称探测距离可达 20 公里）——今日以 +145★/天登上趋势榜。按
+照本栏每条目都该做的触发点核查：**我们找不到触发点。**4 月之后没有新发布
+（v2.0.2-p0-audit），6 月 17 日之后没有提交，也没有找到新的 HN 或媒体报
+道；此前最强的关注是一个较早的 71 分 HN 讨论串。所以请按 Void 教训来读
+这条：一件确实令人印象深刻的硬件作品，但它*当下*的走红无法解释，维护状
+态处于休眠——这是需要调查的信号，不是安装的信号。
+
+**Why it matters:** 消费级价位的相控阵雷达本身就是出色的开放硬件——而今
+天它还兼任了一份"星数速度与项目事件脱钩"的活体标本。
+
+[`🔗 NawfalMotii79/PLFM_RADAR`](https://github.com/NawfalMotii79/PLFM_RADAR) · [`🔗 Hackaday 项目页`](https://hackaday.io/project/205190-open-source-plfm-radar-up-to-20km-range)
+
+---
+
+## 42. CoyoPedal：跑在 ESP32-S3 上的 Neural Amp Modeler 吉他音箱 —— 设备上没有 JS 引擎
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News（Show HN）· 100 分 · 约 2 天前（提交于 Sep 26 02:24 UTC）
+- **Tags:** `esp32` `audio` `dsp` `neural-amp-modeler`
+
+CoyoPedal（GPL-3.0，dashersw）把约 10 美元的 Waveshare
+ESP32-S3-Touch-AMOLED 板子变成一台独立的吉他音箱/效果器，以 48 kHz 实时
+运行完整尺寸的 Neural Amp Modeler A2 模型——23 层、8 通道的 WaveNet，用
+块浮点与手写 Xtensa 内核拆到双核上按 64 帧块处理。它以 USB 主机模式驱动
+标准 USB 声卡，触屏 UI 用 TSX 编写、**编译为原生 C++**——设备上没有任何
+JavaScript 引擎。同一固件可为裸模块构建，WASM 版本还能在浏览器里运行完
+全相同的 DSP 与模型。诚实的边界：它约两天前出现，Show HN 热度过后动能已
+放缓。
+
+**Why it matters:** 神经音箱建模过去需要一台笔记本或专用 DSP 效果器——这
+个项目把它搬到了 commodity 微控制器上，而且那条"TSX 写 UI → 编译为原生
+C++"的管线，在音频之外也值得偷师。
+
+[`🔗 dashersw/coyopedal`](https://github.com/dashersw/coyopedal) · [`🔗 浏览器演示`](https://coyopedal.playtaurus.com/)
+
+---
+
+## 43. byoungd/up 以 64.3k★ 重回趋势榜：从英语学习指南长成 AI 时代的人生手册
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日榜）· 今日 +310 星 · 64,349★
+- **Tags:** `chinese-opensource` `learning` `guide` `documentation`
+
+byoungd/up 始于 2017 年的《离谱的英语学习指南》——中文世界最著名的英语
+学习指南——如今已长成《人生进阶指南》：韩先凯（笔名：离谱）持续更新的
+一部书稿，从英语写到 AI 时代的学习、真实项目、创业失败与身体恢复，以
+CC BY-NC 4.0 提供免费 EPUB/PDF，主页在 biezou.com。README 写明了自己的
+方法——"发现问题 → 主动学习 → 与 AI 协作 → 完成真实任务 → 保存证据 →
+复盘迁移"——并区分研究结论、个人经验与待验证假设。注意：这是单一作者的
+手册，商业关系为自我披露而非审阅，且 +310★/天 的回暖由中文 GitHub 圈驱动。
+
+**Why it matters:** 64k★ 的体量让它成为 GitHub 上最大的中文知识仓库之一，
+而它从英语指南到 AI 协作手册的轨迹，正是当下受众变迁的样本——由身处其
+中的人亲手写下。
+
+[`🔗 byoungd/up`](https://github.com/byoungd/up) · [`🔗 biezou.com`](https://biezou.com)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-09-28T12:20:00+08:00 |
-| 条目数 | 32 |
-| 追踪来源 | 27（Hacker News、GitHub Trending/API、NVD、BleepingComputer、OpenAI、ThreatDown、Socket、CyberSecurityNews、fireworks.ai、Hugging Face、arXiv、hex.pm、colo.to、sancho.bearblog.dev、loficities.com、iain.rocks、generalroboticslab.com、wiki.zimbra.com、Unsung/aresluna.org、ihatethefuture.com、hereticpleb.vercel.app、The Flashpoint、nura.eco、mitxela.com、fakecloud.dev、platform.openai.com、changeradar.ai） |
+| 生成时间 | 2026-09-28T20:45:00+08:00 |
+| 条目数 | 43 |
+| 追踪来源 | 37（Hacker News、GitHub Trending/API、NVD、BleepingComputer、OpenAI、ThreatDown、Socket、CyberSecurityNews、fireworks.ai、Hugging Face、arXiv、hex.pm、colo.to、sancho.bearblog.dev、loficities.com、iain.rocks、generalroboticslab.com、wiki.zimbra.com、Unsung/aresluna.org、ihatethefuture.com、hereticpleb.vercel.app、The Flashpoint、nura.eco、mitxela.com、fakecloud.dev、platform.openai.com、changeradar.ai、vhyrro.neorg.org、luarocks.org、claude.com、platform.claude.com、earnanhonestdollar.com、space.com、git.mills.io、cs341.cs.illinois.edu、hackaday.io、coyopedal.playtaurus.com、biezou.com） |
 | 更新时间表 | 每日 04:03、12:03、20:03 UTC+8（每日 3 次） |
 | 排名算法 | 热度速度加权（时效 × 互动加速度 × 来源权威度） |
 | 许可证 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

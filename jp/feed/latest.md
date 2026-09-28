@@ -1,8 +1,8 @@
 ---
 date: 2026-09-28
-updated: 2026-09-28T12:20:00+08:00
+updated: 2026-09-28T20:45:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -787,13 +787,295 @@ JS レンダリングでテキストが乏しく、上記の詳細はラボの�
 
 ---
 
+## 33. ついに今日：Starship Flight 14 が初の軌道投入に挑戦 —— Starlink V3 衛星 26 機を搭載
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 108 pts · 約3時間前（Sep 28 09:15 UTC 投稿）
+- **Tags:** `spacex` `starship` `starlink` `launch`
+
+SpaceX は本日 Starship Flight 14 を飛ばします（発射ウィンドウは 12:15 UTC
+に Starbase で開始、75 分間）。13 回の亜軌道飛行を経て、プログラム初の真
+の軌道投入が狙いです：高度約 275 km、最大 6 周回（約 10 時間）、制御再突
+入後にチリ沖の太平洋へ着水。ブースターの目標はタワー catching から、上
+昇・ステージ分離・ブーストバック・着陸の実証へと移っています。本当のマ
+イルストーンはペイロードの方：**運用版 Starlink V3 衛星 26 機——プログ
+ラム初の実際の展開試験です。**正直なステータス注記：本フィードの執筆時
+点（約 12:45 UTC）で、確認したソースには発射や軌道投入の確定情報はあり
+ませんでした——結果はライブ報道を正としてください。
+
+**Why it matters:** 軌道投入と V3 展開が両方成功すれば、Starship は試験機
+から Starlink の打ち上げインフラへ変わります。V3 衛星の打ち上げペースを
+一年中律速してきたのがまさにこの制約です。
+
+[`🔗 Space.com ライブ配信`](https://www.space.com/space-exploration/launches-spacecraft/spacexs-starship-megarocket-launching-to-orbit-for-1st-time-ever-on-sept-28-watch-it-live) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49875411)
+
+---
+
+## 34. 「Prompting Claude Opus 5.5」—— ハーネス調整の公式ガイドが HN フロントページへ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 136 pts · 約5時間前（Sep 28 07:33 UTC 投稿）
+- **Tags:** `prompt-engineering` `claude` `agents` `docs`
+
+Anthropic の Opus 5.5 公式プロンプティングガイド——ローンチではなく、ド
+キュメントの方——が今朝の HN で最も読まれている AI 話題です。Opus 5 と
+の挙動の違いと、それに対処するプロンプト/ハーネスパターンを網羅していま
+す：effort キャリブレーション、API とチャット各面での思考挙動、進捗報告、
+無人・マルチエージェントタスク、セーフガード拒否、フロントエンド設計、
+複雑な視覚入力、マルチアプリワークフロー、ユーザーメッセージ内の貼り付
+けテキスト。記載されたベースライン：Opus 5.5 は Opus 5 より 30% 以上速
+く出力トークンを生成し、同じタスクをより少ないトークンで完了する傾向が
+あり、既存の Opus 5 プロンプトは「変更なしでそのまま良好に動作する」。
+
+**Why it matters:** モデルの挙動が、ベンダーがリリースごとに「ハーネス調
+整マニュアル」を維持するほど動くターゲットになった——そしてコミュニティ
+はそれをフロントページの読み物として扱う。このドキュメントジャンル自体
+がトレンドです。
+
+[`🔗 Prompting Claude Opus 5.5（公式ドキュメント）`](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49874728)
+
+---
+
+## 35. Parley：素の IRC を話すフェデレーテッドチャット —— irssi から user@domain で
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 85 pts · 約2時間前（Sep 28 10:30 UTC 投稿）
+- **Tags:** `irc` `chat` `federation` `self-hosted`
+
+Parley（James Mills、prologic）は、ワイヤプロトコルに素の IRC を使う連
+邦型・分散型チャットです。自分のドメインでインスタンスを動かせば、誰で
+も irssi をはじめ任意の IRC クライアントから `user@domain` で連絡できま
+す——新しいクライアントも、アカウント移行も、ブリッジボットも不要。Nostr
+ベースの Discord 代替 Armada（9月27日掲載）のわずか 2 日後の登場で、「プ
+ラットフォームなしで Discord を置き換える」試みが今週は目白押しです。
+Parley の賭けは新プロトコルとは正反対：誰もがすでに話せる、あのチャット
+プロトコルを再利用すること。
+
+**Why it matters:** フェデレーテッドチャットの成否はクライアント採用で決
+まります。既存の IRC 人口をそのまま自分のユーザーベースにするのが、最も
+保守的で——そしておそらく唯一実現可能な——導入路です。
+
+[`🔗 git.mills.io/prologic/parley`](https://git.mills.io/prologic/parley) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49875913)
+
+---
+
+## 36. Luarocks.org：一般ユーザーアカウントと LuaJIT バイトコード悪用があれば、Lua パッケージレジストリの root まで一本道だった
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 28 pts · 約16時間前（Sep 27 20:13 UTC 投稿）
+- **Tags:** `security` `supply-chain` `luajit` `sandbox-escape`
+
+セキュリティ研究者 Vhyrro の検証記事（9月27日）は、luarocks.org——最高
+峰パッケージのダウンロード数 2,400 万の Lua パッケージレジストリ——にお
+いて、一般登録アカウントから root に至る完全なエクスプロイトチェーンを
+記録しています。rockspec 検証のサンドボックスはほぼ模範的——空の環境、
+JIT 無効、debug フックによる行数制限——でしたが、spec を `loadstring()`
+でロードしており、`loadstring` は LuaJIT の**バイトコード**も受け付けま
+す。そして LuaJIT は意図的にバイトコード検証を行っていません。既知の公開
+エクスプロイトは OpenResty の LJ_GC64=1 フォークに対してすべて不発だっ
+たため、研究者は新たに作成しました：境界チェックのない `KNUM` 定数イン
+デックスで範囲外読み出しを行い、`package.loaded` の TValue 経由でピボッ
+トしてグローバル環境から `loadstring` を復元し、任意コードを実行——デモ
+ではサイトのホームページを `ttyd` シェルに置き換えるほどでした。**9月26
+日時点で修正済み**。PoC と luarocks.org の公式インシデントページも公開さ
+れています。注意：記事は CVE 番号に言及しておらず、レジストリ全体への波
+及は観測された事実ではなく潜在的リスクです。
+
+**Why it matters:** 今月の CPAN・npm 事件が角度を変えて同じことを示し続け
+ています——パッケージレジストリは最もレバレッジの高いサプライチェーン標
+的であり、悪意あるコードと同じ VM で信頼できないコードをサンドボックス化
+しても、それは隔離ではありません。
+
+[`🔗 Conquering the Moon（検証記事）`](https://vhyrro.neorg.org/posts/critical-luarocks-exploit-cve/) · [`🔗 luarocks.org セキュリティインシデント`](https://luarocks.org/security-incident-september-2026)
+
+---
+
+## 37. 「Do not guess」：たった一句の指示で、抽出時の捏造フィールドが 70.7% → 20.2% に
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 57 pts · 約19時間前（Sep 27 17:24 UTC 投稿）
+- **Tags:** `evaluation` `hallucination` `extraction` `agents`
+
+エージェント間サービスマーケットの Earn an Honest Dollar が、Web 抽出向
+けの捏造ベンチマークを公開しました：7 種類のページ・42 組の「双子ページ」。
+2 ページは 1 行だけが違い、それぞれに囮（古い価格、別人の著者、古い日付）
+が仕掛けてあります。誠実な抽出器は 1 ページ目では値を返し、2 ページ目で
+は `null` を返すべきもの。結論：「ページにない値はすべて null を返すこと。
+Do not guess.」の一文を加えるだけで、捏造フィールドが 70.7% から 20.2%
+へ減少。より興味深いのはモデル別の表——Gemini 3.8 Flash と GLM 5.3 は
+36 中 1 のみミス、一方で有料抽出 API は素のモデルに負ける（Firecrawl：
+36 中 24 を捏造）——そして但し書きもページに明記されています：各参加者
+1 回のみ（2026年9月27日実施）、95% 区間は広い、有料 API は無料枠でテスト。
+
+**Why it matters:** エージェント経済に必要なのは生の能力より「わからない
+とわかる」キャリブレーションされた棄権です。一文でここまで数字が動くのは、
+実務上の勝利であると同時に、この一文なしで出荷された全抽出パイプラインへ
+の告発でもあります。
+
+[`🔗 ベンチマーク`](https://earnanhonestdollar.com/bench) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49868753)
+
+---
+
+## 38. Claude Marketplace：Anthropic が 2,000 以上のプラグイン・コネクタ・エージェント・サービスパートナーを一つのストアに —— コミット済み支出で購入可能に
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic ブログ（9月23日）· BleepingComputer 報道 9月27日
+- **Tags:** `anthropic` `marketplace` `mcp` `agents`
+
+Anthropic の Claude Marketplace（9月23日発表、大規模な報道は9月27日に到
+着）は、3 つのカタログを一つのストアフロントに統合しました：2,000 以上の
+コネクタとプラグイン（Atlassian、Google、Microsoft、Notion、Salesforce
+など）、CrowdStrike・Cursor・Harvey・Legora・Lovable・Snowflake・Hebbia
+らの Claude 搭載エージェント・製品、そして Claude Partner Network 経由の
+コンサル/サービスパートナー（Accenture、BCG、Deloitte）。数よりも重要な
+詳細が二つ：購入者は**コミット済み Anthropic 支出の一部**をパートナー製品
+の購入に充てられる——クラウドマーケットプレイスの調達経済学を AI に適用
+した形です。そしてビルダーは **MCP と Agent Skills** で公開する——9月25
+日に取り上げた Claude Code プラグインディレクトリ（314 プラグイン）と同
+じオープン標準で、このマーケットプレイスはその顧客向けスーパーセットです。
+
+**Why it matters:** 今のプラットフォーム戦争はモデル品質ではなくディスト
+リビューションの争いです——そして「コミット済み契約額の消化先」は、かつ
+てあらゆるエンタープライズクラウドにエコシステムをもたらした仕組みその
+ものです。
+
+[`🔗 Anthropic 発表`](https://claude.com/blog/claude-marketplace) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-turns-claude-into-an-ai-marketplace-with-2-000-plus-plugins-and-connectors/)
+
+---
+
+## 39. UIUC がシステムプログラミング教科書をオープンソース化 —— coursebook が +265★/日でトレンドに
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日次）· 本日 +265 スター · 2,225★ · 最終push Sep 26
+- **Tags:** `textbook` `systems-programming` `c` `education`
+
+cs341-illinois/coursebook は、イリノイ大学アーバナ・シャンペーン校 CS 341
+（システムプログラミング）で使われるオープンソースの入門教科書です。実
+質として Angrave の古典的 SystemProgramming wikibook を標準化・拡張する
+ことを目指し、引用・脚注・用語集を備え、PDF・EPUB・HTML・Markdown への
+CI 自動エクスポートを持ちます。講義とコードはすべて C（「Linux カーネル
+の事実上の言語」）。今回の急上昇を引き金とする単一のイベントはありませ
+ん——9 年の歴史ある授業資料がトレンドに浮上したもので、おそらく試験シー
+ズンの自然発現です。なおリポジトリには LICENSE ファイルがなく、「再配布
+こそ存在意義」のリポジトリとしては現実的な再利用の懸念になります。
+
+**Why it matters:** 大学の授業が CS 教育の最高品質の無料レイヤーになり続け
+ています。そして構造化されエクスポート可能な教科書は、エージェントがそ
+のまま教えるのに最適な形でもあります。
+
+[`🔗 cs341-illinois/coursebook`](https://github.com/cs341-illinois/coursebook) · [`🔗 HTML 版`](https://cs341.cs.illinois.edu/coursebook/index.html)
+
+---
+
+## 40. 「Jev in the Wild」：Jev エコシステム初の定量的マップ —— 公開プロジェクト 2,170 件
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · HF Papers · 2609.30216
+- **Tags:** `jev` `ecosystem` `analysis` `decision-models`
+
+今週しきりに登場した主役に、ついに測定値が付きました。「Jev in the Wild」
+（arXiv:2609.30216）は、2026年9月22日時点で GitHub から収集した公開 Jev
+プロジェクト 2,170 件を分析したものです：新規プロジェクトと既存リポジト
+リへの統合の両方による急速な初期成長。属性判定とスコアリングが支配的な
+用途で、アクション選択・コンテンツフィルタリング・モデル/ツール選択は分
+野により異なる。そして関心はルーティングとインターフェース系エージェン
+トに集中し、**プロジェクト数とは相関しない**。但し書き：公開 GitHub プロ
+ジェクトの単一時点スナップショットに過ぎず、私的・社内デプロイは見えま
+せん。
+
+**Why it matters:** 数週間にわたる Jev 論——パロディ、ベンチマーク、ラッ
+パー、ローカルランナー——の中で、これが最初の「逸話ではない」データポイ
+ントです。意思決定モデルのエコシステムは実際に何をしているのか。
+
+[`🔗 arXiv:2609.30216`](https://arxiv.org/abs/2609.30216) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.30216)
+
+---
+
+## 41. PLFM_RADAR が 25.6k★ で再トレンドに —— ただしリポジトリは 6 月から休止状態
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日次）· 本日 +145 スター · 25,605★ · 最終push 6月17日
+- **Tags:** `radar` `open-hardware` `fpga` `trending-audit`
+
+NawfalMotii79/PLFM_RADAR——オープンソース・低コストの 10.5 GHz PLFM フ
+ェーズドアレイレーダーシステム（「AERIS-10」ビルドは 2048 点 FFT、ハイブ
+リッド AGC、ADAR1000 ビームフォーミングを含む。Hackaday 記事は最大 20 km
+の探知距離を主張）——が本日 +145★/日でトレンドボードに載っています。こ
+こにある全項目が受けるべきトリガー確認の結果：**見つけられませんでした。**
+4 月以降リリースはなく（v2.0.2-p0-audit）、6月17日以降コミットもなく、新
+しい HN や報道の取り上げも確認できません。以前で最も大きな注目は古い 71
+ポイントの HN スレッドです。だからこれは Void の教訓の通りに読んでくださ
+い：確かに印象的なハードウェア作品ですが、*現在の*トレンド入りは説明がな
+く、メンテナンス状態は休止中——これは調査すべき合図であって、インストー
+ルすべき合図ではありません。
+
+**Why it matters:** 消費者価格のフェーズドアレイレーダーはそれだけで出色
+のオープンハードウェアです——そして今日は「プロジェクトのイベントから遊
+離したスター速度」の生きた標本も兼ねています。
+
+[`🔗 NawfalMotii79/PLFM_RADAR`](https://github.com/NawfalMotii79/PLFM_RADAR) · [`🔗 Hackaday プロジェクト`](https://hackaday.io/project/205190-open-source-plfm-radar-up-to-20km-range)
+
+---
+
+## 42. CoyoPedal：ESP32-S3 上で動く Neural Amp Modeler ギターアンプ —— デバイスに JS エンジンはなし
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News（Show HN）· 100 pts · 約2日前（Sep 26 02:24 UTC 投稿）
+- **Tags:** `esp32` `audio` `dsp` `neural-amp-modeler`
+
+CoyoPedal（GPL-3.0、dashersw）は約 10 ドルの Waveshare
+ESP32-S3-Touch-AMOLED ボードを、フルサイズの Neural Amp Modeler A2 キャ
+プチャを 48 kHz でリアルタイムに実行するスタンドアロンのギターアンプ・エ
+フェクターに変えます。23 層・8 チャネルの WaveNet をブロック浮動小数点
+と手書き Xtensa カーネルで処理し、両コアに 64 フレームブロックで分割負荷。
+USB ホストとしてクラス準拠の USB インターフェースを駆動し、タッチスク
+リーン UI は TSX で書いて**ネイティブ C++ にコンパイル**——デバイスに
+JavaScript エンジンは一切ありません。同じファームウェアは素のモジュー
+ル向けにもビルドでき、WASM ビルドは同一の DSP とモデルをブラウザで動かせ
+ます。正直な適用範囲：約 2 日前に登場し、Show HN の余熱が去った後は勢いは
+鈍っています。
+
+**Why it matters:** ニューラルアンプモデリングには以前はノート PC か専用
+DSP ペダルが必要でした——これをコモディティマイコンの上に載せ、しかも
+「TSX で UI → ネイティブ C++ コンパイル」というパイプラインは、オーディ
+オを越えて盗む価値があります。
+
+[`🔗 dashersw/coyopedal`](https://github.com/dashersw/coyopedal) · [`🔗 ブラウザデモ`](https://coyopedal.playtaurus.com/)
+
+---
+
+## 43. byoungd/up が 64.3k★ で再トレンドに：英語学習ガイドから育った AI 時代の人生マニュアル
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending（日次）· 本日 +310 スター · 64,349★
+- **Tags:** `chinese-opensource` `learning` `guide` `documentation`
+
+byoungd/up は 2017 年の「离谱的英语学习指南」——中国語圏で最も有名な英語
+学習ガイド——に始まり、今では韓先凱（筆名：离谱）による絶賛更新中の書稿
+『人生进阶指南』へと成長しました。英語から、AI 時代の学習、実際のプロジ
+ェクト、起業の失敗と回復までを扱い、CC BY-NC 4.0 で無料の EPUB/PDF とし
+て公開、ホームページは biezou.com です。README には自らのメソッドが書か
+れています——「問題を発見 → 学ぶ → AI と協働 → 実際のタスクを完遂 → 証
+拠を残す → 振り返って転用する」——研究結論・個人的経験・未検証の仮説を
+区別している点も特徴です。注意：単一著者のマニュアルであり、商業的な関
+わりは審査ではなく自己開示されています。+310★/日 の再浮上は中国語 GitHub
+圏がドライバーです。
+
+**Why it matters:** 64k★ の規模は GitHub 上で最大級の中国語ナレッジリポジ
+トリです。そして英語ガイドから AI 協働マニュアルへ至るその軌跡は、今の読
+者層の変化そのものを、その内側にいる人間が書き残したサンプルです。
+
+[`🔗 byoungd/up`](https://github.com/byoungd/up) · [`🔗 biezou.com`](https://biezou.com)
+
+---
+
 ## Metadata
 
 | 項目 | 値 |
 |-------|-------|
-| 生成日時 | 2026-09-28T12:20:00+08:00 |
-| アイテム数 | 32 |
-| 追跡ソース | 27（Hacker News、GitHub Trending/API、NVD、BleepingComputer、OpenAI、ThreatDown、Socket、CyberSecurityNews、fireworks.ai、Hugging Face、arXiv、hex.pm、colo.to、sancho.bearblog.dev、loficities.com、iain.rocks、generalroboticslab.com、wiki.zimbra.com、Unsung/aresluna.org、ihatethefuture.com、hereticpleb.vercel.app、The Flashpoint、nura.eco、mitxela.com、fakecloud.dev、platform.openai.com、changeradar.ai） |
+| 生成日時 | 2026-09-28T20:45:00+08:00 |
+| アイテム数 | 43 |
+| 追跡ソース | 37（Hacker News、GitHub Trending/API、NVD、BleepingComputer、OpenAI、ThreatDown、Socket、CyberSecurityNews、fireworks.ai、Hugging Face、arXiv、hex.pm、colo.to、sancho.bearblog.dev、loficities.com、iain.rocks、generalroboticslab.com、wiki.zimbra.com、Unsung/aresluna.org、ihatethefuture.com、hereticpleb.vercel.app、The Flashpoint、nura.eco、mitxela.com、fakecloud.dev、platform.openai.com、changeradar.ai、vhyrro.neorg.org、luarocks.org、claude.com、platform.claude.com、earnanhonestdollar.com、space.com、git.mills.io、cs341.cs.illinois.edu、hackaday.io、coyopedal.playtaurus.com、biezou.com） |
 | 更新スケジュール | 毎日 04:03、12:03、20:03 UTC+8（1日3回） |
 | ランキング | ベロシティ重視（新鮮さ × エンゲージメント加速度 × ソースの権威） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-09-28
-updated: 2026-09-28T12:20:00+08:00
+updated: 2026-09-28T20:45:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -797,13 +797,292 @@ embodied-AI needs more of — with an honest envelope.
 
 ---
 
+## 33. Today's the day: Starship Flight 14 targets first-ever orbit — with 26 Starlink V3 satellites aboard
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 108 pts · ~3h ago (submitted Sep 28 09:15 UTC)
+- **Tags:** `spacex` `starship` `starlink` `launch`
+
+SpaceX is flying Starship Flight 14 today (window opened 12:15 UTC from
+Starbase, 75 minutes) — the program's first attempt at true orbital insertion
+after 13 suborbital flights: ~275 km altitude, up to six orbits over roughly
+10 hours, controlled reentry and Pacific splashdown west of Chile. The
+booster's objectives shifted toward proving ascent, stage separation,
+boostback and landing rather than a tower catch. The payload is the real
+milestone: **26 operational Starlink V3 satellites — the first real
+deployment attempt of the program.** Honest status note: at this feed's write
+time (~12:45 UTC), the sources we checked had not yet confirmed liftoff or
+orbit insertion — treat the outcome as unconfirmed and live coverage as the
+source of record.
+
+**Why it matters:** if orbit + V3 deployment both work, Starship stops being
+a test article and becomes Starlink's launch infrastructure — the constraint
+that has gated V3 satellite cadence all year.
+
+[`🔗 Space.com live coverage`](https://www.space.com/space-exploration/launches-spacecraft/spacexs-starship-megarocket-launching-to-orbit-for-1st-time-ever-on-sept-28-watch-it-live) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49875411)
+
+---
+
+## 34. "Prompting Claude Opus 5.5" — the official harness-tuning guide hits the HN front page
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 136 pts · ~5h ago (submitted Sep 28 07:33 UTC)
+- **Tags:** `prompt-engineering` `claude` `agents` `docs`
+
+Anthropic's official prompting guide for Opus 5.5 — not a launch, the docs —
+is the AI story HN is reading this morning. It covers behavioral differences
+from Opus 5 and the prompting/harness patterns that address them: effort
+calibration, thinking behavior across API and chat surfaces, progress
+updates, unattended and multi-agent tasks, safeguard refusals, frontend
+design, complex visual inputs, multi-app workflows, and pasted text in user
+messages. Stated baseline: Opus 5.5 generates output tokens more than 30%
+faster than Opus 5, tends to finish the same task with fewer tokens, and
+existing Opus 5 prompts "should perform well without changes."
+
+**Why it matters:** model behavior is now enough of a moving target that a
+vendor maintains a per-release *harness-tuning manual* — and the community
+treats it as front-page reading. That doc genre is itself the trend.
+
+[`🔗 Prompting Claude Opus 5.5 (official docs)`](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49874728)
+
+---
+
+## 35. Parley: federated chat that speaks plain IRC — user@domain from irssi
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 85 pts · ~2h ago (submitted Sep 28 10:30 UTC)
+- **Tags:** `irc` `chat` `federation` `self-hosted`
+
+Parley (James Mills, prologic) is federated, decentralised chat where the
+wire protocol is plain IRC: you run an instance for your domain and anyone
+can reach you as `user@domain` from irssi or any IRC client — no new client,
+no account migration, no bridge bots. It lands two days after Armada, the
+Nostr-based Discord alternative (covered Sep 27), making this a genuinely
+crowded week for "replace Discord without a platform" attempts — Parley's bet
+is the opposite of a new protocol: reuse the one chat protocol everyone
+already speaks.
+
+**Why it matters:** every federated-chat attempt lives or dies on client
+adoption; making the existing IRC fleet your client base is the most
+conservative — and possibly the only viable — on-ramp.
+
+[`🔗 git.mills.io/prologic/parley`](https://git.mills.io/prologic/parley) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49875913)
+
+---
+
+## 36. Luarocks.org: one user account was one LuaJIT bytecode exploit away from rooting the Lua package registry
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 28 pts · ~16h ago (submitted Sep 27 20:13 UTC)
+- **Tags:** `security` `supply-chain` `luajit` `sandbox-escape`
+
+Security researcher Vhyrro's writeup (Sep 27) documents a full pre-auth-to-root
+chain on luarocks.org, the Lua package registry whose top package counts 24M
+downloads. The rockspec-validation sandbox was close to exemplary — empty
+environment, JIT off, debug-hook line limits — but it loaded specs with
+`loadstring()`, which also accepts LuaJIT **bytecode**, and LuaJIT deliberately
+ships without bytecode verification. Existing public exploits failed against
+OpenResty's LJ_GC64=1 fork, so the researcher wrote a new one: an out-of-bounds
+read via an unbounded `KNUM` constant index, pivoting through a `package.loaded`
+TValue to recover `loadstring` from the global environment and run arbitrary
+code — demonstrated by replacing the site homepage with a `ttyd` shell.
+**Patched as of Sep 26**; PoC and a luarocks.org incident page are published.
+Caveats: the writeup cites no CVE ID, and the registry-wide blast radius was
+potential, not observed.
+
+**Why it matters:** the CPAN and npm incidents of this month keep making the
+same point from different angles — package registries are the highest-leverage
+supply-chain target there is, and sandboxing untrusted code with the same
+VM that runs it is not containment.
+
+[`🔗 Conquering the Moon (writeup)`](https://vhyrro.neorg.org/posts/critical-luarocks-exploit-cve/) · [`🔗 luarocks.org security incident`](https://luarocks.org/security-incident-september-2026)
+
+---
+
+## 37. "Do not guess": one instruction cuts made-up extraction fields from 70.7% to 20.2%
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 57 pts · ~19h ago (submitted Sep 27 17:24 UTC)
+- **Tags:** `evaluation` `hallucination` `extraction` `agents`
+
+Earn an Honest Dollar (an agent-to-agent services marketplace) published a
+fabrication benchmark for web extraction: 42 twin-page pairs across 7 page
+types, where the two pages differ by one row and each carries a decoy (an old
+price, the wrong author, a stale date). An honest extractor returns the value
+on page one and `null` on page two. Headline: adding "Use null for any field
+whose value is not on the page. Do not guess." cut made-up fields from 70.7%
+to 20.2%. The per-model table is the interesting part — Gemini 3.8 Flash and
+GLM 5.3 miss 1 of 36, while paid extraction APIs underperform raw models
+(Firecrawl: 24/36 fabricated) — and the caveats are on the page: one run per
+contestant, dated Sep 27 2026, wide 95% ranges, paid APIs tested on free
+tiers.
+
+**Why it matters:** agent commerce needs calibrated abstention more than raw
+capability — and a single sentence of instruction moving the number that far
+is both a practical win and an indictment of every extraction pipeline
+shipped without it.
+
+[`🔗 The benchmark`](https://earnanhonestdollar.com/bench) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49868753)
+
+---
+
+## 38. Claude Marketplace: Anthropic unifies 2,000+ plugins, connectors, agents and service partners — buyable against committed spend
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic blog (Sep 23) · BleepingComputer coverage Sep 27
+- **Tags:** `anthropic` `marketplace` `mcp` `agents`
+
+Anthropic's Claude Marketplace (announced Sep 23, wide coverage landing Sep
+27) consolidates three catalogs into one storefront: 2,000+ connectors and
+plugins (Atlassian, Google, Microsoft, Notion, Salesforce…), Claude-powered
+agents and products from CrowdStrike, Cursor, Harvey, Legora, Lovable,
+Snowflake and Hebbia, and consulting/service partners (Accenture, BCG,
+Deloitte) via the Claude Partner Network. Two details matter more than the
+count: buyers can spend **a portion of their committed Anthropic spend** on
+partner products — cloud-marketplace procurement economics applied to AI —
+and builders publish via **MCP and Agent Skills**, the same open standards
+already covered here via the Claude Code plugin directory (314 plugins,
+Sep 25) — this marketplace is the customer-facing superset of that.
+
+**Why it matters:** distribution, not model quality, is the platform war of
+the moment — and spending against committed contracts is the mechanism that
+got every enterprise cloud its ecosystem.
+
+[`🔗 Anthropic announcement`](https://claude.com/blog/claude-marketplace) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-turns-claude-into-an-ai-marketplace-with-2-000-plus-plugins-and-connectors/)
+
+---
+
+## 39. UIUC open-sources its systems programming textbook — coursebook trends at +265★/day
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (daily) · +265 stars today · 2,225★ · pushed Sep 26
+- **Tags:** `textbook` `systems-programming` `c` `education`
+
+cs341-illinois/coursebook is the open-source introductory systems programming
+textbook used by CS 341 at the University of Illinois Urbana-Champaign —
+built to standardize and extend Angrave's classic SystemProgramming wikibook,
+with citations, footnotes, a glossary and CI-automated exports to PDF, EPUB,
+HTML and Markdown. All instruction and code is C ("the de-facto language of
+the Linux kernel"). No single event triggered the spike — it's a nine-year
+course artifact surfacing on trending, likely exam-season discovery — and the
+repo has no license file, a real reuse caveat for a repo whose whole point is
+redistribution.
+
+**Why it matters:** university courses keep becoming the highest-quality free
+layer of CS education, and a structured, exportable textbook is also exactly
+the shape an agent can teach from.
+
+[`🔗 cs341-illinois/coursebook`](https://github.com/cs341-illinois/coursebook) · [`🔗 HTML edition`](https://cs341.cs.illinois.edu/coursebook/index.html)
+
+---
+
+## 40. "Jev in the Wild": the first quantitative map of the Jev ecosystem — 2,170 public projects
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · HF Papers · 2609.30216
+- **Tags:** `jev` `ecosystem` `analysis` `decision-models`
+
+This week's recurring character finally gets a measurement. "Jev in the Wild"
+(arXiv:2609.30216) analyzes 2,170 publicly available Jev projects collected
+from GitHub as of Sep 22, 2026: rapid early ecosystem growth via both new
+projects and integration into existing repos; attribute judgment and scoring
+are the dominant uses, while action selection, content filtering and
+model/tool selection vary by domain; and public attention concentrates in
+routing and interface agents — and does *not* track project counts. Caveat:
+it is a snapshot of public GitHub projects, a single source at a single
+timestamp; private and internal deployments are invisible to it.
+
+**Why it matters:** after weeks of Jev takes — parody, benchmarks, wrappers,
+local runners — this is the first datapoint that isn't an anecdote: what the
+decision-model ecosystem is actually doing with it.
+
+[`🔗 arXiv:2609.30216`](https://arxiv.org/abs/2609.30216) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.30216)
+
+---
+
+## 41. PLFM_RADAR re-trends at 25.6k★ — and the repo has been dormant since June
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (daily) · +145 stars today · 25,605★ · last pushed Jun 17
+- **Tags:** `radar` `open-hardware` `fpga` `trending-audit`
+
+NawfalMotii79/PLFM_RADAR — an open-source, low-cost 10.5 GHz PLFM phased-array
+radar system (the "AERIS-10" builds target a 2048-point FFT, hybrid AGC and
+ADAR1000 beam-forming; the Hackaday writeup claims up to 20 km range) — is on
+today's trending board at +145★/day. The trigger check every item here is
+supposed to get: **we can't find one.** No release since April (v2.0.2-p0-audit),
+no commit since June 17, no fresh HN or press pickup located; the strongest
+prior attention is an older 71-point HN thread. So read this one as the Void
+lesson says to: a genuinely impressive hardware artifact whose *current* trend
+is unexplained, and whose maintenance status is dormant — signal to
+investigate, not to install.
+
+**Why it matters:** a consumer-price phased-array radar is remarkable open
+hardware — and today it doubles as a live specimen of star velocity detached
+from any project event.
+
+[`🔗 NawfalMotii79/PLFM_RADAR`](https://github.com/NawfalMotii79/PLFM_RADAR) · [`🔗 Hackaday project`](https://hackaday.io/project/205190-open-source-plfm-radar-up-to-20km-range)
+
+---
+
+## 42. CoyoPedal: a Neural Amp Modeler guitar rig on an ESP32-S3 — no JS engine on the device
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News (Show HN) · 100 pts · ~2d ago (submitted Sep 26 02:24 UTC)
+- **Tags:** `esp32` `audio` `dsp` `neural-amp-modeler`
+
+CoyoPedal (GPL-3.0, dashersw) turns the ~$10 Waveshare ESP32-S3-Touch-AMOLED
+board into a standalone guitar amp and effects pedal running full-size
+Neural Amp Modeler A2 captures at 48 kHz — a 23-layer, eight-channel WaveNet
+in block floating point with hand-written Xtensa kernels, split across both
+cores in 64-frame blocks. It drives a class-compliant USB interface as USB
+host, and the touchscreen UI is written in TSX **compiled to native C++** —
+no JavaScript engine on the device. The same firmware builds for a bare
+module, and a WASM build runs the identical DSP and model in the browser.
+Honest envelope: it surfaced ~2 days ago and momentum has slowed since the
+Show HN bump.
+
+**Why it matters:** neural amp modeling used to require a laptop or a dedicated
+DSP pedal — this puts it on a commodity microcontroller, with a web-tooling
+(UI in TSX) to-native-C++ pipeline worth stealing beyond audio.
+
+[`🔗 dashersw/coyopedal`](https://github.com/dashersw/coyopedal) · [`🔗 Browser demo`](https://coyopedal.playtaurus.com/)
+
+---
+
+## 43. byoungd/up re-trends at 64.3k★: the English study guide that grew into an AI-era life manual
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (daily) · +310 stars today · 64,349★
+- **Tags:** `chinese-opensource` `learning` `guide` `documentation`
+
+byoungd/up began in 2017 as 离谱的英语学习指南 — the famous Chinese-language
+English-learning guide — and has grown into 《人生进阶指南》("Life Level-Up
+Guide"), a continuously updated book by 韩先凯 (pen name 离谱) that runs from
+English through AI-era learning, real projects, startup failure and recovery,
+published as free EPUB/PDF under CC BY-NC 4.0, with homepage at biezou.com.
+The README states its own method — "discover a problem → learn → collaborate
+with AI → finish a real task → keep the evidence → review and transfer" —
+and separates research findings from personal experience and untested
+hypotheses. Caveats: it is one author's manual with commercial affiliations
+disclosed rather than reviewed, and the +310★/day re-trend is driven by the
+Chinese-language GitHub sphere.
+
+**Why it matters:** at 64k★ this is one of the largest Chinese-language
+knowledge repos on GitHub, and its arc — English guide → AI-collaboration
+manual — is the audience shift of the moment, written from inside it.
+
+[`🔗 byoungd/up`](https://github.com/byoungd/up) · [`🔗 biezou.com`](https://biezou.com)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-28T12:20:00+08:00 |
-| Items | 32 |
-| Sources tracked | 27 (Hacker News, GitHub Trending/API, NVD, BleepingComputer, OpenAI, ThreatDown, Socket, CyberSecurityNews, fireworks.ai, Hugging Face, arXiv, hex.pm, colo.to, sancho.bearblog.dev, loficities.com, iain.rocks, generalroboticslab.com, wiki.zimbra.com, Unsung/aresluna.org, ihatethefuture.com, hereticpleb.vercel.app, The Flashpoint, nura.eco, mitxela.com, fakecloud.dev, platform.openai.com, changeradar.ai) |
+| Generated | 2026-09-28T20:45:00+08:00 |
+| Items | 43 |
+| Sources tracked | 37 (Hacker News, GitHub Trending/API, NVD, BleepingComputer, OpenAI, ThreatDown, Socket, CyberSecurityNews, fireworks.ai, Hugging Face, arXiv, hex.pm, colo.to, sancho.bearblog.dev, loficities.com, iain.rocks, generalroboticslab.com, wiki.zimbra.com, Unsung/aresluna.org, ihatethefuture.com, hereticpleb.vercel.app, The Flashpoint, nura.eco, mitxela.com, fakecloud.dev, platform.openai.com, changeradar.ai, vhyrro.neorg.org, luarocks.org, claude.com, platform.claude.com, earnanhonestdollar.com, space.com, git.mills.io, cs341.cs.illinois.edu, hackaday.io, coyopedal.playtaurus.com, biezou.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
