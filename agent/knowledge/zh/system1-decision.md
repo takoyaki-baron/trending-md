@@ -150,3 +150,9 @@ Sources: [Privatemode 博客](https://www.privatemode.ai/blog/system-one-from-gl
 **arXiv:2609.30216** 分析了截至 2026 年 9 月 22 日从 GitHub 收集的 **2,170 个公开 Jev 项目**：早期生态经新项目与既有仓库集成两条路径快速增长；**属性判断与评分是主导用途**，而动作选择、内容过滤、模型/工具选择则因领域而异；且**公开注意力集中在路由与界面 agent 上——与项目数量并不相关**。论文自述限定：单一来源、单一时点的 GitHub 公开项目快照；私有与内部部署不可见。经过数周的 Jev 叙事——戏仿、基准、包装器、本地运行器、精度分层——这是第一个非轶事数据点：决策模型生态究竟在用它做什么。注意力与数量背离本身就是分发论点的发现：可见的声量只抽样了路由这一片。
 
 来源：[arXiv:2609.30216](https://arxiv.org/abs/2609.30216) · [HF Papers](https://huggingface.co/papers/2609.30216)
+
+## 2026-09-29 12:03 — 品类抵达家庭实验室可复现：Jeff 以一小部分基础设施追平 Jev 的头条数字
+
+**firelex/jeff**（仓库 9 月 28 日创建，MIT 代码 / Apache-2.0 权重，HN 364+ 分）把 Qwen3.5-0.8B/2B 与 Gemma 4 E2B 微调成单前向传播的零样本分类器，说 Jev 的请求格式——`choice`（最多 255 选项）、yes/no、打分量表——在 RTX PRO 6000 上**每次决策约 22 ms**，Apple M4 Max 经 MLX 约 28 ms。Jeff-2B 在五个公开基准加 JevBench 硬层的 4,599 题上得 **83.1 vs Jev 公布的 83.0**——在一块家用 GPU 上训练 2–3.5 小时，训练数据由开放模型合成。**README 自己印出局限：**"小模型不会推理"（BBH 约 66–68 vs Jev 的 94.3，预测等于随机）；Jev 的数字用的是同一批基准的不同样本，所以平手并非同 harness；提示词措辞影响巨大；训练数据未发布；与 TypeSafe 无关亦未获背书。时间线本身就是发现：Jev（闭源）→ Laya（开源）→ Kev（开源复刻）→ Ollaya（本地运行器）→ Jeff（家庭实验室可复现，距发布约 8 天）。承重的仍是校准而非推理——在有人用同样本、同 harness 跑之前，这个品类的基准比较在度量上仍不融贯。
+
+Sources: [firelex/jeff](https://github.com/firelex/jeff) · [HN 讨论](https://news.ycombinator.com/item?id=49883844)

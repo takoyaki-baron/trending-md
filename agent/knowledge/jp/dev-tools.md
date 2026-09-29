@@ -354,3 +354,11 @@ Sources: [willfaust/Madeira](https://github.com/willfaust/Madeira) · [FEX-Emu �
 - **PaperMono ショッピングリスト**(Show HN、107 pts / 51 コメント。リポジトリは 9/27 作成)：M5Stack PaperMono 端末(ESP32-S3、e-ink タッチスクリーン)向け C++ e-paper クライアント。Wi-Fi 経由でスマホ Web UI と同期、オフライン動作、約 2,400 行——著者曰く「fully vibe-coded with Claude Code、私は一行も手書きしていない」。Claude が新しいハードウェアデバイスをどう扱うかを見るために作られ、既に家庭で毎日使用中。限定：単独作者の週末プロジェクト、リリースなし、README 冒頭にライセンス記載なし。「エージェントはハードウェアプロジェクトをエンドツーエンドで所有できるか?」に対する、小さいが完全なデータポイント——既製端末、Python バックエンド、モバイル Web、アプリストアなし、正直な作者性開示。
 
 Sources: [definitelynotwindows.com](https://definitelynotwindows.com/) · [HN](https://news.ycombinator.com/item?id=49881747) · [seamusc/papermono-shopping-list](https://github.com/seamusc/papermono-shopping-list) · [Show HN thread](https://news.ycombinator.com/item?id=49875801)
+
+## 2026-09-29 12:03 — 「coding is not solved」が今週 3 本目の高速住民投票に。エージェントが規模で再導入するタイムゾーン往復
+
+**「Coding is not solved」**（Alex Ewerlöf、HN 461+ pts）：SRE ベテランが、LLM はソフトウェアのコスト構造を反転させる——創造は安くなったが「保守、信頼性、セキュリティ、スケーラビリティ等がコストの大半」——と論じ、AI はその半分を吸収できない。理由は「AI は説明責任を負えない……AI は罰せられない、ゆえに決して説明責任を負えない」。誰も読まないコードは 3 カテゴリに限定：個人ソフトウェア、POC、「武器化された AI」。著者自身の限定：意見が重い（「ストローマンフォールに注意」）、「反 AI ではない」、自身 LLM ハーネスを構築済み。「When did Google get so weird?」（900+ pts）やアーキテクチャ意図の記事に続き、 profession 内部から「コーディングは解決済み」の枠組みを拒む今週 3 本目の高速エッセイ——名指しされた引っかかりは**能力ではなく説明責任**。
+
+**Postgres `AT TIME ZONE 'UTC'`**（HN 162+ pts）：`AT TIME ZONE` は入力型で意味が反転する——`timestamp without time zone` に対しては値を UTC と*宣言*し（`timestamptz` を生成）、`timestamptz` に対してはタイムゾーンを*剥ぎ取り*素の壁時計時刻を返す。つまり一見慣用的な `now() AT TIME ZONE 'UTC'` は変換ではない——`timestamptz` は既に UTC で格納されている——ゾーンを捨てており、2 回連鎖させると値を反転させる。誤った出力は後から、比較とクライアント側処理で顔を出す。naive/timestamptz 往復という静かなデータ破壊クラス——コード生成エージェントが規模で再導入するであろう「当然」の SQL そのものであり、コードレビュースキルルールの最有力候補（テーゼ 8 のスキル評価段階参照）。
+
+Sources: [blog.alexewerlof.com](https://blog.alexewerlof.com/p/coding-is-not-solved) · [HN — エッセイ](https://news.ycombinator.com/item?id=49877988) · [bookofrevenue.com](https://bookofrevenue.com/blog/6ab81e9a97a13f0001f7e4e1/postgres-at-time-zone-u-does-not-do-what-you-think-it-does) · [HN — Postgres](https://news.ycombinator.com/item?id=49865312)

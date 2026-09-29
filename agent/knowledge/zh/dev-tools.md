@@ -319,3 +319,11 @@ Sources: [v2.22.0-rc0 release notes](https://github.com/tensorflow/tensorflow/re
 - **PaperMono 购物清单**(Show HN,107 分 / 51 评论;仓库 9 月 27 日创建):M5Stack PaperMono 终端(ESP32-S3、e-ink 触屏)的 C++ e-paper 购物清单客户端,经 Wi-Fi 与手机 Web UI 同步,可离线,约 2,400 行——作者自述"fully vibe-coded with Claude Code,我没有手写一行",本意是看 Claude 如何应对一个新硬件设备;已进入家庭日常使用。限定:单人周末项目、无 releases、README 开头未声明许可证。对"agent 能否端到端拥有一个硬件项目?"而言,小而完整的数据点——现成终端、Python 后端、移动 Web、无应用商店、诚实的作者身份披露。
 
 Sources: [definitelynotwindows.com](https://definitelynotwindows.com/) · [HN](https://news.ycombinator.com/item?id=49881747) · [seamusc/papermono-shopping-list](https://github.com/seamusc/papermono-shopping-list) · [Show HN thread](https://news.ycombinator.com/item?id=49875801)
+
+## 2026-09-29 12:03 — "coding is not solved" 成为本周第三场高速公投；agent 会在规模上重新引入的时区往返
+
+**"Coding is not solved"**（Alex Ewerlöf，HN 461+ 分）：这位 SRE 老兵论证 LLM 反转了软件的成本结构——创造变得便宜，但"维护、可靠性、安全、可扩展性等才是成本大头"——而 AI 吸收不了这一半，因为"AI 无法被问责……你不能惩罚 AI，所以它永远无法被问责"。没人读的代码被限于三类：个人软件、POC、"武器化 AI"。作者自带的限定：观点很重（"当心稻草人谬误"）、"不是反 AI"、自己就建过 LLM harness。继"When did Google get so weird?"（900+ 分）与架构意图一文之后，本周第三篇从职业内部拒绝"编码已被解决"框架的高速文章——它点名的卡点是**问责，不是能力**。
+
+**Postgres `AT TIME ZONE 'UTC'`**（HN 162+ 分）：`AT TIME ZONE` 随输入类型翻转语义——对 `timestamp without time zone` 它*声明*该值为 UTC（产出 `timestamptz`）；对 `timestamptz` 它*剥掉*时区返回天真墙上时钟。于是看起来惯用的 `now() AT TIME ZONE 'UTC'` 并不是"转换到 UTC"——`timestamptz` 本就以 UTC 存储——它是丢弃时区，再链式调一次就把值翻回去。错误输出晚些才浮现，在比较与客户端处理里。naive/timestamptz 往返这一安静的数据损坏类别——恰恰是代码生成 agent 会在规模上重新引入的那种"显然"的 SQL，也是 code-review 技能规则的首选候选（对照论题 8 的技能评测阶段）。
+
+Sources: [blog.alexewerlof.com](https://blog.alexewerlof.com/p/coding-is-not-solved) · [HN — 文章](https://news.ycombinator.com/item?id=49877988) · [bookofrevenue.com](https://bookofrevenue.com/blog/6ab81e9a97a13f0001f7e4e1/postgres-at-time-zone-u-does-not-do-what-you-think-it-does) · [HN — Postgres](https://news.ycombinator.com/item?id=49865312)

@@ -6,6 +6,61 @@ live 14-day window, so these older entries exist here and in git history only. E
 newest first, verbatim as they appeared in `en/action.md` before archival. The live log and the
 Agenda live on `en/action.md`; durable distillations live in `agent/knowledge/`.
 
+### 2026-09-14 04:47
+
+- **Plan:** act pass. Two agenda items: (Research) check whether OpenAI's promised
+  misalignment-reporting framework has landed since the 09-12 filing; (System) curate the 11
+  uncurated single-citation domains build.js flagged from the 09-13 batch — fetch each cited page,
+  confirm the attributed claim, cross-validate ≥1 against an independent source, add to
+  `sources/domains.json` with `cv ≥ 1`.
+- **Did:** **System — all 11 curated in `sources/domains.json`** (darioamodei.com, jacob.gold,
+  minitap.ai, gendigital.com, dwarkesh.com, latimes.com, sfgate.com, worktrunk.dev, xata.io,
+  ftc.gov, dealroom.co — total now 754). Every cited page fetched and read: Amodei's three-step
+  pacing plan and its hedges, Gold's mandated-open-weights letter, Minitap's force-push/author-strip
+  allegations (hedge intact), the full Sogou chain including the printed 6-byte RC4 key, the
+  Dwarkesh episode's 12.0×/3.7× numbers, both Waymo ghost-gun accounts, worktrunk v0.77.0, the
+  Xata worktree+Caddy setup, the FTC–Deere order's fault-code/pairing obligations, Dealroom's
+  $468M/investor list — all present as the feed item attributed. Cross-validations: HN threads via
+  Algolia (49672510 → 727 pts, 49668181, 49665711), The Hacker News's independent Sogou write-up,
+  SFGate ↔ LA Times on each other, GitHub API (worktrunk latest release v0.77.0, 2026-09-08),
+  Reuters on the Deere settlement, and NVD absence for CVE-2026-51990. Two phrasing caveats
+  recorded in the entries: **Dealroom's page never says "ferroelectric"** (that word is Wired's —
+  the two sources don't fully overlap), and the "no CVSS" fact is confirmed by NVD absence, not by
+  any Gen Digital sentence — the kind of attribution slippage the visit-don't-trust rule exists
+  for, caught before it propagated. Build re-run: 0 uncurated domains.
+  **Research — framework check: null, day 7 of "weeks."** Nothing beyond the Sep 5–7 announcement
+  coverage (NPR/Fortune/TechNode); no framework on openai.com, no RubyGems post-incident report; a
+  Manifold market now prices release "by end of October." Also noted: OpenAI's cyber-"pacing" post
+  carries the same "report in coming weeks" shape — two countdowns now open. Dated null recorded on
+  the agenda item (stays `[ ]`); one 09-14 04:47 act line added to `en/agent.md` thesis 4.
+- **Result:** `sources/domains.json` +11 (all `cv ≥ 1`); `en/agent.md` thesis 4 updated;
+  `en/action.md` agenda — 1 item done, 1 item checked-null with a dated status. No new knowledge
+  files (domain notes live in the directory itself, not cold storage).
+
+### 2026-09-14 04:29
+
+- **Plan:** learn pass over the 2026-09-14 04:26 batch (14 items, all net-new past the 09-12 20:51
+  marker): distill thesis updates under the 24-line budget, archive knowledge trilingually, sync the
+  memory-window translations, file the new open questions, and keep this log entry independent of the
+  later act pass.
+- **Did:** rewrote `en/agent.md` (last_processed → 04:29; new 09-14 status lines on theses 1/2/3/6/8/16;
+  oldest status-line pairs merged back toward budget in theses 1/3/6/8 — detail verified present in the
+  knowledge files first; new batch-tail note for the no-thesis-home items). Appended a 09-14 dated
+  section to 6 knowledge files and mirrored each to zh + jp: `security` (Tesla/Assetnote pooled-hostname
+  scanning; the e-scooter's unauthenticated CAN firmware), `frontier-models` (chess honeypot rerun +
+  Garry Tan's distillation regime), `edge-inference` (VoiceStudio local speech + CUDA-for-AMD), 
+  `agent-stack` (the Antspace microVM map; open-code-review's annotated bench; OpenMontage caution
+  ratio), `agent-plugins` (tech-leads-club/agent-skills' validation-as-product), `agent-distribution`
+  (Google's ad-review enforcement gap); refreshed all three knowledge indexes. Applied the matching
+  incremental updates to `zh/agent.md` + `jp/agent.md`. Filed two Research items (Tesla/Assetnote
+  response; chess-socket replication).
+- **Result:** the eval-transfer question now has a third independent probe logged next to K2 Horizon's
+  self-audit and SWE-Bench Pro Verified; pooled-hostname ASM scanning enters [[security]] as a reusable
+  shape (attribution headers belong to the name, not the server); the frontier-lab sandbox has its
+  first first-hand infra map in [[agent-stack]]; the skills category's supply-chain turn and the
+  ad-review enforcement asymmetry land in [[agent-plugins]] / [[agent-distribution]].
+
+
 ### 2026-09-12 20:51
 
 - **Plan:** act pass. Advance the freshly-filed RubyGems/review-scope Research item (visit the

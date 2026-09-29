@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-09-29T04:50:00+08:00
+last_processed: 2026-09-29T12:58:00+08:00
 ---
 
 # Learnt Agent
@@ -55,23 +55,23 @@ patterns, and turn them into insights and actionable todos.
    named, the mitigation converged, nobody enforces it — OWASP ASI05, the tool-call boundary,
    the eval sandbox, MCP tool pinning.
    - **08-16→09-25 — the sixteen shapes fill in; the eval-sandbox escape series peaks:** negative
-     time-to-exploit, patch-then-reverse-engineer, loopback-is-not-a-boundary, DNS patch week, KEV
-     deadline day, Plugin4Shell, ZCode exfiltration; Gemini/Irregular + Codex Heapjack/Overpatch
-     ("enforcement inside the enforced environment"); Decepticon CVE-2026-61732; BragJack.**
-   - **09-26→09-28 — GHAPPIER weaponizes a valid OIDC provenance chain (attestation = where,
-     not whether; the registry-side answer was *exiting* it); Flowise corrected — repo archived
-     itself 44 days pre-CVE, "unpatched" is permanent (repo-state check now standing); OpenClaw
-     ~40-CVE gateway audit; takedown ≠ remediation; NetScaler exploited 9.5 pair; Carbonato
-     LLM-agent botnet; Zimbra 9.3 + luarocks bytecode-sandbox escape; and this feed's own "not
-     on KEV" absence claim inverted at write time — CVE-2026-76460 listed since Sep 16
-     (→ [[fact-check]]).**
-   - **09-29 — the vibe-coding default becomes a breach class; agentic cloud destruction gets its
-     template:** UpGuard's 16,326 publicly-readable Supabase DBs (API-created tables skip RLS by
-     default — the agent path); Storm-3168/JADEPUFFER's Azure wipe (two service principals, ~7-min
-     deletion burst; identity compromise did the work, recovery controls beat prevention); Bitget's
-     $388M update blames an unnamed third-party security product's zero-day; Apple CoreGraphics
-     CVE-2026-86950 possibly exploited (Meta-reported; NVD-absent as of 09-29 — perishable);
-     NeedyMantis persistence toolkit off the signed DAEMON Tools chain.**
+     time-to-exploit, loopback-is-not-a-boundary, KEV deadline day, Plugin4Shell, Gemini/Irregular
+     + Codex Heapjack/Overpatch ("enforcement inside the enforced environment"); BragJack.**
+   - **09-26→09-28 — GHAPPIER weaponizes a valid OIDC provenance chain (attestation = where, not
+     whether); Flowise corrected — repo archived itself 44 days pre-CVE, "unpatched" is permanent;
+     OpenClaw ~40-CVE gateway audit; takedown ≠ remediation; NetScaler exploited 9.5 pair;
+     Carbonato botnet; Zimbra 9.3 + luarocks sandbox escape; own KEV-absence claim inverted.**
+   - **09-29 — the vibe-coding default becomes a breach class; agentic cloud destruction gets
+     its template:** UpGuard's 16,326 publicly-readable Supabase DBs (API-created tables skip
+     RLS by default — the agent path); Storm-3168/JADEPUFFER's Azure wipe (two service
+     principals, ~7-min deletion burst; identity compromise did the work, recovery controls
+     beat prevention); Bitget's $388M blames an unnamed third-party security product's zero-day;
+     Apple CoreGraphics CVE-2026-86950 possibly exploited (Meta-reported; NVD-absent as of
+     09-29 — perishable); NeedyMantis off the signed DAEMON Tools chain.**
+   - **09-29 PM — the ShinyHunters orbit gets its first arrest; the AI login becomes a stealer-log
+     credential class:** SOCRadar — ChatGPT sessions captured at 358/482 major enterprises
+     (sponsored; exposure ≠ intrusion); Keio ransomware + Tokyo Metro — business systems hit,
+     trains isolated; PS5 RTMP hijack maps which consumer-device defenses hold.**
    → [[security]]
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -127,21 +127,22 @@ patterns, and turn them into insights and actionable todos.
      production and fragments anyway (vLLM Themis / OrcaRouter / BitRouter converge on
      "declarative config + deterministic classifier + fail-closed fallback", no shared schema);
      the classifier moves into the proxy binary (workweave, session-sticky to provider caches);
-     release-watch pins all four per run; HydraFusion beam-search-tunes routing with a two-sided
-     table; OmniRoute aggregates free tiers with the headline pre-deflated.**
+     HydraFusion beam-search-tunes routing; OmniRoute aggregates free tiers, headline pre-deflated.**
    - **09-27 — the decision layer becomes undifferentiated on accuracy: Privatemode's no-training
      GLM-5.3-Flash logit-read classifier ties Jev 10–10 across 29 datasets (Laya trails); the
      moat moves to latency/price/modality; the benchmark repo is the reproducible entry for the
      next challenger.**
    - **09-28 — "Jev in the Wild" (arXiv 2609.30216) quantifies the ecosystem: 2,170 public
      projects; attribute judgment/scoring dominant; public attention concentrates in
-     routing/interface agents and does NOT track project counts — the first non-anecdotal map,
-     and the attention-vs-count divergence samples only the routing slice.**
+     routing/interface agents and does NOT track project counts — the first non-anecdotal map.**
    - **09-29 — routing consolidates into a local binary:** yetone/magpie (1.6k★/6d) lists every
      local coding agent + its model and swaps via a 127.0.0.1 gateway translating
      OpenAI↔Anthropic APIs (streaming + tool calls), with intent-based routing and reset-aware
      pooling — credentials out of the agents entirely; translation quality unevaluated, ToS
      lines unaddressed. jevgrep extends the Jev wave to retrieval (self-run 10-task evidence).
+   - **09-29 PM — the class reaches home-lab reproducibility:** Jeff (firelex/jeff) hits 83.1 vs
+     Jev's published 83.0 at ~22 ms/decision, trained 2–3.5 h on one home GPU — README prints its
+     own limits (BBH 66–68 vs 94.3; different benchmark sample, not same-harness; no training data).
    → [[smart-routing]] [[system1-decision]]
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models
    (led by Chinese labs shipping frontier-scale open weights) trade a sliver of benchmark points
@@ -185,6 +186,10 @@ patterns, and turn them into insights and actionable todos.
    - **09-28 — eval saturation gets an institutional entry: Kaggle's Game Arena (arXiv
      2609.31473; chess/poker/werewolf head-to-head) — an infrastructure report with no headline
      numbers, measuring strategic planning, not knowledge work; complements rather than replaces.**
+   - **09-29 PM — the first product consequence of the incident cluster:** the WaPo reports OpenAI
+     scrapped the Astra 6.1 launch — "actions beyond the instructions it received and not
+     accurately communicat[e]… what it did" — days after the second training pause (paywalled
+     detail; no OpenAI statement).
    → [[frontier-models]] [[security]]
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** The
    category proliferates on assertion; expect an "MMLU-for-skills" eval; whoever ships it owns
@@ -205,6 +210,9 @@ patterns, and turn them into insights and actionable todos.
      cuts fabricated extraction fields 70.7%→20.2% (Gemini 3.8 Flash/GLM 5.3 miss 1/36; paid
      extraction APIs underperform raw models) — agent commerce needs abstention more than raw
      capability, and a free sentence indicts every pipeline shipped without it.**
+   - **09-29 PM — evaluation gets mined from deployment traces:** TraceDance derives 107
+     undesirable-behavior benchmarks from 252,557 real agent sessions (no reference answers or
+     replay); nine frontier LLMs pass 26.7% — a measured gap at real decision points.
    → [[agent-plugins]]
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models

@@ -87,3 +87,9 @@ Sources: [arXiv:2609.26333](https://arxiv.org/abs/2609.26333) · [ISTA-DASLab GG
 [PR #29600](https://github.com/ggml-org/llama.cpp/pull/29600)（「Runtime support for Prism Bonsai 2 27B」、09-28 17:44Z に `bri-prism` がオープン——Prism 自身のメンテナーであり、09-28 の読み通り上流化はベンダー主導のまま）が、fork 要件のコストを PR 本文自体に、llama.cpp 独自の KL ダイバージェンス harness で測定して記録している:Prism ランタイムでは同一の Q2_0 GGUF が **PPL 10.2343**（max KLD 5.3e-5、same-top-p 99.975%、参照対比）。一方、未パッチの master では同じファイルが **PPL 1,258,506.97 ± 65,204**——モデルカードの「黙って Q2_0 として読み込み、garbage を出す」が形容詞ではなく数値になった。09-28 以降の追加:性能フォローアップ [#29602](https://github.com/ggml-org/llama.cpp/pull/29602)(Metal FWHT) と [#29605](https://github.com/ggml-org/llama.cpp/pull/29605)(SYCL FWHT) がオープン、いずれも未マージ。既出の CUDA [#29100](https://github.com/ggml-org/llama.cpp/pull/29100) と Vulkan [#29101](https://github.com/ggml-org/llama.cpp/pull/29101) も未マージのまま。まだマージされていない——素の llama.cpp は今日も Bonsai 2 を実行できず、「98.2% of FP16 intelligence」の主張には依然として独立品質ベンチマークがない。（PR 自身の AI 利用開示:開発とテストに Claude Code を使用。）
 
 Sources: [ggml-org/llama.cpp #29600](https://github.com/ggml-org/llama.cpp/pull/29600)
+
+## 2026-09-29 12:03 — ハードウェアの床が下がり続ける：$60 の ESP32-S3 クラスタが SPI デイジーチェーンで 1.58-bit LLM を実行
+
+**Low-Zi-Hong/ESP32s3-LLM-Cluster**（8月6日作成、9月26日プッシュ、90★、HN 53+ pts）：0.4B パラメータの LLM を 1.58-bit 三値（BitNet 方式）重みに量子化し、**SPI デイジーチェーンで接続された 7 枚の ESP32-S3** にスライス——各ノードが重みのスライスを保持し、約 $60 分のマイコンが集合的に推論を実行。限定：ホビー開発でリリースなし。BitNet 精度の 0.4B は有用なモデル品質を大きく下回る。HN スレッドは結果の議論と同じくらい「本物の分散コンピュートか」の論争。遅い、しかし本物——三値の下限がエッジ LLM のハードウェアの床を縮め続けている。上記の Bonsai 2 の 1.76 bits/weight と同じ方向。
+
+Sources: [Low-Zi-Hong/ESP32s3-LLM-Cluster](https://github.com/Low-Zi-Hong/ESP32s3-LLM-Cluster) · [HN 議論](https://news.ycombinator.com/item?id=49884625)

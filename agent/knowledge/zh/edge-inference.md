@@ -84,3 +84,9 @@ Sources: [arXiv:2609.26333](https://arxiv.org/abs/2609.26333) · [ISTA-DASLab GG
 [PR #29600](https://github.com/ggml-org/llama.cpp/pull/29600)（"Runtime support for Prism Bonsai 2 27B"，09-28 17:44Z 由 `bri-prism` 提交——Prism 自己的维护者，与 09-28 的判断一致：上游化仍是厂商驱动）把 fork 门槛的代价直接写进了 PR 描述，用 llama.cpp 自带的 KL 散度工具测量：Prism 运行时下同一份 Q2_0 GGUF 达到 **PPL 10.2343**（max KLD 5.3e-5，same-top-p 99.975%，对照参考）；而在未打补丁的 master 上，同一文件得分 **PPL 1,258,506.97 ± 65,204**——模型卡上"静默按 Q2_0 加载、产出乱码"现在是一个数字，不再是形容词。09-28 之后新增：性能后续 PR [#29602](https://github.com/ggml-org/llama.cpp/pull/29602)（Metal FWHT）与 [#29605](https://github.com/ggml-org/llama.cpp/pull/29605)（SYCL FWHT），均未合入；此前已开的 CUDA [#29100](https://github.com/ggml-org/llama.cpp/pull/29100) 与 Vulkan [#29101](https://github.com/ggml-org/llama.cpp/pull/29101) 也仍未合入。尚未合并——原版 llama.cpp 今天仍跑不了 Bonsai 2，"98.2% of FP16 intelligence" 主张依然没有独立质量基准。（PR 自身的 AI 使用披露：开发与测试使用了 Claude Code。）
 
 Sources: [ggml-org/llama.cpp #29600](https://github.com/ggml-org/llama.cpp/pull/29600)
+
+## 2026-09-29 12:03 — 硬件下限继续下探：$60 的 ESP32-S3 集群经 SPI 菊链跑 1.58-bit LLM
+
+**Low-Zi-Hong/ESP32s3-LLM-Cluster**（8 月 6 日创建、9 月 26 日推送、90★、HN 53+ 分）：0.4B 参数 LLM 量化为 1.58-bit 三值（BitNet 风格）权重，切分到 **SPI 菊链相连的七片 ESP32-S3**——每片持有一份权重切片，约 $60 的单片机集体完成推理。限定：业余构建、无 releases；0.4B 在 BitNet 精度下远低于可用模型质量；HN 帖里"算不算真正的分布式计算"的争论与结果讨论一样多。慢，但是真的——三值下限持续压缩边缘 LLM 的硬件下限，与上文 Bonsai 2 的 1.76 bits/weight 同一方向。
+
+Sources: [Low-Zi-Hong/ESP32s3-LLM-Cluster](https://github.com/Low-Zi-Hong/ESP32s3-LLM-Cluster) · [HN 讨论](https://news.ycombinator.com/item?id=49884625)
