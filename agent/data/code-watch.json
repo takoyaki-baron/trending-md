@@ -666,12 +666,42 @@
           "path": "claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/technical/accounting-and-evidence.md",
           "html_url": "https://github.com/broadinstitute/warp-sandbox-podman/blob/b12c845ee211cebd298b969af1b61b9974aeb726/claude-sandbox-shared/.claude/plugins/marketplaces/caveman/docs/technical/accounting-and-evidence.md",
           "found": "2026-09-28T21:19:07.620Z"
+        },
+        "m4025329-cell/rembo::caveman/docs/WRAP-BENCHMARK.md": {
+          "repo": "m4025329-cell/rembo",
+          "path": "caveman/docs/WRAP-BENCHMARK.md",
+          "html_url": "https://github.com/m4025329-cell/rembo/blob/c62f8faaee8a4156adbd70fd7217bc21f7607546/caveman/docs/WRAP-BENCHMARK.md",
+          "found": "2026-09-29T13:26:45.205Z"
+        },
+        "m4025329-cell/rembo::caveman/README.md": {
+          "repo": "m4025329-cell/rembo",
+          "path": "caveman/README.md",
+          "html_url": "https://github.com/m4025329-cell/rembo/blob/c62f8faaee8a4156adbd70fd7217bc21f7607546/caveman/README.md",
+          "found": "2026-09-29T13:26:45.205Z"
+        },
+        "m4025329-cell/rembo::caveman/docs/technical/product-model.md": {
+          "repo": "m4025329-cell/rembo",
+          "path": "caveman/docs/technical/product-model.md",
+          "html_url": "https://github.com/m4025329-cell/rembo/blob/c62f8faaee8a4156adbd70fd7217bc21f7607546/caveman/docs/technical/product-model.md",
+          "found": "2026-09-29T13:26:45.205Z"
+        },
+        "m4025329-cell/rembo::caveman/docs/technical/accounting-and-evidence.md": {
+          "repo": "m4025329-cell/rembo",
+          "path": "caveman/docs/technical/accounting-and-evidence.md",
+          "html_url": "https://github.com/m4025329-cell/rembo/blob/c62f8faaee8a4156adbd70fd7217bc21f7607546/caveman/docs/technical/accounting-and-evidence.md",
+          "found": "2026-09-29T13:26:45.205Z"
+        },
+        "m4025329-cell/rembo::caveman/benchmarks/render_charts.py": {
+          "repo": "m4025329-cell/rembo",
+          "path": "caveman/benchmarks/render_charts.py",
+          "html_url": "https://github.com/m4025329-cell/rembo/blob/c62f8faaee8a4156adbd70fd7217bc21f7607546/caveman/benchmarks/render_charts.py",
+          "found": "2026-09-29T13:26:45.205Z"
         }
       },
-      "runs": 57,
+      "runs": 58,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-09-29T05:21:30.890Z",
-      "last_total": 97
+      "last_run": "2026-09-29T13:26:45.205Z",
+      "last_total": 100
     },
     "ra-paper-id": {
       "seen": {
@@ -863,18 +893,18 @@
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 44,
+      "runs": 45,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-29T05:21:30.890Z",
+      "last_run": "2026-09-29T13:26:45.205Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 44,
+      "runs": 45,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-29T05:21:30.890Z",
+      "last_run": "2026-09-29T13:26:45.205Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-09-29T05:21:30.890Z"
+  "last_run": "2026-09-29T13:26:45.205Z"
 }

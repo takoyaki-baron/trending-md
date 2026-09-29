@@ -2206,3 +2206,11 @@ Sources: [UpGuard Research](https://www.upguard.com/blog/everything-everywhere-s
 **PS5 RTMP 串流劫持**（Yash Garg，HN 219+ 分）：主机在开播时经 DNS 解析 Twitch 采集主机，而多数防御成立——HTTPS 保护的发现、RTMPS 证书校验、YouTube 明文 RTMP 路径在约 60 秒活性检查后断开。缺口：通配符 `contribute.live-video.net` 仍在 1935 端口提供**明文 RTMP**，于是局域网 DNS/DHCP 重定向（dnsmasq + OpenWRT 静态租约）用 nginx-rtmp 捕获 1080p60 H.264/AAC 流。属个人网络内的 workaround，不是已披露漏洞；未联系索尼；仅数周可靠性使用。一张干净的地图：哪些消费设备防御（TLS + CA 校验、活性检查）成立，哪个单一通配符主机名悄悄拆掉了它们。
 
 Sources: [BleepingComputer — 逮捕](https://www.bleepingcomputer.com/news/security/dutch-police-confirm-arrest-in-shinyhunters-hacking-investigation/) · [HN — 逮捕](https://news.ycombinator.com/item?id=49884369) · [BleepingComputer — SOCRadar](https://www.bleepingcomputer.com/news/security/80-000-plus-organizations-had-ai-logins-stolen-from-shadow-ai-to-llmjacking/) · [BleepingComputer — 京王](https://www.bleepingcomputer.com/news/security/japans-keio-confirms-ransomware-attack-disrupted-business-systems/) · [京王公告](https://www.keio.co.jp/news/update/announce/nr260926v13404/index.html) · [yashgarg.dev](https://yashgarg.dev/posts/hijacking-ps5-rtmp-stream/)
+
+## 2026-09-29 20:03 — 对话内容"按设计"流向广告商；加固的代价在一个应用上被测量
+
+**"Prompt like a butterfly, sting like a tracker"**（Jorge García Herrero 论文，落款 Sep 16，HN 173 分）：多家 AI 提供商向第三方披露对话衍生制品——标题、提示词、截图——"通常伴随可实现用户归因的持久标识符"；部分提供商公开暴露无访问控制的对话永久链接（拿到 URL 的追踪器可读 entire chat）；Grok 具体案例中，导出截图带着可见对话内容到达 TikTok。**来自我们自身抽取的注意：**我们只能经 HN 帖抽取摘要（PDF 文本层抗拒工具解析）——各提供商的发现均转引自帖子；在复述具体厂商指控前请先核对 PDF。且"披露+标识符"在法律上常属"分享"功能——这正是论文的论点。本周的隐私故事不是黑客攻击：增长打法（分享按钮、永久链接 UX、广告集成）按设计泄露 AI 对话。地图上的新形状——没有攻击者的外泄。
+
+**GrapheneOS hardened_malloc vs Osmand**（wirelessmoves，HN 83 分）：一位用户的追查诊断——Osmand 分配-即弃式地图滚动在 GrapheneOS 加固分配器下付出真实开销；内置的按应用开关恢复速度"带一个安全代价"（作者把大部分地图使用换到 CoMaps）。一个应用、一台设备、一次测量——是规避写法，不是基准。但安全-易用拨盘由此可见：在多数应用上零成本的加固，悄悄向分配密集型负载（如地图）收税；按应用 opt-out 正是让两端都站得住的设计——与平台整体移除能力类别互为镜像（→ [[platform-gatekeeping]]）。
+
+Sources: [论文 PDF](https://jorgegarciaherrero.com/wp-content/interactivos/20260916-Prompt-like-a-butterfly-sting-like-a-tracker-(clean).pdf) · [HN — 论文](https://news.ycombinator.com/item?id=49890226) · [wirelessmoves](https://blog.wirelessmoves.com/2026/09/grapheneos-when-an-app-is-slow.html) · [HN — GrapheneOS](https://news.ycombinator.com/item?id=49882208)

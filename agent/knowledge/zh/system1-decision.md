@@ -156,3 +156,11 @@ Sources: [Privatemode 博客](https://www.privatemode.ai/blog/system-one-from-gl
 **firelex/jeff**（仓库 9 月 28 日创建，MIT 代码 / Apache-2.0 权重，HN 364+ 分）把 Qwen3.5-0.8B/2B 与 Gemma 4 E2B 微调成单前向传播的零样本分类器，说 Jev 的请求格式——`choice`（最多 255 选项）、yes/no、打分量表——在 RTX PRO 6000 上**每次决策约 22 ms**，Apple M4 Max 经 MLX 约 28 ms。Jeff-2B 在五个公开基准加 JevBench 硬层的 4,599 题上得 **83.1 vs Jev 公布的 83.0**——在一块家用 GPU 上训练 2–3.5 小时，训练数据由开放模型合成。**README 自己印出局限：**"小模型不会推理"（BBH 约 66–68 vs Jev 的 94.3，预测等于随机）；Jev 的数字用的是同一批基准的不同样本，所以平手并非同 harness；提示词措辞影响巨大；训练数据未发布；与 TypeSafe 无关亦未获背书。时间线本身就是发现：Jev（闭源）→ Laya（开源）→ Kev（开源复刻）→ Ollaya（本地运行器）→ Jeff（家庭实验室可复现，距发布约 8 天）。承重的仍是校准而非推理——在有人用同样本、同 harness 跑之前，这个品类的基准比较在度量上仍不融贯。
 
 Sources: [firelex/jeff](https://github.com/firelex/jeff) · [HN 讨论](https://news.ycombinator.com/item?id=49883844)
+
+## 2026-09-29 20:03 — Jeeves：第三幕让"推理"成为杠杆；同日零安装游乐场落地
+
+**PostHog/jeeves**（仓库与权重 Sep 29 发布，仅数小时；HN 48+ 分）：Qwen3.5-9B 微调（LoRA + pointer head，SFT + CISPO，外加"diffusion drafter"），先推理再回答 Jev 风格的决策请求——yes/no（`noul`）、choice、score——走同一个 Jev 兼容 API。README 表：**held-out 域外 0.889** vs Kev-9B 的 0.822、Jev 的 0.857；JevBench 公开档 0.935 vs Jev 的 0.866——但 transfer 档落败（0.746 vs 0.800）。延迟：不思考约 0.3 s，思考时单张 H100 中位 3.3 s。权重（HF：PostHog/jeeves）与**完整训练数据以 MIT/Apache 发布**。**注意：**对照列全部是 Kev 公布的数字，并非重跑（"Inspired by Kev" 写得明明白白）；发布仅数小时，无独立复现。时间线延长：Jev → Laya → Kev → Ollaya → Jeff → Jeeves（距闭源发布约 9 天）。第一幕造出品类，第二幕在家庭实验室复现，第三幕加入刻意的推理步——而第一个附带训练数据的发布，使它成为这个品类一直缺的同 harness 重跑的参考实现。
+
+**MicroLLM Lab**（stateofutopia.com，HN 257 分）：七个 SLM（25M–360M，Q4）完全在浏览器端经 WebGPU 运行与基准对比——"100% 私有、零服务器、零账号"——把 SLM 定位为决定"是否需要昂贵的云端模型"的分诊层。**注意：**帖子自己的示例显示 25M–360M 有多弱（一条评论的热水浴缸问题得到自信的胡说）；是演示，不是框架。这是品类的正门：任何人十秒钟就能体感"大多数调用不需要前沿模型"这一论题。
+
+Sources: [PostHog/jeeves](https://github.com/PostHog/jeeves) · [HF 权重](https://huggingface.co/PostHog/jeeves) · [HN — Jeeves](https://news.ycombinator.com/item?id=49891290) · [MicroLLM Lab](https://stateofutopia.com/experiments/microllmlab/) · [HN — MicroLLM Lab](https://news.ycombinator.com/item?id=49882781)

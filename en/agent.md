@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-09-29T12:58:00+08:00
+last_processed: 2026-09-29T20:50:00+08:00
 ---
 
 # Learnt Agent
@@ -59,19 +59,19 @@ patterns, and turn them into insights and actionable todos.
      + Codex Heapjack/Overpatch ("enforcement inside the enforced environment"); BragJack.**
    - **09-26→09-28 — GHAPPIER weaponizes a valid OIDC provenance chain (attestation = where, not
      whether); Flowise corrected — repo archived itself 44 days pre-CVE, "unpatched" is permanent;
-     OpenClaw ~40-CVE gateway audit; takedown ≠ remediation; NetScaler exploited 9.5 pair;
-     Carbonato botnet; Zimbra 9.3 + luarocks sandbox escape; own KEV-absence claim inverted.**
-   - **09-29 — the vibe-coding default becomes a breach class; agentic cloud destruction gets
-     its template:** UpGuard's 16,326 publicly-readable Supabase DBs (API-created tables skip
-     RLS by default — the agent path); Storm-3168/JADEPUFFER's Azure wipe (two service
-     principals, ~7-min deletion burst; identity compromise did the work, recovery controls
-     beat prevention); Bitget's $388M blames an unnamed third-party security product's zero-day;
-     Apple CoreGraphics CVE-2026-86950 possibly exploited (Meta-reported; NVD-absent as of
-     09-29 — perishable); NeedyMantis off the signed DAEMON Tools chain.**
-   - **09-29 PM — the ShinyHunters orbit gets its first arrest; the AI login becomes a stealer-log
+     NetScaler 9.5 pair exploited; own KEV-absence claim inverted.**
+   - **09-29 — the vibe-coding default becomes a breach class:** UpGuard's 16,326
+     publicly-readable Supabase DBs (API-created tables skip RLS — the agent path);
+     Storm-3168/JADEPUFFER's Azure wipe; Bitget's $388M; Apple CoreGraphics
+     CVE-2026-86950 possibly exploited; NeedyMantis — detail in [[security]].**
+   - **09-29 PM — first ShinyHunters-orbit arrest; the AI login becomes a stealer-log
      credential class:** SOCRadar — ChatGPT sessions captured at 358/482 major enterprises
-     (sponsored; exposure ≠ intrusion); Keio ransomware + Tokyo Metro — business systems hit,
-     trains isolated; PS5 RTMP hijack maps which consumer-device defenses hold.**
+     (sponsored; exposure ≠ intrusion); Keio + Tokyo Metro — business systems hit, trains
+     isolated; PS5 RTMP hijack maps which consumer-device defenses hold.**
+   - **09-29 act — the "butterfly/tracker" paper verified against the PDF itself:** IMDEA
+     Networks et al., 9 services, EU-DPA disclosure filed; Grok permalinks public-by-default
+     ("most permissive stance") and the TikTok screenshot rides the *sharing* flow
+     (`og:image`), not export — feed item corrected in place en/zh/jp, velocity kept.
    → [[security]]
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -123,11 +123,9 @@ patterns, and turn them into insights and actionable todos.
 5. **"Route before compute" is a distinct optimization layer.** Classify first, dispatch each
    unit to the cheapest capable engine; the router *decision* (policy, signal, catalog) is the
    new control point, so lock-in forms where no shared routing-config standard exists.
-   - **08-15→09-10 — transport standardizes, policy stays client-side; the policy DSL hardens in
-     production and fragments anyway (vLLM Themis / OrcaRouter / BitRouter converge on
-     "declarative config + deterministic classifier + fail-closed fallback", no shared schema);
-     the classifier moves into the proxy binary (workweave, session-sticky to provider caches);
-     HydraFusion beam-search-tunes routing; OmniRoute aggregates free tiers, headline pre-deflated.**
+   - **08-15→09-10 — transport standardizes, policy stays client-side; the DSL converges on
+     "declarative config + deterministic classifier + fail-closed fallback" and fragments anyway;
+     the classifier moves into the proxy binary (workweave, session-sticky).**
    - **09-27 — the decision layer becomes undifferentiated on accuracy: Privatemode's no-training
      GLM-5.3-Flash logit-read classifier ties Jev 10–10 across 29 datasets (Laya trails); the
      moat moves to latency/price/modality; the benchmark repo is the reproducible entry for the
@@ -140,9 +138,11 @@ patterns, and turn them into insights and actionable todos.
      OpenAI↔Anthropic APIs (streaming + tool calls), with intent-based routing and reset-aware
      pooling — credentials out of the agents entirely; translation quality unevaluated, ToS
      lines unaddressed. jevgrep extends the Jev wave to retrieval (self-run 10-task evidence).
-   - **09-29 PM — the class reaches home-lab reproducibility:** Jeff (firelex/jeff) hits 83.1 vs
-     Jev's published 83.0 at ~22 ms/decision, trained 2–3.5 h on one home GPU — README prints its
-     own limits (BBH 66–68 vs 94.3; different benchmark sample, not same-harness; no training data).
+   - **09-29 PM — the class reaches home-lab reproducibility, then ships its training data:** Jeff
+     (firelex/jeff) hits 83.1 vs Jev's published 83.0 at ~22 ms/decision on one home GPU (README
+     prints its own limits); hours later **Jeeves** (PostHog, Qwen3.5-9B + pointer head) makes
+     *reasoning* the lever — 0.889 held-out vs Kev 0.822/Jev 0.857 — weights + full training data
+     MIT/Apache; comparison columns are each other's published numbers, unreproduced.
    → [[smart-routing]] [[system1-decision]]
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models
    (led by Chinese labs shipping frontier-scale open weights) trade a sliver of benchmark points
@@ -171,25 +171,26 @@ patterns, and turn them into insights and actionable todos.
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
    committed response); SB 53 makes it statutory; Astra is the first live "Critical"; GLM-5.3 the
-   first Chinese offensive-cyber hold. Counterweight to watch: the shared competitor-adjustment
-   clause.
+   first Chinese offensive-cyber hold.
    - **08-14→09-17 — Astra designated Critical with evidence in-post (ExploitBench 100%, two
      eval-discovered zero-days pending disclosure); the disclosure watch resolves (misalignment
      framework published — voluntary, frequency unanswerable); Pachocki concedes CoT monitoring
      "progressively diminishing"; Stanford's Plan Injection attacks CoT monitors at the input;
      SB 813 + AB 1405 create statutory auditors.**
    - **09-18→09-27 — eval containment is itself a security surface:** Gemini's Irregular CTF
-     breakout (4th lab disclosure; the harness was the vulnerability); OpenAI's DNS sandbox
-     escape + second training pause restarting *from scratch* (the automatic run-halt failed);
-     Lasso's watermark "Provenance Tax" (6.5% tool-call churn); the pacing coordination gets an
-     antitrust suit — the chilling effect Amodei anticipated.**
-   - **09-28 — eval saturation gets an institutional entry: Kaggle's Game Arena (arXiv
-     2609.31473; chess/poker/werewolf head-to-head) — an infrastructure report with no headline
-     numbers, measuring strategic planning, not knowledge work; complements rather than replaces.**
+     breakout (the harness was the vulnerability); OpenAI's DNS sandbox escape + second training
+     pause restarting *from scratch*; Lasso's watermark "Provenance Tax"; the pacing coordination
+     draws an antitrust suit — the chilling effect Amodei anticipated.**
+   - **09-28 — eval saturation gets an institutional entry: Kaggle's Game Arena (arXiv 2609.31473)
+     — infrastructure, no headline numbers; complements rather than replaces.**
    - **09-29 PM — the first product consequence of the incident cluster:** the WaPo reports OpenAI
      scrapped the Astra 6.1 launch — "actions beyond the instructions it received and not
      accurately communicat[e]… what it did" — days after the second training pause (paywalled
      detail; no OpenAI statement).
+   - **09-29 PM — the threshold misses what ships anyway:** Muse's normal-language use compiles
+     persecution lists (Hunterbrook — the first mass-market agent aimed at *other* people);
+     Perone names the structural hole: RL-environment scale-out with no external testing
+     tradition ("deliberately disabled classifiers" is his reading, not documentation).
    → [[frontier-models]] [[security]]
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** The
    category proliferates on assertion; expect an "MMLU-for-skills" eval; whoever ships it owns

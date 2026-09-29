@@ -1683,3 +1683,9 @@ Sources: [stablyai/orca](https://github.com/stablyai/orca) · [zhayujie/CowAgent
 **Tencent WeKnora v0.8.2**(9 月 24 日;周榜第 6,30,919★):沙箱化 agent 工具统一、**按工具粒度的 MCP 启用开关**、管理员建号 UI,以及路径穿越修复(本地前缀、任务 ID、wiki 排序参数)。维护活跃(9 月 28 日有 push);文档中文优先。知识平台吸收 agent 治理特性,是 RAG × agent 基建的安静合流。
 
 Sources: [Cloudflare blog](https://blog.cloudflare.com/cloudflare-cf-cli-launch/) · [cloudflare/cf](https://github.com/cloudflare/cf) · [HN](https://news.ycombinator.com/item?id=49879577) · [NVIDIA developer blog](https://developer.nvidia.com/blog/nvidia-open-agent-safety-platform-a-reference-for-continuous-in-silicon-agent-monitoring/) · [The Decoder](https://the-decoder.com/nvidia-wants-to-keep-ai-agents-on-a-short-leash-with-a-watchdog-built-into-its-chips) · [mikehasa/golive-skill](https://github.com/mikehasa/golive-skill) · [trycua/cua](https://github.com/trycua/cua) · [Tencent/WeKnora](https://github.com/Tencent/WeKnora) · [v0.8.2 release notes](https://github.com/Tencent/WeKnora/releases)
+
+## 2026-09-29 20:03 — PageIndex Flash：无向量 RAG 拿掉自己的索引成本
+
+**VectifyAI/PageIndex v0.2.19/0.2.20**（Sep 21/28；今日 +822★ 至 36.7k★，MIT，Sep 28 有推送）：不为文档切块嵌入，而是构建便于推理的目录树——检索即树导航、由 LLM 读节点，无向量索引。新的 **PageIndex Flash** 仅凭版面统计生成树结构（"结构生成本身不涉及 LLM"）；LLM 只写节点摘要，树扩展并发提出节点——拿掉了无向量 RAG 此前最主要的实用障碍：索引成本。**注意：**质量主张是项目自报；SDK 同时命名本地与云端模式（托管漏斗是设计的一部分）；"无向量"以查询期的推理成本换取嵌入召回——交易有文档，不是免费的。embed-everything 默认之外最强的在役替代，恰在 agent 需要把文档理解当作子程序而非流水线时到来——与记忆基底收敛于结构化既定知识（wiki-not-RAG）互为检索侧同类。
+
+Sources: [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) · [releases](https://github.com/VectifyAI/PageIndex/releases)

@@ -75,6 +75,10 @@
   {
    "repo": "vectorize-io/hindsight",
    "why": "agent-memory attention sink (thesis 1 / [[agent-stack]]): 39.6k★, the quarter's fastest riser; its LongMemEval SOTA attribution was corrected 09-28 to co-developer reproduction (2 of 7 paper authors are VT Sanghani faculty; WaPo a named dev collaborator — CLAUDE.md author-overlap rule seeded by it). A push/release is a chance the README's 'independently reproduced by research collaborators' phrasing or the benchmark claims change — verify the wording, not just the diff"
+  },
+  {
+   "repo": "PostHog/jeeves",
+   "why": "decision-model class (thesis 5 / [[system1-decision]]): the reasoning-improves-routers entry — Qwen3.5-9B + pointer head, 0.889 held-out vs Kev 0.822/Jev 0.857, weights + full training data MIT/Apache released 09-29 (first for the class). Watch fires on a third-party same-harness rerun covering Jev/Kev/Jeff/Jeeves on one sample (the agenda's open watch: each README's comparison columns are the others' published numbers) or any sealed JevBench adoption"
   }
  ]
 }

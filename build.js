@@ -498,6 +498,7 @@ function discoverKnowledgeTopics(lang) {
 const SOURCE_ALIASES = {
   'raw.githubusercontent.com': 'github.com',
   'github.githubassets.com': 'github.com',
+  'api.github.com': 'github.com',
   'blog.csdn.net': 'csdn.net', 'agent.csdn.net': 'csdn.net', 'adg.csdn.net': 'csdn.net',
   'eu.36kr.com': '36kr.com',
   'm.thepaper.cn': 'thepaper.cn',

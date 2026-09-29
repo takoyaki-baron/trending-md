@@ -1237,51 +1237,60 @@
     },
     "https://www.reuters.com/business/anthropic-targets-financial-advisers-with-new-claude-tool-2026-09-14": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-09-28T21:21:23.288Z",
-      "last_seen": "2026-09-29T05:24:28.596Z",
+      "last_seen": "2026-09-29T13:29:46.385Z",
       "feeds": [
         "2026-09-29.md"
       ]
     },
     "https://www.npmjs.com/package/@dzhng/jevgrep": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-09-28T21:21:23.288Z",
-      "last_seen": "2026-09-29T05:24:28.596Z",
+      "last_seen": "2026-09-29T13:29:46.385Z",
       "feeds": [
         "2026-09-29.md"
       ]
     },
     "https://socradar.io": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-29T05:24:28.596Z",
-      "last_seen": "2026-09-29T05:24:28.596Z",
+      "last_seen": "2026-09-29T13:29:46.385Z",
       "feeds": [
         "2026-09-29.md"
       ]
     },
     "https://www.androidheadlines.com/2026/09/openai-leaks-always-on-o-chatgpt-assistant.html": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-29T05:24:28.596Z",
-      "last_seen": "2026-09-29T05:24:28.596Z",
+      "last_seen": "2026-09-29T13:29:46.385Z",
       "feeds": [
         "2026-09-29.md"
       ]
     },
     "https://www.washingtonpost.com/technology/2026/09/28/chatgpt-maker-openai-scraps-release-astra-61-model-over-safety/": {
       "verdict": "transient",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-09-29T05:24:28.596Z",
-      "last_seen": "2026-09-29T05:24:28.596Z",
+      "last_seen": "2026-09-29T13:29:46.385Z",
+      "feeds": [
+        "2026-09-29.md"
+      ]
+    },
+    "https://jorgegarciaherrero.com/wp-content/interactivos/20260916-Prompt-like-a-butterfly-sting-like-a-tracker-(clean": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-09-29T13:29:46.385Z",
+      "last_seen": "2026-09-29T13:29:46.385Z",
       "feeds": [
         "2026-09-29.md"
       ]
     }
   },
-  "runs": 41,
+  "runs": 42,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-09-29T05:24:28.596Z"
+  "last_run": "2026-09-29T13:29:46.385Z"
 }

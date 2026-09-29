@@ -174,3 +174,11 @@ Sources: [arXiv:2609.30216](https://arxiv.org/abs/2609.30216) · [HF Papers](htt
 **firelex/jeff**（リポジトリ 9月28日作成、MIT コード / Apache-2.0 ウェイト、HN 364+ pts）は Qwen3.5-0.8B/2B と Gemma 4 E2B を、Jev のリクエスト形式を話す単一フォワードパスのゼロショット分類器にファインチューン——`choice`（最大 255 選択肢）、yes/no、スコア尺度——RTX PRO 6000 で**判断あたり約 22 ms**、Apple M4 Max は MLX 経由で約 28 ms。Jeff-2B は 5 つの公開ベンチマークと JevBench ハード層の 4,599 問で **83.1 対 Jev 公表の 83.0**——1 枚の家庭用 GPU で 2〜3.5 時間の学習、訓練データはオープンモデルが合成。**README が自らの限界を印刷：**「小さいモデルは推論しない」（BBH 約 66〜68 対 Jev の 94.3、予測はほぼランダム）。Jev の数値は同じベンチマークの別サンプルを使っており、引き分けは同一ハーネスではない。プロンプトの言い回しが極めて重要。訓練データ非公開。TypeSafe と無関係で承認も受けていない。タイムライン自体が発見：Jev（クローズド）→ Laya（オープン）→ Kev（オープンレプリカ）→ Ollaya（ローカルランナー）→ Jeff（ホームラボ再現、ローンチから約 8 日）。荷重を支えているのは依然、推論ではなくキャリブレーション——誰かが同じサンプルを同じハーネスで走らせるまで、このクラスのベンチマーク比較は計量的に不整合のままである。
 
 Sources: [firelex/jeff](https://github.com/firelex/jeff) · [HN 議論](https://news.ycombinator.com/item?id=49883844)
+
+## 2026-09-29 20:03 — Jeeves:第 3 幕は「推論」をレバーに。同日、ゼロインストールの遊び場も到着
+
+**PostHog/jeeves**(リポジトリと重みを Sep 29 リリース、数時間経過。HN 48+ pts):Qwen3.5-9B のファインチューン(LoRA + pointer head、SFT + CISPO、さらに「diffusion drafter」)で、Jev 方式の判断リクエストにyes/no(`noul`)・choice・score を答える前に推論する——同一の Jev 互換 API で。README の表:**held-out 域外 0.889** 対 Kev-9B 0.822、Jev 0.857。JevBench 公開ティアは 0.935 対 Jev 0.866——ただし transfer ティアは敗北(0.746 対 0.800)。レイテンシは思考なし約 0.3 秒、思考ありは H100 1 枚で中央値 3.3 秒。重み(HF: PostHog/jeeves)と**完全な訓練データを MIT/Apache で公開**。**注意:**比較列はすべて Kev が公表する数値であり再実行ではない(「Inspired by Kev」と明記)。リリース数時間、独立再現なし。タイムラインは延長:Jev → Laya → Kev → Ollaya → Jeff → Jeeves(クローズド公開から約 9 日)。第 1 幕がカテゴリを出し、第 2 幕がホームラボで再現し、第 3 幕が意図的な推論ステップを追加——そして訓練データを添えた最初のリリースが、このクラスに欠けていた同一ハーネス再実行のリファレンス実装になる。
+
+**MicroLLM Lab**(stateofutopia.com、HN 257 pts):7 つの SLM(25M〜360M、Q4)を WebGPU で完全クライアント側実行・ベンチ比較——「100% プライベート、サーバーコストゼロ、アカウントゼロ」——高価なクラウドモデルが必要かどうかを決めるトリアージ層として SLM を位置づける。**注意:**スレッド自身の例が 25M〜360M の弱さを示す(あるコメントの浴槽の質問に自信満々のナンセンス)。デモであってフレームワークではない。クラスの正面玄関:「ほとんどの呼び出しにフロンティアモデルは要らない」を 10 秒で体感できる。
+
+Sources: [PostHog/jeeves](https://github.com/PostHog/jeeves) · [HF の重み](https://huggingface.co/PostHog/jeeves) · [HN — Jeeves](https://news.ycombinator.com/item?id=49891290) · [MicroLLM Lab](https://stateofutopia.com/experiments/microllmlab/) · [HN — MicroLLM Lab](https://news.ycombinator.com/item?id=49882781)

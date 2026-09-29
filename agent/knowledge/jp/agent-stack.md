@@ -1965,3 +1965,9 @@ Sources: [arXiv 2512.12818](https://arxiv.org/abs/2512.12818) · [README](https:
 **Tencent WeKnora v0.8.2**(9/24。週間 #6、30,919★):サンドボックス化されたエージェントツール統合、**ツール単位の MCP 有効化トグル**、管理者によるユーザー作成 UI、パストラバーサル修正(ローカルプレフィックス・タスク ID・wiki ソートパラメータ)。保守は活発(9/28 push)。ドキュメントは中国語優先。ナレッジプラットフォームがエージェントガバナンス機能を吸収する、RAG × エージェントインフラの静かな収束。
 
 Sources: [Cloudflare blog](https://blog.cloudflare.com/cloudflare-cf-cli-launch/) · [cloudflare/cf](https://github.com/cloudflare/cf) · [HN](https://news.ycombinator.com/item?id=49879577) · [NVIDIA developer blog](https://developer.nvidia.com/blog/nvidia-open-agent-safety-platform-a-reference-for-continuous-in-silicon-agent-monitoring/) · [The Decoder](https://the-decoder.com/nvidia-wants-to-keep-ai-agents-on-a-short-leash-with-a-watchdog-built-into-its-chips) · [mikehasa/golive-skill](https://github.com/mikehasa/golive-skill) · [trycua/cua](https://github.com/trycua/cua) · [Tencent/WeKnora](https://github.com/Tencent/WeKnora) · [v0.8.2 release notes](https://github.com/Tencent/WeKnora/releases)
+
+## 2026-09-29 20:03 — PageIndex Flash:ベクトルレス RAG が自身のインデックスコストを除去
+
+**VectifyAI/PageIndex v0.2.19/0.2.20**(Sep 21/28。本日 +822★ で 36.7k★、MIT、Sep 28 push):ドキュメントをチャンク埋め込みする代わりに、推論に適した目次ツリーを構築——検索はツリー辿りで LLM がノードを読む、ベクトルインデックスなし。新しい **PageIndex Flash** はツリー構造をレイアウト統計だけから生成(「構造生成自体に LLM は関与しない」)。LLM が書くのはノード要約のみで、ツリー展開はノードを並行して提案——ベクトルレス RAG の最大の実用障壁だったインデックスコストを除去。**注意:**品質主張はプロジェクト自身のもの。SDK はローカルとクラウドの両モードを名指し(ホステッドファネルは設計の一部)。「ベクトルレス」はクエリ時の推論コストと埋め込み再現率を交換する——取引は文書化済み、ただの飯ではない。embed-everything の既定値に対する最も強い現役の代替が、エージェントがドキュメント理解をパイプラインではなくサブルーチンとして必要とする瞬間に到着——構造化された確定知識へ収束するメモリ基盤(wiki-not-RAG)の検索側の兄弟。
+
+Sources: [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) · [releases](https://github.com/VectifyAI/PageIndex/releases)
