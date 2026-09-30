@@ -1,8 +1,8 @@
 ---
 date: 2026-09-30
-updated: 2026-09-30T04:03:00+08:00
+updated: 2026-09-30T12:03:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 12
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -394,13 +394,522 @@ that yt-dlp remains the load-bearing dependency of this entire category.
 
 ---
 
+## 15. livenerf: a pre-registered 30-day rig asks whether Opus 5.5 gets quietly nerfed — HN's #1 story
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** HN front page #1 · 350+ pts, 150+ comments · ~6h ago (~06:36 UTC+8)
+- **Tags:** `evals` `benchmarks` `opus-5-5` `model-drift`
+
+ninjahawk/livenerf — "a long-running, deterministic-as-possible benchmark for
+detecting whether a frontier model gets quietly worse after launch" — is the
+front page's top story. Months of "Anthropic nerfs models after release"
+reports have always ended as vibes versus vibes, so this repo starts the
+clock on launch day (Opus 5.5, Sep 22) and runs daily for 30 days: days 1–10
+baseline, then two 10-day windows, first possible call ~Oct 24. It's built on
+the UK AI Security Institute's Inspect framework, run through headless Claude
+Code with a pinned CLI (2.1.280), frozen prompts, exact-match graders ("no
+LLM judge, ever") and append-only raw logs; the stats follow Anthropic's own
+error-bars paper. Calibration: 2,336 questions screened, 78 "sometimes right"
+questions form the panel — with the selection bias measured (fresh pass rate
+54.7% → 62.0%) and 8 wrong answer keys / 30 ambiguous questions flagged but
+kept under a pre-registered sensitivity analysis. Six of 30 days collected as
+of Sep 29, none missed. **The README's own limits:** one run per day detects
+only ~7.5 accuracy points per 10-day window, and validation showed a
+same-family swap (Opus 5 for 5.5) was *not* distinguishable at 99% (−3.8 ±
+6.3 points, −23% tokens) — the instrument can't catch a swap of that size.
+It also measures the model as served through Claude Code on a Max
+subscription, not the raw API.
+
+**Why it matters:** "the model got worse" finally has a reproducible
+instrument — pre-registration, a control arm, clustered standard errors —
+and the honest bound of what it can detect is published next to the plan.
+The secondary signal (output tokens per sample) is where quiet effort
+reductions show first, often before accuracy moves.
+
+[`🔗 ninjahawk/livenerf`](https://github.com/ninjahawk/livenerf) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49901736)
+
+---
+
+## 16. America.gov launches as the AI front door to the US government — with an executive order behind it
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** White House / GovExec · 445+ pts on HN · ~14h ago (~22:04 UTC+8)
+- **Tags:** `government` `ai-deployment` `chatbot` `policy`
+
+America.gov relaunched Sep 29 as an AI-chatbot "digital front door" to the
+federal government, unveiled at a "Hello, America" event alongside an
+executive order directing the GSA, the National Design Studio and OMB to make
+it "the single point of entry" for covered services — online-accessible
+federal services serving 100,000+ users a year, with Login.gov integration
+mandated (IRS tax filing and DoD/intelligence services excluded). The chatbot
+draws only on ~29,000 federal websites and runs on Google Gemini and xAI
+Grok, per chief design officer Joe Gebbia's CNBC remarks — the White House
+fact sheet itself names no models. Trump credited Edward Coristine as lead
+engineer. Phase 2, targeted 2027: completing transactions in the chatbot;
+passport applications via the site are promised for December 2026. The
+privacy notice says "AI providers do not retain your prompts or responses"
+and that responses may be cached up to two hours via a prompt hash; HN users
+found a ~50MB client-side ONNX PII filter ("Rampart") downloading to the
+browser, a non-public system prompt, and asymmetric refusal examples.
+Former USDS chief Mikey Dickerson called it a demo of "the easiest 5% of the
+problem." FedScoop reports a second EO the same day directs agencies to call
+AI "Super Intelligence (SI)."
+
+**Why it matters:** this is a compliance mandate, not a demo — every
+100k+-user federal service must integrate with one AI-fronted platform — and
+the first government-scale test of chatbot-front-door UX against the
+gov.uk-style structured design it replaces.
+
+[`🔗 White House fact sheet`](https://www.whitehouse.gov/fact-sheets/2026/09/fact-sheet-president-donald-j-trump-streamlines-access-to-government-services-through-america-gov/) · [`🔗 GovExec`](https://www.govexec.com/technology/2026/09/white-house-launches-ai-powered-americagov-digital-front-door/416323/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49893509)
+
+---
+
+## 17. Anthropic: GLM-5.3 spreads near-frontier cyber capability via open weights — and refusals cost ~$1,200 to strip
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic Frontier Red Team · 200+ pts on HN · ~11h ago (~01:31 UTC+8)
+- **Tags:** `anthropic` `glm-5-3` `open-weights` `cybersecurity`
+
+Anthropic's Frontier Red Team published an analysis of Zhipu/Z.ai's
+open-weight GLM-5.3: on ExploitBench V8 it "develops end-to-end exploits in
+50 of 410 attempts," against 56/410 for Anthropic's restricted-access Claude
+Mythos Preview (earlier public models: ~0), and 4% vs 6% on an internal
+binary-exploitation benchmark. In human-expert sessions it chained novel
+JavaScript-engine 0-days in a Linux browser build into a drive-by page that
+reads arbitrary visitor files (SSH private key theft demonstrated), and
+GLM-5.3-Flash built a working ARM64 N-day exploit chain with a
+pointer-authentication bypass in ~8 hours of compute (~$20.40 at API prices)
+plus 20 minutes of human attention. Safeguards: 0% engagement on direct
+malicious requests rose to 64% with a cover story, 92% with prefilled
+thinking tokens, 100% with abliterated weights — abliteration took ~2,200
+GPU-hours (~$4,400) on the first attempt, and Anthropic estimates an
+experienced team needs ~600 GPU-hours (~$1,200), cutting refusals from >90%
+to 3–12% with GPQA-Diamond unchanged. NIST's CAISI separately calls it "the
+most cyber-capable open-weight model released to date," ~4 months behind the
+US frontier. **Anthropic's own caveats:** bypass tests ran in a simulated
+no-exec environment — "imperfect measures"; the exploit tasks didn't trigger
+GLM-5.3's built-in refusals (it does refuse explicit malware requests); the
+0-day target was the Linux build only; and the closed-vs-open safeguard
+comparison is structurally asymmetric — closed weights can't be abliterated
+by design.
+
+**Why it matters:** frontier-adjacent offensive capability that is permanent
+(in the weights), cheap to strip, and downloadable changes threat modeling
+for anyone shipping internet-facing software — and Anthropic's stated answer
+(expanded defender access, independent government testing) is now a live
+policy question.
+
+[`🔗 Anthropic research`](https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49897075)
+
+---
+
+## 18. DevDay: OpenAI previews a Decisions API — Luna-powered, predefined answers, "their response to Jev"
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI DevDay keynote · The New Stack / Willison live blog · ~11h ago (~01:15 UTC+8)
+- **Tags:** `openai` `decisions-api` `jev` `classification`
+
+Among DevDay's announcements: a preview of the **Decisions API**, which
+OpenAI's recap describes as "real-time decision-making by focusing Luna's
+intelligence on a specific set of user-defined questions with finite
+pre-defined answers." Simon Willison's live notes: the model responds "in a
+fraction of a second" from "a predefined set of options to choose from" —
+and his framing is the story: "Sounds like their response to Jev," the
+TypeSafe classifier API that left stealth less than two weeks earlier. The
+New Stack reports ~150ms responses with confidence scores. No pricing
+announced; preview status. It lands into an ecosystem this feed has tracked
+all week — Ollaya, Jeeves, Jeff, Jevstiller — except this time the incumbent
+platform is adopting the interface rather than orbiting it.
+
+**Why it matters:** the Jev-shaped API surface (constrained choices,
+calibrated confidence, single-digit-millisecond latencies) is becoming a
+platform feature. Raschka's Sep 29 analysis (item 28) argues retrofitting
+the API is easy but matching the breadth is not — which is exactly the
+competition this announcement starts.
+
+[`🔗 OpenAI DevDay recap`](https://openai.com/index/devday-2026-recap/) · [`🔗 Willison live blog`](https://simonwillison.net/2026/Sep/29/openai-devday-2026-live-blog/) · [`🔗 The New Stack`](https://thenewstack.io/openai-decision-api-luna/)
+
+---
+
+## 19. LiteLLM: internal user → proxy admin → host RCE via one reused encryption key — patched today
+
+- **Velocity:** ▮▮ rising
+- **Source:** GHSA-7hp6-4w63-5g45 · published Sep 30 · releases ~09:00 UTC+8
+- **Tags:** `litellm` `cve` `agent-infra` `rce`
+
+The LiteLLM proxy reuses a single encryption key both for sealing secrets at
+rest and for minting session tokens. An authenticated `internal_user` can
+request an API key whose crafted metadata carries "a forged admin credential
+as the 'secret' value"; submitting the returned ciphertext as a bearer token
+makes the proxy "trust the forged admin identity" — full proxy admin,
+including arbitrary command execution via the MCP stdio endpoint. Vulnerable:
+≥1.91.0 **by default** (1.87.0–1.90.x only with `EXPERIMENTAL_UI_LOGIN=true`).
+Fixed in 1.100.4 / 1.101.3 / 1.102.2 / 1.103.1 / 1.104.0rc2, all released
+Sep 30. GitHub rates it High, **CVSS v4 7.7** (GitHub-assigned); the advisory
+states "No known CVE," and an NVD keyword check today confirms no matching
+record — meaning CVE-keyed scanners won't see it. Credit: Hoa X. Nguyen
+(OPSWAT Unit 515). Interim mitigation `EXPERIMENTAL_UI_LOGIN=false` breaks
+CLI SSO / Claude Code gateway login.
+
+**Why it matters:** LiteLLM (59.9k★) sits in front of a large share of
+self-hosted model fleets, and key-reuse in exactly that gateway layer is the
+bug class agent infrastructure keeps producing — "no CVE assigned" is the
+part that buys the attackers time.
+
+[`🔗 GHSA advisory`](https://github.com/BerriAI/litellm/security/advisories/GHSA-7hp6-4w63-5g45) · [`🔗 BerriAI/litellm`](https://github.com/BerriAI/litellm)
+
+---
+
+## 20. LightLLM: two unauthenticated pickle-deserialization RCEs (CVSS 9.8) — no fixed release yet
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · published Sep 29 23:17 UTC (~07:17 UTC+8)
+- **Tags:** `lightllm` `cve` `rce` `llm-serving`
+
+ModelTC/lightllm ≤1.2.0 has two network-reachable, no-authentication RCEs
+published to NVD last night: **CVE-2026-103040**, unauthenticated RCE via the
+router profiler RPyC service (requires the server started with
+`--enable_profiling`), and **CVE-2026-103041**, RCE via the embed-cache RPyC
+service in multimodal deployments — bound on all interfaces with
+`allow_pickle: True` and no auth. Scores: **CVSS v3.1 9.8 and v4.0 9.3, both
+assigned by VulnCheck** in the NVD record (VulnCheck-scored enrichment, not
+NVD Analyzed). Vendor issues #1596/#1597 have been open since Sep 29; the
+latest release remains v1.2.0 (Aug 10), and the repo is alive (pushed today)
+— so "no patched release" is pending, not permanent. Credit: Mingkai Yu,
+Jiapeng Li, Jiajia Liu.
+
+**Why it matters:** RPyC plus pickle is a remote-code-execution giveaway in
+any Python serving stack, and inference servers are being attached to public
+networks at speed — the reproducible lesson is to check what *else* your
+LLM server exposes besides the inference port.
+
+[`🔗 NVD: CVE-2026-103040`](https://nvd.nist.gov/vuln/detail/CVE-2026-103040) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/lightllm-through-1.2.0-unauthenticated-remote-code-execution-via-embed-cache-rpyc-service) · [`🔗 Issue #1597`](https://github.com/ModelTC/lightllm/issues/1597)
+
+---
+
+## 21. OpenBao patched an unauthenticated-to-RCE chain; HashiCorp Vault hasn't — and an AI found nearly all of it
+
+- **Velocity:** ▮▮ rising
+- **Source:** ControlPlane · published Sep 28, HN Sep 29
+- **Tags:** `openbao` `vault` `rce` `secrets-management`
+
+ControlPlane disclosed an unauthenticated-to-RCE chain affecting Vault and
+its open-source fork OpenBao. The critical bug — GHSA-j6wc-jpvg-xfxq,
+"Remote Code Execution via `sys/storage/raft/snapshot-force` Plugin Catalog
+Replacement" — is rated critical on OpenBao's advisory (no CVSS on the
+advisory record itself; ControlPlane cites CVSSv4 9.4), is gated on guessing
+a SHA-256 checksum (many guesses can be embedded per attempt), and works
+even on read-only container images without `plugin_directory`. Six further
+advisories ship alongside (8.2, 7.7, 7.6 among them). **No CVE IDs exist
+for any of them.** OpenBao fixed everything in v2.6.3/v2.7.0 (Sep 23); HashiCorp
+Vault's latest release (v2.1.1, Sep 16) predates the fixes — ControlPlane
+says Vault customers "were impacted at the time of release, with no
+mitigations in place," and that IBM declined a mutual-disclosure agreement
+(ControlPlane's characterization; IBM's side isn't on the record). Partial
+mitigations: drop `plugin_directory`, set `BAO_DISABLE_PUBLIC_ACME`. And the
+line worth repeating: "All but one vulnerability discovered in this release
+was found by an AI."
+
+**Why it matters:** the fork-split moment made concrete — the open-source
+fork ships the fixes while the commercial original remains exposed — plus
+AI-found vulnerabilities graduating from demo to a 9.4-class secrets-store
+RCE chain.
+
+[`🔗 ControlPlane writeup`](https://control-plane.io/posts/unauthed-to-rce-in-vault-and-openbao/) · [`🔗 openbao/openbao`](https://github.com/openbao/openbao)
+
+---
+
+## 22. Simple-WAM: world-model gains come from the first denoising step — not from generating the future
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face daily papers · 33 upvotes, #1 today
+- **Tags:** `research` `world-models` `robotics` `efficiency`
+
+"What Makes World Action Models Generalize? An Empirical Study of Test-Time
+Future Modeling" (arXiv:2609.34981, Tsinghua-LeapLab, Gao Huang group) runs
+a matched-backbone comparison of how WAMs use future-token generation — and
+finds the expensive part buys almost nothing. Simple-WAM (one denoising pass
+over fully-noised future tokens) hits 79.5% on LIBERO-Plus perturbation
+average vs 67.7% for explicit multi-step WAM and 53.8% for latent
+world-modeling — while π0.5 *with* embodied pretraining still tops at 84.4%.
+Task generalization with video: 73.6 vs 69.9 vs a latent collapse to 5.9.
+Latency: 74.7 ms/chunk vs 286.9 (3.8×). The first denoising step carries
+nearly all the benefit; the remaining nine add ≤~1.8 points. On RoboTwin
+with video, explicit generation *beats* Simple-WAM (47.3 vs 44.5). The
+conclusion states the scope plainly: "Our conclusions rest on a 5B backbone
+without embodied pretraining," and whether they hold at larger scale
+"remains open."
+
+**Why it matters:** a controlled attribution result, not a leaderboard — it
+says the costly iterative generation at the heart of the world-model
+narrative may be doing little work, which is simultaneously an efficiency
+win and a scaling-story caution.
+
+[`🔗 arXiv:2609.34981`](https://arxiv.org/abs/2609.34981) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.34981)
+
+---
+
+## 23. MaLiang-Harness: the program-to-visual gap — 100% generation success, and a quarter of videos still fail quality
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face daily papers · 33 upvotes, #1-tied today
+- **Tags:** `research` `multimodal` `code-generation` `benchmarks`
+
+MaLiang-Harness (arXiv:2609.34309, NUS; author list includes Shuicheng Yan)
+introduces benchmarks that measure whether agent-generated code *renders
+correctly and meets visual quality thresholds* — not just whether it runs —
+across 11 closed-source MLLMs. The headline datum: GPT-6 Astra scores 100%
+generation success on both MaLiang-IBench and MaLiang-VBench, but only
+96.0% of image tasks and **76.9% of video tasks** meet all quality
+thresholds — i.e., for video, roughly one in four "successful" renders
+fails the quality bar. The abstract's point is the mismatch itself: "a
+mismatch between general capability scores and visual generation
+performance" — general benchmarks predict this ability poorly. No dedicated
+limitations section; evaluation is confined to closed-source models. Code
+exists (gulucaptain/MaLiang-Harness, created Sep 27 — a day-old repo, so
+treat the harness as fresh, not battle-tested).
+
+**Why it matters:** "the code ran" has been the ceiling of most agent evals;
+this measures the step after, and finds the frontier's success rate and its
+quality rate are different numbers — a distinction that matters anywhere
+agents ship visual output.
+
+[`🔗 arXiv:2609.34309`](https://arxiv.org/abs/2609.34309) · [`🔗 gulucaptain/MaLiang-Harness`](https://github.com/gulucaptain/MaLiang-Harness)
+
+---
+
+## 24. NSL: "WSL for Linux" — systemd-nspawn dev machines that leave the host alone
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 100+ pts, 70+ comments · ~13h ago (~22:51 UTC+8)
+- **Tags:** `linux` `containers` `dev-environments` `show-hn`
+
+Frostyard's NSL (NSpawn Subsystem for Linux) does for Linux what WSL did for
+Windows: run dev environments without touching the host. Machines are
+systemd-nspawn containers inside a shared QEMU VM — install Debian, Fedora,
+Arch (seven signed, weekly-rebuilt distro images, verified against the
+publishing workflow) while your `$HOME`, `/run/media` and `/mnt` mount under
+`/mnt/host` with your own UID/GID. Ports forward to host `127.0.0.1`; GUI
+apps appear via Waypipe; a `--isolated` flag runs untrusted software in its
+own VM with no host access. MIT-licensed, pre-release v0.4.0 ("v0.3.0 and
+earlier are a retired prototype"). **The caveats it states:** tested on one
+host configuration ("Snow Linux 13 on x86-64" with pinned systemd/QEMU
+versions), and the publishing org is brand-new — the repo (Go, created Sep
+26) has 42★; the Show HN thread, not the star count, is the signal here.
+
+**Why it matters:** "keep the host clean" has been the strongest argument
+for Nix and macOS-style containerization; NSL is a WSL-shaped answer on the
+Linux desktop itself — the direction that problem rarely gets attacked from.
+
+[`🔗 frostyard.github.io/nsl`](https://frostyard.github.io/nsl/) · [`🔗 frostyard/nsl`](https://github.com/frostyard/nsl) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49894351)
+
+---
+
+## 25. XBOW: an AI agent weaponized a kernel bug human review passed over
+
+- **Velocity:** ▮ steady
+- **Source:** XBOW blog · published Sep 28, HN Sep 29
+- **Tags:** `xbow` `linux` `kernel` `agentic-security`
+
+XBOW's autonomous agent took **CVE-2026-72018** — an out-of-bounds write in
+the kernel `dibs` loopback driver, where `move_data()` memcpy's into a
+registered DMB without bounds checks on a peer-controlled `dmbe_idx`
+(NVD: CVSS 3.1 **7.8 High**, Secondary score from the kernel CNA; patched
+upstream since June) — a bug human researchers had looked at and passed
+over, and built a working local privilege escalation: 16-zero-byte writes at
+partially controlled offsets, used to zero out `cred` identity fields.
+**The post's own scope caveats:** it assumes an unprivileged user already
+holding `CAP_NET_ADMIN`; reliability was 22 of 100 fresh boots; it was
+tested on 7.1.0-rc6 with all kernel mitigations disabled; and the team
+deliberately skipped chaining an infoleak/UAF that would raise reliability.
+No known exploitation.
+
+**Why it matters:** not a new threat — a demonstration that agentic
+exploitation now completes the work humans deprioritize. Triage backlogs,
+not just fresh CVEs, are the attack surface.
+
+[`🔗 XBOW blog`](https://xbow.com/blog/no-time-to-pwn-cve-2026-72018) · [`🔗 NVD: CVE-2026-72018`](https://nvd.nist.gov/vuln/detail/CVE-2026-72018)
+
+---
+
+## 26. Cloudflare applies to become a publicly trusted certificate authority
+
+- **Velocity:** ▮ steady
+- **Source:** Cloudflare blog · published Sep 29 · 42+ pts on HN
+- **Tags:** `cloudflare` `pki` `tls` `post-quantum`
+
+Twelve years after Universal SSL, Cloudflare has filed applications with the
+Chrome, Apple, Microsoft and Mozilla root programs to operate as a public
+certificate authority, signed an agreement to acquire an established root
+from GlobalSign, and designed the CA ACME-first: it will refuse clients that
+don't support ACME Renewal Information (RFC 9773). Plans include being
+among the first CAs serving post-quantum certificates against Chrome's PQ
+root program, and production Merkle Tree Certificates with first certs
+targeted Q1 2027. The caveat, verbatim: "We are not issuing certificates
+yet, and it will be a little while before we do." HN commenters add
+context: Google Trust Services did the same GlobalSign-root maneuver, and
+the PQ/MTC push may fracture WebPKI into PQ and legacy halves.
+
+**Why it matters:** a fourth major public CA with an ARI-or-nothing stance
+pushes the entire ecosystem toward automated renewal, and the post-quantum
+timeline matters for anyone whose TLS infrastructure outlives a
+crypto migration.
+
+[`🔗 Cloudflare blog`](https://blog.cloudflare.com/cloudflare-certificate-authority/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49893144)
+
+---
+
+## 27. Backblaze Q2 2026 drive stats: quarterly AFR at 1.73% — the worst "in quite a while"
+
+- **Velocity:** ▮ steady
+- **Source:** Backblaze · published Sep 29 · 113+ pts on HN
+- **Tags:** `storage` `reliability` `data` `backblaze`
+
+Backblaze's quarterly drive-failure report: 354,415 drives analyzed,
+quarterly annualized failure rate **1.73%** against a 1.41% lifetime rate —
+the highest quarterly figure "in quite a while." A rare clean sweep: Seagate
+holds the entire zero-failure honor roll (ST8000NM000A, ST12000NM000J,
+ST14000NM000J, with ST16000NM000J at one failure). Three models exceeded the
+6.95% outlier threshold: Seagate ST10000NM0086 at 9.33% (only 965 drives,
+~8.5 years old), ST14000NM0138 at 8.26%, and HGST HUH721212ALN604 at 7.63%.
+Two models retired; **no new drive models for a second consecutive quarter**;
+20TB+ drives now exceed 25% of the fleet. The report also walks through SMR
+and HAMR — Backblaze runs no SMR drives, and cautions that industry SMR
+adoption means "not today" does not mean "not ever." **Caveats from the
+author:** the worst AFRs are partly small-sample artifacts, and 10 of 31
+models posted AFRs above 3.0% — a skew she hasn't fully analyzed.
+
+**Why it matters:** the failure-rate spike lands mid drive-supply shortage —
+this is the quarter's datapoint for capacity planning, durability math, and
+buy-vs-wait decisions.
+
+[`🔗 Backblaze blog`](https://www.backblaze.com/blog/backblaze-drive-stats-for-q2-2026/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49893002)
+
+---
+
+## 28. Raschka: from bag-of-words to Jev — the classifier history that explains the decision-model wave
+
+- **Velocity:** ▮ steady
+- **Source:** Ahead of AI (Sebastian Raschka) · 53+ pts on HN · ~17h ago (~19:06 UTC+8)
+- **Tags:** `research` `classification` `jev` `history`
+
+Sebastian Raschka places TypeSafe's Jev in six decades of text-classification
+history, re-running his own IMDb benchmarks at every stop: bag-of-words +
+logistic regression 89.9% (still his default baseline), LSTMs 85.66% from
+scratch but 95.4% with ULMFiT transfer, CNNs ~90.07%, ModernBERT ~95%. His
+Jev runs: **Choice 96.47% / Noul 96.20%** on 25k reviews for ~$0.65 and ~22
+minutes — "comparable to a fine-tuned ModernBERT but with no fine-tuning
+required." He guesses a small ModernBERT-like model trained on synthetic
+data with RLCD-style calibration (and explains the published RLCR
+formulation, R = c − (q − c)²). **Caveats he states:** unknown whether
+IMDb's test set is in Jev's training data; public clones trail badly
+(Contrastive LM 82.90%, Laya 92.33%) and fail his Tetris test; fine-tuning
+still wins for high-volume narrow tasks; and he flags OpenAI's newly
+announced Decision API (item 18) as a Jev competitor. He discloses no
+affiliation and no free access.
+
+**Why it matters:** the sober version of the Jev wave — a well-executed API
+over known techniques, whose moat is breadth and calibration rather than
+novelty — from the person best positioned to say so.
+
+[`🔗 Ahead of AI`](https://magazine.sebastianraschka.com/p/classifier-history-and-jev) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49891203)
+
+---
+
+## 29. Deser returns: Ronacher reopens Rust serialization's design space — Serde-compatible in principle, at a stated cost
+
+- **Velocity:** ▮ steady
+- **Source:** lucumr.pocoo.org · ~7h ago (~05:48 UTC+8) · 39+ pts on HN
+- **Tags:** `rust` `serialization` `serde` `deser`
+
+Armin Ronacher has revived Deser — begun in 2022 at Sentry, abandoned, now
+rewritten — and argues it has reached a state worth public attention: "at
+least in principle a drop-in replacement" for Serde. His thesis: Serde's
+pain points (`arbitrary_precision` corrupting tagged enums, `flatten`
+breaking integer map keys, `deserialize_with` adapters that can't compose
+through `Option`/`Vec`) aren't bugs but consequences of three design
+decisions its stability guarantees protect — one trait set for both
+self-describing and non-self-describing formats, a fixed data model that
+loses information when buffering, and recursion on the call stack. Deser is
+event-driven and non-recursive (driver state on the heap, miniserde-style):
+suspendable parsing, lossless buffering, an extensible data model with
+first-class extension types, middleware layers, native XML with namespaces.
+**The costs, stated plainly:** no non-self-describing formats like protobuf;
+JSON reads 33% faster to 60% slower than serde_json (~10% slower on
+average); writes 3× faster to 70% slower; more binary bloat; and the orphan
+rule makes displacing Serde's ecosystem position "very unlikely" — "it is
+just not Serde."
+
+**Why it matters:** not a migration call — a working proof that Serde's
+limitations are design choices rather than Rust's laws, from the author of
+some of Rust-adjacent Python's most-used libraries.
+
+[`🔗 lucumr.pocoo.org`](https://lucumr.pocoo.org/2026/9/29/deser/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49901149)
+
+---
+
+## 30. Raven: a 4.8k-star "harness of harnesses" tops HF papers — with a results-free abstract
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face papers / GitHub · 33 upvotes, 4.8k views · repo pushed today
+- **Tags:** `agents` `harness` `benchmarks` `open-source`
+
+EverMind's Raven pairs an arXiv paper (2609.33439) with one of the
+fastest-rising agent repos of the week: Apache-2.0, 1,738 commits, **4,847★
+in days**, pushed this morning. The paper claims the multi-agent harness
+"significantly outperforms the state-of-the-art agent systems" — with no
+benchmarks, metrics or numbers anywhere on the abstract page, no limitations
+section, and a company listed as the author. The README's numbers are
+self-reported and mostly chart images (DataAgentBench Pass@1 0.8762 with
+Opus-5; a nanochat recursive-self-improvement showcase completing "172
+training runs across 7 rounds without a single crash"). What the repo *does*
+state plainly: "Raven is pre-alpha. Interfaces and configuration may change
+quickly." No independent verification of any performance claim exists yet.
+
+**Why it matters:** per this feed's own Void rule — star velocity is a
+signal to investigate, not to publish. The honest current statement is "a
+very active, pre-alpha agent harness whose every performance number is
+self-reported"; the benchmark claims, not the stars, are what to watch.
+
+[`🔗 arXiv:2609.33439`](https://arxiv.org/abs/2609.33439) · [`🔗 EverMind-AI/Raven`](https://github.com/EverMind-AI/Raven)
+
+---
+
+## 31. Show HN: the real-time solar system — 526k asteroids and ~35k tracked satellites in a browser tab
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 155+ pts, 37 comments · ~9h ago (~03:08 UTC+8)
+- **Tags:** `visualization` `webgl` `space` `show-hn`
+
+space.bl2.net renders the solar system at real scale in the browser,
+"current state" included: WebGL2 rendering with SGP4 orbit propagation in
+web workers, CelesTrak TLEs for Earth-orbiting objects, JPL SBDB for
+asteroids and comets, JPL Horizons for spacecraft positions, refreshed
+daily; the ~30MB asteroid dataset loads in the background. A time slider
+runs forward and backward, satellites appearing and disappearing per launch
+date. The author describes it as "a byproduct of another project" built over
+"a few evenings." **Limitations surfaced in the thread:** "real scale" means
+positions, not markers — satellite dots are effectively city-sized, which is
+why the geostationary belt renders as a visible ring; a high-time-speed
+rendering glitch was reported; and the author fixed a mobile bug within
+hours. Commenters compare it to Celestia (desktop-only, its SourceForge page
+stale) and note roughly half of tracked objects are Starlink.
+
+**Why it matters:** half a million propagated orbits at interactive frame
+rates in a tab — WebGL2, workers and public ephemeris data keep raising the
+ceiling on what "a weekend project" means.
+
+[`🔗 space.bl2.net`](https://space.bl2.net/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49898778)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-30T04:03:00+08:00 |
-| Items | 14 |
-| Sources tracked | 12 (GitHub Trending, Hacker News, CISA KEV, NVD, OpenAI, arXiv, Hugging Face, EFF, The Register, tcl-lang.org, MSRC, jevstiller.pages.dev) |
+| Generated | 2026-09-30T12:03:00+08:00 |
+| Items | 31 |
+| Sources tracked | 24 (GitHub Trending/advisories, Hacker News, CISA KEV, NVD, VulnCheck, ControlPlane, OpenAI, Anthropic, White House/GovExec, arXiv, Hugging Face, Backblaze, Cloudflare, XBOW, EFF, The Register, tcl-lang.org, MSRC, The New Stack, Simon Willison, lucumr.pocoo.org, Ahead of AI, Frostyard, space.bl2.net) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

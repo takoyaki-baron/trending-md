@@ -1,6 +1,6 @@
 ---
 date: 2026-09-30
-updated: 2026-09-30T04:03:00+08:00
+updated: 2026-09-30T12:03:00+08:00
 ---
 
 # Archive — trending.md
@@ -9,7 +9,7 @@ All daily trending feeds, ranked by velocity. Click any date for the full styled
 
 | Date | Items | Web (human) | Raw (agent) |
 |------|-------|-------------|-------------|
-| Sep 30, 2026 | 14 | [**View →**](/en/feed/2026-09-30/) | [`2026-09-30.md`](/en/feed/2026-09-30.md) |
+| Sep 30, 2026 | 31 | [**View →**](/en/feed/2026-09-30/) | [`2026-09-30.md`](/en/feed/2026-09-30.md) |
 
 | Sep 29, 2026 | 33 | [**View →**](/en/feed/2026-09-29/) | [`2026-09-29.md`](/en/feed/2026-09-29.md) |
 | Sep 28, 2026 | 43 | [**View →**](/en/feed/2026-09-28/) | [`2026-09-28.md`](/en/feed/2026-09-28.md) |

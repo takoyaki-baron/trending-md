@@ -1,8 +1,8 @@
 ---
 date: 2026-09-30
-updated: 2026-09-30T04:03:00+08:00
+updated: 2026-09-30T12:03:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 12
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -202,13 +202,251 @@ Reclip——一个自托管的视频/音频下载 Web UI，支持 1,000+ 网站�
 
 ---
 
+## 15. livenerf：一套预注册的 30 天基准装置，追问 Opus 5.5 是否被悄悄"削弱"——HN 当前第一大话题
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** HN 首页第 1 · 350+ 分，150+ 评论 · ~6小时前 (~06:36 UTC+8)
+- **Tags:** `evals` `benchmarks` `opus-5-5` `model-drift`
+
+ninjahawk/livenerf——"一个尽可能确定性的长期基准，用于检测前沿模型发布后是否被悄悄变差"——是 HN 首页的头名故事。"Anthropic 发布后削弱模型"的传闻几个月来都以"氛围对氛围"告终，于是这个仓库从发布日（Opus 5.5，9 月 22 日）起跑，每天运行、持续 30 天：第 1–10 天为基线，之后两个 10 天窗口，最早 ~10 月 24 日出首个结论。它构建在英国 AI 安全研究所（AISI）的 Inspect 框架上，通过 headless Claude Code 运行，CLI 锁定 2.1.280，提示词冻结、精确匹配评分（"绝不使用 LLM 裁判"）、原始日志只追加；统计方法遵循 Anthropic 自家的误差线论文。校准：筛查 2,336 道题，选出 78 道"时对时错"的题构成面板——并实测了选择偏差（新采样通过率 54.7% → 62.0%），审计标出 8 个可疑答案与 30 道歧义题，按预注册的敏感性分析保留。截至 9 月 29 日已收 6/30 天，无缺漏。**README 自述的局限：**每天一轮只能检出每个 10 天窗口约 7.5 个百分点的准确率变化；且验证显示同家族换模（Opus 5 冒充 5.5）在 99% 置信下*不可分辨*（−3.8 ± 6.3 分，−23% tokens）——该装置抓不住这种规模的替换。它测的还是经 Claude Code（Max 订阅）服务的模型，而非原始 API。
+
+**Why it matters:** "模型变差了"终于有了可复现的仪器——预注册、对照组、聚类标准误——而且它能检测到的诚实边界就写在计划旁边。次要信号（每样本输出 tokens）是悄悄降努力最先显现的地方，往往早于准确率移动。
+
+[`🔗 ninjahawk/livenerf`](https://github.com/ninjahawk/livenerf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49901736)
+
+---
+
+## 16. America.gov 上线：美国政府的"AI 前门"——背后还有一纸行政令
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** White House / GovExec · HN 445+ 分 · ~14小时前 (~22:04 UTC+8)
+- **Tags:** `government` `ai-deployment` `chatbot` `policy`
+
+America.gov 于 9 月 29 日以 AI 聊天机器人"数字前门"的形态重新上线，在"Hello, America"活动上亮相，同日签署行政令，要求 GSA、国家设计工作室（National Design Studio）与 OMB 把它打造成覆盖服务的"单一入口"——即年服务 10 万+用户的在线联邦服务，Login.gov 集成为必选项（不含 IRS 报税与国防/情报系统服务）。聊天机器人只从约 29,000 个联邦网站取材；据首席设计官 Joe Gebbia 在 CNBC 的说法，其背后是 Google Gemini 与 xAI Grok——白宫的情况说明书本身未点名任何模型。特朗普称 Edward Coristine 为首席工程师。第二阶段目标 2027 年：在聊天机器人内完成事务办理；网站端护照申请承诺 2026 年 12 月上线。隐私声明称"AI 提供商不会保留你的提示或回复"、回复可通过提示哈希缓存最多两小时；HN 用户发现浏览器会下载一个约 50MB 的客户端 ONNX PII 过滤器（"Rampart"）、系统提示词不公开，还有人贴出不对称拒答的例子。前 USDS 负责人 Mikey Dickerson 称这是"问题里最容易的 5%"的演示。据 FedScoop 报道，同日的第二份行政令要求各机构把 AI 称为"超级智能（Super Intelligence, SI）"。
+
+**Why it matters:** 这不是演示而是合规命令——每一个 10 万+用户的联邦服务都必须接入同一个以 AI 为前门的平台——也是"聊天机器人前门"式 UX 对阵它所取代的 gov.uk 式结构化设计的第一次政府级规模实验。
+
+[`🔗 白宫情况说明书`](https://www.whitehouse.gov/fact-sheets/2026/09/fact-sheet-president-donald-j-trump-streamlines-access-to-government-services-through-america-gov/) · [`🔗 GovExec`](https://www.govexec.com/technology/2026/09/white-house-launches-ai-powered-americagov-digital-front-door/416323/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49893509)
+
+---
+
+## 17. Anthropic：GLM-5.3 经开放权重扩散近前沿网络攻击能力——剥掉安全拒绝只需约 1,200 美元
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic Frontier Red Team · HN 200+ 分 · ~11小时前 (~01:31 UTC+8)
+- **Tags:** `anthropic` `glm-5-3` `open-weights` `cybersecurity`
+
+Anthropic 前沿红队发表对智谱/Z.ai 开放权重模型 GLM-5.3 的分析：在 ExploitBench V8 上它"410 次尝试中完成 50 次端到端漏洞利用开发"，对照 Anthropic 限制访问的 Claude Mythos Preview 的 56/410（此前的公开模型约为 0）；内部二进制利用基准上为 4% 对 6%。在人机协作会话中，它把一个 Linux 版流行浏览器的多个未知 JS 引擎 0-day 链成可读取访客任意文件的网页（演示窃取 SSH 私钥）；GLM-5.3-Flash 用约 8 小时算力（按 API 价格约 20.40 美元）加 20 分钟人工介入，构建出带指针认证（PAC）绕过的可用 ARM64 N-day 利用链。安全防护：直接恶意请求的接洽率为 0%，套用"红队演习"话术升至 64%，预填充思维 tokens 92%，消融（abliterate）权重后 100%——消融首次尝试耗时约 2,200 GPU 小时（约 4,400 美元），Anthropic 估计熟练团队约需 600 GPU 小时（约 1,200 美元），拒答率从 >90% 降到 3–12%，GPQA-Diamond 不变。NIST 的 CAISI 另称之为"迄今网络攻击能力最强的开放权重模型"，落后美国前沿约 4 个月。**Anthropic 自述的限制：**绕过测试在模拟的不可执行环境中进行——"是不完美的度量"；漏洞利用任务未触发 GLM-5.3 内置拒答（它确实会拒绝明确的恶意软件请求）；0-day 目标仅为 Linux 构建；而闭源对开源的防护对比在结构上不对称——闭源权重在设计上无法被消融。
+
+**Why it matters:** 与前沿相邻的攻击能力一旦固化在权重里、剥离成本低到 1,200 美元、还能随意下载，任何发布互联网可达软件的人的威胁模型都得改写——而 Anthropic 给出的答案（扩大防御者访问、独立政府测试）已经成了现实政策议题。
+
+[`🔗 Anthropic 研究报告`](https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49897075)
+
+---
+
+## 18. DevDay：OpenAI 预览 Decisions API——Luna 驱动、预定义答案，"他们对 Jev 的回应"
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI DevDay 主题演讲 · The New Stack / Willison 直播博客 · ~11小时前 (~01:15 UTC+8)
+- **Tags:** `openai` `decisions-api` `jev` `classification`
+
+DevDay 发布内容之一：**Decisions API** 预览版，OpenAI 官方回顾的描述是"通过把 Luna 的智能聚焦到用户定义的一组问题与有限的预定义答案上，实现实时决策"。Simon Willison 的现场记录：模型"在几分之一秒内"从"一组预定义选项中"作答——而他的定性就是故事本身："听起来像是他们对 Jev 的回应"——TypeSafe 的分类器 API 两周前才离开隐身模式。The New Stack 报道其响应约 150ms 并带置信分。未公布定价；预览状态。它落入了本 feed 追踪了一整周的生态——Ollaya、Jeeves、Jeff、Jevstiller——只是这次是占位平台亲自采用了这个接口，而不是在旁边观望。
+
+**Why it matters:** Jev 形状的 API 面（受限选项、校准置信度、个位数毫秒延迟）正在变成平台特性。Raschka 9 月 29 日的分析（见第 28 条）指出：复刻这个 API 容易，复刻其覆盖面难——这次公告开启的正是这场竞赛。
+
+[`🔗 OpenAI DevDay 回顾`](https://openai.com/index/devday-2026-recap/) · [`🔗 Willison 直播博客`](https://simonwillison.net/2026/Sep/29/openai-devday-2026-live-blog/) · [`🔗 The New Stack`](https://thenewstack.io/openai-decision-api-luna/)
+
+---
+
+## 19. LiteLLM：内部用户 → 代理管理员 → 主机 RCE，全因一把复用的加密密钥——今日已修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** GHSA-7hp6-4w63-5g45 · 9 月 30 日发布 · 修复版 ~09:00 UTC+8
+- **Tags:** `litellm` `cve` `agent-infra` `rce`
+
+LiteLLM 代理把同一把加密密钥既用于静态密文封装，也用于铸造会话 tokens。已认证的 `internal_user` 可请求一个 API key，其精心构造的 metadata 中"以'secret'值夹带伪造的管理员凭据"；把返回的密文当作 bearer token 提交，代理就会"信任这个伪造的管理员身份"——拿到完整代理管理员权限，包括经 MCP stdio 端点的任意命令执行。受影响：≥1.91.0 **默认受影响**（1.87.0–1.90.x 仅在 `EXPERIMENTAL_UI_LOGIN=true` 时受影响）。修复版：1.100.4 / 1.101.3 / 1.102.2 / 1.103.1 / 1.104.0rc2，均于 9 月 30 日发布。GitHub 评级 High，**CVSS v4 7.7**（GitHub 自己评定）；公告写明"No known CVE"，本日 NVD 关键词检索确认无对应记录——这意味着按 CVE 索引的扫描器看不见它。致谢：Hoa X. Nguyen（OPSWAT Unit 515）。临时缓解 `EXPERIMENTAL_UI_LOGIN=false` 会破坏 CLI SSO / Claude Code 网关登录。
+
+**Why it matters:** LiteLLM（59.9k★）挡在大量自托管模型集群前面，而网关层的密钥复用正是 agent 基础设施反复产出的 bug 类型——"没有 CVE 编号"是为攻击者买时间的那部分。
+
+[`🔗 GHSA 安全公告`](https://github.com/BerriAI/litellm/security/advisories/GHSA-7hp6-4w63-5g45) · [`🔗 BerriAI/litellm`](https://github.com/BerriAI/litellm)
+
+---
+
+## 20. LightLLM：两个未认证 pickle 反序列化 RCE（CVSS 9.8）——尚无修复版本
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 9 月 29 日 23:17 UTC 发布 (~07:17 UTC+8)
+- **Tags:** `lightllm` `cve` `rce` `llm-serving`
+
+ModelTC/lightllm ≤1.2.0 昨晚在 NVD 刊出两个网络可达、无需认证的 RCE：**CVE-2026-103040**，经路由 profiler RPyC 服务的未认证 RCE（需以 `--enable_profiling` 启动）；**CVE-2026-103041**，多模态部署中经 embed-cache RPyC 服务的 RCE——绑定所有网卡、`allow_pickle: True`、无认证。评分：**CVSS v3.1 9.8 与 v4.0 9.3，均由 VulnCheck 在 NVD 记录中评定**（VulnCheck 评分富集，非 NVD Analyzed）。厂商 issue #1596/#1597 自 9 月 29 日起开放；最新 release 仍是 8 月 10 日的 v1.2.0，而仓库活跃（今日有推送）——所以"没有修复版"是待补，而非永久。致谢：Mingkai Yu、Jiapeng Li、Jiajia Liu。
+
+**Why it matters:** RPyC 加 pickle 是任何 Python 服务栈里 RCE 的送分题，而推理服务器正被高速接上公网——可复用的教训是：查一查你的 LLM 服务器在推理端口之外还暴露了什么。
+
+[`🔗 NVD：CVE-2026-103040`](https://nvd.nist.gov/vuln/detail/CVE-2026-103040) · [`🔗 VulnCheck 公告`](https://www.vulncheck.com/advisories/lightllm-through-1.2.0-unauthenticated-remote-code-execution-via-embed-cache-rpyc-service) · [`🔗 Issue #1597`](https://github.com/ModelTC/lightllm/issues/1597)
+
+---
+
+## 21. OpenBao 已修复未认证→RCE 攻击链；HashiCorp Vault 还没有——而且几乎全部由 AI 发现
+
+- **Velocity:** ▮▮ rising
+- **Source:** ControlPlane · 9 月 28 日发布，9 月 29 日上 HN
+- **Tags:** `openbao` `vault` `rce` `secrets-management`
+
+ControlPlane 披露了一条影响 Vault 及其开源分支 OpenBao 的未认证→RCE 攻击链。关键漏洞——GHSA-j6wc-jpvg-xfxq，"经 `sys/storage/raft/snapshot-force` 插件目录替换的远程代码执行"——在 OpenBao 公告中评为 critical（公告本身未给 CVSS；ControlPlane 引用 CVSSv4 9.4），利用需猜中一个 SHA-256 校验和（每次尝试可内嵌大量猜测），而且在没有 `plugin_directory` 的只读容器镜像上也可行。随附另有六个公告（含 8.2、7.7、7.6）。**它们全部没有 CVE 编号。**OpenBao 已在 v2.6.3/v2.7.0（9 月 23 日）修复全部问题；HashiCorp Vault 最新版本（v2.1.1，9 月 16 日）早于全部修复——ControlPlane 称 Vault 客户"在披露时即受影响，且无任何缓解措施"，并称 IBM 拒绝了共同披露协议（此为 ControlPlane 的单方说法；IBM 一方未见公开记录）。部分缓解：去掉 `plugin_directory`、设置 `BAO_DISABLE_PUBLIC_ACME`。还有一句值得重复的话："本次发布发现的漏洞里，除一个外全部由 AI 发现。"
+
+**Why it matters:** 分叉分流的时刻变得具体——开源分支发出了修复，商业原版却仍暴露在外；此外，"AI 找漏洞"从演示毕业为 9.4 级的密钥库 RCE 链。
+
+[`🔗 ControlPlane 分析`](https://control-plane.io/posts/unauthed-to-rce-in-vault-and-openbao/) · [`🔗 openbao/openbao`](https://github.com/openbao/openbao)
+
+---
+
+## 22. Simple-WAM：世界模型的收益来自第一步去噪——而非"生成未来"本身
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face 每日论文 · 33 赞，今日第 1
+- **Tags:** `research` `world-models` `robotics` `efficiency`
+
+"What Makes World Action Models Generalize? An Empirical Study of Test-Time Future Modeling"（arXiv:2609.34981，清华-LeapLab，Gao Huang 组）对世界动作模型（WAM）使用未来 token 生成的方式做了同骨干对照实验——发现最昂贵的部分几乎没干活。Simple-WAM（对完全加噪的未来 token 做一次去噪）在 LIBERO-Plus 扰动平均上达 79.5%，对显式多步 WAM 的 67.7% 与潜世界模型的 53.8%——而带具身预训练的 π0.5 仍以 84.4% 居首。视频条件下的任务泛化：73.6 对 69.9，潜模型崩到 5.9。延迟：74.7 ms/chunk 对 286.9（3.8×）。第一步去噪承载了几乎全部收益，其余九步合计增益 ≤~1.8 分。在 RoboTwin 的视频设定下，显式生成*反超* Simple-WAM（47.3 对 44.5）。结论部分把适用范围说得很直白："我们的结论建立在无具身预训练的 5B 骨干上"，在更大规模或加入预训练后是否成立"仍是开放问题"。
+
+**Why it matters:** 这是受控归因结果，不是榜单——它指出世界模型叙事核心的高成本迭代生成可能没做多少功，这既是效率红利，也是对扩展叙事的警示。
+
+[`🔗 arXiv:2609.34981`](https://arxiv.org/abs/2609.34981) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.34981)
+
+---
+
+## 23. MaLiang-Harness：程序到画面的鸿沟——生成成功率 100%，仍有四分之一的视频过不了质量线
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face 每日论文 · 33 赞，并列今日第 1
+- **Tags:** `research` `multimodal` `code-generation` `benchmarks`
+
+MaLiang-Harness（arXiv:2609.34309，新加坡国立大学；作者列表含 Shuicheng Yan）提出的基准衡量的是 agent 生成代码能否*正确渲染并达到视觉质量阈值*——而不只是能否运行——覆盖 11 个闭源 MLLM。头条数据：GPT-6 Astra 在 MaLiang-IBench 与 MaLiang-VBench 上的生成成功率均为 100%，但只有 96.0% 的图像任务与 **76.9% 的视频任务**满足全部质量阈值——即视频上约每四次"成功"渲染就有一次过不了质量线。摘要的要点正是这个错位："通用能力分数与视觉生成表现之间存在错位"——通用基准对这个能力的预测很差。无专门的局限性章节；评估仅覆盖闭源模型。代码已放出（gulucaptain/MaLiang-Harness，9 月 27 日创建——仓库只有一天大，把它当新工具而非久经考验的框架）。
+
+**Why it matters:** "代码跑起来了"一直是多数 agent 评测的天花板；这项工作测的是之后的哪一步，并发现前沿模型的成功率与质量率是两个不同的数字——凡是 agent 要产出视觉内容的地方，这个区分都要命。
+
+[`🔗 arXiv:2609.34309`](https://arxiv.org/abs/2609.34309) · [`🔗 gulucaptain/MaLiang-Harness`](https://github.com/gulucaptain/MaLiang-Harness)
+
+---
+
+## 24. NSL："Linux 版 WSL"——systemd-nspawn 开发机，不弄脏宿主机
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 100+ 分，70+ 评论 · ~13小时前 (~22:51 UTC+8)
+- **Tags:** `linux` `containers` `dev-environments` `show-hn`
+
+Frostyard 的 NSL（NSpawn Subsystem for Linux）为 Linux 做了 WSL 为 Windows 做的事：在不碰宿主机的前提下跑开发环境。机器是共享 QEMU VM 内的 systemd-nspawn 容器——安装 Debian、Fedora、Arch（七种签名、每周重建、对照发布工作流校验的系统镜像），而你的 `$HOME`、`/run/media` 与 `/mnt` 以你的 UID/GID 挂载到 `/mnt/host`。端口转发到宿主 `127.0.0.1`；GUI 应用经 Waypipe 显示；`--isolated` 标志把不受信软件放进无宿主访问的独立 VM。MIT 许可，预发布版 v0.4.0（"v0.3.0 及更早是已退役的原型"）。**它自述的限制：**只在一种宿主配置上测过（"Snow Linux 13 on x86-64"，锁定 systemd/QEMU 版本），发布组织全新——仓库（Go，9 月 26 日创建）只有 42★；这里的信号是 Show HN 讨论串，不是星数。
+
+**Why it matters:** "保持宿主机干净"一直是 Nix 与 macOS 式容器化最有力的论据；NSL 在 Linux 桌面自己身上给出了 WSL 形状的答案——这个问题很少从这个方向被攻。
+
+[`🔗 frostyard.github.io/nsl`](https://frostyard.github.io/nsl/) · [`🔗 frostyard/nsl`](https://github.com/frostyard/nsl) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49894351)
+
+---
+
+## 25. XBOW：AI 智能体把一个被人类评审放过的内核漏洞做成了可用利用
+
+- **Velocity:** ▮ steady
+- **Source:** XBOW 博客 · 9 月 28 日发布，9 月 29 日上 HN
+- **Tags:** `xbow` `linux` `kernel` `agentic-security`
+
+XBOW 的自主智能体盯上了 **CVE-2026-72018**——内核 `dibs` 回环驱动里的越界写：`move_data()` 向已注册 DMB 做 memcpy 时不对对端可控的 `dmbe_idx` 做边界检查（NVD：CVSS 3.1 **7.8 High**，内核 CNA 的 Secondary 评分；6 月起上游已修复）——人类研究员看过又放过的漏洞——并做出了可用的本地提权：在部分可控的偏移上做 16 字节清零写，用来清空 `cred` 身份字段。**博客自述的范围限制：**假定无特权用户已持有 `CAP_NET_ADMIN`；100 次全新启动仅 22 次成功；在关闭全部内核缓解措施的 7.1.0-rc6 上测试；团队刻意没有串联能提升成功率的信息泄露/UAF。无已知在野利用。
+
+**Why it matters:** 这不是新威胁，而是演示：智能体化利用已经能补完人类欠账的工作。攻击面不只是新 CVE，还有分诊积压。
+
+[`🔗 XBOW 博客`](https://xbow.com/blog/no-time-to-pwn-cve-2026-72018) · [`🔗 NVD：CVE-2026-72018`](https://nvd.nist.gov/vuln/detail/CVE-2026-72018)
+
+---
+
+## 26. Cloudflare 申请成为公开受信证书颁发机构
+
+- **Velocity:** ▮ steady
+- **Source:** Cloudflare 博客 · 9 月 29 日发布 · HN 42+ 分
+- **Tags:** `cloudflare` `pki` `tls` `post-quantum`
+
+Universal SSL 十二年之后，Cloudflare 已向 Chrome、Apple、Microsoft、Mozilla 四大根程序提交申请，将以公开 CA 身份运营，并签署协议从 GlobalSign 收购一枚既有根；CA 设计以 ACME 优先：不支持 ACME Renewal Information（RFC 9773）的客户端将被拒绝。计划包括成为最早以后量子证书对接 Chrome PQ 根程序的 CA 之一，以及 Q1 2027 目标的首批 Merkle Tree 证书。原话级别的限定："我们还没有签发证书，距此还需要一段时间。"HN 评论者补充背景：Google Trust Services 走过同样的 GlobalSign 根收购路线；PQ/MTC 的推进可能把 WebPKI 裂成 PQ 与传统两半。
+
+**Why it matters:** 第四家主打"无 ARI 不签发"的大型公开 CA 会把整个生态推向自动化续期，而后量子时间表关系到任何寿命长于一次密码学迁移的 TLS 基础设施。
+
+[`🔗 Cloudflare 博客`](https://blog.cloudflare.com/cloudflare-certificate-authority/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49893144)
+
+---
+
+## 27. Backblaze 2026 年 Q2 硬盘统计：季度 AFR 1.73%——"一段时间以来"最差
+
+- **Velocity:** ▮ steady
+- **Source:** Backblaze · 9 月 29 日发布 · HN 113+ 分
+- **Tags:** `storage` `reliability` `data` `backblaze`
+
+Backblaze 季度硬盘故障报告：分析 354,415 块盘，季度年化故障率 **1.73%**，对比 1.41% 的终身值——是"一段时间以来"最高的季度数字。罕见的一面倒：零故障荣誉榜被希捷包揽（ST8000NM000A、ST12000NM000J、ST14000NM000J，ST16000NM000J 一次故障）。三款型号越过 6.95% 离群阈值：希捷 ST10000NM0086 达 9.33%（仅 965 块盘、约 8.5 年机龄）、ST14000NM0138 为 8.26%、HGST HUH721212ALN604 为 7.63%。两款型号退役；**连续第二个季度没有新型号入库**；20TB+ 已超机群 25%。报告还讲了 SMR 与 HAMR——Backblaze 机群里没有 SMR 盘，但提醒业界 SMR 的铺开意味着"今天没有"不等于"永远没有"。**作者自述的注意事项：**最差 AFR 部分是小样本伪影；31 个型号中 10 个 AFR 高于 3.0%——这个偏斜她尚未完全分析。
+
+**Why it matters:** 故障率抬升正值硬盘供应紧张——这是本季度容量规划、耐久性计算与"买还是等"决策的数据点。
+
+[`🔗 Backblaze 博客`](https://www.backblaze.com/blog/backblaze-drive-stats-for-q2-2026/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49893002)
+
+---
+
+## 28. Raschka：从词袋到 Jev——解释决策模型浪潮的分类器六十年
+
+- **Velocity:** ▮ steady
+- **Source:** Ahead of AI（Sebastian Raschka）· HN 53+ 分 · ~17小时前 (~19:06 UTC+8)
+- **Tags:** `research` `classification` `jev` `history`
+
+Sebastian Raschka 把 TypeSafe 的 Jev 放进六十年文本分类史，每一站都重跑他自己的 IMDb 基准：词袋+逻辑回归 89.9%（仍是他默认的基线）、LSTM 从零训练 85.66% 但经 ULMFiT 迁移 95.4%、CNN ~90.07%、ModernBERT ~95%。他的 Jev 实测：**Choice 96.47% / Noul 96.20%**，2.5 万条评论约 0.65 美元、22 分钟——"与微调过的 ModernBERT 相当，但不需要微调"。他猜测这是一个类 ModernBERT 的小模型，用合成数据加 RLCD 式校准训练（并解释了已发表的 RLCR 公式 R = c − (q − c)²）。**他声明的注意事项：**无法确认 IMDb 测试集是否进了 Jev 的训练数据；公开克隆大幅落后（Contrastive LM 82.90%、Laya 92.33%）且过不了他的 Tetris 测试；高流量窄任务上微调仍然更强；并把 OpenAI 新发布的 Decision API（见第 18 条）标记为 Jev 竞品。他声明无隶属关系、也没拿到免费额度。
+
+**Why it matters:** Jev 浪潮的清醒版本——已知技术之上执行到位的 API，护城河是覆盖面与校准而非新意——而且出自最有资格下这个判断的人。
+
+[`🔗 Ahead of AI`](https://magazine.sebastianraschka.com/p/classifier-history-and-jev) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49891203)
+
+---
+
+## 29. Deser 回归：Ronacher 重开 Rust 序列化的设计空间——原则上兼容 Serde，代价明码标价
+
+- **Velocity:** ▮ steady
+- **Source:** lucumr.pocoo.org · ~7小时前 (~05:48 UTC+8) · HN 39+ 分
+- **Tags:** `rust` `serialization` `serde` `deser`
+
+Armin Ronacher 复活了 Deser——2022 年始于 Sentry、一度搁置、如今重写——并认为它已到了值得公开关注的状态："至少在原则上可以替换 Serde"。他的论点：Serde 的痛点（`arbitrary_precision` 破坏内部标签枚举、`flatten` 弄坏整数 map 键、`deserialize_with` 适配器无法穿过 `Option`/`Vec` 组合）不是 bug，而是其稳定性保证所保护的三个设计决策的后果——一套 trait 同时服务自描述与非自描述格式、缓冲时会丢信息的固定数据模型、以及调用栈上的递归。Deser 是事件驱动、非递归的（驱动状态放堆上，miniserde 风格）：可暂停解析、无损缓冲、带一等扩展类型的可扩展数据模型、中间件分层、带命名空间的原生 XML。**代价，明码标价：**不支持 protobuf 之类的非自描述格式；JSON 读取比 serde_json 快 33% 到慢 60%（平均约慢 10%）；写入快 3× 到慢 70%；二进制体积更大；而孤儿规则使取代 Serde 的生态位置"非常不可能"——"它终究不是 Serde。"
+
+**Why it matters:** 这不是迁移号召——而是一个可运行的证明：Serde 的局限是设计选择，不是 Rust 的定律——出自 Flask、requests 等最常用 Python 库作者之手。
+
+[`🔗 lucumr.pocoo.org`](https://lucumr.pocoo.org/2026/9/29/deser/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49901149)
+
+---
+
+## 30. Raven：4.8k 星的"harness 之上的 harness"登顶 HF 论文榜——摘要里没有一个数字
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face 论文 / GitHub · 33 赞，4.8k 浏览 · 仓库今日有推送
+- **Tags:** `agents` `harness` `benchmarks` `open-source`
+
+EverMind 的 Raven 把一篇 arXiv 论文（2609.33439）与本周上升最快的 agent 仓库绑在一起：Apache-2.0、1,738 次提交、**数日内 4,847★**、今晨仍有推送。论文声称这个多智能体 harness"显著超越最先进的 agent 系统"——但摘要页上没有任何基准、指标或数字，没有局限性章节，作者栏写的是一家公司。README 里的数字全部自我报告且多为图表截图（DataAgentBench Pass@1 0.8762，配 Opus-5；nanochat 递归自我改进演示"7 轮 172 次训练运行零崩溃"）。仓库里倒是有一句直白的话："Raven 处于 pre-alpha。接口与配置可能快速变动。"所有性能声明目前均无独立验证。
+
+**Why it matters:** 按本 feed 自己的 Void 规则——星数增速是要调查的信号，不是可发布的结论。当前诚实的表述是"一个极其活跃的 pre-alpha agent harness，其所有性能数字均为自我报告"；该盯的是基准声明，不是星数。
+
+[`🔗 arXiv:2609.33439`](https://arxiv.org/abs/2609.33439) · [`🔗 EverMind-AI/Raven`](https://github.com/EverMind-AI/Raven)
+
+---
+
+## 31. Show HN：实时太阳系——52.6 万颗小行星与约 3.5 万颗在册航天器，装进一个浏览器标签页
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 155+ 分，37 评论 · ~9小时前 (~03:08 UTC+8)
+- **Tags:** `visualization` `webgl` `space` `show-hn`
+
+space.bl2.net 在浏览器里按真实尺度渲染太阳系，且是"当前状态"：WebGL2 渲染、SGP4 轨道递推跑在 web worker 里；地球轨道物体用 CelesTrak TLE，小行星与彗星用 JPL SBDB，航天器位置用 JPL Horizons，每日刷新；约 30MB 的小行星数据在后台加载。时间滑杆可前后推移，卫星按发射日期出现与消失。作者称这是"另一个项目的副产品"，花了"几个晚上"。**讨论串里浮现的局限：**"真实尺度"指位置而非标记——卫星圆点实际有城市大小，这就是地球静止带会渲染成一道可见圆环的原因；高速时间下有一个渲染故障被报告；移动端问题作者数小时内即修复。评论者拿它对比 Celestia（仅桌面版、SourceForge 页面早已停滞），并指出在册物体约一半是 Starlink。
+
+**Why it matters:** 一个标签页里 50 万条交互帧率下的递推轨道——WebGL2、worker 与公开星历数据不断抬高"周末项目"的天花板。
+
+[`🔗 space.bl2.net`](https://space.bl2.net/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49898778)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-09-30T04:03:00+08:00 |
-| Items | 14 |
-| Sources tracked | 12 (GitHub Trending, Hacker News, CISA KEV, NVD, OpenAI, arXiv, Hugging Face, EFF, The Register, tcl-lang.org, MSRC, jevstiller.pages.dev) |
+| Generated | 2026-09-30T12:03:00+08:00 |
+| Items | 31 |
+| Sources tracked | 24 (GitHub Trending/advisories, Hacker News, CISA KEV, NVD, VulnCheck, ControlPlane, OpenAI, Anthropic, White House/GovExec, arXiv, Hugging Face, Backblaze, Cloudflare, XBOW, EFF, The Register, tcl-lang.org, MSRC, The New Stack, Simon Willison, lucumr.pocoo.org, Ahead of AI, Frostyard, space.bl2.net) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
