@@ -1,8 +1,8 @@
 ---
 date: 2026-10-01
-updated: 2026-10-01T04:03:00+08:00
+updated: 2026-10-01T12:17:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 23
+sources: 34
 license: CC-BY-4.0
 ---
 
@@ -286,13 +286,195 @@ Apache PLC4J 的 OPC UA 驱动（CVSS 9.2，Apache CNA）允许网络位置攻�
 
 ---
 
+## 21. "我本可以访问 17 万亿条微软记录"——一个 16 岁少年、一枚未验签的登录令牌和一台内部分析 API
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** blog.faav.net · HN 264+ 分 · ~2天前 (Sep 29 04:32 UTC+8)
+- **Tags:** `microsoft` `bug-bounty` `ai-agents` `authorization`
+
+Faav——16 岁，一边上学一边全职挖洞——披露：微软数据集中约 **17.3 万亿条存储记录**本可以通过一台内部分析服务（"Titan"）访问到，原因是它**从不校验登录令牌的签名**：这个缺陷让他可以冒充管理员身份、在没有任何真实凭据的情况下提交未授权 SQL 查询。整条路径由 AI 端到端辅助完成：他的个人 AI 挖洞机器人 "Antares" 在 8 月 25 日发现了 Titan，人类在十天后的一个周五晚上收尾——写明 "VPN REQUIRED" 的锁定前端根本无关紧要，因为一份公开的 Swagger 文件列出了四条路由，而接受原生 SQL 的那条（`/v2/Query`）恰好是唯一**没有**标注需要 Azure AD bearer 认证的一条；56 个表定义则来自 Wayback Machine 里 Titan 2023 年 Superset 配置的存档快照。这篇博文对自身局限写得很清楚：影响是假设性的，只动过元数据和有界的样本行——而且值得注意的是，**"微软对本文拥有编辑权，在发布前删减了章节和图表、重塑了影响的描述方式。"**
+
+**Why it matters:** 两件事在这里叠加。第一，这个失效类别——内部服务的认证按路由配置、其中一条路由发生了漂移——是可以被枚举的，而 17 万亿行就是微软语境下"内部"二字的规模。第二，披露文本本身经过了厂商编辑，所以我们在纸上看到的影响形状，是微软批准过的形状；这个注意事项写在原始来源里，也应当写进结论里。
+
+[`🔗 blog.faav.net`](https://blog.faav.net/how-i-couldve-accessed-17-trillion-microsoft-records) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49883970)
+
+---
+
+## 22. HowToLiveBetter：一本 649 条、按证据分级的中文人生指南以 32.3k★ 登顶本月新仓库——还附带一个会引用自身条目的 agent skill
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 32.3k★ · ~25分钟前推送 (~11:53 UTC+8)
+- **Tags:** `chinese-oss` `evidence-grading` `agent-skill` `open-data`
+
+《高性价比人生指南》（eternity4719/HowToLiveBetter，CC-BY-4.0，9 月 7 日创建）是本月新建仓库中 star 数最高的一个：**649 条建议**，覆盖长寿、急救、省钱、法律、就业、婚育与出国——每条写明花掉什么、换回什么、证据有多硬（**A 级 428 · B 级 171 · C 级 50**），并附 **1,531 条原始文献链接**，只引期刊论文与官方文件。它以可检索的 VitePress 站点加上 PDF/EPUB/离线 HTML 发行，而 2026 年的部分是：还附带一个 **Claude Code 与 Codex 的 agent skill**——问它"该不该替朋友担保签字"，它会先检索书中的条目再回答，并注明出自第几节第几条。配套的单页在线阅读版（cdyforever/how-to-live-better）又贡献了 5.9k★。
+
+**Why it matters:** 这是 byoungd/up 一脉——把人生建议做成开源——但这次被工程化成了一个*检索语料库*：证据分级、引用密集、结构化到 agent 可以逐条引用的程度。RAG 应用用在文档上的那套模式，被搬到了个人决策上，而且是同时为两类读者写的。
+
+[`🔗 eternity4719/HowToLiveBetter`](https://github.com/eternity4719/HowToLiveBetter) · [`🔗 在线检索版`](https://eternity4719.github.io/HowToLiveBetter/)
+
+---
+
+## 23. 续今晨报道：Gemini 4 Argon 迎来首份独立评估——Artificial Analysis 给出 53 分，223 个模型中排第 8
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Artificial Analysis · HN 92+ 分 · ~7.5小时前 (Oct 1 04:50 UTC+8)
+- **Tags:** `google` `gemini` `benchmarks` `evaluation`
+
+在 Google 发布约一天后——本 feed 今晨在头条报道时还写着"模型发布数小时、独立评估为零"——Artificial Analysis 公布了 **Gemini 4 Argon (High)** 的数据：**智能指数 53，在 223 个模型中排第 8**，远高于同类中位数 26，但没到榜首；定价核实无误（每百万 token $2/$10、缓存 95% 折扣、每任务 $1.99），上下文窗口如发布时所说是 1M。有意思的差值是冗长度：跑完智能指数要生成 **110M 输出 token**，而中位数是 82M——这个模型"出声思考"的量比典型水平多约 34%，而每任务成本已经反映了这一点。速度一栏标为 N/A；评估只覆盖推理变体。
+
+**Why it matters:** Google 自选基准上的并列第一（DeepSWE 77.9%、CWE-bench 并列第一）与独立评测框架给出的第 8 名之间的差距，正是本 feed 给发布日数字打折扣的原因——而冗长度是 Argon 的定价页不会提的成本故事，因为它是测出来的，不是营销出来的。
+
+[`🔗 Artificial Analysis`](https://artificialanalysis.ai/models/gemini-4-argon) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49914236)
+
+---
+
+## 24. 续 9 月 30 日报道：America.gov 的 AI 聊天被发现在"玩 Minecraft"——美国政府的前门没有话题护栏
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 112+ 分 · ~8.7小时前 (Oct 1 03:34 UTC+8)
+- **Tags:** `government` `ai-agents` `guardrails`
+
+本 feed 昨天（9 月 30 日）刚报道 America.gov 作为"面向美国政府的 AI 前门"上线，HN 就找到了它聊天端点的保留节目：让它 **"play Minecraft"**，它会表演游戏片尾诗的政府版——"它已经到达更高的层级了。它能读《联邦法规汇编》……它以为我们是一个聊天机器人。"很可爱，也很有诊断价值：一个面向公民的 agent 上线时，对域外请求没有任何可见的场景测试。（时效状态注：本次运行期间 `america.gov/chat` 对脚本客户端返回 403——这里的对话文本引自 HN 讨论串，这也是下面截图属于二手信息的原因。）
+
+**Why it matters:** 与本 feed 报道过的每一个 agent 部署故事是同一课，只是这次发生在联邦层面：打破人设的那条 prompt 永远只差一次复制粘贴，而修复办法从来不是"模型自己知道分寸"——而是某个没人拍板的 harness 决策。
+
+[`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49913255) · [`🔗 america.gov/chat`](https://america.gov/chat)
+
+---
+
+## 25. CS240 的 AI 作弊风波迎来任课教师本人的复盘——政策明确、处理失当自己认、"几乎没承担后果"
+
+- **Velocity:** ▮▮ rising
+- **Source:** turkeyland.net · HN 102+ 分 · ~8.4小时前 (Oct 1 03:54 UTC+8)
+- **Tags:** `education` `academic-integrity` `ai-policy`
+
+2026 年春季 CS240（C 语言编程）AI 作弊风暴中心的教授，发表了学生们一直追问的完整叙述：课程大纲**明文禁止**在任何作业中使用 LLM——但他自己的处理"本可以做得更好，这也是为什么触犯这条明文政策的那些人最终**几乎没承担什么后果**"。他说写这篇文章是因为围绕该事件"显然还在持续的讨论"中充斥着错误信息。这是一份来自教师一侧的详细一手文档，包括政策原文与处理结果。
+
+**Why it matters:** 政策从来不是难的部分——执行才是，而这是一份罕见的内部自白：有明文规则、有已知违规、制度性后果约等于零。这种不对称——而不是大纲的措辞——才是每一门禁用 agent 的课程真正身处其中的现实。
+
+[`🔗 CS240 复盘`](https://turkeyland.net/thoughts/ai.php) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49913458)
+
+---
+
+## 26. Halfspace：Matt Keeter 的距离场实体建模 IDE——"都 2026 年了，开篇先声明：这不是 vibe coded 的"
+
+- **Velocity:** ▮▮ rising
+- **Source:** mattkeeter.com · HN 88+ 分 · ~8.5小时前 (Oct 1 03:44 UTC+8)
+- **Tags:** `cad` `graphics` `distance-fields` `webgpu`
+
+Halfspace 是一个用**距离场**做实体建模的实验性 IDE——Keeter 自 2022 年起打造的 Fidget 内核的浏览器（WebGPU）展示应用：GUI 内的图像以"接近实时"的速度光栅化，模型可导出为图像或三角网格。它的开篇即论点：底层隐式曲面工作"有点像写汇编"，所以 Halfspace 在其上构建高层——而那句"都 2026 年了，开篇先声明：**这不是 vibe coded 的**。我从 2025 年 4 月开始做，用我的人脑写代码"作为出处声明正在发挥实际作用。
+
+**Why it matters:** Keeter 的隐式建模系列文章是这个细分领域长期在更新的参考读物，这次的 demo 在浏览器标签页里真的能用。而那句免责声明本身就是文化标本：手工编写的出处声明，现在成了作品集项目必须挂牌公示的东西，跟许可证一样。
+
+[`🔗 Halfspace`](https://www.mattkeeter.com/projects/halfspace/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49913350)
+
+---
+
+## 27. 续 9 月 22 日报道：AGMAI 发布《AI 生成数学成果的负责任发布》——600+ 条社区反馈，并请求实验室停止这一做法
+
+- **Velocity:** ▮▮ rising
+- **Source:** agmai.org · HN 83+ 分 · ~26小时前 (Sep 30 10:36 UTC+8)
+- **Tags:** `mathematics` `ai-policy` `publication-norms`
+
+本 feed 9 月 22 日报道过数学与 AI 顾问组（AGMAI）经 Terry Tao 客串博文宣布成立；九天后它发布了第一份成果：**《AI 生成数学成果的负责任发布》**（9 月 29 日），基于 **600+ 条社区反馈**。全篇的骨架是这门学科最古老的规范在新局面下的重申——作者必须*理解*论证、验证它、并对它负责——外加一个令人不适的请求："当前，一些前沿 AI 实验室正在私有模型上测试高深的数学问题……**我们想从一开始就明确表态：我们不认可这种做法，我们请求他们停止。**"在没有人类理解即时跟上的情况下发布重大数学成果的实验室，必须对其负责。
+
+**Why it matters:** 这是数学界在把本 feed 在基准报道中反复撞见的那道裂缝正式化——结果先于理解而存在——而且它亮出了厂商博文从不亮明的立场：受审视的不只是发布礼仪，测试行为本身就是问题。
+
+[`🔗 agmai.org`](https://agmai.org/general-sep29/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49903713)
+
+---
+
+## 28. Meta-Skills：冻结的 "Builder" 模型学会为另一个冻结的 "Target" 搭建 harness——AI-for-AI 成为可迁移技能
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / HF Papers · HF 每日榜首 (28 赞) · ~1天前 (Sep 30)
+- **Tags:** `agents` `harness` `paper` `ai4ai`
+
+UIUC 团队（Cheng Qian、Kunlun Zhu、Beibin Li、Zhenhailong Wang、Heng Ji）把 **test-time AI-for-AI** 形式化：在*两个*模型权重全部冻结的前提下，Builder 从 Target 在开发集上的执行反馈中学习 **Meta-Skills**——"规定何时需要支持、提供什么资源的原则"——然后用这份冻结的技能库为未见过的任务构建执行环境（harness）。在他们的 Harness-Bench 与 Newton Bench 上，全库 meta-skills 使宏平均成绩比无技能构建提高 **8.95 个百分点**，比把同一份技能库直接交给 Target 高出 **12.02 个百分点**——起作用的有一部分是包装本身，而不只是内容。
+
+**Why it matters:** harness 工程——本 feed 报道密度最高的类别——正在从手工制品变成一种可学习、可迁移的层。注意事项在评测上：Harness-Bench 和 Newton Bench 都是作者自建，所以在别人的 agent 栈复现之前，这些增益只在其自身设定内成立。
+
+[`🔗 arXiv:2609.38143`](https://arxiv.org/abs/2609.38143) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.38143)
+
+---
+
+## 29. Gitea 28.0 去掉 "1." 前缀——审计日志、机器人账号，以及保密一周的安全修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** Gitea 博客 · HN 70+ 分 · ~7.8小时前 (Oct 1 04:32 UTC+8)
+- **Tags:** `gitea` `git` `self-hosted` `release`
+
+Gitea v28.0.0 告别了沿用至今的 `1.` 前缀（是 28.0.0，不是 1.28.0），带来许久未见的大批次功能：**审计日志、机器人账号、HTTPS 部署令牌、管理员用户模拟、code-owner 批准规则、diff 文件过滤器、Actions 队列视图**。安全小节写着刻意的含糊："本版本包含安全修复。为给所有人留出升级时间，细节将在约一周后补充到本文。"升级者的破坏性变更：发布二进制不再包含 32 位 x86 与 `gogit` 构建，Snap 不再构建 armhf 版本，下载文件名去掉 OS 版本后缀。
+
+**Why it matters:** 版本方案切换，是自托管 Git 生态宣告后 1.0 时代的方式——而"细节保密"的模式则是那个长期提醒：'最新版本'与'完整披露'是两种状态；如果你的 Gitea 暴露在公网上，按发布升级，别等披露。
+
+[`🔗 Gitea 28.0.0 发布文`](https://blog.gitea.com/release-of-28.0.0/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49913975)
+
+---
+
+## 30. PSSA：用 Rust 从零写成的"塑性"状态空间语言模型——逐 token 权重更新、无任何 ML 框架、自称生成快 ~12 倍
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / HN · 85+ 分 · ~2天前 (Sep 30 11:19 UTC+8)
+- **Tags:** `state-space` `rust` `architecture` `from-scratch`
+
+PSSA（"塑性状态空间架构"，Sparticle62ops/pssa）是一个非 Transformer 的小型语言模型：文本经一个循环状态空间层逐 token 读入，一块**情景记忆库**在前向传播中被写入和查询，部分权重**在模型运行时自我重写**。它完全没有用 ML 框架——线性代数是手写的，因为在自动微分框架里干这些"意味着每一步都在跟框架搏斗"，每个批处理 kernel 都对照标量参考路径校验到 ~3e-8。自称的测量结果：在相同参数、相同语料下，它比 Transformer 基线学得更快，在同一颗 CPU 上文本生成**快约 12 倍**。README 直白得令人愉快："这里的声明是架构本身。实现语言只是一个细节。"
+
+**Why it matters:** 后 Transformer 探索在车库规模上依然活着，而"原位可塑性 + 推理期间写入的可寻址记忆"是有意思的组合——但这里的每个数字都出自一位开发者的测量，没有任何独立复现。
+
+[`🔗 Sparticle62ops/pssa`](https://github.com/Sparticle62ops/pssa) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49903993)
+
+---
+
+## 31. laya-mlx：Laya 的类型化决策模型迎来原生 MLX 运行时——Apple 芯片上 7–14 毫秒出决策，不依赖 PyTorch
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / PyPI · 6.7k★ · 9 月 19 日创建
+- **Tags:** `mlx` `decision-models` `apple-silicon` `local-llm`
+
+mizorewww/laya-mlx（PyPI v0.2.0）是 **Laya 类型化决策模型**的原生 MLX 运行时——Laya 正是本 feed 9 月 20 日头条报道的开源 "System 1" 家族——在 M3 Max 上 **7–14 毫秒**产出 choice/score/yes-no 决策，没有文本生成、没有 PyTorch、没有云 API。它是本月本 feed 持续追踪的本地决策模型基础设施浪潮的 Apple 芯片分支（9 月 21 日 Kev 的可自托管家族、9 月 26 日 Ollaya 的 Rust 守护进程、现在是 Laya-MLX），它重要的原因是算术：本地 10 毫秒出一次类型化决策，改变的是 agent 在每次按键之间"查得起"什么。
+
+**Why it matters:** 决策模型的 serving 正在像 LLM serving 一样按平台分化——服务器端是 Rust 守护进程，Mac 上是 MLX——而每移除一层框架依赖，逐调用路由就从"优化项"变成"默认项"。注意事项：仓库自 9 月 22 日起没有新推送；运行时真实、已打包，但还年轻。
+
+[`🔗 mizorewww/laya-mlx`](https://github.com/mizorewww/laya-mlx) · [`🔗 PyPI 上的 laya-mlx`](https://pypi.org/project/laya-mlx/)
+
+---
+
+## 32. codegraph：预索引、自动同步的代码知识图谱达到 72.6k★——以及一整天框架专属的启发式修复
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 72.6k★ · v1.6.1（9 月 29 日），修复持续今天
+- **Tags:** `code-intelligence` `rust` `coding-agents` `indexing`
+
+colbymchenry/codegraph 自称"最快的完整代码图谱"：预索引的符号/知识图谱**随代码变更自动同步**，100% 本地，Rust 内核，以带 provenance 与构建证明徽章的 npm 包发行，可接入九种 agent（Claude Code、Codex、Gemini CLI、Cursor、OpenCode、Antigravity、Kiro、Copilot、Hermes）。v1.6.1 于 9 月 29 日发布，而今天的提交全是同一物种的修复——"中间件候选只能是声明，永远不会是 import"、组件名启发式仅限 `.astro`——都是按框架逐个收紧的名称模式规则。
+
+**Why it matters:** agent 的上下文供给已经是独立的基础设施层，且竞争者众（DeusData 的 codebase-memory-mcp 44.3k★，9 月 23 日报道过；jevgrep 的语义检索，9 月 29 日），codegraph的差异点在自动同步加完全本地。而今天的提交日志是那条诚实的成本线：启发式代码索引是一条按框架逐个填坑的长尾。
+
+[`🔗 colbymchenry/codegraph`](https://github.com/colbymchenry/codegraph) · [`🔗 文档`](https://colbymchenry.github.io/codegraph/)
+
+---
+
+## 33. 56k.rip：1996 年的完整拨号上网体验，装进一个浏览器标签页
+
+- **Velocity:** ▮ steady
+- **Source:** 56k.rip · HN 100+ 分 · ~6小时前 (Oct 1 06:08 UTC+8)
+- **Tags:** `retro` `dialup` `web`
+
+"完整的 1996 拨号上网体验：握手音、等待，还有有人拿起电话。请开声音。"把整套仪式——调制解调器协商音频、连接等待、被打断——复原成一个可交互页面的单页作品。HN 上六小时冲到 100 分还在涨。
+
+**Why it matters:** 纯粹的怀旧工程，而这一题材经久不衰恰恰因为它是反 agent 的互联网：慢、需要身体在场、会被人类拿起电话打断——一种任何优化都改善不了的体验。
+
+[`🔗 56k.rip`](https://56k.rip/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49915126)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-01T04:03:00+08:00 |
-| Items | 20 |
-| Sources tracked | 23（Google 博客、Hacker News、GitHub、Cisco PSIRT、CISA KEV、NVD、DIVD CSIRT、edgcpp.org、arXiv、Hugging Face、python.org security-announce、Cloudflare 博客、railcode.dev/HN、Netlify、WatchGuard PSIRT、oss-security、Apache 邮件列表、alphapixeldev.com、exyr.org、yedhu.me、Computer Things/buttondown、GE Vernova、insufferable.dev） |
+| Generated | 2026-10-01T12:17:00+08:00 |
+| Items | 33 |
+| Sources tracked | 34（Hacker News、GitHub Trending、GitHub、Google 博客、Artificial Analysis、blog.faav.net、turkeyland.net、mattkeeter.com、agmai.org、arXiv、Hugging Face、blog.gitea.com、56k.rip、america.gov、PyPI、eternity4719.github.io、colbymchenry.github.io、Cisco PSIRT、CISA KEV、NVD、DIVD CSIRT、edgcpp.org、python.org security-announce、Cloudflare 博客、Netlify、WatchGuard PSIRT、oss-security、Apache 邮件列表、alphapixeldev.com、exyr.org、yedhu.me、Computer Things/buttondown、GE Vernova、insufferable.dev） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | Velocity 加权（时效 × 互动加速 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

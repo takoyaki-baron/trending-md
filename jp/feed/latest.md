@@ -1,8 +1,8 @@
 ---
 date: 2026-10-01
-updated: 2026-10-01T04:03:00+08:00
+updated: 2026-10-01T12:17:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 23
+sources: 34
 license: CC-BY-4.0
 ---
 
@@ -286,13 +286,195 @@ GPU テキストレンダリングの3つの答えを比較する深掘り——
 
 ---
 
+## 21. 「17兆件のMicrosoftレコードにアクセスできた可能性」——16歳の研究者、未検証のログイントークン、そして内部分析API
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** blog.faav.net · HN 264+ pts · ~2日前 (Sep 29 04:32 UTC+8)
+- **Tags:** `microsoft` `bug-bounty` `ai-agents` `authorization`
+
+Faav——16歳、学校と両立しながらバグバウンティに没頭——Faavは、Microsoftの多様なデータセットにまたがる推定**17.3兆件の保存レコード**が、単一の内部分析サービス（"Titan"）経由で到達可能だったことを開示した。原因は**ログイントークンの署名を一切検証していなかった**ことで、この欠陥により管理者のIDを名乗り、資格情報なしで未許可のSQLクエリを投稿できた。侵入経路は端から端までAI支援だった。本人のAIハックボット「Antares」が8月25日にTitanを発見し、人間が10日後の金曜夜に仕上げた——「VPN REQUIRED」と表示される施錠済みフロントエンドは無関係も同然だった。公開Swaggerファイルに4つのルートが列挙され、生SQLを受け付ける`/v2/Query`だけが唯一Azure ADベアラー認証の表記が**なかった**からだ。56個のテーブル定義は、Wayback Machineに残っていたTitanの2023年Superset設定のアーカイブから復元した。記事自身が限界を明示している。影響は仮定の話で、メタデータと上限付きサンプル行しか触っていない——そして注目すべきことに、**「Microsoftはこの記事に対して編集権を持ち、公開前に節と図表を削り、影響の記述を再形成した」**。
+
+**Why it matters:** 二つの要素がここで重なる。第一に、この失敗クラス——内部サービスの認証がルート単位で設定され、一つのルートだけドリフトした——は列挙可能であり、17兆行というのはMicrosoftにおける「内部」の規模である。第二に、開示文書そのものがベンダー編集済みであり、紙面上に読める影響の形状はMicrosoftが承認した形状だということ。注意書きは一次資料にあり、結論にも入れるべきだ。
+
+[`🔗 blog.faav.net`](https://blog.faav.net/how-i-couldve-accessed-17-trillion-microsoft-records) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49883970)
+
+---
+
+## 22. HowToLiveBetter：649項目をエビデンス格付けした中国語の人生ガイドが、今月の新リポジトリ首位の32.3k★に——自身の項目を引用するagent skill付き
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 32.3k★ · ~25分前にpush (~11:53 UTC+8)
+- **Tags:** `chinese-oss` `evidence-grading` `agent-skill` `open-data`
+
+「高コスパ人生ガイド」（eternity4719/HowToLiveBetter、CC-BY-4.0、9月7日作成）は9月に作成されたリポジトリで最もスターを集めた：長寿、救急処置、節約、法律、雇用、結婚・育児、海外移住をカバーする**649項目の助言**——各項目に何を費やし何を得るか、エビデンスの硬さを明記し（**A格付け428 · B 171 · C 50**）、ジャーナル論文と公式文書のみを引いた**1,531本の出典リンク**を添える。検索可能なVitePressサイトに加えPDF/EPUB/オフラインHTMLで頒布され、2026年の部分として、**Claude CodeとCodex用のagent skill**を同梱する。「友人の連帯保証人になっていいか」と尋ねると、まず本の項目を検索し、節と項番を引用してから答える。姉妹の单ページリーダー（cdyforever/how-to-live-better）がさらに5.9k★を積む。
+
+**Why it matters:** byoungd/upの系譜——人生の助言をオープンソースにする——だが、今回は*検索コーパス*として設計されている：エビデンス格付け済み、出典過密、agentが一行ずつ引用できる構造。RAGアプリがドキュメントに使っているのと同じパターンを、個人の意思決定に適用し、同時に二人の読者のために書いた。
+
+[`🔗 eternity4719/HowToLiveBetter`](https://github.com/eternity4719/HowToLiveBetter) · [`🔗 オンライン検索版`](https://eternity4719.github.io/HowToLiveBetter/)
+
+---
+
+## 23. 続き：Gemini 4 Argon に初の独立評価——Artificial Analysis は 53 点、223モデル中8位
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Artificial Analysis · HN 92+ pts · ~7.5時間前 (Oct 1 04:50 UTC+8)
+- **Tags:** `google` `gemini` `benchmarks` `evaluation`
+
+Googleの発表から約一日——今朝このフィードが#1で扱った際は「リリース数時間、独立評価ゼロ」と書いた——のち、Artificial Analysisが**Gemini 4 Argon (High)**の数値を公開した：**Intelligence Index 53、223モデル中8位**。クラス中央値の26を大きく上回るが、首位には届かない。価格は確認済み（100万トークンあたり$2/$10、キャッシュ95%割引、タスクあたり$1.99）、コンテキストは発表通り1M。注目すべき差分は冗長性だ：Intelligence Indexを完走するのに**出力トークン110M**を消費し、中央値は82M——このモデルは典型的モデルより約34%多く「声に出して考え」、その分はタスク単位コストにすでに反映されている。速度はN/A表記。評価は推論バリアントのみ。
+
+**Why it matters:** Google選定のタイ首位（DeepSWE 77.9%、CWE-bench同率1位）と、独立ハーネスの8位との差こそ、このフィードがリリース日の数字に割り引く理由だ——そして冗長性はArgonの価格ページが語らないコストの話だ。測定されていて、宣伝されていないからだ。
+
+[`🔗 Artificial Analysis`](https://artificialanalysis.ai/models/gemini-4-argon) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49914236)
+
+---
+
+## 24. 続き：America.govのAIチャットが「Minecraftで遊ぶ」というネタが発覚——米政府の玄関口にはトピックのガードレールがない
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 112+ pts · ~8.7時間前 (Oct 1 03:34 UTC+8)
+- **Tags:** `government` `ai-agents` `guardrails`
+
+このフィードが9月30日に「米政府へのAI玄関口」としてAmerica.govの開設を報じた翌日、HNはそのチャットエンドポイントの余興を発見した：**「play Minecraft」**と頼むと、ゲームのエンドクレジット詩の政府版を朗々と披露する——「より高いレベルに到達した。連邦規則集(CFR)を読めるようになった…私たちをチャットボットだと思っている」。楽しいが、診断的でもある：市民向けエージェントが、ドメイン外リクエストへのシナリオテストを一切見せずに出荷された。（鮮度注：今回の実行時、`america.gov/chat`はスクリプトクライアントに403を返した——ここの台詞はHNスレッドからの引用であり、画面写しが二次情報である理由でもある。）
+
+**Why it matters:** このフィードが扱ってきたすべてのエージェント運用の話と同じ教訓が、今度は連邦スケールで起きた：人格を壊すプロンプトは常にコピペ一つ先にあり、修正は決して「モデルが分別を持った」ではない——誰かが下していなかったharnessの決定だ。
+
+[`🔗 HN 議論`](https://news.ycombinator.com/item?id=49913255) · [`🔗 america.gov/chat`](https://america.gov/chat)
+
+---
+
+## 25. CS240のAIカンニング騒動、担当教員自身の回顧録に——明確な方針、処理のまずさを自認、「ほとんど結果責任なし」
+
+- **Velocity:** ▮▮ rising
+- **Source:** turkeyland.net · HN 102+ pts · ~8.4時間前 (Oct 1 03:54 UTC+8)
+- **Tags:** `education` `academic-integrity` `ai-policy`
+
+2026年春のCS240（Cプログラミング）AIカンニング騒動の中心にいた教授が、学生たちに問われ続けた経緯を公開した：講義シラバスにはあらゆる課題でのLLM使用を禁じる**明文化された禁止**があった——それでも彼自身の対応は「もっと良くあるべきだった。それこそが、明文化された方針に違反した人々が結局**ほとんど、あるいはまったく結果責任を負わずに**済んだ主な理由だ」。執筆の動機は、事件をめぐる「どうやら今も続いている議論」を取り巻く誤情報だとしている。政策の条文から処理の結果までを含む、教員側からの詳細な一次文書だ。
+
+**Why it matters:** 政策は決して難しい部分ではない——執行が難しい。そしてこれは内側からの稀な白状だ：明文ルールがあり、既知の違反があり、制度的帰結はほぼゼロ。エージェントを禁じるすべての講義が実際に生きているのは、シラバスの文言ではなく、この非対称性だ。
+
+[`🔗 CS240 回顧録`](https://turkeyland.net/thoughts/ai.php) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49913458)
+
+---
+
+## 26. Halfspace：Matt Keeter の距離場ソリッドモデリング IDE——「2026年になったので、冒頭に書いておく。これはvibe codeしていない」
+
+- **Velocity:** ▮▮ rising
+- **Source:** mattkeeter.com · HN 88+ pts · ~8.5時間前 (Oct 1 03:44 UTC+8)
+- **Tags:** `cad` `graphics` `distance-fields` `webgpu`
+
+Halfspaceは**距離場**によるソリッドモデリングの実験的IDE——Keeterが2022年から作ってきたFidgetカーネルのブラウザ（WebGPU）ショーケースだ：GUI内の画像をほぼリアルタイムでラスタライズし、モデルは画像や三角形メッシュとして書き出せる。構え自体が主張だ：低レベルな陰曲面の作業「はアセンブリを書くのに少し似ている」、だからHalfspaceはその上に高レイヤーを築く——そして「2026年になったので、冒頭に書いておく。**これはvibe codeしていない**。2025年4月から取り組み、人間の脳でコードを書いている」という書き出しは、出自の声明として実働している。
+
+**Why it matters:** Keeterの陰関数モデリング連作はこのニッチの長期リファレンスであり、今回のデモはタブの中で本当に動く。そしてその免責文言が文化の標本だ：手書きであることの出自声明は、今や作品集プロジェクトがライセンスと同じように掲げるべきものになった。
+
+[`🔗 Halfspace`](https://www.mattkeeter.com/projects/halfspace/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49913350)
+
+---
+
+## 27. 続き：AGMAI が「AI生成数学の責任ある公開」を公表——600件超の意見募集、そして実験室に実践の中止を要請
+
+- **Velocity:** ▮▮ rising
+- **Source:** agmai.org · HN 83+ pts · ~26時間前 (Sep 30 10:36 UTC+8)
+- **Tags:** `mathematics` `ai-policy` `publication-norms`
+
+このフィードが9月22日にTerry Taoのゲスト投稿を通じて報じた数学・AI諮問グループ（AGMAI）が、九日後に最初の成果を発表した：**「Responsible Release of AI-Generated Mathematics」**（9月29日）、**600件超のコミュニティからの回答**に基づく。背骨はこの分野最古の規範の再定義だ——著者は論証を*理解*し、検証し、それに責任を負わねばならない——に、居心地の悪い要請が加わる：「現在、一部のフロンティアAIラボは、高度な数学的問題をプロプライエタリなモデルでテストしている……**冒頭から明確に述べておく。我々はこの慣行を支持しない。中止を要請する。**」人間の理解が即座に伴わないまま重要な数学的成果を公開するラボは、それに責任を負わねばならない。
+
+**Why it matters:** 数学コミュニティが、このフィードがベンチマーク報道で繰り返し突き当たってきた亀裂——理解される前に存在してしまう結果——を正式化したものだ。そしてベンダーブログが決して明かさない立場を取る：審査の対象は公開のエチケットだけでなく、テストという慣行そのものだ。
+
+[`🔗 agmai.org`](https://agmai.org/general-sep29/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49903713)
+
+---
+
+## 28. Meta-Skills：凍結された「Builder」モデルが、凍結された「Target」のためにハーネスを組むことを学ぶ——AI-for-AIが転移可能なスキルになる
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / HF Papers · HFデイリー首位 (28 ups) · ~1日前 (Sep 30)
+- **Tags:** `agents` `harness` `paper` `ai4ai`
+
+UIUCのチーム（Cheng Qian、Kunlun Zhu、Beibin Li、Zhenhailong Wang、Heng Ji）が **test-time AI-for-AI** を形式化した：*両*モデルの重みを凍結したまま、BuilderがTargetの開発セット上での実行フィードバックから **Meta-Skills**——「いつ支援が必要で、どんなリソースを提供すべきかを定める原則」——を学び、凍結したスキルバンクを使って未知のタスク向けの実行環境（ハーネス）を構築する。彼らのHarness-BenchとNewton Benchにおいて、フルバンクのmeta-skillsはスキルなし構築比でマクロ平均 **+8.95ポイント**、同じバンクをTargetに直接渡す方法比で **+12.02ポイント** 改善した——内容だけでなく、パッケージング自体が仕事の一部を担っている。
+
+**Why it matters:** ハーネスエンジニアリング——このフィードで最も報道密度の高いカテゴリ——が、手作りの成果物から、それ自体学習可能で転移可能なレイヤーになりつつある。注意点は評価だ：Harness-BenchもNewton Benchも著者らの自作であり、誰かの別のエージェントスタックが再現するまで、この利得は彼らの設定内でのみ成立する。
+
+[`🔗 arXiv:2609.38143`](https://arxiv.org/abs/2609.38143) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.38143)
+
+---
+
+## 29. Gitea 28.0、「1.」を外す——監査ログ、ボットアカウント、そして1週間非公開のセキュリティ修正
+
+- **Velocity:** ▮▮ rising
+- **Source:** Gitea ブログ · HN 70+ pts · ~7.8時間前 (Oct 1 04:32 UTC+8)
+- **Tags:** `gitea` `git` `self-hosted` `release`
+
+Gitea v28.0.0は歴史的な`1.`接頭辞を引退させ（1.28.0ではなく28.0.0だ）、しばらくぶりの大量機能を載せる：**監査ログ、ボットアカウント、HTTPSデプロイトークン、管理者によるユーザーなりすまし、code-owner承認ルール、diffファイルフィルタ、Actionsキュービュー**。セキュリティ節は意図的なぼかしだ：「本リリースにはセキュリティ修正が含まれます。全員がアップグレードする時間を確保するため、詳細は約1週間後にこの記事に追記されます。」アップグレーダーへの破壊的変更：リリースバイナリから32ビットx86と`gogit`ビルドが消え、Snapのarmhfビルドが廃止、ダウンロードファイル名からOSバージョン接尾辞が消える。
+
+**Why it matters:** バージョン方式の切り替えは、セルフホストGitエコシステムがポスト1.0時代を宣言するやり方だ——そして「詳細は後日」のパターンは不変の教訓でもある：「最新リリース」と「完全開示」は別の状態だ。Giteaを公開環境で動かしているなら、開示を待たずリリースで上げろ。
+
+[`🔗 Gitea 28.0.0 リリース記事`](https://blog.gitea.com/release-of-28.0.0/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49913975)
+
+---
+
+## 30. PSSA：Rustでゼロから書かれた「可塑性」のある状態空間言語モデル——トークンごとの重み更新、MLフレームワークなし、生成は約12倍速を主張
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / HN · 85+ pts · ~2日前 (Sep 30 11:19 UTC+8)
+- **Tags:** `state-space` `rust` `architecture` `from-scratch`
+
+PSSA（「plastic state-space architecture」、Sparticle62ops/pssa）はトランスフォーマーではない小型言語モデルだ：テキストを再帰状態空間レイヤーで一トークンずつ読み、**エピソード記憶バンク**がフォワードパス中に書き込み・照会され、重みの一部は**モデルの実行中に自分自身を書き換える**。MLフレームワークは一切使っていない——線形代数は手書きだ。自動微分の下では「一歩ごとにフレームワークと戦うことになる」からで、すべてのバッチ化カーネルはスカラー参照経路に対し約3e-8まで検証されている。自己測定の主張：同パラメータ・同コーパスでトランスフォーマー比より速く学習し、同じCPUでテキスト生成は**約12倍速い**。READMEは率直だ：「ここでの主張はアーキテクチャだ。実装言語は細部にすぎない。」
+
+**Why it matters:** ポストトランスフォーマーの探求はガレージ規模で生きており、その場での可塑性と、推論中に書き込まれるアドレス可能な記憶の組み合わせは面白い——ただしここの数値はすべて一人の開発者の測定であり、独立再現は存在しない。
+
+[`🔗 Sparticle62ops/pssa`](https://github.com/Sparticle62ops/pssa) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49903993)
+
+---
+
+## 31. laya-mlx：Layaの型付き決定モデルにネイティブMLXランタイム——Appleシリコンで7–14ミリ秒の決定、PyTorch不要
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / PyPI · 6.7k★ · 9月19日作成
+- **Tags:** `mlx` `decision-models` `apple-silicon` `local-llm`
+
+mizorewww/laya-mlx（PyPI v0.2.0）は **Layaの型付き決定モデル**——このフィードが9月20日に#1で扱ったオープンソース「System 1」ファミリー——のネイティブMLXランタイムだ：M3 Maxで **7–14ミリ秒** でchoice/score/yes-noの決定を返し、テキスト生成なし、PyTorchなし、クラウドAPIなし。今月このフィードが追い続けてきたローカル決定モデルインフラの波のAppleシリコン支流だ（9月21日のKevのセルフホスト可能ファミリー、9月26日のOllayaのRustデーモン、そして今回のLaya-MLX）。それが重要な理由は算術だ：ローカルで10ミリ秒の型付き決定は、エージェントが一キーストロークごとに「調べられる」ものを変える。
+
+**Why it matters:** 決定モデルのサービングは、LLMサービングと同じようにプラットフォームごとに分化しつつある——サーバーにはRustデーモン、MacにはMLX——そしてフレームワーク依存を一つ減すごとに、呼び出しごとのルーティングは「最適化」から「デフォルト」に変わる。注意：リポジトリは9月22日以降静かだ。ランタイムは実在しパッケージ化されているが、若い。
+
+[`🔗 mizorewww/laya-mlx`](https://github.com/mizorewww/laya-mlx) · [`🔗 PyPIのlaya-mlx`](https://pypi.org/project/laya-mlx/)
+
+---
+
+## 32. codegraph：事前インデックス・自動同期のコードナレッジグラフが72.6k★——そして一日中続いたフレームワーク別ヒューリスティクス修正
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 72.6k★ · v1.6.1（9月29日）、修正は今日も継続
+- **Tags:** `code-intelligence` `rust` `coding-agents` `indexing`
+
+colbymchenry/codegraphは自らを「最速の完全コードグラフ」と称する：コードの変更に**自動同期**する事前インデックス済みのシンボル/ナレッジグラフ、100%ローカル、Rustカーネル、provenanceとattested-buildバッジ付きのnpmパッケージとして頒布され、9種のエージェント（Claude Code、Codex、Gemini CLI、Cursor、OpenCode、Antigravity、Kiro、Copilot、Hermes）に接続できる。v1.6.1は9月29日に公開され、今日のコミットは全部同じ種類の修正だ——「ミドルウェア候補は宣言であり決してimportではない」、コンポーネント名ヒューリスティクスは`.astro`のみに限定——フレームワークごとに名前パターンの規則を詰める作業だ。
+
+**Why it matters:** エージェントへのコンテキスト供給はそれ自体インフラレイヤーになり、大型の競合が複数ある（9月23日に扱ったDeusDataのcodebase-memory-mcp 44.3k★、9月29日のjevgrepのセマンティック検索）。codegraphの差別化は自動同期と完全ローカルだ。そして今日のコミットログが正直なコスト行だ：ヒューリスティックなコードインデックスは、フレームワークごとの穴埋めが続く長い尾だ。
+
+[`🔗 colbymchenry/codegraph`](https://github.com/colbymchenry/codegraph) · [`🔗 ドキュメント`](https://colbymchenry.github.io/codegraph/)
+
+---
+
+## 33. 56k.rip：1996年のダイヤルアップ体験のすべてを、ブラウザのタブに
+
+- **Velocity:** ▮ steady
+- **Source:** 56k.rip · HN 100+ pts · ~6時間前 (Oct 1 06:08 UTC+8)
+- **Tags:** `retro` `dialup` `web`
+
+「1996年のダイヤルアップ体験のすべて：ハンドシェイク音、待ち時間、そして誰かが電話を取る。音はオンで。」モデム交渉オーディオから接続待ち、切断まで、儀式全体をインタラクティブなページとして復元した単一ページ作品だ。HNで6時間で100ポイント超え、まだ伸びている。
+
+**Why it matters:** 純粋なノスタルジア工学だ。そしてこのジャンルが繰り返し受けるのは、それが反エージェントのインターネットだからだ：遅く、身体がそこにあり、人間が電話を取ることで中断される——どんな最適化でも改善できない体験。
+
+[`🔗 56k.rip`](https://56k.rip/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49915126)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-01T04:03:00+08:00 |
-| Items | 20 |
-| Sources tracked | 23（Google ブログ、Hacker News、GitHub、Cisco PSIRT、CISA KEV、NVD、DIVD CSIRT、edgcpp.org、arXiv、Hugging Face、python.org security-announce、Cloudflare ブログ、railcode.dev/HN、Netlify、WatchGuard PSIRT、oss-security、Apache メーリングリスト、alphapixeldev.com、exyr.org、yedhu.me、Computer Things/buttondown、GE Vernova、insufferable.dev） |
+| Generated | 2026-10-01T12:17:00+08:00 |
+| Items | 33 |
+| Sources tracked | 34（Hacker News、GitHub Trending、GitHub、Google ブログ、Artificial Analysis、blog.faav.net、turkeyland.net、mattkeeter.com、agmai.org、arXiv、Hugging Face、blog.gitea.com、56k.rip、america.gov、PyPI、eternity4719.github.io、colbymchenry.github.io、Cisco PSIRT、CISA KEV、NVD、DIVD CSIRT、edgcpp.org、python.org security-announce、Cloudflare ブログ、Netlify、WatchGuard PSIRT、oss-security、Apache メーリングリスト、alphapixeldev.com、exyr.org、yedhu.me、Computer Things/buttondown、GE Vernova、insufferable.dev） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | Ranking | Velocity 重み付け（鮮度 × エンゲージメント加速 × ソースの権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

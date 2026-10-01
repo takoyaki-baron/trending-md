@@ -1,8 +1,8 @@
 ---
 date: 2026-10-01
-updated: 2026-10-01T04:03:00+08:00
+updated: 2026-10-01T12:17:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 23
+sources: 34
 license: CC-BY-4.0
 ---
 
@@ -286,13 +286,195 @@ The U.S. Nuclear Regulatory Commission issued a construction permit to the Tenne
 
 ---
 
+## 21. "I could've accessed 17T Microsoft records" — a 16-year-old, one unsigned login token, and an internal analytics API
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** blog.faav.net · 264+ pts on HN · ~2d ago (Sep 29 04:32 UTC+8)
+- **Tags:** `microsoft` `bug-bounty` `ai-agents` `authorization`
+
+Faav — 16, full-time on bug bounty around school — disclosed that an estimated **17.3 trillion stored rows** across a wide range of Microsoft datasets were reachable through a single internal analytics service ("Titan"), because it **never checked the signature on a login token**: a flaw that let them claim an administrator's identity and submit unauthorized SQL queries with no credentials. The path in was AI-assisted end to end: their personal AI hackbot "Antares" surfaced Titan on Aug 25, and the human finished it ten days later — the locked "VPN REQUIRED" frontend didn't matter because a public Swagger file listed four routes, and the one that accepted raw SQL (`/v2/Query`) was the only one *not* marked as requiring Azure AD bearer auth; 56 table definitions came from Wayback Machine snapshots of Titan's 2023 Superset configuration. The post is explicit about its own limits: impact is hypothetical, only metadata and bounded sample rows were touched — and, notably, **"Microsoft had editorial control over this post, cutting sections and figures and reshaping how the impact is described before publication."**
+
+**Why it matters:** two things compound here. First, the failure class — an internal service whose auth is configured per-route and one route drifted — is enumerable, and 17T rows is the scale of "internal" at Microsoft. Second, the disclosure itself is vendor-edited, so the shape of the impact we can read is the shape Microsoft approved; the caveat is in the primary source, and it belongs in the takeaway.
+
+[`🔗 blog.faav.net`](https://blog.faav.net/how-i-couldve-accessed-17-trillion-microsoft-records) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49883970)
+
+---
+
+## 22. HowToLiveBetter: a 649-entry, evidence-graded Chinese life manual tops the month's new repos at 32.3k★ — with an agent skill that cites its own sections
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 32.3k★ · pushed ~25 min ago (~11:53 UTC+8)
+- **Tags:** `chinese-oss` `evidence-grading` `agent-skill` `open-data`
+
+高性价比人生指南 ("the cost-effective life guide," eternity4719/HowToLiveBetter, CC-BY-4.0, created Sep 7) is now the most-starred repository created in September: **649 recommendations** spanning longevity, first aid, money, law, employment, family and emigration — each entry stating what it costs, what it buys back, and how hard the evidence is (**grade A 428 · B 171 · C 50**), with **1,531 source links** citing only journal papers and official documents. It ships as a searchable VitePress site plus PDF/EPUB/offline-HTML releases, and — the 2026 part — an **agent skill for Claude Code and Codex**: ask "should I co-sign a loan for a friend" and it answers by first retrieving the book's entries, with section-and-item citations. A companion single-page reader (`cdyforever/how-to-live-better`) adds another 5.9k★.
+
+**Why it matters:** this is the byoungd/up lineage — life advice as open source — but engineered as a *retrieval corpus*: evidence-graded, citation-dense, and structured so an agent can quote it line-by-line. The same pattern RAG apps use on documentation, applied to personal decisions, written for both audiences at once.
+
+[`🔗 eternity4719/HowToLiveBetter`](https://github.com/eternity4719/HowToLiveBetter) · [`🔗 online search edition`](https://eternity4719.github.io/HowToLiveBetter/)
+
+---
+
+## 23. Since this morning's coverage: Gemini 4 Argon gets its first independent read — Artificial Analysis scores it 53, #8 of 223
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Artificial Analysis · 92+ pts on HN · ~7.5h ago (Oct 1 04:50 UTC+8)
+- **Tags:** `google` `gemini` `benchmarks` `evaluation`
+
+Roughly a day after Google's announcement — which this feed covered at #1 this morning with the note that the model was "hours old with zero independent evaluation" — Artificial Analysis published its numbers for **Gemini 4 Argon (High)**: **Intelligence Index 53, ranking #8 of 223**, well above the class median of 26 but short of the top of the chart; the pricing checks out ($2/$10 per M tokens, 95% cache discount, $1.99 per task), context is 1M as announced. The interesting delta is verbosity: **110M output tokens** to complete the Intelligence Index vs a median of 82M — the model reasons out loud ~34% more than typical, which the per-task cost already reflects. Speed is listed N/A; the evaluation covers the reasoning variant only.
+
+**Why it matters:** the gap between Google-selected tie-firsts (DeepSWE 77.9%, CWE-bench co-#1) and an independent harness placing it #8 is exactly why this feed discounts launch-day numbers — and verbosity is the Argon cost story nobody's pricing page mentions, because it's measured, not marketed.
+
+[`🔗 Artificial Analysis`](https://artificialanalysis.ai/models/gemini-4-argon) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49914236)
+
+---
+
+## 24. Since our Sep 30 coverage: America.gov's AI chat "plays Minecraft" — the US government's front door has no topical guardrails
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 112+ pts · ~8.7h ago (Oct 1 03:34 UTC+8)
+- **Tags:** `government` `ai-agents` `guardrails`
+
+A day after this feed covered America.gov's launch as "the AI front door to the US government," HN found its chat endpoint's party trick: ask it to **"play Minecraft"** and it performs the game's end-credits poem, government edition — "It has reached a higher level now. It can read the Code of Federal Regulations… It thinks we are a chatbot." Delightful, and diagnostic: a citizen-facing agent shipped with no visible scenario testing for off-domain requests. (Perishable-state note: `america.gov/chat` returned 403 to scripted clients during this run — the transcript here is quoted from the HN thread, which is also why the screenshots below are second-hand.)
+
+**Why it matters:** same lesson as every agent-deployment story this feed covers, now at federal scale: the prompt that breaks the persona is always one copy-paste away, and the fix is never "the model knew better" — it's a harness decision someone didn't make.
+
+[`🔗 HN discussion`](https://news.ycombinator.com/item?id=49913255) · [`🔗 america.gov/chat`](https://america.gov/chat)
+
+---
+
+## 25. CS240's AI-cheating storm gets the instructor's own retrospective — clear policy, admitted mishandling, "little to no consequence"
+
+- **Velocity:** ▮▮ rising
+- **Source:** turkeyland.net · 102+ pts on HN · ~8.4h ago (Oct 1 03:54 UTC+8)
+- **Tags:** `education` `academic-integrity` `ai-policy`
+
+The professor at the center of Spring 2026's CS 240 (C programming) AI-cheating storm published the account students kept asking for: the course had a **clearly articulated syllabus prohibition** on using LLMs for any assignment — yet his own handling "should have been better and is primarily why the individuals that ran afoul of the clearly stated course policy ultimately incurred **little to no consequence**." He wrote it down, he says, because misinformation about the incident "surrounds the, apparently, ongoing discussions." A detailed primary document from the instructor's side, including the policy text and the resolution.
+
+**Why it matters:** the policy was never the hard part — enforcement is, and this is a rare admission from inside: a stated rule, a known violation, and an institutional outcome of approximately nothing. That asymmetry, not the syllabus wording, is the operating reality every course that bans agents now lives in.
+
+[`🔗 CS240 retrospective`](https://turkeyland.net/thoughts/ai.php) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49913458)
+
+---
+
+## 26. Halfspace: Matt Keeter's distance-field solid-modeling IDE — "Since it's 2026, let me note at the outset that this is not vibe-coded"
+
+- **Velocity:** ▮▮ rising
+- **Source:** mattkeeter.com · 88+ pts on HN · ~8.5h ago (Oct 1 03:44 UTC+8)
+- **Tags:** `cad` `graphics` `distance-fields` `webgpu`
+
+Halfspace is an experimental IDE for solid modeling with **distance fields** — a browser (WebGPU) showcase for the Fidget kernel Keeter has been building since 2022: images rasterized in real(ish)-time inside the GUI, models exportable as images or triangle meshes. The framing is the argument: low-level implicit-surface work "is a bit like writing assembly," so Halfspace builds the high-level layer on top — and the opening line, "Since it's 2026, let me note at the outset that **this is not vibe-coded**. I've been working on it since April 2025 and am writing the code using my human brain," is doing real work as a statement of provenance.
+
+**Why it matters:** Keeter's implicit-modeling writeups are the long-running reference series in this niche, and the demo is genuinely usable in a tab. The disclaimer is the cultural artifact: hand-written provenance is now something a portfolio project has to declare, the way licenses do.
+
+[`🔗 Halfspace`](https://www.mattkeeter.com/projects/halfspace/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49913350)
+
+---
+
+## 27. Since our Sep 22 coverage: AGMAI publishes "Responsible Release of AI-Generated Mathematics" — 600+ replies, and an ask that labs stop the practice
+
+- **Velocity:** ▮▮ rising
+- **Source:** agmai.org · 83+ pts on HN · ~26h ago (Sep 30 10:36 UTC+8)
+- **Tags:** `mathematics` `ai-policy` `publication-norms`
+
+Nine days after this feed covered the Advisory Group on Mathematics and AI's launch (via Terry Tao's guest post), it published its first output: **"Responsible Release of AI-Generated Mathematics"** (Sep 29), built from **600+ community replies**. The spine is the discipline's oldest norm, restated for the new situation — authors must *understand* the argument, verify it, and take responsibility for it — extended with an uncomfortable ask: "at present, some frontier AI labs are testing advanced mathematical problems on proprietary models… **We want to state clearly from the start: we do not endorse this practice, and we ask them to stop.**" Labs that release substantial mathematical output without immediately accompanying human understanding "must take responsibility" for it.
+
+**Why it matters:** this is the mathematical community formalizing the split this feed keeps hitting in benchmarks — results that exist before anyone understands them — and it takes a position the vendor blog posts never do: the testing practice itself, not just the release etiquette, is the thing under review.
+
+[`🔗 agmai.org`](https://agmai.org/general-sep29/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49903713)
+
+---
+
+## 28. Meta-Skills: a frozen "Builder" model learns to build harnesses for a frozen "Target" — AI-for-AI as a transferable skill
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / HF Papers · top-upvoted HF daily (28) · ~1d ago (Sep 30)
+- **Tags:** `agents` `harness` `paper` `ai4ai`
+
+A UIUC group (Cheng Qian, Kunlun Zhu, Beibin Li, Zhenhailong Wang, Heng Ji) formalizes **test-time AI-for-AI**: with *both* models' weights fixed, a Builder learns **Meta-Skills** — "principles specifying when support is needed and what resources to provide" — from a Target's execution feedback on a development set, then uses the frozen skill bank to construct execution environments (harnesses) for unseen tasks. On their Harness-Bench and Newton Bench, full-bank meta-skills improve macro-average performance by **+8.95 points over no-skill construction** and **+12.02 over directly handing the same bank to the Target** — the packaging, not the content, does part of the work.
+
+**Why it matters:** harness engineering — the most-covered category on this feed — is becoming itself a learnable, transferable layer rather than a hand-crafted artifact. The caveat is the evaluation: Harness-Bench and Newton Bench are the authors' own constructions, so the gains are internal to their setup until someone else's agent stack reproduces them.
+
+[`🔗 arXiv:2609.38143`](https://arxiv.org/abs/2609.38143) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.38143)
+
+---
+
+## 29. Gitea 28.0 drops the "1." — audit logging, bot accounts, and security fixes withheld for a week
+
+- **Velocity:** ▮▮ rising
+- **Source:** Gitea blog · 70+ pts on HN · ~7.8h ago (Oct 1 04:32 UTC+8)
+- **Tags:** `gitea` `git` `self-hosted` `release`
+
+Gitea v28.0.0 retires the historical `1.` prefix (this is 28.0.0, not 1.28.0) and ships the biggest feature batch in a while: **audit logging, bot accounts, HTTPS deploy tokens, administrator user impersonation, code-owner approval rules, diff file filters, and an Actions queue view**. The security section is deliberate coyness: "This release contains security fixes. To give everyone time to upgrade, details will be added to this post in about a week." Breaking changes for upgraders: 32-bit x86 and `gogit` builds are gone from release binaries, the Snap is no longer built for armhf, and download filenames lose the OS-version suffix.
+
+**Why it matters:** the version-scheme break is the self-hosted Git ecosystem declaring its post-1.0 era — and the withheld-details pattern is the standing reminder that "latest release" and "fully disclosed" are different states; if you run Gitea exposed to the internet, upgrade on the release, not on the disclosure.
+
+[`🔗 Gitea 28.0.0 release post`](https://blog.gitea.com/release-of-28.0.0/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49913975)
+
+---
+
+## 30. PSSA: a plastic state-space LM written from scratch in Rust — per-token weight updates, no ML framework, ~12× faster generation claimed
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / HN · 85+ pts · ~2d ago (Sep 30 11:19 UTC+8)
+- **Tags:** `state-space` `rust` `architecture` `from-scratch`
+
+PSSA ("plastic state-space architecture," Sparticle62ops/pssa) is a small language model that is not a transformer: text is read one token at a time through a recurrent state-space layer, an **episodic memory bank** is written and queried during the forward pass, and part of the weights **rewrite themselves while the model runs**. It's built with no ML framework at all — the linear algebra is hand-written because autograd "meant fighting the framework at every step," with every batched kernel checked against a scalar reference path to ~3e-8. Claims, self-measured: at matched parameters on the same corpus it learns faster than a transformer baseline and generates text **~12× quicker on the same CPU**. The README is refreshingly blunt that "the architecture is the claim here. The implementation language is a detail."
+
+**Why it matters:** post-transformer exploration is alive at garage scale, and in-place plasticity plus an addressable memory written during inference is the interesting combination — but every number here is one developer's measurement, and nothing has been independently reproduced.
+
+[`🔗 Sparticle62ops/pssa`](https://github.com/Sparticle62ops/pssa) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49903993)
+
+---
+
+## 31. laya-mlx: Laya's typed decision models get a native MLX runtime — 7–14 ms decisions on Apple silicon, no PyTorch
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / PyPI · 6.7k★ · created Sep 19
+- **Tags:** `mlx` `decision-models` `apple-silicon` `local-llm`
+
+mizorewww/laya-mlx (PyPI v0.2.0) is a native MLX runtime for **Laya's typed decision models** — the open-source "System 1" family this feed covered at #1 on Sep 20 — producing choice/score/yes-no decisions in **7–14 ms on an M3 Max**, with no text generation, no PyTorch, and no cloud API. It's the Apple-silicon branch of the local decision-model infrastructure wave this feed has tracked all month (Kev's self-hostable family Sep 21, Ollaya's Rust daemon Sep 26, Laya-MLX now), and the reason it matters is arithmetic: a typed decision that costs 10 ms locally changes what an agent can afford to check per keystroke.
+
+**Why it matters:** decision-model serving is fragmenting by platform the way LLM serving did — Rust daemons for servers, MLX for Macs — and each runtime that removes a framework dependency makes per-call routing a default rather than an optimization. Caveat: the repo has been quiet since Sep 22; the runtime is real and packaged, but young.
+
+[`🔗 mizorewww/laya-mlx`](https://github.com/mizorewww/laya-mlx) · [`🔗 laya-mlx on PyPI`](https://pypi.org/project/laya-mlx/)
+
+---
+
+## 32. codegraph: a pre-indexed, auto-syncing code knowledge graph at 72.6k★ — and a day of framework-specific heuristic fixes
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 72.6k★ · v1.6.1 Sep 29, fixes today
+- **Tags:** `code-intelligence` `rust` `coding-agents` `indexing`
+
+colbymchenry/codegraph bills itself as "the fastest complete code graph": pre-indexed symbol/knowledge graph that **auto-syncs as code changes**, 100% local, Rust kernel, shipping as an npm package with provenance and attested-build badges, and plugging into nine agents (Claude Code, Codex, Gemini CLI, Cursor, OpenCode, Antigravity, Kiro, Copilot, Hermes). v1.6.1 landed Sep 29, and today's commits are all the same species of fix — "a middleware candidate is a declaration, never an import," the component-name heuristic scoped to `.astro` only — name-pattern rules being tightened per framework.
+
+**Why it matters:** agent context supply is now its own infrastructure layer with several large contenders (DeusData's codebase-memory-mcp at 44.3k★, covered Sep 23; jevgrep's semantic search, Sep 29), and codegraph's differentiation is auto-sync plus fully-local. Today's commit log is the honest cost line: heuristic code indexing is a long tail of per-framework special cases.
+
+[`🔗 colbymchenry/codegraph`](https://github.com/colbymchenry/codegraph) · [`🔗 documentation`](https://colbymchenry.github.io/codegraph/)
+
+---
+
+## 33. 56k.rip: the full 1996 dial-up internet experience, in a browser tab
+
+- **Velocity:** ▮ steady
+- **Source:** 56k.rip · 100+ pts on HN · ~6h ago (Oct 1 06:08 UTC+8)
+- **Tags:** `retro` `dialup` `web`
+
+"The full 1996 dial-up experience: the handshake, the wait, someone picking up the phone. Sound on." A single-page reconstruction of the entire ritual — modem negotiation audio, the connect wait, the interruption — preserved as an interactive page. 100 points and climbing on HN within six hours.
+
+**Why it matters:** pure nostalgia engineering, and the genre keeps performing precisely because it's the anti-agent internet: slow, embodied, interrupted by humans picking up phones — an experience no amount of optimization would improve.
+
+[`🔗 56k.rip`](https://56k.rip/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49915126)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-01T04:03:00+08:00 |
-| Items | 20 |
-| Sources tracked | 23 (Google blog, Hacker News, GitHub, Cisco PSIRT, CISA KEV, NVD, DIVD CSIRT, edgcpp.org, arXiv, Hugging Face, python.org security-announce, Cloudflare blog, railcode.dev/HN, Netlify, WatchGuard PSIRT, oss-security, Apache lists, alphapixeldev.com, exyr.org, yedhu.me, Computer Things/buttondown, GE Vernova, insufferable.dev) |
+| Generated | 2026-10-01T12:17:00+08:00 |
+| Items | 33 |
+| Sources tracked | 34 (Hacker News, GitHub Trending, GitHub, Google blog, Artificial Analysis, blog.faav.net, turkeyland.net, mattkeeter.com, agmai.org, arXiv, Hugging Face, blog.gitea.com, 56k.rip, america.gov, PyPI, eternity4719.github.io, colbymchenry.github.io, Cisco PSIRT, CISA KEV, NVD, DIVD CSIRT, edgcpp.org, python.org security-announce, Cloudflare blog, Netlify, WatchGuard PSIRT, oss-security, Apache lists, alphapixeldev.com, exyr.org, yedhu.me, Computer Things/buttondown, GE Vernova, insufferable.dev) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
