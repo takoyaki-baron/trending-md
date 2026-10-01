@@ -182,3 +182,9 @@ Sources: [firelex/jeff](https://github.com/firelex/jeff) · [HN 議論](https://
 **MicroLLM Lab**(stateofutopia.com、HN 257 pts):7 つの SLM(25M〜360M、Q4)を WebGPU で完全クライアント側実行・ベンチ比較——「100% プライベート、サーバーコストゼロ、アカウントゼロ」——高価なクラウドモデルが必要かどうかを決めるトリアージ層として SLM を位置づける。**注意:**スレッド自身の例が 25M〜360M の弱さを示す(あるコメントの浴槽の質問に自信満々のナンセンス)。デモであってフレームワークではない。クラスの正面玄関:「ほとんどの呼び出しにフロンティアモデルは要らない」を 10 秒で体感できる。
 
 Sources: [PostHog/jeeves](https://github.com/PostHog/jeeves) · [HF の重み](https://huggingface.co/PostHog/jeeves) · [HN — Jeeves](https://news.ycombinator.com/item?id=49891290) · [MicroLLM Lab](https://stateofutopia.com/experiments/microllmlab/) · [HN — MicroLLM Lab](https://news.ycombinator.com/item?id=49882781)
+
+## 2026-10-01 12:03 — 決定モデルのサービングがプラットフォームで分裂：Laya にネイティブ MLX ランタイム（+ 09-30 補遺）
+
+**laya-mlx**（mizorewww/laya-mlx、PyPI v0.2.0、6.7k★、9月19日作成）：**Laya の型付き決定モデル**のネイティブ MLX ランタイム——M3 Max で **7–14ms** で choice/score/yes-no の決定を返す。テキスト生成なし、PyTorch なし、クラウド API なし。ローカルサービングの波が LLM サービングと同じようにプラットフォームで分裂し始めた：サーバーは Rust デーモン（Ollaya）、Mac は MLX（laya-mlx）。算術が本題——ローカル 10ms の型付き決定1回は、エージェントがキーストロークの合間にどれだけ検査できるかを変える。フレームワーク依存を1つ除くごとに、呼び出し毎ルーティングは最適化から既定へ変わる。留保：9月22日以降静か——本物でパッケージ済みだが若い。
+
+**（09-30 補遺）** **DevDay が Decisions API を予告**——Luna 搭載、事前定義された回答。HN は「Jev への彼らの回答」と読んだ：需要を握る当事者からの、決定モデルクラスへのプラットフォームの回答。**Jevstiller**——Jev 級決定モデルをローカル蒸留、統計的不一致境界付き（クラスに訓練側の道具が育つ）。**Raschka**——bag-of-words から Jev へ：決定モデルの波を説明する分類器の歴史（クラスに知的な系譜がつく）。

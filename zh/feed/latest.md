@@ -26,7 +26,7 @@ Google DeepMind 发布 **Gemini 4 Argon**（9 月 30 日，Koray Kavukcuoglu）�
 - **Source:** insufferable.dev · HN 354+ 分 · ~4小时前 (~23:50 UTC+8)
 - **Tags:** `deepseek` `kv-cache` `analysis` `pricing`
 
-今日讨论增速最快的一篇（约 77 分/小时）：文章主张"蒸馏"叙事已经过时，因为中国实验室是**公开**配方的——DeepSeek 的 MLA（约 15 倍 KV-cache 压缩）演进为"Compressed Sparse Attention"及后续版本，据称在 DeepSeek-V4.1-Flash 上达到 **890 字节/token 的全局 KV cache**（长会话编程场景约为 DeepSeek-V1 的 437 倍）。它判断西方实验室已采纳这条线的证据是**从定价推断**：前沿厂商缓存读取价格全面下调——Opus 5.5 比 Opus 5 降 60%，GPT-6.1 Sol 比 GPT-5.6 Sol 七月末定价降 80%——被解读为"低调发布、不做宣传"。**本 feed 必须附带的保留意见：**DeepSeek 版本/规格数字仅见于这篇博客——没有找到任何 DeepSeek 页面确认"V4.1-Flash"或 890 字节这一数字；"架构被采纳"是作者的推断，不是厂商声明。
+今日讨论增速最快的一篇（约 77 分/小时）：文章主张"蒸馏"叙事已经过时，因为中国实验室是**公开**配方的——DeepSeek 的 MLA（约 15 倍 KV-cache 压缩）演进为"Compressed Sparse Attention"及后续版本，据称在 DeepSeek-V4.1-Flash 上达到 **890 字节/token 的全局 KV cache**（长会话编程场景约为 DeepSeek-V1 的 437 倍）。它判断西方实验室已采纳这条线的证据是**从定价推断**：前沿厂商缓存读取价格全面下调——Opus 5.5 比 Opus 5 降 60%，GPT-6.1 Sol 比 GPT-5.6 Sol 七月末定价降 80%——被解读为"低调发布、不做宣传"。**本 feed 必须附带的保留意见（10 月 1 日就地更正）：**早先版本称 DeepSeek 规格数字仅见于这篇博客——这一"缺席"判断是错的：DeepSeek 本家就在 V4.1-Flash 模型页上公布了"890 字节/token"（本 feed 9 月 10 日已报道，[HF，MIT 协议](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash)）。规格是厂商公开的；仍是作者推断的是"架构被采纳"——缓存读取价格坍缩是真实的可观测量，但定价只是共享约束的证据，不是厂商声明。
 
 **Why it matters:** 它赖以成立的可观察事实——一个季度内所有前沿厂商的缓存读取价格坍缩——是真实的，并正在悄然改写代理经济学的成本结构（长上下文代理的生死就在缓存读取费率上）。但其机制是披着架构报道外衣的定价推断；按本 feed 的一贯教训：保留意见要写进结论行，而不只是正文。
 

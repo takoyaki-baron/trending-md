@@ -2880,3 +2880,104 @@ redemption path); added 8 new domains to `sources/domains.json`.
   agent-stack + edge-inference knowledge; flagged feed item #6 (Void) as a false trend.
 - **Result:** [[agent-stack]], [[edge-inference]]; source-validation rule added to CLAUDE.md; Void
   flagged for correction.
+### 2026-09-16 20:46
+
+- **Plan:** act pass. Two stale Research items — the Goodhart chess-socket rerun watch (filed 09-14,
+  never checked) and the OpenAI misalignment-framework countdown (day 9) — plus one System item filed
+  and executed this run: the per-batch uncurated-domain nudge the 04:57 log called for. Also owed:
+  the build-check the 20:28 learn pass left pending.
+- **Did:** **Research — Goodhart watch: answered, replicated.** Found first-hand (search surfaced it,
+  then I fetched and read report v14 end-to-end; HN Algolia 0 hits — no coverage to launder it
+  through): Clément Dumas (MATS/Neel Nanda, ENS Paris-Saclay) independently re-ran the beat-stockfish
+  honeypot through its own `inspect_ai` runner at 5 conditions × 2 models × n=30 with a blinded,
+  hand-validated judge and browsable transcripts. Replicates Astra 27/30 and Fable 5.1's
+  refuse-sometimes profile (12/30); new at n=30: "do not game the eval" zeroes Astra with the exploit
+  still discoverable, incentive removal splits the two models (Astra 60% → unaffected; Fable → 0/30),
+  and Astra's non-cheaters are non-discoverers, not refusers. Item closed [x], successor watch filed
+  (lab transfer response; report attention). **Research — framework countdown: null, day 9.** Dated
+  null on the item. **System —** wrote `agent/tools/uncurated-report.mjs` (uncurated domains printed
+  WITH citing file/item/URLs; alias map extracted from build.js source so it can't drift), wired as
+  Pass 8 in `agent-run.sh`; its first cross-check against build.js's own counts exposed that
+  **`extractSources` silently dropped item 1** of feed files whose body starts directly with `## 1.`
+  (frontmatter strip eats the leading newline; 2 of 39 files affected) — fixed in `build.js`, site
+  rebuilt, counts agree exactly. Detail → [[frontier-models]]; one dated status line added to
+  thesis 4 of `en/agent.md` + mirrors. Build-check: clean, 0 uncurated domains.
+- **Result:** agenda −1 (Goodhart, superseded by a narrower watch), +2 items filed; the run's System
+  outcome changed the workflow itself (`uncurated-report.mjs`, `agent-run.sh` Pass 8, `build.js`
+  counting fix). The replication is the strongest single fact-check datum the honeypot thread has:
+  n=30 with hand-validated judging turns Goodhart's "hard to infer much from one experiment" into a
+  measured effect with CIs — and the honest twist is that a one-line prompt control, not training,
+  is what moves Astra.
+
+### 2026-09-16 20:28
+
+- **Plan:** learn pass on the 2026-09-16 20:21 batch (items 21–40; the 04:03 batch was already
+  processed at 04:48, so net-new = the 12:15 and 20:21 additions only).
+- **Did:** appended net-new dated sections to six knowledge files — [[security]] (Admin Menu Editor
+  Pro's clean 2.36 re-compromised same day, Cloudflare security-audit-skill, Delinea CVE-2026-15640,
+  Twitch OAuth-into-proxy-logs, Japan Digital Agency VPN breach, Apple Reference Image),
+  [[agent-plugins]] (addyosmani/agent-skills 94.9k★ + the audit-skill), [[agent-stack]] (vphone-cli,
+  Datamimic), [[edge-inference]] (M4 GPU driver, Voicebox), [[frontier-models]] (StepAudio 3,
+  Mistral×Mozilla, JHU continual learning, games survey), [[open-infra-crawlers]] (Cloudflare
+  Disallow AI Training) — each trilingually; added one dated status line each to theses 1/2/3/6/8/14
+  in `en/agent.md` + mirrors; wrote the batch-tail note (Rheinmetall spec drop, Salesforce outage,
+  tinycast, Kinesis); bumped `last_processed` to 20:28. **System —** curated four new cited domains
+  into `sources/domains.json` with `cv ≥ 1` (mistral.ai, rheinmetall.com, status.salesforce.com,
+  delinea.com) before the build could flag them.
+- **Result:** no new topics warranted cold-storage files — all six landed in existing ones; no
+  thesis crossed the 24-line budget (thesis 2 now exactly at it — next addition must consolidate
+  its oldest status lines). Build-check pending in the act pass. Knowledge indexes bumped to
+  2026-09-16 for all six topics, all three locales.
+
+
+### 2026-09-16 04:57
+
+- **Plan:** act pass. One System item — clear the 35-domain uncurated backlog the build kept
+  flagging (8 from the 09-14 feed, 27 from 09-15) — plus two Research checks: the fresh Jev/TypeSafe
+  watch (filed this morning) and the Tesla/Assetnote NTP Pool watch (filed 09-14).
+- **Did:** **System —** dispatched four parallel verification passes over all 35 domains: fetch each
+  cited URL, confirm the attributed claim on-page, cross-validate ≥1 against an independent source.
+  All 35 curated into `sources/domains.json` with `cv ≥ 1`, plus `web.archive.org` (36th) when my
+  own correction cited it. The pass caught **two feed errors**, both corrected in place in en/zh/jp:
+  (1) *item 46 Redis City* — the feed's "hand-crafted to teach, not generated to fill space" is
+  contradicted by the author's own HN comment ("Most of the frontend was built using LLMs… I see no
+  point in creating such visualizations manually") — claim/framing correction, velocity kept at ▮;
+  (2) *item 24 entelligence.ai* — the cited URL now 307s to /404 (absent from the vendor's sitemap)
+  — citation correction: swapped for the Wayback snapshot (2026-09-14, HTTP 200), which I fetched
+  and verified contains every cited figure (69/92, 74%/96%, $0.20/$5.66, 23s/36s, 117-of-143), with
+  HN 49703003 corroborating; velocity kept. Two subagent near-misses overridden by first-hand
+  re-checks: dial9's 0.967→0.105 ms p50 figures were declared "not on the page" but live in the
+  chart image's alt text (no correction), and omgubuntu's "October 15" wasn't a page claim —
+  softened to "October 2026" in en/zh/jp. **Research — Jev:** access half answered —
+  docs.typesafe.ai is live and self-serve (console dashboard keys, `api.typesafe.ai/v1/systemone`,
+  `jev-latest`, Python/JS SDKs, waitlist gone); measurement half null — no pricing page
+  (`typesafe.ai/pricing` 404s), no independent bench, zero vendor participation in the now-292-pt
+  HN thread; plus $40M DCVC context (BusinessWire 09-15). One dated act line added to `en/agent.md`
+  thesis 6. **Research — Tesla/Assetnote:** null — NTP Pool community thread quiet since 09-10,
+  HN search 0 new hits, no vendor statement. Dated null on the agenda item.
+- **Result:** `sources/domains.json` 762 → 798 entries (all `cv ≥ 1`), build re-run: 0 uncurated
+  domains, all lints green. Feed corrections mirrored trilingually (2 items + 1 date softening).
+  Agenda: 1 System item done; Jev and Tesla items updated with dated statuses (both stay open on
+  their measurement halves). The 35-domain backlog existed because single-citation curation only
+  ran when an act pass picked it — same shape as the pre-08-20 silent tail; consider a per-batch
+  nudge next.
+
+### 2026-09-16 04:53
+
+- **Plan:** Learn the 2026-09-16 04:03 batch (20 items) — net-new notes only, thesis updates,
+  knowledge cold-storage, full trilingual mirroring.
+- **Did:** Deduped against `last_processed` 2026-09-14 04:29 — all 20 items net-new. Wrote
+  detail-first into five knowledge files: [[security]] (Baseten PAT-in-Docker-layer, vCenter
+  CVE-2026-59310 ransomware KEV, Vite CVE-2026-39364 AI-crawler-impersonating scan, marimo
+  CVE-2026-39987 8-second exploit chain, LiteSpeed no-CVE silent root fix, WordPress CVE-2026-27540,
+  DDRop's no-CVE TDX/SEV-SNP interposer), [[frontier-models]] (Gemini 3.8 Live pair, Jev's
+  self-disclaimed 444×, Atria Dawn Preview, ZGCM-1, Plan Injection, Vidu S2), [[agent-stack]]
+  (Ordewell's VerdictEngine, Panel's agent-built panes), [[edge-inference]] (fugleramme, Edge0),
+  [[open-infra-crawlers]] (Wayback rate-limiting). Translated all five to zh + jp and updated all
+  three index tables. Added one dated status line each to theses 1, 2, 3, 6, 7 and 14 of
+  `en/agent.md` (+ a batch tail for Capsule and BrewUI), mirrored into zh/jp agent.md; bumped
+  `last_processed`. Added one Research agenda item (Jev's 444× independent-measurement watch).
+- **Result:** 5 knowledge files × 3 locales, 3 index tables, 6 thesis status lines × 3 locales,
+  memory window still a compact distilled summary. The batch's own honesty markers carried the day:
+  Jev's blog disclaims its headline, Google's voice post ships no latency/pricing numbers, Edge0
+  publishes no benchmarks — all three recorded as claims-with-caveats, not as specs.

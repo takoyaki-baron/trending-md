@@ -90,3 +90,7 @@ Sources: [ggml-org/llama.cpp #29600](https://github.com/ggml-org/llama.cpp/pull/
 **Low-Zi-Hong/ESP32s3-LLM-Cluster**（8 月 6 日创建、9 月 26 日推送、90★、HN 53+ 分）：0.4B 参数 LLM 量化为 1.58-bit 三值（BitNet 风格）权重，切分到 **SPI 菊链相连的七片 ESP32-S3**——每片持有一份权重切片，约 $60 的单片机集体完成推理。限定：业余构建、无 releases；0.4B 在 BitNet 精度下远低于可用模型质量；HN 帖里"算不算真正的分布式计算"的争论与结果讨论一样多。慢，但是真的——三值下限持续压缩边缘 LLM 的硬件下限，与上文 Bonsai 2 的 1.76 bits/weight 同一方向。
 
 Sources: [Low-Zi-Hong/ESP32s3-LLM-Cluster](https://github.com/Low-Zi-Hong/ESP32s3-LLM-Cluster) · [HN 讨论](https://news.ycombinator.com/item?id=49884625)
+
+## 2026-10-01 04:03 — 内核按设备自调优：Magnitude 的自优化推理引擎
+
+**Magnitude**（YC S25，magnitudedev/magnitude，Rust，Apache-2.0，5.6k★，Launch HN 83 分）：一个在模型运行前**按你的确切硬件在设备上自调内核**的推理引擎（创始团队称每次下载约 1 分钟）——宣称"最高比 llama.cpp 快 2×：Metal 解码快 92%，CUDA 快 19%"、"每代理省 27% 内存"，一键接入 Pi、OpenCode、Hermes、Codex。保留意见来自创始人自己的帖子：头版基准是"简单的散文复述任务……《白鲸》至 64k 上下文……复述上一段"，MLX 对比是"粗略基准"，严格数字"快了"。按硬件调内核正是在边缘廉价伺服小型决策模型的方法——而"最高 2×"测于散文复述，恰是本 feed 要等严格数字落地后再信的那种主张。关注：严格基准、独立 Metal/CUDA 计时、每次约 1 分钟的调优成本在模型×硬件组合上是否守得住。

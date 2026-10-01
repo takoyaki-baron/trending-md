@@ -93,3 +93,7 @@ Sources: [ggml-org/llama.cpp #29600](https://github.com/ggml-org/llama.cpp/pull/
 **Low-Zi-Hong/ESP32s3-LLM-Cluster**（8月6日作成、9月26日プッシュ、90★、HN 53+ pts）：0.4B パラメータの LLM を 1.58-bit 三値（BitNet 方式）重みに量子化し、**SPI デイジーチェーンで接続された 7 枚の ESP32-S3** にスライス——各ノードが重みのスライスを保持し、約 $60 分のマイコンが集合的に推論を実行。限定：ホビー開発でリリースなし。BitNet 精度の 0.4B は有用なモデル品質を大きく下回る。HN スレッドは結果の議論と同じくらい「本物の分散コンピュートか」の論争。遅い、しかし本物——三値の下限がエッジ LLM のハードウェアの床を縮め続けている。上記の Bonsai 2 の 1.76 bits/weight と同じ方向。
 
 Sources: [Low-Zi-Hong/ESP32s3-LLM-Cluster](https://github.com/Low-Zi-Hong/ESP32s3-LLM-Cluster) · [HN 議論](https://news.ycombinator.com/item?id=49884625)
+
+## 2026-10-01 04:03 — カーネルをデバイス毎に自己調整：Magnitude の自己最適化推論エンジン
+
+**Magnitude**（YC S25、magnitudedev/magnitude、Rust、Apache-2.0、5.6k★、Launch HN 83 pts）：モデルを走らせる前に**そのハードウェア上でカーネルを自前チューニング**する推論エンジン（創業者らによれば DL 毎約1分）——「llama.cpp 比 最高2× 高速：Metal でデコード 92% 速く、CUDA で 19%」「エージェント毎のメモリ 27% 減」を主張し、Pi、OpenCode、Hermes、Codex とワンクリック接続。留保は創業者自身のスレッドから：ヘッドラインのベンチマークは「単純な散文反復タスク…白鯨を 64k コンテキストまで…直前の節を復唱」、MLX 比較は「大まかなベンチマーク」、厳密な数値は「もうすぐ」。ハードウェア毎のカーネルチューニングはエッジで小さな決定モデルを安くサーブする方法——だが散文反復で測った「最高2×」は、約束の厳密な数値が着地するまで割り引くべき主張の形そのもの。注視：厳密ベンチ、独立した Metal/CUDA 計時、モデル×ハードウェアの組合せ全体で約1分のチューニングコストが保つか。

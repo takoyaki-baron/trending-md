@@ -188,3 +188,7 @@ Sources: [Anthropic 発表](https://claude.com/blog/claude-marketplace) · [Blee
 **Cloudflare のエージェント利用数値**(`cf` 本体は → [[agent-stack]]):エージェント駆動の Wrangler 利用 ~25%(2026/3)→ 48%、エージェントの日次コマンド種類数は約 2 倍——ベンダーが自社のエージェントトラフィック比率を、エージェント消費者向けにプライマリ CLI を作り直す明示的な根拠として公開。エージェントチャネルはインフラのロードマップを動かすほど大きくなり、ベンダーはそれを口に出すようになった。
 
 Sources: [anthropics/financial-services](https://github.com/anthropics/financial-services) · [Reuters launch coverage](https://www.reuters.com/business/anthropic-targets-financial-advisers-with-new-claude-tool-2026-09-14) · [Cloudflare blog](https://blog.cloudflare.com/cloudflare-cf-cli-launch/)
+
+## 2026-10-01 04:03 — 機械アクセスにペイウォール：Cloudflare の Monetization Gateway がクローズドベータへ
+
+**Cloudflare Monetization Gateway**（クローズドベータ、Agents Week）：ドメイン所有者が「エージェントによる自分のウェブサイト、API、MCP ツール、データセットへのアクセスに課金できる」——**HTTP 402、チェックアウトへのリダイレクトなし**——人間ではなく機械のためのペイウォール——ステーブルコインベースの **x402** プロトコルで決済。姉妹投稿の **Pay Per Use** は同じ primitive を出版社向けに：「各利用を報告し支払う、検証済み買い手の信頼できるネットワーク」を、共有の identity/metering/pricing/analytics 軌道の上に。そのほかのスレート：AI Gateway の Auto Router、エージェントへのリアルタイム問題検知、エージェントサンドボックス向けに作り直された Containers（新投稿——9月26日のデータ削除欠陥とは別物）。エージェントトラフィックの収益化は場当たり的な 402 実験だった。それが、決済を内蔵したホステッドインフラになりつつある。MCP ツール、API、エージェントに消費されるコンテンツを公開する者にとって、機械アクセスの既定条件が今週決められようとしている——そして値付けされる。エージェント分布のテーゼの需要側の完成：教育層を押し退けたチャネルに、計量器が付く。

@@ -728,3 +728,9 @@ Sources: [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skil
 **chess-postmortem-skills**（`brumar/chess-postmortem-skills`，Show HN 73 分，仓库创建于 9 月 25 日，56★）：给它一个 lichess 链接加录制的思考音频——它在本地用 whisper.cpp 转录、按 PGN 时钟时间把句子对齐到着法、用自然语言盘问 Stockfish，产出带注释的 PGN、HTML 查看器与解说视频。两天的单人仓库、一个完整示例——是动量、不是成熟度。但"技能"模式在爱好领域的端到端落地——本地转录 → 工具编排 → 可发布产物——是任何小众工作流本周就能照抄的模板。
 
 Sources: [tt-a1i/archify](https://github.com/tt-a1i/archify) · [Hermes 技能目录条目](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-archify) · [brumar/chess-postmortem-skills](https://github.com/brumar/chess-postmortem-skills) · [HN — 棋局复盘](https://news.ycombinator.com/item?id=49857528)
+
+## 2026-10-01 04:03 — 品味的确定性检测器（impeccable）；形式方法浪潮迎来反驳章
+
+**impeccable**（pbakaus/impeccable，周增 2,644 达 73k★，周榜第 10）："1 个技能、24 条命令、浏览器内实时迭代、**61 条确定性检测规则**"，让编码代理产出更好的前端设计——明说是 Anthropic `frontend-design` 技能的分支，论题："每个模型都在同一批 SaaS 模板上训练……处处 Inter、紫到蓝渐变、卡片套卡片。"检测规则"无 LLM、无 API key 即可运行"。项目确实活着：五天内发 v0.1.6–0.1.8（9 月 25–29 日），9 月 30 日有推送。同日 HN 的回声（"我们 vibe coding 的网站看起来像设计师做的"，127 分）从用户侧给出同一结论——热评第一："你无意中重新发明了设计学院教的设计流程。"技能类对设计瓶颈的回答是编译器时代的那一套：**品味的确定性 linter**——因为失败模式在各模型间出奇一致。评测在哪？仍然缺席——这个类悬而未决的老问题。
+
+**〈TLA+ 能检查什么、不能检查什么〉**（Hillel Wayne，Computer Things，9 月 30 日，87 分）：给"代理+形式方法"浪潮的对冲砝码，触发点是"Boris Cherny（Claude Code 发明者）提到 Opus 能用 TLA+ 找出竞态条件"。Wayne："我们稍微冷静一点，别再讲'TLA+ 会把 AI 从它自己手里救出来'。"核心局限用 `[]P`/`P'`/`<>P` 走了一遍：**"要验证一个性质，你得先有一个性质可供验证"**——模型检查的是规约；写出正确的规约仍是人类的、未解决的那一半。这波浪潮有用的版本不是"模型替你证明系统"——而是"模型写出你懒得写的规约，再拿它约束实现"。验证依然始于人类对"什么才重要"的决定。

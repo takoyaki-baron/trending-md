@@ -26,12 +26,13 @@
       "hn_seen": [
         "49616247",
         "49661662",
-        "49880842"
+        "49880842",
+        "49894320"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-29T13:28:41.834Z"
+      "checked": "2026-10-01T05:43:57.990Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -61,7 +62,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-29T13:28:41.834Z"
+      "checked": "2026-10-01T05:43:57.990Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -74,12 +75,13 @@
         "49558108",
         "49567594",
         "49851169",
-        "49851205"
+        "49851205",
+        "49893876"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-29T13:28:41.834Z"
+      "checked": "2026-10-01T05:43:57.990Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -89,7 +91,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-29T13:28:41.834Z"
+      "checked": "2026-10-01T05:43:57.990Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -112,7 +114,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-29T13:28:41.834Z"
+      "checked": "2026-10-01T05:43:57.990Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -125,12 +127,13 @@
     "agentic-offense-campaign": {
       "nvd_seen": [],
       "hn_seen": [
-        "49695605"
+        "49695605",
+        "49897396"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-29T13:28:41.834Z"
+      "checked": "2026-10-01T05:43:57.990Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -140,7 +143,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-09-29T13:28:41.834Z"
+      "checked": "2026-10-01T05:43:57.990Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -194,13 +197,14 @@
         "0.2.30",
         "0.2.31",
         "0.2.32",
+        "0.2.33",
         "0.2.4",
         "0.2.5"
       ],
-      "checked": "2026-09-29T13:28:41.834Z"
+      "checked": "2026-10-01T05:43:57.990Z"
     }
   },
-  "runs": 72,
+  "runs": 73,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-09-29T13:28:41.834Z"
+  "last_run": "2026-10-01T05:43:57.990Z"
 }

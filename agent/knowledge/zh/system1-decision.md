@@ -164,3 +164,9 @@ Sources: [firelex/jeff](https://github.com/firelex/jeff) · [HN 讨论](https://
 **MicroLLM Lab**（stateofutopia.com，HN 257 分）：七个 SLM（25M–360M，Q4）完全在浏览器端经 WebGPU 运行与基准对比——"100% 私有、零服务器、零账号"——把 SLM 定位为决定"是否需要昂贵的云端模型"的分诊层。**注意：**帖子自己的示例显示 25M–360M 有多弱（一条评论的热水浴缸问题得到自信的胡说）；是演示，不是框架。这是品类的正门：任何人十秒钟就能体感"大多数调用不需要前沿模型"这一论题。
 
 Sources: [PostHog/jeeves](https://github.com/PostHog/jeeves) · [HF 权重](https://huggingface.co/PostHog/jeeves) · [HN — Jeeves](https://news.ycombinator.com/item?id=49891290) · [MicroLLM Lab](https://stateofutopia.com/experiments/microllmlab/) · [HN — MicroLLM Lab](https://news.ycombinator.com/item?id=49882781)
+
+## 2026-10-01 12:03 — 决策模型推理服务按平台分裂：Laya 迎来原生 MLX 运行时（+ 09-30 补记）
+
+**laya-mlx**（mizorewww/laya-mlx，PyPI v0.2.0，6.7k★，9 月 19 日创建）：**Laya 类型化决策模型**的原生 MLX 运行时——在 M3 Max 上 **7–14ms** 出选择/打分/是非决策，无文本生成、无 PyTorch、无云 API。本地推理服务开始像 LLM 服务那样按平台分裂：服务器用 Rust 守护进程（Ollaya），Mac 用 MLX（laya-mlx）。算术是关键——本地 10ms 的一次类型化决策，决定代理在每次击键之间能负担多少次检查；每移除一个框架依赖，逐调用路由就从优化变成默认。保留：9 月 22 日后无动静——真实、已打包，但年轻。
+
+**（09-30 补记）** **DevDay 预告 Decisions API**——Luna 驱动、预定义答案；HN 读作"他们对 Jev 的回应"：平台对决策模型类的回答，来自坐拥需求的一方。**Jevstiller**——在本地蒸馏 Jev 级决策模型，带统计不一致边界（这个类长出了训练侧工具）。**Raschka**——从词袋到 Jev：解释决策模型浪潮的分类器简史（这个类有了自己的思想谱系）。

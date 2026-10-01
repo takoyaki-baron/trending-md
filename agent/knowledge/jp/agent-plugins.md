@@ -843,3 +843,9 @@ Sources: [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skil
 **chess-postmortem-skills**（`brumar/chess-postmortem-skills`、Show HN 73 pts、リポジトリ作成 9/25、56★）：lichess リンクと思考音声を渡すと——whisper.cpp でローカル文字起こし、PGN クロック時刻で文を手に整列、Stockfish を自然言語で尋問、注釈付き PGN・HTML ビューア・ナレーション映像を出力。2 日物の単著リポジトリで実例 1 件——勢いであり成熟度ではない。ただし「スキル」パターンを趣味ドメインでエンドツーエンドで実行した形——ローカル文字起こし → ツールオーケストレーション → 公開可能な成果物——は、どんなニッチなワークフローでも今週コピーできるテンプレート。
 
 Sources: [tt-a1i/archify](https://github.com/tt-a1i/archify) · [Hermes スキルカタログ項目](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-archify) · [brumar/chess-postmortem-skills](https://github.com/brumar/chess-postmortem-skills) · [HN — 棋譜検証](https://news.ycombinator.com/item?id=49857528)
+
+## 2026-10-01 04:03 — 味のための決定的検出器（impeccable）。形式手法の波に反証章
+
+**impeccable**（pbakaus/impeccable、週 +2,644 で 73k★、週間トレンド10位）：「1スキル、24コマンド、ブラウザ内ライブ反復、**61本の決定的検出ルール**」でコーディングエージェントに良いフロントエンド設計をさせる——Anthropic の `frontend-design` スキルのフォークであることを明記し、テーゼは「どのモデルも同じ SaaS テンプレートで訓練された…どこでも Inter、紫から青へのグラデーション、カードの中のカード」。検出ルールは「LLM も API キーも不要で走る」。プロジェクトは生きている：5日で v0.1.6–0.1.8（9月25–29日）、9月30日に push。同日の HN の反響（「vibe coding した我々のサイトがデザイナー製に見える」、127 pts）がユーザー側から同じ結論を着地させる——トップコメント：「あなたは設計学校で教えるデザインプロセスを偶然再発明した」。設計のボトルネックに対するスキルカテゴリの答えはコンパイラ時代のそれ：**味のための決定的リンタ**——失敗モードがモデル間で一貫していることが分かったから。評価はどこ？ まだ不在——カテゴリの恒常的な欠落。
+
+**「TLA+ に検査できること/できないこと」**（Hillel Wayne、Computer Things、9月30日、87 pts）：エージェント×形式手法の波へのカウンターウェイト。引き金は「Claude Code の発明者 Boris Cherny が、Opus が TLA+ で競合状態を発見できたと述べた」。Wayne：「『TLA+ が AI を AI 自身から救う』物語を少しだけ冷まそう」。核心の限界は `[]P`/`P'`/`<>P` で歩いた通り：**「性質を検証するには、検証すべき性質が必要」**——モデルが検査するのは仕様で、正しい仕様を書くのは依然人間の、未解決の半分だ。波の有用な版は「モデルがシステムを証明する」ではなく「モデルが書く気しなかった仕様を書き、実装をそれに縛る」。検証は依然、何が重要かという人間の決定から始まる。

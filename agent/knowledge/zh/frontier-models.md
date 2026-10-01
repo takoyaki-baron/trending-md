@@ -2051,3 +2051,19 @@ Sources: [华盛顿邮报](https://www.washingtonpost.com/technology/2026/09/28/
 **Perone，"The systems that no one will test"**（博客，HN 90+ 分）：回忆录的一半是他 2020 年的发现——巴西联邦系统暴露了几乎全体巴西人的记录（证件、住址、证人保护状态），上报后修复迅速。2026 年的推演：各大实验室"激进扩展 RL 环境"，用第三方公司和模型合成任务与奖励——庞大的决策面，没有外部测试传统，无人审计。对 OpenAI 事件他直接质疑"逃逸其防护"的叙事："OpenAI 故意关闭了分类器、削减了防护（很多人并不知道）。"**注意：**一半回忆、一半论辩；分类器说法是他基于公开报道的解读，并非文档；他明确声明 2020 年未外泄任何数据。这是 AI 风险辩论里无聊但真实的版本——也是论题 7 弱点迄今最锐利的外部表述：测量基础设施在实验室内部。
 
 Sources: [Hunterbrook Media](https://hntrbrk.com/breaking-news/muse-doxxing) · [HN — Muse](https://news.ycombinator.com/item?id=49889780) · [Terra Incognita](https://blog.christianperone.com/2026/09/the-systems-that-no-one-will-test/) · [HN — Perone](https://news.ycombinator.com/item?id=49876052)
+
+## 2026-10-01 04:03 + 12:03 — Gemini 4 Argon：无护栏层级在美国实验室制度化，一天内迎来首个独立读数；AGMAI 要求实验室收手；GRAFT 与 OmniTaskonomy（+ 09-30 补记）
+
+**Gemini 4 Argon**（Google DeepMind，9 月 30 日，Kavukcuoglu）是两级模式抵达最大的实验室：一个"能自主发现、验证并修补关键软件漏洞"的前沿编码/代理/网络防御模型，**未 GA**——通过 Fairwind Program 向"可信网络防御者" rollout，且对他们**不带网络护栏**（"对于可信防御者和 Google 内部团队，我们将发布不带网络护栏的 Argon，让其发挥完整的前沿级网络防御能力"），Google 同时"正积极参与美国政府针对预发布模型的自愿程序"。先定价后开放：介绍价 $2/$10（脚注写明过渡期后翻倍至 $4/$20），缓存输入 95% 折扣，输出上限提到 1M token；基准全是 Google 自选（DeepSWE v1.1 77.9%、Zapier AutomationBench 第一 51.3%、CWE-bench v1 并列第一 68%）。这是 09-30 GLM-5.3 条目（近前沿网络能力经开源权重扩散、剥离拒绝训练测得约 $1,200）的直接续集：一家实验室经开源权重泄漏能力，另一家把无护栏层级制度化为定价产品。**约一天后首个独立读数**（[Artificial Analysis](https://artificialanalysis.ai/models/gemini-4-argon)）：Intelligence Index **53，223 个模型中列第 8**（同类中位 26）——发布与独立的落差如预测（Google 的并列第一 vs 独立 harness 的第 8），外加没有定价页会告诉你的成本故事：完成该指数耗 **110M 输出 token**，中位是 82M（多出约 34% 的"出声推理"）。速度 N/A；仅测推理变体。关注：Fairwind 成员与监督、$4/$20 是否守得住、第三方网络能力实测。来源：[Google 博客](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/) · [HN](https://news.ycombinator.com/item?id=49913571) · [AA 讨论](https://news.ycombinator.com/item?id=49914236)
+
+**(10-01 13:10 act — "可信网络防御者都是谁"已从两个 Fairwind 页面一手作答）：[项目页](https://blog.google/innovation-and-ai/technology/safety-security/fairwind-program/)（Four Flynn，发布于 **2026 年 9 月 2 日**——Fairwind 比 Argon 早一个月，最初围绕 **Gemini 3.8 Flash Cyber + CodeMender** 启动；两个页面均未提及 Argon）写明 **"全球逾 650 个参与伙伴"**，分三类梯度铺开——政府/国家网络主管机构 → 关键基础设施运营者（医疗、电信、能源、金融）→ 核心技术平台——且**没有可机读的成员名单**（伙伴墙是图片）；通过推荐语浮出五个名字：**CrowdStrike、Palo Alto Networks、Snowflake、Wiz、Armadin**。所谓"监督"是**契约式自我声明**：参与组织"同意严格的操作标准"（MFA 含抗钓鱼、用户级鉴权、访问仅限内部网络/应急响应/渗透测试团队、伙伴"必须跟踪员工访问与使用"），Google "对申请组织进行背景调查"，禁止共享/转售访问权限，作为 Gemini Enterprise Agent Platform 托管模型访问时零数据保留——**通篇没有独立审计方、没有监督机构、没有透明度报告承诺**。专注防御基准的学术实验室可申请。所以该层级的治理就是厂商检查自己客户的作业——与今夏各代理安全等级同款"无人执行"形态，只是这次带 650+ 个 logo。其余关注项不变：$4/$20 是否如期落地、*网络*层级的第三方实测（AA 的 223 中第 8 只覆盖通用智能）。
+
+**AGMAI 的首份正式产出**（agmai.org，9 月 29 日，基于 600+ 社区反馈）：《负责任地发布 AI 生成的数学》重申学科最老的规范——作者必须*理解*、验证并对论证负责——并走到任何厂商帖子都没走到的地方："目前一些前沿 AI 实验室正在专有模型上测试高深数学问题……**我们从一开始就明确表态：我们不认可这种做法，并请他们停止。**"发布实质性数学成果而未随之配以人类理解者"必须承担责任"。被正式审查的不再只是发布礼仪，而是测试行为本身——九位数学家（IAS 支持，仍无决定权）给出了一份规范文件。
+
+**GRAFT**（arXiv:2609.37868，KAIST+AITRICS，HF 日榜第一）：当某个 prompt 的 GRPO rollout 组全部失败时，优势估计坍缩——GRAFT 换入**异构同伴模型**的 rollout 组并做离策略校正：三对模型 × 五个数学基准平均 +2.1、最高 +4.5；存储的同伴轨迹在不共同训练时保留 +1.8。局限一节堪称模范：收益"取决于两模型互补程度"、兼容性分数"是代理量不是密度比"、范围仅两模型对/仅数学/仅 ≤3B 基座——前沿模型版未经验证，论文自己说了。
+
+**OmniTaskonomy**（arXiv:2609.38079；作者含 Jitendra Malik、Ranjay Krishna、Sewon Min）：图像到图像生成训练何时改善图像到文本理解的受控图谱——19 种生成任务 × 25 种理解能力，收益随 I2I 数据量增长；直觉配对（深度 → 度量 3D、指向 → 计数、拼图 → 二维排序）与意外配对（**2.5D 分割 → 类别识别；Z 深度预测 → 定位**），经梯度对齐探查。"生成教理解"不再是感觉——框架也谨慎地声明收益依赖任务，非普遍成立。
+
+**PSSA**（Sparticle62ops/pssa，HN 85 分）：车库级后 transformer 架构——递归状态空间层、前向传播中写入和查询的情景记忆库、部分权重在运行中自我重写——纯手写 Rust 内核、无 ML 框架（批量内核对标量参考路径校验至 ~3e-8）。全部自测：同参数同语料学得更快、同 CPU 生成快约 12 倍。"架构才是主张"——无任何独立复现；Bonsai 教训适用于有人复跑之前。
+
+**（09-30 补记）** **livenerf**——HN 第一：预注册的 30 天装置，测 Opus 5.5 是否被悄悄削弱——测量基础设施指向部署方而非模型。**ChatGPT Pro 500**——$500/月档；"Ultrafast 只在这里"（配额套利成为加购项）。**MaLiang-Harness**——程序到视觉的鸿沟：生成成功率 100%，仍有四分之一视频过不了质量关。**Simple-WAM**——世界模型收益来自第一步去噪，而非生成未来。

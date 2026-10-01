@@ -28,6 +28,8 @@ created: 2026-09-09
 [paradise-runner/toast](https://github.com/paradise-runner/toast) ·
 [HN 讨论](https://news.ycombinator.com/item?id=49662496)
 
-**Go Concurrency Distilled（2026-09-27）**——Anton Zhiyanov 的免费 Go 并发小书（HN 83 分）直接声明"AI-free"定位：继 LibreOffice 的成文规范与 Toast 终端 IDE 之后的第三个"无 AI"实例，也是第一个出现在*参考/教育*材料中的——该标签现已横跨办公套件、开发工具与学习资源。
+**Go Concurrency Distilled（2026-09-27）**——Anton Zhiyanov 的免费 Go 并发小书（HN 83 分）页面上带有"AI-free"字样：继 LibreOffice 的成文规范与 Toast 终端 IDE 之后的第三个"无 AI"实例，也是第一个出现在*参考/教育*材料中的——该标签现已横跨办公套件、开发工具与学习资源。**10-01 更正：**页面上唯一的 AI 提及系于他的*另一本书*，并非本书——"check out my other book — Gist of Go: Concurrency. The book is AI-free."（feed 条目已就地更正 en/zh/jp，速度保持）。站得住的读法是：作者为其 Go 教学材料打上无 AI 标签，但逐字 claim 属于 Gist of Go——引用时照此表述。
 
 **AI 贡献禁令作为 fork 边界（2026-09-28）**——"无 AI"立场的新形态：不是产品定位，而是*贡献政策*。FEX-Emu 的政策禁止 AI 生成的贡献，于是 Madeira（把 x86-64 Windows 游戏移植到未越狱 iPhone 的 Wine+FEX-Emu+DXMT 项目）——其 fork 含 AI 辅助代码——要求贡献者**不要**向上游提交修改。代码可以流进 fork，但永不回流越过边界；"无 AI"现在决定代码能流向哪里，是上述定位声明的供应链版本。
+
+**手写出处成为声明属性（2026-10-01）**——Halfspace（Matt Keeter 的距离场实体建模 IDE，其 2022 年起构建的 Fidget 内核的 WebGPU 展示；HN 88 分）开篇即："都 2026 年了，让我先声明：**这不是 vibe coded 的**。我从 2025 年 4 月开始做这个项目，用我的人脑写代码。"这份免责声明本身就是文化产物：手写出处正在成为作品集项目像 license 一样必须声明的一等属性——是上文机构级定位的个人工匠版。同日的政策侧同伴：**CS240 讲师本人的回顾**（turkeyland.net，102 分）——2026 春季 AI 作弊风暴中心的那门 C 语言课，课程大纲明确禁止在任何作业中使用 LLM，而他承认自己的处置"本可以更好，也正是因为它，违反这条明文政策的学生最终几乎没有承担任何后果"。政策从来不是难的部分；执行才是——一条明文规则、一次已知违规、一个约等于零的机构后果。这种不对称，而非大纲措辞，才是每一条"禁 AI"规则真正运行其上的现实。

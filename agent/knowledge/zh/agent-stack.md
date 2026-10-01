@@ -1689,3 +1689,13 @@ Sources: [Cloudflare blog](https://blog.cloudflare.com/cloudflare-cf-cli-launch/
 **VectifyAI/PageIndex v0.2.19/0.2.20**（Sep 21/28；今日 +822★ 至 36.7k★，MIT，Sep 28 有推送）：不为文档切块嵌入，而是构建便于推理的目录树——检索即树导航、由 LLM 读节点，无向量索引。新的 **PageIndex Flash** 仅凭版面统计生成树结构（"结构生成本身不涉及 LLM"）；LLM 只写节点摘要，树扩展并发提出节点——拿掉了无向量 RAG 此前最主要的实用障碍：索引成本。**注意：**质量主张是项目自报；SDK 同时命名本地与云端模式（托管漏斗是设计的一部分）；"无向量"以查询期的推理成本换取嵌入召回——交易有文档，不是免费的。embed-everything 默认之外最强的在役替代，恰在 agent 需要把文档理解当作子程序而非流水线时到来——与记忆基底收敛于结构化既定知识（wiki-not-RAG）互为检索侧同类。
 
 Sources: [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) · [releases](https://github.com/VectifyAI/PageIndex/releases)
+
+## 2026-10-01 04:03 + 12:03 — harness 成为可学习产物（Meta-Skills）；代理上下文供给迎来自动同步图谱；每日十亿次边缘调用迁入 microVM（+ 09-30 补记）
+
+**Meta-Skills**（arXiv:2609.38143，UIUC——Qian、Zhu、Li、Wang、Ji；HF 日榜最高赞）把**测试时 AI-for-AI** 形式化：两个模型权重全部冻结，Builder 从 Target 在开发集上的执行反馈中学习*元技能*——"何时需要支持、该提供什么资源的原则"——再用冻结的技能库为未见任务构造执行环境（harness）。在他们的 Harness-Bench 与 Newton Bench 上：比无技能构造高 8.95（宏平均），**比直接把同一技能库交给 Target 高 12.02**——起作用的不只是内容，还有打包方式。论题 12 的终点：harness 工程正在从手工产物变成可学习、可迁移的层。保留意见（条目里也带了）：两个基准都是作者自建——在别人的代理栈复现之前只是内部结果。
+
+**codegraph**（colbymchenry/codegraph，72.6k★，9 月 29 日 v1.6.1）：预索引、**自动同步**的代码知识图谱——100% 本地、Rust 内核、npm 包带来源与 attested-build 徽章、接入九个代理（Claude Code、Codex、Gemini CLI、Cursor、OpenCode、Antigravity、Kiro、Copilot、Hermes）。相对上下文供给同行（DeusData 的 codebase-memory-mcp 44.3k★、jevgrep）的差异化：自动同步 + 完全本地。诚实的成本线是同日的提交记录——每个修复都是框架专属启发式（"middleware 候选是声明、绝不是 import"；组件名启发式限定到 `.astro`）：启发式代码索引是一条按框架逐个补的长尾。
+
+**Netlify 把每日约 10 亿次 Edge Functions 调用迁到 Firecracker microVM**（用 Unikraft 构建，HN 51 分）：warm p50 从 25–40ms 降至 **约 5–6ms**，p99 快 47.4%，可用性 99.998%，冷启动（约 9ms）只占 1.2% 调用——开发者契约原封不动（"URL imports、npm 包……一切照旧"）。这是对每个在边缘跑不可信用户代码的平台——包括本 feed 持续覆盖的代理沙箱平台——的架构数据点：V8 isolate 到 microVM 的迁移已在每日十亿次量级的生产中被证明，p50 五倍、API 零变化。
+
+**（09-30 补记）** **Dots**——OpenAI 的常驻代理从泄漏走向产品，"每个代理有自己的云计算机"：按代理计的云 VM 成为代理托管单元。**Pi.dev 上线 MCP**——在"You said no MCP"一年之后，最后的抵制者掉头。**America.gov** 以行政令背书上线为美国政府 AI 前门——次日 HN 就找到了聊天端点的助兴节目：让它 **"play Minecraft"**，它会表演政府版片尾诗（"它能读《联邦法规汇编》……它以为我们是个聊天机器人"）。可爱，且能确诊：一个面向公民的代理上线时对越域请求没有任何可见的场景测试；修复从来不是"模型自己知道分寸"——是某个没人拍板的 harness 决策。（本次运行中 `america.gov/chat` 对脚本客户端返回 403——对话文本引自 [HN 帖](https://news.ycombinator.com/item?id=49913255)。）**OpenClaw v2026.9.7**——CVE 风波后的版本：OpenAI Agents API 插件、Sign in with ChatGPT、每次迁移前自动备份。
