@@ -1,8 +1,8 @@
 ---
 date: 2026-10-01
-updated: 2026-10-01T12:17:00+08:00
+updated: 2026-10-01T20:22:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 34
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -468,13 +468,153 @@ colbymchenry/codegraph 自称"最快的完整代码图谱"：预索引的符号/
 
 ---
 
+## 34. Android 开发者验证正式生效："用户保护"今日起在四国开启——侧载时代就此改变
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** HN · 261+ 分 · ~7.8小时前 (~12:32 UTC+8)
+- **Tags:** `android` `google` `policy` `sideloading`
+
+今天正是 Google 官方页面点名的日期：**"自 2026 年 9 月 30 日起，对安装应用的用户开始实施保护"**——从参与计划的商店在认证 Android 设备（Android 7+）上生效，首发**巴西、印度尼西亚、新加坡和泰国**，并将在"2027 年及以后"扩展到"认证 Android 设备上的所有应用"。未验证开发者的应用现在必须走面向高级用户的**高级安装流程**（与开发者 API 一道于 2026 年 8 月上线）；开发者通过 Android Developer Console（仅限 Play 外分发）或 Play Console 注册，后者自动注册约 99% 的应用。也存在让步条款：限制分发账号可向**最多 20 台设备分享应用，无需政府身份证件、无需费用**，开源应用还有专门的注册指南。而 HN 上的开发者反应并没有和解：一个标题带脏话、反对整个程序的帖子八小时内冲到 261 分。
+
+**Why it matters:** 这是 Android 安装时契约在真实国家的真实设备上实际改变的一天——身份注册成为安装的前提，而"高级用户逃生通道"能否长期存在，恰恰是任何人事先无法验证的部分。F-Droid 一类的分发模式和 2027 年的全球扩展才是接下来要盯的东西。
+
+[`🔗 developer.android.com/developer-verification`](https://developer.android.com/developer-verification) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49917761)
+
+---
+
+## 35. FirstDate：新加坡政府自建的相亲 App 跑 Gale-Shapley——稳定婚姻匹配，72 小时推一个人
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Register · HN 416+ 分 · ~27小时前 (~17:27 UTC+8)
+- **Tags:** `algorithms` `gale-shapley` `government-tech` `matching-markets`
+
+FirstDate 是新加坡政府科技局（GovTech）试点的相亲应用——源自员工讨论、在机构的年度黑客松上建成，与 TraceTogether 同出一门。它以 **Gale-Shapley 稳定匹配算法**（Gale & Shapley，1962；诺奖级谱系）处理兴趣、习惯、价值观与偏好的问卷，按 **72 小时一个周期、每次只推一位匹配对象**运行；双方同意后互换联系方式，还有名为"Date Quests"的首次约会破冰建议功能。目前只面向 **21–35 岁的单身公务员**，GovTech 也承认算法"无法保证化学反应或走向恋情"。HN 帖子（383 条评论）围绕匹配理论吵了一天。
+
+**Why it matters:** 延迟接受算法已经 64 岁，而这是它最字面意义上的一次部署——一个真实的稳定婚姻问题，由国家运营、以婚姻为目的。它同时也是"反滑动"的产品形态：排序偏好加一次只推一人，是对参与度最大化信息流的拒绝——而提出者恰好是一个没有参与度指标可刷的机构。
+
+[`🔗 The Register`](https://www.theregister.com/public-sector/2026/10/01/singapores-government-creates-a-dating-app/5300353) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49906432)
+
+---
+
+## 36. 欧洲大多数大型数据中心不愿披露用水与用电量——尽管欧盟法律早已要求：荷兰不到四分之一公开
+
+- **Velocity:** ▮▮ rising
+- **Source:** NL Times / Lighthouse Reports · HN 211+ 分 · ~25.5小时前 (~18:49 UTC+8)
+- **Tags:** `data-centers` `energy` `transparency` `ai-buildout`
+
+Lighthouse Reports 与 Trouw 等欧洲媒体为期一年的调查显示，欧洲大型数据中心——**装机容量 500 kW 及以上、欧盟《能效指令》已要求报告三年的那类**——大多不公布数据。荷兰的情况：行业协会统计有 **186 家**该规模商业数据中心，国家机构掌握其中 104 家的数据，而电力数据公开的只有 **44 家**、用水数据公开的只有 **47 家**。已公开的部分是：数据中心 2024 年用电 **51 亿千瓦时——占全国电力的 4.6%，是五年前的两倍**；电网公司 TenneT 预计到 **2030 年将达 10–15%**；微软在荷兰最大的单体设施一家就占**全国用电量的 1%**，而坐拥两座大型园区的 Google 什么都不披露。
+
+**Why it matters:** 本 feed 一直在记录 AI 大建设的账单——Bain 的 6 万亿美元营收缺口、内存价格、电网拥堵——而这些争论全部以这类数字为前提。指令早就要求上报；此番的发现是"法律要求上报"与"向公众披露"是两回事，水电之争至今跑在估算上。
+
+[`🔗 NL Times`](https://nltimes.nl/2026/09/30/data-centers-refusing-say-much-water-electricity-use) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49907057)
+
+---
+
+## 37. Show HN：Ledge.sh——代码块真的能跑的 Markdown 笔记，还给 agent 配了 MCP 服务器
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 156+ 分 · ~1.5天前 (Sep 30 07:41 UTC+8)
+- **Tags:** `markdown` `notes` `mcp` `show-hn`
+
+Ledge 是"能运行的 Markdown 笔记"：在代码块上按 ⌘↩，输出就在下方流式出现——支持 shell、Python、Node、Ruby、PHP、TypeScript（内置 Bun）、SQL、redis-cli，以及接给 agent 的 AI `prompt` 块。每条笔记有**自己持久化的 shell**（`cd`、环境变量、激活的 virtualenv 在多次运行间保留）；笔记可以通过 SSH 放在服务器上，用 `host:` 行把代码块路由到其他机器；iPhone/iPad/Android 客户端只是服务器的瘦窗口——"手机上不存笔记"，用 Secure Enclave 密钥配对。它内置 **MCP 服务器，让 Claude Code 能读取、搜索、编辑笔记**——但**不给 agent 删除工具**；Apache-2.0 协议、纯 Markdown 文件、无账号、无伴随数据库。HN 评论区拿来对比的是：带 bash 后端的 Jupyter、org-mode、Observable Framework。
+
+**Why it matters:** "可执行的 runbook"是个 50 年历史、总差一口气就能成的想法；2026 年的新增项是 SSH 即同步，以及一个带"刻意负能力"（不能删除）的 agent 接口。仓库还小（178★），但设计决策才是有意思的部分。
+
+[`🔗 ledge.sh`](https://ledge.sh) · [`🔗 ledgesh/ledge`](https://github.com/ledgesh/ledge) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49902382)
+
+---
+
+## 38. OpenDLSS：NVIDIA DLSS 5 神经渲染网络的 Vulkan 重实现——逐位一致，连中间结果都一致
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 124+ 分 · ~27.6小时前 (~16:43 UTC+8)
+- **Tags:** `graphics` `vulkan` `neural-rendering` `dlss`
+
+maanHimself/OpenDLSS-NR 用 Vulkan 重实现了 **DLSS 5 的神经渲染网络，"与原版逐位一致"**——与 DLSS-NR build 310.8.0 相同的 71 块 Swin/ViT U-net，张量核心上跑 FP8（E4M3）、141 MiB 权重，而且声明强于最终图像一致：**全部 75 个 block 边界逐字节匹配**，用 `parity` 夹具模式验证。第二个独立实现（`ports/browser-webgpu/`）把同一网络跑进浏览器，不用张量核心、不用 FP8。权重自备；架构依照 NVIDIA 公开的报告（[DLSS 5: Generative Neural Rendering](https://research.nvidia.com/labs/adlr/DLSS5/)）。注意 DLSS 5 NR 是什么：**不是超分**——是一个把引擎画好的帧重新渲染的生成式网络，从注入噪声中生成细节。
+
+**Why it matters:** 一位独立开发者仅凭公开报告就把一个专有实时模型复现到逐位一致，这本身就是双向的数据点——架构完全可复原，而"权重自备"提醒你护城河真正所在。生成式神经渲染取代帧重建，也是这一轮实时图形学最值得注意的转向。
+
+[`🔗 maanHimself/OpenDLSS-NR`](https://github.com/maanHimself/OpenDLSS-NR) · [`🔗 NVIDIA DLSS 5 项目页`](https://research.nvidia.com/labs/adlr/DLSS5/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49906100)
+
+---
+
+## 39. MIST：图像的"存在"本身就让 VLM 裁判失稳——对齐图像与误导图像移动标签的比例几乎相同
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / HF Papers · HF 每日榜首 · ~2天前 (Sep 29)
+- **Tags:** `vlm` `evaluation` `benchmarks` `paper`
+
+误导图像压力测试（MIST）：200 个可作字面或比喻解读的英文句子，配对齐图像、误导图像或无图像，交给 13 个 VLM 裁判——而标注准则要求答案只取决于句子本身，任何图像都不应改变结果。结果两种图像移动标签的比率几乎一样——**对齐 20.5%、误导 19.4%，都高于"删掉忽略图像指令"造成的 11.6%**——而且在两图下标签出现分歧的那些样本里，只有 **37%** 朝图像所示含义移动。无论图像缺席、对齐还是误导，与人类标注者的一致率都不变。作者的结论：**"让裁判动摇的是图像存在这件事，而不是它是哪一张——所以可替代性判定描述的与其说是模型，不如说是配置。"** 通过 alt-test 的七个裁判受影响小于六个从未通过的——但十三个全部受影响。
+
+**Why it matters:** "VLM 当裁判"正在成为评估 agentic 多模态系统的廉价底座，而这是"测试框架即测量本身"教训迄今最锋利的一次呈现：一个本应毫无影响的条件让所有受测裁判失稳，意味着基于裁判的分数有一部分是在给实验装置打分。
+
+[`🔗 arXiv:2609.37863`](https://arxiv.org/abs/2609.37863) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.37863)
+
+---
+
+## 40. TileLang v0.1.15：原生华为昇腾 950 后端 + 自动 CUDA warp 特化——内核 DSL 走向多厂商
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 8k★ · v0.1.15 Sep 30
+- **Tags:** `kernels` `gpu` `huawei-ascend` `compilers`
+
+开源平铺内核 DSL TileLang（tile-ai/tilelang，8k★）9 月 30 日发布 v0.1.15，带来两项结构性更新。其一，**原生华为昇腾 950 支持**（`target="ascend"`，dav-3510）：端到端 NPU 后端，原生代码生成，Cube GEMM 与 Vector 计算合入同一 kernel（`T.SimdVF`/`T.SimtVF` 区域），显式 UB/L1/L0 存储控制，**MXFP8/MXFP4 块缩放 GEMM**，自动调度、流水线化与同步插入。其二，**自动 CUDA warp 特化**：可选的基于角色的调度器，把 TMA 加载、MMA 计算、TMA 存储与 worker 操作分配给特化 warp 组——原本要手写 PTX 的 Hopper/Blackwell 时代模式。外加跨 SM100/SM120 的统一 `T.gemm_blockscaled`，以及更强的 Python 前端（编译期推导式、`zip`、生成器表达式）。
+
+**Why it matters:** 一个 Triton 级开源内核 DSL 获得昇腾一等公民支持，是算力栈多元化叙事的具体数据点——任何非 NVIDIA 加速器最难的都是可编程性桥梁，而它这次与定义当前 NVIDIA 代码生成的编译技术（warp 特化）出现在同一个版本里。
+
+[`🔗 tilelang v0.1.15 发布`](https://github.com/tile-ai/tilelang/releases/tag/v0.1.15) · [`🔗 tile-ai/tilelang`](https://github.com/tile-ai/tilelang)
+
+---
+
+## 41. Ubuntu 26.04.1 LTS：首个点版本——CUDA 进主仓库、默认抗量子密钥交换、X.org 迁移完成
+
+- **Velocity:** ▮ steady
+- **Source:** Ubuntu · HN 77+ 分 · ~22.7小时前 (~21:36 UTC+8)
+- **Tags:** `ubuntu` `linux` `release` `lts`
+
+26.04 LTS 系列的首个点版本（9 月 29 日）是"现在可以放心装了"的里程碑，也把一个悄悄布满里程碑的发布整合完毕：GNOME 50，Ubuntu **全面转向 Wayland**（X.org 迁移完成），非实验性分数缩放与 VRR；新默认应用（Papers、Loupe、Ptyxis、Resources）与统一 App Center；**首个在主仓库原生提供 NVIDIA CUDA 的 Ubuntu 版本**，外加 AMD ROCm；**TPM 全盘加密转正**；**默认混合抗量子密钥交换**、移除旧密码套件；首个扩展内存安全组件的 LTS（Rust 内核驱动、`sudo-rs`、`uutils`）；面向 Intel TDX 与 AMD SEV 的机密计算；`authd` 支持 Entra ID、Google IAM 与 OIDC。24.04 LTS 用户将收到升级提示。
+
+**Why it matters:** 点版本意味着 LTS 开始成为机群默认，而这个版本同时固化了三个转变——AI 工具链进发行版（主仓库里的 CUDA/ROCm）、默认抗量子、核心组件内存安全——它们过去每一个都还是早期采用者的手动选项。
+
+[`🔗 Ubuntu 博客`](https://ubuntu.com/blog/upgrade-your-desktop-ubuntu-26-04-lts) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49908757)
+
+---
+
+## 42. CVE-2026-103056：能 root 它所看守的每台终端的 AI-SOC agent——CrowdStrike RTR 命令拼接的 CVSS 9.4 命令注入
+
+- **Velocity:** ▮ steady
+- **Source:** VulnCheck · CVSS 9.4 · ~35小时前 (Sep 30 09:16 UTC+8)
+- **Tags:** `cve` `ai-security` `agent-security` `vulncheck`
+
+AiSOC——一个开源的 AI 安全运营中心（SOC）产品——在 `crowdstrike_rtr.py` 和 `endpoint.py` 中**以未转义的动作参数内插**构造 CrowdStrike Real Time Response 命令字符串。已认证用户只需向 `file_path`、`path`、`script_name` 或 `script_args` 注入单引号，即可跳出引号参数，**在该平台管辖的每一台受管终端上以 SYSTEM 或 root 权限执行任意命令**。**CVSS 9.4 Critical（CVSS v4.0）——由发现方 VulnCheck 评分**（NVD 记录中为 Secondary 指标，无 CNA 评分）。同批披露的 **CVE-2026-103055（8.7）**：realtime WebSocket/SSE 服务器用硬编码常量做 JWT 验证。影响 7.2.0 至 12.0.0 之前的版本；**修复于 v12.0.0**，公告 GHSA-7q37-2wfw-xrx7。
+
+**Why it matters:** 这正是本 feed 在 agent harness 里反复发现的那类模式——用字符串内插拼出可信执行路径——但这次的受害者是一款安全产品，爆炸半径字面意义上就是它所防守的机群。按"谁评的分"规则写明：9.4 是发现方的评分，不是厂商的。
+
+[`🔗 VulnCheck 公告`](https://www.vulncheck.com/advisories/aisoc-7.2.0-before-12.0.0-command-injection-via-crowdstrike-rtr) · [`🔗 GHSA-7q37-2wfw-xrx7`](https://github.com/beenuar/AiSOC/security/advisories/GHSA-7q37-2wfw-xrx7) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-103056)
+
+---
+
+## 43. GPT-Synopsys：OpenAI 与 Synopsys 宣布专用模型操刀 EDA 工具——无日期、无基准，仅有早期合作
+
+- **Velocity:** ▮ steady
+- **Source:** Synopsys · HN 40+ 分 · ~1.5天前 (Sep 30)
+- **Tags:** `openai` `synopsys` `chip-design` `eda`
+
+OpenAI 与 Synopsys 宣布 **GPT-Synopsys**——"一个专用模型，经过优化以使用 Synopsys EDA 工具执行半导体设计流程"，定位高于如今的 agent+工具集成：模型本身就是 EDA 专家用户，承接委派的工程目标（**PPA 优化、时序与验证收敛**），agent 运行工具、解读结果、迭代至人类评审的验证收敛。它将集成 Synopsys.ai 与 Autopilot agentic 平台，跑在 OpenAI 托管的基础设施上，以**算力+模型+许可证捆绑**方式销售，客户设计数据"不用于训练模型"。新闻稿里没有的：具体基座模型、发布日期、客户名单、任何基准——只有"早期技术合作已在进行"。
+
+**Why it matters:** 这是一周内第二个垂直前沿模型模板（此前是 Gemini 4 Argon 的可信网络防御者档位）：前沿厂商把模型与一家厂商的专业工具链绑定，按企业许可证定价。芯片设计这版目前全是宣布、没有证据——而这本身就是需要跟踪的点。
+
+[`🔗 Synopsys 新闻稿`](https://news.synopsys.com/2026-09-30-OpenAI-and-Synopsys-Announce-GPT-Synopsys-Frontier-Intelligence-to-Revolutionize-Chip-Design) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49919910)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-01T12:17:00+08:00 |
-| Items | 33 |
-| Sources tracked | 34（Hacker News、GitHub Trending、GitHub、Google 博客、Artificial Analysis、blog.faav.net、turkeyland.net、mattkeeter.com、agmai.org、arXiv、Hugging Face、blog.gitea.com、56k.rip、america.gov、PyPI、eternity4719.github.io、colbymchenry.github.io、Cisco PSIRT、CISA KEV、NVD、DIVD CSIRT、edgcpp.org、python.org security-announce、Cloudflare 博客、Netlify、WatchGuard PSIRT、oss-security、Apache 邮件列表、alphapixeldev.com、exyr.org、yedhu.me、Computer Things/buttondown、GE Vernova、insufferable.dev） |
+| Generated | 2026-10-01T20:22:00+08:00 |
+| Items | 43 |
+| Sources tracked | 42（Hacker News、GitHub Trending、GitHub、Google 博客、Artificial Analysis、blog.faav.net、turkeyland.net、mattkeeter.com、agmai.org、arXiv、Hugging Face、blog.gitea.com、56k.rip、america.gov、PyPI、eternity4719.github.io、colbymchenry.github.io、Cisco PSIRT、CISA KEV、NVD、DIVD CSIRT、edgcpp.org、python.org security-announce、Cloudflare 博客、Netlify、WatchGuard PSIRT、oss-security、Apache 邮件列表、alphapixeldev.com、exyr.org、yedhu.me、Computer Things/buttondown、GE Vernova、insufferable.dev、developer.android.com、The Register、NL Times、ubuntu.com、Synopsys、VulnCheck、ledge.sh、research.nvidia.com） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | Velocity 加权（时效 × 互动加速 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

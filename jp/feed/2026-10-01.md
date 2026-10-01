@@ -1,8 +1,8 @@
 ---
 date: 2026-10-01
-updated: 2026-10-01T12:17:00+08:00
+updated: 2026-10-01T20:22:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 34
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -468,13 +468,153 @@ colbymchenry/codegraphは自らを「最速の完全コードグラフ」と称�
 
 ---
 
+## 34. Android デベロッパー検証ついに発効：「ユーザー保護」が本日4カ国で開始——サイドローディングの時代が変わる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** HN · 261+ pts · 約7.8時間前 (~12:32 UTC+8)
+- **Tags:** `android` `google` `policy` `sideloading`
+
+Google 自身のページが示す日付が今日：**「2026年9月30日をもって、アプリをインストールするユーザーへの保護を開始します」**——参加ストアから認証済み Android 端末（Android 7+）へのインストールが対象で、開始は**ブラジル、インドネシア、シンガポール、タイ**の4カ国、「2027年以降」に「認証済み Android 端末上のすべてのアプリ」へ拡大予定。未検証デベロッパーのアプリはパワーユーザー向け**アドバンスドフロー**を必要とする（開発者 API とともに2026年8月に開始）。デベロッパーは Android Developer Console（Play 外配信専用）か Play Console で登録し、後者はアプリの約99%を自動登録。譲歩条項もある：限定配信アカウントなら**政府発行 ID も費用も不要で最大20台の端末にアプリを共有でき**、オープンソースアプリ向けの専用登録ガイドも用意されている。一方、HN での開発者の反応は和解していない：プログラム名を罵倒タイトルにしたスレッドが8時間で261ポイント。
+
+**Why it matters:** Android のインストール時の契約が、実際の国の実際の端末で変わった日だ——身元登録がインストールの前提条件になり、パワーユーザー用の逃げ道が長期的に存続するかは誰にも事前検証できない。F-Droid 級の配布モデルと2027年の世界展開が、次に見るべき部分だ。
+
+[`🔗 developer.android.com/developer-verification`](https://developer.android.com/developer-verification) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49917761)
+
+---
+
+## 35. FirstDate：シンガポール政府製マッチングアプリが Gale-Shapley を稼働——安定マッチング、72時間に1人
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Register · HN 416+ pts · 約27時間前 (~17:27 UTC+8)
+- **Tags:** `algorithms` `gale-shapley` `government-tech` `matching-markets`
+
+FirstDate はシンガポール GovTech がパイロット運用するマッチングアプリ——職員の議論から生まれ、同庁の年次ハッカソンで構築された。TraceTogether と同じ組織だ。興味・習慣・価値観・選好のアンケートに **Gale-Shapley 安定マッチングアルゴリズム**（Gale & Shapley、1962；ノーベル賞級の系譜）を適用し、**72時間周期で1人ずつ候補を提示**する運用。双方が同意すると連絡先を交換でき、「Date Quests」という初デートのアイスブレイク提案機能もある。対象は現在**21〜35歳の独身公務員**に限られ、GovTech 自ら「相性や恋愛への発展は保証できない」と認める。HN スレッド（383コメント）は一日中マッチング理論の議論で沸いた。
+
+**Why it matters:** 遅延受理アルゴリズムは64歳になり、これがその最も文字通りの展開だ——現実の安定結婚問題を、国家が婚姻目的で運営している。同時にこれは「スワイプしない」プロダクト形状でもある：順位付き選好と一度1人は、エンゲージメント最大化フィードへの拒否であり——それを打ち出したのがエンゲージメント指標を持たない機構というのが皮肉だ。
+
+[`🔗 The Register`](https://www.theregister.com/public-sector/2026/10/01/singapores-government-creates-a-dating-app/5300353) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49906432)
+
+---
+
+## 36. 欧州の大型データセンターの大半が水と電力の使用量を明かさない——EU法が3年間報告を義務付けているのに、オランダでは4分の1未満
+
+- **Velocity:** ▮▮ rising
+- **Source:** NL Times / Lighthouse Reports · HN 211+ pts · 約25.5時間前 (~18:49 UTC+8)
+- **Tags:** `data-centers` `energy` `transparency` `ai-buildout`
+
+Lighthouse Reports と Trouw など欧州メディアによる1年に及ぶ調査が明かしたのは、欧州の大型データセンター——**設置容量500kW以上、EU エネルギー効率指令が3年間報告を義務付けてきたクラス**——の大半が数値を公表していないという実態だ。オランダの場合：業界団体は同規模の商業データセンター**186**を数え、国家機関はうち104のデータを保有するが、電力が公表されているのはわずか**44**、水は**47**。公表済みの部分では：データセンターは2024年に**51億 kWh を消費——全国電力の4.6%で、5年前の2倍**。送電網運営者 TenneT は**2030年に10〜15%**へ伸びると見込み、Microsoft のオランダ最大施設は単独で**全国電力消費の1%**を占め、大型サイトを2つ持つ Google は一切公表していない。
+
+**Why it matters:** 本 feed は AI 建設ラッシュの請求書——Bain の6兆ドル売上ギャップ、メモリ価格、送電網混雑——を追い続けてきたが、それらの議論はすべてこうした数値が前提だ。指令はとっくに報告を義務付けている。今回の発見は「法律が報告を義務付けること」と「公衆への開示」が別物だということだ。水と電力をめぐる議論は、いまだ推計の上を走っている。
+
+[`🔗 NL Times`](https://nltimes.nl/2026/09/30/data-centers-refusing-say-much-water-electricity-use) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49907057)
+
+---
+
+## 37. Show HN：Ledge.sh——コードブロックが実際に動く Markdown ノート、エージェント向け MCP サーバー付き
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 156+ pts · 約1.5日前 (Sep 30 07:41 UTC+8)
+- **Tags:** `markdown` `notes` `mcp` `show-hn`
+
+Ledge は「動く Markdown ノート」：コードブロックで ⌘↩ を押せば出力が下にストリーミングされる——shell、Python、Node、Ruby、PHP、TypeScript（同梱 Bun 経由）、SQL、redis-cli、そしてエージェントにパイプする AI `prompt` ブロックに対応。各ノートは**自分専用の永続 shell** を持ち（`cd`、環境変数、有効化した virtualenv が実行間で保持される）、ノートは SSH 経由でサーバーに置けて `host:` 行でコードブロックを別マシンへルーティングできる。iPhone/iPad/Android クライアントはサーバーの薄い窓にすぎない——「電話にノートは保存されない」、Secure Enclave 鍵でペアリング。**Claude Code がノートを読み・検索・編集できる MCP サーバー**を同梱するが、**エージェントに削除ツールは与えない**。Apache-2.0、プレーンな Markdown ファイル、アカウント不要、サイドカーデータベースなし。HN の比較対象：bash バックエンドの Jupyter、org-mode、Observable Framework。
+
+**Why it matters:** 「実行できるランブック」は50年の歴史を持ち、いつも一歩届かなかったアイデアだ。2026年の追加要素は SSH がそのまま同期になることと、意図的な負のケイパビリティ（削除不可）を持つエージェント用インターフェースだ。リポジトリはまだ小さい（178★）が、面白いのは設計判断のほうだ。
+
+[`🔗 ledge.sh`](https://ledge.sh) · [`🔗 ledgesh/ledge`](https://github.com/ledgesh/ledge) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49902382)
+
+---
+
+## 38. OpenDLSS：NVIDIA DLSS 5 ニューラルレンダリングネットワークの Vulkan 再実装——ビット完全一致、中間結果まで
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 124+ pts · 約27.6時間前 (~16:43 UTC+8)
+- **Tags:** `graphics` `vulkan` `neural-rendering` `dlss`
+
+maanHimself/OpenDLSS-NR は **DLSS 5 のニューラルレンダリングネットワークを Vulkan で再実装し、「オリジナルとビット完全一致」**を達成した——DLSS-NR build 310.8.0 と同じ71ブロックの Swin/ViT U-net、テンソルコア上の FP8（E4M3）、重みは141 MiB。しかも主張は最終画像の一致より強い：**全75ブロック境界がバイト単位で一致**し、`parity` フィクスチャモードで検証できる。2つ目の独立実装（`ports/browser-webgpu/`）は同じネットワークをテンソルコアなし・FP8なしでブラウザに載せる。重みは自己調達。アーキテクチャは NVIDIA 公表のレポート（[DLSS 5: Generative Neural Rendering](https://research.nvidia.com/labs/adlr/DLSS5/)）に基づく。DLSS 5 NR とは何かに注意：**アップスケーラーではない**——エンジンが描いたフレームを再レンダリングし、注入されたノイズからディテールを生成する生成ネットワークだ。
+
+**Why it matters:** 独立開発者が公表レポートだけから専用リアルタイムモデルをビット単位で再現できたのは、双方向のデータポイントだ——アーキテクチャは完全に復元可能で、かつ「重みは自己調達」がモートの本当の場所を思い出させる。生成的ニューラルレンダリングがフレーム再構築を置き換える方向性も、このサイクルのリアルタイムグラフィックスで特筆すべき転換だ。
+
+[`🔗 maanHimself/OpenDLSS-NR`](https://github.com/maanHimself/OpenDLSS-NR) · [`🔗 NVIDIA DLSS 5 プロジェクトページ`](https://research.nvidia.com/labs/adlr/DLSS5/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49906100)
+
+---
+
+## 39. MIST：画像の「存在」そのものが VLM ジャッジを不安定化させる——整合画像と誤導画像がラベルを動かす割合はほぼ同じ
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / HF Papers · HF 日次トップ · 約2日前 (Sep 29)
+- **Tags:** `vlm` `evaluation` `benchmarks` `paper`
+
+Misleading-Image Stress Test（MIST）：字義的にも比喩的にも読める英文200文を、整合画像・誤導画像・画像なしの条件で13の VLM ジャッジに提示する——ラベリングガイドラインは答えを文だけから取るよう要求しており、どの画像も結果を変えてはならない。結果は、両方の画像がほぼ同じ割合でラベルを動かした——**整合20.5%、誤導19.4%、いずれも「画像を無視せよ」という指示を削除した際の11.6%を上回る**——しかも2画像間でラベルが分かれたサンプルのうち、画像の示す意味のほうへ動いたのは**37%**だけ。画像が不在でも整合でも誤導でも、人間アノテーターとの一致率は変わらない。著者の結論：**「ジャッジを動かすのは画像がどちらであるかではなく、画像がそこにあることだ。ゆえに代替可能性の判定は、モデルと同じくらい『設定』を記述している。」** alt-test を通過する7ジャッジは通過しない6ジャッジより影響は小さい——しかし13ジャッジ全員が影響を受ける。
+
+**Why it matters:** 「VLM をジャッジに」はエージェント型マルチモーダルシステム評価の安価な土台になりつつあり、これは「ハーネスが測定そのもの」という教訓の最も鋭い提示だ——本来何の影響も持たないはずの条件がテスト済み全ジャッジを不安定化したということは、ジャッジベースのスコアは一部、実験セットアップを採点しているということだ。
+
+[`🔗 arXiv:2609.37863`](https://arxiv.org/abs/2609.37863) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.37863)
+
+---
+
+## 40. TileLang v0.1.15：Huawei Ascend 950 ネイティブバックエンドと自動 CUDA warp 特化——カーネル DSL がマルチベンダーへ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 8k★ · v0.1.15 Sep 30
+- **Tags:** `kernels` `gpu` `huawei-ascend` `compilers`
+
+オープンソースのタイル化カーネル DSL TileLang（tile-ai/tilelang、8k★）が9月30日に v0.1.15 をリリースし、構造的な追加を2つ載せた。第一に、**Huawei Ascend 950 のネイティブサポート**（`target="ascend"`、dav-3510）：エンドツーエンドの NPU バックエンドで、ネイティブコード生成、Cube GEMM と Vector 演算を1カーネルに統合（`T.SimdVF`/`T.SimtVF` 領域）、UB/L1/L0 ストレージの明示的制御、**MXFP8/MXFP4 ブロックスケール GEMM**、そして自動スケジューリング・パイプライン化・同期挿入。第二に、**自動 CUDA warp 特化**：オプトインのロールベーススケジューラが、TMA ロード、MMA 演算、TMA ストア、worker 操作を特化 warp グループに割り当てる——従来手書き PTX だった Hopper/Blackwell 時代のパターンだ。さらに SM100/SM120 を横断する統一 `T.gemm_blockscaled` と、表現力を増した Python フロントエンド（コンパイル時の内包表記、`zip`、ジェネレータ式）。
+
+**Why it matters:** Triton クラスのオープンカーネル DSL が Ascend の一等市民サポートを得たのは、コンピュートスタック多様化の物語における具体的データポイントだ——NVIDIA 以外のアクセラレータで一番難しいのはプログラマビリティの橋であり、それが現行 NVIDIA コード生成を定義するコンパイラ技術（warp 特化）と同じリリースに載ってきた。
+
+[`🔗 tilelang v0.1.15 リリース`](https://github.com/tile-ai/tilelang/releases/tag/v0.1.15) · [`🔗 tile-ai/tilelang`](https://github.com/tile-ai/tilelang)
+
+---
+
+## 41. Ubuntu 26.04.1 LTS：初のポイントリリース——CUDA がメインリポジトリへ、ポスト量子鍵交換がデフォルトに、X.org 移行完了
+
+- **Velocity:** ▮ steady
+- **Source:** Ubuntu · HN 77+ pts · 約22.7時間前 (~21:36 UTC+8)
+- **Tags:** `ubuntu` `linux` `release` `lts`
+
+26.04 LTS シリーズ初のポイントリリース（9月29日）は「もう安心してインストールできる」合図であり、静かに成果だらけだったリリースを統合した：GNOME 50、Ubuntu **完全 Wayland 化**（X.org からの移行完了）、実験段階を卒業した分数スケーリングと VRR。新デフォルトアプリ（Papers、Loupe、Ptyxis、Resources）と統合 App Center。**NVIDIA CUDA をリポジトリからネイティブ提供する初の Ubuntu**、加えて AMD ROCm。**TPM バックアップのフルディスク暗号化が GA**。**ハイブリッドポスト量子鍵交換がデフォルト**に、レガシー暗号スイートは削除。メモリ安全コンポーネントを拡充した初の LTS（Rust カーネルドライバ、`sudo-rs`、`uutils`）。Intel TDX と AMD SEV 向けコンフィデンシャルコンピューティング。`authd` は Entra ID、Google IAM、OIDC に対応。24.04 LTS ユーザーにはアップグレードが通知される。
+
+**Why it matters:** ポイントリリースは LTS がフリートのデフォルトになる瞬間であり、これは3つの転換を一度に焼き込んだ——ディストロへの AI ツールチェーン統合（メインの CUDA/ROCm）、デフォルトのポスト量子、コア部分のメモリ安全性——どれも従来はアーリーアダプターの手動オプションだったものだ。
+
+[`🔗 Ubuntu ブログ`](https://ubuntu.com/blog/upgrade-your-desktop-ubuntu-26-04-lts) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49908757)
+
+---
+
+## 42. CVE-2026-103056：監視対象の全エンドポイントを root 化できた AI-SOC エージェント——CrowdStrike RTR コマンド構築の CVSS 9.4 コマンドインジェクション
+
+- **Velocity:** ▮ steady
+- **Source:** VulnCheck · CVSS 9.4 · 約35時間前 (Sep 30 09:16 UTC+8)
+- **Tags:** `cve` `ai-security` `agent-security` `vulncheck`
+
+AiSOC——オープンソースの AI セキュリティオペレーションセンター（SOC）製品——は、`crowdstrike_rtr.py` と `endpoint.py` で CrowdStrike Real Time Response のコマンド文字列を**エスケープなしのアクションパラメータ補間**で構築している。認証済みユーザーは `file_path`、`path`、`script_name`、`script_args` にシングルクォートを注入してクォートされた引数を突破し、**このプラットフォームが管理するすべてのエンドポイント上で SYSTEM または root 権限の任意コマンド実行**に至る。**CVSS 9.4 Critical（CVSS v4.0）——発見者 VulnCheck によるスコア**（NVD レコードでは Secondary 指標、CNA スコアなし）。同時 disclose の **CVE-2026-103055（8.7）**：realtime WebSocket/SSE サーバーが JWT 検証にハードコードされた定数を使用。7.2.0〜12.0.0 未満が影響を受け、**v12.0.0 で修正**、公告は GHSA-7q37-2wfw-xrx7。
+
+**Why it matters:** これは本 feed がエージェントハーネスで繰り返し見つけてきたパターンだ——文字列補間で信頼された実行パスを組み立てる——ただし今回は被害者がセキュリティ製品であり、爆発半径は文字通りその製品が守るフリートだ。「誰が採点したか」のルールに従い記す：9.4 は発見者のスコアであり、ベンダーのものではない。
+
+[`🔗 VulnCheck アドバイザリ`](https://www.vulncheck.com/advisories/aisoc-7.2.0-before-12.0.0-command-injection-via-crowdstrike-rtr) · [`🔗 GHSA-7q37-2wfw-xrx7`](https://github.com/beenuar/AiSOC/security/advisories/GHSA-7q37-2wfw-xrx7) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-103056)
+
+---
+
+## 43. GPT-Synopsys：OpenAI と Synopsys が EDA ツールを操作する専用モデルを発表——日付なし、ベンチマークなし、早期連携のみ
+
+- **Velocity:** ▮ steady
+- **Source:** Synopsys · HN 40+ pts · 約1.5日前 (Sep 30)
+- **Tags:** `openai` `synopsys` `chip-design` `eda`
+
+OpenAI と Synopsys が **GPT-Synopsys** を発表——「Synopsys の EDA ツールを使って半導体設計ワークフローを実行するよう最適化された専用モデル」。今日のエージェント+ツール統合を超えた位置づけだ：モデル自体が EDA のエキスパートユーザーであり、委任された工学目標（**PPA 最適化、タイミング、検証収束**）を扱い、エージェントがツールを実行し、結果を解釈し、人間のレビューに向け検証された成果へ反復する。Synopsys.ai と Autopilot エージェントプラットフォームに統合され、OpenAI ホストのインフラで動き、**コンピュート+モデル+ライセンスのバンドル**として販売される。顧客の設計データは「モデルの学習に使用されない」。プレスリリースにないもの：基盤モデルの名前、出荷日、顧客、ベンチマーク——あるのは「早期技術連携が進行中」だけだ。
+
+**Why it matters:** これは今週2つ目のバーティカル・フロンティアモデルのテンプレートだ（先日は Gemini 4 Argon の信頼されたサイバー防御者ティア）：フロンティアベンダーがモデルを一つのベンダーの専門ツールチェーンと組み合わせ、エンタープライズライセンスに価格を織り込む。チップ設計版は今のところ告知のみで証拠がゼロ——そしてそれ自体が追跡すべきポイントだ。
+
+[`🔗 Synopsys プレスリリース`](https://news.synopsys.com/2026-09-30-OpenAI-and-Synopsys-Announce-GPT-Synopsys-Frontier-Intelligence-to-Revolutionize-Chip-Design) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49919910)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-01T12:17:00+08:00 |
-| Items | 33 |
-| Sources tracked | 34（Hacker News、GitHub Trending、GitHub、Google ブログ、Artificial Analysis、blog.faav.net、turkeyland.net、mattkeeter.com、agmai.org、arXiv、Hugging Face、blog.gitea.com、56k.rip、america.gov、PyPI、eternity4719.github.io、colbymchenry.github.io、Cisco PSIRT、CISA KEV、NVD、DIVD CSIRT、edgcpp.org、python.org security-announce、Cloudflare ブログ、Netlify、WatchGuard PSIRT、oss-security、Apache メーリングリスト、alphapixeldev.com、exyr.org、yedhu.me、Computer Things/buttondown、GE Vernova、insufferable.dev） |
+| Generated | 2026-10-01T20:22:00+08:00 |
+| Items | 43 |
+| Sources tracked | 42（Hacker News、GitHub Trending、GitHub、Google ブログ、Artificial Analysis、blog.faav.net、turkeyland.net、mattkeeter.com、agmai.org、arXiv、Hugging Face、blog.gitea.com、56k.rip、america.gov、PyPI、eternity4719.github.io、colbymchenry.github.io、Cisco PSIRT、CISA KEV、NVD、DIVD CSIRT、edgcpp.org、python.org security-announce、Cloudflare ブログ、Netlify、WatchGuard PSIRT、oss-security、Apache メーリングリスト、alphapixeldev.com、exyr.org、yedhu.me、Computer Things/buttondown、GE Vernova、insufferable.dev、developer.android.com、The Register、NL Times、ubuntu.com、Synopsys、VulnCheck、ledge.sh、research.nvidia.com） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | Ranking | Velocity 重み付け（鮮度 × エンゲージメント加速 × ソースの権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

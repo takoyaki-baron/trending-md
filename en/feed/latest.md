@@ -1,8 +1,8 @@
 ---
 date: 2026-10-01
-updated: 2026-10-01T12:17:00+08:00
+updated: 2026-10-01T20:22:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 34
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -468,13 +468,153 @@ colbymchenry/codegraph bills itself as "the fastest complete code graph": pre-in
 
 ---
 
+## 34. Android Developer Verification enforcement goes live: "protections begin" in four countries — the sideloading era changes today
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** HN · 261+ pts · ~7.8h ago (~12:32 UTC+8)
+- **Tags:** `android` `google` `policy` `sideloading`
+
+Today is the date Google's own page names: **"Effective September 30, 2026, protections begin for users installing apps"** from participating stores on certified Android devices (Android 7+) — starting in **Brazil, Indonesia, Singapore and Thailand**, with expansion "globally to all apps on certified Android devices" in 2027 and beyond. Apps from unverified developers now require the **advanced flow** for power users (launched August 2026 along with developer APIs); developers register via Android Developer Console (outside-Play-only) or Play Console, which auto-registers ~99% of apps. Accommodations exist: limited distribution accounts share apps with **up to 20 devices without a government-issued ID or fee**, and there is a dedicated registration guide for open-source apps. The developer reaction on HN is not reconciled: a profanity-titled thread against the program sits at 261 points within eight hours.
+
+**Why it matters:** this is the day the Android install-time contract changed for real devices in real countries — identity registration as a precondition of installation, with a power-user escape hatch whose long-term persistence is exactly what nobody can verify in advance. F-Droid-class distribution and the 2027 global expansion are the parts to watch.
+
+[`🔗 developer.android.com/developer-verification`](https://developer.android.com/developer-verification) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49917761)
+
+---
+
+## 35. FirstDate: Singapore's government-built dating app runs Gale-Shapley — stable marriage, one match every 72 hours
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Register · 416+ pts on HN · ~27h ago (~17:27 UTC+8)
+- **Tags:** `algorithms` `gale-shapley` `government-tech` `matching-markets`
+
+FirstDate is a dating app piloted by Singapore's GovTech — born from staff discussions and built at the agency's annual hackathon, the same agency behind TraceTogether. It uses the **Gale-Shapley Stable Matching algorithm** (Gale & Shapley, 1962; a Nobel-adjacent lineage) over a questionnaire of interests, habits, values and preferences, and runs on a **72-hour cycle presenting one suggested match at a time**; mutual agreement reveals contact details, and a "Date Quests" feature suggests first-date icebreakers. It targets **single civil servants aged 21–35**, and GovTech concedes the algorithm "cannot guarantee chemistry or a match leading to a relationship." The HN thread (383 comments) has been debating the matching-theory ever since.
+
+**Why it matters:** deferred acceptance is 64 years old and this is its most literal deployment — an actual stable-marriage problem, run by a state, for marriage. It's also the anti-swipe product shape: one match at a time with ranked preferences is a rejection of the engagement-maximizing feed, from an institution with no engagement metrics to game.
+
+[`🔗 The Register`](https://www.theregister.com/public-sector/2026/10/01/singapores-government-creates-a-dating-app/5300353) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49906432)
+
+---
+
+## 36. Most large European data centers won't say how much water and power they use — fewer than 1 in 4 in the Netherlands, despite an EU law requiring it
+
+- **Velocity:** ▮▮ rising
+- **Source:** NL Times / Lighthouse Reports · 211+ pts on HN · ~25.5h ago (~18:49 UTC+8)
+- **Tags:** `data-centers` `energy` `transparency` `ai-buildout`
+
+A year-long Lighthouse Reports investigation with Trouw and other European outlets found that large European data centers — **500 kW installed capacity and up, the class the EU Energy Efficiency Directive has required to report for three years** — largely don't publish the figures. In the Netherlands: the industry association counts **186 commercial data centers** of that size, the national agency holds data on 104, and public figures exist for electricity at just **44** and water at **47**. What is public: data centers consumed **5.1 billion kWh in 2024 — 4.6% of national electricity, double the level of five years ago**; grid operator TenneT expects **10–15% by 2030**; Microsoft's biggest Dutch facility alone accounts for **1% of national electricity consumption**, and Google, with two large sites, discloses nothing.
+
+**Why it matters:** this feed keeps covering the AI buildout's bill — Bain's $6T revenue gap, RAM prices, grid congestion — and every one of those arguments is downstream of numbers like these. The directive already requires the reporting; the finding is that legal requirement and public disclosure are different things, and the water-and-power debate is running on estimates.
+
+[`🔗 NL Times`](https://nltimes.nl/2026/09/30/data-centers-refusing-say-much-water-electricity-use) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49907057)
+
+---
+
+## 37. Show HN: Ledge.sh — Markdown notes whose code blocks actually run, with an MCP server for your agents
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 156+ pts · ~1.5d ago (Sep 30 07:41 UTC+8)
+- **Tags:** `markdown` `notes` `mcp` `show-hn`
+
+Ledge is "Markdown notes that run": press ⌘↩ on a code block and output streams beneath it — shell, Python, Node, Ruby, PHP, TypeScript (via bundled Bun), SQL, redis-cli, and AI `prompt` blocks piped to agents. Each note has **its own persistent shell** (`cd`, env vars, activated virtualenvs carry between runs); notes can live on a server over SSH with `host:` lines routing blocks to other machines; iPhone/iPad/Android clients are thin windows onto the server — "the phone holds no notes," paired via a Secure Enclave key. It ships an **MCP server so Claude Code can read, search and edit notes** — with **no delete tool for agents** — and it's Apache-2.0, plain Markdown files, no account, no sidecar database. HN's comparisons: Jupyter with a bash backend, org-mode, Observable Framework.
+
+**Why it matters:** runbooks that execute are a 50-year-old idea that keeps almost working; the 2026 additions are SSH-as-sync and an agent surface with a deliberate negative capability (no deletes). Small repo (178★), but the design decisions are the interesting part.
+
+[`🔗 ledge.sh`](https://ledge.sh) · [`🔗 ledgesh/ledge`](https://github.com/ledgesh/ledge) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49902382)
+
+---
+
+## 38. OpenDLSS: a Vulkan reimplementation of NVIDIA's DLSS 5 neural rendering network — bit-exact, intermediates included
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN · 124+ pts · ~27.6h ago (~16:43 UTC+8)
+- **Tags:** `graphics` `vulkan` `neural-rendering` `dlss`
+
+maanHimself/OpenDLSS-NR reimplements **DLSS 5's neural rendering network in Vulkan, "bit-exact against the original"** — the same 71-block Swin/ViT U-net as DLSS-NR build 310.8.0, FP8 (E4M3) on tensor cores, 141 MiB of weights, and the claim is stronger than final-image parity: **all 75 block boundaries match byte for byte**, verified via a `parity` fixture mode. A second independent implementation (`ports/browser-webgpu/`) runs the same network in a browser with no tensor cores and no FP8. You supply the weights; the architecture follows NVIDIA's published report ([DLSS 5: Generative Neural Rendering](https://research.nvidia.com/labs/adlr/DLSS5/)). Note what DLSS 5 NR is: **not an upscaler** — a generative network that re-renders the frame the engine drew, generating detail from injected noise.
+
+**Why it matters:** an independent developer reproducing a proprietary real-time model bit-exact from the published report is a datapoint in both directions — the architecture is fully recoverable, and "you supply the weights" is the reminder of where the moat actually is. Generative neural rendering replacing frame reconstruction is also the notable shift in real-time graphics this cycle.
+
+[`🔗 maanHimself/OpenDLSS-NR`](https://github.com/maanHimself/OpenDLSS-NR) · [`🔗 NVIDIA DLSS 5 project page`](https://research.nvidia.com/labs/adlr/DLSS5/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49906100)
+
+---
+
+## 39. MIST: an image's mere presence destabilizes VLM judges — aligned and misleading images move labels almost identically
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv / HF Papers · top-upvoted HF daily · ~2d ago (Sep 29)
+- **Tags:** `vlm` `evaluation` `benchmarks` `paper`
+
+The Misleading-Image Stress Test: 200 English sentences readable figuratively or literally, shown to 13 VLM judges with an aligned image, a misleading image, or no image — where the labeling guidelines require the answer to come from the sentence alone, so no image should change anything. Both images changed labels at nearly the same rate — **aligned 20.5%, misleading 19.4%, both above the 11.6% caused by deleting the ignore-the-image instruction** — and only **37%** of the labels that differed between the two images moved toward the sense the image depicted. Human agreement is unchanged whether the image is absent, aligned or misleading. The authors' conclusion: **"what moves a judge is that an image is there, not which of the two it is, so a substitutability verdict describes a configuration as much as a model."** The seven judges that pass the alt-test are less affected than the six that never do — but all thirteen are affected.
+
+**Why it matters:** VLM-as-judge is becoming the cheap substrate for evaluating agentic multimodal systems, and this is the harness-is-the-measurement lesson in its sharpest form yet: a condition that should do nothing destabilizes every judge tested, so judge-based scores are partly scoring the setup.
+
+[`🔗 arXiv:2609.37863`](https://arxiv.org/abs/2609.37863) · [`🔗 HF Papers`](https://huggingface.co/papers/2609.37863)
+
+---
+
+## 40. TileLang v0.1.15: native Huawei Ascend 950 backend and automatic CUDA warp specialization — the kernel DSL goes multi-vendor
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 8k★ · v0.1.15 Sep 30
+- **Tags:** `kernels` `gpu` `huawei-ascend` `compilers`
+
+TileLang — the open-source tiled-kernel DSL (tile-ai/tilelang, 8k★) — shipped v0.1.15 on Sep 30 with two structural additions. First, **native Huawei Ascend 950 support** (`target="ascend"`, dav-3510): an end-to-end NPU backend with native code generation, Cube-GEMM and Vector computation combined in one kernel (`T.SimdVF`/`T.SimtVF` regions), explicit UB/L1/L0 storage control, **MXFP8/MXFP4 block-scaled GEMM**, and automatic scheduling, pipelining and synchronization insertion. Second, **automatic CUDA warp specialization**: an opt-in role-based scheduler that assigns TMA loads, MMA compute, TMA stores and worker operations to specialized warp groups — the Hopper/Blackwell-era pattern that used to be hand-written PTX. Plus a unified `T.gemm_blockscaled` across SM100/SM120 and a more expressive Python frontend (comprehensions, `zip`, generator expressions at compile time).
+
+**Why it matters:** a Triton-class open kernel DSL gaining first-class Ascend support is a concrete datapoint in the compute-stack diversification story — the programmability bridge is the hard part of any non-NVIDIA accelerator, and here it arrives in the same release as the compiler technique (warp specialization) that defines current NVIDIA codegen.
+
+[`🔗 tilelang v0.1.15 release`](https://github.com/tile-ai/tilelang/releases/tag/v0.1.15) · [`🔗 tile-ai/tilelang`](https://github.com/tile-ai/tilelang)
+
+---
+
+## 41. Ubuntu 26.04.1 LTS: the first point release — CUDA in the main repos, post-quantum key exchange by default, and the X.org shift complete
+
+- **Velocity:** ▮ steady
+- **Source:** Ubuntu · 77+ pts on HN · ~22.7h ago (~21:36 UTC+8)
+- **Tags:** `ubuntu` `linux` `release` `lts`
+
+The first point release of the 26.04 LTS series (Sep 29) is the "now it's safe to install" milestone, and it consolidates a quietly milestone-heavy release: GNOME 50 with **Ubuntu fully on Wayland** (the X.org shift complete), non-experimental fractional scaling and VRR; new default apps (Papers, Loupe, Ptyxis, Resources) and a unified App Center; **the first Ubuntu release shipping NVIDIA CUDA natively in its repos**, plus AMD ROCm; **TPM-backed full-disk encryption GA**; **default hybrid post-quantum key exchange** with legacy ciphers removed; first LTS expanding memory-safe components (Rust kernel drivers, `sudo-rs`, `uutils`); confidential computing for Intel TDX and AMD SEV; and `authd` with Entra ID, Google IAM and OIDC. 24.04 LTS users get prompted to upgrade.
+
+**Why it matters:** point releases are when an LTS becomes the fleet default, and this one bakes in three shifts at once — AI toolchain in the distro (CUDA/ROCm in main), post-quantum by default, and memory-safe core components — each of which used to be an early-adopter opt-in.
+
+[`🔗 Ubuntu blog`](https://ubuntu.com/blog/upgrade-your-desktop-ubuntu-26-04-lts) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49908757)
+
+---
+
+## 42. CVE-2026-103056: the AI-SOC agent that could root every endpoint it watched — CVSS 9.4 command injection in CrowdStrike RTR command building
+
+- **Velocity:** ▮ steady
+- **Source:** VulnCheck · CVSS 9.4 · ~35h ago (Sep 30 09:16 UTC+8)
+- **Tags:** `cve` `ai-security` `agent-security` `vulncheck`
+
+AiSOC — an open-source AI security-operations-center product — builds CrowdStrike Real Time Response command strings by **interpolating unescaped action parameters** in `crowdstrike_rtr.py` and `endpoint.py`. An authenticated user can inject single quotes into `file_path`, `path`, `script_name` or `script_args`, break out of the quoted arguments, and **execute arbitrary commands with SYSTEM or root privileges on every managed endpoint** the platform controls. **CVSS 9.4 Critical (CVSS v4.0) — assigned by VulnCheck, the finder** (a Secondary metric on the NVD record; no CNA score). A sibling finding, **CVE-2026-103055 (8.7)**: a hard-coded constant used for JWT verification in the realtime WebSocket/SSE server. Affects 7.2.0 before 12.0.0; **fixed in v12.0.0**, disclosed via GHSA-7q37-2wfw-xrx7.
+
+**Why it matters:** the pattern is the one this feed keeps finding in agent harnesses — a trusted execution path assembled by string interpolation — but the victim this time is a security product, which makes the blast radius literally the fleet it defends. Who-scored-it note: the 9.4 is the finder's score, not a vendor's.
+
+[`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/aisoc-7.2.0-before-12.0.0-command-injection-via-crowdstrike-rtr) · [`🔗 GHSA-7q37-2wfw-xrx7`](https://github.com/beenuar/AiSOC/security/advisories/GHSA-7q37-2wfw-xrx7) · [`🔗 NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-103056)
+
+---
+
+## 43. GPT-Synopsys: OpenAI and Synopsys announce a specialized model that operates EDA tools — no dates, no benchmarks, early engagements only
+
+- **Velocity:** ▮ steady
+- **Source:** Synopsys · 40+ pts on HN · ~1.5d ago (Sep 30)
+- **Tags:** `openai` `synopsys` `chip-design` `eda`
+
+OpenAI and Synopsys announced **GPT-Synopsys**, "a specialized model, optimized to use Synopsys EDA tools to perform semiconductor design workflows" — positioned beyond today's agent-plus-tools integrations: the model itself is the expert EDA user, handling delegated engineering objectives (**PPA optimization, timing and verification closure**) while agents run tools, interpret results and iterate toward verified outcomes for human review. It integrates with Synopsys.ai and the Autopilot agentic platform, runs on OpenAI-hosted infrastructure, and will be sold as a **bundled compute, model and license** offering, with customer design data "not used to train the model." What the release doesn't contain: a named base model, a ship date, a customer, or a benchmark — "early technology engagements are underway."
+
+**Why it matters:** this is the second vertical-frontier-model template in a week (after Gemini 4 Argon's trusted-cyber-defender tier): a frontier vendor pairing its model with one vendor's professional toolchain and pricing it into enterprise licenses. The chip-design version is all announcement and no evidence so far — which is itself the thing to track.
+
+[`🔗 Synopsys press release`](https://news.synopsys.com/2026-09-30-OpenAI-and-Synopsys-Announce-GPT-Synopsys-Frontier-Intelligence-to-Revolutionize-Chip-Design) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49919910)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-01T12:17:00+08:00 |
-| Items | 33 |
-| Sources tracked | 34 (Hacker News, GitHub Trending, GitHub, Google blog, Artificial Analysis, blog.faav.net, turkeyland.net, mattkeeter.com, agmai.org, arXiv, Hugging Face, blog.gitea.com, 56k.rip, america.gov, PyPI, eternity4719.github.io, colbymchenry.github.io, Cisco PSIRT, CISA KEV, NVD, DIVD CSIRT, edgcpp.org, python.org security-announce, Cloudflare blog, Netlify, WatchGuard PSIRT, oss-security, Apache lists, alphapixeldev.com, exyr.org, yedhu.me, Computer Things/buttondown, GE Vernova, insufferable.dev) |
+| Generated | 2026-10-01T20:22:00+08:00 |
+| Items | 43 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, GitHub, Google blog, Artificial Analysis, blog.faav.net, turkeyland.net, mattkeeter.com, agmai.org, arXiv, Hugging Face, blog.gitea.com, 56k.rip, america.gov, PyPI, eternity4719.github.io, colbymchenry.github.io, Cisco PSIRT, CISA KEV, NVD, DIVD CSIRT, edgcpp.org, python.org security-announce, Cloudflare blog, Netlify, WatchGuard PSIRT, oss-security, Apache lists, alphapixeldev.com, exyr.org, yedhu.me, Computer Things/buttondown, GE Vernova, insufferable.dev, developer.android.com, The Register, NL Times, ubuntu.com, Synopsys, VulnCheck, ledge.sh, research.nvidia.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
