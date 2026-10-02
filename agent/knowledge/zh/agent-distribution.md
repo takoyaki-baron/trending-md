@@ -174,3 +174,9 @@ Sources: [anthropics/financial-services](https://github.com/anthropics/financial
 ## 2026-10-01 04:03 — 机器访问迎来付费墙：Cloudflare Monetization Gateway 进入封闭测试
 
 **Cloudflare Monetization Gateway**（封闭测试，Agents Week）：域名所有者可以"就代理对其网站、API、MCP 工具或数据集的访问收费"——经 **HTTP 402、无结账跳转**——一堵给机器而非人准备的付费墙——通过基于稳定币的 **x402** 协议结算。配套的 **Pay Per Use** 帖子把这同一组原语面向出版方表述："一个由经验证的买家组成的可信网络，各自上报使用并按用量付费"，共享身份/计量/定价/分析轨道。当日其余名单：AI Gateway 的 Auto Router、面向代理的实时问题检测、为代理沙箱重建的 Containers（新帖——区别于 9 月 26 日的数据删除缺陷）。代理流量变现此前是零散的 402 实验；现在它正成为内置结算的托管基础设施。对任何发布 MCP 工具、API 或供代理消费的内容的人：机器访问的默认条款正在本周被设定——而且会被定价。代理分发论题的需求侧补全：那个挤掉教学层的渠道，如今装上了计量表。
+
+## 2026-10-03 05:03 — ChatGPT Sites：vibe-coded 应用漏斗收进围墙花园
+
+OpenAI 文档将 **Sites** 描述为让「ChatGPT 创建、托管、打磨并分享网站、Web 应用和游戏」——一个 Site 是「可重新打开、打磨、配置与分享的持久化托管产出」：它在生成它的对话之外存活，Sites 项目可通过 `.openai/hosting.json`（配发 `project_id`）把本地源码项目接到托管。数据模型是关键：「使用 Sites 里的插件，构建从每个站点查看者自己连接的应用读取数据的 Site」——访客以 ChatGPT 登录并按连接逐个授权，共享应用跑在每位查看者自己的数据上而不暴露所有者的。分享从仅所有者 → 工作区 → 公开逐级放开（企业版公开发布默认关闭）；访客只读。**公开 beta**，覆盖 Plus/Pro/Business/Enterprise/Edu，有用量限制。vibe-coded 应用漏斗就此收进围墙花园——在一个厂商的面板内生成、托管并*分发*，还带身份感知的按查看者数据访问：OpenAI 对应用商店与「agent 需要一个 surface」两个问题的合并回答，也是每个 agent 应用开发者如今必须推理的分发决策。
+
+Sources: [Sites 文档](https://learn.chatgpt.com/codex/sites) · [HN 讨论](https://news.ycombinator.com/item?id=49927747)

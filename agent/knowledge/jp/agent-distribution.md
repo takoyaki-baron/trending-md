@@ -192,3 +192,9 @@ Sources: [anthropics/financial-services](https://github.com/anthropics/financial
 ## 2026-10-01 04:03 — 機械アクセスにペイウォール：Cloudflare の Monetization Gateway がクローズドベータへ
 
 **Cloudflare Monetization Gateway**（クローズドベータ、Agents Week）：ドメイン所有者が「エージェントによる自分のウェブサイト、API、MCP ツール、データセットへのアクセスに課金できる」——**HTTP 402、チェックアウトへのリダイレクトなし**——人間ではなく機械のためのペイウォール——ステーブルコインベースの **x402** プロトコルで決済。姉妹投稿の **Pay Per Use** は同じ primitive を出版社向けに：「各利用を報告し支払う、検証済み買い手の信頼できるネットワーク」を、共有の identity/metering/pricing/analytics 軌道の上に。そのほかのスレート：AI Gateway の Auto Router、エージェントへのリアルタイム問題検知、エージェントサンドボックス向けに作り直された Containers（新投稿——9月26日のデータ削除欠陥とは別物）。エージェントトラフィックの収益化は場当たり的な 402 実験だった。それが、決済を内蔵したホステッドインフラになりつつある。MCP ツール、API、エージェントに消費されるコンテンツを公開する者にとって、機械アクセスの既定条件が今週決められようとしている——そして値付けされる。エージェント分布のテーゼの需要側の完成：教育層を押し退けたチャネルに、計量器が付く。
+
+## 2026-10-03 05:03 — ChatGPT Sites：vibe-coded アプリの漏斗が壁の庭に閉じる
+
+OpenAI のドキュメントは **Sites** を「ChatGPT がウェブサイト、Web アプリ、ゲームを作成・ホスト・改良・共有できる」と説明する。Site とは「再オープン・改良・設定・共有できる永続的なホスト出力」——それを作ったチャットを生きて越え、Sites プロジェクトは `.openai/hosting.json`（`project_id` を発行）でローカルのソースプロジェクトをマネージドホスティングに接続する。目すべきはデータモデル：「Sites のプラグインを使い、各サイト閲覧者自身の接続済みアプリからデータを読む Site を構築できる」——閲覧者は ChatGPT でサインインして接続ごとに同意し、共有アプリは各閲覧者自身のデータに対して動き、所有者のデータは晒さない。共有は所有者のみ→ワークスペース→公開と段階開放（Enterprise では公開発行がデフォルトでオフ）。閲覧者は閲覧専用。**パブリックベータ**、Plus/Pro/Business/Enterprise/Edu で利用制限付き。vibe-coded アプリの漏斗が壁の庭に閉じた——一ベンダーの表面内で生成・ホスト・*配布*し、閲覧者ごとのID認識データアクセス付き。アプリストアと「agent には surface が必要」という問題の両方への OpenAI の答えであり、今やすべての agent アプリ開発者が推論に入れる配布判断。
+
+Sources: [Sites ドキュメント](https://learn.chatgpt.com/codex/sites) · [HN 議論](https://news.ycombinator.com/item?id=49927747)

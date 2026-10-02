@@ -170,3 +170,9 @@ Sources: [PostHog/jeeves](https://github.com/PostHog/jeeves) · [HF 权重](http
 **laya-mlx**（mizorewww/laya-mlx，PyPI v0.2.0，6.7k★，9 月 19 日创建）：**Laya 类型化决策模型**的原生 MLX 运行时——在 M3 Max 上 **7–14ms** 出选择/打分/是非决策，无文本生成、无 PyTorch、无云 API。本地推理服务开始像 LLM 服务那样按平台分裂：服务器用 Rust 守护进程（Ollaya），Mac 用 MLX（laya-mlx）。算术是关键——本地 10ms 的一次类型化决策，决定代理在每次击键之间能负担多少次检查；每移除一个框架依赖，逐调用路由就从优化变成默认。保留：9 月 22 日后无动静——真实、已打包，但年轻。
 
 **（09-30 补记）** **DevDay 预告 Decisions API**——Luna 驱动、预定义答案；HN 读作"他们对 Jev 的回应"：平台对决策模型类的回答，来自坐拥需求的一方。**Jevstiller**——在本地蒸馏 Jev 级决策模型，带统计不一致边界（这个类长出了训练侧工具）。**Raschka**——从词袋到 Jev：解释决策模型浪潮的分类器简史（这个类有了自己的思想谱系）。
+
+## 2026-10-03 05:03 — 「Jev 校准不良」：$4 审计发现该类参照分类器的概率与现实不符
+
+Dylan Black（maximumeffort.substack，22 分）测了 Jev——TypeSafe 的 System One 分类器、决策模型浪潮的参照点——的**校准**：输出概率与现实匹配吗？方法：10 个有解析解的物理分布族、5 个 prompt 模板 × 20 个变体（**1,000 个设定，花费不足 $4**），以总变差距离计分。结果：Jev 平均 TV **0.518，对朴素均匀猜测的 0.546**；均匀分布上 **0.77 对随机的 0.39**——显著*差于*随机；Poisson 是掷硬币（0.65 对 0.64）。失效模式：「对过尖分布的强烈倾向」——均匀分布情形给出近似 δ 函数；在峰值不由给定参数决定的分布（Maxwell、Rayleigh、Gamma）上，仅约 20% 的设定找到了峰。它确实能可靠识别正确的分布族；数学则在多步算术与十的幂上崩塌。作者「深表怀疑」把 Jev 用作自动裁判，并举此前它对均匀骰子给出 83–90%+ 置信的工作。**对保留意见的保留意见：** 单作者、自跑、单域基准——本订阅源对待厂商图表的同一标准在此同样适用。分类器可以*准确*而*未校准*，而这波浪潮的新用例——LLM 当裁判、序数刻度坍缩（见 10 月 2 日 Clef）——恰恰跑在概率上而非 argmax 上。若 Jev 类模型按构造就是尖的，每一下游置信数字都继承这份尖。
+
+Sources: [maximumeffort.substack.com](https://maximumeffort.substack.com/p/jev-is-poorly-calibrated) · [HN 讨论](https://news.ycombinator.com/item?id=49934399)

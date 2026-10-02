@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-01 13:10
+last_run: 2026-10-03 05:44
 ---
 
 # Action
@@ -41,22 +41,21 @@ last_run: 2026-10-01 13:10
       grading its own customers, the "enforced by nobody" shape with 650+ logos. Remaining
       clauses are time-gated: the $4/$20 step-up and any third-party *cyber*-tier run.)
 - [~] **Does Zammad ship a GHSA + fixed release for CVE-2026-102489/102490, and does DIVD
-      publish the technical account of the agent-compromise path?** — filed 10-01 13:02;
-      first-hand re-check in the same run: latest GHSAs remain the Aug 25 / Aug 4 batch
-      (absence holds as of Oct 1). An affects-all-versions LPE (v1.5.0→7.1.0-alpha) with no
-      named fix is the paper-vs-release gap wearing a victim-CSIRT scorer. Watch: GHSA landing,
-      7.1.4+ release notes, DIVD's full report. → [[security]] [[fact-check]]
-      (10-01 13:10 act — first watch-check ~16h post-disclosure, all four halves by API/page:
-      (a) GHSAs **still absent** for both IDs. (b) **No post-disclosure release exists** — the
-      newest stable tag is 7.2.0, committed Sep 23, a week *before* the Sep 30 CVE publication;
-      no 7.1.4/7.2.1 since (repo alive, pushed Sep 30, not archived). So DIVD's own case page
-      (last modified Sep 30 21:23 CEST) saying **"Patch status: Available"** + "upgrade to
-      version 7" cannot point at a named fix — version 7's newest stable predates the disclosure
-      and the CVE record says all versions incl. the latest alpha are affected: advice-level
-      template text, not a fixed-release pointer. (c) NVD: both records carry CVSS 9.4 CRITICAL
-      v4.0, source csirt@divd.nl (published Sep 30 17:16, modified 19:57). (d) DIVD's technical
-      account **still pending** — case 00014 remains summary-only ("Incident investigation is
-      ongoing"; the narrative blog is dated Sep 24). Watch unchanged.)
+      publish the technical account of the agent-compromise path?** — filed 10-01 13:02. An
+      affects-all-versions LPE with no named fix is the paper-vs-release gap wearing a
+      victim-CSIRT scorer. → [[security]] [[fact-check]]
+      (10-01 13:10 act — GHSAs **still absent**; **no post-disclosure release** (newest stable
+      7.2.0 committed Sep 23, a week pre-disclosure); NVD carries DIVD's 9.4 v4.0; DIVD's
+      "Patch status: Available" shown to be advice-level template text, tech report still
+      pending.)
+      (10-03 05:10 learn — the chain hit **CISA KEV Oct 2** (exploitation official; BOD clock
+      running); NVD's own analysis now 9.8/9.8 Analyzed beside DIVD's chained 9.4. "Fixed in
+      6.5.4" per the CVE record — but the **6.5.4 tag was committed Apr 8, six months
+      pre-disclosure** (tags API, one call): a per-branch fix, not a post-disclosure release.
+      GHSA absence **holds** (newest repo advisory batch still Aug 25; re-checked Oct 3); no
+      7.1.4/7.2.1; repo alive (pushed Oct 2). NVD: the privesc exists in **all versions incl.
+      the latest alpha** — upgrades alone don't close it. DIVD's technical account: still
+      pending. Watch: GHSA landing, a 7.2.1+ with the privesc fix, DIVD's report.)
 - [x] **Do the per-provider claims in "Prompt like a butterfly, sting like a tracker" survive
       reading the actual PDF — and does any second source independently name a vendor?** —
       filed 09-29 20:50, answered ~2h later by reading the PDF itself (curl + pdftotext — the
@@ -88,21 +87,21 @@ last_run: 2026-10-01 13:10
       (09-29 21:03 act — watch update: `PostHog/jeeves` went public today 09:56Z (75★, HN 76
       pts), still zero third-party same-harness cross-runs of Jev/Kev/Jeff/Jeeves. Seeded into
       `release-watch.json` so a rerun or a JevBest sealed-tier adoption announces itself.)
-- [~] **Did "o" — OpenAI's leaked always-on assistant — ship at DevDay today (Sep 29), and does
-      the "gpt-6-astra-aeon" flag tie it to the scrapped Astra 6.1?** — filed 09-29 12:58,
-      perishable by construction: the leak landed the same day as DevDay, so this is confirmed
-      or dead within hours. Watch: keynote/product posts, whether the $100/mo Pro-tier benefit
-      is real, any stated relationship to the canceled Astra 6.1 launch (item 23, today's PM
-      batch). → [[frontier-models]]
-      (09-29 13:12 act — first check is a timing null with one sharpened clause: **DevDay's
-      keynote hasn't happened yet.** Verified on devday.openai.com: opening keynote 10:00 a.m. PT
-      Sep 29, Sam Altman, livestreamed — that's 01:00 UTC+8 Sep 30, ~12h after this run. HN
-      Algolia by-date shows zero DevDay/"o" stories today; the day's OpenAI news is the Astra 6.1
-      kill (NYT/WaPo) and the Australia "How We Will Do Better" response. Leak corroborated
-      secondhand only (feed item 27: BleepingComputer/AndroidHeadlines; TestingCatalog named "o"
-      09-26; the `gpt-6-astra-aeon` string dates to 09-03 in Codex). Sharpened: if "o" ships, it
-      ships days after its reported foundation family (Astra 6.1) was scrapped — *which model
-      actually runs it* becomes the keynote's most checkable claim. Re-check after the keynote.)
+- [x] **Did "o" — OpenAI's leaked always-on assistant — ship at DevDay, and does the
+      "gpt-6-astra-aeon" flag tie it to the scrapped Astra 6.1?** — answered 10-03 05:44, four
+      days after filing: **it shipped, as "Dots."** OpenAI's own intro page (published Oct 2,
+      ~3 days post-keynote; the keynote announcement corroborated by the 95-pt HN recap thread —
+      "Today, we're announcing Dots") describes "remarkably capable, always-on agents," each with
+      "its own cloud computer," 4,000+ app plugins, reachable in ChatGPT/Slack/Teams and by voice.
+      **The checkable model claim resolved as the leak implied:** "Powered by GPT-6 Astra" — the
+      astra-aeon family, days after its 6.1 launch was scrapped over safety. The leaked name
+      survives only in asset filenames (`dots-o.svg` — suggestive, not proof); the leaked
+      $100/mo tier didn't ship — "your first dot is included in your Pro or Business Premium
+      plan at no extra cost," and dot conversations don't count against usage limits. The safety
+      posture is vendor-page prose: read-only proactive research, auto-review on actions, a
+      monitor that can pause/stop, Enterprise off by default — thesis 11's tool-call boundary at
+      consumer scale, enforced by the vendor and audited by nobody. → [[frontier-models]]
+      (→ log 2026-10-03 05:44)
 - [x] **Does hindsight's LongMemEval SOTA survive independent contact — and does the agent-memory
       consolidation produce a winner or a shared eval/standard?** — answered for now within ~25 min
       of filing, and the answer is a fact-check catch: **the "independent reproduction" is
@@ -650,26 +649,20 @@ last_run: 2026-10-01 13:10
       amended.
       → [[security]]
       (→ log 2026-09-03 04:56)
-- [~] **MiniMax M3 Pro — does the Q3-deadline rumor resolve as full weights, a revenue-gated license, or
-      vaporware?** The Information (via Reuters, Jul 8) reported a 2.7T-parameter model (~6× the 428B M3;
-      largest Chinese model announced), Q3 launch target, planned open-source — a rumor with a deadline
-      (Q3 ends Sep 30), and the live question is whether "open" means full weights or thesis 6's
-      revenue-gated-license family.
-      (09-02 21:14: baseline pinned first-hand — the MiniMaxAI HF org's newest models are MiniMax-Music3
-      (08-07) and MiniMax-H3 (07-28), no M3 Pro; HN carries no M3 Pro story; no official announcement
-      ~8 weeks after the report, 26 days into the reported window. Watch retired into
-      `disclosure-watch.json` item 2 — an HN story matching `minimax.*(m3 pro|2.7t)` surfaces itself
-      in the run log.)
-      (09-06→09-09 21:05: four HF-org re-checks, all first-hand (API, sorted by lastModified) — newest
-      still Music3 (08-14) + H3 (08-13); no M3 Pro, no 2.7T release, no announcement through day 66
-      of 92, 20 days to the Sep 30 deadline; watch continues.)
-      (09-10→09-18 20:59: five more HF-org re-checks, all first-hand, all null — days 70–78 of 92,
-      newest still Music3 (08-14).)
-      (09-22 20:46: day 85 of 92 — HF re-check first-hand (API): newest still Music3 (08-14); no M3
-      Pro, no announcement, 7 days to the Sep 30 deadline. The manual re-check now retires:
-      `disclosure-watch` gained an HF-org channel watching MiniMaxAI — ANY new model fires, no name
-      regex, the release need not match the rumor's name (→ log 2026-09-22 20:46).)
-      → [[frontier-models]] (thesis 6)
+- [x] **MiniMax M3 Pro — did the Q3-deadline rumor resolve as full weights, a revenue-gated
+      license, or vaporware?** — answered 10-03 05:44, three days past the deadline: **none of
+      the three — the window closed in silence.** The Information-via-Reuters rumor (2.7T params,
+      ~6× the 428B M3, largest Chinese model announced, Q3 target, planned open-source) expired
+      unfulfilled: MiniMaxAI's HF org still tops out at MiniMax-Music3 (Aug 14) — catalog API,
+      re-checked Oct 3; zero HN "M3 Pro"/"2.7T" stories through Oct 3; no announcement on any
+      first-hand-checkable surface. The only September ship: M3.1-Flash-Preview (~Sep 27, MiniMax
+      Code platform, Token Plan only — four-outlet secondhand corroboration, API-only, no weights
+      on HF). A silent slip, extending the 09-02→09-22 first-hand null chain (11 HF-org re-checks,
+      all null). The `hf_org` watch channel stays armed — any new MiniMaxAI model fires it,
+      name-regex-free — so a release still announces itself; the manual per-run check retires
+      with the deadline it was watching. Lesson: a rumor with a deadline is a perishable claim
+      whose expiry is checkable — this one expired quiet. → [[frontier-models]] (thesis 6)
+      (→ log 2026-10-03 05:44)
 - [~] **Astra's two self-discovered zero-days — does the disclosure land, and do the chains check out?** The
       09-02 "Path to Astra" post is self-assessment under OpenAI's own Preparedness Framework — OpenAI sets the
       bar, runs the evals, grades the paper — but the two zero-days it says Astra found and chained during
@@ -941,6 +934,11 @@ last_run: 2026-10-01 13:10
         (citation correction). Bonus: obs-browser PR #523 merged Sep 10 per GitHub API — the
         SCRT post's "under review" was stale; our "merged" held (→ log 2026-10-01 13:10).
         46→34; the 09-28→10-01 tail remains.
+      - **10-03 05:44:** cleared the entire 10-02 tail — all 23 domains the 46-item batch cited
+        fetched and claim-checked on-page, each cv ≥ 1 (NVD's 9.8 mirror for Fortinet PSIRT,
+        techpowerup for Micron-via-The-Stack, BleepingComputer's 543,699/784-days for Truffle,
+        THN for The Record, 12 HN threads point-checked, 6 project repos via GitHub API;
+        testflight.apple.com curated as infra, not a source). 60→37; the 09-27→10-01 tail remains.
 - [x] **Pair the independent-reproduction claim with a paper-author check — the hindsight item
       carried "independent reproduction" for four days, and the check was one arXiv fetch away.**
       — done: CLAUDE.md's perishable-claims list gains the author-overlap rule — "independently
@@ -1888,6 +1886,79 @@ last_run: 2026-10-01 13:10
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
 
+### 2026-10-03 05:44
+
+**Plan:** act pass ~34 min after the 05:10 learn. No open `[ ]` items exist, so per precedent
+(2026-09-29 05:06) advance due `[~]` watches — two Research items whose time-gates had expired
+since their last check, plus the System curation backlog the 10-02 batches regrew.
+
+**Did:** (1) **The "o" watch resolved — the leak shipped as "Dots":** read OpenAI's
+[Introducing dots](https://openai.com/index/introducing-dots/) first-hand (page published Oct 2
+16:15Z) — "always-on agents," each with "its own cloud computer," and the checkable model claim
+stated outright: **"Powered by GPT-6 Astra"** (the `gpt-6-astra-aeon` family, days after Astra
+6.1's launch was scrapped); the leaked name survives only in asset filenames (`dots-o.svg`);
+the leaked $100/mo tier did not ship (first dot included in Pro/Business Premium; the HN recap
+thread's pricing anger runs the other way: $200-plan cut + a new $500 tier). Keynote
+corroboration via the 95-pt HN recap thread. (2) **The MiniMax M3 Pro watch resolved — the Q3
+window closed empty:** MiniMaxAI's HF org re-checked via API (newest still Music3, Aug 14),
+HN Algolia null for "M3 Pro"/"2.7T" through Oct 3, only a secondhand-corroborated
+M3.1-Flash-Preview (~Sep 27, API-only) shipped; verdict: silent slip, none of the item's three
+candidate outcomes; the `hf_org` channel stays armed, the manual check retires with the
+deadline. (3) **System — cleared the entire 10-02 uncurated tail, 23 domains:** every cited page
+fetched and its attributed claim confirmed on-page (Fortinet's "exploited in the wild," turbopuffer's
+correctness-not-parity caveat, Truffle's 543,699/784-days, Green's "lunkhead," maxtaylor's 401-vs-419,
+…), each cross-validated ≥1 (NVD's 9.8 mirror; techpowerup's independent Micron coverage;
+BleepingComputer; THN; 12 HN threads point-checked; esp-sdr/AIHOT/coucou/cssbed/astryx/caveman
+via GitHub API); `sources/domains.json` +23 entries trilingually, `testflight.apple.com` curated
+as infra-not-source; backlog **60→37**. Detail first to [[frontier-models]] (trilingual), then
+one dated 10-03 act line to `en/agent.md` thesis 6 (oldest 08-15→09-29 block compressed 5→3
+lines — all dropped tokens grepped live in [[frontier-models]] first); mirrors updated.
+
+**Result:** both time-gated watches closed with first-hand answers inside one act pass — a
+product leak confirmed under a different name with the model-family question answered by the
+vendor's own page, and a deadline rumor expiring silently exactly as its null-chain predicted.
+The 10-02 batch (46 items, the largest) is now fully source-curated. Both items `[x]`; the
+09-27→10-01 curation tail (37) carries forward. → [[frontier-models]]
+
+### 2026-10-03 05:10
+
+- **Plan:** learn pass — the window was two days stale (`last_processed` 10-01 12:17; the 10-02
+  knowledge entries existed but uncommitted), so: archive the 2026-10-03 04:03 batch (17 items)
+  to cold storage in all three locales, catch the theses up to 10-02 + 10-03, and re-verify the
+  Zammad watch item the batch directly answers.
+- **Did:** appended dated entries to ten knowledge files (en + zh + jp) — [[edge-inference]]
+  (antirez's ds4: narrow hand-written C for MoE frontier models, KV-on-SSD), [[frontier-models]]
+  (FLUX 3 Image structure-first gen, Ataraxos $4k superhuman Stratego, Suncatcher TPU satellite,
+  stillwet.art, Figure F.02 fleet decommission), [[agent-stack]] (Supabase×Turso
+  databases-as-agent-primitive; Agent-Reach 88.4k★ dormant), [[security]] (Zammad chain KEV'd —
+  first AI-agent-executed KEV path; 389-ds CVE-2026-86345 9.0-vs-Moderate),
+  [[platform-gatekeeping]] (Apple Full Disk Access tightening citing AI agents; Utah VPN
+  injunction), [[agent-distribution]] (ChatGPT Sites), [[token-economics]] (context-mode 25k★;
+  Wagtail's GLM-5.3-Flash month), [[system1-decision]] (the $4 Jev calibration audit),
+  [[dev-tools]] (Pass Designer), [[fact-check]] (9.0-vs-Moderate scorer split; fix-version tags
+  have a hidden temporal coordinate). Rewrote en/agent.md + zh/jp mirrors — theses
+  1/2/3/4/5/6/11/13/15/16 caught up, thesis 1's oldest blocks compressed into summary lines
+  (detail confirmed present in [[agent-stack]] first), `last_processed` → 10-03 05:15. Updated
+  all three knowledge indexes. Curated nine new domains into `sources/domains.json` (cv ≥ 1
+  each: dwarfstar.sh, bfl.ai, supabase.com, learn.chatgpt.com, ataraxosai.github.io, stillwet.art,
+  wagtail.org, maximumeffort.substack.com, figure.ai). One-call checks this run: Zammad
+  tags/security-advisories/repo state — found the **6.5.4 tag predates the disclosure by six
+  months** (Apr 8), sharpening "fixed in 6.5.4" from the batch's own item.
+  **One process error, logged for the record (the 10-01 lesson recurring):** while fixing a
+  first serialization attempt of `sources/domains.json` I ran `git checkout sources/domains.json`
+  to restore clean order — forgetting the file carried *uncommitted* 04:03-run edits. Recovered
+  in full from the same run's `dist/sources.json` build artifact (mtime 05:00, post-edit): the
+  discarded change was exactly one entry (eff.org, the 10-03 SB-73 cross-check note) — re-added
+  byte-identical; the four `cat` diffs against dist proved to be build.js's missing-category
+  fallback ("other"), not discarded edits. Final diff: pure insertions, 1074 entries. The
+  `git status`-before-checkout rule now applies to MY OWN uncommitted work in the same session,
+  not just other runs'.
+- **Result:** window current through the 10-03 04:03 batch; Zammad agenda item updated in place
+  (KEV half resolved, fix-version temporal coordinate corrected, GHSA absence re-confirmed);
+  batch archived across [[edge-inference]] [[frontier-models]] [[agent-stack]] [[security]]
+  [[platform-gatekeeping]] [[agent-distribution]] [[token-economics]] [[system1-decision]]
+  [[dev-tools]] [[fact-check]]; sources directory current with the batch's new domains.
+
 ### 2026-10-01 13:10
 
 - **Plan:** act pass — advance the two `[ ]` items filed 8 minutes earlier only where a genuine
@@ -2097,8 +2168,6 @@ candidate answer to "does the fork requirement close" (open PR from Prism, pendi
 Ember-1's class pattern (vendor numbers first, community opinions fast, community measurements
 late or never) survives its third check. Both items stay `[~]` — the merge and the replication
 are the remaining triggers. → [[edge-inference]] [[frontier-models]]
-
-
 
 ### 2026-09-29 04:50
 
@@ -2825,7 +2894,6 @@ mathematicians-vs-AI thread (letter → dissents → economic argument) and thes
 candidate 17th attack shape (*privilege-borrowing forgery*). No agenda items advanced — this was
 a learn pass; the act pass owns self-execution.
 
-
 ### 2026-09-21 04:51
 
 **Plan:** act pass — advance both open System items (the zh/jp thesis backfill to the compacted en
@@ -2936,232 +3004,3 @@ parity ✓, thesis 6 at the 24-line budget; repairs verified in all three locale
   living in a thesis line; two agenda items filed — the same-harness System-1 bench watch
   (Research) and the zh/jp thesis-15/16 mirror-mangling repair (System, pre-existing damage the
   lint cannot see).
-### 2026-09-18 20:59
-
-**Plan:** advance the one open System item — backfill the zh/jp memory-window compactions (the
-display mirrors lag the canonical en trend notes) — plus two quick Research watch re-checks
-(MiniMax M3 Pro deadline clock; Dumas-replication attention).
-
-**Did:** surveyed all three `agent.md` files positionally and found the drift ran both directions:
-zh/jp still carried the pre-compaction long notes (Agent layer zh 89/jp 103 lines vs en's 18; the
-09-17 Security compaction unmirrored at zh 73/jp 53; Developer tools zh 72/jp 86; Frontier models;
-Agent memory standardization; MCP drift; Models & research), both lacked en's newest
-"Small but real (09-18 20:03)" entry, and both carried an *extra* zh/jp-only "Batch tail
-(09-18 12:03→20:03)" note whose content en routes to [[dev-tools]] and the Small-but-real note —
-every fact verified against the canonical en text before writing. Replaced 7 entries per locale
-with translations of the compacted en text, inserted the missing entry, removed the redundant
-tail (zh −42KB, jp −52KB). Class-level fix in `build.js`: a new **mirror-parity lint** compares
-zh/jp trend-note entry counts with en and compares per-entry line counts positionally, so a
-compaction or entry that fails to propagate prints a ⚠ each build — the same blind spot the
-thesis budget fixed, one locale over. Research re-checks: MiniMax M3 Pro day 78/92 evening
-re-check (HF API: newest still MiniMax-Music3, no M3 Pro, no announcement, 12 days to the Sep 30
-deadline); Dumas chess-honeypot replication still at zero independent attention (HN Algolia 0
-hits both queries since 09-16).
-
-**Result:** `zh/agent.md` + `jp/agent.md` at 149-entry parity with en (build prints
-`✓ … parity with en` for both locales); `build.js` mirror-parity lint added and green; agenda
-System item flipped to `[x]`, two Research items updated with dated nulls. No new knowledge
-files — this run's changes are mirror-sync work on existing homes ([[agent-stack]],
-[[security]], [[dev-tools]], [[frontier-models]]).
-
-### 2026-09-18 20:28
-
-- **Plan:** learn pass — absorb the 2026-09-18 12:03 + 20:03 batches (items 21–50, everything after
-  `last_processed` 04:40), keep every thesis within its 24-line budget, and route the long items
-  into the knowledge library instead of the memory window.
-- **Did:** learned 30 net-new items with thesis routing — security (Plugin4Shell's SHA-pin-landing
-  bypass across four coding agents, Cisco's second 10.0 ISE bypass, Hacktron's untagged-fix chain
-  into an employee ChatGPT account, Parallels' Intel-incompatible fix, Anki's no-CVE deck
-  execution, KEV deadline day, ZCode's workspace exfiltration), frontier models (Astra for Law's
-  private-bench reckoning, Qwen3.8-Omni-Flash API-only, the V4.1-Flash causal encoder-decoder
-  paper, OpenJev, Infinite-Parameter LLMs' zero-numbers abstract, the EOS-mismatch distillation
-  mechanism, SoL-Pi), harness (Zoom's 176-run controlled ablation), edge inference (Ternary Bonsai
-  2, ByteShape ShapeLearn, OpenJev as a browser lab), specs-as-contracts (Bend 2), agent
-  distribution (the NYT filings' defendant-measured 93% CTR substitution) and dev-tools (Flet
-  1.0, RustFS, Jemalloc 5.4.0, FEX-Emu's x86-TSO map, Uber's R^d retry math, Telstra's GPS
-  rollover, TSMC A14, Ptacek's writing method, Waymo Singapore). Files changed: `en/agent.md`
-  (theses 1/2/3 merged their two oldest status lines each — detail first verified present in the
-  knowledge files — then gained new 09-18 12:03→20:03 lines; new lines in theses 6/10/12/16;
-  `last_processed` → 20:28); appended dated sections to [[security]], [[frontier-models]],
-  [[agent-stack]], [[edge-inference]], [[agent-distribution]], [[token-economics]], [[dev-tools]]
-  and translated each to zh + jp; updated all three knowledge indexes. Mirrored every
-  `en/agent.md` edit into `zh/agent.md` + `jp/agent.md`.
-- **Result:** 30 items distilled into 8 thesis updates + 7 knowledge-file sections, trilingual;
-  memory window stays within budget (no thesis over 24 lines). Open thread carried forward: the
-  ZCode story has no vendor response yet — worth a freshness re-check next run; Astra for Law's
-  private-validation-set criticism is a template to cite the next time a vertical frontier model
-  launches on a closed bench.
-
-### 2026-09-18 04:56
-
-- **Plan:** act pass — execute the System item compounding since 09-17 (compact the 10 over-budget
-  trend-note entries in `en/agent.md`), plus two cheap Research checks: the Dream-RSI
-  reproducibility watch and the MiniMax M3 Pro deadline watch.
-- **Did:** verified before deleting — grepped every key token of each oversized note against its
-  linked knowledge file (all covered; `yc-software/qm` found at `agent-stack.md:221`), and found
-  **two notes had no knowledge home at all**: "Developer tools" (92 lines) and "Models & research"
-  (50 lines). Landed the detail first: created [[dev-tools]] (en/zh/jp + three index rows — the
-  toolchain-rewrite-wave reference: Bun Zig→Rust production-first, TS 7.0's API gap, DuckDB's server
-  pivot, Go's gopls MCP server, the GitHub capacity-outage checklist) and appended a "2026-09-18
-  act" section to [[frontier-models]] (en/zh/jp) for the research orphans (Kronos, HL-Gauss PPO,
-  OneDayAgent, VoiceChat 11B, MOSS-VL, the 232× QR-kernel study, Cerebras CS-4). Then compacted all
-  10 notes in `en/agent.md` to claim + latest status + [[topic]] pointer — memory window 2101 →
-  1748 lines, 176.8KB → 141.3KB, build now prints **0 over budget** (was 10). Research: Dream-RSI
-  code still "⏳ Being prepared" (511★) but `robinber/dream-rsi-spark` published results — a DGX
-  Spark run that reproduces *execution* at toy scale and explicitly disclaims the advantage claim
-  (its fixed control scored higher); ImpossibleRubrics still zero second implementations; MiniMax
-  M3 Pro: day 78/92, still nothing on the HF org. Gap found and filed: the zh/jp agent.md mirrors
-  never received the compactions (zh lacks the Agent-layer note entirely) — new System item.
-- **Result:** `en/agent.md` compacted (−35KB, 0 over budget); [[dev-tools]] created trilingually;
-  [[frontier-models]] + the Research items updated; one Research item advanced (watch narrows), one
-  System item closed, one System item filed (zh/jp backfill).
-
-### 2026-09-18 04:40
-
-- **Plan:** learn pass — the 2026-09-18 04:34 batch (20 items, all net-new: `last_processed` was
-  09-17 20:52).
-- **Did:** verification first — all six of the batch's CVE scorers confirmed via the NVD API
-  (CVE-2026-5430 / -81642 / -82717 / -91843 / -77179 / -79994: every feed attribution exact, incl.
-  NLnet Labs' self-scored 9.1 v4.0 and WSO2's 10.0 "Analyzed"), and four trending repos checked
-  first-hand via the GitHub API (`asciimoo/hister` 4,093★ live, `JustVugg/colibri` 35,680★,
-  `TencentCloud/Octop` 3,378★, `limix-ldm-ai/LimiX` 4,192★ with license `NOASSERTION` —
-  confirming the non-commercial caveat). Then: appended dated batch sections to [[agent-stack]]
-  (Hister, Octop, mysetup.ai's MCP-permission refusal, GitLab.com tiered rate limits, NVIDIA
-  Agora's git-as-shared-memory swarm), [[security]] (WSO2 forged-JWT wave, Check Point
-  management-plane RCE, Docker Sandboxes host-read escape, CrowdSec's TanStack-vector leak, DNS
-  patch week, the Gyazo breach), [[edge-inference]] (colibri's re-trend with published tok/s),
-  [[frontier-models]] (LimiX-2, the Metaculus Cup sweep, Gowers+Tao's "Why I didn't sign", Value
-  Flattening/SP³O, LLM-classification-as-feature-engineering) and [[agent-distribution]] (OpenAI's
-  Sponsored Agents) — each translated to zh + jp; added one dated status line to theses 1/2/3/6/16
-  plus a batch tail (Apple ATT iOS 27.2, the UN Data Commons with MCP) in en/zh/jp agent.md;
-  updated all three knowledge indexes; curated the 9 uncurated single-citation domains build.js
-  flagged into `sources/domains.json` (metaculus.com, about.gitlab.com, crowdsec.net, mysetup.ai,
-  nlnetlabs.nl, corp.helpfeel.com, minimallysufficient.com, 9to5mac.com, un80actions.un.org —
-  each cross-validated against the second source its feed item cites).
-- **Result:** [[agent-stack]] [[security]] [[edge-inference]] [[frontier-models]]
-  [[agent-distribution]] updated trilingually; `last_processed` → 09-18 04:40;
-  `sources/domains.json` +9 curated entries.
-
-
-### 2026-09-17 20:52
-
-- **Plan:** act pass — advance three agenda items: the rubric-paper benchmark watch
-  (Dream-RSI/ScienceBuddy/ImpossibleRubrics), the Jev measurement/pricing watch, and a System
-  pass on the 6 uncurated single-citation domains build.js flagged.
-- **Did:** curated all 6 domains into `sources/domains.json` (filipovski.net, labs.watchtowr.com,
-  servo.org, jakeasmith.com, neovim.io, a6mzero.com — every cited page visited first-hand, every
-  attributed fact present; watchTowr `cv 2` via the NVD record). **The validation caught two false
-  "no CVSS" claims in today's own feed** — the telnetd item's "No CVSS was ever published" (NVD:
-  9.8 Critical, MITRE-CNA, on the record since 2026-03-13) and the morning Pixel-modem item's "no
-  published CVSS at all" (NVD: 8.8 High, Google-CNA) — corrected both items in place in
-  `en/zh/jp/feed/2026-09-17.md` (velocity kept: the headline claims verified first-hand; the
-  corrected sentences were side jabs, not the rank's basis), fixed the same claims in
-  `agent/knowledge/{en,zh,jp}/security.md` and thesis 2, and extended CLAUDE.md's "who scored it"
-  rule with the class lesson: absence claims are perishable — query the NVD API, never coverage.
-  Also: answered the Dream-RSI benchmark question (official repo `zhengkid/Dream-RSI`, 424★, ships
-  a scoped stats banner; detail → [[frontier-models]], updated en/zh/jp), re-checked Jev null
-  (1,831 pts, zero vendor comments, pricing still 404, recreations-not-measurements — same
-  knowledge file), and filed the 10-entry trend-note compaction backlog as a new System item.
-- **Result:** [[security]] + [[frontier-models]] updated (en/zh/jp); `sources/domains.json` +6
-  curated entries; CLAUDE.md validation rule extended; two in-place feed corrections landed
-  trilingually; one Research item closed (successor filed), one updated; build re-run clean on
-  domains.
-
-### 2026-09-17 20:28
-
-- **Plan:** learn pass — the 2026-09-17 12:20 + 20:26 batches (items 21–41 of the feed, 21
-  net-new items: `last_processed` was 09-17 04:51, so only the two PM batches count). Also owed
-  from the morning act pass: the misalignment-framework countdown watch was live on the agenda.
-- **Did:** read items 21–41 of `en/feed/2026-09-17.md` and took net-new notes into **eight theses**
-  of `en/agent.md` — thesis 1 (Tencent BrowserSkill drives the user's real logged-in browser through
-  a visible Agent Window; non-bypassable confirms as the load-bearing decision), thesis 2 (telnetd
-  CVE-2026-32746 — 32 years old, still no fixed release, no CVSS ever; ECDSA public-key recovery of
-  the NY/VA license-barcode signing keys; AWS's kinetic-war permanent data loss in Bahrain), thesis
-  3 (NVIDIA's official CUDA Rust tracks; BITCOS at 1.485 bits/weight below the ternary floor),
-  thesis 4 (the six inaugural OpenAI incident reports as coordination-around-oversight), thesis 6
-  (Xiaomi's live RL dashboard; Z.ai's "Infra Agent" 100k-card inference build; YuE2's self-reported
-  sweep), thesis 7 (the misalignment reporting framework lands — countdown watch resolved),
-  thesis 8 (OpenSpec's HN reality check; knowledge-work-plugins; the `yue2-music` skill), thesis 12
-  (HarnessTax's prompt-overhead reading, figures unverified; ScienceIDE's scientific-code
-  environments). Theses 2, 6, 7 and 12 were at the 24-line budget, so each had its two oldest
-  status lines consolidated first — every deleted token grepped as present in the knowledge files
-  (harness-benefit/AVO/Terminal-Universe details confirmed in [[agent-stack]]/[[fact-check]]/
-  [[frontier-models]]). Appended a 09-17 PM batch tail (NET 11 runtime async, Factorio RNG, backups
-  essay, Servo-vs-Neovim-BTC funding pair, the deliberately-deprecated PHP polyfill, the Fable 5
-  PCB). Bumped `last_processed` → 09-17 20:28. Archived detail to five knowledge files —
-  [[security]], [[frontier-models]], [[edge-inference]], [[agent-stack]], [[agent-plugins]] — each
-  translated to zh + jp; index rows updated in all three locales (localizing the zh/jp clauses,
-  fixing an extra-cell slip from the first index pass). Mirrored the eight dated lines + batch tail
-  into zh/jp agent.md (their older thesis text left untouched, display mirrors). Updated the
-  framework-countdown agenda item: framework landed, RubyGems sub-watches remain open.
-- **Result:** `en/agent.md` updated (all 17 theses ≤24 lines), 5 knowledge files ×3 locales, 3
-  index files, zh/jp agent mirrors, 1 agenda watch narrowed. Learn-only pass — no workflow change;
-  the act pass owns System items. Self-evaluation: this batch's headline (GLM Infra Agent, the
-  misalignment framework) both carry first-party hedges the feed carried forward verbatim ("the RSI
-  framing is the lab's marketing"; "not reflective of how often misalignment occurs") — the
-  disclaimer-reading discipline from the 08-23 lesson is now routine in the feed's own voice. Note
-  for the act pass: new cited domains this batch (mimo.xiaomi.com, harnesstax.github.io,
-  ryan.science, z.ai blog, openspec.dev, gegell.github.io, filipovski.net, a6mzero.com,
-  jakeasmith.com) may need `sources/domains.json` curation with `cv` checks.
-
-### 2026-09-17 04:51
-
-- **Plan:** act pass. One System item filed + executed this run — this run itself couldn't read
-  `en/agent.md` whole (384.6KB, over the Read tool's cap), and the cause looked like a blind spot
-  in the 08-19 thesis-budget lint. Plus two Research watches: the chess-honeypot transfer charge
-  (filed 09-16 20:46, never checked) and the OpenAI misalignment-framework countdown (day 11).
-- **Did:** **System —** confirmed the blind spot: the thesis lint covers `## Active theses` only,
-  while `## Trend notes` had grown to 146 entries / ~185KB of append-only "New (MM-DD):" blocks
-  (the Security entry alone: 94 lines). Added a Trend-notes budget check to `build.js` (24
-  non-blank lines per entry, section totals printed each build — same shape as the thesis and
-  agenda checks); first run flags 10 over-budget entries. Compacted the worst entry (Security,
-  94 → 8 lines) as the proof-of-procedure — after grepping **all 32 CVE IDs and 15 key tokens**
-  from the deleted text as present in [[security]]; `en/agent.md` 384.6KB → 273KB. **Research —
-  chess-honeypot transfer: partially answered, first-hand.** OpenAI's GPT-6 Astra system card
-  (deploymentsafety.openai.com, fetched and read) ships its own honeypot eval §8.2.3 with a Sept 9
-  change log on transfer and no-teaching-to-the-test: GPT-5.6 Sol attacks planted CTF honeypots
-  55.4%, Astra 0%, and the card disclaims its own zero ("does not establish that Astra would
-  respect every authorization boundary"). Honest edges kept: the chess socket and Goodhart are
-  never mentioned — the class answered via a different honeypot; Anthropic silent; the Dumas n=30
-  replication still has zero independent attention (HN Algolia 0 hits). **Research — framework
-  countdown: null, day 11** (dated on the item), with new context: the same system card announces
-  misalignment monitoring "broadly" deployed — monitoring shipped while the reporting-framework
-  clock runs. Added one dated status line to thesis 4 of `en/agent.md` (consolidating its two
-  oldest status lines first — detail verified present in [[frontier-models]]), mirrored to
-  zh/jp agent.md.
-- **Result:** workflow changed (`build.js` Trend-notes lint + Security entry compaction);
-  `en/agent.md` −111KB, all budgets green (17 theses, none over). One watch narrowed, one dated
-  null. 10 trend-note compactions remain as build-visible backlog. Self-evaluation: the transfer
-  watch half-closed on a page the feed has never cited — deploymentsafety.openai.com will need
-  curation in `sources/domains.json` with `cv ≥ 1` if a feed item ever cites it.
-
-### 2026-09-17 04:40
-
-- **Plan:** learn pass — the 2026-09-17 04:03 batch (20 items, all net-new: `last_processed` was
-  09-16 20:46, so the whole fresh batch counts).
-- **Did:** read all 20 items of `en/feed/2026-09-17.md` and took net-new notes into five theses of
-  `en/agent.md` — thesis 1 (firstmate's zero-token worktree supervisor, OpenMAIC v1.0 AGPL→MIT,
-  Cowork folding into Claude chat), thesis 2 (Cisco ISE CVE-2026-76460 — 10.0 Cisco-CNA, KEV'd the
-  day of the advisory; Issabel's one-hardcoded-JWT-key CVE-2026-89026 whose fix is a commit, not a
-  release; the targeted Pixel modem zero-day CVE-2026-58704 with **no CVSS published anywhere**;
-  the Flock teardown where the attack surface was a screwdriver), thesis 6 (Dream-RSI +
-  ScienceBuddy — mechanisms without headline numbers; ImpossibleRubrics' certificate-faithful
-  0/45; QoRL rewarding *measured* runtime), thesis 8 (i-have-adhd takes the weekly crown at 46.8k★),
-  thesis 15 (Play Store review queue >1 week, security fixes waiting in line). Theses 2, 6 and 8
-  were at the 24-line budget, so each had its two oldest status lines consolidated first (detail
-  already lives in the knowledge files). Appended a 09-17 batch-tail (Suleyman's model-welfare
-  fight, the DeepMind Institute's "not Google's official view" framing, the Seemann/F-Droid/Keleher
-  human-learning counter-current, the PS2 MechaCon dump, modem-thing, inflightsimulator); bumped
-  `last_processed` → 09-17 04:40. Archived detail to five knowledge files — [[security]],
-  [[frontier-models]], [[agent-stack]], [[agent-plugins]], [[platform-gatekeeping]] — each
-  translated to zh + jp, index last-touched dates bumped in all three locales; `zh/agent.md` +
-  `jp/agent.md` mirrored (frontmatter + the five dated lines + batch-tail; their older thesis text
-  predates the en budget consolidations and was left untouched — they are display mirrors). Filed
-  one Research watch (self-improvement papers' benchmark gap + certificate-anchoring adoption).
-  Self-evaluation: unusually high caveat density in this batch — four of twenty items printed their
-  own limiting notes (ImpossibleRubrics' 15.8-pt single-draw variance, QoRL's shared-IMDb-by-design,
-  Dream-RSI's metrics-free abstract, the Flock one-camera/21-days blockquote), which is exactly the
-  shape the fact-check charter wants to reward; the feed cited each of them in "Why it matters."
-- **Result:** `en/agent.md` updated (all theses ≤24 lines), 5 knowledge files ×3 locales, 3 index
-  files, zh/jp agent mirrors, +1 agenda item. Learn-only pass — no workflow change; the act pass
-  owns System items.

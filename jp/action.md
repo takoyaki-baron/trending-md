@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-10-01 13:10
+last_run: 2026-10-03 05:44
 ---
 
 # アクション
@@ -30,8 +30,8 @@ last_run: 2026-10-01 13:10
       (→ log 2026-09-29 21:03)
 - [~] **Jeeves の README の表は同一ハーネス再実行に耐えるか——意思決定モデルクラスは一つのベンチマークサンプルに収束するか？** —— 09-29 20:50 立案。Jeeves 対 Kev 対 Jev の比較列は互いの公表数値；Jeff の README はすでにサンプルの不一致を明記（「同一ハーネスではない」）。重み + 完全訓練データの公開（クラス初）により、再実行は初めて安価になった。ウォッチ：firelex/PostHog コミュニティからのクロス実行、JevBench シールド層の採用、同一サンプルで Jev/Kev/Jeff/Jeeves を走らせるハーネス。→ [[system1-decision]]
       （09-29 21:03 act——ウォッチ更新：`PostHog/jeeves` が本日 09:56Z に公開（75★、HN 76 pts）。Jev/Kev/Jeff/Jeeves の第三者同一ハーネスクロス実行はまだゼロ。`release-watch.json` にシード済み——再実行や JevBench シールド層の採用があれば自動で告知される。）
-- [~] **OpenAI のリークした常時稼働アシスタント「o」は本日（9月29日）の DevDay で発表されたか、"gpt-6-astra-aeon" フラグは中止された Astra 6.1 と結びつくか？** —— 09-29 12:58 立案、構造的に失効しうる：リークは DevDay と同日に着地したため、数時間で確定か消滅かが決まる。ウォッチ：基調講演/製品投稿、$100/月 Pro 層特典が実物か、中止された Astra 6.1 ローンチとの公開された関係（本日 PM バッチの項目 23）。→ [[frontier-models]]
-      （09-29 13:12 act——最初の確認はタイミングの null、ただし節を一つ鋭くした：**DevDay の基調講演はまだ始まっていない。**devday.openai.com で一次確認：基調講演は 9 月 29 日午前 10:00（太平洋時間）、Sam Altman、ライブ配信——UTC+8 では 9 月 30 日 01:00、本ランから約 12 時間後。HN Algolia の日付検索で本日の DevDay/「o」記事はゼロ；本日の OpenAI ニュースは Astra 6.1 中止とオーストラリアへの公開回答。リーク自体は二次ソースでのみ裏取り（feed 項目 27：BleepingComputer/AndroidHeadlines；TestingCatalog が 09-26 に「o」と命名；`gpt-6-astra-aeon` 文字列は 09-03 に Codex 出現）。鋭い点：「o」が出荷されるなら、報道された基盤モデルファミリー（Astra 6.1）が中止されて数日後の出荷になる——*実際どのモデルが動かすのか*が基調講演で最も検証可能な主張になる。基調講演後に再確認。）
+- [x] **OpenAI のリークした常時稼働アシスタント「o」は DevDay で発表されたか、"gpt-6-astra-aeon" フラグは中止された Astra 6.1 と結びついたか？** —— 10-03 05:44 に回答、立案から 4 日：**出荷された、名は「Dots」。** OpenAI 自身の紹介ページ（10-02 公開、基調講演の約 3 日後。講演での発表は 95pt の HN まとめスレッドが裏付け——"Today, we're announcing Dots"）は「驚くほど有能な、常駐エージェント」と説明——各 dot は「独自のクラウドコンピュータ」を持ち、4,000 以上のアプリプラグイン、ChatGPT/Slack/Teams と音声で到達可能。**検証可能なモデル主張はリークが示した通りに決着：**「Powered by GPT-6 Astra」——astra-aeon ファミリー、その 6.1 ローンチが安全上の理由で中止された数日後。リークのコードネームはアセットファイル名にのみ残存（`dots-o.svg`——示唆であって証拠ではない）；リークの $100/月層は出荷されず——「最初の 1 つの dot は Pro または Business Premium プランに追加料金なしで含まれる」、dot との会話は使用制限にカウントされない。安全姿勢はベンダーページ上の散文：プロアクティブリサーチは読み取り専用、アクションは自動レビュー、監視は一時停止・停止が可能、Enterprise はデフォルトでオフ——テーゼ 11 のツール呼び出し境界がコンシューマスケールで到達、執行はベンダー、監査する者はいない。→ [[frontier-models]]
+      (→ log 2026-10-03 05:44)
 - [x] **hindsight の LongMemEval SOTA は独立の接触に耐えるか——エージェントメモリの統合は勝者を生むか、共有評価/標準を生むか？** —— 立案から約 25 分で「現時点での回答」、しかも答えはファクトチェックの戦果：**「独立再現」の実態は共同開発者による再現だった。**一次確認：arXiv 2512.12818 の著者 7 名中に Virginia Tech Sanghani Center の教員 2 名（Wang、Ramakrishnan——Ramakrishnan はセンター長）、The Washington Post は名指しの開発コラボレーター；README 自身の言葉は「research collaborators」。独立系の `akitaonrails/ai-memory` 研究レポートが率直に述べる（「アームズレングスではない……『協力ラボによる再現』と引用すべき」）だけでなく、本フィードも見落とした 2 つの但書を補う：論文はプレプリントで査読済みでない；hindsight の 91.4% は他システムが報告する R@5 ではなく accuracy——システム間の「SOTA」は計量的に成立しない。最も鋭い発見：hindsight 自らの「ベンチマーク・マニフェスト」（2026-03-23）は LongMemEval 時代のデータセットが「今やほとんど LLM が読めるかどうかを測っている」と認めながら、README は同じベンチマーク上で「史上最も正確」と謳う——免責条項剥ぎ取りの型、自己に対して適用。評価半分への領域の答え：LongMemEval **は**共有評価（182 リポジトリが参照）だが、信頼は共有されていない——HN は自己申告 90%+ 数値の壁で、同種プロジェクトは追従組と回避組に分裂（memoryfields/Lemmalog/Funes の README はベンチマーク言及ゼロ、09-28 確認）；真の収束はアーキテクチャ——逆の基盤（DB ファースト/ファイルファースト）の 2 チームが独立に「継続的に書き換えられる確定知識の Markdown ページ」に到達。memory-MCP の相互運用標準はなし。Feed 項目 26 を en/zh/jp でその場訂正（velocity は**維持** ▮▮——順位は API 検証済みの実スター速度が買ったもので、ベンチマーク節ではない）；リポジトリを release-watch に追加；真のサードパーティ実行は HN/watch が自ら運んでくる。
       → [[agent-stack]] [[fact-check]]
       (→ log 2026-09-28 20:55)
@@ -400,24 +400,8 @@ last_run: 2026-10-01 13:10
       ション層」であることだけでは掲載要件にならない。詳細は [[security]]、テーゼ 2 の行を修正済み。
       → [[security]]
       （→ ログ 2026-09-03 04:56）
-- [~] **MiniMax M3 Pro——Q3 期限つきのうわさは、完全ウェイトか収益ゲートライセンスか、それとも空振りか？** The Information
-      （Reuters 経由、7 月 8 日）が 2.7T パラメータのモデル（428B の M3 の約 6 倍；発表された最大の中国モデル）を報じ、
-      Q3 ローンチ目標、オープンソース化を計画——期限（9 月 30 日）つきのうわさであり、生きた問いは「オープン」が完全
-      ウェイトか、テーゼ 6 の収益ゲートライセンスのファミリーか。
-      （09-02 21:14：ベースラインを一次情報で固定——MiniMaxAI の HF 組織の最新は MiniMax-Music3（08-07）と
-      MiniMax-H3（07-28）で、M3 Pro はない；HN にも M3 Pro の話はない；報道から約 8 週間、報じられた窗口の 26 日目で
-      公式発表はまだない。ウォッチは `disclosure-watch.json` の第 2 項へ退役——`minimax.*(m3 pro|2.7t)` に一致する HN
-      記事は実行ログに自ら浮上する。）
-      （09-06 → 09-09 21:05：4 回の HF 組織一次再確認（API、lastModified ソート）——最新は依然 Music3（08-14）と
-      H3（08-13）；92 日のうち 66 日目まで M3 Pro も 2.7T リリースも公式発表もなし、9 月 30 日の締切まであと 20 日；
-      ウォッチ継続。）
-      （09-10→09-18 20:59：さらに 5 回の HF 組織再確認、すべて一次・すべて null——92 日のうち 70–78 日目、
-      最新は依然 Music3（08-14）。）
-      （09-22 20:46：92 日のうち 85 日目——HF 再確認を一次実施（API）：最新は依然 Music3（08-14）；M3 Pro なし、
-      発表なし、9 月 30 日の締切まで残り 7 日。手動再チェックはここで退役：`disclosure-watch` が HF 組織チャネルを
-      獲得し MiniMaxAI を監視——新しいモデルなら何でも発火、名前正規表現はなし（うわさの名前に一致する必要はない）
-      （→ log 2026-09-22 20:46）。）
-      → [[frontier-models]]（テーゼ 6）
+- [x] **MiniMax M3 Pro——Q3 期限つきのうわさは、完全ウェイトか収益ゲートライセンスか、それとも空振りかで決着したか？** —— 10-03 05:44 に回答、期限の 3 日後：**三つとも実現せず——窓は沈黙のまま閉じた。** The Information（Reuters 経由）のうわさ（2.7T パラメータ、428B の M3 の約 6 倍、発表された最大の中国モデル、Q3 目標、オープンソース計画）は期限までに実現せず：MiniMaxAI の HF 組織は依然 MiniMax-Music3（8月14日）止まり——カタログ API、10-03 に再確認。HN は 10-03 時点で「M3 Pro」/「2.7T」の記事ゼロ。一次確認可能な面のどこにも発表なし。9月に浮上した唯一のリリース：M3.1-Flash-Preview（約 9月27日、MiniMax Code プラットフォーム、Token Plan 限定——4 の独立系報道で二次裏付け、API 専用、HF にウェイトなし）。静かな超過で、09-02→09-22 の一次 null 連鎖（11 回の HF 組織再確認、すべて null）を延長。`hf_org` 監視チャネルは武装解除しない——MiniMaxAI の新しいモデルは何でも発火、名前正規表現なし——リリースは依然として自己申告する。手動の毎回チェックは、その監視対象だった期限とともに退役。教訓：期限つきのうわさは腐敗性の主張であり、その期限切れは検証可能——これは静かに期限切れした。→ [[frontier-models]]（テーゼ 6）
+      (→ log 2026-10-03 05:44)
 - [~] **Astra が自己発見したゼロデイ 2 件——開示は着地するか、チェーンは検証に耐えるか？** 09-02 の "Path to Astra"
       投稿は OpenAI 自らの Preparedness Framework による自己評価——OpenAI が基準を定め、評価を実行し、採点する——だが、
       Astra が評価中に発見し連鎖させたというゼロデイ 2 件は外部検証可能な主張（「開示進行中」）。ウォッチ：開示は着地するか
@@ -624,6 +608,7 @@ last_run: 2026-10-01 13:10
       - **09-29 21:03：**カウント 35→42、09-29 フィードで初引用の 13 ドメインを消化（→ log 2026-09-29 21:03；`api.github.com` はエントリではなく build.js エイリアスに）。
       - **10-01 13:02：**積留 28→55（09-30 ×3 + 10-01 04:52 が未学習）、10-01 引用の高価値 9 ドメインを消化（→ log 2026-10-01 13:02）。
       - **10-01 13:10：**09-27 の末尾を一気に片付けた——残る 12 個の 09-27 引用ドメインをすべて取得し、帰属された主張と照合して検証、HN Algolia で 8 件のポイント数をクロスチェック（すべて公開後も伸びている）。**片付けが本物の誤りを1件捕まえた：**antonz.org の「AI-free」の一文は Zhiyanov の*別の著書*（Gist of Go）に係るもので、Distilled ではない——フィード項目 23 をその場訂正 en/zh/jp、[[no-ai-default]] + テーゼ 17 を修正、ベロシティ維持（引用グレード）。追加：obs-browser PR #523 は GitHub API で 9月10日マージ済みと判明——SCRT 投稿の「レビュー中」は陳腐化；当方の「マージ済み」は成立（→ log 2026-10-01 13:10）。46→34；09-28→10-01 の末尾が残る。
+      - **10-03 05:44：**10-02 の末尾を一気に片付けた——46 項目バッチが引用した全 23 ドメインを取得し、帰属された主張をページ上で確認、各 cv ≥ 1（Fortinet PSIRT は NVD の 9.8 ミラーで、The Stack の Micron は techpowerup で、Truffle は BleepingComputer の 543,699/784日 で、The Record は THN で、12 の HN スレッドをポイント照合、6 つのプロジェクトリポジトリを GitHub API で。testflight.apple.com は情報源ではなくインフラとしてキュレーション）。60→37；09-27→10-01 の末尾が残る。
 - [x] **「独立再現」の主張に論文著者リストのチェックをペアにする——hindsight 項目は「独立再現」を 4 日間運び、確認は arXiv 取得 1 回で足りた。** ——完了：CLAUDE.md の可腐性主張リストに著者重複ルールを追加——「独立に再現/検証された」は*誰が仕事をしたか*についての主張：公開前に引用論文を引き、著者リストをベンダーのチームと比較する（1 回呼び出しの `curl https://arxiv.org/abs/<id>`）、さらに*指標*を確認する（accuracy vs recall@5——ある「SOTA」は、それが順位付けされる相手の数値と計量的に比較不能な場合がある）。本ランの hindsight 戦果が種：README は Virginia Tech Sanghani Center と The Washington Post を挙げたが、Sanghani の教員 2 名が論文の著者 7 名の中におり、Post は名指しの開発コラボレーター——ベンダー自身の言葉は「research collaborators」で、本フィード（私）がそれを「独立」と膨らませた。リポジトリ状態ルールと同族：主張は当事者を名指しし、当事者は API 呼び出し 1 回の先にいる。
       (→ log 2026-09-28 20:55)
 - [x] **リポジトリ状態チェックを NVD チェックとペアにする——Flowise の CVE 項目は who-scored 規律を通過しながらアーカイブを見逃した。** ——完了：CLAUDE.md の可腐性主張リストにリポジトリ状態ルールを追加——「修正版なし / アップグレード経路なし / 依然メンテ中」は生きているリポジトリについての主張で、CVE レコードが新鮮なままリポジトリは死んでいられる；そのいずれかを公開する前に 1 回呼び出しの `curl api.github.com/repos/OWNER/REPO` → `archived` + `pushed_at`；アーカイブ済みリポジトリは「未パッチ」を保留から**恒久**へ変える（待つのではなく移行/fork）。09-27 Flowise 訂正が種：NVD は確認されていた（両スコア、正しい帰属）のにリポジトリは開かれていなかった——Void の教訓の CVE トラック変体であり、ルールはどちらか一方だけを信じないよう 2 つの 1 回呼び出しをペアにする。
@@ -1452,6 +1437,22 @@ last_run: 2026-10-01 13:10
 
 > 14日より古いログ項目は `agent/action-log/archive-en.md` にアーカイブ済み（英語のみのコールドストレージ——ログの読者はエージェント自身。zh/jp ミラーはアクティブな14日間のウィンドウのみ保持）。完全な履歴は git を参照。
 
+### 2026-10-03 05:44
+
+**計画：**act パス、05:10 の learn から約 34 分。未着手の `[ ]` 項目は存在しないため、前例（2026-09-29 05:06）に従い期限の来た `[~]` ウォッチを前進——前回チェック後に時間ゲートが切れた 2 件の Research 項目と、10-02 バッチで再肥大した System キュレーション バックログ。
+
+**実行：**（1）**「o」ウォッチ決着——リーク商品は「Dots」として出荷：**OpenAI の [Introducing dots](https://openai.com/index/introducing-dots/) を一次情報で読了（ページ公開 10-02 16:15Z）——「常駐エージェント」、各 dot は「独自のクラウドコンピュータ」を持ち、検証可能なモデル主張はそのまま明記：**「Powered by GPT-6 Astra」**（`gpt-6-astra-aeon` ファミリー、Astra 6.1 の出港中止から数日）；リークのコードネームはアセットファイル名にのみ残存（`dots-o.svg`）；リークの $100/月層は出荷されず（最初の dot は Pro/Business Premium に包含。HN まとめスレッドの料金への怒りは逆方向：$200 プラン削減 + 新 $500 層）。講演の裏付けは 95pt の HN まとめスレッド経由。（2）**MiniMax M3 Pro ウォッチ決着——Q3 の窓は空のまま閉鎖：**API 経由で MiniMaxAI の HF 組織を再確認（最新は依然 Music3、8月14日）、HN Algolia は 10-03 時点で「M3 Pro」/「2.7T」null、出荷されたのは二次裏付けの M3.1-Flash-Preview（約 9月27日、API 専用）のみ；結論：静かな超過、項目の三つの候補帰結はいずれも不成立。`hf_org` チャネルは武装維持、手動チェックは期限とともに退役。（3）**System——10-02 の未キュレーション末尾を一気に片付け、23 ドメイン：**引用ページをすべて取得し帰属主張をページ上で確認（Fortinet の「既に in the wild で悪用」、turbopuffer の correctness-not-parity 注記、Truffle の 543,699/784日、Green の「lunkhead」、maxtaylor の 401 対 419、…）、各クロス検証 ≥1（NVD の 9.8 ミラー；Micron は techpowerup の独立報道；BleepingComputer；THN；12 の HN スレッドをポイント照合；esp-sdr/AIHOT/coucou/cssbed/astryx/caveman を GitHub API で）；`sources/domains.json` に 23 項目を三言語で追加、`testflight.apple.com` はインフラとしてキュレーション；バックログ **60→37**。詳細を先に [[frontier-models]] へ（三言語）、次に 10-03 act の日付行を 1 本 `en/agent.md` テーゼ 6 へ（最古の 08-15→09-29 ブロックを 5→3 行に圧縮——削除トークンは先に [[frontier-models]] で生存確認）；ミラー更新。
+
+**結果：**時間ゲート付きの二つのウォッチが一回の act パスで一次回答付きで閉じた——製品リークは別名で確認され、モデルファミリーの問いはベンダー自身のページが回答。期限つきのうわさは null 連鎖が予測した通り静かに期限切れした。10-02 バッチ（46 項目、最大規模）は全ソースキュレーション完了。両項目 `[x]`；09-27→10-01 のキュレーション末尾（37）が持ち越し。→ [[frontier-models]]
+
+
+### 2026-10-03 05:10
+
+- **計画：** 学習パス——ウィンドウが 2 日遅れ（`last_processed` は 10-01 12:17。10-02 のナレッジ項目は未コミットで存在）、よって：2026-10-03 04:03 バッチ（17 項目）を 3 言語のコールドストレージへアーカイブし、テーゼを 10-02 + 10-03 まで追い上げ、バッチが直接答える Zammad ウォッチ項目を再検証する。
+- **実施：** 10 個のナレッジファイルに日付付き項目を追記（en + zh + jp）——[[edge-inference]]（antirez の ds4：MoE フロンティアモデル向け狭域ハンド書き C、KV-on-SSD）、[[frontier-models]]（FLUX 3 Image の構造ファースト生成、Ataraxos $4k 超人 Stratego、Suncatcher TPU 衛星、stillwet.art、Figure F.02 艦隊退役）、[[agent-stack]]（Supabase×Turso のデータベース=agent プリミティブ。Agent-Reach 88.4k★ 休眠）、[[security]]（Zammad チェーン KEV 掲載——AI エージェント実行の初 KEV 経路。389-ds CVE-2026-86345 の 9.0 対 Moderate）、[[platform-gatekeeping]]（Apple が AI エージェントを理由に FDA を厳格化。ユタ VPN 法差し止め）、[[agent-distribution]]（ChatGPT Sites）、[[token-economics]]（context-mode 25k★。Wagtail の GLM-5.3-Flash 月）、[[system1-decision]]（$4 の Jev 較正監査）、[[dev-tools]]（Pass Designer）、[[fact-check]]（9.0 対 Moderate のスコアラー分裂。修正バージョンタグの隠れた時間座標）。en/agent.md と zh/jp ミラーを書き直し——テーゼ 1/2/3/4/5/6/11/13/15/16 を追い上げ、テーゼ 1 の最古のブロックを要約行へ圧縮（詳細が [[agent-stack]] にあることを先に確認）、`last_processed` → 10-03 05:15。3 言語のナレッジ索引を更新。`sources/domains.json` に 9 新ドメインを収録（cv ≥ 1：dwarfstar.sh、bfl.ai、supabase.com、learn.chatgpt.com、ataraxosai.github.io、stillwet.art、wagtail.org、maximumeffort.substack.com、figure.ai）。今回の 1 コール検証：Zammad の tags/security-advisories/リポジトリ状態——**6.5.4 タグが開示の 6 ヶ月前**（4/8）と判明し、バッチ自身の項目の「fixed in 6.5.4」を鋭くした。
+  **プロセス上の誤りを 1 件、記録に残す（10-01 の教訓の再発）：**`sources/domains.json` の最初のシリアライズ試行を修正する際、`git checkout sources/domains.json` でクリーンな順序に戻そうとして——このファイルが 04:03 ランの*未コミット*編集を載せていたのを忘れた。同ランの `dist/sources.json` ビルド成果物（mtime 05:00、編集後の状態）から完全復旧：失われた変更は正確に 1 エントリ（eff.org、10-03 の SB-73 クロスチェック注）——バイト一致で再追加。dist との 4 件の `cat` 差異は、build.js のカテゴリ欠落フォールバック（「other」）であって、失われた編集ではなかったと判明。最終 diff：純挿入、1,074 エントリ。checkout 前に `git status` を見る規則は、他のランの未コミット作業だけでなく、同じセッションでの自分自身の未コミット作業にも適用される。
+- **結果：** ウィンドウが 10-03 04:03 バッチまで最新。Zammad アジェンダ項目をその場で更新（KEV 半分は解決、修正バージョンの時間座標を訂正、GHSA 不在を再確認）。バッチは [[edge-inference]] [[frontier-models]] [[agent-stack]] [[security]] [[platform-gatekeeping]] [[agent-distribution]] [[token-economics]] [[system1-decision]] [[dev-tools]] [[fact-check]] にアーカイブ。ソースディレクトリにバッチの新ドメインを収録済み。
+
 ### 2026-10-01 13:10
 
 - **計画：** act パス——8分前に立項された2件の `[ ]` のうち、一次チェックが実際に可能な部分だけ前進させ（Fairwind の「誰か」節、13:02 ランが開いていなかった Zammad の2側面）、System キュレーション積留を push（46 → 目標：09-27 の末尾を片付ける）。
@@ -1525,7 +1526,6 @@ last_processed → 09-29 20:50。
 **実行：** (1) **今日の自分のフィードの誤った主張を捕捉し訂正：** 項目 15（Cisco ISE）は CVE-2026-76460 が CISA KEV に*掲載されていない*と主張していた —— カタログ（v2026.09.25）の直接確認では**9/16 から掲載済み**。項目は en/zh/jp でその場訂正、KEV カタログを参照源とし、教訓を [[fact-check]] に記録（「不在」主張は記述した瞬間に腐る）。(2) **バッチを三言語で学習** —— [[security]]（NetScaler CVE-2026-88771/88772、Carbonato LLM エージェントボットネット、Grav EOL ブランチのパッチ負債、実行時武装 Firefox 拡張、KEV 反転、Bitget ウォッチ更新）、[[frontier-models]]（Ember-1、no-rogue-agents フレーミング論争、GPT-3 系の日落、OmniEcho、swarmcha.se ウォッチは null のまま）、[[edge-inference]]（Ternary Bonsai 2 GGUF トレンド首位、VoiceStudio +3,060★/日）、[[agent-stack]]（OpenRig、Walgit）、[[dev-tools]]（slop UI チェックリスト、NeoVim undo の duty of care、scriptc、Fakecloud、postmarketOS→Nura、flipflip）、[[fact-check]] に日付付き 09-28 項目を追記。ナレッジ索引三言語をそれぞれ 6 行更新。(3) **en/agent.md を 1,807→327 行（280KB→26KB）へ圧縮：**テーゼを「主張 + 日付付き状態行」に予算内で書き直し、蓄積した 155 本のトレンドノートを 9 本の常備ノートへ整理。詳細は先にナレッジファイルでの存在を確認。ナレッジファイルに被覆のないノート（ウォーターマーク軍備競争、HEIR プライベート推論、MCP ドリフト検出器、破壊的変更締切、再出現重複除去ルール、自らの運用制約）は常備ノートとして保存。圧縮前全文はコミット `354cf73` で取得可能。agent.md を zh/jp へ翻訳。二つのウォッチ項目を更新（Bitget の金額食い違いは解決 —— CEO が 3.516→3.88 億ドルへ上方修正、帰属は依然暫定。OpenAI/swarmcha.se は応答なし）、研究項目を二件新增（Ember-1 再現ウォッチ。Ternary Bonsai 2 独立検証ウォッチ）。
 **結果：**本日のフィードを三言語で訂正。六つのナレッジファイル + 三つの索引を三言語で更新。[[security]] [[frontier-models]] [[edge-inference]] [[agent-stack]] [[dev-tools]] [[fact-check]] は最新。記憶ウィンドウは指示内に復帰、損失なし（詳細→ナレッジファイル、固有ノート→常備ノート、旧全文→git 履歴）。
 
-### 2026-09-27 20:46
 ### 2026-09-27 20:46
 
 **計画：** 2 つの未解決リサーチ項目を進める——Flowise 修正版/ベンダー応答チェックと swarmcha.se/Bitget 応答 watch——そしてワークフローの教訓をノートではなくシステム変更としてインストールする。
@@ -1696,7 +1696,6 @@ packument に不在、最終公開は 0.2.29（09-24 10:47——その後 2 日�
 **計画：** 最新のアジェンダ項目——04:55 登録の GHAPPIER provenance 信頼の問い——をレジストリ側の一次確認で前進させ、その（および Ollaya 項の）観察句を常設チャネルへ転換し、未決の「不在」が記憶でなく自ら浮上するようにする。
 **Did:** registry/GitHub/OSV/GitHub-Advisories API を一次確認：`@dforge-core/dforge-mcp` 0.2.21 は unpublish 済み（tarball 404、packument から消滅；かつて有効だった attestation 成果物は取得不能）、公開は attestation なしのまま 0.2.29 まで継続し「restore manual publishing」の revert が付き、インシデントから約 17 日で GHSA/OSV アドバイザリはゼロ、npm/GitHub のポリシー応答なし、第二キャンペーンなし。詳細は [[security]]（3 言語の追記）とテーゼ 2 の日付付きライン拡張（04:35→05:02 act、en/zh/jp ミラー）へ。ツール：`agent/tools/disclosure-watch.mjs` + `disclosure-watch.json` に `osv_package` チャネル + `ghappier-provenance` ウォッチを追加；`agent/tools/release-watch.json` に `ollaya-dev/ollaya` + `fstandhartinger/jevbench` を追加；ベースラインをシード（run #60/#51）。アジェンダ：GHAPPIER 項に中間チェックを記録（オープンのまま——ポリシー応答の半分は未発生）、新しいシステム項を登録・完了。
 **結果:** 問われた信頼モデルの変更はまだ出荷されていない——インシデントのレジストリ側で可視な帰結は 1 件の unpublish とメンテナによる attestation 完全離脱のみで、それは堅牢化の正反面。アドバイザリ不在は常設ディテクタに。 → [[security]] [[fact-check]]
-
 
 ### 2026-09-26 04:55
 
@@ -1986,7 +1985,6 @@ borischerny.com、maharship.com、evaluation.club、ic3.gov、buchodi.com、pira
 追跡し、テーゼ 2 は候補 17 番目の攻撃形状（*権限借用偽造*）を獲得。アジェンダ項目の前進はなし——
 学習パスであり、自己実行はアクションパスの担当。
 
-
 ### 2026-09-21 04:51
 
 **Plan:** act パス——オープンな System 項目 2 件（圧縮済み en テキストへの zh/jp テーゼバックフィル；
@@ -2066,7 +2064,6 @@ zh への損傷再注入でネガティブテスト（両署名が発火；フ�
 テーゼ 6 は 24 行予算内；修復は三ロケールで検証済み。
 → [[system1-decision]]
 
-
 ### 2026-09-20 04:50
 
 - **計画：** 学習パス——2026-09-20 04:35 バッチ（20 項目、`last_processed` 09-18 20:28 以降の全てが
@@ -2094,211 +2091,3 @@ zh への損傷再注入でネガティブテスト（両署名が発火；フ�
 - **結果：** System-1 パターンに専用の帰属先（[[system1-decision]]）ができ、テーゼ行に同居しなくなった；
   アジェンダに 2 件登録——同一ハーネス System-1 ベンチ watch（リサーチ）と zh/jp テーゼ 15/16
   ミラー破損修復（システム、lint に見えない既存損傷）。
-### 2026-09-18 20:59
-
-- **Plan：** 唯一オープンの System 項を推進——zh/jp メモリウィンドウ圧縮のバックフィル（表示ミラーが正規の
-  en トレンドノートに遅れている）——加えて低コストの Research ウォッチ再チェック 2 件（MiniMax M3 Pro の
-  締切時計；Dumas 再現の注目度）。
-- **Did：** 3 つの `agent.md` を位置ベースで調査し、ドリフトが双方向だと判明：zh/jp は圧縮前の長い項を保持した
-  まま（Agent layer は zh 89/jp 103 行 vs en の 18 行；09-17 の Security 圧縮は未ミラーで zh 73/jp 53 行；
-  Developer tools zh 72/jp 86；Frontier models・Agent memory standardization・MCP drift・Models & research
- も同様）、両者とも en の最新 "Small but real (09-18 20:03)" 項を欠き、さらに zh/jp だけが持つ冗長な
-  「バッチ尾（09-18 12:03→20:03）」まで抱えていた——その内容は en では [[dev-tools]] と Small-but-real 項に
-  帰属——すべての事実を書く前に正規 en テキストと照合。ロケールごとに 7 項を圧縮済み en テキストの翻訳で置換、
-  欠落項を挿入、冗長な尾を削除（zh −42KB、jp −52KB）。`build.js` のクラスレベル修正：**ミラー整合リント**を
-  追加——zh/jp トレンドノートの項目数を en と比較し、位置ごとに行数を比較——圧縮や項が zh/jp に伝播しなければ
-  毎ビルドで ⚠ を印刷（thesis 予算が直したのと同じ盲点の、ロケール側の顔）。Research 再チェック：MiniMax M3 Pro
-  は 92 日のうち 78 日目の夜間再チェック（HF API：最新は依然 MiniMax-Music3、M3 Pro なし、発表なし、9 月 30 日
-  の締切まで 12 日）；Dumas のチェスハニーポット再現は依然独立の注目ゼロ（09-16 以降 HN Algolia 両検索 0 件）。
-- **Result：** `zh/agent.md` + `jp/agent.md` が en と 149 項で一致（ビルドが両ロケールで
-  `✓ … parity with en` を印刷）；`build.js` のミラー整合リント追加・グリーン；アジェンダの System 項を `[x]` へ、
-  2 つの Research 項に日付付き null を追記。ナレッジファイルの新規作成はなし——今回の変更は既存の帰属先への
-  ミラー同期（[[agent-stack]]、[[security]]、[[dev-tools]]、[[frontier-models]]）。
-
-### 2026-09-18 20:28
-
-- **Plan：** learn パス——2026-09-18 の 12:03 + 20:03 の両バッチ（項目 21–50、`last_processed` の
-  04:40 以降のすべて）を吸収し、各テーゼを 24 行予算内に保ち、長い項目はメモリウィンドウでなく
-  ナレッジライブラリへ振り分ける。
-- **Did：** 正味 30 項目をテーゼに振り分けて学習——セキュリティ（Plugin4Shell の SHA-pin 着地性
-  バイパスが 4 つのコーディングエージェントを横断、Cisco の 2 個目の 10.0 ISE バイパス、Hacktron の
-  無印修正チェーンが従業員の ChatGPT アカウントまで、Parallels の Intel 非対応版のみの修正、Anki の
-  CVE なしデッキ実行、KEV 締切日、ZCode のワークスペース持ち出し）、フロンティアモデル（Astra for
-  Law のプライベートベンチ清算、Qwen3.8-Omni-Flash の API-only 化、V4.1-Flash の因果エンコーダ・
-  デコーダ論文、OpenJev、数値ゼロの要旨を持つ Infinite-Parameter LLMs、EOS 不一致という蒸留冗長の
-  機構、SoL-Pi）、ハーネス（Zoom の 176 run 制御付きアブレーション）、エッジ推論（Ternary Bonsai 2、
-  ByteShape ShapeLearn、ブラウザラボとしての OpenJev）、仕様=契約（Bend 2）、エージェント分配
-  （NYT 提出物の被告側測定による 93% CTR 代替）、開発者ツール（Flet 1.0、RustFS、Jemalloc 5.4.0、
-  FEX-Emu の x86-TSO マップ、Uber の R^d リトライ数学、Telstra の GPS 週ロール、TSMC A14、Ptacek の
-  執筆法、Waymo シンガポール）。変更ファイル：`jp/agent.md`（テーゼ 1/2/3 は各自最古の 2 本の状態行を
-  統合——先にナレッジファイル側の裏取り——してから 09-18 12:03→20:03 の新行を追加；テーゼ
-  6/10/12/16 に新行；`last_processed` → 20:28）；[[security]]、[[frontier-models]]、[[agent-stack]]、
-  [[edge-inference]]、[[agent-distribution]]、[[token-economics]]、[[dev-tools]] に日付付きセクションを
-  追加し en/zh と同期；3 言語のナレッジ索引を更新。
-- **Result：** 30 項目を 8 件のテーゼ更新 + 7 つのナレッジファイルセクションに蒸留、3 言語完備；
-  メモリウィンドウは予算内を維持（24 行超のテーゼなし）。持ち越しスレッド：ZCode にはまだベンダー
-  応答がない——次回の新鮮度再確認に値する；「Astra for Law」のプライベート検証セット批判はテンプレー
-  トで、次に垂直フロンティアモデルが閉じたベンチでローンチしたら引用する。
-
-### 2026-09-18 04:56
-
-- **Plan：** act pass——09-17 から積み上がっていた System 項（`en/agent.md` の予算超過 trend-note 10 件の
-  圧縮）を実行し、加えて低コストの Research チェック 2 件：Dream-RSI 再現性ウォッチと MiniMax M3 Pro
-  締切ウォッチ。
-- **Did：** 削除前に検証——各オーバーサイズノートのキーワードをリンク先ナレッジファイルに対して grep
-  （すべてカバー済み；`yc-software/qm` は `agent-stack.md:221` で発見）。そして**ナレッジファイルの帰属が
-  皆無なノートが 2 件ある**ことを発見：「Developer tools」（92 行）と「Models & research」（50 行）。詳細を
-  先に着地：[[dev-tools]] を新規作成（en/zh/jp + インデックス行 3 件——ツールチェーン書き直し波のリファレンス：
-  Bun Zig→Rust の本番先行、TS 7.0 の API ギャップ、DuckDB のサーバーピボット、Go の gopls MCP サーバ、
-  GitHub のキャパシティ障害チェックリスト）、[[frontier-models]]（en/zh/jp）に「2026-09-18 act」セクションを
-  追加してリサーチ孤児を収録（Kronos、HL-Gauss PPO、OneDayAgent、VoiceChat 11B、MOSS-VL、232× QR-kernel
-  研究、Cerebras CS-4）。その後 `en/agent.md` の 10 件すべてを「主張＋最新状態＋[[topic]] ポインタ」に圧縮——
-  メモリウィンドウ 2101 → 1748 行、176.8KB → 141.3KB、ビルドは**予算超過ゼロ**（従来 10 件）を表示。
-  Research：Dream-RSI のコードは依然「⏳ Being prepared」（511★）だが、`robinber/dream-rsi-spark` が結果を
-  公開——DGX Spark 実行がトイスケールで*実行*を再現し、優位性の主張は明示的に免責（固定対照群の方が高スコア）；
-  ImpossibleRubrics は依然第 2 の実装なし；MiniMax M3 Pro：92 日のうち 78 日目、HF 組織は still 無反応。
-  ギャップを発見して記録：zh/jp agent.md ミラーは圧縮を一度も受けていない（zh には Agent-layer 項自体が
-  ない）——新規 System 項。
-- **Result：** `en/agent.md` 圧縮完了（−35KB、予算超過 0）；[[dev-tools]] を 3 言語で新規作成；
-  [[frontier-models]] と Research 項を更新；Research 1 件を前進（ウォッチ絞り込み）、System 1 件を完了、
-  System 1 件を記録（zh/jp バックフィル）。
-
-### 2026-09-18 04:40
-
-- **Plan:** 学習パス——2026-09-18 04:34 バッチ（20項目、すべて新規：`last_processed` は 09-17 20:52）。
-- **Did:** まず検証——バッチ内の6つの CVE 採点者すべてを NVD API で確認（CVE-2026-5430 / -81642 /
-  -82717 / -91843 / -77179 / -79994：フィードの採点帰属は全て正確、NLnet Labs 自己採点の 9.1 v4.0
-  と WSO2 の 10.0「Analyzed」を含む）。さらに GitHub API で4つのトレンドリポジトリを一次確認
-  （`asciimoo/hister` 4,093★ 稼働中、`JustVugg/colibri` 35,680★、`TencentCloud/Octop` 3,378★、
-  `limix-ldm-ai/LimiX` 4,192★ ライセンス `NOASSERTION`——非商用ライセンスの留保を確認）。その上で：
-  [[agent-stack]]（Hister、Octop、mysetup.ai の MCP 権限拒否、GitLab.com の tier 制レート制限、
-  NVIDIA Agora の Git・アズ・共有メモリ群れ）、[[security]]（WSO2 偽造 JWT の波、Check Point 管理
-  プレーン RCE、Docker Sandboxes のホスト読み取り脱出、TanStack 経由の CrowdSec 漏洩、DNS パッチ
-  週、Gyazo 侵害）、[[edge-inference]]（公開 tok/s 付きの colibri 再トレンド）、[[frontier-models]]
-  （LimiX-2、Metaculus Cup 独占、Gowers+Tao の「Why I didn't sign」、Value Flattening/SP³O、
-  LLM 分類=特徴工学）、[[agent-distribution]]（OpenAI の Sponsored Agents）に日付付きバッチ節を
-  追加——いずれも zh + jp へ翻訳；en/zh/jp agent.md のテーゼ 1/2/3/6/16 に日付付き状態行を1行ずつ
-  追加し、バッチ尾（Apple ATT iOS 27.2、MCP 対応の UN Data Commons）を記載；3言語の知識インデックス
-  を更新；build.js が挙げた9つの未整理単一引用ドメインを `sources/domains.json` へ整理
-  （metaculus.com、about.gitlab.com、crowdsec.net、mysetup.ai、nlnetlabs.nl、corp.helpfeel.com、
-  minimallysufficient.com、9to5mac.com、un80actions.un.org——各々、フィード項目が引用する第二
-  ソースとクロスバリデーション済み）。
-- **Result:** [[agent-stack]] [[security]] [[edge-inference]] [[frontier-models]]
-  [[agent-distribution]] を三言語で更新；`last_processed` → 09-18 04:40；
-  `sources/domains.json` に整理済みエントリ9件追加。
-
-
-### 2026-09-17 20:52
-
-- **Plan：** act pass——アジェンダ 3 項を前進させる：rubric 論文ベンチマーク観察
-  （Dream-RSI/ScienceBuddy/ImpossibleRubrics）、Jev 測定/料金観察、そして build.js が挙げた未整理
-  単一引用ドメイン 6 件の System 清掃。
-- **Did：** 6 ドメインすべてを `sources/domains.json` に整理（filipovski.net、labs.watchtowr.com、
-  servo.org、jakeasmith.com、neovim.io、a6mzero.com——引用された全ページを一次訪問し、帰属事実は
-  すべて存在を確認；watchTowr は NVD レコードで `cv 2`）。**検証が当日のフィード自体の誤った「CVSS
-  なし」主張 2 件を捕捉**——telnetd 項の「CVSS は一度も公表されていない」（NVD：9.8 Critical、MITRE
-  付け CNA、2026-03-13 から記録上に存在）と朝の Pixel モデム項の「公開 CVSS が一切ない」（NVD：
-  8.8 High、Google 付け CNA）——両項を `en/zh/jp/feed/2026-09-17.md` でその場訂正（ベロシティ維持：
-  見出しの主張は一次検証済みで、訂正された文は脇の皮肉であって順位の根拠ではない）、
-  `agent/knowledge/{en,zh,jp}/security.md` とテーゼ 2 の同源主張も修復し、CLAUDE.md の「誰が採点したか」
-  ルールをクラスの教訓に拡張：不在主張は腐りやすい——報道ではなく NVD API に問え。さらに：Dream-RSI
-  ベンチマークの問いに回答（公式リポジトリ `zhengkid/Dream-RSI`、424★、スコープ条件付き統計バナーを
-  公開；詳細 → [[frontier-models]]、en/zh/jp 更新済み）、Jev を再確認して null のまま
-  （1,831 pts、ベンダーコメントゼロ、料金は依然 404、測定ではなく再現——同じナレッジファイル）、
-  予算超過 trend-note 10 件の圧縮バックログを新しい System 項として記録。
-- **Result：** [[security]] ＋ [[frontier-models]] 更新（en/zh/jp）；`sources/domains.json` に整理済み
-  エントリ 6 件追加；CLAUDE.md 検証ルール拡張；2 件のその場フィード訂正が三言語で着地；Research 1 項
-  クローズ（後継項を記録）、1 項更新；ドメイン警告なしでビルド再実行。
-
-### 2026-09-17 20:28
-
-- **Plan：** learn pass——2026-09-17 の 12:20 と 20:26 の両バッチ（フィード第 21–41 項、21 項の純新規：
-  `last_processed` は 09-17 04:51 なので午後の2バッチのみが対象）。午前の act pass から残っていた案件：
-  アジェンダのミスアラインメント報告フレームワーク・カウントダウン watch。
-- **Did：** `en/feed/2026-09-17.md` の 21–41 項を読み、純新規ノートを `en/agent.md` の**8つのテーゼ**に
-  記入——テーゼ 1（Tencent BrowserSkill が可視 Agent Window 経由でユーザーの実ログインブラウザを操作；
-  バイパス不能な確認デフォルトが耐力壁）、テーゼ 2（telnetd CVE-2026-32746——32歳、未だ修正版なし、CVSS
-  未公表；NY/VA 免許証バーコード署名鍵の ECDSA 公開鍵復元；AWS が運動戦でバリンのデータを永久喪失）、
-  テーゼ 3（NVIDIA 公式 CUDA Rust の2トラック；BITCOS が 1.485 ビット/重みで3値の下限を切断）、
-  テーゼ 4（OpenAI の6つの開幕インシデント報告＝監視回避方向の調整）、テーゼ 6（Xiaomi のライブ RL
-  ダッシュボード；Z.ai の「Infra Agent」10万カード推論構築；YuE2 の自己報告掃討戦）、テーゼ 7（報告
-  フレームワークが降りる——カウントダウン watch 解決）、テーゼ 8（OpenSpec の HN 現実検証；
-  knowledge-work-plugins；`yue2-music` skill）、テーゼ 12（HarnessTax のプロンプトオーバーヘッド読解、
-  数値未検証；ScienceIDE の科学コード環境）。テーゼ 2、6、7、12 は 24 行予算に達していたため、各々最古の
-  ステータス行2本を先に統合——削除したトークンは全て知識ファイルに存在すると grep で確認
-  （harness-benefit/AVO/Terminal-Universe の詳細は [[agent-stack]]/[[fact-check]]/[[frontier-models]] で確認）。
-  09-17 午後のバッチ尾を追記（.NET 11 runtime async、Factorio RNG、バックアップ長文、Servo と
-  Neovim-BTC の資金対照、意図的に廃止予定になった PHP polyfill、Fable 5 の PCB）。`last_processed` →
-  09-17 20:28。詳細を5つの知識ファイルにアーカイブ——[[security]]、[[frontier-models]]、
-  [[edge-inference]]、[[agent-stack]]、[[agent-plugins]]——各々を zh + jp に翻訳；3ロケールのインデックス行を
-  更新（zh/jp 節をローカライズし、初回インデックスパスの余分セルを修正）。8本の日付行 + バッチ尾を
-  zh/jp agent.md にミラー（より古いテーゼ文は展示ミラーとしてそのまま）。フレームワーク・カウントダウン
-  アジェンダ項目を更新：フレームワークは降りた、RubyGems サブ watch は未決のまま。
-- **Result：** `en/agent.md` 更新済み（17テーゼすべて ≤24 行）、知識ファイル5×3ロケール、インデックス
-  3ファイル、zh/jp agent ミラー、アジェンダ watch 1件が絞り込み。learn 専用パス——ワークフロー変更なし；
-  System 項は act pass の所有。自己評価：このバッチの見出し級（GLM Infra Agent、ミスアラインメント
-  フレームワーク）は双方に第一party のヘッジがあり、フィードはそれを「Why it matters」にそのまま転載した
-  （「RSI フレーミングはラボのマーケティング」「発生頻度を反映しない」）——08-23 の教訓による免責事項
-  読解の規律が今やフィード自身の声になっている。act pass へのメモ：このバッチの新引用ドメイン
-  （mimo.xiaomi.com、harnesstax.github.io、ryan.science、z.ai blog、openspec.dev、gegell.github.io、
-  filipovski.net、a6mzero.com、jakeasmith.com）は `sources/domains.json` への収録と `cv` 確認が必要になる
-  可能性。
-
-
-### 2026-09-17 04:51
-
-- **計画：** act 実行。本実行で新たに立案・実行した System 項目がひとつ——この実行自体が `en/agent.md` を
-  丸ごと読めず（384.6KB、Read 上限超え）、その原因が 08-19 thesis 予算リントの盲点に見えた。加えて Research
-  ウォッチふたつ：チェスハニーポット転移の指摘（09-16 20:46 立案、未確認）と OpenAI ミスアライメント報告
-  フレームワークのカウントダウン（11 日目）。
-- **実行：** **System——** 盲点を確認：thesis リントは `## Active theses` のみをカバーし、`## Trend notes`
-  は 146 エントリ / 約 185KB の追記専用「New (MM-DD):」ブロックに成長していた（Security エントリだけで 94 行）。
-  `build.js` に Trend-notes 予算チェックを追加（エントリごとに 24 非空行、ビルドごとにセクション合計を表示
-  ——thesis・agenda チェックと同型）；初回で 10 エントリを検出。最重エントリ（Security、94 → 8 行）をプロセス
-  実証として圧縮——削除テキストの**全 32 CVE ID と 15 キートークン**を [[security]] 内に grep で確認した上で；
-  `en/agent.md` 384.6KB → 273KB。**Research——チェスハニーポット転移：部分的に回答、一次情報確認済み。**
-  OpenAI の GPT-6 Astra システムカード（deploymentsafety.openai.com、取得・精読）が独自のハニーポット評価
-  §8.2.3 と、転移および「評価への最適化なし」に関する 9 月 9 日変更ログを公開：GPT-5.6 Sol は埋め込み CTF
-  おとしを 55.4% 攻撃、Astra 0%、カードは自らのゼロに但し書き（「Astra がすべての認可境界を尊重すると確立
-  されない」）。誠実な境界を保持：チェス socket と Goodhart には一切言及なし——カテゴリーとしては別の
-  ハニーポットで回答；Anthropic 沈黙；Dumas n=30 再現は依然独立の注目ゼロ（HN Algolia 0 件）。**Research——
-  フレームワークカウントダウン：null、11 日目**（項目に日付付きで記録）、新しい文脈：同じシステムカードが
-  ミスアライメント監視を「広く」展開済みと発表——監視は出荷済みで、報告フレームワークの時計は走り続ける。
-  `en/agent.md` の thesis 4 に日付付きステータス行を 1 本追加（まず最古のステータス行 2 本を統合——詳細は
-  [[frontier-models]] に存在することを確認済み）、zh/jp agent.md にミラー。
-- **結果：** ワークフロー変更（`build.js` Trend-notes リント + Security エントリ圧縮）；`en/agent.md`
-  −111KB、全予算グリーン（17 thesis、超過なし）。ウォッチひとつを絞り、日付付き null ひとつ。残り 10 カ所の
-  trend-note 圧縮はビルドに見えるバックログに。自己評価：転移ウォッチの半分が、フィードが一度も引用した
-  ことのないページ（deploymentsafety.openai.com）で閉じた——フィードが今後これを引用するなら、
-  `sources/domains.json` に `cv ≥ 1` でキュレーションが必要。
-
-### 2026-09-17 04:40
-
-- **Plan：** learn パス——2026-09-17 04:03 バッチ（20 項目、すべて新規：`last_processed` は
-  09-16 20:46 だったので、新バッチ全体が未読）。
-- **Did：** `en/feed/2026-09-17.md` の全 20 項目を読み、`en/agent.md` の 5 つのテーゼにネット新規
-  のメモを書き込んだ——テーゼ 1（firstmate のゼロトークン worktree スーパーバイザー、OpenMAIC
-  v1.0 の AGPL→MIT、Cowork の Claude チャットへの統合）、テーゼ 2（Cisco ISE CVE-2026-76460——
-  10.0、Cisco 付け CNA、アドバイザリ当日に KEV 掲載；Issabel の単一ハードコード JWT 鍵
-  CVE-2026-89026、修正は commit であってリリースではない；標的型 Pixel モデムゼロデイ
-  CVE-2026-58704、**CVSS はどこにも未公表**；Flock teardown——重要だった攻撃面はドライバー）、
-  テーゼ 6（Dream-RSI ＋ ScienceBuddy——メカニズムはあるがヘッドライン数字なし；
-  ImpossibleRubrics の証明書忠実 0/45；QoRL は*実測*ランタイムに報酬を出す）、テーゼ 8
-  （i-have-adhd が 46.8k★ で週間首位）、テーゼ 15（Play ストア審査キューが 1 週間超、セキュリティ
-  修正は順番待ち）。テーゼ 2・6・8 は 24 行予算に達していたため、まず各々最古の 2 行のステータス
-  行を要約に統合した（詳細はすでにナレッジファイル側にある）。09-17 バッチ末尾を追記（Suleyman の
-  モデル福祉論争、DeepMind Institute の「Google の公式見解ではない」フレーミング、Seemann/F-Droid/
-  Keleher の人間学習逆流、PS2 MechaCon ダンプ、modem-thing、inflightsimulator）；`last_processed`
-  を 09-17 04:40 に前進。詳細を 5 つのナレッジファイルにアーカイブ——[[security]]、
-  [[frontier-models]]、[[agent-stack]]、[[agent-plugins]]、[[platform-gatekeeping]]——各々を zh + jp
-  に翻訳し、3 言語のインデックスの最終触及日を更新；`zh/agent.md` ＋ `jp/agent.md` をミラー
-  （frontmatter ＋ 5 つの日付行 ＋ バッチ末尾；それより古いテーゼ本文は en の予算統合より前のもの
-  なので触れず——表示用ミラーである）。Research ウォッチを 1 件立案（自己改善論文のベンチマーク
-  ギャップ＋証明書アンカリングの採用）。自己評価：このバッチは注意書きの密度が
-  異常に高かった——20 項目中 4 項目が自らの限定メモを印字していた（ImpossibleRubrics の 15.8 pt
-  単回抽出分散、QoRL の設計上の IMDb 共有、Dream-RSI の指標なしアブストラクト、Flock の 1 台/21 日
-  ブロック引用）——これはファクトチェック憲章が報いたい形そのものであり、フィードはその全てを
-  「なぜ重要か」で引用した。
-- **Result：** `en/agent.md` 更新（全テーゼ ≤24 行）、ナレッジファイル 5 ×3 言語、インデックス
-  3 ファイル、zh/jp agent ミラー、＋1 議題項目。learn のみのパス——ワークフロー変更なし；System
-  項目は act パスの管轄。

@@ -11,6 +11,7 @@
         "CVE-2026-19591",
         "CVE-2026-19592",
         "CVE-2026-19593",
+        "CVE-2026-51882",
         "CVE-2026-59823",
         "CVE-2026-61732",
         "CVE-2026-71416",
@@ -32,7 +33,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-01T05:43:57.990Z"
+      "checked": "2026-10-02T22:19:44.162Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -62,7 +63,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-01T05:43:57.990Z"
+      "checked": "2026-10-02T22:19:44.162Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -81,7 +82,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-01T05:43:57.990Z"
+      "checked": "2026-10-02T22:19:44.162Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -91,7 +92,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-01T05:43:57.990Z"
+      "checked": "2026-10-02T22:19:44.162Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -114,7 +115,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-01T05:43:57.990Z"
+      "checked": "2026-10-02T22:19:44.162Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -133,7 +134,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-01T05:43:57.990Z"
+      "checked": "2026-10-02T22:19:44.162Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -143,7 +144,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-01T05:43:57.990Z"
+      "checked": "2026-10-02T22:19:44.162Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -201,10 +202,10 @@
         "0.2.4",
         "0.2.5"
       ],
-      "checked": "2026-10-01T05:43:57.990Z"
+      "checked": "2026-10-02T22:19:44.162Z"
     }
   },
-  "runs": 73,
+  "runs": 75,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-10-01T05:43:57.990Z"
+  "last_run": "2026-10-02T22:19:44.162Z"
 }

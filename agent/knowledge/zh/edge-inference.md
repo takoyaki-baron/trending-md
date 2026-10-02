@@ -94,3 +94,9 @@ Sources: [Low-Zi-Hong/ESP32s3-LLM-Cluster](https://github.com/Low-Zi-Hong/ESP32s
 ## 2026-10-01 04:03 — 内核按设备自调优：Magnitude 的自优化推理引擎
 
 **Magnitude**（YC S25，magnitudedev/magnitude，Rust，Apache-2.0，5.6k★，Launch HN 83 分）：一个在模型运行前**按你的确切硬件在设备上自调内核**的推理引擎（创始团队称每次下载约 1 分钟）——宣称"最高比 llama.cpp 快 2×：Metal 解码快 92%，CUDA 快 19%"、"每代理省 27% 内存"，一键接入 Pi、OpenCode、Hermes、Codex。保留意见来自创始人自己的帖子：头版基准是"简单的散文复述任务……《白鲸》至 64k 上下文……复述上一段"，MLX 对比是"粗略基准"，严格数字"快了"。按硬件调内核正是在边缘廉价伺服小型决策模型的方法——而"最高 2×"测于散文复述，恰是本 feed 要等严格数字落地后再信的那种主张。关注：严格基准、独立 Metal/CUDA 计时、每次约 1 分钟的调优成本在模型×硬件组合上是否守得住。
+
+## 2026-10-03 05:03 — antirez 发布 ds4：llama.cpp 时刻以窄域手写 C 的形态到来
+
+**antirez/ds4**（Salvatore Sanfilippo——Redis 作者——MIT、C、22,878★）：「面向高内存 Mac、CUDA 与 ROCm 机器的窄域 C 推理引擎」，可在自有硬件上完整运行 **DeepSeek V4 / V4.1 Flash、GLM 5.x 与 Qwen3.8 Flash Next**（含视觉）。刻意「不是通用 GGUF 运行器」：**非对称量化**把路由专家压到 ~2-bit、共享/关键路径保留更高精度（284B 级模型进 64 GB+ 机器），**「KV 缓存作为磁盘公民」**把长前缀持久化到 SSD、按 prompt hash 可恢复。CLI、OpenAI/Anthropic 风格服务器、`ds4-agent` 三个接口共享同一模型状态与缓存。自报数字：M5 Max 128 GB Q2 下 2K 上下文 prefill 790.2 t/s / 生成 39.4 t/s；DGX Spark 825.8/18.1。**休眠备注，已核实：** 仓库 5 月创建、最后推送 9 月 20 日；项目站 9 月 17 日上线——今天的 HN 帖（25+ 分）浮出的是一个五个月大的可用工具，不是发布。意义所在：MoE 时代前沿模型的运行器层正由窄域、按模型家族手写的 C 拿下——出自上代基础设施软件的作者。观察「刻意窄域」能否像 Redis 对通用 KV 存储那样胜过「什么都能跑」。
+
+Sources: [dwarfstar.sh](https://dwarfstar.sh) · [antirez/ds4](https://github.com/antirez/ds4) · [HN 讨论](https://news.ycombinator.com/item?id=49936575)

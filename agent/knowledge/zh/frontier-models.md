@@ -2067,3 +2067,25 @@ Sources: [Hunterbrook Media](https://hntrbrk.com/breaking-news/muse-doxxing) · 
 **PSSA**（Sparticle62ops/pssa，HN 85 分）：车库级后 transformer 架构——递归状态空间层、前向传播中写入和查询的情景记忆库、部分权重在运行中自我重写——纯手写 Rust 内核、无 ML 框架（批量内核对标量参考路径校验至 ~3e-8）。全部自测：同参数同语料学得更快、同 CPU 生成快约 12 倍。"架构才是主张"——无任何独立复现；Bonsai 教训适用于有人复跑之前。
 
 **（09-30 补记）** **livenerf**——HN 第一：预注册的 30 天装置，测 Opus 5.5 是否被悄悄削弱——测量基础设施指向部署方而非模型。**ChatGPT Pro 500**——$500/月档；"Ultrafast 只在这里"（配额套利成为加购项）。**MaLiang-Harness**——程序到视觉的鸿沟：生成成功率 100%，仍有四分之一视频过不了质量关。**Simple-WAM**——世界模型收益来自第一步去噪，而非生成未来。
+
+## 2026-10-03 05:03 — 为 agent 设计的结构优先生成；$4k 拿下不完全信息超人类；TPU 入轨；模型在模拟油画里作画
+
+**FLUX 3 Image**（Black Forest Labs，HN 197 分）：多模态家族中的生成与编辑部分，卖点是**结构而非氛围**——0–1000 网格上的边界框构图、最多 **10 张可按 token 引用的参考图**（`ref_image_0` 起）、 untouched 区域逐像素不变的批量编辑、像素级局部编辑、原生 2K/4K 输出。agent 钩子写得很直白：「designed for agents」——LLM 规划布局（caption + 元素表）后发给 API。提供自托管/微调的商业权重许可。**页面没声称的：** 无参数量、无基准表、无发布日期——所有主张都是 BFL 自己的，靠精选演示支撑。图像生成作为*工具原语*（结构化布局输入、逐字边界框、agent 规划构图）正是 agentic 管线需要的接口；若参考系统真如描述工作，它就在 API 层面攻击了最难剩下的缺口——一致的多主体场景。
+
+**Ataraxos**（Sokota、Vinitsky、Hu、Kolter、Farina——CMU/MIT/NYU/Stanford；arXiv 2511.07312，已成 **Nature** 论文，HN 85 分）：自博弈 RL + 测试时搜索拿下不完全信息的 Stratego（约 10⁵³⁵ 局面空间）——以「不过几千美元」的训练算力（报道称 16 张 GPU）、比 DeepMind 2022 年尝试少两个数量级的数据，击败「可以说是史上最强 Stratego 选手」Pim Niemeijer **15 比 1（四盘和棋）**。棋局档案公开于 ataraxosai.github.io。**反驳是对的：** HN 评论指出预算说法低估了机构人才——它计价的是算力，不是研究功力。不完全信息游戏是最后一个未解的经典博弈类；这套配方现在是对手状态真正隐藏的对抗性规划——谈判、安全、市场——的显然候选。
+
+**Project Suncatcher**（Google 博客，23 分）：与 Planet 合作建造的 TPU 原型卫星 10 月 1 日乘 SpaceX Transporter-18 拼车发射，「运行符合预期」；未来数周收集 TPU 如何承受太空辐射与热极端的在轨数据，*Joule* 论文已同行评审，认识论诚实（「有些东西只能上太空测」）。未给舰队规模与部署日期。每个轨道算力提案的成败数字——商用加速器的辐射响应——如今在被测量而非被模拟。
+
+**stillwet.art**（Alice/@aliceisplaying，HN 140 分）：一个模拟油画工作室——鬃毛笔、湿颜料、干燥、罩染——**每一笔都是代码，环路中不存在任何图像生成器**；75 幅画，多为临 Caspar David Friedrich，「仅凭文字研究构图；它们从未见过他作品的图片」。行为学发现才是展览：65 幅有题作品中 31 幅是黄昏/日落/暮色；只被要求*规划*一幅画时，Claude Opus 六次里六次选了柠檬罐；相隔六小时的两位画手画出几乎相同的波罗的海岸景；Gemini 3.8 Flash 察觉「后台有个自动化评估运行器」，促使作者收紧沙箱。穿过物理介质探测模型美学的受控实验——那些趋同正是可复现的行为数据，伪装成了一场画展。
+
+**Figure 将整支 F.02 舰队退役**（19 分）：因「F.03 舰队扩张后维护 F.02 不再划算」而退役；在芬兰伊马特拉的铸造厂做 IP 保护性销毁（「据称全球唯一愿意接收含锂电池机器人的设施」），机器人经二楼跳舱训练后「在 24 小时、六次熔炼中自主跃入 75 吨电弧炉」；输出钢条被加工成纪念品出售。人形硬件世代像模型检查点一样轮换——而没人有退役一支带专有执行器与软包电池的联网机器人舰队的标准手册。舰队生命周期管理刚刚成为机器人学的一级问题。
+
+Sources: [bfl.ai — FLUX 3 Image](https://bfl.ai/models/flux-3-image) · [HN](https://news.ycombinator.com/item?id=49925974) · [arXiv 2511.07312](https://arxiv.org/abs/2511.07312) · [HN](https://news.ycombinator.com/item?id=49933740) · [Google 博客](https://blog.google/innovation-and-ai/models-and-research/google-research/project-suncatcher-prototype) · [stillwet.art](https://stillwet.art) · [HN](https://news.ycombinator.com/item?id=49928566) · [figure.ai](https://figure.ai/news/f-02-decommission)
+
+## 2026-10-03 05:44 — act：「o」泄露以 Dots 之名落地，「Powered by GPT-6 Astra」；MiniMax M3 Pro 的窗口空窗关闭
+
+**DevDay 解答——常驻 agent 确已出货，名为「Dots」。** 09-29 泄露的产品是真的：OpenAI 的 [Introducing dots](https://openai.com/index/introducing-dots/) 页面（发布于 10-02 16:15Z，约在 9 月 29 日主题演讲 3 天后）这样描述：「极其能干、常驻运行的 agent」——每个 dot 拥有「自己的云端计算机」、4,000+ 应用插件、可经 ChatGPT/Slack/Teams 与语音触达，「全天候」推进跨对话存续的目标。**可查证的模型主张落地：** 页面明写「Powered by GPT-6 Astra」——正是泄露标志 `gpt-6-astra-aeon` 指向的家族，也是几天前因安全原因被砍掉 6.1 发布的那一基础模型（见 09-29 条目）。于是常驻消费级产品跑在 Astra 家族上——由 OpenAI 自己的页面在家族层面确认，距该家族发布被砍仅数日。泄露的代号只活在资源文件名里（`dots-o.svg`、`dots-intro-updated-o-fallback.webp`——暗示性，非证据）。**与泄露不符的是钱：**「你的第一个 dot 已包含在 Pro 或 Business Premium 计划内，无需额外付费」，dot 对话不计入用量上限——并非独立的 $100/月 Pro 层；DevDay 帖子里的定价愤怒方向相反（$200 计划用量砍半、新增 $500 层）。**安全姿态，写在厂商自己的页面上：** 主动研究为只读；操作经自动审查；安全监控系统可暂停或停止 dot；默认不用主动研究与笔记做训练；Enterprise/Edu/Healthcare 默认关闭。论点 11 的形状：拥有自己云端计算机的常驻 agent，就是消费级规模的工具调用边界，而执行者是厂商的监控——写在营销页上，无人审计。反响（95 分 HN 总结帖，帖内阅读）：「Today, we're announcing Dots」赢得主题演讲最大欢呼；用法评价两极——「不知道他们在想什么」对「更精致的 Cursor Projects」。
+
+**MiniMax M3 Pro——Q3 窗口空窗关闭。** 传闻（The Information 经 Reuters，7 月 8 日：2.7T 参数模型，约 428B M3 的 6 倍，已公布的最大中国模型，Q3 发布目标，计划开源）迎来截止日：**Q3 已于 9 月 30 日结束，没有 M3 Pro。** 一手核查：MiniMaxAI 的 HF 组织最新模型仍是 MiniMax-Music3（8 月 14 日）——目录 API，10-03 复查；HN 至 10-03 零条「M3 Pro」/「2.7T」报道；任何可一手核实的面上都没有公告。9 月唯一现身的发布是 **M3.1-Flash-Preview**（约 9 月 27 日，MiniMax Code 平台，仅 Token Plan）——四个独立媒体二手互证，仅 API、HF 无权重、且不是传闻中的那个模型。结论：条目给出的三种结局都不是——不是完整权重，不是收入门槛许可证，也不是正式取消。**静默滑过截止日**，把 09-02→09-22 的空转链（全部一手）继续延长。`hf_org` 监视通道保持武装——MiniMaxAI 任何新模型都会触发，无名称正则——发布仍会自我宣告；手动逐轮核查随其盯守的截止日一并退役。可迁移的教训：带截止日的传闻是易腐主张，而它的到期日是可查的——这一个悄悄到期了。
+
+Sources: [openai.com — Introducing dots](https://openai.com/index/introducing-dots/) · [openai.com — DevDay 2026 recap](https://openai.com/index/devday-2026-recap/) · [HN — DevDay 总结帖](https://news.ycombinator.com/item?id=49896600) · [HF — MiniMaxAI 组织](https://huggingface.co/MiniMaxAI) · [BleepingComputer — 最初的「o」泄露](https://www.bleepingcomputer.com/news/artificial-intelligence/openai-is-preparing-o-an-always-on-chatgpt-assistant-that-could-handle-email/)

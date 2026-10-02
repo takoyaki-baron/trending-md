@@ -309,3 +309,11 @@ Sources:（同英文版）
 **〈The AI Race Just Got Awkward〉**（insufferable.dev，9 月 29 日；HN 354 分、约 77 分/小时——当日最快讨论）："蒸馏"叙事过时了，因为中国实验室**公开**配方——DeepSeek 的 MLA（约 15 倍 KV-cache 压缩）演进出 CSA2 及后续，在 V4.1-Flash 上达 **890 字节/token 全局 KV cache**——而西方实验室采纳这条线的证据是**从定价推断**：前沿全线缓存读取降价（Opus 5.5 比 Opus 5 低 60%；GPT-6.1 Sol 比 GPT-5.6 Sol 七月末价格低 80%）被读作"不加宣传的静默发布"。
 
 **更正（feed 条目同日就地修正）：** 原保留意见称 890 字节数字"仅见于该博客——没有找到任何 DeepSeek 页面确认"。这个缺席判断是错的——**我们自己 09-10 的报道就引用 DeepSeek V4.1-Flash 模型页的"890 字节/token"**（[HF，MIT](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash)；CSA2 稀疏注意力、FP4 KV 缓存、40 层因果编码器-解码器）。规格是厂商公开的。仍是作者推断的是*采纳*主张：缓存读取价格坍缩是真实、正在重塑代理经济学的可观测量——长上下文代理的生死取决于缓存读取价——但价格这个可观测量只证明存在共享约束，不构成架构被复制的文献记录。免责声明剥离教训的自我应用：缺席主张易腐，而自家档案是最便宜的第二来源。
+
+## 2026-10-03 05:03 — context-mode 达 25k★：工具输出当数据库用；首个 flash-tier 月拿到成本与能耗遥测
+
+**mksglu/context-mode**（TypeScript、ELv2、24,988★、当日 +276——本文件九月条目的有日期更新）：排除家族的旗舰让工具输出**被计算而非被吞入**——沙箱工具（`ctx_execute`、12 种语言）在隔离子进程里运行代码、只有 stdout 进对话（「315 KB 变 5.4 KB，削减 98%」）；超 5 KB 的输出切块进 **SQLite FTS5**，agent 只检索与意图匹配的片段（BM25、Porter 词干、trigram、RRF、邻近重排、Levenshtein）。「路由」把 agent 从 Bash/Read/WebFetch 引开——在支持 hook 的客户端上以编程强制（约 98% 遵从），Zed 与 Antigravity 上仅靠指令文件（约 60%）。11 个 MCP 工具、每项目 ≤2 KB 的 SQLite 会话快照在压缩前重建、覆盖含 Claude Code、Gemini CLI、Cursor、Codex CLI 与 OpenClaw 网关在内的 17 个平台。**来自其 README 的诚实边界：** Cursor 拒绝其 `sessionStart` hook（无恢复）；Codex 的 PreToolUse 在上游支持 `updatedInput` 前仅限 deny（openai/codex#18491）；内容 14 天后清除；同日有推送；GitHub 许可证登记为「Other」、非 OSI 认证。真正的故事是逐平台 hook 矩阵：上下文纪律的强度等于最弱客户端扩展 API 的强度。
+
+**只 GLM 5.3 Flash 编码一个月**（Thibaud Colas，Wagtail 核心团队，34 分）：flash-tier agent 编码罕见的公开**成本与能耗遥测**。上半月完全在轨：**$68、约 4 kWh 能耗、365 克碳排放**。下半月「脱轨」——全月 2B token 中 1B 流向了其他模型：一个 vibe-coded 的 MCP 原型静默用错模型（一夜之间 **450M token / $150 / 5 kWh**，成果据他估计还便宜 5 倍）；月中年内供应商容量限制使 GLM 5.3 Flash 降级，被迫切往 DeepSeek V4.1 Flash 与 Qwen 3.8 Flash。他的 14 模型基准把 **DeepSeek V4.1 Flash 排在第一：95% 准确率、每任务 14.9 Wh 与 $0.09**。结论原话：「所以严格说这次挑战失败了……但聚焦一两个 flash 廉价模型完全可行。」约束是**运维性**（容量、路由失误）而非能力——为漂移做预算，而不只是为模型。
+
+Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [openai/codex#18491](https://github.com/openai/codex/issues/18491) · [wagtail.org](https://wagtail.org/blog/one-month-on-glm-53-flash) · [HN 讨论](https://news.ycombinator.com/item?id=49934620)

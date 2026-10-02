@@ -161,3 +161,11 @@ Sources:（同英文版）
 **剑桥分析案 Facebook 被判担责**（新墨西哥州陪审团，圣塔菲；判决 9 月 25 日；HN 261 分）：在 AG Raúl Torrez 为期两周、围绕收割约 8700 万档案的性格测试的庭审中，陪审团认定 Facebook 在隐私保护上欺骗用户——逾 200 万项违规（全州人口规模），包括在丑闻后关于数据经纪调查误导公众。量刑由法官而非陪审团决定；州方寻求每项违规最高 $5,000。收窄局面的背景：8 月高达 $180 亿的多州儿童安全和解免除了 Meta 在新墨西哥以外的一切未来剑桥分析责任（佛罗里达拒绝签署），且该州今年已在另一起未成年人安全庭审中赢得 $9.42 亿。Meta 表示不认同并将继续抗辩，主张其宪法第一修正案下的平台运营权。与工程师相关的部分是逐违规罚金算术：$5,000 × 每一个受影响用户。
 
 Sources: [gultsch.de](https://gultsch.de/posts/breaking-up-with-google-play/) · [HN — Conversations](https://news.ycombinator.com/item?id=49855315) · [CBS News](https://www.cbsnews.com/news/facebook-liable-deceiving-users-cambridge-analytica/) · [HN — 判决](https://news.ycombinator.com/item?id=49852302)
+
+## 2026-10-03 05:03 — agent 权限之墙抵达 macOS；法院以系统论证驳回技术强制
+
+**Apple 将收紧完全磁盘访问——并点名 AI agent 是原因**（10 月 2 日开发者通告，无技术细节）：FDA「在很大程度上绕开」按资源的隐私控制，且正被「可能置用户于危险的方式」使用，「暴露系统上的一切——文件、邮件、消息乃至浏览历史」；今后此类访问需「非常明确的用户主动操作」。AI 表述就是头条：「随着 AI agent 能力与自主性日益增强，这种级别访问的风险将大幅增长。」**通告里没有的：** 无生效日期、无新权限或 API、无迁移指引——「going forward」就是全部时间线。还点出第三方视角：agent 读取通信类应用「也可能侵害用户通信对象的隐私」。agent 时代的权限之墙正从 macOS 率先立起，出自那个本来就处处设门的厂商；如果你的 agent 索引邮件、消息或文件系统，预留未来 macOS 版本里的同意悬崖——现在就按最小授权设计，因为「备份应用」是 Apple 唯一点名合法的用例。
+
+**犹他州 VPN 年龄验证法被以「技术上的不可能」叫停**（EFF；303 分、#1）：联邦法院（Barlow 法官）对 SB 73 批准**初步禁令**——该法要求网站封禁所有 VPN 用户或穿透流量混淆来识别访客物理位置，并从 10 月 8 日起执行「商业上合理的地理混淆检测」。判决是罕见的以系统论证写成的法院意见：法规「要求 Aylo 之类的实体完美定位网站用户以规避责任」，同时承认「地理定位的完美目前不可能」——对任何单个误定位访客都构成事实上的严格责任。诉讼由 Aylo（Pornhub 母公司）提起，EFF 的法庭之友搭建了技术记录；范围限定已声明：禁令仅覆盖 VPN 条款，单独的「分享 VPN 规避信息」禁令未被质疑，犹他州下届会期可重写。**第一个死于一纸「技术不可能」裁决而非言论裁决的年龄验证制度**——这本账册的反例：有时法院会逐字采纳工程师的论证。
+
+Sources: [Apple Developer News](https://developer.apple.com/news/?id=p6zjojqw) · [HN](https://news.ycombinator.com/item?id=49937631) · [EFF Deeplinks](https://eff.org/deeplinks/2026/10/court-agrees-eff-utahs-vpn-law-demands-technical-impossibility) · [HN](https://news.ycombinator.com/item?id=49927754)

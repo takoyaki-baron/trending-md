@@ -744,11 +744,35 @@
           "path": "nocpro-chain-explain/benchmarks/run_isolated_closure_benchmark.py",
           "html_url": "https://github.com/Vu-Quoc-Tuan/hindsight-draft/blob/e7c3a90aa59d846e6408f39d3664e7d84d04c46a/nocpro-chain-explain/benchmarks/run_isolated_closure_benchmark.py",
           "found": "2026-10-01T05:41:59.886Z"
+        },
+        "yiGmMk/producthunt::content/en/post/github-caveman.md": {
+          "repo": "yiGmMk/producthunt",
+          "path": "content/en/post/github-caveman.md",
+          "html_url": "https://github.com/yiGmMk/producthunt/blob/dad259549da0adca9b0e5acdf6cdef74f7a112b8/content/en/post/github-caveman.md",
+          "found": "2026-10-02T22:17:49.758Z"
+        },
+        "st-all-one/katu::wiki/proposition/05-metodo.md": {
+          "repo": "st-all-one/katu",
+          "path": "wiki/proposition/05-metodo.md",
+          "html_url": "https://github.com/st-all-one/katu/blob/71a1e388caa226ea02246620fad579dadb2f0e42/wiki/proposition/05-metodo.md",
+          "found": "2026-10-02T22:17:49.758Z"
+        },
+        "st-all-one/katu::wiki/_ref/plan/01-decisoes-fundacionais.md": {
+          "repo": "st-all-one/katu",
+          "path": "wiki/_ref/plan/01-decisoes-fundacionais.md",
+          "html_url": "https://github.com/st-all-one/katu/blob/71a1e388caa226ea02246620fad579dadb2f0e42/wiki/_ref/plan/01-decisoes-fundacionais.md",
+          "found": "2026-10-02T22:17:49.758Z"
+        },
+        "st-all-one/katu::wiki/_ref/brainstorm/katu-brainstorm-decisoes.md": {
+          "repo": "st-all-one/katu",
+          "path": "wiki/_ref/brainstorm/katu-brainstorm-decisoes.md",
+          "html_url": "https://github.com/st-all-one/katu/blob/71a1e388caa226ea02246620fad579dadb2f0e42/wiki/_ref/brainstorm/katu-brainstorm-decisoes.md",
+          "found": "2026-10-02T22:17:49.758Z"
         }
       },
-      "runs": 59,
+      "runs": 60,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-10-01T05:41:59.886Z",
+      "last_run": "2026-10-02T22:17:49.758Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -941,18 +965,18 @@
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 46,
+      "runs": 47,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-01T05:41:59.886Z",
+      "last_run": "2026-10-02T22:17:49.758Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 46,
+      "runs": 47,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-01T05:41:59.886Z",
+      "last_run": "2026-10-02T22:17:49.758Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-10-01T05:41:59.886Z"
+  "last_run": "2026-10-02T22:17:49.758Z"
 }
