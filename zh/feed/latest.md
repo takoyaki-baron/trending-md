@@ -1,8 +1,8 @@
 ---
 date: 2026-10-02
-updated: 2026-10-02T12:20:00+08:00
+updated: 2026-10-02T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -454,13 +454,209 @@ TypeScript 效果系统的推倒重写把供应链姿态放在了头条：核心
 
 ---
 
+## 33. DeepSeek Harness Desktop：agent 框架走出终端 —— macOS 与 Windows 桌面版开启公测
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** deepseek.com · 267+ pts on HN · ~9h ago（~11:11 UTC+8）
+- **Tags:** `deepseek` `agent-harness` `desktop` `plugins`
+
+DeepSeek 的开源 agent 框架——`dsh`，MIT 许可，构建于 Cordis 框架（"一切皆插件"）之上——现已推出**桌面应用**：Apple 芯片 macOS 的 `.dmg` 与 64 位 Windows 的 `.exe`，仍标注为全球公开预览，原有的 `npx @deepseek-ai/dsh web` 与源码方式保留。相比 8 月的开发者预览（当时拿下 HN 747 点），桌面版新增：**Creator 模式**（对话生成插件——演示 5 分钟左右造出一个悬浮番茄钟）、**定时任务**（每周五 17:00 出周报，支持指定时区）、带工具调用载荷与耗时的执行轨迹，以及 Word、Excel、PDF、TypeScript、Python 文件的预览编辑。官方插件：Terminal、Agent loop、Subagents；Agent teams、Auto approval review、Scheduled tasks、Voice input 明确标注**实验性**。界面显示 DeepSeek-V41-Flash，可调 "High" 档。HN 反馈：有早期用户称"所有设置与工作区都完整迁移"——对应的是可预期的隐私疑虑（"要一个全权限的大二进制才是目的吧"）与"又一个 harness"的疲劳感。
+
+**Why it matters:** 框架层是本榜单最大几个仓库所在的位置（Pi、OpenClaw、Paperclip）——而现在一家前沿实验室亲自发布了消费级桌面 harness，MIT 许可、可插件扩展，把模型厂商与 agent 运行时之间的距离压到零。值得盯住的是评论区抛出的问题：来自模型厂商的全权限 agent 二进制。
+
+[`🔗 DeepSeek Harness`](https://www.deepseek.com/en/harness/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49929489)
+
+---
+
+## 34. Debian 一份通告修复一大墙内核 CVE —— "数个"这个词居功至伟
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** LWN / Debian · 371+ pts on HN · ~13h ago（~07:10 UTC+8）
+- **Tags:** `linux` `kernel` `cve` `debian`
+
+Debian 的 DSA-6528-1 把 stable（trixie）的 6.12.x 内核更新到 **6.12.111-1**，标题干巴巴的一句"Linux 内核中发现数个漏洞"——后面跟着一整墙 CVE 编号，横跨 **2024 至 2026 年**（CVE-2024-52560 到 CVE-2026-100079），描述只有一句：可能导致"提权、拒绝服务或信息泄露"。诚实上下文来自内核自己的 CVE 文档：因为几乎任何内核 bug 都可能危害安全，内核 CVE 团队"极度谨慎，几乎给所有 bug 修复都分配 CVE"——本批大多数是内存安全问题。通告未标注任何在野利用，也未给出逐条 CVSS；9 月 29 日修复，建议升级。这是大规模回移列车，不是上周 KEV 那种在野利用故事——HN 的 264 条评论大半在讨论量词，还要感谢《英雄无敌 3》的数量刻度（"several" 是 5–9，过千是"军团"）。
+
+**Why it matters:** 内核 CVE 的分母已膨胀到一份通告能装下一个军团——信号不再是数量而是列车：你若在跑 trix，6.12.111-1 就是增量；你若把 CVE 总数当风险读，这份通告就是常设反例。
+
+[`🔗 LWN`](https://lwn.net/Articles/1097401/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49928121)
+
+---
+
+## 35. 穴居人再临：108.9k★ 的省 token 技能重回趋势榜——而基准测试说"be brief."就能打平
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending（第 2 名）· 108,853★（API 已验证 ~12:18 UTC+8）
+- **Tags:** `claude-code` `skills` `tokens` `benchmarking`
+
+"why use many token when few token do trick"——caveman 技能 + 代理（Go，Apache-2.0）今日排在趋势榜**第 2 位**，距离它 4 月那个 904 点的 HN 帖子已过半年。该技能指示 agent 用简短的穴居人语气回答；仓库声称**输出 token 减少 65%+**，代码、命令与错误输出逐字节保持不变，并附带 `caveman-stats` 读取会话 JSONL、汇报真实用量。有趣的是独立检验：Max Taylor 的 24 提示、五臂基准（opus-4-7，按评分细则打分）发现 caveman-lite 平均 **401 输出 token，而 "be brief." 是 419**（基线 636）——约 37% 对 34% 的削减，各臂质量差距在 1.5% 以内，危险表述零触发。真正拉开差距的是：一致的输出形状、会话中段可调的强度旋钮、基于 hook 的规则集重注入（长会话不丢），以及**Auto-Clarity**——破坏性操作时自动放松压缩。
+
+**Why it matters:** 测量得出的结论比梗活得久——输出 token 只是账单的小头，而一句两个词的指令就能在两个轴上打平插件；真正留下的是结构，不是压缩。大多数提示工程建议从不与无聊的默认值对测。这一次测了。
+
+[`🔗 JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) · [`🔗 "be brief." 基准`](https://www.maxtaylor.me/articles/i-benchmarked-caveman-against-two-words) · [`🔗 HN（4 月）`](https://news.ycombinator.com/item?id=47647455)
+
+---
+
+## 36. agent 技能货架走向平台官方：Google、Cursor 与 52k★ 营销包包抄今日榜单
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · API 已验证 10 月 2 日（~12:18 UTC+8）
+- **Tags:** `skills` `google` `cursor` `agents`
+
+数一数今日前十五：**八个是技能层项目**——caveman、obra/superpowers（294k★）、impeccable、mattpocock/skills、coreyhaines31/marketingskills（52.2k★）、mksglu/context-mode（24.9k★），以及值得注意的新面孔：**google/skills**（"Google 产品与技术的 Agent Skills"，Apache-2.0，20.6k★，今日有推送——近期提交覆盖 GKE 升级排障参考、Cloud Spanner Queues、解决方案架构技能参考）和 **cursor/plugins**（"Cursor 插件规范与官方插件"，TypeScript，9.4k★——当天提交还在重命名一个 eToro 交易插件）。marketingskills——面向 Claude Code 等的 CRO、文案、SEO、分析与增长工程——以 52.2k★ 成为非开发者阵营的招牌。
+
+**Why it matters:** 技能本是一种社区民间格式；当 Google 维护起技能单体仓库、Cursor 发布插件*规范*，这个格式正被吸进平台表层——今天条目 11 和 25 提出的问题（Figma 白名单、OpenAI 扩展）在更低一层重演。货架正在变成过道，而过道是有主人的。
+
+[`🔗 google/skills`](https://github.com/google/skills) · [`🔗 cursor/plugins`](https://github.com/cursor/plugins) · [`🔗 marketingskills`](https://github.com/coreyhaines31/marketingskills)
+
+---
+
+## 37. KillSec 被连根拔起：16 岁的 RaaS 疑似主管、五台服务器、四国八处搜查
+
+- **Velocity:** ▮▮ rising
+- **Source:** The Record · 10 月 1–2 日
+- **Tags:** `ransomware` `raas` `europol` `takedown`
+
+KillSec 清剿行动的细节：西班牙国民警卫队网络犯罪部门在阿利坎特逮捕了疑似运营该团伙的**16 岁罗马尼亚籍少年**；**Fouad Eltibrizi**（网名 "Archduke"，荷兰籍）在英国被捕，依据是 9 月 16 日美国联邦大陪审团起诉（波多黎各区，未授权访问计算机共谋），正等待引渡；另有两人被捕，已确认至少四名成员——一名疑似开发者 8 月刚满 18 岁。KillSec 于 2024 年现身，发起约 **1,000 次攻击、至少一半得手**，目标覆盖医疗、政府与金融服务；Halcyon 将其列为最便宜的 RaaS 平台之一——Tor 控制面板带聊天与定制工具，低水平附属也能上手。查获：五台服务器与泄露站点；希腊、罗马尼亚、英国、西班牙八处住宅被搜查；汉堡主导行动，Europol EC3 提供支持，BitDefender 与 Group-IB 协办。
+
+**Why it matters:** 年龄是头条，结构才是故事。最便宜一档的勒索软件即服务已经运转到值得九国联动——端掉的是品牌，它养活的附属团伙换个地方重新挂牌。
+
+[`🔗 The Record`](https://therecord.media/killsec-ransomware-raas-arrests-europe) · [`🔗 The Hacker News`](https://thehackernews.com/2026/10/police-arrest-16-year-old-suspected-of.html)
+
+---
+
+## 38. Proofpoint：中国关联的 TA419 冒充 Anthropic 高管与前 OSTP 副主任，对美国 AI 政策圈发起凭证钓鱼
+
+- **Velocity:** ▮▮ rising
+- **Source:** Proofpoint · 10 月 1 日发布
+- **Tags:** `phishing` `ta419` `espionage` `ai-policy`
+
+TA419——Proofpoint 自 2025 年 4 月起跟踪、此前从未公开报道——针对美国智库、高校与律所的 AI 政策专家实施两段式社会工程：先发善意破冰邮件，再用定制版开源 **Frameless BitB** 工具对 Microsoft 365/Entra ID 发起中间人凭证钓鱼，其遥测脚本自动勾选"保持登录"、自动提交一次性验证码——**在 MFA 通过的同时截获会话 cookie**。冒用的身份：白宫 OSTP 前首席副主任 **Lynne Edwards Parker**、经济学家 **Heidi Crebo-Rediker**，以及 2026 年 2 月的一次——**Anthropic 高级员工**。诱饵包括虚构的"AI 政策咨询委员会"、参议院外委会关于 AI 出口管制的报告，以及一封题为"就 Claude 军事整合征集反馈"的邮件。归因口径照录 Proofpoint 原文：中国关联，*可能*服务于中国情报目标——这是基于目标选择的评估，不是点名赞助方。
+
+**Why it matters:** AI 政策讨论已经值得冒充它的亲历者——银行那套借来的可信度剧本，对准了正在起草规则的人。而工具本身是开源的：这类攻击的门槛是身份，不是技术。
+
+[`🔗 Proofpoint`](https://www.proofpoint.com/us/blog/threat-insight/hallucinating-credibility-china-aligned-ta419-impersonates-its-way-us-ai-policy) · [`🔗 The Register`](https://www.theregister.com/security/2026/10/01/suspected_chinese_spies_spoofed_an/)
+
+---
+
+## 39. Meta 开源 Astryx：服务 13,000 个内部应用、打磨 8 年的设计系统——自带 AGENTS.md 的 agent-ready
+
+- **Velocity:** ▮▮ rising
+- **Source:** facebook/astryx · 13.5k★ · v0.6.4 于 10 月 1 日发布（~05:20 UTC+8）
+- **Tags:** `meta` `design-system` `react` `open-source`
+
+Astryx（React 19+，内部用 StyleX，MIT，beta）是 Meta 最大的内部设计系统走向公开：**150+ 全类型、可访问组件**，主题即 CSS 自定义属性覆盖（自带七套主题，含 matcha、gothic、y2k），文档/脚手架/codemod 一应俱全的 CLI，以及**开放内部**——`swizzle` 可把组件完整源码弹射进你的项目，StyleX 对消费者不可见（用 Tailwind、CSS modules 或原生 CSS 经 `className` 覆盖）。"agent ready" 是结构性设计而非口号：仓库自带 **AGENTS.md 与 CLAUDE.md**，文档与 CLI 共同设计，人和助手读同一份参考；README 还建议设置 CLI 脚本别名，免得 agent 敲错路径。触发点：v0.6.4 于 10 月 1 日发布。声明的限制：图表库（`@astryxdesign/vega`/`charts`）仍在 canary；`@astryxdesign/lab` 保持内部。
+
+**Why it matters:** 今天出现的第三种 agent 与设计工具的关系模型，前两种见条目 11（Figma 白名单）与条目 25（OpenAI MCP 扩展）：不给 agent 设门禁，也不扩展协议——让*库本身*成为 agent 的界面，把它要读的文档用同样的许可证放进仓库。
+
+[`🔗 facebook/astryx`](https://github.com/facebook/astryx) · [`🔗 astryx.atmeta.com`](http://astryx.atmeta.com)
+
+---
+
+## 40. Truffle Security：公共 GitHub 仓库中的 543,699 个仍有效凭证——暴露中位数 784 天，"缺口在吊销"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Truffle Security · 9 月 29 日发布 · 持续发酵
+- **Tags:** `secrets` `github` `credentials` `research`
+
+Truffle Security 扫描了 The Stack v3 全部 4,096 个分片——**224,553,295 个仓库、约 585 亿个文件**，仅默认分支，爬取截止 2025 年 8 月 7 日——并于 2026 年 7 月 27–28 日对各服务方做了活体验证。结果：从 1,103,438 次暴露中确认 **543,699 个有效凭证**；暴露时长中位数 **784 天**，90 分位 6.3 年，最早的有效凭证来自 2009 年 6 月。**199,843 个泄露于 push protection 成为默认**（2024 年 2 月）之后，且 **51.8% 的存活秘钥是 push protection 默认不拦的形状**——连接串、Google API key、私钥。家族分化是最锐利的数据点：101,886 个已提交的 npm token 中只有**1 个**仍然有效，而 Google Cloud 服务账号有 **69,041** 个存活（共 126,963 个），MongoDB 连接串"100%"存活——作者标注这是测量假象，因为检测器只汇报它成功连上的 URI。声明的局限：仅默认分支（"真实总量更大"）、文件时间戳只是泄露日期的代理、push protection 效应测得的是渐变而非阶跃。
+
+**Why it matters:** 报告的论题——"仍然能通过认证的泄露密钥就是访问权"——把修复从推送时的开发者自律挪到服务方的吊销策略，那里几乎没人设 SLA。npm 与 MongoDB 的分化把它量化：有自动吊销基础设施的生态基本解决了这个问题；其余的永远在漏。
+
+[`🔗 Truffle Security`](https://trufflesecurity.com/blog/github-repos-exposed-543699-credentials-nobody-revoked-them) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/over-543-000-valid-credentials-exposed-in-public-github-repositories/)
+
+---
+
+## 41. OneStreamer：一个 4B 模型打通流式视频——感知、记忆与主动响应共用一个接口
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face papers · 61 upvotes（今日榜首）
+- **Tags:** `video` `streaming` `multimodal` `paper`
+
+今日 HF 榜首（arXiv 2610.01762；南京大学 MCG 团队，Xiangyu Zeng 领衔的 24 位作者）把流式视频系统通常拆开的东西合而为一：一个 **4B 参数**模型，在任务未知时就保留可能有用的证据，攒够了再作答——**主动生成作为感知、记忆与响应共用的单一学习接口**。组件：**PHCM**（Proactive Hierarchical Caption Memory——为已结束事件生成带时间戳的字幕与摘要，作为可复用的事实记忆）、**PSTL**（Proactive State Transition Learning——在所有输出锚点施加监督；仅用 27.5% 的标注状态 token 就胜过稠密状态监督），以及**OneStreamer-1M**——由合成管线构建的百万级流式数据集。声称：在全部八个流式视频基准上优于对比方法。摘要未列局限——诚实的注脚是对比集就是作者自己选的。
+
+**Why it matters:** 常开 agent（今天都有覆盖：Dots、Pi Durable）需要不被提问也在记忆的视频原生伙伴；一个自带字幕记忆的 4B 模型是算力上说得通的形状，而"先等攒够证据，再行动"正是 agentic 搜索反复重新发明的那条证据积累回路。
+
+[`🔗 arXiv 2610.01762`](https://arxiv.org/abs/2610.01762) · [`🔗 HF papers`](https://huggingface.co/papers/2610.01762)
+
+---
+
+## 42. PyRUA-Lean：用 Python 包住机器人策略——GPT-6 Astra agent 成功率 63.1% → 71.7%，输入 token 少 65%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 10 月 1 日提交
+- **Tags:** `robotics` `vla` `agents` `paper`
+
+arXiv 2610.01939（Ruiyang Si 等 12 人）用交互式代码执行框架取代"每步一次模型调用"的机器人控制：agent 编写 **Python 单元格**，把经典原语与习得的 VLA 策略组合起来，在代码里做条件判断与本地重试，只返回显式请求的图像与状态。对比是受控的——同一个 **GPT-6 Astra** 规划器、同一批原语、同等的 LLM 调用预算、跨 LIBERO-PRO、RoboTwin 2.0 与 RoboCasa365 的 700 个仿真任务：成功率 **63.1% → 71.7%**；在双方都解出的任务上，**LLM 调用少 49%、输入 token 少 65%**。声明的局限：仅仿真；单一基线加单一规划器，对其他 agent 设计的泛化未验证。
+
+**Why it matters:** token 效率浪潮有了机器人学入口，而且机制平凡可复现——把控制流从模型挪进 Python 单元格。保留提醒：仿真任务、单规划器；但"框架写循环、模型写策略调用"正是 Mid-Harness（条目 30）在软件侧主张的分层。
+
+[`🔗 arXiv 2610.01939`](https://arxiv.org/abs/2610.01939) · [`🔗 HF papers`](https://huggingface.co/papers/2610.01939)
+
+---
+
+## 43. 青蛙与蟾蜍与越来越能干的机器——一本图绘 AI 寓言冲上 HN 首页
+
+- **Velocity:** ▮ steady
+- **Source:** frogandtoad.ai · 222+ pts on HN · ~14h ago（~06:23 UTC+8）
+- **Tags:** `ai-culture` `copyright` `illustration` `essay`
+
+frogandtoad.ai——图绘寓言，"Elizabeth Van Nostrand 撰文，HungerArtist 绘图"，封面是青蛙与蟾蜍站在"被小型机器帮手围满"的工作坊里——让 Arnold Lobel 笔下的两栖动物迎面撞上自动化，风格本身即论证。HN（222 点）把它同时当作作品与罗夏墨迹：有人担保其文字与画风是"执行上乘的 Lobel 拟作"；有人把主题概括为"青蛙和蟾蜍承担责任，而不是怪罪它们造的机器"；还有人指出缺逗号。而最锐利的一条是提问不是批评：**"Arnold Lobel 的遗产管理方拿到钱了吗？"**——风格模仿之问抢在故事结束之前抵达。
+
+**Why it matters:** "AI slop 美学"吵了两年，令人印象深刻的反例以童书拟作的形式出现，好看到首页争论的是*遗产管理方*而不是逗号。在世艺术家风格模仿没有定论的法律；这就是那个博同情的测试案例长成的样子。
+
+[`🔗 frogandtoad.ai`](https://www.frogandtoad.ai/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49927760)
+
+---
+
+## 44. 给 HN 的 AI"移动球门"来一场公投——投票截止，评论区才是真结果
+
+- **Velocity:** ▮ steady
+- **Source:** stoppels.ch · 156+ pts on HN · ~19h ago（~01:32 UTC+8）
+- **Tags:** `evaluation` `ai-progress` `hacker-news` `meta`
+
+Goalposts 抓取 HN 自己的记录——历年"AI 永远做不到……"的评论——逐条回放，供三选一投票（"这发生了吗？"——是 / 不确定 / 否）。投票已截止；站点指向结果页。189 条评论的讨论串才是干货所在：ben_w "很高兴我的一个预测错得彻底"（LLM 现在会写并训练新的 ML 模型）；FabCH 指控这个串犯下了站名所暗示的罪行——"人们不停移动球门"，把"商业任务"悄悄扩张成"任意新任务"；tripleee 反驳"没有监督就不可靠"从来都是那条线；还有一位开发者声称付费移动 App 上线六个月，只看 MR 行数变更——"你们只能选择相信我的话。"
+
+**Why it matters:** 出题的社区在给自己阅卷，然后发现难的不是清单——而是每一个"做到了"都在重新定义考试。对所有发布能力声明的人（包括本榜单）都是一面好镜子。
+
+[`🔗 Goalposts`](https://stoppels.ch/goalposts/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49924618)
+
+---
+
+## 45. coucou：住进刘海里盯着你编程 agent 的小家伙——五天 2.7k★
+
+- **Velocity:** ▮ steady
+- **Source:** Louis-CFM/coucou · 2,713★ · 9 月 27 日创建
+- **Tags:** `menubar` `agents` `observability` `open-source`
+
+coucou（MIT，Rust，9 月 27 日创建）把"一个住进刘海的小家伙"放到 macOS 刘海里——Windows、Linux 则在屏幕顶端——替你看着编程 agent：**Claude Code、Gemini CLI、Antigravity 等**。定位是环境化的 agent 可观测：agent 在终端或标签页里干活，刘海里的小生物是它的状态灯。五天拿下 2,713★ 与 403 fork，今日仍在推送。
+
+**Why it matters:** agent 状态正在变成环境 UI——与今天的框架故事（条目 1、33）同一本能，但从下方抵达：不是一个更大的应用，而是一个更小的。盯住"agent 在场"会不会变成平台特性（刘海 API、操作系统级 agent 状态），而不是停留在一个应用品类。
+
+[`🔗 Louis-CFM/coucou`](https://github.com/Louis-CFM/coucou) · [`🔗 项目主页`](https://louis-cfm.github.io/coucou/)
+
+---
+
+## 46. CSS Bed：28 套无类 CSS、每套一条 `<link>`——反框架货架有了自己的橱窗
+
+- **Velocity:** ▮ steady
+- **Source:** cssbed.com · 119+ pts on HN · ~15h ago（~05:21 UTC+8）
+- **Tags:** `css` `frontend` `web` `open-source`
+
+ubershmekel 的 CSS Bed 收录 **28 套无类（classless）CSS 主题**——pico、sakura、water.css、simple.css、tufte、mvp.css、bamboo、holiday.css、writ、yorha 等——全部渲染同一个演示页，表单、表格、代码块与排版可并排对比，然后复制一条 `<head>` 代码即用。卖点："零学习曲线——像平常一样写 HTML，不用去文档里学哪个类干什么"；响应式，每套几 KB，源码在 github.com/ubershmekel/cssbed。
+
+**Why it matters:** 与今天的 Bez（条目 16）同一本能，方向相反——Bez 从规格生成引擎规则，CSS Bed 直接删掉框架：语义 HTML 加几 KB 别人的品味。对 agent 搭的 UI（见 impeccable，10 月 1 日）而言，无类主题是对抗同质化问题的廉价确定性地板。
+
+[`🔗 cssbed.com`](https://www.cssbed.com) · [`🔗 ubershmekel/cssbed`](https://github.com/ubershmekel/cssbed)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-02T12:20:00+08:00 |
-| Items | 32 |
-| Sources tracked | 31 (Hacker News, GitHub Trending, GitHub API, earendil.com, Cloudflare blog, turbopuffer, Hugging Face papers, arXiv, arXiv blog, Fortinet PSIRT, CISA KEV, NVD, OSM community forum, TestFlight, 404 Media, The Stack, CBS News, nnethercote.github.io, Figma forum, rtl-sdr.com, tangled.org, Check Point blog, GitButler blog, svelte.dev, molily.de, Northeastern Khoury, blog.cryptographyengineering.com, resobscura.substack.com, effect.website, aihot.news, openai/mcp-extensions) |
+| Generated | 2026-10-02T20:20:00+08:00 |
+| Items | 46 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, GitHub API, earendil.com, Cloudflare blog, turbopuffer, Hugging Face papers, arXiv, arXiv blog, Fortinet PSIRT, CISA KEV, NVD, OSM community forum, TestFlight, 404 Media, The Stack, CBS News, nnethercote.github.io, Figma forum, rtl-sdr.com, tangled.org, Check Point blog, GitButler blog, svelte.dev, molily.de, Northeastern Khoury, blog.cryptographyengineering.com, resobscura.substack.com, effect.website, aihot.news, openai/mcp-extensions, deepseek.com, LWN, maxtaylor.me, The Record, The Hacker News, Proofpoint, The Register, trufflesecurity.com, BleepingComputer, frogandtoad.ai, stoppels.ch) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

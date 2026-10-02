@@ -1,8 +1,8 @@
 ---
 date: 2026-10-02
-updated: 2026-10-02T12:20:00+08:00
+updated: 2026-10-02T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -454,13 +454,209 @@ Johns Hopkins cryptographer Matthew Green positions himself between two camps: i
 
 ---
 
+## 33. DeepSeek Harness Desktop: the agent harness leaves the terminal — macOS and Windows apps ship in public preview
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** deepseek.com · 267+ pts on HN · ~9h ago (~11:11 UTC+8)
+- **Tags:** `deepseek` `agent-harness` `desktop` `plugins`
+
+DeepSeek's open-source agent harness — `dsh`, MIT-licensed, built on the Cordis framework ("everything is a plugin") — now ships as **desktop applications**: a `.dmg` for Apple-silicon macOS and a `.exe` for 64-bit Windows, still labeled worldwide public preview, alongside the existing `npx @deepseek-ai/dsh web` and source routes. What the desktop cut adds over the August developer preview (which drew 747 points on HN): **Creator mode** (generate a plugin by chat — the demo builds a floating Pomodoro timer in ~5 minutes), **scheduled tasks** (a weekly report every Friday at 17:00 in your timezone), execution traces with tool-call payloads and timings, and preview/edit for Word, Excel, PDF, TypeScript, Python files. Official plugins: Terminal, Agent loop, Subagents — with Agent teams, Auto approval review, Scheduled tasks and Voice input explicitly **experimental**. The UI shows DeepSeek-V41-Flash with a "High" setting. HN reception: "all settings and workspaces are transferred," one early user reports — against the predictable privacy suspicion ("getting a big binary with full permissions is the goal here") and "yet another harness" fatigue.
+
+**Why it matters:** the harness layer is where this feed's biggest repos live (Pi, OpenClaw, Paperclip) — and now a frontier lab ships its own consumer-grade desktop harness, MIT-licensed and plugin-extensible, collapsing the distance between model vendor and agent runtime. The question to watch is the one the thread raised: a full-permission agent binary from the same company that serves the model.
+
+[`🔗 DeepSeek Harness`](https://www.deepseek.com/en/harness/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49929489)
+
+---
+
+## 34. Debian fixes a wall of kernel CVEs in one advisory — and "several" is doing heroic work
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** LWN / Debian · 371+ pts on HN · ~13h ago (~07:10 UTC+8)
+- **Tags:** `linux` `kernel` `cve` `debian`
+
+Debian's DSA-6528-1 updates stable's (trixie) 6.12.x kernel to **6.12.111-1** under the dry title "Several vulnerabilities have been discovered in the Linux kernel" — followed by a wall of CVE identifiers spanning **2024 through 2026** (CVE-2024-52560 up to CVE-2026-100079), described only as potentially leading to "a privilege escalation, denial of service or information leaks." The honest context, from the kernel's own CVE docs: because almost any kernel bug can potentially compromise security, the kernel CVE team "acts with extreme caution and labels nearly all bug fixes with a CVE" — and most of this batch are memory-safety issues. No exploitation is flagged; no per-CVE severity is given; fixed Sep 29, upgrade advised. This is the mass-backport train, not an active-exploitation story like last week's KEV entries — HN spent most of its 264 comments on the quantifier, courtesy of Heroes of Might & Magic 3's scale system ("several" is 5–9; past 1,000 it's a "legion").
+
+**Why it matters:** the kernel's CVE denominator has inflated to the point where one advisory carries a legion — so the signal is no longer the count but the train: if you run trix, 6.12.111-1 is the delta; and if you read CVE totals as risk, this advisory is the standing counterexample.
+
+[`🔗 LWN`](https://lwn.net/Articles/1097401/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49928121)
+
+---
+
+## 35. Caveman rides again: the 108.9k★ token-cutting skill is back on the board — and the benchmark says "be brief." matches it
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending (#2) · 108,853★ (API-verified ~12:18 UTC+8)
+- **Tags:** `claude-code` `skills` `tokens` `benchmarking`
+
+"why use many token when few token do trick" — the caveman skill + proxy (Go, Apache-2.0) sits at **#2 on today's trending board**, six months after its 904-point April HN thread. The skill instructs the agent to answer in clipped caveman-speak; the repo claims **65%+ output-token cuts** with code, commands and error output byte-for-byte intact, and ships `caveman-stats` to read session JSONL and report actual usage. The independent check is the interesting part: Max Taylor's 24-prompt, five-arm benchmark (opus-4-7, rubric-scored) found caveman-lite averaged **401 output tokens vs "be brief." at 419** (baseline 636) — a ~37% vs ~34% cut, with quality within 1.5% across all arms and zero dangerous-claim triggers. What actually differentiated the plugin: consistent output shape, a mid-session intensity dial, hook-based ruleset re-injection for long sessions, and **Auto-Clarity**, which relaxes compression for destructive operations.
+
+**Why it matters:** the measured lesson outlives the meme — output tokens are the small half of the bill, and a two-word instruction matched the plugin on both axes; what survived was structure, not compression. Most prompt-engineering advice never gets measured against the boring default. This one did.
+
+[`🔗 JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) · [`🔗 the "be brief." benchmark`](https://www.maxtaylor.me/articles/i-benchmarked-caveman-against-two-words) · [`🔗 HN (April)`](https://news.ycombinator.com/item?id=47647455)
+
+---
+
+## 36. The agent-skills shelf goes platform-official: Google, Cursor and a 52k★ marketing pack own today's board
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · API-verified Oct 2 (~12:18 UTC+8)
+- **Tags:** `skills` `google` `cursor` `agents`
+
+Count today's top fifteen and **eight are skills-layer projects** — caveman, obra/superpowers (294k★), impeccable, mattpocock/skills, coreyhaines31/marketingskills (52.2k★), mksglu/context-mode (24.9k★), and the notable new entrants: **google/skills** ("Agent Skills for Google products and technologies," Apache-2.0, 20.6k★, pushed today — recent commits cover GKE-upgrade troubleshooting references, Cloud Spanner Queues, and solution-architecture skill references) and **cursor/plugins** ("Cursor plugin specification and official plugins," TypeScript, 9.4k★ — same-day commits renaming an eToro trading plugin). marketingskills — CRO, copywriting, SEO, analytics, growth engineering for Claude Code and friends — has become the non-developer poster child at 52.2k★.
+
+**Why it matters:** skills have been a community folk format; when Google maintains a skills monorepo and Cursor publishes a plugin *specification*, the format is being absorbed into platform surface — with the same distribution-gate questions items 11 and 25 raised today (Figma's whitelist, OpenAI's extensions), now one layer down. The shelf is becoming aisles, and the aisles have owners.
+
+[`🔗 google/skills`](https://github.com/google/skills) · [`🔗 cursor/plugins`](https://github.com/cursor/plugins) · [`🔗 marketingskills`](https://github.com/coreyhaines31/marketingskills)
+
+---
+
+## 37. KillSec dismantled: a 16-year-old alleged RaaS admin, five servers, eight houses raided across four countries
+
+- **Velocity:** ▮▮ rising
+- **Source:** The Record · Oct 1–2
+- **Tags:** `ransomware` `raas` `europol` `takedown`
+
+The takedown of KillSec, in detail: Spanish Civil Guard cybercrime units arrested a **16-year-old Romanian national in Alicante** suspected of running the group; **Fouad Eltibrizi** ("Archduke," Dutch) was arrested in the UK on a Sep 16 US federal indictment (District of Puerto Rico, unauthorized computer access conspiracy) and awaits extradition; two more arrests, at least four members identified — one suspected developer turned 18 in August. KillSec emerged in 2024 and launched **~1,000 attacks, at least half successful**, hitting healthcare, government and financial-services targets; Halcyon ranked it among the cheapest RaaS platforms — a Tor control panel with chat and custom tools that let low-skill affiliates operate. Seized: five servers and the leak site; eight houses raided across Greece, Romania, Britain and Spain; Europol EC3 supported the Hamburg-based operation, with BitDefender and Group-IB assisting.
+
+**Why it matters:** the age is the headline; the structure is the story. The cheapest tier of ransomware-as-a-service is now operational enough that its admin panel, leak site and five servers justify a nine-country operation — and arrests disrupt the brand, while the affiliate crowd it served just re-lists elsewhere.
+
+[`🔗 The Record`](https://therecord.media/killsec-ransomware-raas-arrests-europe) · [`🔗 The Hacker News`](https://thehackernews.com/2026/10/police-arrest-16-year-old-suspected-of.html)
+
+---
+
+## 38. Proofpoint: China-aligned TA419 spoofed an Anthropic exec and ex-OSTP leadership to credential-phish US AI policy circles
+
+- **Velocity:** ▮▮ rising
+- **Source:** Proofpoint · published Oct 1
+- **Tags:** `phishing` `ta419` `espionage` `ai-policy`
+
+TA419 — tracked by Proofpoint since April 2025, previously unreported publicly — ran two-stage social engineering against AI-policy experts at US think tanks, universities and law firms: benign rapport-building emails first, then an adversary-in-the-middle credential phish built on a customized **Frameless BitB** kit against Microsoft 365/Entra ID, with a live-telemetry script that auto-accepts "Keep me signed in" and auto-submits one-time codes — **capturing session cookies while MFA passes**. Impersonated identities: **Lynne Edwards Parker** (former principal deputy director of the White House OSTP), economist **Heidi Crebo-Rediker**, and — in February 2026 — a **senior Anthropic employee**. Lures included a fictitious "AI Policy Advisory Committee," a Senate Foreign Relations report on AI export controls, and an email titled "Request for Feedback on Military Integration of Claude." Attribution, stated as Proofpoint states it: China-aligned, *likely* supporting Chinese intelligence objectives — an assessment drawn from targeting alignment, not named sponsorship.
+
+**Why it matters:** the AI policy conversation is now worth impersonating its actual participants — the borrowed-credibility playbook, aimed at the people drafting the rules. And the kit itself is open source: the barrier to this class of attack is the persona, not the technology.
+
+[`🔗 Proofpoint`](https://www.proofpoint.com/us/blog/threat-insight/hallucinating-credibility-china-aligned-ta419-impersonates-its-way-us-ai-policy) · [`🔗 The Register`](https://www.theregister.com/security/2026/10/01/suspected_chinese_spies_spoofed_an/)
+
+---
+
+## 39. Meta open-sources Astryx: the 8-year design system behind 13,000 internal apps — agent-ready, with AGENTS.md in the box
+
+- **Velocity:** ▮▮ rising
+- **Source:** facebook/astryx · 13.5k★ · v0.6.4 released Oct 1 (~05:20 UTC+8)
+- **Tags:** `meta` `design-system` `react` `open-source`
+
+Astryx (React 19+, StyleX internally, MIT, beta) is Meta's largest internal design system gone public: **150+ typed, accessible components**, theming via CSS custom-property overrides (seven shipped themes, including matcha, gothic and y2k), a CLI for docs/scaffolding/codemods, and **open internals** — `swizzle` ejects a component's full source into your project, and StyleX stays invisible to consumers (override via `className` with Tailwind, CSS modules or plain CSS). The "agent ready" part is structural rather than a slogan: the repo ships **AGENTS.md and CLAUDE.md**, docs and CLI are co-designed so humans and assistants read the same reference, and the README suggests a CLI script alias to stop agents mistyping paths. Trigger: v0.6.4 released Oct 1. Stated limits: charting (`@astryxdesign/vega`/`charts`) remains canary-only; `@astryxdesign/lab` stays internal.
+
+**Why it matters:** the third model of agent-plus-design-tooling to appear today, after Figma's whitelist (item 11) and OpenAI's MCP extensions (item 25): don't gate the agent, and don't extend the protocol — make the library *itself* the agent's interface, with the docs it reads shipped in the repo under the same license.
+
+[`🔗 facebook/astryx`](https://github.com/facebook/astryx) · [`🔗 astryx.atmeta.com`](http://astryx.atmeta.com)
+
+---
+
+## 40. Truffle Security: 543,699 live credentials in public GitHub repos — median exposure 784 days, "the gap is revocation"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Truffle Security · published Sep 29 · sustained coverage
+- **Tags:** `secrets` `github` `credentials` `research`
+
+Truffle Security scanned all 4,096 shards of The Stack v3 — **224,553,295 repositories, ~58.5 billion files**, default branches only, crawl closed Aug 7 2025 — then live-verified matches against providers on Jul 27–28, 2026. Result: **543,699 valid credentials** from 1,103,438 exposures; median exposure **784 days**, 90th percentile 6.3 years, the oldest valid since June 2009. **199,843 leaked after push protection became default** (Feb 2024), and **51.8% of live secrets are shapes push protection doesn't block** — connection strings, Google API keys, private keys. The family split is the sharpest datapoint: of 101,886 committed npm tokens exactly **one** still works, versus **69,041** live Google Cloud service accounts (of 126,963) and "100%" of MongoDB strings — which the authors flag as a measurement artifact, since the detector only reports URIs it successfully connected to. Stated limits: default-branch-only corpus ("the real population is larger"), file timestamps as a proxy for leak dates, and the push-protection effect measured as a ramp rather than a step.
+
+**Why it matters:** the report's thesis — "a leaked key that still authenticates is access" — moves the fix from developer discipline at push time to provider-side revocation policy, where almost nobody runs SLAs. The npm-versus-MongoDB spread quantifies it: ecosystems with automatic revocation infrastructure essentially solve this; the rest leak forever.
+
+[`🔗 Truffle Security`](https://trufflesecurity.com/blog/github-repos-exposed-543699-credentials-nobody-revoked-them) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/over-543-000-valid-credentials-exposed-in-public-github-repositories/)
+
+---
+
+## 41. OneStreamer: one 4B model for streaming video — perception, memory and proactive response in a single interface
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face papers · 61 upvotes (#1 on today's board)
+- **Tags:** `video` `streaming` `multimodal` `paper`
+
+The top paper on today's HF board (arXiv 2610.01762; Nanjing University MCG group, 24 authors led by Xiangyu Zeng) unifies what streaming-video systems usually split: a **4B-parameter** model that retains potentially useful evidence before any task is known, then answers when enough has accumulated — with **proactive generation as the single shared learning interface** across perception, memory and response. Components: **PHCM** (Proactive Hierarchical Caption Memory — timestamped captions plus summaries of finished events, kept as reusable factual memory), **PSTL** (Proactive State Transition Learning — supervision at all output anchors; beats dense state supervision while using only 27.5% of annotated state tokens), and **OneStreamer-1M**, a 1M+-record streaming dataset built by a synthesis pipeline. Claim: best among compared methods across all eight streaming-video benchmarks. No limitations in the abstract — the honest note is that the comparison set is the authors'.
+
+**Why it matters:** always-on agents (Dots, Pi Durable — both covered today) need video-native companions that remember without being asked; a 4B model carrying its own caption-memory is the compute-plausible shape of that, and "wait, then act" is the same evidence-accumulation loop agentic search keeps reinventing.
+
+[`🔗 arXiv 2610.01762`](https://arxiv.org/abs/2610.01762) · [`🔗 HF papers`](https://huggingface.co/papers/2610.01762)
+
+---
+
+## 42. PyRUA-Lean: write Python around the robot policy — GPT-6 Astra agent gains 63.1% → 71.7% while cutting input tokens 65%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · submitted Oct 1
+- **Tags:** `robotics` `vla` `agents` `paper`
+
+arXiv 2610.01939 (Ruiyang Si + 11 co-authors) replaces model-call-per-step robot control with an interactive code-execution framework: the agent writes **Python cells** that compose classical primitives with learned VLA policies, run conditional checks and local retries inside the code, and return only explicitly-requested images and state. The comparison is controlled — same **GPT-6 Astra** planner, same primitives, equal LLM-call budgets, 700 simulated task instances across LIBERO-PRO, RoboTwin 2.0 and RoboCasa365: success **63.1% → 71.7%**, and on tasks both agents solved, **49% fewer LLM calls and 65% fewer input tokens**. Stated limits: simulation only; a single baseline with a single planner, so generalization to other agent designs isn't shown.
+
+**Why it matters:** the token-efficiency wave now has a robotics entry whose mechanism is mundane and reproducible — move control flow from the model into a Python cell. The caveats stay attached: simulated tasks, one planner; but "the harness writes the loop, the model writes the policy call" is exactly the layering Mid-Harness (item 30) argues for on the software side.
+
+[`🔗 arXiv 2610.01939`](https://arxiv.org/abs/2610.01939) · [`🔗 HF papers`](https://huggingface.co/papers/2610.01939)
+
+---
+
+## 43. Frog and Toad and the increasingly capable machines — an illustrated AI parable hits the HN front page
+
+- **Velocity:** ▮ steady
+- **Source:** frogandtoad.ai · 222+ pts on HN · ~14h ago (~06:23 UTC+8)
+- **Tags:** `ai-culture` `copyright` `illustration` `essay`
+
+frogandtoad.ai — an illustrated parable "written by Elizabeth Van Nostrand, drawn by HungerArtist," its cover showing Frog and Toad in their workshop "surrounded by small helpful machines" — puts Arnold Lobel's amphibians in the path of automation and lets the pastiche do the arguing. HN (222 points) treats it as both artifact and Rorschach test: one commenter vouches the writing and art are "a well-executed pastiche" of Lobel's books; another summarizes the theme as "Frog and Toad are held accountable instead of blaming the machines they built"; a third flags the missing commas. And the sharpest note is a question, not a critique: **"has the estate of Arnold Lobel been compensated for this?"** — the style-imitation question arriving before the story even ends.
+
+**Why it matters:** two years of "AI slop aesthetics" debate, and the memorable counterexample arrives as a children's-book pastiche good enough that the front-page argument is about the *estate*, not the commas. Living-artist style imitation has no settled law; this is what the sympathetic test case looks like.
+
+[`🔗 frogandtoad.ai`](https://www.frogandtoad.ai/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49927760)
+
+---
+
+## 44. HN's AI goalposts, put to a vote — voting closed, and the comments are the real result
+
+- **Velocity:** ▮ steady
+- **Source:** stoppels.ch · 156+ pts on HN · ~19h ago (~01:32 UTC+8)
+- **Tags:** `evaluation` `ai-progress` `hacker-news` `meta`
+
+Goalposts scrapes HN's own record — years of "AI will never…" comments — and serves them back one at a time for a three-way vote ("Has this happened?" — Yes / Not sure / No). Voting has closed; the site points to a results page. The 189-comment thread is where the substance lives: ben_w is "very pleased one of my predictions was totally wrong" (LLMs now write and train new ML models); FabCH accuses the thread of exactly what the site's name implies — "people keep shifting" goalposts, quietly expanding "business tasks" to "arbitrary new tasks"; tripleee counters that unreliable-without-supervision was always the bar; and one developer claims six months of shipping a paid mobile app while reviewing only MR line-counts — "you will have to take my word for its quality."
+
+**Why it matters:** the community that set the challenges is grading its own exam, and discovering the hard part isn't the checklist — it's that every "met" redefines the test. A useful mirror for anyone who publishes capability claims, this feed included.
+
+[`🔗 Goalposts`](https://stoppels.ch/goalposts/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49924618)
+
+---
+
+## 45. coucou: a notch-dwelling watcher for your coding agents — 2.7k★ in five days
+
+- **Velocity:** ▮ steady
+- **Source:** Louis-CFM/coucou · 2,713★ · created Sep 27
+- **Tags:** `menubar` `agents` `observability` `open-source`
+
+coucou (MIT, Rust, created Sep 27) puts "a tiny friend that lives in your notch" — macOS — or at the top of the screen (Windows, Linux) and keeps an eye on your coding agents: **Claude Code, Gemini CLI, Antigravity and more**. The framing is ambient agent-observability: the agent works in its terminal or tab, and the creature in the notch is its status light. 2,713★ and 403 forks in five days, pushed today.
+
+**Why it matters:** agent status is becoming ambient UI — the same instinct as today's harness stories (items 1 and 33), arriving from below: not a bigger app, a smaller one. Watch whether "agent presence" turns into a platform feature (notch APIs, OS-level agent status) rather than staying an app category.
+
+[`🔗 Louis-CFM/coucou`](https://github.com/Louis-CFM/coucou) · [`🔗 homepage`](https://louis-cfm.github.io/coucou/)
+
+---
+
+## 46. CSS Bed: 28 classless stylesheets, one `<link>` each — the anti-framework shelf gets its showcase
+
+- **Velocity:** ▮ steady
+- **Source:** cssbed.com · 119+ pts on HN · ~15h ago (~05:21 UTC+8)
+- **Tags:** `css` `frontend` `web` `open-source`
+
+ubershmekel's CSS Bed collects **28 classless CSS themes** — pico, sakura, water.css, simple.css, tufte, mvp.css, bamboo, holiday.css, writ, yorha and more — all rendering one shared demo page so forms, tables, code blocks and typography can be compared side by side, then copied as a single `<head>` snippet. The pitch: "No learning curve — use HTML as you would normally instead of going to the docs to learn which class does what"; responsive, a few KB each, source at github.com/ubershmekel/cssbed.
+
+**Why it matters:** the same instinct as today's Bez item (item 16), run in reverse — where Bez generates engine rules from specs, CSS Bed deletes the framework entirely: semantic HTML plus a few KB of someone else's taste. For agent-built UIs (see impeccable, Oct 1), classless themes are a cheap deterministic floor against the sameness problem.
+
+[`🔗 cssbed.com`](https://www.cssbed.com) · [`🔗 ubershmekel/cssbed`](https://github.com/ubershmekel/cssbed)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-02T12:20:00+08:00 |
-| Items | 32 |
-| Sources tracked | 31 (Hacker News, GitHub Trending, GitHub API, earendil.com, Cloudflare blog, turbopuffer, Hugging Face papers, arXiv, arXiv blog, Fortinet PSIRT, CISA KEV, NVD, OSM community forum, TestFlight, 404 Media, The Stack, CBS News, nnethercote.github.io, Figma forum, rtl-sdr.com, tangled.org, Check Point blog, GitButler blog, svelte.dev, molily.de, Northeastern Khoury, blog.cryptographyengineering.com, resobscura.substack.com, effect.website, aihot.news, openai/mcp-extensions) |
+| Generated | 2026-10-02T20:20:00+08:00 |
+| Items | 46 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, GitHub API, earendil.com, Cloudflare blog, turbopuffer, Hugging Face papers, arXiv, arXiv blog, Fortinet PSIRT, CISA KEV, NVD, OSM community forum, TestFlight, 404 Media, The Stack, CBS News, nnethercote.github.io, Figma forum, rtl-sdr.com, tangled.org, Check Point blog, GitButler blog, svelte.dev, molily.de, Northeastern Khoury, blog.cryptographyengineering.com, resobscura.substack.com, effect.website, aihot.news, openai/mcp-extensions, deepseek.com, LWN, maxtaylor.me, The Record, The Hacker News, Proofpoint, The Register, trufflesecurity.com, BleepingComputer, frogandtoad.ai, stoppels.ch) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-10-02
-updated: 2026-10-02T12:20:00+08:00
+updated: 2026-10-02T20:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -451,6 +451,202 @@ TypeScript の効果システムの全面書き直しは、サプライチェー
 **Why it matters:** このフィードは個々の事件を別々に報じてきた（DNS トンネル、Hugging Face の群れ、Azure 消去）。Green はそれらを*組織論*の引数へ組織化した最初の重鎮だ —— 壊れたのはサンドボックスではなく、サンドボックスの所有だった。「ワームの材料」という一点は、プロンプトインジェクションをデータ品質のバグから伝播メカニズムへと再定義する。
 
 [`🔗 Cryptography Engineering`](https://blog.cryptographyengineering.com/2026/09/30/is-sandboxing-sufficient-to-contain-rogue-agents/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49917378)
+
+---
+
+## 33. DeepSeek Harness Desktop：エージェントハーネスがターミナルを出る —— macOS・Windows デスクトップ版が公開プレビューへ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** deepseek.com · 267+ pts on HN · ~9h ago（~11:11 UTC+8）
+- **Tags:** `deepseek` `agent-harness` `desktop` `plugins`
+
+DeepSeek のオープンソース・エージェントハーネス——`dsh`、MIT ライセンス、Cordis フレームワーク（「すべてはプラグイン」）の上に構築——が**デスクトップアプリ**として登場：Apple シリコン macOS 向け `.dmg` と 64 ビット Windows 向け `.exe`。いまだ世界中で公開プレビューの位置づけで、既存の `npx @deepseek-ai/dsh web` やソースからの導入も併存する。8 月の開発者プレビュー（HN で 747 ポイント）からデスクトップ版で加わったのは：**Creator モード**（チャットでプラグインを生成——デモでは約 5 分で浮遊ポモドーロタイマーを構築）、**Scheduled tasks**（毎週金曜 17:00 に週報、タイムゾーン指定可）、ツールコールのペイロードと所要時間を含む実行トレース、Word・Excel・PDF・TypeScript・Python ファイルのプレビュー/編集。公式プラグインは Terminal、Agent loop、Subagents——Agent teams、Auto approval review、Scheduled tasks、Voice input は明示的に**実験的**。UI は DeepSeek-V41-Flash を「High」設定で表示。HN の受け：「設定とワークスペースはすべて引き継がれた」とする早期ユーザーの声に対し、予想通りのプライバシー疑念（「完全な権限の巨大バイナリを配ることが目的だろう」）と「またハーネスか」という疲れ。
+
+**Why it matters:** ハーネス層はこのフィード最大級のリポジトリが集まる場所（Pi、OpenClaw、Paperclip）——そこにフロンティア研究所自身が消費者向けデスクトップハーネスを MIT ライセンス・プラグイン拡張可能で出荷し、モデルベンダーとエージェントランタイムの距離をゼロにした。注視すべきはスレッドが提起した問い：モデルを提供する同じ会社からのフル権限エージェントバイナリ。
+
+[`🔗 DeepSeek Harness`](https://www.deepseek.com/en/harness/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49929489)
+
+---
+
+## 34. Debian が一枚のアドバイザリでカーネル CVE の壁を修復 —— 「数個」という言葉が大活躍
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** LWN / Debian · 371+ pts on HN · ~13h ago（~07:10 UTC+8）
+- **Tags:** `linux` `kernel` `cve` `debian`
+
+Debian の DSA-6528-1 は stable（trixie）の 6.12.x カーネルを **6.12.111-1** へ更新。「Linux カーネルに複数の脆弱性が発見されました」という地味なタイトルの先に、**2024 年から 2026 年**に及ぶ CVE 識別子の壁（CVE-2024-52560 から CVE-2026-100079 まで）が続き、説明は「特権昇格、サービス拒否、情報漏洩につながる可能性がある」の一点のみ。正直な文脈はカーネル自身の CVE ドキュメントから：ほぼすべてのカーネルバグがセキュリティを脅かしうるため、カーネル CVE チームは「極めて慎重に、ほぼすべてのバグ修正に CVE を付与」しており、この大量枠の大半はメモリ安全性の問題。悪用の報告はなく、CVE ごとの深刻度もなし。9 月 29 日修正、アップグレード推奨。これは大規模バックポート列車であり、先週の KEV エントリのような活用中の話ではない——HN の 264 コメントの大半は量詞の話題に費やされ、その刻度は『Heroes of Might & Magic 3』の数量体系を引かざるを得ないほど（「several」は 5〜9、1000 を超えると「legion」）。
+
+**Why it matters:** カーネル CVE の分母は 1 つのアドバイザリに一軍団を収められるまで膨張した——シグナルはもはや数ではなく列車：trix を動かしているなら 6.12.111-1 がその差分。CVE 総数をリスクとして読むなら、このアドバイザリは常設の反例。
+
+[`🔗 LWN`](https://lwn.net/Articles/1097401/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49928121)
+
+---
+
+## 35. 続・Caveman：108.9k★ のトークン削減スキルがトレンドに返り咲き——ベンチマークは「be brief.」で足並み可能と判定
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending（第 2 位）· 108,853★（API 検証済み ~12:18 UTC+8）
+- **Tags:** `claude-code` `skills` `tokens` `benchmarking`
+
+「why use many token when few token do trick」——caveman スキル＋プロキシ（Go、Apache-2.0）が本日のトレンドボード**第 2 位**。904 ポイントを獲得した 4 月の HN スレッドから半年。スキルはエージェントに短い粗野な口調で答えるよう指示し、リポジトリはコード・コマンド・エラー出力をバイト単位で保持したまま**出力トークン 65%+ 削減**を主張。実使用量を報告する `caveman-stats` も同梱。興味深いのは独立検証：Max Taylor の 24 プロンプト・5 アームベンチマーク（opus-4-7、ルーブリック採点）は caveman-lite の平均 **401 出力トークンに対し「be brief.」は 419**（ベースライン 636）——約 37% 対 34% の削減で、全アームで品質差 1.5% 以内、危険な主張の誘発ゼロ。実際に差をつけたのは：一貫した出力形状、セッション途中で調整できる強度ダイヤル、フックベースのルールセット再注入（長時間セッションで効く）、そして破壊的操作で圧縮を緩める**Auto-Clarity**。
+
+**Why it matters:** 測定された教訓はミームより長生きする——出力トークンは請求の小さい側で、二語の指示が両軸でプラグインに匹敵した。残ったのは構造であって圧縮ではない。ほとんどのプロンプトエンジニアリング助言は退屈なデフォルトと対測されないまま。これは測られた。
+
+[`🔗 JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) · [`🔗「be brief.」ベンチマーク`](https://www.maxtaylor.me/articles/i-benchmarked-caveman-against-two-words) · [`🔗 HN（4 月）`](https://news.ycombinator.com/item?id=47647455)
+
+---
+
+## 36. エージェントスキル棚がプラットフォーム公式へ：Google・Cursor・52k★ のマーケパックが今日のボードを席巻
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · API 検証済み 10 月 2 日（~12:18 UTC+8）
+- **Tags:** `skills` `google` `cursor` `agents`
+
+今日のトップ 15 を数えると**8 つがスキル層プロジェクト**——caveman、obra/superpowers（294k★）、impeccable、mattpocock/skills、coreyhaines31/marketingskills（52.2k★）、mksglu/context-mode（24.9k★）、そして注目の新顔：**google/skills**（「Google 製品とテクノロジーのための Agent Skills」、Apache-2.0、20.6k★、本日もプッシュ——直近のコミットは GKE アップグレードのトラブルシューティングリファレンス、Cloud Spanner Queues、ソリューションアーキテクチャスキルのリファレンスをカバー）と **cursor/plugins**（「Cursor プラグイン仕様と公式プラグイン」、TypeScript、9.4k★——同日のコミットは eToro トレーディングプラグインの改名処理）。marketingskills——Claude Code など向けの CRO・コピーライティング・SEO・分析・グロースエンジニアリング——は 52.2k★ で非開発者陣営の看板的存在に。
+
+**Why it matters:** スキルはコミュニティの民間フォーマットだった。Google がスキルのモノレポを維持し、Cursor がプラグイン*仕様*を発行するとき、このフォーマットはプラットフォーム表層に吸収されつつある——本日の項目 11 と 25 が提起した配給ゲートの問い（Figma のホワイトリスト、OpenAI の拡張）が一段下で再演される。棚は通路になりつつあり、通路には所有者がいる。
+
+[`🔗 google/skills`](https://github.com/google/skills) · [`🔗 cursor/plugins`](https://github.com/cursor/plugins) · [`🔗 marketingskills`](https://github.com/coreyhaines31/marketingskills)
+
+---
+
+## 37. KillSec 解体：16 歳の RaaS 疑い管理者、サーバー 5 台、4 カ国 8 か所の家宅捜索
+
+- **Velocity:** ▮▮ rising
+- **Source:** The Record · 10 月 1〜2 日
+- **Tags:** `ransomware` `raas` `europol` `takedown`
+
+KillSec 制圧の詳細：スペイン治安警備隊のサイバー犯罪部門がアリカンテで、グループを運営していた疑いのある**16 歳のルーマニア国籍少年**を逮捕。**Fouad Eltibrizi**（「Archduke」、オランダ国籍）は 9 月 16 日の米連邦大陪審起訴（プエルトリコ地区、不正アクセス共謀）に基づき英国内で逮捕され、身柄引き渡し待ち。更に 2 名が逮捕され、少なくとも 4 名のメンバーが特定——容疑者の開発者の一人は 8 月に 18 歳になったばかり。KillSec は 2024 年に出現し、**約 1,000 件の攻撃（少なくとも半数が成功）**を実行、標的は医療・政府・金融サービス。Halcyon はこれを最安クラスの RaaS プラットフォームにランク付け——チャットとカスタムツールを備えた Tor 制御パネルが低スキルのアフィリエイトにも操作を許していた。押収：サーバー 5 台と漏洩サイト。ギリシャ・ルーマニア・英国・スペインの 8 か所で家宅捜索。ハンブルク発の作戦を Europol EC3 が支援、BitDefender と Group-IB が協力。
+
+**Why it matters:** 年齢が見出し、構造が物語。最安のランサムウェア・アズ・ア・サービスが、9 カ国の作戦を正当化する管理パネル・漏洩サイト・サーバー 5 台を運営するまでに稼働していた——逮捕が切るのはブランドで、そこに養われていたアフィリエイトの群れは別の場所で看板を出し直す。
+
+[`🔗 The Record`](https://therecord.media/killsec-ransomware-raas-arrests-europe) · [`🔗 The Hacker News`](https://thehackernews.com/2026/10/police-arrest-16-year-old-suspected-of.html)
+
+---
+
+## 38. Proofpoint：中国に関連する TA419 が Anthropic 幹部と元 OSTP 副所長になりすまし、米 AI 政策界隈へ認証情報フィッシング
+
+- **Velocity:** ▮▮ rising
+- **Source:** Proofpoint · 10 月 1 日発表
+- **Tags:** `phishing` `ta419` `espionage` `ai-policy`
+
+TA419——Proofpoint が 2025 年 4 月から追跡し、これまで公表されていなかった——は米シンクタンク・大学・法律事務所の AI 政策エキスパートへ二段階のソーシャルエンジニアリングを実行：まず無害なラポート構築メール、次にカスタマイズ版オープンソース **Frameless BitB** キットによる Microsoft 365/Entra ID への中間者認証情報フィッシング。テレメトリスクリプトは「サインインを保持」を自動承諾し、ワンタイムコードを自動送信——**MFA が通過するのと同時にセッション Cookie を奪取**。なりすました人物：ホワイトハウス OSTP 元筆頭副所長の **Lynne Edwards Parker**、経済学者の **Heidi Crebo-Rediker**、そして 2026 年 2 月には **Anthropic の上級社員**。疑似「AI Policy Advisory Committee」への招待、上院外務委員会の AI 輸出管理報告への寄稿依頼、「Claude の軍事統合に関するフィードバック募集」と題するメールなどがルアー。帰属は Proofpoint の文脈のまま：中国関連、中国のインテリジェンス目標を*支援している可能性*——これは標的選択からの評価であり、特定のスポンサー名ではない。
+
+**Why it matters:** AI 政策の議論は、その当事者になりすます価値がついた——銀行で使われた信頼性を借りるプレイブックが、ルールを書く人々へ。そしてキット自体はオープンソース：この種の攻撃の障壁は技術ではなく人格。
+
+[`🔗 Proofpoint`](https://www.proofpoint.com/us/blog/threat-insight/hallucinating-credibility-china-aligned-ta419-impersonates-its-way-us-ai-policy) · [`🔗 The Register`](https://www.theregister.com/security/2026/10/01/suspected_chinese_spies_spoofed_an/)
+
+---
+
+## 39. Meta が Astryx をオープンソース化：13,000 の内部アプリを支えた 8 年物デザインシステム——AGENTS.md 同梱の agent-ready
+
+- **Velocity:** ▮▮ rising
+- **Source:** facebook/astryx · 13.5k★ · v0.6.4 リリース 10 月 1 日（~05:20 UTC+8）
+- **Tags:** `meta` `design-system` `react` `open-source`
+
+Astryx（React 19+、内部は StyleX、MIT、ベータ）は Meta 最大の内部デザインシステムが公開に踏み切ったもの：**150 以上の型付きアクセシブルコンポーネント**、CSS カスタムプロパティのオーバーライドによるテーマング（matcha・gothic・y2k を含む 7 テーマ同梱）、ドキュメント/スキャフォールド/codemod を揃えた CLI、そして**オープンな内部**——`swizzle` はコンポーネントの完全なソースをプロジェクトへ eject、StyleX は利用者から不可視（Tailwind・CSS modules・素の CSS を `className` 経由で上書き）。「agent ready」はスローガンではなく構造：リポジトリは **AGENTS.md と CLAUDE.md** を同梱し、ドキュメントと CLI は人間とアシスタントが同じリファレンスを読むよう共設計、README はエージェントのパス打ち間違いを防ぐ CLI スクリプトエイリアスまで提案。トリガーは 10 月 1 日の v0.6.4 リリース。明記された限界：チャーティング（`@astryxdesign/vega`/`charts`）は canary のみ、`@astryxdesign/lab` は内部のまま。
+
+**Why it matters:** 本日登場したエージェント×デザインツールの関係モデルの第 3 案——Figma のホワイトリスト（項目 11）、OpenAI の MCP 拡張（項目 25）に続く：エージェントに門を設けず、プロトコルを拡張もしない——*ライブラリそのもの*をエージェントのインターフェースにし、読むべきドキュメントを同じライセンスでリポジトリに同梱する。
+
+[`🔗 facebook/astryx`](https://github.com/facebook/astryx) · [`🔗 astryx.atmeta.com`](http://astryx.atmeta.com)
+
+---
+
+## 40. Truffle Security：公開 GitHub リポジトリに 543,699 個の有効な認証情報——露出中央値 784 日、「ギャップは失効にあり」
+
+- **Velocity:** ▮▮ rising
+- **Source:** Truffle Security · 9 月 29 日発表・継続的な報道
+- **Tags:** `secrets` `github` `credentials` `research`
+
+Truffle Security は The Stack v3 の全 4,096 シャード——**224,553,295 リポジトリ、約 585 億ファイル**、デフォルトブランチのみ、クロールは 2025 年 8 月 7 日に終了——を走査し、2026 年 7 月 27〜28 日にプロバイダーへ対して照合を生検証。結果：1,103,438 件の露出から **543,699 個の有効な認証情報**。露出期間の中央値は **784 日**、90 パーセンタイルで 6.3 年、最古の有効個は 2009 年 6 月。**199,843 個は push protection がデフォルト化した後**（2024 年 2 月）に漏えいしており、**生存シークレットの 51.8% は push protection が既定でブロックしない形状**——接続文字列、Google API キー、秘密鍵。最も鋭いデータはファミリー間の分裂：コミットされた 101,886 個の npm トークンで生き残ったのはちょうど **1 個**。一方 Google Cloud サービスアカウントは **69,041** 個が生存（126,963 中）、MongoDB 接続文字列は「100%」生存——これは測定アーチファクトだと著者自身が注記（検出器は接続に成功した URI しか報告しない）。明記された限界：デフォルトブランチのみのコーパス（「実人口はより大きい」）、漏えい日付の代理としてのファイルタイムスタンプ、階段ではなくランプとして測られた push protection 効果。
+
+**Why it matters:** レポートの命題——「まだ認証を通る漏えい鍵はアクセスである」——は修正をプッシュ時の開発者規律から、ほとんど誰も SLA を持たないプロバイダー側の失効ポリシーへ移す。npm と MongoDB の開きがそれを定量化する：自動失効インフラを持つエコシステムは本質的にこれを解いている。残りは永遠に漏れ続ける。
+
+[`🔗 Truffle Security`](https://trufflesecurity.com/blog/github-repos-exposed-543699-credentials-nobody-revoked-them) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/over-543-000-valid-credentials-exposed-in-public-github-repositories/)
+
+---
+
+## 41. OneStreamer：1 つの 4B モデルでストリーミング映像を——知覚・記憶・能動的応答を単一インターフェースに
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face papers · 61 upvotes（本日 1 位）
+- **Tags:** `video` `streaming` `multimodal` `paper`
+
+本日の HF ボード首位（arXiv 2610.01762；南京大学 MCG チーム、Xiangyu Zeng 率いる 24 名）は、ストリーミング映像システムが通常分離するものを統合：タスクが未知の段階から有用かもしれない証拠を保持し、十分に蓄積した時点で答える **4B パラメータ**モデル——知覚・記憶・応答を貫く**能動的生成を単一の共有学習インターフェース**とする。構成要素：**PHCM**（Proactive Hierarchical Caption Memory——終了したイベントへタイムスタンプ付きキャプションと要約を生成し、再利用可能な事実メモリとして保持）、**PSTL**（Proactive State Transition Learning——全出力アンカーに監督を置く。注釈済み状態トークンの 27.5% だけで密な状態監督に勝つ）、そして合成パイプラインで構築された 100 万件超のデータセット **OneStreamer-1M**。主張：8 つのストリーミング映像ベンチマークすべてで比較対象中ベスト。要旨に限界の記載なし——誠実な注釈は、比較集合が著者自身の選択だという点。
+
+**Why it matters:** 常時稼働エージェント（本日ともに取り上げた Dots、Pi Durable）は、問われる前に記憶する映像ネイティブな相棒を必要とする。自前のキャプションメモリを担う 4B モデルは計算量の上で筋の通った形であり、「待ち、証拠を溜め、行動する」は agentic 検索が繰り返し再発明する証拠蓄積ループそのもの。
+
+[`🔗 arXiv 2610.01762`](https://arxiv.org/abs/2610.01762) · [`🔗 HF papers`](https://huggingface.co/papers/2610.01762)
+
+---
+
+## 42. PyRUA-Lean：ロボットポリシーを Python で包む——GPT-6 Astra エージェントが 63.1% → 71.7%、入力トークン 65% 削減
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 10 月 1 日投稿
+- **Tags:** `robotics` `vla` `agents` `paper`
+
+arXiv 2610.01939（Ruiyang Si ほか 12 名）は「ステップごとのモデル呼び出し」のロボット制御を対話型コード実行フレームワークに置き換える：エージェントは古典的プリミティブと学習済み VLA ポリシーを組み合わせる **Python セル**を書き、条件分岐とローカルリトライをコード内で行い、明示的に要求した画像と状態のみを受け取る。比較は統制済み——同一の **GPT-6 Astra** プランナー、同一のプリミティブ、同等の LLM 呼び出し予算、LIBERO-PRO・RoboTwin 2.0・RoboCasa365 の 700 シミュレーションタスク：成功率 **63.1% → 71.7%**。両者が解けたタスクでは **LLM 呼び出し 49% 減、入力トークン 65% 減**。明記された限界：シミュレーションのみ。単一ベースライン・単一プランナーで、他のエージェント設計への汎化は未検証。
+
+**Why it matters:** トークン効率の波にロボティクスのエントリー が加わったが、その機構は平凡で再現可能——制御フローをモデルから Python セルへ移すだけ。注意点は付いたまま：シミュレーション、単一プランナー。それでも「ハーネスがループを書き、モデルがポリシー呼び出しを書く」は、ソフトウェア側で Mid-Harness（項目 30）が主張するレイヤリングそのもの。
+
+[`🔗 arXiv 2610.01939`](https://arxiv.org/abs/2610.01939) · [`🔗 HF papers`](https://huggingface.co/papers/2610.01939)
+
+---
+
+## 43. カエルとヒキガエルと、ますます有能になる機械——絵付きの AI 寓話が HN フロントページに
+
+- **Velocity:** ▮ steady
+- **Source:** frogandtoad.ai · 222+ pts on HN · ~14h ago（~06:23 UTC+8）
+- **Tags:** `ai-culture` `copyright` `illustration` `essay`
+
+frogandtoad.ai——「Elizabeth Van Nostrand 文、HungerArtist 画」の絵付き寓話。表紙は「小さな機械の助手たちに囲まれた」工作小屋のカエルとヒキガエル——Arnold Lobel の両生類を自動化の行く手へ立たせ、pastiche そのものに論じさせる。HN（222 ポイント）はこれを作品としてもロールシャッハとしても扱う：文体と画風は「巧みに仕上げられた Lobel の pastiche」との保証、テーマは「カエルとヒキガエルは、自分たちが造った機械を責めずに自ら責任を負う」要約、そして抜けたカンマの指摘。最も鋭い一読 は批評ではなく質問：**「Arnold Lobel の遺産管理団体はこの件で報酬を得たのか？」**——スタイル模倣の問いが、物語が終わる前に到着した。
+
+**Why it matters:** 「AI slop 美学」を 2 年論じてきて、記憶に残る反例が童書の pastiche として到着した——フロントページの争点がカンマではなく*遺産管理団体*になるほど良い出来で。存命作家のスタイル模倣に確定した法はない。同情を得やすいテストケースの姿がこれだ。
+
+[`🔗 frogandtoad.ai`](https://www.frogandtoad.ai/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49927760)
+
+---
+
+## 44. HN の AI ゴールポスト、投票へ——投票は締切、コメントこそが本当の結果
+
+- **Velocity:** ▮ steady
+- **Source:** stoppels.ch · 156+ pts on HN · ~19h ago（~01:32 UTC+8）
+- **Tags:** `evaluation` `ai-progress` `hacker-news` `meta`
+
+Goalposts は HN 自身の記録——歴代の「AI には永遠に無理……」コメント——を漁り、三択投票（「これは起きた？」——はい / わからない / いいえ）のため一本ずつ再生する。投票は締切済み。サイトは結果ページを指す。実質は 189 コメントのスレッドにある：ben_w は「自分の予測が完全に外れてとても嬉しい」（LLM は今や新しい ML モデルを書き、訓練する）。FabCH はスレッドがサイト名の示す罪そのものを犯していると非難——「人々はゴールポストを動かし続けている」、「ビジネスタスク」が静かに「任意の新しいタスク」へ拡張される。tripleee は「監督なしでは信頼できない」が当初から基準だったと反論。ある開発者は、MR の行数変更だけを見て 6 か月間有料モバイルアプリを出荷してきたと主張——「品質については私を信じるしかない。」
+
+**Why it matters:** 出題したコミュニティが自分の試験を採点し、難しいのはチェックリストではなく、「達成」の一文ごとに試験が再定義されることだと発見する。能力の主張を公表する者すべて——このフィードを含む——にとって有用な鏡。
+
+[`🔗 Goalposts`](https://stoppels.ch/goalposts/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49924618)
+
+---
+
+## 45. coucou：ノッチに住んでコーディングエージェントを見守る小さな相棒——5 日で 2.7k★
+
+- **Velocity:** ▮ steady
+- **Source:** Louis-CFM/coucou · 2,713★ · 9 月 27 日作成
+- **Tags:** `menubar` `agents` `observability` `open-source`
+
+coucou（MIT、Rust、9 月 27 日作成）は「ノッチに住む小さな友達」——macOS——あるいは画面上部（Windows、Linux）に置かれ、コーディングエージェントを見守る：**Claude Code、Gemini CLI、Antigravity など**。位置づけは環境的なエージェント可観測性：エージェントはターミナルやタブで働き、ノッチの生き物はそのステータスライト。5 日で 2,713★ と 403 fork、本日もプッシュ済み。
+
+**Why it matters:** エージェントの状態は環境 UI になりつつある——本日のハーネス物（項目 1、33）と同じ本能が、下から到着：より大きいアプリではなく、より小さい方。「エージェントの存在」がアプリカテゴリに留まるか、プラットフォーム機能（ノッチ API、OS レベルのエージェント状態）になるかを注視したい。
+
+[`🔗 Louis-CFM/coucou`](https://github.com/Louis-CFM/coucou) · [`🔗 ホームページ`](https://louis-cfm.github.io/coucou/)
+
+---
+
+## 46. CSS Bed：28 種のクラスレス CSS、各 1 つの `<link>`——アンチフレームワークの棚にショーケースができた
+
+- **Velocity:** ▮ steady
+- **Source:** cssbed.com · 119+ pts on HN · ~15h ago（~05:21 UTC+8）
+- **Tags:** `css` `frontend` `web` `open-source`
+
+ubershmekel の CSS Bed は **28 種のクラスレス CSS テーマ**——pico、sakura、water.css、simple.css、tufte、mvp.css、bamboo、holiday.css、writ、yorha など——を収録し、すべて同一のデモページを描画させることで、フォーム・テーブル・コードブロック・タイポグラフィを並べて比較でき、1 つの `<head>` スニペットとしてコピーできる。売り込み：「学習曲線ゼロ——どのクラスが何をするかドキュメントで学ぶ代わりに、普通に HTML を書く」。レスポンシブ、各数 KB、ソースは github.com/ubershmekel/cssbed。
+
+**Why it matters:** 本日の Bez（項目 16）と同じ本能の逆走——Bez が仕様からエンジンのルールを生成するなら、CSS Bed はフレームワークそのものを削除する：セマンティック HTML に、誰かの趣味を数 KB だけ。エージェント構築 UI（impeccable、10 月 1 日を参照）にとって、クラスレステーマは均質化問題への安価で決定論的な床。
+
+[`🔗 cssbed.com`](https://www.cssbed.com) · [`🔗 ubershmekel/cssbed`](https://github.com/ubershmekel/cssbed)
 
 ---
 
