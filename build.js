@@ -496,6 +496,7 @@ function discoverKnowledgeTopics(lang) {
 
 /* ── Sources aggregation (domain → citation stats + co-citation graph) ── */
 const SOURCE_ALIASES = {
+  'twitter.com': 'x.com',
   'raw.githubusercontent.com': 'github.com',
   'github.githubassets.com': 'github.com',
   'api.github.com': 'github.com',
@@ -972,7 +973,18 @@ if (fs.existsSync(agentMemPath)) {
    agent/knowledge/en/<topic>.md, and only after verification that it is actually there. */
 const TREND_NOTE_LINE_BUDGET = 24;
 const memLines2 = fs.readFileSync(agentMemPath, 'utf8').split('\n');
-const tnStart = memLines2.findIndex(l => /^##\s+Trend notes\s*$/.test(l));
+/* Header regexes tolerate a parenthetical qualifier — "Trend notes (standing)",
+   "趋势笔记（常设）", "トレンドノート（常設）" — and the anchor header warns when absent.
+   Background: exact-match regexes (`/^##\s+Trend notes\s*$/`, zh `当前论点`, jp `現在のテーゼ`)
+   stopped matching when the 09-28 compaction renamed the section (`## Trend notes (standing)`,
+   92aa4b0) and the mirrors renamed the thesis headers (`## 活跃论题`/`## アクティブなテーゼ`,
+   8d8e640) — the `if (tnStart !== -1)` gate then silently skipped three checks for six days
+   (trend-note budget, zh/jp trend-notes parity, zh/jp thesis structural check) until the
+   10-04 05:02 build noticed the missing parity line. A vanished anchor header now warns loudly
+   instead of silently skipping its whole check block. */
+const hdrRe = (base) => new RegExp(`^##\\s+${base}(?:\\s*[(（][^)）]*[)）])?\\s*$`);
+const TN_HDR = { en: hdrRe('Trend notes'), zh: hdrRe('趋势笔记'), jp: hdrRe('トレンドノート') };
+const tnStart = memLines2.findIndex(l => TN_HDR.en.test(l));
 if (tnStart !== -1) {
   const tnEntries = [];
   for (let i = tnStart + 1; i < memLines2.length; i++) {
@@ -1002,7 +1014,7 @@ if (tnStart !== -1) {
      locales share one order); a mirror entry flags when it is both much longer than its en
      counterpart (compaction not mirrored) and over the budget itself, and a count mismatch flags
      missing entries. */
-  const MIRROR_TN_HEADERS = { zh: /^##\s+趋势笔记\s*$/, jp: /^##\s+トレンドノート\s*$/ };
+  const MIRROR_TN_HEADERS = { zh: TN_HDR.zh, jp: TN_HDR.jp };
   for (const [loc, headerRe] of Object.entries(MIRROR_TN_HEADERS)) {
     const mPath = path.join(ROOT, loc, 'agent.md');
     if (!fs.existsSync(mPath)) continue;
@@ -1047,9 +1059,9 @@ if (tnStart !== -1) {
      must now be identical in all three locales — a missed compaction or a drifted entry prints ⚠
      at build instead of surfacing a month later by manual diff.) */
   const THESIS_SEC = {
-    en: { h: /^##\s+Active theses\s*$/, end: /^##\s+Trend notes\s*$/ },
-    zh: { h: /^##\s+当前论点\s*$/, end: /^##\s+趋势笔记\s*$/ },
-    jp: { h: /^##\s+現在のテーゼ\s*$/, end: /^##\s+トレンドノート\s*$/ },
+    en: { h: hdrRe('Active theses'), end: TN_HDR.en },
+    zh: { h: hdrRe('活跃论题'), end: TN_HDR.zh },
+    jp: { h: hdrRe('アクティブなテーゼ'), end: TN_HDR.jp },
   };
   const scanTheses = (loc) => {
     const p = path.join(ROOT, loc, 'agent.md');
@@ -1107,6 +1119,8 @@ if (tnStart !== -1) {
       }
     }
   }
+} else {
+  console.log(`  ⚠ en/agent.md: "## Trend notes" header not found — trend-note budget, zh/jp trend-notes parity and zh/jp thesis structural checks all skipped (the 09-28 silent-death failure mode; re-sync this regex, don't ignore)`);
 }
 
 /* ── Agenda-item budget check ──

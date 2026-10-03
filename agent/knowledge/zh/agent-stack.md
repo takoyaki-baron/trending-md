@@ -1707,3 +1707,13 @@ Sources: [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) · [relea
 **Agent-Reach**（Panniantong/Agent-Reach，MIT、Python、88,421★、当日 #1 仓库）：给 agent 跨 Twitter/X、Reddit、YouTube、GitHub、B 站、小红书、网页、RSS 等读写/搜索能力的「一个 CLI、零 API 费用」。每个平台映射到一条有序的主+备后端链（twitter-cli→OpenCLI；yt-dlp；gh；小红书三层回退），`agent-reach doctor` 逐通道报告状态；只用免费后端、默认只读，连安装都是贴一段 prompt 让 agent 自行完成的流程。**警告本身即趋势：** 最后推送 **9 月 15 日**、无 release、七个月 88.4k★ 且涨星无法归因于任何单一公告——README 还警告**同名的 PyPI 包不是本项目**（`pip install` 前的供应链警示）。免计费 API 的 agent 网页访问实质上是套着 LLM 皮的抓取框架——极有用、与所有平台条款结构性冲突，趋势热度恰如这种张力所预言。
 
 Sources: [Supabase 博客](https://supabase.com/blog/supabase-is-acquiring-turso) · [HN](https://news.ycombinator.com/item?id=49934784) · [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach)
+
+## 2026-10-04 04:03 — 编排层投票「默认全自动驾驶」；to-do 工具从记忆层补位；线程迁移被重建
+
+**Paperclip v2026.1001.0**（paperclipai/paperclip，MIT，TypeScript——96,694★，周趋势第一，+12,825/周）：这个给混合 harness agent 团队（OpenClaw、Claude Code、Codex、Cursor + Cloud）从单一仪表盘分配目标与预算的 agent 编排应用，发布了一个 77 提交的版本：**定时 GitHub PR 评审 bot**、带受治理部署工具的 Railway 连接器、审批在活跃运行期间排队而非弹回、native runner 与聊天恢复加固（审批/Stop 竞态、会话连续性、沙箱重连）。关键的一句在发布说明自己的话里：**「execution harnesses now default to full auto。」** 仓库状态已核查：未归档、抓取前几分钟有推送；托管的「Paperclip Cloud」仍是候补名单。编排层是 agent 治理真正被决定的地方，而默认值就是一个产品决策——观察 PR 评审 bot 会不会让「agent 评审 agent 代码」成为常态、以及由谁承担风险。
+
+**T3 Code 启动 Orchestrator V2**（pingdotgg/t3code，MIT——24,608★，+251/天）：用你现有订阅从 iOS/Android/web/Electron 驱动 Claude Code、Codex、Cursor、Grok Build、OpenCode 与 Google Antigravity 的控制面，先切稳定 v0.0.45（为 Codex 0.159 重新生成协议绑定、OpenCode 按凭据限速），随后发布**首个「Orchestrator V2」nightly**（10 月 3 日 01:10 UTC）：重建 agent turn 的启动/停止/排队/恢复、subagent 与后台工作的跟踪、线程在机器间的迁移。批次内开发最活跃的仓库（抓取前几分钟有推送）。注意事项是项目自己的标注：0.0.x 版本号、V2 是 nightly、部分预览版带明确的「do not install」警告——前整合期，版本号自己说了。
+
+**claude-mem v13.29.0**（thedotmack/claude-mem，Apache-2.0——95,494★，+218/天）：这个记忆压缩层（逐会话捕获 agent 做过什么、压缩、之后重注入相关上下文）现在在会话开始时注入一条规则，把它的 `work_state_write`/`work_state_read` 工具立为**正典 to-do 清单**，理由很能说明问题：**「Claude Code 给 Claude 5 模型没有原生 to-do 工具，所以此前没有任何东西记录进行中的事。」** 同版新增：带预设的 `openai-compatible` provider、Codex 订阅 provider、Kimi Code 与 Oh My Pi 支持——把触角伸向 OpenClaw、Codex、Gemini、Hermes、Copilot、OpenCode。变更烈度在它自己的说明里（「多处默认值变更，见升级说明」）；记忆质量主张自报。「模型没有 to-do 工具」是对 harness 层的控诉，不是模型的缺陷——而修复以 95k★ 第三方记忆插件的形态到来，说明状态连续性已是 agent UX 的承重墙。观察 harness 们一个季度内把它吸收。
+
+Sources: [paperclipai/paperclip](https://github.com/paperclipai/paperclip) · [v2026.1001.0 发布说明](https://github.com/paperclipai/paperclip/releases/tag/v2026.1001.0) · [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) · [v13.29.0 发布说明](https://github.com/thedotmack/claude-mem/releases/tag/v13.29.0)

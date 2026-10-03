@@ -169,3 +169,9 @@ Sources: [gultsch.de](https://gultsch.de/posts/breaking-up-with-google-play/) ·
 **犹他州 VPN 年龄验证法被以「技术上的不可能」叫停**（EFF；303 分、#1）：联邦法院（Barlow 法官）对 SB 73 批准**初步禁令**——该法要求网站封禁所有 VPN 用户或穿透流量混淆来识别访客物理位置，并从 10 月 8 日起执行「商业上合理的地理混淆检测」。判决是罕见的以系统论证写成的法院意见：法规「要求 Aylo 之类的实体完美定位网站用户以规避责任」，同时承认「地理定位的完美目前不可能」——对任何单个误定位访客都构成事实上的严格责任。诉讼由 Aylo（Pornhub 母公司）提起，EFF 的法庭之友搭建了技术记录；范围限定已声明：禁令仅覆盖 VPN 条款，单独的「分享 VPN 规避信息」禁令未被质疑，犹他州下届会期可重写。**第一个死于一纸「技术不可能」裁决而非言论裁决的年龄验证制度**——这本账册的反例：有时法院会逐字采纳工程师的论证。
 
 Sources: [Apple Developer News](https://developer.apple.com/news/?id=p6zjojqw) · [HN](https://news.ycombinator.com/item?id=49937631) · [EFF Deeplinks](https://eff.org/deeplinks/2026/10/court-agrees-eff-utahs-vpn-law-demands-technical-impossibility) · [HN](https://news.ycombinator.com/item?id=49927754)
+
+## 2026-10-04 04:03 — 国家侧把关账本拿到文件级证据：抗议旁观者流入承包商构建的系统
+
+**ICE/Palantir ICM 人脸识别文件**（*Hilton v. Noem*，缅因联邦地区法院，2:26-cv-00092；部分解封文件 10 月 2 日公开）：一名 DHS 探员为至少六人（政府称八人）创建调查案件管理（ICM）记录——这些人**在缅因州波特兰观察 ICE 行动**——把其中两人标注为「Threat to Law Enforcement, Professional Protestor」，并将照片经 Mobile Query 应用送交一名 CBP 探员做人脸识别核查，按 2016 年 DHS 隐私评估以「lookout 记录」共享。ICM 为 Palantir 构建（2014 年，基于 Gotham；至 2022 年五年支持合同至多约 $9,600 万，2025 年另加 $3,000 万 ImmigrationOS）。DHS 发言人：「这起诉讼建立在对存在一个数据库的谎言之上。」**状态纪律：** 这些是进行中诉讼里的指控，大量基于政府自己的文件与证词；尚无任何司法裁决，政府的驳回动写明该探员「未试图将任何人提名为恐怖观察名单对象」。这条故事真正的主角是那个被争夺的词：带 lookout 共享的分布式案件管理，行为上像个数据库而不被称为数据库——把关账本（对 A/I 的 SDGT、犹他禁令）如今新增了以文件级别记录在案的监控基础设施。
+
+Sources: [Wired](https://www.wired.com/story/ice-has-been-dumping-protester-photos-into-a-palantir-database/) · [CourtListener 案卷](https://www.courtlistener.com/docket/72313728/hilton-v-noem/) · [HN 讨论](https://news.ycombinator.com/item?id=49938477)

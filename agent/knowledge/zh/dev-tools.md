@@ -349,3 +349,15 @@ Sources: [firebase-ios-sdk #16728](https://github.com/firebase/firebase-ios-sdk/
 **Pass Designer**（beta、需 macOS 27、免费 Apple 开发者注册，HN 106 分）：用于设计并预览 Apple Wallet 卡券——商店卡、活动票、登机牌——的 macOS 下载应用，卖点是保真：实时预览「使用与 iOS 和 watchOS 相同的渲染，你在 Pass Designer 里看到的，就是顾客在设备上看到的」。随做随验（缺失键、意外定义），支持向 Siri 建议、日历、地图供数的语义标签，并能「从你的语义数据自动生成向后兼容的卡券结构」。卡券设计曾是手写 JSON 加签名的苦役、核对循环要过一遍真机；带像素级一致预览的第一方设计器把这个循环折叠了——同一天，Apple 收紧了另一处开发者面（完全磁盘访问，→ [[platform-gatekeeping]]），却把这里磨平了。
 
 Sources: [developer.apple.com/pass-designer](https://developer.apple.com/pass-designer) · [HN 讨论](https://news.ycombinator.com/item?id=49937276)
+
+## 2026-10-04 04:03 — 容器成为用户态操作系统；Orion 收缩；OHTTP 有了产品；Rails 即编译器自认浏览器半场
+
+**FTL v0.1.0**（nuta/ftl，双 MIT/Apache-2.0——Rust-OS 成名的 Seiya Nuta）：每个容器跑一个*用户态 OS*——一个以共享库实现 Linux 进程、VFS 与 TCP/IP 的小内核，内核暴露形似 hypervisor 的系统调用，Linux 兼容性以 WSL1/Linuxulator 传统做成用户态库。令人意外的设计注记：**「FTL 用用户态捕获异常（非硬件加速虚拟化）」**——发布演示在 `-m 32`（32 MB）下启动 QEMU 实例，项目自己的网站就由跑在 FTL 上的 Rust HTTP 服务器服务。路线图对年轻程度很诚实：文件系统 2026 年 11 月、Node.js/Go 支持 2026 年 12 月、SMP 与容器镜像 2027 年 1 月。容器隔离设计空间的第三个点——不是 namespaces+cgroups，不是硬件 VM，而是用户态陷入。若密度主张成立，按请求容器的冷启动经济学将再度改写。
+
+**Kagi 停止开发 Orion Linux/Windows 版，两者开源。** 基于 WebKit 的浏览器收缩回 macOS/iOS；Linux Beta 自 10 月 2 日公告起停止更新（「我们不建议把它当主浏览器」）；原定 2026 年底的 Windows 发布从 Kagi 侧取消；源码发布细节承诺 30 天内给出。叙事是刻意的非 Chromium 独立（「用不分叉 Chromium 的难路来造它」），理由是用户资助的「非常小的团队，只有一把手数得过来的开发者」。**限定语是 Kagi 自己的：**「Kagi 不会是核心维护者」、尚未找到基金会或接管者、开源的许可证条款未定。第二个可用的非 Chromium 引擎的多平台未来，现在押在是否有人在约 30 天窗口内接手。
+
+**Cloudflare OHTTP Gateway**（封闭 beta，付费 zone 附加组件，未公布定价）：客户端把 HPKE 加密请求（RFC 9180）POST 到自己 zone 的 `/.well-known/ohttp-gateway` 端点；边缘按 RFC 9458（外加 chunked-OHTTP 草案）解封装，应用服务器「把 OHTTP 请求当普通 HTTP 处理」——同时第三方中继仍只携带密文，没有任何一方同时看到客户端身份与内容。有趣的是那条护栏：网关**「将拒绝解密来自 Cloudflare Workers 或 Cloudflare 代理主机的请求」**——单厂商信任坍缩被写进代码而非政策；厂商硬编码反对自家纵向整合的罕见案例。Privacy Gateway 更名「Cloudflare OHTTP Relay」。声明限制：自带中继；OHTTP「在网络层提供隐私，不触碰内部请求体」。OHTTP 当了两年的「有协议无产品」；这是应用团队真正能采用 managed 版本。
+
+**Roundhouse——「The Browser Half」**（rubys/roundhouse，Apache-2.0，抓取前几分钟有推送）：Sam Ruby 的 Rails 到九语言编译器（Rust、Go、TypeScript、Crystal、Elixir、Kotlin、Swift、C#/.NET、Python——「部署目标……从运行时选择变成编译器开关」）；类型来自无注解的全程序推断（「`has_many :comments` 就是一个类型声明」）；对 **Mastodon（1,173 个文件、全部 337 个 controller、含 HAML）** 的一遍约 1.5 秒；正确性由一致性 oracle 钉住——从 Rails 与各目标拉同一 URL 再 diff。Ruby 自 9 月 18 日首版以来几乎每日发文（Campfire 通过 299/300 测试），而这篇是诚实的那篇：编译出的 Campfire 移植**原样留下「3,749 行 JavaScript」**。Rails 即规格是自转译器浪潮席卷 Python 以来最激进的「你的框架是一层兼容层」押注，作者正在公开做验证工作——包括还不奏效的部分。浏览器半场是这类项目通常死掉的地方；它现在是被点名的开放问题。
+
+Sources: [ftl-os.org](https://ftl-os.org/) · [nuta/ftl](https://github.com/nuta/ftl) · [HN — FTL](https://news.ycombinator.com/item?id=49944912) · [Kagi 博客](https://blog.kagi.com/update-orion-linux-windows) · [HN — Orion](https://news.ycombinator.com/item?id=49941447) · [Cloudflare 博客](https://blog.cloudflare.com/announcing-cloudflare-ohttp-gateway/) · [HN — OHTTP](https://news.ycombinator.com/item?id=49941091) · [rubys/roundhouse](https://github.com/rubys/roundhouse) · [intertwingly.net](http://intertwingly.net/blog/)

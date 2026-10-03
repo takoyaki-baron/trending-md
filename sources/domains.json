@@ -2082,6 +2082,7 @@
     "jp": "Signal 公式コミュニティフォーラム（スタッフ参加あり）。10 ページ目に一次情報のコミット一覧が埋め込まれている。2026-09-16 検証：引用された 3 件のコミットタイトル（register numberless account／Hide some settings／Use new zkgroup credential、greyson-signal、2026-09-02）が原文どおり掲載。HN 49689048（390 pts）が裏付け。",
     "zh": "Signal 官方社区论坛，有官方员工参与，第 10 页内嵌第一方提交记录。2026-09-16 验证：三条引用的提交标题逐字在页（register numberless account / Hide some settings / Use new zkgroup credential，greyson-signal，2026-09-02）；HN 49689048（390 分）交叉佐证零知识注册一事。"
   },
+  "community.zammad.org": {"cat": "community", "cred": "high", "cv": 1, "density": "med", "en": "Zammad's official community forum (Discourse) — where the vendor published its Oct 1 statement on the DIVD-chain CVEs (CVE-2026-102489/102490): the scope dispute, the disclosure-timeline criticism. Cross-checked (10-04): the statement's Sep 24/26 timeline matches DIVD's own case page, and the posting staff account matches the GHSA publisher in the repo advisory API.", "jp": "Zammad の公式コミュニティフォーラム（Discourse）——ベンダーが 10/1 に DIVD チェーンの CVE（CVE-2026-102489/102490）に関する声明を発表した場所。スコープへの異議と開示タイムラインへの批判を含む。クロスチェック済み（10-04）：声明の 9/24・9/26 のタイムラインは DIVD のケースページと一致、投稿したスタッフアカウントはリポジトリアドバイザリ API の GHSA パブリッシャーと一致。", "zh": "Zammad 官方社区论坛（Discourse）——厂商 10 月 1 日就 DIVD 链 CVE（CVE-2026-102489/102490）发布声明的场所，含范围异议与披露时间线批评。已交叉核验（10-04）：声明中 9 月 24/26 的时间线与 DIVD 案件页一致，发帖员工账号与仓库公告 API 中的 GHSA 发布者一致。"},
   "computing.co.uk": {
     "cat": "news",
     "cred": "med",
@@ -9913,5 +9914,86 @@
     "en": "Christie's online-only auction catalog — cited for the RFC 1149 avian-carrier packet lot (Waitzman/Bergen Linux User Group provenance). Primary source for the artifact's own description and estimate. Cross-validated (10-03): lot page fetched directly; RFC 1149 authorship matches public record.",
     "zh": "佳士得在线专场拍卖目录 —— 引用于 RFC 1149 信鸽数据包拍品（Waitzman/Bergen Linux User Group 来源）。该实物描述与估价的第一手来源。已交叉核验（10-03）：直接抓取拍品页；RFC 1149 作者身份与公开记录一致。",
     "jp": "クリスティーズのオンラインオンリー競売カタログ —— RFC 1149 伝書鳩パケットのロット（Waitzman/Bergen Linux User Group の来歴）で引用。実物の説明と見積りの一次情報源。突合済み（10-03）：ロットページを直接取得。RFC 1149 の著者は公開記録と一致。"
+  },
+  "aleph-alpha.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Aleph Alpha — German sovereign-AI vendor; first-party source for the Kolibri release (specs, benchmark table) and its unusually candid tech report, which admits pre-training contamination. Cross-checked against the Hugging Face repo (params, license).",
+    "zh": "Aleph Alpha——德国主权 AI 厂商;Kolibri 发布规格、基准表及其罕见的坦诚技术报告(承认预训练污染)的一手来源。已与 Hugging Face 仓库(参数量、许可证)交叉核验。",
+    "jp": "Aleph Alpha——ドイツの主権AIベンダー。Kolibri リリースの仕様・ベンチマーク表と、事前学習汚染を認める異例に率直な技術レポートの一次来源。Hugging Face リポジトリ(パラメータ数・ライセンス)とクロスチェック済み。"
+  },
+  "blog.kagi.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Kagi's official blog — first-party for Orion product decisions (platform exits, open-sourcing terms). Cross-checked against the HN discussion of the announcement.",
+    "zh": "Kagi 官方博客——Orion 产品决策(退出平台、开源条款)的一手来源。已与该公告的 HN 讨论交叉核验。",
+    "jp": "Kagi 公式ブログ——Orion のプロダクト決定(プラットフォーム撤退、オープンソース化の条件)の一次来源。発表の HN 議論とクロスチェック済み。"
+  },
+  "courtlistener.com": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Free Law Project's court-record archive — dockets, parties and filing dates for litigation stories. Cross-checked against Wired's case number and parties for Hilton v. Noem.",
+    "zh": "Free Law Project 的法庭记录档案——诉讼报道的案卷号、当事方与立案日期。已与 Wired 报道中的 Hilton v. Noem 案号与当事方交叉核验。",
+    "jp": "Free Law Project の裁判記録アーカイブ——訴訟記事の事件番号・当事者・提訴日。Wired の報道(事件番号・当事者)とクロスチェック済み。"
+  },
+  "ftl-os.org": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Project site for FTL, nuta's userspace container OS — architecture claims and roadmap dates. Cross-checked against the GitHub repo (license, README) and the HN thread.",
+    "zh": "FTL(nuta 的用户态容器 OS)项目站——架构主张与路线图日期。已与 GitHub 仓库(许可证、README)及 HN 讨论交叉核验。",
+    "jp": "FTL(nuta のユーザースペースコンテナ OS)のプロジェクトサイト——アーキテクチャの主張とロードマップの日付。GitHub リポジトリ(ライセンス・README)と HN スレッドでクロスチェック済み。"
+  },
+  "gitea.com": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Gitea's own forge (hosts gitea/runner) — repo state and releases checked directly via its API when the GitHub advisory lacked a patched range. Not a GitHub alias; separate service.",
+    "zh": "Gitea 自家的代码托管(托管 gitea/runner)——在 GitHub 通告缺少已修复范围时,直接经其 API 核验仓库状态与发布。非 GitHub 别名,是独立服务。",
+    "jp": "Gitea 自身のフォージ(gitea/runner をホスト)——GitHub アドバイザリに修正済みレンジがないため、API 経由でリポジトリ状態とリリースを直接確認。GitHub のエイリアスではなく独立したサービス。"
+  },
+  "intertwingly.net": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Sam Ruby's personal blog — the Roundhouse build log in the author's own words, including what doesn't work yet. Claims cross-checked against the repo.",
+    "zh": "Sam Ruby 的个人博客——Roundhouse 构建日志的作者原话,包括尚未奏效的部分。主张已与仓库交叉核验。",
+    "jp": "Sam Ruby の個人ブログ——Roundhouse のビルドログを著者自身の言葉で、まだ機能しない部分まで含めて。主張はリポジトリとクロスチェック済み。"
+  },
+  "linuxiac.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Linux news site. The Jeremy Soller rationale it attributes for COSMIC's LLM-PR ban is single-sourced here; the policy itself was verified against the primary PR template.",
+    "zh": "Linux 新闻站。其转述的 Jeremy Soller 对 COSMIC 禁 LLM-PR 政策的动机说明为单一来源;政策本身已与一手 PR 模板核验。",
+    "jp": "Linux 系ニュースサイト。COSMIC の LLM-PR 禁止について伝える Jeremy Soller の動機はここが唯一のソース。ポリシー自体は一次の PR テンプレートで検証済み。"
+  },
+  "tej.as": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Independent technical reads of model releases (Tejas). Its Kolibri details (training-data rephrasing via Gemma 4/Mistral-NeMo, MoE serving caveat) match the model card and tech report.",
+    "zh": "对模型发布的独立技术解读(Tejas)。其 Kolibri 细节(经 Gemma 4/Mistral-NeMo 改写训练数据、MoE 常驻显存提示)与模型卡及技术报告一致。",
+    "jp": "モデルリリースの独立した技術解説(Tejas)。Kolibri の詳細(Gemma 4/Mistral-NeMo による学習データの書き換え、MoE 常駐の注意点)はモデルカードと技術レポートと一致。"
+  },
+  "theatlantic.com": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "The Atlantic — primary venue for the Robinson resignation essay. Paywalled to automated access; quotes were verified via TechCrunch's transcription, not the original text.",
+    "zh": "《大西洋月刊》——Robinson 辞职文章的首发媒体。对自动化访问有付费墙;引语经 TechCrunch 转述核验,而非原文。",
+    "jp": "The Atlantic——Robinson 退職エッセイの一次媒体。自動アクセスにはペイウォール。引用は原文ではなく TechCrunch の書き起こしで検証。"
   }
 }

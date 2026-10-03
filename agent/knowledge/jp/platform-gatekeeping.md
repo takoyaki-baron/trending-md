@@ -194,3 +194,9 @@ Sources: [gultsch.de](https://gultsch.de/posts/breaking-up-with-google-play/) ·
 **ユタ州の VPN 年齢認証法が「技術的不可能」として阻止される**（EFF。303 pts、#1）：連邦地裁（Barlow 判事）が SB 73 に**暫定差し止め**を認めた。同法はサイトに全 VPN ユーザーの遮断かトラフィックマスキングの突破を強い、「商業的に合理的な位置情報難読化検出」を 10 月 8 日から求めるはずだった。判決はシステム論として書かれた稀有な裁判所意見：制定法は「Aylo のような事業者に、責任を避けるためにユーザー位置を完璧に特定すること」を要求しながら、「その完璧さは現時点で不可能」と認める——位置特定を 1 人でも誤れば厳格責任。訴訟は Aylo（Pornhub の親）が提起し、EFF の amicus が技術記録を組んだ。範囲の限定も明示：差し止めは VPN 条項のみ。VPN 回避情報の共有禁止は争われておらず、ユタ州は次会期で書き直せる。**審判ではなく技術的不可能性の認定で死んだ初の年齢認証制度**——この台帳全体への反例：時々、裁判所は技術者の議論を逐文字採用する。
 
 Sources: [Apple Developer News](https://developer.apple.com/news/?id=p6zjojqw) · [HN](https://news.ycombinator.com/item?id=49937631) · [EFF Deeplinks](https://eff.org/deeplinks/2026/10/court-agrees-eff-utahs-vpn-law-demands-technical-impossibility) · [HN](https://news.ycombinator.com/item?id=49927754)
+
+## 2026-10-04 04:03 — 国家側ゲートキーピングの台帳が文書レベルの証拠を得る：抗議傍観者が請負企業製システムへ
+
+**ICE/Palantir ICM 顔認識文書**（*Hilton v. Noem*、D. Me.、2:26-cv-00092。一部非公開解除された文書が 10月2日公開）：DHS の捜査官が、**メイン州ポートランドで ICE の活動を観察していた**少なくとも 6 名（政府側は 8 名と主張）の Investigative Case Management レコードを作成——うち 2 名を「Threat to Law Enforcement, Professional Protestor」とラベル付け——写真を Mobile Query アプリ経由で CBP の捜査官に送り顔認識チェックへ、2016 年の DHS プライバシー評価に基づく「lookout レコード」として共有。ICM は Palantir 製（2014、Gotham ベース。2022 年までの 5 年間サポート契約で最大約 $96M、2025 年にさらに $30M の ImmigrationOS）。DHS 広報：「この訴訟は、データベースが存在するという嘘に基づいている。」**ステータスの規律：** これらは係争中の訴訟における主張であり、政府自身の文書と証言収録に強く基づく。確定した判断は何もなく、政府の却下動議は当該捜査官が「個人をテロ監視リストにノミネートしようとしなかった」と述べる。物語の本当の主題は争われている言葉だ：lookout 共有を備えた分散型ケース管理は、データベースと呼ばれずにデータベースとして振る舞う——ゲートキーピング台帳（A/I への SDGT、ユタ州の差し止め）に、文書レベルで記録された監視インフラが加わった。
+
+Sources: [Wired](https://www.wired.com/story/ice-has-been-dumping-protester-photos-into-a-palantir-database/) · [CourtListener ドケット](https://www.courtlistener.com/docket/72313728/hilton-v-noem/) · [HN ディスカッション](https://news.ycombinator.com/item?id=49938477)

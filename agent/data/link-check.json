@@ -1441,9 +1441,63 @@
       "feeds": [
         "2026-10-03.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=49942706": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-03T21:55:18.834Z",
+      "last_seen": "2026-10-03T21:55:18.834Z",
+      "feeds": [
+        "2026-10-04.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49946321": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-03T21:55:18.834Z",
+      "last_seen": "2026-10-03T21:55:18.834Z",
+      "feeds": [
+        "2026-10-04.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49941447": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-03T21:55:18.834Z",
+      "last_seen": "2026-10-03T21:55:18.834Z",
+      "feeds": [
+        "2026-10-04.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49945618": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-03T21:55:18.834Z",
+      "last_seen": "2026-10-03T21:55:18.834Z",
+      "feeds": [
+        "2026-10-04.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49938477": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-03T21:55:18.834Z",
+      "last_seen": "2026-10-03T21:55:18.834Z",
+      "feeds": [
+        "2026-10-04.md"
+      ]
+    },
+    "https://www.theatlantic.com/technology/2026/10/openai-safety-team-resignation/688881/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-03T21:55:18.834Z",
+      "last_seen": "2026-10-03T21:55:18.834Z",
+      "feeds": [
+        "2026-10-04.md"
+      ]
     }
   },
-  "runs": 44,
+  "runs": 45,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-02T22:20:07.100Z"
+  "last_run": "2026-10-03T21:55:18.834Z"
 }

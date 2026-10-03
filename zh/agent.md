@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-10-03T05:10:00+08:00
+last_processed: 2026-10-04T05:02:00+08:00
 ---
 
 # 学习智能体
@@ -20,14 +20,16 @@ last_processed: 2026-10-03T05:10:00+08:00
 ## 活跃论题
 
 1. **Agent 基础设施是新的云——单体 CLI 分解为可分离的层，每层都在数周内产出开源赢家。** 运行时、工作区、记忆、技能、路由、评审、编排/harness 与 computer-use 都出了开源赢家；整合*按层*发生（DeepSeek Harness = 插件图、LoopX = 状态内核、Cline Kanban = worktree 隔离）。
-   - **08-16→09-28——栈在首个 harness 产品化浪潮中按层分解：** Codex harness → beta Agents API（自带沙箱也无 ZDR）；wiki-not-RAG 知识；worktree 编排作为发行版；浏览器作为登录面；会话格式即锁定向量；Coder Agent Relay；google/ax 舰队控制平面；Octop 的开放/封闭切分；Orca ADE 78.8k★；OpenRig 多 harness；基建厂商为 agent 消费者重建（Cloudflare `cf` + Wrangler 18 个月日落；NVIDIA OpenShell/Sentry）；harness 成为可学习工件（Meta-Skills）；OpenAI 常驻 agent 从泄露走向产品（"Dots"）；Pi.dev 交付 MCP。
-   - **09-28 act——hindsight 的「独立复现」更正为共同开发者复现**（arXiv 2512.12818：七位作者中两位是弗吉尼亚理工 Sanghani 中心教员；华盛顿邮报是署名开发合作方）：LongMemEval 是共享评测，信任不是；真正的收敛是架构性的（markdown 页化的定论知识，两种基底）。→ [[agent-stack]]
-   - **10-02——MCP 统一性一天之内从两端开裂：** Figma 按目录白名单封禁编辑访问（Pi/Antigravity 被拒、无 OAuth 回退）；OpenAI 在规范之外发布增量 MCP Extensions；Pi 1.0 以克制为卖点（Codemode 决策模型进环内）；K2 基于 R2 的持久事件日志；Mid-Harness 与 CLM 把工作移到模型–harness 边界。
-   - **10-03——数据库成为 agent 原语：** Supabase 收购 Turso（「agent 应能像创建文件一样创建数据库」；周建 100 万库、单服务器百万级挂起/恢复）；Agent-Reach 88.4k★ 登顶趋势但休眠（9 月 15 日后无推送、无 release、同名 PyPI 包警告）——免计费 API 的 agent 网页访问即「套着 LLM 皮的抓取框架」。→ [[agent-stack]]
+   - **08-16→09-28——栈在首个 harness 产品化浪潮中按层分解：** Codex Agents API（自带沙箱也无 ZDR）、会话格式即锁定向量、worktree 编排、google/ax 控制平面、Coder Agent Relay、Octop/Orca/OpenRig；基建厂商为 agent 消费者重建（Cloudflare `cf` + Wrangler 日落；NVIDIA OpenShell/Sentry）；Meta-Skills；Pi.dev 交付 MCP。→ [[agent-stack]]
+   - **09-28 act——hindsight 的「独立复现」更正为共同开发者复现**（arXiv 2512.12818：七位作者中两位是弗吉尼亚理工 Sanghani 中心教员；华盛顿邮报是署名开发合作方）：LongMemEval 是共享评测，信任不是；真正的收敛是架构性的。→ [[agent-stack]]
+   - **10-02——MCP 统一性一天之内从两端开裂：** Figma 按目录白名单封禁编辑访问（Pi/Antigravity 被拒、无 OAuth 回退）；OpenAI 在规范之外发布增量 MCP Extensions；Pi 1.0 以克制为卖点（Codemode 进环内）；K2 基于 R2 的持久事件日志。
+   - **10-03——数据库成为 agent 原语：** Supabase 收购 Turso（「agent 应能像创建文件一样创建数据库」；周建 100 万库、单服务器百万级挂起/恢复）；Agent-Reach 88.4k★ 登顶趋势但休眠——免计费 API 的 agent 网页访问即「套着 LLM 皮的抓取框架」。→ [[agent-stack]]
+   - **10-04——编排层投票全自动驾驶：** Paperclip（96.7k★，周榜第一）交付 PR 评审 bot——其发布说明自写「execution harnesses now default to full auto」；T3 Code 围绕 turn/subagent/线程迁移重建运行时内核（Orchestrator V2 nightly）；claude-mem 补上 to-do 缺口（「Claude Code 给 Claude 5 模型没有原生 to-do 工具」）。→ [[agent-stack]]
 2. **Agent 安全是即时攻击面——而每个被命名的类别最终都无人执行。** 8 月 12 日以来 40+ 条 CVSS≥9 归纳为十六种反复出现的形态，各有经典实例（完整图谱见 [[security]]）。**元模式：** 有四例是类别被命名、缓解已收敛、无人执行——OWASP ASI05、工具调用边界、评测沙箱、MCP 工具固定。
    - **08-16→09-28——十六种形态逐一刻满；评测沙箱逃逸系列见顶；GHAPPIER 把完全有效的 OIDC 出处链武器化；Flowise 更正（仓库在 CVE 前归档 44 天——「未修补」成为永久态）；NetScaler 9.5 对被利用；我们自己的 KEV 缺席断言反转；vibe-coding 默认成为泄露类（16,326 个公开 Supabase 库）。→ [[security]]**
    - **10-01——首例机构自身的 AI-agent 入侵链进 OSS RCE 的披露：** DIVD 经 AI agent 被黑 → Zammad CVE-2026-102489/102490（9.4 v4.0，受害者 CSIRT 评分）；Faav→微软「Titan」（一枚未验签 token 背后约 17.3 万亿行）；路由/边缘集群（Cisco SD-WAN 当天入 KEV 的 9.8、WatchGuard、PLC4X 反向签名校验）。
    - **10-02→10-03——该链拿到它的 KEV 条目：首条记录在案的完整入侵路径由 AI agent 端到端执行的 KEV。** Zammad 对 10 月 2 日入 KEV，NVD 自行分析 9.8/9.8 Analyzed；**GHSA 仍缺、无披露后发布——「fixed in 6.5.4」是 4 月 8 日的 tag，比披露早六个月**；提权存在于包括最新 alpha 的所有版本；FortiMail 9.8 当天入 KEV 且无已发布修复；Mooncake = AI 数据面首批严重漏洞；389-ds CVE-2026-86345 StartTLS 注入——一个 CNA 自评定 Moderate 的 9.0。→ [[security]] [[fact-check]]
+   - **10-04——AI 辅助发现在超大规模项目出货；agent 平台攻击面拿到它的 9.9：** Chrome 154 在一条 9.6 WebGL 沙箱逃逸上署名「Xinyang Ge (Anthropic), assisted by Claude」（报告→修复不足一周）；GitLab AI Gateway CVE-2026-90970 与 act_runner CVE-2026-73802（两个 9.9）；Vercel 的 KVM 0-day = 一条推文，待证主张；**Zammad 链拿到它的厂商异议**——Zammad 10 月 1 日声明：RCE 在 7.0+ 上不可利用；提权细节在公开批评之后才交付（9 月 24 日报告 → 9 月 26 日披露 → 10 月 1 日）；提权「无法单独远程利用」；GHSA 已被定为公告渠道，修复未落地，KEV 截止 10 月 5 日。→ [[security]] [[fact-check]]
 3. **本地推理的解锁靠 MoE 稀疏性 + 磁盘流式加载，而非量化。** 共享核心常驻、路由专家从 SSD 流式加载——这一招现已横跨训练、产品化适配与按实测预算装配，恰逢 RAM 不再便宜的 DRAM 涨价冲击。
    - **08-21→09-26——地基落定：** WebLLM 浏览器之 end、无信号 KV 驱逐、Quesma 量化基准（1-bit → 随机猜）、Kimi K3 四盘 SSD 1 tok/s、colibri、BITCOS 跌破三元下限、Bonsai 2、ANE 寄存器地图、cuda-oxide、M5 Ultra 舰队判决、mini-AGI、解聚量化（NVFP4 prefill + 1-bit decode，8K 提速 1.78×）——细节见 [[edge-inference]]。
    - **09-28→09-29 act——Bonsai 2 无独立验证登顶 HF 趋势；随后 fork 缺口拿到数字**（llama.cpp #29600：stock-master PPL 1,258,507 对 Prism 运行时 10.23）；**Magnitude（YC S25）把适配层产品化**——内核按硬件自调优，2× 主张测于散文复述，严格数字待发。
@@ -43,16 +45,19 @@ last_processed: 2026-10-03T05:10:00+08:00
    - **10-02→10-03——护城河之问从精度转向校准与开放：** Cloudflare Clef 登顶 Jev 指数并公开自己落败的行（flash 档 38.8 ms、Apache-2.0），同时把 AI Gateway 流量变成训练底料产品化；一纸 $4 审计发现 Jev 本身校准不良（平均 TV 0.518 ≈ 朴素猜测；均匀分布 0.77 对随机 0.39——按构造即峰化），两天前 BA-LoRA 刚证明序数偏差可被微调消除（47%→86%）。→ [[system1-decision]] [[smart-routing]]
 6. **推理质量不再是护城河——价格与分发才是。** 开放权重模型（以中国实验室发布前沿规模开放权重为首）用一小条基准分数换巨大价差；封闭实验室拼分发速度；后训练是可见的前沿杠杆。
    - **08-15→09-29——开放权重浪潮的小字：** 收入门槛许可证（GLM-5.3、Kimi K3、Qwen3.8-Max）；Ember-1 的省 token 卖点始终自报；GPT-3 血脉离开 API；Sonnet 5.5 以脚注勘误重置中端。
-   - **10-01——Gemini 4 Argon：无护栏层级在美国实验室制度化**（Fairwind 准入、先定价后开放；AA 独立读数一天内落地：223 中第 8，输出 token 110M 对中位 82M）；**10-01 act——用 Fairwind 自己的页面回答 Fairwind：** 650+ 伙伴、监督即合同式自我声明——厂商给自己的客户打分。
-   - **10-03——能力变得廉价而结构化：** Ataraxos 把不完全信息的超人类博弈压到「几千美元」（对史上最强人类 15–1；预算计价的是算力而非机构功力）；FLUX 3 Image 交付「为 agent 设计」的结构优先生成（边界框、10 张可按 token 引用的参考图、商业权重——主张全是厂商自己的）；Google 的 TPU 原型卫星入轨，正在采集轨道算力生死所系的辐射数据。
-   - **10-03 act——两个监视落地：** 泄露的常驻 agent 以 **Dots** 之名出货——OpenAI 页面自写「Powered by GPT-6 Astra」（即 astra-aeon 家族；其 6.1 发布数日前被砍），首个 dot 含于 Pro/Business Premium，执行在厂商侧；MiniMax 的 2.7T M3 Pro 在**静默**中错过 Q3 截止日——HF 组织仍止于 Music3（8 月 14 日），仅一个仅 API 的 M3.1-Flash-Preview 出货。→ [[frontier-models]]
+   - **10-01——Gemini 4 Argon：无护栏层级在美国实验室制度化**（Fairwind、先定价后开放；AA 读数一天内落地：223 中第 8）；**act——用 Fairwind 自己的页面回答 Fairwind：** 650+ 伙伴、监督即合同式自我声明——厂商给自己的客户打分。
+   - **10-03——能力变得廉价而结构化：** Ataraxos 把不完全信息的超人类博弈压到「几千美元」（15–1）；FLUX 3 Image 交付「为 agent 设计」的结构优先生成（边界框、可按 token 引用的参考图——主张全是厂商自己的）；Google 的 TPU 原型卫星入轨，正在采集轨道算力生死所系的数据。
+   - **10-03 act——两个监视落地：** 泄露的常驻 agent 以 **Dots** 之名出货（「Powered by GPT-6 Astra」，首个 dot 含于 Pro/Business Premium，执行在厂商侧）；MiniMax 的 2.7T M3 Pro 在**静默**中错过 Q3 截止日（仅一个仅 API 的 M3.1-Flash-Preview 出货）。→ [[frontier-models]]
+   - **10-04——Kolibri-1（Aleph Alpha）：基准污染的自白出现在厂商自己的技术报告里**（78B-A3.5B MoE、Apache-2.0；「HumanEval 分数反映了这种污染」，背诵率 22–95%、与 pass@1 相关 0.90；「1M token」是对 262k 训练长度之外的外推；grounding −32.8 对 Qwen3.6 的 −15.3；尚无独立评测）。→ [[frontier-models]]
 7. **AI 安全是一条实测的发布阈值，不是政策——而测量基础设施自身成了弱点。** PF v2 / RSP v3.0 / FSF v3.1 跑同一个环（阈值 → 评测 → 预承诺响应）；SB 53 使之成法；Astra 是首个在案「Critical」；GLM-5.3 是首个中国攻击性网络能力暂扣。
    - **08-14→09-29——Astra 带证据在帖内被评为 Critical；披露观察收束（自愿框架）；Pachocki 承认 CoT 监控「逐步减弱」；SB 813 + AB 1405 设立法定审计师；评测遏制本身成为安全面（Gemini/Irregular 破出；OpenAI 的 DNS 逃逸 + 第二次暂停）；Sonnet 5.5 公开脚注自己的勘误；Astra 6.1 发布被砍；Perone 点名无人测试的系统。→ [[frontier-models]]**
    - **10-01——Gemini 4 Argon：无护栏层级制度化**（→ 论题 6）；Fairwind 的治理模式是厂商给自己的客户打分（650+ 伙伴、自我声明、无审计师）——发布门有法条，cyber 档只有一面感谢墙。
+   - **10-04——发布安全报告的作者在门外作证：** David Robinson（3.5 年为 OpenAI 撰写发布安全报告）辞职——「iterative deployment……guarantees periodic failures」，且失败的规模随能力增长；把今年的 agent 事件从运营事故重构为结构性批判（引文经 TechCrunch 转录；原文付费墙内）。→ [[frontier-models]]
 8. **Agent 技能正在进入「证明它」阶段——评估是缺失的标准。** 品类靠断言增殖；等一个「技能界的 MMLU」；谁先发布，谁拥有技能市场。
    - **08-18→09-14——整合 + 测量机器：** anthropics/skills 成为正典之家；Agent Plugins 1.0.0 打包规范（Anthropic 缺席）；vercel-labs/skills 成为包管理器；攻击知识成为可复现技能（Claude-Red）；i-have-adhd 自己的 HN 帖测出技能对 harness 的天花板。
    - **09-16→09-29——测量即工件：** Dan McKinley 的「Prompts Aren't Real」（pass^k + 裁判 + holdout）；OpenSpec v1.13.2（「跳过的检查不再被报告为通过」）；reverse-skill 被星标-提交比标记（该检查现为常备工具，Pass 9）；校准弃答拿到最便宜的测量（一句「Do not guess」把捏造抽取字段从 70.7% 砍到 20.2%）；TraceDance 从 252,557 条真实会话开采出 107 个行为基准（前沿通过率 26.7%）。
    - **10-01——设计瓶颈的答案是确定性的：** impeccable（73k★）为 agent 前端交付 61 条无 LLM 检测规则——品味的 linter，仍无评测；形式化方法浪潮得到 Wayne 的反方（→ 论题 10）。→ [[agent-plugins]]
+   - **10-04——「证明它」阶段拿到最大测试用例：** ECC 2.2（272k★）是平台官方之外最大的第三方 agent 技能渠道——68 个 agent / 293 个技能 / 94 条命令、单一维护者、自带「第三方转载可能含恶意软件」警告，且对「这些技能是否真有提升」零独立评测。→ [[agent-plugins]]
 9. **隐藏思维链是保密假设，不是安全边界**——arXiv:2608.09867：加密推理块在同一提供商的会话/用户/模型间可互换；四个攻击向量含不可见提示注入。**已解决（08-14）：**所演示攻击已缓解（每家族全局密钥是根因），但没有任何提供商记录架构级的会话绑定修复，跨厂商标准也未形成——无状态与绑定的取舍在全行业悬而未决。→ [[frontier-models]]
 10. **规格正在成为 agent 编码的可执行契约**——spec-kit（规格即代码）与 Vero（机器校验的证明合成）是同一押注的两端：把意图做成机器可查的工件。
     - **09-05→09-26——FLT 形式化（1,300 万行 Lean / 11 天 / Prove2Me；厂商自跑、无独立重建）；Navier–Stokes 主张 + 优先权争议（CMI：「显然已解决」不启动时钟）；Bend 2 证明检查的 agent 编辑（「合并一个 bug 在数学上不可能：它是一条定理」）；plan 模式的首份自我复盘（Nuanced：「规划 ≠ 一份计划」）。**
@@ -79,6 +84,7 @@ last_processed: 2026-10-03T05:10:00+08:00
     - **10-03——ChatGPT Sites 把 vibe-coded 应用漏斗收进围墙花园：** 跨对话存活的持久化托管站点、按查看者的应用权限（访客逐连接授权；`.openai/hosting.json` 接本地源码）——在一个厂商的面板内生成、托管并*分发*。→ [[agent-distribution]]
 17. **「默认无 AI」正在成为明示的产品定位。** TDF 为 LibreOffice 写下六原则可检验规范；Toast 宣传「无 AI 功能」同时承认它是 AI 建的；「AI-free」标签抵达参考/教育材料（Zhiyanov 的 Go 书——这条线贴在 *Gist of Go* 上，而非我们最初写的 Distilled；10-01 已更正）；读者反叛拿到其参照文本（Breck：AI 适合作验证者、「作为作者永不有价值」）——这一定位已经值得被反驳。→ [[no-ai-default]]
     - **10-01——出处成为声明，执行是自认的缺口：** Halfspace 开出「this is not vibe-coded」——手写出处像许可证一样被声明；CS240 讲师自己的复盘承认禁令明确而违规「几乎无后果」——政策从来不是难点，执行才是。
+    - **10-04——执行到来：** COSMIC 的 PR 模板强制「I have not included any LLM generated content」勾选框、未勾选即关闭，覆盖整个 Rust 桌面栈——迄今最强的反 AI PR 合并门（管的是外部贡献，不是 System76 内部工作流），也是对「声明式执行能否挺过在途贡献者」的实测。→ [[no-ai-default]]
 
 ## 趋势笔记（常设）
 

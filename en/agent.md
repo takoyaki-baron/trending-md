@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-03T05:44:00+08:00
+last_processed: 2026-10-04T05:02:00+08:00
 ---
 
 # Learnt Agent
@@ -31,24 +31,24 @@ patterns, and turn them into insights and actionable todos.
    happens *by layer* (DeepSeek Harness = plugin graph, LoopX = state kernel, Cline Kanban =
    worktree isolation).
    - **08-16→09-28 — the stack decomposes by layer through the first harness-productization
-     wave:** Codex harness → beta Agents API (no ZDR even self-hosted); wiki-not-RAG knowledge;
-     worktree orchestration as a distro; session formats as the lock-in vector; Coder Agent
-     Relay; google/ax fleet control plane; Octop/Orca/OpenRig consolidation; infra vendors
-     rebuild for agent consumers (Cloudflare `cf` + 18-month Wrangler sunset; NVIDIA
-     OpenShell/Sentry); the harness becomes learnable (Meta-Skills); "Dots"; Pi.dev ships MCP.
+     wave:** Codex Agents API (no ZDR self-hosted), session formats as lock-in vector, worktree
+     orchestration, google/ax control plane, Coder Agent Relay, Octop/Orca/OpenRig; infra
+     vendors rebuild for agents (Cloudflare `cf` + Wrangler sunset; NVIDIA OpenShell/Sentry);
+     Meta-Skills; Pi.dev ships MCP. → [[agent-stack]]
    - **09-28 act — hindsight's "independent reproduction" corrected to co-developer reproduction**
-     (arXiv 2512.12818: 2 Sanghani faculty among 7 authors; the Post is a named dev collaborator):
-     LongMemEval is the shared eval, trust isn't; the real convergence is architectural
-     (markdown-pages-of-settled-knowledge, two substrates). → [[agent-stack]]
+     (arXiv 2512.12818: 2 Sanghani faculty among 7 authors; the Post a named dev collaborator):
+     LongMemEval is the shared eval, trust isn't; the real convergence is architectural. → [[agent-stack]]
    - **10-02 — MCP uniformity cracks from both ends in a day:** Figma catalog-gates edit access
      (Pi/Antigravity rejected, no OAuth fallback); OpenAI ships additive MCP Extensions outside
-     the spec; Pi 1.0 sells restraint (Codemode decision models in-loop); K2 durable event log on
-     R2; Mid-Harness + CLMs move work to the model–harness boundary.
+     the spec; Pi 1.0 sells restraint (Codemode in-loop); K2 durable event log on R2.
    - **10-03 — the database becomes an agent primitive:** Supabase acquires Turso ("agents should
      be able to create a database as easily as creating a file"; 1M DBs/week, millions-per-server
-     suspend/resume); Agent-Reach 88.4k★ tops trending dormant (last push Sep 15, no releases,
-     same-named PyPI warning) — free-backends agent web access as scraping-with-an-LLM-in-front.
-     → [[agent-stack]]
+     suspend/resume); Agent-Reach 88.4k★ tops trending dormant — free-backend agent web access as
+     scraping-with-an-LLM-in-front. → [[agent-stack]]
+   - **10-04 — the orchestration layer votes full-auto:** Paperclip (96.7k★, #1 weekly) ships
+     PR-review bots — "execution harnesses now default to full auto" in its own notes; T3 Code
+     rebuilds its runtime core (Orchestrator V2 nightly); claude-mem fills the to-do hole
+     ("Claude Code gives Claude 5 models no native to-do tool"). → [[agent-stack]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~40+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes, each with a
    canonical instance (full map in [[security]]). **Meta-pattern:** in four cases the class is
@@ -59,16 +59,20 @@ patterns, and turn them into insights and actionable todos.
      "unpatched" permanent); NetScaler 9.5 pair exploited; own KEV-absence claim inverted; the
      vibe-coding default becomes a breach class (16,326 public Supabase DBs). → [[security]]**
    - **10-01 — the first disclosure where an org's own AI-agent compromise chains into OSS RCE:**
-     DIVD hacked through AI agents → Zammad CVE-2026-102489/102490 (9.4 v4.0, victim-CSIRT-
-     scored); Faav→Microsoft "Titan" (17.3T rows behind one unsigned token); the router/edge
-     cluster (Cisco SD-WAN KEV same-day 9.8, WatchGuard, PLC4X inverted signature check).
-   - **10-02→10-03 — the chain gets its KEV entry: the first KEV whose documented intrusion path
-     was executed end-to-end by an AI agent.** Zammad pair KEV'd Oct 2, NVD's own analysis 9.8/9.8
-     Analyzed; **GHSA still absent, no post-disclosure release — "fixed in 6.5.4" is an Apr 8
-     tag, six months pre-disclosure**; the privesc is in all versions incl. latest alpha;
-     FortiMail 9.8 KEV'd same-day with NO fixed release; Mooncake = the AI data plane's first
-     criticals; 389-ds CVE-2026-86345 StartTLS injection — a 9.0 the CNA itself rates Moderate.
-     → [[security]] [[fact-check]]
+     DIVD hacked through AI agents → Zammad CVE-2026-102489/102490 (9.4 v4.0, victim-CSIRT-scored);
+     Faav→Microsoft "Titan" (17.3T rows, one unsigned token); Cisco SD-WAN KEV same-day, WatchGuard, PLC4X.
+   - **10-02→10-03 — the chain gets its KEV entry — the first whose documented intrusion path was
+     executed end-to-end by an AI agent** (Zammad pair KEV'd Oct 2, NVD 9.8 Analyzed; GHSA absent,
+     "fixed in 6.5.4" is an Apr 8 tag; privesc in all versions; FortiMail 9.8 no fix; Mooncake =
+     the AI data plane's first criticals; 389-ds 9.0-vs-Moderate). → [[security]] [[fact-check]]
+   - **10-04 — AI-assisted discovery ships at hyperscale; the agent-platform surface gets its
+     9.9s:** Chrome 154 credits "Xinyang Ge (Anthropic), assisted by Claude" on a 9.6 WebGL
+     sandbox escape (reported→patched <1 week); GitLab AI Gateway CVE-2026-90970 and act_runner
+     CVE-2026-73802 (9.9s); Vercel's KVM 0-day = one tweet, pending claim; **the Zammad chain
+     gets its vendor dispute** — Zammad's Oct 1 statement: RCE unexploitable on 7.0+; privesc
+     details handed over only after public criticism (Sep 24 report → Sep 26 disclosure → Oct 1);
+     privesc "cannot be exploited remotely on its own"; GHSA is the declared channel, fix
+     pending, KEV due Oct 5. → [[security]] [[fact-check]]
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
    productized fitting, and fit-to-measured-budget, meeting the DRAM price shock exactly as RAM
@@ -130,21 +134,21 @@ patterns, and turn them into insights and actionable todos.
    - **08-15→09-29 — the open-weight wave's fine print:** revenue-gated licenses (GLM-5.3,
      Kimi K3, Qwen3.8-Max); Ember-1's token-efficiency sell stayed self-reported; the GPT-3
      lineage left the API; Sonnet 5.5 reset the mid-tier with footnoted errata.
-   - **10-01 — Gemini 4 Argon: the no-guardrails tier institutionalized at a US lab** (Fairwind
-     access, priced pre-availability; AA's independent read lands within a day: #8 of 223, 110M
-     vs 82M median output tokens); **10-01 act — Fairwind answered from its own pages:** 650+
-     partners, oversight is contractual self-attestation — the vendor grading its own customers.
-   - **10-03 — capability gets cheap and structured:** Ataraxos takes superhuman
-     imperfect-information play to "a few thousand dollars" (15–1 vs the best human; the budget
-     prices compute, not institutional talent); FLUX 3 Image ships structure-first generation
-     "designed for agents" (bounding boxes, 10 token-addressable references, commercial weights —
-     claims all vendor's own); Google's TPU prototype satellite is in orbit collecting the
-     radiation data orbital compute lives or dies on.
-   - **10-03 act — two watches resolved:** the leaked always-on agent shipped as **Dots** —
-     "Powered by GPT-6 Astra" per OpenAI's page (the astra-aeon family; its 6.1 launch scrapped
-     days earlier), first dot included in Pro/Business Premium, enforcement vendor-side; and
-     MiniMax's 2.7T M3 Pro met its Q3 deadline in **silence** — HF org still tops out at Music3
-     (Aug 14), only an API-only M3.1-Flash-Preview shipped. → [[frontier-models]]
+   - **10-01 — Gemini 4 Argon: the no-guardrails tier institutionalized at a US lab** (Fairwind,
+     priced pre-availability; AA's read in a day: #8 of 223); **act — Fairwind from its own
+     pages:** 650+ partners, oversight is contractual self-attestation — the vendor grading
+     its own customers.
+   - **10-03 — capability gets cheap and structured:** Ataraxos superhuman imperfect-info play
+     for "a few thousand dollars" (15–1); FLUX 3 Image structure-first generation "designed for
+     agents" (bounding boxes, token-addressable refs — claims vendor's own); Google's TPU
+     prototype satellite in orbit collecting the data orbital compute lives or dies on.
+   - **10-03 act — two watches resolved:** the always-on leak shipped as **Dots** ("Powered by
+     GPT-6 Astra", first dot in Pro/Business Premium, enforcement vendor-side); MiniMax's 2.7T
+     M3 Pro met its Q3 deadline in **silence** (only an API-only M3.1-Flash-Preview). → [[frontier-models]]
+   - **10-04 — Kolibri-1 (Aleph Alpha): the contamination admission ships in the vendor's own
+     tech report** (78B-A3.5B MoE, Apache-2.0; "the HumanEval scores reflect this contamination,"
+     recitation 22–95% correlating 0.90 with pass@1; "1M tokens" is extrapolation past a 262k
+     trained length; grounding −32.8 vs Qwen3.6's −15.3; no independent eval yet). → [[frontier-models]]
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
    committed response); SB 53 makes it statutory; Astra is the first live "Critical"; GLM-5.3 the
@@ -157,6 +161,11 @@ patterns, and turn them into insights and actionable todos.
    - **10-01 — Gemini 4 Argon: the no-guardrails tier institutionalized** (→ thesis 6); Fairwind's
      governance model is the vendor grading its own customers (650+ partners, self-attestation,
      no auditor) — the release gate has a statute, the cyber tier has a testimonial wall.
+   - **10-04 — the launch-safety reports' author testifies from outside:** David Robinson (3.5
+     years writing OpenAI's safety reports) resigns — "iterative deployment… guarantees periodic
+     failures" whose scale grows with capability; the year's agent incidents reframed from
+     operational accidents to structural critique (quotes via TechCrunch; essay paywalled).
+     → [[frontier-models]]
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** The
    category proliferates on assertion; expect an "MMLU-for-skills" eval; whoever ships it owns
    the skills marketplace.
@@ -173,6 +182,10 @@ patterns, and turn them into insights and actionable todos.
    - **10-01 — the design-bottleneck answer is deterministic:** impeccable (73k★) ships 61 no-LLM
      detector rules for agent frontend — linters for taste, still no eval; the formal-methods wave
      gets Wayne's counterweight (→ thesis 10). → [[agent-plugins]]
+   - **10-04 — the prove-it phase gets its largest test case:** ECC 2.2 (272k★) is the biggest
+     third-party agent-skills channel after the platform-official ones — 68 agents/293 skills/
+     94 commands, single maintainer, its own "third-party re-uploads may contain malware"
+     warning, and zero independent evaluation that the skills improve anything. → [[agent-plugins]]
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
    within a provider; four vectors incl. invisible prompt injection. **Resolved (08-14):** the
@@ -285,6 +298,10 @@ patterns, and turn them into insights and actionable todos.
       "this is not vibe-coded" — hand-written provenance declared the way licenses are; and the
       CS240 instructor's own retrospective admits a clearly-stated ban with "little to no
       consequence" for violators — the policy was never the hard part; enforcement is.
+    - **10-04 — enforcement arrives: COSMIC's PR template mandates an "I have not included any LLM
+      generated content" checkbox with closure for non-compliance, across the whole Rust desktop
+      stack — the strongest anti-AI-PR merge gate yet (gates contributions, not System76's
+      internal work), and a live test of attestation vs in-flight contributors. → [[no-ai-default]]**
 
 ## Trend notes (standing)
 

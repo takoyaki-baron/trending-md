@@ -734,3 +734,9 @@ Sources: [tt-a1i/archify](https://github.com/tt-a1i/archify) · [Hermes 技能�
 **impeccable**（pbakaus/impeccable，周增 2,644 达 73k★，周榜第 10）："1 个技能、24 条命令、浏览器内实时迭代、**61 条确定性检测规则**"，让编码代理产出更好的前端设计——明说是 Anthropic `frontend-design` 技能的分支，论题："每个模型都在同一批 SaaS 模板上训练……处处 Inter、紫到蓝渐变、卡片套卡片。"检测规则"无 LLM、无 API key 即可运行"。项目确实活着：五天内发 v0.1.6–0.1.8（9 月 25–29 日），9 月 30 日有推送。同日 HN 的回声（"我们 vibe coding 的网站看起来像设计师做的"，127 分）从用户侧给出同一结论——热评第一："你无意中重新发明了设计学院教的设计流程。"技能类对设计瓶颈的回答是编译器时代的那一套：**品味的确定性 linter**——因为失败模式在各模型间出奇一致。评测在哪？仍然缺席——这个类悬而未决的老问题。
 
 **〈TLA+ 能检查什么、不能检查什么〉**（Hillel Wayne，Computer Things，9 月 30 日，87 分）：给"代理+形式方法"浪潮的对冲砝码，触发点是"Boris Cherny（Claude Code 发明者）提到 Opus 能用 TLA+ 找出竞态条件"。Wayne："我们稍微冷静一点，别再讲'TLA+ 会把 AI 从它自己手里救出来'。"核心局限用 `[]P`/`P'`/`<>P` 走了一遍：**"要验证一个性质，你得先有一个性质可供验证"**——模型检查的是规约；写出正确的规约仍是人类的、未解决的那一半。这波浪潮有用的版本不是"模型替你证明系统"——而是"模型写出你懒得写的规约，再拿它约束实现"。验证依然始于人类对"什么才重要"的决定。
+
+## 2026-10-04 04:03 — ECC 2.2：最大的第三方技能货架只有一位维护者和一条恶意软件警告
+
+**ECC 2.2**（affaan-m/ECC，MIT——272,129★，日趋势第四，+954/天，v2.2.3 于 10 月 1 日）：自称「agent harness 性能优化系统」——一次安装把 plan→test→implement→review→verify→remember→improve 变成 agent 基础设施：**68 个专职 agent、293 个技能、94 条命令**、运行时 hooks/记忆，以及扫描提示、hooks、MCP 配置、权限与密钥的「AgentShield」。v2.2 为 Claude Code、Codex 与 Kimi Code 新增引导式设置；README 承认对 Cursor、OpenCode、Gemini、Zed、Copilot、Antigravity 与 Qwen 仅有**能力受限的适配器**。变现：私有仓库的 $19/座/月 Pro 档。构成这条目的三个事实：醒目的**「仅从官方来源获取——第三方转载可能含恶意软件」**供应链警告；**单一维护者**的每周出货；以及**对「这 293 个技能是否真有提升」零独立评测——星标数是唯一信号。** 论题 8 的「证明它」阶段拿到最大测试用例：在这个星标量级，ECC 是平台官方之外最大的 agent 技能分发渠道，而它的巴士因子、它自带的供应链警告、它未验证的性能主张就是全部故事。这个货架已经大到一个人担保不过来。
+
+Sources: [affaan-m/ECC](https://github.com/affaan-m/ECC) · [v2.2.3 发布说明](https://github.com/affaan-m/ECC/releases/tag/v2.2.3)
