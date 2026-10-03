@@ -1,8 +1,8 @@
 ---
 date: 2026-10-03
-updated: 2026-10-03T04:25:00+08:00
+updated: 2026-10-03T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -244,13 +244,181 @@ Dylan Black は、Jev——TypeSafe の System One 分類器であり、この�
 
 ---
 
+## 18. Muse Gadgets：Meta が自社アシスタントのハードウェアレイヤーをオープンソース化 —— ESP32 と Raspberry Pi の SDK、Apache 2.0
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** gadgets.muse.ai · 155+ pts on HN · ~9h ago (~03:24 UTC+8)
+- **Tags:** `meta` `muse` `hardware` `esp32` `open-source`
+
+Meta が **Muse Gadgets**——「あなたの Muse のためのオープンソースハードウェア」——を発表し、SDK とファームウェアを Apache 2.0 で `facebookincubator/muse-gadget-sdk` として公開した（リポジトリは 10 月 2 日作成、今日も push。C 言語）。2 本の線：**ESP32 Device SDK**（スクリーン、オーディオ入出力、センサー）と、**Linux Device SDK**——「遊んでいる Raspberry Pi や Linux ボックスを Muse ガジェットに変える……自分のコマンドを書き足して、システム管理の雑務や Home Assistant のセットアップを Muse に任せる」。対応ボードは Raspberry Pi 5、Waveshare ESP32-S3 AMOLED、Seeed reTerminal E1002（電子ペーパー）、M5Stack StickS3、ideaspark ESP32、Home Assistant Voice PE に及ぶ。ペアリングは Muse アプリ経由（Settings → Devices → Developer mode、デバイス名は「MuseGadget」プレフィックス）。そして**すべてのガジェットに SDK トークンが必要**（Gadget SDK Terms の下で）。各 SDK ディレクトリには「Muse Code のようなコーディングエージェントのための」`AGENTS.md` も入っている。Meta 自身のデバイスも 1 つ売る：**Muse Home Link**——ローカル HTTP-API デバイス（照明、テレビ、プリンター）へのブリッジで、「米国限定・有効な Muse サブスクリプションが必要・無料、1 登録につき 1 台」、10 月出荷。トーンは意図的にホビイスト向けだ：「ハッカーがハッカーのために作った、純粋に楽しむためのもの。いじりの副作用には、文鎮化、保証の失効、電圧降下、破産が含まれうる」。掲載デバイスはすべてサードパーティ製で、「Meta は保証も担保もしない」。
+
+**Why it matters:** アシスタントからアクチュエータへの道は、エージェントスタックで最後にロックされたレイヤーだ。Meta はそれを家電の庭ではなくホッカー SDK で開けた——ハードウェア版の MCP の瞬間である。同時にこれは公開のセキュリティ実験でもある：消費者アイデンティティによるペアリングとローカルデバイス制御は、エージェントがこれまで越えることを許されてこなかった信頼境界そのものだ。
+
+[`🔗 gadgets.muse.ai`](https://gadgets.muse.ai) · [`🔗 facebookincubator/muse-gadget-sdk`](https://github.com/facebookincubator/muse-gadget-sdk) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49937504)
+
+---
+
+## 19. Greg Kroah-Hartman が Anthropic の Mythos カーネル脆弱性リストを採点：79 件のうち「修正が必要だったのは 20 件」——実作業の総量は「カーネル開発 1 時間分」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Kernel Recipes 2026 video · 197+ pts on HN · ~25h ago (~10:50 UTC+8 Oct 2)
+- **Tags:** `linux-kernel` `ai-security` `mythos` `anthropic` `cve`
+
+9 月 29 日に公開された Kernel Recipes 2026 の講演「Security in the LLM age」（再生数 9.8k）で、Linux カーネルの stable ツリーメンテナーは、「Anthropic の Mythos システムが **79 件のカーネル脆弱性**を見つけた」という主張の監査に一節を割いた。スライドの内訳、HN 上の書き起こしによれば：24 件は「詳細が一切ない——『クラッシュした』だけ」、14 件は「そもそもバグではない」、3 件は「データが完全に捏造」、15 件は最新リリースですでに修正済み（11 件は他の開発者が、4 件は Anthropic が）——残りが **「修正が必要だった 20 件」**（7 件は「悪意あるファイルシステムイメージを仮定」、2 件は「スタックの途中に悪意あるネットワークパケットを注入できると仮定」）。聴講者の投稿によれば、発見手法は過去数十年のカーネル修正のパターンマッチングを別の場所に適用するものだと述べ、既知のバグを最初に直したカーネル開発者へのクレジットを欠いたことを批判し、純価値を「カーネル開発 1 時間分」と総括した。**この項目自体の注意点：** これは一人のメンテナーによる監査で、現時点ではスライドと参加者の書き起こしとしてのみ存在する——双方の書面による報告書は（まだ）出ていない。
+
+**Why it matters:** 「うちの AI が N 件の脆弱性を見つけた」という主張についに、最も信頼しうる審判が点数を出した：約 25%（79 中 20）。そして指弾された原罪は発見ではなく、帰属だった。ベンダーの CVE プレスリリースは、今後この採点表と突き合わせられることになる。
+
+[`🔗 Kernel Recipes 2026 video`](https://www.youtube.com/watch?v=NnV_cWeoo5Q) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49929391)
+
+---
+
+## 20. 忘れっぽい CPU：Linux on M4 が、WFI が x0–x31 をゼロにする様子を暴く —— Apple が 4 世代にわたって出荷し続けた ARM 仕様違反
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** yuka.dev · 148+ pts on HN · ~14h ago (~22:20 UTC+8 Oct 2)
+- **Tags:** `linux` `apple-silicon` `arm64` `kernel`
+
+Yureka Lilian による M4 Mac mini 向け Linux のブリングアップ日記（m1n1、メインラインカーネル、NixOS）は、このマシンがなぜ「忘れっぽい」のかを記録している：**WFI**——すべての OS が絶えず発行する ARM のアイドル命令——を実行すると、Apple のコアでは**アーキテクチャレジスタ x0–x31 がゼロになる**。「WFI 命令はアーキテクチャ状態を失させてはならない」という仕様に反する。M1–M3 はこの挙動を覆うベンダー「チicken bit」（`ARM64_REG_CYC_OVRD_ok2pwrdn_force_mask`）を積んでいたが、M4 では「このチicken bit はロックされたか、削除されたようだ」。回避策——すべての WFI/WFIT を NOP に置換——は 2026 年 4 月に全コアを立ち上げ、今は**上流にマージ済み**だ：カーネルの bootarg（`idle=<wfi|yield|nop>`）と、影響あるベアメタル機で m1n1 が WFI/WFIT を自動無効化する方式で、M4 Pro・M4 Max・M5 での動作を確認。投稿は M4 の残りの壁も棚卸しする：SPTM を必須化した初世代、raw boot モードでロックされた GXF、書くとクラッシュする RVBAR。
+
+**Why it matters:** アーキテクチャ仕様を静かに破るハードウェアの癖が 4 世代生き延び、カーネルの quirk として永久保存されることになった——「プラットフォーム＝仕様」は、壊れるまでしか成立しない。そしてこれは 2026 年時点の Apple シリコン Linux ブリングアップの具体状況でもある：メインライン公認のアイドル回避策つきで。
+
+[`🔗 yuka.dev`](https://yuka.dev/blog-2026-10-02-linux-m4.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49933869)
+
+---
+
+## 21. オープンソース SIEM の UTMStack：CVSS 9.9 のインシデントコマンド WebSocket と 9.8 の内部キー認証バイパス —— v11.2.16 で修正
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · CVSS 9.9 + 9.8（VulnCheck 付与）· NVD 公開 Oct 2
+- **Tags:** `cve` `siem` `auth-bypass` `utmstack`
+
+UTMStack（オープンソースの SIEM/SOAR）の VulnCheck による 2 件の開示が 10 月 2 日に NVD に載り、いずれも **v11.2.16**（10 月 1 日リリース）で修正済み。**CVE-2026-82041 —— CVSS 9.9**（`CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`）：`UTMIncidentCommandWebsocket.processCommand()` に認可が欠落——これは `/command/{hostname}` の STOMP 宛先にマップされるハンドラで、「ロールチェックもコマンド許可リストもない」——低権限ユーザーがインシデントコマンドチャンネルを操れる。**CVE-2026-82042 —— CVSS 9.8**（`PR:N`）：「`INTERNAL_KEY` 環境変数に一致する有効な `Utm-Internal-Key` ヘッダ」を提示するだけで「管理 API への完全なアクセス」を得られる認証バイパス。**スコア、出典付き：** 両スコアとも CNA としての VulnCheck のもの（CVSS 3.1 と 4.0 の双方が公開済み）。NVD は VulnCheck のメトリクスを載せている。**リポジトリ状態は確認済み：** utmstack/UTMStack はアーカイブされておらず、10 月 2 日にも push。リリースは流れている（v12.0.0 が 9 月 29 日、v11.2.15 が 9 月 30 日、v11.2.16 が 10 月 1 日）。
+
+**Why it matters:** このフィードが繰り返し突き当たるのと同じパターン——セキュリティツール自体が一次攻撃面になる（10 月 1 日の CrowdStrike RTR、今朝の Zammad ヘルプデスク連鎖）——だが今回は、SOC 自身のリモートコマンド経路にロールチェックがなかった。UTMStack を動かしているなら、v11.2.16 が最低線。ついでに `INTERNAL_KEY` をローテートしておくこと。
+
+[`🔗 NVD — CVE-2026-82041`](https://nvd.nist.gov/vuln/detail/CVE-2026-82041) · [`🔗 NVD — CVE-2026-82042`](https://nvd.nist.gov/vuln/detail/CVE-2026-82042) · [`🔗 v11.2.16 release`](https://github.com/utmstack/UTMStack/releases)
+
+---
+
+## 22. Sharpening Tax：Meta が、RL ポストトレーニングがエージェントの pass@K カバレッジに課す代償を定量化
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.01509 · Hugging Face daily papers #7 · 66 pts · ~1d ago
+- **Tags:** `post-training` `rl` `agents` `pass-at-k` `research`
+
+Meta 主導の 10 著者論文（Azalia Mirhoseini と Sharon Y. Li を含む）は、**シャープニング仮説**——RL ポストトレーニングはベースモデルがすでに持つ振る舞いを鋭くするだけで、pass@1 を上げる一方で解のカバレッジ（pass@K）を削る——を数学とコーディングからエージェント的タスクへ拡張した。4 ファミリーからの **14 組の base/post-trained ペア**、3 つのエージェントベンチマーク（42 ケース）を通じて：「軽い推論ハーネス」だけを付けたベースモデルは、十分なテスト時予算があれば pass@1 は低いまま「ポストトレーニング済みの対応モデルの解カバレッジ（pass@K）をしばしば上回る」。メカニズム：ポストトレーニングはタスクを二つの極端——「常に解けるか、永遠に解けないか」——へ押しやり、カバレッジと引き換えにサンプリング効率と一貫性を買っている。2 つの成果物：ロールアウト「わずか数回から推定できる」**Sharpening Tax** 診断指標と、プロンプトごとに温度を適応させるベイジアンサンプラー **posterior-tempered group sampling（PTGS）**——固定温度ベースラインより「税を少なく支払う」。10 月 1 日提出。
+
+**Why it matters:** このフィードが繰り返し出会ってきた「ベースモデル＋ハーネス」の結果（10 月 2 日の Mid-Harness：テスト時計算で凍結モデルが 50% → 68%）を説明するメカニズム論文がこれだ。サービングスタックにテスト時予算があるなら、「RL チューニング済みチェックポイント」はもはや自動のデフォルトではない——そして税額は、ロールアウト数回分の費用で測れる。
+
+[`🔗 arXiv 2610.01509`](https://arxiv.org/abs/2610.01509) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 23. Beyond Memory：長期エージェントに明示的な信念状態を —— 推論時のみ、訓練不要、そして失敗モードに名前を：Belief Trapping
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.01415 · Hugging Face daily papers #4 · 69 pts · ~1d ago
+- **Tags:** `agents` `belief-states` `long-horizon` `inference-time` `research`
+
+「Beyond Memory: Harnessing Long-Horizon Agents with Explicit Belief States」が提案する **PoS** は、「エージェントの決定コンテキストとして明示的な信念状態を構築し、絶えず維持する」推論時フレームワークだ。各信念は、現在の世界状態の推定と未解決のタスク要件を組み合わせ——「エージェントがまだ何を学び、何を成し遂げるべきか」を明示する。一貫性バリデータと進捗モニターが **Belief Trapping**——「エージェントが行動し続けながら、目標への意味のある前進がない」状態——を検出し、回復はハマり込みのパターンと要件の種類の双方に合わせて調整される。結果：実行と診断の 4 ベンチマーク × 3 つの LLM バックボーンすべてで「全ベンチマークでの最高の総合性能」。アブレーションは一貫性検証と回復の双方の必要性を示し、コンテキスト拡張実験はコンテキスト増大への韧性を示した。著者 12 名は学術と産業をまたぐ——著者リストには Dan Pei の清華大学グループが名を連ね、HF の掲載では Alibaba とされる。
+
+**Why it matters:** メモリの波が整理するのは*何が起きたか*。PoS が整理するのは*何がまだ未知で、何が未完了か*——同じコンテキストウィンドウ上の、別のデータ構造だ。推論時で差し込み可能、訓練は不要。「Belief Trapping」はハーネス陣営がずっと欲しかった名前だ：エージェントが動き続けるのに進捗がゼロのループ。
+
+[`🔗 arXiv 2610.01415`](https://arxiv.org/abs/2610.01415) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 24. Ai2 が AstaBrief 8B をオープンソース化：Asta の Fast モードの裏方だった引用付きレポート生成器 —— ウェイトも訓練データも評価も込み
+
+- **Velocity:** ▮▮ rising
+- **Source:** allenai.org · 22+ pts on HN · ~7h ago (~05:25 UTC+8)
+- **Tags:** `ai2` `open-weights` `report-generation` `qwen` `citations`
+
+非営利ラベルが **AstaBrief 8B**——「Asta の高速レポート生成モデル」——を公開した。「研究上の質問と検索した文献断片を、引用付きレポートに変える」モデルだ。**Qwen3-8B** ベースで SFT + DPO（不安定で高価な RL は意図的に回避）、9 万件のフィルタ済み研究質問から 4.7 万件の SFT サンプル、さらに人間の選好と「95% 一致」するよう GPT-4.1 と DeepSeek-R1 が判定した約 6K の DPO ペア。**ウェイトは Apache 2.0 で** Hugging Face（`allenai/AstaBrief_8B`）に、訓練データとローカルレポート生成のサンプル GitHub ワークフローとともに公開。速度の主張：「Fast モードはレポート 1 本あたり平均 51.1 秒、Thinking モードは 178.5 秒、約 3.5 倍速い」——専有システムよりほぼ一桁少ない。**正直な欄：** 評価は内部のもの（SQABench-CS2、ユーザー手書きの CS 研究質問 200 本。DeepScholarBench）。人間研究では総合選好は DR-Tulu が勝ち、「3 人の研究者のうち 2 人だけが引用精度で AstaBrief を選好」。Fast モードユーザーの 23% は Thinking モードに戻らなかった。
+
+**Why it matters:** 「Deep Research lite」の階層に、オープンウェイトでデータごと公開され、機関が自分のファイアウォールの内側で動かせる参照実装ができた——そして RL を見送った判断まで含むパイプライン全体の公開は、ほとんどのベンダが出荷しない部分そのものだ。
+
+[`🔗 allenai.org/blog/astabrief`](https://allenai.org/blog/astabrief) · [`🔗 allenai/AstaBrief_8B`](https://huggingface.co/allenai/AstaBrief_8B)
+
+---
+
+## 25. 「すべての SaaS ビジネスはモデルの周りのハーネスになる」——今四半期の整理概念を企業論へ昇格させた 8 月のエッセイが HN に
+
+- **Velocity:** ▮ steady
+- **Source:** blog.sshh.io · 117+ pts on HN · ~7h ago (~05:10 UTC+8) · エッセイは 8 月 24 日付
+- **Tags:** `harness` `saas` `agents` `org-design`
+
+Shrivu Shankar のエッセイ（8 月 24 日発表、今朝 HN で再浮上）は、ハーネス——「ステートレスな LLM を取り巻くインフラ、インターフェース、コンテキスト、状態」——を開発ツールのカテゴリではなく会社そのものとして論じる。4 段階：ハーネスなし → 個人がハーネスを操作する → 個人がハーネスをオーケストレーションする → **「ハーネスが個人をオーケストレーションする」**。この時点で「Humans are part of the harness」。品質は無人自動化ではなく人間の注意の配分から生まれる：「taste-holders」が主要な決定、デモ、上位デザイン案だけをレビューする。競争の論理：最上位のハーネスを握るか、商品化されるか——「外側のループ全体を外注したなら……そのビジネスはすでにコモディティ化している」。引用される証拠：Ramp、Stripe、DoorDash の社内 AI 開発者ツール。
+
+**Why it matters:** このフィードは四半期を通じて「ハーネス」をエンジニアリングの名詞として追ってきた（Mid-Harness、ds4 の共有状態エージェント面、今日の HF ボードにある Meta のハーネス最適化 ActiveSaddler）。このエッセイの動きは、それを企業論へ昇格させることだ——6 週間前の文章で、まだ証明はされていない。だが「ハーネス」が 2027 年の組織図の言葉になるなら、この用法を鋳造した文章のひとつはこれだ。
+
+[`🔗 blog.sshh.io`](https://blog.sshh.io/p/the-harness-is-the-company) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49938616)
+
+---
+
+## 26. ソフトウェアエンジニアのための Lean 証明の解剖：Sipser の正則性の演習を spec → DFA → proof に分解する
+
+- **Velocity:** ▮ steady
+- **Source:** agostbiro.net · 92+ pts on HN · ~33h ago (~02:50 UTC+8 Oct 2)
+- **Tags:** `lean` `formal-methods` `verification` `dfa`
+
+現役エンジニアによる、Lean 4 + Mathlib で Sipser の教科書の古典的な演習を形式化する手順の完全解説：3 行のビット列からなり、最下行が上 2 行の二進和に等しい言語 B は**正則**である。構成はキャリー DFA——「状態が未確定キャリーであるフルアダーに、デッドシンクを加えたもの」——が反転した言語を認識し、Mathlib の「正則性は反転で保たれる」定理で閉じる。3 部構成の解剖（specification / implementation / proof）の芯は `run_invariant` 補題——`evalFrom` が `carry carryOut` で終わるのは `row1LE wLE + row2LE wLE + carryIn = row3LE wLE + carryOut * 2 ^ wLE.length` のときかつそのときに限る——で、`generalizing carryIn` 付きの帰納法で証明する。教訓：「proofs are programs」。形式化は隠れた仮定（「語の 3 行は等長でなければならない」）を露わにした。そしてブラックボックス化への警告——エージェントがすでにこの種の証明を一発で出せる以上、「今後、機械生成の証明を読めるようでいることが重要だ」。
+
+**Why it matters:** 形式手法の波には、現役エンジニア向けの入口がずっと欠けていた——この文書がそれだ。そして機械生成証明についてのこの警告は、今週、カーネルメンテナーが AI の脆弱性リストに 20/79 をつけた（第 19 条）のと同じ枠に収まる：理解による裏付けのない検証は、速くなっただけのベルトコンベアだ。
+
+[`🔗 agostbiro.net`](https://agostbiro.net/posts/2026-10-anatomy-of-a-lean-proof/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49925602)
+
+---
+
+## 27. Audionaut：エージェントが MCP 経由で操縦する GPLv3 のマルチトラック音声エディタ —— 3 年の C++、1 編集 = 1 undo ステップ
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 133+ pts on HN · ~20h ago (~16:00 UTC+8 Oct 2)
+- **Tags:** `audio` `open-source` `mcp` `juce` `show-hn`
+
+kvoltmer/Audionaut（C++ / JUCE。Windows/macOS/Linux。README バッジは GPLv3）が「AI エージェントが MCP 経由で操縦できる、無料のオープンソースマルチトラック音声エディタ」として登場した。作者の出発点：制作期間 3–4 年。「古い Sound Designer II のワークフロー（リージョンを作り、プレイリストに落とし、書き出して完了）で自分のマルチチャンネル録音を編集するため」に始まった。エージェント用の面は 1 行——`claude mcp add audionaut -- npx -y audionaut-mcp`——そして鍵となる契約が**「編集 1 回が 1 つの undo ステップとして届く」**だ。ヒーローデモでは、Claude が 16 小節ごとに曲を切り分け、クリップを 2 トラックに振り分け、隙間を埋め、クロスフェードとフェードアウトを設定する。リポジトリ確認済み：156★、10 月 2 日に push——勢いは現時点で star 数ではなく HN 主導だ。
+
+**Why it matters:** デスクトップアプリの MCP 化が、IDE とブラウザを越えて時間領域のメディアへ届きつつある。そして「1 編集 = 1 undo ステップ」は正しいエージェント UX のプリミティブだ——エージェントの編集が、人間が取り消せる形を保つ。Audacity とフル DAW の間の、久しく空いていた開源の穴も埋めた。
+
+[`🔗 kvoltmer/Audionaut`](https://github.com/kvoltmer/Audionaut) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49931031)
+
+---
+
+## 28. Debian が貢献者向けの LLM 推論ポータルを静かに立ち上げる —— Salsa ログイン、予算トラッキング、Scaleway 負担
+
+- **Velocity:** ▮ steady
+- **Source:** inference.debian.net · 12+ pts on HN · ~5h ago (~06:45 UTC+8)
+- **Tags:** `debian` `llm-infra` `open-source` `distro`
+
+`inference.debian.net` は「Debian 貢献者が LLM 推論にアクセスするためのセルフサービスポータル」だ：Salsa（Debian の GitLab）でログインし、「Debian Developers と Debian Maintainers のみがアクセスを許され」、API キーを管理し予算消費を追跡する。9 月 23 日に `debian-devel-announce` で告知済み。現在リストされている最初のモデルは `scaleway/qwen3.8-27b`（9 月 25 日追加）。「推論リソースは Scaleway がスポンサー」。ポータルのソース（`inference-team/inference-user-portal`）は Salsa 上にあり、最近の更新で「DebGPT 設定セクション」とサンドボックスのサンプルが加わった。
+
+**Why it matters:** ディストロがアイデンティティ制御・スポンサー資金の推論を貢献者に提供するのは、一次のインフラ判断だ——道徳的な等価物はビルドファームであり、他のディストロが比較される基準型になる。DebGPT 統合が本音を物語る：これは人間がチャットするための特典ではなく、Debian の作業をするエージェントのための推論だ。
+
+[`🔗 inference.debian.net`](https://inference.debian.net/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49939513)
+
+---
+
+## 29. 最初の RFC 1149 パケットがクリスティーズの競売に —— David Waitzman の鳩運搬 ping、額装付き
+
+- **Velocity:** ▮ steady
+- **Source:** onlineonly.christies.com · 56+ pts on HN · ~15h ago (~20:45 UTC+8 Oct 2)
+- **Tags:** `internet-history` `rfc1149` `auction` `humor`
+
+クリスティーズの「Fine Printed Books & Manuscripts」オンラインセールには、**「Carrier Pigeon Internet Protocol」**と題されたロットが含まれる：「[WAITZMAN, David and the BERGEN LINUX USER GROUP.] RFC 1149 に従い伝書鳩で送られた、印刷された IP/ICMP の『ping』パケット 1 通。小さな紙巻き、41 × 210 mm。鳩の脚に括り付けていたときの転がり皺が残る。額装済み。」カタログによる来歴：David Waitzman——1990 年のエープリルフールに RFC 1149『Avian Carriers による IP データグラム伝送の標準』を著したアメリカのネットワークエンジニア——で、このパケットは「最初の、そして最も有名な実装」の生存パケット、Bergen Linux User Group の鳩実験によるもの。背板の裏には「Property of David Waitzman」と記されている。
+
+**Why it matters:** インターネットの最も经典的なジョーク標準が、美術市場に入った。インターネット第一世代の紙の痕跡が収集対象になり始めている——そして RFC ユーモアの系譜（1149 → 2549 の QoS 改良 → 6214 の IPv6 適応）は、額装するに値する原本が存在するほど古くなった。
+
+[`🔗 Christie's lot 325216`](https://onlineonly.christies.com/s/fine-printed-books-manuscripts-science/carrier-pigeon-internet-protocol-150/325216) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49932911)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-03T04:25:00+08:00 |
-| Items | 17 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, GitHub API, dwarfstar.sh, bfl.ai, supabase.com, eff.org, learn.chatgpt.com, csirt.divd.nl, CISA KEV, NVD, access.redhat.com, arXiv, Nature, ataraxosai.github.io, blog.google, developer.apple.com, stillwet.art, wagtail.org, maximumeffort.substack.com, Hugging Face papers) |
+| Generated | 2026-10-03T12:20:00+08:00 |
+| Items | 29 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, GitHub API, dwarfstar.sh, bfl.ai, supabase.com, eff.org, learn.chatgpt.com, csirt.divd.nl, CISA KEV, NVD, access.redhat.com, arXiv, Nature, ataraxosai.github.io, blog.google, developer.apple.com, stillwet.art, wagtail.org, maximumeffort.substack.com, Hugging Face papers, gadgets.muse.ai, YouTube/Kernel Recipes, yuka.dev, allenai.org, blog.sshh.io, agostbiro.net, inference.debian.net, onlineonly.christies.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

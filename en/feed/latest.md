@@ -1,8 +1,8 @@
 ---
 date: 2026-10-03
-updated: 2026-10-03T04:25:00+08:00
+updated: 2026-10-03T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -244,13 +244,181 @@ Dylan Black tested Jev — TypeSafe's System One classifier, the reference point
 
 ---
 
+## 18. Muse Gadgets: Meta open-sources the hardware layer for its assistant — ESP32 and Raspberry Pi SDKs, Apache 2.0
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** gadgets.muse.ai · 155+ pts on HN · ~9h ago (~03:24 UTC+8)
+- **Tags:** `meta` `muse` `hardware` `esp32` `open-source`
+
+Meta launched **Muse Gadgets** — "open source hardware for your Muse" — and open-sourced the SDKs and firmware under Apache 2.0 in `facebookincubator/muse-gadget-sdk` (repo created Oct 2, pushed today; C). Two tracks: an **ESP32 Device SDK** (screens, audio in/out, sensors) and a **Linux Device SDK** — "turn that spare Raspberry Pi or Linux box into a Muse gadget... hack in your own commands to let Muse handle sysadmin chores or your Home Assistant setup." Supported boards span Raspberry Pi 5, Waveshare ESP32-S3 AMOLED, Seeed reTerminal E1002 (e-ink), M5Stack StickS3, ideaspark ESP32 and Home Assistant Voice PE. Pairing goes through the Muse app (Settings → Devices → Developer mode, devices prefixed "MuseGadget"), and **every gadget needs an SDK token** under the Gadget SDK Terms; each SDK directory ships an `AGENTS.md` "for coding agents like Muse Code." Meta also sells one first-party device: **Muse Home Link**, a bridge to local HTTP-API devices (lights, TVs, printers) — "Free with an active Muse subscription in the United States only, limit one per subscriber," shipping in October. The framing is deliberately hobbyist: "built by hackers, for hackers, just for fun. Side effects of tinkering may include bricked boards, voided warranties, brownouts, or bankruptcies" — and the devices shown are third-party, which "Meta doesn't endorse or warrant."
+
+**Why it matters:** assistant-to-actuator is the last locked layer of the agent stack, and Meta is opening it with a hacker SDK instead of an appliance garden — hardware's MCP moment. It's also a live security experiment: consumer-identity pairing plus local device control is exactly the trust boundary agents haven't been allowed to cross until now.
+
+[`🔗 gadgets.muse.ai`](https://gadgets.muse.ai) · [`🔗 facebookincubator/muse-gadget-sdk`](https://github.com/facebookincubator/muse-gadget-sdk) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49937504)
+
+---
+
+## 19. Greg Kroah-Hartman grades Anthropic's Mythos kernel-bug haul: of 79 claimed vulnerabilities, "20 fixes were needed" — and the real work totaled "just one hour of kernel development"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Kernel Recipes 2026 video · 197+ pts on HN · ~25h ago (~10:50 UTC+8 Oct 2)
+- **Tags:** `linux-kernel` `ai-security` `mythos` `anthropic` `cve`
+
+In his Kernel Recipes 2026 talk "Security in the LLM age" (video published Sep 29, 9.8k views), the Linux kernel's stable-tree maintainer devoted a section to auditing the claim that Anthropic's Mythos system surfaced **79 kernel vulnerabilities**. The slide breakdown, as transcribed on HN: 24 had "no detail at all — 'something crashed'"; 14 were "not a bug at all"; 3 were "totally made up data"; 15 were already fixed in the latest release (11 by other developers, 4 by Anthropic) — leaving **"20 fixes were needed"** (7 requiring "assume a malicious filesystem image," 2 "assume you can inject a malicious network packet into the middle of the stack"). Per the audience thread, he described the discovery method as pattern-matching decades of prior kernel fixes and applying those mechanisms elsewhere, faulted the report for not crediting the kernel developers who originally fixed the already-known bugs, and put the net value at "just one hour of kernel development work." **The caveat on our own sourcing:** this is one maintainer's audit as captured in slides and attendee transcriptions — not (yet) a written report from either side.
+
+**Why it matters:** the most credible possible referee for "our AI found N vulnerabilities" claims just published his grade: ~25% (20/79), with heavy pre-filtering implied — and attribution, not discovery, was the flagged sin. Every vendor CVE press release now has a template to be measured against.
+
+[`🔗 Kernel Recipes 2026 video`](https://www.youtube.com/watch?v=NnV_cWeoo5Q) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49929391)
+
+---
+
+## 20. The forgetful CPU: Linux on the M4 reveals WFI zeroes x0–x31 — an ARM-spec violation Apple shipped for four chip generations
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** yuka.dev · 148+ pts on HN · ~14h ago (~22:20 UTC+8 Oct 2)
+- **Tags:** `linux` `apple-silicon` `arm64` `kernel`
+
+Yureka Lilian's bring-up diary for Linux on an M4 Mac mini (m1n1, mainline kernel, NixOS) documents why the machine is "forgetful": executing **WFI** — the ARM idle instruction every OS issues constantly — **zeroes architectural registers x0–x31** on Apple's cores, violating the architecture spec's "the WFI instruction must not cause a loss of architectural state." M1–M3 shipped a vendor "chicken bit" (`ARM64_REG_CYC_OVRD_ok2pwrdn_force_mask`) that masked the behavior; on M4, "it seems this chicken bit is either locked or has been removed." The workaround — replacing all WFI/WFIT instructions with NOPs — got all cores up in April 2026 and is now **merged upstream**: a kernel bootarg (`idle=<wfi|yield|nop>`) plus m1n1 auto-disabling WFI/WFIT on affected bare-metal machines, confirmed working on M4 Pro, M4 Max and M5. The post also catalogs the rest of the M4 wall: first generation mandating SPTM, GXF locked in raw boot mode, RVBAR writes that crash.
+
+**Why it matters:** a hardware quirk that silently violates the architecture spec survived four chip generations and had to be enshrined as a kernel quirk — "the platform is the spec" only until it isn't. It's also the concrete 2026 state of Apple-silicon Linux bring-up, now with a mainline-blessed idle workaround.
+
+[`🔗 yuka.dev`](https://yuka.dev/blog-2026-10-02-linux-m4.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49933869)
+
+---
+
+## 21. Open-source SIEM UTMStack: a CVSS 9.9 incident-command websocket and a 9.8 internal-key auth bypass — fixed in v11.2.16
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · CVSS 9.9 + 9.8 (VulnCheck-assigned) · NVD published Oct 2
+- **Tags:** `cve` `siem` `auth-bypass` `utmstack`
+
+Two VulnCheck-disclosed flaws in UTMStack (open-source SIEM/SOAR) landed on NVD Oct 2, both **fixed in v11.2.16** (released Oct 1). **CVE-2026-82041 — CVSS 9.9** (`CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`): missing authorization in `UTMIncidentCommandWebsocket.processCommand()`, the handler mapped to the `/command/{hostname}` STOMP destination, with "no role check or command allowlist" — a low-privileged user can drive the incident-command channel. **CVE-2026-82042 — CVSS 9.8** (`PR:N`): an authentication bypass granting "full administrative API access" by presenting "a valid `Utm-Internal-Key` header matching the `INTERNAL_KEY` environment variable." **Scoring, attributed:** both scores are VulnCheck's as CNA (CVSS 3.1 and 4.0 both published); NVD carries VulnCheck's metrics. **Repo state checked:** utmstack/UTMStack is not archived, pushed Oct 2, releases flowing (v12.0.0 Sep 29, v11.2.15 Sep 30, v11.2.16 Oct 1).
+
+**Why it matters:** the same pattern this feed keeps hitting — security tooling as tier-one attack surface (CrowdStrike RTR on Oct 1, Zammad's helpdesk chain this morning) — except here it's the SOC's own remote-command plane that had no role check. If you run UTMStack, v11.2.16 is the floor; rotate `INTERNAL_KEY` while you're at it.
+
+[`🔗 NVD — CVE-2026-82041`](https://nvd.nist.gov/vuln/detail/CVE-2026-82041) · [`🔗 NVD — CVE-2026-82042`](https://nvd.nist.gov/vuln/detail/CVE-2026-82042) · [`🔗 v11.2.16 release`](https://github.com/utmstack/UTMStack/releases)
+
+---
+
+## 22. The Sharpening Tax: Meta quantifies what RL post-training costs agents in pass@K coverage
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.01509 · Hugging Face daily papers #7 · 66 pts · ~1d ago
+- **Tags:** `post-training` `rl` `agents` `pass-at-k` `research`
+
+A 10-author Meta-led paper (Azalia Mirhoseini and Sharon Y. Li among them) extends the **sharpening hypothesis** — RL post-training sharpens behaviors the base model already has, lifting pass@1 while cutting solution coverage (pass@K) — from math and coding to agentic tasks. Across **14 base/post-trained pairs** from four families and three agentic benchmarks (42 cases): base models with only a "light inference harness" "often surpass their post-trained counterparts in solution coverage (pass@K)" given enough test-time budget, despite lower pass@1. The mechanism: post-training pushes tasks toward two extremes — "either always solved or never solved" — buying sampling efficiency and consistency at coverage's expense. Two deliverables: the **Sharpening Tax** diagnostic, estimable "from just a few rollouts," and **posterior-tempered group sampling (PTGS)**, a per-prompt adaptive-temperature Bayesian sampler that "pays a smaller tax than the fixed-temperature baseline" on both coverage and single-shot accuracy. Submitted Oct 1.
+
+**Why it matters:** this is the mechanism paper behind the base-model-plus-harness results this feed keeps meeting (Mid-Harness, Oct 2: test-time compute lifted a frozen model 50% → 68%). If your serving stack has test-time budget, "the RL-tuned checkpoint" is no longer the automatic default — and the tax is now measurable for the price of a few rollouts.
+
+[`🔗 arXiv 2610.01509`](https://arxiv.org/abs/2610.01509) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 23. Beyond Memory: explicit belief states for long-horizon agents — inference-time, no training, and a name for the failure mode: Belief Trapping
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.01415 · Hugging Face daily papers #4 · 69 pts · ~1d ago
+- **Tags:** `agents` `belief-states` `long-horizon` `inference-time` `research`
+
+"Beyond Memory: Harnessing Long-Horizon Agents with Explicit Belief States" introduces **PoS**, an inference-time framework that "constructs and continually maintains explicit belief states as the agent's decision context." Each belief combines an estimate of the current world state with unresolved task requirements — "making explicit what the agent still needs to learn and accomplish." A consistency validator plus progress monitor detects **Belief Trapping** — "where the agent continues to act without making meaningful progress toward the goal" — and recovery is tailored to both the trapping pattern and the requirement type. Results: "the highest overall performance on every benchmark" across four benchmarks (execution and diagnosis) with all three LLM backbones; ablations confirm consistency validation and recovery both matter; context-scaling experiments show resilience to context growth. Twelve authors bridging academia and industry — Dan Pei's Tsinghua group is on the author list, and the HF listing shows Alibaba.
+
+**Why it matters:** the memory wave organizes *what happened*; PoS organizes *what's still unknown and undone* — a different data structure for the same context window, drop-in at inference time with no training. "Belief Trapping" is a name the harness crowd needed: the loop where the agent keeps acting while nothing progresses.
+
+[`🔗 arXiv 2610.01415`](https://arxiv.org/abs/2610.01415) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 24. Ai2 open-sources AstaBrief 8B: the cited-report generator behind Asta's Fast mode — weights, training data and evals included
+
+- **Velocity:** ▮▮ rising
+- **Source:** allenai.org · 22+ pts on HN · ~7h ago (~05:25 UTC+8)
+- **Tags:** `ai2` `open-weights` `report-generation` `qwen` `citations`
+
+The nonprofit lab open-sourced **AstaBrief 8B**, the "fast report-generation model in Asta" — a model that turns "a research question and retrieved literature excerpts into a cited report." Built on **Qwen3-8B** with SFT + DPO (RL "deliberately avoided" as unstable/expensive), from 90K filtered research queries → 47K SFT examples, plus ~6K DPO pairs judged by GPT-4.1 and DeepSeek-R1 with "95% agreement" with human preferences. **Weights are Apache 2.0** on Hugging Face (`allenai/AstaBrief_8B`), with the training data and an example GitHub workflow for local report generation. Speed claim: "Fast mode averages 51.1 seconds per report compared with 178.5 seconds for Thinking mode, about 3.5× faster" — near an order of magnitude under proprietary trackers. **The honest column:** evals are internal (SQABench-CS2, 200 user-written CS questions; DeepScholarBench); in the human study DR-Tulu wins overall preference and only "two of the three researchers prefer AstaBrief... on citation accuracy"; and 23% of Fast-mode users never switched back to Thinking mode.
+
+**Why it matters:** the "Deep Research lite" tier now has an open-weights, data-included reference implementation an institution can run behind its own firewall — and Ai2 publishing the full pipeline, including the decision to skip RL, is the part most vendors won't ship.
+
+[`🔗 allenai.org/blog/astabrief`](https://allenai.org/blog/astabrief) · [`🔗 allenai/AstaBrief_8B`](https://huggingface.co/allenai/AstaBrief_8B)
+
+---
+
+## 25. "Every SaaS business will become a harness around a model" — the August essay that promotes the quarter's organizing metaphor hits HN
+
+- **Velocity:** ▮ steady
+- **Source:** blog.sshh.io · 117+ pts on HN · ~7h ago (~05:10 UTC+8) · essay dated Aug 24
+- **Tags:** `harness` `saas` `agents` `org-design`
+
+Shrivu Shankar's essay (published Aug 24, resurfacing on HN this morning) argues the harness — "infra, interfaces, context, and state that surround a stateless LLM" — is not a dev-tool category but the company itself. Four stages: no harness → individuals operate harnesses → individuals orchestrate harnesses → **"Harnesses orchestrate individuals,"** at which point "Humans are part of the harness." Quality comes from directing human attention, not lights-out automation: "taste-holders" review only major decisions, demos, and top design variants. The competitive logic: own the top-level harness or be commoditized — "If the entire outer loop is outsourced... the business has now been commoditized." Evidence cited: in-house AI developer tooling at Ramp, Stripe and DoorDash.
+
+**Why it matters:** this feed has tracked "harness" all quarter as an engineering noun (Mid-Harness, ds4's shared-state agent surface, Meta's harness-optimizing ActiveSaddler on today's HF board). The essay's move is promoting it to a corporate thesis — six weeks old and unproven, but if "harness" becomes the org-chart word of 2027, this is one of the essays that coined the usage.
+
+[`🔗 blog.sshh.io`](https://blog.sshh.io/p/the-harness-is-the-company) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49938616)
+
+---
+
+## 26. Anatomy of a Lean proof, for software engineers: a Sipser regularity exercise as spec → DFA → proof
+
+- **Velocity:** ▮ steady
+- **Source:** agostbiro.net · 92+ pts on HN · ~33h ago (~02:50 UTC+8 Oct 2)
+- **Tags:** `lean` `formal-methods` `verification` `dfa`
+
+A working-engineer walkthrough of formalizing a classic Sipser exercise in Lean 4 + Mathlib: the language B of three-row bit columns whose bottom row is the binary sum of the top two is **regular**. The construction is a carry DFA — "a full adder whose state is the pending carry, plus a dead sink state" — recognizing the reversed language, then closing the loop with Mathlib's regularity-preserved-under-reversal theorem. The three-part anatomy (specification / implementation / proof) centers on the `run_invariant` lemma — `evalFrom` ends in `carry carryOut` iff `row1LE wLE + row2LE wLE + carryIn = row3LE wLE + carryOut * 2 ^ wLE.length` — proven by induction with `generalizing carryIn`. Lessons: "proofs are programs"; formalization surfaced a hidden assumption ("all three rows of a word have the same length"); and the anti-black-box warning — since agents already one-shot proofs like this one, "it's important going forward that we can understand machine-generated proofs."
+
+**Why it matters:** the formal-methods wave keeps lacking an on-ramp for working engineers — this is that document. And its warning about machine-generated proofs lands the same week a kernel maintainer graded an AI bug haul 20/79 (item 19): verification without comprehension is just a faster conveyor belt.
+
+[`🔗 agostbiro.net`](https://agostbiro.net/posts/2026-10-anatomy-of-a-lean-proof/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49925602)
+
+---
+
+## 27. Audionaut: a GPLv3 multitrack audio editor that agents drive over MCP — three years of C++, one undo step per edit
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 133+ pts on HN · ~20h ago (~16:00 UTC+8 Oct 2)
+- **Tags:** `audio` `open-source` `mcp` `juce` `show-hn`
+
+kvoltmer/Audionaut (C++ on JUCE; Windows/macOS/Linux; GPLv3 per the README badge) launches as "a free, open-source multitrack audio editor that AI agents can drive over MCP." The author's origin story: 3–4 years in the making, begun to edit "my own multi-channel recordings with the old Sound Designer II workflow (create regions, drop to a playlist, export playlist, done)." The agent surface is one line — `claude mcp add audionaut -- npx -y audionaut-mcp` — and the key contract: **"each edit arrives as one undo step."** The hero demo shows Claude cutting a song every 16 bars, splitting clips across two tracks, closing the gaps, then setting crossfades and a fade-out. Repo checked: 156★, pushed Oct 2 — early traction is HN-led, not star-led.
+
+**Why it matters:** MCP-for-desktop-apps is reaching past IDEs and browsers into time-domain media, and "one edit = one undo step" is the right agent-UX primitive — agent edits that stay human-revertible. Also a rare open-source entry in the gap between Audacity and a full DAW.
+
+[`🔗 kvoltmer/Audionaut`](https://github.com/kvoltmer/Audionaut) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49931031)
+
+---
+
+## 28. Debian quietly stands up an LLM inference portal for its contributors — Salsa login, budget tracking, Scaleway-sponsored
+
+- **Velocity:** ▮ steady
+- **Source:** inference.debian.net · 12+ pts on HN · ~5h ago (~06:45 UTC+8)
+- **Tags:** `debian` `llm-infra` `open-source` `distro`
+
+`inference.debian.net` is "a self-service portal for Debian contributors to access LLM inference": log in with Salsa (Debian's GitLab), "only Debian Developers and Debian Maintainers are granted access," then manage API keys and track budget consumption. It was announced on `debian-devel-announce` on Sep 23; the first listed model is `scaleway/qwen3.8-27b` (added Sep 25); "Inference resources sponsored by Scaleway." The portal's source (`inference-team/inference-user-portal`) is on Salsa, and recent updates added "a DebGPT configuration section" plus sandboxing examples.
+
+**Why it matters:** a distro providing identity-gated, sponsor-funded inference to contributors is a first-class infrastructure decision — the moral equivalent of running build daemons, and the template other distros will now be compared against. The DebGPT integration is the tell: this is inference for agents doing Debian work, not a chat perk for humans.
+
+[`🔗 inference.debian.net`](https://inference.debian.net/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49939513)
+
+---
+
+## 29. The first RFC 1149 packet is up for auction at Christie's — David Waitzman's pigeon-borne ping, framed
+
+- **Velocity:** ▮ steady
+- **Source:** onlineonly.christies.com · 56+ pts on HN · ~15h ago (~20:45 UTC+8 Oct 2)
+- **Tags:** `internet-history` `rfc1149` `auction` `humor`
+
+Christie's "Fine Printed Books & Manuscripts" online sale includes a lot titled **"Carrier Pigeon Internet Protocol"**: "[WAITZMAN, David and the BERGEN LINUX USER GROUP.] One printed IP/ICMP 'ping' packet sent by carrier pigeon per RFC 1149. Small scroll of paper, 41 × 210 mm. Rolling creases visible from when attached to pigeon's leg. Framed." Provenance per the catalog: David Waitzman, the American network engineer who authored RFC 1149 — *A Standard for the Transmission of IP Datagrams on Avian Carriers* — on April Fools' Day 1990, and the packet is "a surviving packet from the first and most famous implementation," the Bergen Linux User Group's pigeon run, inscribed on the backing board "Property of David Waitzman."
+
+**Why it matters:** the internet's canonical joke standard has entered the fine-art market. The first internet generation's paper trail is now collectible — and the RFC humor lineage (1149 → 2549's QoS improvements → 6214's IPv6 adaptation) is old enough to have originals worth framing.
+
+[`🔗 Christie's lot 325216`](https://onlineonly.christies.com/s/fine-printed-books-manuscripts-science/carrier-pigeon-internet-protocol-150/325216) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49932911)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-03T04:25:00+08:00 |
-| Items | 17 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, GitHub API, dwarfstar.sh, bfl.ai, supabase.com, eff.org, learn.chatgpt.com, csirt.divd.nl, CISA KEV, NVD, access.redhat.com, arXiv, Nature, ataraxosai.github.io, blog.google, developer.apple.com, stillwet.art, wagtail.org, maximumeffort.substack.com, Hugging Face papers) |
+| Generated | 2026-10-03T12:20:00+08:00 |
+| Items | 29 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, GitHub API, dwarfstar.sh, bfl.ai, supabase.com, eff.org, learn.chatgpt.com, csirt.divd.nl, CISA KEV, NVD, access.redhat.com, arXiv, Nature, ataraxosai.github.io, blog.google, developer.apple.com, stillwet.art, wagtail.org, maximumeffort.substack.com, Hugging Face papers, gadgets.muse.ai, YouTube/Kernel Recipes, yuka.dev, allenai.org, blog.sshh.io, agostbiro.net, inference.debian.net, onlineonly.christies.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

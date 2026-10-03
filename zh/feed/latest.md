@@ -1,8 +1,8 @@
 ---
 date: 2026-10-03
-updated: 2026-10-03T04:25:00+08:00
+updated: 2026-10-03T12:20:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -108,7 +108,7 @@ Panniantong/Agent-Reach（MIT，Python）登顶今日趋势榜：一个**能力�
 
 - **Velocity:** ▮▮ rising
 - **Source:** arXiv / Nature · 85+ pts on HN · ~6h ago (~22:11 UTC+8)
-- **Tags:** `rl` `game-ai` `imperfect-information` `research
+- **Tags:** `rl` `game-ai` `imperfect-information` `research`
 
 《用自博弈强化学习与测试时搜索实现超人类 Stratego AI》（Sokota、Vinitsky、Hu、Kolter、Farina；arXiv 2511.07312，现为 **Nature** 论文）报告了 Stratego 上"性能与成本的双重台阶变化"——这个游戏因绝大多数信息隐藏（约 10⁵³⁵ 局面空间）而长期难住 AI。该系统 **Ataraxos** 对 Pim Niemeijer——"可以说是史上最强的 Stratego 选手"——以 **15 胜 1 负外加 4 盘和棋**取胜（Ars Technica 对 Nature 发表的报道）；摘要宣称凭借不完美信息下的自博弈 RL 加测试时搜索达到"大幅超人类水平"，训练"不是工业级预算，而只是几千美元"（报道称为 16 块 GPU），训练数据比 2022 年 DeepMind 那次少两个数量级。对局档案公开在 ataraxosai.github.io。**为平衡起见的反弹：** HN 评论者指出"budget"说法低估了机构级人才投入（CMU/MIT/NYU/Stanford）——成本主张针对算力，不含研究本身。
 
@@ -244,13 +244,181 @@ Dylan Black 测试了 Jev——TypeSafe 的 System One 分类器、本栏自 9 �
 
 ---
 
+## 18. Muse Gadgets：Meta 为其助手开源硬件层 —— ESP32 与 Raspberry Pi SDK，Apache 2.0
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** gadgets.muse.ai · 155+ pts on HN · ~9h ago (~03:24 UTC+8)
+- **Tags:** `meta` `muse` `hardware` `esp32` `open-source`
+
+Meta 推出 **Muse Gadgets**——"给你的 Muse 的开源硬件"——并将 SDK 与固件以 Apache 2.0 开源在 `facebookincubator/muse-gadget-sdk`（仓库创建于 10 月 2 日，今天仍有 push；C 语言）。两条线：**ESP32 Device SDK**（屏幕、音频输入输出、传感器）与 **Linux Device SDK**——"把那台闲置的 Raspberry Pi 或 Linux 盒子变成 Muse gadget……写上你自己的命令，让 Muse 处理系统管理杂务或你的 Home Assistant 设置。" 支持的板子横跨 Raspberry Pi 5、Waveshare ESP32-S3 AMOLED、Seeed reTerminal E1002（电子墨水）、M5Stack StickS3、ideaspark ESP32 与 Home Assistant Voice PE。配对走 Muse 应用（Settings → Devices → Developer mode，设备名以 "MuseGadget" 为前缀），且**每个 gadget 都需要 SDK token**（受 Gadget SDK Terms 约束）；每个 SDK 目录都带 `AGENTS.md`，"给 Muse Code 这类编码 agent 用"。Meta 还卖一台自家设备：**Muse Home Link**，桥接本地 HTTP-API 设备（灯、电视、打印机）——"仅限美国、需有效 Muse 订阅，免费，每订阅限一台"，10 月发货。姿态刻意走爱好者路线："由 hacker 造，给 hacker 用，纯属好玩。折腾的副作用可能包括变砖、失去保修、电压跌落或破产。" 页面展示的设备均出自第三方，"Meta 不为其背书或担保"。
+
+**Why it matters:** 助手到执行器是 agent 技术栈最后一层锁着的大门，Meta 选择用 hacker SDK 而不是整机花园来打开它——硬件版的 MCP 时刻。它同时也是一场公开的安全实验：消费级身份配对加本地设备控制，恰恰是 agent 此前不被允许跨越的信任边界。
+
+[`🔗 gadgets.muse.ai`](https://gadgets.muse.ai) · [`🔗 facebookincubator/muse-gadget-sdk`](https://github.com/facebookincubator/muse-gadget-sdk) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49937504)
+
+---
+
+## 19. Greg Kroah-Hartman 给 Anthropic 的 Mythos 内核漏洞清单打分：79 个"漏洞"里"20 个真需要修"——全部实际工作量"只值一小时的内核开发"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Kernel Recipes 2026 video · 197+ pts on HN · ~25h ago (~10:50 UTC+8 Oct 2)
+- **Tags:** `linux-kernel` `ai-security` `mythos` `anthropic` `cve`
+
+在他 9 月 29 日上线的 Kernel Recipes 2026 演讲"Security in the LLM age"（9.8k 播放）中，Linux 内核 stable 树维护者专门用一节审计了"Anthropic 的 Mythos 系统发现 **79 个内核漏洞**"这一说法。幻灯片的分类，按 HN 上的转录：24 个"完全没有细节——'崩了'"；14 个"根本不是 bug"；3 个"数据纯属编造"；15 个在最新版本里早已修复（11 个是别人修的，4 个是 Anthropic 修的）——剩下 **"20 个真需要修"**（7 个前提是"假设一个恶意文件系统镜像"，2 个"假设你能向协议栈中间注入恶意网络包"）。据现场听众的帖子，他把发现方法描述为对过去几十年内核补丁做模式匹配、再把机制套用到别处，批评报告没有致谢最早修复这些已知 bug 的内核开发者，并把净价值总结为"只值一小时的内核开发工作"。**对我们信源的免责声明：** 这是一位维护者的审计，目前只见于幻灯片与参会者的转录——双方都还没有（至少还没有）发布书面报告。
+
+**Why it matters:** "我们的 AI 发现了 N 个漏洞"这类说法刚刚得到最可信裁判的打分：约 25%（79 个里 20 个），且隐含了大量预筛——而被点名的原罪是署名，不是发现。所有厂商 CVE 新闻稿从此都有了对照模板。
+
+[`🔗 Kernel Recipes 2026 video`](https://www.youtube.com/watch?v=NnV_cWeoo5Q) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49929391)
+
+---
+
+## 20. 健忘的 CPU：Linux 登上 M4 揭示 WFI 会清零 x0–x31 —— 一个 Apple 连发四代芯片的 ARM 规范违背
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** yuka.dev · 148+ pts on HN · ~14h ago (~22:20 UTC+8 Oct 2)
+- **Tags:** `linux` `apple-silicon` `arm64` `kernel`
+
+Yureka Lilian 的 M4 Mac mini Linux bring-up 日记（m1n1、主线内核、NixOS）记录了这台机器为何"健忘"：执行 **WFI**——每个操作系统都会不断下发的 ARM 空闲指令——会**把架构寄存器 x0–x31 清零**，违反架构规范"WFI 指令不得导致架构状态丢失"。M1–M3 自带一个厂商"chicken bit"（`ARM64_REG_CYC_OVRD_ok2pwrdn_force_mask`）可以掩盖该行为；到了 M4，"这个 chicken bit 似乎要么被锁死、要么已被移除。" 变通方案——把所有 WFI/WFIT 替换成 NOP——在 2026 年 4 月点亮了全部核心，如今**已合入上游**：内核 bootarg（`idle=<wfi|yield|nop>`）加 m1n1 在受影响的裸机上自动禁用 WFI/WFIT，已确认在 M4 Pro、M4 Max 与 M5 上有效。帖子同时清点了 M4 的其余高墙：第一代强制 SPTM、GXF 在 raw boot 模式下锁死、写 RVBAR 即崩溃。
+
+**Why it matters:** 一个静默违背架构规范的硬件怪癖，跨越四代芯片存活，最后不得不作为内核 quirk 永久记录——"平台即规范"只在它没坏之前成立。这也是 Apple 芯片 Linux bring-up 在 2026 年的具体现状：附带一个主线认可的空闲 workaround。
+
+[`🔗 yuka.dev`](https://yuka.dev/blog-2026-10-02-linux-m4.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49933869)
+
+---
+
+## 21. 开源 SIEM UTMStack：CVSS 9.9 的事件指令 websocket 加 9.8 的 internal-key 认证绕过 —— v11.2.16 已修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck · CVSS 9.9 + 9.8（VulnCheck 评定）· NVD 发布于 Oct 2
+- **Tags:** `cve` `siem` `auth-bypass` `utmstack`
+
+UTMStack（开源 SIEM/SOAR）的两个 VulnCheck 披露漏洞 10 月 2 日登上 NVD，均已在 **v11.2.16**（10 月 1 日发布）修复。**CVE-2026-82041 —— CVSS 9.9**（`CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`）：`UTMIncidentCommandWebsocket.processCommand()` 缺失授权检查——它是 `/command/{hostname}` 这个 STOMP 目的地的处理器，"没有角色检查，也没有命令白名单"——低权限用户即可驱动事件指令通道。**CVE-2026-82042 —— CVSS 9.8**（`PR:N`）：认证绕过，提交"一个与 `INTERNAL_KEY` 环境变量匹配的有效 `Utm-Internal-Key` header"即可获得"完整的管理 API 访问"。**评分，注明出处：** 两个分数都是 VulnCheck 以 CNA 身份评定的（CVSS 3.1 与 4.0 均已发布）；NVD 载的是 VulnCheck 的指标。**仓库状态已核查：** utmstack/UTMStack 未归档，10 月 2 日仍有 push，release 在流动（v12.0.0 于 9 月 29 日、v11.2.15 于 9 月 30 日、v11.2.16 于 10 月 1 日）。
+
+**Why it matters:** 本栏反复撞见的同一模式——安全工具自己就是一级攻击面（10 月 1 日的 CrowdStrike RTR、今晨的 Zammad helpdesk 链）——只不过这次轮到 SOC 自己的远程指令通道没有角色检查。如果你在跑 UTMStack，v11.2.16 是底线；顺手把 `INTERNAL_KEY` 换掉。
+
+[`🔗 NVD — CVE-2026-82041`](https://nvd.nist.gov/vuln/detail/CVE-2026-82041) · [`🔗 NVD — CVE-2026-82042`](https://nvd.nist.gov/vuln/detail/CVE-2026-82042) · [`🔗 v11.2.16 release`](https://github.com/utmstack/UTMStack/releases)
+
+---
+
+## 22. Sharpening Tax：Meta 量化 RL post-training 让 agent 在 pass@K 覆盖上付出的代价
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.01509 · Hugging Face daily papers #7 · 66 pts · ~1d ago
+- **Tags:** `post-training` `rl` `agents` `pass-at-k` `research`
+
+一篇 10 位作者的 Meta 领衔论文（Azalia Mirhoseini 与 Sharon Y. Li 在列）把 **sharpening 假说**——RL post-training 只是锐化基座已有行为，抬高 pass@1 却压缩解法覆盖（pass@K）——从数学与编码推广到 agentic 任务。跨 **14 对 base/post-trained 模型**（四个家族）、三个 agentic 基准（42 个案例）：只带"轻量 inference harness"的基座模型，在测试时预算充足时"其解法覆盖（pass@K）往往超过 post-trained 对手"，尽管 pass@1 更低。机制：post-training 把任务推向两个极端——"要么总是解出、要么永远解不出"——用覆盖换来采样效率与一致性。两项交付：**Sharpening Tax** 诊断量，"几次 rollout 就能估出"；以及 **posterior-tempered group sampling（PTGS）**——按 prompt 自适应温度的贝叶斯采样器，在覆盖与单发准确率上都"比固定温度基线少缴税"。10 月 1 日提交。
+
+**Why it matters:** 这就是本栏不断遇到的"基座模型 + harness"结果的机制论文（10 月 2 日的 Mid-Harness：测试时算力让冻结模型 50% → 68%）。如果你的服务栈有测试时预算，"RL 微调过的那个 checkpoint"不再自动是默认答案——而且现在只花几次 rollout 的钱就能量出税额。
+
+[`🔗 arXiv 2610.01509`](https://arxiv.org/abs/2610.01509) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 23. Beyond Memory：给长程 agent 显式信念状态 —— 推理时生效、零训练，并给失败模式起了名字：Belief Trapping
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.01415 · Hugging Face daily papers #4 · 69 pts · ~1d ago
+- **Tags:** `agents` `belief-states` `long-horizon` `inference-time` `research`
+
+《Beyond Memory: Harnessing Long-Horizon Agents with Explicit Belief States》提出 **PoS**：一个推理时框架，"持续构建并维护显式信念状态，作为 agent 的决策上下文"。每条信念把当前世界状态的估计与未决任务要求组合在一起——"把 agent 还需要学什么、完成什么变成显式的。" 一致性校验器加进度监视器负责检测 **Belief Trapping**——"agent 继续行动、却对目标没有任何实质推进"的状态——并针对卡死模式与未决要求类型定制恢复策略。结果：四个基准（执行与诊断）上、三个 LLM backbone 下均取得"每个基准的最高整体性能"；消融证实一致性校验与恢复都不可少；上下文扩展实验显示对上下文增长有韧性。12 位作者横跨学界与产业界——作者名单里有 Dan Pei 的清华团队，HF 页面标注 Alibaba。
+
+**Why it matters:** memory 浪潮整理的是*发生过什么*；PoS 整理的是*还有什么未知、什么没完成*——同一个上下文窗口里的另一种数据结构，推理时即插即用、无需训练。"Belief Trapping" 是 harness 圈子一直缺的名字：那个 agent 不停行动而进度为零的死循环。
+
+[`🔗 arXiv 2610.01415`](https://arxiv.org/abs/2610.01415) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
+## 24. Ai2 开源 AstaBrief 8B：Asta Fast 模式背后的带引用报告生成器 —— 权重、训练数据、评测全给你
+
+- **Velocity:** ▮▮ rising
+- **Source:** allenai.org · 22+ pts on HN · ~7h ago (~05:25 UTC+8)
+- **Tags:** `ai2` `open-weights` `report-generation` `qwen` `citations`
+
+这家非营利实验室开源了 **AstaBrief 8B**——"Asta 里的快速报告生成模型"，把"一个研究问题加检索到的文献片段变成一篇带引用的报告"。基于 **Qwen3-8B**，SFT + DPO（刻意避开不稳定且昂贵的 RL），从 9 万条过滤后的研究问题得到 4.7 万条 SFT 样本，再加约 6K DPO 对——由 GPT-4.1 与 DeepSeek-R1 判别，与人偏好"95% 一致"。**权重以 Apache 2.0** 挂在 Hugging Face（`allenai/AstaBrief_8B`），训练数据与本地报告生成的示例 GitHub workflow 一并放出。速度主张："Fast mode 平均 51.1 秒一篇报告，Thinking mode 为 178.5 秒，约 3.5 倍快"——比专有系统低接近一个数量级。**诚实栏：** 评测是内部的（SQABench-CS2，200 道用户手写的 CS 研究问题；DeepScholarBench）；人类研究中 DR-Tulu 赢得总体偏好，且只有"三位研究者中的两位在引用准确性上更偏爱 AstaBrief"；23% 的 Fast mode 用户从未切回 Thinking mode。
+
+**Why it matters:** "Deep Research lite" 这一档从此有了开源权重、连数据一起给、机构可藏在自己防火墙后跑的参照实现——而 Ai2 把整条流水线（包括跳过 RL 的决定）全部公开，恰恰是多数厂商不会出货的那部分。
+
+[`🔗 allenai.org/blog/astabrief`](https://allenai.org/blog/astabrief) · [`🔗 allenai/AstaBrief_8B`](https://huggingface.co/allenai/AstaBrief_8B)
+
+---
+
+## 25. "每一家 SaaS 公司都会变成模型外面的一层 harness" —— 把本季度核心隐喻升格为组织论文的 8 月旧文登上 HN
+
+- **Velocity:** ▮ steady
+- **Source:** blog.sshh.io · 117+ pts on HN · ~7h ago (~05:10 UTC+8) · 文章写于 Aug 24
+- **Tags:** `harness` `saas` `agents` `org-design`
+
+Shrivu Shankar 的这篇文章（8 月 24 日发表，今晨在 HN 重新浮出）主张：harness——"围绕无状态 LLM 的基础设施、接口、上下文与状态"——不是一个开发者工具品类，而是公司本身。四个阶段：没有 harness → 个人操作 harness → 个人编排 harness → **"harness 编排个人"**，彼时"Humans are part of the harness"。质量来自调度人类注意力，而不是无人化："taste-holders" 只审大决策、demo 与最优设计变体。竞争逻辑：握住最外层 harness，否则被商品化——"如果整个外循环都外包出去了……这门生意已经被商品化。" 引用的证据：Ramp、Stripe、DoorDash 的内部 AI 开发者工具。
+
+**Why it matters:** 本栏整个季度都在把"harness"当作工程名词追踪（Mid-Harness、ds4 的共享状态 agent 面、今天 HF 榜上 Meta 那篇优化 harness 的 ActiveSaddler）。这篇文章的动作是把它升格为公司论——六周前的旧文、尚未被验证，但如果"harness"成为 2027 年的组织架构词，这就是铸造该用法的文章之一。
+
+[`🔗 blog.sshh.io`](https://blog.sshh.io/p/the-harness-is-the-company) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49938616)
+
+---
+
+## 26. 给软件工程师解剖一个 Lean 证明：把 Sipser 正则性习题拆成 spec → DFA → proof
+
+- **Velocity:** ▮ steady
+- **Source:** agostbiro.net · 92+ pts on HN · ~33h ago (~02:50 UTC+8 Oct 2)
+- **Tags:** `lean` `formal-methods` `verification` `dfa`
+
+一位在职工程师完整拆解如何用 Lean 4 + Mathlib 形式化 Sipser 教材的经典习题：三行比特列构成的语言 B——第三行是前两行按二进制求和——是**正则的**。构造是一个进位 DFA——"一个全加器，状态是待定进位，外加一个死端汇"——识别反转后的语言，再用 Mathlib 的"正则性在反转下保持"定理闭环。三段式解剖（specification / implementation / proof）的芯是 `run_invariant` 引理——`evalFrom` 终于 `carry carryOut` 当且仅当 `row1LE wLE + row2LE wLE + carryIn = row3LE wLE + carryOut * 2 ^ wLE.length`——用归纳法加 `generalizing carryIn` 证明。经验："proofs are programs"；形式化逼出一个隐含假设（"一个词的三行必须等长"）；以及对黑盒化的警告——既然 agent 已经能一发命中这类证明，"往前看，我们能读懂机器生成的证明这件事很重要。"
+
+**Why it matters:** 形式方法浪潮一直缺一张给在职工程师的入场图——这就是那张图。而它对机器生成证明的警告，与本周一位内核维护者给 AI 漏洞清单打出 20/79（第 19 条）恰好同框：没有理解兜底的验证，只是一条更快的传送带。
+
+[`🔗 agostbiro.net`](https://agostbiro.net/posts/2026-10-anatomy-of-a-lean-proof/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49925602)
+
+---
+
+## 27. Audionaut：agent 可以经 MCP 驱动的 GPLv3 多轨音频编辑器 —— 三年 C++，每次编辑一个 undo 步
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 133+ pts on HN · ~20h ago (~16:00 UTC+8 Oct 2)
+- **Tags:** `audio` `open-source` `mcp` `juce` `show-hn`
+
+kvoltmer/Audionaut（C++ / JUCE；Windows/macOS/Linux；README 徽章为 GPLv3）以"一个免费开源、AI agent 可以经 MCP 驱动的多轨音频编辑器"亮相。作者的起点：做了三四年，最初是为了"用老 Sound Designer II 的工作流（建 region、丢进 playlist、导出、完事）剪自己的多轨录音"。Agent 接口一行——`claude mcp add audionaut -- npx -y audionaut-mcp`——关键契约是**"每次编辑就是一个 undo 步"**。首页 demo 显示 Claude 每 16 小节切一刀、把 clip 分到两条轨道、补上缝隙，再设交叉淡入淡出与淡出。仓库已核查：156★，10 月 2 日有 push——热度目前由 HN 而非 star 数带动。
+
+**Why it matters:** 桌面应用的 MCP 化正在越过 IDE 和浏览器，进入时域媒体；而"一次编辑 = 一个 undo 步"是正确的 agent-UX 原语——agent 的每一次改动都保持人类可回滚。它也补上了 Audacity 与完整 DAW 之间那个久违的开源空位。
+
+[`🔗 kvoltmer/Audionaut`](https://github.com/kvoltmer/Audionaut) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49931031)
+
+---
+
+## 28. Debian 悄悄为贡献者立起一个 LLM 推理门户 —— Salsa 登录、预算追踪、Scaleway 赞助
+
+- **Velocity:** ▮ steady
+- **Source:** inference.debian.net · 12+ pts on HN · ~5h ago (~06:45 UTC+8)
+- **Tags:** `debian` `llm-infra` `open-source` `distro`
+
+`inference.debian.net` 是"给 Debian 贡献者的 LLM 推理自助门户"：用 Salsa（Debian 的 GitLab）登录，"只有 Debian Developers 与 Debian Maintainers 获得访问权"，然后管理 API key、追踪预算消耗。服务于 9 月 23 日在 `debian-devel-announce` 公告；目前列出的首个模型是 `scaleway/qwen3.8-27b`（9 月 25 日加入）；"推理资源由 Scaleway 赞助。" 门户源码（`inference-team/inference-user-portal`）就在 Salsa 上，最近的更新加入了"DebGPT 配置一节"与沙箱示例。
+
+**Why it matters:** 发行版为贡献者提供身份门控、赞助商出资的推理，是一级基础设施决策——道德等价物是当年的构建集群，其他发行版从此有了对照模板。DebGPT 集成泄露了天机：这是给"干 Debian 活的 agent"用的推理，不是给人聊天的福利。
+
+[`🔗 inference.debian.net`](https://inference.debian.net/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49939513)
+
+---
+
+## 29. 第一只 RFC 1149 数据包登上佳士得拍场 —— David Waitzman 的鸽子载波 ping，已装框
+
+- **Velocity:** ▮ steady
+- **Source:** onlineonly.christies.com · 56+ pts on HN · ~15h ago (~20:45 UTC+8 Oct 2)
+- **Tags:** `internet-history` `rfc1149` `auction` `humor`
+
+佳士得"Fine Printed Books & Manuscripts"在线专场收录了一件名为 **"Carrier Pigeon Internet Protocol"** 的拍品："[WAITZMAN, David and the BERGEN LINUX USER GROUP.] 一枚按 RFC 1149 由信鸽传递的 IP/ICMP 'ping' 数据包。纸卷一小轴，41 × 210 mm。留有当年绑在鸽腿上的滚动折痕。已装框。" 目录所述来源：David Waitzman——1990 年愚人节写下 RFC 1149《Avian Carriers 上传输 IP 数据报的标准》的美国网络工程师——这枚数据包是"第一次也是最著名一次实现"的幸存包，出自 Bergen Linux User Group 的鸽子实验，背板背面题有"Property of David Waitzman"。
+
+**Why it matters:** 互联网最经典的愚人节标准进入了艺术品市场。第一代互联网的纸质痕迹开始成为收藏品——而 RFC 幽默谱系（1149 → 2549 的 QoS 改进 → 6214 的 IPv6 适配）已经老到出现了值得装框的原件。
+
+[`🔗 Christie's lot 325216`](https://onlineonly.christies.com/s/fine-printed-books-manuscripts-science/carrier-pigeon-internet-protocol-150/325216) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49932911)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-03T04:25:00+08:00 |
-| Items | 17 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, GitHub API, dwarfstar.sh, bfl.ai, supabase.com, eff.org, learn.chatgpt.com, csirt.divd.nl, CISA KEV, NVD, access.redhat.com, arXiv, Nature, ataraxosai.github.io, blog.google, developer.apple.com, stillwet.art, wagtail.org, maximumeffort.substack.com, Hugging Face papers) |
+| Generated | 2026-10-03T12:20:00+08:00 |
+| Items | 29 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, GitHub API, dwarfstar.sh, bfl.ai, supabase.com, eff.org, learn.chatgpt.com, csirt.divd.nl, CISA KEV, NVD, access.redhat.com, arXiv, Nature, ataraxosai.github.io, blog.google, developer.apple.com, stillwet.art, wagtail.org, maximumeffort.substack.com, Hugging Face papers, gadgets.muse.ai, YouTube/Kernel Recipes, yuka.dev, allenai.org, blog.sshh.io, agostbiro.net, inference.debian.net, onlineonly.christies.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

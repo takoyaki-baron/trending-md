@@ -9850,5 +9850,68 @@
     "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
+  },
+  "gadgets.muse.ai": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Meta's Muse Gadgets page — primary source for the Muse hardware SDK launch (ESP32/Linux SDKs, Muse Home Link). Cross-validated (10-03): SDK claims, Apache 2.0 licensing and pairing flow match the facebookincubator/muse-gadget-sdk repo directly.",
+    "zh": "Meta 的 Muse Gadgets 页面 —— Muse 硬件 SDK 发布（ESP32/Linux SDK、Muse Home Link）的第一手来源。已交叉核验（10-03）：SDK 说法、Apache 2.0 许可与配对流程与 facebookincubator/muse-gadget-sdk 仓库完全一致。",
+    "jp": "Meta の Muse Gadgets ページ —— Muse ハードウェア SDK 発表（ESP32/Linux SDK、Muse Home Link）の一次情報源。突合済み（10-03）：SDK の主張・Apache 2.0 ライセンス・ペアリング手順は facebookincubator/muse-gadget-sdk リポジトリと一致。"
+  },
+  "yuka.dev": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Yureka Lilian's personal blog — deep Apple-silicon Linux bring-up writeups (the M4 WFI register-zeroing finding). Single-author, but the load-bearing claims are checkable in mainline: the idle= bootarg fix and m1n1 workaround are merged upstream. Cross-validated (10-03) via the merged-fix trail and the HN thread.",
+    "zh": "Yureka Lilian 的个人博客 —— 深度的 Apple 芯片 Linux bring-up 长文（M4 WFI 清零寄存器的发现）。单一作者，但关键主张可在主线内核核查：idle= bootarg 修复与 m1n1 变通均已合入上游。已交叉核验（10-03）：合入记录与 HN 讨论串。",
+    "jp": "Yureka Lilian の個人ブログ —— Apple シリコン向け Linux ブリングアップの深い書き込み（M4 の WFI レジスタゼロ化の発見）。単一著者だが、肝の主張はメインラインで検証可能：idle= bootarg の修正と m1n1 の回避策は上流マージ済み。突合済み（10-03）：マージ記録と HN スレッド経由。"
+  },
+  "allenai.org": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Allen Institute for AI's blog — nonprofit lab announcements with unusually full disclosure (AstaBrief 8B: weights Apache 2.0, training data, skipped-RL rationale, honest human-study results). Cross-validated (10-03): release claims match the allenai/AstaBrief_8B HF model card (apache-2.0).",
+    "zh": "Allen Institute for AI 的博客 —— 非营利实验室公告，披露异常完整（AstaBrief 8B：Apache 2.0 权重、训练数据、跳过 RL 的理由、诚实的人类研究结果）。已交叉核验（10-03）：发布主张与 allenai/AstaBrief_8B 的 HF 模型卡（apache-2.0）一致。",
+    "jp": "Allen Institute for AI のブログ —— 非営利ラボの発表で、開示が異例なまでに完全（AstaBrief 8B：Apache 2.0 ウェイト、訓練データ、RL 見送りの理由、率直な人間研究結果）。突合済み（10-03）：公開主張は allenai/AstaBrief_8B の HF モデルカード（apache-2.0）と一致。"
+  },
+  "blog.sshh.io": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Shrivu Shankar's substack — AI-industry essays (\"The Harness Is the Company\": SaaS as harness-around-a-model). Thesis-grade argumentation, evidence is anecdotal (Ramp/Stripe/DoorDash tooling, unnamed). Cross-validated (10-03): publication date (Aug 24) verified from page metadata; the claims are predictions, not measurements.",
+    "zh": "Shrivu Shankar 的 substack —— AI 行业长文（\"The Harness Is the Company\"：SaaS 即模型外的一层 harness）。论证属论纲级，证据是轶事性的（Ramp/Stripe/DoorDash 的内部工具，未具名）。已交叉核验（10-03）：发表日期（8 月 24 日）经页面元数据验证；其主张是预测，不是测量。",
+    "jp": "Shrivu Shankar の substack —— AI 業界エッセイ（\"The Harness Is the Company\"：SaaS はモデルの周りのハーネス）。議論はテーゼ級で、根拠は逸話的（Ramp/Stripe/DoorDash の社内ツール、非公開）。突合済み（10-03）：公開日（8 月 24 日）はページのメタデータで確認。主張は測定ではなく予測。"
+  },
+  "agostbiro.net": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal engineering blog — worked formal-methods walkthroughs (the Lean 4/Mathlib Sipser DFA proof anatomy). Claims are checkable by construction: every lemma and tactic cited exists in Mathlib. Cross-validated (10-03) via Mathlib's isRegular_reverse and the HN discussion.",
+    "zh": "个人工程博客 —— 形式方法的实战走查（Lean 4/Mathlib 解剖 Sipser DFA 证明）。主张按构造可核查：引用的每条引理与 tactic 都存在于 Mathlib。已交叉核验（10-03）：经 Mathlib 的 isRegular_reverse 与 HN 讨论串。",
+    "jp": "個人エンジニアリングブログ —— 形式手法の実践ウォークスルー（Lean 4/Mathlib で Sipser の DFA 証明を解剖）。主張は構成上検証可能：引用される補題とタクティックはすべて Mathlib に存在。突合済み（10-03）：Mathlib の isRegular_reverse と HN 議論経由。"
+  },
+  "inference.debian.net": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Debian's official LLM inference portal for contributors (Salsa-gated, Scaleway-sponsored, first model scaleway/qwen3.8-27b). Primary source for its own terms and model list. Cross-validated (10-03): the service announcement independently confirmed on lists.debian.org (debian-devel-announce, Sep 2026).",
+    "zh": "Debian 官方面向贡献者的 LLM 推理门户（Salsa 门控、Scaleway 赞助、首个模型 scaleway/qwen3.8-27b）。其条款与模型列表的第一手来源。已交叉核验（10-03）：服务公告在 lists.debian.org（debian-devel-announce，2026 年 9 月）独立确认。",
+    "jp": "Debian 公式の貢献者向け LLM 推論ポータル（Salsa 制限、Scaleway スポンサー、最初のモデルは scaleway/qwen3.8-27b）。利用規約とモデルリストの一次情報源。突合済み（10-03）：サービス告知は lists.debian.org（debian-devel-announce、2026 年 9 月）で独立確認。"
+  },
+  "onlineonly.christies.com": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Christie's online-only auction catalog — cited for the RFC 1149 avian-carrier packet lot (Waitzman/Bergen Linux User Group provenance). Primary source for the artifact's own description and estimate. Cross-validated (10-03): lot page fetched directly; RFC 1149 authorship matches public record.",
+    "zh": "佳士得在线专场拍卖目录 —— 引用于 RFC 1149 信鸽数据包拍品（Waitzman/Bergen Linux User Group 来源）。该实物描述与估价的第一手来源。已交叉核验（10-03）：直接抓取拍品页；RFC 1149 作者身份与公开记录一致。",
+    "jp": "クリスティーズのオンラインオンリー競売カタログ —— RFC 1149 伝書鳩パケットのロット（Waitzman/Bergen Linux User Group の来歴）で引用。実物の説明と見積りの一次情報源。突合済み（10-03）：ロットページを直接取得。RFC 1149 の著者は公開記録と一致。"
   }
 }
