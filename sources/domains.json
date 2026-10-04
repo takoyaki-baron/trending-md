@@ -7491,6 +7491,15 @@
     "jp": "Salesforce公式ニュースルーム＆製品ページ。2026年8月のAnthropicとの「Claudeforce」提携（37スキルプラグイン、ClaudeがAgentforceの推論エンジンに）の一次情報源。突合済み（08-28）：プラグイン/スキル数とMCPベースのルーティング（AIforce）はプレスリリースと製品ページで一致し、約14%の時間外上昇も広く裏付けられている。",
     "zh": "Salesforce 官方新闻稿与产品页；2026 年 8 月与 Anthropic 的“Claudeforce”合作（37 技能插件、Claude 作为 Agentforce 推理引擎）的一手来源。已交叉核验（08-28）：插件/技能数量与基于 MCP 的路由（AIforce）在新闻稿与产品页一致，约 14% 的盘后涨幅也得到多方印证。"
   },
+  "sanders.senate.gov": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Official press-release page for Sen. Bernie Sanders; primary source for the Ban Flock Act announcement (Oct 2, 2026, with Rep. Ocasio-Cortez and Sen. Merkley). Its three provisions (federal ALPR ban, grant cutoff to ALPR-using states, private right of action) and scale figures (Flock: 120,000+ cameras, ~20B scans/month, 56 municipalities deactivating this year) corroborated against the Ocasio-Cortez house announcement and TechCrunch's coverage of the Judge Sara Hill ruling it follows.",
+    "jp": "バーニー・サンダース上院議員の公式プレスリリースページ。Ban Flock Act 発表（2026-10-02、Ocasio-Cortez 下院議員・Merkley 上院議員と共同）の一次情報源。3つの規定（連邦ALPR禁止、ALPR利用州への連邦補助金打ち切り、私的訴権）と規模の数字（Flock：12万台超のカメラ、月約200億走査、今年56自治体が契約解除）を、Ocasio-Cortez 事務所の発表と TechCrunch の Sara Hill 判事判決報道で裏付け。",
+    "zh": "参议员 Bernie Sanders 官方新闻稿页面；Ban Flock 法案发布（2026-10-02，与众议员 Ocasio-Cortez、参议员 Merkley 共同）的一手来源。三条条款（联邦禁用 ALPR、对使用 ALPR 的州停拨联邦资金、私人诉权）与体量数据（Flock：12 万+ 摄像头、月扫描约 200 亿车次、今年已有 56 个市镇解约）已对照 Ocasio-Cortez 众议员办公室公告与 TechCrunch 对 Sara Hill 法官判决的报道交叉印证。"
+  },
   "sandordargo.com": {
     "cat": "community",
     "cred": "high",
@@ -9340,6 +9349,15 @@
     "en": "CIRCL (Luxembourg CERT) vulnerability lookup — a reliable CVE reference front-end over NVD; cross-checked for Scriban CVE-2026-74790.",
     "jp": "CIRCL（ルクセンブルクCERT）の脆弱性ルックアップ——NVD上の信頼できるCVE参照フロントエンド。Scriban CVE-2026-74790でクロスチェック済み。",
     "zh": "CIRCL（卢森堡 CERT）漏洞查询——基于 NVD 的可靠 CVE 参考前端；已就 Scriban CVE-2026-74790 交叉核对。"
+  },
+  "vxlang.org": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Project site for Vx, a heterogeneous-computing systems language where memory residency is part of the type system (\"a compile error, not a segfault at three in the morning\"). Cross-validated against github.com/vx-lang/Vx (v0.0.2, 2,013 commits since Sep 9, Rust compiler on LLVM/MLIR 22 + Z3, honest limitations list). Early-stage: no while loops yet — treat claims as direction, not product.",
+    "jp": "メモリ常駐を型システムの一部にするヘテロジニアスコンピューティング向けシステム言語 Vx のプロジェクトサイト（「午前3時のセグフォではなくコンパイルエラー」）。github.com/vx-lang/Vx（v0.0.2、9月9日以来 2,013 コミット、LLVM/MLIR 22 + Z3 上の Rust コンパイラ、正直な制限リスト）とクロス検証済み。初期段階：whileループ未実装——主張は製品ではなく方向性として扱うこと。",
+    "zh": "Vx（内存驻留属于类型系统一部分的异构计算系统语言）项目站（\"是编译错误，不是凌晨三点的段错误\"）。已与 github.com/vx-lang/Vx 交叉核验（v0.0.2、9 月 9 日以来 2,013 次提交、LLVM/MLIR 22 + Z3 上的 Rust 编译器、坦率的限制清单）。早期项目：连 while 循环都还没有——其主张应视为方向而非产品。"
   },
   "wagtail.org": {
     "cat": "community",

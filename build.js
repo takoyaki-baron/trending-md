@@ -512,6 +512,7 @@ const SOURCE_ALIASES = {
   'blog.modelcontextprotocol.io': 'modelcontextprotocol.io',
   'api.msrc.microsoft.com': 'msrc.microsoft.com',
   'docs.openclaw.ai': 'openclaw.ai',
+  'new.opencut.app': 'opencut.app',
 };
 
 function normalizeHost(url) {
