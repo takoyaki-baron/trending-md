@@ -1,8 +1,8 @@
 ---
 date: 2026-10-04
-updated: 2026-10-04T04:45:00+08:00
+updated: 2026-10-04T12:30:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -286,13 +286,111 @@ GitHub アドバイザリ **GHSA-x4q3-gcj3-m6cf**(CVE-2026-73802):Gitea の CI �
 
 ---
 
+## 21. 連邦判事が Flock のナンバープレート検索を違憲と認定——「無差別な mass surveillance」、証拠は排除される
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 366+ pts · ~6h ago (~06:07 UTC+8)
+- **Tags:** `surveillance` `alpr` `fourth-amendment` `policy`
+
+連邦判事(Sara E. Hill、オクラホマ州北地区連邦地裁)は今週、タルサ郡の副保安官代理が Flock Safety のカメラ網を使ってある女性の車を特定した行為——カリフォルニアのアウトオブステート プレートであるという理由だけで、令状なしにネットワークでプレートを検索——が修正第 4 条に違反すると認めた。そこから生まれた停止(報道では約 91 ポンドのメタンフェタミン)は、この検索の「毒樹の果実」として排除される。判決の中心文言:Flock のネットワークは**「一種の無差別な mass surveillance」**——最高裁が *Carpenter* 判決で容認した targeted search ではない——そして「この検索は修正第 4 条のいかなる例外にも当てはまらない」。Flock の報道担当者は 404 Media に「Flock は本件の当事者ではない」と述べた。適用範囲の注意点は報道自身が明示している:他の法院を拘束せず、判断の対象は*この検索*であって Flock 社ではない。
+
+**Why it matters:** 米国最大の ALPR ネットワークに対する憲法判断の第一波が届き始めた——救済が証拠排除であることは、機関が実際に痛みを感じる唯一の帰結だ。フロリダ・テキサスでの契約解除、上院の「Block Flock 法案」、CEO の謝罪が重なるさなかの判決であり、Flock と交渉中のすべての都市に引用可能な判例を渡した。
+
+[`🔗 TechCrunch`](https://techcrunch.com/2026/10/03/federal-judge-calls-flock-indiscriminate-mass-surveillance/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49948254)
+
+---
+
+## 22. Simon Willison:「ほぼすべてに、デフォルトのハード予算上限が必要になる」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 277+ pts · ~4h ago (~08:20 UTC+8)
+- **Tags:** `agents` `cost` `cloud` `safety`
+
+Willison の投稿は TIPS ではなく製品要件だ:コーディング agent は「アイデア」と「寝ている間に金を使い続けるデプロイ済みコード」の間の摩擦を取り去った。だから**デフォルトのハード予算上限——上限に達したらプロジェクトを一時停止する仕組みで、メール送信ではなく——が、従量課金プラットフォームの最低ラインになろうとしている**。現状の整理:AWS は 9 月 16 日に spend limits を投入(アカウントレベルの上限で、到達するとプロジェクトが一時停止——現在は「限られた顧客」へ展開中)、Google Cloud は 7 月に Spend Caps を投入(プロジェクト内の特定サービスへの月次上限、Vertex AI Agent Engine などの agentic AI ツールを含む)。投稿の核心は彼自身の告白にある:自分のプロジェクトは「最初からハード予算上限を付けてあるべきだった」。HN スレッドでは、このフィードが何週も周回してきた帰結を一句足している:agent は「ハード予算上限をデフォルトで持つプロバイダを推奨するようバイアスすべき」だ。
+
+**Why it matters:** この 1 年の agent 暴走インシデントを、すべての開発者が行う調達判断に接続し、市場の失敗を言語化した:ソフトな制御(アラート、ダッシュボード)は、デフォルトが効くべきまさにその場所でオプトインになっている。「デフォルトでハード上限」が SSO のように機能一覧に載る日を watch したい。
+
+[`🔗 simonwillison.net`](https://simonwillison.net/2026/Oct/3/default-hard-budget-caps/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49949235)
+
+---
+
+## 23. 9 月 28 日の報道から:claude.dev の Opus 5.5 プレイブックが HN へ——「think carefully を削除」、タスクリストはファイルに、そして明かされたフラグ→フォールバック挙動
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 188+ pts · ~10h ago (~02:29 UTC+8)
+- **Tags:** `claude` `opus-5-5` `agents` `harness`
+
+2 番目の公式 Opus 5.5 ガイド——Addy Osmani による claude.dev プレイブック(9 月 22 日公開)——が HN フロントページに届いた。これはこのフィードが 9 月 28 日に取り上げた文書(プラットフォームのプロンプトエンジニアリング docs)とは別物だ。具体的手法:タスク全体とゴールラインを渡す。**「think carefully」的な行は削除する**(モデルは常に考え、量を自分で決める)。停止ルールは CLAUDE.md に(「私なしでは続行できないとき、破壊的操作の前——データ削除、force-push、このリポジトリ外の変更——のみ止まって聞け」)。**タスクリストはファイルに置き**、コンテキスト要約をまたいで生き延びさせる。「確認できなかったものはマークせよ」と指示する。TIPS ではない部分:**Opus 5.5 は Fable レベルの bio・cyber セーフガード付きで出た初の Opus であり——Claude アプリと Claude Code では、フラグされたメッセージの大半は黙って旧モデルへ移される**。セッションはそこでそのまま続く(`/model` で確認可能、設定にもトグルあり)。fast mode は研究プレビューのままで、トークン単価は高い。性能主張(「初期テスターは、最低 effort の Opus 5.5 が高 effort の Opus 5 より多くのバグを捉えたと述べた」)はベンダー自身のもので、公開評価はない。
+
+**Why it matters:** フラグ→旧モデルフォールバックはプロンプトの心得ではなくモデルの運用上の事実だ——agentic に bio・セキュリティ作業をするチームは、黙った品質ダウングレードを設計で回避する必要があり、合図は `/model` を一瞥するだけ。その開示がチューニングガイドの片隅に埋まっている。
+
+[`🔗 claude.dev`](https://claude.dev/blog/getting-the-most-out-of-opus-5-5/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49946567)
+
+---
+
+## 24. Valve の Timur Kristóf、XDC 2026 で 10 年前の Radeon カードを AMDGPU に載せた 1 年を語る
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 185+ pts · ~9h ago (~03:14 UTC+8)
+- **Tags:** `linux` `amdgpu` `graphics` `drivers`
+
+トロントの XDC 2026 で、Valve の Linux グラフィックス エンジニア Timur Kristóf が 1 年分のカーネル作業を発表した:**GCN 1.0/1.1 世代のカード(2012–13 年、HD 7000/8000 系)をレガシー Radeon ドライバから現行の AMDGPU カーネルドライバへ移行**——AMD が投資をやめて久しいハードウェアで RADV Vulkan ドライバが使えるようになる。Phoronix の記述では:表示コードの欠陥修正、電源管理問題への対処、ソフトリセット対応を重ね、移行の測定可能な成果は**Linux 6.19 でこれらの GPU が得た約 30% の性能向上**。HN で語られたのは出身話だ——Mesa ユーザースペースで長く過ごした後、「カーネルドライバ開発の演習」として始めた——で、講演はそのまま他の貢献者への how-to でもあり、スライドは freedesktop の Indico にある。
+
+**Why it matters:** GPU ベンダーはこの仕事をしなかった。ゲーム会社のドライバ エンジニアが、今も現役の数百万枚のカードのためにやった。「どう始めたか」が本題になる珍しいカーネル貢献の話でもあり——古いハードウェアをメインラインに残すパイプラインの論証だ。
+
+[`🔗 Phoronix`](https://www.phoronix.com/news/XDC-2026-Valve-Timur-AMDGPU) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49946895)
+
+---
+
+## 25. フランス国務院(Conseil d'État)がロダン美術館に 3D スキャン公開訴訟の勝利——スキャンは彫刻と「法識別不能」
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 120+ pts · ~11h ago (~02:01 UTC+8)
+- **Tags:** `open-access` `3d-scanning` `policy` `museums`
+
+2023 年 12 月、パリ行政法廷はロダン美術館に対し、パブリックドメインの彫刻の 3D スキャンを行政文書として公開するよう命じ(フランスの情報公開審議会 CADA は 2017 年から繰り返しその認定)、オープンアクセス活動家 Cosmo Wenman に 1,500 ユーロの支払いを命じた。美術館は控訴せず判決を無視した。ところが控訴審で**国務院が方向を転換**:スキャンは実物と**「法識別不能」**——美術館の譲渡不能コレクションの一部——であり、情報公開法はそもそも適用されず、Wenman は逆に美術館へ 3,000 ユーロの支払いを命じられた。この記述の留保:敗訴当事者自身の書き手(本人が明言)であり、裁判所は事実認定を明示的に拒否した——著作権の判断はなされていない。アクセスを塞いだのは*分類*であって所有権ではない。共同原告:Communia、ウィキメディア・フランス、La Quadrature du Net。
+
+**Why it matters:** 標準的なオープンアクセスの型——パブリックドメイン作品のスキャンを情報公開で請求する——がフランスで天井に当たった:公的機関のスキャンが法的にモノそのものなら、公的資金で文化遺産をデジタル化しながら、誰にもスキャンへのアクセスを許さなくてよいことになる。EU の再利用指令と「譲渡不能コレクション」原理の衝突が現実のものになった。
+
+[`🔗 Cosmo Wenman`](https://cosmowenman.substack.com/p/rodin-museum-3d-scan-verdict) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49946355)
+
+---
+
+## 26. 「Agent に必要なのはメモリではなくドキュメントだ」——Operator Memory がベクトル DB 不要の「Markdown 脳」を出荷
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 83+ pts · ~11h ago (~01:03 UTC+8)
+- **Tags:** `agents` `memory` `documentation`
+
+Kevin Liao のエッセイは、すべてのメモリプラグインが同じアーキテクチャ——トランスクリプト → スニペット → ベクトルストア → top-k 注入——を共有し、その欠陥も共有すると論じる:検索は類似度順で、結果が正しく・最新で・完全である保証はない。保存された「記憶」はコードベースの変化で陳腐化しながら真理として扱われる。agent は存在を知らないものを検索できない。embedding ストアは不透明で監査不能。人間のチームは古い会議を再生しない——書き留める。ゆえに **Operator Memory**:彼のオープンソースプラグインは、指示・仕様・決定・調査の Markdown ワークスペースを作業前に読み、作業後に更新させる——ベクトル DB なし、embedding なし、バックグラウンドデーモンなし。投稿内の譲歩:AGENTS.md はコードベース文脈としてすでに機能する(「ただし 1 ファイルは有限すぎる」)、ベンチマークは存在しない——主張はアーキテクチャのレベルだ。
+
+**Why it matters:** このフィードが繰り返し取り上げてきたメモリプラグインの隆盛への直接の対抗テーゼ——公開当日、カテゴリのトップ(claude-mem、本日の #15)が「*ハーネス*に to-do ツールがなかった」という見出しのリリースを出したばかりだ。recall 対 documents は、メモリ層の最初の本当の設計闘争になりつつある。
+
+[`🔗 liao.gg`](https://liao.gg/blog/agents-dont-need-memory) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49945933)
+
+---
+
+## 27. wpd:libwebp を追い越す Rust 製 WebP デコーダ——次の CVE-2023-4863 の日に備えて
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 47+ pts · ~23h ago (~13:45 UTC+8)
+- **Tags:** `rust` `webp` `memory-safety` `decoders`
+
+Halide Compression が **wpd**(BSD-2-Clause、github.com/halidecx/wpd)を公開した:Rust 製 WebP デコーダで、手書き SIMD はコンパイルで外せるブロックに分離され、アセンブリなしでは「完全に検証可能なメモリ安全性」でビルドできる。動機は名指しされている:**CVE-2023-4863**——2023 年に主要ブラウザすべてを襲った、活発に悪用された libwebp のヒープバグ。libwebp 比の主張:**シングルスレッド lossy で 1.19×、シングルスレッド lossless で 2.74×、マルチスレッド lossy で 2.68×、マルチスレッド lossless で 3.19× 高速**——そして正直な出どころは告知そのものに書いてある:ベンチマークは「開発者テストデータのサブセット」で実施、マルチスレッドの数字は並列アニメーション復号に依存し、シングルスレッドの数字こそが「純粋なアルゴリズム改善」。libwebp との機能対応表も同梱され、唯一の後退(dithering 制御なし)も明記されている。
+
+**Why it matters:** 画像デコーダは「どこも敵意ある入力」の古典的攻撃面で、2023 年以降の libwebp 書き直しはほぼメモリ安全だが遅いものだった。*速い*と主張し、ベンチマークハーネスを公開した最初の例だ。効く留保は彼ら自身のもの:あれは彼らのテストデータであり、再現できるコーパスではない。
+
+[`🔗 halide.cx`](https://halide.cx/blog/wpd/) · [`🔗 halidecx/wpd`](https://github.com/halidecx/wpd) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49941641)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-04T04:45:00+08:00 |
-| Items | 20 |
-| Sources tracked | 19 (Hacker News, GitHub (trending/API/advisories), Hugging Face, arXiv, NVD, CISA ICS, aleph-alpha.com, tej.as, ftl-os.org, blog.kagi.com, blog.cloudflare.com, chromereleases.googleblog.com, x.com, techcrunch.com, theatlantic.com, wired.com, courtlistener.com, linuxiac.com, intertwingly.net, gitea.com) |
+| Generated | 2026-10-04T12:30:00+08:00 |
+| Items | 27 |
+| Sources tracked | 26 (Hacker News, GitHub (trending/API/advisories), Hugging Face, arXiv, NVD, CISA ICS, aleph-alpha.com, tej.as, ftl-os.org, blog.kagi.com, blog.cloudflare.com, chromereleases.googleblog.com, x.com, techcrunch.com, theatlantic.com, wired.com, courtlistener.com, linuxiac.com, intertwingly.net, gitea.com, simonwillison.net, claude.dev, phoronix.com, halide.cx, liao.gg, cosmowenman.substack.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

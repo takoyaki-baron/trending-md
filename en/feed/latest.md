@@ -1,8 +1,8 @@
 ---
 date: 2026-10-04
-updated: 2026-10-04T04:45:00+08:00
+updated: 2026-10-04T12:30:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -286,13 +286,111 @@ GitHub advisory **GHSA-x4q3-gcj3-m6cf** (CVE-2026-73802): Gitea's CI runner appe
 
 ---
 
+## 21. Federal judge rules a Flock license-plate search unconstitutional — "indiscriminate mass surveillance," and the evidence gets suppressed
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 366+ pts · ~6h ago (~06:07 UTC+8)
+- **Tags:** `surveillance` `alpr` `fourth-amendment` `policy`
+
+A federal judge (Sara E. Hill, US District Court for the Northern District of Oklahoma) ruled this week that a Tulsa County deputy violated the Fourth Amendment when he used the Flock Safety camera network to locate a woman's car — running her California plate through the network without a warrant, on the plate's out-of-state status alone. The stop it produced (about 91 lbs of methamphetamine, per the report) is suppressed as fruit of that search. The ruling's core language: Flock's network is **"a type of indiscriminate mass surveillance"** — not the targeted search the Supreme Court blessed in *Carpenter* — and "this search does not fit within any exception to the Fourth Amendment." Flock's spokesperson told 404 Media that "Flock was not a party to this case." Scope caveats are explicit in the coverage: it binds no other court, and it rules on the *search*, not on Flock the company.
+
+**Why it matters:** the first wave of constitutional rulings on the largest ALPR network in the US is arriving — with suppression as the remedy, which is the one consequence an agency actually feels. It lands amid canceled contracts in Florida and Texas, a Senate "Block Flock Act," and a CEO apology, and it hands every city negotiating a Flock contract a citable ruling.
+
+[`🔗 TechCrunch`](https://techcrunch.com/2026/10/03/federal-judge-calls-flock-indiscriminate-mass-surveillance/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49948254)
+
+---
+
+## 22. Simon Willison: "We're going to need default hard budget caps on pretty much everything"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 277+ pts · ~4h ago (~08:20 UTC+8)
+- **Tags:** `agents` `cost` `cloud` `safety`
+
+Willison's post is a product requirement, not a tip: coding agents have removed the friction between "an idea" and "deployed code that costs money while you sleep," so **default hard budget caps — caps that pause the project at the limit, rather than sending emails — are about to become table stakes** for any metered platform. He documents the state of the art: AWS launched spend limits on Sep 16 (an account-level cap where projects pause when hit — currently rolling out to "a limited number of customers"), and Google Cloud launched Spend Caps in July (a monthly financial cap on specific services within a project, including agentic AI tools like Vertex AI Agent Engine). His own disclosure is the point of the post: a project of his "should have had a hard budget cap on it from the very beginning." In the HN thread he adds the corollary this feed has been circling for weeks: agents should "bias towards recommending providers that have hard budget caps."
+
+**Why it matters:** this connects the year's runaway-agent incidents to a procurement decision every developer makes — and names the market failure: soft controls (alerts, dashboards) are opt-in exactly where defaults would do the work. Watch "hard cap by default" become a listed feature the way SSO did.
+
+[`🔗 simonwillison.net`](https://simonwillison.net/2026/Oct/3/default-hard-budget-caps/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49949235)
+
+---
+
+## 23. Since our Sep 28 coverage: claude.dev's Opus 5.5 playbook hits HN — "delete 'think carefully,'" task lists in files, and a disclosed flag→fallback behavior
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 188+ pts · ~10h ago (~02:29 UTC+8)
+- **Tags:** `claude` `opus-5-5` `agents` `harness`
+
+A second official Opus 5.5 guide — Addy Osmani's claude.dev playbook, published Sep 22 — reached the HN front page, and it is not the document this feed covered on Sep 28 (those were the platform prompt-engineering docs). The concrete advice: give the whole task plus a finish line; **delete "think carefully" lines** (the model always thinks and decides how much); put stop-rules in CLAUDE.md ("Stop and ask only when you can't continue without me, or before anything destructive: deleting data, force-pushing, or changing anything outside this repository"); **keep the task list in a file** so it survives context summarization; ask it to "mark anything you couldn't confirm." The part that isn't tips: **Opus 5.5 is the first Opus launched with Fable-level bio and cyber safeguards — and in Claude apps and Claude Code, most flagged messages silently move to an older model**, with the session just continuing there (inspectable via `/model`; a settings toggle exists). Fast mode remains a research preview that costs more per token. The performance claims ("early testers said Opus 5.5 at its lowest effort caught more bugs than Opus 5 at high effort") are the vendor's own, without published evals.
+
+**Why it matters:** the flag→older-model fallback is an operational fact about the model, not prompting advice — teams doing agentic bio or security work now have a silent quality downgrade to design around, with only a glance at `/model` as the tell. That disclosure is buried in a tuning guide.
+
+[`🔗 claude.dev`](https://claude.dev/blog/getting-the-most-out-of-opus-5-5/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49946567)
+
+---
+
+## 24. Valve's Timur Kristóf recounts the year that moved a decade of Radeon cards onto AMDGPU — XDC 2026
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 185+ pts · ~9h ago (~03:14 UTC+8)
+- **Tags:** `linux` `amdgpu` `graphics` `drivers`
+
+At XDC 2026 in Toronto, Valve Linux-graphics engineer Timur Kristóf presented a year of kernel work: moving **GCN 1.0/1.1-era cards (2012–13, the HD 7000/8000 line)** from the legacy Radeon driver onto the modern AMDGPU kernel driver — which unlocks the RADV Vulkan driver on hardware AMD had long stopped investing in. Phoronix's account: he fixed display-code defects, addressed power-management issues, and added soft-reset support along the way; the transition's measured payoff was the **~30% performance uplift these GPUs received in Linux 6.19**. The part HN highlighted is the origin story — years in Mesa userspace, then this begun "as a kernel driver development exercise" — and the talk doubles as a how-to for other contributors, with slides on freedesktop's Indico.
+
+**Why it matters:** the GPU vendor wasn't going to do this work; a game company's driver engineer did it for a user base measured in millions of still-working cards. It's also the rare kernel-contribution story where the "how I got started" material is the point — the pipeline argument for keeping old hardware on mainline.
+
+[`🔗 Phoronix`](https://www.phoronix.com/news/XDC-2026-Valve-Timur-AMDGPU) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49946895)
+
+---
+
+## 25. France's Conseil d'État hands the Rodin Museum a win over 3D-scan open access — scans "legally indistinguishable" from the sculptures
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 120+ pts · ~11h ago (~02:01 UTC+8)
+- **Tags:** `open-access` `3d-scanning` `policy` `museums`
+
+In December 2023 the Paris Administrative Tribunal ordered the Rodin Museum to release 3D scans of its public-domain sculptures as administrative documents — the French FOI council (CADA) had said so repeatedly since 2017 — and awarded open-access activist Cosmo Wenman €1,500; the museum ignored the order without appealing. On appeal, **the Conseil d'État reversed course**: the scans are **"legally indistinguishable from physical reproductions"** — part of the museum's inalienable collection — so FOI law does not apply at all, and Wenman was ordered to pay the museum €3,000. Caveats on the account: it is the losing party's own write-up (he says so), and the court expressly declined to examine facts — no copyright determination was made; access was blocked by *classification*, not ownership. Co-plaintiffs: Communia, Wikimédia France, La Quadrature du Net.
+
+**Why it matters:** the standard open-access playbook — FOI the scans of public-domain works — just hit a ceiling in France: if a public institution's scans are legally the objects, then public money can digitize heritage that no one else need ever access. The EU's reuse directive versus the "inalienable collection" doctrine is now a live conflict.
+
+[`🔗 Cosmo Wenman`](https://cosmowenman.substack.com/p/rodin-museum-3d-scan-verdict) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49946355)
+
+---
+
+## 26. "Agents don't need memory, they need documentation" — Operator Memory ships a Markdown brain with no vector database
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 83+ pts · ~11h ago (~01:03 UTC+8)
+- **Tags:** `agents` `memory` `documentation`
+
+Kevin Liao's essay argues that every memory plugin shares one architecture — transcripts → snippets → vector store → top-k injection — and inherits its flaws: retrieval is similarity-ranked, so nothing guarantees results are correct, current, or complete; stored "memories" go stale as the codebase changes while still being treated as truth; an agent can't search for what it doesn't know exists; and embedding stores are opaque and unauditable. Human teams don't rewatch old meetings — they write things down. Hence **Operator Memory**, his open-source plugin: a workspace of Markdown instructions, specs, decisions and research the agent reads before work and updates after — no vector database, no embeddings, no background daemons. Concessions in the post: AGENTS.md already works for codebase context ("but one file is too limited"), and there is no benchmark — the argument is architectural.
+
+**Why it matters:** a direct counter-thesis to the memory-plugin boom this feed keeps covering — published the same day the category leader (claude-mem, #15 today) shipped a release whose headline is that *the harness* had no to-do tool. Recall versus documents is becoming the memory layer's first real design fight.
+
+[`🔗 liao.gg`](https://liao.gg/blog/agents-dont-need-memory) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49945933)
+
+---
+
+## 27. wpd: a Rust WebP decoder that outpaces libwebp — built for the day the next CVE-2023-4863 lands
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 47+ pts · ~23h ago (~13:45 UTC+8)
+- **Tags:** `rust` `webp` `memory-safety` `decoders`
+
+Halide Compression released **wpd** (BSD-2-Clause, github.com/halidecx/wpd): a WebP decoder in Rust whose hand-written SIMD sits in a compile-out block, so it builds "entirely verifiably memory-safe" without assembly. The motivation is named: **CVE-2023-4863**, the actively-exploited libwebp heap bug that hit every major browser in 2023. Claimed against libwebp: **1.19× faster single-thread lossy, 2.74× single-thread lossless, 2.68× multi-thread lossy, 3.19× multi-thread lossless** — with the honest sourcing in the announcement itself: benchmarks ran on "a subset of our developer test data," the multi-threaded numbers lean on parallel animation decoding, and the single-threaded numbers are "the pure algorithmic improvement." A feature-parity table against libwebp ships too, including the one regression (no dithering controls).
+
+**Why it matters:** image decoders are the classic everywhere-input-is-hostile attack surface, and the libwebp rewrites since 2023 have mostly been memory-safe-but-slower; this is the first to claim *faster* with the benchmark harness public. The caveat that matters stays theirs: it's their test data, not a corpus you'd reproduce.
+
+[`🔗 halide.cx`](https://halide.cx/blog/wpd/) · [`🔗 halidecx/wpd`](https://github.com/halidecx/wpd) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49941641)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-04T04:45:00+08:00 |
-| Items | 20 |
-| Sources tracked | 19 (Hacker News, GitHub (trending/API/advisories), Hugging Face, arXiv, NVD, CISA ICS, aleph-alpha.com, tej.as, ftl-os.org, blog.kagi.com, blog.cloudflare.com, chromereleases.googleblog.com, x.com, techcrunch.com, theatlantic.com, wired.com, courtlistener.com, linuxiac.com, intertwingly.net, gitea.com) |
+| Generated | 2026-10-04T12:30:00+08:00 |
+| Items | 27 |
+| Sources tracked | 26 (Hacker News, GitHub (trending/API/advisories), Hugging Face, arXiv, NVD, CISA ICS, aleph-alpha.com, tej.as, ftl-os.org, blog.kagi.com, blog.cloudflare.com, chromereleases.googleblog.com, x.com, techcrunch.com, theatlantic.com, wired.com, courtlistener.com, linuxiac.com, intertwingly.net, gitea.com, simonwillison.net, claude.dev, phoronix.com, halide.cx, liao.gg, cosmowenman.substack.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

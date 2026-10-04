@@ -1,8 +1,8 @@
 ---
 date: 2026-10-04
-updated: 2026-10-04T04:45:00+08:00
+updated: 2026-10-04T12:30:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 19
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -286,13 +286,111 @@ GitHub 通告 **GHSA-x4q3-gcj3-m6cf**(CVE-2026-73802):Gitea 的 CI runner 把 wo
 
 ---
 
+## 21. 联邦法官裁定 Flock 车牌搜索违宪——"无差别的 mass surveillance",证据被排除
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 366+ pts · ~6h ago (~06:07 UTC+8)
+- **Tags:** `surveillance` `alpr` `fourth-amendment` `policy`
+
+联邦法官(Sara E. Hill,俄克拉荷马州北区联邦地区法院)本周裁定:塔尔萨县一名副警长仅凭"加州外州车牌"这一理由、无令状地用 Flock Safety 摄像头网络定位一名女性的车辆,违反了第四修正案。由此产生的拦停(据报道称约 91 磅甲基苯丙胺)作为"毒树之果"被排除。裁定的核心表述:Flock 网络属于**"一种无差别的 mass surveillance"**——不是最高法院在 *Carpenter* 案中所认可的那种针对性搜索——且"该搜索不符合第四修正案的任何例外"。Flock 发言人对 404 Media 表示"Flock 不是本案当事人"。报道中明确给出了适用范围限制:该裁定不约束其他法院,且审判对象是*这次搜索*,而非 Flock 公司本身。
+
+**Why it matters:** 针对美国最大 ALPR 网络的第一波合宪性裁决正在到来——救济手段是证据排除,而这恰恰是执法机构唯一真正在乎的后果。裁定落地之际,正值佛罗里达和得克萨斯取消合同、参议院"Block Flock 法案"出台、CEO 公开道歉——它给了每一个正在与 Flock 谈判的城市一份可引用的判例。
+
+[`🔗 TechCrunch`](https://techcrunch.com/2026/10/03/federal-judge-calls-flock-indiscriminate-mass-surveillance/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49948254)
+
+---
+
+## 22. Simon Willison:"几乎所有东西都需要默认硬预算上限"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 277+ pts · ~4h ago (~08:20 UTC+8)
+- **Tags:** `agents` `cost` `cloud` `safety`
+
+Willison 这篇文章提出的是一个产品需求而非技巧:编程 agent 已经抹平了"一个想法"和"部署一段会趁你睡觉时烧钱的代码"之间的摩擦,因此**默认硬预算上限——到达上限即暂停项目的上限,而不是发邮件提醒——即将成为所有按量计费平台的基本门槛**。他梳理了现状:AWS 于 9 月 16 日上线 spend limits(账户级上限,触顶即暂停项目——目前正向"有限的客户群"推送);Google Cloud 于 7 月上线 Spend Caps(对项目内特定服务的月度财务上限,包括 Vertex AI Agent Engine 等 agentic AI 工具)。他自己坦白的关键一笔:他有个项目"从一开始就该挂上硬预算上限"。在 HN 讨论中他补上了本 feed 已绕了好几周的推论:agent 应当"偏向推荐默认带硬预算上限的服务商"。
+
+**Why it matters:** 它把这一年的 agent 失控事件与每个开发者都要做的采购决策连了起来,并点破了市场失灵所在:软性控制(告警、仪表盘)恰恰在最需要默认值的地方被做成了可选项。看着"默认硬上限"像当年的 SSO 一样变成宣传页上的一行功能吧。
+
+[`🔗 simonwillison.net`](https://simonwillison.net/2026/Oct/3/default-hard-budget-caps/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49949235)
+
+---
+
+## 23. 自我们 9 月 28 日的报道以来:claude.dev 的 Opus 5.5 实战手册登上 HN——"删掉'think carefully'"、任务清单入文件,以及一项被披露的标记→降级行为
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 188+ pts · ~10h ago (~02:29 UTC+8)
+- **Tags:** `claude` `opus-5-5` `agents` `harness`
+
+第二份官方 Opus 5.5 指南——Addy Osmani 撰写的 claude.dev 实战手册(9 月 22 日发布)——登上了 HN 首页,它不是本 feed 9 月 28 日报道过的那份文档(那是平台提示工程文档)。具体建议:给完整任务并给出完成线;**删掉"think carefully"之类的句子**(模型本来就会思考并自行决定思考多少);把停止规则写进 CLAUDE.md("只有当我无法继续、或即将做破坏性操作时才停下来问我:删除数据、force-push、或改动本仓库之外的任何东西");**把任务清单放进文件**,使其在上下文摘要后仍能存活;要求它"标记出任何你无法确认的内容"。而非技巧的部分:**Opus 5.5 是首个以 Fable 级 bio 与 cyber 防护发布的 Opus——在 Claude 应用和 Claude Code 中,大多数被标记的消息会静默转移到旧模型上**,会话只是继续进行(可用 `/model` 查看;设置中有开关)。fast mode 仍是研究预览,每 token 成本更高。性能主张("早期测试者称 Opus 5.5 最低 effort 抓的 bug 比高 effort 的 Opus 5 还多")是厂商自述,无公开评测。
+
+**Why it matters:** 标记→旧模型降级是关于模型运行行为的事实,而非提示技巧——做 agentic bio 或安全工作的团队现在多了一个需要设计规避的静默质量降级,唯一的线索是瞥一眼 `/model`。而这条披露被埋在一篇调优指南里。
+
+[`🔗 claude.dev`](https://claude.dev/blog/getting-the-most-out-of-opus-5-5/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49946567)
+
+---
+
+## 24. Valve 的 Timur Kristóf 在 XDC 2026 讲述把十年前的 Radeon 卡搬上 AMDGPU 的一年
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 185+ pts · ~9h ago (~03:14 UTC+8)
+- **Tags:** `linux` `amdgpu` `graphics` `drivers`
+
+在多伦多 XDC 2026 上,Valve Linux 图形工程师 Timur Kristóf 汇报了他一年的内核工作:把 **GCN 1.0/1.1 时代的显卡(2012–13 年,HD 7000/8000 线)**从旧版 Radeon 驱动迁到现代 AMDGPU 内核驱动——这让 AMD 早已停止投入的硬件用上了 RADV Vulkan 驱动。按 Phoronix 的记述:过程中他修复了显示代码缺陷、处理了电源管理问题、增加了软复位支持;这次迁移的可测量回报是**这些 GPU 在 Linux 6.19 中获得的约 30% 性能提升**。HN 热议的是他的出身故事——多年 Mesa 用户态经验,然后以"一次内核驱动开发的练手"开始这件事——而这场演讲同时是写给其他贡献者的入门指南,幻灯片在 freedesktop 的 Indico 上。
+
+**Why it matters:** GPU 厂商不会做这件事;一家游戏公司的驱动工程师为上百万块仍在服役的显卡做了。这也是少有的"我怎么入门"本身就是重点的内核贡献故事——这是让老硬件留在主线上的管道论证。
+
+[`🔗 Phoronix`](https://www.phoronix.com/news/XDC-2026-Valve-Timur-AMDGPU) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49946895)
+
+---
+
+## 25. 法国最高行政法院判罗丹博物馆赢下 3D 扫描公开获取案——扫描件与雕塑"法律上无法区分"
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 120+ pts · ~11h ago (~02:01 UTC+8)
+- **Tags:** `open-access` `3d-scanning` `policy` `museums`
+
+2023 年 12 月,巴黎行政法庭曾责令罗丹博物馆将其公有领域雕塑的 3D 扫描件作为行政文件公开——法国信息公开委员会(CADA)自 2017 年起就反复如此认定——并判开放获取活动者 Cosmo Wenman 获赔 1,500 欧元;博物馆未上诉、无视了判决。而在上诉审中,**最高行政法院(Conseil d'État)反转了方向**:扫描件与实物**"法律上无法区分"**——属于博物馆不可转让的馆藏——因此信息公开法完全不适用,Wenman 反被判赔博物馆 3,000 欧元。关于这份叙述的保留意见:这是败诉方自己的陈述(他本人也如此声明),且法院明确拒绝对事实进行审查——裁定并未认定版权归属;公开获取是被*文件定性*挡住的,而不是所有权。共同原告:Communia、维基媒体法国、La Quadrature du Net。
+
+**Why it matters:** 标准的开放获取打法——对公有领域作品的扫描件提信息公开——在法国刚刚撞上天花板:如果公共机构的扫描件在法律上就是藏品本身,那么公共资金可以数字化文化遗产,而其他任何人都无需被允许访问扫描件。欧盟再利用指令与"不可转让馆藏"原则的冲突自此成为现实。
+
+[`🔗 Cosmo Wenman`](https://cosmowenman.substack.com/p/rodin-museum-3d-scan-verdict) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49946355)
+
+---
+
+## 26. "Agent 不需要记忆,需要的是文档"——Operator Memory 发布无向量数据库的"Markdown 大脑"
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 83+ pts · ~11h ago (~01:03 UTC+8)
+- **Tags:** `agents` `memory` `documentation`
+
+Kevin Liao 的文章论证所有记忆插件共享同一套架构——对话记录 → 片段 → 向量库 → top-k 注入——并继承其缺陷:检索按相似度排序,无法保证结果正确、最新或完整;存的"记忆"随代码库演变而失效,却仍被当作真理;agent 无法搜索自己不知道存在的东西;embedding 库不透明、不可审计。人类团队不会回看旧会议——他们会把事情写下来。于是有了 **Operator Memory**:他的开源插件,给 agent 一个 Markdown 工作区——指令、规格、决策、研究,工作前读取、工作后更新——没有向量数据库、没有 embedding、没有后台守护进程。文中的自我让步:AGENTS.md 对代码库上下文已经够用("但单个文件太有限"),而且没有基准测试——论点是架构层面的。
+
+**Why it matters:** 这是对本 feed 反复报道的记忆插件热潮的直接反命题——发布当天,品类头部(今天的 #15 claude-mem)发布的版本标题恰恰是*harness*没有 to-do 工具。"检索还是文档"正在成为记忆层的第一场真正的设计之争。
+
+[`🔗 liao.gg`](https://liao.gg/blog/agents-dont-need-memory) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49945933)
+
+---
+
+## 27. wpd:比 libwebp 更快的 Rust WebP 解码器——为下一个 CVE-2023-4863 到来的那天而写
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 47+ pts · ~23h ago (~13:45 UTC+8)
+- **Tags:** `rust` `webp` `memory-safety` `decoders`
+
+Halide Compression 发布了 **wpd**(BSD-2-Clause,github.com/halidecx/wpd):Rust 编写的 WebP 解码器,手写 SIMD 被隔离在可编译关闭的代码块中,不启汇编时构建"完全可验证的内存安全"。动机写得明明白白:**CVE-2023-4863**——2023 年那张横扫所有主流浏览器、被活跃利用的 libwebp 堆漏洞。相对 libwebp 的主张:**单线程有损快 1.19×、单线程无损快 2.74×、多线程有损快 2.68×、多线程无损快 3.19×**——而诚实的出处就写在公告里:基准测试跑在"我们开发者测试数据的一个子集"上,多线程数字受益于并行动画解码,单线程数字才是"纯算法改进"。随文还附了对 libwebp 的功能对齐表,包括唯一一处回退(无 dithering 控制)。
+
+**Why it matters:** 图像解码器是"处处输入皆敌意"的经典攻击面,2023 年以来的 libwebp 重写大多是内存安全但更慢;这是第一个声称*更快*且基准测试工具公开的。关键的保留意见仍是他们自己的:那是他们的测试数据,不是你能复现的语料。
+
+[`🔗 halide.cx`](https://halide.cx/blog/wpd/) · [`🔗 halidecx/wpd`](https://github.com/halidecx/wpd) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49941641)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-04T04:45:00+08:00 |
-| Items | 20 |
-| Sources tracked | 19 (Hacker News, GitHub (trending/API/advisories), Hugging Face, arXiv, NVD, CISA ICS, aleph-alpha.com, tej.as, ftl-os.org, blog.kagi.com, blog.cloudflare.com, chromereleases.googleblog.com, x.com, techcrunch.com, theatlantic.com, wired.com, courtlistener.com, linuxiac.com, intertwingly.net, gitea.com) |
+| Generated | 2026-10-04T12:30:00+08:00 |
+| Items | 27 |
+| Sources tracked | 26 (Hacker News, GitHub (trending/API/advisories), Hugging Face, arXiv, NVD, CISA ICS, aleph-alpha.com, tej.as, ftl-os.org, blog.kagi.com, blog.cloudflare.com, chromereleases.googleblog.com, x.com, techcrunch.com, theatlantic.com, wired.com, courtlistener.com, linuxiac.com, intertwingly.net, gitea.com, simonwillison.net, claude.dev, phoronix.com, halide.cx, liao.gg, cosmowenman.substack.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
