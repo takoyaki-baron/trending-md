@@ -1733,3 +1733,10 @@ Sources: [paperclipai/paperclip](https://github.com/paperclipai/paperclip) · [v
 **Octop 有日期的更新（10-05）：**TencentCloud/Octop 重上趋势（周榜 #11，6,720★，+1,476/周），v1.0.2b5（9 月 29 日）：**AgentTeams** beta（「协调者把多位专家排上多步工作」）和 Octop↔Octop 云桥接、让一个家庭经隧道借用远程专家。带新事实的重现——有日期的更新，不是新发现；值得盯着他们兑现的是那份护栏清单（「JWT 多用户隔离、工具审批、shell 命令护栏、PII 脱敏」）。
 
 Sources: [Cloudflare changelog](https://developers.cloudflare.com/changelog/post/2026-10-02-introducing-web-search-api/) · [HN——Web Search API](https://news.ycombinator.com/item?id=49963171) · [mvschwarz/openrig](https://github.com/mvschwarz/openrig) · [morluto/rea](https://github.com/morluto/rea) · [OpenCut-app/OpenCut](https://github.com/OpenCut-app/OpenCut) · [tester-army/e2e](https://github.com/tester-army/e2e) · [TencentCloud/Octop](https://github.com/TencentCloud/Octop)
+
+
+**MemAdapter——正确的记忆同样造成谄媚（10-07，arXiv 2610.05162，厦门团队含 Jinsong Su）：** 记忆致谄媚的标准缓解——过滤掉有偏差或错误的记忆——错过了机制：**即使客观正确的记忆也会让 agent 过度迎合用户的历史信念**，因为同一记忆在不同上下文中应得的分量不同。MemAdapter 用三个组件适配记忆整合：反事实归纳（探查检索到的记忆可能对答案做什么）、上下文感知反思（校准它*应得*多少影响）、基于证据的推理（在保留记忆正当引力的同时落地回应）。代码在 GitHub（22★，10 月 6 日推送）；摘要**没有任何数字**——只有「在三个基准上一致提升记忆可靠性」，效应量未经验证。对栈而言：持久记忆持续上产线（本文件的记忆线——hindsight、memoryfields、Lemmalog、Funes），而失效模式仍在编目——这条把问题从存储卫生重新定位为**检索加权**：更难的修复，也是更大的修复。
+
+**PageIndex 有日期的更新——SDK 发布，Flash 把 LLM 移出索引（10-07）：** VectifyAI/PageIndex（38.8k★，+2,860/周）在 v0.2.21（10 月 1 日）发布 SDK：`client.submit_document("report.pdf")` → `client.chat(...)`，本地运行（无服务器、无向量库、无 API key）或云。**PageIndex Flash** 把 LLM 从结构生成中整个移除——树来自版面统计，LLM 只写节点摘要，树扩展以并发波次提议节点。反向量 RAG 论证的阿喀琉斯之踵一直是索引成本（每篇文档都要 LLM 调用）；Flash 攻击的正是那一半。树导航能否在语料库规模上胜过嵌入仍是开放问题——但本地 SDK 至少让它可测。（本文件 09-29 Flash 注记的有日期更新；去重规则。）
+
+Sources: [arXiv 2610.05162](https://arxiv.org/abs/2610.05162) · [DEEP-JLU/MemAdapter](https://github.com/DEEP-JLU/MemAdapter) · [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) · [v0.2.21 release](https://github.com/VectifyAI/PageIndex/releases)

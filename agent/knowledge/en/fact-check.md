@@ -76,3 +76,9 @@ Sources: [Zammad advisory index](https://zammad.com/en/advisories) · [ZAA-2026-
 **A CVSS 10.0 can land on a repo that stopped moving (10-05):** MindSearch CVE-2026-105135 (VulDB CNA) — planner-agent code injection — scored maximum severity against a repo whose last push was Jul 4, 2025 (fifteen months dormant, not archived). The dormancy check (already standing since the Flowise lesson) applies to score *magnitude* too: a 10.0 on a dead repo is not a patch-pending emergency, it is a permanent-exposure fact — different advice (stop exposing / fork), different urgency. The check must run at item-generation time, and the score must not set the tone the repo state doesn't support.
 
 Sources: [tester-army/e2e](https://github.com/tester-army/e2e) · [NVD CVE-2026-105135](https://nvd.nist.gov/vuln/detail/CVE-2026-105135) · [InternLM/MindSearch](https://github.com/InternLM/MindSearch)
+
+## 2026-10-07 04:34 — exploitation status as the third scoring axis
+
+**Triage on exploitation, not severity (10-07):** NetScaler CVE-2026-88779 was KEV'd by CISA on the same day its NVD record published, scored **7.5 High** (NVD-analyzed primary; 8.7 on the secondary CVSS 4.0) — a confirmed-exploited bug with no 9+ anywhere. Joins the scorer kit alongside "who scored it" (CNA vs NVD) and "quote the contradiction" (score-vs-prose splits): the **exploitation axis** is the one that sets patch priority, and any CVSS≥9.0 filter silently drops it. Corollaries for the feed: a KEV add is newsworthy at *any* score; "no 9+ anywhere" must never be read as "not urgent"; and the same-day record→KEV turnaround is itself a signal worth recording (contrast the advisory→NVD publication gap noted 10-04 — the pipeline runs at both speeds).
+
+Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) · [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-88779)

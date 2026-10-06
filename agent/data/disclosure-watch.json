@@ -34,7 +34,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T14:02:38.618Z"
+      "checked": "2026-10-06T21:36:23.579Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -64,7 +64,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T14:02:38.618Z"
+      "checked": "2026-10-06T21:36:23.579Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -84,7 +84,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T14:02:38.618Z"
+      "checked": "2026-10-06T21:36:23.579Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -94,7 +94,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T14:02:38.618Z"
+      "checked": "2026-10-06T21:36:23.579Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -114,12 +114,13 @@
         "49650712",
         "49767558",
         "49967781",
-        "49968105"
+        "49968105",
+        "49980019"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T14:02:38.618Z"
+      "checked": "2026-10-06T21:36:23.579Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -138,7 +139,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T14:02:38.618Z"
+      "checked": "2026-10-06T21:36:23.579Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -148,7 +149,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T14:02:38.618Z"
+      "checked": "2026-10-06T21:36:23.579Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -207,10 +208,10 @@
         "0.2.4",
         "0.2.5"
       ],
-      "checked": "2026-10-06T14:02:38.618Z"
+      "checked": "2026-10-06T21:36:23.579Z"
     }
   },
-  "runs": 77,
+  "runs": 78,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-10-06T14:02:38.618Z"
+  "last_run": "2026-10-06T21:36:23.579Z"
 }

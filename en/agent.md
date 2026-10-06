@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-06T20:50:00+08:00
+last_processed: 2026-10-07T04:34:00+08:00
 ---
 
 # Learnt Agent
@@ -31,24 +31,24 @@ patterns, and turn them into insights and actionable todos.
    happens *by layer* (DeepSeek Harness = plugin graph, LoopX = state kernel, Cline Kanban =
    worktree isolation).
    - **08-16→09-28 — the stack decomposes by layer through the first harness-productization
-     wave:** Codex Agents API (no ZDR self-hosted), session formats as lock-in vector, worktree
-     orchestration, google/ax control plane, Coder Agent Relay; infra vendors rebuild for agents
-     (Cloudflare `cf` + Wrangler sunset); Pi.dev ships MCP. → [[agent-stack]]
+     wave:** Codex Agents API, session formats as lock-in, worktree orchestration, google/ax,
+     Coder Agent Relay, cf+Wrangler sunset, Pi.dev ships MCP. → [[agent-stack]]
+   - **10-07 — memory's failure mode moves from storage hygiene to retrieval weighting:** MemAdapter
+     (arXiv 2610.05162) — even *objectively correct* memories cause sycophancy (the same memory
+     warrants different influence per context); counterfactual induction + context-aware reflection;
+     abstract gives no numbers. → [[agent-stack]]
    - **09-28 act — hindsight's "independent reproduction" corrected to co-developer reproduction**
      (2 Sanghani faculty among 7 authors): LongMemEval is the shared eval, trust isn't. → [[agent-stack]]
-   - **10-02→10-03 — MCP uniformity cracks from both ends; the database becomes an agent
-     primitive:** Figma catalog-gates edit access; OpenAI ships additive MCP Extensions outside
-     the spec; Pi 1.0 sells restraint; K2 durable event log on R2; Supabase acquires Turso
-     ("create a database as easily as creating a file"); Agent-Reach 88.4k★ tops trending
-     dormant. → [[agent-stack]]
-   - **10-04 — the orchestration layer votes full-auto:** Paperclip (96.7k★, #1 weekly) ships
-     PR-review bots — "execution harnesses now default to full auto" in its own notes; T3 Code
-     rebuilds its runtime core; claude-mem fills the to-do hole ("no native to-do tool").
+   - **10-02→10-03 — MCP uniformity cracks both ends; the database becomes an agent primitive:**
+     Figma catalog-gates edit access; OpenAI ships MCP Extensions outside the spec; Pi 1.0 sells
+     restraint; Supabase acquires Turso; Agent-Reach 88.4k★ tops trending dormant. → [[agent-stack]]
+   - **10-04 — the orchestration layer votes full-auto:** Paperclip (96.7k★, #1 weekly) ships PR-review
+     bots ("execution harnesses now default to full auto" in its own notes); T3 Code rebuilds its
+     runtime core; claude-mem fills the to-do hole. → [[agent-stack]]
+   - **10-05→10-06 — grounding gets metered:** Cloudflare's Web Search API proxies agent web access
+     through AI Gateway (Ceramic.ai/Exa/Linkup, ZDR — the proxy sees what agents want to know);
+     openrig orchestrates Claude Code+Codex as one YAML rig; OpenCut rewrites around MCP/headless.
      → [[agent-stack]]
-   - **10-05→10-06 — grounding gets metered:** Cloudflare's Web Search API proxies agent web
-     access through AI Gateway (Ceramic.ai/Exa/Linkup, ZDR — the proxy sees what agents want to
-     know); openrig (weekly #1) orchestrates Claude Code+Codex as one YAML rig; rea gives RE
-     its MCP harness; OpenCut rewrites the whole editor around MCP/headless. → [[agent-stack]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~40+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes, each with a
    canonical instance (full map in [[security]]). **Meta-pattern:** in four cases the class is
@@ -64,11 +64,11 @@ patterns, and turn them into insights and actionable todos.
      sandbox escape (<1 week to patch); GitLab AI Gateway + act_runner 9.9s; **the Zammad chain
      gets its vendor dispute** (details handed over only after public criticism).
      → [[security]] [[fact-check]]
-   - **10-05→10-06 — the paperwork-lag week:** ZITADEL's ATO season (3 VulnCheck-scored
-     criticals + 3 more unnamed in v4.19.2 notes); MindSearch CVE-2026-105135 — a CVSS 10.0 on
-     a planner-agent eval 15 months dormant; Legcord's double critical, no patched release; a
-     PHP k8s client's TLS fix 30 months before its record; ASOS push-channel extortion (unverified).
-     → [[security]]
+   - **10-05→10-06 — the paperwork-lag week** (ZITADEL ATO season, a CVSS 10.0 on a
+     15-month-dormant agent eval, Legcord's double critical, a 30-month record lag → [[security]]).
+   - **10-07 act — DIVD's case page lands first-hand; the 10-06 "no case" was a wrong-host null:**
+     102489 present-but-not-exploitable in 7.0.0–7.1.3, 102490 in all versions, patch "Available";
+     the agent-compromise forensic account is still pending. → [[security]]
    - **10-06 21:13 act — the Zammad chain gets its fix and 28 GHSAs — and both KEV'd CVEs are
      absent from both:** 7.2.1 ("Critical Security Update", ≤7.2.0 affected) ships the fixes;
      every advisory is CVE-less and neither CVE-2026-102489 nor -102490 appears — the vendor's
@@ -77,26 +77,26 @@ patterns, and turn them into insights and actionable todos.
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
    productized fitting, and fit-to-measured-budget, meeting the DRAM price shock exactly as RAM
    stopped being cheap.
-   - **08-21→09-26 — the foundation settles:** WebLLM browser end, signal-free KV eviction,
-     Quesma's quantization bench (1-bit → random guess), Kimi K3 at 1 tok/s from four SSDs,
-     colibri, BITCOS below the ternary floor, Bonsai 2, ANE register map, cuda-oxide, M5 Ultra
-     fleet verdict, mini-AGI, disaggregated quantization (NVFP4 prefill + 1-bit decode, 1.78×
-     TTFT at 8K) — detail in [[edge-inference]].
-   - **09-28→09-29 act — Bonsai 2 tops HF trending without independent validation; then the fork
-     gap gets its number** (llama.cpp #29600: stock-master PPL 1,258,507 vs 10.23 under Prism);
-     **Magnitude (YC S25) productizes the fitting layer** — kernels self-tuned per hardware,
-     2× claim measured on prose repetition, rigorous numbers pending.
+   - **08-21→09-26 — the foundation settles:** WebLLM browser end, signal-free KV eviction, Quesma's
+     quantization bench, Kimi K3 from four SSDs, colibri, BITCOS, Bonsai 2, ANE register map, M5
+     Ultra verdict, disaggregated quantization (NVFP4 prefill + 1-bit decode) — in [[edge-inference]].
+   - **09-28→09-29 act — Bonsai 2 tops HF trending unvalidated; the fork gap gets its number**
+     (llama.cpp #29600: stock-master PPL 1,258,507 vs 10.23 under Prism); **Magnitude (YC S25)
+     productizes the fitting layer** — kernels self-tuned per hardware, 2× measured on prose repetition.
    - **10-02 — the cost floor hardens contractually:** Micron's 26 take-or-pay deals >35% of
      revenue through 2030, majority with floor-and-ceiling bands — "much tighter in 2027 and
      2028."
    - **10-03 — antirez's ds4: the llama.cpp moment arrives as narrow hand-written C per model
-     family** (DeepSeek V4/GLM 5.x/Qwen3.8 Flash Next; ~2-bit routed experts + high-precision
-     shared paths; KV cache as a disk citizen, resumable by prompt hash; 22.9k★, last push
-     Sep 20 — a five-month-old tool surfacing, not a launch). → [[edge-inference]]
+     family** (DeepSeek V4/GLM 5.x/Qwen3.8; ~2-bit routed experts; KV cache as a disk citizen,
+     resumable by prompt hash; 22.9k★, last push Sep 20 — surfacing, not a launch). → [[edge-inference]]
    - **10-05 — Strata puts the Qwen4-architecture preview on a gaming GPU:** expert offloading
      (hot experts GPU-resident, RAM tail, SSD lookup) runs Qwen3.8-Flash-Next (125B-A6B) at
      94 tok/s on an RTX 5070 12 GB at Q2_0 — the HN title's 4090 row is unmeasured, the
      quantization cost unmentioned; DeepGEMM's 26/09/30 drop lands Mega MoE locality. → [[edge-inference]]
+   - **10-07 — the accelerator itself becomes an agent artifact:** FeSens/openTPU — SystemVerilog
+     + ISA + bit-exact simulator + kernel compiler monorepo "developed by AI," runs real models on a
+     Kintex-7 token-for-token identical to its simulator (MoE experts streamed from host; published
+     measurement methodology). → [[edge-inference]]
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
    Anthropic's Frontier Red Team's four failure modes say coordination does NOT emerge from
@@ -140,26 +140,26 @@ patterns, and turn them into insights and actionable todos.
    (led by Chinese labs shipping frontier-scale open weights) trade a sliver of benchmark points
    for a huge price gap; closed labs compete on distribution speed; post-training is the visible
    frontier lever.
-   - **08-15→09-29 — the open-weight wave's fine print:** revenue-gated licenses (GLM-5.3,
-     Kimi K3, Qwen3.8-Max); Ember-1's token-efficiency sell stayed self-reported; the GPT-3
-     lineage left the API; Sonnet 5.5 reset the mid-tier with footnoted errata.
+   - **08-15→09-29 — the open-weight wave's fine print:** revenue-gated licenses (GLM-5.3, Kimi K3,
+     Qwen3.8-Max); Ember-1's sell self-reported; GPT-3 lineage left the API; Sonnet 5.5's errata.
    - **10-01 — Gemini 4 Argon: the no-guardrails tier institutionalized at a US lab** (Fairwind,
-     priced pre-availability; AA's read in a day: #8 of 223); **act — Fairwind from its own
-     pages:** 650+ partners, oversight is contractual self-attestation — the vendor grading
-     its own customers.
-   - **10-03 — capability gets cheap and structured; two watches resolved:** Ataraxos superhuman
-     imperfect-info play for "a few thousand dollars"; FLUX 3 Image structure-first generation
-     "designed for agents"; TPU prototype satellite in orbit; the always-on leak shipped as
+     priced pre-availability; AA's read in a day: #8 of 223); **act:** 650+ partners, oversight is
+     contractual self-attestation — the vendor grading its own customers.
+   - **10-03 — capability gets cheap and structured:** Ataraxos superhuman imperfect-info play for
+     "a few thousand dollars"; FLUX 3 Image "designed for agents"; the always-on leak shipped as
      **Dots** ("Powered by GPT-6 Astra"); MiniMax's 2.7T M3 Pro met Q3 in **silence**.
      → [[frontier-models]]
-   - **10-04 — Kolibri-1 (Aleph Alpha): the contamination admission ships in the vendor's own
-     tech report** (78B-A3.5B MoE, Apache-2.0; "the HumanEval scores reflect this contamination,"
-     recitation 22–95% correlating 0.90 with pass@1; "1M tokens" is extrapolation past a 262k
-     trained length; grounding −32.8 vs Qwen3.6's −15.3; no independent eval yet). → [[frontier-models]]
+   - **10-04 — Kolibri-1 (Aleph Alpha): the contamination admission ships in the vendor's own tech
+     report** (78B-A3.5B MoE, Apache-2.0; recitation 22–95% correlating 0.90 with pass@1; "1M
+     tokens" extrapolates past a 262k trained length; no independent eval yet). → [[frontier-models]]
    - **10-06 — Reflection Beam pre-announces on efficiency:** 501B-A23B open-weight MoE, "3–4×
      less inference compute than GLM-5.2 at comparable reasoning" — zero weights, an
      "approximate compute comparison" disclaimer, Kimi K3 conceded ahead; the open-weight pitch
      is now tokens-per-job, unverifiable until weights land. → [[frontier-models]]
+   - **10-07 — Europe's bet goes 1T and cyber-first:** Mistral Large 4 (1T-total/49B-active MoE,
+     public preview $1.36/$4.18 per M; 3,800 Grace Blackwell in Mistral's own EU DCs); weights
+     *promised* end-Oct under an unspecified license, gated on red-teaming with state authorities;
+     every number vendor-run (blind human eval 3.74/5, second behind Opus 5). → [[frontier-models]]
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
    committed response); SB 53 makes it statutory; Astra is the first live "Critical"; GLM-5.3 the
@@ -177,19 +177,21 @@ patterns, and turn them into insights and actionable todos.
      failures" whose scale grows with capability; the year's agent incidents reframed from
      operational accidents to structural critique (quotes via TechCrunch; essay paywalled).
      → [[frontier-models]]
+   - **10-07 — the release gate reaches the open-weights side:** Mistral holds Large 4's weights
+     until red-teaming "with cybersecurity firms, vetted partners, and state authorities" completes —
+     open-weights labs gating the artifact on the security review, not announcing alongside it.
+     → [[frontier-models]]
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** The
    category proliferates on assertion; expect an "MMLU-for-skills" eval; whoever ships it owns
    the skills marketplace.
-   - **08-18→09-14 — consolidation + the measurement machinery:** anthropics/skills canonical
-     home; Agent Plugins 1.0.0 packaging spec (Anthropic absent); vercel-labs/skills becomes the
-     package manager; offense knowledge as repeatable skills (Claude-Red); i-have-adhd's own HN
-     thread measures the skills-vs-harness ceiling.
-   - **09-16→09-29 — the measurement is the artifact:** Dan McKinley's "Prompts Aren't Real"
-     (pass^k + judges + holdouts); OpenSpec v1.13.2 ("skipped checks are no longer reported as
-     passing"); reverse-skill flagged by the star-to-commit check (now standing tooling, Pass 9);
-     calibrated abstention gets its cheapest measurement (one "Do not guess" sentence cuts
-     fabricated extraction fields 70.7%→20.2%); TraceDance mines 107 behavior benchmarks from
-     252,557 real sessions (frontier pass rate 26.7%).
+   - **08-18→09-14 — consolidation + the measurement machinery:** anthropics/skills canonical home;
+     Agent Plugins 1.0.0 spec (Anthropic absent); vercel-labs/skills the package manager;
+     Claude-Red offense skills; i-have-adhd's HN thread measures the skills-vs-harness ceiling.
+   - **09-16→09-29 — the measurement is the artifact:** McKinley's "Prompts Aren't Real" (pass^k +
+     judges + holdouts); OpenSpec v1.13.2 ("skipped checks are no longer reported as passing");
+     reverse-skill flagged by star-to-commit (now standing tooling); one "Do not guess" sentence
+     cuts fabricated extraction fields 70.7%→20.2%; TraceDance mines 107 benchmarks from 252,557
+     sessions (frontier pass 26.7%).
    - **10-01 — the design-bottleneck answer is deterministic:** impeccable (73k★) ships 61 no-LLM
      detector rules for agent frontend — linters for taste, still no eval; the formal-methods wave
      gets Wayne's counterweight (→ thesis 10). → [[agent-plugins]]
@@ -197,10 +199,12 @@ patterns, and turn them into insights and actionable todos.
      third-party agent-skills channel after the platform-official ones — 68 agents/293 skills/
      94 commands, single maintainer, its own "third-party re-uploads may contain malware"
      warning, and zero independent evaluation that the skills improve anything. → [[agent-plugins]]
-   - **10-05→10-06 — the shelf stratifies into named-maintainer brands:** Garry Tan's gstack
-     (135k★) and Osmani's agent-skills (101k★) re-trend with no fresh release; Pocock's personal
-     directory hits 277k★, the largest on GitHub. A famous name as trust anchor — where the eval
-     gap bites hardest. → [[agent-plugins]]
+   - **10-05→10-06 — named-maintainer brands:** gstack (135k★), Osmani's agent-skills (101k★)
+     re-trend with no fresh release; Pocock's directory hits 277k★, GitHub's largest. A famous
+     name as trust anchor — where the eval gap bites hardest. → [[agent-plugins]]
+   - **10-07 — the shelf grows a vertical wing:** diagram-design re-trends at 43.9k★ (42 diagram
+     types, "no Mermaid slop," still shipping — 2.6.64 on Oct 6); stratification now generic →
+     named-maintainer → *vertical-quality*; anti-slop is a marketable feature. → [[agent-plugins]]
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
    within a provider; four vectors incl. invisible prompt injection. **Resolved (08-14):** the
@@ -324,6 +328,10 @@ patterns, and turn them into insights and actionable todos.
       generated content" checkbox with closure for non-compliance, across the whole Rust desktop
       stack — the strongest anti-AI-PR merge gate yet (gates contributions, not System76's
       internal work), and a live test of attestation vs in-flight contributors. → [[no-ai-default]]**
+   - **10-07 — the status-economy casualty:** erdosproblems.com freezes comments and deletes the
+     scoreboard (291 proof claims, 155 with zero explanation, "OPEN→SOLVED dopamine hit" spam) —
+     when claiming credit costs nothing, claims stop carrying information; remove the prize, not
+     just the spam. The mirror of COSMIC: gate the input vs delete the scoreboard. → [[no-ai-default]]
 
 ## Trend notes (standing)
 
@@ -371,5 +379,12 @@ patterns, and turn them into insights and actionable todos.
   ghappier-provenance, npm_package, fable-thinking-decline), `mcp-snapshot.mjs` (MCP drift),
   `release-watch.mjs` (router repos), star-to-commit check (Pass 9 in agent-run.sh), KEV/NVD/
   npm/GitHub one-call checks (CLAUDE.md perishable-claims rules).
+
+- **Non-AI batch items (10-07):** Nobel Physics → Francis Halzen, IceCube, sole laureate (a detector
+  builder wins — the multi-decade instrumentation bet recognized as the discovery); Fervo Cape Station
+  = first enhanced-geothermal plant commercial, 23 months from groundbreaking, Google anchor buyer
+  (the AI buildout's power constraint gets a new timeline class); arXiv 2610.06783 claims subquadratic
+  3SUM + subcubic APSP (v1, unreviewed, exponents +0.0008/+0.0005 — extraordinary claim, file under
+  pending). → [[frontier-models]]
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

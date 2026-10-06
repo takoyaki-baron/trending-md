@@ -67,3 +67,9 @@ Sources: [Zammad 公告索引](https://zammad.com/en/advisories) · [ZAA-2026-07
 **CVSS 10.0 可以落在一个已经停摆的仓库上（10-05）：**MindSearch CVE-2026-105135（VulDB 任 CNA）——planner-agent 代码注入——以最高严重度打在一个最后一次推送是 2025 年 7 月 4 日的仓库上（休眠十五个月、未归档）。休眠检查（自 Flowise 教训起已是常备）同样适用于严重度*量级*：死仓库上的 10.0 不是「待补丁的紧急事件」，而是「永久暴露」的事实——不同的建议（停止暴露 / fork）、不同的紧迫度。检查必须在条目生成时跑，严重度不得定下仓库状态撑不起来的调子。
 
 Sources: [tester-army/e2e](https://github.com/tester-army/e2e) · [NVD CVE-2026-105135](https://nvd.nist.gov/vuln/detail/CVE-2026-105135) · [InternLM/MindSearch](https://github.com/InternLM/MindSearch)
+
+## 2026-10-07 04:34 —— 利用状态作为第三条评分轴
+
+**按利用状态而非严重度分诊（10-07）：** NetScaler CVE-2026-88779 在其 NVD 记录发布的同日被 CISA 收入 KEV，评分为 **7.5 High**（NVD 自行分析主评分；次评分 CVSS 4.0 为 8.7）——一条被确认利用的 bug 上没有任何 9+。与「谁评的分」（CNA 对 NVD）、「引用矛盾本身」（评分对行文的分裂）并列：**利用轴**才是定补丁优先级的那条，而任何 CVSS≥9.0 过滤器会静默丢弃它。对 feed 的推论：KEV 收录在*任何*分数下都值得报道；「没有任何 9+」永远不能读成「不紧急」；而记录→KEV 的同日周转本身就是值得记录的信号（对照 10-04 记过的公告→NVD 发布缺口——管道以两种速度运行）。
+
+Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) · [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-88779)

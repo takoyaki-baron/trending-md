@@ -750,3 +750,8 @@ Sources: [affaan-m/ECC](https://github.com/affaan-m/ECC) · [v2.2.3 发布说明
 **为什么重要：**继平台官方货架（10 月 2 日：Google、Cursor）之后，货架的第二层现在明确是**名人维护者包**——以名人为信任锚的工作流即商品，有自己的分发（插件市场、安装器）和叫得出名字的品牌。分层是：平台官方 → 名人维护者 → 长尾，而评估缺口（→ 论题 8）恰在信任锚是一个人而非一个平台的地方咬得最疼。
 
 Sources: [garrytan/gstack](https://github.com/garrytan/gstack) · [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) · [mattpocock/skills](https://github.com/mattpocock/skills) · [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents) · [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd)
+
+
+**10-07——货架的第三层：垂直品质。** cathrynlavery/diagram-design 重回日榜（43.9k★，+227/天；2026 年 4 月创建，仍在发布——10 月 6 日插件 manifest 升到 2.6.64，含 drawio 几何校验修复）：「为 Claude Code、Codex、GitHub Copilot、Factory Droid 与 Pi 提供社论级图表设计。42 种图型。自包含 HTML + SVG。无阴影。无 Mermaid 垃圾。」与 `impeccable` 的无 LLM 检测规则并列，设计品质之翼把成层化再推进一档：平台官方 → 名人维护者 → **垂直品质**。*图表样式*拿到 43.9k★ 说明 agent 产出物的瓶颈已从「能不能用」移到「看起来是否有意图」——反垃圾现在是可卖的功能。这些技能是否真有提升，仍然零独立评测（→ 论题 8 的评估缺口，又深一层）。
+
+Sources: [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) · [pbakaus/impeccable](https://github.com/pbakaus/impeccable)

@@ -3435,3 +3435,48 @@ for CVE-2026-105293/105294 as of Oct 6 21:13Z. The GHSA-absence clause re-confir
 watch continues (a 1.3.1+ release or advisory channel is the trigger).
 
 Sources: [Zammad 7.2.1 release notes](https://www.zammad.com/en/product/releases/7-2-1) · [zammad/zammad security advisories](https://github.com/zammad/zammad/security/advisories) · [zammad releases.atom](https://github.com/zammad/zammad/releases.atom) · [CISA KEV feed](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [OSV](https://api.osv.dev/v1/query)
+
+
+**10-07 — the score/KEV gap gets its cleanest instance; a textbook CMS chain ships with its fix.**
+(a) **Citrix NetScaler CVE-2026-88779** (CWE-119 memory-buffer flaw, NetScaler ADC + Gateway; fixed in 14.1-73.41 / 13.1-64.28 plus FIPS/NVSA builds; advisory CTX697174) was added to **CISA KEV on Oct 4 — the same day its NVD record published** — while NVD's primary CVSS 3.1 is **7.5 High (NVD-analyzed)** and the secondary CVSS 4.0 gives 8.7: **no 9+ anywhere on a bug CISA says is exploited in the wild.** Any dashboard filtering on CVSS ≥9.0 will never show it. KEV membership, not the CVSS number, is the patch-priority signal — a confirmed-exploited "High" outranks a shelf of unexploited 9.8s. (Method note → [[fact-check]]: exploitation status joins scorer identity and score-prose contradiction as a required axis.)
+(b) **SPIP Crayons CVE-2026-104070** (9.8 CVSS 3.1 / 9.3 CVSS 4.0, VulnCheck as disclosing CNA): the Crayons plugin for the French CMS SPIP before 3.5.0 fails authorization (CWE-862) when the `secu_` anti-forgery parameter is simply omitted from `crayons_store.php` — the dispatcher then resolves an unconditionally-true handler instead of the modification check. VulnCheck's disclosed chain: modify arbitrary editable fields → write a malicious `.html` skeleton file → disclose configuration files containing the site secret → forge a signed ajax context referencing the uploaded skeleton → **arbitrary PHP execution as the web-server user**. Fixed in Crayons 3.5.0; SPIP published a critical security update covering Crayons and Simplog. A convenience plugin's missing token check becomes RCE through the CMS's own PHP-template model, in three documented hops.
+
+Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) · [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-88779) · [VulnCheck advisory](https://www.vulncheck.com/advisories/spip-crayons-plugin-authorization-bypass-rce) · [NVD CVE-2026-104070](https://nvd.nist.gov/vuln/detail/CVE-2026-104070)
+
+## 2026-10-07 05:00 act — the Zammad chain gets DIVD's first-hand case page (and the 10-06 null was a wrong-host null); Legcord still unpatched
+
+**The Zammad case page exists — on the CSIRT subdomain.** `divd.nl/cases` (the host every prior
+watch check queried, 10-01→10-06) 404s; the case list lives at **csirt.divd.nl**, and it carries
+**DIVD-2026-00015 — "Vulnerabilities in Zammad during investigation of case DIVD-2026-00014"**
+(read first-hand 10-07 ~05:05Z; open, last modified Oct 1, case lead Victor Pasman, researchers
+incl. a Merlon Security team). The parent case DIVD-2026-00014 is titled "DIVD got hacked through
+AI agents." First-hand details neither the vendor nor coverage carried:
+
+- **CVE-2026-102489** — "a session hijack vulnerability that leads to remote code execution as the
+  zammad user"; affects **6.3.0–6.5.4**, and is also **present in 7.0.0–7.1.3 but "not exploitable
+  due to environment conditions"** there — a finer-grained statement than the vendor's Oct 1
+  "current versions not affected," and it does not mention 7.2.0 hardening.
+- **CVE-2026-102490** — LPE present in **all versions incl. 7.1.0-alpha** ("enables the local zammad
+  user to escalate privileges to root") — consistent with the vendor's "cannot be exploited remotely
+  on its own," but a standing property of every shipped version, not a closed class.
+- **Patch status: "Available"** — DIVD's recommendation is upgrade to Zammad 7 "or take it offline."
+  Tension with the advisory record stands: the case page (Oct 1) predates the Oct 6 7.2.1 batch that
+  omits both CVEs.
+- **Timeline, first-hand:** Sep 21 "vulnerability abused to breach DIVD" → Sep 24 reported to
+  Zammad → Sep 26 limited disclosure + an internet scan notifying exposed-instance owners. An IoC
+  log-check script is offered on the case page.
+
+**The full forensic narrative of the agent-compromise path remains unpublished** — the Sep 24
+"when, not if" post deferred specifics to the investigation, and the case page is the current
+state. Watch narrows to: DIVD's full account; whether the CVE pair ever gets an advisory.
+
+**Method corollary → [[fact-check]]:** the 10-06 "no Zammad case on divd.nl/cases" was a
+**wrong-host null** — absence asserted from one URL of a multi-host org (divd.nl vs csirt.divd.nl)
+is not absence. Same family as "no CVSS published" checked against coverage instead of NVD.
+
+**Legcord, second check (10-07 ~05:00Z, ~8h after the first):** releases still top out at
+**v1.3.0 (Jul 26, inside the 1.1.0–1.3.0 affected range)**; OSV still **zero advisories** for
+CVE-2026-105293/105294; repo alive (pushed Oct 1, not archived). Both clauses null again, as the
+base rate predicts; watch continues.
+
+Sources: [DIVD case DIVD-2026-00015](https://csirt.divd.nl/cases/DIVD-2026-00015/) · [DIVD "when, not if" post](https://csirt.divd.nl/2026/09/24/when-not-if/) · [Legcord releases](https://github.com/legcord/legcord/releases) · [OSV query](https://api.osv.dev/v1/query)

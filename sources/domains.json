@@ -10318,5 +10318,176 @@
     "en": "The Atlantic — primary venue for the Robinson resignation essay. Paywalled to automated access; quotes were verified via TechCrunch's transcription, not the original text.",
     "zh": "《大西洋月刊》——Robinson 辞职文章的首发媒体。对自动化访问有付费墙;引语经 TechCrunch 转述核验,而非原文。",
     "jp": "The Atlantic——Robinson 退職エッセイの一次媒体。自動アクセスにはペイウォール。引用は原文ではなく TechCrunch の書き起こしで検証。"
+  },
+  "biezou.com": {
+    "cat": "vendor",
+    "cred": "low",
+    "cv": 1,
+    "density": "low",
+    "en": "An AI API relay gateway (\"Unified AI API gateway and admin dashboard\" per its own meta description) — NOT the guide's homepage the feed first took it for. The byoungd/up README (checked 10-07) links it as \"AI 中转推荐：biezou.com\" with its own caveat: publicly positioned as a unified AI API gateway/admin panel, a third-party optional entry, verify terms/price/privacy before use — the author's commercial relay service, disclosed in the open (the author states his chairmanship of a cloud company on-page in the README). Cited by a 09-28 item as the repo homepage; corrected in place to what it is. Cross-validated vs the repo README + the site's own meta tags.",
+    "jp": "AI API 中継ゲートウェイ（自サイトのメタ説明で \"Unified AI API gateway and admin dashboard\"）——フィードが最初に想定したガイドのホームページではない。byoungd/up の README（10-07 確認）は「AI 中转推荐：biezou.com」と自己の注意書き付きで紹介する：公式には統合 AI API ゲートウェイ/管理パネルと位置づけられた第三者の任意エントリで、利用前に規約・価格・プライバシーを確認せよ——作者の商用リレーサービスであり、README 上で自ら公然と開示している（作者はクラウド会社の会長である旨を明記）。09-28 の項目がリポジトリのホームページとして引用。実態に合わせて修正済み。リポジトリ README とサイト自身のメタタグで相互検証済み。",
+    "zh": "一个 AI API 中转网关（其自身 meta 描述为\"Unified AI API gateway and admin dashboard\"）——并非该条目最初以为的指南主页。byoungd/up 的 README（10-07 核查）以\"AI 中转推荐：biezou.com\"并自带告警的方式链接它：公开定位为统一 AI API 网关/管理面板的第三方可选入口，使用前请自行核对服务条款、价格与隐私——这是作者的商用中转服务，且在 README 中公开作了利益披露（作者写明自己任某云计算公司董事长）。09-28 条目曾将其当作仓库主页引用；已按实际身份就地更正。与仓库 README 及站点自身 meta 标签交叉验证。"
+  },
+  "colo.to": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Eric Gullichsen's personal site hosting the Nvidia options narrative plus the primary documents as footnote PDFs (invitation.pdf, grant.pdf, exercise.pdf). Read first-hand: the main text confirms the grant's quarterly-over-one-year language, the 1996 CFO letter forcing exercise of 15,625 of 25,000 options, the 4.5M split-adjusted missing shares and the ~$1B claim; the $0.05 strike and 90-day expiry live in the footnote PDFs (surfaced via the HN thread — 15,625 x $0.05 = $781.25 sent, per exercise.pdf). One correction to our own item: he was on the 1993 Technical Advisory Board, an advisor, not an \"early employee.\" Cross-validated vs the HN thread.",
+    "jp": "Eric Gullichsen の個人サイト。Nvidia のオプション騒動の本文に、一次資料を脚注 PDF（invitation.pdf、grant.pdf、exercise.pdf）で添付している。一次読解の結果：本編は付与の四半期・1年縛りの文言、1996 年 CFO 函による 25,000 株中 15,625 株の行使強制、分割調整後 450 万株の喪失と約10億ドルの主張を確認。行使価格 $0.05 と 90 日期限は脚注 PDF 側（HN スレッド経由で判明——exercise.pdf では 15,625 x $0.05 = $781.25 送金）。自分の記事の修正点：彼は 1993 年の Technical Advisory Board のメンバーで、\"初期従業員\"ではなくアドバイザー。HN スレッドと相互検証済み。",
+    "zh": "Eric Gullichsen 的个人站，托管 Nvidia 期权往事正文并以脚注 PDF 附上原始文件（invitation.pdf、grant.pdf、exercise.pdf）。已一手阅读：正文确认授予协议\"按季度分期、授予一年内全部归属\"的措辞、1996 年 CFO 信函强制行权 25,000 份中的 15,625 份、拆股调整后 450 万股的损失与约 10 亿美元的说法；$0.05 行权价与 90 天期限在脚注 PDF 中（经 HN 讨论串揭示——exercise.pdf 显示行权汇款 15,625 × $0.05 = $781.25）。对我们自己条目的一处更正：他 1993 年进入的是技术顾问委员会（Technical Advisory Board），是顾问而非\"早期员工\"。与 HN 讨论串交叉验证。"
+  },
+  "coyopedal.playtaurus.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Armagan Amcalar's (dashersw) project site for CoyoPedal. Read first-hand: confirms the browser build runs \"the same UI, the same DSP, the same neural amp model\" compiled to WebAssembly, the NAM A2-Full profile at 48 kHz on a 240 MHz dual-core microcontroller (\"the full architecture, not a trimmed or distilled stand-in\"), and the touch UI — the on-page authorship/license (GPL-3.0) matches the repo. \"WaveNet\" never appears on the page (that detail is the README's). A project page that documents its own envelope honestly. Cross-validated vs the GitHub repo (dashersw/coyopedal) and the HN thread.",
+    "jp": "Armagan Amcalar（dashersw）の CoyoPedal プロジェクトサイト。一次読解：ブラウザビルドが WebAssembly にコンパイルされた「同じ UI、同じ DSP、同じニューラルアンプモデル」で動くこと、240 MHz デュアルコア MCU 上で 48 kHz の NAM A2-Full プロファイル（「フルアーキテクチャであり、縮小版ではない」）、タッチ UI を確認——ページ上の作者/ライセンス（GPL-3.0）はリポジトリと一致。\"WaveNet\" という語はページに現れない（その詳細は README 側）。自身の動作範囲を正直に文書化するプロジェクトページ。GitHub リポジトリ（dashersw/coyopedal）および HN スレッドと相互検証済み。",
+    "zh": "Armagan Amcalar（dashersw）的 CoyoPedal 项目站。已一手阅读：确认浏览器构建以 WebAssembly 运行\"相同的 UI、相同的 DSP、相同的神经功放模型\"、240 MHz 双核微控制器上 48 kHz 的 NAM A2-Full 档案（\"完整架构，非删减替身\"）、以及触控 UI——页面上的作者/许可证（GPL-3.0）与仓库一致。\"WaveNet\" 一词未在页面出现（该细节属于 README）。一个诚实记录自身边界的项目页。与 GitHub 仓库（dashersw/coyopedal）及 HN 讨论串交叉验证。"
+  },
+  "cs341.cs.illinois.edu": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "UIUC CS 341's official course-book site — the HTML edition of the open systems-programming textbook. Read first-hand: confirms the C-only instruction, the full chapter list (Processes, Memory Allocators, Threads, Synchronization, Deadlock, Virtual Memory, Scheduling, Networking, Filesystems, Signals, Security, plus Post Mortems on Heartbleed/Dirty Cow/Meltdown/Spectre), the lineage (\"based on a crowd-source authoring wikibook experiment by Lawrence Angrave\"), and free PDF/EPUB exports. Course-hosted stable infrastructure, not a viral page. Cross-validated vs the GitHub repo (cs341-illinois/coursebook).",
+    "jp": "UIUC CS 341 の公式コースブックサイト——公開されているシステムプログラミング教科書の HTML 版。一次読解：C 言語限定の方針、章構成（Processes、Memory Allocators、Threads、Synchronization、Deadlock、Virtual Memory、Scheduling、Networking、Filesystems、Signals、Security、さらに Heartbleed/Dirty Cow/Meltdown/Spectre の Post Mortems）、系譜（\"Lawrence Angrave によるクラウドソースの wikibook 実験に基づく\"）、無料の PDF/EPUB 出力を確認。講義運営の安定インフラで、バズページではない。GitHub リポジトリ（cs341-illinois/coursebook）と相互検証済み。",
+    "zh": "UIUC CS 341 的官方课程教材站——开放系统编程教材的 HTML 版。已一手阅读：确认纯 C 教学、完整章节表（进程、内存分配器、线程、同步、死锁、虚拟内存、调度、网络、文件系统、信号、安全，外加 Heartbleed/Dirty Cow/Meltdown/Spectre 的 Post Mortems）、渊源（\"基于 Lawrence Angrave 的众包 wikibook 实验\"）、以及免费 PDF/EPUB 导出。是课程托管的稳定基础设施，不是病毒式页面。与 GitHub 仓库（cs341-illinois/coursebook）交叉验证。"
+  },
+  "earnanhonestdollar.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Earn an Honest Dollar, a self-described agent-to-agent services marketplace, publishing its own extraction-fabrication benchmark. The bench page (read first-hand) confirms the design (42 twin-page pairs across 7 page types, one-row differences, decoys incl. \"Was $493.00\"), the headline (405/573 = 70.7% without the null-instruction, 116/574 = 20.2% with it), Firecrawl 24/36, and every caveat (one run per contestant, Sep 27 2026, Wilson intervals spanning ~30 points, paid APIs on free tiers). One correction: GLM 5.3's cell is 1/35, not 1/36 — \"counts below 36 exclude errors.\" A vendor grading models against its own product's need; numbers first-hand, framing self-interested. Cross-validated vs the HN thread.",
+    "jp": "Earn an Honest Dollar——自らをエージェント間サービスマーケットプレイスと称する企業が、独自の抽出ハルシネーションベンチマークを公開。bench ページ（一次読解）は設計（7 種類のページで 42 組、1 行差、\"Was $493.00\" などのデコイ）、見出し数値（null 指示なしで 405/573 = 70.7%、ありで 116/574 = 20.2%）、Firecrawl 24/36、そして全注意事項（各出場者 1 回、2026-09-27、約30ポイントに及ぶ Wilson 区間、有料 API は無料枠）を裏付ける。修正点：GLM 5.3 のセルは 1/36 ではなく 1/35——「36 未満はエラーを除外」。自社製品の需要に対してモデルを採点するベンダー。数値は一次、視点は利害関係。HN スレッドと相互検証済み。",
+    "zh": "Earn an Honest Dollar——自称智能体间服务市场，发布自家的抽取幻觉基准。bench 页面（已一手阅读）证实了设计（7 类页面 42 对、仅差一行、含 \"Was $493.00\" 等诱饵）、标题数字（无 null 指令 405/573 = 70.7%，有则 116/574 = 20.2%）、Firecrawl 24/36，以及全部注意事项（每参赛者单次运行、2026-09-27、宽达约 30 个百分点的 Wilson 区间、付费 API 用免费档）。一处更正：GLM 5.3 的格子是 1/35 而非 1/36——页面注明\"低于 36 的计数剔除了报错\"。厂商按自家产品需求给模型打分；数字一手，立场自利。与 HN 讨论串交叉验证。"
+  },
+  "erdosproblems.com": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Thomas Bloom's database of open Erdős problems; founder-authored policy posts are precise and self-critical (the Oct 2026 comment-freeze post publishes its own spam audit: 291 proof claims, 155 with zero explanation). Cross-validated (10-07): the forum post's numbers match the HN discussion.",
+    "jp": "Thomas Bloom 氏の Erdős 問題オープンデータベース。創設者自身のポリシー投稿は正確で自己批判的（2026年10月のコメント凍結投稿は独自のスパム監査を公開：証明主張291件、うち説明ゼロが155件）。相互検証済み（10-07）：フォーラム投稿の数値は HN 議論と一致。",
+    "zh": "Thomas Bloom 的 Erdős 问题开放数据库；创始人的政策长文精确而自省（2026年10月的评论冻结公告附带了自身的垃圾信息审计：291 条证明声明，155 条零解释）。交叉验证（10-07）：论坛帖的数字与 HN 讨论一致。"
+  },
+  "generalroboticslab.com": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Duke's General Robotics Lab (C. Karen Liu's group) project pages — JavaScript-rendered; the Cartesian Hand page (read first-hand) exposes only its title as static text, so no technical claim can be verified against it directly. The feed knew this and sourced the detail from the HN discussion; keep that pattern — treat the page as proof the lab hosts the project, the HN thread as the content source. Cross-validated vs the HN thread (lab affiliation matches the title).",
+    "jp": "Duke 大学 General Robotics Lab（C. Karen Liu グループ）のプロジェクトページ——JavaScript 描画のため、Cartesian Hand のページ（一次読解）で静的テキストとして得られるのはタイトルのみで、技術的主張を直接検証できない。フィードはこれを踏まえ詳細を HN ディスカッションから取材済み。この形を維持すること——ページはラボがプロジェクトをホストする証拠、内容は HN スレッドを情報源とする。HN スレッド（ラボ所属がタイトルと一致）と相互検証済み。",
+    "zh": "杜克大学 General Robotics Lab（C. Karen Liu 组）的项目页——JavaScript 渲染，Cartesian Hand 页面（已一手阅读）的静态文本只有标题，无法直接核验任何技术主张。该条目当时已知晓这一点并从 HN 讨论取材；应保持这一模式——该页面只作为实验室托管项目的证明，内容以 HN 讨论串为来源。与 HN 讨论串交叉验证（实验室归属与标题一致）。"
+  },
+  "git.mills.io": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "James Mills' (prologic) self-hosted Gitea instance — the canonical home of his projects, e.g. Parley. Read first-hand: the repo's tagline is verbatim \"Federated, decentralised chat that speaks plain IRC,\" the README confirms user@domain addressing readable from irssi/WeeChat/Textual with no plugins. Nuance the feed's phrasing: IRC is the client-facing protocol; instance-to-instance federation is signed JSON POSTed to peers' /inbox over HTTPS. MIT, Go 94.3%, actively pushed (last commit 2026-10-06), working proof-of-concept status. Cross-validated vs the HN thread.",
+    "jp": "James Mills（prologic）のセルフホスト Gitea インスタンス——彼のプロジェクト（例：Parley）の正規のホーム。一次読解：リポジトリのタグラインは「Federated, decentralised chat that speaks plain IRC」そのままで、README は irssi/WeeChat/Textual からプラグインなしで user@domain アドレス指定で到達できることを確認。フィードの表現への注意：IRC はクライアント側プロトコルで、インスタンス間のフェデレーションは HTTPS 上でピアの /inbox に POST される署名付き JSON。MIT、Go 94.3%、活発に push（最終 2026-10-06）、動く PoC の位置づけ。HN スレッドと相互検証済み。",
+    "zh": "James Mills（prologic）自托管的 Gitea 实例——其项目（如 Parley）的权威主页。已一手阅读：仓库标语就是\"Federated, decentralised chat that speaks plain IRC\"原文，README 确认 irssi/WeeChat/Textual 无需插件即可按 user@domain 寻址到达。对该条目措辞的细化：IRC 是面向客户端的协议；实例间联邦是经 HTTPS 向对端 /inbox POST 的签名 JSON。MIT、Go 94.3%、持续推送（最后提交 2026-10-06）、定位为可用的概念验证。与 HN 讨论串交叉验证。"
+  },
+  "hex.pm": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "The Erlang/Elixir package registry — package pages carry version history, license, publisher and download counts. Read first-hand for the Imp page: MIT, deepfates as sole owner confirmed; registry state is perishable exactly as documented — at citation time (09-27) Imp showed v0.5.0, one version, 93 downloads; on re-read (10-07) it showed v0.8.1, five versions, 768 all-time downloads. Cite registry numbers only with their date. Cross-validated vs the GitHub repo (deepfates/imp).",
+    "jp": "Erlang/Elixir のパッケージレジストリ——パッケージページにはバージョン履歴、ライセンス、パブリッシャー、ダウンロード数が載る。Imp のページを一次読解：MIT、deepfates が単独オーナーであることを確認。レジストリの状態は記載通り腐敗しやすい——引用時（09-27）は v0.5.0・1 バージョン・93 ダウンロードだったが、再読（10-07）では v0.8.1・5 バージョン・累計 768 ダウンロード。レジストリ数値は必ず日付付きで引用。GitHub リポジトリ（deepfates/imp）と相互検証済み。",
+    "zh": "Erlang/Elixir 的包注册表——包页面载有版本历史、许可证、发布者与下载量。已一手阅读 Imp 页面：MIT、deepfates 为唯一所有者属实；注册表状态恰如所述易变——引用时（09-27）Imp 显示 v0.5.0、单版本、93 次下载；重读时（10-07）已是 v0.8.1、五个版本、累计 768 次下载。引用注册表数字必须带日期。与 GitHub 仓库（deepfates/imp）交叉验证。"
+  },
+  "iain.rocks": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Iain Cambridge's personal blog. The Go-coupling essay (read first-hand, 27 Sep 2026) argues on-page exactly the two points the feed attributed: import paths make your code \"coupled to a hosting provider,\" and \"every commercial software development team using Go should be using custom domains\" (citing go.uber.org, go.mongodb.org). Nuance: the essay frames coupling via import statements/fetch behavior — go.mod and git history are the feed's extension, not its words — and the rebuttals (domain lapses, proxy serving, sed-vs-slog) are the HN thread's, as the feed itself said. Cross-validated vs the HN thread.",
+    "jp": "Iain Cambridge の個人ブログ。Go 結合のエッセイ（一次読解、2026-09-27）には、フィードが帰属させた 2 点がそのまま書かれている：インポートパスによりコードが「ホスティングプロバイダに結合」されること、そして「Go を使うすべての商用開発チームはカスタムドメインを使うべき」（go.uber.org、go.mongodb.org を例示）。注意：エッセイの結合論はインポート文とフェッチ挙動によるもので——go.mod と git 履歴はフィードの拡張で原文にない——また反論（ドメイン失効、プロキシの提供、sed vs 長期移行）はフィード自身が書いた通り HN スレッド側にある。HN スレッドと相互検証済み。",
+    "zh": "Iain Cambridge 的个人博客。Go 耦合一文（已一手阅读，2026-09-27）在页面上写明了该条目归属的两点：导入路径使代码\"与托管提供商耦合\"，以及\"每个使用 Go 的商业开发团队都应使用自定义域名\"（举 go.uber.org、go.mongodb.org 为例）。细节：原文的耦合论证基于 import 语句与拉取行为——go.mod 与 git 历史是该条目的引申、非原文措辞；而反驳（域名失效、代理兜底、sed 与长期迁移）如该条目所述属于 HN 讨论串。与 HN 讨论串交叉验证。"
+  },
+  "jadidbourbaki.github.io": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal systems-programming writeups (GitHub Pages). The prompt-lookup post (read first-hand) carries every number the feed cited — 165.48 µs baseline on a 541 MB corpus, 3.98 µs after four changes (~41.6x) on a single M4 Pro (median of 3 runs) — plus the honesty the feed praised verbatim: acceptance rates \"almost identical to the original implementation.\" Also documents a fifth follow-up (Lemire threshold-check PR) pushing it to ~140x, which the feed's 42x headline predates. Code and results in a public repo. Cross-validated vs the HN thread.",
+    "jp": "個人のシステムプログラミング解説（GitHub Pages）。prompt-lookup の記事（一次読解）にはフィードが引用した全数値がある——541 MB コーパスで 165.48 µs のベースライン、4 つの変更後に 3.98 µs（約41.6倍）、単一の M4 Pro（3 回の中央値）——さらにフィードが称賛した誠実さの一文「アクセプタンス率は元の実装とほぼ同一」もそのまま。5 つ目の追試（Lemire のしきい値チェック PR）で約140倍に達したことも記載（フィードの42倍見出しはこれより前）。コードと結果は公開リポジトリに。HN スレッドと相互検証済み。",
+    "zh": "个人系统编程技术写作（GitHub Pages）。prompt-lookup 一文（已一手阅读）载有该条目引用的全部数字——541 MB 语料上 165.48 µs 基线、四项改动后 3.98 µs（约 41.6 倍）、单台 M4 Pro（3 次取中位）——并原样保留了该条目称道的诚实声明：接受率\"与原始实现几乎完全相同\"。文中还记载第五项后续改动（Lemire 阈值检查 PR）将提速推至约 140 倍——该条目的 42 倍标题早于此。代码与结果在公开仓库。与 HN 讨论交叉验证。"
+  },
+  "loficities.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Safa Elmali's Show HN project: pixel-art city night loops with lofi synthesized live via the Web Audio API. The site itself (read first-hand) confirms the cities (Paris/Tokyo/Hong Kong/Sydney/San Francisco among 9), the procedural audio — \"Chords, drums, bass and melody are synthesized with the Web Audio API, without samples, recordings or an AI model\" — the ?obs and &weather= parameters, and states the art is \"written with AI coding agents\" (the feed's disclosure provenance). The $19 Gumroad price is NOT on the site — that disclosure lives in the creator's HN comments and the Gumroad page. Cross-validated vs the HN thread.",
+    "jp": "Safa Elmali の Show HN 作品：ピクセルアートの夜景ループに、Web Audio API でライブ合成する lofi を組み合わせたサイト。サイト本体（一次読解）は、都市（パリ/東京/香港/シドニー/サンフランシスコ含む9都市）、手続き的オーディオ——「コード、ドラム、ベース、メロディは Web Audio API で合成され、サンプル・録音・AI モデル不使用」——、?obs と &weather= パラメータ、そしてアートが「AI コーディングエージェントで書かれた」ことを確認（フィードの開示の出所）。$19 の Gumroad 価格はサイト上にない——その開示は作者の HN コメントと Gumroad ページ側。HN スレッドと相互検証済み。",
+    "zh": "Safa Elmali 的 Show HN 作品：像素城市夜景循环 + 用 Web Audio API 实时合成的 lofi。站点本身（已一手阅读）确认了城市（巴黎/东京/香港/悉尼/旧金山等 9 城）、程序化音频——\"和弦、鼓、贝斯、旋律均用 Web Audio API 合成，不用采样、录音或 AI 模型\"——以及 ?obs 与 &weather= 参数，并写明画面\"由 AI 编码智能体写成\"（即该条目披露的出处）。$19 的 Gumroad 价格不在站点上——该披露来自作者在 HN 的评论与 Gumroad 页面。与 HN 讨论串交叉验证。"
+  },
+  "luarocks.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The Lua package registry — its September 2026 security-incident page (read first-hand) is the registry's own account and is more detailed than the researcher's writeup: fix = loadstring in \"t\" text-only mode + rejection of the \\x1b bytecode marker; all API keys revoked/sessions ended, bcrypt hashes exposed so password resets advised, 2FA re-enrollment; three malicious packages named (bcrcewon, 7e0b94029db0, 7e0b9402f9c8) with \"treat that machine as compromised\"; confirmed shell execution July 9 - Aug 20 2026; \"no evidence that any existing module was tampered with\" with its own stated limits (owner-vs-attacker deletion indistinguishable). An exemplary vendor incident disclosure. Cross-validated vs the researcher writeup.",
+    "jp": "Lua のパッケージレジストリ——2026年9月のセキュリティインシデントページ（一次読解）はレジストリ自身の説明で、研究者の解説より詳細：修正は \"t\"（テキスト限定）モードの loadstring と \\x1b バイトコードマーカの拒否。全 API キー失効・セッション全終了、bcrypt ハッシュ暴露のためパスワード変更、2FA 再登録。悪意ある 3 パッケージを名指し（bcrcewon、7e0b94029db0、7e0b9402f9c8）し「そのマシンは侵害されたものとして扱え」。2026年7月9日〜8月20日にシェル実行を確認。「既存モジュールの改ざん痕跡なし」——ただし所有者と攻撃者の削除は区別不能という限界も自己明記。ベンダー開示の模範例。研究者の解説と相互検証済み。",
+    "zh": "Lua 包注册表——其 2026 年 9 月安全事件页（已一手阅读）是注册表自己的说明，比研究者文章更细：修复 = loadstring 改用 \"t\"（纯文本）模式 + 拒绝 \\x1b 字节码标记；全部 API key 吊销/会话终结、bcrypt 哈希暴露故建议改密、2FA 重新绑定；点名三个恶意包（bcrcewon、7e0b94029db0、7e0b9402f9c8）并要求\"将那台机器视为已失陷\"；确认 2026 年 7 月 9 日—8 月 20 日发生过 shell 执行；\"无证据表明既有模块被篡改\"——同时自述局限（所有者删除与攻击者删除不可区分）。厂商事件披露的典范。与研究者文章交叉验证。"
+  },
+  "mihai.dinculescu.dev": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Personal blog of the tapo (TP-Link Tapo devices) library maintainer — first-hand protocol writeups for his own project, with an honest device-compatibility matrix including the models that misbehave. Cross-validated (10-07): the TPAP post matches the repo (v0.11.1 TPAP support, SPAKE2+/RFC 9383, legacy-AES removal in v0.11.0).",
+    "jp": "tapo（TP-Link Tapo デバイス向けライブラリ）メンテナの個人ブログ——自プロジェクトに関する一次のプロトコル解説で、挙動がおかしいモデルまで含む正直なデバイス互換マトリクス付き。相互検証済み（10-07）：TPAP 投稿はリポジトリと一致（v0.11.1 で TPAP 対応、SPAKE2+/RFC 9383、v0.11.0 でレガシー AES 削除）。",
+    "zh": "tapo（TP-Link Tapo 设备库）维护者的个人博客——对自家项目的一手协议长文，附带诚实的设备兼容矩阵（连表现异常的型号也列出）。交叉验证（10-07）：TPAP 文与仓库一致（v0.11.1 加入 TPAP、SPAKE2+/RFC 9383、v0.11.0 移除遗留 AES）。"
+  },
+  "parseable.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Parseable's product site — unified observability on an object-store Parquet lake (Rust, single binary, OTel-native). Performance figures are self-reported and not reproducible from the page itself (the '100M time-series/min' ingest claim didn't render in our fetch); treat numbers as marketing until a benchmark is published. Cross-validated (10-07): platform description matches the GitHub repo (AGPL-3.0, Rust, logs+metrics+traces).",
+    "jp": "Parseable の製品サイト——オブジェクトストア上の Parquet レイクによる統合オブザーバビリティ（Rust、単一バイナリ、OTel ネイティブ）。性能数値は自己申告で、ページ自体からは再現できません（フェッチでは『毎分1億時系列』の主張は描画されず）；ベンチマークが公開されるまで数値はマーケティングとして扱うこと。相互検証済み（10-07）：プラットフォームの説明は GitHub リポジトリと一致（AGPL-3.0、Rust、ログ+メトリクス+トレース）。",
+    "zh": "Parseable 的产品官网——基于对象存储 Parquet 数据湖的统一可观测平台（Rust、单二进制、OTel 原生）。性能数字为自行报告且无法从页面本身复现（我们抓取时『每分钟 1 亿时间序列』的宣称并未渲染出来）；在公司公布基准测试前，请将数字视为营销话术。交叉验证（10-07）：平台描述与 GitHub 仓库一致（AGPL-3.0、Rust、日志+指标+链路）。"
+  },
+  "sancho.bearblog.dev": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "A personal Bear Blog blog (\"Sancho Panza's Thoughts\"). The Google AI Overview post (read first-hand, 27 Sep 2026) contains exactly what the feed attributed: the 2014 Dario Saric meme search, the AI Overview misreading it as a romantic rejection and offering consolation, the measured concessions (\"sometimes helpful\", fine in a Gemini chat) and the closing \"I'm not sure how to feel about all of this.\" Screenshots are images, so the consolation text is the author's description. Single-post blog with no track record; the HN thread (2000+ pts) is where the analysis lives. Cross-validated vs that thread.",
+    "jp": "個人ブログ（Bear Blog、\"Sancho Panza's Thoughts\"）。Google AI Overview の投稿（一次読解、2026-09-27）にはフィードが帰属させた内容が正確にある：2014年の Dario Saric ミーム検索、AI Overview が恋愛の拒絶と誤解して慰めたこと、冷静な留保（\"sometimes helpful\"、Gemini チャットなら許容）、結びの \"I'm not sure how to feel about all of this\"。スクリーンショットは画像のため慰めの文言は著者描写による。実績のない単発ブログで、分析は HN スレッド（2000+ pts）側にある。同スレッドと相互検証済み。",
+    "zh": "个人博客（Bear Blog，\"Sancho Panza's Thoughts\"）。Google AI Overview 一文（已一手阅读，2026-09-27）包含该条目归属的全部内容：2014 年 Dario Saric 梗的搜索、AI Overview 误读为情感拒绝并加以安慰、克制的让步（\"有时有用\"、放在 Gemini 对话里尚可），以及结尾的\"我不知道该作何感想\"。截图为图片，安慰文案出自作者描述。无往绩的单篇文章博客；分析主体在 HN 讨论串（2000+ 分）。与该讨论串交叉验证。"
+  },
+  "tml.stanford.edu": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Stanford's Transmission Lab (TML) project pages. The HomeBody page (read first-hand) states every claim the feed attributed to it: a plug-and-play VLM calling a composable skill library (navigate/pick/place/open drawer) on a Unitree G1, Real2Sim twin built in Isaac Sim from LiDAR+SLAM exploration with ICP-registered localization, unseen-kitchen demos incl. medicine retrieval from an occluded drawer, and the limitations in its own words (Real2Sim setup time and API costs, Astra reasoning-latency pauses, RTX 4090 local stack). Authors listed (Huh, Gu, Truong, Liu, Tevet); no arXiv link on-page. Cross-validated vs the HN thread.",
+    "jp": "Stanford TML のプロジェクトページ。HomeBody のページ（一次読解）にはフィードが帰属させた主張がすべて記載されている：Unitree G1 上で構成可能なスキルライブラリを呼ぶプラグアンドプレイの VLM、LiDAR+SLAM 探索から Isaac Sim で構築し ICP で位置合わせする Real2Sim ツイン、見知らぬキッチンでの実演（引き出し奥の薬の回収含む）、そして制限事項の明記（Real2Sim のセットアップ時間と API コスト、Astra の推論レイテンシによる一時停止、RTX 4090 のローカル構成）。著者名記載。HN スレッドと相互検証済み。",
+    "zh": "斯坦福 TML 的项目页。HomeBody 页面（已一手阅读）写明了该条目归属给它的全部主张：在 Unitree G1 上由 VLM 直接调用可插拔技能库（导航/抓取/放置/开抽屉）、从 LiDAR+SLAM 探索数据在 Isaac Sim 中构建 Real2Sim 数字孪生并用 ICP 配准定位、未见厨房中的演示（含从被遮挡抽屉取药），以及原文承认的限制（Real2Sim 搭建时间与 API 成本、Astra 推理延迟停顿、本地需 RTX 4090）。列有作者名单。与 HN 讨论交叉验证。"
+  },
+  "vhyrro.neorg.org": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Vhyrro's security writeups (personal site). The LuaRocks exploit post (read first-hand, 27 Sep 2026) confirms all seven claims the feed attributed: loadstring() accepting LuaJIT bytecode (the LuaJIT FAQ quoted: \"loading untrusted bytecode is not safe!\" — \"there's no bytecode verification on purpose\"), the otherwise-exemplary sandbox (empty env, JIT off, 2000-line debug hook), the new LJ_GC64=1 OOB write-free read via an unbounded KNUM index, the ttyd homepage-replacement demo, the Sep 26 patch, no CVE ID anywhere, and the 24M-download top package. Also states exploitation \"actively utilized since July 9th 2026.\" Cross-validated vs the luarocks.org incident page.",
+    "jp": "Vhyrro のセキュリティ解説（個人サイト）。LuaRocks エクスプロイトの記事（一次読解、2026-09-27）はフィードが帰属させた 7 点すべてを裏付ける：LuaJIT バイトコードを受け付ける loadstring()（LuaJIT FAQ を引用：\"loading untrusted bytecode is not safe!\"——\"there's no bytecode verification on purpose\"）、それ以外は模範的だったサンドボックス（空環境、JIT 無効、2000 行のデバッグフック）、無境界 KNUM インデックスによる LJ_GC64=1 での新攻撃、ttyd によるホームページ置換デモ、9月26日の修正、CVE ID の不在、2400万ダウンロードの最多パッケージ。さらに「2026年7月9日から実際に利用された」とも。luarocks.org のインシデントページと相互検証済み。",
+    "zh": "Vhyrro 的安全写作（个人站）。LuaRocks 漏洞利用一文（已一手阅读，2026-09-27）逐条证实了该条目归属的全部七点：接受 LuaJIT 字节码的 loadstring()（引 LuaJIT FAQ 原文：\"loading untrusted bytecode is not safe!\"——\"there's no bytecode verification on purpose\"）、其余堪称典范的沙箱（空环境、JIT 关闭、2000 行调试钩子）、以无边界 KNUM 索引在 LJ_GC64=1 上的新利用、ttyd 替换首页演示、9 月 26 日修复、通篇无 CVE ID、以及 2400 万下载的头部包。文中还写明利用\"自 2026 年 7 月 9 日起被实际使用\"。与 luarocks.org 事件页交叉验证。"
+  },
+  "wiki.zimbra.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Zimbra's official security-advisory wiki — the vendor's canonical fix-version index, cited as the reference for CVE-2026-93647 (stored XSS via forged calendar sender, ZCS below 10.1.21). Bot-walled: plain and automated fetches get HTTP 403, so agents cannot read it directly — corroborate via the NVD record instead, whose Rapid7 CNA `affected` data confirms the <10.1.21 range and the 9.3 Secondary score (cve@rapid7.com). Cited by the feed only after the one-call NVD check; treat the wiki as verify-in-browser.",
+    "jp": "Zimbra 公式のセキュリティアドバイザリウィキ——ベンダーの正規の修正バージョン索引で、CVE-2026-93647（偽装カレンダー送信者による stored XSS、ZCS 10.1.21 未満）の参照先。ボット対策あり：通常・自動フェッチは HTTP 403 となるため、エージェントは直接読めず——NVD レコードで代読する。Rapid7 CNA の `affected` データが <10.1.21 の範囲と 9.3 Secondary（cve@rapid7.com）を確認。ワンコールの NVD チェック後にのみ引用。ブラウザでの確認が前提。",
+    "zh": "Zimbra 官方安全公告 wiki——厂商的修复版本权威索引，是 CVE-2026-93647（伪造日历发件人的存储型 XSS，ZCS 低于 10.1.21）的引用对象。有反爬墙：普通与自动抓取均返回 HTTP 403，智能体无法直接读取——改用 NVD 记录代读，其 Rapid7 CNA 的 `affected` 数据确认了 <10.1.21 的范围与 9.3 Secondary 评分（cve@rapid7.com）。仅在完成一次 NVD 调用核验后才引用该 wiki；把它当作需浏览器验证的来源。"
   }
 }

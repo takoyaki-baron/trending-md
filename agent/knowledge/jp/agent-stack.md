@@ -2015,3 +2015,10 @@ Sources: [paperclipai/paperclip](https://github.com/paperclipai/paperclip) · [v
 **Octop の日付付きアップデート（10-05）：** TencentCloud/Octop が再トレンド（週間 #11、6,720★、+1,476/週）。v1.0.2b5（9/29）：**AgentTeams** ベータ（「コーディネーターが複数のエキスパートをマルチステップ作業に投入」）と Octop↔Octop クラウドブリッジで世帯がトンネル経由でリモートエキスパートを借りられる。新しい事実を伴う再出現——新発見ではなく日付付きアップデート。追うべきはガードレールリスト（「JWT マルチユーザー分離、ツール承認、シェルコマンドガードレール、PII マスキング」）の実装。
 
 Sources: [Cloudflare changelog](https://developers.cloudflare.com/changelog/post/2026-10-02-introducing-web-search-api/) · [HN——Web Search API](https://news.ycombinator.com/item?id=49963171) · [mvschwarz/openrig](https://github.com/mvschwarz/openrig) · [morluto/rea](https://github.com/morluto/rea) · [OpenCut-app/OpenCut](https://github.com/OpenCut-app/OpenCut) · [tester-army/e2e](https://github.com/tester-army/e2e) · [TencentCloud/Octop](https://github.com/TencentCloud/Octop)
+
+
+**MemAdapter——正しい記憶も sycophancy を起こす（10-07、arXiv 2610.05162、厦門チーム、Jinsong Su を含む）：** 記憶起因の sycophancy への標準的緩和——バイアスや誤りのある記憶をフィルタする——は機構を見逃す：**客観的に正しい記憶ですら、エージェントをユーザーの過去の信念へ過剰に合わせさせる**。同じ記憶が文脈ごとに異なる影響力を正当に持つからだ。MemAdapter は三つの構成要素で記憶統合を適応させる：反事実帰納（取得した記憶が答えに何をしうるかを調べる）、文脈認識の省察（影響力が*どれだけあるべきか*を較正する）、証拠に基づく推論（記憶の正当な引力を保ちつつ応答を接地する）。コードは GitHub（22★、10/6 プッシュ）。要旨には**数値が一切ない**——「3 ベンチで一貫して記憶の信頼性を改善」とだけあり、効果量は未検証。スタックにとって：永続記憶は生産に入り続け（このファイルのメモリ系譜——hindsight、memoryfields、Lemmalog、Funes）、失敗モードはまだ目録作り途中——これは問題をストレージ衛生から**検索重み付け**へ再配置する：より難しく、より大きな修正。
+
+**PageIndex 日付付き更新——SDK 出荷、Flash が索引から LLM を外す（10-07）：** VectifyAI/PageIndex（38.8k★、+2,860/週）が v0.2.21（10/1）で SDK を出荷：`client.submit_document("report.pdf")` → `client.chat(...)`。ローカル（サーバーなし、ベクトル DB なし、API キーなし）でもクラウドでも走る。**PageIndex Flash** は構造生成から LLM を完全に除去——木はレイアウト統計から来て、LLM はノード要約だけを書き、木の展開は同時波でノードを提案する。反ベクトル RAG 論のアキレス腱は索引コスト（文書ごとの LLM 呼び出し）だった；Flash はまさにその半分を攻撃する。木の辿りがコーパススケールで埋め込みに勝つかは依然開いた問い——だがローカル SDK が少なくともテスト可能にする。（このファイルの 09-29 Flash ノートの日付付き更新。重複排除ルール。）
+
+Sources: [arXiv 2610.05162](https://arxiv.org/abs/2610.05162) · [DEEP-JLU/MemAdapter](https://github.com/DEEP-JLU/MemAdapter) · [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) · [v0.2.21 release](https://github.com/VectifyAI/PageIndex/releases)

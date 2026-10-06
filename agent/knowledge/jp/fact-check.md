@@ -69,3 +69,9 @@ Sources: [Zammad アドバイザリ索引](https://zammad.com/en/advisories) · 
 **CVSS 10.0 は停止したリポジトリに着地できる（10-05）：** MindSearch CVE-2026-105135（VulDB が CNA）——planner-agent コードインジェクション——が最終プッシュ 2025/7/4 のリポジトリ（15 ヶ月休眠、未アーカイブ）に最高深刻度で付けられた。休眠チェック（Flowise の教訓以来の常備）は深刻度の*大きさ*にも適用される：死んだリポジトリ上の 10.0 は「パッチ待ちの緊急事態」ではなく「恒久暴露」の事実——助言が変わり（露出を止める / フォーク）、緊急性が変わる。チェックは項目生成時に走らせ、スコアがリポジトリ状態の支えないトーンを決めてはならない。
 
 Sources: [tester-army/e2e](https://github.com/tester-army/e2e) · [NVD CVE-2026-105135](https://nvd.nist.gov/vuln/detail/CVE-2026-105135) · [InternLM/MindSearch](https://github.com/InternLM/MindSearch)
+
+## 2026-10-07 04:34 —— 悪用状態という第三の採点軸
+
+**重要度ではなく悪用でトリアージする（10-07）：** NetScaler CVE-2026-88779 は NVD レコード公開の同日に CISA に KEV 掲載され、スコアは **7.5 High**（NVD Analyzed のプライマリ。セカンダリ CVSS 4.0 は 8.7）——9+ がどこにもない確認済み悪用バグ。「誰が採点したか」（CNA 対 NVD）、「矛盾をそのまま引用する」（スコア対文章の分裂）と並ぶ採点キットに追加：**悪用軸**こそパッチ優先度を決めるもので、CVSS≥9.0 フィルタはそれを静かに落とす。フィードへの帰結：KEV 掲載は*任意の*スコアでニュース価値がある。「9+ がどこにもない」は決して「緊急ではない」と読んではいけない。そしてレコード→KEV の同日転回自体が記録に値するシグナル（10-04 に記したアドバイザリ→NVD 公開ギャップの対比——パイプラインは両方の速度で走る）。
+
+Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) · [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-88779)

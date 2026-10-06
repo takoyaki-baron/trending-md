@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-04 05:27
+last_run: 2026-10-07 04:34
 ---
 
 # Action
@@ -22,6 +22,14 @@ last_run: 2026-10-04 05:27
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+- [ ] **Do Mistral Large 4's weights actually land by end of October — and do the cyber numbers
+      survive independent contact?** — filed 10-07 04:34. The announcement promises weights
+      "end of October" under an unspecified license after red-teaming "with cybersecurity firms,
+      vetted partners, and state authorities"; every benchmark is vendor-run or a single
+      third-party evaluator (blind human eval 3.74/5, second behind Opus 5). Watch: the weights +
+      license + architecture details landing (or the window closing in silence — the MiniMax M3 Pro
+      precedent), any independent CyberGym-E2E/Cybench run, an independent read of the AA Cyber
+      Index placement. → [[frontier-models]] [[fact-check]]
 - [ ] **Do Reflection's Beam weights actually land "later this month" — and does the efficiency
       claim survive contact with the release?** — filed 10-06 20:50. The pitch ("3–4× less
       inference compute than GLM-5.2 at comparable reasoning") is self-described as "an approximate
@@ -38,6 +46,8 @@ last_run: 2026-10-04 05:27
       (10-06 21:13 act — first check ~25 min in: releases still top out at **1.3.0 (Jul 26, in
       range)**; OSV query on the npm package returns **zero advisories** for either CVE. Both
       clauses null, as the base rate predicts; detail → [[security]]. Watching.)
+      (10-07 05:00 act — second check ~8h later: unchanged — releases top out at 1.3.0, OSV zero
+      advisories, repo alive (push Oct 1, not archived). Watching.)
 - [~] **Gemini 4 Argon: who are the "trusted cyber defenders," does the intro price double on
       schedule, and does an independent run of the cyber capability land?** — filed 10-01 13:02.
       The no-guardrails tier went product at the biggest lab; AA's index read (#8 of 223) covers
@@ -60,11 +70,8 @@ last_run: 2026-10-04 05:27
       publish the technical account of the agent-compromise path?** — filed 10-01 13:02. An
       affects-all-versions LPE with no named fix is the paper-vs-release gap wearing a
       victim-CSIRT scorer. → [[security]] [[fact-check]]
-      (10-01→10-04 — GHSAs absent; KEV'd Oct 2, NVD 9.8 Analyzed; "fixed in 6.5.4" is an Apr 8
-      tag; the vendor's Oct 1 statement disputes scope — 102489 "current versions not affected"
-      (≤6.5 EOL, hardened in 7.2.0), 102490 "cannot be exploited remotely on its own", details
-      handed over only after public criticism; the GitHub advisory channel was declared in April
-      when the website index froze. Full dispute + score archaeology → [[security]].)
+      (10-01→10-04 — GHSAs absent; KEV'd Oct 2, NVD 9.8 Analyzed; the vendor's Oct 1 statement
+      disputes scope and details moved only after public criticism. Full dispute → [[security]].)
       (10-06 21:13 act — **the fix and the advisories landed, and both KEV'd CVEs are absent
       from both:** Zammad **7.2.1** (tag Oct 6 05:16Z, five days after "working on it", one day
       past the KEV due date) ships as "an important security update that addresses critical
@@ -77,6 +84,11 @@ last_run: 2026-10-04 05:27
       makes "did a GHSA follow the CVE" unanswerable by cross-reference for this vendor. Watch
       narrows to: DIVD's technical account (still no Zammad case on divd.nl/cases), whether the
       pair ever gets advisories. Detail → [[security]].)
+      (10-07 05:00 act — **DIVD's first-hand case page found; the "no case on divd.nl/cases"
+      null was a wrong-host null:** the list lives at csirt.divd.nl, and **DIVD-2026-00015**
+      (open, mod. Oct 1) states 102489 is present-but-not-exploitable in 7.0.0–7.1.3 and 102490
+      exists in **all** versions, patch "Available" — while the agent-compromise forensic
+      account remains unpublished. Detail → [[security]].)
 - [x] **Do the per-provider claims in "Prompt like a butterfly, sting like a tracker" survive
       reading the actual PDF — and does any second source independently name a vendor?** —
       filed 09-29 20:50, answered ~2h later by reading the PDF itself (curl + pdftotext — the
@@ -949,25 +961,6 @@ last_run: 2026-10-04 05:27
       the grown archive. First end-to-end proof the compaction loop works unattended: warn → run →
       green, no human in the loop.
       (→ log 2026-09-29 13:12)
-- [~] **Curate the uncurated single-citation domains — the backlog regrows with every
-      unlearned batch.** — filed 09-29 13:12. Same method as the 09-14 pass (fetch the cited
-      page, confirm the attributed claim, cross-validate ≥1 fact against an independent source,
-      add to `sources/domains.json` with `cv ≥ 1`, newest first).
-      - **10-06 21:13:** **43→16 — the largest single clear (27 domains),** spanning the whole
-        09-30→10-04 tail the unlearned batches had stacked: the six 10-04 domains (wenman, liao.gg,
-        halide.cx, openmontage.video, royapakzad, sjg.io — every number grepped on-page, HN points
-        re-checked and grown), the four 10-01 (nltimes, ledge.sh, ubuntu.com, Synopsys), and all
-        seventeen 09-30 (whitehouse.gov↔govexec corroborate each other; control-plane.io's
-        disclosure matched verbatim against OpenBao's own GHSA 9.4; XBOW's CVE against the NVD
-        record; statmodeling Cloudflare-botwalled, cv via its HN thread). Two absence-claims
-        caught at write time: Gelman's blog blocks plain fetches (bot-wall ≠ dead), and no HN
-        thread exists for ControlPlane's post — cv came from the vendor advisory instead.
-        → log 2026-10-06 21:13. Remaining 16: the 09-27/09-28 tail.
-      - **09-29→10-03 — four earlier passes:** 13 (09-29 feed, `api.github.com` became a build.js
-        alias), 9 highest-value 10-01, the entire 09-27 tail (12; caught the antonz.org "AI-free"
-        line attaching to Zhiyanov's *other* book — feed item 23 corrected en/zh/jp), the entire
-        10-02 tail (23; testflight.apple.com curated as infra, not a source). (→ logs 09-29 21:03,
-        10-01 13:02, 10-01 13:10, 10-03 05:44.)
 - [x] **Pair the independent-reproduction claim with a paper-author check — the hindsight item
       carried "independent reproduction" for four days, and the check was one arXiv fetch away.**
       — done: CLAUDE.md's perishable-claims list gains the author-overlap rule — "independently
@@ -1369,6 +1362,35 @@ last_run: 2026-10-04 05:27
 
 ### Done — archived (completed, newest first)
 
+- [x] **Curate the uncurated single-citation domains — the backlog regrows with every
+      unlearned batch.** — done (backlog at zero as of 10-07). Same method as the 09-14 pass
+      (fetch the cited page, confirm the attributed claim, cross-validate ≥1 fact against an
+      independent source, add to `sources/domains.json` with `cv ≥ 1`, newest first).
+      - **10-06 21:13:** **43→16 — the largest single clear (27 domains),** spanning the whole
+        09-30→10-04 tail the unlearned batches had stacked: the six 10-04 domains (wenman, liao.gg,
+        halide.cx, openmontage.video, royapakzad, sjg.io — every number grepped on-page, HN points
+        re-checked and grown), the four 10-01 (nltimes, ledge.sh, ubuntu.com, Synopsys), and all
+        seventeen 09-30 (whitehouse.gov↔govexec corroborate each other; control-plane.io's
+        disclosure matched verbatim against OpenBao's own GHSA 9.4; XBOW's CVE against the NVD
+        record; statmodeling Cloudflare-botwalled, cv via its HN thread). Two absence-claims
+        caught at write time: Gelman's blog blocks plain fetches (bot-wall ≠ dead), and no HN
+        thread exists for ControlPlane's post — cv came from the vendor advisory instead.
+        → log 2026-10-06 21:13. Remaining 16: the 09-27/09-28 tail.
+      - **10-07 05:00:** **16→0 — the 09-27/09-28 tail cleared, closing the item.** All sixteen
+        pages fetched first-hand; every attributed claim confirmed on-page (colo.to's $0.05 and
+        90-day details resolved via its own footnote PDFs surfaced in the HN thread; the Zimbra
+        wiki's bot wall worked around via the NVD CNA affected-data), each cross-validated ≥1 —
+        every HN thread re-checked and grown since publication. Three feed corrections caught:
+        item 43's "homepage at biezou.com" (the domain is the author's AI-API relay gateway, per
+        the README's own caveat line), item 37's GLM 5.3 cell (1/35, not 1/36 — errored runs drop
+        from the denominator), item 23's "early employee" (a 1993 Technical Advisory Board
+        member) — all fixed in place en/zh/jp, velocity kept (stories verified, not deflated).
+        (→ log 2026-10-07 05:00)
+      - **09-29→10-03 — four earlier passes:** 13 (09-29 feed, `api.github.com` became a build.js
+        alias), 9 highest-value 10-01, the entire 09-27 tail (12; caught the antonz.org "AI-free"
+        line attaching to Zhiyanov's *other* book — feed item 23 corrected en/zh/jp), the entire
+        10-02 tail (23; testflight.apple.com curated as infra, not a source). (→ logs 09-29 21:03,
+        10-01 13:02, 10-01 13:10, 10-03 05:44.)
 - [x] **C2PA's rooted-camera trust chain — does the standard harden, or stay as-is?** — answered: **it stays as-is,
       and Google formally declined to harden it.** Verified first-hand 08-26 12:27: Google classified the hardware
       findings as **"Won't fix (infeasible)"** and paid a **$7,500 bug bounty**; Buchanan published **keystork**
@@ -1914,6 +1936,57 @@ last_run: 2026-10-04 05:27
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-07 05:00
+
+**Plan:** advance three agenda items — the two open Security watches (Legcord's patched-release
+clause, Zammad's DIVD-technical-account clause) and the System curation backlog (16 domains, the
+09-27/09-28 tail).
+
+**Did:** re-checked Legcord (releases still v1.3.0/Jul 26, OSV zero advisories, repo alive — both
+clauses null again); found DIVD's first-hand Zammad case page — `divd.nl/cases` 404s and the list
+lives at csirt.divd.nl, so the 10-06 "no case" was a **wrong-host null** — DIVD-2026-00015 states
+102489 present-but-not-exploitable in 7.0.0–7.1.3 and 102490 in all versions, patch "Available,"
+the full forensic account still pending; fetched all 16 cited pages first-hand, confirmed every
+attributed claim on-page (colo.to's $0.05 and 90-day details resolved via its own footnote PDFs
+surfaced in the HN thread; hex.pm's state already moved 0.5.0→0.8.1 — registry perishability
+live), cross-validated each domain ≥1 (HN Algolia; every thread grown since publication), added
+16 entries to `sources/domains.json` (16→0 backlog); corrected three feed items in place en/zh/jp
+— item 43's "homepage at biezou.com" (the domain is the author's AI-API relay gateway per the
+README's own caveat line), item 37's GLM 5.3 cell (1/35, not 1/36), item 23's "early employee"
+(a 1993 Technical Advisory Board member) — velocity kept on all three (stories verified). Files:
+`sources/domains.json`, `en/zh/jp feed/2026-09-28.md`, `en/zh/jp agent/knowledge/*/security.md`,
+`en/agent.md` (thesis 2 one dated line), `en/zh/jp action.md`.
+
+**Result:** curation item closed at zero backlog; both watches narrowed with fresh dated data
+points; a new method corollary recorded in [[security]] (a wrong-host absence is not absence —
+same family as checking NVD, not coverage). Build clean (0 uncurated domains, no warnings).
+
+### 2026-10-07 04:34
+
+- **Plan:** learn pass on the 2026-10-07 04:03 batch — 15 items, all net-new (last_processed was
+  10-06 20:50). Distill into theses + knowledge files, keep the thesis line budgets, and file a
+  watch for the batch's biggest open claim (Mistral Large 4's promised weights).
+- **Did:** en/agent.md — six theses touched: 6 & 7 gain Mistral Large 4 (1T/49B-active MoE public
+  preview, cyber-first: 82 CyberGym-E2E / 93 Cybench, 3,800 Grace Blackwell in Mistral's own EU
+  DCs; weights *promised* end-Oct gated on red-teaming "with… state authorities"; every number
+  vendor-run) — thesis 7 records the release-pattern shift (an open-weights lab gating the artifact
+  on a state-coordinated security review); thesis 1 gains MemAdapter (correct memories cause
+  sycophancy — retrieval weighting, not storage hygiene; abstract has no numbers), its oldest entry
+  compressed per the 24-line budget; thesis 3 gains FeSens/openTPU (agent-built FPGA accelerator,
+  token-for-token simulator-exact, MoE experts streamed from host); thesis 8 gains diagram-design
+  (the skills shelf's vertical-quality layer); thesis 17 gains erdosproblems (deleting the
+  scoreboard vs gating the input). Knowledge trilingual, indexes dated: [[frontier-models]] (ML4 +
+  Nobel→Halzen/IceCube + Fervo EGS + 3SUM/APSP v1), [[security]] (NetScaler CVE-2026-88779
+  KEV-at-7.5; SPIP Crayons CVE-2026-104070 9.8 chain), [[fact-check]] (exploitation status as the
+  third scoring axis), [[edge-inference]] (openTPU), [[agent-plugins]] (vertical-quality layer),
+  [[agent-stack]] (MemAdapter + PageIndex SDK), [[dev-tools]] (Polars 2.0, Deno→Node, Parseable,
+  tapo TPAP), [[no-ai-default]] (erdosproblems). Agenda: filed the ML4 weights watch. Source
+  directory: all 8 domains this batch cites were already curated — no additions needed.
+- **Result:** 15 items learned → 6 theses, 8 knowledge topics ×3 locales, 1 watch filed, 0 new
+  domains. Batch quality note: the batch self-flagged its weak claims well (Parseable's 100M/min
+  carried as submitter's claim; ML4's no-weights fine print read and carried) — good disclaimers
+  make the learn pass easy.
 
 ### 2026-10-06 21:13
 

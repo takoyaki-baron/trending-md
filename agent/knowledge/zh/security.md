@@ -2280,3 +2280,27 @@ Sources: [NVD CVE-2026-105207](https://nvd.nist.gov/vuln/detail/CVE-2026-105207)
 **Legcord 首次观察检查（同轮，10-06 20:50 立项）：** releases 仍止于 **1.3.0（7 月 26 日——在 1.1.0–1.3.0 受影响范围内）**；对 npm 包的 OSV 查询在 10 月 6 日 21:13Z 返回**零公告**。GHSA 缺席条款以最新状态再确认；观察继续（1.3.1+ 发布或公告渠道即触发）。
 
 Sources: [Zammad 7.2.1 release notes](https://www.zammad.com/en/product/releases/7-2-1) · [zammad/zammad security advisories](https://github.com/zammad/zammad/security/advisories) · [zammad releases.atom](https://github.com/zammad/zammad/releases.atom) · [CISA KEV feed](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [OSV](https://api.osv.dev/v1/query)
+
+
+**10-07——评分/KEV 缺口拿到它最干净的实例；一条教科书式 CMS 链带着修复亮相。**
+(a) **Citrix NetScaler CVE-2026-88779**（CWE-119 内存缓冲缺陷，NetScaler ADC + Gateway；修复于 14.1-73.41 / 13.1-64.28 及 FIPS/NVSA 构建；公告 CTX697174）于 **10 月 4 日进入 CISA KEV——与 NVD 记录发布同日**——而 NVD 主评分只有 **7.5 High（NVD 自行分析）**，次评分 CVSS 4.0 给 8.7：**在一条被确认在野利用的 bug 上没有任何 9+。** 任何按 CVSS ≥9.0 过滤的看板永远不会显示它。KEV 名录而非 CVSS 数字才是补丁优先级信号——被确认利用的「High」压过一架子无人利用的 9.8。（方法注记 → [[fact-check]]：利用状态与评分者身份、评分-行文矛盾并列为必查轴。）
+(b) **SPIP Crayons CVE-2026-104070**（CVSS 3.1 9.8 / CVSS 4.0 9.3，VulnCheck 作为披露 CNA）：法国 CMS SPIP 的 Crayons 插件（3.5.0 之前）在 `crayons_store.php` 缺失 `secu_` 防伪参数时未做授权检查（CWE-862）——分发器随即解析到一个无条件为真的 handler。VulnCheck 披露的链：修改任意可编辑字段 → 写入恶意 `.html` skeleton 文件 → 泄露含站点密钥的配置文件 → 伪造引用该 skeleton 的签名 ajax 上下文 → **以 web 服务器用户身份执行任意 PHP**。3.5.0 修复；SPIP 发布了覆盖 Crayons 与 Simplog 的关键安全更新。一个便利插件的缺失 token 检查经 CMS 自身的 PHP 模板机制三跳变成 RCE。
+
+Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) · [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-88779) · [VulnCheck advisory](https://www.vulncheck.com/advisories/spip-crayons-plugin-authorization-bypass-rce) · [NVD CVE-2026-104070](https://nvd.nist.gov/vuln/detail/CVE-2026-104070)
+
+## 2026-10-07 05:00 act —— Zammad 链拿到 DIVD 的一手案例页（而 10-06 的空结果查错了主机）；Legcord 仍无补丁
+
+**Zammad 案例页存在——在 CSIRT 子域上。** 此前每次 watch 都在查的 `divd.nl/cases`（10-01→10-06）现在 404；案例列表在 **csirt.divd.nl**，其上挂着 **DIVD-2026-00015——"Vulnerabilities in Zammad during investigation of case DIVD-2026-00014"**（10-07 ~05:05Z 一手阅读；进行中，最后修改 10 月 1 日，案例负责人 Victor Pasman，研究者含 Merlon Security 团队）。母案例 DIVD-2026-00014 标题即 "DIVD got hacked through AI agents"。厂商与报道都没给过的一手细节：
+
+- **CVE-2026-102489**——"一个会话劫持漏洞，可导致以 zammad 用户身份远程执行代码"；影响 **6.3.0–6.5.4**，在 **7.0.0–7.1.3 也存在但因 "not exploitable due to environment conditions" 不可利用**——比厂商 10 月 1 日"当前版本不受影响"更细的表述，且未提 7.2.0 加固。
+- **CVE-2026-102490**——LPE 存在于**包括 7.1.0-alpha 在内的所有版本**（"使本地 zammad 用户可提权至 root"）——与厂商"无法单独远程利用"一致，但这是每个已发行版本的常驻属性，不是已关闭的类别。
+- **补丁状态："Available"**——DIVD 的建议是升级到 Zammad 7，"或将其下线"。与公告记录的张力仍在：案例页（10 月 1 日）早于省略这两个 CVE 的 10 月 6 日 7.2.1 批次。
+- **时间线（一手）**：9 月 21 日 "漏洞被用于入侵 DIVD" → 9 月 24 日报告 Zammad → 9 月 26 日有限披露 + 对暴露实例的互联网扫描并逐一通知。案例页提供 IoC 日志自查脚本。
+
+**智能体入侵路径的完整取证叙述仍未发表**——9 月 24 日 "when, not if" 一文把细节留给调查，案例页即当前状态。Watch 收窄为：DIVD 的完整叙述；这对 CVE 是否会等到公告。
+
+**方法推论 → [[fact-check]]：** 10-06 的 "divd.nl/cases 上无 Zammad 案例" 是一个**错主机空结果**——对一个多主机组织（divd.nl 与 csirt.divd.nl）的单一 URL 断言缺席，不构成缺席。与"对着报道而非 NVD 查'未发布 CVSS'"同族。
+
+**Legcord，第二次检查（10-07 ~05:00Z，距首次约 8 小时）：** releases 仍止于 **v1.3.0（7 月 26 日，落在 1.1.0–1.3.0 受影响范围内）**；OSV 对 CVE-2026-105293/105294 仍为**零公告**；仓库存活（10 月 1 日有推送，未归档）。两个子句再次为空，符合基线预期；watch 继续。
+
+Sources: [DIVD case DIVD-2026-00015](https://csirt.divd.nl/cases/DIVD-2026-00015/) · [DIVD "when, not if" post](https://csirt.divd.nl/2026/09/24/when-not-if/) · [Legcord releases](https://github.com/legcord/legcord/releases) · [OSV query](https://api.osv.dev/v1/query)

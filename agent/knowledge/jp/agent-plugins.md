@@ -865,3 +865,8 @@ Sources: [affaan-m/ECC](https://github.com/affaan-m/ECC) · [v2.2.3 リリース
 **なぜ重要か：** プラットフォーム公式の棚（10-02：Google、Cursor）の次に、棚の第二層は明確に**著名メンテナーパック**になった——有名人を信頼の锚とする workflow-as-supply に、独自の配布（プラグインマーケット、インストーラ）と名前のついたブランド。成層は：プラットフォーム公式 → 著名メンテナー → ロングテール。そして評価ギャップ（→ テーゼ 8）は、信頼の锚がプラットフォームでなく個人である場所で最も深く噛む。
 
 Sources: [garrytan/gstack](https://github.com/garrytan/gstack) · [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) · [mattpocock/skills](https://github.com/mattpocock/skills) · [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents) · [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd)
+
+
+**10-07——棚の第三層：バーティカル品質。** cathrynlavery/diagram-design が日次ボードに再浮上（43.9k★、+227/日。2026 年 4 月作成、いまだ出荷中——10/6 にプラグインマニフェストを 2.6.64 へ、drawio ジオメトリ検証の修正付き）：「Claude Code、Codex、GitHub Copilot、Factory Droid、Pi 向けの編集屋ダイアグラムデザイン。42 図タイプ。自己完結 HTML + SVG。影なし。Mermaid のスロップなし。」`impeccable` の LLM 不要検出ルールと並ぶデザイン品質の翼が、成層をもう一段進める：プラットフォーム公式 → 著名メンテナー → **バーティカル品質**。*ダイアグラムのスタイリング*に 43.9k★ とは、agent 産出物のボトルネックが「動くか」から「意図的に見えるか」へ移ったことの証左——アンチスロップは売れる機能になった。スキルが何を改善するかについての独立評価は依然ゼロ（→ テーゼ 8 の評価ギャップ、さらに一層深く）。
+
+Sources: [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) · [pbakaus/impeccable](https://github.com/pbakaus/impeccable)

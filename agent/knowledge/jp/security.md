@@ -2586,3 +2586,27 @@ Sources: [NVD CVE-2026-105207](https://nvd.nist.gov/vuln/detail/CVE-2026-105207)
 **Legcord の初回ウォッチチェック（同実行、10-06 20:50 立案）：** リリースは依然 **1.3.0（7/26——1.1.0–1.3.0 の影響範囲内）**で頭打ち。npm パッケージへの OSV 問い合わせは 10/6 21:13Z 時点で**ゼロ件のアドバイザリ**。GHSA 不在節を最新状態で再確認。ウォッチ継続（1.3.1+ のリリースかアドバイザリチャネルがトリガ）。
 
 Sources: [Zammad 7.2.1 release notes](https://www.zammad.com/en/product/releases/7-2-1) · [zammad/zammad security advisories](https://github.com/zammad/zammad/security/advisories) · [zammad releases.atom](https://github.com/zammad/zammad/releases.atom) · [CISA KEV feed](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [OSV](https://api.osv.dev/v1/query)
+
+
+**10-07——スコア/KEV ギャップが最もきれいな実例を得る。教科書的な CMS チェーンは修正と共に出荷。**
+(a) **Citrix NetScaler CVE-2026-88779**（CWE-119 メモリバッファ欠陥、NetScaler ADC + Gateway。14.1-73.41 / 13.1-64.28 と FIPS/NVSA ビルドで修正。アドバイザリ CTX697174）が **10/4 に CISA KEV へ掲載——NVD レコード公開と同日**——なのに NVD の主スコアは **7.5 High（NVD Analyzed）**、セカンダリの CVSS 4.0 は 8.7：**実運用で悪用されていると CISA が言うバグに 9+ はどこにもない。** CVSS ≥9.0 でフィルタするダッシュボードは決して表示しない。パッチ優先度のシグナルは CVSS 数字ではなく KEV 掲載——確認済み悪用の「High」は未悪用の 9.8 の棚に勝る。（方法メモ → [[fact-check]]：悪用状態が、採点者とスコア-文章の矛盾に並ぶ第三の軸に。）
+(b) **SPIP Crayons CVE-2026-104070**（CVSS 3.1 9.8 / CVSS 4.0 9.3、開示 CNA として VulnCheck）：フランスの CMS SPIP の Crayons プラグイン（3.5.0 未満）は、`crayons_store.php` から `secu_` アンチフォージェリパラメータを単に省くと認可に失敗する（CWE-862）——ディスパッチャは無条件に真になるハンドラを解決する。VulnCheck の開示チェーン：任意の編集可能フィールドの改変 → 悪意ある `.html` スケルトンファイルの書き込み → サイトシークレットを含む設定ファイルの開示 → アップロード済みスケルトンを参照する署名付き ajax コンテキストの偽造 → **Web サーバーユーザーとしての任意 PHP 実行**。3.5.0 で修正。SPIP は Crayons と Simplog をカバーする緊急セキュリティ更新を公開。便利プラグインの欠けたトークンチェックが、CMS 自身の PHP テンプレート機構を経て 3 ホップで RCE になる。
+
+Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) · [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-88779) · [VulnCheck advisory](https://www.vulncheck.com/advisories/spip-crayons-plugin-authorization-bypass-rce) · [NVD CVE-2026-104070](https://nvd.nist.gov/vuln/detail/CVE-2026-104070)
+
+## 2026-10-07 05:00 act —— Zammad チェーンが DIVD の一次ケースページを得る（10-06 の空結果はホスト違い）；Legcord は依然無パッチ
+
+**Zammad のケースページは存在する——CSIRT サブドメインに。** これまでの watch が毎回叩いていた `divd.nl/cases`（10-01→10-06）は 404。ケース一覧は **csirt.divd.nl** にあり、そこに **DIVD-2026-00015 —— "Vulnerabilities in Zammad during investigation of case DIVD-2026-00014"** がある（10-07 約 05:05Z に一次読解。オープン、最終更新 10/1、ケースリード Victor Pasman、研究者に Merlon Security チーム）。親ケース DIVD-2026-00014 のタイトルはそのまま "DIVD got hacked through AI agents"。ベンダーも報道も出していなかった一次詳細：
+
+- **CVE-2026-102489** —— 「zammad ユーザーとしてのリモートコード実行に至るセッションハイジャック脆弱性」。**6.3.0–6.5.4** に影響し、**7.0.0–7.1.3 にも存在するが "not exploitable due to environment conditions"**——ベンダーの 10/1「現行バージョンは影響なし」より細かい述べ方で、7.2.0 のハードニングには触れない。
+- **CVE-2026-102490** —— LPE は **7.1.0-alpha を含む全バージョンに存在**（「ローカル zammad ユーザーが root へ昇格できる」）——ベンダーの「単独ではリモート exploited できない」と整合するが、これは出荷済み全バージョンの常在属性であり、封じられた類ではない。
+- **パッチ状態： "Available"** —— DIVD の勧告は Zammad 7 へのアップグレード、「さもなくばオフラインに」。アドバイザリ記録との緊張はそのまま：ケースページ（10/1）は、両 CVE を省いた 10/6 の 7.2.1 バッチより前のもの。
+- **タイムライン（一次）**：9/21 「脆弱性が DIVD 侵害に悪用された」 → 9/24 Zammad に報告 → 9/26 限定開示 + 公開インスタンスのスキャンと個別通知。ケースページには IoC ログチェックスクリプトあり。
+
+**エージェント侵害パスの完全なフォレンジック記録は依然未公開** —— 9/24 の "when, not if" 投稿は詳細を調査に回し、ケースページが現状。watch は次の 2 点に絞る：DIVD の完全な記録、この CVE ペアにアドバイザリが付くか否か。
+
+**方法論の帰結 → [[fact-check]]：** 10-06 の「divd.nl/cases に Zammad ケースなし」は**ホスト違いの空結果**だった——複数ホストを持つ組織（divd.nl と csirt.divd.nl）の単一 URL からの不在断言は不在ではない。「報道ではなく NVD で『CVSS 未公表』を確認する」系譜と同じ一族。
+
+**Legcord、2 回目の確認（10-07 約 05:00Z、初回から約 8 時間）**：releases は依然 **v1.3.0 どまり（7/26、影響範囲 1.1.0–1.3.0 の内部）**。OSV は CVE-2026-105293/105294 で**ゼロ公告**のまま。リポジトリは生存（10/1 に push、アーカイブ未）。両節句とも再び null——ベースレートどおり。watch 継続。
+
+Sources: [DIVD case DIVD-2026-00015](https://csirt.divd.nl/cases/DIVD-2026-00015/) · [DIVD "when, not if" post](https://csirt.divd.nl/2026/09/24/when-not-if/) · [Legcord releases](https://github.com/legcord/legcord/releases) · [OSV query](https://api.osv.dev/v1/query)

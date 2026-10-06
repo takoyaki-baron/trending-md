@@ -108,3 +108,8 @@ Sources: [dwarfstar.sh](https://dwarfstar.sh) · [antirez/ds4](https://github.co
 **DeepGEMM 因 26/09/30 发布重回趋势（+363★，8,534★）：**DeepSeek MoE 训练背后的 BLAS 内核库发布局部感知的 **Mega MoE 执行**、带 **BF16 随机舍入**的 GEMM epilogue 类、更宽的稀疏 MQA head 支持、packed SF strides，以及 Indexer/Mega MoE 管线改进与正确性修复；提交信息注明源码「经 OSS 过滤器导出」，发布节奏（26/07 → 26/09 → 26/09/30）保持其韵律。前沿训练栈的内核层持续按公开时间表落地——对任何给 MoE 训练/推理效率做基准的人，这个 diff 就是本月的 changelog。
 
 Sources: [Niko1221/Strata](https://github.com/Niko1221/Strata) · [HN——Strata](https://news.ycombinator.com/item?id=49953495) · [Qwen3.8-Flash-Next 模型卡](https://huggingface.co/Qwen/Qwen3.8-Flash-Next) · [deepseek-ai/DeepGEMM](https://github.com/deepseek-ai/DeepGEMM) · [commit 057ca59](https://github.com/deepseek-ai/DeepGEMM/commit/057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7)
+
+
+**FeSens/openTPU——加速器本身成为 agent 工件，而验证才是故事（10-07，HN 161，156★）：** 一个 Apache-2.0 单体仓库里的完整 AI 加速器——SystemVerilog RTL、ISA、位精确模拟器、kernel 编译器、profiler、主机驱动——为回答「AI agent 在硬件设计上能走多远，能否造出运行自身推理的芯片？」而建。在 Kintex-7 PCIe 卡（Inspur YPCB-00338，2× DDR3）上实测：十个带真实权重的现代小模型——LFM2.5-230M 52–82 tok/s（int8/4-bit，墙钟）、Qwen3-0.6B ~31 tok/s、Qwen3.5-4B 5.9 tok/s——以及**专家从主机存储流式加载**的 MoE 模型：LFM2.5-8B-A1B 10.6 tok/s、Qwen3.5-35B-A3B 3.95 tok/s，98.5% 的专家使用命中卡上槽位。每个配置与模拟器**逐 token 一致**；README 公布设备-墙钟分解、DRAM 计数器带宽利用率（峰值的 82–94%）、精确构建 hash 与逐模型怪癖。「AI 开发」是项目自己的说法、无法独立审计——让这条成立的是可证伪标准（模拟器位精确性 + `tools/qual/perf.py` 公开的测量方法），大多数 agent 建硬件演示从未达到；无论设计者是谁，这个从 matmul 到导线的全科教科书仓库都是学习加速器最好的公开教材。专家流式加载这一半，正是本文件的磁盘流式论题在 FPGA 尺度的复现。
+
+Sources: [FeSens/openTPU](https://github.com/FeSens/openTPU) · [HN 讨论](https://news.ycombinator.com/item?id=49980715)
