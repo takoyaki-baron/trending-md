@@ -100,3 +100,11 @@ Sources: [Low-Zi-Hong/ESP32s3-LLM-Cluster](https://github.com/Low-Zi-Hong/ESP32s
 **antirez/ds4**（Salvatore Sanfilippo——Redis 作者——MIT、C、22,878★）：「面向高内存 Mac、CUDA 与 ROCm 机器的窄域 C 推理引擎」，可在自有硬件上完整运行 **DeepSeek V4 / V4.1 Flash、GLM 5.x 与 Qwen3.8 Flash Next**（含视觉）。刻意「不是通用 GGUF 运行器」：**非对称量化**把路由专家压到 ~2-bit、共享/关键路径保留更高精度（284B 级模型进 64 GB+ 机器），**「KV 缓存作为磁盘公民」**把长前缀持久化到 SSD、按 prompt hash 可恢复。CLI、OpenAI/Anthropic 风格服务器、`ds4-agent` 三个接口共享同一模型状态与缓存。自报数字：M5 Max 128 GB Q2 下 2K 上下文 prefill 790.2 t/s / 生成 39.4 t/s；DGX Spark 825.8/18.1。**休眠备注，已核实：** 仓库 5 月创建、最后推送 9 月 20 日；项目站 9 月 17 日上线——今天的 HN 帖（25+ 分）浮出的是一个五个月大的可用工具，不是发布。意义所在：MoE 时代前沿模型的运行器层正由窄域、按模型家族手写的 C 拿下——出自上代基础设施软件的作者。观察「刻意窄域」能否像 Redis 对通用 KV 存储那样胜过「什么都能跑」。
 
 Sources: [dwarfstar.sh](https://dwarfstar.sh) · [antirez/ds4](https://github.com/antirez/ds4) · [HN 讨论](https://news.ycombinator.com/item?id=49936575)
+
+## 2026-10-06 20:45 —— Strata：专家卸载把 125B-A6B MoE 装进 12 GB 游戏显卡；DeepGEMM 的 26/09/30 发布
+
+**Strata（Niko1221/Strata，MIT，9 月 24 日创建，十天 10.5k★，HN 442）：**围绕一个技巧构建的推理引擎——在单张消费级 GPU 上跑 **Qwen3.8-Flash-Next**（125B 总参 / 6B 激活，Alibaba 自己的模型卡称之为「Qwen4 将采用的架构的实验预览」；180B 参数 safetensors、每 token 512 专家中 10 路由 + 1 共享）。机制：**专家卸载**（最热专家驻留 GPU、全集在 RAM、CPU 服务尾部、SSD 存查找表）加投机解码（1.6–1.8×）加分块 prompt 摄入（1,000+ tok/s prefill）。README 自己的基准表（32K prompt，引擎 v0.1.36）：**RTX 5070 12 GB 上 Q2_0 生成 94 tok/s**、RX 9070 XT 60 tok/s、RTX 3090「应约 100–140 tok/s」（推算）。要求：12 GB 显存 / 32 GB 内存 / 约 80 GB 磁盘。**标题与表的落差：**HN 标题写「RTX 4090 跑 100T/s」，但 4090 不是实测行——而 Q2_0 是激进量化，质量代价只字未提。为什么重要：超稀疏 MoE 架构持续移动「在家能跑」的线，而把 125B-A6B 塞进游戏 PC 的这套工程，就是 Qwen4 级模型未来在本地的消费方式预览。
+
+**DeepGEMM 因 26/09/30 发布重回趋势（+363★，8,534★）：**DeepSeek MoE 训练背后的 BLAS 内核库发布局部感知的 **Mega MoE 执行**、带 **BF16 随机舍入**的 GEMM epilogue 类、更宽的稀疏 MQA head 支持、packed SF strides，以及 Indexer/Mega MoE 管线改进与正确性修复；提交信息注明源码「经 OSS 过滤器导出」，发布节奏（26/07 → 26/09 → 26/09/30）保持其韵律。前沿训练栈的内核层持续按公开时间表落地——对任何给 MoE 训练/推理效率做基准的人，这个 diff 就是本月的 changelog。
+
+Sources: [Niko1221/Strata](https://github.com/Niko1221/Strata) · [HN——Strata](https://news.ycombinator.com/item?id=49953495) · [Qwen3.8-Flash-Next 模型卡](https://huggingface.co/Qwen/Qwen3.8-Flash-Next) · [deepseek-ai/DeepGEMM](https://github.com/deepseek-ai/DeepGEMM) · [commit 057ca59](https://github.com/deepseek-ai/DeepGEMM/commit/057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7)

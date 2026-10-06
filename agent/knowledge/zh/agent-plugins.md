@@ -740,3 +740,13 @@ Sources: [tt-a1i/archify](https://github.com/tt-a1i/archify) · [Hermes 技能�
 **ECC 2.2**（affaan-m/ECC，MIT——272,129★，日趋势第四，+954/天，v2.2.3 于 10 月 1 日）：自称「agent harness 性能优化系统」——一次安装把 plan→test→implement→review→verify→remember→improve 变成 agent 基础设施：**68 个专职 agent、293 个技能、94 条命令**、运行时 hooks/记忆，以及扫描提示、hooks、MCP 配置、权限与密钥的「AgentShield」。v2.2 为 Claude Code、Codex 与 Kimi Code 新增引导式设置；README 承认对 Cursor、OpenCode、Gemini、Zed、Copilot、Antigravity 与 Qwen 仅有**能力受限的适配器**。变现：私有仓库的 $19/座/月 Pro 档。构成这条目的三个事实：醒目的**「仅从官方来源获取——第三方转载可能含恶意软件」**供应链警告；**单一维护者**的每周出货；以及**对「这 293 个技能是否真有提升」零独立评测——星标数是唯一信号。** 论题 8 的「证明它」阶段拿到最大测试用例：在这个星标量级，ECC 是平台官方之外最大的 agent 技能分发渠道，而它的巴士因子、它自带的供应链警告、它未验证的性能主张就是全部故事。这个货架已经大到一个人担保不过来。
 
 Sources: [affaan-m/ECC](https://github.com/affaan-m/ECC) · [v2.2.3 发布说明](https://github.com/affaan-m/ECC/releases/tag/v2.2.3)
+
+## 2026-10-06 20:45 —— 货架分层：名人维护者品牌是第二层
+
+**10-05——两个以人名打品牌的技能包在没有任何新发布的情况下重回日榜；上榜本身就是事件。** **gstack**（garrytan/gstack，MIT，3 月 11 日创建，420 commits，当日清晨有推送，135,114★ +121/24h）是 YC 总裁自己的 Claude Code 配置：「23 个固执己见的工具，扮演 CEO、设计师、工程经理、发布经理、文档工程师和 QA」，排成一个冲刺——Think → Plan → Build → Review → Test → Ship → Reflect——带安全命令（`/careful`、`/freeze`、`/guard`），README 自夸「约为我 2013 年节奏的 810 倍（日 11,417 行对 14 行逻辑行）」——**用逻辑行/天衡量的生产力数字，正是 agent 可以免费刷高的那种指标**；这是要盯的主张。**agent-skills**（addyosmani/agent-skills，MIT，638 commits，101,164★ +336/24h）是更有纪律的工件：6 类 25 个生命周期技能、9 条 slash 命令、反合理化表格、以 Google 文化命名的实践（Hyrum's Law、Beyonce Rule、Chesterton's Fence）。仓库状态已核：两家都活着、当日有推送。
+
+**10-06——GitHub 上最大的技能仓库现在是个人的 `.agents` 目录。**mattpocock/skills 达到 **277,488★**（日榜第二，+1,028）：「给真工程师的技能。直接来自我的 `.agents` 目录」，明说「不是 vibe coding」，明确反对夺走你控制权的流程型框架（GSD、BMAD、Spec-Kit）；技能小而可组合、模型无关，可作官方 Claude Code 插件安装（`/plugin install mattpocock-skills`）或经 skills.sh 装可编辑副本，背后是约 6 万开发者的 newsletter。它周围的日榜约三分之一是技能仓库：msitarzewski/agency-agents（157,540★，+621——「一家完整的 AI 代理机构」的人格专家团）、ayghri/i-have-adhd（54,113★，+318——一个阻止你的 agent 把答案埋掉的技能）、cathrynlavery/diagram-design（43,628★，+227——42 种图类型、「不要 Mermaid 垃圾」）。
+
+**为什么重要：**继平台官方货架（10 月 2 日：Google、Cursor）之后，货架的第二层现在明确是**名人维护者包**——以名人为信任锚的工作流即商品，有自己的分发（插件市场、安装器）和叫得出名字的品牌。分层是：平台官方 → 名人维护者 → 长尾，而评估缺口（→ 论题 8）恰在信任锚是一个人而非一个平台的地方咬得最疼。
+
+Sources: [garrytan/gstack](https://github.com/garrytan/gstack) · [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) · [mattpocock/skills](https://github.com/mattpocock/skills) · [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents) · [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd)

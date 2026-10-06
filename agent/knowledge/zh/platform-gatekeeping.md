@@ -175,3 +175,9 @@ Sources: [Apple Developer News](https://developer.apple.com/news/?id=p6zjojqw) �
 **ICE/Palantir ICM 人脸识别文件**（*Hilton v. Noem*，缅因联邦地区法院，2:26-cv-00092；部分解封文件 10 月 2 日公开）：一名 DHS 探员为至少六人（政府称八人）创建调查案件管理（ICM）记录——这些人**在缅因州波特兰观察 ICE 行动**——把其中两人标注为「Threat to Law Enforcement, Professional Protestor」，并将照片经 Mobile Query 应用送交一名 CBP 探员做人脸识别核查，按 2016 年 DHS 隐私评估以「lookout 记录」共享。ICM 为 Palantir 构建（2014 年，基于 Gotham；至 2022 年五年支持合同至多约 $9,600 万，2025 年另加 $3,000 万 ImmigrationOS）。DHS 发言人：「这起诉讼建立在对存在一个数据库的谎言之上。」**状态纪律：** 这些是进行中诉讼里的指控，大量基于政府自己的文件与证词；尚无任何司法裁决，政府的驳回动写明该探员「未试图将任何人提名为恐怖观察名单对象」。这条故事真正的主角是那个被争夺的词：带 lookout 共享的分布式案件管理，行为上像个数据库而不被称为数据库——把关账本（对 A/I 的 SDGT、犹他禁令）如今新增了以文件级别记录在案的监控基础设施。
 
 Sources: [Wired](https://www.wired.com/story/ice-has-been-dumping-protester-photos-into-a-palantir-database/) · [CourtListener 案卷](https://www.courtlistener.com/docket/72313728/hilton-v-noem/) · [HN 讨论](https://news.ycombinator.com/item?id=49938477)
+
+## 2026-10-06 20:45 —— Flock 在 48 小时内迎来司法 + 立法钳形攻势
+
+**《Ban Flock Act》（Sanders / Ocasio-Cortez / Merkley，10 月 2 日发布）：**针对自动车牌识别器的三步棋——（1）禁止联邦机构使用 ALPR 或访问 ALPR 数据，（2）切断对使用 ALPR 或与 ALPR 厂商签约的州与地方的联邦拨款，（3）设立**私人诉权**，让美国人可就 ALPR 相关权利侵害起诉联邦政府。新闻稿给目标定了量：美国最大 ALPR 厂商 Flock 运营 **12 万+ 摄像头、每月扫描约 200 亿车次**，今年已有至少 56 个市镇停用、取消或拒绝了 Flock 合同。它几乎压着 Judge Sara Hill 的裁定（10 月 3 日报道）落地：塔尔萨副警长无令状检索 Flock 数据库违反第四修正案——缴获的约 91 磅冰毒作为「毒树之果」被排除，法官称 Flock 是「无差别的大规模监控」。**为什么重要：**司法与立法两条轨道在 48 小时内合流，把「一纸坏判决」变成政策轨迹——而私人诉权条款才是会改变厂商经济学、而不只是政府行为的那一条。与 10-04 的 ICE/Palantir ICM 条目互补：监控层现在同时有一份解封的扩张案和一部专门的回滚法案。
+
+Sources: [Sanders 新闻稿](https://www.sanders.senate.gov/press-releases/news-sanders-ocasio-cortez-merkley-unveil-ban-flock-act-to-protect-americans-right-to-privacy/) · [TechCrunch 报道裁定](https://techcrunch.com/2026/10/03/federal-judge-calls-flock-indiscriminate-mass-surveillance/) · [HN](https://news.ycombinator.com/news)

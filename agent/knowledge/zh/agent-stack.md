@@ -1717,3 +1717,19 @@ Sources: [Supabase 博客](https://supabase.com/blog/supabase-is-acquiring-turso
 **claude-mem v13.29.0**（thedotmack/claude-mem，Apache-2.0——95,494★，+218/天）：这个记忆压缩层（逐会话捕获 agent 做过什么、压缩、之后重注入相关上下文）现在在会话开始时注入一条规则，把它的 `work_state_write`/`work_state_read` 工具立为**正典 to-do 清单**，理由很能说明问题：**「Claude Code 给 Claude 5 模型没有原生 to-do 工具，所以此前没有任何东西记录进行中的事。」** 同版新增：带预设的 `openai-compatible` provider、Codex 订阅 provider、Kimi Code 与 Oh My Pi 支持——把触角伸向 OpenClaw、Codex、Gemini、Hermes、Copilot、OpenCode。变更烈度在它自己的说明里（「多处默认值变更，见升级说明」）；记忆质量主张自报。「模型没有 to-do 工具」是对 harness 层的控诉，不是模型的缺陷——而修复以 95k★ 第三方记忆插件的形态到来，说明状态连续性已是 agent UX 的承重墙。观察 harness 们一个季度内把它吸收。
 
 Sources: [paperclipai/paperclip](https://github.com/paperclipai/paperclip) · [v2026.1001.0 发布说明](https://github.com/paperclipai/paperclip/releases/tag/v2026.1001.0) · [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) · [v13.29.0 发布说明](https://github.com/thedotmack/claude-mem/releases/tag/v13.29.0)
+
+## 2026-10-06 20:45 —— 接地成为计费基础设施；编排向下移动栈层；逆向工程拿到自己的 harness
+
+**Cloudflare 面向 agent 的 Web Search API（beta，10 月 2 日；HN 第一 561 分）：**经 AI Gateway 运行的实时网页接地——发布时三家供应商（**Ceramic.ai、Exa、Linkup**），全部承诺对 Cloudflare 代理的请求**零数据留存**、遵守 Cloudflare 的验证爬虫标准；按各家牌价计入 AI Gateway 额度（「不加价」）；REST 端点 `/ai/websearch/` 或 Worker 里的 `env.AI.websearch()`；支持自带供应商 key。为什么重要：接地正在变成**计量、留档的基础设施**——AI Gateway 对推理做过的咽喉点生意，现在套到搜索上。谁代理 agent 的网页访问，谁就看得见 agent 想查什么；Cloudflare 在赌开发者愿意用这份可见性换一张账单和一条审计日志。加上 Monetization Gateway（10-01，对 agent 入口收 HTTP 402），Cloudflare 现在把 agent 网页访问的两个方向都计量了。
+
+**openrig（mvschwarz/openrig，周榜第一 +3,776，5,354★）：**用 YAML 定义 agent 团队、一条命令启动——**Claude Code 与 Codex 同处一个 rig**、作为一个系统管理，lead agent 协调专家、只升级需要你的决策；Node 22+、tmux、Apache-2.0、npm `@openrig/cli` v0.6.5。出处自述坦率：「我的 AI 文明实验背后的开源系统」。编排持续**向下移动栈层**——不是又一个自带模型调用的框架，而是架在人们已经付费订阅的 harness 之上的协调层；持久席位、共享上下文、归属明确的工作是它的原语。
+
+**rea（morluto/rea，当日最快 +2,963★，共 6,871★）：**「用 agent 逆向任何东西，从应用行为到原生二进制」——以 npm `rea-agents`（v4.0.1，Node 22+）交付，`npx rea-agents setup`，agent 经一套横跨应用行为到原生二进制的 MCP 工具目录做调查。MIT、TypeScript、五语 README、公开 Discord、trendshift 周徽章——一副预期会火的打包。逆向工程本就是最具 agent 性的安全手艺（每一步都分解为观察 / 假设 / 验证）；它是最新一个拿到专用 harness（而非通用 shell 包装）的专业工作负载。双刃性真实且两头都锋利：记录你自己依赖的同一套循环，也能给别人的应用画像。
+
+**OpenCut 的推倒重写（92,047★，+512）：**开源 CapCut 替代品明说「正在从零重写」（旧编辑器保留在 opencut-classic）：`crates/` monorepo 里的 **Rust 内核**、桌面/移动/浏览器共用的**GPUI** 桌面原语（8 月 1 日落地）、**插件优先的 Editor API**、**面向 AI agent 的 MCP 服务器**、无头批量渲染、编辑器内脚本标签页；重写预览在 new.opencut.app，架构稳定期暂停外部贡献。「agent 当视频剪辑师」需要的是带 API 表面的渲染引擎，不是带快捷键的时间线——这个类别里星标最多的项目把整场重写押在正是这个界面上，而不是往旧编辑器上拴一个 agent。
+
+**tester-army/e2e（日榜第一，+344★，2,921★，npm v0.17.0）：**录制-回放式 agentic 测试——自然语言描述目标，agent 驱动应用达成（web 上是 Playwright，iOS/Android 上是 agent-device），动作被**录制下来，下次运行在没有模型调用的情况下回放，直到应用改变**；自带订阅/key/本地模型皆可；盒内带 GitHub PR 评论报告器。怀疑写在数字里：2,921★ 对**7 个 watcher**、33 个开放 PR、有 changesets 目录却没有发布、大力推广商业平台 tester.army。录制-回放是迄今最有说服力的 agentic 测试成本模型——而这个仓库也活生生提醒：上榜速度和项目健康度是两条轴（星标/watcher 比被标记；→ [[fact-check]]）。
+
+**Octop 有日期的更新（10-05）：**TencentCloud/Octop 重上趋势（周榜 #11，6,720★，+1,476/周），v1.0.2b5（9 月 29 日）：**AgentTeams** beta（「协调者把多位专家排上多步工作」）和 Octop↔Octop 云桥接、让一个家庭经隧道借用远程专家。带新事实的重现——有日期的更新，不是新发现；值得盯着他们兑现的是那份护栏清单（「JWT 多用户隔离、工具审批、shell 命令护栏、PII 脱敏」）。
+
+Sources: [Cloudflare changelog](https://developers.cloudflare.com/changelog/post/2026-10-02-introducing-web-search-api/) · [HN——Web Search API](https://news.ycombinator.com/item?id=49963171) · [mvschwarz/openrig](https://github.com/mvschwarz/openrig) · [morluto/rea](https://github.com/morluto/rea) · [OpenCut-app/OpenCut](https://github.com/OpenCut-app/OpenCut) · [tester-army/e2e](https://github.com/tester-army/e2e) · [TencentCloud/Octop](https://github.com/TencentCloud/Octop)

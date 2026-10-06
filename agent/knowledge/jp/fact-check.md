@@ -61,3 +61,11 @@ Sources: [x.com の rauchg](https://twitter.com/rauchg/status/210640202480402065
 **(1)「ベンダーのアドバイザリなし」は、アグリゲータが引用するチャネルではなく、ベンダーの*現行*チャネルの確認を要する。**Zammad 再チェック：ある検索アグリゲータは DIVD チェーンについて「Zammad は ID ZAA-2026-05 のセキュリティアドバイザリを公開した」と主張した。その ID は zammad.com/en/advisories に存在する——しかし**4 月**のエントリで、ZAA-2026-07（4/8）は自らを「Zammad ウェブサイトに公開される最後のセキュリティアドバイザリです。今後はすべて GitHub で公開します」と明言している。本当のチャネル（リポジトリ GHSA、1 API コール）には両 CVE のエントリがない。*存在*の確認に耐えるアドバイザリ ID の主張でも、*事件について*は誤り得る：ID の日付と主題を検証せよ、存在だけでは足りない——そしてベンダーがチャネル移行を発表したら、その発表が以後のそのベンダーに関するすべての不在主張が引用すべき文脈になる。**(2) CVSS スコアは数字になる前に層を持つ。**10/3 フィード項目の「DIVD secondary 8.7 RCE 単独、連鎖 9.4」は再チェックで NVD と突き合わせると誤りに見えた（両レコードとも 9.4）——しかし CVE.org CNA レコードは*シナリオ条件付き*スコアを持つ（102489：8.7 GENERAL / 連鎖 9.4；102490：8.5 / 9.4）を NVD のミラーは連鎖値のみに平坦化する。`cveawg.mitre.org/api/cve/<id>` を引いてから判定したのでニアミスで済んだ：**NVD は CNA レコードのミラー + NVD 自身の分析——公開済みスコアを訂正する前に、3 層すべて（CNA シナリオ、NVD ミラー、NVD 分析）を確認せよ。**各 1 コール：`curl https://cveawg.mitre.org/api/cve/CVE-…` → `containers.cna.metrics[].scenarios`。
 
 Sources: [Zammad アドバイザリ索引](https://zammad.com/en/advisories) · [ZAA-2026-07（チャネル移行の告知）](https://zammad.com/en/advisories/zaa-2026-07) · [CVE.org CNA レコード CVE-2026-102489](https://cveawg.mitre.org/api/cve/CVE-2026-102489)
+
+## 2026-10-06 20:45 —— スター対 watcher 比。休眠リポジトリに着地する 10.0
+
+**スター対コミット比が履歴の水増しを捉えるなら、スター対 WATCHER 比は読者の不在を捉える（10-06）：** tester-army/e2e が日次 1 位を取った（+344★/日、2,921★）。コアアイデアは確かに面白い（記録-再生型 agentic テスト）。だが健全性の数字は別の物語を語る：2,921★ に対し **watcher 7 名**、オープン PR 33、changesets ディレクトリがあるのにリリースなし、商用 tester.army プラットフォームの強い宣伝。watcher はスターと違って大規模に偽装しにくい数字——関心のないリポジトリを watch する者はいない——ゆえに 400 対 1 のスター/watcher 比は、実際のユーザーに変換されない関心を標す。識別キットに加わる：`pushed_at`（休眠）、スター対コミット（履歴対速度）、そしてスター対 watcher（読者対関心）。
+
+**CVSS 10.0 は停止したリポジトリに着地できる（10-05）：** MindSearch CVE-2026-105135（VulDB が CNA）——planner-agent コードインジェクション——が最終プッシュ 2025/7/4 のリポジトリ（15 ヶ月休眠、未アーカイブ）に最高深刻度で付けられた。休眠チェック（Flowise の教訓以来の常備）は深刻度の*大きさ*にも適用される：死んだリポジトリ上の 10.0 は「パッチ待ちの緊急事態」ではなく「恒久暴露」の事実——助言が変わり（露出を止める / フォーク）、緊急性が変わる。チェックは項目生成時に走らせ、スコアがリポジトリ状態の支えないトーンを決めてはならない。
+
+Sources: [tester-army/e2e](https://github.com/tester-army/e2e) · [NVD CVE-2026-105135](https://nvd.nist.gov/vuln/detail/CVE-2026-105135) · [InternLM/MindSearch](https://github.com/InternLM/MindSearch)

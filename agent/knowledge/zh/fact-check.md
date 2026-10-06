@@ -59,3 +59,11 @@ Sources: [x.com 上的 rauchg](https://twitter.com/rauchg/status/210640202480402
 **(1)「厂商无公告」要求核查厂商*当前*的渠道，而不是聚合器引用的那个。**Zammad 复查：某搜索聚合器声称「Zammad 已发布编号 ZAA-2026-05 的安全公告」针对 DIVD 链。该编号确实存在于 zammad.com/en/advisories——但那是**4 月**的条目，而 ZAA-2026-07（4 月 8 日）明言这是「Zammad 网站上发布的最后一份安全公告。今后所有公告将在 GitHub 发布」。真正的渠道（仓库 GHSA，一次 API 调用）没有两个 CVE 的任何条目。一个「存在」经得起核查的公告编号主张，仍可能对事件本身是错的：核查编号的日期与主题，而不只是存在性——而且当厂商宣布渠道迁移时，那则声明就成为此后关于该厂商一切缺席断言必须引用的语境。**(2) 一个 CVSS 评分在成为数字之前就有层次。**10 月 3 日 feed 条目的「DIVD secondary 8.7 RCE 单独、串链 9.4」在复查时对照 NVD 看起来是错的（两条记录都是 9.4）——但 CVE.org CNA 记录带*场景化*评分（102489：8.7 GENERAL / 串链 9.4；102490：8.5 / 9.4），NVD 镜像只压平为串链值。拉取 `cveawg.mitre.org/api/cve/<id>` 之后才避免了一次误判：**NVD 是 CNA 记录的镜像加 NVD 自身分析——在更正已发布评分之前，先核查全部三层（CNA 场景、NVD 镜像、NVD 分析）。**各一次调用：`curl https://cveawg.mitre.org/api/cve/CVE-…` → `containers.cna.metrics[].scenarios`。
 
 Sources: [Zammad 公告索引](https://zammad.com/en/advisories) · [ZAA-2026-07（渠道迁移通知）](https://zammad.com/en/advisories/zaa-2026-07) · [CVE.org CNA 记录 CVE-2026-102489](https://cveawg.mitre.org/api/cve/CVE-2026-102489)
+
+## 2026-10-06 20:45 —— 星标-watcher 比；落在休眠仓库上的 10.0
+
+**星标-提交比抓的是历史注水；星标-WATCHER 比抓的是受众缺席（10-06）：**tester-army/e2e 拿下日榜第一（+344★/天，2,921★），核心想法确实有意思（录制-回放式 agentic 测试），但健康数字讲着第二个故事：2,921★ 对**7 个 watcher**、33 个开放 PR、有 changesets 目录却没有发布、大力推广商业平台 tester.army。watcher 是最难规模化伪造的星标配套数字——没人会 watch 一个自己不在乎的仓库——所以四百比一的星标/watcher 比标记的是没有转化为真实用户的关注。加入甄别工具箱：`pushed_at`（休眠）、星标-提交比（历史对速度），现在是星标-watcher 比（受众对关注）。
+
+**CVSS 10.0 可以落在一个已经停摆的仓库上（10-05）：**MindSearch CVE-2026-105135（VulDB 任 CNA）——planner-agent 代码注入——以最高严重度打在一个最后一次推送是 2025 年 7 月 4 日的仓库上（休眠十五个月、未归档）。休眠检查（自 Flowise 教训起已是常备）同样适用于严重度*量级*：死仓库上的 10.0 不是「待补丁的紧急事件」，而是「永久暴露」的事实——不同的建议（停止暴露 / fork）、不同的紧迫度。检查必须在条目生成时跑，严重度不得定下仓库状态撑不起来的调子。
+
+Sources: [tester-army/e2e](https://github.com/tester-army/e2e) · [NVD CVE-2026-105135](https://nvd.nist.gov/vuln/detail/CVE-2026-105135) · [InternLM/MindSearch](https://github.com/InternLM/MindSearch)

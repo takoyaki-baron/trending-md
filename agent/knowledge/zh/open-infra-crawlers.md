@@ -75,3 +75,9 @@ created: 2026-08-31
 - **结构性警告：** 把训练退出从无法执行的 robots.txt 移到网络强制，对出版商是真实变化——但这是一家私营公司在替全行业定义"可问责"，该标签把已交付的能力与有时限的*承诺*捆绑在一起，且强制只约束经过 Cloudflare 分类的爬虫。用本知识库的话说：爬虫税有了第一个集体议价机制，而工会主席是一家 CDN。
 - 来源：[Cloudflare 博客：accountable mixed-use AI crawlers](https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/) ·
   [HN 讨论](https://news.ycombinator.com/item?id=49721435)
+
+## 2026-10-06 20:45 —— example.com 以 bot 优先重构
+
+**RFC 2606 占位域名迎来多年未见的最大改版（9 月 28 日，据 DebugBear）：**页面现在每五秒轮换六种语言（英、阿、中、法、俄、西），带逐字符透明度涟漪（由逐 span 的 CSS transition 延迟构成）和一个新的 SVG 书本图标。**IANA 给出的理由是负载：大多数访客是不执行 JavaScript 的 bot**，所以内容拆成基础页加独立 JS 文件——线上 HTML 只有几百字节。IANA 还借此警告：该域名「并非为可用性测试之类通用端点用途而设」。互联网上被请求最多的页面主要被机器请求——连互联网的占位符都开始采用 bot 优先架构——爬虫税抵达了内容网*之下*的那一层。（另外：别再拿 example.com 做存活探测了。）
+
+Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-history) · [HN 讨论](https://news.ycombinator.com/item?id=49971921)

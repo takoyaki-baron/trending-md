@@ -85,3 +85,9 @@ created: 2026-08-31
 - **構造的な注意書き：** トレーニングオプトアウトを robots.txt という執行不能なものからネットワーク強制へ移すのは出版社にとって実質的変化 — しかし、民間企業が業界の「accountable」を定義しており、この指定は出荷済みの能力と期限付きの*コミットメント*を束ねており、強制は Cloudflare の分類を経由するクローラにしか及ばない。このナレッジファイルの言葉で言えば：クローラ税に最初の団体交渉の仕組みができ、組合長は CDN である。
 - ソース：[Cloudflare ブログ：accountable mixed-use AI crawlers](https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/) ·
   [HN 議論](https://news.ycombinator.com/item?id=49721435)
+
+## 2026-10-06 20:45 —— example.com が bot ファーストでリデザイン
+
+**RFC 2606 のプレースホルダーが長年で最大の刷新（9/28、DebugBear 計測）：** ページは 5 秒毎に 6 言語（英・阿・中・仏・露・西）をローテーションし、span 毎の CSS transition 遅延で作る文字単位の不透明度リップルと新しい SVG 本アイコンを備える。**IANA の理由は負荷：訪問者の大多数は JavaScript を実行しない bot** のため、内容は基本ページ + 別個の JS ファイルに分割され、配信される HTML は数百バイト。IANA はこの機会に、このドメインは「可用性テストのような汎用エンドポイント用途を意図していない」とも警告。インターネットで最もフェッチされるページは主に機械によってフェッチされており、インターネットのプレースホルダーすら bot ファーストのアーキテクチャを出荷する——クローラー税はコンテンツウェブの*下*の層にまで届いた。（そして：example.com を uptime ping するのはやめる。）
+
+Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-history) · [HN 議論](https://news.ycombinator.com/item?id=49971921)

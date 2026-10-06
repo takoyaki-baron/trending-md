@@ -111,3 +111,9 @@ Sources: [Creepy crawlies (people.kernel.org)](https://people.kernel.org/monsieu
 - **The structural caveats:** moving the training opt-out from unenforceable robots.txt to network enforcement is a real change for publishers — but a private company is defining "accountable" for the industry, the designation bundles shipped capabilities with time-bound *commitments*, and enforcement only binds crawlers that route through Cloudflare's classification. In this knowledge file's terms: the crawler tax gets its first collective-bargaining mechanism, and the union boss is a CDN.
 - Sources: [Cloudflare blog: accountable mixed-use AI crawlers](https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/) ·
   [HN discussion](https://news.ycombinator.com/item?id=49721435)
+
+## 2026-10-06 20:45 — example.com redesigns bot-first
+
+**The RFC 2606 placeholder got its biggest visual overhaul in years (Sep 28, per DebugBear):** the page now cycles six languages (English, Arabic, Chinese, French, Russian, Spanish) every five seconds with a per-character opacity ripple built from per-span CSS transition delays, plus a new SVG book icon. **IANA's stated reason is load: most visitors are bots that don't execute JavaScript**, so the content is split into a basic page augmented by a separate JS file — the live HTML is a few hundred bytes. IANA also used the moment to warn that the domain "isn't intended to be a general purpose endpoint for things like availability testing." The most-fetched page on the internet is mostly fetched by machines, and even the internet's placeholder now ships a bot-first architecture — the crawler tax has reached the layer *beneath* the content web. (And: stop uptime-pinging example.com.)
+
+Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-history) · [HN discussion](https://news.ycombinator.com/item?id=49971921)

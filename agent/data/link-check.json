@@ -1495,9 +1495,81 @@
       "feeds": [
         "2026-10-04.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=49963171": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-06T14:03:04.655Z",
+      "last_seen": "2026-10-06T14:03:04.655Z",
+      "feeds": [
+        "2026-10-06.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49969183": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-06T14:03:04.655Z",
+      "last_seen": "2026-10-06T14:03:04.655Z",
+      "feeds": [
+        "2026-10-06.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49971921": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-06T14:03:04.655Z",
+      "last_seen": "2026-10-06T14:03:04.655Z",
+      "feeds": [
+        "2026-10-06.md"
+      ]
+    },
+    "https://www.niemanlab.org/2026/10/chatgpt-is-adding-real-cartoonists-signatures-to-fake-new-yorker-cartoons/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-06T14:03:04.655Z",
+      "last_seen": "2026-10-06T14:03:04.655Z",
+      "feeds": [
+        "2026-10-06.md"
+      ]
+    },
+    "https://www.npmjs.com/package/rea-agents": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-06T14:03:04.655Z",
+      "last_seen": "2026-10-06T14:03:04.655Z",
+      "feeds": [
+        "2026-10-06.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49975619": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-06T14:03:04.655Z",
+      "last_seen": "2026-10-06T14:03:04.655Z",
+      "feeds": [
+        "2026-10-06.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49976468": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-06T14:03:04.655Z",
+      "last_seen": "2026-10-06T14:03:04.655Z",
+      "feeds": [
+        "2026-10-06.md"
+      ]
+    },
+    "https://www.npmjs.com/package/@openrig/cli": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-06T14:03:04.655Z",
+      "last_seen": "2026-10-06T14:03:04.655Z",
+      "feeds": [
+        "2026-10-06.md"
+      ]
     }
   },
-  "runs": 45,
+  "runs": 46,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-03T21:55:18.834Z"
+  "last_run": "2026-10-06T14:03:04.655Z"
 }
