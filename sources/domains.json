@@ -1345,6 +1345,15 @@
     "jp": "個人開発ブログ(Master.dev コース)。実測数値付きの一次フィールドレポート——React Compiler/Vite 記事は vite-plugin-react のリリースノートと突合済み。実務者執筆で数値は整合。単一作者の限界はある。",
     "zh": "个人开发者博客(Master.dev 课程)；带实测数字的一手报告——React Compiler/Vite 一文已对照 vite-plugin-react 发布说明核验。从业者亲笔、数字可对上；单作者局限仍在。"
   },
+  "blog.miguelgrinberg.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Miguel Grinberg's engineering blog — the annual Python-release benchmark is a feed staple, with methodology, hardware and build flags stated. Cross-checked (10-07): his 3.15.0rc3 'final days away' timeline matches python.org's FTP tree (3.15.0/ holds only pre-release artifacts, no final release page). Perf numbers are single-machine results — treat as one datapoint.",
+    "jp": "Miguel Grinbergの技術ブログ——年次Pythonリリースベンチマークは本フィードの定番で、手法・ハードウェア・ビルドフラグが明示されます。突合済み（10-07）：3.15.0rc3『正式版まであと数日』の時系列はpython.orgのFTPツリーと一致（3.15.0/ はプレリリース成果物のみで正式版ページなし）。性能数値は単一マシンの結果として扱うこと。",
+    "zh": "Miguel Grinberg 的工程博客——年度 Python 版本基准测试是本栏目的常客，方法、硬件与构建参数均有交代。已交叉核验（10-07）：其 3.15.0rc3『正式版几天内发布』的时间线与 python.org FTP 目录一致（3.15.0/ 仅存预发布产物，无正式版页面）。性能数字是单机结果，仅作单点数据。"
+  },
   "blog.mozilla.org": {
     "cat": "vendor",
     "cred": "high",
@@ -5588,6 +5597,15 @@
     "jp": "数学者の Mastodon インスタンス——Terence Tao がここで発信。検証済み（09-09）：『再生不能な仕方で採掘』投稿の全文はページの og:description に（公開 2026-09-08T20:32:28Z）、表現と飲料水/海洋の比喩を一次確認；個別ステータスページはサーバーレンダリングで認証不要。",
     "zh": "数学家的 Mastodon 实例——陶哲轩在此首发。已核验（09-09）：『以不可再生方式开采』帖的全文在页面 og:description 中（发布于 2026-09-08T20:32:28Z），原话与饮用水/海洋比喻一手确认；单条状态页服务端渲染，无需登录。"
   },
+  "matklad.github.io": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "matklad's (rust-analyzer creator) engineering notes — short, opinionated, and careful to declare their own scope ('thresholds are for a specific Zen 2 laptop'). Cross-checked (10-07): the benchmark-timing post makes advice claims pinned to measured noise floors rather than falsifiable facts; corroborated by a 130-point HN thread. Advice, not data.",
+    "jp": "matklad（rust-analyzer作者）の技術ノート——短く、率直で、自らの適用範囲を明示する（『閾値は特定のZen 2ノート向け』）。突合済み（10-07）：ベンチタイミング投稿は反証可能な事実ではなく実測ノイズフロアに紐づく助言であり、130ポイントのHNスレッドが裏付け。データではなく助言。",
+    "zh": "matklad（rust-analyzer 作者）的工程笔记——短小、直率，且会主动声明适用边界（『阈值只对一台 Zen 2 笔记本成立』）。已交叉核验（10-07）：基准计时一文给出的是绑定实测噪声底的建言而非可证伪事实；HN 130 分讨论可作旁证。属建议，非数据。"
+  },
   "mattkeeter.com": {
     "cat": "code",
     "cred": "high",
@@ -6799,6 +6817,15 @@
     "en": "Security research/explainer site; detailed CVE write-ups with technical depth — verify exploitability claims against vendor advisories.",
     "jp": "セキュリティ研究/解説サイト。技術深度のあるCVE解説——悪用可能性の主張はベンダー勧告と照合を。",
     "zh": "安全研究与漏洞解析站点；技术深度较高的 CVE 分析——可利用性声明宜对照厂商公告核实。"
+  },
+  "penguin-mail.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Official site of Penguin Mail, a Linux mail/calendar client (v1.0.0). Cross-checked (10-07): the site's GPL-3.0-or-later license, Rust+GTK4 stack and Sep 19 origin match c9dev/penguin-mail repo metadata via the GitHub API. Vendor page for its own product — feature claims verified against the repo, roadmap claims not.",
+    "jp": "Linuxメール/カレンダークライアント Penguin Mail の公式サイト（v1.0.0）。突合済み（10-07）：GPL-3.0-or-later、Rust+GTK4、9月19日作成の記載は GitHub API 経由で c9dev/penguin-mail のリポジトリメタデータと一致。自社製品のベンダーページ——機能主張はリポジトリと照合済み、ロードマップ主張は未検証。",
+    "zh": "Linux 邮件/日历客户端 Penguin Mail 的官网（v1.0.0）。已交叉核验（10-07）：站点的 GPL-3.0-or-later 许可、Rust+GTK4 技术栈与 9 月 19 日创建时间，经 GitHub API 与 c9dev/penguin-mail 仓库元数据一致。自营产品厂商页——功能主张已对仓库核实，路线图主张未核实。"
   },
   "people.kernel.org": {
     "cat": "community",
@@ -8757,6 +8784,15 @@
     "jp": "TechRepublic——老舗エンタープライズIT業界誌。突合済み（08-16）：ChatGPT Linuxデスクトップの報道はZDNetと一致（OpenAI初のネイティブLinuxアプリ、ChatGPT + Work + Codexを1つのElectronアプリに、Ubuntu/Debian/Fedora）。",
     "zh": "TechRepublic——老牌企业科技行业媒体。已交叉核验（08-16）：其 ChatGPT Linux 桌面应用报道与 ZDNet 一致（OpenAI 首个原生 Linux 应用，ChatGPT + Work + Codex 合于一个 Electron 应用，Ubuntu/Debian/Fedora）。"
   },
+  "techspot.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Tech enthusiast news site; fast coverage of AI/security stories with named sourcing (arrest reports, court filings). Cross-checked (10-07): its Anthropic diary-report details (name, Sept 26 entry, FL Statute 836.10 charge, human-review pipeline) match Tom's Hardware's independent report. Headlines can outrun the caveats — read to the body.",
+    "jp": "テック系ニュースサイト。逮捕記録や裁判資料まで辿るAI/セキュリティ報道が速い。突合済み（10-07）：Anthropic日記通報の詳細（氏名、9月26日の記入、FL法836.10の罪状、人間レビューパイプライン）はTom's Hardwareの独立報道と一致。見出しが但し書きに先行しがち——本文まで読むこと。",
+    "zh": "科技新闻站点；AI/安全事件报道快，且会追到逮捕报告、法庭文件等具名信源。已交叉核验（10-07）：其 Anthropic 日记上报案细节（姓名、9 月 26 日条目、佛州 836.10 法条指控、人工审核管线）与 Tom's Hardware 的独立报道一致。标题有时跑在限定条件前面——请读到正文。"
+  },
   "techweb.com.cn": {
     "cat": "news",
     "cred": "med",
@@ -10156,6 +10192,15 @@
     "en": "Zhipu (Z.ai) — GLM series vendor research posts; canonical for GLM-5.3's same-base/post-training claim (vendor-reported benchmarks). Cross-checked vs docs.z.ai (08-21).",
     "jp": "Zhipu（Z.ai）——GLMシリーズのベンダー研究記事。GLM-5.3の同一ベース/ポストトレーニングのみという主張（ベンダー発表ベンチ）の正典。docs.z.ai とクロスチェック済み（08-21）。",
     "zh": "智谱（Z.ai）——GLM 系列厂商研究文章；GLM-5.3 同底座/纯后训练说法（厂商自报基准）的权威来源。已对照 docs.z.ai 交叉核验（08-21）。"
+  },
+  "zohaib.cc": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Personal engineering blog of Zohaib Ansari — agent-UX analysis. Cross-checked (10-07): the Claude Code suggested-messages feature it analyzes is corroborated by a 135-point HN thread; the 'real customer is the model' thesis is opinion, and framed as such.",
+    "jp": "Zohaib Ansariの個人技術ブログ——エージェントUX分析。突合済み（10-07）：分析対象のClaude Codeサジェストメッセージ機能は135ポイントのHNスレッドで裏付け。『本当の顧客はモデル』というテーゼは意見であり、そのようにフレームされている。",
+    "zh": "Zohaib Ansari 的个人工程博客——智能体 UX 分析。已交叉核验（10-07）：其分析的 Claude Code 建议消息功能有 HN 135 分讨论佐证；『真正的客户是模型』的论点是观点，且行文明示了这一点。"
   },
   "zuckoff.app": {
     "cat": "community",

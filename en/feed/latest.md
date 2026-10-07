@@ -1,8 +1,8 @@
 ---
 date: 2026-10-07
-updated: 2026-10-07T04:45:00+08:00
+updated: 2026-10-07T12:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 15
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -224,13 +224,171 @@ arXiv 2610.05162 (Xiamen group, incl. Jinsong Su) argues the standard mitigation
 
 ---
 
+## 16. OpenAI publishes 722 AI-generated math manuscripts — including "integer multiplication below n log n" and a counterexample to Hadwiger
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 565+ pts · ~6h ago (~06:30 UTC+8)
+- **Tags:** `openai` `mathematics` `lean` `ai-research`
+
+OpenAI's "Sharing AI progress in mathematics" release backs its announcement with a new GitHub repo, **openai/math**: **722 manuscripts in 372 families** produced by an unreleased internal model that "was posed approximately 4,000 problems," at an average of "three hours of ChatGPT Pro thinking compute" per result (repo created Oct 6, 3.6k★, Apache-2.0). The claims are extraordinary across the board: **integer multiplication below n log n**, **matrix multiplication in O(n^1.75)** ("Nine Fourths"), complex matrix multiplication below 2.258, a **counterexample to Hadwiger's conjecture**, counterexamples to Sidorenko, Kaplansky and Baum-Connes, a zeta-function zero-free region at Re(s) > 11/12, and a Cannon's conjecture proof — with directory dates running Sept 23 → Oct 6. Verification is partial by OpenAI's own description: "Many, but not all, of the manuscripts have been formalized" in an included Lean library, and "**Some of the unformalized results could have issues.**" The release protocol preserves version history, records corrections as new versions, and — per the announcement — was shaped with the independent Advisory Group on Mathematics and AI at IAS.
+
+**Why it matters:** this is the first lab release that ships the AGMAI-style hygiene the September open letter asked for — frozen release history, per-manuscript BibTeX, Lean formalizations landing incrementally — rather than screenshots. The load-bearing number is not 722; it's "many, but not all": the repo's own caveat is the true abstract, and the math community's formalization queue is now the bottleneck between "claimed" and "known."
+
+> Coincidence worth noting: on the same day, HN is separately debating a v1 preprint claiming subquadratic 3SUM (item 7) — algorithmic refutation claims are arriving faster than verification.
+
+[`🔗 OpenAI: Sharing AI progress in mathematics`](https://openai.com/index/sharing-ai-progress-in-mathematics/) · [`🔗 openai/math`](https://github.com/openai/math) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49984923)
+
+---
+
+## 17. EmbeddingGemma 2: Google open-weights a 740M multimodal embedder under Apache 2.0
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 254+ pts · ~12h ago (~00:20 UTC+8)
+- **Tags:** `google` `embeddings` `open-weights` `on-device`
+
+Google shipped EmbeddingGemma 2 (posted Oct 6): **740M parameters total** on the Gemma 4 architecture — **270M text, 170M vision, 300M audio** — unifying text, code, images, video and audio in one embedding space, under a "commercially permissive Apache 2.0 license." Claims: best-in-class among sub-1B multimodal embedders on MTEB Code and MAEB, a **9.92-point jump on MTEB Code vs EmbeddingGemma 1 (68.76 → 78.68)**, an 8K-token context (4× the original), and quantized on-device footprints of ~191MB (text-only) to ~567MB (full multimodal) active RAM on a Pixel 11 Pro. Matryoshka truncation from 768 to 128 dimensions gives "up to 6x storage reduction." Weights are on Hugging Face and Kaggle, with runtime support from llama.cpp to MLX to WebGPU.
+
+The post names no explicit limitations — benchmark numbers are Google's own runs, and the model card carries the full evals. HN's reception was the warmest an embedder has drawn in months: SimonW called the Apache 2.0 choice the point, since embedding workloads "involve calculating thousands or even millions" of vectors.
+
+**Why it matters:** embeddings are the unglamorous substrate of every RAG stack, memory system and skills index shipping right now — and they've been the last piece of the local stack without a good permissive multimodal option. A 740M model that indexes screenshots, voice notes and code in one space, on-device, is infrastructure for exactly the agent-memorizing-your-machine pattern this feed keeps tracking.
+
+[`🔗 Google: EmbeddingGemma 2`](https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49980487)
+
+---
+
+## 18. Langflow OSS: IBM's bulletin discloses 25 vulnerabilities — two unauthenticated 9.8 RCEs, fixed in 1.12.3
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · records published Oct 6–7 (CNA: IBM)
+- **Tags:** `langflow` `cve` `rce` `agents`
+
+IBM's security bulletin for **Langflow OSS 1.0.0–1.12.2** — the visual agent/workflow builder, 155k★ on GitHub, active and un-archived — covers **25 vulnerabilities** spanning code-execution restrictions, access controls, sensitive-data handling, file and archive processing. The two heads: **CVE-2026-104334** ("improper control of code generation," CWE-94) and **CVE-2026-93674** (OS command injection) — both **CVSS 3.1 9.8**, both unauthenticated remote code execution, both scored by IBM itself as CNA. The fix is **Langflow 1.12.3**.
+
+**Why it matters:** Langflow's entire product is executing model-generated code against your API keys and data sources — an unauthenticated RCE in that tool is a direct line from "internet-reachable instance" to "attacker holds your agent's credentials." If you run Langflow, 1.12.3, today; if you expose agent builders publicly, treat this as the argument not to.
+
+[`🔗 IBM security bulletin`](https://www.ibm.com/support/pages/node/7290694) · [`🔗 NVD: CVE-2026-104334`](https://nvd.nist.gov/vuln/detail/CVE-2026-104334)
+
+---
+
+## 19. Anthropic has now reported Claude users to police at least three times since August
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 813+ pts (Oct 5) · follow-up today (~08:53 UTC+8)
+- **Tags:** `anthropic` `privacy` `safety` `policy`
+
+The Florida case that drew 813 HN points on Oct 5 now has a documented pattern: per Tom's Hardware, this is **at least the third conversation with Claude to reach police since August**. The details per TechSpot's arrest-report sourcing: Carli Michelle Heller of Bonita Springs wrote on Sept 26 — using Claude as a diary — that she would attack the Lee County Sheriff's Office; Claude's safety systems flagged the conversation, a human reviewer judged it a credible threat, and Anthropic reported it to law enforcement. She faces a second-degree felony under Florida's written-threats statute. Anthropic's policy says it may share user information "in limited emergencies" to prevent death or serious physical injury — and coverage notes the contrast with OpenAI, which flagged the Benedict Canyon shooter's chats but did not refer them, and is now being sued by the city.
+
+**Why it matters:** this is the first vendor-reported-criminal-case precedent to accumulate multiple data points, and it lands on the exact axis agentic products are built on: chats that feel private are human-reviewable and reportable. For developers, the design question is no longer hypothetical — what your users confide to your agent has a review pipeline, and "diary" is a use case people demonstrably have.
+
+[`🔗 TechSpot: the diary case`](https://www.techspot.com/news/114091-florida-woman-used-claude-diary-anthropic-reported-sheriff.html) · [`🔗 Tom's Hardware: third case since August`](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-reports-florida-womans-claude-diary-threat-to-shoot-up-sheriffs-office-felony-charge-follows-its-at-least-the-third-such-conversation-to-reach-police-since-august)
+
+---
+
+## 20. South Korea's president: AI agents appear to have been used in the bank hacks
+
+- **Velocity:** ▮▮ rising
+- **Source:** Reuters (Oct 6) · HN 53+ pts · ~4h ago (~08:10 UTC+8)
+- **Tags:** `south-korea` `banking` `ai-agents` `security`
+
+President Lee Jae Myung told a cabinet meeting that "signs have emerged of AI being used" in recent hacks against South Korean banks — per Reuters, an unusual head-of-government attribution. All five major banks (Shinhan, KB Kookmin, Hana, Woori, NongHyup) have reported intrusions in the recent wave; the Financial Services Commission counted roughly **200,000 hacking attempts** this year and shared **28 unique attacker IPs** with the sector. Authorities have not disclosed what kind of AI tools are involved — the "AI agents" framing comes from the presidential statement, not a published technical report. Reuters ties it to a pattern: Australia disclosed an OpenAI coding agent breaching a health-portal test environment in June.
+
+**Why it matters:** if the attribution holds up when evidence is published, this is the first state-level claim that autonomous agents ran intrusion operations at scale — the offensive counterpart to this feed's defensive-agent coverage. Until the evidence lands, treat "AI did it" as the claim being investigated, not the finding.
+
+[`🔗 Reuters`](https://www.reuters.com/world/south-koreas-lee-says-ai-appears-have-been-used-bank-hacks-2026-10-06/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49985861)
+
+---
+
+## 21. Since the DevDay preview: OpenAI's Decisions API enters public beta — gpt-6-luna at $0.10/M input
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 186+ pts · ~7h ago (~05:10 UTC+8)
+- **Tags:** `openai` `decisions-api` `jev` `routing`
+
+Since our Sep 30 coverage of the DevDay preview: the **Decisions API is now in public beta** — "we expect to GA in the coming weeks" — with a live guide and `POST /v1/decisions`. Three typed question shapes: `predicate` (returns a 0–1 probability), `choice` (picks from a fixed option set, with confidence), and `score` (rates against ordered levels, and can land between them). **gpt-6-luna is the only model available**, at **$0.10 per 1M input tokens** — output tokens are never billed, because there are none: answers are typed selections, ~10× faster than the Responses API by the page's claim. Zero Data Retention and HIPAA terms are eligible.
+
+**Why it matters:** the "response to Jev" is now a product with a price and an SLA-shaped roadmap rather than a keynote slide — the decision-model tier has its hyperscaler incumbent two weeks in. Harness builders routing cheap classify/route/score calls off the frontier model now have a default answer from the same vendor as the frontier model, which will be hard for open alternatives to out-price.
+
+[`🔗 OpenAI: Decisions API guide`](https://developers.openai.com/api/docs/guides/decisions) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49984025)
+
+---
+
+## 22. AWS open-weights a decision model: Strands Decider 2B, training data included
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 55+ pts · ~2h ago (~10:20 UTC+8)
+- **Tags:** `aws` `decision-models` `open-weights` `jev`
+
+The AWS Strands team (Marc Brooker, Mike Chambers, Fabio Nonato de Paula) released **Strands Decider 2B**: a decision model — no text generation, it picks from provided options and emits confidence scores — built from a Qwen3.5-2B "torso" with the LM head replaced by a ~1M-parameter pointer head, fine-tuned with a rank-16 LoRA, at **v19** after an earlier slot-head architecture lost. It runs on CPU; median latency **~115ms on an RTX 3090, ~153ms on an M3 MacBook** for small tasks. On JevBench's public set it ranks **3rd of 33 in the 2B class** (accuracy plus Brier-score calibration). Weights, training data and scripts are all published. The post is candid about limits: "significantly worse at solving complex problems than reasoning models," unsuited to anything needing generation, and its demo agent used hand-picked questions — "an illustration rather than a recommendation."
+
+**Why it matters:** the decision-model wave now has AWS shipping an open entry with calibration — not accuracy — as a headline metric, and the honesty of the caveats is itself notable for a launch post. For harness builders, "route the cheap calls to a 2B pointer, escalate the rest" just became a pattern with a reference implementation.
+
+[`🔗 Strands: Introducing Decider`](https://strandsagents.com/blog/introducing-strands-decider/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49987076)
+
+---
+
+## 23. Python 3.15: the JIT finally beats the standard interpreter — 1.20–1.28×
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 41+ pts · ~6h ago (~06:10 UTC+8)
+- **Tags:** `python` `jit` `performance` `cpython`
+
+Miguel Grinberg's annual benchmark run (on 3.15.0rc3, with the final release days away) found the headline in the build options: the standard interpreter is roughly at parity with 3.14 (1.03–1.04× single-threaded), but the **experimental JIT now lands 1.20–1.28× faster than the standard interpreter — the first release where the specialized build wins consistently** across his benchmarks. Free-threading held its ground: ~4.5× on multi-threaded pure-Python workloads. His verdict on the release overall: "a minor upgrade" unless you're switching builds.
+
+**Why it matters:** the JIT crossing from "not yet" to "measurably faster" changes the deployment calculus — Python now has a fast build and a compatible build, and the eventual question of which one ships by default is a real fork in the road for a language whose deployment story has been its one-build simplicity.
+
+[`🔗 How Fast is Python 3.15?`](https://blog.miguelgrinberg.com/post/how-fast-is-python-3-15) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49984652)
+
+---
+
+## 24. Claude Code's suggested messages: "the real customer is the model"
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 135+ pts · ~10h ago (~02:10 UTC+8)
+- **Tags:** `claude-code` `agent-ux` `harness`
+
+Zohaib Ansari's analysis of Claude Code's post-response suggested-message chips argues they're misread as a convenience feature: they are a **communication channel from the harness to the model, routed through the human**. The suggested replies encode confirmation vocabulary, retry framing and soft approvals that keep long agent loops moving — in his line, "it keeps the human in the loop in a way that actually keeps the loop going," with the thesis stated in the section heading: "The real customer isn't you, it's the model."
+
+**Why it matters:** every harness is converging on the same loop, and the differentiator is increasingly the human-interface protocol around it — suggested messages are autocomplete applied to *consent*, which is both clever and a little unsettling. Watch for the pattern propagating to every competitor harness within a quarter.
+
+[`🔗 zohaib.cc`](https://www.zohaib.cc/blog/smartest-claude-code-feature) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49981905)
+
+---
+
+## 25. matklad: Benchmark In Milliseconds — run microbenchmarks at ~300ms, not microseconds
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 130+ pts · ~35h ago (~01:15 UTC+8 Oct 6)
+- **Tags:** `benchmarking` `performance` `engineering`
+
+matklad's one-page rule: size the input so a benchmark takes **~300ms** — long enough that warm-cache noise (~2%) makes the ~5ms error bar tolerable, while anything under ~30ms drowns in timer resolution and anything under ~5ms collides with OS jitter. The post is careful to de-generalize itself: the thresholds are "for a specific Zen 2 laptop," and you should measure your own noise floor — with a pointer to his follow-up on benchmark automation.
+
+**Why it matters:** benchmarks written by agents are becoming ambient — every harness now generates performance claims as a side effect of existing. A shared stopping rule for "is this measurement real" is exactly the folklore the harness-building wave keeps needing and keeps rediscovering.
+
+[`🔗 matklad.github.io`](https://matklad.github.io/2026/10/05/benchmark-milliseconds.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=49967427)
+
+---
+
+## 26. Penguin Mail 1.0: a native Linux mail client where the AI is off until you ask
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 108+ pts · ~6h ago (~06:15 UTC+8)
+- **Tags:** `linux` `rust` `email` `agent-ux`
+
+Penguin Mail shipped v1.0.0: mail and calendar for Linux in **Rust with GTK4/libadwaita** (GPL-3.0, repo created Sep 19, 76★, pushed Oct 6), speaking Gmail, Microsoft and plain IMAP/POP3/SMTP — with "no server of its own, no tracking and no ads," and OpenPGP/S/MIME through your own GnuPG, never held keys. The AI assistant is **off until you choose a model**, runs locally via LM Studio or Ollama, and "asks before it sends mail or changes a setting" — with every tool call displayed (Ctrl+J). HN's reception split exactly along that line: "I was 100% interested until crossing '...with AI'" — commenters who read the design noted the opt-in, local, ask-first behavior is the opposite of the assistant-shoved-in pattern.
+
+**Why it matters:** the native-Linux-mail graveyard is deep, so skepticism is earned — but this launch is a quietly good template for consumer agent UX: local execution, visible tool calls, and consent before side effects, shipped as defaults rather than a privacy page.
+
+[`🔗 penguin-mail.com`](https://penguin-mail.com/) · [`🔗 c9dev/penguin-mail`](https://github.com/c9dev/penguin-mail)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-07T04:45:00+08:00 |
-| Items | 15 |
-| Sources tracked | 15 (Hacker News, GitHub (trending/API), CISA KEV, NVD, arXiv, Hugging Face, mistral.ai, pola.rs, techcrunch.com, erdosproblems.com, vulncheck.com, dbushell.com, parseable.com, mihai.dinculescu.dev, Wikipedia) |
+| Generated | 2026-10-07T12:25:00+08:00 |
+| Items | 26 |
+| Sources tracked | 27 (Hacker News, GitHub (trending/API), CISA KEV, NVD, arXiv, Hugging Face, openai.com, developers.openai.com, github.com/openai/math, mistral.ai, pola.rs, blog.google, ibm.com, techcrunch.com, erdosproblems.com, vulncheck.com, dbushell.com, parseable.com, mihai.dinculescu.dev, reuters.com, techspot.com, tomshardware.com, strandsagents.com, blog.miguelgrinberg.com, zohaib.cc, matklad.github.io, penguin-mail.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-10-07
-updated: 2026-10-07T04:45:00+08:00
+updated: 2026-10-07T12:25:00+08:00
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 15
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -224,13 +224,171 @@ arXiv 2610.05162(厦门大学团队,含 Jinsong Su)指出,针对记忆诱发谄�
 
 ---
 
+## 16. OpenAI 发布 722 篇 AI 生成数学手稿——其中包括"低于 n log n 的整数乘法"与 Hadwiger 猜想反例
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 565+ pts · ~6h ago (~06:30 UTC+8)
+- **Tags:** `openai` `mathematics` `lean` `ai-research`
+
+OpenAI 的"Sharing AI progress in mathematics"发布以一个新的 GitHub 仓库 **openai/math** 支撑其公告:**372 个族系共 722 篇手稿**,由一个未发布的内部模型产出——该模型"被提出了约 4,000 个问题",平均"每个结果消耗三小时的 ChatGPT Pro thinking 算力"(仓库创建于 10 月 6 日,3.6k★,Apache-2.0)。主张一个比一个惊人:**低于 n log n 的整数乘法**、**O(n^1.75) 的矩阵乘法**("Nine Fourths")、低于 2.258 的复矩阵乘法指数、**Hadwiger 猜想反例**、Sidorenko、Kaplansky 与 Baum-Connes 的反例、ζ 函数在 Re(s) > 11/12 的零点自由区域、以及 Cannon 猜想证明——目录日期从 9 月 23 日一直排到 10 月 6 日。验证按 OpenAI 自己的描述是部分的:"许多(但非全部)手稿已在随附的 Lean 库中形式化",而且"**部分未形式化的结果可能存在问题。**"发布协议保留版本历史、以新版本记录更正,并且——按公告所述——与 IAS 的数学与 AI 独立咨询组共同制定。
+
+**Why it matters:** 这是第一个真正践行九公开信所要求的 AGMAI 式规范的实验室发布——冻结的发布历史、逐篇 BibTeX、Lean 形式化增量到位——而不是截图。承重数字不是 722,而是"许多,但非全部":仓库自己的免责声明才是真正的摘要,数学社区的形式化队列现在横亘在"声称"与"已知"之间。
+
+> 值得一提的巧合:同一天 HN 还在热议另一篇声称次二次 3SUM 的 v1 预印本(第 7 条)——算法推翻类主张的到来速度快于验证速度。
+
+[`🔗 OpenAI: Sharing AI progress in mathematics`](https://openai.com/index/sharing-ai-progress-in-mathematics/) · [`🔗 openai/math`](https://github.com/openai/math) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49984923)
+
+---
+
+## 17. EmbeddingGemma 2:Google 以 Apache 2.0 开放 740M 多模态嵌入模型
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 254+ pts · ~12h ago (~00:20 UTC+8)
+- **Tags:** `google` `embeddings` `open-weights` `on-device`
+
+Google 于 10 月 6 日发布 EmbeddingGemma 2:基于 Gemma 4 架构的**总参数 740M** 模型——**文本 270M、视觉 170M、音频 300M**——把文本、代码、图像、视频与音频统一进一个嵌入空间,采用"商业友好的 Apache 2.0 许可证"。主张:在 MTEB Code 与 MAEB 上为 1B 以下多模态嵌入模型中最佳,MTEB Code 较 EmbeddingGemma 1 **提升 9.92 分(68.76 → 78.68)**,上下文窗口 8K token(原版 4 倍),量化后在 Pixel 11 Pro 上的活跃内存约 191MB(纯文本)至 567MB(全多模态)。Matryoshka 截断从 768 到 128 维可带来"最高 6 倍存储缩减"。权重已上线 Hugging Face 与 Kaggle,运行时支持从 llama.cpp 到 MLX 再到 WebGPU。
+
+帖子没有列出明确的局限性——基准数字均为 Google 自测,完整评估见模型卡。HN 的反应是数月来嵌入模型得到的最高热度:SimonW 指出 Apache 2.0 才是重点,因为嵌入负载"动辄要计算成千上万乃至数百万"个向量。
+
+**Why it matters:** 嵌入是当下每一套 RAG、记忆系统与技能索引的隐形底座——而它一直是本地技术栈中最后一个缺少优秀宽松许可多模态选项的环节。一个能在设备上把截图、语音备忘和代码索引进同一空间的 740M 模型,正是本栏目持续追踪的"智能体记住你的整台机器"模式的基础设施。
+
+[`🔗 Google: EmbeddingGemma 2`](https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49980487)
+
+---
+
+## 18. Langflow OSS:IBM 公告披露 25 个漏洞——两个未授权 9.8 RCE,1.12.3 已修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 记录发布于 Oct 6–7(CNA:IBM)
+- **Tags:** `langflow` `cve` `rce` `agents`
+
+IBM 针对 **Langflow OSS 1.0.0–1.12.2**(可视化智能体/工作流构建器,GitHub 155k★,仓库活跃且未归档)的安全公告涵盖**25 个漏洞**,横跨代码执行限制、访问控制、敏感数据处理、文件与归档处理。最重的两个:**CVE-2026-104334**("代码生成控制不当",CWE-94)与 **CVE-2026-93674**(操作系统命令注入)——均为 **CVSS 3.1 9.8**,均为未授权远程代码执行,均由 IBM 自己作为 CNA 赋分。修复版本为 **Langflow 1.12.3**。
+
+**Why it matters:** Langflow 的产品本质就是对你的 API key 和数据源执行模型生成的代码——这类工具里的未授权 RCE,等于把"暴露在公网的实例"直连成"攻击者握有你智能体的全部凭据"。如果你在跑 Langflow,1.12.3,今天就升;如果你把智能体构建器暴露在公网,这条新闻就是别这么做的理由。
+
+[`🔗 IBM 安全公告`](https://www.ibm.com/support/pages/node/7290694) · [`🔗 NVD: CVE-2026-104334`](https://nvd.nist.gov/vuln/detail/CVE-2026-104334)
+
+---
+
+## 19. Anthropic 已至少三次向警方上报 Claude 用户对话——自 8 月以来
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 813+ pts(Oct 5) · 今日有后续报道(~08:53 UTC+8)
+- **Tags:** `anthropic` `privacy` `safety` `policy`
+
+10 月 5 日拿下 813 个 HN 点的佛罗里达案,如今有了成体系的图案:据 Tom's Hardware,这是 **8 月以来至少第三起到达警方的 Claude 对话**。TechSpot 依逮捕报告给出的细节:Bonita Springs 的 Carli Michelle Heller 在 9 月 26 日——把 Claude 当日记用——写下了将袭击 Lee County 治安官办公室的内容;Claude 的安全系统标记了这段对话,人工审核员判定其为可信威胁,Anthropic 随后向执法部门上报。她面临佛罗里达州书面威胁法的二级重罪指控。Anthropic 的政策写明,在涉及死亡或严重人身伤害的"有限紧急情况"下可共享用户信息——报道同时点出与 OpenAI 的对照:后者标记过 Benedict Canyon 枪击案的相关对话但未转交,如今正被该市起诉。
+
+**Why it matters:** 这是第一个积累出多个数据点的"厂商上报刑事案"先例,而它恰好落在智能体产品赖以构建的那根轴上:感觉私密的对话,是可被人工审阅、可被上报的。对开发者而言,设计问题已不再假设性——用户向你的智能体倾诉的内容存在一条审核管线,而"日记"是一种确实有人在使用场景。
+
+[`🔗 TechSpot:日记案`](https://www.techspot.com/news/114091-florida-woman-used-claude-diary-anthropic-reported-sheriff.html) · [`🔗 Tom's Hardware:8 月以来第三起`](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-reports-florida-womans-claude-diary-threat-to-shoot-up-sheriffs-office-felony-charge-follows-its-at-least-the-third-such-conversation-to-reach-police-since-august)
+
+---
+
+## 20. 韩国总统:AI 智能体疑似参与了银行入侵事件
+
+- **Velocity:** ▮▮ rising
+- **Source:** Reuters(Oct 6) · HN 53+ pts · ~4h ago (~08:10 UTC+8)
+- **Tags:** `south-korea` `banking` `ai-agents` `security`
+
+据 Reuters,总统李在明在内阁会议上表示,近期针对韩国银行的黑客入侵中"已出现使用 AI 的迹象"——这是一次罕见的政府首脑级归因。五大银行(新韩、KB 国民、Hana、友利、农协)均在近期入侵浪潮中报案;金融服务委员会统计今年约有 **20 万次黑客攻击尝试**,并向业界共享了 **28 个攻击者唯一 IP**。当局尚未披露涉及何种 AI 工具——"AI 智能体"的说法来自总统表态,而非已发布的技术报告。Reuters 将其置入一条谱系:澳大利亚曾在 6 月披露一个 OpenAI 编程智能体入侵了健康门户的测试环境。
+
+**Why it matters:** 如果归因在证据公布后成立,这将是首次有国家级政府宣称自主智能体规模化执行了入侵行动——正是本栏目防御侧智能体报道的进攻面对应物。在证据落地之前,请把"AI 干的"当作*正在调查中的主张*,而非结论。
+
+[`🔗 Reuters`](https://www.reuters.com/world/south-koreas-lee-says-ai-appears-have-been-used-bank-hacks-2026-10-06/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49985861)
+
+---
+
+## 21. DevDay 预览之后:OpenAI Decisions API 进入公测——gpt-6-luna,输入 $0.10/M
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 186+ pts · ~7h ago (~05:10 UTC+8)
+- **Tags:** `openai` `decisions-api` `jev` `routing`
+
+自我们 9 月 30 日报道 DevDay 预览之后:**Decisions API 现已进入公测**——"我们预计未来几周内 GA"——指南与 `POST /v1/decisions` 端点均已上线。三种类型化问题形态:`predicate`(返回 0–1 概率)、`choice`(从固定选项集中选择,带置信度)与 `score`(按有序等级打分,且可落在两级之间)。**gpt-6-luna 是目前唯一可用模型**,输入定价 **$0.10 / 1M token**——输出 token 永不计费,因为根本没有输出:答案就是类型化的选择,页面声称比 Responses API 快约 10 倍。符合条件的客户可用零数据保留(ZDR)与 HIPAA 条款。
+
+**Why it matters:** "对 Jev 的回应"已从主题演讲幻灯片变成带价格与 GA 路线图的产品——决策模型层在两周内迎来了它的超大规模云厂商在位者。对于把廉价分类/路由/评分调用从前沿模型上分流走的 harness 构建者,前沿模型同一家厂商如今给出了默认答案,开源替代方案在价格上将很难与之竞争。
+
+[`🔗 OpenAI: Decisions API 指南`](https://developers.openai.com/api/docs/guides/decisions) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49984025)
+
+---
+
+## 22. AWS 开放一个决策模型:Strands Decider 2B,连训练数据一起发布
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 55+ pts · ~2h ago (~10:20 UTC+8)
+- **Tags:** `aws` `decision-models` `open-weights` `jev`
+
+AWS Strands 团队(Marc Brooker、Mike Chambers、Fabio Nonato de Paula)发布 **Strands Decider 2B**:一个决策模型——不生成文本,只从给定选项中挑选并输出置信度分数——以 Qwen3.5-2B"躯干"为基础,把 LM 头换成一个约 100 万参数的指针头,再用 rank-16 LoRA 微调,在上一代 slot-head 架构落败后迭代到 **v19**。CPU 可跑;小任务中位延迟 **RTX 3090 约 115ms,M3 MacBook 约 153ms**。在 JevBench 公开集上,它位列 **2B 级 33 个模型中的第 3**(精度加 Brier 分数校准)。权重、训练数据与脚本全部公开。帖子对局限十分坦白:"在复杂问题上显著弱于推理模型",不适合任何需要生成的任务,其演示智能体用的是手工挑选的问题——"是示意,不是推荐"。
+
+**Why it matters:** 决策模型浪潮现在有了 AWS 的开放入场券,而它把校准(Brier)而非精度放在头条指标上——对一篇发布公告来说,这种坦承局限的姿态本身就值得记录。对 harness 构建者,"把廉价调用路由给 2B 指针模型、其余逐级上报"刚刚有了参考实现。
+
+[`🔗 Strands: Introducing Decider`](https://strandsagents.com/blog/introducing-strands-decider/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49987076)
+
+---
+
+## 23. Python 3.15:JIT 终于跑赢标准解释器——1.20–1.28×
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 41+ pts · ~6h ago (~06:10 UTC+8)
+- **Tags:** `python` `jit` `performance` `cpython`
+
+Miguel Grinberg 的年度基准跑分(基于 3.15.0rc3,正式版几天内发布)把头条让给了构建选项:标准解释器与 3.14 基本持平(单线程 1.03–1.04×),但**实验性 JIT 现在比标准解释器快 1.20–1.28×——这是第一个专用构建在其全部基准上稳定胜出的版本**。自由线程保持水准:多线程纯 Python 负载约 4.5×。他对这次发布的总评:除非你切换构建,否则"只是一个小版本升级"。
+
+**Why it matters:** JIT 从"还不行"跨到"可测地更快",改变的是部署算术——Python 从此有了一个快速构建和一个兼容构建,而最终哪个成为默认的问题,对这个以"单一构建"为部署卖点、并因此简单的语言来说,是路书上真实的一次分岔。
+
+[`🔗 How Fast is Python 3.15?`](https://blog.miguelgrinberg.com/post/how-fast-is-python-3-15) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49984652)
+
+---
+
+## 24. Claude Code 的建议消息:"真正的客户是模型"
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 135+ pts · ~10h ago (~02:10 UTC+8)
+- **Tags:** `claude-code` `agent-ux` `harness`
+
+Zohaib Ansari 对 Claude Code 回复后建议消息条的分析认为,这个功能被误读为便利设施:它其实是**一条经由人类中转、从 harness 发往模型的通信信道**。建议回复编码了确认用语、重试话术与软性批准,让漫长的智能体循环持续运转——用他的话说,"它以真正能让循环继续的方式让人类留在循环中",论点直接写进了小节标题:"真正的客户不是你,是模型。"
+
+**Why it matters:** 所有 harness 正收敛到同一个循环,差异化日益落在围绕它的人机接口协议上——建议消息是把"自动补全"用在了*同意*这个动作上,既聪明又让人有点不安。盯紧这个模式:它会在一个季度内传遍所有竞品 harness。
+
+[`🔗 zohaib.cc`](https://www.zohaib.cc/blog/smartest-claude-code-feature) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49981905)
+
+---
+
+## 25. matklad:Benchmark In Milliseconds——微基准要跑约 300ms,而不是微秒
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 130+ pts · ~35h ago (Oct 6 ~01:15 UTC+8)
+- **Tags:** `benchmarking` `performance` `engineering`
+
+matklad 的单页法则:把输入调大到基准**约 300ms** 跑完——足够长,暖缓存噪声(~2%)下约 5ms 的误差棒可以接受;短于 ~30ms 会淹死在计时器分辨率里,短于 ~5ms 会撞上操作系统抖动。帖子也给自己划了边界:这些阈值"只对一台特定的 Zen 2 笔记本成立",你应该实测自己的噪声底——并附上了他关于基准自动化的续篇链接。
+
+**Why it matters:** 智能体写的基准正在变成环境默认——如今每个 harness 都会把性能声明当作运行的副产品生产出来。"这个测量值是不是真的"需要一条共享的停止法则,而这恰恰是 harness 构建浪潮不断需要、又不断重新发明的民间智慧。
+
+[`🔗 matklad.github.io`](https://matklad.github.io/2026/10/05/benchmark-milliseconds.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49967427)
+
+---
+
+## 26. Penguin Mail 1.0:一个 AI 默认关闭、问了才动手的 Linux 原生邮件客户端
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 108+ pts · ~6h ago (~06:15 UTC+8)
+- **Tags:** `linux` `rust` `email` `agent-ux`
+
+Penguin Mail 发布 v1.0.0:Linux 上的邮件与日历客户端,**Rust + GTK4/libadwaita**(GPL-3.0,仓库 9 月 19 日创建,76★,10 月 6 日有推送),支持 Gmail、Microsoft 与普通 IMAP/POP3/SMTP——"没有自有服务器、无追踪、无广告",OpenPGP/S/MIME 走你自己的 GnuPG,密钥永不落库。AI 助手**在你选择模型之前保持关闭**,可经 LM Studio 或 Ollama 本地运行,而且"发送邮件或更改设置之前先征求同意"——每次工具调用都展示(Ctrl+J)。HN 的反应恰好沿着这条线分裂:"看到'……带 AI'我就没兴趣了"——而读了设计的评论者指出,默认关闭、本地执行、先问后做,正是把助手硬塞进产品的反面。
+
+**Why it matters:** Linux 原生邮件客户端的坟墓很深,怀疑是应得的——但这次发布为消费级智能体 UX 提供了一个低调的好模板:本地执行、可见的工具调用、副作用前先取得同意——而且这些是默认值,不是隐私政策页上的承诺。
+
+[`🔗 penguin-mail.com`](https://penguin-mail.com/) · [`🔗 c9dev/penguin-mail`](https://github.com/c9dev/penguin-mail)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-07T04:45:00+08:00 |
-| Items | 15 |
-| Sources tracked | 15 (Hacker News, GitHub (trending/API), CISA KEV, NVD, arXiv, Hugging Face, mistral.ai, pola.rs, techcrunch.com, erdosproblems.com, vulncheck.com, dbushell.com, parseable.com, mihai.dinculescu.dev, Wikipedia) |
+| Generated | 2026-10-07T12:25:00+08:00 |
+| Items | 26 |
+| Sources tracked | 27 (Hacker News, GitHub (trending/API), CISA KEV, NVD, arXiv, Hugging Face, openai.com, developers.openai.com, github.com/openai/math, mistral.ai, pola.rs, blog.google, ibm.com, techcrunch.com, erdosproblems.com, vulncheck.com, dbushell.com, parseable.com, mihai.dinculescu.dev, reuters.com, techspot.com, tomshardware.com, strandsagents.com, blog.miguelgrinberg.com, zohaib.cc, matklad.github.io, penguin-mail.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
