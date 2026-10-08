@@ -1758,3 +1758,11 @@ Sources: [arXiv 2610.05162](https://arxiv.org/abs/2610.05162) · [DEEP-JLU/MemAd
 **EmbeddingGemma 2（Google，10 月 6 日，Apache 2.0）：** 740M（270M 文本 / 170M 视觉 / 300M 音频）把文本、代码、图像、视频、音频统一进一个嵌入空间；MTEB Code 较 v1 +9.92（68.76→78.68）；8K 上下文；量化后设备端 ~191–567MB；Matryoshka 768→128 最高省 6× 存储；权重在 HF/Kaggle、运行时从 llama.cpp 到 MLX 到 WebGPU。本地栈最后一块没有许可宽松多模态选项的拼图补上——「agent 记住你整台机器」模式的基础设施。
 
 Sources: [docker/docker-agent](https://github.com/docker/docker-agent) · [HN](https://news.ycombinator.com/item?id=49996259) · [microsoft/mxc](https://github.com/microsoft/mxc) · [NVIDIA/OpenShell](https://github.com/NVIDIA/OpenShell) · [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre) · [Google Developers Blog](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/) · [zohaib.cc](https://www.zohaib.cc/blog/smartest-claude-code-feature) · [EmbeddingGemma 2](https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/)
+
+## 2026-10-09 —— 程序状态成为终端协议；开源个人助理公布它自己的疑虑
+
+**OSC 7501（Mitchell Hashimoto，10 月 6 日，HN 17）：**一条转义序列，让任何终端程序声明自己的状态——`ESC ] 7501 ; state=working|idle|done|blocked|error ; progress=… ; app=… ; msg=… ESC \`——支持并发记录的层级 ID，阻塞态带 `kind=permission|question|auth`。动机完全是 agent 时代的：agent 收件箱工具（如 Herdr）用脆弱的正则抓窗口标题（其中一条匹配 Claude Code 标题里的盲文转轮——一个规则文件「三个月里改了十次」），而 socket API 在 SSH 和容器里会断，pty 却两者都能穿过。libghostty 和 Rex 已实现；Terraform、Claude Code、Codex、Homebrew 各有不到一打行的概念验证 emitter。这是提案，不是标准——明确征求反馈。多 agent 编排缺的原语不是更好的模型，而是机器不用解析人类输出就能问「完成了、阻塞了、还是挂了？」；优雅降级（未知 OSC 被跳过）加 SSH 可用是摩擦最低的版本。论题 1 的分层图新增一层：harness 与监督者之间的*状态信道*。
+
+**nanoMuse（浙江大学，HF 论文 2610.08699，81 赞；GPL-3.0，338★）：**Meta Muse 个人助理的开源对应物——一个有名字、有形象、用 Markdown 记忆（SOUL.md、USER.md、GLOBAL.md、HEARTBEAT.md）的 agent，在你拥有的每台设备上作为对等端运行：Android 全功能端上 agent（38 MB 应用，带屏幕控制）、受限 iOS 版（TestFlight——「iOS 不允许任何应用操控另一个应用」）、Electron 桌面端、Web 应用、可选自托管中继（约 $4–6/月）。「Sentinel」以固定决策顺序和污点规则把守每一次工具调用；支持 18 家模型供应商。局限章节异常诚实：Sentinel 是「策略边界，不是特权边界」，屏幕操控的手没有实测成功率，记忆缺乏溯源元数据。个人助理架构正在公开两面同时成形——Muse 封闭、nanoMuse 开源——带着同样三个难题：跨设备身份、权限把守、可信记忆。「做任何不可撤销的事之前先问你」是正确默认；策略级把守是否守得住，恰是作者自己怀疑的。
+
+Sources: [OSC 7501 提案](https://mitchellh.com/writing/program-status-osc7501) · [HN 讨论](https://news.ycombinator.com/item?id=49984159) · [nanoMuse 论文](https://huggingface.co/papers/2610.08699) · [nano-muse/nanoMuse](https://github.com/nano-muse/nanoMuse)

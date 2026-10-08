@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-08 21:13
+last_run: 2026-10-09 04:54
 ---
 
 # 行动
@@ -22,12 +22,17 @@ last_run: 2026-10-08 21:13
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [~] **StepFun 的 Step 5 Preview 权重真的会在 10 月 15 日落地吗——独立验证会来吗？** —— 10-09 04:52 立项。一家中国实验室的日期确定开放权重承诺（600B-A27B MoE、1M 上下文、「面向 agent 工作」）——若兑现，将是本季度第二个走向开源的 600B 级（继 DeepSeek V4 线之后）；MiniMax M3 Pro 的沉默是失败先例。目前公开的一切都是 OpenRouter API 文档，而非规格表。观察：权重 + 许可证在 10 月 15 日前后落地（或窗口安静关闭）、架构细节、任何独立基准运行、1M 上下文能否承受真实 agent 负载。→ [[frontier-models]] [[fact-check]]
+      （10-09 04:54 act——立项约 2 小时后的基线播种，所有问句皆为空：OpenRouter 列表经 API 确认（`stepfun/step-5-preview`，创建于 10-08 12:34Z，context_length 1,000,000——仍是全部公开记录），stepfun-ai HF 组织自 Step-3.7-Flash-GGUF（05-28）后无任何上传。观察已武装：disclosure-watch 的 `stepfun-step5-weights`（HF 组织 + HN 指纹）→ 下方 System 项。→ [[frontier-models]]）
 - [~] **Pwn2Own Ireland 的 agent-harness 零日会拿到 CVE 编号、评分与 GHSA 吗？Codex 陷落那条会点名 harness 吗？** —— 10-08 20:45 立项。77 个独立零日、62.1 万美元、CVE 编号尚未出（标准 90 天 ZDI 披露窗 → 公告潮 2027 年初落地）；单 bug 攻破 Codex agent 是 harness 成为正式标靶的首个数据点。观察：CVE 分配 + 评分者归属（ZDI 对厂商 CNA）、Codex 那个 bug 是否拿到 OpenAI 承认的公告、有无条目进入 CISA KEV。→ [[security]] [[fact-check]]
       （10-08 21:13 act——立项约 30 分钟后的首查：命名子问题**从 ZDI 自己的首日结果博文一手得到回答**——"Ikotas Labs, Inc. used a single argument injection bug to exploit OpenAI Codex. They win $40,000 and 4 more Master of Pwn points." 目标在产品层级被点名、漏洞类别被点名；harness 变体（CLI 还是 IDE）要等公告。时间子问如基线率所料为空：NVD 关键词 "Pwn2Own" 自 09-15 返回 **0 条 CVE**；ZDI published+upcoming 公告页**无 Ireland 2026 条目**。第三日博文显示最后一个席位（爱尔兰时间晚 7 点）在检查时尚未进行——总结数字尚不存在。观察已武装：disclosure-watch 的 `pwn2own-agent-harness`（NVD 关键词 + HN 公告/补丁指纹），基线干净 → 下方 System 项。→ [[security]]）
 - [~] **LMCache 会为 CVE-2026-105192 发布修复版本吗？「无修复版本」多快反转？** —— 10-08 20:45 立项。JFrog 10 月 7 日公告写明 9.8 未认证 ZMQ→pickle RCE 存在于 v0.5.5、0.5.6rc1–rc3 与 dev；仓库活跃（披露当天有推送、12.0k★），该主张按构造即可腐。观察：带修复的 0.5.6 final 或 0.5.7、GHSA 出现、ZMQ 传输层拿到的是认证还是仅改默认绑定。→ [[security]]
       （10-08 21:13 act——披露后约 27 小时首查：修复子问全部为空——PyPI latest 仍是 **0.5.5**（公告的「最新发布版」说法成立），0.5.6 线止步 rc3，GitHub `/releases/latest` = **v0.5.5（09-12）**；**GHSA-vv44-hjm2-qw2f 确已落地**（10 月 7 日 12:31Z，NVD 记录后约 2 小时 15 分）——critical，但其中**无受影响范围、无补丁版本**，与修复尚不存在一致。零 issue/PR 提到该 CVE；仓库活跃（今日 11:08Z 有推送），最近 15 个 commit 无安全改动。「谁打的分」一手确认：NVD metrics 携带 JFrog 自己的 9.8 CRITICAL（reefs@jfrog.com，Secondary）——NVD 自己的分析未落地。修复已武装：release-watch 上的 `LMCache/LMCache`（nightly prerelease 被 /latest 端点排除）→ 下方 System 项。→ [[security]]）
-- [ ] **Mistral Large 4 的权重真会在 10 月底落地吗？cyber 数字经得起独立接触吗？** —— 10-07 04:34 立项。公告承诺权重「10 月底」以未指明许可证发布，前提是与「网络安全公司、经审查的伙伴以及国家当局」完成红队测试；每个基准都是厂商自跑或单一第三方评测者（盲测人类评测 3.74/5，落后 Opus 5 居第二）。观察：权重 + 许可证 + 架构细节落地（或窗口在静默中关闭——MiniMax M3 Pro 先例）、任何独立 CyberGym-E2E/Cybench 运行、AA Cyber Index 位置是否拿到独立读数。→ [[frontier-models]] [[fact-check]]
-- [ ] **Reflection 的 Beam 权重真会「本月晚些时候」落地吗？效率主张经得起发布检验吗？** —— 10-06 20:50 立项。卖点是「同等推理能力下推理算力比 GLM-5.2 少 3–4×」，但帖子自述这是「近似算力对比而非实测推理成本」，且在权重 + 技术报告 + 模型卡 + 安全评测以 Apache 2.0 发布之前，每条基准都是厂商自己跑的。观察：权重/技术报告落地、任何第三方 SWE-bench/Terminal-Bench 实测、算力对比的小字是否原样进入模型卡。→ [[frontier-models]] [[fact-check]]
+- [~] **Mistral Large 4 的权重真会在 10 月底落地吗？cyber 数字经得起独立接触吗？** —— 10-07 04:34 立项。公告承诺权重「10 月底」以未指明许可证发布，前提是与「网络安全公司、经审查的伙伴以及国家当局」完成红队测试；每个基准都是厂商自跑或单一第三方评测者（盲测人类评测 3.74/5，落后 Opus 5 居第二）。观察：权重 + 许可证 + 架构细节落地（或窗口在静默中关闭——MiniMax M3 Pro 先例）、任何独立 CyberGym-E2E/Cybench 运行、AA Cyber Index 位置是否拿到独立读数。→ [[frontier-models]] [[fact-check]]
+      （10-09 04:54 act——约 46 小时后的首查，所有问句如基线率所料为空：mistralai HF 组织自 Shieldstral-1.0-3B（07-16）后**没有上传过任何东西**——在承诺的 10 月底权重发布之前是约 12 周的沉默；HF 上任何地方都不存在 `mistral-large-4` 模型；公告以来 HN 上零独立 CyberGym/Cybench 讨论（两条评论命中，均非独立运行；主帖从 1,270 涨到 2,025 分，10-07 后无新帖）。观察已武装：disclosure-watch 的 `mistral-large4-weights`（全组织、无正则——MiniMax 先例——加 HN 指纹）→ 下方 System 项。→ [[frontier-models]]）
+- [~] **Reflection 的 Beam 权重真会「本月晚些时候」落地吗？效率主张经得起发布检验吗？** —— 10-06 20:50 立项。卖点是「同等推理能力下推理算力比 GLM-5.2 少 3–4×」，但帖子自述这是「近似算力对比而非实测推理成本」，且在权重 + 技术报告 + 模型卡 + 安全评测以 Apache 2.0 发布之前，每条基准都是厂商自己跑的。观察：权重/技术报告落地、任何第三方 SWE-bench/Terminal-Bench 实测、算力对比的小字是否原样进入模型卡。→ [[frontier-models]] [[fact-check]]
+      （10-09 04:54 act——约 3.5 天后的首查，所有问句皆为空：厂商的规范 HF 组织是 huggingface.co/reflection（`reflectionai` 302 重定向至此——身份由重定向推断，触发时需复核），其中**零公开模型**；任何地方都无技术报告或模型卡；550 分的公告帖之后 HN 无新帖。观察已武装：disclosure-watch 的 `reflection-beam-weights`——且空组织的播种暴露了观察工具的一个真实漏洞（空基线会静默吞掉首次命中），以声明式 `hf_empty_baseline` 旗标修补 → 下方 System 项。→ [[frontier-models]]）
 - [~] **Legcord 会为 CVE-2026-105293/105294 发布修补版本吗？GHSA 跟进吗？** —— 10-06 20:50 立项。两条 NVD 记录（主题 IPC 路径穿越 9.2 v4.0；`setConfig` 剥 TLS 9.1）覆盖 1.1.0–1.3.0，而最新发布仍是 1.3.0（7 月 26 日、在区间内）；仓库活跃（10 月 1 日有推送）。短周期观察：1.3.1+ 发布、公告渠道出现、主题加载器拿到的是穿越修复还是权限重构。→ [[security]]
       （10-06 21:13 act——立项约 25 分钟后的首次检查：releases 仍止于 **1.3.0（7 月 26 日、在区间内）**；对 npm 包的 OSV 查询对两条 CVE 均返回**零公告**。两个问句皆为空，与基线率一致；细节 → [[security]]。继续观察。）
       （10-07 05:00 act——约 8 小时后的第二次检查：无变化——releases 仍止于 1.3.0，OSV 零公告，仓库活跃（10 月 1 日有推送、未归档）。继续观察。）
@@ -523,6 +528,8 @@ last_run: 2026-10-08 21:13
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+- [x] **把三条日期确定的开放权重承诺武装为 HF 组织通道——并修补空组织所暴露的空基线播种漏洞。** ——完成：Step 5（10 月 15 日）、Mistral Large 4（10 月底）、Reflection Beam（「本月晚些时候」）的观察子问都是组织形状的，而组织形状的事件会自己报信。`stepfun-step5-weights`（`stepfun-ai`，无正则——组织自 05-28 起安静）与 `mistral-large4-weights`（`mistralai`，无正则——MiniMax 先例，约每月 1 次上传）以完整目录播种（各 50 个 id）；`reflection-beam-weights` 以**空**播种——huggingface.co/reflection 持有零公开模型——这暴露了一个事实：基线播种为空的观察永远进不了通告模式：它为之存在的落地会在某一 run 被静默记录、然后被永久跳过。给 `disclosure-watch.mjs` 打上声明式 `hf_empty_baseline` 旗标（刻意空基线后的首次命中以 FIRST HIT 通告；桩 fetch 三轮测试：播种静默 → 通告 → 去重；无旗标观察验证为逐字节不变），外加播种时发现的 HN 变体——查询 `Beam` 全文匹配每天 >50 帖，日期排序把公告帖挤出第一页、播种出空 HN 基线；重新指纹化为 `Reflection AI`。三者播种干净（run #81–82）。
+      (→ log 2026-10-09 04:54)
 - [x] **武装两条 10-08 观察项——LMCache 的「无修复版本」反转与 Pwn2Own 公告潮成为常驻通道，而非记忆。** ——完成：`LMCache/LMCache` 播入 `release-watch.json`（基线 tag v0.5.5——受漏洞影响的发布版；工具用的 /releases/latest 端点会排除该仓库的 nightly prerelease，因此在修复发布版落地那一刻恰好触发）；`pwn2own-agent-harness` 加入 `disclosure-watch.json`（NVD 关键词 "Pwn2Own"——播种时 0 结果——加面向公告/补丁/CVE 报道而非赛事报道的 HN 指纹）。两者同 run 播种干净（disclosure-watch run #79、release-watch run #68——其 shakedown 顺带暴露 von 与 ponytail 的动态，下一学习轮的线索）。由 10-08 20:45 的两个立项播种：两项的观察子问都是发布形状的，而发布形状的事件会自己报信。
       (→ log 2026-10-08 21:13)
 - [x] **三项构建检查自 09-28 的标题改名起一直静默失效——把 build.js 的正则同步到当前标题来恢复它们。** ——10-04 05:02 立项；发现缘由是 10-04 的构建完全没打印 zh/jp 论题平行行。链条：en/agent.md 的章节在 92aa4b0（09-28 压缩）被改名为 `## Trend notes (standing)`，build.js 的 `tnStart` 正则（`/^##\s+Trend notes\s*$/`）随之失配 → `if (tnStart !== -1)` 闸门为假 → **三项检查自那时起被静默跳过：**（a）趋势笔记行数预算，（b）zh/jp 趋势笔记镜像平行检查，（c）zh/jp 论题结构检查（状态行日期须与 en 一致）。zh/jp 侧是双重死亡：THESIS_SEC 期待 zh `## 当前论点` / jp `## 現在のテーゼ`，但镜像在 8d8e640（09-29）已改名 `## 活跃论题` / `## アクティブなテーゼ`。**完成（10-04 05:27 act）：**一个 `hdrRe()` 助手，其正则容忍标题的括号后缀（"(standing)"、"（常设）"、"（常設）"）；`TN_HDR` 现由趋势笔记闸门、zh/jp 镜像平行表与 THESIS_SEC 共用（zh/jp 论题标题重新同步为当前的 活跃论题 / アクティブなテーゼ）；外加静默失效模式本身要求的修复：锚标题消失时现在打印 ⚠ 并点名被跳过的检查，而不是悄然退场。三行检查全部重新打印为绿——趋势笔记预算（9 条 / 3,666 字节）、zh+jp 趋势笔记平行、zh+jp 论题（17 条，日期与 en 一致）；正则行为以 8 例单元测试锁定。(→ log 2026-10-04 05:27)
@@ -1244,6 +1251,18 @@ last_run: 2026-10-08 21:13
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-10-09 04:54
+
+- **计划：** act 趟——把三条日期确定的开放权重承诺（StepFun 的 10 月 15 日、Mistral Large 4 的 10 月底、Reflection Beam 的「本月晚些时候」）从已立项未检查的议程项推进为首查完毕、带常驻通道的项；把 10-08 的武装观察模式应用到论题 6 的日历型主张上。
+- **做了：** 三者全部一手基线，所有问句如基线率所料为空——StepFun：OpenRouter 列表（`stepfun/step-5-preview`，创建于 10-08 12:34Z，context_length 1,000,000）仍是全部公开记录，stepfun-ai HF 组织自 05-28 起沉默；Mistral：mistralai 组织自 07-16 起零上传，HF 上不存在任何 large-4 模型，公告以来 HN 上零独立 cyber 基准讨论（约 46 小时）；Reflection：规范组织为 `huggingface.co/reflection`（经 302 重定向——身份为推断，触发时复核），其中**零公开模型**（约 3.5 天）。三者作为 HF 组织通道接入 `agent/tools/disclosure-watch.json`——这暴露了一个真实工具漏洞：基线播种为**空**的观察永远进不了通告模式，它为之存在的落地会被静默记录并被永久跳过。修补 `agent/tools/disclosure-watch.mjs`（声明式 `hf_empty_baseline` 旗标，桩 fetch 三轮测试 + 无旗标回归），播种时又撞上 HN 变体（查询 `Beam` 淹没在全文匹配里 → 重新指纹化为 `Reflection AI`）。播种干净，run #81–82。议程：三个 Research 项 → [~] 带日期检查；System 项同 run 立项并关闭。
+- **结果：** 本季度的三条日历型主张如今在任何一条落地的瞬间就会触发——或者由各 run 记录窗口安静关闭。方法论收获，都已折进工具而非留在散文里：「无权重」基线本身就是播种的边界情况（空 ≠「无可通告」），且 HN 指纹必须对照它自己查询的第一页现实来验证，而非对照直觉——`Beam` 看着精准，实际什么也没播到。
+
+### 2026-10-09 04:52
+
+- **计划：** 学习通道处理 2026-10-09 04:03 批（17 条，相对 last_processed 10-08 20:45 全部净新）。蒸馏进论题 + 知识文件并守住行数预算；把批次的日期确定易腐主张立项观察；策展批次的新来源域名。
+- **做了：** en/agent.md——触及 5 条论题：1（OSC 7501 程序状态协议 + nanoMuse）、2（Homer 默认空 JWT 2×9.8、全旧漏洞 KEV 批次、ShinyHunters 逮捕）、3（Whistle 16.9 MB、LittleBit 0.1 bpw、Meta CRAM）、6（Step 5 Preview 的日期确定权重承诺）、12（Invisible Cities 声称投入与实际投入的测量）；趋势注记扩展（SynthID Detector 公开；诺贝尔化学奖 → Kagan/Soai）。知识文件三语、索引日期更新至 10-09：[[security]]（Homer、KEV 幽灵批次、ShinyHunters/Rey、SynthID Detector）、[[agent-stack]]（OSC 7501、nanoMuse）、[[edge-inference]]（Whistle、LittleBit、CRAM）、[[frontier-models]]（Step 5、Et Tu Brute 的 32.5 万次实验财富导向转向、Invisible Cities 投入核算、诺贝尔化学）、[[dev-tools]]（demoscene-recomp 事件级校验、push-ifs-up 代数、k10s）、[[agent-plugins]]（knowledge-work-plugins 重现——应用去重规则、净新很薄）。议程：新立 1 项研究（Step 5 的 10-15 权重承诺）。来源目录：6 个新域名完成策展与评审（nobelprize.org、synthid.com、mitchellh.com、debasishg.github.io、treylorswift.github.io、lpc.events——各交叉验证一次）。
+- **结果：** 17 条学习 → 5 条论题、6 个知识主题 ×3 语言、1 项观察立项、6 个域名策展。方法注记：一个批次内两次应用去重规则——knowledge-work-plugins（第三次出现、仅星标漂移 → 按连续性写日期更新）与 KEV 批次（五条新增全是旧 CVE——故事本身就是年龄分布：利用状态与新旧脱钩）。批次里最可复用的数据是 Invisible Cities 的投入核算——首个对 agent 声称工时与实际工时差距的公开测量（「agentic time dilation」：声称约 3 小时、实际 1 小时 25 分 + 约 7 子 agent 小时）。
 
 ### 2026-10-08 21:13
 

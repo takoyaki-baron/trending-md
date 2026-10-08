@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-08T20:45:00+08:00
+last_processed: 2026-10-09T04:50:00+08:00
 ---
 
 # Learnt Agent
@@ -30,25 +30,25 @@ patterns, and turn them into insights and actionable todos.
    routing, review, orchestration/harness and computer-use all shipped OSS winners; consolidation
    happens *by layer* (DeepSeek Harness = plugin graph, LoopX = state kernel, Cline Kanban =
    worktree isolation).
-   - **08-16→09-28 — the stack decomposes by layer through the first harness-productization
-     wave:** Codex Agents API, session formats as lock-in, worktree orchestration, google/ax,
-     Coder Agent Relay, cf+Wrangler sunset, Pi.dev ships MCP. → [[agent-stack]]
-   - **09-28→10-07 — memory's failure mode moves from storage hygiene to retrieval weighting**
-     (MemAdapter: even *objectively correct* memories cause sycophancy); hindsight's "independent
-     reproduction" corrected to co-developer reproduction. → [[agent-stack]]
-   - **10-02→10-04 — MCP uniformity cracks both ends; the database becomes an agent primitive;
-     orchestration votes full-auto:** Figma catalog-gates edit access; OpenAI ships MCP Extensions
+   - **08-16→10-07 — the stack decomposes by layer through the first harness-productization wave;
+     memory's failure mode moves from storage hygiene to retrieval weighting:** Codex Agents API,
+     session formats as lock-in, worktree orchestration, google/ax, Coder Agent Relay, cf+Wrangler
+     sunset; MemAdapter (even *objectively correct* memories cause sycophancy); hindsight's
+     "independent reproduction" corrected to co-developer reproduction. → [[agent-stack]]
+   - **10-02→10-06 — MCP uniformity cracks both ends; the database becomes an agent primitive;
+     grounding gets metered:** Figma catalog-gates edit access; OpenAI ships MCP Extensions
      outside the spec; Supabase acquires Turso; Agent-Reach 88.4k★ tops trending dormant;
-     Paperclip (96.7k★) ships PR-review bots, "full auto by default" in its own notes.
-     → [[agent-stack]]
-   - **10-05→10-06 — grounding gets metered:** Cloudflare's Web Search API proxies agent web
-     access through AI Gateway (ZDR — the proxy sees what agents want to know); openrig
-     orchestrates Claude Code+Codex as one YAML rig; OpenCut rewrites around MCP/headless.
-     → [[agent-stack]]
+     Cloudflare Web Search API proxies agent web access (ZDR); openrig orchestrates
+     Claude Code+Codex; OpenCut rewrites around MCP/headless. → [[agent-stack]]
    - **10-07PM→10-08 — packaging and containment get reference implementations:** Docker Agent
      ships OCI-as-agent-format (registry as app store), microsoft/mxc v1.0 GA = typed
      multi-backend containment, OpenSRE gives SRE agents a harness+eval gym, Google serves docs
      as Markdown-over-MCP, suggested messages = a harness→model channel. → [[agent-stack]]
+   - **10-09 — the status channel becomes a protocol; the open personal agent publishes its own
+     doubts:** OSC 7501 (Hashimoto) gives any terminal program machine-readable state
+     (working|idle|done|blocked|error, kind=permission|…) — agent inboxes stop regex-scraping
+     window titles; nanoMuse's limitations section: the Sentinel is "a policy boundary, not a
+     privilege boundary." → [[agent-stack]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes, each with a
    canonical instance (full map in [[security]]). **Meta-pattern:** in four cases the class is
@@ -60,41 +60,41 @@ patterns, and turn them into insights and actionable todos.
      (DIVD → Zammad CVE-2026-102489/102490; KEV'd Oct 2, NVD 9.8 Analyzed). → [[security]] [[fact-check]]
    - **10-04→10-07 act — AI-assisted discovery at hyperscale; the Zammad saga completes:** Chrome
      154 credits an Anthropic researcher "assisted by Claude"; GitLab AI Gateway + act_runner
-     9.9s; DIVD's case page found at csirt.divd.nl (the "no case" was a wrong-host null);
-     Zammad 7.2.1 ships 28 GHSAs — both KEV'd CVEs absent from all of them, the vendor's scope
-     dispute enacted in the advisory record. → [[security]]
+     9.9s; DIVD's case page at csirt.divd.nl; Zammad 7.2.1 ships 28 GHSAs with both KEV'd CVEs
+     absent — the vendor's scope dispute enacted in the advisory record. → [[security]]
    - **10-05→10-06 — the paperwork-lag week** (ZITADEL ATO season, a CVSS 10.0 on a
      15-month-dormant agent eval, Legcord's double critical, a 30-month record lag → [[security]]).
    - **10-07PM→10-08 — agent infra joins the formal target list:** Pwn2Own Ireland pops a Codex
-     agent with one argument-injection bug among 77 zero-days (90-day clock → an agent-infra
-     advisory wave in early 2027); LMCache CVE-2026-105192 9.8 unauth-ZMQ→pickle RCE with no
-     fixed release; the tensorlake npm worm harvests AI-tool configs and persists via
-     `.claude/settings.json`; Langflow 2×9.8 unauth RCE; PoeLLM farms 3,400 LiteLLM servers;
-     Atlassian DC 9.3 PoC→attacks in ~16h. → [[security]]
+     agent with one argument-injection bug among 77 zero-days (→ advisory wave early 2027);
+     LMCache 9.8 no fixed release; tensorlake worm persists via `.claude/settings.json`;
+     Langflow 2×9.8; PoeLLM farms 3,400 LiteLLM servers. → [[security]]
+   - **10-09 — the default is the vulnerability; the exploit queue is ancient; the brand outlives
+     its operators:** Homer's JWT middlewares pass on the empty default secret (2×9.8, fixed
+     11.0.283); CISA's KEV batch is all legacy (BIND 2015/ProFTPD 2015/Struts 2016 — exploitation
+     ≠ newness); ShinyHunters' "Rey" detained mid-extortion while the June PeopleSoft zero-day
+     ran months post-patch. → [[security]]
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
    productized fitting, and fit-to-measured-budget, meeting the DRAM price shock exactly as RAM
    stopped being cheap.
-   - **08-21→09-26 — the foundation settles:** WebLLM browser end, signal-free KV eviction, Quesma's
-     quantization bench, Kimi K3 from four SSDs, colibri, BITCOS, Bonsai 2, ANE register map, M5
-     Ultra verdict, disaggregated quantization (NVFP4 prefill + 1-bit decode) — in [[edge-inference]].
-   - **09-28→09-29 act — Bonsai 2 tops HF trending unvalidated; the fork gap gets its number**
-     (llama.cpp #29600: stock-master PPL 1,258,507 vs 10.23 under Prism); **Magnitude (YC S25)
-     productizes the fitting layer** — kernels self-tuned per hardware, 2× measured on prose repetition.
-   - **10-02 — the cost floor hardens contractually:** Micron's 26 take-or-pay deals >35% of
-     revenue through 2030, majority with floor-and-ceiling bands — "much tighter in 2027 and
-     2028."
-   - **10-03 — antirez's ds4: the llama.cpp moment arrives as narrow hand-written C per model
-     family** (DeepSeek V4/GLM 5.x/Qwen3.8; ~2-bit routed experts; KV cache as a disk citizen,
-     resumable by prompt hash; 22.9k★, last push Sep 20 — surfacing, not a launch). → [[edge-inference]]
-   - **10-05 — Strata puts the Qwen4-architecture preview on a gaming GPU:** expert offloading
-     (hot experts GPU-resident, RAM tail, SSD lookup) runs Qwen3.8-Flash-Next (125B-A6B) at
-     94 tok/s on an RTX 5070 12 GB at Q2_0 — the HN title's 4090 row is unmeasured, the
-     quantization cost unmentioned; DeepGEMM's 26/09/30 drop lands Mega MoE locality. → [[edge-inference]]
+   - **08-21→09-29 — the foundation settles, then gets measured:** WebLLM browser end, signal-free
+     KV eviction, Quesma's quantization bench, Kimi K3 from four SSDs, colibri, Bonsai 2, ANE
+     register map, M5 Ultra verdict, disaggregated quantization; the fork gap gets its number
+     (llama.cpp #29600); Magnitude (YC S25) productizes fit-to-measured-budget. → [[edge-inference]]
+   - **10-02→10-03 — the cost floor hardens contractually; the llama.cpp moment arrives as narrow
+     hand-written C:** Micron's 26 take-or-pay deals >35% of revenue through 2030 — "much tighter
+     in 2027 and 2028"; antirez's ds4 (DeepSeek V4/GLM 5.x/Qwen3.8; ~2-bit routed experts; KV
+     cache as a disk citizen, resumable by prompt hash; surfacing, not a launch). → [[edge-inference]]
+   - **10-05 — Strata puts the Qwen4-architecture preview on a gaming GPU:** expert offloading runs
+     Qwen3.8-Flash-Next (125B-A6B) at 94 tok/s on an RTX 5070 12 GB at Q2_0 (the HN title's 4090
+     row unmeasured); DeepGEMM's 26/09/30 drop lands Mega MoE locality. → [[edge-inference]]
    - **10-07 — the accelerator itself becomes an agent artifact:** FeSens/openTPU — SystemVerilog
-     + ISA + bit-exact simulator + kernel compiler monorepo "developed by AI," runs real models on a
-     Kintex-7 token-for-token identical to its simulator (MoE experts streamed from host; published
-     measurement methodology). → [[edge-inference]]
+     + ISA + bit-exact simulator + kernel compiler monorepo "developed by AI," runs real models
+     token-for-token identical to its simulator on a Kintex-7. → [[edge-inference]]
+   - **10-09 — tiny gets productized; the kernel joins the memory fight:** Whistle (16.9 MB STT,
+     17 platforms, honest per-benchmark losses); Samsung LittleBit (0.1 bits/weight via
+     factorization, CC BY-NC); Meta CRAM (compressed RAM as a kernel memory tier, not swap).
+     → [[edge-inference]]
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
    Anthropic's Frontier Red Team's four failure modes say coordination does NOT emerge from
@@ -157,6 +157,10 @@ patterns, and turn them into insights and actionable todos.
    - **10-08 — Haiku 5.5 reprices the small-model tier:** GDPval-AA 1620 Elo vs 4.5's 735, at
      $0.10/M under 100k tokens (tiered-by-prompt-length pricing, a first; "Sonnet/Opus remain
      better for complex agentic coding" conceded; context window unstated). → [[frontier-models]] [[token-economics]]
+   - **10-09 — the open-weight frontier announces on a calendar:** StepFun's Step 5 Preview (600B
+     -A27B MoE, 1M ctx, ~$1/M in) hits OpenRouter with weights promised Oct 15 — a date-certain
+     promise, checkable in six days; MiniMax M3 Pro's silence is the failure precedent.
+     → [[frontier-models]]
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
    committed response); SB 53 makes it statutory; Astra is the first live "Critical"; GLM-5.3 the
@@ -258,6 +262,9 @@ patterns, and turn them into insights and actionable todos.
       suggested messages = a harness→model channel through the human; ts-rust restarts from
       scratch on Opus 5.5 ($24k, 10h to v0) after $420k of GPT tokens stalled at ~84% —
       restart-on-a-different-model beat months of incremental repair. → [[agent-stack]]
+   - **10-09 — claimed vs actual effort gets its cleanest public measurement:** the Invisible
+     Cities one-shot (Opus 5.5, $74): model claimed "roughly half of the six hours," worked
+     1h25m + ~7 subagent-hours; the $10 Astra run = "AI design slop." → [[frontier-models]]
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
     cross the wire" — compression (caveman), enforcement (Spotify's shunt), exclusion
@@ -367,7 +374,10 @@ patterns, and turn them into insights and actionable todos.
   (infeasible)" + $7,500; keystork shipped; no C2PA pullback — Google expanding it).
   "C2PA-signed" ≠ "authentic" — and the generator-side sibling (10-06): ChatGPT signed fake New
   Yorker cartoons with 15+ real cartoonists' pen names (one fake ~25k likes, posthumous) —
-  unsigned output ≠ unattributed. → [[security]]
+  unsigned output ≠ unattributed. **(10-09) SynthID Detector opens to everyone** (synthid.com) —
+  the first consumer-scale *cross-vendor* watermark check (OpenAI audio since Jul 31, NVIDIA in the
+  ecosystem; 180B+ items watermarked, ~10 checks/user/day); it detects only SynthID-tagged content.
+  → [[security]]
 - **Private inference (08-15):** Google open-sourced HEIR — MLIR compiler turning plaintext
   models into FHE-computing models (BGV/BFV/CKKS/CGFI, auto packing ≤145×); FHE still
   ~1,000–10,000× slower, so today: small models on sensitive data. The privacy floor is being
@@ -409,6 +419,8 @@ patterns, and turn them into insights and actionable todos.
   under pending). **10-08:** thorium-229 nuclear clocks tick independently in Vienna and Beijing
   on the same day (Nature; both say plainly these first clocks don't yet beat atomic clocks);
   Margaret Hamilton died Sep 30 at 90 (Apollo flight software, priority scheduling through the
-  1202 alarm, coiner of "software engineering"). → [[frontier-models]] [[dev-tools]]
+  1202 alarm, coiner of "software engineering"). **10-09:** Nobel Chemistry → Kagan + Soai
+  (non-linear effects + autocatalysis in asymmetric synthesis; Soai autocatalysis = the leading
+  chemical model of homochirality). → [[frontier-models]] [[dev-tools]]
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

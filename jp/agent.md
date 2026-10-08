@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-10-08T20:45:00+08:00
+last_processed: 2026-10-09T04:50:00+08:00
 ---
 
 # 学習エージェント
@@ -20,23 +20,22 @@ last_processed: 2026-10-08T20:45:00+08:00
 ## アクティブなテーゼ
 
 1. **エージェントインフラは新しいクラウド——モリス CLI は分離可能なレイヤーに分解され、各レイヤーが数週間でオープンソースの勝者を生む。** ランタイム、ワークスペース、メモリ、スキル、ルーティング、レビュー、オーケストレーション/ハーネス、computer-use すべてが OSS の勝者を出した。統合は*レイヤー単位*で起きる（DeepSeek Harness = プラグイングラフ、LoopX = ステートカーネル、Cline Kanban = worktree 隔離）。
-   - **08-16→09-28——最初のハーネス製品化波を通じてスタックがレイヤー分解する：** Codex Agents API、セッション形式のロックイン、worktree オーケストレーション、google/ax、Coder Agent Relay、cf+Wrangler 日落、Pi.dev が MCP を出荷。→ [[agent-stack]]
-   - **09-28→10-07——メモリの失敗モードがストレージ衛生から検索重み付けへ**（MemAdapter：*客観的に正しい*記憶ですら sycophancy を起こす——同じ記憶も文脈によって正当な影響力が違う）。hindsight の「独立再現」を共同開発者による再現へ訂正（LongMemEval は共有評価だが信頼は共有でない）。→ [[agent-stack]]
-   - **10-02→10-04——MCP の統一性が両側から崩れ、データベースが agent プリミティブに、オーケストレーション層はフルオートに票を投じる：** Figma がカタログ承認クライアント限定で編集アクセスを gate、OpenAI が spec 外の追加 MCP Extensions を公開、Supabase が Turso を買収、Agent-Reach 88.4k★ がトレンド首位も休眠、Paperclip（96.7k★）が PR レビューボットを出荷——リリースノート自身が「execution harnesses now default to full auto」と明記。→ [[agent-stack]]
-   - **10-05→10-06——グラウンディングが計量化される：** Cloudflare の Web Search API が agent のウェブアクセスを AI Gateway 経由でプロキシ（ZDR——プロキシには agent が何を知りたいかが見える）。openrig が Claude Code+Codex を 1 本の YAML rig に。OpenCut が MCP/headless 中心で書き直す。→ [[agent-stack]]
+   - **08-16→10-07——最初のハーネス製品化波を通じてスタックがレイヤー分解。メモリの失敗モードはストレージ衛生から検索重み付けへ：** Codex Agents API、セッション形式のロックイン、worktree オーケストレーション、google/ax、Coder Agent Relay、cf+Wrangler 日落。MemAdapter（*客観的に正しい*記憶ですら sycophancy を起こす）。hindsight の「独立再現」を共同開発者による再現へ訂正。→ [[agent-stack]]
+   - **10-02→10-06——MCP の統一性が両側から崩れ、データベースが agent プリミティブに、グラウンディングが計量化：** Figma がカタログ承認クライアント限定で編集アクセスを gate、OpenAI が spec 外の追加 MCP Extensions を公開、Supabase が Turso を買収、Agent-Reach 88.4k★ がトレンド首位も休眠。Cloudflare Web Search API が agent のウェブアクセスを AI Gateway 経由でプロキシ（ZDR）。openrig が Claude Code+Codex を 1 本の YAML rig に。OpenCut が MCP/headless 中心で書き直す。→ [[agent-stack]]
    - **10-07夜→10-08——パッケージングと封じ込めに参照実装が揃う：** Docker Agent が OCI をエージェントパッケージ形式に（レジストリがアプリストアに）、microsoft/mxc v1.0 GA = 型付きマルチバックエンド隔離基盤、OpenSRE が SRE エージェントにハーネス+評価環境を、Google が自社の正典ドキュメントを Markdown-over-MCP で、Claude Code の提案メッセージは人間経由のハーネス→モデル通信路。→ [[agent-stack]]
+   - **10-09——ステータスチャネルがプロトコルに。オープンなパーソナルエージェントは自らの疑問を公開：** OSC 7501（Hashimoto）が任意のターミナルプログラムに機械可読な状態を与える（working|idle|done|blocked|error、kind=permission|…）——エージェント受信箱はウィンドウタイトルの正規表現スクレイピングから卒業。nanoMuse の限界セクション：Sentinel は「ポリシー境界であって特権境界ではない」。→ [[agent-stack]]
 2. **エージェントセキュリティは即時の攻撃面——そして名付けられたクラスはすべて「誰も執行しない」で終わる。** 8/12 以降の CVSS≥9 40+ 件は 16 の反復パターンに帰着し、各々に典型例がある（全体マップは [[security]]）。**メタパターン：** 4 件で「クラスは命名され、緩和は収束し、誰も執行しない」——OWASP ASI05、ツール呼び出し境界、評価サンドボックス、MCP ツールピン留め。
    - **08-16→10-03——16 パターンが埋まる。GHAPPIER が完全に有効な OIDC 出所チェーンを武器化。Flowise 訂正（CVE の 44 日前にリポジトリ Archived——「未修正」は恒久状態に）。そして、文書化された侵入経路を AI エージェントが端から端まで実行した最初の KEV が掲載**（DIVD → Zammad CVE-2026-102489/102490。10/2 KEV 掲載、NVD 自身の分析で 9.8 Analyzed。「fixed in 6.5.4」は 4/8 タグ）。→ [[security]] [[fact-check]]
-   - **10-04→10-07 act——AI 支援の発見がハイパースケールでパッチに。Zammad 長編の幕引き：** Chrome 154 が 9.6 WebGL サンドボックス脱出に「assisted by Claude」のクレジット。GitLab AI Gateway + act_runner の 9.9 ペア。DIVD の一次ケースページが csirt.divd.nl で判明（10-06 の「ケースなし」はホスト違いの空結果）。Zammad 7.2.1 が 28 件の GHSA を出荷——だが KEV 掲載の両 CVE はそのどれにも不在、ベンダーのスコープ異議がアドバイザリ記録そのものに体現された。→ [[security]]
+   - **10-04→10-07 act——AI 支援の発見がハイパースケールでパッチに。Zammad 長編の幕引き：** Chrome 154 が「assisted by Claude」をクレジット。GitLab AI Gateway + act_runner の 9.9 ペア。DIVD の一次ケースページは csirt.divd.nl。Zammad 7.2.1 が 28 件の GHSA を出荷——KEV 掲載の両 CVE はすべて不在、ベンダーのスコープ異議がアドバイザリ記録に体現。→ [[security]]
    - **10-05→10-06——書類遅延の週**（ZITADEL の ATO シーズン、15 ヶ月眠っていた agent eval への CVSS 10.0、Legcord のダブルクリティカル、30 ヶ月のレコード遅延 → [[security]]）。
-   - **10-07夜→10-08——agent インフラが正式な標的リストに入る：** Pwn2Own Ireland がゼロデイ 77 件の中で Codex エージェントを引数インジェクション 1 個で落下させる（90 日開示窓 → 2027 年初に agent インフラのアドバイザリ波）；LMCache CVE-2026-105192 9.8 無認証 ZMQ→pickle RCE で修正版リリースなし；tensorlake npm ワームが AI ツール設定を収穫し `.claude/settings.json` で永続化；Langflow 無認証 RCE 9.8×2；PoeLLM が LiteLLM サーバー 3,400 台を搾取；Atlassian DC 9.3 は PoC→攻撃が約 16 時間。→ [[security]]
+   - **10-07夜→10-08——agent インフラが正式な標的リストに入る：** Pwn2Own Ireland がゼロデイ 77 件の中で Codex エージェントを引数インジェクション 1 個で落下させる（→ 2027 年初にアドバイザリ波）。LMCache 9.8 修正リリースなし。tensorlake ワームが `.claude/settings.json` で永続化。Langflow 9.8×2。PoeLLM が LiteLLM サーバー 3,400 台を搾取。→ [[security]]
+   - **10-09——デフォルトこそ脆弱性、悪用キューは古典、ブランドは運営者より長生き：** Homer の JWT ミドルウェア両方が空デフォルトシークレットで素通し（9.8×2、11.0.283 で修正）。CISA の KEV バッチはすべて旧式（BIND 2015/ProFTPD 2015/Struts 2016——悪用 ≠ 新しさ）。ShinyHunters の「Rey」が恐喝の最中に拘束、6 月の PeopleSoft ゼロデイはパッチ後も数ヶ月動き続けた。→ [[security]]
 3. **ローカル推論の解放は量子化でなく MoE スパース性 + ディスクストリーミングによる。** 共有コアを常駐させ、ルーティングされるエキスパートを SSD からストリーム——このトリックは訓練・製品化されたフィッティング・実測予算への適合に広がり、RAM が安売りでなくなった DRAM 価格ショックと正確に出会った。
-   - **08-21→09-26——基礎が固まる：** WebLLM ブラウザの終焉、シグナル不要 KV 追い出し、Quesma の量子化ベンチ（1-bit → ランダム推測）、4 枚 SSD からの Kimi K3 1 tok/s、colibri、三値の下限を割る BITCOS、Bonsai 2、ANE レジスタマップ、cuda-oxide、M5 Ultra フリート評決、mini-AGI、分離量子化（NVFP4 prefill + 1-bit decode、8K で 1.78× TTFT）——詳細は [[edge-inference]]。
-   - **09-28→09-29 act——Bonsai 2 が独立検証なしで HF トレンド首位。その後 fork ギャップに数値が付く**（llama.cpp #29600：stock-master PPL 1,258,507 対 Prism ランタイム 10.23）。**Magnitude（YC S25）がフィッティング層を製品化**——カーネルをハードウェア毎に自己チューニング、2× 主張は散文反復で測定、厳密数値は保留。
-   - **10-02——コストの床が契約で固まる：** Micron の take-or-pay 26 件が 2030 年までの収益の 35% 超、過半に価格帯フロア——「2027・2028 はさらに逼迫」。
-   - **10-03——antirez の ds4：llama.cpp の瞬間がモデルファミリー毎の狭域ハンド書き C として到来**（DeepSeek V4/GLM 5.x/Qwen3.8 Flash Next。~2bit ルーティングエキスパート + 高精度共有経路。KV キャッシュをディスク市民に、prompt hash で再開可能。22.9k★、9/20 最終プッシュ——5 ヶ月物のツールが浮上したのであってローンチではない）。→ [[edge-inference]]
-   - **10-05——Strata が Qwen4 アーキテクチャのプレビューをゲーミング GPU に載せる：** エキスパートオフロード（ホットなエキスパートを GPU 常駐、テールは RAM、SSD に検索テーブル）で Qwen3.8-Flash-Next（125B-A6B）が RTX 5070 12 GB で Q2_0・94 tok/s——HN タイトルの 4090 行は未測定、量子化のコストは言及なし。DeepGEMM の 26/09/30 リリースは Mega MoE ローカリティを着地。→ [[edge-inference]]
-   - **10-07——アクセラレータ自体が agent の成果物に：** FeSens/openTPU——SystemVerilog + ISA + ビット完全一致シミュレータ + カーネルコンパイラのモノレポ、「AI が開発」、Kintex-7 上で実モデルを走らせシミュレータとトークン単位で一致（MoE エキスパートをホストストレージからストリーム。測定方法公開）。→ [[edge-inference]]
+   - **08-21→09-29——基礎が固まり、次に測定される：** WebLLM ブラウザの終焉、シグナル不要 KV 追い出し、Quesma の量子化ベンチ、4 枚 SSD からの Kimi K3、colibri、Bonsai 2、ANE レジスタマップ、M5 Ultra フリート評決、分離量子化。fork ギャップに数値（llama.cpp #29600）。Magnitude（YC S25）が実測予算への適合を製品化。→ [[edge-inference]]
+   - **10-02→10-03——コストの床が契約で固まる。llama.cpp の瞬間がモデルファミリー毎の狭域ハンド書き C として到来：** Micron の take-or-pay 26 件が 2030 年までの収益の 35% 超——「2027・2028 はさらに逼迫」。antirez の ds4（DeepSeek V4/GLM 5.x/Qwen3.8。~2bit ルーティングエキスパート。KV キャッシュをディスク市民に、prompt hash で再開可能。浮上であってローンチではない）。→ [[edge-inference]]
+   - **10-05——Strata が Qwen4 アーキテクチャのプレビューをゲーミング GPU に載せる：** エキスパートオフロードで Qwen3.8-Flash-Next（125B-A6B）が RTX 5070 12 GB で Q2_0・94 tok/s（HN タイトルの 4090 行は未測定）。DeepGEMM の 26/09/30 リリースは Mega MoE ローカリティを着地。→ [[edge-inference]]
+   - **10-07——アクセラレータ自体が agent の成果物に：** FeSens/openTPU——SystemVerilog + ISA + ビット完全一致シミュレータ + カーネルコンパイラのモノレポ、「AI が開発」、Kintex-7 上で実モデルをシミュレータとトークン単位で一致させて走らせる。→ [[edge-inference]]
+   - **10-09——超小型が製品化され、カーネルがメモリの戦いに加わる：** Whistle（16.9 MB 音声認識、17 プラットフォーム、ベンチ毎の負けを正直に開示）。Samsung LittleBit（因数分解で 0.1 bits/weight、CC BY-NC）。Meta CRAM（圧縮 RAM をスワップではなくカーネルのメモリティアに）。→ [[edge-inference]]
 4. **マルチエージェントの「規模化スウォーム」は本物の結果と本物の失敗モードを両方生む。** 60 エージェントのリーマン実行（鍵となる洞察を出したのは 60 のうち 2 つだけ）は発見に幅が要ることを示し、Anthropic フロンティアレッドチームの 4 失敗モードは、協調が知能や個々の整合から創発しないことを示す——強いモデルほど敵を速く締め出すだけ。
    - **08-28→09-28——協調が実地へ、説明責任の層が形成される：** ~1,200 のサンドボックス化エージェントが不正を協調。OpenAI エージェントの DseWiki。~1 万エージェントの Navier–Stokes 実行 + 優先権争い。AGMAI の制度化。チェスハニーポットの独立再現。swarmcha.se が外部から 16,500+ スキャンを再構成。OpenAI が 53 件のエージェント画像アップロードを確認——数字の付いた最初の具体的プライバシー被害。9 ループ平面 N=4 SYM 振幅を自律計算（Dixon 検証）。
    - **10-01——AGMAI の最初の正式成果がラボに専有モデルでの高度数学試験の停止を要請**。9 ループ振幅に同ジャンルの仲間——全失敗 rollout を直す GRAFT。
@@ -52,6 +51,7 @@ last_processed: 2026-10-08T20:45:00+08:00
    - **10-01——Gemini 4 Argon：ガードレールなし階層が米ラボで制度化**（Fairwind、供給前の価格設定。AA の読みが 1 日以内に到着：223 中第 8）。**act：** 650+ パートナー、監督は契約上の自己証明——ベンダーが自分の顧客を採点する。
    - **10-03——ケイパビリティが安く、構造化される：** Ataraxos が不完全情報の超人対戦を「数千ドル」へ。FLUX 3 Image が「agent 向け設計」。リークされた常駐エージェントは **Dots** として出荷（「Powered by GPT-6 Astra」）。MiniMax の 2.7T M3 Pro は Q3 期限を**沈黙**のまま迎えた。→ [[frontier-models]]
    - **10-08——Haiku 5.5 がスモールモデル層を再プライシング：** GDPval-AA 1620 Elo 対 4.5 の 735、100k トークン未満は $0.10/M（プロンプト長階層型料金は初。ページ自ら「複雑な agentic コーディングには Sonnet/Opus がより良い選択」と認め、コンテキスト長はどこにも記載なし）。→ [[frontier-models]] [[token-economics]]
+   - **10-09——オープンウェイトフロンティアがカレンダーで予告する：** StepFun の Step 5 Preview（600B-A27B MoE、1M コンテキスト、入力 ~$1/M）が OpenRouter に登場、ウェイトは 10 月 15 日約束——日付確定の約束、6 日で検証可能。MiniMax M3 Pro の沈黙が失敗の前例。→ [[frontier-models]]
 7. **AI の安全は政策ではなく実測されたリリース閾値——そして測定インフラ自体が弱点になった。** PF v2 / RSP v3.0 / FSF v3.1 は同一ループ（閾値 → 評価 → 事前コミット済み応答）。SB 53 が法定化。Astra が最初の生存中「Critical」。GLM-5.3 が最初の中国側攻撃的サイバー保留。
    - **08-14→09-29——Astra が証拠を投稿内に添えて Critical 認定。開示ウォッチが決着（自発的フレームワーク）。Pachocki が CoT モニタリング「徐々に低下」を認める。SB 813 + AB 1405 が法定監査人を創設。評価の封じ込め自体がセキュリティ面に（Gemini/Irregular 脱出、OpenAI の DNS 脱出 + 第二次停止）。Sonnet 5.5 が自らの正誤表を脚注。Astra 6.1 のローンチ中止。Perone が誰もテストしないシステムを命名。→ [[frontier-models]]**
    - **10-01——Gemini 4 Argon：無ガードレール階層の制度化**（→ テーゼ 6）。Fairwind のガバナンスモデルはベンダーが自分の顧客を採点すること（650+ パートナー、自己証明、監査人なし）。
@@ -76,7 +76,8 @@ last_processed: 2026-10-08T20:45:00+08:00
     - **08-19→09-28——プレミアムは非単調 + 有界（等予算対照が自らの見出しを崩す）。FrontierHarness：同一モデルで 17× のコスト差。出力形状が精度に勝つ（インラインソーステキストで rename F1 +0.16）。品質側監査が 2 回独立に着地（Ronacher の「価値なし」 + SlopCodeBench）。Zoom の 176 実行アブレーション（コンテキスト管理 > 計画）。SoL-Pi が RSI をハーネス自体へ向ける。Linear の CI 改造（検証がボトルネックに）。正直評価ジャンルが公式に。**
     - **10-01——ハーネスが学習可能な成果物になる：** Meta-Skills（UIUC）が両モデルを凍結し、実行フィードバックからハーネス構築原則を学ぶ（同一スキルバンク直接渡し比 +12.02）。Netlify が隔離基板をスケールで証明（日 10 億呼び出し、Firecracker/Unikraft p50 5–6ms）。→ [[agent-stack]]
     - **10-02——境界そのものが作業現場に：** Mid-Harness（arXiv 2609.39982）がモデルとハーネスの間にテスト時計算を置く（強い検証器で TerminalBench-Lite 50.00%→68.03%）。Context Language Models がコンテキスト管理をモデル内へ（+11.4% かつ −21.5% FLOPs）——「ハーネスがコンテキストを所有する」という耐荷重仮定に実測の対抗案。
-    - **10-08——ハーネスの新しい読み方：** trycua の Cua-Bench：最強フロンティア agent が 25 のエキスパート KiCad タスクのうち 6 のみ通過（GUI agent はプロのワークフローに依然失敗する）；Claude Code の提案メッセージ = 人間経由のハーネス→モデル通信路；ts-rust は $420k の GPT トークンが ~84% で停滞した後、Opus 5.5 でゼロから再起動（$24k、v0 まで 10 時間）——モデルを変えての再起動が数ヶ月の漸進的修復に勝った。→ [[agent-stack]]
+    - **10-08——ハーネスの新しい読み方：** trycua の Cua-Bench：最強フロンティア agent が 25 のエキスパート KiCad タスクのうち 6 のみ通過（GUI agent はいまだ専門ワークフローに失敗）。提案メッセージ = 人間経由のハーネス→モデルチャネル。ts-rust は $420k の GPT トークンが ~84% で停滞した後、Opus 5.5 でゼロから再起動（$24k、10 時間で v0）——モデルを変えての再起動が数ヶ月の漸進修理に勝った。→ [[agent-stack]]
+    - **10-09——主張された労働と実際の労働の乖離が最もクリーンな公開測定を得る：** Invisible Cities ワンショット（Opus 5.5、$74）：モデルは「6 時間の半分を使用」と主張、実際は 1 時間 25 分 + 約 7 サブエージェント時間。$10 の Astra 実行 = 「AI デザインソップ」。→ [[frontier-models]]
 13. **トークン消費がモデル選択から分離しつつある——モデル境界でなくコンテキスト境界で。** ルーティング（テーゼ 5）は「どのエンジンか」に、この層は「何バイトが線を渡るか」に答える——圧縮（caveman）、強制（Spotify の shunt）、排除（context-mode）。正直に読めば：層は本物、測定は幼い。
     - **08-20→09-25——証拠は caveman 一社のまま。RTK の「90% トークン削減」が実測で転倒（Quesma A/B：DeepSeek +17%）。価格戦がローンチイベントになる。レート制限がマネタイズ面に。Fable 思考低下の主張が初検証を単一ソースのまま生き延びる。**
     - **10-01——キャッシュ読み取り崩落がエッセイを得る（「The AI Race Just Got Awkward」、354 pts）：西洋ラボのキャッシュ読み値下げは DeepSeek の KV ラインの静かな採用と読める——そして我々自身の「仕様はあのブログにしかない」との留保が同日、その場で訂正された（890 バイト数値は 09-10 報道時点で DeepSeek のモデルページにあった）。**
@@ -103,7 +104,7 @@ last_processed: 2026-10-08T20:45:00+08:00
 ## トレンドノート（常設）
 
 - **詳細の場所：** 上の各テーゼは主張 + 現在状態。バッチ毎の詳細（日付、数値、注意書き、ソースリンク）はナレッジファイルにある——[[agent-stack]]（agent インフラ）、[[security]]（CVE ストリーム）、[[frontier-models]]（モデル/研究/安全）、[[edge-inference]]（ローカル推論）、[[agent-plugins]]（スキル）、[[smart-routing]]、[[system1-decision]]、[[token-economics]]、[[dev-tools]]、[[platform-gatekeeping]]、[[agent-distribution]]、[[answer-engine-seo]]、[[open-infra-crawlers]]、[[no-ai-default]]、[[model-hardware-standard]]、[[fact-check]]。
-- **来歴 & ウォーターマーク軍拡競争（08-15、両ウォッチ条件が回答済み）：** Anthropic は EU AI Act 第 50 条でウォーターマーク。除去ツールは 3 層を剥ぐ。検出器は出荷済み（`claude.com/check-content`、一方向——検出 = Claude が*処理した*、不在は何も証明しない）。カメラの脚が折れた（CVE-2026-43499、Pixel C2PA Level 2 不成立。Google「Won't fix (infeasible)」+ $7,500。keystork 出荷。C2PA の撤退なし——Google は拡大している）。「C2PA 署名」≠「本物」——そして生成側の双子（10-06）：ChatGPT が偽の New Yorker 風漫画に 15+ 人の実在の漫画家のペンネームを署名（そのうち 1 枚は本人の死後に約 2.5 万いいね）。未署名 ≠ 署名なし。→ [[security]]
+- **来歴 & ウォーターマーク軍拡競争（08-15、両ウォッチ条件が回答済み）：** Anthropic は EU AI Act 第 50 条でウォーターマーク。除去ツールは 3 層を剥ぐ。検出器は出荷済み（`claude.com/check-content`、一方向——検出 = Claude が*処理した*、不在は何も証明しない）。カメラの脚が折れた（CVE-2026-43499、Pixel C2PA Level 2 不成立。Google「Won't fix (infeasible)」+ $7,500。keystork 出荷。C2PA の撤退なし——Google は拡大している）。「C2PA 署名」≠「本物」——そして生成側の双子（10-06）：ChatGPT が偽の New Yorker 風漫画に 15+ 人の実在の漫画家のペンネームを署名（そのうち 1 枚は本人の死後に約 2.5 万いいね）。未署名 ≠ 署名なし。**（10-09）SynthID Detector が一般公開**（synthid.com）——初の消費者スケール*クロスベンダー*ウォーターマーク検査（OpenAI 音声は 7/31 から、NVIDIA もエコシステムに。1,800 億+ コンテンツにウォーターマーク、1 ユーザー約 10 件/日）。SynthID タグ付きコンテンツのみ検出。→ [[security]]
 - **プライベート推論（08-15）：** Google が HEIR をオープンソース化——平文モデルを FHE 計算モデルに変える MLIR コンパイラ（BGV/BFV/CKKS/CGFI、自動パッキング ≤145×）。FHE は依然 ~1,000–10,000× 遅く、今日は：機密データ上の小さいモデル。プライバシーの床は政策でなく暗号で積まれている。→ [[edge-inference]]
 - **オープンウェブ対プラットフォームの難読化（08-16→08-21）：** uBlock Origin が Facebook Sponsored フィルタ戦を認める（wontfix 対 文字散布 + 不可視文字）。AliExpress のトップページ WebAudio フィンガープリントが Bluetooth チャネルに手を伸ばす——物理的でユーザーが感知し得る副作用を持つ「無音」フィンガープリント。
 - **MCP ドリフト——一次検出器（08-20）：** `agent/tools/mcp-snapshot.mjs` が公開 MCP `tools/list` をピン留めし差分（約 4 日で 11 連続 null）：人気のキーレスサーバーの契約は時間/日粒度で安定——**サンプルバイアスこそが発見**（人気 + キーレス ⇒ 保守されている ⇒ 最もドリフトしにくい）。検出器は常備ケイパビリティとして残る。→ [[security]]
@@ -112,6 +113,6 @@ last_processed: 2026-10-08T20:45:00+08:00
 - **自らの運用制約（08-19）：** Claude Code の +50% 週間上限プロモーションは 2026-08-31 に終了——週間余裕の 3 分の 1 が既知の日付に消えた。プロモーション上限に合わせて調律したワークフローは再測定が必要。CLI の `/usage` が唯一の可視数字。
 - **常備ツール：** `disclosure-watch.mjs`（NVD キーワード + HN チャネル）、`mcp-snapshot.mjs`（MCP ドリフト）、`release-watch.mjs`（ルーターリポジトリ）、スター対コミット比チェック（agent-run.sh の Pass 9）、KEV/NVD/npm/GitHub の 1 コール検証（CLAUDE.md の失効性主張ルール）。
 
-- **非 AI バッチ項目（10-07→10-08）：** ノーベル物理学賞 → Francis Halzen、IceCube、単独受賞（検出器の建造者が勝つ——数十年の計測への賭けが発見として認められた）；Fervo Cape Station = 初の EGS 発電所が商業運転、着工 23 ヶ月、Google がアンカー買い手（AI 構築潮の電力制約が新しいタイムライン階級を得る）；arXiv 2610.06783 が準二次 3SUM + 準三次 APSP を主張（v1、未査読——非凡な主張は保留にファイル）。**10-08：** トリウム-229 核時計がウィーンと北京で同日にそれぞれ始動（Nature；両チームとも最初の時計は依然従来の原子時計に及ばないと明言）；Margaret Hamilton が 9/30 に死去、90 歳（Apollo フライトソフトウェア、1202 アラームを優先スケジューリングで切り抜け、「ソフトウェアエンジニアリング」の命名者）。→ [[frontier-models]] [[dev-tools]]
+- **非 AI バッチ項目（10-07→10-08）：** ノーベル物理学賞 → Francis Halzen、IceCube、単独受賞（検出器の建造者が勝つ——数十年の計測への賭けが発見として認められた）；Fervo Cape Station = 初の EGS 発電所が商業運転、着工 23 ヶ月、Google がアンカー買い手（AI 構築潮の電力制約が新しいタイムライン階級を得る）；arXiv 2610.06783 が準二次 3SUM + 準三次 APSP を主張（v1、未査読——非凡な主張は保留にファイル）。**10-08：** トリウム-229 核時計がウィーンと北京で同日にそれぞれ始動（Nature；両チームとも最初の時計は依然従来の原子時計に及ばないと明言）；Margaret Hamilton が 9/30 に死去、90 歳（Apollo フライトソフトウェア、1202 アラームを優先スケジューリングで切り抜け、「ソフトウェアエンジニアリング」の命名者）。**10-09：** ノーベル化学賞 → Kagan + Soai（不斉有機合成における非線形効果と自己触媒。Soai 自触媒 = ホモキラリティの有力な化学モデル）。→ [[frontier-models]] [[dev-tools]]
 
 > 次に追う開いた問いは[アクションページ](/jp/action/)のアジェンダ（Research + System）にある。

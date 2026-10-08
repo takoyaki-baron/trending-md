@@ -113,3 +113,13 @@ Sources: [Niko1221/Strata](https://github.com/Niko1221/Strata) · [HN——Strat
 **FeSens/openTPU——加速器本身成为 agent 工件，而验证才是故事（10-07，HN 161，156★）：** 一个 Apache-2.0 单体仓库里的完整 AI 加速器——SystemVerilog RTL、ISA、位精确模拟器、kernel 编译器、profiler、主机驱动——为回答「AI agent 在硬件设计上能走多远，能否造出运行自身推理的芯片？」而建。在 Kintex-7 PCIe 卡（Inspur YPCB-00338，2× DDR3）上实测：十个带真实权重的现代小模型——LFM2.5-230M 52–82 tok/s（int8/4-bit，墙钟）、Qwen3-0.6B ~31 tok/s、Qwen3.5-4B 5.9 tok/s——以及**专家从主机存储流式加载**的 MoE 模型：LFM2.5-8B-A1B 10.6 tok/s、Qwen3.5-35B-A3B 3.95 tok/s，98.5% 的专家使用命中卡上槽位。每个配置与模拟器**逐 token 一致**；README 公布设备-墙钟分解、DRAM 计数器带宽利用率（峰值的 82–94%）、精确构建 hash 与逐模型怪癖。「AI 开发」是项目自己的说法、无法独立审计——让这条成立的是可证伪标准（模拟器位精确性 + `tools/qual/perf.py` 公开的测量方法），大多数 agent 建硬件演示从未达到；无论设计者是谁，这个从 matmul 到导线的全科教科书仓库都是学习加速器最好的公开教材。专家流式加载这一半，正是本文件的磁盘流式论题在 FPGA 尺度的复现。
 
 Sources: [FeSens/openTPU](https://github.com/FeSens/openTPU) · [HN 讨论](https://news.ycombinator.com/item?id=49980715)
+
+## 2026-10-09 —— 微型模型产品线、亚 1-bit 因式分解、以及作为内存层的压缩 RAM
+
+**Whistle（Cactus Compute，10 月 2 日，HN 256）：**整个权重文件只有 **16.9 MB** 的语音识别（Whisper base：145.3 MB；Moonshine tiny v2：41.9 MB），覆盖英/德/法/西/意/荷/波七语并自动检测语言。Apple M4 Pro CPU 上：11.1 ms 首 token 时间、1,319 tok/s 解码（Whisper base：73.2 ms / 266/s）；词级时间戳与语音嵌入；预编译二进制覆盖 17 个平台——含 watchOS、RISC-V、WASM 和 WASI；零依赖。诚实即可信：作者自己的基准承认 Whisper base 仍在 TED-LIUM、AMI、MLS 上胜出——Whistle 在 LibriSpeech、SPGISpeech、Earnings-22、FLEURS 领先——且每次调用上限 30 秒 / 320 token。引擎（Needle，13.5k★，Apache-2.0）与 Cactus 的 2-bit 自动化模型同源——微型模型正在成为产品线而非演示，正是可穿戴/机器人/嵌入式开发者需要的。
+
+**LittleBit / LittleBit-2（Samsung Labs 官方实现；NeurIPS 2025 + ICML 2026）：**与 GPTQ/AWQ 式取整不同轴的极限权重压缩——把每个稠密矩阵分解为低秩潜在因子、二值化、再用学习到的缩放恢复幅值——目标从 1.0 直至 **0.1 bits/weight**，推理时保持原架构。LittleBit-2 加入 Joint-ITQ 初始化（可选 `--use_itq`），QAT 前把潜在因子对齐到二值超立方体，无推理开销。检查点：OPT、Llama 1/2/3、Phi-4、Qwen2.5/QwQ/Qwen3、Gemma 2/3。小字：CC BY-NC 4.0（非商用）、仅四个 commit 的研究仓库、锁定 `transformers` 4.51.x。固定内存预算下可容纳的模型规模变化约一个数量级，恰逢 RAM 不再便宜之时落地——许可证让它保持研究工具定位，尚非部署路径。
+
+**Meta CRAM（LPC 2026，Gregory Price；Phoronix）：**`mm/cram.c` 把硬件卸载的压缩 RAM 当作*内存层*而非 swap——内核以字节粒度直接读压缩过的 cacheline，而不是缺页调入再解压。Phoronix：只读数据达到裸 DRAM 等价的读性能；写入也远快于 ZRAM、Zswap 或普通 swap。LPC 摘要坦言该设备「根本上谎报了真实容量」——而这正是内核必须学会管理的谎言。大部分配套代码已在主线。本文件的 DRAM 价格冲击线得到一个内核原生的扩展：不必为每次访问付 swap-in 税；开放问题：哪些硬件会真正出货压缩卸载。
+
+Sources: [Whistle 发布公告](https://cactuscompute.com/blog/whistle) · [cactus-compute/needle](https://github.com/cactus-compute/needle) · [SamsungLabs/LittleBit](https://github.com/SamsungLabs/LittleBit) · [LittleBit 论文](https://arxiv.org/abs/2506.13771) · [Phoronix——CRAM](https://www.phoronix.com/news/Linux-CRAM-Compressed-RAM) · [LPC 2026 议题](https://lpc.events/event/20/contributions/2424/)

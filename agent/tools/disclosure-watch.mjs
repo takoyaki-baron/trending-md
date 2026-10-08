@@ -115,8 +115,15 @@ for (const item of manifest.watch) {
         if (!id) continue;
         if (re && !re.test(id)) continue;
         if (observed.hf_seen.includes(id)) continue;
-        if ((prev.hf_seen ?? []).length) {
-          changes.push(`${item.id} HF: ${id} (lastModified ${m.lastModified ?? '?'}) https://huggingface.co/${id}`);
+        // hf_empty_baseline: an org seeded EMPTY (zero public models at watch creation) can
+        // never reach announce-mode through the `(prev.hf_seen ?? []).length` gate — the
+        // landing this watch exists for would be recorded silently on one run, then skipped
+        // forever (found 2026-10-09 wiring the Reflection Beam watch: huggingface.co/reflection
+        // holds ZERO public models pre-release). The flag declares "empty is the expected
+        // baseline", so the FIRST hit announces instead of silently joining the baseline.
+        if ((prev.hf_seen ?? []).length || item.hf_empty_baseline) {
+          const first = item.hf_empty_baseline && !(prev.hf_seen ?? []).length;
+          changes.push(`${item.id} HF: ${id} (lastModified ${m.lastModified ?? '?'}) https://huggingface.co/${id}${first ? ' — FIRST HIT after empty baseline' : ''}`);
         }
         observed.hf_seen.push(id);
       }

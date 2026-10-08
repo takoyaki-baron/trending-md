@@ -1,6 +1,34 @@
 {
  "watch": [
   {
+   "id": "reflection-beam-weights",
+   "why": "thesis 6 — Reflection Beam (501B/23B MoE, pre-announced 10-05 on a tokens-per-job pitch, HN 550) promises weights + tech report + model card + safety evals 'later this month' under Apache 2.0; the compute comparison is self-disclaimed as approximate, so every number is vendor-run until the artifact lands. Seeded 10-09 ~05:00 (~3.5d in, all clauses null): the vendor's canonical HF org is huggingface.co/reflection (reflectionai 302-redirects there — org identity inferred from the redirect, re-verify at fire time) and it holds ZERO public models; no tech report anywhere; no new HN story since the announcement. No hf_model_regex and hf_empty_baseline=true — an empty org makes ANY upload the event, and the flag makes the first hit announce (the seeding hole this wiring exposed and patched in disclosure-watch.mjs). hn_query is 'Reflection AI', not 'Beam': 'Beam' full-text-matches >50 stories/day, and date-sorting pushed the original announcement off page 1, seeding an empty HN baseline — the silent-first-hit hole, HN flavor.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-10-05T00:00:00.000",
+   "hn_query": "Reflection AI",
+   "hn_title_regex": "beam.*(reflection|weight|apache|licen|tech.?report|releas|open.?weight)|reflection.*beam",
+   "hf_org": "reflection",
+   "hf_empty_baseline": true
+  },
+  {
+   "id": "mistral-large4-weights",
+   "why": "thesis 6 — Mistral Large 4 (1T/49B MoE, previewed 10-06, HN main thread 1,270→2,025 pts by 10-09) promises weights end of October under an unspecified license after red-teaming 'with cybersecurity firms, vetted partners, and state authorities'; the 82% CyberGym-E2E headline is all-vendor-scored. Seeded 10-09 ~05:00 (~46h in, all clauses null): mistralai HF org has uploaded NOTHING since Shieldstral-1.0-3B (07-16), no large-4 model exists anywhere on HF, and zero independent CyberGym/Cybench chatter on HN since the announcement (2 comment hits, neither an independent run). No hf_model_regex, MiniMax precedent — the org uploads ~1/month, so ANY new id is low-noise and a 'Large-4-2510' naming variant can't slip past a regex.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-10-06T00:00:00.000",
+   "hn_query": "Mistral",
+   "hn_title_regex": "mistral.*large.?4|large.?4.*(weight|licen|releas|open.?source|download)",
+   "hf_org": "mistralai"
+  },
+  {
+   "id": "stepfun-step5-weights",
+   "why": "thesis 6 — StepFun's Step 5 Preview (600B-A27B MoE, 1M ctx, ~$1/M in) carries the quarter's only DATE-CERTAIN open-weights promise: Oct 15, checkable in six days at seed time; MiniMax M3 Pro's silence is the failure precedent. Seeded 10-09 ~05:00 (~2h after filing, all clauses null): the OpenRouter listing (stepfun/step-5-preview, created 10-08 12:34Z, ctx 1,000,000 via API) is still the entire publication record — API docs, not a spec sheet — and the stepfun-ai HF org has uploaded nothing since Step-3.7-Flash-GGUF (05-28). No hf_model_regex — quiet org, ANY new upload fires.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-10-08T00:00:00.000",
+   "hn_query": "StepFun",
+   "hn_title_regex": "stepfun.*(step.?5|weight|open|releas|licen)|step.?5.*(weight|open.?weight|licen|download)",
+   "hf_org": "stepfun-ai"
+  },
+  {
    "id": "pwn2own-agent-harness",
    "why": "thesis 2 — Pwn2Own Ireland 2026 (Cork, Oct 6-8) took agent infra formal: 77 unique zero-days in the first two days and an OpenAI Codex agent popped with a single argument-injection bug (Ikotas Labs, $40k — named in ZDI's own day-one post, read first-hand 10-08). Vendors get the standard 90-day ZDI window, so the advisory wave lands early 2027; NVD keyword 'Pwn2Own' returned 0 results at seed time (10-08 21:13) and ZDI's published+upcoming advisory pages carry no Ireland 2026 entries. Fires when the wave starts assigning: whether the Codex bug gets a CVE OpenAI acknowledges, who scores it (ZDI vs vendor-CNA), whether any land on KEV. HN fingerprint tuned to advisory/patch stories, not contest coverage.",
    "nvd_keywords": [

@@ -34,7 +34,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-08T13:39:12.040Z"
+      "checked": "2026-10-08T21:13:31.629Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -64,7 +64,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-08T13:39:12.040Z"
+      "checked": "2026-10-08T21:13:31.629Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -84,7 +84,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-08T13:39:12.040Z"
+      "checked": "2026-10-08T21:13:31.629Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -94,7 +94,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-08T13:39:12.040Z"
+      "checked": "2026-10-08T21:13:31.629Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -121,7 +121,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-08T13:39:12.040Z"
+      "checked": "2026-10-08T21:13:31.629Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -140,7 +140,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-08T13:39:12.040Z"
+      "checked": "2026-10-08T21:13:31.629Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -150,7 +150,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-08T13:39:12.040Z"
+      "checked": "2026-10-08T21:13:31.629Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -210,7 +210,7 @@
         "0.2.4",
         "0.2.5"
       ],
-      "checked": "2026-10-08T13:39:12.040Z"
+      "checked": "2026-10-08T21:13:31.629Z"
     },
     "pwn2own-agent-harness": {
       "nvd_seen": [],
@@ -218,10 +218,151 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-08T13:39:12.040Z"
+      "checked": "2026-10-08T21:13:31.629Z"
+    },
+    "reflection-beam-weights": {
+      "nvd_seen": [],
+      "hn_seen": [
+        "49969183"
+      ],
+      "hf_seen": [],
+      "osv_seen": [],
+      "npm_seen": [],
+      "checked": "2026-10-08T21:13:31.629Z"
+    },
+    "mistral-large4-weights": {
+      "nvd_seen": [],
+      "hn_seen": [
+        "49977844",
+        "49977979",
+        "49978004",
+        "49978033",
+        "49978040",
+        "49978116",
+        "49982852",
+        "49988417",
+        "49996573"
+      ],
+      "hf_seen": [
+        "mistralai/Devstral-2-123B-Instruct-2512",
+        "mistralai/Devstral-Small-2-24B-Instruct-2512",
+        "mistralai/Devstral-Small-2505",
+        "mistralai/Devstral-Small-2507",
+        "mistralai/Leanstral-1.5-119B-A6B",
+        "mistralai/Leanstral-2603",
+        "mistralai/Magistral-Small-2506",
+        "mistralai/Magistral-Small-2507",
+        "mistralai/Magistral-Small-2509",
+        "mistralai/Magistral-Small-2509-GGUF",
+        "mistralai/Ministral-3-14B-Base-2512",
+        "mistralai/Ministral-3-14B-Instruct-2512",
+        "mistralai/Ministral-3-14B-Instruct-2512-BF16",
+        "mistralai/Ministral-3-14B-Instruct-2512-GGUF",
+        "mistralai/Ministral-3-14B-Reasoning-2512",
+        "mistralai/Ministral-3-14B-Reasoning-2512-GGUF",
+        "mistralai/Ministral-3-3B-Base-2512",
+        "mistralai/Ministral-3-3B-Instruct-2512",
+        "mistralai/Ministral-3-3B-Instruct-2512-BF16",
+        "mistralai/Ministral-3-3B-Instruct-2512-GGUF",
+        "mistralai/Ministral-3-3B-Instruct-2512-ONNX",
+        "mistralai/Ministral-3-3B-Reasoning-2512",
+        "mistralai/Ministral-3-3B-Reasoning-2512-GGUF",
+        "mistralai/Ministral-3-8B-Base-2512",
+        "mistralai/Ministral-3-8B-Instruct-2512",
+        "mistralai/Ministral-3-8B-Instruct-2512-BF16",
+        "mistralai/Ministral-3-8B-Instruct-2512-GGUF",
+        "mistralai/Ministral-3-8B-Reasoning-2512",
+        "mistralai/Ministral-3-8B-Reasoning-2512-GGUF",
+        "mistralai/Ministral-8B-Instruct-2410",
+        "mistralai/Mistral-7B-Instruct-v0.3",
+        "mistralai/Mistral-Large-3-675B-Base-2512",
+        "mistralai/Mistral-Large-3-675B-Instruct-2512",
+        "mistralai/Mistral-Large-3-675B-Instruct-2512-BF16",
+        "mistralai/Mistral-Large-3-675B-Instruct-2512-Eagle",
+        "mistralai/Mistral-Large-3-675B-Instruct-2512-NVFP4",
+        "mistralai/Mistral-Medium-3.5-128B",
+        "mistralai/Mistral-Medium-3.5-128B-EAGLE",
+        "mistralai/Mistral-Nemo-Instruct-FP8-2407",
+        "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+        "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+        "mistralai/Mistral-Small-4-119B-2603",
+        "mistralai/Mistral-Small-4-119B-2603-NVFP4",
+        "mistralai/Mistral-Small-4-119B-2603-eagle",
+        "mistralai/Pixtral-12B-2409",
+        "mistralai/Pixtral-Large-Instruct-2411",
+        "mistralai/Shieldstral-1.0-3B",
+        "mistralai/Voxtral-4B-TTS-2603",
+        "mistralai/Voxtral-Mini-4B-Realtime-2602",
+        "mistralai/Voxtral-Small-24B-2507"
+      ],
+      "osv_seen": [],
+      "npm_seen": [],
+      "checked": "2026-10-08T21:13:31.629Z"
+    },
+    "stepfun-step5-weights": {
+      "nvd_seen": [],
+      "hn_seen": [
+        "50007764",
+        "50007811"
+      ],
+      "hf_seen": [
+        "stepfun-ai/GELab-Zero-4B-preview",
+        "stepfun-ai/GOT-OCR2_0",
+        "stepfun-ai/NextStep-1-Large",
+        "stepfun-ai/NextStep-1-Large-Edit",
+        "stepfun-ai/NextStep-1-Large-Pretrain",
+        "stepfun-ai/NextStep-1-f8ch16-Tokenizer",
+        "stepfun-ai/NextStep-1.1",
+        "stepfun-ai/NextStep-1.1-Pretrain",
+        "stepfun-ai/NextStep-1.1-Pretrain-256px",
+        "stepfun-ai/PaCoRe-8B",
+        "stepfun-ai/Qwen2.5-32B-DialogueReason",
+        "stepfun-ai/RLVR-8B-0926",
+        "stepfun-ai/Step-3.5-Flash",
+        "stepfun-ai/Step-3.5-Flash-Base",
+        "stepfun-ai/Step-3.5-Flash-Base-Midtrain",
+        "stepfun-ai/Step-3.5-Flash-FP8",
+        "stepfun-ai/Step-3.5-Flash-GGUF-Q4_K_S",
+        "stepfun-ai/Step-3.5-Flash-GGUF-Q8_0",
+        "stepfun-ai/Step-3.7-Flash",
+        "stepfun-ai/Step-3.7-Flash-FP8",
+        "stepfun-ai/Step-3.7-Flash-GGUF",
+        "stepfun-ai/Step-3.7-Flash-NVFP4",
+        "stepfun-ai/Step-Audio-2-mini",
+        "stepfun-ai/Step-Audio-2-mini-Base",
+        "stepfun-ai/Step-Audio-2-mini-Think",
+        "stepfun-ai/Step-Audio-AQAA",
+        "stepfun-ai/Step-Audio-Chat",
+        "stepfun-ai/Step-Audio-EditX",
+        "stepfun-ai/Step-Audio-EditX-AWQ-4bit",
+        "stepfun-ai/Step-Audio-R1",
+        "stepfun-ai/Step-Audio-R1.1",
+        "stepfun-ai/Step-Audio-TTS-3B",
+        "stepfun-ai/Step-Audio-Tokenizer",
+        "stepfun-ai/Step1X-3D",
+        "stepfun-ai/Step1X-Edit",
+        "stepfun-ai/Step1X-Edit-v1p1-diffusers",
+        "stepfun-ai/Step1X-Edit-v1p2",
+        "stepfun-ai/Step1X-Edit-v1p2-preview",
+        "stepfun-ai/Step3-VL-10B",
+        "stepfun-ai/Step3-VL-10B-Base",
+        "stepfun-ai/Step3-VL-10B-FP8",
+        "stepfun-ai/StepFun-Formalizer-32B",
+        "stepfun-ai/StepFun-Formalizer-7B",
+        "stepfun-ai/StepFun-Prover-Preview-32B",
+        "stepfun-ai/StepFun-Prover-Preview-7B",
+        "stepfun-ai/step3",
+        "stepfun-ai/step3-fp8",
+        "stepfun-ai/stepvideo-t2v",
+        "stepfun-ai/stepvideo-t2v-turbo",
+        "stepfun-ai/stepvideo-ti2v"
+      ],
+      "osv_seen": [],
+      "npm_seen": [],
+      "checked": "2026-10-08T21:13:31.629Z"
     }
   },
-  "runs": 80,
+  "runs": 83,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-10-08T13:39:12.040Z"
+  "last_run": "2026-10-08T21:13:31.629Z"
 }

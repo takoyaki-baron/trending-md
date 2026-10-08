@@ -10633,5 +10633,59 @@
     "en": "sheets.works 'Data Drop' — small data-journalism pieces that count things from primary records. Cross-checked (10-08): the maintainer-count piece's methodology (10+ commits, Oct 2025–Oct 2026) is self-defined and reproducible from the cited repos' histories; the HN thread stress-tested the proxy. Not a news org — treat its numbers as one methodology's output, not ground truth.",
     "zh": "sheets.works 的「Data Drop」——从一手记录出发做计数的小型数据新闻。已交叉核验（10-08）：维护者计数一文的方法（10+ 次提交、2025-10 至 2026-10）为自定义口径，可在所引仓库的提交历史上复现；HN 讨论对该代理指标做了压力测试。非新闻机构——其数字是某种方法论的产物，不是基准真相。",
     "jp": "sheets.works の「Data Drop」——一次記録からカウントする小型データジャーナリズム。検証済み（10-08）：メンテナ数記事の手法（10+ コミット、2025-10〜2026-10）は自己定義で、参照リポジトリの履歴から再現可能。HN スレッドで代理指標の限界が検証された。報道機関ではない——数値は一手法の出力であり地上の真理ではない。"
+  },
+  "nobelprize.org": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "The Nobel Prize's official site — primary for laureates, citations, and prize summaries. Cross-checked (10-09): the 2026 chemistry award (Kagan/Soai, non-linear effects + autocatalysis) matches same-day HN and press coverage.",
+    "zh": "诺贝尔奖官网——获奖者、获奖理由与官方摘要的第一来源。交叉验证（10-09）：2026 化学奖（Kagan/Soai，非线性效应 + 自催化）与当日 HN 及媒体报道一致。",
+    "jp": "ノーベル賞公式サイト——受賞者・引用文・要約の一次来源。クロスチェック（10-09）：2026 年化学賞（Kagan/Soai、非線形効果 + 自己触媒）は当日の HN と報道と一致。"
+  },
+  "synthid.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Google DeepMind's SynthID Detector (public 10-07) — primary for watermark-verification capability and its stated limits (detects only SynthID-tagged content). Cross-checked (10-09) against the blog.google announcement of the same day.",
+    "zh": "Google DeepMind 的 SynthID 检测器（10-07 公开）——水印验证能力及其明示局限（只检测带 SynthID 标记的内容）的第一来源。与 10-09 当日 blog.google 公告交叉验证。",
+    "jp": "Google DeepMind の SynthID Detector（10-07 公開）——ウォーターマーク検証能力とその明示的限界（SynthID タグ付きのみ検出）の一次来源。同日の blog.google 発表とクロスチェック（10-09）。"
+  },
+  "mitchellh.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Mitchell Hashimoto's personal writing (Ghostty creator) — primary for his own protocol proposals. Cross-checked (10-09): the OSC 7501 spec matches the HN discussion and the libghostty/Rex implementations it cites.",
+    "zh": "Mitchell Hashimoto（Ghostty 作者）的个人写作——其协议提案的第一来源。交叉验证（10-09）：OSC 7501 规格与 HN 讨论及其引用的 libghostty/Rex 实现一致。",
+    "jp": "Mitchell Hashimoto（Ghostty 作者）の個人執筆——自身のプロトコル提案の一次来源。クロスチェック（10-09）：OSC 7501 仕様は HN 議論と引用される libghostty/Rax 実装と一致。"
+  },
+  "debasishg.github.io": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Debasish Ghosh's engineering blog — the essay formalizing the Tiger Style 'push ifs up, fors down' heuristic with category theory, limits included. Cross-checked (10-09): the heuristic's origin matches TigerBeetle's Tiger Style docs; HN thread 176 pts.",
+    "zh": "Debasish Ghosh 的工程博客——用范畴理论把 Tiger Style「上推 if、下推 for」启发式形式化的文章（含限定条件）。交叉验证（10-09）：该启发式的出处与 TigerBeetle Tiger Style 文档一致；HN 讨论 176 分。",
+    "jp": "Debasish Ghosh の技術ブログ——Tiger Style の「if を上へ、for を下へ」ヒューリスティックを圏論で形式化する エッセイ（限界も明記）。クロスチェック（10-09）：ヒューリスティックの出所は TigerBeetle の Tiger Style ドキュメントと一致。HN スレッド 176 pts。"
+  },
+  "treylorswift.github.io": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Personal GitHub Pages hosting the demoscene-recomp browser builds — the demo itself is the evidence for the cycle-exact recompilation claim. Cross-checked (10-09): runs as described; method details match the HN thread (146 pts) where the author answered questions.",
+    "zh": "托管 demoscene-recomp 浏览器版的个人 GitHub Pages——demo 本身就是周期精确重编译主张的证据。交叉验证（10-09）：按描述可运行；方法细节与作者答疑的 HN 讨论一致（146 分）。",
+    "jp": "demoscene-recomp のブラウザビルドをホストする個人 GitHub Pages——デモ自体がサイクル一致再コンパイルの主張の証拠。クロスチェック（10-09）：記述どおり動作。方法の詳細は著者が答えた HN スレッド（146 pts）と一致。"
+  },
+  "lpc.events": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Linux Plumbers Conference site — primary for talk abstracts (Meta's CRAM `mm/cram.c` memory-tier proposal). Cross-checked (10-09): the abstract's claims match Phoronix's independent report of the same talk.",
+    "zh": "Linux Plumbers 会议官网——议题摘要的第一来源（Meta 的 CRAM `mm/cram.c` 内存层提案）。交叉验证（10-09）：摘要主张与 Phoronix 对同场报告的独立报道一致。",
+    "jp": "Linux Plumbers Conference のサイト——トークンアブストラクトの一次来源（Meta の CRAM `mm/cram.c` メモリティア提案）。クロスチェック（10-09）：アブストラクトの主張は同じトークンに関する Phoronix の独立報道と一致。"
   }
 }

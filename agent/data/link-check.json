@@ -1801,9 +1801,63 @@
       "feeds": [
         "2026-10-08.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50004790": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-08T21:13:59.486Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49997073": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-08T21:13:59.486Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49994746": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-08T21:13:59.486Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50007764": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-08T21:13:59.486Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49984159": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-08T21:13:59.486Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://www.phoronix.com/news/Linux-CRAM-Compressed-RAM": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-08T21:13:59.486Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
     }
   },
-  "runs": 48,
+  "runs": 49,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-08T13:39:45.651Z"
+  "last_run": "2026-10-08T21:13:59.486Z"
 }

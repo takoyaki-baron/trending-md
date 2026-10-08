@@ -761,3 +761,9 @@ Sources: [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram
 **cloudflare/security-audit-skill 重回日榜（26.2k★，+576，无新发布——最后提交 9 月 14 日）：** 罕见地从技能毕业为 4,000 人公司生产安全工作流的例子——它孕育了 6 月的「Build Your Own Vulnerability Harness」（20,799 条原始候选 → 7,245 条可行动发现、覆盖 128 个仓库）。可移植的是模式而非分数：侦察到覆盖引导狩猎的六阶段；**每条候选都交给一个「试图推翻它」的全新验证者**；发现以经 schema 校验的 JSON、由零依赖 Node 脚本交付；README 里诚实的自测（「单次运行约找到多次运行总和的一半」）；且在没有 OS 强制沙箱时一切保持 `needs_validation`。适用于任何 agent QA 任务、不限于安全——这是技能货架上评估故事本身就是工件的那个条目（论题 8 的评估缺口，被一个仓库在自己的领域内回答）。
 
 Sources: [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) · [Build Your Own Vulnerability Harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness/)
+
+## 2026-10-09 —— 平台官方的垂直层再度上榜
+
+**anthropics/knowledge-work-plugins 重回日榜（#7，+309★，总计 27.4k★）：**与本库 09-17、09-26 两次记录的是同一个仓库（24.4k★ → 25.6k★）——按去重规则这是一次重现，净新内容很薄：清单（11 个角色包、Apache-2.0、`claude plugin marketplace add anthropics/knowledge-work-plugins`；连接器 Slack/Notion/Salesforce 级 CRM/Snowflake、生物领域的 PubMed/Benchling）早已在案。这次重现确认为常设事实的是：*垂直*层——按职能划分的领域工作流、词汇与连接器接线——是平台官方出品，且采用曲线仍在爬升（09-26 时 +889/周 → 现在 +309/天）。09-26 的开放问题依旧成立：每个插件的价值都质押在 Anthropic 无法控制的第三方连接器上——与开发者侧仓库相同的信任面，只是指向法律与财务数据。
+
+Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [Claude 插件市场](https://claude.com/marketplace/plugins)

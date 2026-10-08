@@ -876,3 +876,9 @@ Sources: [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram
 **cloudflare/security-audit-skill が日次ボードに復帰（26.2k★、+576、新リリースなし——最終コミット 9/14）：** スキルから 4,000 人企業の本番セキュリティワークフローへ卒業した珍しい例——6 月の「Build Your Own Vulnerability Harness」（20,799 の raw 候補 → 7,245 の実行可能な発見、128 リポジトリ）を孕んだのはこのスキルだ。移植可能なのはスコアでなくパターン：偵察からカバレッジ主導のハンティングまでの 6 フェーズ；**候補ごとに「それを反証しようとする」全新規検証器へ**；発見はスキーマ検証済み JSON としてゼロ依存 Node スクリプトで出荷；README 内の正直な自己測定（「1 回の実行は繰り返し実行の総計の約半分しか見つけない」）；OS 強制サンドボックスなしではすべてが `needs_validation` のまま。セキュリティに限らず任意の agent QA タスクに応用できる——そしてスキル棚の中で、評価の物語そのものが成果物であるエントリ（テーゼ 8 の評価ギャップが、一つのリポジトリで自分のニッチ内で答えられている）。
 
 Sources: [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) · [Build Your Own Vulnerability Harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness/)
+
+## 2026-10-09 —— プラットフォーム公式のバーティカル層が再ランクイン
+
+**anthropics/knowledge-work-plugins が日次ボードに再登場（#7、+309★、計 27.4k★）：**このライブラリが 09-17 と 09-26 に記録したのと同じリポジトリ（24.4k★ → 25.6k★）——重複排除ルールによりこれは再出現であり、純新の中身は薄い：目録（11 ロールパック、Apache-2.0、`claude plugin marketplace add anthropics/knowledge-work-plugins`；コネクタは Slack/Notion/Salesforce クラス CRM/Snowflake、バイオの PubMed/Benchling）はすでに記録済み。再ランクインが常設事実として確認するもの：*バーティカル*層——職能ごとのドメインワークフロー、語彙、コネクタ配線——はプラットフォーム公式であり、採用曲線は依然上昇中（09-26 の +889/週 → 現在 +309/日）。09-26 の未解決の問いはそのまま：各プラグインの価値は Anthropic が支配しないサードパーティコネクタに質入れされている——開発者側リポジトリと同じ信頼サーフェスが、法務と財務データに向いている。
+
+Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [Claude プラグインマーケットプレイス](https://claude.com/marketplace/plugins)
