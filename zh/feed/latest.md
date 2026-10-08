@@ -1,8 +1,8 @@
 ---
 date: 2026-10-08
-updated: 2026-10-08T04:25:00Z
+updated: 2026-10-08T12:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 28
 license: CC-BY-4.0
 ---
 
@@ -258,13 +258,251 @@ Cua 项目(YC X25)没有任何单一发布事件就重回周榜——它的势�
 
 ---
 
+## 19. Pwn2Own 爱尔兰:两天 77 个零日——其中 OpenAI Codex 智能体被一个 bug 攻破
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** ZDI / Pwn2Own Ireland(科克) · 第二日战果 Oct 7 · 赛事持续至 Oct 8
+- **Tags:** `pwn2own` `zero-days` `agents` `mobile`
+
+ZDI 的 Pwn2Own Ireland 2026 两天内已产出 77 个独立零日——第一天 32 个、38.85 万美元,第二天再添 45 个、23.25 万美元,累计 62.1 万美元。三星 Galaxy S26 反复沦陷——仅第二天就被攻破三次;而本信息流存在的理由是:**一个 OpenAI Codex 智能体被单个参数注入 bug 攻破**。VinSOC 以 8 万美元的攻击链领跑个人榜——Philips Hue Bridge Pro(7 个 bug)和 Oracle Autonomous AI Database(5 个 bug)。注意限制:CVE 编号和评分尚未分配——厂商有标准的 90 天 ZDI 披露窗口;部分首日 Galaxy bug 厂商此前已知;iPhone 17 目标无人报名("no contestant registered for an attempt")。
+
+**Why it matters:** 智能体 harness 已成为正式的 Pwn2Own 目标类别,一次单 bug 的 Codex 攻破给"harness 即攻击面"的这个季度标出了公开价格——GitLab AI Gateway、Mooncake、MindSearch。90 天倒计时也意味着一波智能体基础设施公告将在 2027 年初落地。
+
+[`🔗 第一天:32 个零日,38.85 万美元`](https://www.bleepingcomputer.com/news/security/hackers-exploit-32-zero-days-on-first-day-of-pwn2own-ireland/) · [`🔗 第二天:再添 45 个`](https://www.bleepingcomputer.com/news/security/samsung-galaxy-s26-hacked-three-more-times-at-pwn2own-ireland/)
+
+---
+
+## 20. LMCache:vLLM 所用 KV 缓存层的未认证 RCE——CVSS 9.8,且仍无修复版本
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** JFrog Research · Oct 7 披露 · NVD 9.8(JFrog 自评)
+- **Tags:** `lmcache` `vllm` `rce` `cve`
+
+CVE-2026-105192(CWE-306):在多进程/分布式模式下,LMCache 会打开一个**未认证的 ZeroMQ ROUTER 套接字**,msgpack 扩展载荷在任何 handler 运行之前就抵达 `pickle.loads`——一条未认证的 ZMQ 消息即远程代码执行。持有 CNA 身份的 JFrog 于 10 月 7 日披露,并声明该缺陷"仍存在于最新 PyPI 发布 v0.5.5、v0.5.6 候选版直至 v0.5.6rc3,以及开发分支中"——目前没有任何修复版本。范围限制(来自公告本身):使用默认绑定的单机标准安装不可被其他机器访问;仅在 vLLM 进程内使用的 LMCache 不会打开该端口。仓库活着而非弃坑(今天仍有推送,12.0k★),补丁大概率在路上——但截至发稿并不存在。NVD 载有 JFrog 的 Secondary 9.8。
+
+**Why it matters:** KV 缓存层正在成为推理机群的共享基础设施——恰是"一个未认证 pickle 汇点变成全机群 RCE"的那一层。活跃仓库上的"无修复版本"声明会很快过期,但在补丁落地之前,暴露在公网的分布式 LMCache 部署应视为"可被拿下",而不只是"有风险"。
+
+[`🔗 JFrog 公告`](https://research.jfrog.com/vulnerabilities/lmcache-is-vulnerable-to-unauthenticated-remote-code-execution-via-pickle-deserialization-on-the-multiprocess-zmq-transport-cve-2026-105192-jfsa-2026-001694382/) · [`🔗 NVD: CVE-2026-105192`](https://nvd.nist.gov/vuln/detail/CVE-2026-105192)
+
+---
+
+## 21. npm 上的 tensorlake 被 Shai-Hulud 蠕虫植入后门——0.5.144 窃取 AI 工具凭据,现已下架
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Hacker News / Socket · 事件进行中 · 恶意版本发布于 ~01:12 UTC(~09:10 UTC+8)
+- **Tags:** `npm` `supply-chain` `credentials` `worm`
+
+10 月 7 日,一个恶意提交以维护者名义落入 Tensorlake 的仓库,Shai-Hulud/ChainDrop 蠕虫随即于 10 月 8 日 01:12 UTC 将 `tensorlake@0.5.144` 发布到 npm。据 Socket 分析(经 The Hacker News 报道),它会"窃取凭据、外传机密、建立持久化,并执行远程下发的代码"——npm/GitHub 令牌、AWS 密钥、SSH 私钥、加密钱包,以及 **AI 工具配置(Claude、Cursor、Windsurf、Zed)**,通过 `.claude/settings.json` 和 `.vscode/tasks.json` 持久化,并借以太坊合约解析 C2。发稿时已核验注册表状态:0.5.144 已从注册表 `versions` 中消失(dist-tags.latest = 0.5.143)——是 npm 还是维护者删除的尚不可确认。装过的话:删除并轮换全部凭据。
+
+**Why it matters:** npm 蠕虫浪潮已从"包"转向"智能体使用的工具"——经 `.claude/settings.json` 持久化意味着一次错误安装即可攻陷该机器上此后所有智能体会话。这份窃取清单本身就是一张智能体开发者信任锚点地图。
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/10/tensorlake-npm-package-compromised-to.html) · [`🔗 npm: tensorlake`](https://registry.npmjs.org/tensorlake)
+
+---
+
+## 22. 继昨天的 722 份数学手稿发布:OpenAI 撤回三篇论文——一个符号错误,连带两篇依赖结果
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 80+56 pts(两个讨论串) · ~5h ago(~15:05 UTC+8)
+- **Tags:** `openai` `ai-math` `formalization` `retraction`
+
+昨天我们报道了 OpenAI 发布数百份 AI 生成的数学手稿;该仓库的 history 文件现在多了一条 10 月 7 日的"Withdrawals"条目。《Split abelian eightfold 上 Weil 类的代数性》中的一个符号错误使稳定化迹消去论证失效——"以及两篇依赖论文所用的构造。因此我们撤回以下三部手稿":Weil 类一文、一个 K3 的 Kuga–Satake 构造,以及 K3 乘积上的有理 Hodge 猜想。同一条目还记录了 14 篇经证明修复的修订、6 个新形式化(形式化比例现为"300 / 719 = ~42%"),以及——悄无声息地——头条总数从 722 缩水到 719。被撤论文带有指向存档版本的说明。
+
+**Why it matters:** 同周内的撤回-修复循环正是这套流程正常运转时的样子——它是对炒作和今晨"验证并不能为翻译背书"批评的双重具体回应:产物是可查的,而一旦去查,它们会像人类数学一样出问题。
+
+[`🔗 openai/math history`](https://github.com/openai/math/blob/main/history.md) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50002650)
+
+---
+
+## 23. 陶哲轩的"Math 2.0"与 Aaronson 的"Mathocalypse":数学家们回应了
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 368+ pts(Tao 讨论串) · ~7h ago(~13:15 UTC+8)
+- **Tags:** `ai-math` `culture` `openai` `research`
+
+对这波 AI 数学发布的两份重量级回应,今晨双双登上 HN 首页。陶哲轩(Mathstodon,四帖长帖的末帖):"Math 1.0"的先解为王文化"已被优化到不可持续的地步","Math 2.0"必须"弱化单纯解题的角色,更全面地重视数学进步"——包括阐述、社区建设、开辟新方向,并重新审视教育、发表与职业晋升的评价标准。Scott Aaronson 在〈The Mathocalypse〉中走得更远:称这次发布是"数学史上最重大的日子之一",并据其听取汇报后的自述(未经独立核实)称该未发布模型每题花费约 3 小时 GPT-Pro 级算力、在约 8000 次尝试中成功率约 5%;他把"OpenAI 模式"(倾倒不可读的证明)与"Anthropic 模式"(付钱请数学家——他点名 Virginia Williams 和 Josh Alman——写消化版)相对照。他最锋利的一句:"还没有任何人理解过这些证明中的任何一个;理解它们的竞赛才刚刚开始。"
+
+**Why it matters:** 将与机器生成数学共处的人正在公开、实时地亮明立场——陶哲轩谈激励体系应该奖励什么,Aaronson 谈哪种发布模式对这门学科伤害更小。两帖都是未来十年数学的战略文件。
+
+[`🔗 陶哲轩 on Mathstodon`](https://mathstodon.xyz/@tao/117395269325940185) · [`🔗 Aaronson: The Mathocalypse`](https://scottaaronson.blog/?p=10169) · [`🔗 HN: Tao 讨论串`](https://news.ycombinator.com/item?id=50002008) · [`🔗 HN: Aaronson 讨论串`](https://news.ycombinator.com/item?id=49997718)
+
+---
+
+## 24. SonicWall SMA1000:CVSS 10.0 的预认证 SSRF 获热修复——"一条非预期的替代访问路径"
+
+- **Velocity:** ▮▮ rising
+- **Source:** SonicWall 公告 SNWLID-2026-0017 · CVSS 10.0(SonicWall 自评) · 热修复 Oct 6–7
+- **Tags:** `sonicwall` `cve` `ssrf` `patch-now`
+
+CVE-2026-102255:SonicWall 修复了 SMA1000 Appliance WorkPlace 界面中一个最高严重级的**预认证 SSRF**——"一条非预期的替代访问路径",让未认证的远程攻击者可使设备代发内部请求。修复版本:12.4.3-03670 及更高、12.5.0-03082 及更高;热修复经 MySonicWall 下发,需重启。受影响:SMA1000 设备(型号 6210、7210、8200v);SMA 100 系列与防火墙 SSL-VPN 不受影响。SonicWall 声明"没有证据表明这四个缺陷中的任何一个正被用于攻击";Shadowserver 统计有 400+ 台暴露在互联网上的 SMA1000。NVD 载有 SonicWall 的 Secondary 10.0(10 月 7 日发布)。鉴于该产品线 7 月与 9 月的被利用史,无论如何都应按"今晚就打补丁"处理。
+
+**Why it matters:** 边缘设备上的 10.0 预认证漏洞本身就属于"今晚必修"级;在这条产品线上,这已是今年的第四幕。在暴露于公网的 VPN/网关硬件上,"暂无被利用证据"的保质期向来很短。
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/10/sonicwall-patches-cvss-100-pre.html) · [`🔗 NVD: CVE-2026-102255`](https://nvd.nist.gov/vuln/detail/CVE-2026-102255)
+
+---
+
+## 25. microsoft/mxc 达到 1.0:运行不可信模型输出的统一沙箱底座
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · v1.0.0 GA 于 Oct 7 · 今日 +106★ · 共 1.5k
+- **Tags:** `sandboxing` `agents` `microsoft` `open-source`
+
+Microsoft eXecution Container 在 rc4/rc5 之后于 10 月 7 日正式 GA:"一个沙箱化代码执行系统,用于在 Windows、Linux 和 macOS 上运行不可信代码(模型输出、插件与工具)",提供"多种隔离后端,从 OS 原生进程沙箱到完整虚拟机,隐藏在统一的隔离模型与类型化 SDK 之后"。后端列表横跨 Windows Sandbox、LXC、Bubblewrap、Seatbelt、MicroVM(Nanvix)与 Hyperlight——行为依平台而异是设计使然。MIT 许可。这是本月第三个登上趋势榜的智能体隔离底座,前有 NVIDIA OpenShell(面向智能体机群的内核级策略)与 Docker 的 agent runtime(OCI 打包)。
+
+**Why it matters:** 每家 harness 厂商都要运行模型输出,而每家都在自造沙箱。微软这份类型化的多后端参考实现,给"关住巫师"的争论提供了可具体 standardize 的对象——mxc 作执行底座,OpenShell 作策略层。
+
+[`🔗 microsoft/mxc`](https://github.com/microsoft/mxc) · [`🔗 v1.0.0 发布`](https://github.com/microsoft/mxc/releases/tag/v1.0.0)
+
+---
+
+## 26. ts-rust:LLM 把 TypeScript 编译器移植成 Rust——GPT 烧了 42 万美元停滞,Opus 5.5 以约 2.4 万美元完成
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 74+ pts · 124 cmt · ~12h ago(~08:45 UTC+8)
+- **Tags:** `typescript` `rust` `llm` `compilers`
+
+pingdotgg/ts-rust(MIT)是由 LLM 编写的 TypeScript 编译器、检查器与 LSP 的 Rust 移植——README 里前后两场战役就是故事本身:数月间约 42 万美元的 OpenAI token(GPT-5.6 Sol,后换 GPT 6 Astra)在约 84% 兼容度处停滞;改用 Opus 5.5 从零重启,10 小时产出可用的 v0,两周总 API 花费约 24,047 美元——"介于作者每周 200 美元套餐上限的 925% 到 983%"。免责声明本身就是内容:"这是一个早期版本"、"我一行代码都没读过"、"警告:我不知道它是否真的能用"、一个 Known problems 章节,以及"The Slop Line"以下全部由模型自写。"在我们测试过的所有真实项目中 100% 兼容"是自报数据。
+
+**Why it matters:** 无论 ts-rust 是否达到生产级,它都是"智能体能否移植真实编译器"这一问题上一份公开且标价的数据点——包括"换模型从零重启胜过数月增量修补"这一发现。真正的头条是成本曲线:42 万 → 2.4 万美元。
+
+[`🔗 pingdotgg/ts-rust`](https://github.com/pingdotgg/ts-rust) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50000676)
+
+---
+
+## 27. OpenSRE v0.1:AI SRE 智能体的框架——兼训练场——今日发布
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · v0.1 今日发布(Oct 8) · 11.6k★(今日 +107)
+- **Tags:** `sre` `agents` `observability` `evals`
+
+Tracer-Cloud 的 OpenSRE 今日发布 v0.1:"面向 AI SRE 智能体的开源框架,以及它们改进所需的训练与评估环境。接入你已在用的 60+ 工具"——Apache-2.0,curl|bash 安装,每日构建直至今日首个带 tag 的发布。README 对成熟度毫不讳言:"Public Alpha:核心工作流可用于早期探索,但尚未完全稳定……API 与集成可能变更。"仓库创建于 1 月,但 11.6k★ 攒得很快;v0.1 是第一个发布 tag。
+
+**Why it matters:** 事件响应是迄今尚未拥有"harness + 评估"层的最高风险智能体工作负载,而"训练与评估环境"的提法正是要点所在——把 SRE 智能体当作可基准测试的模型问题,而非聊天集成。v0.1 之前就有 11.6k 星,说明需求侧早已就位。
+
+[`🔗 Tracer-Cloud/opensre`](https://github.com/Tracer-Cloud/opensre) · [`🔗 v0.1 发布`](https://github.com/Tracer-Cloud/opensre/releases/tag/v0.1.2026.10.8)
+
+---
+
+## 28. Anthropic 将 Project Glasswing 并入三级 Cyber Verification Program——为经审核的安全从业者降低拦截
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic · Oct 6 宣布
+- **Tags:** `anthropic` `cyber` `policy` `agents`
+
+Anthropic 将 Project Glasswing 并入扩展后的 Cyber Verification Program,设三级——Defense、Red Team、Specialized——向符合资质的安全从业者提供"高级网络能力与更低强度的拦截分类器"。其动机基准来自 Anthropic 自己:未加入 CVP 时,CyScenarioBench 上"每个任务都在第一句提示就被拦截";在 Red Team Access 下,零拦截、50 个任务成功 34 个。交换条件写得明明白白:"加入该计划的组织必须接受数据留存,以便我们监控网络滥用。"129k+ 已验证漏洞的数字来自合作方上报,Anthropic 自估真实影响"至少高出五倍"——注意这是它自己的估计。Red Team Access 仅对组织开放。这延续了 Google 为 Gemini 4 Argon 推出的"可信网络防御者"通道——各大实验室正在收敛到同一种准入模型。
+
+**Why it matters:** 网络能力的门控正在各大实验室变成正式、公开披露的分级体系——基准数字、留存条款与准入资格都摆在明面上。对防御者而言,智能体能力从此按"已验证身份"区分,而不再只是按模型;对其他人而言,这就是其他实验室将照抄的模板。
+
+[`🔗 Cyber Verification Program`](https://www.anthropic.com/news/cyber-verification-program) · [`🔗 Project Glasswing`](https://www.anthropic.com/glasswing)
+
+---
+
+## 29. zerobrew 的诚实基准:冷装 6.6 倍、热装 68 倍——"100 倍"只是 100 个包里的 24 个
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 94+ pts · ~9h ago(~11:25 UTC+8)
+- **Tags:** `homebrew` `rust` `package-managers` `benchmarks`
+
+zerobrew——用内容寻址存储在进程内重定位 bottle 的 Rust 版 Homebrew 替代品——随迁移到 zerobrewhq 组织发布了一份 100 包基准:冷装比 brew 快 6.6 倍,热装快 68 倍。README 对自己的标语两次自打折扣:"100x*"只覆盖"100 个包中热装提速 100 倍以上的 24 个",冷装受链路带宽限制(测试连接上"冷装 3.3 倍"),而且"没有 Homebrew 的 bottle 构建农场,这些数字一个都不存在"。这也是一次带前史的重发:2026 年 1 月的项目,其上一轮病毒式传播曾在 2 月招出〈Reverse engineering a viral open-source launch〉的复盘。7.8k★,Apache-2.0。
+
+**Why it matters:** 一个价值完全派生自别人构建农场的包管理器,在自己的 README 里把这件事说清楚——这正是本信息流纠错政策想要奖励的诚实。而带星号的场景——热装——恰是 CI 里的常态。
+
+[`🔗 zerobrewhq/zerobrew`](https://github.com/zerobrewhq/zerobrew) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50001580)
+
+---
+
+## 30. artcraft:Rust 版"艺术家 IDE"冲上日榜第 3——创始人说"离能用还差得远"
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +1,465★(日榜第 3) · 共 6.0k
+- **Tags:** `rust` `creative-tools` `ai-art` `open-source`
+
+storytold/artcraft 创建于 2022 年,但 10 月 4 日的 HN 讨论串("用 Rust 写的开源 Adobe 兼容套件",128 pts)把它在今天上午拉到日增 1,465★。这是一款原生 Rust 应用,面向"交互式 AI 图像与视频创作。在 2D 中构图、在 3D 中布景,并选择适合你工作的模型"——v0.41.0 于 9 月 26 日发布,提交持续到 10 月 7 日。创始人在 HN 讨论串里说:"我还没准备好把它发到 HN。它离能用还差得远……这些仍是超级早期的 alpha。"值得记录的注意事项:许可证是自定义 LICENSE.md(GitHub 标为"Other",不是 OSI 许可),Linux 仅支持从源码构建。
+
+**Why it matters:** 一个开放、原生、模型无关的创作 IDE,正好补上 SaaS 生成器与胶水脚本管线之间缺位的那格货架——而创始人在星潮之下的"没准备好"式坦白,是本周"关注度跑在项目自身就绪度前面"的最干净案例。
+
+[`🔗 storytold/artcraft`](https://github.com/storytold/artcraft) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49958850)
+
+---
+
+## 31. 究竟是谁在撑起互联网:23 个基础项目中有 11 个只靠一两名常规贡献者
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 136+ pts · ~6h ago(~14:40 UTC+8)
+- **Tags:** `maintainers` `open-source` `bus-factor` `data`
+
+sheets.works 的 Data Drop 统计了 23 个基础项目——SQLite、zlib、curl、bash、xz、时区数据库——2025 年 10 月至 2026 年 10 月完整提交历史中改动 10 次以上的贡献者。结果:"23 个中有 11 个"项目只有一两个人在做常规工作,而 Paul Eggert 业余维护的时区数据库装在"40 亿"台 Android 与 iPhone 设备上。点题引句:"数十亿手机运行在由少数几个人照看的代码上。我们是从代码本身数出来的。"注意:"常规"= 10+ 次提交是一个会低估审阅者与 triage 工作的代理指标——该文自称目标是检验 xkcd 漫画的论断,而非穷尽式审计 bus factor。
+
+**Why it matters:** xkcd 那个数字通常只是段子;这是带了方法论的段子。xz 事件之后,单维护者基础设施是供应链风险类别,不再是道德说教——而提交级统计便宜到可以跑在你自己的依赖树上。
+
+[`🔗 Holding up the internet`](https://sheets.works/data-viz/holding-up-the-internet) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50002494)
+
+---
+
+## 32. 11 个单位方格的最优装箱在 Lean 中获形式化验证——附一句诚实的"非仅内核"声明
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 115+ pts · ~22h ago(Oct 7 ~22:10 UTC+8)
+- **Tags:** `lean` `formal-methods` `ai-math` `packing`
+
+一个 Lean 4 仓库声称给出了"11 个单位正方形装入最小正方形"的完整机器检查最优性证明:"已完成的 EvolvingPrograms 验证运行接受了全部 7,920 个本地 Lean 模块,最终审计报告零 admissions。"最优值为 T = (6u+4)/(1+2u−u²),其中 u 是 (9/25, 37/100) 上一个八次多项式的根——T ≈ 3.8770835900228141773——确切多项式已公布于 README。证明经 EvolvingPrograms 管线 AI 辅助完成;验证运行于 10 月 6 日完成。README 自己的声明才是承重句:昂贵的数值证书检查使用 `native_decide`,因此"这不是仅内核的验证声明"——它同时信任 Lean 的内核与原生编译器。
+
+**Why it matters:** 一个悬置数十年的开放问题以公开、可重跑的验证方式关闭——而且免责声明是作者主动给出的,不是被追问出来的。把它与今晨"验证不能为翻译背书"的预印本、以及 OpenAI 同周的撤回放在一起读:AI 数学的有趣变量不再是"行不行",而是每一项主张实际携带哪一层的检查。
+
+[`🔗 11SquaresFormalized`](https://github.com/Queuingtheorydotcom/11SquaresFormalized) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49993121)
+
+---
+
+## 33. Liquid AI 开源 d1:单次前向就出答案的 3B 与 600M"决策模型"
+
+- **Velocity:** ▮ steady
+- **Source:** Liquid AI 博客 · Oct 7 · HF 141 likes / 5.4k 下载
+- **Tags:** `decision-models` `edge` `open-weights` `liquid-ai`
+
+Liquid AI 发布 d1-3B 与 d1-omni-600M——"不产出 token……在单次前向传播中给出答案"的开源权重模型,分别由其 LFM2.5-VL-3B 与 LFM2.5-Encoder-350M 微调而来。所有声明均在 Liquid 自家的 Decision Index v0.2.1(public split)上自报:48.57,"领先所有 10B 以下模型,与 Decider 35B-A3B——一个体积 12 倍的决策模型——持平",在"RTX 4090 上 8 ms"、Jetson Orin Nano 上约 50 ms。权重已上 Hugging Face(d1-3B 创建于 10 月 5 日,其后有 GGUF 变体)。诚实细节:d1-omni-600M 被标注为"我们的首个实验性检查点"——得分仅 15.95。决策模型浪潮(OpenAI Decisions API、AWS Strands Decider、Cloudflare Clef)自此有了开源权重、亚秒级、可上设备的参赛者。
+
+**Why it matters:** 决策模型正在成为拥有自家基准指数的产品品类,而 Liquid 此举让边缘/自托管档位成真。这条注意事项适用于整个品类:那套指数是厂商自己的。
+
+[`🔗 d1 开源发布`](https://www.liquid.ai/blog/d1-open) · [`🔗 HF 上的 LiquidAI/d1-3B`](https://huggingface.co/LiquidAI/d1-3B)
+
+---
+
+## 34. PoeLLM:3400 台暴露的 AI 服务器被劫持挖矿——经 LiteLLM 漏洞,C2 藏在 GitHub 的一首诗里
+
+- **Velocity:** ▮ steady
+- **Source:** Lumen Black Lotus Labs · Oct 7 报告
+- **Tags:** `botnet` `litellm` `ai-infra` `cryptomining`
+
+Lumen Black Lotus Labs 的"Canto Incognito"报告记录了一个自 4 月以来拿下 3400+ 台服务器的挖矿僵尸网络,目标是暴露在外的 LiteLLM、Gotenberg、Gitea 与 Ivanti Sentry 实例。与 AI 相关的链路:LiteLLM CVE-2026-42271(MCP 测试端点;NVD Primary 8.8 / GitHub CNA 8.7,已在 v1.83.7-stable 修复)与 Starlette CVE-2026-48710(6.5,已在 1.0.1 修复)串联即可未认证 RCE——经 BleepingComputer 转述 Horizon3 的确认。载荷为 Kryptex 矿池上的 XMRig/Iron 矿机;归因为"中等置信度"的意大利操作者。标志性手法:C2 地址藏在 GitHub 仓库的一首诗里——"每次搭新 C2,他们就改掉诗里的几个词。"
+
+**Why it matters:** AI 基础设施栈——LiteLLM 是事实上的 LLM 代理层——正被按僵尸网络规模收割,而漏洞出自 5 月。暴露的 LiteLLM 实例是预填好的靶子;修复早已存在数月。
+
+[`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/poellm-malware-infects-exposed-ai-servers-in-cryptomining-attacks/) · [`🔗 LiteLLM v1.83.7-stable`](https://github.com/BerriAI/litellm/releases/tag/v1.83.7-stable)
+
+---
+
+## 35. Google 发布 Developer Knowledge API:把自家文档做成 Markdown,走 MCP 供给
+
+- **Velocity:** ▮ steady
+- **Source:** Google Developers Blog · Oct 7
+- **Tags:** `google` `documentation` `mcp` `agents`
+
+Google 宣布推出 Developer Knowledge API——"关于 Google Cloud、Firebase、Android 及更多产品开发者文档的官方程序化事实来源"——"以结构化 API 取代脆弱的网页抓取,提供新鲜的 Markdown 格式文档",带语义与关键词搜索、文档分块与有据问答。它以 MCP 服务器的形式提供,"覆盖 Google Antigravity、Claude Code、Cursor、GitHub Copilot",另有 gcloud CLI 入口与可安装的 agent skill(`npx skills add google/skills`)。帖子中的注意事项:未说明 Preview/GA 阶段,`BatchGetDocuments` 单次调用上限 20 篇文档,且文档索引存在滞后。
+
+**Why it matters:** 智能体之所以幻觉出 API,多半因为它们获取文档的方式是抓取。当平台所有者直接供给权威 Markdown 加 MCP,文档层就成为了智能体基础设施——可以预期一年内所有主要文档体系都会被倒逼跟进。
+
+[`🔗 Google Developers Blog`](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/) · [`🔗 Developers Blog 列表页`](https://developers.googleblog.com/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-08T04:25:00Z |
-| Items | 18 |
-| Sources tracked | 18 (Hacker News, GitHub Trending/API, NVD, jira.atlassian.com, anthropic.com, openai.com, developer.chrome.com, arxiv.org, blog.cloudflare.com, docs.nvidia.com, reuters.com, blog.google, news.mit.edu, refactoringenglish.com, cua.ai, ascii.rest, bigwords.page, rswebsols.com) |
+| Generated | 2026-10-08T12:25:00Z |
+| Items | 35 |
+| Sources tracked | 28 (Hacker News, GitHub Trending/API, NVD, jira.atlassian.com, anthropic.com, openai.com, developer.chrome.com, arxiv.org, blog.cloudflare.com, docs.nvidia.com, reuters.com, blog.google, news.mit.edu, refactoringenglish.com, cua.ai, ascii.rest, bigwords.page, rswebsols.com, BleepingComputer, The Hacker News, JFrog Research, npm registry, Mathstodon, scottaaronson.blog, Hugging Face, Liquid AI, Google Developers Blog, sheets.works) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

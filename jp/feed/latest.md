@@ -1,8 +1,8 @@
 ---
 date: 2026-10-08
-updated: 2026-10-08T04:25:00Z
+updated: 2026-10-08T12:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 28
 license: CC-BY-4.0
 ---
 
@@ -258,13 +258,251 @@ Cua プロジェクト(YC X25)は単一のローンチイベントなしでウ�
 
 ---
 
+## 19. Pwn2Own Ireland:2 日で 77 のゼロデイ——OpenAI Codex エージェントもたった 1 バグで落ちる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** ZDI / Pwn2Own Ireland(コーク) · 2 日目の結果 Oct 7 · 大会は Oct 8 まで
+- **Tags:** `pwn2own` `zero-days` `agents` `mobile`
+
+ZDI の Pwn2Own Ireland 2026 は 2 日間で 77 の独立ゼロデイを生んだ——1 日目に 32 件・388,500 ドル、2 日目にさらに 45 件・232,500 ドル、累計 621,000 ドル。Samsung Galaxy S26 は繰り返し陥落——2 日目だけでも 3 回。そしてこのフィードが存在する理由となる一件:**OpenAI Codex エージェントが単一の引数注入バグで攻撃された**。個人首位は VinSOC——Philips Hue Bridge Pro(7 バグ)と Oracle Autonomous AI Database(5 バグ)の 8 万ドルチェーンで。留保:CVE 番号とスコアは未割り当て——ベンダーには標準の 90 日 ZDI 開示期間がある。初日の Galaxy バグの一部はベンダー既知。iPhone 17 ターゲットは登録者ゼロで未実施。
+
+**Why it matters:** エージェントハーネスは正式な Pwn2Own のターゲットカテゴリになり、「ハーネス=攻撃表面」の四半期——GitLab AI Gateway、Mooncake、MindSearch——に公開の値段が付いた。90 日の時計は、2027 年初頭にエージェントインフラ勧告の波が来ることも意味する。
+
+[`🔗 1 日目:32 ゼロデイ、388,500 ドル`](https://www.bleepingcomputer.com/news/security/hackers-exploit-32-zero-days-on-first-day-of-pwn2own-ireland/) · [`🔗 2 日目:さらに 45`](https://www.bleepingcomputer.com/news/security/samsung-galaxy-s26-hacked-three-more-times-at-pwn2own-ireland/)
+
+---
+
+## 20. LMCache:vLLM が使う KV キャッシュ層の未認証 RCE——CVSS 9.8、修正リリースはまだ存在せず
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** JFrog Research · 10 月 7 日開示 · NVD 9.8(JFrog 自己評価)
+- **Tags:** `lmcache` `vllm` `rce` `cve`
+
+CVE-2026-105192(CWE-306):マルチプロセス/分散モードの LMCache は**未認証の ZeroMQ ROUTER ソケット**を開き、msgpack 拡張ペイロードがどんなハンドラより先に `pickle.loads` に届く——未認証の ZMQ メッセージ 1 通がそのままリモートコード実行になる。CNA を持つ JFrog が 10 月 7 日に開示し、「最新の PyPI リリース v0.5.5、v0.5.6 候補の v0.5.6rc3 まで、さらに dev ブランチにもまだ存在する」と明言——修正版はまだ一つもない。スコープの限定(アドバイザリ自身より):デフォルトバインドのシングルホスト構成は他マシンから到達不可。vLLM プロセス内だけで使う LMCache はこのポートを開かない。リポジトリは放置ではなく生きている(本日も push、12.0k★)のでパッチは道中だろう——ただし公開時点では存在しない。NVD は JFrog の Secondary 9.8 を収載。
+
+**Why it matters:** KV キャッシュ層は推論フリートの共有インフラになりつつある——「未認証の pickle シンク 1 個がフリート全体の RCE になる」まさにその層だ。活発なリポジトリで「修正リリースなし」の主張はすぐ失効するが、着地するまでは、公開された分散 LMCache は「リスクあり」ではなく「奪取可能」と扱うべきだ。
+
+[`🔗 JFrog アドバイザリ`](https://research.jfrog.com/vulnerabilities/lmcache-is-vulnerable-to-unauthenticated-remote-code-execution-via-pickle-deserialization-on-the-multiprocess-zmq-transport-cve-2026-105192-jfsa-2026-001694382/) · [`🔗 NVD: CVE-2026-105192`](https://nvd.nist.gov/vuln/detail/CVE-2026-105192)
+
+---
+
+## 21. npm の tensorlake が Shai-Hulud ワームでバックドア化——0.5.144 は AI ツールの認証情報を収穫、現在は取り下げ済み
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Hacker News / Socket · 進行中のインシデント · 悪意ある版は ~01:12 UTC(~09:10 UTC+8)に公開
+- **Tags:** `npm` `supply-chain` `credentials` `worm`
+
+10 月 7 日、メンテナ名義の不正コミットが Tensorlake のリポジトリに混入し、Shai-Hulud/ChainDrop ワームが 10 月 8 日 01:12 UTC に `tensorlake@0.5.144` を npm に publish した。Socket の分析(The Hacker News 経由)によれば「認証情報を収穫し、秘密を持ち出し、永続化を確立し、リモートから供給されるコードを実行する」——npm/GitHub トークン、AWS 秘密鍵、SSH 鍵、暗号資産ウォレット、そして **AI ツールの設定(Claude、Cursor、Windsurf、Zed)**。`.claude/settings.json` と `.vscode/tasks.json` で永続化し、C2 はイーサリアムのコントラクトで解決。公開時にレジストリ状態を確認:0.5.144 はもう `versions` に存在しない(dist-tags.latest = 0.5.143)——削除したのが npm かメンテナかは未確認。インストールした人は:削除してすべて輪換を。
+
+**Why it matters:** npm ワームの波は「パッケージ」から「エージェントが使うツール」へ移った——`.claude/settings.json` 経由の永続化は、1 回の悪いインストールがそのマシンでの以降すべてのエージェントセッションを危うくすることを意味する。収穫リストは、エージェント開発者の信頼の錨そのものの地図だ。
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/10/tensorlake-npm-package-compromised-to.html) · [`🔗 npm: tensorlake`](https://registry.npmjs.org/tensorlake)
+
+---
+
+## 22. 昨日の 722 本の数学原稿リリースを受けて:OpenAI が 3 本の論文を撤回——符号ミス 1 個、依存する 2 結果も巻き込む
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 80+56 pts(2 スレッド) · ~5h ago(~15:05 UTC+8)
+- **Tags:** `openai` `ai-math` `formalization` `retraction`
+
+昨日このフィードは OpenAI による数百本の AI 生成数学原稿の公開を扱った。リポジトリの history ファイルにはいま、10 月 7 日付の「Withdrawals」欄が立っている。「Split abelian eightfolds 上の Weil 類の代数性」の符号ミスが安定化トレースの相殺議論を無効化し、「それに依存する 2 本の論文で使われる構成も巻き込んだ。結果として、次の 3 本を撤回する」——Weil 類の論文、K3 の Kuga–Satake 構成、K3 積上の有理 Hodge 予想。同じ欄には証明修復を伴う 14 本の改訂、6 件の新しい形式化(形式化率はいま「300 / 719 = ~42%」)、そして——音もなく——公称の総数が 722 から 719 へ縮んだ事実も記録されている。撤回論文にはアーカイブ版へのリンクが付く。
+
+**Why it matters:** 同週内の撤回と修復のサイクルは、この仕組みが機能しているときの姿だ——そして hype と、今朝の「検証は翻訳を保証しない」批判の両方に対する具体的な応答になる。成果物は検査可能で、検査すれば、人間の数学と同じように壊れる。
+
+[`🔗 openai/math history`](https://github.com/openai/math/blob/main/history.md) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50002650)
+
+---
+
+## 23. 陶哲軒の「Math 2.0」と Aaronson の「Mathocalypse」:数学者たちが応答する
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 368+ pts(Tao スレッド) · ~7h ago(~13:15 UTC+8)
+- **Tags:** `ai-math` `culture` `openai` `research`
+
+AI 数学リリースへの重鎮二人の応答が、今朝そろって HN フロントページに。陶哲軒(Mathstodon、4 連投の最終投稿):「Math 1.0」の速解き文化は「持続不可能なところまで最適化され尽くした」。「Math 2.0」は「単なる問題解決の役割を中心から下げ、数学的進歩をより包括的に評価すべき」——解説、コミュニティ形成、新しい研究方向の開拓、そして教育・出版・キャリア評価基準の見直し。Scott Aaronson は〈The Mathocalypse〉でさらに踏み込む:この公開を「数学史上最大の日のうちの一つ」と呼び、ブリーフィングに基づく自己報告(独立検証なし)として、未公開モデルは 1 問あたり約 3 時間の GPT-Pro 級計算を費やし、約 8,000 試行の ~5% で成功したと報じる。彼は「OpenAI モデル」(読めない証明を投げる)を「Anthropic モデル」(数学者——Virginia Williams と Josh Alman の名前を挙げる——に金を払って消化版を書かせる)と対比させる。最も鋭い一句:「これらの証明を理解した人間はまだほとんど誰もいない。理解するレースが始まったばかりだ。」
+
+**Why it matters:** 機械生成の数学とこれから付き合う人々が、公の場でリアルタイムに立場を切り拓いている——陶はインセンティブ体系が何を報いるべきかを、Aaronson はどちらの公開モデルが分野への害が少ないかを。両投稿とも、これからの 10 年の数学のための戦略文書だ。
+
+[`🔗 Mathstodon の陶`](https://mathstodon.xyz/@tao/117395269325940185) · [`🔗 Aaronson: The Mathocalypse`](https://scottaaronson.blog/?p=10169) · [`🔗 HN: Tao スレッド`](https://news.ycombinator.com/item?id=50002008) · [`🔗 HN: Aaronson スレッド`](https://news.ycombinator.com/item?id=49997718)
+
+---
+
+## 24. SonicWall SMA1000:CVSS 10.0 の事前認証 SSRF にホットフィックス——「意図しない代替アクセス経路」
+
+- **Velocity:** ▮▮ rising
+- **Source:** SonicWall アドバイザリ SNWLID-2026-0017 · CVSS 10.0(SonicWall 自己評価) · ホットフィックス Oct 6–7
+- **Tags:** `sonicwall` `cve` `ssrf` `patch-now`
+
+CVE-2026-102255:SonicWall は SMA1000 の Appliance WorkPlace インターフェースにある最大深刻度の**事前認証 SSRF** を修正した——「意図しない代替アクセス経路」により、未認証のリモート攻撃者がアプライアンスに内部リクエストを発行させられる。修正版:12.4.3-03670 以上、12.5.0-03082 以上。ホットフィックスは MySonicWall 経由、再起動必須。対象:SMA1000 アプライアンス(モデル 6210、7210、8200v)。SMA 100 シリーズとファイアウォール SSL-VPN は非対象。SonicWall は「4 つの脆弱性のいずれも攻撃に使われた証拠はない」と表明。Shadowserver はインターネット露出した SMA1000 を 400+ 台と計上。NVD は SonicWall の Secondary 10.0 を収載(10 月 7 日公表)。この製品ラインの 7 月と 9 月の悪用履歴を考えれば、いずれにせよ「今夜パッチ」で扱うべきだ。
+
+**Why it matters:** エッジ機器の 10.0 事前認証バグはそれだけで今夜パッチの領域だ。この製品ラインでは今年 4 幕目。インターネット露出の VPN/ゲートウェイハードウェアでは、「悪用の証拠なし」の賞味期限は常に短い。
+
+[`🔗 The Hacker News`](https://thehackernews.com/2026/10/sonicwall-patches-cvss-100-pre.html) · [`🔗 NVD: CVE-2026-102255`](https://nvd.nist.gov/vuln/detail/CVE-2026-102255)
+
+---
+
+## 25. microsoft/mxc が 1.0 到達:信頼できないモデル出力を走らせる統一サンドボックス基盤
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · v1.0.0 GA は Oct 7 · 本日 +106★ · 計 1.5k
+- **Tags:** `sandboxing` `agents` `microsoft` `open-source`
+
+Microsoft eXecution Container が rc4/rc5 を経て 10 月 7 日に GA 到達:「Windows、Linux、macOS 上で信頼できないコード(モデル出力、プラグイン、ツール)を走らせるためのサンドボックス化コード実行システム」であり、「OS ネイティブのプロセスサンドボックスからフル VM までの複数の分離バックエンドを、統一された分離モデルと型付き SDK の背後に」持つ。バックエンドは Windows Sandbox、LXC、Bubblewrap、Seatbelt、MicroVM(Nanvix)、Hyperlight に及ぶ——挙動がプラットフォーム依存なのは設計通り。MIT ライセンス。今月トレンドに乗った 3 つ目のエージェント隔離基盤だ。前には NVIDIA OpenShell(エージェントフリート向けカーネル強制ポリシー)と Docker の agent runtime(OCI パッケージング)がいる。
+
+**Why it matters:** ハーネスベンダーは皆モデル出力を走らせる必要があり、皆が自前のサンドボックスを巻いている。Microsoft の型付き・マルチバックエンドの参照実装は、「魔法使いを閉じ込める」議論に標準化の具体的な受け皿を与える——実行基盤は mxc、ポリシー層は OpenShell、という整理ができる。
+
+[`🔗 microsoft/mxc`](https://github.com/microsoft/mxc) · [`🔗 v1.0.0 リリース`](https://github.com/microsoft/mxc/releases/tag/v1.0.0)
+
+---
+
+## 26. ts-rust:LLM が TypeScript コンパイラを Rust へ移植——GPT の 42 万ドルが停滞し、Opus 5.5 が約 2.4 万ドルで仕上げた
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 74+ pts · 124 cmt · ~12h ago(~08:45 UTC+8)
+- **Tags:** `typescript` `rust` `llm` `compilers`
+
+pingdotgg/ts-rust(MIT)は、LLM が書いた TypeScript コンパイラ・チェッカー・LSP の Rust 移植だ——README の 2 つの戦役がそのまま物語:数ヶ月と約 420,000 ドルの OpenAI トークン(GPT-5.6 Sol、次いで GPT 6 Astra)は互換性 ~84% で停滞。Opus 5.5 でゼロからやり直したところ、10 時間で動く v0 に到達し、2 週間の総 API 支出は約 24,047 ドル——著者の週 200 ドル上限の「925%〜983%」に達した。免責自体が本文だ:「これはアーリーリリース」「私はこのコードを一行も読んでいない」「警告:本当に動くか私には分からない」、Known problems セクション、そして「The Slop Line」以下はすべてモデル自身の文章。「実世界のプロジェクトすべてで 100% 互換」は自己申告。
+
+**Why it matters:** プロダクション級かどうかは別として、これは「エージェントは本物のコンパイラを移植できるか」への公開かつ値付けされたデータポイントだ——異なるモデルでゼロからやり直す方が数ヶ月の漸進修復に勝った、という発見を含む。本当の見出しはコスト曲線だ:42 万 → 2.4 万ドル。
+
+[`🔗 pingdotgg/ts-rust`](https://github.com/pingdotgg/ts-rust) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50000676)
+
+---
+
+## 27. OpenSRE v0.1:AI SRE エージェントのフレームワーク——そして訓練場——が本日ローンチ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · v0.1 本日リリース(Oct 8) · 11.6k★(本日 +107)
+- **Tags:** `sre` `agents` `observability` `evals`
+
+Tracer-Cloud の OpenSRE が本日 v0.1 を出した:「AI SRE エージェントのためのオープンソースフレームワーク、およびそれらが改善するために必要な訓練と評価の環境。すでに走っている 60+ のツールを接続」——Apache-2.0、curl|bash インストール、最初のタグ付きリリースに至るまで毎日ビルド。README は成熟度に正直だ:「Public Alpha:コアワークフローは早期探索に使えるが、まだ完全には安定していない……API と統合は変更される可能性がある。」リポジトリは 2026 年 1 月に生まれたが 11.6k★ を急速に積み上げた。v0.1 が最初のリリースタグ。
+
+**Why it matters:** インシデント対応は、いまだ固有の「ハーネス+評価」層を持たない最高リスクのエージェント workload だ。「訓練と評価の環境」というフレーミングこそ要点——SRE エージェントをチャット統合ではなく、ベンチマーク可能なモデル問題として扱う。v0.1 前に 11.6k 星は、需要側がすでにそこにあることを物語る。
+
+[`🔗 Tracer-Cloud/opensre`](https://github.com/Tracer-Cloud/opensre) · [`🔗 v0.1 リリース`](https://github.com/Tracer-Cloud/opensre/releases/tag/v0.1.2026.10.8)
+
+---
+
+## 28. Anthropic、Project Glasswing を 3 層の Cyber Verification Program に統合——審査を済ませたセキュリティ専門家には検閲を緩和
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic · 10 月 6 日発表
+- **Tags:** `anthropic` `cyber` `policy` `agents`
+
+Anthropic は Project Glasswing を拡張版 Cyber Verification Program へ統合し、Defense・Red Team・Specialized の 3 層を設けた。資格を持つセキュリティ専門家に「高度なサイバー能力と、検閲分類器の緩和」を提供する。動機のベンチマークは Anthropic 自身のもの:CVP 未加入では CyScenarioBench の「全タスクが最初のプロンプトでブロック」、Red Team Access ではブロック 0、50 タスク中 34 が成功。取引条件は明示的:「プログラムに加入した組織は、サイバー悪用を監視できるようデータ保持に同意する必要がある。」129k+ の検証済み脆弱性の数字はパートナー報告で、Anthropic 自身は実際の影響を「少なくとも 5 倍」と見積もる——あくまで自己推計。Red Team Access は組織限定。Google が Gemini 4 Argon で「信頼されたサイバー防御者」に先行公開したのと同じ型で、大手ラボは同じゲートモデルへ収束しつつある。
+
+**Why it matters:** サイバー業務の能力ゲーティングが、大手ラボで正式かつ開示された階層制度になりつつある——ベンチマーク数字、保持条件、適格性が最初から公開される。防御者にとって、エージェント能力はモデルだけでなく「検証済みのアイデンティティ」で差がつく時代に。その他全員にとって、これは他ラボがそのまま写すテンプレートだ。
+
+[`🔗 Cyber Verification Program`](https://www.anthropic.com/news/cyber-verification-program) · [`🔗 Project Glasswing`](https://www.anthropic.com/glasswing)
+
+---
+
+## 29. zerobrew の正直なベンチマーク:コールド 6.6 倍、ウォーム 68 倍——「100 倍」は 100 パッケージ中 24 個だけ
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 94+ pts · ~9h ago(~11:25 UTC+8)
+- **Tags:** `homebrew` `rust` `package-managers` `benchmarks`
+
+zerobrew——コンテンツアドレスストアから bottle をプロセス内で再配置する Rust 製 Homebrew 代替——が zerobrewhq org への移行に合わせて 100 パッケージのベンチマークを公開:brew 比でコールド 6.6 倍、ウォーム 68 倍。README は自社のタグラインに但し書きを二度付ける:「100x*」が指すのは「100 パッケージのうちウォームで 100 倍以上速くなった 24 個」だけ。コールドはリンク帯域が律速(テスト回線で「コールド 3.3 倍」)。そして「Homebrew の bottle ビルドファームなしに、これらの数字は一つも存在しない」。これは前史のある再ローンチでもある:2026 年 1 月生まれのプロジェクトの前回のバイラル拡散は、2 月に〈Reverse engineering a viral open-source launch〉という検証記事を生んだ。7.8k★、Apache-2.0。
+
+**Why it matters:** その価値が完全に他人のビルドファームから派生しているパッケージマネージャが、自らの README でそれを明言する——これはこのフィードの訂正ポリシーが評価しようとしてきた誠実さそのものだ。そしてアスタリスクのケース——ウォームインストール——こそ CI の常態だ。
+
+[`🔗 zerobrewhq/zerobrew`](https://github.com/zerobrewhq/zerobrew) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50001580)
+
+---
+
+## 30. artcraft:Rust 製「アーティストの IDE」が日次トレンド 3 位に——創設者は「完成まで程遠い」と言う
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +1,465★(日次 3 位) · 計 6.0k
+- **Tags:** `rust` `creative-tools` `ai-art` `open-source`
+
+storytold/artcraft は 2022 年生まれだが、10 月 4 日の HN スレッド(「Rust で書かれたオープンソース Adobe 互換スイート」、128 pts)が今朝 +1,465★/日まで押し上げた。「インタラクティブな AI 画像・動画制作のための IDE。2D で構図、3D で舞台設定、仕事に合うモデルを選ぶ」ネイティブ Rust アプリで、v0.41.0 は 9 月 26 日リリース、コミットは 10 月 7 日まで続く。創設者は HN スレッドでこう言う:「HN に投げる準備はできていなかった。完成からは程遠い……これらはまだ超初期のアルファ。」記録しておくべき留保:ライセンスはカスタム LICENSE.md(GitHub 表記は「Other」で OSI 承認ではない)、Linux はソースビルドのみ。
+
+**Why it matters:** オープンでネイティブ、モデル非依存のクリエイティブ IDE は、SaaS 生成サービスと接着スクリプトのパイプラインの間に欠けていた棚の一枠だ。星の洪水に隣接した創設者の「準備ができていない」という正直さは、今週もっともきれいな「注目がプロジェクトの準備度を追い越した」事例だ。
+
+[`🔗 storytold/artcraft`](https://github.com/storytold/artcraft) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49958850)
+
+---
+
+## 31. 実は誰がインターネットを支えているのか:基盤 23 プロジェクトのうち 11 が、定常的に動かすのは 1〜2 人
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 136+ pts · ~6h ago(~14:40 UTC+8)
+- **Tags:** `maintainers` `open-source` `bus-factor` `data`
+
+sheets.works の Data Drop が、23 の基盤プロジェクト——SQLite、zlib、curl、bash、xz、タイムゾーンデータベース——の完全なコミット履歴から、2025 年 10 月〜2026 年 10 月に 10+ の変更を行ったコントリビュータを数えた。結果:「23 のうち 11」のプロジェクトで、定常的な仕事をしているのは 1〜2 人だけ。Paul Eggert が余暇に保守するタイムゾーンデータベースは「40 億」台の Android と iPhone に出荷されている。締めの句:「数十億のスマホが、一握りの人に見守られたコードの上で走っている。我々はそれをコードそのものから数えた。」留保:「定常」= 10+ コミットは、レビューやトリアージを数え落とす代理指標——同記事自身の但し書きは xkcd のコミックの主張を検証することで、bus factor の網羅監査ではないと明言している。
+
+**Why it matters:** xkcd の数字は普通はジョークだ。これは方法論付きのジョークだ。xz の後、単一メンテナのインフラは道徳的な嘆きではなくサプライチェーンのリスクカテゴリだ——そしてコミットレベルの計数は、自分の依存ツリーに対してでも走らせられる安さだ。
+
+[`🔗 Holding up the internet`](https://sheets.works/data-viz/holding-up-the-internet) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50002494)
+
+---
+
+## 32. 11 個の正方形の最適パッキングが Lean で形式検証——率直な「kernel-only ではない」留保つき
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 115+ pts · ~22h ago(Oct 7 ~22:10 UTC+8)
+- **Tags:** `lean` `formal-methods` `ai-math` `packing`
+
+Lean 4 のリポジトリが、「11 個の単位正方形を最小の正方形に詰める」完全な機械検証済み最適性証明を主張している:「完了した EvolvingPrograms 検証ランはローカルの全 7,920 Lean モジュールを受け入れ、最終監査は admissions ゼロを報告。」最適値は T = (6u+4)/(1+2u−u²)。u は (9/25, 37/100) にある 8 次多項式の根——T ≈ 3.8770835900228141773——正確な多項式は README に公開済み。証明は EvolvingPrograms パイプラインで AI 支援。検証ランは 10 月 6 日に完了。README 自身の留保こそが荷重を支える一文:高価な数値証明書チェックに `native_decide` を使うため「これは kernel-only の検証主張ではない」——Lean のカーネルとネイティブコンパイラの双方を信頼している。
+
+**Why it matters:** 数十年の未解決問題が、公開され再実行可能な検証で閉じた——しかも留保は著者自身が自発的に置いたものだ。今朝の「検証は翻訳を保証しない」プレプリントと、OpenAI の同週撤回と併せて読みたい。AI 数学の面白い変数はもう「動くかどうか」ではなく、各主張が実際にどの階層の検査を実際に担っているかだ。
+
+[`🔗 11SquaresFormalized`](https://github.com/Queuingtheorydotcom/11SquaresFormalized) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=49993121)
+
+---
+
+## 33. Liquid AI が d1 をオープンウェイト化:1 回の forward pass で答える 3B と 600M の「決定モデル」
+
+- **Velocity:** ▮ steady
+- **Source:** Liquid AI ブログ · Oct 7 · HF 141 いいね / 5.4k ダウンロード
+- **Tags:** `decision-models` `edge` `open-weights` `liquid-ai`
+
+Liquid AI が d1-3B と d1-omni-600M をリリース——「トークンを生成しない……1 回の forward pass で答えを出す」オープンウェイトモデルで、同社の LFM2.5-VL-3B と LFM2.5-Encoder-350M を微調整したもの。主張はすべて、Liquid 自前の Decision Index v0.2.1(public split)上の自己申告:48.57、「10B 未満の全モデルをリードし、12 倍のサイズを持つ決定モデル Decider 35B-A3B に並ぶ」、「RTX 4090 上で 8 ms」、Jetson Orin Nano で約 50 ms。ウェイトは Hugging Face に(d1-3B は 10 月 5 日作成、以後 GGUF 版も)。正直な詳細:d1-omni-600M は「最初の実験的チェックポイント」と明記——スコアは 15.95。決定モデルの波(OpenAI Decisions API、AWS Strands Decider、Cloudflare Clef)に、オープンウェイトでサブ秒・オンデバイスの挑戦者が加わった。
+
+**Why it matters:** 決定モデルは自前のベンチマークインデックスを持つ製品カテゴリになりつつあり、Liquid の動きでエッジ/セルフホストの階層が現実になった。留保はカテゴリ全体に効く:あのインデックスはベンダー自身のものだ。
+
+[`🔗 d1 オープンリリース`](https://www.liquid.ai/blog/d1-open) · [`🔗 HF の LiquidAI/d1-3B`](https://huggingface.co/LiquidAI/d1-3B)
+
+---
+
+## 34. PoeLLM:暴露した 3,400 台の AI サーバーがマイニングに乗っ取られる——LiteLLM バグ経由、C2 は GitHub の一首の詩に隠れる
+
+- **Velocity:** ▮ steady
+- **Source:** Lumen Black Lotus Labs · 10 月 7 日レポート
+- **Tags:** `botnet` `litellm` `ai-infra` `cryptomining`
+
+Lumen Black Lotus Labs の「Canto Incognito」レポートは、4 月以降 3,400+ 台のサーバーを掌握した暗号資産マイニングのボットネットを記録している。標的は露出した LiteLLM、Gotenberg、Gitea、Ivanti Sentry のインスタンス。AI 関係のチェーン:LiteLLM CVE-2026-42271(MCP テストエンドポイント。NVD Primary 8.8 / GitHub CNA 8.7、v1.83.7-stable で修正)を Starlette CVE-2026-48710(6.5、1.0.1 で修正)と連鎖させると未認証 RCE になる——Horizon3 の確認を BleepingComputer が伝えた。ペイロードは Kryptex プールの XMRig/Iron マイナー。帰属は「中程度の確信度」でイタリア人運用者。象徴的な手口:C2 アドレスは GitHub リポジトリ内の一首の詩に隠されている——「新しい C2 を立てるたび、詩の数語を変える。」
+
+**Why it matters:** AI インフラスタック——LiteLLM は事実上の標準 LLM プロキシ層——が、ボットネット規模で耕されている。バグは 5 月のものだ。露出した LiteLLM インスタンスは予め用意された獲物で、修正は数ヶ月前から存在していた。
+
+[`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/poellm-malware-infects-exposed-ai-servers-in-cryptomining-attacks/) · [`🔗 LiteLLM v1.83.7-stable`](https://github.com/BerriAI/litellm/releases/tag/v1.83.7-stable)
+
+---
+
+## 35. Google が Developer Knowledge API を公開:自社ドキュメントを Markdown で、MCP 経由に
+
+- **Velocity:** ▮ steady
+- **Source:** Google Developers Blog · Oct 7
+- **Tags:** `google` `documentation` `mcp` `agents`
+
+Google は Developer Knowledge API を発表した——「Google Cloud、Firebase、Android などに関する開発者ドキュメントの、公式でプログラマティックな事実の源泉」であり、「脆いウェブスクレイピングを、新鮮な Markdown 形式ドキュメントを提供する構造化 API に置き換える」。セマンティック検索とキーワード検索、ドキュメントのチャンク分割、根拠付き Q&A を備える。MCP サーバーとして提供され、「Google Antigravity、Claude Code、Cursor、GitHub Copilot」で動作するほか、gcloud CLI の面とインストール可能な agent skill(`npx skills add google/skills`)もある。投稿中の留保:Preview/GA の段階は明記なし、`BatchGetDocuments` は 1 呼び出し 20 ドキュメント上限、ドキュメントインデックスの遅延は認められている。
+
+**Why it matters:** エージェントが API を幻覚するのは、そのドキュメントアクセスがスクレイピングだからが大きい。プラットフォーム所有者が公式の一次資料としての Markdown と MCP を直接供給するとき、ドキュメント層はエージェントインフラになる——主要なドキュメント資産は一年以内にこれへ追い込まれると見ていい。
+
+[`🔗 Google Developers Blog`](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/) · [`🔗 Developers Blog 一覧`](https://developers.googleblog.com/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-08T04:25:00Z |
-| Items | 18 |
-| Sources tracked | 18 (Hacker News, GitHub Trending/API, NVD, jira.atlassian.com, anthropic.com, openai.com, developer.chrome.com, arxiv.org, blog.cloudflare.com, docs.nvidia.com, reuters.com, blog.google, news.mit.edu, refactoringenglish.com, cua.ai, ascii.rest, bigwords.page, rswebsols.com) |
+| Generated | 2026-10-08T12:25:00Z |
+| Items | 35 |
+| Sources tracked | 28 (Hacker News, GitHub Trending/API, NVD, jira.atlassian.com, anthropic.com, openai.com, developer.chrome.com, arxiv.org, blog.cloudflare.com, docs.nvidia.com, reuters.com, blog.google, news.mit.edu, refactoringenglish.com, cua.ai, ascii.rest, bigwords.page, rswebsols.com, BleepingComputer, The Hacker News, JFrog Research, npm registry, Mathstodon, scottaaronson.blog, Hugging Face, Liquid AI, Google Developers Blog, sheets.works) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
