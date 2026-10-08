@@ -870,3 +870,9 @@ Sources: [garrytan/gstack](https://github.com/garrytan/gstack) · [addyosmani/ag
 **10-07——棚の第三層：バーティカル品質。** cathrynlavery/diagram-design が日次ボードに再浮上（43.9k★、+227/日。2026 年 4 月作成、いまだ出荷中——10/6 にプラグインマニフェストを 2.6.64 へ、drawio ジオメトリ検証の修正付き）：「Claude Code、Codex、GitHub Copilot、Factory Droid、Pi 向けの編集屋ダイアグラムデザイン。42 図タイプ。自己完結 HTML + SVG。影なし。Mermaid のスロップなし。」`impeccable` の LLM 不要検出ルールと並ぶデザイン品質の翼が、成層をもう一段進める：プラットフォーム公式 → 著名メンテナー → **バーティカル品質**。*ダイアグラムのスタイリング*に 43.9k★ とは、agent 産出物のボトルネックが「動くか」から「意図的に見えるか」へ移ったことの証左——アンチスロップは売れる機能になった。スキルが何を改善するかについての独立評価は依然ゼロ（→ テーゼ 8 の評価ギャップ、さらに一層深く）。
 
 Sources: [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) · [pbakaus/impeccable](https://github.com/pbakaus/impeccable)
+
+## 2026-10-08 —— 棚の「実戦配備組」が再浮上
+
+**cloudflare/security-audit-skill が日次ボードに復帰（26.2k★、+576、新リリースなし——最終コミット 9/14）：** スキルから 4,000 人企業の本番セキュリティワークフローへ卒業した珍しい例——6 月の「Build Your Own Vulnerability Harness」（20,799 の raw 候補 → 7,245 の実行可能な発見、128 リポジトリ）を孕んだのはこのスキルだ。移植可能なのはスコアでなくパターン：偵察からカバレッジ主導のハンティングまでの 6 フェーズ；**候補ごとに「それを反証しようとする」全新規検証器へ**；発見はスキーマ検証済み JSON としてゼロ依存 Node スクリプトで出荷；README 内の正直な自己測定（「1 回の実行は繰り返し実行の総計の約半分しか見つけない」）；OS 強制サンドボックスなしではすべてが `needs_validation` のまま。セキュリティに限らず任意の agent QA タスクに応用できる——そしてスキル棚の中で、評価の物語そのものが成果物であるエントリ（テーゼ 8 の評価ギャップが、一つのリポジトリで自分のニッチ内で答えられている）。
+
+Sources: [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) · [Build Your Own Vulnerability Harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness/)

@@ -42,3 +42,9 @@ Sources: [PULL_REQUEST_TEMPLATE.md](https://github.com/pop-os/cosmic-epoch/blob/
 
 **ステータス経済の犠牲者（2026-10-07）**——erdosproblems.com が「AI の猛攻に屈する」（HN 31）：創設者 Thomas Bloom が問題へのコメントを凍結、open/solved ステータスラベルと解決率カウントを削除、クレジット表現を剥ぐ——証明は誰かに帰属させず「it is known that…」と述べられるように。引き金：2025 年 8 月のコメント開始以来、まともな議論は崩壊し証明主張スパムが爆発——あるコメンテーターの監査は **291 の証明主張、そのうち 155 が説明ゼロ、61 問で複数の競合主張**を数え、「ほぼすべて」の新規コメントが「OPEN→SOLVED のドーパミン」を追う無説明の AI 証明宣告になるにつれ、モデレーションは持続不可能に（サイト：1,221 問、ユーザー約 2,000、日訪問 1–2.5 万）。ジャンルの最も大胆な一手：大半のプラットフォームはスパムにモデレーション追加で応じる；ここは**賞を取り除いた**——クレジット主張のコストがゼロなら、主張は情報を運ばなくなる。ならば主催者は主張のホスティングをやめた。COSMIC の証明ゲートの鏡像：入力を門禁するか、スコアボードを削除するか。Erdős を引いて締める——「my brain is open」——数学が人間の協業であり続けるよう促す。
 Sources: [erdosproblems.com フォーラム](https://www.erdosproblems.com/forum/thread/blog:9) · [HN 議論](https://news.ycombinator.com/item?id=49977689)
+
+## 2026-10-07 夜 —— 「聞くまでオフのローカル AI」スタンスに消費者向けテンプレート
+
+**Penguin Mail 1.0**（Rust/GTK4 の Linux メール + カレンダー、GPL-3.0、リポジトリ 9/19、76★）：AI アシスタントは**モデルを選ぶまでオフ**——LM Studio か Ollama でローカル実行、「メール送信や設定変更の前に確認」、全ツール呼び出しを可視化（Ctrl+J）；独自サーバーなし、OpenPGP/S-MIME は自分の GnuPG 経由。HN の受けは正にこの線で割れた（「『……with AI』を越えるまでは 100% 興味あった」対：オプトイン・ローカル・先に聞く挙動はアシスタント押し付けパターンの正反対だ）。分類学に 3 つ目のスタンスが並んだ：AI デフォルト ON（業界標準）、無 AI（TDF/Toast/COSMIC）、そして **AI はいるが聞くまでオフ**——副作用の前に同意を、プライバシーページではなくデフォルトとして出荷する。
+
+Sources: [penguin-mail.com](https://penguin-mail.com/) · [c9dev/penguin-mail](https://github.com/c9dev/penguin-mail)

@@ -354,3 +354,9 @@ Sources:（英語版と同じ）
 **GLM 5.3 Flash だけで 1 ヶ月コーディング**（Thibaud Colas、Wagtail コアチーム、34 pts）：flash-tier agent コーディングとして稀有な公開**コスト・エネルギー遥測**。前半は完全に軌道内：**$68、約 4 kWh、炭素 365 g**。後半は「脱線」——月の 2B トークンのうち 1B が他モデルへ：vibe-coded の MCP プロトタイプが静かにモデルを取り違え（一晩で **450M トークン / $150 / 5 kWh**、結果は彼の推定で 5 倍安く上がるはずだった）、月半ばにはプロバイダ容量制限で GLM 5.3 Flash が劣化し DeepSeek V4.1 Flash と Qwen 3.8 Flash への切替を強制された。彼の 14 モデルベンチは **DeepSeek V4.1 Flash を首位**（精度 95%、タスクあたり 14.9 Wh と $0.09）に置く。結論は引用：「だから厳密にはこの挑戦は失敗だった……でも 1〜2 の flash 格安モデルに絞るのは全く実行可能」。制約は能力ではなく**運用**（容量、モデルルーティングのミス）——モデルだけでなくドリフトに予算を割け。
 
 Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [openai/codex#18491](https://github.com/openai/codex/issues/18491) · [wagtail.org](https://wagtail.org/blog/one-month-on-glm-53-flash) · [HN 議論](https://news.ycombinator.com/item?id=49934620)
+
+## 2026-10-08 —— 料金がプロンプト長で階層化し始める；キャッシュレバーが再び動く
+
+**Claude Haiku 5.5 の階層型料金（初）：** **100k プロンプトトークン未満**は入出力 $0.10/$0.50 毎 M——**以上は $0.50/$2.50**——価格が方向だけでなくコンテキスト規模で変わる：短いプロンプトで Haiku 4.5 の約 90% 安、全体で約 75% 安。Sonnet 5.5 のキャッシュ読みは $0.10 に半減；Max/Team に月 $100–500 の API クレジット。スモールモデル層は agent 経済学が実際に生きる場所（サブエージェント、圧縮、ルーティング）で、プロンプト長階層化は皆が走らせている長コンテキスト agentic ワークロードそのものを静かに再プライシングする。ルーティングに新しい決定軸も渡す：同じモデルが境界未満では 5× 安い——コンテキスト整形（このファイルの圧縮/排除ファミリー）が買えるのはもはやトークンだけでなく価格ステップであり、コンテキスト境界に明示的な価格の崖がついた。
+
+Sources: [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5) · [HN 議論](https://news.ycombinator.com/item?id=49996437)

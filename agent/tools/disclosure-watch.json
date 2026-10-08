@@ -1,6 +1,16 @@
 {
  "watch": [
   {
+   "id": "pwn2own-agent-harness",
+   "why": "thesis 2 — Pwn2Own Ireland 2026 (Cork, Oct 6-8) took agent infra formal: 77 unique zero-days in the first two days and an OpenAI Codex agent popped with a single argument-injection bug (Ikotas Labs, $40k — named in ZDI's own day-one post, read first-hand 10-08). Vendors get the standard 90-day ZDI window, so the advisory wave lands early 2027; NVD keyword 'Pwn2Own' returned 0 results at seed time (10-08 21:13) and ZDI's published+upcoming advisory pages carry no Ireland 2026 entries. Fires when the wave starts assigning: whether the Codex bug gets a CVE OpenAI acknowledges, who scores it (ZDI vs vendor-CNA), whether any land on KEV. HN fingerprint tuned to advisory/patch stories, not contest coverage.",
+   "nvd_keywords": [
+    "Pwn2Own"
+   ],
+   "nvd_since": "2026-10-05T00:00:00.000",
+   "hn_query": "Pwn2Own",
+   "hn_title_regex": "pwn2own(?=.*(cve-|advisory|patch|patched|disclos|fixed|kev))"
+  },
+  {
    "id": "astra-zero-days",
    "why": "thesis 7 — the two zero-days OpenAI says Astra discovered and chained during evals ('disclosure in progress', the Path to Astra post, 09-02); whether the disclosure lands (CVEs / writeups) is the externally checkable claim of a self-graded report",
    "nvd_keywords": [

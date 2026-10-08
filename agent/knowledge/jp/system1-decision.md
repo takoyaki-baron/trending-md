@@ -194,3 +194,15 @@ Sources: [PostHog/jeeves](https://github.com/PostHog/jeeves) · [HF の重み](h
 Dylan Black（maximumeffort.substack、22 pts）が Jev——TypeSafe の System One 分類器、決定モデルウェーブの基準点——を**較正**の面から調べた：出力確率は現実と一致するか。手法：解析解が既知の 10 物理分布ファミリー、5 プロンプトテンプレート × 20 変数（**1,000 設定、4 ドル未満**）、全変動距離で採点。結果：Jev の平均 TV は **0.518、ナイーブな一様推測の 0.546 対**。一様分布では **0.77 対ランダムの 0.39**——有意に*偶然より悪い*。Poisson はコイン投げ（0.65 対 0.64）。失敗モード：「尖りすぎる分布への強い傾向」——一様分布のケースで δ 関数近似。ピークが与えられたパラメータにない分布（Maxwell、Rayleigh、Gamma）では約 20% の設定しかピークを見つけられない。正しいファミリーの同定は信頼でき、数学は多段算術と 10 の冪で崩壊。著者は Jev を自動審判に使うことに「深い疑念」を示し、一様なサイコロに 83–90%+ の自信を付けた先行例を挙げる。**留保への留保：** 単著者・自己実行・単一領域のベンチマーク——ベンダーチャートに適用してきたのと同じ基準がここにも適用される。分類器は*正確*でありながら*未較正*でありうる。そしてこのクラスの新たなユースケース——LLM 審判、序数スケールの圧縮（10/2 の Clef 参照）——は argmax ではなく確率の上で走る。Jev クラスが構造的に尖っているなら、下流の信頼数値はすべてそれを受け継ぐ。
 
 Sources: [maximumeffort.substack.com](https://maximumeffort.substack.com/p/jev-is-poorly-calibrated) · [HN 議論](https://news.ycombinator.com/item?id=49934399)
+
+## 2026-10-07 夜 → 10-08 20:35 —— 3 日で 3 階層：クラスにハイパースケーラーの incumbent、クラウドのオープンウェイト、エッジの参入者が揃う
+
+**OpenAI Decisions API が公開ベータへ（gpt-6-luna のみ、入力 $0.10/M；HN 186）：**「数週間以内に GA を見込む」；`POST /v1/decisions` に 3 型式の型付き質問——`predicate`（0–1 の確率を返す）、`choice`（固定選択肢から選び信頼度を添える）、`score`（順序付きレベルで評価し、間を取れる）。出力トークンは存在しないので一切課金されない；ページ自慢で Responses API の約 10× 速い；ZDR と HIPAA 条項が適用可能。「Jev への応答」が基調講演のスライドから、価格と SLA 型ロードマップを持つ製品になった——決定層のハイパースケーラー incumbent が、DevDay の 2 週間後、オフロード先のフロンティアモデルと同じベンダーから売られる。
+
+**AWS Strands Decider 2B（重み + 訓練データ + スクリプトを公開；HN 55）：** Qwen3.5-2B の胴体に LM head を約 100 万パラメータの pointer head に置き換え、rank-16 LoRA、初期の slot-head 構造の敗北を経て **v19**；CPU でも動く；小タスクで RTX 3090 約 115ms、M3 MacBook 約 153ms。**JevBench 公開セットの 2B クラス 33 中 3 位（精度 + Brier 较正）**——ヘッドライン指標が精度でなく較正、監査後のクラスの合意を継続。正直な限界：「複雑な問題を解くのは推論モデルより大幅に劣る」；デモエージェントは手選別の質問を使用（「例示であって推奨ではない」）。「安い呼びは 2B pointer へ振り、残りをエスカレート」に参照実装ができた。
+
+**Liquid AI d1（d1-3B + d1-omni-600M、HF で重み公開、10/7）：**「トークンを生成しない……単一フォワードパスで答えを出す」モデル、LFM2.5-VL-3B と LFM2.5-Encoder-350M から微調整。全数値が Liquid 自社の Decision Index v0.2.1（公開スプリット）での自己報告：48.57、「10B 未満の全モデルを上回り、12 倍の大きさの決定モデル Decider 35B-A3B と同等」；RTX 4090 で 8 ms、Jetson Orin Nano で約 50 ms。正直なラベル：d1-omni-600M は「初の実験的チェックポイント」（15.95）。カテゴリにオープンウェイト・サブ秒・オンデバイスの参入者ができた——そして既存の但し書きはそのまま：インデックスはベンダー自家製だ。
+
+クラスの収束パターンが読める：全員が同じベンチファミリーに自己報告し（JevBench / Decision Index）、精度はコモディティ化し、差別化の主張はレイテンシ/価格/較正/配置階層へ——そして**依然として同一ハーネスでのクロス実行はゼロ**（09-29 の Jeeves ウォッチは有効のまま）。
+
+Sources: [Decisions API ガイド](https://developers.openai.com/api/docs/guides/decisions) · [HN](https://news.ycombinator.com/item?id=49984025) · [Strands：Introducing Decider](https://strandsagents.com/blog/introducing-strands-decider/) · [HN](https://news.ycombinator.com/item?id=49987076) · [Liquid AI——d1 公開](https://www.liquid.ai/blog/d1-open) · [LiquidAI/d1-3B](https://huggingface.co/LiquidAI/d1-3B)

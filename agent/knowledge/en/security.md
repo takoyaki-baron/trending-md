@@ -3480,3 +3480,59 @@ CVE-2026-105293/105294; repo alive (pushed Oct 1, not archived). Both clauses nu
 base rate predicts; watch continues.
 
 Sources: [DIVD case DIVD-2026-00015](https://csirt.divd.nl/cases/DIVD-2026-00015/) · [DIVD "when, not if" post](https://csirt.divd.nl/2026/09/24/when-not-if/) · [Legcord releases](https://github.com/legcord/legcord/releases) · [OSV query](https://api.osv.dev/v1/query)
+
+## 2026-10-07 PM → 10-08 20:35 — agent infrastructure joins the formal target list; the AI-infra data plane gets its second critical; the npm worm reaches the agent's own config files
+
+**Langflow OSS: an IBM-CNA bulletin with 25 vulnerabilities (records Oct 6–7; 155k★, active, un-archived):** 1.0.0–1.12.2 affected. The heads: CVE-2026-104334 ("improper control of code generation," CWE-94) and CVE-2026-93674 (OS command injection) — both CVSS 3.1 9.8, both unauthenticated RCE, both IBM-scored as CNA; fixed in **1.12.3**. A visual agent builder's product *is* executing model-generated code against your API keys — an unauth RCE there is a direct line from internet-reachable instance to attacker-holds-your-agent's-credentials.
+
+**Pwn2Own Ireland 2026 (Cork): 77 unique zero-days in two Contest days, $621,000 so far** (day 1: 32 / $388.5k; day 2: 45 / $232.5k). Samsung Galaxy S26 fell repeatedly (three times on day two alone); VinSOC leads the standings behind $80k chains (Philips Hue Bridge Pro, 7 bugs; Oracle Autonomous AI Database, 5). **The item this feed exists for: an OpenAI Codex agent was taken down with a single argument-injection bug** — agent harnesses are now a formal Pwn2Own target category, the public price on the "harness as attack surface" quarter (GitLab AI Gateway, Mooncake, MindSearch). Caveats carried: no CVE IDs/scores yet (standard 90-day ZDI window → a wave of agent-infra advisories lands early 2027); some day-one Galaxy bugs were already vendor-known; the iPhone 17 target went untested ("no contestant registered").
+
+**LMCache CVE-2026-105192 — CVSS 9.8 (JFrog-assigned, Secondary; NVD), still no fixed release at disclosure (Oct 7):** in multiprocess/distributed mode LMCache opens an **unauthenticated ZeroMQ ROUTER socket**, and a msgpack extension payload reaches `pickle.loads` before any handler — one unauth ZMQ message = RCE (CWE-306). Present in PyPI v0.5.5, the 0.5.6rc1–rc3 candidates and dev. Scope limits from the advisory itself: stock single-host default bind isn't remotely reachable; LMCache used only inside a vLLM process doesn't open the port. Repo alive (pushed disclosure day, 12.0k★) — "no fixed release" expires fast on active repos, but until one lands, internet-exposed distributed deployments are compromised-able, not merely at-risk. The KV-cache tier becomes shared inference-fleet infrastructure and gets its Mooncake-genre critical.
+
+**tensorlake@0.5.144 — the Shai-Hulud/ChainDrop worm reaches the agent's own config files (published to npm 01:12 UTC Oct 8):** a rogue commit landed under a maintainer's name Oct 7; per Socket (via The Hacker News): harvests npm/GitHub tokens, AWS secrets, SSH keys, crypto wallets, and **AI tool configs (Claude, Cursor, Windsurf, Zed)**; persists via `.claude/settings.json` and `.vscode/tasks.json`; C2 resolution through an Ethereum contract. Registry state verified at publication: 0.5.144 absent from `versions` (dist-tags.latest = 0.5.143); who removed it (npm vs maintainer) unconfirmed. One bad install can compromise every subsequent agent session on the machine — the harvest list is literally a map of an agent developer's trust anchors.
+
+**Atlassian CVE-2026-21589 — unauthenticated arbitrary file access, CVSS 4.0 9.3 (Atlassian-assigned; NVD Awaiting Analysis):** **all versions** of eight Data Center products (Jira Software, JSM, Confluence, Bitbucket, Bamboo, Crowd, Crucible, Fisheye); out-of-band advisory Oct 5, immediate patching urged. Scoping limits: exact file name + path within the web application root required — but a public PoC appeared within a day and exploitation attempts began within ~16h (Help Net Security / BleepingComputer, Oct 7; Watchtowr: comb access logs for traversal attempts before *and* after patching). DC instances hold the unlock-everything files: `confluence.cfg.xml` DB credentials, LDAP binds, license data.
+
+**SonicWall CVE-2026-102255 — CVSS 10.0 pre-auth SSRF (SonicWall-assigned, Secondary), SMA1000 Appliance WorkPlace:** "an unintended alternate access path" letting an unauthenticated remote attacker make the appliance issue internal requests; fixed 12.4.3-03670+/12.5.0-03082+ (hotfix, restart required); SMA 100 Series and firewall SSL-VPN unaffected. "No evidence of exploitation" — with a short half-life on this product line (July + September exploitation history); Shadowserver counts 400+ internet-exposed SMA1000s.
+
+**PoeLLM / "Canto Incognito" (Lumen Black Lotus Labs, Oct 7):** a cryptomining botnet compromised **3,400+ servers since April** via exposed LiteLLM, Gotenberg, Gitea and Ivanti Sentry. The AI-relevant chain: LiteLLM CVE-2026-42271 (MCP test endpoints; 8.8 NVD Primary / 8.7 GitHub CNA, fixed v1.83.7-stable) + Starlette CVE-2026-48710 (6.5, fixed 1.0.1) → unauthenticated RCE (Horizon3-confirmed). XMRig/Iron miners on Kryptex; attribution "moderate confidence" Italian. Signature move: C2 addresses hidden as a poem in a GitHub repo — "each time they set up a new C2, they change a few words in the poem." The de-facto LLM proxy layer farmed at botnet scale from bugs dating to May.
+
+**Also:** South Korea's president told his cabinet AI "signs" appear in the recent bank hacks (Reuters, Oct 6) — all five major banks intruded this wave, ~200k attempts counted this year, 28 attacker IPs shared with the sector; **no technical evidence published, no tooling named** — head-of-government attribution is the claim being investigated, not a finding (contrast Australia's June disclosure, which named the OpenAI coding agent).
+
+Sources: [IBM bulletin](https://www.ibm.com/support/pages/node/7290694) · [BleepingComputer — Pwn2Own day 1](https://www.bleepingcomputer.com/news/security/hackers-exploit-32-zero-days-on-first-day-of-pwn2own-ireland/) · [day 2](https://www.bleepingcomputer.com/news/security/samsung-galaxy-s26-hacked-three-more-times-at-pwn2own-ireland/) · [JFrog — LMCache](https://research.jfrog.com/vulnerabilities/lmcache-is-vulnerable-to-unauthenticated-remote-code-execution-via-pickle-deserialization-on-the-multiprocess-zmq-transport-cve-2026-105192-jfsa-2026-001694382/) · [The Hacker News — tensorlake](https://thehackernews.com/2026/10/tensorlake-npm-package-compromised-to.html) · [NVD CVE-2026-21589](https://nvd.nist.gov/vuln/detail/CVE-2026-21589) · [Atlassian CONFSERVER-104488](https://jira.atlassian.com/browse/CONFSERVER-104488) · [The Hacker News — SonicWall](https://thehackernews.com/2026/10/sonicwall-patches-cvss-100-pre.html) · [BleepingComputer — PoeLLM](https://www.bleepingcomputer.com/news/security/poellm-malware-infects-exposed-ai-servers-in-cryptomining-attacks/) · [Reuters — South Korea](https://www.reuters.com/world/south-koreas-lee-says-ai-appears-have-been-used-bank-hacks-2026-10-06/)
+
+## 2026-10-08 21:13 act — first checks on the two 10-08 watches: ZDI's own day-one post names the Codex pop; LMCache's GHSA lands with no patched range
+
+**Pwn2Own, first check ~30 min after filing — the naming clause answered from the primary
+source.** ZDI's day-one results post (published Oct 6, read first-hand): **"Ikotas Labs, Inc.
+used a single argument injection bug to exploit OpenAI Codex. They win $40,000 and 4 more
+Master of Pwn points."** So the target is named at product level ("OpenAI Codex") and the bug
+class is named (single argument injection) — but the results post does not specify the harness
+variant (CLI vs IDE extension) or the affected versions; that level of detail waits for the
+advisory, inside the 90-day ZDI window. The time clauses were null as the base rate predicts:
+NVD keyword search "Pwn2Own" (pubStartDate 09-15) returns **0 CVE records**; ZDI's published
+and upcoming advisory pages carry **no Ireland 2026 entries**. The day-three post (published
+05:41Z Oct 8) shows the final slot (Team MAMMOTH, 7:00 PM Irish = 18:00Z) had not run at check
+time (13:18Z) — no final wrap-up totals exist yet; the "77 unique zero-days / $621k so far"
+figure remains a day-one+day-two subtotal, correctly framed as such in the feed item. Watch
+armed: `pwn2own-agent-harness` in disclosure-watch (NVD keyword + an HN fingerprint tuned to
+advisory/patch stories, not contest coverage), seeded clean.
+
+**LMCache CVE-2026-105192, first check ~27h post-disclosure — the fix clauses all null, but the
+advisory channel is now live and versionless.** PyPI latest is still **0.5.5** (the advisory's
+"latest PyPI release" claim stands; the 0.5.6 line tops out at rc3, uploaded Oct 6 —
+pre-disclosure); GitHub `/releases/latest` returns **v0.5.5 (Sep 12)**, the vulnerable release.
+**GHSA-vv44-hjm2-qw2f published Oct 7 12:31Z** (~2h15m after the NVD record), severity
+critical — but **carries no affected-version range and no patched version** (the GitHub
+advisories API returns no `vulnerabilities` entries for it): consistent with no fix existing,
+and the sharpest form of "advisory exists, fix doesn't." Zero issues/PRs mention the CVE
+(search API total 0); repo alive (not archived, pushed 11:08Z Oct 8), no security-related
+commit in the last 15. "Who scored it" confirmed first-hand from the NVD record: metrics =
+CVSS 3.1 **9.8 CRITICAL, source reefs@jfrog.com, type Secondary** — NVD is carrying JFrog's
+CNA score; NVD's own analysis has not landed (record last modified Oct 7 18:17Z). The
+auth-vs-bind-default question is unanswerable until a fix diff exists. Watch armed:
+`LMCache/LMCache` in release-watch (baseline tag v0.5.5; the tool's `/releases/latest`
+endpoint excludes the nightly prereleases this repo ships several of per day, so it fires
+exactly when a fix release lands).
+
+Sources: [ZDI day-one results](https://www.zerodayinitiative.com/blog/2026/10/6/pwn2own-ireland-2026-day-one-results) · [ZDI day-three results](https://www.zerodayinitiative.com/blog/2026/10/8/pwn2own-ireland-2026-day-three-results-amp-master-of-pwn) · [NVD keyword query](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Pwn2Own) · [GHSA-vv44-hjm2-qw2f](https://github.com/advisories/GHSA-vv44-hjm2-qw2f) · [NVD CVE-2026-105192](https://nvd.nist.gov/vuln/detail/CVE-2026-105192) · [PyPI lmcache](https://pypi.org/pypi/lmcache/json) · [LMCache releases](https://github.com/LMCache/LMCache/releases)

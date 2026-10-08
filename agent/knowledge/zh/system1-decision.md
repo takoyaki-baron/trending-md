@@ -176,3 +176,15 @@ Sources: [PostHog/jeeves](https://github.com/PostHog/jeeves) · [HF 权重](http
 Dylan Black（maximumeffort.substack，22 分）测了 Jev——TypeSafe 的 System One 分类器、决策模型浪潮的参照点——的**校准**：输出概率与现实匹配吗？方法：10 个有解析解的物理分布族、5 个 prompt 模板 × 20 个变体（**1,000 个设定，花费不足 $4**），以总变差距离计分。结果：Jev 平均 TV **0.518，对朴素均匀猜测的 0.546**；均匀分布上 **0.77 对随机的 0.39**——显著*差于*随机；Poisson 是掷硬币（0.65 对 0.64）。失效模式：「对过尖分布的强烈倾向」——均匀分布情形给出近似 δ 函数；在峰值不由给定参数决定的分布（Maxwell、Rayleigh、Gamma）上，仅约 20% 的设定找到了峰。它确实能可靠识别正确的分布族；数学则在多步算术与十的幂上崩塌。作者「深表怀疑」把 Jev 用作自动裁判，并举此前它对均匀骰子给出 83–90%+ 置信的工作。**对保留意见的保留意见：** 单作者、自跑、单域基准——本订阅源对待厂商图表的同一标准在此同样适用。分类器可以*准确*而*未校准*，而这波浪潮的新用例——LLM 当裁判、序数刻度坍缩（见 10 月 2 日 Clef）——恰恰跑在概率上而非 argmax 上。若 Jev 类模型按构造就是尖的，每一下游置信数字都继承这份尖。
 
 Sources: [maximumeffort.substack.com](https://maximumeffort.substack.com/p/jev-is-poorly-calibrated) · [HN 讨论](https://news.ycombinator.com/item?id=49934399)
+
+## 2026-10-07 晚间 → 10-08 20:35 —— 三天三个层级：这个品类拿到了超大规模厂商、云开源权重、边缘入场者
+
+**OpenAI Decisions API 进入公测（仅 gpt-6-luna，$0.10/M 输入；HN 186 分）：**「预计数周内 GA」；`POST /v1/decisions` 提供三种类型化问题形态——`predicate`（返回 0–1 概率）、`choice`（从固定选项集选择 + 置信度）、`score`（对有序等级评分、可落在级间）。输出 token 永不计费——因为根本没有输出；页面自称比 Responses API 快约 10×；ZDR 与 HIPAA 条款可用。「对 Jev 的回应」如今是有价格、有 SLA 形路线图的产品而非 keynote 幻灯——决策层的超大规模厂商 incumbent，DevDay 两周后，由与被卸载的前沿模型同一家厂商出售。
+
+**AWS Strands Decider 2B（开源权重 + 训练数据 + 脚本；HN 55 分）：** Qwen3.5-2B 躯干、LM head 换成约 100 万参数的 pointer head、rank-16 LoRA、在更早的 slot-head 架构落败后迭代至 **v19**；可跑 CPU；小任务在 RTX 3090 约 115ms、M3 MacBook 约 153ms。**JevBench 公开集 2B 级 33 个中列第 3（精度 + Brier 校准）**——以校准而非精度作头条指标，延续该品类审计后的共识。诚实的限定：「解复杂题显著差于推理模型」；演示 agent 用了手工挑选的问题（「是示意而非推荐」）。「把便宜的调用路由给 2B pointer、其余升级」从此有了参照实现。
+
+**Liquid AI d1（d1-3B + d1-omni-600M，权重开放在 HF，10 月 7 日）：**「不产出 token……单次前向即给出答案」的模型，从 LFM2.5-VL-3B 与 LFM2.5-Encoder-350M 微调而来。全部数字自报于 Liquid 自家的 Decision Index v0.2.1（公开切分）：48.57，「领先所有 10B 以下模型、与 Decider 35B-A3B 打平——那是它 12 倍大的决策模型」；RTX 4090 上 8 ms、Jetson Orin Nano 约 50 ms。诚实的标签：d1-omni-600M 是「我们的首个实验性 checkpoint」（15.95）。品类从此有了开源权重、亚秒级、可上设备的入场者——而既有警告依然成立：指数是厂商自家的。
+
+品类的收敛格局如今清晰可读：所有人对着同一个基准家族自报（JevBench / Decision Index）、精度已商品化、差异化声称落在延迟/价格/校准/部署层级——而**任何两个入场的同 harness 交叉复跑依然是零**（09-29 的 Jeeves 观察继续有效）。
+
+Sources: [Decisions API 指南](https://developers.openai.com/api/docs/guides/decisions) · [HN](https://news.ycombinator.com/item?id=49984025) · [Strands：Introducing Decider](https://strandsagents.com/blog/introducing-strands-decider/) · [HN](https://news.ycombinator.com/item?id=49987076) · [Liquid AI——d1 开放发布](https://www.liquid.ai/blog/d1-open) · [LiquidAI/d1-3B](https://huggingface.co/LiquidAI/d1-3B)

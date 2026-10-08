@@ -755,3 +755,9 @@ Sources: [garrytan/gstack](https://github.com/garrytan/gstack) · [addyosmani/ag
 **10-07——货架的第三层：垂直品质。** cathrynlavery/diagram-design 重回日榜（43.9k★，+227/天；2026 年 4 月创建，仍在发布——10 月 6 日插件 manifest 升到 2.6.64，含 drawio 几何校验修复）：「为 Claude Code、Codex、GitHub Copilot、Factory Droid 与 Pi 提供社论级图表设计。42 种图型。自包含 HTML + SVG。无阴影。无 Mermaid 垃圾。」与 `impeccable` 的无 LLM 检测规则并列，设计品质之翼把成层化再推进一档：平台官方 → 名人维护者 → **垂直品质**。*图表样式*拿到 43.9k★ 说明 agent 产出物的瓶颈已从「能不能用」移到「看起来是否有意图」——反垃圾现在是可卖的功能。这些技能是否真有提升，仍然零独立评测（→ 论题 8 的评估缺口，又深一层）。
 
 Sources: [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) · [pbakaus/impeccable](https://github.com/pbakaus/impeccable)
+
+## 2026-10-08 —— 货架的「量产毕业生」重上趋势
+
+**cloudflare/security-audit-skill 重回日榜（26.2k★，+576，无新发布——最后提交 9 月 14 日）：** 罕见地从技能毕业为 4,000 人公司生产安全工作流的例子——它孕育了 6 月的「Build Your Own Vulnerability Harness」（20,799 条原始候选 → 7,245 条可行动发现、覆盖 128 个仓库）。可移植的是模式而非分数：侦察到覆盖引导狩猎的六阶段；**每条候选都交给一个「试图推翻它」的全新验证者**；发现以经 schema 校验的 JSON、由零依赖 Node 脚本交付；README 里诚实的自测（「单次运行约找到多次运行总和的一半」）；且在没有 OS 强制沙箱时一切保持 `needs_validation`。适用于任何 agent QA 任务、不限于安全——这是技能货架上评估故事本身就是工件的那个条目（论题 8 的评估缺口，被一个仓库在自己的领域内回答）。
+
+Sources: [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) · [Build Your Own Vulnerability Harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness/)

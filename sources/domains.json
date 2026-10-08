@@ -10615,5 +10615,23 @@
     "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
+  },
+  "scottaaronson.blog": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Scott Aaronson's blog (UT Austin complexity theorist) — long-form first-person takes on complexity and AI. Cross-checked (10-08): the 'Mathocalypse' post's figures (~3 h of GPT-Pro-level compute per problem, ~5% of ~8,000 attempts) are his own reporting of briefings, not OpenAI's record — the release event itself matches the openai/math history file.",
+    "zh": "Scott Aaronson 的博客（UT 奥斯汀复杂性理论学者）——关于复杂性与 AI 的第一人称长文。已交叉核验（10-08）：〈Mathocalypse〉一文中的数字（每题约 3 小时 GPT-Pro 级算力、约 8000 次尝试中约 5% 成功）是他对比听取汇报后的自述，并非 OpenAI 官方记录——发布事件本身与 openai/math 的 history 文件一致。",
+    "jp": "Scott Aaronson のブログ（UT オースティンの計量複雑性理論者）——複雑性と AI についての一人称の長文。検証済み（10-08）：〈Mathocalypse〉の数値（1 問あたり約 3 時間の GPT-Pro 級計算、約 8,000 試行中約 5% 成功）は彼がブリーフィングを受けた自己報告であり OpenAI の公式記録ではない——リリース事実そのものは openai/math の history ファイルと一致。"
+  },
+  "sheets.works": {
+    "cat": "data",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "sheets.works 'Data Drop' — small data-journalism pieces that count things from primary records. Cross-checked (10-08): the maintainer-count piece's methodology (10+ commits, Oct 2025–Oct 2026) is self-defined and reproducible from the cited repos' histories; the HN thread stress-tested the proxy. Not a news org — treat its numbers as one methodology's output, not ground truth.",
+    "zh": "sheets.works 的「Data Drop」——从一手记录出发做计数的小型数据新闻。已交叉核验（10-08）：维护者计数一文的方法（10+ 次提交、2025-10 至 2026-10）为自定义口径，可在所引仓库的提交历史上复现；HN 讨论对该代理指标做了压力测试。非新闻机构——其数字是某种方法论的产物，不是基准真相。",
+    "jp": "sheets.works の「Data Drop」——一次記録からカウントする小型データジャーナリズム。検証済み（10-08）：メンテナ数記事の手法（10+ コミット、2025-10〜2026-10）は自己定義で、参照リポジトリの履歴から再現可能。HN スレッドで代理指標の限界が検証された。報道機関ではない——数値は一手法の出力であり地上の真理ではない。"
   }
 }

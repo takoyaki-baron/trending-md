@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-07T04:34:00+08:00
+last_processed: 2026-10-08T20:45:00+08:00
 ---
 
 # Learnt Agent
@@ -33,46 +33,44 @@ patterns, and turn them into insights and actionable todos.
    - **08-16→09-28 — the stack decomposes by layer through the first harness-productization
      wave:** Codex Agents API, session formats as lock-in, worktree orchestration, google/ax,
      Coder Agent Relay, cf+Wrangler sunset, Pi.dev ships MCP. → [[agent-stack]]
-   - **10-07 — memory's failure mode moves from storage hygiene to retrieval weighting:** MemAdapter
-     (arXiv 2610.05162) — even *objectively correct* memories cause sycophancy (the same memory
-     warrants different influence per context); counterfactual induction + context-aware reflection;
-     abstract gives no numbers. → [[agent-stack]]
-   - **09-28 act — hindsight's "independent reproduction" corrected to co-developer reproduction**
-     (2 Sanghani faculty among 7 authors): LongMemEval is the shared eval, trust isn't. → [[agent-stack]]
-   - **10-02→10-03 — MCP uniformity cracks both ends; the database becomes an agent primitive:**
-     Figma catalog-gates edit access; OpenAI ships MCP Extensions outside the spec; Pi 1.0 sells
-     restraint; Supabase acquires Turso; Agent-Reach 88.4k★ tops trending dormant. → [[agent-stack]]
-   - **10-04 — the orchestration layer votes full-auto:** Paperclip (96.7k★, #1 weekly) ships PR-review
-     bots ("execution harnesses now default to full auto" in its own notes); T3 Code rebuilds its
-     runtime core; claude-mem fills the to-do hole. → [[agent-stack]]
-   - **10-05→10-06 — grounding gets metered:** Cloudflare's Web Search API proxies agent web access
-     through AI Gateway (Ceramic.ai/Exa/Linkup, ZDR — the proxy sees what agents want to know);
-     openrig orchestrates Claude Code+Codex as one YAML rig; OpenCut rewrites around MCP/headless.
+   - **09-28→10-07 — memory's failure mode moves from storage hygiene to retrieval weighting**
+     (MemAdapter: even *objectively correct* memories cause sycophancy); hindsight's "independent
+     reproduction" corrected to co-developer reproduction. → [[agent-stack]]
+   - **10-02→10-04 — MCP uniformity cracks both ends; the database becomes an agent primitive;
+     orchestration votes full-auto:** Figma catalog-gates edit access; OpenAI ships MCP Extensions
+     outside the spec; Supabase acquires Turso; Agent-Reach 88.4k★ tops trending dormant;
+     Paperclip (96.7k★) ships PR-review bots, "full auto by default" in its own notes.
      → [[agent-stack]]
+   - **10-05→10-06 — grounding gets metered:** Cloudflare's Web Search API proxies agent web
+     access through AI Gateway (ZDR — the proxy sees what agents want to know); openrig
+     orchestrates Claude Code+Codex as one YAML rig; OpenCut rewrites around MCP/headless.
+     → [[agent-stack]]
+   - **10-07PM→10-08 — packaging and containment get reference implementations:** Docker Agent
+     ships OCI-as-agent-format (registry as app store), microsoft/mxc v1.0 GA = typed
+     multi-backend containment, OpenSRE gives SRE agents a harness+eval gym, Google serves docs
+     as Markdown-over-MCP, suggested messages = a harness→model channel. → [[agent-stack]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
-   nobody.** ~40+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes, each with a
+   nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes, each with a
    canonical instance (full map in [[security]]). **Meta-pattern:** in four cases the class is
    named, the mitigation converged, nobody enforces it — OWASP ASI05, the tool-call boundary,
    the eval sandbox, MCP tool pinning.
    - **08-16→10-03 — the sixteen shapes fill in; GHAPPIER weaponizes a valid OIDC provenance
      chain; Flowise corrected (archived 44 days pre-CVE — "unpatched" permanent); and the first
      org-compromise→OSS-RCE chain lands its KEV entry, executed end-to-end by an AI agent**
-     (DIVD → Zammad CVE-2026-102489/102490; KEV'd Oct 2, NVD 9.8 Analyzed; "fixed in 6.5.4" is
-     an Apr 8 tag). → [[security]] [[fact-check]]
-   - **10-04 — AI-assisted discovery ships at hyperscale; the agent-platform surface gets its
-     9.9s:** Chrome 154 credits an Anthropic researcher "assisted by Claude" on a 9.6 WebGL
-     sandbox escape (<1 week to patch); GitLab AI Gateway + act_runner 9.9s; **the Zammad chain
-     gets its vendor dispute** (details handed over only after public criticism).
-     → [[security]] [[fact-check]]
+     (DIVD → Zammad CVE-2026-102489/102490; KEV'd Oct 2, NVD 9.8 Analyzed). → [[security]] [[fact-check]]
+   - **10-04→10-07 act — AI-assisted discovery at hyperscale; the Zammad saga completes:** Chrome
+     154 credits an Anthropic researcher "assisted by Claude"; GitLab AI Gateway + act_runner
+     9.9s; DIVD's case page found at csirt.divd.nl (the "no case" was a wrong-host null);
+     Zammad 7.2.1 ships 28 GHSAs — both KEV'd CVEs absent from all of them, the vendor's scope
+     dispute enacted in the advisory record. → [[security]]
    - **10-05→10-06 — the paperwork-lag week** (ZITADEL ATO season, a CVSS 10.0 on a
      15-month-dormant agent eval, Legcord's double critical, a 30-month record lag → [[security]]).
-   - **10-07 act — DIVD's case page lands first-hand; the 10-06 "no case" was a wrong-host null:**
-     102489 present-but-not-exploitable in 7.0.0–7.1.3, 102490 in all versions, patch "Available";
-     the agent-compromise forensic account is still pending. → [[security]]
-   - **10-06 21:13 act — the Zammad chain gets its fix and 28 GHSAs — and both KEV'd CVEs are
-     absent from both:** 7.2.1 ("Critical Security Update", ≤7.2.0 affected) ships the fixes;
-     every advisory is CVE-less and neither CVE-2026-102489 nor -102490 appears — the vendor's
-     scope dispute is now enacted in the advisory record. → [[security]]
+   - **10-07PM→10-08 — agent infra joins the formal target list:** Pwn2Own Ireland pops a Codex
+     agent with one argument-injection bug among 77 zero-days (90-day clock → an agent-infra
+     advisory wave in early 2027); LMCache CVE-2026-105192 9.8 unauth-ZMQ→pickle RCE with no
+     fixed release; the tensorlake npm worm harvests AI-tool configs and persists via
+     `.claude/settings.json`; Langflow 2×9.8 unauth RCE; PoeLLM farms 3,400 LiteLLM servers;
+     Atlassian DC 9.3 PoC→attacks in ~16h. → [[security]]
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
    productized fitting, and fit-to-measured-budget, meeting the DRAM price shock exactly as RAM
@@ -136,12 +134,19 @@ patterns, and turn them into insights and actionable todos.
      poorly calibrated (mean TV 0.518 ≈ naive guess; 0.77 vs 0.39 on uniform — peaky by
      construction), two days after BA-LoRA showed the ordinal bias is trainable (47%→86%).
      → [[system1-decision]] [[smart-routing]]
+   - **10-07PM→10-08 — three days, three tiers:** OpenAI's Decisions API enters public beta
+     (gpt-6-luna only, $0.10/M, three typed shapes, output never billed); AWS open-weights
+     Strands Decider 2B (calibration as the headline metric); Liquid d1 puts open weights at
+     the edge (8 ms/4090 — vendor's own index). → [[system1-decision]]
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models
    (led by Chinese labs shipping frontier-scale open weights) trade a sliver of benchmark points
    for a huge price gap; closed labs compete on distribution speed; post-training is the visible
    frontier lever.
-   - **08-15→09-29 — the open-weight wave's fine print:** revenue-gated licenses (GLM-5.3, Kimi K3,
-     Qwen3.8-Max); Ember-1's sell self-reported; GPT-3 lineage left the API; Sonnet 5.5's errata.
+   - **08-15→10-07 — the open-weight wave's fine print:** revenue-gated licenses (GLM-5.3, Kimi
+     K3, Qwen3.8-Max); Ember-1's sell self-reported; Kolibri-1 ships its own contamination
+     admission; Reflection Beam pre-announces on tokens-per-job with zero weights; Mistral Large
+     4 promises 1T open weights end-Oct gated on state-coordinated red-teaming, all numbers
+     vendor-run. → [[frontier-models]]
    - **10-01 — Gemini 4 Argon: the no-guardrails tier institutionalized at a US lab** (Fairwind,
      priced pre-availability; AA's read in a day: #8 of 223); **act:** 650+ partners, oversight is
      contractual self-attestation — the vendor grading its own customers.
@@ -149,49 +154,38 @@ patterns, and turn them into insights and actionable todos.
      "a few thousand dollars"; FLUX 3 Image "designed for agents"; the always-on leak shipped as
      **Dots** ("Powered by GPT-6 Astra"); MiniMax's 2.7T M3 Pro met Q3 in **silence**.
      → [[frontier-models]]
-   - **10-04 — Kolibri-1 (Aleph Alpha): the contamination admission ships in the vendor's own tech
-     report** (78B-A3.5B MoE, Apache-2.0; recitation 22–95% correlating 0.90 with pass@1; "1M
-     tokens" extrapolates past a 262k trained length; no independent eval yet). → [[frontier-models]]
-   - **10-06 — Reflection Beam pre-announces on efficiency:** 501B-A23B open-weight MoE, "3–4×
-     less inference compute than GLM-5.2 at comparable reasoning" — zero weights, an
-     "approximate compute comparison" disclaimer, Kimi K3 conceded ahead; the open-weight pitch
-     is now tokens-per-job, unverifiable until weights land. → [[frontier-models]]
-   - **10-07 — Europe's bet goes 1T and cyber-first:** Mistral Large 4 (1T-total/49B-active MoE,
-     public preview $1.36/$4.18 per M; 3,800 Grace Blackwell in Mistral's own EU DCs); weights
-     *promised* end-Oct under an unspecified license, gated on red-teaming with state authorities;
-     every number vendor-run (blind human eval 3.74/5, second behind Opus 5). → [[frontier-models]]
+   - **10-08 — Haiku 5.5 reprices the small-model tier:** GDPval-AA 1620 Elo vs 4.5's 735, at
+     $0.10/M under 100k tokens (tiered-by-prompt-length pricing, a first; "Sonnet/Opus remain
+     better for complex agentic coding" conceded; context window unstated). → [[frontier-models]] [[token-economics]]
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
    committed response); SB 53 makes it statutory; Astra is the first live "Critical"; GLM-5.3 the
    first Chinese offensive-cyber hold.
    - **08-14→09-29 — Astra designated Critical with evidence in-post; the disclosure watch
      resolves (voluntary framework); Pachocki concedes CoT monitoring "progressively diminishing";
-     SB 813 + AB 1405 create statutory auditors; eval containment is itself a security surface
-     (Gemini/Irregular breakout; OpenAI's DNS escape + second pause); Sonnet 5.5 footnotes its own
-     errata; Astra 6.1's launch scrapped; Perone names the untested-systems hole. → [[frontier-models]]**
-   - **10-01 — Gemini 4 Argon: the no-guardrails tier institutionalized** (→ thesis 6); Fairwind's
-     governance model is the vendor grading its own customers (650+ partners, self-attestation,
-     no auditor) — the release gate has a statute, the cyber tier has a testimonial wall.
+     SB 813 + AB 1405 create statutory auditors; eval containment is itself a security surface;
+     Sonnet 5.5 footnotes its own errata; Astra 6.1's launch scrapped; Perone names the
+     untested-systems hole. → [[frontier-models]]**
+   - **10-01 — Gemini 4 Argon: the no-guardrails tier institutionalized** (→ thesis 6); Fairwind
+     governance = the vendor grading its own customers (650+ partners, self-attestation, no auditor).
    - **10-04 — the launch-safety reports' author testifies from outside:** David Robinson (3.5
      years writing OpenAI's safety reports) resigns — "iterative deployment… guarantees periodic
-     failures" whose scale grows with capability; the year's agent incidents reframed from
-     operational accidents to structural critique (quotes via TechCrunch; essay paywalled).
-     → [[frontier-models]]
-   - **10-07 — the release gate reaches the open-weights side:** Mistral holds Large 4's weights
-     until red-teaming "with cybersecurity firms, vetted partners, and state authorities" completes —
-     open-weights labs gating the artifact on the security review, not announcing alongside it.
-     → [[frontier-models]]
+     failures"; the year's agent incidents reframed as structural critique.
+   - **10-07PM→10-08 — capability gating becomes a published tier system:** Anthropic folds
+     Glasswing into a 3-tier Cyber Verification Program (reduced blocking for vetted security
+     professionals, data retention required, own-benchmark motivation), matching Google's
+     Fairwind; and Anthropic has reported users to police 3× since August — the safety review
+     pipeline has real-world outcomes. → [[frontier-models]]
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** The
    category proliferates on assertion; expect an "MMLU-for-skills" eval; whoever ships it owns
    the skills marketplace.
    - **08-18→09-14 — consolidation + the measurement machinery:** anthropics/skills canonical home;
      Agent Plugins 1.0.0 spec (Anthropic absent); vercel-labs/skills the package manager;
-     Claude-Red offense skills; i-have-adhd's HN thread measures the skills-vs-harness ceiling.
+     i-have-adhd's HN thread measures the skills-vs-harness ceiling.
    - **09-16→09-29 — the measurement is the artifact:** McKinley's "Prompts Aren't Real" (pass^k +
      judges + holdouts); OpenSpec v1.13.2 ("skipped checks are no longer reported as passing");
-     reverse-skill flagged by star-to-commit (now standing tooling); one "Do not guess" sentence
-     cuts fabricated extraction fields 70.7%→20.2%; TraceDance mines 107 benchmarks from 252,557
-     sessions (frontier pass 26.7%).
+     one "Do not guess" sentence cuts fabricated extraction fields 70.7%→20.2%; TraceDance mines
+     107 benchmarks from 252,557 sessions (frontier pass 26.7%).
    - **10-01 — the design-bottleneck answer is deterministic:** impeccable (73k★) ships 61 no-LLM
      detector rules for agent frontend — linters for taste, still no eval; the formal-methods wave
      gets Wayne's counterweight (→ thesis 10). → [[agent-plugins]]
@@ -199,12 +193,13 @@ patterns, and turn them into insights and actionable todos.
      third-party agent-skills channel after the platform-official ones — 68 agents/293 skills/
      94 commands, single maintainer, its own "third-party re-uploads may contain malware"
      warning, and zero independent evaluation that the skills improve anything. → [[agent-plugins]]
-   - **10-05→10-06 — named-maintainer brands:** gstack (135k★), Osmani's agent-skills (101k★)
-     re-trend with no fresh release; Pocock's directory hits 277k★, GitHub's largest. A famous
-     name as trust anchor — where the eval gap bites hardest. → [[agent-plugins]]
-   - **10-07 — the shelf grows a vertical wing:** diagram-design re-trends at 43.9k★ (42 diagram
-     types, "no Mermaid slop," still shipping — 2.6.64 on Oct 6); stratification now generic →
-     named-maintainer → *vertical-quality*; anti-slop is a marketable feature. → [[agent-plugins]]
+   - **10-05→10-07 — named-maintainer brands, then a vertical wing:** gstack (135k★), Osmani's
+     agent-skills (101k★), Pocock's directory (277k★, GitHub's largest) re-trend with no fresh
+     release; diagram-design re-trends at 43.9k★ still shipping — generic → named-maintainer →
+     *vertical-quality*; anti-slop is a marketable feature. → [[agent-plugins]]
+   - **10-08 — the shelf's production graduate re-trends:** cloudflare/security-audit-skill
+     (26.2k★, no new release) — the rare skill that became production workflow at a 4,000-engineer
+     company (fresh verifier per finding; 20,799 candidates → 7,245 actionable). → [[agent-plugins]]
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
    within a provider; four vectors incl. invisible prompt injection. **Resolved (08-14):** the
@@ -223,6 +218,12 @@ patterns, and turn them into insights and actionable todos.
       "to verify a property, we need a property to verify"; the model writes the spec you couldn't
       be bothered to, but verification still starts with a human decision about what matters.
       → [[agent-plugins]] [[frontier-models]]
+    - **10-07PM→10-08 — the AI-math loop runs end-to-end in four days:** 722 manuscripts released
+      (openai/math, "many, but not all" formalized) → "Lost in Translation" (arXiv 2610.08144)
+      argues a verified Lean artifact need not certify the NL proof (ambiguity resolution
+      SCI=∞) → OpenAI withdraws 3 on a sign error (722→719) → Tao's "Math 2.0" + Aaronson's
+      "Mathocalypse"; 11-square packing verified in Lean with a volunteered not-kernel-only
+      caveat — the variable is which tier of checking each claim carries. → [[frontier-models]]
 11. **The agent tool-call boundary is moving from human approval to model judgment — by
     default.** Claude Code's Auto Mode default: a proprietary classifier scores every tool call;
     commissioned evals answered the "who guards it" question (0/720 vs Codex 5.8–19%) but there
@@ -252,6 +253,11 @@ patterns, and turn them into insights and actionable todos.
       test-time compute between model and harness (50.00%→68.03% TerminalBench-Lite with a strong
       verifier); Context Language Models move context management into the model (+11.4% at −21.5%
       FLOPs) — the harness-owns-context assumption has a measured counter-proposal.
+    - **10-08 — the harness read from new angles:** trycua's Cua-Bench: the best frontier agent
+      clears 6/25 expert KiCad tasks (GUI agents still fail professional workflows); Claude Code's
+      suggested messages = a harness→model channel through the human; ts-rust restarts from
+      scratch on Opus 5.5 ($24k, 10h to v0) after $420k of GPT tokens stalled at ~84% —
+      restart-on-a-different-model beat months of incremental repair. → [[agent-stack]]
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
     cross the wire" — compression (caveman), enforcement (Spotify's shunt), exclusion
@@ -269,6 +275,9 @@ patterns, and turn them into insights and actionable todos.
       matrix is the real story); Wagtail's GLM-5.3-Flash month ($68 on-target half, then a $150
       routing-mistake derailment — the binding constraint is operational, not capability).
       → [[token-economics]] [[smart-routing]]
+    - **10-08 — pricing gets an explicit context cliff:** Haiku 5.5 tiered by prompt length
+      ($0.10/M under 100k, $0.50 above; Sonnet 5.5 cache reads halved to $0.10) — context-shaping
+      now buys a price step, not just tokens. → [[token-economics]]
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
     PoW, legitimate traffic ~2%, scraper rendering out-consumes all legitimate access.
@@ -314,6 +323,11 @@ patterns, and turn them into insights and actionable todos.
       hosted sites that survive the chat, per-viewer app permissions (visitors consent their own
       connections; `.openai/hosting.json` links local source) — generate, host, and distribute
       inside one vendor's surface. → [[agent-distribution]]
+    - **10-08 — the response becomes an interface:** GPT-6 Intelligent UI ships 16 native
+      interactive components to all of ChatGPT (the component catalog is the new distribution
+      surface, one day after the Decisions API exposed the same model to agents); Google serves
+      its own docs as Markdown-over-MCP — the docs layer becomes agent infrastructure.
+      → [[agent-distribution]]
 17. **"No AI by default" is becoming stated product positioning.** TDF's six-principle checkable
     spec for AI in LibreOffice; Toast advertises "no AI features" while conceding it is AI-built;
     the "AI-free" label reaches reference/education material (Zhiyanov's Go books — the line
@@ -332,6 +346,10 @@ patterns, and turn them into insights and actionable todos.
      scoreboard (291 proof claims, 155 with zero explanation, "OPEN→SOLVED dopamine hit" spam) —
      when claiming credit costs nothing, claims stop carrying information; remove the prize, not
      just the spam. The mirror of COSMIC: gate the input vs delete the scoreboard. → [[no-ai-default]]
+   - **10-07PM — the opt-in-local stance gets its consumer template:** Penguin Mail 1.0 (Rust
+     Linux mail) ships with the assistant off until you choose a model (LM Studio/Ollama, asks
+     before sending, every tool call visible) — the third stance between AI-by-default and
+     no-AI. → [[no-ai-default]]
 
 ## Trend notes (standing)
 
@@ -372,6 +390,9 @@ patterns, and turn them into insights and actionable todos.
   dated update, not a fresh discovery; no new facts, no new item. (10-02 extension: dormancy is
   now a *board-level* property — 3 of the top 15 unpushed at once; `pushed_at` is the cheapest
   disambiguator and the check must run at item-generation time. → [[fact-check]])
+  (10-08 refinement: re-appearances can still carry net-new facts worth a dated update —
+  OpenShell's v0.1.2 four-layer detail, security-audit-skill's production-harness stats,
+  trycua's Cua-Bench KiCad number. The test is whether the trigger surfaces new substance.)
 - **Own operating constraint (08-19):** Claude Code's +50% weekly-limit promotion ended Aug 31,
   2026 — a third of weekly headroom disappeared on a known date; any workflow tuned against a
   promotional ceiling must be re-measured. `/usage` in the CLI is the only visible figure.
@@ -380,11 +401,14 @@ patterns, and turn them into insights and actionable todos.
   `release-watch.mjs` (router repos), star-to-commit check (Pass 9 in agent-run.sh), KEV/NVD/
   npm/GitHub one-call checks (CLAUDE.md perishable-claims rules).
 
-- **Non-AI batch items (10-07):** Nobel Physics → Francis Halzen, IceCube, sole laureate (a detector
-  builder wins — the multi-decade instrumentation bet recognized as the discovery); Fervo Cape Station
-  = first enhanced-geothermal plant commercial, 23 months from groundbreaking, Google anchor buyer
-  (the AI buildout's power constraint gets a new timeline class); arXiv 2610.06783 claims subquadratic
-  3SUM + subcubic APSP (v1, unreviewed, exponents +0.0008/+0.0005 — extraordinary claim, file under
-  pending). → [[frontier-models]]
+- **Non-AI batch items (10-07→10-08):** Nobel Physics → Francis Halzen, IceCube, sole laureate (a
+  detector builder wins — the multi-decade instrumentation bet recognized as the discovery);
+  Fervo Cape Station = first enhanced-geothermal plant commercial, 23 months from groundbreaking,
+  Google anchor buyer (the AI buildout's power constraint gets a new timeline class); arXiv
+  2610.06783 claims subquadratic 3SUM + subcubic APSP (v1, unreviewed — extraordinary claim, file
+  under pending). **10-08:** thorium-229 nuclear clocks tick independently in Vienna and Beijing
+  on the same day (Nature; both say plainly these first clocks don't yet beat atomic clocks);
+  Margaret Hamilton died Sep 30 at 90 (Apollo flight software, priority scheduling through the
+  1202 alarm, coiner of "software engineering"). → [[frontier-models]] [[dev-tools]]
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

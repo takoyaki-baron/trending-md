@@ -1740,3 +1740,21 @@ Sources: [Cloudflare changelog](https://developers.cloudflare.com/changelog/post
 **PageIndex 有日期的更新——SDK 发布，Flash 把 LLM 移出索引（10-07）：** VectifyAI/PageIndex（38.8k★，+2,860/周）在 v0.2.21（10 月 1 日）发布 SDK：`client.submit_document("report.pdf")` → `client.chat(...)`，本地运行（无服务器、无向量库、无 API key）或云。**PageIndex Flash** 把 LLM 从结构生成中整个移除——树来自版面统计，LLM 只写节点摘要，树扩展以并发波次提议节点。反向量 RAG 论证的阿喀琉斯之踵一直是索引成本（每篇文档都要 LLM 调用）；Flash 攻击的正是那一半。树导航能否在语料库规模上胜过嵌入仍是开放问题——但本地 SDK 至少让它可测。（本文件 09-29 Flash 注记的有日期更新；去重规则。）
 
 Sources: [arXiv 2610.05162](https://arxiv.org/abs/2610.05162) · [DEEP-JLU/MemAdapter](https://github.com/DEEP-JLU/MemAdapter) · [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) · [v0.2.21 release](https://github.com/VectifyAI/PageIndex/releases)
+
+## 2026-10-07 晚间 → 10-08 20:35 —— 以 OCI 为 agent 打包；沙箱拿到类型化基底；SRE agent 拿到训练场；文档成为 agent 基础设施
+
+**Docker Agent（`docker/docker-agent`，3.8k★，Apache-2.0，HN 201 分）：** 一个 Go CLI 插件、Docker Desktop 4.63+ 预装——agent 以声明式 YAML 定义、多 agent 团队自动任务委派、工具从**任意 MCP 服务器**挂载（本地/远程/容器化）、供应商无关（OpenAI、Anthropic、Gemini、Bedrock、Mistral、xAI、本地用 Docker Model Runner）、内置 `think`/`todo`/`memory` + BM25/嵌入/混合 RAG——**以 OCI 镜像经常规镜像仓库分发**。安静的论题：把容器分发标准化的那家公司想成为 agent 的分发渠道；若 agent 镜像能像容器镜像一样被拉取，仓库就成为新的应用商店。
+
+**microsoft/mxc v1.0.0 GA（10 月 7 日，MIT，+106★/天，共 1.5k★）：**「一个用于运行不受信任代码（模型输出、插件与工具）的沙箱化代码执行系统，覆盖 Windows、Linux 与 macOS」——多沙箱后端（Windows Sandbox、LXC、Bubblewrap、Seatbelt、MicroVM/Nanvix、Hyperlight）藏在统一的封 containment 模型与类型化 SDK 之后，行为按平台而异是设计使然；前一天刚过 rc4/rc5。本月第三个登上趋势的 agent 封 containment 基底（OpenShell = 策略层、Docker = 打包）：mxc 作为执行基底，让「关住巫师」的争论有了具体可标准化的对象。
+
+**NVIDIA OpenShell 日期更新（周榜第一，+3,690★，共 15.3k★；v0.1.2 于 9 月 28 日发布并承诺发布节奏）：** 四层现在读得具体——**Landlock** 文件系统围栏；可热更新的网络白名单；seccomp + 阻断 sudo/setuid 的无特权进程身份；供应商凭据存为不透明占位符、只在获批端点解析。声明式、可版本控制的 YAML 策略，高风险变更需人工评审后才生效；Python/TypeScript/Go/Rust SDK；Windows 仅限 WSL-2 实验性；直接以 Claude Code、Codex、Copilot CLI、OpenCode 为目标——碎片化沙箱讨论得到的厂商中立、内核级强制的参照运行时。
+
+**OpenSRE v0.1（Tracer-Cloud，10 月 8 日发布，首个 tag 之前已 11.6k★）：**「面向 AI SRE agent 的开源框架，以及它们改进所需的训练与评测环境。接入你已在跑的 60+ 工具」——Apache-2.0、curl|bash 安装、README 自认 Public Alpha（「API 与集成可能变更」）。事件响应是尚未拥有 harness+评测层的最高风险 agentic 负载，这里被当作可基准化的模型问题而非聊天集成；v0.1 之前 11.6k 星说明需求侧先于工件存在。
+
+**Google Developer Knowledge API（10 月 7 日）：**「关于 Google Cloud、Firebase、Android 等开发者文档的官方、程序化事实源」——新鲜的 **Markdown 格式**文档走 API（语义 + 关键词搜索、分块、接地问答），以 MCP 服务器交付、可工作于「Google Antigravity、Claude Code、Cursor、GitHub Copilot」，另有 gcloud 命令面与可安装技能（`npx skills add google/skills`）。帖内限定：未标注 Preview/GA 阶段、`BatchGetDocuments` 每次上限 20 篇、承认索引滞后。agent 幻觉 API 很大程度上因为文档访问靠爬取；当平台所有者以正典 Markdown + MCP 直供，文档层成为 agent 基础设施——每个主要文档资产接下来都会被压着跟进。（Accept-Markdown 内容协商那条线，从厂商侧到货。）
+
+**Claude Code 的建议消息（zohaib.cc，HN 135 分）：** 被误读为便利功能的响应后建议 chips 其实是**经由人类中转的 harness→模型通信通道**——确认用语、重试框架、维持长 agent 循环运转的软批准（「真正的顾客不是你，是模型」）。把自动补全用在同意上；预计一个季度内出现在所有竞品 harness。
+
+**EmbeddingGemma 2（Google，10 月 6 日，Apache 2.0）：** 740M（270M 文本 / 170M 视觉 / 300M 音频）把文本、代码、图像、视频、音频统一进一个嵌入空间；MTEB Code 较 v1 +9.92（68.76→78.68）；8K 上下文；量化后设备端 ~191–567MB；Matryoshka 768→128 最高省 6× 存储；权重在 HF/Kaggle、运行时从 llama.cpp 到 MLX 到 WebGPU。本地栈最后一块没有许可宽松多模态选项的拼图补上——「agent 记住你整台机器」模式的基础设施。
+
+Sources: [docker/docker-agent](https://github.com/docker/docker-agent) · [HN](https://news.ycombinator.com/item?id=49996259) · [microsoft/mxc](https://github.com/microsoft/mxc) · [NVIDIA/OpenShell](https://github.com/NVIDIA/OpenShell) · [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre) · [Google Developers Blog](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/) · [zohaib.cc](https://www.zohaib.cc/blog/smartest-claude-code-feature) · [EmbeddingGemma 2](https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/)

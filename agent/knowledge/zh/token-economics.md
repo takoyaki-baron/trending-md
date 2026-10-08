@@ -317,3 +317,9 @@ Sources:（同英文版）
 **只 GLM 5.3 Flash 编码一个月**（Thibaud Colas，Wagtail 核心团队，34 分）：flash-tier agent 编码罕见的公开**成本与能耗遥测**。上半月完全在轨：**$68、约 4 kWh 能耗、365 克碳排放**。下半月「脱轨」——全月 2B token 中 1B 流向了其他模型：一个 vibe-coded 的 MCP 原型静默用错模型（一夜之间 **450M token / $150 / 5 kWh**，成果据他估计还便宜 5 倍）；月中年内供应商容量限制使 GLM 5.3 Flash 降级，被迫切往 DeepSeek V4.1 Flash 与 Qwen 3.8 Flash。他的 14 模型基准把 **DeepSeek V4.1 Flash 排在第一：95% 准确率、每任务 14.9 Wh 与 $0.09**。结论原话：「所以严格说这次挑战失败了……但聚焦一两个 flash 廉价模型完全可行。」约束是**运维性**（容量、路由失误）而非能力——为漂移做预算，而不只是为模型。
 
 Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [openai/codex#18491](https://github.com/openai/codex/issues/18491) · [wagtail.org](https://wagtail.org/blog/one-month-on-glm-53-flash) · [HN 讨论](https://news.ycombinator.com/item?id=49934620)
+
+## 2026-10-08 —— 定价开始按提示长度分级；缓存杠杆再次移动
+
+**Claude Haiku 5.5 分级定价（首次）：** **10 万提示 token 以下**每百万输入/输出 $0.10/$0.50——**以上 $0.50/$2.50**——价格随上下文规模而不仅仅是方向缩放：短提示约比 Haiku 4.5 便宜 90%、整体约 75%。Sonnet 5.5 缓存读取减半至 $0.10；Max/Team 增加每月 $100–500 API 信用。小模型层是 agent 经济真正发生的地方（子代理、压缩、路由），按提示长度分级悄悄重定价的恰是所有人都在跑的长上下文 agentic 负载。它还递给路由一根新决策轴：同一模型在边界以下便宜 5×，于是上下文整形（本文件的压缩/排除家族）买到的不再只是 token，而是一个价格台阶——上下文边界有了明码的价格悬崖。
+
+Sources: [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5) · [HN 讨论](https://news.ycombinator.com/item?id=49996437)

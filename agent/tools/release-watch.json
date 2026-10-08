@@ -1,6 +1,10 @@
 {
  "watch": [
   {
+   "repo": "LMCache/LMCache",
+   "why": "CVE-2026-105192 (thesis 2 / [[security]]): the 9.8 unauth-ZMQ→pickle RCE (JFrog, disclosed 10-07) has NO fixed release — PyPI latest is still vulnerable v0.5.5 (09-12), /releases/latest confirmed v0.5.5 at seed time (10-08 21:13), GHSA-vv44-hjm2-qw2f carries no patched range, and no issue/PR mentions the CVE. Any /releases/latest move is the fix landing — then the watch clause 'auth on the ZMQ transport, or just a bind-default change?' gets answered from the actual diff"
+  },
+  {
    "repo": "ollaya-dev/ollaya",
    "why": "System-1 local runner (thesis 6 / [[system1-decision]]): serves Jev-compatible single-forward-pass decision models locally behind Ollama-style commands (Rust, Apache-2.0, 91★, Show HN 09-26). The substantive HN pushback — Ollama could absorb the feature, the flagship example 'is basically classification' — gets tested by motion here: a release, decision-model docs, or a benchmark publication (currently vendor numbers only) is the daemon answering the why-not-Ollama challenge"
   },

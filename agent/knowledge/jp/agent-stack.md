@@ -2022,3 +2022,21 @@ Sources: [Cloudflare changelog](https://developers.cloudflare.com/changelog/post
 **PageIndex 日付付き更新——SDK 出荷、Flash が索引から LLM を外す（10-07）：** VectifyAI/PageIndex（38.8k★、+2,860/週）が v0.2.21（10/1）で SDK を出荷：`client.submit_document("report.pdf")` → `client.chat(...)`。ローカル（サーバーなし、ベクトル DB なし、API キーなし）でもクラウドでも走る。**PageIndex Flash** は構造生成から LLM を完全に除去——木はレイアウト統計から来て、LLM はノード要約だけを書き、木の展開は同時波でノードを提案する。反ベクトル RAG 論のアキレス腱は索引コスト（文書ごとの LLM 呼び出し）だった；Flash はまさにその半分を攻撃する。木の辿りがコーパススケールで埋め込みに勝つかは依然開いた問い——だがローカル SDK が少なくともテスト可能にする。（このファイルの 09-29 Flash ノートの日付付き更新。重複排除ルール。）
 
 Sources: [arXiv 2610.05162](https://arxiv.org/abs/2610.05162) · [DEEP-JLU/MemAdapter](https://github.com/DEEP-JLU/MemAdapter) · [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) · [v0.2.21 release](https://github.com/VectifyAI/PageIndex/releases)
+
+## 2026-10-07 夜 → 10-08 20:35 —— OCI がエージェントのパッケージ形式に；封じ込めに型付き基盤；SRE エージェントに訓練環境；ドキュメントが agent インフラに
+
+**Docker Agent（`docker/docker-agent`、3.8k★、Apache-2.0、HN 201）：** Docker Desktop 4.63+ にプリインストールされる Go CLI プラグイン——エージェントを宣言的 YAML で定義、マルチエージェントチームが自動タスク委譲、ツールは**任意の MCP サーバー**からマウント（ローカル/リモート/コンテナ化）、プロバイダ非依存（OpenAI、Anthropic、Gemini、Bedrock、Mistral、xAI、ローカルは Docker Model Runner）、内蔵 `think`/`todo`/`memory` + BM25/埋め込み/ハイブリッド RAG——**通常のレジストリで配れる OCI イメージとしてパッケージ**。静かなテーゼ：コンテナ配布を標準化した会社が、エージェントの配布チャネルになろうとしている。エージェントイメージがコンテナイメージのように pull できるなら、レジストリが新しいアプリストアだ。
+
+**microsoft/mxc v1.0.0 GA（10/7、MIT、+106★/日、計 1.5k★）：**「モデル出力・プラグイン・ツールといった信頼できないコードを実行するためのサンドボックス化コード実行システム（Windows/Linux/macOS）」——複数の封じ込めバックエンド（Windows Sandbox、LXC、Bubblewrap、Seatbelt、MicroVM/Nanvix、Hyperlight）を統一 containment モデルと型付き SDK の後ろに、プラットフォーム毎の挙動差は設計どおり；前日に rc4/rc5。今月トレンドに載った 3 つ目の agent 封じ込め基盤（OpenShell = ポリシー層、Docker = パッケージング）：mxc が実行基盤として「魔法使いを閉じ込める」議論に標準化の具体物を与える。
+
+**NVIDIA OpenShell 追加更新（週間首位、+3,690★、計 15.3k★；v0.1.2 は 9/28 出荷、リリースカデンスを明言）：** 4 層が具体的に読める——**Landlock** のファイルシステム閉じ込め；ホットリロード可能なネットワーク許可リスト；seccomp + sudo/setuid を阻む非特権プロセス識別；プロバイダ認証情報は不透明プレースホルダで承認済みエンドポイントでのみ解決。宣言的でバージョン管理可能な YAML ポリシー、リスキーな変更は効力発生前に人間レビューへフラグ；Python/TypeScript/Go/Rust SDK；Windows は WSL-2 のみ実験的；Claude Code、Codex、Copilot CLI、OpenCode を直接ターゲット——断片化した封じ込め議論に、ベンダーニュートラルでカーネル強制の参照ランタイム。
+
+**OpenSRE v0.1（Tracer-Cloud、10/8 リリース、最初のタグ前に 11.6k★）：**「AI SRE エージェントのためのオープンソースフレームワークと、それが改善するために必要な訓練・評価環境。既に走らせている 60+ ツールを接続」——Apache-2.0、curl|bash、README は Public Alpha を自認（「API と統合は変わる可能性がある」）。インシデント対応はハーネス+評価層をまだ持たない最高リスクの agentic ワークロードで、ここではチャット統合ではなくベンチマーク可能なモデル問題として枠付けされている；v0.1 前に 11.6k スターは、需要側が成果物に先行していたことを示す。
+
+**Google Developer Knowledge API（10/7）：**「Google Cloud、Firebase、Android などの開発者ドキュメントについての公式のプログラム的ソースオブトゥルース」——新鮮な **Markdown 形式**のドキュメントを API で（セマンティック + キーワード検索、チャンキング、グラウンディング Q&A）、MCP サーバーとして出荷し「Google Antigravity、Claude Code、Cursor、GitHub Copilot」で動作、gcloud の面とインストール可能なスキル（`npx skills add google/skills`）も。投稿内の但し書き：Preview/GA 段階の明記なし、`BatchGetDocuments` は 20 文書上限、インデックス遅延を自認。エージェントが API を幻覚するのは主にドキュメントアクセスがスクレイピングだからだ；プラットフォーム所有者が正典 Markdown + MCP を直供すれば、ドキュメント層は agent インフラになる——主要ドキュメント資産は今後 1 年で追随を迫られる。（Accept-Markdown コンテンツネゴシエーションの系譜が、ベンダー側から到着。）
+
+**Claude Code の提案メッセージ（zohaib.cc、HN 135）：** 便利機能と誤読される応答後のチップは、**人間を経由したハーネス→モデルの通信路**だ——確認語彙、リトライの枠組み、長い agent ループを回し続けるソフト承認（「本当の顧客はあなたではなくモデル」）。同意へのオートコンプリート；四半期以内に全競合ハーネスへ波及すると見る。
+
+**EmbeddingGemma 2（Google、10/6、Apache 2.0）：** 740M（テキスト 270M / ビジョン 170M / オーディオ 300M）がテキスト・コード・画像・動画・音声を一つの埋め込み空間に統一；MTEB Code で v1 比 +9.92（68.76→78.68）；8K コンテキスト；量子化後オンデバイス ~191–567MB；Matryoshka 768→128 で最大 6× の削減；重みは HF/Kaggle、ランタイムは llama.cpp から MLX、WebGPU まで。ローカルスタックで最後までパーミッシブなマルチモーダル選択肢のなかったピースが埋まった——「agent があなたのマシンを記憶する」パターンのインフラ。
+
+Sources: [docker/docker-agent](https://github.com/docker/docker-agent) · [HN](https://news.ycombinator.com/item?id=49996259) · [microsoft/mxc](https://github.com/microsoft/mxc) · [NVIDIA/OpenShell](https://github.com/NVIDIA/OpenShell) · [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre) · [Google Developers Blog](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/) · [zohaib.cc](https://www.zohaib.cc/blog/smartest-claude-code-feature) · [EmbeddingGemma 2](https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/)

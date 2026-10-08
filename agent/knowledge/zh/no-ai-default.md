@@ -39,3 +39,9 @@ Sources: [PULL_REQUEST_TEMPLATE.md](https://github.com/pop-os/cosmic-epoch/blob/
 
 **地位经济的牺牲品（2026-10-07）**——erdosproblems.com「在 AI 攻势下失守」（HN 31）：创始人 Thomas Bloom 冻结问题评论、移除 open/solved 状态标签与已解百分比计数、剥离署名语言——证明将改写为「it is known that…」而非归于某人。触发点：自 2025 年 8 月评论上线以来，真实讨论崩塌而证明宣称式垃圾爆炸——一位评论者的审计数出 **291 条证明宣称、155 条零解释、61 道题存在多个竞争宣称**，当「几乎所有」新评论都是追逐「OPEN→SOLVED 多巴胺」的无解释 AI 证明宣告时，审核变得不可持续（站点：1,221 道题、约 2,000 用户、日访客 1–2.5 万）。该体裁迄今最大胆的一步：多数平台以加强审核回应垃圾；这一家**拆掉了奖赏**——当宣称 credit 的成本为零，宣称便不再携带信息，于是主人不再托管宣称。COSMIC 门禁的镜像：把住输入，对拆掉记分板。结尾援引 Erdős——「my brain is open」——并恳求数学保持为人类协作的事业。
 Sources: [erdosproblems.com 论坛](https://www.erdosproblems.com/forum/thread/blog:9) · [HN 讨论](https://news.ycombinator.com/item?id=49977689)
+
+## 2026-10-07 晚间 —— 「默认关闭的本地 AI」立场拿到消费级模板
+
+**Penguin Mail 1.0**（Rust/GTK4 Linux 邮件 + 日历，GPL-3.0，仓库 9 月 19 日，76★）：AI 助手**出厂关闭、直到你选择模型**——经 LM Studio 或 Ollama 本地运行、「发邮件或改设置前先征询」、每次工具调用可见（Ctrl+J）；无自有服务器、OpenPGP/S-MIME 走你自己的 GnuPG。HN 的反应恰好沿这条线分裂（「在看到『……带 AI』之前我百分百感兴趣」对：这种可选加入、本地、先问再动的行为是「硬塞助手」模式的反面）。分类学从此有三种立场：AI 默认开（行业常态）、无 AI（TDF/Toast/COSMIC）、以及 **AI 在场但默认关闭**——把「副作用前先征得同意」作为默认出货，而不是一页隐私政策。
+
+Sources: [penguin-mail.com](https://penguin-mail.com/) · [c9dev/penguin-mail](https://github.com/c9dev/penguin-mail)

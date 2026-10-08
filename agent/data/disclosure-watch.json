@@ -34,7 +34,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T21:36:23.579Z"
+      "checked": "2026-10-08T13:39:12.040Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -64,7 +64,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T21:36:23.579Z"
+      "checked": "2026-10-08T13:39:12.040Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -84,7 +84,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T21:36:23.579Z"
+      "checked": "2026-10-08T13:39:12.040Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -94,7 +94,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T21:36:23.579Z"
+      "checked": "2026-10-08T13:39:12.040Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -115,12 +115,13 @@
         "49767558",
         "49967781",
         "49968105",
-        "49980019"
+        "49980019",
+        "49987259"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T21:36:23.579Z"
+      "checked": "2026-10-08T13:39:12.040Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -139,7 +140,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T21:36:23.579Z"
+      "checked": "2026-10-08T13:39:12.040Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -149,7 +150,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-06T21:36:23.579Z"
+      "checked": "2026-10-08T13:39:12.040Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -205,13 +206,22 @@
         "0.2.32",
         "0.2.33",
         "0.2.34",
+        "0.2.35",
         "0.2.4",
         "0.2.5"
       ],
-      "checked": "2026-10-06T21:36:23.579Z"
+      "checked": "2026-10-08T13:39:12.040Z"
+    },
+    "pwn2own-agent-harness": {
+      "nvd_seen": [],
+      "hn_seen": [],
+      "hf_seen": [],
+      "osv_seen": [],
+      "npm_seen": [],
+      "checked": "2026-10-08T13:39:12.040Z"
     }
   },
-  "runs": 78,
+  "runs": 80,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-10-06T21:36:23.579Z"
+  "last_run": "2026-10-08T13:39:12.040Z"
 }

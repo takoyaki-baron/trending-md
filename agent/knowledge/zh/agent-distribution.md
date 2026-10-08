@@ -180,3 +180,11 @@ Sources: [anthropics/financial-services](https://github.com/anthropics/financial
 OpenAI 文档将 **Sites** 描述为让「ChatGPT 创建、托管、打磨并分享网站、Web 应用和游戏」——一个 Site 是「可重新打开、打磨、配置与分享的持久化托管产出」：它在生成它的对话之外存活，Sites 项目可通过 `.openai/hosting.json`（配发 `project_id`）把本地源码项目接到托管。数据模型是关键：「使用 Sites 里的插件，构建从每个站点查看者自己连接的应用读取数据的 Site」——访客以 ChatGPT 登录并按连接逐个授权，共享应用跑在每位查看者自己的数据上而不暴露所有者的。分享从仅所有者 → 工作区 → 公开逐级放开（企业版公开发布默认关闭）；访客只读。**公开 beta**，覆盖 Plus/Pro/Business/Enterprise/Edu，有用量限制。vibe-coded 应用漏斗就此收进围墙花园——在一个厂商的面板内生成、托管并*分发*，还带身份感知的按查看者数据访问：OpenAI 对应用商店与「agent 需要一个 surface」两个问题的合并回答，也是每个 agent 应用开发者如今必须推理的分发决策。
 
 Sources: [Sites 文档](https://learn.chatgpt.com/codex/sites) · [HN 讨论](https://news.ycombinator.com/item?id=49927747)
+
+## 2026-10-08 —— 响应成为界面；文档成为渠道
+
+**GPT-6「Intelligent UI」向全部 ChatGPT 推开（HN 542 分）：** 回答混合文本与 **16 个原生交互组件**（按钮、表单、图表），模型生成的同时由客户端编译器渐进渲染；Free/Go 用户首次获得 GPT-6 Luna、付费档获得 Sol。聊天表面成为应用平台——前一天 Decisions API（gpt-6-luna）刚把同一模型以编程方式开放给 agent——看组件目录如何像 web 图标库与技能货架那样成为分发面。HN 悬而未决的问题正是对的那个：这是模型能力还是 harness？
+
+**Google Developer Knowledge API（文档以 Markdown over MCP 交付——基建读法见 [[agent-stack]]）**同时是一个分发事实：当平台所有者把正典文档直接喂给 agent，靠爬取生存的第三方文档站就失去了存在理由——文档资产走向正典优先，与答案引擎 SEO 的垃圾经济学正好相反。
+
+Sources: [GPT-6 for everyone](https://openai.com/index/gpt-6-for-everyone/) · [HN](https://news.ycombinator.com/item?id=49996425) · [Google Developers Blog](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/)

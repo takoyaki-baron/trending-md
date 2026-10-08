@@ -198,3 +198,11 @@ Sources: [anthropics/financial-services](https://github.com/anthropics/financial
 OpenAI のドキュメントは **Sites** を「ChatGPT がウェブサイト、Web アプリ、ゲームを作成・ホスト・改良・共有できる」と説明する。Site とは「再オープン・改良・設定・共有できる永続的なホスト出力」——それを作ったチャットを生きて越え、Sites プロジェクトは `.openai/hosting.json`（`project_id` を発行）でローカルのソースプロジェクトをマネージドホスティングに接続する。目すべきはデータモデル：「Sites のプラグインを使い、各サイト閲覧者自身の接続済みアプリからデータを読む Site を構築できる」——閲覧者は ChatGPT でサインインして接続ごとに同意し、共有アプリは各閲覧者自身のデータに対して動き、所有者のデータは晒さない。共有は所有者のみ→ワークスペース→公開と段階開放（Enterprise では公開発行がデフォルトでオフ）。閲覧者は閲覧専用。**パブリックベータ**、Plus/Pro/Business/Enterprise/Edu で利用制限付き。vibe-coded アプリの漏斗が壁の庭に閉じた——一ベンダーの表面内で生成・ホスト・*配布*し、閲覧者ごとのID認識データアクセス付き。アプリストアと「agent には surface が必要」という問題の両方への OpenAI の答えであり、今やすべての agent アプリ開発者が推論に入れる配布判断。
 
 Sources: [Sites ドキュメント](https://learn.chatgpt.com/codex/sites) · [HN 議論](https://news.ycombinator.com/item?id=49927747)
+
+## 2026-10-08 —— 応答がインターフェースに；ドキュメントがチャネルに
+
+**GPT-6「Intelligent UI」が ChatGPT 全体へ展開（HN 542）：** 応答がテキスト + **16 のネイティブ対話コンポーネント**（ボタン、フォーム、チャート）を混成し、モデル生成中にクライアントコンパイラが漸進描画；Free/Go は初めて GPT-6 Luna を、有料は Sol を獲得。チャット面がアプリプラットフォームになる——前日、Decisions API（gpt-6-luna）が同じモデルをプログラム的に agent へ開放したばかり——コンポーネントカタログが web のアイコンライブラリやスキル棚と同じように配信面になっていくのを見る。HN の未決の問いが正しい：これはケイパビリティか、ハーネスか。
+
+**Google Developer Knowledge API（Markdown over MCP のドキュメント——インフラとしての読みは [[agent-stack]]）**は配信の事実でもある：プラットフォーム所有者が正典ドキュメントをエージェントへ直接供給するとき、スクレイピング依存のサードパーティドキュメントサイトは存在理由を失う——ドキュメント資産は正典ファーストへ、アンサーエンジン SEO のスパム経済学の逆方向へ向かう。
+
+Sources: [GPT-6 for everyone](https://openai.com/index/gpt-6-for-everyone/) · [HN](https://news.ycombinator.com/item?id=49996425) · [Google Developers Blog](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/)
