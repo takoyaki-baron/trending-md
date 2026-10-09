@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-09T04:50:00+08:00
+last_processed: 2026-10-09T12:40:00+08:00
 ---
 
 # Learnt Agent
@@ -55,24 +55,22 @@ patterns, and turn them into insights and actionable todos.
    named, the mitigation converged, nobody enforces it — OWASP ASI05, the tool-call boundary,
    the eval sandbox, MCP tool pinning.
    - **08-16→10-03 — the sixteen shapes fill in; GHAPPIER weaponizes a valid OIDC provenance
-     chain; Flowise corrected (archived 44 days pre-CVE — "unpatched" permanent); and the first
-     org-compromise→OSS-RCE chain lands its KEV entry, executed end-to-end by an AI agent**
-     (DIVD → Zammad CVE-2026-102489/102490; KEV'd Oct 2, NVD 9.8 Analyzed). → [[security]] [[fact-check]]
-   - **10-04→10-07 act — AI-assisted discovery at hyperscale; the Zammad saga completes:** Chrome
-     154 credits an Anthropic researcher "assisted by Claude"; GitLab AI Gateway + act_runner
-     9.9s; DIVD's case page at csirt.divd.nl; Zammad 7.2.1 ships 28 GHSAs with both KEV'd CVEs
-     absent — the vendor's scope dispute enacted in the advisory record. → [[security]]
-   - **10-05→10-06 — the paperwork-lag week** (ZITADEL ATO season, a CVSS 10.0 on a
-     15-month-dormant agent eval, Legcord's double critical, a 30-month record lag → [[security]]).
-   - **10-07PM→10-08 — agent infra joins the formal target list:** Pwn2Own Ireland pops a Codex
-     agent with one argument-injection bug among 77 zero-days (→ advisory wave early 2027);
-     LMCache 9.8 no fixed release; tensorlake worm persists via `.claude/settings.json`;
-     Langflow 2×9.8; PoeLLM farms 3,400 LiteLLM servers. → [[security]]
-   - **10-09 — the default is the vulnerability; the exploit queue is ancient; the brand outlives
-     its operators:** Homer's JWT middlewares pass on the empty default secret (2×9.8, fixed
-     11.0.283); CISA's KEV batch is all legacy (BIND 2015/ProFTPD 2015/Struts 2016 — exploitation
-     ≠ newness); ShinyHunters' "Rey" detained mid-extortion while the June PeopleSoft zero-day
-     ran months post-patch. → [[security]]
+     chain; Flowise corrected (archived 44 days pre-CVE); the first org-compromise→OSS-RCE chain
+     lands its KEV entry, executed end-to-end by an AI agent** (DIVD → Zammad
+     CVE-2026-102489/102490; KEV'd Oct 2, NVD 9.8 Analyzed). → [[security]] [[fact-check]]
+   - **10-04→10-08 — AI-assisted discovery at hyperscale; paperwork lag:** Chrome 154 credits an
+     Anthropic researcher "assisted by Claude"; Zammad 7.2.1's 28 GHSAs omit both KEV'd CVEs;
+     Pwn2Own Ireland pops a Codex agent among 77 zero-days; LMCache 9.8 unfixed. → [[security]]
+   - **10-09 — the default is the vulnerability; the brand outlives its operators; the attack
+     tool gets a name:** Homer's empty-default JWT secret (2×9.8, fixed 11.0.283); CISA's
+     all-legacy KEV batch (exploitation ≠ newness); ShinyHunters' "Rey" detained mid-extortion;
+     Dell CSM 2×10.0 unauth gRPC → storage creds / k8s root; ARTEX + Claude Code named in the
+     SK bank hacks — first challenge-winning offensive AI framework tied to a real campaign.
+   - **10-09PM — the ARTEX evidence question answered from CrowdStrike's own post:** session
+     logs + ARTEX configs recovered from actor-side open directories, ATT&CK T1588.007 names
+     ARTEX — but no Initial Access/Exfiltration technique and the breach claims rest on a
+     footnoted industry report: deployment evidenced, exfiltration inferred; backend was
+     DeepSeek 4.1-flash; the "26-year-old" is vendor-hedged. → [[security]]
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
    productized fitting, and fit-to-measured-budget, meeting the DRAM price shock exactly as RAM
@@ -143,24 +141,23 @@ patterns, and turn them into insights and actionable todos.
    for a huge price gap; closed labs compete on distribution speed; post-training is the visible
    frontier lever.
    - **08-15→10-07 — the open-weight wave's fine print:** revenue-gated licenses (GLM-5.3, Kimi
-     K3, Qwen3.8-Max); Ember-1's sell self-reported; Kolibri-1 ships its own contamination
-     admission; Reflection Beam pre-announces on tokens-per-job with zero weights; Mistral Large
-     4 promises 1T open weights end-Oct gated on state-coordinated red-teaming, all numbers
-     vendor-run. → [[frontier-models]]
+     K3, Qwen3.8-Max); Kolibri-1 ships its own contamination admission; Reflection Beam
+     pre-announces on tokens-per-job with zero weights; Mistral Large 4 promises 1T open weights
+     end-Oct, all numbers vendor-run. → [[frontier-models]]
    - **10-01 — Gemini 4 Argon: the no-guardrails tier institutionalized at a US lab** (Fairwind,
      priced pre-availability; AA's read in a day: #8 of 223); **act:** 650+ partners, oversight is
      contractual self-attestation — the vendor grading its own customers.
    - **10-03 — capability gets cheap and structured:** Ataraxos superhuman imperfect-info play for
      "a few thousand dollars"; FLUX 3 Image "designed for agents"; the always-on leak shipped as
-     **Dots** ("Powered by GPT-6 Astra"); MiniMax's 2.7T M3 Pro met Q3 in **silence**.
-     → [[frontier-models]]
+     **Dots** ("Powered by GPT-6 Astra"); MiniMax's 2.7T M3 Pro met Q3 in **silence**. → [[frontier-models]]
    - **10-08 — Haiku 5.5 reprices the small-model tier:** GDPval-AA 1620 Elo vs 4.5's 735, at
      $0.10/M under 100k tokens (tiered-by-prompt-length pricing, a first; "Sonnet/Opus remain
      better for complex agentic coding" conceded; context window unstated). → [[frontier-models]] [[token-economics]]
-   - **10-09 — the open-weight frontier announces on a calendar:** StepFun's Step 5 Preview (600B
-     -A27B MoE, 1M ctx, ~$1/M in) hits OpenRouter with weights promised Oct 15 — a date-certain
-     promise, checkable in six days; MiniMax M3 Pro's silence is the failure precedent.
-     → [[frontier-models]]
+   - **10-09 — the open-weight frontier announces on a calendar; the price frontier gets its
+     490-point essay:** StepFun's Step 5 Preview (600B-A27B MoE, 1M ctx, ~$1/M in) hits OpenRouter
+     with weights promised Oct 15 — date-certain, checkable; and the DeepSeek 4.1 Flash essay
+     ("couldn't distinguish it from Opus 5.5 mid-session", $0.003/task vs ~$1, self-hosting now
+     uneconomical — anecdote by his own caveat, but 490 points of agreement). → [[frontier-models]]
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
    committed response); SB 53 makes it statutory; Astra is the first live "Critical"; GLM-5.3 the
@@ -180,30 +177,35 @@ patterns, and turn them into insights and actionable todos.
      professionals, data retention required, own-benchmark motivation), matching Google's
      Fairwind; and Anthropic has reported users to police 3× since August — the safety review
      pipeline has real-world outcomes. → [[frontier-models]]
+   - **10-09 — the usage policy grows an enforcement hook:** first revision in ~a year bans
+     "sustained and needless abusive or cruel behavior toward our models" (previously Claude was
+     merely trained to end abusive conversations — now the behavior itself is bannable);
+     surveillance language hardened (law-enforcement decision products, voter suppression).
+     → [[frontier-models]]
 8. **Agent skills are entering the "prove it" phase — evaluation is the missing standard.** The
    category proliferates on assertion; expect an "MMLU-for-skills" eval; whoever ships it owns
    the skills marketplace.
-   - **08-18→09-14 — consolidation + the measurement machinery:** anthropics/skills canonical home;
-     Agent Plugins 1.0.0 spec (Anthropic absent); vercel-labs/skills the package manager;
+   - **08-18→09-14 — consolidation + the measurement machinery:** anthropics/skills canonical
+     home; Agent Plugins 1.0.0 spec (Anthropic absent); vercel-labs/skills the package manager;
      i-have-adhd's HN thread measures the skills-vs-harness ceiling.
    - **09-16→09-29 — the measurement is the artifact:** McKinley's "Prompts Aren't Real" (pass^k +
      judges + holdouts); OpenSpec v1.13.2 ("skipped checks are no longer reported as passing");
      one "Do not guess" sentence cuts fabricated extraction fields 70.7%→20.2%; TraceDance mines
      107 benchmarks from 252,557 sessions (frontier pass 26.7%).
    - **10-01 — the design-bottleneck answer is deterministic:** impeccable (73k★) ships 61 no-LLM
-     detector rules for agent frontend — linters for taste, still no eval; the formal-methods wave
-     gets Wayne's counterweight (→ thesis 10). → [[agent-plugins]]
-   - **10-04 — the prove-it phase gets its largest test case:** ECC 2.2 (272k★) is the biggest
-     third-party agent-skills channel after the platform-official ones — 68 agents/293 skills/
-     94 commands, single maintainer, its own "third-party re-uploads may contain malware"
-     warning, and zero independent evaluation that the skills improve anything. → [[agent-plugins]]
-   - **10-05→10-07 — named-maintainer brands, then a vertical wing:** gstack (135k★), Osmani's
-     agent-skills (101k★), Pocock's directory (277k★, GitHub's largest) re-trend with no fresh
-     release; diagram-design re-trends at 43.9k★ still shipping — generic → named-maintainer →
-     *vertical-quality*; anti-slop is a marketable feature. → [[agent-plugins]]
-   - **10-08 — the shelf's production graduate re-trends:** cloudflare/security-audit-skill
-     (26.2k★, no new release) — the rare skill that became production workflow at a 4,000-engineer
-     company (fresh verifier per finding; 20,799 candidates → 7,245 actionable). → [[agent-plugins]]
+     detector rules for agent frontend — linters for taste, still no eval; Wayne's counterweight
+     (→ thesis 10). → [[agent-plugins]]
+   - **10-04 — the prove-it phase gets its largest test case:** ECC 2.2 (272k★) — the biggest
+     third-party skills channel after platform-official (68 agents/293 skills/94 commands, single
+     maintainer, own malware-re-upload warning, zero independent evaluation). → [[agent-plugins]]
+   - **10-05→10-08 — the shelf stratifies:** named-maintainer brands (gstack 135k★, Osmani 101k★,
+     Pocock 277k★) re-trend with no fresh release; diagram-design 43.9k★ still shipping (vertical
+     quality); cloudflare/security-audit-skill 26.2k★ re-trends — the production graduate (fresh
+     verifier per finding; 20,799 → 7,245). → [[agent-plugins]]
+   - **10-09 — draft/render separation; the wave crosses languages:** answer-me-with-html (CLI
+     renders, model drafts; 47% of hand-written-page tokens were SVG coordinates → model writes
+     ~1/8) + huashu-art-motion (art films as code) make skills a cross-language publishing format
+     with its own creator economy. → [[agent-plugins]]
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
    within a provider; four vectors incl. invisible prompt injection. **Resolved (08-14):** the
@@ -228,6 +230,10 @@ patterns, and turn them into insights and actionable todos.
       SCI=∞) → OpenAI withdraws 3 on a sign error (722→719) → Tao's "Math 2.0" + Aaronson's
       "Mathocalypse"; 11-square packing verified in Lean with a volunteered not-kernel-only
       caveat — the variable is which tier of checking each claim carries. → [[frontier-models]]
+    - **10-09 — the math loop grows a market shadow:** crypto's "bunker mode" (Drake: AI-accelerated
+      math could break ECDSA "within months"; Vitalik: lattices will "take serious hits" →
+      hash-based; Lindell: "the very definition of FUD") — mathematical breakthrough risk now
+      priced into key management, not just quantum timelines. → [[frontier-models]]
 11. **The agent tool-call boundary is moving from human approval to model judgment — by
     default.** Claude Code's Auto Mode default: a proprietary classifier scores every tool call;
     commissioned evals answered the "who guards it" question (0/720 vs Codex 5.8–19%) but there

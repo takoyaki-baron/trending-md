@@ -882,3 +882,11 @@ Sources: [cloudflare/security-audit-skill](https://github.com/cloudflare/securit
 **anthropics/knowledge-work-plugins が日次ボードに再登場（#7、+309★、計 27.4k★）：**このライブラリが 09-17 と 09-26 に記録したのと同じリポジトリ（24.4k★ → 25.6k★）——重複排除ルールによりこれは再出現であり、純新の中身は薄い：目録（11 ロールパック、Apache-2.0、`claude plugin marketplace add anthropics/knowledge-work-plugins`；コネクタは Slack/Notion/Salesforce クラス CRM/Snowflake、バイオの PubMed/Benchling）はすでに記録済み。再ランクインが常設事実として確認するもの：*バーティカル*層——職能ごとのドメインワークフロー、語彙、コネクタ配線——はプラットフォーム公式であり、採用曲線は依然上昇中（09-26 の +889/週 → 現在 +309/日）。09-26 の未解決の問いはそのまま：各プラグインの価値は Anthropic が支配しないサードパーティコネクタに質入れされている——開発者側リポジトリと同じ信頼サーフェスが、法務と財務データに向いている。
 
 Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [Claude プラグインマーケットプレイス](https://claude.com/marketplace/plugins)
+
+## 2026-10-09 12:03 — ドラフト/レンダ分離；中国スキル波の合流
+
+**QingYunA/answer-me-with-html（2,365★、10/9 push）：**スキル棚におけるドラフト/レンダ反転の最も明快な定式化：モデルは内容を起草すべきで、組版すべきではない。難しい質問をすると、エージェントは短い Markdown ドラフトを書き、スキルの CLI に渡し、約 50 ms 後に図入りの読める単一 HTML ページが 1 ファイルで手に屑る。リポジトリはモデルが手書きした 9 ページのトークンを数え（平均 4,893 トークン）、**47% が SVG 座標**と突き止めた——そこで CLI が図をレンダし、モデルは手書きページに要る「約 1/8 のトークン」だけ書く。解説動画モード付き；Claude Code・Codex・Cursor・OpenCode・Pi で動作。同一系譜で棚の3つ目のトークン発見：caveman 式圧縮（書き側スタイルフィルタ）→ コンテキスト=データベース（context-mode）→ ドラフト/レンダ分離（決定論的コードが構造を、モデルが内容を持つ）。テーゼ8の評価ギャップに関して特筆：*測定済みの*主張を出す稀なスキルの一つ——47%/8分の1の勘定は README にあり、9 ページの計数から再計算可能。
+
+**alchaincyf/huashu-art-motion（2,545★、10/8 push）：**花叔（alchaincyf）——中国で最もよく知られる AI ブロガーの一人——がコーディングエージェントをアートフィルム監督に変える：35 アートスタイル、9 つの「ナレーション文法」、8 タイプのパラメータ化クリップ、完全なナレーション短編のリファレンスコード（`npx skills add alchaincyf/huashu-art-motion`）。ショーケースは作者がスーパーマリオのレベルをピクセルで突き進む 65 秒の映画——レンガ・パイプ・カメラワーク・レベルモーションはすべてコードとして書かれ、キャラフレームは生成、敵にはピクセルの Sam と Dario がカメオ出演し、「メンバーシップを選べ：OpenAI か Claude か」のパワーアップ冗談まで。clips ドキュメントは本物の制作規律を示す：20 fps GIF 書き出し、クリップ毎 192 色パレット、Bayer ディザ、`gifsicle -O3`。中国のエージェントスキル波（昨日の answer-me-with-html、今日のこれ）は、英語棚の洞察——決定論的コードが構造を持ち、モデルが内容を持つ——に合流し、それをアニメーションに適用する。アニメでは決定論的部分が作業の大半。スキルは独自のクリエイター経済を持つ言語横断の出版フォーマットになりつつある。
+
+Sources: [QingYunA/answer-me-with-html](https://github.com/QingYunA/answer-me-with-html) · [answer-me-with-html.com](https://answer-me-with-html.com/) · [alchaincyf/huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) · [マリオ ショーケース クリップ](https://github.com/alchaincyf/huashu-art-motion/blob/main/assets/showcase/mario-clips.md)

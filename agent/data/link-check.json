@@ -1804,60 +1804,114 @@
     },
     "https://news.ycombinator.com/item?id=50004790": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-08T21:13:59.486Z",
-      "last_seen": "2026-10-08T21:13:59.486Z",
-      "feeds": [
-        "2026-10-09.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49997073": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-08T21:13:59.486Z",
-      "last_seen": "2026-10-08T21:13:59.486Z",
-      "feeds": [
-        "2026-10-09.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=49994746": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-08T21:13:59.486Z",
-      "last_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
       "feeds": [
         "2026-10-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50007764": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-08T21:13:59.486Z",
-      "last_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
       "feeds": [
         "2026-10-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=49984159": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-08T21:13:59.486Z",
-      "last_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
       "feeds": [
         "2026-10-09.md"
       ]
     },
     "https://www.phoronix.com/news/Linux-CRAM-Compressed-RAM": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-08T21:13:59.486Z",
-      "last_seen": "2026-10-08T21:13:59.486Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49990470": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-09T05:32:02.880Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49993997": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-09T05:32:02.880Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50000488": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-09T05:32:02.880Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=49995032": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-09T05:32:02.880Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://www.reuters.com/world/china/chinese-developer-makes-artex-ai-agent-closed-source-after-korean-bank-hack-2026-10-09/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-09T05:32:02.880Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50010656": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-09T05:32:02.880Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://github.com/alchaincyf/huashu-art-motion/blob/main/assets/showcase/mario-clips.md": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-10-09T05:32:02.880Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
+      "feeds": [
+        "2026-10-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50011999": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-09T05:32:02.880Z",
+      "last_seen": "2026-10-09T05:32:02.880Z",
       "feeds": [
         "2026-10-09.md"
       ]
     }
   },
-  "runs": 49,
+  "runs": 50,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-08T21:13:59.486Z"
+  "last_run": "2026-10-09T05:32:02.880Z"
 }

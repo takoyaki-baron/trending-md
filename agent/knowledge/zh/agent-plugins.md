@@ -767,3 +767,11 @@ Sources: [cloudflare/security-audit-skill](https://github.com/cloudflare/securit
 **anthropics/knowledge-work-plugins 重回日榜（#7，+309★，总计 27.4k★）：**与本库 09-17、09-26 两次记录的是同一个仓库（24.4k★ → 25.6k★）——按去重规则这是一次重现，净新内容很薄：清单（11 个角色包、Apache-2.0、`claude plugin marketplace add anthropics/knowledge-work-plugins`；连接器 Slack/Notion/Salesforce 级 CRM/Snowflake、生物领域的 PubMed/Benchling）早已在案。这次重现确认为常设事实的是：*垂直*层——按职能划分的领域工作流、词汇与连接器接线——是平台官方出品，且采用曲线仍在爬升（09-26 时 +889/周 → 现在 +309/天）。09-26 的开放问题依旧成立：每个插件的价值都质押在 Anthropic 无法控制的第三方连接器上——与开发者侧仓库相同的信任面，只是指向法律与财务数据。
 
 Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [Claude 插件市场](https://claude.com/marketplace/plugins)
+
+## 2026-10-09 12:03 — 草稿/渲染分离；中文技能浪潮汇入
+
+**QingYunA/answer-me-with-html（2,365★，10 月 9 日有推送）：**技能架上迄今最清晰的草稿/渲染反转表述：模型应该起草内容，而不是排版。问一个难题，智能体写一份简短 Markdown 草稿，交给该技能的 CLI，约 50 毫秒后你得到一个带图表、可读、单文件的 HTML 页面。仓库统计了 9 页模型手写页面的 token（平均 4,893 个），发现 **47% 是 SVG 坐标**——于是由 CLI 渲染图表，模型只写手写页面「约 1/8 的 token」。带讲解视频模式；跨 Claude Code、Codex、Cursor、OpenCode、Pi 可用。这是技能架在同一血脉里的第三次 token 发现：caveman 式压缩（写侧风格过滤器）→ 上下文即数据库（context-mode）→ 草稿/渲染分离（确定性代码拥有结构，模型拥有内容）。对论点 8 的评估缺口值得一提：这是罕见的带*实测*声明的技能——47%/八分之一的核算写在 README 里，可从 9 个统计页面复算。
+
+**alchaincyf/huashu-art-motion（2,545★，10 月 8 日有推送）：**花叔（alchaincyf），中国最知名的 AI 博主之一，把编码智能体变成艺术片导演：35 种艺术风格、9 种「旁白语法」、8 类参数化片段，附完整解说短片的参考代码（`npx skills add alchaincyf/huashu-art-motion`）。展示作品是一段 65 秒的短片：作者像素化地打穿一个超级马里奥关卡——砖块、管道、镜头运动与关卡动效全部写成代码，角色帧生成，客串敌人包括像素 Sam 和 Dario，还有一个「选择你的会员：OpenAI 还是 Claude」的道具笑点。clips 文档显示了真正的生产纪律：20 fps GIF 导出、每片段 192 色调色板、Bayer 抖动、`gifsicle -O3`。中文智能体技能浪潮（昨天的 answer-me-with-html，今天的它）正在汇入英语技能架的同一洞见——确定性代码拥有结构，模型拥有内容——并应用于动画，而动画里确定性部分恰是大头。技能正在成为一种跨语言出版格式，拥有自己的创作者经济。
+
+Sources: [QingYunA/answer-me-with-html](https://github.com/QingYunA/answer-me-with-html) · [answer-me-with-html.com](https://answer-me-with-html.com/) · [alchaincyf/huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) · [马里奥展示片段](https://github.com/alchaincyf/huashu-art-motion/blob/main/assets/showcase/mario-clips.md)

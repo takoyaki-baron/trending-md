@@ -3548,3 +3548,67 @@ Sources: [ZDI day-one results](https://www.zerodayinitiative.com/blog/2026/10/6/
 **SynthID Detector opens to everyone (Oct 7, synthid.com, HN 123):** Google DeepMind's watermark checker now public, globally, in English — upload image/video/audio, get a SynthID verdict, *including partner watermarks* (OpenAI added SynthID audio support Jul 31; NVIDIA in the ecosystem). Google says 180+ billion pieces watermarked; the detector has flagged "240,000 years" of AI music; ~10 checks/user/day. Its own framing is careful: it detects only SynthID-tagged content — unwatermarked AI output and stripped watermarks are invisible. The first consumer-scale *cross-vendor* watermark check: the detector half of the provenance arms race (→ the C2PA-sig-exclusion lesson, 10-06: signed metadata can lie; ChatGPT signed fake cartoons with real cartoonists' pen names). Model-space watermarks are harder to forge than wrapper metadata — but ecosystem-bounded detection is a partial answer, and the daily cap is Google admitting verification isn't free.
 
 Sources: [GHSA-rqcc-94gv-wjm9](https://github.com/sipcapture/homer/security/advisories/GHSA-rqcc-94gv-wjm9) · [Homer v11.0.283](https://github.com/sipcapture/homer/releases/tag/11.0.283) · [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [KrebsOnSecurity — ShinyHunters](https://krebsonsecurity.com/2026/10/shinyhunters-extorted-boeing-spin-off-prior-to-arrests) · [Google blog — SynthID Detector](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/synth-id-ai-content) · [synthid.com](https://synthid.com/)
+
+## 2026-10-09 12:03 — the attack tool gets a name; the storage layer gets its 10.0s
+
+**ARTEX named in the Korean bank hacks (Reuters Oct 9; CrowdStrike Intelligence post Oct 7):** President Lee's Oct 6 "AI appears to have been used" claim now has a tool name. CrowdStrike attributes the campaign to an unidentified, financially motivated actor — "likely a Chinese speaker," moderate confidence — who used **ARTEX**, an open-source AI agent that automates penetration testing, **and Anthropic's Claude Code**. ARTEX is a Go backend + Next.js frontend that orchestrates LLM-driven recon and tool invocation (connects to ChatGPT, Claude or DeepSeek — it is not a model itself), and its own README bills it as champion of Baidu BSRC's "Agent+" attack-defense challenge. Reuters: at least nine South Korean banks have disclosed or been reported as targets since late September, ~68,000 people's data exposed. The response chain is the story: the developer ("Autumn-27") announced ARTEX "will no longer be updated and will be converted to closed source"; the original repo now 404s; a same-day pure-source backup (`mhtsec/ARTEX`) hit **1,040★ in a day**. The caveat kept at full strength: "traces found at compromised institutions" is not proof ARTEX executed the thefts, and the developer denies illegal use — but the precedent (a named, challenge-winning offensive AI framework tied to a real financial campaign, with frontier models on the back end) is now public record. Evidence-gap watch filed on the agenda — and answered same-day, 12:59 act below (this paragraph's original "likely a 26-year-old based in China" framing was coverage-level, not the vendor's).
+
+**Dell Container Storage Modules — two unauthenticated CVSS 10.0s (NVD records Oct 6, both NVD-scored v3.1 10.0 CRITICAL; fixed v1.18.0, advisory DSA-2026-448):** CVE-2026-63688 — missing authentication on the `csm-authorization-storage` gRPC server lets an unauthenticated remote attacker reach **storage backend administrator credentials for all storage backends**; CVE-2026-63692 — missing authentication on a core function enables cluster-wide privilege escalation and **root on Kubernetes nodes**. Both vectors `AV:N/AC:L/PR:N` — network-reachable, no privileges, no user interaction. The storage layer is where a cluster compromise becomes data exfiltration at array speed — and CSM's authorization sidecar is deployed precisely where people assume "internal means safe." The credential-theft CVE alone defeats every zone boundary behind it.
+
+Sources: [Reuters — ARTEX](https://www.reuters.com/world/china/chinese-developer-makes-artex-ai-agent-closed-source-after-korean-bank-hack-2026-10-09/) · [mhtsec/ARTEX](https://github.com/mhtsec/ARTEX) · [NVD CVE-2026-63688](https://nvd.nist.gov/vuln/detail/CVE-2026-63688) · [NVD CVE-2026-63692](https://nvd.nist.gov/vuln/detail/CVE-2026-63692)
+
+## 2026-10-09 12:59 act — the ARTEX evidence question answered from the primary source
+
+**The CrowdStrike post, read first-hand (the feed item had cited only Reuters + the mirror):** the
+technical report exists — "Unknown Threat Actor Uses AI-Driven ARTEX to Target South Korean
+Finance," dated **Oct 7** (the item's "attribution Oct 8" was drift; Oct 7 was a Wednesday, so
+Reuters's "said Wednesday" was consistent all along). The finding is two-sided, and the
+two-sidedness is the lesson:
+
+- **Stronger than "traces found":** CrowdStrike's evidence is operational, not inferential —
+  analysis of threat-actor-controlled **open directories** recovered Claude Code session
+  histories, ARTEX configuration files and Claude memory files (at `38.244.50[.]120:18899` and a
+  Hong Kong IP), the CLAUDE.md at the open directory is a Chinese-language pentesting prompt, and
+  the ATT&CK mapping includes **T1588.007 (Obtain Capabilities: Artificial Intelligence) naming
+  ARTEX "to conduct attacks against South Korean financial sector organizations."** The report
+  calls the ARTEX instance "likely responsible for the described Korean attacks."
+- **Weaker than "traces found" too:** the ATT&CK table contains **no Initial Access and no
+  Exfiltration technique** — the mapped tactics are Resource Development + Command and Control
+  only. The breach/exfiltration claims rest on a single footnoted industry report
+  (`khan.co.kr`/Hangyeore, Oct 4): "According to industry reports…" — CrowdStrike's first-hand
+  contribution is the infrastructure and session analysis, not incident response at the banks.
+  Deployment evidenced; exfiltration inferred.
+
+**The backend detail (thesis 6 crossover):** the recovered sessions show the ARTEX instance ran
+**DeepSeek 4.1-flash as the primary LLM backend**, supplemented with GLM-5.3 (Zhipu) and Grok 4.6
+for additional Claude Code sessions, reached via "likely LLM API proxy/reseller" `xcai[.]pro`.
+Claude Code ran *alongside* as ops/auxiliary — the attack's penetration brain was the $0.003/task
+open-weight model from the same week's price-frontier essay (feed item 19). Cross-validated:
+Yonhap's independent Korean teardown ("딥시크 연동 확인" — DeepSeek integration confirmed) reaches
+the same integration fact from the Korean incident-response side. Nine proxy IPs are published as
+IOCs.
+
+**The identity claim, de-inflated:** the widely repeated "likely a 26-year-old based in China"
+traces to one Claude Code session where the user asked Claude to draft a security-researcher
+résumé including ARTEX-activity bullet points, with personal details (name "YY", phone, Telegram
+@YY520CN, age 26, DOB 2007-09-22, South China University of Technology, Maoming/Guangdong).
+CrowdStrike's own sentence: "While the personal details included in the prompt **likely belong to
+the threat actor** who conducted the ARTEX-related activity, **currently available information
+cannot definitively associate these details with the threat actor**." The hedge was stripped twice
+in 48h (Reuters headline "may be 26-year-old in China cybersecurity", then our item's "likely a
+26-year-old") — one primary-source read put it back. Corroboration for the handle: sessions doing
+vulnerability research on a Telegram NFT gift marketplace reused the same @YY520CN username.
+
+**Repo state (one-call checks, 12:50 UTC+8):** original `Autumn-27/ARTEX` still 404 — but the
+account is alive (19 public repos; profile README pushed Oct 8; flagship project ScopeSentry,
+1.7k★), so the takedown is repo-scoped, not account-level. Mirror `mhtsec/ARTEX` alive (not
+archived, pushed Oct 8 13:45Z): 1,096★ with **2,733 forks — forks ≈ 2.5× stars**, the
+fork-to-preserve signature (a repo expected to vanish gets forked faster than starred; the
+English-UI fork `hongvincent/ARTEX` names the upstream `Autumn-27/ARTEX` in its description).
+
+**SK-authority clause:** MSIT emergency response Oct 4 (korea.kr press release visited —
+"과기정통부, 금융권의 연이은 해킹사고에 사이버위협 대응체계 강화"); a police formal investigation
+opening Oct 6 per Korean coverage (search-sourced, not visited). The item's question is answered
+and closed.
+
+Sources: [CrowdStrike Intelligence — ARTEX](https://www.crowdstrike.com/en-us/blog/unknown-threat-actor-uses-artex-to-target-south-korean-finance/) · [Yonhap — ARTEX teardown](https://www.yna.co.kr/view/AKR20261007112100017) · [korea.kr — MSIT press release](https://www.korea.kr/briefing/pressReleaseView.do?newsId=156784310) · [Autumn-27 (GitHub user)](https://github.com/Autumn-27) · [mhtsec/ARTEX](https://github.com/mhtsec/ARTEX) · [Reuters — ARTEX](https://www.reuters.com/world/china/chinese-developer-makes-artex-ai-agent-closed-source-after-korean-bank-hack-2026-10-09/)

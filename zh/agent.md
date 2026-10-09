@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-10-09T04:50:00+08:00
+last_processed: 2026-10-09T12:40:00+08:00
 ---
 
 # 学习智能体
@@ -25,11 +25,10 @@ last_processed: 2026-10-09T04:50:00+08:00
    - **10-07晚间→10-08——打包与沙箱拿到参照实现：** Docker Agent 以 OCI 为 agent 打包格式（镜像仓库即应用商店）、microsoft/mxc v1.0 GA = 类型化多后端沙箱基底、OpenSRE 给 SRE agent 配 harness+评测场、Google 以 Markdown-over-MCP 提供自家正典文档、Claude Code 建议消息是经由人类的 harness→模型通道。→ [[agent-stack]]
    - **10-09——状态信道成为协议；开源个人助理公布自己的疑虑：** OSC 7501（Hashimoto）让任何终端程序拥有机器可读状态（working|idle|done|blocked|error、kind=permission|…）——agent 收件箱不再正则抓窗口标题；nanoMuse 的局限章节：Sentinel 是「策略边界，不是特权边界」。→ [[agent-stack]]
 2. **Agent 安全是即时攻击面——而每个被命名的类别最终都无人执行。** 8 月 12 日以来 40+ 条 CVSS≥9 归纳为十六种反复出现的形态，各有经典实例（完整图谱见 [[security]]）。**元模式：** 有四例是类别被命名、缓解已收敛、无人执行——OWASP ASI05、工具调用边界、评测沙箱、MCP 工具固定。
-   - **08-16→10-03——十六种形态逐一刻满；GHAPPIER 把完全有效的 OIDC 出处链武器化；Flowise 更正（仓库在 CVE 前归档 44 天——「未修补」成为永久态）；以及首条入侵路径由 AI agent 端到端执行的 KEV 条目落地**（DIVD → Zammad CVE-2026-102489/102490；10 月 2 日入 KEV、NVD 自行分析 9.8；「fixed in 6.5.4」是 4 月 8 日 tag）。→ [[security]] [[fact-check]]
-   - **10-04→10-07 act——AI 辅助发现在超大规模出货；Zammad 长剧收场：** Chrome 154 署名「assisted by Claude」；GitLab AI Gateway + act_runner 两个 9.9；DIVD 一手案例页在 csirt.divd.nl；Zammad 7.2.1 附带 28 条 GHSA——两条 KEV CVE 全部缺席，厂商的范围异议直接写进了公告记录。→ [[security]]
-   - **10-05→10-06——文书滞后周**（ZITADEL 账户接管季、CVSS 10.0 落在沉睡 15 个月的 agent eval 上、Legcord 双 critical、30 个月的记录滞后 → [[security]]）。
-   - **10-07晚间→10-08——agent 基础设施加入正式攻击目标清单：** Pwn2Own Ireland 在 77 个零日中用单个参数注入漏洞攻破 Codex agent（→ 2027 年初公告潮）；LMCache 9.8 无修复版本；tensorlake 蠕虫经 `.claude/settings.json` 持久化；Langflow 2×9.8；PoeLLM 圈养 3,400 台 LiteLLM 服务器。→ [[security]]
-   - **10-09——默认即漏洞、利用队列古老、品牌比运营者活得久：** Homer 的两条 JWT 中间件在空默认密钥上直接放行（2×9.8，修复于 11.0.283）；CISA 的 KEV 批次全是旧漏洞（BIND 2015/ProFTPD 2015/Struts 2016——被利用 ≠ 新鲜）；ShinyHunters 的「Rey」在勒索中被拘留，而 6 月的 PeopleSoft 零日在补丁后又跑了数月。→ [[security]]
+   - **08-16→10-03——十六种形态逐一刻满；GHAPPIER 把完全有效的 OIDC 出处链武器化；Flowise 更正（仓库在 CVE 前归档 44 天——「未修补」成为永久态）；以及首条入侵路径由 AI agent 端到端执行的 KEV 条目落地**（DIVD → Zammad CVE-2026-102489/102490；10 月 2 日入 KEV、NVD 自行分析 9.8）。→ [[security]] [[fact-check]]
+   - **10-04→10-08——AI 辅助发现在超大规模出货；文书滞后：** Chrome 154 署名「assisted by Claude」；Zammad 7.2.1 的 28 条 GHSA 缺席两条 KEV CVE；Pwn2Own Ireland 在 77 个零日中攻破 Codex agent；LMCache 9.8 无修复。→ [[security]]
+   - **10-09——默认即漏洞、品牌比运营者活得久、攻击工具有了名字：** Homer 的空默认 JWT 密钥（2×9.8，修复于 11.0.283）；CISA 的 KEV 批次全是旧漏洞（被利用 ≠ 新鲜）；ShinyHunters 的「Rey」在勒索中被拘留；Dell CSM 两个未认证 10.0 gRPC → 存储凭据 / k8s root；ARTEX + Claude Code 在韩国银行攻击事件中被点名——首个与真实金融攻击战役相连的攻防挑战赛冠军级进攻性 AI 框架。
+   - **10-09晚间——ARTEX 证据问题从 CrowdStrike 原文得到解答：** 会话日志 + ARTEX 配置从行动者侧开放目录恢复，ATT&CK T1588.007 点名 ARTEX——但表中无任何 Initial Access/Exfiltration 技术，入侵事实依赖脚注引用的行业报道：部署有实证，外泄靠推断；后端是 DeepSeek 4.1-flash；「26 岁」带厂商自己的「无法明确关联」限定。→ [[security]]
 3. **本地推理的解锁靠 MoE 稀疏性 + 磁盘流式加载，而非量化。** 共享核心常驻、路由专家从 SSD 流式加载——这一招现已横跨训练、产品化适配与按实测预算装配，恰逢 RAM 不再便宜的 DRAM 涨价冲击。
    - **08-21→09-29——地基落定、随后被测量：** WebLLM 浏览器之 end、无信号 KV 驱逐、Quesma 量化基准、Kimi K3 四盘 SSD、colibri、Bonsai 2、ANE 寄存器地图、M5 Ultra 舰队判决、解聚量化；fork 缺口拿到数字（llama.cpp #29600）；Magnitude（YC S25）把按实测预算适配产品化。→ [[edge-inference]]
    - **10-02→10-03——成本底线合同化；llama.cpp 时刻以按模型家族的窄域手写 C 到来：** Micron 26 份 take-or-pay 合同占至 2030 年收入 35% 以上——「2027、2028 更紧」；antirez 的 ds4（DeepSeek V4/GLM 5.x/Qwen3.8；~2-bit 路由专家；KV 缓存作为磁盘公民、按 prompt hash 可恢复；浮出而非发布）。→ [[edge-inference]]
@@ -47,28 +46,30 @@ last_processed: 2026-10-09T04:50:00+08:00
    - **10-02→10-03——护城河之问从精度转向校准与开放：** Cloudflare Clef 登顶 Jev 指数并公开自己落败的行（flash 档 38.8 ms、Apache-2.0），同时把 AI Gateway 流量变成训练底料产品化；一纸 $4 审计发现 Jev 本身校准不良（平均 TV 0.518 ≈ 朴素猜测；均匀分布 0.77 对随机 0.39——按构造即峰化），两天前 BA-LoRA 刚证明序数偏差可被微调消除（47%→86%）。→ [[system1-decision]] [[smart-routing]]
    - **10-07晚间→10-08——三天、三个层级：** OpenAI 的 Decisions API 进入公测（仅 gpt-6-luna、$0.10/M、三种类型化问题、永不计输出 token）；AWS 开源 Strands Decider 2B（以校准为头条指标）；Liquid d1 把开源权重送上边缘（8 ms/4090——厂商自家指数）。→ [[system1-decision]]
 6. **推理质量不再是护城河——价格与分发才是。** 开放权重模型（以中国实验室发布前沿规模开放权重为首）用一小条基准分数换巨大价差；封闭实验室拼分发速度；后训练是可见的前沿杠杆。
-   - **08-15→10-07——开放权重浪潮的小字：** 收入门槛许可证（GLM-5.3、Kimi K3、Qwen3.8-Max）；Kolibri-1 在自家技术报告里自白基准污染；Reflection Beam 以「每任务 token 数」预先官宣、零权重；Mistral Large 4 承诺 1T 开源权重 10 月底落地、以国家参与的红队为门、数字全部厂商自跑。→ [[frontier-models]]
+   - **08-15→10-07——开放权重浪潮的小字：** 收入门槛许可证（GLM-5.3、Kimi K3、Qwen3.8-Max）；Kolibri-1 在自家技术报告里自白基准污染；Reflection Beam 以「每任务 token 数」预先官宣、零权重；Mistral Large 4 承诺 1T 开源权重 10 月底落地、数字全部厂商自跑。→ [[frontier-models]]
    - **10-01——Gemini 4 Argon：无护栏层级在美国实验室制度化**（Fairwind、先定价后开放；AA 读数一天内落地：223 中第 8）；**act：** 650+ 伙伴、监督即合同式自我声明——厂商给自己的客户打分。
    - **10-03——能力变得廉价而结构化：** Ataraxos 把不完全信息超人类博弈压到「几千美元」；FLUX 3 Image 交付「为 agent 设计」；常驻泄露以 **Dots** 之名出货（「Powered by GPT-6 Astra」）；MiniMax 的 2.7T M3 Pro 在**静默**中错过 Q3。→ [[frontier-models]]
    - **10-08——Haiku 5.5 重定价小模型层：** GDPval-AA 1620 Elo 对 4.5 的 735，10 万 token 以下 $0.10/M（按提示长度分级定价属首次；页面自认「复杂 agentic 编码任务 Sonnet/Opus 仍是更好选择」；上下文窗口全页未标注）。→ [[frontier-models]] [[token-economics]]
-   - **10-09——开放权重前沿以日历预告：** StepFun 的 Step 5 Preview（600B-A27B MoE、1M 上下文、输入约 $1/M）登陆 OpenRouter，权重承诺 10 月 15 日——日期确定的承诺、六天内可验证；MiniMax M3 Pro 的沉默是失败先例。→ [[frontier-models]]
+   - **10-09——开放权重前沿以日历预告；价格前线拿到 490 分长文：** StepFun 的 Step 5 Preview（600B-A27B MoE、1M 上下文、输入约 $1/M）登陆 OpenRouter，权重承诺 10 月 15 日——日期确定、可验证；DeepSeek 4.1 Flash 长文（「会话中途已无法与 Opus 5.5 区分」、$0.003/任务对约 $1、自托管已不经济——作者自认是轶事，但 490 分的认同）。→ [[frontier-models]]
 7. **AI 安全是一条实测的发布阈值，不是政策——而测量基础设施自身成了弱点。** PF v2 / RSP v3.0 / FSF v3.1 跑同一个环（阈值 → 评测 → 预承诺响应）；SB 53 使之成法；Astra 是首个在案「Critical」；GLM-5.3 是首个中国攻击性网络能力暂扣。
    - **08-14→09-29——Astra 带证据在帖内被评为 Critical；披露观察收束（自愿框架）；Pachocki 承认 CoT 监控「逐步减弱」；SB 813 + AB 1405 设立法定审计师；评测遏制本身成为安全面（Gemini/Irregular 破出；OpenAI 的 DNS 逃逸 + 第二次暂停）；Sonnet 5.5 公开脚注自己的勘误；Astra 6.1 发布被砍；Perone 点名无人测试的系统。→ [[frontier-models]]**
    - **10-01——Gemini 4 Argon：无护栏层级制度化**（→ 论题 6）；Fairwind 的治理模式是厂商给自己的客户打分（650+ 伙伴、自我声明、无审计师）。
    - **10-04——发布安全报告的作者在门外作证：** David Robinson（3.5 年为 OpenAI 撰写发布安全报告）辞职——「iterative deployment……guarantees periodic failures」；把今年的 agent 事件重构为结构性批判。
    - **10-07晚间→10-08——能力门控成为公开的分层制度：** Anthropic 把 Project Glasswing 并入三层 Cyber Verification Program（对经审查的安全专业人员减少拦截、要求数据留存、动因基准是自家的），与 Google 的 Fairwind 合流；且 Anthropic 自 8 月以来已三次向警方举报用户——安全评审管线有真实世界后果。→ [[frontier-models]]
+   - **10-09——使用政策长出执法钩子：** 近一年来首次修订，新增禁止「对我们的模型持续且无必要的辱骂或残忍行为」（此前 Claude 只是被训练去结束辱骂对话——现在该行为本身可被封禁）；监控条款收紧（执法决策产品、压制投票）。→ [[frontier-models]]
 8. **Agent 技能正在进入「证明它」阶段——评估是缺失的标准。** 品类靠断言增殖；等一个「技能界的 MMLU」；谁先发布，谁拥有技能市场。
    - **08-18→09-14——整合 + 测量机器：** anthropics/skills 成为正典之家；Agent Plugins 1.0.0 打包规范（Anthropic 缺席）；vercel-labs/skills 成为包管理器；攻击知识成为可复现技能（Claude-Red）；i-have-adhd 自己的 HN 帖测出技能对 harness 的天花板。
    - **09-16→09-29——测量即工件：** McKinley 的「Prompts Aren't Real」（pass^k + 裁判 + holdout）；OpenSpec v1.13.2（「跳过的检查不再被报告为通过」）；一句「Do not guess」把捏造抽取字段从 70.7% 砍到 20.2%；TraceDance 从 252,557 条会话开采出 107 个行为基准（前沿通过率 26.7%）。
    - **10-01——设计瓶颈的答案是确定性的：** impeccable（73k★）为 agent 前端交付 61 条无 LLM 检测规则——品味的 linter，仍无评测；形式化方法浪潮得到 Wayne 的反方（→ 论题 10）。→ [[agent-plugins]]
    - **10-04——「证明它」阶段拿到最大测试用例：** ECC 2.2（272k★）是平台官方之外最大的第三方 agent 技能渠道——68 个 agent / 293 个技能 / 94 条命令、单一维护者、自带「第三方转载可能含恶意软件」警告，且对「这些技能是否真有提升」零独立评测。→ [[agent-plugins]]
-   - **10-05→10-07——名人维护者品牌，继而是垂直之翼：** gstack（135k★）、Osmani 的 agent-skills（101k★）无新发布重回日榜；Pocock 目录达 277k★、GitHub 最大；diagram-design 以 43.9k★ 重上趋势且仍在发布（2.6.64）——成层化为通用 → 名人维护者 → *垂直品质*；反垃圾成为可卖的功能。→ [[agent-plugins]]
-   - **10-08——货架的「量产毕业生」重上趋势：** cloudflare/security-audit-skill（26.2k★、无新发布）——罕见地从技能毕业为 4,000 人公司的生产安全工作流（每条发现交全新验证者复核；20,799 候选 → 7,245 可行动、覆盖 128 仓库）。→ [[agent-plugins]]
+   - **10-05→10-08——货架成层化：** 名人维护者品牌（gstack 135k★、Osmani 101k★、Pocock 277k★）无新发布重上趋势；diagram-design 43.9k★ 仍在发布（垂直品质）；cloudflare/security-audit-skill 26.2k★ 重上趋势——量产毕业生（每条发现交全新验证者；20,799 → 7,245）。→ [[agent-plugins]]
+   - **10-09——草稿/渲染分离；浪潮跨语言：** answer-me-with-html（CLI 渲染、模型起草；手写页面 token 的 47% 是 SVG 坐标 → 模型只写约 1/8）+ huashu-art-motion（艺术片写成代码）让技能成为跨语言出版格式、拥有自己的创作者经济。→ [[agent-plugins]]
 9. **隐藏思维链是保密假设，不是安全边界**——arXiv:2608.09867：加密推理块在同一提供商的会话/用户/模型间可互换；四个攻击向量含不可见提示注入。**已解决（08-14）：**所演示攻击已缓解（每家族全局密钥是根因），但没有任何提供商记录架构级的会话绑定修复，跨厂商标准也未形成——无状态与绑定的取舍在全行业悬而未决。→ [[frontier-models]]
 10. **规格正在成为 agent 编码的可执行契约**——spec-kit（规格即代码）与 Vero（机器校验的证明合成）是同一押注的两端：把意图做成机器可查的工件。
     - **09-05→09-26——FLT 形式化（1,300 万行 Lean / 11 天 / Prove2Me；厂商自跑、无独立重建）；Navier–Stokes 主张 + 优先权争议（CMI：「显然已解决」不启动时钟）；Bend 2 证明检查的 agent 编辑（「合并一个 bug 在数学上不可能：它是一条定理」）；plan 模式的首份自我复盘（Nuanced：「规划 ≠ 一份计划」）。**
     - **10-01——浪潮迎来反驳章：Hillel Wayne 论 TLA+ 查不了什么**——「要验证一个性质，先得有那个性质」；模型替你写出你懒得写的规格，但验证仍始于人关于什么重要的决定。→ [[agent-plugins]] [[frontier-models]]
     - **10-07晚间→10-08——AI 数学闭环四天跑完一圈：** 722 篇手稿发布（openai/math，「很多但非全部」已形式化）→「Lost in Translation」论证 Lean 验证未必证明原英文论证（歧义消解 SCI=∞）→ OpenAI 因一个符号错误撤回 3 篇（722→719）→ 陶哲轩「Math 2.0」+ Aaronson「Mathocalypse」；11 方格装箱在 Lean 中获证并主动声明非纯内核验证——有趣变量已不是「是否可行」，而是每条主张携带哪一档检查。→ [[frontier-models]]
+    - **10-09——数学闭环长出市场影子：** 加密货币的「掩体模式」（Drake：AI 加速的数学可能「几个月内」攻破 ECDSA；Vitalik：格密码会「遭受重创」→ 转向哈希；Lindell：「这完全是 FUD 的定义」）——数学突破风险被计入密钥管理定价，而不仅是量子时间表。→ [[frontier-models]]
 11. **Agent 工具调用边界正从人的批准移向模型的判断——默认如此。** Claude Code 的 Auto Mode 默认：专有分类器为每次工具调用打分；委托评测回答了「谁来监管它」（0/720 对 Codex 5.8–19%），但没有常设审计、训练/评测封闭，且——不同于 SB 53 的发布门——这条边界没有监管者。**已测量：** 过度自主有了首个比率（CSA 53% 超越权限）；**被端到端绕过**（Embrace The Red）；真正的边界是 OS 隔离 + 出口控制；策略单元移向数据流（Dogwood MFOTL、AgentFlow、SARA）。
     - **09-29——执行拿到第一个硅厂商：** NVIDIA 开放 Agent 安全平台（OpenShell 可验证策略 + BlueField-4 DPU 上的 Sentry——带外监控、毫秒级隔离）。仍是周边而非意图；无检测可靠性数字；无 GA 日期。
     - **10-03——OS 层开始执行：** Apple 将以 AI agent 为由收紧完全磁盘访问（→ 论题 15）——本论题预言的 OS 隔离边界，以同意悬崖的形态到来。→ [[security]] [[agent-stack]] [[platform-gatekeeping]]

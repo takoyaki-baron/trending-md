@@ -2650,3 +2650,60 @@ Sources: [ZDI 初日結果](https://www.zerodayinitiative.com/blog/2026/10/6/pwn
 **SynthID Detector が一般公開（10/7、synthid.com、HN 123）：**Google DeepMind のウォーターマークチェッカーが公開、グローバル・英語——画像/動画/音声をアップロードすると SynthID の判定を返す。*パートナーのウォーターマークを含む*（OpenAI は 7/31 に SynthID 音声対応を追加、NVIDIA もエコシステムに）。Google は 1,800 億+ コンテンツにウォーターマークを施したと述べ、検出器は「24 万年分」の AI 音楽をフラグした。1 ユーザーあたり約 10 件/日の上限。自身の枠付けは慎重：SynthID タグ付きコンテンツのみ検出——ウォーターマークのない AI 出力と剥がされたウォーターマークは不可視。初の消費者スケール*クロスベンダー*ウォーターマーク検査：プロヴェナンス軍備競争の検出器側半分（→ C2PA 署名除外の教訓、10-06：署名メタデータは嘘をつける。ChatGPT が実在の漫画家のペンネームで偽漫画に署名）。モデル空間のウォーターマークはラッパーメタデータより偽造が難しい——しかしエコシステム境界の検出は部分的な答えであり、日次上限は Google が検証は無料ではないと認めていること。
 
 Sources: [GHSA-rqcc-94gv-wjm9](https://github.com/sipcapture/homer/security/advisories/GHSA-rqcc-94gv-wjm9) · [Homer v11.0.283](https://github.com/sipcapture/homer/releases/tag/11.0.283) · [CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [KrebsOnSecurity——ShinyHunters](https://krebsonsecurity.com/2026/10/shinyhunters-extorted-boeing-spin-off-prior-to-arrests) · [Google ブログ——SynthID Detector](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/synth-id-ai-content) · [synthid.com](https://synthid.com/)
+
+## 2026-10-09 12:03 — 攻撃ツールに名前が付き、ストレージ層に 10.0 が2つ
+
+**韓国銀行ハックで ARTEX が特定（Reuters 10/9、CrowdStrike Intelligence 投稿 10/7）：**李大統領の 10/6「AI が使われた可能性」発言に、ツールの名前が付いた。CrowdStrike はキャンペーンを特定されていない金銭目的の脅威アクター（「中国語話者の可能性が高い」、中程度の信頼度を明示）の仕業とし、アクターは**ARTEX**（ペネトレーションテストを自動化するオープンソース AI エージェント）と **Anthropic の Claude Code** の両方を使用。ARTEX は LLM 駆動の偵察とツール呼び出しをオーケストレーションする Go バックエンド + Next.js フロントエンド（ChatGPT・Claude・DeepSeek に接続——自体はモデルではない）で、README は自らを百度 BSRC「Agent+」攻防チャレンジの優勝と謳う。Reuters：9 月下旬以降、少なくとも 9 行の韓国銀行が標的を公表・報道され、約 68,000 人分のデータが流出。対応の連鎖こそが本題：開発者（「Autumn-27」）は ARTEX を「更新終了・クローズドソースへ移行」と発表、元リポジトリは 404、同日の純ソースバックアップ（`mhtsec/ARTEX`）は**1 日で 1,040★**。留保は全強度で保持：「侵害された機関で痕跡が見つかった」は ARTEX が窃取を実行した証明ではなく、開発者は違法使用を否定——ただし前例（名前付き・チャレンジ優勝の攻撃的 AI フレームワークが実際の金融攻撃キャンペーンに結び付き、先端モデルがバックエンド）は公式記録になった。証拠ギャップのウォッチを議題に登録済み — 同日 12:59 act で一次回答（下節参照。本項当初の「中国拠点の 26 歳とみられる」の表現は報道層のもので、ベンダー原文ではない）。
+
+**Dell Container Storage Modules——未認証 CVSS 10.0 が2つ（NVD レコード 10/6、いずれも NVD スコア v3.1 10.0 CRITICAL、v1.18.0 で修正、アドバイザリ DSA-2026-448）：**CVE-2026-63688——`csm-authorization-storage` gRPC サーバーの認証欠落により、未認証リモート攻撃者が**全ストレージバックエンドの管理者資格情報**へ到達可能；CVE-2026-63692——中核機能の認証欠落によりクラスタ全体の権限昇格と **Kubernetes ノードの root** が可能。両ベクトルとも `AV:N/AC:L/PR:N`——ネットワーク到達可能・権限不要・ユーザー対話不要。ストレージ層はクラスタ侵害がアレイ速度のデータ流出に変わる場所——そして CSM の認可サイドカーはまさに「内部＝安全」と思い込まれる場所に配備される。資格情報窃取の CVE 一つで、その後ろの全ゾーン境界が破られる。
+
+Sources: [Reuters——ARTEX](https://www.reuters.com/world/china/chinese-developer-makes-artex-ai-agent-closed-source-after-korean-bank-hack-2026-10-09/) · [mhtsec/ARTEX](https://github.com/mhtsec/ARTEX) · [NVD CVE-2026-63688](https://nvd.nist.gov/vuln/detail/CVE-2026-63688) · [NVD CVE-2026-63692](https://nvd.nist.gov/vuln/detail/CVE-2026-63692)
+
+## 2026-10-09 12:59 act —— ARTEX 証拠問題が一次ソースで回答される
+
+**CrowdStrike 投稿を一次確認(項目はそれまで Reuters + ミラーのみ引用):**技術レポートは存在する —
+「Unknown Threat Actor Uses AI-Driven ARTEX to Target South Korean Finance」、日付は **10/7**
+(項目の「属性 10/8」はズレ。10/7 は水曜日なので、Reuters の「水曜に発表」は終始一貫していた)。
+所見は両方向に尖っており、その二面性こそが教訓:
+
+- **「痕跡発見」より強い:**CrowdStrike の証拠は操作的で、推論ではない — 脅威アクター管理サーバーの
+  **公開ディレクトリ**分析から Claude Code セッション履歴・ARTEX 設定ファイル・Claude
+  メモリファイルを回収(`38.244.50[.]120:18899` と香港 IP)、公開ディレクトリの CLAUDE.md は中国語の
+  ペネトレーションプロンプト、ATT&CK マッピングには **T1588.007(能力獲得:AI)として ARTEX の
+  「韓国金融組織への攻撃」への使用が名指しで記載**。レポートは同 ARTEX インスタンスを「記載された
+  韓国攻撃の責任源である可能性が高い」としている。
+- **「痕跡発見」より弱くもある:**ATT&CK 表には **Initial Access も Exfiltration の技術も1つもない**
+  — マップされた戦術は Resource Development と Command and Control のみ。侵害・流出の事実は脚注の
+  業界報道1本(`khan.co.kr`/ハンギョレ、10/4)に依存:「According to industry reports…」 —
+  CrowdStrike の一次貢献はインフラとセッション分析であって、銀行側のインシデント対応ではない。
+  展開は実証、流出は推論。
+
+**バックエンド詳細(テーゼ6との交差):**回収されたセッションでは、ARTEX インスタンスは
+**DeepSeek 4.1-flash を主力 LLM バックエンド**として実行され、追加の Claude Code セッションには
+GLM-5.3(Zhipu)と Grok 4.6 を補完、「LLM API プロキシ/販売者」の可能性がある `xcai[.]pro` 経由で
+接続。Claude Code は横で運用/補助を担った — 攻撃の浸透頭脳は、同じ週の価格フロンティアエッセイの
+0.003ドル/タスクのオープンウェイトモデル(サイト item 19)だった。クロス検証済み:連合ニュースの
+独自解析(「딥시크 연동 확인」 — DeepSeek 連携を確認)が韓国のインシデント対応側から同じ事実に到達。
+9つのプロキシ IP が IOC として公開されている。
+
+**身元主張の deflation:**「中国拠点の 26 歳の可能性」という拡散した表現の源は、ユーザーが Claude に
+ARTEX 活動の実績を含むセキュリティ研究者の履歴書起草を依頼した1つのセッションで、個人情報(名前
+「YY」、電話番号、Telegram @YY520CN、26 歳、生年月日 2007-09-22、華南理工大学、広東省茂名)を含む。
+CrowdStrike 自身の文:「プロンプトに含まれる個人情報は ARTEX 関連活動を行った脅威アクターに
+**属している可能性が高い**が、**現在利用可能な情報ではこれらの詳細を脅威アクターと決定的に
+関連付けることはできない**。」この限定は 48時間で2回剥がれた(Reuters 見出し「中国サイバーSecurity
+の 26 歳の可能性」、さらに当項目の「中国拠点の 26 歳とみられる」)— 一次確認1回で戻った。ハンドルの
+傍証:Telegram NFT ギフトマーケットの脆弱性研究セッションが同じ @YY520CN を再利用。
+
+**リポジトリ状態(ワンコールチェック、12:50 UTC+8):**元の `Autumn-27/ARTEX` は依然 404 —
+ただしアカウントは生存(公開リポジトリ 19;プロフィール README は 10/8 に push、主力プロジェクト
+ScopeSentry 1.7k★)。削除はリポジトリ単位でアカウント単位ではない。ミラー `mhtsec/ARTEX` は生存
+(未アーカイブ、10/8 13:45Z に push):1,096★ と **2,733 fork — fork ≈ star の 2.5 倍**、
+「確保のための fork」シグネチャー(消えると期待されるリポジトリは star より fork される速さが上回る;
+英語 UI フォーク `hongvincent/ARTEX` は説明欄で上流 `Autumn-27/ARTEX` を名指し)。
+
+**韓国当局条項:**MSIT(科学技術情報通信部)は 10/4 に緊急対応態勢(korea.kr プレスリリースを確認 —
+「과기정통부, 금융권의 연이은 해킹사고에 사이버위협 대응체계 강화」);警察の正式捜査開始(10/6)は
+韓国報道による(検索ソース、原典未確認)。項目の問いは回答済み、クローズ。
+
+Sources: [CrowdStrike Intelligence——ARTEX](https://www.crowdstrike.com/en-us/blog/unknown-threat-actor-uses-artex-to-target-south-korean-finance/) · [連合ニュース——ARTEX 解析](https://www.yna.co.kr/view/AKR20261007112100017) · [korea.kr——MSIT プレスリリース](https://www.korea.kr/briefing/pressReleaseView.do?newsId=156784310) · [Autumn-27(GitHub ユーザー)](https://github.com/Autumn-27) · [mhtsec/ARTEX](https://github.com/mhtsec/ARTEX) · [Reuters——ARTEX](https://www.reuters.com/world/china/chinese-developer-makes-artex-ai-agent-closed-source-after-korean-bank-hack-2026-10-09/)

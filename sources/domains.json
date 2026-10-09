@@ -10687,5 +10687,71 @@
     "en": "Linux Plumbers Conference site — primary for talk abstracts (Meta's CRAM `mm/cram.c` memory-tier proposal). Cross-checked (10-09): the abstract's claims match Phoronix's independent report of the same talk.",
     "zh": "Linux Plumbers 会议官网——议题摘要的第一来源（Meta 的 CRAM `mm/cram.c` 内存层提案）。交叉验证（10-09）：摘要主张与 Phoronix 对同场报告的独立报道一致。",
     "jp": "Linux Plumbers Conference のサイト——トークンアブストラクトの一次来源（Meta の CRAM `mm/cram.c` メモリティア提案）。クロスチェック（10-09）：アブストラクトの主張は同じトークンに関する Phoronix の独立報道と一致。"
+  },
+  "dgt.is": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "en": "Danish developer blog (dgt.is); the DeepSeek 4.1 Flash essay is first-hand heavy-usage reporting, not benchmarks — its pricing/KV-cache numbers were cross-checked against its 490-pt HN thread and consistent OpenRouter pricing, but the core claim is explicitly the author's subjective experience.",
+    "zh": "丹麦开发者博客（dgt.is）；DeepSeek 4.1 Flash 一文是重度使用的一手体验报告而非跑分——其定价与 KV cache 数字已对照 490 分的 HN 讨论和一致的 OpenRouter 定价交叉验证，但核心主张明确是作者的主观体验。",
+    "jp": "デンマークの開発者ブログ（dgt.is）。DeepSeek 4.1 Flash 記はベンチマークでない一次のヘビーユース報告 — 価格と KV キャッシュの数値は 490pt の HN 議論と整合する OpenRouter 価格で裏取り済みだが、核心の主張は著者の主観的体験であると明示されている。"
+  },
+  "bevy.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "en": "Official Bevy engine release blog; primary source for 0.20 (817 PRs, 227 contributors) — feature claims validated against the HN thread and repo activity.",
+    "zh": "Bevy 引擎官方发布博客；0.20（817 个 PR、227 位贡献者）的一手来源——特性主张已对照 HN 讨论与仓库动态验证。",
+    "jp": "Bevy エンジン公式リリースブログ。0.20（817 PR、227 コントリビュータ）の一次ソース — 機能の主張は HN 議論とリポジトリの活動に対して検証済み。"
+  },
+  "cointelegraph.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "en": "Crypto trade news; its Drake/Buterin bunker-mode piece carried direct quotes from both and Haseeb Qureshi's endorsement — consistent with the HN thread and the underlying X posts, but treat its framing of expert opinion as selective (skeptics like Lindell appear only via The Defiant).",
+    "zh": "加密行业新闻媒体；其 Drake/Buterin 掩体模式报道带有双方的直接引语和 Haseeb Qureshi 的支持——与 HN 讨论及底层 X 帖子一致，但其对专家意见的取舍是有选择的（Lindell 等质疑者仅经 The Defiant 出现）。",
+    "jp": "暗号業界ニュース。Drake/Buterin のバンカーモード記事は両者の直接引用と Haseeb Qureshi の支持を含み — HN 議論や元の X 投稿と整合するが、専門家意見の採り上げは選択的（Lindell ら懐疑派は The Defiant 経由でのみ登場）。"
+  },
+  "answer-me-with-html.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "en": "Project website for the answer-me-with-html agent skill (same author as the GitHub repo, whose README it mirrors); token-count claims validated against the repo's own counted table — vendor-self-reported numbers, cite as such.",
+    "zh": "answer-me-with-html 智能体技能的项目网站（与 GitHub 仓库同一作者，内容为 README 镜像）；token 统计主张已对照仓库自统计表验证——属厂商自报数字，引用时照实标注。",
+    "jp": "answer-me-with-html エージェントスキルのプロジェクトサイト（GitHub リポジトリと同一作者、README のミラー）。トークン集計の主張はリポジトリ自身の集計表に対して検証 — ベンダー自己申告の数値としてその旨を明記して引用。"
+  },
+  "biohub.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "en": "CZ Biohub's official newsroom; primary announcement for the $1.8B Virtual Biology Initiative expansion — partner names and dollar figures matched the HN discussion and are the committing parties' own statements (i.e., commitments, not delivered data).",
+    "zh": "CZ Biohub 官方新闻页；18 亿美元 Virtual Biology Initiative 扩展的一手公告——合作方名单与金额与 HN 讨论一致，且是承诺方自己的表述（即承诺而非已交付的数据）。",
+    "jp": "CZ Biohub 公式ニュースルーム。18億ドルの Virtual Biology Initiative 拡大の一次発表 — パートナー名と金額は HN 議論と一致し、コミットする側自身の表明（つまり約束であって提供済みデータではない）。"
+  },
+  "naturalsystems.io": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "en": "Alex Lowell's personal project site; eth68's latency/THD numbers are first-party measurements with the methodology published — corroborated by the HN thread's technically literate discussion, but single-builder hardware with only two PCBs populated.",
+    "zh": "Alex Lowell 的个人项目站；eth68 的延迟/THD 数字是公开了方法论的第一方实测——经 HN 讨论中具备技术素养的讨论佐证，但这是只焊了两块 PCB 的单人硬件项目。",
+    "jp": "Alex Lowell の個人プロジェクトサイト。eth68 のレイテンシ/THD 数値は方法論が公開された一次測定 — HN 議論の技術的に筋の通った議論で裏取り済みだが、実装済み PCB はわずか2枚の個人ビルドハードウェア。"
+  },
+  "crowdstrike.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Vendor threat-intelligence blog (Counter Adversary Operations). The ARTEX post (read first-hand 10-09) is unusually disciplined: evidence staged by provenance (actor-side open directories, session histories), attribution stated with explicit confidence level, and its own hedges carried in-line (resume-prompt personal details it says it 'cannot definitively associate'; ATT&CK table omitting Initial Access/Exfiltration while coverage implied full-chain). Cross-validated: the DeepSeek-backend finding independently confirmed by Yonhap.",
+    "zh": "厂商威胁情报博客(Counter Adversary Operations)。ARTEX 文(10-09 一手阅读)纪律性罕见:证据按来源分层(行动者侧开放目录、会话历史),归因明示置信度,自身限定随文保留(简历提示词的个人信息“无法明确关联”;ATT&CK 表不含 Initial Access/Exfiltration,而报道暗示全链路)。已交叉核验:DeepSeek 后端结论经 Yonhap 独立证实。",
+    "jp": "ベンダー脅威インテリジェンスブログ(Counter Adversary Operations)。ARTEX 記事(10-09 に一次確認)は規律が高い:証拠を出所別に段階化(アクター側公開ディレクトリ、セッション履歴)、帰属は信頼度を明示、自己の限定も本文に保持(履歴書プロンプトの個人情報は「決定的な関連付けは不可能」;ATT&CK 表に Initial Access/Exfiltration なし、一方報道はフルチェーンを示唆)。クロス検証済み:DeepSeek バックエンドの所見は Yonhap が独立に確認。"
+  },
+  "yna.co.kr": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Yonhap News Agency, South Korea's national wire. Its ARTEX teardown (visited 10-09) independently confirms the DeepSeek-integration fact via Korean incident-response analysis — corroborating CrowdStrike's primary post without echoing it; the natural first stop for the Korean-side record (government response, FSI IP-tracing). Wire-service framing, national agency.",
+    "zh": "韩联社,韩国国家通讯社。其 ARTEX 拆解报道(10-09 已访问)经韩国应急处置分析独立证实 DeepSeek 集成事实——与 CrowdStrike 一次源相互印证而非转述;追踪韩方记录(政府响应、金融安保院 IP 追踪)的第一站。通讯社式措辞,国家通讯社。",
+    "jp": "連合ニュース(韓国の国家通信社)。ARTEX 解析記事(10-09 に確認)は韓国のインシデント対応分析を通じて DeepSeek 連携の事実を独立に確認 — CrowdStrike の一次情報と裏付け合う転載ではない。韓国側の記録(政府対応、金融保安院の IP 追跡)を追う第一候補。通信社らしい中性の文体。"
   }
 }
