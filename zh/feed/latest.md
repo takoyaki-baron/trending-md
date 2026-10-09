@@ -1,8 +1,8 @@
 ---
 date: 2026-10-09
-updated: 2026-10-09T04:25:00Z
+updated: 2026-10-09T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -249,14 +249,16 @@ Mitchell Hashimoto(Ghostty)于 10 月 6 日发布 OSC 7501 提案:用一条转�
 ## 18. 韩国银行入侵调查锁定工具:ARTEX——开发者随即宣布转闭源
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Reuters · 今日(10 月 9 日)~09:56 UTC+8 发布;CrowdStrike 归因 10 月 8 日
+- **Source:** Reuters · 今日(10 月 9 日)~09:56 UTC+8 发布;CrowdStrike Intelligence 博文 10 月 7 日(已一手核实)
 - **Tags:** `artex` `ai-agents` `bank-hack` `crowdstrike` `south-korea`
 
-自我们 10 月 6 日报道李在明总统"银行黑客事件疑似使用了 AI"之后:工具现在有名字了。CrowdStrike 周三表示,嫌疑人——很可能是一名身处中国的 26 岁年轻人——同时使用了 **ARTEX**(一个自动化渗透测试的开源 AI 智能体)和 Anthropic 的 Claude Code;Reuters 报道,9 月底以来至少有九家韩国银行披露或被报道为攻击目标,约 6.8 万人的数据泄露。周四,开发者("Autumn-27")宣布 ARTEX "将不再更新并转为闭源"——原始 GitHub 仓库现在已经 404。同日出现的纯源码备份仓库(`mhtsec/ARTEX`)一天内收获 **1,040★**。该仓库 README 自称是百度 BSRC"agent+"攻防挑战赛冠军项目;ARTEX 是 Go 后端 + Next.js 前端,编排 LLM 驱动的侦察与工具调用,本身不是模型——它连接 ChatGPT、Claude 或 DeepSeek。
+自我们 10 月 6 日报道李在明总统"银行黑客事件疑似使用了 AI"之后:工具现在有名字了。CrowdStrike Intelligence(10 月 7 日,已一手核实)将行动归因于一名未具名、以经济利益为动机的行动者——"很可能是中文使用者",明示为中等置信度——其同时使用了 **ARTEX**(一个自动化渗透测试的开源 AI 智能体)和 Anthropic 的 Claude Code;Reuters 报道,9 月底以来至少有九家韩国银行披露或被报道为攻击目标,约 6.8 万人的数据泄露。周四,开发者("Autumn-27")宣布 ARTEX "将不再更新并转为闭源"——原始 GitHub 仓库现在已经 404(截至今天 12:59 UTC+8 仍是如此;账号本身存活,说明下架仅限仓库层面)。同日出现的纯源码备份仓库(`mhtsec/ARTEX`)一天内收获 **1,040★**,目前 1,096★、**2,733 个 fork**——fork 数约为 star 数的 2.5 倍,典型的"抢先保存"特征。ARTEX 是 Go 后端 + Next.js 前端,编排 LLM 驱动的侦察与工具调用,本身不是模型。
 
-**为什么重要:**这是第一个被点名、拿过竞赛冠军、并与真实金融攻击行动挂钩的进攻性 AI 框架——而"撤源码、镜像仓库几小时涨一千星"的反应说明猫鼠游戏已经开场。要注意的分寸:"在失陷机构发现痕迹"并不等于证明 ARTEX 执行了窃取,开发者也否认违法使用——但"智能体框架成为攻击工具、前沿模型在后台支撑"这一先例已载入公开记录。
+恢复出的证据比"发现痕迹"更锐利,而且朝两个方向都更锐利。CrowdStrike 从行动者控制的服务器开放目录中提取了 Claude Code 会话历史、ARTEX 配置文件和 Claude 记忆文件,其 ATT&CK 映射包含 T1588.007(获取能力:人工智能),点名 ARTEX "用于对韩国金融行业组织实施攻击"——但该表**没有列出任何 Initial Access 或 Exfiltration 技术**,泄露事实本身依赖一条脚注引用的行业报道(Hangyeore):部署有一手证据,窃取仍是推断。恢复的会话显示,该 ARTEX 实例以 **DeepSeek 4.1-flash 为主力 LLM 后端**(外加 GLM-5.3 和 Grok 4.6,疑似经 API 转售商接入)——DeepSeek 集成已被 Yonhap(韩联社)自己的拆解报道独立证实。而广为流传的"身在中国 26 岁嫌疑人"来自日志中一段请 Claude 起草简历的提示词,其个人信息 CrowdStrike 自己表示"无法明确"与威胁行动者关联。
 
-[`🔗 Reuters`](https://www.reuters.com/world/china/chinese-developer-makes-artex-ai-agent-closed-source-after-korean-bank-hack-2026-10-09/) · [`🔗 mhtsec/ARTEX(备份)`](https://github.com/mhtsec/ARTEX)
+**为什么重要:**这是第一个被点名、拿过竞赛冠军、并与真实金融攻击行动挂钩的进攻性 AI 框架——而"撤源码、镜像仓库几小时涨一千星"的反应说明猫鼠游戏已经开场。双向的限定必须放进头条结论:部署已被观察到,窃取仍属"借报道归因",嫌疑人身份连恢复日志的厂商自己都明确不予确认;开发者也否认违法使用。"智能体框架成为攻击工具、中国开源权重模型充当后端"这一先例已载入公开记录。
+
+[`🔗 CrowdStrike Intelligence`](https://www.crowdstrike.com/en-us/blog/unknown-threat-actor-uses-artex-to-target-south-korean-finance/) · [`🔗 Reuters`](https://www.reuters.com/world/china/chinese-developer-makes-artex-ai-agent-closed-source-after-korean-bank-hack-2026-10-09/) · [`🔗 Yonhap——证实 DeepSeek 集成`](https://www.yna.co.kr/view/AKR20261007112100017) · [`🔗 mhtsec/ARTEX(备份)`](https://github.com/mhtsec/ARTEX)
 
 ---
 
@@ -428,13 +430,181 @@ Natural Systems 的 eth68 是一台 1U 机架音频接口,通过标准 100M 以�
 
 ---
 
+## 31. SGLang:一个 CVSS 9.8 的 pickle 反序列化 RCE——"关闭 pickle"的开关也拦不住,且至今没有修复版本
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · CVE-2026-93034 记录 10 月 8 日 15:17 UTC 发布 · CVSS 9.8(CNA 评定)
+- **Tags:** `cve` `sglang` `llm-inference` `deserialization`
+
+NVD 于 10 月 8 日发布 CVE-2026-93034 记录:SGLang 的 ZMQ 消息解码器(`_maybe_unwrap_pickle`)通过 `pickle.loads()` 无条件反序列化 `PickleWrapper` 载荷——没有类型白名单、没有身份验证——只要 ZMQ 端口可达即可未鉴权远程代码执行(披露指出:数据并行注意力使用非回环 `--dist-init-addr` 时会绑定到 localhost 之外)。披露文章更糟的半截是:`SGLANG_USE_PICKLE_IPC`——运维用来"关掉 pickle"的开关——在 `environ.py` 中默认为 `true`,而且**并不能**阻止利用:msgpack 路径照样处理 PickleWrapper 载荷。7 月 14 日报给 CERT/CC,9 月 17 日获确认,本周公开披露。仓库仍在活跃(今天有推送),但其最新的打标签版本 v0.5.21(9 月 18 日)早于记录发布,截至发稿没有修复公告。
+
+**为什么重要:**这是本周第二起核心 LLM 推理基础设施的未鉴权 pickle 反序列化 RCE(昨天条目 24 的 LMCache 是第一起)——而且这个漏洞连自己的关闭开关都防不住,恰恰是多数团队会首先选择的缓解手段。自托管 SGLang 部署通常和 GPU 兄弟节点在同一扁平网络里;一个被配置反复重新启用的 0.0.0.0 绑定 ZMQ 端口,就是这个坑本身。
+
+[`🔗 NVD CVE-2026-93034`](https://nvd.nist.gov/vuln/detail/CVE-2026-93034) · [`🔗 Forkast 披露报道`](https://forkast.news/sglang-llm-serving-framework-has-cvss-9-8-pickle-deserialization-rce-that-persists-even-when-pickle-is-disabled)
+
+---
+
+## 32. Theranos.world:坐进 Elizabeth Holmes 的审判席——每份文件都是真实庭审证据,由文档 AI 厂商解析
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 477+ pts · ~18h ago (~01:51 UTC+8)
+- **Tags:** `interactive` `document-ai` `theranos` `archives`
+
+Theranos.world 是对 Elizabeth Holmes 庭审桌上场景的交互式模拟:在她的 MacBook 上点 Log In,翻她的 iPhone,操作 Edison 血检仪——你打开的每条短信、每封邮件、每份文件,都是庭审中的真实证据,由搭建该网站的文档 AI 公司 Extend 解析呈现。站点悄然上线后几乎霸榜 HN 一整天(477+ 分),用户尤其称赞可全键盘导航的 macOS 9 风格界面,以及"让庭审记录自己说话"的克制。网站自己也标明了赞助方:"parsed by Extend"。
+
+**为什么重要:**这是把文档 AI 做成体验而非宣讲——语料是真的,解析本身就是产品 demo。HN 热评("包装精美的 Extend 软广")说明观众看穿了它是什么,照样点了赞。作为一种模板,"一手档案 + 智能体解析"值得跟踪;作为新闻,请记住选择解析什么的工具是谁家的。
+
+[`🔗 Theranos.world`](https://www.theranos.world/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50009295)
+
+---
+
+## 33. rea 后续:三天三个大版本、单日 +15.3k★——逆向工程 MCP 冲上 3.5 万星
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 日榜 #1 · 今日 +15,335★ · 总 35,012★(昨天约 13k)
+- **Tags:** `rea` `reverse-engineering` `mcp` `agents`
+
+自从我们 10 月 6 日把 `morluto/rea` 写成当日最大涨幅之后,它又三天连发三个大版本——rea-agents v5.0.0(10 月 7 日:应用图新增 macOS bundle 解剖,Android 分析现要求完整 JDK 17)、v6.0.0(10 月 8 日:破坏性契约变更,所有 MCP 文件系统输入改要求绝对主机路径)、v6.1.0(10 月 9 日,~09:08 UTC+8:Hopper 正则模式迁移到 ECMAScript Unicode 语法并放进可取消、5 秒死线的 worker,注册 Grok Build/Bot 客户端,更多 Ghidra 工作)——然后垂直起飞:10 月 7 日约 9.6k★ → 10 月 8 日 12,962★ → 现在 **35,012★**,以单日 +15,335 居今日趋势榜第一。卖点没变:一个 MCP 服务(外加 CLI),让智能体跨应用行为、二进制、固件做逆向。
+
+**为什么重要:**本周我们跟踪到的最快仓库增速既不是模型也不是 harness,而是让智能体读懂没有源码的软件的工具。36 小时内 2.7 倍的星数,靠的是实打实的破坏性版本发布而非一次性病毒传播——REA 正在固化为"智能体的二进制之眼"默认层;安全含义是双向的(昨天的 ARTEX 条目就是同一能力被武器化)。
+
+[`🔗 morluto/rea`](https://github.com/morluto/rea) · [`🔗 v6.1.0 发布说明`](https://github.com/morluto/rea/releases/tag/rea-agents-6.1.0)
+
+---
+
+## 34. OpenAI 开除三名安全研究员——三人发公开信反驳"不当行为"指控
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** TechCrunch + WSJ · 公开信 10 月 8 日 · 48+ HN pts(今日 ~18:00 UTC+8)
+- **Tags:** `openai` `ai-safety` `industry` `whistleblowing`
+
+OpenAI 已解雇其安全组织的三名成员——Jasmine Wang、Tomek Korbak 和 Mikita Balesni,于 9 月底/10 月初被辞退——公司称调查发现"不当行为模式","明显违反我们关于不当处理研究信息的政策",包括向第三方 AI 安全组织共享机密信息。10 月 8 日,三人向 OpenAI 的安全与监督机构发出公开信:否认在既定程序之外不当处理敏感信息;否认向 The Information 泄露思维链可监控性缺陷报道;并逐条反驳指控——Wang 表示其被引用的"高管邮箱访问权"是委派给她的招聘权限、她曾试图归还,并且她在误开邮件后几分钟内就上报了。三人警告如此仓促的解雇正在制造寒蝉效应,并敦促 OpenAI 兑现第三方审计与模型可监控性承诺。据 TechCrunch,OpenAI 内部备忘录否认解雇是对提出安全关切的报复。
+
+**为什么重要:**时序比任何单点指控更重要:可监控性研究 → 媒体泄露 → 解雇 → 反驳信,这已成为前沿实验室安全异议升级的标准剧本;而它落在同一周——OpenAI 撤回三篇数学论文、其安全透明负责人辞职(10 月 4 日)余温未散。对任何评估 OpenAI 安全治理的人——或作为客户与其谈判的人——这就是书面记录。
+
+[`🔗 TechCrunch`](https://techcrunch.com/2026/10/08/fired-openai-safety-researchers-dispute-misconduct-claims-warn-of-chilling-effect/) · [`🔗 WSJ`](https://www.wsj.com/tech/ai/openai-parts-ways-with-researchers-who-allegedly-shared-confidential-information-aebac528)
+
+---
+
+## 35. htmx 作者的《Yes, and》以 500 分登顶 HN:依然要学编程——但永远别让 AI 替你写作业
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 500+ pts · ~26h ago (~17:48 UTC+8 Oct 8)
+- **Tags:** `education` `htmx` `ai-coding` `essay`
+
+Carson Gross 二月发表的《Yes, and》——他对"还该不该学编程"的回答——本周以 500+ 分冲上 HN 首页。核心论点:AI 对初级开发者确实危险,因为它能生成代码,却让人失去阅读代码所需的动手理解——所以他对学生的忠告是"AI 能替你完成这份作业。别让它这么做。"他拒绝"汇编到高级语言"的类比(编译器是确定性的,LLM 不是,其输出还会引入意外复杂度);他认可智能体作为理解概念的"极其有效的助教"(他自己就配了这样一个 AGENTS.md);至于就业,他认为市场低迷是周期性的,告诫学生招聘网站是彩票,该靠的是人际关系网。
+
+**为什么重要:**这是一位真正在讲课的重要 OSS 维护者给出的、传播最广的 AI 时代具体教学法:技能清单(清晰写作、领域知识、靠亲手写代码习得的架构)是一份课程大纲而非氛围。HN 帖子里的反方——"靠人脉"和历来的忠告一样、且并非人人可得——是它诚实的配重。
+
+[`🔗 htmx.org/essays/yes-and`](https://htmx.org/essays/yes-and/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50003796)
+
+---
+
+## 36. 《雷神之锤》被智能体舰队移植到零依赖安全 Rust——与 id 自己的 C 逐像素互证
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 183+ pts · ~7h ago (~13:22 UTC+8)
+- **Tags:** `quake` `rust` `wasm` `agent-fleets`
+
+quake-srp("slop Rust port")把 id Software 的《雷神之锤》(1996)从 WinQuake C 源码用 Rust 重写——只用标准库、零依赖、无 `unsafe`——通过 WASM 在浏览器里跑共享版第一章,另有原生 `quaketool`。方法才是故事:README 写明,由 Claude(在 Claude Code 中)写代码和文档,人类定规则、试玩、报 bug——多支智能体舰队在各自 git 分支上按书面简报工作,并由一位"主席智能体"把关:只有完整检查套件通过才合并分支。正确性由 oracle 强制:id 自己的 C 无头编译作参照,移植版与它在数千个视角下的 3-D 画面逐像素一致(怪物在其中醒着)、混音器输出逐采样一致、demo 回放逐帧一致;仍有差异的部分在 AUDIT.md 里逐条列出,一条命令即可重跑证明。
+
+**为什么重要:**这是本周第三个登上 HN 的复古移植,但唯一带有可迁移工程方法的——一支智能体舰队,其合并被"对着参照实现的差分测试"把关。把"WinQuake"换成任何有已知良好二进制的遗留系统,这就是正确性可检验的智能体重写配方,而非氛围评审。仓库才一天大、38★;技术再次跑赢项目本身。
+
+[`🔗 terrapapagalli1516/quake-srp`](https://github.com/terrapapagalli1516/quake-srp) · [`🔗 浏览器试玩`](https://quake-srp.pages.dev/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50016312)
+
+---
+
+## 37. alibaba/open-code-review 以 4.48 万星重回趋势榜:代码审查做成确定性流水线——自带基准,并明说召回率取舍
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 日榜 #5 · 今日 +323★ · 总 4.48 万
+- **Tags:** `code-review` `alibaba` `chinese-oss` `benchmark`
+
+`alibaba/open-code-review`(Go,`ocr` CLI)重回日趋势榜:它作为阿里集团内部官方 AI 审查助手运行两年("服务数万开发者、识别数百万缺陷")后开源,如今 44.8k★,10 月 8 日仍有活跃提交。架构是差异点:确定性工程流水线负责选文件与分包;带工具调用能力的 LLM 智能体读完整文件、检索代码库、产出行级精度的评论——刻意不做"把 diff 直接扔给模型"。它自带基准 AACR-Bench(50 个开源仓库、200 个真实 PR、10 种语言、由 80+ 资深工程师交叉验证的 1,505 个标注缺陷,托管在 Hugging Face),而 README 的头条主张把取舍摆在明面上:同模型下精确率和 F1 高于通用智能体、token 仅约 1/9,但**召回率更低**——刻意的"精确优先于噪声"选择。
+
+**为什么重要:**多数智能体审查工具兜售召回率风味的魔法;这个项目发布基准,并承认自己会故意漏报。当"审查"成为企业内最高频的智能体负载,它回答的架构问题才是关键:当模型就是评审者时,流水线该有多少留在确定性一侧。
+
+[`🔗 alibaba/open-code-review`](https://github.com/alibaba/open-code-review) · [`🔗 AACR-Bench 数据集`](https://huggingface.co/datasets/Alibaba-Aone/aacr-bench)
+
+---
+
+## 38. 有人在申请 .lan 顶级域——而半个世界的路由器已用它命名内网设备
+
+- **Velocity:** ▮▮ rising
+- **Source:** ICANN + Hacker News · 130+ pts · ~20h ago (~23:51 UTC+8 Oct 8)
+- **Tags:** `dns` `icann` `gtld` `home-networking`
+
+ICANN 新 gTLD 申请系统公布了字符串 **.lan** 的申请 CD2694T-T26351——申请人 "Coffee Danger, LLC"(Identity Digital 旗下实体)——状态 Active、Pre-Evaluation,10 月 7 日发布。问题在 HN 帖子里被立刻点破:.lan 是 OpenWrt(以及无数家用路由器、二十年的 homelab 惯例)给局域网设备命名的默认后缀,但它从未获得专用保留——不像 `home.arpa.`(RFC 8375),后者的存在正是为了让内部名字永不查询根服务器。一旦 .lan 在根区委派,泄漏型解析器就开始把内网主机名发给一个商业注册局,而对每一张沿用默认配置的网络来说,名字冲突成了现实安全问题。
+
+**为什么重要:**ICANN 自己的冲突处理史上 .corp/.home 的早期警报正在公开重演——一条从未写进标准的惯例,撞上一个只认书面流程的程序。具体行动无聊但真实:如果你的局域网还在用 .lan,规划迁移到 `home.arpa.`,或确保你的解析器用本地权威区应答 .lan、永不转发。
+
+[`🔗 ICANN 申请 CD2694T-T26351`](https://newgtldprogram-aps.icann.org/applications/CD2694T-T26351/summary) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50007353)
+
+---
+
+## 39. LingBot-Map 以 1.75 万星重回趋势榜:~20 FPS 流式三维重建——LiDAR 可选
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +109★ · 总 1.75 万 · 10 月 5–6 日有新提交
+- **Tags:** `3d-reconstruction` `slam` `video` `chinese-oss`
+
+Robbyant 的 LingBot-Map——一个从流式视频重建场景的前馈三维基础模型——在 10 月 5–6 日一波提交后重回趋势榜。其几何上下文 Transformer(GCT,基于 VGGT 骨干)通过锚点上下文、位姿参考窗口和轨迹记忆,把坐标接地、稠密几何线索与长程漂移修正统一进同一个流式框架;分页 KV-cache 注意力让推理在 518×378 分辨率、超过 10,000 帧的长序列上稳定保持 ~20 FPS——无传感器、无 LiDAR、也没有逐帧优化循环。代码与权重以 Apache-2.0 发布于 GitHub、Hugging Face 和 ModelScope;仓库挂有 arXiv 技术报告(2604.14141),并自称"ECCV 2026 最佳论文奖候选"——这是仓库自己的标签,不是已公布的奖项。
+
+**为什么重要:**VGGT 一系正在从 feed-forward 一侧吃掉 SLAM:每帧一次前向传播取代位姿图机器,这正是机器人和 AR 开发者在没有深度传感器时做漂移修正所需要的。"最佳论文候选"在 10 月 ECCV 放榜前只是营销——1.75 万星说明从业者没在等评审委员会。
+
+[`🔗 Robbyant/lingbot-map`](https://github.com/Robbyant/lingbot-map) · [`🔗 arXiv 2604.14141`](https://arxiv.org/abs/2604.14141)
+
+---
+
+## 40. Jevman:六个决策模型各打 100 局吃豆人——Jev 热潮有了自己的街机基准
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 65+ pts · ~18h ago (~02:29 UTC+8 Oct 9)
+- **Tags:** `decision-models` `benchmark` `reinforcement` `jev`
+
+Opper AI 的 Jevman 把六个 AI 决策模型——以选项、评分或是否作答而非聊天的 Jev 类模型——放进实时吃豆人对阵经典街机幽灵,每模型 100 局,公开排行榜记录分数与延迟,对局可观看,harness 开源、任何人都能接入自己的模型。Cloudflare 的 Clef 是参赛者之一(依排行榜:2,476 分、单局最高 4,820、决策约 398 毫秒)。这是该品类第一个游戏回路基准——此前它们只在静态多选题集上被测量。
+
+**为什么重要:**决策模型正被当作聊天 LLM 之下的便宜快速层售卖(OpenAI 的 Decisions API、Cloudflare Clef、AWS Strands Decider);Jevman 测的是真实产品表面——实时约束下的序贯选择,犹豫即失败。一个不由厂商掌控、完整对局公开的基准,正是这个年轻品类应有的形状。
+
+[`🔗 Jevman 基准`](https://opper.ai/jevman-benchmark/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50007993)
+
+---
+
+## 41. Paul Hudson 的 SwiftUI 技能发布 v1.1 适配 Xcode 27.2——Swift 智能体技能架半年后更新
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 5.2k★ · 今日 +88 · v1.1 于 10 月 7 日推送(~21:39 UTC+8)
+- **Tags:** `swift` `swiftui` `agent-skills` `apple`
+
+`twostraws/SwiftUI-Agent-Skill`——Paul Hudson(Hacking with Swift)的智能体技能,教编码助手写出"更聪明、更简洁、更现代的 SwiftUI",针对 LLM 真实会犯的导航、布局、状态管理与无障碍错误——10 月 7 日发布 v1.1("Updated for Xcode 27.2 and iPhone Duo"),自四月以来首次推送,今日以 5.2k★(+88)重回趋势榜。它是一个技能族中的一格:SwiftData Pro、Swift Concurrency Pro、Swift Testing Pro,外加一个枢纽仓库(Swift-Agent-Skills),全部采用可移植的 agentskills.io 格式,可用 `npx skills add` 或 Claude Code 插件市场安装。
+
+**为什么重要:**技能架的问题从来不是有没有,而是新不新——平台 SDK 几个月就在指南下面移动。一位具名维护者对照具名 Xcode 版本为框架技能打版本,是让技能长寿的维护模式;多仓库技能族则是苹果平台开发生态最先采纳的打包模式。
+
+[`🔗 twostraws/SwiftUI-Agent-Skill`](https://github.com/twostraws/SwiftUI-Agent-Skill) · [`🔗 Swift-Agent-Skills 枢纽`](https://github.com/twostraws/Swift-Agent-Skills)
+
+---
+
+## 42. Rembrandt:免费、可自托管的 Lightroom 替代品,带端侧 AI——"冲掉订阅化的垃圾化"
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 47+ pts · ~15h ago (~05:00 UTC+8)
+- **Tags:** `photography` `on-device-ai` `open-source` `self-hosted`
+
+Rembrandt 是一款面向 macOS、Windows 和 Linux 的免费照片编辑器——无账号、无订阅、无跟踪——作者自称 Adobe 难民,支持 RAW、蒙版(AI 主体/背景/物体/深度)、在你的 GPU 上跑 2×/4× 超分辨率,以及自然语言"Ask"模式("golden hour, shadows +25")替你推动滑块。它可自托管(目录是你的、存储是你的),Show HN 发布已把仓库推过百星。README 的标语定下基调:"Stop paying for Adobe. Flush the incrapification."
+
+**为什么重要:**端侧 AI 编辑器品类正持续成为反订阅的答案——超分辨率与主体蒙版现在无需云端往返就能在消费级 GPU 上运行,这与条目 1 的 Whistle 是同一个端侧推理故事,只是换上了消费级外壳。它是一个几天大的单人仓库;诚实的读法是"方向可期,观察维护",而不是"Lightroom 已死"。
+
+[`🔗 thesnarkitecht/rembrandt`](https://github.com/thesnarkitecht/rembrandt) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50012199)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-09T04:25:00Z |
-| Items | 30 |
-| Sources tracked | 27 (Hacker News, GitHub Trending/API, CISA KEV, GitHub Security Advisories, arxiv.org, Hugging Face Papers, nobelprize.org, blog.google/synthid.com, KrebsOnSecurity, Phoronix, LPC 2026, OpenRouter, Quesma, Cactus Compute, mitchellh.com, debasishg.github.io, claude.com marketplace, Reuters, dgt.is, bevy.org, anthropic.com, NVD, Wccftech, Cointelegraph, answer-me-with-html.com, naturalsystems.io, biohub.org) |
+| Generated | 2026-10-09T12:20:00Z |
+| Items | 42 |
+| Sources tracked | 37 (Hacker News, GitHub Trending/API, CISA KEV, GitHub Security Advisories, arxiv.org, Hugging Face Papers, nobelprize.org, blog.google/synthid.com, KrebsOnSecurity, Phoronix, LPC 2026, OpenRouter, Quesma, Cactus Compute, mitchellh.com, debasishg.github.io, claude.com marketplace, Reuters, dgt.is, bevy.org, anthropic.com, NVD, Wccftech, Cointelegraph, answer-me-with-html.com, naturalsystems.io, biohub.org, forkast.news, techcrunch.com, wsj.com, htmx.org, opper.ai, icann.org, technology.robbyant.com, quake-srp.pages.dev, open-codereview.ai, theranos.world) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

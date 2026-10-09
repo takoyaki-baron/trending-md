@@ -10753,5 +10753,50 @@
     "en": "Yonhap News Agency, South Korea's national wire. Its ARTEX teardown (visited 10-09) independently confirms the DeepSeek-integration fact via Korean incident-response analysis — corroborating CrowdStrike's primary post without echoing it; the natural first stop for the Korean-side record (government response, FSI IP-tracing). Wire-service framing, national agency.",
     "zh": "韩联社,韩国国家通讯社。其 ARTEX 拆解报道(10-09 已访问)经韩国应急处置分析独立证实 DeepSeek 集成事实——与 CrowdStrike 一次源相互印证而非转述;追踪韩方记录(政府响应、金融安保院 IP 追踪)的第一站。通讯社式措辞,国家通讯社。",
     "jp": "連合ニュース(韓国の国家通信社)。ARTEX 解析記事(10-09 に確認)は韓国のインシデント対応分析を通じて DeepSeek 連携の事実を独立に確認 — CrowdStrike の一次情報と裏付け合う転載ではない。韓国側の記録(政府対応、金融保安院の IP 追跡)を追う第一候補。通信社らしい中性の文体。"
+  },
+  "theranos.world": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Extend's interactive Theranos trial-evidence simulation (Holmes' desk, real trial texts/emails 'parsed by Extend') — a document-AI vendor's marketing piece that discloses its sponsor on-site; the underlying evidence is the public court record, but the selection of what got parsed is the vendor's. Cross-checked (10-09) against the HN discussion, where the 'buried Extend marketing' reading is itself top-voted.",
+    "zh": "Extend 制作的 Theranos 庭审证据交互模拟(Holmes 的桌面,真实庭审短信/邮件,'parsed by Extend')——一个在场内标明赞助方的文档 AI 厂商营销作品;底层证据是公开的庭审记录,但'解析什么'由厂商选择。10-09 经 HN 讨论交叉核对,'软广'读法本身就是热评。",
+    "jp": "Extend が作った Theranos 裁判証拠のインタラクティブ再現(Holmes の机、実際の法廷のテキスト/メール、「parsed by Extend」)—— スポンサーをサイト内で明示するドキュメント AI ベンダーのマーケティング作品。根拠となる証拠は公開の裁判記録だが、何を解析したかはベンダーの選択。10-09 に HN 議論と突合済みで、「埋め込み広告」という読み本身がトップ評価。"
+  },
+  "wsj.com": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The Wall Street Journal — first-rank outlet for AI-industry accountability reporting (the OpenAI safety-researcher firings broke here, 10-02/10-09, and was independently corroborated same-week by TechCrunch, CBS and AP). Paywalled; cite alongside an open mirror when the paywall blocks verification.",
+    "zh": "《华尔街日报》——AI 行业问责报道的第一梯队(OpenAI 安全研究员解雇事件 10-02/10-09 由其首发,同周被 TechCrunch、CBS 与 AP 独立佐证)。有付费墙;付费墙阻碍核验时请与公开转载并引。",
+    "jp": "The Wall Street Journal —— AI 業界のアカウンタビリティ報道の第一級(OpenAI 安全研究員解雇を 10-02/10-09 に初報、同週中に TechCrunch・CBS・AP が独立に裏取り)。有料壁あり。検証を妨げられた場合は公開版と併記して引用。"
+  },
+  "quake-srp.pages.dev": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Cloudflare Pages host for quake-srp's playable shareware episode — the demo endpoint of the safe-Rust Quake port. Cross-checked (10-09) against the GitHub README, whose claims (oracle diffing, AUDIT.md, agent-fleet process) live in the repo; the page itself is a player, not documentation.",
+    "zh": "quake-srp 可试玩共享版章节的 Cloudflare Pages 托管页——安全 Rust 版《雷神之锤》的演示入口。10-09 与 GitHub README 交叉核对(oracle 差分、AUDIT.md、智能体舰队流程都在仓库里);页面本身是播放器,不是文档。",
+    "jp": "quake-srp のプレイ可能なシェアウェアエピソードを載せる Cloudflare Pages ホスト —— safe Rust 版 Quake ポートのデモ入口。10-09 に GitHub README と突合済み(オラクル差分・AUDIT.md・エージェント艦隊の工程はリポジトリ側)。ページ自体はプレイヤーであってドキュメントではない。"
+  },
+  "newgtldprogram-aps.icann.org": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "ICANN's official New gTLD Application Publication System — canonical record for gTLD applications (applicant, string, status, processing stage). Cross-checked (10-09): the .lan application's applicant (Coffee Danger, LLC / Identity Digital) and status match the HN thread's claims; JS-rendered, so scrape with care.",
+    "zh": "ICANN 官方新 gTLD 申请公布系统——gTLD 申请的权威记录(申请人、字符串、状态、处理阶段)。10-09 交叉核对:.lan 申请的申请人(Coffee Danger, LLC / Identity Digital)与状态同 HN 讨论一致;页面由 JS 渲染,抓取需注意。",
+    "jp": "ICANN 公式の新 gTLD 申請公開システム —— gTLD 申請の一次記録(出願人・文字列・状態・処理段階)。10-09 に突合済み:.lan 申請の出願人(Coffee Danger, LLC / Identity Digital)と状態は HN スレッドの主張と一致。JS 描画のため取得は要注意。"
+  },
+  "opper.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Opper AI's product site, home of the Jevman Pac-Man leaderboard for decision models — a vendor-run benchmark (their platform hosts the harness), with full games watchable and the harness open-sourced; scores were corroborated (10-09) by the Show HN thread and community discussion, but the model roster is the vendor's choice.",
+    "zh": "Opper AI 的产品站,决策模型吃豆人排行榜 Jevman 的所在地——厂商运营的基准(harness 由其平台托管),完整对局可观看、harness 已开源;分数 10-09 经 Show HN 讨论与社区讨论佐证,但参赛模型名单由厂商决定。",
+    "jp": "Opper AI の製品サイト。決定モデルのパックマン・リーダーボード Jevman の場所 —— ベンダー運営のベンチマーク(ハーネスは同社プラットフォームでホスト)だが、ゲームは全て観戦可能でハーネスは公開済み。スコアは 10-09 に Show HN スレッドとコミュニティの議論で裏取り済み。ただし出場モデルの選定はベンダー側。"
   }
 }
