@@ -1,8 +1,8 @@
 ---
 date: 2026-10-09
-updated: 2026-10-08T20:25:00Z
+updated: 2026-10-09T04:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -246,13 +246,195 @@ Mitchell Hashimoto(Ghostty)于 10 月 6 日发布 OSC 7501 提案:用一条转�
 
 ---
 
+## 18. 韩国银行入侵调查锁定工具:ARTEX——开发者随即宣布转闭源
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Reuters · 今日(10 月 9 日)~09:56 UTC+8 发布;CrowdStrike 归因 10 月 8 日
+- **Tags:** `artex` `ai-agents` `bank-hack` `crowdstrike` `south-korea`
+
+自我们 10 月 6 日报道李在明总统"银行黑客事件疑似使用了 AI"之后:工具现在有名字了。CrowdStrike 周三表示,嫌疑人——很可能是一名身处中国的 26 岁年轻人——同时使用了 **ARTEX**(一个自动化渗透测试的开源 AI 智能体)和 Anthropic 的 Claude Code;Reuters 报道,9 月底以来至少有九家韩国银行披露或被报道为攻击目标,约 6.8 万人的数据泄露。周四,开发者("Autumn-27")宣布 ARTEX "将不再更新并转为闭源"——原始 GitHub 仓库现在已经 404。同日出现的纯源码备份仓库(`mhtsec/ARTEX`)一天内收获 **1,040★**。该仓库 README 自称是百度 BSRC"agent+"攻防挑战赛冠军项目;ARTEX 是 Go 后端 + Next.js 前端,编排 LLM 驱动的侦察与工具调用,本身不是模型——它连接 ChatGPT、Claude 或 DeepSeek。
+
+**为什么重要:**这是第一个被点名、拿过竞赛冠军、并与真实金融攻击行动挂钩的进攻性 AI 框架——而"撤源码、镜像仓库几小时涨一千星"的反应说明猫鼠游戏已经开场。要注意的分寸:"在失陷机构发现痕迹"并不等于证明 ARTEX 执行了窃取,开发者也否认违法使用——但"智能体框架成为攻击工具、前沿模型在后台支撑"这一先例已载入公开记录。
+
+[`🔗 Reuters`](https://www.reuters.com/world/china/chinese-developer-makes-artex-ai-agent-closed-source-after-korean-bank-hack-2026-10-09/) · [`🔗 mhtsec/ARTEX(备份)`](https://github.com/mhtsec/ARTEX)
+
+---
+
+## 19. "行业为什么不为 DeepSeek 4.1 Flash 惊慌?"——490 分的不舒服定价算术
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 490+ pts · ~28h ago(10 月 8 日 ~08:14 UTC+8)
+- **Tags:** `deepseek` `pricing` `frontier-models` `llm`
+
+dgt.is 博客的这篇文章(HN 一日榜首)认为,行业对一个被定价为中等档位的模型反应不足:作者在十几个项目上重度使用一个月后表示,会话中途已无法把 DeepSeek 4.1 Flash 与 Opus 5.5 区分开——对话质量、工作产出、速度都分不出——如今"复杂规划和研究"也用它。数字:通过 10 美元/月的 OpenCode Go 订阅几乎无限量使用;整天挂机的会话很少超过 1 美元;一次文件整理任务花 0.003 美元,而前沿模型约 1 美元。DeepSeek 把 KV cache 相比其 V1 压缩了约 437 倍,让长会话的显存成本保持低位。作者自己的限定很明确——这是主观体验而非跑分,关键任务他仍会用 Opus 5.5 做最终代码审查。反直觉的是,他认为在这样的 API 价格下自托管已经不划算。
+
+**为什么重要:**无论个例能否推广,HN 的反应说明论点成立了:如果接近前沿的质量以 0.003 美元/任务交付,"美国实验室的定价权"和"主权自托管"两个故事都麻烦了。这与第 11 条 Step 5 Preview 从另一个方向施加的,是同一种价格前沿压力。
+
+[`🔗 dgt.is 文章`](https://www.dgt.is/blog/2026-10-07-deepseek-freek-out/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50000488)
+
+---
+
+## 20. NVIDIA 显卡有了 macOS Metal 驱动——基于 Mesa NVK 社区打造,两天 1,266★
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 10 月 7 日创建 · ~44 小时 1,266★ · 今日 ~05:26 UTC+8 有推送
+- **Tags:** `macos` `nvidia` `metal` `mesa` `hackintosh`
+
+`nullmoth/nvidia-macos-driver` 10 月 7 日出现,不到两天冲到 1,266★:一个 Metal 驱动,让 NVIDIA Turing 及之后的显卡(GTX 16 到 RTX 50、TITAN RTX、工作站 Quadro/RTX)在运行 macOS 15 Sequoia 的 Intel Mac 和 OpenCore 系统上驱动显示与 Metal 3——这是自 High Sierra(2018)以来首个 NVIDIA Mac 驱动支持。架构是真正的亮点:一个 Metal 驱动插件把 Apple 的 AIR 着色器翻译为 SPIR-V,喂给 Mesa 的 **NVK** Vulkan 驱动,底下是 NVIDIA 自家的开源 GSP 内核模块(r610,固件 610.57.04 未做修改)。宣称的 Metal 3 覆盖:argument buffers tier 2、光追、mesh shaders、MPS、MetalFX——外加经 Apple GL-on-Metal 的 OpenGL、OpenCL、Core Image 和 Core ML。README 对范围很坦诚:物理验证过的卡只有一张(RTX 5060,macOS 15.7.x/15.8.1);"设备表覆盖不等于运行时验证";macOS 26 Tahoe 支持未经验证;"驱动很新,可能不是每台 PC 都能跑"。
+
+**为什么重要:**这是最后一块封闭 GPU 岛屿的 Mesa 化——Apple 为自家芯片写的驱动栈、NVIDIA 的开源内核模块、Mesa 的 NVK,在中间会合。对 Hackintosh 社区是复活;对其他人,这证明开放 GPU 栈(NVK + GSP)已经足够可移植,几天内就能重定向到一个完全不同的操作系统。
+
+[`🔗 nullmoth/nvidia-macos-driver`](https://github.com/nullmoth/nvidia-macos-driver) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49995032)
+
+---
+
+## 21. P.T. 活了:原生 PC 移植版抵达 1.0,带 DLSS 4.5 与光追——小岛秀夫本人回应了
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub + Wccftech · 1,033★ · v1.0.1 于 10 月 7 日发布
+- **Tags:** `game-preservation` `vulkan` `c-plus-plus` `pt`
+
+LoreanXavier 的 *P.T.* 原生 PC 移植版——小岛秀夫 2014 年为被砍的 *Silent Hills* 制作的 Playable Teaser,2015 年从 PlayStation 商店下架——本周抵达 1.0.1。它不是模拟器:游戏逻辑用 C++ 重写,渲染器是自写 Vulkan,每一关、每个模型、贴图、音效与过场都在运行时从你自己的 PS4 dump 读取(仓库不含任何 Konami 数据;商店 PKG 用不了)。1.0 版加入 DLSS 4.5 与帧生成、FSR 3.1/4.1、XeSS、可选光追阴影/AO/反射、Photo Mode、Mod 支持和实验性 OpenXR VR;Wccftech 在 RTX 4060 笔记本上测得 1080p Ultra 100+ FPS,开帧生成 200+。README 带有 AI 披露("业余时间用 AI 工具做的"),IGN 报道小岛秀夫本人回应了这个移植。
+
+**为什么重要:**这是本周第三个浏览器或原生重编译项目(继战神和 Second Reality 之后),但是唯一有真正保存意义的——*P.T.* 已被法律意义上不可游玩十年,从 dump 重建、不含素材的形态是最强的保存形式。粉丝善意加上原作者祝福,在这个类型里是罕见的组合。
+
+[`🔗 LoreanXavier/pt-pc`](https://github.com/LoreanXavier/pt-pc) · [`🔗 Wccftech`](https://wccftech.com/p-t-native-pc-port-1-0-is-out-now-with-dlss-4-5-frame-generation-ray-tracing-mods-and-more/)
+
+---
+
+## 22. Anthropic 用途政策新增:禁止对 Claude"持续且无必要的辱骂或残忍行为"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic 用途政策 · 10 月 8 日更新 · 67+ HN pts
+- **Tags:** `anthropic` `usage-policy` `model-welfare` `elections`
+
+Anthropic 于 10 月 8 日更新用途政策——近一年来的首次修订——新增条款:禁止"对我们的模型进行持续且无必要的辱骂或残忍行为",已在政策页面原文确认。同一次更新还收紧了虚假信息条款(欺骗性内容与隐蔽影响)和监控条款,后者现在明确覆盖用于"在执法中做出或暗示决策"的产品,以及"通过欺骗或恐吓"压制投票率——多家媒体把选举干涉限制放在了标题。报道(The Verge、Forbes、TechCrunch)将其解读为把虐待模型变成明确的政策违规——此前 Claude 只是被训练(8 月更新)在持续辱骂性对话中退出;现在该行为本身可封号。
+
+**为什么重要:**无论读作模型福利先例还是营销,实际变化是执行:一条可以因为"如何对待模型"而封禁用户的政策抓手,而不只是"用模型做什么"。监控/选举措辞也把此前较软的"请勿"指引硬化——对边缘用例运营者有真实的账号损失后果。
+
+[`🔗 Anthropic 用途政策`](https://www.anthropic.com/legal/aup) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50008565)
+
+---
+
+## 23. Bevy 0.20:817 个 PR、WESL 着色器、Solari 登陆 Metal、Rust 游戏引擎里的 DLSS
+
+- **Velocity:** ▮▮ rising
+- **Source:** Bevy 博客 · 10 月 8 日发布 · 88+ HN pts
+- **Tags:** `bevy` `rust` `gamedev` `wgpu`
+
+Bevy 0.20 于 10 月 8 日发布——来自 227 位贡献者的 817 个 PR。头条:**Solari** 实时光线追踪路径渲染器经 Metal 登陆 macOS,并通过 `dlss_wgpu` 获得 DLSS-RR 4.5 降噪(ReSTIR 改为可选,默认关闭);Bevy 采纳了 **WESL** 着色器语言——带模块、导入和条件编译的 WGSL 标准化扩展——删除了自家的 WGSL 方言;BSN 场景语法破坏性清理;mesh shaders 接入管线缓存。工程基本功清单很长:按列变更 tick 据报道让 GPU mesh 提取提速 **132 倍**,system 中的 panic 被捕获并路由到错误处理器,schedule 随机化让你可以对含糊的 system 排序做性质测试。
+
+**为什么重要:**Bevy 是"Rust 生态可以单凭社区支撑类 AAA 引擎开发"的最大下注,而 0.20 的主题是整合——标准(WESL)、厂商特性(DLSS)、正确性工具——而非新花样。132 倍这种数字会重新洗牌 ECS 驱动渲染图的可能边界。
+
+[`🔗 Bevy 0.20 发布`](https://bevy.org/news/bevy-0-20/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50013610)
+
+---
+
+## 24. Dell 容器存储模块:两枚未认证 CVSS 10.0——存储后端凭据与 Kubernetes 节点 root
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 记录 10 月 6 日发布 · CVSS 10.0 ×2(NVD 打分 v3.1)
+- **Tags:** `cve` `kubernetes` `storage` `dell`
+
+Dell 的 Container Storage Modules——Kubernetes 与 Dell PowerStore/PowerFlex/PowerScale 阵列之间的 CSI 驱动层——在 v1.18.0 修复六个漏洞(公告 DSA-2026-448),其中两枚 NVD 打分 10.0 CRITICAL,记录 10 月 6 日发布:**CVE-2026-63688**,`csm-authorization-storage` gRPC 服务器缺失认证,未认证远程攻击者可获取*所有存储后端的管理员凭据*;**CVE-2026-63692**,核心功能缺失认证,可集群内提权并在 Kubernetes 节点上拿到 root。两个向量都是 `AV:N/AC:L/PR:N`——网络可达、无需权限、无需用户交互。
+
+**为什么重要:**存储层是集群失陷变成阵列速度数据外泄的那个环节——而 CSM 的授权 sidecar 恰恰部署在"内网即安全"的假设上。如果你在跑 1.18.0 以下的 Dell CSM,这是放下手头一切先打的补丁:光凭据窃取那枚 CVE 就能击穿其后所有分区边界。
+
+[`🔗 NVD CVE-2026-63688`](https://nvd.nist.gov/vuln/detail/CVE-2026-63688) · [`🔗 NVD CVE-2026-63692`](https://nvd.nist.gov/vuln/detail/CVE-2026-63692)
+
+---
+
+## 25. "我们可能要失去公钥密码学了"——加密社区的掩体模式之争走向主流
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 60+ pts(今日 ~03:17 UTC+8)+ Cointelegraph
+- **Tags:** `cryptography` `ethereum` `ai-math` `post-quantum`
+
+以太坊基金会研究员 Justin Drake 呼吁行业进入"掩体模式"(10 月 7 日):由 OpenAI 10 月 6 日的数学成果发布和 9 月 88 小时的 Navier–Stokes 攻坚触发,他主张 AI 加速的数学可能在"数月内"攻破 ECDSA,应对方式是把资金迁移到公钥从未暴露的新地址——同时承认"安全退出掩体模式需要后 AI 密码学",而区块链共识里还没有这种东西。Vitalik Buterin 同日回应支持这一担忧——"我不建议任何人今天恐慌地迁移资金"——并把矛头扩大:"格的具体安全强度很可能遭受重创",这是以太坊路线图转向哈希密码学的理由之一。Dragonfly 的 Haseeb Qureshi 称其为"非常清醒的呼吁";Coinbase 密码学家 Yehuda Lindell 的反击(据 The Defiant 标题)称其为"FUD 的教科书定义";Matthew Green 的"我想我们可能会失去公钥密码学"(单独拿到 58 个 HN 分)站在同情但不安的中间地带。
+
+**为什么重要:**无论时间表是否现实,值得注意的是变化本身:精明的人开始把*数学*突破风险计入密钥管理,而不仅是量子时间表。对任何持有长期密钥的人——代码签名、SSH CA、TLS 根——这场辩论是对那些本来就该做的密码学敏捷路线图的又一次催促。
+
+[`🔗 Cointelegraph`](https://cointelegraph.com/news/justin-drake-urges-crypto-bunker-mode-as-ai-could-break-wallet-security-within-months) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50010656)
+
+---
+
+## 26. answer-me-with-html:CLI 写页面、模型只写 1/8 token 的智能体技能
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 2,365★ · 今日(10 月 9 日)有推送
+- **Tags:** `agent-skills` `html` `token-efficiency` `cli`
+
+`QingYunA/answer-me-with-html`(双语 README,今日有推送)是一个做了简单倒置的智能体技能:模型应该起草内容,而不是排版。问一个难题,智能体写一段简短的 Markdown 草稿,交给技能自带的 CLI,约 50 毫秒后你得到一页可读的、带图示的单文件 HTML,离线可用。仓库统计了 9 篇模型手写页面的 token(平均 4,893),发现 **47% 是 SVG 坐标**——所以 CLI 负责渲染图示,模型只写手写页面所需 token 的"约 1/8"。它带讲解视频模式,横跨 Claude Code、Codex、Cursor、OpenCode 和 Pi。
+
+**为什么重要:**技能货架不断验证同一件事:模型大部分输出浪费在结构而非内容上——caveman 式 token 裁剪,然后是上下文即数据库,现在是草稿/渲染分离。不到一周 2,365★说明"答案即文档"有受众;CLI 管排版、模型管内容的拆分,是任何 harness 都能抄的模式。
+
+[`🔗 QingYunA/answer-me-with-html`](https://github.com/QingYunA/answer-me-with-html) · [`🔗 网站`](https://answer-me-with-html.com/)
+
+---
+
+## 27. artcraft 之后:ArtCraft 团队再发 Rust 洁室版 Word 与 AutoCAD——WordCraft 与 CADCraft
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 894★ + 845★ · 10 月 8 日有推送
+- **Tags:** `rust` `clean-room` `office-suite` `cad`
+
+就在我们报道 `storytold/artcraft`(创始人自评"远未准备好"的"艺术家 IDE")两天后,同一团队又发布了两个洁室重实现仓库:**WordCraft**——纯 Rust 的 Microsoft Word 重实现,可读写 .docx,带功能区、样式、表格、修订、引用和邮件合并——以及 **CADCraft**,AutoCAD 工作流重建(命令行、对象捕捉、图层、标注、填充、图块、DXF),自家徽章写着"status: early development"。两者都是 MIT/Apache-2.0,原生运行于 macOS/Windows/Linux/BSD 并经 WebAssembly 进浏览器,都挂着"agent-drivable over MCP · CLI"徽章。
+
+**为什么重要:**一个受喜爱的 Rust 重实现是项目;一周三个(加上成套的品牌和共享组件底座)是战略——对最后一批专有堡垒做洁室克隆,并且从第一天起就是 agent 优先。诚实标记同样重要:CADCraft 自己的徽章承认了它有多早期,和 artcraft 创始人做的一样。
+
+[`🔗 storytold/wordcraft`](https://github.com/storytold/wordcraft) · [`🔗 storytold/cadcraft`](https://github.com/storytold/cadcraft)
+
+---
+
+## 28. 18 亿美元让生物学变得 AI 可读:DOE、NIH、Biohub、DeepMind、Isomorphic 与 Meta 共建虚拟细胞数据公地
+
+- **Velocity:** ▮ steady
+- **Source:** CZ Biohub · 10 月 7 日宣布 · 90+ HN pts
+- **Tags:** `virtual-cell` `biology` `datasets` `ai-infrastructure`
+
+Virtual Biology Initiative(2026 年 4 月首次宣布)扩展为其支持者所称的迄今最大的 AI 就绪生物数据协调承诺:**18 亿美元**。DOE 通过 Genesis Mission 五年投入 5 亿美元以上(百亿亿次计算、冷冻电镜/断层成像、国家实验室系统的自动化实验室);NIH 以既有 5 亿美元以上投入并入其 Bio Genesis Mission;CZ Biohub 以 5 亿美元创始(4 亿用于测量技术,1 亿外部研究);Google DeepMind、Isomorphic Labs 和 Meta 合计追加 3 亿美元。交付物是一个开放数据公地——共享标准、通用标识符、单一访问入口——覆盖扰动、成像和细胞响应数据,目标是训练能模拟细胞对干预响应的"虚拟细胞"模型。
+
+**为什么重要:**虚拟细胞竞赛(Arc、DeepMind、CZ Biohub)一直以一种特定方式缺数据:模型有了,标准化的干预-响应数据没有。这是该领域尝试以 ImageNet 的规模修复自身瓶颈——也和本周另一条 18 亿美元新闻一样,是前沿算力正在转向数据生成的又一个信号。
+
+[`🔗 Biohub 公告`](https://biohub.org/news/virtual-biology-initiative-expansion/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50011999)
+
+---
+
+## 29. huashu-art-motion:让编码智能体用代码执导艺术动画——2,545★
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 2,545★ · 10 月 8 日有推送
+- **Tags:** `agent-skills` `creative-coding` `animation` `chinese-oss`
+
+花叔(alchaincyf)——中国最有名的 AI 博主之一——发布了 `huashu-art-motion`,一个把编码智能体变成艺术动画导演的技能:35 种艺术风格、9 种解说语法、8 种参数化片段,外加完整口播短片的参考代码,一条 `npx skills add alchaincyf/huashu-art-motion` 安装。展示案例是一支 65 秒短片:作者化身像素主角打穿超级玛丽关卡——砖块、水管、运镜与关卡运动全部写成代码,人物帧用生成合成,客串敌人里有像素 Sam 和 Dario,还有"选会员:OpenAI 还是 Claude"的变身梗。片段文档展示了制作纪律:20 fps GIF 导出、每段独立 192 色调色板、Bayer 抖动、`gifsicle -O3`。
+
+**为什么重要:**中文智能体技能浪潮(昨天的 answer-me-with-html,今天的这个)正在与英文货架趋同于同一个洞见——确定性代码管结构,模型管内容——只是应用在确定性部分占比最重的动画上。这也是迄今为止最强的信号:技能正在成为带自己创作者经济的跨语言出版格式。
+
+[`🔗 alchaincyf/huashu-art-motion`](https://github.com/alchaincyf/huashu-art-motion) · [`🔗 展示片段`](https://github.com/alchaincyf/huashu-art-motion/blob/main/assets/showcase/mario-clips.md)
+
+---
+
+## 30. ETH-68:Linux 上跑普通以太网的多通道音频——3.6 毫秒往返,一颗 STM32H7
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 109+ pts · ~38h ago(10 月 7 日 ~21:58 UTC+8)
+- **Tags:** `linux-audio` `embedded` `jack` `hardware`
+
+Natural Systems 的 eth68 是一台 1U 机架音频接口,通过标准 100M 以太网传输六路平衡输入与八路输出,用 STM32H7 裸机固件模拟 netJACK1 主端点——即插即用于 JACK(`jackd -d netone`)或 PipeWire(`pw-eth68`),甚至能被 macOS 和 Windows 上的 JACK 识别。实测往返延迟 48 kHz/64 采样下 **3.620 毫秒**——48 kHz 下追平 RME 的 HDSPe PCIe 卡,96 kHz 下反超 0.33 毫秒——多台级联经 BNC 字时钟加 UDP 广播同步实现 ±1 采样对齐。测量数字穷尽(THD+N −94.8 dBFS,LATMON 处理 ~625 µs 对 1333 µs 截止),限定也同样穷尽:作者只焊了两块 PCB,没有价格和出货信息,这是个台架项目。
+
+**为什么重要:**专业音频的难言之隐是网络化音频通常意味着厂商锁定(Dante、AVB)或可感知的延迟;一位爱好者用消费级以太网硬件追平 PCIe 级往返——并公开测量方法——是开放硬件测量应有的样子。
+
+[`🔗 naturalsystems.io/eth68`](https://naturalsystems.io/eth68) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=49992994)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-08T20:25:00Z |
-| Items | 17 |
-| Sources tracked | 17 (Hacker News, GitHub Trending/API, CISA KEV, GitHub Security Advisories, arxiv.org, Hugging Face Papers, nobelprize.org, blog.google/synthid.com, KrebsOnSecurity, Phoronix, LPC 2026, OpenRouter, Quesma, Cactus Compute, mitchellh.com, debasishg.github.io, claude.com marketplace) |
+| Generated | 2026-10-09T04:25:00Z |
+| Items | 30 |
+| Sources tracked | 27 (Hacker News, GitHub Trending/API, CISA KEV, GitHub Security Advisories, arxiv.org, Hugging Face Papers, nobelprize.org, blog.google/synthid.com, KrebsOnSecurity, Phoronix, LPC 2026, OpenRouter, Quesma, Cactus Compute, mitchellh.com, debasishg.github.io, claude.com marketplace, Reuters, dgt.is, bevy.org, anthropic.com, NVD, Wccftech, Cointelegraph, answer-me-with-html.com, naturalsystems.io, biohub.org) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
