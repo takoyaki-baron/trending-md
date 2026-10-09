@@ -345,3 +345,9 @@ YAML + 同梱 OpenVINO Qwen3.5 `IntelligentRule` 分類器）、**NeuralTrust Tr
 - **dzhng/jevgrep**(`jg`、9/26 から ~440★/日、9/28 単日で 3 リリース。npm `@dzhng/jevgrep` v0.4.4 はレジストリで確認済み、Node 22+):コーディングエージェントがリポジトリについて質問し(「telemetry イベントはどう記録される?」)、関連ファイル・読むべき手がかり・逐語のソース抜粋を 1 回の stdout 応答で受け取る。フォルダ・ファイル・宣言の各レベルで関連性を判定する決定モデル。Vercel AI Gateway、TypeSafe、OpenRouter、OpenCode Zen のキーを受け付ける。**README 自身の限定：**約 30% のコスト削減という見出しは自己実施の 10 タスク SWE-bench 比較(「ベースラインと同じ 8/10 タスクを低コストで」)に依存——極小かつベンダー選択のサンプル。CLI を入れるだけではエージェントは使い方を学ばない(同梱スキルが必須)。Jev ツール wave(→ [[system1-decision]])が検索に到達：エージェントと grep の間の意味的事前検索レイヤー。
 
 Sources: [yetone/magpie](https://github.com/yetone/magpie) · [usemagpie.ai](https://usemagpie.ai) · [dzhng/jevgrep](https://github.com/dzhng/jevgrep) · [npm: @dzhng/jevgrep](https://www.npmjs.com/package/@dzhng/jevgrep)
+
+## 2026-10-10 04:03 —— トークンレベル・ルーティングがサービングシステムを得る
+
+**TokenRouter（arXiv 2610.12242、清華大学 NICS-EFC、NeurIPS 2026 採択；コードは thu-nics/TokenRouter で公開；HF Papers 100 upvote）：** *トークン*ごとのルーティング決定——最近のアルゴリズム研究がコスト品質で per-query ルーティングを上回ることを示す粒度——は、単一モデル前提で築かれたサービングスタックを壊し、「深刻なステップ非同期化と頻繁なバッチ投入遅延」を生む。設計原則は「request-centric programming, model-centric execution」：開発者は 1 リクエストの視点でルーティングロジックを書き、ランタイムはモデルごとに subserver を起動し、数学的スループットモデル由来のハイパーパラメータを持つ遅延バッチング・スケジューラで動く。ルーティングアルゴリズム×ワークロード×モデルペア全体での結果：既存システムより **2.01–64.15×** 高いデコード スループット。論文自身が定量化する要点：ボトルネックはルータではなくスケジューラ——そしてワークロード間の 2× 対 64× の開きこそアブストラクトの正直な部分；「ワークロードに強く依存」と読むべき。モデル動物園が専門家モデル・ドラフト・決定モデルへ断片化する中（→ [[system1-decision]]）、これが答える需要そのもの：トークンレベル・ルーティングは断片化を使い物にする道である。
+
+Sources: [arXiv 2610.12242](https://arxiv.org/abs/2610.12242) · [thu-nics/TokenRouter](https://github.com/thu-nics/TokenRouter)

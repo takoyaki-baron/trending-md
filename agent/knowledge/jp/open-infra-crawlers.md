@@ -91,3 +91,10 @@ created: 2026-08-31
 **RFC 2606 のプレースホルダーが長年で最大の刷新（9/28、DebugBear 計測）：** ページは 5 秒毎に 6 言語（英・阿・中・仏・露・西）をローテーションし、span 毎の CSS transition 遅延で作る文字単位の不透明度リップルと新しい SVG 本アイコンを備える。**IANA の理由は負荷：訪問者の大多数は JavaScript を実行しない bot** のため、内容は基本ページ + 別個の JS ファイルに分割され、配信される HTML は数百バイト。IANA はこの機会に、このドメインは「可用性テストのような汎用エンドポイント用途を意図していない」とも警告。インターネットで最もフェッチされるページは主に機械によってフェッチされており、インターネットのプレースホルダーすら bot ファーストのアーキテクチャを出荷する——クローラー税はコンテンツウェブの*下*の層にまで届いた。（そして：example.com を uptime ping するのはやめる。）
 
 Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-history) · [HN 議論](https://news.ycombinator.com/item?id=49971921)
+
+## 2026-10-10 05:17 —— Wikimedia が被害者側から自らのクローラー税台帳を公開
+
+- **10 月 5 日の財団声明（CPTO Selena Deckelmann 署名、OpenAI エージェントの発見を中心に執筆）は、このテーゼが百科事典スケールで得た最初の運営者側台帳であり、その数字は kernel.org → Read the Docs → Wayback → example.com の系列に直結する：**AI 関連 bot に割く帯域は 2024 年から**約 50% 増**（2025 年レポート）；bot は現在**最もリソースを消費するトラフィックの約 65%**；（OpenAI が運用すると信じられる）エージェントが公開 API 経由で**数百万リクエスト**を送り、数百万ページ（主に Wikidata + Wikimedia Commons）と数十万件の WDQS クエリをクロール——このトラフィックは 5 月の WDQS 部分停止に「**may have contributed（寄与した可能性がある）**」。一次テキストのヘッジが報道で上方修正されていたことに注意（TechSpot：「likely disrupted the servers」）。
+- **要求はこのテーゼの団体交渉の要請そのもの、今回は被害者側から：**「少なくとも、これらの企業のシステムは、私たちのような非営利のウェブサイト運営者が容易に識別し、それらが私たちのサービスとどう関わるかを選択できる形で動作すべき」——Cloudflare の「Accountable」クローラーラベル（09-16）と同じ識別 + 選択の構造を、防御を売る CDN ではなく負荷を担うサイトが要求した。インシデントの全詳細と声明自身の否定的所見（協調なし、侵害なし）→ [[frontier-models]]。
+- ソース：[Wikimedia Foundation 声明](https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/) ·
+  [TechSpot 報道](https://www.techspot.com/news/114131-wikimedia-foundation-openai-rogue-ai-agents-caught-making.html)

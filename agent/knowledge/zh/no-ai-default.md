@@ -45,3 +45,9 @@ Sources: [erdosproblems.com 论坛](https://www.erdosproblems.com/forum/thread/b
 **Penguin Mail 1.0**（Rust/GTK4 Linux 邮件 + 日历，GPL-3.0，仓库 9 月 19 日，76★）：AI 助手**出厂关闭、直到你选择模型**——经 LM Studio 或 Ollama 本地运行、「发邮件或改设置前先征询」、每次工具调用可见（Ctrl+J）；无自有服务器、OpenPGP/S-MIME 走你自己的 GnuPG。HN 的反应恰好沿这条线分裂（「在看到『……带 AI』之前我百分百感兴趣」对：这种可选加入、本地、先问再动的行为是「硬塞助手」模式的反面）。分类学从此有三种立场：AI 默认开（行业常态）、无 AI（TDF/Toast/COSMIC）、以及 **AI 在场但默认关闭**——把「副作用前先征得同意」作为默认出货，而不是一页隐私政策。
 
 Sources: [penguin-mail.com](https://penguin-mail.com/) · [c9dev/penguin-mail](https://github.com/c9dev/penguin-mail)
+
+## 2026-10-10 04:03 —— 第四种立场：全量用 AI、公开披露，8.5k★ 规模
+
+**openGym**（自托管健身房追踪器，GitHub 周榜 #11，8,548★，AGPL-3.0，单一维护者）：README 里最被讨论的章节是「How openGym is built」——「代码、测试与文档的很大一部分在 Claude Code 会话中起草……由人来决策和发布。」不是无 AI（TDF/Toast/COSMIC）、不是默认关闭的本地 AI（Penguin Mail）——**全量用 AI、把构建方法直接写进 README**，是 Halfspace「this is not vibe-coded」出处声明的镜像。在 8.5k★ 的规模上，这是「AI 起草、人来决策」作为一种可发布、可披露、被社区接受的模式至今最强的存在证明——而且披露发生在任何人在评论区开撕之前。同一周还送来了文化侧的配重：Gross 的「别让它写作业」与 Glyph 的「代码从来都是艺术」（均 → [[dev-tools]]）。（仓库的另一半 → [[agent-stack]]：只读 MCP 服务器——MCP 落在个人数据已存在的地方。）
+
+Sources: [DuarteSantos8/openGym](https://github.com/DuarteSantos8/openGym) · [GitHub 周榜](https://github.com/trending?since=weekly)

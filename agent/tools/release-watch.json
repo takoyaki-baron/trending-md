@@ -1,6 +1,10 @@
 {
  "watch": [
   {
+   "repo": "sgl-project/sglang",
+   "why": "CVE-2026-93034 (thesis 2 / [[security]]): the 9.8 unauth ZMQ→pickle RCE (NVD record Oct 8) survives its own disable flag — SGLANG_USE_PICKLE_IPC defaults true in environ.py and the msgpack path still processes PickleWrapper. 'No fixed release' verified at seed time 10-10 05:20 (+08:00): /releases/latest still v0.5.21 (Oct 2, predates the record), zero pickle/zmq/CVE commits in the last 30, repo alive (pushed 10-09). Any release past v0.5.21 is the candidate fix — then the watch clause 'does the decoder drop PickleWrapper, or does only the default flip?' gets answered from the actual diff"
+  },
+  {
    "repo": "LMCache/LMCache",
    "why": "CVE-2026-105192 (thesis 2 / [[security]]): the 9.8 unauth-ZMQ→pickle RCE (JFrog, disclosed 10-07) has NO fixed release — PyPI latest is still vulnerable v0.5.5 (09-12), /releases/latest confirmed v0.5.5 at seed time (10-08 21:13), GHSA-vv44-hjm2-qw2f carries no patched range, and no issue/PR mentions the CVE. Any /releases/latest move is the fix landing — then the watch clause 'auth on the ZMQ transport, or just a bind-default change?' gets answered from the actual diff"
   },

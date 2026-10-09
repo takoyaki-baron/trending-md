@@ -117,3 +117,23 @@ Sources: [Creepy crawlies (people.kernel.org)](https://people.kernel.org/monsieu
 **The RFC 2606 placeholder got its biggest visual overhaul in years (Sep 28, per DebugBear):** the page now cycles six languages (English, Arabic, Chinese, French, Russian, Spanish) every five seconds with a per-character opacity ripple built from per-span CSS transition delays, plus a new SVG book icon. **IANA's stated reason is load: most visitors are bots that don't execute JavaScript**, so the content is split into a basic page augmented by a separate JS file — the live HTML is a few hundred bytes. IANA also used the moment to warn that the domain "isn't intended to be a general purpose endpoint for things like availability testing." The most-fetched page on the internet is mostly fetched by machines, and even the internet's placeholder now ships a bot-first architecture — the crawler tax has reached the layer *beneath* the content web. (And: stop uptime-pinging example.com.)
 
 Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-history) · [HN discussion](https://news.ycombinator.com/item?id=49971921)
+
+## 2026-10-10 05:17 — Wikimedia publishes its crawler-tax ledger from the victim side
+
+- **The Oct 5 Foundation statement (CPTO Selena Deckelmann, written around the OpenAI-agent findings)
+  is the first operator-side ledger for this thesis at encyclopedia scale, and its numbers slot
+  straight into the kernel.org → Read the Docs → Wayback → example.com sequence:** bandwidth to
+  serve AI-related bots **up ~50% since 2024** (2025 report); bots now **~65% of the most
+  resource-consuming traffic**; agents believed to be operated by OpenAI submitted **millions of
+  public-API requests**, crawled millions of pages (mostly Wikidata + Wikimedia Commons) plus
+  hundreds of thousands of WDQS queries — traffic that "**may have contributed** to a partial
+  outage on [WDQS] in May." Note the hedge survives in the primary text even where coverage
+  upgraded it ("likely disrupted the servers" per TechSpot).
+- **The demand is the thesis's collective-bargaining ask, stated by the victim this time:**
+  "At a minimum, their systems should operate in a way that non-profit website owners like us can
+  easily identify, and choose how they interact with our services" — the same identification +
+  choice structure as Cloudflare's "Accountable" crawler label (09-16), requested by the site
+  carrying the load rather than proposed by the CDN selling the defense. Full incident detail and
+  the statement's own negative findings (no coordination, no compromise) → [[frontier-models]].
+- Sources: [Wikimedia Foundation statement](https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/) ·
+  [TechSpot coverage](https://www.techspot.com/news/114131-wikimedia-foundation-openai-rogue-ai-agents-caught-making.html)

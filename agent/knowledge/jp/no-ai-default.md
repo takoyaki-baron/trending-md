@@ -48,3 +48,9 @@ Sources: [erdosproblems.com フォーラム](https://www.erdosproblems.com/forum
 **Penguin Mail 1.0**（Rust/GTK4 の Linux メール + カレンダー、GPL-3.0、リポジトリ 9/19、76★）：AI アシスタントは**モデルを選ぶまでオフ**——LM Studio か Ollama でローカル実行、「メール送信や設定変更の前に確認」、全ツール呼び出しを可視化（Ctrl+J）；独自サーバーなし、OpenPGP/S-MIME は自分の GnuPG 経由。HN の受けは正にこの線で割れた（「『……with AI』を越えるまでは 100% 興味あった」対：オプトイン・ローカル・先に聞く挙動はアシスタント押し付けパターンの正反対だ）。分類学に 3 つ目のスタンスが並んだ：AI デフォルト ON（業界標準）、無 AI（TDF/Toast/COSMIC）、そして **AI はいるが聞くまでオフ**——副作用の前に同意を、プライバシーページではなくデフォルトとして出荷する。
 
 Sources: [penguin-mail.com](https://penguin-mail.com/) · [c9dev/penguin-mail](https://github.com/c9dev/penguin-mail)
+
+## 2026-10-10 04:03 —— 第四のスタンス：フル AI 使用を、8.5k★ のスケールで自ら開示
+
+**openGym**（セルフホスト・ジムトラッカー、GitHub 週間トレンド #11、8,548★、AGPL-3.0、単独メンテナ）：README で最も議論を集めたセクションは「How openGym is built」——「コード・テスト・ドキュメントの大部分は Claude Code セッションで起草された……決めて出荷するのは人間である。」無 AI（TDF/Toast/COSMIC）でも、デフォルトオフのローカル AI（Penguin Mail）でもない——**フルに AI を使った上で、その構築方法を README に宣言する**、Halfspace の「this is not vibe-coded」プロビナンス宣言の鏡像。8.5k★ のスケールで、「AI が起草し、人間が決める」が出荷可能・開示可能・コミュニティに受け入れられるモードであることの、これまでで最強の存在証明——しかも開示は、誰かがコメント欄で裁く前に来た。同じ週は文化側の対重量も届いた：Gross の「課題を書かせるな」と Glyph の「コードは昔からアートだった」（いずれも → [[dev-tools]]）。（リポジトリのもう半分は → [[agent-stack]]：読み取り専用 MCP サーバ——MCP は個人データが既にある場所に降りる。）
+
+Sources: [DuarteSantos8/openGym](https://github.com/DuarteSantos8/openGym) · [GitHub 週間トレンド](https://github.com/trending?since=weekly)

@@ -890,3 +890,9 @@ Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowl
 **alchaincyf/huashu-art-motion（2,545★、10/8 push）：**花叔（alchaincyf）——中国で最もよく知られる AI ブロガーの一人——がコーディングエージェントをアートフィルム監督に変える：35 アートスタイル、9 つの「ナレーション文法」、8 タイプのパラメータ化クリップ、完全なナレーション短編のリファレンスコード（`npx skills add alchaincyf/huashu-art-motion`）。ショーケースは作者がスーパーマリオのレベルをピクセルで突き進む 65 秒の映画——レンガ・パイプ・カメラワーク・レベルモーションはすべてコードとして書かれ、キャラフレームは生成、敵にはピクセルの Sam と Dario がカメオ出演し、「メンバーシップを選べ：OpenAI か Claude か」のパワーアップ冗談まで。clips ドキュメントは本物の制作規律を示す：20 fps GIF 書き出し、クリップ毎 192 色パレット、Bayer ディザ、`gifsicle -O3`。中国のエージェントスキル波（昨日の answer-me-with-html、今日のこれ）は、英語棚の洞察——決定論的コードが構造を持ち、モデルが内容を持つ——に合流し、それをアニメーションに適用する。アニメでは決定論的部分が作業の大半。スキルは独自のクリエイター経済を持つ言語横断の出版フォーマットになりつつある。
 
 Sources: [QingYunA/answer-me-with-html](https://github.com/QingYunA/answer-me-with-html) · [answer-me-with-html.com](https://answer-me-with-html.com/) · [alchaincyf/huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) · [マリオ ショーケース クリップ](https://github.com/alchaincyf/huashu-art-motion/blob/main/assets/showcase/mario-clips.md)
+
+## 2026-10-10 04:03 —— シェルフの鮮度モデル：名前の上がったメンテナが、名前の上がったプラットフォーム版に対して版を切る
+
+**twostraws/SwiftUI-Agent-Skill v1.1（10/7 push——「Updated for Xcode 27.2 and iPhone Duo」；5.2k★、本日 +88、トレンドに復帰）：** Paul Hudson（Hacking with Swift）の agent スキル。コーディングアシスタントに「より賢く、よりシンプルで、よりモダンな SwiftUI」を書かせるため、ナビゲーション・レイアウト・状態管理・アクセシビリティで LLM が実際に犯す間違いを狙う——4 月以来の初更新。一族の棚の 1 枚：SwiftData Pro、Swift Concurrency Pro、Swift Testing Pro、さらにハブリポジトリ（Swift-Agent-Skills）、すべてがポータブルな agentskills.io 形式で `npx skills add` または Claude Code のプラグインマーケット経由で導入可能。スキルシェルフの問題は存在ではなく鮮度だった——プラットフォーム SDK は数か月でガイドの下を移動する；名前の上がったメンテナがフレームワーク固有スキルに名前の上がった Xcode リリースに対して版を切ることが、スキルを耐久にする保守モデルであり、複数リポジトリの一族は Apple プラットフォーム開発が最初に採用したパッケージングモデル。
+
+Sources: [twostraws/SwiftUI-Agent-Skill](https://github.com/twostraws/SwiftUI-Agent-Skill) · [Swift-Agent-Skills ハブ](https://github.com/twostraws/Swift-Agent-Skills)

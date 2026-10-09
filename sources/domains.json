@@ -1327,6 +1327,15 @@
     "jp": "Glazer Technologies（OSINT/データインテリジェンス企業）のエンジニアリングブログ。深く再現可能な一次フォレンジック（Cronos レジストリの KOD 復元：頻度スコアリング+ハンガリアン法）。土台となる OCCRP cronodump コードベースが裏付け。alephdata/cronodump と相互検証済み。",
     "zh": "Glazer Technologies（OSINT/数据情报公司）的工程博客——深入且可复现的一手取证（Cronos 注册表 KOD 恢复：频率评分+匈牙利算法）；其所扩展的 OCCRP cronodump 代码库可作旁证。与 alephdata/cronodump 交叉验证。"
   },
+  "blog.glyph.im": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Glyph Lefkowitz's personal blog — long-form essays from the Twisted/Promises lineage. Cross-checked (10-10): the Deferred attribution and the Berger framing hold against the HN discussion; it's argument, not reporting — cite as perspective.",
+    "jp": "Glyph Lefkowitz の個人ブログ——Twisted/Promises の系譜からの長文エッセイ。突合済み（10-10）：Deferred の帰属と Berger の枠組みは HN 議論に対して成立。論証であって報道ではない——視点として引用。",
+    "zh": "Glyph Lefkowitz 的个人博客——Twisted/Promises 血统的长文。交叉核验（10-10）：Deferred 归属与 Berger 框架经 HN 讨论无误；这是论辩不是报道——按观点引用。"
+  },
   "blog.google": {
     "cat": "vendor",
     "cred": "high",
@@ -1515,6 +1524,15 @@
     "en": "Cisco Talos threat intelligence blog. Cross-checked: the CLOSEDQUORUM AI-delegated-C2 report (09-22) matched THN's independent writeup including the inert-build caveat, and Talos rule/hash indicators (Snort 1:66984) were published alongside; long-established vendor research shop.",
     "jp": "Cisco Talosの脅威インテリジェンスブログ。突合済み：CLOSEDQUORUM（AI委譲C2）レポート（09-22）は不活性ビルドの注意書きを含めTHNの独立記事と一致し、Snort 1:66984やハッシュ指標も同時公開。老舗ベンダー調査組織。",
     "zh": "Cisco Talos 威胁情报博客。已交叉核验：CLOSEDQUORUM AI 委托 C2 报告（09-22）与 THN 的独立报道一致（包括未激活构建的注意事项），Snort 规则 1:66984 与哈希指标同步发布；老牌厂商研究机构。"
+  },
+  "blog.torproject.org": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "The Tor Project's official blog — first-hand for project governance statements (the Mullvad trust ledger). Cross-checked (10-10) against the HN discussion; the statement is the primary for what changed and what it concedes.",
+    "jp": "Tor Project 公式ブログ——プロジェクトガバナンス声明の一次情報（Mullvad 信頼台帳）。HN 議論と突合済み（10-10）；何が変わり何を認めたかの正典ソース。",
+    "zh": "Tor Project 官方博客——项目治理声明的一手来源（Mullvad 信任账本）。经 HN 讨论交叉核验（10-10）；该声明是「改了什么、承认了什么」的正典来源。"
   },
   "blog.trailofbits.com": {
     "cat": "security",
@@ -1793,6 +1811,15 @@
     "en": "Capital B News — nonprofit newsroom covering environmental/policy beats; its EPA data-center permitting story cites the Federal Register rule directly. Cross-checked (09-12): proposal details match EPA's own data-center Clean Air Act page.",
     "jp": "Capital B News——環境・政策を扱う非営利ニュースルーム。EPAデータセンター許可の記事は連邦官報の規則を直接引用。クロスチェック済み（09-12）：提案の詳細はEPA公式のデータセンター清浄空気法ページと一致。",
     "zh": "Capital B News——报道环境与政策议题的非营利新闻编辑室；其 EPA 数据中心许可报道直接引用联邦公报规则。已交叉核验（09-12）：拟议规则细节与 EPA 官方数据中心清洁空气法页面一致。"
+  },
+  "carrierexplode.com": {
+    "cat": "data",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Carrier-Explode — a decoded, diffable, CC0 dataset of carrier-settings blobs across iPhone/Pixel/Galaxy firmware. Cross-checked (10-10) against its own repo (AlecDusheck/carrier-explode): decoders are self-declared incomplete and the project is days old — unique data, immature provenance; verify any single carrier record against a device before relying on it.",
+    "jp": "Carrier-Explode——iPhone/Pixel/Galaxy ファームウェアのキャリア設定 blob をデコードした diff 可能な CC0 データセット。自家のリポジトリ（AlecDusheck/carrier-explode）と突合済み（10-10）：デコーダは不完全と自己宣言、プロジェクトは数日齢——データは独自、来歴は未成熟。個々のキャリア記録に依存する前に実機で検証を。",
+    "zh": "Carrier-Explode——把 iPhone/Pixel/Galaxy 固件中运营商设置 blob 解码为可 diff 的 CC0 数据集。经其自家仓库（AlecDusheck/carrier-explode）交叉核验（10-10）：解码器自述不完整、项目数天大——数据独特、出处尚不成熟；依赖任何单条运营商记录前先对照真机验证。"
   },
   "cathrynlavery.github.io": {
     "cat": "code",
@@ -2153,6 +2180,15 @@
     "en": "Eric Gullichsen's personal site hosting the Nvidia options narrative plus the primary documents as footnote PDFs (invitation.pdf, grant.pdf, exercise.pdf). Read first-hand: the main text confirms the grant's quarterly-over-one-year language, the 1996 CFO letter forcing exercise of 15,625 of 25,000 options, the 4.5M split-adjusted missing shares and the ~$1B claim; the $0.05 strike and 90-day expiry live in the footnote PDFs (surfaced via the HN thread — 15,625 x $0.05 = $781.25 sent, per exercise.pdf). One correction to our own item: he was on the 1993 Technical Advisory Board, an advisor, not an \"early employee.\" Cross-validated vs the HN thread.",
     "jp": "Eric Gullichsen の個人サイト。Nvidia のオプション騒動の本文に、一次資料を脚注 PDF（invitation.pdf、grant.pdf、exercise.pdf）で添付している。一次読解の結果：本編は付与の四半期・1年縛りの文言、1996 年 CFO 函による 25,000 株中 15,625 株の行使強制、分割調整後 450 万株の喪失と約10億ドルの主張を確認。行使価格 $0.05 と 90 日期限は脚注 PDF 側（HN スレッド経由で判明——exercise.pdf では 15,625 x $0.05 = $781.25 送金）。自分の記事の修正点：彼は 1993 年の Technical Advisory Board のメンバーで、\"初期従業員\"ではなくアドバイザー。HN スレッドと相互検証済み。",
     "zh": "Eric Gullichsen 的个人站，托管 Nvidia 期权往事正文并以脚注 PDF 附上原始文件（invitation.pdf、grant.pdf、exercise.pdf）。已一手阅读：正文确认授予协议\"按季度分期、授予一年内全部归属\"的措辞、1996 年 CFO 信函强制行权 25,000 份中的 15,625 份、拆股调整后 450 万股的损失与约 10 亿美元的说法；$0.05 行权价与 90 天期限在脚注 PDF 中（经 HN 讨论串揭示——exercise.pdf 显示行权汇款 15,625 × $0.05 = $781.25）。对我们自己条目的一处更正：他 1993 年进入的是技术顾问委员会（Technical Advisory Board），是顾问而非\"早期员工\"。与 HN 讨论串交叉验证。"
+  },
+  "commandline.microsoft.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Microsoft's Command Line product blog — first-hand for model announcements, but every benchmark number is vendor-run (Decision-1's 36-benchmark accuracy/speed claims). Existence and pricing cross-checked (10-10) via the HN thread; treat accuracy claims as marketing until independently reproduced.",
+    "jp": "Microsoft の Command Line 製品ブログ——モデル発表の一次情報だが、ベンチ数値はすべてベンダー自走（Decision-1 の 36 ベンチ精度/速度主張）。存在と価格は HN スレッドで突合済み（10-10）；独立再現まで精度主張はマーケとして扱う。",
+    "zh": "微软 Command Line 产品博客——模型公告的一手来源，但每个基准数字都是厂商自跑（Decision-1 的 36 基准精度/速度主张）。存在性与定价经 HN 讨论交叉核验（10-10）；独立复现之前，精度主张按营销处理。"
   },
   "community.nasscom.in": {
     "cat": "community",
@@ -2702,6 +2738,15 @@
     "en": "Delinea's security advisories — the CNA's own record for the Secret Server CVE-2026-15640 cluster, so the 9.5 score is vendor-assigned; treat severity with scorer provenance attached. Cross-validated against Rapid7's independent CVE entry, which also confirms it is not on CISA KEV and no confirmed exploitation.",
     "jp": "Delinea のセキュリティアドバイザリ — Secret Server CVE-2026-15640 群の CNA 自身の記録であり、9.5 スコアはベンダー自己評価。引用時は採点者の出所を添えること。Rapid7 の独立 CVE エントリと突合済み — CISA KEV 未掲載・確認された悪用なしも確認。",
     "zh": "Delinea 安全公告——Secret Server CVE-2026-15640 漏洞簇的 CNA 自身记录，因此 9.5 分为厂商自评；引用时必须附带评分者来源。已与 Rapid7 的独立 CVE 条目交叉核验，后者还确认其未列入 CISA KEV、无已确认的利用。"
+  },
+  "deno.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Deno Land's own blog — first-hand for runtime/JSR announcements. The Oct 9 acquisition post (Dahl) is the primary for the Cloudflare deal; every clause cross-checked against the joint Cloudflare post (blog.cloudflare.com) in the same item.",
+    "jp": "Deno Land 公式ブログ——ランタイム/JSR 発表の一次情報。10/9 の買収記事（Dahl）は Cloudflare 取引の正典ソース。同一項目内で Cloudflare 共同記事（blog.cloudflare.com）と突合済み。",
+    "zh": "Deno Land 官方博客——运行时/JSR 发布的一手来源。10 月 9 日的收购公告（Dahl）是 Cloudflare 交易的正典来源；同一条目内逐条对照 Cloudflare 联合文章（blog.cloudflare.com）交叉核验。"
   },
   "depesz.com": {
     "cat": "community",
@@ -4464,6 +4509,15 @@
     "jp": "HeroDevs —— 商用 EOL サポートベンダー；EOL ソフトの CVE ラウンドアップは有用な集約だが、自らが語る問題を商売にしている。",
     "zh": "HeroDevs——商业化 EOL 支持厂商；其 EOL 软件 CVE 综述是有用的聚合，但它贩卖的正是它所描述的问题。"
   },
+  "hetzner.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Hetzner's engineering blog — operator-first-hand infrastructure write-ups with published numbers (Flusskrebs over OVN, the 80k conntrack cap). Cross-checked (10-10) via the HN thread where Hetzner engineers fill in detail; claims are the operator's own, but capacity numbers this specific are rarely published at all.",
+    "jp": "Hetzner のエンジニアリングブログ——公開数字付きの運用者一次インフラ解説（OVN でなく Flusskrebs、8 万 conntrack 上限）。HN スレッドで突合済み（10-10、Hetzner エンジニアが詳細を補足）。主張は運用者自身のものだが、ここまで具体的なキャパシティ数字の公開自体が稀。",
+    "zh": "Hetzner 工程博客——运营者一手的基础设施长文，带公开数字（Flusskrebs 而非 OVN、8 万 conntrack 上限）。经 HN 讨论交叉核验（10-10，Hetzner 工程师在帖内补充细节）；主张是运营者自己的，但这类具体容量数字被公开本身就很罕见。"
+  },
   "hex.pm": {
     "cat": "data",
     "cred": "high",
@@ -4705,6 +4759,15 @@
     "en": "patrickxia's engineering blog; first-person essays that state their own predictive track record and counterarguments. Cross-checked (09-28): the 'normalization of inexplicable failures' essay matches its HN discussion, including the author's self-hedges.",
     "jp": "patrickxia のエンジニアリングブログ。自身の予測実績や反論まで書き明かす一人称のエッセイ。突合済み（09-28）：「説明のつかない失敗の正常化」は HN 議論と一致。作者自身の留保も含む。",
     "zh": "patrickxia 的工程博客；第一人称长文，会写明自己的预测记录与反面论点。已交叉核验（09-28）：\"无法解释的失败正在被正常化\"与其 HN 讨论串一致，包括作者的自我限定。"
+  },
+  "iminafleeting.com": {
+    "cat": "other",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Fleeting — synthetic meeting audio as workplace self-defence. Self-described product facts (12-minute recordings, in-browser invites); cross-checked (10-10) against the HN discussion where the creator answers design questions directly. A demo site, not a source for anything beyond itself.",
+    "jp": "Fleeting——職場の自己防衛としての合成会議オーディオ。製品事実はすべて自己記述（12 分の録音、ブラウザ内生成の招待）；HN スレッドで突合済み（10-10、作者が設計質問に直接回答）。デモサイトであり、自分自身を超える事実のソースではない。",
+    "zh": "Fleeting——作为职场自卫的合成会议音频。产品事实均为自述（12 分钟录音、浏览器内生成的邀请）；经 HN 讨论交叉核验（10-10，创作者在帖内直接回答设计问题）。演示站，除自身之外不作为任何事实的来源。"
   },
   "impeccable.style": {
     "cat": "vendor",
@@ -6037,6 +6100,15 @@
     "en": "Xiaomi's MiMo model site — primary source for MiMo releases and the live mimo-v2.6 RL training dashboard. Cross-checked (09-17): dashboard title and self-description (\"training metrics of the mimo-v2.6-pro and mimo-v2.6-flash reinforcement-learning runs, live from the trainer's logs\") confirmed; it is a websocket app, so displayed metrics are vendor telemetry only.",
     "jp": "XiaomiのMiMoモデルサイト——MiMoリリースとライブのmimo-v2.6 RL学習ダッシュボードの一次情報源。クロスチェック済み（09-17）：ダッシュボードのタイトルと自己説明（「mimo-v2.6-proとmimo-v2.6-flashのRLランの学習メトリクス、トレーナーのログからライブ」）を確認。WebSocketアプリのため表示メトリクスはベンダーテレメトリに限る。",
     "zh": "小米 MiMo 模型官网——MiMo 发布与 mimo-v2.6 RL 实时训练面板的第一手来源。已交叉核验（09-17）：面板标题与自述（\"mimo-v2.6-pro 与 mimo-v2.6-flash 强化学习运行的训练指标，来自训练器日志的实时数据\"）已确认；其为 websocket 应用，展示指标仅属厂商自报遥测。"
+  },
+  "minesweeper.mikelacher.com": {
+    "cat": "other",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Triple-A Minesweeper — a satirical web toy applying AAA tropes to the 1989 grid. No backend, no claims to verify beyond its own existence; cross-checked (10-10) via the HN discussion. Culture item, cited as the artifact itself.",
+    "jp": "Triple-A Minesweeper——1989 年のグリッドに 3A の型を載せる風刺 Web おもちゃ。バックエンドなし、自身の存在以外に検証すべき主張なし；HN スレッドで突合済み（10-10）。文化項目として、アーティファクトそのものとして引用。",
+    "zh": "Triple-A Minesweeper——把 3A 套路搬到 1989 年网格上的讽刺网页玩具。无后端、除自身存在外无可验证主张；经 HN 讨论交叉核验（10-10）。文化条目，作为工件本身引用。"
   },
   "minimallysufficient.com": {
     "cat": "research",
@@ -7517,6 +7589,15 @@
     "en": "Official PyPy project blog — canonical primary source; the triple release (PyPy2.7/3.11/3.12-beta on CPython 3.12.14 stdlib), Py_LIMITED_API=0x030C0000 header compatibility, non-mangled symbols, manylinux_2_28 buildbots, computed gotos with the 'have not been that impressive' speedup caveat, and the HPy drop were all verified verbatim 09-21; HN thread (54 pts) confirms the release announcement.",
     "jp": "PyPy プロジェクトの公式ブログ — 一次ソース。PyPy2.7/3.11/3.12（ベータ、CPython 3.12.14 stdlib）のトリプルリリース、Py_LIMITED_API=0x030C0000 でのヘッダー互換、非マングル化シンボル、manylinux_2_28 ビルドボット、computed gotos と「have not been that impressive」という高速化への留保、HPy 廃止を 09-21 に逐語確認。HN スレッド（54 pts）がリリース発表を裏付ける。",
     "zh": "PyPy 项目官方博客——权威一手来源。三重发布（PyPy2.7/3.11/3.12 beta，基于 CPython 3.12.14 标准库）、Py_LIMITED_API=0x030C0000 头部兼容、非名称修饰的导出符号、manylinux_2_28 构建机、computed gotos 及 'speedups have not been that impressive' 的自留保、HPy 后端移除，均已于 09-21 逐字核实；HN 讨论帖（54 分）确认了该发布公告。"
+  },
+  "python.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The Python Software Foundation's release pages — canonical for version facts (release date, PEP lists, platform notes). 3.15.0 details cross-checked (10-10) against the HN discussion and our own 10-07 JIT benchmark coverage; the baseline distinction (7-12% is vs the tail-calling interpreter, not the standard one) is stated on the release page itself.",
+    "jp": "Python Software Foundation のリリースページ——バージョン事実（公開日、PEP 一覧、プラットフォーム注記）の正典。3.15.0 の詳細は HN 議論と自前の 10-07 JIT ベンチ報道と突合済み（10-10）。基線の区別（7-12% は tail-calling インタプリタ比）はリリースページ自体が明記。",
+    "zh": "Python 软件基金会的发布页——版本事实（发布日期、PEP 清单、平台说明）的正典来源。3.15.0 细节经 HN 讨论与我们自己的 10-07 JIT 基准报道交叉核验（10-10）；基线区分（7–12% 是对尾调用解释器、非标准解释器）发布页上写明。"
   },
   "qbitai.com": {
     "cat": "news",

@@ -206,3 +206,11 @@ Sources: [maximumeffort.substack.com](https://maximumeffort.substack.com/p/jev-i
 クラスの収束パターンが読める：全員が同じベンチファミリーに自己報告し（JevBench / Decision Index）、精度はコモディティ化し、差別化の主張はレイテンシ/価格/較正/配置階層へ——そして**依然として同一ハーネスでのクロス実行はゼロ**（09-29 の Jeeves ウォッチは有効のまま）。
 
 Sources: [Decisions API ガイド](https://developers.openai.com/api/docs/guides/decisions) · [HN](https://news.ycombinator.com/item?id=49984025) · [Strands：Introducing Decider](https://strandsagents.com/blog/introducing-strands-decider/) · [HN](https://news.ycombinator.com/item?id=49987076) · [Liquid AI——d1 公開](https://www.liquid.ai/blog/d1-open) · [LiquidAI/d1-3B](https://huggingface.co/LiquidAI/d1-3B)
+
+## 2026-10-10 04:03 —— ティアにクローズドなハイパースケーラー参入者と、ベンダー非管理の初ゲームベンチマークが並ぶ
+
+**Microsoft-Decision-1（Microsoft Command Line ブログ、10/9；HN 28 pts）：** テキストを生成しないために作られたモデル——構造化 API 呼び出しで、固定選択肢（はい/いいえ、多肢選択、評価、ルーブリック採点）に対する校正済み確率スコアを出力する。ルーティング、分類、検証、agent 制御向け。事後学習の基盤は **Qwen3.5-9B**（そう、Microsoft が Alibaba のオープンモデルの上に構築；MAI と OpenAI モデルへのリベースを予告）、評価ベンチマークは訓練からブラインド。自己申告値：36 ベンチマーク（約 15 万問）で最高精度、名指しした準優勝（Quyet-1.0-Large）の 4.5× 速い、P50 で GPT-6 Sol の 35× 速い、摂動への決定フリップ 1.3%；内部実績（Xbox Research：10,000+ フィードバック項目を GPT-6 Sol の 14× の速度・200 分の 1 のコストで）。価格：**入力 $0.042/百万トークン、出力無料**；Microsoft Foundry で現在利用可、OpenRouter は「近日」；オープンウェイトなし。先週 AWS がオープンウェイト 2B で種を撒いた決定モデルティアに、クローズドで API 専用のハイパースケーラー参入者が現れた——同じテーゼ（agent トークンの大半は、小型専門モデルが数分の一のコストで下せる判断に使われる）への正反対の GTM。精度の数字はすべてベンダー自身のもの；検証可能な主張は精度ではなく価格のほう。そして基盤に注目：クローズドラボの製品が中国のオープンウェイトモデルで事後学習されている——オープンウェイト最前線が既定の基材になった（→ [[frontier-models]]）。
+
+**Jevman（Opper AI、Show HN 65 pts）：** 6 つの決定モデルがクラシックなアーケードの幽霊相手にリアルタイム・パックマンを 100 試合ずつ対戦——スコアとレイテンシの公開リーダーボード、観戦可能な試合、誰もが自モデルを接続できるオープンソースハーネス（Cloudflare Clef も参戦：2,476 点、最高 4,820、決定約 398 ms）。これまで静的な多肢選択セットで測られてきたカテゴリの、初のゲームループ・ベンチマーク——ためらうことが失敗になるリアルタイム制約下の順序選択。ベンダーが管理していないベンチマークで、完全な試合が公開される——この若いカテゴリにとってまさに正しい形。
+
+Sources: [Microsoft-Decision-1 発表](https://commandline.microsoft.com/microsoft-decision-1-model-foundry/) · [HN——Decision-1](https://news.ycombinator.com/item?id=50024913) · [Jevman ベンチマーク](https://opper.ai/jevman-benchmark/) · [HN——Jevman](https://news.ycombinator.com/item?id=50007993)

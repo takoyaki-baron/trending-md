@@ -289,3 +289,9 @@ vs BitRouter 策略 spec vs PolicyAware YAML vs `routing.yaml`），互不互通
 - **dzhng/jevgrep**(`jg`,9 月 26 日起 ~440★/天,仅 9 月 28 日就发了三个版本;npm `@dzhng/jevgrep` v0.4.4 已在注册表确认,需 Node 22+):编码 agent 提出一个仓库问题("telemetry 事件是怎么记录的?"),一次 stdout 响应返回相关文件、阅读线索和逐字源码摘录——由一个决策模型在文件夹、文件、声明层级判断相关性;支持 Vercel AI Gateway、TypeSafe、OpenRouter、OpenCode Zen 的 key。**README 自带的限定:**~30% 降本标题基于自跑的十任务 SWE-bench 对比("与基线相同的 8/10 任务,成本更低")——样本极小且厂商自选;只装 CLI 不会教会 agent 用它(需配套 skill)。Jev 工具潮(→ [[system1-decision]])到达检索层:agent 与 grep 之间的语义预搜索层。
 
 Sources: [yetone/magpie](https://github.com/yetone/magpie) · [usemagpie.ai](https://usemagpie.ai) · [dzhng/jevgrep](https://github.com/dzhng/jevgrep) · [npm: @dzhng/jevgrep](https://www.npmjs.com/package/@dzhng/jevgrep)
+
+## 2026-10-10 04:03 —— token 级路由拿到它的服务系统
+
+**TokenRouter（arXiv 2610.12242，清华大学 NICS-EFC，已被 NeurIPS 2026 接收；代码开源于 thu-nics/TokenRouter；HF Papers 100 赞）：** 按 *token* 粒度做路由决策——近期算法工作证明这一粒度在成本-质量上胜过按查询路由——但会打破建立在单模型假设上的服务栈，产生「严重的步进失同步与频繁的批准入延迟」。设计原则是「以请求为中心编程、以模型为中心执行」：开发者从单个请求的视角写路由逻辑，运行时为每个模型生成一个 subserver，配以延迟批处理调度器，其超参数来自一个数学吞吐模型。跨路由算法、负载与模型对的结果：解码吞吐较现有系统提高 **2.01–64.15×**。论文自己量化的要点：瓶颈在调度器而非路由器——而 2× 对 64× 的跨负载差距是摘要里诚实的部分；把它读作「高度依赖负载」。模型动物园正在碎片化为专家模型、草稿模型与决策模型（→ [[system1-decision]]），这正是它回答的需求：token 级路由是碎片化变得可用的方式。
+
+Sources: [arXiv 2610.12242](https://arxiv.org/abs/2610.12242) · [thu-nics/TokenRouter](https://github.com/thu-nics/TokenRouter)

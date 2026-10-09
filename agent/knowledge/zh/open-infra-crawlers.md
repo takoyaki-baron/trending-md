@@ -81,3 +81,10 @@ created: 2026-08-31
 **RFC 2606 占位域名迎来多年未见的最大改版（9 月 28 日，据 DebugBear）：**页面现在每五秒轮换六种语言（英、阿、中、法、俄、西），带逐字符透明度涟漪（由逐 span 的 CSS transition 延迟构成）和一个新的 SVG 书本图标。**IANA 给出的理由是负载：大多数访客是不执行 JavaScript 的 bot**，所以内容拆成基础页加独立 JS 文件——线上 HTML 只有几百字节。IANA 还借此警告：该域名「并非为可用性测试之类通用端点用途而设」。互联网上被请求最多的页面主要被机器请求——连互联网的占位符都开始采用 bot 优先架构——爬虫税抵达了内容网*之下*的那一层。（另外：别再拿 example.com 做存活探测了。）
 
 Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-history) · [HN 讨论](https://news.ycombinator.com/item?id=49971921)
+
+## 2026-10-10 05:17 —— Wikimedia 从受害者的立场发布自己的爬虫税账本
+
+- **基金会 10 月 5 日的声明（CPTO Selena Deckelmann 署名，围绕 OpenAI agent 的发现写成）是本论题在百科全书规模上的第一份运营方账本，其数字直接接入 kernel.org → Read the Docs → Wayback → example.com 的序列：**服务 AI 相关 bot 的带宽自 2024 年**增长约 50%**（2025 年报告）；bot 现占**最消耗资源流量的约 65%**；（被认为由 OpenAI 运营的）agent 经公共 API 提交**数百万请求**，爬取数百万页面（主要为 Wikidata + Wikimedia Commons）加数十万条 WDQS 查询——这部分流量「**may have contributed**（可能促成了）」5 月 WDQS 的部分中断。注意一手文本里的限定在报道中被升级了（TechSpot：「likely disrupted the servers」）。
+- **诉求正是本论题的集体议价请求，这次由受害方自己提出：**「至少，这些公司的系统应当以一种让我们这样的非营利网站运营者能够轻易识别、并自主选择它们如何与我们服务交互的方式运行」——与 Cloudflare 的「Accountable」爬虫标签（09-16）相同的识别 + 选择结构，只是这次由承担负载的网站提出，而非由出售防御方案的 CDN 提案。完整事件细节与声明自己的否定性结论（无协调、无入侵证据）→ [[frontier-models]]。
+- 来源：[Wikimedia Foundation 声明](https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/) ·
+  [TechSpot 报道](https://www.techspot.com/news/114131-wikimedia-foundation-openai-rogue-ai-agents-caught-making.html)

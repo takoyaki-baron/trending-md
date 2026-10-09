@@ -188,3 +188,11 @@ Sources: [maximumeffort.substack.com](https://maximumeffort.substack.com/p/jev-i
 品类的收敛格局如今清晰可读：所有人对着同一个基准家族自报（JevBench / Decision Index）、精度已商品化、差异化声称落在延迟/价格/校准/部署层级——而**任何两个入场的同 harness 交叉复跑依然是零**（09-29 的 Jeeves 观察继续有效）。
 
 Sources: [Decisions API 指南](https://developers.openai.com/api/docs/guides/decisions) · [HN](https://news.ycombinator.com/item?id=49984025) · [Strands：Introducing Decider](https://strandsagents.com/blog/introducing-strands-decider/) · [HN](https://news.ycombinator.com/item?id=49987076) · [Liquid AI——d1 开放发布](https://www.liquid.ai/blog/d1-open) · [LiquidAI/d1-3B](https://huggingface.co/LiquidAI/d1-3B)
+
+## 2026-10-10 04:03 —— 该层级拿到封闭的超大规模厂商入场者，以及首个不由厂商控制的街机基准
+
+**Microsoft-Decision-1（Microsoft Command Line 博客，10 月 9 日；HN 28 分）：** 一个刻意*不生成文本*的模型——它通过结构化 API 调用，对固定选项集输出校准过的概率分数：是非题、多选、评分、量规打分——瞄准路由、分类、验证与 agent 控制。后训练基座是 **Qwen3.5-9B**（是的，微软在阿里巴巴的开源模型上构建；承诺日后 rebase 到 MAI 与 OpenAI 模型），评测基准对训练保持盲测。自报结果：36 个基准（约 15 万题）最高准确率；比其点名的亚军（Quyet-1.0-Large）快 4.5×、P50 比 GPT-6 Sol 快 35×；扰动下决策翻转率仅 1.3%；内部战绩（Xbox Research：10,000+ 反馈项、速度 14× 于 GPT-6 Sol、成本低 200×）。定价：**输入 $0.042/百万 token、输出免费**；现已登陆 Microsoft Foundry，「即将登陆 OpenRouter」；无开源权重。上周 AWS 用开源 2B 播种的决策模型层，如今有了封闭、纯 API 的超大规模厂商入场者——同一论题的两种相反打法：多数 agent token 花在一个小型专用模型就能以零头价格做出的判断上。每个准确率数字都是厂商自报；真正可证伪的主张是价格，不是准确率。另外注意基座：封闭实验室的产品后训练在中国开源权重模型上——开放权重前线成了默认底料（→ [[frontier-models]]）。
+
+**Jevman（Opper AI，Show HN 65 分）：** 六个决策模型在实时吃豆人对阵经典街机幽灵，各玩 100 局，公开排行榜记录分数与延迟、对局可观看、harness 开源、任何人都能接入自己的模型（Cloudflare Clef 亦在参赛者中：2,476 分、单局最高 4,820、决策约 398 ms）。该品类此前只在静态多选集上被测量，这是第一个游戏循环基准——实时约束下的序数选择，迟疑即失败。一个厂商不控制的基准、完整对局公开——对这个年轻的品类而言，形状完全正确。
+
+Sources: [Microsoft-Decision-1 公告](https://commandline.microsoft.com/microsoft-decision-1-model-foundry/) · [HN——Decision-1](https://news.ycombinator.com/item?id=50024913) · [Jevman 基准](https://opper.ai/jevman-benchmark/) · [HN——Jevman](https://news.ycombinator.com/item?id=50007993)

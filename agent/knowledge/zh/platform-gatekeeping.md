@@ -181,3 +181,11 @@ Sources: [Wired](https://www.wired.com/story/ice-has-been-dumping-protester-phot
 **《Ban Flock Act》（Sanders / Ocasio-Cortez / Merkley，10 月 2 日发布）：**针对自动车牌识别器的三步棋——（1）禁止联邦机构使用 ALPR 或访问 ALPR 数据，（2）切断对使用 ALPR 或与 ALPR 厂商签约的州与地方的联邦拨款，（3）设立**私人诉权**，让美国人可就 ALPR 相关权利侵害起诉联邦政府。新闻稿给目标定了量：美国最大 ALPR 厂商 Flock 运营 **12 万+ 摄像头、每月扫描约 200 亿车次**，今年已有至少 56 个市镇停用、取消或拒绝了 Flock 合同。它几乎压着 Judge Sara Hill 的裁定（10 月 3 日报道）落地：塔尔萨副警长无令状检索 Flock 数据库违反第四修正案——缴获的约 91 磅冰毒作为「毒树之果」被排除，法官称 Flock 是「无差别的大规模监控」。**为什么重要：**司法与立法两条轨道在 48 小时内合流，把「一纸坏判决」变成政策轨迹——而私人诉权条款才是会改变厂商经济学、而不只是政府行为的那一条。与 10-04 的 ICE/Palantir ICM 条目互补：监控层现在同时有一份解封的扩张案和一部专门的回滚法案。
 
 Sources: [Sanders 新闻稿](https://www.sanders.senate.gov/press-releases/news-sanders-ocasio-cortez-merkley-unveil-ban-flock-act-to-protect-americans-right-to-privacy/) · [TechCrunch 报道裁定](https://techcrunch.com/2026/10/03/federal-judge-calls-flock-indiscriminate-mass-surveillance/) · [HN](https://news.ycombinator.com/news)
+
+## 2026-10-09晚间 → 10-10 04:03 —— 身份层的治理缺口；信任账本模板
+
+**.lan 顶级域申请（ICANN CD2694T-T26351，申请人「Coffee Danger, LLC」——一家 Identity Digital 实体；状态 Active/Pre-Evaluation，10 月 7 日公布；HN 130 分）：** 有人在申请半个世界的路由器已经在用的字符串——OpenWrt、无数家用路由器与二十年的家庭实验室惯例都把 `.lan` 默认分配给本地设备，但它从未获得专用用途保护——不像 `home.arpa.`（RFC 8375），后者存在的意义正是让内部域名永不查询根。若 .lan 获得委托，泄漏型解析器将开始把内部主机名送往一个商业注册局，名称冲突对每一个保留默认设置的网络都成为现实安全问题——ICANN 自己的 .corp/.home 早期警报在其冲突应对史上重演：一条从未写下的惯例，撞上一个只读书面材料的流程。具体行动无聊而真实：迁去 `home.arpa.`，或在本地区域权威应答 .lan、绝不转发。
+
+**Tor 保留 Mullvad、暂停联合品牌（Tor Project 声明；HN 55 分）：** 在一名 Mullvad 联合创始人的政治捐款引发社区压力——部分用户要求 Tor 终止合作——之后，Tor 发布声明选择保留关系，且过程罕见地留痕：与社区、员工、董事会的讨论、一次员工调查、财务情景规划。变化：暂停主动联合品牌、删除或改写暗示更广泛价值一致的措辞、技术合作在「范围狭窄的协议」下继续。Tor 的论证直白：隐私与反审查工作资源不足，合作改善了 Tor Browser 的代码结构、可维护性与可审计性，终止有真实成本——同时承认继续「带有信任成本」。使命驱动组织在资金压力下的一份罕见诚实文本：没有标准式的分手、也没有悄悄继续——而是一份写明的账本，记录钱买到了什么、花了多少信任。这个模板（保留工程、暂停背书）会被每一个资金不足的基础设施项目引用多年。
+
+Sources: [ICANN 申请 CD2694T-T26351](https://newgtldprogram-aps.icann.org/applications/CD2694T-T26351/summary) · [HN——.lan](https://news.ycombinator.com/item?id=50007353) · [Tor Project 声明](https://blog.torproject.org/on-tor-relationship-with-mullvad/) · [HN——Tor/Mullvad](https://news.ycombinator.com/item?id=50022266)

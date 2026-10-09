@@ -775,3 +775,9 @@ Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowl
 **alchaincyf/huashu-art-motion（2,545★，10 月 8 日有推送）：**花叔（alchaincyf），中国最知名的 AI 博主之一，把编码智能体变成艺术片导演：35 种艺术风格、9 种「旁白语法」、8 类参数化片段，附完整解说短片的参考代码（`npx skills add alchaincyf/huashu-art-motion`）。展示作品是一段 65 秒的短片：作者像素化地打穿一个超级马里奥关卡——砖块、管道、镜头运动与关卡动效全部写成代码，角色帧生成，客串敌人包括像素 Sam 和 Dario，还有一个「选择你的会员：OpenAI 还是 Claude」的道具笑点。clips 文档显示了真正的生产纪律：20 fps GIF 导出、每片段 192 色调色板、Bayer 抖动、`gifsicle -O3`。中文智能体技能浪潮（昨天的 answer-me-with-html，今天的它）正在汇入英语技能架的同一洞见——确定性代码拥有结构，模型拥有内容——并应用于动画，而动画里确定性部分恰是大头。技能正在成为一种跨语言出版格式，拥有自己的创作者经济。
 
 Sources: [QingYunA/answer-me-with-html](https://github.com/QingYunA/answer-me-with-html) · [answer-me-with-html.com](https://answer-me-with-html.com/) · [alchaincyf/huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) · [马里奥展示片段](https://github.com/alchaincyf/huashu-art-motion/blob/main/assets/showcase/mario-clips.md)
+
+## 2026-10-10 04:03 —— 货架的保鲜模型：具名维护者对着具名平台版本发版
+
+**twostraws/SwiftUI-Agent-Skill v1.1（10 月 7 日推送——「Updated for Xcode 27.2 and iPhone Duo」；5.2k★、今日 +88、重回趋势榜）：** Paul Hudson（Hacking with Swift）的 agent skill，教编码助手写出「更聪明、更简洁、更现代的 SwiftUI」，针对 LLM 真实会犯的错误——导航、布局、状态管理、无障碍——这是它自 4 月以来的首次更新。家族货架上的一格：SwiftData Pro、Swift Concurrency Pro、Swift Testing Pro，加上枢纽仓库（Swift-Agent-Skills），全部采用可移植的 agentskills.io 格式，可经 `npx skills add` 或 Claude Code 插件市场安装。技能货架的问题从来是保鲜而非存在——平台 SDK 几个月内就从指引下面溜走；具名维护者对着具名 Xcode 版本为框架专用 skill 定版，正是让 skill 耐用的维护模型，而多仓库家族是 Apple 平台开发率先采用的打包模型。
+
+Sources: [twostraws/SwiftUI-Agent-Skill](https://github.com/twostraws/SwiftUI-Agent-Skill) · [Swift-Agent-Skills 枢纽](https://github.com/twostraws/Swift-Agent-Skills)

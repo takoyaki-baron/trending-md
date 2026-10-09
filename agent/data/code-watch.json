@@ -780,11 +780,56 @@
           "path": "docs/stages_record/S09_base_benchmark/S09_benchmark_full_run.md",
           "html_url": "https://github.com/AVegetableChick/DriveAlign/blob/33d1dfb40d96315562150b1ef88877a2be844934/docs/stages_record/S09_base_benchmark/S09_benchmark_full_run.md",
           "found": "2026-10-06T21:34:20.651Z"
+        },
+        "hefenglim/invest-portfolio::docs/spec/2026-08-16-ai-assistant.md": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "docs/spec/2026-08-16-ai-assistant.md",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/aa5c80a03989a82f1f0b2e492f312947fc89eedb/docs/spec/2026-08-16-ai-assistant.md",
+          "found": "2026-10-09T21:43:28.425Z",
+          "collision": true
+        },
+        "hefenglim/invest-portfolio::portfolio_dash/llm_insight/variables.py": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "portfolio_dash/llm_insight/variables.py",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/aa5c80a03989a82f1f0b2e492f312947fc89eedb/portfolio_dash/llm_insight/variables.py",
+          "found": "2026-10-09T21:43:28.425Z",
+          "collision": true
+        },
+        "hefenglim/invest-portfolio::portfolio_dash/llm_insight/official_templates.py": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "portfolio_dash/llm_insight/official_templates.py",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/aa5c80a03989a82f1f0b2e492f312947fc89eedb/portfolio_dash/llm_insight/official_templates.py",
+          "found": "2026-10-09T21:43:28.425Z",
+          "collision": true
+        },
+        "hefenglim/invest-portfolio::docs/accounting-formula-manual.md": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "docs/accounting-formula-manual.md",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/aa5c80a03989a82f1f0b2e492f312947fc89eedb/docs/accounting-formula-manual.md",
+          "found": "2026-10-09T21:43:28.425Z"
+        },
+        "hefenglim/invest-portfolio::docs/accounting-formula-manual.en.md": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "docs/accounting-formula-manual.en.md",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/aa5c80a03989a82f1f0b2e492f312947fc89eedb/docs/accounting-formula-manual.en.md",
+          "found": "2026-10-09T21:43:28.425Z"
+        },
+        "hefenglim/invest-portfolio::portfolio_dash/portfolio/timeseries.py": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "portfolio_dash/portfolio/timeseries.py",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/aa5c80a03989a82f1f0b2e492f312947fc89eedb/portfolio_dash/portfolio/timeseries.py",
+          "found": "2026-10-09T21:43:28.425Z"
+        },
+        "hefenglim/invest-portfolio::portfolio_dash/portfolio/dashboard.py": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "portfolio_dash/portfolio/dashboard.py",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/aa5c80a03989a82f1f0b2e492f312947fc89eedb/portfolio_dash/portfolio/dashboard.py",
+          "found": "2026-10-09T21:43:28.425Z"
         }
       },
-      "runs": 66,
+      "runs": 67,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-10-09T05:29:26.880Z",
+      "last_run": "2026-10-09T21:43:28.425Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -977,18 +1022,18 @@
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 53,
+      "runs": 54,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-09T05:29:26.880Z",
+      "last_run": "2026-10-09T21:43:28.425Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 53,
+      "runs": 54,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-09T05:29:26.880Z",
+      "last_run": "2026-10-09T21:43:28.425Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-10-09T05:29:26.880Z"
+  "last_run": "2026-10-09T21:43:28.425Z"
 }
