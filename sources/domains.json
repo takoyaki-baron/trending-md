@@ -10879,5 +10879,95 @@
     "en": "Opper AI's product site, home of the Jevman Pac-Man leaderboard for decision models — a vendor-run benchmark (their platform hosts the harness), with full games watchable and the harness open-sourced; scores were corroborated (10-09) by the Show HN thread and community discussion, but the model roster is the vendor's choice.",
     "zh": "Opper AI 的产品站,决策模型吃豆人排行榜 Jevman 的所在地——厂商运营的基准(harness 由其平台托管),完整对局可观看、harness 已开源;分数 10-09 经 Show HN 讨论与社区讨论佐证,但参赛模型名单由厂商决定。",
     "jp": "Opper AI の製品サイト。決定モデルのパックマン・リーダーボード Jevman の場所 —— ベンダー運営のベンチマーク(ハーネスは同社プラットフォームでホスト)だが、ゲームは全て観戦可能でハーネスは公開済み。スコアは 10-09 に Show HN スレッドとコミュニティの議論で裏取り済み。ただし出場モデルの選定はベンダー側。"
+  },
+  "gizmodo.com": {
+    "cat": "news",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Gizmodo tech/science news. Cross-checked (10-10): its Flock-the-Flockers report correctly attributes the police visit to Sistilli's own video and notes Peel Regional Police declined comment — attribution discipline intact.",
+    "zh": "Gizmodo 科技新闻。交叉核验（10-10）：其 Flock 反向监控报道如实注明“警察上门”仅出自当事人视频、警方拒绝置评——归属纪律良好。",
+    "jp": "Gizmodo のテック・サイエンス報道。クロスチェック済み（10-10）：Flock 逆監視記事は警察の訪問を本人動画に由来づけ、警察が取材に応じなかったことを明記。帰属の規律は正確。"
+  },
+  "nbcphiladelphia.com": {
+    "cat": "news",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "NBC10 Philadelphia local news. Cross-checked (10-10): its Anthropic false-tip report matches TechCrunch on dates/timeline and adds the police spokesperson's exact quotes and the multi-agency investigation list.",
+    "zh": "NBC10 费城地方新闻。交叉核验（10-10）：其 Anthropic 虚假线索报道与 TechCrunch 在日期与时间线上一致，并补充了警方发言人的原话与多机构调查名单。",
+    "jp": "NBC10 フィラデルフィアの地域報道。クロスチェック済み（10-10）：Anthropic 虚偽通報記事は TechCrunch と日付・経緯が一致し、警察報道官の発言と多機関調査の内実を補完。"
+  },
+  "beaksec.github.io": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "beaksec's independent vuln-research blog. Cross-checked (10-10): its Telegram Desktop CVE-2026-107181 writeup matches the NVD record (published Oct 7) on versions, mechanism and the 7.2.9 fix; its CVSS 8.1 is clearly labeled as the researchers' own score, and NVD carries no metrics at write time.",
+    "zh": "beaksec 的独立漏洞研究博客。交叉核验（10-10）：其 Telegram Desktop CVE-2026-107181 分析与 NVD 记录（10 月 7 日发布）在版本、机理与 7.2.9 修复上一致；其 CVSS 8.1 明确标注为研究者自评，NVD 撰写时无评分。",
+    "jp": "beaksec の独立脆弱性研究ブログ。クロスチェック済み（10-10）：Telegram Desktop CVE-2026-107181 の検証は NVD レコード（10月7日公開）とバージョン・機構・7.2.9 修正で一致。CVSS 8.1 は研究者自身のスコアと明記、NVD は執筆時点でメトリクスなし。"
+  },
+  "rea.tools": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "REA's official docs/onboarding site. Cross-checked (10-10): content matches the morluto/rea repo it documents; the install path is a paste-into-your-agent prompt around npx rea-agents@latest. Vendor site — treat its framing as the project's own.",
+    "zh": "REA 官方文档/引导站。交叉核验（10-10）：内容与其文档所对应的 morluto/rea 仓库一致；安装路径是围绕 npx rea-agents@latest 的“粘贴进智能体”提示词。厂商站点——其表述按项目自述对待。",
+    "jp": "REA の公式ドキュメント/オンボーディングサイト。クロスチェック済み（10-10）：内容は文書化対象の morluto/rea リポジトリと一致。導線は npx rea-agents@latest を貼り付けるプロンプト。ベンダーサイトゆえ記述は当事者主張として扱う。"
+  },
+  "cphpost.dk": {
+    "cat": "news",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "The Copenhagen Post (English-language Danish news). Cross-checked (10-10): its CPR-breach round-up matches Politiken's reporting it cites (123456 on three accounts incl. admin, 8.8M CPR numbers, 970k credit warnings) and is careful to mark the hacker's claims as unconfirmed.",
+    "zh": "The Copenhagen Post（丹麦英文媒体）。交叉核验（10-10）：其 CPR 事件综述与所引 Politiken 报道一致（含管理员在内三个账户用 123456、880 万个 CPR 号、97 万信贷预警），并将黑客的说法谨慎标注为未证实。",
+    "jp": "The Copenhagen Post（デンマークの英字紙）。クロスチェック済み（10-10）：CPR 侵害まとめは引用先 Politiken の報道と一致（管理者を含む3アカウントの 123456、880万件の CPR 番号、97万人の与信警告）。ハッカーの主張を未確認と明記する慎重さ。"
+  },
+  "politiken.dk": {
+    "cat": "news",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Politiken, major Danish daily. Cross-checked (10-10): URL live (HTTP 200); headline confirms it received the hacker's 8.75M-record dataset — the primary source for the 123456 password detail, which secondary coverage faithfully attributes to it.",
+    "zh": "Politiken，丹麦主流日报。交叉核验（10-10）：链接有效（HTTP 200）；标题确认其收到了黑客提供的 875 万条数据集——是“123456”密码细节的第一手来源，二手报道均如实归因于它。",
+    "jp": "Politiken、デンマークの主要日刊紙。クロスチェック済み（10-10）：URL 有効（HTTP 200）。見出しはハッカーから875万件のデータセットを受け取った事実を確認。「123456」パスワード詳細の一次ソース。"
+  },
+  "borretti.me": {
+    "cat": "community",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Fernando Borretti's personal blog (Rust/compiler essays, Austral author). Cross-checked (10-10): fetched 'No Man Is an Island' in full; quotes attributed to it match the text. Personal-essay source — argument, not reporting.",
+    "zh": "Fernando Borretti 的个人博客（Rust/编译器长文，Austral 作者）。交叉核验（10-10）：全文抓取了《No Man Is an Island》，引用与其原文一致。个人随笔来源——是论证而非报道。",
+    "jp": "Fernando Borretti の個人ブログ（Rust/コンパイラ論考、Austral 作者）。クロスチェック済み（10-10）：『No Man Is an Island』を全文取得、引用は本文と一致。個人エッセイ源——論証であり報道ではない。"
+  },
+  "opengroup.org": {
+    "cat": "data",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "The Open Group's official UNIX certification register. Cross-checked (10-10): live page shows only IBM/HPE/SCO; cross-validated against the Oct 7 Wayback snapshot which still listed four macOS releases — the diff is the story.",
+    "zh": "The Open Group 官方 UNIX 认证注册表。交叉核验（10-10）：当前页面仅列 IBM/HPE/SCO；与 10 月 7 日 Wayback 快照（仍列四个 macOS 版本）交叉验证——差异本身即新闻。",
+    "jp": "The Open Group の公式 UNIX 認証レジストリ。クロスチェック済み（10-10）：現在のページは IBM/HPE/SCO のみ。10月7日の Wayback スナップショット（macOS 4バージョンを掲載）と突き合わせ検証済み——その差分がニュース。"
+  },
+  "hugohe3.github.io": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "ppt-master's GitHub Pages examples gallery. Cross-checked (10-10): live, titled 'PPT Master — AI generates natively editable PPTX from any document'; showcases the repo's native-shape/chart output. Project's own showcase — position claims are the project's.",
+    "zh": "ppt-master 的 GitHub Pages 示例画廊。交叉核验（10-10）：在线可访问，标题为“PPT Master — AI generates natively editable PPTX from any document”；展示该仓库的原生形状/图表输出。项目自办展示——定位说辞按项目自述对待。",
+    "jp": "ppt-master の GitHub Pages 例集ギャラリー。クロスチェック済み（10-10）：オンラインで稼働、タイトルは「PPT Master — AI generates natively editable PPTX from any document」。リポジトリのネイティブ図形/チャート出力を実演。プロジェクト自身のショーケース。"
+  },
+  "blog.janestreet.com": {
+    "cat": "research",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Jane Street's engineering blog. Cross-checked (10-10): its diffusion-for-market-data post states its own negative conclusion ('not yet accurate enough to be a realistic generator') and quantifies failure modes (DDPM 8-sigma blowups) — unusually honest for the genre.",
+    "zh": "Jane Street 工程博客。交叉核验（10-10）：其行情数据扩散模型一文明确写出自身的否定性结论（“还不足以成为现实的生成器”）并量化失败模式（DDPM 8σ 爆炸）——在此类文章中罕见地诚实。",
+    "jp": "Jane Street のエンジニアリングブログ。クロスチェック済み（10-10）：市況データ拡散の記事は自身の否定的結論（「まだ現実的なジェネレーターには不正確」）を明言し、失敗モード（DDPM の8σ爆発）を定量化。このジャンルにしては珍しく誠実。"
   }
 }
