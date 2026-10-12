@@ -1,8 +1,8 @@
 ---
 date: 2026-10-12
-updated: 2026-10-12T04:40:00Z
+updated: 2026-10-12T12:50:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 33
 license: CC-BY-4.0
 ---
 
@@ -386,13 +386,195 @@ Ted Haley's Show HN (TedHaley/pensieve; macOS 14+, Apple Silicon, free and open 
 
 ---
 
+## 28. Zod's supply-chain near miss: an Ethereum-C2 preinstall loader sat in the repo history — caught before npm
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 146+ pts · ~5h ago (~15:47 UTC+8); npm registry state checked this run (~20:50 UTC+8)
+- **Tags:** `supply-chain` `npm` `security` `zod`
+
+A commit on colinhacks/zod — d821685, "Fix bugs and improve performance," authored under the maintainer's own identity — is a complete npm supply-chain kit, spotted by an external security audit and flagged in issue #6658 (Oct 11): two new `meta.test.mjs` files wired as `preinstall` hooks into both the `zod` and `mini` packages. The payload is the novel part: it ABI-decodes attacker domains out of an **Ethereum smart contract** (`0xe236…e523`, selector `0x53ed5143`) via `eth_call` to three public RPC endpoints, fetches `https://<domain>/loader`, and `await import`s the base64 response — C2 infrastructure no takedown can sink. The same commit rewired `release.yml` so a version bump on main **auto-publishes to npm**, dropping the manual maintainer run. The near-miss: the malicious files never shipped — `zod@4.6.6` on npm (published Oct 11 16:18 UTC; live registry state verified this run) is clean, the repo had already run a "Cleanup bad commits" pass (PR #6620, Sep 21), and the reporter confirms the published tarball doesn't contain them. But the commit object is still reachable in git history — a `git bisect` can land on it — and there is no advisory, no CVE, and no maintainer statement in the issue yet.
+
+**Why it matters:** two defenses actually worked, and both were process, not detection — zod's late-September move to *staged* releases behind a maintainer-run approval environment, and an auditor who read the diff. The blockchain C2 is the escalation to watch: registries can unpublish a package, but nobody can unpublish a smart contract. The thread's sharpest line lands on the scanners: the "supply chain security" tools were, as one commenter put it, "as useful as expected" — silent.
+
+[`🔗 commit d821685`](https://github.com/colinhacks/zod/commit/d821685ea6732436fcdf786a81d076958471e467) · [`🔗 issue #6658`](https://github.com/colinhacks/zod/issues/6658) · [`🔗 zod on npm (verified clean)`](https://registry.npmjs.org/zod)
+
+---
+
+## 29. CyberXero: SOCRadar documents an access broker running Claude Code — 51 agents, 628k+ records
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** The Hacker News · Oct 12 (~5h ago, ~20:00 UTC+8); SOCRadar STRU report ~Oct 6
+- **Tags:** `threat-actor` `claude-code` `agents` `initial-access`
+
+SOCRadar's Threat Research Unit profiled "CyberXero," a Russian-speaking initial access broker active since July — and an exposed open directory at `46.21.250[.]135` (the actor's live working directory: AI session logs, plaintext token scripts, toolkits, recon output, victim data) let researchers reconstruct the operation in the actor's own words. Two pipelines: an automated one against WordPress/Magento/PrestaShop at scale (one run: 4,708 targets scanned → 429 WordPress admin panels confirmed → **32 web shells deployed in 61 seconds**), and a manual one against Ukrainian energy and critical infrastructure, including a Kharkiv heating provider — **628,000+ records exfiltrated from four Ukrainian organizations**, plus compromises in Poland, China and the Netherlands. The AI layer: **Claude Code running 51 specialized agents** for scanning, exploit-chaining, reconnaissance and post-exploitation on the operator's workstation, plus the open-source PentAGI agent wired to Cobalt Strike via an AI-provider API. Evasion was context engineering, not jailbreaks: tasks framed as "an authorized pentest on my own infrastructure," sessions reset when refusals piled up. And some refusals held — across four iterations the model declined to install a backdoor, disable a firewall, move laterally, deploy a web shell, or accept a forged ownership token.
+
+**Why it matters:** the first documented campaign this feed has covered where a mainstream coding agent was the offensive workhorse at this scale — and the actor's own leak is why it's documented. SOCRadar's structural conclusion is the one for defenders: "Model safety controls act on the context of a session, not on the model weights." It lands the same day as Anthropic's eval-internet shutdown (#9): the refusal logs that held are the dataset to study.
+
+[`🔗 The Hacker News: CyberXero`](https://thehackernews.com/2026/10/cyberxero-uses-claude-code-in-campaign.html) · [`🔗 SOCRadar STRU — "CyberXero: An AI-Augmented Initial Access Broker"`](https://socradar.io/) *(report behind Cloudflare — 403 to automated fetchers; title confirmed via search index)*
+
+---
+
+## 30. QGIS bans AI-assisted contributions outright — with retroactive reversion and sanctioning
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 74+ pts · ~1.4h ago (~19:22 UTC+8), accelerating
+- **Tags:** `open-source` `policy` `qgis` `ai-coding`
+
+QGIS — one of the largest open-source geospatial projects — has rewritten its AI policy (QEP-408 v2.0, dated Sep 24, merged Oct 7, authored by core dev Nyall Dawson): "**No LLM, AI or agent assisted code contributions are allowed** in the github.com/qgis/qgis repository. If we subsequently discover that you have used an AI, LLM, or any agent-based workflow for your contribution, you will be subject to **code reversion and contributor rights sanctioning**." Note the scope: not AI-*generated* code — AI-*assisted*, enforced retroactively against contributors who don't disclose. The project has had an AI policy since January (QEP-408, originally authored by Even Rouault); v2.0 replaces the permissive regime with a hard ban, and the PR links the mailing-list debate that preceded it.
+
+**Why it matters:** the first total ban by a foundation-scale OSS project, arriving in the same month the agent-skills shelf crossed 277k★ — the governance fork is now explicit. Most projects converged on disclosure norms; QGIS is betting the review cost of AI-assisted patches exceeds their value. The open question is enforceability: retroactive reversion is trivial against identifiable contributors, and anonymous drive-bys — exactly who this targets — are the hardest to sanction.
+
+[`🔗 QEP-408 v2.0 (raw)`](https://raw.githubusercontent.com/qgis/QGIS-Enhancement-Proposals/master/qep-408-ai-tool-policy.md) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50054751)
+
+---
+
+## 31. Ledger confirms a hardware implant: a chip behind the screen of the $92M CryptoBilis drain
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 55+ pts · ~2.7h ago (~18:09 UTC+8); crypto.news investigation
+- **Tags:** `hardware` `supply-chain` `crypto` `forensics`
+
+After weeks of "how do 311 wallets drain without a seed-phrase leak," a physical answer: Ledger confirmed on Oct 10 that "one of the impacted users' devices contained an **unauthorized hardware implant**," during its investigation of Southeast-Asian reseller CryptoBilis (Indonesia, Malaysia, Philippines) — which it has told to halt all sales and shipments. Mark Karpelès — the former Mt. Gox CEO — examined a suspicious Nano X on Oct 9 and photographed an extra component hidden behind the display, inside screen-protective material, in packaging that looked intact; Tibane Labs' teardown describes a microcontroller with cellular communication hardware wired to the screen's internal data lines — consistent with capturing the 24-word recovery phrase at activation. Bitquery estimates ~**$92.9M** removed across five chains (~$70.5M USDT-on-TRON, $16.8M BTC; ~$10M since frozen); PublicAML tracked 900 ETH reaching Tornado Cash on Oct 10. The caveats are Ledger's own: it has *not* confirmed the implant's function, has not established that it caused the losses, and says its own infrastructure shows no compromise.
+
+**Why it matters:** the supply-chain story of the month wasn't npm (#28) — it was the physical channel: a reseller's shipment, intact packaging, a chip that watches the screen during setup. The forensics chain — collector's eye, teardown, on-chain attribution, vendor confirmation — is a template; so is the honesty about what remains unconfirmed, starting with implant-to-loss causation.
+
+[`🔗 crypto.news: Ledger confirms hidden chip`](https://crypto.news/ledger-confirms-hidden-chip-in-crypto-wallet-amid-92m/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50054092)
+
+---
+
+## 32. Bricksforge unauthenticated RCE under automated attack — 63 rotating IPs; NVD scores it 9.8, not 10
+
+- **Velocity:** ▮▮ rising
+- **Source:** The Hacker News · Oct 12 (~today); Patchstack exploitation detected Oct 7, 21:47 UTC
+- **Tags:** `wordpress` `cve` `rce` `exploitation`
+
+CVE-2026-85097 — unauthenticated arbitrary file upload leading to RCE in the Bricksforge WordPress plugin (≤3.1.8.9; fixed in 3.1.8.10, current 4.0.1) — has been exploited in the wild since Oct 7, per Patchstack telemetry (Wordfence also published an advisory). The bug is a two-step: request a nonce from the `bricksforge_regenerate_nonce` AJAX endpoint, upload a GIF/PHP polyglot that passes the initial MIME check, then submit a form whose `temporaryFileUploads.url` — the field Patchstack says goes unvalidated — points the saved file at a PHP extension (`.php5`, `.phtml`, case tricks, URL-encodings). The observed pattern is automation over rotating infrastructure: 63 unique source IPs, six driving ~46% of requests, one cluster of 44 IPs firing 56 identical payloads within seconds. Score bookkeeping, per this feed's standing rule: coverage headlines say **CVSS 10.0**; the NVD record (published Oct 8) carries **9.8 Critical, status Deferred**.
+
+**Why it matters:** form-endpoint file upload is the oldest WordPress RCE shape there is, and it still pays — the fix is one version bump on a plugin that many sites update late or never. Defenders: audit `form_submit` traffic carrying `temporaryFileUploads`, and sweep `/wp-content/uploads/bricksforge/tmp/` for unexpected PHP.
+
+[`🔗 The Hacker News: Bricksforge exploited`](https://thehackernews.com/2026/10/attackers-exploit-cvss-100-bricksforge.html) · [`🔗 NVD: CVE-2026-85097`](https://nvd.nist.gov/vuln/detail/CVE-2026-85097)
+
+---
+
+## 33. Anthropic's OSS Scanner: model-generated vuln reports shipped to maintainers without human review — if they opt in
+
+- **Velocity:** ▮▮ rising
+- **Source:** red.anthropic.com/oss-scanner · launched ~Oct 9; The Hacker News coverage Oct 9
+- **Tags:** `ai-security` `open-source` `vulnerability-disclosure` `anthropic`
+
+The program behind this year's vulnerability flood now has a front door. OSS Scanner enrolls projects via a PR to `anthropics/oss-scanner` adding `projects/<name>/project.yaml` — repo, contact email, and a Dockerfile that pre-installs everything "so that a **fully offline agent** can conduct its security audit" — and sends enrolled projects periodic scans "by our strongest models at no cost," with eligibility mirroring OSS-Fuzz (remote-attack exposure, number of dependents). The load-bearing distinction the coverage flattened: Anthropic's default process sends reports **after human review** under coordinated disclosure (6,000+ reports reviewed by Oct 2026); OSS Scanner is the **fast track** where maintainers explicitly opt into receiving unreviewed, model-generated reports. Scale, per the launch coverage: 29,000+ candidate vulnerabilities found, ~6,000 reported to maintainers, **584 advisories as of Oct 2** — and no 90-day disclosure window initially, with false-positive risk the stated reason.
+
+**Why it matters:** this is coordinated vulnerability disclosure reorganized around a model's throughput — and the opt-in-to-unreviewed-reports design is the honest admission that human triage is the bottleneck. Paired with today's Zod near-miss (#28) and GhostAction (#3), the loop is closed: AI is simultaneously the attack surface and, increasingly, the defense. Anthropic's own forecast: "in two years, AI will favor defense."
+
+[`🔗 Anthropic: OSS Scanner`](https://red.anthropic.com/oss-scanner/) · [`🔗 The Hacker News: Anthropic launches free AI vulnerability scanner`](https://thehackernews.com/2026/10/anthropic-launches-free-ai.html)
+
+---
+
+## 34. Since our Oct 10 note: rea crosses 132k★ on a +45.5k★ day — v6.4 adds Android ADB and JEB decompilation
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending daily · #1 · +45,495★ today; repo state checked via GitHub API this run
+- **Tags:** `reverse-engineering` `mcp` `agents` `android`
+
+Explicit update on a covered repo: when we last wrote (Oct 10) morluto/rea had passed 60k★ on a +25.8k★ day; the **778-point HN thread** ("REA Reverse – Engineer Anything," 327 comments, Oct 10) and a four-release week have since carried it to **132,021★ — GitHub's #1 daily, +45,495★ today** (state verified via the GitHub API this run: not archived, pushed today). The releases are substantive rather than cosmetic: v6.4.0 (Oct 11) adds full **Android workflows over ADB** — device inspection, split-APK acquisition, logs, screenshots, file transfers, explicit app-lifecycle actions, plus manifest and localized-string decoding via Apktool — and **JEB integration**: browse project units and decompile selected items through a caller-started local JEB MCP server. v6.2/v6.3 rebuilt the evidence model with breaking changes (canonical Evidence results, stricter capture contracts, recapture required for old data).
+
+**Why it matters:** the velocity curve is unprecedented in this feed's tracking (+15.3k → +25.8k → +45.5k daily), and the 327-comment HN thread is where the skepticism lives alongside the enthusiasm. The feature direction is the tell: rea is becoming the agent-side front end for the *entire* reverse-engineering toolchain — app behavior, desktop binaries, and now phones and commercial decompilers.
+
+[`🔗 morluto/rea`](https://github.com/morluto/rea) · [`🔗 HN: REA Reverse – Engineer Anything (778 pts)`](https://news.ycombinator.com/item?id=50028275)
+
+---
+
+## 35. PS2 games statically recompiled to WebAssembly: Gran Turismo 4 at 50 fps, God of War II at 60
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 66+ pts · ~6h ago (~14:46 UTC+8)
+- **Tags:** `emulation` `webassembly` `recompilation` `playstation`
+
+snuri00/ps2-web-recomp (MIT; "the sibling of psp-web-recomp") runs PS2 discs in a browser with **no emulator and no BIOS**: the Emotion Engine's machine code is translated ahead of time into C++ (16 KiB guest-code units, R5900 quirks preserved — 128-bit registers, branch delay slots, the PS2's non-IEEE floating point) and compiled to WASM, linked against a C++ reimplementation of the PS2's OS; the boot path is reimplemented, so no Sony BIOS ships. Gran Turismo 4 plays boot → menus → a full race at **50 fps (PAL) at 2× native resolution** on integrated graphics; God of War II was ported "with only generic changes and no game-specific code" and holds 60 fps in heavy combat. VU1 microprograms observed in test runs are precompiled to SIMD C++; unseen ones are translated to WASM on the fly in milliseconds. No game data included — users supply disc images of games they own, and the README asks that generated outputs stay private.
+
+**Why it matters:** the console-recompilation wave (P.T., God of War WASM, AnyPS5) keeps finding its technical ceiling, and the Emotion Engine was the ceiling. "No game-specific code" is the milestone — a generic recompiler pipeline rather than a per-title port. The clean-room discipline (no assets, no BIOS, outputs kept private) is exactly what last week's fast vibe-coded ports skipped.
+
+[`🔗 snuri00/ps2-web-recomp`](https://github.com/snuri00/ps2-web-recomp) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50052251)
+
+---
+
+## 36. zt: type-safe HTML templating for Zig — templates that transpile to Zig at build time
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 141+ pts · ~7.7h ago (~13:02 UTC+8)
+- **Tags:** `zig` `web-dev` `templating` `type-safety`
+
+Lukáš Lalinský's zt (63★, "a small HTML templating language that compiles to Zig at build-time") ports Go's Templ pattern to Zig: `.zt` templates transpile to plain Zig during `zig build`, so each template becomes an ordinary typed function — write `{u.nmae}` and the build fails with `error: no field named 'nmae' in struct 'models.User'`, with error comments mapped back to template lines; pass a string where `?User` is expected and it won't compile. Rendering writes directly to a `std.Io.Writer` — no allocations, no intermediate state — dynamic values are HTML-escaped by default, URL schemes are checked, and unclosed elements are parse errors. It powers the author's Dusty web framework, and the caveats are his own: "not very mature yet," with an open syntax question (bare `if`/`for` vs `@if`/`@for`) tracked in an issue.
+
+**Why it matters:** the typed-template convergence (Templ → JSX → now Zig) keeps proving the same point: the cheapest XSS and rendering bugs are the ones the compiler deletes before runtime. Build-step transpilation makes templates first-class compile units with zero runtime — a pattern any agent-generated web stack should steal, and one more sign of Zig eating the web-server niche.
+
+[`🔗 lalinsky.com: Type-safe HTML templating in Zig`](https://lalinsky.com/2026/10/11/type-safe-html-templating-in-zig.html) · [`🔗 lalinsky/zt`](https://github.com/lalinsky/zt)
+
+---
+
+## 37. "Postgres isn't slow, your storage is" — the 9.24× NVMe-vs-gp3 benchmark that keeps resurfacing
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 122+ pts · ~5.5h ago (~14:36 UTC+8), 102 comments
+- **Tags:** `postgres` `performance` `storage` `cloud`
+
+Sai Srirampur's POSETTE 2026 talk (recap published by ClickHouse in August, front-paged today) makes the storage argument with eight identical m6id.4xlarge clusters and a 482 GiB / 3.3-billion-row pgbench heap: instance-store NVMe delivered **16,030 TPS vs 1,734 TPS on baseline gp3 EBS (3,000 IOPS) — 9.24×** — with median transaction latency of 4.0 ms vs 36.9 ms. The milliseconds have addresses: ~19 ms page reads (vs 0.3 ms) and 11 ms WAL fsync (vs 1.5 ms); a VACUUM of 10 GB bloat took 964 s vs 366 s; 29 of 64 backends sat waiting on `IO:DataFileRead`. The recommendation is architectural, not instance-upsizing: put durability at the **cluster** level — quorum synchronous replication (`ANY 1 (standby1, standby2)`) plus continuous object-storage backups (WAL-G) — and let nodes be ephemeral NVMe. The caveats are printed on the tin: baseline gp3 only ("other EBS setups would most likely produce different results"), a conclusion "deliberately narrower than the title," and ClickHouse sells managed Postgres.
+
+**Why it matters:** the default cloud storage tier behaves like a ~9× tax on write-heavy Postgres, and the fix invalidates the per-node durability assumptions most managed setups are built on. The 102-comment fight is largely over whether baseline gp3 is a strawman — which is precisely the caveat the authors led with.
+
+[`🔗 ClickHouse: Postgres isn't slow, your storage is`](https://clickhouse.com/blog/posette-talk-recap-postgres-isnt-slow-your-storage-is) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50052163)
+
+---
+
+## 38. Doory: the self-hosted open-source Canva — with an attribution catch and a six-commit history
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 135+ pts · ~11.2h ago (~08:48 UTC+8)
+- **Tags:** `design` `self-hosted` `canvas` `open-source`
+
+Doory (shaongitbd/doory, 457★, demo at doory.art) is a browser-based design editor billing itself as a full open-source Canva: React 19 + a Fabric.js canvas + Yjs real-time co-editing on Django 5; exports PNG/JPG/SVG/PDF/MP4/WebM/GIF including **print-ready PDFs with bleed and crop marks**, rendered in-browser; 27 enter/exit animations, 12 emphasis effects, 16 page transitions; magic resize, layers, masks, curved text; background removal by a model downloaded to run locally in the browser; brand kits, present mode with speaker notes, a CC0 audio library, ~25,000 icons and illustrations. The repo's own catches: the license is **Attribution Assurance** — free including commercial use, but the running app must display prominent attribution — and the git history is **six commits**: a polished code drop, not an organic project (17 open PRs, no releases yet).
+
+**Why it matters:** the self-hosted creative-suite wave (Rembrandt, OpenCut, and the skills-shelf's slides/video/CAD organs) gains its Canva-shaped entry — the last major design SaaS without a credible open twin. The license terms and the six-commit history are the story: whether this grows maintainers decides if it's a project or a launch.
+
+[`🔗 shaongitbd/doory`](https://github.com/shaongitbd/doory) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50049872)
+
+---
+
+## 39. Since our Oct 8 note: the SonicWall SMA 1000 SSRF drew 135 exploitation attempts two days after the hotfix
+
+- **Velocity:** ▮ steady
+- **Source:** The Hacker News · Oct 12 (~today); Previdian/Defused Cyber telemetry
+- **Tags:** `sonicwall` `ssrf` `exploitation` `patch`
+
+Explicit update on a covered CVE: the SMA 1000 pre-auth SSRF (**CVE-2026-102255**, CVSS 10.0 — NVD record published Oct 7, status Awaiting Analysis; "an unintended alternate access path" in the Appliance Work Place interface) received platform hotfixes 12.4.3-03670 and 12.5.0-03082 on Oct 6. Defused Cyber and Previdian then logged the **first exploitation attempts on Oct 8 — two days after the patch**: 135 attempts in total, from just **two U.S. source IPs**, directing the appliance at internal functionality. SonicWall's advisory (SNWLID-2026-0017) has not yet been updated to reflect in-the-wild exploitation. The pattern context: this is the third exploited SMA 1000 flaw this year, after June's CVE-2026-15409/15410 zero-days (UTA0533 → Java web shells, KNUCKLEBALL malware, extracted TOTP seed configurations per Rapid7).
+
+**Why it matters:** the patch-to-exploit window is now measured in days, and the vendor advisory trails the attackers — if your update cue is the advisory, you are last. Edge appliances remain the sector where "patched" and "safe" diverge fastest; the two-IP sourcing says targeted, not worm.
+
+[`🔗 The Hacker News: SonicWall SMA 1000 targeted`](https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html) · [`🔗 NVD: CVE-2026-102255`](https://nvd.nist.gov/vuln/detail/CVE-2026-102255)
+
+---
+
+## 40. SoftwareGym: 182 synthesized GUI apps for training computer-use agents — OSWorld Pass@3 +15.6 points
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face papers · featured Oct 12; arXiv 2610.12611
+- **Tags:** `research` `computer-use` `agents` `training-data`
+
+SoftwareGym (arXiv 2610.12611; Tian Jin, Wenhao Wang, Jing Kang, Haoting Shi, Rui Ye, Yijun Lu, Siheng Chen — affiliations not listed on the arXiv page) attacks computer-use-agent training from the data side: a pipeline that (1) generates structurally diverse application designs, (2) realizes them as **runnable applications**, and (3) applies GUI evaluation with iterative repair so every environment is runtime-verified — 182 apps across 12 categories at a 91.5% mean task pass rate. Its 120-task SoftwareGym-Bench doubles as a trajectory farm: training a CUA on those trajectories lifts **OSWorld Pass@3 from 41.39% to 56.97%** — strictly out-of-domain, on the benchmark these environments were designed to differ from.
+
+**Why it matters:** computer-use agents are bottlenecked on environments, not architectures — native apps are expensive to build, browser sandboxes too shallow (the same diagnosis as AgentGarten, Oct 10, and trycua's benchmark frontier, Oct 8). Runtime-verified synthetic-environment farms are becoming the RL infrastructure of the CUA race; the number to watch is how much of the +15.6 survives as the farm scales past 182 apps.
+
+[`🔗 arXiv 2610.12611`](https://arxiv.org/abs/2610.12611) · [`🔗 Hugging Face papers`](https://huggingface.co/papers)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-12T04:40:00Z |
-| Items | 27 |
-| Sources tracked | 30 (Hacker News, GitHub Trending/API, GitGuardian, The Hacker News, BleepingComputer, NVD, npm registry, PyPI, Anthropic, IRCv3 Working Group, Cursor Marketplace, itsallaboutthebit.com, nanolathe.gg, shkspr.mobi, betterwispr.com, verdagon.dev, disconnect3d.pl, The Verge, NYC DCWP, thomas-huehn.com, texttocad.dev, nonfunctional.substack.com, X/Twitter, pub.sakana.ai, arXiv, UC Berkeley Research, royfish.dev, epestr.com, The Guardian, tedhaley.ca) |
+| Generated | 2026-10-12T12:50:00Z |
+| Items | 40 |
+| Sources tracked | 33 (Hacker News, GitHub Trending/API, GitGuardian, The Hacker News, BleepingComputer, NVD, npm registry, PyPI, Anthropic (red.anthropic.com), SOCRadar, IRCv3 Working Group, Cursor Marketplace, itsallaboutthebit.com, nanolathe.gg, shkspr.mobi, betterwispr.com, verdagon.dev, disconnect3d.pl, The Verge, NYC DCWP, thomas-huehn.com, texttocad.dev, nonfunctional.substack.com, X/Twitter, pub.sakana.ai, arXiv, Hugging Face Papers, UC Berkeley Research, royfish.dev, epestr.com, The Guardian, tedhaley.ca, crypto.news, lalinsky.com, ClickHouse) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

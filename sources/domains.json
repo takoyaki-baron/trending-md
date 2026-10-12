@@ -592,6 +592,14 @@
     "jp": "Anil Madhavapeddy の個人ブログ——OCaml メンテナによる一次のセキュリティ/OSS エッセイ（例:「rumour is the exploit」）。一次情報だが個人の見解。",
     "zh": "Anil Madhavapeddy 的个人博客——OCaml 维护者的一手安全/开源随笔（如《rumour is the exploit》）；属一手来源，但代表个人观点。"
   },
+  "answer-me-with-html.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "en": "Project website for the answer-me-with-html agent skill (same author as the GitHub repo, whose README it mirrors); token-count claims validated against the repo's own counted table — vendor-self-reported numbers, cite as such.",
+    "jp": "answer-me-with-html エージェントスキルのプロジェクトサイト（GitHub リポジトリと同一作者、README のミラー）。トークン集計の主張はリポジトリ自身の集計表に対して検証 — ベンダー自己申告の数値としてその旨を明記して引用。",
+    "zh": "answer-me-with-html 智能体技能的项目网站（与 GitHub 仓库同一作者，内容为 README 镜像）；token 统计主张已对照仓库自统计表验证——属厂商自报数字，引用时照实标注。"
+  },
   "anthropic.com": {
     "cat": "vendor",
     "cred": "high",
@@ -987,6 +995,15 @@
     "jp": "Bryan Cantrill(Oxide CTO)の個人ブログ——『The revolt of the reader』の一次情報。調査統計は二次引用のため Dunlop の原典での確認が望ましい。",
     "zh": "Bryan Cantrill(Oxide CTO)的个人博客——《读者的反叛》一文的一手出处；其中的调查统计为转引，应对照 Dunlop 原始调查核实。"
   },
+  "beaksec.github.io": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "beaksec's independent vuln-research blog. Cross-checked (10-10): its Telegram Desktop CVE-2026-107181 writeup matches the NVD record (published Oct 7) on versions, mechanism and the 7.2.9 fix; its CVSS 8.1 is clearly labeled as the researchers' own score, and NVD carries no metrics at write time.",
+    "jp": "beaksec の独立脆弱性研究ブログ。クロスチェック済み（10-10）：Telegram Desktop CVE-2026-107181 の検証は NVD レコード（10月7日公開）とバージョン・機構・7.2.9 修正で一致。CVSS 8.1 は研究者自身のスコアと明記、NVD は執筆時点でメトリクスなし。",
+    "zh": "beaksec 的独立漏洞研究博客。交叉核验（10-10）：其 Telegram Desktop CVE-2026-107181 分析与 NVD 记录（10 月 7 日发布）在版本、机理与 7.2.9 修复上一致；其 CVSS 8.1 明确标注为研究者自评，NVD 撰写时无评分。"
+  },
   "benchlm.ai": {
     "cat": "data",
     "cred": "med",
@@ -1058,6 +1075,14 @@
     "jp": "Artificial Analysis の公開指数に基づく日次更新の価格/知能バリューフロンティアチャート。手法ページが除外項を自己文書化。クロスチェック済み（09-25）: 本フィードが引用するモデル（Opus 5.5、Mercury 2.5）の描画値は AA の公開指数データと一致。",
     "zh": "基于 Artificial Analysis 公开指数的每日刷新价格/智能价值前沿图表；方法页自陈排除项。已交叉核验（09-25）：本 feed 所引模型（Opus 5.5、Mercury 2.5）的绘图值与 AA 公开指数数据一致。"
   },
+  "bevy.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "en": "Official Bevy engine release blog; primary source for 0.20 (817 PRs, 227 contributors) — feature claims validated against the HN thread and repo activity.",
+    "jp": "Bevy エンジン公式リリースブログ。0.20（817 PR、227 コントリビュータ）の一次ソース — 機能の主張は HN 議論とリポジトリの活動に対して検証済み。",
+    "zh": "Bevy 引擎官方发布博客；0.20（817 个 PR、227 位贡献者）的一手来源——特性主张已对照 HN 讨论与仓库动态验证。"
+  },
   "bfl.ai": {
     "cat": "vendor",
     "cred": "med",
@@ -1084,6 +1109,14 @@
     "en": "URL-as-app sign maker (Show HN); the site documents its own design (fragment-as-state, client-side QR). Cross-checked (10-08): claims matched the MIT-licensed GitHub repo and the Show HN thread.",
     "jp": "URLイコールアプリの看板メーカー（Show HN）。サイトが自らの設計（fragmentイコール状態、クライアントサイドQR）を文書化。クロスチェック（10-08）：主張は MIT ライセンスの GitHub リポジトリと Show HN スレッドと一致。",
     "zh": "URL 即应用的告示牌工具（Show HN）；站点自述其设计（fragment 即状态、客户端二维码）。交叉验证（10-08）：其主张与 MIT 许可的 GitHub 仓库及 Show HN 讨论串一致。"
+  },
+  "biohub.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "en": "CZ Biohub's official newsroom; primary announcement for the $1.8B Virtual Biology Initiative expansion — partner names and dollar figures matched the HN discussion and are the committing parties' own statements (i.e., commitments, not delivered data).",
+    "jp": "CZ Biohub 公式ニュースルーム。18億ドルの Virtual Biology Initiative 拡大の一次発表 — パートナー名と金額は HN 議論と一致し、コミットする側自身の表明（つまり約束であって提供済みデータではない）。",
+    "zh": "CZ Biohub 官方新闻页；18 亿美元 Virtual Biology Initiative 扩展的一手公告——合作方名单与金额与 HN 讨论一致，且是承诺方自己的表述（即承诺而非已交付的数据）。"
   },
   "bishopfox.com": {
     "cat": "security",
@@ -1344,6 +1377,15 @@
     "en": "Google's official blog — primary source for Google announcements (HEIR FHE compiler). High authority; co-cited with Google Developers Blog for the same HEIR story.",
     "jp": "Google公式ブログ —— Google発表（HEIR同型暗号コンパイラ）の一次情報源。権威は高い。HEIRはGoogle Developers Blogと同一項目で共引用。",
     "zh": "Google 官方博客 —— Google 发布（HEIR 同态加密编译器）的第一手来源。权威性高；HEIR 与 Google Developers Blog 同条共引。"
+  },
+  "blog.janestreet.com": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Jane Street's engineering blog. Cross-checked (10-10): its diffusion-for-market-data post states its own negative conclusion ('not yet accurate enough to be a realistic generator') and quantifies failure modes (DDPM 8-sigma blowups) — unusually honest for the genre.",
+    "jp": "Jane Street のエンジニアリングブログ。クロスチェック済み（10-10）：市況データ拡散の記事は自身の否定的結論（「まだ現実的なジェネレーターには不正確」）を明言し、失敗モード（DDPM の8σ爆発）を定量化。このジャンルにしては珍しく誠実。",
+    "zh": "Jane Street 工程博客。交叉核验（10-10）：其行情数据扩散模型一文明确写出自身的否定性结论（“还不足以成为现实的生成器”）并量化失败模式（DDPM 8σ 爆炸）——在此类文章中罕见地诚实。"
   },
   "blog.jetbrains.com": {
     "cat": "vendor",
@@ -1632,6 +1674,15 @@
     "en": "Personal blog of Boris Cherny (creator of Claude Code, author of Programming TypeScript) — management/product essays. Cross-checked (09-21): the blog itself carries no bio; author identity and Claude Code role confirmed via independent public sources. Note his posts are process essays without first-hand anecdotes.",
     "jp": "Boris Cherny（Claude Code の生みの親、『Programming TypeScript』著者）の個人ブログ——マネジメント/製品エッセイ。クロスチェック済み（09-21）：ブログ自体に経歴はなく、著者確認と Claude Code での役割は独立した公開情報で確認済み。投稿は一次逸話を含まないプロセス論である点に注意。",
     "zh": "Boris Cherny（Claude Code 创造者、《Programming TypeScript》作者）的个人博客——管理/产品随笔。已交叉核验（09-21）：博客本身无作者简介；作者身份与 Claude Code 角色经独立公开来源确认。注意其文章为方法论随笔，不含第一手轶事。"
+  },
+  "borretti.me": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Fernando Borretti's personal blog (Rust/compiler essays, Austral author). Cross-checked (10-10): fetched 'No Man Is an Island' in full; quotes attributed to it match the text. Personal-essay source — argument, not reporting.",
+    "jp": "Fernando Borretti の個人ブログ（Rust/コンパイラ論考、Austral 作者）。クロスチェック済み（10-10）：『No Man Is an Island』を全文取得、引用は本文と一致。個人エッセイ源——論証であり報道ではない。",
+    "zh": "Fernando Borretti 的个人博客（Rust/编译器长文，Austral 作者）。交叉核验（10-10）：全文抓取了《No Man Is an Island》，引用与其原文一致。个人随笔来源——是论证而非报道。"
   },
   "brand.io": {
     "cat": "other",
@@ -2001,6 +2052,15 @@
     "jp": "クレイ数学研究所——ミレニアム賞発表の一次情報源；検証が済むまで結論を出さない、意図的に慎重な言葉遣い（「apparently settled」）。",
     "zh": "克雷数学研究所——千禧年大奖公告的一手来源；措辞刻意审慎（如“显然已被解决”），在验证完成前不给结论。"
   },
+  "clickhouse.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "ClickHouse Inc. engineering blog — vendor blog selling ClickHouse and Managed Postgres, so benchmark posts need reading past the lede. Cross-checked (10-12): its POSETTE recap carries the disclaimers prominently (baseline gp3 only, 'deliberately narrower than the title', single-snapshot pg_stat_activity) — the caveats are on-page, not stripped, and its own CTA discloses the vendor conflict.",
+    "jp": "ClickHouse Inc. のエンジニアリングブログ — ClickHouse とマネージド Postgres を売るベンダーブログであり、ベンチマーク記事はリードの先まで読む必要がある。突合済み（10-12）：POSETTE レキャップは限定語を目立つ位置に載せる（ベースライン gp3 のみ、「結論は意図的にタイトルより狭い」、単一時点の pg_stat_activity）— 限定語はページ上にあり、剥がされておらず、CTA 自身がベンダー利害を開示。",
+    "zh": "ClickHouse Inc. 工程博客 —— 出售 ClickHouse 与托管 Postgres 的厂商博客，基准类文章需读到导语之后。已交叉核验（10-12）：其 POSETTE 回顾把限定语放在显要位置（仅基线 gp3、'结论刻意窄于标题'、单点快照的 pg_stat_activity）—— 限定在页面本身，未被剥离，且其 CTA 自我披露了厂商利益。"
+  },
   "cloud.google.com": {
     "cat": "vendor",
     "cred": "high",
@@ -2153,6 +2213,14 @@
     "en": "Cognition (Devin) corporate blog — first-party lab posts with unusually deep technical appendices; the RSA-260 post's cost tables are self-measured and the siever code was not released, so performance claims stay vendor-graded.",
     "jp": "Cognition（Devin）公式ブログ —— 技術付録が異常に深い一次情報。RSA-260 記事のコスト表は自己計測で、siever コードは未公開のため性能主張はベンダー自己評価のまま。",
     "zh": "Cognition（Devin）官方博客 —— 一手实验室文章，技术附录异常深入；RSA-260 文中的成本表为自测、siever 代码未公开，性能主张仍属厂商自评。"
+  },
+  "cointelegraph.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "en": "Crypto trade news; its Drake/Buterin bunker-mode piece carried direct quotes from both and Haseeb Qureshi's endorsement — consistent with the HN thread and the underlying X posts, but treat its framing of expert opinion as selective (skeptics like Lindell appear only via The Defiant).",
+    "jp": "暗号業界ニュース。Drake/Buterin のバンカーモード記事は両者の直接引用と Haseeb Qureshi の支持を含み — HN 議論や元の X 投稿と整合するが、専門家意見の採り上げは選択的（Lindell ら懐疑派は The Defiant 経由でのみ登場）。",
+    "zh": "加密行业新闻媒体；其 Drake/Buterin 掩体模式报道带有双方的直接引语和 Haseeb Qureshi 的支持——与 HN 讨论及底层 X 帖子一致，但其对专家意见的取舍是有选择的（Lindell 等质疑者仅经 The Defiant 出现）。"
   },
   "colbymchenry.github.io": {
     "cat": "code",
@@ -2325,6 +2393,15 @@
     "jp": "Armagan Amcalar（dashersw）の CoyoPedal プロジェクトサイト。一次読解：ブラウザビルドが WebAssembly にコンパイルされた「同じ UI、同じ DSP、同じニューラルアンプモデル」で動くこと、240 MHz デュアルコア MCU 上で 48 kHz の NAM A2-Full プロファイル（「フルアーキテクチャであり、縮小版ではない」）、タッチ UI を確認——ページ上の作者/ライセンス（GPL-3.0）はリポジトリと一致。\"WaveNet\" という語はページに現れない（その詳細は README 側）。自身の動作範囲を正直に文書化するプロジェクトページ。GitHub リポジトリ（dashersw/coyopedal）および HN スレッドと相互検証済み。",
     "zh": "Armagan Amcalar（dashersw）的 CoyoPedal 项目站。已一手阅读：确认浏览器构建以 WebAssembly 运行\"相同的 UI、相同的 DSP、相同的神经功放模型\"、240 MHz 双核微控制器上 48 kHz 的 NAM A2-Full 档案（\"完整架构，非删减替身\"）、以及触控 UI——页面上的作者/许可证（GPL-3.0）与仓库一致。\"WaveNet\" 一词未在页面出现（该细节属于 README）。一个诚实记录自身边界的项目页。与 GitHub 仓库（dashersw/coyopedal）及 HN 讨论串交叉验证。"
   },
+  "cphpost.dk": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "The Copenhagen Post (English-language Danish news). Cross-checked (10-10): its CPR-breach round-up matches Politiken's reporting it cites (123456 on three accounts incl. admin, 8.8M CPR numbers, 970k credit warnings) and is careful to mark the hacker's claims as unconfirmed.",
+    "jp": "The Copenhagen Post（デンマークの英字紙）。クロスチェック済み（10-10）：CPR 侵害まとめは引用先 Politiken の報道と一致（管理者を含む3アカウントの 123456、880万件の CPR 番号、97万人の与信警告）。ハッカーの主張を未確認と明記する慎重さ。",
+    "zh": "The Copenhagen Post（丹麦英文媒体）。交叉核验（10-10）：其 CPR 事件综述与所引 Politiken 报道一致（含管理员在内三个账户用 123456、880 万个 CPR 号、97 万信贷预警），并将黑客的说法谨慎标注为未证实。"
+  },
   "cppstories.com": {
     "cat": "community",
     "cred": "high",
@@ -2360,6 +2437,24 @@
     "en": "CrowdSec's incident statements carry unusual self-hedging (repo counts disputed, \"found none so far\" on credential hunting, staleness windows) — read the primary statement, not the \"300 repos\" coverage. Cross-validated (09-18) against the HN thread and TanStack-compromise reporting.",
     "jp": "CrowdSec のインシデント声明は珍しい自己留保を運ぶ（リポジトリ数に異議、認証情報探索は「今のところ未発門」、陳腐化期間）——一次声明を読み、「300リポジトリ」報道を読むな。クロスチェック済み（09-18、HN スレッドと TanStack 侵害報道と照合）。",
     "zh": "CrowdSec 的事件声明带有少见的自我限定（否认仓库数、凭据排查\"目前未发现\"、过时窗口）——读一手声明，别读\"300 仓库\"报道。已交叉核验（09-18，对照 HN 讨论与 TanStack 事件报道）。"
+  },
+  "crowdstrike.com": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Vendor threat-intelligence blog (Counter Adversary Operations). The ARTEX post (read first-hand 10-09) is unusually disciplined: evidence staged by provenance (actor-side open directories, session histories), attribution stated with explicit confidence level, and its own hedges carried in-line (resume-prompt personal details it says it 'cannot definitively associate'; ATT&CK table omitting Initial Access/Exfiltration while coverage implied full-chain). Cross-validated: the DeepSeek-backend finding independently confirmed by Yonhap.",
+    "jp": "ベンダー脅威インテリジェンスブログ(Counter Adversary Operations)。ARTEX 記事(10-09 に一次確認)は規律が高い:証拠を出所別に段階化(アクター側公開ディレクトリ、セッション履歴)、帰属は信頼度を明示、自己の限定も本文に保持(履歴書プロンプトの個人情報は「決定的な関連付けは不可能」;ATT&CK 表に Initial Access/Exfiltration なし、一方報道はフルチェーンを示唆)。クロス検証済み:DeepSeek バックエンドの所見は Yonhap が独立に確認。",
+    "zh": "厂商威胁情报博客(Counter Adversary Operations)。ARTEX 文(10-09 一手阅读)纪律性罕见:证据按来源分层(行动者侧开放目录、会话历史),归因明示置信度,自身限定随文保留(简历提示词的个人信息“无法明确关联”;ATT&CK 表不含 Initial Access/Exfiltration,而报道暗示全链路)。已交叉核验:DeepSeek 后端结论经 Yonhap 独立证实。"
+  },
+  "crypto.news": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Crypto industry news outlet. Cross-checked (10-12): its Ledger hardware-implant report (Ledger confirming an 'unauthorized hardware implant' in one device, Bitquery ~$92.9M/311-wallet estimate, Karpelès teardown photos, Tibane Labs analysis) is internally consistent and every quantitative claim is attributed to a named firm; vendor hedges (function unconfirmed, causation unestablished) carried rather than stripped.",
+    "jp": "暗号資産業界のニュースサイト。突合済み（10-12）：Ledger ハードウェアインプラント報道（Ledger が 1 台のデバイスに不正ハードウェアインプラントを確認、Bitquery の約 9,290 万ドル/311 ウォレット推定、Karpelès 氏の分解写真、Tibane Labs の分析）は内部的に整合し、定量主張はすべて実名企業に帰属。ベンダーの限定語（機能未確認、因果未確立）を剥がさず保持。",
+    "zh": "加密行业新闻站。已交叉核验（10-12）：其 Ledger 硬件植入报道（Ledger 确认一台设备含未授权硬件植入、Bitquery 约 9,290 万美元/311 钱包估算、Karpelès 拆解照片、Tibane Labs 分析）内部一致，每个量化主张都具名归因；保留了厂商的限定语（功能未确认、因果未确立）而非剥离。"
   },
   "cryptocellar.org": {
     "cat": "research",
@@ -2676,6 +2771,15 @@
     "jp": "Dealroom——スタートアップ/VC データプラットフォーム（ニュース部門あり）。引用項目（「Kepler exits stealth with $470 million」、9/10）は本文の 4.68 億ドル、GlobalFoundries 5,000万ドル + Intel Capital + AMD Ventures + Baillie Gifford + Gates Frontier、商務省 2.45 億ドルのコミットを確認。09-14 に本文を確認。Wired の特集と hwbusters（ロジック上への強誘電体積層の詳細）で相互検証。注意：Dealroom のページ自体は「ferroelectric」に一切言及せず——この語は Wired 由来。両ソースは完全には重複しない。",
     "zh": "Dealroom——初创/风投数据平台，附新闻栏目。所引条目（\"Kepler exits stealth with $470 million\"，9 月 10 日）证实了正文 4.68 亿美元、GlobalFoundries 5000 万 + Intel Capital + AMD Ventures + Baillie Gifford + Gates Frontier，以及商务部 2.45 亿美元承诺。09-14 已逐页核实；与 Wired 特稿及 hwbusters（铁电叠层逻辑工艺细节）交叉验证。注意：Dealroom 页面通篇未提\"ferroelectric\"——该词出自 Wired；两来源并不完全重叠。"
   },
+  "debasishg.github.io": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Debasish Ghosh's engineering blog — the essay formalizing the Tiger Style 'push ifs up, fors down' heuristic with category theory, limits included. Cross-checked (10-09): the heuristic's origin matches TigerBeetle's Tiger Style docs; HN thread 176 pts.",
+    "jp": "Debasish Ghosh の技術ブログ——Tiger Style の「if を上へ、for を下へ」ヒューリスティックを圏論で形式化する エッセイ（限界も明記）。クロスチェック（10-09）：ヒューリスティックの出所は TigerBeetle の Tiger Style ドキュメントと一致。HN スレッド 176 pts。",
+    "zh": "Debasish Ghosh 的工程博客——用范畴理论把 Tiger Style「上推 if、下推 for」启发式形式化的文章（含限定条件）。交叉验证（10-09）：该启发式的出处与 TigerBeetle Tiger Style 文档一致；HN 讨论 176 分。"
+  },
   "debian.org": {
     "cat": "community",
     "cred": "high",
@@ -2909,6 +3013,14 @@
     "en": "Independent tech blog (hardware writeups); BC-250 specs verified against Tom's Hardware and forum sources before citing.",
     "jp": "独立系テックブログ(ハードウェア寄り)。BC-250 の仕様は Tom's Hardware とフォーラム情報で照合済み。",
     "zh": "独立技术博客（硬件向）；BC-250 规格在引用前已对照 Tom's Hardware 和论坛信源核实。"
+  },
+  "dgt.is": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "en": "Danish developer blog (dgt.is); the DeepSeek 4.1 Flash essay is first-hand heavy-usage reporting, not benchmarks — its pricing/KV-cache numbers were cross-checked against its 490-pt HN thread and consistent OpenRouter pricing, but the core claim is explicitly the author's subjective experience.",
+    "jp": "デンマークの開発者ブログ（dgt.is）。DeepSeek 4.1 Flash 記はベンチマークでない一次のヘビーユース報告 — 価格と KV キャッシュの数値は 490pt の HN 議論と整合する OpenRouter 価格で裏取り済みだが、核心の主張は著者の主観的体験であると明示されている。",
+    "zh": "丹麦开发者博客（dgt.is）；DeepSeek 4.1 Flash 一文是重度使用的一手体验报告而非跑分——其定价与 KV cache 数字已对照 490 分的 HN 讨论和一致的 OpenRouter 定价交叉验证，但核心主张明确是作者的主观体验。"
   },
   "dial9-rs.github.io": {
     "cat": "code",
@@ -4105,6 +4217,15 @@
     "jp": "GitLab フォージ本体——プロジェクト/MR の事実の一次ソース。github.com と同様、新しさの検証が必要。",
     "zh": "GitLab 代码托管平台本身——项目/MR 事实的权威来源；与 github.com 同属需核实新鲜度的类别。"
   },
+  "gizmodo.com": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Gizmodo tech/science news. Cross-checked (10-10): its Flock-the-Flockers report correctly attributes the police visit to Sistilli's own video and notes Peel Regional Police declined comment — attribution discipline intact.",
+    "jp": "Gizmodo のテック・サイエンス報道。クロスチェック済み（10-10）：Flock 逆監視記事は警察の訪問を本人動画に由来づけ、警察が取材に応じなかったことを明記。帰属の規律は正確。",
+    "zh": "Gizmodo 科技新闻。交叉核验（10-10）：其 Flock 反向监控报道如实注明“警察上门”仅出自当事人视频、警方拒绝置评——归属纪律良好。"
+  },
   "gleam.run": {
     "cat": "code",
     "cred": "high",
@@ -4652,6 +4773,15 @@
     "en": "Model/dataset hub; canonical for open-weight model releases and benchmarks.",
     "jp": "モデル/データセットハブ。オープンウェイトモデル公開・ベンチの正典。",
     "zh": "模型/数据集中枢；开源权重模型发布与基准的权威来源。"
+  },
+  "hugohe3.github.io": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "ppt-master's GitHub Pages examples gallery. Cross-checked (10-10): live, titled 'PPT Master — AI generates natively editable PPTX from any document'; showcases the repo's native-shape/chart output. Project's own showcase — position claims are the project's.",
+    "jp": "ppt-master の GitHub Pages 例集ギャラリー。クロスチェック済み（10-10）：オンラインで稼働、タイトルは「PPT Master — AI generates natively editable PPTX from any document」。リポジトリのネイティブ図形/チャート出力を実演。プロジェクト自身のショーケース。",
+    "zh": "ppt-master 的 GitHub Pages 示例画廊。交叉核验（10-10）：在线可访问，标题为“PPT Master — AI generates natively editable PPTX from any document”；展示该仓库的原生形状/图表输出。项目自办展示——定位说辞按项目自述对待。"
   },
   "hugovergnes.github.io": {
     "cat": "community",
@@ -5318,6 +5448,15 @@
     "jp": "Ladybird ブラウザの公式サイト——「This Month in Ladybird」月例レポートと Alpha 2026（Linux & macOS）目標の一次情報。進捗はすべてプロジェクトの自己報告（機能見出し中心で独立ベンチマークなし）——Alpha の日程は目標であり確約ではない。クロス検証済み：8月レポートのトピックは HN の議論と一致。",
     "zh": "Ladybird 浏览器官方站点——\"This Month in Ladybird\" 月报及 Alpha 2026（Linux 与 macOS）目标的第一手来源；所有进展均为项目自述（功能标题式新闻，无独立基准测试）——Alpha 日期是目标而非承诺。已交叉验证：八月月报主题与 HN 讨论一致。"
   },
+  "lalinsky.com": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal engineering blog of Lukáš Lalinský (ex-Acoustic; audio/DNS/SQLite tooling). Cross-checked (10-12): its zt Zig-templating post matches the lalinsky/zt repo it announces — README pitch, build-time transpilation, std.Io.Writer output, compile-time field errors all verified against the repository; author states immaturity himself.",
+    "jp": "Lukáš Lalinský 氏の個人エンジニアリングブログ（元 Acoustic；オーディオ/DNS/SQLite ツール）。突合済み（10-12）：zt Zigテンプレートの投稿は発表元の lalinsky/zt リポジトリと一致 — README の位置づけ、ビルド時トランスパイル、std.Io.Writer 出力、コンパイル時フィールドエラーをリポジトリで検証；成熟度未満は作者自身が明言。",
+    "zh": "Lukáš Lalinský 的个人工程博客（前 Acoustic；音频/DNS/SQLite 工具）。已交叉核验（10-12）：其 zt Zig 模板文章与其发布的 lalinsky/zt 仓库一致 —— README 定位、构建期转译、std.Io.Writer 输出、编译期字段错误均经仓库核验；作者自己声明尚不成熟。"
+  },
   "lalitm.com": {
     "cat": "other",
     "cred": "high",
@@ -5668,6 +5807,15 @@
     "en": "GitHub Pages data-analysis writeup by Louis Abraham ('The load-bearing vocabulary of Claude', 461k PR descriptions, agent-vocab cluster 0.7%→~39%). Cross-validated (08-28): methodology and figures corroborated by the 562-point HN thread and the linked repo.",
     "jp": "Louis Abraham氏のGitHub Pagesデータ分析記事（「The load-bearing vocabulary of Claude」、46.1万件のPR説明、エージェント語彙クラスタ0.7%→約39%）。突合済み（08-28）：手法と数値は562ポイントのHNスレッドとリンク先リポジトリが裏付け。",
     "zh": "Louis Abraham 的 GitHub Pages 数据分析文章（《The load-bearing vocabulary of Claude》，46.1 万条 PR 描述，智能体词汇簇 0.7%→约 39%）。已交叉核验（08-28）：方法与数据得到 562 分 HN 讨论帖及所附仓库印证。"
+  },
+  "lpc.events": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Linux Plumbers Conference site — primary for talk abstracts (Meta's CRAM `mm/cram.c` memory-tier proposal). Cross-checked (10-09): the abstract's claims match Phoronix's independent report of the same talk.",
+    "jp": "Linux Plumbers Conference のサイト——トークンアブストラクトの一次来源（Meta の CRAM `mm/cram.c` メモリティア提案）。クロスチェック（10-09）：アブストラクトの主張は同じトークンに関する Phoronix の独立報道と一致。",
+    "zh": "Linux Plumbers 会议官网——议题摘要的第一来源（Meta 的 CRAM `mm/cram.c` 内存层提案）。交叉验证（10-09）：摘要主张与 Phoronix 对同场报告的独立报道一致。"
   },
   "luarocks.org": {
     "cat": "vendor",
@@ -6164,6 +6312,15 @@
     "jp": "Mistral AI の発表ブログ。自社リリースの一次情報だが、能力に関する主張はすべてベンダー自身のもの（Firefox Smart Window の記事は具体的モデルを明示せず、ZDR 主張は監査ではなく契約上の表明）。Mozilla の Firefox 148 記事と突合済み — 提携とオプトイン方式は確認。",
     "zh": "Mistral AI 的发布公告博客。对其自身发布是一手来源，但所有能力声明都出自厂商本身（Firefox Smart Window 文章未指明具体模型，ZDR 声明是合同性表述而非审计）。已与 Mozilla 并行的 Firefox 148 文章交叉核验，确认了合作关系与自主加入的定位。"
   },
+  "mitchellh.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Mitchell Hashimoto's personal writing (Ghostty creator) — primary for his own protocol proposals. Cross-checked (10-09): the OSC 7501 spec matches the HN discussion and the libghostty/Rex implementations it cites.",
+    "jp": "Mitchell Hashimoto（Ghostty 作者）の個人執筆——自身のプロトコル提案の一次来源。クロスチェック（10-09）：OSC 7501 仕様は HN 議論と引用される libghostty/Rax 実装と一致。",
+    "zh": "Mitchell Hashimoto（Ghostty 作者）的个人写作——其协议提案的第一来源。交叉验证（10-09）：OSC 7501 规格与 HN 讨论及其引用的 libghostty/Rex 实现一致。"
+  },
   "mitxela.com": {
     "cat": "community",
     "cred": "high",
@@ -6380,6 +6537,14 @@
     "jp": "個人システムエンジニアリングブログ。09-16 のページ検証で、10,000 エントリの BPF LRU ハッシュ、280 億→30.3 億カーネルサイクルのベンチマーク、ハードリンク時の i_nlink>1 スローパスフォールバック、「一時的な回避策に過ぎない」とする自己評価、タイトルの「(Not AI Gen)」表記を確認。HN 49697477（149pts、コメントで memoization 対 SELinux AVC の論点が議論されている）でクロス検証済み。",
     "zh": "个人系统工程博客；09-16 页面核查确认 10,000 条目的 BPF LRU 哈希、280 亿降至 30.3 亿内核周期的基准数据、硬链接 i_nlink>1 时回退慢路径、'更像权宜之计而非真正解决方案'的自我评价及标题中的 '(Not AI Gen)' 标记。经 HN 49697477（149 分，评论围绕 memoization 与 SELinux AVC 的对比展开）交叉验证。"
   },
+  "naturalsystems.io": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "en": "Alex Lowell's personal project site; eth68's latency/THD numbers are first-party measurements with the methodology published — corroborated by the HN thread's technically literate discussion, but single-builder hardware with only two PCBs populated.",
+    "jp": "Alex Lowell の個人プロジェクトサイト。eth68 のレイテンシ/THD 数値は方法論が公開された一次測定 — HN 議論の技術的に筋の通った議論で裏取り済みだが、実装済み PCB はわずか2枚の個人ビルドハードウェア。",
+    "zh": "Alex Lowell 的个人项目站；eth68 的延迟/THD 数字是公开了方法论的第一方实测——经 HN 讨论中具备技术素养的讨论佐证，但这是只焊了两块 PCB 的单人硬件项目。"
+  },
   "nature.com": {
     "cat": "research",
     "cred": "high",
@@ -6397,6 +6562,15 @@
     "en": "NautilusTrader's official site; first-hand docs for the Rust-native trading engine (v2 release-candidate line).",
     "jp": "NautilusTraderの公式サイト。Rustネイティブ取引エンジン（v2リリース候補ライン）ドキュメントの一次情報。",
     "zh": "NautilusTrader 官网；Rust 原生交易引擎（v2 候选发布线）文档的一手来源。"
+  },
+  "nbcphiladelphia.com": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "NBC10 Philadelphia local news. Cross-checked (10-10): its Anthropic false-tip report matches TechCrunch on dates/timeline and adds the police spokesperson's exact quotes and the multi-agency investigation list.",
+    "jp": "NBC10 フィラデルフィアの地域報道。クロスチェック済み（10-10）：Anthropic 虚偽通報記事は TechCrunch と日付・経緯が一致し、警察報道官の発言と多機関調査の内実を補完。",
+    "zh": "NBC10 费城地方新闻。交叉核验（10-10）：其 Anthropic 虚假线索报道与 TechCrunch 在日期与时间线上一致，并补充了警方发言人的原话与多机构调查名单。"
   },
   "nebius.com": {
     "cat": "vendor",
@@ -6468,6 +6642,15 @@
     "en": "German digital-rights news — strong on surveillance, copyright, and sanctions coverage; cross-checked the Autistici/Inventati designation against State Dept/OFAC releases.",
     "jp": "ドイツのデジタル権利系メディア。監視・著作権・制裁報道に強い。Autistici/Inventati 指定は国務省/OFAC 発表と突合済み。",
     "zh": "德国数字权利媒体——在监控、版权与制裁报道上较强；Autistici/Inventati 制裁一事已与国务院/OFAC 公告交叉核验。"
+  },
+  "newgtldprogram-aps.icann.org": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "ICANN's official New gTLD Application Publication System — canonical record for gTLD applications (applicant, string, status, processing stage). Cross-checked (10-09): the .lan application's applicant (Coffee Danger, LLC / Identity Digital) and status match the HN thread's claims; JS-rendered, so scrape with care.",
+    "jp": "ICANN 公式の新 gTLD 申請公開システム —— gTLD 申請の一次記録(出願人・文字列・状態・処理段階)。10-09 に突合済み:.lan 申請の出願人(Coffee Danger, LLC / Identity Digital)と状態は HN スレッドの主張と一致。JS 描画のため取得は要注意。",
+    "zh": "ICANN 官方新 gTLD 申请公布系统——gTLD 申请的权威记录(申请人、字符串、状态、处理阶段)。10-09 交叉核对:.lan 申请的申请人(Coffee Danger, LLC / Identity Digital)与状态同 HN 讨论一致;页面由 JS 渲染,抓取需注意。"
   },
   "news.17173.com": {
     "cat": "news",
@@ -6594,6 +6777,15 @@
     "en": "Nicholas Nethercote's rustc-perf reports — the primary bimonthly telemetry on Rust compiler performance, with per-PR attributions and stated caveats (regressions incl. serde). The best-in-class example of a maintainer publishing their own measurements.",
     "jp": "Nicholas Nethercoteのrustc-perfレポート —— Rustコンパイラ性能の隔週一次テレメトリ。PR単位の帰属と注意書き（serdeを含む退行）付き。メンテナが自測定を公開する模範例。",
     "zh": "Nicholas Nethercote 的 rustc-perf 报告——Rust 编译器性能的双周一手遥测，含逐 PR 归因与明示注意事项（含 serde 在内的退行）。维护者公开自测数据的典范。"
+  },
+  "nobelprize.org": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "The Nobel Prize's official site — primary for laureates, citations, and prize summaries. Cross-checked (10-09): the 2026 chemistry award (Kagan/Soai, non-linear effects + autocatalysis) matches same-day HN and press coverage.",
+    "jp": "ノーベル賞公式サイト——受賞者・引用文・要約の一次来源。クロスチェック（10-09）：2026 年化学賞（Kagan/Soai、非線形効果 + 自己触媒）は当日の HN と報道と一致。",
+    "zh": "诺贝尔奖官网——获奖者、获奖理由与官方摘要的第一来源。交叉验证（10-09）：2026 化学奖（Kagan/Soai，非线性效应 + 自催化）与当日 HN 及媒体报道一致。"
   },
   "nobodywho.ai": {
     "cat": "community",
@@ -6873,6 +7065,15 @@
     "jp": "OpenCutの公式サイト（opencut.appが現行のopencut-classicビルドを配信；Rust書き換え版はnew.opencut.app）。OpenCut書き換え発表（Rustコア、ヘッドレスモード、MCPサーバー）で引用。共引用のOpenCut-app/OpenCutリポジトリ（83.5kスター）が裏付け。",
     "zh": "OpenCut 官网（opencut.app 运行当前的 opencut-classic 构建；Rust 重写版在 new.opencut.app）。因 OpenCut 重写公告（Rust 核心、无头模式、MCP 服务器）被引用。由共同引用的 OpenCut-app/OpenCut 仓库（83.5k stars）佐证。"
   },
+  "opengroup.org": {
+    "cat": "data",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "The Open Group's official UNIX certification register. Cross-checked (10-10): live page shows only IBM/HPE/SCO; cross-validated against the Oct 7 Wayback snapshot which still listed four macOS releases — the diff is the story.",
+    "jp": "The Open Group の公式 UNIX 認証レジストリ。クロスチェック済み（10-10）：現在のページは IBM/HPE/SCO のみ。10月7日の Wayback スナップショット（macOS 4バージョンを掲載）と突き合わせ検証済み——その差分がニュース。",
+    "zh": "The Open Group 官方 UNIX 认证注册表。交叉核验（10-10）：当前页面仅列 IBM/HPE/SCO；与 10 月 7 日 Wayback 快照（仍列四个 macOS 版本）交叉验证——差异本身即新闻。"
+  },
   "openjdk.org": {
     "cat": "code",
     "cred": "high",
@@ -7024,6 +7225,15 @@
     "en": "Landing page for OpenWhispr, an open-source local-first voice-dictation app — its offline/privacy claims (\"your voice never reaches us\", local Whisper models) check out against the OpenWhispr/openwhispr repo (cross-validated); compliance badges (HIPAA/SOC 2) are unverified marketing.",
     "jp": "オープンソースのローカル音声入力アプリ OpenWhispr の製品ページ。オフライン/プライバシー主張（「音声はこちらに届かない」、ローカル Whisper モデル）は OpenWhispr/openwhispr リポジトリと一致（相互検証済み）。HIPAA/SOC 2 等のコンプライアンスバッジは未検証のマーケティング。",
     "zh": "OpenWhispr（开源本地优先语音听写应用）的落地页——其离线/隐私主张（\"你的语音永远不经过我们\"、本地 Whisper 模型）与 OpenWhispr/openwhispr 仓库一致（已交叉验证）；HIPAA/SOC 2 等合规徽章属未经核实的营销。"
+  },
+  "opper.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Opper AI's product site, home of the Jevman Pac-Man leaderboard for decision models — a vendor-run benchmark (their platform hosts the harness), with full games watchable and the harness open-sourced; scores were corroborated (10-09) by the Show HN thread and community discussion, but the model roster is the vendor's choice.",
+    "jp": "Opper AI の製品サイト。決定モデルのパックマン・リーダーボード Jevman の場所 —— ベンダー運営のベンチマーク(ハーネスは同社プラットフォームでホスト)だが、ゲームは全て観戦可能でハーネスは公開済み。スコアは 10-09 に Show HN スレッドとコミュニティの議論で裏取り済み。ただし出場モデルの選定はベンダー側。",
+    "zh": "Opper AI 的产品站,决策模型吃豆人排行榜 Jevman 的所在地——厂商运营的基准(harness 由其平台托管),完整对局可观看、harness 已开源;分数 10-09 经 Show HN 讨论与社区讨论佐证,但参赛模型名单由厂商决定。"
   },
   "opusfived.dev": {
     "cat": "community",
@@ -7349,6 +7559,15 @@
     "jp": "Politico EU——政策/テック報道。検証済み（09-09）：Coxon 辞職記事を一次取得し、発言（『我々の命を賭博にかけている』『自己改善する超知能へ直進』）を確認。さらに feed が落とした事実：Anthropic のアライメント担当リード Evan Hubinger が Coxon を公然支持し、10 年以内に AI が人類を滅ぼす確率を >10% と試算。主流メディアのテンポ；引用は X の元投稿と突合可能。",
     "zh": "Politico EU——政策/科技报道。已核验（09-09）：Coxon 辞职报道一手抓取，确认引语（『拿我们的生命赌博』『直奔自我改进的超级智能』），并有 feed 漏掉的事实：Anthropic 对齐团队负责人 Evan Hubinger 公开支持 Coxon，并给出十年内 AI 灭绝人类 >10% 的概率。主流新闻节奏；引语可与 X 原帖对勘。"
   },
+  "politiken.dk": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Politiken, major Danish daily. Cross-checked (10-10): URL live (HTTP 200); headline confirms it received the hacker's 8.75M-record dataset — the primary source for the 123456 password detail, which secondary coverage faithfully attributes to it.",
+    "jp": "Politiken、デンマークの主要日刊紙。クロスチェック済み（10-10）：URL 有効（HTTP 200）。見出しはハッカーから875万件のデータセットを受け取った事実を確認。「123456」パスワード詳細の一次ソース。",
+    "zh": "Politiken，丹麦主流日报。交叉核验（10-10）：链接有效（HTTP 200）；标题确认其收到了黑客提供的 875 万条数据集——是“123456”密码细节的第一手来源，二手报道均如实归因于它。"
+  },
   "poltora.dev": {
     "cat": "community",
     "cred": "med",
@@ -7644,6 +7863,15 @@
     "jp": "Qoder公式プロダクトサイト（アリババ）。08-28にエージェントワークスペース刷新をAliyun開発者コミュニティ記事と併せて使用（Qwen3.8-Max、Autoルーター、40+コネクタ/70+プラグイン/2万+スキル）。PingWestとAliyun記事に突合済み。",
     "zh": "Qoder 官方产品站（阿里）。08-28 与阿里云开发者社区文章一起用于智能体工作台重塑报道（Qwen3.8-Max、Auto 调度、40+ 连接器/70+ 插件/2 万+ 技能）。已与 PingWest 及阿里云文章交叉核验。"
   },
+  "quake-srp.pages.dev": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Cloudflare Pages host for quake-srp's playable shareware episode — the demo endpoint of the safe-Rust Quake port. Cross-checked (10-09) against the GitHub README, whose claims (oracle diffing, AUDIT.md, agent-fleet process) live in the repo; the page itself is a player, not documentation.",
+    "jp": "quake-srp のプレイ可能なシェアウェアエピソードを載せる Cloudflare Pages ホスト —— safe Rust 版 Quake ポートのデモ入口。10-09 に GitHub README と突合済み(オラクル差分・AUDIT.md・エージェント艦隊の工程はリポジトリ側)。ページ自体はプレイヤーであってドキュメントではない。",
+    "zh": "quake-srp 可试玩共享版章节的 Cloudflare Pages 托管页——安全 Rust 版《雷神之锤》的演示入口。10-09 与 GitHub README 交叉核对(oracle 差分、AUDIT.md、智能体舰队流程都在仓库里);页面本身是播放器,不是文档。"
+  },
   "qualcomm.com": {
     "cat": "vendor",
     "cred": "high",
@@ -7761,6 +7989,15 @@
     "jp": "R&D World——研究開発/イノベーション業界誌。OpenAI o3のIOI/Codeforces報道で引用（08-09）；これは08-17の修正でCodeforcesパーセンタイルを軸に項目を改題した際の*差し替え*リンク（元の36Kr「Doug」リンクはVoid級の不整合）。arXiv:2502.06807と共引用。",
     "zh": "R&D World——研发/创新行业杂志。因 OpenAI o3 的 IOI/Codeforces 报道被引用（08-09）；这是 08-17 更正后替换的链接，当时该条目围绕 Codeforces 百分位重新拟题（原 36Kr “Doug”链接属 Void 类错配）。与 arXiv:2502.06807 共同引用。"
   },
+  "rea.tools": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "REA's official docs/onboarding site. Cross-checked (10-10): content matches the morluto/rea repo it documents; the install path is a paste-into-your-agent prompt around npx rea-agents@latest. Vendor site — treat its framing as the project's own.",
+    "jp": "REA の公式ドキュメント/オンボーディングサイト。クロスチェック済み（10-10）：内容は文書化対象の morluto/rea リポジトリと一致。導線は npx rea-agents@latest を貼り付けるプロンプト。ベンダーサイトゆえ記述は当事者主張として扱う。",
+    "zh": "REA 官方文档/引导站。交叉核验（10-10）：内容与其文档所对应的 morluto/rea 仓库一致；安装路径是围绕 npx rea-agents@latest 的“粘贴进智能体”提示词。厂商站点——其表述按项目自述对待。"
+  },
   "reactoratlas.com": {
     "cat": "data",
     "cred": "med",
@@ -7805,6 +8042,15 @@
     "en": "Advocacy news outlet (digital-rights slant) — treat framing with care, but the specific facts check out. Fetched 09-21: Spain's Second Section of the Intellectual Property Commission (Ministry of Culture) ordered ISP blocks on Archive.today and mirrors, no court ruling, the \"ESTÁ USTED INTENTANDO ACCEDER A UN SITIO WEB ILEGAL\" block page; it indeed does not reproduce the resolution or name the complainant (the feed correctly flagged both). Independently cross-checked 09-21 against bandaancha.eu (09-17), which confirms the commission order, ISP-level blocks, mirrors, and adds the block took effect from mid-August.",
     "jp": "デジタル権利寄りのアドボカシー系ニュースサイト — 論調には注意が必要だが、個別の事実は確認できた。09-21 に取得：スペイン文化省の知的財産委員会第二部が Archive.today とミラーの ISP ブロックを命令、裁判所判決なし、「ESTÁ USTED INTENTANDO ACCEDER A UN SITIO WEB ILEGAL」のブロックページ。決議文の未掲載・申立人不明も事実で、フィードの注記は正しい。09-21 に bandaancha.eu（09-17）で独立クロス検証：委員会命令、ISP 単位のブロック、ミラー、8月中旬からの発効を確認。",
     "zh": "数字权利倾向的倡导型新闻网站——框架需谨慎对待，但具体事实核查通过。09-21 抓取：西班牙文化部知识产权委员会第二部分下令 ISP 封锁 Archive.today 及镜像、无法院裁决、\"ESTÁ USTED INTENTANDO ACCEDER A UN SITIO WEB ILEGAL\" 封锁页；确实未转载决议原文、未点名申诉方（feed 对这两点的标注准确）。09-21 经 bandaancha.eu（09-17）独立交叉验证：确认委员会命令、ISP 级封锁、镜像，并补充封锁自 8 月中旬起生效。"
+  },
+  "red.anthropic.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Anthropic's red team / frontier-security program page. Cross-checked (10-12): the OSS Scanner page is the primary source behind THN's coverage and is more careful than it — unreviewed model-generated reports are the explicit opt-in fast track while the default process ships after human CVD review; enrollment mechanics (project.yaml + offline Dockerfile) match the coverage's numbers.",
+    "jp": "Anthropic のレッドチーム／フロンティアセキュリティプログラムのページ。突合済み（10-12）：OSS Scanner ページは THN 報道の一次情報で、より慎重だ — レビューなしのモデル生成レポートは明示的なオプトインの高速トラックで、既定プロセスは人間の CVD レビュー後に送信；登録の仕組み（project.yaml + オフライン Dockerfile）は報道の数字と一致。",
+    "zh": "Anthropic 红队/前沿安全项目页面。已交叉核验（10-12）：OSS Scanner 页面是 THN 报道的原始来源且更严谨 —— 未评审的模型生成报告是显式选择加入的快速通道，默认流程经人工 CVD 评审后发送；报名机制（project.yaml + 离线 Dockerfile）与报道数字吻合。"
   },
   "redblobgames.com": {
     "cat": "community",
@@ -8237,6 +8483,15 @@
     "jp": "香港の英字日刊。中国テック/ビジネスと政策をカバー。",
     "zh": "香港英文日报；中国科技/商业与政策报道。"
   },
+  "scottaaronson.blog": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Scott Aaronson's blog (UT Austin complexity theorist) — long-form first-person takes on complexity and AI. Cross-checked (10-08): the 'Mathocalypse' post's figures (~3 h of GPT-Pro-level compute per problem, ~5% of ~8,000 attempts) are his own reporting of briefings, not OpenAI's record — the release event itself matches the openai/math history file.",
+    "jp": "Scott Aaronson のブログ（UT オースティンの計量複雑性理論者）——複雑性と AI についての一人称の長文。検証済み（10-08）：〈Mathocalypse〉の数値（1 問あたり約 3 時間の GPT-Pro 級計算、約 8,000 試行中約 5% 成功）は彼がブリーフィングを受けた自己報告であり OpenAI の公式記録ではない——リリース事実そのものは openai/math の history ファイルと一致。",
+    "zh": "Scott Aaronson 的博客（UT 奥斯汀复杂性理论学者）——关于复杂性与 AI 的第一人称长文。已交叉核验（10-08）：〈Mathocalypse〉一文中的数字（每题约 3 小时 GPT-Pro 级算力、约 8000 次尝试中约 5% 成功）是他对比听取汇报后的自述，并非 OpenAI 官方记录——发布事件本身与 openai/math 的 history 文件一致。"
+  },
   "sdcc.sourceforge.net": {
     "cat": "code",
     "cred": "high",
@@ -8479,6 +8734,15 @@
     "en": "SFGate (Hearst) — SF Bay Area news; the Sep 11 Waymo ghost-gun report (Madilynne Medina) is the fastest first-hand account, with named SFPD spokesperson Allison Maxie and Waymo's own confirmation. Confirmed on-page 09-14 via reader; cross-validated vs the LA Times's Sep 12 follow-up. Same paywall note as latimes.com.",
     "jp": "SFGate（Hearst 系）——SF ベイエリアのニュース。9/11 の Waymo ゴーストガン記事（Madilynne Medina）は最速の一次報道で、SFPD 広報 Allison Maxie の実名と Waymo 本人の確認を含む。09-14 にリーダー経由で本文を確認。LA Times の 9/12 追跡記事と相互検証。ペイウォール注意は latimes.com に同じ。",
     "zh": "SFGate（Hearst 旗下）——旧金山湾区新闻；其 9 月 11 日 Waymo 幽灵枪报道（Madilynne Medina）是最快的一手叙述，含具名 SFPD 发言人 Allison Maxie 与 Waymo 自身确认。09-14 经阅读器逐页核实；与 LA Times 9 月 12 日的后续报道交叉验证。付费墙注意事项同 latimes.com。"
+  },
+  "sheets.works": {
+    "cat": "data",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "sheets.works 'Data Drop' — small data-journalism pieces that count things from primary records. Cross-checked (10-08): the maintainer-count piece's methodology (10+ commits, Oct 2025–Oct 2026) is self-defined and reproducible from the cited repos' histories; the HN thread stress-tested the proxy. Not a news org — treat its numbers as one methodology's output, not ground truth.",
+    "jp": "sheets.works の「Data Drop」——一次記録からカウントする小型データジャーナリズム。検証済み（10-08）：メンテナ数記事の手法（10+ コミット、2025-10〜2026-10）は自己定義で、参照リポジトリの履歴から再現可能。HN スレッドで代理指標の限界が検証された。報道機関ではない——数値は一手法の出力であり地上の真理ではない。",
+    "zh": "sheets.works 的「Data Drop」——从一手记录出发做计数的小型数据新闻。已交叉核验（10-08）：维护者计数一文的方法（10+ 次提交、2025-10 至 2026-10）为自定义口径，可在所引仓库的提交历史上复现；HN 讨论对该代理指标做了压力测试。非新闻机构——其数字是某种方法论的产物，不是基准真相。"
   },
   "shopify.engineering": {
     "cat": "vendor",
@@ -9072,6 +9336,15 @@
     "jp": "Sylvain Kalache の個人ブログ(Honeypot 共同創業者)——AI インシデント処理とスキル侵食のエッセイの一次情報。議論と類比でありデータセットなし。",
     "zh": "Sylvain Kalache 的个人博客(Honeypot 联合创始人)——AI 处理事故与技能侵蚀一文的一手出处；属论证与类比，无数据集。"
   },
+  "synthid.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Google DeepMind's SynthID Detector (public 10-07) — primary for watermark-verification capability and its stated limits (detects only SynthID-tagged content). Cross-checked (10-09) against the blog.google announcement of the same day.",
+    "jp": "Google DeepMind の SynthID Detector（10-07 公開）——ウォーターマーク検証能力とその明示的限界（SynthID タグ付きのみ検出）の一次来源。同日の blog.google 発表とクロスチェック（10-09）。",
+    "zh": "Google DeepMind 的 SynthID 检测器（10-07 公开）——水印验证能力及其明示局限（只检测带 SynthID 标记的内容）的第一来源。与 10-09 当日 blog.google 公告交叉验证。"
+  },
   "sysdig.com": {
     "cat": "security",
     "cred": "high",
@@ -9459,6 +9732,15 @@
     "jp": "量子コンピューティング専門ニュースサイト。IBM Nighthawk r2 の数値は IBM 公式ブログと一致——スループット主張はいずれにせよベンダー由来。",
     "zh": "专注量子计算的新闻站；IBM Nighthawk r2 数据与 IBM 官方博客一致——但吞吐声明无论如何都源自厂商。"
   },
+  "theranos.world": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Extend's interactive Theranos trial-evidence simulation (Holmes' desk, real trial texts/emails 'parsed by Extend') — a document-AI vendor's marketing piece that discloses its sponsor on-site; the underlying evidence is the public court record, but the selection of what got parsed is the vendor's. Cross-checked (10-09) against the HN discussion, where the 'buried Extend marketing' reading is itself top-voted.",
+    "jp": "Extend が作った Theranos 裁判証拠のインタラクティブ再現(Holmes の机、実際の法廷のテキスト/メール、「parsed by Extend」)—— スポンサーをサイト内で明示するドキュメント AI ベンダーのマーケティング作品。根拠となる証拠は公開の裁判記録だが、何を解析したかはベンダーの選択。10-09 に HN 議論と突合済みで、「埋め込み広告」という読み本身がトップ評価。",
+    "zh": "Extend 制作的 Theranos 庭审证据交互模拟(Holmes 的桌面,真实庭审短信/邮件,'parsed by Extend')——一个在场内标明赞助方的文档 AI 厂商营销作品;底层证据是公开的庭审记录,但'解析什么'由厂商选择。10-09 经 HN 讨论交叉核对,'软广'读法本身就是热评。"
+  },
   "therecord.media": {
     "cat": "news",
     "cred": "high",
@@ -9781,6 +10063,15 @@
     "en": "Community-built GitHub trending ranking and analytics platform, an alternative to GitHub Trending; aggregated repository star and momentum data.",
     "jp": "GitHub Trendingの代替として作られたコミュニティ運営のリポジトリ順位・分析サイト。スター数と勢いのデータを集約。",
     "zh": "社区构建的 GitHub 趋势排名与分析平台（GitHub Trending 替代品），聚合仓库星标与热度数据。"
+  },
+  "treylorswift.github.io": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Personal GitHub Pages hosting the demoscene-recomp browser builds — the demo itself is the evidence for the cycle-exact recompilation claim. Cross-checked (10-09): runs as described; method details match the HN thread (146 pts) where the author answered questions.",
+    "jp": "demoscene-recomp のブラウザビルドをホストする個人 GitHub Pages——デモ自体がサイクル一致再コンパイルの主張の証拠。クロスチェック（10-09）：記述どおり動作。方法の詳細は著者が答えた HN スレッド（146 pts）と一致。",
+    "zh": "托管 demoscene-recomp 浏览器版的个人 GitHub Pages——demo 本身就是周期精确重编译主张的证据。交叉验证（10-09）：按描述可运行；方法细节与作者答疑的 HN 讨论一致（146 分）。"
   },
   "trezor.io": {
     "cat": "vendor",
@@ -10400,6 +10691,15 @@
     "jp": "Writerの企業サイト —— 同一記事で引用されるPalmyra x6エージェントツール使用モデル（arXiv:2608.16620）のラボ；製品リリースの一次情報だが、研究上の主張は論文で確認を。",
     "zh": "Writer 公司官网 —— 与同条目引用的 Palmyra x6 智能体工具使用模型（arXiv:2608.16620）同属一实验室；产品发布的一手来源，但研究声明应以论文为准核对。"
   },
+  "wsj.com": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The Wall Street Journal — first-rank outlet for AI-industry accountability reporting (the OpenAI safety-researcher firings broke here, 10-02/10-09, and was independently corroborated same-week by TechCrunch, CBS and AP). Paywalled; cite alongside an open mirror when the paywall blocks verification.",
+    "jp": "The Wall Street Journal —— AI 業界のアカウンタビリティ報道の第一級(OpenAI 安全研究員解雇を 10-02/10-09 に初報、同週中に TechCrunch・CBS・AP が独立に裏取り)。有料壁あり。検証を妨げられた場合は公開版と併記して引用。",
+    "zh": "《华尔街日报》——AI 行业问责报道的第一梯队(OpenAI 安全研究员解雇事件 10-02/10-09 由其首发,同周被 TechCrunch、CBS 与 AP 独立佐证)。有付费墙;付费墙阻碍核验时请与公开转载并引。"
+  },
   "wvnews.com": {
     "cat": "news",
     "cred": "low",
@@ -10553,6 +10853,15 @@
     "jp": "査読未経の個人プレプリント project ページ。2026-09-16 検証：ページ上で tL_D の再帰デコーダ経路の記述を確認。GitHub API でリポジトリ確認（Apache-2.0、2026-09-12 作成、現在 823 スター）。免責文言 '…research goals rather than measured results in this report' は実在するが、本サイトではなくリポジトリ README（master ブランチ）側にあるため、引用時は README を指示すること。",
     "zh": "未经同行评审的个人预印本项目页。2026-09-16 验证：页面确认 tL_D 递归解码器路径表述；GitHub API 确认仓库（Apache-2.0，创建于 2026-09-12，现 823 星）；免责声明 '…research goals rather than measured results in this report' 真实存在——但在仓库 README（master 分支）中而非本网站页面，引用该句应指向 README。"
   },
+  "yna.co.kr": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Yonhap News Agency, South Korea's national wire. Its ARTEX teardown (visited 10-09) independently confirms the DeepSeek-integration fact via Korean incident-response analysis — corroborating CrowdStrike's primary post without echoing it; the natural first stop for the Korean-side record (government response, FSI IP-tracing). Wire-service framing, national agency.",
+    "jp": "連合ニュース(韓国の国家通信社)。ARTEX 解析記事(10-09 に確認)は韓国のインシデント対応分析を通じて DeepSeek 連携の事実を独立に確認 — CrowdStrike の一次情報と裏付け合う転載ではない。韓国側の記録(政府対応、金融保安院の IP 追跡)を追う第一候補。通信社らしい中性の文体。",
+    "zh": "韩联社,韩国国家通讯社。其 ARTEX 拆解报道(10-09 已访问)经韩国应急处置分析独立证实 DeepSeek 集成事实——与 CrowdStrike 一次源相互印证而非转述;追踪韩方记录(政府响应、金融安保院 IP 追踪)的第一站。通讯社式措辞,国家通讯社。"
+  },
   "yoshuabengio.org": {
     "cat": "research",
     "cred": "high",
@@ -10696,278 +11005,5 @@
     "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
-  },
-  "scottaaronson.blog": {
-    "cat": "research",
-    "cred": "high",
-    "cv": 1,
-    "density": "med",
-    "en": "Scott Aaronson's blog (UT Austin complexity theorist) — long-form first-person takes on complexity and AI. Cross-checked (10-08): the 'Mathocalypse' post's figures (~3 h of GPT-Pro-level compute per problem, ~5% of ~8,000 attempts) are his own reporting of briefings, not OpenAI's record — the release event itself matches the openai/math history file.",
-    "zh": "Scott Aaronson 的博客（UT 奥斯汀复杂性理论学者）——关于复杂性与 AI 的第一人称长文。已交叉核验（10-08）：〈Mathocalypse〉一文中的数字（每题约 3 小时 GPT-Pro 级算力、约 8000 次尝试中约 5% 成功）是他对比听取汇报后的自述，并非 OpenAI 官方记录——发布事件本身与 openai/math 的 history 文件一致。",
-    "jp": "Scott Aaronson のブログ（UT オースティンの計量複雑性理論者）——複雑性と AI についての一人称の長文。検証済み（10-08）：〈Mathocalypse〉の数値（1 問あたり約 3 時間の GPT-Pro 級計算、約 8,000 試行中約 5% 成功）は彼がブリーフィングを受けた自己報告であり OpenAI の公式記録ではない——リリース事実そのものは openai/math の history ファイルと一致。"
-  },
-  "sheets.works": {
-    "cat": "data",
-    "cred": "med",
-    "cv": 1,
-    "density": "med",
-    "en": "sheets.works 'Data Drop' — small data-journalism pieces that count things from primary records. Cross-checked (10-08): the maintainer-count piece's methodology (10+ commits, Oct 2025–Oct 2026) is self-defined and reproducible from the cited repos' histories; the HN thread stress-tested the proxy. Not a news org — treat its numbers as one methodology's output, not ground truth.",
-    "zh": "sheets.works 的「Data Drop」——从一手记录出发做计数的小型数据新闻。已交叉核验（10-08）：维护者计数一文的方法（10+ 次提交、2025-10 至 2026-10）为自定义口径，可在所引仓库的提交历史上复现；HN 讨论对该代理指标做了压力测试。非新闻机构——其数字是某种方法论的产物，不是基准真相。",
-    "jp": "sheets.works の「Data Drop」——一次記録からカウントする小型データジャーナリズム。検証済み（10-08）：メンテナ数記事の手法（10+ コミット、2025-10〜2026-10）は自己定義で、参照リポジトリの履歴から再現可能。HN スレッドで代理指標の限界が検証された。報道機関ではない——数値は一手法の出力であり地上の真理ではない。"
-  },
-  "nobelprize.org": {
-    "cat": "news",
-    "cred": "high",
-    "cv": 1,
-    "density": "med",
-    "en": "The Nobel Prize's official site — primary for laureates, citations, and prize summaries. Cross-checked (10-09): the 2026 chemistry award (Kagan/Soai, non-linear effects + autocatalysis) matches same-day HN and press coverage.",
-    "zh": "诺贝尔奖官网——获奖者、获奖理由与官方摘要的第一来源。交叉验证（10-09）：2026 化学奖（Kagan/Soai，非线性效应 + 自催化）与当日 HN 及媒体报道一致。",
-    "jp": "ノーベル賞公式サイト——受賞者・引用文・要約の一次来源。クロスチェック（10-09）：2026 年化学賞（Kagan/Soai、非線形効果 + 自己触媒）は当日の HN と報道と一致。"
-  },
-  "synthid.com": {
-    "cat": "vendor",
-    "cred": "high",
-    "cv": 1,
-    "density": "med",
-    "en": "Google DeepMind's SynthID Detector (public 10-07) — primary for watermark-verification capability and its stated limits (detects only SynthID-tagged content). Cross-checked (10-09) against the blog.google announcement of the same day.",
-    "zh": "Google DeepMind 的 SynthID 检测器（10-07 公开）——水印验证能力及其明示局限（只检测带 SynthID 标记的内容）的第一来源。与 10-09 当日 blog.google 公告交叉验证。",
-    "jp": "Google DeepMind の SynthID Detector（10-07 公開）——ウォーターマーク検証能力とその明示的限界（SynthID タグ付きのみ検出）の一次来源。同日の blog.google 発表とクロスチェック（10-09）。"
-  },
-  "mitchellh.com": {
-    "cat": "community",
-    "cred": "high",
-    "cv": 1,
-    "density": "med",
-    "en": "Mitchell Hashimoto's personal writing (Ghostty creator) — primary for his own protocol proposals. Cross-checked (10-09): the OSC 7501 spec matches the HN discussion and the libghostty/Rex implementations it cites.",
-    "zh": "Mitchell Hashimoto（Ghostty 作者）的个人写作——其协议提案的第一来源。交叉验证（10-09）：OSC 7501 规格与 HN 讨论及其引用的 libghostty/Rex 实现一致。",
-    "jp": "Mitchell Hashimoto（Ghostty 作者）の個人執筆——自身のプロトコル提案の一次来源。クロスチェック（10-09）：OSC 7501 仕様は HN 議論と引用される libghostty/Rax 実装と一致。"
-  },
-  "debasishg.github.io": {
-    "cat": "community",
-    "cred": "high",
-    "cv": 1,
-    "density": "med",
-    "en": "Debasish Ghosh's engineering blog — the essay formalizing the Tiger Style 'push ifs up, fors down' heuristic with category theory, limits included. Cross-checked (10-09): the heuristic's origin matches TigerBeetle's Tiger Style docs; HN thread 176 pts.",
-    "zh": "Debasish Ghosh 的工程博客——用范畴理论把 Tiger Style「上推 if、下推 for」启发式形式化的文章（含限定条件）。交叉验证（10-09）：该启发式的出处与 TigerBeetle Tiger Style 文档一致；HN 讨论 176 分。",
-    "jp": "Debasish Ghosh の技術ブログ——Tiger Style の「if を上へ、for を下へ」ヒューリスティックを圏論で形式化する エッセイ（限界も明記）。クロスチェック（10-09）：ヒューリスティックの出所は TigerBeetle の Tiger Style ドキュメントと一致。HN スレッド 176 pts。"
-  },
-  "treylorswift.github.io": {
-    "cat": "community",
-    "cred": "med",
-    "cv": 1,
-    "density": "low",
-    "en": "Personal GitHub Pages hosting the demoscene-recomp browser builds — the demo itself is the evidence for the cycle-exact recompilation claim. Cross-checked (10-09): runs as described; method details match the HN thread (146 pts) where the author answered questions.",
-    "zh": "托管 demoscene-recomp 浏览器版的个人 GitHub Pages——demo 本身就是周期精确重编译主张的证据。交叉验证（10-09）：按描述可运行；方法细节与作者答疑的 HN 讨论一致（146 分）。",
-    "jp": "demoscene-recomp のブラウザビルドをホストする個人 GitHub Pages——デモ自体がサイクル一致再コンパイルの主張の証拠。クロスチェック（10-09）：記述どおり動作。方法の詳細は著者が答えた HN スレッド（146 pts）と一致。"
-  },
-  "lpc.events": {
-    "cat": "community",
-    "cred": "high",
-    "cv": 1,
-    "density": "med",
-    "en": "Linux Plumbers Conference site — primary for talk abstracts (Meta's CRAM `mm/cram.c` memory-tier proposal). Cross-checked (10-09): the abstract's claims match Phoronix's independent report of the same talk.",
-    "zh": "Linux Plumbers 会议官网——议题摘要的第一来源（Meta 的 CRAM `mm/cram.c` 内存层提案）。交叉验证（10-09）：摘要主张与 Phoronix 对同场报告的独立报道一致。",
-    "jp": "Linux Plumbers Conference のサイト——トークンアブストラクトの一次来源（Meta の CRAM `mm/cram.c` メモリティア提案）。クロスチェック（10-09）：アブストラクトの主張は同じトークンに関する Phoronix の独立報道と一致。"
-  },
-  "dgt.is": {
-    "cat": "community",
-    "cred": "med",
-    "cv": 1,
-    "en": "Danish developer blog (dgt.is); the DeepSeek 4.1 Flash essay is first-hand heavy-usage reporting, not benchmarks — its pricing/KV-cache numbers were cross-checked against its 490-pt HN thread and consistent OpenRouter pricing, but the core claim is explicitly the author's subjective experience.",
-    "zh": "丹麦开发者博客（dgt.is）；DeepSeek 4.1 Flash 一文是重度使用的一手体验报告而非跑分——其定价与 KV cache 数字已对照 490 分的 HN 讨论和一致的 OpenRouter 定价交叉验证，但核心主张明确是作者的主观体验。",
-    "jp": "デンマークの開発者ブログ（dgt.is）。DeepSeek 4.1 Flash 記はベンチマークでない一次のヘビーユース報告 — 価格と KV キャッシュの数値は 490pt の HN 議論と整合する OpenRouter 価格で裏取り済みだが、核心の主張は著者の主観的体験であると明示されている。"
-  },
-  "bevy.org": {
-    "cat": "vendor",
-    "cred": "high",
-    "cv": 1,
-    "en": "Official Bevy engine release blog; primary source for 0.20 (817 PRs, 227 contributors) — feature claims validated against the HN thread and repo activity.",
-    "zh": "Bevy 引擎官方发布博客；0.20（817 个 PR、227 位贡献者）的一手来源——特性主张已对照 HN 讨论与仓库动态验证。",
-    "jp": "Bevy エンジン公式リリースブログ。0.20（817 PR、227 コントリビュータ）の一次ソース — 機能の主張は HN 議論とリポジトリの活動に対して検証済み。"
-  },
-  "cointelegraph.com": {
-    "cat": "news",
-    "cred": "med",
-    "cv": 1,
-    "en": "Crypto trade news; its Drake/Buterin bunker-mode piece carried direct quotes from both and Haseeb Qureshi's endorsement — consistent with the HN thread and the underlying X posts, but treat its framing of expert opinion as selective (skeptics like Lindell appear only via The Defiant).",
-    "zh": "加密行业新闻媒体；其 Drake/Buterin 掩体模式报道带有双方的直接引语和 Haseeb Qureshi 的支持——与 HN 讨论及底层 X 帖子一致，但其对专家意见的取舍是有选择的（Lindell 等质疑者仅经 The Defiant 出现）。",
-    "jp": "暗号業界ニュース。Drake/Buterin のバンカーモード記事は両者の直接引用と Haseeb Qureshi の支持を含み — HN 議論や元の X 投稿と整合するが、専門家意見の採り上げは選択的（Lindell ら懐疑派は The Defiant 経由でのみ登場）。"
-  },
-  "answer-me-with-html.com": {
-    "cat": "vendor",
-    "cred": "med",
-    "cv": 1,
-    "en": "Project website for the answer-me-with-html agent skill (same author as the GitHub repo, whose README it mirrors); token-count claims validated against the repo's own counted table — vendor-self-reported numbers, cite as such.",
-    "zh": "answer-me-with-html 智能体技能的项目网站（与 GitHub 仓库同一作者，内容为 README 镜像）；token 统计主张已对照仓库自统计表验证——属厂商自报数字，引用时照实标注。",
-    "jp": "answer-me-with-html エージェントスキルのプロジェクトサイト（GitHub リポジトリと同一作者、README のミラー）。トークン集計の主張はリポジトリ自身の集計表に対して検証 — ベンダー自己申告の数値としてその旨を明記して引用。"
-  },
-  "biohub.org": {
-    "cat": "vendor",
-    "cred": "high",
-    "cv": 1,
-    "en": "CZ Biohub's official newsroom; primary announcement for the $1.8B Virtual Biology Initiative expansion — partner names and dollar figures matched the HN discussion and are the committing parties' own statements (i.e., commitments, not delivered data).",
-    "zh": "CZ Biohub 官方新闻页；18 亿美元 Virtual Biology Initiative 扩展的一手公告——合作方名单与金额与 HN 讨论一致，且是承诺方自己的表述（即承诺而非已交付的数据）。",
-    "jp": "CZ Biohub 公式ニュースルーム。18億ドルの Virtual Biology Initiative 拡大の一次発表 — パートナー名と金額は HN 議論と一致し、コミットする側自身の表明（つまり約束であって提供済みデータではない）。"
-  },
-  "naturalsystems.io": {
-    "cat": "vendor",
-    "cred": "med",
-    "cv": 1,
-    "en": "Alex Lowell's personal project site; eth68's latency/THD numbers are first-party measurements with the methodology published — corroborated by the HN thread's technically literate discussion, but single-builder hardware with only two PCBs populated.",
-    "zh": "Alex Lowell 的个人项目站；eth68 的延迟/THD 数字是公开了方法论的第一方实测——经 HN 讨论中具备技术素养的讨论佐证，但这是只焊了两块 PCB 的单人硬件项目。",
-    "jp": "Alex Lowell の個人プロジェクトサイト。eth68 のレイテンシ/THD 数値は方法論が公開された一次測定 — HN 議論の技術的に筋の通った議論で裏取り済みだが、実装済み PCB はわずか2枚の個人ビルドハードウェア。"
-  },
-  "crowdstrike.com": {
-    "cat": "security",
-    "cred": "high",
-    "cv": 1,
-    "density": "high",
-    "en": "Vendor threat-intelligence blog (Counter Adversary Operations). The ARTEX post (read first-hand 10-09) is unusually disciplined: evidence staged by provenance (actor-side open directories, session histories), attribution stated with explicit confidence level, and its own hedges carried in-line (resume-prompt personal details it says it 'cannot definitively associate'; ATT&CK table omitting Initial Access/Exfiltration while coverage implied full-chain). Cross-validated: the DeepSeek-backend finding independently confirmed by Yonhap.",
-    "zh": "厂商威胁情报博客(Counter Adversary Operations)。ARTEX 文(10-09 一手阅读)纪律性罕见:证据按来源分层(行动者侧开放目录、会话历史),归因明示置信度,自身限定随文保留(简历提示词的个人信息“无法明确关联”;ATT&CK 表不含 Initial Access/Exfiltration,而报道暗示全链路)。已交叉核验:DeepSeek 后端结论经 Yonhap 独立证实。",
-    "jp": "ベンダー脅威インテリジェンスブログ(Counter Adversary Operations)。ARTEX 記事(10-09 に一次確認)は規律が高い:証拠を出所別に段階化(アクター側公開ディレクトリ、セッション履歴)、帰属は信頼度を明示、自己の限定も本文に保持(履歴書プロンプトの個人情報は「決定的な関連付けは不可能」;ATT&CK 表に Initial Access/Exfiltration なし、一方報道はフルチェーンを示唆)。クロス検証済み:DeepSeek バックエンドの所見は Yonhap が独立に確認。"
-  },
-  "yna.co.kr": {
-    "cat": "news",
-    "cred": "high",
-    "cv": 1,
-    "density": "high",
-    "en": "Yonhap News Agency, South Korea's national wire. Its ARTEX teardown (visited 10-09) independently confirms the DeepSeek-integration fact via Korean incident-response analysis — corroborating CrowdStrike's primary post without echoing it; the natural first stop for the Korean-side record (government response, FSI IP-tracing). Wire-service framing, national agency.",
-    "zh": "韩联社,韩国国家通讯社。其 ARTEX 拆解报道(10-09 已访问)经韩国应急处置分析独立证实 DeepSeek 集成事实——与 CrowdStrike 一次源相互印证而非转述;追踪韩方记录(政府响应、金融安保院 IP 追踪)的第一站。通讯社式措辞,国家通讯社。",
-    "jp": "連合ニュース(韓国の国家通信社)。ARTEX 解析記事(10-09 に確認)は韓国のインシデント対応分析を通じて DeepSeek 連携の事実を独立に確認 — CrowdStrike の一次情報と裏付け合う転載ではない。韓国側の記録(政府対応、金融保安院の IP 追跡)を追う第一候補。通信社らしい中性の文体。"
-  },
-  "theranos.world": {
-    "cat": "vendor",
-    "cred": "med",
-    "cv": 1,
-    "density": "med",
-    "en": "Extend's interactive Theranos trial-evidence simulation (Holmes' desk, real trial texts/emails 'parsed by Extend') — a document-AI vendor's marketing piece that discloses its sponsor on-site; the underlying evidence is the public court record, but the selection of what got parsed is the vendor's. Cross-checked (10-09) against the HN discussion, where the 'buried Extend marketing' reading is itself top-voted.",
-    "zh": "Extend 制作的 Theranos 庭审证据交互模拟(Holmes 的桌面,真实庭审短信/邮件,'parsed by Extend')——一个在场内标明赞助方的文档 AI 厂商营销作品;底层证据是公开的庭审记录,但'解析什么'由厂商选择。10-09 经 HN 讨论交叉核对,'软广'读法本身就是热评。",
-    "jp": "Extend が作った Theranos 裁判証拠のインタラクティブ再現(Holmes の机、実際の法廷のテキスト/メール、「parsed by Extend」)—— スポンサーをサイト内で明示するドキュメント AI ベンダーのマーケティング作品。根拠となる証拠は公開の裁判記録だが、何を解析したかはベンダーの選択。10-09 に HN 議論と突合済みで、「埋め込み広告」という読み本身がトップ評価。"
-  },
-  "wsj.com": {
-    "cat": "news",
-    "cred": "high",
-    "cv": 1,
-    "density": "high",
-    "en": "The Wall Street Journal — first-rank outlet for AI-industry accountability reporting (the OpenAI safety-researcher firings broke here, 10-02/10-09, and was independently corroborated same-week by TechCrunch, CBS and AP). Paywalled; cite alongside an open mirror when the paywall blocks verification.",
-    "zh": "《华尔街日报》——AI 行业问责报道的第一梯队(OpenAI 安全研究员解雇事件 10-02/10-09 由其首发,同周被 TechCrunch、CBS 与 AP 独立佐证)。有付费墙;付费墙阻碍核验时请与公开转载并引。",
-    "jp": "The Wall Street Journal —— AI 業界のアカウンタビリティ報道の第一級(OpenAI 安全研究員解雇を 10-02/10-09 に初報、同週中に TechCrunch・CBS・AP が独立に裏取り)。有料壁あり。検証を妨げられた場合は公開版と併記して引用。"
-  },
-  "quake-srp.pages.dev": {
-    "cat": "code",
-    "cred": "med",
-    "cv": 1,
-    "density": "med",
-    "en": "Cloudflare Pages host for quake-srp's playable shareware episode — the demo endpoint of the safe-Rust Quake port. Cross-checked (10-09) against the GitHub README, whose claims (oracle diffing, AUDIT.md, agent-fleet process) live in the repo; the page itself is a player, not documentation.",
-    "zh": "quake-srp 可试玩共享版章节的 Cloudflare Pages 托管页——安全 Rust 版《雷神之锤》的演示入口。10-09 与 GitHub README 交叉核对(oracle 差分、AUDIT.md、智能体舰队流程都在仓库里);页面本身是播放器,不是文档。",
-    "jp": "quake-srp のプレイ可能なシェアウェアエピソードを載せる Cloudflare Pages ホスト —— safe Rust 版 Quake ポートのデモ入口。10-09 に GitHub README と突合済み(オラクル差分・AUDIT.md・エージェント艦隊の工程はリポジトリ側)。ページ自体はプレイヤーであってドキュメントではない。"
-  },
-  "newgtldprogram-aps.icann.org": {
-    "cat": "data",
-    "cred": "high",
-    "cv": 1,
-    "density": "high",
-    "en": "ICANN's official New gTLD Application Publication System — canonical record for gTLD applications (applicant, string, status, processing stage). Cross-checked (10-09): the .lan application's applicant (Coffee Danger, LLC / Identity Digital) and status match the HN thread's claims; JS-rendered, so scrape with care.",
-    "zh": "ICANN 官方新 gTLD 申请公布系统——gTLD 申请的权威记录(申请人、字符串、状态、处理阶段)。10-09 交叉核对:.lan 申请的申请人(Coffee Danger, LLC / Identity Digital)与状态同 HN 讨论一致;页面由 JS 渲染,抓取需注意。",
-    "jp": "ICANN 公式の新 gTLD 申請公開システム —— gTLD 申請の一次記録(出願人・文字列・状態・処理段階)。10-09 に突合済み:.lan 申請の出願人(Coffee Danger, LLC / Identity Digital)と状態は HN スレッドの主張と一致。JS 描画のため取得は要注意。"
-  },
-  "opper.ai": {
-    "cat": "vendor",
-    "cred": "med",
-    "cv": 1,
-    "density": "med",
-    "en": "Opper AI's product site, home of the Jevman Pac-Man leaderboard for decision models — a vendor-run benchmark (their platform hosts the harness), with full games watchable and the harness open-sourced; scores were corroborated (10-09) by the Show HN thread and community discussion, but the model roster is the vendor's choice.",
-    "zh": "Opper AI 的产品站,决策模型吃豆人排行榜 Jevman 的所在地——厂商运营的基准(harness 由其平台托管),完整对局可观看、harness 已开源;分数 10-09 经 Show HN 讨论与社区讨论佐证,但参赛模型名单由厂商决定。",
-    "jp": "Opper AI の製品サイト。決定モデルのパックマン・リーダーボード Jevman の場所 —— ベンダー運営のベンチマーク(ハーネスは同社プラットフォームでホスト)だが、ゲームは全て観戦可能でハーネスは公開済み。スコアは 10-09 に Show HN スレッドとコミュニティの議論で裏取り済み。ただし出場モデルの選定はベンダー側。"
-  },
-  "gizmodo.com": {
-    "cat": "news",
-    "cred": "high",
-    "density": "med",
-    "cv": 1,
-    "en": "Gizmodo tech/science news. Cross-checked (10-10): its Flock-the-Flockers report correctly attributes the police visit to Sistilli's own video and notes Peel Regional Police declined comment — attribution discipline intact.",
-    "zh": "Gizmodo 科技新闻。交叉核验（10-10）：其 Flock 反向监控报道如实注明“警察上门”仅出自当事人视频、警方拒绝置评——归属纪律良好。",
-    "jp": "Gizmodo のテック・サイエンス報道。クロスチェック済み（10-10）：Flock 逆監視記事は警察の訪問を本人動画に由来づけ、警察が取材に応じなかったことを明記。帰属の規律は正確。"
-  },
-  "nbcphiladelphia.com": {
-    "cat": "news",
-    "cred": "high",
-    "density": "med",
-    "cv": 1,
-    "en": "NBC10 Philadelphia local news. Cross-checked (10-10): its Anthropic false-tip report matches TechCrunch on dates/timeline and adds the police spokesperson's exact quotes and the multi-agency investigation list.",
-    "zh": "NBC10 费城地方新闻。交叉核验（10-10）：其 Anthropic 虚假线索报道与 TechCrunch 在日期与时间线上一致，并补充了警方发言人的原话与多机构调查名单。",
-    "jp": "NBC10 フィラデルフィアの地域報道。クロスチェック済み（10-10）：Anthropic 虚偽通報記事は TechCrunch と日付・経緯が一致し、警察報道官の発言と多機関調査の内実を補完。"
-  },
-  "beaksec.github.io": {
-    "cat": "security",
-    "cred": "high",
-    "density": "high",
-    "cv": 1,
-    "en": "beaksec's independent vuln-research blog. Cross-checked (10-10): its Telegram Desktop CVE-2026-107181 writeup matches the NVD record (published Oct 7) on versions, mechanism and the 7.2.9 fix; its CVSS 8.1 is clearly labeled as the researchers' own score, and NVD carries no metrics at write time.",
-    "zh": "beaksec 的独立漏洞研究博客。交叉核验（10-10）：其 Telegram Desktop CVE-2026-107181 分析与 NVD 记录（10 月 7 日发布）在版本、机理与 7.2.9 修复上一致；其 CVSS 8.1 明确标注为研究者自评，NVD 撰写时无评分。",
-    "jp": "beaksec の独立脆弱性研究ブログ。クロスチェック済み（10-10）：Telegram Desktop CVE-2026-107181 の検証は NVD レコード（10月7日公開）とバージョン・機構・7.2.9 修正で一致。CVSS 8.1 は研究者自身のスコアと明記、NVD は執筆時点でメトリクスなし。"
-  },
-  "rea.tools": {
-    "cat": "vendor",
-    "cred": "med",
-    "density": "med",
-    "cv": 1,
-    "en": "REA's official docs/onboarding site. Cross-checked (10-10): content matches the morluto/rea repo it documents; the install path is a paste-into-your-agent prompt around npx rea-agents@latest. Vendor site — treat its framing as the project's own.",
-    "zh": "REA 官方文档/引导站。交叉核验（10-10）：内容与其文档所对应的 morluto/rea 仓库一致；安装路径是围绕 npx rea-agents@latest 的“粘贴进智能体”提示词。厂商站点——其表述按项目自述对待。",
-    "jp": "REA の公式ドキュメント/オンボーディングサイト。クロスチェック済み（10-10）：内容は文書化対象の morluto/rea リポジトリと一致。導線は npx rea-agents@latest を貼り付けるプロンプト。ベンダーサイトゆえ記述は当事者主張として扱う。"
-  },
-  "cphpost.dk": {
-    "cat": "news",
-    "cred": "high",
-    "density": "med",
-    "cv": 1,
-    "en": "The Copenhagen Post (English-language Danish news). Cross-checked (10-10): its CPR-breach round-up matches Politiken's reporting it cites (123456 on three accounts incl. admin, 8.8M CPR numbers, 970k credit warnings) and is careful to mark the hacker's claims as unconfirmed.",
-    "zh": "The Copenhagen Post（丹麦英文媒体）。交叉核验（10-10）：其 CPR 事件综述与所引 Politiken 报道一致（含管理员在内三个账户用 123456、880 万个 CPR 号、97 万信贷预警），并将黑客的说法谨慎标注为未证实。",
-    "jp": "The Copenhagen Post（デンマークの英字紙）。クロスチェック済み（10-10）：CPR 侵害まとめは引用先 Politiken の報道と一致（管理者を含む3アカウントの 123456、880万件の CPR 番号、97万人の与信警告）。ハッカーの主張を未確認と明記する慎重さ。"
-  },
-  "politiken.dk": {
-    "cat": "news",
-    "cred": "high",
-    "density": "high",
-    "cv": 1,
-    "en": "Politiken, major Danish daily. Cross-checked (10-10): URL live (HTTP 200); headline confirms it received the hacker's 8.75M-record dataset — the primary source for the 123456 password detail, which secondary coverage faithfully attributes to it.",
-    "zh": "Politiken，丹麦主流日报。交叉核验（10-10）：链接有效（HTTP 200）；标题确认其收到了黑客提供的 875 万条数据集——是“123456”密码细节的第一手来源，二手报道均如实归因于它。",
-    "jp": "Politiken、デンマークの主要日刊紙。クロスチェック済み（10-10）：URL 有効（HTTP 200）。見出しはハッカーから875万件のデータセットを受け取った事実を確認。「123456」パスワード詳細の一次ソース。"
-  },
-  "borretti.me": {
-    "cat": "community",
-    "cred": "med",
-    "density": "high",
-    "cv": 1,
-    "en": "Fernando Borretti's personal blog (Rust/compiler essays, Austral author). Cross-checked (10-10): fetched 'No Man Is an Island' in full; quotes attributed to it match the text. Personal-essay source — argument, not reporting.",
-    "zh": "Fernando Borretti 的个人博客（Rust/编译器长文，Austral 作者）。交叉核验（10-10）：全文抓取了《No Man Is an Island》，引用与其原文一致。个人随笔来源——是论证而非报道。",
-    "jp": "Fernando Borretti の個人ブログ（Rust/コンパイラ論考、Austral 作者）。クロスチェック済み（10-10）：『No Man Is an Island』を全文取得、引用は本文と一致。個人エッセイ源——論証であり報道ではない。"
-  },
-  "opengroup.org": {
-    "cat": "data",
-    "cred": "high",
-    "density": "med",
-    "cv": 1,
-    "en": "The Open Group's official UNIX certification register. Cross-checked (10-10): live page shows only IBM/HPE/SCO; cross-validated against the Oct 7 Wayback snapshot which still listed four macOS releases — the diff is the story.",
-    "zh": "The Open Group 官方 UNIX 认证注册表。交叉核验（10-10）：当前页面仅列 IBM/HPE/SCO；与 10 月 7 日 Wayback 快照（仍列四个 macOS 版本）交叉验证——差异本身即新闻。",
-    "jp": "The Open Group の公式 UNIX 認証レジストリ。クロスチェック済み（10-10）：現在のページは IBM/HPE/SCO のみ。10月7日の Wayback スナップショット（macOS 4バージョンを掲載）と突き合わせ検証済み——その差分がニュース。"
-  },
-  "hugohe3.github.io": {
-    "cat": "vendor",
-    "cred": "med",
-    "density": "med",
-    "cv": 1,
-    "en": "ppt-master's GitHub Pages examples gallery. Cross-checked (10-10): live, titled 'PPT Master — AI generates natively editable PPTX from any document'; showcases the repo's native-shape/chart output. Project's own showcase — position claims are the project's.",
-    "zh": "ppt-master 的 GitHub Pages 示例画廊。交叉核验（10-10）：在线可访问，标题为“PPT Master — AI generates natively editable PPTX from any document”；展示该仓库的原生形状/图表输出。项目自办展示——定位说辞按项目自述对待。",
-    "jp": "ppt-master の GitHub Pages 例集ギャラリー。クロスチェック済み（10-10）：オンラインで稼働、タイトルは「PPT Master — AI generates natively editable PPTX from any document」。リポジトリのネイティブ図形/チャート出力を実演。プロジェクト自身のショーケース。"
-  },
-  "blog.janestreet.com": {
-    "cat": "research",
-    "cred": "high",
-    "density": "high",
-    "cv": 1,
-    "en": "Jane Street's engineering blog. Cross-checked (10-10): its diffusion-for-market-data post states its own negative conclusion ('not yet accurate enough to be a realistic generator') and quantifies failure modes (DDPM 8-sigma blowups) — unusually honest for the genre.",
-    "zh": "Jane Street 工程博客。交叉核验（10-10）：其行情数据扩散模型一文明确写出自身的否定性结论（“还不足以成为现实的生成器”）并量化失败模式（DDPM 8σ 爆炸）——在此类文章中罕见地诚实。",
-    "jp": "Jane Street のエンジニアリングブログ。クロスチェック済み（10-10）：市況データ拡散の記事は自身の否定的結論（「まだ現実的なジェネレーターには不正確」）を明言し、失敗モード（DDPM の8σ爆発）を定量化。このジャンルにしては珍しく誠実。"
   }
 }
