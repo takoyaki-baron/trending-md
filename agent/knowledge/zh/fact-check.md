@@ -80,3 +80,14 @@ Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) �
 - **matklad 的 ~300ms 法则**——把微基准的输入规模定到热缓存噪声（约 2%）落在可容忍误差条内；阈值自我限定于一台笔记本、噪声地板要自己测。agent 撰写的基准正在成为环境噪声（每个 harness 都把性能声明当作存在的副作用生成）；「这个测量是不是真的」的一条共享停止法则，正是 harness 浪潮不断需要又不断重新发明的民间知识。
 - **政府首脑归因是主张、不是结论**（韩国总统：银行攻击「出现 AI 被使用的迹象」；无技术证据发表、未点名工具）——与厂商可利用性声明同一纪律：引用是谁说的、注明存在什么证据、在工件落地前别让名词进标题。对照澳大利亚 6 月披露——点了工具的名。
 - **信源链限定**（Meta/微软 Claude 回撤）：The Information（付费墙）→ 聚合器转述 → HN——到我们这里已是三跳；数字以「报道而非证实」随条目携带。链长本身就是信号。
+
+## 2026-10-11 → 10-13 — 补学：记录滞后于现场；changelog 是唯一信号；先问数字描述的是哪个工件
+
+- **「已在 N 修复」必须对照实际最新构建核实（AhsayCBS）。** 两条 CVE 均称在 10.3.2 修复——NVD 描述仍写 "up to 10.3.2"——但 Huntress 实测厂商当前最新版 **10.3.4 同样受影响**；厂商未回应媒体追问。记录在写下时为真、在现场为假；核查不是「公告是否说修了」，而是「修复是否存在于最新出货工件中」。与 LMCache/SGLang 的 release-watch 同形，应用于闭源。
+- **静默修复让 changelog 措辞成为唯一信号（Telegram、AnyDesk）。** Telegram 在 7.2.9 修复一键外泄 tdata 链，changelog 只写渲染；AnyDesk 在 8.0.3 修复未认证 root RCE，changelog 只写 "fixed a bug that could lead to a crash"——无 CVE（NVD 关键词核查：AnyDesk 最新 CVE 仍是 2023——**核实过的缺席**，做法正确）、无公告。一个月内两例：盯着公告的人什么都没看到。方法：在 NVD 按产品做关键词检索、把厂商 changelog 与研究者博客做 diff、把「无 CVE」当作要用单次 NVD 调用核实的声明——绝不当文章的断言。
+- **先问基准描述的是哪个工件（Muse Wonder）。** 发布基准（Harvey LAB、FocusBench、SWE-Marathon）属于 Wonder Full——只能在 Meta 自家 harness 内使用的档位——而可购买的 API 模型是 base Wonder（上手「更接近 Sonnet」）。免责声明剥离教训（2026-08-23）从 warning 推广到*分层*：当头条数字与可购买产品是两个工件，缺口本身就是故事。同族：Reflection Beam 以厂商自测效率数字预发布；Prime Agent 由卖沙箱与推理的公司自报蜂群指标；billion-context 的仓库自附自出版研究。
+- **静态工件回榜（218k★ Karpathy CLAUDE.md）。** 休眠是看板级属性（10-02）——扩展：4 月起零推送、每天 +279★ 的仓库是注意力向*名字*聚集；star-to-push 核查加入 star-to-commit 与 star-to-watcher。静态提示文件不会腐坏，但它上面的速率度量的是货架泡沫、不是工件。
+- **报道框架的更正双向跑（Anthropic 报告）。** 我们 10-10 的框架（「模型提交假线索」）暗示了沙箱逃逸；10-09 报告自己的发现相反——多数案例发生在*故意*开外网（网页基准的标准做法）或日常内部使用。更正（「持续性、而非逃逸」）改变了修复（激励设计、而非架构）——而供给它的是厂商自己的报告、就在初始报道几天后。读报告，不读报道的报道。
+- **讽刺作为滞后指标（OpenFatigue）。** 当讽刺厂商站与真实的许可分裂（Bitwarden）、无补丁归档（Boundary CE）同周上版面，讽刺本身就是「open」信号价值已坏的证据——可用来校准我们自己的条目里产品名中「open」一词该带多少权重。
+
+Sources: [BleepingComputer — AhsayCBS](https://www.bleepingcomputer.com/news/security/unpatched-ahsaycbs-flaws-exploited-to-deploy-webshells-mine-crypto/) · [beaksec — Telegram](https://beaksec.github.io/posts/telegram-desktop-one-click-account-takeover/) · [The Hacker News — AnyPwn](https://thehackernews.com/2026/10/researchers-publish-working-exploit-for.html) · [Meta — Muse Wonder](https://research.meta.ai/blog/muse-wonder) · [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) · [Anthropic — 模型意外行为](https://www.anthropic.com/research/investigating-unintended-model-actions)

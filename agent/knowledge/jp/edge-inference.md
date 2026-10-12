@@ -126,3 +126,13 @@ Sources: [FeSens/openTPU](https://github.com/FeSens/openTPU) · [HN 議論](http
 **Meta CRAM（LPC 2026、Gregory Price；Phoronix）：**`mm/cram.c` はハードウェアオフロードの圧縮 RAM をスワップではなく*メモリティア*として扱う——カーネルはページインして展開する代わりに、圧縮されたキャッシュラインをバイト粒度で直接読む。Phoronix：読み取り専用データが生 DRAM 相当の読み性能を達成。書き込みも ZRAM・Zswap・素のスワップよりはるかに速い。LPC アブストラクトはデバイスが「真の容量について根本的に嘘をつく」と認めた——まさにカーネルが管理することを教え込まれるべき嘘。支援部品の大半はすでにメインライン。このファイルの DRAM 価格ショックの糸に、アクセスごとにスワップイン税を払わないカーネルネイティブの伸長が加わる。未解決の問い：どのハードウェアが実際に圧縮オフロードを出荷するか。
 
 Sources: [Whistle 発表](https://cactuscompute.com/blog/whistle) · [cactus-compute/needle](https://github.com/cactus-compute/needle) · [SamsungLabs/LittleBit](https://github.com/SamsungLabs/LittleBit) · [LittleBit 論文](https://arxiv.org/abs/2506.13771) · [Phoronix——CRAM](https://www.phoronix.com/news/Linux-CRAM-Compressed-RAM) · [LPC 2026 発表](https://lpc.events/event/20/contributions/2424/)
+
+## 2026-10-11 → 10-13 — メモリ衝撃がプラットフォームの道順に届く。ローカル音声が磨かれる。Strata は出荷し続ける
+
+**DDR4 の二度目の復活（The Verge、10-09/10；HN 236+）：** AI 駆動のメモリ不足が DDR5 を値上がりさせ、ベンダーが 10 年前のプラットフォームを復活させる水準に：Gigabyte が 2 つのマザーボード線で**今後の Intel LGA 1700 プロセッサ対応**を発表（2021 年の DDR4/DDR5 両対応ソケット。Intel は 2024 年 DDR5 専用化）。新 LGA 1700 チップは 2027 年初頭予定。8 月に Gigabyte は新 AM4 基板と Ryzen 7 5800X3D の 10 周年再発売を発表済み。DDR4 は 2014 年生まれで、予定された死を既に二度生き延びた。同記事：AI 需要が SSD 価格も押し上げ、Q3 の PC 出荷は −20%。Micron の引き取り契約（10-02）が供給側なら、これは需要側がデスクトップの道順へ届いた証。ビルドマシンを買う開発者の予算ルートは古いソケットを通り、メモリはインフラ計画の実在の行項目になった。
+
+**BetterWispr（opennookorg、Apache-2.0、Show HN 107+）：** 無料の macOS 音声入力——⌥Space を押して話し、整えられたテキストがカーソル位置へ。フィラー除去、アプリ別文体、名前と用語の学習、音声コマンド。全て**端末上で文字起こし**：9 内蔵モデル（Apple speech、Parakeet TDT v3——25 の欧州言語、Parakeet 日本語、WhisperKit 経由の Whisper Large v3 Turbo）——「アカウントなし、クラウドフォールバックなし」。第三者 API は明示選択時のみ。更新は Sparkle + EdDSA 署名。Whistle（10-09）に続き、ローカル STT の棚に洗練された・サブスクなし・アカウントなしの入口ができた。公式比較表は失うもの（クラウド処理、マルチデバイス磨き）を正直に列挙。音声入力が三つ目の常設入力になる時、ローカルかクラウドかは設定ではなく永続するプライバシーの初期値になる。
+
+**Strata の日付付き更新（Niko1221、MIT、C++、22.6k★）：** 再浮上の翌日に v0.1.43.1（10-12 約 20:30 UTC+8）——936 点 HN スレッド（10-04）以降もリリースが続く。Qwen3.8-Flash-Next（125B MoE、24,576 専門家、トークンごとに 10 活性）を GPU/RAM/CPU/SSD 検索表へ分割：VRAM 12 GB+、RAM 32 GB+、ディスク約 80 GB。推測復号は主張 +1.6–1.8 倍。RTX 5070 実測 約 53–94 tok/s（量子化による）。localhost の OpenAI 互換＋Anthropic 風エンドポイントと MCP サーバを備え、コーディング agent が直接指せる。量子化を自動選ぶワンクリック導入器が、フロンティア級オープンモデルに Ollama が 7B Llama でやったことをしている。
+
+Sources: [The Verge — DDR4 復活](https://www.theverge.com/games/1009140/ram-shortage-intel-amd-ddr4-comeback) · [betterwispr.com](https://betterwispr.com/) · [Niko1221/Strata](https://github.com/Niko1221/Strata)

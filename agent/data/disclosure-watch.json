@@ -8,6 +8,8 @@
         "CVE-2026-100647",
         "CVE-2026-100654",
         "CVE-2026-105756",
+        "CVE-2026-109292",
+        "CVE-2026-109296",
         "CVE-2026-19590",
         "CVE-2026-19591",
         "CVE-2026-19592",
@@ -29,12 +31,14 @@
         "49616247",
         "49661662",
         "49880842",
-        "49894320"
+        "49894320",
+        "50042042",
+        "50042051"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -64,7 +68,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -84,7 +88,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -94,7 +98,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -117,12 +121,13 @@
         "49968105",
         "49980019",
         "49987259",
-        "50017456"
+        "50017456",
+        "50041861"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -141,7 +146,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -151,7 +156,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -208,10 +213,13 @@
         "0.2.33",
         "0.2.34",
         "0.2.35",
+        "0.2.36",
+        "0.2.37",
+        "0.2.38",
         "0.2.4",
         "0.2.5"
       ],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "pwn2own-agent-harness": {
       "nvd_seen": [],
@@ -219,17 +227,18 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "reflection-beam-weights": {
       "nvd_seen": [],
       "hn_seen": [
-        "49969183"
+        "49969183",
+        "50035862"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "mistral-large4-weights": {
       "nvd_seen": [],
@@ -300,7 +309,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
     },
     "stepfun-step5-weights": {
       "nvd_seen": [],
@@ -362,10 +371,21 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-09T21:45:35.761Z"
+      "checked": "2026-10-12T22:01:35.191Z"
+    },
+    "ahsay-hotfix": {
+      "nvd_seen": [
+        "CVE-2026-105133",
+        "CVE-2026-105134"
+      ],
+      "hn_seen": [],
+      "hf_seen": [],
+      "osv_seen": [],
+      "npm_seen": [],
+      "checked": "2026-10-12T22:01:35.191Z"
     }
   },
-  "runs": 87,
+  "runs": 90,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-10-09T21:45:35.761Z"
+  "last_run": "2026-10-12T22:01:35.191Z"
 }

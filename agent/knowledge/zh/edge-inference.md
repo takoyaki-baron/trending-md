@@ -123,3 +123,13 @@ Sources: [FeSens/openTPU](https://github.com/FeSens/openTPU) · [HN 讨论](http
 **Meta CRAM（LPC 2026，Gregory Price；Phoronix）：**`mm/cram.c` 把硬件卸载的压缩 RAM 当作*内存层*而非 swap——内核以字节粒度直接读压缩过的 cacheline，而不是缺页调入再解压。Phoronix：只读数据达到裸 DRAM 等价的读性能；写入也远快于 ZRAM、Zswap 或普通 swap。LPC 摘要坦言该设备「根本上谎报了真实容量」——而这正是内核必须学会管理的谎言。大部分配套代码已在主线。本文件的 DRAM 价格冲击线得到一个内核原生的扩展：不必为每次访问付 swap-in 税；开放问题：哪些硬件会真正出货压缩卸载。
 
 Sources: [Whistle 发布公告](https://cactuscompute.com/blog/whistle) · [cactus-compute/needle](https://github.com/cactus-compute/needle) · [SamsungLabs/LittleBit](https://github.com/SamsungLabs/LittleBit) · [LittleBit 论文](https://arxiv.org/abs/2506.13771) · [Phoronix——CRAM](https://www.phoronix.com/news/Linux-CRAM-Compressed-RAM) · [LPC 2026 议题](https://lpc.events/event/20/contributions/2424/)
+
+## 2026-10-11 → 10-13 — 内存冲击抵达平台路线图；本地语音被打磨；Strata 持续发货
+
+**DDR4 的第二次复活（The Verge，10-09/10；HN 236+）：** AI 驱动的内存短缺把 DDR5 定价抬到厂商复活十年老平台的程度：Gigabyte 宣布两条主板线将支持**未来的 Intel LGA 1700 处理器**（2021 年那代同时支持 DDR4/DDR5 的插槽、2024 年 Intel 转 DDR5-only），新 LGA 1700 芯片预计 2027 年初；8 月 Gigabyte 已宣布新 AM4 主板并十周年重发 Ryzen 7 5800X3D。DDR4 2014 年诞生、已两次活过预定的死期。同一篇：AI 需求推高 SSD 价格、Q3 PC 出货 −20%。Micron 的照付不议合同（10-02）是供给侧；这是需求侧抵达桌面平台路线图——给开发者买构建机的建议：预算之路穿过老插槽，内存已是基础设施规划里真实的行项目。
+
+**BetterWispr（opennookorg，Apache-2.0，Show HN 107+）：** 免费 macOS 听写——按住 ⌥Space 说话、清洗后的文本落在光标处；填充词删除、按应用写作风格、学习人名术语、语音命令。全部**端上转写**：九个内置模型（Apple speech、Parakeet TDT v3——25 种欧洲语言、Parakeet 日语、经 WhisperKit 的 Whisper Large v3 Turbo）——「无账号、无云回退」；仅显式选择才走第三方 API；更新经 Sparkle + EdDSA 签名。继 Whistle（10-09）之后，本地 STT 货架有了精致、无订阅、无账号的入口；官网对比表诚实列出放弃的部分（云处理、多设备打磨）。听写成为第三种常驻输入方式，本地 vs 云就是永久的隐私默认值而非设置项。
+
+**Strata 有日期的更新（Niko1221，MIT，C++，22.6k★）：** v0.1.43.1 在回榜次日落地（10-12 约 20:30 UTC+8）——936 分 HN 帖（10-04）以来发版持续。Qwen3.8-Flash-Next（125B MoE、24,576 专家、每 token 激活 10 个）拆到 GPU/RAM/CPU/SSD 查找表：12 GB+ 显存、32 GB+ 内存、约 80 GB 磁盘；投机解码声称 +1.6–1.8×；RTX 5070 实测约 53–94 tok/s（按量化）；提供 localhost OpenAI 兼容 + Anthropic 风格端点与 MCP 服务器，编码 agent 可直接指向。自动选量化的一键安装器，正在为前沿级开源模型做 Ollama 为 7B Llama 做过的事。
+
+Sources: [The Verge — DDR4 回归](https://www.theverge.com/games/1009140/ram-shortage-intel-amd-ddr4-comeback) · [betterwispr.com](https://betterwispr.com/) · [Niko1221/Strata](https://github.com/Niko1221/Strata)

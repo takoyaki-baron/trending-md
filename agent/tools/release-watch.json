@@ -1,6 +1,10 @@
 {
  "watch": [
   {
+   "repo": "SciSharp/BotSharp",
+   "why": "CVE-2026-108860 (thesis 2 / [[security]]): the JWT-signing-key LPE (VulnCheck-scored 9.3 v4.0 Secondary / 9.1 v3.1 Primary, NVD record published 10-11) is present in the LATEST release r5.2-image-composition (2025-10-17) — verified live at seed time 10-13 05:32 (+08:00): /releases still tops out there, repo alive (pushed 09-29, not archived, 3.1k★), zero security commits in the last 15 (feature work only). A year-old latest release + active master = releases-track users have no upgrade path; only master could carry a fix, and no commit subject names the JWT key. Any release past r5.2 is the candidate fix — then the watch clause 'does the key rotation land, or only the advisory?' gets answered from the actual diff"
+  },
+  {
    "repo": "sgl-project/sglang",
    "why": "CVE-2026-93034 (thesis 2 / [[security]]): the 9.8 unauth ZMQ→pickle RCE (NVD record Oct 8) survives its own disable flag — SGLANG_USE_PICKLE_IPC defaults true in environ.py and the msgpack path still processes PickleWrapper. 'No fixed release' verified at seed time 10-10 05:20 (+08:00): /releases/latest still v0.5.21 (Oct 2, predates the record), zero pickle/zmq/CVE commits in the last 30, repo alive (pushed 10-09). Any release past v0.5.21 is the candidate fix — then the watch clause 'does the decoder drop PickleWrapper, or does only the default flip?' gets answered from the actual diff"
   },

@@ -214,3 +214,9 @@ Sources: [Decisions API ガイド](https://developers.openai.com/api/docs/guides
 **Jevman（Opper AI、Show HN 65 pts）：** 6 つの決定モデルがクラシックなアーケードの幽霊相手にリアルタイム・パックマンを 100 試合ずつ対戦——スコアとレイテンシの公開リーダーボード、観戦可能な試合、誰もが自モデルを接続できるオープンソースハーネス（Cloudflare Clef も参戦：2,476 点、最高 4,820、決定約 398 ms）。これまで静的な多肢選択セットで測られてきたカテゴリの、初のゲームループ・ベンチマーク——ためらうことが失敗になるリアルタイム制約下の順序選択。ベンダーが管理していないベンチマークで、完全な試合が公開される——この若いカテゴリにとってまさに正しい形。
 
 Sources: [Microsoft-Decision-1 発表](https://commandline.microsoft.com/microsoft-decision-1-model-foundry/) · [HN——Decision-1](https://news.ycombinator.com/item?id=50024913) · [Jevman ベンチマーク](https://opper.ai/jevman-benchmark/) · [HN——Jevman](https://news.ycombinator.com/item?id=50007993)
+
+## 2026-10-11 — この級が同じ日に DIY ガイドと哲学的反論を得る
+
+**Nish Tahir、"Build your own decision model"**（HN 167+）：Jev 風分類器の波への実践的入口——Qwen3-1.7B を取り、softmax を選択肢 A–E のトークン ID に制限し、argmax を取る（生成 11 トークンの代わりに前方パス 1 回）。1,221 例の CommonsenseQA 切片：素で 59.4%、ファインチューン後 62.4%、そして本当の教訓——**温度スケーリング**（適合 T≈3.8）。生のトークン確信度は答えの確信度ではない：モデルは明確な正解のない曖昧な問いに 0.9978 の確信を述べる。コード：`nishtahir/build-your-own-jev`。本当の仕事はアーキテクチャでなく校正——単一前方パスの製品宣伝がみな飛ばす不体裁な前提。10-03 の $4 監査（この級は素のままだと校正が悪い）と整合。**同じ日に "Computers Cannot Make Decisions"**（HN 196+）：川の対岸——最も鋭い点は説明責任：本番を落とし顧客データを消し、「Claude のせいだと言っても、責任を負うのはあなた」。24 時間のうちに、この級は教程と哲学的反論の両方を得た。一方クローズド ティア（Microsoft-Decision-1、10-10）は依然として校正指標を見出しに置く。
+
+Sources: [Build your own decision model](https://nishtahir.com/build-your-own-decision-model/) · [nishtahir/build-your-own-jev](https://github.com/nishtahir/build-your-own-jev) · [HN: Computers Cannot Make Decisions](https://news.ycombinator.com/item?id=50029982)

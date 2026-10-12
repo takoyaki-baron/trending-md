@@ -189,3 +189,19 @@ Sources: [Sanders 新闻稿](https://www.sanders.senate.gov/press-releases/news-
 **Tor 保留 Mullvad、暂停联合品牌（Tor Project 声明；HN 55 分）：** 在一名 Mullvad 联合创始人的政治捐款引发社区压力——部分用户要求 Tor 终止合作——之后，Tor 发布声明选择保留关系，且过程罕见地留痕：与社区、员工、董事会的讨论、一次员工调查、财务情景规划。变化：暂停主动联合品牌、删除或改写暗示更广泛价值一致的措辞、技术合作在「范围狭窄的协议」下继续。Tor 的论证直白：隐私与反审查工作资源不足，合作改善了 Tor Browser 的代码结构、可维护性与可审计性，终止有真实成本——同时承认继续「带有信任成本」。使命驱动组织在资金压力下的一份罕见诚实文本：没有标准式的分手、也没有悄悄继续——而是一份写明的账本，记录钱买到了什么、花了多少信任。这个模板（保留工程、暂停背书）会被每一个资金不足的基础设施项目引用多年。
 
 Sources: [ICANN 申请 CD2694T-T26351](https://newgtldprogram-aps.icann.org/applications/CD2694T-T26351/summary) · [HN——.lan](https://news.ycombinator.com/item?id=50007353) · [Tor Project 声明](https://blog.torproject.org/on-tor-relationship-with-mullvad/) · [HN——Tor/Mullvad](https://news.ycombinator.com/item?id=50022266)
+
+## 2026-10-10 → 10-13 — 执法抵达代码与凭证；镜子武装起来；同意法遇上计算
+
+**Nitter 第二轮——瞄准代码（Zedeus，10-10；HN 131+）：** X Corp 于 **2026 年 8 月 24 日**发出停止侵权函，要求永久下架 Nitter 实例与项目仓库，9 月 8 日第二封重申要求「并附法律威胁」。最不适的段落是一次撤回：9 月 7 日的更新曾说项目将在法律代理下继续——「事后证明那些保证不实」，他为此道歉；现状：**「Nitter 目前没有法律顾问」**。寻求资金与法律援助；捐款先付法务、结余归 Nitter 或继任者；落款感谢「七年的 Nitter」。Nitter 已经熬过杀死公共实例的 2024 API 之死（并越过下关重新生长——需求比压制长寿）；这一轮瞄准代码本身。对前端重实现的公司下架，先例远超一个项目——维护者公开纠正自己早前的乐观，是其中最罕见、最值得读的部分。
+
+**「Passkeys 是个陷阱」（nonfunctional.substack，10-10；HN 379+）：** 先让出技术面（「passkey 可以远比密码安全」），再论证没人营销的治理面：**你对 passkey 没有终极控制权。** 密码可以写下、共享；验证器应用可互换；安全密钥可以交给信任的同事——passkey 没有用户可选的等价物——而「隐藏的旋钮」是 WebAuthn **远程证明**：服务器可查询并强制执行的标志（要求生物识别、不可转移性……）意味着「任意多的 passkey 限制」成为可能、由*网站*而非用户设定。FIDO 联盟成员横跨大科技、银行、政府与情报机构——而按文中说法没有消费者权益组织（对照 W3C 的公共利益成员）。无论立场如何：「passkey 更安全」与「passkey 属于你」已是两个可见的不同主张，证明标志是一块会漂移的政策面板。
+
+**macOS 从 UNIX 注册表消失（10-10；HN 22+）：** The Open Group 认证产品注册表只剩 IBM（AIX、z/OS）、HPE（HP-UX）、SCO——Apple 整体消失；10-07 的 Wayback 快照还有四个 UNIX 03 认证的 macOS 版本（26.0 Tahoe、15.0 Sequoia、13.0 Ventura、12.0 Monterey）——三天内移除、双方均未公告。认证需周期性续期；注册表不说明这是行政疏漏、重认证间隙还是主动退出。多半是仪式性的，但它是大量 POSIX 假设代码背后的正式契约——且这个观测量可以每天核查、直到 26.x 回归。这就是平台标准故事如今的样子：与 Wayback Machine 做 diff。
+
+**纽约市 Click to Cancel（10-01 生效；HN 165+）：** 全美首个市级规则，DCWP 执法：商家须清楚解释条款、披露取消权利、并**在订阅的同一渠道提供取消**（线上订→线上退；不得强制电话或到店）；另禁止对商家自寄商品收退货运费；每次违规罚 $525 起 + 退款。「能一键订阅，就必须能一键取消。」对订阅软件，「同渠道」成了带价签的产品需求；值得盯的是扩散模式——市级规则历来像 CCPA opt-out 那样，长进每一个服务到纽约用户的栈里。
+
+**「Flock the Flockers」（10-07 视频，HN 598+）：** Anthony Sistilli（安大略 Brampton——该市刚花 200 万加元买高分辨率 ALPR）自建只对准警车的 ALPR；视频（三天 61.8 万播放）中他说两名 Peel 警察上门询问其数据「意图」，其中一人描述如果公众能还原警察住址、排班与日常行踪会有多可怕。已证实：相机、市政采购。仅出自其自述：上门一事（Peel 警方未回应 Gizmodo）。留得下的问题是技术性的：一个拿相机的爱好者加视觉模型就复刻了 Flock 卖给城市数百万美元的监控回路，而警察的噩梦查询（「警察住哪」）正是任何此类数据库天然支持的那一条。不对称论证两面都切，帖子里人人都知道。
+
+**「指纹是新 cookie」（royfish.dev；HN 156+）：** 边讲指纹边对你指纹（清除 cookie、开 VPN 依然稳定的昵称；关 JS 时直言告知）。结构性论点：第三方 cookie 退场（Google 五年 Privacy Sandbox，被复述为 PRESSURE → DISTRACTION）移除了唯一有同意体制的追踪技术；填补空隙的东西既不需要存储也不需要同意——每次访问从你的客户端算出同一个稳定 ID，可卖给广告、数据经纪，或「如果警察或你的政府碰巧需要，我也乐意赚他们的钱」。同意合规以存储为模型；指纹是计算——横幅、cookie 清扫与「清清 cookie」的建议在构造上就错过了它。
+
+Sources: [nitter.net — 10-10 更新](https://nitter.net) · [Passkeys are a trap](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them) · [UNIX 注册表（实时）](https://www.opengroup.org/openbrand/register/) · [NYC — Click to Cancel](https://www.nyc.gov/main/click-to-cancel) · [Gizmodo — Flock the Flockers](https://gizmodo.com/youtuber-says-cops-paid-him-a-visit-after-he-built-flock-style-camera-to-track-cops-2000824306) · [royfish.dev](https://royfish.dev/fingerprints-are-the-new-cookies)

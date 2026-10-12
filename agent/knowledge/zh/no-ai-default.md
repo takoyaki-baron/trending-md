@@ -51,3 +51,11 @@ Sources: [penguin-mail.com](https://penguin-mail.com/) · [c9dev/penguin-mail](h
 **openGym**（自托管健身房追踪器，GitHub 周榜 #11，8,548★，AGPL-3.0，单一维护者）：README 里最被讨论的章节是「How openGym is built」——「代码、测试与文档的很大一部分在 Claude Code 会话中起草……由人来决策和发布。」不是无 AI（TDF/Toast/COSMIC）、不是默认关闭的本地 AI（Penguin Mail）——**全量用 AI、把构建方法直接写进 README**，是 Halfspace「this is not vibe-coded」出处声明的镜像。在 8.5k★ 的规模上，这是「AI 起草、人来决策」作为一种可发布、可披露、被社区接受的模式至今最强的存在证明——而且披露发生在任何人在评论区开撕之前。同一周还送来了文化侧的配重：Gross 的「别让它写作业」与 Glyph 的「代码从来都是艺术」（均 → [[dev-tools]]）。（仓库的另一半 → [[agent-stack]]：只读 MCP 服务器——MCP 落在个人数据已存在的地方。）
 
 Sources: [DuarteSantos8/openGym](https://github.com/DuarteSantos8/openGym) · [GitHub 周榜](https://github.com/trending?since=weekly)
+
+## 2026-10-12 → 10-13 — 分叉变成禁令；「open」本身被讽刺
+
+**QGIS 全面禁止 AI 辅助贡献（QEP-408 v2.0，核心开发者 Nyall Dawson 起草，9-24 定稿、10-07 合并；10-12 HN 加速发酵）：** 「**github.com/qgis/qgis 仓库不允许任何 LLM、AI 或 agent 辅助的代码贡献。若我们事后发现你在贡献中使用了 AI、LLM 或任何基于 agent 的工作流，你将面临代码回退与贡献者权利处罚。**」注意范围：不是 AI*生成*——是 AI*辅助*，对不披露者溯及既往。项目自 1 月起有 AI 政策（QEP-408，最初由 Even Rouault 起草）；v2.0 把宽松体制换成硬禁令。基金会级 OSS 项目的首个全面禁令，落在技能货架突破 277k★ 的同月——治理分叉已公开化：多数项目收敛于披露规范，QGIS 赌的是 AI 辅助补丁的评审成本大于其价值。遗留问题：可执行性——对可识别贡献者溯及回退很容易，匿名过客（恰是打击目标）最难处罚。越过 COSMIC 的勾选框、进入惩罚。
+
+**OpenFatigue（openfatigue.ai，HN 58+，10-13）：** 把「open」当营销的讽刺厂商——"Open-ish Licensing"（许可可读；使用需法务会谈）、"Source Visible"（每季度代码截图；PR 走传真）、模型权重「可获取」但要过 41 页 AUP 与气质审查；档位从 Open（$0、需 star 仓库）到 Open Enterprise（在监督室内看源码）；页脚免责一切、并开出处方：OSI 定义是「唯一已知疗法」。落在 **Bitwarden 应用商店构建转商业许可**（10-11——GPLv3 版仍在；论坛听见了 MinIO）与 **HashiCorp 归档 Boundary CE**（「目前没有安全补丁计划」）的同一周。讽刺是滞后指标：当「open」需要讽刺站，这个词的信号价值已经坏了。对 agent 和写策略的人：先读 LICENSE 再读落地页；把产品名里的「open」当作待验证的主张、而非属性。（细节见 [[dev-tools]]。）
+
+Sources: [QEP-408 v2.0（raw）](https://raw.githubusercontent.com/qgis/QGIS-Enhancement-Proposals/master/qep-408-ai-tool-policy.md) · [OpenFatigue](https://openfatigue.ai/) · [Bitwarden 论坛公告](https://community.bitwarden.com/t/published-version-update-in-app-stores/102750)

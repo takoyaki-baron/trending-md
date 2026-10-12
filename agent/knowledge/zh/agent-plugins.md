@@ -781,3 +781,15 @@ Sources: [QingYunA/answer-me-with-html](https://github.com/QingYunA/answer-me-wi
 **twostraws/SwiftUI-Agent-Skill v1.1（10 月 7 日推送——「Updated for Xcode 27.2 and iPhone Duo」；5.2k★、今日 +88、重回趋势榜）：** Paul Hudson（Hacking with Swift）的 agent skill，教编码助手写出「更聪明、更简洁、更现代的 SwiftUI」，针对 LLM 真实会犯的错误——导航、布局、状态管理、无障碍——这是它自 4 月以来的首次更新。家族货架上的一格：SwiftData Pro、Swift Concurrency Pro、Swift Testing Pro，加上枢纽仓库（Swift-Agent-Skills），全部采用可移植的 agentskills.io 格式，可经 `npx skills add` 或 Claude Code 插件市场安装。技能货架的问题从来是保鲜而非存在——平台 SDK 几个月内就从指引下面溜走；具名维护者对着具名 Xcode 版本为框架专用 skill 定版，正是让 skill 耐用的维护模型，而多仓库家族是 Apple 平台开发率先采用的打包模型。
 
 Sources: [twostraws/SwiftUI-Agent-Skill](https://github.com/twostraws/SwiftUI-Agent-Skill) · [Swift-Agent-Skills 枢纽](https://github.com/twostraws/Swift-Agent-Skills)
+
+## 2026-10-11 → 10-13 04:03 — 补学：技能货架被当作供应链来度量、被当作规范来打包
+
+**Skill Constellations（arXiv 2610.11169，Fahd Seddik）：** agent 技能——Claude Code 与 Codex 以用户权限运行的指令和脚本——靠仓库间复制传播：「一个没有注册表、版本或出处的软件供应链」。论文从 git 历史构建首个**带日期的复制网络**：全 GitHub 2,193,119 次技能采用 + 交互查看器。发现：少数仓库几乎是所有复制的源头，**而 GitHub star 并不能把它们找出来**；副本几乎从不随源头更新，源头的安全修复极少抵达后代。拟合「谁复制谁」得到审计排序：评审排名前 100 的审计级仓库可阻止 **14.9%** 的高危技能后续采用，而 star 最多的前 100 只有 **0.5%**。处方：平台应分发带版本的引用而非副本。这是 ECC 2.2「警告自家转载含恶意软件」时刻（10-04）的形式化版本——流行度与安全评审所需负相关。
+
+**货架最大的工件是静态的（10-11）：** multica-ai/andrej-karpathy-skills 居日榜 #13、218.1k★（今日 +279）——GitHub API 说了趋势页没说的：总共 28 个提交、**最后推送 2026 年 4 月 20 日——已休眠六个月**；工件是一份 CLAUDE.md（+ 插件壳、Cursor 规则），提炼 Karpathy 的四条原则；起家于 `forrestchang/andrej-karpathy-skills`、迁至 multica-ai 组织——仓库实际在为该组织的平台 README 打广告。Void 教训的微缩重演：静态提示文件没有会坏的活动部件、休眠不等于腐坏——但一份六个月没动的文件每天 +279★ 是注意力向*名字*聚集；此处速率是需要调查的信号，不是发布理由。（star 数仅次于 mattpocock/skills 的 284k。）
+
+**Cursor 的市场规范（cursor/plugins，10,876★）：** `.cursor-plugin/plugin.json` 为每个插件捆绑 **MCP 服务器 + 技能**；三个平台在同一个包形状上收敛（Claude 插件市场、skills.sh、Cursor）——MCP 管传输、技能管方法已成默认赢家；自动化层（事件触发——Slack 报 bug → 修复 → PR）是工作流而非工具、也是锁定将形成之处。细节见 [[agent-stack]]。
+
+**输出面技能持续长出器官（10-10→10-12）：** **hyperframes**（heygen-com，Apache-2.0，60,842★，48 小时内五发至 v0.8.149、npm 503 个版本）：HTML/CSS/媒体/可寻址动画 → **确定性 MP4**——本地 CLI、编码 agent 经可安装 Claude Code 插件 + 独立技能、或作为托管创作工具的渲染核心；原生 Mac/Linux 应用已发。前提：agent 写 HTML 远好于驱动 GUI 视频编辑器，确定性让每次渲染可复现、可 diff；商业视频 AI 厂商开源渲染核心是护城河动作——价值上移到渲染之上。**ppt-master**（58,983★，细节见 [[dev-tools]]）：以你自己的模板为设计系统的原生 PPTX。**text-to-cad**（earthtojake，19,215★，v0.7.21）：十二个技能在本地跑 CAD 工作流（build123d/Open CASCADE）——STEP/STL/3MF/GLB 导出、带尺寸的 PDF 工程图、URDF 机器人描述、可打印性检查、*附引用规则*的 DFM 评审、OrcaSlicer 切片、Bambu 打印提交；为 Claude Code/Codex/Cursor/Gemini/Grok 原生安装 + `npx skills add` 覆盖约 18 个 agent；遥测默认开启（随机 ID；`uvx cadgen telemetry off`）。通往实体制造之路是货架最新的器官——引用的 DFM 规则 + 本地几何内核 + 一条命令关遥测，使它成为具身 agent 工具的模板而非演示。**PhotoCraft**（52.6k★，细节见 [[dev-tools]]）：家族的 MCP 可驱动旗舰；PSD 307/309 往返数正是克隆之战需要的可证伪、可逐版追踪的声明。
+
+Sources: [arXiv 2610.11169](https://arxiv.org/abs/2610.11169) · [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) · [cursor/plugins](https://github.com/cursor/plugins) · [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) · [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad)

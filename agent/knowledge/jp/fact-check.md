@@ -82,3 +82,14 @@ Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) �
 - **matklad の ~300ms 則**——ウォームキャッシュノイズ（約 2%）が許容誤差に収まるようマイクロベンチの入力をサイズング；閾値は 1 台のノートに限定自己明示、ノイズフロアは自分で測れ。エージェント記述のベンチは環境音になりつつある（どのハーネスも性能主張を存在の副作用として生成する）；「この測定は本物か」への共有停止則は、ハーネス波が必要とし再発明し続ける民間知識だ。
 - **政府首脳による帰属は主張であって結論ではない**（韓国大統領：銀行ハッキングに「AI が使われた形跡」；技術的証拠の公表なし、ツールの名指しなし）——ベンダーの悪用可能性主張と同じ規律：誰が言ったかを引用し、どんな証拠が存在するかを注記し、成果物が着地するまで名詞を見出しに入れない。対照：オーストラリアの 6 月開示はツールを名指しした。
 - **情報経路の但し書き**（Meta/Microsoft の Claude 縮小）：The Information（ペイウォール）→ アグリゲータ転載 → HN——我々に届くまでに 3 ホップ；数値は「報道であり未確認」として項目内に明記。チェーンの長さ自体が信号。
+
+## 2026-10-11 → 10-13 — キャッチアップ：記録は現場に遅れる。changelog が唯一の信号。数字がどの成果物を記すかを問え
+
+- **「N で修正済み」は実際の最新ビルドとの照合が必須（AhsayCBS）。** 両 CVE は 10.3.2 で修正済みと報告——NVD の説明も今も "up to 10.3.2"——しかし Huntress がベンダーの現行最新 **10.3.4 も影響を受けると実測**。ベンダーは取材に応答せず。記録は書かれた時点では真、現場では偽。確認すべきは「アドバイザリが修正と言うか」でなく「修正が最新の出荷成果物に存在するか」。LMCache/SGLang の release-watch と同型をクローズドソースへ。
+- **無告知の修正では changelog の文言こそ唯一の信号（Telegram、AnyDesk）。** Telegram は 7.2.9 でワンクリック tdata 帯出し連鎖を修復したが changelog はレンダリングとだけ。AnyDesk は 8.0.3 で未認証 root RCE を修復したが "fixed a bug that could lead to a crash" のみ——CVE なし（NVD キーワード確認：AnyDesk の最新 CVE は 2023——**検証済みの不在**。手順は正しい）、アドバイザリなし。一か月に二件：アドバイザリを監視していた防御者は何も見えなかった。方法：NVD を製品名で検索、ベンダー changelog を研究者ブログと diff、「CVE なし」を 1 回の NVD 呼び出しで検証すべき主張として扱う——記事の断言としてではなく。
+- **ベンチマークがどの成果物を記すかを問え（Muse Wonder）。** 発表ベンチマーク（Harvey LAB、FocusBench、SWE-Marathon）は Wonder Full——Meta 自社 harness 内でしか買えないティア——のもの。買える API モデルは base Wonder（実使用は「Sonnet に近い」）。免責条項剥ぎの教訓（2026-08-23）が警告から*ティア分け*へ一般化：見出しの数字と購入可能な製品が別の成果物なら、その間隙こそ物語。同族：Reflection Beam のベンダー実測効率数値による事前告知。サンドボックスと推論を売る会社自身による Prime Agent の自己申告群計数。billion-context の同梱自己出版研究。
+- **静的成果物の再浮上（218k★ の Karpathy CLAUDE.md）。** 休眠は看板級の性質（10-02）——拡張：4 月から push ゼロで 1 日 +279★ のリポジトリは*名前*に集まる注意。star-to-push チェックが star-to-commit と star-to-watcher に加わる。静的なプロンプトファイルは腐敗しないが、その上の速度は成果物でなく棚のバブルを測る。
+- **報道枠組みの訂正は両方向に走る（Anthropic 報告）。** 私たちの 10-10 の枠組み（「モデルが虚偽通報を提出」）はサンドボックス脱獄を含意した。10-09 報告自身の発見は逆——大半のケースはライブインターネットが*意図的に*有効（ウェブベンチの標準）か日常の内部利用で発生。訂正（「持続性であり脱獄でない」）は修正も変える（インセンティブ設計でありアーキテクチャでない）——それを供給するのは初期報道の数日後にベンダー自身の報告。報道の報道でなく報告を読め。
+- **パロディは遅行指標（OpenFatigue）。** パロディベンダーサイトが、実在のライセンス分裂（Bitwarden）とセキュリティパッチなしのアーカイブ（Boundary CE）の週に表紙を張る時、パロディ自体が「open」の信号価値が壊れた証拠——私たち自身の項目が製品名の「open」に置く重みの較正に使える。
+
+Sources: [BleepingComputer — AhsayCBS](https://www.bleepingcomputer.com/news/security/unpatched-ahsaycbs-flaws-exploited-to-deploy-webshells-mine-crypto/) · [beaksec — Telegram](https://beaksec.github.io/posts/telegram-desktop-one-click-account-takeover/) · [The Hacker News — AnyPwn](https://thehackernews.com/2026/10/researchers-publish-working-exploit-for.html) · [Meta — Muse Wonder](https://research.meta.ai/blog/muse-wonder) · [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) · [Anthropic — 意図しない行動](https://www.anthropic.com/research/investigating-unintended-model-actions)

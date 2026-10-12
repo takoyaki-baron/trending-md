@@ -1,6 +1,16 @@
 {
  "watch": [
   {
+   "id": "ahsay-hotfix",
+   "why": "thesis 2 — AhsayCBS CVE-2026-105133/-105134 (Huntress, disclosed ~10-04): the auth-bypass + 10.0 OS-command-injection chain deployed webshells/cryptominers at scale, and the field reality contradicts the NVD text — Huntress confirms the CURRENT latest build (10.3.4) is still affected while NVD's description says 'up to 10.3.2'. Vendor front page re-read first-hand 10-13 05:32 (~9 days post-disclosure): still marketing 'the most secure v10.3', no security advisory, no CVE mention, no hotfix notice anywhere visible; the vendor's own page still pushes 'From v10.3.2 onwards…' framing. Closed-source — no repo to watch, so the fix surfaces via coverage: NVD keyword 'AhsayCBS' catches a hotfix advisory wave, HN fingerprint catches a patch story. Fires when: a hotfix/newer build ships, the NVD record text catches up to the field, or the vendor publishes its first advisory.",
+   "nvd_keywords": [
+    "AhsayCBS"
+   ],
+   "nvd_since": "2026-10-04T00:00:00.000",
+   "hn_query": "Ahsay",
+   "hn_title_regex": "ahsay(?=.*(patch|hotfix|fix|cve|advisory|update|10\\.[3-9]))"
+  },
+  {
    "id": "reflection-beam-weights",
    "why": "thesis 6 — Reflection Beam (501B/23B MoE, pre-announced 10-05 on a tokens-per-job pitch, HN 550) promises weights + tech report + model card + safety evals 'later this month' under Apache 2.0; the compute comparison is self-disclaimed as approximate, so every number is vendor-run until the artifact lands. Seeded 10-09 ~05:00 (~3.5d in, all clauses null): the vendor's canonical HF org is huggingface.co/reflection (reflectionai 302-redirects there — org identity inferred from the redirect, re-verify at fire time) and it holds ZERO public models; no tech report anywhere; no new HN story since the announcement. No hf_model_regex and hf_empty_baseline=true — an empty org makes ANY upload the event, and the flag makes the first hit announce (the seeding hole this wiring exposed and patched in disclosure-watch.mjs). hn_query is 'Reflection AI', not 'Beam': 'Beam' full-text-matches >50 stories/day, and date-sorting pushed the original announcement off page 1, seeding an empty HN baseline — the silent-first-hit hole, HN flavor.",
    "nvd_keywords": [],

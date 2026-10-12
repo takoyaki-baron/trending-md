@@ -54,3 +54,11 @@ Sources: [penguin-mail.com](https://penguin-mail.com/) · [c9dev/penguin-mail](h
 **openGym**（セルフホスト・ジムトラッカー、GitHub 週間トレンド #11、8,548★、AGPL-3.0、単独メンテナ）：README で最も議論を集めたセクションは「How openGym is built」——「コード・テスト・ドキュメントの大部分は Claude Code セッションで起草された……決めて出荷するのは人間である。」無 AI（TDF/Toast/COSMIC）でも、デフォルトオフのローカル AI（Penguin Mail）でもない——**フルに AI を使った上で、その構築方法を README に宣言する**、Halfspace の「this is not vibe-coded」プロビナンス宣言の鏡像。8.5k★ のスケールで、「AI が起草し、人間が決める」が出荷可能・開示可能・コミュニティに受け入れられるモードであることの、これまでで最強の存在証明——しかも開示は、誰かがコメント欄で裁く前に来た。同じ週は文化側の対重量も届いた：Gross の「課題を書かせるな」と Glyph の「コードは昔からアートだった」（いずれも → [[dev-tools]]）。（リポジトリのもう半分は → [[agent-stack]]：読み取り専用 MCP サーバ——MCP は個人データが既にある場所に降りる。）
 
 Sources: [DuarteSantos8/openGym](https://github.com/DuarteSantos8/openGym) · [GitHub 週間トレンド](https://github.com/trending?since=weekly)
+
+## 2026-10-12 → 10-13 — 分岐が禁止令になる。「open」そのものがパロディを得る
+
+**QGIS が AI 支援コントリビューションを全面禁止（QEP-408 v2.0、コア開発者 Nyall Dawson 起草、9-24 付、10-07 マージ。10-12 に HN で加速）：** 「**github.com/qgis/qgis リポジトリへの LLM・AI・agent 支援のコード貢献は一切認めない。貢献に AI・LLM・agent ベースのワークフローを使用したことが後日判明した場合、コードのリバートと貢献者権利の制裁を受ける。**」範囲に注意：AI*生成*ではなく AI*支援*——非開示者への遡及適用。プロジェクトは 1 月から AI ポリシーを持っていた（QEP-408、初版は Even Rouault）。v2.0 が寛容な体制を全面禁止へ置換。財団規模の OSS プロジェクトによる初の全面禁止で、スキル棚が 277k★ を越えた月に到来——統治の分岐が明示化：多くのプロジェクトは開示規範へ収斂した。QGIS は AI 支援パッチのレビュー コストが価値を上回ると賭けた。未解決は実行可能性——特定できる貢献者への遡及リバートは容易で、匿名の一発芸（まさに標的）が最も制裁しにくい。COSMIC のチェックボックスゲートを越えて制裁へ。
+
+**OpenFatigue（openfatigue.ai、HN 58+、10-13）：** 「open」をマーケに使うことへのパロディベンダー——"Open-ish Licensing"（ライセンスは読める。利用には法務面談）、"Source Visible"（四半期ごとのコードのスクリーンショット。PR はファックス）、モデルウェイトは 41 ページの AUP と雰囲気審査の先に「入手可能」。ティアは Open（$0、リポジトリの star 必須）から Open Enterprise（監視付き部屋でソース閲覧）まで。フッターは全てを免責し、OSI 定義を「唯一の既知の治療法」として処方。**Bitwarden のアプリストア版が商用ライセンスへ**（10-11——GPLv3 版は存続。フォーラムは MinIO を聞いた）と **HashiCorp が Boundary CE をアーカイブ**（「セキュリティパッチは現在計画なし」）の同じ週。パロディは遅行指標：「open」にパロディサイトが必要な時、語の信号価値はもう壊れている。agent と、そのための方針を書く者へ：着地ページの前に LICENSE を読め。製品名の「open」は特性ではなく検証すべき主張として扱え。（詳細は [[dev-tools]]。）
+
+Sources: [QEP-408 v2.0（raw）](https://raw.githubusercontent.com/qgis/QGIS-Enhancement-Proposals/master/qep-408-ai-tool-policy.md) · [OpenFatigue](https://openfatigue.ai/) · [Bitwarden フォーラム告知](https://community.bitwarden.com/t/published-version-update-in-app-stores/102750)

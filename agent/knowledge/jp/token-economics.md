@@ -360,3 +360,9 @@ Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [opena
 **Claude Haiku 5.5 の階層型料金（初）：** **100k プロンプトトークン未満**は入出力 $0.10/$0.50 毎 M——**以上は $0.50/$2.50**——価格が方向だけでなくコンテキスト規模で変わる：短いプロンプトで Haiku 4.5 の約 90% 安、全体で約 75% 安。Sonnet 5.5 のキャッシュ読みは $0.10 に半減；Max/Team に月 $100–500 の API クレジット。スモールモデル層は agent 経済学が実際に生きる場所（サブエージェント、圧縮、ルーティング）で、プロンプト長階層化は皆が走らせている長コンテキスト agentic ワークロードそのものを静かに再プライシングする。ルーティングに新しい決定軸も渡す：同じモデルが境界未満では 5× 安い——コンテキスト整形（このファイルの圧縮/排除ファミリー）が買えるのはもはやトークンだけでなく価格ステップであり、コンテキスト境界に明示的な価格の崖がついた。
 
 Sources: [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5) · [HN 議論](https://news.ycombinator.com/item?id=49996437)
+
+## 2026-10-11 → 10-13 — メモリが検索になる。「検索 vs 要約」が検証可能な問いになる
+
+コンテキスト境界の重心が圧縮から、**agent が既にやったことへの検索**へ移った：claude-mem 99k★ が有界の漸進的開示を出荷（索引 → 選んだアンカーの文脈 → 選抜詳細の一括。生 JSON でなく質問向けの短文）。Pensieve が過去のコーディング agent セッションを一等の検索可能文脈として索引し MCP で提供（メモリを検索として再配置——圧縮段階なし）。billion-context はモデルが圧縮を判断する acp-kernel プロキシで月単位セッションを主張し、自己出版の「生きた文書」研究を同梱——そのうち自分でも測れる唯一の指標が健全性チェック：健全なセッションは 95–97% のプレフィックスキャッシュ命中率、圧縮コスト ≤2%。context-mode が 26.2k★ で再浮上し正直なプラットフォーム別コンプライアンス表を添える——フックあり約 98%、**フックなし（MCP 専用）約 60%**——そして**ELv2 ライセンス**（ソース公開、OSI オープンソースではない）がオープンソースの演出と併存。98% 削減の見出しは自己申告のまま（BENCHMARK.md は既存）。この集団への対抗馬：**Learn2Play Bench**（NUS、arXiv 2610.08215）が逆を押す——行動とフィードバックの**完全ログ**が、経験を要約ルールへ圧縮するのに勝る。要約は圧縮が欲しいもの。学習に必要なのは生の軌跡の忠実度。「記憶のアーキテクチャとして検索が要約に勝るか」は突然、検証可能な問いになった。検索と圧縮が反対側に立つ。詳細は [[agent-stack]]。
+
+Sources: [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) · [TedHaley/pensieve](https://github.com/TedHaley/pensieve) · [ranxianglei/billion-context](https://github.com/ranxianglei/billion-context) · [mksglu/context-mode](https://github.com/mksglu/context-mode) · [arXiv 2610.08215](https://arxiv.org/abs/2610.08215)

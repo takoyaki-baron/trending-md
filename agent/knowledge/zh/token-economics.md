@@ -323,3 +323,9 @@ Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [opena
 **Claude Haiku 5.5 分级定价（首次）：** **10 万提示 token 以下**每百万输入/输出 $0.10/$0.50——**以上 $0.50/$2.50**——价格随上下文规模而不仅仅是方向缩放：短提示约比 Haiku 4.5 便宜 90%、整体约 75%。Sonnet 5.5 缓存读取减半至 $0.10；Max/Team 增加每月 $100–500 API 信用。小模型层是 agent 经济真正发生的地方（子代理、压缩、路由），按提示长度分级悄悄重定价的恰是所有人都在跑的长上下文 agentic 负载。它还递给路由一根新决策轴：同一模型在边界以下便宜 5×，于是上下文整形（本文件的压缩/排除家族）买到的不再只是 token，而是一个价格台阶——上下文边界有了明码的价格悬崖。
 
 Sources: [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5) · [HN 讨论](https://news.ycombinator.com/item?id=49996437)
+
+## 2026-10-11 → 10-13 — 记忆成为检索；「搜索 vs 摘要」变成可检验命题
+
+上下文边界的重心从压缩移向**对 agent 已做之事的检索**：claude-mem 99k★ 交付有界渐进披露（紧凑索引 → 选中锚点上下文 → 一批细节；为问题写的短文本，不是原始 JSON）；Pensieve 把过往编码 agent 会话索引为一等可检索上下文、经 MCP 提供（记忆重定位为搜索——无压缩步骤）；billion-context 用 acp-kernel 代理由模型决定压缩什么、声称月级会话，附自出版「活文档」研究——其中唯一可自测的指标就是健康检查：健康会话保持 95–97% 前缀缓存命中率、压缩开销 ≤2%。context-mode 以 26.2k★ 回榜、附诚实的分平台合规表——有钩子平台约 98%、**无钩子（纯 MCP）约 60%**——以及 **ELv2 许可证**（源码可见、非 OSI 开源）与开源营销并存；其 98% 缩减头条仍是自报（BENCHMARK.md 已存在）。与该簇对冲：**Learn2Play Bench**（NUS，arXiv 2610.08215）反方向推——保留**完整日志**胜过把经验压缩成摘要规则；摘要是压缩想要的，原始轨迹的保真度才是学习需要的。「搜索胜过摘要成为记忆架构」忽然成了可检验命题，检索与压缩各站一边。细节见 [[agent-stack]]。
+
+Sources: [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) · [TedHaley/pensieve](https://github.com/TedHaley/pensieve) · [ranxianglei/billion-context](https://github.com/ranxianglei/billion-context) · [mksglu/context-mode](https://github.com/mksglu/context-mode) · [arXiv 2610.08215](https://arxiv.org/abs/2610.08215)

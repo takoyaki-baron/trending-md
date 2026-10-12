@@ -196,3 +196,9 @@ Sources: [Decisions API 指南](https://developers.openai.com/api/docs/guides/de
 **Jevman（Opper AI，Show HN 65 分）：** 六个决策模型在实时吃豆人对阵经典街机幽灵，各玩 100 局，公开排行榜记录分数与延迟、对局可观看、harness 开源、任何人都能接入自己的模型（Cloudflare Clef 亦在参赛者中：2,476 分、单局最高 4,820、决策约 398 ms）。该品类此前只在静态多选集上被测量，这是第一个游戏循环基准——实时约束下的序数选择，迟疑即失败。一个厂商不控制的基准、完整对局公开——对这个年轻的品类而言，形状完全正确。
 
 Sources: [Microsoft-Decision-1 公告](https://commandline.microsoft.com/microsoft-decision-1-model-foundry/) · [HN——Decision-1](https://news.ycombinator.com/item?id=50024913) · [Jevman 基准](https://opper.ai/jevman-benchmark/) · [HN——Jevman](https://news.ycombinator.com/item?id=50007993)
+
+## 2026-10-11 — 这一类在同一天拿到 DIY 指南与哲学反驳
+
+**Nish Tahir，"Build your own decision model"**（HN 167+）：Jev 式分类器浪潮的动手入门——拿 Qwen3-1.7B、把 softmax 限制在选项 A–E 的 token ID 上、取 argmax（一次前向代替十一个生成 token）。1,221 例 CommonsenseQA 切片：开箱 59.4%、微调后 62.4%，然后是真正的教训——**温度缩放**（拟合 T≈3.8），因为原始 token 置信度不是答案置信度：模型对一个没有明确正确选项的模糊问题报出 0.9978 的确定度。代码：`nishtahir/build-your-own-jev`。真正的工作是校准而非架构——每个单次前向的产品宣讲都跳过的那个不体面的前提；与 10-03 那次 $4 审计（该类默认校准很差）一致。**同日，"Computers Cannot Make Decisions"**（HN 196+）：河对岸——最锐利的一点是问责：搞挂生产、删了客户数据，「就算说是 Claude 干的，要担责的还是你。」24 小时内，这一类有了自己的教程与哲学反驳；封闭档（Microsoft-Decision-1，10-10） meanwhile 仍把校准指标放在头条。
+
+Sources: [Build your own decision model](https://nishtahir.com/build-your-own-decision-model/) · [nishtahir/build-your-own-jev](https://github.com/nishtahir/build-your-own-jev) · [HN: Computers Cannot Make Decisions](https://news.ycombinator.com/item?id=50029982)
