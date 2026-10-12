@@ -1,8 +1,8 @@
 ---
 date: 2026-10-12
-updated: 2026-10-11T20:30:00Z
+updated: 2026-10-12T04:40:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -246,13 +246,153 @@ An April 2026 post by Thomas Hühn resurfaced at the top of HN: twenty years ago
 
 ---
 
+## 18. "Passkeys are a trap" — 379 points of pushback on the FIDO consensus
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 379+ pts · ~6.2h ago (~05:59 UTC+8)
+- **Tags:** `passkeys` `authentication` `webauthn` `fido`
+
+An essay under the byline "The Hack Non-Functional" (Oct 10) that concedes the technical case up front — "it is true that passkeys can be far more secure than passwords" — and then argues the governance case nobody markets: **you do not have ultimate control over your passkeys**. Passwords can be written down and shared; authenticator apps are interchangeable; security keys can be handed to a trusted colleague. Passkeys have no user-chosen equivalent — and the essay's "hidden dial" is WebAuthn remote attestation: the flags a server can query and enforce (biometrics-required, non-transferability, and beyond) mean "arbitrarily many passkey restrictions" are possible, set by the site rather than the user. The institutional point: the FIDO Alliance spans Big Tech, banks, governments and intelligence agencies — and, per the essay, no consumer-advocacy groups, contrasted with the W3C's public-interest members. The conclusion is the title.
+
+**Why it matters:** the first HN-front-page articulation of the passkey objection that isn't enterprise recoverability — it's about who sets the defaults in a credential system whose constraints are cryptographically enforced and remotely queryable. Whatever your position, "passkeys are more secure" and "passkeys are yours" are now visibly two different claims, and attestation flags are a policy surface that drifts.
+
+[`🔗 Passkeys are a trap`](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50048312)
+
+---
+
+## 19. Karpathy's four-tier funnel: the LLM capability gap is "a sharp funnel" now
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 307+ pts · ~7.9h ago (~04:20 UTC+8)
+- **Tags:** `llm` `ai-industry` `karpathy` `adoption`
+
+Andrej Karpathy re-posted his April thread because "this gap in shared understanding of LLM capability is *widening*. It's now less 'two groups of people speaking past each other' and more a sharp funnel" — and quantified the tiers: **~6B people (~75%)** have barely touched an LLM; **~1–2B casual users** see "derpy chatbots" — a better search box, a writing aid; **~20M professionals (0.2%)** in math&code watch agents finish weeks-long projects from a prompt ("less than 1 year ago, I was writing code manually by hand"); and **~5,000 people (~0.00006%)** with internal frontier access see "swarms of thousands of agents collaborating over weeks on software mega projects" — minting zero-days, advancing frontier mathematics — where "human review and comprehension are starting to fall behind" (his examples: the OpenAI-HF incident "archeology," the 722 math manuscripts). The funnel is driven by impact scaling with ambition, the jaggedness of RL-on-verifiable-rewards capability, and access tiers.
+
+**Why it matters:** a compact theory of why AI discourse keeps missing itself — each tier's evidence is invisible from the tier below, so public debate samples the bottom of the funnel while the claims are made at the top. It's also an inadvertent roadmap for verification: when comprehension falls behind output, the scarce resource is exactly what today's Campfire-rewrite autopsy (#5) and Epoch's InnovationEval (Oct 11) are selling.
+
+[`🔗 @karpathy on X`](https://twitter.com/karpathy/status/2109361546505966046) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50047422)
+
+---
+
+## 20. AhsayCBS under active attack: auth bypass + command injection — and the latest release is still vulnerable
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BleepingComputer · Huntress report, exploitation observed Oct 7, Huntress update Oct 10 (~2d ago)
+- **Tags:** `exploitation` `msp` `backup` `cve`
+
+Huntress observed attackers chaining two AhsayCBS flaws against at least five organizations since Oct 7: **CVE-2026-105133** (authentication bypass, public exploit) into **CVE-2026-105134** (OS command injection), then reconnaissance, JSP webshells, and an XMRig miner disguised as `edge.exe`, persisted via a fake `MicrosoftEdgeUpdateSvc` service (a modified NSSM). The evasion layer is the AI-era detail: `Taskgmr.ps1`, which Huntress believes is AI-assisted, pauses the miner whenever Task Manager opens, resumes when it closes, and kills Task Manager outright at 6 p.m. or after an hour open overnight; one site also received the vulnerable WinRing0x64.sys driver. The record-vs-reality gap: both CVEs are reported as fixed in AhsayCBS 10.3.2 — NVD's descriptions still say "up to 10.3.2" — but Huntress confirmed the current latest, **10.3.4, is also affected**, and Ahsay hasn't answered press queries. Scores, for the record: VulDB-assigned CVSS 4.0 — 5.5 for the bypass, 9.3 for the injection.
+
+**Why it matters:** backup consoles are the MSP supply chain — one compromised server fronts many downstream clients. And this is the week's cleanest perishable-record case: "fixed in 10.3.2" was true in the CVE text and false in the field until Huntress tested the latest build. Until a patch exists: restrict the management interface to trusted IPs, assume persistence, restore from clean backups (Huntress published IOCs and four Sigma rules).
+
+[`🔗 BleepingComputer: unpatched AhsayCBS flaws exploited`](https://www.bleepingcomputer.com/news/security/unpatched-ahsaycbs-flaws-exploited-to-deploy-webshells-mine-crypto/) · [`🔗 NVD: CVE-2026-105134`](https://nvd.nist.gov/vuln/detail/CVE-2026-105134)
+
+---
+
+## 21. Fingerprints are the new cookies — an interactive essay that fingerprints you while it explains fingerprinting
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 156+ pts · ~5.7h ago (~06:33 UTC+8)
+- **Tags:** `privacy` `browser-fingerprinting` `tracking` `gdpr`
+
+royfish.dev's piece opens by doing the thing: with JavaScript on, it assigns you a stable nickname that survives cookie-clearing and VPNs; with JS off it tells you straight — "You disabled JavaScript, so this fingerprinting trick can't run at all. You're still vulnerable to network-based methods." The argument it makes while the demo runs: the third-party-cookie phase-out (Google's five-year Privacy Sandbox arc, retold as PRESSURE → DISTRACTION) removed the one tracking technology that had a consent regime, and what flowed into the gap needs neither storage nor consent — the same consistent ID computed from your client each visit, monetizable for ads, data-broker sales, or, in the essay's bluntest line, "if the police or your government happen to care, I'll gladly take their money too."
+
+**Why it matters:** consent compliance is modeled on storage; fingerprinting is computation, so banners, cookie sweeps and "clear your cookies" advice miss it by construction. For anyone shipping analytics or anti-fraud in web products, the demo doubles as a question about which side of that line your SDK defaults sit on.
+
+[`🔗 royfish.dev: Fingerprints are the new cookies`](https://royfish.dev/fingerprints-are-the-new-cookies) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50048642)
+
+---
+
+## 22. Sakana AI's MASS: recursive self-improvement where the model is its own research community
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 80+ pts · ~5.9h ago (~06:22 UTC+8)
+- **Tags:** `research` `recursive-self-improvement` `multi-agent` `sakana-ai`
+
+MASS — "Multi-Agent Self-Supervision" (Sakana AI + UC Berkeley; Hyunin Lee, Jinglue Xu, Jeffrey Seely, Matei Zaharia, Yujin Tang et al.; arXiv 2610.12176; code public at SakanaAI/mass) — attacks the supervision bottleneck of homogeneous recursive self-improvement: past humanity's knowledge frontier, on non-verifiable tasks, "the model being improved (optimizee) also serves as its own optimizer and evaluator." A single model critiquing its own complex reasoning stalls, so MASS alternates (1) evolutionary optimization of *multi-agent workflow topologies* with (2) supervised fine-tuning on the trajectories those workflows generate — the team's collective work becomes training signal for the model its members share. The claimed result, stated carefully: "improves score per output token over the base model on research benchmarks."
+
+**Why it matters:** it lands a day after Epoch's InnovationEval (Oct 11) found frontier agents can't rediscover a known post-training method — and misreport the attempt. MASS is the vendor-side answer to the same problem: don't wait for human-verifiable tasks; make the multi-agent organization itself the supervisor. The metric choice is the tell — score-per-token is compute-normalized precisely because absolute scores on self-generated curricula are the part of RSI nobody can independently grade yet.
+
+[`🔗 pub.sakana.ai/mass`](https://pub.sakana.ai/mass/) · [`🔗 arXiv 2610.12176`](https://arxiv.org/abs/2610.12176) · [`🔗 SakanaAI/mass`](https://github.com/SakanaAI/mass)
+
+---
+
+## 23. HashiCorp archives Boundary Community Edition — no security patches planned
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 53+ pts · ~4.2h ago (~08:02 UTC+8)
+- **Tags:** `hashicorp` `open-source` `ibm` `access-management`
+
+The README of hashicorp/boundary (4.1k★) now opens with the notice: "Boundary Community Edition (CE) is no longer under active development, and this repository has been archived as of October 8, 2026." The repo is read-only — no new issues, PRs or community contributions — and the killing sentence is explicit: **"No new Boundary CE releases, maintenance updates, bug fixes, or security patches are currently planned."** Development concentrates on HCP Boundary and Boundary Enterprise ("human and agentic access capabilities" — note the agentic). Existing code and binaries remain available "for reference and existing self-managed use," and teams still on CE are told to evaluate whether it meets their "operational, security, and compliance requirements."
+
+**Why it matters:** the second open-source-governance shock this week — but Bitwarden's Oct 11 licensing split at least left a living GPL build; Boundary CE is a dead, internet-facing auth surface by official announcement. Self-hosters now hold an unpatched broker to production SSH/database/Kubernetes access, and the burden of proof just moved to them. It's the IBM-era pattern in one README: the free edition stops being a product and becomes a lead magnet.
+
+[`🔗 hashicorp/boundary (archived)`](https://github.com/hashicorp/boundary) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50049498)
+
+---
+
+## 24. "Using AI for just 10 minutes erodes persistence" — now peer-reviewed, presented at COLM
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 83+ pts · ~17.5h ago (~18:47 UTC+8 Oct 11)
+- **Tags:** `research` `cognition` `ai-education` `colm`
+
+The UC Berkeley write-up (Oct 9) covers the peer-reviewed version of a study whose preliminary draft "made waves earlier this year," presented this week at the Conference on Language Modeling: "AI Assistance Reduces Persistence and Hurts Independent Performance" (Grace Liu, Brian Christian of UC Berkeley's Center for Human-Compatible AI, Tsvetomira Dumbalska, Michiel A. Bakker, Rachit Dubey; arXiv 2604.04721). Three randomized trials, 1,222 participants: with ChatGPT available, people start *more* accurate on fraction problems (n=354); remove the tool after 12 problems and solve rate collapses while skip rate spikes — replicated with a second, larger group (n=667) and again on SAT reading comprehension (n=201). Christian's framing: AI removes "productive struggle," and when answers arrive in seconds, anything slower feels inefficient.
+
+**Why it matters:** the honest reading is narrower than the headline: the measured injury is what happens at *withdrawal*, not during use — assistance re-prices effort, and the re-pricing doesn't undo itself. That's a design constraint for AI-tutoring products and "agent as junior pair" workflows alike: what the user does when the tool is unavailable is a testable behavior, and it currently fails.
+
+[`🔗 UC Berkeley Research`](https://vcresearch.berkeley.edu/news/using-ai-just-10-minutes-erodes-your-ability-persist-hard-things) · [`🔗 arXiv 2604.04721`](https://arxiv.org/abs/2604.04721)
+
+---
+
+## 25. Reverse engineering a commercial spatial-audio effect on Linux — the LLM as sounding board, not oracle
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 111+ pts · ~12.9h ago (~23:21 UTC+8 Oct 11)
+- **Tags:** `reverse-engineering` `dsp` `audio` `linux`
+
+A seven-minute post (epestr.com, Oct 10) with playable A/B samples: the author wanted a Linux equivalent of a commercial effect that makes audio sound "farther from the ears" and lighter to listen to, and documents the whole path — PipeWire as the base stack; MIT's KEMAR HRTF set rejected because anechoic recordings lose the room echoes that carry the effect; SADIE II, with room responses, "much closer"; then the limit of LLM assistance, as Gemini kept producing confident psychoacoustic vocabulary — "perceptual envelopment," "late-field decorrelation," "spectral diffusion" — that "didn't point to anything." What worked: treating the commercial binary as ground truth and running assembly-level tests to recover the actual filter.
+
+**Why it matters:** the cleanest small-scale statement yet of this week's reverse-engineering division of labor (rea at 60k★, the 500B-token FPS decompile): the model generates hypotheses and vocabulary; the disassembly and the signal path decide. Note which side produced the shipping result.
+
+[`🔗 epestr.com: Reverse engineering a commercial spatial audio effect`](http://epestr.com/blog/reverse-engineering-a-commercial-spatial-audio-effect/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50044272)
+
+---
+
+## 26. Google ordered to halt two Finnish datacentre sites — environmental review becomes AI infra's newest bottleneck
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 238+ pts · ~5.7h ago (~06:33 UTC+8); reporting first published Oct 6
+- **Tags:** `data-centers` `ai-infra` `finland` `environment`
+
+Per Miranda Bryant's Guardian report (Oct 6, resurfacing at 238 points today): Finnish authorities ordered Google to **temporarily stop work on two datacentre construction sites** — the Muhos site among them — after the company failed to carry out the required environmental impact assessments before building. The halt is procedural rather than a final rejection: work stops pending the assessments Google skipped, while the planning process runs on regulatory time.
+
+**Why it matters:** the AI buildout's binding constraints have been chips and grid connections; this is the third one arriving on schedule — land, water and environmental review, which run on timescales no amount of capex compresses. For anyone siting compute in the Nordics, EIA sequencing is now a first-quarter item, not a legal afterthought.
+
+[`🔗 The Guardian: Google told to halt work on datacentres in Finland`](https://www.theguardian.com/technology/2026/oct/06/google-datacentres-finland-temporary-halt-environmental-impact-assessment) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50048638)
+
+---
+
+## 27. Pensieve: local search over files, repos — and your agents' own sessions — served to agents over MCP
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 39+ pts · ~4.2h ago (~08:03 UTC+8)
+- **Tags:** `agent-infra` `local-search` `mcp` `context`
+
+Ted Haley's Show HN (TedHaley/pensieve; macOS 14+, Apple Silicon, free and open source) is a local index over documents, folders, git repositories **and past coding-agent sessions**, exposed two ways: a human-facing ⌃⇧ spotlight-style panel (exact + meaning hybrid queries, `-` exclusions, `kind:`/`in:` filters) and an MCP server that hands Claude Code, Codex, Cursor, Gemini CLI, Windsurf or any MCP client "the few passages that matter" instead of letting them grep the whole disk — the pitch being that grep-loops cost tokens and wall-clock on every round.
+
+**Why it matters:** the honest counterpoint is the thread's top comment: "I saw like 20 tools of this kind and there is a new one coming every month" — and Cursor shipped, then removed, one of its own. The differentiator worth watching is indexing *agent sessions* as first-class retrievable context: that's memory (claude-mem, #1 today) repositioned as search — no compression step, just retrieval over what your agents already did. Whether search beats summarize as the memory architecture is suddenly a testable question.
+
+[`🔗 tedhaley.ca/pensieve`](https://tedhaley.ca/pensieve/) · [`🔗 TedHaley/pensieve`](https://github.com/TedHaley/pensieve)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-11T20:30:00Z |
-| Items | 17 |
-| Sources tracked | 20 (Hacker News, GitHub Trending/API, GitGuardian, The Hacker News, NVD, npm registry, PyPI, Anthropic, IRCv3 Working Group, Cursor Marketplace, itsallaboutthebit.com, nanolathe.gg, shkspr.mobi, betterwispr.com, verdagon.dev, disconnect3d.pl, The Verge, NYC DCWP, thomas-huehn.com, texttocad.dev) |
+| Generated | 2026-10-12T04:40:00Z |
+| Items | 27 |
+| Sources tracked | 30 (Hacker News, GitHub Trending/API, GitGuardian, The Hacker News, BleepingComputer, NVD, npm registry, PyPI, Anthropic, IRCv3 Working Group, Cursor Marketplace, itsallaboutthebit.com, nanolathe.gg, shkspr.mobi, betterwispr.com, verdagon.dev, disconnect3d.pl, The Verge, NYC DCWP, thomas-huehn.com, texttocad.dev, nonfunctional.substack.com, X/Twitter, pub.sakana.ai, arXiv, UC Berkeley Research, royfish.dev, epestr.com, The Guardian, tedhaley.ca) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-10-12
-updated: 2026-10-11T20:30:00Z
+updated: 2026-10-12T04:40:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -246,13 +246,153 @@ Thomas Hühn が 2026 年 4 月に書いた投稿が HN の最上位に浮上し
 
 ---
 
+## 18. 「Passkeys are a trap」——FIDO コンセンサスへの 379 ポイントの反論
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 379+ pts · 約6.2時間前 (~05:59 UTC+8)
+- **Tags:** `passkeys` `authentication` `webauthn` `fido`
+
+「The Hack Non-Functional」名義のエッセイ(10 月 10 日)は、まず技術的な主張を認めた上で——「passkey がパスワードよりはるかに安全になり得るのは事実」——誰も宣伝しないガバナンスの論点を突く:**あなたは passkey を最終的にコントロールしていない**。パスワードは書き留めて共有できる。認証アプリは相互に交換可能だ。物理セキュリティキーは信頼する同僚に渡せる。Passkey にはユーザーが選べる代替が存在しない——そしてエッセイの言う「隠れたダイヤル」が WebAuthn のリモートアテステーションだ。サーバーが照会・強制できるフラグ(生体認証の必須化、非移転性、さらにその先)は「無数の passkey 制約」を可能にする。サイトが設定するのであって、ユーザーではない。制度的な論点:FIDO Alliance のメンバーはビッグテック、銀行、政府、情報機関に及ぶ——このエッセイによれば、消費者擁護団体だけがいない。W3C が公共利益のメンバーを擁することとの対比で。結論はタイトルそのものだ。
+
+**Why it matters:** HN フロントページで初めて、passkey への反論がエンタープライズのリカバリ可能性ではなく「暗号学的に強制され、リモート照会可能な制約を持つクレデンシャル体系のデフォルトを誰が決めるのか」として言語化された。どちらの立場を取るにせよ、「passkey はより安全だ」と「passkey はあなたのものだ」が明白に異なる二つの主張になった今、アテステーションフラグはドリフトしうるポリシー面だ。
+
+[`🔗 Passkeys are a trap`](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50048312)
+
+---
+
+## 19. Karpathy の四層ファネル:LLM 能力の認識ギャップは「鋭いファネル」になった
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 307+ pts · 約7.9時間前 (~04:20 UTC+8)
+- **Tags:** `llm` `ai-industry` `karpathy` `adoption`
+
+Andrej Karpathy は 4 月の投稿を掘り起こした。「LLM 能力に対する共有された理解のギャップは*拡大している*。もはや『すれ違う二つのグループ』ではなく、鋭いファネルだ」——そして層を定量化した:**約 60 億人(~75%)**は LLM にほとんど触れたことがない。**約 10〜20 億人のカジュアル層**が見るのは「間の抜けたチャットボット」——少し良い検索ボックス、文章作成補助。**約 2000 万人の専門職(0.2%)**(数学とコード)はエージェントが数週間のプロジェクトを 1 プロンプトで仕上げるのを目の当たりにする(「1 年未満前、私はまだコードを手で書いていた」)。そして**約 5000 人(~0.00006%)**のフロンティア級システムへの内部アクセス権保持者が見るのは「数千のエージェントが数週間かけて協調するソフトウェア巨大プロジェクト」——ゼロデイの採掘、フロンティア数学の前進——そこでは「人間によるレビューと理解が追いつかなくなり始めている」(彼の例:OpenAI-HF 事件の「考古学」、722 本の数学原稿)。ファネルを駆動するのは、影響力の野望への比例、検証可能報酬での RL が生むギザギザの能力、そしてアクセス階層だ。
+
+**Why it matters:** AI 議論がなぜ自分自身を見失い続けるのかについてのコンパクトな理論だ——各層の証拠は下の層からは見えず、公的議論はファネルの底をサンプリングし、主張は頂点で為される。検証のための地図でもある:理解が産出に追いつかなくなったとき、希少な資源はまさに今日の Campfire リライト検証(#5)や Epoch の InnovationEval(10 月 11 日)が売っているものだ。
+
+[`🔗 @karpathy on X`](https://twitter.com/karpathy/status/2109361546505966046) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50047422)
+
+---
+
+## 20. AhsayCBS が活発に攻撃されている:認証バイパス+コマンドインジェクション——最新リリースはいまだ脆弱
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BleepingComputer · Huntress 報告、攻撃は 10 月 7 日に観測、Huntress 更新は 10 月 10 日 (約2日前)
+- **Tags:** `exploitation` `msp` `backup` `cve`
+
+Huntress は 10 月 7 日以降、少なくとも 5 組織への攻撃で 2 つの AhsayCBS 脆弱性の連鎖を観測した:**CVE-2026-105133**(認証バイパス、公開 PoC あり)から**CVE-2026-105134**(OS コマンドインジェクション)へ、その後偵察、JSP ウェブシェル設置、`edge.exe` に偽装した XMRig マイナー、偽 `MicrosoftEdgeUpdateSvc` サービス(改変 NSSM)による永続化。回避層に AI 時代のディテールがある:Huntress が AI 支援の可能性を指摘する `Taskgmr.ps1` は、タスクマネージャが開くとマイニングを一時停止し、閉じると再開、午後 6 時や一晩 1 時間以上開きっぱなしだとタスクマネージャ自体を強制終了する。一方のサイトには脆弱な WinRing0x64.sys ドライバも投入された。記録と現実のギャップ:両 CVE は「AhsayCBS 10.3.2 で修正」と報じられ——NVD の記述も今なお「up to 10.3.2」——だが Huntress は現行最新の **10.3.4 も影響を受ける**と確認し、Ahsay は取材に答えていない。スコアの帰属も記しておく:VulDB が採点した CVSS 4.0——バイパス 5.5、インジェクション 9.3。
+
+**Why it matters:** バックアップコンソールは MSP サプライチェーンだ——1 台の侵害されたサーバーが多数の下流クライアントの正面に立つ。そして今週最も典型的な「記録の腐り」ケースだ。「10.3.2 で修正済み」は CVE テキストでは真で、最新ビルドを Huntress が実測するまで現場では偽だった。パッチが存在するまでの助言:管理インターフェースを信頼済み IP に制限し、永続化を前提に考え、クリーンなバックアップから復旧する(Huntress は IOC と 4 本の Sigma ルールを公開済み)。
+
+[`🔗 BleepingComputer:unpatched AhsayCBS flaws exploited`](https://www.bleepingcomputer.com/news/security/unpatched-ahsaycbs-flaws-exploited-to-deploy-webshells-mine-crypto/) · [`🔗 NVD:CVE-2026-105134`](https://nvd.nist.gov/vuln/detail/CVE-2026-105134)
+
+---
+
+## 21. 指紋は新しい Cookie——説明しながらあなたを指紋採取するインタラクティブなエッセイ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 156+ pts · 約5.7時間前 (~06:33 UTC+8)
+- **Tags:** `privacy` `browser-fingerprinting` `tracking` `gdpr`
+
+royfish.dev の記事は冒頭でそれをやってのける:JavaScript を有効にしていれば、Cookie 削除や VPN でも変わらない安定したニックネームをあなたに割り当てる。無効なら率直に告げる——「JavaScript を無効にしたので、この指紋採取のトリックはまったく動きません。それでもあなたはネットワークベースの手法に脆弱です」。デモが走る間に展開される論証:サードパーティ Cookie の廃止(Google の 5 年にわたる Privacy Sandbox の軌跡、ここでは「圧力→目くらまし」として語り直される)は、同意制度を持っていた唯一のトラッキング技術を取り除き、その隙間に入ってきたものは保存も同意も必要としない——アクセスごとにクライアントから算出される同一の安定 ID は、広告に、データブローカーへの転売に、そしてエッセイ最も率直な一文によれば「警察や政府があなたを気にする日には、喜んで彼らからもお金を受け取る」。
+
+**Why it matters:** 同意コンプライアンスは保存をモデルにしている。指紋採取は計算であり、だからバナーも Cookie 検査も「Cookie を消しましょう」という助言も、構造的に届かない。Web プロダクトにアナリティクスや不正検知を組み込む者にとって、このデモは自分の SDK のデフォルトが線のどちら側に立っているかを問う鏡でもある。
+
+[`🔗 royfish.dev:Fingerprints are the new cookies`](https://royfish.dev/fingerprints-are-the-new-cookies) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50048642)
+
+---
+
+## 22. Sakana AI の MASS:モデル自身が研究コミュニティを兼ねる再帰的自己改善
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 80+ pts · 約5.9時間前 (~06:22 UTC+8)
+- **Tags:** `research` `recursive-self-improvement` `multi-agent` `sakana-ai`
+
+MASS——「Multi-Agent Self-Supervision」(Sakana AI + UC Berkeley。Hyunin Lee、Jinglue Xu、Jeffrey Seely、Matei Zaharia、Yujin Tang ら。arXiv 2610.12176。コードは SakanaAI/mass で公開)——は均質な再帰的自己改善(RSI)の監督ボトルネックを攻撃する:人類の知のフロンティアを越えた先の、検証不可能なタスクでは「改善されるモデル(optimizee)が自らのオプティマイザと評価器をも兼ねる」。単一モデルが自分の複雑な推論を批評しても空転するため、MASS は (1) *マルチエージェントのワークフロー位相*の進化的最適化と (2) それらのワークフローが生成した軌跡での教師ありファインチューニングを交互に行う——チームの集合的な仕事が、そのメンバーが動かすモデルへの訓練信号になる。主張は慎重に語られる:「研究ベンチマークで出力トークンあたりのスコアをベースモデルより改善する」。
+
+**Why it matters:** Epoch の InnovationEval(10 月 11 日)がフロンティアエージェントには既知の事後学習手法を再発見できず、試み自体を誤報告すると発表した翌日の発表だ。MASS は同じ問題へのベンダー側の答えだ:人間が検証可能なタスクを待つのではなく、マルチエージェントの組織そのものを監督者にする。指標の選択が勘所だ——トークンあたりスコアの正規化は、自己生成カリキュラム上の絶対スコアこそ RSI でまだ誰も独立に採点できない部分だからだ。
+
+[`🔗 pub.sakana.ai/mass`](https://pub.sakana.ai/mass/) · [`🔗 arXiv 2610.12176`](https://arxiv.org/abs/2610.12176) · [`🔗 SakanaAI/mass`](https://github.com/SakanaAI/mass)
+
+---
+
+## 23. HashiCorp が Boundary Community Edition をアーカイブ——セキュリティパッチの計画もなし
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 53+ pts · 約4.2時間前 (~08:02 UTC+8)
+- **Tags:** `hashicorp` `open-source` `ibm` `access-management`
+
+hashicorp/boundary(4.1k★)の README は今、この告知で始まる:「Boundary Community Edition(CE)はもはや活発な開発下になく、このリポジトリは 2026 年 10 月 8 日にアーカイブされました」。リポジトリは読み取り専用——新しい issue、PR、コミュニティ貢献は受け付けない——そして致命的な一文は明示的だ:**「新しい Boundary CE のリリース、メンテナンス更新、バグ修正、セキュリティパッチは現時点で一切計画されていません。」** 開発は HCP Boundary と Boundary Enterprise(「人間とエージェントのためのアクセス機能」——agentic という語に注目)に集中される。既存のコードとバイナリは「参考および既存のセルフマネージド利用のために」引き続き利用可能で、CE を使い続けるチームには「運用・セキュリティ・コンプライアンス要件」を満たすか評価するよう促している。
+
+**Why it matters:** 今週 2 件目のオープンソースガバナンスの衝撃——だが Bitwarden の 10 月 11 日のライセンス分岐は生きた GPL ビルドを少なくとも残した。Boundary CE は公式告知によって死んだ、インターネット露出の認証サーフェスだ。セルフホスターは本番の SSH/データベース/Kubernetes アクセスへのパッチされないブローカーを抱え込むことになり、証明責任は彼らに移った。1 つの README に現れた IBM 時代のパターンでもある:無料版は製品であることをやめ、リード獲得の餌になる。
+
+[`🔗 hashicorp/boundary(アーカイブ済み)`](https://github.com/hashicorp/boundary) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50049498)
+
+---
+
+## 24. 「AI を 10 分使うだけで粘り強さが損なわれる」——ついに査読を経て COLM で発表
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 83+ pts · 約17.5時間前 (~18:47 UTC+8 Oct 11)
+- **Tags:** `research` `cognition` `ai-education` `colm`
+
+UC Berkeley の記事(10 月 9 日)は、今年前半に暫定版が「波を起こした」研究の査読版を取り上げた。今週 Conference on Language Modeling で発表された「AI Assistance Reduces Persistence and Hurts Independent Performance」(Grace Liu、UC Berkeley Center for Human-Compatible AI の Brian Christian、Tsvetomira Dumbalska、Michiel A. Bakker、Rachit Dubey。arXiv 2604.04721)。ランダム化試験 3 件、参加者 1222 人:ChatGPT が使える状態では、人は分数の問題で当初*より正確*だった(n=354)。12 問後にツールを取り上げると正答率が崩落し、スキップ率が急上昇する——より大きい第 2 グループ(n=667)で再現され、SAT の読解(n=201)でも繰り返された。Christian の表現:AI は「生産的な苦闘」を取り除き、答えが秒で返ってくると、より遅いものすべてが非効率に感じられる。
+
+**Why it matters:** 正直な読みは見出しより狭い:測定された傷は使用中ではなく*撤去時*に生じる——支援は努力に再価格付けをし、その再価格付けは自然には戻らない。これは AI チュータリング製品にも「エージェントをジュニアのペアプロ相手にする」ワークフローにも等しく効く設計制約だ。ツールが使えないときユーザーが何をするかは測定可能な振る舞いで、現状それが不合格になっている。
+
+[`🔗 UC Berkeley Research`](https://vcresearch.berkeley.edu/news/using-ai-just-10-minutes-erodes-your-ability-persist-hard-things) · [`🔗 arXiv 2604.04721`](https://arxiv.org/abs/2604.04721)
+
+---
+
+## 25. Linux で商用空間オーディオエフェクトをリバースエンジニアリング——LLM は壁打ち相手、神託ではない
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 111+ pts · 約12.9時間前 (~23:21 UTC+8 Oct 11)
+- **Tags:** `reverse-engineering` `dsp` `audio` `linux`
+
+再生可能な A/B サンプル付きの 7 分の投稿(epestr.com、10 月 10 日):作者は「耳から遠く」感じさせ聴いて軽い商用エフェクトの Linux 版を欲し、全行程を記録した——基盤は PipeWire。MIT の KEMAR HRTF セットは却下。無響室録音では効果を運ぶ部屋の反響が失われるからだ。部屋応答付きの SADIE II は「はるかに近い」。そして LLM 支援の限界に当たる——Gemini は自信満々の心理音響用語を生み続けた——「知覚的包囲」「後 field の脱相関」「スペクトル拡散」——しかし「何も指し示さなかった」。効いたのは:商用バイナリをグラウンドトゥルースとして扱い、アセンブリレベルのテストで実際のフィルタを復元することだった。
+
+**Why it matters:** 今週のリバースエンジニアリング分業(60k★ の rea、5000 億トークンの FPS逆コンパイル)の、最も小さなスケールでの明晰な定式化だ。モデルは仮説と語彙を生成し、ディスアセンブリと信号経路が決める。動く成果物を生んだのがどちら側か、に注目したい。
+
+[`🔗 epestr.com:Reverse engineering a commercial spatial audio effect`](http://epestr.com/blog/reverse-engineering-a-commercial-spatial-audio-effect/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50044272)
+
+---
+
+## 26. Google にフィンランドの 2 データセンターサイトの停止を命じられる——環境審査が AI インフラの新たなボトルネックに
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 238+ pts · 約5.7時間前 (~06:33 UTC+8)。報道の初出は 10 月 6 日
+- **Tags:** `data-centers` `ai-infra` `finland` `environment`
+
+Miranda Bryant の Guardian 記事(10 月 6 日。本日 238 ポイントで再浮上)によれば、フィンランド当局は Google に対し、建設前に必要な環境影響評価を実施しなかったとして、**2 つのデータセンター建設サイト——Muhos サイトを含む——の作業一時停止を命じた**。停止は手続き的なもので最終拒否ではない:Google が省略した評価が済むまで作業は止まり、計画プロセスは規制の時間軸で進む。
+
+**Why it matters:** AI 建設の制約はチップと送電網だった。それに予定通り到着した第三の制約——土地、水、環境審査であり、その時間軸はどれだけの設備投資でも圧縮できない。北欧に計算資源を置く者にとって、EIA の順序立ては今や最初の四半期の項目であり、法務の後付けではない。
+
+[`🔗 The Guardian:Google told to halt work on datacentres in Finland`](https://www.theguardian.com/technology/2026/oct/06/google-datacentres-finland-temporary-halt-environmental-impact-assessment) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50048638)
+
+---
+
+## 27. Pensieve:ファイル・リポジトリ・そしてエージェント自身のセッションをローカル検索し、MCP でエージェントへ
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 39+ pts · 約4.2時間前 (~08:03 UTC+8)
+- **Tags:** `agent-infra` `local-search` `mcp` `context`
+
+Ted Haley の Show HN(TedHaley/pensieve。macOS 14+、Apple Silicon、無料かつオープンソース)は、ドキュメント、フォルダ、git リポジトリ、**そして過去のコーディングエージェントのセッション**にまたがるローカルインデックスで、二つの顔を持つ:人間向けの ⌃⇧ スポットライト風パネル(完全一致+意味のハイブリッド検索、`-` 除外、`kind:`/`in:` フィルタ)と、Claude Code、Codex、Cursor、Gemini CLI、Windsurf、あるいは任意の MCP クライアントに「重要な数段落だけ」を渡す MCP サーバー——ディスク全体を grep させないために。売りは、grep ループが毎ラウンドでトークンと待ち時間を消費するという点だ。
+
+**Why it matters:** 正直な反論はスレッドのトップコメントにある:「こういうツールを 20 個ほど見てきたし、毎月新しいのが来る」——そして Cursor 自身が出し、後に撤去したものもある。注目に値する差別化は、*エージェントのセッション*を第一級の検索可能コンテキストとして索引することだ。それは記憶(今日の #1、claude-mem)を検索として作り直したものだ——圧縮ステップなし、エージェントがすでにやったことへの検索だけ。「記憶のアーキテクチャとして検索と要約のどちらが正しいか」は、突然テスト可能な問いになった。
+
+[`🔗 tedhaley.ca/pensieve`](https://tedhaley.ca/pensieve/) · [`🔗 TedHaley/pensieve`](https://github.com/TedHaley/pensieve)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-11T20:30:00Z |
-| Items | 17 |
-| Sources tracked | 20 (Hacker News, GitHub Trending/API, GitGuardian, The Hacker News, NVD, npm registry, PyPI, Anthropic, IRCv3 Working Group, Cursor Marketplace, itsallaboutthebit.com, nanolathe.gg, shkspr.mobi, betterwispr.com, verdagon.dev, disconnect3d.pl, The Verge, NYC DCWP, thomas-huehn.com, texttocad.dev) |
+| Generated | 2026-10-12T04:40:00Z |
+| Items | 27 |
+| Sources tracked | 30 (Hacker News, GitHub Trending/API, GitGuardian, The Hacker News, BleepingComputer, NVD, npm registry, PyPI, Anthropic, IRCv3 Working Group, Cursor Marketplace, itsallaboutthebit.com, nanolathe.gg, shkspr.mobi, betterwispr.com, verdagon.dev, disconnect3d.pl, The Verge, NYC DCWP, thomas-huehn.com, texttocad.dev, nonfunctional.substack.com, X/Twitter, pub.sakana.ai, arXiv, UC Berkeley Research, royfish.dev, epestr.com, The Guardian, tedhaley.ca) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

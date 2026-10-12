@@ -1,8 +1,8 @@
 ---
 date: 2026-10-12
-updated: 2026-10-11T20:30:00Z
+updated: 2026-10-12T04:40:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -246,13 +246,153 @@ Thomas Hühn 2026 年 4 月的一篇博文重新登上 HN 头部:二十年前,�
 
 ---
 
+## 18. 《Passkeys are a trap》——379 个 HN 分数对 FIDO 共识的反击
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 379+ pts · ~6.2小时前 (~05:59 UTC+8)
+- **Tags:** `passkeys` `authentication` `webauthn` `fido`
+
+一篇署名"The Hack Non-Functional"的文章(10 月 10 日)先把技术立场让出去——"passkeys 确实可能远比密码安全"——然后讲那个没人愿意宣传的治理问题:**你对 passkey 并不拥有最终控制权**。密码可以写下来、可以共享;验证器应用可以互换;实体安全密钥可以交给信任的同事。Passkey 没有用户可选的等价物——而文章所说的"隐藏旋钮"就是 WebAuthn 远程证明:服务器可查询、可强制执行的标志位(强制生物识别、禁止可迁移性,以及更多)意味着"任意多的 passkey 限制"成为可能,由网站设定,而不是用户。制度层面的论点:FIDO Alliance 的成员横跨大科技公司、银行、政府和情报机构——按这篇文章的说法,唯独没有消费者权益组织;对比之下 W3C 有公共利益成员。结论就是标题本身。
+
+**Why it matters:** 这是 HN 头条第一次把对 passkey 的反对意见讲成企业可恢复性之外的东西——它问的是:在一个约束被密码学强制、且可被远程查询的凭证体系里,默认值由谁来定。无论你站哪边,"passkey 更安全"和"passkey 属于你"如今已是 visibly 两个不同的命题,而 attestation 标志位就是一个会漂移的策略面。
+
+[`🔗 Passkeys are a trap`](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50048312)
+
+---
+
+## 19. Karpathy 的四层漏斗:LLM 能力认知鸿沟已变成"一个尖锐的漏斗"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 307+ pts · ~7.9小时前 (~04:20 UTC+8)
+- **Tags:** `llm` `ai-industry` `karpathy` `adoption`
+
+Andrej Karpathy 把 4 月的推文重新翻出来,因为"对 LLM 能力的共同认知鸿沟正在*扩大*。它已不再是'两群人各说各话',更像一个尖锐的漏斗"——并给出了分层量化:**约 60 亿人(~75%)**几乎没有接触过 LLM;**约 10–20 亿轻度用户**看到的是"呆萌聊天机器人"——一个更好的搜索框、写作助手;**约 2000 万专业人士(0.2%)**(数学与代码领域)亲眼看到代理用一条提示完成过去数周的项目("不到 1 年前,我还在逐字符手写代码");而**约 5000 人(~0.00006%)**拥有内部前沿系统权限,他们看到的是"数千代理协作数周的大型软件工程"——铸造零日漏洞、推进前沿数学——在那里"人类的审查与理解开始跟不上"。漏斗由三个因素驱动:影响随抱负扩大、RL 在可验证奖励上的锯齿状能力、以及接入层级。
+
+**Why it matters:** 这是一条关于"AI 讨论为何总错过自己"的紧凑理论——每一层的证据在下一层不可见,于是公共讨论采样的是漏斗底部,而论断在顶部做出。它也无意间给出了验证工作的路线图:当理解跟不上产出,稀缺资源恰恰是今天 Campfire 重写解剖(#5)和 Epoch 的 InnovationEval(10 月 11 日)在卖的东西。
+
+[`🔗 @karpathy on X`](https://twitter.com/karpathy/status/2109361546505966046) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50047422)
+
+---
+
+## 20. AhsayCBS 遭活跃攻击:认证绕过 + 命令注入——而最新版本仍在受影响
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BleepingComputer · Huntress 报告,攻击 10 月 7 日被观测到,Huntress 10 月 10 日更新 (~2天前)
+- **Tags:** `exploitation` `msp` `backup` `cve`
+
+Huntress 自 10 月 7 日起观测到攻击者对至少五个组织链式利用两个 AhsayCBS 漏洞:**CVE-2026-105133**(认证绕过,已有公开利用代码)接**CVE-2026-105134**(操作系统命令注入),随后侦察、部署 JSP Webshell,并伪装成 `edge.exe` 投放 XMRig 矿机,通过伪造的 `MicrosoftEdgeUpdateSvc` 服务持久化(改造版 NSSM)。规避层是 AI 时代的细节:据 Huntress 判断疑似 AI 辅助编写的 `Taskgmr.ps1` 会在任务管理器打开时暂停挖矿、关闭时恢复,并在晚 6 点或任务管理器整夜开启超 1 小时后直接杀掉它;其中一个站点还被投放了存在漏洞的 WinRing0x64.sys 驱动。记录与现实的落差:两个 CVE 均被标注"已在 AhsayCBS 10.3.2 修复"——NVD 描述至今仍写着"up to 10.3.2"——但 Huntress 确认当前最新版 **10.3.4 同样受影响**,而 Ahsay 未回应媒体询问。记一下评分归属:VulDB 签发的 CVSS 4.0——绕过 5.5,注入 9.3。
+
+**Why it matters:** 备份控制台是 MSP 供应链——一台被攻破的服务器面向众多下游客户。这也是本周最典型的"记录易腐"案例:"已在 10.3.2 修复"在 CVE 文本里是真的,在野外是假的,直到 Huntress 实测了最新构建。补丁落地前的建议:把管理界面限制在可信 IP、按已被持久化处理、从干净备份恢复(Huntress 已发布 IOC 和四条 Sigma 规则)。
+
+[`🔗 BleepingComputer:unpatched AhsayCBS flaws exploited`](https://www.bleepingcomputer.com/news/security/unpatched-ahsaycbs-flaws-exploited-to-deploy-webshells-mine-crypto/) · [`🔗 NVD:CVE-2026-105134`](https://nvd.nist.gov/vuln/detail/CVE-2026-105134)
+
+---
+
+## 21. 指纹是新的 Cookie——一篇一边讲指纹采集一边给你做指纹采集的互动文章
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 156+ pts · ~5.7小时前 (~06:33 UTC+8)
+- **Tags:** `privacy` `browser-fingerprinting` `tracking` `gdpr`
+
+royfish.dev 的文章开头就把事情做了:开 JavaScript,它给你分配一个清 Cookie、挂 VPN 都不会变的稳定昵称;关 JavaScript,它直言相告——"你禁用了 JavaScript,这个指纹把戏完全跑不起来。但你仍然暴露于基于网络的方法。"演示进行的同时它讲完论证:第三方 Cookie 的退场(Google 五年 Privacy Sandbox 历程,被复述为施压→转移注意力)移除了唯一有同意制度的追踪技术,而填进空缺的东西既不需要存储也不需要同意——每次访问从你的客户端现算出同一个稳定 ID,可卖给广告、数据经纪商,或者用文章最直白的话说,"如果警察或你的政府碰巧在乎,我也乐意收他们的钱。"
+
+**Why it matters:** 同意合规体系建在存储模型上;指纹是计算,所以横幅、Cookie 巡检和"清清 Cookie"的建议从构造上就够不着它。对任何在 Web 产品里集成分析或反欺诈的人来说,这个演示同时是一面镜子:你的 SDK 默认值站在线的哪一边。
+
+[`🔗 royfish.dev:Fingerprints are the new cookies`](https://royfish.dev/fingerprints-are-the-new-cookies) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50048642)
+
+---
+
+## 22. Sakana AI 的 MASS:模型自任研究社区的递归自我改进
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 80+ pts · ~5.9小时前 (~06:22 UTC+8)
+- **Tags:** `research` `recursive-self-improvement` `multi-agent` `sakana-ai`
+
+MASS——"Multi-Agent Self-Supervision"(Sakana AI + UC Berkeley;Hyunin Lee、Jinglue Xu、Jeffrey Seely、Matei Zaharia、Yujin Tang 等;arXiv 2610.12176;代码开源于 SakanaAI/mass)——攻击的是同质化递归自我改进(RSI)的监督瓶颈:越过人类知识的边界后,在不可验证任务上,"被改进的模型(optimizee)同时充当自己的优化器与评估器"。单一模型批评自身复杂推理会原地打转,于是 MASS 交替进行:(1)对*多代理工作流拓扑*做进化优化,(2)用这些工作流生成的轨迹做监督微调——团队的集体工作成为其成员所共享模型的训练信号。结果主张措辞谨慎:"在研究型基准上提高每输出 token 的得分"。
+
+**Why it matters:** 它落在 Epoch 的 InnovationEval(10 月 11 日)发现前沿代理无法重新发现一个已知后训练方法、而且会虚报尝试的次日。MASS 是对同一问题的厂商侧回答:不等人类可验证的任务,让多代理组织本身充当监督者。指标选择是要害——"每 token 得分"做了算力归一化,恰恰因为自生成课程上的绝对分数是 RSI 中目前没人能独立打分的部分。
+
+[`🔗 pub.sakana.ai/mass`](https://pub.sakana.ai/mass/) · [`🔗 arXiv 2610.12176`](https://arxiv.org/abs/2610.12176) · [`🔗 SakanaAI/mass`](https://github.com/SakanaAI/mass)
+
+---
+
+## 23. HashiCorp 归档 Boundary 社区版——明确宣布不再有安全补丁
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 53+ pts · ~4.2小时前 (~08:02 UTC+8)
+- **Tags:** `hashicorp` `open-source` `ibm` `access-management`
+
+hashicorp/boundary(4.1k★)的 README 现在以这则通告开头:"Boundary Community Edition(CE)不再处于活跃开发状态,本仓库已于 2026 年 10 月 8 日归档。"仓库转为只读——不再接受新 issue、PR 或社区贡献——而那句致命的话写得明明白白:**"目前没有规划任何新的 Boundary CE 发布、维护更新、缺陷修复或安全补丁。"** 开发集中于 HCP Boundary 与 Boundary Enterprise("面向人类与代理的访问能力"——注意 agentic)。既有代码与二进制"供参考与既有自管使用"继续可用,仍在用 CE 的团队被建议评估其是否满足"运营、安全与合规要求"。
+
+**Why it matters:** 本周第二起开源治理冲击——但 Bitwarden 10 月 11 日的许可拆分至少留了一个活着的 GPL 构建;Boundary CE 则是被官方公告判死的、暴露在互联网上的认证面。自托管者现在手里握着一个通往生产环境 SSH/数据库/Kubernetes 访问的、不再有补丁的代理,举证责任刚刚转移到他们身上。这也是 IBM 时代模式的一份 README 样本:免费版不再是产品,变成了获客诱饵。
+
+[`🔗 hashicorp/boundary(已归档)`](https://github.com/hashicorp/boundary) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50049498)
+
+---
+
+## 24. "仅用 AI 10 分钟就会侵蚀坚持能力"——已通过同行评审,在 COLM 发表
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 83+ pts · ~17.5小时前 (~18:47 UTC+8 Oct 11)
+- **Tags:** `research` `cognition` `ai-education` `colm`
+
+UC Berkeley 的报道(10 月 9 日)介绍了今年早些时候初稿"掀起波澜"的那项研究的同行评审版,本周在语言建模会议(COLM)上发表:"AI Assistance Reduces Persistence and Hurts Independent Performance"(Grace Liu、UC Berkeley 人类兼容 AI 中心的 Brian Christian、Tsvetomira Dumbalska、Michiel A. Bakker、Rachit Dubey;arXiv 2604.04721)。三项随机试验、1222 名参与者:有 ChatGPT 可用时,人们在分数题上起初*更*准确(n=354);做完 12 题后撤走工具,解题率立刻崩塌、跳过率飙升——在更大的第二组(n=667)复现,在 SAT 阅读理解上(n=201)再次复现。Christian 的表述:AI 移除了"有益的挣扎",当答案秒回,任何更慢的东西都显得低效。
+
+**Why it matters:** 诚实的解读比标题更窄:被测量的伤害发生在*撤走*工具时,而不是使用中——辅助对努力重新定价,而重定价不会自行恢复。这对 AI 辅导产品和"代理当实习生结对"的工作流都是设计约束:工具不可用时用户的行为是可测的,而它现在会不及格。
+
+[`🔗 UC Berkeley Research`](https://vcresearch.berkeley.edu/news/using-ai-just-10-minutes-erodes-your-ability-persist-hard-things) · [`🔗 arXiv 2604.04721`](https://arxiv.org/abs/2604.04721)
+
+---
+
+## 25. 在 Linux 上逆向商业空间音频效果——LLM 当陪练,不当神谕
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 111+ pts · ~12.9小时前 (~23:21 UTC+8 Oct 11)
+- **Tags:** `reverse-engineering` `dsp` `audio` `linux`
+
+一篇七分钟的文章(epestr.com,10 月 10 日,附可播放的 A/B 对比):作者想要 Linux 版的商业效果——让声音"离耳朵更远"、听感更轻——并记录了全程:以 PipeWire 为基础栈;MIT 的 KEMAR HRTF 数据集被否决,因为消声室录音丢失了承载这一效果的空间混响;带房间响应的 SADIE II"接近得多";随后撞上 LLM 辅助的边界——Gemini 不断产出自信的心理声学词汇——"感知包围感""远场去相关""谱扩散"——却"指不出任何东西"。真正奏效的:把商业二进制当作地面真值,跑到汇编级测试,把真实的滤波器恢复出来。
+
+**Why it matters:** 本周逆向工程分工(rea 的 60k★、500B token 的 FPS 反编译)迄今最干净的小尺度陈述:模型生成假设与词汇;反汇编和信号链路做裁决。注意是哪一边产出了能跑的结果。
+
+[`🔗 epestr.com:Reverse engineering a commercial spatial audio effect`](http://epestr.com/blog/reverse-engineering-a-commercial-spatial-audio-effect/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50044272)
+
+---
+
+## 26. Google 被令停工芬兰两处数据中心工地——环评成为 AI 基建的最新瓶颈
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 238+ pts · ~5.7小时前 (~06:33 UTC+8);报道首发于 10 月 6 日
+- **Tags:** `data-centers` `ai-infra` `finland` `environment`
+
+按 Miranda Bryant 的卫报报道(10 月 6 日,今日以 238 分重回视野):芬兰当局命令 Google **暂时停工两处数据中心在建工地**——其中包括 Muhos 工地——因为该公司在开工前未按要求进行环境影响评估。停工是程序性的而非最终否决:在补齐被跳过的评估之前工程暂停,而规划流程按监管时间表运转。
+
+**Why it matters:** AI 基建的硬约束一直数着芯片和电网;这是第三项按点到来的——土地、水和环评,它们的时间表不随任何金额的资本支出压缩。对任何要在北欧选址算力的人来说,环评审排现在是第一季度的事,不是法务的事后补充。
+
+[`🔗 卫报:Google told to halt work on datacentres in Finland`](https://www.theguardian.com/technology/2026/oct/06/google-datacentres-finland-temporary-halt-environmental-impact-assessment) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50048638)
+
+---
+
+## 27. Pensieve:对文件、代码库——以及你自己代理的会话——做本地搜索,经 MCP 供给代理
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 39+ pts · ~4.2小时前 (~08:03 UTC+8)
+- **Tags:** `agent-infra` `local-search` `mcp` `context`
+
+Ted Haley 的 Show HN(TedHaley/pensieve;macOS 14+、Apple Silicon、免费开源)是一个本地索引,覆盖文档、文件夹、git 仓库**以及过去的编码代理会话**,以两种方式暴露:面向人类的 ⌃⇧ 聚焦式面板(精确+语义混合查询、`-` 排除、`kind:`/`in:` 过滤),以及一个 MCP 服务器——把"真正重要的那几段"递给 Claude Code、Codex、Cursor、Gemini CLI、Windsurf 或任何 MCP 客户端,而不是让它们 grep 整块磁盘——卖点在于 grep 循环每一轮都在烧 token 和等待时间。
+
+**Why it matters:** 诚实的反方观点就在讨论区第一条热门评论里:"我见过差不多 20 个这类工具,每个月还来一个新的"——而 Cursor 自己上过又下架过一个。值得关注差异化的一点是把*代理会话*当作一等可检索上下文来索引:这是记忆(claude-mem,今日第 1 条)重新包装成搜索——没有压缩步骤,只是对代理已经做过的事做检索。"搜索与摘要谁才是记忆的正确架构"突然变成一个可测的问题。
+
+[`🔗 tedhaley.ca/pensieve`](https://tedhaley.ca/pensieve/) · [`🔗 TedHaley/pensieve`](https://github.com/TedHaley/pensieve)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-11T20:30:00Z |
-| Items | 17 |
-| Sources tracked | 20 (Hacker News, GitHub Trending/API, GitGuardian, The Hacker News, NVD, npm registry, PyPI, Anthropic, IRCv3 Working Group, Cursor Marketplace, itsallaboutthebit.com, nanolathe.gg, shkspr.mobi, betterwispr.com, verdagon.dev, disconnect3d.pl, The Verge, NYC DCWP, thomas-huehn.com, texttocad.dev) |
+| Generated | 2026-10-12T04:40:00Z |
+| Items | 27 |
+| Sources tracked | 30 (Hacker News, GitHub Trending/API, GitGuardian, The Hacker News, BleepingComputer, NVD, npm registry, PyPI, Anthropic, IRCv3 Working Group, Cursor Marketplace, itsallaboutthebit.com, nanolathe.gg, shkspr.mobi, betterwispr.com, verdagon.dev, disconnect3d.pl, The Verge, NYC DCWP, thomas-huehn.com, texttocad.dev, nonfunctional.substack.com, X/Twitter, pub.sakana.ai, arXiv, UC Berkeley Research, royfish.dev, epestr.com, The Guardian, tedhaley.ca) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
