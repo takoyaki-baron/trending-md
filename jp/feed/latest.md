@@ -1,8 +1,8 @@
 ---
 date: 2026-10-13
-updated: 2026-10-13T04:25:00Z
+updated: 2026-10-13T12:10:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -484,13 +484,142 @@ CVE-2026-66086（10月12日公開）：Unisoc のモデム OTA スタックに�
 
 ---
 
+## 35. Rust の `T: 'static` 制約が共変フィールド代入でバイパスされる——P-critical の soundness 破綻、rustc の生涯の大半で生きていた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 174+ pts · 約1.6時間前 (~18:27 UTC+8)；issue は本日 ~16:45 UTC+8 に提出
+- **Tags:** `rust` `memory-safety` `compiler` `unsoundness`
+
+rust-lang/rust issue #164250（本日提出、1時間以内に I-unsound のラベルと **P-critical** のトリアージ）：`T: 'static` 制約とカスタム `Drop` 実装を持つ構造体は、普通のフィールド代入を通して非 `'static` 参照を潜り込ませられる——代入は変位（variance）を経由するが、Drop の後始末コードは制約が成立している前提で書かれている。最小の再現に必要なのは static `Mutex`、`Option` フィールド、`Drop` 実装だけだ：stable でコンパイルでき（報告者は少なくとも 1.85 まで遡って示した）、ASan 下では stack-use-after-scope を起こす——プログラムは死んだ文字列を `&'static String` として平和に印字する。コンパイラチーム貢献者の lcnr は `static` を一切必要としない亜種を Godbolt の再現付きで投稿し、「1.4 から unsound」と結論づけた。報告者自身のバージョンは「1.18.0（2017年）からずっとコンパイルできていた」。関連の可能性：#128225。HN の議論は、健全性で有名な借用チェッカーの下で、これほど小さな条件の組み合わせがどう生き延びたのかという点に集中している——再現は通常のコードの範囲内だが、カスタム `Drop` は必要だ。
+
+**なぜ重要か：** Rust の売りはコンパイル時の健全性であり、エコシステムの unsafe 監査ロジックは「安全なコードは UB を起こせない」に依拠している。安全コード約10行で到達できる P-critical の穴——rustc の生涯の大半存在していた——は、健全性がユーザーが無料で得る定理ではなく、修復され続ける性質だという思い出させてくれる。セキュリティの視点では：「コンパイルできた」は安全性の証明ではなく、メモリ安全性の主張には CVE と同じくバージョン境界を付けるべきだ、ということ。
+
+[`🔗 rust-lang/rust #164250`](https://github.com/rust-lang/rust/issues/164250) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50069499)
+
+---
+
+## 36. Ledger ハードウェア植入の一昼夜後：(exfil) 外部送信経路は eSIM だった——チップが「画面の肩越しに読む」
+
+- **Velocity:** ▮▮ rising
+- **Source:** heise · HN 64+ pts · 約3.5時間前 (~16:34 UTC+8)
+- **Tags:** `supply-chain` `hardware` `ledger` `crypto`
+
+10月12日の Ledger によるハードウェア植入確認（約 $92M の CryptoBilins 流出事件）の報道を受けた：heise の追跡記事が、Tibane Labs によるデバイス分析に基づく仕組みを報じた。チップが傍受するのはセキュアエレメント→画面の伝送——つまり表示データそのものであり「Tempest 攻撃のように」——シードフレーズは表示された瞬間に捕捉される。一方、ユーザーが確認する画面上の表示は本物のままだ。同じ分析では、事前プロビジョン済み eSIM を持つ LTE モデムと細いアンテナ線も見つかり、ウォレット自身のバッテリーで動作していた——純正バッテリーは無傷で、表示下のフォームが空間を空けるために薄められていた。Tibane はこれまでに**影響を受けた 300+ のウォレット**を特定し、流出総額は約 $93M。範囲：過去約3か月にマレーシア拠点の販売代理店 Cryptobilis 経由で販売されたデバイス（Ledger は取引を停止）；1台は Amazon Japan の第三者販売者経由の購入が確認され、マレーシアから発送されていた。明示的に未検証：8月に販売代理店の所有者が「JiaMing」に変わったとされる件；Ledger は顧客1名の損失と改ざんを認めているが、全容は確認していない。これは第3世代の植入だ——2026年5月の Joe Grand の分解では手作業による改造デバイスだったが、今回は量産品に見える。
+
+**なぜ重要か：** 植入そのものより外送経路の方が重要だ：ネットワークの信頼は一切不要（eSIM + モバイル事業者）、破るべきファームウェア署名もなく、ユーザーが頼るよう言われた唯一の検証——デバイス自身の画面の単語を読むこと——こそがバイパスされている。サプライチェーン防御は販売チャネルに移る：ベンダーから直接買い、鍵を預かるものについては第三者マーケットプレイスをすべて信頼できないものとして扱うこと。
+
+[`🔗 heise：Crypto thieves sell hardware wallets with secret eSIM`](https://www.heise.de/en/news/Crypto-thieves-sell-hardware-wallets-with-secret-eSIM-11485188.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50068508)
+
+---
+
+## 37. AWS Lambda Web Functions：HTTP サーバをそのまま——環境あたり128同時リクエスト、アクティブ CPU 課金
+
+- **Velocity:** ▮▮ rising
+- **Source:** AWS News Blog · HN 35+ pts · 約2時間前 (~18:08 UTC+8)
+- **Tags:** `serverless` `aws` `lambda` `web`
+
+AWS が発表した（10月12日）**Lambda Web Functions**——Event Functions と MicroVMs の間に位置する第3の Lambda フォームファクター：既存の Node.js HTTP サーバ（Express、Hono、Fastify、Next.js）をイベントハンドラに書き直さず、アダプタなしでデプロイできる。各実行環境は最大 **128 の同時リクエスト**を処理；課金はアクティブ CPU 制（DB 待ちや API 待ちはほぼ課金されず）、メモリは環境の生存期間で計測。`aws lambda-web deploy` がバンドル、不変リビジョンの公開、HTTPS URL の返却を一度に行い；リビジョン間でトラフィックを分割できる（90/10 カナリア）；エンドポイントはリージョン別か、レイテンシベースでルーティングする単一のグローバル URL（ベストエフォート）；CloudFront のオリジンアクセスコントロール（OAC）と VPC 接続に対応。ローンチ範囲：Node.js 24、Arm64、5リージョン。
+
+**なぜ重要か：** Cloudflare Workers / Deno Deploy 型デプロイに対する AWS の答えだ——しかも Cloudflare による Deno 買収（10月10日）の数日後に登場し、「サーバーを意識せず Web アプリをデプロイする」レイヤーにハイパースケーラーの参入者が加わったことになる。コスト計算で注目すべきは環境あたりの密度とアクティブ CPU 課金の組み合わせだ：Workers 型のパッキング密度に、コンテナ型のコード。
+
+[`🔗 AWS News Blog：Lambda Web Functions`](https://aws.amazon.com/blogs/aws/announcing-aws-lambda-web-functions-for-fast-consistent-web-app-performance-anywhere/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50069318)
+
+---
+
+## 38. 文字起こしをする埋め込みモデル：EmbeddingGemma 2 自身の空間から単語を「読み出す」——MacBook Air で1時間の音声を約13秒で
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 48+ pts · 約0.6時間前 (~19:27 UTC+8)
+- **Tags:** `embeddings` `speech-to-text` `on-device` `apple-silicon`
+
+eg2.haku.sh は、Google の EmbeddingGemma 2——音声認識のために訓練されたことのないマルチモーダルの*埋め込み*モデル——を STT エンジンとして使う無料の Mac アプリを公開した。音声エンコーダは完全に凍結したまま；小さな「リーダー」（公開ライセンスの英語音声で 8×H100 を2時間弱訓練）が短い音声スライスをモデルのテキスト空間へ移し、約229,000の英単語のうち最も近いものが勝つ；極小モデルが句読点と大文字を補う。測定結果：8 GB のベース M3 MacBook Air で Neural Engine を使い、1時間の音声を**約12.6秒（288×リアルタイム）**で処理、ダウンロードは715 MB。比較表も正直だ：同級の従来型オンデバイス STT は ~150×（IBM Granite Speech）から480×（M5 Pro の Parakeet v3 ファインチューン）——つまり「専用モデルと競争できる」のであって「より速い」のではない。ページが明示する限界：英語のみ、ベースモデルはこのタスク向けに訓練されていない。
+
+**なぜ重要か：** 独創的なのは埋め込み空間を汎用インターフェースとして扱う発想だ——STT ヘッドは一度も訓練されていないのに、音声→テキストの近接性はすでにモデルの中にあり、2時間の訓練のリーダーで十分にデコードできた。10月7日の EmbeddingGemma 2 リリース報道に続く話として、これはその最初の本当に意外な転用であり——「埋め込みモデルは単一用途のエンコーダではなく再利用可能な基材だ」というデータポイントになる。
+
+[`🔗 Embedding Gemma Transcribe — eg2.haku.sh`](https://eg2.haku.sh/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50069971)
+
+---
+
+## 39. vercel-labs/skills が再トレンド入り、34.1k★：`npx skills` がエージェントスキル棚のパッケージマネージャーになりつつある
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending 日次 · 34,143★、本日 +187 · v1.7.2（10月9日）
+- **Tags:** `agent-skills` `cli` `vercel` `package-manager`
+
+vercel-labs/skills（MIT、TypeScript）は skills.sh の背後にある CLI——スキル棚がますます前提とするインストール層だ：`npx skills add owner/repo` は GitHub/GitLab/Azure/任意の git/ローカルのソースを解決し、対応する **75以上のエージェント**（Claude Code、Codex、OpenCode、Cursor など）のどれにでもインストールする；`skills use` はスキルを一時ディレクトリに書き出し、生成されたプロンプトをエージェントへ直接パイプする。インストール数は skills.sh バッジとして表示され、今やリポジトリが README に載せる——本日の VoiceStudio 項目も自らのインストールドキュメントで `npx skills add debpalash/VoiceStudio` を勧めている。10月11日の Skill Constellations（日付付きコピーネットワーク）の報道に続く話として、これは同じ物語のインフラ側の半分だ：カウント付きの正規レジストリ、MIT ライセンス、エージェント非依存。本日の再トレンドに新リリースは関与していない（v1.7.2 は10月9日）；エコシステムの引き込みが物語そのものだ。
+
+**なぜ重要か：** スキル棚に npm の瞬間が訪れた——パッケージマネージャーは、下流すべての人の命名、発見、信頼、サプライチェーン攻撃面を決める。Socket は2月から skills.sh を監視し始めている；34k★ は `npx skills` がエコシステム収束のデフォルトになったことを示し、スキルの由来確認は今やこれを経由してルーティングされる。
+
+[`🔗 vercel-labs/skills`](https://github.com/vercel-labs/skills) · [`🔗 skills.sh`](https://skills.sh/)
+
+---
+
+## 40. VoiceStudio が再トレンド入り、61.4k★：ローカル ElevenLabs 代替がエージェントでインストール可能に——MCP も skills も全部
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending 日次 · #3 · 61,434★、本日 +1,691
+- **Tags:** `tts` `voice-cloning` `local-first` `agents`
+
+debpalash/VoiceStudio（AGPL-3.0、2026年4月作成）は、音声クローン、ボイスデザイン、動画ダビング、文字起こし（ディクテーション）、トランスクリプション、オーディオブック制作をまとめたクロスプラットフォームのデスクトップアプリ。デフォルトエンジンは k2-fsa の **OmniVoice**（Next-gen Kaldi チームの多言語音声モデル、arXiv 2604.00688）で、646言語対応を標榜している——これはプロジェクト自身の公開数字で、独立検証はしていない。すべてローカルで動作（CUDA/Metal/CPU、CPU フォールバックには約5 GB の PyTorch）；リモートサービスはオプションで、使用分析は同意が必要。エージェント統合が注目点だ：ローカル API と MCP サーバ、Claude Code/Codex/Cursor に貼り付けるためのエージェントインストールガイド（`docs/install/agent.md`）、そして `npx skills add` 対応。開発は活発——本日も朝にコミットがある；最新リリース v0.5.6（9月23日）は最近の作業をまだパッケージ化していない。
+
+**なぜ重要か：** ElevenLabs 型のワークフロー（クローン→ダビング→オーディオブック）がローカルファーストのコモディティになりつつあり、このリポジトリは「コーディングエージェントでインストールする」を第一級の配布チャネルとして扱っている——本日の e2e 項目と同じ docs-for-agents 慣行だ。本日の急上昇を説明する新リリースや明確なきっかけはない；このリポジトリは4月以降繰り返しトレンド入りしており、6か月で61k★はリポジトリで検証済みの複利だ。
+
+[`🔗 debpalash/VoiceStudio`](https://github.com/debpalash/VoiceStudio) · [`🔗 voicestudio.sh`](https://voicestudio.sh/)
+
+---
+
+## 41. GPT-SoVITS：UVR5 WebUI に未認証の OS コマンドインジェクション——CVSS 9.8（研究者採点）、最新リリースは依然脆弱
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVE-2025-71429 10月12日公開（約15時間前）
+- **Tags:** `cve` `ai-infra` `command-injection` `tts`
+
+CVE-2025-71429（10月12日公開）：RVC-Boss の GPT-SoVITS——62.7k★ の少サンプル音声クローン/TTS プロジェクト——は最新リリース 20250606v2pro（2025年6月）を含む範囲で、`tools/uvr5/vr.py` に OS コマンドインジェクションを持つ：UVR5 WebUI の出力フォルダ用テキストボックスが `$(...)` のようなシェル置換を受け付け、mp3/m4a エクスポート時にそのパスが `os.system` 経由でサーバーユーザーとして実行されるシェルコマンドに補間される。スコアの帰属：**9.8（v3.1）/ 9.3（v4.0）、いずれも VulnCheck が採点**——CNA レコードはなく、研究者採点として扱うべきだ。今回の確認：`os.system(cmd)` の呼び出しは main ブランクに依然存在し（10月8日にプッシュ）、最新リリースは脆弱な2025年6月タグのまま——リリース済みの全バージョンが影響を受ける。実際の露出は、WebUI を localhost 以外で実行しているすべての人だ。
+
+**なぜ重要か：** パターンの繰り返しだ（SGLang の pickle RCE、LMCache、Langflow）：人々が趣味でセルフホストする AI ツールは localhost 向けに設計されたシェル実行パスを持っており、同じ人々がそれをネットワークに露出させる。GPT-SoVITS の WebUI を実行しているなら：修正リリースが出るまで localhost にバインドするか認証を前置せよ——まだ出ていない。
+
+[`🔗 NVD：CVE-2025-71429`](https://nvd.nist.gov/vuln/detail/CVE-2025-71429) · [`🔗 RVC-Boss/GPT-SoVITS`](https://github.com/RVC-Boss/GPT-SoVITS)
+
+---
+
+## 42. DishwasherBench：フロンティアモデルにシミュレートされた Bosch の食器洗いをさせる——誠実な「このスコアで信頼できること」セクション付き
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 55+ pts · 約3.7時間前 (~16:24 UTC+8)
+- **Tags:** `benchmark` `physical-reasoning` `agents` `simulation`
+
+Composo の DishwasherBench（MIT、v0.1.0、リポジトリは10月12日作成）は、実在の一台の物理シミュレーション上で動く食器洗いゲーム——「Spotless」——だ：Bosch SMV4HAX40G の Eco 50 プログラムを、噴流・水滴・流れ・汚れ・洗剤の化学でシミュレートする。プレイヤー——人間はブラウザで、モデルは **MCP** 経由——かごに食器を詰め、洗浄が走り、きれいに出た食器が得点になる；後のレベルではすべては入らず、取捨選択を強いられる。README の率直さこそが要点だ：v0.1.0 のスコアは詰め方と向き（カップは口を下に）を反映するが、**皿とカトラリーが実際にきれいに洗えたかはまだ捉えない**——そしてそれを専用の「このスコアで信頼できること」セクションではっきり言っている。各エピソードは誰でも再生し、もう一度「洗える」記録だ。
+
+**なぜ重要か：** 物理配置の推論は、コードの流暢さと具身的能力の間のギャップを見つけるプローブの一つで、その設計選択——一台の較正済み実機、検証可能なリプレイ、公開された信頼限界——は、このフィードが標準として掲げ続けてきた認識論そのものだ。本日の Ben Recht による解剖（項目30）は、同じジャンルからそれらの限界が欠けたときの姿だ。
+
+[`🔗 composo-ai/DishwasherBench`](https://github.com/composo-ai/DishwasherBench) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=50068437)
+
+---
+
+## 43. RimWorld 1.7 が Unity を離れ Ludeon 自社の Waylith エンジンへ——2〜4倍高速、セーブは双方向互換
+
+- **Velocity:** ▮ steady
+- **Source:** Ludeon ブログ · HN 68+ pts · 約16.8時間前 (~03:18 UTC+8)
+- **Tags:** `gamedev` `unity` `engines` `performance`
+
+Ludeon が発表した（10月12日）：RimWorld 1.7 は Unity を置き換える自社エンジン **Waylith** 上で動く——ゲームはそのまま、速くなる：ストレステスト済みの終盤コロニーは 1.6 より 2.2倍速く、1,500 個の mod を読み込むのに14分かかっていたものが6分になった（ブログの提示範囲は2〜4倍、ハードウェアと mod 構成で異なる）。セーブは双方向で互換——1.6 のセーブは 1.7 で読め、1.7 のセーブも 1.6 で使える——大半の mod は無変更で動作する；modder はモダンな C# 言語機能と低コストなカスタム VFX を得て、1.7 タグ付きビルドの再公開を求められている。現在 Steam の「unstable」ベータブランチでプレイ可能；安定版の時期は未定；約10年以上前のマシンでは動かない可能性がある。Waylith は未発表の Ludeon の新作も支えるという。
+
+**なぜ重要か：** RimWorld は mod ヘビーな Unity ゲームの典型であり、したがってこれは2023年の価格騒動以降の「Unity 離れ」にとってこれまでで最大の実地テストだ——宣言ではなく、出荷済みでセーブ互換、実測数字付きのエンジン交換だ。mod 互換の物語（書き直すのではなくタグを打ち直す）は、同じ動きを考えるすべてのスタジオが研究する部分だろう。
+
+[`🔗 Ludeon：Announcing the Waylith Engine and Update 1.7`](https://ludeon.com/blog/2026/10/announcing-the-waylith-engine-and-update-1-7/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50061497)
+
+---
+
 ## Metadata
 
 | 項目 | 値 |
 |-------|-------|
-| Generated | 2026-10-13T04:25:00Z |
-| Items | 34 |
-| Sources tracked | 31 (Hacker News, GitHub Trending/API, npm registry, NVD, arXiv, Intel, GitHub Status, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, LinkedIn, yyhh.org, mortoray.com, ryanbigg.com, purplesyringa.moe, felixcloutier.com, micahflee.com, taylor.town, phreak.ing, Unisoc security bulletin, VulnCheck-scored NVD records, vendor blogs and security bulletins, personal engineering blogs) |
+| Generated | 2026-10-13T12:10:00Z |
+| Items | 43 |
+| Sources tracked | 38 (Hacker News, GitHub Trending/API, npm registry, NVD, arXiv, Intel, GitHub Status, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, heise.de, LinkedIn, yyhh.org, mortoray.com, ryanbigg.com, purplesyringa.moe, felixcloutier.com, micahflee.com, taylor.town, phreak.ing, Unisoc security bulletin, VulnCheck-scored NVD records, AWS News Blog, Ludeon blog, eg2.haku.sh, skills.sh, voicestudio.sh, rust-lang/rust issue tracker, vendor blogs and security bulletins, personal engineering blogs) |
+| Update schedule | 04:03, 12:03, 20:03 UTC+8 (1日3回) |
+| Ranking | 速度重視（鮮度 × エンゲージメント加速度 × ソースの権威） |
+| License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (1日3回) |
 | Ranking | 速度重視（鮮度 × エンゲージメント加速度 × ソースの権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

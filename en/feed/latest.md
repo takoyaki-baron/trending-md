@@ -1,8 +1,8 @@
 ---
 date: 2026-10-13
-updated: 2026-10-13T04:25:00Z
+updated: 2026-10-13T12:10:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -484,13 +484,139 @@ CVE-2026-66086 (published Oct 12): in Unisoc's modem OTA stack, "a possible stac
 
 ---
 
+## 35. Rust's `T: 'static` bound can be bypassed via covariant field assignment — a P-critical unsoundness, live for most of rustc's life
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 174+ pts · ~1.6h ago (~18:27 UTC+8); issue filed today ~16:45 UTC+8
+- **Tags:** `rust` `memory-safety` `compiler` `unsoundness`
+
+rust-lang/rust issue #164250 (filed today, labeled I-unsound and triaged **P-critical** within the hour): a struct with a `T: 'static` bound and a custom `Drop` impl lets a non-`'static` reference slip in through plain field assignment — the write goes through variance, but the Drop glue assumes the bound holds. The minimal repro needs only a static `Mutex`, an `Option` field and a `Drop` impl: it compiles on stable (the reporter shows it back to at least 1.85), and under ASan produces a stack-use-after-scope — the program happily prints a dead string as a `&'static String`. Compiler-team contributor lcnr posted a variant needing no `static` at all, with a Godbolt repro, concluding "unsound since 1.4"; the reporter's own version "has been compiling ever since 1.18.0 (2017)". Possibly related: #128225. The HN debate is about how such a small constellation survived a borrow checker famous for soundness — the repro is well within normal code, though it does require a custom `Drop`.
+
+**Why it matters:** Rust's pitch is compile-time soundness, and the ecosystem's unsafe-audit logic leans on "safe code can't cause UB." A P-critical hole reachable in ~10 lines of safe code — present for most of rustc's lifetime — is a reminder that soundness is a property under repair, not a theorem users get for free. For the security-minded: "it compiled" is not a safety proof, and memory-safety claims deserve the same version-bounded framing we give CVEs.
+
+[`🔗 rust-lang/rust #164250`](https://github.com/rust-lang/rust/issues/164250) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50069499)
+
+---
+
+## 36. Ledger implant, one day later: the exfil channel was an eSIM — a chip "reading over the screen's shoulder"
+
+- **Velocity:** ▮▮ rising
+- **Source:** heise · HN 64+ pts · ~3.5h ago (~16:34 UTC+8)
+- **Tags:** `supply-chain` `hardware` `ledger` `crypto`
+
+Since our Oct 12 note on Ledger confirming a hardware implant behind the ~$92M CryptoBilis drain: heise's follow-up reports the mechanism, per Tibane Labs' device analysis. The chip intercepts the Secure Element→screen transmission — the display data itself, "like a Tempest attack" — so the seed phrase is captured at the moment it is shown, while the on-screen confirmation the user checks stays genuine. The same analysis found an LTE modem with a pre-provisioned eSIM and a fine antenna wire, powered by the wallet's own battery — the original battery untouched; the foam under the display was thinned to make room. Tibane has identified **300+ affected wallets** so far, drained of ~$93M. Scope: devices sold via the Malaysia-based dealer Cryptobilis in the last ~3 months (Ledger has suspended them); one confirmed purchase went through Amazon Japan via a third-party seller, mailed from Malaysia. Explicitly unverified: an August ownership change of the dealer to one "JiaMing"; Ledger has confirmed one customer loss and manipulation but not the full circumstances. This is the third implant generation — May 2026's Joe Grand teardown showed hand-manipulated devices; these look series-produced.
+
+**Why it matters:** the exfil channel matters more than the implant: no network trust needed at all (eSIM + mobile operator), no firmware signature to break, and the one verification users are told to rely on — read the words on the device's own screen — is precisely what's bypassed. Supply-chain defense moves to the sales channel: buy from the vendor, and treat third-party marketplaces as untrusted for anything that holds keys.
+
+[`🔗 heise: Crypto thieves sell hardware wallets with secret eSIM`](https://www.heise.de/en/news/Crypto-thieves-sell-hardware-wallets-with-secret-eSIM-11485188.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50068508)
+
+---
+
+## 37. AWS Lambda Web Functions: your HTTP server as-is — 128 concurrent requests per environment, active-CPU billing
+
+- **Velocity:** ▮▮ rising
+- **Source:** AWS News Blog · HN 35+ pts · ~2h ago (~18:08 UTC+8)
+- **Tags:** `serverless` `aws` `lambda` `web`
+
+AWS announced (Oct 12) **Lambda Web Functions** — a third Lambda form factor between Event Functions and MicroVMs: an existing Node.js HTTP server (Express, Hono, Fastify, Next.js) deploys without being rewritten into an event handler, no adapter. Each execution environment handles up to **128 concurrent requests**; billing is active-CPU (waiting on a database or API barely bills) with memory metered for the environment's lifetime. `aws lambda-web deploy` bundles, publishes an immutable revision, and returns an HTTPS URL; traffic can split between revisions (a 90/10 canary); endpoints are regional or one global URL with best-effort latency-based routing; CloudFront origin access control and VPC connectivity are supported. Launch scope: Node.js 24, Arm64, five regions.
+
+**Why it matters:** this is AWS's answer to the Cloudflare-Workers/Deno-Deploy deployment shape — and it lands days after Cloudflare acquired Deno (Oct 10), so "deploy a web app without thinking about servers" now has a hyperscaler entrant. The density-per-environment plus active-CPU model is the part to watch in cost math: Workers-style packing with container-style code.
+
+[`🔗 AWS News Blog: Lambda Web Functions`](https://aws.amazon.com/blogs/aws/announcing-aws-lambda-web-functions-for-fast-consistent-web-app-performance-anywhere/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50069318)
+
+---
+
+## 38. An embedding model that transcribes: reading words out of EmbeddingGemma 2's own space — 1 hour of audio in ~13 s on a MacBook Air
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 48+ pts · ~0.6h ago (~19:27 UTC+8)
+- **Tags:** `embeddings` `speech-to-text` `on-device` `apple-silicon`
+
+eg2.haku.sh ships a free Mac app that uses Google's EmbeddingGemma 2 — a multimodal *embedding* model, never trained for speech-to-text — as an STT engine. The audio encoder stays frozen; a small "reader" (trained in under two hours on 8×H100, on openly licensed English speech) moves each short audio slice into the model's text space, where the nearest of ~229,000 English words wins; a tiny model adds punctuation and capitals. Measured result: an hour of audio in **~12.6 s (288× real time)** on a base M3 MacBook Air with 8 GB, on the Neural Engine, 715 MB downloaded. Their comparison table keeps it honest: conventional on-device STT in the same class does ~150× (IBM Granite Speech) up to 480× (a Parakeet v3 fine-tune on M5 Pro) — so this is competitive-with, not faster-than, purpose-built models. Stated caveats: English-only, and the base model was never trained for the task.
+
+**Why it matters:** the trick is treating the embedding space as a universal interface — no STT head was ever trained, yet audio→text proximity was already in the model, and a two-hour reader was enough to make it decode. Since we covered EmbeddingGemma 2's release on Oct 7, this is its first genuinely surprising repurposing — a data point for embedding models as reusable substrates rather than single-purpose encoders.
+
+[`🔗 Embedding Gemma Transcribe — eg2.haku.sh`](https://eg2.haku.sh/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50069971)
+
+---
+
+## 39. vercel-labs/skills re-trends at 34.1k★: `npx skills` is becoming the package manager of the agent-skills shelf
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending daily · 34,143★, +187 today · v1.7.2 (Oct 9)
+- **Tags:** `agent-skills` `cli` `vercel` `package-manager`
+
+vercel-labs/skills (MIT, TypeScript) is the CLI behind skills.sh — the install layer the skills shelf increasingly assumes: `npx skills add owner/repo` resolves GitHub/GitLab/Azure/any-git/local sources and installs into whichever of **75+ supported agents** you use (Claude Code, Codex, OpenCode, Cursor, …), while `skills use` writes the skill to a temp directory and pipes the generated prompt straight into an agent. Install counts surface as skills.sh badges, which repos now put in their READMEs — today's VoiceStudio item advertises `npx skills add debpalash/VoiceStudio` in its own install docs. Since our Oct 11 note on Skill Constellations (the dated copy network), this is the infrastructure half of the same story: a canonical registry with counts, MIT-licensed and agent-agnostic. No fresh release triggers today's re-trend (v1.7.2 shipped Oct 9); the ecosystem pull is the story.
+
+**Why it matters:** the skills shelf got its npm moment — a package manager decides naming, discovery, trust and supply-chain surface for everyone downstream. Socket began watching skills.sh back in February; 34k stars says `npx skills` is the default the ecosystem converged on, and skill provenance now routes through it.
+
+[`🔗 vercel-labs/skills`](https://github.com/vercel-labs/skills) · [`🔗 skills.sh`](https://skills.sh/)
+
+---
+
+## 40. VoiceStudio re-trends at 61.4k★: the local ElevenLabs alternative now installs by agent — MCP, skills and all
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending daily · #3 · 61,434★, +1,691 today
+- **Tags:** `tts` `voice-cloning` `local-first` `agents`
+
+debpalash/VoiceStudio (AGPL-3.0, created April 2026) is a cross-platform desktop app bundling voice cloning, voice design, video dubbing, dictation, transcription and audiobook creation. It defaults to k2-fsa's **OmniVoice** engine (the Next-gen Kaldi team's omnilingual speech model, arXiv 2604.00688) and claims 646 languages — a project-published number we haven't independently checked. Everything runs local (CUDA/Metal/CPU, ~5 GB CPU PyTorch fallback); remote services are optional and usage analytics requires consent. The agent integration is the notable part: a local API and MCP server, an agent install guide (`docs/install/agent.md`) meant to be pasted into Claude Code/Codex/Cursor, and `npx skills add` support. Development is active — commits landed this morning; the last release, v0.5.6 (Sep 23), predates the recent work.
+
+**Why it matters:** the ElevenLabs-shaped workflow (clone → dub → audiobook) is becoming a local-first commodity, and this repo treats "install it with your coding agent" as a first-class distribution channel — the same docs-for-agents convention as today's e2e item. No fresh release or trigger explains today's spike; the repo has trended repeatedly since April, and 61k★ in six months is the compounding, verified at the repo.
+
+[`🔗 debpalash/VoiceStudio`](https://github.com/debpalash/VoiceStudio) · [`🔗 voicestudio.sh`](https://voicestudio.sh/)
+
+---
+
+## 41. GPT-SoVITS: unauthenticated OS command injection in the UVR5 WebUI — CVSS 9.8 (researcher-scored), latest release still vulnerable
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVE-2025-71429 published Oct 12 (~15h ago)
+- **Tags:** `cve` `ai-infra` `command-injection` `tts`
+
+CVE-2025-71429 (published Oct 12): RVC-Boss's GPT-SoVITS — the 62.7k★ few-shot voice-cloning/TTS project — through its current release 20250606v2pro (June 2025) has an OS command injection in `tools/uvr5/vr.py`: the UVR5 WebUI's output-folder textboxes accept shell substitutions like `$(...)`, and with mp3/m4a export the path is interpolated into a shell command run via `os.system` as the server user. Score attribution: **9.8 (v3.1) / 9.3 (v4.0), both assigned by VulnCheck** — no CNA record, so treat it as researcher-assigned. Checked this run: the `os.system(cmd)` calls are still on main (pushed Oct 8), and the latest release remains the vulnerable June 2025 tag — every released version is affected. The practical exposure is anyone running the WebUI beyond localhost.
+
+**Why it matters:** the pattern repeats (SGLang's pickle RCE, LMCache, Langflow): AI tooling people self-host for fun has shell-execution paths designed for localhost, and the same people expose them over the network. If you run GPT-SoVITS's WebUI: bind to localhost or front it with auth until a fixed release lands — there isn't one yet.
+
+[`🔗 NVD: CVE-2025-71429`](https://nvd.nist.gov/vuln/detail/CVE-2025-71429) · [`🔗 RVC-Boss/GPT-SoVITS`](https://github.com/RVC-Boss/GPT-SoVITS)
+
+---
+
+## 42. DishwasherBench: frontier models load a simulated Bosch — with an honest "what a score can be trusted for" section
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 55+ pts · ~3.7h ago (~16:24 UTC+8)
+- **Tags:** `benchmark` `physical-reasoning` `agents` `simulation`
+
+Composo's DishwasherBench (MIT, v0.1.0, repo created Oct 12) is a dishwasher-loading game — "Spotless" — on a physical simulation of one real machine: a Bosch SMV4HAX40G whose Eco 50 programme is simulated with jets, droplets, run-off, soil and detergent chemistry. Players — human in a browser, model over **MCP** — load the baskets, the wash runs, and points come from items that come out clean; later levels don't fit everything, forcing choices. The README's candor is the point: v0.1.0's score reflects packing and orientation (cups mouth-down) but **does not yet capture whether plates and cutlery actually wash clean** — and it says so in a dedicated "What a score can be trusted for" section. Every episode is a record anyone can replay and re-wash.
+
+**Why it matters:** physical-arrangement reasoning is one of the gap-finders between code fluency and embodied competence, and the design choices — one calibrated real machine, verifiable replay, published trust limits — are exactly the epistemics the feed keeps holding up as the standard. Today's Ben Recht autopsy (item 30) is what the same genre looks like when those limits are missing.
+
+[`🔗 composo-ai/DishwasherBench`](https://github.com/composo-ai/DishwasherBench) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=50068437)
+
+---
+
+## 43. RimWorld 1.7 leaves Unity for Ludeon's in-house Waylith engine — 2–4× faster, saves compatible in both directions
+
+- **Velocity:** ▮ steady
+- **Source:** Ludeon blog · HN 68+ pts · ~16.8h ago (~03:18 UTC+8)
+- **Tags:** `gamedev` `unity` `engines` `performance`
+
+Ludeon announced (Oct 12) RimWorld 1.7 on **Waylith**, its in-house engine replacing Unity — same game, faster: a stress-tested late-game colony runs 2.2× faster than 1.6, and a 1,500-mod pack that took 14 minutes to load now takes 6 (the blog's stated range is 2–4×, results varying by hardware and mod set). Saves are compatible in both directions — 1.6 saves load in 1.7, 1.7 saves work in 1.6 — and most mods work unchanged; modders gain modern C# language features and cheaper custom VFX, and are asked to re-publish 1.7-tagged builds. It's live now on Steam's "unstable" beta branch; no stable date; machines older than ~10 years may not run it. Waylith will also power an unannounced new Ludeon game.
+
+**Why it matters:** RimWorld is the canonical mod-heavy Unity game, so this is the biggest real-world test yet of the post-2023-pricing-saga exodus from Unity — a shipped, save-compatible engine swap with measured numbers, not a manifesto. The mod-compatibility story (re-tag, don't rewrite) is the part every studio contemplating the same move will study.
+
+[`🔗 Ludeon: Announcing the Waylith Engine and Update 1.7`](https://ludeon.com/blog/2026/10/announcing-the-waylith-engine-and-update-1-7/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50061497)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-13T04:25:00Z |
-| Items | 34 |
-| Sources tracked | 31 (Hacker News, GitHub Trending/API, npm registry, NVD, arXiv, Intel, GitHub Status, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, LinkedIn, yyhh.org, mortoray.com, ryanbigg.com, purplesyringa.moe, felixcloutier.com, micahflee.com, taylor.town, phreak.ing, Unisoc security bulletin, VulnCheck-scored NVD records, vendor blogs and security bulletins, personal engineering blogs) |
+| Generated | 2026-10-13T12:10:00Z |
+| Items | 43 |
+| Sources tracked | 38 (Hacker News, GitHub Trending/API, npm registry, NVD, arXiv, Intel, GitHub Status, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, heise.de, LinkedIn, yyhh.org, mortoray.com, ryanbigg.com, purplesyringa.moe, felixcloutier.com, micahflee.com, taylor.town, phreak.ing, Unisoc security bulletin, VulnCheck-scored NVD records, AWS News Blog, Ludeon blog, eg2.haku.sh, skills.sh, voicestudio.sh, rust-lang/rust issue tracker, vendor blogs and security bulletins, personal engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-10-13
-updated: 2026-10-13T04:25:00Z
+updated: 2026-10-13T12:10:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 31
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -484,13 +484,142 @@ CVE-2026-66086（10月12日发布）：Unisoc 基带 OTA 协议栈中"由于对 
 
 ---
 
+## 35. Rust 的 `T: 'static` 约束可被协变字段赋值绕过——P-critical 级 soundness 破洞，存在了 rustc 生命周期的绝大部分
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 174+ pts · ~1.6小时前 (~18:27 UTC+8)；issue 于今日 ~16:45 UTC+8 提交
+- **Tags:** `rust` `memory-safety` `compiler` `unsoundness`
+
+rust-lang/rust issue #164250（今日提交，一小时内即被打上 I-unsound 标签并定级 **P-critical**）：一个带 `T: 'static` 约束和自定义 `Drop` 实现的结构体，可以通过普通的字段赋值让非 `'static` 引用溜进去——赋值走的是型变（variance），而 Drop 析构逻辑却假定该约束成立。最小复现只需要一个 static `Mutex`、一个 `Option` 字段和一个 `Drop` 实现：它在 stable 上能编译（提交者演示至少可回溯到 1.85），在 ASan 下产生 stack-use-after-scope——程序会把一个已销毁的字符串当作 `&'static String` 愉快地打印出来。编译器团队贡献者 lcnr 贴出了一个完全不需要 `static` 的变体，附 Godbolt 复现，结论是"从 1.4 起就不健全"；提交者自己的版本"从 1.18.0（2017 年）起就一直在编译"。可能相关：#128225。HN 的争论点在于：如此小的特征组合，怎么能在以健全性著称的借用检查器下存活这么久——复现代码完全在正常编码范围内，只是确实需要一个自定义 `Drop`。
+
+**为什么重要：** Rust 的卖点就是编译期健全性，而生态里的 unsafe 审计逻辑都建立在"安全代码不会引发 UB"之上。一个 ~10 行安全代码即可触发的 P-critical 破洞——存在了 rustc 生命周期的绝大部分——提醒我们健全性是一个持续修复中的属性，不是用户免费获得的定理。从安全视角看："能编译"不是安全性证明，内存安全声明应当像 CVE 一样带上版本边界来表述。
+
+[`🔗 rust-lang/rust #164250`](https://github.com/rust-lang/rust/issues/164250) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50069499)
+
+---
+
+## 36. Ledger 硬件植入事件后续：外传信道是一颗 eSIM——芯片"在屏幕肩膀后面偷读"
+
+- **Velocity:** ▮▮ rising
+- **Source:** heise · HN 64+ pts · ~3.5小时前 (~16:34 UTC+8)
+- **Tags:** `supply-chain` `hardware` `ledger` `crypto`
+
+接我们 10月12日 关于 Ledger 确认硬件植入（约 $92M 的 CryptoBilis 盗取事件）的报道：heise 的后续报道给出了机制，来自 Tibane Labs 对设备的分析。这颗芯片截获的是安全元件→屏幕的传输——即显示数据本身，"如同一次 Tempest 攻击"——助记词在显示的那一刻就被捕获，而用户核对的那段屏幕确认信息依然真实无误。同一分析还发现了带预置 eSIM 的 LTE 调制解调器和一根细天线，由钱包自身电池供电——原装电池未动过；屏幕下方的泡棉被削薄以腾出空间。Tibane 目前已识别 **300+ 台受影响钱包**，合计被盗约 $93M。范围：过去约 3 个月经马来西亚经销商 Cryptobilis 售出的设备（Ledger 已中止合作）；已确认有一台经由 Amazon Japan 的第三方卖家购入，从马来西亚寄出。明确未证实：该经销商 8 月变更所有人为"JiaMing"一事；Ledger 已确认一起客户损失与篡改，但未证实全部细节。这是第三代植入——2026年5月 Joe Grand 的拆解显示的是手工改装设备；而这一批看起来是量产货。
+
+**为什么重要：** 外传信道比植入本身更关键：完全不需要信任任何网络（eSIM + 移动运营商），没有可破坏的固件签名，而用户被告知要依赖的那个验证步骤——读设备自己屏幕上的词——恰恰是被绕过的那一步。供应链防御前移到销售渠道：从厂商直购，把一切第三方市场视为不可信——只要它保管密钥。
+
+[`🔗 heise：Crypto thieves sell hardware wallets with secret eSIM`](https://www.heise.de/en/news/Crypto-thieves-sell-hardware-wallets-with-secret-eSIM-11485188.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50068508)
+
+---
+
+## 37. AWS Lambda Web Functions：HTTP 服务器原样上——每个环境 128 并发请求，按活跃 CPU 计费
+
+- **Velocity:** ▮▮ rising
+- **Source:** AWS News Blog · HN 35+ pts · ~2小时前 (~18:08 UTC+8)
+- **Tags:** `serverless` `aws` `lambda` `web`
+
+AWS 宣布（10月12日）**Lambda Web Functions**——介于 Event Functions 与 MicroVMs 之间的第三种 Lambda 形态：现有的 Node.js HTTP 服务器（Express、Hono、Fastify、Next.js）无需改写成事件处理器即可部署，不用任何适配器。每个执行环境可处理最多 **128 个并发请求**；按活跃 CPU 计费（等数据库、等 API 几乎不计费），内存按环境生命周期计量。`aws lambda-web deploy` 一条命令完成打包、发布不可变修订版并返回 HTTPS URL；修订版之间可按比例分流流量（如 90/10 金丝雀）；端点有区域级，也有跨区按时延路由的单一全球 URL（尽力而为）；支持 CloudFront 源站访问控制（OAC）与 VPC 连接。首发范围：Node.js 24、Arm64、五个区域。
+
+**为什么重要：** 这是 AWS 对 Cloudflare Workers/Deno Deploy 部署形态的正面回应——而且恰在 Cloudflare 收购 Deno（10月10日）几天后落地，"部署 Web 应用不用想服务器"这一层如今有了超大规模厂商的入场者。值得在成本模型里盯住的是单环境密度加活跃 CPU 计费：Workers 式的装箱密度，配容器式的代码。
+
+[`🔗 AWS News Blog：Lambda Web Functions`](https://aws.amazon.com/blogs/aws/announcing-aws-lambda-web-functions-for-fast-consistent-web-app-performance-anywhere/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50069318)
+
+---
+
+## 38. 会转写的嵌入模型：从 EmbeddingGemma 2 自己的空间里"读出"文字——MacBook Air 上 1 小时音频约 13 秒
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 48+ pts · ~0.6小时前 (~19:27 UTC+8)
+- **Tags:** `embeddings` `speech-to-text` `on-device` `apple-silicon`
+
+eg2.haku.sh 发布了一款免费 Mac 应用，把 Google 的 EmbeddingGemma 2——一个多模态*嵌入*模型、从未为语音转写训练过——当作 STT 引擎。音频编码器完全冻结；一个小"读取器"（在公开授权的英文语音上用 8×H100 训练不到两小时）把每小段音频移入模型的文本空间，与约 229,000 个英文单词中最近者胜出；再由一个微型模型补标点与大小写。实测结果：在 8 GB 内存的基础款 M3 MacBook Air 上，经 Neural Engine，1 小时音频约 **12.6 秒（288× 实时）**完成转写，下载量 715 MB。对比表也保持了诚实：同级的传统端侧 STT 为 ~150×（IBM Granite Speech）至 480×（M5 Pro 上的 Parakeet v3 微调版）——所以这是"可与专用模型竞争"，不是"更快"。页面明示的局限：仅英文，且基础模型从未为此任务训练过。
+
+**为什么重要：** 玄机在于把嵌入空间当作通用接口——从未训练过任何 STT 头，但"音频→文本的邻近性"早已在模型之中，一个两小时训练的读取器就足以让它解码。接我们 10月7日 对 EmbeddingGemma 2 发布的报道：这是它第一次真正令人意外的用途重构——也是"嵌入模型是可复用基材而非单一用途编码器"的一个数据点。
+
+[`🔗 Embedding Gemma Transcribe — eg2.haku.sh`](https://eg2.haku.sh/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50069971)
+
+---
+
+## 39. vercel-labs/skills 重登趋势榜，34.1k★：`npx skills` 正在成为 agent 技能货架的包管理器
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending 日榜 · 34,143★，今日 +187 · v1.7.2（10月9日）
+- **Tags:** `agent-skills` `cli` `vercel` `package-manager`
+
+vercel-labs/skills（MIT，TypeScript）是 skills.sh 背后的 CLI——技能货架越来越依赖的安装层：`npx skills add owner/repo` 可解析 GitHub/GitLab/Azure/任意 git/本地来源，并安装到 **75+ 支持的 agent**（Claude Code、Codex、OpenCode、Cursor 等）中的任意一个；`skills use` 则把技能写入临时目录，将生成的提示词直接管道给 agent。安装量以 skills.sh 徽章形式展示，如今仓库都把它放进 README——今日的 VoiceStudio 条目就在自己的安装文档里推荐 `npx skills add debpalash/VoiceStudio`。接我们 10月11日 关于 Skill Constellations（带日期的抄送网络）的报道：这是同一个故事的基础设施半边——带计数、MIT 许可、agent 无关的规范注册表。今日重登趋势没有新版本触发（v1.7.2 于 10月9日发布）；生态拉力才是故事本身。
+
+**为什么重要：** 技能货架迎来了自己的 npm 时刻——包管理器决定着下游所有人的命名、发现、信任与供应链攻击面。Socket 早在 2 月就开始盯防 skills.sh；34k★ 说明 `npx skills` 是生态收敛出的默认选项，技能的来源验证如今都经由它路由。
+
+[`🔗 vercel-labs/skills`](https://github.com/vercel-labs/skills) · [`🔗 skills.sh`](https://skills.sh/)
+
+---
+
+## 40. VoiceStudio 重登趋势榜，61.4k★：本地版 ElevenLabs 替代品现在能用 agent 安装——MCP、skills 全都有
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending 日榜 · #3 · 61,434★，今日 +1,691
+- **Tags:** `tts` `voice-cloning` `local-first` `agents`
+
+debpalash/VoiceStudio（AGPL-3.0，2026年4月创建）是一款跨平台桌面应用，打包了声音克隆、声音设计、视频配音、听写、转写与有声书制作。默认引擎为 k2-fsa 的 **OmniVoice**（Next-gen Kaldi 团队的全语种语音模型，arXiv 2604.00688），宣称支持 646 种语言——这是项目自己发布的数字，我们未独立核验。所有工作流本地运行（CUDA/Metal/CPU，CPU 回退需约 5 GB 的 PyTorch）；远程服务可选，使用分析需征得同意。Agent 集成是亮点：本地 API 与 MCP 服务器、一份供粘贴进 Claude Code/Codex/Cursor 的 agent 安装指南（`docs/install/agent.md`），以及 `npx skills add` 支持。开发活跃——今天上午仍有提交；最近一个版本 v0.5.6（9月23日）还未打包近期的工作。
+
+**为什么重要：** ElevenLabs 形态的工作流（克隆→配音→有声书）正在变成本地优先的大宗商品，而这个仓库把"用你的编码 agent 安装"当作第一分发渠道——与今日 e2e 条目相同的 docs-for-agents 惯例。今日的暴涨没有新版本或明确触发点可解释；该仓库自 4 月以来反复登榜，六个月 61k★ 是我们在仓库实地核验过的复利。
+
+[`🔗 debpalash/VoiceStudio`](https://github.com/debpalash/VoiceStudio) · [`🔗 voicestudio.sh`](https://voicestudio.sh/)
+
+---
+
+## 41. GPT-SoVITS：UVR5 WebUI 未认证 OS 命令注入——CVSS 9.8（研究者评分），最新发布版仍受影响
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVE-2025-71429 10月12日发布（约 15 小时前）
+- **Tags:** `cve` `ai-infra` `command-injection` `tts`
+
+CVE-2025-71429（10月12日发布）：RVC-Boss 的 GPT-SoVITS——62.7k★ 的少样本声音克隆/TTS 项目——直至当前发布版 20250606v2pro（2025年6月），`tools/uvr5/vr.py` 中存在 OS 命令注入：UVR5 WebUI 的输出文件夹文本框接受 `$(...)` 之类的 shell 替换，选择 mp3/m4a 导出时该路径会被插值进经 `os.system` 以服务器用户身份执行的 shell 命令。评分归属：**9.8（v3.1）/ 9.3（v4.0），均由 VulnCheck 评给**——无 CNA 记录，应视为研究者评分。本次核验：`os.system(cmd)` 调用仍在 main 分支（10月8日有推送），最新发布版仍是那个带漏洞的 2025年6月 tag——所有已发布版本均受影响。实际暴露面是任何把 WebUI 跑在 localhost 之外的人。
+
+**为什么重要：** 模式在重演（SGLang 的 pickle RCE、LMCache、Langflow）：人们出于兴趣自托管的 AI 工具带着为 localhost 设计的 shell 执行路径，而同样这群人把它暴露到了网络上。如果你在跑 GPT-SoVITS 的 WebUI：绑定 localhost 或加一层认证，直到修复版发布——目前还没有。
+
+[`🔗 NVD：CVE-2025-71429`](https://nvd.nist.gov/vuln/detail/CVE-2025-71429) · [`🔗 RVC-Boss/GPT-SoVITS`](https://github.com/RVC-Boss/GPT-SoVITS)
+
+---
+
+## 42. DishwasherBench：让前沿模型装一台仿真 Bosch洗碗机——附一个诚实的"这个分数能说明什么"章节
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 55+ pts · ~3.7小时前 (~16:24 UTC+8)
+- **Tags:** `benchmark` `physical-reasoning` `agents` `simulation`
+
+Composo 的 DishwasherBench（MIT，v0.1.0，仓库 10月12日 创建）是一个装洗碗机游戏——"Spotless"——运行在一台真实机器的物理仿真上：一台 Bosch SMV4HAX40G，其 Eco 50 程序以喷淋、水滴、流挂、污渍与洗涤剂化学进行仿真。玩家——人在浏览器里、模型走 **MCP**——装篮、洗碗、按洗净的餐具计分；后面的关卡装不下所有东西，逼迫取舍。README 的坦率正是重点：v0.1.0 的分数反映摆放与朝向（杯口朝下），但**尚不能反映盘子和餐具是否真的洗干净**——并且用专门的"这个分数能被信任到什么程度"章节明说了。每一局都是一个任何人都可以回放、重新"洗"一遍的记录。
+
+**为什么重要：** 物理摆放推理是区分代码流利度与具身能力之间的探针之一，而它的设计选择——一台标定过的真实机器、可验证回放、公开的可信边界——正是本信息流一直举为标准的认识论。今日的 Ben Recht 剖析（条目 30）展示的正是同一体裁缺失这些边界时的样子。
+
+[`🔗 composo-ai/DishwasherBench`](https://github.com/composo-ai/DishwasherBench) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50068437)
+
+---
+
+## 43. RimWorld 1.7 弃用 Unity，改用 Ludeon 自研 Waylith 引擎——快 2–4 倍，存档双向兼容
+
+- **Velocity:** ▮ steady
+- **Source:** Ludeon 博客 · HN 68+ pts · ~16.8小时前 (~03:18 UTC+8)
+- **Tags:** `gamedev` `unity` `engines` `performance`
+
+Ludeon 宣布（10月12日）RimWorld 1.7 运行于 **Waylith**——替代 Unity 的自研引擎：游戏不变，更快——后期 colony 压力实测比 1.6 快 2.2 倍，一个装载 1,500 个 mod、原本要 14 分钟的存档现在 6 分钟载入（博客给出的区间是 2–4 倍，因硬件与 mod 组合而异）。存档双向兼容——1.6 存档可在 1.7 读取，1.7 存档也可在 1.6 使用——多数 mod 无需改动；modder 获得现代 C# 语言特性与更低成本的自定义特效，并被请求重新发布 1.7 标记版本。现已在 Steam "unstable" 测试分支可玩；正式版无日期；约十年以上的旧机器可能无法运行。Waylith 还将驱动一款未公布的 Ludeon 新游戏。
+
+**为什么重要：** RimWorld 是重 mod 系 Unity 游戏的典型代表，因此这是 2023 定价风波后"Unity 出走潮"迄今最大的一次现实检验——一次已发货、存档兼容、带着实测数字的引擎更换，而不是一份宣言。mod 兼容的故事（重新打标，而非重写）是每个考虑同样动作的工作室都会研读的部分。
+
+[`🔗 Ludeon：Announcing the Waylith Engine and Update 1.7`](https://ludeon.com/blog/2026/10/announcing-the-waylith-engine-and-update-1-7/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50061497)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-10-13T04:25:00Z |
-| Items | 34 |
-| Sources tracked | 31 (Hacker News, GitHub Trending/API, npm registry, NVD, arXiv, Intel, GitHub Status, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, LinkedIn, yyhh.org, mortoray.com, ryanbigg.com, purplesyringa.moe, felixcloutier.com, micahflee.com, taylor.town, phreak.ing, Unisoc security bulletin, VulnCheck-scored NVD records, vendor blogs and security bulletins, personal engineering blogs) |
+| Generated | 2026-10-13T12:10:00Z |
+| Items | 43 |
+| Sources tracked | 38 (Hacker News, GitHub Trending/API, npm registry, NVD, arXiv, Intel, GitHub Status, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, heise.de, LinkedIn, yyhh.org, mortoray.com, ryanbigg.com, purplesyringa.moe, felixcloutier.com, micahflee.com, taylor.town, phreak.ing, Unisoc security bulletin, VulnCheck-scored NVD records, AWS News Blog, Ludeon blog, eg2.haku.sh, skills.sh, voicestudio.sh, rust-lang/rust issue tracker, vendor blogs and security bulletins, personal engineering blogs) |
+| Update schedule | 04:03, 12:03, 20:03 UTC+8 (每天 3 次) |
+| Ranking | 速度加权（新鲜度 × 互动加速度 × 来源权威度） |
+| License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (每天 3 次) |
 | Ranking | 速度加权（新鲜度 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
