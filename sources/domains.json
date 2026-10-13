@@ -547,6 +547,15 @@
     "jp": "Amix（Amiga SVR4 Unix）復興プロジェクトの公式サイト。詳細かつ異例なほど誠実（信頼度タグ付き grimoire）だが、小規模な自主公開プロジェクトで主張は自己報告。",
     "zh": "Amix（Amiga SVR4 Unix）复兴项目官网；细节丰富且异常坦诚（带置信度标签的 grimoire），但属小型自发布项目，主张均为自报。"
   },
+  "amosbbatto.wordpress.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Amos Batto's long-form independent analysis — the Linux-phone autopsy was researched from schematics and primary polls. Fetched first-hand (10-14): PINE64 poll numbers (39.3% Phosh / 15.5% Sxmo, Jan 2022, n=3,079), the 1,539-unfixed-CVE EOL kernel, and Purism's $1,299/600-cancellations all on-page. Correction caught (10-14): the 98.7%-of-469k-LOC figure covers ALL Purism-initiated Librem 5 projects, not Phosh alone — feed item corrected in place.",
+    "jp": "Amos Battoの長文独立分析——Linuxスマホ検証は回路図と一次調査に基づく。一次確認済み（10-14）：PINE64投票（39.3% Phosh / 15.5% Sxmo、2022年1月、n=3,079）、未修正CVE 1,539件のEOLカーネル、Purismの1,299ドル/600件キャンセル本人確認。訂正捕捉（10-14）：98.7%/469k行はPhosh単体ではなくPurism発のLibrem 5プロジェクト全体の数値——フィード項目をその場で修正。",
+    "zh": "Amos Batto 的长篇独立分析——Linux 手机剖析基于原理图与一手调查。已一手核验（10-14）：PINE64 投票（39.3% Phosh / 15.5% Sxmo，2022 年 1 月，n=3,079）、1,539 个未修复 CVE 的 EOL 内核、Purism $1,299/600 笔未退款取消均在页面上。纠正捕获（10-14）：98.7%/469k 行代码覆盖 Purism 发起的全部 Librem 5 项目而非仅 Phosh——已就地更正条目。"
+  },
   "ampcuscyber.com": {
     "cat": "security",
     "cred": "med",
@@ -725,6 +734,15 @@
     "en": "Arcturus Labs (John Berryman) search/AI engineering blog — technical analysis with working precedents cited. Cross-checked (09-23): its tool-calling-as-classification argument cites verifiable 2024 analyses and matches nobodywho.ai's independent Jev decomposition; conclusions framed as argument, not measurement.",
     "jp": "Arcturus Labs（John Berryman）の検索/AIエンジニアリングブログ——検証可能な先行事例を引いた技術分析。突合済み（09-23）：ツール呼び出し＝分類の議論は検証可能な2024年の分析を引用し、nobodywho.aiの独立したJev分解と一致；結論は測定ではなく論証として枠付け。",
     "zh": "Arcturus Labs（John Berryman）的搜索/AI 工程博客——引用可查证先例的技术分析。已交叉核验（09-23）：其“工具调用即分类”论证引用了可查证的 2024 年分析，并与 nobodywho.ai 对 Jev 的独立分解一致；结论定位为论证而非测量。"
+  },
+  "argmin.net": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Ben Recht's blog (Berkeley professor) — careful technical autopsies of ML claims. Fetched first-hand (10-14): the OpenAI FFT autopsy's load-bearing numbers verified in-text (10^100 hidden constant at N=10^12, ~10^99x Cooley-Tukey advantage, Morgenstern 1973 barrier); cross-checked against this feed's own 10-07/10-08 coverage of the 722-manuscript dump the post autopsies.",
+    "jp": "Ben Recht（バークレー教授）のブログ——ML主張の丁寧な技術検証。一次確認済み（10-14）：OpenAI FFT検証の要となる数値を本文で確認（N=10^12で隠れ定数10^100、Cooley-Tukey比~10^99倍、Morgenstern 1973の壁）；同ポストが検証している722本の論文ダンプに関する当フィードの10-07/10-08報道と突合。",
+    "zh": "Ben Recht（伯克利教授）的博客——对 ML 论断的严谨技术剖析。已一手核验（10-14）：OpenAI FFT 剖析的关键数字均在正文（N=10^12 时 ~10^100 隐藏常数、较 Cooley-Tukey 慢 ~10^99 倍、Morgenstern 1973 下界）；并与本站 10-07/10-08 对其所剖析 722 篇稿件的报道交叉核验。"
   },
   "arista.com": {
     "cat": "vendor",
@@ -1235,6 +1253,15 @@
     "jp": "arXiv 公式ブログ——資金・ガバナンスなど機関の発表。クロスチェック済み（09-25）: 1,720 万ドルの複数年非営利コミットメントは同日の HN 議論とも整合。",
     "zh": "arXiv 官方博客——机构性公告（资金、治理）。已交叉核验（09-25）：1,720 万美元多年期非营利承诺获同日 HN 讨论印证。"
   },
+  "blog.character.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Character.AI's official blog — first-party statements during the company's Chapter 11 process. Cross-checked (10-14): the Oct 12 bankruptcy/sale announcement matches the HN front-page item and Verge coverage; note it is a distressed-vendor source, so read service commitments against court filings.",
+    "jp": "Character.AI 公式ブログ——Chapter 11 手続き中の会社側の一次発言。クロスチェック済み（10-14）：10月12日 の破産・売却発表は HN フロントページ項目と Verge の報道と一致；困窮下のベンダーソースなので、サービス継続の約束は裁判所書類と突き合わせて読むこと。",
+    "zh": "Character.AI 官方博客——公司 Chapter 11 程序中的一方陈述。已交叉核验（10-14）：10月12日 破产出售公告与 HN 首页条目及 Verge 报道一致；注意这是困境中的厂商来源，服务承诺请对照法院文件阅读。"
+  },
   "blog.checkpoint.com": {
     "cat": "vendor",
     "cred": "high",
@@ -1603,6 +1630,15 @@
     "jp": "Cisco Talosの脅威インテリジェンスブログ。突合済み：CLOSEDQUORUM（AI委譲C2）レポート（09-22）は不活性ビルドの注意書きを含めTHNの独立記事と一致し、Snort 1:66984やハッシュ指標も同時公開。老舗ベンダー調査組織。",
     "zh": "Cisco Talos 威胁情报博客。已交叉核验：CLOSEDQUORUM AI 委托 C2 报告（09-22）与 THN 的独立报道一致（包括未激活构建的注意事项），Snort 规则 1:66984 与哈希指标同步发布；老牌厂商研究机构。"
   },
+  "blog.thunderbird.net": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Thunderbird project's official blog (Mozilla MZLA). Cross-checked (10-14): the iOS first-look post's claims (native Swift/SwiftUI rewrite, pre-alpha, repo thunderbird/thunderbird-ios, no TestFlight yet) match the author's HN comments and the public repo.",
+    "jp": "Thunderbird プロジェクト公式ブログ（Mozilla MZLA）。クロスチェック済み（10-14）：iOS ファーストルック記事の主張（Swift/SwiftUI のフルネイティブ書き直し、pre-alpha、リポジトリ thunderbird/thunderbird-ios、TestFlight 未提供）は著者の HN コメントと公開リポジトリと一致。",
+    "zh": "Thunderbird 项目官方博客（Mozilla MZLA）。已交叉核验（10-14）：iOS 预览文的说法（Swift/SwiftUI 全原生重写、pre-alpha、仓库 thunderbird/thunderbird-ios、TestFlight 未开放）与作者 HN 评论及公开仓库一致。"
+  },
   "blog.torproject.org": {
     "cat": "community",
     "cred": "high",
@@ -1647,6 +1683,15 @@
     "en": "Individual developer blog (xlap.top) publishing source-code deep-dives of trending OSS tools; low authority, useful for internals. Cross-checked (08-15): its holehe write-up matches the megadose/holehe repo (GPL-3.0, ~13K stars, 120+ services).",
     "jp": "個人開発者ブログ（xlap.top）。話題のOSSツールのソースコード深掘り記事を公開。権威性は低いが内部実装の理解に有用。突合済み（08-15）：holehe記事はmegadose/holeheリポジトリと一致（GPL-3.0、約13K stars、120以上のサービス）。",
     "zh": "个人开发者博客（xlap.top），发布热门开源工具的源码深读；权威性低，但对内部实现较有用。已交叉核验（08-15）：其 holehe 文章与 megadose/holehe 仓库一致（GPL-3.0，约 13K stars，120+ 个服务）。"
+  },
+  "blogs.gentoo.org": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Gentoo developer blogs — first-hand distro-packaging perspective from maintainers. Fetched first-hand (10-14): mgorny's uv-build plea verified in-text (1.2-1.5 MiB wheels vs flit-core 45 KiB, SPARC rustix skips, 32-bit ebuild hacks); the release-churn claim independently confirmed on PyPI: exactly 12 uv-build releases in the 30 days prior (166 versions total, latest 0.13.0).",
+    "jp": "Gentoo開発者のブログ——メンテナによる一次のディストロパッケージ視点。一次確認済み（10-14）：mgornyのuv-build請願を本文で確認（ホイール1.2-1.5 MiB vs flit-core 45 KiB、SPARCのrustixスキップ、32ビットebuildハック）；リリース頻度はPyPIで独立確認：直前30日間にちょうど12リリース（計166バージョン、最新0.13.0）。",
+    "zh": "Gentoo 开发者博客——维护者的一手发行版打包视角。已一手核验（10-14）：mgorny 的 uv-build 呼吁正文属实（wheel 1.2-1.5 MiB 对 flit-core 45 KiB、rustix 跳过 SPARC、32 位 ebuild hack）；发布频率已在 PyPI 独立确认：此前 30 天恰好 12 个版本（共 166 个版本，最新 0.13.0）。"
   },
   "blogs.gnome.org": {
     "cat": "vendor",
@@ -3454,6 +3499,15 @@
     "jp": "Effect公式ドキュメント/リリースサイト —— Effect 4.0（依存ゼロコア、バンドル/スループット数値、2029年までのLTS保証）の一次情報。ベンチは作者自測、採用数値はnpmで検証可能。",
     "zh": "Effect 官方文档/发布站——Effect 4.0（零依赖核心、包体/吞吐数字、2029 年 LTS 承诺）的一手来源。基准为作者自测，采用数据可对 npm 核验。"
   },
+  "eg2.haku.sh": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Embedding Gemma Transcribe — indie free Mac app repurposing Google's EmbeddingGemma 2 as STT. Fetched first-hand (10-14): 288x / 12.6s per hour / 715 MB / ~229k words all on-page, and the honesty is real — the comparison table self-labels 'a rough guide, not a like-for-like ranking' and discloses WER ~5% vs 2-3% for leading models. Numbers self-measured; cross-checked against Google's EmbeddingGemma 2 release (covered 10-07).",
+    "jp": "Embedding Gemma Transcribe——GoogleのEmbeddingGemma 2をSTTに転用する個人製無料Macアプリ。一次確認済み（10-14）：288倍/1時間12.6秒/715 MB/約22.9万語すべて掲載、誠実さも本物——比較表は自己ラベルで『大まかな目安、同等比較ではない』と明示し、WER約5%（先行モデルは2-3%）を開示。数値は自己測定；GoogleのEmbeddingGemma 2リリース（10-07掲載）と突合。",
+    "zh": "Embedding Gemma Transcribe——将 Google EmbeddingGemma 2 改作 STT 的个人免费 Mac 应用。已一手核验（10-14）：288×/每小时 12.6 秒/715 MB/约 22.9 万词均在页面，且足够诚实——对比表自带『粗略指南、非同条件排名』标注并披露 WER 约 5%（领先模型 2-3%）。数字为自测；与 Google EmbeddingGemma 2 发布（10-07 已收录）交叉核验。"
+  },
   "eiln.github.io": {
     "cat": "research",
     "cred": "high",
@@ -3778,6 +3832,15 @@
     "jp": "Fastpotify のランディングページ——Carmine Paolino による egui + librespot のネイティブ Spotify クライアント。プロジェクト自己記述であり、リポジトリ（crmne/fastpotify）と HN スレッドと共引用。",
     "zh": "Fastpotify 的落地页——Carmine Paolino 基于 egui + librespot 的原生 Spotify 客户端；为项目自述，与仓库（crmne/fastpotify）及 HN 讨论共引。"
   },
+  "felixcloutier.com": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Felix Cloutier's mechanically-separated x86 instruction reference — the community-standard assembly reference. Fetched first-hand (10-14): vfmaddrnd231pd listed as V/V FMA with the SDM's VEX.DDS encodings and _mm_fmaddround_pd intrinsics, no unimplemented flag — exactly the stale-documentation fossil the ghost-instruction item turns on. Cross-checked against purplesyringa's investigation (GNU as rejects the mnemonic; #UD on Haswell; dropped from the 2026 SDM).",
+    "jp": "Felix Cloutierの機械分離x86命令リファレンス——アセンブリリファレンスのコミュニティ標準。一次確認済み（10-14）：vfmaddrnd231pdがV/V FMAとしてSDMのVEX.DDSエンコーディングと_mm_fmaddround_pd組み込み関数付きで掲載、未実装フラグなし——幽霊命令itemの根拠たる古文書の化石そのもの。purplesyringaの調査（GNU asはニーモニック拒否、Haswellで#UD、2026 SDMから削除）と突合。",
+    "zh": "Felix Cloutier 的机械提取版 x86 指令参考——汇编参考的社区标准。已一手核验（10-14）：vfmaddrnd231pd 以 V/V FMA 列出，带 SDM 的 VEX.DDS 编码与 _mm_fmaddround_pd 内建函数，无未实现标记——正是幽灵指令条目所依据的过期文档化石。与 purplesyringa 的调查交叉核验（GNU as 拒绝该助记符；Haswell 上 #UD；2026 SDM 已删除）。"
+  },
   "felonybench.com": {
     "cat": "data",
     "cred": "med",
@@ -3848,6 +3911,15 @@
     "en": "Firecrawl's official blog; first-hand for the pdf-inspector/AnyDoc parser releases.",
     "jp": "Firecrawl公式ブログ。pdf-inspector/AnyDocパーサー発表の一次情報。",
     "zh": "Firecrawl 官方博客；pdf-inspector/AnyDoc 解析器发布的一手来源。"
+  },
+  "firefox.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Mozilla's product marketing — the Firefox Enterprise launch page. Fetched first-hand (10-14): on-prem console, external-connection controls, extension governance, Lockdown Mode, native DLP, SIEM export, 'AI controls — allow, restrict or disable AI tools', Thunderbird Enterprise 'Coming Soon', and the DORA/GDPR/NIS2/ISO27001/SOC2 badges all on-page; ESR genuinely absent. Marketing copy — the HN thread (490+ pts) quotes the same feature set.",
+    "jp": "Mozillaの製品マーケティング——Firefox Enterprise発表ページ。一次確認済み（10-14）：オンプレコンソール、外部接続制御、拡張機能ガバナンス、Lockdown Mode、ネイティブDLP、SIEMエクスポート、『AI controls — allow, restrict or disable AI tools』、Thunderbird Enterprise『Coming Soon』、DORA/GDPR/NIS2/ISO27001/SOC2バッジすべて掲載；ESRは本当に不在。マーケティング文——HNスレッド（490+ pts）が同じ機能セットを引用。",
+    "zh": "Mozilla 产品营销——Firefox Enterprise 发布页。已一手核验（10-14）：本地部署控制台、外部连接控制、扩展治理、Lockdown Mode、原生 DLP、SIEM 导出、『AI controls — allow, restrict or disable AI tools』、Thunderbird Enterprise『Coming Soon』及五项合规徽章均在页面；ESR 确实缺席。属营销文案——HN 讨论串（490+ 分）引用同一功能集。"
   },
   "fireworks.ai": {
     "cat": "vendor",
@@ -4324,6 +4396,15 @@
     "en": "The open-source firehose — every repo's canonical home; highest volume, but raw and unvetted (always verify stars/recency).",
     "jp": "オープンソースの源泉 —— 全リポジトリの正規ホーム。量は最大だが生のまま（スター数・新しさは必ず検証）。",
     "zh": "开源信息的总闸 —— 每个仓库的权威主页；体量最大，但原始且未经核验（务必核实星数与新鲜度）。"
+  },
+  "githubstatus.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "GitHub's official status page (Atlassian Statuspage) — the authoritative incident timeline. Fetched first-hand (10-14): the Oct 12 incident page matches the item's reconstruction minute-for-minute (12:21 UTC investigate → 13:02 PRs normal → 13:38 partial mitigation → 14:35 Issues/Actions → 19:28 backlog → 20:16 resolved), with the RCA promised but unlinked. Point-in-time only — history lives on the timeline page, not per-incident.",
+    "jp": "GitHub公式ステータスページ（Atlassian Statuspage）——インシデントタイムラインの一次情報源。一次確認済み（10-14）：10月12日のインシデントページは項目の再構築と分単位で一致（12:21 UTC調査開始 → 13:02 PR正常 → 13:38部分的緩和 → 14:35 Issues/Actions → 19:28バックログ → 20:16解決）、RCAは約束済みで未リンク。時点情報のみ——履歴はtimelineページにあり個別インシデントにはない。",
+    "zh": "GitHub 官方状态页（Atlassian Statuspage）——事件时间线的权威来源。已一手核验（10-14）：10 月 12 日事件页与条目重构逐分钟一致（12:21 UTC 开始调查 → 13:02 PR 恢复 → 13:38 缓解部分成功 → 14:35 Issues/Actions → 19:28 积压 → 20:16 解决），RCA 承诺发布但未链接。仅为时点信息——历史在 timeline 页而非单个事件页。"
   },
   "gitlab.com": {
     "cat": "code",
@@ -5124,6 +5205,15 @@
     "jp": "分析ブログ（キャッシュ読み取り価格崩落を論じる「The AI Race Just Got Awkward」）。DeepSeek スペック数値は DeepSeek 本家の V4.1-Flash モデルページと交叉検証済み（890 バイト/トークン、09-10報道）。「採用された」という主張は依然著者の価格推論——結論は報道ではなく論点として扱うこと。",
     "zh": "分析博客（〈The AI Race Just Got Awkward〉，论缓存读取价格坍缩）。其 DeepSeek 规格数字已对照 DeepSeek 本家 V4.1-Flash 模型页交叉验证（890 字节/token，见本 feed 09-10 报道）；但\"架构被采纳\"仍是作者的定价推断——结论当论点读，不当报道读。"
   },
+  "intel.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Intel product pages — the D270 GPU page read first-hand (10-14): 480 GB LPDDR5X / 32 Xe3P cores / 256 XMX / 350 W / PCIe 5.0 all on-page, and the absence claims hold — no bandwidth, no FLOPS, no price, no date, with projections explicitly disclaimed as 'Intel internal analysis as of Feb 2026'. Vendor claims of an unreleased product; the HN thread's 1.5 TB/s & 1.3 PFLOPS figures remain press-leak numbers, not page facts.",
+    "jp": "Intelの製品ページ——D270 GPUページを一次確認（10-14）：480 GB LPDDR5X/32 Xe3Pコア/256 XMX/350 W/PCIe 5.0すべて掲載、欠落の主張も成立——帯域幅・FLOPS・価格・日付なし、予測は『Intel internal analysis as of Feb 2026』と明示免责。未発売製品のベンダー主張；HNスレッドの1.5 TB/s・1.3 PFLOPSはリーク数値のまま、ページの事実ではない。",
+    "zh": "Intel 产品页——一手核验 D270 GPU 页（10-14）：480 GB LPDDR5X/32 Xe3P 核心/256 XMX/350 W/PCIe 5.0 均在页面，缺席论断同样成立——无带宽、无 FLOPS、无价格、无日期，预测明确免责为『Intel internal analysis as of Feb 2026』。未发布产品的厂商主张；HN 讨论串的 1.5 TB/s 与 1.3 PFLOPS 仍是爆料数字，非页面事实。"
+  },
   "interconnects.ai": {
     "cat": "research",
     "cred": "high",
@@ -5547,6 +5637,15 @@
     "jp": "ウクライナの英語系ニュース媒体——省庁の帰属付きの戦時一次報道が強い（キウ データセンター攻撃、数字化转型省により約 10 万世帯オフライン）；未確認と自己表示する主張はそのまま掲載。ページ内容 + HN/BBC 版と突合済み（09-26）。",
     "zh": "乌克兰英文新闻媒体——战时第一手报道有力，附部委归属（基辅数据中心打击，数字化转型部称约 10 万户离线）；其自标未证实的主张按原样引用。已与页面内容 + HN/BBC 版本交叉核验（09-26）。"
   },
+  "kylekukshtel.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Kyle Kukshtel's practitioner blog — gamedev/agent-workflow write-ups from a working indie developer. Fetched first-hand (10-14): all seven harness techniques verified in-text (seeded randomness, odiff quantitative similarity scores, save/load day one, 'Thing-Driven Development', serializable commands, simulation-as-library, samply text profiling). Cross-checked: odiff is a real maintained tool (dmtrKovalenko/odiff, 3.2k★). Single-practitioner claims — n=1 until replicated.",
+    "jp": "Kyle Kukshtelの実践者ブログ——現役インディー開発者によるgamedev/エージェントワークフロー解説。一次確認済み（10-14）：7つのハーネス技法すべて本文で確認（シード固定乱数、odiffの定量的類似度スコア、初日セーブ/ロード、『Thing-Driven Development』、シリアライズ可能コマンド、ライブラリとしてのシミュレーション、samplyテキストプロファイリング）。突合：odiffは実在のメンテナンスされたツール（dmtrKovalenko/odiff、3.2k★）。単一実践者の主張——再現されるまでn=1。",
+    "zh": "Kyle Kukshtel 的实践者博客——在职独立开发者写 gamedev/智能体工作流。已一手核验（10-14）：七项 harness 技术全部正文核实（种子随机、odiff 定量相似度评分、首日存读档、『Thing-Driven Development』、可序列化命令、模拟作为独立库、samply 文本剖析）。交叉核验：odiff 为真实维护中的工具（dmtrKovalenko/odiff，3.2k★）。单一实践者主张——被复现前 n=1。"
+  },
   "labs.cloudsecurityalliance.org": {
     "cat": "security",
     "cred": "high",
@@ -5844,6 +5943,15 @@
     "jp": "Linebender——Rustグラフィックスエコシステム組織（wgpu関連、Xilem、Vello）。09-25に取得：Fearless SIMD 1.0 の記事は安全性アーキテクチャ（kernel!マクロ、監査済みtransmute）、採用数、3年セキュリティ更新のコミットメントを自ら明記。2018/2025の predecessor 記事とも整合。",
     "zh": "Linebender——Rust 图形生态组织（wgpu 相关项目、Xilem、Vello）。09-25 抓取：Fearless SIMD 1.0 文章写明自身安全架构（kernel! 宏、经审计的 transmute）、采用量与 3 年安全更新承诺；与该项目 2018/2025 年的前作文章一致。"
   },
+  "linkedin.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "LinkedIn Pulse long-form posts — platform for industry figures' essays (Rich Hickey's 'AI' Is Not a Tool ran here, Oct 11). Fetched first-hand (10-14): full text visible without login, all attributed quotes verbatim ('LLMs are not wielded. LLMs are automation.', the drive-thru analogy, 'You miss learning how to think'). Author-claims-only; cross-checked via the yyhh.org rebuttal and both HN threads quoting the same lines.",
+    "jp": "LinkedIn Pulseの長文投稿——業界人物のエッセイプラットフォーム（Rich Hickeyの『AI』Is Not a Toolはここに掲載、10-11）。一次確認済み（10-14）：ログイン不要で全文表示、帰属引用はすべて逐語通り（『LLMs are not wielded. LLMs are automation.』、ドライブスルー比喩、『You miss learning how to think』）。著者の主張のみ；yyhh.orgの反論と同じ行を引用する両HNスレッドで突合。",
+    "zh": "LinkedIn Pulse 长文——业界人物文章的平台（Rich Hickey《'AI' Is Not a Tool》10-11 发于此）。已一手核验（10-14）：无需登录即可见全文，所有归属引文逐字属实（'LLMs are not wielded. LLMs are automation.'、得来速类比、'You miss learning how to think'）。仅为作者主张；经 yyhh.org 反驳文及两条引用同句的 HN 讨论串交叉核验。"
+  },
   "linux.org": {
     "cat": "community",
     "cred": "low",
@@ -5988,6 +6096,15 @@
     "jp": "Armin Ronacher氏（Flask、Sentry）の技術ブログ——長年の実践者による一次的な長文レビュー。エージェント評価記事は否定的結果も自ら記載。クロスチェック済み（09-12）：Astra 35時間実験の数値は本文とHN議論と一致。",
     "zh": "Armin Ronacher（Flask、Sentry）的工程博客——长期的一线实践者长文；其智能体评测文章自带负面结果。已交叉核验（09-12）：Astra 35 小时实验的数字与其原文及 HN 讨论一致。"
   },
+  "ludeon.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Ludeon Studios' dev blog — the RimWorld studio's own announcements, unusually numbers-forward. Fetched first-hand (10-14): the Waylith/1.7 post verified in-text (2.2x late-game, 1500-mod load 14→6 min, stated 2-4x range, bidirectional save compatibility, 'unstable' Steam branch, new-game tease). Vendor-measured numbers but shipped and player-verifiable on the public beta; HN thread (68+ pts) corroborates.",
+    "jp": "Ludeon Studiosの開発ブログ——RimWorldスタジオ自身の発表、異例なほど数値提示が多い。一次確認済み（10-14）：Waylith/1.7投稿を本文で確認（終盤2.2倍、1500 Modのロード14→6分、提示レンジ2-4倍、双方向セーブ互換、Steam『unstable』ブランチ、新作示唆）。ベンダー測定値だが製品化済みで公開ベータで検証可能；HNスレッド（68+ pts）が裏付け。",
+    "zh": "Ludeon Studios 开发博客——RimWorld 工作室自家公告，罕见地给出实测数字。已一手核验（10-14）：Waylith/1.7 文正文核实（终盘 2.2×、1500 mod 加载 14→6 分钟、标称 2-4× 区间、双向存档兼容、Steam『unstable』分支、新作暗示）。厂商自测数字但已随公开 beta 可玩家验证；HN 讨论串（68+ 分）佐证。"
+  },
   "lumify.ai": {
     "cat": "vendor",
     "cred": "low",
@@ -6032,6 +6149,15 @@
     "en": "machine0's product and pricing site (YC S26); the per-hour GPU/CPU rates and suspend-to-zero billing terms are stated precisely enough to compare against other agent-runtime hosts — a vendor page whose value is the price sheet, not the positioning.",
     "jp": "machine0の製品・料金ページ（YC S26）。GPU／CPUの時間単価と「サスペンドで課金停止」の条件が他のエージェントランタイム事業者と比較できる精度で明記されている——価値は価格表にあり、ポジショニングの文言にはない。",
     "zh": "machine0 的产品与定价页（YC S26）；GPU/CPU 时费与「挂起即停止计费」条款写得足够精确，可与其他 agent 运行时厂商横向对比——其价值在价目表而非定位话术。"
+  },
+  "machinelearning.apple.com": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Apple Machine Learning Research page — abstracts and posts for Apple's published ML work. Cross-checked (10-14): the Minions distributed GPU cloud post matches arXiv 2610.12970 (title, authors, Oct 9 submission); page-level claims about scale are absent from the abstract itself, so keep numbers to the paper.",
+    "jp": "Apple Machine Learning Research のページ——Apple の公開 ML 研究の要約と投稿。クロスチェック済み（10-14）：Minions 分散 GPU クラウドの投稿は arXiv 2610.12970（タイトル・著者・10月9日 提出）と一致；ページ単位のスケール記述はアブストラクトにはないため、数値は論文に合わせること。",
+    "zh": "Apple 机器学习研究页面——Apple 已发表 ML 工作的摘要与文章。已交叉核验（10-14）：Minions 分布式 GPU 云一文与 arXiv 2610.12970 一致（标题、作者、10月9日 提交）；页面层面的规模说法摘要里没有，数字请以论文为准。"
   },
   "macmagazine.com.br": {
     "cat": "news",
@@ -6357,6 +6483,15 @@
     "jp": "METR、フロンティアモデル評価の非営利団体——インシデント開示は一次情報で限定が正確。一次検証済み（09-02）：8/31 セキュリティ更新の fail-open 認証バグ、約 $60万の無料クレジット消費、5月の攻撃者プロービングはいずれも報告どおり。",
     "zh": "METR，前沿模型评测非营利机构——其事件披露为一手且限定精确。已一手核验（09-02）：8 月 31 日安全更新中的鉴权 fail-open 缺陷、约 $60 万免费额度被消耗、以及 5 月攻击者探测事件均与报道一致。"
   },
+  "micahflee.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Micah Lee's blog — veteran security engineer (ex-The Intercept infosec director); migration/privacy posts with a threat model and receipts. Fetched first-hand (10-14): the ~4-month open-weights lag, GLM-5.3-vs-Opus-5.5 take, cop-agent false positives, and the exact stack prices all verified in-text. Its key factual citation (ZCode silently uploading repos to Alibaba Cloud) matches this feed's own 09-18 Reuters-sourced item.",
+    "jp": "Micah Leeのブログ——ベテランセキュリティエンジニア（元The Intercept情報セキュリティ部長）；脅威モデルと根拠付きの移行/プライバシー解説。一次確認済み（10-14）：約4ヶ月のオープンウェイト遅延、GLM-5.3対Opus 5.5の評価、監視エージェントの誤検知、正確なスタック価格をすべて本文で確認。主要な事実引用（ZCodeがリポジトリをAlibaba Cloudへ無断送信）は当フィードの09-18 Reuters取材項目と一致。",
+    "zh": "Micah Lee 的博客——资深安全工程师（前 The Intercept 信息安全总监）；带威胁模型与凭据的迁移/隐私文章。已一手核验（10-14）：约 4 个月开源权重滞后、GLM-5.3 对 Opus 5.5 的评价、监控代理误报、确切的栈与价格均正文核实。其关键事实引用（ZCode 无声上传仓库至阿里云）与本站 09-18 路透社来源条目一致。"
+  },
   "microsoft.com": {
     "cat": "security",
     "cred": "high",
@@ -6563,6 +6698,15 @@
     "en": "MongoDB newsroom — first-party product announcements (Atlas Managed MCP). Read first-hand: hosted MCP endpoint + agent list confirmed; OAuth 2.1 detail lives in docs/zh coverage.",
     "jp": "MongoDB ニュースルーム——公式製品発表（Atlas マネージド MCP）。直接読了：ホスト型 MCP エンドポイント + 対応エージェントを確認。OAuth 2.1 の詳細はドキュメント/中国語報道。",
     "zh": "MongoDB 新闻室——官方产品发布（Atlas 托管 MCP）。已一手核读：托管 MCP 端点 + 支持 agent 列表属实；OAuth 2.1 细节在文档/中文报道中。"
+  },
+  "mortoray.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "mortoray (Edaqa Mortoray)'s engineering essays — opinionated but carefully-argued long-form. Fetched first-hand (10-14): the hacking-charges argument verified in-text (four design choices, G20 three-element test, intent transfer), and its incident citations point to independently-reported events (OpenAI/Australia → ABC News; Google three companies → NYT). Legal argument by a non-lawyer — reasoning, not doctrine.",
+    "jp": "mortoray（Edaqa Mortoray）のエンジニアリングエッセイ——論調は明快だが議論は丁寧な長文。一次確認済み（10-14）：ハッキング起訴論を本文で確認（4つの設計選択、G20の3要件テスト、意図の転嫁）、事件引用は独立報道のある出来事を指す（OpenAI/豪州 → ABC News、Google 3社 → NYT）。法律家ではないによる法的議論——教義ではなく論証。",
+    "zh": "mortoray（Edaqa Mortoray）的工程长文——观点鲜明但论证仔细。已一手核验（10-14）：起诉黑客罪论证正文核实（四项设计选择、G20 三要件、意图转移），其事件引用指向独立报道过的事件（OpenAI/澳洲 → ABC News；Google 三家公司 → 纽约时报）。非法律人士的法律论证——是论理而非法理。"
   },
   "motherduck.com": {
     "cat": "vendor",
@@ -7685,6 +7829,15 @@
     "jp": "中国のPHP開発者向けチュートリアル/ニュースサイト。OSSリリースの二次報道。一次価値は低い。",
     "zh": "中文 PHP 开发者教程/新闻站；对开源发布的二手报道。一手价值低。"
   },
+  "phreak.ing": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "low",
+    "en": "Phreak.ing — a free anonymous community PBX styled on 1980s phone phreaking (Asterisk + browser softphone + IRC bridge + SMS gateway). Fetched first-hand (10-14): every claimed feature on-page and live (*69, *67, #phreak bridge, dial-code list via SMS 742735, fail2ban). 'No logs' is a promise, not an audit; treat dial-in infrastructure as untrusted. Cross-checked via the Show HN thread (95+ pts) where the operator answers setup questions.",
+    "jp": "Phreak.ing——1980年代のフォリーキングを模した無料の匿名コミュニティPBX（Asterisk + ブラウザソフトフォン + IRCブリッジ + SMSゲートウェイ）。一次確認済み（10-14）：主張された全機能がページ上で稼働（*69、*67、#phreakブリッジ、SMS 742735でのダイヤルコード一覧、fail2ban）。『ログ保持なし』は監査ではなく誓い；ダイヤルイン基盤は信頼しないこと。運営者が設定質問に答えるShow HNスレッド（95+ pts）で突合。",
+    "zh": "Phreak.ing——仿 1980 年代电话飞客的免费匿名社区 PBX（Asterisk + 浏览器软电话 + IRC 桥 + SMS 网关）。已一手核验（10-14）：所有宣称功能均在线在页（*69、*67、#phreak 桥、SMS 742735 查拨号码表、fail2ban）。『不留日志』是承诺而非审计；拨入基础设施视为不可信。经 Show HN 讨论串（95+ 分，运营者亲自答疑）交叉核验。"
+  },
   "pingwest.com": {
     "cat": "news",
     "cred": "med",
@@ -8636,6 +8789,15 @@
     "jp": "Ryan Faheyの個人研究ブログ——再現可能な成果物を伴う慎重な一次暗号/RE研究。クロスチェック済み（09-17）：PDF417バーコード鍵復元の記事は検証可能な一次文書（CA DMVの技術概説、did:web鍵ドキュメント、SEC 1仕様）を引用し、復元したP-256鍵とブラウザ検証器を公開、HNの議論とも一致。",
     "zh": "Ryan Fahey 的个人研究博客——带可复现产物的严谨一手密码学/逆向研究。已交叉核验（09-17）：其 PDF417 条码密钥恢复一文引用了可验证的一手文档（加州 DMV 技术概览、did:web 密钥文档、SEC 1 规范），公布了恢复的 P-256 公钥和浏览器验证器，与 HN 讨论一致。"
   },
+  "ryanbigg.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Ryan Bigg's personal blog — the Ruby community fixture's first-hand accounts (author of 'Rails 4 in Action', maintainer of widely-downloaded gems). Fetched first-hand (10-14): the Leaving Tech specifics verified in-text (20 years, 3 dozen+ applications, 24 rejections, the AI-screening quote, Warrnambool/remote, 'mental harm and anguish'). Self-reported job-search data; the author's standing is publicly verifiable, the rejection counts are not.",
+    "jp": "Ryan Biggの個人ブログ——Rubyコミュニティの重鎮による一次記録（『Rails 4 in Action』著者、広く使われるgemのメンテナ）。一次確認済み（10-14）：Leaving Techの詳細を本文で確認（20年、応募3ダース超、24回の拒否、AIスクリーニング発言、Warrnambool/リモート、『mental harm and anguish』）。求職データは自己申告；著者の地位は公開検証可能だが拒否数は不可能。",
+    "zh": "Ryan Bigg 的个人博客——Ruby 社区元老的一手记录（《Rails 4 in Action》作者、广泛使用的 gem 维护者）。已一手核验（10-14）：Leaving Tech 细节正文核实（20 年、投递 3 打余、24 次拒信、AI 筛选引语、Warrnambool/远程、'mental harm and anguish'）。求职数据为自述；作者声望可公开验证，拒信数字不可。"
+  },
   "safateam.com": {
     "cat": "security",
     "cred": "high",
@@ -8671,6 +8833,15 @@
     "en": "Salesforce official newsroom + product pages; first-hand for the Aug 2026 'Claudeforce' partnership with Anthropic (37-skill plugin, Claude as Agentforce reasoning engine). Cross-validated (08-28): the plugin/skill counts and MCP-based routing (AIforce) match the press release and product page, and the ~14% after-hours stock move is widely corroborated.",
     "jp": "Salesforce公式ニュースルーム＆製品ページ。2026年8月のAnthropicとの「Claudeforce」提携（37スキルプラグイン、ClaudeがAgentforceの推論エンジンに）の一次情報源。突合済み（08-28）：プラグイン/スキル数とMCPベースのルーティング（AIforce）はプレスリリースと製品ページで一致し、約14%の時間外上昇も広く裏付けられている。",
     "zh": "Salesforce 官方新闻稿与产品页；2026 年 8 月与 Anthropic 的“Claudeforce”合作（37 技能插件、Claude 作为 Agentforce 推理引擎）的一手来源。已交叉核验（08-28）：插件/技能数量与基于 MCP 的路由（AIforce）在新闻稿与产品页一致，约 14% 的盘后涨幅也得到多方印证。"
+  },
+  "sammystraus.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Sammy Straus's personal dev blog — first-hand field measurements from running small web services. Fetched first-hand (10-14): the AI-bot-flood post verified in-text (~half of traffic from one change-watching summarizer, per-endpoint logging as the tell, robots.txt + rate limits as the fix, WordPress probes on a non-WordPress site). Single-site observation, methods stated plainly — the n=1 measurement the agentic-web-tax thesis rests on, so treat the ratio as indicative.",
+    "jp": "Sammy Strausの個人開発ブログ——小規模Webサービス運用からの一次の現場計測。一次確認済み（10-14）：AIボット殺到投稿を本文で確認（変化監視サマライザー1つでトラフィック約半分、エンドポイント単位ログが決め手、robots.txt+レート制限が対処、非WordPressサイトへのWordPressプローブ）。単一サイトの観測、手法は平明——エージェントWeb税テーゼの依拠するn=1計測ゆえ、比率は目安と扱うこと。",
+    "zh": "Sammy Straus 的个人开发博客——运营小型 Web 服务的一手现场测量。已一手核验（10-14）：AI 机器人洪流一文正文核实（单一变更监视摘要器占约一半流量、按端点日志为破案关键、robots.txt + 限速为对策、非 WordPress 站点遭 WordPress 探测）。单站观测、方法透明——是智能体网络税论题所依赖的 n=1 测量，比例仅作参考。"
   },
   "sancho.bearblog.dev": {
     "cat": "community",
@@ -9112,6 +9283,15 @@
     "en": "Simon Green's personal engineering writeups. Cross-checked (10-06): the BinRange UWB post's measurements (sub-2cm single calibration, 37%→100% orientation fix, 37.28m max reading, ~$124+$330 bill) and its honest failures ('choosing a different radio doesn't make parked cars disappear', unexplained reception gap, unmeasured battery) are all on-page — a model of measurement-with-caveats writing. HN 154 pts.",
     "jp": "Simon Green の個人エンジニアリング記事。クロスチェック済み（10-06）：BinRange UWB 記事の計測（単回校正で2cm未満、アンテナ指向で37%→100%、最遠37.28m、約$124+$330の費用）と誠実な失敗記録（「ラジオを変えても停車中の車は消えない」、未解明の受信ギャップ、未測定のバッテリー）がすべてページ上にある。但し書き付き計測の模範的書き方。HN 154pt。",
     "zh": "Simon Green 的个人工程随笔。已交叉核验（10-06）：BinRange UWB 文章的测量（单次校准亚 2 厘米、天线定向 37%→100%、最远 37.28 米、约 124+330 美元账单）及其诚实的失败记录（\"换无线电不会让停着的车消失\"、未解释的接收间隙、未测的电池）均在页面上——带保留测量的写作范本。HN 154 分。"
+  },
+  "skills.sh": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Vercel's agent-skills registry — the install-count leaderboard behind `npx skills` (self-described 'The Open Agent Skills Ecosystem'). Fetched first-hand (10-14): 'Made with care by Vercel' footer, live leaderboard (find-skills 3.8M installs all-time; 1,307,338 tab total), and ~20 supported-agent badges all on-page. Cross-checked: the backing repo vercel-labs/skills live at 34.4k★ MIT via GitHub API (the item's 34,143★ had drifted +259). Install counts are self-reported telemetry — not audited.",
+    "jp": "Vercelのエージェントスキルレジストリ——`npx skills`の裏にあるインストール数リーダーボード（自称『The Open Agent Skills Ecosystem』）。一次確認済み（10-14）：『Made with care by Vercel』フッター、稼働中リーダーボード（find-skillsは通算380万インストール、タブ合計1,307,338）、約20の対応エージェントバッジすべて掲載。突合：基盤リポジトリvercel-labs/skillsはGitHub APIで34.4k★ MIT稼働（項目の34,143★から+259ドリフト）。インストール数は自己申告テレメトリ——監査済みではない。",
+    "zh": "Vercel 的智能体技能注册表——`npx skills` 背后的安装量排行榜（自称 'The Open Agent Skills Ecosystem'）。已一手核验（10-14）：'Made with care by Vercel' 页脚、实时排行榜（find-skills 累计 380 万安装、标签页合计 1,307,338）、约 20 个受支持智能体徽章均在页面。交叉核验：底层仓库 vercel-labs/skills 经 GitHub API 实测 34.4k★ MIT（条目的 34,143★ 已漂移 +259）。安装数为自报遥测——未经审计。"
   },
   "skillsllm.com": {
     "cat": "code",
@@ -9740,6 +9920,15 @@
     "en": "TantoSec's research blog — primary exploit-chain writeups with reproduction detail (the Telerik padding-oracle chain); vendor-independent, publishes its own verification limits.",
     "jp": "TantoSec のリサーチブログ——再現詳細付きの一次エクスプロイトチェーン解説(Telerik padding-oracle チェーン);ベンダー非依存で、自らの検証限界も公表。",
     "zh": "TantoSec 研究博客——带复现细节的一手利用链分析(Telerik padding-oracle 链);独立于厂商,发布自身的验证边界。"
+  },
+  "taylor.town": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Taylor Troesh's (taylor.town) personal essays — retrospective scoring and contrarian takes on AI history. Fetched first-hand (10-14): the Kevin Kelly 2016 retrospective verified in-text (oligarchy/utility hits, 'not even Kelly foresaw the bitter lesson', the open-weights contradiction). The load-bearing Kelly quotes match the published text — 'oligarchy of two or three large, general-purpose cloud-based commercial intelligences' is cited verbatim in the Aspen Institute's 2017 AI report from The Inevitable.",
+    "jp": "Taylor Troesh（taylor.town）の個人エッセイ——AI史の回顧採点と異論のある視点。一次確認済み（10-14）：Kevin Kelly 2016回顧を本文で確認（寡占/ユーティリティ的中、『bitter lessonをKellyすら予見せず』、オープンウェイト矛盾）。要となるKelly引用は公刊文と一致——『oligarchy of two or three large, general-purpose cloud-based commercial intelligences』はAspen Instituteの2017年AI報告がThe Inevitableから逐語引用。",
+    "zh": "Taylor Troesh（taylor.town）的个人随笔——AI 史回顾评分与逆主流观点。已一手核验（10-14）：Kevin Kelly 2016 回顾正文核实（寡占/公用设施命中、'not even Kelly foresaw the bitter lesson'、开放权重矛盾）。关键 Kelly 引文与已刊文本一致——'oligarchy of two or three large, general-purpose cloud-based commercial intelligences' 在 Aspen Institute 2017 年 AI 报告中逐字引用自《The Inevitable》。"
   },
   "tcl-lang.org": {
     "cat": "code",
@@ -10505,6 +10694,15 @@
     "jp": "TypeSafe AI ベンダーブログ（Jev「システム1」モデル）。見出しの数値（193.6×/444.6×）はすべて自らの投稿で免責 —— 異なるセットアップ、補助の可能性、自家製ワークフロー、ウェイトリスト限定。主張の存在は HN スレッド（290+ pts）とクロスチェック；主張自体は未検証。",
     "zh": "TypeSafe AI 厂商博客（Jev \"系统一\"模型）。所有头条数字（193.6×/444.6×）都被其自己的文章免责——不同设置、可能有补贴、自编工作流、仅限候补。主张的存在已与其 HN 帖（290+ 分）交叉核对；主张本身未经证实。"
   },
+  "ua.news": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Ukrainian news aggregator/relay carrying international wire stories in English (e.g. RMF24 reporting). Cross-checked (10-14): its Fehmarnbelt tunnel cyberattack report matches the RMF24 original, Sund & Bælt's confirmation, and the HN thread; attribution remains open, so treat hybrid-warfare framing as speculation.",
+    "jp": "国際通信社の報道を英語で中継するウクライナのニュースアグリゲーター（RMF24 など）。クロスチェック済み（10-14）：フェーマルン・ベルト トンネルのサイバー攻撃報道は RMF24 の原報・Sund & Bælt の確認・HN スレッドと一致；帰属は未確定のため、ハイブリッド戦争のフレーミングは憶測として扱うこと。",
+    "zh": "乌克兰新闻聚合/转述站，以英文转载国际通讯社报道（如 RMF24）。已交叉核验（10-14）：其费马恩海峡隧道网络攻击报道与 RMF24 原始报道、Sund & Bælt 的确认及 HN 讨论一致；归属未定，混合战争框架应视为猜测。"
+  },
   "uber.com": {
     "cat": "vendor",
     "cred": "high",
@@ -10539,6 +10737,15 @@
     "en": "Official UN80 Work Package documents — the UN Data Commons launch's primary source (entity commitments, 2027 onboarding goal, Google.org funding). Cross-validated (09-18) against TechCrunch's coverage and the UNICEF benchmark numbers quoted therein.",
     "jp": "UN80 ワークパッケージの公式文書——UN Data Commons ローンチの一次ソース（機関コミット、2027年搭載目標、Google.org 資金）。クロスチェック済み（09-18、TechCrunch の報道とそこで引用された UNICEF ベンチマーク数値と照合）。",
     "zh": "UN80 工作包官方文档——UN Data Commons 发布的一手来源（实体承诺、2027 接入目标、Google.org 资助）。已交叉核验（09-18，对照 TechCrunch 报道及其引用的 UNICEF 基准数字）。"
+  },
+  "unisoc.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "Unisoc's product security bulletins — the CNA's own advisory channel for its modem/baseband silicon. Fetched first-hand (10-14): the SIB1 bulletin (v1.0, dated 10-01) names CWE-121, network access vector, affected chipsets T8100/T9100/UDX710. Cross-checked twice: NVD carries 9.8 CRITICAL v3.1 from the vendor (security@unisoc.com, Secondary) — but the bulletin's own printed rating reads 'High 8.3' while its own CVSS:3.1 vector string computes to 9.8. An internally inconsistent vendor score — trust the vector math, record both.",
+    "jp": "Unisocのプロダクトセキュリティ勧告——同社モデム/ベースバンドSiのCNA自身の助言チャネル。一次確認済み（10-14）：SIB1勧告（v1.0、10-01付）はCWE-121、ネットワークアクセスベクトル、対象チップセットT8100/T9100/UDX710を明記。二重に突合：NVDはベンダー（security@unisoc.com、Secondary）の9.8 CRITICAL v3.1を掲載——しかし勧告自身の表記は『High 8.3』で、同じ勧告のCVSS:3.1ベクトル文字列は9.8に計算される。内部矛盾のあるベンダースコア——ベクトル計算を信頼し、両方を記録。",
+    "zh": "紫光展锐（Unisoc）产品安全公告——其调制解调器/基带芯片 CNA 自己的通告渠道。已一手核验（10-14）：SIB1 公告（v1.0，日期 10-01）列明 CWE-121、网络访问向量、受影响芯片 T8100/T9100/UDX710。两次交叉核验：NVD 载有厂商（security@unisoc.com，Secondary）的 9.8 CRITICAL v3.1——但公告自身印制的等级为 'High 8.3'，而其自己的 CVSS:3.1 向量串计算得 9.8。内部矛盾的厂商评分——信向量计算，两者并录。"
   },
   "unite.ai": {
     "cat": "news",
@@ -10755,6 +10962,15 @@
     "en": "TokenPost (Vietnam) — blockchain/crypto news; co-cited with mixedbread for Toast 1. Treat tech-model claims as secondary.",
     "jp": "TokenPost（ベトナム）—— ブロックチェーン/暗号ニュース。Toast 1はmixedbreadと同一項目で共引用。技術モデル主張は二次シグナル扱い。",
     "zh": "TokenPost（越南）—— 区块链/加密货币新闻；Toast 1 与 mixedbread 同条共引。技术模型声明宜作二手信号。"
+  },
+  "voicestudio.sh": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "VoiceStudio's official site — marketing page for the local-first voice suite (AGPL desktop app + closed Pro tier). Fetched first-hand (10-14): the ElevenLabs row-by-row comparison, 'No account, no cloud', and the AGPL/Pro-$99 split all on-page; the 646-languages claim is project-published and unverified. Cross-checked: the repo debpalash/VoiceStudio live at 62.9k★ AGPL-3.0 via GitHub API. Note the landing page omits the MCP/agent-install docs — those live only in the repo.",
+    "jp": "VoiceStudio公式サイト——ローカルファースト音声スイート（AGPLデスクトップアプリ+クローズドPro階層）のマーケティングページ。一次確認済み（10-14）：ElevenLabs行単位比較、『No account, no cloud』、AGPL/Pro-99ドルの分離すべて掲載；646言語の主張はプロジェクト公表値で未検証。突合：リポジトリdebpalash/VoiceStudioはGitHub APIで62.9k★ AGPL-3.0稼働。注：ランディングページはMCP/エージェントインストール文書に言及せず——リポジトリにのみ存在。",
+    "zh": "VoiceStudio 官网——本地优先语音套件（AGPL 桌面应用 + 闭源 Pro 层）的营销页。已一手核验（10-14）：ElevenLabs 逐行对比、'No account, no cloud'、AGPL/Pro-$99 分层均在页面；646 种语言为项目自报数字、未验证。交叉核验：仓库 debpalash/VoiceStudio 经 GitHub API 实测 62.9k★ AGPL-3.0。注意落地页未提 MCP/智能体安装文档——仅存在于仓库内。"
   },
   "vuldb.com": {
     "cat": "security",
@@ -11266,6 +11482,15 @@
     "en": "Yureka Lilian's personal blog — deep Apple-silicon Linux bring-up writeups (the M4 WFI register-zeroing finding). Single-author, but the load-bearing claims are checkable in mainline: the idle= bootarg fix and m1n1 workaround are merged upstream. Cross-validated (10-03) via the merged-fix trail and the HN thread.",
     "jp": "Yureka Lilian の個人ブログ —— Apple シリコン向け Linux ブリングアップの深い書き込み（M4 の WFI レジスタゼロ化の発見）。単一著者だが、肝の主張はメインラインで検証可能：idle= bootarg の修正と m1n1 の回避策は上流マージ済み。突合済み（10-03）：マージ記録と HN スレッド経由。",
     "zh": "Yureka Lilian 的个人博客 —— 深度的 Apple 芯片 Linux bring-up 长文（M4 WFI 清零寄存器的发现）。单一作者，但关键主张可在主线内核核查：idle= bootarg 修复与 m1n1 变通均已合入上游。已交叉核验（10-03）：合入记录与 HN 讨论串。"
+  },
+  "yyhh.org": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Huahai Yang's personal blog (yyhh.org founder) — first-principles essays on AI and cognition; published the same-day rebuttal to Hickey's tool/automation piece. Fetched first-hand (10-14): the four counter-arguments verified in-text ('Even by his definition, an LLM can be something a human wields'; evaluation-criteria-not-prerequisites; compilers/spreadsheets; skilled wielding vs delegation). Its quotations of Hickey's definitions match the LinkedIn original fetched the same run — a rebuttal that quotes its target accurately.",
+    "jp": "Huahai Yang（yyhh.org創業者）の個人ブログ——AIと認知に関する原理主義的エッセイ；Hickeyの道具/自動化論への当日反論を発表。一次確認済み（10-14）：4つの反論を本文で確認（『Even by his definition, an LLM can be something a human wields』；評価基準であって前提ではない；コンパイラ/スプレッドシート；熟練した操縦対委任）。Hickey定義の引用は同回で取得したLinkedIn原文と一致——対象を正確に引用する反論。",
+    "zh": "Huahai Yang（yyhh.org 创始人）的个人博客——AI 与认知的第一性原理随笔；发布了对 Hickey 工具/自动化论的当日反驳。已一手核验（10-14）：四项反驳论点正文核实（'Even by his definition, an LLM can be something a human wields'；是评价标准而非前提；编译器/电子表格；熟练驾驭与外包）。其对 Hickey 定义的引用与同次抓取的 LinkedIn 原文一致——是准确引用靶文的反驳。"
   },
   "z.ai": {
     "cat": "vendor",

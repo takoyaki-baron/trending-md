@@ -133,3 +133,19 @@ Sources: [Whistle 发布公告](https://cactuscompute.com/blog/whistle) · [cact
 **Strata 有日期的更新（Niko1221，MIT，C++，22.6k★）：** v0.1.43.1 在回榜次日落地（10-12 约 20:30 UTC+8）——936 分 HN 帖（10-04）以来发版持续。Qwen3.8-Flash-Next（125B MoE、24,576 专家、每 token 激活 10 个）拆到 GPU/RAM/CPU/SSD 查找表：12 GB+ 显存、32 GB+ 内存、约 80 GB 磁盘；投机解码声称 +1.6–1.8×；RTX 5070 实测约 53–94 tok/s（按量化）；提供 localhost OpenAI 兼容 + Anthropic 风格端点与 MCP 服务器，编码 agent 可直接指向。自动选量化的一键安装器，正在为前沿级开源模型做 Ollama 为 7B Llama 做过的事。
 
 Sources: [The Verge — DDR4 回归](https://www.theverge.com/games/1009140/ram-shortage-intel-amd-ddr4-comeback) · [betterwispr.com](https://betterwispr.com/) · [Niko1221/Strata](https://github.com/Niko1221/Strata)
+
+## 2026-10-13 下午 → 10-14 04:03 — 两条流式机制收敛到同一结论：磁盘说了算；容量加入带宽战；嵌入模型学会听
+
+**Janas（Show HN，纯 C，除 libc 外零依赖）：**面向低配硬件的实验性 MoE 推理引擎——权重留在磁盘，每个 token 所需的专家经 `O_DIRECT` 从 NVMe 流式读取（~5.7 GB/s），~19 GB 内存缓存 80B 模型的热点专家，Vulkan 负责 prompt 处理，草稿来自各模型内置 MTP 块（Qwen3.5/3.6/Next）或 Gemma 4 的 drafting assistant。头条（自报）：**Qwen3-Next-80B（48 GB 权重）在 32 GB 笔记本上 37 tok/s——llama.cpp 为 2.8 tok/s**；无草稿 24 tok/s；"Q4_K_M 下对比的 13 个模型全部快于 llama.cpp。"README 做了多数民间基准省掉的诚实工作：全部由作者在一台机器上测得；llama.cpp 跑 80B 需要 OOM workaround；两边"度量方式并非严格一致"；草稿列"在 2026 年 9 月 26 日前是错的"；"这是实验，不是产品。"
+
+**AirLLM 再上趋势（37.7k★，Apache-2.0）——另一种粒度：**一次只在 GPU 上放一个 transformer 层、带预取地从磁盘流式读入——显存随层尺寸而非模型尺寸伸缩：Kimi K3（2.8T）单卡 3.72 GB、DeepSeek-V3（671B）约 12 GB、Llama 70B 约 4 GB；可选 4/8-bit 仅权重压缩约 3×（瓶颈在磁盘加载，故只压权重）。2026 轨迹：v3.0 FP8 + 统一 `AutoModel`（6 月）、Kimi K3（7 月）、Qwen3.8-Flash-Next 125B MoE 5.95 GB（8 月）、9 月的冻结权重流式加载让 125B 模型 6 GB 内做 LoRA 式微调。"能跑起来"工程，不是吞吐冠军。
+
+**收敛点：**专家卸载（Strata、Janas）与逐层流式（AirLLM）为不同用户优化——tok/s vs 能跑——但都让**磁盘而非 GPU**成为决定一台普通机器能跑什么模型的部件。
+
+**Intel D270 推理 GPU：**单张标准 PCIe 5.0 卡最高 **480 GB LPDDR5X**，32 个 Xᵉ3P 核心、256 个 XMX 矩阵引擎、350 W 风冷；官宣目标：agentic AI、长上下文 RAG、编程助手、高并发 serving（支持 vLLM/PyTorch/SGLang/Triton）。**内存带宽与 FLOPS 未公布**——帖内流传的 1.5 TB/s + 1.3 PFLOPS FP8（经 videocardz）是泄露数字，评论区自行对标 V100（0.9 TB/s）与 MI300X（5.3 TB/s HBM）；页面自己的性能对照写着"Intel 内部分析，2026 年 2 月版"vs RTX Pro 6000。无价格、无日期。LPDDR5X 每瓦容量 vs HBM 带宽是推理硬件的头号权衡，单卡风冷 480 GB 正是"给少数用户伺候巨型 MoE"的形状——但 Meta Wonder 教训在硅片上重演：厂商公布之前，泄露数字只当泄露看。
+
+**Apple Minions（arXiv 2610.12970，10 月 9 日提交）：**把 macOS 机器闲着的 GPU 汇成"动态分布式虚拟 GPU 云"，带容错，面向被集中算力"高价、低弹性、长排队"卡住的团队。三页纸、一图一表——**没有基准、没有设备数、没有吞吐**。"实用平台"的说法是方向路标而非实测结果；等带数字的后续。
+
+**会转写的嵌入模型（eg2.haku.sh）：**Google 的 EmbeddingGemma 2——多模态*嵌入*模型、从未训练过语音转文字——被用作 STT 引擎。音频编码器保持冻结；一个小"reader"（8×H100 上不足两小时、用开放授权英文语音训练）把短音频片段搬进模型的文本空间，~22.9 万英文词中最近者胜出；再由一个小模型补标点与大写。实测：**1 小时音频约 12.6 秒转完（288× 实时）**——基础款 M3 MacBook Air 8 GB、Neural Engine、下载 715 MB。对比表保持诚实：IBM Granite Speech 约 150×、M5 Pro 上的 Parakeet v3 微调约 480×——是与专用 STT 打平，不是更快。诀窍：**嵌入空间当通用接口**——从未训练过 STT 头，音频→文本的邻近度本就潜伏在模型里，两小时训练的 reader 就足以让它解码。接 10 月 7 日 EmbeddingGemma 2 发布条目：它第一次真正令人意外的再利用——嵌入模型作为可复用基底的数据点。
+
+Sources: [prabanta-dev/janas](https://github.com/prabanta-dev/janas) · [HN 50063717](https://news.ycombinator.com/item?id=50063717) · [lyogavin/airllm](https://github.com/lyogavin/airllm) · [Intel D-series](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu/d-series.html) · [HN 50063365](https://news.ycombinator.com/item?id=50063365) · [Apple ML Research — Minions](https://machinelearning.apple.com/research/distributed-gpu-cloud) · [arXiv 2610.12970](https://arxiv.org/abs/2610.12970) · [eg2.haku.sh](https://eg2.haku.sh/) · [HN 50069971](https://news.ycombinator.com/item?id=50069971)

@@ -205,3 +205,11 @@ Sources: [ICANN 申请 CD2694T-T26351](https://newgtldprogram-aps.icann.org/appl
 **「指纹是新 cookie」（royfish.dev；HN 156+）：** 边讲指纹边对你指纹（清除 cookie、开 VPN 依然稳定的昵称；关 JS 时直言告知）。结构性论点：第三方 cookie 退场（Google 五年 Privacy Sandbox，被复述为 PRESSURE → DISTRACTION）移除了唯一有同意体制的追踪技术；填补空隙的东西既不需要存储也不需要同意——每次访问从你的客户端算出同一个稳定 ID，可卖给广告、数据经纪，或「如果警察或你的政府碰巧需要，我也乐意赚他们的钱」。同意合规以存储为模型；指纹是计算——横幅、cookie 清扫与「清清 cookie」的建议在构造上就错过了它。
 
 Sources: [nitter.net — 10-10 更新](https://nitter.net) · [Passkeys are a trap](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them) · [UNIX 注册表（实时）](https://www.opengroup.org/openbrand/register/) · [NYC — Click to Cancel](https://www.nyc.gov/main/click-to-cancel) · [Gizmodo — Flock the Flockers](https://gizmodo.com/youtuber-says-cops-paid-him-a-visit-after-he-built-flock-style-camera-to-track-cops-2000824306) · [royfish.dev](https://royfish.dev/fingerprints-are-the-new-cookies)
+
+## 2026-10-13 下午 → 10-14 04:03 — Apple 继续当智能家居守门人；企业浏览器成为 AI 执行点
+
+**Apple HomeView（11 月 13 日发售；已开预订）：**7 英寸智能家居显示屏/中枢——穹顶铝制底座、1200 万像素 Center Stage 摄像头、四波束成形麦克风、A18 芯片；另有壁挂款。运行家庭 app、FaceTime、音乐、Siri；最多六人面容识别；同时九路家庭摄像头流；烟雾/CO 声音检测；Handoff；Safari"开始烹饪"模式；Siri AI 以 beta 进 27.2 版软件（仅英语、有用量限制）。架构才是重点：**摄像头与麦克风流在 A18 的 Secure Exclaves 中处理**——"OS 与 Apple 均无法访问的隔离隔间"；个人内容（信息、日历）仅在配对 iPhone 处于同一 Wi-Fi、近期解锁、且机主面容识别通过时显示。新 Apple Home Collection 配件（摄像头、温控器、门锁）端到端加密、"稍后上市"；**配件必须支持 HomeKit 或 Matter**；未公布任何新 SDK/API。端侧信任边界延伸到常开传感器——此后所有常开摄像头产品都要对比的架构——而徽章要求确认 Apple 有意继续做智能家居的守门人，而非开放平台。
+
+**Firefox Enterprise：**（详见 [[security]]）本地化浏览器治理，带 **"AI controls — allow, restrict or disable AI tools"** 开关；向后 DORA 欧洲喊话的主权牌（本地控制台、开源透明、非 Chromium 引擎当单一化保险）。与本文件追踪的守门行为互为镜像：这是*买方*要求的执行，而非平台移除的能力——但效果合流：浏览器同时成为数据与 AI 用途的执行点。
+
+Sources: [Apple — HomeView](https://www.apple.com/apple-homeview/) · [HN 50071017](https://news.ycombinator.com/item?id=50071017) · [Firefox Enterprise](https://www.firefox.com/en-US/enterprise/) · [HN 50070302](https://news.ycombinator.com/item?id=50070302)

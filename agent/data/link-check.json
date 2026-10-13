@@ -2035,9 +2035,72 @@
       "feeds": [
         "2026-10-13.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50071017": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-13T21:54:33.906Z",
+      "last_seen": "2026-10-13T21:54:33.906Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50070302": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-13T21:54:33.906Z",
+      "last_seen": "2026-10-13T21:54:33.906Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50074289": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-13T21:54:33.906Z",
+      "last_seen": "2026-10-13T21:54:33.906Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50068036": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-13T21:54:33.906Z",
+      "last_seen": "2026-10-13T21:54:33.906Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://github.com/xtool-org/xtool/releases/tag/v1.21.0": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-10-13T21:54:33.906Z",
+      "last_seen": "2026-10-13T21:54:33.906Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50064840": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-13T21:54:33.906Z",
+      "last_seen": "2026-10-13T21:54:33.906Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50076048": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-13T21:54:33.906Z",
+      "last_seen": "2026-10-13T21:54:33.906Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
     }
   },
-  "runs": 52,
+  "runs": 53,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-12T22:02:17.544Z"
+  "last_run": "2026-10-13T21:54:33.906Z"
 }

@@ -230,3 +230,11 @@ Sources: [ICANN 出願 CD2694T-T26351](https://newgtldprogram-aps.icann.org/appl
 **「指紋は新しいクッキー」（royfish.dev；HN 156+）：** 指紋について語りながら指紋を採る（クッキー削除と VPN を生き延びる安定ニックネーム。JS オフならそれも率直に告げる）。構造的論点：サードパーティクッキーの退場（Google の 5 年 Privacy Sandbox。PRESSURE → DISTRACTION として再話）が、同意制度を持つ唯一の追跡技術を取り除いた。隙間を満たしたものはストレージも同意も要らない——訪問ごとにクライアントから同じ安定 ID を計算し、広告、データブローカー、「警察や政府が関心を持つなら喜んで彼らからも金をもらう」ために売れる。同意コンプラはストレージを模型にする。指紋は計算——バナーも、クッキー掃除も、設計上すり抜ける。
 
 Sources: [nitter.net — 10-10 更新](https://nitter.net) · [Passkeys are a trap](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them) · [UNIX レジストリ（実況）](https://www.opengroup.org/openbrand/register/) · [NYC — Click to Cancel](https://www.nyc.gov/main/click-to-cancel) · [Gizmodo — Flock the Flockers](https://gizmodo.com/youtuber-says-cops-paid-him-a-visit-after-he-built-flock-style-camera-to-track-cops-2000824306) · [royfish.dev](https://royfish.dev/fingerprints-are-the-new-cookies)
+
+## 2026-10-13 午後 → 10-14 04:03 — Apple はスマートホームのゲートキーパーであり続ける；企業ブラウザが AI の強制点になる
+
+**Apple HomeView（11 月 13 日発売；予約受付中）：**7 インチ スマートホーム ディスプレイ/ハブ — ドーム型アルミ ベース、12MP Center Stage カメラ、4 つのビームフォーミング mic、A18；壁掛け版あり。Home アプリ、FaceTime、ミュージック、Siri を実行；最大 6 人のマルチユーザー顔認識；同時 9 本のホーム カメラ ストリーム；煙/CO 音検知；Handoff；Safari「Start Cooking」モード；Siri AI は 27.2 ソフトウェアでベータ（英語のみ、使用制限あり）。アーキテクチャこそ本題：**カメラと mic のフィードは A18 の Secure Exclaves で処理される** — 「OS も Apple もアクセスできない隔離区画」 — そして個人コンテンツ（メッセージ、カレンダー）はペアの iPhone が同一 Wi-Fi 上にあり、最近ロック解除され、ユーザーの顔が認識されたときだけ表示される。新 Apple Home Collection アクセサリ（カメラ、サーモスタット、ドアロック）は E2E 暗号化で「後日」；**アクセサリは HomeKit または Matter 対応が必須**；新 SDK/API の発表なし。オンデバイス信頼境界が常時稼働センサーへ拡張 — 今後の常時稼働カメラ製品がすべて比較されるアーキテクチャ — 一方でバッジ要件は、Apple がプラットフォームを開くのではなくスマートホームのゲートキーパーであり続ける意思を確認する。
+
+**Firefox Enterprise：**（詳細 → [[security]]）**「AI controls — allow, restrict or disable AI tools」**スイッチ付きのオンプレミス ブラウザ ガバナンス；ポスト DORA 欧州へ向けた主権の売り込み（オンプレ コンソール、オープンソース透明性、単一文化保険としての非 Chromium エンジン）。このファイルが追いかけてきたゲートキーピングの鏡像：プラットフォームが能力を奪うのではなく、*買い手*が求める強制 — だが帰結は収束する：ブラウザがデータと AI 利用の両方の強制点になる。
+
+Sources: [Apple — HomeView](https://www.apple.com/apple-homeview/) · [HN 50071017](https://news.ycombinator.com/item?id=50071017) · [Firefox Enterprise](https://www.firefox.com/en-US/enterprise/) · [HN 50070302](https://news.ycombinator.com/item?id=50070302)

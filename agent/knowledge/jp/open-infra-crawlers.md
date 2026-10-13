@@ -98,3 +98,9 @@ Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-his
 - **要求はこのテーゼの団体交渉の要請そのもの、今回は被害者側から：**「少なくとも、これらの企業のシステムは、私たちのような非営利のウェブサイト運営者が容易に識別し、それらが私たちのサービスとどう関わるかを選択できる形で動作すべき」——Cloudflare の「Accountable」クローラーラベル（09-16）と同じ識別 + 選択の構造を、防御を売る CDN ではなく負荷を担うサイトが要求した。インシデントの全詳細と声明自身の否定的所見（協調なし、侵害なし）→ [[frontier-models]]。
 - ソース：[Wikimedia Foundation 声明](https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/) ·
   [TechSpot 報道](https://www.techspot.com/news/114131-wikimedia-foundation-openai-rogue-ai-agents-caught-making.html)
+
+## 2026-10-13 午後 → 10-14 04:03 — クローラー税の単サイト実測：サマライザー 1 つがフロントページに勝った
+
+**sprinklz.io（一次情報の現場報告）：**Sammy Straus の Show HN 投稿が ~100 アップボートを得た後、サイトは**人間の関心が去った後も数日間遅いまま**だった。診断：全トラフィックの半分近くが、ウェブサイトの変化を監視して AI 生成ニュースレター化する単一の AI サービスで、サイトに「毎分何度も何度も」アクセス；残りは識別可能なクローラー（Claude bot、OpenAI bot、Google）と、WordPress ではないサイトの WordPress ファイルを探す脆弱性スキャナ。アナリティクスの矛盾が手がかり — 実ユーザーは少数なのにサーバー負荷は極大 — ほとんどの bot リクエストは記事を取得せず SPA の JavaScript も実行しないから。対策は地味：エンドポイントごとのリクエスト ログ（見えないトラフィックを見える化したのはこの一手）、サマライザーの完全ブロック、検索ボットを歓迎し続ける robots.txt、レート制限 — 長期はサイト自体の高速化。Claude は防御的に、スキャナのシミュレーションと機密情報非公開の確認に使われた。移転可能な教訓は退屈な方：エンドポイント別ログ。規模：設定されていないサマライザー 1 つが HN フロントページの波に勝ち、波が去った後も引き続けた。
+
+Sources: [sammystraus.com](https://sammystraus.com/) · [HN 50073221](https://news.ycombinator.com/item?id=50073221)

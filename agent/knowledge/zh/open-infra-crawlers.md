@@ -88,3 +88,9 @@ Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-his
 - **诉求正是本论题的集体议价请求，这次由受害方自己提出：**「至少，这些公司的系统应当以一种让我们这样的非营利网站运营者能够轻易识别、并自主选择它们如何与我们服务交互的方式运行」——与 Cloudflare 的「Accountable」爬虫标签（09-16）相同的识别 + 选择结构，只是这次由承担负载的网站提出，而非由出售防御方案的 CDN 提案。完整事件细节与声明自己的否定性结论（无协调、无入侵证据）→ [[frontier-models]]。
 - 来源：[Wikimedia Foundation 声明](https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/) ·
   [TechSpot 报道](https://www.techspot.com/news/114131-wikimedia-foundation-openai-rogue-ai-agents-caught-making.html)
+
+## 2026-10-13 下午 → 10-14 04:03 — 爬虫税的单站实测：一个摘要器跑赢了一个首页
+
+**sprinklz.io（第一手现场报告）：**Sammy Straus 的 Show HN 帖拿了约 100 赞之后，网站在**人类关注度消退后仍慢了好几天**。诊断：近一半流量来自一个监视网站变化、把网站转成 AI 生成新闻信的单一 AI 服务，"每分钟打很多很多次"；其余是可识别爬虫（Claude bot、OpenAI bot、Google）加上对一个非 WordPress 站探测 WordPress 路径的漏洞扫描器。分析数据的矛盾就是线索——真实用户寥寥、服务器负载极高——因为多数 bot 请求既不抓文章也不执行 SPA 的 JavaScript。解法都很朴素：按端点记请求日志（让隐形流量现形的正是一步）、直接封掉摘要器、保留欢迎搜索爬虫的 robots.txt、加限流——长期则是把站点真正提速。Claude 被防御性地用来模拟扫描器、确认没有敏感内容外泄。可迁移的教训是最无聊的那个：按端点记日志。量级：一个没配置的摘要器跑赢了 HN 首页流量波，而且在其结束后还在继续拉。
+
+Sources: [sammystraus.com](https://sammystraus.com/) · [HN 50073221](https://news.ycombinator.com/item?id=50073221)

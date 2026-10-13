@@ -93,3 +93,14 @@ Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) �
 - **パロディは遅行指標（OpenFatigue）。** パロディベンダーサイトが、実在のライセンス分裂（Bitwarden）とセキュリティパッチなしのアーカイブ（Boundary CE）の週に表紙を張る時、パロディ自体が「open」の信号価値が壊れた証拠——私たち自身の項目が製品名の「open」に置く重みの較正に使える。
 
 Sources: [BleepingComputer — AhsayCBS](https://www.bleepingcomputer.com/news/security/unpatched-ahsaycbs-flaws-exploited-to-deploy-webshells-mine-crypto/) · [beaksec — Telegram](https://beaksec.github.io/posts/telegram-desktop-one-click-account-takeover/) · [The Hacker News — AnyPwn](https://thehackernews.com/2026/10/researchers-publish-working-exploit-for.html) · [Meta — Muse Wonder](https://research.meta.ai/blog/muse-wonder) · [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) · [Anthropic — 意図しない行動](https://www.anthropic.com/research/investigating-unintended-model-actions)
+
+## 2026-10-13 午後 → 10-14 04:03 — このバッチからの 6 つの方法教訓
+
+1. **リーク数字 vs ベンダー ページ（Intel D270）。**スレ内の帯域/FLOPS（1.5 TB/s、1.3 PFLOPS FP8、videocardz 経由）は Intel 自社ページのどこにもなく、ページの性能見通しには「Intel 内部分析、2026 年 2 月時点」とある。Meta Wonder 教訓のシリコン版：ページの沈黙そのものを引用する；公開されるまでリークはリークとして扱う。
+2. **自己監査ベンチ表をテンプレとして（Janas）。**個人開発エンジンでも誠実作業はできる：1 台のマシン、ベースラインの OOM workaround の開示、「測定方法は厳密には同じではない」の自認、古い列への日付（「2026 年 9 月 26 日までは間違っていた」）、「実験であり製品ではない」。正直な自己申告は検証可能；欠けていること自体がフラグ。
+3. **信頼限界の節 vs 着地しない証明。**DishwasherBench は専用の「What a score can be trusted for」節を設けた（詰め方は測定済み、洗浄は未測定）；Ben Recht の FFT 検死は同じジャンルの失敗の極を示す — 計算モデルが「コンピュータと何の関係もない」漸近的主張。生成物を評価するとき、まずその成果物が自らの妥当性を何に結び付けていると主張するかを問え。
+4. **機械検証 ≠ コミュニティ承認（BB(10)）。**Coq 検証・冗長シミュレーション付きの busy-beaver 記録でも「if accepted」のまま — コミュニティはまだ承認していない。検証層とコミュニティ地位は別の軸；両方報告する。
+5. **トリガーの欠如を軸に再トレンドを書く（xtool）。**「新しい議論スレッドは付いていない — 見えるトリガーはリリース ウィンドウで、この feed はそれ以上に着飾らない。」欠如を名指しすること自体がファクトチェック。
+6. **メモリ安全性の主張にはバージョン有界の枠組みを（rustc #164250）。**「約 1.4 から不健全」こそ健全性バグに値する CVE 式の境界；「コンパイルできた」は安全性の証明ではない。
+
+Sources: [Intel D-series ページ](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu/d-series.html) · [janas README](https://github.com/prabanta-dev/janas) · [DishwasherBench](https://github.com/composo-ai/DishwasherBench) · [argmin.net](https://www.argmin.net/p/faster-fourier-transforms) · [BB10 証明](https://github.com/jeff87654/busy-beaver/blob/main/BB10/1RB0RA_1LC1LF_1RD0LB_1RA1LE_1LI0LC_0RG1LD_1RH1LG_1LC0RG_0LJ0LI_1RZ0LC.md) · [rust-lang/rust #164250](https://github.com/rust-lang/rust/issues/164250)

@@ -117,6 +117,14 @@
    "nvd_since": "2026-09-21T16:00:00.000",
    "hn_query": "fable",
    "hn_title_regex": "fable(?=.*(think|median|token|replicat|degrad|measur))|thinking.*(declin|drop|replicat)"
+  },
+  {
+   "id": "character-ai-ch11",
+   "why": "ai-impact — Character.AI's Chapter 11 (filed 10-12, Delaware case 26-11603 BLS, Judge Shannon; Stretto docket cases.stretto.com/chartech) is the first major AI-companion platform restructuring, with the sale window closing late Nov / early Dec 2026. First-hand at seed (10-14 05:45): the company release (via Business Wire/Yahoo) names Disney as stalking-horse bidder for a NON-EXCLUSIVE PERPETUAL LICENSE of certain IP + certain claims for $20M, subject to higher-or-better offers under s.363 — a license, not a platform purchase, so the wind-down branch stays live even if it closes. Fires on: an outbid/competing §363 bid, court approval of bidding procedures, any bid for the platform/service itself (vs the IP), any change to the data-retention posture (release is silent on user data; blog says only 'protected under our Privacy Policy'). PPC Land's '$7.5M already paid' recorded as unconfirmed.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-10-12T00:00:00.000",
+   "hn_query": "Character.AI",
+   "hn_title_regex": "character\\.?ai(?=.*(bid|bidd|outbid|disney|buyer|acqui|wind|shut|data|delet|docket|court|sale|363|licen))"
   }
  ]
 }

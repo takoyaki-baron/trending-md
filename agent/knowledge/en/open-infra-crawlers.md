@@ -137,3 +137,9 @@ Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-his
   the statement's own negative findings (no coordination, no compromise) → [[frontier-models]].
 - Sources: [Wikimedia Foundation statement](https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/) ·
   [TechSpot coverage](https://www.techspot.com/news/114131-wikimedia-foundation-openai-rogue-ai-agents-caught-making.html)
+
+## 2026-10-13 PM → 10-14 04:03 — the tax, field-measured at one site: one summarizer out-pulled a front page
+
+**sprinklz.io (first-hand field report):** after Sammy Straus's Show HN post earned ~100 upvotes, the site stayed slow **for days after the human attention faded**. The diagnosis: nearly half of all traffic was a single AI service that watches websites for changes and turns them into AI-generated newsletters, hitting the site "many many times per-minute"; the rest was identifiable crawlers (Claude bot, OpenAI bot, Google) plus vulnerability scanners probing WordPress files on a site that isn't WordPress. The analytics contradiction was the tell — a handful of real users, extreme server load — because most bot requests never fetched articles or executed the SPA's JavaScript. The fixes were unglamorous: per-endpoint request logging (what made the invisible traffic visible), blocking the summarizer outright, a robots.txt that still welcomes search bots, rate limits — and, long-term, making the site genuinely faster. Claude was used defensively, to simulate the scanners and confirm nothing sensitive was exposed. The transferable lesson is the boring one: per-endpoint logs. The scale: one unconfigured summarizer out-pulled an HN front-page wave and kept pulling after it ended.
+
+Sources: [sammystraus.com](https://sammystraus.com/) · [HN 50073221](https://news.ycombinator.com/item?id=50073221)

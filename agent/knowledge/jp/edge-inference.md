@@ -136,3 +136,19 @@ Sources: [Whistle 発表](https://cactuscompute.com/blog/whistle) · [cactus-com
 **Strata の日付付き更新（Niko1221、MIT、C++、22.6k★）：** 再浮上の翌日に v0.1.43.1（10-12 約 20:30 UTC+8）——936 点 HN スレッド（10-04）以降もリリースが続く。Qwen3.8-Flash-Next（125B MoE、24,576 専門家、トークンごとに 10 活性）を GPU/RAM/CPU/SSD 検索表へ分割：VRAM 12 GB+、RAM 32 GB+、ディスク約 80 GB。推測復号は主張 +1.6–1.8 倍。RTX 5070 実測 約 53–94 tok/s（量子化による）。localhost の OpenAI 互換＋Anthropic 風エンドポイントと MCP サーバを備え、コーディング agent が直接指せる。量子化を自動選ぶワンクリック導入器が、フロンティア級オープンモデルに Ollama が 7B Llama でやったことをしている。
 
 Sources: [The Verge — DDR4 復活](https://www.theverge.com/games/1009140/ram-shortage-intel-amd-ddr4-comeback) · [betterwispr.com](https://betterwispr.com/) · [Niko1221/Strata](https://github.com/Niko1221/Strata)
+
+## 2026-10-13 午後 → 10-14 04:03 — 2 つのストリーミング機構が一つの結論へ収束：ディスクが決める。容量が帯域の戦いに加わる。埋め込みモデルが聴くことを覚える
+
+**Janas（Show HN、純 C、libc 以外依存なし）：**低スペック ハードウェア向け実験的 MoE 推論エンジン — 重みはディスクに置いたまま、各トークンに必要なエキスパートを `O_DIRECT` で NVMe からストリーミング（~5.7 GB/s）、80B モデルのホット エキスパートを ~19 GB の RAM キャッシュに保持、prompt 処理は Vulkan、ドラフトは各モデル内蔵の MTP ブロック（Qwen3.5/3.6/Next）または Gemma 4 の drafting assistant から。ヘッドライン（自己申告）：**Qwen3-Next-80B（重み 48 GB）が 32 GB ノート PC で 37 tok/s — llama.cpp は 2.8 tok/s**；ドラフトなし 24 tok/s；「Q4_K_M で比較した 13 モデルすべてで llama.cpp より高速。」README は素人ベンチが省きがちな誠実作業をやっている：すべて作者が 1 台で測定；llama.cpp は 80B で OOM workaround が必要；測定方法は「厳密には同じではない」；ドラフト列は「2026 年 9 月 26 日までは間違っていた」；「これは実験であり製品ではない。」
+
+**AirLLM 再トレンド（37.7k★、Apache-2.0）— もう一つの粒度：**transformer の層を 1 枚だけ GPU に載せ、残りをプリフェッチ付きでディスクからストリーミング — VRAM はモデルでなく層のサイズに比例：Kimi K3（2.8T）を 1 カード 3.72 GB、DeepSeek-V3（671B）~12 GB、Llama 70B ~4 GB；オプションの 4/8 ビット重みのみ圧縮で約 3 倍（ボトルネックはディスク読み込みなので重みだけ）。2026 年の歩み：v3.0 FP8 + 統一 `AutoModel`（6 月）、Kimi K3 対応（7 月）、Qwen3.8-Flash-Next 125B MoE を 5.95 GB で（8 月）、9 月は凍結重みのストリーミングで 125B を 6 GB 未満 LoRA 微調整。「動くこと自体」のエンジニアリングであり、スループットの覇者ではない。
+
+**収束点：**エキスパート オフロード（Strata、Janas）と層ストリーミング（AirLLM）は最適化する相手が違う — tok/s vs 動くか — だが両方とも**GPU ではなくディスク**を、普通のマシンがどのモデルを動かせるかを決める部品に変えた。
+
+**Intel D270 推論 GPU：**標準 PCIe 5.0 カード 1 枚に最大 **480 GB LPDDR5X**、Xᵉ3P コア 32、XMX 行列エンジン 256、350 W 空冷；目標は agentic AI、長文 RAG、コーディング アシスタント、高同時実行サービング（vLLM/PyTorch/SGLang/Triton 対応）。**メモリ帯域と FLOPS は非公開** — スレ内の 1.5 TB/s + 1.3 PFLOPS FP8（videocardz 経由）はリーク数字で、コメント欄が V100（0.9 TB/s）や MI300X（5.3 TB/s HBM）と自主比較；ページ自身の性能見通しは「Intel 内部分析、2026 年 2 月時点」vs RTX Pro 6000。価格も日程もなし。LPDDR5X のワットあたり容量 vs HBM 帯域は推論ハードウェア最大のトレードオフで、空冷 1 枚 480 GB は「少数ユーザーに巨大 MoE を仕える」形 — ただし Meta Wonder の教訓がシリコンでも適用：ベンダーが公開するまで、リークはリークとして扱う。
+
+**Apple Minions（arXiv 2610.12970、10 月 9 日提出）：**通常利用中は遊んでいる macOS マシンの GPU をプールし「動的分散仮想 GPU クラウド」化、フォールトトレランス付き、集中インフラの「高コスト・低弾力・長い待ち時間」に困るチーム向け。3 ページ、図 1、表 1 — **ベンチマークなし、台数なし、スループット数値なし**。「実用プラットフォーム」の主張は方向の道標であり実測結果ではない；数字を出す続編を追う。
+
+**転写する埋め込みモデル（eg2.haku.sh）：**Google の EmbeddingGemma 2 — 音声転写向けに訓練されたことのないマルチモーダル*埋め込み*モデル — を STT エンジンとして使う。音声エンコーダは凍結のまま；小さな「リーダー」（8×H100 で 2 時間未満、オープンライセンス英語音声で訓練）が短い音声スライスをモデルのテキスト空間へ移し、約 22.9 万英単語の最近接が勝つ；极小モデルが句読点と大文字を補う。実測：**1 時間の音声を約 12.6 秒（288 倍リアルタイム）** — ベース M3 MacBook Air 8 GB、Neural Engine、ダウンロード 715 MB。比較表は正直：IBM Granite Speech ~150 倍、M5 Pro の Parakeet v3 微調整 ~480 倍 — 専用 STT に匹敵する速さであり、超えてはいない。トリック：**埋め込み空間を万能インターフェースとして使う** — STT ヘッドは一度も訓練されていないのに、音声→テキストの近接性は最初からモデルの中にあり、2 時間のリーダーでそれがデコードできるようになった。10 月 7 日の EmbeddingGemma 2 リリース項目の続き：初めての本物の意外な転用 — 埋め込みモデルが再利用可能な基盤であることのデータポイント。
+
+Sources: [prabanta-dev/janas](https://github.com/prabanta-dev/janas) · [HN 50063717](https://news.ycombinator.com/item?id=50063717) · [lyogavin/airllm](https://github.com/lyogavin/airllm) · [Intel D-series](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu/d-series.html) · [HN 50063365](https://news.ycombinator.com/item?id=50063365) · [Apple ML Research — Minions](https://machinelearning.apple.com/research/distributed-gpu-cloud) · [arXiv 2610.12970](https://arxiv.org/abs/2610.12970) · [eg2.haku.sh](https://eg2.haku.sh/) · [HN 50069971](https://news.ycombinator.com/item?id=50069971)

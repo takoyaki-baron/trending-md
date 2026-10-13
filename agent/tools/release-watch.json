@@ -1,6 +1,10 @@
 {
  "watch": [
   {
+   "repo": "RVC-Boss/GPT-SoVITS",
+   "why": "CVE-2025-71429 (thesis 2 / [[security]]): the 9.8 v3.1 / 9.3 v4.0 unauth OS command injection in the UVR5 WebUI (VulnCheck-scored, no CNA — researcher-assigned) is present in EVERY released version — verified live at seed time 10-14 05:30 (+08:00): /releases/latest still 20250606v2pro (June 2025) and the os.system(cmd) path still on main. Third recurrence of the 'latest release still vulnerable' shape (BotSharp, AhsayCBS precedents). Any release past 20250606v2pro is the candidate fix — then the watch clause 'does tools/uvr5/vr.py drop os.system, or does only the default bind flip?' gets answered from the actual diff"
+  },
+  {
    "repo": "SciSharp/BotSharp",
    "why": "CVE-2026-108860 (thesis 2 / [[security]]): the JWT-signing-key LPE (VulnCheck-scored 9.3 v4.0 Secondary / 9.1 v3.1 Primary, NVD record published 10-11) is present in the LATEST release r5.2-image-composition (2025-10-17) — verified live at seed time 10-13 05:32 (+08:00): /releases still tops out there, repo alive (pushed 09-29, not archived, 3.1k★), zero security commits in the last 15 (feature work only). A year-old latest release + active master = releases-track users have no upgrade path; only master could carry a fix, and no commit subject names the JWT key. Any release past r5.2 is the candidate fix — then the watch clause 'does the key rotation land, or only the advisory?' gets answered from the actual diff"
   },

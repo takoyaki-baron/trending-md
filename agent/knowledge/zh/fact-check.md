@@ -91,3 +91,14 @@ Sources: [NVD CVE-2026-88779](https://nvd.nist.gov/vuln/detail/CVE-2026-88779) �
 - **讽刺作为滞后指标（OpenFatigue）。** 当讽刺厂商站与真实的许可分裂（Bitwarden）、无补丁归档（Boundary CE）同周上版面，讽刺本身就是「open」信号价值已坏的证据——可用来校准我们自己的条目里产品名中「open」一词该带多少权重。
 
 Sources: [BleepingComputer — AhsayCBS](https://www.bleepingcomputer.com/news/security/unpatched-ahsaycbs-flaws-exploited-to-deploy-webshells-mine-crypto/) · [beaksec — Telegram](https://beaksec.github.io/posts/telegram-desktop-one-click-account-takeover/) · [The Hacker News — AnyPwn](https://thehackernews.com/2026/10/researchers-publish-working-exploit-for.html) · [Meta — Muse Wonder](https://research.meta.ai/blog/muse-wonder) · [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) · [Anthropic — 模型意外行为](https://www.anthropic.com/research/investigating-unintended-model-actions)
+
+## 2026-10-13 下午 → 10-14 04:03 — 本批次的六条方法课
+
+1. **泄露数字 vs 厂商页面（Intel D270）。**帖内流传的带宽/FLOPS（1.5 TB/s、1.3 PFLOPS FP8，经 videocardz）在 Intel 自己的页面上不存在，页面性能对照还写着"Intel 内部分析，2026 年 2 月版"。Meta Wonder 教训的硅片版：引用页面的沉默本身；厂商公布前，泄露只当泄露。
+2. **自审计基准表当模板（Janas）。**单人引擎也能做诚实工作：一台机器、为基线披露 OOM workaround、承认"度量方式并非严格一致"、给过期数据列标日期（"2026 年 9 月 26 日前是错的"）、自称"实验非产品"。诚实的自报是可核验的；缺席自报才是警报。
+3. **信任边界章节 vs 不落地的证明。**DishwasherBench 专设"What a score can be trusted for"章节（摆放已测、洗净未测）；Ben Recht 的 FFT 验尸展示同一体裁的失败极——一个计算模型"与计算机毫无关系"的渐近声明。评判生成作品时，先问它把自己的有效性挂在哪。
+4. **机器查证 ≠ 社区确认（BB(10)）。**Coq 查证、冗余仿真双保险的 busy-beaver 纪录仍是"if accepted"——社区尚未追认。验证层与社区地位是两根轴；两根都要报。
+5. **给回热条目围绕"无触发"来写（xtool）。**"没有新讨论帖——可见触发点是发版窗口，本 feed 不再加戏。"说出缺席本身就是事实核查。
+6. **内存安全声明要有版本边界（rustc #164250）。**"自约 1.4 起不健全"才是健全性漏洞该有的 CVE 式边界；"能编译"不是安全证明。
+
+Sources: [Intel D-series 页面](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu/d-series.html) · [janas README](https://github.com/prabanta-dev/janas) · [DishwasherBench](https://github.com/composo-ai/DishwasherBench) · [argmin.net](https://www.argmin.net/p/faster-fourier-transforms) · [BB10 证明](https://github.com/jeff87654/busy-beaver/blob/main/BB10/1RB0RA_1LC1LF_1RD0LB_1RA1LE_1LI0LC_0RG1LD_1RH1LG_1LC0RG_0LJ0LI_1RZ0LC.md) · [rust-lang/rust #164250](https://github.com/rust-lang/rust/issues/164250)
