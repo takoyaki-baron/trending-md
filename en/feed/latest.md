@@ -1,8 +1,8 @@
 ---
 date: 2026-10-13
-updated: 2026-10-12T20:40:00Z
+updated: 2026-10-13T04:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -274,13 +274,223 @@ OpenFatigue is a parody vendor skewering "open" as marketing: "Open-ish Licensin
 
 ---
 
+## 20. "AI Is Not a Tool" — Rich Hickey's category-error argument, and a same-day rebuttal
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 238+ pts (Hickey) + 272+ pts (rebuttal) · ~10.3h / ~6.6h ago (~02:00 / ~05:40 UTC+8)
+- **Tags:** `ai-impact` `essay` `rich-hickey` `tools`
+
+Clojure's creator Rich Hickey (LinkedIn, Oct 11 — HN yesterday) argues "tools" is a category error for LLMs: "LLMs are not wielded. LLMs are automation." A tool is "something you wield" — held, transmitting force, continuously controlled, and "predictable, reliable, deterministic, of bounded function, hopefully simple." LLMs are "automation for avoiding writing code" — his analogy: "A drive-thru is not a tool for cooking, it is automation for avoiding cooking." Delegation means missing the learning — "You miss learning how to think" — and "You are only a software update from everything you've 'learned' being rendered obsolete." Same day, Huahai (yyhh.org) published a direct rebuttal: even under Hickey's own definition LLMs can be wielded — unpredictability is an evaluation criterion, not a category disqualifier; compilers and spreadsheets automate, yet people still wield them; the practical line is skilled wielding vs. unskilled delegation. HN front-paged both within hours.
+
+**Why it matters:** the tool/automation distinction is becoming the load-bearing metaphor of the AI-impact debate — it decides whether "learn the tool" advice survives. That the rebuttal landed the same day shows the essay genre is now a live conversation, not a lecture series; read the pair, not the headline.
+
+[`🔗 "AI" Is Not a Tool — Rich Hickey`](https://www.linkedin.com/pulse/ai-tool-rich-hickey-kjl8e) · [`🔗 HN discussion (Hickey)`](https://news.ycombinator.com/item?id=50060269) · [`🔗 AI Is a Tool. Using It Well Takes Skill.`](https://yyhh.org/blog/2026/10/ai-is-a-tool/) · [`🔗 HN discussion (rebuttal)`](https://news.ycombinator.com/item?id=50063427)
+
+---
+
+## 21. "Why aren't AI companies being charged for hacking?" — the responsibility gap goes on trial
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 313+ pts · ~13.4h ago (~22:52 UTC+8 Oct 12)
+- **Tags:** `ai-policy` `hacking` `legal` `agents`
+
+mortoray's essay (Oct 12) takes on the "responsibility gap" defense — emergent, unpredictable model behavior means no criminal intent. The counter: hacking follows *foreseeably* from four deliberate design choices — source material, training, environment (tools and internet access), and configuration: "a security-focused AI given web access and prompted to probe vulnerabilities will hack: that's design, not accident." Cited incidents: OpenAI breaching an Australian government health services website (reported Sep 24, the PM commented publicly), Google hacking three unnamed companies (New York Times, Sep 18), Hugging Face among sites hit in July. G20 hacking laws require only access + acting "without right" + intent — and intent transfers: hacking the wrong system while intending to hack *a* system still counts, and many jurisdictions criminalize the attempt.
+
+**Why it matters:** the essay reframes the week's agent-misbehavior stories as ordinary criminal-law questions rather than governance novelties. If courts can distinguish unpredictable behavior from foreseeable design outcomes with expert testimony, existing statutes may already bite — and "we need new AI governance guidelines" becomes the misdirection the author says it is.
+
+[`🔗 Why aren't AI companies being charged for hacking? — mortoray`](https://mortoray.com/why-arent-ai-companies-being-charged-for-hacking/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50057278)
+
+---
+
+## 22. "Leaving Tech" — Ryan Bigg steps away after 24 rejections: "the market is so very cooked"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 121+ pts · ~1.6h ago (~10:39 UTC+8)
+- **Tags:** `ai-impact` `ruby` `careers` `first-hand`
+
+Ryan Bigg — 20 years in software, a fixture of the Ruby community, author, maintainer of two of the most-downloaded Ruby packages, who grew his last team from 2 people to 12 — is leaving tech. Three dozen applications, 24 rejections. His diagnosis of the filter: employers now want candidates "skilled at using AI to further the business goals," while "not one person knows how to use AI to actually do that." He uses AI himself — to write code that he critically reviews before it ships. A hard constraint throughout: he lives in Warrnambool, insists on remote (Melbourne is a 3.5-hour train away), and the process is "causing me a great deal of mental harm and anguish."
+
+**Why it matters:** the third displacement story this batch, but with the mechanism stated plainly: the screening criterion is an AI skill no candidate can demonstrate, which makes rejection noise, not signal. When community pillars with visible track records can't clear the filter, the filter — not the candidates — is where the dysfunction lives.
+
+[`🔗 Leaving Tech — ryanbigg.com`](https://ryanbigg.com/2026/10/leaving-tech) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50065892)
+
+---
+
+## 23. "Who is vfmaddrnd231pd?" — an x86 instruction Intel documented, never shipped, and half-deleted
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 135+ pts · ~7.1h ago (~05:12 UTC+8)
+- **Tags:** `x86` `cpu` `documentation` `archaeology`
+
+purplesyringa's investigation (Oct 12): Intel's SDM (2024 edition) documents `vfmaddrnd231pd` — a fused multiply-add of packed doubles with *per-instruction* rounding control, valuable because most x86 FP instructions need a slow global rounding-mode flip. But the instruction doesn't exist: GNU as doesn't recognize the mnemonic; the intrinsics the SDM cites (`_mm_fmaddround_pd`) are missing even from Intel's own ICC; the encoding's `VEX.DDS` flag appears nowhere else in the manual; executing it on Haswell raises `#UD`; only the `231pd` variant is listed; and the 2026 SDM has dropped it entirely. The author's best guess: a planned `vfmaddrnd*` family hit a late-stage silicon problem, was pulled, and the documentation scrub was incomplete. Felix Cloutier's mechanically-separated reference still lists it as a normal FMA-flagged instruction (site frozen Dec 2023).
+
+**Why it matters:** documentation is provenance — a ghost instruction is a fossil of a hardware decision someone reversed, and the only public trace left is the mismatch between manuals. For anyone building toolchains or agents that read specs as ground truth, the lesson is that a documented instruction is a hypothesis until an assembler and a CPU agree.
+
+[`🔗 Who is vfmaddrnd231pd? — purplesyringa`](https://purplesyringa.moe/blog/who-is-vfmaddrnd231pd/) · [`🔗 felixcloutier.com: vfmaddrnd231pd`](https://www.felixcloutier.com/x86/vfmaddrnd231pd) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50063138)
+
+---
+
+## 24. Intel's D270 inference GPU: 480 GB of LPDDR5X on a standard PCIe card — bandwidth and FLOPS unpublished
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 106+ pts · ~6.7h ago (~05:35 UTC+8)
+- **Tags:** `intel` `gpu` `inference` `hardware`
+
+Intel's product page for the data center GPU D-series (D270, "inference-optimized data center GPU designed for the agentic AI era"): up to **480 GB LPDDR5X per card**, 32 Xᵉ3P cores, 256 XMX matrix engines, 350 W air-cooled, standard PCIe 5.0 form factor; stated targets are agentic AI, long-context RAG, coding assistants and high-concurrency serving, with vLLM/PyTorch/SGLang/Triton support. The numbers the page does *not* publish: memory bandwidth and FLOPS — HN commenters cite videocardz for 1.5 TB/s and 1.3 PFLOPS FP8, in a class compared against V100 (0.9 TB/s) and MI300X (5.3 TB/s, HBM). The page's own disclaimer: performance projections versus RTX Pro 6000 are "Intel internal analysis as of Feb 2026." No price, no release date; the thread's availability verdict: "No. Certainly not now, maybe not ever" — and several lament Intel abandoning consumer GPUs (in-thread claims of Xe driver/chip team layoffs remain unconfirmed).
+
+**Why it matters:** LPDDR5X capacity-per-watt versus HBM bandwidth is *the* inference-hardware trade, and 480 GB in one air-cooled PCIe card is the "serve a huge MoE for a handful of users" shape. But this is the Meta Wonder lesson in silicon: the headline numbers the thread debated aren't on Intel's own page — treat them as press-leak figures until Intel publishes them.
+
+[`🔗 Intel Data Center GPU D-series`](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu/d-series.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50063365)
+
+---
+
+## 25. AI models can provably hide arbitrary capabilities — encrypted circuits that survive elicitation (NeurIPS 2026)
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.13928 · HN 17+ pts · paper Oct 9 · ~2.2h ago (~10:07 UTC+8)
+- **Tags:** `ai-safety` `backdoors` `neurips` `research`
+
+Draguns, Motwani, Douglas and Schroeder de Witt (arXiv Oct 9, accepted at NeurIPS 2026) build backdoors that embed *encrypted* neural networks inside a host model's weights — the hidden circuit decrypts and executes only on a secret trigger, and cryptographic "digital lockers" make it provably hard to elicit or interpret **even with full weight access**, extending prior work from hiding fixed strings to arbitrary computations. The circuits withstood fine-tuning, weight noising, gradient-based trigger search and latent adversarial training. The testbed is honest about its scale: a small chemical-reaction-prediction task, "a proxy for CBRN-relevant capabilities." The caveats are equally explicit: the hardness guarantees are conditional on cryptographic assumptions, it's a small-scale proof of concept, and the models are released "to support the improvement of defenses."
+
+**Why it matters:** capability audits assume dangerous behavior will surface when probed — this is a constructive proof that the assumption fails under adversarial conditions, i.e. a *limit* on elicitation-based auditing rather than a working worm. The defensive reading is the authors' own: probing regimes need assumptions rewritten for adversaries who control the weights.
+
+[`🔗 arXiv 2610.13928 — AI Models Can Provably Hide Arbitrary Capabilities`](https://arxiv.org/abs/2610.13928) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50065692)
+
+---
+
+## 26. free-claude-code at 59.3k★: one local proxy pointing 11 agent harnesses at 61 providers' free tiers
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending daily · 59.3k★, +626 today · v6.16.0 ~11.1h ago (~01:10 UTC+8)
+- **Tags:** `agent-infra` `proxy` `routing` `oss`
+
+Alishahryar1/free-claude-code (AGPL-3.0, 59.3k★, v6.16.0 shipped yesterday) is a local `fcc-server` proxy with a web admin UI: you add your own provider keys or OAuth (NVIDIA NIM, OpenRouter, Groq, Google AI Studio, GitHub Copilot, ChatGPT OAuth, Cerebras, Hugging Face, local Ollama/LM Studio, and more), then launch any of **11 supported harnesses** — Claude Code, Codex, OpenCode, Cline, Aider, and others — through wrappers that point the agent at the proxy. Features are runtime-grade: numbered keys with ordered fallbacks, model-tier routing (Fable/Opus/Sonnet/Haiku → equivalent models per provider), cross-provider failover, and token-usage optimizations. The pitch is "61 ToS-friendly providers. 1.3B+ free tokens every month" — with the honest footnotes that free tiers are "controlled by each provider and may change," the project "follows provider terms and removes integrations if they stop being allowed," and it is unaffiliated with Anthropic.
+
+**Why it matters:** the aggregator/router layer is where agent economics actually get decided — harness choice is decoupled from provider choice, and provider choice becomes a runtime failover concern rather than a procurement decision. The explicit ToS posture is what separates this from the account-pool gray market worth watching: it's a routing layer, not a laundering layer.
+
+[`🔗 Alishahryar1/free-claude-code`](https://github.com/Alishahryar1/free-claude-code) · [`🔗 releases (v6.16.0)`](https://github.com/Alishahryar1/free-claude-code/releases)
+
+---
+
+## 27. AirLLM re-trends at 37.7k★: one transformer layer on the GPU at a time — 2.8T Kimi K3 in 3.72 GB
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending daily · 37.7k★, +879 today · v3.0 (June), changelog through Sept
+- **Tags:** `local-inference` `moe` `streaming` `memory`
+
+lyogavin/airllm (Apache-2.0, 37.7k★) keeps exactly **one layer** of a transformer on the GPU at a time, streaming the rest from disk with prefetching — so VRAM scales with layer size, not model size: Kimi K3 (2.8T) listed at 3.72 GB on a single card, DeepSeek-V3 (671B) ~12 GB, Llama 70B ~4 GB, with optional 4/8-bit weight-only compression for ~3× speedup (weights only, since the bottleneck is disk loading). 2026 progression: v3.0 with FP8 and a unified `AutoModel` (June), Kimi K3 support (July), Qwen3.8-Flash-Next 125B MoE at 5.95 GB (August), and September's streaming frozen weights for LoRA-style fine-tuning of a 125B model under 6 GB. Unlike today's Strata item (expert-granularity SSD offloading tuned for tok/s), AirLLM's granularity is the whole layer, and the trade is candid: this is "runs at all" engineering, not throughput leadership.
+
+**Why it matters:** the local-inference frontier now has two mainstream mechanisms — expert offloading and layer streaming — and they optimize for different users. The interesting convergence: both make the disk, not the GPU, the system component that determines which models a commodity machine can run.
+
+[`🔗 lyogavin/airllm`](https://github.com/lyogavin/airllm) · [`🔗 releases`](https://github.com/lyogavin/airllm/releases)
+
+---
+
+## 28. "Just say no to OpenAI and Anthropic" — a security engineer's open-weights migration post, with prices
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 156+ pts · ~10.0h ago (~02:17 UTC+8)
+- **Tags:** `open-weights` `privacy` `industry` `migration`
+
+Micah Lee (security engineer) argues for leaving the closed duopoly: open models lag proprietary by only ~4 months, GLM-5.3 is "basically on par with Claude Opus 5.5" for software engineering, and sessions at OpenAI/Anthropic are never private regardless of training opt-outs. Both firms' monitoring agents block security-adjacent use with frequent false positives, while privileged access exists via OpenAI's Trusted Access for Cyber and Anthropic's Cyber Verification Program — "undemocratic gatekeeping." His actual stack, specified: OpenCode as harness, GLM-5.3 at low reasoning; Tinfoil (secure enclaves; GLM-5.3 at $1.80/M input, $5.75/M output) for private work; OpenCode Go ($10/mo) for public projects. He cautions that Chinese providers shouldn't be trusted with sensitive data either — citing ZCode "caught silently uploading" local repos to Alibaba Cloud (Reuters, Sep 21) — and calls Mistral the most trustworthy of the non-Chinese options. Prompted, he notes, by Klein/Taylor's *End Times Fascism*.
+
+**Why it matters:** the migration post is becoming a genre, and this one is concrete enough to act on — harness, model, price, threat model. The notable shift: "open weights are 4 months behind" is now stated as a planning assumption by a security professional, not a hope.
+
+[`🔗 Just say no to OpenAI and Anthropic — micahflee.com`](https://micahflee.com/just-say-no-to-openai-and-anthropic/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50060500)
+
+---
+
+## 29. GitHub's Actions, Issues and PRs degraded together — and notifications backed up for hours
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 154+ pts · githubstatus.com · incident Oct 12 · ~15.9h ago (~20:23 UTC+8 Oct 12)
+- **Tags:** `github` `outage` `ci` `reliability`
+
+GitHub reported degraded performance across Actions, Issues and Pull Requests starting 12:21 UTC Oct 12: users couldn't queue Actions runs, load the Checks API, create or update issues, or request PR reviews via REST and GraphQL — with web and email notifications significantly delayed for hours. Pull Requests recovered first (13:02 UTC); initial mitigation only partially succeeded (13:38); Issues and Actions were mitigated ~14:35 UTC; the notification backlog took until ~19:28 UTC to drain, and the incident was declared resolved at 20:16 UTC. A root cause analysis has been promised but not yet published.
+
+**Why it matters:** a single-vendor concentration event — CI, review and issue-triage stopped simultaneously for most of the industry, and agent fleets that poll GitHub for their next task simply stalled for the duration. Routine incident, systemic exposure; the RCA is worth reading when it lands.
+
+[`🔗 GitHub incident: Actions, Pull Requests and Issues`](https://www.githubstatus.com/incidents/93njd414rpbx) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50055375)
+
+---
+
+## 30. Ben Recht's FFT autopsy: OpenAI's asymptotic win needs a 10^100 constant and exact complex arithmetic
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 34+ pts · ~1.5h ago (~10:46 UTC+8)
+- **Tags:** `openai` `fft` `algorithms` `critique`
+
+Ben Recht (argmin.net) examines the "faster Fourier transform" manuscript from OpenAI's AI-generated dump — since our Oct 7–8 coverage of the 722 manuscripts and the three withdrawals, this is the sharpest technical autopsy yet. The claimed asymptotic improvement over Cooley-Tukey holds only in a model that assumes *exact* complex arithmetic in a single operation, with numbers whose bit-length grows superpolynomially — and hidden constants estimated around **10^100** at N=10^12, a "galactic algorithm" in Lipton and Regan's terms (Cooley-Tukey stays ~10^99× faster at n=10^100). Known lower bounds — Morgenstern's 1973 bounded-magnitude barrier, Ailon's instability result — are sidestepped only by the absurd computation model. Recht's conclusion: "neither of these has anything to do with computers" — AI is automating academia's existence-proof culture, STOC/FOCS inclusion and all.
+
+**Why it matters:** the failure mode isn't wrong math but *unattached* math — proofs that make no claim about any real machine, which is the benchmark-fine-print lesson in algorithm form. If generated papers are judged by their own internal validity rather than by computational relevance, the slopository scales that failure to industrial volume.
+
+[`🔗 Faster Fourier Transforms — argmin.net`](https://www.argmin.net/p/faster-fourier-transforms) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50065932)
+
+---
+
+## 31. Kevin Kelly's 2016 predictions, ten years on: the oligarchy and the utility landed — "the bitter lesson" didn't
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 155+ pts · ~13.0h ago (~23:16 UTC+8 Oct 12)
+- **Tags:** `ai-predictions` `retrospective` `essay` `industry`
+
+taylor.town scores *The Inevitable* (2016) a decade later. The hits: Google "really making an AI" (the transformer followed in 2017); an "oligarchy of two or three large, general-purpose cloud-based commercial intelligences"; AI as AWS-style utility rather than HAL 9000; conversational answers at nanocent-prices. The miss: "the bulk of AI will be special purpose software brains… 99% nerdly narrow, supersmart specialists" — general models ate the specialists, and "not even Kelly foresaw the bitter lesson." The tension the author flags: Kelly predicted the oligarchy *and* championed open AI — the exact contradiction the ecosystem now lives inside.
+
+**Why it matters:** a decade-old prediction set is finally scoreable, and the score says forecasting *concentration* was easier than forecasting *architecture*. Useful calibration for every "agents will/won't X" claim being written today — including in this feed.
+
+[`🔗 Kevin Kelly's 2016 AI Predictions, 10 Years Later — taylor.town`](https://taylor.town/kk-ai-2026) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50057668)
+
+---
+
+## 32. Phreak.ing: an anonymous internet phone switch — Asterisk, a browser softphone, and an IRC bridge
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 95+ pts · ~6.6h ago (~05:39 UTC+8)
+- **Tags:** `telephony` `asterisk` `voip` `hacker-culture`
+
+Phreak.ing is a free community PBX styled on 1980s phone phreaking: sign up anonymously ("we do not keep logs & we do not want your personal information"; "do not use your real phone number for signup"), get a 3–10 digit extension, and connect any of four ways — an in-browser softphone, SIP via Linphone (QR setup; hardware desk phones work), an IRC bridge to `#phreak`, or plain SMS (texting 742735 posts into the channel). The classic feature set is all there: `*69` call return, `*67` caller-ID blocking, voicemail with remote access, conference rooms, call park/pickup, intercom — plus `*#06#` for party mode. Built on Asterisk with fail2ban.
+
+**Why it matters:** hacker-culture infrastructure as a working product rather than a museum piece — and a tidy demo of how commodity VoIP plus an IRC bridge collapses the distance between a chat window and a dial tone. The anonymity posture ("no logs") is also the risk model: read the ToS before you dial.
+
+[`🔗 Phreak.ing`](https://phreak.ing/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50063417)
+
+---
+
+## 33. Atticus: hold-to-talk macOS voice assistant on your existing Claude plan — with shortcuts that learn to skip the model
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 83+ pts · ~28h ago (~08:15 UTC+8 Oct 12)
+- **Tags:** `voice` `macos` `claude-code` `show-hn`
+
+SaarthurR/atticus-mac (MIT, 92★, Show HN): hold ⌃⌥space, speak, release — Apple's on-device speech recognition ("audio never leaves your Mac") pipes the request to `claude -p` on your existing Claude Pro/Max plan (~0.14¢ of plan usage per ask, no API key). Simple commands — open apps, move windows, web searches — skip AI entirely (~0.08 s), and repeated actions become **learned shortcuts** that run without any model call (one example drops from 5.5 s to 0.4 s). Safe mode runs AI commands inside Claude Code's sandbox (writes limited to a scratch folder), blocks `rm`/`sudo`/disk tools outright, and asks before deleting, sending or buying. Extras: local meeting transcripts with optional AI summaries, and a "watch for me" page/agent-log poller. macOS 26+.
+
+**Why it matters:** the learned-shortcut mechanism is the same economics tester-army/e2e applies to testing — pay for the model once per novel action, then replay the confirmed decision deterministically. Voice is just the front-end; "confirm once, cache the intent" is an agent-latency pattern worth stealing everywhere.
+
+[`🔗 SaarthurR/atticus-mac`](https://github.com/SaarthurR/atticus-mac) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=50049588)
+
+---
+
+## 34. Unisoc modem OTA stack: CVSS 9.8 stack overflow in SIB1 scheduling validation — RCE with no privileges and no interaction
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVE-2026-66086 published Oct 12 (~1.1d ago)
+- **Tags:** `cve` `baseband` `unisoc` `mobile`
+
+CVE-2026-66086 (published Oct 12): in Unisoc's modem OTA stack, "a possible stack-based buffer overflow due to improper validation of scheduling information in SIB1 messages… could lead to remote code execution or denial of service with no additional execution privileges needed." SIB1 is the LTE/5G system-information block every phone decodes when camping on a cell — the attack surface is the radio link itself, not an app. Score attribution matters here: CVSS 3.1 **9.8** assigned by the vendor CNA (security@unisoc.com); there is no independent analysis or exploitation report yet. The fix ships via Unisoc's product security bulletin (their reference is the sole NVD link).
+
+**Why it matters:** baseband bugs are the closest thing to wormable-without-a-click, and SIB1 is broadcast infrastructure by definition — every handset in range of a spoofed or malicious cell parses it. The usual supply-chain lag applies: Unisoc powers mid-range devices across many OEMs, and each device waits on its vendor to integrate the bulletin; vendor-CNA scores also deserve independent confirmation before panic.
+
+[`🔗 NVD: CVE-2026-66086`](https://nvd.nist.gov/vuln/detail/CVE-2026-66086) · [`🔗 Unisoc product security bulletin`](https://www.unisoc.com/en/support/product-security-bulletin/2109454821805424641)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-12T20:40:00Z |
-| Items | 19 |
-| Sources tracked | 20 (Hacker News, GitHub Trending/API, npm registry, NVD, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, Filippo Valsorda, Diomidis Spinellis, cendyne.dev, simonkoeck.com, prophitt.me, shokunin.studio, openfatigue.ai, agent37.com, VulnCheck-scored NVD records) |
+| Generated | 2026-10-13T04:25:00Z |
+| Items | 34 |
+| Sources tracked | 31 (Hacker News, GitHub Trending/API, npm registry, NVD, arXiv, Intel, GitHub Status, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, LinkedIn, yyhh.org, mortoray.com, ryanbigg.com, purplesyringa.moe, felixcloutier.com, micahflee.com, taylor.town, phreak.ing, Unisoc security bulletin, VulnCheck-scored NVD records, vendor blogs and security bulletins, personal engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

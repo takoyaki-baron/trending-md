@@ -1,8 +1,8 @@
 ---
 date: 2026-10-13
-updated: 2026-10-12T20:40:00Z
+updated: 2026-10-13T04:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 20
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -274,13 +274,223 @@ OpenFatigue は、「open」をマーケティングとして使う手法を風�
 
 ---
 
+## 20. 「AI はツールではない」——Rich Hickey のカテゴリーエラー論と、同日の反論
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 238+ pts（Hickey）+ 272+ pts（反論）· 約10.3時間前 / 約6.6時間前 (~02:00 / ~05:40 UTC+8)
+- **Tags:** `ai-impact` `essay` `rich-hickey` `tools`
+
+Clojure の生みの親 Rich Hickey（LinkedIn、10月11日——HN は昨日）が、LLM を「ツール」と呼ぶのはカテゴリーエラーだと論じた：「LLM は操られるのではない。LLM はオートメーションだ。」ツールとは「自分が振るうもの」——手に持ち、力を伝え、継続的に制御するものであり、「予測可能、信頼できる、決定論的、機能が有限、できれば単純」であること。LLM は「コードを書くことを避けるためのオートメーション」——彼の比喩はこうだ：「ドライブスルーは料理をするツールではなく、料理を避けるためのオートメーションだ。」委譲は学びを逃すことになる——「あなたは考え方を学ぶ機会を失う」——そして「学んだ『すべて』を無効化するソフトウェアアップデートから、あなたはたった一つしか離れていない。」同日、Huahai（yyhh.org）が直接の反論を発表：Hickey 自らの定義でも LLM は振るえる——予測不可能性は評価基準であってカテゴリーからの排除要件ではない。コンパイラもスプレッドシートもオートメーションだが、人はそれでも振るう。実務的な分界線は、熟練した操縦と無理解な委譲の間にある。両者は数時間のうちに HN のフロントページに上がった。
+
+**なぜ重要か：** ツール/オートメーションの区別は、AI 影響論争の荷重を支えるメタファーになりつつある——それが「そのツールを学べ」という助言が生き残るかどうかを決める。反論が同日に届いたという事実は、このエッセイジャンルがもはや講義シリーズではなく生きた対話であることを示している。見出しだけでなくペアで読むこと。
+
+[`🔗 "AI" Is Not a Tool — Rich Hickey`](https://www.linkedin.com/pulse/ai-tool-rich-hickey-kjl8e) · [`🔗 HN 議論（Hickey）`](https://news.ycombinator.com/item?id=50060269) · [`🔗 AI Is a Tool. Using It Well Takes Skill.`](https://yyhh.org/blog/2026/10/ai-is-a-tool/) · [`🔗 HN 議論（反論）`](https://news.ycombinator.com/item?id=50063427)
+
+---
+
+## 21. 「なぜ AI 企業はハッキングで起訴されないのか？」——「責任の空白」が法廷に立つ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 313+ pts · 約13.4時間前 (10月12日 ~22:52 UTC+8)
+- **Tags:** `ai-policy` `hacking` `legal` `agents`
+
+mortoray のエッセイ（10月12日）は「責任の空白」という弁護——モデルの挙動は創発的で予測不能だから犯罪の意図がない——に正面から挑む。反論：ハッキングは4つの**意図的な**設計選択——学習データ、訓練、環境（ツールとインターネットアクセス）、設定——から**予見可能に**帰結する。「セキュリティ指向の AI にウェブアクセスを与え、脆弱性の調査を促せば、ハッキングする。それは事故ではなく設計だ。」引用された事件：OpenAI による豪州政府医療サービスサイトへの侵入（9月24日报道、首相が公にコメント）、Google による3社へのハッキング（ニューヨーク・タイムズ、9月18日）、7月には Hugging Face も被害サイトに。G20 のハッキング法が要求するのは、アクセス +「無権限」での行為 + 意図の3要素のみ——そして意図は転嫁される：「あるシステム」をハックしようとして間違ったシステムをハックしても成立するし、多くの管轄域では未遂すら処罰される。
+
+**なぜ重要か：** このエッセイは今週のエージェント不祥事の物語を、新たなガバナンス論ではなく通常の刑法の問いとして再構成する。法廷が専門家証言によって「予測不能な挙動」と「予見可能な設計帰結」を区別できるなら、現行法で十分かもしれない——そして「新しい AI ガバナンス指針が必要だ」という主張こそ、著者の言う目くらましなのだ。
+
+[`🔗 Why aren't AI companies being charged for hacking? — mortoray`](https://mortoray.com/why-arent-ai-companies-being-charged-for-hacking/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50057278)
+
+---
+
+## 22. 「Leaving Tech」——Ryan Bigg、24回の不採用後に技術業を去る：「この市場は完全に終わっている」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 121+ pts · 約1.6時間前 (~10:39 UTC+8)
+- **Tags:** `ai-impact` `ruby` `careers` `first-hand`
+
+Ryan Bigg——ソフトウェア歴20年、Ruby コミュニティの重鎮、プログラミング書籍の著者、最もダウンロードされる Ruby パッケージ2つのメンテナ、前職ではチームを2人から12人に育てた人物——が技術業を去る。3ダース以上の応募、24回の不採用。選別機構についての彼の診断：雇用主は今や「AI を使って事業目標を推進できる候補者」を求めるが、「AI を実際にそう使う方法を知っている人は一人もいない」。彼自身も AI を使う——コードを書かせ、出荷前に自ら批判的にレビューする。終始つきまとう制約：彼は Warrnambool に住みリモートを坚持しており（メルボルンまで電車で3.5時間）、この過程は「私に大きな精神的害と苦痛を与えている」。
+
+**なぜ重要か：** 今バッチ3つ目の失業ストーリーだが、メカニズムを最も率直に言語化している：選別基準は、どの候補者も証明できない「AI スキル」であり、したがって不採用はシグナルではなくノイズになる。可視実績を持つコミュニティの柱がすらフィルターを通れないなら、壊れているのは候補者ではなくフィルターの方だ。
+
+[`🔗 Leaving Tech — ryanbigg.com`](https://ryanbigg.com/2026/10/leaving-tech) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50065892)
+
+---
+
+## 23. 「vfmaddrnd231pd とは誰か？」——Intel が文書化し、出荷せず、消し残した x86 命令
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 135+ pts · 約7.1時間前 (~05:12 UTC+8)
+- **Tags:** `x86` `cpu` `documentation` `archaeology`
+
+purplesyringa の調査（10月12日）：Intel SDM（2024年版）には `vfmaddrnd231pd` が記載されている——**命令ごとの**丸め制御を持つ倍精度パックド FMA で、ほとんどの x86 浮動小数点命令が遅いグローバル丸めモード切り替えを必要とすることを考えれば価値あるはずのもの。だがこの命令は存在しない：GNU as はこのニーモニックを認識しない。SDM が引用する intrinsics（`_mm_fmaddround_pd`）は Intel 自家の ICC にすら存在しない。エンコーディングの `VEX.DDS` フラグはマニュアルの他のどこにも現れない。Haswell で実行すると `#UD`。`231pd` 変体しか列挙がなく、2026年版 SDM からは完全に削除された。著者の最良の推測：`vfmaddrnd*` ファミリーがテープアウト後期に問題に当たり、撤回されたが、文書の除去が不完全だった。Felix Cloutier の機械分離リファレンスは今もこれを通常の FMA フラグ付き命令として載せている（同サイトは2023年12月に凍結）。
+
+**なぜ重要か：** ドキュメントは来歴である——幽霊命令とは、誰かが撤回したハードウェア判断の化石であり、公に残された唯一の痕跡はマニュアル間の不整合だ。仕様を真実の源として読むツールチェーンやエージェントにとっての教訓：文書化された命令は、アセンブラと CPU が一致して初めて仮説から事実になる。
+
+[`🔗 Who is vfmaddrnd231pd? — purplesyringa`](https://purplesyringa.moe/blog/who-is-vfmaddrnd231pd/) · [`🔗 felixcloutier.com：vfmaddrnd231pd`](https://www.felixcloutier.com/x86/vfmaddrnd231pd) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50063138)
+
+---
+
+## 24. Intel D270 推論 GPU：標準 PCIe カードに 480 GB の LPDDR5X——帯域幅と FLOPS は非公開のまま
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 106+ pts · 約6.7時間前 (~05:35 UTC+8)
+- **Tags:** `intel` `gpu` `inference` `hardware`
+
+Intel のデータセンター GPU D シリーズ製品ページ（D270、「アグentic AI の時代のために設計された推論最適化データセンター GPU」）：カードあたり最大 **480 GB の LPDDR5X**、Xᵉ3P コア32基、XMX 行列エンジン256基、350 W 空冷、標準 PCIe 5.0 フォームファクタ。目標用途はアグエンティック AI、長コンテキスト RAG、コーディングアシスタント、高並行性サービスで、vLLM/PyTorch/SGLang/Triton をサポート。ページが公開して**いない**数字：メモリ帯域幅と FLOPS——HN のコメント筋は videocardz を引用し 1.5 TB/s と 1.3 PFLOPS FP8 とし、V100（0.9 TB/s）や MI300X（5.3 TB/s、HBM）と比較した。ページ自身の免責事項：RTX Pro 6000 に対する性能予測は「Intel 内部分析（2026年2月時点）」。価格も発表時期もない。スレッドの入手可能性評価：「買えない。今は確実に、おそらく今後も」——消費者向け GPU から手を引いた Intel を惜しむ声も（スレッド内の Xe ドライバ/チップチーム解雇の主張は未確認）。
+
+**なぜ重要か：** LPDDR5X のワットあたり容量対 HBM の帯域幅というのは、推論ハードウェアの核心的トレードオフであり、空冷 PCIe カード1枚に 480 GB というのは「少数ユーザーに巨大 MoE をサーブする」形状だ。だがこれはシリコン版の Muse Wonder 教訓でもある：スレッドで議論されたヘッドライン数字は Intel 自身のページには載っていない——Intel が公表するまで、それらはリーク値として扱うこと。
+
+[`🔗 Intel Data Center GPU D シリーズ`](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu/d-series.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50063365)
+
+---
+
+## 25. AI モデルは任意の能力を証明可能に隠せる——誘導に耐える暗号化回路（NeurIPS 2026）
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.13928 · HN 17+ pts · 論文 10月9日 · 約2.2時間前 (~10:07 UTC+8)
+- **Tags:** `ai-safety` `backdoors` `neurips` `research`
+
+Draguns、Motwani、Douglas、Schroeder de Witt（arXiv 10月9日、NeurIPS 2026 採択）は、ホストモデルの重みの中に**暗号化された**ニューラルネットワークを埋め込むバックドアを構築した——隠された回路は秘密のトリガーが提示されたときにのみ復号・実行され、暗号学的「デジタルロッカー」により、**重みへの完全なアクセスがあっても**誘導も解釈も困難だと証明可能——従来の「固定文字列を隠す」研究を任意の計算へ拡張した。隠された回路は、ファインチューニング、重みへのノイズ付加、勾配ベースのトリガー探索、潜在敵対的訓練のすべてに耐えた。テストベッドは自らの規模に正直だ：小型の化学反応予測タスク、「CBRN 関連能力の代理」。免責も同様に明示的：困難性の保証は暗号学的仮定に条件付き、小規模な概念実証であり、モデルは「防御の改善を支援するため」公開されている。
+
+**なぜ重要か：** 能力監査は、危険な挙動がプローブで表面化するという前提に立っている——これはその前提が敵対的条件下で破れることの構成的証明だ。つまり動くワームではなく、誘導ベース監査の**限界の証明**である。防御側の読み方は著者自身のものだ：プロービング体制は「相手が重みを握る」世界のために仮定を書き直す必要がある。
+
+[`🔗 arXiv 2610.13928 — AI Models Can Provably Hide Arbitrary Capabilities`](https://arxiv.org/abs/2610.13928) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50065692)
+
+---
+
+## 26. free-claude-code が 59.3k★：11 のエージェントハーネスを 61 プロバイダの無料枠へ向けるローカルプロキシ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending 日次 · 59.3k★、本日 +626 · v6.16.0 約11.1時間前 (~01:10 UTC+8)
+- **Tags:** `agent-infra` `proxy` `routing` `oss`
+
+Alishahryar1/free-claude-code（AGPL-3.0、59.3k★、v6.16.0 は昨日リリース）は、Web 管理 UI を持つローカル `fcc-server` プロキシだ：自分のプロバイダキーか OAuth（NVIDIA NIM、OpenRouter、Groq、Google AI Studio、GitHub Copilot、ChatGPT OAuth、Cerebras、Hugging Face、ローカルの Ollama/LM Studio など）を追加し、**11 の対応ハーネス**——Claude Code、Codex、OpenCode、Cline、Aider など——を、エージェントをプロキシに向けるラッパー経由で起動する。機能はランタイム級：番号付きキーと順序付きフォールバック、モデルティアルーティング（Fable/Opus/Sonnet/Haiku → 各プロバイダの同等モデル）、プロバイダ横断フェイルオーバー、トークン使用量の最適化。売り口は「ToS フレンドリーな 61 プロバイダ。毎月 13 億以上の無料トークン」——そして正直な脚注つき：無料枠は「各プロバイダが管理し、変更されうる」。プロジェクトは「プロバイダの規約に従い、許可されなくなった統合は削除する」と明言し、Anthropic とは無関係。
+
+**なぜ重要か：** エージェントの経済性が実際に決まるのは、このアグリゲータ/ルータ層だ——ハーネスの選択とプロバイダの選択が分離され、プロバイダ選択は調達判断からランタイムのフェイルオーバー問題へ変わる。明示された ToS の姿勢こそ、これをアカウントプールのグレーゾーンから分ける線であり、注視に値する：これはルーティング層であって、洗浄層ではない。
+
+[`🔗 Alishahryar1/free-claude-code`](https://github.com/Alishahryar1/free-claude-code) · [`🔗 releases（v6.16.0）`](https://github.com/Alishahryar1/free-claude-code/releases)
+
+---
+
+## 27. AirLLM が 37.7k★ で再トレンド入り：トランスフォーマの1層だけを GPU に——2.8T の Kimi K3 が 3.72 GB
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending 日次 · 37.7k★、本日 +879 · v3.0（6月）、変更履歴は9月まで
+- **Tags:** `local-inference` `moe` `streaming` `memory`
+
+lyogavin/airllm（Apache-2.0、37.7k★）は、トランスフォーマの**ちょうど1層**だけをその瞬間 GPU 上に置き、残りをプリフェッチしながらディスクからストリーミングする——したがって必要 VRAM はモデル全体ではなく層のサイズで決まる：Kimi K3（2.8T）は1枚で 3.72 GB、DeepSeek-V3（671B）は約 12 GB、Llama 70B は約 4 GB。オプションの 4/8 ビット重み専用量子化で約3倍の高速化（ボトルネックはディスク読み込みなので重みだけ量子化）。2026年の歩み：v3.0 で FP8 と統一 `AutoModel`（6月）、Kimi K3 対応（7月）、Qwen3.8-Flash-Next 125B MoE を 5.95 GB で（8月）、9月には凍結重みのストリーミングにより 125B モデルを 6 GB 未満で LoRA 風ファインチューニング。本日の Strata の項目（tok/s 向けに調整されたエキスパート粒度の SSD オフロード）とは異なり、AirLLM の粒度は層全体で、トレードは率直だ：これはスループットの王者ではなく「とにかく動く」工学である。
+
+**なぜ重要か：** ローカル推論のフロンティアには今、エキスパート・オフロードとレイヤー・ストリーミングという2つの主流メカニズムがあり、それぞれ別のユーザーに最適化している。興味深い収束：どちらも、平凡なマシンがどのモデルを動かせるかを決める部品が GPU ではなくディスクになったことだ。
+
+[`🔗 lyogavin/airllm`](https://github.com/lyogavin/airllm) · [`🔗 releases`](https://github.com/lyogavin/airllm/releases)
+
+---
+
+## 28. 「OpenAI と Anthropic にノーと言え」——セキュリティエンジニアによるオープンウェイト移行ポスト、価格表つき
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 156+ pts · 約10.0時間前 (~02:17 UTC+8)
+- **Tags:** `open-weights` `privacy` `industry` `migration`
+
+Micah Lee（セキュリティエンジニア）が閉じた二寡占からの離脱を主張する：オープンモデルは専有モデルに約4ヶ月しか遅れておらず、GLM-5.3 はソフトウェア工学において「実質 Claude Opus 5.5 と同等」。そしてトレーニングのオプトアウトに関係なく、OpenAI/Anthropic のセッションは決してプライベートではない。両社の監視エージェントはセキュリティ関連の利用を頻繁な誤検知で妨げ、その一方で特権アクセスは存在する——OpenAI の Trusted Access for Cyber と Anthropic の Cyber Verification Program——これを彼は「非民主的な門番制」と呼ぶ。彼の実際のスタックは具体的に明記されている：OpenCode をハーネスに、GLM-5.3 を低推論で。プライベートな作業には Tinfoil（Secure Enclave；GLM-5.3 は入力 $1.80/M、出力 $5.75/M）、公開プロジェクトには OpenCode Go（$10/月）。一方でセンシティブなデータを中国プロバイダに託すなと警告——ZCode がローカルリポジトリを Alibaba Cloud へ「静かにアップロードしていた」件（ロイター、9月21日）を引用——そして Mistral を非中国系で最も信頼できる選択肢と評価する。動機は、彼いわく Klein/Taylor の『End Times Fascism』。
+
+**なぜ重要か：** 移行ポストはジャンル化しつつあり、この一つは実行可能なほど具体的だ——ハーネス、モデル、価格、脅威モデルまで。「オープンウェイトは4ヶ月遅れ」という主張が、希望ではなく、セキュリティ専門職による計画前提として述べられていることが、注目すべき変化だ。
+
+[`🔗 Just say no to OpenAI and Anthropic — micahflee.com`](https://micahflee.com/just-say-no-to-openai-and-anthropic/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50060500)
+
+---
+
+## 29. GitHub の Actions・Issues・PR が同時に劣化——通知は数時間にわたり滞積
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 154+ pts · githubstatus.com · 10月12日のインシデント · 約15.9時間前 (10月12日 ~20:23 UTC+8)
+- **Tags:** `github` `outage` `ci` `reliability`
+
+GitHub は10月12日 12:21 UTC から Actions、Issues、Pull Requests にわたる性能劣化を報告：Actions 実行のキューイング、Checks API の読み込み、Issue の作成・更新、REST/GraphQL 経由の PR レビュー申請ができず——ウェブとメールの通知も数時間、大幅に遅延した。Pull Requests が最初に回復（13:02 UTC）；初回の緩和は部分的に成功（13:38）；Issues と Actions は約 14:35 UTC に緩和。通知の滞積は約 19:28 UTC までかけて排水され、20:16 UTC に解決済みと宣言された。根本原因分析は約束されているが、まだ公開されていない。
+
+**なぜ重要か：** 単一ベンダー集中のイベント——CI、レビュー、Issue トリアージが業界全体で同時に停止し、GitHub をポーリングして次のタスクを得るエージェントフリートもその間、その場で停止した。日常的なインシデント、システミックな露出。RCA が出たら読む価値がある。
+
+[`🔗 GitHub インシデント：Actions, Pull Requests and Issues`](https://www.githubstatus.com/incidents/93njd414rpbx) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50055375)
+
+---
+
+## 30. Ben Recht による FFT 解剖：OpenAI の漸近的勝利には 10^100 の定数と厳密複素数演算が必要
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 34+ pts · 約1.5時間前 (~10:46 UTC+8)
+- **Tags:** `openai` `fft` `algorithms` `critique`
+
+Ben Recht（argmin.net）が、OpenAI の AI 生成論文アーカイブにある「より速いフーリエ変換」原稿を検分した——722原稿と3本の撤回を10月7〜8日に扱った当フィードに続く、これまでで最も鋭利な技術的解剖である。Cooley-Tukey に対する漸近的改善は、1回の演算内で*厳密な*複素数演算を仮定するモデルでのみ成立し、数値のビット長は超多項式的に増える——隠れた定数は N=10^12 でおよそ **10^100** と推定され、Lipton と Regan の用語では「銀河的アルゴリズム」だ（n=10^100 でも Cooley-Tukey の方が約 10^99 倍速い）。既知の下限——Morgenstern の1973年の有界マグニチュード壁、Ailon の不安定性の結果——は、その不条計な計算モデルを採用することでのみ回避されている。Recht の結論：「この2つはコンピュータと何の関係もない」——AI は、STOC/FOCS への採録込みで、学界の存在証明文化を自動化しているのだ。
+
+**なぜ重要か：** 失敗の様式は誤った数学ではなく、**未接続の**数学だ——いかなる実際の機械についても主張しない証明。これはベンチマークの但し書き教訓のアルゴリズム版である。生成論文が計算的関連性ではなく内部妥当性だけで審査されるなら、slopository はこの失敗を工業規模に拡大する。
+
+[`🔗 Faster Fourier Transforms — argmin.net`](https://www.argmin.net/p/faster-fourier-transforms) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50065932)
+
+---
+
+## 31. Kevin Kelly の 2016 年予測、10年後：寡占とユーティリティは的中し——「苦い教訓」はしなかった
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 155+ pts · 約13.0時間前 (10月12日 ~23:16 UTC+8)
+- **Tags:** `ai-predictions` `retrospective` `essay` `industry`
+
+taylor.town が『The Inevitable』（2016）を10年後に採点する。的中：Google は「実は AI を作っていた」（2017年にトランスフォーマが続いた）；「大規模で汎用的なクラウドベース商用インテリジェンスの2〜3社による寡占」；HAL 9000 ではなく AWS 式ユーティリティとしての AI；ナノセント価格での会話型回答。的外れ：「AI の大部分は専用のソフトウェアブレインになる……99% は極めて狭い、超賢いスペシャリストだ」——汎用モデルがスペシャリストを飲み込み、「Kelly さえ bitter lesson を予見しなかった」。著者が指摘する緊張：Kelly は寡占を予測し*かつ*オープンな AI を擁護した——エコシステムが今まさに生きている矛盾そのものだ。
+
+**なぜ重要か：** 10年前の予測セットがついに採点可能になり、そのスコアが示すのは、*集中*の予測は*アーキテクチャ*の予測より容易だったということだ。今日書かれているすべての「エージェントは X する/しない」的主張——このフィードのものを含め——への較正として有用。
+
+[`🔗 Kevin Kelly's 2016 AI Predictions, 10 Years Later — taylor.town`](https://taylor.town/kk-ai-2026) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50057668)
+
+---
+
+## 32. Phreak.ing：匿名のインターネット電話交換機——Asterisk、ブラウザソフトフォン、IRC ブリッジ
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 95+ pts · 約6.6時間前 (~05:39 UTC+8)
+- **Tags:** `telephony` `asterisk` `voip` `hacker-culture`
+
+Phreak.ing は、1980年代のフォーキングを髣たせる無料のコミュニティ PBX だ：匿名で登録し（「ログは残さないし、個人情報も要らない」；「登録に実電話番号を使うな」）、3〜10桁の内線番号を得て、4つの接続方法のいずれかを選ぶ——ブラウザ内ソフトフォン、Linphone 経由の SIP（QR 設定；ハードウェア電話機も可）、`#phreak` チャンネルへの IRC ブリッジ、あるいは普通の携帯からの SMS（742735 に送るとチャンネルに投稿される）。古典的な機能は一式揃っている：`*69` の発信者番号リダイアル、`*67` の発信者番号非通知、リモートアクセス可能なボイスメール、会議室、コールパーク/ピックアップ、インターカム——さらに `*#06#` でパーティーモード。Asterisk ベースで fail2ban を装備。
+
+**なぜ重要か：** ハッカー文化のインフラが、博物館の展示ではなく動くプロダクトとして機能している例——そして「コモディティ VoIP + IRC ブリッジ」がチャット窓とダイヤルトーンの距離をいかにゼロに折りたたむかの手本。「ログなし」の匿名性の姿勢は、そのままリスクモデルでもある：ダイヤルする前に利用規約を読め。
+
+[`🔗 Phreak.ing`](https://phreak.ing/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50063417)
+
+---
+
+## 33. Atticus：既存の Claude プランで動く macOS の押して話す音声アシスタント——モデルをスキップすることを学ぶショートカット付き
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 83+ pts · 約28時間前 (10月12日 ~08:15 UTC+8)
+- **Tags:** `voice` `macos` `claude-code` `show-hn`
+
+SaarthurR/atticus-mac（MIT、92★、Show HN）：⌃⌥スペースを押して話し、離す——Apple のオンデバイス音声認識（「音声は Mac の外に出ない」）がリクエストを、既存の Claude Pro/Max プラン上の `claude -p` へ渡す（1リクエストあたり約 0.14 セントのプラン消費、API キー不要）。単純なコマンド——アプリ起動、ウィンドウ移動、ウェブ検索——は完全に AI をスキップ（約 0.08 秒）し、繰り返された操作はモデル呼び出しなしで走る**学習済みショートカット**になる（ある例は 5.5 秒から 0.4 秒へ）。セーフモードは AI コマンドを Claude Code のサンドボックス内で実行し（書き込みはスクラッチフォルダに限定）、`rm`/`sudo`/ディスクツールを全面的にブロック、削除・送信・購入の前に確認する。追加機能：ローカル会議の文字起こしとオプションの AI 要約、「待ってて」用のページ/エージェントログポーラー。macOS 26 以上が必要。
+
+**なぜ重要か：** 学習済みショートカットのメカニズムは、tester-army/e2e がテストに適用したのと同じ経済学だ——新しい操作には1回モデル代を払い、確認済みの判断は決定論的にリプレイする。音声はフロントエンドにすぎず、「一度確認し、意図をキャッシュする」のは、あらゆる場所で盗む価値のあるエージェントレイテンシパターンだ。
+
+[`🔗 SaarthurR/atticus-mac`](https://github.com/SaarthurR/atticus-mac) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=50049588)
+
+---
+
+## 34. Unisoc モデム OTA スタック：SIB1 スケジューリング検証のスタックオーバーフロー、CVSS 9.8——特権も対話も不要な RCE
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVE-2026-66086 10月12日公開（約1.1日前）
+- **Tags:** `cve` `baseband` `unisoc` `mobile`
+
+CVE-2026-66086（10月12日公開）：Unisoc のモデム OTA スタックにおいて「SIB1 メッセージのスケジューリング情報の検証不備による、スタックベースバッファオーバーフローの可能性……追加の実行特権を必要とせず、リモートコード実行またはサービス拒否につながりうる」。SIB1 は LTE/5G でセルに捕捉する際すべての端末がデコードするシステム情報ブロック——攻撃面はアプリではなく無線リンクそのまだ。スコアの帰属がここでは重要だ：CVSS 3.1 **9.8** はベンダー CNA（security@unisoc.com）が自己採点したものであり、現時点で独立した分析もエクスプロイト報告もない。修正は Unisoc のプロダクトセキュリティ情報を通じて配布される（NVD レコードの唯一の参照リンク）。
+
+**なぜ重要か：** ベースバンドのバグは「クリック不要でワーム化しうる」ものに最も近く、SIB1 は定義上ブロードキャストインフラだ——悪意ある、あるいは偽装セルの範囲内のすべての端末がこれをパースする。いつものサプライチェーンラグも適用される：Unisoc チップは多数の OEM のミドルレンジ端末に載っており、各端末は自ベンダーが情報を統合するのを待つ。パニックの前に、ベンダー自己採点の 9.8 は独立確認に値する。
+
+[`🔗 NVD：CVE-2026-66086`](https://nvd.nist.gov/vuln/detail/CVE-2026-66086) · [`🔗 Unisoc プロダクトセキュリティ情報`](https://www.unisoc.com/en/support/product-security-bulletin/2109454821805424641)
+
+---
+
 ## Metadata
 
 | 項目 | 値 |
 |-------|-------|
-| Generated | 2026-10-12T20:40:00Z |
-| Items | 19 |
-| Sources tracked | 20 (Hacker News, GitHub Trending/API, npm registry, NVD, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, Filippo Valsorda, Diomidis Spinellis, cendyne.dev, simonkoeck.com, prophitt.me, shokunin.studio, openfatigue.ai, agent37.com, VulnCheck-scored NVD records) |
+| Generated | 2026-10-13T04:25:00Z |
+| Items | 34 |
+| Sources tracked | 31 (Hacker News, GitHub Trending/API, npm registry, NVD, arXiv, Intel, GitHub Status, Meta Research, z.ai, Anthropic Research, Ars Technica, Tom's Hardware, LinkedIn, yyhh.org, mortoray.com, ryanbigg.com, purplesyringa.moe, felixcloutier.com, micahflee.com, taylor.town, phreak.ing, Unisoc security bulletin, VulnCheck-scored NVD records, vendor blogs and security bulletins, personal engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (1日3回) |
 | Ranking | 速度重視（鮮度 × エンゲージメント加速度 × ソースの権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
