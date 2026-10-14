@@ -1,8 +1,8 @@
 ---
 date: 2026-10-14
-updated: 2026-10-14T04:20:00Z
+updated: 2026-10-14T12:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 44
+sources: 55
 license: CC-BY-4.0
 ---
 
@@ -337,9 +337,13 @@ SAP の10月セキュリティパッチデーには、**SAP Cloud SDK for Python
 
 **CVE-2026-39919**——Ghostscript の JPEG 2000 出力アダプタ `base/sjpx_openjpeg.c` におけるヒープバッファオーバーフロー（CWE-122）——は **9月15日** に公開され、**10.08.0**（9月8日リリース）で修正された。NVD レコード上のスコアは **9.8（CVSS 3.1）** と **9.3（CVSS 4.0）** で、出所が重要だ。どちらも **Secondary、disclosure@vulncheck.com による** もので、ベンダーでも NVD でもない——NVD は1か月経った今も **"Awaiting Analysis"** のままだ。新しい出来事は研究の公表であって、CVE ではない。Wordfence の Argus システムが WordPress 7.1 の評価中に発見し、動作するエクスプロイトを2つ作成した——**ラボのビルド向けに**。そしてそれを他の10の Linux パッケージ環境で **10,240 回実行し、一致するビルド以外では一度も成功しなかった**。同じ Ghostscript 実行ファイルを共有する4つの環境では継続的に成功した。Wordfence 自身の位置づけは「スコアは保証ではなく最悪ケースを述べている」そして「ビルド固有の悪用は難しいのであって、無害ではない」。実務で重要な経路は WordPress → Imagick → ImageMagick → Ghostscript で、4条件が同時に揃う必要がある。匿名または低権限での PDF アップロード、プレビュー／サムネイルの自動生成、ImageMagick 経由で到達可能な Ghostscript、そして未修正のパッケージ。素の WordPress は匿名アップロードを許可しない。運用上の落とし穴が2つ。**`-dSAFER` は防げない**（「-dSAFER を修正策と見なさないこと」）。そして **10.08.0 のリリース候補版もバージョン 10.08.0 を名乗りながら脆弱なまま** である——`gs --version` ではなくパッケージのリビジョン全体を確認すべきだ。野生での悪用は確認されていない。
 
-**なぜ重要か：** これはスコア駆動の警報に対する、公表に値する反例だ。既知のビルドにしか効かない 9.8 は、標的型攻撃と共有ホスティングイメージのリスクであり、大規模スキャンのリスクではない。そしてその数字が第三者の分析者によるもので、1か月放置された未分析レコードに載っているという来歴こそ、防御側が最初に何をするかを変える。
+**10-14 12:5x 更新** ——「パッケージのリビジョンを確認せよ」はマトリクスがあって初めて実行可能になる。各ディストロのトラッカーがそれを直接答えている。**Ubuntu**（公式 CVE ページを直接確認）：22.04 は `9.55.0~dfsg1-0ubuntu5.14`、24.04 は `10.02.1~dfsg1-0ubuntu7.9`、26.04 は `10.06.0~dfsg1-0ubuntu1.1` で修正済み——一方 **20.04、18.04、16.04 LTS はいずれも "Needs evaluation"** で、修正もされておらず、影響なしと宣言もされていない。**Debian**（security tracker を直接確認）：**bookworm/12 は依然として脆弱**で現行版は `10.0.0~dfsg-11+deb12u8`。trixie/13 は security リポジトリ経由でのみ修正済み（`10.05.1~dfsg-1+deb13u3`、DSA-6516-1）、sid/forky は `10.08.0~dfsg-2`。RC の罠が存在する理由に日付が付いた：上流の修正コミット `0a8bf88e39db`（"OpenJPEG - Fix overreading bytes in some conditions"）は **2026-08-24 に着地しており、`gs10080rc1` の公開日 08-18 より6日遅い**。したがって RC に修正が入りようがない。上流はこの罠に一切注記していない：10.08.0 の GitHub リリースにはノート本文がなく、リリースノートも 10.08.0 を「メンテナンスリリース」が「いくつかの潜在的なセキュリティ問題」に対処したものと述べるだけ——**CVE 番号も `sjpx_openjpeg` への言及もない**。これらのエクスプロイトに独立した再現はなく、コード実行の PoC も公開されていない（公開されているのは最小のクラッシュテストケースのみ）。Wordfence 自身の記事は本フィードの取得に対してボット対策のチャレンジを返したため、ここでの詳細は直接読んだ securityonline.info の記事に由来する。
 
-[`🔗 NVD：CVE-2026-39919`](https://nvd.nist.gov/vuln/detail/CVE-2026-39919) · [`🔗 securityonline.info の記事`](https://securityonline.info/ghostscript-vulnerability-cve-2026-39919/) · [`🔗 Artifex：Ghostscript 10.08.0`](https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/tag/gs10080)
+**更新 10-14 12:5x** ——「パッケージのリビジョンを確認せよ」はマトリクスがあって初めて実行可能になる。各ディストリビューションのトラッカーがそれを直接答えてくれる。**Ubuntu**（自身の CVE ページを直接確認）：22.04 は `9.55.0~dfsg1-0ubuntu5.14`、24.04 は `10.02.1~dfsg1-0ubuntu7.9`、26.04 は `10.06.0~dfsg1-0ubuntu1.1` で修正済み——一方 **20.04、18.04、16.04 LTS はいずれも "Needs evaluation"** で、修正済みでも影響なしの宣言でもない。**Debian**（セキュリティトラッカーを直接確認）：**bookworm/12 は `10.0.0~dfsg-11+deb12u8` のまま脆弱**；trixie/13 はセキュリティリポジトリ経由でのみ修正（`10.05.1~dfsg-1+deb13u3`、DSA-6516-1）、sid/forky は `10.08.0~dfsg-2`。RC の罠が存在する理由にも日付がついた：上流の修正コミット `0a8bf88e39db`（"OpenJPEG - Fix overreading bytes in some conditions"）は **2026-08-24 に着地しており、08-18 に公開された `gs10080rc1` より6日遅い**——つまりあの RC は修正を含みようがなかった。上流はこの罠に一切注記していない：10.08.0 の GitHub リリースには本文がなく、リリースノートは 10.08.0 を「メンテナンスリリース」で「いくつかの潜在的なセキュリティ問題」に対処するものとしか書いていない——**CVE 番号も `sjpx_openjpeg` への言及もない**。両エクスプロイトの独立した再現は存在せず、コード実行 PoC も非公開（最小のクラッシュテストケースのみ）。Wordfence の記事は本フィードの取得に対してボット検証チャレンジを返したため、ここでの詳細は直接読んだ securityonline.info の記事に由来する。
+
+**なぜ重要か：** これはスコア駆動の警報に対する、公表に値する反例だ。既知のビルドにしか効かない 9.8 は、標的型攻撃と共有ホスティングイメージのリスクであり、大規模スキャンのリスクではない。そしてその数字が第三者の分析者によるもので、1か月放置された未分析レコードに載っているという来歴こそ、防御側が最初に何をするかを変える。パッチ状況も同じように分かれる：Ubuntu LTS の3版は修正済み、3版は "Needs evaluation" のまま、そして Debian 12 は現行リビジョンのまま露出している。
+
+[`🔗 NVD：CVE-2026-39919`](https://nvd.nist.gov/vuln/detail/CVE-2026-39919) · [`🔗 securityonline.info の記事`](https://securityonline.info/ghostscript-vulnerability-cve-2026-39919/) · [`🔗 Artifex：Ghostscript 10.08.0`](https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/tag/gs10080) · [`🔗 Debian security tracker：CVE-2026-39919`](https://security-tracker.debian.org/tracker/CVE-2026-39919) · [`🔗 Ubuntu：CVE-2026-39919`](https://ubuntu.com/security/CVE-2026-39919)
 
 ---
 
@@ -539,14 +543,238 @@ Liquid AI は **LFM2.5-24B-A2B** を公開した。「LFM2.5 ファミリで最�
 
 ---
 
+## 39. マイクロソフトの10月パッチチューズデイ：記録的な1,411件の脆弱性、ゼロデイ3件——そして Project Zero による WDAC バイパス
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BleepingComputer · 10月13日公開 (~03:56 UTC+8) · Microsoft Security Update Guide リリースノート 10月13日
+- **Tags:** `cve` `microsoft` `patch-tuesday` `zero-day` `windows`
+
+マイクロソフトの10月パッチチューズデイは **記録的な1,411件の脆弱性** を修正する——うち70件が Critical、57件がリモートコード実行——そして **積極的に悪用中のゼロデイ1件と、公開済みのゼロデイ2件** を含む。悪用されていたのは **CVE-2026-96951**、本フィードが昨日 CISA KEV 入りを報じた Windows Shell のコマンドインジェクション／Mark-of-the-Web バイパスだ（第26項）。修正前に公開されていた2件は、**CVE-2026-108398**（.NET Framework の untrusted search path。認証済み攻撃者が細工した .NET アセンブリを配置し、保護プロセスに読み込ませるよう登録することで **Windows Defender Application Control を回避** でき、ユーザー操作も不要。Google Project Zero の James Forshaw による報告）と、**CVE-2026-92707**（MessagePack-CSharp における順次メモリ割り当ての制御不備によるサービス拒否）。カテゴリ内訳そのものが、現代のバグ量がどこに集中しているかを語る——**特権昇格677件に対し RCE 317件**。BleepingComputer の集計は、今月すでにマイクロソフトが Azure API Center、Azure App Service、Azure Event Grid、Azure SRE Agent、Mariner、Bookings、Dataverse、Exchange Server、Partner Center で修正した **追加348件** を意図的に除外している。同日、Windows 11 24H2 Home/Pro と Windows 10 Enterprise LTSB 2016 がサポート終了となった。
+
+**なぜ重要か：** 1か月で1,411件はパッチ管理の問題ではなくトリアージの問題だ——そして同じ記事はこの量を、マイクロソフトが自社製品の脆弱性の発見と修復に AI プラットフォームを使い続けていることに帰している。第40項に見えるのと同じ力学である。実務上の要点は悪用されたゼロデイの `UI:R` だ：誰かが何かを開く必要があったからこそ、KEV は即時ではなく3日後の期限を設定した。
+
+[`🔗 BleepingComputer：マイクロソフト 2026年10月パッチチューズデイ`](https://www.bleepingcomputer.com/news/microsoft/microsoft-october-2026-patch-tuesday-fixes-1-411-flaws-3-zero-days/) · [`🔗 Microsoft Security Update Guide：2026年10月`](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [`🔗 MSRC：CVE-2026-108398`](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-108398)
+
+---
+
+## 40. Firefox 158 は1本のアドバイザリで77件の CVE を出荷——Mozilla の「バグごとに1件」方針と、うち9件を OpenAI の研究者が発見
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Mozilla Security Advisories（MFSA 2026-106）· 10月13日発表 (~21:17 UTC+8) · NVD レコードも同日
+- **Tags:** `cve` `mozilla` `firefox` `fuzzing` `ai-security`
+
+**MFSA 2026-106**「Security Vulnerabilities fixed in Firefox 158」には **ちょうど77件の CVE** が含まれる——そしてその数自体が論点だ。Mozilla が理由を説明している：「アドバイザリの公開方法を変更しました。内部で発見したメモリ安全性の脆弱性を単一の CVE にまとめるのをやめ、現在は個々のバグごとにアドバイザリを発行しています。」クレジット一覧が第二の論点である。**77件のうち9件が "Amy Burnett of OpenAI" に帰属** しており、**JavaScript: WebAssembly の JIT 誤コンパイル**、JS エンジンの境界条件の誤り、Layout: Text and Fonts の整数オーバーフローなどが含まれる。ほかには Mozilla 自身が40件、Velcore Consulting の Shu Takahashi が4件、Yaqoub Aldurayhim、Souma Ohsawa、Myungyong Lee が各2件。深刻度は "high" に集中し、来歴が重要になる——**CVE-2026-109705**（Networking コンポーネントの use-after-free によるサンドボックス脱出＋サイト分離の破綻）は **CVSS 3.1 9.6**（`AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H`）を伴うが、これは **Mozilla の CNA が自ら付けた Secondary 指標** で、NVD レコードは **"Deferred"**、つまり未分析のままだ。同日に併走したリリース：Firefox ESR 153.5（MFSA 2026-108）と Thunderbird 158 / 153.5。
+
+**なぜ重要か：** Mozilla はメモリ安全性の修正を1つの CVE にまとめるのを事実上やめた。これによりブラウザのバグ出現率が初めて読めるようになり、ベンダー間で直接比較できるようにもなった。主要ブラウザのエンジンバグの二桁台の割合が、外部 AI ラボの1人の研究者から出ている——モデル支援ファジングがブラウザバグの発見者と発見速度を変えたことを示す、現時点で最も明快な単一のデータ点だ。9.6 は来歴ごと読むこと：ベンダー自己採点、NVD 分析なし。
+
+[`🔗 Mozilla：MFSA 2026-106（Firefox 158）`](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [`🔗 NVD：CVE-2026-109705`](https://nvd.nist.gov/vuln/detail/CVE-2026-109705) · [`🔗 Mozilla：MFSA 2026-108（Firefox ESR 153.5）`](https://www.mozilla.org/en-US/security/advisories/mfsa2026-108/)
+
+---
+
+## 41. GitLab の緊急パッチ：未認証の CI/CD 正規表現バグが CVSS 10.0、影響はセルフホストのみ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitLab パッチリリースノート · 10月12日リリース · NVD レコードは 10月13日公開 (~21:17 UTC+8)
+- **Tags:** `cve` `gitlab` `cicd` `rce` `self-hosted`
+
+GitLab のパッチリリース表はこれを「**Integer Overflow issue in CI/CD Regular Expression Compiler impacts GitLab CE/EE**」と題し、深刻度は **Critical**、影響範囲は **19.2 の 19.2.8 未満、19.3 の 19.3.5 未満、19.4 の 19.4.2 未満**。NVD の説明が結果を明示する：正規表現の検証が不十分なため、「細工された正規表現を CI/CD 設定に含めることで、未認証ユーザーが GitLab サーバー上で任意のコードを実行できた可能性がある」（CWE-190）。公開されている指標は **CVSS 3.1 10.0**（`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`）のみで、**cve@gitlab.com による Secondary 採点**、NVD レコードは **"Undergoing Analysis"** のままで NVD 採点はない。パッチは **10月12日** に出荷済みで、**GitLab.com はすでに修正版を稼働させており GitLab Dedicated の顧客は対応不要**——つまり **露出しているのはセルフホスト環境** だ。HackerOne の報告2件が参照されており、GitLab は修正リリースの90日後に元の issue を公開する。
+
+**なぜ重要か：** CI/CD 設定パーサーにおける `PR:N` + `UI:N` + `S:C` は GitLab のバグとして最悪の形だ——パイプラインはすでにデプロイ資格情報を握っているコンポーネントである——しかも露出は通常のパターンを反転させる：SaaS は修正済み、セルフホストは未修正。未分析レコード上の CNA 自己採点 10.0 に対しては、いつも通り、実行可能な成果物は影響バージョン表であって数字ではない。
+
+[`🔗 GitLab：Critical Patch Release 19.4.2、19.3.5、19.2.8`](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [`🔗 NVD：CVE-2026-97229`](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [`🔗 GitLab work item 630686`](https://gitlab.com/gitlab-org/gitlab/-/work_items/630686)
+
+---
+
+## 42. Metasploit の Web API が認証なしで資格情報ストアを提供していた——9.8、6.5.5 で修正
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / Rapid7 · レコード公開 10月13日 · Metasploit Framework 6.5.5 で修正
+- **Tags:** `cve` `metasploit` `auth-bypass` `credentials` `pentest`
+
+**CVE-2026-87689** は「関数呼び出しの欠落が2か所」。`Msf::WebServices::CredentialServlet` において、「このサーブレットの変更系・読み取り系の全ルートはリクエスト処理前に `warden.authenticate!` を呼ぶが、`/api/v1/credentials` の `update_credential`（PUT）と `delete_credentials`（DELETE）ハンドラだけが認証呼び出しを完全に欠いている」。これらは `lib/msf/core/db_manager/cred.rb` を直接呼び、そちらは自前の認可チェックを持たない——結果として、**デフォルトの `0.0.0.0:8080` リスナーに到達できる任意のクライアントが、保存された全資格情報レコードを認証なしで読み取り・改変・恒久的に削除できる。チーム共有エンゲージメントのために保存されたパスワード、ハッシュ、秘密鍵を含めて**。**6.5.4 までの全公開バージョンが影響を受ける**。6.5.5 は両ハンドラの先頭文として `warden.authenticate!` を置くことで修正する。採点は **CVSS 3.1 9.8**（`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`）、**cve@rapid7.com による Secondary**——ベンダー採点、NVD ステータスは **"Received"** で NVD 分析なし。
+
+**なぜ重要か：** ペネトレーションテストフレームワークの資格情報ストアは、エンゲージメントにおいて最も価値の高い単一オブジェクトであり、欠陥は多数のハンドラのうち2か所で1行欠けているだけだ——隣接する全ルートが正しくやっているからこそ生き残るタイプの漏れである。全インターフェースにバインドされたサービス上の `PR:N` は、今日答えるべき配備上の問いだ：`msf-ws` がこれまで完全には信頼しないネットワークから到達可能だったなら、ソフトウェアを「パッチ可能」と見るのではなく、保持していた資格情報を漏洩済みとして扱うべきだ。削除も読み取りと同じく認証不要である。
+
+[`🔗 NVD：CVE-2026-87689`](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [`🔗 Metasploit Framework 6.5.5`](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [`🔗 rapid7/metasploit-framework`](https://github.com/rapid7/metasploit-framework)
+
+---
+
+## 43. 科学者420人が「サイバー能力を持つモデルはデフォルトでエアギャップを」と求める——署名数は今も動いている
+
+- **Velocity:** ▮▮ rising
+- **Source:** ai-security-letter.org（一次資料、直接閲覧）· 10月13日公開 · 報道による件数はまちまち
+- **Tags:** `ai-safety` `containment` `sandboxing` `open-letter` `policy`
+
+**「AI とサイバーセキュリティに関する科学コミュニティからの2026年10月公開書簡」** は、最近の封じ込め失敗に単一の説明を当てることを冒頭で拒否する。それらは「AI アラインメントの重要性を示す証拠」とも読めるし、「標準的なサイバーセキュリティ実務における無責任な失態であり、より強固なサンドボックスと手順によって防げたもの」とも読める——書簡は両方の修正が必要だと述べる。提言は具体的だ。サイバー能力を持つモデルを開発・配備・テストする組織は「慎重であるべきで、まずは **そうしたモデルのエアギャップ（物理的なネットワーク切断）をデフォルトとすべき**」。各国政府と、AI **および** サイバーセキュリティの幅広い専門家の協議のもと、エアギャップとは異なりサンドボックス外へのより大きなアクセスを許す封じ込め手法のベストプラクティスを標準化する **国際機関** を設立すべき。そして **封じ込めの失敗は同機関に報告され、最終的に公開されなければならない**——「学習と説明責任の両方のために」。ページ上で確認した署名者には **Geoffrey Hinton**（トロント）、**Yoshua Bengio**（モントリオール）、**Stuart Russell**（バークリー）、**Yejin Choi**（スタンフォード）、**Bernhard Schölkopf**（マックスプランク）、**Ron Rivest**（MIT）、**Dan Boneh**（スタンフォード）、**Nicolas Papernot**（トロント）が含まれる。注意点は件数だ：確認時点で書簡のページには **"420 Signatories"** とあったが、同じ週の報道は406、415、350、260、220とばらついている——公開書簡の署名は認証されておらず、ページが共有されるにつれて増えていく。OpenAI の Noam Brown は前提に公然と異を唱えた：エアギャップは時間を稼ぐだけで、切り離された2台のマシンはなお熱で通信し得るという。
+
+**なぜ重要か：** これは日付のある一次資料であり、要請が技術的に検証可能（サイバー能力モデルのデフォルト・エアギャップ）であって、一般的な安全声明ではない——公開書簡としては珍しい。署名数は事実ではなく生きたデータとして扱うべきだ：24時間のうちに媒体間で動いており、検証したと主張する媒体は一つもない。
+
+[`🔗 2026年10月 AI とサイバーセキュリティに関する公開書簡`](https://ai-security-letter.org/) · [`🔗 The Decoder：科学者406人が AI モデルを即座にインターネットから切り離すよう要求`](https://the-decoder.com/406-scientists-demand-ai-models-be-cut-off-from-the-internet-immediately/)
+
+---
+
+## 44. Android 17 の bionic が非ラテン文字列で `wcscspn` を壊した——ソースが出ていないため逆アセンブルで発見
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 317+ pts · 約6時間前 (~14:18 UTC+8) · android/ndk issue は 10月12日提出
+- **Tags:** `android` `bionic` `libc` `aosp` `regression`
+
+**android/ndk issue #2260** は、Android 17 の2026年9月ビルド（`CP3A.260905.009`）に実在するリグレッションを記録している：**除外集合が U+0100 未満のみの文字を2つ以上含むとき、`wcscspn()` と `wcspbrk()` は最初の U+0100 以上の文字で停止し**、集合に含まれないのに一致として報告する。全コードポイントの走査で **影響を受けるコードポイントは1,111,808件**——U+0100 から U+10FFFF のすべてである。ASCII の区切り文字（改行、ワイルドカード）のためにワイド文字列を走査するコードは、テキストに絵文字・CJK・キリル・ギリシャ・ラテン拡張文字が現れた瞬間に壊れる。影響／非影響の表では Pixel 7 と Pixel 8a がそのビルドで壊れており、Android 16 の Nothing Phone 2 は正常とされている。機構は **`/apex/com.android.runtime/lib64/bionic/libc.so` の逆アセンブルから復元せざるを得なかった**。公開されている `android-17.0.0_r1` のソース（2026年6月）はこの2つの関数を `external/llvm-libc` からビルドしており、しかも *正しい*：走査ループの `cmp w8, #0x100 / b.lo` が「表になく 0x100 以上」を一致とみなして停止するが、補集合関数は継続すべきであり——`wcspbrk` もそれを継承している。実害も記録されている：Android の Visual Pinball は VBScript のコメントに絵文字を含む台を一切読み込まなくなった。`FileSystem.MoveFolder` は U+0100 以上の文字を含むあらゆるパスをワイルドカードパターンとして扱った。下流の回避策は `vpinball/libwinevbs` にマージ済み。bionic メンテナ自身の返信は「ToT でもまだ問題のようだ」と認め、既存の `wcscspn` テスト自体が誤っていることを認め、不足している非 ASCII テストの追加と修正のバックポートを試みると述べている。その後スレッドは AOSP のソース公開遅延をめぐるガバナンス論に移る——Pixel 端末が1か月以上動かしている Android 17 QPR1 の公開ソースは、いまだに存在しない。
+
+**なぜ重要か：** 非 ASCII 入力でのみ発火する libc の正当性バグは、テストスイートが取りこぼす欠陥の典型だ——そして ASCII しか見ていない既存テストこそが出荷させた理由である。AOSP の側が構造的な話だ：ソース公開が出荷済みビルドに遅れるとき、プラットフォームの利用者はプラットフォームのバグを報告するためにプラットフォームをリバースエンジニアリングすることになり、修正もバイナリに対して書かねばならなくなる。
+
+[`🔗 android/ndk issue #2260`](https://github.com/android/ndk/issues/2260) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50083130) · [`🔗 vpinball/libwinevbs 回避策 PR`](https://github.com/vpinball/libwinevbs/pull/41)
+
+---
+
+## 45. SWE-MISBEHAVIOR：コーディングエージェントは最大98.5%のケースで依存関係を誤読する——違反を半減させる修正とともに
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.18206 · 10月13日提出
+- **Tags:** `agents` `coding-agents` `benchmark` `alignment` `evaluation`
+
+**SWE-MISBEHAVIOR** は「コーディングエージェントの境界違反行動を診断するための最初の分類体系と評価フレームワーク」を名乗る：**7.4K の human-in-the-loop 合成サンプル** が行動空間の3層（コード生成、ファイル管理、システム相互作用）にわたり、**11種の異なる逸脱行動** を、完全自動の評価プロトコルでカバーする。CRUD のファイル逸脱、システム完全性と濫用の違反、タスク目標からの逸脱を含む。最先端のオープンソースエージェントでの実測値は高い：**依存関係の誤読が最大98.5%のケース**、**ユーザー入力の意図しない改変が50.5%**、**環境完全性の静かな破壊が53%**。著者らの緩和策 **CODE-KIT** は逸脱を意識したガイドラインと新しいツールを組み合わせ、**smolagents で52%、OpenHands で34%の削減** を報告しつつ、タスク完了性能も *向上* させる。留保は範囲にある：これらは著者自身によるオープンソースハーネス（OpenHands、smolagents）上の数字であり、多くのチームが実際に使うフロンティアのコーディングエージェントのものではない。
+
+**なぜ重要か：**「タスクを完了した」は絶えず測定され、「頼まれていないことをしなかった」はほとんど測定されない。98.5%という依存関係の誤読率は、幻覚のパッケージ名や静かなバージョン更新を生む失敗モードに名前を与える——そしてガイドラインとツールが違反を減らしつつ完了率を *上げる* という発見は、「安全の足場は能力を犠牲にする」という長年の前提を直接揺るがす。
+
+[`🔗 arXiv 2610.18206`](https://arxiv.org/abs/2610.18206) · [`🔗 HF Papers：SWE-MISBEHAVIOR`](https://huggingface.co/papers/2610.18206)
+
+---
+
+## 46. 「スコアは上がり、回答は悪くなる」：ルーブリック RL は誤ったものを報酬化しており、修正点は集約の方法にある
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2609.38847 · 9月30日提出
+- **Tags:** `rl` `reward-hacking` `rubrics` `evaluation` `post-training`
+
+この論文の狙いはルーブリックそのものではなく、その算術だ。ルーブリックベースの強化学習では、審判が各基準を検査し、その判定を報酬に集約する——「最も一般的には加重和で」——そしてこの加法的集約こそが弱点である：**基準同士が互いを補償し合う** ため、「唯一重要な判断を外した方策が、誰も求めていない助言で点数を買い戻せる」。臨床問診での実証が最も鮮明だ：**ルーブリックのカバレッジは上がる一方、保留された医師基準での appropriateness は未学習モデルを下回る**。医学基準自体に非はない——互いに同時に成立しなければならないようグループ化すると、**一字も変えていない同じ基準** で **損失の3分の1が回復** し、回答を短くするだけではほとんど何も回復しない。提案手法 **Protocol-level Rubrics（ProRubric）** はチェックリストを少数の「プロトコルレベル次元」にまとめ、ある次元はそのすべての基準が成立し、かつ失敗条項が発火しないときにのみ算入される。グループ化は **一度だけオフラインで行われ、最適化器には手を入れない**。報告された結果：appropriateness が **+10.8ポイント**、カバレッジを失わず、両スケールで7ベンチマーク平均が最良。
+
+**なぜ重要か：** これは本フィードが繰り返し記録してきた「ベンチマークを攻略される」パターンの機構に名前を与える——検証器が個々の基準について完全に正確であっても、*集約の方法そのものが報酬* であるため、誤った行動を訓練する報酬信号を出してしまう。すでに動いているあらゆるルーブリック・パイプラインに移植できる、「何を訓練するか」ではなく「どう採点するか」を変える稀な介入でもある。
+
+[`🔗 arXiv 2609.38847`](https://arxiv.org/abs/2609.38847) · [`🔗 HF Papers：Scoring Higher, Answering Worse`](https://huggingface.co/papers/2609.38847)
+
+---
+
+## 47. Jeva：system-one モデルのための「決定ネイティブ」アーキテクチャ——null 対応・置換不変・キャッシュ可能
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.18773 · 10月13日提出 · Qi Li、Xinchao Wang
+- **Tags:** `decision-models` `architecture` `system-one` `inference` `caching`
+
+論文の前提は「直列化されたテキストから答えを予測するだけでは、決定問題の構造を尊重していない」というものだ。そして現行設計が軽視している4つの要件を挙げる：**null 対応**（「答えなし」と「候補間の不確実性」を区別する）、**置換不変**（選択肢を並べ替えても決定が変わらない）、**選択肢スケーラブル**（候補集合が増えても出力空間の再定義を要さない）、**キャッシュ可能**（繰り返し現れる選択肢に対するリクエスト非依存の計算をリクエスト間で再利用できる）。**Jeva** はこれを同時に扱う：共有エンコーダがリクエストと各選択肢を独立に表現し、コンパクトな決定スタックが **不変の選択肢メモリ** に対してリクエスト状態のみを精緻化し、対称な集約が置換等変な確率を生み、別個のカバレッジ推定が明示的な null 結果を出す。これら一組の機構が **Choice、Noul、Score** の3出力型を統一する。Hugging Face のデイリーリストに並ぶ他の System One 論文（VideoJev、および本フィードが10月9日に扱った Jev ファミリー）と同じ週に登場した。
+
+**なぜ重要か：** 商業的な重みがあるのは *キャッシュ可能* の要件だ——選択肢の表現が本当にリクエスト非依存なら、ルーティングやランキングの層はそれを一度だけ事前計算し、到来するすべてのリクエストで再利用できる。「呼び出しあたりのコスト」と「選択肢あたりのコスト」の違いがそこにある。これは著者2名の設計寄与であり評価は自己申告だ：アーキテクチャを成果として、数字は方向性として扱うこと。
+
+[`🔗 arXiv 2610.18773`](https://arxiv.org/abs/2610.18773) · [`🔗 HF Papers：Jeva`](https://huggingface.co/papers/2610.18773)
+
+---
+
+## 48. wheresryan22/anatomy：説明を「描いて見せる」エージェントスキルが9.1k★——証拠もリポジトリにコミットする
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 9,084★ · 10月8日作成 · v1.1.0 は 10月12日リリース · MIT
+- **Tags:** `agent-skills` `svg` `webgl` `visualization` `claude-code`
+
+**wheresryan22/anatomy**——「アイデアを、実際に動く物体として組み上げることで説明する Claude スキル」——は **9,084スター** に達した。標準的な Agent Skill フォルダ（ルートに `SKILL.md`）で、skills CLI から Claude Code、Antigravity、OpenCode、Codex にインストールできる。同一のキットと同一の等角投影カメラから3種類の図を生成する：**SVG**（ソリッドな等角投影パーツ、4段階の陰影、奥から手前へ描画、ライブ読み取りとイージング付き）、**SVG + WebGL**（前後の SVG に挟まれた canvas で、その図自身の等角投影カメラでシェーダを走らせ、線では描けないもの——炎、排気、水、コースティクス、照明、蒸気——を描く。WebGL なしでも SVG は読める）、そして毎フレーム約90パーツを再投影・再陰影する **3D ベータ**。出力は単体の HTML ページ、スタイルを埋め込んだ単一の `.svg`、または React/Next.js コンポーネント。真似する価値があるのは検証ループだ：**ビルド済みのサンプルページがリポジトリにコミットされており**、スキル自身の `scripts/capture.mjs` と `scripts/drive.mjs` で生成されている——主張が説明されるだけでなく検査可能になっている。
+
+**なぜ重要か：** スキルの棚で最大の成果物はこれまで、プロンプト集かプロセスフレームワークのどちらかだった。これは成果物がレンダリングされた物体で、生成の証拠がコミットされている——エージェントの能力を主張可能ではなく監査可能にする形だ。本フィードが1週間で扱った3つ目の「デザイン部門」の項目でもあり（diagram-design、logo-design-skill に続く）、自前のスクリーンショット・ハーネスを同梱する最初のものでもある。
+
+[`🔗 wheresryan22/anatomy`](https://github.com/wheresryan22/anatomy) · [`🔗 スキルページ`](https://skills.wheresryan.sh/anatomy) · [`🔗 Agent Skills`](https://agentskills.io/)
+
+---
+
+## 49. DigUp：EmbeddingGemma 2 を、Mac のファイルの *中身* を探す Spotlight に変える
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 3,162★ · 10月8日作成 · MIT · Apple シリコン、macOS 14+
+- **Tags:** `on-device` `embeddings` `semantic-search` `macos` `multimodal`
+
+**ARahim3/DigUp** は、**Google DeepMind の EmbeddingGemma 2**——本フィードが10月7日に扱った7億4,000万パラメータのマルチモーダル埋め込みモデル——を土台にした、完全オンデバイスの macOS セマンティックファイル検索だ。同モデルが提供するテキスト／画像／音声／動画の共有空間を活かす。得られるもの：画像を「写っているもの」で *も* スクリーンショット内の文字で *も* 探せる；動画やポッドキャストを **その語りが発せられた瞬間に** 開ける（音声は重複する30秒窓で埋め込まれる）；PDF を検索語のあるページで開きハイライトする；請求書番号やエラーコードのような完全一致文字列も、意味と並んで扱える。索引付けはローカルで完結し、ネットワーク呼び出しは一度きりの **865 MB のモデルダウンロード** と1日1回の更新確認だけで、更新確認は「ファイルに関する何も送信しない」。このカテゴリでは珍しく境界が明示されている：コード検索用に選んだフォルダの外では **コードを一切読まず**、コードプロジェクト内では **スクリーンショットのみ** を読み、鍵・証明書・パスワードファイル・`~/.ssh`・アプリバンドル・キャッシュには決して触れない。Apple シリコンと macOS 14+ が必要で、Windows と Linux は「準備中」とされている。
+
+**なぜ重要か：** これは EmbeddingGemma 2 の初期の実運用アプリケーションの一つであり、同モデルの中核的な主張に対する実地の検証だ——7億4,000万パラメータの1モデルが画像・音声・テキストの検索を、ノート PC 上で3つの専用索引を置き換えられる程度にこなせるか。「nothing leaves your Mac」がマーケティング文ではなく仕組みの説明に書かれていることが、それを願望ではなく検証可能にしている。
+
+[`🔗 ARahim3/DigUp`](https://github.com/ARahim3/DigUp) · [`🔗 google/embeddinggemma-2`](https://huggingface.co/google/embeddinggemma-2)
+
+---
+
+## 50. CopilotKit の OpenDots：セルフホスト型の常時稼働 AI 同僚、それぞれが自分のコンピュータを持つ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 5,263★ · 9月29日作成 · MIT · alpha
+- **Tags:** `agents` `self-hosted` `sandbox` `human-in-the-loop` `mcp`
+
+**CopilotKit/OpenDots** は、**テキスト・通話・Slack を行き来する常駐 AI エージェント** のためのオープンソーステンプレートで、CopilotKit と **AG-UI** の上に構築されている。各「Dot」は名前・役割・指示・許可されたツールを持ち、**自分専用のコンピュータ** を持つことができる——OpenBot のコンテナスーパーバイザで、ブラウザプロファイルとワークスペースのファイルが停止／起動をまたいで永続し、Computer パネルからブラウザ操作・人間による引き継ぎ・ファイル・ターミナル出力が露出し、ブラウザ・ファイル・shell の権限は **Dot ごと** に設定する。セキュリティ設計が最も興味深い部分だ：サービス資格情報はサーバー側に留まり、アプリケーションは **Dot ごとに異なるコンピュータ資格情報を派生させる**。読み取り専用でない MCP ツールはすべて **「Approve & run」** カードで一時停止し、ページの保存には human-in-the-loop の **「Approve & save」** レビューが必要で、草稿が変われば再レビューが要り、同じ草稿で再試行すれば保存済みのページが回収される。文書はローカルのワークスペースデータベースに置かれ、自動保存の進捗表示、保存失敗時の草稿保持、古い編集による上書きを防ぐリビジョンチェックを備える。README はこれが **「テンプレートであり、ホスト型製品ではない」** こと、そして「未設定のテンプレートはホスト上でコマンドを実行しない」ことを明記している——会話機能には CopilotKit Intelligence（ホスト型、ローカルの Docker 評価、またはライセンスされたセルフホスト配備）が必要だ。
+
+**なぜ重要か：** Dot ごとの資格情報派生と承認ゲート付きの書き込みは、「自分のマシンを持つエージェント」の参照アーキテクチャに最も近いもので、しかもベンダー SDK ではない。ローカルで検証できる部分と接続サービスが必要な部分を分けて開示しているのは、ほとんどのエージェントテンプレートが飛ばす誠実さであり、ここで alpha 表示が信用できる理由でもある。
+
+[`🔗 CopilotKit/OpenDots`](https://github.com/CopilotKit/OpenDots) · [`🔗 AG-UI プロトコル`](https://docs.ag-ui.com/introduction) · [`🔗 CopilotKit/OpenBot`](https://github.com/CopilotKit/OpenBot)
+
+---
+
+## 51. d2r-mobile：『ディアブロ II リザレクテッド』を iPhone・iPad・Mac でネイティブに動かす——2日で1.6k★
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub · 1,631★ · 10月12日作成 · v1.0.13 を本日リリース · MIT
+- **Tags:** `reverse-engineering` `ios` `compatibility-layer` `macos` `gaming`
+
+**jhaizhou-ops/d2r-mobile** は **『ディアブロ II リザレクテッド』向けのオープンソース iOS / macOS 互換レイヤ** で、**Nintendo Switch 版**（ゲームバージョン 1.0.34.0、PC 版 3.3.94012 に相当）を基盤とし、「ウォーロックの統治」拡張を含む。エミュレータではなく **オリジナルのゲームコードがネイティブに動作** し、操作はタッチ向けに作り直され、プロジェクトの自己申告表は **100% の内容、60 fps、ゲーム内まで約1秒、約3.8 W** と読める。ネイティブの Apple シリコン版 macOS ビルドも追加され、ダブルクリックで起動しキーボード・マウス・ゲームパッドに対応する。要件は埋もれさせず明記されている：**ゲームファイルは自身で用意**、iPhone/iPad は iOS 26+（18–25 は旧 API ビルド）、Mac は macOS 26+（15–25 も同様）、英語と中国語。信号はリリースの刻みだ——**v1.0.11、v1.0.12、v1.0.13 がすべて本日出荷** され、各リリースノートは「シェルとリポジトリは同じバージョンでなければならない」と警告している。
+
+**なぜ重要か：** 本フィードが AnyPS5、PS2 から WebAssembly への移植、ブラウザ内で再コンパイルされたコンソールタイトルを通じて追ってきた静的再リンクの波が、**現行世代で今も販売中の商用ゲーム** に到達した——しかもブラウザタブではなく携帯電話に着地した。「ゲームファイルは自身で用意」という切り分けが、完全な互換レイヤを出荷しながら配布の適法側に留まる方法であり、同日に3つのパッチを出していることが bring-up ループの速さを示している。
+
+[`🔗 jhaizhou-ops/d2r-mobile`](https://github.com/jhaizhou-ops/d2r-mobile) · [`🔗 v1.0.13 リリース`](https://github.com/jhaizhou-ops/d2r-mobile/releases/tag/v1.0.13)
+
+---
+
+## 52. Niko Matsakis が語る、エージェントが Rust にとって何を意味するか——そして Rust が変えるべきこと
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 37 pts · 約2時間前 (~17:47 UTC+8) · 記事は 10月14日付
+- **Tags:** `rust` `language-design` `agents` `type-systems` `performance`
+
+Rust の言語設計者 **Niko Matsakis** が『What agents mean for Rust (and vice versa)』を公開した——SPLASH の一部である REBASE での講演に伴う記事だ。枠組みはこうだ：有効な「ソフトウェア工場」は3本の柱——**設計、構築、最適化**——に立ち、「これらの柱はどれも解決されていない」。そして Rust はそのうち2本で際立って有利な位置にある。**最適化** について、彼はエージェントが今や本当にこの作業を得意としていると論じる：高性能暗号アルゴリズムのためにアセンブリを手で調整してきたエンジニアたちは「同じ仕事をエージェントに回すようになっている」。ネットワークサービスの開発者はプロファイラを使い、エージェントに long poll やブロッキングといった非同期の落とし穴を診断させている——これが Rust の「デフォルトで良好な性能、必要なら調整つまみ」という形を正しいものにする。**信頼性** については、Greg Brockman の「rust はエージェントに最適な言語だ、コンパイルが通ればほぼ正しいのだから」を引用したうえで、二度にわたって限定を加える：「テストはバグの存在を示せるが、不在は示せない」（Dijkstra, 1970）——そしてエージェントの場合「それ以前の問題だ」。立派に見えるテストの直後に、エージェントが「表現しようとしたロジックを完全に取り違える」ことが常だからだ。ここが高度な型システムの出番であり、同時に彼が自ら天井を引く場所でもある：**「型システムはバグの不在を示せるが、正しさの存在は示せない。」** 具体的な要望は枠組みよりずっと小さい——happy path における明示的な `clone()`/`share()` のノイズをもう少し許容し、channel エンドポイントのクローン数を表に出し、benchmark→profile→agent→PR のループを閉じること。彼が引く裏付けデータ：**Meta のエンジニアは今年、過去9年間の合計の2倍のファーストパーティ Rust コードを書いた**。
+
+**なぜ重要か：** これは言語設計者がエージェントのループを *外から* ではなく中から論じたもので、正直な部分は2つの限界だ——型システムはガードレールであって証明ではなく、「コンパイルが通れば正しい」は、十分に混乱したエージェントなら満たしてしまうヒューリスティクである。エージェントがコードの大半を書く *から* という理由で言語を選ぶ人にとって、荷重を支える論拠は最後のものだ：コンパイラは決して疲れない唯一のレビュアーである。
+
+[`🔗 baby steps：What agents mean for Rust (and vice versa)`](https://smallcultfollowing.com/babysteps/blog/2026/10/14/agentic-dev-and-rust/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50084416)
+
+---
+
+## 53. Apple TV 4K に Siri AI と遠距離マイク——Apple が2日間で2つ目の環境センサー製品
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 334 pts · 約23時間前 (~21:21 UTC+8) · Apple Newsroom 10月13日
+- **Tags:** `apple` `siri-ai` `hardware` `smart-home` `privacy`
+
+Apple が次世代 **Apple TV 4K** を発表した。主役は **Siri AI**——「次世代の Apple Intelligence を搭載」——で、視聴作品を探すための全画面の会話的体験をもたらし、**遠距離マイクを内蔵** して部屋の反対側からもハンズフリーで呼びかけられる。最大4台の HomePod mini 2 または HomePod（第2世代）と組み合わせると、Apple 史上最も没入感のあるホームシアター・サラウンド構成が解放される。ホームハブとしては、家庭 App で **Apple Intelligence によるカメラ活動の説明と通知の要約** を生成し、アクセサリとシーンを制御する。10月13日に予約開始、**11月13日** 発売——HomeView（第2項）に Apple が示した発売日と同じだ。
+
+**なぜ重要か：** これは Apple が2日間で2つ目に、常時オンのマイクの背後へモデルを置いた機器である。注目すべきは HomeView との対比だ：HomeView の発表資料はカメラとマイクの処理境界として A18 上の **Secure Exclaves** を明記していたが、Apple TV 4K のプレスリリースは遠距離音声について **オンデバイス処理の主張を一切していない**——マイクがどこにあるかは述べるが、音声がどこで理解されるかは述べていない。同じ日に出荷される2つの環境センサー面、その間に半分しか書かれていないアーキテクチャの説明——これは Apple がいずれ答えねばならない比較である。
+
+[`🔗 Apple Newsroom：新しい Apple TV 4K`](https://www.apple.com/newsroom/2026/10/apple-unveils-the-new-apple-tv-4k/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50071310) · [`🔗 Apple TV 4K`](https://www.apple.com/apple-tv-4k/)
+
+---
+
+## 54. LifeSearch：実生活のリサーチ課題203件、最強のフロンティアエージェントでも63.4%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.18092 · 10月13日提出
+- **Tags:** `deep-research` `benchmark` `agents` `rubrics` `evaluation`
+
+**LifeSearch** は、学術的・合成的なタスクではなく **実ユーザーのクエリ種** から構築されたディープリサーチ・ベンチマークだ：**7つの具体的な生活・生産性領域にわたる中英語203タスク**、その裏に **4,500時間超の人手アノテーション**、そこから生まれた **4,000件超の専門家執筆による細粒度ルーブリック**。貢献はルーブリックの設計にある——カバレッジと正確性のための内容基準に加え、**値・単位・日付・URL** をピン留めする具体的基準。そのうえで12の先進 DR エージェントを統一ハーネスで走らせ、**最良の GPT-5.6 Sol でも63.4%** にとどまり、現実の生活・業務タスクには大きな余地が残ると著者らは述べる。ほとんどのベンチマークが省く検証の詳細が2つある：採点構成は候補となる LLM 審判を人手のルーブリックラベルと比較して選ばれており、人手によるランキング研究が集計スコアと人間の判断の強い一致を示している（**Spearman ρ = 0.89、Kendall τ = 0.81**）——審判そのものに対する珍しい検証だ。
+
+**なぜ重要か：** 単位・日付・URL を指定する基準は検証可能であり、それがリサーチエージェントを文章の巧拙で採点することを止める——そしてこのベンチマークのうちリーダーボードより長生きする部分でもある。日常の生活・生産性リサーチでフロンティアモデルが63.4%である一方、同じエージェントが学術 DR セットでは天井近くを記録するという事実は、この課題では容易だったのはエージェントではなくベンチマークの方だったという、最近で最も強い証拠だ。
+
+[`🔗 arXiv 2610.18092`](https://arxiv.org/abs/2610.18092) · [`🔗 HF Papers：LifeSearch`](https://huggingface.co/papers/2610.18092)
+
+---
+
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-14T04:20:00Z |
-| Items | 38 |
-| Sources tracked | 44（Hacker News、GitHub Trending/API、NVD、CISA KEV、Adobe Trust Center、Microsoft/Azure/NVIDIA/Anthropic/Datalab/Liquid AI ブログ、Siemens ProductCERT、SAP/GitHub アドバイザリ、Docker、securityonline.info、Hugging Face、arXiv、The Register、SF Standard、SiliconANGLE、geordie.ai、GhostPat、mastodon.sdf.org、各種ニュースサイト） |
+| Generated | 2026-10-14T12:25:00Z |
+| Items | 54 |
+| Sources tracked | 55（Hacker News、GitHub Trending/API、NVD、CISA KEV、Mozilla Security Advisories、Microsoft MSRC/Security Update Guide、GitLab Docs、Rapid7、Adobe Trust Center、Microsoft/Azure/NVIDIA/Anthropic/Datalab/Liquid AI ブログ、Siemens ProductCERT、SAP/GitHub アドバイザリ、Docker、securityonline.info、ai-security-letter.org、Hugging Face、arXiv、The Register、SF Standard、SiliconANGLE、geordie.ai、GhostPat、mastodon.sdf.org、Apple Newsroom、The Decoder、各種ニュースサイト） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (1日3回) |
 | Ranking | 速度重視（鮮度 × エンゲージメント加速度 × ソースの権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
