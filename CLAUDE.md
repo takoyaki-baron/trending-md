@@ -104,8 +104,22 @@ underlying pages — this produced a two-layer false signal in a single item.
    metric whose `source` is `nvd@nist.gov` (calibrated first-hand against CVE-2026-102489, status
    `Analyzed`, carrying `cvssMetricV31 Primary nvd@nist.gov 9.8` beside DIVD's `Secondary` 9.4).
    Read `vulnStatus` **and** the metric sources together before writing either "CNA-assigned" or
-   "NVD Analyzed". One-call form for an item in hand — prints status, every metric's
-   (version, type, source, score), CWE, KEV:
+   "NVD Analyzed".
+   **A missing score can be POLICY, not absence — name whose policy** (added 2026-10-15 after the
+   curl item: the project's own `VULN-DISCLOSURE-POLICY.md` says "We do not support CVSS … We
+   believe CVSS is a broken system", so "no CVSS for this CVE" and "no CVSS has been assigned yet"
+   look identical in a table and are different sentences). Score provenance has **four** cases, and
+   every item must say which one it is in: **(1)** CNA-assigned, **(2)** NVD-analyzed, **(3)** no
+   score **by design** — the policy is documented by **curl** (`curl/curl`
+   `docs/VULN-DISCLOSURE-POLICY.md`, four levels Low→Critical) and **Go** (`go.dev/doc/security/policy`:
+   "when issuing CVEs for Go security issues we do not assign CVSS scores"), **(4)** scored by a
+   third party the code's owner **disowns** — Go states MITRE/NVD "may assign CVSS scores to our
+   vulnerabilities, but we do not endorse these scores as accurate reflections of their impact", so
+   a number on the record is not an endorsement by the party that knows the code. The kernel-CNA
+   half of the same claim is **third-party only** (Stenberg, quoted in The Register): the kernel's
+   own `Documentation/process/cve.rst` contains no CVSS statement at all — cite it as "reported by
+   Stenberg", never as "the kernel's policy". One-call form for an item in hand — prints status,
+   every metric's (version, type, source, score), CWE, KEV:
    `node agent/tools/nvd-provenance.mjs --ids CVE-…,CVE-…`
    A **standing** per-CVE watch (Pass 10 of `agent-run.sh`, `agent/tools/nvd-provenance.json`)
    reports only movement — status flips, an `nvd@nist.gov` metric appearing, a score revision, a
@@ -375,6 +389,21 @@ markdown to drift:
 cross-validated at least once (`cv` ≥ 1)** — confirm at least one of its facts against an
 independent source before adding it. This is the learnt agent's job (see `agent/AGENT.md`);
 `node build.js` prints a `⚠ N uncurated domains need a review` list each run.
+
+**What `cv` counts** (defined 2026-10-15; the machine-readable definition lives in the registry
+itself under the `"$cv"` key, and is exported to `/sources.json` as `cvDefinition`) — `cv` is the
+number of **independent** confirmations of a fact attributed to this domain. `cv: 1` is the
+curation cross-check above; each further confirmation appends a dated `cvlog` line, so
+**`cv === 1 + cvlog.length`** for every entry that has a `cvlog`. Independence is the whole point
+and the easy thing to get wrong: **a confirming party counts only if it is not downstream of the
+same original report, and two hosts cited in the same feed item are never a cross-check** —
+co-citation is a *shared-origin* signal (one press release, one vendor advisory, one wire story,
+one co-sealed government document). Entries with `cv > 1` and no `cvlog` are pre-rule legacy and are
+**not** retro-fitted. Review a batch with `node agent/tools/cv-audit.mjs --clusters` (co-citation
+candidates, i.e. what NOT to bump for), audit with `--check` (enforces the invariant; `build.js`
+warns on drift each run), and bump with
+`node agent/tools/cv-audit.mjs --bump <host> --note "YYYY-MM-DD — <what you verified, against whom>" --write`
+(dry-run without `--write`; the note must be dated and must name the independent check).
 
 ## Important URLs
 

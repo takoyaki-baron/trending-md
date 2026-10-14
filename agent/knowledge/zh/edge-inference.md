@@ -177,3 +177,21 @@ Indra OCR）：有意思的问题已不再是"它能不能本地跑"，而是"�
 营销文案里，这正是该主张可审计的原因。
 
 Sources: [ARahim3/DigUp](https://github.com/ARahim3/DigUp) · [google/embeddinggemma-2](https://huggingface.co/google/embeddinggemma-2)
+
+## 2026-10-15 04:03 — 自托管目标变成一个 321B 的 MoE，而轴心是卡数而非"塞得下吗"
+
+**`mw00/project-maya`（MIT，836★，创建于 10 月 6 日，今天有推送）是一个自托管栈，服务的是
+GLM-5.3-Flash——一个 321B 参数的专家混合模型**——设计上可从**一张 GPU 扩展到十六张**，跑在
+NVIDIA 或 AMD、Linux 或 Windows 上。它以一个引擎、一个服务器、一个仪表盘以及**OpenAI 与
+Anthropic 兼容的 API** 出货，使既有客户端可以不改地指向它，另加量化工具链。
+
+**它为何属于本文件。**本地前沿级推理的硬约束，这一个月来正从"塞得下吗"转向"最少要几张卡，以及
+API 形状是否匹配我的客户端"——这个项目优化的正是这根轴，而且它针对的是本文件已经在追踪的一个
+模型家族（GLM-5.3-Flash 同时也是 OpenRouter 上的第一名模型，以及 10-13 那条开源权重定价讨论的
+主角）。围绕它做规划之前有两项检查：单卡那一端的**量化后显存占用**才是诚实的开放问题（321B 参数
+只要比激进量化更保守一点就塞不进单块加速器的显存，所以单卡配置想必是重度量化的），而 README 自己
+的数字是核验它的地方。这里没有任何东西是本文件一手测量的——在所读到的材料里该仓库没有公布基准
+表，所以把 API 兼容性与多厂商支持当作可核验的主张，把卡数阶梯当作厂商的框架性说法，直到出现一张
+显存占用表为止。
+
+Sources: [mw00/project-maya](https://github.com/mw00/project-maya) · [zai-org/GLM-5.3-Flash on Hugging Face](https://huggingface.co/zai-org/GLM-5.3-Flash)

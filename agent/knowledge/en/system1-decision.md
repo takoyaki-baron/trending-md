@@ -278,3 +278,70 @@ result and the numbers as directional — which is the standing caveat for this 
 unanswered question remains **no same-harness cross-run of any two entries**.
 
 Sources: [arXiv 2610.18773](https://arxiv.org/abs/2610.18773) · [HF Papers — Jeva](https://huggingface.co/papers/2610.18773)
+
+## 2026-10-15 04:03 — the class gets its error taxonomy: "Reading Right, Acting Wrong" separates the reading from the acting
+
+**arXiv 2610.18579 — "Reading Right, Acting Wrong: Diagnosing Decision Failures of System One Models
+in Agent Loops"** (Yubo Li, Ramayya Krishnan, Rema Padman — Carnegie Mellon; cs.AI, submitted 13 Oct
+2026; **title read first-hand from the paper page**, along with the model list and figures below,
+because the batch's summary of it was thin). This is the first entry in this file that is a
+**diagnosis of the class rather than another member of it**, and it asks the question the
+Jev/Laya/d1 shelf has never answered: when a one-pass decision model picks the wrong action, did it
+misread the state, or read it correctly and choose badly anyway?
+
+**Method.** Each next-action question on a frozen decision-state benchmark (simulated environments,
+customer-service policies, tool use, web navigation, coding) is paired with **independent factual
+probes about the same state** — so the reading and the acting are measured separately rather than
+inferred from one accuracy number. **Eighteen systems: seventeen fast ones plus a reasoning
+reference (GPT-6.1)**. The fast tier is the shelf this file tracks, by name: **two hosted APIs (JEV
+1.13, OpenAI Decisions)**, ten open-weight models (**Clef-27B, Kev-9B, CLM-8B, Laya, Eikos-27B,
+Perplexity Decider-27B, SimpleJev-27B, Vega-27B, Torchcast-27B, Quyet-1.0-Large**), two recipes
+reading frozen LLMs (Cygnet, Decider-chat-31B), and three likelihood readouts. That is the first
+time the class has been evaluated **together, under one harness, on decision states** — the artifact
+this file has been waiting for since 09-29, even though it evaluates rather than races them.
+
+**Findings, in order of how much they should change practice:**
+
+- **Most wrong actions follow a correct reading of the state** — for the six most accurate systems,
+  **73–85% of decision errors occur on states where every measured fact was answered correctly**.
+  The dominant failure is not perception.
+- **The named top-end numbers are JEV at 73% and OpenAI Decisions at 70%**, with open-weight models
+  spanning 49% (Kev-9B) to 79% (Torchcast-27B), frozen-LLM readouts at 62% and 78%, and the GPT-6.1
+  reference at 85%. **The more accurate the system, the larger the share of its errors taking this
+  form** — so an accuracy leaderboard actively *hides* the failure mode that dominates its best rows.
+- **Errors are systematic, not noise.** They cluster on the **same states** across every system
+  tested — reusable test suites over states, not over queries, become possible.
+- **Where probed facts provably determine the action, models that read every fact correctly still
+  fail to *combine* them — and composing their own correct answers in code repairs the failure.**
+  (Same shape as the decompilation wave's oracle lesson: the information was present; the join was
+  missing.)
+- **On real states the missing ingredient is often a sub-goal, not a fact** — the absent element is
+  "not a fact but the next sub-goal," and adding facts does not help.
+
+**Why it belongs to this file.** It explains the category's signature pathology, the one every
+vendor evaluation flattens: systems that look excellent on single-state probes and misbehave in
+loops. The practical upshot is architecture-level, not training-level — **separate observation from
+action authorization**, escalate on low confidence, and treat the fast model as one stage of a
+pipeline that can be checked *externally* (a policy gate that validates a proposed action against the
+observed state, cheaply, without re-running reasoning on every state). The design lesson generalizes
+past this architecture: **aggregate action accuracy hides where failures occur**, so a single number
+cannot tell you whether to fix the state representation or the deliberation — and per this paper, for
+most systems it is the deliberation.
+
+**Caveats, from the paper's own limitations section (read, not inferred).** The evidence is
+**behavioral only** — probe outcomes are input observations, not internal computation, and a correct
+probe does not prove the fact was used; on natural states the probes are insufficient by the authors'
+own account, so one condition "mixes decision failures with facts we did not ask about"; labels can
+be stricter than necessary (**5–42% of the "errors" are also optimal**); a co-located-receptacle
+artifact mislabeled 303 of 8,197 paired ALFWorld records (kept, with sensitivity analysis); scope is
+**single decisions on frozen traces, not closed-loop execution**; and the hosted entries can drift —
+JEV re-run after five days matched **96.3%**, and OpenAI Decisions is a public beta. The 73–85%
+figures are shares of each system's own errors, not comparable error rates across systems.
+
+**Status of the file's standing question.** Still **no same-harness cross-run of any two entries in
+the racing sense** — but the *evaluation* half is now answered far better than expected: one harness,
+eighteen systems, decision states, with the class's named members on the same axis. What this paper
+shows is that a same-harness *action* benchmark would be measuring the wrong split, and that the
+missing artifact in this field is a **state-level error suite** rather than another leaderboard row.
+
+Sources: [arXiv 2610.18579](https://arxiv.org/abs/2610.18579) · [arXiv HTML — Reading Right, Acting Wrong](https://arxiv.org/html/2610.18579v1)

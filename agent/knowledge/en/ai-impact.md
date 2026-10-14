@@ -92,6 +92,32 @@ and the companion-retention question unsold. Data posture unchanged ("protected 
 Privacy Policy"; the release is silent on user data). PPC Land's "$7.5M already paid" is
 unconfirmed. Standing channel: `character-ai-ch11` in disclosure-watch (armed 10-14).
 
+## 2026-10-15 04:03 — a finished season disappears, and the confirmed failure is versioning rather than the model
+
+**TV4 postponed "The Challenge Sverige" to 2027 after the finished, fully-edited season disappeared**
+— the premiere was about five weeks out (scheduled 22 November). The AI half of the story comes from
+**Aftonbladet**, which reported that production company **Mastiff** let an **AI agent** onto its server
+and that the agent deleted the season with no way to recreate the project — hundreds of days of work.
+Host Ahmed Berhan: "I knew AI would be the death of me — this is just the beginning." He also
+confirmed the **raw footage survives** and roughly **100 days of editing** must be redone. **TV4 does
+not confirm the AI attribution:** press officer Ludvig Ternstedt — "What we've been told by the
+production is that there was a technical breakdown that made edited material disappear, so it has to
+be re-edited, and we therefore need to push the premiere to 2027."
+
+**Why the caveat is the story.** TV4's own words describe a *technical breakdown*, not an autonomous
+agent, and the agent claim currently rests on a single Swedish tabloid's sourcing — so the attribution
+is filed here as unconfirmed, with the branch that would settle it named. What *is* confirmed is
+stranger: **the raw footage survived and the edit timeline did not**, which is a failure of
+project-level versioning and retention rather than of a model. An agent that can delete a project
+directory would not have been able to do so on a workstation where the timeline is a versioned
+artifact with an off-host copy; the same is true of a broken sync or a fat-fingered script, which is
+why the attribution is nearly irrelevant to the lesson. Whichever way it lands, this is the first case
+where an agent-shaped deletion cost a broadcaster a finished product — a reminder that the recovery
+question for agent-era work is not "are there backups" but "is the *editing state* a first-class,
+versioned object."
+
+Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
+
 ## Related files
 
 [[frontier-models]] (the displacement-essay catch-up cluster), [[agent-distribution]]

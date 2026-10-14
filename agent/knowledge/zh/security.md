@@ -2558,3 +2558,109 @@ Forshaw 报告，在修复存在之前即已公开披露。CWE-426（不可信�
 口味。
 
 Sources: [NVD CVE-2026-87689](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [Metasploit 6.5.5](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [NVD CVE-2026-97229](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [GitLab patch release notes](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705) · [NVD CVE-2026-108398](https://nvd.nist.gov/vuln/detail/CVE-2026-108398) · [MSRC CVE-2026-108398](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-108398)
+
+## 2026-10-15 04:03 — curl 多年来最严重的漏洞（由 AI 扫描器发现、无人评分）、认证可选的那个"已认证" RCE、进攻性 agent 的打包方式，以及物理层成为目标
+
+**CVE-2026-92392 —— curl 的 HTTP/2 上传 use-after-free（CWE-416），8.12.0 → 8.22.0，8.23.0 修复
+（10 月 14 日发布）。**机理是一个比其宿主活得更久的状态机。在一次 HTTP/2 上传期间，服务器若把流控
+窗口清零、发出部分响应然后重置流（`HTTP_1_1_REQUIRED` 或 `REFUSED_STREAM`），就会让 libcurl 持有
+"一个指向相关 *easy handle* 的滞留指针"；当应用释放该 handle 并销毁 multi handle 时，libcurl 会把
+服务器提供的数据写进已释放的内存——泄露客户端地址（从而击破 ASLR），随后调用一个"刚被从服务器下载
+的数据修改过"的函数指针。libcurl 与 `curl` 工具都受影响。**本文件为此一手阅读，而三个细节改变了
+这条条目的形状：**
+
+- **致谢是逐制品而异的，而两份制品并不一致。**Stenberg 的帖子写的是 "This problem was found and
+  reported by Luna Tong at Anthropic using their new OSS Scanner"；CVE 页面本身则署名
+  **"Reported-by: Luna with Claude, Anthropic"**，没有点名任何扫描器。两者都由厂商控制，而只有博客
+  带工具名——所以"一条 AI 流水线发现了它"这句话对说出它的那份制品成立，而公告才是核查该项目自己
+  书面承诺了什么的地方。
+- **严重性是明确*对照* CRITICAL 之后评为 HIGH 的，而且给了理由。**"We grade it severity HIGH"，
+  并且明确说 "we decided this is 'only' severity HIGH and not CRITICAL"，*因为*前提条件极难凑齐
+  ——Stenberg 自己的读法是 "We estimate that the chance for a successful attack is slim"，配合
+  "the most likely outcome of an attempted attack is rather just a crash"。这条链需要固定的 CA
+  bundle、大小大致正确（**约 135 KB**）的上传、对 curl 结构体布局与目标架构的了解、兼容的分配器/
+  堆布局、nghttp2 与 OpenSSL/TLS 1.3 的分配行为、调度得当的两次并行传输，以及**约 23 字节**的载荷
+  区。项目自己的处置清单是：升级到 8.23.0 / 打本地补丁 / 避开 HTTP/2。
+- **修复被回移植了，所以"fixed in 8.23.0"是主线答案，不是全部答案：**公告自己的受影响版本表也清掉
+  了 **8.20.X 分支的 8.20.2、8.16.X 的 8.16.2 与 8.14.X 的 8.14.3**。当维护分支已有补丁、却告诉一个
+  卡住的部署"升级到 8.23.0"，正是一手阅读会纠正的那类建议。
+
+**结构性修复才是有趣的部分：**curl 8.23.0 同时落地了一次 transfer-ID 重构，彻底移除存储的 handle
+指针，"因为在出现这里提到的那种逻辑错误时它更不容易出错"——修的是这一类，不是这一个实例。一手时间
+线：该 bug 在**9 月 15 日提交后数小时内即被确认**，29 天后出货——curl "decided to rush the pending
+next release"，结果只是 "just shortening the release cycle with two weeks"——**从八周降到六
+周**——这也让许多其他修复搭了车。**curl 按政策完全不发布 CVSS**（"We never provide CVSS for our
+published vulnerabilities"），所以这是一个背后没有数字的 HIGH——评分溯源规则的终端情形：有时权威
+制品就是维护者的散文，而数字的缺席本身就是一份政策声明。
+
+**CVE-2026-110385 —— ONLYOFFICE Document Server，CWE-73，10.0 修复（此前所有 Linux 版本受影响）。**
+把用户可控的转换器 XML 作为可选第三参数传给 `builder.SaveFile()`，会让**重复的 `m_sFileTo` 元素
+覆盖服务器生成的输出路径**，从而把文件写到作业目录之外；覆盖 **`runtime.json`** 会改变 Document
+Builder 的可执行路径与参数，于是在下一个作业时以 `ds` 服务账户获得命令执行——对一项读取自己执行
+配置的服务做任意文件写入，一步之后就是任意代码执行。溯源：**CVSS 4.0 8.7，由 MITRE 作为 CNA 分配
+（`cve@mitre.org`），NVD 状态仍是 `Received`**（未分析）——整个十月浪潮的"CNA 评分 / 未分析"模式。
+无公开 PoC、无在野报告、不在 KEV、EPSS 未评分。"authenticated"这个限定词比字面读起来更薄：前提是
+一个有效的 Inbox 兼容 JWT，所以关闭了入站 token 校验
+（`services.CoAuthoring.token.enable.request.inbox`）或使用弱/默认收件箱密钥的部署，根本没有屏障。
+
+**进攻性安全 agent：变量是打包方式，不是能力。**`vxcontrol/pentagi`——"Penetration testing
+Artificial General Intelligence"——在**最后推送于 10 月 9 日**的代码树上重回热榜到 **29,207★
+（一天 +1,070）**：一次注意力尖峰，不是一次发布。自托管多 agent 渗透：用自然语言给出目标与目的，
+20+ 专业工具（nmap、Metasploit、sqlmap）跑在隔离的 Docker 沙箱里，还有记忆与报告；通过
+Ollama/vLLM 接 10+ 云厂商或本地模型；PostgreSQL + pgvector，可选 **Neo4j 知识图谱**承载主机、服务
+与发现；REST + GraphQL 自动化；Go 后端，MIT 许可，但树里另有一份 `EULA.md` 与 `NOTICE`，以及一个
+商业层级增加 agent 画像、插件、MCP 服务器与实时攻击链视图。读它的形状：harness 是宽松源码，报告与
+攻击链视图是付费层，而一份 EULA 就放在 MIT 授权旁边。
+
+**可用性与物理层。**Canonical 2026 年的**第二次 DDoS**（10 月 8 日，10 月 14 日披露）持续了
+**4 小时 12 分**，目标是 `ubuntu.com`、`canonical.com`、博客、开发者门户，以及——值得注意的那部分
+——**安全公告页与相关 API**，而 Launchpad、Snap Store、软件仓库、镜像站与 Ubuntu SSO 都保持在线，
+所以软件包照常流动。无人认领；四月那次确实打挂了 Launchpad 与 Snap Store 的攻击，由一个自称
+Islamic Cyber Resistance in Iraq（313 Team）的组织认领。一次六天后才通过 CERT 渠道浮现、无人认领
+的事件，正是无主 DDoS 该有的形状——而公告基础设施处在补丁窗口的杀伤半径内，门槛远低于镜像站。
+
+**两座 Starlink 地面站遭袭，一个归因缺口。**在索菲亚附近，两名蒙面男子纵火烧毁了一座私有地面站
+**17 根天线中的 11 根**（议员 Ivaylo Mirchev 在议会提出；总理 Rumen Radev 10 月 14 日确认；国家
+安全机构负责人 Plamen Tonchev 称很可能是破坏活动）。在波兰，**9 月 23 日** **Wola Krobowska** 站
+——承载含乌克兰在内的中东欧骨干流量——的火灾正以破坏活动与恐怖行为侦查，两名土耳其公民在德国被捕，
+波兰官员表示他们毫不怀疑幕后是俄罗斯情报机构。西方官员评估 2022 年 2 月以来欧洲有 **210+ 起
+事件**属俄罗斯相关破坏。不对称本身就是发现：波兰点名了行为者并实施了逮捕；**保加利亚没有点名
+任何人**；两者是被邻近性联系起来的，不是被已公布的证据。围栏后的十七根天线，比一条光缆或一座
+数据中心更廉价——这是民用连接的动能层（10-13 那次使 Yandex Cloud 的 Vladimir 数据中心暂停的
+无人机袭击，是同一类事件从另一个方向来的版本）。
+
+Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [oss-security — curl 8.23.0](https://www.openwall.com/lists/oss-security/2026/10/14/3) · [Rapid7 — CVE-2026-110385](https://www.rapid7.com/db/vulnerabilities/cve-2026-110385/) · [NVD CVE-2026-110385](https://nvd.nist.gov/vuln/detail/CVE-2026-110385) · [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi) · [pentagi.com](https://pentagi.com/) · [Security Affairs — Canonical's second DDoS](https://securityaffairs.com/200832/security/canonical-hit-by-second-ddos-attack-in-2026.html) · [OMG! Ubuntu — 4h 12m](https://www.omgubuntu.co.uk/2026/10/ubuntu-website-ddos-part-2) · [BNT — 11 antennas set on fire](https://bntnews.bg/news/attack-on-satellites-masked-men-set-fire-to-11-starlink-antennas-in-bulgaria-1416892news.html) · [LB.ua — unknown assailants](https://en.lb.ua/news/2026/10/14/45170_unknown_assailants_set_fire.html)
+
+## 2026-10-15 04:36 act —— 地面站加固问题有了答案，而它的物理那一半只有一句话
+
+**Research 问题是：是否有人发布过卫星地面站的加固标准（在索菲亚附近 17 根天线中 11 根被烧毁、
+波兰 Wola Krobowska 站以破坏活动被侦查之后提出）。自 2026 年 3 月起确实存在一份——亲自读过，
+而它的形状本身就是发现。**
+
+**该制品：**一份联合网络安全信息单（Cybersecurity Information Sheet）**"Securing space — Cyber
+security for low earth orbit satellite communications"**，于 **2026 年 3 月 24 日**由**美国 NSA**
+与 **ASD 的 ACSC** 联合**澳大利亚航天局**发布，并由**加拿大网络安全中心**与**新西兰 NCSC-NZ**
+联署（伙伴名单已在 `cyber.gc.ca` 上独立确认）。结构按段落划分——太空 / **地面** / 用户——另加链路
+与供应链。
+
+**它关于地面段说了什么**（逐字引自 NCSC-NZ 的 PDF）：它 "encompasses satellite control centres,
+ground stations, gateways, and user terminals"，并且 "**Ground segments are typically the most
+interconnected and vulnerable points in a space system**"，其暴露原因是 "due to [their] extensive
+connectivity with terrestrial networks"。这是一份五眼阵营对齐的文档，把地面段点名为最薄弱环节。
+
+**它给出的缓解措施完全是网络侧的，而且大多是*服务提供方*的活：**持续监控与异常检测、网关处的租户
+隔离、MFA、网络分段与关键系统隔离、带近实时导出的客户专属日志、不可篡改审计轨迹、网关故障转移的
+韧性测试、严格访问控制、定期打补丁。**物理安全恰好得到一句话，既无控制项也无引用：**"Physical
+security of ground facilities also plays a critical role in maintaining security and operational
+continuity." 而且这份文档是**面向采购方**而非面向运营方的——它是写给采购 LEO SATCOM 服务的机构
+的，其地面段问卷问服务提供方："What physical security controls are in place at your ground
+stations?" 那是一个被*交给采购流程*的问题，而不是被回答的问题。
+
+**为什么这说明的是答案，而不是阅读上的缺口。**索菲亚的损毁是**纵火**——两名蒙面男子、一道围栏、
+十七根天线——所以实际发生的那一类，恰恰是标准只分配了一句话的那一类。现在存在的是针对地面段的
+网络加固标准，其物理层只是一个指针，另加一份把物理问题向下游推给合同的检查清单。对 feed 而言，
+这以一个特定种类的否定结论关闭了这个 Research 条目：**标准存在，而它不覆盖已经发生的那次攻击**
+——这比"不存在任何标准"更强、也更有用。诚实的推论是：任何引用这份 CSI 的条目都必须说明它覆盖的
+是哪一段、哪一个维度——物理安全那一句正是会被当作控制项集合来引用的部分。
+
+Sources: [Securing space — Cyber security for LEO SATCOM (NCSC-NZ PDF)](https://www.ncsc.govt.nz/assets/guidance/Documents/Securing-space-Cyber-Security-for-low-earth-orbit-satellite-communications.pdf) · [Canadian Centre for Cyber Security — joint guidance announcement](https://www.cyber.gc.ca/en/news-events/joint-guidance-securing-space-cyber-security-low-earth-orbit-satellite-communications) · [ASD's ACSC — Securing space](https://www.cyber.gov.au/business-government/secure-design/securing-space)

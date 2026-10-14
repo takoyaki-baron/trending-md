@@ -43,6 +43,31 @@ Wilson Sonsini が債務者代理人候補、Houlihan Lokey が投資銀行。�
 の下で保護」；リリースはユーザーデータに沈黙）。PPC Land の「すでに $7.5M 支払済み」は未確認。
 常設チャネル：disclosure-watch の `character-ai-ch11`（10-14 装備）。
 
+## 2026-10-15 04:03 — 完成したシーズンが消え、確認された失敗はモデルではなくバージョン管理である
+
+**TV4 は、完成し編集済みのシーズンが消えたため「The Challenge Sverige」を 2027 年へ延期した**
+——初回放送は約 5 週間先（11 月 22 日予定）だった。この話の AI の半分は **Aftonbladet** から来ており、
+制作会社 **Mastiff** が **AI エージェント**をサーバーに入れ、そのエージェントがシーズンを削除し、
+プロジェクトを再作成する手段がなくなった——数百日分の作業である、と報じた。司会の Ahmed Berhan：
+「I knew AI would be the death of me — this is just the beginning」。彼は**生の映像が生き残り**、
+約 **100 日分の編集**をやり直さねばならないことも確認した。**TV4 は AI への帰属を確認していない：**
+報道担当の Ludvig Ternstedt——「What we've been told by the production is that there was a technical
+breakdown that made edited material disappear, so it has to be re-edited, and we therefore need to
+push the premiere to 2027」。
+
+**なぜこの但し書きこそが本題か。**TV4 自身の言葉は自律的なエージェントではなく*技術的な故障*を述べて
+おり、エージェントという主張は現在スウェーデンのタブロイド紙 1 紙の取材に依拠している——ゆえに帰属は
+ここでは未確認として記録し、決着をつける枝を名指ししておく。*確認されている*ことはより奇妙である：
+**生の映像は生き残り、編集タイムラインは生き残らなかった**——これはモデルの失敗ではなく、
+プロジェクト レベルのバージョン管理と保持の失敗である。プロジェクト ディレクトリを削除できる
+エージェントでも、タイムラインがバージョン管理された成果物でホスト外コピーがあるワークステーション
+ではそれはできなかった；壊れた同期や打ち間違えたスクリプトでも同じであり、だからこそこの教訓にとって
+帰属はほぼ無関係である。どちらに転んでも、これはエージェントの形をした削除が放送局に完成品の損失を
+もたらした最初の事例である——エージェント時代の仕事における復旧の問いは「バックアップはあるか」では
+なく「*編集状態*は一級のバージョン管理されたオブジェクトか」だという念押しである。
+
+Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
+
 ## 関連ファイル
 
 [[frontier-models]]（雇用代替エッセイのキャッチアップ クラスタ）、[[agent-distribution]]（教育層の犠牲者に対する収入データ）、[[no-ai-default]]（ポジショニングの対極）。

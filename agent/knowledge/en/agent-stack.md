@@ -2699,3 +2699,66 @@ credible rather than as a hedge. Compare `strands-agents/box` (10-14, above): Bo
 the writes. Two halves of the same containment problem, shipped within a fortnight.
 
 Sources: [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots) · [AG-UI protocol](https://docs.ag-ui.com/introduction) · [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot)
+
+## 2026-10-15 04:03 — one capability, six surfaces; an SDK written for agents as readers; memory as a single binary with its ceiling published
+
+**Builder.io ships Agent-Native (beta): the agent and the UI as "equal partners."** The premise is
+that the chat sidebar bolted onto an app is the wrong shape; instead one shared set of **actions,
+data and application state** is the app, and the agent resolves "this" against the current page,
+selected record or active view. From a **single capability definition** it exposes that capability to
+**six surfaces — UI, agent, HTTP API, CLI, MCP and A2A** — and because the agent calls the same
+actions the UI calls, it never has to drive the screen like a computer-use agent, which the post
+argues is slower and more token-heavy. Integrations run outbound to Slack, Teams, Discord, email,
+Telegram, WhatsApp, Notion, Linear and GitHub over MCP, and inbound over A2A and MCP so Claude,
+ChatGPT, Cursor or Codex can invoke app actions. Model choice is BYO-key (Anthropic, OpenAI, Gemini,
+OpenRouter, any OpenAI-compatible endpoint, or Ollama locally); scaffolds with
+`npx @agent-native/core@latest create my-app` into your own repo; any PostgreSQL database; deploys to
+Node, Vercel, Netlify, Cloudflare or AWS. `BuilderIO/agent-native` (created March 2026, 7,186★,
+pushed the day of the launch) **declares no license file**. Two headline features carry the post's own
+caveats: running Codex models on an existing ChatGPT subscription is "an experimental option in
+Labs," and rendering app UI inside a conversation works only "in hosts that support MCP Apps." **The
+six-surface claim is the architectural bet worth archiving** — define a capability once and every
+caller shares it, which is the only way an agent's action inventory stays in sync with an app's
+permissions model. Compare the containment/identity thread (OpenDots, Box): this is the *inventory*
+half of the same problem.
+
+**Meta's `facebookincubator/muse-gadget-sdk` — an SDK whose documented consumer is an agent.** Meta
+open-sourced the kit for building your own Muse peripherals: program an off-the-shelf **ESP32**
+(screens, audio in/out, sensors, actuators) or turn a **Raspberry Pi / Linux box** into a gadget,
+including custom commands for sysadmin chores or Home Assistant. Two SDKs plus firmware ship in-tree,
+an **SDK token is required** ("Every gadget needs a token to pair"), pairing runs through the Muse app
+with Developer mode enabled, and **each directory carries an `AGENTS.md` alongside its `README.md`** —
+the repo's own interface is written for coding agents as first-class readers. Apache-2.0 with
+third-party carve-outs ("the Apache License does not cover the Jollybot avatar"), an opt-in isolated
+diagnostic core for battery-input power profiling, and **no alpha or beta label anywhere** — the only
+stability warning is that tinkering may cause "bricked boards, voided warranties, brownouts, or
+bankruptcies. Proceed at your own risk!" 2.2k★, 99 commits, 27 open issues, **69 open pull requests**,
+empty Releases tab. Read it as the Alexa Gadgets playbook in reverse: a closed assistant opening the
+*hardware* flank to hobbyists while it is still losing the model argument buys third-party devices and
+goodwill cheaply. The `AGENTS.md`-per-directory convention is the detail most likely to age into a
+norm.
+
+**`elstongun/leviathan` — agent memory as one static binary, with the ceiling stated by its author.**
+A single Apache-2.0 Rust binary that turns records (JSONL, JSON, CSV/TSV, SQLite, or anything a
+database CLI can export) into a ranked full-text index, so an agent asks in plain words and gets back
+short, cited result cards instead of grepping raw history. Indexing is **one SQLite file with no
+runtime dependencies**; MCP support is optional; ambiguous or unknown groups **list candidates and
+exit 3 rather than guess**. Published benchmark, **read first-hand from `docs/BENCHMARKS.md`** at
+**1M records (678 MB)**: **436 median tokens per question** against 107,122 for the best grep
+strategy (**245×**; grep "entity history" is worse at 209,412, and reading the whole dataset is
+203M), 99.0% hit@5 and 98.5% hit@1 (MRR@5 0.987), a **602-token** worst case across 1,200 questions,
+and p50 latency **33.4 ms** against grep-history's **88.9 ms** — with the doc noting that below
+~100K records grep is as fast or faster, and that for an agent token cost dominates grep's ~90 ms.
+807★, created Oct 5. The disclosure is the pattern this shelf needs: the README and the benchmark doc
+state their own limits before anyone else can — **"The data is synthetic"** (a deliberately
+adversarial generator: 1,500 machines, 27 failure modes, 27% placeholder resolutions, 15% empty, a
+separate question vocabulary, deterministic seed 7), so **accuracy should be read as an upper bound
+and token counts as representative**; "**one example dataset**"; "**this measures retrieval, not the
+final answer**" (no LLM reads the output); "**the baselines are simple on purpose**" and get the exact
+key for free; lexical BM25 with stemming, so synonym mismatches lean on other words; and "one
+machine, one run" — latencies from a single 2018 desktop CPU. That is a benchmark you can argue
+with, which is the point. This is the retrieval branch of the memory thread ([[token-economics]],
+[[agent-distribution]]) landing as a **single-binary, no-service** artifact: the interesting axis is
+no longer "vector DB or full-text" but "how few moving parts can hold a long session over real data."
+
+Sources: [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [facebookincubator/muse-gadget-sdk](https://github.com/facebookincubator/muse-gadget-sdk) · [HN — muse-gadget-sdk](https://news.ycombinator.com/item?id=49941331) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)

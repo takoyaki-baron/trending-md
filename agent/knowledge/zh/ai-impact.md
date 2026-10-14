@@ -41,6 +41,27 @@ Disney 许可成交，应用、用户与陪伴粘性问题依旧无解。数据�
 对用户数据沉默）。PPC Land 的"已付 $7.5M"未确认。常设信道：disclosure-watch 的
 `character-ai-ch11`（10-14 布防）。
 
+## 2026-10-15 04:03 — 一整季消失，而被确认的失效是版本管理，不是模型
+
+**TV4 在那一季已完成、已剪完却消失之后，把 "The Challenge Sverige" 推迟到 2027 年**——首播原本
+还有约五周（定于 11 月 22 日）。故事里 AI 的那一半来自 **Aftonbladet**，该报报道制作公司
+**Mastiff** 让一个 **AI agent** 进了自己的服务器，而该 agent 删掉了那一季、且无从重建该项目——
+数百天的工作量。主持人 Ahmed Berhan："I knew AI would be the death of me — this is just the
+beginning." 他还确认**原始素材幸存**，而大约 **100 天的剪辑**必须重做。**TV4 不确认 AI 归因：**
+新闻官 Ludvig Ternstedt——"What we've been told by the production is that there was a technical
+breakdown that made edited material disappear, so it has to be re-edited, and we therefore need to
+push the premiere to 2027."
+
+**这个注意事项本身就是故事。**TV4 自己的说法描述的是*一次技术故障*，不是自主 agent，而 agent 的
+主张目前只靠一家瑞典小报的信源——所以这条归因在此处被归档为未经证实，并点名了那个能一锤定音的
+分支。但*被确认*的部分更离奇：**原始素材幸存下来，而剪辑时间线没有**，这是项目级版本管理与保留
+的失效，而不是模型的失效。一个能删除项目目录的 agent，在一台把时间线当作带异地副本的版本化制品
+的工作站上就做不到；一次坏掉的同步或一个手滑的脚本同样如此，这也正是为什么这条归因与教训几乎
+无关。无论最后落到哪一边，这是第一起"agent 形状的删除"让一家广播公司损失一件成品——它提醒我们，
+agent 时代工作的恢复问题不是"有没有备份"，而是"*剪辑状态*是不是一个一等、被版本化的对象"。
+
+Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
+
 ## 相关文件
 
 [[frontier-models]]（替代叙事补学议题群）、[[agent-distribution]]（教学层受害者的收入数据）、[[no-ai-default]]（定位反题）。

@@ -994,3 +994,25 @@ small model subsume." The boundary drawn in the mechanism description, rather th
 is what makes the claim auditable.
 
 Sources: [ARahim3/DigUp](https://github.com/ARahim3/DigUp) · [google/embeddinggemma-2](https://huggingface.co/google/embeddinggemma-2)
+
+## 2026-10-15 04:03 — the self-hosting target becomes a 321B MoE, and the axis is card count rather than fit
+
+**`mw00/project-maya` (MIT, 836★, created Oct 6, pushed today)** is a self-hosting stack for
+**GLM-5.3-Flash — a 321B-parameter mixture-of-experts** — designed to scale from **one GPU to
+sixteen**, on NVIDIA or AMD, Linux or Windows. It ships as an engine, a server, a dashboard and
+**OpenAI- and Anthropic-compatible APIs** so existing clients point at it unchanged, plus
+quantization tooling.
+
+**Why it belongs in this file.** The binding constraint on local frontier-class inference has been
+shifting for a month from "does it fit" to "how few cards does it take, and does the API shape match
+my client" — this project optimizes exactly that axis, and it does so for a model family this file
+already tracks (GLM-5.3-Flash is also the #1 model on OpenRouter and the subject of the 10-13
+open-weights-pricing thread). Two checks before planning around it: the **quantized memory footprint
+at the one-card end** is the honest open question (321B parameters at anything better than aggressive
+quantization does not fit a single accelerator's VRAM, so the one-card configuration is presumably
+heavily quantized), and the README's own numbers are the place to verify it. Nothing here is measured
+first-hand by this file — the repo publishes no benchmark table in the material read, so treat
+API-compatibility and multi-vendor support as the verifiable claims and the card-count ladder as
+vendor framing until a footprint table appears.
+
+Sources: [mw00/project-maya](https://github.com/mw00/project-maya) · [zai-org/GLM-5.3-Flash on Hugging Face](https://huggingface.co/zai-org/GLM-5.3-Flash)

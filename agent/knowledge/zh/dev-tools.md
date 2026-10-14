@@ -525,3 +525,68 @@ U+0100 到 U+10FFFF 的全部**。任何用宽字符扫描 ASCII 分隔符（换
 构建时，平台的用户只能逆向平台来报告其中的 bug，而修复只能对着二进制写。
 
 Sources: [baby steps — What agents mean for Rust](https://smallcultfollowing.com/babysteps/blog/2026/10/14/agentic-dev-and-rust/) · [HN discussion](https://news.ycombinator.com/item?id=50084416) · [jhaizhou-ops/d2r-mobile](https://github.com/jhaizhou-ops/d2r-mobile) · [d2r-mobile v1.0.13](https://github.com/jhaizhou-ops/d2r-mobile/releases/tag/v1.0.13) · [android/ndk issue #2260](https://github.com/android/ndk/issues/2260) · [HN discussion](https://news.ycombinator.com/item?id=50083130) · [vpinball/libwinevbs workaround PR](https://github.com/vpinball/libwinevbs/pull/41)
+
+## 2026-10-15 04:03 — 一个脚枪搬进了标准库；一个面向 agent 推销的渲染器；一个给自己的主张围上围栏的向量索引；以及一份把备份规则当作产品的 root 指南
+
+**Go 1.27 的 HTTP/1 修复：别再为了一个没读完的换行符扔掉连接。**HTTP/1 的响应是顺序传输的，所以
+即使只差一个字节没读完的 body——比如 JSON 对象后面的一个尾随换行——都会让连接不可用，而关闭它
+意味着把建立连接的开销再付一遍。Go 1.27 让 `net/http.Transport` **异步排空剩余 body**，上限为
+**最多 50 ms 或 256 KB**，并把连接放回池中；当响应带 `Connection: close` 时直接跳过这项工作。
+Nicholas Husin 与 Damien Neil 的基准通过 HTTP/1（`GODEBUG=http2client=0`）对一个简单的取状态
+函数向 `index.golang.org` 发起 100 次调用：**Go 1.26 上约 710 ms，对 Go 1.27 上约 150 ms**——
+"That is almost 5 times faster!" 给出的建议刻意平淡无奇：回去写 `defer resp.Body.Close()`，
+让 net/http 处理复杂度，而不是手搓排空逻辑。已说明的注意事项：该行为"might evolve in future
+versions of Go"，排空是尽力而为的（大 body 或慢 body 仍然回退到新连接），而过去的排空建议往往
+被无意义地套用在 HTTP/2 上。**它为何属于本文件：**这次修复把一个广为人知的正确性脚枪从应用代码
+搬进了标准库，于是收益落到那些根本不知道自己有问题的服务上——而这个数字，任何有工具链和一个
+URL 的人都能复现。
+
+**`academa-labs/manimgx`（MIT，1,231★，创建于 10 月 5 日）：把 Manim CE 的 Python API 架在
+Rust/wgpu 核心上，且面向 agent 推销。**既有 Manim 场景跑在一条 GPU 路径上——"blazingly fast 3D
+animation engine for agents, compatible with Manim CE's API"；可用提示词或从 PyPI/npm 安装，
+并在浏览器中运行。头条基准，在 Apple M4 Pro 上以 1080p60 渲染五个场景：**3.08 秒渲染出 36.2 秒
+的视频**，公布为**比 ManimCE 快 90.6×、比 ManimGL 快 11.5×、比 Blender Workbench 快 18.7×**，
+计时口径是从启动到 MP4 完成。**这个对比值得它自己邀请来的那条注意事项：**场景、设置与运行都在树里
+的 `benchmarks/` 下，但 Blender Workbench 是**光栅**渲染器，而 Manim 场景是**矢量**——一个针对
+另一条输出流水线的 18.7× 是另一种测量，所以值得带走的是 ManimCE 与 ManimGL 那些倍数。对于一个
+在场景上反复迭代的编码 agent，渲染延迟就是"一次有用的修改"与"二十次"之间的差别，这也正是"面向
+agent 的引擎"这个框法成立的原因。
+
+**`timescale/pg_vectorsearch`（PostgreSQL License，245★）：PRISM，以及一个在基准战开始之前就被
+围上围栏的主张。**一个实现 **PRISM——"Partitioned Routing Index for Similarity Matching"** 的
+PostgreSQL 扩展，概念上接近 pgvector 的 IVFFlat，但建立在更新的量化、路由与分区之上：一棵在共享
+缓冲区缓存中常驻的层次化质心树、SIMD 优化倒排列表里的 RaBitQ 量化向量、跳过不可能候选的误差界，
+以及从堆里以全精度重排的幸存者。原生 `vec32`/`vec16` 类型，另加既有 pgvector `vector`/`halfvec`
+列与常规算子（`<->`、`<#>`、`<=>`）。主张是：在查询与建索引两方面都比 IVFFlat 与 HNSW
+"significantly faster"，且对 HNSW "faster at equivalent recall on a 100-million-vector dataset,
+on an instance with a quarter of the memory"。围栏是："**Status: alpha. Meant for testing, not
+production**"，外加"upgrading between prereleases may not be possible; plan to drop and recreate
+the extension and its indexes"，以及倒排"lists grow as rows arrive and never split on their own"
+（`prism_rebalance` 过程就是为此存在的）。缺的是复现 harness；在一个存在之前，这个"内存对召回"
+的对比是一条带有严肃、自陈注意事项的厂商主张。（对照数据库索引那条线：Polars 2.0 的行序变更与
+turbopuffer 的 ANN 降级——索引层一直在重新规定一次查询被允许假设什么。）
+
+**`wesbos/photo-frame-dashboard`（1.1k★，创建于 10 月 8 日）："备份并校验"这套纪律*就是*产品。**
+一份分阶段的指南加脚本，用于接管消费级 Android 相框——"unlock it, root it, replace the vendor
+app, and run your own web page full screen"——覆盖 **PF1007L/AiMOR**（Allwinner A33）、
+**BIUFRAME/Synergy 10X1**（Rockchip RK3126）、**Skylight Calendar 150-CAL**（RK3566，经一条隐藏
+菜单路径）与 **LOOFII C-3**（Allwinner A133，出厂即带 root ADB）。访问按风险递增顺序尝试：
+**先 USB ADB，再网络（`adb connect <ip>:5555`），最后才是厂商应用漏洞或 SD 卡引导补丁。**备份与
+刷写脚本与一个部署到 Cloudflare Workers 的 Vite 仪表盘、一个 WebView kiosk 应用一同出货。规则
+才是贡献所在：这些是"records of the units their owners tested, **not universal flashing
+guides**"；任何写入前先问机主；在**已验证的备份**（字节数、SHA-256、检查 `0xCC` 填充）之前不做
+任何写入；不要相信 `OKAY` 状态；遇到第一处不匹配就停；转储保持私有，因为它们含 Wi-Fi 凭据与
+token。已记录的锁死风险被明确点出——在禁用厂商应用之前，先*手动*确认设置还能进去，因为通过 ADB
+读回并不能证明这一点。TLDR 让你把编码 agent 指向这个仓库，而这正是那些检查清单存在的原因：否则
+agent 会先写，然后在之后才发现锁死。
+
+**Iosevka 在 HN 顶部挂了 630 分，而什么都没发布。**当前版本 **v34.9.0，发表于 2026-09-26**；
+此前两个是 v34.8.1（8 月 22 日）与 v34.8.0（7 月 26 日）——一个活跃维护、约每月一次节奏的项目，
+站点上**没有 news 栏**。八个家族（Iosevka、Term、Fixed 及其 slab 变体，外加近似等宽的 Aile 与
+Etoile），等宽字形"exactly 1/2em wide"，两种可配置宽度，**146 个可配置字符与 19 个风格集**（含
+模仿 Andale Mono、Consolas、JetBrains Mono 与 IBM Plex Mono 的集合），并声称覆盖 **248 种语言**。
+这条是**一款十年前的、仍在维护的工具被重新发现**，不是一次发布——触发事件规则被用在了一款字体
+上，也提醒我们"星数涨了"在成为头条之前需要一个*为什么*。评估时要说明的取舍：自带变体的构建模式
+正是它的连字与宽度集合完整的原因，也正是为什么现成的二进制可能不是你要的。
+
+Sources: [Go blog — Better HTTP/1 connection reuse](https://go.dev/blog/http-connection-reuse) · [HN — Go 1.27 HTTP/1](https://news.ycombinator.com/item?id=50090369) · [academa-labs/manimgx](https://github.com/academa-labs/manimgx) · [ManimGX benchmarks](https://github.com/academa-labs/manimgx/tree/main/benchmarks) · [timescale/pg_vectorsearch](https://github.com/timescale/pg_vectorsearch) · [HN — pg_vectorsearch](https://news.ycombinator.com/item?id=50086165) · [wesbos/photo-frame-dashboard](https://github.com/wesbos/photo-frame-dashboard) · [HN — photo-frame-dashboard](https://news.ycombinator.com/item?id=50048003) · [Iosevka](https://typeof.net/Iosevka/) · [be5invis/Iosevka](https://github.com/be5invis/Iosevka) · [HN — Iosevka](https://news.ycombinator.com/item?id=50084240)

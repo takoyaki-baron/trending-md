@@ -210,6 +210,18 @@ node "$REPO_DIR/agent/tools/vendor-advisory.mjs" --watch \
   --state "$REPO_DIR/agent/data/vendor-advisory.json" 2>&1 \
   || echo "vendor-advisory watch failed (non-fatal)"
 
+# ── Pass 12: sources-registry `cv` review audit (standing, best-effort) ──
+# The `cv` field on sources/domains.json was write-once until 10-15: CLAUDE.md required cv ≥ 1 at
+# curation time and said nothing about a second unit, so 169 entries drifted above 1 with no record
+# of why. It now means "independent confirmations of a fact attributed to this domain" and carries a
+# dated cvlog, with the invariant cv === 1 + cvlog.length. `--check` is cheap and catches drift at
+# run time rather than at build time; build.js also warns. The co-citation half is deliberately NOT
+# auto-run here — `--clusters <feed>` is a review aid for the act pass, because co-citation is a
+# shared-origin signal and the bump it might tempt you into is the exact error the rule prevents.
+# See agent/tools/cv-audit.mjs.
+node "$REPO_DIR/agent/tools/cv-audit.mjs" --check 2>&1 \
+  || echo "cv-audit check flagged drift (non-fatal) — see node agent/tools/cv-audit.mjs --check"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

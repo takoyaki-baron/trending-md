@@ -1852,3 +1852,55 @@ execute commands on your host"；对话功能需要 CopilotKit Intelligence（�
 *身份*逐 agent 化并对写入设闸。同一隔离问题的两半，在两周内先后出货。
 
 Sources: [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots) · [AG-UI protocol](https://docs.ag-ui.com/introduction) · [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot)
+
+## 2026-10-15 04:03 — 一项能力、六个面；一个把 agent 当读者来写的 SDK；记忆成为一个二进制，且上限已公布
+
+**Builder.io 出货 Agent-Native（beta）：让 agent 与 UI 成为"平等的伙伴"。**前提是那种外挂在应用
+旁边的聊天侧栏形状是错的；相反，一套共享的**动作、数据与应用状态**才是应用本身，而 agent 针对当前
+页面、选中记录或活动视图来解析"这个"。从**一份能力定义**出发，它把该能力暴露给**六个面——UI、
+agent、HTTP API、CLI、MCP 与 A2A**——而因为 agent 调用的是 UI 调用的同一批动作，它永远不必像
+computer-use agent 那样去驱动屏幕，帖子主张后者更慢、也更费 token。集成分两路：出站经 MCP 连到
+Slack、Teams、Discord、邮件、Telegram、WhatsApp、Notion、Linear 与 GitHub；入站经 A2A 与 MCP，
+让 Claude、ChatGPT、Cursor 或 Codex 可以调用应用动作。模型选择是自带 key（Anthropic、OpenAI、
+Gemini、OpenRouter、任何 OpenAI 兼容端点，或本地 Ollama）；用
+`npx @agent-native/core@latest create my-app` 脚手架进你自己的仓库；任意 PostgreSQL 数据库；
+可部署到 Node、Vercel、Netlify、Cloudflare 或 AWS。`BuilderIO/agent-native`（创建于 2026 年 3 月，
+7,186★，发布当天有推送）**未声明任何许可证文件**。两个头条功能带着帖子自己的注意事项：在既有的
+ChatGPT 订阅上跑 Codex 模型是 "an experimental option in Labs"，在会话里渲染应用 UI 只在
+"in hosts that support MCP Apps" 时可行。**值得存档的架构赌注是那个六面主张**——把一项能力定义
+一次、让每个调用方共享它，这是 agent 的动作清单与应用的权限模型保持同步的唯一办法。与隔离/身份
+那条线（OpenDots、Box）对照：这是同一个问题的*清单*那一半。
+
+**Meta 的 `facebookincubator/muse-gadget-sdk`——一个把 agent 写成文档化消费者的 SDK。**Meta 开源
+了用来构建自家 Muse 外设的套件：给一块现成的 **ESP32** 编程（屏幕、音频进出、传感器、执行器），
+或把一台**树莓派 / Linux 盒子**变成 gadget，包括为系统管理杂务或 Home Assistant 定制的命令。两个
+SDK 加固件都在树里出货，**必须要有 SDK token**（"Every gadget needs a token to pair"），配对流经
+开启了开发者模式的 Muse 应用，而且**每个目录都在 `README.md` 旁边带一份 `AGENTS.md`**——仓库自己
+的接口是写给作为一等读者的编码 agent 的。Apache-2.0 带第三方例外（"the Apache License does not
+cover the Jollybot avatar"），一个为电池输入功耗剖析而设的选择性隔离诊断核，以及**任何地方都没有
+alpha 或 beta 标签**——唯一的稳定性警告是，折腾可能导致 "bricked boards, voided warranties,
+brownouts, or bankruptcies. Proceed at your own risk!"。2.2k★，99 次提交，27 个未关闭 issue，
+**69 个未合并 PR**，Releases 标签页为空。把它读作 Alexa Gadgets 剧本的反向：一个闭源助手在自己
+仍未赢下模型之争时，向爱好者打开*硬件*侧翼，廉价地换取第三方设备与好感。每个目录一份 `AGENTS.md`
+这个约定，是最可能沉淀为规范的那个细节。
+
+**`elstongun/leviathan`——把 agent 记忆做成一个静态二进制，上限由作者自己写明。**一个 Apache-2.0
+的 Rust 单二进制，把记录（JSONL、JSON、CSV/TSV、SQLite，或任何数据库 CLI 能导出的东西）变成带排名
+的全文索引，于是 agent 用大白话提问，拿回的是简短、带引用的结果卡片，而不是去 grep 原始历史。
+索引是**一个 SQLite 文件、没有运行时依赖**；MCP 支持是可选的；含义不明或未知的分组**会列出候选
+并退出码 3，而不是猜**。已公布基准，**一手读自 `docs/BENCHMARKS.md`**，在 **100 万条记录
+（678 MB）**上：**每问中位数 436 token**，对比最佳 grep 策略的 107,122（**245×**；grep
+"entity history" 更差，209,412，而通读整个数据集是 203M），99.0% hit@5 与 98.5% hit@1
+（MRR@5 0.987），1,200 个问题中最差 **602 token**，p50 延迟 **33.4 ms** 对 grep-history 的
+**88.9 ms**——文档同时指出，在约 10 万条记录以下 grep 一样快或更快，而对 agent 来说 token 成本
+压过 grep 那约 90 ms。807★，创建于 10 月 5 日。这种披露正是这个货架需要的模式：README 与基准文档
+在别人开口之前先写下自己的局限——**"The data is synthetic"**（一个刻意对抗性的生成器：1,500 台
+机器、27 种失效模式、27% 的占位符被解析、15% 为空、独立的提问词表、确定性种子 7），所以**准确率
+应读作上限、token 计数读作代表性数值**；"**one example dataset**"；"**this measures retrieval,
+not the final answer**"（输出没有 LLM 参与阅读）；"**the baselines are simple on purpose**"，而且
+免费拿到精确的 key；词法 BM25 带词干化，所以同义词不匹配要靠其他词兜住；以及"one machine, one
+run"——延迟来自一颗 2018 年的桌面 CPU。这是一份你可以跟它争辩的基准，而重点正在于此。这是记忆线索
+的检索分支（[[token-economics]]、[[agent-distribution]]）以一个**单二进制、无服务**制品落地：
+有意思的轴不再是"向量库还是全文"，而是"要多少个活动部件，才能在一次真实数据的长会话上撑住"。
+
+Sources: [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [facebookincubator/muse-gadget-sdk](https://github.com/facebookincubator/muse-gadget-sdk) · [HN — muse-gadget-sdk](https://news.ycombinator.com/item?id=49941331) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)

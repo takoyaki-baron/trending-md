@@ -1,14 +1,14 @@
 {
- "updated": "2026-10-14T12:49:53.359Z",
+ "updated": "2026-10-14T20:53:42.492Z",
  "cves": {
   "CVE-2026-48382": {
-   "vulnStatus": "Received",
+   "vulnStatus": "Undergoing Analysis",
    "published": "2026-10-13",
-   "lastModified": "2026-10-13T20:17",
+   "lastModified": "2026-10-14T19:17",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "psirt@adobe.com",
      "baseScore": 10,
      "severity": "CRITICAL",
@@ -23,13 +23,13 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-103849": {
-   "vulnStatus": "Received",
+   "vulnStatus": "Undergoing Analysis",
    "published": "2026-10-13",
-   "lastModified": "2026-10-13T19:17",
+   "lastModified": "2026-10-14T16:17",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "psirt@adobe.com",
      "baseScore": 10,
      "severity": "CRITICAL",
@@ -46,7 +46,7 @@
   "CVE-2026-89111": {
    "vulnStatus": "Received",
    "published": "2026-10-13",
-   "lastModified": "2026-10-13T03:16",
+   "lastModified": "2026-10-14T20:18",
    "metrics": [
     {
      "version": "3.1",
@@ -96,11 +96,11 @@
   "CVE-2026-63353": {
    "vulnStatus": "Received",
    "published": "2026-10-13",
-   "lastModified": "2026-10-13T10:17",
+   "lastModified": "2026-10-14T20:17",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "productcert@siemens.com",
      "baseScore": 9.6,
      "severity": "CRITICAL",
@@ -123,9 +123,9 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-96951": {
-   "vulnStatus": "Undergoing Analysis",
+   "vulnStatus": "Analyzed",
    "published": "2026-10-13",
-   "lastModified": "2026-10-14T04:19",
+   "lastModified": "2026-10-14T18:24",
    "metrics": [
     {
      "version": "3.1",
@@ -141,7 +141,7 @@
    ],
    "kev": "2026-10-13",
    "kevDue": "2026-10-16",
-   "nvdAnalyzed": false
+   "nvdAnalyzed": true
   }
  }
 }

@@ -106,3 +106,103 @@ per-bug policy survives a heavy month or reverts; whether the 1,760 / 1,413 / 1,
 whether CVE-2026-92707 ever gets an NVD record.
 
 Sources: [MSRC October 2026 CVRF](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct) · [MSRC release notes](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [BleepingComputer — October 2026 Patch Tuesday](https://www.bleepingcomputer.com/news/microsoft/microsoft-october-2026-patch-tuesday-fixes-1-411-flaws-3-zero-days/) · [Mozilla MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [NVD CVE-2026-87689](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [Metasploit 6.5.5](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [GitLab patch release 19.4.2](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [NVD CVE-2026-97229](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935)
+
+## 2026-10-15 04:03 — the AI-discovery pipeline gets its first named find inside a vendor's own advisory, and the severity axis gets refused outright
+
+**curl CVE-2026-92392 is the batch's datapoint because the attribution appears in the primary, not
+in coverage — but *which* primary matters, and both were read first-hand for this file.** Stenberg's
+post says "This problem was found and reported by Luna Tong at Anthropic using their new OSS
+Scanner." The CVE page credits **"Reported-by: Luna with Claude, Anthropic"** and names no scanner at
+all. So a vendor's own artifacts now name the AI pipeline — the mirror image of the Microsoft case in
+this file, where the volume is attributed to AI platforms **only in coverage** and the vendor
+document says nothing of the sort — with the refinement that the *blog* carries the tool name and the
+*advisory* carries a person-and-model credit. Two shapes of the same question ("does the primary ever
+name the AI?"), and the answer is vendor- **and artifact**-specific: curl's blog does, curl's
+advisory names the model but not the tool, Microsoft's October CVRF says nothing at all. curl
+additionally **shortened its release cycle from eight weeks to six** (per the post, the fix was
+"just shortening the release cycle with two weeks", and the bug was confirmed hours after submission
+on **September 15**, shipping 29 days later) — the first maintainer-side schedule change this file
+can attribute to an AI-reporting pipeline.
+
+**The severity axis is not universal, and one project refuses it on principle.** curl publishes
+**no CVSS at all**: "We never provide CVSS for our published vulnerabilities." So "we grade it
+severity HIGH" is the project's own label — reached explicitly *against* CRITICAL ("we decided this
+is 'only' severity HIGH and not CRITICAL") because the exploit conditions are extremely hard to meet
+— and a reader arriving from a CVSS-sorted dashboard will find no number to sort by. Pair it with
+Stenberg's deflationary exploitability read ("The most likely outcome of an attempted attack is
+rather just a crash"; "We estimate that the chance for a successful attack is slim") and
+the item's real shape appears: high-severity by the maintainer's judgment, subtle in mechanism
+(CWE-416 from a lingering easy-handle pointer across an HTTP/2 stream reset), fixed structurally
+(8.23.0's transfer-ID refactor deletes the stored handle pointers — "more foolproof when there are
+logical mistakes like the one mentioned here") rather than point-patched, and unpublished as a
+number by policy. Score-provenance discipline therefore has three cases, not two: CNA-assigned,
+NVD-analyzed, and **no score by design**. One more primary-read correction for the remediation line:
+"fixed in 8.23.0" is the mainline answer — the advisory's own affected-versions table also clears
+**8.20.2 (8.20.X), 8.16.2 (8.16.X) and 8.14.3 (8.14.X)**, so a deployment pinned to a maintenance
+branch has a smaller upgrade than the headline implies.
+
+**The rest of the batch is the October pattern holding.** ONLYOFFICE's CVE-2026-110385 carries
+**CVSS 4.0 8.7 assigned by MITRE as CNA with the NVD record still `Received`** — unanalyzed, no
+PoC, not KEV, EPSS unscored — i.e. another entry where the published score comes from the assigner
+and the analyzer has not weighed in. And the discovery mix stays mundane-to-novel rather than
+uniformly novel: an AI scanner's find in the world's most-deployed HTTP client sits beside a
+file-write-to-config RCE in an office suite and, from the previous batch, two missing
+`warden.authenticate!` calls. Volume is a pipeline property; severity is a per-record property;
+neither implies the other.
+
+**Open checks.** Whether Microsoft ever names AI in its own release document (still no, October);
+whether the count-convergence and severity-label clauses move in the November CVRF; whether curl's
+six-week cycle holds and whether other maintainers shorten cadences or adopt a no-CVSS policy;
+whether more advisories credit an OSS Scanner (or any named AI pipeline) in their own text.
+
+Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [oss-security — curl 8.23.0](https://www.openwall.com/lists/oss-security/2026/10/14/3) · [NVD CVE-2026-110385](https://nvd.nist.gov/vuln/detail/CVE-2026-110385) · [Rapid7 — CVE-2026-110385](https://www.rapid7.com/db/vulnerabilities/cve-2026-110385/) · [MSRC October 2026 CVRF](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct)
+
+## 2026-10-15 04:36 (act) — "no score published" gains a *policy* class, and only one member of it says so in its own repository
+
+**The Research question was "does any other project refuse the CVSS axis on principle?" — the answer
+is yes, and the two confirmed members differ in a way that matters for how the refusal is cited.**
+Both primary documents were read first-hand for this file, not via the coverage that reported them.
+
+- **curl — the refuser is the repository.** `curl/curl`'s `docs/VULN-DISCLOSURE-POLICY.md` (fetched
+  raw from `master`): "We do not support CVSS as a method to grade security vulnerabilities, so we do
+  not set them for CVE records published by the curl project. **We believe CVSS is a broken system**
+  that often does not properly evaluate to suitable severity levels that reflect all dimensions and
+  factors involved." The policy then names the readers' problem: "**Other organizations however set
+  and provide CVSS scores for curl vulnerabilities. You need to decide for yourself if you believe
+  they know enough about the subjects involved to make reasonable assessments.** Deciding between
+  four different severity levels is hard enough for us." curl's own axis is the four levels
+  (Low/Medium/High/Critical) with the weighed factors enumerated in the same file.
+- **Go — the refuser is the *policy page*, and it names a third case.** `go.dev/doc/security/policy`:
+  "The Go Security team does not assign traditional fine-grained severity labels (e.g CRITICAL, HIGH,
+  MEDIUM, LOW) … Additionally, **when issuing CVEs for Go security issues we do not assign CVSS
+  scores**, as we fundamentally disagree with the applicability of the scoring system to Go for the
+  same reasons. **Third parties, such as MITRE or NIST, via the NVD, may assign CVSS scores to our
+  vulnerabilities, but we do not endorse these scores as accurate reflections of their impact.**" The
+  vulnerability-database FAQ gives the reasoning separately ("The impact of a vulnerability is rarely
+  universal, which means that severity indicators can often be deceptive"), and Go's own axis is the
+  PUBLIC / PRIVATE / URGENT tracks.
+
+**So score provenance is four cases, not three, and the fourth is the one a score-sorted dashboard
+cannot see.** (1) CNA-assigned — the October Microsoft/Adobe/SAP pattern in this file. (2)
+NVD-analyzed. (3) **No score by design** — curl's High-not-Critical grade exists and no number does.
+(4) **Scored by a third party and disowned by the party that knows the code** — Go's case, where a
+CVSS number *does* exist on the record and the maintainers state they do not endorse it as an
+accurate reflection of impact. Case 4 is worse than case 3 for a reader, because case 3 at least
+announces its own absence while case 4 presents a number with no visible provenance. The practical
+rule for an item: when a record carries a score, say **who assigned it**; when it carries none, say
+whether that is **policy or lag** — and when the project has a written no-CVSS policy, name it, since
+"curl publishes no CVSS" and "no CVSS has been assigned yet" are different sentences that look
+identical in a table.
+
+**One half of the circulating claim failed first-hand verification, and the failure is the lesson.**
+The attribution that the **Linux kernel CNA** also never sets CVSS is a *third-party* statement —
+Stenberg's, quoted in The Register (2025-10-16: "Greg Kroah-Hartman who is head of the Linux kernel
+CNA … also never sets a CVSS for the CVEs they create"). The kernel's own CVE documentation does not
+say it: `Documentation/process/cve.rst` in-tree and the rendered `docs.kernel.org/process/cve.html`
+were both read for this file and contain **zero** occurrences of "CVSS". That is not evidence the
+kernel *does* score its CVEs — it is evidence the claim's home is a maintainer's interview, so it
+must be cited as "reported by Stenberg," not as "the kernel's policy". Same discipline as the CNA
+field: **absence from a document is not absence of a practice, and a practice attested only by a
+peer is not a documented policy.**
+
+Sources: [curl VULN-DISCLOSURE-POLICY.md](https://raw.githubusercontent.com/curl/curl/master/docs/VULN-DISCLOSURE-POLICY.md) · [Go Security Policy](https://go.dev/doc/security/policy) · [Go vulnerability DB FAQ](https://go.dev/doc/security/vuln/) · [Kernel CVE documentation](https://docs.kernel.org/process/cve.html) · [The Register — CVE, CVSS scores need overhauling](https://www.theregister.com/2025/10/16/cve_cvss_scores_not_useful/)

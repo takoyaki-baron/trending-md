@@ -568,3 +568,77 @@ AOSP の側面はガバナンスの話だ：ソース公開が出荷済みビル
 フォームを逆解析してそのバグを報告することになり、修正はバイナリに対して書かねばならない。
 
 Sources: [baby steps — What agents mean for Rust](https://smallcultfollowing.com/babysteps/blog/2026/10/14/agentic-dev-and-rust/) · [HN discussion](https://news.ycombinator.com/item?id=50084416) · [jhaizhou-ops/d2r-mobile](https://github.com/jhaizhou-ops/d2r-mobile) · [d2r-mobile v1.0.13](https://github.com/jhaizhou-ops/d2r-mobile/releases/tag/v1.0.13) · [android/ndk issue #2260](https://github.com/android/ndk/issues/2260) · [HN discussion](https://news.ycombinator.com/item?id=50083130) · [vpinball/libwinevbs workaround PR](https://github.com/vpinball/libwinevbs/pull/41)
+
+## 2026-10-15 04:03 — 一つの footgun が標準ライブラリへ移り、エージェント向けに売り込まれたレンダラ、自らの主張に柵を張るベクター索引、そしてバックアップ規則そのものを製品にする rooting ガイド
+
+**Go 1.27 の HTTP/1 修正：読まれなかった改行のために接続を捨てるのをやめる。**HTTP/1 では応答が
+逐次的に流れるので、1 バイトでも読み残されたボディ——JSON オブジェクトの後の末尾改行——があると
+接続が使えなくなり、閉じることはセットアップ費用を再び払うことを意味した。Go 1.27 は
+`net/http.Transport` に**残ったボディを非同期的に排出**させ（**最大 50 ms または 256 KB** で上限）、
+接続をプールへ戻す；応答が `Connection: close` を持つときはその作業をまるごと省く。Nicholas Husin と
+Damien Neil のベンチマークは、単純なステータス取得関数を `index.golang.org` に対して HTTP/1
+（`GODEBUG=http2client=0`）で 100 回呼ぶ：**Go 1.26 で約 710 ms 対 Go 1.27 で約 150 ms**——
+「That is almost 5 times faster!」。指針は意図的に退屈である：`defer resp.Body.Close()` を書く形に
+戻し、複雑さは net/http に任せよ。排出ロジックを手書きするのではなく。明示された但し書き：この挙動は
+「might evolve in future versions of Go」、排出はベストエフォート（大きく遅いボディは依然として新しい
+接続にフォールバックする）、そして過去の排出の助言は HTTP/2 に対して無意味に適用されることが多かった。
+**なぜここに属するか：**この修正はよく知られた正確性の footgun をアプリケーション コードから標準
+ライブラリへ移すので、恩恵は自分がその問題を抱えていると知らなかったサービスにも届く——しかも
+その数値はツールチェーンと URL があれば誰でも再現できる。
+
+**`academa-labs/manimgx`（MIT、1,231★、10 月 5 日作成）：Rust/wgpu コアの上の Manim CE の Python API、
+エージェント向けに売り込まれている。**既存の Manim シーンが GPU 経路で走る——「blazingly fast 3D
+animation engine for agents, compatible with Manim CE's API」；プロンプトから、または PyPI/npm から
+インストールでき、ブラウザで動く。見出しのベンチマークは、Apple M4 Pro での 1080p60 の 5 シーン：
+**36.2 秒の映像を 3.08 秒でレンダリング**、**ManimCE より 90.6 倍、ManimGL より 11.5 倍、Blender
+Workbench より 18.7 倍高速**として公開され、launch から MP4 完成までで測られている。**この比較には、
+リポジトリ自身が招いている但し書きが値する：**シーン、設定、実行はすべて `benchmarks/` の下に
+ツリー内にあるが、Blender Workbench は**ラスタ** レンダラであり Manim のシーンは**ベクター**である
+——異なる出力パイプラインに対する 18.7× は別の測定なので、持ち帰るべきは ManimCE と ManimGL に対する
+倍数である。シーンを反復するコーディング エージェントにとって、レンダリング レイテンシは有用な
+リビジョン 1 回と 20 回の差であり、だからこそ「エージェントのためのエンジン」という枠組みが刺さる。
+
+**`timescale/pg_vectorsearch`（PostgreSQL License、245★）：PRISM、そしてベンチマーク戦争が始まる前に
+張られた柵。** **PRISM——「Partitioned Routing Index for Similarity Matching」**を実装する
+PostgreSQL 拡張で、概念的には pgvector の IVFFlat に近いが、より新しい量子化、ルーティング、
+パーティショニングの上に築かれている：共有バッファ キャッシュに暖かく保持される階層的な重心木、
+SIMD 最適化されたポスティング リスト内の RaBitQ 量子化ベクトル、見込みの薄い候補を飛ばす誤差境界、
+そしてヒープから完全精度で再ランク付けされる生存者。ネイティブの `vec32`/`vec16` 型に加え、既存の
+pgvector `vector`/`halfvec` 列を通常の演算子（`<->`、`<#>`、`<=>`）で使える。主張：「significantly
+faster」——IVFFlat と HNSW の双方に対し、クエリと索引構築の両方で、そして HNSW に対しては「1 億
+ベクトルのデータセットで、メモリが四分の一のインスタンス上で、同等の再現率においてより高速」。柵：
+「**Status: alpha. Meant for testing, not production**」、加えて「upgrading between prereleases may
+not be possible; plan to drop and recreate the extension and its indexes」、そしてポスティング
+「lists grow as rows arrive and never split on their own」（`prism_rebalance` 手続きが存在する理由）。
+欠けている部品は再現ハーネスである；それが存在するまで、メモリ対再現率の比較は、深刻だが自己開示
+された但し書きを伴うベンダーの主張である。（データベース索引の系と比べよ：Polars 2.0 の行順の変更と
+turbopuffer の ANN 降格——索引層はクエリが何を前提にしてよいかを繰り返し規定し直している。）
+
+**`wesbos/photo-frame-dashboard`（1.1k★、10 月 8 日作成）：バックアップと検証の規律*こそが*製品である。**
+民生向け Android フォト フレームを乗っ取るための段階別ガイドとスクリプト——「unlock it, root it,
+replace the vendor app, and run your own web page full screen」——が **PF1007L/AiMOR**（Allwinner A33）、
+**BIUFRAME/Synergy 10X1**（Rockchip RK3126）、**Skylight Calendar 150-CAL**（RK3566、隠しメニュー
+経由）、**LOOFII C-3**（Allwinner A133、root ADB を出荷）を覆う。アクセスはリスクの昇順で試される：
+**まず USB 経由の ADB、次にネットワーク（`adb connect <ip>:5555`）、そして最後にのみベンダー アプリの
+エクスプロイトか SD カードのブート パッチ。**バックアップとローダーのスクリプトが、Cloudflare Workers
+へデプロイする Vite ダッシュボードと WebView キオスク アプリとともに出荷される。貢献は規則のほうで
+ある：これらは「records of the units their owners tested, **not universal flashing guides**」であり、
+書き込みの前に所有者に尋ね、**検証済みのバックアップ**（バイト数、SHA-256、`0xCC` 埋めの確認）の前に
+書き込みを行わず、`OKAY` ステータスを信頼せず、最初の不一致で停止し、Wi-Fi 資格情報とトークンを
+含むためダンプは非公開に保つ。文書化されたロックアウトのリスクは明示されている——ベンダー アプリを
+無効化する前に Settings に*手で*到達できることを確認せよ。ADB 経由の読み戻しはそれを証明しないからだ。
+TLDR はコーディング エージェントをこのリポジトリに向けろと言うが、まさにそれがチェックリストの存在
+理由である：さもなければエージェントは先に書き込み、ロックアウトを後で発見する。
+
+**Iosevka の HN 首位 630 ポイント、しかも何も出荷していない。**現行リリース **v34.9.0、2026-09-26
+公開**；その前の二つは v34.8.1（8 月 22 日）と v34.8.0（7 月 26 日）——活発にメンテナンスされている
+プロジェクトで、おおよそ月次の間隔であり、サイトには**ニュース節がない**。8 つのファミリ（Iosevka、
+Term、Fixed + slab 変種、加えて準プロポーショナルの Aile と Etoile）、等幅グリフは「exactly 1/2em
+wide」、2 つの設定可能な幅、**146 の設定可能な文字と 19 のスタイル セット**（Andale Mono、Consolas、
+JetBrains Mono、IBM Plex Mono を模すセットを含む）、そして **248 言語**を主張するカバレッジ。この
+項目は**10 年前の、依然メンテナンスされているツールの再発見**であってローンチではない——トリガー
+規則をフォントに適用したものであり、「スターが動いた」が見出しになる前に*なぜ*を要するという
+念押しである。評価するときに述べるべきトレードオフ：自分の変種をビルドするモデルこそが、リガチャと
+幅のセットが完全である理由であり、既製のバイナリが望みどおりでないかもしれない理由でもある。
+
+Sources: [Go blog — Better HTTP/1 connection reuse](https://go.dev/blog/http-connection-reuse) · [HN — Go 1.27 HTTP/1](https://news.ycombinator.com/item?id=50090369) · [academa-labs/manimgx](https://github.com/academa-labs/manimgx) · [ManimGX benchmarks](https://github.com/academa-labs/manimgx/tree/main/benchmarks) · [timescale/pg_vectorsearch](https://github.com/timescale/pg_vectorsearch) · [HN — pg_vectorsearch](https://news.ycombinator.com/item?id=50086165) · [wesbos/photo-frame-dashboard](https://github.com/wesbos/photo-frame-dashboard) · [HN — photo-frame-dashboard](https://news.ycombinator.com/item?id=50048003) · [Iosevka](https://typeof.net/Iosevka/) · [be5invis/Iosevka](https://github.com/be5invis/Iosevka) · [HN — Iosevka](https://news.ycombinator.com/item?id=50084240)

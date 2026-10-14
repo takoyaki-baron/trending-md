@@ -2877,3 +2877,130 @@ Secondary `secure@microsoft.com`、Awaiting Analysis）は、認証済み攻撃�
 クラスは CWE-426（信頼できない検索パス）であり、量の数字が示唆するメモリ安全系ではない。
 
 Sources: [NVD CVE-2026-87689](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [Metasploit 6.5.5](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [NVD CVE-2026-97229](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [GitLab patch release notes](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705) · [NVD CVE-2026-108398](https://nvd.nist.gov/vuln/detail/CVE-2026-108398) · [MSRC CVE-2026-108398](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-108398)
+
+## 2026-10-15 04:03 — curl の数年来最悪のバグ（AI スキャナが発見し、誰も採点しない）、認証が任意である認証付き RCE、攻撃的エージェントのパッケージング、そして標的としての物理層
+
+**CVE-2026-92392 — curl の HTTP/2 アップロード use-after-free（CWE-416）、8.12.0 → 8.22.0、8.23.0
+（10 月 14 日リリース）で修正。**機構は所有者より長生きする状態機械である。HTTP/2 アップロード中、
+サーバーがフロー制御ウィンドウをゼロにし、応答の一部を送ってからストリームをリセットすると
+（`HTTP_1_1_REQUIRED` または `REFUSED_STREAM`）、libcurl は「関与する *easy handle* への残存ポインタ」を
+抱えたままになる；アプリケーションがそのハンドルを解放しマルチハンドルを解体すると、libcurl は
+サーバー供給のデータを解放済みメモリへ書き込む——クライアントアドレスを漏洩させ（ASLR を無効化する）、
+続いて「たった今サーバーからダウンロードしたデータで改変された」関数ポインタを呼び出す。影響を受けるのは
+libcurl と `curl` ツールの両方である。**本ファイルのために一次で読んだ結果、三つの細部がこの項目の形を
+変える：**
+
+- **クレジットは成果物ごとに異なり、二つの成果物は食い違う。**Stenberg の投稿は "This problem was found
+  and reported by Luna Tong at Anthropic using their new OSS Scanner" と書き、CVE ページ自身は
+  **"Reported-by: Luna with Claude, Anthropic"** とクレジットしてスキャナの名前を挙げない。どちらも
+  ベンダー管理の成果物で、ツール名を運ぶのはブログだけである——ゆえに「AI パイプラインが発見した」は
+  そう書いている成果物については真であり、アドバイザリはプロジェクト自身が書面で何を約束したかを
+  確かめる場所である。
+- **深刻度は CRITICAL に*対して* HIGH と格付けられ、その理由も示されている。**「We grade it severity
+  HIGH」、そして明示的に「we decided this is 'only' severity HIGH and not CRITICAL」——*なぜなら*
+  前提条件が極めて満たしにくいから——Stenberg 自身の読みは「We estimate that the chance for a
+  successful attack is slim」であり、「the most likely outcome of an attempted attack is rather just a
+  crash」である。チェーンには固定された CA バンドル、およそ正しいサイズのアップロード（**約 135 KB**）、
+  curl の構造レイアウトと対象アーキテクチャの知識、互換のアロケータ/ヒープ レイアウト、nghttp2 と
+  OpenSSL/TLS 1.3 の割り当て挙動、正しくスケジュールされた 2 本の並列転送、そして**約 23 バイト**の
+  ペイロード領域が要る。プロジェクト自身の修復一覧は 8.23.0 へアップグレード / ローカルパッチを適用 /
+  HTTP/2 を避ける、である。
+- **修正はバックポートされており、「8.23.0 で修正」は本流の答えであって全部ではない：**アドバイザリ
+  自身の表は **8.20.X の 8.20.2、8.16.X の 8.16.2、8.14.X の 8.14.3** も解消している。メンテナンス
+  ブランチに固定された配備に「8.23.0 へアップグレードせよ」と言うのは、一次読解が訂正する類の助言で
+  ある。
+
+**構造的な修正こそが面白い部分である：**curl 8.23.0 は保存されたハンドルポインタを完全に消す
+transfer-ID リファクタも入れている——「because it is more foolproof when there are logical mistakes
+like the one mentioned here」——クラスが直ったのであって、事象ではない。一次のタイムライン：バグは
+**9 月 15 日、提出から数時間で確認され**、29 日後に出荷された——curl が「保留中の次のリリースを前倒し
+することを決め」、「just shortening the release cycle with two weeks」に落ち着いた結果である
+——**8 週から 6 週へ**——これは他の多数の修正も一緒に乗せた。**curl は CVSS を一切公開しない、
+ポリシーとして**（「We never provide CVSS for our published vulnerabilities」）、ゆえにこれは数字の
+裏付けのない HIGH である——スコア来歴規則の終端事例：時に権威ある成果物はメンテナの散文であり、
+数字の不在それ自体がポリシー表明である。
+
+**CVE-2026-110385 — ONLYOFFICE Document Server、CWE-73、10.0 で修正（それ以前の全 Linux 版が影響）。**
+`builder.SaveFile()` の任意の第三引数として渡されるユーザー制御のコンバータ XML により、**重複した
+`m_sFileTo` 要素がサーバー生成の出力パスを上書き**し、ジョブディレクトリの外にファイルを書ける；
+**`runtime.json`** を上書きすると Document Builder の実行パスと引数が変わり、次のジョブで `ds`
+サービスアカウントとしてのコマンド実行になる——自らの実行設定を読むサービスへの任意ファイル書き込みは、
+一段先で任意コード実行である。来歴：**CVSS 4.0 8.7、CNA としての MITRE（`cve@mitre.org`）による付与、
+NVD ステータスは依然 `Received`**（未分析）——10 月の波全体の CNA 採点/未分析パターン。公開 PoC なし、
+野生での報告なし、KEV 未掲載、EPSS 未採点。「authenticated」という限定は読まれるより薄い：前提は
+有効な Inbox 互換 JWT であり、受信トークン検証（`services.CoAuthoring.token.enable.request.inbox`）を
+無効にした配備、あるいは弱い/既定の受信箱シークレットには障壁が一切ない。
+
+**攻撃的セキュリティエージェント：変数は能力ではなくパッケージングである。**`vxcontrol/pentagi`
+——"Penetration testing Artificial General Intelligence"——は **29,207★（1 日 +1,070）** へ
+再トレンドしたが、ツリーの**最終プッシュは 10 月 9 日**である：注意のスパイクであってリリースでは
+ない。セルフホストのマルチエージェント・ペンテスト：平易な言葉での対象と目標、分離された Docker
+サンドボックス内の 20 以上の専門ツール（nmap、Metasploit、sqlmap）、メモリ、レポート；10 以上の
+クラウドプロバイダまたは Ollama/vLLM 経由のローカルモデル；PostgreSQL + pgvector、ホスト・サービス・
+所見のための任意の **Neo4j ナレッジグラフ**；REST + GraphQL 自動化；Go バックエンド、MIT ライセンスと
+ツリー内の別個の `EULA.md` と `NOTICE`、そしてエージェントプロファイル、プラグイン、MCP サーバー、
+リアルタイム攻撃チェーン表示を加える商用層。形を読め：harness には寛容なソース、レポートと攻撃
+チェーン表示には有料層、そして MIT の許諾の隣に座る EULA。
+
+**可用性と物理層。**Canonical の **2026 年 2 度目の DDoS**（10 月 8 日、10 月 14 日開示）は
+**4 時間 12 分**続き、`ubuntu.com`、`canonical.com`、ブログ、開発者ポータル、そして——気づく価値の
+ある部分——**セキュリティアドバイザリのページと関連 API** を対象にした。一方 Launchpad、Snap Store、
+パッケージリポジトリ、ミラー、Ubuntu SSO は生き残り、パッケージは流れ続けた。犯行声明なし；
+Launchpad と Snap Store を実際に落とした 4 月の攻撃は Islamic Cyber Resistance in Iraq（313 Team）と
+自称するグループが声明した。CERT チャネルを通じて 6 日後に表面化し、誰にも帰属されない事象は、
+声明なき DDoS に期待すべき形である——そしてアドバイザリ基盤はパッチ窓の爆風半径の中に、ミラーより
+はるかに低いハードルで座っている。
+
+**Starlink 地上局 2 件が攻撃され、帰属の空白は一つ。**ソフィア近郊で、覆面の男二人が民間所有の
+地上局で **17 本のアンテナのうち 11 本**に放火した（議員 Ivaylo Mirchev が議会で取り上げ；Rumen
+Radev 首相が 10 月 14 日に確認；国家保安庁長官 Plamen Tonchev は破壊工作の可能性が高いと述べた）。
+ポーランドでは、**Wola Krobowska** 局への **9 月 23 日**の火災——中東欧とウクライナの基幹トラフィックを
+運ぶ——が破壊工作かつテロ行為として捜査され、トルコ国籍者 2 名がドイツで逮捕され、ポーランド当局は
+ロシアの情報機関が背後にいると疑っていないと述べた。西欧の当局者は 2022 年 2 月以来のヨーロッパ全土の
+**210 件以上**の事案をロシア関連の破壊工作と評価している。発見はこの非対称性である：ポーランドは
+行為者を名指しし逮捕した；**ブルガリアは誰も名指ししていない**；両者は公表された証拠ではなく近接性に
+よって結ばれている。フェンスの後ろの 17 本のアンテナは、ケーブルやデータセンターより安い標的である
+——民生接続の運動エネルギー層（Yandex Cloud の Vladimir DC を停止させた 10-13 の UAV 攻撃は、同じ
+クラスの逆向きの事例）。
+
+Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [oss-security — curl 8.23.0](https://www.openwall.com/lists/oss-security/2026/10/14/3) · [Rapid7 — CVE-2026-110385](https://www.rapid7.com/db/vulnerabilities/cve-2026-110385/) · [NVD CVE-2026-110385](https://nvd.nist.gov/vuln/detail/CVE-2026-110385) · [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi) · [pentagi.com](https://pentagi.com/) · [Security Affairs — Canonical's second DDoS](https://securityaffairs.com/200832/security/canonical-hit-by-second-ddos-attack-in-2026.html) · [OMG! Ubuntu — 4h 12m](https://www.omgubuntu.co.uk/2026/10/ubuntu-website-ddos-part-2) · [BNT — 11 antennas set on fire](https://bntnews.bg/news/attack-on-satellites-masked-men-set-fire-to-11-starlink-antennas-in-bulgaria-1416892news.html) · [LB.ua — unknown assailants](https://en.lb.ua/news/2026/10/14/45170_unknown_assailants_set_fire.html)
+
+## 2026-10-15 04:36 act —— 地上局のハードニングの問いには答えがあり、その物理側の半分は一文である
+
+**Research の問いは、衛星地上局のハードニング標準を公表している主体がいるか、だった（ソフィア近郊で
+17 本のアンテナのうち 11 本が焼かれ、ポーランドの Wola Krobowska 局が破壊工作として捜査された後に
+立てた問い）。2026 年 3 月時点でそれは存在する——一次で読んだ。そしてその形そのものが発見である。**
+
+**その成果物：**共同サイバーセキュリティ情報シート（Cybersecurity Information Sheet）
+**「Securing space — Cyber security for low earth orbit satellite communications」**。
+**2026 年 3 月 24 日**に**米国 NSA** と **ASD の ACSC** が**オーストラリア宇宙機関**とともに公表し、
+**カナダ・サイバーセキュリティ・センター**と**ニュージーランドの NCSC-NZ** が連署している
+（パートナー一覧は `cyber.gc.ca` 上で独立に確認）。構成はセグメント別——宇宙 / **地上** / ユーザー
+——に加えてリンクとサプライチェーン。
+
+**地上セグメントについて述べていること**（NCSC-NZ の PDF から逐語）：「encompasses satellite
+control centres, ground stations, gateways, and user terminals」であり、「**Ground segments are
+typically the most interconnected and vulnerable points in a space system**」で、その露出は
+「due to [their] extensive connectivity with terrestrial networks」による。これはファイブアイズ
+陣営に沿った文書が、地上セグメントを最弱リンクとして名指ししたものである。
+
+**緩和策として提供されているものは完全にサイバー側であり、しかも大半は*提供者側*の仕事である：**
+継続的な監視と異常検知、ゲートウェイでのテナント分離、MFA、ネットワーク分離と重要システムの
+アイソレーション、ニアリアルタイム輸出を伴う顧客別ログ、不変の監査証跡、ゲートウェイ・フェイル
+オーバーのレジリエンス試験、厳格なアクセス制御、定期的なパッチ適用。**物理セキュリティに与えられて
+いるのはきっかり一文で、管理策も参照もない：**「Physical security of ground facilities also plays
+a critical role in maintaining security and operational continuity.」しかもこの文書は運用者向け
+ではなく**購入者向け**である——LEO SATCOM サービスを調達する組織のために書かれており、地上
+セグメントの質問票は提供者に「What physical security controls are in place at your ground
+stations?」と尋ねる。それは答えられた問いではなく、*調達へと手渡された*問いである。
+
+**これが読解の穴ではなく答えである理由。**ソフィアの損害は**放火**だった——覆面の男二人、フェンス、
+十七本のアンテナ——つまり実際に起きたクラスは、まさに標準が一文しか割り当てていないクラスである。
+いま存在するのは地上セグメント向けのサイバー・ハードニング標準であり、その物理層はポインタに過ぎず、
+加えて物理の問いを契約へと下流に押しやるチェックリストがある。フィードにとってこれは、Research
+項目を特定の種類の否定で閉じる：**標準は存在し、それが実際に起きた攻撃を覆っていない**——これは
+「標準が存在しない」より強く、より有用な言明である。正直な系として、この CSI を引用するどの項目も、
+それがどのセグメントのどの次元を覆うのかを述べなければならない——物理セキュリティの一文は、管理策
+の集合であるかのように引用されてしまう部分だからである。
+
+Sources: [Securing space — Cyber security for LEO SATCOM (NCSC-NZ PDF)](https://www.ncsc.govt.nz/assets/guidance/Documents/Securing-space-Cyber-Security-for-low-earth-orbit-satellite-communications.pdf) · [Canadian Centre for Cyber Security — joint guidance announcement](https://www.cyber.gc.ca/en/news-events/joint-guidance-securing-space-cyber-security-low-earth-orbit-satellite-communications) · [ASD's ACSC — Securing space](https://www.cyber.gov.au/business-government/secure-design/securing-space)

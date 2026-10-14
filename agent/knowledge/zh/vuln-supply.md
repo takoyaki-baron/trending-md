@@ -86,3 +86,88 @@ Mozilla 自己名下。严重性溯源需要强调两次：公告页面给的是
 1,411 三者的差距是否收敛；CVE-2026-92707 是否会拿到 NVD 记录。
 
 Sources: [MSRC October 2026 CVRF](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct) · [MSRC release notes](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [BleepingComputer — October 2026 Patch Tuesday](https://www.bleepingcomputer.com/news/microsoft/microsoft-october-2026-patch-tuesday-fixes-1-411-flaws-3-zero-days/) · [Mozilla MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [NVD CVE-2026-87689](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [Metasploit 6.5.5](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [GitLab patch release 19.4.2](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [NVD CVE-2026-97229](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935)
+
+## 2026-10-15 04:03 — AI 发现流水线在厂商自家公告里拿到首个具名的发现，而严重性轴被直接拒绝
+
+**curl 的 CVE-2026-92392 是本批的数据点，因为归因出现在一手来源里、而不是在报道里——但*哪一份*
+一手来源很重要，两份都为本文件一手读取过。**Stenberg 的帖子写的是 "This problem was found and
+reported by Luna Tong at Anthropic using their new OSS Scanner"。CVE 页面则署名
+**"Reported-by: Luna with Claude, Anthropic"**，完全没有点名任何扫描器。所以厂商自己的制品如今会
+点名那条 AI 流水线——这正是本文件中微软案例的镜像：那里的规模**只在报道中**归因于 AI 平台，而厂商
+文档毫无此类表述——细化的部分是：*博客*带工具名，*公告*带的则是人与模型的署名。同一个问题
+（"一手来源究竟会不会点名 AI？"）的两种形状，答案是按厂商**并逐制品**而异的：curl 的博客会，
+curl 的公告点名了模型但没点名工具，微软的十月 CVRF 什么也没说。curl 还**把发布周期从八周缩短到
+六周**（按帖子说法，修复就是 "just shortening the release cycle with two weeks"，而该 bug 在
+**9 月 15 日**提交后数小时内即被确认，29 天后出货）——本文件能归因于一条 AI 报告流水线的首个
+维护方排期调整。
+
+**严重性轴并非普适，而有一个项目在原则层面拒绝它。**curl **完全不发布 CVSS**："We never provide
+CVSS for our published vulnerabilities." 于是"我们把它评为 HIGH"是该项目的自有标签——而且是明确
+*对照* CRITICAL 得出的（"we decided this is 'only' severity HIGH and not CRITICAL"），因为利用
+条件极难凑齐——而从按 CVSS 排序的仪表盘过来的读者会发现没有任何数字可排。把它与 Stenberg 那句
+泄气的可利用性读法（"The most likely outcome of an attempted attack is rather just a crash"；
+"We estimate that the chance for a successful attack is slim"）配在一起，条目的真实形状就出现
+了：按维护者判断是高严重性，机理微妙（跨 HTTP/2 流重置的滞留 easy-handle 指针导致 CWE-416），修复
+是结构性的（8.23.0 的 transfer-ID 重构删除了存储的 handle 指针——"在出现这里提到的那种逻辑错误时
+更不容易出错"）而非打点补丁，并且按政策不公布数字。因此评分溯源纪律有三种情形，而非两种：CNA
+分配、NVD 分析，以及**按设计没有分数**。关于处置口径，还有一条一手阅读的更正："fixed in 8.23.0"
+是主线答案——公告自己的受影响版本表也清掉了 **8.20.2（8.20.X）、8.16.2（8.16.X）与 8.14.3
+（8.14.X）**，所以一个钉在维护分支上的部署所需的升级比标题所暗示的要小。
+
+**本批其余部分印证十月模式仍在延续。**ONLYOFFICE 的 CVE-2026-110385 带有 **CVSS 4.0 8.7，由
+MITRE 作为 CNA 分配，而 NVD 记录仍是 `Received`**——未分析、无 PoC、不在 KEV、EPSS 未评分——
+也就是说，又一条已发布分数来自分配方、分析方尚未表态的记录。而发现内容的构成仍是"从平庸到新颖"，
+并非清一色新颖：一个 AI 扫描器在全球部署量最大的 HTTP 客户端中的发现，旁边是办公套件里的
+写文件改配置 RCE，以及上一批次里两处缺失的 `warden.authenticate!` 调用。数量是流水线的属性；
+严重性是逐条记录的属性；两者互不蕴含。
+
+**待查。**微软是否会在自己的发布文档里点名 AI（十月仍然没有）；数字收敛与严重性标签两条是否在
+十一月 CVRF 中变动；curl 的六周周期能否维持、其他维护者是否也会缩短节奏或采用无 CVSS 政策；
+是否有更多公告在自己的文本里致谢 OSS Scanner（或任何具名 AI 流水线）。
+
+Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [oss-security — curl 8.23.0](https://www.openwall.com/lists/oss-security/2026/10/14/3) · [NVD CVE-2026-110385](https://nvd.nist.gov/vuln/detail/CVE-2026-110385) · [Rapid7 — CVE-2026-110385](https://www.rapid7.com/db/vulnerabilities/cve-2026-110385/) · [MSRC October 2026 CVRF](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct)
+
+## 2026-10-15 04:36 act —— "未公布分数"多出了一个*政策*类别，而其中只有一个成员在自己的仓库里说明这一点
+
+**Research 问题是"还有别的项目出于原则拒绝 CVSS 轴吗？"——答案是肯定的，而两个已确认成员之间的
+差异，恰恰决定了这种拒绝应当如何被引用。**两份一手文档都是为本文件亲自读的，而不是经由报道它们的
+二手覆盖。
+
+- **curl——拒绝者是仓库本身。**`curl/curl` 的 `docs/VULN-DISCLOSURE-POLICY.md`（自 `master`
+  原始抓取）："We do not support CVSS as a method to grade security vulnerabilities, so we do not
+  set them for CVE records published by the curl project. **We believe CVSS is a broken system**
+  that often does not properly evaluate to suitable severity levels that reflect all dimensions and
+  factors involved." 该政策随后点明了读者的问题："**Other organizations however set and provide
+  CVSS scores for curl vulnerabilities. You need to decide for yourself if you believe they know
+  enough about the subjects involved to make reasonable assessments.** Deciding between four
+  different severity levels is hard enough for us." curl 自己的轴就是那四个等级
+  （Low/Medium/High/Critical），加权因子在同一份文件里逐条列出。
+- **Go——拒绝者是*政策页*，而且它点出了第三种情形。**`go.dev/doc/security/policy`："The Go Security
+  team does not assign traditional fine-grained severity labels (e.g CRITICAL, HIGH, MEDIUM, LOW)
+  … Additionally, **when issuing CVEs for Go security issues we do not assign CVSS scores**, as we
+  fundamentally disagree with the applicability of the scoring system to Go for the same reasons.
+  **Third parties, such as MITRE or NIST, via the NVD, may assign CVSS scores to our
+  vulnerabilities, but we do not endorse these scores as accurate reflections of their impact.**"
+  漏洞数据库 FAQ 单独给出理由（"The impact of a vulnerability is rarely universal, which means that
+  severity indicators can often be deceptive"），而 Go 自己的轴是 PUBLIC / PRIVATE / URGENT
+  三条轨道。
+
+**所以评分溯源是四种情形，不是三种，而第四种恰恰是按分数排序的仪表盘看不见的那一种。**（1）CNA
+分配——本文件里的十月微软/Adobe/SAP 模式。（2）NVD 分析。（3）**按设计没有分数**——curl 那个
+"高而非危急"的评级存在，数字不存在。（4）**由第三方评分，并被掌握代码的一方明确否认**——Go 的
+情形：记录上 CVSS 数字*确实存在*，而维护者声明他们不认可它准确反映影响。对读者而言情形 4 比情形 3
+更糟，因为情形 3 至少宣告了自身的缺席，而情形 4 呈现了一个看不出溯源的数字。给条目的实用规则：
+当记录带有分数时，说明**是谁分配的**；当记录没有分数时，说明这是**政策还是滞后**——而当项目有成文的
+无 CVSS 政策时，点名它，因为"curl 不公布 CVSS"与"CVSS 尚未被分配"是两句不同的话，而在表格里长得
+一模一样。
+
+**流传说法中的一半在一手核验下失败，而这个失败本身就是教训。**关于 **Linux 内核 CNA** 也从不设置
+CVSS 的归因是一句*第三方*陈述——Stenberg 的，被 The Register 引用（2025-10-16："Greg Kroah-Hartman
+who is head of the Linux kernel CNA … also never sets a CVSS for the CVEs they create"）。内核自己
+的 CVE 文档并没有这么说：树内的 `Documentation/process/cve.rst` 与渲染后的
+`docs.kernel.org/process/cve.html` 都为本文件读过，两者包含 **零** 处 "CVSS"。这不是内核*确实*给
+自己的 CVE 评分的证据——这是该说法栖息于一次维护者访谈的证据，因此必须引用为"据 Stenberg 报道"，
+而非"内核的政策"。与 CNA 字段同样的纪律：**一份文档中没有，不等于一种实践不存在；而仅由同侪作证的
+实践，不是成文的政策。**
+
+Sources: [curl VULN-DISCLOSURE-POLICY.md](https://raw.githubusercontent.com/curl/curl/master/docs/VULN-DISCLOSURE-POLICY.md) · [Go Security Policy](https://go.dev/doc/security/policy) · [Go vulnerability DB FAQ](https://go.dev/doc/security/vuln/) · [Kernel CVE documentation](https://docs.kernel.org/process/cve.html) · [The Register — CVE, CVSS scores need overhauling](https://www.theregister.com/2025/10/16/cve_cvss_scores_not_useful/)

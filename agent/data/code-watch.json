@@ -839,9 +839,9 @@
           "found": "2026-10-12T21:59:21.801Z"
         }
       },
-      "runs": 71,
+      "runs": 72,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-10-14T12:44:01.705Z",
+      "last_run": "2026-10-14T20:49:47.574Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -1025,27 +1025,585 @@
           "path": "crates/katgpt-core/src/kv_eviction/mod.rs",
           "html_url": "https://github.com/katopz/katgpt-rs/blob/f62a5887be83ed4d0dbdfd5e8ac0f60bcf574ace/crates/katgpt-core/src/kv_eviction/mod.rs",
           "found": "2026-09-26T05:21:25.430Z"
+        },
+        "zhaolin-amd/llm-paper-radar::paper-river/RandomAttention-2609.03430.org": {
+          "repo": "zhaolin-amd/llm-paper-radar",
+          "path": "paper-river/RandomAttention-2609.03430.org",
+          "html_url": "https://github.com/zhaolin-amd/llm-paper-radar/blob/99283442272a618848453bc9202fa4c089bee714/paper-river/RandomAttention-2609.03430.org",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "zhaolin-amd/llm-paper-radar::paper-river/RandomAttention-2609.03430_en.org": {
+          "repo": "zhaolin-amd/llm-paper-radar",
+          "path": "paper-river/RandomAttention-2609.03430_en.org",
+          "html_url": "https://github.com/zhaolin-amd/llm-paper-radar/blob/99283442272a618848453bc9202fa4c089bee714/paper-river/RandomAttention-2609.03430_en.org",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "janilbols-w/weekly-paper::src/content/docs/papers/arxiv-2609.03430.md": {
+          "repo": "janilbols-w/weekly-paper",
+          "path": "src/content/docs/papers/arxiv-2609.03430.md",
+          "html_url": "https://github.com/janilbols-w/weekly-paper/blob/29a1dae25d2126bd6fd1d383e292bace8ed7f20e/src/content/docs/papers/arxiv-2609.03430.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "gbdata365/daily_papers::papers/2609.03430_new.html": {
+          "repo": "gbdata365/daily_papers",
+          "path": "papers/2609.03430_new.html",
+          "html_url": "https://github.com/gbdata365/daily_papers/blob/615b2964c996aa6990e3ad54e9f0d7405a3bd650/papers/2609.03430_new.html",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "vollero/hf-daily-paper-summaries::summaries/2026/09/2026-09-04/2609.03430.md": {
+          "repo": "vollero/hf-daily-paper-summaries",
+          "path": "summaries/2026/09/2026-09-04/2609.03430.md",
+          "html_url": "https://github.com/vollero/hf-daily-paper-summaries/blob/e74517f10f6121156c5c23bffcf61600010b7f2f/summaries/2026/09/2026-09-04/2609.03430.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "ChuaHanChong/ResearchBrain::_KnowledgeHub_/2609.03430.md": {
+          "repo": "ChuaHanChong/ResearchBrain",
+          "path": "_KnowledgeHub_/2609.03430.md",
+          "html_url": "https://github.com/ChuaHanChong/ResearchBrain/blob/6ec409e91dca783236e3ce401347b97764fe7b5e/_KnowledgeHub_/2609.03430.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "pavani06/papers-journal::edicoes/deep/2026/09/2609.03430.md": {
+          "repo": "pavani06/papers-journal",
+          "path": "edicoes/deep/2026/09/2609.03430.md",
+          "html_url": "https://github.com/pavani06/papers-journal/blob/e7a90e6b7b9d1955f0006b2cdb9d38ce704d9b2a/edicoes/deep/2026/09/2609.03430.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "SalesforceAIResearch/Random-Attention::README.md": {
+          "repo": "SalesforceAIResearch/Random-Attention",
+          "path": "README.md",
+          "html_url": "https://github.com/SalesforceAIResearch/Random-Attention/blob/64db9688a12f0926db45fec039370f6ceb1ab4fe/README.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "pavani06/papers-journal::docs/deep/2026/09/2609.03430.html": {
+          "repo": "pavani06/papers-journal",
+          "path": "docs/deep/2026/09/2609.03430.html",
+          "html_url": "https://github.com/pavani06/papers-journal/blob/e7a90e6b7b9d1955f0006b2cdb9d38ce704d9b2a/docs/deep/2026/09/2609.03430.html",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "zhaolin-amd/llm-paper-radar::digests/2026-09-03.md": {
+          "repo": "zhaolin-amd/llm-paper-radar",
+          "path": "digests/2026-09-03.md",
+          "html_url": "https://github.com/zhaolin-amd/llm-paper-radar/blob/99283442272a618848453bc9202fa4c089bee714/digests/2026-09-03.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "zhaolin-amd/llm-paper-radar::digests/2026-09-03_en.md": {
+          "repo": "zhaolin-amd/llm-paper-radar",
+          "path": "digests/2026-09-03_en.md",
+          "html_url": "https://github.com/zhaolin-amd/llm-paper-radar/blob/99283442272a618848453bc9202fa4c089bee714/digests/2026-09-03_en.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "DaBestCode/randkv::NOTICE": {
+          "repo": "DaBestCode/randkv",
+          "path": "NOTICE",
+          "html_url": "https://github.com/DaBestCode/randkv/blob/13d7fa1481a4437b945329b70430116c111c513a/NOTICE",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "careywyr/AI-Weekly-Paper::2026/0831-0904.md": {
+          "repo": "careywyr/AI-Weekly-Paper",
+          "path": "2026/0831-0904.md",
+          "html_url": "https://github.com/careywyr/AI-Weekly-Paper/blob/335b376112249957f431d23d5794ca2f2e1c3d23/2026/0831-0904.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "skynettoday/skynet-today::_posts/digests/2026-09-07-343.md": {
+          "repo": "skynettoday/skynet-today",
+          "path": "_posts/digests/2026-09-07-343.md",
+          "html_url": "https://github.com/skynettoday/skynet-today/blob/e7b848ad9d3750c1c5be84932ccd1855a6ed88c1/_posts/digests/2026-09-07-343.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Jimmuji/ai-daily-digest::daily/2026-09-05.md": {
+          "repo": "Jimmuji/ai-daily-digest",
+          "path": "daily/2026-09-05.md",
+          "html_url": "https://github.com/Jimmuji/ai-daily-digest/blob/0ff53fba1ea0f442a8e8f18457c9f4c25dc30961/daily/2026-09-05.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "zhaolin-amd/llm-paper-radar::digests/2026-09-04.md": {
+          "repo": "zhaolin-amd/llm-paper-radar",
+          "path": "digests/2026-09-04.md",
+          "html_url": "https://github.com/zhaolin-amd/llm-paper-radar/blob/99283442272a618848453bc9202fa4c089bee714/digests/2026-09-04.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Jimmuji/ai-daily-digest::daily/2026-09-06.md": {
+          "repo": "Jimmuji/ai-daily-digest",
+          "path": "daily/2026-09-06.md",
+          "html_url": "https://github.com/Jimmuji/ai-daily-digest/blob/0ff53fba1ea0f442a8e8f18457c9f4c25dc30961/daily/2026-09-06.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Jimmuji/ai-daily-digest::daily/2026-09-07.md": {
+          "repo": "Jimmuji/ai-daily-digest",
+          "path": "daily/2026-09-07.md",
+          "html_url": "https://github.com/Jimmuji/ai-daily-digest/blob/0ff53fba1ea0f442a8e8f18457c9f4c25dc30961/daily/2026-09-07.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "CSQianDong/Awesome-arXiv-Daily-Reporter::4-Sep-2026/NLP/README.md": {
+          "repo": "CSQianDong/Awesome-arXiv-Daily-Reporter",
+          "path": "4-Sep-2026/NLP/README.md",
+          "html_url": "https://github.com/CSQianDong/Awesome-arXiv-Daily-Reporter/blob/f41938b04081f2f904dac33f6c68430aa0cc400f/4-Sep-2026/NLP/README.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Jimmuji/ai-daily-digest::daily/2026-09-05.en.md": {
+          "repo": "Jimmuji/ai-daily-digest",
+          "path": "daily/2026-09-05.en.md",
+          "html_url": "https://github.com/Jimmuji/ai-daily-digest/blob/0ff53fba1ea0f442a8e8f18457c9f4c25dc30961/daily/2026-09-05.en.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Jimmuji/ai-daily-digest::daily/2026-09-07.en.md": {
+          "repo": "Jimmuji/ai-daily-digest",
+          "path": "daily/2026-09-07.en.md",
+          "html_url": "https://github.com/Jimmuji/ai-daily-digest/blob/0ff53fba1ea0f442a8e8f18457c9f4c25dc30961/daily/2026-09-07.en.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Jimmuji/ai-daily-digest::daily/2026-09-06.en.md": {
+          "repo": "Jimmuji/ai-daily-digest",
+          "path": "daily/2026-09-06.en.md",
+          "html_url": "https://github.com/Jimmuji/ai-daily-digest/blob/0ff53fba1ea0f442a8e8f18457c9f4c25dc30961/daily/2026-09-06.en.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "alloevil/AI-Paper-Daily::docs/2026-09-04.md": {
+          "repo": "alloevil/AI-Paper-Daily",
+          "path": "docs/2026-09-04.md",
+          "html_url": "https://github.com/alloevil/AI-Paper-Daily/blob/ed909ee49ee925d5ae69183914b7a85bdb38bccf/docs/2026-09-04.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "zhaolin-amd/llm-paper-radar::digests/2026-09-04_en.md": {
+          "repo": "zhaolin-amd/llm-paper-radar",
+          "path": "digests/2026-09-04_en.md",
+          "html_url": "https://github.com/zhaolin-amd/llm-paper-radar/blob/99283442272a618848453bc9202fa4c089bee714/digests/2026-09-04_en.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "katopz/katgpt-rs::.plans/585_usage_rate_eviction_primitive.md": {
+          "repo": "katopz/katgpt-rs",
+          "path": ".plans/585_usage_rate_eviction_primitive.md",
+          "html_url": "https://github.com/katopz/katgpt-rs/blob/f7479340b69f8f6ecddbeddf2b0e12e4f763cf96/.plans/585_usage_rate_eviction_primitive.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "katopz/katgpt-rs::.benchmarks/697_usage_rate_eviction_goat.md": {
+          "repo": "katopz/katgpt-rs",
+          "path": ".benchmarks/697_usage_rate_eviction_goat.md",
+          "html_url": "https://github.com/katopz/katgpt-rs/blob/f7479340b69f8f6ecddbeddf2b0e12e4f763cf96/.benchmarks/697_usage_rate_eviction_goat.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "averkij/top_papers::logs/2026-09-06_last_log.txt": {
+          "repo": "averkij/top_papers",
+          "path": "logs/2026-09-06_last_log.txt",
+          "html_url": "https://github.com/averkij/top_papers/blob/bc648400dcfe452de630299b98d78ced3ee22cad/logs/2026-09-06_last_log.txt",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "averkij/top_papers::logs/2026-09-04_last_log.txt": {
+          "repo": "averkij/top_papers",
+          "path": "logs/2026-09-04_last_log.txt",
+          "html_url": "https://github.com/averkij/top_papers/blob/bc648400dcfe452de630299b98d78ced3ee22cad/logs/2026-09-04_last_log.txt",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "katopz/katgpt-rs::.research/531_Random_Attention_Null_Eviction.md": {
+          "repo": "katopz/katgpt-rs",
+          "path": ".research/531_Random_Attention_Null_Eviction.md",
+          "html_url": "https://github.com/katopz/katgpt-rs/blob/f7479340b69f8f6ecddbeddf2b0e12e4f763cf96/.research/531_Random_Attention_Null_Eviction.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "katopz/katgpt-rs::.research/523_H2O_Norm_Age_Normalized_KV_Eviction.md": {
+          "repo": "katopz/katgpt-rs",
+          "path": ".research/523_H2O_Norm_Age_Normalized_KV_Eviction.md",
+          "html_url": "https://github.com/katopz/katgpt-rs/blob/f7479340b69f8f6ecddbeddf2b0e12e4f763cf96/.research/523_H2O_Norm_Age_Normalized_KV_Eviction.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "DaBestCode/randkv::README.md": {
+          "repo": "DaBestCode/randkv",
+          "path": "README.md",
+          "html_url": "https://github.com/DaBestCode/randkv/blob/13d7fa1481a4437b945329b70430116c111c513a/README.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "InMatrix/ai-papers-reader::paper_data/paper_metadata_2026-09-04.txt": {
+          "repo": "InMatrix/ai-papers-reader",
+          "path": "paper_data/paper_metadata_2026-09-04.txt",
+          "html_url": "https://github.com/InMatrix/ai-papers-reader/blob/1cdfb18a97daf61d5f3beb8da71f48ffa842bf25/paper_data/paper_metadata_2026-09-04.txt",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "sunlei1992/vllm-learning::kv_research/ids3.txt": {
+          "repo": "sunlei1992/vllm-learning",
+          "path": "kv_research/ids3.txt",
+          "html_url": "https://github.com/sunlei1992/vllm-learning/blob/de806bcb6961898b276fa3b873fa8583d45b82a2/kv_research/ids3.txt",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "KAUST-Academy/weekly-ai-brief::2026/09/04/SOURCES.md": {
+          "repo": "KAUST-Academy/weekly-ai-brief",
+          "path": "2026/09/04/SOURCES.md",
+          "html_url": "https://github.com/KAUST-Academy/weekly-ai-brief/blob/cea3a0358fc8a48ebfe7e1345c9932cec3449a19/2026/09/04/SOURCES.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "alloevil/AI-Paper-Daily::docs/weekly-2026-W37.md": {
+          "repo": "alloevil/AI-Paper-Daily",
+          "path": "docs/weekly-2026-W37.md",
+          "html_url": "https://github.com/alloevil/AI-Paper-Daily/blob/ed909ee49ee925d5ae69183914b7a85bdb38bccf/docs/weekly-2026-W37.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "alloevil/openclaw-workspace::data/arxiv/2026-09-04.md": {
+          "repo": "alloevil/openclaw-workspace",
+          "path": "data/arxiv/2026-09-04.md",
+          "html_url": "https://github.com/alloevil/openclaw-workspace/blob/f6ea2d60ff6a972306d9fa5d38d2b37133df92b7/data/arxiv/2026-09-04.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "hobbytp/hobbytp.github.io::content/zh/daily_ai/2026-09-04.md": {
+          "repo": "hobbytp/hobbytp.github.io",
+          "path": "content/zh/daily_ai/2026-09-04.md",
+          "html_url": "https://github.com/hobbytp/hobbytp.github.io/blob/59e12ada6ab3bcaa63e3d8240ff094922a8dbc22/content/zh/daily_ai/2026-09-04.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "guzus/ai-research-arm::research/arxiv/2026-09-04-papers.md": {
+          "repo": "guzus/ai-research-arm",
+          "path": "research/arxiv/2026-09-04-papers.md",
+          "html_url": "https://github.com/guzus/ai-research-arm/blob/ef3d3f8fb0325c84a25701032f7aab56140a0192/research/arxiv/2026-09-04-papers.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Neetx/ai-research-radar::reports/2026-09-04.md": {
+          "repo": "Neetx/ai-research-radar",
+          "path": "reports/2026-09-04.md",
+          "html_url": "https://github.com/Neetx/ai-research-radar/blob/783370ad19bf21d33d20443aa3ff18b4e71fb995/reports/2026-09-04.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "KAUST-Academy/weekly-ai-brief::2026/09/04/report.tex": {
+          "repo": "KAUST-Academy/weekly-ai-brief",
+          "path": "2026/09/04/report.tex",
+          "html_url": "https://github.com/KAUST-Academy/weekly-ai-brief/blob/cea3a0358fc8a48ebfe7e1345c9932cec3449a19/2026/09/04/report.tex",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "vollero/hf-daily-paper-summaries::summaries/2026/09/2026-09-04/relationships.md": {
+          "repo": "vollero/hf-daily-paper-summaries",
+          "path": "summaries/2026/09/2026-09-04/relationships.md",
+          "html_url": "https://github.com/vollero/hf-daily-paper-summaries/blob/e74517f10f6121156c5c23bffcf61600010b7f2f/summaries/2026/09/2026-09-04/relationships.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "qqtang-code/Paper-Reading-Collection::attention-kv-cache/random-attention/README.md": {
+          "repo": "qqtang-code/Paper-Reading-Collection",
+          "path": "attention-kv-cache/random-attention/README.md",
+          "html_url": "https://github.com/qqtang-code/Paper-Reading-Collection/blob/56078fe57c635f6ae701f57a6e129fab9e7a785b/attention-kv-cache/random-attention/README.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "wyh0626/ai-news-agent::output/ai-daily-2026-09-06.md": {
+          "repo": "wyh0626/ai-news-agent",
+          "path": "output/ai-daily-2026-09-06.md",
+          "html_url": "https://github.com/wyh0626/ai-news-agent/blob/31459cec3e88da1efd0390e30b9245ca16587719/output/ai-daily-2026-09-06.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "wyh0626/ai-news-agent::output/ai-daily-2026-09-05.md": {
+          "repo": "wyh0626/ai-news-agent",
+          "path": "output/ai-daily-2026-09-05.md",
+          "html_url": "https://github.com/wyh0626/ai-news-agent/blob/31459cec3e88da1efd0390e30b9245ca16587719/output/ai-daily-2026-09-05.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Luvata/arxive::pages/2026-09-04-cs-cl.html": {
+          "repo": "Luvata/arxive",
+          "path": "pages/2026-09-04-cs-cl.html",
+          "html_url": "https://github.com/Luvata/arxive/blob/b335066e2481cfbc9e623ad1fb04f28b36f96a91/pages/2026-09-04-cs-cl.html",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "wyh0626/ai-news-agent::output/ai-daily-2026-09-07.md": {
+          "repo": "wyh0626/ai-news-agent",
+          "path": "output/ai-daily-2026-09-07.md",
+          "html_url": "https://github.com/wyh0626/ai-news-agent/blob/31459cec3e88da1efd0390e30b9245ca16587719/output/ai-daily-2026-09-07.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "pavani06/papers-journal::edicoes/2026/09/2026-09-04.md": {
+          "repo": "pavani06/papers-journal",
+          "path": "edicoes/2026/09/2026-09-04.md",
+          "html_url": "https://github.com/pavani06/papers-journal/blob/e7a90e6b7b9d1955f0006b2cdb9d38ce704d9b2a/edicoes/2026/09/2026-09-04.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "vollero/hf-daily-paper-summaries::summaries/2026/09/2026-09-04.md": {
+          "repo": "vollero/hf-daily-paper-summaries",
+          "path": "summaries/2026/09/2026-09-04.md",
+          "html_url": "https://github.com/vollero/hf-daily-paper-summaries/blob/e74517f10f6121156c5c23bffcf61600010b7f2f/summaries/2026/09/2026-09-04.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Solaris-celeste/PaperSpider::reports/2026-09-07.md": {
+          "repo": "Solaris-celeste/PaperSpider",
+          "path": "reports/2026-09-07.md",
+          "html_url": "https://github.com/Solaris-celeste/PaperSpider/blob/8fb3d8e59c58d7cf2d974f42c14b8e272e2e9525/reports/2026-09-07.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "wyh0626/ai-news-agent::output/ai-daily-2026-09-06-zh.md": {
+          "repo": "wyh0626/ai-news-agent",
+          "path": "output/ai-daily-2026-09-06-zh.md",
+          "html_url": "https://github.com/wyh0626/ai-news-agent/blob/31459cec3e88da1efd0390e30b9245ca16587719/output/ai-daily-2026-09-06-zh.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "wyh0626/ai-news-agent::output/ai-daily-2026-09-05-zh.md": {
+          "repo": "wyh0626/ai-news-agent",
+          "path": "output/ai-daily-2026-09-05-zh.md",
+          "html_url": "https://github.com/wyh0626/ai-news-agent/blob/31459cec3e88da1efd0390e30b9245ca16587719/output/ai-daily-2026-09-05-zh.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "wwd29/arxiv-daily::html/user_2/2026-09-04.html": {
+          "repo": "wwd29/arxiv-daily",
+          "path": "html/user_2/2026-09-04.html",
+          "html_url": "https://github.com/wwd29/arxiv-daily/blob/9eb6fd2f125a4226935d5d43d06671d36ffba631/html/user_2/2026-09-04.html",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "wyh0626/ai-news-agent::output/ai-daily-2026-09-04.md": {
+          "repo": "wyh0626/ai-news-agent",
+          "path": "output/ai-daily-2026-09-04.md",
+          "html_url": "https://github.com/wyh0626/ai-news-agent/blob/31459cec3e88da1efd0390e30b9245ca16587719/output/ai-daily-2026-09-04.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "wyh0626/ai-news-agent::output/ai-daily-2026-09-07-zh.md": {
+          "repo": "wyh0626/ai-news-agent",
+          "path": "output/ai-daily-2026-09-07-zh.md",
+          "html_url": "https://github.com/wyh0626/ai-news-agent/blob/31459cec3e88da1efd0390e30b9245ca16587719/output/ai-daily-2026-09-07-zh.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "hyeonseo2/daily-huggingface::newsletters/daily-huggingface-2026-09-07.md": {
+          "repo": "hyeonseo2/daily-huggingface",
+          "path": "newsletters/daily-huggingface-2026-09-07.md",
+          "html_url": "https://github.com/hyeonseo2/daily-huggingface/blob/d7a541e21ed0cfb62c0f7f988062e4d4c0bf4f8a/newsletters/daily-huggingface-2026-09-07.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "hyeonseo2/daily-huggingface::newsletters/daily-huggingface-2026-09-05.md": {
+          "repo": "hyeonseo2/daily-huggingface",
+          "path": "newsletters/daily-huggingface-2026-09-05.md",
+          "html_url": "https://github.com/hyeonseo2/daily-huggingface/blob/d7a541e21ed0cfb62c0f7f988062e4d4c0bf4f8a/newsletters/daily-huggingface-2026-09-05.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "hyeonseo2/daily-huggingface::newsletters/daily-huggingface-2026-09-06.md": {
+          "repo": "hyeonseo2/daily-huggingface",
+          "path": "newsletters/daily-huggingface-2026-09-06.md",
+          "html_url": "https://github.com/hyeonseo2/daily-huggingface/blob/d7a541e21ed0cfb62c0f7f988062e4d4c0bf4f8a/newsletters/daily-huggingface-2026-09-06.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "wyh0626/ai-news-agent::output/ai-daily-2026-09-04-zh.md": {
+          "repo": "wyh0626/ai-news-agent",
+          "path": "output/ai-daily-2026-09-04-zh.md",
+          "html_url": "https://github.com/wyh0626/ai-news-agent/blob/31459cec3e88da1efd0390e30b9245ca16587719/output/ai-daily-2026-09-04-zh.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "amaljithkuttamath/ai-radar::reports/2026-09-04-digest.md": {
+          "repo": "amaljithkuttamath/ai-radar",
+          "path": "reports/2026-09-04-digest.md",
+          "html_url": "https://github.com/amaljithkuttamath/ai-radar/blob/163916336f61e56983bfafda6ccacbbd53b88d5d/reports/2026-09-04-digest.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "anghel4d/broadside-observer::radar/runs/2026-09-04-frontier.md": {
+          "repo": "anghel4d/broadside-observer",
+          "path": "radar/runs/2026-09-04-frontier.md",
+          "html_url": "https://github.com/anghel4d/broadside-observer/blob/dc446a818aed4c16b3d78dd58e99b0697f088398/radar/runs/2026-09-04-frontier.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "mahsumaktas/oracle_arastirma::raw/2026-09-07.md": {
+          "repo": "mahsumaktas/oracle_arastirma",
+          "path": "raw/2026-09-07.md",
+          "html_url": "https://github.com/mahsumaktas/oracle_arastirma/blob/64f0f8d0fdfed8eea057916b4add8efdced595b0/raw/2026-09-07.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "alloevil/AI-Paper-Daily::docs/2026-09-04.html": {
+          "repo": "alloevil/AI-Paper-Daily",
+          "path": "docs/2026-09-04.html",
+          "html_url": "https://github.com/alloevil/AI-Paper-Daily/blob/ed909ee49ee925d5ae69183914b7a85bdb38bccf/docs/2026-09-04.html",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "speedcell4/ai-research-2026::notes/efficiency-systems.md": {
+          "repo": "speedcell4/ai-research-2026",
+          "path": "notes/efficiency-systems.md",
+          "html_url": "https://github.com/speedcell4/ai-research-2026/blob/466e3a7224c1b1b88f75070083996e88c4519c05/notes/efficiency-systems.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "speedcell4/ai-research-2026::report.md": {
+          "repo": "speedcell4/ai-research-2026",
+          "path": "report.md",
+          "html_url": "https://github.com/speedcell4/ai-research-2026/blob/466e3a7224c1b1b88f75070083996e88c4519c05/report.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "mahsumaktas/oracle_arastirma::raw/es/2026-09-07.md": {
+          "repo": "mahsumaktas/oracle_arastirma",
+          "path": "raw/es/2026-09-07.md",
+          "html_url": "https://github.com/mahsumaktas/oracle_arastirma/blob/64f0f8d0fdfed8eea057916b4add8efdced595b0/raw/es/2026-09-07.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "mahsumaktas/oracle_arastirma::raw/en/2026-09-07.md": {
+          "repo": "mahsumaktas/oracle_arastirma",
+          "path": "raw/en/2026-09-07.md",
+          "html_url": "https://github.com/mahsumaktas/oracle_arastirma/blob/64f0f8d0fdfed8eea057916b4add8efdced595b0/raw/en/2026-09-07.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "vollero/hf-daily-paper-summaries::summaries/2026/09/2026-09-09/relationships.md": {
+          "repo": "vollero/hf-daily-paper-summaries",
+          "path": "summaries/2026/09/2026-09-09/relationships.md",
+          "html_url": "https://github.com/vollero/hf-daily-paper-summaries/blob/e74517f10f6121156c5c23bffcf61600010b7f2f/summaries/2026/09/2026-09-09/relationships.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "vollero/hf-daily-paper-summaries::summaries/2026/09/2026-09-09.md": {
+          "repo": "vollero/hf-daily-paper-summaries",
+          "path": "summaries/2026/09/2026-09-09.md",
+          "html_url": "https://github.com/vollero/hf-daily-paper-summaries/blob/e74517f10f6121156c5c23bffcf61600010b7f2f/summaries/2026/09/2026-09-09.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "alloevil/AI-Paper-Daily::docs/weekly-2026-W37.html": {
+          "repo": "alloevil/AI-Paper-Daily",
+          "path": "docs/weekly-2026-W37.html",
+          "html_url": "https://github.com/alloevil/AI-Paper-Daily/blob/ed909ee49ee925d5ae69183914b7a85bdb38bccf/docs/weekly-2026-W37.html",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "osa-mayor/DailyUpdate::Papers/papers_2026-09-05.md": {
+          "repo": "osa-mayor/DailyUpdate",
+          "path": "Papers/papers_2026-09-05.md",
+          "html_url": "https://github.com/osa-mayor/DailyUpdate/blob/3dde4a974a0c676c19cbc6e03f76820825ea7c1d/Papers/papers_2026-09-05.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Derekwang2002/ai-intelligence::daily/2026-09-05.md": {
+          "repo": "Derekwang2002/ai-intelligence",
+          "path": "daily/2026-09-05.md",
+          "html_url": "https://github.com/Derekwang2002/ai-intelligence/blob/9ac319a66d165aadb2f14c9130348306e1894892/daily/2026-09-05.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "osa-mayor/DailyUpdate::Papers/papers_2026-09-07.md": {
+          "repo": "osa-mayor/DailyUpdate",
+          "path": "Papers/papers_2026-09-07.md",
+          "html_url": "https://github.com/osa-mayor/DailyUpdate/blob/3dde4a974a0c676c19cbc6e03f76820825ea7c1d/Papers/papers_2026-09-07.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "georgeorange-crypto/ai-research-radar::reports/weekly/2026-W36.md": {
+          "repo": "georgeorange-crypto/ai-research-radar",
+          "path": "reports/weekly/2026-W36.md",
+          "html_url": "https://github.com/georgeorange-crypto/ai-research-radar/blob/d5ed556f839f243966c663a21639f24e6e77e6f7/reports/weekly/2026-W36.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "VictoriYang/infinite-axis::content/radar/2026-09-04.md": {
+          "repo": "VictoriYang/infinite-axis",
+          "path": "content/radar/2026-09-04.md",
+          "html_url": "https://github.com/VictoriYang/infinite-axis/blob/427fcb683fbf421b8ce13a6c42979adfd74d5c7b/content/radar/2026-09-04.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "soroushzargar/ClaudeMag::papers-list-2026-09-09.txt": {
+          "repo": "soroushzargar/ClaudeMag",
+          "path": "papers-list-2026-09-09.txt",
+          "html_url": "https://github.com/soroushzargar/ClaudeMag/blob/dee7c492bcd94288ea03755e0f353106306f3176/papers-list-2026-09-09.txt",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "vlev02/NewsAgent::research-digest/digests/2026/09/2026-09-08.md": {
+          "repo": "vlev02/NewsAgent",
+          "path": "research-digest/digests/2026/09/2026-09-08.md",
+          "html_url": "https://github.com/vlev02/NewsAgent/blob/12edb6b78b55b8029fbef0bbcc3b226ccec66103/research-digest/digests/2026/09/2026-09-08.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "sunlei1992/vllm-learning::kv_research/r1.txt": {
+          "repo": "sunlei1992/vllm-learning",
+          "path": "kv_research/r1.txt",
+          "html_url": "https://github.com/sunlei1992/vllm-learning/blob/de806bcb6961898b276fa3b873fa8583d45b82a2/kv_research/r1.txt",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "yupengtang/Daily-AI-Trend-Reporter::_posts/2026-09-04-friday-daily-ai-research-digest.md": {
+          "repo": "yupengtang/Daily-AI-Trend-Reporter",
+          "path": "_posts/2026-09-04-friday-daily-ai-research-digest.md",
+          "html_url": "https://github.com/yupengtang/Daily-AI-Trend-Reporter/blob/d1884f6d28f4dfa86d74aa98e5bc3e4e17e9f5f4/_posts/2026-09-04-friday-daily-ai-research-digest.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "georgeorange-crypto/ai-research-radar::reports/monthly/2026-09.md": {
+          "repo": "georgeorange-crypto/ai-research-radar",
+          "path": "reports/monthly/2026-09.md",
+          "html_url": "https://github.com/georgeorange-crypto/ai-research-radar/blob/d5ed556f839f243966c663a21639f24e6e77e6f7/reports/monthly/2026-09.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "pavani06/papers-journal::edicoes/papers-moc.md": {
+          "repo": "pavani06/papers-journal",
+          "path": "edicoes/papers-moc.md",
+          "html_url": "https://github.com/pavani06/papers-journal/blob/e7a90e6b7b9d1955f0006b2cdb9d38ce704d9b2a/edicoes/papers-moc.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Derekwang2002/ai-intelligence::daily/2026-09-05.en.md": {
+          "repo": "Derekwang2002/ai-intelligence",
+          "path": "daily/2026-09-05.en.md",
+          "html_url": "https://github.com/Derekwang2002/ai-intelligence/blob/9ac319a66d165aadb2f14c9130348306e1894892/daily/2026-09-05.en.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Kevin-Liu-01/cotcodec::program/proposals/2026-10-08-q3-k1-v3-qwen35-4b.md": {
+          "repo": "Kevin-Liu-01/cotcodec",
+          "path": "program/proposals/2026-10-08-q3-k1-v3-qwen35-4b.md",
+          "html_url": "https://github.com/Kevin-Liu-01/cotcodec/blob/8c1d9867160785436fc6f91207fe581e31cc8fc4/program/proposals/2026-10-08-q3-k1-v3-qwen35-4b.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Themaoqiu/PersonalPage::data/papers/cron.log": {
+          "repo": "Themaoqiu/PersonalPage",
+          "path": "data/papers/cron.log",
+          "html_url": "https://github.com/Themaoqiu/PersonalPage/blob/9d70bceb6a814eafde8e18cd8764ed103ef0abd8/data/papers/cron.log",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "sunlei1992/vllm-learning::kv_research/README.md": {
+          "repo": "sunlei1992/vllm-learning",
+          "path": "kv_research/README.md",
+          "html_url": "https://github.com/sunlei1992/vllm-learning/blob/de806bcb6961898b276fa3b873fa8583d45b82a2/kv_research/README.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "lonePatient/lonePatient.github.io::arxiv/arxiv_papers_2026-09-04.txt": {
+          "repo": "lonePatient/lonePatient.github.io",
+          "path": "arxiv/arxiv_papers_2026-09-04.txt",
+          "html_url": "https://github.com/lonePatient/lonePatient.github.io/blob/1a2b04bdc4fe94d5cbb0b11ecaa655197cb55657/arxiv/arxiv_papers_2026-09-04.txt",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "georgeorange-crypto/ai-research-radar::reports/weekly/2026-W37.md": {
+          "repo": "georgeorange-crypto/ai-research-radar",
+          "path": "reports/weekly/2026-W37.md",
+          "html_url": "https://github.com/georgeorange-crypto/ai-research-radar/blob/d5ed556f839f243966c663a21639f24e6e77e6f7/reports/weekly/2026-W37.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "skymined/everydaynews::website/reports/2026-09-06.md": {
+          "repo": "skymined/everydaynews",
+          "path": "website/reports/2026-09-06.md",
+          "html_url": "https://github.com/skymined/everydaynews/blob/50c039db9eb424ce865097f6fc993d2bb9390dac/website/reports/2026-09-06.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "vlev02/NewsAgent::research-digest/digests/2026/09/2026-09-05.md": {
+          "repo": "vlev02/NewsAgent",
+          "path": "research-digest/digests/2026/09/2026-09-05.md",
+          "html_url": "https://github.com/vlev02/NewsAgent/blob/12edb6b78b55b8029fbef0bbcc3b226ccec66103/research-digest/digests/2026/09/2026-09-05.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "vlev02/NewsAgent::research-digest/digests/2026/09/2026-09-06.md": {
+          "repo": "vlev02/NewsAgent",
+          "path": "research-digest/digests/2026/09/2026-09-06.md",
+          "html_url": "https://github.com/vlev02/NewsAgent/blob/12edb6b78b55b8029fbef0bbcc3b226ccec66103/research-digest/digests/2026/09/2026-09-06.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "skymined/everydaynews::website/reports/2026-09-05.md": {
+          "repo": "skymined/everydaynews",
+          "path": "website/reports/2026-09-05.md",
+          "html_url": "https://github.com/skymined/everydaynews/blob/50c039db9eb424ce865097f6fc993d2bb9390dac/website/reports/2026-09-05.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "hundong2/news_letter::archives/2026-09-05.html": {
+          "repo": "hundong2/news_letter",
+          "path": "archives/2026-09-05.html",
+          "html_url": "https://github.com/hundong2/news_letter/blob/92b1b6986bde355a08edd617dfa6c7739aa9db15/archives/2026-09-05.html",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "georgeorange-crypto/ai-research-radar::reports/daily/2026/09/2026-09-05.md": {
+          "repo": "georgeorange-crypto/ai-research-radar",
+          "path": "reports/daily/2026/09/2026-09-05.md",
+          "html_url": "https://github.com/georgeorange-crypto/ai-research-radar/blob/d5ed556f839f243966c663a21639f24e6e77e6f7/reports/daily/2026/09/2026-09-05.md",
+          "found": "2026-10-14T20:49:47.574Z"
+        },
+        "vlev02/NewsAgent::research-digest/digests/2026/09/2026-09-10.md": {
+          "repo": "vlev02/NewsAgent",
+          "path": "research-digest/digests/2026/09/2026-09-10.md",
+          "html_url": "https://github.com/vlev02/NewsAgent/blob/12edb6b78b55b8029fbef0bbcc3b226ccec66103/research-digest/digests/2026/09/2026-09-10.md",
+          "found": "2026-10-14T20:49:47.574Z"
         }
       },
-      "runs": 19,
+      "runs": 20,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-09-27T05:10:44.722Z",
-      "last_total": 3
+      "last_run": "2026-10-14T20:49:47.574Z",
+      "last_total": 100
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 58,
+      "runs": 59,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-14T12:44:01.705Z",
+      "last_run": "2026-10-14T20:49:47.574Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 58,
+      "runs": 59,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-14T12:44:01.705Z",
+      "last_run": "2026-10-14T20:49:47.574Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-10-14T12:44:01.705Z"
+  "last_run": "2026-10-14T20:49:47.574Z"
 }

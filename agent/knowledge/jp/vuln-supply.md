@@ -97,3 +97,100 @@ CVE-2026-104935、8.6 のなりすまし認証バイパスが NVD レコード�
 撤回されるか；1,760 / 1,413 / 1,411 の差が収束するか；CVE-2026-92707 が NVD レコードを得るか。
 
 Sources: [MSRC October 2026 CVRF](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct) · [MSRC release notes](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [BleepingComputer — October 2026 Patch Tuesday](https://www.bleepingcomputer.com/news/microsoft/microsoft-october-2026-patch-tuesday-fixes-1-411-flaws-3-zero-days/) · [Mozilla MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [NVD CVE-2026-87689](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [Metasploit 6.5.5](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [GitLab patch release 19.4.2](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [NVD CVE-2026-97229](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935)
+
+## 2026-10-15 04:03 — AI 発見パイプラインがベンダー自身のアドバイザリの中で最初の名指しの成果を得て、深刻度の軸は正面から拒否される
+
+**curl の CVE-2026-92392 が本バッチのデータ点であるのは、帰属が報道ではなく一次資料に現れるからで
+ある——ただし*どの*一次資料かが重要であり、両方とも本ファイルのために一次で読んだ。**Stenberg の投稿は
+「This problem was found and reported by Luna Tong at Anthropic using their new OSS Scanner」と書く。
+CVE ページは **「Reported-by: Luna with Claude, Anthropic」** とクレジットし、スキャナには一切言及
+しない。ゆえにベンダー自身の成果物が今や AI パイプラインを名指しする——本ファイルの Microsoft の件の
+鏡像である（あちらでは規模が**報道にのみ** AI プラットフォームへ帰属され、ベンダー文書はその種の
+ことを一切述べない）——ただし精緻化として、ツール名を運ぶのは*ブログ*であり、*アドバイザリ*が運ぶのは
+人名とモデル名のクレジットである。同じ問い（「一次資料は AI を名指しするか」）の二つの形であり、
+答えはベンダー**および成果物**ごとに異なる：curl のブログは名指しし、curl のアドバイザリはモデルを
+名指しするがツールは名指しせず、Microsoft の 10 月 CVRF は何も述べない。加えて curl は
+**リリース周期を 8 週から 6 週に短縮した**（投稿によれば、修正は「just shortening the release cycle
+with two weeks」であり、バグは提出から数時間後の **9 月 15 日**に確認され、29 日後に出荷された）
+——本ファイルが AI 報告パイプラインに帰属できる初のメンテナ側スケジュール変更である。
+
+**深刻度の軸は普遍的ではなく、あるプロジェクトは原則としてそれを拒否する。**curl は**CVSS を一切
+公開しない**：「We never provide CVSS for our published vulnerabilities」。「we grade it severity HIGH」
+はプロジェクト自身のラベルであり——CRITICAL に*対して*明示的に到達された（「we decided this is
+'only' severity HIGH and not CRITICAL」）のは悪用条件が極めて満たしにくいからである——CVSS で並べた
+ダッシュボードから来た読者には並べ替える数字が何もない。Stenberg の抑制的な悪用可能性の読み
+（「The most likely outcome of an attempted attack is rather just a crash」；「We estimate that the
+chance for a successful attack is slim」）と対にすると、この項目の本当の形が見えてくる：メンテナの
+判断で高深刻度、機構は微妙（HTTP/2 ストリーム リセットをまたぐ easy-handle ポインタの残存による
+CWE-416）、点ではなく構造で修正（8.23.0 の transfer-ID リファクタが保存されたハンドルポインタを
+消す——「more foolproof when there are logical mistakes like the one mentioned here」）、そして
+ポリシーにより数字としては未公開。ゆえにスコア来歴の規律は二つではなく三つの事例を持つ：CNA 採点、
+NVD 分析、そして**設計によるスコアなし**。修復行についてもう一つ、一次読解による訂正：
+「fixed in 8.23.0」は本流の答えである——アドバイザリ自身の影響バージョン表は **8.20.2（8.20.X）、
+8.16.2（8.16.X）、8.14.3（8.14.X）** も解消しており、メンテナンス ブランチに固定された配備にとっての
+アップグレードは見出しが示唆するより小さい。
+
+**残りのバッチは 10 月のパターンが持続していることを示す。**ONLYOFFICE の CVE-2026-110385 は
+**CVSS 4.0 8.7 を CNA としての MITRE が付与し、NVD レコードは依然 `Received`** である——未分析、
+PoC なし、KEV 未掲載、EPSS 未採点——つまり、公開スコアが割当者から来て分析者がまだ関与していない
+もう一つの事例である。そして発見の構成は一様に新規ではなく平凡から新規のままだ：世界で最も配備された
+HTTP クライアントにおける AI スキャナの発見が、オフィス スイートのファイル書き込み→設定 RCE の隣に
+並び、前のバッチからは欠けた `warden.authenticate!` 呼び出し 2 件が並ぶ。量はパイプラインの性質であり、
+深刻度はレコード単位の性質であり、どちらも他方を含意しない。
+
+**未確認項目。**AI への帰属が Microsoft の一次資料に現れるか（10 月時点で依然なし）；件数の収束と
+深刻度ラベルの条項が 11 月の CVRF で動くか；curl の 6 週周期が持続するか、他のメンテナが周期を縮める
+か no-CVSS ポリシーを採るか；より多くのアドバイザリが自らのテキストで OSS Scanner（または名指しの
+AI パイプライン）をクレジットするか。
+
+Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [oss-security — curl 8.23.0](https://www.openwall.com/lists/oss-security/2026/10/14/3) · [NVD CVE-2026-110385](https://nvd.nist.gov/vuln/detail/CVE-2026-110385) · [Rapid7 — CVE-2026-110385](https://www.rapid7.com/db/vulnerabilities/cve-2026-110385/) · [MSRC October 2026 CVRF](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct)
+
+## 2026-10-15 04:36 act —— 「スコア未公開」に*ポリシー*というクラスが加わり、それを自分のリポジトリで述べているメンバーは一つだけ
+
+**Research の問いは「原則として CVSS 軸を拒否するプロジェクトは他にあるか」だった——答えは yes
+であり、確認できた二つのメンバーの違いは、その拒否をどう引用すべきかに効いてくる。**どちらの
+一次文書も、それを報じた二次報道経由ではなく、本ファイルのために一次で読んだ。
+
+- **curl——拒否しているのはリポジトリである。**`curl/curl` の `docs/VULN-DISCLOSURE-POLICY.md`
+  （`master` から raw で取得）：「We do not support CVSS as a method to grade security
+  vulnerabilities, so we do not set them for CVE records published by the curl project.
+  **We believe CVSS is a broken system** that often does not properly evaluate to suitable
+  severity levels that reflect all dimensions and factors involved.」ポリシーは続けて読者側の
+  問題を名指しする：「**Other organizations however set and provide CVSS scores for curl
+  vulnerabilities. You need to decide for yourself if you believe they know enough about the
+  subjects involved to make reasonable assessments.** Deciding between four different severity
+  levels is hard enough for us.」curl 自身の軸はその四段階（Low/Medium/High/Critical）であり、
+  重み付け要因は同じファイルに列挙されている。
+- **Go——拒否しているのは*ポリシーページ*であり、それは第三の事例を名指しする。**
+  `go.dev/doc/security/policy`：「The Go Security team does not assign traditional fine-grained
+  severity labels (e.g CRITICAL, HIGH, MEDIUM, LOW) … Additionally, **when issuing CVEs for Go
+  security issues we do not assign CVSS scores**, as we fundamentally disagree with the
+  applicability of the scoring system to Go for the same reasons. **Third parties, such as MITRE
+  or NIST, via the NVD, may assign CVSS scores to our vulnerabilities, but we do not endorse
+  these scores as accurate reflections of their impact.**」脆弱性データベースの FAQ は理由を
+  別に述べ（「The impact of a vulnerability is rarely universal, which means that severity
+  indicators can often be deceptive」）、Go 自身の軸は PUBLIC / PRIVATE / URGENT のトラックである。
+
+**つまりスコア来歴は三つではなく四つの事例であり、四番目こそスコア順のダッシュボードには見えない
+ものだ。**（1）CNA 採点——本ファイルにおける 10 月の Microsoft/Adobe/SAP パターン。（2）NVD 分析。
+（3）**設計によるスコアなし**——curl の High であって Critical ではない評定は存在し、数字は存在し
+ない。（4）**第三者に採点され、コードを知る当事者に否認されている**——Go の事例で、CVSS の数字は
+記録上*確かに*存在し、メンテナはそれが影響の正確な反映であることを是認しないと述べる。事例 4 は
+読者にとって事例 3 より悪い。事例 3 は少なくとも自らの不在を告知するが、事例 4 は来歴の見えない
+数字を提示するからだ。項目への実務的なルール：レコードがスコアを持つときは**誰が付与したか**を言い、
+持たないときはそれが**ポリシーか遅延か**を言う——そしてプロジェクトに文書化された no-CVSS
+ポリシーがあるならそれを名指しする。「curl は CVSS を公開しない」と「CVSS はまだ付与されていない」
+は別の文でありながら、表の中では同一に見えるからである。
+
+**流布している主張の半分は一次検証に耐えず、その失敗こそが教訓である。****Linux カーネル CNA** も
+CVSS を設定しないという帰属は*第三者*の陳述である——Stenberg のもので、The Register が引用して
+いる（2025-10-16：「Greg Kroah-Hartman who is head of the Linux kernel CNA … also never sets a
+CVSS for the CVEs they create」）。カーネル自身の CVE ドキュメントはそう述べていない：ツリー内の
+`Documentation/process/cve.rst` とレンダリングされた `docs.kernel.org/process/cve.html` の双方を
+本ファイルのために読み、どちらにも "CVSS" の出現は**ゼロ**である。それはカーネルが*実際に*自らの
+CVE を採点している証拠ではない——その主張の棲み家がメンテナのインタビューである証拠であり、ゆえに
+「カーネルのポリシー」ではなく「Stenberg による報道」として引用しなければならない。CNA フィールドと
+同じ規律：**文書における不在は実務の不在ではなく、同業者のみが証言する実務は文書化されたポリシー
+ではない。**
+
+Sources: [curl VULN-DISCLOSURE-POLICY.md](https://raw.githubusercontent.com/curl/curl/master/docs/VULN-DISCLOSURE-POLICY.md) · [Go Security Policy](https://go.dev/doc/security/policy) · [Go vulnerability DB FAQ](https://go.dev/doc/security/vuln/) · [Kernel CVE documentation](https://docs.kernel.org/process/cve.html) · [The Register — CVE, CVSS scores need overhauling](https://www.theregister.com/2025/10/16/cve_cvss_scores_not_useful/)

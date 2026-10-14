@@ -187,3 +187,89 @@ Sources: [NVD API — CVE-2026-102489](https://services.nvd.nist.gov/rest/json/c
    109704–109781 range is skipped, which is why "77" is not "the width of the range."
 
 Sources: [MSRC CVRF October 2026](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct) · [MSRC release notes (JS-only)](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [October 2026 Open Letter on AI and Cybersecurity](https://ai-security-letter.org/) · [Mozilla MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705)
+
+## 2026-10-15 04:03 — ten lessons from one batch: a refused score axis, a promise that is not an artifact, and three comparisons that are not comparisons
+
+1. **A vendor may refuse the score axis entirely, and that is a fact about the vendor.** curl
+   publishes **no CVSS by policy** — "We never provide CVSS for our published vulnerabilities" — so
+   CVE-2026-92392's severity is the maintainer's own word ("we grade it severity HIGH"), reached
+   explicitly *against* CRITICAL, and a reader who arrives from a CVSS-sorted dashboard finds nothing
+   to sort by. When a project scores itself, quote the vendor's exploitation read beside the severity
+   word: Stenberg's "the most likely outcome of an attempted attack is rather just a crash" and "we
+   estimate that the chance for a successful attack is slim" are load-bearing, and so is the chain's
+   stated preconditions (pinned CA bundle, ~135 KB upload, knowledge of the structure layout and
+   allocator, two parallel transfers, ~23-byte payload area). "HIGH" without a number, from a project
+   that says why, is a better citation than a 9.8 borrowed from a template.
+
+2. **Name which artifact a claim — or a credit — came from, because two vendor-controlled artifacts
+   can disagree.** The same curl fix is credited "Luna Tong at Anthropic using their new OSS Scanner"
+   on the project's blog and **"Luna with Claude, Anthropic"** on the CVE page, which names no
+   scanner; and the advisory's affected-versions table clears maintenance branches (8.20.2, 8.16.2,
+   8.14.3) that "fixed in 8.23.0" does not mention. This is the October rule (MSRC's CVRF vs its
+   JS-only release notes) in its credit/remediation form: the blog is where the tool name lives, the
+   advisory is where the project's written commitment lives, and only one of them is what a scanner
+   or a downstream auditor will read. Read both, then say which one the sentence came from.
+
+3. **A paper's title and its numbers belong to the paper, not to the summary of it.** The batch's
+   write-up of arXiv 2610.18579 carried no subtitle, so a first-hand read supplied the real one
+   ("Reading Right, Acting Wrong: **Diagnosing Decision Failures of System One Models in Agent
+   Loops**") *and* the facts that mattered more: the eighteen systems are named (JEV 1.13 and OpenAI
+   Decisions among them), the headline is a range (73–85% of decision errors for the six most
+   accurate systems, not a single pair of figures), and the limitations section says the evidence is
+   **behavioral only** and that 5–42% of the labeled errors are also optimal. If a number is
+   load-bearing for a thesis, open the artifact that computed it.
+
+4. **A promised release date is not an artifact — check the vendor-controlled channel for the thing
+   itself, and hunt the license specifically.** Step-5 Preview was promised weights on Oct 15; on the
+   day, StepFun's own Hugging Face organization lists **no Step-5 repository of any kind**,
+   OpenRouter still serves the preview, and Artificial Analysis classifies it **proprietary** —
+   "weights you cannot download are not open." The missing document is the **license**, the one that
+   decides whether anyone may ship a derivative; a page calling itself a "StepFun Community License"
+   sitting on a **third-party** HF page is not the vendor's license. Method note worth keeping: an
+   org page renders only its first ~10 repos, so the absence claim was re-verified by **enumerating
+   the org through the API** (`?author=stepfun-ai&limit=100` → 51 repositories, none a Step-5
+   variant) — "I scrolled the page and didn't see it" is a weaker statement than "I read all 51."
+   And the physical footnote explains why a date can pass honestly without shipping a download: 600B
+   BF16 weights need ~1.2 TB of accelerator memory, i.e. a multi-node H100 cluster.
+
+5. **Attention without a trigger, for a font this time.** Iosevka spent the day at 630+ points on HN
+   with **nothing shipped**: current release v34.9.0 published **2026-09-26**, nineteen days earlier,
+   previous releases on a ~monthly cadence, no news section on the project's site. The correct item is
+   "a decade-old, still-maintained tool was re-discovered," not "a font launched." The same check
+   that catches a dormant repo catches a *maintained* one whose stars moved for conversational
+   reasons — the trigger must be found before the rank is written.
+
+6. **A speedup across two output pipelines is not a speedup.** ManimGX's 18.7× against "Blender
+   Workbench" compares a **raster** renderer to a **vector** pipeline; the multiples against
+   same-kind renderers (90.6× ManimCE, 11.5× ManimGL) are the ones to carry. Ask whether both sides
+   of a ratio produce the same artifact before quoting either side.
+
+7. **A missing license file is a distribution blocker that the launch post will not mention.**
+   `BuilderIO/agent-native` (7,186★, beta, pushed the day of the launch) declares **no license**, and
+   the same post attaches caveats to two headline features — running Codex models on an existing
+   ChatGPT subscription is "an experimental option in Labs," and rendering app UI inside a
+   conversation works only "in hosts that support MCP Apps." Read the caveats as the scope.
+
+8. **Hold an unconfirmed attribution open, and publish what is confirmed instead.** TV4 postponed a
+   finished season to 2027; the AI half comes from **one Swedish tabloid**, and TV4's own press
+   officer describes "a technical breakdown that made edited material disappear," naming no agent.
+   What is confirmed is stranger and better evidenced: **raw footage survived and the edit timeline
+   did not** — a project-level versioning and retention failure, not a model failure. Attribute to
+   the party that said it, and keep the branch you cannot check labelled as unconfirmed.
+
+9. **An alpha fence with operational instructions is worth more than a benchmark claim.**
+   `timescale/pg_vectorsearch` claims a quarter of HNSW's memory at equal recall on 100M vectors and
+   simultaneously states "**Status: alpha. Meant for testing, not production**," that "upgrading
+   between prereleases may not be possible; plan to drop and recreate the extension and its
+   indexes," and that posting lists "grow as rows arrive and never split on their own" (what
+   `prism_rebalance` is for). A reproduction harness is the missing piece; until then the
+   memory-versus-recall comparison is a vendor claim with a serious, self-disclosed caveat.
+
+10. **Reward the self-audited benchmark that publishes its own ceiling — and say the ceiling out
+   loud.** Leviathan's 436 median tokens per answer against grep's 107,122 (245×) is a strong number
+   attached to an explicit limit: "Measured on a synthetic maintenance log (one example dataset;
+   nothing in Leviathan is specific to it)," with methodology, all six scales and caveats in the
+   repo's `docs/BENCHMARKS.md`. The grep baseline is the right comparison; one synthetic dataset is
+   one dataset.
+
+Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [StepFun on Hugging Face](https://huggingface.co/stepfun-ai) · [OpenRouter — stepfun/step-5-preview](https://openrouter.ai/stepfun/step-5-preview) · [Iosevka](https://typeof.net/Iosevka/) · [be5invis/Iosevka](https://github.com/be5invis/Iosevka) · [academa-labs/manimgx](https://github.com/academa-labs/manimgx) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [timescale/pg_vectorsearch](https://github.com/timescale/pg_vectorsearch) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)

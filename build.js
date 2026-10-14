@@ -592,8 +592,28 @@ function sourcesEntries(data, curated) {
       cred: (c && c.cred) || null,
       density: (c && c.density) || null,
       cv: (c && typeof c.cv === 'number') ? c.cv : null,
+      cvlog: (c && Array.isArray(c.cvlog)) ? c.cvlog : [],
     };
   }).sort((a, b) => b.count - a.count || a.host.localeCompare(b.host));
+}
+
+/* The `cv` field's meaning + invariant are documented in sources/domains.json under the "$cv" key
+ * (added 2026-10-15, agent/tools/cv-audit.mjs). A cv > 1 with no cvlog is pre-rule legacy; a cvlog
+ * whose length disagrees with cv is drift, and drift is what this lint exists to surface. */
+function cvDefinition(curated) {
+  return (curated && curated['$cv']) || null;
+}
+
+function cvDrift(curated) {
+  const bad = [];
+  for (const [host, v] of Object.entries(curated || {})) {
+    if (host.startsWith('$') || !v || typeof v !== 'object') continue;
+    if (!Array.isArray(v.cvlog)) continue;
+    if (v.cv !== 1 + v.cvlog.length) {
+      bad.push(`${host}: cv=${v.cv} but cvlog has ${v.cvlog.length} line(s) (expected ${1 + v.cvlog.length})`);
+    }
+  }
+  return bad;
 }
 
 function buildSourceCloud(entries) {
@@ -646,7 +666,7 @@ function buildSourcesContent(lang, data, curated) {
     const review = e.cred
       ? `<span class="rv rv-${e.cred}" title="${s.srcCred}">${lvlWord[e.cred]}</span>` +
         `<span class="rv rv-${e.density}" title="${s.srcDensity}">${lvlWord[e.density]}</span>` +
-        `<span class="rv rv-cv${e.cv >= 1 ? '' : ' rv-cv0'}" title="${s.srcCV}">${e.cv >= 1 ? '✓' + e.cv : '·'}</span>`
+        `<span class="rv rv-cv${e.cv >= 1 ? '' : ' rv-cv0'}" title="${s.srcCV}${e.cvlog && e.cvlog.length ? ' — ' + esc(e.cvlog.join(' · ')) : ''}">${e.cv >= 1 ? '✓' + e.cv : '·'}</span>`
       : `<span class="rv rv-none" title="${s.srcCV}">${s.srcUnreviewed}</span>`;
     return `<tr>
       <td class="src-rank">${i + 1}</td>
@@ -763,6 +783,15 @@ function buildSourcesMD(lang, data, curated) {
     lines.push(`- [${p.a}](https://${p.a}) · [${p.b}](https://${p.b}) — ${p.w}`);
   });
   lines.push('');
+  /* The cvlog is the audit trail behind the CV column — an agent reading sources.md can see what
+   * was checked and against what, instead of trusting a bare count. (10-15) */
+  const logged = entries.filter(e => e.cvlog && e.cvlog.length);
+  if (logged.length) {
+    lines.push('## ' + (s.srcCVLog || s.srcCV + ' log'));
+    lines.push('');
+    logged.forEach(e => e.cvlog.forEach(line => lines.push(`- [${e.host}](https://${e.host}) — ${line}`)));
+    lines.push('');
+  }
   return lines.join('\n');
 }
 
@@ -774,6 +803,7 @@ function buildSourcesJSON(data, curated) {
     cred: e.cred || null,
     density: e.density || null,
     crossValidated: e.cv || 0,
+    crossValidatedLog: e.cvlog || [],
     note: {
       en: (e.note && e.note.en) || '',
       zh: (e.note && e.note.zh) || '',
@@ -785,6 +815,7 @@ function buildSourcesJSON(data, curated) {
     days: data.days,
     items: data.totalItems,
     totalCitations: entries.reduce((n, e) => n + e.citations, 0),
+    cvDefinition: cvDefinition(curated),
     categories: SOURCE_CATEGORIES,
     domains: entries,
   };
@@ -885,6 +916,13 @@ console.log('  ✓ sources.json');
 const unreviewedDomains = Object.keys(srcData.counts)
   .filter(h => !curatedSources[h])
   .sort((a, b) => srcData.counts[b] - srcData.counts[a]);
+/* `cv` drift lint (10-15): the field is an audit trail now, so a cvlog whose length disagrees with
+   cv is a broken record rather than a rounding question — surface it every build, like the thesis lint. */
+const cvDriftList = cvDrift(curatedSources);
+if (cvDriftList.length) {
+  console.log(`  ⚠ ${cvDriftList.length} \`cv\` review(s) drifted from their cvlog — fix in sources/domains.json (see node agent/tools/cv-audit.mjs --check)`);
+  cvDriftList.slice(0, 10).forEach(b => console.log(`      ${b}`));
+}
 const mustReview = unreviewedDomains.filter(h => srcData.counts[h] >= 2);
 if (mustReview.length) {
   console.log(`  ⚠ ${mustReview.length} uncurated domains need a review (≥2 citations) — add to sources/domains.json with cred/density/cv`);

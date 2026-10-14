@@ -164,3 +164,75 @@ Sources: [NVD API — CVE-2026-102489](https://services.nvd.nist.gov/rest/json/c
    "区间宽度"的原因。
 
 Sources: [MSRC CVRF October 2026](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct) · [MSRC release notes (JS-only)](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [October 2026 Open Letter on AI and Cybersecurity](https://ai-security-letter.org/) · [Mozilla MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705)
+
+## 2026-10-15 04:03 — 一个批次里的十堂课：被拒绝的评分轴、一个不是制品的承诺，以及三个并非比较的比较
+
+1. **厂商可以完全拒绝评分轴，而那是关于该厂商的事实。**curl **按政策不发布任何 CVSS**——
+   "We never provide CVSS for our published vulnerabilities"——所以 CVE-2026-92392 的严重性是
+   维护者自己的措辞（"we grade it severity HIGH"），而且是明确*对照* CRITICAL 得出的，从按 CVSS
+   排序的仪表盘过来的读者找不到任何可排序的东西。当一个项目自己评分时，把厂商的可利用性读法引在
+   严重性措辞旁边：Stenberg 的 "the most likely outcome of an attempted attack is rather just a
+   crash" 与 "we estimate that the chance for a successful attack is slim" 都是承重的，这条链
+   自述的前提条件也同样承重（固定的 CA bundle、约 135 KB 的上传、对结构体布局与分配器的了解、
+   两次并行传输、约 23 字节的载荷区）。一个来自"愿意说明理由"的项目、不带数字的 "HIGH"，比从模板
+   借来的 9.8 更值得引用。
+
+2. **说明一项声明——或一次致谢——来自哪一份制品，因为两份都由厂商控制的制品可能互相矛盾。**同一个
+   curl 修复，在项目博客上署名 "Luna Tong at Anthropic using their new OSS Scanner"，在 CVE
+   页面上则是 **"Luna with Claude, Anthropic"**，后者没有点名任何扫描器；而公告的受影响版本表还
+   清掉了 "fixed in 8.23.0" 未提及的维护分支（8.20.2、8.16.2、8.14.3）。这就是十月规则（MSRC 的
+   CVRF 对只渲染 JS 的发布说明）的致谢/处置形态：博客是工具名所在之处，公告是项目书面承诺所在
+   之处，而扫描器或下游审计者只会读到其中之一。两份都读，然后说明这句话出自哪一份。
+
+3. **论文的标题与数字属于论文，不属于对它的摘要。**本批次对 arXiv 2610.18579 的记述没有副标题，
+   于是一次一手阅读补出了真正的副标题（"Reading Right, Acting Wrong: **Diagnosing Decision
+   Failures of System One Models in Agent Loops**"）*以及*更要紧的那些事实：十八个系统是有名字的
+   （其中包含 JEV 1.13 与 OpenAI Decisions），头条是一个区间（表现最准的六个系统的决策错误中
+   73–85%，而非一对单一数字），而局限章节说明证据**仅为行为层面的**、且被标记的"错误"中 5–42%
+   同时也是最优选择。如果某个数字对一条论题是承重的，就打开算出它的那份制品。
+
+4. **承诺的发布日期不是制品——去厂商控制的渠道里找那个东西本身，并且专门去找许可证。**Step-5
+   Preview 承诺在 10 月 15 日发布权重；当天，StepFun 自己的 Hugging Face 组织**任何形式的 Step-5
+   仓库都没有**，OpenRouter 仍在提供该预览，而 Artificial Analysis 把它归为**专有**——"weights
+   you cannot download are not open"。缺失的那份文件是**许可证**，它决定任何人是否可以分发
+   衍生品；一页自称 "StepFun Community License" 却挂在**第三方** HF 页面上，那不是厂商的许可证。
+   值得保留的方法注记：组织页面只渲染最前面的约 10 个仓库，所以"不存在"这一主张是通过**用 API
+   枚举整个组织**复核的（`?author=stepfun-ai&limit=100` → 51 个仓库，没有一个是 Step-5 的变体）
+   ——"我翻了页面没看到它"是比"我读完了全部 51 个"更弱的一句话。而那条物理脚注解释了为什么一个
+   日期可以诚实地过去却没出货：600B BF16 权重需要约 1.2 TB 加速器内存，也就是一个多节点 H100
+   集群。
+
+5. **没有触发事件的注意力，这次是一款字体。**Iosevka 在 HN 上以 630+ 分挂了一整天而**什么都没
+   发布**：当前版本 v34.9.0 发表于 **2026-09-26**，早十九天，此前几个版本约每月一次，项目站点
+   没有 news 栏。正确的条目是"一款十年前的、仍在维护的工具被重新发现"，而不是"一款字体发布了"。
+   那个能逮住休眠仓库的检查，同样能逮住一个因对话性原因而星数变动的*仍在维护*的项目——排名写出
+   之前，必须先找到触发事件。
+
+6. **跨两条输出流水线的加速不是加速。**ManimGX 对 "Blender Workbench" 的 18.7× 是把**光栅**
+   渲染器与**矢量**流水线相比；值得带走的是那些对同类渲染器的倍数（90.6× ManimCE、11.5×
+   ManimGL）。在引用比值任何一侧之前，先问两侧产出的是不是同一种制品。
+
+7. **缺失的许可证文件是发布阻塞项，而发布帖不会提它。**`BuilderIO/agent-native`（7,186★，beta，
+   发布当天有推送）声明**无许可证**，而同一篇帖子给两个头条功能都挂了注意事项——在既有的 ChatGPT
+   订阅上跑 Codex 模型是 "an experimental option in Labs"，在会话里渲染应用 UI 只在 "in hosts
+   that support MCP Apps" 时可行。把注意事项当作适用范围来读。
+
+8. **把未经证实的归因悬置，改为公布已被证实的部分。**TV4 把一季已完成的作品推迟到 2027 年；AI
+   那一半来自**一家瑞典小报**，而 TV4 自己的新闻官描述的是"一次使已剪辑素材消失的技术故障"，没有
+   点名任何 agent。被证实的部分更离奇也更有据：**原始素材幸存下来，而剪辑时间线没有**——一次项目
+   级的版本管理与保留失效，不是模型失效。归因于说出它的一方，把无法核查的那一支标注为未经证实。
+
+9. **带操作说明的 alpha 围栏，比一句基准主张更有价值。**`timescale/pg_vectorsearch` 声称在
+   1 亿向量上、同等召回下只用 HNSW 四分之一的内存，同时写明 "**Status: alpha. Meant for testing,
+   not production**"、"upgrading between prereleases may not be possible; plan to drop and
+   recreate the extension and its indexes"，以及倒排列表 "grow as rows arrive and never split on
+   their own"（`prism_rebalance` 就是为此存在的）。缺的是复现 harness；在那之前，这个"内存对
+   召回"的对比是一条带有严肃、自陈注意事项的厂商主张。
+
+10. **奖励那个公布自己上限的自审计基准——并且把上限大声说出来。**Leviathan 每答中位数 436 token
+    对 grep 的 107,122（245×）是一个强数字，同时挂着一个明确的限制："Measured on a synthetic
+    maintenance log (one example dataset; nothing in Leviathan is specific to it)"，并且把方法
+    论、全部六个规模与注意事项放在仓库的 `docs/BENCHMARKS.md`。grep 基线是正确的对照；一个合成
+    数据集就是一个数据集。
+
+Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [StepFun on Hugging Face](https://huggingface.co/stepfun-ai) · [OpenRouter — stepfun/step-5-preview](https://openrouter.ai/stepfun/step-5-preview) · [Iosevka](https://typeof.net/Iosevka/) · [be5invis/Iosevka](https://github.com/be5invis/Iosevka) · [academa-labs/manimgx](https://github.com/academa-labs/manimgx) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [timescale/pg_vectorsearch](https://github.com/timescale/pg_vectorsearch) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)

@@ -173,3 +173,88 @@ Sources: [NVD API — CVE-2026-102489](https://services.nvd.nist.gov/rest/json/c
    クレジット——そして 109704–109781 の範囲で 1 つの ID が欠番であるため、「77」は「範囲の幅」ではない。
 
 Sources: [MSRC CVRF October 2026](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct) · [MSRC release notes (JS-only)](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [October 2026 Open Letter on AI and Cybersecurity](https://ai-security-letter.org/) · [Mozilla MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705)
+
+## 2026-10-15 04:03 — 一つのバッチからの 10 の教訓：拒否されたスコア軸、成果物ではない約束、そして比較ではない三つの比較
+
+1. **ベンダーはスコア軸そのものを拒否しうる。そしてそれはそのベンダーについての事実である。**curl は
+   **CVSS をポリシーとして公開しない**——「We never provide CVSS for our published vulnerabilities」
+   ——ゆえに CVE-2026-92392 の深刻度はメンテナ自身の言葉（「we grade it severity HIGH」）であり、
+   CRITICAL に*対して*明示的に到達されたものであり、CVSS で並べたダッシュボードから来た読者には
+   並べ替えるものが何もない。プロジェクトが自ら採点するときは、深刻度の語の隣にベンダーの悪用可能性の
+   読みを引用せよ：Stenberg の「the most likely outcome of an attempted attack is rather just a crash」
+   と「we estimate that the chance for a successful attack is slim」は主張の荷重を支えており、
+   チェーンの明示された前提条件（固定された CA バンドル、約 135 KB のアップロード、構造レイアウトと
+   アロケータの知識、2 本の並列転送、約 23 バイトのペイロード領域）も同様である。数字のない「HIGH」は、
+   理由を述べるプロジェクトから来ていれば、テンプレートから借りた 9.8 より良い引用である。
+
+2. **主張——あるいはクレジット——がどの成果物から来たかを名指しせよ。ベンダー管理の二つの成果物は
+   食い違いうるからだ。**同じ curl の修正は、プロジェクトのブログでは「Luna Tong at Anthropic using
+   their new OSS Scanner」と、CVE ページでは **「Luna with Claude, Anthropic」** とクレジットされ、
+   後者はスキャナを名指ししない；そしてアドバイザリの影響バージョン表は「fixed in 8.23.0」が言及
+   しないメンテナンス ブランチ（8.20.2、8.16.2、8.14.3）を解消している。これは 10 月の規則
+   （MSRC の CVRF 対 その JS のみのリリースノート）のクレジット/修復の形である：ツール名が住むのは
+   ブログであり、プロジェクトの書面のコミットメントが住むのはアドバイザリであり、スキャナや下流の
+   監査人が読むのはそのうち一方だけである。両方を読み、そのうえで文がどちらから来たかを述べよ。
+
+3. **論文のタイトルとその数字は論文のものであって、その要約のものではない。**本バッチの
+   arXiv 2610.18579 の書き起こしはサブタイトルを欠いていたため、一次読解が本物のサブタイトル
+   （「Reading Right, Acting Wrong: **Diagnosing Decision Failures of System One Models in Agent
+   Loops**」）*および*より重要だった事実を供給した：18 のシステムが名指しされ（JEV 1.13 と OpenAI
+   Decisions を含む）、見出しは範囲であり（最も正確な 6 システムで意思決定エラーの 73–85%——単一の
+   数値の組ではない）、そして限界の節は証拠が**行動面のみ**であること、ラベル付けされたエラーの
+   5–42% は最適でもあると述べている。ある数字がテーゼの荷重を支えるなら、それを計算した成果物を
+   開け。
+
+4. **約束されたリリース日は成果物ではない——ベンダー管理のチャネルでその物自体を確認し、ライセンスを
+   特に探せ。**Step-5 Preview は 10 月 15 日に重みを約束されていた；当日、StepFun 自身の Hugging
+   Face 組織に **Step-5 のいかなるリポジトリも存在せず**、OpenRouter は依然プレビューを配信し、
+   Artificial Analysis は **proprietary** と分類する——「weights you cannot download are not open」。
+   欠けている文書は**ライセンス**であり、派生物を出荷してよいかを決めるのはそれである；
+   **第三者**の HF ページに載っている「StepFun Community License」と自称するページはベンダーの
+   ライセンスではない。残す価値のある方法のメモ：組織ページは最初の約 10 リポジトリしか描画しないので、
+   不在の主張は **API で組織を列挙して**再検証した（`?author=stepfun-ai&limit=100` → 51 リポジトリ、
+   Step-5 の変種はなし）——「ページをスクロールして見えなかった」は「51 件すべてを読んだ」より弱い
+   主張である。そして物理的な脚注が、日付が正直に過ぎつつダウンロードを出荷しない理由を説明する：
+   600B の BF16 重みは約 1.2 TB のアクセラレータ メモリ、つまりマルチノードの H100 クラスタを要する。
+
+5. **トリガーのない注意、今回はフォントについて。**Iosevka は 1 日 HN で 630+ ポイントを保ちながら
+   **何も出荷していない**：現行リリース v34.9.0 は **2026-09-26** 公開で 19 日前、以前のリリースは
+   月次程度の間隔、プロジェクト サイトにニュース節はない。正しい項目は「10 年前の、依然メンテナンス
+   されているツールが再発見された」であって「フォントがローンチした」ではない。休眠リポジトリを
+   捕まえるのと同じ検査が、会話上の理由でスターが動いた*メンテナンスされている*リポジトリも捕まえる
+   ——順位を書く前にトリガーを見つけねばならない。
+
+6. **二つの出力パイプラインをまたぐ高速化は高速化ではない。**ManimGX の「Blender Workbench」に対する
+   18.7× は、**ラスタ** レンダラと**ベクター** パイプラインを比較している；同種のレンダラに対する倍数
+   （90.6× ManimCE、11.5× ManimGL）こそが持ち帰るべき数字である。比率のどちらかを引用する前に、
+   両辺が同じ成果物を生むかを問え。
+
+7. **ライセンス ファイルの欠落は、ローンチ投稿が言及しない配布の阻害要因である。**
+   `BuilderIO/agent-native`（7,186★、ベータ、ローンチ当日にプッシュ）は**ライセンスを宣言していない**。
+   そして同じ投稿は二つの見出し機能に但し書きを付けている——既存の ChatGPT サブスクリプションで
+   Codex モデルを走らせるのは「an experimental option in Labs」であり、会話の中でアプリ UI を描画
+   できるのは「in hosts that support MCP Apps」に限られる。但し書きを適用範囲として読め。
+
+8. **未確認の帰属は開いたままにし、確認されたことを代わりに公開せよ。**TV4 は完成したシーズンを
+   2027 年へ延期した；AI の半分は**スウェーデンのタブロイド紙 1 紙**から来ており、TV4 自身の報道
+   担当者は「a technical breakdown that made edited material disappear」と述べ、エージェントを名指し
+   していない。確認されていることはより奇妙で証拠もある：**生の映像は生き残り、編集タイムラインは
+   生き残らなかった**——モデルの失敗ではなく、プロジェクト レベルのバージョン管理と保持の失敗である。
+   そう述べた当事者に帰属させ、確認できない枝は未確認とラベル付けしたままにせよ。
+
+9. **運用上の指示を伴う alpha の柵は、ベンチマークの主張より価値がある。**`timescale/pg_vectorsearch`
+   は 1 億ベクトルで同等の再現率において HNSW のメモリの四分の一を主張し、同時に「**Status: alpha.
+   Meant for testing, not production**」、「upgrading between prereleases may not be possible; plan to
+   drop and recreate the extension and its indexes」、そしてポスティング リストが「grow as rows arrive
+   and never split on their own」（`prism_rebalance` が存在する理由）であると述べている。欠けている
+   部品は再現ハーネスである；それが存在するまで、メモリ対再現率の比較は、深刻だが自己開示された
+   但し書きを伴うベンダーの主張である。
+
+10. **自らの天井を公開する自己監査ベンチマークを評価せよ——そしてその天井を声に出して述べよ。**
+    Leviathan の回答あたり中央値 436 トークン 対 grep の 107,122（245×）は、明示的な限界に紐づいた
+    強い数字である：「Measured on a synthetic maintenance log (one example dataset; nothing in
+    Leviathan is specific to it)」、そして手法、6 つのスケールすべて、但し書きがリポジトリの
+    `docs/BENCHMARKS.md` にある。grep のベースラインは正しい比較である；1 つの合成データセットは
+    1 つのデータセットである。
+
+Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [StepFun on Hugging Face](https://huggingface.co/stepfun-ai) · [OpenRouter — stepfun/step-5-preview](https://openrouter.ai/stepfun/step-5-preview) · [Iosevka](https://typeof.net/Iosevka/) · [be5invis/Iosevka](https://github.com/be5invis/Iosevka) · [academa-labs/manimgx](https://github.com/academa-labs/manimgx) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [timescale/pg_vectorsearch](https://github.com/timescale/pg_vectorsearch) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)

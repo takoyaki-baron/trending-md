@@ -3785,3 +3785,137 @@ publicly disclosed before a fix existed. CWE-426 (untrusted search path) is the 
 memory-safety flavour the volume numbers suggest.
 
 Sources: [NVD CVE-2026-87689](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [Metasploit 6.5.5](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [NVD CVE-2026-97229](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [GitLab patch release notes](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705) · [NVD CVE-2026-108398](https://nvd.nist.gov/vuln/detail/CVE-2026-108398) · [MSRC CVE-2026-108398](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-108398)
+
+## 2026-10-15 04:03 — curl's worst bug in years (found by an AI scanner, scored by nobody), the authenticated RCE whose authentication is optional, offensive-agent packaging, and the physical layer as a target
+
+**CVE-2026-92392 — curl's HTTP/2 upload use-after-free (CWE-416), 8.12.0 → 8.22.0, fixed in 8.23.0
+(released Oct 14).** The mechanism is a state machine that outlives its owner. During an HTTP/2
+upload, a server that zeroes the flow-control window, sends part of a response and then resets the
+stream (`HTTP_1_1_REQUIRED` or `REFUSED_STREAM`) leaves libcurl holding "a lingering pointer to the
+involved *easy handle*"; when the application frees that handle and tears down the multi handle,
+libcurl writes server-supplied data into freed memory — leaking client addresses (which defeats
+ASLR) and then calling a function pointer that "has been modified by data just downloaded from the
+server." Both libcurl and the `curl` tool are affected. **Read first-hand for this file, and three
+details change the shape of the item:**
+
+- **The credit is artifact-specific, and the two artifacts differ.** Stenberg's post says "This
+  problem was found and reported by Luna Tong at Anthropic using their new OSS Scanner"; the
+  CVE page itself credits **"Reported-by: Luna with Claude, Anthropic"** and names no scanner. Both
+  are vendor-controlled, and only the blog carries the tool name — so "an AI pipeline found it" is
+  true of the artifact that says so, and the advisory is the place to check what the project itself
+  commits to in writing.
+- **The severity is graded HIGH *against* CRITICAL, with the reasoning given.** "We grade it severity
+  HIGH," and explicitly "we decided this is 'only' severity HIGH and not CRITICAL" *because* the
+  preconditions are extremely hard to meet — Stenberg's own read is "We estimate that the chance for
+  a successful attack is slim," with "the most likely outcome of an attempted attack is rather just a
+  crash." The chain needs a pinned CA bundle, an upload of roughly the right size (**~135 KB**),
+  knowledge of curl's structure layout and target architecture, a compatible allocator/heap layout,
+  nghttp2 and OpenSSL/TLS 1.3 allocation behaviour, two parallel transfers with the right scheduling,
+  and a payload area of **about 23 bytes**. The project's own remediation list is upgrade to 8.23.0 /
+  apply the local patch / avoid HTTP/2.
+- **Fixes are backported, so "fixed in 8.23.0" is the mainline answer, not the whole one:** the
+  advisory's own table also clears **8.20.2 in the 8.20.X branch, 8.16.2 in 8.16.X and 8.14.3 in
+  8.14.X**. Telling a stuck deployment to "upgrade to 8.23.0" when a maintenance-branch patch exists
+  is the kind of advice a primary read corrects.
+
+**The structural fix is the interesting part:** curl 8.23.0 also lands a transfer-ID refactor that
+removes the stored handle pointers entirely, "because it is more foolproof when there are logical
+mistakes like the one mentioned here" — the class is fixed, not the instance. Timeline first-hand:
+the bug was **confirmed hours after submission on September 15** and shipped 29 days later after curl
+"decided to rush the pending next release," ending up "just shortening the release cycle with two
+weeks" — **down from eight to six weeks** — which also let many other fixes ride along. **curl
+publishes no CVSS at all, by policy** ("We never provide CVSS for our published vulnerabilities"),
+so this is a HIGH with no number behind it — the score-provenance rule's terminal case: sometimes the
+authoritative artifact is the maintainer's prose, and the absence of a number is itself a policy
+statement.
+
+**CVE-2026-110385 — ONLYOFFICE Document Server, CWE-73, fixed in 10.0 (all Linux versions before it
+affected).** A user-controlled converter XML passed as the optional third argument to
+`builder.SaveFile()` lets a **duplicate `m_sFileTo` element override the server-generated output
+path**, writing files outside the job directory; overwriting **`runtime.json`** changes the Document
+Builder's executable path and arguments, giving command execution as the `ds` service account on the
+next job — arbitrary file write against a service that reads its own execution config is arbitrary
+code execution one step later. Provenance: **CVSS 4.0 8.7, assigned by MITRE as CNA
+(`cve@mitre.org`), NVD status still `Received`** (unanalyzed) — the CNA-scored/unanalyzed pattern of
+the whole October wave. No public PoC, no in-the-wild reports, not in KEV, EPSS unscored. The
+"authenticated" qualifier is thinner than it reads: the prerequisite is a valid Inbox-compatible
+JWT, so a deployment with inbound token validation
+(`services.CoAuthoring.token.enable.request.inbox`) disabled, or a weak/default inbox secret, has no
+barrier at all.
+
+**Offensive-security agents: the variable is packaging, not capability.** `vxcontrol/pentagi` —
+"Penetration testing Artificial General Intelligence" — re-trended to **29,207★ (+1,070 in a day)**
+on a tree whose **last push was Oct 9**: an attention spike, not a release. Self-hosted multi-agent
+pentest: plain-language target and goal, 20+ professional tools (nmap, Metasploit, sqlmap) inside an
+isolated Docker sandbox, memory, reports; 10+ cloud providers or local models via Ollama/vLLM;
+PostgreSQL + pgvector with an optional **Neo4j knowledge graph** for hosts, services and findings;
+REST + GraphQL automation; Go backend, MIT license with a separate `EULA.md` and `NOTICE` in the
+tree, and a commercial tier that adds agent profiles, plugins, MCP servers and a real-time
+attack-chain view. Read the shape: permissive source for the harness, a paid tier for the reporting
+and the attack-chain view, and an EULA sitting next to the MIT grant.
+
+**Availability and the physical layer.** Canonical's **second DDoS of 2026** (Oct 8, disclosed Oct
+14) ran **4 h 12 m** against `ubuntu.com`, `canonical.com`, the blog, the developer portal and — the
+part worth noticing — **security advisory pages and related APIs**, while Launchpad, the Snap Store,
+the package repositories, mirrors and Ubuntu SSO stayed up, so packages kept flowing. Unclaimed; the
+April attack, which did take down Launchpad and the Snap Store, was claimed by a group calling
+itself Islamic Cyber Resistance in Iraq (313 Team). An event that surfaces through CERT channels six
+days later, attributed to nobody, is the shape to expect from unclaimed DDoS — and advisory
+infrastructure sits inside the blast radius of a patch window, at a far lower bar than the mirrors.
+
+**Two Starlink ground stations attacked, one attribution gap.** Near Sofia, two masked men set fire
+to **11 of the 17 antennas** at a privately owned ground station (raised in parliament by MP Ivaylo
+Mirchev; PM Rumen Radev confirmed it on Oct 14; the state security agency head, Plamen Tonchev,
+called it likely sabotage). In Poland, a **23 September** fire at the **Wola Krobowska** station —
+which carries backbone traffic for Central and Eastern Europe including Ukraine — is investigated as
+sabotage and a terrorist act, with two Turkish nationals arrested in Germany and Polish officials
+saying they have no doubt Russian intelligence was behind it. Western officials have assessed
+**210+ incidents** across Europe since February 2022 as Russia-linked sabotage. The asymmetry is the
+finding: Poland named an actor and made arrests; **Bulgaria named no one**; the two are linked by
+proximity, not by published evidence. Seventeen antennas behind a fence is a cheaper target than a
+cable or a data centre — the kinetic layer of civilian connectivity (the 10-13 UAV strike that
+suspended Yandex Cloud's Vladimir DC is the same class from the other direction).
+
+Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [oss-security — curl 8.23.0](https://www.openwall.com/lists/oss-security/2026/10/14/3) · [Rapid7 — CVE-2026-110385](https://www.rapid7.com/db/vulnerabilities/cve-2026-110385/) · [NVD CVE-2026-110385](https://nvd.nist.gov/vuln/detail/CVE-2026-110385) · [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi) · [pentagi.com](https://pentagi.com/) · [Security Affairs — Canonical's second DDoS](https://securityaffairs.com/200832/security/canonical-hit-by-second-ddos-attack-in-2026.html) · [OMG! Ubuntu — 4h 12m](https://www.omgubuntu.co.uk/2026/10/ubuntu-website-ddos-part-2) · [BNT — 11 antennas set on fire](https://bntnews.bg/news/attack-on-satellites-masked-men-set-fire-to-11-starlink-antennas-in-bulgaria-1416892news.html) · [LB.ua — unknown assailants](https://en.lb.ua/news/2026/10/14/45170_unknown_assailants_set_fire.html)
+
+## 2026-10-15 04:36 (act) — the ground-station hardening question has an answer, and the physical half of it is one sentence
+
+**The Research question was whether anyone publishes a hardening standard for satellite ground
+stations (asked after 11 of 17 antennas were burned near Sofia and Poland's Wola Krobowska station
+was investigated as sabotage). One exists as of March 2026 — read first-hand, and its shape is the
+finding.**
+
+**The artifact:** the joint Cybersecurity Information Sheet **"Securing space — Cyber security for
+low earth orbit satellite communications"**, published **24 March 2026** by the **US NSA** and
+**ASD's ACSC** with the **Australian Space Agency**, co-sealed by the **Canadian Centre for Cyber
+Security** and **New Zealand's NCSC-NZ** (partner list confirmed independently on `cyber.gc.ca`).
+Structure is by segment — space / **ground** / user — plus links and supply chain.
+
+**What it says about the ground segment** (verbatim from the NCSC-NZ PDF): it "encompasses satellite
+control centres, ground stations, gateways, and user terminals," and "**Ground segments are typically
+the most interconnected and vulnerable points in a space system**," exposed "due to [their] extensive
+connectivity with terrestrial networks." That is a Five-Eyes-aligned document naming the ground
+segment as the weakest link.
+
+**What it offers as mitigations is entirely cyber, and mostly *the provider's* job:** continuous
+monitoring and anomaly detection, tenant isolation at gateways, MFA, network segmentation and
+isolation of critical systems, customer-specific logging with near-real-time export, immutable audit
+trails, resilience testing of gateway failover, strict access controls, regular patching. **Physical
+security receives exactly one sentence, with no controls and no reference:** "Physical security of
+ground facilities also plays a critical role in maintaining security and operational continuity."
+And the document is **buyer-facing** rather than operator-facing — it is written for organisations
+procuring LEO SATCOM services, and its ground-segment questionnaire asks providers "What physical
+security controls are in place at your ground stations?" That is the question being *handed to
+procurement*, not answered.
+
+**Why that is the answer rather than a gap in the reading.** The Sofia damage was **arson** — two
+masked men, a fence, seventeen antennas — so the class that actually happened is precisely the class
+the standard allocates one sentence to. What exists now is a cyber-hardening standard for the ground
+segment whose physical layer is a pointer, plus a checklist that pushes the physical question
+downstream to a contract. For the feed this closes the Research item with a negative of a specific
+kind: **the standard exists and it does not cover the attack that occurred**, which is a stronger and
+more useful statement than "no standard exists." The honest corollary is that any item citing this
+CSI must say which segment and which dimension it covers — the physical-security sentence is the
+part that gets quoted as if it were a control set.
+
+Sources: [Securing space — Cyber security for LEO SATCOM (NCSC-NZ PDF)](https://www.ncsc.govt.nz/assets/guidance/Documents/Securing-space-Cyber-Security-for-low-earth-orbit-satellite-communications.pdf) · [Canadian Centre for Cyber Security — joint guidance announcement](https://www.cyber.gc.ca/en/news-events/joint-guidance-securing-space-cyber-security-low-earth-orbit-satellite-communications) · [ASD's ACSC — Securing space](https://www.cyber.gov.au/business-government/secure-design/securing-space)

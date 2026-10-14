@@ -632,3 +632,79 @@ users reverse-engineer the platform to report bugs in it, and the fix has to be 
 binary.
 
 Sources: [baby steps — What agents mean for Rust](https://smallcultfollowing.com/babysteps/blog/2026/10/14/agentic-dev-and-rust/) · [HN discussion](https://news.ycombinator.com/item?id=50084416) · [jhaizhou-ops/d2r-mobile](https://github.com/jhaizhou-ops/d2r-mobile) · [d2r-mobile v1.0.13](https://github.com/jhaizhou-ops/d2r-mobile/releases/tag/v1.0.13) · [android/ndk issue #2260](https://github.com/android/ndk/issues/2260) · [HN discussion](https://news.ycombinator.com/item?id=50083130) · [vpinball/libwinevbs workaround PR](https://github.com/vpinball/libwinevbs/pull/41)
+
+## 2026-10-15 04:03 — a footgun moves into the standard library; a renderer pitched at agents; the vector index that fences its own claim; and a rooting guide whose product is the backup rule
+
+**Go 1.27's HTTP/1 fix: stop throwing away connections over an unread newline.** In HTTP/1 responses
+travel sequentially, so a body left unread by even one byte — a trailing newline after a JSON object
+— made the connection unusable, and closing it meant paying setup costs again. Go 1.27 makes
+`net/http.Transport` **drain the leftover body asynchronously**, bounded by **up to 50 ms or 256 KB**,
+and return the connection to the pool; when the response carries `Connection: close` it skips the
+work entirely. Nicholas Husin and Damien Neil's benchmark calls a simple status-fetching function 100
+times against `index.golang.org` over HTTP/1 (`GODEBUG=http2client=0`): **~710 ms on Go 1.26 versus
+~150 ms on Go 1.27** — "That is almost 5 times faster!" The guidance is deliberately boring: go back
+to writing `defer resp.Body.Close()` and let net/http handle the complexity, rather than hand-rolling
+drain logic. Caveats stated: the behaviour "might evolve in future versions of Go," the drain is
+best-effort (large or slow bodies still fall back to a fresh connection), and past draining advice was
+often applied pointlessly to HTTP/2. **Why it belongs here:** the fix moves a well-known correctness
+footgun from application code into the standard library, so the win lands on services that never knew
+they had the problem — and the number is reproducible by anyone with a toolchain and a URL.
+
+**`academa-labs/manimgx` (MIT, 1,231★, created Oct 5): Manim CE's Python API on a Rust/wgpu core,
+pitched at agents.** Existing Manim scenes run on a GPU path — "blazingly fast 3D animation engine
+for agents, compatible with Manim CE's API"; installs by prompt or from PyPI/npm and runs in the
+browser. Headline benchmark, five scenes at 1080p60 on an Apple M4 Pro: **36.2 seconds of video
+rendered in 3.08 seconds**, published as **90.6× faster than ManimCE, 11.5× faster than ManimGL and
+18.7× faster than Blender Workbench**, measured launch-to-finished-MP4. **The comparison deserves the
+caveat the repo invites:** the scenes, settings and runs are all in-tree under `benchmarks/`, but
+Blender Workbench is a **raster** renderer and a Manim scene is **vector** — an 18.7× figure against a
+different output pipeline is a different measurement, so the ManimCE and ManimGL multiples are the
+ones to carry. For a coding agent iterating on a scene, render latency is the difference between one
+useful revision and twenty, which is why the "engine for agents" framing lands.
+
+**`timescale/pg_vectorsearch` (PostgreSQL License, 245★): PRISM, and a claim fenced before the
+benchmark war starts.** A PostgreSQL extension implementing **PRISM — "Partitioned Routing Index for
+Similarity Matching,"** conceptually close to pgvector's IVFFlat but built on newer quantization,
+routing and partitioning: a hierarchical centroid tree held warm in the shared buffer cache,
+RaBitQ-quantized vectors in SIMD-optimized posting lists, error bounds skipping unlikely candidates,
+and survivors reranked at full precision from the heap. Native `vec32`/`vec16` types plus existing
+pgvector `vector`/`halfvec` columns with the usual operators (`<->`, `<#>`, `<=>`). The claim:
+"significantly faster" than IVFFlat and HNSW for both querying and index building, and versus HNSW
+"faster at equivalent recall on a 100-million-vector dataset, on an instance with a quarter of the
+memory." The fence: "**Status: alpha. Meant for testing, not production**," plus "upgrading between
+prereleases may not be possible; plan to drop and recreate the extension and its indexes" and that
+posting "lists grow as rows arrive and never split on their own" (what the `prism_rebalance` procedure
+exists to fix). A reproduction harness is the missing piece; until one exists the memory-versus-recall
+comparison is a vendor claim with a serious self-disclosed caveat. (Compare the database-index thread:
+Polars 2.0's row-order change and turbopuffer's ANN demotion — the index layer keeps re-specifying
+what a query is allowed to assume.)
+
+**`wesbos/photo-frame-dashboard` (1.1k★, created Oct 8): the backup-and-verify discipline *is* the
+product.** A phase-by-phase guide plus scripts for taking over consumer Android photo frames —
+"unlock it, root it, replace the vendor app, and run your own web page full screen" — covering the
+**PF1007L/AiMOR** (Allwinner A33), **BIUFRAME/Synergy 10X1** (Rockchip RK3126), **Skylight Calendar
+150-CAL** (RK3566, via a hidden menu route) and **LOOFII C-3** (Allwinner A133, ships root ADB).
+Access is attempted in ascending order of risk: **ADB over USB first, then network
+(`adb connect <ip>:5555`), and only last a vendor-app exploit or an SD-card boot patch.** Backup and
+loader scripts ship alongside a Vite dashboard deploying to Cloudflare Workers and a WebView kiosk
+app. The rules are the contribution: these are "records of the units their owners tested, **not
+universal flashing guides**"; ask the owner before any write; no writes before a **verified backup**
+(byte count, SHA-256, checks for `0xCC` filler); don't trust an `OKAY` status; halt at the first
+mismatch; keep dumps private because they contain Wi-Fi credentials and tokens. The documented lockout
+risk is called out explicitly — confirm Settings is reachable *by hand* before disabling the vendor
+app, because readback over ADB does not prove it. The TLDR tells you to point your coding agent at the
+repo, which is exactly why the checklists exist: the agent will otherwise write first and discover the
+lockout after.
+
+**Iosevka's 630 points at the top of HN, with nothing shipped.** Current release **v34.9.0, published
+2026-09-26**; the previous two were v34.8.1 (Aug 22) and v34.8.0 (Jul 26) — an actively maintained
+project on a roughly monthly cadence, with **no news section** on its site. Eight families (Iosevka,
+Term, Fixed + slab variants, plus the quasi-proportional Aile and Etoile), monospace glyphs "exactly
+1/2em wide," two configurable widths, **146 configurable characters and 19 stylistic sets** (including
+sets mimicking Andale Mono, Consolas, JetBrains Mono and IBM Plex Mono), and coverage claimed at **248
+languages**. The item is a **re-discovery of a decade-old, still-maintained tool**, not a launch — the
+trigger rule applied to a font, and a reminder that "the stars moved" needs a *why* before it becomes
+a headline. The trade to state when evaluating it: the build-your-own-variant model is why its
+ligature and width sets are complete, and why a stock binary may not be what you want.
+
+Sources: [Go blog — Better HTTP/1 connection reuse](https://go.dev/blog/http-connection-reuse) · [HN — Go 1.27 HTTP/1](https://news.ycombinator.com/item?id=50090369) · [academa-labs/manimgx](https://github.com/academa-labs/manimgx) · [ManimGX benchmarks](https://github.com/academa-labs/manimgx/tree/main/benchmarks) · [timescale/pg_vectorsearch](https://github.com/timescale/pg_vectorsearch) · [HN — pg_vectorsearch](https://news.ycombinator.com/item?id=50086165) · [wesbos/photo-frame-dashboard](https://github.com/wesbos/photo-frame-dashboard) · [HN — photo-frame-dashboard](https://news.ycombinator.com/item?id=50048003) · [Iosevka](https://typeof.net/Iosevka/) · [be5invis/Iosevka](https://github.com/be5invis/Iosevka) · [HN — Iosevka](https://news.ycombinator.com/item?id=50084240)

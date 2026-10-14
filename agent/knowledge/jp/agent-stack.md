@@ -2140,3 +2140,65 @@ Docker 評価、またはライセンスされたセルフホスト配備）が�
 出荷された。
 
 Sources: [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots) · [AG-UI protocol](https://docs.ag-ui.com/introduction) · [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot)
+
+## 2026-10-15 04:03 — 一つの能力、六つの面；読者としてのエージェントのために書かれた SDK；天井を公開した単一バイナリとしてのメモリ
+
+**Builder.io が Agent-Native（ベータ）を出荷：エージェントと UI を「対等なパートナー」にする。**前提は、
+アプリにボルト留めされたチャット サイドバーは間違った形だというもので、代わりに共有された一組の
+**アクション、データ、アプリケーション状態**がアプリであり、エージェントは「これ」を現在のページ、
+選択中のレコード、あるいはアクティブなビューに対して解決する。**単一の能力定義**から、その能力を
+**六つの面——UI、エージェント、HTTP API、CLI、MCP、A2A**——へ露出し、エージェントは UI が呼ぶのと
+同じアクションを呼ぶため、computer-use エージェントのように画面を操作する必要がない——投稿はそちらが
+遅くトークンも重いと論じる。連携は MCP 経由で Slack、Teams、Discord、メール、Telegram、WhatsApp、
+Notion、Linear、GitHub へ外向きに走り、A2A と MCP 経由で内向きに走るので、Claude、ChatGPT、Cursor、
+Codex がアプリのアクションを呼べる。モデル選択は BYO-key（Anthropic、OpenAI、Gemini、OpenRouter、
+任意の OpenAI 互換エンドポイント、あるいはローカルの Ollama）；
+`npx @agent-native/core@latest create my-app` で自分のリポジトリにスキャフォールドし、任意の
+PostgreSQL データベースを使い、Node、Vercel、Netlify、Cloudflare、AWS へデプロイする。
+`BuilderIO/agent-native`（2026 年 3 月作成、7,186★、ローンチ当日にプッシュ）は**ライセンス ファイルを
+宣言していない**。二つの見出し機能は投稿自身の但し書きを伴う：既存の ChatGPT サブスクリプションで
+Codex モデルを走らせるのは「Labs の実験的オプション」であり、会話の中でアプリ UI を描画できるのは
+「MCP Apps をサポートするホスト」に限られる。**六面の主張こそがアーカイブに値するアーキテクチャ上の
+賭けである**——能力を一度定義すればすべての呼び出し元がそれを共有する。エージェントのアクション目録が
+アプリの権限モデルと同期し続ける唯一の道である。封じ込め/アイデンティティの系（OpenDots、Box）と
+比べよ：これは同じ問題の*目録*の半分である。
+
+**Meta の `facebookincubator/muse-gadget-sdk`——文書化された消費者がエージェントである SDK。**Meta は
+自前の Muse 周辺機器を作るためのキットをオープンソース化した：市販の **ESP32** をプログラムする
+（画面、音声入出力、センサー、アクチュエータ）か、**Raspberry Pi / Linux 機**をガジェットに変える
+——sysadmin の雑用や Home Assistant 向けのカスタムコマンドも含む。ツリー内に 2 つの SDK とファーム
+ウェアが出荷され、**SDK トークンが必須**（「Every gadget needs a token to pair」）、ペアリングは
+Developer モードを有効にした Muse アプリ経由で行われ、そして**各ディレクトリが `README.md` の隣に
+`AGENTS.md` を携える**——リポジトリ自身のインターフェースが、コーディング エージェントを一級の読者と
+して書かれている。Apache-2.0 に第三者の除外条項付き（「the Apache License does not cover the
+Jollybot avatar」）、バッテリー入力の電力プロファイリングのためのオプトインの分離診断コア、そして
+**どこにも alpha や beta のラベルがない**——唯一の安定性警告は、いじると「bricked boards, voided
+warranties, brownouts, or bankruptcies. Proceed at your own risk!」になり得るというものである。
+2.2k★、99 コミット、オープン issue 27、**オープン PR 69**、Releases タブは空。Alexa Gadgets の
+プレイブックを逆から読むものと理解せよ：モデル論争に負けつつある閉じたアシスタントが*ハードウェア*の
+側面を趣味家に開くことで、サードパーティ機器と goodwill を安く買う。ディレクトリごとの `AGENTS.md` と
+いう慣行は、規範へと熟成する可能性が最も高い細部である。
+
+**`elstongun/leviathan`——単一の静的バイナリとしてのエージェント メモリ、天井は作者自身が述べる。**
+記録（JSONL、JSON、CSV/TSV、SQLite、あるいはデータベース CLI がエクスポートできるもの）をランク付け
+された全文索引に変える、1 つの Apache-2.0 Rust バイナリ。ゆえにエージェントは平易な言葉で問い、
+生の履歴を grep する代わりに短く引用付きの結果カードを受け取る。索引は**実行時依存のない 1 つの
+SQLite ファイル**；MCP サポートは任意；曖昧または未知のグループは**候補を列挙して推測せず exit 3** する。
+公開ベンチマークは**`docs/BENCHMARKS.md` から一次で読んだ**もので、**100 万件（678 MB）**において：
+**質問あたり中央値 436 トークン** 対 最良の grep 戦略の 107,122（**245×**；grep "entity history" は
+209,412 とさらに悪く、データセット全体の読み込みは 203M）、hit@5 99.0% と hit@1 98.5%（MRR@5 0.987）、
+1,200 問を通じての最悪値 **602 トークン**、そして p50 レイテンシ **33.4 ms** 対 grep-history の
+**88.9 ms**——ただし文書は、約 100K 件未満では grep の方が速いか同等であり、エージェントにとっては
+grep の約 90 ms よりトークン コストが支配的だと注記している。807★、10 月 5 日作成。開示こそがこの棚に
+必要なパターンである：README とベンチマーク文書が、誰よりも先に自らの限界を述べる——**「The data is
+synthetic」**（意図的に敵対的な生成器：1,500 台のマシン、27 の故障モード、27% のプレースホルダ解決、
+15% の空、別個の質問語彙、決定論的シード 7）。ゆえに**精度は上限として読み、トークン数は代表値として
+読むべき**である；「**one example dataset**」；「**this measures retrieval, not the final answer**」
+（出力を読む LLM はない）；「**the baselines are simple on purpose**」であり、正解キーを無料で
+手に入れる；語幹処理付きの字句 BM25 なので、同義語の不一致は他の語に頼る；そして「one machine, one
+run」——2018 年のデスクトップ CPU 1 台でのレイテンシである。これは議論できるベンチマークであり、
+そこが要点だ。メモリの系の検索の枝（[[token-economics]]、[[agent-distribution]]）が**単一バイナリ、
+サービスなし**の成果物として着地したものである：面白い軸はもはや「ベクター DB か全文か」ではなく
+「実際のデータ上で長いセッションを保持するのに、可動部品をどれだけ少なくできるか」である。
+
+Sources: [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [facebookincubator/muse-gadget-sdk](https://github.com/facebookincubator/muse-gadget-sdk) · [HN — muse-gadget-sdk](https://news.ycombinator.com/item?id=49941331) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)

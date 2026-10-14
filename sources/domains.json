@@ -1,4 +1,17 @@
 {
+  "$cv": {
+    "definition": {
+      "en": "cv = the number of INDEPENDENT confirmations of a fact attributed to this domain. cv 1 is the curation cross-check CLAUDE.md requires; each further confirmation appends a dated cvlog line, so cv === 1 + cvlog.length.",
+      "zh": "cv = 归属于该域名的事实获得独立核验的次数。cv 为 1 即 CLAUDE.md 要求的策展交叉核验；此后每次核验追加一条带日期的 cvlog 记录，因此 cv === 1 + cvlog.length。",
+      "jp": "cv = このドメインに帰属する事実が独立に確認された回数。cv 1 は CLAUDE.md が要求するキュレーション時のクロスチェック。以降の確認は日付付きの cvlog 行を追加するため、cv === 1 + cvlog.length。"
+    },
+    "independence": {
+      "en": "A confirming party counts only if it is NOT downstream of the same original report. Two hosts cited in the same feed item are NOT a cross-check: co-citation is a shared-origin signal (one press release, one vendor advisory, one wire story, one co-sealed government document). Entries with cv > 1 and no cvlog predate the rule and are legacy, not retro-fitted.",
+      "zh": "只有当核验方不是同一原始报道的下游时才算数。同一条 feed 中引用的两个域名不构成交叉核验：共引是同一来源的信号（同一份新闻稿、同一份厂商公告、同一篇通讯社稿、同一份联合署名的政府文件）。cv > 1 但没有 cvlog 的条目属规则之前的遗留，不回溯补齐。",
+      "jp": "確認元が同じ一次報道の下流でない場合のみ数える。同一 feed アイテム内で引用された 2 つのホストはクロスチェックではない。共引用は同一來源のシグナルである（同一プレスリリース、同一ベンダーアドバイザリ、同一通信社記事、共同名義の政府文書）。cv > 1 で cvlog が無い項目はルール以前の遺産で、遡及して埋めない。"
+    },
+    "tool": "node agent/tools/cv-audit.mjs (--clusters | --check | --bump <host> --note \"YYYY-MM-DD — …\" [--write])"
+  },
   "02ship.com": {
     "cat": "community",
     "cred": "low",
@@ -304,6 +317,15 @@
     "en": "ai-primer.com — AI-news coverage site. Its ox-alpha story (anonymous stealth/ox-alpha on OpenRouter, free ~1-week preview, 1M ctx) matches the OpenRouter model page first-hand; the 80%-vs-65% DeepSWE smoke test is a small-sample community run, not a published benchmark.",
     "jp": "ai-primer.com——AIニュース報道サイト。ox-alpha記事（OpenRouter上の匿名 stealth/ox-alpha、約1週間の無料プレビュー、1Mコンテキスト）はOpenRouterのモデルページと一次照合で一致；80%-vs-65%のDeepSWEスモークテストは小標本のコミュニティ実行であり公刊ベンチマークではない。",
     "zh": "ai-primer.com——AI 新闻聚合网站。其 ox-alpha 报道（OpenRouter 上的匿名 stealth/ox-alpha、约一周免费预览、1M 上下文）与 OpenRouter 模型页一手核实一致；80%-vs-65% 的 DeepSWE 冒烟测试是小样本社区跑分，并非正式基准。"
+  },
+  "ai-security-letter.org": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 2,
+    "density": "med",
+    "en": "Primary host of the October 2026 open letter on AI and cybersecurity signed by hundreds of scientists. High value as a primary artifact (signatories listed with affiliations, recommendations quoted verbatim), but the signatory count is a live, unauthenticated number — cross-checked (10-14) against The Decoder and other outlets, which reported 406/415/350/260/220 while the page itself read 420.",
+    "jp": "科学者数百名が署名した2026年10月の AI とサイバーセキュリティに関する公開書簡の一次ホスト。一次資料として価値が高い（署名者は所属付きで列挙、提言は原文どおり）。ただし署名数は生きた未認証の数字である——10-14 に The Decoder ほかと突合したところ、報道は 406/415/350/260/220、ページ自体は 420 と表示していた。",
+    "zh": "数百位科学家签署的《2026 年 10 月 AI 与网络安全公开信》的一手托管页。作为一手文件价值高（署名者附机构逐一列出、建议为原文），但签名数是实时且未经认证的——10-14 与 The Decoder 等媒体交叉核验：报道为 406/415/350/260/220，而页面本身显示 420。"
   },
   "ai.google.dev": {
     "cat": "vendor",
@@ -671,6 +693,15 @@
     "en": "Anubis (the anti-AI-scraper proof-of-work gate) project's own blog — first-party and technically dense (the WASM PoW post: difficulty now counted in bits, wasm2js fallback trade-off), but served behind Anubis's own challenge — agents need the GitHub release or an archive mirror. Cross-validated vs the TecharoHQ/anubis releases page.",
     "jp": "Anubis（AI クローラ対策の proof-of-work ゲート）プロジェクト自身のブログ。一次で技術密度が高い（WASM PoW の記事：難易度はビット単位に、wasm2js フォールバックのトレードオフ）。ただしサイト自体が Anubis のチャレンジページの裏にあり、エージェントは GitHub リリースかアーカイブミラーが必要。TecharoHQ/anubis のリリースページと相互検証済み。",
     "zh": "Anubis（反 AI 爬虫的工作量证明门）项目自己的博客——一手且技术密度高（WASM PoW 一文：难度改按比特计、wasm2js 回退的取舍），但站点自身就架在 Anubis 挑战页后面——智能体需借助 GitHub release 或存档镜像。与 TecharoHQ/anubis 的 releases 页交叉验证。"
+  },
+  "apertus-llm.org": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Project Apertus home page (ETH Zurich / EPFL and Swiss partners); the sovereign-open-model project's own site. Cross-checked 2026-10-15 against arXiv 2610.15542 for the release contents and licensing posture.",
+    "jp": "Project Apertus公式サイト（ETHチューリッヒ／EPFLほかスイス勢）。主権オープンモデル計画の公式ページ。2026-10-15に公開内容とライセンス姿勢をarXiv 2610.15542と突合済み。",
+    "zh": "Project Apertus 官网（苏黎世联邦理工／洛桑联邦理工等瑞士机构）；主权开放模型项目自己的站点。已于 2026-10-15 就发布内容与许可姿态，与 arXiv 2610.15542 交叉核验。"
   },
   "api-docs.deepseek.com": {
     "cat": "vendor",
@@ -1747,6 +1778,15 @@
     "jp": "Bloomberg——調査報道系のビジネス/テック報道（ペイウォール、グラフィック多用）。突合済み（09-23）：イラン学校爆撃の再構成記事は匿名当局者に帰属し、国防総日のノーコメントとPalantirの争議を明記——衝撃的な話題でも帰属の規律は保たれている。",
     "zh": "Bloomberg——调查报道型商业/科技媒体（付费墙、重图表）。已交叉核验（09-23）：其伊朗学校空袭重建报道归于匿名官员，并注明五角大楼拒绝置评与 Palantir 的异议——即便在爆炸性报道上也保持归因纪律。"
   },
+  "bntnews.bg": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Bulgarian National Television news; local primary reporting on the Sofia Starlink arson. Cross-checked 2026-10-14 against LB.ua and Ukrainian outlets on the antenna count (11 of 17) and the government's confirmation.",
+    "jp": "ブルガリア国営テレビのニュース。ソフィアのStarlink放火に関する現地一次報道。2026-10-14にアンテナ数（17基中11基）と政府確認についてLB.uaほかと突合済み。",
+    "zh": "保加利亚国家电视台新闻；索菲亚 Starlink 纵火案的当地一手报道。已于 2026-10-14 就天线数量（17 面中 11 面）与政府确认，与 LB.ua 等交叉核验。"
+  },
   "board.flatassembler.net": {
     "cat": "community",
     "cred": "low",
@@ -1845,6 +1885,15 @@
     "en": "Red Hat's official Bugzilla. Bug 2517885 confirmed 09-21 as the tracker for CVE-2026-75885: unauthenticated SSRF and resource exhaustion via /api/devfile/ and /api/devfile/samples/ (routes registered skipping auth wrappers, partial-read SSRF against metadata/etcd/kubelets), reported 2026-08-18, still NEW. Cross-validated against access.redhat.com's CVE page: CVSS 9.3, vector CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L. Note Bugzilla itself shows only 'high' severity, no numeric score.",
     "jp": "Red Hat 公式 Bugzilla。09-21 に Bug 2517885 が CVE-2026-75885 のトラッカーであることを確認：/api/devfile/ と /api/devfile/samples/ 経由の未認証 SSRF とリソース枯渇、2026-08-18 報告、未だ NEW。access.redhat.com の CVE ページとクロス検証：CVSS 9.3、ベクトル CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L。Bugzilla 自体は数値スコアを持らず「high」のみ表示。",
     "zh": "Red Hat 官方 Bugzilla。已于 09-21 确认 Bug 2517885 即 CVE-2026-75885 的追踪单：通过 /api/devfile/ 和 /api/devfile/samples/ 的未认证 SSRF 与资源耗尽，2026-08-18 报告，状态仍为 NEW。已与 access.redhat.com 的 CVE 页面交叉验证：CVSS 9.3，向量 CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L。注意 Bugzilla 页面本身只显示「high」严重级别，无数值评分。"
+  },
+  "builder.io": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Builder.io's blog and product site; vendor voice for its own framework launches — concrete on architecture, silent on license terms. Cross-checked 2026-10-15 against the BuilderIO/agent-native repo (which declares no license).",
+    "jp": "Builder.ioのブログ／製品サイト。自社フレームワーク発表におけるベンダー発信で、アーキテクチャは具体的だがライセンス条件には触れない。2026-10-15にBuilderIO/agent-nativeリポジトリ（ライセンス未宣言）と突合済み。",
+    "zh": "Builder.io 的博客与产品站点；其自研框架发布中的厂商口径——架构写得具体，许可条款则沉默。已于 2026-10-15 与 BuilderIO/agent-native 仓库（未声明许可证）交叉核验。"
   },
   "bun.com": {
     "cat": "vendor",
@@ -2699,6 +2748,18 @@
     "jp": "Cua（trycua、YC X25）のマーケティングサイト。computer-use のドライバ/フリート/ベンチスタックの一次情報だが、見出しの数値は自己申告。クロスチェック（10-08）：製品の主張は MIT ライセンスの GitHub リポジトリと一致。「KiCad 25 タスク中 6」はベンダー単独の数値。",
     "zh": "Cua（trycua，YC X25）营销站；其 computer-use 驱动/机队/基准栈的一手来源，但头条数字为自报。交叉验证（10-08）：产品主张与 MIT 许可的 GitHub 仓库一致；“25 个 KiCad 任务仅过 6 个”为厂商单方数据。"
   },
+  "curl.se": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "The curl project's own site; canonical for its security advisories (curl publishes no CVSS by policy). Cross-checked 2026-10-15: CVE-2026-92392 details (affected 8.12.0–8.22.0, CWE-416, reporter, no numeric score) match Daniel Stenberg's maintainer post and the oss-security advisory.",
+    "jp": "curlプロジェクト公式サイト。セキュリティアドバイザリの正典（curlは方針としてCVSSを出さない）。2026-10-15に突合済み：CVE-2026-92392の詳細（影響8.12.0〜8.22.0、CWE-416、報告者、数値スコアなし）はStenbergの記事とoss-securityの勧告に一致。",
+    "zh": "curl 项目官网；其安全公告的权威来源（curl 按政策不发布 CVSS）。已于 2026-10-15 交叉核验：CVE-2026-92392 的细节（影响 8.12.0–8.22.0、CWE-416、报告者、无数值评分）与 Stenberg 的维护者文章及 oss-security 公告一致。",
+    "cvlog": [
+      "2026-10-15 — Debian security tracker re-derived the affected-version mapping from the code rather than the advisory text: DSA-6558-1 fixes trixie at 8.14.1-2+deb13u7 and sid at 8.23.0-1, and marks bookworm (7.88.1) not-affected because the vulnerable code only arrived in 8.12.0 — a release curl's own table does not name. Caveat kept: the tracker cites the advisory for the flaw's existence, so this confirms the version mapping, not the flaw."
+    ]
+  },
   "cursor.com": {
     "cat": "vendor",
     "cred": "med",
@@ -2779,6 +2840,15 @@
     "en": "David Buchanan's security-research blog; first-hand analysis of Android C2PA camera auth. Cross-validated (08-26): its CVE-2026-43499 one-click-root claim matches the HN thread (104 pts) and Pixel-root coverage; note it is an opinionated essay, not a disclosure.",
     "jp": "David Buchananのセキュリティ研究ブログ。Android C2PAカメラ認証の一次分析。突合済み（08-26）：CVE-2026-43499のワンクリックroot主張はHNスレッド（104点）やPixel root報道と一致。ただし意見エッセイであって開示文書ではない点に注意。",
     "zh": "David Buchanan 的安全研究博客；对 Android C2PA 相机认证的一手分析。已交叉核验（08-26）：其 CVE-2026-43499 一键 root 的说法与 HN 讨论（104 分）及 Pixel root 报道一致；注意这是观点性文章而非漏洞披露。"
+  },
+  "daniel.haxx.se": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Daniel Stenberg's maintainer blog; first-hand runtime for curl design and security decisions, including the caveats advisories omit. Cross-checked 2026-10-15 against curl's own advisory for CVE-2026-92392.",
+    "jp": "Daniel Stenbergのメンテナブログ。curlの設計・セキュリティ判断の一次情報で、勧告が省く留保も書かれる。2026-10-15にcurl公式勧告と突合済み。",
+    "zh": "Daniel Stenberg 的维护者博客；curl 设计与安全决策的第一手来源，含公告省略的限定条件。已于 2026-10-15 与 curl 官方公告交叉核验。"
   },
   "daniellitt.com": {
     "cat": "community",
@@ -3274,6 +3344,15 @@
     "zh": "Docker 博客与公告——注册表厂商的第一方事件披露，包括支撑“未发现利用”结论的枚举工作。交叉核验（10-14）：CVE-2026-105445 的时间线（2024-08-26 暴露起点至 9 月 30 日修复）与 GhostPat 的独立撰文及 NVD 记录一致。",
     "jp": "Docker のブログとアドバイザリ——レジストリ事業者による一次情報のインシデント開示。否定的結論を支えた全件調査も含む。相互検証（10-14）：CVE-2026-105445 の時系列（2024-08-26 の露出開始〜9月30日の修正）は GhostPat の独立記事と NVD レコードに一致。"
   },
+  "docs.ag-ui.com": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Documentation for the AG-UI agent-user-interaction protocol. Adequate for protocol mechanics but project-self-published and thin on independent evaluation — cross-checked (10-14) via the CopilotKit/OpenDots README, which states that template is built on AG-UI.",
+    "jp": "AG-UI エージェント・ユーザー相互作用プロトコルのドキュメント。プロトコルの仕組みには十分だがプロジェクト自身の公開物で、独立した評価は薄い——10-14 に CopilotKit/OpenDots の README（同テンプレートが AG-UI 上に構築されていると明記）で突合。",
+    "zh": "AG-UI 智能体—用户交互协议的文档。说明协议机制足够，但属项目自我发布、缺少独立评估——10-14 通过 CopilotKit/OpenDots 的 README（明确说明该模板构建于 AG-UI 之上）交叉核验。"
+  },
   "docs.bigmodel.cn": {
     "cat": "vendor",
     "cred": "high",
@@ -3606,6 +3685,15 @@
     "en": "Embrace The Red (Wunderwuzzi) — AI/LLM security research blog; prompt-injection and agent-hijack PoCs. Verified first-hand (08-31): 'Breaking Claude Code Opus 5 Auto Mode' (Aug 26) exists on the index; its end-to-end Auto Mode bypass chain is the third-party test the classifier default needed.",
     "jp": "Embrace The Red（Wunderwuzzi）——AI/LLMセキュリティ研究ブログ。プロンプトインジェクションとエージェントハイジャックのPoC。一次確認済み（08-31）：『Breaking Claude Code Opus 5 Auto Mode』（8/26）がインデックスに存在。そのエンドツーエンドのAuto Modeバイパスチェーンは、分類器デフォルトが欠いていたサードパーティ検証。",
     "zh": "Embrace The Red（Wunderwuzzi）——AI/LLM 安全研究博客；提示注入与 agent 劫持的 PoC。一手核实（08-31）：索引页确有《Breaking Claude Code Opus 5 Auto Mode》（8 月 26 日）；其端到端 Auto Mode 绕过链正是分类器默认方案需要的第三方检验。"
+  },
+  "en.lb.ua": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "English edition of LB.ua, a Ukrainian news outlet; strong on Ukraine-relevant infrastructure and hybrid-war reporting. Cross-checked 2026-10-14 on the Bulgaria Starlink arson.",
+    "jp": "ウクライナの報道機関LB.uaの英語版。ウクライナに関わるインフラ・ハイブリッド戦の報道に強い。2026-10-14のブルガリアStarlink放火で突合済み。",
+    "zh": "乌克兰媒体 LB.ua 的英文版；在涉乌基础设施与混合战报道上较强。已在 2026-10-14 的保加利亚 Starlink 纵火案中交叉核验。"
   },
   "en.sedaily.com": {
     "cat": "news",
@@ -6834,6 +6922,15 @@
     "jp": "Wikidata/Commons ベースのロケ地オープンデータアトラス。方法論が明示（ステートメントとメンションの証拠を分離）で、CC0 の GeoJSON/CSV ダンプと読み取り専用 MCP エンドポイント付き。注意：ページ上の数値は HN 投稿タイトルより新しいためサイト基準で引用（15,565 地点 vs 「13,312 本」）。",
     "zh": "基于 Wikidata/Commons 的取景地开放数据地图集，方法论明确（声明与提及两类证据分开）、提供 CC0 GeoJSON/CSV 数据包与只读 MCP 端点。注意：页面数字比 HN 投稿标题更新（15,565 个地点 vs “13,312 部影视”）；以站点为准。"
   },
+  "mozilla.org": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Mozilla's own security advisory index (MFSA) — first-hand for Firefox/Thunderbird CVE lists and for the vendor's 2026 change to per-bug advisories. Cross-checked (10-14): MFSA 2026-106's CVE-2026-109705 entry (Networking use-after-free sandbox escape, fixed in Firefox 158 / ESR 153.5) matches the NVD record's description and affected-version data.",
+    "jp": "Mozilla自身のセキュリティアドバイザリ一覧（MFSA）——Firefox/Thunderbird の CVE 一覧と、2026年の「バグごとに1件」への方針変更の一次情報。突合済み（10-14）：MFSA 2026-106 の CVE-2026-109705（Networking の use-after-free によるサンドボックス脱出、Firefox 158 / ESR 153.5 で修正）は NVD レコードの説明および影響バージョンと一致。",
+    "zh": "Mozilla 官方安全公告索引（MFSA）——Firefox/Thunderbird CVE 清单及 2026 年“每 bug 一条”政策变更的一手来源。已交叉核验（10-14）：MFSA 2026-106 中 CVE-2026-109705（Networking 释放后使用导致沙箱逃逸，修复于 Firefox 158 / ESR 153.5）与 NVD 记录的描述及受影响版本一致。"
+  },
   "mrjjxw.com": {
     "cat": "news",
     "cred": "med",
@@ -7927,6 +8024,15 @@
     "en": "Security research/explainer site; detailed CVE write-ups with technical depth — verify exploitability claims against vendor advisories.",
     "jp": "セキュリティ研究/解説サイト。技術深度のあるCVE解説——悪用可能性の主張はベンダー勧告と照合を。",
     "zh": "安全研究与漏洞解析站点；技术深度较高的 CVE 分析——可利用性声明宜对照厂商公告核实。"
+  },
+  "pentagi.com": {
+    "cat": "security",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "PentAGI's project site (VXControl); landing page for the self-hosted autonomous pentest agent. Cross-checked 2026-10-15 against the GitHub README for scope, licensing and the 'authorized testing only' constraint.",
+    "jp": "PentAGIのプロジェクトサイト（VXControl）。セルフホスト型自律ペンテストエージェントのランディングページ。2026-10-15に範囲・ライセンス・「認可されたテスト専用」の制約をGitHub READMEと突合済み。",
+    "zh": "PentAGI 项目站点（VXControl）；自托管自主渗透测试 Agent 的落地页。已于 2026-10-15 就范围、许可与「仅供授权测试」的约束，与 GitHub README 交叉核验。"
   },
   "people.kernel.org": {
     "cat": "community",
@@ -9158,6 +9264,15 @@
     "jp": "Elastic Security Labs。深い脅威インテリ研究とマルウェア分析。",
     "zh": "Elastic 安全实验室；深入的威胁情报研究与恶意软件分析。"
   },
+  "security-tracker.debian.org": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Debian's official CVE tracker — the authoritative per-release vulnerable/fixed status and fixed source-package version for every CVE touching Debian, with the DSA reference. Distinct from debian.org (project news) and lists.debian.org (mailing lists); unlike a vendor advisory it states 'vulnerable' for releases it has not fixed. Cross-validated (10-14): its CVE-2026-39919 page (bookworm still vulnerable at 10.0.0~dfsg-11+deb12u8, trixie fixed in 10.05.1~dfsg-1+deb13u3 via DSA-6516-1) agrees with Ubuntu's independently-maintained page and with the upstream fix commit 0a8bf88e39db that both cite.",
+    "jp": "Debian 公式の CVE トラッカー——Debian に関わる全 CVE について、リリース別の vulnerable/fixed 状態と修正済みソースパッケージ版、DSA 参照を与える権威。debian.org（プロジェクトニュース）や lists.debian.org（メーリングリスト）とは別物で、ベンダーアドバイザリと違い未修正のリリースを明示的に「vulnerable」と書く。突合済み（10-14）：CVE-2026-39919 のページ（bookworm は 10.0.0~dfsg-11+deb12u8 のまま脆弱、trixie は DSA-6516-1 経由で 10.05.1~dfsg-1+deb13u3 で修正）は、独立に維持される Ubuntu のページおよび両者が参照する上流修正コミット 0a8bf88e39db と一致。",
+    "zh": "Debian 官方 CVE 追踪器——对涉及 Debian 的每个 CVE 给出按发行版划分的 vulnerable/fixed 状态、已修复的源码包版本以及 DSA 引用，具有权威性。它不同于 debian.org（项目新闻）与 lists.debian.org（邮件列表）；与厂商公告不同，它会明确把尚未修复的发行版标为 vulnerable。已交叉核验（10-14）：其 CVE-2026-39919 页面（bookworm 仍在 10.0.0~dfsg-11+deb12u8 上存在漏洞，trixie 经 DSA-6516-1 在 10.05.1~dfsg-1+deb13u3 中修复）与独立维护的 Ubuntu 页面以及双方都引用的上游修复提交 0a8bf88e39db 一致。"
+  },
   "security.apple.com": {
     "cat": "security",
     "cred": "high",
@@ -9437,6 +9552,15 @@
     "jp": "Vercelのエージェントスキルレジストリ——`npx skills`の裏にあるインストール数リーダーボード（自称『The Open Agent Skills Ecosystem』）。一次確認済み（10-14）：『Made with care by Vercel』フッター、稼働中リーダーボード（find-skillsは通算380万インストール、タブ合計1,307,338）、約20の対応エージェントバッジすべて掲載。突合：基盤リポジトリvercel-labs/skillsはGitHub APIで34.4k★ MIT稼働（項目の34,143★から+259ドリフト）。インストール数は自己申告テレメトリ——監査済みではない。",
     "zh": "Vercel 的智能体技能注册表——`npx skills` 背后的安装量排行榜（自称 'The Open Agent Skills Ecosystem'）。已一手核验（10-14）：'Made with care by Vercel' 页脚、实时排行榜（find-skills 累计 380 万安装、标签页合计 1,307,338）、约 20 个受支持智能体徽章均在页面。交叉核验：底层仓库 vercel-labs/skills 经 GitHub API 实测 34.4k★ MIT（条目的 34,143★ 已漂移 +259）。安装数为自报遥测——未经审计。"
   },
+  "skills.wheresryan.sh": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Author-run landing page and install instructions for the anatomy agent skill. Useful for the skill's own scope claims but vendor-self-published — cross-checked (10-14) against the wheresryan22/anatomy GitHub README, which links it and describes the same three output kinds (SVG, SVG+WebGL, 3D beta) and install paths.",
+    "jp": "anatomy エージェントスキルの作者運営ランディングページ兼インストール手順。スキル自身の範囲に関する主張には有用だが自己公表——10-14 に wheresryan22/anatomy の GitHub README と突合し、リンクと同一の3出力（SVG、SVG+WebGL、3D ベータ）およびインストール経路を確認。",
+    "zh": "anatomy 智能体技能的作者自营落地页与安装说明。对技能自身的范围主张有用，但属自我发布——10-14 与 wheresryan22/anatomy 的 GitHub README 交叉核验，二者互链并描述同样的三类产出（SVG、SVG+WebGL、3D 测试版）及安装路径。"
+  },
   "skillsllm.com": {
     "cat": "code",
     "cred": "low",
@@ -9454,6 +9578,15 @@
     "en": "Agent-skills marketplace directory listing skills across harnesses. Use to find repos, verify against the GitHub source. Cross-checked (08-26): Archify listing matches tt-a1i/archify repo.",
     "jp": "エージェントスキルのマーケットプレイスディレクトリ。リポジトリ発見に使用し、GitHub ソースで照合する。突合済み（08-26）：Archify の掲載は tt-a1i/archify リポジトリと一致。",
     "zh": "智能体技能市场目录，收录各类框架的技能。用于发现仓库，需对照 GitHub 源核实。已交叉核验（08-26）：Archify 条目与 tt-a1i/archify 仓库一致。"
+  },
+  "smallcultfollowing.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Niko Matsakis's personal blog (Rust language design). First-hand for language-design argument and unusually careful about its own limits; opinion rather than measurement, so numbers he quotes from others (e.g. Meta's first-party Rust volume) should be treated as second-hand. Cross-checked (10-14) via the Hacker News discussion of the same post.",
+    "jp": "Niko Matsakis（Rust の言語設計）の個人ブログ。言語設計の論旨は一次情報で、自らの限界について異例に慎重。ただし意見であり測定ではないため、他者から引用した数字（例：Meta のファーストパーティ Rust コード量）は二次情報として扱う。10-14 に同一記事の Hacker News ディスカッションで突合。",
+    "zh": "Niko Matsakis（Rust 语言设计）的个人博客。语言设计论证为一手，且对自身局限异常谨慎；但属观点而非测量，其中转引他人的数字（如 Meta 的第一方 Rust 代码量）应按二手处理。10-14 通过对同一博文的 Hacker News 讨论交叉核验。"
   },
   "socket.dev": {
     "cat": "security",
@@ -9948,6 +10081,15 @@
     "en": "Svelte's official site — primary for release announcements (SvelteKit 3: config-into-Vite, #lib alias, migration path); notably states what it does NOT claim (no perf numbers).",
     "jp": "Svelte公式サイト —— リリース発表の一次情報（SvelteKit 3：Viteへの設定統合、#libエイリアス、移行パス）。主張しないことも明記（性能数値なし）。",
     "zh": "Svelte 官网——发布公告的一手来源（SvelteKit 3：配置并入 Vite、#lib 别名、迁移路径）；且明示自己不主张什么（无性能数字）。"
+  },
+  "svt.se": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Sveriges Television, Sweden's public broadcaster; high-credibility Nordic news, useful as an independent check on tabloid-sourced claims. Cross-checked 2026-10-14 on the TV4 incident.",
+    "jp": "スウェーデン公共放送SVT。信頼度の高い北欧ニュースで、タブロイド発の主張を独立検証するのに有用。2026-10-14のTV4事案で突合済み。",
+    "zh": "瑞典公共广播公司 SVT；高可信度的北欧新闻，可用于独立核验小报来源的说法。已在 2026-10-14 的 TV4 事件中交叉核验。"
   },
   "swarmcha.se": {
     "cat": "research",
@@ -10820,6 +10962,15 @@
     "jp": "Turso公式ブログ。Limbo（Rust版SQLite）の深い技術記事の一次情報——ベンチマーク主張はリポジトリで確認を。",
     "zh": "Turso 官方博客；Limbo（Rust 版 SQLite）工程深度文章的一手来源——基准声明宜对照仓库核实。"
   },
+  "tv4.se": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Swedish broadcaster TV4's own site; primary for its statements. Cross-checked 2026-10-14: its 'technical breakdown' wording on The Challenge was reported identically by SVT and DN, and notably does NOT confirm the AI-agent attribution.",
+    "jp": "スウェーデン放送TV4の公式サイト。同社の声明における一次情報。2026-10-14に突合済み：The Challengeに関する「技術的障害」という表現はSVTとDNも同様に報じ、AIエージェント説は確認していない。",
+    "zh": "瑞典广播公司 TV4 官网；其官方声明的第一手来源。已于 2026-10-14 交叉核验：关于 The Challenge 的「技术故障」措辞被 SVT 与 DN 同样报道，且并未确认「AI Agent 所为」的归因。"
+  },
   "twcert.org.tw": {
     "cat": "security",
     "cred": "high",
@@ -10828,6 +10979,15 @@
     "en": "TWCERT/CC (Taiwan national CERT) advisories; authoritative for Taiwanese vendors — verified first-hand for CVE-2026-78211 (4MOSAn GCB Doctor).",
     "jp": "TWCERT/CC（台湾の国家CERT）アドバイザリ。台湾ベンダーに対して権威——CVE-2026-78211（4MOSAn GCB Doctor）を一次確認済み。",
     "zh": "TWCERT/CC（台湾国家级 CERT）公告；对台湾厂商具有权威性——已一手核实 CVE-2026-78211（4MOSAn GCB Doctor）。"
+  },
+  "typeof.net": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Belleve Invis's site, home of the Iosevka typeface; authoritative for variants and features but carries no changelog or news — release history must come from the GitHub repo. Checked 2026-10-14.",
+    "jp": "Belleve Invisのサイト、書体Iosevkaの本拠。バリアントと機能については権威だが変更履歴やニュースは無く、リリース履歴はGitHubリポジトリから取る必要がある。2026-10-14に確認。",
+    "zh": "Belleve Invis 的站点，Iosevka 字体的大本营；在变体与特性上是权威，但不带更新日志或新闻——发布历史必须来自 GitHub 仓库。已于 2026-10-14 核查。"
   },
   "typesafe.ai": {
     "cat": "vendor",
@@ -10854,15 +11014,6 @@
     "en": "Uber's engineering blog — primary postmortems with unusually honest self-limitation sections (retry storms, 09-17: retry budgets hold only to ~10% base error rate, ~2% incorrect unclaims). Cross-checked (09-18) against the HN thread; no independent reproduction exists of the mesh-wide numbers.",
     "jp": "Uber のエンジニアリングブログ。自己限定のセクションが異常に誠実な一次ポストモーテムを公開（リトライストーム、09-17：リトライ予算は基本エラー率約 10% までしか効かない等）。HN スレッドと突き合わせ済み（09-18）。メッシュ全体の数値の独立再現は存在しない。",
     "zh": "Uber 工程博客，第一方复盘且自带罕见诚实的自我限定章节（重试风暴，09-17：重试预算仅在基础错误率约 10% 内有效、约 2% 错误认领等）。已与 HN 讨论串交叉核验（09-18）；全网级数字无独立复现。"
-  },
-  "security-tracker.debian.org": {
-    "cat": "security",
-    "cred": "high",
-    "cv": 1,
-    "density": "high",
-    "en": "Debian's official CVE tracker — the authoritative per-release vulnerable/fixed status and fixed source-package version for every CVE touching Debian, with the DSA reference. Distinct from debian.org (project news) and lists.debian.org (mailing lists); unlike a vendor advisory it states 'vulnerable' for releases it has not fixed. Cross-validated (10-14): its CVE-2026-39919 page (bookworm still vulnerable at 10.0.0~dfsg-11+deb12u8, trixie fixed in 10.05.1~dfsg-1+deb13u3 via DSA-6516-1) agrees with Ubuntu's independently-maintained page and with the upstream fix commit 0a8bf88e39db that both cite.",
-    "jp": "Debian 公式の CVE トラッカー——Debian に関わる全 CVE について、リリース別の vulnerable/fixed 状態と修正済みソースパッケージ版、DSA 参照を与える権威。debian.org（プロジェクトニュース）や lists.debian.org（メーリングリスト）とは別物で、ベンダーアドバイザリと違い未修正のリリースを明示的に「vulnerable」と書く。突合済み（10-14）：CVE-2026-39919 のページ（bookworm は 10.0.0~dfsg-11+deb12u8 のまま脆弱、trixie は DSA-6516-1 経由で 10.05.1~dfsg-1+deb13u3 で修正）は、独立に維持される Ubuntu のページおよび両者が参照する上流修正コミット 0a8bf88e39db と一致。",
-    "zh": "Debian 官方 CVE 追踪器——对涉及 Debian 的每个 CVE 给出按发行版划分的 vulnerable/fixed 状态、已修复的源码包版本以及 DSA 引用，具有权威性。它不同于 debian.org（项目新闻）与 lists.debian.org（邮件列表）；与厂商公告不同，它会明确把尚未修复的发行版标为 vulnerable。已交叉核验（10-14）：其 CVE-2026-39919 页面（bookworm 仍在 10.0.0~dfsg-11+deb12u8 上存在漏洞，trixie 经 DSA-6516-1 在 10.05.1~dfsg-1+deb13u3 中修复）与独立维护的 Ubuntu 页面以及双方都引用的上游修复提交 0a8bf88e39db 一致。"
   },
   "ubuntu.com": {
     "cat": "vendor",
@@ -11761,50 +11912,5 @@
     "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
-  },
-  "mozilla.org": {
-    "cat": "security",
-    "cred": "high",
-    "cv": 1,
-    "density": "high",
-    "en": "Mozilla's own security advisory index (MFSA) — first-hand for Firefox/Thunderbird CVE lists and for the vendor's 2026 change to per-bug advisories. Cross-checked (10-14): MFSA 2026-106's CVE-2026-109705 entry (Networking use-after-free sandbox escape, fixed in Firefox 158 / ESR 153.5) matches the NVD record's description and affected-version data.",
-    "jp": "Mozilla自身のセキュリティアドバイザリ一覧（MFSA）——Firefox/Thunderbird の CVE 一覧と、2026年の「バグごとに1件」への方針変更の一次情報。突合済み（10-14）：MFSA 2026-106 の CVE-2026-109705（Networking の use-after-free によるサンドボックス脱出、Firefox 158 / ESR 153.5 で修正）は NVD レコードの説明および影響バージョンと一致。",
-    "zh": "Mozilla 官方安全公告索引（MFSA）——Firefox/Thunderbird CVE 清单及 2026 年“每 bug 一条”政策变更的一手来源。已交叉核验（10-14）：MFSA 2026-106 中 CVE-2026-109705（Networking 释放后使用导致沙箱逃逸，修复于 Firefox 158 / ESR 153.5）与 NVD 记录的描述及受影响版本一致。"
-  },
-  "ai-security-letter.org": {
-    "cat": "community",
-    "cred": "high",
-    "cv": 2,
-    "density": "med",
-    "en": "Primary host of the October 2026 open letter on AI and cybersecurity signed by hundreds of scientists. High value as a primary artifact (signatories listed with affiliations, recommendations quoted verbatim), but the signatory count is a live, unauthenticated number — cross-checked (10-14) against The Decoder and other outlets, which reported 406/415/350/260/220 while the page itself read 420.",
-    "jp": "科学者数百名が署名した2026年10月の AI とサイバーセキュリティに関する公開書簡の一次ホスト。一次資料として価値が高い（署名者は所属付きで列挙、提言は原文どおり）。ただし署名数は生きた未認証の数字である——10-14 に The Decoder ほかと突合したところ、報道は 406/415/350/260/220、ページ自体は 420 と表示していた。",
-    "zh": "数百位科学家签署的《2026 年 10 月 AI 与网络安全公开信》的一手托管页。作为一手文件价值高（署名者附机构逐一列出、建议为原文），但签名数是实时且未经认证的——10-14 与 The Decoder 等媒体交叉核验：报道为 406/415/350/260/220，而页面本身显示 420。"
-  },
-  "skills.wheresryan.sh": {
-    "cat": "code",
-    "cred": "med",
-    "cv": 1,
-    "density": "med",
-    "en": "Author-run landing page and install instructions for the anatomy agent skill. Useful for the skill's own scope claims but vendor-self-published — cross-checked (10-14) against the wheresryan22/anatomy GitHub README, which links it and describes the same three output kinds (SVG, SVG+WebGL, 3D beta) and install paths.",
-    "jp": "anatomy エージェントスキルの作者運営ランディングページ兼インストール手順。スキル自身の範囲に関する主張には有用だが自己公表——10-14 に wheresryan22/anatomy の GitHub README と突合し、リンクと同一の3出力（SVG、SVG+WebGL、3D ベータ）およびインストール経路を確認。",
-    "zh": "anatomy 智能体技能的作者自营落地页与安装说明。对技能自身的范围主张有用，但属自我发布——10-14 与 wheresryan22/anatomy 的 GitHub README 交叉核验，二者互链并描述同样的三类产出（SVG、SVG+WebGL、3D 测试版）及安装路径。"
-  },
-  "docs.ag-ui.com": {
-    "cat": "code",
-    "cred": "med",
-    "cv": 1,
-    "density": "med",
-    "en": "Documentation for the AG-UI agent-user-interaction protocol. Adequate for protocol mechanics but project-self-published and thin on independent evaluation — cross-checked (10-14) via the CopilotKit/OpenDots README, which states that template is built on AG-UI.",
-    "jp": "AG-UI エージェント・ユーザー相互作用プロトコルのドキュメント。プロトコルの仕組みには十分だがプロジェクト自身の公開物で、独立した評価は薄い——10-14 に CopilotKit/OpenDots の README（同テンプレートが AG-UI 上に構築されていると明記）で突合。",
-    "zh": "AG-UI 智能体—用户交互协议的文档。说明协议机制足够，但属项目自我发布、缺少独立评估——10-14 通过 CopilotKit/OpenDots 的 README（明确说明该模板构建于 AG-UI 之上）交叉核验。"
-  },
-  "smallcultfollowing.com": {
-    "cat": "community",
-    "cred": "high",
-    "cv": 1,
-    "density": "high",
-    "en": "Niko Matsakis's personal blog (Rust language design). First-hand for language-design argument and unusually careful about its own limits; opinion rather than measurement, so numbers he quotes from others (e.g. Meta's first-party Rust volume) should be treated as second-hand. Cross-checked (10-14) via the Hacker News discussion of the same post.",
-    "jp": "Niko Matsakis（Rust の言語設計）の個人ブログ。言語設計の論旨は一次情報で、自らの限界について異例に慎重。ただし意見であり測定ではないため、他者から引用した数字（例：Meta のファーストパーティ Rust コード量）は二次情報として扱う。10-14 に同一記事の Hacker News ディスカッションで突合。",
-    "zh": "Niko Matsakis（Rust 语言设计）的个人博客。语言设计论证为一手，且对自身局限异常谨慎；但属观点而非测量，其中转引他人的数字（如 Meta 的第一方 Rust 代码量）应按二手处理。10-14 通过对同一博文的 Hacker News 讨论交叉核验。"
   }
 }
