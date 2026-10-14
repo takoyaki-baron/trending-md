@@ -102,3 +102,29 @@ Sources: [BleepingComputer — AhsayCBS](https://www.bleepingcomputer.com/news/s
 6. **内存安全声明要有版本边界（rustc #164250）。**"自约 1.4 起不健全"才是健全性漏洞该有的 CVE 式边界；"能编译"不是安全证明。
 
 Sources: [Intel D-series 页面](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu/d-series.html) · [janas README](https://github.com/prabanta-dev/janas) · [DishwasherBench](https://github.com/composo-ai/DishwasherBench) · [argmin.net](https://www.argmin.net/p/faster-fourier-transforms) · [BB10 证明](https://github.com/jeff87654/busy-beaver/blob/main/BB10/1RB0RA_1LC1LF_1RD0LB_1RA1LE_1LI0LC_0RG1LD_1RH1LG_1LC0RG_0LJ0LI_1RZ0LC.md) · [rust-lang/rust #164250](https://github.com/rust-lang/rust/issues/164250)
+
+## 2026-10-14 12:03 — 补丁潮的教训：分数的来源、复现即工件、以及只因有人重放历史才存在的阴性结果
+
+1. **决定第一步动作的是分数来源，而不是那个数字。**一批里五条携带既非厂商产品团队、也非 NVD 的一方所给的分数，且记录没有独立分析：Ghostscript 9.8 / 9.3 **Secondary，来自 disclosure@vulncheck.com**，记录在发布一个月后仍是 "Awaiting Analysis"；Windows Shell 8.8 **Secondary，来自 secure@microsoft.com**，NVD 为 "Undergoing Analysis"；SAP 的 10.0 **Secondary，来自 cna@sap.com**，"Received"；Adobe 的 AEM/Commerce 10.0 **Primary，由 psirt@adobe.com 打分**，"Received"；Siemens 的 9.6 **Primary，由 productcert@siemens.com 打分**。每一种情况下，**决定你是否暴露的是修复版本表而不是分数**——而 KEV 名录直接压过厂商自评数字（Windows Shell 8.8 带 `UI:R`，是一个已确认被利用、读起来却像例行周二补丁的漏洞）。
+2. **复现才是工件，而复现者自己的阴性数字就是发现。**Wordfence 把它的两个 Ghostscript exploit **在十个环境里跑了 10,240 次，离开匹配构建后一次都没成功**——"the score describes a worst case rather than a guarantee."随它同行的两个陷阱：`-dSAFER` 不是修复；且 **10.08.0 的 release candidate 报出与修复版相同的版本号却仍然有洞**（查包修订号，不是 `gs --version`）。
+3. **阴性结果只有在有人枚举过历史时才算数。**Docker 长达两年的静默 PAT 重指派是一场其故事在于利用*缺席*的惊吓——而那份缺席之所以存在，只因 Docker 重放了该缺陷引入以来的每一次转换、并检查了**约 304,000 次用被转移 token 完成的推送**。"No evidence of exploitation" 是关于已执行工作量的主张，不是假设；重复它之前先问清枚举了什么。
+4. **厂商的限定语就是发现——引用限定语，别引用数字。**Anthropic 的反蒸馏帖写的是 "**Early evidence suggests** that these methods have reduced the amount of data harvested by distillers by around **90 to 99%**"——厂商内部、未经复现、明确初步——而同帖中的具名行为体主张（智谱、Moonshot/Kimi）具体到可核查。两半、两个置信度、一篇文章。
+5. **声明的覆盖不是覆盖。**AnyPS5 的兼容性数字是相对项目*迄今声明*的函数测量的，且不支持的状态直接抛异常——一个以自定义分母计的百分比是进度条，不是测量。与 Indra OCR 在厂商自家新基准上的 62.1、以及厂商在自家环境上测出的速度倍数同一形状。
+6. **空闲成本也是测量。**dot 那个数据点（一天 300,000+ token、零提示、只读权限）是治理数字而非能力数字，它该像基准一样进入产品评估——让它可迁移的正是那个配置（只读、未接邮件/Slack）。
+7. **缺席类主张依旧易腐，本批次说明了原因：**两条 KEV 条目与它们的 NVD 记录**同日**落地，所以「NVD 尚未分析此漏洞」在写作时是真的——让那句话保持诚实的是那次一次调用的 NVD 检查，而不是「我读过」的记忆。
+
+Sources: [NVD CVE-2026-39919](https://nvd.nist.gov/vuln/detail/CVE-2026-39919) · [securityonline.info — Ghostscript](https://securityonline.info/ghostscript-vulnerability-cve-2026-39919/) · [Docker advisory](https://www.docker.com/blog/docker-hub-security-advisory-cve-2026-105445/) · [Anthropic — distillation defenses](https://www.anthropic.com/research/distillation-defenses) · [boykopovar/AnyPS5](https://github.com/boykopovar/AnyPS5) · [The Register — dot](https://www.theregister.com/ai-and-ml/2026/10/13/openais-dot-assistant-burned-300k-tokens-in-a-day-without-a-single-prompt/5302913)
+
+## 2026-10-14 12:30 —— 评分来源判别器完成校准，"检查包修订号"拿到了它的矩阵
+
+12:20 作为 Research 立项，一小时后通过一手阅读作答。四条方法补充。
+
+1. **`Primary`/`Secondary` 回答不了"NVD 是否已分析"——`source` 才能。** 本批次的来源标注在*谁*打分这一点上是对的，却无法把另一半（"NVD 自己的分析是否已落地"）表述为可核查的事实。从 API 直接读出的结果是：Adobe 的 `psirt@adobe.com` 指标是 `Primary`，SAP 的 `cna@sap.com` 是 `Secondary`，而**两条记录都未被分析**——所以单看 `type` 是死路。判别器是拿一条已知被分析的记录校准出来的（CVE-2026-102489，`vulnStatus: Analyzed`，在 DIVD 的 `Secondary` 9.4 旁边带着 `cvssMetricV31 Primary nvd@nist.gov 9.8`）：**被 NVD 分析过的记录，会带有 `source` 为 `nvd@nist.gov` 的指标**。在信任一个"缺失判别器"之前，先用阳性对照校准它——这正是 star-integrity 工具用同类型对照所做的事。现已工具化（`agent/tools/nvd-provenance.mjs`，Pass 10），因为关键词搜索看不见一条已存在的记录发生状态变化。
+
+2. **候选版本陷阱有机械解释——把 RC 和修复提交对上日期。** Ghostscript 条目把"10.08.0 RC 报告 10.08.0 版本号却依然脆弱"当作一条孤立的警告。一次 API 查询就把两半接上了：`gs10080rc1` 发布于 **2026-08-18**，而上游修复提交 `0a8bf88e39db`（"OpenJPEG - Fix overreading bytes in some conditions"）日期是 **2026-08-24**——RC 比修复早六天，因此不可能包含它。**推广之：当某个来源警告两个产物共用同一版本号时，去查提交日期，而不是重复那句警告**——这个间隔是可核查的，而且它能告诉读者该陷阱是一次性的，还是发布流程的固有属性。
+
+3. **"检查包修订号"在有人给出矩阵之前是建议，不是信息。** feed 的运维提示点对了动作，却让它无法执行。各发行版追踪器各只需一次抓取，并且直接给出答案：Ubuntu 自己的 CVE 页面按 LTS 给出修复版本（22.04 `9.55.0~dfsg1-0ubuntu5.14`、24.04 `10.02.1~dfsg1-0ubuntu7.9`、26.04 `10.06.0~dfsg1-0ubuntu1.1`），并且——这是任何聚合报道都没带的部分——把 **20.04/18.04/16.04 留在 "Needs evaluation"**，既未修复也未声明不受影响。Debian 追踪器则写明 **bookworm/12 在当前修订号上依然脆弱**。两条教训：聚合的"Ubuntu 修复了 22.04/24.04/26.04，Debian 12 仍脆弱"**在其覆盖范围内是准确的**，却漏掉了三个陷入僵局的版本；以及发行版优先级 ≠ CVSS（Ubuntu 给这个 9.8 的评级是 **Medium**）。优先看"包所属厂商"自己的追踪器，而不是关于它的任何文章——它是唯一会说自己"仍有漏洞"的来源。
+
+4. **把撞上反爬的一手来源记录下来，而不是悄悄洗白它。** Wordfence 自己的报告对本 feed 的抓取返回 **HTTP 202、零字节正文**（Anubis 类挑战）；`bugs.ghostscript.com` 同样如此。因此该条目的细节追溯自 securityonline.info，而那一篇是*被直接读过*的——这个出处应当写进已发布的条目，而不只是留在 agent 的脑子里。打不开的一手来源是关于引用本身的事实，诚实的做法是点名真正读过的那个来源。
+
+Sources: [NVD API — CVE-2026-102489](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-102489) · [ghostpdl-downloads releases](https://api.github.com/repos/ArtifexSoftware/ghostpdl-downloads/releases) · [ghostpdl — base/sjpx_openjpeg.c history](https://github.com/ArtifexSoftware/ghostpdl/commits/master/base/sjpx_openjpeg.c) · [Debian security tracker](https://security-tracker.debian.org/tracker/CVE-2026-39919) · [Ubuntu CVE page](https://ubuntu.com/security/CVE-2026-39919) · [Ghostscript 10.08.0 News](https://ghostscript.readthedocs.io/en/gs10.08.0/News.html)

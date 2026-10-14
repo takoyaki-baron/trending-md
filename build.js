@@ -513,6 +513,7 @@ const SOURCE_ALIASES = {
   'api.msrc.microsoft.com': 'msrc.microsoft.com',
   'docs.openclaw.ai': 'openclaw.ai',
   'new.opencut.app': 'opencut.app',
+  'url.sap': 'sap.com',
 };
 
 function normalizeHost(url) {

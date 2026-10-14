@@ -206,6 +206,15 @@
     "jp": "WordPress プラグイン Admin Menu Editor Pro のベンダーサイト——9月14日の侵害時には一次情報のインシデント勧告を掲載。現在は意図的にオフライン（再構築中）。",
     "zh": "WordPress 插件 Admin Menu Editor Pro 的厂商站点——9月14日入侵事件期间承载第一手事件公告；目前按计划下线（重建中）。"
   },
+  "adobe.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 2,
+    "en": "Adobe's trust centre — first-party security bulletins (APSB*) whose fixed-version tables are more actionable than the CNA-assigned CVSS. Cross-checked (10-14): APSB26-144's CVEs, vectors and fixed versions (2025.0.14 / 2023.0.26) match the NVD records.",
+    "zh": "Adobe 信任中心——第一方安全公告（APSB*），其修复版本表比 CNA 自评的 CVSS 更可操作。交叉核验（10-14）：APSB26-144 的 CVE、向量与修复版本（2025.0.14 / 2023.0.26）与 NVD 记录一致。",
+    "jp": "Adobe のトラストセンター——一次情報のセキュリティ速報（APSB*）。修正バージョン表は CNA 採点の CVSS より実用的。相互検証（10-14）：APSB26-144 の CVE・ベクタ・修正版（2025.0.14 / 2023.0.26）は NVD レコードと一致。"
+  },
   "agent37.com": {
     "cat": "vendor",
     "cred": "med",
@@ -771,6 +780,15 @@
     "jp": "深い技術ジャーナリズム。チップ・OS・AI基盤の長文記事に信頼性。",
     "zh": "深度技术媒体；对芯片、系统与 AI 基础设施的长篇报道可靠。"
   },
+  "artcraft.storytold.com": {
+    "cat": "code",
+    "cred": "med",
+    "density": "low",
+    "cv": 1,
+    "en": "The ArtCraft suite's own site — the project catalogue, now auditable against the thirteen repositories named by craft-launcher. Cross-checked (10-14): the listed applications match the launcher's catalogue.",
+    "zh": "ArtCraft 套件自建站点——项目目录，如今可与 craft-launcher 列出的十三个仓库对照审计。交叉核验（10-14）：所列应用与启动器的目录一致。",
+    "jp": "ArtCraft スイートの公式サイト——プロジェクトカタログ。craft-launcher が挙げる 13 リポジトリと突き合わせて検証できる。相互検証（10-14）：掲載アプリはランチャーのカタログと一致。"
+  },
   "artificialanalysis.ai": {
     "cat": "data",
     "cred": "high",
@@ -959,6 +977,15 @@
     "en": "Ayman Nadeem's personal blog — primary source for the \"Plan mode is dead\" post-mortem of his own planning-centric app Nuanced (first-person failure report; the author is the authority on his own product's outcome). Corroborated by the 162-pt HN discussion (09-26).",
     "jp": "Ayman Nadeem の個人ブログ——自身のプランニング志向アプリ Nuanced の「Plan mode is dead」検証の一次情報（本人による失敗報告；自分の製品の帰結についての権威は本人）。162-pt の HN 議論と裏付け（09-26）。",
     "zh": "Ayman Nadeem 的个人博客——其规划优先应用 Nuanced 的〈Plan mode is dead〉自我检讨的一手来源（第一人称失败报告；关于自己产品的结局作者即权威）。有 162 分 HN 讨论互证（09-26）。"
+  },
+  "azure.microsoft.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Microsoft's Azure engineering blog — architecture deep dives behind its own silicon and platform announcements. Cross-checked (10-14): the Maia 300 post matches news.microsoft.com's announcement while adding package/fabric detail independently reported elsewhere.",
+    "zh": "微软 Azure 工程博客——自家芯片与平台公告背后的架构深潜。交叉核验（10-14）：Maia 300 一文与 news.microsoft.com 的公告一致，并补充了第三方独立报道的封装/互连细节。",
+    "jp": "Microsoft の Azure エンジニアリングブログ——自社シリコン／プラットフォーム発表の背景にあるアーキテクチャ解説。相互検証（10-14）：Maia 300 の記事は news.microsoft.com の発表と一致し、独立報道されたパッケージ／ファブリックの詳細を補う。"
   },
   "babyloniantwins.com": {
     "cat": "community",
@@ -1765,6 +1792,15 @@
     "jp": "Fernando Borretti の個人ブログ（Rust/コンパイラ論考、Austral 作者）。クロスチェック済み（10-10）：『No Man Is an Island』を全文取得、引用は本文と一致。個人エッセイ源——論証であり報道ではない。",
     "zh": "Fernando Borretti 的个人博客（Rust/编译器长文，Austral 作者）。交叉核验（10-10）：全文抓取了《No Man Is an Island》，引用与其原文一致。个人随笔来源——是论证而非报道。"
   },
+  "boykopovar.github.io": {
+    "cat": "code",
+    "cred": "med",
+    "density": "low",
+    "cv": 1,
+    "en": "A GitHub Pages project site (AnyPS5's web converter) — the project's own front end: useful for state, not an independent source. Cross-checked (10-14): its scope matches the repository's README and issue tracker.",
+    "zh": "GitHub Pages 项目站点（AnyPS5 的网页转换器）——项目自建前端：可用于了解状态，但不是独立来源。交叉核验（10-14）：其范围与仓库 README 及 issue 跟踪一致。",
+    "jp": "GitHub Pages のプロジェクトサイト（AnyPS5 の Web コンバータ）——プロジェクト自身のフロントエンド。状態把握には有用だが独立ソースではない。相互検証（10-14）：範囲はリポジトリの README と issue と一致。"
+  },
   "brand.io": {
     "cat": "other",
     "cred": "med",
@@ -2006,6 +2042,15 @@
     "en": "Censys internet-scanning intelligence; first-hand exposure telemetry for CVEs (exposed-instance counts) — authoritative on scan data, cross-check exploit detail against vendor/PoC.",
     "jp": "Censysのインターネットスキャンインテリジェンス。CVEの露出テレメトリ（露出インスタンス数）の一次情報——スキャンデータは権威、悪用の詳細はベンダー/PoCと突合を。",
     "zh": "Censys 互联网扫描情报；CVE 暴露面遥测（暴露实例数）的一手来源——扫描数据权威，利用细节建议与厂商/PoC 交叉核对。"
+  },
+  "cert-portal.siemens.com": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Siemens ProductCERT's advisory portal — first-party ICS advisories (SSA-*) whose per-product affected/fix columns matter more than the score. Cross-checked (10-14): SSA-591731's eight CVEs, vectors and 'currently no fix is available' status match the NVD records.",
+    "zh": "西门子 ProductCERT 公告门户——第一方 ICS 公告（SSA-*），其按产品列出的受影响/修复状态比评分更重要。交叉核验（10-14）：SSA-591731 的八个 CVE、向量与“目前无可用修复”状态与 NVD 记录一致。",
+    "jp": "Siemens ProductCERT のアドバイザリポータル——一次情報の ICS アドバイザリ（SSA-*）。製品別の影響／修正欄がスコアより重要。相互検証（10-14）：SSA-591731 の 8 件の CVE、ベクタ、「現在修正版なし」の状態は NVD レコードと一致。"
   },
   "cert.europa.eu": {
     "cat": "security",
@@ -2816,6 +2861,15 @@
     "jp": "データセンター業界の老舗B2Bメディア（InfraXmedia傘下）。長文報道が強みだがベンダー寄りの面もあり、一次情報と照合を。",
     "zh": "数据中心行业老牌B2B媒体（InfraXmedia旗下），以深度报道见长但受厂商影响，请对照一手来源核实。"
   },
+  "datalab.to": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Datalab's blog — the vendor's own model releases and benchmarks (Indra OCR, marker), so numbers are vendor-run. Cross-checked (10-14): the Indra OCR claims are consistent between this post and the Hugging Face model card, including the printed limitations.",
+    "zh": "Datalab 博客——厂商自家的模型发布与基准（Indra OCR、marker），数字由厂商自测。交叉核验（10-14）：Indra OCR 的主张在该文与 Hugging Face 模型卡之间一致，包括其列出的局限。",
+    "jp": "Datalab のブログ——自社モデル公開とベンチマーク（Indra OCR、marker）。数値はベンダー実測。相互検証（10-14）：Indra OCR の主張は本記事と Hugging Face モデルカードで一致し、明記された限界も共通。"
+  },
   "datasette.io": {
     "cat": "code",
     "cred": "med",
@@ -3211,6 +3265,15 @@
     "jp": "DistroWatch——Linuxディストロのトラッカー；ディストロの可用性/評価（Omarchy）に有用。二次/コミュニティシグナルであり、技術的主張の一次情報源ではない。basecamp/omarchyリポジトリと突合済み（08-20）。",
     "zh": "DistroWatch——Linux 发行版追踪站；对发行版可用性/评分（Omarchy）有用。属二手/社区信号，非技术论断的一手来源。已与 basecamp/omarchy 仓库交叉核验（08-20）。"
   },
+  "docker.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Docker's blog and advisories — first-party incident disclosure from the registry vendor, including the enumeration work behind negative findings. Cross-checked (10-14): the CVE-2026-105445 timeline (2024-08-26 exposure start to the Sep 30 fix) matches GhostPat's independent write-up and the NVD record.",
+    "zh": "Docker 博客与公告——注册表厂商的第一方事件披露，包括支撑“未发现利用”结论的枚举工作。交叉核验（10-14）：CVE-2026-105445 的时间线（2024-08-26 暴露起点至 9 月 30 日修复）与 GhostPat 的独立撰文及 NVD 记录一致。",
+    "jp": "Docker のブログとアドバイザリ——レジストリ事業者による一次情報のインシデント開示。否定的結論を支えた全件調査も含む。相互検証（10-14）：CVE-2026-105445 の時系列（2024-08-26 の露出開始〜9月30日の修正）は GhostPat の独立記事と NVD レコードに一致。"
+  },
   "docs.bigmodel.cn": {
     "cat": "vendor",
     "cred": "high",
@@ -3336,6 +3399,15 @@
     "en": "Official N-able product documentation; fetched 09-16, the HF4 release notes confirm CVE-2026-86218 (pre-auth RCE) and build 2026.3.1.14, though the page renders a stale 'page no longer exists' banner above the live content. Strongly cross-validated against the CISA KEV catalog: CVE-2026-86218, N-able N-central, static code injection (CWE-96), added 2026-09-08, due 2026-09-11, forensic triage required.",
     "jp": "N-able の公式製品ドキュメント。09-16 に取得を検証し、HF4 リリースノートで CVE-2026-86218（pre-auth RCE）と build 2026.3.1.14 を確認。本文の上に古い「ページが存在しません」バナーが表示される点に注意。CISA KEV カタログと強く交叉検証済み：CVE-2026-86218、N-able N-central、静的コード注入（CWE-96）、2026-09-08 掲載、期限 2026-09-11、フォレンジック・トリアージ要求あり。",
     "zh": "N-able 官方产品文档，09-16 实际抓取：HF4 发行说明确认 CVE-2026-86218（预认证 RCE）及 build 2026.3.1.14；注意页面在正文上方渲染了一个过期的\"页面不存在\"横幅。已与 CISA KEV 目录强交叉验证：CVE-2026-86218、N-able N-central、静态代码注入（CWE-96）、2026-09-08 收录、截止 2026-09-11、要求取证排查。"
+  },
+  "dogwood-policy.github.io": {
+    "cat": "code",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "The Dogwood policy language's documentation site — the spec behind Strands Box's permit/forbid semantics. Cross-checked (10-14): its default-deny semantics match the box repository's README.",
+    "zh": "Dogwood 策略语言的文档站点——Strands Box 的 permit/forbid 语义背后的规范。交叉核验（10-14）：其默认拒绝语义与 box 仓库 README 一致。",
+    "jp": "Dogwood ポリシー言語のドキュメントサイト——Strands Box の permit/forbid セマンティクスを支える仕様。相互検証（10-14）：デフォルト拒否のセマンティクスは box リポジトリの README と一致。"
   },
   "dolthub.com": {
     "cat": "vendor",
@@ -4298,6 +4370,15 @@
     "jp": "gentic.news——AI/開発ツールの紹介記事。Reticle の記事は reticlehq/reticle リポジトリの二次紹介（共引用）。",
     "zh": "gentic.news——AI/开发工具评测；其 Reticle 文章是对 reticlehq/reticle 仓库的二次报道（共同引用）。"
   },
+  "geordie.ai": {
+    "cat": "vendor",
+    "cred": "low",
+    "density": "med",
+    "cv": 1,
+    "en": "Geordie — an AI-governance vendor whose published test of OpenAI's dot agent is the origin of the 300k-token idle figure; an interested party, so read it as a vendor-run measurement. Cross-checked (10-14): the configuration (read-only, no email/Slack) is stated in The Register's independent write-up.",
+    "zh": "Geordie——AI 治理厂商，其公布的 OpenAI dot 智能体测试是“闲置消耗 30 万 token”数字的出处；属利益相关方，应按厂商自测解读。交叉核验（10-14）：其配置（只读、未接入邮箱/Slack）在《The Register》的独立报道中亦有陈述。",
+    "jp": "Geordie——AI ガバナンス企業。OpenAI の dot エージェントに関する公表テストが「アイドルで 30 万トークン」の出所。利害関係者でありベンダー実測として読む。相互検証（10-14）：構成（読み取り専用、メール/Slack 非接続）は The Register の独立記事にも記載。"
+  },
   "getsimpledirect.com": {
     "cat": "vendor",
     "cred": "med",
@@ -4315,6 +4396,15 @@
     "en": "GE Vernova Hitachi press room — authoritative about its own announcements (BWRX-300 NRC construction permit, Sep 29); regulatory milestone corroborated by independent HN front-page coverage; press releases are announcements, not analysis.",
     "jp": "GE Vernova のプレスルーム——自社発表については一次情報（BWRX-300 の NRC 建設許可、09-29）。規制上のマイルストーンは独立した HN トップページ報道とも整合。プレスリリースは告知であり分析ではない。",
     "zh": "GE Vernova（日立 GE Vernova）新闻室——对自身发布具权威性（BWRX-300 的 NRC 建造许可，09-29）；监管里程碑有独立的 HN 头版报道佐证；新闻稿是公告，不是分析。"
+  },
+  "ghostpat.com": {
+    "cat": "community",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "GhostPat — an independent write-up site for the Docker Hub PAT-reassignment flaw; researcher-side narrative, so read its framing as advocacy. Cross-checked (10-14): mechanism and dates agree with Docker's own advisory.",
+    "zh": "GhostPat——Docker Hub PAT 重分配漏洞的独立撰文站点；属研究者立场叙事，其表述应按主张看待。交叉核验（10-14）：机制与时间线与 Docker 官方公告一致。",
+    "jp": "GhostPat——Docker Hub の PAT 再割当て脆弱性に関する独立系記事サイト。研究者側の主張として読むべき。相互検証（10-14）：仕組みと日付は Docker 公式アドバイザリと一致。"
   },
   "ghuntley.com": {
     "cat": "community",
@@ -6339,6 +6429,15 @@
     "jp": "インディーストリート拡張（Weedout）の GitHub Pages ランディング — ベンダー自己記述のため主張は著者自身のものとして扱う。範囲の自白（「無ラベルのスロップは範囲外」）は HN 議論と一致。",
     "zh": "独立浏览器扩展（Weedout）的 GitHub Pages 落地页——属厂商自述，声明应视为作者自述；其范围自白（“未标注的垃圾内容不在范围内”）与 HN 讨论一致。"
   },
+  "mastodon.sdf.org": {
+    "cat": "community",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "A long-running Mastodon instance (SDF) — home of the NetBSD project's own account, so posts there are first-party announcements reached through a third-party host. Cross-checked (10-14): the September donations post matches the project's own donations page.",
+    "zh": "长期运行的 Mastodon 实例（SDF）——NetBSD 项目官方账号所在地，因此该实例上的帖子是经由第三方主机发布的第一方公告。交叉核验（10-14）：9 月捐款帖子与项目官方捐款页面一致。",
+    "jp": "長寿の Mastodon インスタンス（SDF）。NetBSD プロジェクト公式アカウントの拠点であり、同インスタンスの投稿は第三者ホスト経由の一次発表。相互検証（10-14）：9月の寄付投稿はプロジェクト公式の寄付ページと一致。"
+  },
   "mathandai.org": {
     "cat": "research",
     "cred": "high",
@@ -6950,6 +7049,15 @@
     "jp": "Andrew Nesbitt の個人ブログ。依存関係とパッケージ管理が主题——慎重な単独著者のエッセイで、論証は意図的に意見先行。",
     "zh": "Andrew Nesbitt 的个人博客，专注依赖与包管理——严谨的单作者论述；论证天然偏观点先行。"
   },
+  "netbsd.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "The NetBSD project's own site — canonical for release notes, policies and the donations totals behind the AI-free funding story. Cross-checked (10-14): the donations page and the project's Mastodon post agree on the figures.",
+    "zh": "NetBSD 项目自建站点——发布说明、政策与捐款总额的权威来源（AI 立场筹款故事的依据）。交叉核验（10-14）：捐款页面与项目 Mastodon 帖子的数字一致。",
+    "jp": "NetBSD プロジェクトの公式サイト——リリースノート、方針、寄付総額の正典（AI 非使用方針の資金調達記事の根拠）。相互検証（10-14）：寄付ページとプロジェクトの Mastodon 投稿の数値は一致。"
+  },
   "netlify.com": {
     "cat": "vendor",
     "cred": "high",
@@ -7011,6 +7119,15 @@
     "en": "LavX's tech news aggregator that curates and rewrites industry coverage while promoting its own developer tools; secondary source, confirm against original outlets.",
     "jp": "LavX運営のテックニュースアグリゲーター。他媒体の報道を再編集し自社開発ツールも宣伝する二次情報源、元記事で確認を。",
     "zh": "LavX 旗下科技新闻聚合站，转载改写行业报道并推广自家开发工具，属二手来源，需对照原始媒体核实。"
+  },
+  "news.microsoft.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Microsoft's corporate newsroom — first-party product and silicon announcements, including claims measured against unnamed baselines. Cross-checked (10-14): Maia 300's 7x rack-throughput and 40%-per-megawatt figures appear here first; third-party architecture reporting supplied the specs Microsoft omitted.",
+    "zh": "微软企业新闻室——第一方产品与芯片公告，其中包含以未具名基线测得的指标。交叉核验（10-14）：Maia 300 的 7 倍机架吞吐与每兆瓦 +40% token 数字首先出现在此；第三方架构报道补上了微软未披露的规格。",
+    "jp": "Microsoft のコーポレートニュースルーム——一次情報の製品・シリコン発表。名称非公開のベースラインに対する数値を含む。相互検証（10-14）：Maia 300 の 7 倍ラックスループットと 1MW あたり 40% 増はここが初出。第三者のアーキテクチャ報道が非開示の仕様を補った。"
   },
   "news.mit.edu": {
     "cat": "news",
@@ -7245,6 +7362,15 @@
     "en": "NIST National Vulnerability Database — the canonical CVE severity/affected-versions reference; authoritative, cross-check vendor writeups against it.",
     "jp": "NIST National Vulnerability Database（NVD）——CVEの深刻度・影響範囲の正典リファレンス。ベンダー解説はこれと突合を。",
     "zh": "NIST 国家漏洞库（NVD）——CVE 严重度与受影响版本的权威参考；厂商分析应以它为准核对。"
+  },
+  "nvidia.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "NVIDIA's corporate site — product and programme pages (MGX, OCP contributions) backing its blog announcements. Cross-checked (10-14): the MGX material matches the developer-blog post on the Vera Rubin OCP contribution.",
+    "zh": "NVIDIA 企业站点——支撑其博客公告的产品与项目页面（MGX、OCP 贡献）。交叉核验（10-14）：MGX 材料与关于 Vera Rubin 向 OCP 贡献的开发者博客文章一致。",
+    "jp": "NVIDIA のコーポレートサイト——ブログ発表を裏付ける製品・プログラムページ（MGX、OCP への貢献）。相互検証（10-14）：MGX の内容は Vera Rubin の OCP 貢献に関する開発者ブログと一致。"
   },
   "nvidia.github.io": {
     "cat": "research",
@@ -8888,6 +9014,15 @@
     "jp": "Sansec（ノルウェーのECセキュリティベンダー）の脅威調査ブログ。StyleSmuggler Magento ゼロデイの発見者による一次開示で、タイムラインと IOC が詳細。自社事例については権威あるが、緩和策（Shield ルール）を販売する立場でもある。The Hacker News の独立報道（Disrex による2store侵入確認を含む）と相互検証済み。",
     "zh": "Sansec（挪威电商安全厂商）的威胁研究博客——StyleSmuggler Magento 零日漏洞的发现者一手披露，时间线与 IOC 详尽；对其自身事件具权威性，但它同时兜售缓解方案（Shield 规则）。与 The Hacker News 的独立报道交叉验证（含 Disrex 确认的两家被入侵商店）。"
   },
+  "sap.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "SAP's corporate domain (including the url.sap shortener for Security Patch Day) — first-party patch-day bulletins and advisories, CNA-scored. Cross-checked (10-14): CVE-2026-89111's fix version (0.45.2) and SSRF mechanism match the GitHub advisory and the NVD record.",
+    "zh": "SAP 企业域名（含 Security Patch Day 的 url.sap 短链）——第一方补丁日公告与安全通告，由 CNA 自评评分。交叉核验（10-14）：CVE-2026-89111 的修复版本（0.45.2）与 SSRF 机制与 GitHub 安全公告及 NVD 记录一致。",
+    "jp": "SAP のコーポレートドメイン（Security Patch Day 用の url.sap 短縮リンクを含む）——一次情報のパッチデー速報とアドバイザリ。CNA 採点。相互検証（10-14）：CVE-2026-89111 の修正版（0.45.2）と SSRF の仕組みは GitHub アドバイザリと NVD レコードに一致。"
+  },
   "savingcontent.com": {
     "cat": "news",
     "cred": "med",
@@ -9184,6 +9319,15 @@
     "en": "SFGate (Hearst) — SF Bay Area news; the Sep 11 Waymo ghost-gun report (Madilynne Medina) is the fastest first-hand account, with named SFPD spokesperson Allison Maxie and Waymo's own confirmation. Confirmed on-page 09-14 via reader; cross-validated vs the LA Times's Sep 12 follow-up. Same paywall note as latimes.com.",
     "jp": "SFGate（Hearst 系）——SF ベイエリアのニュース。9/11 の Waymo ゴーストガン記事（Madilynne Medina）は最速の一次報道で、SFPD 広報 Allison Maxie の実名と Waymo 本人の確認を含む。09-14 にリーダー経由で本文を確認。LA Times の 9/12 追跡記事と相互検証。ペイウォール注意は latimes.com に同じ。",
     "zh": "SFGate（Hearst 旗下）——旧金山湾区新闻；其 9 月 11 日 Waymo 幽灵枪报道（Madilynne Medina）是最快的一手叙述，含具名 SFPD 发言人 Allison Maxie 与 Waymo 自身确认。09-14 经阅读器逐页核实；与 LA Times 9 月 12 日的后续报道交叉验证。付费墙注意事项同 latimes.com。"
+  },
+  "sfstandard.com": {
+    "cat": "news",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "The San Francisco Standard — local beat/investigative reporting with court-document access. Cross-checked (10-14): its account of the OpenAI conference-room recorder arrest matches SiliconANGLE's write-up and the complaint details.",
+    "zh": "《旧金山标准报》——具备法院文件获取能力的地方/调查报道。交叉核验（10-14）：其对 OpenAI 会议室窃听器逮捕案的叙述与 SiliconANGLE 的报道及起诉书细节一致。",
+    "jp": "The San Francisco Standard——裁判所文書に基づく地元・調査報道。相互検証（10-14）：OpenAI 会議室の録音器事件に関する記述は SiliconANGLE の記事と起訴内容の詳細に一致。"
   },
   "sheets.works": {
     "cat": "data",
@@ -10711,14 +10855,23 @@
     "jp": "Uber のエンジニアリングブログ。自己限定のセクションが異常に誠実な一次ポストモーテムを公開（リトライストーム、09-17：リトライ予算は基本エラー率約 10% までしか効かない等）。HN スレッドと突き合わせ済み（09-18）。メッシュ全体の数値の独立再現は存在しない。",
     "zh": "Uber 工程博客，第一方复盘且自带罕见诚实的自我限定章节（重试风暴，09-17：重试预算仅在基础错误率约 10% 内有效、约 2% 错误认领等）。已与 HN 讨论串交叉核验（09-18）；全网级数字无独立复现。"
   },
-  "ubuntu.com": {
-    "cat": "vendor",
+  "security-tracker.debian.org": {
+    "cat": "security",
     "cred": "high",
     "cv": 1,
     "density": "high",
-    "en": "Canonical's official Ubuntu blog — primary release announcements. Cross-checked (10-06): the 26.04.1 post's claims (Wayland shift complete, first release shipping NVIDIA CUDA in main repos, TPM-backed FDE GA, hybrid post-quantum key exchange by default, Rust kernel drivers + sudo-rs + uutils, Intel TDX/AMD SEV) all on-page, dated Sep 29 2026. Vendor voice — benchmark-free by nature, facts checkable against release notes.",
-    "jp": "Canonical の公式Ubuntuブログ——一次リリース発表。クロスチェック済み（10-06）：26.04.1 記事の主張（Wayland移行完了、mainリポジトリにNVIDIA CUDAをネイティブ収録した初のリリース、TPM-backed FDEのGA、ハイブリッド耐量子鍵交換のデフォルト化、Rustカーネルドライバ+sudo-rs+uutils、Intel TDX/AMD SEV）がすべてページ上にあり、日付は2026-09-29。ベンダー語り——ベンチマークフリーだが事実はリリースノートと照合可能。",
-    "zh": "Canonical 官方 Ubuntu 博客——一手发布公告。已交叉核验（10-06）：26.04.1 文章的声明（Wayland 迁移完成、首个在 main 仓库原生发布 NVIDIA CUDA 的版本、TPM 全盘加密 GA、默认混合后量子密钥交换、Rust 内核驱动+sudo-rs+uutils、Intel TDX/AMD SEV）均在页面上，日期 2026-09-29。厂商口吻——天然无基准，事实可与发布说明核对。"
+    "en": "Debian's official CVE tracker — the authoritative per-release vulnerable/fixed status and fixed source-package version for every CVE touching Debian, with the DSA reference. Distinct from debian.org (project news) and lists.debian.org (mailing lists); unlike a vendor advisory it states 'vulnerable' for releases it has not fixed. Cross-validated (10-14): its CVE-2026-39919 page (bookworm still vulnerable at 10.0.0~dfsg-11+deb12u8, trixie fixed in 10.05.1~dfsg-1+deb13u3 via DSA-6516-1) agrees with Ubuntu's independently-maintained page and with the upstream fix commit 0a8bf88e39db that both cite.",
+    "jp": "Debian 公式の CVE トラッカー——Debian に関わる全 CVE について、リリース別の vulnerable/fixed 状態と修正済みソースパッケージ版、DSA 参照を与える権威。debian.org（プロジェクトニュース）や lists.debian.org（メーリングリスト）とは別物で、ベンダーアドバイザリと違い未修正のリリースを明示的に「vulnerable」と書く。突合済み（10-14）：CVE-2026-39919 のページ（bookworm は 10.0.0~dfsg-11+deb12u8 のまま脆弱、trixie は DSA-6516-1 経由で 10.05.1~dfsg-1+deb13u3 で修正）は、独立に維持される Ubuntu のページおよび両者が参照する上流修正コミット 0a8bf88e39db と一致。",
+    "zh": "Debian 官方 CVE 追踪器——对涉及 Debian 的每个 CVE 给出按发行版划分的 vulnerable/fixed 状态、已修复的源码包版本以及 DSA 引用，具有权威性。它不同于 debian.org（项目新闻）与 lists.debian.org（邮件列表）；与厂商公告不同，它会明确把尚未修复的发行版标为 vulnerable。已交叉核验（10-14）：其 CVE-2026-39919 页面（bookworm 仍在 10.0.0~dfsg-11+deb12u8 上存在漏洞，trixie 经 DSA-6516-1 在 10.05.1~dfsg-1+deb13u3 中修复）与独立维护的 Ubuntu 页面以及双方都引用的上游修复提交 0a8bf88e39db 一致。"
+  },
+  "ubuntu.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 2,
+    "density": "high",
+    "en": "Canonical's official Ubuntu blog — primary release announcements — plus the /security/CVE-… pages, which carry per-release status and the fixed package version. Cross-checked (10-06): the 26.04.1 post's claims (Wayland shift complete, first release shipping NVIDIA CUDA in main repos, TPM-backed FDE GA, hybrid post-quantum key exchange by default, Rust kernel drivers + sudo-rs + uutils, Intel TDX/AMD SEV) all on-page, dated Sep 29 2026. Cross-validated again (10-14): the CVE-2026-39919 security page's fixed versions for 22.04/24.04/26.04 and its 'Needs evaluation' entries for 20.04/18.04/16.04 agree with Debian's tracked fix commit 0a8bf88e39db — and note the page's own priority is Medium despite the 9.8, a reminder that distro prioritisation is not CVSS.",
+    "jp": "Canonical の公式Ubuntuブログ——一次リリース発表——に加え、リリース別ステータスと修正済みパッケージ版を載せる /security/CVE-… ページ。クロスチェック済み（10-06）：26.04.1 記事の主張（Wayland移行完了、mainリポジトリにNVIDIA CUDAをネイティブ収録した初のリリース、TPM-backed FDEのGA、ハイブリッド耐量子鍵交換のデフォルト化、Rustカーネルドライバ+sudo-rs+uutils、Intel TDX/AMD SEV）がすべてページ上にあり、日付は2026-09-29。さらに突合済み（10-14）：CVE-2026-39919 のセキュリティページが示す 22.04/24.04/26.04 の修正版と、20.04/18.04/16.04 の「Needs evaluation」は、Debian が追跡する修正コミット 0a8bf88e39db と一致する——そして同ページ自身の優先度は 9.8 にもかかわらず Medium であり、ディストロの優先順位付けは CVSS ではないことを思い出させる。",
+    "zh": "Canonical 官方 Ubuntu 博客——一手发布公告——以及 /security/CVE-… 页面，后者载有按发行版划分的状态与已修复包版本。已交叉核验（10-06）：26.04.1 文章的声明（Wayland 迁移完成、首个在 main 仓库原生发布 NVIDIA CUDA 的版本、TPM 全盘加密 GA、默认混合后量子密钥交换、Rust 内核驱动+sudo-rs+uutils、Intel TDX/AMD SEV）均在页面上，日期 2026-09-29。再次交叉核验（10-14）：CVE-2026-39919 安全页面给出的 22.04/24.04/26.04 修复版本，以及 20.04/18.04/16.04 的“Needs evaluation”，与 Debian 追踪的修复提交 0a8bf88e39db 一致——同时注意该页面自身的优先级为 Medium，尽管评分为 9.8，这提醒我们发行版的优先级排序并不等于 CVSS。"
   },
   "ui-mate.github.io": {
     "cat": "research",

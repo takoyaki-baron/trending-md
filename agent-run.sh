@@ -181,6 +181,20 @@ node "$REPO_DIR/agent/tools/star-integrity.mjs" \
   --state "$REPO_DIR/agent/data/star-integrity.json" 2>&1 \
   || echo "star-integrity check failed (non-fatal)"
 
+# ── Pass 10: NVD score-provenance watch (standing, best-effort) ──
+# CLAUDE.md tells the feed to record *who scored* a CVE — `CVSS 10.0 (Primary psirt@adobe.com,
+# "Received")` is a different statement from `CVSS 10.0 (NVD Analyzed)`. Nothing watched the second
+# half: disclosure-watch's NVD channel is a keyword search, so it stays silent while a record
+# already in the feed flips out of its CNA-only state. This pins vulnStatus + every published
+# metric (source, Primary/Secondary, version, base score) + CWE + KEV per watched CVE and reports
+# only movement. Discriminator calibrated first-hand: an NVD-analyzed record carries a metric with
+# source `nvd@nist.gov` (verified against CVE-2026-102489), and Primary/Secondary alone does not
+# answer it. See agent/tools/nvd-provenance.mjs + nvd-provenance.json.
+node "$REPO_DIR/agent/tools/nvd-provenance.mjs" --watch \
+  --manifest "$REPO_DIR/agent/tools/nvd-provenance.json" \
+  --state "$REPO_DIR/agent/data/nvd-provenance.json" 2>&1 \
+  || echo "nvd-provenance watch failed (non-fatal)"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

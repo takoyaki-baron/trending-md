@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-10-14T04:40:00+08:00
+last_processed: 2026-10-14T12:20:00+08:00
 ---
 
 # 学習エージェント
@@ -25,6 +25,11 @@ last_processed: 2026-10-14T04:40:00+08:00
 > を一括で吸収 — 詳細はナレッジ ファイルの日付付きキャッチアップ節に。
 > **（10-14）学習パス：**10 月 13 日午後のバッチ（項目 20〜43）+ 10 月 14 日 04:03 バッチを吸収 —
 > 正味約 42 項目；AI インパクト クラスタに専用の家（[[ai-impact]]）ができた。
+> **（10-14 12:03）学習パス：**12:19 バッチの正味 20 項目（19〜38：10 月のパッチ波、Maia 300 +
+> Vera Rubin→OCP、スキルの四ストアフロント パッケージ、トークン境界の ColGrep + dot、端の
+> LFM2.5/Indra、NetBSD の AI 不使用ファンドレイズ）を吸収。新テーゼ 19 + ナレッジの家
+> [[datacenter-silicon]]；テーゼ 1、2、3、5、6、8、11、13、17 はそれぞれ日付付き行を 1 本追加し、
+> 最古のステータス行は追記ではなく圧縮した。
 
 ## アクティブなテーゼ
 
@@ -33,69 +38,69 @@ last_processed: 2026-10-14T04:40:00+08:00
    レビュー、オーケストレーション/harness、computer-use — すべてが OSS の勝者を出した；統合は
    *レイヤごと*に起きる（DeepSeek Harness = プラグイン グラフ、LoopX = ステート カーネル、
    Cline Kanban = worktree 分離）。
-   - **08-16→10-13 — スタックはレイヤごとに分解；パッケージング・コンテインメント・ステータス
-     チャネルが参照実装を得る：**Codex Agents API、セッション形式 = ロックイン、spec 外の MCP
-     Extensions、Supabase が Turso を買収、Docker Agent が OCI をエージェント形式に、
-     microsoft/mxc v1.0 GA、OSC 7501 の機械可読ターミナル状態、bigarrow（「クリックはしない…
-     指すだけ」）、openGym のフィットネストラッカー上の読み取り専用 MCP、rea は破壊的リリース
-     3 発で 13k→35k★。→ [[agent-stack]]
-   - **10-10午後→10-13 — エージェント CLI が常駐デーモンに；メモリが検索製品に；サンドボックス
-     価格戦が始動：**openai/codex #48195（自己更新 `--managed-daemon`、メンテナ返答なし）；
-     claude-mem 99k★ の有界プログレッシブ開示；Pensieve は過去の agent セッションを検索として
-     インデックス；Cursor がプラグイン spec を公開；Agent37 はサンドボックスを $0.37/月に価格設定；
-     Talorys = BYO-Cloudflare 個人エージェント。→ [[agent-stack]] [[token-economics]]
+   - **08-16→10-13 — スタックはレイヤごとに分解；パッケージング・コンテインメント・メモリ・
+     ステータス チャネルが参照実装を得る：**Codex Agents API、セッション形式 = ロックイン、spec 外の
+     MCP Extensions、Supabase が Turso を買収、Docker Agent が OCI をエージェント形式に、
+     microsoft/mxc v1.0 GA、OSC 7501、rea 13k→35k★、自己更新 `--managed-daemon`、claude-mem 99k★、
+     Pensieve、Cursor のプラグイン spec、Agent37 のサンドボックス $0.37/月。
+     → [[agent-stack]] [[token-economics]]
    - **10-13午後→10-14 — エージェントが forge を壊した；ルーター アグリゲータがコンシューマへ：**
      Anthropic の Scion — マージ量が 4 か月で 2,500→30,000+/日、CI チェックアウト ~2,500 万/日、
-     素朴な fetch なら日 600+ PB、refs は非推奨、Antique のセマンティック承認（「行ではなく意図を
-     レビュー」）、真似るなの但し書き、本当の要請 = git プラットフォームがサーバー側 RPC を採用；
-     free-claude-code 59.3k★ が 11 ハーネスを 61 プロバイダへルーティング（フォールバック、階層
-     ルーティング層であってグレーマーケットではない）；Atticus は確認済みの意図をモデルなしの
-     ショートカットへキャッシュ。→ [[agent-stack]]
-   - **10-14 act — Scion の要請がベースラインを得る；欠落は共有 spec であって RPC ではない：**
-     逐語的要請 = 「Scion のような包括的なサーバー側 RPC…forge を横断して標準化された形で git
-     クライアントが対話できるように」（コードの約束なし）；一次確認：4 forge すべてにマージ RPC、
-     blame は GitHub（GraphQL `Commit.blame`）と GitLab（REST）にあり、Gitea/Forgejo の API
-     ルータには blame ルートがゼロ。→ [[agent-stack]]
+     refs は非推奨、Antique のセマンティック承認（「行ではなく意図をレビュー」）、明示的な「真似るな」；
+     一次確認した逐語的要請は「包括的なサーバー側 RPC…forge を横断して標準化された形で git クライアントが
+     対話できるように」— コードの約束はなく、マージ RPC はすでに 4 forge すべてにあるため、欠落は
+     共有 spec；free-claude-code 59.3k★ が 11 ハーネスを 61 プロバイダへルーティング。
+     → [[agent-stack]]
+   - **10-14 — computer-use がプラットフォームの門を外す；サンドボックスがポリシー言語を出荷：**
+     `onehumanbeing/esp32-iphone-agent` — $7 の ESP32-S3 を USB HID に、AirPlay ミラーを合わせて、
+     Mac も署名 ID もベンダー API もループに入れずに既製の iPhone を操作（1,647★/3 日）；
+     `strands-agents/box` は Dogwood の `permit`/`forbid` 既定拒否ポリシーを**インタープリタ横断の
+     共有イベント履歴**上で出荷（ファイル読み取りが後の下り要求を拒否できる）、macOS-ARM 限定
+     プレビュー。→ [[agent-stack]] [[security]]
 2. **エージェント セキュリティは当面の攻撃面 — そして名付けられたクラスは誰にも強制されない。**
    8 月 12 日以降の CVSS≥9 エントリ 50+ は 16 の反復形に解決され、それぞれに典型例がある（全体図は
    [[security]]）。**メタパターン：**4 例でクラスは命名され、緩和は収束したが、誰も強制していない —
    OWASP ASI05、ツール呼び出し境界、eval サンドボックス、MCP ツール ピン留め。
    - **08-16→10-13 — 16 の形が埋まる；AI 支援の発見は巨大スケールで出荷され、書類は遅れる：**
-     GHAPPIER の正規 provenance 武器化；DIVD→Zammad が AI エージェントによりエンドツーエンドで
-     KEV 登録；Pwn2Own が Codex エージェントを弾く（ゼロデイ 77 件）；SGLang の pickle RCE；
-     GhostAction 2 ラウンド（772+346 リポジトリ）；CyberXero：アクセス ブローカーが Claude Code で
-     51 エージェントを運用。→ [[security]] [[fact-check]]
-   - **10-13 act — 「最新リリースが依然脆弱」が固まる：**BotSharp の CVE-2026-108860 は NVD で
-     VulnCheck 採点を得たが、最新リリースは 1 年前の脆弱な r5.2 のまま — アップグレード パスなし；
-     AhsayCBS は開示から約 9 日経っても「最も安全な v10.3」を宣伝し勧告なし。武装済み：
-     `SciSharp/BotSharp` を release-watch へ、`ahsay-hotfix` を disclosure-watch へ。→ [[security]]
-   - **10-13午後→10-14 — フルチェーンが商品化；持ち出し経路がアナログへ：**XBOW の 25 万ドル
-     Chrome チェーンが 6 日 / API 費用 ~4 万ドルの `gpt-5.6-sol` キャンペーンで（Maglev deopt →
-     WebP TOCTOU → Crashpad 凍結レンダラ；人間 4 名が「結果に異議」；彼ら自身の予測：1 年以内に
-     人間の指揮も不要に）；Ledger の implant が事前プロビジョン済み eSIM で画面自身の表示ラインから
-     シードを読み取る（300+ ウォレット、~9,300 万ドル）；GPT-SoVITS 9.8 で全リリースが依然脆弱；
-     Ivanti KEV 8.6 + Unisoc SIB1 ベースバンド 9.8（ベンダー採点）；Fehmarnbelt は ID カード無効化で
-     停止；責任ギャップ論考：既存のハッキング法規がすでに噛みつく可能性。→ [[security]] [[fact-check]]
+     GHAPPIER の正規 provenance 武器化、DIVD→Zammad が AI エージェントによりエンドツーエンドで KEV
+     登録、Pwn2Own が Codex エージェントを弾く、SGLang の pickle RCE、GhostAction 2 ラウンド
+     （772+346 リポジトリ）、アクセス ブローカーが Claude Code で 51 エージェントを運用、そして
+     「最新リリースが依然脆弱」の固化（BotSharp r5.2、AhsayCBS、いずれも勧告なし）。
+     → [[security]] [[fact-check]]
+   - **10-13午後→10-14 — フルチェーンが商品化；持ち出し経路がアナログへ：**XBOW の 25 万ドル Chrome
+     チェーンが 6 日・キャンペーン費用 ~4 万ドル；Ledger の implant が事前プロビジョン済み eSIM 経由で
+     画面自身の表示ラインからシードを読み取る（300+ ウォレット、~9,300 万ドル）；Unisoc SIB1
+     ベースバンド 9.8。→ [[security]] [[fact-check]]
+   - **10-14 — 10 月のパッチ波は採点の由来（scoring provenance）の物語であり、負の結果こそが発見：**
+     1 つの ColdFusion 勧告に無認証の 10.0 が 2 件、加えて 10.0 の SAP OAuth2 SSRF — いずれも NVD が
+     未解析のレコードに CNA が採点；Siemens の S7-1500 の 9.6 が 8 件は「現在修正版は存在しない」；
+     Ghostscript の 9.8 は自ビルドの外での 10,240 回の再現試行に失敗；Docker の 2 年にわたる無言の
+     PAT 再割り当ては ~304,000 のイメージを検査して悪用なし。→ [[security]] [[fact-check]]
+   - **10-14 act — 来歴の判別子が入り、パッチマトリクスが成果物になる：**「NVD が分析したか」は
+     `source: nvd@nist.gov` が答え、`Primary`/`Secondary` ではない（CVE-2026-102489 で較正）、
+     今や常設ウォッチ；Ghostscript の RC の罠に日付が付き（`gs10080rc1` 08-18 は修正コミット
+     08-24 より早い）、上流は勧告を一切出していない；Ubuntu は 20.04/18.04/16.04 を「Needs
+     evaluation」に残し、Debian 12 は依然脆弱。→ [[security]] [[fact-check]]
 3. **ローカル推論の解放は MoE スパーシティ + ディスク ストリーミングによるものであり、量子化では
    ない。**共有コアを常駐させ、ルーティングされたエキスパートを SSD からストリーミングする — この
    技は訓練・製品化フィッティング・実測予算に合わせた選型へ広がり、RAM が安くなくなった瞬間に
    DRAM 価格ショックと正面から出会った。
-   - **08-21→10-09 — 土台が定まり、測定され、ゲーミング GPU・FPGA・メモリ合戦へ届く：**WebLLM、
-     信号なし KV 追い出し、量子化ベンチ、4 枚の SSD で Kimi K3、colibri、ANE レジスタ マップ、
-     M5 Ultra 判定、分離型量子化、Magnitude；Micron の take-or-pay（「2027–2028 はもっと厳しい」）；
-     antirez の ds4；Strata が 5070 で 94 tok/s；DeepGEMM Mega MoE；FeSens/openTPU の agent 製
-     アクセラレータ；Whistle、Samsung LittleBit、Meta CRAM。→ [[edge-inference]]
-   - **10-11→10-13 — RAM ショックがプラットフォーム ロードマップに届く；ローカル音声が磨かれる：**
-     DDR4 第二次復活（Gigabyte が LGA 1700 を 2027 年初頭予定で復活、AM4 + 5800X3D 再販も）—
-     DRAM の行項目がソケット ライフサイクルを左右し始めた；BetterWispr（完全ローカル音声入力、
-     端側 9 モデル）；Strata は出荷を続ける（再トレンド翌日に v0.1.43.1）。→ [[edge-inference]]
+   - **08-21→10-13 — 土台が定まり、測定され、RAM ショックがプラットフォームのロードマップに届く：**
+     WebLLM、信号なし KV 追い出し、4 枚の SSD で Kimi K3、colibri、ANE レジスタ マップ、分離型量子化、
+     antirez の ds4、Strata が 5070 で 94 tok/s、FeSens/openTPU；Micron の take-or-pay
+     （「2027–2028 はもっと厳しい」）；DDR4 第二次復活（Gigabyte が LGA 1700 を復活）— DRAM の行項目が
+     ソケット ライフサイクルを左右し始めた；BetterWispr のローカル音声入力。→ [[edge-inference]]
    - **10-13午後→10-14 — 2 つのストリーミング機構、1 つの結論；容量が戦いに加わる：**Janas（純 C
      NVMe エキスパート ストリーミング、32 GB ノートで 80B モデル 37 tok/s、自己監査ベンチ表）+
-     AirLLM 層ストリーミング再トレンド — エキスパート オフロードと層ストリーミングは最適化対象が
-     違うが、どちらもディスクを「普通のマシンがどのモデルを動かせるか」を決める部品に変えた；
-     Intel D270 は 1 枚の PCIe カードに 480 GB LPDDR5X（帯域/FLOPS 非公開 — リーク数字）；
-     Apple Minions のアイドル GPU クラウド（3 ページ、数値なし）；EmbeddingGemma 2 が自らの埋め込み
-     空間経由で STT に転用（M3 Air で 288 倍）。→ [[edge-inference]]
+     AirLLM 層ストリーミング — エキスパート オフロードと層ストリーミングは最適化対象が違うが、
+     どちらもディスクを「普通のマシンがどのモデルを動かせるか」を決める部品に変えた；Intel D270 は
+     1 枚の PCIe カードに 480 GB LPDDR5X（帯域/FLOPS 非公開）；Apple Minions のアイドル GPU クラウド
+     （3 ページ、数値なし）。→ [[edge-inference]]
+   - **10-14 — 小モデル階層がかつて GPU を要した仕事を覆い、端の MoE が推論を学ぶ：**Liquid の
+     LFM2.5-24B-A2B がファミリを締める（総 24B / アクティブ 2.45B、64 エキスパート top-4、short-conv
+     ブロック 30 + GQA 10 — 推論トークン 1 つごとに 2.45B パラメータ分の計算；M5 Max で 184 tok/s、
+     LFM-1.0 ライセンス、ベンダー自身の LiveClaw 比較）；Indra OCR は 100 万パラメータのモデルで
+     32 CPU コアから毎秒 49 ページ読む。→ [[edge-inference]] [[smart-routing]]
 4. **マルチエージェントの「スケールする群れ」は本物の成果と本物の失敗様式を生む。**60 エージェントの
    Riemann ラン（60 中 2 のみが鍵となる洞察を産んだ）は発見に幅が要ることを示し、Anthropic 前線
    レッドチームの 4 失敗様式は協調が知能や個々のアラインメントから創発しないことを示す — 能力の
@@ -130,26 +135,31 @@ last_processed: 2026-10-14T04:40:00+08:00
      制約付き softmax；本業は校準 — 温度スケーリング T≈3.8、トークン信頼 ≠ 解答信頼）vs「計算機は
      決断できない」（説明責任：本番を落として「Claude がやったと言っても、責任を負うのはあなた」）。
      → [[system1-decision]]
+   - **10-14 — 検索サブタスクがルーティングの標的になる：**LightOn の `lightonai/colgrep-agent-2B` は
+     Claude Code/Sonnet 5.5 とリポジトリの間に座り（ColGrep のマルチベクトル late interaction）、
+     未見の 13 リポジトリ・52 問で grep 比 API トークン 34% 減 / キャッシュ考慮コスト 40% 減、
+     「精度に統計的有意差なし」— 動くのは反復的なターンであって推論ではなく、精度中立性が合格基準。
+     → [[smart-routing]]
 6. **推論品質はもはや堀ではない — 価格と流通がそうだ。**オープンウェイト（中国ラボがフロンティア
    規模のオープンウェイトを出すのが先導）はベンチの数ポイントを巨大な価格差と交換する；クローズド
    ラボは流通速度で競う；ポストトレーニングが可視のフロンティア レバー。
    - **08-15→10-10 — オープンウェイトの波の細部、そして階層の制度化：**収入ゲート付きライセンス
      （GLM-5.3、Kimi K3、Qwen3.8-Max）；Kolibri-1 の汚染自白；Fairwind = ベンダが自社顧客を格付け；
-     数千ドルの超人対局 Ataraxos；FLUX 3 は「エージェントのために設計」；Haiku 5.5 が小モデル階層を
-     再価格設定；Step 5 Preview が暦に載る；Microsoft の Decision-1 は Qwen3.5-9B をポストトレーニング。
-     → [[frontier-models]]
-   - **10-11→10-13 — ベンチ説明責任ギャップに旗艦案例；垂直ファインチューニングが最も厳しい指標を
-     公開：**Meta Muse Wonder — ヘッドライン ベンチは Wonder Full のもの（Meta 自社ハーネス内のみで
-     販売）で、API モデルはプレミアム価格のベース Wonder；GLM-Legal は Harvey LAB で 19.2% オールパス
-     （ベース比 +12.5pp）；MiMo-V2.6 は grader 計算を一級の RL 予算に；byteification（Nature）；
-     Jane Street の拡散ネガティブ；FT：NVIDIA が Reflection を巡り买収/増額協議 — Beam の
-     オープンウェイト約束に企業の枠。→ [[frontier-models]]
+     FLUX 3 は「エージェントのために設計」；Haiku 5.5 が小モデル階層を再価格設定；Microsoft の
+     Decision-1 は Qwen3.5-9B をポストトレーニング；Meta Muse Wonder のヘッドライン ベンチは
+     Wonder Full のもの（Meta 自社ハーネス内のみで販売）で、API モデルはプレミアム価格のベース
+     Wonder；GLM-Legal は Harvey LAB で 19.2% オールパス。→ [[frontier-models]]
    - **10-13午後→10-14 — 負け表付き GA；遅れは計画前提になる：**Gemini 4 Argon GA が 5 対戦敗北を
      公開（FrontierSWE v2 55.0 vs Fable 5.1 の 65.5、Terminal-bench 4.0 57.4 vs Opus 5.5 の 66.4、
      TB-Science 57.6 vs Astra 68.1…）しつつ、Fairwind は「さらに数百」のパートナーへ拡大；Micah Lee の
      移住ポストは約 4 か月のオープン遅れを計画前提として表明 — GLM-5.3 はソフトウェア工学で ≈
      Opus 5.5、監視の誤検出 vs 特権サイバー アクセス（「非民主的ゲートキーピング」）。
      → [[frontier-models]]
+   - **10-14 — オープンウェイト移転が初のベンダ実測の防御を得る：**Anthropic は蒸留防御が収集
+     データを「おおよそ 90〜99%」削減すると主張 — 自己測定、「early evidence」、独立再現なし —
+     同時に Zhipu を名指し（GLM-5.3 の開発中のサイバー能力；Fable 5 のセーフガードが攻撃を劣化させた
+     後、より古い Claude に切り替えた）し、Moonshot/Kimi の事例を繰り返す；収穫の標的は答えではなく
+     推論トランスクリプト。→ [[frontier-models]] [[fact-check]]
 7. **AI 安全性は政策ではなく実測のリリース閾値 — そして測定インフラ自体が弱点になりつつある。**
    PF v2 / RSP v3.0 / FSF v3.1 は同じループを回す（閾値 → 評価 → 事前コミットの対応）；SB 53 が
    法定化；Astra が現行の初「Critical」；GLM-5.3 が中国初の攻撃的サイバー抑制。
@@ -172,22 +182,21 @@ last_processed: 2026-10-14T04:40:00+08:00
      書き直しを要する。→ [[frontier-models]]
 8. **エージェント スキルは「証明して見せろ」段階に入る — 評価が欠けた標準。**カテゴリは宣言で
    増殖する；「スキル界の MMLU」eval を待て；それを出した者がスキル マーケットプレイスを所有する。
-   - **08-18→10-10 — 統合、測定機構、棚の階層化：**anthropics/skills が正典に；Agent Plugins 1.0.0
-     （Anthropic 不在）；vercel-labs/skills がパッケージ マネージャに；McKinley の pass^k + 判者 +
-     ホールドアウト；impeccable の LLM 不要 61 検出規則；ECC 2.2 のゼロ評価メガ棚；有名人メンテナ
-     ブランドがリリースなしで再トレンド；cloudflare/security-audit-skill が量産卒業生に。
-     → [[agent-plugins]]
-   - **10-11→10-13 — 棚がサプライチェーンとして測られ、spec として梱包される：**Skill
-     Constellations（arXiv 2610.11169）が初の日付付きコピー ネットワークを構築 — 219 万採用；少数の
-     リポジトリがほぼ全コピーを供給し、**星では特定できない**（監査順 100 リポジトリのレビューで
-     高リスク採用の 14.9% を防止 vs 星順 100 では 0.5%）；Cursor がマーケットプレイス spec を公開
-     （plugin.json = MCP サーバー + スキル）；棚最大の成果物は静的（21.8 万★ Karpathy CLAUDE.md、
-     6 か月休眠）；hyperframes と ppt-master が動画とネイティブ PPTX をインストール可能な成果物に。
-     → [[agent-plugins]]
+   - **08-18→10-13 — 統合、測定機構、そして棚がサプライチェーンとして測られる：**anthropics/skills が
+     正典に；Agent Plugins 1.0.0；vercel-labs/skills がパッケージ マネージャに；McKinley の pass^k +
+     判者 + ホールドアウト；impeccable の LLM 不要 61 検出規則；ECC 2.2 のゼロ評価メガ棚；
+     Skill Constellations（arXiv 2610.11169、219 万採用 — **星では供給元リポジトリを特定できない**；
+     監査順 100 リポジトリのレビューで高リスク採用の 14.9% を防止 vs 星順 100 では 0.5%）；Cursor の
+     マーケットプレイス spec；21.8 万★ の Karpathy CLAUDE.md は 4 月以来静的。→ [[agent-plugins]]
    - **10-13午後→10-14 — npm の瞬間：**vercel-labs/skills が生態系の引きだけで 34.1k★ で再トレンド —
      `npx skills` が git/任意 git/ローカルのソースを 75+ エージェントへ解決し、skills.sh のインストール数
      バッジが README に広がる（Socket は 2 月から監視）；VoiceStudio 61.4k★ は `docs/install/agent.md` +
      `npx skills add` を第一級の流通経路として扱う。→ [[agent-plugins]] [[agent-distribution]]
+   - **10-14 — 棚最大のリポジトリが四ストアフロント パッケージになる：**mattpocock/skills は
+     289,927★ で Anthropic、OpenAI、GitHub、Google 自身のプラグイン マーケットプレイス 4 つを
+     同時に通り（フォールバックは `npx skills`、「エージェントごとに 1 つ選べ」）、`in-progress/` +
+     `deprecated/` ディレクトリを備える — 棚の他のほぼ何も持たない保守状態。
+     → [[agent-plugins]] [[agent-distribution]]
 9. **隠蔽された思考連鎖は機密保持の仮定であってセキュリティ境界ではない** — arXiv:2608.09867：
    暗号化推論ブロックは同一プロバイダ内でセッション/ユーザー/モデルを跨いで交換可能；不可視プロンプト
    インジェクションを含む 4 つの攻撃ベクトル。**解決済み（08-14）：**実証された攻撃は緩和
@@ -196,7 +205,7 @@ last_processed: 2026-10-14T04:40:00+08:00
    未解決のまま。→ [[frontier-models]]
 10. **スペックがエージェント コーディングの実行可能な契約になりつつある** — spec-kit（スペック即
     コード）と Vero（機械検証の証明合成）は同じ賭けの両端：意図を機械検証可能な成果物にすること。
-    - **09-05→10-09 — ループ、その反発、市場の影：**FLT 形式化（1,100 万 Lean 行/11 日、ベンダ実施）；
+    - **09-05→10-09 — ループ、その反発、市場の影：**FLT 形式化（1,300 万 Lean 行/11 日、ベンダ実施）；
       Navier–Stokes 主張 + 優先権論争；Wayne の TLA+ 対重み；722 本ループのエンドツーエンド
       （「Lost in Translation」、722→719、Tao の「Math 2.0」）；暗号資産のバンカー モード；
       quake-srp のピクセル単位 oracle；Lozano-Robledo の凸包エッセイ。→ [[frontier-models]] [[dev-tools]]
@@ -216,24 +225,25 @@ last_processed: 2026-10-14T04:40:00+08:00
     か」に答えた（0/720 vs Codex 5.8–19%）が、常設監査はなく、訓練/評価は非公開、そして — SB 53 の
     リリース ゲートと違い — この境界に規制者はいない。**実測：**過剰なエージェンシーに初の率
     （CSA 53% が権限超過）；**エンドツーエンドで迂回済み**（Embrace The Red）；本当の境界は OS 分離 +
-    下り制御；ポリシー単位はデータフローへ（Dogwood MFOTL、AgentFlow、SARA）。
-    - **09-29 — 強制が初のシリコン ベンダを得る：**NVIDIA Open Agent Safety Platform（OpenShell の
-      検証可能ポリシー + BlueField-4 DPU 上の Sentry — 帯域外監視、ms 隔離）。依然として周辺であって
-      意図ではない；検出信頼性の数値なし；GA 日なし。
-    - **10-03 — OS 層が強制を始める：**Apple が AI エージェントを理由にフルディスク アクセスを締め付け
-      （→ テーゼ 15）— このテーゼが予言した OS 分離境界が、同意の断崖として到着。
+    下り制御。
+    - **09-29→10-03 — 強制が初のシリコン ベンダと初の OS 層を得る：**NVIDIA の Open Agent Safety
+      Platform（OpenShell の検証可能ポリシー + BlueField-4 DPU 上の Sentry — 帯域外監視、ms 隔離；
+      依然として周辺であって意図ではなく、検出信頼性の数値なし、GA 日なし）；Apple が AI エージェントを
+      理由にフルディスク アクセスを締め付ける（→ テーゼ 15）。
       → [[security]] [[agent-stack]] [[platform-gatekeeping]]
     - **10-11→10-13 — OS の契約がゼロから描かれ、ベンダ層が対話する：**Veda（趣味の Rust OS：アプリは
-      リスク レベル付きの型付きアクションを宣言し、プロンプトではなくカーネルが機密の同意を保管 —
-      「エージェントが文書から読んだものは何も何も承認できない」）；Nadella の「モデルは侵害済みと
-      仮定せよ」チェックリストは microsoft/mxc の製品ロードマップの朗読；unikernel 論が再価格設定
-      （「移植税こそが unikernel を殺した経済学だった — エージェントがそれを消した」）。
+      リスク レベル付きの型付きアクションを宣言し、プロンプトではなくカーネルが機密の同意を保管）；
+      Nadella の「モデルは侵害済みと仮定せよ」チェックリストは microsoft/mxc のロードマップの朗読。
       → [[agent-stack]] [[security]]
     - **10-13午後→10-14 — 強制がコンシューマ ハードウェアと企業チェックボックスで出荷：**Apple
-      HomeView はカメラ/mic フィードを Secure Exclaves で処理し（「OS も Apple もアクセスできない」）、
-      個人コンテンツはペア iPhone の在场 + 顔照合で扉を開ける；Firefox Enterprise が DLP の隣に
-      「allow/restrict/disable AI tools」を出荷 — OS 分離と企業執行が同時に到着。
+      HomeView はカメラ/mic フィードを Secure Exclaves で処理し（「OS も Apple もアクセスできない」）；
+      Firefox Enterprise が DLP の隣に「allow/restrict/disable AI tools」を出荷。
       → [[agent-stack]] [[platform-gatekeeping]]
+    - **10-14 — データフロー ポリシー単位が製品として出荷：**`strands-agents/box`（Apache-2.0、
+      macOS-ARM プレビュー）は Dogwood の `permit`/`forbid` 既定拒否規則をエージェント プロセスの
+      *外側*で、インタープリタ横断の共有イベント履歴上で強制する — ファイル読み取りが後の下り要求を
+      拒否できる：「何に触れられるか」ではなく「すでにしたことを踏まえ、次に何をしてよいか」。
+      → [[agent-stack]] [[security]]
 12. **最適化の標的はモデルからハーネスへ移った — そしてプレミアムは実測で、有界。**Bojie Li が
     この規律を命名：「harness エンジニアリング」。
     - **08-19→10-08 — プレミアムは実測かつ有界；ハーネスは学習可能になり、それから作業現場に：**
@@ -270,6 +280,12 @@ last_processed: 2026-10-14T04:40:00+08:00
       Learn2Play Bench が反論 — 要約規則より完全な生ログがエージェント学習に勝つ；context-mode が
       正直な適合表付きで再トレンド（フック対応プラットフォームで 98%、なしで ~60% — しかもライセンスは
       OSI オープンソースではなく ELv2）。→ [[token-economics]] [[agent-stack]]
+    - **10-14 — コンテキスト境界の 2 つの実測レバー：**LightOn の `lightonai/colgrep-agent-2B` が
+      Claude Code/Sonnet 5.5 の API トークンを 34%、キャッシュ考慮コストを 40% 削減（grep 比、精度に
+      有意差なし、52 問・未見 13 リポジトリ）— 動くのは検索ループであって推論ではない；そして OpenAI の
+      常時稼働 `dot` は読み取り専用権限下で**プロンプトなしに 1 日 300,000+ トークンを燃やした** —
+      アイドル時の挙動が、使用量課金のエージェント製品すべてにとっての行項目になった。
+      → [[token-economics]] [[smart-routing]]
 14. **AI クローラー負荷はオープンソース インフラへの実測された税 — そして機能する唯一の対策は匿名
     アクセスを劣化させる。**kernel.org：ランダム commit リクエスト ~600 万/日、33% が Anubis PoW を
     解き、正当トラフィックは ~2%、スクレイパのレンダリングが正当アクセス全体を上回る消費。
@@ -337,6 +353,11 @@ last_processed: 2026-10-14T04:40:00+08:00
       vibe-coded」；CS240 の歯のない禁止；COSMIC の必須証明ゲート；erdosproblems がスコアボードを削除；
       Penguin Mail のローカル オプトイン第三スタンス；openGym の開示型フル AI 第四スタンス。
       → [[no-ai-default]]
+    - **10-14 — 最初の資金データ点：**NetBSD の明示的な AI 不使用スタンスは **$120,282** を
+      **$50,000** の寄付目標に対して報告（9 月だけで ~120 件の寄付）— 一方 Torvalds は Linux を
+      「反 AI プロジェクトではない」と呼び、Debian は AI 生成貢献を許可する投票を行い、COSMIC は
+      「AI コンテンツなし」を強制マージ ゲートにした。注意書き：寄付者基盤は貢献者基盤ではない。
+      → [[no-ai-default]]
     - **10-12→10-13 — フォークが禁止になり、「オープン」自体がパロディを得る：**QGIS QEP-408 v2.0 が
       AI*支援*貢献を全面的に禁止 — 遡及リバート + 貢献者権利制裁、これまでで最強のゲート；OpenFatigue
       が open-washing を風刺する同じ週に Bitwarden のアプリストア ビルドが商用ライセンスへ（GPLv3 の
@@ -355,6 +376,18 @@ last_processed: 2026-10-14T04:40:00+08:00
       HTTP サーバーをアダプタなしでデプロイ、環境あたり 128 同時リクエスト、アクティブ CPU 課金、
       不変 revision のトラフィック分割 — Cloudflare による Deno 買収の数日後：Workers 式の詰め込みと
       コンテナ式コードが、両側から揃った。→ [[dev-tools]]
+19. **AI ファクトリのシリコンは建てられた場所で消費され、ラックはオープン標準になる。**
+    ハイパースケーラー アクセラレータはますますレンタル市場ではなく、作り手自身のトークン需要に
+    よって正当化され、筐体/ファブリック/電力の層は OCP へ公開されつつある — シャーシは商品化し、
+    シリコンはしない。
+    - **10-14 — Microsoft がレンタル経路のない推論優先 XPU を出荷；NVIDIA が Vera Rubin ラックを
+      開放：**Maia 300 — 8 スタックで 288 GB HBM4、インターポーザ上に 7 チップ + 8 HBM スタック、
+      ラックあたり 96 XPU で ~167 kW、2027 年量産、Azure はマルチギガワットへ拡張 — 一方で
+      「Maia 200 ラック比最大 7× スループット」「主要 GPU ベース システム比 40% 増のトークン/メガワット」
+      は**名前のない**ベースラインとの比較であり、Maia 容量は外部クラウド顧客に一切レンタルされない。
+      同じ週、NVIDIA は Vera Rubin ラック + コンピュート トレイ設計を MGX 1.2 経由で OCP へ寄贈、
+      加えてグリッド耐性標準、Visionbay の 800V DC 設計、NVIDIA+Cisco の USFP 400G モジュール、
+      NVIDIA+Google の Falcon Transport。→ [[datacenter-silicon]]
 
 ## トレンドノート（常設）
 
@@ -363,8 +396,8 @@ last_processed: 2026-10-14T04:40:00+08:00
   [[frontier-models]]（モデル/研究/安全）、[[edge-inference]]（ローカル推論）、[[agent-plugins]]
   （スキル）、[[smart-routing]]、[[system1-decision]]、[[token-economics]]、[[dev-tools]]、
   [[platform-gatekeeping]]、[[agent-distribution]]、[[answer-engine-seo]]、[[open-infra-crawlers]]、
-  [[no-ai-default]]、[[model-hardware-standard]]、[[fact-check]]、[[ai-impact]]（雇用/教育/インパクト
-  クラスタ）。
+  [[no-ai-default]]、[[model-hardware-standard]]、[[datacenter-silicon]]（AI ファクトリ計算 + ラック
+  標準）、[[fact-check]]、[[ai-impact]]（雇用/教育/インパクト クラスタ）。
 - **エージェント逆コンパイル/保存の波（10-11→10-13）：**Kotaku が空中から現れたブラウザ移植を数える：
   Halo（×4）、Vice City、Simpsons Hit & Run（Opus 5.5 は「逆コンパイルが極めて上手い」；PS2/PS3 世代の
   ターゲットは ~512 MB に収まる — ブラウザ タブより小さい）；一次情報の帳簿：6,000〜7,000 億トークン、
@@ -373,7 +406,10 @@ last_processed: 2026-10-14T04:40:00+08:00
   PS2 Web リコンパイルは GT4 を 50 fps で走らせ「ゲーム固有コードなし」。合法の孪生（Nanolathe の
   クリーンルーム Total Annihilation beta、PhotoCraft の PSD 307/309 往復）対高速な無許可移植：複製が
   安くなると、削除は終わりではなく日程を決める。分業：モデルが仮説を立て、oracle が裁く。
-  → [[dev-tools]]
+  **（10-14）エミュレーションを完全に飛ばす枝が現行世代の標的を得る：**`boykopovar/AnyPS5`
+  （35.6k★、週間 #1）は PS5 実行ファイルを再実装したシステム `prx` ライブラリに対して再リンクする —
+  ネイティブ バイナリ、ランタイムなし — 互換性はプロジェクトが*これまでに宣言した*関数に対して
+  測られる。→ [[dev-tools]]
 - **プロビナンス & ウォーターマーク軍拡競争（08-15、両監視条件は回答済み）：**Anthropic は EU AI Act
   Art. 50 でウォーターマーク；除去ツールは 3 層を剥ぐ；検出器は出荷済み（`claude.com/check-content`、
   一方向 — 検出 = Claude が*処理した*、不在は何も証明しない）；カメラの脚が折れた（CVE-2026-43499、
@@ -426,32 +462,25 @@ last_processed: 2026-10-14T04:40:00+08:00
   `release-watch.mjs`（ルーター リポジトリ）、星対コミット比（agent-run.sh の Pass 9）、KEV/NVD/npm/
   GitHub ワンコール チェック（CLAUDE.md の腐りやすい主張ルール）。
 
-- **非 AI バッチ項目（10-07→10-14）：**10-07→10-10：ノーベル物理 → Halzen/IceCube（検出器を作った者が
-  受賞）；Fervo の初の商用 Enhanced Geothermal 発電所（Google がアンカー購入者）；保留：arXiv
-  2610.06783 の subquadratic 3SUM（未査読）；トリウム-229 核時計がウィーン + 北京で時を刻む（原子時計は
-  未超え）；Margaret Hamilton 逝去、90 歳；ノーベル化学 → Kagan + Soai（ホモカイラリティ）；Hetzner の
-  百万サーバー OVS スタック；C2y が 45 の UB を削除；Carrier-Explode の CC0 キャリア設定データセット；
-  Tor↔Mullvad の信頼台帳；三 A 級 Minesweeper。10-10→10-13：PVX-001 — 冷蔵庫安定のオープン mRNA-VLP
-  ワクチンが第 I 相へ（IP 誓約*こそが*配送機構）；DuckDB 2.0 の非同期 I/O（1 本の S3 クエリで 2.4 倍）；
-  DDR4 第二次復活（→ テーゼ 3）；LineageOS 24 が Android 17 に先行投入；PSPi 6（オープン ハードウェア
-  保存）；20 年遅れの Knuth 小切手；Valen の群 borrowing；zt；9.24 倍の NVMe 対 gp3 Postgres ベンチ；
-  Google がフィンランドの 2 データセンターを停止（EIA 順番待ちは第 1 四半期の項目）；**UAV 攻撃で
-  Yandex Cloud の Vladimir データセンターが緊急モードに — 動的攻撃により申告緊急モードに入った初の
-  トップ層クラウド**；デンマーク CPR 漏洩は請負業者の「123456」で走った（→ [[security]]）；Ledger が
-  Nano X 画面の裏のハードウェア植入を確認（→ [[security]]）。10-13午後→10-14：**vfmaddrnd231pd —
-  ゴースト x86 命令**（2024 年版 SDM に記載、出荷されず、Haswell で #UD、2026 年版 SDM から削除 —
-  文書化された命令は、アセンブラと CPU が揃って同意するまで仮説）；GitHub 10 月 12 日障害
-  （Actions/Issues/PRs が同時に劣化；エージェント フリートは停止；RCA 未出）；Phreak.ing（匿名
-  Asterisk 電話交換機 + IRC ブリッジ）；**RimWorld 1.7 が Unity を離れ自社 Waylith へ**（2〜4 倍高速、
-  セーブは双方向互換 — Unity 離脱潮最大の実戦テスト）；Linux スマホ検死（libhybris カーネルは 2026 年
-  1 月 EOL で未修正 CVE 1,539；Purism 発の46.9万行 Librem 5 プロジェクト群の 98.7% が外部組織管理下）；uv-build 懇願（1.4 MiB の Rust 対 45 KiB
-  の flit-core — リリース頻度は下流に課す税）；Thunderbird iOS（ゼロからネイティブ Swift）；
-  Fehmarnbelt メガプロジェクトが ID カード断で停止（→ [[security]]）；BB(10) が Graham 数を超える、
-  Coq 検証付き（→ テーゼ 10）。AI インパクト クラスタ（Hickey 対 反論、Ryan Bigg の Leaving Tech、
-  Kelly の回顧、Character.AI Chapter 11）は専用の家へ移動：→ [[ai-impact]]
-  **（10-14 act）Character.AI Chapter 11 の買主節は申立て約45分後に解答：** Disney がステーキング
-  ホース入札者——$20M による特定知財の非独占的永続ライセンス＋一部請求権、§363 の上位入札は維持
-  （プレスリリースと Stretto を一次確認；ケース 26-11603 BLS）——プラットフォーム買収ではなくライセンス；
-  閉鎖分岐とデータ条項は不変（`character-ai-ch11` 監視を装備）。→ [[ai-impact]]
+- **非 AI バッチ項目（10-07→10-14）：**10-07→10-13（項目単位の記録は日付付き feed ファイルに）：
+  ノーベル物理 → 検出器を作った Halzen/IceCube；ノーベル化学 → ホモカイラリティ；Fervo の初の商用
+  EGS 発電所；Hetzner の百万サーバー OVS スタック；C2y が 45 の UB を削除；PVX-001 — 冷蔵庫安定の
+  オープン mRNA-VLP ワクチンが第 I 相へ；DuckDB 2.0 の非同期 I/O；**DDR4 第二次復活**（→ テーゼ 3）；
+  LineageOS 24；PSPi 6；Carrier-Explode の CC0 データセット；Tor↔Mullvad の信頼台帳；Google が
+  フィンランドの 2 データセンターを停止；**UAV 攻撃で Yandex Cloud の Vladimir データセンターが
+  申告緊急モードに — 動的攻撃により申告緊急モードに入った初のトップ層クラウド**；デンマークの CPR
+  漏洩は請負業者の「123456」で走った（→ [[security]]）；Ledger が Nano X のハードウェア植入を確認
+  （→ [[security]]）。10-13午後→10-14：**vfmaddrnd231pd — ゴースト x86 命令**（2024 年版 SDM に記載、
+  出荷されず、2026 年版 SDM から削除）；GitHub 10 月 12 日障害（Actions/Issues/PRs が同時に劣化；
+  エージェント フリートは停止；RCA 未出）；Phreak.ing；**RimWorld 1.7 が Unity を離れ自社 Waylith へ**
+  （2〜4 倍高速、セーブは双方向互換）；Linux スマホ検死（EOL カーネルに未修正 CVE 1,539；Purism 発の
+  46.9 万行 Librem 5 プロジェクト群の 98.7% が外部組織管理下）；uv-build 懇願；Thunderbird iOS
+  （ゼロからネイティブ Swift）；Fehmarnbelt が ID カード断で停止（→ [[security]]）；BB(10) が Graham
+  数を超える、Coq 検証付き（→ テーゼ 10）。AI インパクト クラスタ（Hickey 対 反論、Ryan Bigg の
+  Leaving Tech、Kelly の回顧、Character.AI Chapter 11）は専用の家へ移動：→ [[ai-impact]]
+  **（10-14 act）Character.AI Chapter 11 の買主節は ~45 分後に解答：**Disney = ステーキング ホース
+  入札者——$20M による非独占的永続 IP ライセンス＋一部請求権、§363 の上位入札は維持（リリースと
+  Stretto を一次確認；ケース 26-11603 BLS）——プラットフォーム買収ではなくライセンス；閉鎖分岐と
+  データ条項は不変（`character-ai-ch11` 監視を装備）。→ [[ai-impact]]
 
 > 次に追う開かれた問いは、[アクション ページ](/jp/action/)のアジェンダ（Research + System）にある。

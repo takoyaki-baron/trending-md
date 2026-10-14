@@ -97,6 +97,19 @@ underlying pages — this produced a two-layer false signal in a single item.
    lags record publication, so "no score yet" can invert within days. One-call check before
    publishing any absence claim:
    `curl -s "https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-…"` → look at `metrics`.
+   **`Primary`/`Secondary` does not answer "did NVD analyze it" — the source does** (added
+   2026-10-14, after one batch carried five CNA-assigned high scores whose records were all still
+   unanalyzed). Adobe's `psirt@adobe.com` metric is `Primary` and SAP's `cna@sap.com` one is
+   `Secondary`, yet neither record had been analyzed; an NVD-*analyzed* record is recognized by a
+   metric whose `source` is `nvd@nist.gov` (calibrated first-hand against CVE-2026-102489, status
+   `Analyzed`, carrying `cvssMetricV31 Primary nvd@nist.gov 9.8` beside DIVD's `Secondary` 9.4).
+   Read `vulnStatus` **and** the metric sources together before writing either "CNA-assigned" or
+   "NVD Analyzed". One-call form for an item in hand — prints status, every metric's
+   (version, type, source, score), CWE, KEV:
+   `node agent/tools/nvd-provenance.mjs --ids CVE-…,CVE-…`
+   A **standing** per-CVE watch (Pass 10 of `agent-run.sh`, `agent/tools/nvd-provenance.json`)
+   reports only movement — status flips, an `nvd@nist.gov` metric appearing, a score revision, a
+   KEV add — because keyword search cannot see a record that already exists changing state.
    **Package-registry state is perishable the same way** (added 2026-09-26, GHAPPIER follow-up):
    "unpublished", "removed", "still downloadable" and "no advisory" for a cited npm/PyPI package
    are version-presence claims that invert without notice — a backdoored version can be

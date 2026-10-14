@@ -238,3 +238,9 @@ Sources: [nitter.net — 10-10 更新](https://nitter.net) · [Passkeys are a tr
 **Firefox Enterprise：**（詳細 → [[security]]）**「AI controls — allow, restrict or disable AI tools」**スイッチ付きのオンプレミス ブラウザ ガバナンス；ポスト DORA 欧州へ向けた主権の売り込み（オンプレ コンソール、オープンソース透明性、単一文化保険としての非 Chromium エンジン）。このファイルが追いかけてきたゲートキーピングの鏡像：プラットフォームが能力を奪うのではなく、*買い手*が求める強制 — だが帰結は収束する：ブラウザがデータと AI 利用の両方の強制点になる。
 
 Sources: [Apple — HomeView](https://www.apple.com/apple-homeview/) · [HN 50071017](https://news.ycombinator.com/item?id=50071017) · [Firefox Enterprise](https://www.firefox.com/en-US/enterprise/) · [HN 50070302](https://news.ycombinator.com/item?id=50070302)
+
+## 2026-10-14 12:03 — プラットフォームの関門を取り除く 7 ドルのボード
+
+**esp32-iphone-agent が、ベンダー API をループに挟まずに素の iPhone をエージェント到達可能にする（`onehumanbeing/esp32-iphone-agent`、10 月 11 日作成、3 日で 1,647★、MIT）：** 機構は [[agent-stack]] に。ゲートキーピングとしての読みはそれ自身の比較表にある——Apple の公認自動化経路（XCTest/WebDriverAgent）は Mac、Xcode、署名済みランナー、そして無料枠の署名が 7 日ごとに失効する Apple 開発者アカウントを要するが、**AirPlay ミラー＋USB HID ボード**はどれも要らず、ゲームを含む任意のアプリで動き、**ベンダー API をループに残さない**。ピクセルを消費して HID イベントを出すだけなので、プラットフォームがファーストパーティ自動化フレームワークに付けられるあらゆる同意面の外側に立つ——テイクダウンを越えて再生長する Nitter インスタンスと同じ構造的位置であり、Apple の Full Disk Access 厳格化と HomeView の HomeKit/Matter バッジが依存するレバーの直接の対抗物だ：**プラットフォームが同意しようとしまいと、デバイスは到達可能である。** 変わったのは参入コスト（7 ドル、署名 ID 不要）であり、これがこれを趣味ではなくフリートの問いにしている部分だ。
+
+Sources: [onehumanbeing/esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent) · [demo video](https://www.youtube.com/watch?v=Ly4im-P4jYg)

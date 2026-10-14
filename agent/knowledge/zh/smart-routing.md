@@ -295,3 +295,11 @@ Sources: [yetone/magpie](https://github.com/yetone/magpie) · [usemagpie.ai](htt
 **TokenRouter（arXiv 2610.12242，清华大学 NICS-EFC，已被 NeurIPS 2026 接收；代码开源于 thu-nics/TokenRouter；HF Papers 100 赞）：** 按 *token* 粒度做路由决策——近期算法工作证明这一粒度在成本-质量上胜过按查询路由——但会打破建立在单模型假设上的服务栈，产生「严重的步进失同步与频繁的批准入延迟」。设计原则是「以请求为中心编程、以模型为中心执行」：开发者从单个请求的视角写路由逻辑，运行时为每个模型生成一个 subserver，配以延迟批处理调度器，其超参数来自一个数学吞吐模型。跨路由算法、负载与模型对的结果：解码吞吐较现有系统提高 **2.01–64.15×**。论文自己量化的要点：瓶颈在调度器而非路由器——而 2× 对 64× 的跨负载差距是摘要里诚实的部分；把它读作「高度依赖负载」。模型动物园正在碎片化为专家模型、草稿模型与决策模型（→ [[system1-decision]]），这正是它回答的需求：token 级路由是碎片化变得可用的方式。
 
 Sources: [arXiv 2610.12242](https://arxiv.org/abs/2610.12242) · [thu-nics/TokenRouter](https://github.com/thu-nics/TokenRouter)
+
+## 2026-10-14 12:03 — 路由的是搜索子任务，不是推理子任务；文档解析继续分出自己的路由层
+
+**一个本地 2B 搜索 agent 成为最重复轮次的路由目标（`lightonai/colgrep-agent-2B`，10 月 12 日；arXiv 2610.05099）：**一个 2B 模型 "sits between your coding agent and the repository"，用 ColGrep（多向量后交互语义搜索）搜索、读文件、跟随引用，返回路径 + 行号区间 + 代码。接进**运行 Sonnet 5.5 的 Claude Code**，在**13 个未见仓库上的 52 个代码搜索问题**上：相对 grep **−34% API token、−40% 缓存感知成本**，且（作者原话）"**no statistically significant change in accuracy**"。路由洞见在于移动的是哪个子任务：不是推理，而是产生 token 量的 grep/open/follow/re-search 循环——而决策是逐轮按能力做出的，以准确率中性的结果作为验收测试。→ [[token-economics]]
+
+**文档解析继续分出它自己的路由层（Indra OCR，Datalab，10 月 13 日）：**一个 **1M 参数**的识别模型，在 **32 个 CPU 核心上 49 页/秒**（比 Tesseract 和 PaddleOCR 的 PP-OCR 文本模型快 11–17×，单页延迟约 230 ms），外加完整版面：每行一个框、每个版面块一个带标签的框（正文、章节标题、列表、表格、题注、脚注、表单、目录、页眉/页脚）、阅读顺序、横向与倒置页面的纠偏，以及 markdown 或 JSON 输出——且**记录每页文本是来自 PDF 文本层、OCR，还是两者**。来源字段就是那个路由可供性：它告诉管线哪些页可以信、哪些要升级。头条准确率 **62.1，在 OmniParseBench 上，这是 Datalab 自家新造的基准**——核心限定条件——而印出来的局限异常完整：手写体约 **8%**，扫描件/图像仅限拉丁/西里尔/希腊/天城/孟加拉/中文（无阿拉伯文、希伯来文、泰文、假名、韩文），多级表头丢失结构（表格分 56.4），而在文本上 **PaddleOCR 的 PP-StructureV3 以 55.6 对 41.3 在默认模式下胜过它**——Indra 只在需要显式开启的 `--math` 模式下领先，而那要付出 30–35% 的吞吐。对分类与路由管线而言，「文本够好、够快」是正确取舍；每一个速度倍数都是厂商在厂商自家基准上的测量。→ [[edge-inference]] [[token-economics]]
+
+Sources: [LightOn ColGrep-Agent](https://huggingface.co/blog/lightonai/colgrep-agent) · [arXiv 2610.05099](https://arxiv.org/abs/2610.05099) · [Datalab — Indra OCR](https://www.datalab.to/blog/indra-ocr) · [datalab-to/indra-ocr](https://huggingface.co/datalab-to/indra-ocr)

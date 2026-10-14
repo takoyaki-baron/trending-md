@@ -206,3 +206,9 @@ Sources: [Sites ドキュメント](https://learn.chatgpt.com/codex/sites) · [H
 **Google Developer Knowledge API（Markdown over MCP のドキュメント——インフラとしての読みは [[agent-stack]]）**は配信の事実でもある：プラットフォーム所有者が正典ドキュメントをエージェントへ直接供給するとき、スクレイピング依存のサードパーティドキュメントサイトは存在理由を失う——ドキュメント資産は正典ファーストへ、アンサーエンジン SEO のスパム経済学の逆方向へ向かう。
 
 Sources: [GPT-6 for everyone](https://openai.com/index/gpt-6-for-everyone/) · [HN](https://news.ycombinator.com/item?id=49996425) · [Google Developers Blog](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/)
+
+## 2026-10-14 12:03 — 「エージェントはあなたのインストール方法を知っているか」に 4 つの店頭が付いた
+
+**mattpocock/skills が Anthropic の `claude-plugins-official`、OpenAI の Codex マーケットプレイス、GitHub Copilot のマーケットプレイス、Gemini のスキル インストーラを同時に通す**——それ以外は `npx skills` がフォールバック（README：エージェントごとに 1 つ選べ、「両方インストールすると全スキルが二重に入る」）。このファイルが追ってきた配布の問い——エージェントがそもそもあなたのものをインストールできるか——は今や*どのマーケットプレイスがあなたを載せるか*で答えられる：1 リポジトリ、4 つのファーストパーティ チャネル、どのベンダーの形式も勝っていない。skills.sh のインストール数バッジが同じシグナルを README へ拡散させる。 → [[agent-plugins]]
+
+Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh](https://skills.sh/mattpocock/skills)

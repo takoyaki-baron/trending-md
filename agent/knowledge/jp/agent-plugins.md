@@ -916,3 +916,9 @@ Sources: [arXiv 2610.11169](https://arxiv.org/abs/2610.11169) · [multica-ai/and
 **VoiceStudio 再トレンド（第 3 位、61.4k★、AGPL-3.0、+1,691/日）：**ローカル優先の ElevenLabs 型スイート（声のクローン、ボイスデザイン、動画ダビング、文字起こし、書き起こし、オーディオブック；既定エンジンは k2-fsa の OmniVoice、arXiv 2604.00688；646 言語と主張 — プロジェクト公表数、未独立検証）。すべてローカル実行（CUDA/Metal/CPU、CPU フォールバック ~5 GB）；アナリティクスは同意制。配布ノート：ローカル API + **MCP サーバー** + Claude Code/Codex/Cursor に貼り付ける想定の `docs/install/agent.md` + `npx skills add` 対応 — 「コーディング エージェントでインストール」を第一級の経路として扱っている。開発は活発（トレンド当日の朝もコミット）；最終リリース v0.5.6（9 月 23 日）は最近の作業に先行；4 月以来繰り返しトレンド入り、61k はリポジトリで確認済み。
 
 Sources: [vercel-labs/skills](https://github.com/vercel-labs/skills) · [skills.sh](https://skills.sh/) · [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [voicestudio.sh](https://voicestudio.sh/)
+
+## 2026-10-14 12:03 — シェルフの npm の瞬間が完了：スキル リポジトリが 4 ベンダー自身のマーケットプレイス経由で配布される
+
+**mattpocock/skills が 289,927★ —— 公式インストール経路が 4 つ、加えて `deprecated/` ディレクトリ：** 配布リストそのものがニュースだ。`claude plugin install mattpocock-skills@claude-plugins-official`、`codex plugin marketplace add mattpocock/skills`、`copilot plugin marketplace add … && copilot plugin install …`、`gemini skills install …`、それ以外向けに `npx skills@latest add mattpocock/skills -a` ——**1 つのリポジトリが Anthropic、OpenAI、GitHub、Google の公式チャネルを同時に通る**。これは「skills」がもはや 1 ベンダーのファイル形式ではなくポータブルなパッケージ種別になったことの、これまでで最も明快な証拠だ。README は**エージェントごとに 1 つ**選べと求める——「両方インストールすると全スキルが二重に入る」。位置づけは変わらず明示的：GSD、BMAD、Spec-Kit は「あなたのコントロールを奪い、プロセス内のバグを解決しにくくする」のに対し、これらは「小さく、適応しやすく、コンポーザブル」で「任意のモデルで動く」ことを意図する。ツリーは `engineering/`、`productivity/`、`misc/` を持ち、加えて——シェルフ上ほとんど何も持たないもの——**`in-progress/` と `deprecated/`**、すなわちもう動かないスキルに対する明示的なメンテナンス状態を持つ。最新リリース v1.3.1（10 月 4 日）、10 月 13 日 push、**週で +11,955★**、累計 289,927★（MIT、2 月 3 日作成）。 → [[agent-distribution]] [[agent-stack]]
+
+Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh listing](https://skills.sh/mattpocock/skills)

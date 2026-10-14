@@ -801,3 +801,9 @@ Sources: [arXiv 2610.11169](https://arxiv.org/abs/2610.11169) · [multica-ai/and
 **VoiceStudio 再上趋势（第 3 名，61.4k★，AGPL-3.0，+1,691/天）：**本地优先的 ElevenLabs 形态全家桶（声音克隆、音色设计、视频配音、听写、转写、有声书；默认 k2-fsa 的 OmniVoice 引擎，arXiv 2604.00688；自称 646 种语言——项目自报数、未独立核验）。全部本地运行（CUDA/Metal/CPU，CPU 回退约 5 GB）；分析需征得同意。渠道笔记：本地 API + **MCP 服务器** + 可直接粘进 Claude Code/Codex/Cursor 的 `docs/install/agent.md` + `npx skills add` 支持——"用你的编码 agent 安装"被当成一等渠道经营。开发活跃（上趋势当天早晨仍有提交）；最近 release v0.5.6（9 月 23 日）早于近期工作；4 月以来反复上趋势，61k 已在仓库核实。
 
 Sources: [vercel-labs/skills](https://github.com/vercel-labs/skills) · [skills.sh](https://skills.sh/) · [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [voicestudio.sh](https://voicestudio.sh/)
+
+## 2026-10-14 12:03 — 货架的 npm 时刻完成：一个 skills 仓库经四家厂商自家 marketplace 分发
+
+**mattpocock/skills 达 289,927★——四条官方安装渠道加一个 `deprecated/` 目录：**新闻在于分发清单本身：`claude plugin install mattpocock-skills@claude-plugins-official`、`codex plugin marketplace add mattpocock/skills`、`copilot plugin marketplace add … && copilot plugin install …`、`gemini skills install …`，其他一切用 `npx skills@latest add mattpocock/skills -a`——**一个仓库同时经 Anthropic、OpenAI、GitHub 与 Google 的官方渠道发货**，这是迄今最清楚的信号：skills 已不再是一家厂商的文件格式，而成为可移植的包类型。README 要求**每个 agent 只选一个**，"because installing both gives you every skill twice"。定位未变且明确：GSD、BMAD 与 Spec-Kit "take away your control and make bugs in the process hard to resolve"，而这些意在 "small, easy to adapt, and composable"，并能 "work with any model"。目录树包含 `engineering/`、`productivity/`、`misc/`，以及——货架上几乎别处都没有的部分——**`in-progress/` 与 `deprecated/`**，即为已不再工作的 skill 设一个显式维护状态。最新 release v1.3.1（10 月 4 日），10 月 13 日有推送，一周 **+11,955★**，总计 289,927★（MIT，2 月 3 日创建）。→ [[agent-distribution]] [[agent-stack]]
+
+Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh listing](https://skills.sh/mattpocock/skills)

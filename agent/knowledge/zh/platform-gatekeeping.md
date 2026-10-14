@@ -213,3 +213,9 @@ Sources: [nitter.net — 10-10 更新](https://nitter.net) · [Passkeys are a tr
 **Firefox Enterprise：**（详见 [[security]]）本地化浏览器治理，带 **"AI controls — allow, restrict or disable AI tools"** 开关；向后 DORA 欧洲喊话的主权牌（本地控制台、开源透明、非 Chromium 引擎当单一化保险）。与本文件追踪的守门行为互为镜像：这是*买方*要求的执行，而非平台移除的能力——但效果合流：浏览器同时成为数据与 AI 用途的执行点。
 
 Sources: [Apple — HomeView](https://www.apple.com/apple-homeview/) · [HN 50071017](https://news.ycombinator.com/item?id=50071017) · [Firefox Enterprise](https://www.firefox.com/en-US/enterprise/) · [HN 50070302](https://news.ycombinator.com/item?id=50070302)
+
+## 2026-10-14 12:03 — 那块移掉平台闸门的 7 美元板子
+
+**esp32-iphone-agent 让原装 iPhone 在环中没有厂商 API 的情况下被 agent 寻址（`onehumanbeing/esp32-iphone-agent`，10 月 11 日创建，三天 1,647★，MIT）：**机制见 [[agent-stack]]。守门读法就是它自己的对比表——Apple 官方认可的自动化路径（XCTest/WebDriverAgent）需要 Mac、Xcode、签名 runner，以及一个免费层签名每 7 天过期的 Apple 开发者账号；而 **AirPlay 镜像 + USB HID 板**全都不需要，能在任何 app（含游戏）中工作，且**环中没有厂商 API**。因为它只消费像素、只发出 HID 事件，它处在平台能附加到一方自动化框架上的所有同意界面之外——与被下架后又长回来的 Nitter 实例处于同一结构位置，也正对 Apple 收紧 Full Disk Access 与 HomeView 的 HomeKit/Matter 徽章二者所依赖的那根杠杆：**无论平台是否同意，设备都可被寻址。**变的是入场成本（7 美元、无需签名身份），这正是它从爱好问题变成舰队问题的那一部分。
+
+Sources: [onehumanbeing/esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent) · [demo video](https://www.youtube.com/watch?v=Ly4im-P4jYg)

@@ -248,3 +248,9 @@ Sources: [Sites docs](https://learn.chatgpt.com/codex/sites) · [HN discussion](
 **Google Developer Knowledge API (docs-as-Markdown over MCP — infra read in [[agent-stack]])** is also a distribution fact: when the platform owner serves canonical docs to agents directly, scraping-based third-party docs sites lose their reason to exist — the docs estate goes canonical-first, the reverse of the answer-engine-SEO spam economics.
 
 Sources: [GPT-6 for everyone](https://openai.com/index/gpt-6-for-everyone/) · [HN](https://news.ycombinator.com/item?id=49996425) · [Google Developers Blog](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/)
+
+## 2026-10-14 12:03 — "do the agents know how to install you" now has four storefronts
+
+**mattpocock/skills ships through Anthropic's `claude-plugins-official`, OpenAI's Codex marketplace, GitHub Copilot's marketplace and Gemini's skills installer at once**, with `npx skills` as the fallback for everything else (README: pick one per agent, "installing both gives you every skill twice"). The distribution question this file tracks — whether agents can install your thing at all — is now answered by *which marketplaces list you*: one repo, four first-party channels, no vendor's format winning. Install-count badges on skills.sh propagate the same signal into READMEs. → [[agent-plugins]]
+
+Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh](https://skills.sh/mattpocock/skills)

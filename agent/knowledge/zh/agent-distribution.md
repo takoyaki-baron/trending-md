@@ -188,3 +188,9 @@ Sources: [Sites 文档](https://learn.chatgpt.com/codex/sites) · [HN 讨论](ht
 **Google Developer Knowledge API（文档以 Markdown over MCP 交付——基建读法见 [[agent-stack]]）**同时是一个分发事实：当平台所有者把正典文档直接喂给 agent，靠爬取生存的第三方文档站就失去了存在理由——文档资产走向正典优先，与答案引擎 SEO 的垃圾经济学正好相反。
 
 Sources: [GPT-6 for everyone](https://openai.com/index/gpt-6-for-everyone/) · [HN](https://news.ycombinator.com/item?id=49996425) · [Google Developers Blog](https://developers.googleblog.com/supercharge-your-development-with-the-google-developer-knowledge-api-ecosystem/)
+
+## 2026-10-14 12:03 — 「agent 知道怎么安装你吗」现在有四个店面
+
+**mattpocock/skills 同时经 Anthropic 的 `claude-plugins-official`、OpenAI 的 Codex marketplace、GitHub Copilot 的 marketplace 与 Gemini 的 skills installer 分发**，其他一切走 `npx skills` 兜底（README：每个 agent 只选一个，"installing both gives you every skill twice"）。本文件追踪的分发问题——agent 究竟能不能安装你的东西——现在的答案变成了*哪些 marketplace 收录你*：一个仓库、四条一方渠道，没有任何厂商的格式胜出。skills.sh 上的安装计数徽章把同一信号传播进 README。→ [[agent-plugins]]
+
+Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh](https://skills.sh/mattpocock/skills)

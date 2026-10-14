@@ -1,0 +1,35 @@
+{
+  "_note": "Per-CVE NVD score-provenance watch (agent/tools/nvd-provenance.mjs). Filed 2026-10-14 after one feed batch carried five CNA-assigned high scores whose NVD records were all still unanalyzed. The event worth catching is a record flipping out of its CNA-only state: vulnStatus changing, an `nvd@nist.gov` metric appearing beside (or replacing) the vendor's, or a KEV add. Keyword search (disclosure-watch's NVD channel) cannot see any of those — the record already exists. Verified live at seed time, 2026-10-14 12:4x UTC+8.",
+  "watch": [
+    {
+      "id": "CVE-2026-48382",
+      "why": "Adobe Experience Manager 10.0, Primary psirt@adobe.com, status Received",
+      "seeded": "2026-10-14 [Received] 3.1 Primary/psirt@adobe.com 10.0, CWE-863, published 10-13"
+    },
+    {
+      "id": "CVE-2026-103849",
+      "why": "Adobe Commerce 10.0, Primary psirt@adobe.com, status Received",
+      "seeded": "2026-10-14 [Received] 3.1 Primary/psirt@adobe.com 10.0, CWE-1336, published 10-13"
+    },
+    {
+      "id": "CVE-2026-89111",
+      "why": "SAP Cloud SDK for Python OAuth2 SSRF 10.0 — Secondary cna@sap.com, status Received",
+      "seeded": "2026-10-14 [Received] 3.1 Secondary/cna@sap.com 10.0, CWE-918, published 10-13"
+    },
+    {
+      "id": "CVE-2026-39919",
+      "why": "Ghostscript JPEG2000 heap overflow 9.8/9.3 — both Secondary disclosure@vulncheck.com, Awaiting Analysis a month on (the build-specific-exploitation item)",
+      "seeded": "2026-10-14 [Awaiting Analysis] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.8, CWE-122, published 09-15"
+    },
+    {
+      "id": "CVE-2026-63353",
+      "why": "Siemens SIMATIC S7-1500 stored XSS 9.6, Primary productcert@siemens.com, no fix available",
+      "seeded": "2026-10-14 [Received] 3.1 Primary/productcert@siemens.com 9.6, 4.0 Secondary/productcert@siemens.com 9.4, CWE-79, published 10-13"
+    },
+    {
+      "id": "CVE-2026-96951",
+      "why": "Windows Shell command injection 8.8, KEV'd 10-13, Secondary secure@microsoft.com — the only KEV entry in the set",
+      "seeded": "2026-10-14 [Undergoing Analysis] 3.1 Secondary/secure@microsoft.com 8.8, CWE-77, KEV 2026-10-13, published 10-13"
+    }
+  ]
+}

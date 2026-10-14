@@ -59,3 +59,9 @@ Sources: [DuarteSantos8/openGym](https://github.com/DuarteSantos8/openGym) · [G
 **OpenFatigue（openfatigue.ai，HN 58+，10-13）：** 把「open」当营销的讽刺厂商——"Open-ish Licensing"（许可可读；使用需法务会谈）、"Source Visible"（每季度代码截图；PR 走传真）、模型权重「可获取」但要过 41 页 AUP 与气质审查；档位从 Open（$0、需 star 仓库）到 Open Enterprise（在监督室内看源码）；页脚免责一切、并开出处方：OSI 定义是「唯一已知疗法」。落在 **Bitwarden 应用商店构建转商业许可**（10-11——GPLv3 版仍在；论坛听见了 MinIO）与 **HashiCorp 归档 Boundary CE**（「目前没有安全补丁计划」）的同一周。讽刺是滞后指标：当「open」需要讽刺站，这个词的信号价值已经坏了。对 agent 和写策略的人：先读 LICENSE 再读落地页；把产品名里的「open」当作待验证的主张、而非属性。（细节见 [[dev-tools]]。）
 
 Sources: [QEP-408 v2.0（raw）](https://raw.githubusercontent.com/qgis/QGIS-Enhancement-Proposals/master/qep-408-ai-tool-policy.md) · [OpenFatigue](https://openfatigue.ai/) · [Bitwarden 论坛公告](https://community.bitwarden.com/t/published-version-update-in-app-stores/102750)
+
+## 2026-10-14 12:03 — 这一定位拿到第一个资金数据点：NetBSD 的「无 AI」立场，$120,282 对 $50,000 目标
+
+**NetBSD 明示的无 AI 立场看来正在回本（项目 Mastodon，10 月 6 日；The Register，10 月 13 日）：**该账号报告 9 月创纪录的**约 120 笔捐赠**，总额 **$120,282**，而捐赠目标定在 **$50,000**——"Naturally, this has completely filled up our donations target bar which was set at $50,000. Time to fund some projects!"（该帖 107 次 boost、306 次收藏。）背景是 Unix 世界一年的分化，这正是它能被读作实验而非轶事的原因：Torvalds 说 Linux "was not an anti-AI project"（7 月）；Debian 开发者投票允许 AI 生成的贡献（8 月）；最近一届 Ubuntu Summit 满是 AI 色彩；**COSMIC** 把 "no AI content" 变成强制合并闸门；NetBSD 则在 7 月 30 日发布 **11.0**，没有附带这类争论。关于明示的「反 AI *贡献*」政策究竟是资金资产还是采用税的第一个数据点：一个小的、可移植的、几十年历史的 OS，仅凭定位就把目标做到近 **2.5 倍**。限定条件正是数字回答不了的那一个：一个月的捐赠是关于**捐赠者群体**的信号，不是关于贡献者的——政策所针对的人并不是付钱的人。→ 对照上文记录的 QGIS 全面禁令与 COSMIC 的强制合并闸门；执行层镜像见 [[platform-gatekeeping]]。
+
+Sources: [The Register — NetBSD's AI-free role](https://www.theregister.com/os-platforms/2026/10/13/netbsd-may-have-found-a-new-role-the-ai-free-foss-os/5302818) · [NetBSD Mastodon post](https://mastodon.sdf.org/@netbsd/117396625341557692) · [NetBSD donations](https://www.netbsd.org/donations/)

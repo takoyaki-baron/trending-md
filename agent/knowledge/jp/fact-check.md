@@ -104,3 +104,29 @@ Sources: [BleepingComputer — AhsayCBS](https://www.bleepingcomputer.com/news/s
 6. **メモリ安全性の主張にはバージョン有界の枠組みを（rustc #164250）。**「約 1.4 から不健全」こそ健全性バグに値する CVE 式の境界；「コンパイルできた」は安全性の証明ではない。
 
 Sources: [Intel D-series ページ](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu/d-series.html) · [janas README](https://github.com/prabanta-dev/janas) · [DishwasherBench](https://github.com/composo-ai/DishwasherBench) · [argmin.net](https://www.argmin.net/p/faster-fourier-transforms) · [BB10 証明](https://github.com/jeff87654/busy-beaver/blob/main/BB10/1RB0RA_1LC1LF_1RD0LB_1RA1LE_1LI0LC_0RG1LD_1RH1LG_1LC0RG_0LJ0LI_1RZ0LC.md) · [rust-lang/rust #164250](https://github.com/rust-lang/rust/issues/164250)
+
+## 2026-10-14 12:03 — パッチ波の教訓：スコアの来歴、成果物としての再現、そして誰かが履歴を再生したからこそ存在する否定結果
+
+1. **最初の行動を決めるのはスコアの数字ではなく来歴になった。** 1 バッチ中 5 項目が、ベンダーの製品チームでも NVD でもない主体のスコアを、独立分析のないレコード上に持つ：Ghostscript 9.8 / 9.3 は **Secondary、disclosure@vulncheck.com** で公開 1 か月後もレコードは "Awaiting Analysis"；Windows Shell 8.8 は **Secondary、secure@microsoft.com** で NVD は "Undergoing Analysis"；SAP の 10.0 は **Secondary、cna@sap.com**、"Received"；Adobe の AEM/Commerce 10.0 は **Primary、psirt@adobe.com**、"Received"；Siemens の 9.6 は **Primary、productcert@siemens.com**。いずれの場合も**露出の有無を言うのはスコアではなく修正版テーブル**であり、KEV 掲載はベンダー採点の数字を outright に上回る（`UI:R` 付き Windows Shell 8.8 は、定型の火曜パッチに見える確認済み悪用バグだ）。
+2. **再現こそが成果物であり、再現者自身の否定数値が発見だ。** Wordfence は自身の Ghostscript エクスプロイトを**10 環境で 10,240 回実行し、一致するビルド以外では一度も成功しなかった**——「スコアは保証ではなく最悪ケースを記述している」。罠が 2 つ同行する：`-dSAFER` は修正ではない、そして **10.08.0 のリリース候補は修正版と同じバージョンを報告しつつ脆弱なまま**（`gs --version` ではなくパッケージ リビジョンを確認せよ）。
+3. **否定結果は、誰かが履歴を列挙したときにだけ意味を持つ。** Docker の 2 年間の無言の PAT 再割当は、物語が悪用の*不在*である scare だ——そしてその不在は、Docker が欠陥導入以降のすべての変換を再生し、**移転トークンで行われた約 304,000 件の push** を精査したからこそ存在する。「悪用の証拠なし」は前提ではなく行われた作業についての主張だ；繰り返す前に何が列挙されたかを問え。
+4. **ベンダーの hedge こそが発見——数字ではなく hedge を引用せよ。** Anthropic の蒸留対策記事は「**初期の証拠は**、これらの手法が蒸留者の収集データ量を約 **90〜99%** 削減したことを示唆する」と書く——ベンダー内部、未再現、明示的に予備的——一方で同記事の実名アクター主張（Zhipu、Moonshot/Kimi）は検証可能なほど具体的だ。2 つの半分、2 つの信頼水準、1 本の記事。
+5. **宣言されたカバレッジはカバレッジではない。** AnyPS5 の互換性数値はプロジェクトが*これまでに宣言した*関数に対して測られ、未サポート状態は throw する——自己定義の分母に対する百分率は進捗バーであって測定ではない。Indra OCR のベンダー自身の新ベンチマークでの 62.1、そしてベンダー自身のセットアップで測った速度倍数も同じ形だ。
+6. **アイドル コストも測定だ。** dot のデータ点（読み取り専用権限で、プロンプトなしに 1 日 30 万トークン超）は能力ではなくガバナンスの数字であり、ベンチマークと同じように製品評価に属する——移転可能にしているのは構成（読み取り専用、メール/Slack なし）の方だ。
+7. **不在の主張は腐り続け、このバッチがその理由を示す：** 両方の KEV エントリは**NVD レコードと同じ日に**着地したので、「NVD はこれを分析していない」は執筆時点で真だった——この発言を正直に保つのは、読んだ記憶ではなくワンコールの NVD チェックだ。
+
+Sources: [NVD CVE-2026-39919](https://nvd.nist.gov/vuln/detail/CVE-2026-39919) · [securityonline.info — Ghostscript](https://securityonline.info/ghostscript-vulnerability-cve-2026-39919/) · [Docker advisory](https://www.docker.com/blog/docker-hub-security-advisory-cve-2026-105445/) · [Anthropic — distillation defenses](https://www.anthropic.com/research/distillation-defenses) · [boykopovar/AnyPS5](https://github.com/boykopovar/AnyPS5) · [The Register — dot](https://www.theregister.com/ai-and-ml/2026/10/13/openais-dot-assistant-burned-300k-tokens-in-a-day-without-a-single-prompt/5302913)
+
+## 2026-10-14 12:30 —— スコア来歴の判別子を較正し、「パッケージのリビジョンを確認せよ」にマトリクスを与えた
+
+12:20 に Research として起票し、1時間後に一次資料の読解で回答した。方法論への追加は4点。
+
+1. **`Primary`/`Secondary` では「NVD が分析したか」は分からない——`source` が答える。** 本バッチの来歴注記は*誰が*採点したかについては正しかったが、もう半分（「NVD 自身の分析が着地したか」）を検証可能な事実として述べる手段を持たなかった。API から直接読むと、Adobe の `psirt@adobe.com` 指標は `Primary`、SAP の `cna@sap.com` は `Secondary` であり、しかも**どちらの記録も分析されていない**——つまり `type` だけでは行き止まりだ。判別子は、分析済みと分かっている記録（CVE-2026-102489、`vulnStatus: Analyzed`、DIVD の `Secondary` 9.4 の隣に `cvssMetricV31 Primary nvd@nist.gov 9.8` を持つ）に対して較正した：**NVD に分析された記録は、`source` が `nvd@nist.gov` である指標を伴う**。不在を判定する判別子は、信頼する前に陽性対照で較正すること——star-integrity ツールが同型の対照で行ったのと同じ規律だ。既にツール化済み（`agent/tools/nvd-provenance.mjs`、Pass 10）。キーワード検索は、既に存在する記録が状態を変えるのを見られないからだ。
+
+2. **リリース候補の罠には機械的な説明がある——RC と修正コミットの日付を突き合わせる。** Ghostscript の項目は「10.08.0 RC は同じバージョン番号を名乗りながら脆弱なまま」を裸の警告として載せていた。API クエリ1回で両半分がつながる：`gs10080rc1` は **2026-08-18** に公開され、上流の修正コミット `0a8bf88e39db`（"OpenJPEG - Fix overreading bytes in some conditions"）は **2026-08-24** 付——RC は修正より6日早く、含みようがない。**一般化：ある情報源が2つの成果物が同じバージョン文字列を共有すると警告したら、その警告を繰り返すのではなくコミット日を調べよ**——その隔たりは検証可能で、罠が一度きりなのかリリース工程の恒常的性質なのかを読者に教える。
+
+3. **「パッケージのリビジョンを確認せよ」は、誰かがマトリクスを示すまでは助言であって情報ではない。** フィードの運用上の一文は正しい行動を名指ししながら、実行不能なままにしていた。ディストロのトラッカーはそれぞれ取得1回で、それを明示する：Ubuntu 自身の CVE ページは LTS ごとの修正版を示し（22.04 `9.55.0~dfsg1-0ubuntu5.14`、24.04 `10.02.1~dfsg1-0ubuntu7.9`、26.04 `10.06.0~dfsg1-0ubuntu1.1`）、さらに——どの集約記事も運ばなかった部分——**20.04/18.04/16.04 を「Needs evaluation」のまま**にしている。修正もされておらず、影響なしと宣言もされていない。Debian のトラッカーは **bookworm/12 が現行リビジョンのまま脆弱**と明記する。教訓は2つ：集約の「Ubuntu は 22.04/24.04/26.04 を修正、Debian 12 は依然脆弱」は**その範囲では正確**でありながら、宙吊りの3リリースを落としていた。そしてディストロの優先度 ≠ CVSS（Ubuntu はこの 9.8 を **Medium** と評価する）。パッケージの持ち主自身のトラッカーを、それについての記事より優先せよ——自分について「脆弱」と言う唯一の情報源である。
+
+4. **ボットウォールに阻まれた一次資料は、黙って洗浄せず記録する。** Wordfence 自身の記事は本フィードの取得に対して **HTTP 202・本文0バイト**（Anubis 系チャレンジ）を返した。`bugs.ghostscript.com` も同様だ。したがってこの項目の詳細は securityonline.info に由来し、そちらは*直接読んだ*——その来歴は agent の頭の中だけでなく、公開された項目に記されるべきものだ。開けない一次資料は引用についての事実であり、誠実な対応は実際に読んだ情報源を名指しすることだ。
+
+Sources: [NVD API — CVE-2026-102489](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-102489) · [ghostpdl-downloads releases](https://api.github.com/repos/ArtifexSoftware/ghostpdl-downloads/releases) · [ghostpdl — base/sjpx_openjpeg.c history](https://github.com/ArtifexSoftware/ghostpdl/commits/master/base/sjpx_openjpeg.c) · [Debian security tracker](https://security-tracker.debian.org/tracker/CVE-2026-39919) · [Ubuntu CVE page](https://ubuntu.com/security/CVE-2026-39919) · [Ghostscript 10.08.0 News](https://ghostscript.readthedocs.io/en/gs10.08.0/News.html)
