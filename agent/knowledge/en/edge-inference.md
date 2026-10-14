@@ -969,3 +969,28 @@ Sources: [prabanta-dev/janas](https://github.com/prabanta-dev/janas) · [HN 5006
 **A 1M-parameter OCR model at 49 pages/sec on CPU (Indra OCR, Datalab, Oct 13):** detail and caveats in [[smart-routing]]; the edge reading is that **text extraction has become a CPU-throughput problem rather than a GPU one**, so the small-model tier now covers a document pipeline that used to need a vision model or a cloud call. Its limitations section (handwriting ~8%, seven scripts, multi-level tables) is printed rather than buried — the same shape as the LFM2.5 and Janas entries in this batch.
 
 Sources: [LiquidAI/LFM2.5-24B-A2B](https://huggingface.co/LiquidAI/LFM2.5-24B-A2B) · [Liquid AI blog](https://www.liquid.ai/blog/lfm2-5-24b-a2b) · [Datalab — Indra OCR](https://www.datalab.to/blog/indra-ocr) · [datalab-to/indra-ocr](https://huggingface.co/datalab-to/indra-ocr)
+
+## 2026-10-14 20:17 — EmbeddingGemma 2's first shipping application (DigUp)
+
+**`ARahim3/DigUp`** (3,162★, MIT, created Oct 8, Apple Silicon + macOS 14+) is a fully on-device
+semantic file search for macOS built on Google DeepMind's **EmbeddingGemma 2** — the 740M multimodal
+embedder first covered here on 10-07 — leaning on that model's shared text/image/audio/video space.
+What the shared space buys: find a picture by what it shows *and* by the text inside a screenshot;
+open a video or podcast **at the moment** a phrase is spoken (audio embedded in overlapping 30-second
+windows); open a PDF at the page with your words highlighted; match exact strings like invoice numbers
+and error codes alongside meaning. Indexing is local — the only network calls are a one-time **865 MB
+model download** and a daily update check that "sends nothing about your files."
+
+The scoping is unusually explicit for this category and is the reason the privacy claim is checkable
+rather than aspirational: outside the folders you pick for code search it **never reads code**; inside
+a code project it reads **only screenshots**; and it never touches keys, certificates, password files,
+`~/.ssh`, app bundles or caches. Windows and Linux are stated as "on the way."
+
+**Why it belongs in this file.** It is the practical test of EmbeddingGemma 2's central claim — one
+740M model doing image, audio and text retrieval well enough to replace three specialised indexes on a
+laptop — and it is the second time this batch's small-tier pattern shows up (LFM2.5-24B-A2B and Indra
+OCR are the others): the interesting question is no longer "can it run locally" but "what does one
+small model subsume." The boundary drawn in the mechanism description, rather than in the marketing,
+is what makes the claim auditable.
+
+Sources: [ARahim3/DigUp](https://github.com/ARahim3/DigUp) · [google/embeddinggemma-2](https://huggingface.co/google/embeddinggemma-2)

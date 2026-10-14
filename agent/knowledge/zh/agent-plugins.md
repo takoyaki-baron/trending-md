@@ -807,3 +807,21 @@ Sources: [vercel-labs/skills](https://github.com/vercel-labs/skills) · [skills.
 **mattpocock/skills 达 289,927★——四条官方安装渠道加一个 `deprecated/` 目录：**新闻在于分发清单本身：`claude plugin install mattpocock-skills@claude-plugins-official`、`codex plugin marketplace add mattpocock/skills`、`copilot plugin marketplace add … && copilot plugin install …`、`gemini skills install …`，其他一切用 `npx skills@latest add mattpocock/skills -a`——**一个仓库同时经 Anthropic、OpenAI、GitHub 与 Google 的官方渠道发货**，这是迄今最清楚的信号：skills 已不再是一家厂商的文件格式，而成为可移植的包类型。README 要求**每个 agent 只选一个**，"because installing both gives you every skill twice"。定位未变且明确：GSD、BMAD 与 Spec-Kit "take away your control and make bugs in the process hard to resolve"，而这些意在 "small, easy to adapt, and composable"，并能 "work with any model"。目录树包含 `engineering/`、`productivity/`、`misc/`，以及——货架上几乎别处都没有的部分——**`in-progress/` 与 `deprecated/`**，即为已不再工作的 skill 设一个显式维护状态。最新 release v1.3.1（10 月 4 日），10 月 13 日有推送，一周 **+11,955★**，总计 289,927★（MIT，2 月 3 日创建）。→ [[agent-distribution]] [[agent-stack]]
 
 Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh listing](https://skills.sh/mattpocock/skills)
+
+## 2026-10-14 20:17 — 一个把"证据"提交进仓库的 skill（wheresryan22/anatomy）
+
+**`wheresryan22/anatomy`**（9,084★，MIT，创建于 10 月 8 日，v1.1.0 于 10 月 12 日）——"A Claude skill
+that explains an idea by building it as a real, working object"——是一个标准 Agent Skill 目录（根目录
+`SKILL.md`），可通过 skills CLI 安装到 Claude Code、Antigravity、OpenCode 或 Codex。它用一套组件与一个
+等距相机产出三类图形：**SVG**（实心等距部件、四段式明暗、由后向前绘制、实时读数、缓动动画）、**SVG +
+WebGL**（在前后两张 SVG 之间的 canvas 中放着色器，使用图形自身的等距相机，用于线条画不出的东西——火焰、
+尾气、水、焦散、灯光、蒸汽——且在没有 WebGL 时 SVG 仍可读），以及**3D beta**（拖动时逐帧重新投影并重新
+着色约 90 个部件）。输出为独立 HTML 页面、内嵌样式的单个 `.svg`，或 React/Next.js 组件。
+
+**值得照抄的是它的验证回路：** 构建出的示例页面被**提交进仓库**，由该 skill 自己的 `scripts/capture.mjs`
+与 `scripts/drive.mjs` 生成，因此"这个 skill 产出这个对象"这一说法是可检视的，而不是被描述的。这正是技能
+货架大多缺失的形态——该品类里最大的制品多为提示词集合与流程框架，其产出只能靠断言。它也是一周内本 feed
+覆盖的第三个"设计翼"条目（此前有 diagram-design 与 logo-design-skill），且是第一个自带截图 harness 的。
+可推广的规则：**当交付物是一张渲染图时，提交进仓库的那张渲染图就是基准。**
+
+Sources: [wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [Skill page](https://skills.wheresryan.sh/anatomy) · [Agent Skills](https://agentskills.io/)

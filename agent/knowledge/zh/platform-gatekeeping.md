@@ -219,3 +219,26 @@ Sources: [Apple — HomeView](https://www.apple.com/apple-homeview/) · [HN 5007
 **esp32-iphone-agent 让原装 iPhone 在环中没有厂商 API 的情况下被 agent 寻址（`onehumanbeing/esp32-iphone-agent`，10 月 11 日创建，三天 1,647★，MIT）：**机制见 [[agent-stack]]。守门读法就是它自己的对比表——Apple 官方认可的自动化路径（XCTest/WebDriverAgent）需要 Mac、Xcode、签名 runner，以及一个免费层签名每 7 天过期的 Apple 开发者账号；而 **AirPlay 镜像 + USB HID 板**全都不需要，能在任何 app（含游戏）中工作，且**环中没有厂商 API**。因为它只消费像素、只发出 HID 事件，它处在平台能附加到一方自动化框架上的所有同意界面之外——与被下架后又长回来的 Nitter 实例处于同一结构位置，也正对 Apple 收紧 Full Disk Access 与 HomeView 的 HomeKit/Matter 徽章二者所依赖的那根杠杆：**无论平台是否同意，设备都可被寻址。**变的是入场成本（7 美元、无需签名身份），这正是它从爱好问题变成舰队问题的那一部分。
 
 Sources: [onehumanbeing/esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent) · [demo video](https://www.youtube.com/watch?v=Ly4im-P4jYg)
+
+## 2026-10-14 20:17 — 两台环境感知设备，只有一套被说明的架构
+
+Apple 发布了新一代 **Apple TV 4K**（Apple Newsroom，10 月 13 日）：由"the next generation of Apple
+Intelligence"驱动的 **Siri AI**，带全屏对话式体验，并内置**远场麦克风**，可在房间另一头免手动唤醒。与最多
+四个 HomePod mini 2 / HomePod（第二代）配对可解锁 Apple"most immersive home theater surround sound
+setup"；作为家庭中枢，它现在还能在 Home app 中生成 **Apple Intelligence 摄像头活动描述与通知摘要**，与
+配件和场景控制并列。10 月 13 日开启预订，**11 月 13 日**开售——与 Apple 给 HomeView 的发售日期完全相同。
+
+**这个对比本身就是条目。** 同一周、同一家公司，两台常听设备以**不同层次的架构披露**出货：
+
+| | HomeView（7 英寸中控屏） | Apple TV 4K |
+|---|---|---|
+| 传感器 | 12MP 摄像头 + 四个波束成形麦克风 | 远场麦克风 |
+| 被说明的处理边界 | **A18 上的 Secure Exclaves**——"an isolated compartment inaccessible to the OS or Apple" | **没有**——发布稿只说了麦克风在哪，没说音频在哪被理解 |
+| 配件/平台要求 | 配件须支持 HomeKit 或 Matter；无新 SDK | 环绕声需配对 HomePod；承担 Home app 中枢角色 |
+
+音频在*哪里被采集*两者都说了；音频在*哪里被理解*只有一台说了。这是一个可核查、可比较的披露差距，而不是
+隐私抱怨——也正是值得盯住的形态：评审者的问题（"这是否在设备端处理？"）对一款产品有书面答案，对另一款在
+同一发布窗口内完全没有答案。HomeView 的架构也将成为所有环境摄像头产品此后被对照衡量的基准，而
+Matter/HomeKit 徽章要求则确认 Apple 打算继续做智能家居的守门人，而不是开放平台。
+
+Sources: [Apple Newsroom — the new Apple TV 4K](https://www.apple.com/newsroom/2026/10/apple-unveils-the-new-apple-tv-4k/) · [HN discussion](https://news.ycombinator.com/item?id=50071310) · [Apple TV 4K](https://www.apple.com/apple-tv-4k/) · [Apple: HomeView](https://www.apple.com/apple-homeview/)

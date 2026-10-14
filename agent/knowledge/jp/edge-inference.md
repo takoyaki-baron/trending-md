@@ -160,3 +160,27 @@ Sources: [prabanta-dev/janas](https://github.com/prabanta-dev/janas) · [HN 5006
 **100 万パラメータの OCR モデルが CPU で 49 ページ/秒（Indra OCR、Datalab、10 月 13 日）：** 詳細と注意書きは [[smart-routing]] に；エッジ側の読みは、**テキスト抽出が GPU ではなく CPU スループットの問題になった**こと。かつてビジョン モデルかクラウド呼び出しを要した文書パイプラインを、今や小型モデル層が担う。その制限節（手書き約 8%、7 書字体系、多段表）は埋めずに印刷されている——このバッチの LFM2.5 と Janas の項目と同じ形だ。
 
 Sources: [LiquidAI/LFM2.5-24B-A2B](https://huggingface.co/LiquidAI/LFM2.5-24B-A2B) · [Liquid AI blog](https://www.liquid.ai/blog/lfm2-5-24b-a2b) · [Datalab — Indra OCR](https://www.datalab.to/blog/indra-ocr) · [datalab-to/indra-ocr](https://huggingface.co/datalab-to/indra-ocr)
+
+## 2026-10-14 20:17 — EmbeddingGemma 2 の最初の出荷アプリケーション（DigUp）
+
+**`ARahim3/DigUp`**（3,162★、MIT、10 月 8 日作成、Apple Silicon + macOS 14+）は、Google DeepMind の
+**EmbeddingGemma 2**（10-07 に本ファイルで初めて扱った 740M のマルチモーダル埋め込みモデル）上に構築された
+完全オンデバイスの macOS セマンティック検索で、同モデルが提供するテキスト／画像／音声／動画の共有空間を
+利用している。この共有空間が与えるもの：写っている内容でもスクリーンショット内の文字でも画像を探せる；
+フレーズが**話された瞬間**に動画やポッドキャストを開ける（音声は 30 秒の重複ウィンドウで埋め込む）；PDF を
+該当ページで開き該当語をハイライトする；意味だけでなく請求書番号やエラーコードのような文字列も完全一致で
+引ける。索引はローカルで、ネットワーク呼び出しは一度きりの **865 MB モデルダウンロード**と「あなたのファイル
+について何も送信しない」日次更新確認だけである。
+
+このカテゴリにしては珍しく範囲を明示しており、それがプライバシー主張を掛け声ではなく検証可能にしている：
+コード検索用に選んだフォルダの外では**コードを一切読まない**；コードプロジェクト内では**スクリーンショット
+だけ**を読む；鍵、証明書、パスワードファイル、`~/.ssh`、アプリバンドル、キャッシュには触れない。Windows と
+Linux は "on the way" と記されている。
+
+**なぜ本ファイルに属するか。** これは EmbeddingGemma 2 の中心的主張——1 つの 740M モデルが画像・音声・
+テキスト検索を、ノート PC 上の 3 つの専用インデックスを置き換えられる水準でこなす——の実地試験であり、
+本バッチの「小型モデル層」パターンの二度目の登場でもある（他は LFM2.5-24B-A2B と Indra OCR）。面白い問いは
+もはや「ローカルで動くか」ではなく「1 つの小型モデルが何を包含するか」だ。境界がマーケティングではなく
+機構の記述に引かれていることが、この主張を監査可能にしている。
+
+Sources: [ARahim3/DigUp](https://github.com/ARahim3/DigUp) · [google/embeddinggemma-2](https://huggingface.co/google/embeddinggemma-2)

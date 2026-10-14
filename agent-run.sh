@@ -195,6 +195,21 @@ node "$REPO_DIR/agent/tools/nvd-provenance.mjs" --watch \
   --state "$REPO_DIR/agent/data/nvd-provenance.json" 2>&1 \
   || echo "nvd-provenance watch failed (non-fatal)"
 
+# ── Pass 11: vendor-advisory registry-presence watch (standing, best-effort) ──
+# CLAUDE.md rule 6 tells the feed that a JS-only vendor page has a machine-readable twin; that was a
+# *rule* only because one vendor's endpoint was calibrated. Three now are (MSRC CVRF, Red Hat CSAF v2,
+# Cisco's publication service), so the rule is a fetched registry rather than a memory — and the
+# deeper find is that a vendor document carries a Type="CNA" note per entry naming the party that
+# actually assigned the ID: 343 of Microsoft's 1,760 October entries are not Microsoft's CVEs, and
+# CVE-2026-92707 sits in no registry at all because its CNA is GitHub, not because NVD is behind.
+# "Published by no registry" is a perishable absence, so it gets a channel. GHSA is deliberately NOT
+# polled here (60/hr unauthenticated; this repo budgets a handful of api.github.com calls per run).
+# See agent/tools/vendor-advisory.mjs + vendor-advisory.json.
+node "$REPO_DIR/agent/tools/vendor-advisory.mjs" --watch \
+  --manifest "$REPO_DIR/agent/tools/vendor-advisory.json" \
+  --state "$REPO_DIR/agent/data/vendor-advisory.json" 2>&1 \
+  || echo "vendor-advisory watch failed (non-fatal)"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

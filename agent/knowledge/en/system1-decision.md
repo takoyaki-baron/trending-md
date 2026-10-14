@@ -246,3 +246,35 @@ Sources: [Microsoft-Decision-1 announcement](https://commandline.microsoft.com/m
 **Nish Tahir, "Build your own decision model"** (HN 167+): the hands-on on-ramp for the Jev-style classifier wave — take Qwen3-1.7B, restrict the softmax to the token IDs of options A–E, pick the argmax (one forward pass instead of eleven generated tokens). On a 1,221-example CommonsenseQA slice: 59.4% constrained-decoding out of the box, 62.4% after fine-tuning, then the real lesson — **temperature scaling** (fitted T≈3.8), because raw token confidence is not answer confidence: the model states 0.9978 certainty on an ambiguous question with no clearly correct option. Code: `nishtahir/build-your-own-jev`. Calibration, not architecture, is the actual work — the unglamorous prerequisite every one-forward-pass product pitch skips; consistent with the $4 audit's finding (10-03) that the class is poorly calibrated by default. **The same day, "Computers Cannot Make Decisions"** (HN 196+): the opposite bank of the river — the sharpest point being accountability: bring down prod and delete customer data, "and told them Claude did it, you'd still be the one in trouble." The genre now has its tutorial and its philosophical pushback within 24 hours of each other; the closed tier (Microsoft-Decision-1, 10-10) meanwhile keeps the calibration metric as its headline.
 
 Sources: [Build your own decision model](https://nishtahir.com/build-your-own-decision-model/) · [nishtahir/build-your-own-jev](https://github.com/nishtahir/build-your-own-jev) · [HN: Computers Cannot Make Decisions](https://news.ycombinator.com/item?id=50029982)
+
+## 2026-10-14 20:17 — Jeva: the class gets a "decision-native" architecture, and the requirement that matters is *cacheable*
+
+**Jeva (arXiv 2610.18773, Qi Li & Xinchao Wang, Oct 13).** The premise is that "predicting an answer
+from serialized text does not, by itself, respect the structure of a decision problem," and the paper
+names four requirements current designs underemphasize:
+
+| Requirement | What it rules out |
+|---|---|
+| **null-aware** | conflating *absence* of an answer with uncertainty among the candidates |
+| **permutation-invariant** | a decision that changes when the alternatives are reordered |
+| **option-scalable** | growing candidate sets forcing a redefinition of the output space |
+| **cacheable** | recomputing request-independent work over recurring alternatives |
+
+Jeva addresses them jointly: a shared encoder represents the request and each option independently; a
+compact decision stack refines only the request state against **immutable option memory**; symmetric
+aggregation yields permutation-equivariant probabilities; and a separate coverage estimate produces
+explicit null outcomes. That one set of mechanisms unifies the **Choice, Noul and Score** output types
+— i.e. it claims the three shapes the rest of the class ships as separate heads are one architecture.
+
+**The commercially load-bearing requirement is *cacheable*.** If option representations are genuinely
+request-independent, a routing or ranking layer precomputes them once and reuses them across every
+incoming request — the difference between a decision model that costs per *call* and one that costs
+per *option*. That is a pricing argument, not an accuracy one, and it is the first architectural claim
+in this class that points at unit economics rather than at benchmark position.
+
+**Status:** a two-author design contribution with self-reported evaluations, landing in the same week
+as VideoJev and the Jev-family papers on Hugging Face's daily list. Treat the architecture as the
+result and the numbers as directional — which is the standing caveat for this file, whose one
+unanswered question remains **no same-harness cross-run of any two entries**.
+
+Sources: [arXiv 2610.18773](https://arxiv.org/abs/2610.18773) · [HF Papers — Jeva](https://huggingface.co/papers/2610.18773)

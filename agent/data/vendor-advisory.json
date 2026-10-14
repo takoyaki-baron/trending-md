@@ -1,0 +1,26 @@
+{
+ "updated": "2026-10-14T12:43:50.029Z",
+ "ids": {
+  "CVE-2026-92707": {
+   "nvd": null,
+   "cveawg": null,
+   "kev": false,
+   "cna": "GitHub_M"
+  },
+  "CVE-2026-108266": {
+   "nvd": {
+    "status": "Received",
+    "metrics": [
+     "9.1 Secondary/security-advisories@github.com"
+    ],
+    "nvdAnalyzed": false
+   },
+   "cveawg": {
+    "cna": "GitHub_M",
+    "state": "PUBLISHED"
+   },
+   "kev": false,
+   "cna": "GitHub_M"
+  }
+ }
+}

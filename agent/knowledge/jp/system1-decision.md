@@ -220,3 +220,32 @@ Sources: [Microsoft-Decision-1 発表](https://commandline.microsoft.com/microso
 **Nish Tahir、"Build your own decision model"**（HN 167+）：Jev 風分類器の波への実践的入口——Qwen3-1.7B を取り、softmax を選択肢 A–E のトークン ID に制限し、argmax を取る（生成 11 トークンの代わりに前方パス 1 回）。1,221 例の CommonsenseQA 切片：素で 59.4%、ファインチューン後 62.4%、そして本当の教訓——**温度スケーリング**（適合 T≈3.8）。生のトークン確信度は答えの確信度ではない：モデルは明確な正解のない曖昧な問いに 0.9978 の確信を述べる。コード：`nishtahir/build-your-own-jev`。本当の仕事はアーキテクチャでなく校正——単一前方パスの製品宣伝がみな飛ばす不体裁な前提。10-03 の $4 監査（この級は素のままだと校正が悪い）と整合。**同じ日に "Computers Cannot Make Decisions"**（HN 196+）：川の対岸——最も鋭い点は説明責任：本番を落とし顧客データを消し、「Claude のせいだと言っても、責任を負うのはあなた」。24 時間のうちに、この級は教程と哲学的反論の両方を得た。一方クローズド ティア（Microsoft-Decision-1、10-10）は依然として校正指標を見出しに置く。
 
 Sources: [Build your own decision model](https://nishtahir.com/build-your-own-decision-model/) · [nishtahir/build-your-own-jev](https://github.com/nishtahir/build-your-own-jev) · [HN: Computers Cannot Make Decisions](https://news.ycombinator.com/item?id=50029982)
+
+## 2026-10-14 20:17 — Jeva：このクラスに「意思決定ネイティブ」なアーキテクチャが付き、本当に効く要件は*キャッシュ可能*
+
+**Jeva（arXiv 2610.18773、Qi Li & Xinchao Wang、10 月 13 日）。** 前提は "predicting an answer from
+serialized text does not, by itself, respect the structure of a decision problem" であり、現行設計が
+軽視しがちな四つの要件を名指しする：
+
+| 要件 | 何を排除するか |
+|---|---|
+| **null-aware** | 答えの*不在*と候補間の不確実性の混同 |
+| **permutation-invariant** | 選択肢を並べ替えると変わる意思決定 |
+| **option-scalable** | 候補集合の増加が出力空間の再定義を強要すること |
+| **cacheable** | 繰り返し現れる選択肢に対するリクエスト非依存の計算の再実行 |
+
+Jeva はこれらを同時に扱う：共有エンコーダがリクエストと各選択肢を独立に表現し、小型の決定スタックが
+**不変の選択肢メモリ**に対してリクエスト状態のみを精錬し、対称集約が置換同変な確率を生み、別個のカバレッジ
+推定が明示的な null 結果を出す。この一組の機構が **Choice、Noul、Score** の三出力型を統一する——つまり
+このクラスの他実装が 3 つのヘッドとして出荷しているものは、1 つのアーキテクチャだという主張である。
+
+**商業的に荷重を支える要件は*キャッシュ可能*だ。** 選択肢表現が本当にリクエスト非依存なら、ルーティングや
+ランキングの層は一度事前計算し、以降の全リクエストで再利用できる——「*呼び出し*あたりで課金される決定
+モデル」と「*選択肢*あたりで課金される決定モデル」の差である。これは精度ではなく価格の議論であり、この
+クラスで初めて単位経済を指すアーキテクチャ主張だ。
+
+**状態：** 自己申告の評価を伴う 2 著者の設計貢献で、VideoJev や Jev 系論文と同じ週に Hugging Face の
+デイリーリストに並んだ。アーキテクチャを結論、数字を方向性として扱うこと——これは本ファイルの常設の注意で、
+唯一未解決の問いは依然として**任意の 2 エントリ間の同一 harness でのクロスランが存在しない**ことである。
+
+Sources: [arXiv 2610.18773](https://arxiv.org/abs/2610.18773) · [HF Papers — Jeva](https://huggingface.co/papers/2610.18773)

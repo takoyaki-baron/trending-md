@@ -244,3 +244,29 @@ Sources: [Apple — HomeView](https://www.apple.com/apple-homeview/) · [HN 5007
 **esp32-iphone-agent が、ベンダー API をループに挟まずに素の iPhone をエージェント到達可能にする（`onehumanbeing/esp32-iphone-agent`、10 月 11 日作成、3 日で 1,647★、MIT）：** 機構は [[agent-stack]] に。ゲートキーピングとしての読みはそれ自身の比較表にある——Apple の公認自動化経路（XCTest/WebDriverAgent）は Mac、Xcode、署名済みランナー、そして無料枠の署名が 7 日ごとに失効する Apple 開発者アカウントを要するが、**AirPlay ミラー＋USB HID ボード**はどれも要らず、ゲームを含む任意のアプリで動き、**ベンダー API をループに残さない**。ピクセルを消費して HID イベントを出すだけなので、プラットフォームがファーストパーティ自動化フレームワークに付けられるあらゆる同意面の外側に立つ——テイクダウンを越えて再生長する Nitter インスタンスと同じ構造的位置であり、Apple の Full Disk Access 厳格化と HomeView の HomeKit/Matter バッジが依存するレバーの直接の対抗物だ：**プラットフォームが同意しようとしまいと、デバイスは到達可能である。** 変わったのは参入コスト（7 ドル、署名 ID 不要）であり、これがこれを趣味ではなくフリートの問いにしている部分だ。
 
 Sources: [onehumanbeing/esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent) · [demo video](https://www.youtube.com/watch?v=Ly4im-P4jYg)
+
+## 2026-10-14 20:17 — 環境センサー二台、説明されたアーキテクチャは一つ
+
+Apple は次世代 **Apple TV 4K** を発表した（Apple Newsroom、10 月 13 日）："the next generation of Apple
+Intelligence" を搭載した **Siri AI** と全画面の会話体験、そして部屋の反対側からハンズフリーで呼びかけられる
+**内蔵遠距離マイク**。最大 4 台の HomePod mini 2 / HomePod（第 2 世代）と組み合わせると Apple の "most
+immersive home theater surround sound setup" が解放され、ホームハブとしては Home アプリ内で
+**Apple Intelligence によるカメラ活動記述と通知要約**をアクセサリ・シーン制御と並んで生成する。予約は
+10 月 13 日開始、提供開始は **11 月 13 日**——Apple が HomeView に示した発売日と同一である。
+
+**比較そのものが項目だ。** 同じ週、同じ会社から、常時倾听する二つの面が**異なる水準のアーキテクチャ開示**で
+出荷される：
+
+| | HomeView（7 インチハブ） | Apple TV 4K |
+|---|---|---|
+| センサー | 12MP カメラ + ビームフォーミングマイク 4 基 | 遠距離マイク |
+| 明示された処理境界 | **A18 上の Secure Exclaves**——"an isolated compartment inaccessible to the OS or Apple" | **なし**——マイクの位置は述べるが、音声がどこで理解されるかは述べない |
+| アクセサリ／プラットフォーム要件 | HomeKit か Matter 対応が必須、新 SDK なし | サラウンドに HomePod ペアリング、Home アプリのハブ役 |
+
+音声が*どこで取得されるか*は両方が述べている。*どこで理解されるか*を述べたのは片方だけだ。これは privacy
+への不満ではなく、検証可能で比較可能な開示の差である——そして注視に値する形でもある：レビュアーの問い
+（「これはオンデバイスで処理されるのか」）に、一つの製品は文書化された答えを持ち、もう一つは同じ発表期間の
+うちに答えをまったく持たない。HomeView のアーキテクチャは今後あらゆる環境カメラ製品が比較される基準に
+なり、Matter/HomeKit バッジ要件は Apple がスマートホームの門番に留まる意図を確認している。
+
+Sources: [Apple Newsroom — the new Apple TV 4K](https://www.apple.com/newsroom/2026/10/apple-unveils-the-new-apple-tv-4k/) · [HN discussion](https://news.ycombinator.com/item?id=50071310) · [Apple TV 4K](https://www.apple.com/apple-tv-4k/) · [Apple: HomeView](https://www.apple.com/apple-homeview/)

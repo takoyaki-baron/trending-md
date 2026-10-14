@@ -922,3 +922,24 @@ Sources: [vercel-labs/skills](https://github.com/vercel-labs/skills) · [skills.
 **mattpocock/skills が 289,927★ —— 公式インストール経路が 4 つ、加えて `deprecated/` ディレクトリ：** 配布リストそのものがニュースだ。`claude plugin install mattpocock-skills@claude-plugins-official`、`codex plugin marketplace add mattpocock/skills`、`copilot plugin marketplace add … && copilot plugin install …`、`gemini skills install …`、それ以外向けに `npx skills@latest add mattpocock/skills -a` ——**1 つのリポジトリが Anthropic、OpenAI、GitHub、Google の公式チャネルを同時に通る**。これは「skills」がもはや 1 ベンダーのファイル形式ではなくポータブルなパッケージ種別になったことの、これまでで最も明快な証拠だ。README は**エージェントごとに 1 つ**選べと求める——「両方インストールすると全スキルが二重に入る」。位置づけは変わらず明示的：GSD、BMAD、Spec-Kit は「あなたのコントロールを奪い、プロセス内のバグを解決しにくくする」のに対し、これらは「小さく、適応しやすく、コンポーザブル」で「任意のモデルで動く」ことを意図する。ツリーは `engineering/`、`productivity/`、`misc/` を持ち、加えて——シェルフ上ほとんど何も持たないもの——**`in-progress/` と `deprecated/`**、すなわちもう動かないスキルに対する明示的なメンテナンス状態を持つ。最新リリース v1.3.1（10 月 4 日）、10 月 13 日 push、**週で +11,955★**、累計 289,927★（MIT、2 月 3 日作成）。 → [[agent-distribution]] [[agent-stack]]
 
 Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh listing](https://skills.sh/mattpocock/skills)
+
+## 2026-10-14 20:17 — 「証拠」をリポジトリにコミットする skill（wheresryan22/anatomy）
+
+**`wheresryan22/anatomy`**（9,084★、MIT、10 月 8 日作成、v1.1.0 は 10 月 12 日）——"A Claude skill that
+explains an idea by building it as a real, working object"——は標準的な Agent Skill フォルダ（ルートの
+`SKILL.md`）で、skills CLI から Claude Code、Antigravity、OpenCode、Codex に導入できる。一つのキットと
+一つの等距カメラから三種の図を生成する：**SVG**（中実の等距パーツ、4 段階の陰影、奥から手前へ描画、ライブ
+読み出し、イージング付きモーション）、**SVG + WebGL**（前後の SVG の間の canvas にシェーダを置き、図自身の
+等距カメラで、線では描けないもの——炎、排気、水、コースティクス、ランプ光、蒸気——を描く。WebGL なしでも
+SVG は読める）、そして**3D ベータ**（ドラッグに応じて約 90 パーツを毎フレーム再投影・再陰影する）。出力は
+単体 HTML ページ、スタイルを埋め込んだ単一 `.svg`、または React/Next.js コンポーネント。
+
+**真似る価値があるのは検証ループだ：** 生成されたサンプルページが**リポジトリにコミット**されており、skill
+自身の `scripts/capture.mjs` と `scripts/drive.mjs` で生成される。したがって「この skill がこの物体を生む」
+という主張は、説明されるのではなく検査可能である。これはスキルの棚がほぼ欠いていた形だ——このカテゴリ最大の
+成果物はプロンプト集とプロセスフレームワークであり、その出力は主張されるだけだった。また本 feed が一週間で
+扱った三番目の「デザイン翼」項目であり（diagram-design と logo-design-skill に続く）、自前のスクリーン
+ショット harness を同梱する最初の例でもある。一般化できる規則：**成果物がレンダリングであるなら、コミット
+されたそのレンダリングがベンチマークである。**
+
+Sources: [wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [Skill page](https://skills.wheresryan.sh/anatomy) · [Agent Skills](https://agentskills.io/)

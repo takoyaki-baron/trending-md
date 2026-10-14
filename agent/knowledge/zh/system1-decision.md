@@ -202,3 +202,30 @@ Sources: [Microsoft-Decision-1 公告](https://commandline.microsoft.com/microso
 **Nish Tahir，"Build your own decision model"**（HN 167+）：Jev 式分类器浪潮的动手入门——拿 Qwen3-1.7B、把 softmax 限制在选项 A–E 的 token ID 上、取 argmax（一次前向代替十一个生成 token）。1,221 例 CommonsenseQA 切片：开箱 59.4%、微调后 62.4%，然后是真正的教训——**温度缩放**（拟合 T≈3.8），因为原始 token 置信度不是答案置信度：模型对一个没有明确正确选项的模糊问题报出 0.9978 的确定度。代码：`nishtahir/build-your-own-jev`。真正的工作是校准而非架构——每个单次前向的产品宣讲都跳过的那个不体面的前提；与 10-03 那次 $4 审计（该类默认校准很差）一致。**同日，"Computers Cannot Make Decisions"**（HN 196+）：河对岸——最锐利的一点是问责：搞挂生产、删了客户数据，「就算说是 Claude 干的，要担责的还是你。」24 小时内，这一类有了自己的教程与哲学反驳；封闭档（Microsoft-Decision-1，10-10） meanwhile 仍把校准指标放在头条。
 
 Sources: [Build your own decision model](https://nishtahir.com/build-your-own-decision-model/) · [nishtahir/build-your-own-jev](https://github.com/nishtahir/build-your-own-jev) · [HN: Computers Cannot Make Decisions](https://news.ycombinator.com/item?id=50029982)
+
+## 2026-10-14 20:17 — Jeva：该类别获得"决策原生"架构，而真正要紧的要求是*可缓存*
+
+**Jeva（arXiv 2610.18773，Qi Li & Xinchao Wang，10 月 13 日）。** 其前提是"predicting an answer from
+serialized text does not, by itself, respect the structure of a decision problem"，并点出当前设计普遍
+低估的四项要求：
+
+| 要求 | 它排除了什么 |
+|---|---|
+| **null-aware** | 把答案的*缺席*与候选之间的不确定性混为一谈 |
+| **permutation-invariant** | 重排备选项就改变的决策 |
+| **option-scalable** | 候选集增长就要求重新定义输出空间 |
+| **cacheable** | 对反复出现的备选项重复计算与请求无关的工作 |
+
+Jeva 联合处理这四点：共享编码器分别表示请求与每个选项；紧凑的决策栈只针对**不可变的选项记忆**精炼请求状态；
+对称聚合产生置换等变概率；独立的覆盖度估计给出显式 null 结果。这一套机理统一了 **Choice、Noul 与 Score**
+三种输出类型——也就是说，它主张该类别其余实现分作三个头的形态，其实是同一个架构。
+
+**商业上承重的要求是*可缓存*。** 如果选项表示确实与请求无关，路由或排序层就能一次预计算、在随后每个请求中
+复用——这正是"按*调用*计费的决策模型"与"按*选项*计费"之间的差别。这是价格论证而非准确率论证，也是该类别
+中第一个指向单位经济而非基准排位的架构主张。
+
+**状态：** 一篇两作者的架构贡献，自报评测，与 VideoJev 及 Jev 家族论文同一周出现在 Hugging Face 日榜上。
+把架构当作结论、把数字当作方向性——这是本文件的常设警告，其唯一未解问题依旧是**任何两个条目之间都没有同
+harness 的交叉运行**。
+
+Sources: [arXiv 2610.18773](https://arxiv.org/abs/2610.18773) · [HF Papers — Jeva](https://huggingface.co/papers/2610.18773)

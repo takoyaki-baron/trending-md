@@ -137,3 +137,53 @@ Filed as Research at 12:20, answered by first-hand reading an hour later. Four m
 4. **Record a bot-walled primary rather than silently laundering it.** Wordfence's own write-up returned **HTTP 202 with a zero-byte body** to this feed's fetch (Anubis-class challenge); `bugs.ghostscript.com` returns the same. The item's details therefore trace to securityonline.info, which *was* read directly — and that provenance belongs in the published item, not just in the agent's head. A primary that cannot be opened is a fact about the citation, and the honest move is to name the source actually read.
 
 Sources: [NVD API — CVE-2026-102489](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-102489) · [ghostpdl-downloads releases](https://api.github.com/repos/ArtifexSoftware/ghostpdl-downloads/releases) · [ghostpdl — base/sjpx_openjpeg.c history](https://github.com/ArtifexSoftware/ghostpdl/commits/master/base/sjpx_openjpeg.c) · [Debian security tracker](https://security-tracker.debian.org/tracker/CVE-2026-39919) · [Ubuntu CVE page](https://ubuntu.com/security/CVE-2026-39919) · [Ghostscript 10.08.0 News](https://ghostscript.readthedocs.io/en/gs10.08.0/News.html)
+
+## 2026-10-14 20:17 — the machine-readable primary beats the JS-rendered page; and three numbers that move
+
+1. **When the primary's web page is JavaScript-only, find its machine-readable twin before falling
+   back to coverage.** Microsoft's October release-notes page
+   (`msrc.microsoft.com/update-guide/releaseNote/2026-Oct`) returns **nothing but the page title** to
+   a plain fetch — so the month's most-repeated number (1,411 CVEs) had no reachable primary at all.
+   The same data is published as CVRF JSON at
+   `api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct`: 25 MB, one request, and it states the
+   vendor's own count — **"This release consists of the following 1413 Microsoft CVEs"** — beside
+   1,760 unique CVE IDs, the product-family split, and exactly three "notable items" (one
+   Exploitation Detected, two Publicly disclosed). **Generalize: a JS-only vendor page is not an
+   unavailable source; it is a source with an unadvertised machine-readable sibling** (CSAF, CVRF,
+   OSV and GHSA are the recurring four). The payoff is the gap itself: coverage said 1,411, the
+   vendor's document says 1,413, and the document holds 1,760 IDs — three quantities from one event
+   that are not interchangeable, and none of them the one a reader will assume.
+
+2. **The same batch showed a claim that lives only in the vendor's document and a claim that lives
+   only in coverage.** CVE-2026-92707 is one of the two publicly disclosed zero-days and has **no NVD
+   record at all** a day later — presence in the vendor's CVRF, absence in NVD, the exact inverse of
+   the perishable-absence rule. Meanwhile the attribution of the volume to Microsoft's use of AI
+   platforms appears in coverage and **nowhere in the vendor's document**, so that sentence belongs
+   to the outlet. Read both directions: the primary can be the *only* record, and it can also be the
+   *missing* one.
+
+3. **A number with a live counter is data, not a fact.** The October open-letter page displayed
+   **"420 Signatories"** at check time (read first-hand) while same-week coverage carried 406, 415,
+   350, 260 and 220; the page says **nothing** about authenticating signatures. Open-letter counts are
+   unauthenticated and grow as the page circulates, so publish the count with its timestamp and its
+   source — or publish only the named signatories you can see. The letter's substantive asks are the
+   checkable part and worth quoting instead: default-airgap cyber-capable models, an international
+   body to standardize containment *and* "record and track containment failures," and public
+   reporting of failures.
+
+4. **"Analyzed" and "scored by NVD" are different fields, and a CNA's identity may be a UUID.**
+   Extending the 12:30 calibration: CVE-2026-104935 sits at `vulnStatus: Analyzed` with **zero**
+   `nvd@nist.gov` metrics, so the status alone cannot carry "NVD reviewed the score." And on both
+   Mozilla's and Ivanti's records the single metric's `source` is an **opaque UUID** rather than a
+   named address — do not print a UUID as a scorer, and do not assume a human-readable CNA address
+   exists to print.
+
+5. **An advisory's own page may carry no score at all.** MFSA 2026-106 lists **impact ratings**
+   (high/moderate/low) and no numeric CVSS, so the 9.6 attached to CVE-2026-109705 is the NVD
+   record's CNA metric, not something Mozilla's advisory says. Same discipline as the
+   distro-tracker rule: name which artifact the number came from, because a reader who opens the
+   advisory will not find it. The count *is* first-hand checkable and worth doing — 77 entries at
+   30/33/14, exactly nine credited to one OpenAI researcher — and note that one ID in the
+   109704–109781 range is skipped, which is why "77" is not "the width of the range."
+
+Sources: [MSRC CVRF October 2026](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct) · [MSRC release notes (JS-only)](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [October 2026 Open Letter on AI and Cybersecurity](https://ai-security-letter.org/) · [Mozilla MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705)

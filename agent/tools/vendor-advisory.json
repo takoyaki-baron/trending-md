@@ -1,0 +1,17 @@
+{
+  "_note": "Registry-presence watch (agent/tools/vendor-advisory.mjs). Filed 2026-10-14 20:32 to answer the open Research item 'Do vendor-document-only CVEs stay out of NVD, or is CVE-2026-92707 a lag rather than a gap?'. The answer turned out to be neither: Microsoft's own CVRF carries a Type=\"CNA\" note on every entry and names GitHub_M as the assigner for CVE-2026-92707, and the CVE Program's registry has no record for it while 11 of 12 sampled October IDs (across 11 different CNAs, CVRF-CNA matching assignerShortName every time) are PUBLISHED. So the pending party is GitHub, not NVD — and 'published by no registry' is a perishable absence exactly like 'no CVSS' or an unpublished npm version, which is why it gets a channel rather than a memory note. CVE-2026-108266 is the same-CNA control: a second GitHub_M-assigned ID in the same document that IS published, so a 92707 appearance is interpretable as a publish, not as a registry-wide reindex. Verified live at seed time, 2026-10-14 20:4x UTC+8.",
+  "watch": [
+    {
+      "id": "CVE-2026-92707",
+      "why": "vendor-document-only: CNA GitHub_M, absent from NVD + cveawg, named in Microsoft's Oct CVRF as a publicly-disclosed zero-day (MessagePack-CSharp DoS)",
+      "cna": "GitHub_M",
+      "seeded": "2026-10-14 [absent at NVD, absent at cveawg] no KEV; CVRF lists CWE-1325 and 'Publicly Disclosed:Yes;Exploited:No'"
+    },
+    {
+      "id": "CVE-2026-108266",
+      "why": "same-CNA control for the above — a second GitHub_M ID from the same CVRF that IS published, so movement on 92707 is attributable",
+      "cna": "GitHub_M",
+      "seeded": "2026-10-14 [cveawg PUBLISHED, assignerShortName GitHub_M] Microsoft Mariner rustls fork RA-TLS attestation-binding bug"
+    }
+  ]
+}

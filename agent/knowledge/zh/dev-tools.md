@@ -478,3 +478,50 @@ Sources: [rust-lang/rust #164250](https://github.com/rust-lang/rust/issues/16425
 **ArtCraft 套件拿到启动器，其范围首次变得可审计（`storytold/craft-launcher`，2,366★，10 月 9 日创建，纯 Rust 跑在 egui 上——"no Electron, no web view"）：**一个原生 app，列出套件里每个程序、检测哪些已安装及版本、为你的 OS 与 CPU 挑对构建（DMG、MSI、AppImage、.deb、.rpm）、**按各 release 的 SHA-256 校验和验证**、安装，并从各 app 的 GitHub releases 报告更新；菜单栏或系统托盘、十一种界面语言，以及一个展示同一目录的浏览器版本。目录本身是另一条新闻：**十三个 app**——PhotoCraft、LightCraft、FilmCraft、DesignCraft、VectorCraft、PdfCraft、EffectCraft、WordCraft、DeckCraft、GridCraft、CADCraft、SoundCraft 与 FigCraft——远超本 feed 逐个报道过的 PhotoCraft/WordCraft/CADCraft。一个做到十三个桌面 app 的套件，比需要第十四个 app 更需要一个启动器；而经校验和验证、从 GitHub releases 拉取的安装，正是每个多 app 开源家族恰在此规模上撞到的分发问题：**仓库清单现在就是那个主张。**
 
 Sources: [boykopovar/AnyPS5](https://github.com/boykopovar/AnyPS5) · [AnyPS5 web converter](https://boykopovar.github.io/AnyPS5/) · [storytold/craft-launcher](https://github.com/storytold/craft-launcher) · [ArtCraft](https://artcraft.storytold.com/)
+
+## 2026-10-14 20:17 — 编译器即 harness、一次当代主机的重链接，以及一个只在非 ASCII 上触发的 libc bug
+
+**Niko Matsakis《What agents mean for Rust (and vice versa)》**（smallcultfollowing.com，10 月 14 日）——他
+在 REBASE/SPLASH 演讲的配套文章。他的框架是：有效的"软件工厂"建立在三大支柱上——**设计、构建、优化**——而
+"none of these pillars are solved"，Rust 在其中两根上位置异常有利。关于**优化**，他认为 agent 确实已经擅长
+这项工作：为高性能密码算法手写汇编的工程师"are now turning to agents for that same job"，网络服务开发者
+用 profiler 让 agent 诊断长轮询、阻塞这类异步陷阱——这使 Rust"good performance by default, knobs when
+you need 'em"成为正确形态。关于**可靠性**，他引用 Greg Brockman 的"rust is a perfect language for
+agents, given that if it compiles it's ~correct"，然后两次加限定：Dijkstra 的"Testing can show the
+presence of bugs, but not their absence"——而在 agent 场景下"it's not even close"，因为一套看起来很有
+说服力的测试套件之后，往往跟着一个"completely missed the boat on the logic"的 agent。这正是高级类型系统
+发挥作用之处，并用他自己刻意不造的词划出边界：**"Type systems can show the absence of bugs, but not the
+presence of correctness."** 具体诉求比框架小——在 happy path 上容忍更多显式 `clone()`/`share()` 噪音、
+在 channel 端点上暴露 clone 计数、打通 benchmark→profile→agent→PR 回路。支撑数据：
+**Meta 工程师今年写的一手 Rust 是此前九年总和的兩倍。** 对"因为 agent 会写大部分代码而选语言"的人而言，
+承重论据是最后一条：编译器是唯一永不疲倦的评审者。
+
+**`jhaizhou-ops/d2r-mobile`**（1,631★，创建于 10 月 12 日，MIT）——一个面向《暗黑破坏神 II：重制版》的
+iOS/macOS **兼容层**，基于 **Nintendo Switch 版本**（游戏版本 1.0.34.0，对应 PC 3.3.94012）并含 Reign of
+the Warlock 资料片。原始游戏代码**原生运行**，不经过模拟器；操作针对触屏重建；项目自报表格为 **100% 内容、
+60 fps、约 1 秒进入游戏、约 3.8 W**，另有双击即启动、支持键鼠与手柄的 Apple Silicon 原生 macOS 构建。
+前置条件直白写明：**自备游戏文件**、iOS 26+（18–25 用旧 API 构建）、macOS 26+（15–25 同理）。发布节奏才是
+信号——v1.0.11、v1.0.12、v1.0.13 在同一天全部发布，每条都警告"the shell and the repository must be from
+the same version"。本 feed 通过 `boykopovar/AnyPS5` 与 PS2→WebAssembly 移植追踪的静态重链接浪潮，如今抵达
+了一款**当代、仍在售的商业游戏**，而且落在手机上而不是浏览器标签页里；自备游戏文件的切分，正是它在交付完整
+兼容层的同时仍站在分发合规一侧的原因。
+
+**Android 17 的 bionic `wcscspn()`/`wcspbrk()` 回归**（android/ndk issue #2260，10 月 12 日提交）——
+2026 年 9 月构建（`CP3A.260905.009`）使这两个函数在排除集包含两个及以上全部低于 U+0100 的成员时，于第一个
+≥ U+0100 的字符处停止，并报告一个并不在集合中的匹配。对全部码点扫描发现 **1,111,808 个受影响码点——即
+U+0100 到 U+10FFFF 的全部**。任何用宽字符扫描 ASCII 分隔符（换行、通配符）的代码，只要文本含 emoji、CJK、
+西里尔、希腊或拉丁扩展字符就会失效：Android 上的 Visual Pinball 不再加载任何 VBScript 源码注释中含 emoji
+的球台，`FileSystem.MoveFolder` 把每个含 ≥ U+0100 字符的路径当作通配模式（下游绕过已合入
+`vpinball/libwinevbs`）。按报告者的表，该构建上 Pixel 7 与 Pixel 8a 损坏；Android 16 上的 Nothing Phone 2
+正常。
+
+**机理只能从 `/apex/com.android.runtime/lib64/bionic/libc.so` 的反汇编中恢复**，因为公开的
+`android-17.0.0_r1` 源码（2026 年 6 月）从 `external/llvm-libc` 构建这两个函数且*是正确的*——扫描中的
+`cmp w8, #0x100 / b.lo` 循环把"不在表中且 ≥ 0x100"当作匹配并停止，而互补函数必须继续，`wcspbrk` 因调用
+`wcscspn` 而继承。bionic 维护者确认它"seems to still be an issue at ToT"，承认**现有的 `wcscspn` 测试本身
+就是错的**（其期望值为 `2u`，而 `wcscspn(L"he￾lo", L"lo")` 返回 3），并表示会补上缺失的非 ASCII 测试
+并尝试回移植修复。两个教训，其中一个是结构性的：一个只在非 ASCII 输入上触发的 libc 正确性 bug，是测试套件
+遗漏的原型——而那个只测 ASCII 的测试*正是它出货的原因*。AOSP 那一半是治理故事：当源码发布滞后于已出货的
+构建时，平台的用户只能逆向平台来报告其中的 bug，而修复只能对着二进制写。
+
+Sources: [baby steps — What agents mean for Rust](https://smallcultfollowing.com/babysteps/blog/2026/10/14/agentic-dev-and-rust/) · [HN discussion](https://news.ycombinator.com/item?id=50084416) · [jhaizhou-ops/d2r-mobile](https://github.com/jhaizhou-ops/d2r-mobile) · [d2r-mobile v1.0.13](https://github.com/jhaizhou-ops/d2r-mobile/releases/tag/v1.0.13) · [android/ndk issue #2260](https://github.com/android/ndk/issues/2260) · [HN discussion](https://news.ycombinator.com/item?id=50083130) · [vpinball/libwinevbs workaround PR](https://github.com/vpinball/libwinevbs/pull/41)

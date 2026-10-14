@@ -1828,3 +1828,27 @@ Sources: [Anthropic Engineering — Scion](https://www.anthropic.com/engineering
 **Strands Box：OS 层强制，加一门真策略语言，且策略对历史求值（`strands-agents/box`，Apache-2.0，v0.1.0 于 10 月 7 日发布，393★，43 个 open issue）：**面向 AI agent 的 Rust 沙箱引擎，出自 Strands（AWS 血脉）生态，其中**访问控制是代码而非配置**——策略用 **Dogwood** 编写，一门 `permit`/`forbid` 语言，带**默认拒绝**语义（"a matching `permit` must allow the operation, and a matching `forbid` overrides that permission"）。Box 与 harness 无关（`box.toml` 和 `policy.dw` 可指向任意 agent 二进制），把 OS 隔离与**在 agent 进程之外**求值的语义规则结合，做凭证注入使 agent 从不持有密钥，并把决策导出为 OTLP-JSON。值得照抄的机制：**解释器与网关共享同一份事件历史**，因此一次经 Shell 或 Python 解释器的文件读取，可以让出口网关拒绝稍后的一次出站 HTTP 请求。开局就讲明且要紧的限定条件："**Preview:** Box currently supports local execution on **macOS with Apple silicon** only"（Linux 计划中、尚未发布），以及 "direct filesystem grants in `box.toml` are enforced by the OS and do **not** produce individual Dogwood decisions"——想被策略检查的文件必须经解释器访问，而不是直接授权。43 个 open issue 对 393★，读起来是积极分诊。这是数据流单元以产品形态到来：边界从「它能碰到什么」移到「**鉴于它已经做过什么，它下一步可以做什么**」。→ [[security]]
 
 Sources: [onehumanbeing/esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent) · [demo video](https://www.youtube.com/watch?v=Ly4im-P4jYg) · [strands-agents/box](https://github.com/strands-agents/box) · [Dogwood policy language](https://dogwood-policy.github.io/dogwood/)
+
+## 2026-10-14 20:17 — 每个 agent 一台机器，终于有了凭据模型（CopilotKit/OpenDots）
+
+**`CopilotKit/OpenDots`**（5,263★，MIT，alpha，创建于 9 月 29 日）是一个开源模板，用于**在文本、通话与
+Slack 之间穿行的持久化 AI agent**，构建于 CopilotKit 与 **AG-UI** 之上。每个 "Dot" 拥有名称、角色、指令
+与允许的工具，并且可以有**自己的电脑**——一个 OpenBot 容器监督进程，带浏览器配置与工作区文件，跨停止/启动
+持久化，通过 Computer 面板暴露浏览器控制、人工接管、文件与终端输出，浏览器/文件/shell 权限**逐 Dot 设置**。
+
+值得归档的是其安全设计，因为它是目前最接近"拥有自己机器的 agent"参考架构、而又不是厂商 SDK 的东西：
+
+- **逐 Dot 凭据派生** —— 服务凭据留在服务器端，应用"derives a different computer credential for each
+  Dot"，因此被攻破的 Dot 持有的凭据只覆盖自身，而不是整个机队。
+- **写入需审批** —— 任何非只读 MCP 工具都会暂停并弹出 **"Approve & run"** 卡片；保存页面需要人在回路
+  **"Approve & save"**，其中*草稿已变*需要重新审阅，而*同一草稿重试*会恢复已保存的页面（多数审批流程
+  做错的幂等细节）。
+- **文档存放在本地工作区数据库**，带自动保存进度上报、保存失败时保留草稿，以及针对过期编辑的版本检查。
+
+README 明确说明这是 **"a template, not a hosted product"**，且"an unconfigured template does not
+execute commands on your host"；对话功能需要 CopilotKit Intelligence（托管、本地 Docker 评估，或授权的
+自建部署）。这种披露切分——哪些可在本地验证、哪些需要接入服务——正是让 alpha 标签显得可信而非托词的原因。
+与 `strands-agents/box`（10-14，见上）对照：Box 在 agent *之外*基于共享事件史执行策略；OpenDots 则让
+*身份*逐 agent 化并对写入设闸。同一隔离问题的两半，在两周内先后出货。
+
+Sources: [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots) · [AG-UI protocol](https://docs.ag-ui.com/introduction) · [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot)

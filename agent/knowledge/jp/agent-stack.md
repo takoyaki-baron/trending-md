@@ -2110,3 +2110,33 @@ Sources: [Anthropic Engineering — Scion](https://www.anthropic.com/engineering
 **Strands Box：OS 強制＋本物のポリシー言語、そしてポリシーは履歴に対して評価される（`strands-agents/box`、Apache-2.0、v0.1.0 は 10 月 7 日、393★、オープン issue 43）：** Strands（AWS 系譜）エコシステム発の AI エージェント向け Rust サンドボックス エンジンで、**アクセス制御は設定ではなくコード**——ポリシーは **Dogwood** で書く。`permit`/`forbid` の言語で**デフォルト拒否**の意味論（「一致する `permit` が操作を許可しなければならず、一致する `forbid` がその許可を上書きする」）。Box はハーネス非依存（`box.toml` と `policy.dw` が任意のエージェント バイナリを指す）で、OS 分離と、エージェント プロセスの**外側**で評価される意味論的ルールを組み合わせ、資格情報注入によってエージェントがシークレットを保持しないようにし、決定を OTLP-JSON で出力する。真似る価値のある機構は：**インタプリタとゲートウェイがイベント履歴を共有する**ので、Shell や Python インタプリタ経由のファイル読み取りが、後の外向き HTTP 要求を egress ゲートウェイに拒否させ得る。冒頭で明示され、かつ重要な注意書き：「**Preview：** Box は現在、**Apple silicon 上の macOS** でのローカル実行のみをサポートする」（Linux は計画中で未出荷）、そして「`box.toml` の直接ファイルシステム権限付与は OS が強制し、個別の Dogwood 決定を**生成しない**」——ポリシー検査したいファイルは直接付与せずインタプリタ経由で到達させねばならない。393★ に対してオープン issue 43 は活発なトリアージに見える。これはデータフロー単位が製品として到来したものだ：境界は「何に触れられるか」から「**すでに何をしたかを踏まえ、次に何をしてよいか**」へ移る。 → [[security]]
 
 Sources: [onehumanbeing/esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent) · [demo video](https://www.youtube.com/watch?v=Ly4im-P4jYg) · [strands-agents/box](https://github.com/strands-agents/box) · [Dogwood policy language](https://dogwood-policy.github.io/dogwood/)
+
+## 2026-10-14 20:17 — エージェントごとのマシンに資格情報モデルが付く（CopilotKit/OpenDots）
+
+**`CopilotKit/OpenDots`**（5,263★、MIT、alpha、9 月 29 日作成）は、**テキスト・通話・Slack を行き来する
+永続 AI エージェント**のオープンソース雛形で、CopilotKit と **AG-UI** 上に構築されている。各 "Dot" は名前・
+役割・指示・許可ツールを持ち、**自分専用のコンピュータ**を持てる——OpenBot コンテナスーパーバイザで、
+ブラウザプロファイルとワークスペースファイルが停止／起動をまたいで永続し、Computer パネルからブラウザ操作・
+人手引き継ぎ・ファイル・ターミナル出力を提供し、ブラウザ／ファイル／シェル権限は **Dot ごと**に設定する。
+
+アーカイブに値するのはそのセキュリティ設計で、ベンダー SDK ではない「自分専用マシンを持つエージェント」の
+参照アーキテクチャに最も近い：
+
+- **Dot ごとの資格情報導出** —— サービス資格情報はサーバー側に留まり、アプリケーションは "derives a
+  different computer credential for each Dot" するため、侵害された Dot が持つのは自分に限定された
+  資格情報であって機隊全体のものではない。
+- **書き込みは承認制** —— 非読み取り専用の MCP ツールは **"Approve & run"** カードで停止し、ページ保存には
+  人手インザループの **"Approve & save"** が必要で、*変更されたドラフト*は再審査を要し、*同一ドラフトの
+  再試行*は保存済みページを復元する（多くの承認フローが誤る冪等性の細部）。
+- **文書はローカルワークスペース DB に保存**され、自動保存の進捗報告、保存失敗時のドラフト保持、古い編集に
+  対するリビジョン検査を備える。
+
+README はこれが **"a template, not a hosted product"** であり、"an unconfigured template does not
+execute commands on your host" であると明示する。会話機能には CopilotKit Intelligence（ホスト型、ローカル
+Docker 評価、またはライセンスされたセルフホスト配備）が必要だ。この開示の切り分け——何がローカルで検証可能で、
+何が接続サービスを要するか——が、alpha ラベルを言い訳ではなく信頼できるものにしている。`strands-agents/box`
+（10-14、上記）と対比せよ：Box はエージェントの*外*で共有イベント履歴に基づきポリシーを執行し、OpenDots は
+*身元*をエージェント単位にし、書き込みにゲートを掛ける。同じ封じ込め問題の二つの半身が、2 週間のうちに
+出荷された。
+
+Sources: [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots) · [AG-UI protocol](https://docs.ag-ui.com/introduction) · [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot)

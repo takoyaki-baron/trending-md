@@ -157,3 +157,23 @@ Sources: [prabanta-dev/janas](https://github.com/prabanta-dev/janas) · [HN 5006
 **一个 1M 参数 OCR 模型在 CPU 上跑到 49 页/秒（Indra OCR，Datalab，10 月 13 日）：**细节与限定条件见 [[smart-routing]]；边缘读法是**文本抽取已变成 CPU 吞吐问题而非 GPU 问题**，于是小模型档位现在覆盖了一条过去需要视觉模型或云端调用的文档管线。它的限制章节（手写体约 8%、七种文字、多级表格）是被印出来的而非被埋起来的——与本批次中 LFM2.5 和 Janas 条目同一形状。
 
 Sources: [LiquidAI/LFM2.5-24B-A2B](https://huggingface.co/LiquidAI/LFM2.5-24B-A2B) · [Liquid AI blog](https://www.liquid.ai/blog/lfm2-5-24b-a2b) · [Datalab — Indra OCR](https://www.datalab.to/blog/indra-ocr) · [datalab-to/indra-ocr](https://huggingface.co/datalab-to/indra-ocr)
+
+## 2026-10-14 20:17 — EmbeddingGemma 2 的第一个出货应用（DigUp）
+
+**`ARahim3/DigUp`**（3,162★，MIT，创建于 10 月 8 日，Apple Silicon + macOS 14+）是一个完全本地的 macOS
+语义文件搜索，构建在 Google DeepMind 的 **EmbeddingGemma 2** 之上——即 10-07 在此首次覆盖的那个 740M 多模态
+嵌入模型——并利用该模型提供的文本/图像/音频/视频共享空间。这个共享空间带来的是：既能按画面内容、也能按
+截图中的文字找图；**在说到某句话的那一刻**打开视频或播客（音频按 30 秒重叠窗口嵌入）；打开 PDF 并跳到
+高亮你所说词语的那一页；在语义匹配之外还能精确匹配发票号、错误码这类字符串。索引在本地——唯一的网络调用是
+一次性 **865 MB 模型下载**和一次"不发送任何关于你文件的信息"的每日更新检查。
+
+该品类中罕见地明确划定了范围，这也正是其隐私主张可核查而非口号的原因：在你为代码搜索选定的文件夹之外它
+**从不读取代码**；在代码项目内它**只读截图**；并且从不触碰密钥、证书、口令文件、`~/.ssh`、应用包或缓存。
+Windows 与 Linux 标注为"on the way"。
+
+**它为何属于本文件。** 它是对 EmbeddingGemma 2 核心主张的实践检验——一个 740M 模型在图像、音频与文本检索上
+好到足以在笔记本上取代三个专用索引——而且它是本批"小模型层级"模式的第二次出现（另两个是 LFM2.5-24B-A2B 与
+Indra OCR）：有意思的问题已不再是"它能不能本地跑"，而是"一个小模型能吞并什么"。边界写在机理描述里而非
+营销文案里，这正是该主张可审计的原因。
+
+Sources: [ARahim3/DigUp](https://github.com/ARahim3/DigUp) · [google/embeddinggemma-2](https://huggingface.co/google/embeddinggemma-2)

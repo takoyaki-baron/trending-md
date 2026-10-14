@@ -3726,3 +3726,62 @@ Two scorer facts to keep beside the matrix: Ubuntu's own priority is **Medium** 
 **Standing shape.** The exploitability half stays as Wordfence left it — two lab-build exploits, 10,240 attempts across ten environments, zero successes outside the matching build, no public code-execution PoC, no independent reproduction, no in-the-wild exploitation. This is the *targeted-attack and shared-hosting-image* risk class, not the mass-scan class: the package-revision matrix is what turns the 9.8 into a decision. Provenance watch armed for the record's own motion (`nvd-provenance.json`, Pass 10) — the event that would change this write-up is the record leaving "Awaiting Analysis".
 
 Sources: [Debian security tracker](https://security-tracker.debian.org/tracker/CVE-2026-39919) · [Ubuntu: CVE-2026-39919](https://ubuntu.com/security/CVE-2026-39919) · [Artifex gs10080 release](https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/tag/gs10080) · [ghostpdl fix commit 0a8bf88](https://github.com/ArtifexSoftware/ghostpdl/commit/0a8bf88e39db07b0751a58d6ec1cf992073e4dc1) · [Ghostscript 10.08.0 News](https://ghostscript.readthedocs.io/en/gs10.08.0/News.html) · [NVD: CVE-2026-39919](https://nvd.nist.gov/vuln/detail/CVE-2026-39919)
+
+## 2026-10-14 20:17 — the October wave's mundane tail, and three provenance fields that are not the same field
+
+The wave's headline items are in the 10-14 section above. What the 20:17 batch adds is the *tail* —
+and the tail is the argument: a month that also produces these two is not a month of novel research.
+
+**CVE-2026-87689 — Metasploit Framework's web API served its credential store unauthenticated**
+(9.8, CVSS 3.1, CWE-306, Secondary from `cve@rapid7.com`, NVD "Received", no NVD analysis). In
+`Msf::WebServices::CredentialServlet`, "every mutating and read route calls `warden.authenticate!`
+before processing a request, except the `update_credential` (PUT) and `delete_credentials` (DELETE)
+handlers for `/api/v1/credentials`, which omit the authentication call entirely." Those handlers
+call straight into `lib/msf/core/db_manager/cred.rb`, which performs no authorization of its own. A
+client able to reach the default `0.0.0.0:8080` listener can read, modify **or permanently delete**
+every stored credential record — passwords, hashes, private keys held for a shared team engagement.
+6.5.5 fixes it by making `warden.authenticate!` the first statement in both handlers; all published
+versions through 6.5.4 are affected. **The shape to keep:** a defect that survives review *because*
+every neighbouring route does it right — and a pentest framework's credential store is the
+highest-value single object in an engagement, so the remediation is "treat those credentials as
+disclosed," not "patch and move on." Delete is as unauthenticated as read.
+
+**CVE-2026-97229 — GitLab CE/EE, integer overflow in the CI/CD regular-expression compiler**
+(CVSS 3.1 10.0, CWE-190, Secondary from `cve@gitlab.com`, NVD "Undergoing Analysis"). An
+unauthenticated user could execute arbitrary code on the GitLab server via a crafted regular
+expression in a CI/CD configuration, "due to insufficient regular expression validation." Affected:
+19.2 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2; patches shipped Oct 12. **The exposure
+is inverted from the usual pattern:** GitLab.com already runs the patched version and GitLab
+Dedicated customers need no action, which leaves *self-managed* instances as the exposed set. Two
+HackerOne reports are referenced; GitLab publishes the underlying issues 90 days after the patching
+release.
+
+**Provenance refinement — one batch, three fields that are not the same field.** The 12:30 act pass
+established that `Primary`/`Secondary` records *who assigned* a metric while "has NVD analyzed it" is
+a `source: nvd@nist.gov` question. The 20:17 batch adds two more distinctions, all from the standing
+`nvd-provenance.mjs --ids` read:
+
+| CVE | `vulnStatus` | metrics | NVD-analyzed | metric source |
+|---|---|---|---|---|
+| CVE-2026-104935 (Ivanti ICS 8.6) | **Analyzed** | 1 | **0** | `3c1d8aa1-…` UUID, Secondary |
+| CVE-2026-109705 (Firefox 158, 9.6) | Deferred | 1 | 0 | `134c704f-…` UUID, Secondary |
+| CVE-2026-108398 (.NET WDAC bypass, 8.8) | Awaiting Analysis | 1 | 0 | `secure@microsoft.com`, Secondary |
+| CVE-2026-87689 (Metasploit, 9.8) | Received | 1 | 0 | `cve@rapid7.com`, Secondary |
+| CVE-2026-97229 (GitLab, 10.0) | Undergoing Analysis | 1 | 0 | `cve@gitlab.com`, Secondary |
+| CVE-2026-92707 (MessagePack-CSharp DoS) | **no NVD record at all** | — | — | vendor CVRF only |
+
+Two lessons. **(1)** `vulnStatus: Analyzed` does **not** imply an `nvd@nist.gov` metric exists —
+CVE-2026-104935 is Analyzed with zero NVD-assigned metrics, so "NVD analyzed it" and "NVD scored it"
+are separate statements. **(2)** A metric's `source` is sometimes an opaque UUID rather than a named
+address (Mozilla's and Ivanti's records here), so "this is the CNA's own score" may have to be
+established from the record's provenance fields rather than read off the metric — do not print a
+UUID as a scorer, and do not assume an email address is there to be printed.
+
+Also from this batch: **CVE-2026-108398** (.NET Framework untrusted search path, CWE-426, 8.8
+Secondary `secure@microsoft.com`, Awaiting Analysis) lets an authenticated attacker place a crafted
+.NET assembly and register it for loading by a protected process, **bypassing Windows Defender
+Application Control with no user interaction** — reported by James Forshaw of Google Project Zero,
+publicly disclosed before a fix existed. CWE-426 (untrusted search path) is the class, not the
+memory-safety flavour the volume numbers suggest.
+
+Sources: [NVD CVE-2026-87689](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [Metasploit 6.5.5](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [NVD CVE-2026-97229](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [GitLab patch release notes](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705) · [NVD CVE-2026-108398](https://nvd.nist.gov/vuln/detail/CVE-2026-108398) · [MSRC CVE-2026-108398](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-108398)

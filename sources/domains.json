@@ -11761,5 +11761,50 @@
     "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
+  },
+  "mozilla.org": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Mozilla's own security advisory index (MFSA) — first-hand for Firefox/Thunderbird CVE lists and for the vendor's 2026 change to per-bug advisories. Cross-checked (10-14): MFSA 2026-106's CVE-2026-109705 entry (Networking use-after-free sandbox escape, fixed in Firefox 158 / ESR 153.5) matches the NVD record's description and affected-version data.",
+    "jp": "Mozilla自身のセキュリティアドバイザリ一覧（MFSA）——Firefox/Thunderbird の CVE 一覧と、2026年の「バグごとに1件」への方針変更の一次情報。突合済み（10-14）：MFSA 2026-106 の CVE-2026-109705（Networking の use-after-free によるサンドボックス脱出、Firefox 158 / ESR 153.5 で修正）は NVD レコードの説明および影響バージョンと一致。",
+    "zh": "Mozilla 官方安全公告索引（MFSA）——Firefox/Thunderbird CVE 清单及 2026 年“每 bug 一条”政策变更的一手来源。已交叉核验（10-14）：MFSA 2026-106 中 CVE-2026-109705（Networking 释放后使用导致沙箱逃逸，修复于 Firefox 158 / ESR 153.5）与 NVD 记录的描述及受影响版本一致。"
+  },
+  "ai-security-letter.org": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 2,
+    "density": "med",
+    "en": "Primary host of the October 2026 open letter on AI and cybersecurity signed by hundreds of scientists. High value as a primary artifact (signatories listed with affiliations, recommendations quoted verbatim), but the signatory count is a live, unauthenticated number — cross-checked (10-14) against The Decoder and other outlets, which reported 406/415/350/260/220 while the page itself read 420.",
+    "jp": "科学者数百名が署名した2026年10月の AI とサイバーセキュリティに関する公開書簡の一次ホスト。一次資料として価値が高い（署名者は所属付きで列挙、提言は原文どおり）。ただし署名数は生きた未認証の数字である——10-14 に The Decoder ほかと突合したところ、報道は 406/415/350/260/220、ページ自体は 420 と表示していた。",
+    "zh": "数百位科学家签署的《2026 年 10 月 AI 与网络安全公开信》的一手托管页。作为一手文件价值高（署名者附机构逐一列出、建议为原文），但签名数是实时且未经认证的——10-14 与 The Decoder 等媒体交叉核验：报道为 406/415/350/260/220，而页面本身显示 420。"
+  },
+  "skills.wheresryan.sh": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Author-run landing page and install instructions for the anatomy agent skill. Useful for the skill's own scope claims but vendor-self-published — cross-checked (10-14) against the wheresryan22/anatomy GitHub README, which links it and describes the same three output kinds (SVG, SVG+WebGL, 3D beta) and install paths.",
+    "jp": "anatomy エージェントスキルの作者運営ランディングページ兼インストール手順。スキル自身の範囲に関する主張には有用だが自己公表——10-14 に wheresryan22/anatomy の GitHub README と突合し、リンクと同一の3出力（SVG、SVG+WebGL、3D ベータ）およびインストール経路を確認。",
+    "zh": "anatomy 智能体技能的作者自营落地页与安装说明。对技能自身的范围主张有用，但属自我发布——10-14 与 wheresryan22/anatomy 的 GitHub README 交叉核验，二者互链并描述同样的三类产出（SVG、SVG+WebGL、3D 测试版）及安装路径。"
+  },
+  "docs.ag-ui.com": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Documentation for the AG-UI agent-user-interaction protocol. Adequate for protocol mechanics but project-self-published and thin on independent evaluation — cross-checked (10-14) via the CopilotKit/OpenDots README, which states that template is built on AG-UI.",
+    "jp": "AG-UI エージェント・ユーザー相互作用プロトコルのドキュメント。プロトコルの仕組みには十分だがプロジェクト自身の公開物で、独立した評価は薄い——10-14 に CopilotKit/OpenDots の README（同テンプレートが AG-UI 上に構築されていると明記）で突合。",
+    "zh": "AG-UI 智能体—用户交互协议的文档。说明协议机制足够，但属项目自我发布、缺少独立评估——10-14 通过 CopilotKit/OpenDots 的 README（明确说明该模板构建于 AG-UI 之上）交叉核验。"
+  },
+  "smallcultfollowing.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Niko Matsakis's personal blog (Rust language design). First-hand for language-design argument and unusually careful about its own limits; opinion rather than measurement, so numbers he quotes from others (e.g. Meta's first-party Rust volume) should be treated as second-hand. Cross-checked (10-14) via the Hacker News discussion of the same post.",
+    "jp": "Niko Matsakis（Rust の言語設計）の個人ブログ。言語設計の論旨は一次情報で、自らの限界について異例に慎重。ただし意見であり測定ではないため、他者から引用した数字（例：Meta のファーストパーティ Rust コード量）は二次情報として扱う。10-14 に同一記事の Hacker News ディスカッションで突合。",
+    "zh": "Niko Matsakis（Rust 语言设计）的个人博客。语言设计论证为一手，且对自身局限异常谨慎；但属观点而非测量，其中转引他人的数字（如 Meta 的第一方 Rust 代码量）应按二手处理。10-14 通过对同一博文的 Hacker News 讨论交叉核验。"
   }
 }

@@ -2509,3 +2509,52 @@ Sources: [Adobe APSB26-144](https://www.adobe.com/trust/security/products/coldfu
 **持续形态。** 可利用性那一半维持 Wordfence 留下的状态——两个针对实验室构建的利用、跨十个环境 10240 次尝试、在匹配构建之外零成功、没有公开的代码执行 PoC、没有独立复现、没有在野利用。这属于*定向攻击与共享主机镜像*的风险类别，不是大规模扫描类别：包修订号矩阵才是把那个 9.8 变成决策的东西。已为该记录自身的状态变化武装来源监视（`nvd-provenance.json`，Pass 10）——会推翻本文的唯 一事件，是记录离开 "Awaiting Analysis"。
 
 Sources: [Debian security tracker](https://security-tracker.debian.org/tracker/CVE-2026-39919) · [Ubuntu: CVE-2026-39919](https://ubuntu.com/security/CVE-2026-39919) · [Artifex gs10080 release](https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/tag/gs10080) · [ghostpdl fix commit 0a8bf88](https://github.com/ArtifexSoftware/ghostpdl/commit/0a8bf88e39db07b0751a58d6ec1cf992073e4dc1) · [Ghostscript 10.08.0 News](https://ghostscript.readthedocs.io/en/gs10.08.0/News.html) · [NVD: CVE-2026-39919](https://nvd.nist.gov/vuln/detail/CVE-2026-39919)
+
+## 2026-10-14 20:17 — 十月浪潮的平凡尾部，以及三个并非同一字段的溯源字段
+
+该浪潮的头条条目见上方 10-14 小节。20:17 这批补充的是*尾部*——而尾部正是论据：一个同时产出下面这两条
+的月份，并不是一个充满新颖研究的月份。
+
+**CVE-2026-87689 — Metasploit Framework 的 Web API 在无认证状态下提供其凭据库**（9.8，CVSS 3.1，CWE-306，
+Secondary，来自 `cve@rapid7.com`，NVD 状态 "Received"，无 NVD 分析）。在
+`Msf::WebServices::CredentialServlet` 中，"every mutating and read route calls `warden.authenticate!` before
+processing a request, except the `update_credential` (PUT) and `delete_credentials` (DELETE) handlers for
+`/api/v1/credentials`, which omit the authentication call entirely." 这些 handler 直接调用
+`lib/msf/core/db_manager/cred.rb`，而后者自身不做任何授权。能访问默认 `0.0.0.0:8080` 监听者的客户端，
+可以读取、修改**或永久删除**全部已存凭据记录——共享团队engagement中的口令、哈希与私钥。6.5.5 通过把
+`warden.authenticate!` 置于两个 handler 的首句修复；截至 6.5.4 的所有已发布版本均受影响。**要记住的形态：**
+一个之所以能通过评审、*正因为*相邻每条路由都做对了的缺陷——而渗透框架的凭据库是一次engagement中价值最高的
+单一对象，因此补救措施是"把这些凭据视为已泄露"，而不是"打个补丁继续"。删除与读取一样无需认证。
+
+**CVE-2026-97229 — GitLab CE/EE，CI/CD 正则表达式编译器中的整数溢出**（CVSS 3.1 10.0，CWE-190，Secondary，
+来自 `cve@gitlab.com`，NVD 状态 "Undergoing Analysis"）。未认证用户可通过 CI/CD 配置中特制的正则表达式在
+GitLab 服务器上执行任意代码，"due to insufficient regular expression validation"。受影响：19.2 低于
+19.2.8、19.3 低于 19.3.5、19.4 低于 19.4.2；补丁于 10 月 12 日发布。**暴露面与常见模式相反：** GitLab.com
+已运行修复版本、GitLab Dedicated 客户无需动作，留下的暴露集合是*自建*实例。引用了两份 HackerOne 报告；
+GitLab 在补丁版本发布 90 天后公开底层 issue。
+
+**溯源细化——同一批，三个并非同一字段的字段。** 12:30 的 act pass 已确立：`Primary`/`Secondary` 记录的是
+*谁指派*了指标，而"NVD 是否分析过"是一个 `source: nvd@nist.gov` 问题。20:17 这批又添了两个区分，全部来自
+常设的 `nvd-provenance.mjs --ids` 读取：
+
+| CVE | `vulnStatus` | 指标数 | NVD 已分析 | 指标来源 |
+|---|---|---|---|---|
+| CVE-2026-104935（Ivanti ICS 8.6） | **Analyzed** | 1 | **0** | `3c1d8aa1-…` UUID，Secondary |
+| CVE-2026-109705（Firefox 158，9.6） | Deferred | 1 | 0 | `134c704f-…` UUID，Secondary |
+| CVE-2026-108398（.NET WDAC 绕过，8.8） | Awaiting Analysis | 1 | 0 | `secure@microsoft.com`，Secondary |
+| CVE-2026-87689（Metasploit，9.8） | Received | 1 | 0 | `cve@rapid7.com`，Secondary |
+| CVE-2026-97229（GitLab，10.0） | Undergoing Analysis | 1 | 0 | `cve@gitlab.com`，Secondary |
+| CVE-2026-92707（MessagePack-CSharp DoS） | **NVD 完全无记录** | — | — | 仅有厂商 CVRF |
+
+两个教训。**(1)** `vulnStatus: Analyzed` **并不**意味着存在 `nvd@nist.gov` 指标——CVE-2026-104935 是
+Analyzed 且 NVD 指派指标为零，因此"NVD 分析过它"与"NVD 给它打过分"是两个不同的陈述。**(2)** 指标的 `source`
+有时是不透明 UUID 而非具名地址（此处的 Mozilla 与 Ivanti 记录），因此"这是 CNA 自己的评分"可能必须从记录的
+溯源字段推断，而不能直接从指标上读出——不要把 UUID 当作评分方打印，也不要假定一定存在可打印的邮箱地址。
+
+本批另有一条：**CVE-2026-108398**（.NET Framework 不可信搜索路径，CWE-426，8.8，Secondary
+`secure@microsoft.com`，Awaiting Analysis）允许已认证攻击者放置特制 .NET 程序集并注册给受保护进程加载，
+**在无用户交互的情况下绕过 Windows Defender Application Control**——由 Google Project Zero 的 James
+Forshaw 报告，在修复存在之前即已公开披露。CWE-426（不可信搜索路径）才是类别，而非规模数字所暗示的内存安全
+口味。
+
+Sources: [NVD CVE-2026-87689](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [Metasploit 6.5.5](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [NVD CVE-2026-97229](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [GitLab patch release notes](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705) · [NVD CVE-2026-108398](https://nvd.nist.gov/vuln/detail/CVE-2026-108398) · [MSRC CVE-2026-108398](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-108398)

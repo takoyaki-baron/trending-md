@@ -130,3 +130,46 @@ Sources: [NVD CVE-2026-39919](https://nvd.nist.gov/vuln/detail/CVE-2026-39919) �
 4. **ボットウォールに阻まれた一次資料は、黙って洗浄せず記録する。** Wordfence 自身の記事は本フィードの取得に対して **HTTP 202・本文0バイト**（Anubis 系チャレンジ）を返した。`bugs.ghostscript.com` も同様だ。したがってこの項目の詳細は securityonline.info に由来し、そちらは*直接読んだ*——その来歴は agent の頭の中だけでなく、公開された項目に記されるべきものだ。開けない一次資料は引用についての事実であり、誠実な対応は実際に読んだ情報源を名指しすることだ。
 
 Sources: [NVD API — CVE-2026-102489](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-102489) · [ghostpdl-downloads releases](https://api.github.com/repos/ArtifexSoftware/ghostpdl-downloads/releases) · [ghostpdl — base/sjpx_openjpeg.c history](https://github.com/ArtifexSoftware/ghostpdl/commits/master/base/sjpx_openjpeg.c) · [Debian security tracker](https://security-tracker.debian.org/tracker/CVE-2026-39919) · [Ubuntu CVE page](https://ubuntu.com/security/CVE-2026-39919) · [Ghostscript 10.08.0 News](https://ghostscript.readthedocs.io/en/gs10.08.0/News.html)
+
+## 2026-10-14 20:17 — 機械可読な一次資料は JS レンダリングのページに勝る；そして動く三つの数字
+
+1. **一次資料の Web ページが JavaScript のみなら、報道に退く前に機械可読な双子を探す。** Microsoft の
+   10 月リリースノートページ（`msrc.microsoft.com/update-guide/releaseNote/2026-Oct`）は素の取得に対して
+   **ページタイトル以外何も返さない**——つまりその月で最も引用された数字（1,411 件の CVE）には到達可能な
+   一次資料が存在しなかった。同じデータは CVRF JSON として
+   `api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct` に公開されている：25 MB、1 リクエスト、そして
+   ベンダー自身の件数——**"This release consists of the following 1413 Microsoft CVEs"**——に加え、
+   1,760 件の一意な CVE ID、製品ファミリ内訳、そしてちょうど 3 件の "notable items"（Exploitation
+   Detected 1 件、Publicly disclosed 2 件）を与える。**一般化：JS のみのベンダーページは利用不能な資料では
+   なく、宣伝されていない機械可読な兄弟を持つ資料である**（CSAF、CVRF、OSV、GHSA が繰り返し現れる四つ）。
+   利得はその差そのものだ：報道は 1,411、ベンダー文書は 1,413、文書は 1,760 の ID を保持する——同一事象から
+   の三つの量であり、互換ではなく、いずれも読者が既定で想定するものではない。
+
+2. **同じバッチに、ベンダー文書にしか存在しない主張と、報道にしか存在しない主張が同時にあった。**
+   CVE-2026-92707 は公開済みゼロデイ 2 件の一方でありながら、翌日時点で **NVD にレコードが一切ない**
+   ——ベンダー CVRF に存在し NVD に不在、すなわち「易逝的な不在」ルールの正反対である。一方、規模を
+   Microsoft の AI プラットフォーム利用に帰属させる文言は報道に現れ、**ベンダー文書には存在しない**ので、
+   その文は媒体に帰属する。両方向を読むこと：一次資料は*唯一*の記録にもなり得るし、*欠けている*記録にも
+   なり得る。
+
+3. **ライブカウンタ付きの数字は事実ではなくデータである。** 10 月の公開書簡ページは確認時点で
+   **"420 Signatories"** を表示していた（一次取得）が、同じ週の報道は 406、415、350、260、220 を伝え、
+   ページには署名の認証について**何も**書かれていない。公開書簡の署名数は未認証であり、ページが拡散する
+   につれて増えるので、タイムスタンプと出所を添えて公表するか、目で確認できる署名者だけを載せるべきだ。
+   書簡のうち検証可能で引用に値するのは要求そのものである：サイバー能力モデルの既定エアギャップ、封じ込め
+   慣行を標準化し "record and track containment failures" も担う国際機関、そして失敗の公開。
+
+4. **「Analyzed」と「NVD が採点した」は別のフィールドであり、CNA の身元は UUID かもしれない。** 12:30 の
+   較正を拡張する：CVE-2026-104935 は `vulnStatus: Analyzed` でありながら `nvd@nist.gov` メトリクスが
+   **ゼロ**であり、ステータスだけでは「NVD がスコアを審査した」を支えられない。また Mozilla と Ivanti の
+   レコードでは唯一のメトリクスの `source` が具名アドレスではなく**不透明な UUID**である——UUID を採点者
+   として印字せず、印字可能な人間可読の CNA アドレスが存在すると仮定しないこと。
+
+5. **アドバイザリのページ自体がスコアを一切載せていないことがある。** MFSA 2026-106 は**影響度ラベル**
+   （high/moderate/low）のみで数値 CVSS を持たないため、CVE-2026-109705 に付けられた 9.6 は NVD レコード
+   の CNA メトリクスであり、Mozilla のアドバイザリが述べたものではない。ディストロトラッカーの規則と
+   同じ規律：数字がどの成果物由来かを明示すること。アドバイザリを開いた読者には見つからないからだ。
+   ただし件数*自体*は一次確認する価値がある——77 件、30/33/14、うちちょうど 9 件が 1 人の OpenAI 研究者の
+   クレジット——そして 109704–109781 の範囲で 1 つの ID が欠番であるため、「77」は「範囲の幅」ではない。
+
+Sources: [MSRC CVRF October 2026](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct) · [MSRC release notes (JS-only)](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [October 2026 Open Letter on AI and Cybersecurity](https://ai-security-letter.org/) · [Mozilla MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705)

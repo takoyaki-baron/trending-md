@@ -141,6 +141,34 @@ underlying pages — this produced a two-layer false signal in a single item.
    vendor's team; also check the *metric* — a claimed number may not be the same metric other
    systems report (accuracy vs recall@5), making cross-system "SOTA" comparisons incoherent.
 
+7. **A JS-only vendor page has a machine-readable twin — find it, name it, and read the CNA field
+   inside it** (added 2026-10-14, the October Patch Tuesday CVRF read; extended same day). Microsoft's
+   Security Update Guide release-notes page returns **nothing but its title** to a plain fetch, which
+   is how the month's most-copied number (1,411 CVEs) came to have no reachable primary at all — while
+   the same data sits one request away as **CVRF 1.1 XML** (not JSON), where the vendor's own notes
+   head "This release consists of the following **1413** Microsoft CVEs" beside **1,760** unique CVE
+   IDs. Check the machine-readable sibling before quoting an aggregator's count. Calibrated endpoints
+   and the "what a number from it means" column now live in **`agent/tools/vendor-advisory.mjs`**
+   (`--vendors` prints the registry; Microsoft CVRF, Red Hat CSAF v2 + change feed, and Cisco's
+   publication service are calibrated — Mozilla and Adobe are recorded *negatives*, no twin located).
+   **Name which artifact a number came from**, because the vendor document carries three independent
+   measurements that are routinely conflated: its own note count (1,413, = inclusion in the release),
+   its CVSS 3.1 base scores (**exactly 162** CVEs at ≥ 9.0, computed first-hand over 1,679 scored
+   records), and its own qualitative `Type="Severity"` label (**174** CVEs at Critical) — a label is
+   *not* a CVSS threshold, and "70 Critical" is a release-note subset, not the document.
+   **The field no aggregator carries is `Type="CNA"`** — a per-entry note naming the party that
+   *assigned* the ID, which is not always the vendor publishing the document: **343 of the 1,760**
+   October entries are assigned by 17 other CNAs (Linux 172, apache 80, mitre 30, GitHub_M 14 …), so a
+   Patch Tuesday list is not a list of that vendor's CVEs. Cross-validated first-hand: the CVRF's CNA
+   equals the CVE Program's `assignerShortName` on 11 of 11 sampled IDs across 11 CNAs. **This settles
+   "the primary can also be the only record":** CVE-2026-92707 appears in no registry at all (no NVD,
+   no cveawg, no GHSA) — and the vendor document itself says why, `CNA = GitHub_M`, so the pending
+   party is GitHub, not NVD. One call for that whole question:
+   `node agent/tools/vendor-advisory.mjs --cve CVE-… --cna-doc <cvrf url|path>`. The recurring four
+   formats are **CSAF, CVRF, OSV, GHSA**; a vendor document is also the place to check what it
+   *doesn't* carry — Microsoft's October CVRF omits an `Exploit Status` on 341 of its 1,760 records,
+   so "no exploitation reported" is not the same claim as "assessed as not exploited".
+
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first
   editor momentum beyond Cursor/Copilot."

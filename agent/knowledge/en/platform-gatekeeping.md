@@ -292,3 +292,33 @@ Sources: [Apple — HomeView](https://www.apple.com/apple-homeview/) · [HN 5007
 **esp32-iphone-agent makes a stock iPhone agent-addressable with no vendor API in the loop (`onehumanbeing/esp32-iphone-agent`, created Oct 11, 1,647★ in three days, MIT):** mechanism in [[agent-stack]]. The gatekeeping reading is its own comparison table — Apple's sanctioned automation path (XCTest/WebDriverAgent) requires a Mac, Xcode, a signed runner and an Apple developer account whose free-tier signature expires every 7 days, while an **AirPlay mirror plus a USB HID board** requires none of them, works in any app including games, and leaves **no vendor API in the loop**. Because it only consumes pixels and emits HID events, it is outside every consent surface a platform can attach to a first-party automation framework — the same structural position as the Nitter instances that regrow past takedowns, and the direct counterpart to the levers Apple's Full Disk Access tightening and HomeView's HomeKit/Matter badge both depend on: **the device is addressable whether or not the platform consents.** The cost of entry is what changed ($7, no signing identity), which is the part that makes it a fleet question rather than a hobby one.
 
 Sources: [onehumanbeing/esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent) · [demo video](https://www.youtube.com/watch?v=Ly4im-P4jYg)
+
+## 2026-10-14 20:17 — two ambient-sensor devices, one stated architecture
+
+Apple announced the next generation of **Apple TV 4K** (Apple Newsroom, Oct 13): **Siri AI** "powered
+by the next generation of Apple Intelligence" with a full-screen conversational experience, and
+**built-in far-field microphones** so it can be addressed hands-free from across a room. Paired with
+up to four HomePod mini 2 / HomePod (2nd gen) speakers it unlocks Apple's "most immersive home
+theater surround sound setup," and as a home hub it now generates **Apple Intelligence camera
+activity descriptions and summarized notifications** in the Home app alongside accessory and scene
+control. Pre-orders opened Oct 13, availability begins **November 13** — the same ship date Apple
+gave HomeView.
+
+**The comparison is the item.** In the same week, from the same company, two always-listening
+surfaces shipped with **different levels of architectural disclosure**:
+
+| | HomeView (7-inch hub) | Apple TV 4K |
+|---|---|---|
+| Sensors | 12MP camera + four beamforming mics | far-field microphones |
+| Stated processing boundary | **Secure Exclaves on the A18** — "an isolated compartment inaccessible to the OS or Apple" | **none** — the release says where the microphones are, not where the audio is understood |
+| Accessory/platform requirement | HomeKit- or Matter-enabled accessories; no new SDK | HomePod pairing for surround; Home app hub role |
+
+Where the audio is *captured* is stated in both; where it is *understood* is stated in one. That is a
+checkable, comparative disclosure gap rather than a privacy complaint — and it is the shape worth
+watching, because the reviewer's question ("is this processed on-device?") has a documented answer for
+one product and no answer at all for the other, in the same launch window. HomeView's architecture is
+also the one every ambient-camera competitor will now be measured against, while the Matter/HomeKit
+badge requirement confirms Apple intends to stay the smart home's gatekeeper rather than open a
+platform.
+
+Sources: [Apple Newsroom — the new Apple TV 4K](https://www.apple.com/newsroom/2026/10/apple-unveils-the-new-apple-tv-4k/) · [HN discussion](https://news.ycombinator.com/item?id=50071310) · [Apple TV 4K](https://www.apple.com/apple-tv-4k/) · [Apple: HomeView](https://www.apple.com/apple-homeview/)

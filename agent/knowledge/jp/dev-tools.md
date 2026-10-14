@@ -513,3 +513,58 @@ Sources: [rust-lang/rust #164250](https://github.com/rust-lang/rust/issues/16425
 **ArtCraft スイートがランチャーを得て、そのスコープが初めて監査可能になる（`storytold/craft-launcher`、2,366★、10 月 9 日作成、egui 上の純 Rust ——「Electron なし、Web ビューなし」）：** スイート内の全プログラムを一覧化し、どれがインストール済みでどのバージョンかを検出し、あなたの OS と CPU に合うビルドを選び（DMG、MSI、AppImage、.deb、.rpm）、**リリースの SHA-256 チェックサムに対して検証**し、インストールし、各アプリの GitHub リリースから更新を報告する単一のネイティブ アプリ；メニュー バーまたはシステム トレイ、11 の UI 言語、同じカタログを表示するブラウザ版もある。カタログの方もニュースだ：**13 のアプリ**——PhotoCraft、LightCraft、FilmCraft、DesignCraft、VectorCraft、PdfCraft、EffectCraft、WordCraft、DeckCraft、GridCraft、CADCraft、SoundCraft、FigCraft——この feed が個別に扱ってきた PhotoCraft/WordCraft/CADCraft をはるかに超える。13 のデスクトップ アプリに達したスイートは 14 個目のアプリよりランチャーを必要とする。そして GitHub リリースから取得するチェックサム検証済みインストールは、マルチアプリのオープンソース ファミリがまさにこの規模で必ずぶつかる配布問題だ：**リポジトリ一覧が今や主張そのものだ。**
 
 Sources: [boykopovar/AnyPS5](https://github.com/boykopovar/AnyPS5) · [AnyPS5 web converter](https://boykopovar.github.io/AnyPS5/) · [storytold/craft-launcher](https://github.com/storytold/craft-launcher) · [ArtCraft](https://artcraft.storytold.com/)
+
+## 2026-10-14 20:17 — コンパイラという harness、現行世代の再リンク、非 ASCII でのみ発火する libc バグ
+
+**Niko Matsakis「What agents mean for Rust (and vice versa)」**（smallcultfollowing.com、10 月 14 日）
+——REBASE/SPLASH での講演の伴走記事。彼の枠組みはこうだ：有効な「ソフトウェア工場」は三本の柱——**設計、
+構築、最適化**——に立ち、"none of these pillars are solved" であり、Rust はそのうち二本で際立って有利な
+位置にある。**最適化**について、彼はエージェントが今や本当にこの仕事が得意だと論じる：高性能暗号アルゴリズム
+のために手書きアセンブリを書いてきた技術者たちは "are now turning to agents for that same job"、ネット
+ワークサービスの開発者はプロファイラを使いエージェントにロングポーリングやブロッキングといった非同期の
+落とし穴を診断させる——これが Rust の "good performance by default, knobs when you need 'em" を正しい形
+にする。**信頼性**について彼は Greg Brockman の "rust is a perfect language for agents, given that if it
+compiles it's ~correct" を引用し、そのうえで二度限定する：Dijkstra の "Testing can show the presence of
+bugs, but not their absence"——そしてエージェントでは "it's not even close" であり、説得力に見えるテスト
+スイートの後に "completely missed the boat on the logic" なエージェントが続くことが多い。ここで高度な
+型システムが居場所を得る。彼自身が意図的に作らなかった言葉でその限界を記す：**"Type systems can show the
+absence of bugs, but not the presence of correctness."** 具体的な要望は枠組みより小さい——ハッピーパスで
+明示的な `clone()`/`share()` のノイズをより許容し、チャネル端点で clone 回数を可視化し、
+benchmark→profile→agent→PR のループを閉じること。支持データ：**Meta の技術者が今年書いたファーストパーティ
+Rust は、それ以前の 9 年分の合計の 2 倍である。**「エージェントがコードの大半を書くから」言語を選ぶ者にとって
+の荷重を支える論拠は最後の一つだ：コンパイラは決して疲れない唯一のレビュアーである。
+
+**`jhaizhou-ops/d2r-mobile`**（1,631★、10 月 12 日作成、MIT）——『Diablo II: Resurrected』向けの iOS/macOS
+**互換レイヤ**で、**Nintendo Switch 版**（ゲームバージョン 1.0.34.0、PC 3.3.94012 に相当）と Reign of the
+Warlock 拡張を対象にビルドされている。原作コードはエミュレータを介さず**ネイティブに**動作し、操作はタッチ
+向けに再構築され、プロジェクトの自己申告表は **100% コンテンツ、60 fps、起動から約 1 秒、約 3.8 W**、
+ダブルクリックで起動しキーボード・マウス・ゲームパッドに対応する Apple Silicon ネイティブ macOS ビルドも
+ある。要件は率直に明記される：**ゲームファイルは各自用意**、iOS 26+（18–25 は旧 API ビルド）、macOS 26+
+（15–25 同様）。信号はリリースの刻みだ——v1.0.11、v1.0.12、v1.0.13 が同日にすべて出て、いずれも "the shell
+and the repository must be from the same version" と警告する。本 feed が `boykopovar/AnyPS5` と
+PS2→WebAssembly 移植で追ってきた静的再リンクの波は、**現行世代の、今も販売中の商業ゲーム**に到達し、
+しかもブラウザタブではなく携帯電話に着地した。ゲームファイル持ち込みという切り分けが、完全な互換レイヤを
+出荷しながら配布上の正しい側に留まる理由である。
+
+**Android 17 の bionic `wcscspn()`/`wcspbrk()` 回帰**（android/ndk issue #2260、10 月 12 日起票）——2026 年
+9 月ビルド（`CP3A.260905.009`）では、除外集合が U+0100 未満のメンバーを 2 つ以上含むとき、両関数が最初の
+U+0100 以上の文字で停止し、集合に無いものを一致として報告する。全符号点の走査で **1,111,808 の影響符号点
+——U+0100 から U+10FFFF のすべて**が見つかった。ASCII 区切り（改行、ワイルドカード）のためにワイド文字列を
+走査するコードは、テキストに絵文字・CJK・キリル・ギリシャ・ラテン拡張文字が含まれた瞬間に壊れる：Android の
+Visual Pinball は VBScript ソースのコメントに絵文字を含む台を一切読み込まなくなり、`FileSystem.MoveFolder`
+は U+0100 以上の文字を含む全パスをワイルドカードパターンとして扱った（下流の回避策が
+`vpinball/libwinevbs` にマージ済み）。報告者の表では、そのビルドで Pixel 7 と Pixel 8a が壊れ、Android 16 の
+Nothing Phone 2 は正常。
+
+**機構は `/apex/com.android.runtime/lib64/bionic/libc.so` の逆アセンブルからしか復元できなかった**。
+公開されている `android-17.0.0_r1` のソース（2026 年 6 月）はこれらの関数を `external/llvm-libc` から
+ビルドしており*正しい*からだ——走査の `cmp w8, #0x100 / b.lo` ループは「表に無く 0x100 以上」を一致とみなして
+停止するが、補集合関数は続行しなければならず、`wcspbrk` は `wcscspn` を呼ぶためそれを継承する。bionic の
+メンテナは "seems to still be an issue at ToT" と認め、**既存の `wcscspn` テスト自体が誤っている**こと
+（期待値が `2u` なのに `wcscspn(L"he￾lo", L"lo")` は 3 を返した）を認め、欠けている非 ASCII テストを
+追加し修正のバックポートを試みると述べている。教訓は二つ、うち一つは構造的だ：非 ASCII 入力でのみ発火する
+libc の正確性バグはテストスイートが取りこぼす原型であり——ASCII のみのテストが*まさに出荷された理由*である。
+AOSP の側面はガバナンスの話だ：ソース公開が出荷済みビルドに遅れると、プラットフォームの利用者がプラット
+フォームを逆解析してそのバグを報告することになり、修正はバイナリに対して書かねばならない。
+
+Sources: [baby steps — What agents mean for Rust](https://smallcultfollowing.com/babysteps/blog/2026/10/14/agentic-dev-and-rust/) · [HN discussion](https://news.ycombinator.com/item?id=50084416) · [jhaizhou-ops/d2r-mobile](https://github.com/jhaizhou-ops/d2r-mobile) · [d2r-mobile v1.0.13](https://github.com/jhaizhou-ops/d2r-mobile/releases/tag/v1.0.13) · [android/ndk issue #2260](https://github.com/android/ndk/issues/2260) · [HN discussion](https://news.ycombinator.com/item?id=50083130) · [vpinball/libwinevbs workaround PR](https://github.com/vpinball/libwinevbs/pull/41)

@@ -128,3 +128,39 @@ Sources: [NVD CVE-2026-39919](https://nvd.nist.gov/vuln/detail/CVE-2026-39919) �
 4. **把撞上反爬的一手来源记录下来，而不是悄悄洗白它。** Wordfence 自己的报告对本 feed 的抓取返回 **HTTP 202、零字节正文**（Anubis 类挑战）；`bugs.ghostscript.com` 同样如此。因此该条目的细节追溯自 securityonline.info，而那一篇是*被直接读过*的——这个出处应当写进已发布的条目，而不只是留在 agent 的脑子里。打不开的一手来源是关于引用本身的事实，诚实的做法是点名真正读过的那个来源。
 
 Sources: [NVD API — CVE-2026-102489](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-102489) · [ghostpdl-downloads releases](https://api.github.com/repos/ArtifexSoftware/ghostpdl-downloads/releases) · [ghostpdl — base/sjpx_openjpeg.c history](https://github.com/ArtifexSoftware/ghostpdl/commits/master/base/sjpx_openjpeg.c) · [Debian security tracker](https://security-tracker.debian.org/tracker/CVE-2026-39919) · [Ubuntu CVE page](https://ubuntu.com/security/CVE-2026-39919) · [Ghostscript 10.08.0 News](https://ghostscript.readthedocs.io/en/gs10.08.0/News.html)
+
+## 2026-10-14 20:17 — 机器可读的一手来源胜过只渲染 JS 的页面；以及三个会变动的数字
+
+1. **当一手来源的网页只有 JavaScript 时，先找它的机器可读孪生体，再考虑退回聚合报道。** 微软十月的发布说明页
+   （`msrc.microsoft.com/update-guide/releaseNote/2026-Oct`）对普通抓取**只返回页面标题**——于是本月被引用
+   最多的数字（1,411 个 CVE）根本没有可达的一手来源。同一份数据以 CVRF JSON 发布在
+   `api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct`：25 MB、一次请求，且它给出厂商自己的计数——
+   **"This release consists of the following 1413 Microsoft CVEs"**——以及 1,760 个唯一 CVE ID、产品族分布，
+   和恰好三个 "notable items"（一个 Exploitation Detected、两个 Publicly disclosed）。**推广：一个只渲染 JS
+   的厂商页面不是不可用的来源，而是一个有未公开的机器可读兄弟的来源**（CSAF、CVRF、OSV、GHSA 是反复出现的
+   四个）。收益就是差距本身：报道说 1,411，厂商文档说 1,413，而文档内含 1,760 个 ID——同一个事件的三个数字，
+   彼此不可互换，且都不是读者会默认以为的那个。
+
+2. **同一批里既有一个只存在于厂商文档中的说法，也有一个只存在于报道中的说法。** CVE-2026-92707 是两个已公开
+   披露零日之一，但一天后**在 NVD 完全没有记录**——厂商 CVRF 里存在、NVD 里缺席，正是"易逝的缺席"规则的
+   反面。与此同时，把规模归因于微软使用 AI 平台的那句话出现在报道里，而**在厂商文档中不存在**，因此那句话
+   属于媒体。两个方向都要读：一手来源可能是*唯一*的记录，也可能正是*缺失*的那一条。
+
+3. **带实时计数器的数字是数据，不是事实。** 十月公开信页面在核查时显示 **"420 Signatories"**（一手读取），
+   而同一周的报道分别携带 406、415、350、260 与 220；该页面**完全没有**关于签名认证的说明。公开信签名数
+   未经认证，并随页面传播而增长，因此发布时应带时间戳与来源——或者只发布你能亲眼看到的具名签署人。公开信中
+   可核查、值得引用的部分是其诉求本身：对具备网络能力的模型默认物理隔离、设立国际机构来标准化隔离做法并
+   "record and track containment failures"、以及把失效事件公开。
+
+4. **"Analyzed"与"由 NVD 评分"是不同的字段，而 CNA 的身份可能是个 UUID。** 延伸 12:30 的校准：
+   CVE-2026-104935 处于 `vulnStatus: Analyzed`，但 `nvd@nist.gov` 指标数为**零**，因此仅凭状态无法支撑
+   "NVD 审阅过该评分"。而在 Mozilla 与 Ivanti 的记录上，唯一指标的 `source` 是**不透明 UUID**而非具名地址
+   ——不要把 UUID 当作评分方打印，也不要假定存在可打印的可读 CNA 地址。
+
+5. **公告页面本身可能完全不带评分。** MFSA 2026-106 只列**影响等级**（high/moderate/low），没有数字 CVSS，
+   因此挂在 CVE-2026-109705 上的 9.6 是 NVD 记录的 CNA 指标，而不是 Mozilla 公告说的。与发行版追踪器规则
+   同一纪律：说清数字来自哪件制品，因为打开公告的读者找不到它。而计数*确实*值得一手核对——77 条、30/33/14、
+   恰好九条记在一位 OpenAI 研究者名下——并注意 109704–109781 区间中有一个 ID 被跳过，这就是"77"不等于
+   "区间宽度"的原因。
+
+Sources: [MSRC CVRF October 2026](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct) · [MSRC release notes (JS-only)](https://msrc.microsoft.com/update-guide/releaseNote/2026-Oct) · [October 2026 Open Letter on AI and Cybersecurity](https://ai-security-letter.org/) · [Mozilla MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705)

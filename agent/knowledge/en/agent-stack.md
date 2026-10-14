@@ -2667,3 +2667,35 @@ Sources: [Anthropic Engineering — Scion](https://www.anthropic.com/engineering
 **Strands Box: OS enforcement plus a real policy language, with the policy evaluated over history (`strands-agents/box`, Apache-2.0, v0.1.0 Oct 7, 393★, 43 open issues):** a Rust sandbox engine for AI agents from the Strands (AWS-lineage) ecosystem where **access control is code, not configuration** — policies are written in **Dogwood**, a `permit`/`forbid` language with **default-deny** semantics ("a matching `permit` must allow the operation, and a matching `forbid` overrides that permission"). Box is harness-agnostic (`box.toml` and `policy.dw` point at any agent binary), combines OS isolation with semantic rules evaluated **outside** the agent process, does credential injection so the agent never holds the secret, and exports decisions to OTLP-JSON. The mechanism worth copying: **interpreters and gateways share an event history**, so a file read through the Shell or Python interpreter can cause the egress gateway to deny a later outbound HTTP request. Caveats stated up front and material: "**Preview:** Box currently supports local execution on **macOS with Apple silicon** only" (Linux planned, not shipped), and "direct filesystem grants in `box.toml` are enforced by the OS and do **not** produce individual Dogwood decisions" — files you want policy-checked must be reached through an interpreter rather than granted directly. 43 open issues against 393 stars reads as active triage. This is the dataflow unit arriving as a product: the boundary moves from "what can it touch" to "**what may it do next, given what it already did**." → [[security]]
 
 Sources: [onehumanbeing/esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent) · [demo video](https://www.youtube.com/watch?v=Ly4im-P4jYg) · [strands-agents/box](https://github.com/strands-agents/box) · [Dogwood policy language](https://dogwood-policy.github.io/dogwood/)
+
+## 2026-10-14 20:17 — the per-agent machine gets a credential model (CopilotKit/OpenDots)
+
+**`CopilotKit/OpenDots`** (5,263★, MIT, alpha, created Sep 29) is an open-source template for
+**persistent AI agents that move between text, calls and Slack**, built on CopilotKit and **AG-UI**.
+Each "Dot" gets a name, role, instructions and permitted tools, and can have **its own computer** — an
+OpenBot container supervisor with a browser profile and workspace files that persist across
+stop/start, exposed through a Computer panel with browser control, human takeover, files and terminal
+output, with browser, file and shell permissions set **per Dot**.
+
+The security design is the part worth archiving, because it is the closest thing to a reference
+architecture for "an agent that has its own machine" that is not a vendor SDK:
+
+- **Per-Dot credential derivation** — service credentials stay on the server and the application
+  "derives a different computer credential for each Dot," so a compromised Dot holds a credential
+  scoped to itself rather than the fleet's.
+- **Approval-gated writes** — any non-read-only MCP tool pauses for an **"Approve & run"** card, and
+  saving a page requires a human-in-the-loop **"Approve & save"**, where a *changed draft* needs a
+  fresh review while a *same-draft retry* recovers the already-saved page (the idempotence detail most
+  approval flows get wrong).
+- **Documents in a local workspace database** with autosave progress reporting, drafts preserved on
+  failed saves, and revision checks against stale edits.
+
+The README is explicit that this is **"a template, not a hosted product"** and that "an unconfigured
+template does not execute commands on your host"; conversations require CopilotKit Intelligence
+(hosted, a local Docker evaluation, or a licensed self-hosted deployment). That disclosure split —
+what is locally verifiable versus what needs a connected service — is why the alpha label reads as
+credible rather than as a hedge. Compare `strands-agents/box` (10-14, above): Box enforces policy
+*outside* the agent over a shared event history; OpenDots makes the *identity* per-agent and gates
+the writes. Two halves of the same containment problem, shipped within a fortnight.
+
+Sources: [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots) · [AG-UI protocol](https://docs.ag-ui.com/introduction) · [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot)

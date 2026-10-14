@@ -2821,3 +2821,59 @@ Sources: [Adobe APSB26-144](https://www.adobe.com/trust/security/products/coldfu
 **恒常的な形。** 悪用可能性の半分は Wordfence が残したまま——ラボビルド向けのエクスプロイト2つ、10環境での10,240回の試行、一致するビルド以外での成功ゼロ、公開されたコード実行 PoC なし、独立した再現なし、野生での悪用なし。これは*標的型攻撃と共有ホスティングイメージ*のリスク階級であり、大規模スキャンの階級ではない：パッケージリビジョンのマトリクスこそが、その 9.8 を判断に変える。記録自身の動きに来歴ウォッチを武装させた（`nvd-provenance.json`、Pass 10）——この記述を覆す唯一の出来事は、記録が "Awaiting Analysis" を離れることだ。
 
 Sources: [Debian security tracker](https://security-tracker.debian.org/tracker/CVE-2026-39919) · [Ubuntu: CVE-2026-39919](https://ubuntu.com/security/CVE-2026-39919) · [Artifex gs10080 release](https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/tag/gs10080) · [ghostpdl fix commit 0a8bf88](https://github.com/ArtifexSoftware/ghostpdl/commit/0a8bf88e39db07b0751a58d6ec1cf992073e4dc1) · [Ghostscript 10.08.0 News](https://ghostscript.readthedocs.io/en/gs10.08.0/News.html) · [NVD: CVE-2026-39919](https://nvd.nist.gov/vuln/detail/CVE-2026-39919)
+
+## 2026-10-14 20:17 — 10 月の波の平凡な裾野、そして同じフィールドではない三つの来歴フィールド
+
+波の見出し項目は上の 10-14 セクションにある。20:17 バッチが加えるのは*裾野*であり、その裾野こそが論拠だ：
+以下二つをも同時に生む月は、新規研究に満ちた月ではない。
+
+**CVE-2026-87689 — Metasploit Framework の Web API が資格情報ストアを無認証で提供**（9.8、CVSS 3.1、
+CWE-306、Secondary、`cve@rapid7.com`、NVD ステータス "Received"、NVD 分析なし）。
+`Msf::WebServices::CredentialServlet` において、"every mutating and read route calls
+`warden.authenticate!` before processing a request, except the `update_credential` (PUT) and
+`delete_credentials` (DELETE) handlers for `/api/v1/credentials`, which omit the authentication
+call entirely." これらのハンドラは `lib/msf/core/db_manager/cred.rb` を直接呼び出し、そこでは独自の
+認可は一切行われない。既定の `0.0.0.0:8080` リスナーに到達できるクライアントは、保存された全資格情報
+（共有チームのエンゲージメント用のパスワード、ハッシュ、秘密鍵）を読み取り・変更・**恒久的に削除**できる。
+6.5.5 は両ハンドラの先頭文を `warden.authenticate!` にすることで修正；6.5.4 までの全公開版が影響を受ける。
+**覚えておくべき形：** 隣接するすべてのルートが正しく行っている*がゆえに*レビューを通過してしまう欠陥——
+そしてペンテストフレームワークの資格情報ストアはエンゲージメント中で最も価値の高い単一オブジェクトであり、
+対処は「パッチを当てて先へ進む」ではなく「それらの資格情報は開示済みとして扱う」ことだ。削除も読み取りと
+同じく無認証である。
+
+**CVE-2026-97229 — GitLab CE/EE、CI/CD 正規表現コンパイラの整数オーバーフロー**（CVSS 3.1 10.0、CWE-190、
+Secondary、`cve@gitlab.com`、NVD ステータス "Undergoing Analysis"）。未認証ユーザーが CI/CD 設定内の
+細工された正規表現により GitLab サーバー上で任意コードを実行し得た、"due to insufficient regular
+expression validation"。影響：19.2 は 19.2.8 未満、19.3 は 19.3.5 未満、19.4 は 19.4.2 未満。パッチは
+10 月 12 日公開。**露出は通常と逆である：** GitLab.com は既に修正版を稼働しており GitLab Dedicated 顧客は
+対応不要で、露出集合として残るのは*セルフマネージド*インスタンスだ。HackerOne レポートが 2 件参照され、
+GitLab はパッチリリースの 90 日後に元の issue を公開する。
+
+**来歴の精緻化——1 バッチで、同じフィールドではない三つのフィールド。** 12:30 の act パスは
+`Primary`/`Secondary` が*誰が*メトリクスを割り当てたかを示し、「NVD が分析したか」は
+`source: nvd@nist.gov` の問いであることを確立した。20:17 バッチは常設の `nvd-provenance.mjs --ids` 読み取り
+からさらに二つを追加する：
+
+| CVE | `vulnStatus` | メトリクス | NVD 分析済み | メトリクス source |
+|---|---|---|---|---|
+| CVE-2026-104935（Ivanti ICS 8.6） | **Analyzed** | 1 | **0** | `3c1d8aa1-…` UUID、Secondary |
+| CVE-2026-109705（Firefox 158、9.6） | Deferred | 1 | 0 | `134c704f-…` UUID、Secondary |
+| CVE-2026-108398（.NET WDAC バイパス、8.8） | Awaiting Analysis | 1 | 0 | `secure@microsoft.com`、Secondary |
+| CVE-2026-87689（Metasploit、9.8） | Received | 1 | 0 | `cve@rapid7.com`、Secondary |
+| CVE-2026-97229（GitLab、10.0） | Undergoing Analysis | 1 | 0 | `cve@gitlab.com`、Secondary |
+| CVE-2026-92707（MessagePack-CSharp DoS） | **NVD にレコード自体が無い** | — | — | ベンダー CVRF のみ |
+
+教訓は二つ。**(1)** `vulnStatus: Analyzed` は `nvd@nist.gov` メトリクスの存在を**意味しない**——
+CVE-2026-104935 は Analyzed でありながら NVD 割り当てメトリクスがゼロであり、「NVD が分析した」と
+「NVD が採点した」は別の言明である。**(2)** メトリクスの `source` は具名アドレスではなく不透明な UUID の
+ことがある（ここでは Mozilla と Ivanti のレコード）。したがって「これは CNA 自身のスコアだ」は来歴
+フィールドから推論する必要があり得る——UUID を採点者として印字せず、印字可能なメールアドレスが存在すると
+仮定しないこと。
+
+同じバッチからもう一点：**CVE-2026-108398**（.NET Framework の信頼できない検索パス、CWE-426、8.8、
+Secondary `secure@microsoft.com`、Awaiting Analysis）は、認証済み攻撃者が細工した .NET アセンブリを配置し
+保護プロセスに読み込ませることを可能にし、**ユーザー操作なしで Windows Defender Application Control を
+バイパス**する——Google Project Zero の James Forshaw による報告で、修正が存在する前に公開開示された。
+クラスは CWE-426（信頼できない検索パス）であり、量の数字が示唆するメモリ安全系ではない。
+
+Sources: [NVD CVE-2026-87689](https://nvd.nist.gov/vuln/detail/CVE-2026-87689) · [Metasploit 6.5.5](https://github.com/rapid7/metasploit-framework/releases/tag/6.5.5) · [NVD CVE-2026-97229](https://nvd.nist.gov/vuln/detail/CVE-2026-97229) · [GitLab patch release notes](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) · [NVD CVE-2026-104935](https://nvd.nist.gov/vuln/detail/CVE-2026-104935) · [NVD CVE-2026-109705](https://nvd.nist.gov/vuln/detail/CVE-2026-109705) · [NVD CVE-2026-108398](https://nvd.nist.gov/vuln/detail/CVE-2026-108398) · [MSRC CVE-2026-108398](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-108398)

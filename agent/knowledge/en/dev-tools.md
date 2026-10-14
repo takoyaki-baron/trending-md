@@ -570,3 +570,65 @@ Sources: [rust-lang/rust #164250](https://github.com/rust-lang/rust/issues/16425
 **The ArtCraft suite gets a launcher, and its scope becomes auditable for the first time (`storytold/craft-launcher`, 2,366★, created Oct 9, pure Rust on egui — "no Electron, no web view"):** one native app that lists every program in the suite, detects which are installed and at what version, picks the right build for your OS and CPU (DMG, MSI, AppImage, .deb, .rpm), **verifies it against the release's SHA-256 checksums**, installs it, and reports updates from each app's GitHub releases; menu bar or system tray, eleven interface languages, and a browser version showing the same catalog. The catalog is the other news: **thirteen apps** — PhotoCraft, LightCraft, FilmCraft, DesignCraft, VectorCraft, PdfCraft, EffectCraft, WordCraft, DeckCraft, GridCraft, CADCraft, SoundCraft and FigCraft — well past the PhotoCraft/WordCraft/CADCraft this feed has covered individually. A suite that reaches thirteen desktop apps needs a launcher more than a fourteenth app, and checksum-verified installs pulled from GitHub releases is the distribution problem every multi-app open-source family hits at exactly this size: **the repo list is now the claim.**
 
 Sources: [boykopovar/AnyPS5](https://github.com/boykopovar/AnyPS5) · [AnyPS5 web converter](https://boykopovar.github.io/AnyPS5/) · [storytold/craft-launcher](https://github.com/storytold/craft-launcher) · [ArtCraft](https://artcraft.storytold.com/)
+
+## 2026-10-14 20:17 — the compiler as harness, a current-gen relink, and a libc bug that only fires on non-ASCII
+
+**Niko Matsakis, "What agents mean for Rust (and vice versa)"** (smallcultfollowing.com, Oct 14) —
+the companion post to a REBASE/SPLASH talk. His frame: an effective "software factory" rests on three
+pillars — **design, construction, optimization** — and "none of these pillars are solved," with Rust
+unusually well placed for two. On **optimization** he argues agents are now genuinely good at the
+work: engineers who hand-tuned assembly for high-performance cryptographic algorithms "are now turning
+to agents for that same job," and network-service developers use profilers to have agents diagnose
+async pitfalls like long polls and blocking — which makes Rust's "good performance by default, knobs
+when you need 'em" the right shape. On **reliability** he quotes Greg Brockman's "rust is a perfect
+language for agents, given that if it compiles it's ~correct," then qualifies it twice: Dijkstra's
+"Testing can show the presence of bugs, but not their absence" — and with agents "it's not even
+close," since a convincing-looking test suite is often followed by an agent that "completely missed
+the boat on the logic." That is where an advanced type system earns its place, marked with his own
+deliberate non-coinage: **"Type systems can show the absence of bugs, but not the presence of
+correctness."** The concrete asks are smaller than the framing — tolerate more explicit
+`clone()`/`share()` noise in the happy path, surface clone counts on channel endpoints, close the
+benchmark→profile→agent→PR loop. Supporting datapoint: **Meta engineers wrote twice as much
+first-party Rust this year as in the previous nine combined.** The load-bearing argument for anyone
+choosing a language *because* agents will write most of it is the last one: the compiler is the only
+reviewer that never gets tired.
+
+**`jhaizhou-ops/d2r-mobile`** (1,631★, created Oct 12, MIT) — an iOS/macOS **compatibility layer for
+Diablo II: Resurrected**, built against the **Nintendo Switch release** (game version 1.0.34.0,
+corresponding to PC 3.3.94012) with the Reign of the Warlock expansion. The original game code runs
+**natively**, not through an emulator; controls are rebuilt for touch; the project's self-reported
+table reads **100% content, 60 fps, ~1 second to in-game, ~3.8 W**, with a native Apple-silicon macOS
+build that starts on double-click and takes keyboard, mouse and gamepad. Requirements are stated
+plainly: **bring your own game files**, iOS 26+ (18–25 via an older-API build), macOS 26+ (15–25
+likewise). Release cadence is the signal — v1.0.11, v1.0.12 and v1.0.13 all shipped the same day,
+each warning that "the shell and the repository must be from the same version." The static-relinking
+wave this feed has tracked through `boykopovar/AnyPS5` and the PS2-to-WebAssembly ports has now
+reached a **current-generation, still-sold commercial game**, and landed on phones rather than in a
+browser tab; the bring-your-own-game-files split is what keeps it on the right side of distribution
+while shipping a complete compatibility layer.
+
+**Android 17's bionic `wcscspn()`/`wcspbrk()` regression** (android/ndk issue #2260, filed Oct 12) —
+the September 2026 builds (`CP3A.260905.009`) make both functions stop at the first character
+≥ U+0100 whenever the reject set holds two or more members all below U+0100, reporting a match that
+is not in the set. A sweep of every code point found **1,111,808 affected code points — all of
+U+0100 through U+10FFFF**. Any code scanning wide strings for ASCII delimiters (newlines, wildcards)
+breaks as soon as the text contains an emoji, CJK, Cyrillic, Greek or Latin Extended characters:
+Visual Pinball on Android stopped loading any table whose VBScript source contains an emoji in a
+comment, and `FileSystem.MoveFolder` treated every path with a character ≥ U+0100 as a wildcard
+pattern (a downstream workaround is merged in `vpinball/libwinevbs`). Broken per the reporter's
+table: Pixel 7 and Pixel 8a on that build; a Nothing Phone 2 on Android 16 is fine.
+
+**The mechanism had to be recovered from disassembly** of `/apex/com.android.runtime/lib64/bionic/
+libc.so`, because the public `android-17.0.0_r1` sources (June 2026) build these functions from
+`external/llvm-libc` and are *correct* — the scan's `cmp w8, #0x100 / b.lo` loop treats "not in the
+table and ≥ 0x100" as a match and stops, where the complement functions must continue, and `wcspbrk`
+inherits it by calling `wcscspn`. The bionic maintainer confirms it "seems to still be an issue at
+ToT," admits **the existing `wcscspn` test is itself wrong** (its expected value was `2u` while
+`wcscspn(L"he￾lo", L"lo")` returned 3), and says he will add the missing non-ASCII tests and try
+to backport a fix. Two lessons, one of them structural: a libc correctness bug that only fires on
+non-ASCII input is the archetype a test suite misses — and the ASCII-only test is *exactly why it
+shipped*. The AOSP half is the governance story: when source drops lag shipped builds, the platform's
+users reverse-engineer the platform to report bugs in it, and the fix has to be written against a
+binary.
+
+Sources: [baby steps — What agents mean for Rust](https://smallcultfollowing.com/babysteps/blog/2026/10/14/agentic-dev-and-rust/) · [HN discussion](https://news.ycombinator.com/item?id=50084416) · [jhaizhou-ops/d2r-mobile](https://github.com/jhaizhou-ops/d2r-mobile) · [d2r-mobile v1.0.13](https://github.com/jhaizhou-ops/d2r-mobile/releases/tag/v1.0.13) · [android/ndk issue #2260](https://github.com/android/ndk/issues/2260) · [HN discussion](https://news.ycombinator.com/item?id=50083130) · [vpinball/libwinevbs workaround PR](https://github.com/vpinball/libwinevbs/pull/41)

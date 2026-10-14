@@ -2038,123 +2038,159 @@
     },
     "https://news.ycombinator.com/item?id=50071017": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-13T21:54:33.906Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
       "feeds": [
         "2026-10-14.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50070302": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-13T21:54:33.906Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
       "feeds": [
         "2026-10-14.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50074289": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-13T21:54:33.906Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
-      "feeds": [
-        "2026-10-14.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50068036": {
-      "verdict": "blocked",
-      "streak": 2,
-      "first_seen": "2026-10-13T21:54:33.906Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
       "feeds": [
         "2026-10-14.md"
       ]
     },
     "https://github.com/xtool-org/xtool/releases/tag/v1.21.0": {
       "verdict": "dead",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-13T21:54:33.906Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
       "feeds": [
         "2026-10-14.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50064840": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-13T21:54:33.906Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
-      "feeds": [
-        "2026-10-14.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50070741": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-14T04:47:29.175Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
       "feeds": [
         "2026-10-14.md"
       ]
     },
     "https://news.microsoft.com/maia-2026/": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-14T04:47:29.175Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
       "feeds": [
         "2026-10-14.md"
       ]
     },
     "https://www.adobe.com/trust/security/products/coldfusion/apsb26-144.html": {
-      "verdict": "blocked",
+      "verdict": "transient",
       "streak": 1,
       "first_seen": "2026-10-14T04:47:29.175Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
-      "feeds": [
-        "2026-10-14.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50074705": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-14T04:47:29.175Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
-      "feeds": [
-        "2026-10-14.md"
-      ]
-    },
-    "https://www.youtube.com/watch?v=Ly4im-P4jYg": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-14T04:47:29.175Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
       "feeds": [
         "2026-10-14.md"
       ]
     },
     "https://www.nvidia.com/en-us/data-center/mgx/": {
       "verdict": "dead",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-14T04:47:29.175Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
       "feeds": [
         "2026-10-14.md"
       ]
     },
     "https://artcraft.storytold.com/": {
       "verdict": "transient",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-14T04:47:29.175Z",
-      "last_seen": "2026-10-14T04:47:29.175Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50072913": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-14T12:48:06.634Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50063717": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-14T12:48:06.634Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50076048": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-14T12:48:06.634Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://www.apple.com/apple-homeview/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-10-14T12:48:06.634Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://ubuntu.com/security/CVE-2026-39919": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-10-14T12:48:06.634Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://www.apple.com/newsroom/2026/10/apple-unveils-the-new-apple-tv-4k/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-10-14T12:48:06.634Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://www.apple.com/apple-tv-4k/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-10-14T12:48:06.634Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
+      "feeds": [
+        "2026-10-14.md"
+      ]
+    },
+    "https://creativecommons.org/licenses/by/4.0/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-10-14T12:48:06.634Z",
+      "last_seen": "2026-10-14T12:48:06.634Z",
       "feeds": [
         "2026-10-14.md"
       ]
     }
   },
-  "runs": 54,
+  "runs": 55,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-14T04:47:29.175Z"
+  "last_run": "2026-10-14T12:48:06.634Z"
 }
