@@ -1,8 +1,8 @@
 ---
 date: 2026-10-15
-updated: 2026-10-14T20:15:00Z
+updated: 2026-10-15T04:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 38
+sources: 47
 license: CC-BY-4.0
 ---
 
@@ -288,14 +288,154 @@ Canonical's public websites were hit by a distributed denial-of-service attack o
 
 ---
 
+## 21. "Passkeys are not a trap" — Scott Helme rebuts the viral anti-passkey post, on the mechanism
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 528+ pts · ~12.1h ago (~00:15 UTC+8)
+- **Tags:** `passkeys` `security` `webauthn` `attestation` `totp`
+
+Since our Oct 12 coverage of "Passkeys are a trap. Do not use them." (379 points): Scott Helme — founder of Report URI, author of an open-source passkeys library — has published the counter-case, and it attacks the original's *mechanics* rather than its conclusion. (1) **Synced passkeys don't attest.** Passkeys in iCloud Keychain, Google Password Manager, 1Password or Bitwarden return `none` when a site requests attestation; a consumer site demanding attested passkeys "would lock out almost all of its own users, instantly" — guidance against consumer attestation has run "for _years_ now." (2) **Attestation is mischaracterized.** The original claims attestation proves "an approved passkey manager, operating system, and firmware are in use"; Helme: it identifies only the authenticator's make/model via its AAGUID plus a vendor certificate chain — nothing about OS, browser, extensions, root status, or firmware version. (3) **The YubiKey irony.** The original recommends YubiKeys because they "avoid OS-wide attestation" — but YubiKeys are exactly the devices that *do* attestation, shipping Yubico-issued certificates, and enterprise attestation exists precisely to enforce approved hardware. (4) **TOTP is a step backwards.** Codes are relayed in real time by phishing kits like Evilginx (Troy Hunt's Mailchimp compromise is the cited case), while passkeys are domain-bound — and the original author's own addendum concedes passkeys resist man-in-the-middle. Verdict: keep passkeys, pick a manager that supports export, and oppose attestation mandates on consumer logins "if it ever happens."
+
+**Why it matters:** the two posts are not actually disagreeing about threat models — Helme has written elsewhere that "XSS Is Deadly for Passkeys" under attestation `none`, and still endorses YubiKeys. What he corrects is the mechanism (what attestation can and cannot prove) and the trade: refusing a hypothetical future mandate by choosing phishable TOTP today. Note also the 48-hour rebuttal cycle itself — the anti-passkey post's 379 points are what bought this correction its audience.
+
+[`🔗 Scott Helme: Passkeys are not a trap`](https://scotthelme.co.uk/passkeys-are-not-a-trap/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50088935)
+
+---
+
+## 22. OpenCode 2.0: the open-source coding agent rebuilds itself around a background Service — 213.6k★, MIT
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 392+ pts · ~7.5h ago (~04:48 UTC+8)
+- **Tags:** `opencode` `coding-agents` `mcp` `plugins` `typescript`
+
+Anomaly shipped **OpenCode 2.0**, a self-described "major overhaul" of the open-source coding agent (`anomalyco/opencode` — 213,563★, MIT, pushed today). The architecture change: a single background **Service** runs on your machine, and the TUI, web interface and desktop app all connect to it, with `@opencode/client` auto-discovery and `/pair` for other hosts. The API was rebuilt from scratch ("grew haphazardly") and OpenCode now calls its own API — e.g. moving sessions into git worktrees. The idea with the most leverage is **Code Mode**: a minimal JavaScript interpreter (`@opencode/codemode`) that converts MCP servers and OpenAPI endpoints into callable functions, so an agent scripts multi-tool calls in one round trip instead of paying one MCP round trip per call — with all MCP servers opted in by default to cut context bloat. Also new: background subagents (mixing models) and async shell commands with a ctrl+b hotkey to background slow work; ~80+ internal plugins written to force a well-maintained Plugin API, with TUI plugins stable via OpenTUI and hot-reload mid-session; and `@opencode/sdk` exposing the CLI's own code as a library. Breaking changes are stated plainly: 1.0 plugins will not work, the Server API is "completely different," `tui.json` has moved.
+
+**Why it matters:** Code Mode is the same context-economics bet this feed keeps tracking from the research side (yesterday's ColGrep-Agent-2B cut a frontier agent's tokens by a third) — here arrived at from the harness side: batch tool calls through a programmable layer instead of paying per-call MCP overhead. The counterweight is migration debt at 213k★ scale, which the post prices honestly rather than pretending 2.0 is a drop-in.
+
+[`🔗 Anomaly: OpenCode 2.0`](https://anoma.ly/notes/opencode-2-0/) · [`🔗 anomalyco/opencode`](https://github.com/anomalyco/opencode)
+
+---
+
+## 23. "Borders on plagiarism": Mononoke's builder says Anthropic's Scion lifted its derived-data design without credit
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 297+ pts · ~7.9h ago (~04:29 UTC+8)
+- **Tags:** `scion` `mononoke` `attribution` `open-source` `vcs`
+
+Since our Oct 14 item on Anthropic's Scion (7 engineers, 5 months, agents broke git): **Rain** — who helped build **Mononoke**, the source-control server behind Meta's Sapling — has responded, and the dispute is about *credit*, not copying. Rain's claim: Scion's "derived data" concept closely mirrors Mononoke's approach of precomputing indexes (blame, path history, skip lists — now eight separate indexes) defined recursively from a changeset's parents, and "the level of imitation goes well beyond having similar insights." Sapling gets only a "hard-won lessons" mention in Anthropic's post and Mononoke goes uncredited — which "borders on plagiarism." The AI twist is the attribution mechanism: Mononoke is open source and therefore in every LLM's training data, and asking Opus 5.5 or GPT-6 Astra about prior art immediately surfaces the Mononoke similarity. Rain explicitly does **not** object to Anthropic reusing the design — open sourcing exists "to benefit humanity through the spread of good ideas" — and notes their own Meta team consulted prior art too (Google's SrcFS, database write-ahead logs). A footnote contrasts Cursor/Vicent Marti's git work as similar insights with genuinely different designs.
+
+**Why it matters:** this is a new attribution failure mode arriving with AI-assisted design — the provenance chain runs training data → model → design document, and the person who can recognize their own index scheme inside it is findable. The distinction Rain draws is the usable one: convergent *insights* are how engineering normally works, but a specific recursive index structure is a *design*, and models make designs traceable in both directions. Anthropic's side of this exchange is, so far, the original post's silence on Mononoke.
+
+[`🔗 Rain: Anthropic's Scion is heavily inspired by Mononoke`](https://sunshowers.io/posts/anthropic-mononoke/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50094694)
+
+---
+
+## 24. Two actively-exploited enterprise appliances join CISA's KEV the same day — Cisco SEG at 9.8, PAN-OS at 8.6
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV · catalog 2026.10.14 · released 2026-10-14T19:27Z
+- **Tags:** `cve` `kev` `cisco` `palo-alto` `email-security`
+
+CISA's Oct 14 KEV update added two appliance flaws that were already being exploited. **CVE-2026-76519** (Cisco Secure Email Gateway, arbitrary file write): an *unauthenticated* sender emails a crafted attachment and writes files to the appliance OS, then potentially "runs commands as root." Two conditions: **File Reputation (AMP) must be enabled** on a mail policy, and **Content Scanner Tools must be older than 25.3.0.5525**. Cisco found it by internal scanning and assigned the score itself — CVSS 9.8, `psirt@cisco.com`. Advisory `cisco-sa-esa-afw-zqYJkjxp`; fixes have shipped since **September 14** (AsyncOS 15.5.5-014 and 16.5.0-780, plus the CST update, which installs without an upgrade or restart) — but **AsyncOS 16.0 has no fixed build**, there is no workaround, and Cisco says it became aware of attacks in October and has contacted Secure Email Cloud customers showing "indicators of possible compromise." Detection: `grep "System Security" system_logs`. **CVE-2026-0322** (PAN-OS, authenticated RCE in the management interface): affects PAN-OS 12.2.0–12.2.3 on PA-Series, VM-Series and Panorama; fix is 12.2.4+; **no workarounds**, with only partial Threat Prevention coverage (Threat IDs 510046/510047). Palo Alto's own advisory says "very limited exploitation has been observed" and rates it CVSS 4.0 **8.6** — with `PR:H`, because you need management-interface credentials. **Provenance, per our standing check:** the 9.8 is CNA-assigned (Cisco), NVD status Undergoing Analysis; the 8.6 is CNA-assigned (Palo Alto), NVD status Received — neither record has been NVD-analyzed.
+
+**Why it matters:** two appliances whose job is inspecting untrusted content, and the SEG one is exploitable by sending an email — about as low-friction as appliance exploitation gets. The pairing also settles a common misreading: **KEV lists exploitation, not severity** — an 8.6 authenticated RCE made the catalog alongside a 9.8, and the month between the Sep 14 Cisco fix and the Oct 14 KEV listing is the window in which "no exploitation reported" quietly expired.
+
+[`🔗 Cisco: cisco-sa-esa-afw-zqYJkjxp`](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-afw-zqYJkjxp) · [`🔗 Palo Alto: CVE-2026-0322`](https://security.paloaltonetworks.com/CVE-2026-0322) · [`🔗 The Hacker News`](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html)
+
+---
+
+## 25. Since our Oct 11 note: Cloudflare's Yandex deep-dive revises the "bot farms went dark" story
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 237+ pts · ~7.9h ago (~04:29 UTC+8)
+- **Tags:** `cloudflare` `yandex` `bot-traffic` `radar` `measurement`
+
+On Oct 11 this feed reported the UAV strikes on Yandex's Vladimir data center and Cloudflare Radar showing Yandex-origin traffic going to zero. Cloudflare's full analysis (Oct 14) keeps the traffic fact and overturns the interpretation that circulated with it — that Russian bot farms and influence operations had been knocked offline. The strikes (Oct 7–11, three facilities) did culminate in a near-total collapse on Oct 11: **99% below baseline for Yandex Search (AS13238), 90% for Yandex.Cloud (AS200350)**. But the two ASNs played different roles, and aggregate HTTP charts couldn't tell them apart. **AS13238 is search crawling**: 99.5% of its requests classified automated, 93.6% of those *Verified* bots — sampled traffic was 78.1% verified YandexBot, 11.5% YandexRenderResourcesBot, 1.9% YandexImages. **AS200350 is cloud hosting**: ~95.0% of scored requests were bots, **none Verified** — "more like software apps," nearly two-thirds sending data (POST), many self-identifying as JavaScript, Python or Go programs. Steepest industry impact: Publishing and Newspapers, down 44% from Yandex networks — with 90% of pre-event news-site traffic from that ASN being YandexBot indexing articles, and 40.5% of Cloudflare customers answering it with 403 Forbidden. The headline finding: "instead of going dark, malicious bots moved."
+
+**Why it matters:** this is the Void lesson at network scale — a traffic cliff is a signal to investigate, not a finding, and "bot traffic fell" is consistent with both "bot infrastructure destroyed" and "bots relocated," which have opposite implications. Credit where due to our own Oct 11 item: the traffic-to-zero fact it reported was correct; the going-dark *framing* was the part the behavior-level data doesn't support.
+
+[`🔗 Cloudflare: Yandex outage analysis`](https://blog.cloudflare.com/yandex-outage/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50094673)
+
+---
+
+## 26. Jev 1.14.0 ships a "Danger Zone": images, a bounding-box type, and uncapped context for decision models
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 226+ pts · ~7.1h ago (~05:11 UTC+8)
+- **Tags:** `jev` `system-one` `decision-models` `multimodal` `release`
+
+Since our Oct 14 note on the Jeva architecture: Typesafe has shipped **Jev 1.14.0** for its System One decision models, under the `jev-preview` alias (`jev-latest` moves in a week; 1.13.0 gets a 60-day deprecation warning, 1.14.0 gets 30 — a formal deprecation policy is coming). The release proper is "small, subtle improvements to *everything*," with the largest gains in multilingual support. The news is the opt-in **Danger Zone**, enabled per-request via API headers: (1) **composable images** — "the model was multimodal all along"; images work anywhere the JSON interface allows (in `state`, `instructions`, or `criteria`) with `TypeSafe-Danger-Zone-Images: true`; (2) a new **`box` type** returning a single bounding box, "no type errors allowed" — the first type beyond decision-making, exclusive to 1.14.0; (3) **longer context** — production context is deliberately capped for reliability, and the header `TypeSafe-Danger-Zone-Long-Context: true` removes the cap; (4) a **debug opt-in** letting users share queries to help find model issues, which Typesafe still won't train on. The caveats are in Typesafe's own words: the danger-zone features have "way too much jaggedness" to vouch for in production; all models perform worse on multimodality than pure text; models are less reliable on longer contexts; and their internal benchmarks are "provisional, biased toward our own models," so trust your own evals.
+
+**Why it matters:** a decision-model vendor adding a bounding-box output is the system-one shelf reaching toward the GUI-agent grounding layer — the same territory as yesterday's `box`-returning computer-use harnesses, but as a first-class type in a decision API. And the disclosure pattern is the one this feed keeps hoping for and rarely getting: a deprecation policy, a jaggedness warning, and "our benchmarks are biased toward us" printed above the release notes.
+
+[`🔗 Typesafe: Jev 1.14.0`](https://typesafe.ai/blog/jev-1-14) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50095353)
+
+---
+
+## 27. Linus Torvalds posts his first LLM-assisted kernel patch series — and review already found a race
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 114+ pts · ~11.3h ago (~01:00 UTC+8)
+- **Tags:** `linux` `kernel` `llm` `memory-management` `rcu`
+
+LWN (Oct 14): Torvalds has posted his **first LLM-assisted patch series** — ten patches against kernel memory management, following his remarks at the Maintainers Summit that he'd started using an LLM on this work. The target is **folio lookup**: the series enhances it "by noticing when folios are hot" and applies what he describes as "delay releasing this folio until after a RCU period," so both folio lookup and actual folio data accesses can run inside RCU-protected regions — removing refcount traffic from the fastpath, as long as user copies don't trigger page faults. Torvalds claims an **"order-of-magnitude speedup" on a read()-heavy benchmark** — a self-reported number on his own workload, with no independent measurement yet. Early review has already uncovered **a race condition** in the code, so the series needs more work before it can land. The LWN comment section is where the norms debate lives: "Setting a bad example" argues newcomers will conclude "if Linus did it, I don't see why I can't"; the counter is tlamp's excavator — the same machine does different work in a professional's hands.
+
+**Why it matters:** the story is not the speedup — it's where the line now sits. The most consequential gatekeeper in open source used an LLM on memory-management code, said so upfront, and submitted through the same review process that then caught the race in it. That last part is the actual test of the "LLM output is fine under competent review" position, and the first data point is: review worked, patches aren't in yet.
+
+[`🔗 LWN: Linus Torvalds's first LLM-assisted patch series`](https://lwn.net/Articles/1100449/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50090842)
+
+---
+
+## 28. Doc2Harness: the first deterministic benchmark for models that *build* agent harnesses — best model fails 47% of it
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.20344 · submitted Oct 14
+- **Tags:** `research` `benchmarks` `coding-agents` `harnesses`
+
+Most agent benchmarks measure how well a model performs *under* a harness; Doc2Harness ("the first deterministic benchmark for measuring long-horizon harness engineering") measures how well it **builds one**. Stage 1: a model inside a fixed builder harness receives an interface-only contract skeleton plus a development document consolidating behavior from **twelve frontier harnesses**, and builds a complete candidate harness in an isolated container. Stage 2: the frozen harness runs in separate containers, one per test case, driven end-to-end by a **scripted mock model** — no LLM in the loop — and scored on four observable channels: the requests sent to the model, the files on disk, the process exit code, and the command output, with positive controls to prevent vacuous passes. The field: **19 frontier models × 3 independent builds × 328 test cases**. Result: best is **GPT-6 Astra at 53.05%**, the weakest at 27.44% — so even the strongest model fails nearly half the cases — and "failures cluster around how cross-cutting functionality is split across modules." Eleven authors, 17 pages.
+
+**Why it matters:** harness quality is the variable every lab ships and nobody measures, and this feed has watched harness deltas decide outcomes all month (SWE-MISBEHAVIOR's dependency misreads, "your game is the harness"). The deterministic mock-model design removes LLM-judge variance — the failure mode that makes most agent benchmarks unfalsifiable. The honest caveats: author affiliations aren't stated on the abstract page, and "twelve frontier harnesses consolidated into one development document" is one specific sample of the design space — treat the 53% ceiling as a floor for the sub-task, not a verdict on any shipped product.
+
+[`🔗 arXiv 2610.20344`](https://arxiv.org/abs/2610.20344) · [`🔗 arXiv HTML`](https://arxiv.org/html/2610.20344v1)
+
+---
+
+## 29. Petal: CoScreen's makers open-source window-level pair programming — real windows, BYO LiveKit
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 133+ pts · ~9.8h ago (~02:32 UTC+8)
+- **Tags:** `screensharing` `pair-programming` `livekit` `rust` `self-hosted`
+
+**Petal** (`kiruna-labs/petal` — Rust, Apache-2.0, 147★, pushed Oct 13) is an open-source pair-programming app from the team behind CoScreen: low-latency, high-resolution screensharing plus remote control, where shared windows land on your desktop as **real, movable, resizable native windows** rather than tiles in a grid — with per-user labeled cursors, click-into-any-window keyboard and mouse control, several users sharing simultaneously, and persistent rooms (a standing `eng-sync` room, joined by one click) that need no links or scheduling. The deployment story is the point: the app is identical everywhere — "only the video backend changes" — so you can use **Petal Cloud** (hosted LiveKit, zero config), **self-host** by pointing the app at your own LiveKit server via a single docker-compose (traffic stays on your infrastructure), or **fork & build**. Free for macOS and Windows today; "Linux support coming next."
+
+**Why it matters:** window-level sharing — the part that made CoScreen feel like sitting at one desk — is the piece Zoom and Meet never did well, and CoScreen's own trajectory after acquisition is the cautionary tale. The revival as Apache-2.0 with a BYO-LiveKit escape hatch is the same self-hostable-infra pattern this feed keeps seeing in agent tooling (PentAGI, Talorys). Read the 147★ as what it is: a fresh launch with a proven team, not a proven community.
+
+[`🔗 Petal`](https://petal.live/) · [`🔗 kiruna-labs/petal`](https://github.com/kiruna-labs/petal)
+
+---
+
+## 30. Oxide's Virtual Oxide Labs: a full rack — MCUs, firmware and all — emulated on one machine in 10 minutes
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 90+ pts · ~10.0h ago (~02:21 UTC+8)
+- **Tags:** `oxide` `emulation` `rack-scale` `rust` `illumos`
+
+Oxide's **Virtual Oxide Labs (Voxel)** emulates complete Oxide racks — including multi-rack setups — on a single machine: illumos and Rust underneath, succeeding the older "a4x2" virtual labs. The constraint that forced it: finished racks go straight to customers, so rack-scale hardware is scarce, and the team needs to replicate real customer network topologies and run the real control plane **without** building special "test version" releases — Bryan Cantrill's "Prime Directive" says labs run stock Oxide software, unmodified. The emulation depth is the story: **sleds are Propolis VMs** (gimlets, cosmo, scrimlets); **networking is Debian VMs running FRR** (BGP numbered/unnumbered or static) plus SoftNPU, Oxide's software P4 switch; and **microcontrollers are genuinely emulated Cortex-M7/Cortex-M33 devices** — via the open-source `sp-emu`, flashing real Hubris firmware and modeling SysTick against the kernel's reload value — replacing the happy-path `SpSim` stub. Launch generates sprockets PKI, flashes emulated STM32H753/LPC55 parts, wires topology, boots ~6 Propolis VMs and runs `voxel-init` before `wicketd` commissions the rack — **about 10 minutes end to end**. The author runs 6 sleds on a 32-thread Ryzen 9 mini-PC with 96 GB RAM; topology changes are code edits (a new interconnect is "a couple of lines in `rack.rs`"). Stated caveats: sprockets certs aren't provisioned from manufacturing or the RoT as in production, emulated hardware is slower, and some details (a `cycles` field with no true cycle counting) are stopgaps.
+
+**Why it matters:** hardware companies usually fake this layer with mocks; Oxide emulated down to the microcontroller firmware, which means rack-scale CI can run the real control plane against believable silicon-shaped lies. The binding constraint it removed is telling too — the bottleneck on rack-scale software testing was hardware supply, not software.
+
+[`🔗 Oxide: Virtual Oxide Labs`](https://oxide.computer/blog/voxel-labs) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50092423)
+
+---
+
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-14T20:15:00Z |
-| Items | 20 |
-| Sources tracked | 38 (Hacker News front page + Algolia API, GitHub Trending/API, arXiv, Hugging Face, OpenRouter API, curl Security Advisories, daniel.haxx.se, oss-security/Openwall, NVD API, Rapid7, CISA KEV, CSO Online, ThaiCERT, Security Affairs, OMG! Ubuntu, BNT, LB.ua, SVT, TV4, Aftonbladet, Go blog, Builder.io, Project Apertus, Timescale, academa-labs, VXControl, Meta/facebookincubator, vendor advisories) |
+| Generated | 2026-10-15T04:20:00Z |
+| Items | 30 |
+| Sources tracked | 47 (Hacker News front page + Algolia API, GitHub Trending/API, arXiv, Hugging Face, OpenRouter API, curl Security Advisories, daniel.haxx.se, oss-security/Openwall, NVD API, Rapid7, CISA KEV, CSO Online, ThaiCERT, Security Affairs, OMG! Ubuntu, BNT, LB.ua, SVT, TV4, Aftonbladet, Go blog, Builder.io, Project Apertus, Timescale, academa-labs, VXControl, Meta/facebookincubator, vendor advisories, Scott Helme, Anomaly, sunshowers.io, Cisco Security Advisories, Palo Alto Security Advisories, The Hacker News, Cloudflare blog, Typesafe, LWN, Oxide Computer, Petal/kiruna-labs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

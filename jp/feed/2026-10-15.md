@@ -1,8 +1,8 @@
 ---
 date: 2026-10-15
-updated: 2026-10-14T20:15:00Z
+updated: 2026-10-15T04:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 38
+sources: 47
 license: CC-BY-4.0
 ---
 
@@ -288,14 +288,154 @@ Canonical の公開サイトが **2026 年 10 月 8 日**に分散型サービ�
 
 ---
 
+## 21. 「Passkey は罠ではない」——Scott Helme がバイラルな反 Passkey 記事に反論するのは、メカニズムに対してだ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 528+ pts · ~12.1h ago (~00:15 UTC+8)
+- **Tags:** `passkeys` `security` `webauthn` `attestation` `totp`
+
+10 月 12 日にお伝えした「Passkeys are a trap. Do not use them.」（379 ポイント）の続報：Report URI の創業者で、オープンソースの passkey ライブラリの作者でもある Scott Helme が反論を発表した。攻撃対象は原文の*メカニズム*であって、結論ではない。(1) **同期型 passkey は attestation しない。** iCloud キーチェーン、Google パスワードマネージャー、1Password、Bitwarden に入った passkey は、サイトが attestation を要求すると `none` を返す。attested passkey を要求するコンシューマーサイトは「自サイトのユーザーほぼ全員を即座に締め出すことになる」——コンシューマー向け attestation に反対するガイダンスは「もう_何年も_前から」走っている。(2) **attestation は誤って説明されている。** 原文は attestation が「承認済みの passkey マネージャー、OS、ファームウェアが使われていること」を証明すると言う。Helme によれば、attestation が識別するのは AAGUID とベンダー証明書チェーンによる認証器の型番だけ——OS、ブラウザ、拡張、root 状態、ファームウェアバージョンについては何も語らない。(3) **YubiKey の皮肉。** 原文は YubiKey を「OS 全体の attestation を回避するから」と勧める——しかし YubiKey こそ*attestation をする*デバイスであり、Yubico 発行の証明書を出荷時に持ち、enterprise attestation はまさに承認済みハードウェアを強制するために存在する。(4) **TOTP は後退りだ。** コードは Evilginx 型のフィッシングキットがリアルタイムで中継できる（引用は Troy Hunt が遭った Mailchimp 事件）。一方 passkey はドメインに束縛される——原文の著者自身の追記が、passkey が中間者攻撃に耐えることを認めている。結論：passkey を使い続け、エクスポート対応のマネージャーを選び、コンシューマーログインへの attestation 義務化は「もし起きたら」大声で反対せよ。
+
+**なぜ重要か：** 2 つの記事は脅威モデルについて意見が割れているわけではない——Helme は別の場所で、attestation `none` の下では「XSS は Passkey に致命的」と書いており、YubiKey も今なお推している。彼が正すのはメカニズム（attestation に何が証明できて何ができないか）と、その取引だ：仮定上の将来の義務化を拒むために、今日はフィッシング可能な TOTP を選ぶ。そしてこの 48 時間の反論サイクルそのものにも注目——反 passkey 記事の 379 ポイントこそが、この訂正に届く聴衆を買ったのだ。
+
+[`🔗 Scott Helme: Passkeys are not a trap`](https://scotthelme.co.uk/passkeys-are-not-a-trap/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50088935)
+
+---
+
+## 22. OpenCode 2.0：オープンソースのコーディングエージェントがバックグラウンド Service を軸に作り直す——213.6k★、MIT
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 392+ pts · ~7.5h ago (~04:48 UTC+8)
+- **Tags:** `opencode` `coding-agents` `mcp` `plugins` `typescript`
+
+Anomaly が **OpenCode 2.0** をリリースした。オープンソースコーディングエージェントの「大規模な作り直し」を自称する（`anomalyco/opencode` ——213,563★、MIT、本日プッシュ）。アーキテクチャの変化：単一のバックグラウンド **Service** がマシン上で常駐し、TUI・Web インターフェース・デスクトップアプリがすべてそこに接続する。`@opencode/client` による自動検出、他ホストとの `/pair` もある。API はゼロから再構築され（旧 API は「場当たり的に育った」）、OpenCode 自身が自分の API を呼ぶ——たとえばセッションを git worktree に移す、など。最もレバレッジが大きいのは **Code Mode** だ：最小限の JavaScript インタプリタ（`@opencode/codemode`）が MCP サーバーと OpenAPI エンドポイントを呼び出し可能な関数に変換し、エージェントがマルチツール呼び出しを 1 往返のスクリプトにできる——呼び出しごとに MCP 往返のコストを払わずに。すべての MCP サーバーはデフォルトでオプトインされ、コンテキストの肥大化を抑える。さらに：モデルを混在できるバックグラウンドサブエージェントと非同期シェルコマンド（ctrl+b で遅い処理をバックグラウンドへ）、メンテナンスされた Plugin API を強制するために書かれた 80 以上の内部プラグイン、OpenTUI 経由で安定化した TUI プラグインとセッション中のホットリロード、CLI 自身のコードをライブラリとして公開する `@opencode/sdk`。破壊的変更は率直に書かれている：1.0 のプラグインは動かない、Server API は「完全に異なる」、`tui.json` は移動した。
+
+**なぜ重要か：** Code Mode は、このフィードが研究側から追い続けてきたコンテキスト経済学の賭けと同じだ（昨日の ColGrep-Agent-2B はフロンティアエージェントのトークンを 3 分の 1 削った）——今回はハーネス側から同じ場所に到達した：呼び出しごとの MCP オーバーヘッドを払う代わりに、プログラマブルな層を通してツール呼び出しをバッチ化する。その重りとなるのが 213k★ 規模の移行負傷であり、公告はそれを正直に値付けしていて、2.0 を無痛アップグレードとは偽らない。
+
+[`🔗 Anomaly: OpenCode 2.0`](https://anoma.ly/notes/opencode-2-0/) · [`🔗 anomalyco/opencode`](https://github.com/anomalyco/opencode)
+
+---
+
+## 23. 「剽窃に近い」：Mononoke のビルダーが、Anthropic の Scion は derived-data 設計をクレジットなしで持ち出したと述べる
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 297+ pts · ~7.9h ago (~04:29 UTC+8)
+- **Tags:** `scion` `mononoke` `attribution` `open-source` `vcs`
+
+10 月 14 日の Anthropic Scion（7 エンジニア、5 か月、エージェントが git を壊した）の項の続報：Meta の Sapling の背後にあるソース管理サーバー **Mononoke** の開発に参加した **Rain** が応答した。争点は*クレジット*であって、コピーそのものではない。Rain の主張：Scion の「derived data」の概念は、changeset の親から再帰的に定義される事前計算インデックス（blame、パス履歴、スキップリスト——現在は 8 つの独立したインデックス）という Mononoke のアプローチと密接に重なり、「模倣の度合いは、似た洞察を持った、という域をはるかに超えている」。Anthropic の記事で Sapling は「苦労して得た教訓」の一言しかなく、Mononoke はクレジットなし——これ「は剽窃に近い」。AI 的なひねりは帰属のメカニズムにある：Mononoke はオープンソースであり、したがってすべての LLM の学習データに入っている。Opus 5.5 や GPT-6 Astra に prior art を尋ねれば、Mononoke との類似が即座に浮上する。Rain は Anthropic が設計を再利用すること自体には**反対していない**——オープンソースは「良いアイデアが広がることを通じて人類を benefit させるために」存在する——そして自身の Meta チームも prior art を参照した（Google の SrcFS、データベースの write-ahead ログ）と述べる。脚注は、Cursor/Vicent Marti の git 仕事を対例として挙げる：似た洞察、そして真に異なる設計、と。
+
+**なぜ重要か：** これは AI 支援設計とともにやってきた新しい帰属の失敗モードだ——来歴の連鎖は学習データ → モデル → 設計文書という経路をたどり、その中に自分のインデックス構造を認識できる人物は発見可能である。Rain が引く線が使える線だ：収斂した*洞察*はエンジニアリングのごく普通の働き方だが、特定の再帰的インデックス構造は*設計*であり、モデルは設計を双方向に追跡可能にする。Anthropic 側の応答は、現時点では原稿の Mononoke への沈黙しかない。
+
+[`🔗 Rain: Anthropic's Scion is heavily inspired by Mononoke`](https://sunshowers.io/posts/anthropic-mononoke/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50094694)
+
+---
+
+## 24. 活発に悪用されている 2 つのエンタープライズアプライアンスが同じ日に CISA KEV へ——Cisco SEG は 9.8、PAN-OS は 8.6
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV · catalog 2026.10.14 · released 2026-10-14T19:27Z
+- **Tags:** `cve` `kev` `cisco` `palo-alto` `email-security`
+
+CISA の 10 月 14 日 KEV 更新は、すでに悪用されていたアプライアンスの脆弱性を 2 件追加した。**CVE-2026-76519**（Cisco Secure Email Gateway、任意ファイル書き込み）：*認証なしの*送信者が細工した添付ファイルをメールで送るだけでアプライアンスの OS にファイルを書き込め、続いて「root としてコマンドを実行」する可能性がある。条件は 2 つ：メールポリシーで **File Reputation（AMP）が有効**であること、そして **Content Scanner Tools が 25.3.0.5525 より古い**こと。Cisco は内部スキャンで発見し、スコアを自己割り当てした——CVSS 9.8、`psirt@cisco.com`。アドバイザリは `cisco-sa-esa-afw-zqYJkjxp`。修正は **9 月 14 日**から出荷されている（AsyncOS 15.5.5-014 と 16.5.0-780、 plus アップグレードも再起動も不要で入れられる CST 更新）——しかし **AsyncOS 16.0 には修正版が存在せず**、回避策もない。Cisco は 10 月に攻撃を認知し、「compromise の可能性を示す指標」がある Secure Email Cloud の顧客に連絡したという。検出方法：`grep "System Security" system_logs`。**CVE-2026-0322**（PAN-OS、管理インターフェースの認証付き RCE）：PA シリーズ、VM シリーズ、Panorama の PAN-OS 12.2.0–12.2.3 が影響を受ける。修正は 12.2.4+。**回避策はなく**、Threat Prevention による部分緩和のみ（Threat ID 510046/510047）。Palo Alto 自身のアドバイザリは「非常に限定的な悪用が観測されている」とし、CVSS 4.0 **8.6** を付けている——`PR:H` 付きで。管理インターフェースの資格情報が必要だからだ。**常設チェックに基づく来歴：** 9.8 は CNA 自己割り当て（Cisco）で、NVD の状態は Undergoing Analysis。8.6 は CNA 自己割り当て（Palo Alto）で、NVD の状態は Received——どちらのレコードも NVD 分析済みではない。
+
+**なぜ重要か：** どちらも信頼できないコンテンツを検査するのが本職のアプライアンスで、SEG の方はメールを 1 通送るだけで悪用できる——アプライアンス悪用としてほぼ最も低い摩擦だ。このペアはよくある誤読も清算する：**KEV が登録するのは悪用であって、深刻度ではない**——8.6 の認証付き RCE が 9.8 と同じカタログに入った。そして Cisco の 9 月 14 日修正から 10 月 14 日 KEV 登録までの 1 か月が、「悪用報告なし」が静かに期限切れになった期間だった。
+
+[`🔗 Cisco: cisco-sa-esa-afw-zqYJkjxp`](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-afw-zqYJkjxp) · [`🔗 Palo Alto: CVE-2026-0322`](https://security.paloaltonetworks.com/CVE-2026-0322) · [`🔗 The Hacker News`](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html)
+
+---
+
+## 25. 10 月 11 日の項から：Cloudflare の Yandex 深掘り分析が「bot ファームが消えた」物語を修正する
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 237+ pts · ~7.9h ago (~04:29 UTC+8)
+- **Tags:** `cloudflare` `yandex` `bot-traffic` `radar` `measurement`
+
+このフィードは 10 月 11 日、Yandex のウラジーミルデータセンターへの UAV 攻撃と、Cloudflare Radar が示す Yandex 発トラフィックのゼロ化を報じた。Cloudflare の完全分析（10 月 14 日）はトラフィックの事実は保持しつつ、それとともに広まった解釈——ロシアの bot ファームと影響力作戦が無力化された——を覆した。攻撃（10 月 7–11 日、3 施設）は確かに 10 月 11 日にほぼ全滅の崩壊をもたらした：**Yandex 検索（AS13238）はベースライン比 99% 減、Yandex.Cloud（AS200350）は 90% 減**。しかし 2 つの ASN は異なる役割を担っており、集約 HTTP チャートにはそれを区別できない。**AS13238 は検索クロール**：リクエストの 99.5% が自動化と分類され、そのうち 93.6% は*検証済み* bot——サンプリングでは 78.1% が検証済み YandexBot、11.5% が YandexRenderResourcesBot、1.9% が YandexImages。**AS200350 はクラウドホスティング**：スコア付けリクエストの約 95.0% が bot で、**検証済みはゼロ**——「ソフトウェアアプリのよう」で、3 分の 2 近くがデータを送信（POST）し、多くが JavaScript、Python、Go プログラムと自己申告していた。業界別の影響が最大だったのは出版・新聞で、Yandex ネットワークからのトラフィックは 44% 減——同 ASN のイベント前のニュースサイトへのトラフィックの 90% は YandexBot による記事インデックスで、Cloudflare の顧客の 40.5% は 403 Forbidden で応えていた。見出しの結論：「闇に落ちる代わりに、悪意ある bot は移動した。」
+
+**なぜ重要か：** これはネットワーク規模の Void の教訓だ——トラフィックの崖は調査の合図であって、発見そのものではない。「bot トラフィックが減った」は「bot インフラが破壊された」と「bot が移動した」のどちらとも整合し、両者の含意は正反対だ。うちの 10 月 11 日の項にも与すべき点是ある：報じたゼロ化の事実は正しかった。行動レベルのデータが支持しなかったのは、「闇に落ちた」という*枠組み*の部分だった。
+
+[`🔗 Cloudflare: Yandex outage analysis`](https://blog.cloudflare.com/yandex-outage/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50094673)
+
+---
+
+## 26. Jev 1.14.0 が「Danger Zone」を出荷：画像、バウンディングボックス型、上限解除のコンテキスト——決定モデルへ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 226+ pts · ~7.1h ago (~05:11 UTC+8)
+- **Tags:** `jev` `system-one` `decision-models` `multimodal` `release`
+
+10 月 14 日の Jeva アーキテクチャの項に続いて：Typesafe が System One 決定モデル向けの **Jev 1.14.0** を出荷した。`jev-preview` エイリアス配下（`jev-latest` は 1 週間後に切替。1.13.0 には 60 日、1.14.0 には 30 日の非推奨警告——正式な非推奨ポリシーが来る）。リリース本体は「*あらゆるもの*への小さく subtle な改善」で、最大の gain は多言語対応にある。ニュースはオプトインの **Danger Zone** だ。API ヘッダーでリクエストごとに有効化する：(1) **composable images**——「このモデルは最初からマルチモーダルだった」。JSON インターフェースが許す任意の場所（`state`、`instructions`、`criteria`）で画像が機能する。`TypeSafe-Danger-Zone-Images: true` が必要。(2) 新しい **`box` 型**は単一のバウンディングボックスを返し、「型エラーは許されない」——決定を超える最初の型で、1.14.0 専用。(3) **より長いコンテキスト**——本番のコンテキストは信頼性のために意図的に上限が設けられており、ヘッダー `TypeSafe-Danger-Zone-Long-Context: true` がそれを外す。(4) **デバッグのオプトイン**は、ユーザーがクエリを共有してモデルの問題発見を助けるもので、Typesafe は学習には使わないという。留保は Typesafe 自身の言葉だ：danger-zone 機能は本番で保証するには「jaggedness（ギザギザ）が多すぎる」、すべてのモデルはマルチモーダルが純テキストより劣る、モデルはより長いコンテキストで信頼性が落ちる、そして内部ベンチマークは「暫定的で、われわれ自身のモデルに偏っている」——自分の eval を信じよ。
+
+**なぜ重要か：** 決定モデルベンダーがバウンディングボックス出力を加えるのは、system-one の棚が GUI エージェントのグラウンディング層に手を伸ばしているということだ——昨日の `box` を返す computer-use ハーネス群と同じ領域に、決定 API の一人前の型として入ってきた。そしてその開示パターンは、このフィードが願いながらめったに得られないものだ：非推奨ポリシー、jaggedness 警告、「われわれのベンチマークはわれわれに偏っている」が、リリースノートの上に印字されている。
+
+[`🔗 Typesafe: Jev 1.14.0`](https://typesafe.ai/blog/jev-1-14) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50095353)
+
+---
+
+## 27. Linus Torvalds が最初の LLM 支援カーネルパッチシリーズを投稿——レビューはすでにレースコンディションを発見
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 114+ pts · ~11.3h ago (~01:00 UTC+8)
+- **Tags:** `linux` `kernel` `llm` `memory-management` `rcu`
+
+LWN（10 月 14 日）：Torvalds が**最初の LLM 支援パッチシリーズ**を投稿した——カーネルメモリ管理に対する 10 パッチ。Maintainers Summit でこの種の作業に LLM を使い始めたと語っていた件に続くものだ。対象は **folio lookup**：シリーズは「ホットな folio に気づく」ように拡張し、彼の言う「この folio の解放を RCU 期間の後まで遅らせる」を適用する。これで folio lookup も実際の folio データアクセスも RCU 保護領域内で実行でき、ユーザーコピーがページフォールトを起こさない限り、fastpath から refcount のトラフィックが消える。Torvalds は read() 重視のベンチマークで**「桁違いの高速化」**を主張する——彼自身のワークロードでの自己申告の数字で、独立した測定はまだない。初期レビューはすでにコードの**レースコンディション**を発見しており、シリーズが取り込まれるにはさらなる作業が必要だ。LWN のコメント欄が規範をめぐる論争の現場だ：「悪い手本」と題したコメントは、新規参加者が「Linus がやったのに、なぜ私がだめなのか」と結論づけると論じる。反論は tlamp のショベルカーだ——同じ機械でも、プロの手の中では違う仕事をする。
+
+**なぜ重要か：** この話の主役はスピードアップではない——線が今どこに引かれたかだ。オープンソースで最も重みのあるゲートキーパーが、メモリ管理コードに LLM を使い、前もってそれを明かし、そしてその中のレースを拾い上げたのと同じレビュープロセスを通して提出した。最後の部分こそ「有能なレビューの下では LLM 出力でよい」という立場の真の試験であり、最初のデータポイントは：レビューは機能した、パッチはまだ入っていない、だ。
+
+[`🔗 LWN: Linus Torvalds's first LLM-assisted patch series`](https://lwn.net/Articles/1100449/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50090842)
+
+---
+
+## 28. Doc2Harness：エージェントハーネスを*構築する*モデル向けの最初の決定論的ベンチマーク——最強モデルでも 47% 落とす
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.20344 · submitted Oct 14
+- **Tags:** `research` `benchmarks` `coding-agents` `harnesses`
+
+ほとんどのエージェントベンチマークは、ハーネスの*下で*モデルがどれだけ機能するかを測る。Doc2Harness（「長期的なハーネスエンジニアリングを測る最初の決定論的ベンチマーク」）が測るのは、**ハーネスを構築する**能力だ。ステージ 1：固定のビルダーハーネス内のモデルが、インターフェースのみの契約スケルトンと、**12 のフロンティアハーネス**の振る舞いを統合した開発文書を受け取り、隔離コンテナ内で完全な候補ハーネスを構築する。ステージ 2：凍結されたハーネスがテストケースごとに独立したコンテナで実行され、**スクリプト化されたモックモデル**によって端から端まで駆動される——ループに LLM はいない——そして 4 つの観測可能チャネルで採点される：モデルに送られたリクエスト、ディスク上のファイル、プロセスの終了コード、コマンド出力。空虚なパスを防ぐポジティブコントロール付き。規模は **19 フロンティアモデル × 3 独立ビルド × 328 テストケース**。結果：最高は **GPT-6 Astra の 53.05%**、最低は 27.44%——最強モデルでも半分近くのケースに失敗する——そして「失敗は、横断的機能がモジュール間でどう分割されるか周辺に集中する」。著者 11 名、17 ページ。
+
+**なぜ重要か：** ハーネスの品質は、あらゆるラボが出荷し、誰も測らない変数だ。そしてこのフィードはこの 1 か月、ハーネスの差が結果を決めるのを見てきた（SWE-MISBEHAVIOR の依存関係の誤読、「あなたのゲームがハーネス」）。決定論的なモックモデル設計は LLM ジャッジの分散を取り除く——ほとんどのエージェントベンチマークを反証不能にしている失敗モードだ。誠実な留保：要約ページには著者の所属が書かれていない。「12 のフロンティアハーネスを 1 つの開発文書に統合する」のは設計空間の 1 つの特定サンプリングだ——53% の天井は、出荷済み製品への判決ではなく、そのサブタスクの下限として読むべきだ。
+
+[`🔗 arXiv 2610.20344`](https://arxiv.org/abs/2610.20344) · [`🔗 arXiv HTML`](https://arxiv.org/html/2610.20344v1)
+
+---
+
+## 29. Petal：CoScreen の元メンバーがウィンドウレベルのペアプログラミングをオープンソースで——本物のウィンドウ、LiveKit 持ち込み
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 133+ pts · ~9.8h ago (~02:32 UTC+8)
+- **Tags:** `screensharing` `pair-programming` `livekit` `rust` `self-hosted`
+
+**Petal**（`kiruna-labs/petal` ——Rust、Apache-2.0、147★、10 月 13 日プッシュ）は CoScreen のチームによるオープンソースのペアプログラミングアプリだ：低レイテンシ・高解像度のスクリーンシェアとリモート操作で、共有ウィンドウはグリッドのタイルではなく**本物の、移動・リサイズ可能なネイティブウィンドウ**としてデスクトップに現れる。ユーザーごとのラベル付きカーソル、どのウィンドウにもクリックしてキーボード・マウス操作、複数ユーザーの同時共有、リンクも日程も要らない永続ルーム（常設の `eng-sync` ルーム、ワンクリック参加）。デプロイの話こそが本題だ：アプリはどこでも同一で——「変わるのはビデオバックエンドだけ」——だから **Petal Cloud**（ホスト型 LiveKit、設定ゼロ）でも、**セルフホスト**（アプリを自分の LiveKit サーバーに向け、docker-compose 1 つで。トラフィックは自分のインフラに留まる）でも、**fork & build** でも動く。macOS と Windows は今日無料。「Linux 対応は次へ」。
+
+**なぜ重要か：** ウィンドウレベルのシェア——CoScreen に「同じ机に座っている」感覚を与えた部分——は、Zoom や Meet がずっとうまくやれなかったところで、CoScreen 自身の買収後の軌跡はその教訓だ。Apache-2.0 での復活と、BYO-LiveKit という逃げ道は、エージェントツールの世界でこのフィードが繰り返し見ているセルフホスト可能インフラのパターン（PentAGI、Talorys）と同じだ。147★ はその意味通りに読むべきだ：実績あるチームの新規ローンチであって、実証済みのコミュニティではない。
+
+[`🔗 Petal`](https://petal.live/) · [`🔗 kiruna-labs/petal`](https://github.com/kiruna-labs/petal)
+
+---
+
+## 30. Oxide の Virtual Oxide Labs：ラック丸ごと——MCU とファームウェア込み——を 1 台のマシン上で 10 分でエミュレート
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 90+ pts · ~10.0h ago (~02:21 UTC+8)
+- **Tags:** `oxide` `emulation` `rack-scale` `rust` `illumos`
+
+Oxide の **Virtual Oxide Labs（Voxel）**は、完全な Oxide ラック——マルチラック構成も含む——を 1 台のマシン上でエミュレートする：土台は illumos と Rust で、旧「a4x2」仮想ラボの後継だ。これを強いた制約：完成したラックは顧客へ直行するため、ラックスケールのハードウェアは希少で、チームは実際の顧客ネットワークトポロジを再現し、本物のコントロールプレーンを**特別な「テスト版」リリースを作らずに**実行する必要がある。Bryan Cantrill の「Prime Directive」は、ラボは手を加えていない Oxide ソフトウェアを動かせと言う。エミュレーションの深さがこの話の本体だ：**sled は Propolis VM**（gimlet、cosmo、scrimlet）。**ネットワーキングは FRR を動かす Debian VM**（BGP numbered/unnumbered またはスタティック）と、Oxide のソフトウェア P4 スイッチ SoftNPU。そして**マイクロコントローラは本物にエミュレートされた Cortex-M7/Cortex-M33 デバイス**——オープンソースの `sp-emu` を通じて本物の Hubris ファームウェアをフラッシュし、カーネルの reload 値に対して SysTick をモデル化する——ハッピーパスの `SpSim` スタブを置き換える。起動時は sprockets PKI を生成し、エミュレートされた STM32H753/LPC55 をフラッシュし、トポロジを配線し、約 6 台の Propolis VM をブートし、`voxel-init` を走らせ、その後 `wicketd` がラックを commissioning する——**end to end で約 10 分**。著者は 32 スレッドの Ryzen 9 ミニ PC（RAM 96 GB）で sled 6 台を走らせている。トポロジの変更はコード編集だ（新しいインターコネクトは「`rack.rs` の数行」）。明示された留保：sprockets 証明書は製造や RoT からプロビジョニングされない（本番とは異なる）、エミュレートハードウェアは遅い、そして一部の詳細（真のサイクルカウントのない `cycles` フィールド）は姑息な手段だ、と。
+
+**なぜ重要か：** ハードウェア企業は普通、この層を mock でごまかす。Oxide はマイクロコントローラのファームウェアまでエミュレートした。つまりラックスケールの CI が、信じられるシリコン型の嘘に対して本物のコントロールプレーンを走らせられる。それが取り除いた制約も示唆的だ——ラックスケールのソフトウェアテストのボトルネックはソフトウェアではなく、ハードウェアの供給だった。
+
+[`🔗 Oxide: Virtual Oxide Labs`](https://oxide.computer/blog/voxel-labs) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50092423)
+
+---
+
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-14T20:15:00Z |
-| Items | 20 |
-| Sources tracked | 38（Hacker News フロントページ + Algolia API、GitHub Trending/API、arXiv、Hugging Face、OpenRouter API、curl Security Advisories、daniel.haxx.se、oss-security/Openwall、NVD API、Rapid7、CISA KEV、CSO Online、ThaiCERT、Security Affairs、OMG! Ubuntu、BNT、LB.ua、SVT、TV4、Aftonbladet、Go blog、Builder.io、Project Apertus、Timescale、academa-labs、VXControl、Meta/facebookincubator、ベンダーアドバイザリ） |
+| Generated | 2026-10-15T04:20:00Z |
+| Items | 30 |
+| Sources tracked | 47（Hacker News フロントページ + Algolia API、GitHub Trending/API、arXiv、Hugging Face、OpenRouter API、curl Security Advisories、daniel.haxx.se、oss-security/Openwall、NVD API、Rapid7、CISA KEV、CSO Online、ThaiCERT、Security Affairs、OMG! Ubuntu、BNT、LB.ua、SVT、TV4、Aftonbladet、Go blog、Builder.io、Project Apertus、Timescale、academa-labs、VXControl、Meta/facebookincubator、ベンダーアドバイザリ、Scott Helme、Anomaly、sunshowers.io、Cisco Security Advisories、Palo Alto Security Advisories、The Hacker News、Cloudflare blog、Typesafe、LWN、Oxide Computer、Petal/kiruna-labs） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（鮮度 × エンゲージメントの加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
