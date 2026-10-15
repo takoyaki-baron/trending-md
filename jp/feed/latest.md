@@ -1,8 +1,8 @@
 ---
 date: 2026-10-15
-updated: 2026-10-15T04:20:00Z
+updated: 2026-10-15T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 47
+sources: 58
 license: CC-BY-4.0
 ---
 
@@ -428,14 +428,168 @@ Oxide の **Virtual Oxide Labs（Voxel）**は、完全な Oxide ラック——
 
 ---
 
+## 31. Google、Android の電話番号をサインイン中の全アカウントに黙って紐付け——デフォルト有効、解除はオプトアウト
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 475+ pts · 132 コメント · ~19.8h 前 (~00:28 UTC+8)
+- **Tags:** `google` `privacy` `android` `phone-verification`
+
+Android Authority（10月14日）が記録したのは、Google が **Android 端末の電話番号を自動検証し、その端末でサインインしているすべての Google アカウントに紐付けている**という動作だ。アカウントごとの確認プロンプトはない。Google はこの機能をアカウントを「最新の状態に保つ」ことと不正・悪用対策として説明する。唯一の通知は `noreply-phone-verification@google.com` からのメールだ。サポートページは 2025 年 8 月〜10 月の間に更新され、この動作はオプトアウト式に——そして、検証を引き起こしたアカウントだけでなく**端末上の全アカウント**に拡張された。解除は 設定 → Google → すべてのサービス → プライバシーとセキュリティ → **電話番号の確認**。すでに紐付いた番号はアカウントごとに手動で削除する必要がある。Android Authority は、無効化後にトグルが再度オンに戻ったというユーザー報告もあると伝える——こちらは再現できなかった。
+
+**なぜ重要か：** ここでの同意の単位は端末、アイデンティティの単位はアカウントで、Google はその橋をデフォルトで架けた——ユーザーが意図的に維持してきた仕事用・個人用・サブ用の境界が崩れ、アカウント復旧への影響は双方向に及ぶ。前例も押さえたい：2022 年の Google サポートスレッドは、Advanced Protection のアカウントにすら同意なく番号が追加されていたことを示す。つまり 2025 年の変更は新しい振る舞いではなく、新しい適用範囲だ。
+
+[`🔗 Android Authority`](https://www.androidauthority.com/google-auto-phone-number-verification-android-3723117/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50090349)
+
+---
+
+## 32. Tiny Little Office：10 個のツール、1 つの URL——そしてすべてのドキュメントは agent が構築できるリンク
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 479+ pts · 95 コメント · ~14.1h 前 (~06:10 UTC+8)
+- **Tags:** `web-apps` `productivity` `llms-txt` `documents`
+
+**Tiny Little Office** は、ワープロ、アウトライナー、プレゼンビルダー、スプレッドシート、電卓、お絵かき、ダイアグラムメーカー、アニメーター、カレンダー、旅行プランナーを 1 つのブラウザスイートとして届ける——ランディングページに作者名も価格もインストールもない。HN が掴んだ設計思想：**すべてはドキュメントであり、ドキュメントはネストする**——自前の `llms.txt` いわく「ドキュメントは、そのアプリの名前がついた fence として別のドキュメントの中に入る」（ワープロページの中にスプレッドシート、それがさらにプレゼンの中に）。スイートは agent をファーストクラスのユーザーとして書かれている：`llms.txt` は「ドキュメントをリンクとして作る」方法を説き、agent は UI を操作する代わりに URL を書くだけで生きたスプレッドシートやダイアグラムを構築できる。
+
+**なぜ重要か：** ドキュメント即 URL は Bigwords.page の一手（「URL がアプリそのもの」——本フィード 10月8日扱い）をオフィススイート全体に適用し、人間向けチュートリアルの代わりに agent 向けの契約を添えたものだ。未知の点も平明に述べておく：作者は不明で、ドキュメントがどこに置かれ何が永続化されるかはランディングページからは検証できない——Office の代替ではなく、パターンの実演として読むべきものだ。
+
+[`🔗 Tiny Little Office`](https://tinylittleoffice.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50096142)
+
+---
+
+## 33. Epic、Linux 版 Easy Anti-Cheat を書き直す：eBPF と systemd サービス、Secure Boot が必須——Steam Deck はまだ対象外
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Epic Online Services · 10月14日公開 · HN 80+ pts
+- **Tags:** `epic` `anti-cheat` `linux` `gaming` `ebpf`
+
+Epic は **EAC Linux v2** を発表した。Easy Anti-Cheat の Linux 実装を再構築し、保護を「Windows にかなり近いレベル」まで引き上げる狙いだ。Phoronix による発表の読み解きでは、v2 は**カーネルモジュールを使わない**：保護対象ゲームの起動時に立ち上がり事後にアンロードできるアンチチート用 **systemd サービス**と **eBPF カーネルプログラム**で動き、Canonical、Fedora、Universal Blue、Debian、SUSE、Rocky Linux、Microsoft UEFI CA のいずれかが署名した鍵による **UEFI Secure Boot** を要求する。Epic 自身の投稿が歴史を説明する：EAC は 2014 年からネイティブ Linux クライアントを、2021 年から Wine/Proton 経由で Windows ビルドをサポートしてきたが、ゲームごとのオプトインだった——それが **Fortnite が Linux に来ない理由（「しかし来る」）**であり、Fortnite が v2 のパイロットになる。他の開発者への提供はその後だ。Epic は Fedora プロジェクトリーダー Jef Spaleta とのパネルと、「Valve とのオープンな対話」も約束している。Phoronix が指摘する落とし穴：**Steam Deck は必要な機能をまだサポートしていない**。Epic は Valve と対応を進めているという。
+
+**なぜ重要か：** Linux ゲーミングの常態的妥協——ネイティブクライアントはあるが競技マルチプレイはほぼない——は 2021 年以来のゲームごとオプトイン問題で、これはプラットフォームレベルでそれを閉じる最初の具体案だ。コストも Epic 自身の言葉で明示される：要件は「ディストリビューション保守陣がすでにやっている作業の上に築かれる」——つまりカスタムカーネルや Secure Boot なしの環境は、ディストロや Valve が追いつくまで除外される。Linux コミュニティが他の形では一貫して抵抗してきたカーネル信頼の取引だ。
+
+[`🔗 Epic: Awesome Gaming on Linux Without Cheating`](https://onlineservices.epicgames.com/news/introducing-easy-anti-cheat-linux-v2) · [`🔗 Phoronix: EAC with systemd service & eBPF`](https://www.phoronix.com/news/Easy-Anti-Cheat-Better-Linux) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50088166)
+
+---
+
+## 34. Caveman 4.0：トークン圧縮プロキシが 112k★ で再トレンド——6 つの「岩」と、モデルと推論強度を選ぶ Auto
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · JuliusBrussee/caveman · 112,082★ · 本日 +398 · v4.0.1 は 10月13日リリース
+- **Tags:** `tokens` `proxy` `coding-agents` `cost`
+
+`JuliusBrussee/caveman`——「why use many token when few token do trick」こと Apache-2.0 のスキル＋ローカルプロキシ——が **10月13日に v4.0.0 と v4.0.1 をリリース**し、本日 112,082★ で再トレンド入りした。4.0 はインストールを**デフォルト全有効・各々スイッチ付きの 6 コンポーネント**へ再編した：*Say less*（原始人スタイルの回答——同じ修正が 63→20 トークンになった実例）、*Read less*（モデルが見る前にログ・JSON・CSV・テスト出力を圧縮——Claude Code 54 実行で**入力トークン 33.2% 削減**、回答正解 18/18）、*Auto*（新規——リクエストごとにモデルと推論強度を選択。85 のコーディングタスクで同スコアのまま Opus 5.5 xhigh より**54% 安**、暫定と明記）、*Blocks*（新規——agent が書いたスクリプトを保持して再実行：テスト 1 回が **397→76 トークン**）、*Waste fixes*（一時停止中もプロンプトキャッシュを温かく保つ。未計測）、*Browse*（ Web ページを **129.8×** 圧縮）。`npx @caveman-ai/cli` 一発で 30 以上の agent に対応し、自分の鍵でローカルに動く。アカウントが必要なのは Auto だけで無料だ。この発想には独立な学術的反響もある：Adobe Research の **CAVEWOMAN** 論文（arXiv 2606.24083——Adeyemi、Rossi、Dernoncourt）は 8 モデルで入出力両チャネルの言語圧縮を評価しており、caveman の README は出力圧縮 1.4–2.4× の数値をこれに帰している。
+
+**なぜ重要か：** トークン圧縮は文法のジョークから、測定されたコストレバーになった——ただしここの数値はすべて著者自身の実行による自己報告で、README 自身のラベル（「interim」「not measured yet」）こそ持っていくべき正直な部分だ。4.0 が本当に示すのは統合だ：プロンプト整形・出力フィルタ・ルーティング・キャッシュ衛生を 1 つのローカルプロキシに——OpenCode の Code Mode や context-mode と同じ文脈経済学の領地に、言葉遣い側から踏み込んだ形だ。
+
+[`🔗 JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) · [`🔗 v4.0.0 リリースノート`](https://github.com/JuliusBrussee/caveman/releases/tag/v4.0.0) · [`🔗 CAVEWOMAN (arXiv 2606.24083)`](https://arxiv.org/abs/2606.24083)
+
+---
+
+## 35. 失敗した NixOS ダウンロードがカーネル root で終わるまで：TP-Link EAP770 の DMA バグを、バグ自身を止めるためにエクスプロイト
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 151+ pts · 62 コメント · ~47.7h 前 (~20:30 UTC+8)
+- **Tags:** `dma` `qualcomm` `kernel-exploit` `tplink` `wifi`
+
+2026 年 3 月、NixOS の ISO ダウンロードが TLS「bad record mac」で失敗したことで、著者は自分の Wi-Fi 7 アクセスポイント——TP-Link EAP770(EU) v1（Qualcomm IPQ9574、Linux 5.4.164）——に行き着き、Qualcomm のツリー外 `qca-nss-dp` ドライバの **DMA キャッシュコヒーレンシバグ**（CVE なし）に突き当たった：`fast_recycled` としてリサイクルされた送信バッファが完全なキャッシュ無効化をスキップし、古いダーティキャッシュラインが後から新しく DMA されたパケットに書き戻され、一度に 64 バイトを破壊する——さらに Qualcomm の SFE/PPE オフロードが**破壊された後のペイロードに対して TCP チェックサムを再計算する**ため、クライアントはチェックサムが正しいゴミを受け取る（OpenWrt のドライバにはこのバグがない）。オフロードを止めるには root が必要で、TP-Link の SSH シェルは capabilities を一切持たない uid 1——そこで著者は Opus 4.8 と約 17 時間かけ特権昇格チェーンを構築した：非特権 user namespace から届く整数アンダーフロー **CVE-2022-0185** とパイプバッファ操作による任意書き込み、最後は `modprobe_path` の上書き。開発は EAP783 ソースから組んだ QEMU ハーネスで行われた——TP-Link は v1 の GPL ソースを一度も公開していない。AP は稼働し続ける必要があり、slab 破壊により試行は起動ごとに 1 回だけ。結果：ローカル root を取り、オフロードを停止——破壊は 8,192 MiB あたり 3 ブロックからゼロへ、代償は約 8% のスループット——以後は NAS の監視機が再起動のたびにエクスプロイトをやり直す。
+
+**なぜ重要か：** サプライ側の二つの失敗が、これを単なる趣味の戦記以上にしている：チェックサムを再計算して自分の破壊をすべての整合性検査から洗い流すオフロードエンジンと、当該ファームウェア系列を EOL にしたベンダーだ——TP-Link の返答は「ファームウェア更新の対象外」というものだった。AI 支援エクスプロイト論争のデータポイントでもある：チェーンはモデルと共に組まれたが、土台は手で診断した DMA バグと 2022 年の CVE——モデルは著者が組んだハーネスの中で働いた。
+
+[`🔗 blog.dfb.sh: EAP770 root for two zeros`](https://blog.dfb.sh/blog/eap770-root-for-two-zeros/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50070625)
+
+---
+
+## 36. なぜ LLM のペリカンはみんな同じ顔をするのか：13 枚の SVG、1 つのテンプレート——そして最先端 UI の創造性に 65.5（人間 92.3）をつけたベンチマーク
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 162+ pts · 138 コメント · ~19.7h 前 (~00:33 UTC+8)
+- **Tags:** `research` `mode-collapse` `image-generation` `benchmarks` `creativity`
+
+Aman Rusia の「The Emperor Pelican Has No Clothes」が問うのは、業界随一のストレステストプロンプト——「自転車に乗るペリカンの SVG を生成して」——がなぜどこでも同じ鳥を生むのか、だ。Simon Willison のペリカンベンチマークシリーズから集めた 13 枚の SVGは、それぞれ SVG を返した中で最も高い推論設定で生成されたのに、同じ視覚的慣習に収束する：**開放的な創造プロンプトにおける多様性の崩壊**だ。この記事は「何でないか」にも慎重だ：能力の上限ではない——多様性を求めれば、同じモデルはペリカンを王室のパレードにも、モンスーンにも、極夜にも、ネオンの路地にも描ける。観察を支えるのは著者自身の **Design Creativity Bench**（arXiv 2610.11539、Bhole・Gupta・Dey との共著）：16 の最先端モデルに 80 のオープンエンドな UI タスクを与え、originality（同一プロンプトでのモデル間の違い）、creative range（同じ目標を異なる製品領域の 2 プロンプトで出したときのデザインの変化幅）、appropriateness（ブリーフの受け入れ基準を満たす割合）で採点——記事によれば、最上位の GPT-6 Astra は**人間デザイナーの参照値 92.3 に対し 65.5** だった。
+
+**なぜ重要か：** モードコラプスはたいてい画像モデルの罪として語られる。ペリカンシリーズはそれを SVG で可視化し、今や UI で測定可能にした。数値は枠組みごと持っていくべきだ：65.5 対 92.3 は論文の参照スケールに対する記事の読み方であり、ルーブリック採点の「創造性」は新規性のための新規性を褒めるタイプの指標そのものだ——三軸 split は少なくとも新規性と適合性を切り分ける正しい試みではある。
+
+[`🔗 arcfu: The Emperor Pelican Has No Clothes`](https://arcfu.com/post/the-emperor-pelican-has-no-clothes/) · [`🔗 Design Creativity Bench (arXiv 2610.11539)`](https://arxiv.org/abs/2610.11539) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50090443)
+
+---
+
+## 37. Claude Scientific Skills が Scientific Agent Skills へ：K-Dense、177 スキルの科学ライブラリを全 agent に開放——49.9k★
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · K-Dense-AI/scientific-agent-skills · 49,945★ · 本日 +1,091
+- **Tags:** `agent-skills` `science` `open-source` `agents`
+
+K-Dense の科学スキルライブラリ——MIT、49,945★、本日 +1,091 スター——が「Claude Scientific Skills」から **Scientific Agent Skills** へ改名した。改名そのものが発表だ：177 のスキルはオープンな **Agent Skills 標準**（agentskills.io）に従い、ポータブルな Agent Plugins パッケージ（`plugin.json` + `skills/`）として配布され、Claude だけでなく Cursor、Claude Code、Codex、Google Antigravity がロードできる。ライブラリの射程は、バイオインフォマティクスとゲノム学、ケモインフォマティクスと創薬、プロテオミクス、臨床研究ワークフロー、顕微鏡とデジタルパソロジー、神経科学、材料、物理と天文学、地理空間、ラボオートメーション、科学的ライティング、規制文書ドラフト（ICH/USP 法バリデーション）に及ぶ——各スキルはツールの使い方だけでなく、その分野の慣例とバリデーションの確認をエンコードし、ガードレールも明示している（臨床スキルは集団レベルの意思決定支援であって、患者ごとの診断では決してない）。この仕事には論文もある——**arXiv 2609.00065**、"Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents"（Kassis、Agarwal、He、Patel、Brueckner）。伴走品が **K-Dense BYOK**：自分の API キーでこれらのスキルをローカルに走らせる無料・オープンソースのデスクトップ co-scientist で、40 以上のモデルを選べ、重い処理は Modal クラウドに任せられる。
+
+**なぜ重要か：** スキル棚はオープン標準への収束を続けており、科学は手続き的知識の報酬が最も大きい領域だ——pooled CRISPR スクリーニングの慣例や 1D-NMR の較正を知るスキルは、agent がセッションごとに分野の民間伝承を再発見するコストを消す。改名は 6 週間で市場が動いた先を記録している：単一ベンダーのランタイムを狙うのがニッチになり、標準を狙うのがデフォルトになった。
+
+[`🔗 K-Dense-AI/scientific-agent-skills`](https://github.com/K-Dense-AI/scientific-agent-skills) · [`🔗 arXiv 2609.00065`](https://arxiv.org/abs/2609.00065)
+
+---
+
+## 38. Clova：送信者をちょうど一人しか受け付けない受信箱——構造によって漏洩に強い
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 102+ pts · 84 コメント · ~19.2h 前 (~01:00 UTC+8)
+- **Tags:** `email` `privacy` `aliases` `mcp`
+
+**Clova.email** は、ルールそのものが製品であるエイリアスサービスだ：**あるアドレスに最初にメールした送信者がそのアドレスを永久に確保し、他は全員拒否される**——したがって、アドレスを渡した小売業者が名簿を漏らそうと売ろうと、エイリアスはその業者以外の誰にとっても無価値で、人生ごとではなくエイリアスごと消せばいい。受信箱は 3 種類：one-sender（最初の正当な送信者に永久ロック）、temporary（寿命を 1 時間〜1か月で設定、期限を過ぎると受信を拒否し内容を消せる）、prefix（5 文字以上のプレフィックスを確保し、`you-anything@…` をその場で量産、各々が最初の送信者にロック）。**MCP サーバ**も備え、Claude や Cursor などの agent がスコープ付き権限で受信箱の作成・確認コードの取得・レシートの取得を行える。無料枠：永続アドレス 1 個、100 MB、1 日 100 通。Pro は年 $30、Business は年 $50 でカスタムドメイン。
+
+**なぜ重要か：** エイリアスサービス自体は古い。エイリアスの脅威モデルを「ちょうど一人の送信者」に縛るのが簡略化だ——「誰が私のアドレスを漏らした？」というフォレンジックが、タグ運用なしにメールボックスの性質になる。MCP フックのほうが新しいアイデアだ：サインアップ確認フローはまさに agent が押し付けられる雑務で、コードとレシートのためのスコープ付き API は今まで欠けていた配管だ。
+
+[`🔗 Clova`](https://clova.email/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50090932)
+
+---
+
+## 39. Parsimony：どの AI コーダが最も少ないコードで済むかを問うベンチマーク——そして「コードが多いほど解く」ことを発見
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 77+ pts · 17 コメント · ~40.4h 前 (~03:50 UTC+8)
+- **Tags:** `benchmarks` `swe-bench` `coding-agents` `evaluation`
+
+**Parsimony**（La5u、オープン）は AI コーディングモデルを解決率ではなく**どれだけコードを追加したか**で順位付ける：SWE-bench Verified が公開済みのパッチを再利用し、行数ではなく**「コーディングユニット」**——文、呼び出し、比較、名前、リテラル——を数え、削除分を差し引き、変更されたファイルの両バージョンをパースし、何も実行しない（Python のみ。テスト・ドキュメント・生成ファイルは除外。全モデルが同一の mini-SWE-agent を使用）。持っていくべき発見は二つ：**コードが多いほど解くタスクが多い**という相関——26 モデル以上のボードで Spearman 0.33–0.60——そして著者自身の GPT-5.6 Sol 再実行が公開実行の **0.88×** のコードしか追加しなかったことで、これはハーネス設定がこの指標を動かすという警告でもある。著者は天井を平明に述べている：この指標は大きさを測るのであって、可読性や設計の質ではない。
+
+**なぜ重要か：** 二日前、本フィードは 700 社研究を扱った（agent はより多くのコードを生成するが、より多くのソフトウェアは生成しない。レビューが利得を食う）。Parsimony はモデルごとの補完だ：冗長さがハーネスの産物ではなくモデルの特性なら、「正味のコーディングユニット追加数」は保守性をモデル選定に値付けした最初のリーダーボード行になる。個人プロジェクトで、解決数は SWE-bench から再実行なしに引き継いだもの——ランキングは監査ではなくレンズとして扱うこと。
+
+[`🔗 Parsimony`](https://parsimony.lasu.dev/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50077619)
+
+---
+
+## 40. 「あなたの C は標準 C ではない」：実装と ISO C が食い違う場所——`asm`、`FLT_ROUNDS`、死んだ pragma、musl の stdarg
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 98+ pts · 65 コメント · ~46.6h 前 (~21:36 UTC+8)
+- **Tags:** `c` `compilers` `standards` `portability`
+
+sebsite.pw の記事は、規格に書かれた C と、gcc/clang ＋ glibc/musl として存在する C の間の具体的な非互換をカタログ化する。例は具体的だ：**`asm`** は両コンパイラでデフォルト予約語なので、通常の識別子として使う規格準拠のコードがコンパイルできない（著者は「なぜ C は C++ のように予約しないのか」と問う）；規格は **`FLT_ROUNDS`** に実行時の `fesetround` を追跡することを要求するが、gcc は 1 にハードコードする；5 つの標準浮動小数点 pragma（C99 の `FENV_ACCESS`、`FP_CONTRACT`、`CX_LIMITED_RANGE`。C23 の `FENV_ROUND`、`FENV_DEC_ROUND`）は C99 から 27 年経ってなお gcc では「ただの no-op」で、コマンドラインフラグは翻訳単位全体に効くため代替にならない；規格は戻り値型の修飾子は捨てられるべきだと定めるのに、**clang は `const int f();` を `int f();` と競合するとして拒否する**；そして **musl の `stdarg.h`** は 2 引数の `va_start` でコンパイラ内蔵を隠し、サポートしているコンパイラでも C23 の 1 引数形式を塞ぐ。著者自身、これは不完全なリストだと明言し、pragma の深掘りを別稿で約束している。
+
+**なぜ重要か：** これは 10月10日の C2y UB 削除の話の補完であって反復ではない：委員会が未定義動作を削るのが C の現実ギャップの半分で、実装が存在する規格を静かに実装しないのがもう半分だ。`-pedantic` を付けて規格準拠を仮定する者への教訓：このフラグが検査するのはソース対規格であって、プラットフォーム対あなたの想定ではない。
+
+[`🔗 sebsite.pw: Your C is not standard C`](https://sebsite.pw/w/20261012-notstdc.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50071546)
+
+---
+
+## 41. 九年かかり、それから 5 ポンドの Pico：Xbox 360 がついにグリッチされ——1 週間後にソフトウェアエクスプロイトが無意味に
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 100+ pts · 39 コメント · ~47.7h 前 (~20:33 UTC+8)
+- **Tags:** `hardware-hacking` `glitching` `raspberry-pi-pico` `xbox`
+
+Xbox 360 の Reset Glitch Hack が壊すのは一つの命令だ：modchip（ここでは Matrix CoolRunner Rev D）が選んだ瞬間に CPU のリセット線へ約 100ns のパルスを送り、署名検証ルーチン内の `mr` を「宛先レジスタに 0 を移す」動作に変える——するとブート ROM は未署名コードを受け入れる。著者は 2017 年にチップを買い、九年間ツールに阻まれていた：はんだ付け、NAND プログラマ、JTAG プログラマ。状況を変えたのが **Raspberry Pi Pico** だ：**PicoFlasher** は NAND ダンプを 30 分以上から数秒へ縮め、**pico-dirtyJtag** は Octal450 のタイミングファイルで CoolRunner に書き込む——PIO タイマの精度（約 7.5ns）がfault injection に足る 5 ポンドのハードウェアだ。皮肉は予定通りにやってくる：発表の 1 週間前、ソフトウェア単独のエクスプロイト **Xbox360PeerPressure** が出荷された——1BL ブートローダがシリコンに焼き付けられ、従来型のソフト的アプローチでは「まず突破できない」とされてきた本体に——著者いわく「九年の努力をいくらか無意味にした」。
+
+**なぜ重要か：** Pico はハードウェア攻撃ツールの民主化として繰り返し現れている——2021 年の AirTag ファームウェアダンプ、2023 年の Switch modchip、そして 2026 年のグリッチタイミング——教訓は、fault injection の障壁が物理ではなくツールのコストだったということだ。オチはもう一方にも切り込む：九年のハードウェアの仕事が、一つのソフトウェアバグに一週間で obsolete された。
+
+[`🔗 kennedn.com: It took me nine years to hack my Xbox 360`](https://kennedn.com/blog/posts/glitching/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50070661)
+
+---
+
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-15T04:20:00Z |
-| Items | 30 |
-| Sources tracked | 47（Hacker News フロントページ + Algolia API、GitHub Trending/API、arXiv、Hugging Face、OpenRouter API、curl Security Advisories、daniel.haxx.se、oss-security/Openwall、NVD API、Rapid7、CISA KEV、CSO Online、ThaiCERT、Security Affairs、OMG! Ubuntu、BNT、LB.ua、SVT、TV4、Aftonbladet、Go blog、Builder.io、Project Apertus、Timescale、academa-labs、VXControl、Meta/facebookincubator、ベンダーアドバイザリ、Scott Helme、Anomaly、sunshowers.io、Cisco Security Advisories、Palo Alto Security Advisories、The Hacker News、Cloudflare blog、Typesafe、LWN、Oxide Computer、Petal/kiruna-labs） |
+| Generated | 2026-10-15T12:20:00Z |
+| Items | 41 |
+| Sources tracked | 58（Hacker News フロントページ + Algolia API、GitHub Trending/API、arXiv、Hugging Face、OpenRouter API、curl Security Advisories、daniel.haxx.se、oss-security/Openwall、NVD API、Rapid7、CISA KEV、CSO Online、ThaiCERT、Security Affairs、OMG! Ubuntu、BNT、LB.ua、SVT、TV4、Aftonbladet、Go blog、Builder.io、Project Apertus、Timescale、academa-labs、VXControl、Meta/facebookincubator、ベンダーアドバイザリ、Scott Helme、Anomaly、sunshowers.io、Cisco Security Advisories、Palo Alto Security Advisories、The Hacker News、Cloudflare blog、Typesafe、LWN、Oxide Computer、Petal/kiruna-labs、Android Authority、Epic Online Services、Phoronix、blog.dfb.sh、arcfu.com、JuliusBrussee/caveman、K-Dense-AI、Tiny Little Office、Clova、Parsimony/La5u、sebsite.pw、kennedn.com） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（鮮度 × エンゲージメントの加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

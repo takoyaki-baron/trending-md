@@ -1,8 +1,8 @@
 ---
 date: 2026-10-15
-updated: 2026-10-15T04:20:00Z
+updated: 2026-10-15T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 47
+sources: 58
 license: CC-BY-4.0
 ---
 
@@ -428,14 +428,168 @@ Oxide's **Virtual Oxide Labs (Voxel)** emulates complete Oxide racks — includi
 
 ---
 
+## 31. Google attaches your Android phone number to every signed-in account — silently, and opt-out
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 475+ pts · 132 comments · ~19.8h ago (~00:28 UTC+8)
+- **Tags:** `google` `privacy` `android` `phone-verification`
+
+Android Authority (Oct 14) documents that Google **auto-verifies an Android device's phone number and attaches it to every Google account signed in on that device**, with no per-account prompt. Google frames the feature as keeping accounts "up to date" and protecting against fraud and abuse; the only notification is an email from `noreply-phone-verification@google.com`. The support page was updated between August and October 2025 to make the behavior opt-out — and to extend it from the account that triggered it to **all** accounts on the device. The opt-out is Settings → Google → All Services → Privacy & security → **Phone number verification**; numbers already linked must be removed manually, account by account. Android Authority also reports some users finding the toggle flipped back on after disabling — which it could not replicate.
+
+**Why it matters:** the unit of consent here is the device, the unit of identity is the account, and Google bridged them by default — collapsing boundaries people deliberately maintain between work, personal and alt profiles, with account-recovery implications in both directions. Note the precedent: a 2022 Google support thread shows numbers being added without consent even to Advanced Protection accounts, so the 2025 change is less a new behavior than a new scope.
+
+[`🔗 Android Authority`](https://www.androidauthority.com/google-auto-phone-number-verification-android-3723117/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50090349)
+
+---
+
+## 32. Tiny Little Office: ten tools, one URL — and every document is a link your agent can build
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 479+ pts · 95 comments · ~14.1h ago (~06:10 UTC+8)
+- **Tags:** `web-apps` `productivity` `llms-txt` `documents`
+
+**Tiny Little Office** ships a word processor, outliner, presentation builder, spreadsheet, calculator, drawing tool, diagram maker, animator, calendar and trip planner as one browser suite — with no named author, no pricing and no install on the landing page. The design idea HN seized on: **everything is a document, and documents nest** — per its own `llms.txt`, "a document goes inside another as a fence named by its app" (a spreadsheet inside a word-processor page inside a presentation). The suite is written for agents as first-class users: the `llms.txt` instructs how to "make a document as a link," so an agent can construct a live spreadsheet or diagram by writing a URL rather than driving the UI.
+
+**Why it matters:** document-as-URL is the move Bigwords.page made ("the URL is the whole app," covered here Oct 8) applied to a whole office suite, with an agent-facing contract instead of a human tutorial. The unknowns are stated plainly: the author is unidentified, and where documents live or what persists is not verifiable from the landing page — read it as a demonstration of a pattern, not an Office replacement.
+
+[`🔗 Tiny Little Office`](https://tinylittleoffice.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50096142)
+
+---
+
+## 33. Epic rewrites Easy Anti-Cheat for Linux: eBPF and a systemd service, Secure Boot required — Steam Deck not yet covered
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Epic Online Services · published Oct 14 · HN 80+ pts
+- **Tags:** `epic` `anti-cheat` `linux` `gaming` `ebpf`
+
+Epic announced **EAC Linux v2**, a rebuild of Easy Anti-Cheat's Linux implementation to bring protection "much closer to par with Windows." Per Phoronix's read of the announcement, v2 ships **no kernel module**: it runs as an anti-cheat **systemd service** (launched when a protected game runs, unloadable afterward) plus **eBPF kernel programs**, and it requires **UEFI Secure Boot** with keys from Canonical, Fedora, Universal Blue, Debian, SUSE, Rocky Linux or the Microsoft UEFI CA. Epic's own post supplies the history: EAC has supported native Linux clients since 2014 and Windows builds via Wine/Proton since 2021, but opt-in per game — which is why **Fortnite isn't on Linux yet ("but it's coming")**, with Fortnite as the v2 pilot before other developers get access. Epic also commits to a panel with Fedora Project Leader Jef Spaleta and an "open line of communications with Valve." The catch Phoronix flags: **the Steam Deck doesn't support the required functionality yet**, and Epic says it is working with Valve to address it.
+
+**Why it matters:** Linux gaming's standing compromise — native clients exist, competitive multiplayer mostly doesn't — has been a per-game opt-in problem since 2021, and this is the first concrete plan to close it at platform level. The cost is stated in Epic's own words: the requirements "build on work that distribution maintainers already do," which means custom-kernel and no-Secure-Boot setups are excluded until distros or Valve catch up — a kernel-trust bargain the Linux community has historically resisted in other forms.
+
+[`🔗 Epic: Awesome Gaming on Linux Without Cheating`](https://onlineservices.epicgames.com/news/introducing-easy-anti-cheat-linux-v2) · [`🔗 Phoronix: EAC with systemd service & eBPF`](https://www.phoronix.com/news/Easy-Anti-Cheat-Better-Linux) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50088166)
+
+---
+
+## 34. Caveman 4.0: the token-compression proxy re-trends at 112k★ — six rocks, with an Auto that picks model and effort
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · JuliusBrussee/caveman · 112,082★ · +398 today · v4.0.1 released Oct 13
+- **Tags:** `tokens` `proxy` `coding-agents` `cost`
+
+`JuliusBrussee/caveman` — the Apache-2.0 "why use many token when few token do trick" skill + local proxy — shipped **v4.0.0 and v4.0.1 on Oct 13** and re-trends today at 112,082★. 4.0 reorganizes the install into **six components, on by default, each with its own switch**: *Say less* (caveman-voice answers — worked example 63→20 tokens for the same fix), *Read less* (compresses logs, JSON, CSV and test output before the model sees it — **33.2% fewer input tokens** across 54 Claude Code runs with 18/18 answers correct), *Auto* (new — picks the model and reasoning effort per request; **54% cheaper** than Opus 5.5 at xhigh at the same score across 85 coding tasks, labeled interim), *Blocks* (new — the agent keeps the scripts it writes and re-runs them: **397→76 tokens** for one test run), *Waste fixes* (keeps the prompt cache warm while you pause; unmeasured), and *Browse* (web pages compressed **129.8×**). One `npx @caveman-ai/cli` install covers 30+ agents locally on your own keys; only Auto needs an account, and it is free. The idea has independent academic echo: Adobe Research's **CAVEWOMAN** paper (arXiv 2606.24083 — Adeyemi, Rossi, Dernoncourt) evaluates linguistic compression on both the input and output channels across eight models, and caveman's README credits it for the 1.4–2.4× output-compression figure.
+
+**Why it matters:** token compression began as a joke about grammar and became a measured cost lever — but every number here is self-reported on the author's own runs, and the README's own labels ("interim," "not measured yet") are the honest part to carry. What 4.0 actually signals is consolidation: prompt-shaping, output filtering, routing and cache hygiene in one local proxy — the same context-economics territory as OpenCode's Code Mode and context-mode, approached from the voice side.
+
+[`🔗 JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) · [`🔗 v4.0.0 release notes`](https://github.com/JuliusBrussee/caveman/releases/tag/v4.0.0) · [`🔗 CAVEWOMAN (arXiv 2606.24083)`](https://arxiv.org/abs/2606.24083)
+
+---
+
+## 35. A failed NixOS download ended in kernel root: the TP-Link EAP770's DMA bug, exploited to switch itself off
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 151+ pts · 62 comments · ~47.7h ago (~20:30 UTC+8)
+- **Tags:** `dma` `qualcomm` `kernel-exploit` `tplink` `wifi`
+
+A March 2026 NixOS ISO download failing with TLS "bad record mac" led the author to their Wi-Fi 7 access point — a TP-Link EAP770(EU) v1 (Qualcomm IPQ9574, Linux 5.4.164) — and to a **DMA cache-coherency bug in Qualcomm's out-of-tree `qca-nss-dp` driver** (no CVE assigned): a transmit buffer recycled as `fast_recycled` skips full cache invalidation, so stale dirty cache lines later write back over freshly DMA'd packets, corrupting 64 bytes at a time — and Qualcomm's SFE/PPE offload then **recomputes the TCP checksum over the damaged payload**, so clients receive valid-checksum garbage (OpenWrt's driver does not have the bug). Disabling the offload needs root, and TP-Link's SSH shell is uid 1 with no capabilities — so, working with Opus 4.8 over ~17 hours, the author built a privilege-escalation chain: **CVE-2022-0185** (integer underflow reachable from an unprivileged user namespace) plus pipe-buffer manipulation to arbitrary write, ending in a `modprobe_path` overwrite. Development ran in a QEMU harness built from EAP783 sources because TP-Link never released the v1 GPL sources; the AP had to stay up, and slab corruption allows one attempt per boot. Result: local root, offload disabled — corruption from 3 bad blocks per 8,192 MiB to zero at ~8% throughput cost — with a NAS watcher re-exploiting the box after each reboot.
+
+**Why it matters:** two supply-side failures make this more than a hobby war story: a checksum-recalculating offload that launders its own corruption past every integrity check, and a vendor that EOL'd the only firmware line the bug ships in — TP-Link's answer was that the hardware is "no longer supported with firmware updates." It is also a data point for the AI-assisted-exploitation debate: the chain was assembled with a model, but around a hand-diagnosed DMA bug and a 2022 CVE — the model worked inside a harness the author built.
+
+[`🔗 blog.dfb.sh: EAP770 root for two zeros`](https://blog.dfb.sh/blog/eap770-root-for-two-zeros/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50070625)
+
+---
+
+## 36. Why every LLM pelican looks like that: 13 SVGs, one template — and a benchmark that scores frontier UI creativity 65.5 against human 92.3
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 162+ pts · 138 comments · ~19.7h ago (~00:33 UTC+8)
+- **Tags:** `research` `mode-collapse` `image-generation` `benchmarks` `creativity`
+
+Aman Rusia's "The Emperor Pelican Has No Clothes" asks why the field's favorite stress prompt — "generate an SVG of a pelican riding a bicycle" — produces the same bird everywhere. Thirteen SVGs from Simon Willison's pelican-benchmark series, each generated at the highest reasoning setting that returned an SVG, converge on the same visual conventions: **diversity collapse on open-ended creative prompts**. The piece is careful about what it isn't: not a capability ceiling — pushed for variety, the same models render the pelican in a royal parade, a monsoon, polar night, a neon alley. The observation is backed by the author's own **Design Creativity Bench** (arXiv 2610.11539, with Bhole, Gupta and Dey): 16 frontier models on 80 open-ended UI tasks, scored on originality (distinctiveness across models on one prompt), creative range (how much designs change between two prompts for the same goal in different product domains) and appropriateness (share of the brief's acceptance criteria met) — and per the article, the top model GPT-6 Astra scored **65.5 against a human-designer reference of 92.3**.
+
+**Why it matters:** mode collapse is usually an image-model complaint; the pelican series makes it visible in SVG and now measurable in UI. Carry the numbers with their framing: 65.5 vs 92.3 is the article's reading of the paper's reference scale, and rubric-scored "creativity" is exactly the kind of metric that rewards novelty-for-novelty — the three-axis split is at least the right attempt at separating novelty from fitness.
+
+[`🔗 arcfu: The Emperor Pelican Has No Clothes`](https://arcfu.com/post/the-emperor-pelican-has-no-clothes/) · [`🔗 Design Creativity Bench (arXiv 2610.11539)`](https://arxiv.org/abs/2610.11539) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50090443)
+
+---
+
+## 37. Claude Scientific Skills is now Scientific Agent Skills: K-Dense opens its 177-skill science library to every agent — 49.9k★
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · K-Dense-AI/scientific-agent-skills · 49,945★ · +1,091 today
+- **Tags:** `agent-skills` `science` `open-source` `agents`
+
+K-Dense's science skills library — MIT, 49,945★, +1,091 stars today — has renamed from "Claude Scientific Skills" to **Scientific Agent Skills**, and the rename is the announcement: the 177 skills now follow the open **Agent Skills standard** (agentskills.io) and ship as a portable Agent Plugins package (`plugin.json` + `skills/`), loadable by Cursor, Claude Code, Codex and Google Antigravity rather than Claude alone. The library spans bioinformatics and genomics, cheminformatics and drug discovery, proteomics, clinical-research workflows, microscopy and digital pathology, neuroscience, materials, physics and astronomy, geospatial, lab automation, scientific writing and regulatory drafting (ICH/USP method validation) — each skill encoding not just tool usage but the field's conventions and validation checks, with stated guardrails (clinical skills are aggregate decision-support, never patient-specific diagnosis). The work is also described in a paper — **arXiv 2609.00065**, "Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents" (Kassis, Agarwal, He, Patel, Brueckner). The companion piece is **K-Dense BYOK**: a free open-source desktop co-scientist that runs these skills locally on your own API keys across 40+ models, with optional Modal cloud for heavy jobs.
+
+**Why it matters:** the skills shelf keeps consolidating on open standards, and science is the domain where procedural knowledge pays most — a skill that knows pooled-CRISPR-screen conventions or 1D-NMR calibration saves the agent from rediscovering a field's folklore every session. The rename tracks where the market went in six weeks: targeting one vendor's runtime is now the niche; targeting the standard is the default.
+
+[`🔗 K-Dense-AI/scientific-agent-skills`](https://github.com/K-Dense-AI/scientific-agent-skills) · [`🔗 arXiv 2609.00065`](https://arxiv.org/abs/2609.00065)
+
+---
+
+## 38. Clova: an inbox that accepts exactly one sender — leak-proof by construction
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 102+ pts · 84 comments · ~19.2h ago (~01:00 UTC+8)
+- **Tags:** `email` `privacy` `aliases` `mcp`
+
+**Clova.email** is an alias service whose rule is the product: **the first sender to email an address claims it for good; everyone else is rejected** — so when the retailer you gave it to leaks or sells your address, the alias is worthless to everyone but them, and you delete the alias instead of your life. Three inbox types: one-sender (locks permanently to the first legitimate sender), temporary (you set a lifetime, from an hour to a month, after which it rejects mail and can wipe its contents), and prefix (claim 5+ characters, invent `you-anything@…` on the fly, each still locking to its first sender). There is an **MCP server** so Claude, Cursor or another agent can create inboxes, pull verification codes and fetch receipts with scoped permissions. Free tier: 1 permanent address, 100 MB, 100 messages/day; Pro $30/yr; Business $50/yr with a custom domain.
+
+**Why it matters:** alias services are old; binding an alias's threat model to exactly one sender is the simplification — it turns "who leaked my address?" forensics into a property of the mailbox, with no tagging conventions to maintain. The MCP hook is the newer idea: sign-up verification flows are precisely the chore agents get handed, and a scoped API for codes-and-receipts is the plumbing that was missing.
+
+[`🔗 Clova`](https://clova.email/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50090932)
+
+---
+
+## 39. Parsimony: a benchmark that asks which AI coder changes the least code — and finds more code correlates with more solves
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 77+ pts · 17 comments · ~40.4h ago (~03:50 UTC+8)
+- **Tags:** `benchmarks` `swe-bench` `coding-agents` `evaluation`
+
+**Parsimony** (La5u, open) ranks AI coding models not by solve rate but by **how much code they add**: it reuses patches published by SWE-bench Verified and counts **"coding units"** — statements, calls, comparisons, names, literals — rather than lines, subtracts deletions, parses both versions of every changed file, and executes nothing (Python only; tests, docs and generated files excluded; every model runs the same mini-SWE-agent). Two findings worth carrying: **more code correlates with more tasks solved** — Spearman 0.33–0.60 on the boards with 26+ models — and the author's own rerun of GPT-5.6 Sol added **0.88×** the code of its published run, a reminder that harness settings move this metric. The author states the ceiling plainly: the metric captures size, not readability or design quality.
+
+**Why it matters:** two days ago this feed carried the 700-firm study (agents generate more code, not more software; review eats the gains). Parsimony is the per-model complement: if verbosity is a model trait rather than a harness artifact, "net coding units added" is the first leaderboard line that prices maintainability into model choice. Solo project, solve counts inherited from SWE-bench without rerunning — treat the ranking as a lens, not an audit.
+
+[`🔗 Parsimony`](https://parsimony.lasu.dev/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50077619)
+
+---
+
+## 40. "Your C is not standard C": where real toolchains and ISO C disagree — `asm`, `FLT_ROUNDS`, dead pragmas, musl's stdarg
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 98+ pts · 65 comments · ~46.6h ago (~21:36 UTC+8)
+- **Tags:** `c` `compilers` `standards` `portability`
+
+A sebsite.pw write-up catalogs concrete incompatibilities between C as written in the standard and C as it exists in gcc/clang with glibc/musl. The examples are specific: **`asm`** is reserved by default in both compilers, so strictly conforming code using it as an ordinary identifier fails to compile (the author asks why C doesn't just reserve it like C++ does); **`FLT_ROUNDS`** is required by the standard to track runtime `fesetround` calls, but gcc hardcodes it to 1; the five standard floating-point pragmas (C99's `FENV_ACCESS`, `FP_CONTRACT`, `CX_LIMITED_RANGE`; C23's `FENV_ROUND`, `FENV_DEC_ROUND`) are "just no-ops in gcc" 27 years after C99, and command-line flags can't substitute because they apply translation-unit-wide; **clang rejects `const int f();` as conflicting with `int f();`** although the standard says return-type qualifiers are discarded; and **musl's `stdarg.h`** shadows the compiler builtin with a two-argument `va_start`, blocking C23's single-argument form even on compilers that support it. The author calls it explicitly an incomplete list, with a pragmas deep-dive promised.
+
+**Why it matters:** this complements — not repeats — the C2y UB-deletion story from Oct 10: the committee removing undefined behaviors is one half of C's reality gap; implementations quietly not implementing the standard that exists is the other. For anyone writing `-pedantic` and assuming conformance: the flag checks the source against the standard, not the platform against your assumptions.
+
+[`🔗 sebsite.pw: Your C is not standard C`](https://sebsite.pw/w/20261012-notstdc.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50071546)
+
+---
+
+## 41. Nine years, then a £5 Pico: an Xbox 360 finally glitched — a week before a software exploit made it moot
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 100+ pts · 39 comments · ~47.7h ago (~20:33 UTC+8)
+- **Tags:** `hardware-hacking` `glitching` `raspberry-pi-pico` `xbox`
+
+The Reset Glitch Hack on an Xbox 360 corrupts one instruction: a modchip (here a Matrix CoolRunner Rev D) pulses the CPU reset line for ~100ns at a chosen moment, turning an `mr` in the signature-verification routine into "move 0 into the destination register" — and the boot ROM accepts unsigned code. The author bought the chip in 2017 and stalled for nine years on the tooling: soldering, a NAND programmer, a JTAG programmer. What changed is the **Raspberry Pi Pico**: **PicoFlasher** dumps the NAND in seconds instead of 30+ minutes, and **pico-dirtyJtag** programs the CoolRunner with Octal450's timing files — £5 of hardware whose PIO timers are precise enough (~7.5ns) for fault injection. The irony is scheduled: a week before publication, a software-only exploit (**Xbox360PeerPressure**) shipped — against a console whose 1BL bootloader is baked into the silicon and long deemed unhackable by conventional software means — "rendering my years of effort somewhat moot," in the author's words.
+
+**Why it matters:** the Pico keeps appearing as the democratization of hardware-attack tooling — the AirTag firmware dump in 2021, Switch modchips in 2023, now glitch timing in 2026 — and the lesson is that fault injection's barrier was never physics, it was tooling cost. The punchline cuts the other way too: nine years of hardware work obsoleted by one software bug in a week.
+
+[`🔗 kennedn.com: It took me nine years to hack my Xbox 360`](https://kennedn.com/blog/posts/glitching/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50070661)
+
+---
+
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-15T04:20:00Z |
-| Items | 30 |
-| Sources tracked | 47 (Hacker News front page + Algolia API, GitHub Trending/API, arXiv, Hugging Face, OpenRouter API, curl Security Advisories, daniel.haxx.se, oss-security/Openwall, NVD API, Rapid7, CISA KEV, CSO Online, ThaiCERT, Security Affairs, OMG! Ubuntu, BNT, LB.ua, SVT, TV4, Aftonbladet, Go blog, Builder.io, Project Apertus, Timescale, academa-labs, VXControl, Meta/facebookincubator, vendor advisories, Scott Helme, Anomaly, sunshowers.io, Cisco Security Advisories, Palo Alto Security Advisories, The Hacker News, Cloudflare blog, Typesafe, LWN, Oxide Computer, Petal/kiruna-labs) |
+| Generated | 2026-10-15T12:20:00Z |
+| Items | 41 |
+| Sources tracked | 58 (Hacker News front page + Algolia API, GitHub Trending/API, arXiv, Hugging Face, OpenRouter API, curl Security Advisories, daniel.haxx.se, oss-security/Openwall, NVD API, Rapid7, CISA KEV, CSO Online, ThaiCERT, Security Affairs, OMG! Ubuntu, BNT, LB.ua, SVT, TV4, Aftonbladet, Go blog, Builder.io, Project Apertus, Timescale, academa-labs, VXControl, Meta/facebookincubator, vendor advisories, Scott Helme, Anomaly, sunshowers.io, Cisco Security Advisories, Palo Alto Security Advisories, The Hacker News, Cloudflare blog, Typesafe, LWN, Oxide Computer, Petal/kiruna-labs, Android Authority, Epic Online Services, Phoronix, blog.dfb.sh, arcfu.com, JuliusBrussee/caveman, K-Dense-AI, Tiny Little Office, Clova, Parsimony/La5u, sebsite.pw, kennedn.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

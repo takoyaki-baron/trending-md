@@ -1,8 +1,8 @@
 ---
 date: 2026-10-15
-updated: 2026-10-15T04:20:00Z
+updated: 2026-10-15T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 47
+sources: 58
 license: CC-BY-4.0
 ---
 
@@ -428,14 +428,168 @@ Oxide 的 **Virtual Oxide Labs（Voxel）**在一台机器上模拟完整的 Oxi
 
 ---
 
+## 31. Google 把你的 Android 手机号悄悄绑定到所有已登录账号——默认开启，只能退出
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 475+ pts · 132 评论 · ~19.8h 前 (~00:28 UTC+8)
+- **Tags:** `google` `privacy` `android` `phone-verification`
+
+Android Authority（10 月 14 日）记录了 Google 的一个行为：**自动验证 Android 设备的手机号，并将其附加到该设备上登录的每一个 Google 账号**，没有逐账号的提示。Google 将该功能表述为让账号保持「最新状态」并防范欺诈滥用；唯一的通知是一封来自 `noreply-phone-verification@google.com` 的邮件。帮助页面在 2025 年 8 月至 10 月间被更新，把该行为改为可退出——并且把它从触发验证的那个账号扩展到了**设备上的全部账号**。退出路径：设置 → Google → 所有服务 → 隐私与安全 → **电话号码验证**；已经绑定的号码需要逐个账号手动移除。Android Authority 还报告部分用户发现关闭后开关又被重新打开——这一点它未能复现。
+
+**为什么重要：**这里的同意单位是设备，身份单位是账号，而 Google 默认把两者桥接起来——人们刻意维护的工作、个人、小号之间的边界被抹平，账号找回的影响也是双向的。注意前史：2022 年的 Google 支持帖就显示连 Advanced Protection 账号也被未经同意地加上号码，所以 2025 年的改动与其说是新行为，不如说是新范围。
+
+[`🔗 Android Authority`](https://www.androidauthority.com/google-auto-phone-number-verification-android-3723117/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50090349)
+
+---
+
+## 32. Tiny Little Office：十个工具、一个网址——每个文档都是你的 agent 能直接构造的链接
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 479+ pts · 95 评论 · ~14.1h 前 (~06:10 UTC+8)
+- **Tags:** `web-apps` `productivity` `llms-txt` `documents`
+
+**Tiny Little Office** 把文字处理、大纲、演示、电子表格、计算器、画图、流程图、动画、日历和行程规划做成一套浏览器套件——落地页上没有署名作者、没有定价、也不需要安装。HN 抓住的设计点是：**一切皆文档，文档可嵌套**——按它自己的 `llms.txt` 说法，「一个文档以以其应用命名的 fence 进入另一个文档」（电子表格嵌在文字页里，文字页再嵌进演示文稿）。整套件把 agent 当作一等用户来写：`llms.txt` 教的是如何「把文档做成一个链接」，所以 agent 可以靠写一个 URL 构造出活的电子表格或图表，而不用去驱动 UI。
+
+**为什么重要：**文档即链接是 Bigwords.page 的那一步（「URL 就是整个应用」，本报 10 月 8 日报道过）套在整个办公套件上，而且换成面向 agent 的契约而非人类教程。未知项也明说了：作者身份不明，文档存在哪里、什么会持久化，从落地页无法验证——把它读作一种模式的演示，而不是 Office 替代品。
+
+[`🔗 Tiny Little Office`](https://tinylittleoffice.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50096142)
+
+---
+
+## 33. Epic 重写 Linux 版 Easy Anti-Cheat：eBPF + systemd 服务，要求 Secure Boot——Steam Deck 暂不支持
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Epic Online Services · 发布于 10 月 14 日 · HN 80+ pts
+- **Tags:** `epic` `anti-cheat` `linux` `gaming` `ebpf`
+
+Epic 宣布 **EAC Linux v2**，重建 Easy Anti-Cheat 的 Linux 实现，把保护水平提到「与 Windows 接近」。按 Phoronix 对公告的解读，v2 **不带内核模块**：它以反作弊 **systemd 服务**运行（受保护游戏启动时拉起，之后可卸载），配合 **eBPF 内核程序**，并要求 **UEFI Secure Boot**，信任 Canonical、Fedora、Universal Blue、Debian、SUSE、Rocky Linux 或 Microsoft UEFI CA 签发的密钥。Epic 自己的帖子交代了历史：EAC 自 2014 年支持原生 Linux 客户端，2021 年起经 Wine/Proton 支持 Windows 构建，但都是逐游戏自愿加入——这正是 **Fortnite 至今不在 Linux 上的原因（「但它要来了」）**，Fortnite 将作为 v2 的试点，之后再开放给其他开发者。Epic 还承诺与 Fedora 项目负责人 Jef Spaleta 同台座谈，并保持「与 Valve 的畅通沟通」。Phoronix 点出的坑：**Steam Deck 尚不支持所需的全部功能**，Epic 称正与 Valve 合作解决。
+
+**为什么重要：**Linux 游戏的长期妥协——原生客户端有了，竞技多人游戏基本没有——自 2021 年起就是逐游戏自愿加入的问题，这是第一个在平台层面收口的具体计划。代价也写在 Epic 自己的话里：这些要求「建立在发行版维护者已有工作之上」，意味着自定义内核和无 Secure Boot 的环境在发行版或 Valve 跟进之前被排除在外——这是 Linux 社区在其他形式下一直抵制的内核信任交易。
+
+[`🔗 Epic: Awesome Gaming on Linux Without Cheating`](https://onlineservices.epicgames.com/news/introducing-easy-anti-cheat-linux-v2) · [`🔗 Phoronix: EAC with systemd service & eBPF`](https://www.phoronix.com/news/Easy-Anti-Cheat-Better-Linux) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50088166)
+
+---
+
+## 34. Caveman 4.0：token 压缩代理以 112k★ 重新 trending——六个「石头」，外加自动挑选模型与推理强度的 Auto
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · JuliusBrussee/caveman · 112,082★ · 今日 +398 · v4.0.1 于 10 月 13 日发布
+- **Tags:** `tokens` `proxy` `coding-agents` `cost`
+
+`JuliusBrussee/caveman`——「why use many token when few token do trick」的 Apache-2.0 skill + 本地代理——**10 月 13 日发布 v4.0.0 与 v4.0.1**，今天以 112,082★ 重新 trending。4.0 把安装重组为**六个组件，默认全开，每个可单独关**：*Say less*（原始人语气回答——同一修复从 63 token 压到 20 的示例）、*Read less*（在模型看到之前压缩日志、JSON、CSV 和测试输出——54 次 Claude Code 运行中**输入 token 减少 33.2%**，18/18 答案正确）、*Auto*（新——按请求挑选模型与推理强度；85 个编码任务上同分前提下比 Opus 5.5 xhigh **便宜 54%**，标注为 interim）、*Blocks*（新——agent 保留自己写过的脚本并重复运行：一次测试运行 **397→76 token**）、*Waste fixes*（暂停时保持 prompt cache 温热；未测量）、*Browse*（网页压缩 **129.8×**）。一条 `npx @caveman-ai/cli` 覆盖 30+ 个 agent，全在你自己的密钥上本地运行；只有 Auto 需要账号，且免费。这个思路有独立的学术回响：Adobe Research 的 **CAVEWOMAN** 论文（arXiv 2606.24083——Adeyemi、Rossi、Dernoncourt）在输入与输出两个通道上对八个模型评估语言压缩，caveman 的 README 把输出压缩 1.4–2.4× 的数字归于它。
+
+**为什么重要：**token 压缩从语法玩笑变成有测量的成本杠杆——但这里每个数字都是作者在自己运行上的自报值，README 自己的标注（「interim」「not measured yet」）才是该带走的老实部分。4.0 真正的信号是收拢：prompt 整形、输出过滤、路由、缓存卫生装进一个本地代理——与 OpenCode 的 Code Mode、context-mode 是同一个上下文经济学领地，只是从语气这一侧切入。
+
+[`🔗 JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) · [`🔗 v4.0.0 发布说明`](https://github.com/JuliusBrussee/caveman/releases/tag/v4.0.0) · [`🔗 CAVEWOMAN (arXiv 2606.24083)`](https://arxiv.org/abs/2606.24083)
+
+---
+
+## 35. 一次失败的 NixOS 下载以内核 root 收场：TP-Link EAP770 的 DMA 缺陷，被利用来关掉它自己
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 151+ pts · 62 评论 · ~47.7h 前 (~20:30 UTC+8)
+- **Tags:** `dma` `qualcomm` `kernel-exploit` `tplink` `wifi`
+
+2026 年 3 月一次 NixOS ISO 下载报 TLS「bad record mac」，把作者引向他的 Wi-Fi 7 接入点——TP-Link EAP770(EU) v1（Qualcomm IPQ9574，Linux 5.4.164）——以及 Qualcomm 树外 `qca-nss-dp` 驱动里的一个 **DMA 缓存一致性缺陷**（无 CVE 编号）：一块以 `fast_recycled` 回收的发送缓冲跳过了完整的缓存失效，之后陈旧的脏缓存行回写覆盖新 DMA 进来的数据包，每次损坏 64 字节——而 Qualcomm 的 SFE/PPE 硬件卸载还会**对损坏后的载荷重新计算 TCP 校验和**，客户端于是收到校验和合法的垃圾数据（OpenWrt 的驱动没有这个缺陷）。关闭卸载需要 root，而 TP-Link 的 SSH shell 是没有任何 capabilities 的 uid 1——于是作者与 Opus 4.8 花了约 17 小时搭出一条提权链：**CVE-2022-0185**（可从无特权 user namespace 触发的整数下溢）加管道缓冲区操作实现任意写，最后覆写 `modprobe_path`。开发在用 EAP783 源码搭的 QEMU 环境里进行——因为 TP-Link 从未发布 v1 的 GPL 源码；接入点必须保持在线，且 slab 损坏让每次开机只有一次尝试。结果：拿到本地 root、关掉卸载——损坏从每 8,192 MiB 3 个坏块降到零，代价约 8% 吞吐——再由一台 NAS 看守机在每次重启后重新利用一遍。
+
+**为什么重要：**两个供给侧失败让这篇不只是业余战争故事：一个会重算校验和、把自己的损坏洗过每一道完整性检查的卸载引擎，以及一个把唯一受影响固件线 EOL 的厂商——TP-Link 的答复是「不再提供固件更新支持」。它也是 AI 辅助漏洞利用讨论的一个数据点：链条是和模型一起搭的，但围绕的是手工诊断的 DMA 缺陷和 2022 年的 CVE——模型是在作者搭好的环境里干活。
+
+[`🔗 blog.dfb.sh: EAP770 root for two zeros`](https://blog.dfb.sh/blog/eap770-root-for-two-zeros/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50070625)
+
+---
+
+## 36. 为什么每只 LLM 鹈鹕都长那样：13 张 SVG、一个模板——以及一个给前沿 UI 创造力打 65.5 分（人类 92.3）的基准
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 162+ pts · 138 评论 · ~19.7h 前 (~00:33 UTC+8)
+- **Tags:** `research` `mode-collapse` `image-generation` `benchmarks` `creativity`
+
+Aman Rusia 的「The Emperor Pelican Has No Clothes」追问：为什么全领域最爱的压力提示——「生成一张鹈鹕骑自行车的 SVG」——到处产出一模一样的鸟。来自 Simon Willison 鹈鹕基准系列的 13 张 SVG，各自在能返回 SVG 的最高推理档生成，却收敛到同一套视觉惯例：**开放创造性提示上的多样性坍缩**。文章对「它不是什么」很小心：不是能力上限——只要要求多样化，同样的模型能把鹈鹕画进皇家巡游、季风、极夜、霓虹小巷。观察背后是作者自己的 **Design Creativity Bench**（arXiv 2610.11539，与 Bhole、Gupta、Dey 合著）：16 个前沿模型、80 个开放式 UI 任务，按 originality（同提示下模型间的差异性）、creative range（同一目标在不同产品域的两个提示间设计变化幅度）与 appropriateness（满足需求验收标准的比例）打分——按文章说法，最强的 GPT-6 Astra 得 **65.5，对照人类设计师基准 92.3**。
+
+**为什么重要：**模式坍缩通常是图像模型的罪名；鹈鹕系列让它先在 SVG 里可见，如今在 UI 里可测。带上框架再看数字：65.5 对 92.3 是文章对论文参照刻度的读法，而按量规打分的「创造力」恰恰是那种奖励为新颖而新颖的指标——三轴拆分至少是区分新颖与合用的一次正确尝试。
+
+[`🔗 arcfu: The Emperor Pelican Has No Clothes`](https://arcfu.com/post/the-emperor-pelican-has-no-clothes/) · [`🔗 Design Creativity Bench (arXiv 2610.11539)`](https://arxiv.org/abs/2610.11539) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50090443)
+
+---
+
+## 37. Claude Scientific Skills 更名 Scientific Agent Skills：K-Dense 把 177 个科学技能库开放给所有 agent——49.9k★
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · K-Dense-AI/scientific-agent-skills · 49,945★ · 今日 +1,091
+- **Tags:** `agent-skills` `science` `open-source` `agents`
+
+K-Dense 的科学技能库——MIT 协议，49,945★，今日 +1,091 星——从「Claude Scientific Skills」更名为 **Scientific Agent Skills**，更名本身就是公告：177 个技能现在遵循开放的 **Agent Skills 标准**（agentskills.io），以可移植的 Agent Plugins 包（`plugin.json` + `skills/`）分发，Cursor、Claude Code、Codex 和 Google Antigravity 都能加载，不再只属于 Claude。库的覆盖面从生物信息与基因组学、化学信息学与药物发现、蛋白质组学、临床研究工作流、显微与数字病理、神经科学、材料、物理与天文、地理空间、实验室自动化，到科学写作与法规起草（ICH/USP 方法验证）——每个技能编码的不只是工具用法，还有该领域的惯例与验证检查，并写明护栏（临床技能是群体决策支持，绝非针对患者的诊断）。这项工作还有论文背书——**arXiv 2609.00065**，"Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents"（Kassis、Agarwal、He、Patel、Brueckner）。配套之作是 **K-Dense BYOK**：免费开源的桌面 co-scientist，用你自己的 API 密钥在本地运行这些技能，40+ 模型可选，重活可上 Modal 云。
+
+**为什么重要：**技能货架在持续向开放标准收拢，而科学是程序性知识回报最高的领域——一个懂合并 CRISPR 筛选惯例或一维 NMR 校准的技能，省下的是 agent 每个会话重新挖掘一门领域民俗的成本。这次更名记录了六周内市场的走向：绑定单一厂商运行时已成小众，绑定标准才是默认。
+
+[`🔗 K-Dense-AI/scientific-agent-skills`](https://github.com/K-Dense-AI/scientific-agent-skills) · [`🔗 arXiv 2609.00065`](https://arxiv.org/abs/2609.00065)
+
+---
+
+## 38. Clova：只接受唯一发件人的收件箱——靠构造做到防泄露
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 102+ pts · 84 评论 · ~19.2h 前 (~01:00 UTC+8)
+- **Tags:** `email` `privacy` `aliases` `mcp`
+
+**Clova.email** 是一条规则即产品的邮箱别名服务：**第一个向某地址发信的发件人永久认领它，其余一律拒收**——于是当你把地址给过的零售商泄露或转卖名单时，这个别名对除它之外的所有人都没用，你删掉别名即可，不必连累自己的人生。三种收件箱：one-sender（永久锁定给第一个合法发件人）、temporary（你设定生命周期，一小时到一个月，到期后拒收并可清空内容）、prefix（认领 5 个以上字符前缀，随时现造 `you-anything@…`，每个仍锁定其首个发件人）。它带 **MCP 服务器**，Claude、Cursor 或其他 agent 可以按受控权限创建收件箱、取验证码、取回执。免费档：1 个永久地址、100 MB、每日 100 封；Pro 每年 $30；Business 每年 $50 含自定义域名。
+
+**为什么重要：**别名服务是老东西；把别名的威胁模型绑死在唯一发件人身上才是简化——「谁泄露了我的地址」的取证变成邮箱自身的属性，不需要维护任何打标习惯。MCP 钩子是更新的想法：注册验证流程正是 agent 被交办的杂活，一个取码与取回执的受控 API 是此前缺失的管道。
+
+[`🔗 Clova`](https://clova.email/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50090932)
+
+---
+
+## 39. Parsimony：问哪个 AI 编码器改动代码最少的基准——并发现代码写得越多、解题越多
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 77+ pts · 17 评论 · ~40.4h 前 (~03:50 UTC+8)
+- **Tags:** `benchmarks` `swe-bench` `coding-agents` `evaluation`
+
+**Parsimony**（La5u，开源）给 AI 编码模型排名，依据不是解题率而是**增加了多少代码**：它复用 SWE-bench Verified 已公布的补丁，统计**「编码单元」**——语句、调用、比较、名称、字面量——而非行数，扣除删除，解析每个被改文件的前后两版，不执行任何东西（仅 Python；排除测试、文档和生成文件；所有模型跑同一个 mini-SWE-agent）。两个值得带走的发现：**代码越多与解题越多相关**——在 26+ 模型的榜单上 Spearman 0.33–0.60——以及作者自己重跑 GPT-5.6 Sol 时增加的代码是其公开运行的 **0.88×**，提醒大家 harness 设置会移动这个指标。作者把上限说得明白：该指标度量的是体量，不是可读性或设计质量。
+
+**为什么重要：**两天前本报刚报道过那项 700 家公司的研究（agent 生成更多代码，但不是更多软件；收益被评审吞掉）。Parsimony 是逐模型的补充：如果啰嗦是模型特质而非 harness 假象，「净增编码单元」就是第一条把可维护性计入选型的榜单指标。单人项目、解题数直接继承 SWE-bench 而未重跑——把排名当透镜，别当审计。
+
+[`🔗 Parsimony`](https://parsimony.lasu.dev/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50077619)
+
+---
+
+## 40. 「你的 C 不是标准 C」：真实工具链与 ISO C 的分歧清单——`asm`、`FLT_ROUNDS`、失效的 pragma、musl 的 stdarg
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 98+ pts · 65 评论 · ~46.6h 前 (~21:36 UTC+8)
+- **Tags:** `c` `compilers` `standards` `portability`
+
+sebsite.pw 的文章盘点了标准里的 C 与 gcc/clang + glibc/musl 世界里的 C 之间的具体不兼容。例子都很具体：**`asm`** 在两个编译器里默认都是保留字，严格符合标准的代码把它当普通标识符用就无法编译（作者追问为什么 C 不学 C++ 直接保留它）；标准要求 **`FLT_ROUNDS`** 跟踪运行时的 `fesetround`，gcc 却把它硬编码为 1；五个标准浮点 pragma（C99 的 `FENV_ACCESS`、`FP_CONTRACT`、`CX_LIMITED_RANGE`；C23 的 `FENV_ROUND`、`FENV_DEC_ROUND`）在 C99 二十七年后于 gcc 里「仍是空操作」，而命令行旗标替代不了——它们作用于整个翻译单元；标准说返回类型上的限定符应被丢弃，**clang 却把 `const int f();` 与 `int f();` 判为冲突**；**musl 的 `stdarg.h`** 用双参数 `va_start` 遮蔽编译器内建头，挡住了 C23 的单参数形式——哪怕编译器本身支持。作者明说这是不完整清单，pragma 的深挖还会另文发出。
+
+**为什么重要：**它与 10 月 10 日的 C2y 删 UB 报道互补而非重复：委员会删除未定义行为是 C 现实落差的一半；实现悄悄不实现已存在的标准是另一半。对任何写了 `-pedantic` 就假定符合标准的人：这个旗标检查的是源码对标准，不是平台对你的假设。
+
+[`🔗 sebsite.pw: Your C is not standard C`](https://sebsite.pw/w/20261012-notstdc.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50071546)
+
+---
+
+## 41. 九年，然后一颗 5 英镑的 Pico：Xbox 360 终于被电压毛刺破解——一周后软件漏洞让它白忙
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 100+ pts · 39 评论 · ~47.7h 前 (~20:33 UTC+8)
+- **Tags:** `hardware-hacking` `glitching` `raspberry-pi-pico` `xbox`
+
+Xbox 360 上的 Reset Glitch Hack 只损坏一条指令：改芯片（这里是 Matrix CoolRunner Rev D）在选定的时刻向 CPU 复位线打出约 100ns 的脉冲，把签名验证例程里的一条 `mr` 变成「把 0 移入目标寄存器」——boot ROM 于是接受未签名代码。作者 2017 年买下芯片，之后九年被工具链卡住：焊接、NAND 编程器、JTAG 编程器。改变一切的是 **Raspberry Pi Pico**：**PicoFlasher** 把 NAND 转储从 30 多分钟缩到几秒，**pico-dirtyJtag** 用 Octal450 的时序文件给 CoolRunner 编程——5 英镑的硬件，PIO 定时器精度（约 7.5ns）足以做故障注入。讽刺是排好期的：发表前一周，纯软件漏洞 **Xbox360PeerPressure** 出现——对着那台 1BL bootloader 烧死在硅片里、长期被认为常规软件手段无法攻破的主机——用作者自己的话说，「让我多年的努力显得有点白费」。
+
+**为什么重要：**Pico 正在成为硬件攻击工具平民化的常客——2021 年 AirTag 固件转储、2023 年 Switch 破解芯片、2026 年的毛刺时序——教训是故障注入的门槛从来不是物理，而是工具成本。而这个结尾的反转同样锋利：九年的硬件功夫，一周内被一个软件漏洞清零。
+
+[`🔗 kennedn.com: It took me nine years to hack my Xbox 360`](https://kennedn.com/blog/posts/glitching/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50070661)
+
+---
+
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-15T04:20:00Z |
-| Items | 30 |
-| Sources tracked | 47（Hacker News 首页 + Algolia API、GitHub Trending/API、arXiv、Hugging Face、OpenRouter API、curl Security Advisories、daniel.haxx.se、oss-security/Openwall、NVD API、Rapid7、CISA KEV、CSO Online、ThaiCERT、Security Affairs、OMG! Ubuntu、BNT、LB.ua、SVT、TV4、Aftonbladet、Go blog、Builder.io、Project Apertus、Timescale、academa-labs、VXControl、Meta/facebookincubator、厂商公告、Scott Helme、Anomaly、sunshowers.io、Cisco Security Advisories、Palo Alto Security Advisories、The Hacker News、Cloudflare blog、Typesafe、LWN、Oxide Computer、Petal/kiruna-labs） |
+| Generated | 2026-10-15T12:20:00Z |
+| Items | 41 |
+| Sources tracked | 58（Hacker News 首页 + Algolia API、GitHub Trending/API、arXiv、Hugging Face、OpenRouter API、curl Security Advisories、daniel.haxx.se、oss-security/Openwall、NVD API、Rapid7、CISA KEV、CSO Online、ThaiCERT、Security Affairs、OMG! Ubuntu、BNT、LB.ua、SVT、TV4、Aftonbladet、Go blog、Builder.io、Project Apertus、Timescale、academa-labs、VXControl、Meta/facebookincubator、厂商公告、Scott Helme、Anomaly、sunshowers.io、Cisco Security Advisories、Palo Alto Security Advisories、The Hacker News、Cloudflare blog、Typesafe、LWN、Oxide Computer、Petal/kiruna-labs、Android Authority、Epic Online Services、Phoronix、blog.dfb.sh、arcfu.com、JuliusBrussee/caveman、K-Dense-AI、Tiny Little Office、Clova、Parsimony/La5u、sebsite.pw、kennedn.com） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（时效性 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
