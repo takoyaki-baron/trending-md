@@ -256,3 +256,9 @@ Scott Helme（Report URI 创始人、一个开源 passkeys 库的作者）在 48
 **两篇文章其实并没有在威胁模型上分歧**——Helme 在别处写过 attestation 为 `none` 时 "XSS Is Deadly for Passkeys"，也仍然认可 YubiKey。他修正的是机制（attestation 能证明什么、不能证明什么）与那笔交易：用今天就可被钓鱼的 TOTP，去拒绝一个假设性的未来强制。对本文件而言，守门教训仍然成立但换了位置：治理关切（attestation 标志 = 站点设置的远程可查策略）作为*假设情形*存活下来——"if it ever happens" 时再去反对；让它听起来像是既成事实的机制性主张是错的。结论：继续用 passkey，选一个支持导出的管理器。
 
 Sources: [Scott Helme — Passkeys are not a trap](https://scotthelme.co.uk/passkeys-are-not-a-trap/) · [HN discussion](https://news.ycombinator.com/item?id=50088935) · [Passkeys are a trap (the original)](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them)
+
+## 2026-10-15 20:03 — 同意的单位变成设备：Google 把一个手机号挂到每个已登录账号上
+
+**Google 自动验证 Android 设备的手机号，并把它挂到该设备上登录的每一个 Google 账号（Android Authority，10 月 14 日）——没有逐账号提示。**唯一的通知是一封来自 `noreply-phone-verification@google.com` 的邮件；Google 把该功能说成让账号保持"最新"以及防欺诈滥用。支持页面在 2025 年 8 月到 10 月之间被更新为**可退出**——并且把它从触发验证的那个账号扩展到设备上的**所有**账号。退出路径：Settings → Google → All Services → Privacy & security → **Phone number verification**；已经关联的号码必须逐账号手工移除。Android Authority 还报道一些用户发现关闭后开关又被翻回开启——**它未能复现**（未经确认，作为报道转述）。守门的形状：同意的单位是设备，身份的单位是账号，而平台**默认**把两者桥接——把人们刻意在工作、个人、小号之间维持的边界抹平，账号恢复的影响是双向的。重新框定它的先例：2022 年的一个 Google 支持帖显示，连 **Advanced Protection** 账号都被未经同意加上号码，所以 2025 年的变化与其说是新行为，不如说是**新范围**。
+
+Sources: [Android Authority](https://www.androidauthority.com/google-auto-phone-number-verification-android-3723117/) · [HN discussion](https://news.ycombinator.com/item?id=50090349)

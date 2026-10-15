@@ -2182,96 +2182,168 @@
     },
     "https://news.ycombinator.com/item?id=50085323": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-14T20:52:38.477Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
       "feeds": [
         "2026-10-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50091788": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-14T20:52:38.477Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
       "feeds": [
         "2026-10-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=49941331": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-14T20:52:38.477Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
       "feeds": [
         "2026-10-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50090369": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-14T20:52:38.477Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
       "feeds": [
         "2026-10-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50084240": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-14T20:52:38.477Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
       "feeds": [
         "2026-10-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50086165": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-14T20:52:38.477Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
-      "feeds": [
-        "2026-10-15.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50088935": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-15T05:58:49.821Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
       "feeds": [
         "2026-10-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50090842": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-15T05:58:49.821Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
       "feeds": [
         "2026-10-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50094673": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-15T05:58:49.821Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
       "feeds": [
         "2026-10-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50092423": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-15T05:58:49.821Z",
-      "last_seen": "2026-10-15T05:58:49.821Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
+      "feeds": [
+        "2026-10-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50094694": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-15T13:29:54.546Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
+      "feeds": [
+        "2026-10-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50096142": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-15T13:29:54.546Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
+      "feeds": [
+        "2026-10-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50088166": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-15T13:29:54.546Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
+      "feeds": [
+        "2026-10-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50090443": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-15T13:29:54.546Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
+      "feeds": [
+        "2026-10-15.md"
+      ]
+    },
+    "https://www.androidauthority.com/google-auto-phone-number-verification-android-3723117/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-15T13:29:54.546Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
+      "feeds": [
+        "2026-10-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50071546": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-15T13:29:54.546Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
+      "feeds": [
+        "2026-10-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50090932": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-15T13:29:54.546Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
+      "feeds": [
+        "2026-10-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50070661": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-15T13:29:54.546Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
+      "feeds": [
+        "2026-10-15.md"
+      ]
+    },
+    "https://www.rapid7.com/db/vulnerabilities/cve-2026-110385/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-10-15T13:29:54.546Z",
+      "last_seen": "2026-10-15T13:29:54.546Z",
       "feeds": [
         "2026-10-15.md"
       ]
     }
   },
-  "runs": 57,
+  "runs": 58,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-15T05:58:49.821Z"
+  "last_run": "2026-10-15T13:29:54.546Z"
 }

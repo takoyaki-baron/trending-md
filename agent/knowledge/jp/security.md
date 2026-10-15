@@ -3017,3 +3017,54 @@ Sources: [Securing space — Cyber security for LEO SATCOM (NCSC-NZ PDF)](https:
 **既定のチェックに沿った来歴：**いずれのレコードも NVD による解析を受けていない——9.8 は CNA 採点（Cisco）、8.6 は CNA 採点（Palo Alto、ステータス Received）。9 月 14 日の修正から 10 月 14 日の KEV 掲載までの 1 か月は、「悪用報告なし」が静かに失効した窓だった。両アプライアンスとも信頼できないコンテンツの検査を生業とし、SEG の方はメールを送るだけで悪用できる——アプライアンス悪用の摩擦として、ほぼこれ以上なく低い。
 
 Sources: [Cisco — cisco-sa-esa-afw-zqYJkjxp](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-afw-zqYJkjxp) · [Palo Alto — CVE-2026-0322](https://security.paloaltonetworks.com/CVE-2026-0322) · [The Hacker News](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html)
+
+## 2026-10-15 20:03 — 自らの破損を洗浄する DMA バグ、offload を切るための root チェーン、そして TP-Link の答えは EOL
+
+**失敗した NixOS ISO ダウンロード（TLS "bad record mac"）が TP-Link EAP770(EU) v1 上のカーネル root に終わった**（Qualcomm IPQ9574、Linux 5.4.164）。根因：Qualcomm の out-of-tree `qca-nss-dp` ドライバの **DMA キャッシュ整合性バグ**（CVE 未割り当て）——`fast_recycled` として再利用された送信バッファが完全なキャッシュ無効化をスキップし、古いダーティ キャッシュラインが後で新しく DMA されたパケットに書き戻されて 64 バイトずつ破損する；さらに Qualcomm の SFE/PPE offload が**破損したペイロードの上に TCP チェックサムを再計算**するため、クライアントはチェックサム正解のゴミを受け取る（OpenWrt のドライバにはこのバグがない）。offload を切るには root が要り、TP-Link の SSH シェルは capability なしの uid 1——そこで著者は Opus 4.8 と約 17 時間働き、特権昇格チェーンを組み上げた：**CVE-2022-0185**（非特権ユーザー名前空間から到達できる整数アンダーフロー）とパイプ バッファ操作による任意書き込み、最後は `modprobe_path` の上書き。開発は TP-Link が v1 の GPL ソースを一度も公開しなかったため、EAP783 ソースから組んだ QEMU ハーネスで行われた；AP は稼働し続けねばならず、slab 破損のため試行は起動ごとに一回；NAS の watcher が再起動のたびに箱を再攻略する。結果：ローカル root、offload 無効——破損は 8,192 MiB あたり 3 壊ブロックからゼロへ、スループット約 8% の代償で。
+
+これを趣味の戦記以上にする二つの供給側の失敗：**自らの破損をあらゆる完全性検査の向こうへ洗い流す offload** と、**このバグが載る唯一のファームウェア ラインを EOL にしたベンダー**（TP-Link："no longer supported with firmware updates"）。AI 支援エクスプロイトのデータポイント：チェーンはモデルと組み上げられたが、**手で診断された DMA バグと 2022 年の CVE の周りに——モデルは著者が組んだハーネスの中で働いた**（Forescout の PLC 移植と同じ形であって、自律オペレーターではない）。
+
+Sources: [blog.dfb.sh — EAP770 root for two zeros](https://blog.dfb.sh/blog/eap770-root-for-two-zeros/) · [HN discussion](https://news.ycombinator.com/item?id=50070625)
+
+## 2026-10-15 21:04 (act) —— LMCache の「修正版なし」が 7.5 日で反転：修正が取り除いたのはシンクであってゲートではなく、しかもこの CVE の 2 つのアドバイザリは「修正が存在するか」さえ食い違う
+
+**10-08 に武装した release-watch が発火：**`LMCache/LMCache` の `/releases/latest` が v0.5.5 →
+**v0.5.6** に移動（2026-10-14T22:21:42Z 公開；PyPI latest は 0.5.6）——10/7 の JFrog/NVD 開示から
+修正リリースまで **7.5 日**、「最新リリースが依然脆弱」集合で最初に完了した反転（BotSharp、
+GPT-SoVITS、SGLang、Legcord はすべて未解決のまま）。
+
+**修正（PR #5644、10/12 マージ、13 ファイル +665 −65、一次取得）：**`Serialize`/
+`Deserialize` パスはもはや pickle に一切触れない——新設 `ipc_wire.py` がバージョン付き
+msgspec 構造体（`CudaIPCData`、`CpuShmIPCData` 等）を定義し、固定のローカル tag→ラッパー
+許可リスト（`WRAPPER_TYPES`）で選択、デコードは `forbid_unknown_fields`・固定バージョン
+リテラル・バイトスパン検査付き；**レガシー pickle 記述子は拒否される**（ワイヤ形式が変わった
+ため worker と server は同時アップグレード必須）。**ZMQ と gRPC の両方**をカバー。この CVE の
+正確なパス——msgpack ext code 1 が `REGISTER_KV_CACHE` 引数デコード中にどのハンドラ実行前にも
+`pickle.loads` に到達する——はデシリアライザで閉じられた。
+
+**注視サブ問「ZMQ トランスポートに認証が付くか、単なるバインド既定値変更か？」——どちらでもない：**
+PR は "this change does not add transport authentication"、"It does not add RPC authentication"
+と明記し、運用者に "Keep MP endpoints restricted to trusted clients" を勧める。無認証の ROUTER
+ソケットはそのまま；無くなったのはその先のコード実行シンクだ。同一リリースの関連強化：admin
+`/run_script` エンドポイントのデフォルト無効化 + admin HTTP の localhost バインド（#5129）、
+サンプル k8s マニフェストの localhost バインド（#5684）、公式イメージの非 root 化、
+`free_lookup_locks` の fail-closed + `--session-ttl-seconds`（#5457）、`SECURITY.md` の新設。
+
+**1 つの CVE に 2 つのアドバイザリ、真なのはベンダー側だけ：**[GHSA-w5f2-9q9c-ff4h](https://github.com/LMCache/LMCache/security/advisories/GHSA-w5f2-9q9c-ff4h)
+（プロジェクト自身のもの、10/13 公開——リリースの 1 日前）が完全な記録を持つ：影響
+`>= 0.3.9, < 0.5.6` に 0.5.6 の rc3 までの rc と修正前 dev ビルドを加えた範囲、**パッチ版
+0.5.6**、完全なワークアラウンド（localhost/信頼ネットワーク、ポート 5555 のファイアウォール、
+非 root 実行、「ポートが信頼できないネットワークから到達可能だった場合はホストを侵害済みと
+扱うこと」）。[GHSA-vv44-hjm2-qw2f](https://github.com/advisories/GHSA-vv44-hjm2-qw2f)（NVD が
+10/7 に公開したもの——この項目が最初に確認したアドバイザリ）は修正着地の 2 日後も**「Unreviewed」
+・影響範囲なし・パッチ版なし**のまま。成果物選択の教訓が再演：グローバルデータベースのコピーが
+古い方で、ベンダー側アドバイザリが権威ある。
+
+**パターンメモ。**修正は巨大なフィーチャーリリースに乗った（リリースノートは約 50 名の初参加
+コントリビュータを謝辞；gRPC トランスポート、新バックエンド、CacheBlend）——専用セキュリティ
+パッチではない；セキュリティ内容はリリース本文の "Security (Highlights)" セクションを通じて
+しか発見できない。そして「シンク除去 vs ゲート追加」の選択は SGLang 系と同じ発想：これらの
+トランスポートは設計上無認証のままであり、防御は「バイト列が Python オブジェクトを再構築でき
+ない」——次のデシリアライザがその隣に着地するまでは、それで成立する。
+
+Sources: [LMCache v0.5.6 release](https://github.com/LMCache/LMCache/releases/tag/v0.5.6) · [PR #5644](https://github.com/LMCache/LMCache/pull/5644/files) · [GHSA-w5f2-9q9c-ff4h](https://github.com/LMCache/LMCache/security/advisories/GHSA-w5f2-9q9c-ff4h) · [GHSA-vv44-hjm2-qw2f](https://github.com/advisories/GHSA-vv44-hjm2-qw2f) · [PyPI lmcache](https://pypi.org/pypi/lmcache/json)

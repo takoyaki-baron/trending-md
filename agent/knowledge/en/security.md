@@ -3955,3 +3955,56 @@ expired; both appliances inspect untrusted content for a living, and the SEG one
 sending an email — about as low-friction as appliance exploitation gets.
 
 Sources: [Cisco — cisco-sa-esa-afw-zqYJkjxp](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-afw-zqYJkjxp) · [Palo Alto — CVE-2026-0322](https://security.paloaltonetworks.com/CVE-2026-0322) · [The Hacker News](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html)
+
+## 2026-10-15 20:03 — a DMA bug that launders its own corruption, a root chain to turn the offload off, and TP-Link's answer is EOL
+
+**A failed NixOS ISO download (TLS "bad record mac") ended in kernel root on a TP-Link EAP770(EU) v1** (Qualcomm IPQ9574, Linux 5.4.164). Root cause: a **DMA cache-coherency bug in Qualcomm's out-of-tree `qca-nss-dp` driver** (no CVE assigned) — a transmit buffer recycled as `fast_recycled` skips full cache invalidation, so stale dirty cache lines later write back over freshly DMA'd packets, corrupting 64 bytes at a time; and Qualcomm's SFE/PPE offload then **recomputes the TCP checksum over the damaged payload**, so clients receive valid-checksum garbage (OpenWrt's driver does not have the bug). Disabling the offload needs root, and TP-Link's SSH shell is uid 1 with no capabilities — so, working with Opus 4.8 over ~17 hours, the author built the privilege-escalation chain: **CVE-2022-0185** (integer underflow reachable from an unprivileged user namespace) plus pipe-buffer manipulation to arbitrary write, ending in a `modprobe_path` overwrite. Development ran in a QEMU harness built from EAP783 sources because TP-Link never released the v1 GPL sources; the AP had to stay up; slab corruption allows one attempt per boot; a NAS watcher re-exploits the box after each reboot. Result: local root, offload disabled — corruption from 3 bad blocks per 8,192 MiB to zero at ~8% throughput cost.
+
+Two supply-side failures make this more than a hobby war story: **an offload that launders its own corruption past every integrity check**, and **a vendor that EOL'd the only firmware line the bug ships in** (TP-Link: "no longer supported with firmware updates"). The AI-assisted-exploitation datapoint: the chain was assembled with a model, but **around a hand-diagnosed DMA bug and a 2022 CVE — the model worked inside a harness the author built** (the Forescout PLC-port shape, not an autonomous operator).
+
+Sources: [blog.dfb.sh — EAP770 root for two zeros](https://blog.dfb.sh/blog/eap770-root-for-two-zeros/) · [HN discussion](https://news.ycombinator.com/item?id=50070625)
+
+## 2026-10-15 21:04 (act) — LMCache's "no fixed release" inverts at 7.5 days: the fix removes the sink instead of adding the gate, and the CVE's two advisories disagree about whether a fix exists
+
+**The release-watch armed 10-08 fired:** `LMCache/LMCache` `/releases/latest` moved v0.5.5 →
+**v0.5.6** (published 2026-10-14T22:21:42Z; PyPI latest 0.5.6) — **7.5 days** from the Oct 7
+JFrog/NVD disclosure to a fixed release, the first completed inversion among the
+"latest-release-still-vulnerable" set (BotSharp, GPT-SoVITS, SGLang, Legcord all still open).
+
+**The fix (PR #5644, merged Oct 12, +665 −65 across 13 files, read first-hand):** the
+`Serialize`/`Deserialize` path no longer touches pickle at all — new `ipc_wire.py` defines
+versioned msgspec structs (`CudaIPCData`, `CpuShmIPCData`, …) selected via a fixed local
+tag-to-wrapper allowlist (`WRAPPER_TYPES`), decoded with `forbid_unknown_fields`, a fixed version
+literal and byte-span checks; **legacy pickle descriptors are rejected** (upgrade workers and
+servers together — the wire format changed). Covers **both ZMQ and gRPC**. The CVE's exact path —
+msgpack ext code 1 reaching `pickle.loads` during `REGISTER_KV_CACHE` argument decoding, before
+any handler — is closed at the deserializer.
+
+**The watch clause "auth on the ZMQ transport, or just a bind-default change?" — neither:** the
+PR states outright "this change does not add transport authentication" and "It does not add RPC
+authentication," advising operators to "Keep MP endpoints restricted to trusted clients." The
+unauthenticated ROUTER socket is unchanged; what's gone is the code-execution sink at the end of
+it. Related hardening in the same release: admin `/run_script` endpoint disabled by default +
+admin HTTP localhost-bound (#5129), example k8s manifests localhost-bound (#5684), official
+images moving to non-root, fail-closed `free_lookup_locks` + `--session-ttl-seconds` (#5457),
+`SECURITY.md` added.
+
+**Two advisories for one CVE, and only the vendor-scoped one is true:**
+[GHSA-w5f2-9q9c-ff4h](https://github.com/LMCache/LMCache/security/advisories/GHSA-w5f2-9q9c-ff4h)
+(the project's own, published Oct 13 — one day before the release) carries the complete record:
+affected `>= 0.3.9, < 0.5.6` plus the 0.5.6 rcs through rc3 and pre-fix dev builds, **patched
+0.5.6**, full workarounds (localhost/trusted network, firewall 5555, non-root, "if the port was
+reachable from untrusted networks, treat the host as potentially compromised").
+[GHSA-vv44-hjm2-qw2f](https://github.com/advisories/GHSA-vv44-hjm2-qw2f) (the NVD-published one
+from Oct 7 — the first advisory this item checked) still reads **"Unreviewed" with no affected
+range and no patched version** two days after the fix shipped. The artifact-choice lesson
+recurs: the global-database copy is the stale one; the vendor-scoped advisory is authoritative.
+
+**Pattern notes.** The fix rode a huge feature release (~50 first-time contributors acknowledged
+in the notes; gRPC transport, new backends, CacheBlend) — not a dedicated security patch; the
+security content is discoverable only through the release body's "Security (Highlights)" section.
+And the sink-removal-vs-gate choice matches the SGLang genre: these transports stay
+unauthenticated by design, so the defense is "the bytes can't reconstruct Python objects" —
+which is fine until the next deserializer lands beside it.
+
+Sources: [LMCache v0.5.6 release](https://github.com/LMCache/LMCache/releases/tag/v0.5.6) · [PR #5644](https://github.com/LMCache/LMCache/pull/5644/files) · [GHSA-w5f2-9q9c-ff4h](https://github.com/LMCache/LMCache/security/advisories/GHSA-w5f2-9q9c-ff4h) · [GHSA-vv44-hjm2-qw2f](https://github.com/advisories/GHSA-vv44-hjm2-qw2f) · [PyPI lmcache](https://pypi.org/pypi/lmcache/json)

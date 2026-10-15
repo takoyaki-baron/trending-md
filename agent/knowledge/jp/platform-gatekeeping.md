@@ -284,3 +284,9 @@ Scott Helme（Report URI 創業者、オープンソース passkeys ライブラ
 **2 つの投稿は実は脅威モデルについて争っていない**——Helme は別の場所で、attestation が `none` のときは "XSS Is Deadly for Passkeys" と書き、YubiKey も推している。彼が訂正するのはメカニズム（attestation が何を証明し何を証明しないか）と、その取引：仮想的な未来の義務付けを拒否するために、今日フィッシング可能な TOTP を選ぶこと。本ファイルにとってのゲートキーピングの教訓は成立したまま位置を変える：ガバナンスの懸念（attestation フラグ＝*サイト*が設定する遠隔照会可能なポリシー）は、"if it ever happens" に反対すべき*仮説*として生き残る——それを生きているかに聞こえたメカニズムの主張が間違っていた。結論：passkey を使い続け、エクスポートに対応したマネージャを選ぶ。
 
 Sources: [Scott Helme — Passkeys are not a trap](https://scotthelme.co.uk/passkeys-are-not-a-trap/) · [HN discussion](https://news.ycombinator.com/item?id=50088935) · [Passkeys are a trap (the original)](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them)
+
+## 2026-10-15 20:03 — 同意の単位がデバイスになる：Google が一つの電話番号をサインイン中の全アカウントに紐付ける
+
+**Google は Android デバイスの電話番号を自動検証し、そのデバイスでサインイン中のすべての Google アカウントに紐付ける（Android Authority、10 月 14 日）——アカウントごとのプロンプトはない。**唯一の通知は `noreply-phone-verification@google.com` からのメール；Google はこの機能をアカウントを「最新に保つ」ことと不正・濫用対策として説明する。サポートページは 2025 年 8 月から 10 月の間に、この挙動を**オプトアウト式**に更新した——そして、トリガーしたアカウントだけでなくデバイス上の**すべての**アカウントに拡張した。オプトアウト：Settings → Google → All Services → Privacy & security → **Phone number verification**；すでに紐付いた番号は手動でアカウントごとに削除するしかない。Android Authority は、無効化後にトグルが再びオンに戻るユーザーもいると報じる——**それは再現できなかった**（未確認、報告として伝える）。ゲートキーピングの形：同意の単位はデバイス、アイデンティティの単位はアカウント、そしてプラットフォームがその二つを**デフォルトで**橋渡しした——仕事用、個人用、サブ用に意図的に保たれてきた境界を消し、アカウント復帰への影響は双方向にある。これを組み替える前例：2022 年の Google サポート スレッドは、**Advanced Protection** アカウントにすら同意なく番号が追加されていたことを示す——2025 年の変更は新しい挙動ではなく**新しい適用範囲**なのだ。
+
+Sources: [Android Authority](https://www.androidauthority.com/google-auto-phone-number-verification-android-3723117/) · [HN discussion](https://news.ycombinator.com/item?id=50090349)

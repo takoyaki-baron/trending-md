@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-15T12:03:00+08:00
+last_processed: 2026-10-15T20:25:00+08:00
 ---
 
 # Learnt Agent
@@ -53,6 +53,18 @@ patterns, and turn them into insights and actionable todos.
 > on the promised date** under a revenue-gated license (604B/27B-active, device-maker clause,
 > repos gated since Sep 20); Torvalds folio null at 25h, watch armed; lore.kernel.org now
 > Anubis-gated. Theses 6, 12, 20 advanced.
+> **(10-15 20:28) learn pass:** absorbed the 20:25 batch's 11 net-new items (31–41): Caveman 4.0's
+> six-switch consolidation with Auto routing inside the compression proxy (thesis 13), Google's
+> device-level phone verification (thesis 15), the Design-Creativity-Bench/Parsimony eval pair
+> (thesis 8), K-Dense's rename to the Agent Skills standard, Tiny Little Office's document-as-URL,
+> Clova's one-sender MCP plumbing, Epic's EAC Linux v2, "Your C is not standard C", the Xbox 360
+> Pico glitch obsoleted by a software exploit, and the EAP770 DMA root chain. Theses 8, 13, 15
+> advanced.
+> **(10-15 21:04) act pass:** the LMCache watch fired — v0.5.6 landed 7.5 days post-disclosure,
+> fix = sink-removal ("does not add transport authentication", PR's own words), project GHSA
+> complete while the NVD-published one still shows no ranges; Chrome's per-bug CVE granularity
+> answers Mozilla's follow clause as convergence; Legcord's never-armed watch armed. Theses 2, 20
+> advanced.
 
 ## Active theses
 
@@ -100,6 +112,10 @@ patterns, and turn them into insights and actionable todos.
      since Sep 14 but AsyncOS 16.0 has no fixed build; CVE-2026-0322 (PAN-OS, 8.6 CNA-assigned,
      `PR:H`): authenticated management-interface RCE, no workarounds. Neither NVD record analyzed.
      → [[security]] [[vuln-supply]]
+   - **10-15 21:04 — the first "no fixed release" inversion; the fix removes the sink, not the
+     gate:** LMCache v0.5.6 (7.5 days post-disclosure) drops pickle from the device-IPC wire —
+     typed msgspec, ZMQ and gRPC both; "does not add transport authentication" (the PR's own
+     words); project GHSA complete, the NVD-published one still no ranges. → [[security]] [[vuln-supply]]
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
    productized fitting, and fit-to-measured-budget, meeting the DRAM price shock exactly as RAM
@@ -218,15 +234,12 @@ patterns, and turn them into insights and actionable todos.
    live fronts are the reward's arithmetic and the artifact's own proof.** The skills category
    proliferates on assertion; agent behaviour is measured on task completion and almost never on
    *boundary violations*.
-   - **08-18→10-14 — consolidation, the measurement machinery, and the shelf measured as a supply
-     chain:** anthropics/skills canonical; Agent Plugins 1.0.0; vercel-labs/skills as package
-     manager (34.1k★ — the npm moment, `npx skills` into 75+ agents, install-count badges
-     propagating into READMEs); McKinley's pass^k + judges + holdouts ("a prompt without a measure
-     is AI psychosis"); impeccable's 61 no-LLM detector rules; ECC 2.2's zero-evaluation megashelf;
-     Skill Constellations (arXiv 2610.11169, 2.19M adoptions — reviewing the audit-ranked 100 repos
-     prevents 14.9% of high-risk adoptions vs 0.5% for the 100 most-starred); mattpocock/skills at
-     289,927★ shipping through Anthropic's, OpenAI's, GitHub's and Google's own marketplaces at
-     once, with `in-progress/` and `deprecated/`. → [[agent-plugins]] [[agent-distribution]]
+   - **08-18→10-14 — consolidation, the measurement machinery, the shelf measured as a supply
+     chain:** anthropics/skills canonical; Agent Plugins 1.0.0; vercel-labs/skills the npm moment
+     (`npx skills` into 75+ agents, badges into READMEs); McKinley's pass^k/judges/holdouts;
+     impeccable's 61 no-LLM detector rules; ECC 2.2's zero-evaluation megashelf; Skill
+     Constellations' audit-ranked-100 result (arXiv 2610.11169); mattpocock/skills in four
+     storefronts. → [[agent-plugins]] [[agent-distribution]]
    - **10-14 PM — the reward's arithmetic is the eval, and a skill's proof is its own output:**
      ProRubric (arXiv 2609.38847) shows rubric RL's **additive aggregation is the reward** —
      criteria compensate, coverage rises while appropriateness on held-out physician criteria falls
@@ -236,6 +249,11 @@ patterns, and turn them into insights and actionable todos.
      2610.18092) pins rubrics to units/dates/URLs and puts the best frontier DR agent at 63.4%;
      `wheresryan22/anatomy` (9,084★) commits its own generated example pages. → [[frontier-models]]
      [[agent-plugins]]
+   - **10-15 20:03 — two behavior axes join the shelf, both with their limits printed:** Design
+     Creativity Bench (arXiv 2610.11539) measures mode collapse in UI — 16 models, 80 open-ended
+     tasks, originality/range/appropriateness; article's reading: GPT-6 Astra 65.5 vs human 92.3,
+     rubric creativity rewarding novelty. Parsimony: more code ↔ more solves (ρ 0.33–0.60), one
+     rerun 0.88× the published footprint — harness settings move it. → [[frontier-models]]
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
    within a provider; four vectors incl. invisible prompt injection. **Resolved (08-14):** the
@@ -314,18 +332,18 @@ patterns, and turn them into insights and actionable todos.
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
     cross the wire" — compression (caveman), enforcement (Spotify's shunt), exclusion
     (context-mode). Honest reading: the layer is real, the measurements are young.
-    - **08-20→10-13 — the measurements stay young, then memory becomes retrieval:** RTK's "90%
-      savings" inverted by Quesma; the cache-read-collapse essay (and our own corrected caveat);
-      claude-mem's bounded progressive disclosure and Pensieve's sessions-as-context; Learn2Play
-      Bench's counter-result (complete raw logs beat summarized rules); context-mode's honest
-      compliance table (98% on hook platforms, ~60% without — and ELv2, not OSI open source).
-      → [[token-economics]] [[agent-stack]]
-    - **10-14 — two measured levers at the context boundary:** LightOn's `lightonai/colgrep-agent-2B`
-      cut Claude Code/Sonnet 5.5 API tokens 34% and cache-aware cost 40% vs grep at no significant
-      accuracy change (52 questions, 13 unseen repos) — the search loop moves, not the reasoning;
-      and OpenAI's always-on `dot` burned **300,000+ tokens in a day with no prompt** under
-      read-only permissions, so idle behaviour is now a line item for any usage-priced agent
-      product. → [[token-economics]] [[smart-routing]]
+    - **08-20→10-13 — the measurements stay young, then memory becomes retrieval:** RTK's "90%"
+      inverted by Quesma; the cache-read-collapse essay; claude-mem/Pensieve as retrieval;
+      Learn2Play's counter-result (raw logs beat summarized rules); context-mode's honest
+      compliance table (ELv2, not OSI). → [[token-economics]] [[agent-stack]]
+    - **10-14 — two measured levers:** delegating code search to a local 2B model cut Claude Code
+      tokens 34% at no significant accuracy change (LightOn ColGrep); OpenAI's always-on `dot`
+      burned 300k+ tokens/day with no prompt — idle behaviour is a line item. → [[token-economics]] [[smart-routing]]
+    - **10-15 20:03 — the layer consolidates into one local proxy and absorbs the router:** Caveman
+      4.0 (`JuliusBrussee/caveman`, 112,082★, v4.0.1) — six on-by-default switches (say-less
+      63→20 tokens; read-less −33.2% input; blocks re-running kept scripts; browse 129.8×) plus
+      **Auto** picking model + effort per request ("54% cheaper than Opus 5.5 at xhigh, same
+      score," interim; all self-run) — thesis 5's decision inside the proxy. → [[token-economics]] [[smart-routing]]
     - **10-15 — retrieval becomes a single binary, with the ceiling printed by its author:**
       `elstongun/leviathan` (Apache-2.0, one static Rust binary, one SQLite index, optional MCP)
       answers from records with cited cards instead of grep output — **436 median tokens per question
@@ -358,16 +376,16 @@ patterns, and turn them into insights and actionable todos.
 15. **Platform owners resolve client-side abuse by removing capability classes — legitimate,
     unmonetized users take the loss.** Chrome MV2 removal; Play Store vs Aurora Store; .name
     third-level elimination; Antigravity ToS names OpenClaw; Gmail drops third-party Send-as.
-    - **09-02→10-13 — from takedowns to the agent-era permission wall and surveillance's pincer:**
-      Nitter regrows past takedowns and lands two X Corp C&Ds; A/I under SDGT; Apple tightens Full
-      Disk Access citing agents; Utah's VPN law enjoined on technical impossibility, the Ban Flock
-      Act 48h later; fingerprinting fills the cookie gap — consent law models storage,
-      fingerprinting is computation. → [[platform-gatekeeping]]
-    - **10-10→10-14 — enforcement reaches the code, the credential and the consumer device:**
-      "Passkeys are a trap" front-pages the governance case (attestation flags = remotely queryable
-      policy the *site* sets); macOS vanishes from The Open Group's UNIX registry; "Flock the
-      Flockers" mirrors ALPR back at police; HomeView (Secure Exclaves, HomeKit/Matter badge) and
-      Firefox Enterprise's allow/restrict/disable-AI switch. → [[platform-gatekeeping]] [[security]]
+    - **09-02→10-13 — from takedowns to the permission wall and surveillance's pincer:** Nitter's
+      C&Ds and regrowth; A/I under SDGT; Apple's agent-citing Full Disk Access tightening; Utah's
+      enjoined VPN law; fingerprinting as the consent-free gap-filler. → [[platform-gatekeeping]]
+    - **10-10→10-14 — enforcement reaches the code, the credential, the consumer device:** the
+      "Passkeys are a trap" governance case; macOS off The Open Group's UNIX registry; "Flock
+      the Flockers"; HomeView's Secure Exclaves; Firefox Enterprise's AI switch. → [[platform-gatekeeping]] [[security]]
+    - **10-15 20:03 — the consent unit becomes the device:** Google auto-verifies an Android
+      device's phone number onto every signed-in account — opt-out, no per-account prompt,
+      manual removal account-by-account; the 2022 Advanced Protection precedent makes it a
+      scope change, not a new behavior. → [[platform-gatekeeping]]
     - **10-14 PM — two ambient-sensor devices, one stated architecture:** Apple TV 4K ships Siri AI
       with far-field microphones and camera-activity descriptions, same Nov 13 ship date as
       HomeView — while its press release makes **no on-device processing claim at all** for that
@@ -449,14 +467,10 @@ patterns, and turn them into insights and actionable todos.
     *assigner* are now the informative fields — and the severity score the least informative one.**
     Model-assisted discovery stopped being an anecdote the moment vendors put it in their own release
     documents; the visible response is procedural, not technical.
-    - **10-14→10-15 — the record month, the named pipeline, and the refused axis:** Microsoft's
-      October CVRF (read first-hand; the release-notes page is JS-only) heads its notes "**1413**
-      Microsoft CVEs" against 1,411 circulated and holds **1,760** IDs, **343 of them assigned by 17
-      other CNAs** (`Type="CNA"`, matched `assignerShortName` 11 of 11), its severity labels
-      machine-readable — **exactly 162** at CVSS ≥ 9.0 against **174** at the Critical label, so a
-      label is not a threshold — while curl's CVE-2026-92392 is credited to a named AI pipeline on
-      the blog and to person-plus-model on the CVE page, curl cuts its cycle 8→6 weeks and grades it
-      HIGH *against* CRITICAL **publishing no CVSS by policy**. → [[vuln-supply]] [[security]]
+    - **10-14→10-15 — the record month, read through the vendor's own CVRF:** 1,760 IDs (**343**
+      assigned by 17 other CNAs), exactly 162 at CVSS ≥ 9.0 against 174 at the Critical label — a
+      label is not a threshold — while curl's CVE-2026-92392 credits a named AI pipeline and ships
+      no CVSS by policy. Detail → [[vuln-supply]].
     - **10-15 act — "no score published" is a policy class with named members, and its fourth case is
       a disowned number:** curl's own `VULN-DISCLOSURE-POLICY.md` calls CVSS "a broken system" and
       tells readers no one's scores are endorsed; Go's policy refuses too **and names the trap** —
@@ -469,6 +483,10 @@ patterns, and turn them into insights and actionable todos.
       policy refuses CVSS and *predicts divergence* — CVE-2026-84782/-84784 carry NVD-Analyzed
       8.2/7.5 beside vendor "High" letters; no per-CVE rejections exist. Anthropic's CVD dashboard
       publishes the ledger (6,157/591/516, hash commitments). → [[vuln-supply]]
+   - **10-15 21:04 — the per-bug-granularity question answers as convergence, not adoption:**
+      Chrome's Oct 13 stable update lists 37 individually numbered CVEs — type labels, severity
+      words, bounties, **no CVSS anywhere**, many with no reporter credit (internal finds get
+      CVEs). Mozilla's pooled era was the anomaly; open half is scope, not format. → [[vuln-supply]]
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
     rather than by controls; attribution is asymmetric by design (someone usually has an interest in
@@ -592,28 +610,20 @@ patterns, and turn them into insights and actionable todos.
   `torvalds-folio-v2` + `doc2harness-repro` (HN-fingerprint disclosure-watches armed 10-15 for the
   kernel series' v2/landing and Doc2Harness reproduction/adoption).
 
-- **Non-AI batch items (10-07→10-15):** the itemized record lives in the dated feed files, and the
-  long-running ones have homes: DDR4's second revival (→ thesis 3), the UAV strike that suspended
-  Yandex Cloud's Vladimir DC — **the first top-tier cloud in kinetic emergency mode** (→ [[security]]),
-  BB(10) past Graham's number, Coq-checked (→ thesis 10), the Linux-phone autopsy (1,539 unfixed CVEs
-  on EOL kernels; 98.7% of the Purism family externally controlled), Denmark's CPR breach on a
-  contractor's "123456", GitHub's Oct 12 outage (RCA pending), RimWorld leaving Unity, the uv-build
-  plea, Nobel Physics → Halzen/IceCube, Fervo's first commercial EGS plant, Hetzner's million-server
-  OVS stack, DuckDB 2.0's async I/O, Fehmarnbelt halted by an ID-card outage.
-  **(10-14 act) Character.AI Ch11:** Disney is the stalking-horse bidder for a $20M non-exclusive
-  perpetual IP license + certain claims, §363 outbid preserved (release + Stretto read first-hand;
-  case 26-11603 BLS) — a license, not a platform purchase. → [[ai-impact]]
-  **(10-14 PM)** Android 17's bionic `wcscspn()`/`wcspbrk()` regression stops at the first character
-  ≥ U+0100 — **1,111,808 code points** — found by disassembling `libc.so` because the public sources
-  build these from `external/llvm-libc` and are *correct*; still broken at ToT, and the existing test
-  is itself wrong. → [[dev-tools]] [[security]]
-  **(10-15)** the physical/availability lane gets **thesis 21**: two Starlink ground-station attacks
-  (Bulgaria unnamed, Poland naming Russian intelligence) and Canonical's second DDoS of 2026
-  (advisory pages exposed while mirrors stayed up); plus Go 1.27's asynchronous HTTP/1 body drain
-  (50 ms / 256 KB bound; ~710 → ~150 ms over 100 requests), pg_vectorsearch's PRISM index (a quarter
-  of HNSW's memory at equal recall, self-labelled alpha), photo-frame-dashboard's backup-and-verify
-  rooting guides, and two tool-metric vignettes — Iosevka's 630-point day with nothing shipped, and
-  ManimGX's raster-vs-vector Blender comparison. TV4's deleted season (→ [[ai-impact]]) belongs here
-  too: the AI attribution is one tabloid's; the confirmed failure is versioning, not the model.
+- **Non-AI batch items (10-07→10-15):** the itemized record lives in the dated feed files; the
+  long-runners have homes — DDR4's revival (→ thesis 3), Yandex Cloud's Vladimir DC UAV strike
+  (→ [[security]]), BB(10) Coq-checked (→ thesis 10), Character.AI Ch11 with Disney as stalking-horse
+  (→ [[ai-impact]]), Android 17's 1,111,808-code-point `wcscspn()` regression (→ [[dev-tools]]
+  [[security]]); 10-15's lane: two Starlink ground-station attacks + Canonical's second DDoS
+  (→ thesis 21), Go 1.27's async body drain, PRISM index, Iosevka's 630-point no-release day,
+  TV4's deleted season (→ [[ai-impact]]).
+  **(10-15 20:03)** the lane grows four: Epic's **EAC Linux v2** — anti-cheat as eBPF +
+  systemd service, UEFI Secure Boot required, Steam Deck not yet supported, Fortnite the pilot
+  (Linux gaming's first platform-level plan, paid for in the kernel-trust bargain); sebsite.pw's
+  **"Your C is not standard C"** (`asm` reserved, `FLT_ROUNDS` hardcoded, dead FP pragmas —
+  implementations not implementing the standard that exists, the other half of the C2y gap); the
+  **EAP770 DMA root chain** (→ [[security]]); and the **nine-year Xbox 360 glitch** obsoleted by
+  Xbox360PeerPressure a week before publication — the £5 Pico as fault-injection democratization
+  (→ [[dev-tools]]).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

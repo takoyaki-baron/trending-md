@@ -2381,3 +2381,11 @@ Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](ht
 Sources: [stepfun-ai/Step-5-Preview](https://huggingface.co/stepfun-ai/Step-5-Preview) · [Step-5-Preview-BF16](https://huggingface.co/stepfun-ai/Step-5-Preview-BF16) · [LICENSE.txt](https://huggingface.co/stepfun-ai/Step-5-Preview/blob/main/LICENSE.txt)
 
 Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](https://arxiv.org/html/2610.20344v1)
+
+## 2026-10-15 20:03 — 模式坍缩变得在 UI 上可测量，代码足迹变成排行榜
+
+**鹈鹕压力提示暴露多样性坍缩——如今有了测量它的基准。**Aman Rusia 的 "The Emperor Pelican Has No Clothes" 追问为什么全领域最爱的压力提示——"generate an SVG of a pelican riding a bicycle"——处处产出同一只鸟：Simon Willison 鹈鹕基准系列的 **13 张 SVG**，各自用能返回 SVG 的最高推理档生成，却收敛到同一套视觉惯例。这篇文章小心说明它*不是*什么：**不是能力天花板**——被要求求变时，同样的模型能把鹈鹕画进皇家巡游、季风、极夜、霓虹小巷。观察背后是作者自己的 **Design Creativity Bench**（arXiv 2610.11539，与 Bhole、Gupta、Dey 合著）：**16 个前沿模型、80 个开放式 UI 任务**，按独创性（同一提示上跨模型的独特性）、创造幅度（同一目标在不同产品领域的两个提示之间设计变化多大）与恰当性（满足 brief 验收标准的比例）评分——按文章的说法，最高的 GPT-6 Astra 得 **65.5，对人类设计师参考值 92.3**。带上它的框架再读数字：65.5 对 92.3 是*文章对论文参考刻度的读法*，而评分表式的"创造力"恰是那种奖励为新而新的指标——三轴拆分至少是区分新颖与合用的正确尝试。
+
+**Parsimony 按 AI 编码模型改了多少代码排名，而不是解了多少题（La5u，开放）。**它复用 SWE-bench Verified 已发布的补丁，统计**"coding units"**——语句、调用、比较、名字、字面量——而非行数，减去删除，解析每个被改文件的两个版本，不执行任何东西（仅 Python；测试、文档与生成文件除外；每个模型跑同一个 mini-SWE-agent）。两个值得带走的发现：**代码越多与解题越多相关**——在 26+ 模型的榜单上 Spearman 0.33–0.60——以及作者自己对 GPT-5.6 Sol 的复跑加的代码只有其已发布运行的 **0.88×**，提醒我们 harness 设置会移动这个指标。作者直白说出天花板：该指标度量的是规模，不是可读性或设计质量。它是 700 家公司研究（agent 产出更多代码，而非更多软件；review 吃掉收益）的逐模型补充：如果冗长是模型特质而非 harness 造物，"净新增 coding units"就是第一条把可维护性计价进模型选择的排行榜行。独立项目，解题数直接继承自 SWE-bench 未复跑——当作透镜，不是审计。
+
+Sources: [arcfu — The Emperor Pelican Has No Clothes](https://arcfu.com/post/the-emperor-pelican-has-no-clothes/) · [Design Creativity Bench (arXiv 2610.11539)](https://arxiv.org/abs/2610.11539) · [HN — pelican](https://news.ycombinator.com/item?id=50090443) · [Parsimony](https://parsimony.lasu.dev/) · [HN — Parsimony](https://news.ycombinator.com/item?id=50077619)

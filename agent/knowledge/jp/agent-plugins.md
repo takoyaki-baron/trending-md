@@ -943,3 +943,9 @@ SVG は読める）、そして**3D ベータ**（ドラッグに応じて約 90
 されたそのレンダリングがベンチマークである。**
 
 Sources: [wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [Skill page](https://skills.wheresryan.sh/anatomy) · [Agent Skills](https://agentskills.io/)
+
+## 2026-10-15 20:03 — 科学の棚が標準そのものに改称：K-Dense は Claude でなくすべてのエージェントを狙う
+
+**K-Dense の科学スキル ライブラリが「Claude Scientific Skills」から `scientific-agent-skills` へ改称——そして改称こそがアナウンスだ。**MIT、49,945★、本日 +1,091：**177 スキル**が現在オープンな **Agent Skills 標準**（agentskills.io）に従い、持ち運べる Agent Plugins パッケージ（`plugin.json` + `skills/`）として出荷され、Claude だけでなく Cursor、Claude Code、Codex、Google Antigravity から読み込める。領域の幅：バイオインフォマティクスとゲノミクス、ケモインフォマティクスと創薬、プロテオミクス、臨床研究ワークフロー、顕微鏡とデジタル病理、神経科学、材料、物理と天文、ジオスペーシャル、ラボ自動化、科学執筆と規制文書起草（ICH/USP 法バリデーション）——各スキルはツールの使い方だけでなくその分野の慣習と検証をエンコードし、明示されたガードレールを備える（臨床スキルは集団レベルの意思決定支援であって、患者個人の診断は決してしない）。この仕事には論文がある：**arXiv 2609.00065**、"Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents"（Kassis、Agarwal、He、Patel、Brueckner）。仲間：**K-Dense BYOK**——これらのスキルを自分の API キーで 40+ モデルにわたりローカルに実行する無料のオープンソース デスクトップ co-scientist、重い処理は任意の Modal クラウド。六週間前この棚はベンダー向けだった；改称は市場の行き先を記録する——一ベンダーのランタイムを狙うのは今やニッチであり、標準を狙うのがデフォルトだ。
+
+Sources: [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) · [arXiv 2609.00065](https://arxiv.org/abs/2609.00065)

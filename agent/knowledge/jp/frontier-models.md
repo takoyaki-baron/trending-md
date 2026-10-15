@@ -2693,3 +2693,11 @@ Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](ht
 Sources: [stepfun-ai/Step-5-Preview](https://huggingface.co/stepfun-ai/Step-5-Preview) · [Step-5-Preview-BF16](https://huggingface.co/stepfun-ai/Step-5-Preview-BF16) · [LICENSE.txt](https://huggingface.co/stepfun-ai/Step-5-Preview/blob/main/LICENSE.txt)
 
 Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](https://arxiv.org/html/2610.20344v1)
+
+## 2026-10-15 20:03 — モードコラプスが UI で測定可能になり、コード フットプリントがリーダーボードになる
+
+**ペリカンのストレス プロンプトが多様性崩壊を露わにし——それを測るベンチマークができた。**Aman Rusia の "The Emperor Pelican Has No Clothes" は、なぜ分野のお気に入りのストレス プロンプト——「pelican に自転車に乗る SVG を生成して」——がどこでも同じ鳥を生むのかを問う：Simon Willison のペリカン ベンチ シリーズの **13 枚の SVG** は、それぞれ SVG を返した最高の推論設定で生成されたのに、同じ視覚的慣習に収束する。記事はそれが何で*ない*かに慎重だ：**能力の天井ではない**——多様性を求めれば、同じモデルは王室パレード、モンスーン、極夜、ネオン街のペリカンを描く。観察を支えるのは著者自身の **Design Creativity Bench**（arXiv 2610.11539、Bhole、Gupta、Dey と共著）：**16 のフロンティア モデル、80 のオープンエンド UI タスク**を、独創性（一つのプロンプトでのモデル間の際立ち）、創造幅（同じ目標を異なる製品ドメインの二つのプロンプトで出したときの設計の変化量）、適切性（brief の受け入れ基準を満たした割合）で採点——記事によれば、最高位の GPT-6 Astra は**人間デザイナーの参照値 92.3 対して 65.5**。数字はその枠組みごと運ぶ：65.5 対 92.3 は論文の参照尺度に対する*記事の読み*であり、ルーブリック採点の「創造性」は斬新さのための斬新さに報いる種類の指標そのもの——三軸の分解は、少なくとも斬新さと適合性を分ける正しい試みではある。
+
+**Parsimony はコーディング モデルを「どれだけ解いたか」ではなく「どれだけ少なく変えたか」で順位付ける（La5u、公開）。**SWE-bench Verified が公開したパッチを再利用し、行数ではなく**「コーディング単位」**——文、呼び出し、比較、名前、リテラル——を数え、削除を差し引き、変更されたすべてのファイルの両バージョンをパースし、何も実行しない（Python のみ；テスト、ドキュメント、生成ファイルは除外；全モデルが同じ mini-SWE-agent を使用）。持ち帰るべき発見は二つ：**コードが多いほど解いた課題も多い**——26+ モデルのボードで Spearman 0.33–0.60——そして著者自身の GPT-5.6 Sol の再実行は、公開実行の **0.88×** のコードしか追加しなかった。harness 設定がこの指標を動かすという念押しである。著者は天井を率直に言う：この指標が捉えるのはサイズであって、可読性や設計品質ではない。700 社研究（エージェントはより多くのソフトウェアではなく、より多くのコードを生む；レビューが利得を食う）のモデル別の補完だ：もし冗長さが harness の産物ではなくモデルの特性なら、「純追加コーディング単位」は保守性をモデル選択に価格付けした最初のリーダーボードの行になる。個人プロジェクトで、解決数は SWE-bench から再実行なしに引き継がれた——ランキングは監査ではなくレンズとして扱う。
+
+Sources: [arcfu — The Emperor Pelican Has No Clothes](https://arcfu.com/post/the-emperor-pelican-has-no-clothes/) · [Design Creativity Bench (arXiv 2610.11539)](https://arxiv.org/abs/2610.11539) · [HN — pelican](https://news.ycombinator.com/item?id=50090443) · [Parsimony](https://parsimony.lasu.dev/) · [HN — Parsimony](https://news.ycombinator.com/item?id=50077619)

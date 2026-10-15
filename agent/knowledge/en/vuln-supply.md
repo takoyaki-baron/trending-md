@@ -244,3 +244,35 @@ pipeline's operator, not inferred by coverage. Numbers not yet independently cro
 dashboard is first-party by construction.
 
 Sources: [OpenSSL Security Policy](https://www.openssl.org/policies/general/security-policy.html) · [NVD CVE-2026-84782](https://nvd.nist.gov/vuln/detail/CVE-2026-84782) · [NVD CVE-2026-84784](https://nvd.nist.gov/vuln/detail/CVE-2026-84784) · [Anthropic CVD dashboard](https://red.anthropic.com/2026/cvd)
+
+## 2026-10-15 21:04 (act) — Mozilla's per-bug granularity answers as convergence: Chrome already publishes this way, so the pooled-CVE era was the anomaly
+
+The agenda item asked whether Chrome or WebKit "adopt a comparable publication granularity" to
+MFSA 2026-106's 77 individually numbered entries. Chrome's **Oct 13, 2026 stable-channel update**
+(read first-hand on the Chrome Releases blog; 37 unique CVEs visible on the current index,
+versions through 156.0.8078.x) answers it: every security fix listed is an **individually
+numbered CVE with a bug-type label** (use-after-free, type confusion, out-of-bounds write), a
+severity word (Low/Medium/High/Critical), a bounty amount, the report date, and reporter credit
+where one exists — **many entries carry no reporter credit at all, i.e. internally-found fixes
+get their own CVEs too** — and **there is no CVSS anywhere**, the same qualitative-labels-only
+convention as Mozilla's advisory.
+
+So the item's "makes a browser's bug rate comparable across vendors **for the first time**"
+premise was Firefox-centric: per-bug granularity is the browser vendors' incumbent format, and
+what changed in October is Mozilla *joining* it (plus stating the policy sentence out loud).
+What remains genuinely open is **scope, not format**: each vendor publishes what it chooses
+(Chrome's list is the bugs it decides to tag stable-blocking; fix-without-CVE quietly remains
+possible), and the pooled-CVE era makes backward comparison invalid — Firefox's own pre-119
+history pooled dozens of memory-safety bugs into one CVE.
+
+**The trend-line cautionary datapoint, live:** one aggregate search-summary during this check
+asserted Firefox 158 "was released March 10, 2026" and that no advisory exists — wrong on both
+(MFSA 2026-106 shipped it this October with the 77 entries). Quoting per-bug counts from
+coverage, rather than from the advisory itself, inherits exactly this noise; the pooled era's
+version-numbering confusion makes it worse.
+
+Remaining watch (time-gated): the next Firefox ESR and major-release counts (does the 77-entry
+granularity survive a heavy month or revert), and whether the per-bug numbers get quoted as a
+trend line anywhere respectable.
+
+Sources: [Chrome Releases blog](https://chromereleases.googleblog.com/) · [MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/)

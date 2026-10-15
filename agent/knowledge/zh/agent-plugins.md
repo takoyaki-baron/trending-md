@@ -825,3 +825,9 @@ WebGL**（在前后两张 SVG 之间的 canvas 中放着色器，使用图形自
 可推广的规则：**当交付物是一张渲染图时，提交进仓库的那张渲染图就是基准。**
 
 Sources: [wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [Skill page](https://skills.wheresryan.sh/anatomy) · [Agent Skills](https://agentskills.io/)
+
+## 2026-10-15 20:03 — 科学货架改名为标准本身：K-Dense 面向每个 agent，而不只是 Claude
+
+**K-Dense 的科学技能库从 "Claude Scientific Skills" 改名为 `scientific-agent-skills`——而改名本身就是公告。**MIT，49,945★，今天 +1,091：**177 个技能**现在遵循开放的 **Agent Skills 标准**（agentskills.io），以可移植的 Agent Plugins 包出货（`plugin.json` + `skills/`），可被 Cursor、Claude Code、Codex 与 Google Antigravity 加载，而非仅 Claude。领域跨度：生物信息与基因组学、化学信息与药物发现、蛋白质组学、临床研究流程、显微与数字病理、神经科学、材料、物理与天文、地理空间、实验室自动化、科学写作与法规起草（ICH/USP 方法验证）——每个技能编码的不只是工具用法，还有该领域的惯例与校验，并有明示的护栏（临床技能是聚合层决策支持，绝不做患者级诊断）。这项工作有一篇论文：**arXiv 2609.00065**，"Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents"（Kassis、Agarwal、He、Patel、Brueckner）。配套：**K-Dense BYOK**——免费开源的桌面 co-scientist，在你自己的 API key 上跨 40+ 模型本地跑这些技能，重活可选 Modal 云。六周前这个货架还是厂商定向的；改名记录了市场的走向——瞄准单一厂商运行时如今是小众，瞄准标准才是默认。
+
+Sources: [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) · [arXiv 2609.00065](https://arxiv.org/abs/2609.00065)

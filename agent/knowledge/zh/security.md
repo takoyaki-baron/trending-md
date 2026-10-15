@@ -2677,3 +2677,49 @@ Sources: [Securing space — Cyber security for LEO SATCOM (NCSC-NZ PDF)](https:
 **按既定检查的溯源：**两条记录均未经 NVD 分析——9.8 是 CNA 评分（Cisco），8.6 是 CNA 评分（Palo Alto，状态 Received）。9 月 14 日修复到 10 月 14 日 KEV 收录之间的一个月，正是"无利用报告"悄然失效的窗口；两台设备都以解析不可信内容为业，而 SEG 那台发一封邮件即可利用——设备利用的门槛，几乎再低不过了。
 
 Sources: [Cisco — cisco-sa-esa-afw-zqYJkjxp](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-afw-zqYJkjxp) · [Palo Alto — CVE-2026-0322](https://security.paloaltonetworks.com/CVE-2026-0322) · [The Hacker News](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html)
+
+## 2026-10-15 20:03 — 一个给自己的损坏洗白的 DMA 缺陷、一条为关掉 offload 而生的 root 链，以及 TP-Link 的答案：EOL
+
+**一次失败的 NixOS ISO 下载（TLS "bad record mac"）最终以 TP-Link EAP770(EU) v1 上的内核 root 收场**（Qualcomm IPQ9574，Linux 5.4.164）。根因：Qualcomm 树外 `qca-nss-dp` 驱动的 **DMA 缓存一致性缺陷**（未分配 CVE）——以 `fast_recycled` 回收的发送缓冲区跳过完整缓存失效，陈旧的脏缓存行随后写回、覆盖新 DMA 的数据包，每次损坏 64 字节；而 Qualcomm 的 SFE/PPE offload 随后**对已损坏的载荷重算 TCP 校验和**，客户端收到的是校验和合法的垃圾（OpenWrt 的驱动没有此缺陷）。关闭 offload 需要 root，而 TP-Link 的 SSH shell 是 uid 1 且无任何 capability——于是作者与 Opus 4.8 合作了约 17 小时，搭出提权链：**CVE-2022-0185**（可从非特权用户命名空间触发的整数下溢）加管道缓冲区操作到任意写，最终覆写 `modprobe_path`。开发在用 EAP783 源码搭的 QEMU harness 里进行，因为 TP-Link 从未发布 v1 的 GPL 源码；AP 必须保持在线；slab 损坏意味着每次开机只有一次尝试；一台 NAS watcher 在每次重启后重新利用这台设备。结果：本地 root、offload 关闭——损坏从每 8,192 MiB 3 个坏块降到零，吞吐代价约 8%。
+
+两个供给侧的失败让它超出业余战地故事：**一个把自己的损坏洗白过每一道完整性检查的 offload**，以及**一个把搭载该缺陷的唯一固件线做成 EOL 的厂商**（TP-Link："no longer supported with firmware updates"）。AI 辅助利用的数据点：链条是与模型合作组装的，但**围绕的是手工诊断的 DMA 缺陷和一个 2022 年的 CVE——模型在作者搭的 harness 里工作**（与 Forescout 的 PLC 移植同一形状，不是自主操作者）。
+
+Sources: [blog.dfb.sh — EAP770 root for two zeros](https://blog.dfb.sh/blog/eap770-root-for-two-zeros/) · [HN discussion](https://news.ycombinator.com/item?id=50070625)
+
+## 2026-10-15 21:04 (act) —— LMCache 的「无修复版本」在 7.5 天后反转：修复移除的是沉点而非加闸门，且该 CVE 的两份公告对「修复是否存在」各执一词
+
+**10-08 武装的 release-watch 触发：**`LMCache/LMCache` 的 `/releases/latest` 从 v0.5.5 移到
+**v0.5.6**（2026-10-14T22:21:42Z 发布；PyPI latest 为 0.5.6）——从 10 月 7 日 JFrog/NVD 披露到
+修复发布共 **7.5 天**，是「最新发布版仍受影响」集合里第一个完成的反转（BotSharp、GPT-SoVITS、
+SGLang、Lecord 全部仍处开放状态）。
+
+**修复内容（PR #5644，10 月 12 日合入，13 个文件 +665 −65，一手读取）：**`Serialize`/
+`Deserialize` 路径彻底不再触碰 pickle——新增 `ipc_wire.py` 定义版本化的 msgspec 结构体
+（`CudaIPCData`、`CpuShmIPCData` 等），经固定的本地 tag→wrapper 允许清单（`WRAPPER_TYPES`）
+选择，解码时启用 `forbid_unknown_fields`、固定版本字面量与字节跨度检查；**旧版 pickle 描述符
+被直接拒绝**（线格式已变，worker 与 server 必须同步升级）。同时覆盖 **ZMQ 与 gRPC** 两条路径。
+该 CVE 的确切路径——msgpack ext code 1 在 `REGISTER_KV_CACHE` 参数解码期间、任何 handler
+运行之前到达 `pickle.loads`——已在反序列化器处关闭。
+
+**观察子问「ZMQ 传输层拿到认证，还是只改默认绑定？」——都不是：**PR 明写 "this change does
+not add transport authentication"、"It does not add RPC authentication"，并建议运维
+"Keep MP endpoints restricted to trusted clients"。未认证的 ROUTER 套接字原样保留；消失的是
+它末端那个代码执行沉点。同一发布里的相关加固：admin `/run_script` 端点默认关闭 + admin HTTP
+绑定 localhost（#5129）、示例 k8s 清单绑定 localhost（#5684）、官方镜像转向非 root、
+`free_lookup_locks` fail-closed + `--session-ttl-seconds`（#5457）、新增 `SECURITY.md`。
+
+**一个 CVE 两份公告，只有厂商侧那份为真：**[GHSA-w5f2-9q9c-ff4h](https://github.com/LMCache/LMCache/security/advisories/GHSA-w5f2-9q9c-ff4h)
+（项目自己的，10 月 13 日发布——比发布版早一天）携带完整记录：受影响 `>= 0.3.9, < 0.5.6`
+加上 0.5.6 的 rc 到 rc3 及修复前 dev 构建，**补丁版 0.5.6**，以及完整的变通方案
+（localhost/可信网络、防火墙 5555 端口、非 root 运行、"如果端口曾对不可信网络可达，视主机为
+可能已失陷"）。[GHSA-vv44-hjm2-qw2f](https://github.com/advisories/GHSA-vv44-hjm2-qw2f)
+（NVD 于 10 月 7 日发布的那份——本项目第一次检查的公告）在修复落地两天后仍标注
+**"Unreviewed"、无受影响范围、无补丁版本**。制品选择的教训重演：全局数据库的副本是滞后的
+那份，厂商侧公告才是权威。
+
+**模式笔记。**修复搭在一趟巨型功能发布里（发布说明致谢约 50 位首次贡献者；gRPC 传输、新后端、
+CacheBlend）——不是专门的安全补丁；安全内容只能通过发布正文的 "Security (Highlights)" 小节
+发现。而「移除沉点 vs 加闸门」的选择与 SGLang 一类一脉相承：这些传输层按设计保持无认证，防线
+是「字节无法重建 Python 对象」——直到下一个反序列化器在它旁边落地之前，这都成立。
+
+Sources: [LMCache v0.5.6 release](https://github.com/LMCache/LMCache/releases/tag/v0.5.6) · [PR #5644](https://github.com/LMCache/LMCache/pull/5644/files) · [GHSA-w5f2-9q9c-ff4h](https://github.com/LMCache/LMCache/security/advisories/GHSA-w5f2-9q9c-ff4h) · [GHSA-vv44-hjm2-qw2f](https://github.com/advisories/GHSA-vv44-hjm2-qw2f) · [PyPI lmcache](https://pypi.org/pypi/lmcache/json)

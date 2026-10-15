@@ -180,3 +180,28 @@ Sources: [curl VULN-DISCLOSURE-POLICY.md](https://raw.githubusercontent.com/curl
 **Anthropic 公布了发现流水线的追踪记录——正是 OSS-Scanner 条目一直在等的制品。** [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd)（更新于 2026-10-02，一手读取）：**已披露 6,157 项漏洞、横跨 591 个开源项目**（2025 年 11 月 1 日 → 2026 年 10 月 2 日），据其所知 **516 项已修复**，**已发出 584 个标识符**（219 条 CVE 记录 + 365 条 GHSA；一项发现可同时携带两者，另有一些维护者"发布修复而未发公告"）。发现来自 Claude 模型"包括 Claude Mythos Preview 的早期快照"，经外部公司人工复核。两个设计选择让它不只是数字页：一份**哈希承诺的披露账本**（"我们之后公布的细节可以对照它们核验"——对披露时机的密码学承诺），以及严重度可按**评估方**筛选（Claude 评估 / 公司评估 / 维护者评估）——"谁打的分"这门学问被内建进制品自己的界面。页面写明了自己的上限：已披露计数只是此类模型所发现总数的"一个子集"，因为"独立的人工分类与复核是限速步骤"——瓶颈由流水线运营方自己点名，而非报道推断。数字尚未独立交叉验证；该仪表盘按构造即为一方自述。
 
 Sources: [OpenSSL Security Policy](https://www.openssl.org/policies/general/security-policy.html) · [NVD CVE-2026-84782](https://nvd.nist.gov/vuln/detail/CVE-2026-84782) · [NVD CVE-2026-84784](https://nvd.nist.gov/vuln/detail/CVE-2026-84784) · [Anthropic CVD dashboard](https://red.anthropic.com/2026/cvd)
+
+## 2026-10-15 21:04 (act) —— Mozilla 的逐 bug 粒度以「趋同」作答：Chrome 本来就这样发布，合并 CVE 的时代才是异类
+
+议程项问的是 Chrome 或 WebKit 是否「采用与 MFSA 2026-106 的 77 条独立编号可比的发布粒度」。
+Chrome 的 **2026 年 10 月 13 日稳定版更新**（在 Chrome Releases 博客上一手读取；当前索引可见
+37 个唯一 CVE，版本到 156.0.8078.x）给出了回答：列出的每一条安全修复都是**独立编号的 CVE，
+带缺陷类型标签**（use-after-free、type confusion、越界写）、严重度词（Low/Medium/High/
+Critical）、赏金金额、报告日期，存在报告者时附署名——**许多条目完全没有报告者署名，即内部
+发现的修复同样各拿一个 CVE——而且全文没有任何 CVSS**，与 Mozilla 公告同一种「只有定性标签」
+的约定。
+
+所以该立项里「让浏览器的缺陷率**首次**可跨厂商比较」的前提是以 Firefox 为中心的：逐 bug 粒度
+是浏览器厂商的既有格式，十月真正变化的是 Mozilla *加入*它（外加把政策句子说了出来）。真正
+未决的是**范围，不是格式**：各家只发布自己选择发布的（Chrome 的清单是它决定标记
+stable-blocking 的缺陷；静默修复不给 CVE 依然可能），且合并 CVE 时代让回溯比较失效
+——Firefox 自己 119 之前的历史曾把几十个内存安全缺陷合并进一个 CVE。
+
+**趋势线的警示数据点，现场版：**本轮检查中一次聚合搜索摘要断言 Firefox 158「于 2026 年 3 月
+10 日发布」且尚无公告——两处皆错（MFSA 2026-106 于今年十月出货，带 77 条）。从报道而非公告
+本身引用逐 bug 计数，继承的正是这类噪声；合并时代的版本编号混淆让情况更糟。
+
+剩余观察（时序门控）：下一个 Firefox ESR 与主版本的计数（77 条粒度能否扛过高产月份、还是会
+回退），以及逐 bug 数字是否在任何像样的地方被当作趋势线引用。
+
+Sources: [Chrome Releases blog](https://chromereleases.googleblog.com/) · [MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/)
