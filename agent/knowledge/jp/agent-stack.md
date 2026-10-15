@@ -2202,3 +2202,14 @@ run」——2018 年のデスクトップ CPU 1 台でのレイテンシであ�
 「実際のデータ上で長いセッションを保持するのに、可動部品をどれだけ少なくできるか」である。
 
 Sources: [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [facebookincubator/muse-gadget-sdk](https://github.com/facebookincubator/muse-gadget-sdk) · [HN — muse-gadget-sdk](https://news.ycombinator.com/item?id=49941331) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)
+
+
+## 2026-10-15 12:03 — OpenCode 2.0 はバックグラウンド Service を軸に作り直す（Code Mode を同梱）；Mononoke のビルダーが Scion のクレジットに異議
+
+**`anomalyco/opencode` 2.0（213,563★、MIT、投稿当日もプッシュ）——率先的なオープンソース coding agent がバックグラウンド Service を軸に再アーキテクチャ。**1 つの長寿命 **Service** がマシン上で動き、TUI・Web インターフェース・デスクトップ アプリのすべてがそれに接続する（`@opencode/client` の自動ディスカバリ、他ホストは `/pair`）。API はゼロから作り直され（"grew haphazardly"）、OpenCode 自身が自前の API を消費する——セッションの git worktree 移行はその成果の一つ。リリースは 2.0 をドロップインと装わず、自らの移行債務を値付けする：**1.0 のプラグインは動かない**、Server API は "completely different"、`tui.json` は移動した。
+
+**Code Mode が最もレバレッジのある発想：MCP 呼び出しをプログラマブルな関数呼び出しに変える。**最小限の JavaScript インタプリタ（`@opencode/codemode`）が MCP サーバと OpenAPI エンドポイントを呼び出し可能な関数へ変換し、エージェントは MCP の 1 往復を 1 呼び出しごとに払う代わりに、複数ツール呼び出しを**1 回の往復**でスクリプトできる——コンテキスト膨張を抑えるため、すべての MCP サーバが既定でオプトイン。これは ColGrep-Agent-2B（[[token-economics]]）と同じコンテキスト経済学の賭けを、harness 側から到達したものである。同梱：モデルを混在できるバックグラウンド サブエージェント、非同期シェルコマンド（ctrl+b で遅い処理をバックグラウンドへ）、整備された Plugin API を強制するために書かれた ~80+ の内部プラグイン（TUI プラグインは OpenTUI 経由で安定、セッション中ホットリロード）、CLI 自身のコードをライブラリとして露出する `@opencode/sdk`。
+
+**Mononoke のビルダーが、Scion が derived-data 設計をクレジットなしで持ち出したと主張。**Meta の Sapling の背後にあるソース管理サーバ Mononoke の開発に参加した Rain は、Scion の "derived data" が Mononoke のアプローチ——changeset の親から再帰的に定義される事前計算インデックス（blame、path history、skip list、現在は**8 個**の独立インデックス）——に密接に重なると書き、Sapling は Anthropic の投稿で "hard-won lessons" の一言しか得ず Mononoke は無クレジットであり、これは "borders on plagiarism" だとする。異議は**クレジットであって、再利用ではない**——Rain は Anthropic による設計の再利用自体には明示的に異議を唱えず（オープンソーシングは "to benefit humanity through the spread of good ideas" ために存在する）、自分たちの Meta チームも prior art を参照したと認める（Google の SrcFS、データベースの write-ahead ログ）；脚注は Cursor/Vicent Marti の git 作業を「似た洞察、本当に異なる設計」と対比する。AI 固有の部分は**帰属のメカニズム**：Mononoke はオープンソースであり、したがってあらゆる LLM の訓練データにあり、Opus 5.5 や GPT-6 Astra に prior art を尋ねれば Mononoke の類似は即座に表面化する——来歴の連鎖は**訓練データ → モデル → 設計文書**であり、その中に自分のインデックス方式を認識できる人物は発見可能である。収斂した*洞察*はエンジニアリングの通常の働き方であり、具体的な再帰インデックスの*設計*は設計である——そしてモデルは、設計を双方向に追跡可能にする。Anthropic 側の応答は、現時点では元投稿の Mononoke に関する沈黙である。
+
+Sources: [Anomaly — OpenCode 2.0](https://anoma.ly/notes/opencode-2-0/) · [anomalyco/opencode](https://github.com/anomalyco/opencode) · [Rain — Anthropic's Scion is heavily inspired by Mononoke](https://sunshowers.io/posts/anthropic-mononoke/) · [HN discussion](https://news.ycombinator.com/item?id=50094694)

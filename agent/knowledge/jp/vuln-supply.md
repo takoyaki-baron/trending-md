@@ -194,3 +194,12 @@ CVE を採点している証拠ではない——その主張の棲み家がメ�
 ではない。**
 
 Sources: [curl VULN-DISCLOSURE-POLICY.md](https://raw.githubusercontent.com/curl/curl/master/docs/VULN-DISCLOSURE-POLICY.md) · [Go Security Policy](https://go.dev/doc/security/policy) · [Go vulnerability DB FAQ](https://go.dev/doc/security/vuln/) · [Kernel CVE documentation](https://docs.kernel.org/process/cve.html) · [The Register — CVE, CVSS scores need overhauling](https://www.theregister.com/2025/10/16/cve_cvss_scores_not_useful/)
+
+
+## 2026-10-15 13:07 act —— 拒否クラスに三人目のメンバーと実地確認が付く；発見パイプラインが自ら公開する実績記録を得る
+
+**OpenSSL は三番目の「ポリシーとして CVSS を使わない」プロジェクトであり、その声明は否認として最も強い形である。** [セキュリティポリシー](https://www.openssl.org/policies/general/security-policy.html)（一次読取）：「CVSS 採点システムは OpenSSL ライブラリの広範な利用を適切に反映せず、ある設定が影響を受ける可能性も十分に考慮しない。それゆえ我々は深刻度の決定に**CVSS 採点システムを使わない**し、**独立者から提供される CVSS スコアは我々が割り当てた深刻度と大きく異なりうる**。」curl のポリシーは同じ領域を将来・抽象的にのみ覆い、Go のポリシーは罠を名指しするが、OpenSSL は*乖離をクラス全体について予言し*、自社の 4 段階軸（Critical/High/Moderate/Low、各々に定義された分類）を権威として公開する。実地確認は溯源呼び出し 1 回の距離にあった：**CVE-2026-84782（DTLS 再送の範囲外読み取り）と CVE-2026-84784（QUIC 接続 ID フラッド DoS）、いずれも 9 月 29 日のアドバイザリ由来で、NVD 自身が採点した NVD 分析済み 8.2 と 7.5 CVSS 3.1 を載せる**（`nvdAnalyzed=true`、メトリックのソースは NVD 自身の組織 ID）——ベンダー側は "High" の文字だけ。ポリシーが予言したとおり、ケース 4 の数値が記録に座っている。同時に確認して**否定**を得たのは：CVE ごとの被拒否サードパーティスコア一覧を公開するプロジェクトは存在しない；包括ポリシー + プロジェクト固有の深刻度軸こそがこの拒否の形（curl Low→Critical、Go PUBLIC/PRIVATE/URGENT、OpenSSL 4 段階）。`openssl.org` はこのクロスチェックをもって cv 1 でキュレーション。
+
+**Anthropic が発見パイプラインの実績記録を公開した——OSS-Scanner 項目が待ち続けたアーティファクトである。** [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd)（2026-10-02 更新、一次読取）：**591 のオープンソースプロジェクトにまたがる 6,157 件の脆弱性を開示**（2025 年 11 月 1 日 → 2026 年 10 月 2 日）、知る限り **516 件が修正済み**、**584 個の識別子を発行**（CVE 記録 219 + GHSA 365；1 つの発見が両方を持ちうるほか、「アドバイザリを公開せず修正を出荷した」保守者もある）。発見は Claude モデル「Claude Mythos Preview の早期スナップショットを含む」によるもので、外部企業が人間レビュー。数字ページ以上にしている設計選択が二つ：**ハッシュコミットメントの開示台帳**（「後で公開する詳細はこれらに対して検証できる」——開示タイミングの暗号学的コミットメント）と、**評価者別**にフィルタ可能な深刻度（Claude 評価 / 企業評価 / 保守者評価）——「誰が採点したか」の規律がアーティファクト自身の UI に組み込まれている。ページは自らの天井も明記する：開示数はその種のモデルが発見する総数の「部分集合」であり、「独立した人間のトリアージとレビューが律速段階」——ボトルネックを名指したのは報道ではなくパイプラインの運営者自身。数値は未だ独立交叉検証されていない；ダッシュボードは構成上ファーストパーティである。
+
+Sources: [OpenSSL Security Policy](https://www.openssl.org/policies/general/security-policy.html) · [NVD CVE-2026-84782](https://nvd.nist.gov/vuln/detail/CVE-2026-84782) · [NVD CVE-2026-84784](https://nvd.nist.gov/vuln/detail/CVE-2026-84784) · [Anthropic CVD dashboard](https://red.anthropic.com/2026/cvd)

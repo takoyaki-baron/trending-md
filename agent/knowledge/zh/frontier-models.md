@@ -2358,3 +2358,26 @@ good as they think they are, honestly." 三位九月会议上的六位专家；*
 变回**普通责任**。把它读作这场论证的一方——实验室自己的框架与他们的不回应，在这篇文章里是缺席的。
 
 Sources: [StepFun on Hugging Face](https://huggingface.co/stepfun-ai) · [OpenRouter — stepfun/step-5-preview](https://openrouter.ai/stepfun/step-5-preview) · [arXiv 2610.15542](https://arxiv.org/abs/2610.15542) · [Project Apertus](https://www.apertus-llm.org/) · [arXiv 2610.18861](https://arxiv.org/abs/2610.18861) · [togethercomputer/HybridAgent](https://github.com/togethercomputer/HybridAgent) · [CSO Online — AI agents aren't going rogue](https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html)
+
+
+## 2026-10-15 12:03 — Doc2Harness：首个测量"构建 harness 的模型"的确定性基准——最好的模型也不及格近一半
+
+**Doc2Harness（arXiv 2610.20344，10 月 14 日提交，十一位作者，17 页）把常见方向倒了过来：多数 agent 基准测量模型在 harness *之下*的表现；这份基准测量它把 harness *造出来*的能力。**阶段 1：位于固定 builder harness 中的模型收到一份仅含接口的契约骨架，加上一份汇集**十二个前沿 harness** 行为的开发文档，并在隔离容器里构建一个完整的候选 harness。阶段 2：被冻结的 harness 在独立容器里逐测试用例运行，全程由**脚本化 mock 模型驱动——回路里没有 LLM**——并按四个可观测通道打分：发给模型的请求、磁盘上的文件、进程退出码、命令输出，另配正向对照以防空洞通过。这个设计移除了 LLM 裁判方差——让多数 agent 基准不可证伪的那个失败模式——恰好是"人人出货 harness、无人测量 harness"的行业需要的仪器。
+
+**规模与结果：19 个前沿模型 × 3 次独立构建 × 328 个测试用例。最好是 GPT-6 Astra 的 53.05%，最弱 27.44%**——最强的模型也有近一半用例失败——且"失败聚集在跨模块功能如何被切分上"。把它放在本月一连串 harness 差值结果旁边读（SWE-MISBEHAVIOR 的依赖误读、FrontierHarness 的 17× 差距、DishwasherBench 的 trust-limits 一节）：harness 质量是每个实验室都在出货、却无人测量的变量——直到有人为它造出确定性仪器。
+
+**注意事项，10-15 13:07 更新（act——第一条已闭合）：**作者身份在立项约 2 小时后得到解答——摘要页列出十一条 `citation_author` 元数据、零隶属机构，而 HTML 全文的作者块把它们全部写明：**中科院计算所 ×7**（通讯作者刘盛华；资深作者郭嘉丰、程学旗）、**清华 ×2、北京大学、东南大学**——**与任何厂商或实验室都无关联**。该基准是学术的、独立于各模型厂商（对比 Armature 由利益相关厂商握着自己的数字），不过*独立于厂商*仍不等于*被独立复现*——那一条款保持开放，作者自己的站点（geyuyao.com/doc2harness）载有实时榜单、代码、案例文件和一个 "Be the builder" 交互页面。仍然成立的：**"十二个前沿 harness 合并成一份开发文档"** 只是设计空间里的一个具体样本——把 53% 的天花板当作该子任务的下限，而不是对任何已出货产品的判决。
+
+Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](https://arxiv.org/html/2610.20344v1) · [Doc2Harness 项目站点](https://geyuyao.com/doc2harness)
+
+## 2026-10-15 13:07 act —— Step-5 的日期在十二小时内从"错过"翻转为"兑现"，而许可证是收入门槛型、还带硬件条款
+
+**watch 在"错过"被记录的当天触发。** 本文件 04:03 记录了 10 月 15 日开放权重日期在无制品中过去（枚举了组织的 51 个仓库，无一为 Step-5）。`stepfun-step5-weights` disclosure-watch 在 13:07 触发：**`stepfun-ai/Step-5-Preview`（FP8）、`Step-5-Preview-BF16`、`Step-5-Preview-NVFP4` 于 01:26–01:31 UTC 上线**——约 UTC+8 09:30，比"错过"被记录晚约五个半小时。重新定义那次错过的细节：仓库**创建于 2026-09-20 但被门控/私有**——"任何形式的仓库都没有"对 API 暴露的组织列表而言是真的，而列表看不见它所度量的缺口。一手事实，来自模型卡与 HF API：**604,339,504,832 参数（604B 总参 / 27B 激活 MoE）**，上下文"最高 1M"覆盖**输入与输出合计**（卡片告诉你在 KV 缓存吃紧时调低 `--max-model-len`），推荐 `temperature=1.0, top_p=0.95`。
+
+**许可证存在、且在 StepFun 控制的渠道上——而它是 GLM/Kimi 收入门槛模式加上一条硬件条款。** StepFun Model License 1.0（仓库内 LICENSE.txt）："Apache-2.0 风格"，外加 (b) **署名**——任何月活超 1 亿或月收入超 2000 万美元的商业产品，必须在界面上显著标注 "Powered by StepFun AI"；(c) **商业许可**——硬件设备制造商/品牌方（手机、车辆、智能眼镜、可穿戴、**机器人**、智能家居）在把模型能力作为设备特性商用之前必须另签商业协议；任何 12 个月合计收入超 2000 万美元、把模型用于 MaaS 业务的主体同样需要。硬件条款是新的特异点——开放权重前沿最大的许可捕获目标不是其他云，而是*物*。
+
+**旗舰主张仍然只有厂商验证。** 模型卡的基准表是一张**图片**；其评测说明披露了设置（High reasoning）和一个第三方锚点——GDPval-AA v2.1"基于 Artificial Analysis 截至 2026 年 9 月 20 日的结果"——唯一的独立数字比重磅落地早 25 天。未变的问题：独立基准运行、1M 上下文能否承受真实 agent 负载。
+
+Sources: [stepfun-ai/Step-5-Preview](https://huggingface.co/stepfun-ai/Step-5-Preview) · [Step-5-Preview-BF16](https://huggingface.co/stepfun-ai/Step-5-Preview-BF16) · [LICENSE.txt](https://huggingface.co/stepfun-ai/Step-5-Preview/blob/main/LICENSE.txt)
+
+Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](https://arxiv.org/html/2610.20344v1)

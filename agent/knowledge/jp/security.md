@@ -3004,3 +3004,16 @@ stations?」と尋ねる。それは答えられた問いではなく、*調達�
 の集合であるかのように引用されてしまう部分だからである。
 
 Sources: [Securing space — Cyber security for LEO SATCOM (NCSC-NZ PDF)](https://www.ncsc.govt.nz/assets/guidance/Documents/Securing-space-Cyber-Security-for-low-earth-orbit-satellite-communications.pdf) · [Canadian Centre for Cyber Security — joint guidance announcement](https://www.cyber.gc.ca/en/news-events/joint-guidance-securing-space-cyber-security-low-earth-orbit-satellite-communications) · [ASD's ACSC — Securing space](https://www.cyber.gov.au/business-government/secure-design/securing-space)
+
+
+## 2026-10-15 12:03 — KEV のこの日、メール 1 本で届く 9.8 と認証付きの 8.6 が並び、誤読が一つ決着した
+
+**CISA の 10 月 14 日 KEV 更新は、すでに悪用されているエンタープライズ アプライアンス 2 件を追加した。この並び自体が教訓である：カタログが列挙しているのは悪用であって、深刻度ではない。**認証付き 8.6 の RCE が 9.8 と同じリストに入ったのは、両方とも悪用中だからであり、スコアは当初から基準ではない。
+
+**CVE-2026-76519 —— Cisco Secure Email Gateway、任意ファイル書き込み、CVSS 9.8（CNA 自己採点、`psirt@cisco.com`、NVD ステータス Undergoing Analysis）。****未認証**の送信者が細工した添付をメールする。スキャナがそれを処理すると、この脆弱性は攻撃者にアプライアンス OS へのファイル書き込みを許し、続いて "runs commands as root" に至り得る。前提条件は 2 つ、いずれも自己点検可能：メール ポリシーで **File Reputation（AMP）が有効**であること、**Content Scanner Tools が 25.3.0.5525 より古い**こと。Cisco は内部スキャンで発見し（アドバイザリ `cisco-sa-esa-afw-zqYJkjxp`）、修正は **9 月 14 日**から出荷済み（AsyncOS 15.5.5-014 と 16.5.0-780、アップグレードも再起動も不要で導入できる CST 更新を含む）——ただし **AsyncOS 16.0 には修正済みビルドが存在せず**、回避策もなく、Cisco は 10 月に攻撃を認識し、"indicators of possible compromise" を示す Secure Email Cloud の顧客に連絡したと述べる。検出：`grep "System Security" system_logs`。名指しすべき形：**アプライアンスのコンテンツ検査機能がそのまま攻撃経路である**——本ファイルが追ってきた RAG 取り込み SSRF やメール スキャナ連鎖と同じジャンル。防御者のために信頼できないコンテンツを解析する部品それ自体が、入口になる。
+
+**CVE-2026-0322 —— PAN-OS 管理インターフェースの認証付き RCE、CVSS 4.0 8.6（Palo Alto CNA、NVD ステータス Received、ベクトル `PR:H`）。**PA-Series、VM-Series、Panorama の PAN-OS 12.2.0–12.2.3 に影響。修正は 12.2.4+。**回避策なし**、Threat Prevention は部分的なカバーのみ（Threat ID 510046/510047）。Palo Alto 自身のアドバイザリは "very limited exploitation has been observed" と述べる——`PR:H` 付きの 8.6 は「管理インターフェースの資格情報が必要」という正直な採点であり、それこそ KEV 掲載が数字より重要な理由でもある：管理インターフェースの資格情報は、フィッシングされた運用者やアクセス ブローカの活動がまさに手に入れるものだからだ。
+
+**既定のチェックに沿った来歴：**いずれのレコードも NVD による解析を受けていない——9.8 は CNA 採点（Cisco）、8.6 は CNA 採点（Palo Alto、ステータス Received）。9 月 14 日の修正から 10 月 14 日の KEV 掲載までの 1 か月は、「悪用報告なし」が静かに失効した窓だった。両アプライアンスとも信頼できないコンテンツの検査を生業とし、SEG の方はメールを送るだけで悪用できる——アプライアンス悪用の摩擦として、ほぼこれ以上なく低い。
+
+Sources: [Cisco — cisco-sa-esa-afw-zqYJkjxp](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-afw-zqYJkjxp) · [Palo Alto — CVE-2026-0322](https://security.paloaltonetworks.com/CVE-2026-0322) · [The Hacker News](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html)

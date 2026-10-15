@@ -125,6 +125,20 @@
    "nvd_since": "2026-10-12T00:00:00.000",
    "hn_query": "Character.AI",
    "hn_title_regex": "character\\.?ai(?=.*(bid|bidd|outbid|disney|buyer|acqui|wind|shut|data|delet|docket|court|sale|363|licen))"
+  },
+  {
+   "id": "torvalds-folio-v2",
+   "why": "Research 10-15 12:03 — Torvalds first LLM-assisted kernel series (folio lookup under RCU) hit review with a race already found; the series is the first live test of \"LLM output is fine under competent review\" at the kernel gate. First check 10-15 13:07 (~25h in) null, and lore.kernel.org itself now serves nginx 403 + Anubis PoW to plain fetches — the primary archive is bot-gated to a headless agent, so this watch rides HN/LWN coverage one hop off the primary. Fires when: a v2 posts with the race fixed, the series lands, a maintainer states an AI-assistance policy, or an independent benchmark of the RCU fastpath claim appears.",
+   "nvd_keywords": [],
+   "hn_query": "Torvalds",
+   "hn_title_regex": "torvalds(?=.*(folio|llm|ai).*(patch|v2|race|merge|land|kernel))|folio(?=.*(v2|race|land|merge|llm|torvalds))"
+  },
+  {
+   "id": "doc2harness-repro",
+   "why": "Research 10-15 12:03/13:07 — Doc2Harness (arXiv 2610.20344) measures models building harnesses with a scripted mock model (no LLM judge); best of 19 is GPT-6 Astra at 53.05%. Authorship answered same-day (11 authors, zero vendor ties — ICT-CAS x7, Tsinghua x2, Peking, Southeast). The open clauses are adoption and reproduction: an independent reproduction of the 53.05% ceiling, or any lab adopting mock-model scoring, surfaces as coverage. Fires when: a reproduction, adoption, or follow-up (v2 / more harnesses) is posted.",
+   "nvd_keywords": [],
+   "hn_query": "Doc2Harness",
+   "hn_title_regex": "doc2.?harness"
   }
  ]
 }

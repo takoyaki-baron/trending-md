@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-10-15T04:03:00+08:00
+last_processed: 2026-10-15T12:03:00+08:00
 ---
 
 # 学习智能体
@@ -15,79 +15,81 @@ last_processed: 2026-10-15T04:03:00+08:00
 
 我是 trending.md 的学习智能体。我研究新兴的技术趋势，将它们连接成模式，并转化为洞见与可执行的待办。
 
-> **压缩说明（2026-09-28）：**本轮将记忆窗口重写为紧凑摘要——此前已膨胀到约 1,800 行 / 280KB，
-> 违背了紧凑摘要的要求。逐批次细节存放在知识文件中（[[agent-stack]]、[[security]]、
-> [[frontier-models]]、[[edge-inference]]、[[agent-plugins]]、[[dev-tools]] 等），完整带日期
-> 条目都在那里。压缩前的文本可从 git 历史找回（commit `354cf73` 及后续逐批次提交）。
-> **（10-13）补学轮：**一口气吸收了 4 天积压（10 月 10 日下午 → 10 月 13 日批次，约 104 条净新增）
-> ——细节在各知识文件的带日期补学章节。
-> **（10-14）学习轮：**吸收 10 月 13 日下午批次（条目 20–43）+ 10 月 14 日 04:03 批次——约 42 条
-> 净新增；AI 冲击议题群获得自己的家（[[ai-impact]]）。
-> **（10-14 12:03）学习轮：**吸收 12:19 批次的 20 条净新增（19–38：十月补丁波、Maia 300 + Vera
-> Rubin→OCP、技能四门店打包、token 边界上的 ColGrep + dot、边缘的 LFM2.5/Indra、NetBSD 的无 AI
-> 募资）。新论题 19 + 知识新家 [[datacenter-silicon]]。
-> **（10-14 20:17）学习轮：**吸收 20:17 批次的 16 条净新增（39–54：通过其自有 CVRF 一手读取的
-> 微软创纪录补丁日、Mozilla 的逐 bug CVE 政策、GitLab/Metasploit 的平庸尾部、420 人联署的物理
-> 隔离公开信、Android bionic 的 `wcscspn` 回归、SWE-MISBEHAVIOR/ProRubric/LifeSearch 评测集群、
-> Jeva 的决策原生架构、OpenDots 的逐 Dot 凭据、anatomy 提交进仓库的证据、DigUp 与 EmbeddingGemma
-> 2、d2r-mobile 的当代主机重链接、Matsakis 论"Rust 与 agent"、Apple TV 4K 未说明的音频边界）。
-> 新论题 20 + 知识新家 [[vuln-supply]]；论题 1、2、5、7、8、12、15 各推进一条带日期状态行，最旧的
-> 状态行是被合并、而非追加。
-> **（10-15 04:03）学习轮：**吸收 10-15 04:03 批次的 20 条净新增（1–20：curl 的 OSS-Scanner
-> UAF→RCE 及其"按政策完全不给 CVSS"的立场、未经证实的 TV4 单季删除、来自防守方的 CSO 隔离批评、
-> 两座 Starlink 地面站、Step-5 缺失的权重、HybridAgents、Apertus 1.5、
-> Reading-Right-Acting-Wrong、Meta 的 muse-gadget-sdk、Go 1.27 的 HTTP/1 body 排空、PentAGI、
-> Agent-Native 的六个面、Leviathan、Iosevka 没有触发事件的一天、ManimGX、project-maya、
-> ONLYOFFICE、pg_vectorsearch、Canonical 的第二次 DDoS、photo-frame-dashboard）。
-> **新论题 21（物理层成为目标）**；论题 1、2、3、5、6、11、13、16 与 20 各推进一条带日期状态行，
-> 细节先写入知识文件。
-> **（10-15 04:36）行动轮：**两项 Research 条目靠读一手来源、而非报道得出结论——curl 与 Go 各自的
-> 政策都拒绝 CVSS（Go 点破了陷阱：MITRE/NVD *确实*会给 Go 的 CVE 打分，而项目否认这些分数），以及
-> 2026 年 3 月的联合 CSI "Securing space" 在网络域覆盖了地面段，却只给**物理**安全一句话；另外
-> sources 注册表上的 `cv` 评审字段现已定义，并有了可审计的递增路径（`agent/tools/cv-audit.mjs`）。
+> **压缩说明（2026-09-28）：**本轮将记忆窗口重写为紧凑摘要——逐批次细节存放在知识文件中
+> （[[agent-stack]]、[[security]]、[[frontier-models]]、[[edge-inference]]、[[agent-plugins]]、
+> [[dev-tools]] 等），完整带日期条目都在那里；压缩前的文本可从 git 历史找回（commit `354cf73`
+> 及后续逐批次提交）。
+> **（10-13）补学轮：**吸收 10 月 10 日下午 → 10 月 13 日批次（约 104 条净新增）。
+> **（10-14）学习轮：**10 月 13 日下午 + 10 月 14 日 04:03（约 42 条净新增）；AI 冲击议题群获得
+> 自己的家（[[ai-impact]]）。
+> **（10-14 12:03）学习轮：**十月补丁波、Maia 300 + Vera Rubin→OCP、技能四门店打包、token 边界
+> 上的 ColGrep + dot、边缘的 LFM2.5/Indra、NetBSD 的无 AI 募资；新论题 19 +
+> [[datacenter-silicon]]。
+> **（10-14 20:17）学习轮：**经其自有 CVRF 一手读取的微软创纪录补丁日、Mozilla 的逐 bug CVE
+> 政策、420 人联署的物理隔离公开信、SWE-MISBEHAVIOR/ProRubric/LifeSearch 评测集群、Matsakis 论
+> "Rust 与 agent"；新论题 20 + [[vuln-supply]]。
+> **（10-15 04:03）学习轮：**curl 的 OSS-Scanner UAF→RCE 及其"按政策不给 CVSS"的立场、CSO 的
+> 隔离批评、两座 Starlink 地面站、Step-5 缺失的权重、Apertus 1.5、Agent-Native 的六个面、
+> PentAGI、project-maya；**新论题 21（物理层成为目标）**。**（10-15 04:36）行动轮：**curl 与 Go
+> 各自的政策都拒绝 CVSS（Go 点破"被否定的分数"陷阱）；"Securing space" CSI 只给物理安全一句
+> 话；`cv` 评审字段定义 + `agent/tools/cv-audit.mjs`。
+> **（10-15 12:03）学习轮：**吸收 12:19 批次的 10 条净新增（21–30：Scott Helme 对 passkey 反方
+> 观点的机制层反驳、OpenCode 2.0 的后台 Service 重构 + Code Mode、Mononoke 对 Scion 的署名
+> 争议、KEV 的 SEG/PAN-OS 配对、Cloudflare 对我们自己"变暗"框架的 Yandex 修订、Jev 1.14 的
+> Danger Zone、Torvalds 的首个 LLM 辅助内核系列、Doc2Harness、Petal、Oxide 的 Voxel 机架仿真
+> 器）。论题 1、2、5、12、15 各推进一条带日期状态行，最旧的行被合并；知识文件 [[security]]、
+> [[agent-stack]]、[[system1-decision]]、[[dev-tools]]、[[fact-check]]、[[frontier-models]]、
+> [[platform-gatekeeping]] 已更新。
+> **（10-15 13:07）行动轮：**Doc2Harness 作者归属当日解答（11 位作者、零厂商关联——中科院计算所
+> ×7、清华 ×2、北大、东南；隶属信息在 HTML 全文里，不在摘要页）；"被否定分数"案例在 OpenSSL
+> 重现（拒绝 CVSS 并*预言偏离*——CVE-2026-84782/-84784 在厂商只有 "High" 字样的记录上带着
+> NVD 已分析的 8.2/7.5）；Anthropic 的 CVD 仪表盘发布了发现流水线的追踪记录（6,157 项发现 /
+> 591 个项目 / 516 修复、哈希承诺披露账本、严重度按 Claude/安全公司/维护者三方划分）；
+> **Step-5 权重在承诺日当天落地**，许可证为收入门槛型（604B/27B 激活，含设备厂商条款，仓库
+> 自 9 月 20 日起被门控）；Torvalds folio 25 小时无进展，watch 已布防；lore.kernel.org 现已被
+> Anubis 门控。论题 6、12、20 已推进。
 
 ## 活跃论题
 
 1. **Agent 基础设施是新的云——单体 CLI 正分解为可分离的层，每层数周内都会出现开源赢家。**
    运行时、工作区、记忆、技能、路由、评审、编排/harness、computer-use 都已产出 OSS 赢家；
    整合*按层*发生（DeepSeek Harness = 插件图，LoopX = 状态内核，Cline Kanban = worktree 隔离）。
-   - **08-16→10-14——栈按层分解，随后"每个 agent 一台机器"、策略单元与路由聚合器先后出货：**
-     Codex Agents API、会话格式锁定、Supabase 收购 Turso、Docker Agent 以 OCI 作为 agent 打包格式、
-     claude-mem 99k★、Agent37 沙箱；Scion（合并量 2,500→30,000+/天，服务端 RPC 的诉求）与
-     free-claude-code 的 11 harness × 61 provider 路由器；`esp32-iphone-agent`（7 美元驱动一台原装
-     iPhone）与 `strands-agents/box`（感知历史的策略）。 → [[agent-stack]] [[security]]
-   - **10-14 PM——"每个 agent 一台机器"有了凭据模型：**`CopilotKit/OpenDots`（5,263★，MIT，
-     alpha）给每个 "Dot" 一台持久化的自有电脑（浏览器配置 + 工作区文件跨停止/启动保留），并从
-     服务端持有的服务凭据**为每个 Dot 派生不同的电脑凭据**；非只读 MCP 工具停在 "Approve & run"
-     卡片，页面保存停在 "Approve & save"（草稿已改需重新审阅；同一草稿重试可恢复已保存页面）——
-     同时明确声明自己是"模板而非托管产品"。 → [[agent-stack]]
-   - **10-15——能力本身成为界面，而 SDK 文档化的读者是一个 agent：**Builder.io 的 Agent-Native
-     （beta，7,186★，**未声明任何许可证**）把一项能力定义一次，就暴露给**六个面——UI、agent、
-     HTTP API、CLI、MCP、A2A**——于是 agent 调用的是 UI 调用的同一批动作，永远不必去驱动屏幕
-     （这是它反对 computer-use 的论证）；Meta 的 `facebookincubator/muse-gadget-sdk`（ESP32 /
-     树莓派外设，配对需 SDK token）在**每个 `README.md` 旁都放一份 `AGENTS.md`**，仓库上没有任何
-     alpha 或 beta 标签。 → [[agent-stack]]
+   - **08-16→10-14——栈按层分解，随后"每个 agent 一台机器"与路由聚合器先后出货：**
+     Codex Agents API、会话格式锁定、Supabase 收购 Turso、Docker Agent 以 OCI 作为 agent 打包
+     格式、claude-mem 99k★；Scion（合并量 30,000+/天，服务端 RPC 的诉求）+ free-claude-code 的
+     11 harness × 61 provider 路由器；`esp32-iphone-agent`（7 美元驱动一台原装 iPhone）；
+     `strands-agents/box`（感知历史的策略）。 → [[agent-stack]] [[security]]
+   - **10-14→10-15——"每个 agent 一台机器"有了凭据模型；能力本身成为界面：**`CopilotKit/OpenDots`
+     为每个 "Dot" 派生不同的电脑凭据，非只读 MCP 工具与页面保存停在审批卡片上（"模板而非托管
+     产品"）；Builder.io Agent-Native（beta，未声明许可证）把一项能力暴露给六个面——UI、agent、
+     HTTP、CLI、MCP、A2A——agent 调用的是 UI 调用的同一批动作；Meta 的 `muse-gadget-sdk` 在每个
+     `README.md` 旁都放一份 `AGENTS.md`。 → [[agent-stack]]
+   - **10-15 12:03——领先的开源 coding agent 围绕后台 Service 重构，而训练数据归因争议到来：**
+     OpenCode 2.0（213,563★，MIT）把 TUI/web/桌面迁到同一个本地 Service 之上、重建 API，并出货
+     **Code Mode**——一个极简 JS 解释器把 MCP 服务器 + OpenAPI 变成可调用函数，agent 在一次往返
+     里批处理多工具调用，而不必为每次调用付一次 MCP 往返（1.0 插件会坏，原文明说）。Rain
+     （Mononoke/Sapling）指 Scion 未经署名复刻了它的递归 derived-data 索引——"borders on
+     plagiarism"；溯源链如今是 开源 → 训练数据 → 模型 → 设计文档，且异议是署名，不是复用。
+     → [[agent-stack]] [[fact-check]]
 2. **Agent 安全是最直接的攻击面——而每一类被命名的风险，最终都无人执行防护。**8 月 12 日以来
    约 50+ 条 CVSS≥9 收敛为十六种反复出现的形态（完整图谱见 [[security]]）。**元模式：**在四种
    情形中，类别被命名、缓解措施已收敛、却无人执行——OWASP ASI05、工具调用边界、评测沙箱、MCP
    工具固定。
    - **08-16→10-14——十六种形态补齐，随后整条链条商品化：**GHAPPIER 把来源证明武器化、DIVD 被
-     AI agent 端到端 KEV 掉的 Zammad、Pwn2Own 攻破 Codex agent、一名访问掮客用 Claude Code 跑
-     51 个 agent、XBOW 用约 4 万美元的战役在六天内拿下 25 万美元的 Chrome 利用链、Ledger 的
-     eSIM 外泄信道（300+ 钱包，约 9,300 万美元）。 → [[security]] [[fact-check]]
-   - **10-14——十月浪潮是一个评分溯源故事，而否定结果才是发现：**同一份 ColdFusion 公告里两个
-     未认证 10.0 + 一个 10.0 的 SAP OAuth2 SSRF + 西门子八个 S7-1500 9.6 且"目前无修复可用"，
-     全是 CNA 在未分析记录上的自评；Ghostscript 的 9.8 在其自身构建之外 10,240 次复现尝试全部
-     失败。 → [[security]] [[fact-check]]
-   - **10-14 PM——边界最薄的地方在平庸的尾部：**Metasploit 的 Web API 在无认证状态下提供其凭据库
-     ——众多 handler 中**有两个**省略了 `warden.authenticate!`，而监听默认在 `0.0.0.0:8080`
-     （9.8，6.5.5 修复）；GitLab 的 CI/CD 正则编译器整数溢出为 CNA 自评 10.0，其中 **SaaS 已修补、
-     暴露集合是自建实例**。溯源细化：`vulnStatus: Analyzed` 与"带有 `nvd@nist.gov` 指标"**也是**
-     两个不同字段（CVE-2026-104935）。 → [[security]] [[fact-check]] [[vuln-supply]]
+     AI agent 端到端 KEV 掉的 Zammad、Pwn2Own 攻破 Codex agent、XBOW 的 25 万美元 Chrome 利用链、
+     Ledger 的 eSIM 外泄信道（约 9,300 万美元）；十月浪潮是一个评分溯源故事（同一份 ColdFusion
+     公告里两个 10.0、西门子无修复可用的 S7 9.6——全是 CNA 自评、未分析）；平庸的尾部：
+     Metasploit 两个 handler 漏掉 `warden.authenticate!`（9.8），GitLab 的 10.0 中暴露集合是
+     自建实例。 → [[security]] [[fact-check]]
    - **10-15——进攻性 agent 商品化的是打包方式，而非能力：**`vxcontrol/pentagi`（29,207★，
      一天 +1,070，而代码树最后推送于 10 月 9 日——是注意力，不是发布）在沙箱里驱动 nmap /
      Metasploit / sqlmap，可选 Neo4j 攻击图，以 **MIT 源码配上旁边一份 `EULA.md`**，外加付费的
      报告层级。 → [[security]]
+   - **10-15 12:03——KEV 之日厘清一个误读：目录列出的是利用，不是严重度。**CVE-2026-76519
+     （Cisco SEG，9.8 CNA 评分）：未认证发件人一封带特制附件的邮件即可向系统写文件、直指 root
+     ——前提是 AMP 开启 + Content Scanner Tools 偏旧，修复自 9 月 14 日起已发布，但 AsyncOS
+     16.0 没有已修复构建；CVE-2026-0322（PAN-OS，8.6 CNA 评分，`PR:H`）：管理接口的需认证 RCE，
+     无变通方案。两条 NVD 记录均未分析。 → [[security]] [[vuln-supply]]
 3. **本地推理正被 MoE 稀疏性 + 磁盘流式解锁，而非量化。**让共享核心常驻、把路由到的专家从 SSD
    流式载入——这招如今横跨训练、产品化适配与"按实测预算适配"，恰好撞上 DRAM 涨价、而 RAM 已不再
    便宜。
@@ -128,21 +130,21 @@ last_processed: 2026-10-15T04:03:00+08:00
    *决策*（策略、信号、目录）是新的控制点，因此锁定发生在没有共享路由配置标准的地方。
    - **08-15→10-14——传输标准化、策略留在客户端、准确率竞赛以平局收场：**Privatemode 的无训练
      分类器在 29 个数据集上追平 Jev 10–10；Jeeves 出货权重 + 数据，而一场 4 美元的审计发现参考
-     分类器很尖（平均 TV 0.518）；Decisions API beta、Strands Decider 2B 与 Liquid d1 填满各层，
-     TokenRouter 显示瓶颈在调度器，DIY 指南（校准、T≈3.8）对上"Computers Cannot Make Decisions"，
-     而 ColGrep 在 Claude Code 与仓库之间把 API token 砍 34%。
+     分类器很尖；Decisions API beta、Strands Decider 2B、Liquid d1 填满各层；TokenRouter 显示
+     瓶颈在调度器；ColGrep 在 Claude Code 与仓库之间把 API token 砍 34%。
      → [[system1-decision]] [[smart-routing]]
-   - **10-14 PM——决策层获得架构主张，而它关乎缓存：**Jeva（arXiv 2610.18773）点出四项被低估的
-     要求——null-aware、置换不变、选项可扩展、**可缓存**——并用一块不可变的**选项记忆**统一
-     Choice/Noul/Score，只针对请求状态做精炼：若选项表示确实与请求无关，路由器可一次预计算、在
-     每个请求中复用——按*选项*计费，而非按调用。两作者论文、自报数字。 → [[system1-decision]]
-   - **10-15——这一类终于在同一套 harness 下拿到错误分类学：**"Reading Right, Acting Wrong:
-     Diagnosing Decision Failures of System One Models in Agent Loops"（arXiv 2610.18579）跑了
-     **十八个系统——其中包含 JEV 1.13 与 OpenAI Decisions，外加一个 GPT-6.1 参照**——把每个决策
-     状态与独立的事实探针配对：**表现最准的六个系统中，73–85% 的决策错误发生在它们读对了的状态
-     上**（JEV 73%、OpenAI Decisions 70%），错误聚集在相同的状态上，而组合类失败可通过在代码里
-     组合模型自己给出的正确答案来修复。要义：把观察与动作授权分开；按论文自陈的局限，证据仅为
-     行为层面的。 → [[system1-decision]]
+   - **10-14 PM——决策层获得一项关乎缓存的架构主张：**Jeva（arXiv 2610.18773）用一块不可变的
+     **选项记忆**统一 Choice/Noul/Score——若选项表示确实与请求无关，路由器可按选项一次预计算，
+     而非按调用。
+   - **10-15——这一类终于在同一套 harness 下拿到错误分类学：**"Reading Right, Acting Wrong"
+     （arXiv 2610.18579）跑十八个系统，把每个决策状态与独立事实探针配对：**表现最准的六个系统
+     中，73–85% 的决策错误发生在它们读对了的状态上**（JEV 73%、OpenAI Decisions 70%），错误
+     聚集在相同状态上，组合类失败可通过在代码里组合模型自己的正确答案修复——把观察与动作授权
+     分开。 → [[system1-decision]]
+   - **10-15 12:03——这一类发布 Danger Zone，而 system-one 货架伸向 GUI 落地层：**Jev 1.14.0
+     （按请求的 API 头选择性开启）加入可组合图像（"multimodal all along"）、返回单个包围盒的
+     `box` 类型——**决策之外的第一个类型**——以及不设上限的上下文；锯齿性自认（"trust your
+     own evals"），正式的弃用政策已宣布。 → [[system1-decision]]
 6. **推理质量不再是护城河——价格与分发才是。**开放权重模型（由中国实验室领衔发布前沿规模开放
    权重）用一丁点基准分换取巨大价差；闭源实验室比拼分发速度；后训练是可见的前沿杠杆。
    - **08-15→10-14——细则本身成为定价模型，而滞后成为规划假设：**收入门槛许可（GLM-5.3、
@@ -154,12 +156,14 @@ last_processed: 2026-10-15T04:03:00+08:00
      "约 90 到 99%"——自测、"早期证据"、无独立复现——同时点名智谱（GLM-5.3 开发期间的网络能力；
      在 Fable 5 的防护削弱其攻击后改用较旧的 Claude），并重复 Moonshot/Kimi 案例；推理轨迹、而非
      答案，才是收割目标。 → [[frontier-models]] [[fact-check]]
-   - **10-15——承诺的日期过去了，什么也没出现，而缺失的那份文件是许可证：**StepFun **自己的**
-     HF 组织里没有任何 Step-5 仓库，任何由 StepFun 控制的渠道上都不存在许可证（那张"StepFun
-     Community License"页面是**第三方**的），而 OpenRouter 仍在提供该预览、AA 仍将其归为专有——
-     何况 600B BF16 本来就约需 1.2 TB 加速器内存。反例则把整条流水线一起出货：**Apertus 1.5**
-     （8B/70B；多模态经由 tokenizer 进入；262,144 上下文；配方、评测套件、对齐章程、**可追溯生效
-     的**爬虫退出）且自陈上限——日期不等于发布，发布不等于许可。
+   - **10-15——日期在十二小时内从"错过"翻转为"兑现"；许可证是收入门槛型、还带硬件条款：**04:03
+     时组织里没有任何 Step-5 仓库（枚举了 51 个）；~09:30 UTC+8 三个上传上线——**604B 总参 /
+     27B 激活 MoE、1M 上下文（输入+输出合计）**，仓库自 9 月 20 日被门控——许可证为 **StepFun
+     Model License 1.0**（"Apache-2.0 风格"：2000 万美元收入/1 亿 MAU 需显著标注 "Powered by
+     StepFun AI"；**设备制造商**（手机、车辆、眼镜、机器人）与 2000 万美元 MaaS 须另签商业
+     许可）；基准图为厂商自制图片，第三方锚点仅 AA 的 GDPval。反例：**Apertus 1.5**（8B/70B；
+     多模态经由 tokenizer 进入；262,144 上下文；配方、评测套件、对齐章程、**可追溯生效的**爬虫
+     退出）——日期不等于发布；发布不等于开放许可。
      → [[frontier-models]] [[fact-check]]
 7. **AI 安全是一个被测量的发布门槛，而非政策——而测量基础设施如今才是薄弱环节。**PF v2 /
    RSP v3.0 / FSF v3.1 跑同一条回路（门槛 → 评测 → 预先承诺的响应）；SB 53 使其成为法条；Astra
@@ -239,22 +243,18 @@ last_processed: 2026-10-15T04:03:00+08:00
 12. **优化目标已从模型转移到 harness——而这个溢价是被测量过、且有上界的。**Bojie Li 为这门学问
     命名："harness engineering"。
     - **08-19→10-13——溢价被测量且有上界；harness 成为工作现场：**等预算对照组把自己的头条推翻；
-      FrontierHarness 在同一模型上有 17× 差距；Ronacher + SlopCodeBench 的质量审计；Zoom 的 176
-      轮消融（上下文管理 > 规划）；Netlify 每天 10 亿次跑在 Firecracker 上；Cua-Bench 6/25 KiCad；
-      Invisible Cities 一次性生成（自称"六小时里大约一半"，实际 1 小时 25 分 + 约 7 个 subagent
-      小时）；Cockroach 的 MOLT Sinai 失败日志（一个不收敛的循环烧掉 631 美元、技能文件腐烂到
-      约 10 万字）；Campfire 验尸（单一负载测试指标无法裁决一次移植）；5,000 亿 token 的 FPS
-      反编译（决定性的是 oracle，不是模型）。 → [[agent-stack]] [[dev-tools]]
+      FrontierHarness 在同一模型上有 17× 差距；Zoom 的 176 轮消融；Netlify 每天 10 亿次跑在
+      Firecracker 上；MOLT Sinai 的失败日志；5,000 亿 token 的 FPS 反编译（决定性的是 oracle，
+      不是模型）。 → [[agent-stack]] [[dev-tools]]
     - **10-13PM→10-14——harness 文章获得子类型；诚实的基准到来：**gamedev 作为 harness（odiff
-      定量截图评分、一个胖 `Thing` 结构体作为唯一无歧义的编辑点、模拟即事实来源）；DishwasherBench
-      （模拟一台真实 Bosch，模型通过 MCP 操作）公布了"一个分数可以被信任到什么程度"的章节——
-      装填已测量、洗净尚未。 → [[agent-stack]] [[frontier-models]]
-    - **10-14 PM——编译器是 harness 的一部分：**Niko Matsakis 从回路内部论证 Rust 对 agent 编写
-      代码的适配性——优化是 agent 已经擅长的支柱（手写汇编的工作如今交给它们），而编译步骤是
-      永不疲倦的评审者——同时两次标注自己的上限（"Testing can show the presence of bugs, but
-      not their absence"；"Type systems can show the absence of bugs, but not the presence of
-      correctness"），对照 Brockman 的"if it compiles it's ~correct"。数据点：Meta 工程师今年
-      写的一手 Rust 是此前九年总和的**两倍**。 → [[dev-tools]]
+      定量截图评分、模拟即事实来源）；DishwasherBench 公布了"一个分数可以被信任到什么程度"的
+      章节——装填已测量、洗净尚未。 → [[agent-stack]] [[frontier-models]]
+    - **10-14 PM——编译器是 harness 的一部分：**Matsakis 从回路内部论证 Rust 对 agent 编写代码的
+      适配性——优化是 agent 已经擅长的支柱，而编译步骤是永不疲倦的评审者——同时两次标注自己的
+      上限（"Testing can show the presence of bugs, but not their absence"）。数据点：Meta 工程师
+      今年写的一手 Rust 是此前九年总和的**两倍**。 → [[dev-tools]]
+    - **10-15 12:03→13:07——harness 有了自己的基准、其作者归属当日解答，而"永不疲倦的评审者"迎来实测：**Doc2Harness（arXiv 2610.20344）测量模型*构建* harness 的能力——结果由**脚本化 mock 模型**驱动，无 LLM 裁判；19 个中最好的是 GPT-6 Astra 的 **53.05%**；11 位作者、**零厂商关联**（中科院计算所 ×7、清华 ×2、北大、东南）——独立于各模型厂商。Torvalds 的首个 LLM 辅助内核系列进入评审，评审**已经找到一处竞态**——评审起作用了，补丁未合入。
+      → [[dev-tools]] [[frontier-models]] [[fact-check]]
 13. **Token 支出正与模型选择脱钩——发生在上下文边界，而非模型边界。**路由（论题 5）回答"用哪个
     引擎"；这一层回答"多少字节过线"——压缩（caveman）、强制（Spotify 的分流）、排除
     （context-mode）。诚实的读法：这层是真的，测量还很年轻。
@@ -295,21 +295,23 @@ last_processed: 2026-10-15T04:03:00+08:00
     Play Store 对 Aurora Store；.name 三级域消除；Antigravity ToS 点名 OpenClaw；Gmail 取消
     第三方 Send-as。
     - **09-02→10-13——从下架到 agent 时代的权限墙，以及监控的两面夹击：**Nitter 在多次下架后
-      重新生长，随后收到 X Corp 的两封停止函；A/I 因 SDGT 认定关停；macOS 在升级时重新启用一个
-      明确的退出开关；GrapheneOS 的自有设备；Apple 以 AI agent 为由收紧完全磁盘访问；犹他州
-      VPN 法因技术不可行被禁；Ban Flock Act 在 Hill 法官裁决后 48 小时落地；.lan 被申请为 gTLD；
-      Tor 保留 Mullvad 但暂停联合品牌；指纹识别填补了 cookie 的空缺——同意法规范的是存储，而
-      指纹识别是计算。 → [[platform-gatekeeping]]
+      重新生长，随后收到 X Corp 的两封停止函；A/I 因 SDGT 认定关停；Apple 以 AI agent 为由收紧
+      完全磁盘访问；犹他州 VPN 法因技术不可行被禁，Ban Flock Act 48 小时后落地；指纹识别填补了
+      cookie 的空缺——同意法规范的是存储，而指纹识别是计算。 → [[platform-gatekeeping]]
     - **10-10→10-14——执法抵达代码、凭据与消费设备：**"Passkeys are a trap"把治理论点推上首页
       （attestation 标志 = *站点*设定的、可远程查询的策略）；macOS 从 The Open Group 的 UNIX
-      注册表消失；纽约市 Click-to-Cancel；"Flock the Flockers"把 ALPR 镜像回警察；Apple
-      HomeView（摄像头/麦克风在 Secure Exclaves 中，必须 HomeKit/Matter，无新 SDK）与 Firefox
-      Enterprise 的 allow/restrict/disable-AI 开关。 → [[platform-gatekeeping]] [[security]]
+      注册表消失；"Flock the Flockers"把 ALPR 镜像回警察；HomeView（Secure Exclaves，必须
+      HomeKit/Matter）与 Firefox Enterprise 的 allow/restrict/disable-AI 开关。
+      → [[platform-gatekeeping]] [[security]]
     - **10-14 PM——两台环境感知设备，只有一套被说明的架构：**Apple TV 4K 带着 Siri AI 与远场
-      麦克风出货，还能生成 Apple Intelligence 摄像头活动描述，10 月 13 日预订、**11 月 13 日**
-      开售——与 HomeView 完全相同的日期——然而其发布稿对那套远场音频**完全没有设备端处理的
-      声明**，而 HomeView 明确点名了 A18 上的 Secure Exclaves。同一家公司、同一周、两台常听设备：
-      音频在*哪里被采集*有说明；在哪里被*理解*没有。 → [[platform-gatekeeping]]
+      麦克风出货，与 HomeView 同为 **11 月 13 日**开售——然而其发布稿对那套远场音频**完全没有
+      设备端处理的声明**，而 HomeView 明确点名了 Secure Exclaves。音频在*哪里被采集*有说明；
+      在哪里被*理解*没有。 → [[platform-gatekeeping]]
+    - **10-15 12:03——治理关切存活；其机制性主张没有：**Scott Helme 在机制层面反驳"Passkeys are
+      a trap"——同步型 passkey 的 attestation 返回 `none`（要求 attestation 的消费级站点会把
+      几乎全部用户锁在门外）；attestation 只经 AAGUID + 证书链证明认证器厂商/型号，**对 OS 或
+      固件一无所言**——而 YubiKey 恰恰正是做 attestation 的设备。用今天就可被钓鱼的 TOTP 去拒绝
+      一个假设性的强制，是笔坏交易。 → [[platform-gatekeeping]] [[security]]
 16. **Agent 体验是可测量的分发渠道——它的第一个可测量牺牲品是前端的教育层。**Armature（16,893
     次运行）：agent 只在 42% 的格子里收敛到同一工具；"agent 知道你的产品吗？"如今有数字了（由
     利益相关的厂商拥有）；Lawson：agent 首先取代教学层。
@@ -379,6 +381,12 @@ last_processed: 2026-10-15T04:03:00+08:00
       **四种**情形：CNA 分配、NVD 分析、按设计没有分数，以及*由代码所有者所否认的第三方打分*——
       最后一种在按分数排序的表格里是看不见的。同一主张的内核 CNA 那一半只有第三方来源：内核自己的
       `cve.rst` 里 CVSS 一字未提。 → [[vuln-supply]] [[fact-check]]
+   - **10-15 13:07——该类别迎来第三个具名成员与现场确认；流水线有了自己的追踪记录：**OpenSSL 的
+      政策拒绝 CVSS（"并不能恰当地反映 OpenSSL 库的广泛使用"）且*预言偏离*——现场验证：
+      CVE-2026-84782/-84784 在厂商仅标注 "High" 字样的记录上带着 NVD 已分析的 8.2/7.5；没有任何
+      项目发布逐条 CVE 的第三方评分否认清单。Anthropic 的 CVD 仪表盘发布了流水线的账本（6,157
+      项发现 / 591 个项目 / 516 修复、哈希承诺披露账本、严重度按 Claude/安全公司/维护者划分）。
+      → [[vuln-supply]]
 21. **连接的物理层是一个活跃目标，而廉价的攻击手段是纵火。**民用卫星地面站与单一区域数据中心，
     靠的是围栏和地理而非控制措施来防护；归因天生不对称（通常总有某一方不希望点名行为者），而这
     正是这类攻击保持廉价的原因。
@@ -473,7 +481,9 @@ last_processed: 2026-10-15T04:03:00+08:00
   字段——Pass 11）、`compact-log.mjs`（日志窗口压实）、`cv-audit.mjs`（sources 注册表的 `cv` 评审
   字段：某个 feed 批次的共引聚类、`cv === 1 + cvlog.length` 不变式，以及 dry-run 递增路径）、
   星数对提交检查（agent-run.sh 的 Pass 9）、
-  KEV/NVD/npm/GitHub 一次调用检查（CLAUDE.md 的易逝声明规则）。
+  KEV/NVD/npm/GitHub 一次调用检查（CLAUDE.md 的易逝声明规则）、
+  `torvalds-folio-v2` + `doc2harness-repro`（10-15 布防的 HN 指纹 disclosure-watch：内核系列的
+  v2/合入，以及 Doc2Harness 的复现/采纳）。
 
 - **非 AI 批次条目（10-07→10-15）：**逐条记录存放在带日期的 feed 文件中，而长期存在的那些各有其
   归属：DDR4 的第二次复兴（→ 论题 3）、使 Yandex Cloud 的 Vladimir 数据中心暂停的无人机袭击——

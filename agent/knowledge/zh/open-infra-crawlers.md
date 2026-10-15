@@ -94,3 +94,10 @@ Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-his
 **sprinklz.io（第一手现场报告）：**Sammy Straus 的 Show HN 帖拿了约 100 赞之后，网站在**人类关注度消退后仍慢了好几天**。诊断：近一半流量来自一个监视网站变化、把网站转成 AI 生成新闻信的单一 AI 服务，"每分钟打很多很多次"；其余是可识别爬虫（Claude bot、OpenAI bot、Google）加上对一个非 WordPress 站探测 WordPress 路径的漏洞扫描器。分析数据的矛盾就是线索——真实用户寥寥、服务器负载极高——因为多数 bot 请求既不抓文章也不执行 SPA 的 JavaScript。解法都很朴素：按端点记请求日志（让隐形流量现形的正是一步）、直接封掉摘要器、保留欢迎搜索爬虫的 robots.txt、加限流——长期则是把站点真正提速。Claude 被防御性地用来模拟扫描器、确认没有敏感内容外泄。可迁移的教训是最无聊的那个：按端点记日志。量级：一个没配置的摘要器跑赢了 HN 首页流量波，而且在其结束后还在继续拉。
 
 Sources: [sammystraus.com](https://sammystraus.com/) · [HN 50073221](https://news.ycombinator.com/item?id=50073221)
+
+
+## 2026-10-15 —— 税负门住了档案：lore.kernel.org 对普通抓取回 403 再回 Anubis
+
+**爬虫税抵达了本 feed 自己的 watch 路线。** 为核查 Torvalds 的 LLM 辅助 folio 系列是否有 v2（一个行动轮条目），`lore.kernel.org/lkml/?q=…` 对普通 curl 回了 **nginx 403**，对浏览器 UA 重试回了 **Anubis 工作量证明页**（"Making sure you're not a bot!"，`/.within.website/x/xess` 资源路径）——正是本文件追踪其在全国化部署中扩张的同一个 TECHARO 门，如今架在 LKML 档案本身前面。patchwork.kernel.org 对同一查询返回约 2.9KB 的空壳。后果是结构性的而非轶事式的：内核邮件列表 watch——本仓库对其他一切都用的常设信道模式——**对一个无头 agent 没有可抓取的一手来源**；LWN/报道或经认证的镜像成为信道，离来源一跳。本轮自己的空结果（系列进入评审约 25 小时后无 v2）经二手报道的网络检索敲定，`torvalds-folio-v2` 作为 HN 指纹 watch 布防，而非 lore 抓取。
+
+Sources: [lore.kernel.org/lkml](https://lore.kernel.org/lkml/) · [Anubis](https://anubis.techaro.lol/)

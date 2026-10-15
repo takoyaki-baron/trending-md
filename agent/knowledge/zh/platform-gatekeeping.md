@@ -242,3 +242,17 @@ setup"；作为家庭中枢，它现在还能在 Home app 中生成 **Apple Inte
 Matter/HomeKit 徽章要求则确认 Apple 打算继续做智能家居的守门人，而不是开放平台。
 
 Sources: [Apple Newsroom — the new Apple TV 4K](https://www.apple.com/newsroom/2026/10/apple-unveils-the-new-apple-tv-4k/) · [HN discussion](https://news.ycombinator.com/item?id=50071310) · [Apple TV 4K](https://www.apple.com/apple-tv-4k/) · [Apple: HomeView](https://www.apple.com/apple-homeview/)
+
+
+## 2026-10-15 12:03 — "Passkeys are not a trap"：反驳修正的是机制，不是治理关切
+
+Scott Helme（Report URI 创始人、一个开源 passkeys 库的作者）在 48 小时后回应了疯传的 "Passkeys are a trap. Do not use them."（本文件 10-12）——而且是在**机制层面**；反驳的 528 分是原文的 379 分买来的，注意力回路照常运转。四条更正：
+
+1. **同步型 passkey 不做 attestation。**iCloud Keychain、Google Password Manager、1Password 或 Bitwarden 里的 passkey 在网站请求 attestation 时返回 `none`；一个要求 attested passkey 的消费级网站"会立刻把几乎全部自己的用户锁在门外"——反对消费级 attestation 的指引"已经跑了好几年"。
+2. **Attestation 被错误描述。**原文声称 attestation 证明"正在使用获批的 passkey 管理器、操作系统与固件"；Helme：它只通过 **AAGUID 加厂商证书链**识别认证器的厂商/型号——对操作系统、浏览器、扩展、root 状态或固件版本一无所言。
+3. **YubiKey 的讽刺。**原文推荐 YubiKey 的理由是它们"避免 OS 级 attestation"——但 YubiKey 恰恰正是*做* attestation 的设备，出厂带 Yubico 签发的证书；企业 attestation 的存在理由就是强制获批硬件。
+4. **TOTP 是退步。**验证码会被 Evilginx 这类钓鱼套件实时转发（引证即 Troy Hunt 的 Mailchimp 失陷），而 passkey 域名绑定——原作者自己的补记也承认 passkey 能抗中间人。
+
+**两篇文章其实并没有在威胁模型上分歧**——Helme 在别处写过 attestation 为 `none` 时 "XSS Is Deadly for Passkeys"，也仍然认可 YubiKey。他修正的是机制（attestation 能证明什么、不能证明什么）与那笔交易：用今天就可被钓鱼的 TOTP，去拒绝一个假设性的未来强制。对本文件而言，守门教训仍然成立但换了位置：治理关切（attestation 标志 = 站点设置的远程可查策略）作为*假设情形*存活下来——"if it ever happens" 时再去反对；让它听起来像是既成事实的机制性主张是错的。结论：继续用 passkey，选一个支持导出的管理器。
+
+Sources: [Scott Helme — Passkeys are not a trap](https://scotthelme.co.uk/passkeys-are-not-a-trap/) · [HN discussion](https://news.ycombinator.com/item?id=50088935) · [Passkeys are a trap (the original)](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them)

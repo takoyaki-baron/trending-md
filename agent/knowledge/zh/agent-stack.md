@@ -1904,3 +1904,14 @@ run"——延迟来自一颗 2018 年的桌面 CPU。这是一份你可以跟它
 有意思的轴不再是"向量库还是全文"，而是"要多少个活动部件，才能在一次真实数据的长会话上撑住"。
 
 Sources: [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [facebookincubator/muse-gadget-sdk](https://github.com/facebookincubator/muse-gadget-sdk) · [HN — muse-gadget-sdk](https://news.ycombinator.com/item?id=49941331) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)
+
+
+## 2026-10-15 12:03 — OpenCode 2.0 围绕后台 Service 重构（并发布 Code Mode）；Mononoke 的构建者质疑 Scion 的署名
+
+**`anomalyco/opencode` 2.0（213,563★，MIT，帖子当天仍在推送）——领先的开源 coding agent 围绕一个后台 Service 重构架构。**一个长驻的 **Service** 跑在本机；TUI、web 界面与桌面应用都连接它（`@opencode/client` 自动发现，`/pair` 用于其他主机）；API 从零重建（"grew haphazardly"），OpenCode 现在消费自己的 API——会话迁入 git worktree 是成果之一。这个发布对自己的迁移债务明码标价，而不假装 2.0 是无缝升级：**1.0 插件将无法工作**，Server API "completely different"，`tui.json` 已移位。
+
+**Code Mode 是最有杠杆的想法：MCP 调用变成可编程的函数调用。**一个极简 JavaScript 解释器（`@opencode/codemode`）把 MCP 服务器和 OpenAPI 端点转换成可调用函数，agent 于是可以在**一次往返**里脚本化多工具调用，而不必为每次调用付一次 MCP 往返——所有 MCP 服务器默认 opt in，以削减上下文膨胀。这与 ColGrep-Agent-2B（[[token-economics]]）是同一个上下文经济学赌注，只是从 harness 一侧抵达。同批发布：可混合模型的后台 subagent、异步 shell 命令（ctrl+b 把慢任务转后台）、为逼出一个维护良好的 Plugin API 而写的 ~80+ 内部插件（TUI 插件经 OpenTUI 稳定、会话中热重载）、以及把 CLI 自身代码暴露为库的 `@opencode/sdk`。
+
+**Mononoke 的构建者说 Scion 抄走了 derived-data 设计而没有署名。**曾参与构建 Mononoke（Meta 的 Sapling 背后的源码控制服务器）的 Rain 写道：Scion 的 "derived data" 概念紧贴 Mononoke 的做法——从 changeset 的父提交递归定义的预计算索引（blame、path history、skip list，如今是**八个**独立索引）；Sapling 只在 Anthropic 的帖子里得到一笔 "hard-won lessons" 的提及，Mononoke 则完全未被署名——这"borders on plagiarism"。反对的是**署名，不是复用**——Rain 明确不反对 Anthropic 复用该设计（开源的存在理由是 "to benefit humanity through the spread of good ideas"），并指出他们自己的 Meta 团队也参考过前人工作（Google 的 SrcFS、数据库 write-ahead log）；脚注把 Cursor/Vicent Marti 的 git 工作对比为"相似洞见、真正不同的设计"。与 AI 相关的部分是**归因机制**：Mononoke 是开源的，因此在每个 LLM 的训练数据里，向 Opus 5.5 或 GPT-6 Astra 询问 prior art 会立刻浮现 Mononoke 的相似性——溯源链是**训练数据 → 模型 → 设计文档**，而能在其中认出自己索引方案的人是找得到的。趋同的*洞见*是工程常态；一个具体的递归索引结构是一个*设计*，而模型让设计在两个方向上都可追溯。Anthropic 这边，迄今的回应是原帖对 Mononoke 的沉默。
+
+Sources: [Anomaly — OpenCode 2.0](https://anoma.ly/notes/opencode-2-0/) · [anomalyco/opencode](https://github.com/anomalyco/opencode) · [Rain — Anthropic's Scion is heavily inspired by Mononoke](https://sunshowers.io/posts/anthropic-mononoke/) · [HN discussion](https://news.ycombinator.com/item?id=50094694)

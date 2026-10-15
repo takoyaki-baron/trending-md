@@ -708,3 +708,51 @@ a headline. The trade to state when evaluating it: the build-your-own-variant mo
 ligature and width sets are complete, and why a stock binary may not be what you want.
 
 Sources: [Go blog — Better HTTP/1 connection reuse](https://go.dev/blog/http-connection-reuse) · [HN — Go 1.27 HTTP/1](https://news.ycombinator.com/item?id=50090369) · [academa-labs/manimgx](https://github.com/academa-labs/manimgx) · [ManimGX benchmarks](https://github.com/academa-labs/manimgx/tree/main/benchmarks) · [timescale/pg_vectorsearch](https://github.com/timescale/pg_vectorsearch) · [HN — pg_vectorsearch](https://news.ycombinator.com/item?id=50086165) · [wesbos/photo-frame-dashboard](https://github.com/wesbos/photo-frame-dashboard) · [HN — photo-frame-dashboard](https://news.ycombinator.com/item?id=50048003) · [Iosevka](https://typeof.net/Iosevka/) · [be5invis/Iosevka](https://github.com/be5invis/Iosevka) · [HN — Iosevka](https://news.ycombinator.com/item?id=50084240)
+
+## 2026-10-15 12:03 — Torvalds' first LLM-assisted kernel series (review found a race); Oxide emulates the whole rack; Petal revives window-level pairing
+
+**Linus Torvalds posts his first LLM-assisted patch series — and the review process already found a
+race in it (LWN, Oct 14).** Ten patches against kernel memory management, following his Maintainers
+Summit remarks that he'd started using an LLM on this work: the target is **folio lookup**, enhanced
+"by noticing when folios are hot" and applying what he describes as "delay releasing this folio until
+after a RCU period," so folio lookup and actual folio data accesses can run inside RCU-protected
+regions — removing refcount traffic from the fastpath as long as user copies don't trigger page
+faults. Torvalds claims an **"order-of-magnitude speedup" on a read()-heavy benchmark** —
+self-reported, his own workload, no independent measurement yet. The story is not the number: the
+most consequential gatekeeper in open source used an LLM on memory-management code, said so upfront,
+and submitted through the same review process that then caught the race — the first data point for
+the "LLM output is fine under competent review" position, and it reads *review worked, patches not
+in yet*. The norms debate lives in the LWN comments ("if Linus did it, I don't see why I can't" vs
+tlamp's excavator: the same machine does different work in a professional's hands).
+
+**Oxide's Virtual Oxide Labs (Voxel): a full rack — MCUs, firmware and all — emulated on one machine
+in about 10 minutes.** illumos + Rust, succeeding the older "a4x2" virtual labs, including
+multi-rack setups. The constraint that forced it: finished racks go straight to customers, so
+rack-scale hardware is scarce, and the team needs to replicate real customer network topologies and
+run the **real control plane without special "test version" releases** — Bryan Cantrill's "Prime
+Directive" says labs run stock Oxide software, unmodified. The emulation depth is the story:
+**sleds are Propolis VMs** (gimlets, cosmo, scrimlets); **networking is Debian VMs running FRR**
+(BGP numbered/unnumbered or static) plus **SoftNPU**, Oxide's software P4 switch; and
+**microcontrollers are genuinely emulated Cortex-M7/Cortex-M33 devices** via the open-source
+`sp-emu` — real Hubris firmware flashed, SysTick modeled against the kernel's reload value —
+replacing the happy-path `SpSim` stub. Launch generates sprockets PKI, flashes emulated
+STM32H753/LPC55 parts, wires topology, boots ~6 Propolis VMs and runs `voxel-init` before `wicketd`
+commissions the rack — **about 10 minutes end to end**; the author runs 6 sleds on a 32-thread
+Ryzen 9 mini-PC with 96 GB RAM, and a topology change is "a couple of lines in `rack.rs`." Stated
+caveats: sprockets certs aren't provisioned from manufacturing or the RoT as in production, emulated
+hardware is slower, and some details (a `cycles` field with no true cycle counting) are stopgaps.
+Hardware companies usually fake this layer with mocks; Oxide emulated down to the microcontroller
+firmware — the bottleneck it removed was hardware supply, not software.
+
+**`kiruna-labs/petal` — CoScreen's makers open-source window-level pair programming.** Rust,
+Apache-2.0, 147★, pushed Oct 13: low-latency high-resolution screensharing plus remote control where
+shared windows land on your desktop as **real, movable, resizable native windows** rather than tiles
+in a grid — per-user labeled cursors, click-into-any-window keyboard and mouse control, several users
+sharing simultaneously, persistent rooms (a standing `eng-sync` room, joined by one click, no links
+or scheduling). The deployment story is the design: the app is identical everywhere, "only the video
+backend changes" — **Petal Cloud** (hosted LiveKit, zero config), **self-host** by pointing the app
+at your own LiveKit server via a single docker-compose, or **fork & build**. macOS and Windows now,
+"Linux support coming next." Read the 147★ as what it is: a fresh launch with a proven team, not a
+proven community — and the same self-hostable-infra escape-hatch pattern as PentAGI and Talorys.
+
+Sources: [LWN — Torvalds's first LLM-assisted patch series](https://lwn.net/Articles/1100449/) · [HN — LWN thread](https://news.ycombinator.com/item?id=50090842) · [Oxide — Virtual Oxide Labs](https://oxide.computer/blog/voxel-labs) · [HN — Voxel](https://news.ycombinator.com/item?id=50092423) · [petal.live](https://petal.live/) · [kiruna-labs/petal](https://github.com/kiruna-labs/petal)

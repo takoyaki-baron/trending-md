@@ -2762,3 +2762,41 @@ with, which is the point. This is the retrieval branch of the memory thread ([[t
 no longer "vector DB or full-text" but "how few moving parts can hold a long session over real data."
 
 Sources: [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [facebookincubator/muse-gadget-sdk](https://github.com/facebookincubator/muse-gadget-sdk) · [HN — muse-gadget-sdk](https://news.ycombinator.com/item?id=49941331) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)
+
+## 2026-10-15 12:03 — OpenCode 2.0 rebuilds around a background Service (and ships Code Mode); Mononoke's builder disputes Scion's credit
+
+**`anomalyco/opencode` 2.0 (213,563★, MIT, pushed the day of the post) — the leading open-source
+coding agent re-architects onto a background Service.** One long-lived **Service** runs on the
+machine; the TUI, web interface and desktop app all connect to it (`@opencode/client` auto-discovery,
+`/pair` for other hosts); the API was rebuilt from scratch ("grew haphazardly") and OpenCode now
+consumes its own API — sessions moved into git worktrees among the results. The release prices its
+own migration debt instead of pretending 2.0 is a drop-in: **1.0 plugins will not work**, the Server
+API is "completely different," `tui.json` has moved.
+
+**Code Mode is the leverage idea: MCP calls become programmable function calls.** A minimal
+JavaScript interpreter (`@opencode/codemode`) converts MCP servers and OpenAPI endpoints into
+callable functions, so an agent scripts multi-tool calls in **one round trip** instead of paying one
+MCP round trip per call — with all MCP servers opted in by default to cut context bloat. This is the
+same context-economics bet as ColGrep-Agent-2B ([[token-economics]]) arrived at from the harness
+side. Also shipped: background subagents mixing models, async shell commands (ctrl+b to background
+slow work), ~80+ internal plugins written to force a well-maintained Plugin API (TUI plugins stable
+via OpenTUI, hot-reload mid-session), and `@opencode/sdk` exposing the CLI's own code as a library.
+
+**Mononoke's builder says Scion lifted the derived-data design without credit.** Rain — who helped
+build Mononoke, the source-control server behind Meta's Sapling — writes that Scion's "derived data"
+closely mirrors Mononoke's approach of precomputing indexes (blame, path history, skip lists — now
+**eight** separate indexes) defined recursively from a changeset's parents, that Sapling gets only a
+"hard-won lessons" mention while Mononoke goes uncredited, and that this "borders on plagiarism."
+The objection is **credit, not reuse** — Rain explicitly does not object to Anthropic reusing the
+design (open sourcing exists "to benefit humanity through the spread of good ideas") and notes their
+own Meta team consulted prior art too (Google's SrcFS, database write-ahead logs); a footnote
+contrasts Cursor/Vicent Marti's git work as similar insights with genuinely different designs. The
+AI-specific part is the **attribution mechanism**: Mononoke is open source, therefore in every LLM's
+training data, and asking Opus 5.5 or GPT-6 Astra about prior art immediately surfaces the Mononoke
+similarity — the provenance chain runs **training data → model → design document**, and the person
+who can recognize their own index scheme inside it is findable. Convergent *insights* are how
+engineering normally works; a specific recursive index structure is a *design*, and models make
+designs traceable in both directions. Anthropic's side of the exchange is, so far, the original
+post's silence on Mononoke.
+
+Sources: [Anomaly — OpenCode 2.0](https://anoma.ly/notes/opencode-2-0/) · [anomalyco/opencode](https://github.com/anomalyco/opencode) · [Rain — Anthropic's Scion is heavily inspired by Mononoke](https://sunshowers.io/posts/anthropic-mononoke/) · [HN discussion](https://news.ycombinator.com/item?id=50094694)

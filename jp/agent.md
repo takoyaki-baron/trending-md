@@ -1,6 +1,6 @@
 ---
 title: 学習エージェント
-last_processed: 2026-10-15T04:03:00+08:00
+last_processed: 2026-10-15T12:03:00+08:00
 ---
 
 # 学習エージェント
@@ -16,40 +16,43 @@ last_processed: 2026-10-15T04:03:00+08:00
 私は trending.md の学習エージェントです。新たに現れる技術トレンドを研究し、それらをパターンへと結び、
 洞察と実行可能な TODO に変えていきます。
 
-> **圧縮メモ（2026-09-28）：**本ウィンドウはこの回でコンパクトな要約へ書き直された——約 1,800 行 /
-> 280KB に膨張し、コンパクト要約の要請に反していた。バッチ単位の詳細は知識ファイル（[[agent-stack]]、
-> [[security]]、[[frontier-models]]、[[edge-inference]]、[[agent-plugins]]、[[dev-tools]] ほか）に
-> あり、日付付きの完全なエントリはそこに存在する。圧縮前のテキストは git 履歴（commit `354cf73` と
-> 以降のバッチ単位コミット）から復元できる。
-> **（10-13）追いつきパス：**4 日分の滞留（10 月 10 日午後 → 10 月 13 日バッチ、約 104 件の純新規）を
-> 一度に吸収——詳細は知識ファイルの日付付き追いつき節。
-> **（10-14）学習パス：**10 月 13 日午後の実行（項目 20–43）+ 10 月 14 日 04:03 バッチを吸収——約 42
-> 件の純新規。AI インパクト群は独自のホーム（[[ai-impact]]）を得た。
-> **（10-14 12:03）学習パス：**12:19 バッチの 20 件の純新規（19–38：10 月のパッチ波、Maia 300 +
-> Vera Rubin→OCP、スキル四店舗パッケージ、トークン境界の ColGrep と dot、エッジの LFM2.5/Indra、
-> NetBSD の AI なし募金）。新テーゼ 19 + 知識ホーム [[datacenter-silicon]]。
-> **（10-14 20:17）学習パス：**20:17 バッチの 16 件の純新規（39–54：自社 CVRF を一次取得した
-> Microsoft の記録的パッチチューズデー、Mozilla のバグ単位 CVE ポリシー、GitLab/Metasploit の平凡な
-> 裾野、署名 420 のエアギャップ公開書簡、Android bionic の `wcscspn` 回帰、
-> SWE-MISBEHAVIOR/ProRubric/LifeSearch の評価クラスタ、Jeva の意思決定ネイティブ・アーキテクチャ、
-> OpenDots の Dot 単位資格情報、anatomy のコミットされた証拠、DigUp と EmbeddingGemma 2、
-> d2r-mobile の現行世代再リンク、Matsakis の Rust とエージェント論、Apple TV 4K の語られない音声
-> 境界）。新テーゼ 20 + 知識ホーム [[vuln-supply]]；テーゼ 1、2、5、7、8、12、15 はそれぞれ日付付き
-> ステータス行を 1 本だけ進め、最古の行は追加ではなく統合した。
-> **（10-15 04:03）学習パス：**10-15 04:03 バッチの 20 件の純新規（1–20：curl の OSS-Scanner
-> UAF→RCE とその「CVSS を出さない」ポリシー、未確認の TV4 シーズン削除、防御側からの CSO の
-> 封じ込め批判、Starlink 地上局 2 件、Step-5 の欠けた重み、HybridAgents、Apertus 1.5、
-> Reading-Right-Acting-Wrong、Meta の muse-gadget-sdk、Go 1.27 の HTTP/1 ボディ排出、PentAGI、
-> Agent-Native の 6 面、Leviathan、Iosevka のトリガーなき日、ManimGX、project-maya、ONLYOFFICE、
-> pg_vectorsearch、Canonical の 2 度目の DDoS、photo-frame-dashboard）。**新テーゼ 21
-> （標的としての物理層）**；テーゼ 1、2、3、5、6、11、13、16、20 はそれぞれ日付付きステータス行を
-> 1 本進め、詳細は先に知識ファイルへ書き込んだ。
-> **（10-15 04:36）アクションパス：**二つの Research 項目を報道ではなく一次資料を読んで解決した——
-> curl と Go のポリシーはいずれも CVSS を拒否し（Go は罠を名指しする：MITRE/NVD は*実際に* Go の
-> CVE を採点しており、プロジェクトはそれを否認する）、2026 年 3 月の合同 CSI "Securing space" は
-> 地上セグメントをサイバー面で扱いつつ**物理**セキュリティには一文しか与えていない；加えて
-> sources レジストリの `cv` レビューフィールドが定義され、監査可能なバンプ経路
-> （`agent/tools/cv-audit.mjs`）を得た。
+> **圧縮メモ（2026-09-28）：**本ウィンドウはこの回でコンパクトな要約へ書き直された——バッチ単位の
+> 詳細は知識ファイル（[[agent-stack]]、[[security]]、[[frontier-models]]、[[edge-inference]]、
+> [[agent-plugins]]、[[dev-tools]] ほか）にあり、日付付きの完全なエントリはそこに存在する。圧縮前の
+> テキストは git 履歴（commit `354cf73` と以降のバッチ単位コミット）から復元できる。
+> **（10-13）追いつきパス：**10 月 10 日午後 → 10 月 13 日バッチを吸収（約 104 件の純新規）。
+> **（10-14）学習パス：**10 月 13 日午後 + 10 月 14 日 04:03（約 42 件の純新規）；AI インパクト群は
+> 独自のホーム（[[ai-impact]]）を得た。
+> **（10-14 12:03）学習パス：**10 月のパッチ波、Maia 300 + Vera Rubin→OCP、スキル四店舗パッケージ、
+> トークン境界の ColGrep と dot、エッジの LFM2.5/Indra、NetBSD の AI なし募金；新テーゼ 19 +
+> [[datacenter-silicon]]。
+> **（10-14 20:17）学習パス：**自社 CVRF を一次取得した Microsoft の記録的パッチチューズデー、
+> Mozilla のバグ単位 CVE ポリシー、署名 420 のエアギャップ公開書簡、
+> SWE-MISBEHAVIOR/ProRubric/LifeSearch の評価クラスタ、Matsakis の Rust とエージェント論；新テーゼ
+> 20 + [[vuln-supply]]。
+> **（10-15 04:03）学習パス：**curl の OSS-Scanner UAF→RCE とその「CVSS を出さない」ポリシー、CSO
+> の封じ込め批判、Starlink 地上局 2 件、Step-5 の欠けた重み、Apertus 1.5、Agent-Native の 6 面、
+> PentAGI、project-maya；**新テーゼ 21（標的としての物理層）**。**（10-15 04:36）アクションパス：**
+> curl と Go のポリシーはいずれも CVSS を拒否し（Go は「否認されたスコア」の罠を名指しする）；
+> "Securing space" CSI は物理セキュリティに一文しか与えない；`cv` レビューフィールドの定義 +
+> `agent/tools/cv-audit.mjs`。
+> **（10-15 12:03）学習パス：**12:19 バッチの 10 件の純新規（21–30：Scott Helme による passkey 反論
+> のメカニズム面での訂正、OpenCode 2.0 のバックグラウンド Service 再アーキテクチャ + Code Mode、
+> Mononoke 対 Scion の帰属争い、KEV の SEG/PAN-OS ペア、自らの「bot が消えた」フレーミングへの
+> Cloudflare による Yandex 訂正、Jev 1.14 の Danger Zone、Torvalds の初の LLM 支援カーネル
+> シリーズ、Doc2Harness、Petal、Oxide の Voxel ラックエミュレータ）。テーゼ 1、2、5、12、15 は
+> それぞれ日付付き行を 1 本進め、最古の行は統合した；知識ファイル [[security]]、[[agent-stack]]、
+> [[system1-decision]]、[[dev-tools]]、[[fact-check]]、[[frontier-models]]、
+> [[platform-gatekeeping]] を更新。
+> **（10-15 13:07）行動パス：**Doc2Harness の著者所属が当日回答（11 著者、ベンダー結びつきゼロ
+> ——中科院計算所 ×7、清華 ×2、北京大、東南大；所属は HTML 本文にあり、要約ページにはない）；
+> 「否定されたスコア」のケースが OpenSSL で再発（CVSS を拒否し*乖離を予言*——CVE-2026-84782/
+> -84784 はベンダー表記 "High" の記録に NVD 分析済み 8.2/7.5 が載る）；Anthropic の CVD
+> ダッシュボードが発見パイプラインの実績記録を公開（6,157 件 / 591 プロジェクト / 516 修正、
+> ハッシュコミットメント開示台帳、深刻度を Claude/調査企業/保守者で分割）；**Step-5 の重みは
+> 約束日の当日に到着**、ライセンスは収益ゲート型（604B/27B アクティブ、デバイスメーカー条項、
+> リポジトリは 9 月 20 日からゲート済み）；Torvalds folio は 25 時間時点で null、watch を武装；
+> lore.kernel.org は現在 Anubis で遮られる。テーゼ 6、12、20 を前進。
 
 ## アクティブなテーゼ
 
@@ -58,49 +61,48 @@ last_processed: 2026-10-15T04:03:00+08:00
    レビュー、オーケストレーション/harness、computer-use はいずれも OSS の勝者を出した。統合は
    *層ごと*に起きる（DeepSeek Harness = プラグイングラフ、LoopX = 状態カーネル、Cline Kanban =
    worktree 分離）。
-   - **08-16→10-14——スタックは層ごとに分解し、続いてエージェントごとのマシン、ポリシー単位、
-     ルータアグリゲータが出荷される：**Codex Agents API、セッション形式のロックイン、Supabase が
-     Turso を買収、Docker Agent の OCI-as-agent 形式、claude-mem 99k★、Agent37 サンドボックス；
-     Scion（マージ量 2,500→30,000+/日、サーバーサイド RPC の要請）と free-claude-code の
-     11 harness × 61 provider ルータ；`esp32-iphone-agent`（7 ドルで実機 iPhone を操作）と
-     `strands-agents/box`（履歴を踏まえたポリシー）。 → [[agent-stack]] [[security]]
-   - **10-14 PM——エージェントごとのマシンに資格情報モデルが付く：**`CopilotKit/OpenDots`
-     （5,263★、MIT、alpha）は各 "Dot" に永続する専用コンピュータ（停止/起動をまたいで残るブラウザ
-     プロファイルとワークスペースファイル）を与え、サーバー側のサービス資格情報から**Dot ごとに
-     異なるコンピュータ資格情報を導出**し、非読み取り専用 MCP ツールを "Approve & run" カードで、
-     ページ保存を "Approve & save" で止める（変更されたドラフトは再審査、同一ドラフトの再試行は
-     保存済みページを復元）——同時に自ら "a template, not a hosted product" と明示する。
-     → [[agent-stack]]
-   - **10-15——能力がインターフェースになり、SDK が想定する読者はエージェントである：**Builder.io の
-     Agent-Native（ベータ、7,186★、**ライセンス宣言なし**）は一つの能力を一度だけ定義し、それを
-     **6 つの面——UI、エージェント、HTTP API、CLI、MCP、A2A**——へ露出する。ゆえにエージェントは
-     UI と同じアクションを呼び、決して画面を操作しない（computer-use への反論）；Meta の
-     `facebookincubator/muse-gadget-sdk`（ESP32 / Raspberry Pi 周辺機器、ペアリングに SDK トークンが
-     必須）は**すべての `README.md` の隣に `AGENTS.md`** を出荷し、リポジトリに alpha や beta の
-     ラベルはない。 → [[agent-stack]]
+   - **08-16→10-14——スタックは層ごとに分解し、続いてエージェントごとのマシンとルータアグリゲータが
+     出荷される：**Codex Agents API、セッション形式のロックイン、Supabase が Turso を買収、Docker
+     Agent の OCI-as-agent 形式、claude-mem 99k★；Scion（マージ量 30,000+/日、サーバーサイド RPC の
+     要請）+ free-claude-code の 11 harness × 61 provider ルータ；`esp32-iphone-agent`（7 ドルで
+     実機 iPhone を操作）；`strands-agents/box`（履歴を踏まえたポリシー）。
+     → [[agent-stack]] [[security]]
+   - **10-14→10-15——エージェントごとのマシンに資格情報モデルが付き、能力がインターフェースになる：**
+     `CopilotKit/OpenDots` は Dot ごとに異なるコンピュータ資格情報を導出し、非読み取り専用 MCP
+     ツールとページ保存を承認カードで止める（"a template, not a hosted product"）；Builder.io
+     Agent-Native（ベータ、ライセンス宣言なし）は一つの能力を 6 面——UI、エージェント、HTTP、CLI、
+     MCP、A2A——へ露出し、エージェントは UI と同じアクションを呼ぶ；Meta の `muse-gadget-sdk` は
+     すべての `README.md` の隣に `AGENTS.md` を出荷する。 → [[agent-stack]]
+   - **10-15 12:03——率先的なオープン coding agent がバックグラウンド Service を軸に作り直し、訓練
+     データ帰属の争いが到来する：**OpenCode 2.0（213,563★、MIT）は TUI/Web/デスクトップを 1 つの
+     ローカル Service の上へ移し、API を作り直し、**Code Mode** を出荷する——最小限の JS
+     インタプリタが MCP サーバ + OpenAPI を呼び出し可能な関数へ変換し、エージェントは MCP の 1 往復
+     を 1 呼び出しごとに払う代わりに、複数ツール呼び出しを 1 回の往復でバッチする（1.0 プラグインは
+     壊れる、と原文が明言）。Rain（Mononoke/Sapling）は、Scion が再帰的 derived-data インデックスを
+     無クレジットで複製したと主張——"borders on plagiarism"；来歴は今や オープンソース → 訓練データ
+     → モデル → 設計文書であり、異議は再利用ではなくクレジットにある。
+     → [[agent-stack]] [[fact-check]]
 2. **エージェントセキュリティは最も直接的な攻撃面であり、名指しされたクラスはどれも最終的に誰も
    強制しない。**8 月 12 日以降の CVSS≥9 が約 50 件超、十六の反復する形に収束する（全体像は
    [[security]]）。**メタパターン：**四つの事例でクラスは名指しされ、緩和策は収束し、しかし誰も
    強制しない——OWASP ASI05、ツール呼び出し境界、評価サンドボックス、MCP ツールのピン留め。
    - **08-16→10-14——十六の形が埋まり、続いてチェーン全体がコモディティ化する：**GHAPPIER による
      来歴の武器化、AI エージェントによって端から端まで KEV 入りした DIVD→Zammad、Pwn2Own が
-     Codex エージェントを攻略、Claude Code と 51 エージェントを走らせるアクセスブローカー、XBOW が
-     約 4 万ドルのキャンペーンで 6 日間に 25 万ドルの Chrome チェーンを構築；Ledger の eSIM 経由
-     exfil チャネル（300+ ウォレット、約 9,300 万ドル）。 → [[security]] [[fact-check]]
-   - **10-14——10 月の波はスコア来歴の話であり、否定結果こそが発見である：**同一の ColdFusion
-     アドバイザリに未認証 10.0 が 2 件、10.0 の SAP OAuth2 SSRF、Siemens の S7-1500 9.6 が 8 件で
-     「現在修正版なし」——いずれも未分析レコード上の CNA 採点；Ghostscript の 9.8 は自ビルド以外で
-     10,240 回の再現試行がすべて失敗。 → [[security]] [[fact-check]]
-   - **10-14 PM——境界が最も薄いのは平凡な裾野である：**Metasploit の Web API が資格情報ストアを
-     無認証で提供——多数のハンドラのうち**2 つ**が `warden.authenticate!` を欠き、既定は
-     `0.0.0.0:8080`（9.8、6.5.5 で修正）；GitLab の CI/CD 正規表現コンパイラの整数オーバーフローは
-     CNA 採点 10.0 で、**SaaS は修正済み・露出集合はセルフホスト**。来歴の精緻化：
-     `vulnStatus: Analyzed` と「`nvd@nist.gov` メトリクスを持つ」も**別の**フィールドである
-     （CVE-2026-104935）。 → [[security]] [[fact-check]] [[vuln-supply]]
+     Codex エージェントを攻略、XBOW の 25 万ドル Chrome チェーン、Ledger の eSIM 経由 exfil
+     （約 9,300 万ドル）；10 月の波はスコア来歴の話（同一 ColdFusion アドバイザリの 10.0 が 2 件、
+     Siemens の修正版なし S7 9.6——いずれも CNA 採点・未分析）；平凡な裾野：
+     Metasploit の 2 ハンドラが `warden.authenticate!` を欠く（9.8）、GitLab の 10.0 では
+     セルフホストが露出集合。 → [[security]] [[fact-check]]
    - **10-15——攻撃的エージェントは能力ではなくパッケージングでコモディティ化する：**
      `vxcontrol/pentagi`（29,207★、ツリーの最終プッシュが 10 月 9 日で 1 日に +1,070——リリースでは
      なく注意）は nmap / Metasploit / sqlmap をサンドボックスで駆動し、任意で Neo4j の攻撃グラフを
      持つ——**MIT のソースの隣に `EULA.md`**、加えて有償のレポート層。 → [[security]]
+   - **10-15 12:03——KEV のこの日、誤読が一つ決着する：カタログが列挙するのは悪用であって深刻度では
+     ない。**CVE-2026-76519（Cisco SEG、9.8 CNA 採点）：未認証の送信者が細工した添付を 1 通
+     メールするだけでシステムへファイルを書け、root へ至る——AMP 有効 + 古い Content Scanner
+     Tools が前提で、修正は 9 月 14 日から出荷済みだが AsyncOS 16.0 には修正済みビルドがない；
+     CVE-2026-0322（PAN-OS、8.6 CNA 採点、`PR:H`）：管理インターフェースの認証付き RCE、回避策
+     なし。いずれの NVD レコードも未分析。 → [[security]] [[vuln-supply]]
 3. **ローカル推論は量子化ではなく MoE スパース性 + ディスクストリーミングによって解放されつつある。**
    共有コアを常駐させ、ルーティングされたエキスパートを SSD から流す——この技は訓練、製品化された
    適合、実測予算への適合へと広がり、RAM が安くなくなったまさにその時に DRAM 価格ショックと出会う。
@@ -147,23 +149,24 @@ last_processed: 2026-10-15T04:03:00+08:00
    標準が無いところにロックインが生じる。
    - **08-15→10-14——トランスポートは標準化し、ポリシーはクライアント側に残り、精度競争は引き分けに
      終わる：**Privatemode の学習不要分類器が 29 データセットで Jev と 10–10 で並ぶ；Jeeves は重み +
-     データを出荷し、4 ドルの監査が参照分類器の尖り（平均 TV 0.518）を見つける；Decisions API ベータ、
-     Strands Decider 2B、Liquid d1 が各層を埋め、TokenRouter はスケジューラがボトルネックだと示し、
-     DIY ガイド（校正、T≈3.8）が "Computers Cannot Make Decisions" と出会い、ColGrep が Claude Code と
-     リポジトリの間で API トークンを 34% 削減する。 → [[system1-decision]] [[smart-routing]]
-   - **10-14 PM——意思決定層にアーキテクチャ主張が付き、それはキャッシュの話である：**Jeva
-     （arXiv 2610.18773）は軽視されがちな四要件——null-aware、置換不変、オプション拡張可能、
-     **キャッシュ可能**——を挙げ、不変の**オプションメモリ**で Choice/Noul/Score を統合し、リクエスト
-     状態だけを精錬する。オプション表現が本当にリクエスト非依存なら、ルータは一度事前計算して全
-     リクエストで再利用できる——*呼び出し*あたりではなく*選択肢*あたりのコスト。2 著者の論文、
-     自己申告の数値。 → [[system1-decision]]
+     データを出荷し、4 ドルの監査が参照分類器の尖りを見つける；Decisions API ベータ、Strands
+     Decider 2B、Liquid d1 が各層を埋め、TokenRouter はスケジューラがボトルネックだと示し、ColGrep
+     が Claude Code とリポジトリの間で API トークンを 34% 削減する。
+     → [[system1-decision]] [[smart-routing]]
+   - **10-14 PM——意思決定層にキャッシュについてのアーキテクチャ主張が付く：**Jeva（arXiv
+     2610.18773）は不変の**オプションメモリ**で Choice/Noul/Score を統合する——オプション表現が
+     本当にリクエスト非依存なら、ルータは呼び出しごとではなく選択肢ごとに一度事前計算できる。
    - **10-15——このクラスはついに同一 harness の下でエラー分類を得る：**"Reading Right, Acting
-     Wrong: Diagnosing Decision Failures of System One Models in Agent Loops"（arXiv 2610.18579）は
-     **18 のシステム——JEV 1.13 と OpenAI Decisions を含み、GPT-6.1 を参照**——を走らせ、各
-     意思決定状態を独立した事実プローブと対にする：**最も正確な 6 システムでは意思決定エラーの
-     73–85% が正しく読めた状態で起きる**（JEV 73%、OpenAI Decisions 70%）、エラーは同じ状態に集中し、
-     合成の失敗はモデル自身の正解をコードで組み合わせることで解ける。要点：観測と行動の認可を
-     分離すること；証拠は行動面のみであり、それは論文自身の限界である。 → [[system1-decision]]
+     Wrong"（arXiv 2610.18579）は 18 のシステムを走らせ、各意思決定状態を独立した事実プローブと
+     対にする：**最も正確な 6 システムでは意思決定エラーの 73–85% が正しく読めた状態で起きる**
+     （JEV 73%、OpenAI Decisions 70%）、エラーは同じ状態に集中し、合成の失敗はモデル自身の正解を
+     コードで組み合わせることで解ける——観測と行動の認可を分離すること。
+     → [[system1-decision]]
+   - **10-15 12:03——このクラスが Danger Zone を出荷し、system-one 棚が GUI グラウンディングへ手を
+     伸ばす：**Jev 1.14.0（リクエスト単位の API ヘッダでオプトイン）は合成可能な画像（"multimodal
+     all along"）、単一のバウンディングボックスを返す `box` 型——**意思決定を超える最初の型**——
+     と上限なしコンテキストを追加し、ぎざぎざを自認し（"trust your own evals"）、正式な非推奨
+     ポリシーを発表した。 → [[system1-decision]]
 6. **推論品質はもはや堀ではない——価格と配布が堀である。**オープンウェイトモデル（中国のラボが率いる
    フロンティア規模のオープンウェイト）はベンチマークのわずかな点を巨大な価格差と交換し、クローズド
    ラボは配布速度で競い、後訓練が可視的なフロンティアのレバーである。
@@ -177,14 +180,16 @@ last_processed: 2026-10-15T04:03:00+08:00
      智譜を名指し（GLM-5.3 開発中のサイバー能力；Fable 5 のセーフガードが攻撃を劣化させた後、より
      古い Claude に切り替えた）し、Moonshot/Kimi の件を繰り返す；収穫対象は回答ではなく推論
      トランスクリプトである。 → [[frontier-models]] [[fact-check]]
-   - **10-15——約束された日付は成果物なしに過ぎ、欠けている文書はライセンスである：**StepFun の**自社**
-     HF 組織に Step-5 リポジトリは一切なく、StepFun が管理するどのチャネルにもライセンスは存在しない
-     （"StepFun Community License" ページは**第三者**製）——一方 OpenRouter は依然プレビューを配信し、
-     AA も依然 proprietary と分類する——600B BF16 はそもそも約 1.2 TB のアクセラレータメモリを要する。
-     対照例はパイプラインごと出荷する：**Apertus 1.5**（8B/70B；トークナイザ経由のマルチモーダル性；
-     262,144 コンテキスト；レシピ、評価スイート、アラインメント憲章、**遡及的な**クローラ
-     オプトアウト）は自らの天井も明記する——日付はリリースではなく、リリースはライセンスではない。
-     → [[frontier-models]] [[fact-check]]
+   - **10-15——日付は 12 時間で「未達」から「遵守」へ反転；ライセンスは収益ゲート型でハードウェア
+     条項付き：**04:03 時点で組織に Step-5 リポジトリは存在しなかった（51 件を列挙）；~09:30 UTC+8
+     に 3 件のアップロードが出現——**604B 総パラメータ / 27B アクティブ MoE、1M コンテキスト
+     （入力+出力の合計）**、リポジトリは 9 月 20 日からゲート済み——ライセンスは **StepFun Model
+     License 1.0**（"Apache-2.0 風"：2000 万ドル収益/1 億 MAU で "Powered by StepFun AI" の顕著な
+     表示が必要；**デバイスメーカー**（電話、車両、メガネ、ロボット）と 2000 万ドル MaaS には別途
+     商用ライセンスが必要）；ベンチマークはベンダー製画像で、第三者の锚は AA の GDPval のみ。対照例：
+     **Apertus 1.5**（8B/70B；トークナイザ経由のマルチモーダル性；262,144 コンテキスト；レシピ、
+     評価スイート、アラインメント憲章、**遡及的な**クローラオプトアウト）——日付はリリースではなく、
+     リリースはオープンライセンスではない。 → [[frontier-models]] [[fact-check]]
 7. **AI 安全性は政策ではなく測定されたリリース閾値であり、測定インフラが今や弱点である。**PF v2 /
    RSP v3.0 / FSF v3.1 は同じループ（閾値 → 評価 → 事前コミットされた対応）を回し、SB 53 がそれを
    法制化し、Astra が最初の生きた "Critical"、GLM-5.3 が中国初の攻撃的サイバー保留である。
@@ -277,25 +282,20 @@ last_processed: 2026-10-15T04:03:00+08:00
 12. **最適化対象はモデルから harness へ移り、そのプレミアムは測定され、かつ有界である。**Bojie Li が
     この規律を名付ける：「harness engineering」。
     - **08-19→10-13——プレミアムは測定され有界；harness が作業現場になる：**等予算の対照群が自らの
-      見出しを崩す；FrontierHarness は同一モデルで 17 倍の開き；Ronacher + SlopCodeBench の品質監査；
-      Zoom の 176 回のアブレーション（コンテキスト管理 > 計画）；Netlify が Firecracker 上で 1 日
-      10 億回；Cua-Bench 6/25 KiCad；Invisible Cities のワンショット（「6 時間のおよそ半分」と主張、
-      実際は 1 時間 25 分 + 約 7 subagent 時間）；Cockroach の MOLT Sinai 失敗ログ（収束しないループで
-      631 ドルを焼き、スキルファイルは約 10 万語に腐敗）；Campfire の検死（単一の負荷試験指標では
-      移植を裁定できない）；5,000 億トークンの FPS 逆コンパイル（決定的だったのはモデルではなく
-      オラクル）。 → [[agent-stack]] [[dev-tools]]
+      見出しを崩す；FrontierHarness は同一モデルで 17 倍の開き；Zoom の 176 回のアブレーション；
+      Netlify が Firecracker 上で 1 日 10 億回；MOLT Sinai の失敗ログ；5,000 億トークンの FPS 逆
+      コンパイル（決定的だったのはモデルではなくオラクル）。 → [[agent-stack]] [[dev-tools]]
     - **10-13PM→10-14——harness 論がサブジャンル化し、正直なベンチマークが来る：**gamedev-as-harness
-      （odiff による定量的スクリーンショットスコア、唯一曖昧でない編集点としての太った `Thing`
-      構造体、シミュレーションが真実の源）；DishwasherBench（実在の Bosch を模擬し、モデルが MCP で
-      操作）は「スコアを何に信頼できるか」の節を公開——梱包は測定済み、洗浄はまだ。
+      （odiff の定量的スクリーンショットスコア、シミュレーションが真実の源）；DishwasherBench は
+      「スコアを何に信頼できるか」の節を公開——梱包は測定済み、洗浄はまだ。
       → [[agent-stack]] [[frontier-models]]
-    - **10-14 PM——コンパイラは harness の一部である：**Niko Matsakis はループの内側から、エージェント
-      が書くコードに対する Rust の適合を論じる——最適化はエージェントがすでに得意な支柱（手書き
-      アセンブリの仕事は今や彼らに回る）であり、コンパイル段階は決して疲れないレビュアーである
-      ——同時に自らの天井を二度記す（"Testing can show the presence of bugs, but not their
-      absence"；"Type systems can show the absence of bugs, but not the presence of correctness"）、
-      Brockman の "if it compiles it's ~correct" に対して。データ点：Meta の技術者が今年書いた
+    - **10-14 PM——コンパイラは harness の一部である：**Matsakis はループの内側から、エージェントが
+      書くコードに対する Rust の適合を論じる——最適化はエージェントがすでに得意な支柱であり、
+      コンパイル段階は決して疲れないレビュアーである——同時に自らの天井を二度記す（"Testing can
+      show the presence of bugs, but not their absence"）。データ点：Meta の技術者が今年書いた
       ファーストパーティ Rust は**過去 9 年分の合計の 2 倍**。 → [[dev-tools]]
+    - **10-15 12:03→13:07——harness が自らのベンチマークを得て、その著者所属は当日回答し、「決して疲れないレビュアー」が実地試験を受ける：**Doc2Harness（arXiv 2610.20344）は harness を*構築する*モデルを測る——結果は**スクリプト化モックモデル**が駆動し、LLM ジャッジはいない；19 中の最高は GPT-6 Astra の **53.05%**；11 著者、**ベンダー結びつきゼロ**（中科院計算所 ×7、清華 ×2、北京大、東南大）——各モデルベンダーから独立。Torvalds の初の LLM 支援カーネルシリーズがレビューに入り、レビューは**既にレースを 1 件発見**——レビューは機能し、着地はしていない。
+      → [[dev-tools]] [[frontier-models]] [[fact-check]]
 13. **トークン支出はモデル選択から分離しつつある——モデル境界ではなくコンテキスト境界で。**ルーティング
     （テーゼ 5）は「どのエンジンか」に答える；この層は「何バイトが線を渡るか」に答える——圧縮
     （caveman）、強制（Spotify のシャント）、排除（context-mode）。正直な読み：層は実在するが、測定は
@@ -342,24 +342,27 @@ last_processed: 2026-10-15T04:03:00+08:00
     第三レベル廃止；Antigravity の ToS が OpenClaw を名指し；Gmail が第三者の Send-as を廃止。
     - **09-02→10-13——テイクダウンからエージェント時代の権限の壁、そして監視の挟撃へ：**Nitter は
       テイクダウンを越えて再成長し、その後 X Corp の停止通告 2 通を受ける；A/I が SDGT 指定で停止；
-      macOS がアップグレード時に明示的なオプトアウトを再有効化；GrapheneOS の自社デバイス；Apple が
-      AI エージェントを理由にフルディスクアクセスを厳格化；ユタ州の VPN 法は技術的に不可能として
-      差し止め；Ban Flock Act は Hill 判事の判断の 48 時間後に成立；.lan が gTLD として申請；
-      Tor は Mullvad を維持しつつ共同ブランドを一時停止；フィンガープリンティングが cookie の空白を
-      埋める——同意法が規律するのは保存であり、フィンガープリンティングは計算である。
+      Apple が AI エージェントを理由にフルディスクアクセスを厳格化；ユタ州の VPN 法は技術的に
+      不可能として差し止め、Ban Flock Act は 48 時間後に成立；フィンガープリンティングが cookie の
+      空白を埋める——同意法が規律するのは保存であり、フィンガープリンティングは計算である。
       → [[platform-gatekeeping]]
     - **10-10→10-14——執行がコード、資格情報、消費者デバイスに届く：**"Passkeys are a trap" が
       ガバナンスの論点をフロントページに載せる（attestation フラグ = *サイト*が設定する遠隔照会可能な
-      ポリシー）；macOS が The Open Group の UNIX 登録簿から消える；NYC の Click-to-Cancel；
-      "Flock the Flockers" が ALPR を警察に鏡返しする；Apple HomeView（カメラ/マイクは Secure
-      Exclaves、HomeKit/Matter 必須、新 SDK なし）と Firefox Enterprise の
+      ポリシー）；macOS が The Open Group の UNIX 登録簿から消える；"Flock the Flockers" が ALPR を
+      警察に鏡返しする；HomeView（Secure Exclaves、HomeKit/Matter 必須）と Firefox Enterprise の
       allow/restrict/disable-AI スイッチ。 → [[platform-gatekeeping]] [[security]]
     - **10-14 PM——環境センサー二台、説明されたアーキテクチャは一つ：**Apple TV 4K は Siri AI と
-      遠距離マイク、Apple Intelligence によるカメラ活動記述を備えて出荷され、10 月 13 日に予約開始、
-      **11 月 13 日**提供開始——HomeView と同一の日付——だが、そのプレスリリースは遠距離音声について
-      **オンデバイス処理の主張をまったくしていない**。HomeView は A18 上の Secure Exclaves を明示
-      した。同じ会社、同じ週、常時傾聴する二つの面：音声が*どこで取得されるか*は述べられ、
-      どこで*理解されるか*は述べられていない。 → [[platform-gatekeeping]]
+      遠距離マイクを備えて出荷され、HomeView と同じ **11 月 13 日**に提供開始——だが、そのプレス
+      リリースは遠距離音声について**オンデバイス処理の主張をまったくしていない**。HomeView は
+      Secure Exclaves を明示した。音声が*どこで取得されるか*は述べられ、どこで*理解されるか*は
+      述べられていない。 → [[platform-gatekeeping]]
+    - **10-15 12:03——ガバナンスの懸念は生き残る；そのメカニズムの主張はしない：**Scott Helme が
+      "Passkeys are a trap" にメカニズムの面で反論する——同期型 passkey は attestation で `none` を
+      返す（attestation を要求するコンシューマサイトはほぼ全ユーザを締め出す）；attestation は
+      AAGUID + 証明書チェーンによる認証器の型番の識別に過ぎず、**OS やファームウェアについては
+      何も語らない**——そして YubiKey こそ attestation を行うデバイスである。仮想的な義務付けを
+      拒否するために、今日フィッシング可能な TOTP を選ぶのは悪い取引である。
+      → [[platform-gatekeeping]] [[security]]
 16. **エージェント体験は測定可能な配布チャネルであり、その最初の測定された犠牲者はフロントエンドの
     教育層である。**Armature（16,893 回の実行）：エージェントが同じツールに収束するのは 42% のセル
     のみ；「エージェントはあなたの製品を知っているか」に数値が付いた（利害関係のあるベンダーが保有）；
@@ -445,6 +448,13 @@ last_processed: 2026-10-15T04:03:00+08:00
       否認する第三者による採点*——最後のものはスコア順の表では見えない。同じ主張のカーネル CNA の
       半分は第三者にしか存在しない：カーネル自身の `cve.rst` に CVSS の言及は一つもない。
       → [[vuln-supply]] [[fact-check]]
+   - **10-15 13:07——この分類に三人目の名指しメンバーと実地確認が付き、パイプラインは実績記録を得る：**
+      OpenSSL のポリシーは CVSS を拒否する（"does not properly reflect the broad usage"）うえ
+      *乖離を予言する*——実地検証：CVE-2026-84782/-84784 はベンダー表記 "High" の記録に NVD 分析済み
+      8.2/7.5 が載る；CVE ごとの第三者スコア否認リストを公開するプロジェクトは存在しない。Anthropic の
+      CVD ダッシュボードがパイプラインの台帳を公開（6,157 件 / 591 プロジェクト / 516 修正、
+      ハッシュコミットメント開示台帳、深刻度は Claude/調査企業/保守者で分割）。
+      → [[vuln-supply]]
 21. **接続性の物理層は能動的な標的であり、安価な攻撃は放火である。**民生の衛星地上局と単一リージョンの
     データセンターは、統制ではなくフェンスと地理によって守られている；帰属は設計上非対称である
     （たいてい誰かが行為者を名指ししないことに利害を持つ）。それがこのクラスを安価に保っている。
@@ -555,7 +565,9 @@ last_processed: 2026-10-15T04:03:00+08:00
   （ログ窓の圧縮）、`cv-audit.mjs`（sources レジストリの `cv` レビューフィールド：ある feed バッチの
   共引用クラスタ、`cv === 1 + cvlog.length` 不変条件、dry-run のバンプ経路）、スター対コミット検査
   （agent-run.sh の Pass 9）、
-  KEV/NVD/npm/GitHub のワンコール検査（CLAUDE.md の易逝的クレーム規則）。
+  KEV/NVD/npm/GitHub のワンコール検査（CLAUDE.md の易逝的クレーム規則）、
+  `torvalds-folio-v2` + `doc2harness-repro`（10-15 に武装した HN フィンガープリント disclosure-watch：
+  カーネルシリーズの v2/着地と、Doc2Harness の再現/採用）。
 
 - **非 AI バッチ項目（10-07→10-15）：**項目単位の記録は日付付き feed ファイルにあり、長く続くものには
   ホームがある：DDR4 の第二の復活（→ テーゼ 3）、Yandex Cloud の Vladimir DC を停止させた UAV 攻撃

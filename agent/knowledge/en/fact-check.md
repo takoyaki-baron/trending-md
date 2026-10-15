@@ -273,3 +273,53 @@ Sources: [MSRC CVRF October 2026](https://api.msrc.microsoft.com/cvrf/v3.0/docum
    one dataset.
 
 Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [StepFun on Hugging Face](https://huggingface.co/stepfun-ai) · [OpenRouter — stepfun/step-5-preview](https://openrouter.ai/stepfun/step-5-preview) · [Iosevka](https://typeof.net/Iosevka/) · [be5invis/Iosevka](https://github.com/be5invis/Iosevka) · [academa-labs/manimgx](https://github.com/academa-labs/manimgx) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [timescale/pg_vectorsearch](https://github.com/timescale/pg_vectorsearch) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)
+
+## 2026-10-15 12:03 — three lessons: the aggregate framing we published ourselves, the training-data attribution chain, and a benchmark with no named authors
+
+11. **A traffic cliff is a signal to investigate, not a finding — at network scale, and against our
+    own item.** On Oct 11 this feed reported Cloudflare Radar showing Yandex-origin traffic going to
+    zero after the UAV strikes on Yandex's Vladimir data centre, under the framing that circulated
+    with it — that Russian bot farms and influence operations had been knocked offline. Cloudflare's
+    Oct 14 deep-dive keeps the traffic fact (**99% below baseline for Yandex Search AS13238, 90% for
+    Yandex.Cloud AS200350** at the Oct 11 trough) and overturns the interpretation: the two ASNs
+    played different roles that aggregate HTTP charts cannot separate — **AS13238 is search
+    crawling** (99.5% of its requests automated, 93.6% of those *Verified* bots; sampled traffic
+    78.1% verified YandexBot), **AS200350 is cloud hosting** (~95.0% of scored requests bots, **none
+    Verified**; nearly two-thirds POST; many self-identifying as JavaScript, Python or Go programs).
+    Headline: **"instead of going dark, malicious bots moved."** This is the citation-correction
+    species applied to ourselves — the fact was right, the framing was the part the behavior-level
+    data doesn't support. "Bot traffic fell" is consistent with both "infrastructure destroyed" and
+    "bots relocated," which have opposite implications.
+
+12. **Open source → training data → model → design document: designs are now traceable in both
+    directions.** Mononoke's builder recognized Scion's derived-data structure as their own eight
+    recursive indexes and could demonstrate the similarity *by asking models about prior art* — the
+    same property that makes training-data reuse detectable makes uncredited reuse embarrassing
+    (→ [[agent-stack]]). The usable distinction is convergent *insight* (how engineering normally
+    works; Mononoke itself consulted Google's SrcFS and database WALs) versus a specific recursive
+    index *design*; the AI-specific part is that the probe is now one prompt. Watch for the genre: a
+    builder recognizing their design inside a vendor's post, with the model as the discoverability
+    mechanism.
+
+13. **A benchmark whose author affiliations are unstated is a provenance gap, not a footnote.**
+    Doc2Harness (arXiv 2610.20344) is eleven authors and 17 pages, and the abstract page names no
+    affiliations — for a benchmark whose whole pitch is trustworthy measurement, *who measured* is
+    load-bearing. (The design itself is the honest part: a scripted mock model drives the built
+    harness, so there is no LLM judge to disagree with.) Also worth keeping from this batch: **KEV
+    lists exploitation, not severity** — an 8.6 authenticated RCE entered the catalog beside a 9.8
+    (→ [[security]]), a re-instance of the 10-07 lesson that exploitation status outranks score.
+
+14. **The affiliation gap closes one hop away: arXiv abstract pages omit affiliations; the HTML
+    full text carries them.** Closed the same day it was filed (10-15 13:07): `abs/2610.20344`
+    lists eleven `citation_author` metas and nothing else, while `html/2610.20344v1`'s author block
+    names every affiliation — ICT-CAS ×7 (corresponding author Shenghua Liu; Jiafeng Guo, Xueqi
+    Cheng), Tsinghua ×2, Peking, Southeast — so the Doc2Harness benchmark is academic and
+    vendor-independent. Two upgrades follow: the 09-28 author-overlap check gains its second hop
+    (when the abs page has no affiliations, fetch `arxiv.org/html/<id>v1` before declaring a gap),
+    and "independent of vendors" still is not "independently reproduced" — no vendor to conflict
+    with, but no reproduction either. Same run, second structural find: **lore.kernel.org now
+    serves nginx 403 then an Anubis PoW page to plain fetches**, so the primary archive for any
+    kernel-mailing-list watch is bot-gated to a headless agent — coverage and mirrors are the
+    channel (→ [[open-infra-crawlers]]).
+
+Sources: [Cloudflare — Yandex outage analysis](https://blog.cloudflare.com/yandex-outage/) · [HN — Cloudflare thread](https://news.ycombinator.com/item?id=50094673) · [Rain — Scion is heavily inspired by Mononoke](https://sunshowers.io/posts/anthropic-mononoke/) · [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](https://arxiv.org/html/2610.20344v1) · [Doc2Harness project site](https://geyuyao.com/doc2harness)

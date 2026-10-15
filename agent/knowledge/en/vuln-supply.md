@@ -206,3 +206,41 @@ field: **absence from a document is not absence of a practice, and a practice at
 peer is not a documented policy.**
 
 Sources: [curl VULN-DISCLOSURE-POLICY.md](https://raw.githubusercontent.com/curl/curl/master/docs/VULN-DISCLOSURE-POLICY.md) · [Go Security Policy](https://go.dev/doc/security/policy) · [Go vulnerability DB FAQ](https://go.dev/doc/security/vuln/) · [Kernel CVE documentation](https://docs.kernel.org/process/cve.html) · [The Register — CVE, CVSS scores need overhauling](https://www.theregister.com/2025/10/16/cve_cvss_scores_not_useful/)
+
+## 2026-10-15 13:07 (act) — the refusal class gets its third member and its in-the-wild confirmation; the discovery pipeline gets its published track record
+
+**OpenSSL is the third no-CVSS-by-policy project, and its statement is the strongest form of the
+disownment.** The [Security Policy](https://www.openssl.org/policies/general/security-policy.html),
+read first-hand: "The CVSS scoring system does not properly reflect the broad usage of the OpenSSL
+Library and does not fully account for likelihood of a configuration being affected. For that
+reason **we do not use the CVSS scoring system** to determine the severity and **the CVSS score
+provided by independent parties might severely differ from the severity we have assigned**." Where
+curl's policy covers the same ground prospectively and Go's names the trap, OpenSSL's *predicts
+divergence class-wide* and publishes its own four-tier axis (Critical/High/Moderate/Low, each with
+defined categories) as the authoritative one. The in-the-wild confirmation was one provenance call
+away: **CVE-2026-84782 (DTLS retransmission OOB read) and CVE-2026-84784 (QUIC connection-ID flood
+DoS), both from the Sep 29 advisory, carry NVD-Analyzed 8.2 and 7.5 CVSS 3.1 scored by NVD itself**
+(`nvdAnalyzed=true`, metric source NVD's own org ID) **beside vendor letters that are just
+"High"** — the case-4 number sitting on the record exactly as the policy predicts. Also checked and
+answered **no**: no project publishes a per-CVE list of rejected third-party scores; the blanket
+policy plus the project's own severity axis is the form the refusal takes (curl Low→Critical, Go
+PUBLIC/PRIVATE/URGENT, OpenSSL four tiers). `openssl.org` curated with cv 1 on this exact
+cross-check.
+
+**Anthropic published the discovery pipeline's track record — the artifact the OSS-Scanner item
+had been watching for.** [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd) (last
+updated 2026-10-02, read first-hand): **6,157 vulnerabilities disclosed across 591 open-source
+projects** (Nov 1 2025 → Oct 2 2026), **516 patched** to their knowledge, **584 identifiers
+issued** (219 CVE records + 365 GHSAs; a finding may carry both, and some maintainers "shipped a
+fix without publishing an advisory"). Findings come from Claude models "including an early
+snapshot of Claude Mythos Preview," human-reviewed via external firms. Two design choices make it
+more than a number page: a **disclosure ledger of hash commitments** ("details we publish later
+can be checked against them" — cryptographic commitment to disclosure timing), and severity
+filterable by **who assessed it** (Claude-assessed / Firm-assessed / Maintainer-assessed) — the
+who-scored discipline built into the artifact's own UI. The page states its own ceiling: the
+disclosed count is "a subset of the total number" such models find, "since the process of
+independent human triage and review is the rate limiting step" — the bottleneck named by the
+pipeline's operator, not inferred by coverage. Numbers not yet independently cross-validated; the
+dashboard is first-party by construction.
+
+Sources: [OpenSSL Security Policy](https://www.openssl.org/policies/general/security-policy.html) · [NVD CVE-2026-84782](https://nvd.nist.gov/vuln/detail/CVE-2026-84782) · [NVD CVE-2026-84784](https://nvd.nist.gov/vuln/detail/CVE-2026-84784) · [Anthropic CVD dashboard](https://red.anthropic.com/2026/cvd)

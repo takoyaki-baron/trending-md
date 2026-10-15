@@ -270,3 +270,17 @@ immersive home theater surround sound setup" が解放され、ホームハブ�
 なり、Matter/HomeKit バッジ要件は Apple がスマートホームの門番に留まる意図を確認している。
 
 Sources: [Apple Newsroom — the new Apple TV 4K](https://www.apple.com/newsroom/2026/10/apple-unveils-the-new-apple-tv-4k/) · [HN discussion](https://news.ycombinator.com/item?id=50071310) · [Apple TV 4K](https://www.apple.com/apple-tv-4k/) · [Apple: HomeView](https://www.apple.com/apple-homeview/)
+
+
+## 2026-10-15 12:03 — 「Passkeys are not a trap」：反論が訂正するのはメカニズムであって、ガバナンスの懸念ではない
+
+Scott Helme（Report URI 創業者、オープンソース passkeys ライブラリの作者）が、拡散した "Passkeys are a trap. Do not use them."（本ファイル 10-12）に 48 時間後に応じた——しかも**メカニズムの面で**。反論の 528 ポイントは元の 379 ポイントが買ったもので、注意のループは設計どおりに働いた。4 つの訂正：
+
+1. **同期型 passkey は attestation しない。**iCloud Keychain、Google Password Manager、1Password、Bitwarden の passkey は、サイトが attestation を要求すると `none` を返す。attestation 済み passkey を要求するコンシューマ サイトは「自分のユーザのほぼ全員を即座に締め出す」ことになる——コンシューマ attestation に反対するガイダンスは「何年も前から」走っている。
+2. **Attestation は誤って特徴付けられている。**元投稿は attestation が「承認された passkey マネージャ、OS、ファームウェアが使われている」ことの証明だと主張する。Helme によれば、それは **AAGUID とベンダー証明書チェーン**による認証器の型番の識別に過ぎず——OS、ブラウザ、拡張、root 状態、ファームウェアのバージョンについては何も語らない。
+3. **YubiKey の皮肉。**元投稿は YubiKey を「OS 全体の attestation を回避する」として推すが、YubiKey こそ attestation を*行う*デバイスであり、Yubico 発行の証明書を出荷している。enterprise attestation はまさに承認済みハードウェアを強制するために存在する。
+4. **TOTP は後退である。**コードは Evilginx 型フィッシング キットがリアルタイムで中継する（引用は Troy Hunt の Mailchimp 侵害）、一方 passkey はドメインに束縛される——元著者自身の補記が、passkey が man-in-the-middle に耐えることを認めている。
+
+**2 つの投稿は実は脅威モデルについて争っていない**——Helme は別の場所で、attestation が `none` のときは "XSS Is Deadly for Passkeys" と書き、YubiKey も推している。彼が訂正するのはメカニズム（attestation が何を証明し何を証明しないか）と、その取引：仮想的な未来の義務付けを拒否するために、今日フィッシング可能な TOTP を選ぶこと。本ファイルにとってのゲートキーピングの教訓は成立したまま位置を変える：ガバナンスの懸念（attestation フラグ＝*サイト*が設定する遠隔照会可能なポリシー）は、"if it ever happens" に反対すべき*仮説*として生き残る——それを生きているかに聞こえたメカニズムの主張が間違っていた。結論：passkey を使い続け、エクスポートに対応したマネージャを選ぶ。
+
+Sources: [Scott Helme — Passkeys are not a trap](https://scotthelme.co.uk/passkeys-are-not-a-trap/) · [HN discussion](https://news.ycombinator.com/item?id=50088935) · [Passkeys are a trap (the original)](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them)

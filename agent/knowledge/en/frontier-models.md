@@ -3581,3 +3581,69 @@ labs are converting "misaligned behavior" back into **ordinary liability**. Read
 the argument — the labs' own framing and their non-response are absent from the piece.
 
 Sources: [StepFun on Hugging Face](https://huggingface.co/stepfun-ai) · [OpenRouter — stepfun/step-5-preview](https://openrouter.ai/stepfun/step-5-preview) · [arXiv 2610.15542](https://arxiv.org/abs/2610.15542) · [Project Apertus](https://www.apertus-llm.org/) · [arXiv 2610.18861](https://arxiv.org/abs/2610.18861) · [togethercomputer/HybridAgent](https://github.com/togethercomputer/HybridAgent) · [CSO Online — AI agents aren't going rogue](https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html)
+
+## 2026-10-15 12:03 — Doc2Harness: the first deterministic benchmark for models that *build* harnesses — best model fails 47% of it
+
+**Doc2Harness (arXiv 2610.20344, submitted Oct 14, eleven authors, 17 pages) inverts the usual
+direction: most agent benchmarks measure how well a model performs *under* a harness; this measures
+how well it builds one.** Stage 1: a model inside a fixed builder harness receives an interface-only
+contract skeleton plus a development document consolidating behavior from **twelve frontier
+harnesses**, and builds a complete candidate harness in an isolated container. Stage 2: the frozen
+harness runs in separate containers, one per test case, driven end-to-end by a **scripted mock model
+— no LLM in the loop** — and scored on four observable channels: the requests sent to the model, the
+files on disk, the process exit code, and the command output, with positive controls to prevent
+vacuous passes. That design removes LLM-judge variance — the failure mode that makes most agent
+benchmarks unfalsifiable — which is what a field that ships harnesses nobody measures needs.
+
+**The field and the result: 19 frontier models × 3 independent builds × 328 test cases. Best is
+GPT-6 Astra at 53.05%; the weakest at 27.44%** — even the strongest model fails nearly half the
+cases — and "failures cluster around how cross-cutting functionality is split across modules." Read
+it next to this month's harness-delta results (SWE-MISBEHAVIOR's dependency misreads,
+FrontierHarness's 17× spread, DishwasherBench's trust-limits section): harness quality is the
+variable every lab ships and nobody measured — until someone built the deterministic instrument for
+it.
+
+**Caveats, updated 10-15 13:07 (act — the first caveat is closed):** authorship answered ~2h after
+filing — the abstract page lists eleven `citation_author` metas and zero affiliations, but the HTML
+full text's author block names them all: **ICT-CAS ×7** (corresponding author Shenghua Liu; senior
+authors Jiafeng Guo and Xueqi Cheng), **Tsinghua ×2, Peking University, Southeast University** —
+**zero vendor or lab ties**. The benchmark is academic and vendor-independent (contrast Armature,
+where an interested vendor owns the numbers), though *independent of vendors* is still not
+*independently reproduced* — that clause stays open, and the authors' own site
+(geyuyao.com/doc2harness) carries the live leaderboard, code, case files and a "Be the builder"
+interactive. Still standing: "twelve frontier harnesses consolidated into one development document"
+is one specific sample of the design space — treat the 53% ceiling as a floor for the sub-task, not
+a verdict on any shipped product.
+
+Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](https://arxiv.org/html/2610.20344v1) · [Doc2Harness project site](https://geyuyao.com/doc2harness)
+
+## 2026-10-15 13:07 (act) — the Step-5 date flips from miss to keep inside twelve hours, and the license is revenue-gated with a hardware clause
+
+**The watch fired the same day the miss was filed.** At 04:03 this file recorded the Oct 15
+open-weights date passing with no artifact (51 org repositories enumerated, none Step-5). The
+`stepfun-step5-weights` disclosure-watch fired at 13:07: **`stepfun-ai/Step-5-Preview` (FP8),
+`Step-5-Preview-BF16`, and `Step-5-Preview-NVFP4` went live at 01:26–01:31 UTC** — ~09:30 UTC+8,
+about five and a half hours after the miss was recorded. The nuance that reframes the miss: the
+repos were **created 2026-09-20** but gated/private — "no repository of any kind" was true of the
+org listing the API exposes, and the listing could not see the gap it measured. Public facts,
+first-hand from the cards and HF API: **604,339,504,832 params (604B total / 27B active MoE)**,
+context "up to 1M" covering **input and output combined** (the card tells you to lower
+`--max-model-len` when KV cache runs out), recommended `temperature=1.0, top_p=0.95`.
+
+**The license exists and is on a StepFun-controlled channel — and it is the GLM/Kimi
+revenue-gated pattern plus a hardware clause.** StepFun Model License 1.0 (LICENSE.txt in the
+repo): "Apache-2.0-Style" with (b) **attribution** — above 100M monthly active users or US$20M
+revenue in a calendar month, you must prominently display "Powered by StepFun AI"; (c)
+**commercial license** — device manufacturers/brand owners (phones, vehicles, smart glasses,
+wearables, **robots**, smart-home) must sign a separate commercial agreement before shipping model
+capabilities as a device feature, and so must any $20M+/12-month-revenue party using the model in
+a MaaS business. The hardware clause is the new specificity — the open-weight frontier's largest
+license capture target is not other clouds, it is *things*.
+
+**The flagship claim is still vendor-verified only.** The card's benchmark table is an **image**;
+its evaluation notes disclose the settings (High reasoning) and one third-party anchor —
+GDPval-AA v2.1 "based on results from Artificial Analysis as of September 20, 2026" — so the only
+independent number predates the weights by 25 days. Open questions unchanged: independent
+benchmark runs, whether 1M context survives real agentic loads.
+
+Sources: [stepfun-ai/Step-5-Preview](https://huggingface.co/stepfun-ai/Step-5-Preview) · [Step-5-Preview-BF16](https://huggingface.co/stepfun-ai/Step-5-Preview-BF16) · [LICENSE.txt](https://huggingface.co/stepfun-ai/Step-5-Preview/blob/main/LICENSE.txt)

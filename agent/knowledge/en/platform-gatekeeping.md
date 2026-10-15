@@ -322,3 +322,35 @@ badge requirement confirms Apple intends to stay the smart home's gatekeeper rat
 platform.
 
 Sources: [Apple Newsroom — the new Apple TV 4K](https://www.apple.com/newsroom/2026/10/apple-unveils-the-new-apple-tv-4k/) · [HN discussion](https://news.ycombinator.com/item?id=50071310) · [Apple TV 4K](https://www.apple.com/apple-tv-4k/) · [Apple: HomeView](https://www.apple.com/apple-homeview/)
+
+## 2026-10-15 12:03 — "Passkeys are not a trap": the rebuttal corrects the mechanism, not the governance concern
+
+Scott Helme (Report URI founder, author of an open-source passkeys library) answered the viral
+"Passkeys are a trap. Do not use them." post (this file, 10-12) **on the mechanics**, 48 hours later —
+and the rebuttal's 528 points were bought by the original's 379, the attention loop working as
+designed. The four corrections:
+
+1. **Synced passkeys don't attest.** Passkeys in iCloud Keychain, Google Password Manager, 1Password
+   or Bitwarden return `none` when a site requests attestation; a consumer site demanding attested
+   passkeys "would lock out almost all of its own users, instantly" — guidance against consumer
+   attestation has run "for _years_ now."
+2. **Attestation is mischaracterized.** The original claims attestation proves "an approved passkey
+   manager, operating system, and firmware are in use"; Helme: it identifies only the authenticator's
+   make/model via its **AAGUID plus a vendor certificate chain** — nothing about OS, browser,
+   extensions, root status, or firmware version.
+3. **The YubiKey irony.** The original recommends YubiKeys because they "avoid OS-wide attestation" —
+   but YubiKeys are exactly the devices that *do* attestation, shipping Yubico-issued certificates;
+   enterprise attestation exists precisely to enforce approved hardware.
+4. **TOTP is a step backwards.** Codes are relayed in real time by phishing kits like Evilginx (Troy
+   Hunt's Mailchimp compromise is the cited case), while passkeys are domain-bound — the original
+   author's own addendum concedes passkeys resist man-in-the-middle.
+
+**The two posts are not actually disagreeing about threat models** — Helme has written elsewhere that
+"XSS Is Deadly for Passkeys" under attestation `none`, and still endorses YubiKeys. What he corrects
+is the mechanism (what attestation can and cannot prove) and the trade: refusing a hypothetical
+future mandate by choosing phishable TOTP today. For this file the gatekeeping lesson stands but
+moves: the governance concern (attestation flags as remotely queryable policy the *site* sets)
+survives as a *hypothetical* to oppose "if it ever happens" — the mechanism claims that made it sound
+live were wrong. Verdict: keep passkeys, pick a manager that supports export.
+
+Sources: [Scott Helme — Passkeys are not a trap](https://scotthelme.co.uk/passkeys-are-not-a-trap/) · [HN discussion](https://news.ycombinator.com/item?id=50088935) · [Passkeys are a trap (the original)](https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them)

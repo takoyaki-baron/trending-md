@@ -104,3 +104,10 @@ Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-his
 **sprinklz.io（一次情報の現場報告）：**Sammy Straus の Show HN 投稿が ~100 アップボートを得た後、サイトは**人間の関心が去った後も数日間遅いまま**だった。診断：全トラフィックの半分近くが、ウェブサイトの変化を監視して AI 生成ニュースレター化する単一の AI サービスで、サイトに「毎分何度も何度も」アクセス；残りは識別可能なクローラー（Claude bot、OpenAI bot、Google）と、WordPress ではないサイトの WordPress ファイルを探す脆弱性スキャナ。アナリティクスの矛盾が手がかり — 実ユーザーは少数なのにサーバー負荷は極大 — ほとんどの bot リクエストは記事を取得せず SPA の JavaScript も実行しないから。対策は地味：エンドポイントごとのリクエスト ログ（見えないトラフィックを見える化したのはこの一手）、サマライザーの完全ブロック、検索ボットを歓迎し続ける robots.txt、レート制限 — 長期はサイト自体の高速化。Claude は防御的に、スキャナのシミュレーションと機密情報非公開の確認に使われた。移転可能な教訓は退屈な方：エンドポイント別ログ。規模：設定されていないサマライザー 1 つが HN フロントページの波に勝ち、波が去った後も引き続けた。
 
 Sources: [sammystraus.com](https://sammystraus.com/) · [HN 50073221](https://news.ycombinator.com/item?id=50073221)
+
+
+## 2026-10-15 —— 税がアーカイブをゲートする：lore.kernel.org はプレーンなフェッチに 403、次いで Anubis
+
+**クローラ税がこのフィード自身の watch 経路に届いた。** Torvalds の LLM 支援 folio シリーズに v2 があるか確認するため（行動パスの項目）、`lore.kernel.org/lkml/?q=…` はプレーンな curl に **nginx 403** を、ブラウザ UA での再試行には **Anubis の PoW ページ**（"Making sure you're not a bot!"、`/.within.website/x/xess` のアセットパス）を返した——このファイルが kernel.org や Read the Docs への展開を追ってきたのと同じ TECHARO ゲートが、今や LKML アーカイブ自体の前面にある。patchwork.kernel.org は同じクエリに対して約 2.9KB の空のシェルを返した。帰結は逸話ではなく構造的：カーネルメーリングリストの watch——このリポジトリが他のすべてに使ってきた常設チャネルのパターン——には**ヘッドレスエージェントが取得可能な一次ソースが存在しない**；LWN/報道か認証済みミラーがチャネルとなり、ソースから 1 ホップ離れる。この実行自身の null（シリーズがレビューに入ってから約 25 時間、v2 なし）は二次報道のウェブ検索で確定し、`torvalds-folio-v2` は lore のスクレイプではなく HN フィンガープリント watch として武装された。
+
+Sources: [lore.kernel.org/lkml](https://lore.kernel.org/lkml/) · [Anubis](https://anubis.techaro.lol/)

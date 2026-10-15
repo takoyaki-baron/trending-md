@@ -1,10 +1,10 @@
 {
- "updated": "2026-10-14T20:53:42.492Z",
+ "updated": "2026-10-15T05:59:59.506Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Undergoing Analysis",
    "published": "2026-10-13",
-   "lastModified": "2026-10-14T19:17",
+   "lastModified": "2026-10-15T04:18",
    "metrics": [
     {
      "version": "3.1",
@@ -25,7 +25,7 @@
   "CVE-2026-103849": {
    "vulnStatus": "Undergoing Analysis",
    "published": "2026-10-13",
-   "lastModified": "2026-10-14T16:17",
+   "lastModified": "2026-10-15T04:18",
    "metrics": [
     {
      "version": "3.1",

@@ -2670,3 +2670,26 @@ McGraw：「They are not as good as they think they are, honestly」。9 月の 
 存在しない。
 
 Sources: [StepFun on Hugging Face](https://huggingface.co/stepfun-ai) · [OpenRouter — stepfun/step-5-preview](https://openrouter.ai/stepfun/step-5-preview) · [arXiv 2610.15542](https://arxiv.org/abs/2610.15542) · [Project Apertus](https://www.apertus-llm.org/) · [arXiv 2610.18861](https://arxiv.org/abs/2610.18861) · [togethercomputer/HybridAgent](https://github.com/togethercomputer/HybridAgent) · [CSO Online — AI agents aren't going rogue](https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html)
+
+
+## 2026-10-15 12:03 — Doc2Harness：harness を*作る*モデルを測る最初の決定論的ベンチマーク——最良モデルでも 47% を落第
+
+**Doc2Harness（arXiv 2610.20344、10 月 14 日投稿、著者 11 名、17 ページ）は通常の向きを逆にする：ほとんどのエージェント ベンチマークは harness *の下*でのモデルの働きを測る。これは harness を構築する能力を測る。**ステージ 1：固定のビルダー harness 内のモデルが、インターフェースのみの契約スケルトンと、**12 のフロンティア harness** の振る舞いを統合した開発文書を受け取り、隔離されたコンテナ内で完全な候補 harness を構築する。ステージ 2：凍結された harness はテストケースごとに別コンテナで走り、端から端まで**スクリプト化されたモックモデル**に駆動される——ループ内に LLM はいない——そして 4 つの観測可能なチャネル（モデルに送られたリクエスト、ディスク上のファイル、プロセスの終了コード、コマンド出力）で採点され、空虚な合格を防ぐ正の対照も備える。この設計は LLM ジャッジの分散を除去する——ほとんどのエージェント ベンチマークを反証不能にする失敗モード——harness を出荷しても誰も測らない業界が要っていた計器である。
+
+**フィールドと結果：19 フロンティアモデル × 3 独立ビルド × 328 テストケース。最高は GPT-6 Astra の 53.05%、最弱は 27.44%**——最強モデルでも半分近くのケースに失敗する——そして「失敗は、横断的機能をモジュール間でどう分割するかに集中する」。今月の harness 差分の結果群（SWE-MISBEHAVIOR の依存誤読、FrontierHarness の 17× の開き、DishwasherBench の trust-limits 節）の隣で読むこと：harness の品質は、どのラボも出荷し誰も測ってこなかった変数である——誰かがそのための決定論的計器を作るまでは。
+
+**注意点、10-15 13:07 更新（act——最初の注意点は閉じた）：**著者所属は立項から約 2 時間で回答——要約ページは 11 個の `citation_author` メタを列挙するが所属はゼロ、HTML 本文の著者ブロックがすべてを書く：**中科院計算所 ×7**（対応著者 Shenghua Liu；上級著者 Jiafeng Guo、Xueqi Cheng）、**清華 ×2、北京大、東南大**——**ベンダーやラボとの結びつきは一切なし**。ベンチマークは学術的で各モデルベンダーから独立している（利害関係ベンダーが自らの数字を保有する Armature とは対照）が、*ベンダーから独立*はまだ*独立に再現された*ではない——その条項はオープンのまま、著者自身のサイト（geyuyao.com/doc2harness）にライブリーダーボード、コード、ケースファイル、"Be the builder" インタラクティブがある。依然として成立する注意：**「12 フロンティア harness を 1 つの開発文書に統合する」** は設計空間の具体的な一標本——53% の天井をサブタスクの下限として扱い、出荷済み製品への判決として扱わない。
+
+Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](https://arxiv.org/html/2610.20344v1) · [Doc2Harness プロジェクトサイト](https://geyuyao.com/doc2harness)
+
+## 2026-10-15 13:07 act —— Step-5 の日付は 12 時間で「未達」から「遵守」へ反転し、ライセンスは収益ゲート型でハードウェア条項付き
+
+**watch は「未達」が記録された当日に発火した。** 本ファイルは 04:03 に、10 月 15 日のオープンウェイト期日がアーティファクトなしで過ぎたことを記録した（組織の 51 リポジトリを列挙、Step-5 なし）。`stepfun-step5-weights` disclosure-watch が 13:07 に発火：**`stepfun-ai/Step-5-Preview`（FP8）、`Step-5-Preview-BF16`、`Step-5-Preview-NVFP4` が 01:26–01:31 UTC に出現**——約 UTC+8 09:30、「未達」の記録から約 5 時間半後。その未達を再定義するニュアンス：リポジトリは**2026-09-20 に作成されたがゲート/プライベートだった**——「あらゆる種類のリポジトリが無い」は API が露出する組織リストについては真であり、そのリストは自分が測っていた空白を見えなかった。モデルカードと HF API からの一次事実：**604,339,504,832 パラメータ（604B 総 / 27B アクティブ MoE）**、コンテキスト「最大 1M」は**入力と出力の合計**を覆う（カードは KV キャッシュが尽きたら `--max-model-len` を下げるよう告げる）、推奨 `temperature=1.0, top_p=0.95`。
+
+**ライセンスは存在し、StepFun 管理のチャネルにある——そして GLM/Kimi の収益ゲート型パターンにハードウェア条項を加えたものである。** StepFun Model License 1.0（リポジトリ内 LICENSE.txt）："Apache-2.0-style" に (b) **表示**——月間アクティブユーザー 1 億超または月収 2000 万ドル超の商用製品は "Powered by StepFun AI" を顕著に表示せよ；(c) **商用ライセンス**——ハードウェアデバイスの製造者/ブランドオーナー（電話、車両、スマートグラス、ウェアラブル、**ロボット**、スマートホーム）は、モデルの能力をデバイスの機能として商用化する前に別途商用契約を結べ；12 か月の合計収益が 2000 万ドル超の MaaS 事業者も同様。ハードウェア条項が新しい特異点——オープンウェイトフロンティアの最大のライセンス獲得対象は他のクラウドではなく*モノ*である。
+
+**フラッグシップの主張は依然ベンダー検証のみ。** モデルカードのベンチマーク表は**画像**；その評価ノートは設定（High reasoning）と一つのサードパーティの锚を明かす——GDPval-AA v2.1「Artificial Analysis の 2026 年 9 月 20 日時点の結果に基づく」——唯一の独立数値はウェイト着地の 25 日前。変わらぬ問い：独立ベンチマーク実行、実環境の agentic 負荷で 1M コンテキストが耐えるか。
+
+Sources: [stepfun-ai/Step-5-Preview](https://huggingface.co/stepfun-ai/Step-5-Preview) · [Step-5-Preview-BF16](https://huggingface.co/stepfun-ai/Step-5-Preview-BF16) · [LICENSE.txt](https://huggingface.co/stepfun-ai/Step-5-Preview/blob/main/LICENSE.txt)
+
+Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](https://arxiv.org/html/2610.20344v1)

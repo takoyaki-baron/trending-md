@@ -2664,3 +2664,16 @@ stations?" 那是一个被*交给采购流程*的问题，而不是被回答的�
 是哪一段、哪一个维度——物理安全那一句正是会被当作控制项集合来引用的部分。
 
 Sources: [Securing space — Cyber security for LEO SATCOM (NCSC-NZ PDF)](https://www.ncsc.govt.nz/assets/guidance/Documents/Securing-space-Cyber-Security-for-low-earth-orbit-satellite-communications.pdf) · [Canadian Centre for Cyber Security — joint guidance announcement](https://www.cyber.gc.ca/en/news-events/joint-guidance-securing-space-cyber-security-low-earth-orbit-satellite-communications) · [ASD's ACSC — Securing space](https://www.cyber.gov.au/business-government/secure-design/securing-space)
+
+
+## 2026-10-15 12:03 — KEV 一天同时收录邮件触发的 9.8 与需认证的 8.6，并厘清一种误读
+
+**CISA 10 月 14 日的 KEV 更新收录了两个已被在野利用的企业设备，这一配对本身就是教训：该目录列出的是"正在被利用"，而不是严重程度。**一个 8.6 的需认证 RCE 与一个 9.8 进入同一份目录，理由是两者都在被利用——分数从来不是入选标准。
+
+**CVE-2026-76519 —— Cisco Secure Email Gateway 任意文件写入，CVSS 9.8（CNA 自评，`psirt@cisco.com`，NVD 状态 Undergoing Analysis）。**一个**未认证**的发件人发送特制附件；扫描器处理它时，该缺陷允许攻击者向设备操作系统写入文件，进而可能"以 root 执行命令"。两个前置条件均可自查：邮件策略必须启用 **File Reputation（AMP）**，且 **Content Scanner Tools 版本必须早于 25.3.0.5525**。Cisco 经内部扫描发现它（公告 `cisco-sa-esa-afw-zqYJkjxp`）；修复自 **9 月 14 日**起已发布（AsyncOS 15.5.5-014 与 16.5.0-780，外加一个无需升级或重启即可安装的 CST 更新）——但 **AsyncOS 16.0 没有已修复的构建**，没有变通方案，且 Cisco 表示 10 月起察觉攻击，并已联系显示"可能失陷指标"的 Secure Email Cloud 客户。检测方法：`grep "System Security" system_logs`。值得点名的形态：**设备的 content-inspection 特性本身就是攻击路径**——与本文件追踪的 RAG 摄取 SSRF、邮件扫描链同一 genre；替防守方解析不可信内容的那块组件，自己就是入口。
+
+**CVE-2026-0322 —— PAN-OS 管理接口的需认证 RCE，CVSS 4.0 8.6（Palo Alto CNA，NVD 状态 Received；向量 `PR:H`）。**影响 PA-Series、VM-Series 与 Panorama 上的 PAN-OS 12.2.0–12.2.3；修复在 12.2.4+；**无变通方案**，Threat Prevention 仅有部分覆盖（Threat ID 510046/510047）。Palo Alto 自己的公告称"观察到非常有限的利用"——带 `PR:H` 的 8.6 是对"你需要管理接口凭据"的诚实评分，这也正是 KEV 收录比数字更重要的原因：管理接口凭据恰恰是钓鱼运营者与访问经纪活动能拿到的东西。
+
+**按既定检查的溯源：**两条记录均未经 NVD 分析——9.8 是 CNA 评分（Cisco），8.6 是 CNA 评分（Palo Alto，状态 Received）。9 月 14 日修复到 10 月 14 日 KEV 收录之间的一个月，正是"无利用报告"悄然失效的窗口；两台设备都以解析不可信内容为业，而 SEG 那台发一封邮件即可利用——设备利用的门槛，几乎再低不过了。
+
+Sources: [Cisco — cisco-sa-esa-afw-zqYJkjxp](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-afw-zqYJkjxp) · [Palo Alto — CVE-2026-0322](https://security.paloaltonetworks.com/CVE-2026-0322) · [The Hacker News](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html)

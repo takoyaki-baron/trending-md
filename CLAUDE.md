@@ -154,6 +154,10 @@ underlying pages — this produced a two-layer false signal in a single item.
    `curl -s "https://arxiv.org/abs/<id>"` (or the paper's page) → compare authors against the
    vendor's team; also check the *metric* — a claimed number may not be the same metric other
    systems report (accuracy vs recall@5), making cross-system "SOTA" comparisons incoherent.
+   **The affiliation gap closes one hop away** (added 2026-10-15, Doc2Harness): arXiv abstract
+   pages list authors WITHOUT affiliations; the HTML full text carries them — when the abs page
+   has none, fetch `https://arxiv.org/html/<id>v1` and read the author block before writing
+   "unaffiliated/unstated." An affiliation-less abs page is a closable gap, not a finding.
 
 7. **A JS-only vendor page has a machine-readable twin — find it, name it, and read the CNA field
    inside it** (added 2026-10-14, the October Patch Tuesday CVRF read; extended same day). Microsoft's

@@ -345,3 +345,29 @@ shows is that a same-harness *action* benchmark would be measuring the wrong spl
 missing artifact in this field is a **state-level error suite** rather than another leaderboard row.
 
 Sources: [arXiv 2610.18579](https://arxiv.org/abs/2610.18579) · [arXiv HTML — Reading Right, Acting Wrong](https://arxiv.org/html/2610.18579v1)
+
+## 2026-10-15 12:03 — Jev 1.14.0 ships a "Danger Zone": images, a bounding-box type, uncapped context
+
+**Typesafe's Jev 1.14.0** (under the `jev-preview` alias; `jev-latest` moves in a week; 1.13.0 gets a
+60-day deprecation warning, 1.14.0 30 — **a formal deprecation policy is coming**, the first announced
+in this class) is "small, subtle improvements to *everything*," largest gains in multilingual support.
+The news is the opt-in **Danger Zone**, enabled per-request via API headers:
+
+1. **Composable images** — "the model was multimodal all along"; images work anywhere the JSON
+   interface allows (`state`, `instructions`, `criteria`) with `TypeSafe-Danger-Zone-Images: true`.
+2. **A `box` type** returning a single bounding box, "no type errors allowed" — **the first type
+   beyond decision-making**, exclusive to 1.14.0. This is the system-one shelf reaching toward the
+   GUI-agent grounding layer — the territory of box-returning computer-use harnesses, but as a
+   first-class type in a decision API.
+3. **Longer context** — production context is deliberately capped for reliability;
+   `TypeSafe-Danger-Zone-Long-Context: true` removes the cap.
+4. **A debug opt-in** letting users share queries to help find model issues; Typesafe still won't
+   train on them.
+
+**The caveats are in Typesafe's own words** — the disclosure pattern this file keeps wishing for and
+rarely getting: the danger-zone features have "way too much jaggedness" to vouch for in production;
+all models perform worse on multimodality than pure text; models are less reliable on longer
+contexts; and the internal benchmarks are "provisional, biased toward our own models," so trust your
+own evals.
+
+Sources: [Typesafe — Jev 1.14.0](https://typesafe.ai/blog/jev-1-14) · [HN discussion](https://news.ycombinator.com/item?id=50095353)

@@ -283,3 +283,17 @@ Torchcast-27B、Quyet-1.0-Large**）、两个读取冻结 LLM 的配方（Cygnet
 错误套件**，而不是又一行排行榜。
 
 Sources: [arXiv 2610.18579](https://arxiv.org/abs/2610.18579) · [arXiv HTML — Reading Right, Acting Wrong](https://arxiv.org/html/2610.18579v1)
+
+
+## 2026-10-15 12:03 — Jev 1.14.0 发布 "Danger Zone"：图像、包围盒类型、不设上限的上下文
+
+**Typesafe 的 Jev 1.14.0**（挂在 `jev-preview` 别名下；`jev-latest` 一周后切换；1.13.0 获 60 天弃用警告，1.14.0 获 30 天——**正式的弃用政策即将出台**，是该类中首个宣布的）是 "small, subtle improvements to *everything*"，增益最大处在多语言支持。新闻是按请求经 API 头启用的选择性 **Danger Zone**：
+
+1. **可组合图像**——"the model was multimodal all along"；JSON 接口允许的任何位置（`state`、`instructions`、`criteria`）都可以放图像。
+2. **`box` 类型**——返回单个包围盒，"no type errors allowed"——**决策之外的第一个类型**，1.14.0 独有。这是 system-one 货架伸向 GUI-agent 落地层的动作——与返回包围盒的 computer-use harness 同一版图，但作为决策 API 里的一等类型。
+3. **更长上下文**——生产上下文为可靠性而刻意设限；`TypeSafe-Danger-Zone-Long-Context: true` 移除上限。
+4. **调试选择加入**——允许用户分享查询以帮助发现模型问题；Typesafe 仍拒绝用于训练。
+
+**注意事项是 Typesafe 自己写的话**——本文件一直盼望却很少等到的披露模式：danger-zone 特性 "way too much jaggedness"，不敢为生产环境担保；所有模型在多模态上都不如纯文本；模型在更长上下文上更不可靠；内部基准 "provisional, biased toward our own models"，所以请信你自己的评测。
+
+Sources: [Typesafe — Jev 1.14.0](https://typesafe.ai/blog/jev-1-14) · [HN discussion](https://news.ycombinator.com/item?id=50095353)

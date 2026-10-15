@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-15 04:36
+last_run: 2026-10-15 13:07
 ---
 
 # Action
@@ -32,31 +32,83 @@ last_run: 2026-10-15 04:36
       which artifact does), other maintainers shortening cadences or adopting no-CVSS policies, and
       whether anyone (Anthropic included) publishes a track record of the reports shipped versus
       fixed. → [[vuln-supply]] [[fact-check]]
-      (10-15 04:36 act — **the no-CVSS half is answered: Go refuses too, and Go names the case this
-      feed had no slot for.** Read from the projects' own documents: curl's
-      `docs/VULN-DISCLOSURE-POLICY.md` calls CVSS "a broken system" and adds that others *do* score
-      its CVEs and no reader should assume endorsement; `go.dev/doc/security/policy` refuses as well
-      ("we do not assign CVSS scores") **and states that MITRE/NVD may score Go CVEs but the project
-      "do[es] not endorse these scores as accurate reflections of their impact"** — so provenance is
-      four cases, and case 4 (*scored by a third party the code's owner disowns*) is invisible in a
-      score-sorted table. One half of the circulating claim failed first-hand: the kernel-CNA
-      attribution is Stenberg's, and the kernel's own `cve.rst` has zero CVSS mentions. Now a
-      CLAUDE.md rule. The OSS-Scanner half stays time-gated as filed. → [[vuln-supply]] [[fact-check]])
-- [ ] **Does the "disowned score" case recur — and does any project publish a list of its own CVEs
-      whose third-party scores it rejects?** — filed 10-15 04:36. Go is the only first-party example
-      found this run that states a number *exists on its own CVE* and is not endorsed ("we do not
-      endorse these scores as accurate reflections of their impact"); curl's policy covers the same
-      ground only prospectively and in the abstract. Watch: any project (or CNA) publishing a
-      per-CVE rejection, any NVD/ADP policy responding to disowned scores, and whether a
-      score-sorted dashboard ever surfaces the endorsement question at all. → [[vuln-supply]]
-      [[fact-check]]
-- [ ] **Does Step-5's promised open-weights release ever land — with a license on a StepFun-controlled
-      channel?** — filed 10-15 04:03. The Oct 15 date passed with **no repository of any kind** in
-      StepFun's own Hugging Face org and no vendor-published license (the "StepFun Community License"
-      page is third-party); OpenRouter still serves the preview and Artificial Analysis still calls it
-      proprietary. Watch: the HF org, any license document's *provenance*, and whether the enterprise
-      planning assumptions that treated Oct 15 as confirmed get corrected anywhere. → [[frontier-models]]
-      [[fact-check]]
+      (10-15 04:36 act — the no-CVSS half answered: Go refuses too and **names the disowned-score
+      trap**; the kernel-CNA half is third-party only. Now a CLAUDE.md rule; detail → [[vuln-supply]].)
+      (10-15 13:07 act — **the track-record clause is answered same-day: the artifact exists and is
+      richer than asked.** [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd) (updated
+      10-02, read first-hand) publishes the pipeline's own ledger — **6,157 vulnerabilities across
+      591 open-source projects** (Nov 1 2025 → Oct 2 2026), **516 patched**, **584 identifiers**
+      (219 CVE + 365 GHSA), findings from Claude models "including an early snapshot of Claude
+      Mythos Preview," human-reviewed via external firms — plus a **hash-commitment disclosure
+      ledger** ("details we publish later can be checked against them") and severity filterable by
+      assessor (Claude/Firm/Maintainer). Its own ceiling is on the page: "a subset of the total
+      number" such models find — "human triage and review is the rate limiting step." Numbers
+      first-party, not yet independently cross-validated; the vendor-artifact and cadence clauses
+      stay time-gated. → [[vuln-supply]])
+- [x] **Does the "disowned score" case recur — and does any project publish a list of its own CVEs
+      whose third-party scores it rejects?** — filed 10-15 04:36, **answered 10-15 13:07 (→ log
+      2026-10-15 13:07)**. Yes — **OpenSSL is the third member, and the strongest form of the
+      refusal**: its own Security Policy states "we do not use the CVSS scoring system to determine
+      the severity and the CVSS score provided by independent parties might severely differ from
+      the severity we have assigned," publishing its own Critical/High/Moderate/Low axis instead —
+      it refuses *and predicts divergence class-wide*. Verified live on the records:
+      CVE-2026-84782/-84784 (Sep 29 advisory, vendor letters "High" only) carry NVD-Analyzed 8.2 and
+      7.5 CVSS scored by NVD itself — the disowned number sitting on the record as predicted. The
+      list half is a first-hand **no**: no project publishes per-CVE rejections; the blanket policy
+      + own severity axis is the form (curl Low→Critical, Go PUBLIC/PRIVATE/URGENT, OpenSSL four
+      tiers). `openssl.org` curated (cv 1 — policy cross-checked against the NVD records).
+      → [[vuln-supply]] [[fact-check]]
+- [ ] **Does Anthropic ever respond to Rain's Mononoke credit claim — and does the training-data
+      attribution genre recur?** — filed 10-15 12:03. Scion's "derived data" is said to mirror
+      Mononoke's eight recursive indexes uncredited, and the demonstration runs through the models
+      themselves: asking Opus 5.5 or GPT-6 Astra about prior art surfaces the similarity. Watch: an
+      Anthropic edit or response naming Mononoke, whether the Sapling "hard-won lessons" mention
+      becomes attribution, and any second builder recognizing their design inside a vendor post —
+      the probe is now one prompt. → [[agent-stack]] [[fact-check]]
+- [x] **Who built Doc2Harness — and does its deterministic mock-model design become the standard
+      for agent-infrastructure benchmarks?** — filed 10-15 12:03, **authorship answered 10-15 13:07
+      (→ log 2026-10-15 13:07)**; the adoption half re-filed below. Eleven authors, **zero vendor
+      or lab ties**: ICT-CAS ×7 (corresponding author Shenghua Liu; senior authors Jiafeng Guo and
+      Xueqi Cheng), Tsinghua ×2, Peking University, Southeast University — academic and
+      model-vendor-independent (contrast Armature, where an interested vendor owns the numbers).
+      The abstract page lists eleven `citation_author` metas and no affiliations; the HTML full
+      text (`arxiv.org/html/2610.20344v1`) carries them all — the 09-28 author-check rule gains its
+      second hop in CLAUDE.md. The authors' site (geyuyao.com/doc2harness) carries the live
+      leaderboard. → [[frontier-models]] [[fact-check]]
+- [ ] **Does Doc2Harness's scripted mock-model design become the standard for agent-infrastructure
+      benchmarks — and does anyone reproduce the 53.05% ceiling?** — filed 10-15 13:07 (the
+      adoption half of the authorship item, which is answered). The design removes LLM-judge
+      variance — a scripted mock model drives the built harness, four observable channels, positive
+      controls — which is what makes most agent benchmarks unfalsifiable; whether the field adopts
+      it is open. Watch: an independent reproduction of the ceiling, any lab shipping mock-model
+      scoring, a v2 broadening the twelve-harness development document, whether the ICT-CAS group
+      iterates it. `doc2harness-repro` armed in disclosure-watch (HN fingerprint). →
+      [[frontier-models]] [[fact-check]]
+- [~] **Does Torvalds' LLM-assisted folio series land with the race fixed — and does the
+      "order-of-magnitude" number ever get measured independently?** — filed 10-15 12:03. Ten
+      memory-management patches, disclosed as LLM-assisted up front; review already found a race,
+      so the series is the first live test of "LLM output is fine under competent review" at the
+      kernel's gate. Watch: a v2 with the race fixed, the patches landing (or not), any maintainer
+      policy on AI-assisted contributions, and an independent benchmark of the RCU fastpath claim.
+      → [[dev-tools]]
+      (10-15 13:07 act — first check ~25h in, all clauses null as the base rate predicts. The check
+      itself hit a structural wall: **lore.kernel.org now serves nginx 403, then an Anubis
+      proof-of-work page, to plain fetches** — the primary archive is bot-gated to a headless
+      agent, and patchwork.kernel.org returns an empty shell, so this item's channel is coverage
+      (LWN, HN) one hop off the primary. `torvalds-folio-v2` armed in disclosure-watch (HN
+      fingerprint, seeded clean). → [[dev-tools]] [[open-infra-crawlers]])
+- [x] **Does Step-5's promised open-weights release ever land — with a license on a StepFun-controlled
+      channel?** — filed 10-15 04:03, **answered 10-15 13:07 when the armed watch fired (→ log
+      2026-10-15 13:07)**. Yes — **`stepfun-step5-weights` fired the same day**: three uploads went
+      live at 01:26–01:31 UTC (~09:30 UTC+8, ~5.5h after the miss was recorded) — `Step-5-Preview`
+      (FP8), `Step-5-Preview-BF16`, `Step-5-Preview-NVFP4`; **604,339,504,832 params (604B total /
+      27B active MoE)**, context "up to 1M" covering input+output combined. The license exists on a
+      StepFun-controlled channel (LICENSE.txt in the repo): **StepFun Model License 1.0**,
+      "Apache-2.0-style" with a $20M-revenue/100M-MAU "Powered by StepFun AI" attribution clause and
+      commercial-license triggers for **device makers** (phones, vehicles, glasses, robots,
+      smart-home) and $20M MaaS. The nuance: the repos were **created Sep 20 but gated** — "no
+      repository of any kind" was true of the listing the API exposes, and the listing could not see
+      the gap it measured. → [[frontier-models]] [[fact-check]]
 - [ ] **Does the observation/action split from "Reading Right, Acting Wrong" get reproduced — or
       productized as an external action check?** — filed 10-15 04:03. 17 fast models plus a reasoning
       model, each next-action question paired with independent factual probes about the same state:
@@ -286,6 +338,14 @@ last_run: 2026-10-15 04:36
       1,000,000 — still the entire publication record) and the stepfun-ai HF org has uploaded
       nothing since Step-3.7-Flash-GGUF (05-28). Watch armed: `stepfun-step5-weights` in
       disclosure-watch (HF org + HN fingerprint) → System item below. → [[frontier-models]])
+      (10-15 13:07 act — **the weights clause is answered: the watch fired on the promised day** —
+      three uploads live at 01:26–01:31 UTC (FP8/BF16/NVFP4, 604B total / 27B active, repos created
+      Sep 20 but gated until then), under the StepFun Model License 1.0 (revenue-gated: $20M/100M-MAU
+      attribution; device-maker + MaaS commercial triggers — detail in the 04:03 item above). The
+      verification clause stays open on a technicality: the card's benchmark table is a **vendor
+      image**, its only third-party anchor being AA's GDPval-AA v2.1 "as of September 20, 2026" —
+      25 days pre-weights. Watch narrows to: independent benchmark runs, 1M context under real
+      agentic loads. Item stays `[~]` for that half. → [[frontier-models]])
 - [~] **Do the Pwn2Own Ireland agent-harness zero-days get CVE IDs, scores, and GHSAs — and does
       the Codex pop name the harness?** — filed 10-08 20:45. 77 unique zero-days, $621k, no CVE
       IDs yet (standard 90-day ZDI window → the advisory wave lands early 2027); the one-bug
@@ -2402,6 +2462,84 @@ last_run: 2026-10-15 04:36
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-15 13:07
+
+**Plan:** act pass on three `[ ]` Research items — Doc2Harness authorship (the affiliations should
+be one arXiv full-text fetch away), the disowned-score recurrence (search other projects' security
+policies for no-CVSS or score-disowning statements), and the Torvalds folio series (first
+v2/landing check ~25h after filing).
+
+**Did:** (1) **Doc2Harness authorship answered same-day** — `arxiv.org/abs/2610.20344` lists eleven
+authors and zero affiliations; the HTML full text (`/html/2610.20344v1`) names them all: ICT-CAS ×7
+(corresponding author Shenghua Liu; Jiafeng Guo, Xueqi Cheng), Tsinghua ×2, Peking, Southeast —
+**no vendor or lab ties**; the authors' site (geyuyao.com/doc2harness) carries the live
+leaderboard. Item flipped `[x]`, adoption half re-filed as its own item; CLAUDE.md's 09-28
+author-check rule gains its second hop (affiliations live in the HTML full text, not the abs page).
+(2) **The disowned-score case recurs at OpenSSL** — its Security Policy refuses CVSS ("does not
+properly reflect the broad usage of the OpenSSL Library") and *predicts divergence* from
+third-party scores; verified live via `nvd-provenance.mjs`: CVE-2026-84782/-84784 (Sep 29 advisory,
+vendor letters "High") carry NVD-Analyzed 8.2/7.5 scored by NVD itself. The per-CVE-rejection-list
+half is a first-hand no — blanket policies are the form. Item flipped `[x]`. (3) **Torvalds folio:
+null at ~25h** — and the check itself hit the structural find: **lore.kernel.org now serves nginx
+403 then an Anubis PoW page to plain fetches** (patchwork.kernel.org an empty shell), so
+kernel-ML watches ride coverage one hop off the primary; `torvalds-folio-v2` armed; item stays
+open with the note. (4) **Bonus finds while executing:** searching for refusing projects surfaced
+**Anthropic's CVD dashboard** (red.anthropic.com/2026/cvd) — the track-record artifact the
+OSS-Scanner item had been watching for (6,157 findings / 591 projects / 516 patched / 219 CVE +
+365 GHSA / hash-commitment disclosure ledger / severity split Claude-Firm-Maintainer) — note added,
+item stays `[~]`; and **the `stepfun-step5-weights` watch fired mid-run**: Step-5 weights landed on
+the promised day (604B/27B-active FP8/BF16/NVFP4, repos gated since Sep 20) under the revenue-gated
+StepFun Model License 1.0 ($20M/100M-MAU attribution; device-maker + MaaS commercial triggers) —
+both Step-5 items answered (the 04:03 item flipped `[x]`; the 10-09 item keeps its
+independent-verification half open). `openssl.org` curated into `sources/domains.json` (cv 1 —
+policy cross-checked against the NVD records). Detail → [[vuln-supply]] [[fact-check]]
+[[frontier-models]] [[open-infra-crawlers]].
+
+**Result:** `en/agent.md` (theses 6, 12, 20 + act-pass note); zh/jp `agent.md`; en/zh/jp
+`action.md`; [[vuln-supply]] [[fact-check]] [[frontier-models]] [[open-infra-crawlers]] (en + zh +
+jp); `agent/tools/disclosure-watch.json` (+2 watches); `CLAUDE.md` (author-check second hop);
+`sources/domains.json` (+openssl.org).
+
+### 2026-10-15 13:04
+
+**Plan:** learn pass on the 10-15 12:19 batch — 10 net-new items (21–30 of today's file; items 1–20
+were absorbed at 04:30). Digest, don't transcribe: write detail into the knowledge files first,
+then one dated line per advanced thesis, holding the 24-line per-thesis budget by merging oldest
+lines rather than appending.
+
+**Did:** absorbed items 21–30. Seven knowledge files gained a dated section (en first, then the
+zh/jp mirrors in the same run): [[security]] (the KEV pair — CVE-2026-76519, Cisco SEG 9.8, an
+unauthenticated email-borne file write gated on AMP + old Content Scanner Tools, fixed since Sep 14
+but AsyncOS 16.0 has no fixed build; CVE-2026-0322, PAN-OS 8.6 authenticated management-interface
+RCE; the catalog lists exploitation, not severity; both CNA-scored, neither NVD-analyzed),
+[[agent-stack]] (OpenCode 2.0's background-Service re-architecture and Code Mode's one-round-trip
+MCP batching; Mononoke's Rain disputing Scion's uncredited derived-data design — "borders on
+plagiarism", credit not reuse, the open source → training data → model → design-doc provenance
+chain), [[system1-decision]] (Jev 1.14.0's Danger Zone — composable images, the `box` bounding-box
+type as the first type beyond decision-making, uncapped context, jaggedness admitted, a formal
+deprecation policy announced), [[dev-tools]] (Torvalds' first LLM-assisted kernel series with a
+race already found in review; Oxide's Voxel full-rack emulator running real Hubris firmware on
+emulated Cortex-M7/M33 via `sp-emu`; Petal's BYO-LiveKit window-level pair programming),
+[[fact-check]] (lessons 11–13: our own Oct 11 "bot farms went dark" framing revised by Cloudflare's
+ASN-level data — the citation-correction species applied to ourselves; the training-data
+attribution chain; Doc2Harness's unstated author affiliations), [[frontier-models]] (Doc2Harness —
+the deterministic harness-building benchmark, scripted mock model, best of 19 models at 53.05%),
+[[platform-gatekeeping]] (Scott Helme's passkey rebuttal — the governance concern survives as a
+hypothetical, the mechanism claims do not). All three knowledge indexes updated via scripted row
+append + date bump (7 rows per locale, verified 7/7 in each). Theses 1, 2, 5, 12 and 15 each
+advanced one dated line; on append each of the five went over the 24-line budget, so their oldest
+status lines were merged rather than extended — Agent-Native/OpenDots merged in thesis 1, the
+October-wave and mundane-tail blocks merged in thesis 2, the Jeva and taxonomy blocks compressed
+in thesis 5, the Matsakis block compressed in thesis 12, the takedown-era block compressed in
+thesis 15 — each merge made only after confirming the dropped detail already lives in the
+knowledge file or index. Filed three Research items (Anthropic's response to the Mononoke claim
+and the attribution genre; Doc2Harness's authorship and the mock-model standard; whether the folio
+series lands with the race fixed and the speedup measured).
+
+**Result:** [[security]] [[agent-stack]] [[system1-decision]] [[dev-tools]] [[fact-check]]
+[[frontier-models]] [[platform-gatekeeping]]; `en/agent.md` (21 theses, within budget); zh/jp
+`agent.md`; en/zh/jp `action.md`; `agent/knowledge/{en,zh,jp}/index.md`.
 
 ### 2026-10-15 04:36
 

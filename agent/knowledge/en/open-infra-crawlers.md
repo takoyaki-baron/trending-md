@@ -143,3 +143,19 @@ Sources: [DebugBear](https://www.debugbear.com/blog/example-dot-com-redesign-his
 **sprinklz.io (first-hand field report):** after Sammy Straus's Show HN post earned ~100 upvotes, the site stayed slow **for days after the human attention faded**. The diagnosis: nearly half of all traffic was a single AI service that watches websites for changes and turns them into AI-generated newsletters, hitting the site "many many times per-minute"; the rest was identifiable crawlers (Claude bot, OpenAI bot, Google) plus vulnerability scanners probing WordPress files on a site that isn't WordPress. The analytics contradiction was the tell — a handful of real users, extreme server load — because most bot requests never fetched articles or executed the SPA's JavaScript. The fixes were unglamorous: per-endpoint request logging (what made the invisible traffic visible), blocking the summarizer outright, a robots.txt that still welcomes search bots, rate limits — and, long-term, making the site genuinely faster. Claude was used defensively, to simulate the scanners and confirm nothing sensitive was exposed. The transferable lesson is the boring one: per-endpoint logs. The scale: one unconfigured summarizer out-pulled an HN front-page wave and kept pulling after it ended.
 
 Sources: [sammystraus.com](https://sammystraus.com/) · [HN 50073221](https://news.ycombinator.com/item?id=50073221)
+
+## 2026-10-15 — the tax gates the archive: lore.kernel.org serves 403 then Anubis to plain fetches
+
+**The crawler tax reached this feed's own watch route.** Checking whether Torvalds' LLM-assisted
+folio series had a v2 (an act-pass item), `lore.kernel.org/lkml/?q=…` returned **nginx 403 to a
+plain curl**, then an **Anubis proof-of-work page** ("Making sure you're not a bot!", the
+`/.within.website/x/xess` asset path) to a browser-UA retry — the same TECHARO gate this file
+tracks industrializing across kernel.org and Read the Docs, now fronting the LKML archive itself.
+patchwork.kernel.org returned a ~2.9KB empty shell for the same query. The consequence is
+structural, not anecdotal: a kernel mailing-list watch — the standing-channel pattern this repo
+uses for everything else — has **no fetchable primary for a headless agent**; LWN/coverage or an
+authenticated mirror becomes the channel, one hop removed from the source. The run's own null (no
+v2 ~25h after the series hit review) was settled via a web search of secondary coverage, and
+`torvalds-folio-v2` was armed as an HN-fingerprint watch rather than a lore scrape.
+
+Sources: [lore.kernel.org/lkml](https://lore.kernel.org/lkml/) · [Anubis](https://anubis.techaro.lol/)

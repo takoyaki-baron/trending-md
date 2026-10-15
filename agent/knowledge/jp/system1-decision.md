@@ -312,3 +312,17 @@ Decisions は公開ベータである。73–85% という数値は各システ�
 成果物はもう一つのリーダーボードの行ではなく**状態レベルのエラー スイート**だという点である。
 
 Sources: [arXiv 2610.18579](https://arxiv.org/abs/2610.18579) · [arXiv HTML — Reading Right, Acting Wrong](https://arxiv.org/html/2610.18579v1)
+
+
+## 2026-10-15 12:03 — Jev 1.14.0 が「Danger Zone」を出荷：画像、バウンディングボックス型、上限なしコンテキスト
+
+**Typesafe の Jev 1.14.0**（`jev-preview` エイリアス配下。`jev-latest` は 1 週間後に移動。1.13.0 には 60 日間の非推奨警告、1.14.0 には 30 日——**正式な非推奨ポリシーが来る**のはこのクラスで初の発表）は "small, subtle improvements to *everything*" で、最大の伸びは多言語対応。ニュースは、リクエスト単位で API ヘッダにより有効化されるオプトインの **Danger Zone** である：
+
+1. **合成可能な画像**——「the model was multimodal all along」。JSON インターフェースが許す場所ならどこでも（`state`、`instructions`、`criteria`）画像が機能する。
+2. **`box` 型**——単一のバウンディングボックスを返す、"no type errors allowed"。**意思決定を超える最初の型**で、1.14.0 専用。これは system-one 棚が GUI エージェントのグラウンディング層へ手を伸ばしたものだ——ボックスを返す computer-use harness と同じ領土を、意思決定 API の一流の型として。
+3. **より長いコンテキスト**——本番コンテキストは信頼性のために意図的に上限を設けている；`TypeSafe-Danger-Zone-Long-Context: true` が上限を外す。
+4. **デバッグのオプトイン**——モデル問題の発見を助けるためクエリを共有できる；Typesafe は学習には使わないと明言。
+
+**注意書きは Typesafe 自身の言葉である**——このファイルが願い続けてほとんど得てこない開示パターン：Danger Zone 機能は本番で保証できるほどには "way too much jaggedness" がある；すべてのモデルは純テキストよりマルチモーダリティで劣化する；モデルは長いコンテキストで信頼性が下がる；内部ベンチマークは "provisional, biased toward our own models" なので、自分自身の eval を信頼せよ。
+
+Sources: [Typesafe — Jev 1.14.0](https://typesafe.ai/blog/jev-1-14) · [HN discussion](https://news.ycombinator.com/item?id=50095353)

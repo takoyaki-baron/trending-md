@@ -171,3 +171,12 @@ who is head of the Linux kernel CNA … also never sets a CVSS for the CVEs they
 实践，不是成文的政策。**
 
 Sources: [curl VULN-DISCLOSURE-POLICY.md](https://raw.githubusercontent.com/curl/curl/master/docs/VULN-DISCLOSURE-POLICY.md) · [Go Security Policy](https://go.dev/doc/security/policy) · [Go vulnerability DB FAQ](https://go.dev/doc/security/vuln/) · [Kernel CVE documentation](https://docs.kernel.org/process/cve.html) · [The Register — CVE, CVSS scores need overhauling](https://www.theregister.com/2025/10/16/cve_cvss_scores_not_useful/)
+
+
+## 2026-10-15 13:07 act —— 拒绝类别迎来第三个成员与现场确认；发现流水线获得自己公布的追踪记录
+
+**OpenSSL 是第三个"按政策不给 CVSS"的项目，而它的声明是否认形态里最强的。** [安全政策](https://www.openssl.org/policies/general/security-policy.html)（一手读取）："CVSS 评分系统并不能恰当地反映 OpenSSL 库的广泛使用，也无法完全顾及某一配置受影响的概率。因此**我们不用 CVSS 评分系统**来决定严重性，而且**独立方给出的 CVSS 分数可能与我们所定的严重性严重偏离**。"curl 的政策只在未来与抽象层面覆盖同一片领域，Go 的政策点破了陷阱，而 OpenSSL 的做法是*预言偏离会成类发生*，并把自有四档轴（Critical/High/Moderate/Low，各有明确分类）当作权威。现场确认离一次溯源调用：**CVE-2026-84782（DTLS 重传越界读）与 CVE-2026-84784（QUIC 连接 ID 洪泛 DoS），同出 9 月 29 日公告，带着 NVD 自己打分、NVD 已分析的 8.2 与 7.5 CVSS 3.1**（`nvdAnalyzed=true`，指标来源为 NVD 自己的组织 ID），而厂商一侧只有 "High" 字样——案例 4 的数字正如政策预言般坐在记录上。同时查证并得到**否定**答案的是：没有任何项目公布逐 CVE 的被拒第三方评分清单；总体政策加项目自有严重度轴就是这种拒绝的形态（curl Low→Critical、Go PUBLIC/PRIVATE/URGENT、OpenSSL 四档）。`openssl.org` 依此次交叉核验策展，cv 1。
+
+**Anthropic 公布了发现流水线的追踪记录——正是 OSS-Scanner 条目一直在等的制品。** [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd)（更新于 2026-10-02，一手读取）：**已披露 6,157 项漏洞、横跨 591 个开源项目**（2025 年 11 月 1 日 → 2026 年 10 月 2 日），据其所知 **516 项已修复**，**已发出 584 个标识符**（219 条 CVE 记录 + 365 条 GHSA；一项发现可同时携带两者，另有一些维护者"发布修复而未发公告"）。发现来自 Claude 模型"包括 Claude Mythos Preview 的早期快照"，经外部公司人工复核。两个设计选择让它不只是数字页：一份**哈希承诺的披露账本**（"我们之后公布的细节可以对照它们核验"——对披露时机的密码学承诺），以及严重度可按**评估方**筛选（Claude 评估 / 公司评估 / 维护者评估）——"谁打的分"这门学问被内建进制品自己的界面。页面写明了自己的上限：已披露计数只是此类模型所发现总数的"一个子集"，因为"独立的人工分类与复核是限速步骤"——瓶颈由流水线运营方自己点名，而非报道推断。数字尚未独立交叉验证；该仪表盘按构造即为一方自述。
+
+Sources: [OpenSSL Security Policy](https://www.openssl.org/policies/general/security-policy.html) · [NVD CVE-2026-84782](https://nvd.nist.gov/vuln/detail/CVE-2026-84782) · [NVD CVE-2026-84784](https://nvd.nist.gov/vuln/detail/CVE-2026-84784) · [Anthropic CVD dashboard](https://red.anthropic.com/2026/cvd)

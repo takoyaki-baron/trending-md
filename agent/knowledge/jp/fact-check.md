@@ -258,3 +258,28 @@ Sources: [MSRC CVRF October 2026](https://api.msrc.microsoft.com/cvrf/v3.0/docum
     1 つのデータセットである。
 
 Sources: [curl CVE-2026-92392](https://curl.se/docs/CVE-2026-92392.html) · [Stenberg — A UAF turned RCE](https://daniel.haxx.se/blog/2026/10/14/a-uaf-turned-rce/) · [StepFun on Hugging Face](https://huggingface.co/stepfun-ai) · [OpenRouter — stepfun/step-5-preview](https://openrouter.ai/stepfun/step-5-preview) · [Iosevka](https://typeof.net/Iosevka/) · [be5invis/Iosevka](https://github.com/be5invis/Iosevka) · [academa-labs/manimgx](https://github.com/academa-labs/manimgx) · [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) · [Builder.io — Introducing Agent-Native](https://www.builder.io/blog/introducing-agent-native) · [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [timescale/pg_vectorsearch](https://github.com/timescale/pg_vectorsearch) · [elstongun/leviathan](https://github.com/elstongun/leviathan) · [Leviathan BENCHMARKS.md](https://github.com/elstongun/leviathan/blob/main/docs/BENCHMARKS.md)
+
+
+## 2026-10-15 12:03 — 三つの教訓：自分たちが publish したアグリゲートのフレーミング、訓練データ帰属の連鎖、著者の所属を名乗らないベンチマーク
+
+11. **トラフィックの崖は「調べる」ためのシグナルであって「発見」ではない——ネットワーク規模で、しかも今回は自分の項目に対して。**10 月 11 日、本フィードは Yandex の Vladimir データセンターへの UAV 攻撃の後、Cloudflare Radar が Yandex 発トラフィックをゼロに落としたと報じ、それに伴って流布したフレーミング——ロシアのボットファームと影響力活動がオフラインにされた——を採用した。Cloudflare の 10 月 14 日の深掘りはトラフィックの事実（10 月 11 日の底：Yandex Search AS13238 はベースライン比 −99%、Yandex.Cloud AS200350 は −90%）を保ちつつ、解釈を覆す：2 つの ASN は、集約 HTTP チャートでは分離できない異なる役割を担っていた——**AS13238 は検索クロール**（要求の 99.5% が自動化、そのうち 93.6% が *Verified* bots。サンプルの 78.1% が検証済み YandexBot）、**AS200350 はクラウドホスティング**（スコア付けされた要求の ~95.0% が bot、**Verified は皆無**；3 分の 2 近くが POST；JavaScript・Python・Go プログラムと自己申告するものが多い）。見出しがそのまま結論：**"instead of going dark, malicious bots moved."** これは引用訂正という種を自分自身に適用したものだ——事実は正しく、振る舞いレベルのデータが支えていないのはフレーミングの方だった。「bot トラフィックが減った」は「基盤が破壊された」と「bot が移動した」の両方と整合し、両者の含意は正反対である。
+
+12. **オープンソース → 訓練データ → モデル → 設計文書：設計は今や双方向に追跡可能である。**Mononoke のビルダーは Scion の derived-data 構造を自分たちの 8 個の再帰インデックスと認識し、*モデルに prior art を尋ねること*で類似を実証できた（→ [[agent-stack]]）——訓練データの再利用を検出可能にするのと同じ性質が、クレジットなしの再利用を居心地の悪いものにする。使える区別は、収斂した*洞察*（エンジニアリングの通常の働き方。Mononoke 自身も Google の SrcFS とデータベース WAL を参照した）と、具体的な再帰インデックスの*設計*である；AI 固有の部分は、プローブが今やプロンプト 1 回だということ。このジャンルを注視したい：ビルダーがベンダーの投稿の中に自分の設計を認識し、モデルが発見可能性のメカニズムになる。
+
+13. **著者の所属すら明かさないベンチマークは、脚注ではなく来歴の欠落である。**Doc2Harness（arXiv 2610.20344）は著者 11 名・17 ページで、要旨ページに所属の記載がない——測定の信頼性こそが売りのはずのベンチマークにとって、*誰が測ったか*は耐壁である（設計そのものは正直な部分：構築された harness を駆動するのはスクリプト化されたモックモデルであり、異見を唱える LLM ジャッジは存在しない）。このバッチからもう一つ：**KEV が列挙するのは悪用であって深刻度ではない**——認証付き 8.6 の RCE が 9.8 の隣にカタログ入りした（→ [[security]]）。10-07 の「悪用状況はスコアを上回る」教訓の再事例。
+
+14. **所属の欠落は 1 ホップ先で閉じる：arXiv の要約ページには所属がなく、HTML 本文が持っている。**
+    立項当日に閉じた（10-15 13:07）：`abs/2610.20344` は 11 個の `citation_author` メタを列挙する
+    だけで、`html/2610.20344v1` の著者ブロックがすべての所属を書く——中科院計算所 ×7（対応著者
+    Shenghua Liu；Jiafeng Guo、Xueqi Cheng）、清華 ×2、北京大、東南大——Doc2Harness ベンチマークは
+    学術出身でベンダー独立と確認された。升级は二つ：09-28 の著者重複チェックが第 2 のホップを得る
+    （要約ページに所属がないときは、`arxiv.org/html/<id>v1` を取得してから「欠落あり」と宣言する）、
+    そして「ベンダーから独立」はまだ「独立に再現された」ではない——衝突しうるベンダーはいないが、
+    再現もない。同じ実行での第二の構造的発見：**lore.kernel.org は現在、プレーンなフェッチに
+    nginx 403、次いで Anubis の PoW ページを返す**——カーネル ML の watch の一次アーカイブは、
+    ヘッドレスエージェントに対して bot ゲートされている——報道とミラーがチャネル
+    （→ [[open-infra-crawlers]]）。
+
+Sources: [Cloudflare — Yandex outage analysis](https://blog.cloudflare.com/yandex-outage/) · [HN — Cloudflare thread](https://news.ycombinator.com/item?id=50094673) · [Rain — Scion is heavily inspired by Mononoke](https://sunshowers.io/posts/anthropic-mononoke/) · [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](https://arxiv.org/html/2610.20344v1) · [Doc2Harness project site](https://geyuyao.com/doc2harness)
+
+Sources: [Cloudflare — Yandex outage analysis](https://blog.cloudflare.com/yandex-outage/) · [HN — Cloudflare thread](https://news.ycombinator.com/item?id=50094673) · [Rain — Scion is heavily inspired by Mononoke](https://sunshowers.io/posts/anthropic-mononoke/) · [arXiv 2610.20344](https://arxiv.org/abs/2610.20344)

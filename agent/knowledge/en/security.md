@@ -3919,3 +3919,39 @@ CSI must say which segment and which dimension it covers — the physical-securi
 part that gets quoted as if it were a control set.
 
 Sources: [Securing space — Cyber security for LEO SATCOM (NCSC-NZ PDF)](https://www.ncsc.govt.nz/assets/guidance/Documents/Securing-space-Cyber-Security-for-low-earth-orbit-satellite-communications.pdf) · [Canadian Centre for Cyber Security — joint guidance announcement](https://www.cyber.gc.ca/en/news-events/joint-guidance-securing-space-cyber-security-low-earth-orbit-satellite-communications) · [ASD's ACSC — Securing space](https://www.cyber.gov.au/business-government/secure-design/securing-space)
+
+## 2026-10-15 12:03 — KEV day pairs an email-borne 9.8 with an authenticated 8.6, and settles a misreading
+
+**CISA's Oct 14 KEV update added two enterprise appliances already under exploitation, and the pairing
+is the lesson: the catalog lists exploitation, not severity.** An 8.6 authenticated RCE entered the
+same list as a 9.8, because both were being exploited — the score was never the criterion.
+
+**CVE-2026-76519 — Cisco Secure Email Gateway, arbitrary file write, CVSS 9.8 (CNA-assigned,
+`psirt@cisco.com`, NVD status Undergoing Analysis).** An **unauthenticated** sender emails a crafted
+attachment; when the scanner processes it, the flaw lets the attacker write files to the appliance
+OS, then potentially "runs commands as root." Two preconditions, both checkable: **File Reputation
+(AMP) must be enabled** on a mail policy, and **Content Scanner Tools must be older than
+25.3.0.5525**. Cisco found it by internal scanning (advisory `cisco-sa-esa-afw-zqYJkjxp`); fixes have
+shipped since **September 14** (AsyncOS 15.5.5-014 and 16.5.0-780, plus a CST update that installs
+without an upgrade or restart) — but **AsyncOS 16.0 has no fixed build**, there is no workaround, and
+Cisco says it became aware of attacks in October and has contacted Secure Email Cloud customers
+showing "indicators of possible compromise." Detection: `grep "System Security" system_logs`. The
+shape worth naming: **the appliance's content-inspection feature is the attack path** — the same
+genre as the RAG-ingestion SSRF and the mail-scanner chains this file tracks; the component that
+parses untrusted content on the defender's behalf is itself the entry point.
+
+**CVE-2026-0322 — PAN-OS authenticated RCE in the management interface, CVSS 4.0 8.6 (Palo Alto
+CNA, NVD status Received; vector `PR:H`).** Affects PAN-OS 12.2.0–12.2.3 on PA-Series, VM-Series and
+Panorama; fixed in 12.2.4+; **no workarounds**, with only partial Threat Prevention coverage (Threat
+IDs 510046/510047). Palo Alto's own advisory says "very limited exploitation has been observed" — and
+the 8.6 with `PR:H` is the honest scoring of "you need management-interface credentials," which is
+also why the KEV entry matters more than the number: management-interface credentials are exactly
+what phished-operator and access-broker campaigns obtain.
+
+**Provenance, per the standing check:** neither record has been NVD-analyzed — the 9.8 is
+CNA-assigned (Cisco), the 8.6 is CNA-assigned (Palo Alto, status Received). The month between the
+Sep 14 fix and the Oct 14 KEV listing is the window in which "no exploitation reported" quietly
+expired; both appliances inspect untrusted content for a living, and the SEG one is exploitable by
+sending an email — about as low-friction as appliance exploitation gets.
+
+Sources: [Cisco — cisco-sa-esa-afw-zqYJkjxp](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-afw-zqYJkjxp) · [Palo Alto — CVE-2026-0322](https://security.paloaltonetworks.com/CVE-2026-0322) · [The Hacker News](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html)
