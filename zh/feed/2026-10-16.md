@@ -1,6 +1,6 @@
 ---
 date: 2026-10-16
-updated: 2026-10-16T04:23:00Z
+updated: 2026-10-16T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 31
 license: CC-BY-4.0
@@ -414,13 +414,195 @@ awslabs/aidlc-workflows（MIT-0，5,312★，今日有推送，v2.11.0）把 AWS
 
 ---
 
+## 30. “我在自托管什么”：一台 N100 迷你主机跑 28 个服务 — 拒绝清单才是正文
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 530+ pts · 约15.7小时前 (~04:40 UTC+8)
+- **Tags:** `self-hosting` `homelab` `podman` `n100`
+
+一篇个人自托管栈的长文盘点，今天登上 HN 头条：**一台 180 欧元的 Beelink Mini PC S12 Pro（Intel N100、16 GB 内存、512 GB SSD）外加一块 6 TB 硬盘，跑着 28 个服务 —— 17 个原生二进制、11 个 Podman 容器**：Jellyfin、Immich、Home Assistant、Frigate（8 路摄像头）、Vaultwarden、Forgejo、Actual Budget、FreshRSS、Audiobookshelf、Syncthing、Uptime Kuma。真正的看点是拒绝清单：不用 Docker（"原生二进制加 Podman with systemd"，偏爱单个 Go 二进制）、不用 *arr 套件（"资源密集的烂摊子"）、不自托管邮件（"风险大、麻烦多、收益小"）。除仅限 IPv6 的路由器 VPN 外，一切不对公网暴露。数据：内存占用约 7.5 GB，CPU 30–40% —— 而同款迷你主机现在的标价是 **359 欧元**，本 feed 10 月 12 日追踪的内存涨价税已经落到入门级。
+
+**为什么重要：** 这个 530 分的讨论串是"合理自托管"的当代最佳实践 —— systemd 单元取代编排器、默认只待在局域网内、以及一份诚实的"不值得托管"短清单。也给内存涨价添了一个干净的价签：同一 SKU 一年不到涨了 99%。
+
+[`🔗 What I self-host`](https://viceconsole.fyi/blog/2026/10/10/what-i-self-host/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50109715)
+
+---
+
+## 31. sill：Mac 的任意窗口，实时出现在 iPhone 或 iPad 上 — 硬件编码、无服务器
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News + GitHub · 178+ pts · 约10.3小时前 (~10:00 UTC+8) · 2,269★
+- **Tags:** `macos` `ios` `screen-sharing` `swift` `hevc`
+
+**sill**（Apache-2.0，Swift，昨天有推送）用 ScreenCaptureKit 抓取 Mac 上选定的窗口 —— 或整个桌面 —— 经 VideoToolbox 硬件编码器压成 HEVC，串流到 iPhone/iPad 上的免费 App Store 应用；点按、Apple Pencil、触控板和按键通过 TLS 1.3 回传。连接路径：同一网络、USB 线、无共享网络时的"Direct Wireless Connection"、或远程时走你自己的 VPN（如 Tailscale）—— **没有账号，中间没有服务器**。要求：Apple Silicon Mac、macOS 14+、iOS/iPadOS 17+。Mac 端是经过公证的下载，附 Homebrew cask；README 写明：没有设备连接时，不抓取任何内容。
+
+**为什么重要：** 这是远程*使用*应用，不是屏幕镜像 —— 按窗口抓取，输入栈为触控和 Pencil 重新设计。这是两天内第三条"Mac 窗口出现在别处"的新闻（10 月 15 日 Petal 的结对编程窗口、上文第 27 条 Flipflop 的文件隧道），而无服务器姿态是差异点：你的局域网、你的 Tailscale，没有别人的中继。
+
+[`🔗 Saffsanity/sill`](https://github.com/Saffsanity/sill) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50112739)
+
+---
+
+## 32. ai-job-search：作者靠它找到工作的 Claude Code 求职流水线 — 47.8 千星，今日涨速第一
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 47,790★ · trending +879/day (~20:20 UTC+8)
+- **Tags:** `claude-code` `agents` `job-search` `latex`
+
+MadsLorentzen/ai-job-search（昨天有推送）是一个 fork 后填资料的 Claude Code 框架：`/setup` 录入你的个人档案，`/scrape` 搜索招聘门户，`/apply` 用结构化评分评估岗位匹配度，再起草 LaTeX 简历和求职信 —— 走**起草者–审阅者流水线：审阅 agent 在定稿前先批改起草者的产出**，与 AWS AI-DLC 制度化的审批门如出一辙（第 29 条）。核心工作流语言与国家无关；门户 skill 面向丹麦市场（Jobindex、Jobnet、Akademikernes Jobbank），附 AGENTS.md 让 Codex、Antigravity 和 Gemini CLI 开箱即用，另有社区 fork。README 的主线是作者自己的故事：一位 2025 年底被裁的地球物理学家，**投出 69 份定制申请、拿到 20 个初面、签下一份合同** —— 2026 年 6 月入职 AI 工程师，且向每一位雇主坦承了用法。他主动写明的细则：Claude Code 没有免费档，且本项目"没有任何关联的加密货币、代币或付费赞助计划 —— 声称 otherwise 的都是骗局"。
+
+**为什么重要：** 今日涨速最快的仓库不是开发工具，而是一条人生流水线 —— 而它的质量闸门与横扫 agent 货架的是同一套：结构化评估标准、显式审阅步骤、可以 diff 的 LaTeX。+879★/天 也是对 agent-harness 受众到底是谁的最清晰测量。
+
+[`🔗 MadsLorentzen/ai-job-search`](https://github.com/MadsLorentzen/ai-job-search) · [`🔗 Trendshift：每日 #trending`](https://trendshift.io/repositories/43622)
+
+---
+
+## 33. PwnEscape：一个 guest 到 host 的内核逃逸带着自己的 CVE 落地 — CNA 评 9.3，补丁自称"纵深防御"
+
+- **Velocity:** ▮▮ rising
+- **Source:** oss-security + NVD · 披露于 2026-10-15 (~21:15 UTC+8)
+- **Tags:** `cve` `linux-kernel` `kvm` `virtio` `vm-escape`
+
+**CVE-2026-99999**（10 月 15 日发布）是 Linux 内核 virtio/tun 校验和卸载路径上的漏洞：guest 可控的 `CHECKSUM_PARTIAL` 元数据（`csum_start`/`csum_offset`）会存续到宿主侧的分片流程，而在 `ip_do_fragment()` 中，延迟的校验和写回发生在 IPv4 头已被校验*之后* —— 畸形元数据可以改写头部的 IHL 字段，让分片器越过逻辑头部拷贝，**把每包约 32 字节的宿主内存当作假 IP 选项发出去**。写这条前我们核对了原始记录：该 CVE 由 **Linux 内核 CNA** 授予，状态为 **`Received`（NVD 尚未分析）**，携带 **CNA 自评的 CVSS 3.1 9.3 Critical（Secondary 指标，AV:L/AC:L/PR:N/S:C）** —— 评分者与分数同源，符合本 feed 的溯源规则。修复补丁是 Michael Tsirkin 的提交 `6785011f8b16`（"ipv4: validate checksum_start before completing checksum"，Willem de Bruijn 审阅，10 月 14 日进主线，八个 stable 回移），明确定位为**纵深防御护栏** —— 提交信息自述"我们本来就不该放这样的包进来"，更完整的输入校验"即将到来"。披露者是在 Vercel 百万美元沙箱挑战赛中发现该问题的 Paulos Yibelo（据研究者博文所述）；提交信息称该问题"此后已被他人独立复现"。所谓完整的 guest 到 host 利用链 —— 宿主 root 辅助程序执行、且仅在研究者自己的机器上演示 —— 依据的是 pwn.ai 的博文，其写原语的细节被推迟到"Part 2"。
+
+**为什么重要：** 这个模式 —— 元数据验证一次、之后被信任 —— 坐落在每个云沙箱都在跑的 virtio 路径上，而那正是 Vercel 花钱求攻击的环境。9.3 按 CNA 的数字读（它就是），逃逸按研究者演示读（它是），而未完成的修复才是 operative 事实：真正的输入校验还没来。
+
+[`🔗 NVD：CVE-2026-99999`](https://nvd.nist.gov/vuln/detail/CVE-2026-99999) · [`🔗 内核提交 6785011f8b16`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=6785011f8b16) · [`🔗 oss-security 讨论串`](http://www.openwall.com/lists/oss-security/2026/10/15/5) · [`🔗 pwn.ai 披露`](https://pwn.ai/blog/pwnescape)
+
+---
+
+## 34. android/skills：Google 发布官方 Android 开发 agent skills — 经 Claude Code 与 Codex 插件市场分发
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub + developer.android.com · 7,874★ · v1.0.15 于 10 月 14 日发布，今日有推送 (~20:20 UTC+8)
+- **Tags:** `android` `agent-skills` `google` `claude-code` `gemini`
+
+GitHub 上的 android 组织如今维护着 **Android skills** —— 遵循开放 agentskills.io 标准的 SKILL.md 包，为编码 agent 封装 Android 开发指引，可通过 `android` CLI 安装（`android skills add r8-analyzer --project=.`）进每个被检出的 agent 目录。值得注意的策展策略：skill 只做"**评估显示 LLM 表现不佳的用例和工作流**" —— 明确*不*做基础 Jetpack Compose 这类模型已经做得很好的领域。分发刻意跨 harness：Claude Code 插件市场（`/plugin install android-skills --marketplace android/skills`）、Codex 市场（`codex plugin marketplace add android/skills`），以及把 skill 装进 `~/.gemini/antigravity/skills` 的默认行为。v1.0.14（10 月 12 日）与 v1.0.15（10 月 14 日）本周接连发布，仓库今日又有推送。Apache-2.0。
+
+**为什么重要：** agent-skill 货架迎来了第一个平台厂商、评估驱动的官方条目 —— Google 通过 Claude Code 与 Codex 自家的插件市场分发，像上周 mattpocock/skills 一样为跨 agent skill 分发正名；而"评估说模型不行的地方我们才出 skill"是每个框架厂商都能照抄的文档标准。一线文档团队多了一种新的交付格式。
+
+[`🔗 android/skills`](https://github.com/android/skills) · [`🔗 文档：Android skills`](https://developer.android.com/tools/agents/android-skills)
+
+---
+
+## 35. FLUX.3 Klein：BFL 的 5.6B 开源权重图像模型 — 4K 与 10 图参考编辑，500 万美元营收以下商免
+
+- **Velocity:** ▮▮ rising
+- **Source:** BFL 博客 + Hugging Face · 2026-10-15 发布 · 截稿时 22.8k 下载
+- **Tags:** `image-generation` `open-weights` `flux` `diffusion` `black-forest-labs`
+
+Black Forest Labs 发布 **FLUX.3 Image Klein**（10 月 15 日），FLUX.3 家族第二个开源权重成员：**5.6B 参数**，文生图 + 编辑 + **最多 10 张参考图的多参考生成**，原生 4K，支持 bounding-box 摆放控制。BF16 下 11.2 GB、FP8 下 5.6 GB；INT8 版本可在 **8 GB 显存**的 GeForce 卡上运行，RTX 5090 上（经 ComfyUI 的蒸馏 + INT8）约 4 秒出 100 万像素图，RTX 4070 上 9 秒内，GB300 上 NVFP4 精度 0.6 秒内。许可：**FLUX Kommunity License —— 年营收低于 500 万美元的个人与公司可免费商用**；更大的组织需要自托管授权或走 API。ComfyUI、HF Diffusers、TensorRT-LLM、SGLang Diffusion 与 vLLM-Omni 首日支持。基准部分是自报的，但对方法的坦白程度罕见：内部盲测中它在三项任务上都排开源权重第一，而页面自己写明 **延迟对比并不同口径**（Klein 在 BFL 服务器上计时，竞品在客户端计时且包含轮询），Krea 2 也因没有编辑功能而缺席编辑对比。
+
+**为什么重要：** Krea 3（第 8 条）的开源权重对照组 —— 10 图一致性与 bounding-box 控制正是 agent 流水线要的结构化编辑界面，且在营收上限之内边际成本为零。声明的*形状*与体量同样值得注意：厂商在公告里发布自己的延迟口径告警。500 万美元这条线是新的"社区"：阈值之上，开源权重依然封闭。
+
+[`🔗 BFL：FLUX.3 Image Klein`](https://bfl.ai/blog/flux-3-image-klein) · [`🔗 HF：flux-3-image-klein`](https://huggingface.co/black-forest-labs/flux-3-image-klein)
+
+---
+
+## 36. Withings 把 Apple Health 同步对新账户设为 99 美元/年 — 回应里还附了一个"AI Connector"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Withings 社区 + Hacker News · 323+ pts · 约16.1小时前 (~04:10 UTC+8)
+- **Tags:** `withings` `health-data` `subscriptions` `apple-health` `mcp`
+
+自 **10 月 13 日**起，新的 Withings 账户需要 **Withings+（99.99 美元/年）** 才能使用自动第三方同步 —— 包括 Apple Health —— 而 10 月 12 日及之前创建的账户继续免费（豁免绑定账户而非设备）；CSV/PDF 导出对所有人保持免费。公司官方在该帖内的回复确认了这一划分，并把付费档定位在智能功能上 —— 引导用户使用其 **Withings AI Connector（MCP）**，一个把健康数据接入 AI 助手的 MCP 服务器。讨论串（190+ 条评论、HN 323 分）成了主战场：评论者把同步视为已购功能的预期，有人援引 Apple App Review 4.10 条款（禁止为内建能力收费）作为可能让决定反转的施压点。
+
+**为什么重要：** 订阅蠕虫钻进了*同步层* —— 在设备测量数据与操作系统健康存储的交接处收订阅费。MCP 的转折让事情更尖锐：同一条公告让"AI 助手访问你自己的健康数据"成为付费路径。值得盯的是 Apple 的 4.10 条款会不会区别对待"给管道上锁"与"给应用收费"。
+
+[`🔗 Withings 社区帖（含官方回复）`](https://support.withings.com/hc/en-us/community/posts/51887047154577-Unacceptable-Apple-Health-Sync-is-now-behind-a-99-year-paywall-for-new-accounts) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50109375)
+
+---
+
+## 37. CLI-Anything 重登热榜，53.2 千星 — 而 9 月之后没有一次提交
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 53,200★ · trending +716/day (~20:20 UTC+8)
+- **Tags:** `agent-infra` `cli` `hkuds` `skills` `computer-use`
+
+HKUDS/CLI-Anything —— 港大数据科学实验室把桌面软件封装成 agent 可用 CLI 的项目 —— 再次登上热榜（+716★/天，总计 53.2 千星），尽管**它的最后一次提交是 9 月 22 日，README 的新闻栏停在 5 月 30 日**。论点见 arXiv 2606.03854（6 月）：GUI agent 与 LLM 的能力在结构上错位 —— 脆弱的像素、时序依赖、坐标 —— 所以 CLI-Anything 为每个应用生成一套 CLI harness（Blender、Godot、QGIS、Obsidian、Kdenlive、Zoom、n8n；18 个演示应用、自称 2,461 个测试通过），经 **CLI-Hub**（`pip install cli-anything-hub`）与 `npx skills add` 流程分发。与 10 月 15 日 Iosevka 的 HN 日一样，这次冲榜是社会性的，不是开发性的：背后没有新版本。
+
+**为什么重要：** 本周第二个"把软件变成 agent 原生"的趋势项目，前有 Builder.io 的 Agent-Native（10 月 15 日）—— 机制相反（社区共建 CLI vs 能力探测），赌注相同：桌面即将长出机器用户 API 面。没有版本支撑的 star 冲峰，再次证明这个货架的分发是社会性的、不是自动的。
+
+[`🔗 HKUDS/CLI-Anything`](https://github.com/HKUDS/CLI-Anything) · [`🔗 arXiv 2606.03854：CLI-Anything`](https://arxiv.org/abs/2606.03854)
+
+---
+
+## 38. MiniCPM-V 4.7：35B-A3B 多模态 MoE 宣称流畅的端侧推理 — iPhone 上 3 GB 内存跑 13 tok/s
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face · 813 likes · 热榜第 4 · 权重 10 月 7 日，模型卡 10 月 15 日更新
+- **Tags:** `multimodal` `moe` `on-device` `openbmb` `apache-2.0`
+
+OpenBMB 的 **MiniCPM-V 4.7** 是该系列首个 MoE —— **35B 总参 / 3B 激活，Apache-2.0**，另有 1B 型号 —— 头条主张在端侧：**iPhone 17 Pro Max 上 3 GB 内存跑出 13+ tokens/s**，并称这是首个流畅、无损端侧推理的开源 MoE。技术栈才是正文：**Lookahead Expert Scheduling**（llama.cpp-omni fork 预测下一层需要哪些专家并预取，加载与计算重叠，而计算仍遵循模型自身的 token 级路由）、细粒度分层量化、以及 DSpark 投机采样。视觉 token 在 ViT 内部就被压缩（LLaVA-UHD v4 的 intra-ViT early compression），支持 4x/16x 混合比率。平台主张：iOS、Android、鸿蒙，外加 Rockchip、Houmo、Intel、AMD、Arm 芯片的 day-0 支持。厂商基准宣称总分高于 Qwen3.6 35B-A3B 且推理时间更短 —— 自报数据，模型卡表格一贯如此。
+
+**为什么重要：** MoE 上手机的问题是专家权重塞不进设备内存，此前的方案靠限制路由池来绕 —— 代价是封顶能力。预取加重叠是第一个保留完整路由的设计；若 iPhone 数字经得起复现（llama.cpp-omni fork 是验证入口），手机上的 35B 级多模态就不再是演示。
+
+[`🔗 HF：MiniCPM-V-4.7-35B-A3B`](https://huggingface.co/openbmb/MiniCPM-V-4.7-35B-A3B) · [`🔗 OpenBMB/MiniCPM-V`](https://github.com/openbmb/MiniCPM-V)
+
+---
+
+## 39. Gentoo 对 Chromium 包下达"last rites"：稳定版 ebuild 带着已知 602 个 CVE，且无人接手
+
+- **Velocity:** ▮ steady
+- **Source:** LWN + Hacker News · 64+ pts · 约6.8小时前 (~13:30 UTC+8)
+- **Tags:** `gentoo` `chromium` `packaging` `distros` `maintenance`
+
+9 月 24 日，Gentoo 维护者 Sam James 给 www-client/chromium 打上"last rites"（该发行版术语，指待移除的包）—— 起因是一位用户提交的 bug 报告：稳定版 ebuild（151.0.7922.169）带着 **602 个已知漏洞**。今天 HN 讨论串背后的 LWN 报道算清了这笔账：维护者 Matt Jolly 估算**仅编译一项每周就超过 6 小时**（快机器上单次构建 3.5 小时，笔记本上 15–16 小时），大约每两周一个新主分支、每周一次版本 bump —— 这一节奏自他 2023 年接手以来已提速两次 —— 再叠加新引入的 Rust 与 Go 依赖、以及不可靠的上游 tarball CI。Jolly 的恢复条件：**至少三名**精通 C、C++、Go、JavaScript、Rust 的维护者 —— "历史证明一个维护者撑不住。"用户被指向第三方 overlay、未经验证的 Flathub 构建、或上游官方二进制。至于 LLM 能不能顶上，Jolly 说得很直白：不是银弹，无休止地回滚 Crubit/Rust 破坏不可持续。
+
+**为什么重要：** 源码打包与 Chromium 的发版节奏是结构性错配，602 个已知 CVE 就是输掉它的可测量终态。同一篇文章里的对照更有教益：Firefox 的 Gentoo 维护者两周约 20 小时就撑得住，因为 Mozilla 愿意与下游打包者协作。维护是一种关系，不只是一次构建。
+
+[`🔗 LWN：Last rites for Gentoo's Chromium package`](https://lwn.net/Articles/1097760/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50114359)
+
+---
+
+## 40. 续 10 月 10 日 Cloudflare-Deno 条目：vlt 的"Thank you, Deno"补齐退场细节 — 运行时一年内停摆，JSR 与 celld 迁入
+
+- **Velocity:** ▮ steady
+- **Source:** vlt.io + Hacker News · 102+ pts · 约11.2小时前 (~09:10 UTC+8)
+- **Tags:** `javascript` `deno` `cloudflare` `nodejs` `runtimes`
+
+Darcy Clarke（vlt 创始人、npm 前员工）以竞争者身份写下悼词，补上了收购公告没说的操作细节：**Deno 运行时本身将在接下来一年内停摆**；JSR 注册表在 Cloudflare 基础设施上继续；团队的新使命是把 Deno 的 **celld** 引擎合入 Cloudflare 的 **workerd**。文章里值得留下的是论证：Deno 始终没达到生产规模的关键质量 —— "2026 年的 Node 与 2018 年一样占据主导" —— 但现代 Node 几乎每个特性的紧迫感都是它给的：fetch、WebSockets、Web Crypto、稳定测试运行器、权限模型、默认类型剥离、`node:sqlite`、`require(esm)`。压力是双向的 —— Bun 2022 年兼容 npm 的发布，让 Deno 在几周内放弃了 URL 导入。他的担忧：两个独立运行时如今都住进了更大的公司（Bun 在 Anthropic，Deno 在 Cloudflare），社区会不会 fork 出一个 Deno 运行时，是"一个开放问题"。
+
+**为什么重要：** 它回答了 10 月 10 日 Cloudflare 到底买到了什么 —— 一个注册表加一个引擎，不是一个运行时 —— 也是本 feed 反复测量的那个模式的最干净表述：在竞争者死后，在位者采纳竞争者的想法。如果你的生产环境还在跑 Deno，迁移时钟现在是一年。
+
+[`🔗 vlt：Thank you, Deno`](https://www.vlt.io/blog/competition-keeps-javascript-moving) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50112331)
+
+---
+
+## 41. 续 10 月 11 日 Yandex 被袭条目：Sberbank 巴拉科沃数据中心成为第四个遇袭目标
+
+- **Velocity:** ▮ steady
+- **Source:** Politico + Reuters · 2026-10-14 夜间
+- **Tags:** `infrastructure` `datacenters` `ukraine` `sberbank`
+
+10 月 14 日夜间，乌克兰无人机袭击了 Sberbank 位于萨拉托夫州巴拉科沃的数据中心 —— 据路透社，这是本 feed 10 月 11 日追踪的那个模式中的**第四个俄罗斯数据中心遇袭案例**；当时一架 UAV 袭击令 Yandex Cloud 弗拉基米尔设施停摆，Cloudflare Radar 显示 Yandex 流量归零。Sberbank 管理层确认了袭击；Politico 报道该站点不仅服务银行，还承载一系列**政府电子服务**；乌克兰媒体描述这是一座 **82 MW**、设计容纳最多 12 万台服务器的设施，据报道当时仍在部分建设中。俄罗斯的故障监控报告称袭击后连接投诉激增；银行方面称系统运行正常。
+
+**为什么重要：** 目标集已从搜索与云基础设施扩大到国有银行的算力 —— 正是承载 Sberbank AI 与超算雄心的那类设施。10 月 11 日的教训（一次袭击、可观测的流量归零）如今有了第四个数据点：电网级算力正在被当作一等军事目标。
+
+[`🔗 Politico：乌克兰无人机袭击俄罗斯最大银行的数据中心`](https://www.politico.com/news/2026/10/14/ukrainian-drones-struck-russian-sberbank-data-center) · [`🔗 路透社：乌克兰袭击第四个俄罗斯数据中心`](https://www.reuters.com/business/finance/ukrainian-drones-hit-russias-biggest-data-centre-2026-10-14/)
+
+---
+
+## 42. 纯文件夹 esolang "Folders" 迎来它的 HN 之日 — 代码即纯粹的目录结构
+
+- **Velocity:** ▮ steady
+- **Source:** danieltemkin.com + Hacker News · 100+ pts · 约6.9小时前 (~13:25 UTC+8)
+- **Tags:** `esolang` `programming-languages` `filesystem` `art`
+
+Daniel Temkin 的 **Folders**（2015 年创作，2026 年更新）把程序完全编码在文件夹的包含与顺序里 —— 目录名除按字母排序外一律忽略，程序就是"纯粹的有序树"：首个文件夹的子文件夹数量决定命令（0 = if …… 5 = input），表达式种类与类型同理计数（1 = float，2 = string，3 = char）。HelloWorld 是 **209 个目录、0 个文件**；在 Windows 上空文件夹不占磁盘空间，站点标注 352,449 个文件夹显示"0 bytes"。一个漂亮的反转：临时数据*确实*用名字 —— "Folders FS" 把值存在目录名里。实务脚注：git 会忽略空文件夹，所以程序被建议在最深的目录里放 `.gitkeep`。参考编译器在 rottytooth/Folders，另有 JS 模拟器。
+
+**为什么重要：** 十一岁的项目如今冲上热榜 —— 而且意外地应景：agent 本来就以文件系统为原生接口，所以这是极少数编码 agent 能独立读写的 esolang。当然，更重要的是那句话：代码首先是结构，然后才是文本。
+
+[`🔗 danieltemkin.com：Folders`](https://danieltemkin.com/esolangs/folders) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50114342)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-16T04:23:00Z |
-| Items | 29 |
-| Sources tracked | 31 (Hacker News, GitHub Trending, Citizen Lab, CISA KEV, NVD, BIPM, Meta terms, Nieman Lab, IPinfo, E Ink, vendor blogs, foundation announcements, personal engineering blogs) |
+| Generated | 2026-10-16T12:20:00Z |
+| Items | 42 |
+| Sources tracked | 44 (Hacker News, GitHub Trending, Citizen Lab, CISA KEV, NVD, oss-security, kernel.git, BIPM, Meta terms, Nieman Lab, IPinfo, E Ink, LWN, vlt.io, Politico, Reuters, BFL, Withings support, vendor blogs, foundation announcements, personal engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

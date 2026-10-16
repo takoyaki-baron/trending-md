@@ -1,6 +1,6 @@
 ---
 date: 2026-10-16
-updated: 2026-10-16T04:23:00Z
+updated: 2026-10-16T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 31
 license: CC-BY-4.0
@@ -414,13 +414,195 @@ awslabs/aidlc-workflows(MIT-0、5,312★、本日プッシュ、v2.11.0)は、AW
 
 ---
 
+## 30. 「私がセルフホストしているもの」:1台のN100ミニPCで28サービス — 拒絶リストこそが本文
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 530+ pts · 約15.7時間前 (~04:40 UTC+8)
+- **Tags:** `self-hosting` `homelab` `podman` `n100`
+
+ある個人のセルフホスト構成を書き連ねた長文が、今日 HN の頂点に:180 ユーロの Beelink Mini PC S12 Pro(Intel N100、RAM 16 GB、SSD 512 GB)に 6 TB ドライブを添え、**28 のサービス — ネイティブバイナリ 17 個と Podman 越しに 11 個 — を動かしている**:Jellyfin、Immich、Home Assistant、Frigate(IP カメラ 8 台)、Vaultwarden、Forgejo、Actual Budget、FreshRSS、Audiobookshelf、Syncthing、Uptime Kuma。本質的なのは拒絶リストの方:Docker 不使用(「ネイティブバイナリと Podman with systemd」— 単一 Go バイナリを好む)、\*arr スタック不使用(「リソースを食う厄介者」)、メールのセルフホストもしない(「リスクが高く、手間の割に得が少ない」)。公開は IPv6 専用のルーター VPN 以外なし。数値:メモリ使用量 約 7.5 GB、CPU 30–40% — そして同じミニ PC の現在の表示価格は **359 ユーロ**。10 月 12 日にこのフィードが追ったメモリ増税が、エントリー級にまで届いている。
+
+**なぜ重要か:** 530 ポイントのスレッドは「まともな」セルフホストの現時点の到達点 — オーケストレータより systemd ユニット、デフォルトは LAN 内限定、そして「ホストする価値がないもの」の短く正直なリスト。DRAM 不足にも綺麗な価格データポイントを一つ:同じ SKU が 1 年足らずで +99%。
+
+[`🔗 What I self-host`](https://viceconsole.fyi/blog/2026/10/10/what-i-self-host/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50109715)
+
+---
+
+## 31. sill:Mac の任意のウィンドウを iPhone/iPad でライブに — ハードウェアエンコード、サーバーレス
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News + GitHub · 178+ pts · 約10.3時間前 (~10:00 UTC+8) · 2,269★
+- **Tags:** `macos` `ios` `screen-sharing` `swift` `hevc`
+
+**sill**(Apache-2.0、Swift、昨日プッシュ)は ScreenCaptureKit で選択した Mac のウィンドウ — またはデスクトップ全体 — を捉え、Mac の VideoToolbox ハードウェアエンコーダで HEVC にエンコードし、iPhone/iPad の無料 App Store アプリへストリーミングする。タップ、Apple Pencil、トラックパッド、キー入力は TLS 1.3 で戻る。接続経路:同一ネットワーク、USB ケーブル、ネットワークを共有しない場合の「Direct Wireless Connection」、リモートなら Tailscale など自分の VPN — **アカウントも途中のサーバーもない**。要件:Apple silicon Mac、macOS 14+、iOS/iPadOS 17+。Mac 側は公証済みダウンロードと Homebrew cask。デバイスが接続されていない間は何もキャプチャしない、と README に明記。
+
+**なぜ重要か:** 画面ミラーリングではなくアプリケーションの遠隔*操作* — ウィンドウ単位のキャプチャに、タッチと Pencil のために入力スタックを設計し直したもの。2 日で 3 つ目の「Mac のウィンドウを別の場所へ」ネタ(10 月 15 日 Petal のペアプログラミングウィンドウ、上の 27 番 Flipflop のファイルトンネル)で、差別化はサーバーレスの姿勢:自分の LAN、自分の Tailscale、誰かのリレーではない。
+
+[`🔗 Saffsanity/sill`](https://github.com/Saffsanity/sill) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50112739)
+
+---
+
+## 32. ai-job-search:作者が「これで内定が出た」と公言する Claude Code 求職パイプライン — 47.8 千★、本日の最速上昇
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 47,790★ · trending +879/day (~20:20 UTC+8)
+- **Tags:** `claude-code` `agents` `job-search` `latex`
+
+MadsLorentzen/ai-job-search(昨日プッシュ)は fork してプロフィールを埋める Claude Code フレームワーク:`/setup` がプロフィールを取り込み、`/scrape` が求人ポータルを検索、`/apply` が構造化スコアリングで適合度を評価し、LaTeX の職務経歴書とカバーレターを起草する — **drafter–reviewer パイプラインで、確定前に reviewer エージェントが drafter を批判する**。AWS の AI-DLC が制度化したのと同じゲート(29 番)。コアワークフローは言語・国非依存;ポータルスキルはデンマーク市場向け(Jobindex、Jobnet、Akademikernes Jobbank)で、AGENTS.md により Codex・Antigravity・Gemini CLI がそのまま動き、コミュニティフォークもある。README の背骨は作者自身の物語:2025 年末に解雇された地球物理学者が、**69 件のカスタマイズ応募、20 回の一次面接、1 つの署名済み契約** — 2026 年 6 月に AI エンジニアとして着任。使ったことは全ての雇用主に明かしたという。本人が書き添えた細則:Claude Code に無料枠はなく、そして本プロジェクトは「関連する暗号通貨・トークン・有料スポンサーシッププログラムを一切持たない — それを主張するものは詐欺」との警告。
+
+**なぜ重要か:** 本日最速で上昇しているリポジトリは開発ツールではなく人生のパイプライン — しかもその品質ゲートは、エージェント棚を席巻しているのと同じもの:構造化された評価基準、明示的な reviewer ステップ、diff できる LaTeX。+879★/日は、エージェントハーネスのオーディエンスが実際に誰なのかの最も明快な測定でもある。
+
+[`🔗 MadsLorentzen/ai-job-search`](https://github.com/MadsLorentzen/ai-job-search) · [`🔗 Trendshift:デイリー #trending`](https://trendshift.io/repositories/43622)
+
+---
+
+## 33. PwnEscape:guest から host へのカーネル脱出が専用 CVE と共に到着 — CNA 評価 9.3、修正は「多層防御」と自己表明
+
+- **Velocity:** ▮▮ rising
+- **Source:** oss-security + NVD · 2026-10-15 披露 (~21:15 UTC+8)
+- **Tags:** `cve` `linux-kernel` `kvm` `virtio` `vm-escape`
+
+**CVE-2026-99999**(10 月 15 日公開)は Linux カーネルの virtio/tun チェックサムオフロード経路の脆弱性:guest 制御の `CHECKSUM_PARTIAL` メタデータ(`csum_start`/`csum_offset`)がホスト側のフラグメンテーションに持ち込まれ、`ip_do_fragment()` では遅延チェックサムの書き込みが IPv4 ヘッダ検証の*後に*走る — 異常なメタデータがヘッダの IHL フィールドを上書きでき、フラグメンタは論理ヘッドを越えてコピーし、**パケットごとに約 32 バイトのホストメモリを偽 IP オプションとして送出する**。執筆前に一次記録を確認した:CVE は **Linux kernel CNA** による CNA 割り当てで、状態は **`Received`(NVD は未分析)**、**CNA 自己採点の CVSS 3.1 9.3 Critical(Secondary メトリック、AV:L/AC:L/PR:N/S:C)** を担う — スコアラーとスコアが同一当事者、という本フィードの来歴ルールどおり。修正は Michael Tsirkin のコミット `6785011f8b16`(「ipv4: validate checksum_start before completing checksum」、Willem de Bruijn レビュー、10 月 14 日に mainline へ、stable バックポート 8 件)で、明示的に**多層防御のガード** — コミット自体が「そもそもそういうパケットを通すべきではない」と述べ、より完全な入力検証は「準備中」。開示者は Vercel の 100 万ドルサンドボックスチャレンジ(研究者の投稿による)でこれを見つけた Paulos Yibelo;コミットメッセージは「その後、他者によって独立に再現されている」と記す。主張される guest から host への完全なチェーン — ホスト root ヘルパーの実行、研究者自身のマシンでのみデモ — は pwn.ai の解説に依拠し、書き込みプリミティブの詳細は「Part 2」に先送りされている。
+
+**なぜ重要か:** このパターン — 一度検証されたメタデータが後で信頼される — は、あらゆるクラウドサンドボックスが走らせている virtio 経路に乗っており、Vercel が攻撃されるのにお金を払っていたのはまさにその環境だから。9.3 は CNA の数字として読み(実際そう)、脱出は研究者デモとして読み(実際そう)、そして未完成の修正こそが operative な事実:本当の入力検証はまだ来ていない。
+
+[`🔗 NVD:CVE-2026-99999`](https://nvd.nist.gov/vuln/detail/CVE-2026-99999) · [`🔗 カーネルコミット 6785011f8b16`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=6785011f8b16) · [`🔗 oss-security スレッド`](http://www.openwall.com/lists/oss-security/2026/10/15/5) · [`🔗 pwn.ai 開示`](https://pwn.ai/blog/pwnescape)
+
+---
+
+## 34. android/skills:Google が Android 開発向けの公式エージェントスキルを公開 — Claude Code と Codex のマーケットプレイス経由で配布
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub + developer.android.com · 7,874★ · v1.0.15 は 10 月 14 日リリース、本日プッシュ (~20:20 UTC+8)
+- **Tags:** `android` `agent-skills` `google` `claude-code` `gemini`
+
+GitHub の android 組織が **Android skills** を公式に維持する — オープンな agentskills.io 標準に沿った SKILL.md パッケージで、コーディングエージェント向けに Android 開発の指針を封入し、`android` CLI(`android skills add r8-analyzer --project=.`)で検出された全エージェントディレクトリへインストールできる。注目はキュレーション方針:スキルは「**評価で LLM が苦戦することが示されたユースケースとワークフロー**」のためだけに作る — 基本的な Jetpack Compose のようにモデルが既に得意な領域は明示的に*対象外*。配布は意図的にクロスハーネス:Claude Code のプラグインマーケットプレイス(`/plugin install android-skills --marketplace android/skills`)、Codex のマーケットプレイス(`codex plugin marketplace add android/skills`)、そして `~/.gemini/antigravity/skills` へ落とすデフォルト動作。v1.0.14(10 月 12 日)と v1.0.15(10 月 14 日)が今週連続リリースされ、リポジトリは本日もプッシュ済み。Apache-2.0。
+
+**なぜ重要か:** エージェントスキルの棚に、初のプラットフォームベンダー・評価駆動の公式エントリーが加わった — Google が Claude Code と Codex のマーケットプレイス自体を通して配布することは、先週の mattpocock/skills と同じくクロスエージェントなスキル配布を正当化する。「評価でモデルが失敗する場所にだけスキルを出す」のは、あらゆるフレームワークベンダーが真似できるドキュメント標準。一次ベンダーのドキュメントチームに、新しい成果物フォーマットができた。
+
+[`🔗 android/skills`](https://github.com/android/skills) · [`🔗 ドキュメント:Android skills`](https://developer.android.com/tools/agents/android-skills)
+
+---
+
+## 35. FLUX.3 Klein:BFL の 5.6B オープンウェイト画像モデル — 4K と 10 枚参照編集、売上 500 万ドル未満は商用無料
+
+- **Velocity:** ▮▮ rising
+- **Source:** BFL ブログ + Hugging Face · 2026-10-15 リリース · 執筆時点で 22.8k ダウンロード
+- **Tags:** `image-generation` `open-weights` `flux` `diffusion` `black-forest-labs`
+
+Black Forest Labs が **FLUX.3 Image Klein**(10 月 15 日)をリリースした。FLUX.3 ファミリーの 2 番目のオープンウェイトメンバー:**5.6B パラメータ**、テキストから画像 + 編集 + **最大 10 枚の参照画像によるマルチリファレンス生成**、ネイティブ 4K、バウンディングボックス配置制御。BF16 で 11.2 GB、FP8 で 5.6 GB;INT8 版は**VRAM 8 GB** の GeForce カードで動き、RTX 5090(ComfyUI 経由の蒸留 + INT8)で 100 万ピクセル画像を約 4 秒、RTX 4070 で 9 秒未満、GB300 では NVFP4 で 0.6 秒未満。ライセンス:**FLUX Kommunity License — 年商 500 万ドル未満の個人・企業は商用無料**;それ以上の組織はセルフホストライセンスか API。ComfyUI、HF Diffusers、TensorRT-LLM、SGLang Diffusion、vLLM-Omni が初日対応。ベンチマーク節は自己申告だが、手法への正直さが尋常でない:社内ブラインド評価で 3 タスク全てのオープンウェイト首位としつつ、ページ自身が**レイテンシ比較は条件が異なる**(Klein は BFL サーバ上で計時、競合はポーリング込みでクライアント側計時)ことを明かし、Krea 2 は編集機能を持たないため編集比較から欠席していると記す。
+
+**なぜ重要か:** Krea 3(8 番)へのオープンウェイト対抗馬 — 10 枚参照の一貫性とバウンディングボックス制御は、エージェントパイプラインが求める構造化編集サーフェスで、売上限額内なら限界費用ゼロ。主張の*形状*がサイズと同じくらい注目に値する:ベンダーが発表の中で自分のレイテンシ測定条件の警告を載せている。500 万ドルラインは新しい「コミュニティ」:閾値を超えると、オープンウェイトは閉じたままでいる。
+
+[`🔗 BFL:FLUX.3 Image Klein`](https://bfl.ai/blog/flux-3-image-klein) · [`🔗 HF:flux-3-image-klein`](https://huggingface.co/black-forest-labs/flux-3-image-klein)
+
+---
+
+## 36. Withings が新規アカウントの Apple Health 同期を年 99 ドルに — 返答には「AI Connector」が添えてきた
+
+- **Velocity:** ▮▮ rising
+- **Source:** Withings コミュニティ + Hacker News · 323+ pts · 約16.1時間前 (~04:10 UTC+8)
+- **Tags:** `withings` `health-data` `subscriptions` `apple-health` `mcp`
+
+**10 月 13 日から**、新規の Withings アカウントは自動サードパーティ同期 — Apple Health を含む — に **Withings+(年 99.99 ドル)** を要求される。10 月 12 日以前に作成されたアカウントは無料のまま(グランドファーザリングはアカウントに紐づき、デバイスには紐づかない);CSV/PDF エクスポートは全員無料のまま。スレッド内の公式返信がこの分割を確認し、有料枠をインテリジェンス機能の周りに位置づけている — ヘルスデータを AI アシスタントに繋ぐ MCP サーバ「**Withings AI Connector (MCP)**」へユーザーを誘導。スレッド(190+ コメント、HN 323 ポイント)が主戦場:コメント者は同期を購入済み機能の期待と捉え、Apple App Review ガイドライン 4.10(内蔵機能の収益化禁止)を、決定を覆しうる圧力点として挙げる者もいる。
+
+**なぜ重要か:** サブスクリプションクリープが*同期レイヤー*に到達した — デバイスの測定値と OS のヘルスストアの受け渡し地点で、継続課金を取る。MCP のねじれが鋭くする:同じ発表が、自分の健康データへのアシスタントアクセスを有料の道にした。Apple の 4.10 ルールが「アプリへの課金」ではなく「パイプへの課金」をどう扱うかが見どころ。
+
+[`🔗 Withings コミュニティスレッド(公式返信あり)`](https://support.withings.com/hc/en-us/community/posts/51887047154577-Unacceptable-Apple-Health-Sync-is-now-behind-a-99-year-paywall-for-new-accounts) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50109375)
+
+---
+
+## 37. CLI-Anything が 53.2 千★で再トレンド — 9 月以降コミットは一つもない
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 53,200★ · trending +716/day (~20:20 UTC+8)
+- **Tags:** `agent-infra` `cli` `hkuds` `skills` `computer-use`
+
+HKUDS/CLI-Anything — HKU データサイエンス研究所がデスクトップソフトをエージェント利用可能な CLI にラップするプロジェクト — が再びトレンドに(+716★/日、計 53.2 千★)。ただし**最後のコミットは 9 月 22 日で、README のニュース欄は 5 月 30 日に止まっている**。論点は arXiv 2606.03854(6 月):GUI エージェントは LLM の能力と構造的に噛み合わない — 脆いピクセル、タイミング依存、座標 — だから CLI-Anything はアプリケーションごとに CLI ハーネスを生成する(Blender、Godot、QGIS、Obsidian、Kdenlive、Zoom、n8n;デモアプリ 18 個、テスト通過 2,461 を自己申告)。**CLI-Hub**(`pip install cli-anything-hub`)と `npx skills add` フローで配布。10 月 15 日の Iosevka の HN の日と同じく、この急上昇は社会的であって開発的ではない:背後にリリースはない。
+
+**なぜ重要か:** 今週 2 番目の「ソフトをエージェントネイティブにする」トレンドプロジェクト。先週は Builder.io の Agent-Native(10 月 15 日)— メカニズムは正反対(コミュニティ製 CLI vs 能力検出)だが、賭けは同じ:デスクトップにマシンユーザー向け API サーフェスが生えようとしている。リリースなしの star 急増は、この棚の配布が自動的ではなく社会的であることの、また一つのデータポイント。
+
+[`🔗 HKUDS/CLI-Anything`](https://github.com/HKUDS/CLI-Anything) · [`🔗 arXiv 2606.03854:CLI-Anything`](https://arxiv.org/abs/2606.03854)
+
+---
+
+## 38. MiniCPM-V 4.7:35B-A3B のマルチモーダル MoE が滑らかなオンデバイス推論を主張 — iPhone で 3 GB・13 tok/s
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face · 813 likes · トレンド 4 位 · ウェイト 10 月 7 日、カード更新 10 月 15 日
+- **Tags:** `multimodal` `moe` `on-device` `openbmb` `apache-2.0`
+
+OpenBMB の **MiniCPM-V 4.7** はシリーズ初の MoE — **総 35B / アクティブ 3B、Apache-2.0**、1B の兄弟機もあり — で、見出しの主張はオンデバイス:**iPhone 17 Pro Max で 3 GB のメモリ内に 13+ tokens/s**、「滑らかで損失のないオンデバイス推論」を達成した初のオープンソース MoE と位置づける。技術スタックこそが本文:**Lookahead Expert Scheduling**(llama.cpp-omni フォークが次の層に必要なエキスパートを予測・プリフェッチし、読み込みを計算と重畳させる — ただし計算はモデル自身のトークンレベルルーティングに従う)、細粒度の層別量子化、そして DSpark スペキュラティブサンプリング。視覚トークンは ViT の内部で圧縮される(LLaVA-UHD v4 の intra-ViT early compression)、4x/16x の混合レートに対応。プラットフォーム主張:iOS、Android、HarmonyOS に、Rockchip・Houmo・Intel・AMD・Arm チップの day-0 対応。ベンダーベンチマークは Qwen3.6 35B-A3B より総合スコアが高く推論時間が短いと主張 — 自己申告であり、モデルカードの表とはそういうものだ。
+
+**なぜ重要か:** MoE を電話に載せる問題は、エキスパートがデバイスメモリに収まらないこと、そして従来の対応はルーティングプールを制限することだった — 能力に天井を打つ形で。プリフェッチ+重畳は完全なルーティングを保つ最初の設計。iPhone の数字が再現に耐えれば(llama.cpp-omni フォークが検証入口)、電話上の 35B 級マルチモーダルはデモではなくなる。
+
+[`🔗 HF:MiniCPM-V-4.7-35B-A3B`](https://huggingface.co/openbmb/MiniCPM-V-4.7-35B-A3B) · [`🔗 OpenBMB/MiniCPM-V`](https://github.com/openbmb/MiniCPM-V)
+
+---
+
+## 39. Gentoo が Chromium パッケージに「last rites」:安定版 ebuild には既知 602 CVE、担い手はもういない
+
+- **Velocity:** ▮ steady
+- **Source:** LWN + Hacker News · 64+ pts · 約6.8時間前 (~13:30 UTC+8)
+- **Tags:** `gentoo` `chromium` `packaging` `distros` `maintenance`
+
+9 月 24 日、Gentoo メンテナの Sam James が www-client/chromium に「last rites」(削除予定パッケージを示すディストリ用語)を行使した — 発端はユーザーのバグ報告で、安定版 ebuild(151.0.7922.169)が **602 の既知脆弱性**を抱えていると指摘したもの。今日の HN スレッドの元になった LWN 記事が計算を示す:メンテナ Matt Jolly の見積もりで**コンパイルだけで週 6 時間超**(速いマシンで 3.5 時間、ノート PC で 15–16 時間のビルド)、約 2 週間ごとの新メジャーブランチと週次バンプ — このペースは 2023 年に引き継いでから 2 回短縮された — に、新たに加わった Rust と Go の依存、不安定なアップストリーム tarball CI が重なる。Jolly の復活条件:**C・C++・Go・JavaScript・Rust に精通したメンテナが最低 3 人** — 「歴史が示すように、1 人では回らない。」ユーザーには overlay、未検証の Flathub ビルド、アップストリーム公式バイナリが案内される。LLM で埋められるかについては Jolly は率直:銀弾ではなく、Crubit/Rust の破壊を延々とリバートし続けるのは持続不可能。
+
+**なぜ重要か:** ソースベースのパッケージングと Chromium のリリースカデンスは構造的に噛み合わず、602 の既知 CVE はそれに負けた測定可能な終着点。同じ記事にある対比がより教訓的:Firefox の Gentoo メンテナは 2 週間で約 20 時間で回る。Mozilla が下流パッケージャと協働するからだ。メンテナンスとは関係であって、ビルドだけではない。
+
+[`🔗 LWN:Last rites for Gentoo's Chromium package`](https://lwn.net/Articles/1097760/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50114359)
+
+---
+
+## 40. 10 月 10 日の Cloudflare-Deno エントリの続き:vlt の「Thank you, Deno」が撤退の詳細を埋める — ランタイムは 1 年で終了、JSR と celld が移住
+
+- **Velocity:** ▮ steady
+- **Source:** vlt.io + Hacker News · 102+ pts · 約11.2時間前 (~09:10 UTC+8)
+- **Tags:** `javascript` `deno` `cloudflare` `nodejs` `runtimes`
+
+Darcy Clarke(vlt 創業者、元 npm)が競合者としての弔辞を書き、買収発表が語らなかった運用上の詳細を埋めた:**Deno ランタイム自体は今後 1 年で縮小終了**する;JSR レジストリは Cloudflare のインフラ上で継続;そしてチームの新たな使命は Deno の **celld** エンジンを Cloudflare の **workerd** に統合すること。 essay の主張で残すべきはこれ:Deno は生産クリティカルマスに届かなかった — 「2026 年でも Node は 2018 年と同じく支配的」— しかし現代の Node のほぼ全機能の緊急性を供給したのは Deno だった:fetch、WebSockets、Web Crypto、安定したテストランナー、パーミッションモデル、デフォルトの型剥がし、`node:sqlite`、`require(esm)`。圧力は双方向 — Bun の 2022 年 npm 互換ローンチは Deno に数週間で URL インポートを捨てさせた。彼の懸念:2 つの独立系ランタイムが今や更大的な企業の中にいる(Bun は Anthropic、Deno は Cloudflare)、Deno ランタイムのコミュニティフォークが出るかは「開かれた問い」。
+
+**なぜ重要か:** 10 月 10 日に Cloudflare が実際に買ったもの — ランタイムではなくレジストリとエンジン — を確定させ、このフィードが測り続けてきたパターンの最も明快な定式化を与える:競合が死んだ後に、インキュンベントは競合のアイデアを採用する。本番で Deno を動かしているなら、移行の時計はもう 1 年。
+
+[`🔗 vlt:Thank you, Deno`](https://www.vlt.io/blog/competition-keeps-javascript-moving) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50112331)
+
+---
+
+## 41. 10 月 11 日の Yandex 遭襲エントリの続き:Sberbank のバラコボ データセンターが 4 件目の被弾に
+
+- **Velocity:** ▮ steady
+- **Source:** Politico + Reuters · 2026-10-14 深夜
+- **Tags:** `infrastructure` `datacenters` `ukraine` `sberbank`
+
+10 月 14 日深夜、ウクライナのドローンがサラトフ州バラコボにある Sberbank のデータセンターを攻撃した — Reuters によれば、このフィードが 10 月 11 日に追ったパターン(UAV 攻撃で Yandex Cloud のウラジーミル施設が停止し、Cloudflare Radar が Yandex 発トラフィックのゼロ化を観測した件)における**ロシアのデータセンター攻撃 4 件目**。Sberbank 経営陣は攻撃を確認;Politico は同施設が銀行のみならず一連の**政府電子サービス**も支えていると報じ;ウクライナ各紙は **82 MW**・最大 12 万台のサーバーを収容する設計で、報道時点で一部建設中だったと記す。ロシアの障害監視は攻撃後の接続苦情の急増を報告;銀行側はシステムは正常稼働と述べる。
+
+**なぜ重要か:** 標的集合が検索・クラウドインフラから国有銀行の計算資源へと広がった — Sberbank の AI・スパコン野望を載せているのと同じクラスの施設だ。10 月 11 日の教訓(一撃、観測可能なトラフィックゼロ)に 4 つ目のデータポイントが付いた:グリッド規模の計算資源は、両陣営で一級の軍事標的として扱われている。
+
+[`🔗 Politico:ウクライナのドローン、ロシア最大手銀行のデータセンターを攻撃`](https://www.politico.com/news/2026/10/14/ukrainian-drones-struck-russian-sberbank-data-center) · [`🔗 Reuters:ウクライナ、ロシアの 4 つ目のデータセンターを攻撃`](https://www.reuters.com/business/finance/ukrainian-drones-hit-russias-biggest-data-centre-2026-10-14/)
+
+---
+
+## 42. テキストを一切持たない esolang「Folders」が HN の日を迎える — コードは純粋なフォルダ構造
+
+- **Velocity:** ▮ steady
+- **Source:** danieltemkin.com + Hacker News · 100+ pts · 約6.9時間前 (~13:25 UTC+8)
+- **Tags:** `esolang` `programming-languages` `filesystem` `art`
+
+Daniel Temkin の **Folders**(2015 年作、2026 年更新)はプログラムをフォルダの包含と順序だけにエンコードする — フォルダ名はアルファベット順ソート以外には無視され、プログラムは「純粋な順序木」となる:最初のフォルダのサブフォルダ数がコマンドを選び(0 = if …… 5 = input)、式の種類と型も同様に数える(1 = float、2 = string、3 = char)。HelloWorld は**ディレクトリ 209 個、ファイル 0 個**;空フォルダがディスクを食わない Windows では、352,449 個のフォルダが「0 bytes」と表示される例が載る。美しい逆転として、一時データだけは*名前*を使う — 「Folders FS」は値をディレクトリ名に格納する。実務の脚注:git は空フォルダを無視するため、最も深いディレクトリに `.gitkeep` を置くことが推奨される。リファレンスコンパイラは rottytooth/Folders、JS エミュレータもあり。
+
+**なぜ重要か:** 11 歳のプロジェクトが今トレンドに — そして偶然にも時宜的:エージェントは既にファイルシステムをネイティブインターフェースとして仕事をしており、これはコーディングエージェントが助けなしに書ける数少ない esolang の一つ。とはいえ本質はあの一言:コードはテキストの前に、まず構造だ。
+
+[`🔗 danieltemkin.com:Folders`](https://danieltemkin.com/esolangs/folders) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50114342)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-16T04:23:00Z |
-| Items | 29 |
-| Sources tracked | 31 (Hacker News, GitHub Trending, Citizen Lab, CISA KEV, NVD, BIPM, Meta terms, Nieman Lab, IPinfo, E Ink, vendor blogs, foundation announcements, personal engineering blogs) |
+| Generated | 2026-10-16T12:20:00Z |
+| Items | 42 |
+| Sources tracked | 44 (Hacker News, GitHub Trending, Citizen Lab, CISA KEV, NVD, oss-security, kernel.git, BIPM, Meta terms, Nieman Lab, IPinfo, E Ink, LWN, vlt.io, Politico, Reuters, BFL, Withings support, vendor blogs, foundation announcements, personal engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

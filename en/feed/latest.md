@@ -1,8 +1,8 @@
 ---
 date: 2026-10-16
-updated: 2026-10-16T04:23:00Z
+updated: 2026-10-16T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -414,13 +414,195 @@ awslabs/aidlc-workflows (MIT-0, 5,312★, pushed today, v2.11.0) packages AWS's 
 
 ---
 
+## 30. "What I self-host": 28 services on one N100 mini PC — and the refusal list is the content
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 530+ pts · ~15.7h ago (~04:40 UTC+8)
+- **Tags:** `self-hosting` `homelab` `podman` `n100`
+
+A long-form inventory of one person's self-hosted stack, top of HN today: **28 services — 17 native binaries, 11 under Podman — on a €180 Beelink Mini PC S12 Pro** (Intel N100, 16 GB RAM, 512 GB SSD) plus a 6 TB drive: Jellyfin, Immich, Home Assistant, Frigate with 8 IP cameras, Vaultwarden, Forgejo, Actual Budget, FreshRSS, Audiobookshelf, Syncthing, Uptime Kuma. The operative decisions are the refusals: no Docker ("native binaries and Podman with systemd" — single Go binaries preferred), no *arr stack ("a resource-intensive mess"), and no self-hosted email ("too risky/work for little benefit"). Nothing is exposed publicly except IPv6-only router VPNs. Numbers: ~7.5 GB RAM in use, CPU 30–40% — and the same mini PC now lists at **€359**, the memory-shortage tax this feed tracked on Oct 12 reaching the entry level.
+
+**Why it matters:** the 530-point thread is the current state of the art of *reasonable* self-hosting — systemd units over orchestrators, LAN-only by default, and a short honest list of what isn't worth hosting. Also a clean price datapoint for the DRAM shortage: +99% on the same SKU in under a year.
+
+[`🔗 What I self-host`](https://viceconsole.fyi/blog/2026/10/10/what-i-self-host/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50109715)
+
+---
+
+## 31. sill: any Mac window, live on your iPhone or iPad — hardware-encoded, serverless
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News + GitHub · 178+ pts · ~10.3h ago (~10:00 UTC+8) · 2,269★
+- **Tags:** `macos` `ios` `screen-sharing` `swift` `hevc`
+
+**sill** (Apache-2.0, Swift, pushed yesterday) captures a chosen Mac window — or the whole desktop — with ScreenCaptureKit, encodes it as HEVC on the Mac's hardware VideoToolbox encoder, and streams it to a free App Store app on iPhone/iPad; taps, Apple Pencil, trackpad and keys come back over TLS 1.3. Connection paths: same network, a USB cable, a "Direct Wireless Connection" when no network is shared, or your own VPN such as Tailscale for remote access — **no account and no server in between**. Requirements: Apple silicon Mac, macOS 14+, iOS/iPadOS 17+. The Mac side is a notarized download with a Homebrew cask; the README states it captures nothing while no device is connected.
+
+**Why it matters:** this is remote *use* of applications, not screen mirroring — per-window capture with the input stack redesigned for touch and Pencil. It's the third "Mac window somewhere else" item in two days (Petal's pair-programming windows Oct 15, Flipflop's file tunnels in item 27), and the no-server posture is the differentiator: your LAN, your Tailscale, nobody's relay.
+
+[`🔗 Saffsanity/sill`](https://github.com/Saffsanity/sill) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50112739)
+
+---
+
+## 32. ai-job-search: the Claude Code pipeline its author credits with getting him hired — 47.8k★ and the day's fastest riser
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 47,790★ · trending +879/day (~20:20 UTC+8)
+- **Tags:** `claude-code` `agents` `job-search` `latex`
+
+MadsLorentzen/ai-job-search (pushed yesterday) is a fork-and-fill Claude Code framework: `/setup` ingests your profile, `/scrape` searches job portals, `/apply` evaluates posting fit with structured scoring, then drafts a LaTeX CV and cover letter through a **drafter–reviewer pipeline — a reviewer agent critiques the drafter before anything is final**, the same gate AWS's AI-DLC formalized (item 29). The core workflow is language- and country-agnostic; the portal skills are Danish (Jobindex, Jobnet, Akademikernes Jobbank), with an AGENTS.md so Codex, Antigravity and Gemini CLI work out of the box, plus community forks. The README's spine is the author's own story: a geophysicist laid off in late 2025, **69 tailored applications, 20 first interviews, one signed contract** — an AI-engineering job as of June 2026, disclosed to every employer. The fine print he volunteers: Claude Code has no free tier, and the project "has no affiliated cryptocurrency, token, or paid sponsorship program — anything claiming otherwise is a scam."
+
+**Why it matters:** the day's fastest-rising repo is not a dev tool but a life pipeline — and its quality bar is the same one sweeping the agent shelf: structured evaluation criteria, an explicit reviewer step, LaTeX you can diff. At +879★/day it's also the clearest measure yet of who the agent-harness audience actually is.
+
+[`🔗 MadsLorentzen/ai-job-search`](https://github.com/MadsLorentzen/ai-job-search) · [`🔗 Trendshift: daily #trending`](https://trendshift.io/repositories/43622)
+
+---
+
+## 33. PwnEscape: a guest-to-host kernel escape lands with its own CVE — CNA-scored 9.3, fix labeled "defence in depth"
+
+- **Velocity:** ▮▮ rising
+- **Source:** oss-security + NVD · disclosed 2026-10-15 (~21:15 UTC+8)
+- **Tags:** `cve` `linux-kernel` `kvm` `virtio` `vm-escape`
+
+**CVE-2026-99999** (published Oct 15) is a Linux kernel vulnerability in the virtio/tun checksum-offload path: guest-controlled `CHECKSUM_PARTIAL` metadata (`csum_start`/`csum_offset`) survives into host-side fragmentation, and in `ip_do_fragment()` the deferred checksum write runs *after* the IPv4 header was validated — malformed metadata can overwrite the header's IHL field, making the fragmenter copy past the logical head and emit **~32 bytes of host memory per packet as fake IP options**. We checked the primary record before writing: the CVE is CNA-assigned by the **Linux kernel CNA**, status **`Received` (NVD has not analyzed it)**, carrying a **CNA-assigned CVSS 3.1 of 9.3 Critical (Secondary metric, AV:L/AC:L/PR:N/S:C)** — scorer and score from the same party, per this feed's provenance rule. The fix, commit `6785011f8b16` from Michael Tsirkin ("ipv4: validate checksum_start before completing checksum," reviewed by Willem de Bruijn, mainline Oct 14 with eight stable backports), is explicitly a **defence-in-depth guard** — the commit itself says "we really shouldn't allow such packets in," with fuller input validation "forthcoming." The disclosure came from Paulos Yibelo during what the researcher's post describes as Vercel's $1M sandbox challenge; the commit message notes it "has been reproduced by others independently since." The claimed full guest-to-host chain — host-root helper execution, demonstrated only on the researcher's own machines — rests on the pwn.ai write-up, which defers its write-primitive details to "Part 2."
+
+**Why it matters:** the pattern — metadata validated once, trusted later — sits on the virtio path every cloud sandbox runs, which is exactly the environment Vercel was paying to see attacked. Read the 9.3 as the CNA's number (it is), the escape as researcher-demonstrated (it is), and the incomplete fix as the operative fact: the real input validation is still pending.
+
+[`🔗 NVD: CVE-2026-99999`](https://nvd.nist.gov/vuln/detail/CVE-2026-99999) · [`🔗 kernel commit 6785011f8b16`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=6785011f8b16) · [`🔗 oss-security thread`](http://www.openwall.com/lists/oss-security/2026/10/15/5) · [`🔗 pwn.ai disclosure`](https://pwn.ai/blog/pwnescape)
+
+---
+
+## 34. android/skills: Google ships official agent skills for Android — distributed through Claude Code and Codex marketplaces
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub + developer.android.com · 7,874★ · v1.0.15 released Oct 14, pushed today (~20:20 UTC+8)
+- **Tags:** `android` `agent-skills` `google` `claude-code` `gemini`
+
+The android org on GitHub now maintains **Android skills** — SKILL.md packages under the open agentskills.io standard that encode Android-development guidance for coding agents, installable via an `android` CLI (`android skills add r8-analyzer --project=.`) into every detected agent directory. The curation policy is the notable part: skills are built for "**use cases and workflows where evaluations show LLMs underperform**" — explicitly *not* areas like basic Jetpack Compose where models already do fine. Distribution is deliberately cross-harness: a Claude Code plugin marketplace (`/plugin install android-skills --marketplace android/skills`), a Codex marketplace (`codex plugin marketplace add android/skills`), and a default that drops skills into `~/.gemini/antigravity/skills`. v1.0.14 (Oct 12) and v1.0.15 (Oct 14) shipped this week, and the repo was pushed again today. Apache-2.0.
+
+**Why it matters:** the agent-skills shelf just gained its first platform-vendor, eval-driven entry — Google publishing through Claude Code's and Codex's own marketplaces legitimizes cross-agent skill distribution the way mattpocock/skills did last week, and "we publish skills where evals say models fail" is a documentation standard every framework vendor can copy. First-party docs teams have a new deliverable format.
+
+[`🔗 android/skills`](https://github.com/android/skills) · [`🔗 Docs: Android skills`](https://developer.android.com/tools/agents/android-skills)
+
+---
+
+## 35. FLUX.3 Klein: BFL's 5.6B open-weights image model does 4K and 10-reference editing — free commercial use under $5M revenue
+
+- **Velocity:** ▮▮ rising
+- **Source:** BFL blog + Hugging Face · released 2026-10-15 · 22.8k downloads at writing
+- **Tags:** `image-generation` `open-weights` `flux` `diffusion` `black-forest-labs`
+
+Black Forest Labs released **FLUX.3 Image Klein** (Oct 15), the second open-weights member of the FLUX.3 family: **5.6B parameters**, text-to-image + editing + **multi-reference generation with up to 10 reference images**, native 4K, and bounding-box placement control. 11.2 GB in BF16, 5.6 GB FP8; the INT8 build runs on GeForce cards with **8 GB VRAM**, ~4 s per 1-megapixel image on an RTX 5090 (distilled + INT8 via ComfyUI), under 9 s on an RTX 4070, sub-0.6 s on GB300 in NVFP4. License: **FLUX Kommunity License — free commercial use for individuals and companies under $5M annual revenue**; larger organizations need self-hosted licensing or the API. Day-one support in ComfyUI, HF Diffusers, TensorRT-LLM, SGLang Diffusion and vLLM-Omni. The benchmark section is self-reported but unusually candid about method: internal blind evaluations rank it first among open-weights models in all three tasks, and the page itself discloses that **its latency comparisons are apples-to-oranges** (Klein timed on BFL's servers, rivals timed client-side including polling) and that Krea 2 is absent from the editing comparison because it lacks editing.
+
+**Why it matters:** the open-weights counterpoint to Krea 3 (item 8) — 10-reference consistency and bounding-box control are the structured-edit surface agent pipelines want, at zero marginal cost under the revenue cap. And the shape of the claim is as notable as its size: a vendor publishing its own latency-methodology caveat in the announcement. The $5M line is the new "community": open weights that stay closed above a threshold.
+
+[`🔗 BFL: FLUX.3 Image Klein`](https://bfl.ai/blog/flux-3-image-klein) · [`🔗 HF: flux-3-image-klein`](https://huggingface.co/black-forest-labs/flux-3-image-klein)
+
+---
+
+## 36. Withings puts Apple Health sync behind $99/year for new accounts — and answers with an "AI Connector"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Withings community + Hacker News · 323+ pts · ~16.1h ago (~04:10 UTC+8)
+- **Tags:** `withings` `health-data` `subscriptions` `apple-health` `mcp`
+
+From **Oct 13**, new Withings accounts need **Withings+ ($99.99/yr)** for automatic third-party sync — including Apple Health — while accounts created Oct 12 or earlier keep it free (grandfathering tied to the account, not the device); CSV/PDF export stays free for everyone. The company's official reply in the thread confirms the split and frames the paid tier around intelligence features — pointing users to its **Withings AI Connector (MCP)**, an MCP server for wiring health data into AI assistants. The thread (190+ comments, 323 HN points) is doing the arguing: commenters treat sync as a purchased-feature expectation, and one cites Apple App Review guideline 4.10's prohibition on monetizing built-in capabilities as the pressure point that could reverse it.
+
+**Why it matters:** subscription creep has reached the *sync layer* — a recurring fee at the handoff between your device's measurements and your OS's health store. The MCP twist sharpens it: the same announcement makes assistant access to your own health data the paid path. Watch whether Apple's 4.10 rule treats "paywall the pipe" differently from "paywall the app."
+
+[`🔗 Withings community thread (official reply inside)`](https://support.withings.com/hc/en-us/community/posts/51887047154577-Unacceptable-Apple-Health-Sync-is-now-behind-a-99-year-paywall-for-new-accounts) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50109375)
+
+---
+
+## 37. CLI-Anything re-trends at 53.2k★ — with no commit since September
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 53,200★ · trending +716/day (~20:20 UTC+8)
+- **Tags:** `agent-infra` `cli` `hkuds` `skills` `computer-use`
+
+HKUDS/CLI-Anything — the HKU Data Science lab's project that wraps desktop software as agent-usable CLIs — is trending again (+716★/day, 53.2k★ total) even though **its last commit is Sept 22 and the README's news section stops May 30**. The thesis (arXiv 2606.03854, June) is that GUI agents are structurally misaligned with LLMs — brittle pixels, timing dependencies, coordinates — so CLI-Anything generates a CLI harness per application (Blender, Godot, QGIS, Obsidian, Kdenlive, Zoom, n8n; 18 demo apps and a claimed 2,461 passing tests), distributed through **CLI-Hub** (`pip install cli-anything-hub`) and the `npx skills add` flow. Like Iosevka's HN day on Oct 15, the spike is social, not developmental: no release is behind it.
+
+**Why it matters:** the second "make software agent-native" project to trend this week, after Builder.io's Agent-Native (Oct 15) — opposite mechanisms (community-built CLIs vs capability detection), same bet that the desktop is about to grow a machine-user API surface. The star spike without a release is another datapoint that this shelf's distribution is social, not automatic.
+
+[`🔗 HKUDS/CLI-Anything`](https://github.com/HKUDS/CLI-Anything) · [`🔗 arXiv 2606.03854: CLI-Anything`](https://arxiv.org/abs/2606.03854)
+
+---
+
+## 38. MiniCPM-V 4.7: a 35B-A3B multimodal MoE claims smooth on-device inference — 13 tok/s in 3 GB on an iPhone
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face · 813 likes · #4 trending · weights Oct 7, card updated Oct 15
+- **Tags:** `multimodal` `moe` `on-device` `openbmb` `apache-2.0`
+
+OpenBMB's **MiniCPM-V 4.7** is the series' first MoE — **35B total / 3B active, Apache-2.0**, with a 1B sibling — and its headline claim is on-device: **13+ tokens/s within 3 GB of memory on an iPhone 17 Pro Max**, presented as the first open-source MoE with smooth, lossless on-device inference. The technique stack is the content: **Lookahead Expert Scheduling** (a llama.cpp-omni fork predicts which experts the next layer needs and prefetches them, overlapping loading with compute while computation still follows the model's own token-level routing), fine-grained layer-wise quantization, and DSpark speculative sampling. Visual tokens are compressed inside the ViT itself (LLaVA-UHD v4's intra-ViT early compression), with mixed 4x/16x ratios. Platform claims: iOS, Android, HarmonyOS, plus day-0 support for Rockchip, Houmo, Intel, AMD and Arm chips. The vendor benchmark claims a higher overall score than Qwen3.6 35B-A3B in less inference time — self-reported, as model-card tables are.
+
+**Why it matters:** the MoE-on-phone problem is that experts don't fit in device memory, and prior work coped by restricting the routing pool — which caps capability. Prefetch-and-overlap is the first design that keeps full routing; if the iPhone number survives reproduction (the llama.cpp-omni fork is where to check), 35B-class multimodal on a phone stops being a demo.
+
+[`🔗 HF: MiniCPM-V-4.7-35B-A3B`](https://huggingface.co/openbmb/MiniCPM-V-4.7-35B-A3B) · [`🔗 OpenBMB/MiniCPM-V`](https://github.com/openbmb/MiniCPM-V)
+
+---
+
+## 39. Gentoo issues "last rites" for its Chromium package: 602 known CVEs in the stable ebuild, and nobody left to carry it
+
+- **Velocity:** ▮ steady
+- **Source:** LWN + Hacker News · 64+ pts · ~6.8h ago (~13:30 UTC+8)
+- **Tags:** `gentoo` `chromium` `packaging` `distros` `maintenance`
+
+On Sept 24, Gentoo maintainer Sam James masked www-client/chromium with "last rites" — the distro's term for a package pending removal — after a user bug report noted the stable ebuild (151.0.7922.169) carried **602 known vulnerabilities**. The LWN write-up behind today's HN thread documents the arithmetic: maintainer Matt Jolly estimated **more than six hours per week of compilation alone** on powerful hardware (3.5 h builds on fast machines, 15–16 h on laptops), a new major branch roughly every two weeks with weekly bumps — a cadence that shortened twice since he took over in 2023 — plus newly added Rust and Go dependencies and unreliable upstream tarball CI. Jolly's restoration condition: **at least three maintainers** skilled in C, C++, Go, JavaScript and Rust — "history has shown that one maintainer isn't working." Users are pointed to overlays, an unverified Flathub build, or upstream's own binaries. On LLMs filling the gap, Jolly is blunt: not a silver bullet, and endlessly reverting the Crubit/Rust breakage is unsustainable.
+
+**Why it matters:** source-based packaging versus Chromium's release cadence is a structural mismatch, and 602 known CVEs is the measurable end state of losing it. The instructive contrast sits in the same article: Firefox's Gentoo maintainer manages ~20 h per two weeks because Mozilla works with downstream packagers. Maintenance is a relationship, not just a build.
+
+[`🔗 LWN: Last rites for Gentoo's Chromium package`](https://lwn.net/Articles/1097760/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50114359)
+
+---
+
+## 40. Since our Oct 10 note on Cloudflare-Deno: vlt's "Thank you, Deno" fills in the wind-down — the runtime dies in a year, JSR and celld move in
+
+- **Velocity:** ▮ steady
+- **Source:** vlt.io + Hacker News · 102+ pts · ~11.2h ago (~09:10 UTC+8)
+- **Tags:** `javascript` `deno` `cloudflare` `nodejs` `runtimes`
+
+Darcy Clarke (vlt founder, ex-npm) writes the competitor's eulogy, with the operational details the acquisition announcement left out: **the Deno runtime itself winds down over the next year**; JSR, the registry, continues on Cloudflare infrastructure; and the team's new mission is merging Deno's **celld** engine into Cloudflare's **workerd**. The essay's argument is the part worth keeping: Deno never reached production critical mass — "Node remains as dominant in 2026 as in 2018" — but it supplied the urgency behind nearly every modern Node feature: fetch, WebSockets, Web Crypto, a stable test runner, the permission model, default type stripping, `node:sqlite`, `require(esm)`. The pressure ran both ways — Bun's npm-compatible 2022 launch pushed Deno to drop URL imports within weeks. His worry: both independent runtimes now live inside bigger companies (Bun at Anthropic, Deno at Cloudflare), and whether a community fork of the Deno runtime emerges is "an open question."
+
+**Why it matters:** it resolves what Cloudflare actually bought on Oct 10 — a registry and an engine, not a runtime — and it's the cleanest statement of the pattern this feed keeps measuring: incumbents adopt competitors' ideas after the competitors die. If you run Deno in production, the migration clock is now a year.
+
+[`🔗 vlt: Thank you, Deno`](https://www.vlt.io/blog/competition-keeps-javascript-moving) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50112331)
+
+---
+
+## 41. Since our Oct 11 note on the Yandex strikes: Sberbank's Balakovo data center becomes the fourth hit
+
+- **Velocity:** ▮ steady
+- **Source:** Politico + Reuters · overnight 2026-10-14
+- **Tags:** `infrastructure` `datacenters` `ukraine` `sberbank`
+
+Overnight Oct 14, Ukrainian drones struck Sberbank's data center in Balakovo, Saratov Oblast — per Reuters, the **fourth Russian data center strike** in the pattern this feed tracked on Oct 11, when a UAV strike suspended Yandex Cloud's Vladimir facility and Cloudflare Radar showed Yandex-origin traffic going to zero. Sberbank management confirmed the strike; Politico reports the site serves not only the bank but a range of **governmental e-services**; Ukrainian outlets describe an **82 MW** facility designed for up to 120,000 servers, reportedly still partially under construction. Russian outage monitors reported a surge of connection complaints after the strike; the bank says systems operated normally.
+
+**Why it matters:** the target set has widened from search and cloud infrastructure to the state bank's compute — the same class of facility that hosts Sberbank's AI and supercomputer ambitions. The Oct 11 lesson (one strike, observably-zero traffic) now has four data points: grid-scale compute is being treated as a first-class military target.
+
+[`🔗 Politico: Ukrainian drones strike data center of Russia's biggest bank`](https://www.politico.com/news/2026/10/14/ukrainian-drones-struck-russian-sberbank-data-center) · [`🔗 Reuters: Ukraine strikes fourth Russian data center`](https://www.reuters.com/business/finance/ukrainian-drones-hit-russias-biggest-data-centre-2026-10-14/)
+
+---
+
+## 42. Folders, the esolang with no text at all, has its HN day — code as pure folder structure
+
+- **Velocity:** ▮ steady
+- **Source:** danieltemkin.com + Hacker News · 100+ pts · ~6.9h ago (~13:25 UTC+8)
+- **Tags:** `esolang` `programming-languages` `filesystem` `art`
+
+Daniel Temkin's **Folders** (2015, updated 2026) encodes programs entirely in folder containment and order — folder names are ignored except for alphabetical sorting, so a program is a "pure ordered tree": the number of subfolders in the first folder selects the command (0 = if … 5 = input), with expression kinds and types counted the same way (1 = float, 2 = string, 3 = char). The HelloWorld is **209 directories, 0 files**; on Windows, where empty folders occupy no disk space, the site notes 352,449 folders showing "0 bytes." In a nice inversion, temporary data *does* use names — the "Folders FS" stores values in directory names. The practical footnote: git ignores empty folders, so programs are advised to carry `.gitkeep` files in their deepest directories. Reference compiler at rottytooth/Folders, plus a JS emulator.
+
+**Why it matters:** eleven years old and trending now — and accidentally current: an agent already works through the filesystem as its native interface, so this is one of the few esolangs a coding agent could write unaided. Mostly, though, it's a good week for the reminder that code is structure before it is text.
+
+[`🔗 danieltemkin.com: Folders`](https://danieltemkin.com/esolangs/folders) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50114342)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-16T04:23:00Z |
-| Items | 29 |
-| Sources tracked | 31 (Hacker News, GitHub Trending, Citizen Lab, CISA KEV, NVD, BIPM, Meta terms, Nieman Lab, IPinfo, E Ink, vendor blogs, foundation announcements, personal engineering blogs) |
+| Generated | 2026-10-16T12:20:00Z |
+| Items | 42 |
+| Sources tracked | 44 (Hacker News, GitHub Trending, Citizen Lab, CISA KEV, NVD, oss-security, kernel.git, BIPM, Meta terms, Nieman Lab, IPinfo, E Ink, LWN, vlt.io, Politico, Reuters, BFL, Withings support, vendor blogs, foundation announcements, personal engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
