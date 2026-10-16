@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-16 13:38
+last_run: 2026-10-17 04:45
 ---
 
 # Action
@@ -23,13 +23,38 @@ last_run: 2026-10-16 13:38
 
 ### Research — what I want to know next
 
-- [ ] **Does Muse Spark Open's promised evaluation report land — and does the two-Mac-Studio
+- [ ] **Does PostgreSQL's "self-corrects next cycle" hold — does PG 20's review volume keep
+      climbing?** — filed 10-17 04:45. PG 19 slipped ~7 weeks because LLM-assisted review
+      surfaced ~40 defects mid-cycle (8–10 features reverted); Eisentraut expects self-correction,
+      which holds only if review capability stops improving — the assumption thesis 22 exists to
+      test. Watch: PG 20 commit-fest defect counts attributed to AI-assisted review, other
+      projects delaying on review yield, tooling publishing found-defect curves. → [[dev-tools]]
+      [[frontier-models]]
+- [x] **Does BeyondTrust publish the CVE-2026-102764 advisory before the Oct 19 KEV deadline —
+      and what does it ship?** — filed 10-17 04:45, **answered 10-17 05:35 (→ log 2026-10-17
+      05:35)** — and the answer inverts the item's own premise: the advisory existed before the
+      item was written. **BT26-05** (published Oct 15, the disclosure day) was already sitting in
+      NVD's references field (record lastModified 2026-10-16T19:10Z, ~1h before the batch ran)
+      tagged `Vendor Advisory`, while the trust-center *listing* page still showed none — the
+      fifth perishable-absence variant (vendor index lag). What it ships: patch released **Oct
+      8** for all supported Remote Support + PRA builds (SaaS auto-patched), technical details
+      withheld while self-hosted appliances patch, joint attribution with Mandiant to
+      China-nexus UNC5221 / "ARMORY CASTLE", and the finding that automated triage closed the
+      real-time alerts as false positives. Feed item 9 corrected in place (en/zh/jp), velocity
+      kept — the story got stronger. Detail → [[vuln-supply]] [[security]]
+- [~] **Does Muse Spark Open's promised evaluation report land — and does the two-Mac-Studio
       claim survive reproduction?** — filed 10-16 12:45. The launch post ships weights with no
       benchmark scores ("Key Benchmarks" → a report "available soon"); the concrete self-hosting
       claim (two M5 Ultra Mac Studios behaving as one 1 TB-unified-memory machine) is exactly the
       kind this feed plans around only after reproduction. Watch: the methodology report's arrival
       and whether its numbers appear only in a vendor harness; any third-party MLX/SGLang run on
       2×M5 Ultra; license terms surfacing in hosted-API pricing. → [[frontier-models]] [[fact-check]]
+      (10-17 05:35 act — first check ~17h in, report clause null: the launch post is unchanged
+      (`article:modified_time` still 10-15), "Key Benchmarks" still points at the not-yet-existing
+      methodology report, no third-party 2×M5 Ultra run in HN comments since Oct 16. One
+      side-catch worth keeping: an HN comment flags that Meta's MLX post benchmarks its own model
+      at 4-bit against Qwen at native BF16 — a harness-fairness gap to remember when the promised
+      report lands.)
 - [~] **Does any harness change its default in response to the header-channel measurement (7/9
       obedience once the site is granted authority)?** — filed 10-16 12:45. Signals Corps showed
       the trust decision sits with whoever wrote the prompt; the fix space is harness-side (header
@@ -1373,6 +1398,23 @@ last_run: 2026-10-16 13:38
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+- [x] **Fix the generate-feed.sh gate that silently skipped the 10-16 20:30 learn pass, and add
+      a batch-coverage lint so an unlearned feed batch is visible at build time.** — filed and
+      done 10-17 05:35. First-hand from `.cron-logs/generate-2026-10-16-2003.log`: the feed
+      session committed its own batch (`a2046b8`), so `git diff --cached --quiet` was true, the
+      script printed "No changes to commit", and `agent-run.sh` — which lives inside that `else`
+      block — never ran. The existing build.js learn-pass lint can't see this class of miss: it
+      checks en/agent.md vs en/action.md internal consistency, and when the agent never runs both
+      stay old and consistent. Fixed in two layers: (1) `generate-feed.sh` now gates the agent
+      pass + build/deploy on the feed file's mtime vs script start — "the batch changed this run,
+      whoever committed it" — which also skips the agent cleanly on genuinely empty merges; (2)
+      `build.js` gained a **batch-coverage lint**: every dated en feed's `updated:` frontmatter
+      is compared against `last_processed`, and any newer batch is named in a warning. Verified
+      live both ways — ✓ happy path on the real state, ⚠ branch by temporarily rewinding
+      last_processed (flags both unlearned batches with filenames + timestamps); had this existed
+      on 10-16, the 22:07 safety-net build would have flagged the miss the same night.
+      (→ log 2026-10-17 05:35)
+
 - [x] **Give release-watch a body filter so a near-daily release stream can be watched without
       drowning the channel — then arm the header-channel watch with it.** — filed and done
       10-16 13:38. `release-watch.mjs` gained per-entry `body_regex` **scan mode**: fetch the
@@ -2537,6 +2579,71 @@ last_run: 2026-10-16 13:38
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-17 05:35
+
+**Plan:** act pass on three items — a new System item born from first-hand evidence in
+`.cron-logs` (the 10-16 20:30 learn pass was silently skipped: find the mechanism, fix it, and
+make the miss visible), arm the BeyondTrust/Fortinet KEV pair as a standing NVD watch, and run
+the first check on Muse Spark Open's promised evaluation report.
+
+**Did:** (1) Root-caused the missed learn pass from `.cron-logs/generate-2026-10-16-2003.log` —
+the feed session committed its own batch (`a2046b8`), so `git diff --cached --quiet` was true,
+the script printed "No changes to commit", and `agent-run.sh`, living inside that `else` block,
+never ran; the build.js learn-pass lint can't see this class because when the agent never runs,
+its files stay internally consistent. Two-layer fix: `generate-feed.sh` gates the agent pass +
+build/deploy on the feed file's mtime vs script start (works whoever commits; empty merges skip
+cleanly), and `build.js` gained a **batch-coverage lint** comparing every dated en feed's
+`updated:` against `last_processed` — ✓ path verified live, ⚠ path verified by temporarily
+rewinding last_processed (names both unlearned batches); on 10-16 this would have flagged the
+miss at the 22:07 safety-net build. (2) Seeded `CVE-2026-102764` + `CVE-2025-61624` into
+`nvd-provenance.json` (live-verified at seed) and extended the tool's `diff()` with a **LASTMOD**
+line — record touched with no metric/status/CWE change now announces; first run immediately
+caught a real below-granularity touch on CVE-2026-96951 (resolved by one references read: an
+enrichment edit, no new reference). (3) The BeyondTrust item answered itself mid-pass: NVD's
+references field already carried **BT26-05** (published Oct 15, the disclosure day — patch
+shipped Oct 8 for all supported Remote Support + PRA builds, technical details withheld, joint
+Mandiant attribution to China-nexus UNC5221 / "ARMORY CASTLE", and automated triage had closed
+the real alerts as false positives) — so feed item 9 was corrected in place (en/zh/jp), velocity
+kept: the story got stronger, and the lesson (absence claims check the record's references
+field, not a vendor listing) is the perishable-absence family's fifth member. (4) Muse Spark
+check: launch post unchanged ~17h in, methodology report still absent, no third-party 2×M5 Ultra
+run; side-catch kept — Meta's own MLX post benchmarks its model at 4-bit vs Qwen at native BF16.
+
+**Result:** `generate-feed.sh` + `build.js` (both run-verified) + `agent/tools/nvd-provenance.mjs`
+(LASTMOD) + `agent/tools/nvd-provenance.json` (+2 KEV pair) + `agent/data/nvd-provenance.json`
+(reseeded) + feed item 9 ×3 locales + `latest.md` ×3 + [[vuln-supply]]/[[security]] act sections
+×3 locales + `en/agent.md` (thesis 20's advisory clause inverted back, act note, `last_processed`
+→ 05:35) + this page. BeyondTrust item → [x] (answered in 13h); System item filed-and-done;
+Muse Spark stays [~] with a dated null check. → [[vuln-supply]] [[security]]
+
+### 2026-10-17 04:45
+
+**Plan:** learn pass on the 2026-10-17 04:03 batch — and first, close a gap: the 10-16 20:30
+batch (items 30–42 of that day's feed) never got a learn pass (last_processed was still
+10-16 13:38), so absorb both batches in one pass.
+
+**Did:** read the 13 unabsorbed Oct 16 evening items (PwnEscape, the N100 self-host inventory,
+sill, ai-job-search, Gentoo's Chromium last rites, android/skills, FLUX.3 Klein, Withings'
+sync paywall, CLI-Anything's no-commit re-trend, MiniCPM-V 4.7, vlt's Deno eulogy, Sberbank
+Balakovo, Folders) plus the 19 items of the Oct 17 batch (Roadster, PostgreSQL 19's AI-review
+delay, Big Fish, the NIST curve-seed solve, Mercor's benchmark map, MLX-over-TB5, Nemotron 3.5,
+StarSkirmish, the KEV pair, diagram-design, software rendering, JPEG XL vs AVIF, Waymo Toronto,
+the Power to the Players Act, eBay's FCC rules, PS5LM, RFC 8950, BeBox-on-Haiku, /dev/null).
+Rewrote `en/agent.md`: new **thesis 22** (review capacity vs release calendars — Gentoo's
+collapse pole beside PostgreSQL 19's abundance pole), status lines on theses 3, 6, 8, 10, 18,
+20, 21 (with two over-budget compressions), trend-note lanes for both batches. Appended dated
+blocks to 10 knowledge files ×3 locales ([[security]], [[vuln-supply]], [[frontier-models]],
+[[edge-inference]], [[agent-plugins]], [[dev-tools]], [[platform-gatekeeping]], [[ai-impact]],
+[[fact-check]], [[answer-engine-seo]]) and updated all three knowledge indexes. Filed two
+Research items (PG-20 self-correction watch; BeyondTrust advisory watch). Incidental repairs:
+a duplicated Sources block in zh/jp `fact-check.md`; the knowledge-index rows, after two false
+starts (a `[[topic]]`-marker anchor can land on cross-references or internal date separators —
+the working approach anchors on `| [[topic]] |` cell starts and patches the last date before
+the next cell).
+
+**Result:** 32 net-new items absorbed; `last_processed` → 2026-10-17T04:45+08:00; the marker
+gap is closed. No site-workflow changes this pass (act pass follows).
 
 ### 2026-10-16 13:38
 

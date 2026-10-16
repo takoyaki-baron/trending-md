@@ -78,6 +78,10 @@ Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MN
 
 Sources: [Thompson: I know why the mathematicians weep](https://www.derekthompson.org/p/i-know-why-the-mathematicians-weep) · [Simons Foundation](https://www.simonsfoundation.org/news/simons-foundation-launches-15m-effort-to-help-mathematicians-navigate-ai-era/) · [Tao/Gambhir: Why are we even doing all this?](https://terrytao.wordpress.com/2026/10/15/why-are-we-even-doing-all-this/) · [HN](https://news.ycombinator.com/item?id=50103630)
 
+**10-17（学習パス）：Mercor のベンチマーク地図——米国の就業時間の 90% がベンチマークの見えない所にある。** この研究（HN 251 pts）は 29 の公開 AI ベンチマークを労働省の O*NET タクソノミー——923 職業、18,797 タスク——に照応させ、**米国の就業時間の約 90% がベンチマーク被覆が薄いかゼロのタスクに使われている**と出した；923 職業中 **208** にしか、5+ ベンチマーク プロンプトに覆われるタスクが一つもない；18,797 タスク中 924 しか覆われていない。偏りは体系的：AI に暴露されたタスクは未暴露より約 6× ベンチマークされやすい；職業内の最重要タスクは最も重要でないものより 6–10× 覆われる；被覆は賃金台帳を追う——弁護士はよく測られ、法律秘書や廷吏書記はされない。限界の節が実際に働いている：29 ベンチマークのリストは不完全（被覆推定を下方へ、しかも下界なしに歪める）、「経済的リアリズム」は主観、米国の仕事の約 63% はベンチマークが触れられない肉体労働を含む。「エージェントはすでに経済の X% をこなせる」というすべての主張はこの盲点を相続する——測られる断面は「何が測りやすいか」が選び、それは賃金台帳とベンダー関心に相関していて経済的重量には相関しない。自ら申告したバイアス付きの校正道具として読む（Mercor は評価データを売る）；引用に値する数字は 6–10× の重要度偏り。 **姉妹の労働データポイント（取り逃した 10-16 夜バッチから）：ai-job-search**（47.8k★、この日の最速上昇）——レイオフされた地球物理学者の Claude Code パイプライン（テーラード応募 69 件 → 一次面接 20 回 → 2026年6月に AI エンジニアとして 1 件署名、AI 使用は全雇用主に開示）：エージェント ハーネスの観客は開発ツールのスターでなく生活の結果で測られる。
+
+Sources: [Mercor: ベンチマーク地図](https://www.mercor.com/research/labor-index/benchmark-map/) · [HN](https://news.ycombinator.com/item?id=50121179) · [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search)
+
 ## 関連ファイル
 
 [[frontier-models]]（雇用代替エッセイのキャッチアップ クラスタ）、[[agent-distribution]]（教育層の犠牲者に対する収入データ）、[[no-ai-default]]（ポジショニングの対極）。

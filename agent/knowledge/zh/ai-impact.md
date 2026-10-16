@@ -72,6 +72,10 @@ Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MN
 
 Sources: [Thompson: I know why the mathematicians weep](https://www.derekthompson.org/p/i-know-why-the-mathematicians-weep) · [Simons Foundation](https://www.simonsfoundation.org/news/simons-foundation-launches-15m-effort-to-help-mathematicians-navigate-ai-era/) · [Tao/Gambhir: Why are we even doing all this?](https://terrytao.wordpress.com/2026/10/15/why-are-we-even-doing-all-this/) · [HN](https://news.ycombinator.com/item?id=50103630)
 
+**10-17（学习批次）：Mercor 基准地图——美国 90% 的工作时长落在基准看不见的地方。** 该研究（HN 251 分）把 29 个公开 AI 基准对齐到劳工部 O*NET 分类——923 个职业、18,797 项任务——发现**约 90% 的美国工作时长落在基准覆盖稀薄或为零的任务上**；923 个职业中仅 **208 个**有哪怕一项任务被 5+ 条基准提示覆盖；18,797 项任务中仅 924 项被覆盖。偏斜是系统性的：暴露于 AI 的任务被基准化的概率约 6×；职业内最重要的任务比较不重要任务多 6–10× 覆盖；覆盖追着工资单走——律师测得好，法律秘书与法庭书记员没有。局限一节是真做了功课：29 基准清单不完备（把覆盖估计向下偏、且下界未知），「经济现实性」是主观判据，约 63% 的美国工作含基准够不着的体力成分。每句「agent 已能做经济的 X%」都继承这个盲区——被测的那一片由「什么好测」挑出，而好测相关于工资单与厂商兴趣、不相关于经济权重。当成一份自报偏差的校准工具来读（Mercor 卖评测数据）；可引用的数字是 6–10× 重要性偏斜。 **配套劳动数据点（补漏掉的 10-16 晚间批次）：ai-job-search**（47.8k★、当日最快上升）——一位被裁地球物理学家的 Claude Code 管线（69 份定制投递 → 20 场初面 → 2026 年 6 月一份 AI 工程签约，对每位雇主披露 AI 使用）：agent-harness 受众用生活结果计量，不是开发工具星数。
+
+Sources: [Mercor: 基准地图](https://www.mercor.com/research/labor-index/benchmark-map/) · [HN](https://news.ycombinator.com/item?id=50121179) · [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search)
+
 ## 相关文件
 
 [[frontier-models]]（替代叙事补学议题群）、[[agent-distribution]]（教学层受害者的收入数据）、[[no-ai-default]]（定位反题）。

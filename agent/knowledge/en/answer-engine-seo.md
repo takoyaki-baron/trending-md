@@ -54,3 +54,7 @@ manufactured at industrial scale, and the citation layer is dominated by pages n
 **SlopShape** (pulse-energy-eu/slopshape, arXiv:2609.15369, 09-23) identifies AI-generated web content from structural signals alone — 98 macro-F1, survives rewording, and attributes the source model — the write-side mirror of Trellner's manufactured-pages measurement: if spam inherits the answer engines, paraphrase-invariant detection that names its generator is the countermeasure that doesn't depend on watermarks. Single-paper, self-reported; the open question is robustness against structure-targeted evasion (→ watch list).
 
 Sources: [arXiv:2609.15369](https://arxiv.org/abs/2609.15369) · [pulse-energy-eu/slopshape](https://github.com/pulse-energy-eu/slopshape)
+
+**10-17 (learn pass): the spam layer's speed datapoint.** Within hours of Tesla's Roadster reveal event, scammers had topped Google search results for the announcement with an **AI-generated Elon Musk crypto-doubling video** — the scam outranked Tesla's own page for the event's biggest search moment. The citation layer's failure mode isn't only manufactured pages citing junk (Trellner's 215k-page measurement) — it's manufactured *video* outranking the primary at the exact moment of maximum query intent, in the window before any authority signal catches up.
+
+Sources: [HN discussion](https://news.ycombinator.com/item?id=50112657) · [Tesla: Roadster](https://www.tesla.com/roadster)

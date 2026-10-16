@@ -2458,9 +2458,90 @@
       "feeds": [
         "2026-10-16.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50112657": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T21:56:16.992Z",
+      "last_seen": "2026-10-16T21:56:16.992Z",
+      "feeds": [
+        "2026-10-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50119991": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T21:56:16.992Z",
+      "last_seen": "2026-10-16T21:56:16.992Z",
+      "feeds": [
+        "2026-10-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50118320": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T21:56:16.992Z",
+      "last_seen": "2026-10-16T21:56:16.992Z",
+      "feeds": [
+        "2026-10-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50117746": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T21:56:16.992Z",
+      "last_seen": "2026-10-16T21:56:16.992Z",
+      "feeds": [
+        "2026-10-17.md"
+      ]
+    },
+    "https://www.tesla.com/roadster": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T21:56:16.992Z",
+      "last_seen": "2026-10-16T21:56:16.992Z",
+      "feeds": [
+        "2026-10-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50120101": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T21:56:16.992Z",
+      "last_seen": "2026-10-16T21:56:16.992Z",
+      "feeds": [
+        "2026-10-17.md"
+      ]
+    },
+    "https://www.beyondtrust.com/blog/entry/bt26-05": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T21:56:16.992Z",
+      "last_seen": "2026-10-16T21:56:16.992Z",
+      "feeds": [
+        "2026-10-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50118267": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T21:56:16.992Z",
+      "last_seen": "2026-10-16T21:56:16.992Z",
+      "feeds": [
+        "2026-10-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50121004": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T21:56:16.992Z",
+      "last_seen": "2026-10-16T21:56:16.992Z",
+      "feeds": [
+        "2026-10-17.md"
+      ]
     }
   },
-  "runs": 59,
+  "runs": 60,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-16T06:15:43.548Z"
+  "last_run": "2026-10-16T21:56:16.992Z"
 }

@@ -30,6 +30,16 @@
       "id": "CVE-2026-96951",
       "why": "Windows Shell command injection 8.8, KEV'd 10-13, Secondary secure@microsoft.com — the only KEV entry in the set",
       "seeded": "2026-10-14 [Undergoing Analysis] 3.1 Secondary/secure@microsoft.com 8.8, CWE-77, KEV 2026-10-13, published 10-13"
+    },
+    {
+      "id": "CVE-2026-102764",
+      "why": "BeyondTrust PAM auth bypass 9.8-NVD/9.3-CNA, KEV'd one day post-publication (due 10-19) — vendor trust center lists NO advisory naming it; the advisory would land here as a LASTMOD/references move first",
+      "seeded": "2026-10-17 [Analyzed] 3.1 Primary/nvd@nist.gov 9.8, 4.0 Secondary/CNA 9.3, CWE-290, KEV 2026-10-16, published 10-15"
+    },
+    {
+      "id": "CVE-2025-61624",
+      "why": "Fortinet path traversal 6.5-NVD/6.0-CNA, published April, KEV'd ten months on (due 10-19) — watch for patch-state/reference movement",
+      "seeded": "2026-10-17 [Analyzed] 3.1 Primary/nvd@nist.gov 6.5, 3.1 Secondary/psirt@fortinet.com 6.0, CWE-22, KEV 2026-10-16, published 2026-04-14"
     }
   ]
 }

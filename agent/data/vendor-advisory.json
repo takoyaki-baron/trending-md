@@ -1,9 +1,9 @@
 {
- "updated": "2026-10-16T06:17:02.537Z",
+ "updated": "2026-10-16T21:57:54.729Z",
  "ids": {
   "CVE-2026-92707": {
    "nvd": {
-    "status": "Received",
+    "status": "Awaiting Analysis",
     "metrics": [
      "5.3 Secondary/security-advisories@github.com"
     ],
@@ -18,7 +18,7 @@
   },
   "CVE-2026-108266": {
    "nvd": {
-    "status": "Received",
+    "status": "Awaiting Analysis",
     "metrics": [
      "9.1 Secondary/security-advisories@github.com"
     ],

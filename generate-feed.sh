@@ -25,6 +25,10 @@ echo "=== generate-feed $TODAY start $(date) ==="
 
 cd "$REPO_DIR"
 
+# Script start time — compared against the feed file's mtime at the end to decide whether
+# THIS run changed the feed (regardless of who committed it). See the agent-pass gate below.
+START_EPOCH=$(date +%s)
+
 # Pull latest
 git pull origin master --ff-only 2>&1 || echo "(git pull skipped)"
 
@@ -137,10 +141,21 @@ else
   git commit -m "feed: $TODAY $(date +%H:%M) batch ($NEW_COUNT items)" 2>&1
   git push origin master 2>&1
   echo "Committed and pushed ($NEW_COUNT items)."
+fi
 
-  # Run the learnt agent on the new batch (writes its own commit + push).
-  # SKIP_AGENT_DEPLOY=1 → agent-run.sh skips its own build+deploy; this script deploys below.
-  echo "Running learnt agent…"
+# Run the learnt agent on the batch whenever THIS RUN changed the feed — NOT gated on the
+# commit above. The 10-16 20:30 run lost its learn pass to exactly this gate: the feed
+# session committed its own batch (a2046b8), nothing was staged here, "No changes to
+# commit" short-circuited the whole else block, and agent-run.sh — which lived inside it —
+# never ran; the batch sat unlearned until the next day's 04:03 pass absorbed it. The
+# feed file's mtime tells us the batch changed regardless of who committed it.
+# SKIP_AGENT_DEPLOY=1 → agent-run.sh skips its own build+deploy; this script deploys below.
+FEED_MTIME=0
+if [ -f "$FEED_FILE" ]; then
+  FEED_MTIME=$(stat -f %m "$FEED_FILE" 2>/dev/null || echo 0)
+fi
+if [ "$FEED_MTIME" -ge "$START_EPOCH" ]; then
+  echo "Feed changed this run — running learnt agent…"
   SKIP_AGENT_DEPLOY=1 bash agent-run.sh "$TODAY"
 
   # Build and deploy to Cloudflare Pages
@@ -149,6 +164,8 @@ else
   echo "Deploying to Cloudflare Pages…"
   npx wrangler pages deploy dist/ --project-name=trending-md --commit-dirty=true 2>&1
   echo "Deployed."
+else
+  echo "Feed unchanged this run — skipping agent pass and deploy."
 fi
 
 # Magichand tracking (non-blocking)

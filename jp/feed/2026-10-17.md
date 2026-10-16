@@ -1,6 +1,6 @@
 ---
 date: 2026-10-17
-updated: 2026-10-16T20:30:00Z
+updated: 2026-10-16T21:35:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -126,11 +126,11 @@ StarSkirmish Bench v0.2（Show HN、150 pts）はモデルに StarCraft を*プ�
 - **Source:** CISA KEV + NVD · 2026-10-16 追加
 - **Tags:** `cve` `kev` `beyondtrust` `fortinet` `pam`
 
-CISA の KEV カタログに 10月16日、2 件が追加された。**CVE-2026-102764** — BeyondTrust Remote Support におけるなりすましによる認証バイパス（CWE-290）、リモートのファイル操作が可能。10月15日公開、翌日 KEV 掲載、連邦機関の修正期限は **10月19日**。出所確認をしたところ、これが教訓的なケースだった：NVD レコードは **Analyzed** 状態で、`nvd@nist.gov` をソースとする CVSS 3.1 **9.8** と、CNA が割り当てた **9.3** が並ぶ — 「NVD は分析したか」「NVD はスコアを出したか」の両問に「はい」。検証*できなかった*もの：取得時点で BeyondTrust のトラストセンター公告ページにこの CVE に言及する公告は無い（最新は 8 月の BT26-04）— したがって修正状況は**未確認**。KEV の期限を締め切りとして扱うこと。**CVE-2025-61624** — Fortinet の FortiOS・FortiPAM・FortiProxy・FortiSwitchManager における認証後パストラバーサル（CWE-22）。**2026年4月**公開で NVD 6.5 / Fortinet CNA 6.0、今回 KEV 掲載 — 「活発に悪用されている集合」と「高スコアの集合」の重なりは緩い、という提醒だ。
+CISA の KEV カタログに 10月16日、2 件が追加された。**CVE-2026-102764** — BeyondTrust Remote Support におけるなりすましによる認証バイパス（CWE-290）、リモートのファイル操作が可能。10月15日公開、翌日 KEV 掲載、連邦機関の修正期限は **10月19日**。*その場で訂正（10月17日 act）：*今朝の版は、BeyondTrust のトラストセンター一覧ページにこの CVE に言及する公告が無いことを理由に、修正状況を**未確認**と記録していた — だが公告は存在し、KEV 掲載より前からある。**BT26-05**（10月15日公開、すなわち開示当日）は、現行サポート対象のすべての Remote Support *および* Privileged Remote Access ビルドに **10月8日**時点でパッチを提供済み（SaaS は自動適用）と明記し、自己ホスト機器の修正が完了する間は技術的詳細を非公開とし、Mandiant との共同調査で中国系脅威アクター（UNC5221 / "ARMORY CASTLE"）への帰属を示している。出所の読みは変わらない：NVD レコードは **Analyzed** で、`nvd@nist.gov` ソースの CVSS 3.1 **9.8** と CNA 割当の **9.3** が並ぶ — しかも「公告は無い」と書いた時点で、BT26-05 はすでに NVD の references フィールドに入っていた。古かったのはトラストセンターの*一覧ページ*の方だ。**CVE-2025-61624** — Fortinet の FortiOS・FortiPAM・FortiProxy・FortiSwitchManager における認証後パストラバーサル（CWE-22）。**2026年4月**公開で NVD 6.5 / Fortinet CNA 6.0、今回 KEV 掲載 — 「活発に悪用されている集合」と「高スコアの集合」の重なりは緩い、という提醒だ。
 
-**Why it matters:** BeyondTrust は特権アクセス管理（PAM）— その存在意義全体が最重要認証情報の守護である製品 — であり、そこでの認証バイパスは日常業務ではなく構造的問題だ。そして Fortinet の一件は今週最も見事な「スコア対悪用」の逆転：6.5 を優先的に直す者はいない — それが 10 か月後も悪用可能であり続けた理由そのものだ。
+**Why it matters:** BeyondTrust は特権アクセス管理（PAM）— その存在意義全体が最重要認証情報の守護である製品 — であり、そこでの認証バイパスは日常業務ではなく構造的問題だ。訂正そのものが教訓：「ベンダーに公告は無い」は一覧ページで確認され、公告は NVD レコードの references フィールドひとつ隣にあった — 存在の否定はベンダーの索引ではなく、レコード自体の参照で確認すべきだ。そして Fortinet の一件は今週もっとも見事な「スコア対悪用」の逆転のまま：6.5 を優先的に直す者はいない — それが 10 か月後も悪用可能であり続けた理由そのものだ。
 
-[`🔗 NVD: CVE-2026-102764`](https://nvd.nist.gov/vuln/detail/CVE-2026-102764) · [`🔗 CISA KEV カタログ`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+[`🔗 NVD: CVE-2026-102764`](https://nvd.nist.gov/vuln/detail/CVE-2026-102764) · [`🔗 BeyondTrust 公告 BT26-05`](https://www.beyondtrust.com/blog/entry/bt26-05) · [`🔗 CISA KEV カタログ`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
 
 ---
 

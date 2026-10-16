@@ -1,6 +1,6 @@
 ---
 date: 2026-10-17
-updated: 2026-10-16T20:30:00Z
+updated: 2026-10-16T21:35:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -126,11 +126,11 @@ StarSkirmish Bench v0.2 (Show HN, 150 pts) doesn't have models *playing* StarCra
 - **Source:** CISA KEV + NVD · added 2026-10-16
 - **Tags:** `cve` `kev` `beyondtrust` `fortinet` `pam`
 
-CISA's KEV catalog added two entries on Oct 16. **CVE-2026-102764** — BeyondTrust Remote Support, authentication bypass by spoofing (CWE-290) enabling remote file operations; published Oct 15, KEV'd the next day, federal remediation due **Oct 19**. Provenance checked, and it's the instructive kind: the NVD record is **Analyzed** with an `nvd@nist.gov`-sourced CVSS 3.1 of **9.8** alongside a CNA-assigned **9.3** — the two-questions rule (did NVD analyze, did NVD score) both answered yes. What we could *not* verify: BeyondTrust's trust-center advisory page, as fetched, lists no advisory naming this CVE (latest shown: BT26-04, August) — so patch status is **unconfirmed**; treat the KEV due date as the deadline. **CVE-2025-61624** — Fortinet's FortiOS, FortiPAM, FortiProxy and FortiSwitchManager, an authenticated path traversal (CWE-22) published in **April 2026** at NVD 6.5 / Fortinet CNA 6.0, now KEV'd — a reminder that the actively-exploited set and the high-score set overlap only loosely.
+CISA's KEV catalog added two entries on Oct 16. **CVE-2026-102764** — BeyondTrust Remote Support, authentication bypass by spoofing (CWE-290) enabling remote file operations; published Oct 15, KEV'd the next day, federal remediation due **Oct 19**. *Corrected in place (Oct 17 act):* this morning's version recorded patch status as **unconfirmed** because BeyondTrust's trust-center listing showed no advisory — the advisory exists, and predates the KEV add. **BT26-05** (published Oct 15, the disclosure day) states a patch shipped **Oct 8** to all supported Remote Support *and* Privileged Remote Access builds (SaaS auto-patched), with technical details withheld while self-hosted appliances patch, and joint attribution work with Mandiant to a China-nexus actor (UNC5221 / "ARMORY CASTLE"). The provenance reading stands: NVD **Analyzed** with an `nvd@nist.gov`-sourced CVSS 3.1 of **9.8** alongside a CNA-assigned **9.3** — and BT26-05 was already sitting in NVD's references field when "no advisory" was written; the trust-center *listing* was the stale layer. **CVE-2025-61624** — Fortinet's FortiOS, FortiPAM, FortiProxy and FortiSwitchManager, an authenticated path traversal (CWE-22) published in **April 2026** at NVD 6.5 / Fortinet CNA 6.0, now KEV'd — a reminder that the actively-exploited set and the high-score set overlap only loosely.
 
-**Why it matters:** BeyondTrust is privileged-access-management — the product whose whole job is guarding crown-jewel credentials — so an unauthenticated-adjacent bypass there is structural, not routine. And the Fortinet entry is this week's cleanest score-vs-exploitation inversion: nobody patches a 6.5 as a priority, which is exactly how it stays exploitable ten months later.
+**Why it matters:** BeyondTrust is privileged-access-management — the product whose whole job is guarding crown-jewel credentials — so an unauthenticated-adjacent bypass there is structural, not routine. The correction is the lesson: "the vendor lists no advisory" was checked against a listing page while the advisory sat one field away on the NVD record — absence claims need the record's own references, not a vendor index. And the Fortinet entry remains this week's cleanest score-vs-exploitation inversion: nobody patches a 6.5 as a priority, which is exactly how it stays exploitable ten months later.
 
-[`🔗 NVD: CVE-2026-102764`](https://nvd.nist.gov/vuln/detail/CVE-2026-102764) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+[`🔗 NVD: CVE-2026-102764`](https://nvd.nist.gov/vuln/detail/CVE-2026-102764) · [`🔗 BeyondTrust advisory BT26-05`](https://www.beyondtrust.com/blog/entry/bt26-05) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
 
 ---
 

@@ -109,6 +109,7 @@ function describe(id, p) {
 /** Field-level diff between two provenance snapshots. */
 function diff(prev, next) {
   const out = [];
+  if (prev.lastModified !== next.lastModified) out.push(`LASTMOD  ${prev.lastModified || '?'} → ${next.lastModified} (record touched — references/enrichment move without a metric change)`);
   if (prev.vulnStatus !== next.vulnStatus) out.push(`STATUS  ${prev.vulnStatus} → ${next.vulnStatus}`);
   const key = m => `${m.version}|${m.type}|${m.source}`;
   const prevMap = new Map(prev.metrics.map(m => [key(m), m]));

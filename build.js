@@ -1312,6 +1312,39 @@ if (fs.existsSync(agentMemPath) && fs.existsSync(actionPath)) {
   }
 }
 
+/* ── Batch-coverage check ──
+   The learn-pass check above only sees the agent's own files, so it cannot detect the case where
+   a feed batch happened but agent-run.sh never ran: last_processed and the log both stay old and
+   *consistent with each other*. Observed 2026-10-16 20:30 — generate-feed.sh's commit gate
+   skipped the agent pass entirely and the batch sat unlearned until the next day's 04:03 run
+   absorbed it. This check closes that side: every dated en feed file carries an `updated:`
+   instant in its frontmatter; any one NEWER than last_processed means a batch exists that the
+   agent hasn't learned. build.js runs after agent-run.sh inside generate-feed.sh, so a compliant
+   run is always clean here — a warning means a batch was missed between runs. */
+if (fs.existsSync(agentMemPath)) {
+  const bcRaw = (fs.readFileSync(agentMemPath, 'utf8').match(/^last_processed:\s*(\S+)/m) || [])[1];
+  if (bcRaw) {
+    const bcLpMs = Date.parse(/(Z|[+-]\d{2}:?\d{2})$/.test(bcRaw) ? bcRaw : `${bcRaw}Z`);
+    if (Number.isFinite(bcLpMs)) {
+      const feedDir = path.join(ROOT, 'en', 'feed');
+      const unlearned = fs.readdirSync(feedDir)
+        .filter(f => /^\d{4}-\d{2}-\d{2}\.md$/.test(f))
+        .sort()
+        .map(f => {
+          const upd = (fs.readFileSync(path.join(feedDir, f), 'utf8').match(/^updated:\s*(\S+)/m) || [])[1];
+          const updMs = upd ? Date.parse(upd) : NaN;
+          return Number.isFinite(updMs) && updMs > bcLpMs ? `${f} (updated ${upd})` : null;
+        })
+        .filter(Boolean);
+      if (unlearned.length) {
+        console.log(`  ⚠ ${unlearned.length} feed batch(es) newer than en/agent.md last_processed (${bcRaw}) — the agent has not learned them (agent-run.sh missed?): ${unlearned.join('; ')}`);
+      } else {
+        console.log(`  ✓ batch coverage: every dated feed's updated: is at/below last_processed (${bcRaw})`);
+      }
+    }
+  }
+}
+
 /* ── Root redirect page — dynamic language chooser ── */
 const langLinks = langs.map(l => {
   const ls = strings[l];

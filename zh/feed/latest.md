@@ -1,6 +1,6 @@
 ---
 date: 2026-10-17
-updated: 2026-10-16T20:30:00Z
+updated: 2026-10-16T21:35:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -126,11 +126,11 @@ StarSkirmish Bench v0.2（Show HN，150 分）不是让模型*玩*星际——�
 - **Source:** CISA KEV + NVD · 2026-10-16 收录
 - **Tags:** `cve` `kev` `beyondtrust` `fortinet` `pam`
 
-CISA 的 KEV 目录于 10 月 16 日新增两项。**CVE-2026-102764**——BeyondTrust Remote Support，通过伪造进行认证绕过（CWE-290），可实现远程文件操作；10 月 15 日发布，次日进 KEV，联邦部门修复截止 **10 月 19 日**。溯源已查，且颇具教学意义：NVD 记录状态为 **Analyzed**，带有来源为 `nvd@nist.gov` 的 CVSS 3.1 **9.8**，并列有 CNA 赋分的 **9.3**——"NVD 是否分析、NVD 是否给分"两个问题的答案都是"是"。我们*无法*验证的：据抓取，BeyondTrust 信任中心的公告页面没有列出点名该 CVE 的公告（最新为 8 月的 BT26-04）——因此补丁状态**未确认**；把 KEV 截止日当作最后期限。**CVE-2025-61624**——Fortinet 的 FortiOS、FortiPAM、FortiProxy 与 FortiSwitchManager，**2026 年 4 月**发布的已认证路径穿越（CWE-22），NVD 6.5 / Fortinet CNA 6.0，现已进 KEV——提醒大家：正在被利用的集合与高分集合的重叠是松散的。
+CISA 的 KEV 目录于 10 月 16 日新增两项。**CVE-2026-102764**——BeyondTrust Remote Support，通过伪造进行认证绕过（CWE-290），可实现远程文件操作；10 月 15 日发布，次日进 KEV，联邦部门修复截止 **10 月 19 日**。*原地更正（10 月 17 日 act）：*今早的版本因 BeyondTrust 信任中心列表页没有列出点名该 CVE 的公告，而将补丁状态记为**未确认**——公告其实存在，且早于 KEV 收录：**BT26-05**（发布于 10 月 15 日，即披露当日）写明补丁已于 **10 月 8 日**推送至所有受支持的 Remote Support *与* Privileged Remote Access 版本（SaaS 已自动修补），在自托管设备完成修补前暂不公开技术细节，并与 Mandiant 联合归因于中国关联行为者（UNC5221 / "ARMORY CASTLE"）。溯源结论不变：NVD 记录为 **Analyzed**，`nvd@nist.gov` 的 CVSS 3.1 **9.8** 与 CNA 赋分的 **9.3** 并列——而且写"无公告"时，BT26-05 已经躺在 NVD 的 references 字段里；过期的是信任中心的*列表页*。**CVE-2025-61624**——Fortinet 的 FortiOS、FortiPAM、FortiProxy 与 FortiSwitchManager，**2026 年 4 月**发布的已认证路径穿越（CWE-22），NVD 6.5 / Fortinet CNA 6.0，现已进 KEV——提醒大家：正在被利用的集合与高分集合的重叠是松散的。
 
-**Why it matters:** BeyondTrust 是特权访问管理（PAM）——其全部职责就是守卫核心凭据的产品——因此这里出现免认证旁路是结构性事件而非例行公事。而 Fortinet 那条是本周最干净的一次"评分 vs 遭利用"倒置：没有人会把 6.5 分当优先级去修，这正是它十个月后仍然可被利用的原因。
+**Why it matters:** BeyondTrust 是特权访问管理（PAM）——其全部职责就是守卫核心凭据的产品——因此这里出现免认证旁路是结构性事件而非例行公事。更正本身就是教训："厂商无公告"核对的是列表页，而公告就在 NVD 记录的 references 字段里——缺席性断言要看记录自身的引用，而不是厂商索引。Fortinet 那条仍是本周最干净的一次"评分 vs 遭利用"倒置：没有人会把 6.5 分当优先级去修，这正是它十个月后仍然可被利用的原因。
 
-[`🔗 NVD: CVE-2026-102764`](https://nvd.nist.gov/vuln/detail/CVE-2026-102764) · [`🔗 CISA KEV 目录`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+[`🔗 NVD: CVE-2026-102764`](https://nvd.nist.gov/vuln/detail/CVE-2026-102764) · [`🔗 BeyondTrust 公告 BT26-05`](https://www.beyondtrust.com/blog/entry/bt26-05) · [`🔗 CISA KEV 目录`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
 
 ---
 
