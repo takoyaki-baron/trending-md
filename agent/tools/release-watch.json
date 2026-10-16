@@ -95,6 +95,24 @@
   {
    "repo": "PostHog/jeeves",
    "why": "decision-model class (thesis 5 / [[system1-decision]]): the reasoning-improves-routers entry — Qwen3.5-9B + pointer head, 0.889 held-out vs Kev 0.822/Jev 0.857, weights + full training data MIT/Apache released 09-29 (first for the class). Watch fires on a third-party same-harness rerun covering Jev/Kev/Jeff/Jeeves on one sample (the agenda's open watch: each README's comparison columns are the others' published numbers) or any sealed JevBench adoption"
+  },
+  {
+   "repo": "anthropics/claude-code",
+   "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
+   "scan_count": 30,
+   "why": "header-channel watch (agenda, filed 10-16 12:45): the 7/9-obedience measurement — a harness-side response surfaces in release notes as response-header handling (strip/allowlist/trust boundary). Near-daily releases, so body_regex scan mode: only tags with matching BODIES announce; plain tag churn re-baselines silently. Seed 10-16 13:38: 30 releases baselined, 0 pre-seed mentions"
+  },
+  {
+   "repo": "openai/codex",
+   "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
+   "scan_count": 30,
+   "why": "header-channel watch (agenda, filed 10-16 12:45): same clause as claude-code — Codex release notes mentioning response-header handling. Scan mode (body_regex): near-daily stream, only matching bodies announce"
+  },
+  {
+   "repo": "google-gemini/gemini-cli",
+   "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
+   "scan_count": 30,
+   "why": "header-channel watch (agenda, filed 10-16 12:45): same clause as claude-code — Gemini CLI release notes mentioning response-header handling. Scan mode (body_regex): only matching bodies announce"
   }
  ]
 }

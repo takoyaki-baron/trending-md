@@ -2341,9 +2341,126 @@
       "feeds": [
         "2026-10-15.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50107379": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50103338": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50103630": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50104310": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50104726": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50111852": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://www.facebook.com/legal/commercial_terms": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50106738": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50108229": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://www.niemanlab.org/2026/10/metas-new-commercial-terms-will-allow-the-scraping-of-news-sites-legal-experts-say/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50099136": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50100387": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
+    },
+    "https://www.npmjs.com/package/ruflo": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-16T06:15:43.548Z",
+      "last_seen": "2026-10-16T06:15:43.548Z",
+      "feeds": [
+        "2026-10-16.md"
+      ]
     }
   },
-  "runs": 58,
+  "runs": 59,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-15T13:29:54.546Z"
+  "last_run": "2026-10-16T06:15:43.548Z"
 }

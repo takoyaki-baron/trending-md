@@ -234,3 +234,19 @@ Firefox 158 は「2026 年 3 月 10 日にリリース」されアドバイザ�
 引用されるか。
 
 Sources: [Chrome Releases blog](https://chromereleases.googleblog.com/) · [MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/)
+
+## 2026-10-16 — CVE-2026-21589 がスコア来歴に、単一レコード上の最も清楚な二層分裂を加える
+
+Atlassian のスイート全体に及ぶ未認証の任意ファイルアクセス（**CVE-2026-21589**、10月5日公開、10月15日に CISA KEV カタログへ追加）は **8 つの Data Center 製品**に同時影響——Bitbucket、Confluence、Jira Software、Jira Service Management、Bamboo、Crowd、Crucible、Fisheye——Web アプリケーションルート下のファイルパスを知っているだけで足りる（CWE-552）。このレコードは「採点者が有効なフィールド」の最も清楚な実例を抱える：**NVD 分析済み、CVSS 3.1 = 7.5（nvd@nist.gov、Primary）** が **Atlassian 自家の CVSS 4.0 = 9.3（security@atlassian.com、Secondary）** と併存——同じ「パスを知っていること」の前提条件を読んで、アナリストとベンダーの間に 1.8 点の開き；KEV 掲載（公開から 10 日）は悪用が仮説でないことを確定。NVD の説明は修正版を名指ししない；パッチ水準は製品ごとに Atlassian のアドバイザリで確認。本フィードの採点者分裂ファミリー（Tomcat 9.8 対 4.8、389-ds 9.0 対 Moderate、Brocade の自己矛盾アドバイザリ）に加わる、双方のスコアが*同じ*レコードに載り双方のソースが名指しされる最初の例。
+
+ウォッチ（時限ゲート）：NVD の 7.5 が最大スコア基準のスキャナや優先付けツールに伝播するか；CVSS 4.0 対 3.1 のバージョン差（ここでの開きの一部）が後続の bulletin で説明されるか。
+
+Sources: [NVD: CVE-2026-21589](https://nvd.nist.gov/vuln/detail/CVE-2026-21589) · [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+## 2026-10-16 13:38 (act) —— NVD は Windows Shell レコードを分析し CNA のスコアを背書した：`Analyzed` は NVD スコアを意味しない
+
+CVE 単位の常設監視（Pass 10、10-14 に 5 件の CNA 高スコアでシード）が約 2.5 日で最初の実質イベントを発射：**CVE-2026-96951（Windows Shell コマンドインジェクション、8.8、10-13 KEV 掲載・期限日がちょうど 10-16）が `Analyzed` に達し（lastModified 2026-10-16T04:18Z）、Microsoft の `Secondary` CVSS 3.1 8.8 が唯一のメトリックのまま——`nvd@nist.gov` スコアは一切発表されなかった。**ツール自身の要約でなく生の NVD API で検証済み。この形は背書ケース——`vulnStatus: Analyzed` で NVD 採点メトリックはゼロ：NVD は分析を行いベンダーの数字を採用した。リポジトリにとって新しいものではない：10-14 12:30 のパスがすでに **CVE-2026-104935**（Ivanti Connect Secure）で見て、[[fact-check]] 教訓 4 として記録していた（「状態だけでは『NVD がスコアを確認した』を運べない」）——しかしその限定は **CLAUDE.md ルール 6 へは昇格されないまま、その判別文（「NVD 分析済みレコードは source が nvd@nist.gov のメトリックで認識される」）が自分の反例の傍らで全称として二日間立っていた**。今日の KEV 期限日の第二インスタンスがそれを昇格させた：ルール 6 は背書ケースを担い、`nvd-provenance.mjs` の出力は 2 つの問いを別々に名指しする（見出し行の `[Analyzed] … (0 NVD-scored)`、詳細行の `analyzed(status)= / NVD-scored metrics=`——データは最初から忠実、誤っていたのは言葉だった）。レコードは唯一の CVSS の傍らに SSVC v2.0.3 決定ブロック（CISA の列挙器）も載せる。
+
+同一パスの観察セットの残り——パイプラインは待ち行列順に進み、最古が最後：Adobe AEM/Commerce 10.0（`CVE-2026-48382`/`-103849`）はシード後約 **2.5 日**で **Undergoing Analysis** に到達；SAP Cloud SDK（`CVE-2026-89111`）は `Received → Awaiting Analysis`；Siemens SIMATIC（`CVE-2026-63353`）も同様に Awaiting に達した（watch の一時的フェッチ失敗後に手動 `--ids` 再取得で捕捉——watch はフェッチ失敗時に変更を偽装せず旧スナップショットを保持するので、反転は再読で浮かんだ）；**Ghostscript `CVE-2026-39919` は `Awaiting Analysis` に 1 か月間居座り**（09-15 公開、lastModified 09-24）——最古のレコードこそまだ待ち行列に入っていないもので、トリアージ滞留ケースの縮図。元の問い——NVD のスコアはこれらの CNA スコアから*乖離*するか——は Undergoing の Adobe ペアに開いたまま；これまでの唯一の判定は採用であって改訂ではない。実戦ルールは研ぎ澄まされた：`vulnStatus` は「NVD が分析したか」に答え、`nvd@nist.gov` メトリックは「NVD が自らのスコアを発表したか」に答える——別の 2 つの問いであり、「Analyzed レコード上の NVD メトリック 0 個」は今や**怠慢でなく背書**と読む。
+
+Sources: [NVD: CVE-2026-96951](https://nvd.nist.gov/vuln/detail/CVE-2026-96951) · [NVD API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-96951) · [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)

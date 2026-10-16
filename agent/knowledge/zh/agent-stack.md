@@ -1923,3 +1923,15 @@ Sources: [Anomaly — OpenCode 2.0](https://anoma.ly/notes/opencode-2-0/) · [an
 **Clova 把别名威胁模型绑死在恰好一个发件人上。**这个别名服务的规则就是产品：**第一个给某地址发信的发件人永久认领它；其他所有人被拒**——当你给过地址的零售商泄露或卖掉你的地址时，这个别名对除它以外的所有人一文不值，你删掉别名即可，不必删掉人生。三种收件箱：one-sender（永久锁死第一个合法发件人）、temporary（你设定寿命，一小时到一个月，到期拒收并可清空内容）、prefix（认领 5+ 字符，随手发明 `you-anything@…`，每个仍锁第一个发件人）。更新的是那个 **MCP 服务器**：Claude、Cursor 或其他 agent 可以创建收件箱、拉取验证码、取回回执，权限受限——注册验证流程恰恰是 agent 被交代的杂务，而"验证码与回执"的受限 API 是此前缺失的管道。免费档：1 个永久地址、100 MB、100 封/天；Pro $30/年；Business $50/年带自定义域名。
 
 Sources: [Tiny Little Office](https://tinylittleoffice.com/) · [HN — Tiny Little Office](https://news.ycombinator.com/item?id=50096142) · [Clova](https://clova.email/) · [HN — Clova](https://news.ycombinator.com/item?id=50090932)
+
+## 2026-10-16 — 归因纠纷 24 小时内部分解决；检索货架迎来 ES 协议兼容的新成员；超大规模厂商以 MIT-0 发布方法论
+
+**Scion/Mononoke 第二天：** Rain（sunshowers.io）——在构建 Mononoke 之前领导 Bonsai 数据模型团队——跟进表示相似性"超出派生数据、覆盖整个数据模型"，私下已获确认复制是有意的、且 Scion 与 Mononoke 团队存在人员重叠（"这不可能是无意的致敬"；"Scion" 倒过来拼是 "Bonsai"），并把立场收紧为：**"问题在归因，不在复制。"** 24 小时内有动静：Anthropic 的 Nick G. 在 HN 回应，Anthropic 博客帖加入了"充分归因"——Rain 仍认为不够（致谢 Sapling 只指到 `sl` 客户端；changesets 一节应具体引用 Bonsai 的 changesets）。这为厂商和 agent 立下的模板：致谢具体的设计，而不是隔壁的品牌。
+
+**XERJ**（Apache-2.0，单个静态 Rust 二进制，5,489★，v1.0.0-rc.95）从搜索侧加入 agent 检索货架（leviathan、caveman、context-mode）：`xerj autoindex <folder>` 按内容（而非扩展名）识别 13 个格式族的文件、推断 schema、以 tree-sitter 把代码解析成符号（36 种语言），并说 **:9200 端口上的 Elasticsearch 线协议**（"每次提交 1,366 / 1,369 个线协议一致性用例全绿"）——迁移只是改个 base URL。实测声明：同等解题率下**输出 token 比 grep 驱动的 agent 少 2.7×**——而仓库描述写的是 40×，一个没有解释的不同数字；站点的诚实小节发布自己的败绩（内置嵌入器是"词表重叠，不是神经理解"；在自己的 518 MB 语料考试上 grep+python 基线以 10/10 完胜它的 9+1；公开数据集中 Jev 直接赢它）。
+
+**awslabs/aidlc-workflows**（MIT-0，5.3k★，v2.11.0）把 AWS 的 AI 驱动开发生命周期打包成 harness 中立的工作流工具，跨 **7 个 harness**（Claude Code、Kiro CLI/IDE、Codex CLI、Cursor、opencode、GitHub Copilot）：`/aidlc <工作>` 选工作流、补问缺失决策、**在审批门前停下**再前进；文档带信任边界细则（在 Kiro IDE 里信任一个文件夹，它的 `.kiro` hooks 就能在你机器上执行命令）。超大规模厂商的 labs 组织以 MIT-0（无需署名）发布方法论即仓库、审批门作为一等对象。
+
+**ruflo**（claude-flow 的改名）以 75.2k★ 再上趋势（+147/天，10 月 15 日有推送）：分发变为三个 Claude Code 插件（核心工具、可视化控制台 "cockpit"、负责路由与策略执行的 **mods**）加一个面向所有其他客户端的 MCP 服务器（`npx ruflo mcp start`）；README 引用 12 个月 1,252 万 npm 生态下载——自报徽章，未经审计。mods"以你的账号权限运行；安装前审查其代码"——货架的供应链纪律，自己先做到。
+
+Sources: [More on Scion ripping off Mononoke](https://sunshowers.io/posts/anthropic-mononoke-2/) · [HN](https://news.ycombinator.com/item?id=50106738) · [xerj.org](https://xerj.org) · [xerj-org/xerj](https://github.com/xerj-org/xerj) · [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows) · [ruvnet/ruflo](https://github.com/ruvnet/ruflo)

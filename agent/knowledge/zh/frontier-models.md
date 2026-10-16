@@ -2389,3 +2389,13 @@ Sources: [arXiv 2610.20344](https://arxiv.org/abs/2610.20344) · [arXiv HTML](ht
 **Parsimony 按 AI 编码模型改了多少代码排名，而不是解了多少题（La5u，开放）。**它复用 SWE-bench Verified 已发布的补丁，统计**"coding units"**——语句、调用、比较、名字、字面量——而非行数，减去删除，解析每个被改文件的两个版本，不执行任何东西（仅 Python；测试、文档与生成文件除外；每个模型跑同一个 mini-SWE-agent）。两个值得带走的发现：**代码越多与解题越多相关**——在 26+ 模型的榜单上 Spearman 0.33–0.60——以及作者自己对 GPT-5.6 Sol 的复跑加的代码只有其已发布运行的 **0.88×**，提醒我们 harness 设置会移动这个指标。作者直白说出天花板：该指标度量的是规模，不是可读性或设计质量。它是 700 家公司研究（agent 产出更多代码，而非更多软件；review 吃掉收益）的逐模型补充：如果冗长是模型特质而非 harness 造物，"净新增 coding units"就是第一条把可维护性计价进模型选择的排行榜行。独立项目，解题数直接继承自 SWE-bench 未复跑——当作透镜，不是审计。
 
 Sources: [arcfu — The Emperor Pelican Has No Clothes](https://arcfu.com/post/the-emperor-pelican-has-no-clothes/) · [Design Creativity Bench (arXiv 2610.11539)](https://arxiv.org/abs/2610.11539) · [HN — pelican](https://news.ycombinator.com/item?id=50090443) · [Parsimony](https://parsimony.lasu.dev/) · [HN — Parsimony](https://news.ycombinator.com/item?id=50077619)
+
+## 2026-10-16 — Muse Spark Open 带着权重却不带基准分发布；可解释性内部人称叠加是七年的错误；图像编辑拿到 $0.06 价位
+
+**Meta 发布 Muse Spark Open**（10 月 15 日）：816B 总参 / 42B 激活的 MoE，原生多模态，100 万 token 上下文，权重上架 Hugging Face/SageMaker/Google Cloud Model Garden/Microsoft Foundry，采用"带有限商用条款的 Muse Model License"。发布帖里没有的东西：基准测试分数——"Key Benchmarks"一节指向一份"即将发布"的评估方法学报告，安全声明依赖 Meta 内部超级智能扩展框架的阈值。具体的声明是分发（Baseten、Fireworks、Groq、Modal、Nebius、OpenRouter、Together 提供托管 API）与桌面自托管：**两台 M5 Ultra Mac Studio 跑 MLX，"表现就像一台拥有一 TB 统一内存的超级计算机"**（2×512 GB），SGLang 里的 Helion GPU kernel 带来 1.03–3.95× 的 kernel 级加速（自测）。两周内第二个推迟评估报告的美国 800B 级开源权重发布——此前 Step-5 的权重在承诺日期落地、附带营收门槛许可。
+
+**Goodfire 的 Nick Cammarata 发表 "Neural networks are clean"**（[already-clean.goodfire.com](https://already-clean.goodfire.com/)），主张多义性从来不是叠加（superposition）造成的——InceptionV1 的"猫/汽车"神经元是共享姿态泛化的"V 形神经元"；自他 2019 年的原始论文之后没有人发表过第二个叠加回路，而他如今认为原论文是个错误。给出的数字（依赖阈值、小样本、自采）：InceptionV1 最后一层可解释比例 ~0–5% → 固定工具 ~50%、重训 ~70%、参数匹配的 ConvNeXt ~99%；Qwen3-32B 初步审计把 ~97% 的强神经元极点归入三个已理解类别。配套技术论文承诺而未发布——把这些百分比当议程读，并记得作者在"它很简单"这个结论上有商业利益。
+
+**Krea 3** 把图像模型从生成重新定位为规模化编辑：每次编辑最多 6 张参考图并保持标签/logo/角色一致性，"只改要求改的"（换家具、留地毯），原生 2K 下大多数编辑 8 秒内完成，**2K 每张 $0.06**（1K $0.03）——页面自己的算术：10 万张编辑 $6,000，对比 Nano Banana Pro $13,500、GPT Image 2 $22,000；竞品耗时（33 秒 / 90 秒）是厂商口径。帖内自述限制：还不实时；不支持圈选等非文本指令。
+
+Sources: [Meta: Muse Spark Open](https://research.meta.ai/blog/muse-spark-open) · [HN](https://news.ycombinator.com/item?id=50107379) · [Neural networks are clean](https://already-clean.goodfire.com/) · [HN](https://news.ycombinator.com/item?id=50105647) · [Krea 3](https://www.krea.ai/blog/introducing-krea-3)

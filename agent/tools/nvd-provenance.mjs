@@ -73,7 +73,12 @@ function provenance(cve) {
   /* "Has NVD's own analysis landed?" — calibrated against a record known to be analyzed
      (CVE-2026-102489, status Analyzed): NVD's analyst metric carries source `nvd@nist.gov`.
      Primary/Secondary alone does NOT answer it — Adobe's psirt@adobe.com metric is Primary and
-     the SAP cna@sap.com one is Secondary, yet neither record has been analyzed. */
+     the SAP cna@sap.com one is Secondary, yet neither record has been analyzed.
+     2026-10-16 second calibration: the converse does NOT hold — CVE-2026-96951 reached
+     vulnStatus Analyzed with NO nvd@nist.gov metric (Microsoft's Secondary 8.8 stayed the sole
+     score: analysis-as-endorsement; first seen 10-14 on CVE-2026-104935, fact-check lesson 4,
+     but never promoted into the CLAUDE.md rule until this event). So status is checked too; the
+     metric count is reported separately as NVD-scored, a different question. */
   const analyzed = metrics.some(m => m.source === 'nvd@nist.gov') || cve.vulnStatus === 'Analyzed';
   return {
     vulnStatus: cve.vulnStatus || '?',
@@ -90,8 +95,13 @@ function provenance(cve) {
 const fmtMetric = m => `${m.version} ${m.type}/${m.source} ${m.baseScore}`;
 
 function describe(id, p) {
+  /* Two different questions, two different fields (named apart 2026-10-16): vulnStatus answers
+     "did NVD analyze it"; the nvd@nist.gov metric count answers "did NVD publish its own score".
+     The two empirically diverge — CVE-2026-96951 flipped to Analyzed with Microsoft's Secondary
+     8.8 as the SOLE metric (analysis-as-endorsement, no NVD score) — so "NVD-analyzed" must never
+     label the metric count. */
   const nvd = p.metrics.filter(m => m.source === 'nvd@nist.gov').length;
-  return `${id} [${p.vulnStatus}] ${p.metrics.length} metric(s) (${nvd} NVD-analyzed) — ` +
+  return `${id} [${p.vulnStatus}] ${p.metrics.length} metric(s) (${nvd} NVD-scored) — ` +
     (p.metrics.length ? p.metrics.map(fmtMetric).join(', ') : 'no CVSS published') +
     (p.kev ? ` · KEV ${p.kev}` : '');
 }
@@ -129,8 +139,9 @@ if (ids && !WATCH) {
     try { cve = await fetchCve(id); } catch (e) { console.log(`${id}: FETCH FAILED (${e.message})`); continue; }
     if (!cve) { console.log(`${id}: NOT IN NVD (no record)`); continue; }
     const p = provenance(cve);
+    const nvdScored = p.metrics.filter(m => m.source === 'nvd@nist.gov').length;
     console.log(describe(id, p));
-    console.log(`    published ${p.published} · lastModified ${p.lastModified} · nvdAnalyzed=${p.nvdAnalyzed}` +
+    console.log(`    published ${p.published} · lastModified ${p.lastModified} · analyzed(status)=${p.nvdAnalyzed} · NVD-scored metrics=${nvdScored}` +
       (p.cwe.length ? ` · ${p.cwe.join(',')}` : ''));
   }
   process.exit(0);

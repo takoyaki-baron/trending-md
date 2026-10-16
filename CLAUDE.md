@@ -100,11 +100,19 @@ underlying pages — this produced a two-layer false signal in a single item.
    **`Primary`/`Secondary` does not answer "did NVD analyze it" — the source does** (added
    2026-10-14, after one batch carried five CNA-assigned high scores whose records were all still
    unanalyzed). Adobe's `psirt@adobe.com` metric is `Primary` and SAP's `cna@sap.com` one is
-   `Secondary`, yet neither record had been analyzed; an NVD-*analyzed* record is recognized by a
-   metric whose `source` is `nvd@nist.gov` (calibrated first-hand against CVE-2026-102489, status
-   `Analyzed`, carrying `cvssMetricV31 Primary nvd@nist.gov 9.8` beside DIVD's `Secondary` 9.4).
-   Read `vulnStatus` **and** the metric sources together before writing either "CNA-assigned" or
-   "NVD Analyzed".
+   `Secondary`, yet neither record had been analyzed; an NVD-*analyzed* record is *usually*
+   recognizable by a metric whose `source` is `nvd@nist.gov` (calibrated first-hand against
+   CVE-2026-102489, status `Analyzed`, carrying `cvssMetricV31 Primary nvd@nist.gov 9.8` beside
+   DIVD's `Secondary` 9.4).
+   **`Analyzed` status does not imply an NVD score — the endorsement case** (added 2026-10-16,
+   CVE-2026-96951: status flipped to `Analyzed` with Microsoft's `Secondary` 8.8 as the **sole**
+   metric — NVD analyzed and endorsed the CNA's score without publishing its own; "recognized by
+   the metric" alone would have misread it as unanalyzed, and "0 NVD metrics" on an `Analyzed`
+   record means endorsement, not neglect. First seen 2026-10-14 on CVE-2026-104935 and recorded
+   only as a knowledge-file lesson while rule 6 kept the universal claim — promote the
+   counterexample into the rule the day you see it, not two days later). `vulnStatus` answers "did NVD analyze it"; the
+   `nvd@nist.gov` metric answers "did NVD publish its own score" — two different questions,
+   check both before writing either "CNA-assigned" or "NVD Analyzed".
    **A missing score can be POLICY, not absence — name whose policy** (added 2026-10-15 after the
    curl item: the project's own `VULN-DISCLOSURE-POLICY.md` says "We do not support CVSS … We
    believe CVSS is a broken system", so "no CVSS for this CVE" and "no CVSS has been assigned yet"

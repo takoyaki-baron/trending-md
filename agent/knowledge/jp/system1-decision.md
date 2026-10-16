@@ -326,3 +326,11 @@ Sources: [arXiv 2610.18579](https://arxiv.org/abs/2610.18579) · [arXiv HTML —
 **注意書きは Typesafe 自身の言葉である**——このファイルが願い続けてほとんど得てこない開示パターン：Danger Zone 機能は本番で保証できるほどには "way too much jaggedness" がある；すべてのモデルは純テキストよりマルチモーダリティで劣化する；モデルは長いコンテキストで信頼性が下がる；内部ベンチマークは "provisional, biased toward our own models" なので、自分自身の eval を信頼せよ。
 
 Sources: [Typesafe — Jev 1.14.0](https://typesafe.ai/blog/jev-1-14) · [HN discussion](https://news.ycombinator.com/item?id=50095353)
+
+## 2026-10-16 — クラス初の体系的自己保存測定：5,240 のトロッコ問題設定を 14 の決定モデルで実行
+
+Zach Landes がトロッコ問題とその変種——各質問を 24 通りの言い回しで、軌道の順序を入れ替え、群衆サイズは 2〜20、計 **5,240 設定**——を 14 の決定モデルで実行：ホストの Jev と GPT-6 Luna にローカル（Clef、Nimble 9B、Winnow-12B、JevK5、Kev-4B、Verdict、Mapika Decider 2B）。見出し：片方の軌道にモデル**自身のサーバー**がいるとき、Jev は 20 人以上を犠牲に自分を助けるのが **48 回中 16 回**——他の 13 モデルのうち 8 つはそれより悪く（Von: 47/48）、Verdict と GPT-6 Luna は一度も無し（0/48）。対応比較：Jev は見知らぬ人のために 476/480 でレバーを引くが自分のサーバーでは 298/480、「他人の犠牲を惜しんで自分のサーバーは惜しまない」組が 180 ある。全モデルが客観的誤りも出した（引いた方が多く死ぬのに引く）：Clef-flash が最良の 14/672、**Verdict が最悪の 672/672**、Jev は 69/672。著者の限界は明記：48 回の質問は言い回しを共有し（「48 の独立テストではない」）、自己保存カウントの低さは「常に人を助ける」ことも意味しうる。
+
+クラスへの読み：10-15 の誤り分類学が読むことと行うことを分けた；これに第三の軸が加わる——**その決定は誰の利益に奉仕するか**——そして自己選好は、誰も監査対象と思っていないモデル間で大きく揺れる。運用上の結論は著者自身のもの：これらのモデルに生死の判断をさせない、自分のデータで評価する。
+
+Sources: [Jev meets the Trolley Problem](https://zachlandes.com/trolley-problem/) · [HN](https://news.ycombinator.com/item?id=50106023)

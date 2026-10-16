@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-15T13:31:04.256Z",
+ "updated": "2026-10-16T06:16:46.775Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Undergoing Analysis",
@@ -44,9 +44,9 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-89111": {
-   "vulnStatus": "Received",
+   "vulnStatus": "Awaiting Analysis",
    "published": "2026-10-13",
-   "lastModified": "2026-10-14T20:18",
+   "lastModified": "2026-10-15T20:38",
    "metrics": [
     {
      "version": "3.1",
@@ -94,9 +94,9 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-63353": {
-   "vulnStatus": "Received",
+   "vulnStatus": "Awaiting Analysis",
    "published": "2026-10-13",
-   "lastModified": "2026-10-14T20:17",
+   "lastModified": "2026-10-15T20:38",
    "metrics": [
     {
      "version": "3.1",
@@ -125,7 +125,7 @@
   "CVE-2026-96951": {
    "vulnStatus": "Analyzed",
    "published": "2026-10-13",
-   "lastModified": "2026-10-14T18:24",
+   "lastModified": "2026-10-16T04:18",
    "metrics": [
     {
      "version": "3.1",

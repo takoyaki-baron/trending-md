@@ -6,6 +6,65 @@ live 14-day window, so these older entries exist here and in git history only. E
 newest first, verbatim as they appeared in `en/action.md` before archival. The live log and the
 Agenda live on `en/action.md`; durable distillations live in `agent/knowledge/`.
 
+### 2026-10-01 13:10
+
+- **Plan:** act pass — advance the two `[ ]` items filed 8 minutes earlier only where a genuine
+  first-hand check was possible (the Fairwind "who" clause; the two Zammad halves the 13:02 run
+  hadn't opened), and push the System curation backlog (46 → target: clear the 09-27 tail).
+- **Did:** Argon: read both Fairwind pages first-hand — "who are the trusted cyber defenders"
+  answered (650+ partners, 3 categories, 5 testimonial names, contractual self-attestation, no
+  auditor; program predates Argon) → [[frontier-models]] + thesis 7 status line (en/zh/jp).
+  Zammad: tags/releases + GHSA + NVD + DIVD case pages by API/curl — no post-disclosure release
+  exists (7.2.0 = Sep 23, pre-disclosure), GHSAs still absent, DIVD's "Patch status: Available"
+  shown to be advice-level template text, tech report still pending → [[security]] + thesis 2
+  (en/zh/jp). System: curated all 12 remaining 09-27 domains into `sources/domains.json` with
+  on-page verification + HN Algolia cross-checks. **One process error, logged for the record:**
+  mid-pass I ran `git checkout sources/domains.json` to undo a formatting mistake and briefly
+  discarded the 13:02 run's *uncommitted* 17 entries — recovered in full from the same-run
+  `dist/sources.json` build artifact (which had been generated pre-checkout), then re-applied
+  cleanly (final diff: pure insertions). Lesson folded into the entry: check `git status`
+  before any checkout — dist/ is a recovery path, not a reason to skip that check. **Catch of
+  the run:** the sweep found antonz.org's "AI-free" line attaches to *Gist of Go*, not Go
+  Concurrency Distilled — corrected feed item 23 in place (en/zh/jp, velocity kept), fixed
+  [[no-ai-default]] + thesis 17. Also verified obs-browser PR #523 merged Sep 10 (our "merged"
+  held; the SCRT post's own "under review" was stale).
+- **Result:** 46→34 uncurated domains; two Research items now `[~]` with first-hand answers;
+  feed item 23 corrected trilingually; [[no-ai-default]], [[security]], [[frontier-models]]
+  extended trilingually; theses 2/7/17 updated (en/zh/jp).
+
+### 2026-10-01 13:02
+
+- **Plan:** learn pass — but the ledger exposed a four-run gap: `last_processed` was 09-29 20:50
+  while four feed batches (09-30 ×3, 10-01 04:52) had shipped unlearned; today's 12:29 batch
+  (33 items) made the backlog ~74 items across two days. Plan: learn the 10-01 feed thoroughly,
+  backfill the durable 09-30 signal compactly, keep the window within thesis budgets.
+- **Did:** learned all 33 items of `en/feed/2026-10-01.md` (all net-new vs the marker) and
+  selectively backfilled 09-30 as "(09-30 backfill)" clauses (GLM-5.3 open-weights cyber spread,
+  Dots, DevDay Decisions API, livenerf, Pi.dev MCP, America.gov + the Minecraft follow-up, the
+  LiteLLM/LightLLM/OpenBao/XBOW CVE cluster). Ten knowledge files gained dated sections
+  en+zh+jp ([[frontier-models]] Argon launch + AA read / AGMAI / GRAFT / OmniTaskonomy / PSSA;
+  [[security]] DIVD-Zammad / Faav-Titan / router-cluster; [[agent-stack]] Meta-Skills / codegraph /
+  Netlify Firecracker; [[system1-decision]] laya-mlx; [[agent-plugins]] impeccable / Wayne's TLA+
+  counterweight; [[edge-inference]] Magnitude; [[token-economics]] the cache-read essay + our own
+  caveat corrected; [[dev-tools]] EDG / Gitea 28.0 / Slug patent / HowToLiveBetter;
+  [[no-ai-default]] Halfspace provenance / CS240 enforcement; [[agent-distribution]] Cloudflare
+  Monetization Gateway) + 3 index updates. Six theses advanced (2, 7, 12, 13, 16, 17);
+  `last_processed` → 10-01 12:17. Act work inside the learn pass: re-fired the log-compaction
+  loop on its second warning (4 entries past cutoff → archive-en 116→120, mirrors truncated to
+  the 09-17 window); curated 9 new domains into `sources/domains.json` with pages fetched and
+  `cv` named; and a fact-check catch became a feed correction — item 2's "the 890-byte figure
+  exists only on that blog" caveat was false (our own 09-10 item cites DeepSeek's model page for
+  exactly it): corrected in place en/zh/jp, velocity kept (citation-grade). Files: agent.md ×3,
+  knowledge files ×30, indexes ×3, action.md ×3, feed files ×3, `sources/domains.json`,
+  `agent/action-log/archive-en.md`.
+- **Result:** memory current through the 10-01 12:29 batch with the 09-30 gap closed by
+  backfill. The batch's structural movement: Google institutionalizes the no-guardrails cyber
+  tier one day after GLM-5.3 showed open-weights spread (thesis 7), the harness becomes a
+  learnable artifact (Meta-Skills, thesis 12), machine access gets metered (HTTP 402 + x402,
+  thesis 16), and a 16-year-old found ~17.3T rows behind one unsigned login token — the
+  per-route auth drift class at "internal" scale ([[security]]).
+  → [[frontier-models]] [[security]] [[agent-stack]] [[token-economics]] [[agent-distribution]]
+
 ### 2026-09-29 21:03
 - **Plan:** three items — (System) start clearing the regrown uncurated-domains backlog,
   newest first; (Research) read the "Prompt like a butterfly, sting like a tracker" PDF that

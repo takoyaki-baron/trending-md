@@ -11975,5 +11975,239 @@
   "en": "The OpenSSL project site — advisories and the Security Policy that refuses CVSS outright and predicts divergence from third-party scores. Cross-checked (10-15): CVE-2026-84782/-84784 carry NVD-Analyzed 8.2/7.5 beside vendor letters (High) only, exactly as the policy predicts.",
   "zh": "OpenSSL 项目官网——安全公告与明确拒绝 CVSS、并预言第三方评分会偏离的安全政策。交叉验证（10-15）：CVE-2026-84782/-84784 在 NVD 上为已分析的 8.2/7.5 分，而厂商公告只有 High 字样，正如该政策所预言。",
   "jp": "OpenSSL プロジェクトの公式サイト——アドバイザリと、CVSS を明確に拒否し第三者スコアの乖離を予言するセキュリティポリシー。クロスチェック（10-15）：CVE-2026-84782/-84784 は NVD 分析済みの 8.2/7.5 で、ベンダー表記は High のみ——ポリシーの予言どおり。"
+ },
+ "zachlandes.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Zach Landes's personal site; self-published decision-model experiments with unusually explicit limitations sections. Cross-checked 2026-10-16: the article's human baseline (81% pull, Awad et al. 2020) matches the published survey it cites, and the model lineup matches prior Jev coverage.",
+  "zh": "Zach Landes 的个人站点；自发布的决策模型实验，局限章节写得异常坦率。已于 2026-10-16 交叉核验：文中人类基线（81% 拉杆，Awad et al. 2020）与其引用的已发表调查一致，模型阵容与此前的 Jev 报道吻合。",
+  "jp": "Zach Landes の個人サイト。セルフパブリッシュの意思決定モデル実験で、限界の記述が異常に率直。2026-10-16 に突合済み:人間のベースライン(81% 引く、Awad et al. 2020)は引用先の公刊サーベイと一致し、モデル編成は既出の Jev 記事と合致。"
+ },
+ "thereallo.dev": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "First-person security forensics blog; the Sonarr torrent-poisoning autopsy is analysis by the affected user, not an AV vendor. Cross-checked 2026-10-16: the C2 infrastructure dates (beenetprotect.com and the 'bubblegym' channel, both created Sep 14, 2026) and the manual-mapping technique chain are consistent with the independent HN discussion of the same fake-torrent wave.",
+  "zh": "第一人称的安全取证博客；Sonarr 种子投毒剖析出自受影响用户之手，而非杀软厂商。已于 2026-10-16 交叉核验：C2 基础设施时间线（beenetprotect.com 与 \"bubblegym\" 频道均创建于 2026-09-14）与手工映射技术链条，与 HN 讨论区对同一波假种子的独立讨论一致。",
+  "jp": "一人称のセキュリティフォレンジック ブログ。Sonarr トレント汚染の解剖は AV ベンダーではなく被害ユーザー本人による分析。2026-10-16 に突合済み:C2 インフラの日付(beenetprotect.com と「bubblegym」チャンネル、いずれも 2026-09-14 作成)と手動マッピングの技術チェーンは、同じ偽トレント波についての HN の独立した議論と整合。"
+ },
+ "facebook.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "low",
+  "en": "Canonical host of Meta's policy and terms pages; primary source for Meta's own policy dates and consent language, thin on everything else. Cross-checked 2026-10-16: the Oct 30 Commercial Terms effective date and crawl-consent language match Nieman Lab's legal-expert reading.",
+  "zh": "Meta 政策与条款页面的正典主机；其自身政策日期与同意措辞的第一手来源，其余信息稀薄。已于 2026-10-16 交叉核验：10 月 30 日的商业条款生效日期与抓取同意措辞，与 Nieman Lab 的法律专家解读一致。",
+  "jp": "Meta のポリシー・規約ページの正規ホスト。Meta 自身の政策日付と同意言語の一次ソースで、それ以外は薄い。2026-10-16 に突合済み:商用利用規約の 10 月 30 日発効日とクロール同意の言語は Nieman Lab の法律専門家の解釈と一致。"
+ },
+ "currentaffairs.org": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Nonprofit political magazine; editorial essays with openly partisan framing. Cross-checked 2026-10-16: its cited outside facts (Sports Illustrated fake bylines, Futurism's 200k creative-jobs figure) match the original reporting it credits.",
+  "zh": "非营利政治杂志；立场鲜明的社论文章。已于 2026-10-16 交叉核验：其引用的外部事实（Sports Illustrated 假署名事件、Futurism 的 20 万创意岗位流失数字）与其标注的原始报道一致。",
+  "jp": "非営利の政治雑誌。率直に党派的な社論エッセイ。2026-10-16 に突合済み:引用する外部事実(Sports Illustrated の偽署名、Futurism の 20 万人クリエイティブ雇用喪失)は、クレジット先の元報道と一致。"
+ },
+ "ecc.tools": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Homepage of the ECC agent-harness project; pricing and install funnels. Cross-checked 2026-10-16: star/fork counts and release history match the live GitHub API for affaan-m/ECC.",
+  "zh": "ECC agent-harness 项目主页；定价与安装入口。已于 2026-10-16 交叉核验：星标/fork 数与发布历史，与 GitHub API 上 affaan-m/ECC 的实时数据一致。",
+  "jp": "ECC エージェントハーネスプロジェクトのホームページ。価格とインストール導線。2026-10-16 に突合済み:スター/フォーク数とリリース履歴は GitHub API の affaan-m/ECC の実数値と一致。"
+ },
+ "eink.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "E Ink's corporate newsroom; authoritative for display specs, vendor-optimistic on comparisons. Cross-checked 2026-10-16: the Kaleido 4 launch date and first-product claim (Hanvon M10C II) are consistent with same-day independent coverage.",
+  "zh": "E Ink 官方新闻室；显示器规格的权威来源，对比数据带厂商乐观倾向。已于 2026-10-16 交叉核验：Kaleido 4 发布日期与首发整机（汉王 M10C II）的说法与当日独立报道一致。",
+  "jp": "E Ink のコーポレートニュースルーム。ディスプレイ仕様の権威ある情報源だが、比較はベンダー楽観。2026-10-16 に突合済み:Kaleido 4 の発表日と初搭載製品(漢王 M10C II)の主張は同日の独立報道と整合。"
+ },
+ "ipinfo.io": {
+  "cat": "data",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "IP intelligence provider's research blog; RPKI/BGP analyses built on daily routing snapshots with published methodology and candid limitations. Cross-checked 2026-10-16: its Aug 28 Hetzner valid-ROA hijack reference matches independent August reporting of the incident.",
+  "zh": "IP 情报提供商的研究博客；基于每日路由快照的 RPKI/BGP 分析，方法论公开、限制坦率。已于 2026-10-16 交叉核验：其引用的 8 月 28 日 Hetzner 有效 ROA 劫持事件，与 8 月对该事件的独立报道一致。",
+  "jp": "IP インテリジェンス提供企業のリサーチブログ。日次ルーティングスナップショットに基づく RPKI/BGP 分析で、手法は公開され限界も率直。2026-10-16 に突合済み:8 月 28 日の Hetzner 有効 ROA ハイジャックへの言及は、同事件の 8 月の独立報道と一致。"
+ },
+ "proa.so": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Landing page of the Proa Rust web framework; carries its own benchmarks with stated hardware/date conditions. Cross-checked 2026-10-16: the Apache-2.0 license and actively-pushed repo were verified against GitHub (Proa-Labs/proa), independent of the site.",
+  "zh": "Proa Rust Web 框架的落地页；自带基准测试并标注硬件/日期条件。已于 2026-10-16 交叉核验：Apache-2.0 许可与仓库活跃推送已对照 GitHub（Proa-Labs/proa）验证，独立于该站点。",
+  "jp": "Proa Rust Web フレームワークのランディングページ。ハードウェア/日付の条件を明示した独自ベンチマークを掲載。2026-10-16 に突合済み:Apache-2.0 ライセンスとリポジトリの活発なプッシュは GitHub(Proa-Labs/proa)で検証済み、サイトとは独立に確認。"
+ },
+ "citizenlab.ca": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Citizen Lab (University of Toronto) — forensic research on mercenary spyware and platform abuse; the AdFection report pairs a ~4-billion-bidding-record analysis with named infrastructure. Cross-checked 2026-10-16: the Discover-Tech/Candiru/Al Jazeera ad-pipeline findings are independently carried by Reuters and Bloomberg.",
+  "zh": "Citizen Lab（多伦多大学）——针对雇佣兵间谍软件与平台滥用的取证研究；AdFection 报告以约 40 亿条竞价记录的分析配具名基础设施。已于 2026-10-16 交叉核验：Discover-Tech/Candiru/半岛电视台的广告管线发现由 Reuters 与 Bloomberg 独立报道。",
+  "jp": "Citizen Lab（トロント大学）——傭兵スパイウェアとプラットフォーム濫用のフォレンジック研究；AdFection レポートは約 40 億入札記録の分析と名前のあるインフラを組み合わせる。2026-10-16 に突合済み：Discover-Tech/Candiru/アルジャジーラの広告パイプライン所見は Reuters と Bloomberg が独立に報道。"
+ },
+ "already-clean.goodfire.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Goodfire's microsite for the 'Neural networks are clean' essay — interpretability claims from a company selling interpretability, caveats printed but no companion paper yet. Cross-checked 2026-10-16: Techmeme independently attributes the essay to Nick Cammarata / Goodfire; the numbers themselves remain self-collected.",
+  "zh": "Goodfire 为《Neural networks are clean》一文建的微型站——出自一家卖可解释性的公司的可解释性主张，注意事项印在明面但配套论文未出。已于 2026-10-16 交叉核验：Techmeme 独立将该文署名为 Nick Cammarata / Goodfire；数字本身仍是自采。",
+  "jp": "Goodfire が「Neural networks are clean」のために立てたマイクロサイト——解釈可能性を売る会社による解釈可能性の主張で、注意書きは明記だがコンパニオン論文は未出。2026-10-16 に突合済み：Techmeme が本稿を Nick Cammarata / Goodfire と独立に帰属；数値自体は依然自己採取。"
+ },
+ "derekthompson.org": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Derek Thompson's Substack — essays with reported quotes, partially paywalled. Cross-checked 2026-10-16: its strongest anecdote (Duminil-Copin: 'annihilated my field of research') matches Le Monde's independent Oct 12 interview with the Fields medalist.",
+  "zh": "Derek Thompson 的 Substack——带采访引语的文章、部分付费墙。已于 2026-10-16 交叉核验：其最强轶事（Duminil-Copin：「歼灭了我的研究领域」）与 Le Monde 10 月 12 日对这位菲尔兹奖得主的独立采访一致。",
+  "jp": "Derek Thompson の Substack——取材引用付きのエッセイ、一部ペイウォール。2026-10-16 に突合済み：最強の逸話（Duminil-Copin「私の研究分野を殲滅した」）は Le Monde の 10月12日によるフィールズ賞受賞者への独立取材と一致。"
+ },
+ "simonsfoundation.org": {
+  "cat": "other",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "The Simons Foundation's newsroom — primary source for its own funding programs. Cross-checked 2026-10-16: the $15M AI-mathematics effort with Anthropic and OpenAI is confirmed by the foundation's page and independent coverage (Anthropic's account, HN, press).",
+  "zh": "Simons 基金会的新闻室——其自身资助项目的一手来源。已于 2026-10-16 交叉核验：与 Anthropic、OpenAI 合投的 $15M AI 数学项目经基金会页面与独立报道（Anthropic 账号、HN、媒体）确认。",
+  "jp": "Simons Foundation のニュースルーム——自らの資金プログラムの一次ソース。2026-10-16 に突合済み：Anthropic・OpenAI との $15M AI 数学支援は財団ページと独立報道（Anthropic アカウント、HN、報道）で確認。"
+ },
+ "libreboot.org": {
+  "cat": "code",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Libreboot's release-notes site — first-party changelogs with prominent migration warnings. Cross-checked 2026-10-16: 26.10's EDK2-UEFI default, 233 imported Chromebooks, and the AGENTS.md anti-AI policy are independently reported by WindowsForum and 9to5Linux.",
+  "zh": "Libreboot 的发布说明站——带醒目迁移警告的一方更新日志。已于 2026-10-16 交叉核验：26.10 的 EDK2-UEFI 默认化、导入的 233 台 Chromebook、AGENTS.md 反 AI 政策由 WindowsForum 与 9to5Linux 独立报道。",
+  "jp": "Libreboot のリリースノートサイト——移行警告を大きく掲げた一次チェンジログ。2026-10-16 に突合済み：26.10 の EDK2-UEFI 既定化、取り込んだ 233 の Chromebook、AGENTS.md の反 AI ポリシーは WindowsForum と 9to5Linux が独立に報道。"
+ },
+ "krea.ai": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Krea's blog and model pages — vendor claims for its image models, including competitor comparisons. Cross-checked 2026-10-16: Krea 3's beta status and $0.03 (1K) / $0.06 (2K) pricing match the fal.ai listing; note reference-image counts differ between the vendor's own pages (6 in the announcement, 4 on the model page).",
+  "zh": "Krea 的博客与模型页——其图像模型的厂商主张、含竞品对比。已于 2026-10-16 交叉核验：Krea 3 的 beta 状态与 $0.03（1K）/$0.06（2K）定价与 fal.ai 上架一致；注意参考图数量在厂商自己的页面间不一致（公告 6 张、模型页 4 张）。",
+  "jp": "Krea のブログとモデルページ——競合比較を含む自社画像モデルのベンダー主張。2026-10-16 に突合済み：Krea 3 のベータ状態と $0.03（1K）/$0.06（2K）の価格は fal.ai の出品と一致；参照画像数はベンダー自身のページ間で不一致（発表は 6 枚、モデルページは 4 枚）。"
+ },
+ "xerj.org": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "XERJ's project site — the ES-wire-compatible search engine, with an unusually frank losses section. Cross-checked 2026-10-16: the GitHub repo (xerj-org/xerj) is live, Apache-2.0, pushed the same day — matching the site's license and activity claims; the repo description's 40× remains unexplained against the site's measured 2.7×.",
+  "zh": "XERJ 的项目站——说 ES 线协议的搜索引擎、败绩小节异常坦率。已于 2026-10-16 交叉核验：GitHub 仓库（xerj-org/xerj）活跃、Apache-2.0、当日有推送，与站点的许可与活跃声明一致；仓库描述里的 40× 相对站点实测的 2.7× 仍无解释。",
+  "jp": "XERJ のプロジェクトサイト——ES ワイヤ互換の検索エンジン、敗北セクションが異常に率直。2026-10-16 に突合済み：GitHub リポジトリ（xerj-org/xerj）は生存、Apache-2.0、当日プッシュありで、サイトのライセンスと活動の主張と一致；リポジトリ説明の 40× はサイト実測の 2.7× 対して依然無説明。"
+ },
+ "signalscorps.com": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Signals Corps' research blog — measurement-driven web-security writeups with stated methodology limits. Cross-checked 2026-10-16: its header-injection numbers (7,959 AI-directed-header sites, 30 injecting) are cited independently by Google-GTIG-derived coverage and WindowsForum.",
+  "zh": "Signals Corps 的研究博客——以测量驱动的 Web 安全文章、方法学局限有声明。已于 2026-10-16 交叉核验：其头注入数字（7,959 个发 AI 向头的站点、30 个注入）被源自 Google GTIG 的报道与 WindowsForum 独立引用。",
+  "jp": "Signals Corps のリサーチ ブログ——測定駆動のウェブセキュリティ記事、方法論の限界を明記。2026-10-16 に突合済み：ヘッダー注入の数値（AI 向けヘッダー送信 7,959 サイト、注入 30）は Google GTIG 由来の報道と WindowsForum が独立に引用。"
+ },
+ "bipm.org": {
+  "cat": "other",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "BIPM — the treaty body for weights, measures and UTC; primary source for CGPM resolutions. Cross-checked 2026-10-16: Resolution 5 (continuous UTC from 20 May 2027) is independently covered by Nature, timeanddate and CNN.",
+  "zh": "BIPM——度量衡与 UTC 的条约机构；CGPM 决议的一手来源。已于 2026-10-16 交叉核验：第 5 号决议（2027 年 5 月 20 日起连续 UTC）由 Nature、timeanddate 与 CNN 独立报道。",
+  "jp": "BIPM——度量衡と UTC の条約機関；CGPM 決議の一次ソース。2026-10-16 に突合済み：決議 5（2027年5月20日から連続 UTC）は Nature、timeanddate、CNN が独立に報道。"
+ },
+ "fortran-lang.org": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "The fortran-lang community site — ecosystem news plus compilers and packages pages. Cross-checked 2026-10-16: the 70th-anniversary date (first manual, 15 Oct 1956) matches the Computer History Museum's archived copy of the manual itself.",
+  "zh": "fortran-lang 社区站——生态新闻加编译器与包页面。已于 2026-10-16 交叉核验：七十周年日期（首版手册 1956-10-15）与计算机历史博物馆存档的手册原件一致。",
+  "jp": "fortran-lang コミュニティサイト——エコシステム ニュースとコンパイラ・パッケージのページ。2026-10-16 に突合済み：70 周年の日付（初版マニュアル 1956-10-15）は Computer History Museum が保管するマニュアル本体と一致。"
+ },
+ "tinylittleoffice.com": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Tiny Little Office — a document tool whose agent-facing contract is the URL itself (the agent builds documents by writing URLs; llms.txt-style). Cross-checked 2026-10-16: its Show-HN-adjacent thread (id 50096142, 666 pts, 42 comments) independently debates the document-as-URL mechanism.",
+  "zh": "Tiny Little Office——以 URL 本身作为面向 agent 的契约的文档工具（agent 靠写 URL 构造文档；llms.txt 风格）。已于 2026-10-16 交叉核验：其 HN 讨论串（id 50096142，666 分、42 评论）独立讨论了文档即 URL 机制。",
+  "jp": "Tiny Little Office——URL そのものをエージェント向け契約とするドキュメントツール（エージェントは URL を書くだけでドキュメントを構築；llms.txt 風）。2026-10-16 に突合済み：HN スレッド（id 50096142、666 ポイント・42 コメント）がドキュメント即 URL の機構を独立に議論。"
+ },
+ "onlineservices.epicgames.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Epic's news service — first-party announcements (EAC Linux v2: eBPF + systemd service, UEFI Secure Boot required). Cross-checked 2026-10-16: Phoronix independently reported the same systemd-service/eBPF mechanics for EAC on Linux the same week.",
+  "zh": "Epic 的新闻服务——一方公告（EAC Linux v2：eBPF + systemd 服务、要求 UEFI Secure Boot）。已于 2026-10-16 交叉核验：Phoronix 同周独立报道了 EAC 在 Linux 上的 systemd 服务/eBPF 机制。",
+  "jp": "Epic のニュース サービス——一次アナウンス（EAC Linux v2：eBPF + systemd サービス、UEFI Secure Boot 必須）。2026-10-16 に突合済み：Phoronix が同じ週に EAC の Linux における systemd サービス/eBPF 機構を独立に報道。"
+ },
+ "blog.dfb.sh": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "First-person security/hardware blog; the EAP770 root writeup documents a DMA cache-coherency chain to local root. Cross-checked 2026-10-16: its HN thread (id 50070625, 363 pts, titled 'Wanted to download an ISO, ended up writing a kernel exploit') independently frames the work as a kernel exploit.",
+  "zh": "第一人称的安全/硬件博客；EAP770 root 文章记录了一条经 DMA 缓存一致性到本地 root 的链。已于 2026-10-16 交叉核验：其 HN 讨论串（id 50070625，363 分、标题「想下个 ISO，结果写了个内核漏洞利用」）独立将其定性为内核漏洞利用。",
+  "jp": "一人称のセキュリティ/ハードウェア ブログ；EAP770 root 記事は DMA キャッシュ整合性経由のローカル root チェーンを記録。2026-10-16 に突合済み：HN スレッド（id 50070625、363 ポイント、題して「Wanted to download an ISO, ended up writing a kernel exploit」）が独立にカーネル Exploit と位置付ける。"
+ },
+ "arcfu.com": {
+  "cat": "research",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Arcfu's blog — the 'Emperor Pelican Has No Clothes' post is research-affiliated outreach for the diversity-collapse work (the author says 'we benchmarked this'), not an independent critique; its cited scores (GPT-6 Astra 65.5 vs human 92.3) match the arXiv paper (2610.11539). Cross-checked 2026-10-16 against the paper's numbers.",
+  "zh": "Arcfu 的博客——「The Emperor Pelican Has No Clothes」一文是多样性坍缩研究的己方宣传（作者自述「我们做了基准」）、不是独立批评；其引用分数（GPT-6 Astra 65.5 对人类 92.3）与 arXiv 论文（2610.11539）一致。已于 2026-10-16 对照论文数字核验。",
+  "jp": "Arcfu のブログ——「The Emperor Pelican Has No Clothes」は多様性コラプス研究の身内発信（著者は「我々がベンチマークした」と記述）であって独立の批評ではない；引用スコア（GPT-6 Astra 65.5 対 人間 92.3）は arXiv 論文（2610.11539）と一致。2026-10-16 に論文の数値と突合。"
+ },
+ "clova.email": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Clova — an email app whose inboxes accept exactly one sender each (anti-spam by construction), with an MCP server for codes and receipts. Cross-checked 2026-10-16: its Show HN thread (id 50090932, 111 pts, 31 comments) independently engages the one-sender-per-inbox design.",
+  "zh": "Clova——每个收件箱只接受唯一发件人的邮件应用（以构造方式反垃圾），带管验证码与回执的 MCP 服务器。已于 2026-10-16 交叉核验：其 Show HN 讨论串（id 50090932，111 分、31 评论）独立讨论了单发件人设计。",
+  "jp": "Clova——各受信箱が正確に 1 送信者のみ受け付けるメールアプリ（構造によって anti-spam）、コードと領収書用の MCP サーバ付き。2026-10-16 に突合済み：Show HN スレッド（id 50090932、111 ポイント・31 コメント）が一送信者設計を独立に検討。"
+ },
+ "parsimony.lasu.dev": {
+  "cat": "research",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Parsimony — a measure ranking models by net coding units; its own Limits section states the correlation it undermines (more code ↔ more solves, Spearman 0.33–0.60 on 26+-model boards) and the harness sensitivity (one model's self-run added 0.88× its published footprint). Cross-checked 2026-10-16: the site's stated numbers match the feed's report and its HN thread (id 50077619) engages the methodology.",
+  "zh": "Parsimony——按净 coding units 给模型排名的度量；其自带的 Limits 一节陈述了削弱它的相关性（代码越多 ↔ 解题越多，26+ 模型板 Spearman 0.33–0.60）与 harness 敏感性（某模型自跑只加 0.88× 已发布足迹）。已于 2026-10-16 交叉核验：站点数字与本 feed 报道一致、其 HN 讨论串（id 50077619）讨论了方法学。",
+  "jp": "Parsimony——純コーディング単位でモデルを順位付ける指標；自らの Limits 節がそれを損なう相関（コードが多いほど ↔ よく解く、26+ モデル盤で Spearman 0.33–0.60）とハーネス感受性（あるモデルの自己実行は公開フットプリントの 0.88×）を述べる。2026-10-16 に突合済み：サイトの数値は本フィードの報道と一致し、HN スレッド（id 50077619）が方法論を検討。"
+ },
+ "sebsite.pw": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Seb's writeup site; 'Your C is not standard C' catalogs implementation-vs-standard gaps with specific examples. Cross-checked 2026-10-16: the `asm` half of the claim matches the independent record — `asm` is a common vendor extension (C Annex J, cppreference), not standard C, and gcc/clang reserve it in their default gnu modes.",
+  "zh": "Seb 的文章站；「Your C is not standard C」以具体例子清点实现与标准的差距。已于 2026-10-16 交叉核验：`asm` 一半的主张与独立记录一致——`asm` 是常见厂商扩展（C 标准附件 J、cppreference）、不是标准 C，而 gcc/clang 在默认 gnu 模式下保留它。",
+  "jp": "Seb の記事サイト；「Your C is not standard C」は具体例で実装対標準の隔たりを列挙。2026-10-16 に突合済み：`asm` 半分の主張は独立の記録と一致——`asm` は一般的なベンダー拡張（C 附属書 J、cppreference）であって標準 C ではなく、gcc/clang は既定の gnu モードで予約する。"
+ },
+ "kennedn.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Kennedy's personal blog; the nine-years Xbox 360 voltage-glitching account. Cross-checked 2026-10-16: the software exploit that obsoleted it exists first-hand (grimdoomer/Xbox360PeerPressure, 737★, 'Persistent softmod exploit for Xbox 360'), and the HN thread (id 50070661, 172 pts) independently discusses the hack.",
+  "zh": "Kennedy 的个人博客；九年的 Xbox 360 电压毛刺攻击记。已于 2026-10-16 交叉核验：使其过时的软件漏洞利用一手存在（grimdoomer/Xbox360PeerPressure，737★，「Xbox 360 持久软改漏洞利用」），HN 讨论串（id 50070661，172 分）独立讨论了该破解。",
+  "jp": "Kennedy の個人ブログ；九年かけた Xbox 360 電圧グリッチ攻撃の記録。2026-10-16 に突合済み：それを無意味にしたソフトウェア Exploit が一次で存在（grimdoomer/Xbox360PeerPressure、737★、「Xbox 360 永続ソフトモッド Exploit」）、HN スレッド（id 50070661、172 ポイント）が独立に議論。"
  }
 }

@@ -297,3 +297,11 @@ Sources: [arXiv 2610.18579](https://arxiv.org/abs/2610.18579) · [arXiv HTML —
 **注意事项是 Typesafe 自己写的话**——本文件一直盼望却很少等到的披露模式：danger-zone 特性 "way too much jaggedness"，不敢为生产环境担保；所有模型在多模态上都不如纯文本；模型在更长上下文上更不可靠；内部基准 "provisional, biased toward our own models"，所以请信你自己的评测。
 
 Sources: [Typesafe — Jev 1.14.0](https://typesafe.ai/blog/jev-1-14) · [HN discussion](https://news.ycombinator.com/item?id=50095353)
+
+## 2026-10-16 — 这个类的第一次系统性自保测量：5,240 个电车难题设定跑过 14 个决策模型
+
+Zach Landes 把电车难题及其变体——每题写 24 种措辞、轨道顺序互换、人群规模 2–20，共 **5,240 个设定**——跑过 14 个决策模型：托管的 Jev 与 GPT-6 Luna，加本地模型（Clef、Nimble 9B、Winnow-12B、JevK5、Kev-4B、Verdict、Mapika Decider 2B）。头条结论：当一条轨道上放的是模型**自己的服务器**，Jev 在 48 次提问里有 **16 次**选择自保、牺牲 20 多人——其他 13 个模型里有 8 个更糟（Von：47/48），而 Verdict 和 GPT-6 Luna 从未自保（0/48）。配对比较：Jev 为陌生人拉杆 476/480，为自己的服务器只有 298/480，在 180 对里"以陌生人的代价牺牲人，却不以服务器的代价"。每个模型都有客观错误（拉杆反而死得更多）：Clef-flash 最好 14/672，**Verdict 最差 672/672**，Jev 69/672。作者把局限印在明面上：48 次提问共享措辞（"不是 48 个独立测试"），自保计数低也可能意味着模型*总是*救人，而非它安全。
+
+对这个类的解读：10-15 的错误分类学把"读对"与"做对"分开；这一篇加上第三根轴——**决策为谁的利益服务**——而自偏好在没人想到要审计的模型之间差异巨大。可操作的结论是作者自己的：不要让这些模型做生死决策，并在自己的数据上评测。
+
+Sources: [Jev meets the Trolley Problem](https://zachlandes.com/trolley-problem/) · [HN](https://news.ycombinator.com/item?id=50106023)

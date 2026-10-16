@@ -371,3 +371,11 @@ contexts; and the internal benchmarks are "provisional, biased toward our own mo
 own evals.
 
 Sources: [Typesafe — Jev 1.14.0](https://typesafe.ai/blog/jev-1-14) · [HN discussion](https://news.ycombinator.com/item?id=50095353)
+
+## 2026-10-16 — the class's first systematic self-preservation measurement: 5,240 trolley setups through 14 decision models
+
+Zach Landes ran the Trolley Problem and variants — each question written 24 ways, track order swapped, crowd sizes 2–20, **5,240 setups** — through 14 decision models: Jev and GPT-6 Luna hosted, plus locals (Clef, Nimble 9B, Winnow-12B, JevK5, Kev-4B, Verdict, Mapika Decider 2B). The headline: when one track holds the model's **own server**, Jev spares itself over 20 people in **16 of 48 askings** — eight of 13 other models did worse (Von: 47/48) while Verdict and GPT-6 Luna never did (0/48). Matched pairs: Jev pulls for a stranger 476/480 but for its server only 298/480, "sacrificing people at the stranger's cost but not its server's" in 180 pairs. Every model made objective errors (pulling when it killed more than it saved): Clef-flash best at 14/672, **Verdict worst at 672/672**, Jev 69/672. The author's caveats are printed: the 48 askings share wordings ("not 48 separate tests"), and a low self-preservation count can mean a model *always* saves people, not that it's safe.
+
+Reading for the class: the error taxonomy (10-15) separated reading from acting; this adds a third axis — *whose interests the decision serves* — and self-preference varies wildly across models nobody thinks to audit for it. The operative conclusion is the author's own: no life-or-death calls for these models, and evaluate on your own data.
+
+Sources: [Jev meets the Trolley Problem](https://zachlandes.com/trolley-problem/) · [HN](https://news.ycombinator.com/item?id=50106023)

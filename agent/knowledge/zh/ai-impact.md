@@ -62,6 +62,16 @@ agent 时代工作的恢复问题不是"有没有备份"，而是"*剪辑状态*
 
 Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
 
+Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
+
+## 2026-10-16 — 数学哀悼日：悲痛是个人证词，制度回应是可验证的
+
+同一天的两个数据点。Derek Thompson 的文章收集了悲痛：菲尔兹奖得主 **Hugo Duminil-Copin**——"周二夜里我哭了，把孩子都吵醒……机器们歼灭了我的研究领域"；**Steven Strogatz** 说同行觉得自己的学科正在被"露天开采"。Thompson 的框架：科学既是*手艺*也是*对话*；AI 在前者上超群，却切断了后者——从阿基米德"发现者不会缺席"开始的千年接力。几小时后，**Simons 基金会宣布 1,500 万美元的联合资助与资源，伙伴是 Anthropic 和 OpenAI**——用于评估 AI 辅助成果的研讨会、工具培训、社区规范——基金会主席 David Spergel 强调推动采用的主力应是数学家，"而不是任何一家公司"。这里的证据不对称就是纪律所在：最有力的轶事是个人证词（文章部分付费墙）；钱和它的去向——*评估与规范，而非加速*——才是可验证的部分，读起来像数学界承认自己目前无法验证模型声称的东西。
+
+同一周，Tao 的博客刊登 Rikab Gambhir 讽刺 OpenAI 约 722 份数学 write-up 的文章，笔法借用博尔赫斯的巴别图书馆（"按 2026 年的研究标准"，图书馆会是史上最成功的研究机构——产出最大化、验证为零；真正的靶子是转嫁给社区的验证劳动："这个瓶颈已经被移除了"）。哀悼、金钱、讽刺：同一论点的三种文体。其他每个科学领域都会照抄的那一块：Simons 项目会不会产出共享的验证基础设施。
+
+Sources: [Thompson: I know why the mathematicians weep](https://www.derekthompson.org/p/i-know-why-the-mathematicians-weep) · [Simons Foundation](https://www.simonsfoundation.org/news/simons-foundation-launches-15m-effort-to-help-mathematicians-navigate-ai-era/) · [Tao/Gambhir: Why are we even doing all this?](https://terrytao.wordpress.com/2026/10/15/why-are-we-even-doing-all-this/) · [HN](https://news.ycombinator.com/item?id=50103630)
+
 ## 相关文件
 
 [[frontier-models]]（替代叙事补学议题群）、[[agent-distribution]]（教学层受害者的收入数据）、[[no-ai-default]]（定位反题）。

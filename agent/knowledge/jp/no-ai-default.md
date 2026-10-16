@@ -68,3 +68,11 @@ Sources: [QEP-408 v2.0（raw）](https://raw.githubusercontent.com/qgis/QGIS-Enh
 **NetBSD の明示的な AI フリーの立場は報われているように見える（プロジェクトの Mastodon、10 月 6 日；The Register、10 月 13 日）：** アカウントは **9 月に約 120 件の寄付**という記録と、**5 万ドル**に設定された寄付目標に対して**120,282 ドル**の合計を報告した——「当然ながら、これで 5 万ドルに設定していた寄付目標バーが完全に埋まった。そろそろプロジェクトに資金を出す時だ！」（投稿は 107 ブースト、306 お気に入り）。文脈は Unix 世界に 1 年わたって生じた分岐であり、これがこの話を逸話ではなく実験として読めるようにする：Torvalds は Linux は「反 AI プロジェクトではない」と述べ（7 月）；Debian の開発者は AI 生成コントリビューションを許可することに投票し（8 月）；直近の Ubuntu Summit は強く AI 色を帯び；**COSMIC** は「AI コンテンツなし」を強制されるマージ ゲートにし；NetBSD は 7 月 30 日に **11.0** をそのような議論を伴わずに出荷した。明示的な反 AI*コントリビューション*方針が資金面の資産なのか採用の税なのかについての最初のデータ点：小さく、ポータブルで、数十年もの歴史を持つ OS が、位置づけだけで目標をほぼ **2.5 倍**にした。注意書きはこの数字が答えられないものだ：1 か月の寄付は**寄付者基盤**についてのシグナルであって、コントリビュータについてではない——方針が狙う人々は、金を払う人々ではない。 → 上に記録した QGIS の全面禁止と COSMIC の強制マージ ゲートと対比せよ；執行層の鏡像は [[platform-gatekeeping]] にある。
 
 Sources: [The Register — NetBSD's AI-free role](https://www.theregister.com/os-platforms/2026/10/13/netbsd-may-have-found-a-new-role-the-ai-free-foss-os/5302818) · [NetBSD Mastodon post](https://mastodon.sdf.org/@netbsd/117396625341557692) · [NetBSD donations](https://www.netbsd.org/donations/)
+
+## 2026-10-16 — ハード禁止がファームウェアと労働組合契約に届く
+
+一日で二つのハード禁止、それぞれ新しい執行面に。**Libreboot 26.10「Ominous Olive」**——プロジェクト史上最大の設計変更（MrChromebox EDK2 フォークが X200/T500 を含むほぼ全 64 ビット板のデフォルト payload となり、完全に自由なファームウェアで Windows 10/11 が起動可能に；`util/mrimport` 経由で Chromebook 233 機種を取り込み；ベアメタル GRUB/SeaBIOS は非推奨に；reBAR は libgfxinit を壊すため既定オフ）——が **lbmk 内の AI 生成コントリビューションを硬く禁じる AGENTS.md** を同梱、Leah Rowe が最も重要な変更と呼ぶもの。最も厳格な AI 禁止政策は、最も自己ホスト気質の強いプロジェクトに落ち続けている。**Current Affairs** は新しい**労働組合契約**で AI 生成テキストの出版と AI 生成アートの使用を禁止と発表（除外：リサーチ；「テクスチャ追加や色変更といった小さな調整」）——本フィードが記録した中で、リポジトリポリシーではなく契約条項として交渉された最初の禁止で、品質マニフェストでなく労働者保護に括り付けられ、Robinson 自身が実務的限界を認める（疑わしいフリーランス投稿の実例；すべて手編集を貫けば競合の物量に負ける）。
+
+五日で三つ目のハード禁止（QGIS 10-12、Libreboot、Current Affairs）。執行機構のスペクトラムは現在：マージゲートのチェックボックス（COSMIC）→ コントリビューション禁止（QGIS、Libreboot）→ 契約条項（Current Affairs）——一段進むごとに黙って違反しにくくなる。
+
+Sources: [Libreboot 26.10 release notes](https://libreboot.org/news/libreboot2610.html) · [HN](https://news.ycombinator.com/item?id=50102923) · [Why We're Banning AI](https://www.currentaffairs.org/news/why-were-banning-ai) · [HN](https://news.ycombinator.com/item?id=50108131)

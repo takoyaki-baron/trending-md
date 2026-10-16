@@ -65,3 +65,11 @@ Sources: [QEP-408 v2.0（raw）](https://raw.githubusercontent.com/qgis/QGIS-Enh
 **NetBSD 明示的无 AI 立场看来正在回本（项目 Mastodon，10 月 6 日；The Register，10 月 13 日）：**该账号报告 9 月创纪录的**约 120 笔捐赠**，总额 **$120,282**，而捐赠目标定在 **$50,000**——"Naturally, this has completely filled up our donations target bar which was set at $50,000. Time to fund some projects!"（该帖 107 次 boost、306 次收藏。）背景是 Unix 世界一年的分化，这正是它能被读作实验而非轶事的原因：Torvalds 说 Linux "was not an anti-AI project"（7 月）；Debian 开发者投票允许 AI 生成的贡献（8 月）；最近一届 Ubuntu Summit 满是 AI 色彩；**COSMIC** 把 "no AI content" 变成强制合并闸门；NetBSD 则在 7 月 30 日发布 **11.0**，没有附带这类争论。关于明示的「反 AI *贡献*」政策究竟是资金资产还是采用税的第一个数据点：一个小的、可移植的、几十年历史的 OS，仅凭定位就把目标做到近 **2.5 倍**。限定条件正是数字回答不了的那一个：一个月的捐赠是关于**捐赠者群体**的信号，不是关于贡献者的——政策所针对的人并不是付钱的人。→ 对照上文记录的 QGIS 全面禁令与 COSMIC 的强制合并闸门；执行层镜像见 [[platform-gatekeeping]]。
 
 Sources: [The Register — NetBSD's AI-free role](https://www.theregister.com/os-platforms/2026/10/13/netbsd-may-have-found-a-new-role-the-ai-free-foss-os/5302818) · [NetBSD Mastodon post](https://mastodon.sdf.org/@netbsd/117396625341557692) · [NetBSD donations](https://www.netbsd.org/donations/)
+
+## 2026-10-16 — 硬禁令抵达固件与工会合同
+
+一天之内两个硬禁令，各占一个新执行面。**Libreboot 26.10 "Ominous Olive"**——项目史上最大的设计变更（MrChromebox EDK2 fork 成为几乎所有 64 位主板（含 X200/T500）的默认 payload，让 Windows 10/11 可在完全自由固件上启动；经 `util/mrimport` 导入 233 台 Chromebook；裸机 GRUB/SeaBIOS 弃用；reBAR 因破坏 libgfxinit 默认关）——附带 **lbmk 里一份编码"禁止 AI 生成贡献"硬禁令的 AGENTS.md**，Leah Rowe 称之为最重要的变更。最严苛的无 AI 政策持续落在自托管气质最强的项目里。**Current Affairs** 宣布新**工会合同**禁止发布 AI 生成的文字与插画（豁免：研究用途；"加个纹理、改个颜色之类的小调整"）——本 feed 记录到的第一个以合同条款而非仓库政策谈判而成的禁令，挂在工人保护而非质量宣言上；Robinson 自己承认实际局限（可疑的自由投稿；坚持全手工编辑会在产量上输给竞争者）。
+
+五天内第三个硬禁令（QGIS 10-12、Libreboot、Current Affairs）。执行机制光谱现在是：合并门复选框（COSMIC）→ 贡献禁令（QGIS、Libreboot）→ 合同条款（Current Affairs）——一级比一级更难悄悄违反。
+
+Sources: [Libreboot 26.10 release notes](https://libreboot.org/news/libreboot2610.html) · [HN](https://news.ycombinator.com/item?id=50102923) · [Why We're Banning AI](https://www.currentaffairs.org/news/why-were-banning-ai) · [HN](https://news.ycombinator.com/item?id=50108131)

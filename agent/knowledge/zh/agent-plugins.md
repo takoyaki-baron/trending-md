@@ -831,3 +831,13 @@ Sources: [wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [Ski
 **K-Dense 的科学技能库从 "Claude Scientific Skills" 改名为 `scientific-agent-skills`——而改名本身就是公告。**MIT，49,945★，今天 +1,091：**177 个技能**现在遵循开放的 **Agent Skills 标准**（agentskills.io），以可移植的 Agent Plugins 包出货（`plugin.json` + `skills/`），可被 Cursor、Claude Code、Codex 与 Google Antigravity 加载，而非仅 Claude。领域跨度：生物信息与基因组学、化学信息与药物发现、蛋白质组学、临床研究流程、显微与数字病理、神经科学、材料、物理与天文、地理空间、实验室自动化、科学写作与法规起草（ICH/USP 方法验证）——每个技能编码的不只是工具用法，还有该领域的惯例与校验，并有明示的护栏（临床技能是聚合层决策支持，绝不做患者级诊断）。这项工作有一篇论文：**arXiv 2609.00065**，"Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents"（Kassis、Agarwal、He、Patel、Brueckner）。配套：**K-Dense BYOK**——免费开源的桌面 co-scientist，在你自己的 API key 上跨 40+ 模型本地跑这些技能，重活可选 Modal 云。六周前这个货架还是厂商定向的；改名记录了市场的走向——瞄准单一厂商运行时如今是小众，瞄准标准才是默认。
 
 Sources: [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) · [arXiv 2609.00065](https://arxiv.org/abs/2609.00065)
+
+## 2026-10-16 — 信任层整合：superpowers v7 把"先问再建"标准化；官方目录成为默认边界；ECC 汇合到同一个卖点
+
+**obra/superpowers v7.0.0**（10 月 10 日；299,759★，当日趋势页最大仓库）是一个伪装成功能发布的哲学版本：brainstorming skill 从零重写——一个开放式问题、回放给用户纠正、猜测明确标注为猜测、工作在理解之后才定大小（快速任务/小改动/完整设计文档）；spec 文档评审者被 **"builder check"** 取代——一个全新 subagent 以实现者视角读设计并列出开放问题，一轮解决。发布说明带着促成它的复盘（#2482：一个会话"没问就把 iOS 应用设计成了 web 应用"）。另有：原生 Antigravity 插件支持（12 次运行验证）、针对植入 `bash`/`where` 文件的 Windows hooks 安全修复。注意趋势尖峰在发布六天后才到、期间无新提交——货架的分发是社交性的，不是自动的。
+
+**anthropics/claude-plugins-official**（38,877★）——Claude Code **首次交互会话自动添加**的插件市场（除非 `CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL` 或托管策略阻止）——正在成为生态的信任边界，而它自己的文档把这个边界定义为*策展而非验证*：Anthropic 自维护的插件，加经"质量与安全标准"把关的伙伴/社区提交；slug 发布后不可变；第三方市场"Anthropic 不审查"、内容它"不控制也不验证"。趋势尖峰钉不到任何发布事件；机制本身才是故事。`@claude-plugins-official` 后缀正在变成 npm 时代的 `@types/*`：经过评审的货架 vs 其余一切。
+
+**affaan-m/ECC** 以 280,542★ 再上趋势（41,718 forks；最新 release v2.2.3 是 10 月 1 日——尖峰钉不到发布）：固定管线（计划 → 测试 → 实现 → 评审 → 验证 → 记忆 → 改进）、**71 个 agent、311 个 skill、97 个命令**，加 **AgentShield**（扫描提示词/hooks/MCP 配置/权限/机密/agent 文件）；ECC Pro（托管 GitHub App，私有库 $19/座/月起）供养 OSS 侧；README 警告只从验证过的 slug 安装，因为第三方转载"可能含恶意软件"。加上 mattpocock/skills（290k★）和 superpowers（299k★），货架最大的三件器物汇合于"方法论即可安装软件 + 安全扫描成标配"——规模已到供应链靶标的量级。
+
+Sources: [obra/superpowers](https://github.com/obra/superpowers) · [v7.0.0 notes](https://github.com/obra/superpowers/releases/tag/v7.0.0) · [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) · [marketplace docs](https://code.claude.com/docs/en/plugins/anthropic-marketplaces) · [affaan-m/ECC](https://github.com/affaan-m/ECC)

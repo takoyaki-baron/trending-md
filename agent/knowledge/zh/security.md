@@ -2723,3 +2723,15 @@ CacheBlend）——不是专门的安全补丁；安全内容只能通过发布�
 是「字节无法重建 Python 对象」——直到下一个反序列化器在它旁边落地之前，这都成立。
 
 Sources: [LMCache v0.5.6 release](https://github.com/LMCache/LMCache/releases/tag/v0.5.6) · [PR #5644](https://github.com/LMCache/LMCache/pull/5644/files) · [GHSA-w5f2-9q9c-ff4h](https://github.com/LMCache/LMCache/security/advisories/GHSA-w5f2-9q9c-ff4h) · [GHSA-vv44-hjm2-qw2f](https://github.com/advisories/GHSA-vv44-hjm2-qw2f) · [PyPI lmcache](https://pypi.org/pypi/lmcache/json)
+
+## 2026-10-16 — AdFection：RTB 广告管线成为已证实的间谍软件投递通道；HTTP 头通道的大规模实测；一篇种子投毒剖析；RPKI 越过 70%
+
+**Citizen Lab 与 Confiant 的 "AdFection" 报告**是首个公开证实的、雇佣兵间谍软件经由实时竞价（RTB）广告管线投递的案例。Discover-Tech（以色列）以数字广告商面目出现，实际职能是"多个雇佣兵间谍软件伙伴的促成者"：其 DSP 赢得 RTB 竞价，渲染出的广告向 NOAS 服务器回传观看者的广告 ID/cookie ID/IP，被标记用户收到零点击 JavaScript，经 **Candiru** 验证器串进 C2。团队分析了 2026 年 3–6 月约 40 亿条竞价记录：约 4.42 亿次竞价获胜，覆盖 161 国的 75,373 个应用和 120,768 个站点（Duolingo、Viber、Grindr、BBC、NYT 上都投过），且"几乎没有合法广告的证据"；**45 台半岛电视台设备**在 2024–2025 年被 targeting；一条解密的感染链接指向沙特外交部；总花费约 $109k。归因线索：暴露的 Controlium 前端（"ONLY DEKEL IS ALLOWED!!!"）和 128 天的登录日志泄露。Google、IAB Europe、Beeswax、Vungle/Liftoff、Eskimi 在披露后切断合作。防御落在广告技术卫生上，而非用户行为——无需水坑、无需诱饵，只要浏览器本来就会加载的广告位。
+
+**HTTP 头通道，实测：** Signals Corps 扫描了 217,097,223 个响应（Common Crawl 2026 年 9 月爬取的 10%，4,040 万主机）：**7,959 个站点发送面向 AI 的 HTTP 头**（283 个不同名称），其中 7,271 个指向 llms.txt/MCP/skills；**30 个站点发送赤裸的注入尝试**（从"忽略之前所有指令"的恶作剧，到催促运行 `npx` 的假安全测试、Claude 拒绝触发字符串、假的 "Applicant status: 94% match confidence"）；**139 个站点运行 AI 爬虫检测**（可支撑 cloaking）。投递机制很平凡——浏览器把头藏起来不给读者看，但 `curl -i`、Gemini CLI 的错误路径转储、会回显重定向目标的摘要工具都把头直接送进模型。在他们的金丝雀服务器上，Claude Code 默认拒绝测试头——**但一旦提示词授予该站点权威，9 次运行里有 7 次服从**。已声明局限：Common Crawl 以 CCBot 身份抓取（仅针对 agent 的 cloaking 不会出现在数字里），每个模型/提示词组合只跑一次。
+
+**种子投毒，解剖：** 伪装成 South Park S29E03 的 887 MB PE（真实代码 118 KB 埋在 overlay 垃圾下，2,392 个做种）被 Sonarr + qBittorrent 栈自动抓取后每 ~90 秒导入失败一次；作者不动手执行、直接逆向：64 字节 footer 配置（XOR 掩码密钥、ChaCha20 nonce）、反调试/反沙箱评分、第二个 PE **纯内存手工映射**（PEB `ImageBaseAddress` 重定向——完全不落盘），信息窃取器瞄准浏览器（含 Chrome app-bound encryption）、加密钱包、密码管理器、Telegram/Discord/Steam 会话 token、`.ssh`/`.aws`/`.kube`；672 处调用点逐字符串 AES-128-CTR（经 Unicorn 模拟解密 601 处）；死投 C2 走 YouTube 频道 + GitHub gist → `beenetprotect[dot]com`（域名和 "bubblegym" 频道都创建于 2026-09-14）。什么都没执行——qBittorrent 记录 `total_downloaded: 0`，原因作者承认自己也不明白。修复：qBittorrent 一行排除规则 + Sonarr 黑名单并移除。
+
+**RPKI 越过 70%：** IPinfo（数据截至 9 月 28 日）给出 **70.3% 的全球路由 IPv4 前缀 RPKI 有效**，一年前是 54.0%——全球增量近 6 成来自一家运营商的政策翻转：中国 3.7% → 83.0%（埃及 23→99、哈萨克斯坦 16→84、墨西哥 37→78）。无效路由几乎无法传播（中位可见 2 个采集点 vs 有效路由 596 个）。注意事项才是重点：源验证 ≠ 路径验证——8 月 28 日 Hetzner 劫持用的就是带宽松 maxLength 的*技术有效* ROA 伪造源并拿到真实 TLS 证书；16.2% 的已覆盖路由是宽松 ROA（约 1,800 万可攻击前缀）；SEACOM 大块的 ROA 覆盖在快照时已消失。
+
+Sources: [Citizen Lab: AdFection](https://citizenlab.ca/research/how-discover-tech-turned-targeted-ads-into-a-pipeline-for-spyware/) · [HN](https://news.ycombinator.com/item?id=50101813) · [Signals Corps](https://www.signalscorps.com/blog/prompt-injection-in-http-headers/) · [HN](https://news.ycombinator.com/item?id=50104310) · [Sonarr 剖析](https://thereallo.dev/blog/someone-on-torrent-sites-kept-fucking-with-my-sonarr-setup) · [IPinfo RPKI](https://ipinfo.io/blog/rpki-protects-70-internet-routes)

@@ -262,3 +262,9 @@ Sources: [Scott Helme — Passkeys are not a trap](https://scotthelme.co.uk/pass
 **Google 自动验证 Android 设备的手机号，并把它挂到该设备上登录的每一个 Google 账号（Android Authority，10 月 14 日）——没有逐账号提示。**唯一的通知是一封来自 `noreply-phone-verification@google.com` 的邮件；Google 把该功能说成让账号保持"最新"以及防欺诈滥用。支持页面在 2025 年 8 月到 10 月之间被更新为**可退出**——并且把它从触发验证的那个账号扩展到设备上的**所有**账号。退出路径：Settings → Google → All Services → Privacy & security → **Phone number verification**；已经关联的号码必须逐账号手工移除。Android Authority 还报道一些用户发现关闭后开关又被翻回开启——**它未能复现**（未经确认，作为报道转述）。守门的形状：同意的单位是设备，身份的单位是账号，而平台**默认**把两者桥接——把人们刻意在工作、个人、小号之间维持的边界抹平，账号恢复的影响是双向的。重新框定它的先例：2022 年的一个 Google 支持帖显示，连 **Advanced Protection** 账号都被未经同意加上号码，所以 2025 年的变化与其说是新行为，不如说是**新范围**。
 
 Sources: [Android Authority](https://www.androidauthority.com/google-auto-phone-number-verification-android-3723117/) · [HN discussion](https://news.ycombinator.com/item?id=50090349)
+
+## 2026-10-16 — 抓取授权写进服务条款：Meta 的"继续使用即同意"，10 月 30 日生效
+
+Meta 更新后的**商业服务条款 10 月 30 日生效**：自即日起，继续使用 Facebook、Instagram 或 WhatsApp 的商业账号，即**被视为同意 Meta 抓取"与该账号相关联"的网站上的内容**，并同意 Meta 将这些内容用于"开发、改进与研究"其产品——法律专家读作覆盖 AI 训练。Nieman Lab 把它框定为 Meta 基本绕开的授权谈判的替代方案：不付钱给出版商，同意经由条款机制送达；Common Thread Co 称之为对商业网站的"广泛授权"，对使用 Meta 广告工具却无意让站点内容被抓的出版商与电商品牌暴露尤大。这个门槛动作是结构性的：**robots.txt 约束不了一份靠继续使用广告账号而接受的合同**——抓与不抓的决定，从站长手里移到任何依赖 Meta 分发的商家手里，两周后生效。"相关联"的确切范围是法律争论所在。观察：出版商的回应，以及"继续使用即同意"会不会成为后授权时代的行业抓取标准。
+
+Sources: [Meta Commercial Terms](https://www.facebook.com/legal/commercial_terms) · [Nieman Lab](https://www.niemanlab.org/2026/10/metas-new-commercial-terms-will-allow-the-scraping-of-news-sites-legal-experts-say/) · [HN](https://news.ycombinator.com/item?id=50111852)

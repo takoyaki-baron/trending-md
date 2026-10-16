@@ -32,15 +32,49 @@ let state = { repos: {}, runs: 0, first_run: null, last_run: null };
 try { state = { ...state, ...JSON.parse(readFileSync(statePath, 'utf8')) }; } catch { /* first run */ }
 
 const gh = (path) => JSON.parse(execFileSync('gh', ['api', path],
-  { encoding: 'utf8', timeout: 60_000, maxBuffer: 8 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }));
+  { encoding: 'utf8', timeout: 60_000, maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }));
 
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 const now = new Date().toISOString();
 const changes = [];
 const errors = [];
 
-for (const { repo, why } of manifest.watch) {
+for (const entry of manifest.watch) {
+  const { repo, why, body_regex, scan_count } = entry;
   try {
+    /* ── scan mode (body_regex set): changelog watches on near-daily release streams.
+       /releases/latest alone would fire on every tag and drown the channel; instead fetch the
+       release LIST with bodies, regex only tags not yet seen, announce matches, silently
+       re-baseline non-matching drift. Added 2026-10-16 for the header-channel watch
+       (Claude Code / Codex / Gemini CLI release notes vs response-header handling). */
+    if (body_regex) {
+      const releases = gh(`repos/${repo}/releases?per_page=${scan_count ?? 20}`);
+      const tags = releases.map((r) => r.tag_name);
+      const prev = state.repos[repo];
+      const seen = new Set(prev?.seen_tags ?? []);
+      const hits = [];
+      for (const r of releases) {
+        if (seen.has(r.tag_name)) continue;
+        const hay = `${r.name ?? ''}\n${r.tag_name ?? ''}\n${r.body ?? ''}`;
+        const matched = [...new Set(hay.match(new RegExp(body_regex, 'gi')) ?? [])].slice(0, 6);
+        if (matched.length) hits.push({ tag: r.tag_name, date: (r.published_at ?? '').slice(0, 10), matched });
+      }
+      if (!prev) {
+        // Seed: baseline everything silently, but count pre-seed body mentions (published before
+        // the item was filed — context, not a response; dates live in the releases themselves).
+        const preSeed = releases.filter((r) =>
+          new RegExp(body_regex, 'i').test(`${r.name ?? ''}\n${r.tag_name ?? ''}\n${r.body ?? ''}`));
+        changes.push(`seed ${repo} (scan /${body_regex}/i) — ${tags.length} release(s) baselined, ` +
+          `${preSeed.length} pre-seed body mention(s)${preSeed.length ? ` [${preSeed.map((r) => r.tag_name).join(', ')}]` : ''} — ${why}`);
+      } else {
+        for (const h of hits) {
+          changes.push(`${repo} RELEASE-HIT: ${h.tag} (${h.date}) matched [${h.matched.join(' | ')}] — ${why}`);
+        }
+      }
+      const meta = gh(`repos/${repo}`);
+      state.repos[repo] = { seen_tags: tags.slice(0, 30), pushed_at: meta.pushed_at, stars: meta.stargazers_count, checked: now };
+      continue;
+    }
     const meta = gh(`repos/${repo}`);
     let release = null;
     try { release = gh(`repos/${repo}/releases/latest`); } catch { /* no releases yet */ }
@@ -98,8 +132,9 @@ if (errors.length) {
   if (changes.length === 0) process.exit(1); // all-failed run is an error; partial run still reports
 }
 if (changes.length === 0) {
-  console.log(`release-watch: null — ${manifest.watch.length} repos unchanged (run #${state.runs}); ` +
-    `routing DSLs still release-less, skills repos still unsubmitted`);
+  const scanned = manifest.watch.filter((e) => e.body_regex).length;
+  console.log(`release-watch: null — ${manifest.watch.length} repos unchanged (run #${state.runs}` +
+    (scanned ? `, ${scanned} changelog-scanned` : '') + `)`);
 } else {
   console.log(`release-watch: ${changes.length} change(s) (run #${state.runs}):`);
   for (const c of changes) console.log(`  ${c}`);

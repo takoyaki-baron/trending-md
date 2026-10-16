@@ -68,6 +68,16 @@ push the premiere to 2027」。
 
 Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
 
+Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
+
+## 2026-10-16 — 数学喪失の日：悲嘆は個人の証言、制度的応答は検証可能
+
+同じ 24 時間の 2 つのデータポイント。Derek Thompson のエッセイは悲嘆を集める：フィールズ賞受賞者 **Hugo Duminil-Copin**——「火曜の夜、泣いてしまった、娘が目を覚ますほど……機械たちが私の研究分野を殲滅した」；**Steven Strogatz** は同業者が自分の学問を「露天掘りされている」と感じていると語る。Thompson の枠組み：科学は*技芸*であり*会話*でもある；AI は前者に優れ、後者を切断する——アルキメデスの「発見者は決して欠かない」からの千年のリレー。数時間後、**Simons Foundation が Anthropic と OpenAI をパートナーに 1,500 万ドルの資金とリソースを発表**——AI 支援成果の評価ワークショップ、ツール研修、コミュニティ標準——総裁 David Spergel は「どの単一企業でもなく」数学者自身が採用を主導すべきだと強調。ここでの証拠の非対称が規律：最も強い逸話は個人の証言（エッセイは一部有料壁）；金とその狙い——*評価と標準であって加速ではない*——こそが検証可能な部分で、数学コミュニティが現在モデルの主張を検証できないことを認めていると読める。
+
+同じ週、Tao のブログは OpenAI の約 722 の数学 write-up を風刺する Rikab Gambhir の投稿を掲載、ボルヘスのバベル図書館の筆法で（「2026 年の研究基準では」図書館は史上最も成功した研究機関になる——出力最大、検証ゼロ；本当の標的はコミュニティに転嫁された検証労働：「このボトルネックは取り除かれた」）。嘆き、金、風刺：三つの文体の同一の論証。他のすべての科学分野が真似すべき部分：Simons プログラムが共有検証インフラを生むかどうか。
+
+Sources: [Thompson: I know why the mathematicians weep](https://www.derekthompson.org/p/i-know-why-the-mathematicians-weep) · [Simons Foundation](https://www.simonsfoundation.org/news/simons-foundation-launches-15m-effort-to-help-mathematicians-navigate-ai-era/) · [Tao/Gambhir: Why are we even doing all this?](https://terrytao.wordpress.com/2026/10/15/why-are-we-even-doing-all-this/) · [HN](https://news.ycombinator.com/item?id=50103630)
+
 ## 関連ファイル
 
 [[frontier-models]]（雇用代替エッセイのキャッチアップ クラスタ）、[[agent-distribution]]（教育層の犠牲者に対する収入データ）、[[no-ai-default]]（ポジショニングの対極）。

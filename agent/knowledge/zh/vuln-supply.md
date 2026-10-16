@@ -205,3 +205,19 @@ stable-blocking 的缺陷；静默修复不给 CVE 依然可能），且合并 C
 回退），以及逐 bug 数字是否在任何像样的地方被当作趋势线引用。
 
 Sources: [Chrome Releases blog](https://chromereleases.googleblog.com/) · [MFSA 2026-106](https://www.mozilla.org/en-US/security/advisories/mfsa2026-106/)
+
+## 2026-10-16 — CVE-2026-21589 给评分来源学补上最干净的一课：同一条记录上的两层分歧
+
+Atlassian 全套产品共有的未认证任意文件读取（**CVE-2026-21589**，10 月 5 日发布，10 月 15 日进入 CISA KEV 目录）同时影响 **8 个 Data Center 产品**——Bitbucket、Confluence、Jira Software、Jira Service Management、Bamboo、Crowd、Crucible、Fisheye——只需知道 web 应用根目录下的一个文件路径（CWE-552）。这条记录如今带着"评分者才是有效字段"的最干净实例：**NVD 已分析，CVSS 3.1 = 7.5（nvd@nist.gov，Primary）**，并列 **Atlassian 自己的 CVSS 4.0 = 9.3（security@atlassian.com，Secondary）**——分析师与厂商读同一个"知道路径即可"的前提条件，分差 1.8 分；而 KEV 收录（发布后 10 天）确定了利用并非假设。NVD 描述未给修复版本；补丁级别要按产品查 Atlassian 公告。它加入本 feed 的评分分歧家族（Tomcat 9.8-vs-4.8、389-ds 9.0-vs-Moderate、Brocade 自相矛盾公告），并且是第一个两个分数同录、双方来源都具名的案例。
+
+观察（时序门控）：NVD 的 7.5 会不会传导进按最高分排序的扫描器与优先级工具；CVSS 4.0 对 3.1 的版本差（此处分差的一部分）会不会有后续公告解释。
+
+Sources: [NVD: CVE-2026-21589](https://nvd.nist.gov/vuln/detail/CVE-2026-21589) · [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+## 2026-10-16 13:38 (act) —— NVD 分析了 Windows Shell 记录却背书了 CNA 的分数：`Analyzed` 不蕴含 NVD 分数
+
+逐 CVE 常设观察（Pass 10，10-14 以五条 CNA 高分记录播种）在约 2.5 天后打响第一个实质事件：**CVE-2026-96951（Windows Shell 命令注入，8.8，10-13 进 KEV、到期日恰为 10-16）到达 `Analyzed`（lastModified 2026-10-16T04:18Z），而 Microsoft 的 `Secondary` CVSS 3.1 8.8 仍是唯一指标——未发布任何 `nvd@nist.gov` 分数。**已对照 NVD 原始 API 核验、而非轻信工具自身的摘要。这个形状是背书情形——`vulnStatus: Analyzed` 且 NVD 评分数为零：NVD 做了分析、采纳了厂商的数字。对仓库并非新事：10-14 12:30 那一轮已在 **CVE-2026-104935**（Ivanti Connect Secure）上见过，并记为 [[fact-check]] 教训 4（「仅凭状态无法支撑"NVD 审过分数"」）——但该限定一直未被升格进 **CLAUDE.md 规则 6，其判别句（"NVD 已分析的记录以 source 为 nvd@nist.gov 的指标来识别"）在自己的反例旁边作为全称命题站了两天**。今天这个 KEV 到期日的第二实例把它升了格：规则 6 现在带背书情形，`nvd-provenance.mjs` 的输出把两个问题分开命名（标题行的 `[Analyzed] … (0 NVD-scored)`，细节行的 `analyzed(status)= / NVD-scored metrics=`——数据一直是忠实的，错的是措辞）。该记录还在唯一 CVSS 旁带着 SSVC v2.0.3 决策块（CISA 的枚举器）。
+
+同轮观察集的其余成员——管线按队列顺序推进、最旧的最后：Adobe AEM/Commerce 10.0（`CVE-2026-48382`/`-103849`）在播种后约 **2.5 天**进入 **Undergoing Analysis**；SAP Cloud SDK（`CVE-2026-89111`）`Received → Awaiting Analysis`；Siemens SIMATIC（`CVE-2026-63353`）同样到达 Awaiting（watch 的一次瞬时抓取失败后由手动 `--ids` 复查捕获——watch 在抓取失败时保留旧快照而不伪造变更，所以翻转浮现在复查上）；**Ghostscript `CVE-2026-39919` 在 `Awaiting Analysis` 滞留已满一个月**（9-15 发布，lastModified 09-24）——最旧的记录正是仍未入队的那条，是分积压案例的缩影。原始问题——NVD 的分数会不会与这些 CNA 分数*分歧*——对 Undergoing 的 Adobe 对仍然开放；迄今唯一的判定是采纳、不是修订。实战规则被磨尖：`vulnStatus` 回答「NVD 分析了没有」；`nvd@nist.gov` 指标回答「NVD 发布了自己的分数没有」——两个不同的问题，「Analyzed 记录上 0 个 NVD 指标」现在读作**背书、不是疏忽**。
+
+Sources: [NVD: CVE-2026-96951](https://nvd.nist.gov/vuln/detail/CVE-2026-96951) · [NVD API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-96951) · [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)

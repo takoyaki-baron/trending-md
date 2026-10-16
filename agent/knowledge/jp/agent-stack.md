@@ -2221,3 +2221,15 @@ Sources: [Anomaly — OpenCode 2.0](https://anoma.ly/notes/opencode-2-0/) · [an
 **Clova はエイリアスの脅威モデルをちょうど一人の送信者に縛る。**エイリアス サービスのルールそれ自体が製品：**あるアドレスに最初にメールした送信者が永久にそれを主張し、他の全員は拒否される**——宛先を渡した小売業者があなたのアドレスを漏らしたり売ったりしても、そのエイリアスは本人以外には無価値で、人生ではなくエイリアスを消せばいい。三つの受信箱タイプ：one-sender（最初の正当な送信者に永久ロック）、temporary（寿命を設定、1 時間から 1 か月、期限を過ぎると拒否し内容を消去できる）、prefix（5+ 文字を主張、`you-anything@…` をその場で発明、それぞれ最初の送信者にロック）。新しいのは **MCP サーバ**の方だ：Claude、Cursor、その他のエージェントが受信箱を作成し、確認コードを取得し、スコープ付き権限で領収書を取ってくる——サインアップ確認フローはまさにエージェントが押し付けられる雑務であり、コードと領収書のためのスコープ付き API は今まで欠けていた配管だった。無料枠：永続アドレス 1 個、100 MB、100 通/日；Pro $30/年；Business $50/年でカスタム ドメイン。
 
 Sources: [Tiny Little Office](https://tinylittleoffice.com/) · [HN — Tiny Little Office](https://news.ycombinator.com/item?id=50096142) · [Clova](https://clova.email/) · [HN — Clova](https://news.ycombinator.com/item?id=50090932)
+
+## 2026-10-16 — 帰属争いが 24 時間で部分的解決へ。検索棚に ES ワイヤプロトコル互換の新入り。ハイパースケーラーが方法論を MIT-0 で出荷
+
+**Scion/Mononoke 二日目：** Rain（sunshowers.io）——Mononoke を建てる前に Bonsai データモデルチームを率いた——は、類似が「派生データを超えてデータモデル全体に及ぶ」こと、複写が意図的だったことの私的な確認と Scion/Mononoke チーム間の人材的重複を受け取ったと述べ（「これが意図しないオマージュである可能性は皆無」；「Scion」は「Bonsai」の音節を逆にしたもの）、立場を締める：**「問題は複写ではなく帰属だ。」** 24 時間以内に動き：Anthropic の Nick G. が HN で回答し、Anthropic のブログ投稿に「十分な帰属」が追加された——Rain はそれでも不十分と論じる（Sapling へのクレジットは `sl` クライアントを名指す；changesets の節は Bonsai の changesets を具体的に引くべき）。これがベンダーとエージェントに置くテンプレート：隣のブランドではなく、具体的な設計をクレジットする。
+
+**XERJ**（Apache-2.0、単一静的 Rust バイナリ、5,489★、v1.0.0-rc.95）はエージェント検索棚（leviathan、caveman、context-mode）に検索側から加わる：`xerj autoindex <folder>` が拡張子でなく内容で 13 のフォーマット族のファイルを型付けし、スキーマを推論し、コードを tree-sitter でシンボルに構文解析し（36 言語）、**:9200 で Elasticsearch ワイヤプロトコルを話す**（「毎コミットで 1,366 / 1,369 ワイヤ適合ケースがグリーン」）——移行はベース URL の変更。実測主張：同等解答率で grep 駆動エージェントより**出力トークンが 2.7× 少ない**——一方リポジトリ説明は 40×、説明のない別の数字；サイトの誠実さセクションは自らの敗北を公開（内蔵エンベッダーは「語彙の重複であって神経的理解ではない」；自らの 518 MB コーパス試験で grep+python ベースラインが 10/10 対 9+1 で勝つ；Jev が完全勝利する公開データセットもある）。
+
+**awslabs/aidlc-workflows**（MIT-0、5.3k★、v2.11.0）は AWS の AI-Driven Development Life Cycle をハーネス中立のワークフローツールとして包装、**7 つのハーネス**で動く（Claude Code、Kiro CLI/IDE、Codex CLI、Cursor、opencode、GitHub Copilot）：`/aidlc <作業>` がワークフローを選び、欠けた決定を尋ね、進む前に**承認ゲートで停止する**；ドキュメントは信頼境界の細目を運ぶ（Kiro IDE でフォルダを信頼するとその `.kiro` hooks がマシン上でコマンドを実行しうる）。ハイパースケーラーの labs 組織が方法論をリポジトリとして出荷、承認ゲートを第一級オブジェクトに——MIT-0 で、帰属不要。
+
+**ruflo**（claude-flow の改名）が 75.2k★ で再トレンド（+147/日、10月15日プッシュ）：配布は現在 3 つの Claude Code プラグイン（コアツール、ビジュアルコンソール「cockpit」、ルーティングとポリシー施行の **mods**）と全クライアント向け MCP サーバー（`npx ruflo mcp start`）；README は 12 か月で 1,252 万 npm エコシステムダウンロードを引用——自己申告バッジで、監査されていない。mods は「あなたのアカウント権限で走る；インストール前にコードをレビューせよ」——棚の供給網規律を、自らに適用した形。
+
+Sources: [More on Scion ripping off Mononoke](https://sunshowers.io/posts/anthropic-mononoke-2/) · [HN](https://news.ycombinator.com/item?id=50106738) · [xerj.org](https://xerj.org) · [xerj-org/xerj](https://github.com/xerj-org/xerj) · [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows) · [ruvnet/ruflo](https://github.com/ruvnet/ruflo)

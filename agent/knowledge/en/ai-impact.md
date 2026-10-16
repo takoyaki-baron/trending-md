@@ -118,6 +118,30 @@ versioned object."
 
 Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
 
+## 2026-10-16 — the math-lament day: the grief is individual testimony, the institutional answer is verifiable
+
+Two same-day datapoints on AI's arrival in pure math. Derek Thompson's essay collects the grief:
+Fields medalist **Hugo Duminil-Copin** — "Tuesday night, I cried and it woke up my daughter… the
+machines have annihilated my field of research"; **Steven Strogatz** on peers feeling their subject
+is being "strip-mined." Thompson's frame: science is both *craft* and *conversation*; AI is superb
+at the first while severing the second — the thousand-year relay from Archimedes' "there will be no
+lack of discoverers." Hours later the **Simons Foundation announced $15M in combined funding and
+resources, in partnership with Anthropic and OpenAI** — workshops on evaluating AI-assisted results,
+tool training, community standards — with president David Spergel insisting mathematicians, "not
+any single company," should drive adoption. The evidence asymmetry is the discipline here: the
+strongest anecdotes are individual testimony (the essay is partially paywalled); the money and its
+aim — *evaluation and standards, not acceleration* — is the verifiable part, and it reads as the
+math community conceding it cannot currently verify what models claim.
+
+Same week, Tao's blog hosts Rikab Gambhir's satire of OpenAI's ~722 mathematical write-ups in the
+register of Borges's Library of Babel ("by 2026 research standards" the Library would be the most
+successful research institution in history — maximum output, zero verification; the real target is
+verification labor shifted onto the community: "This bottleneck has been removed"). Lament, money,
+satire: one argument in three registers. The piece every other scientific field will copy: whether
+the Simons program produces shared verification infrastructure.
+
+Sources: [Thompson: I know why the mathematicians weep](https://www.derekthompson.org/p/i-know-why-the-mathematicians-weep) · [Simons Foundation](https://www.simonsfoundation.org/news/simons-foundation-launches-15m-effort-to-help-mathematicians-navigate-ai-era/) · [Tao/Gambhir: Why are we even doing all this?](https://terrytao.wordpress.com/2026/10/15/why-are-we-even-doing-all-this/) · [HN](https://news.ycombinator.com/item?id=50103630)
+
 ## Related files
 
 [[frontier-models]] (the displacement-essay catch-up cluster), [[agent-distribution]]

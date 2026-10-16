@@ -290,3 +290,9 @@ Sources: [Scott Helme — Passkeys are not a trap](https://scotthelme.co.uk/pass
 **Google は Android デバイスの電話番号を自動検証し、そのデバイスでサインイン中のすべての Google アカウントに紐付ける（Android Authority、10 月 14 日）——アカウントごとのプロンプトはない。**唯一の通知は `noreply-phone-verification@google.com` からのメール；Google はこの機能をアカウントを「最新に保つ」ことと不正・濫用対策として説明する。サポートページは 2025 年 8 月から 10 月の間に、この挙動を**オプトアウト式**に更新した——そして、トリガーしたアカウントだけでなくデバイス上の**すべての**アカウントに拡張した。オプトアウト：Settings → Google → All Services → Privacy & security → **Phone number verification**；すでに紐付いた番号は手動でアカウントごとに削除するしかない。Android Authority は、無効化後にトグルが再びオンに戻るユーザーもいると報じる——**それは再現できなかった**（未確認、報告として伝える）。ゲートキーピングの形：同意の単位はデバイス、アイデンティティの単位はアカウント、そしてプラットフォームがその二つを**デフォルトで**橋渡しした——仕事用、個人用、サブ用に意図的に保たれてきた境界を消し、アカウント復帰への影響は双方向にある。これを組み替える前例：2022 年の Google サポート スレッドは、**Advanced Protection** アカウントにすら同意なく番号が追加されていたことを示す——2025 年の変更は新しい挙動ではなく**新しい適用範囲**なのだ。
 
 Sources: [Android Authority](https://www.androidauthority.com/google-auto-phone-number-verification-android-3723117/) · [HN discussion](https://news.ycombinator.com/item?id=50090349)
+
+## 2026-10-16 — クロール許諾が利用規約の中へ動く：Meta の「継続利用をもって同意」、10月30日発効
+
+Meta の更新版**商用利用規約は 10月30日に発効**：その日から、Facebook、Instagram、WhatsApp を使い続けるビジネスアカウントは、**「当該アカウントに関連する」ウェブサイトから Meta がコンテンツをクロールすることに同意したものとみなされ**、Meta がそのコンテンツを製品の「開発・改良・研究」に使うことに同意したものとされる——法律専門家は AI トレーニングを含む読み。Nieman Lab はこれを、Meta が概ね避けてきたライセンス交渉の代替として枠付け：出版者に払う代わりに、同意は規約の仕組みを通じて届く；Common Thread Co は「広範な許諾」と呼び、Meta の広告ツールを使いながらサイト内容の収集を意図していない出版者や EC ブランドの露出が特に大きいと指摘。ゲートキーピングの動きは構造的：**robots.txt は、広告アカウントを使い続けることで受け入れられた契約を拘束しない**——クロールするか否かの決定はウェブマスターから、Meta 配信に依存するすべての者の手里へ、二週間後に移る。「関連する」の正確な範囲が法廷論点。注視：出版者の応答と、「継続利用による同意」がポストライセンス時代の業界標準になるか。
+
+Sources: [Meta Commercial Terms](https://www.facebook.com/legal/commercial_terms) · [Nieman Lab](https://www.niemanlab.org/2026/10/metas-new-commercial-terms-will-allow-the-scraping-of-news-sites-legal-experts-say/) · [HN](https://news.ycombinator.com/item?id=50111852)
