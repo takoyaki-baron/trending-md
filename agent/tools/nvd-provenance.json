@@ -40,6 +40,16 @@
       "id": "CVE-2025-61624",
       "why": "Fortinet path traversal 6.5-NVD/6.0-CNA, published April, KEV'd ten months on (due 10-19) — watch for patch-state/reference movement",
       "seeded": "2026-10-17 [Analyzed] 3.1 Primary/nvd@nist.gov 6.5, 3.1 Secondary/psirt@fortinet.com 6.0, CWE-22, KEV 2026-10-16, published 2026-04-14"
+    },
+    {
+      "id": "CVE-2026-77931",
+      "why": "MoviePilot agent-tool prompt injection → ExecuteCommandTool with confirm_dangerous=true (model-controlled boolean as the whole boundary), VulnCheck CNA, NVD Deferred — agent-exploitable class, KEV plausible; watch Deferred→Analyzed + NVD metric",
+      "seeded": "2026-10-17 [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, published 10-15"
+    },
+    {
+      "id": "CVE-2026-110908",
+      "why": "pfSense FRR escapeshellarg() into sed expression → root, MITRE CNA 8.8, internet-facing firewall — KEV plausible; watch Awaiting Analysis→Analyzed (endorsement-vs-own-score case recurring)",
+      "seeded": "2026-10-17 [Awaiting Analysis] 3.1 Secondary/cve@mitre.org 8.8, CWE-78, published 10-15"
     }
   ]
 }

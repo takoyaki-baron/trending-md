@@ -1345,6 +1345,37 @@ if (fs.existsSync(agentMemPath)) {
   }
 }
 
+/* ── CVE watch-coverage check ──
+   Pass 10 of agent-run.sh (agent/tools/nvd-provenance.mjs) only watches the CVEs listed in
+   agent/tools/nvd-provenance.json, so a feed batch that publishes a new CVE falls outside the
+   standing watch unless someone remembers to seed it — observed 2026-10-17: the 12:03 batch's
+   two CVEs (MoviePilot CVE-2026-77931, pfSense CVE-2026-110908) were both unseeded until the
+   act pass caught it, same "manual re-checks rot" class as the Legcord find. Closes it the same
+   way the batch-coverage check closes its gap: every CVE-YYYY-NNNN cited in the newest dated en
+   feed must appear in the watch list. build.js runs after agent-run.sh inside generate-feed.sh,
+   so a compliant run is always clean here — a warning means a cited CVE is not being watched. */
+{
+  const watchPath = path.join(ROOT, 'agent', 'tools', 'nvd-provenance.json');
+  const feedDir = path.join(ROOT, 'en', 'feed');
+  const dated = fs.readdirSync(feedDir).filter(f => /^\d{4}-\d{2}-\d{2}\.md$/.test(f)).sort();
+  const newest = dated[dated.length - 1];
+  if (newest && fs.existsSync(watchPath)) {
+    try {
+      const watch = JSON.parse(fs.readFileSync(watchPath, 'utf8')).watch || [];
+      const watched = new Set(watch.map(w => w.id));
+      const cited = [...new Set(fs.readFileSync(path.join(feedDir, newest), 'utf8').match(/\bCVE-\d{4}-\d{4,7}\b/g) || [])];
+      const unwatched = cited.filter(id => !watched.has(id));
+      if (unwatched.length) {
+        console.log(`  ⚠ ${unwatched.length} CVE(s) cited in en/feed/${newest} but absent from agent/tools/nvd-provenance.json — the standing NVD watch does not cover them: ${unwatched.join(', ')}`);
+      } else {
+        console.log(`  ✓ CVE watch coverage: all ${cited.length} CVE(s) cited in en/feed/${newest} are watched (watch list: ${watched.size})`);
+      }
+    } catch (e) {
+      console.log(`  ⚠ CVE watch coverage check failed to run: ${e.message}`);
+    }
+  }
+}
+
 /* ── Root redirect page — dynamic language chooser ── */
 const langLinks = langs.map(l => {
   const ls = strings[l];

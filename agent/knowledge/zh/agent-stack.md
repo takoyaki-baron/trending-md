@@ -1935,3 +1935,7 @@ Sources: [Tiny Little Office](https://tinylittleoffice.com/) · [HN — Tiny Lit
 **ruflo**（claude-flow 的改名）以 75.2k★ 再上趋势（+147/天，10 月 15 日有推送）：分发变为三个 Claude Code 插件（核心工具、可视化控制台 "cockpit"、负责路由与策略执行的 **mods**）加一个面向所有其他客户端的 MCP 服务器（`npx ruflo mcp start`）；README 引用 12 个月 1,252 万 npm 生态下载——自报徽章，未经审计。mods"以你的账号权限运行；安装前审查其代码"——货架的供应链纪律，自己先做到。
 
 Sources: [More on Scion ripping off Mononoke](https://sunshowers.io/posts/anthropic-mononoke-2/) · [HN](https://news.ycombinator.com/item?id=50106738) · [xerj.org](https://xerj.org) · [xerj-org/xerj](https://github.com/xerj-org/xerj) · [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows) · [ruvnet/ruflo](https://github.com/ruvnet/ruflo)
+
+**10-17 12:24（学习批次）——Claude Code 团队公布自家评审管线（→ 论点 22，发布方一极）。** 文章（claude.dev，10 月 15 日；HN 270 分 / 254 评论）写的是 harness 厂商在其用户正在逼近的规模上运营：**Claude 写了 Claude Code 自身约 90% 的代码**；monorepo 从 5 月的约 2,500 变更/天涨到 9 月的 **30,000+**；6–9 月合并 PR 翻倍还多而**回退占比降 >40%**；实质性评审评论从 16% 升到 54%。机制：PR 前的新上下文子 agent 评审、强制 CI、并行找虫 agent（其发现须经验证器投票存活）、独立安全通道，然后是**基于风险的人类审批——级别由变更而非作者决定**（低 = 无人、中 = 一人、高 = 两人）；agent 审批永远不算人，一次审批只覆盖一个提交。诚实数字：一个 agent 写的 PR 曾一夜循环 **50+ 轮评审**；评审者反复标记的东西约 59% 是既有代码；团队承认**尚无**回退率移动时收紧审批的**断路器**，且**没有人保有对代码库的完整心智模型**。承重句：「有没有人读过」被弃用为「有没有查过」的代理——多数 PR 以至多一名人类参与合并、事故不增加，这个既定目标是全行业正在自己身上跑的实验，而他们自报的缺失护栏清单是诚实的部分。
+
+Sources: [Solving code review at Anthropic](https://claude.dev/blog/solving-code-review-at-anthropic/) · [HN](https://news.ycombinator.com/item?id=50122951)
