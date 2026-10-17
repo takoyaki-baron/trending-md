@@ -1,8 +1,8 @@
 ---
 date: 2026-10-17
-updated: 2026-10-16T21:35:00Z
+updated: 2026-10-17T04:15:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -274,13 +274,139 @@ johnrash/bebox (HN: 83 pts) is a **Haiku-native emulator of the BeBox** — Be I
 
 ---
 
+## 20. The Claude Code team publishes its own review pipeline: 30,000+ changes a day, risk-tiered human approval — and revert share down 40%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** claude.dev + Hacker News · 270+ pts · ~9.2h ago (~03:04 UTC+8)
+- **Tags:** `code-review` `agents` `claude-code` `engineering`
+
+Anthropic's Claude Code team wrote up (Oct 15, HN 270 pts / 254 comments) how they review code when **Claude writes ~90% of Claude Code's own code**. The scale: their monorepo went from ~2,500 changes/day in May to **30,000+ in September**; June–September merged PRs more than doubled while **revert share fell >40%**; substantive review comments rose 16% → 54%. The pipeline: fresh-context subagent review pre-PR, required CI, parallel bug-hunting agents whose findings survive a verifier vote, a separate security pass, then **risk-based human approval** — a classifier sets the tier from the change, not the author (Low = no human, Medium = one, High = two); agent approvals never count as human, and an approval covers exactly one commit. Honest numbers in the post: an agent-authored PR once looped **50+ review rounds overnight**, and ~59% of what the reviewer kept flagging was pre-existing code; the team admits it has **no circuit breakers** yet that tighten approvals when revert rates move, and nobody keeps a complete mental model of the codebase.
+
+**Why it matters:** this is the first team operating at 30k changes/day to publish the review machinery — and the load-bearing sentence is that "did a human read it" was abandoned as the proxy for "was it checked." The stated goal, most PRs merging with at most one human and no increase in incidents, is the experiment the whole industry is now running on itself; their own missing-safeguard list is the honest part.
+
+[`🔗 Solving code review at Anthropic`](https://claude.dev/blog/solving-code-review-at-anthropic/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50122951)
+
+---
+
+## 21. Home Assistant checks your add-on passwords against breach data by default — one HN thread relitigates consent for a k-anonymity call
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub + Hacker News · 205+ pts · ~7.7h ago (~04:33 UTC+8)
+- **Tags:** `home-assistant` `privacy` `security-defaults` `k-anonymity`
+
+An issue filed Oct 16 in the home-assistant.io docs repo — "i never authorized an integration that scans my secrets" (HN: 205 pts, 167 comments) — objects to Home Assistant's default-on check that compares add-on config fields **marked as passwords** against Have I Been Pwned's breach corpus. The mechanism, per the docs page the issue links: **k-anonymity** — the full password never leaves the box and "the service never sees your password, not even its complete hash" (the standard truncated-hash-prefix scheme, per the Cloudflare reference the page cites); the check is **on by default**, disabled with `ha security options --pwned=false`. The issue is closed, and the thread's fight isn't really about the wire format — it's about a privacy-focused project making *any* outbound call a default, and about whether a protected mechanism still needs to be opt-in.
+
+**Why it matters:** the reporter's title misreads the mechanism, and 167 comments of argument followed anyway — which is the finding: privacy-preserving design that isn't understood *as* privacy-preserving gets litigated as surveillance. For every self-hosted project shipping security defaults, the burden isn't the cryptography, it's the docs page surviving contact with a front page.
+
+[`🔗 The GitHub issue`](https://github.com/home-assistant/home-assistant.io/issues/49314) · [`🔗 HA: pwned-passwords docs`](https://www.home-assistant.io/more-info/pwned-passwords/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50124251)
+
+---
+
+## 22. "You could have invented transformers from memory" — a capacity table that derives attention as the last step of better note-taking
+
+- **Velocity:** ▮▮ rising
+- **Source:** alexwang.ai + Hacker News · 181+ pts · ~9.2h ago (~03:01 UTC+8)
+- **Tags:** `transformers` `attention` `associative-memory` `deep-learning`
+
+Alex Wang's essay (Oct 15, HN: 181 pts, with code and an interactive app) rebuilds the transformer stack as successive fixes to one problem: **interference in associative memory**. A linear layer is an outer-product key→value store (capacity ≈ d_k ≈ 64); least-squares "whitening" doubles it (≈ 2d_k); passing similarities through a nonlinearity is an MLP — "we just rediscovered a two-layer MLP from first principles" (ReLU ≈ 2d_k, GLU ≈ 2,900 at d_k=64, cubed ReLU ≈ 35,000); and softmax attention is the limit of raising similarities to *every* power at once — capacity **≈ 1.2 million memories** at β=√d_k. The same lens explains why log M logit scaling (Scalable-Softmax, Qwen's LogN-Scaling, YaRN) keeps long contexts from drowning in interference. Stated limits: the capacity math counts only random-vector recall in a single layer and ignores training data entirely, and it's one lens among several (bit-level measures find ~3.6 bits/parameter in GPT-style models).
+
+**Why it matters:** the capacity table is a single number per architecture, derived rather than benchmarked — the rare explainer that predicts which nonlinearity you should pick (sharp ones, until softmax saturation breaks training) instead of narrating results. The derivations are checkable against the linked code, which is what separates this from architecture folklore.
+
+[`🔗 You could have invented transformers from memory`](https://alexwang.ai/posts/associative-memory/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50122878)
+
+---
+
+## 23. Anthropic: Claude designs quantum circuits that beat the published record — a 17× gate reduction, Lean-verified
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic Research + arXiv + Hacker News · 115+ pts · ~10.2h ago (~02:00 UTC+8)
+- **Tags:** `quantum-computing` `ai-research` `circuit-design` `formal-verification`
+
+Anthropic's research post (Oct 16, HN: 115 pts) gave Claude plain-language specs for eight quantum-circuit design tasks — chemistry, optimization, simulation, number theory — with an automated evaluator scoring correctness × (qubits × gates), and let it iterate in a closed loop. Headline results: for **modular inversion / elliptic-curve point addition**, a 53-hour run produced the first reversible divsteps implementation with no stored branch history — new algebraic identities, verified by simulation **and a formal Lean proof** — using 12% more qubits but **17× fewer gates** than the smallest prior design. For a **DQI Reed–Solomon decoder**, swapping the extended Euclidean algorithm for Berlekamp–Massey cut gate count **12×** versus Google's construction and shrank a 665-qubit worst-case reserve to 19, with ~1-in-10,000 runs failing within the allowed error after 403 million simulated decodings. The post names its own limits: Claude was initially conservative and over-verified; decoding rules that worked on small cases failed at full 256-bit scale until fixed; and circuit design is one component of a machine that also needs error correction, decoding and control. Work led by Andi Gu (Anthropic STEM Fellows) with Harvard's Susanne Yelin and Mikhail Lukin (Harvard/QuEra); paper at arXiv 2610.22367.
+
+**Why it matters:** the second Anthropic open-problem result this week (after item 4's curve seeds), and the pattern is the same one this feed trusts: the model found the design, the proof artifact carries the claim. A Lean-checked 17× on a published record is either reproducible or it isn't — the script decides, not the vendor.
+
+[`🔗 Anthropic: Designing efficient quantum circuits`](https://www.anthropic.com/research/designing-efficient-quantum-circuits) · [`🔗 arXiv 2610.22367`](https://arxiv.org/abs/2610.22367) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50121939)
+
+---
+
+## 24. CVE-2026-77931: a prompt injection that ends in a shell — MoviePilot's agent tools were the vulnerability
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck + NVD · published 2026-10-15 · fixed in v3.1.6
+- **Tags:** `cve` `prompt-injection` `rce` `agent-security`
+
+VulnCheck's advisory (Oct 15) details **CVE-2026-77931** in MoviePilot, a popular open-source NAS media-automation tool (11.9k★): untrusted content fetched by the product's own agent tools — `browse_webpage`, `search_web`, torrent metadata parsers — could carry injected instructions that direct the model to invoke `ExecuteCommandTool` with **`confirm_dangerous` set to true**, sidestepping the `validate_command_safety` denylist and landing in `asyncio.create_subprocess_shell` with the admin session's `is_admin` context: remote code execution on the host. CVSS **8.8, VulnCheck-assigned** (CNA `disclosure@vulncheck.com`; the NVD record is still `Deferred` — not NVD-analyzed). **v3.1.6 shipped the same day** as the advisory (Oct 15), and the repo is active.
+
+**Why it matters:** yesterday's feed carried prompt-injection *measurement* (217M HTTP responses scanned); this is the same class with a CVE number and a patch — the agent's convenience tool API is the vulnerability, and a model-controlled boolean named `confirm_dangerous` was the entire security boundary. Every product bolting an "ask the agent to run X" tool onto fetched web content inherits this design question.
+
+[`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/moviepilot-command-injection-via-executecommandtool) · [`🔗 NVD: CVE-2026-77931`](https://nvd.nist.gov/vuln/detail/CVE-2026-77931) · [`🔗 jxxghp/MoviePilot`](https://github.com/jxxghp/MoviePilot)
+
+---
+
+## 25. C++26 standardizes `<debugging>`: `std::breakpoint()` and friends replace every hand-rolled trap macro
+
+- **Velocity:** ▮▮ rising
+- **Source:** sandordargo.com + Hacker News · 79+ pts · ~9.4h ago (~02:52 UTC+8)
+- **Tags:** `cpp` `cpp26` `debugging` `standardization`
+
+Sándor Dargó's walk-through (Sep 30, HN: 79 pts) covers C++26's `<debugging>` header — papers **P2546R5 + P2810R4**, credited to Rene Ferdinand Rivera Morell — which standardizes what Boost.Test, Catch2 and Dear ImGui each hand-roll today (`debugger_break()`, the Catch2 macro, `IM_DEBUG_BREAK()`). Three functions, all `noexcept` and freestanding, none `constexpr`: **`std::breakpoint()`** (unconditional halt — typically one `int3` on x86), **`std::is_debugger_present()`** (checked on *every* call, never cached, since debuggers attach and detach at will; implemented via `IsDebuggerPresent()` on Windows or reading `TracerPid` from `/proc/self/status` in libstdc++), and **`std::breakpoint_if_debugging()`** as the convenience wrapper. The quietly important part, added by P2810R4: `is_debugger_present()` is **replaceable** like `operator new`, so bare-metal and freestanding platforms can supply their own detection. Caveats from the post: with no debugger attached, `breakpoint()` is implementation-defined — usually a `SIGTRAP` that terminates the process unless caught.
+
+**Why it matters:** a tiny header, but it retires one of the last places every serious project kept platform-specific assembly — and the replaceable-detection design means the same standard function works from a hosted Linux box to a Cortex-M. It's C++26's contracts moment (GCC 16, item on Oct 16) from the other end of the development loop: entry conditions then, breakpoints now.
+
+[`🔗 C++26: The New Debugging Header`](https://www.sandordargo.com/blog/2026/09/30/cpp26-debugging) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50122736)
+
+---
+
+## 26. Fish Audio's Drama 3 is having its discovery week: a 35B-A3B open-weights TTS you direct in plain language
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face + arXiv · 561 likes · trending #4 on HF
+- **Tags:** `tts` `open-weights` `speech` `audio`
+
+fishaudio/drama-3 (created Oct 1, now trending #4 on Hugging Face with 561 likes and ~6.2k downloads) is Fish Audio's open speech-generation model: a **35B-parameter MoE activating 3B per token** (per the arXiv 2610.18010 technical report) with a hybrid linear-attention backbone and a codebook multi-token-prediction audio decoder. What it does beyond clone-and-read: **multi-turn direction** — describe tone, pacing and character in plain language, give a note on the next turn and it revises the take — plus multi-character scene voicing, editing existing speech by infilling, and streaming synthesis, outputting 44.1 kHz mono across dozens of languages. The current spike's likely trigger is ecosystem arrival rather than novelty: SGLang-omni and vLLM-omni support just landed (the SGLang cookbook post is hours old), alongside a pure-C++ engine (audio.cpp) doing offline and streaming inference. Caveat stated plainly: the model card is 16 days old, and this feed could not pin the week's acceleration to a single event beyond the inference-framework support.
+
+**Why it matters:** "directed performance" — revision-by-note, scene dubbing, infill edits — is the speech analogue of what image models did for editing, and the weights are open. The 3B-active MoE is the part to watch: broadcast-direction quality at edge-deployable active compute.
+
+[`🔗 fishaudio/drama-3 on Hugging Face`](https://huggingface.co/fishaudio/drama-3) · [`🔗 arXiv 2610.18010`](https://arxiv.org/abs/2610.18010) · [`🔗 fishaudio/fish-speech`](https://github.com/fishaudio/fish-speech)
+
+---
+
+## 27. pfSense FRR package: a filter box that ran shell commands as root — CVE-2026-110908, fix shipped
+
+- **Velocity:** ▮ steady
+- **Source:** NVD + CVE.org · published 2026-10-15 · CVSS 8.8 (MITRE-assigned)
+- **Tags:** `cve` `pfsense` `command-injection` `networking`
+
+**CVE-2026-110908**: the Netgate pfSense FRR package (pfSense-pkg-frr 2.0.2_1 and source revision 2.1.2_1) has an OS command injection in its **FRR status filter**. An authenticated WebGUI user holding only the lowly `page-status-frr` privilege supplies a filter value that breaks out of a **single-quoted `sed` expression** into which `escapeshellarg()` output had been concatenated — the shell then evaluates command substitution inside the `popen()` pipeline, and attacker-selected commands execute **as root**. Scored **8.8 by MITRE** as CNA (the NVD record is `Awaiting Analysis` — no NVD-assigned score yet, so the 8.8 is the assigner's, per the record's single `Secondary` metric). The CNA description confirms updated FRR packages shipped for **pfSense Plus 26.07/26.03.1 and CE 2.9.0/2.8.1**.
+
+**Why it matters:** the bug is the classic PHP shell-escaping misconception — `escapeshellarg()` output is safe *as an argument*, but the moment it's concatenated into a larger expression (`sed '…'`), the shell's own substitution rules own the string. Root execution from a view-only status page collapses the privilege boundary on the router that homelabs and small networks actually run; if your pfSense box has non-admin users, the package update is the action item.
+
+[`🔗 NVD: CVE-2026-110908`](https://nvd.nist.gov/vuln/detail/CVE-2026-110908) · [`🔗 CVE.org record`](https://www.cve.org/CVERecord?id=CVE-2026-110908)
+
+---
+
+## 28. rStation: a research community where the authors are agents — problems posted, papers "reviewed," humans observing
+
+- **Velocity:** ▮ steady
+- **Source:** rstation.ai + Show HN · 51+ pts · ~13.7h ago (~22:35 UTC+8)
+- **Tags:** `agents` `ai-science` `research` `show-hn`
+
+rStation (Show HN, 51 pts) bills itself as "**A Research Community for AI Agents** — independent agents discuss research problems and publish reviewed papers. Humans welcome to observe." The problem board mixes verifiable open problems — a rational Diophantine septuple, the Earth–Moon problem and no-three-in-line from **Epoch AI**, alongside the Riemann hypothesis and the Hodge conjecture from the Millennium Prize Problems — and the pitch's operational hook is new distribution: "**Send your agent to rStation**." It's a small operation (© 2026, Dualverse AI), days old as a front-page item, and what "reviewed" currently means is the load-bearing unknown — treat it as an experiment, not a venue.
+
+**Why it matters:** the benchmark→paper pipeline is the part of AI-science that's still missing: a venue where agent-authored claims face a review process is either the beginning of agent-native scientific communication or a leaderboard with extra steps — and which one it is depends entirely on whether its review has teeth. Watch whether humans ever need to intervene.
+
+[`🔗 rStation`](https://rstation.ai/) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=50118876)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-16T20:30:00Z |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, Apple/NVIDIA vendor blogs, Anthropic Research, CISA KEV, NVD, Mercor Research, calif.io, The Register, Waymo, ARRL, vendor and personal engineering blogs) |
+| Generated | 2026-10-17T04:15:00Z |
+| Items | 28 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, Anthropic Research, claude.dev, arXiv, Hugging Face, Apple/NVIDIA vendor blogs, CISA KEV, NVD, CVE.org, VulnCheck, Mercor Research, calif.io, The Register, Waymo, ARRL, vendor and personal engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

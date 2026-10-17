@@ -1,8 +1,8 @@
 ---
 date: 2026-10-17
-updated: 2026-10-16T21:35:00Z
+updated: 2026-10-17T04:15:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -274,13 +274,139 @@ johnrash/bebox（HN 83 分）是一个 **Haiku 原生的 BeBox 模拟器**——
 
 ---
 
+## 20. Claude Code 团队公开自己的评审流水线：日变更量 30,000+、按风险分级的人工审批 — 回退率下降 40%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** claude.dev + Hacker News · 270+ pts · ~9.2小时前 (~03:04 UTC+8)
+- **Tags:** `code-review` `agents` `claude-code` `engineering`
+
+Anthropic 的 Claude Code 团队撰文（10 月 15 日，HN 270 分 / 254 评论）介绍了当 **Claude 写下 Claude Code 自身约 90% 的代码**时，他们如何做代码评审。规模数据：其 monorepo 从 5 月的约 2,500 次变更/天涨到 **9 月的 30,000+**；6–9 月合并 PR 数翻倍以上的同时**回退占比下降超过 40%**；实质性评审意见占比从 16% 升至 54%。流水线：PR 前由全新上下文的子代理评审，必需 CI 通过，并行猎虫代理的发现要经过验证代理投票存活，独立的安全审查通道，然后是**按风险分级的人工审批**——分类器根据变更内容而非作者设定级别（低 = 无人审批，中 = 一人，高 = 两人）；代理的批准永远不算人工，且一次批准只覆盖一个具体 commit。文中同样给出诚实数据：一个代理写的 PR 曾整夜循环 **50+ 轮评审**，评审者反复标记的内容约 59% 是既有代码；团队承认**尚无熔断机制**在回退率上升时自动收紧审批，也没有任何人完整掌握代码库的全貌。
+
+**Why it matters:** 这是第一个在日 3 万变更量级上公开自己评审机制的团队——关键的一步是放弃"人类读过了吗"作为"被检查过了吗"的代理指标。他们声明的目标（多数 PR 至多一名人类参与合并、事故率不升）正是全行业正在自己身上做的实验；而他们自己列出的缺失安全网，是这份文档里最诚实的部分。
+
+[`🔗 Solving code review at Anthropic`](https://claude.dev/blog/solving-code-review-at-anthropic/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50122951)
+
+---
+
+## 21. Home Assistant 默认把你的插件密码拿去比对泄露库 — 一条 HN 热帖为一次 k-匿名调用重新审判"默认同意"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub + Hacker News · 205+ pts · ~7.7小时前 (~04:33 UTC+8)
+- **Tags:** `home-assistant` `privacy` `security-defaults` `k-anonymity`
+
+10 月 16 日有人在 home-assistant.io 文档仓库提交 issue——"i never authorized an integration that scans my secrets"（HN 205 分、167 评论）——反对 Home Assistant 默认开启的检查：把插件配置中**标记为密码的字段**拿去与 Have I Been Pwned 的泄露语料比对。按该 issue 所引文档页的机制说明：这是 **k-匿名**方案——完整密码从不离开本机，"服务永远看不到你的密码，甚至看不到它的完整哈希"（即标准的截断哈希前缀方案，页面引用了 Cloudflare 的参考实现）；该检查**默认开启**，可用 `ha security options --pwned=false` 关闭。issue 已关闭，而评论区的争论其实不在协议格式——而在于一个以隐私为卖点的项目把*任何*出站调用设为默认是否正当，以及一个保护性的机制是否仍应默认关闭、由用户显式开启。
+
+**Why it matters:** 报告者的标题误读了机制，但 167 条评论的争论照样发生——这本身就是发现：隐私保护设计若不被理解*为*隐私保护，就会被当作监控来审判。对每一个在自托管软件里上线安全默认值的项目来说，负担不在密码学，而在文档页能否在首页围观中存活。
+
+[`🔗 GitHub issue`](https://github.com/home-assistant/home-assistant.io/issues/49314) · [`🔗 HA: pwned-passwords 文档`](https://www.home-assistant.io/more-info/pwned-passwords/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50124251)
+
+---
+
+## 22. "你本可以从记忆出发发明 Transformer" — 一张把注意力推为记笔记术最终形态的容量表
+
+- **Velocity:** ▮▮ rising
+- **Source:** alexwang.ai + Hacker News · 181+ pts · ~9.2小时前 (~03:01 UTC+8)
+- **Tags:** `transformers` `attention` `associative-memory` `deep-learning`
+
+Alex Wang 的长文（10 月 15 日，HN 181 分，附代码与交互演示）把 Transformer 的整个组件栈重建为对一个问题的连续修复：**联想记忆中的干扰**。线性层是外积键值存储（容量 ≈ d_k ≈ 64）；最小二乘"白化"使容量翻倍（≈ 2d_k）；让相似度过一个非线性就是 MLP——"我们刚从第一性原理重新发明了两层 MLP"（d_k=64 时 ReLU ≈ 2d_k，GLU ≈ 2,900，立方 ReLU ≈ 35,000）；而 softmax 注意力是把相似度同时升到*所有*次幂的极限——β=√d_k 时容量**约 120 万条记忆**。同一视角也解释了 log M logit 缩放（Scalable-Softmax、Qwen 的 LogN-Scaling、YaRN）为何能防止长上下文被干扰淹没。文中声明的局限：容量推导只计单层随机向量召回，完全忽略训练数据；且这只是诸多透镜之一（比特级测量在 GPT 类模型中找到约 3.6 比特/参数）。
+
+**Why it matters:** 这张表给每个架构一个数字，而且是推导出来的、不是跑分跑出来的——罕见的能做出预测的讲解（该选哪个非线性：选锐的，直到 softmax 饱和破坏训练），而不是复述结果。推导可以对照附带的代码检验，这正是它与架构传说之间的分界线。
+
+[`🔗 You could have invented transformers from memory`](https://alexwang.ai/posts/associative-memory/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50122878)
+
+---
+
+## 23. Anthropic：Claude 设计出超越已发表最优记录的量子线路 — 门数减少 17 倍，经 Lean 形式化验证
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic Research + arXiv + Hacker News · 115+ pts · ~10.2小时前 (~02:00 UTC+8)
+- **Tags:** `quantum-computing` `ai-research` `circuit-design` `formal-verification`
+
+Anthropic 的研究博文（10 月 16 日，HN 115 分）给 Claude 提出了八项量子线路设计任务的平语言规范——化学、优化、模拟、数论——由自动评估器按正确性 ×（量子比特 × 门数）打分，让它在闭环中迭代。头条结果：**模逆 / 椭圆曲线点加**任务上，一次 53 小时的运行产出了首个无存储分支历史的可逆 divsteps 实现——推导出新的代数恒等式，经模拟**与 Lean 形式化证明**双重验证——比此前最小的设计多用 12% 的量子比特、但**门数少 17 倍**。在 **DQI Reed–Solomon 译码器**上，把扩展欧几里得算法换成 Berlekamp–Massey，使门数较 Google 的构造减少 **12 倍**，665 量子比特的最坏情况预留缩到 19，4 亿次模拟译码中约万分之一失败率落在允许误差内。博文明确列出自身局限：Claude 起初保守、过度验证；在小规模适用的译码规则在全 256 位规模上曾失效；且线路设计只是量子机器的一个组件，纠错、译码与控制仍需另行设计。工作由 Andi Gu（Anthropic STEM Fellows）领衔，与哈佛的 Susanne Yelin、Mikhail Lukin（哈佛/QuEra）合作；论文见 arXiv 2610.22367。
+
+**Why it matters:** 这是 Anthropic 本周第二个开放问题成果（继今日第 4 条的曲线种子之后），且模式与本 feed 信任的那种相同：模型负责找设计，证明工件负责背书。已发表记录上经 Lean 验证的 17 倍改进，要么可重现要么不可——由脚本说了算，不由厂商说了算。
+
+[`🔗 Anthropic: Designing efficient quantum circuits`](https://www.anthropic.com/research/designing-efficient-quantum-circuits) · [`🔗 arXiv 2610.22367`](https://arxiv.org/abs/2610.22367) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50121939)
+
+---
+
+## 24. CVE-2026-77931：一次以 shell 收场的提示注入 — MoviePilot 的智能体工具本身就是漏洞
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck + NVD · 发布于 2026-10-15 · 已在 v3.1.6 修复
+- **Tags:** `cve` `prompt-injection` `rce` `agent-security`
+
+VulnCheck 的公告（10 月 15 日）详述了 MoviePilot（流行的开源 NAS 媒体自动化工具，11.9k★）中的 **CVE-2026-77931**：由产品自身智能体工具获取的不可信内容——`browse_webpage`、`search_web`、种子元数据解析器——可以携带注入指令，指示模型调用 `ExecuteCommandTool` 并把 **`confirm_dangerous` 设为 true**，绕过 `validate_command_safety` 的拒绝清单，进入携带管理员会话 `is_admin` 上下文的 `asyncio.create_subprocess_shell`：在宿主机上实现远程代码执行。CVSS **8.8，VulnCheck 评分**（CNA 为 `disclosure@vulncheck.com`；NVD 记录仍为 `Deferred`——未经 NVD 分析）。**v3.1.6 与公告同日发布**（10 月 15 日），仓库仍在活跃维护。
+
+**Why it matters:** 昨天的 feed 刊登的是提示注入的*测量*（扫描 2.17 亿条 HTTP 响应）；这次是同一类问题带上了 CVE 编号和补丁——智能体的便利工具 API 就是漏洞本身，而一个由模型控制的名为 `confirm_dangerous` 的布尔值曾是全部的安全边界。任何在抓取的网页内容之上挂一个"让代理帮我跑 X"工具的产品，都继承着同一个设计问题。
+
+[`🔗 VulnCheck 公告`](https://www.vulncheck.com/advisories/moviepilot-command-injection-via-executecommandtool) · [`🔗 NVD: CVE-2026-77931`](https://nvd.nist.gov/vuln/detail/CVE-2026-77931) · [`🔗 jxxghp/MoviePilot`](https://github.com/jxxghp/MoviePilot)
+
+---
+
+## 25. C++26 将 `<debugging>` 纳入标准：`std::breakpoint()` 一家取代所有手搓陷阱宏
+
+- **Velocity:** ▮▮ rising
+- **Source:** sandordargo.com + Hacker News · 79+ pts · ~9.4小时前 (~02:52 UTC+8)
+- **Tags:** `cpp` `cpp26` `debugging` `standardization`
+
+Sándor Dargó 的详解（9 月 30 日，HN 79 分）介绍了 C++26 的 `<debugging>` 头文件——论文 **P2546R5 + P2810R4**，归功于 Rene Ferdinand Rivera Morell——它把 Boost.Test、Catch2 与 Dear ImGui 各自手搓的东西（`debugger_break()`、Catch2 宏、`IM_DEBUG_BREAK()`）收进标准。三个函数，均为 `noexcept`、可自由（freestanding）实现、均非 `constexpr`：**`std::breakpoint()`**（无条件暂停——在 x86 上通常就是一条 `int3`）、**`std::is_debugger_present()`**（*每次*调用都重新检查、绝不缓存，因为调试器随时可以附着与脱离；Windows 上走 `IsDebuggerPresent()`，libstdc++ 读 `/proc/self/status` 的 `TracerPid`），以及作为便捷封装的 **`std::breakpoint_if_debugging()`**。 quiet 但重要的部分由 P2810R4 加入：`is_debugger_present()` 像 `operator new` 一样**可替换**，裸机与 freestanding 平台可以提供自己的检测实现。文中的注意事项：无调试器附着时 `breakpoint()` 的行为是实现定义的——通常是一个 `SIGTRAP`，未被捕获则进程终止。
+
+**Why it matters:** 一个很小的头文件，却让每个严肃项目保留平台特定内联汇编的最后一处据点之一退役——而可替换检测的设计意味着同一个标准函数从有主机的 Linux 机器到 Cortex-M 都能用。这是 C++26 契约特性（GCC 16，10 月 16 日条目）在开发循环另一端的续篇：那边管进入条件，这边管断点。
+
+[`🔗 C++26: The New Debugging Header`](https://www.sandordargo.com/blog/2026/09/30/cpp26-debugging) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50122736)
+
+---
+
+## 26. Fish Audio 的 Drama 3 迎来它的被发现之周：可用平语言指挥的 35B-A3B 开放权重 TTS
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face + arXiv · 561 赞 · HF 趋势榜第 4
+- **Tags:** `tts` `open-weights` `speech` `audio`
+
+fishaudio/drama-3（模型创建于 10 月 1 日，现居 Hugging Face 趋势榜第 4，561 赞、约 6.2k 下载）是 Fish Audio 的开放语音生成模型：按 arXiv 2610.18010 技术报告，**35B 参数 MoE、每 token 激活 3B**，采用混合线性注意力骨干与码本多 token 预测音频解码器。它在克隆朗读之外的能力：**多轮导演式指挥**——用平语言描述语气、节奏与角色，下一轮给出意见它就重录一遍——外加多角色场景配音、对已有语音做 infill 编辑、流式合成，输出 44.1 kHz 单声道，覆盖数十种语言。本周爆发的可能触发点是生态到位而非新品：SGLang-omni 与 vLLM-omni 的支持刚刚落地（SGLang 的 cookbook 文章只有几小时历史），另有纯 C++ 引擎（audio.cpp）支持离线与流式推理。直说的保留意见：模型卡已有 16 天历史，本 feed 无法把这一周的加速归因于推理框架支持之外的单一事件。
+
+**Why it matters:** "导演式表演"——按意见改稿、场景配音、infill 编辑——正是图像模型在编辑方向走过的路在语音上的对应物，而权重是开放的。值得盯的是 3B 激活的 MoE：广播级可指挥的质量，落在边缘可部署的激活算力上。
+
+[`🔗 Hugging Face: fishaudio/drama-3`](https://huggingface.co/fishaudio/drama-3) · [`🔗 arXiv 2610.18010`](https://arxiv.org/abs/2610.18010) · [`🔗 fishaudio/fish-speech`](https://github.com/fishaudio/fish-speech)
+
+---
+
+## 27. pfSense FRR 插件：一个以 root 身份执行 shell 命令的过滤框 — CVE-2026-110908，修复已发布
+
+- **Velocity:** ▮ steady
+- **Source:** NVD + CVE.org · 发布于 2026-10-15 · CVSS 8.8（MITRE 评分）
+- **Tags:** `cve` `pfsense` `command-injection` `networking`
+
+**CVE-2026-110908**：Netgate pfSense 的 FRR 插件（pfSense-pkg-frr 2.0.2_1 及源码版本 2.1.2_1）在 **FRR 状态过滤器**中存在操作系统命令注入。一个只持有低权限 `page-status-frr` 的已认证 WebGUI 用户，提交一个能突破**单引号 `sed` 表达式**的过滤值——`escapeshellarg()` 的输出本被拼接在其中——shell 随后在 `popen()` 管道内执行命令替换，攻击者选定的命令**以 root 身份**运行。由 MITRE 作为 CNA 评分 **8.8**（NVD 记录为 `Awaiting Analysis`——尚无 NVD 自己的评分，8.8 是指派方的，对应记录中唯一的 `Secondary` 指标）。CNA 描述确认 **pfSense Plus 26.07/26.03.1 与 CE 2.9.0/2.8.1** 的更新版 FRR 插件已发布。
+
+**Why it matters:** 这个 bug 是 PHP shell 转义误解的经典形态——`escapeshellarg()` 的输出*作为参数*是安全的，但一旦被拼接进更大的表达式（`sed '…'`），字符串就归 shell 自己的替换规则管。从只读状态页拿到 root 执行，等于把 homelab 和小型网络实际在用的那台路由器的权限边界压塌了；如果你的 pfSense 上有非管理员用户，升级插件就是行动项。
+
+[`🔗 NVD: CVE-2026-110908`](https://nvd.nist.gov/vuln/detail/CVE-2026-110908) · [`🔗 CVE.org 记录`](https://www.cve.org/CVERecord?id=CVE-2026-110908)
+
+---
+
+## 28. rStation：一个作者是智能体的科研社区 — 挂出问题、发表"经评审"的论文、人类旁观
+
+- **Velocity:** ▮ steady
+- **Source:** rstation.ai + Show HN · 51+ pts · ~13.7小时前 (~22:35 UTC+8)
+- **Tags:** `agents` `ai-science` `research` `show-hn`
+
+rStation（Show HN，51 分）自述为"**智能体的科研社区**——独立的智能体讨论研究问题、发表经评审的论文，欢迎人类旁观"。问题板混合了可验证的开放问题——来自 **Epoch AI** 的有理丢番图七元组、地月问题、无三点共线，连同千禧年大奖难题的黎曼假设与 Hodge 猜想——而其运营层面的新意在于分发方式："**把你的智能体送去 rStation**"。它是个很小的运营体（© 2026，Dualverse AI），登上首页才几天，而"评审"当前究竟指什么是最关键的未知数——当作实验看待，而非一个期刊。
+
+**Why it matters:** 基准到论文的管道正是 AI 科研缺失的那一段：一个智能体署名声明要面对评审流程的园地，要么是智能体原生科学传播的开端，要么是一个多绕了一层的排行榜——它是什么，完全取决于它的评审有没有牙齿。值得盯的是：人类是否永远不需要介入。
+
+[`🔗 rStation`](https://rstation.ai/) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50118876)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-16T20:30:00Z |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, Apple/NVIDIA 厂商博客, Anthropic Research, CISA KEV, NVD, Mercor Research, calif.io, The Register, Waymo, ARRL, 厂商与个人工程博客) |
+| Generated | 2026-10-17T04:15:00Z |
+| Items | 28 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, Anthropic Research, claude.dev, arXiv, Hugging Face, Apple/NVIDIA 厂商博客, CISA KEV, NVD, CVE.org, VulnCheck, Mercor Research, calif.io, The Register, Waymo, ARRL, 厂商与个人工程博客) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

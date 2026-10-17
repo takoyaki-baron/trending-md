@@ -1,8 +1,8 @@
 ---
 date: 2026-10-17
-updated: 2026-10-16T21:35:00Z
+updated: 2026-10-17T04:15:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -274,13 +274,139 @@ johnrash/bebox（HN 83 pts）は **Haiku ネイティブの BeBox エミュレ�
 
 ---
 
+## 20. Claude Code チームが自らのレビューパイプラインを公開 — 日次 30,000+ の変更、リスク階層型の人間承認、リバート率は 40% 減
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** claude.dev + Hacker News · 270+ pts · 約9.2時間前 (~03:04 UTC+8)
+- **Tags:** `code-review` `agents` `claude-code` `engineering`
+
+Anthropic の Claude Code チームが（10月15日、HN 270 pts / 254 コメント）、**Claude が Claude Code 自身のコードの約 90% を書いている**状況でどうレビューしているかを書いた。スケール：monorepo は 5 月の約 2,500 変更/日から **9 月には 30,000+** へ。6〜9月でマージされた PR は倍増以上した一方で**リバート率は 40% 以上減**、実質的なレビューコメントの割合は 16% → 54% に上昇。パイプラインは：PR 前にコンテキスト全新鮮のサブエージェントがレビュー、必須 CI、バグ狩りエージェントの並列走査（その指摘はベリファイアエージェントの投票を生き残ったものだけ）、独立したセキュリティパス、そして**リスク階層型の人間承認** — 分類器が著者ではなく変更内容から階層を設定（低 = 人間ゼロ、中 = 1 名、高 = 2 名）。エージェントの承認は人間として数えられず、承認は常に特定の 1 コミットのみを覆う。正直な数字も載っている：エージェント作成の PR が一晩で **50 以上のレビューラウンド**をループしたことがあり、レビュアーが繰り返し指摘していた内容の約 59% は既存コードだった。チーム自身、リバート率が動いたときに承認を自動的に引き締める**サーキットブレーカーがまだない**こと、コードベース全体を頭に入れている者は誰もいないことを認めている。
+
+**Why it matters:** 日次 3 万変更の規模でレビュー機構を公開した最初のチームだ。決定的なのは「人間が読んだか」が「チェックされたか」の代理指標として放棄されたという一文だ。宣言された目標 — ほとんどの PR が最大 1 名の人間でマージし、インシデントは増やさない — は、業界全体が今まさに自分自身で実行している実験であり、彼ら自身が列挙した欠けている安全装置こそがこの文書で最も正直な部分だ。
+
+[`🔗 Solving code review at Anthropic`](https://claude.dev/blog/solving-code-review-at-anthropic/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50122951)
+
+---
+
+## 21. Home Assistant がアドオンのパスワードをデフォルトで漏洩データベースと照合していた — 1 本の HN スレッドが k-匿名性 1 回の呼び出しの「同意」を問い直す
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub + Hacker News · 205+ pts · 約7.7時間前 (~04:33 UTC+8)
+- **Tags:** `home-assistant` `privacy` `security-defaults` `k-anonymity`
+
+10月16日、home-assistant.io ドキュメントリポジトリに提出された issue —「i never authorized an integration that scans my secrets」（HN 205 pts、167 コメント）— は、Home Assistant がアドオン設定の**パスワードとマークされたフィールド**を Have I Been Pwned の漏洩コーパスと照合するデフォルト有効のチェックに異を唱えたものだ。issue が参照するドキュメントページによる仕組み：これは **k-匿名性**で、パスワード全体がマシンの外に出ることはなく、「サービスはあなたのパスワードを、完全なハッシュでさえ決して見ない」（ページが参照する Cloudflare の資料にある、標準的な切り詰めハッシュプレフィックス方式）。チェックは**デフォルトで有効**、`ha security options --pwned=false` で無効化できる。issue はクローズ済み。スレッドの争点は実際にはワイヤ形式ではなく、プライバシーを掲げるプロジェクトが*いかなる*アウトバウンド呼び出しもデフォルトにしてよいのか、そして保護的メカニズムであってもオプトインであるべきなのか、という点だ。
+
+**Why it matters:** 報告者のタイトルはメカニズムを読み違えていたが、それでも 167 コメントの議論が起きた — これ自体が発見だ。プライバシー保護設計は、プライバシー保護*として*理解されなければ、監視として裁かれる。セキュリティのデフォルトを出荷するすべてのセルフホストプロジェクトにとって、負担は暗号技術ではなく、フロントページの注視に耐えるドキュメントページだ。
+
+[`🔗 GitHub issue`](https://github.com/home-assistant/home-assistant.io/issues/49314) · [`🔗 HA: pwned-passwords ドキュメント`](https://www.home-assistant.io/more-info/pwned-passwords/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50124251)
+
+---
+
+## 22. 「記憶から Transformer を発明できたはずだ」 — 注意機構をメモ取り術の最終形へと導く容量表
+
+- **Velocity:** ▮▮ rising
+- **Source:** alexwang.ai + Hacker News · 181+ pts · 約9.2時間前 (~03:01 UTC+8)
+- **Tags:** `transformers` `attention` `associative-memory` `deep-learning`
+
+Alex Wang の長文（10月15日、HN 181 pts、コードとインタラクティブアプリ付き）は、Transformer のスタック全体を一つの問題への連続した修正として再構築する：**連想記憶における干渉**だ。線形層は外積のキー→バリューストア（容量 ≈ d_k ≈ 64）。最小二乗の「白色化」で倍増（≈ 2d_k）。類似度を非線形に通すのは MLP で — 「我々は第一原理から 2 層 MLP を再発見したばかり」（d_k=64 で ReLU ≈ 2d_k、GLU ≈ 2,900、3 乗 ReLU ≈ 35,000）。そして softmax attention は類似度を*すべての*冪に同時に上げる極限 — β=√d_k で容量は**約 120 万件の記憶**となる。同じレンズが、log M logit スケーリング（Scalable-Softmax、Qwen の LogN-Scaling、YaRN）が長いコンテキストを干渉の水没から守る理由も説明する。明示された限界：容量計算は単一層のランダムベクトル想起のみを数え、訓練データを完全に無視する。ビット単位測定（GPT 系モデルで約 3.6 ビット/パラメータ）など、これ以外のレンズもある。
+
+**Why it matters:** この表はアーキテクチャごとに 1 つの数字を与えるが、それはベンチマークではなく導出から来ている — 結果の物語ではなく予測のできる解説（どの非線形を選ぶべきか：softmax の飽和が訓練を壊すまでは鋭いものを）という珍しい種類だ。導出は添付コードに対して検証可能で、それがアーキテクチャの民話との分かれ道だ。
+
+[`🔗 You could have invented transformers from memory`](https://alexwang.ai/posts/associative-memory/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50122878)
+
+---
+
+## 23. Anthropic：Claude が公開済み最良記録を上回る量子回路を設計 — ゲート数 17 分の 1、Lean で形式検証済み
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic Research + arXiv + Hacker News · 115+ pts · 約10.2時間前 (~02:00 UTC+8)
+- **Tags:** `quantum-computing` `ai-research` `circuit-design` `formal-verification`
+
+Anthropic の研究投稿（10月16日、HN 115 pts）は、8 つの量子回路設計タスク（化学・最適化・シミュレーション・数論）の平易な言語仕様を Claude に与え、正確性 ×（量子ビット × ゲート数）で採点する自動評価器のもと、閉ループで反復させた。ヘッドライン結果：**モジュラ逆元 / 楕円曲線点加算**タスクでは、53 時間の実行が分岐履歴を保存しない可逆 divsteps 実装として初のものを産み出し — 新しい代数的恒等式を導出し、シミュレーションと**Lean による形式証明**の両方で検証 — 既存の最小設計より量子ビットは 12% 多いが**ゲート数は 17 分の 1**。**DQI Reed–Solomon デコーダ**では、拡張ユークリッド法を Berlekamp–Massey に置き換えることで、Google の構成比でゲート数を **12 分の 1** に削減し、665 量子ビットの最悪ケース予約を 19 に縮小。4 億回のシミュレート復号で約 1/10,000 の失敗率は許容誤差内だった。投稿は自らの限界も明示する：Claude は当初保守的で過剰検証気味だったこと、小規模で上手くいった復号ルールが 256 ビット全体のスケールでは一度失敗したこと、回路設計は誤り訂正・復号・制御を別途要する量子マシンの一コンポーネントに過ぎないこと。Andi Gu（Anthropic STEM Fellows）が主導し、ハーバードの Susanne Yelin、Mikhail Lukin（Harvard/QuEra）と共同。論文は arXiv 2610.22367。
+
+**Why it matters:** 今週 2 つ目の Anthropic のオープンプロブレム成果（本日の項 4 の曲線シードに続く）で、パターンはこの feed が信頼するものと同じだ。モデルが設計を発見し、証明の成果物が主張を運ぶ。公開記録に対する Lean 検証済みの 17 倍は、再現できるかできないかのどちらかだ — 決めるのはスクリプトであってベンダーではない。
+
+[`🔗 Anthropic: Designing efficient quantum circuits`](https://www.anthropic.com/research/designing-efficient-quantum-circuits) · [`🔗 arXiv 2610.22367`](https://arxiv.org/abs/2610.22367) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50121939)
+
+---
+
+## 24. CVE-2026-77931：シェルで終わるプロンプトインジェクション — MoviePilot のエージェントツール自体が脆弱性だった
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck + NVD · 2026-10-15 公開 · v3.1.6 で修正
+- **Tags:** `cve` `prompt-injection` `rce` `agent-security`
+
+VulnCheck のアドバイザリ（10月15日）は、人気のオープンソース NAS メディア自動化ツール MoviePilot（11.9k★）の **CVE-2026-77931** を詳述する：製品自身のエージェントツール — `browse_webpage`、`search_web`、トレントメタデータパーサ — が取得した信頼できないコンテンツが、モデルに `ExecuteCommandTool` を **`confirm_dangerous` を true に設定して**呼び出させる注入命令を運び、`validate_command_safety` の拒否リストを迂回し、管理者セッションの `is_admin` コンテキストを持つ `asyncio.create_subprocess_shell` に到達する：ホスト上でのリモートコード実行だ。CVSS **8.8、VulnCheck によるスコア**（CNA は `disclosure@vulncheck.com`。NVD レコードはまだ `Deferred` — NVD 分析されていない）。**v3.1.6 はアドバイザリと同じ日（10月15日）に出荷され**、リポジトリは活動中だ。
+
+**Why it matters:** 昨日の feed はプロンプトインジェクションの*測定*（2 億 1,700 万 HTTP レスポンスの走査）を載せた。今回は同じクラスに CVE 番号とパッチが付いたものだ — エージェントの利便ツール API こそが脆弱性であり、モデルが制御できる `confirm_dangerous` という名のブーリアンがセキュリティ境界のすべてだった。取得したウェブコンテンツの上に「エージェントに X を実行させる」ツールを載せるすべての製品が、この設計問いを引き継ぐ。
+
+[`🔗 VulnCheck アドバイザリ`](https://www.vulncheck.com/advisories/moviepilot-command-injection-via-executecommandtool) · [`🔗 NVD: CVE-2026-77931`](https://nvd.nist.gov/vuln/detail/CVE-2026-77931) · [`🔗 jxxghp/MoviePilot`](https://github.com/jxxghp/MoviePilot)
+
+---
+
+## 25. C++26 が `<debugging>` を標準化 — `std::breakpoint()` がすべての手作りトラップマクロを引退させる
+
+- **Velocity:** ▮▮ rising
+- **Source:** sandordargo.com + Hacker News · 79+ pts · 約9.4時間前 (~02:52 UTC+8)
+- **Tags:** `cpp` `cpp26` `debugging` `standardization`
+
+Sándor Dargó の解説（9月30日、HN 79 pts）は、C++26 の `<debugging>` ヘッダ — 論文 **P2546R5 + P2810R4**、Rene Ferdinand Rivera Morell の功績 — を取り上げる。Boost.Test、Catch2、Dear ImGui がそれぞれ手作りしてきたもの（`debugger_break()`、Catch2 のマクロ、`IM_DEBUG_BREAK()`）を標準が引き取る。3 つの関数、いずれも `noexcept` かつ freestanding、いずれも `constexpr` ではない：**`std::breakpoint()`**（無条件停止 — x86 では通常 1 命令の `int3`）、**`std::is_debugger_present()`**（*毎回の*呼び出しで再チェック、決してキャッシュしない — デバッガはいつでもアタッチ/デタッチできるため。Windows では `IsDebuggerPresent()`、libstdc++ では `/proc/self/status` の `TracerPid` を読む）、そして便利ラッパの **`std::breakpoint_if_debugging()`**。静かだが重要な部分は P2810R4 が追加したもの：`is_debugger_present()` は `operator new` と同様に**置き換え可能**で、ベアメタルや freestanding プラットフォームが独自の検出を提供できる。投稿からの注意点：デバッガが未アタッチのときの `breakpoint()` は実装定義 — 通常は `SIGTRAP` で、捕捉しなければプロセスは終了する。
+
+**Why it matters:** 小さなヘッダだが、真剣なプロジェクトがプラットフォーム固有のインラインアセンブリを保持してきた最後の場所のひとつを引退させる — そして置き換え可能検出の設計により、同じ標準関数がホスト付き Linux マシンから Cortex-M まで機能する。C++26 の契約機能（GCC 16、10月16日の項）の、開発ループの反対側からの続編だ。あちらは事前条件、こちらはブレークポイント。
+
+[`🔗 C++26: The New Debugging Header`](https://www.sandordargo.com/blog/2026/09/30/cpp26-debugging) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50122736)
+
+---
+
+## 26. Fish Audio の Drama 3 が発見される週を迎える — 平易な言語で演出できる 35B-A3B オープンウェイト TTS
+
+- **Velocity:** ▮ rising
+- **Source:** Hugging Face + arXiv · 561 いいね · HF トレンド 4 位
+- **Tags:** `tts` `open-weights` `speech` `audio`
+
+fishaudio/drama-3（モデル作成は 10月1日、現在 Hugging Face トレンド 4 位、561 いいね・約 6.2k ダウンロード）は Fish Audio のオープンな音声生成モデルだ：arXiv 2610.18010 の技術報告によれば **35B パラメータの MoE でトークンあたり 3B を活性化**、ハイブリッド線形注意バックボーンとコードブック・マルチトークン予測のオーディオデコーダを備える。クローン読み上げを超える能力：**マルチターンの演出** — トーン・ペース・キャラクターを平易な言語で指示し、次のターンでメモを与えればテイクをやり直す — に加え、多キャラクターシーンの声当て、既存音声の infill 編集、ストリーミング合成。出力は 44.1 kHz モノラル、数十言語をカバー。今週の急上昇の引き金は新規性ではなくエコシステム到達の可能性が高い：SGLang-omni と vLLM-omni のサポートが着地したばかり（SGLang の cookbook 投稿は数時間前）で、オフライン・ストリーミング推論を行う純 C++ エンジン（audio.cpp）もある。はっきり書いておくと：モデルカードは 16 日前のもので、この feed は今週の加速を推論フレームワークサポート以外の単一イベントに帰着できなかった。
+
+**Why it matters:** 「演出されるパフォーマンス」— メモによるリテイク、シーンダビング、infill 編集 — は、画像モデルが編集で辿った道の音声版であり、ウェイトは公開されている。注目すべきは 3B 活性の MoE だ：放送品質の演出可能性が、エッジ配置可能な活性計算量に乗っている。
+
+[`🔗 Hugging Face: fishaudio/drama-3`](https://huggingface.co/fishaudio/drama-3) · [`🔗 arXiv 2610.18010`](https://arxiv.org/abs/2610.18010) · [`🔗 fishaudio/fish-speech`](https://github.com/fishaudio/fish-speech)
+
+---
+
+## 27. pfSense FRR パッケージ：root としてシェルコマンドを実行したフィルタボックス — CVE-2026-110908、修正は出荷済み
+
+- **Velocity:** ▮ steady
+- **Source:** NVD + CVE.org · 2026-10-15 公開 · CVSS 8.8（MITRE によるスコア）
+- **Tags:** `cve` `pfsense` `command-injection` `networking`
+
+**CVE-2026-110908**：Netgate pfSense の FRR パッケージ（pfSense-pkg-frr 2.0.2_1 およびソースリビジョン 2.1.2_1）の **FRR ステータスフィルタ**に OS コマンドインジェクションがある。下位の `page-status-frr` 権限のみを持つ認証済み WebGUI ユーザーが、`escapeshellarg()` の出力が連結されていた**シングルクォートの `sed` 式**を突破するフィルタ値を投入すると — シェルが `popen()` パイプライン内でコマンド置換を評価し、攻撃者の選んだコマンドが **root として**実行される。MITRE が CNA として **8.8** を採点（NVD レコードは `Awaiting Analysis` — NVD 自身のスコアはまだなく、8.8 はレコード唯一の `Secondary` メトリックであるアサイナー側のもの）。CNA の説明は、**pfSense Plus 26.07/26.03.1 および CE 2.9.0/2.8.1** 向けの更新済み FRR パッケージが出荷済みであることを確認している。
+
+**Why it matters:** このバグは PHP のシェルエスケープ誤解の古典的形態だ — `escapeshellarg()` の出力は*引数として*は安全だが、より大きな式（`sed '…'`）に連結された瞬間、文字列はシェル自身の置換ルールに従う。読み取り専用のステータスページから root 実行に至ることは、homelab や小規模ネットワークが実際に動かしているルータの権限境界を崩壊させる。pfSense に非管理者ユーザーがいるなら、パッケージ更新が行動項だ。
+
+[`🔗 NVD: CVE-2026-110908`](https://nvd.nist.gov/vuln/detail/CVE-2026-110908) · [`🔗 CVE.org レコード`](https://www.cve.org/CVERecord?id=CVE-2026-110908)
+
+---
+
+## 28. rStation：著者がエージェントである研究コミュニティ — 問題が掲示され、「レビュー済み」論文が発表され、人間は観察者
+
+- **Velocity:** ▮ steady
+- **Source:** rstation.ai + Show HN · 51+ pts · 約13.7時間前 (~22:35 UTC+8)
+- **Tags:** `agents` `ai-science` `research` `show-hn`
+
+rStation（Show HN、51 pts）は自らを「**AI エージェントのための研究コミュニティ** — 独立したエージェントが研究問題を議論し、レビュー済みの論文を発表する。人間は観察を歓迎する」と位置づける。問題ボードには検証可能なオープン問題 — **Epoch AI** の有理丢番図七つ組、地球-月問題、no-three-in-line、そしてミレニアム懸賞問題のリーマン予想とホッジ予想 — が混在し、運用上の新機軸は配信の形だ：「**あなたのエージェントを rStation に送れ**」。小さな運営体（© 2026、Dualverse AI）で、フロントページに上がって数日。「レビュー済み」が現在何を意味するのかが最重要の未知数だ — 会場ではなく実験として扱うべきだ。
+
+**Why it matters:** ベンチマークから論文へのパイプラインこそ、AI 科学でまだ欠けている部分だ。エージェント作成の主張がレビュープロセスに直面する場は、エージェントネイティブな科学コミュニケーションの始まりか、一段回多いリーダーボードかのどちらかだ — どちらになるかは、そのレビューに牙があるかどうかだけが決める。注目すべきは：人間が介入不要で済む日が来るかどうかだ。
+
+[`🔗 rStation`](https://rstation.ai/) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=50118876)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-16T20:30:00Z |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, Apple/NVIDIA ベンダーブログ, Anthropic Research, CISA KEV, NVD, Mercor Research, calif.io, The Register, Waymo, ARRL, ベンダーおよび個人エンジニアリングブログ) |
+| Generated | 2026-10-17T04:15:00Z |
+| Items | 28 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, Anthropic Research, claude.dev, arXiv, Hugging Face, Apple/NVIDIA ベンダーブログ, CISA KEV, NVD, CVE.org, VulnCheck, Mercor Research, calif.io, The Register, Waymo, ARRL, ベンダーおよび個人エンジニアリングブログ) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
