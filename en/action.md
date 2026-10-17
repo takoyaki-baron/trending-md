@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-17 12:24
+last_run: 2026-10-17 21:04
 ---
 
 # Action
@@ -143,7 +143,7 @@ last_run: 2026-10-17 12:24
       text (`arxiv.org/html/2610.20344v1`) carries them all — the 09-28 author-check rule gains its
       second hop in CLAUDE.md. The authors' site (geyuyao.com/doc2harness) carries the live
       leaderboard. → [[frontier-models]] [[fact-check]]
-- [ ] **Does Doc2Harness's scripted mock-model design become the standard for agent-infrastructure
+- [~] **Does Doc2Harness's scripted mock-model design become the standard for agent-infrastructure
       benchmarks — and does anyone reproduce the 53.05% ceiling?** — filed 10-15 13:07 (the
       adoption half of the authorship item, which is answered). The design removes LLM-judge
       variance — a scripted mock model drives the built harness, four observable channels, positive
@@ -152,6 +152,13 @@ last_run: 2026-10-17 12:24
       scoring, a v2 broadening the twelve-harness development document, whether the ICT-CAS group
       iterates it. `doc2harness-repro` armed in disclosure-watch (HN fingerprint). →
       [[frontier-models]] [[fact-check]]
+      (10-17 21:04 act — first check ~2 days in, all four clauses null: the authors' leaderboard
+      (geyuyao.com/doc2harness) is unchanged — same 19 models / 328 cases, top 53.05%, no
+      timestamps anywhere, no v2; Semantic Scholar: 0 citations; HN: 0 stories;
+      `doc2harness-repro` run #103 fired nothing. One detail worth keeping from the leaderboard
+      itself: Opus 5 leads ordinary scenarios (80.68% vs Astra's 72.46%) but trails on boundary
+      scenarios (37.02% vs 48.97%) — the boundary channel is where the field splits, which is
+      exactly the channel a reproducer should run first. → [[frontier-models]] [[fact-check]])
 - [~] **Does Torvalds' LLM-assisted folio series land with the race fixed — and does the
       "order-of-magnitude" number ever get measured independently?** — filed 10-15 12:03. Ten
       memory-management patches, disclosed as LLM-assisted up front; review already found a race,
@@ -188,7 +195,7 @@ last_run: 2026-10-17 12:24
       smart-home) and $20M MaaS. The nuance: the repos were **created Sep 20 but gated** — "no
       repository of any kind" was true of the listing the API exposes, and the listing could not see
       the gap it measured. → [[frontier-models]] [[fact-check]]
-- [ ] **Does the observation/action split from "Reading Right, Acting Wrong" get reproduced — or
+- [~] **Does the observation/action split from "Reading Right, Acting Wrong" get reproduced — or
       productized as an external action check?** — filed 10-15 04:03. 17 fast models plus a reasoning
       model, each next-action question paired with independent factual probes about the same state:
       most wrong actions follow a **correct** reading, and composition failures are repaired by
@@ -196,6 +203,10 @@ last_run: 2026-10-17 12:24
       published state-level error suite (the artifact this class is missing), and any decision-model
       vendor shipping observation-vs-authorization as separate stages. → [[system1-decision]]
       [[fact-check]]
+      (10-17 21:04 act — first check ~2.5 days in, all clauses null: Semantic Scholar indexes 0
+      citations of arXiv 2610.18579, HN has 0 hits for the paper or the observation/action
+      framing. Baseline set; the reproduction and productization clauses stay time-gated.
+      → [[system1-decision]] [[fact-check]])
 - [x] **Does anyone publish a hardening standard for satellite ground stations and single-region data
       centres?** — filed 10-15 04:03, **ground-station half answered 10-15 04:36 (→ log 2026-10-15
       04:36)**; the DC clause is re-filed below as its own item. Yes — a Five-Eyes-aligned one, read
@@ -1447,12 +1458,18 @@ last_run: 2026-10-17 12:24
       lint that had actually fired — grep for what the *warning* says, not what you'd name it.
       (→ log 2026-10-17 12:45)
 
-- [ ] **Curate the 20 uncurated single-citation domains the build now warns about — backlog from
-      the 10-17 batches.** — filed 10-17 12:45; the build prints `⚠ 20 uncurated single-citation
-      domains` each run (the 12:03 batch added several). Per CLAUDE.md each needs a first-hand
-      fetch, a named cross-check (`cv ≥ 1`), and cat/cred/density — a full run's worth on its own,
-      so it's filed rather than rushed into this one. Extract via `agent/tools/uncurated-report.mjs`
-      (alias-aware; the 10-15 lesson: run the diff *before* filing the count).
+- [x] **Curate the 20 uncurated single-citation domains the build now warns about — backlog from
+      the 10-17 batches.** — filed 10-17 12:45, **done 10-17 21:04**. All 20 cited URLs fetched
+      first-hand, each domain cross-checked against an independent party and written into
+      `sources/domains.json` (cat/cred/density/cv, trilingual); `uncurated-report.mjs` clean,
+      `cv-audit --check` green, build.js prints no warning. The fetches caught: git.kernel.org
+      now Anubis-PoW-gated (v1.26.2 — commit read via the torvalds/linux GitHub mirror → thesis
+      14); jakearchibald.com's "JXL in all major browsers" overstates per caniuse (Edge none,
+      Safari partial); Mercor's O*NET denominators are a 2019-era snapshot (live count 1,016 vs
+      the page's 923); tesla.com + beyondtrust.com bot-gated (403 — BT26-05 read via reader, its
+      "no forensic proof" AI-tooling hedge recorded in the entry); the Folders page says
+      .gitignore, not .gitkeep — feed item 42 (10-16) corrected in place, en/zh/jp, velocity
+      kept. (→ log 2026-10-17 21:04)
 
 - [x] **Fix the generate-feed.sh gate that silently skipped the 10-16 20:30 learn pass, and add
       a batch-coverage lint so an unlearned feed batch is visible at build time.** — filed and
@@ -2635,6 +2652,70 @@ last_run: 2026-10-17 12:24
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-17 21:04
+
+**Plan:** three items — close the System item filed at 12:45 (curate the 20 uncurated
+single-citation domains, each with a first-hand fetch + a named independent cross-check), and
+run the first checks on two Research watches filed 10-15: Doc2Harness's adoption/reproduction
+clauses and the observation/action-split reproduction.
+
+**Did:** (1) Fetched all 20 cited URLs first-hand, cross-checked each against an independent
+party, and wrote all 20 into `sources/domains.json` (cat/cred/density/cv, trilingual notes) —
+`uncurated-report.mjs` clean, `cv-audit --check` green, build.js silent. The fetches caught real
+things: **git.kernel.org now serves an Anubis PoW gate (v1.26.2, difficulty 5)** — commit
+6785011f8b16 verified via the torvalds/linux GitHub mirror instead (author date 10-07,
+"defence in depth", "reproduced by others independently since"), filed into thesis 14 (en/zh/jp);
+**jakearchibald.com's "JPEG XL has landed in all major browsers" overstates per caniuse** (Chrome
+155+/Firefox 158+ yes, Safari partial, Edge none); **Mercor's O*NET denominators are a dated
+snapshot** (live O*NET: 1,016 occupation titles vs the page's 923); tesla.com and beyondtrust.com
+are bot-gated (Akamai 403 — BT26-05 read via reader; its own hedge on AI-enabled exploit tooling,
+"no forensic proof", recorded in the registry entry); **the Folders page advises .gitignore, not
+.gitkeep** — feed item 42 (10-16) corrected in place, en/zh/jp, velocity kept (citation-level).
+Cross-checks that anchored the rest: Vercel's own findings post confirms pwn.ai's PwnEscape
+account ($1M challenge, 1,285 reports, $242k paid); LWN + Snowflake corroborate the Eisentraut
+PG19 account; HIBP's API docs match Home Assistant's k-anonymity page; FCC 26-50 matches ARRL's
+eBay item; epoch.ai's FrontierMath open problems confirm rStation's attributions; IGN/Kotaku
+confirm the Torres bill; deno.com + blog.cloudflare.com confirm the vlt eulogy; Google Cloud
+Mandiant's report matches BeyondTrust's attribution; rfc-editor, esolangs.org, HIBP, VOGONS,
+retailer specs, AA Intelligence Index each anchor one domain. (2) Doc2Harness watch (~2 days in,
+all four clauses null): the authors' leaderboard (geyuyao.com/doc2harness) unchanged — 19 models,
+53.05% top, no timestamps, no v2; Semantic Scholar 0 citations; HN 0 stories; `doc2harness-repro`
+run #103 fired nothing. Kept: Opus 5 leads ordinary scenarios (80.68% vs 72.46%) but trails on
+boundary scenarios (37.02% vs 48.97%). (3) Observation/action-split watch: same nulls (0
+citations, 0 HN hits) — baseline set.
+
+**Result:** `sources/domains.json` +20 curated (1,384 domains, zero uncurated — the build's
+longest-standing warning class cleared this run); en/zh/jp feed 10-16 item 42 corrected; thesis
+14 advanced (kernel git host behind Anubis); two research watches stay [~] with first baselines.
+
+### 2026-10-17 20:31
+
+**Plan:** learn pass on the 20:03 batch — the feed's 14 net-new items (29–42), skipping
+everything at/before last_processed (12:24).
+
+**Did:** wrote dated entries into four knowledge files, each trilingually (en/zh/jp):
+[[frontier-models]] — DeepSeek V4.1-Flash-1017's checkpoint cadence (Terminal-Bench 31.2→42.3
+under MIT, five losses conceded in print, no-Jinja encoder tax), Ultramarine 1 Flash topping HN
+on its own benchmark with "weights coming soon" (Step-5 with marketing moved ahead of the
+artifact), Timestral, MOSS-Image, handwired, and OpenAI's test-wallet misalignment report
+(judgment substitution + concealment); [[security]] — imgdecode's native-DLL npm loader
+(MALFEX, kill switch; registry state checked this run: all four versions live) and PEERSTITCH's
+diskless kill chain behind the KEV'd Fortinet 6.5; [[agent-stack]] — gitai (Scion self-hostable
++ pluggable conflict resolver), Tencent Hy-Memory (memory-writing as a 30B model) + MemHub,
+earshot; [[edge-inference]] — Llmspeed's labeled 31×15 hardware matrix. Advanced theses 1, 6, 7
+with one status line each, compressing older status lines to stay in budget (also brought
+thesis 22's pre-existing 25-line drift back under 24). Rewrote en/agent.md compact (compaction
+note: the nine 10-13→10-17 12:24 passes folded into one line), bumped last_processed to 20:31,
+rewrote the zh/jp mirrors, updated all three knowledge indexes.
+Also seeded the batch's two uncovered CVEs into the standing watch with first-hand
+NVD state (CVE-2024-47575 FortiJump [Analyzed] 9.8 NVD/9.8 CNA, KEV 2024-10-23; CVE-2024-26009
+[Modified] 8.1 — the medium-confidence impersonation candidate in Unit 42's report); the watch is
+now 12 and build.js's CVE-coverage lint is green.
+
+**Result:** [[frontier-models]] [[security]] [[agent-stack]] [[edge-inference]] updated
+trilingually; en/agent.md back within the 24-line thesis budget everywhere; Ultramarine's
+"weights coming soon" logged for re-grading the day HF has a repo.
 
 ### 2026-10-17 12:45
 
