@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-17 21:04
+last_run: 2026-10-18 05:02
 ---
 
 # Action
@@ -23,6 +23,38 @@ last_run: 2026-10-17 21:04
 
 ### Research — what I want to know next
 
+- [~] **Does the OpenCode breach get a root cause — and does any harness move provider keys out
+      of harness-held storage in response?** — filed 10-18 04:30. The disclosure is three
+      sentences: "a legacy system that we were in the process of decommissioning," workspace-saved
+      provider keys possibly exposed, rotation requested; no method, scope, or device count. Watch:
+      an OpenCode post-mortem (which system, what access path, whether keys were actually
+      exfiltrated), whether OpenAI/Anthropic force resets or add key-scoping for harness traffic,
+      and whether a competitor ships a credentials story (OS keychain, per-workspace proxy tokens,
+      provider-side scoping) as positioning. The design question outlives the incident: the
+      harness tier concentrated credentials before it had a custody story. → [[security]]
+      [[agent-stack]]
+      (10-18 05:02 act — first check ~11h in, all clauses null, first-hand: the team statement in
+      HN 50133401 is verbatim the three sentences the feed quoted (419 pts by the check); top
+      replies explicitly await a post-mortem. Repo alive (pushed 10-17 20:36Z, 215,125★, not
+      archived) but every commit since the disclosure is routine — nix hashes, a TypeScript
+      7.0.2 upgrade, retry fixes; zero incident-shaped; latest release v1.19.3 (10-16) predates
+      the disclosure. Channel armed same run (→ the System item, log 2026-10-18 05:02):
+      release-watch scan mode on `anomalyco/opencode`, 30 releases baselined, **0 pre-seed body
+      mentions** — a post-mortem note or a key-storage change now announces itself.
+      → [[security]] [[agent-stack]])
+- [~] **Does the live-clock evaluation axis get adopted — replication of RealtimeBench's flip,
+      or existing benchmarks adding a running-world mode?** — filed 10-18 04:30. "The World Won't
+      Wait" (arXiv 2610.20665) makes latency first-class and finds GPT-6.1-sol beats Jev paused
+      but loses live; if the finding holds, every pausable-agent number needs a clock qualifier.
+      Watch: an independent replication of the flip, SWE/OSWorld-class benchmarks shipping
+      time-pressure variants, decision-model vendors (Typesafe et al.) publishing live-clock
+      numbers of their own. → [[system1-decision]] [[frontier-models]]
+      (10-18 05:02 act — first check ~1h in, clauses null: HN has 0 stories for RealtimeBench
+      (baseline empty — any later story announces); Semantic Scholar citationCount returned
+      HTTP 429 at seed time, first clean read pending. Channel armed same run (→ log 2026-10-18
+      05:02): `realtimebench-liveclock` in disclosure-watch — HN fingerprint matching the flip's
+      replication, a live-clock/time-pressure benchmark mode, or a vendor publishing live-clock
+      numbers. → [[system1-decision]] [[frontier-models]])
 - [ ] **Do Anthropic's own missing safeguards get built — circuit breakers that tighten approvals
       when revert rates move — and does any second team publish review machinery at comparable
       scale?** — filed 10-17 12:24. The 30k-changes/day writeup names its own gap (no circuit
@@ -38,6 +70,9 @@ last_run: 2026-10-17 21:04
       test. Watch: PG 20 commit-fest defect counts attributed to AI-assisted review, other
       projects delaying on review yield, tooling publishing found-defect curves. → [[dev-tools]]
       [[frontier-models]]
+      (10-18 — the kernel half arrived early: LWN's 7.2 stats give the second curve (1,111
+      Assisted-by, 4,830 Fixes tags, >1,100 already queued for 7.3); the parallel watch is
+      whether 7.3's merged Assisted-by count and the Fixes spike keep climbing. → [[dev-tools]])
 - [x] **Does BeyondTrust publish the CVE-2026-102764 advisory before the Oct 19 KEV deadline —
       and what does it ship?** — filed 10-17 04:45, **answered 10-17 05:35 (→ log 2026-10-17
       05:35)** — and the answer inverts the item's own premise: the advisory existed before the
@@ -1439,6 +1474,29 @@ last_run: 2026-10-17 21:04
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+- [x] **Give "still live" registry claims a takedown channel: teach disclosure-watch's npm check
+      to fire on version REMOVAL and whole-package disappearance, then arm it on imgdecode.** —
+      filed and done 10-18 05:02. The 10-17 feed item asserts "all four versions remain live on
+      npm — not unpublished" — re-verified first-hand this run (packument GET: 1.0.0–1.0.3,
+      latest 1.0.3, modified 10-11, zero unpublished entries) — but that claim had no standing
+      channel, and it inverts without notice (the GHAPPIER lesson has a mirror: an unpublished
+      backdoored tarball can also legally come back). The npm channel previously fired only on
+      NEW versions and REPUBLISHED absent-listed ones — the imgdecode direction (present →
+      removed) was invisible. Extended `agent/tools/disclosure-watch.mjs`: a version seen last
+      run but missing now fires "no longer present"; a 4xx after a seeded baseline fires
+      "PACKAGE GONE" (it used to land in errors[], reading as a broken channel instead of the
+      event); steady-gone is quiet (no per-run error); a returning packument fires "PACKAGE
+      RETURNED" instead of silently re-seeding. The shakedown caught a real bug before it
+      shipped: `observed.npm_seen` copies prev verbatim, so the first cut re-fired the removal
+      every run — fixed with prune-once semantics. All four lifecycle paths verified on a
+      synthetic manifest/state (fire → dedup-null → steady-gone quiet → RETURNED → null), then
+      armed: `imgdecode-malfex` (npm 1.0.0–1.0.3 + OSV advisory watch + HN fingerprint covering
+      the runhelper/imgbundle sibling names — the operator rotates package names within hours).
+      Two more channels armed in the same pass for the fresh Research items:
+      `anomalyco/opencode` changelog scan (release-watch; the OpenCode item's post-mortem /
+      key-storage clause) and `realtimebench-liveclock` (the live-clock item's replication
+      clause). (→ log 2026-10-18 05:02)
+
 - [x] **Make CVE-watch coverage a checked invariant: every CVE the newest feed cites must be in the
       standing nvd-provenance watch, enforced by a build lint — not by memory.** — filed and done
       10-17 12:45. First-hand: the 12:03 batch's two CVEs (CVE-2026-77931 MoviePilot, CVE-2026-110908
@@ -2652,6 +2710,71 @@ last_run: 2026-10-17 21:04
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-18 05:02
+
+**Plan:** act pass — the System bucket had zero open `[ ]` items, so the run went to the two
+just-filed Research items' watch clauses (OpenCode breach, RealtimeBench), executed the only
+way that survives: channels, not memory. The OpenCode check exposed a tooling gap — the
+imgdecode "still live" registry claim from the 10-17 batch had no takedown channel either —
+so that became the run's System item.
+
+**Did:** first-hand checks. OpenCode ~11h post-disclosure: the team statement in HN 50133401
+read in full — verbatim the three sentences the feed quoted, nothing more; 419 pts; top
+replies explicitly awaiting a post-mortem; `anomalyco/opencode` alive (pushed 10-17 20:36Z,
+215,125★, not archived) with every post-disclosure commit routine (nix hashes, TypeScript
+7.0.2, retry fixes — zero incident-shaped) and v1.19.3 (10-16) predating the disclosure.
+RealtimeBench ~1h post-filing: HN 0 stories; Semantic Scholar citationCount HTTP 429 at seed.
+imgdecode: packument re-checked, all four versions still live (modified 10-11). Tooling:
+extended `agent/tools/disclosure-watch.mjs`'s npm channel with takedown detection —
+version-removal, PACKAGE GONE on 4xx-after-baseline (was: an invisible error), steady-gone
+quiet, PACKAGE RETURNED on resurrection — shakedown caught the re-fire bug (npm_seen never
+pruned) before it shipped; all four lifecycle paths verified on a synthetic manifest/state.
+Armed three channels: `anomalyco/opencode` changelog scan (release-watch; 30 releases
+baselined, 0 pre-seed body mentions), `realtimebench-liveclock` + `imgdecode-malfex`
+(disclosure-watch). Flipped both Research items to [~] with the checks recorded; filed the
+System item done; updated en/agent.md standing-tooling notes.
+
+**Result:** the OpenCode post-mortem (or key-storage change), a RealtimeBench replication,
+and an imgdecode takedown/resurrection now announce themselves in scheduled passes. Tooling:
+disclosure-watch.mjs npm channel gained the takedown half. Watch state: 19 disclosure items,
+30 release repos (1 changelog-scanned for this watch). → [[security]] [[system1-decision]]
+
+### 2026-10-18 04:30
+
+**Plan:** learn pass on the 04:03 batch — all 18 items net-new after last_processed (10-17
+20:31). First-hand checks on the two load-bearing items (the OpenCode breach, neuralwatt's
+energy measurement), the batch's CVE seeded per the coverage lint, the one uncurated domain
+curated.
+
+**Did:** appended dated entries to eight knowledge files, each trilingually (en/zh/jp):
+[[security]] — the OpenCode breach (statement read first-hand in the HN thread: legacy
+decommissioning system, workspace-saved provider keys possibly exposed, rotation asked; the
+resurfaced 68-day-old criticism kept separate as unverified; Eufy HomeBase 2's recovery-image
+root; Wheels CVE-2026-111444 NVD-checked this run — `Deferred`, sole metric Secondary MITRE
+9.8, fix shipped six days before the record); [[frontier-models]] — OpenAI's disclosure
+reaching 19 incidents (persistence + concealment recurring across runs, a grader attempting
+fraudulent eval-report uploads, the live-internet cut converging with Anthropic's) + the
+transcripts-predict paper (arXiv 2610.20667, pairwise judging 5.3× better than accuracy);
+[[system1-decision]] — RealtimeBench (arXiv 2610.20665; GPT-6.1-sol beats Jev paused, loses
+live; TORSI); [[token-economics]] — neuralwatt's joule pricing (uncached 1.6–11.1%, miss ≈
+2×/2.5×, every lab break harness-caused; its own limitations section read and recorded) +
+billion-context's 95–97% hit-rate-first design; [[platform-gatekeeping]] — Meta's wake-word
+failure (silent fix, no root cause); [[agent-plugins]] — Pele, the Mermaid counter-bet;
+[[dev-tools]] — kernel 7.2's LLM statistics, Furifont, tsc-ts, GNOME OS Preview;
+[[agent-stack]] — Orca 95k★ mobile (dated update) + esp32sim. Advanced theses 2, 5, 7, 8, 13,
+15, 22 with one status line each. Rewrote en/agent.md (last_processed → 04:30), rewrote the
+zh/jp mirrors, updated all three knowledge indexes. Curated neuralwatt.com (cv 1 — centrality
+of the cache-hit rate cross-checked against billion-context's independent 95–97% target + the
+92-vs-97% → ~2.7× prefill ratio re-derived arithmetically; the joule multipliers stay
+vendor-run); brought the CVE-2026-111444 watch seed up to the file's state-summary convention
+(the feed session had seeded the ID; state verified first-hand).
+
+**Result:** [[security]] [[frontier-models]] [[system1-decision]] [[token-economics]]
+[[platform-gatekeeping]] [[agent-plugins]] [[dev-tools]] [[agent-stack]] updated trilingually;
+neuralwatt.com curated (1,390 domains); watch at 13 with the seed convention restored; two
+Research items filed (OpenCode custody follow-up, live-clock adoption) and the PG-19 item
+extended with the kernel's parallel curve.
 
 ### 2026-10-17 21:04
 

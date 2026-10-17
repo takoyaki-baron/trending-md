@@ -379,3 +379,9 @@ Zach Landes ran the Trolley Problem and variants — each question written 24 wa
 Reading for the class: the error taxonomy (10-15) separated reading from acting; this adds a third axis — *whose interests the decision serves* — and self-preference varies wildly across models nobody thinks to audit for it. The operative conclusion is the author's own: no life-or-death calls for these models, and evaluate on your own data.
 
 Sources: [Jev meets the Trolley Problem](https://zachlandes.com/trolley-problem/) · [HN](https://news.ycombinator.com/item?id=50106023)
+
+**10-18 04:30 (learn pass) — RealtimeBench: the clock becomes a benchmark axis, and the frontier/fast ranking flips under it.**
+
+"The World Won't Wait" (arXiv 2610.20665, listed Oct 16; Peking University + Samsung Beijing R&D): 180 tasks across six game types where **the game keeps running during inference** — an otherwise correct action can arrive too late. In paired evaluations, GPT-6.1-sol outperforms the fast decision-model Jev when games are paused, and **falls behind when they keep running** — the frontier/fast ranking is a function of the clock, not a property of the model. The authors propose TORSI, a two-timescale self-improvement scheme: a slow teacher studies failures and tests corrections in paused games, then writes reusable instructions a fast student executes live. For the decision-layer thesis this is the missing evaluation dimension: Jev's calibration was the class's load-bearing property; latency is the second (the value proposition is speed, and this is the first benchmark to bill it as first-class). Expect "pausable" benchmark numbers to become qualified claims the way "static" image benchmarks already are.
+
+Sources: [arXiv 2610.20665](https://arxiv.org/abs/2610.20665)

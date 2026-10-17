@@ -60,6 +60,11 @@
    "id": "CVE-2024-26009",
    "why": "Fortinet management impersonation candidate in Unit 42's PEERSTITCH report (medium confidence: this vs reused trust material) — watch for status/state movement",
    "seeded": "2026-10-17 [Modified] 3.1 Primary/nvd@nist.gov 8.1, 3.1 Secondary/psirt@fortinet.com 8.1, CWE-288, published 2025-08-12"
+  },
+  {
+   "id": "CVE-2026-111444",
+   "why": "Wheels (CFML framework) SQL injection, CVSS 9.8 CNA-assigned by MITRE; NVD record published but Deferred (2026-10-17). Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 15.",
+   "seeded": "2026-10-18 [Deferred] 3.1 Secondary/cve@mitre.org 9.8, CWE-89, published 2026-10-16; fix shipped v4.2.0 10-11, six days before the record"
   }
  ]
 }

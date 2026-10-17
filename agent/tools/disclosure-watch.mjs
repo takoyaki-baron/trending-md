@@ -168,6 +168,11 @@ for (const item of manifest.watch) {
   //    a NEW version fires (publishing resumed — possibly another campaign), and a version
   //    listed in `npm_absent_versions` reappearing fires as REPUBLISHED (the registry has no
   //    republish guard, so an unpublished backdoored tarball can legally come back).
+  //    Takedown half added 2026-10-18 (imgdecode case): the watched package's versions are
+  //    PRESENT, so the event worth catching is their REMOVAL — a version seen last run but
+  //    missing from this packument fires as no-longer-present, and a whole-packument 404
+  //    after a seeded baseline fires as PACKAGE GONE (a plain 404 used to land in errors[],
+  //    where a takedown would read as a broken channel rather than the event).
   if (item.npm_package) {
     try {
       const url = 'https://registry.npmjs.org/' + encodeURIComponent(item.npm_package);
@@ -175,6 +180,23 @@ for (const item of manifest.watch) {
       const versions = Object.keys(d.versions ?? {});
       const latest = d['dist-tags']?.latest ?? '?';
       const absent = item.npm_absent_versions ?? [];
+      if (prev.npm_gone) {
+        // PACKAGE RETURNED: the packument resolves again after a gone run — npm has no
+        // republish guard, so a vanished backdoored package legally comes back (the flag
+        // replaces the silently-re-seeded baseline the empty-prev gate would otherwise record).
+        changes.push(`${item.id} npm: PACKAGE RETURNED (latest ${latest}, versions ${versions.join(', ') || 'none'}) https://www.npmjs.com/package/${item.npm_package}`);
+      }
+      observed.npm_gone = false;
+      if ((prev.npm_seen ?? []).length) {
+        const gone = (prev.npm_seen ?? []).filter((v) => !versions.includes(v));
+        if (gone.length) {
+          changes.push(`${item.id} npm: ${gone.join(', ')} no longer present (unpublished/removed) — latest is now ${latest} https://www.npmjs.com/package/${item.npm_package}`);
+          // prune once announced — else the same ghost re-fires every run (found in the
+          // 10-18 shakedown: observed.npm_seen copies prev verbatim, so a version absent
+          // from the packument stayed in state forever)
+          observed.npm_seen = observed.npm_seen.filter((v) => !gone.includes(v));
+        }
+      }
       for (const v of versions) {
         if (observed.npm_seen.includes(v)) continue;
         if ((prev.npm_seen ?? []).length) {
@@ -187,7 +209,16 @@ for (const item of manifest.watch) {
         observed.npm_seen.push(v);
       }
     } catch (err) {
-      errors.push(`${item.id}/npm: ${String(err.message || err).split('\n')[0]}`);
+      const status = /^(4\d\d)\s/.exec(String(err.message || err));
+      if (status && ((prev.npm_seen ?? []).length || prev.npm_gone)) {
+        if ((prev.npm_seen ?? []).length) {
+          changes.push(`${item.id} npm: PACKAGE GONE (${status[1]}) — was present with versions ${(prev.npm_seen ?? []).join(', ')} https://www.npmjs.com/package/${item.npm_package}`);
+          observed.npm_seen = []; // pruned once announced; a returning packument is the next event
+        }
+        observed.npm_gone = true; // steady state: later 404s stay quiet instead of erroring per run
+      } else {
+        errors.push(`${item.id}/npm: ${String(err.message || err).split('\n')[0]}`);
+      }
     }
   }
 

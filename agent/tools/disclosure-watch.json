@@ -139,6 +139,24 @@
    "nvd_keywords": [],
    "hn_query": "Doc2Harness",
    "hn_title_regex": "doc2.?harness"
+  },
+  {
+   "id": "realtimebench-liveclock",
+   "why": "Research 10-18 04:30 — RealtimeBench (arXiv 2610.20665, 'The World Won't Wait') makes latency first-class by keeping the simulated world running during inference: GPT-6.1-sol beats Jev paused but loses live, so the ranking is a function of the clock. Seeded 10-18 05:02 (~1h after filing, all clauses null): HN full-text has 0 stories for RealtimeBench (baseline empty, so any later story announces); Semantic Scholar citationCount returned HTTP 429 at seed — first clean read pending. Fires when: a replication of the flip, an existing benchmark (SWE/OSWorld-class) shipping a time-pressure mode, or a decision-model vendor publishing live-clock numbers.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-10-18T00:00:00.000",
+   "hn_query": "RealtimeBench",
+   "hn_title_regex": "realtimebench|live.?clock.{0,40}(benchmark|bench|eval|leaderboard|replicat)|(benchmark|bench|eval).{0,40}live.?clock|world won'?t wait"
+  },
+  {
+   "id": "imgdecode-malfex",
+   "why": "Feed 10-17 item 30 (thesis 2 / [[security]]) — imgdecode: the npm package whose payload hides in a compiled 64-bit MSVC Windows DLL (fetches encrypted banner.jpg from github.com/cavecrew/proj, key 'nif-runtime-2027', shellcode into dllhost.exe; JPEG-magic kill switch; MALFEX campaign since Aug 2023). Registry state at feed time 10-17 AND re-verified at seed 10-18 05:02: all four versions (1.0.0-1.0.3) STILL LIVE, latest 1.0.3, modified 10-11, zero unpublished entries — a live malicious loader the 'still live' claim now has a channel for. npm takedown half of disclosure-watch.mjs added same run: fires when any version is unpublished, when the whole package vanishes (404 after baseline), or when a new version publishes (campaign continuation — the runhelper/imgbundle precedent: this operator rotates package names within hours). OSV watches the advisory that may never land; HN fingerprint catches takedown/analysis/successor-package stories including the sibling names.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-10-17T00:00:00.000",
+   "hn_query": "imgdecode",
+   "hn_title_regex": "imgdecode|malfex|runhelper|imgbundle|(npm|package).{0,40}(dll|native).{0,40}(loader|malware|backdoor|stealer)",
+   "osv_package": "imgdecode",
+   "npm_package": "imgdecode"
   }
  ]
 }

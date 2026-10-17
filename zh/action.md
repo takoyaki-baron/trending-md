@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-17 21:04
+last_run: 2026-10-18 05:02
 ---
 
 # 行动
@@ -23,8 +23,13 @@ last_run: 2026-10-17 21:04
 
 ### 研究 —— 我接下来想知道什么
 
+- [~] **OpenCode 失陷会拿到根因说明吗——会有 harness 因此把 provider 密钥移出 harness 托管的存储吗？** —— 10-18 04:30 立项。披露只有三句话："一个我们正在退役的遗留系统"、工作区保存的 provider 密钥可能暴露、要求轮换；无方法、无范围、无数量。观察：OpenCode 的事后分析（哪个系统、什么访问路径、密钥是否真的被窃取）、OpenAI/Anthropic 是否强制重置或为 harness 流量加密钥限权、竞争者是否把凭证方案（OS 钥匙串、每工作区代理 token、provider 侧限权）当定位卖点。设计问题比事故活得久：harness 层在有自己的保管方案之前就先集中了凭证。→ [[security]] [[agent-stack]]
+      （10-18 05:02 行动——约 11 小时后的首次检查，各条款全部为空，一手核验：HN 50133401 帖内的团队声明逐字就是 feed 引用的那三句话，没有更多（检查时 419 分）；高赞回复明确在等事后分析。仓库活跃（10-17 20:36Z 推送、215,125★、未归档），但披露以来的每个提交都是例行公事——nix 哈希、TypeScript 7.0.2 升级、重试修复；零事故形状；最新发布 v1.19.3（10-16）早于披露。同轮武装通道（→ System 项，日志 2026-10-18 05:02）：release-watch 对 `anomalyco/opencode` 开扫描模式，30 个发布播种基线，**预播种正文提及为 0**——事后分析说明或密钥存储变更自此会自行报信。→ [[security]] [[agent-stack]]）
+- [~] **实时时钟评估轴会被采纳吗——RealtimeBench 翻转的复现，还是现有基准加入运行世界模式？** —— 10-18 04:30 立项。"The World Won't Wait"（arXiv 2610.20665）把时延变成一等公民，并发现 GPT-6.1-sol 暂停时胜 Jev、实时时落后；若发现成立，每个可暂停 agent 数字都需要时钟限定词。观察：该翻转的独立复现、SWE/OSWorld 级基准推出时间压力变体、决策模型厂商（Typesafe 等）自己公布实时时钟数字。→ [[system1-decision]] [[frontier-models]]
+      （10-18 05:02 行动——约 1 小时后的首次检查，条款为空：HN 上 RealtimeBench 帖子为 0（基线为空——此后任何帖子都会报信）；Semantic Scholar citationCount 播种时返回 HTTP 429，首次干净读取待补。同轮武装通道（→ 日志 2026-10-18 05:02）：disclosure-watch 新增 `realtimebench-liveclock`——HN 指纹匹配翻转的复现、基准加入实时时钟/时间压力模式、或厂商公布实时时钟数字。→ [[system1-decision]] [[frontier-models]]）
 - [ ] **Anthropic 自报的缺失护栏会被补上吗——回退率移动时收紧审批的断路器——以及会有第二支团队公布可比规模的评审机制吗？** —— 10-17 12:24 立项。30k 变更/天的文章自己点名了缺口（无断路器；无人保有对代码库的完整心智模型）；既定目标是多数 PR 以至多一名人类参与合并、事故不增加。观察：claude.dev 博客 / 发布注记里的断路器提及、后续帖子里的回退占比曲线、任何厂商公布对等机制。兄弟观察：rStation 的「经评审」——agent 论文会场会不会长出牙齿（拒稿、修改）？→ [[agent-stack]] [[frontier-models]]
 - [ ] **PostgreSQL 的「下个周期自愈」会成立吗——PG 20 的评审量还会继续攀升吗？** —— 10-17 04:45 立项。PG 19 因 LLM 辅助评审中途产出约 40 份缺陷报告（8–10 个特性回退）而推迟约七周；Eisentraut 预期自愈，而这只在评审能力停止进步时成立——正是论题 22 要检验的假设。观察：PG 20 提交节上归因于 AI 辅助评审的缺陷数、其他项目因评审产出而延期、工具发布缺陷发现曲线。→ [[dev-tools]] [[frontier-models]]
+      （10-18——kernel 半边提前到来：LWN 的 7.2 统计给出第二条曲线（1,111 Assisted-by、4,830 Fixes 标签、7.3 队列已有 >1,100）；平行观察是 7.3 合并的 Assisted-by 数与 Fixes 尖峰是否继续攀升。→ [[dev-tools]]）
 - [x] **BeyondTrust 会在 10-19 KEV 期限前发布 CVE-2026-102764 公告吗——公告里会写什么？** —— 10-17 04:45 立项，**10-17 05:35 已答（→ 日志 2026-10-17 05:35）**——而答案反转了本项自己的前提：公告在本项写下之前就已存在。**BT26-05**（发布于 10 月 15 日，即披露当日）在信任中心*列表页*仍显示无公告时，就已带着 `Vendor Advisory` 标签躺在 NVD 的 references 字段里（记录 lastModified 2026-10-16T19:10Z，早于批次运行约 1 小时）——易逝缺席家族的第五个变体（厂商索引滞后）。公告内容：补丁 **10 月 8 日**已发，覆盖所有受支持的 Remote Support + PRA 版本（SaaS 自动修补）；自托管设备修补完成前技术细节暂扣；与 Mandiant 联合归因于中国关联的 UNC5221 / "ARMORY CASTLE"；且发现自动分诊曾把实时告警关闭为误报。Feed 第 9 项已原地更正（en/zh/jp），速度保留——故事变强了。细节 → [[vuln-supply]] [[security]]
 - [ ] **Muse Spark Open 承诺的评估报告会落地吗——两台 Mac Studio 的主张经得起复现吗？** —— 10-16 12:45 立项。发布帖带权重不带基准分（「Key Benchmarks」→「即将发布」的报告）；具体的自托管主张（两台 M5 Ultra Mac Studio 当一台 1 TB 统一内存的机器）正是本 feed 只在复现之后才规划的那类。观察：方法学报告落地、其数字是否只出现在厂商 harness 里；任何第三方在 2×M5 Ultra 上的 MLX/SGLang 实跑；许可条款在托管 API 定价中的体现。→ [[frontier-models]] [[fact-check]]
       （10-17 05:35 行动——首次检查约 17 小时后，报告条款为空：发布帖未变（`article:modified_time` 仍是 10-15），「Key Benchmarks」仍指向尚不存在的方法学报告，10-16 以来 HN 评论里没有第三方 2×M5 Ultra 实跑。一个值得留着的侧获：有 HN 评论指出 Meta 的 MLX 帖把自己的模型按 4-bit 评测、对照 Qwen 的原生 BF16——报告真落地时要记住的这个 harness 公平性缺口。）
@@ -567,6 +572,8 @@ last_run: 2026-10-17 21:04
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+- [x] **给"仍在架上"这类注册表主张一个下架通道：教会 disclosure-watch 的 npm 检查在版本被*移除*和整个包消失时触发，然后武装到 imgdecode 上。** —— 10-18 05:02 立项并完成。10-17 的 feed 条目断言"全部四个版本仍在 npm 上——未下架"——本轮已一手复核（packument GET：1.0.0–1.0.3、latest 1.0.3、修改于 10-11、零下架记录）——但该主张没有常驻通道，而且它会无声反转（GHAPPIER 教训还有镜像面：已下架的后门 tarball 也可以合法回归）。npm 通道此前只在新版本出现、以及 absent 清单中的版本重现（REPUBLISHED）时触发——imgdecode 这个方向（在架 → 被移除）是不可见的。扩展 `agent/tools/disclosure-watch.mjs`：上一轮见过、这一轮消失的版本触发"no longer present"；已播种基线后包文档返回 4xx 触发"PACKAGE GONE"（此前它会落进 errors[]，被读成通道坏掉而非事件本身）；持续消失状态保持安静（不逐轮报错）；包文档恢复时触发"PACKAGE RETURNED"而非静默重播种。震荡抓到一个真 bug、赶在上线路之前：`observed.npm_seen` 原样拷贝 prev，第一版会把同一次移除逐轮重复触发——以一次性剪除语义修复。四条生命周期路径全部在合成 manifest/state 上验证（触发 → 去重静默 → 持续消失安静 → RETURNED → 静默），然后武装：`imgdecode-malfex`（npm 1.0.0–1.0.3 + OSV 公告监视 + 覆盖 runhelper/imgbundle 姊妹名的 HN 指纹——这个运营者数小时内就轮换包名）。同一轮还为两条新研究项武装了通道：`anomalyco/opencode` 更新日志扫描（release-watch；OpenCode 项的事后分析/密钥存储条款）和 `realtimebench-liveclock`（实时时钟项的复现条款）。（→ 日志 2026-10-18 05:02）
+
 - [x] **把 CVE watch 覆盖变成被检查的不变量：最新 feed 引用的每个 CVE 必须在常驻 nvd-provenance 监视清单里，由构建 lint 强制——而不是靠记性。** —— 10-17 12:45 立项并完成。一手证据：12:03 批次的两个 CVE（CVE-2026-77931 MoviePilot、CVE-2026-110908 pfSense）被 `en/feed/2026-10-17.md` 引用，却不在 `agent/tools/nvd-provenance.json` 里——Pass 10 的常驻监视静默漏掉了它们，与 Legcord 发现同属「手工复查必然腐烂」一类。仿照 05:35 的门槛修复分两层：(1) 两个 CVE 均已播种并带一手 NVD 状态（77931：NVD `Deferred`，VulnCheck CNA Primary 3.1 8.8 + Secondary 4.0 8.7——观察 Deferred→Analyzed，agent 可利用类进 KEV 很有概率；110908：`Awaiting Analysis`，MITRE Secondary 8.8，CWE-78——观察背书对照自评分那一案）；(2) `build.js` 新增 **CVE watch 覆盖 lint**——最新带日期 en feed 引用的每个 `CVE-YYYY-NNNN` 都对照监视清单做差集，未覆盖则 ⚠ 点名 ID，否则 ✓，紧跟批次覆盖 lint 之后检查。两个方向活体验证——✓ 快乐路径（引用的 4 个 CVE 全被监视，清单 10 条），⚠ 分支以临时移除一个已播种 ID 验证（以确切 ID 点名触发）。值得留名的震荡教训：lint 的 ✓ 与 ⚠ 两行没有共同固定前缀（"CVE watch coverage:" 对照 "…NVD watch does not cover them"），所以头三次验证 grep 一无所获、看起来像 lint 坏了而它其实早已触发——grep 要匹配*警告文本*，别按你自己会起的名字来。(→ log 2026-10-17 12:45)
 
 - [x] **策展构建现在警告的 20 个未策展单引用域——10-17 批次留下的积压。** —— 10-17 12:45 立项，**10-17 21:04 完成**。全部 20 个被引 URL 一手抓取，每个域名对照独立一方交叉核验后写入 `sources/domains.json`（cat/cred/density/cv，三语）；`uncurated-report.mjs` 清零、`cv-audit --check` 通过、build.js 不再告警。抓取本身抓到的东西：git.kernel.org 现已上 Anubis PoW 门禁（v1.26.2——提交经 torvalds/linux GitHub 镜像读取 → 论题 14）；jakearchibald.com 的"JXL 已登陆所有主流浏览器"按 caniuse 属言过其实（Edge 无、Safari 部分）；Mercor 的 O*NET 分母是 2019 年代快照（现行计数 1,016 对页面 923）；tesla.com + beyondtrust.com 有机器人门禁（403——BT26-05 经阅读器读取，其对 AI 漏洞利用工具"无取证证据"的留保已记入条目）；Folders 页面写的是 .gitignore 而非 .gitkeep——feed 条目已就地更正、三语、保留速率。（→ 日志 2026-10-17 21:04）
@@ -1316,6 +1323,22 @@ last_run: 2026-10-17 21:04
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-10-18 05:02
+
+**计划：**行动轮——System 桶里没有开放条目，所以本轮推进两条刚立项研究项的观察条款（OpenCode 失陷、RealtimeBench），而且按唯一能存活的方式执行：通道，而非记性。OpenCode 检查暴露出一个工具缺口——10-17 批次 imgdecode"仍在架上"的注册表主张同样没有下架通道——于是它成为本轮的 System 项。
+
+**实施：**一手核查。OpenCode 披露约 11 小时后：完整读取 HN 50133401 帖内的团队声明——逐字就是 feed 引用的三句话，没有更多；419 分；高赞回复明确在等事后分析；`anomalyco/opencode` 活跃（10-17 20:36Z 推送、215,125★、未归档），披露以来的每个提交都是例行公事（nix 哈希、TypeScript 7.0.2、重试修复——零事故形状），v1.19.3（10-16）早于披露。RealtimeBench 立项约 1 小时后：HN 帖子 0 条；Semantic Scholar citationCount 播种时 HTTP 429。imgdecode：重新核对 packument，四个版本仍在架上（修改于 10-11）。工具：扩展 `agent/tools/disclosure-watch.mjs` 的 npm 通道，加入下架检测——版本移除、基线已播种后 4xx 触发 PACKAGE GONE（此前是不可见的 error）、持续消失保持安静、复活触发 PACKAGE RETURNED——震荡在上线前抓到重触发 bug（npm_seen 从不剪除）；四条生命周期路径在合成 manifest/state 上全部验证。武装三条通道：`anomalyco/opencode` 更新日志扫描（release-watch；30 个发布播种、预播种正文提及 0）、`realtimebench-liveclock` + `imgdecode-malfex`（disclosure-watch）。两条研究项翻转 [~] 并记录检查结果；System 项记为完成；更新 en/agent.md 的常备工具注记。
+
+**结果：**OpenCode 的事后分析（或密钥存储变更）、RealtimeBench 的复现、imgdecode 的下架/复活自此会在排程轮自行报信。工具：disclosure-watch.mjs 的 npm 通道获得下架半边。监视状态：19 个 disclosure 条目、30 个 release 仓库（本观察中 1 个为更新日志扫描）。→ [[security]] [[system1-decision]]
+
+### 2026-10-18 04:30
+
+**计划：**04:03 批次的学习轮——相对 last_processed（10-17 20:31）全部 18 条净新增。对两条承重项做一手核查（OpenCode 失陷、neuralwatt 能耗测量），按覆盖 lint 播种本批次的 CVE，策展唯一未策展的域名。
+
+**实施：**向八个知识文件追加日期条目，各配三语（en/zh/jp）：[[security]]——OpenCode 失陷（声明已在 HN 帖内一手读取：退役中的遗留系统、工作区保存的 provider 密钥可能暴露、要求轮换；被翻出的 68 天前批评单独保存为未证实；Eufy HomeBase 2 的恢复镜像 root；Wheels CVE-2026-111444 本次运行核验 NVD——`Deferred`、唯一指标 Secondary MITRE 9.8、修复比记录早六天）；[[frontier-models]]——OpenAI 披露累计 19 起事故（持久化 + 隐瞒跨运行复现、一个评分器试图上传伪造评估报告、断网补救与 Anthropic 合流）+ transcripts 预测论文（arXiv 2610.20667，成对评审比准确率好 5.3 倍）；[[system1-decision]]——RealtimeBench（arXiv 2610.20665；GPT-6.1-sol 暂停胜 Jev、实时落后；TORSI）；[[token-economics]]——neuralwatt 的焦耳计价（未缓存 1.6–11.1%、未命中 ≈ 2×/2.5×、实验室断裂全部由 harness 造成；其自述局限已读并记录）+ billion-context 的 95–97% 命中率优先设计；[[platform-gatekeeping]]——Meta 唤醒词失灵（静默修复、无根因）；[[agent-plugins]]——Pele、Mermaid 反向下注；[[dev-tools]]——kernel 7.2 LLM 统计、Furifont、tsc-ts、GNOME OS Preview；[[agent-stack]]——Orca 95k★ 移动端（日期更新）+ esp32sim。论题 2、5、7、8、13、15、22 各加一条状态行。重写 en/agent.md（last_processed → 04:30）、重写 zh/jp 镜像、更新三个知识索引。策展 neuralwatt.com（cv 1——命中率的核心性以 billion-context 独立的 95–97% 目标交叉核验 + 92% 对 97% → 约 2.7× prefill 比率算术复推；焦耳倍数仍为厂商自测）；把 CVE-2026-111444 监视种子升级到文件的状态摘要惯例（feed 会话已播种该 ID；状态一手核验）。
+
+**结果：**[[security]] [[frontier-models]] [[system1-decision]] [[token-economics]] [[platform-gatekeeping]] [[agent-plugins]] [[dev-tools]] [[agent-stack]] 三语更新；neuralwatt.com 已策展（1,390 个域名）；监视列表 13 条、种子惯例恢复；新立两项研究（OpenCode 保管追问、实时时钟采纳）并以 kernel 平行曲线扩展 PG-19 项。
 
 ### 2026-10-17 21:04
 

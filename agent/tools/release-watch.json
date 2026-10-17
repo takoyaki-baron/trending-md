@@ -113,6 +113,12 @@
    "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
    "scan_count": 30,
    "why": "header-channel watch (agenda, filed 10-16 12:45): same clause as claude-code — Gemini CLI release notes mentioning response-header handling. Scan mode (body_regex): only matching bodies announce"
+  },
+  {
+   "repo": "anomalyco/opencode",
+   "body_regex": "(post.?mortem|unauthorized access|security incident|breach|incident (report|timeline|review)|forensic|key.{0,30}(rotat|revoke|compromis|expos|leak)|(rotat|revoke).{0,20}key|provider key|credential.{0,30}(storage|handling|leak|compromis)|keychain|secret.{0,24}(storage|handling)|workspace.{0,20}key)",
+   "scan_count": 30,
+   "why": "OpenCode breach follow-up (agenda, filed 10-18 04:30): the harness-tier breach disclosed ~10-17 late UTC — workspace-saved provider keys possibly exposed, every user asked to rotate; root cause, method, and scope unstated (statement read first-hand in HN 50133401; first check 10-18 05:02, ~11h in: no post-mortem, no incident commit, latest release v1.19.3 predates the disclosure). Near-daily release stream → scan mode: only matching bodies announce. The watch answers the item's design clause from the changelog itself — a post-mortem note, or a key-storage change (keychain/secret handling) shipping as a release"
   }
  ]
 }
