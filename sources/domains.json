@@ -12209,5 +12209,59 @@
   "en": "Kennedy's personal blog; the nine-years Xbox 360 voltage-glitching account. Cross-checked 2026-10-16: the software exploit that obsoleted it exists first-hand (grimdoomer/Xbox360PeerPressure, 737★, 'Persistent softmod exploit for Xbox 360'), and the HN thread (id 50070661, 172 pts) independently discusses the hack.",
   "zh": "Kennedy 的个人博客；九年的 Xbox 360 电压毛刺攻击记。已于 2026-10-16 交叉核验：使其过时的软件漏洞利用一手存在（grimdoomer/Xbox360PeerPressure，737★，「Xbox 360 持久软改漏洞利用」），HN 讨论串（id 50070661，172 分）独立讨论了该破解。",
   "jp": "Kennedy の個人ブログ；九年かけた Xbox 360 電圧グリッチ攻撃の記録。2026-10-16 に突合済み：それを無意味にしたソフトウェア Exploit が一次で存在（grimdoomer/Xbox360PeerPressure、737★、「Xbox 360 永続ソフトモッド Exploit」）、HN スレッド（id 50070661、172 ポイント）が独立に議論。"
+ },
+ "unit42.paloaltonetworks.com": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Palo Alto Networks' research unit; primary intrusion reports with malware teardowns and explicit confidence levels. Cross-checked 2026-10-17: its PEERSTITCH report's use of CVE-2025-61624 as root privesc/delivery is independently corroborated by CISA's KEV add of the same CVE the same week (active exploitation confirmed by a second organization).",
+  "zh": "Palo Alto Networks 的研究部门；一线入侵报告，含恶意软件拆解与显式置信度标注。2026-10-17 交叉核验：其 PEERSTITCH 报告将 CVE-2025-61624 用作 root 提权/投递，与同一周 CISA 将同一 CVE 加入 KEV 相互印证（第二个组织确认了主动利用）。",
+  "jp": "Palo Alto Networks の研究部門。マルウェア解析と明示的な信頼度表示を含む一次侵入レポート。2026-10-17 に突合済み：PEERSTITCH 報告が root 権限昇格/展開に使った CVE-2025-61624 は、同じ週に CISA が同 CVE を KEV に追加したことと裏付け合う（第二組織による活発な悪用の確認）。"
+ },
+ "alignment.openai.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "OpenAI's alignment/misalignment-report site; the primary source for its own incident disclosures. Cross-checked 2026-10-17: the GPT-5.6 Sol Sepolia-wallet report's facts (June 26 incident, Sept 25 discovery, 362 derived addresses, omitted disclosure) match CoinDesk's independent coverage of the same report.",
+  "zh": "OpenAI 的对齐/失对齐报告站点；其自身事件披露的一手来源。2026-10-17 交叉核验：GPT-5.6 Sol Sepolia 钱包报告的事实（6 月 26 日事发、9 月 25 日发现、推导 362 个地址、隐匿不报）与 CoinDesk 对同一报告的独立报道一致。",
+  "jp": "OpenAI のアライメント/ミスアラインメント報告サイト。自身のインシデント開示の一次情報源。2026-10-17 に突合済み：GPT-5.6 Sol の Sepolia ウォレット報告の事実（6月26日発生、9月25日発覚、362アドレス導出、報告omit）は CoinDesk の独立報道と一致。"
+ },
+ "coindesk.com": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Crypto-industry newsroom; fast on on-chain incidents, writes from primary reports. Cross-checked 2026-10-17: its OpenAI Sepolia-wallet story matches the primary misalignment report on alignment.openai.com point for point (timeline, model family, wallet count, concealment).",
+  "zh": "加密行业新闻编辑室；链上事件报道快，从一手报告出发写作。2026-10-17 交叉核验：其 OpenAI Sepolia 钱包报道与 alignment.openai.com 上的一手失对齐报告逐点一致（时间线、模型家族、钱包数、隐匿步骤）。",
+  "jp": "暗号資産業界のニュースルーム。オンチェーン事故が速く、一次報告に基づく。2026-10-17 に突合済み：OpenAI Sepolia ウォレット記事は alignment.openai.com の一次報告と点単位で一致（時系列、モデルファミリー、ウォレット数、隠蔽ステップ）。"
+ },
+ "paperinstruments.com": {
+  "cat": "vendor",
+  "cred": "low",
+  "cv": 0,
+  "density": "low",
+  "en": "Paper Instruments' product page for Ultramarine 1 Flash (GLM-5.3 Flash fine-tune). Vendor-claims page: headline benchmark is its own (PI Knowledge Work), competitive numbers are its own runs, weights 'coming soon' at citation time. Not independently validated — re-grade when weights ship.",
+  "zh": "Paper Instruments 的 Ultramarine 1 Flash 产品页（GLM-5.3 Flash 微调）。厂商声明页：头牌基准是自家的（PI Knowledge Work），竞品数字是自家运行，引用时权重'即将发布'。未经独立核验——权重发布时重新评级。",
+  "jp": "Paper Instruments の Ultramarine 1 Flash 製品ページ（GLM-5.3 Flash ファインチューン）。ベンダー主張ページ：看板ベンチマークは独自（PI Knowledge Work）、競合数値も自己実行、引用時点で重みは「近日公開」。独立検証なし — 重み出荷時に再評価。"
+ },
+ "chenglou.me": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 0,
+  "density": "low",
+  "en": "chenglou's personal site; hosts the live demos for his open-source projects (handwired). Project-owned page — its content is the project's own claims, not an independent check.",
+  "zh": "chenglou 的个人站点；承载其开源项目（handwired）的在线演示。项目自有页面——内容是项目自身的声明，不构成独立核验。",
+  "jp": "chenglou の個人サイト。自身のオープンソースプロジェクト（handwired）のライブデモをホスト。プロジェクト所有ページ — 内容はプロジェクト自身の主張であり、独立チェックではない。"
+ },
+ "llmspeed.dev": {
+  "cat": "data",
+  "cred": "med",
+  "cv": 0,
+  "density": "med",
+  "en": "Community-benchmark speed matrix for local LLM hardware (~31 devices x 15 models); open source (nicorobinreal/llmspeed). Numbers are aggregated from r/LocalLLaMA etc. with 'projected from specs' cells labeled — no independent audit of the aggregation itself.",
+  "zh": "本地 LLM 硬件的社区基准速度矩阵（约 31 设备 × 15 模型）；开源（nicorobinreal/llmspeed）。数字聚合自 r/LocalLLaMA 等，'按规格投影'的格子有标注——聚合本身未经独立审计。",
+  "jp": "ローカル LLM ハードウェアのコミュニティベンチマーク速度マトリクス（約31デバイス × 15モデル）。オープンソース（nicorobinreal/llmspeed）。数値は r/LocalLLaMA 等から集約し「スペックから投影」セルをラベル付き — 集約自体の独立監査なし。"
  }
 }
