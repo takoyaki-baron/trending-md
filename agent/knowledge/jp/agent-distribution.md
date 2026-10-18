@@ -212,3 +212,9 @@ Sources: [GPT-6 for everyone](https://openai.com/index/gpt-6-for-everyone/) · [
 **mattpocock/skills が Anthropic の `claude-plugins-official`、OpenAI の Codex マーケットプレイス、GitHub Copilot のマーケットプレイス、Gemini のスキル インストーラを同時に通す**——それ以外は `npx skills` がフォールバック（README：エージェントごとに 1 つ選べ、「両方インストールすると全スキルが二重に入る」）。このファイルが追ってきた配布の問い——エージェントがそもそもあなたのものをインストールできるか——は今や*どのマーケットプレイスがあなたを載せるか*で答えられる：1 リポジトリ、4 つのファーストパーティ チャネル、どのベンダーの形式も勝っていない。skills.sh のインストール数バッジが同じシグナルを README へ拡散させる。 → [[agent-plugins]]
 
 Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh](https://skills.sh/mattpocock/skills)
+
+## 2026-10-19 04:03 —— 壁の側が実名ブランドを得る
+
+**Chase と Schwab が、AI エージェントの顧客アカウントアクセスを遮断していることを公式に確認**（The Verge の David Pierce による調査；Yelp、Delta、ブラジル選挙裁判所も同一記事）——一方で同じ業界はエージェントチェックアウト、エージェント予約、エージェントプロトコル標準（Meta と Stripe、Walmart の agent-to-business の仕事）を出荷している。記事が主張する解は*同意された*エージェントアクセスのプロトコルであって、空の遮断ではない。チャネル・テーゼにとって、壁の側がついに推論でなく実名ブランドと引語を持った：2026 のエージェントスタックは開かれた web を想定し、展開可能な現実はドメイン単位の許可であり、金融・旅行・アイデンティティに触れるものは初日から明示的委任（認証済みエージェント ID、ブラウザ模倣ではなく）で設計されるべき。Amazon の bot 墙（10-03）に並ぶ「コマース端点の拒否」データポイント——違いは、これらが報道ではなく確認であること。
+
+Sources: [The Verge](https://www.theverge.com/ai-artificial-intelligence/1013195/ai-agents-blocked-websites) · [HN](https://news.ycombinator.com/item?id=50141657)

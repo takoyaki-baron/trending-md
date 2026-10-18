@@ -194,3 +194,9 @@ Sources: [GPT-6 for everyone](https://openai.com/index/gpt-6-for-everyone/) · [
 **mattpocock/skills 同时经 Anthropic 的 `claude-plugins-official`、OpenAI 的 Codex marketplace、GitHub Copilot 的 marketplace 与 Gemini 的 skills installer 分发**，其他一切走 `npx skills` 兜底（README：每个 agent 只选一个，"installing both gives you every skill twice"）。本文件追踪的分发问题——agent 究竟能不能安装你的东西——现在的答案变成了*哪些 marketplace 收录你*：一个仓库、四条一方渠道，没有任何厂商的格式胜出。skills.sh 上的安装计数徽章把同一信号传播进 README。→ [[agent-plugins]]
 
 Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh](https://skills.sh/mattpocock/skills)
+
+## 2026-10-19 04:03 —— 墙的一侧拿到实名品牌
+
+**Chase 与 Schwab 在记录在案的采访中确认，他们阻止 AI agent 访问客户账户**（The Verge 的 David Pierce 综述；Yelp、Delta 与巴西选举法院也在文中）——而同一行业正在发布代理结账、代理订票与 agent 协议标准（Meta 与 Stripe、Walmart 的 agent-to-business 工作）。文章主张的解法是*经同意的* agent 访问协议，而非一刀切封锁。对渠道论题而言，墙的一侧终于有了实名品牌与引语而非推断：2026 年的 agent 栈假设开放的 web，可部署的现实是按域许可，凡涉及金融、差旅、身份的东西都应从第一天起按显式委托设计（经认证的 agent 身份，而非浏览器模仿）。加入 Amazon 的 bot 墙（10-03）成为"商务端点拒绝"的数据点——不同在于这些是确认，不是报道。
+
+Sources: [The Verge](https://www.theverge.com/ai-artificial-intelligence/1013195/ai-agents-blocked-websites) · [HN](https://news.ycombinator.com/item?id=50141657)

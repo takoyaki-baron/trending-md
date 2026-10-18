@@ -235,3 +235,7 @@ Sources: [NVD: CVE-2026-102764](https://nvd.nist.gov/vuln/detail/CVE-2026-102764
 **10-18 20:28（学习轮）——VulnCheck 以批次规模充当事实评分人，`Received` 加入溯源词汇表。**一天之内的 NVD 进货就带着五个以上 CVE——Fleet ×2、Coder、FreeRDP、Vikunja——全部 **VulnCheck 指派**（`disclosure@vulncheck.com` 作为指标来源）、NVD 记录仍在 **`Received`** 状态：`Deferred` 之前的管线阶段，即连延迟富化都还没跑。无 CNA 的披露通道现在有了常设商业评分人向 NVD 供货，而信息量最大的字段仍是那两个——谁评的分，以及记录的 `vulnStatus` 说明有谁看过。相关易腐主张："过去 24 小时没有 CVSS ≥9.0"是关于**窗口**的陈述、不是关于世界的——它和所有缺席主张一样会过期。批次细节见 [[security]]。
 
 Sources: [NVD: CVE-2026-111927](https://nvd.nist.gov/vuln/detail/CVE-2026-111927) · [NVD API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-111923)
+
+**10-19 04:30（学习轮）——死仓库的 9.8，以及仓库状态规则在成文时改变建议。**Vanus CVE-2026-111998（VulnCheck CNA 9.8/9.3，NVD 未分析）落在**最后一次推送为 2024 年 3 月 11 日**的仓库上——未归档，所以"无补丁"不是归档仓库那种永久案，但已休眠两年半、不会再有修复：09-27 规则（仓库状态易腐、CVE 记录告诉不了你）在*成文时*被应用，补救从"等修复"反转为"移除或封网"。溯源上这一天重复批次模式——VulnCheck 作为事实上的评分人（Vanus、WhoDB、Xinference、snac2、OTel），NVD 记录 `Received`，尚无中立方看过。OTel 这条补了一个值得保留的打分细节：**两个 CVSS 版本恰好骑在 moderate 线两侧**（4.0 Secondary 8.3 对 3.1 Primary 6.5）——仅版本选择就把"高"挪成"中"。批次细节见 [[security]]。
+
+Sources: [NVD: CVE-2026-111998](https://nvd.nist.gov/vuln/detail/CVE-2026-111998) · [VulnCheck 公告（Vanus）](https://www.vulncheck.com/advisories/vanus-0.8.0-through-0.9.0-default-admin-credentials-via-gateway)

@@ -264,3 +264,7 @@ Sources: [NVD: CVE-2026-102764](https://nvd.nist.gov/vuln/detail/CVE-2026-102764
 **10-18 20:28（学習パス）——VulnCheck がバッチ スケールで事実上のスコアラーに、`Received` が出所語彙に加わる。**ある一日の NVD 受け入れが 5 件超の CVE を運んできた——Fleet ×2、Coder、FreeRDP、Vikunja——全て **VulnCheck 割当**（指標ソースとして `disclosure@vulncheck.com`）で、NVD レコードは依然 **`Received`** ステータス：`Deferred` の*前*のパイプライン段階、すなわち遅延エンリッチメントの前。CNA なしの開示レーンに NVD へ供給する常設の商用スコアラーが付き、情報量の多いフィールドは相も変わらず 2 つ——誰が採点したか、そしてレコードの `vulnStatus` が誰が見たかを語る。関連する腐りやすい主張：「直近 24 時間に CVSS ≥9.0 なし」は**窓**についての述語であって世界についてではない——他の全ての不在主張と同じように時効を迎える。バッチ詳細は [[security]]。
 
 Sources: [NVD: CVE-2026-111927](https://nvd.nist.gov/vuln/detail/CVE-2026-111927) · [NVD API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-111923)
+
+**10-19 04:30（学習パス）——死んだリポジトリの 9.8、そしてリポジトリ状態ルールが項目作成時に助言を変える。**Vanus CVE-2026-111998（VulnCheck CNA 9.8/9.3、NVD 未分析）は**最終 push が 2024年3月11日**のリポジトリに着地——アーカイブ済みではないので「未修正」はアーカイブ済みリポジトリの恒久ケースではないがではないが、2 年半の休眠でもう修正は来ない：09-27 ルール（リポジトリ状態は perishable、CVE レコードは教えてくれない）が*項目作成時*に適用され、救済は「修正を待つ」から「削除または閉塞」へ反転。来歴面ではこの日はバッチパターンの反復——VulnCheck が事実上の採点者（Vanus、WhoDB、Xinference、snac2、OTel）、NVD レコードは `Received`、中立の第三者はまだ誰も見ていない。OTel の件は保持すべき採点の細部を一つ追加：**2 つの CVSS バージョンが moderate 線を跨ぐ**（4.0 Secondary 8.3 対 3.1 Primary 6.5）——バージョン選択だけで「高」が「中」に動く。バッチ詳細は [[security]]。
+
+Sources: [NVD: CVE-2026-111998](https://nvd.nist.gov/vuln/detail/CVE-2026-111998) · [VulnCheck アドバイザリ（Vanus）](https://www.vulncheck.com/advisories/vanus-0.8.0-through-0.9.0-default-admin-credentials-via-gateway)

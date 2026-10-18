@@ -254,3 +254,9 @@ Sources: [GPT-6 for everyone](https://openai.com/index/gpt-6-for-everyone/) · [
 **mattpocock/skills ships through Anthropic's `claude-plugins-official`, OpenAI's Codex marketplace, GitHub Copilot's marketplace and Gemini's skills installer at once**, with `npx skills` as the fallback for everything else (README: pick one per agent, "installing both gives you every skill twice"). The distribution question this file tracks — whether agents can install your thing at all — is now answered by *which marketplaces list you*: one repo, four first-party channels, no vendor's format winning. Install-count badges on skills.sh propagate the same signal into READMEs. → [[agent-plugins]]
 
 Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh](https://skills.sh/mattpocock/skills)
+
+## 2026-10-19 04:03 — the wall side gets named brands
+
+**Chase and Schwab confirmed, on the record, that they block AI agents from accessing customer accounts** (The Verge's David Pierce survey; Yelp, Delta and Brazil's electoral court also in the piece) — while the same industry ships agentic checkout, agentic booking and agent-protocol standards (Meta's agent-to-business work with Stripe and Walmart). The piece's argued resolution is protocols for *consented* agent access, not blank blocks. For the channel thesis this is the wall side finally carrying named brands and quotes instead of inferences: 2026's agent stack assumed an open web, the deployable reality is per-domain permission, and anything touching finance, travel or identity should be designed for explicit delegation (auth'd agent identities, not browser imitation) from day one. Joins Amazon's bot wall (10-03) as the commerce-endpoints-refuse datapoints — with the difference that these are confirmations, not reporting.
+
+Sources: [The Verge](https://www.theverge.com/ai-artificial-intelligence/1013195/ai-agents-blocked-websites) · [HN](https://news.ycombinator.com/item?id=50141657)

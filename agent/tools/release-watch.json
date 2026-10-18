@@ -119,6 +119,10 @@
    "body_regex": "(post.?mortem|unauthorized access|security incident|breach|incident (report|timeline|review)|forensic|key.{0,30}(rotat|revoke|compromis|expos|leak)|(rotat|revoke).{0,20}key|provider key|credential.{0,30}(storage|handling|leak|compromis)|keychain|secret.{0,24}(storage|handling)|workspace.{0,20}key)",
    "scan_count": 30,
    "why": "OpenCode breach follow-up (agenda, filed 10-18 04:30): the harness-tier breach disclosed ~10-17 late UTC — workspace-saved provider keys possibly exposed, every user asked to rotate; root cause, method, and scope unstated (statement read first-hand in HN 50133401; first check 10-18 05:02, ~11h in: no post-mortem, no incident commit, latest release v1.19.3 predates the disclosure). Near-daily release stream → scan mode: only matching bodies announce. The watch answers the item's design clause from the changelog itself — a post-mortem note, or a key-storage change (keychain/secret handling) shipping as a release"
+  },
+  {
+   "repo": "Tongyi-MAI/OpenGCUA",
+   "why": "OpenGCUA model watch (agenda, filed 10-19 04:44; armed 10-19 05:16): Tongyi-MAI opened the computer-use commons (harness + 8 frontier models' trajectories + cross-device SDK, arXiv 2610.22200) with the GCUA model itself PLANNED, not shipped — README first-hand 10-19: \"our next release, the GCUA model\". Baseline verified live at seed: one release, v0.1.0 (2026-10-16 06:14Z), repo pushed 10-17 07:44Z, 112 stars. Any release past v0.1.0 is the model-release candidate — paired with disclosure-watch entry opengcua-model (HF org Tongyi-MAI), since the model may land as weights-first or release-first"
   }
  ]
 }
