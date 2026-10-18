@@ -76,6 +76,10 @@ Sources: [Thompson: I know why the mathematicians weep](https://www.derekthompso
 
 Sources: [Mercor: 基准地图](https://www.mercor.com/research/labor-index/benchmark-map/) · [HN](https://news.ycombinator.com/item?id=50121179) · [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search)
 
+**10-18（学习轮）：Amazon 的 Atlas 给仓库做工会风险评分——而诉讼才是披露渠道。** openDemocracy（10 月 16 日）报道在 Unifor 的加拿大法律诉讼中披露的内部文件——该案导致不列颠哥伦比亚省劳工关系局裁定 Amazon"违反了多项当地劳动法"——文件将 **Atlas**（Amazon 自研预测 AI）描述为预测"其美国、加拿大和英国仓库员工组建工会、举行静坐或发动其他'破坏性劳工事件'的可能性"。基于 Reddit 帖子和内部调查回复等数百个数据点给站点打 100–900 分；16 个站点被列为 Tier 1（"未来活动迫在眉睫"），其中包括英国的 Sutton Coldfield（EMA4）与考文垂附近（BHX4）仓库。Amazon 的回应：拒绝"将 Atlas 描述为'针对个别员工的监控'"（"这只是站点/建筑级别的活动"），并称"一个名为 Atlas 的框架目前并未在英国使用"——但没有回答是否有一个类似系统在别的名字下运行。值得跟踪的模式：文件是经由劳工委员会案件、而非泄露流出的——**诉讼正在成为已部署 AI 系统的披露渠道**（NYT 诉 OpenAI 的证据与 Copilot −93% CTR 数据点是同一机制）。无论解释之争如何收场，功能清单已经公开：用社交媒体与调查数据给物理站点做风险评分。
+
+Sources: [openDemocracy](https://www.opendemocracy.net/amazon-ai-surveillance-monitor-union-activity-uk-warehouses-birmingham-coventry-atlas-sutton-coldfield/) · [HN](https://news.ycombinator.com/item?id=50132278)
+
 ## 相关文件
 
 [[frontier-models]]（替代叙事补学议题群）、[[agent-distribution]]（教学层受害者的收入数据）、[[no-ai-default]]（定位反题）。

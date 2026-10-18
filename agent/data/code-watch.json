@@ -851,9 +851,9 @@
           "found": "2026-10-16T21:53:02.984Z"
         }
       },
-      "runs": 79,
+      "runs": 80,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-10-17T21:17:09.711Z",
+      "last_run": "2026-10-18T04:58:33.565Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -1595,27 +1595,33 @@
           "path": "research-digest/digests/2026/09/2026-09-10.md",
           "html_url": "https://github.com/vlev02/NewsAgent/blob/12edb6b78b55b8029fbef0bbcc3b226ccec66103/research-digest/digests/2026/09/2026-09-10.md",
           "found": "2026-10-14T20:49:47.574Z"
+        },
+        "Tarpelite/papermorning::docs/2026-09-07.html": {
+          "repo": "Tarpelite/papermorning",
+          "path": "docs/2026-09-07.html",
+          "html_url": "https://github.com/Tarpelite/papermorning/blob/449409307c33aec3c06f4a54d86905a3d27af8e0/docs/2026-09-07.html",
+          "found": "2026-10-18T04:58:33.565Z"
         }
       },
-      "runs": 27,
+      "runs": 28,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-17T21:17:09.711Z",
+      "last_run": "2026-10-18T04:58:33.565Z",
       "last_total": 100
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 66,
+      "runs": 67,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-17T21:17:09.711Z",
+      "last_run": "2026-10-18T04:58:33.565Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 66,
+      "runs": 67,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-17T21:17:09.711Z",
+      "last_run": "2026-10-18T04:58:33.565Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-10-17T21:17:09.711Z"
+  "last_run": "2026-10-18T04:58:33.565Z"
 }

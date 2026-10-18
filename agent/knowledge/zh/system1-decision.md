@@ -311,3 +311,9 @@ Sources: [Jev meets the Trolley Problem](https://zachlandes.com/trolley-problem/
 "The World Won't Wait"（arXiv 2610.20665，10-16 列出；北京大学 + 三星北京 R&D）：跨六种游戏类型的 180 个任务，**推理期间游戏继续运行**——一个原本正确的动作可能来得太迟。成对评估中，GPT-6.1-sol 在暂停时胜过快速决策模型 Jev，**在持续运行时落后**——前沿/快速排名是时钟的函数，不是模型的属性。作者提出 TORSI，一个双时间尺度自我改进方案：慢教师研究失败、在暂停游戏中测试修正，再写成可复用指令交给快学生实时执行。对决策层论题这是缺失的评估维度：Jev 的校准是该类的承重属性；时延是第二条（其价值主张就是快，而这是第一个把它记为一等公民的基准）。预期"可暂停"的基准数字将像"静态"图像基准一样成为需要限定的主张。
 
 Sources: [arXiv 2610.20665](https://arxiv.org/abs/2610.20665)
+
+## 2026-10-18 12:29 —— 本层拿到冲上自家指数榜首的开源权重多模态选手：d3（Decision 3.0）
+
+**d3**（vllm-sr/d3，Apache-2.0；HF 卡片 10 月 17 日更新）是 Decision 3.0 的 26.09B 参数基础决策模型——含 0.46B 视觉编码器——即 vLLM Semantic Router 项目（vllm-project/semantic-router，6.2k★，"开放、可编程的模型与算力决策层"）的决策层。输入：文本、JSON、图像或视频加 choice/yes-no/score 问题；输出：一次调用给出每个选项的概率，不生成文本。所有数字均自测：Jev Decision Index 0.3.2 得 66.3，"官方文本榜第一"，比 Decision 2.0 高 10.4；Perception Test 视频 QA 77.4（内部）；单张 AMD Instinct MI325X 上文本中位数 54.4ms / 图像 290ms / 10 秒视频 500ms；批处理下 27 req/s、p99 低于 1 秒。自报数据的警告适用于每一个数字——但真正复利增长的是服务栈模式：由路由模型决定哪些请求才值得生成模型过目，现在带开源权重、多模态输入和 AMD 实测延迟表。本层的指数成为开源选手竞相登顶的对象，本身就是整合信号——与 Cloudflare Clef 登顶 Jev 指数并公布自己输掉的行（10-02）同形，只是少了那份公布的败绩。
+
+Sources: [vllm-sr/d3 模型卡](https://huggingface.co/vllm-sr/d3) · [vllm-project/semantic-router](https://github.com/vllm-project/semantic-router)

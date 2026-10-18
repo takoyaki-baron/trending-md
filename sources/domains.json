@@ -12497,5 +12497,32 @@
     "en": "GPU-inference cloud billing on measured per-request energy; its engineering blog publishes self-run production measurements with an unusually explicit limitations section (lab sessions not customer traffic, UA-based client IDs, eviction-vs-prompt-edit confound admitted). Cross-checked 2026-10-18: the central operational claim — harness-controlled prefix-cache hit rate dominates serving cost — is acted on independently by an unrelated vendor (billion-context makes a 95–97% hit-rate target its headline), and the 92%-vs-97%-cached → ~2.7× prefill-work ratio re-derives arithmetically; the joule multipliers (2×, 2.5× on GLM-5.3) remain vendor-run.",
     "zh": "按每请求实测能耗计费的 GPU 推理云；其工程博客发布自测的生产数据，并附异常坦诚的局限说明（实验室会话而非客户流量、按 User-Agent 识别客户端、承认缓存驱逐与提示词编辑混杂）。已于 2026-10-18 交叉核验：核心操作性主张——前缀缓存命中率由 harness 决定并主导服务成本——被另一独立厂商（billion-context 以 95–97% 命中率为头号目标）独立采纳，且 92% 对 97% 缓存 → 约 2.7 倍 prefill 工作量可由算术复推；焦耳级倍数（2×、GLM-5.3 上 2.5×）仍为厂商自测。",
     "jp": "リクエストごとの実測エネルギーで課金する GPU 推論クラウド。エンジニアリングブログは自社計測の本番データを、例外的に明示的な限界記述付きで公開する（顧客トラフィックではなくラボセッション、UA ベースのクライアント識別、キャッシュ追出しとプロンプト編集の交絡を自認）。2026-10-18 にクロスチェック済み：中核の操作的主張——プレフィックスキャッシュ命中率はハーネスが支配し、サービングコストを左右する——は無関係なベンダー（billion-context が 95–97% の命中率目標を看板に採用）が独立に行動に移しており、92% 対 97% キャッシュ → 約 2.7 倍のプレフィックス作業比は算術的に再導出可能。ジュール倍率（2×、GLM-5.3 で 2.5×）はベンダー計測のままとする。"
+  },
+  "opendemocracy.net": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "openDemocracy — UK reader-funded investigative outlet, strong on accountability and labor reporting; advocacy-adjacent, so attribution discipline matters. Cross-checked 2026-10-18: the Atlas report's documentary spine — Unifor's B.C. challenge and the Labour Board finding that Amazon 'violated multiple local labour laws' — matches the public legal record independently reported by CBC (Feb 2026 wage-freeze ruling) and BCLRB decision 2026 BCLRB 241; Amazon's 'site/building level only' response is the company's own statement obtained directly.",
+    "jp": "openDemocracy——英国の読者資金型調査報道メディア。説明責任と労働報道に強いが、擁護寄りの位置取りなので帰属の規律が重要。突合済み（2026-10-18）：Atlas報道の資料的背骨——UniforのBC州での法的挑戦と「複数の現地労働法に違反した」という労働審判院の認定——は、CBC（2026年2月の賃金凍結裁定）やBCLRB決定2026 BCLRB 241が独立に報じた公開の法的記録と一致。Amazonの「サイト/ビル単位のみ」との回答は同社自身への直接取材による発言。",
+    "zh": "openDemocracy——英国读者资助的调查报道媒体，长于问责与劳动报道；立场贴近倡导组织，归属纪律很重要。已交叉核验（2026-10-18）：Atlas 报道的文件主线——Unifor 在 BC 省的诉讼及劳工委员会认定 Amazon“违反多项当地劳动法”——与 CBC（2026 年 2 月工资冻结裁定）及 BCLRB 2026 BCLRB 241 决定独立报道的公开法律记录一致；Amazon“仅站点/楼宇层面”的回应是直接向公司取得的表态。"
+  },
+  "leodemoura.github.io": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Leonardo de Moura's blog — the Lean creator's own announcements; authoritative for Lean releases and kernel work, not independent. Cross-checked 2026-10-18: the 'verified kernels' post's v4.35.0 / lake check claims match the leanprover/lean4 v4.35.0 GitHub release; con-leche exists as leanprover/con-leche ('An external lean checker with a proof of consistency') under the official org; kernel-renovation issue #14977 is open under arthur-adjedj as the post states. Note: all confirmations are project-canonical (same Lean FRO origin), not third-party.",
+    "jp": "Leonardo de Mouraのブログ——Lean作者自身の発表。Leanのリリースとカーネル作業については権威があるが独立ではない。突合済み（2026-10-18）：「検証済みカーネル」投稿の v4.35.0 / lake check の主張は leanprover/lean4 v4.35.0 のGitHubリリースと一致。con-leche は公式orgの下に leanprover/con-leche（「一致性の証明付き外部Leanチェッカー」）として実在。カーネル改修 issue #14977 は投稿どおり arthur-adjedj 名義でオープン。注：確認はすべてプロジェクト正典（同一Lean FRO由来）であり、第三者ではない。",
+    "zh": "Leonardo de Moura 的博客——Lean 作者本人的发布公告；对 Lean 发布与内核工作具权威性，但非独立来源。已交叉核验（2026-10-18）：博文“自带经验证内核”中 v4.35.0 / lake check 的说法与 leanprover/lean4 v4.35.0 GitHub 发布一致；con-leche 以 leanprover/con-leche（“带一致性证明的外部 Lean 检查器”）实名存在于官方组织下；内核翻新 issue #14977 由 arthur-adjedj 开放中，与博文所述一致。注：以上确认均为项目正典（同一 Lean FRO 来源），并非第三方。"
+  },
+  "celphase.github.io": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "celphase's GitHub Pages — the duck-pond project's own site; authoritative for what the artifact claims, not independent. Cross-checked 2026-10-18: the page's 'no recordings, synthesized live' claim and scene details match the MIT-licensed celphase/duck-pond Rust repo published the same day as the Show HN post; the HN thread (106 pts) confirms audience reception but contains no independent technical analysis of the synthesis method.",
+    "jp": "celphaseのGitHub Pages——duck-pondプロジェクト自身のサイト。成果物の主張については権威があるが独立ではない。突合済み（2026-10-18）：ページの「録音なし、ライブ合成」の主張とシーン詳細は、Show HN投稿と同日公開されたMITライセンスの celphase/duck-pond Rustリポジトリと一致。HNスレッド（106 pts）は受け止めを裏付けるが、合成手法の独立した技術分析は含まない。",
+    "zh": "celphase 的 GitHub Pages——duck-pond 项目自己的网站；对作品本身的声明具权威性，但非独立来源。已交叉核验（2026-10-18）：页面“无录音、实时合成”的声明与场景细节，与 Show HN 帖子同日公开的 MIT 许可 Rust 仓库 celphase/duck-pond 一致；HN 讨论串（106 pts）印证了受众反响，但未包含对合成方法的独立技术分析。"
   }
 }

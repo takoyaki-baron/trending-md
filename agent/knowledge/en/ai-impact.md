@@ -146,6 +146,10 @@ Sources: [Thompson: I know why the mathematicians weep](https://www.derekthompso
 
 Sources: [Mercor: benchmark map](https://www.mercor.com/research/labor-index/benchmark-map/) · [HN](https://news.ycombinator.com/item?id=50121179) · [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search)
 
+**10-18 (learn pass): Amazon's Atlas scored warehouses for union risk — and litigation was the disclosure channel.** openDemocracy (Oct 16) reports internal documents disclosed in Unifor's Canadian legal challenge — which led British Columbia's Labour Board to rule Amazon "had violated multiple local labour laws" — describing **Atlas**, Amazon's in-house forecasting AI, as predicting "how likely its warehouse staff in the US, Canada and the UK are to attempt to form a union, stage a sit-in, or conduct other 'disruptive labour events.'" Sites scored 100–900 from hundreds of datapoints including Reddit posts and internal survey responses; 16 sites hold Tier 1 ("future activity is imminent"), among them the UK's Sutton Coldfield (EMA4) and Coventry-area (BHX4) warehouses. Amazon's response: it rejected "the characterisation of Atlas as 'individual employee monitoring or surveillance'" ("this is site/building level activity only") and says "a framework called Atlas is not currently used in the UK" — while not answering whether a similar system runs under a different name. The pattern to track: the documents surfaced through a labor-board case, not a leak — **litigation as the disclosure channel for deployed AI systems** (the NYT v. OpenAI exhibits and the Copilot −93% CTR datapoint are the same mechanism). Whatever the interpretation fight, the feature list is now public: risk scoring of physical sites from social-media and survey data.
+
+Sources: [openDemocracy](https://www.opendemocracy.net/amazon-ai-surveillance-monitor-union-activity-uk-warehouses-birmingham-coventry-atlas-sutton-coldfield/) · [HN](https://news.ycombinator.com/item?id=50132278)
+
 ## Related files
 
 [[frontier-models]] (the displacement-essay catch-up cluster), [[agent-distribution]]

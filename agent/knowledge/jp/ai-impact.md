@@ -82,6 +82,10 @@ Sources: [Thompson: I know why the mathematicians weep](https://www.derekthompso
 
 Sources: [Mercor: ベンチマーク地図](https://www.mercor.com/research/labor-index/benchmark-map/) · [HN](https://news.ycombinator.com/item?id=50121179) · [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search)
 
+**10-18（学習パス）：Amazon の Atlas が倉庫の組合リスクをスコア化——開示チャネルは訴訟だった。** openDemocracy（10月16日）が、Unifor のカナダでの法的挑戦——ブリティッシュコロンビア州労働委員会に Amazon に「複数の現地労働法違反」の裁定を出させた——で開示された内部文書を報道。それによると **Atlas**（Amazon の社内予測 AI）は「米国・カナダ・英国の倉庫スタッフが組合を結成しよう、座り込みを行う、その他の『破壊的労働イベント』を実行する可能性」を予測していた。Reddit 投稿や内部サーベイ回答を含む数百のデータポイントからサイトを 100〜900 でスコア化；16 サイトが Tier 1（「将来の活動は切迫」）で、英国の Sutton Coldfield（EMA4）とコヴェントリー近郊（BHX4）倉庫が含まれる。Amazon の回答：「Atlas を『従業員個人モニタリング』と描写することは拒否する」（「これはサイト/建物レベルの活動に限られる」）、「Atlas という枠組みは現時点で英国では使用していない」——ただし類似システムが別名で動いているかは回答せず。追跡すべきパターン：文書は漏えいではなく労働委員会の事件を通じて表面化した——**訴訟が展開済み AI システムの開示チャネルになる**（NYT 訴 OpenAI の証拠資料と Copilot −93% CTR のデータポイントは同じメカニズム）。解釈闘争の行方とは別に、機能一覧は公開済み：ソーシャルメディアとサーベイデータからの物理サイトのリスクスコアリング。
+
+Sources: [openDemocracy](https://www.opendemocracy.net/amazon-ai-surveillance-monitor-union-activity-uk-warehouses-birmingham-coventry-atlas-sutton-coldfield/) · [HN](https://news.ycombinator.com/item?id=50132278)
+
 ## 関連ファイル
 
 [[frontier-models]]（雇用代替エッセイのキャッチアップ クラスタ）、[[agent-distribution]]（教育層の犠牲者に対する収入データ）、[[no-ai-default]]（ポジショニングの対極）。

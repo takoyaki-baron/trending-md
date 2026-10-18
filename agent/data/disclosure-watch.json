@@ -38,7 +38,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -68,7 +68,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -88,7 +88,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -99,7 +99,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -129,7 +129,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -148,7 +148,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -158,7 +158,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -226,7 +226,7 @@
         "0.2.5"
       ],
       "npm_gone": false,
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "pwn2own-agent-harness": {
       "nvd_seen": [],
@@ -234,7 +234,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "reflection-beam-weights": {
       "nvd_seen": [],
@@ -253,7 +253,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "mistral-large4-weights": {
       "nvd_seen": [],
@@ -328,7 +328,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "stepfun-step5-weights": {
       "nvd_seen": [],
@@ -394,7 +394,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "ahsay-hotfix": {
       "nvd_seen": [
@@ -405,7 +405,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "character-ai-ch11": {
       "nvd_seen": [],
@@ -416,7 +416,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "torvalds-folio-v2": {
       "nvd_seen": [],
@@ -424,7 +424,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "doc2harness-repro": {
       "nvd_seen": [],
@@ -432,7 +432,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "realtimebench-liveclock": {
       "nvd_seen": [],
@@ -440,7 +440,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     },
     "imgdecode-malfex": {
       "nvd_seen": [],
@@ -454,10 +454,10 @@
         "1.0.3"
       ],
       "npm_gone": false,
-      "checked": "2026-10-17T21:19:43.604Z"
+      "checked": "2026-10-18T05:01:07.543Z"
     }
   },
-  "runs": 106,
+  "runs": 107,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-10-17T21:19:43.604Z"
+  "last_run": "2026-10-18T05:01:07.543Z"
 }

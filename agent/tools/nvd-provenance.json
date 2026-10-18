@@ -65,6 +65,11 @@
    "id": "CVE-2026-111444",
    "why": "Wheels (CFML framework) SQL injection, CVSS 9.8 CNA-assigned by MITRE; NVD record published but Deferred (2026-10-17). Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 15.",
    "seeded": "2026-10-18 [Deferred] 3.1 Secondary/cve@mitre.org 9.8, CWE-89, published 2026-10-16; fix shipped v4.2.0 10-11, six days before the record"
+  },
+  {
+   "id": "CVE-2026-111911",
+   "why": "phpMyFAQ WebAuthn credential injection → auth bypass (password+TOTP), third-party-scored 9.8 by VulnCheck — no CNA score, NVD record Deferred (2026-10-18). Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 24.",
+   "seeded": "2026-10-18 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-287, published 2026-10-17; fixed in 4.1.9, GHSA-g6cq-6rqg-6c9p"
   }
  ]
 }
