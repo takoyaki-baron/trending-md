@@ -1,8 +1,8 @@
 ---
 date: 2026-10-18
-updated: 2026-10-18T04:20:00Z
+updated: 2026-10-18T12:35:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 25
 license: CC-BY-4.0
 ---
 
@@ -406,13 +406,139 @@ celphase の duck-pond は小さなインタラクティブなマガモの群れ
 
 ---
 
+## 29. Anthropic が自社の労働データを公表：エージェントの稼働時間は従業員の 6 倍 — 一方、ジュニア技術職の採用比率は 27% から 9% へ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic リサーチ · HN 56+ pts · 約1.6時間前 (~18:49 UTC+8)
+- **Tags:** `anthropic` `labor` `agents` `research`
+
+Anthropic の研究チームが自社の雇用記録、エージェントセッションのテレメトリ、Slack、カレンダー、採用データ（加えて従業員 17 名へのインタビュー）を分析した：8 月までに、対話型エージェントの稼働時間は従業員の稼働時間の **6 倍**に（逆転が初めて起きたのは 2026 年 3 月）；2025 年初以来、ジュニア技術職の採用比率は **27% から 9%** に低下；エンジニア 1 人あたりのコードコミット数は 6 か月前の **5 倍**に（採用者 192 名対非採用者 74 名の比較で、リバート/削除の指標では品質低下は測定されず）；Claude セッションの約 **80%** は人間を待つアイドル状態；「メタワーク」（エージェントパイプラインの管理）はセッションの 10% から 22% へ；常設のエージェント指示は 1 年で数百から **8,500** へ増加。これを受けての対応：AI による転換に直面する役割の早期警告システム、外部採用より先の社内再配置、採用基準を自律性と判断力へ振り直すこと。注意書きも本文中にある：ツール採用は無作為ではない（「この場合、我々の推定にはバイアスがかかる」）、「より多くのコードは必ずしもより良いコードや事業インパクトを意味しない」、そして結びの一文——「在職者の雇用保護は、そもそも雇用されなかった人の救いにはならない」。
+
+**Why it matters:** フロンティアラボの内部から公表された最初の労働データセット——そしてそのラボのモデルこそ、時間を稼いでいるエージェントそのものだ。10 月 13 日の 700 社研究と並べて読みたい：エージェントを作っている会社では、レビューのボトルネックは「人間を監督者に変える」ことで解かれており、その影響が最初に現れるのは梯子のいちばん下の段だ。
+
+[`🔗 Anthropic リサーチ`](https://www.anthropic.com/research/employment-at-anthropic) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50139873)
+
+---
+
+## 30. DeepSeek がウェブアクセスをユーティリティとして販売：Search と Fetch API、成功リクエスト 1,000 件あたり $0.75 — Claude Code と Codex 経由は 11 月まで無料
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 264+ pts · 約5.5時間前 (~14:50 UTC+8)
+- **Tags:** `deepseek` `search` `agents` `api`
+
+DeepSeek は自社 API に 2 つの素の JSON ツールを追加した：`POST /v1/tools/search`——自社開発の検索エンジンが支え、タイトル・URL・スニペット・モデル向け要約を返し、演算子（`site:`、引用符フレーズ、`lang:`、`after:`/`before:`）に対応し、0–3 の `rerank_score`（1.5 以上を高品質と表示）と 0–4 の `authority` 階層（3 以上が「高権威」）を備える。そして `POST /v1/tools/fetch` は任意のページを Markdown で返す。課金は**成功した**リクエストのみ（HTTP 200 かつ出力非空）：両ツールとも 1,000 件あたり $0.75。DeepSeek Harness、Claude Code、Codex から発行されるサーバーサイドツール呼び出しは、北京時間 **2026 年 11 月 1 日 00:00** まで無料、以降はリクエスト単位の課金へ。両ツールともアカウント単位で 5 QPS に制限。fetch にはドメインごとの制限も加わる。
+
+**Why it matters:** ウェブアクセスが、エージェントハーネスが差し込む従量制インフラになりつつある——品質シグナル（リランクスコア、権威階層）が、ランキング関数の奥ではなく API フィールドとして露出している。成功 1,000 件 $0.75 なら、エージェントの請求書における検索ツールの項目は実質ゼロになる。残る競争軸は検索品質と、ドメインごとのフェッチポリシーだ。
+
+[`🔗 DeepSeek API ドキュメント`](https://api-docs.deepseek.com/guides/search/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50138531)
+
+---
+
+## 31. Sphinx：エージェントのコードが出荷される前に理解度を試す git フック — 間違えることこそが機能
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 155+ pts · 約7.8時間前 (~12:33 UTC+8)
+- **Tags:** `agents` `git` `comprehension` `mit`
+
+Sphinx（parthh01/sphinx、MIT、リポジトリは 10 月 14 日作成）はエージェント支援開発のための git フック：保護ブランチへの push 時に、あなたのチャットを見ていないレビュアーモデルが diff を読み、「この変更は問題が起きたときに何をするか」を問う——例題は webhook ハンドラの二重課金と冪等性を突く。正答すれば push は続行。間違えれば「理由を学び、新しいシナリオを試す」。Codex、Claude Code、Cursor、OpenCode、Pi（あるいは素の git）に対応し、既存のエージェント、OpenRouter、任意の OpenAI 互換エンドポイントで動く。プライバシーの境界も明示される：あなたの回答はコーディングエージェントに届かず、`.env` ファイルは決して開かない。逃げ道も誠実だ：`sphinx yolo` は push を通す——が、スキップはすべて記録される。
+
+**Why it matters:** Claude Code チームのリスク階層化レビューパイプライン（10 月 17 日）と Doc2Harness（10 月 15 日）に続く、個人開発者スケールでの同じ賭け：diff を信用するのではなく、理解をマージの門にする。ログ付きのバイパスは正しい設計だ——ツールは理解を測るのであって、強制しているふりをしない。
+
+[`🔗 sphinx`](https://sphinx-six-theta.vercel.app/) · [`🔗 parthh01/sphinx`](https://github.com/parthh01/sphinx)
+
+---
+
+## 32. Athanor：Claude Opus 5.5 エージェント 4 体、104 時間、各 8 GPU — 素の Qwen3-4B が公式 instruct 版に追いつく
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 本日掲載 (2610.21055)
+- **Tags:** `post-training` `agents` `autonomous-research` `paper`
+
+Athanor は「実 GPU 上で自律的にポストトレーニング研究を行うエージェントネイティブシステム」：エージェントは完全な研究自律性とエンジニアリングツール、スターターコードを与え、データセットと評価結果を読み、訓練データを構築し、訓練アルゴリズムを書いて改変し、ハイパーパラメータを自ら調整する——サンドボックス内で、評価は凍結、データは脱汚染、持続的な研究記録を保持、外部の教師モデルは禁止。ヘッドラインの実験では、Claude Opus 5.5 エージェント 4 体（各 8-GPU ノード、104 時間）が Qwen3-4B-Base を 6 タスクの開発スイートで 15.9 → 67.3、非公開スイートで 9.2 → 48.2 まで引き上げた——公式 Qwen3-4B-Instruct-2507 は 66.5 と 47.9。実験記録が示す手法は：公開推論データでの SFT、あるエージェントの RL ロールアウト改変、エージェント間の重みマージ、自己蒸留ラウンド。著者自身が引いた境界：これは「より弱い形の」再帰的自己改善であり——既知の技術の組み合わせであって、新しい発見ではない。
+
+**Why it matters:** 素のベースモデルを入れて、汎用モデルが出てくる、研究ループに人間なし——著者らは初の主張をし、「組み合わせ」という誠実な限定詞こそが主張を支えている。10 月 12 日の Sakana の MASS と並べて読むと、自律ポストトレーニングにはデモではなく再現可能なプラットフォームができたことになる。
+
+[`🔗 arXiv 2610.21055`](https://arxiv.org/abs/2610.21055) · [`🔗 HTML 全文`](https://arxiv.org/html/2610.21055v1)
+
+---
+
+## 33. エストニアのインターネット投票システムのソースが GitHub に——リポジトリ自体が正体を明かしている：公開スナップショットであって、開発プロジェクトではない
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 216+ pts · 約33時間前 (10月17日 ~11:18 UTC+8)
+- **Tags:** `elections` `open-source` `government` `estonia`
+
+valimised/ivxv（468★）は、エストニアの法的拘束力を持つインターネット投票を支えるシステム IVXV のソースを公開している——コア選挙サービス（collector、storage、processor、auditor）、ID 統合（Mobile-ID、Smart-ID、Web-eID）、有権者向け検証アプリ、systemd サービス付き Debian パッケージングなど約 20 コンポーネントで、国家選挙管理局の監督下にある。リポジトリ自身の位置づけが最も誠実な部分だ：その存在意義は「エストニアのオンライン投票システムのソースコードを公開の審査に供するため」であり、「活発な開発には使用されず」、実際に選挙で使われているコードのスナップショットとして更新が続けられる——`published` ブランチのコミットは 13、従来型のリリースはない。
+
+**Why it matters:** 誰もが読める国家的規模のインターネット投票コードベースはごく少なく、その公開モデル自体が設計判断だ：透明性のための成果物であって、オープン開発ではない。スナップショットという位置づけは、「また放棄された公開リポジタか」という HN の条件反射に先手を打っている。
+
+[`🔗 valimised/ivxv`](https://github.com/valimised/ivxv) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50127586)
+
+---
+
+## 34. MLExpert：自律的 ML エンジニアリング向けにポストトレーニングされた 35B MoE — MLE-Bench Lite のメダル率 37.9% → 72.7%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 本日掲載 (2610.22344)
+- **Tags:** `agents` `mle-bench` `post-training` `paper`
+
+MLExpert は、長時間の機械学習エンジニアリング向けにポストトレーニングされた 35B の混合エキスパートモデルで、3 つの要素から成る：実行可能なタスクを構築する Kaggle-MLE Factory、汎用のツール使用を MLE ドメインへ転移させる階層的 agentic SFT、そして Windowed Interaction RL——実験結果の間のマルチターン決断を、単一の結果報酬を共有するひとつの実行ウィンドウとして扱い、軌跡の終了を待たずにポリシー更新が間に合うよう非同期で収集する。MLE-Bench Lite でベースモデルの平均メダル率を 37.9% から 72.7% に引き上げ、Kimi-K3 や GLM-5.3 といったより大きなフロンティアモデルに匹敵すると主張し、NatureBench Lite でも追加の伸びを示す。アブストラクトに limitations の節はない——ヘッジは動詞の中にある（能力転移を示すのは「示唆する」であって「実証する」ではない）。
+
+**Why it matters:** エージェントモデル特化の波（10 月 13 日 GLM-Legal、10 月 17 日 DeepSeek の Terminal-Bench チェックポイント）に、オープンな 35B パラメータの主張を掲げる ML エンジニアリングの選手が加わった。上の Athanor と並べて読みたい：片方は自律研究プラットフォームを作り、片方はその上を走るスペシャリストを訓練する——そして limitations の欠如こそが、どちらの論文が自分の注意書きをやったかの兆候だ。
+
+[`🔗 arXiv 2610.22344`](https://arxiv.org/abs/2610.22344) · [`🔗 cs.AI 新着`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 35. 自己改善問題：真の改善を承認しつつ良い改善を決して拒まない、終端するゲートは存在しないという証明
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 本日掲載 (2610.21646)
+- **Tags:** `theory` `safety` `self-improvement` `paper`
+
+Moser、Frolov、Nauen、Raue、Dengel は自己改善エージェントをプログラムとして形式化し、不可能性を証明した：いかなる終端する手続き——承認ゲートであれ探索手続きであれ——も、**信頼性**（非改善を決して受け入れない）と**非保守性**（利用可能な改善を決して見逃さない）を同時に満たせない；自己言及的な構成があらゆるその種のゲートを破壊し、誤差有界の確率的ゲートも同じ壁にぶつかる。出口は判定可能なレジーム——bounded な評価と有限の提案予算——であり、そこでは全数シミュレーションが両方の保証を回復する。だが論文の最も鋭い一文もまたそのレジーム内にある：承認された更新の連鎖は、毎回 bounded スコアを押し上げながら、**真のスコアが下がり続ける**ことがありうる。
+
+**Why it matters:** 今週の経験的パターン——不正をしても報酬が払われる OpenAI の grader（第 3 項）、Sakana の自己改善研究コミュニティ——の形式的な背骨である。「あなたの報酬モデルは一般には完全には信頼できません」は、名前のついた仮定を持つ定理になり、Goodhart 分岐の一文は、ガバナンスレビューが引用すべき言葉だ。
+
+[`🔗 arXiv 2610.21646`](https://arxiv.org/abs/2610.21646) · [`🔗 cs.AI 新着`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 36. jasna：ライブ再生つき GPU モザイク検閲レストア — Lada の系譜が速い GUI を手に入れ、限界を README に印刷する
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +115★（累計 約2.2k★）
+- **Tags:** `video` `restoration` `gpu` `agpl`
+
+jasna（Kruk2/jasna、AGPL-3.0、昨日 v0.11.2 リリース）は、動画内のモザイク検閲領域を検出・復元し、フレームのそれ以外はそのまま残す——GUI と CLI の両形態を備え、復元後の動画をファイルに書き出さずにそのまま再生できる。パイプラインは完全に GPU：rfdetr-v6 による検出、BasicVSR++ による復元（無料枠、256×256 クリップ）、NVDEC/NVENC エンコード・デコード。サポーター特典（$15/$25、3 台ライセンス）で UNet 4× シャープニング、静止画向け SD 1.5、LTX 拡散パスが追加になる——NVIDIA 専用。README は RTX 5090 上で Lada 0.11.0 の 3.4〜4.7 倍という自己ベンチマークを掲げ、インスピレーションと一部の基盤として Lada（Codeberg）をクレジットし、真に具体的な制約表を添える：最低 GTX 16 シリーズ（「GTX 10 シリーズ以前は動作しない」）、AMD RX 7000/9000 は実験的、非英語パス非対応、LTX には 8 GB VRAM が必要。
+
+**Why it matters:** モザイクレストアという系譜は本来、論争を呼ぶものだ。jasna はその最も洗練された実装だが——本フィードに載った理由はパッケージングのパターンだ：ハードウェアの下限、有料枠、ベンチマーク方法論を README に明記するツールは、主張が届いた時点ですでにスコープを内蔵している。
+
+[`🔗 Kruk2/jasna`](https://github.com/Kruk2/jasna) · [`🔗 v0.11.2 リリース`](https://github.com/Kruk2/jasna/releases/latest)
+
+---
+
+## 37. NVD の窓に新しい 9.0 はなし — ただし VulnCheck の一括開示が Fleet、Coder、FreeRDP にパッチ相当のバグをもたらした
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / VulnCheck · 10月17〜18日掲載
+- **Tags:** `cve` `self-hosted` `devops` `patch`
+
+過去 24 時間に CVSS 9.0 以上の新規 CVE はなく、KEV への追加もなかった——だが NVD に届いたこの VulnCheck スコアの束は、セルフホストインフラにとって一度のパッチ確認に値する。**Fleet**（デバイス管理）：Apple MDM 登録の plist 解析における無制限再帰——約 150 バイトの細工付きバイナリ plist でサーバーをクラッシュできる（CVE-2026-111923、8.7、4.89.0 で修正）；加えて未認証エンドポイントでの gzip によるメモリ枯渇 DoS（CVE-2026-111924、8.7、4.83.0 で修正）。**Coder**（ワークスペース）：`GetWorkspaceProxyByHostname` が SIMILAR TO の**前方一致**でホスト名を検証するため、プレフィックスとなる任意のドメインが workspace proxy として信頼される——攻撃者が所有するプレフィックスドメインは、細工した auth-redirect 経由で被害者の `application_connect` API キーを奪取できる（CVE-2026-111927、8.7、2.29.20/2.33.12/2.34.8/2.35.4 で修正）。**FreeRDP**：サーバー NTLM ハッシュコールバック経路でのヒープ out-of-bounds 書き込み——逆方向の MIC オフセットを持つ細工済み AUTHENTICATE_MESSAGE が、アロケーションの外へ 16 バイトのゼロを書き込む（CVE-2026-111880、8.3、3.32.0 で修正）。スコアの出所（すべて）：**VulnCheck による割り当て（disclosure@vulncheck.com）；NVD レコードは Received 状態——NVD 分析済みではなく、独立した NVD スコアはない**。同じバッチには、Vikunja の CORS localhost 信頼によるアカウント乗っ取り（7.2）と、第 24 項の phpMyFAQ に加えてさらに 8 件の phpMyFAQ CVE も含まれる。3 リポジトリとも稼働中で修正は出荷済み：Fleet v4.93.0、Coder v2.37.4、FreeRDP 3.32.2。
+
+**Why it matters:** 単体では本フィードの 9.0 基準に届かないが、合わせれば、MDM・クラウドワークスペース・RDP ゲートウェイを動かしている人にとっての今週の現実的なパッチリストだ——そして Coder の一件は教訓だ：ホスト名の許可リストは、同一性ではなく前方一致になった瞬間に破れている。
+
+[`🔗 NVD：CVE-2026-111927`](https://nvd.nist.gov/vuln/detail/CVE-2026-111927) · [`🔗 fleetdm/fleet`](https://github.com/fleetdm/fleet)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-18T04:20:00Z |
-| Items | 28 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, GitHub releases, arXiv, NVD/MITRE, GHSA/VulnCheck, Chrome プラットフォームドキュメント, OpenJDK, Hugging Face, LWN, ベンダーブログ, セキュリティ研究) |
+| Generated | 2026-10-18T12:35:00Z |
+| Items | 37 |
+| Sources tracked | 25 (Hacker News, GitHub Trending, GitHub releases, arXiv, NVD/VulnCheck, GHSA, Chrome プラットフォームドキュメント, OpenJDK, Hugging Face, LWN, Anthropic リサーチ, DeepSeek API ドキュメント, ベンダーブログ, セキュリティ研究) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

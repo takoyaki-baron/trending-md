@@ -1,8 +1,8 @@
 ---
 date: 2026-10-18
-updated: 2026-10-18T04:20:00Z
+updated: 2026-10-18T12:35:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 25
 license: CC-BY-4.0
 ---
 
@@ -693,13 +693,260 @@ audio — the quack that fooled the front page is a few kilobytes of math.
 
 ---
 
+## 29. Anthropic publishes its own labor data: agent hours outnumber employee hours 6 to 1 — and junior technical hires fell from 27% to 9%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic research · HN 56+ pts · 1.6h ago (~18:49 UTC+8)
+- **Tags:** `anthropic` `labor` `agents` `research`
+
+Anthropic's research team analyzed its own employment records, agent-session telemetry,
+Slack, calendar and hiring data (plus 17 employee interviews): by August, interactive
+agent hours outnumbered employee hours **6 to 1** (first crossover in March 2026);
+junior technical hires dropped from **27% to 9%** of technical hiring since early 2025;
+code commits per engineer hit **5×** their level of six months prior (192 adopters vs 74
+non-adopters, with no measurable quality drop by their revert/delete measures); Claude
+sessions sit ~**80% idle** waiting on humans; "meta-work" rose from 10% to 22% of
+sessions; standing agent instructions grew from a few hundred to **8,500** in a year.
+In response: an early-warning system for roles facing AI transformation, internal
+redeployment before external hiring, and hiring criteria reweighted toward autonomy and
+judgment. The caveats are in the post: adoption isn't random ("this would bias our
+estimates"), "more code does not necessarily mean better code," and the closing line —
+"Employment protections for incumbents will not benefit those not hired to begin with."
+
+**Why it matters:** The first labor dataset published from inside a frontier lab — the
+same lab whose models are the agents doing the hours. Read it beside the 700-firm study
+(Oct 13): at the company building the agents, the review bottleneck is being solved by
+making humans into supervisors, and the junior rung of the ladder is where it shows.
+
+[`🔗 Anthropic research`](https://www.anthropic.com/research/employment-at-anthropic) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50139873)
+
+---
+
+## 30. DeepSeek sells web access as a utility: Search and Fetch APIs at $0.75 per 1,000 successful requests — free through Claude Code and Codex until November
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 264+ pts · 5.5h ago (~14:50 UTC+8)
+- **Tags:** `deepseek` `search` `agents` `api`
+
+DeepSeek put two raw JSON tools on its API: `POST /v1/tools/search` — served by its
+in-house search engine, returning title, URL, snippet, a model-oriented summary,
+operators (`site:`, quotes, `lang:`, `after:`/`before:`), a 0–3 `rerank_score`
+(≥1.5 labeled high-quality) and a 0–4 `authority` tier (3+ "highly authoritative") —
+and `POST /v1/tools/fetch`, which returns any page as Markdown. Pricing is per
+**successful** request only (HTTP 200 with non-empty output): $0.75 per 1,000 for each
+tool. Server-side tool calls made through DeepSeek Harness, Claude Code or Codex are
+free until 00:00 Beijing time on **November 1, 2026**, when per-request billing starts.
+Both are rate-limited to 5 QPS at the account level; fetch adds a per-domain limit.
+
+**Why it matters:** Web access is becoming metered infrastructure that agent harnesses
+plug in — with quality signals (rerank score, authority tier) exposed as API fields
+rather than buried in a ranking function. At $0.75/1k successes, the search-tool line
+item in an agent's bill effectively vanishes; what's left to compete on is the
+retrieval quality and the per-domain fetch policy.
+
+[`🔗 DeepSeek API docs`](https://api-docs.deepseek.com/guides/search/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50138531)
+
+---
+
+## 31. Sphinx: a git hook that quizzes you on your agent's code before it ships — wrong answers are the feature
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 155+ pts · 7.8h ago (~12:33 UTC+8)
+- **Tags:** `agents` `git` `comprehension` `mit`
+
+Sphinx (parthh01/sphinx, MIT, repo created Oct 14) is a git hook for agent-assisted
+development: on push to a protected branch, a reviewer model that never saw your chat
+reads the diff and asks what the change does when things go wrong — the example probes
+a webhook handler on double-charging and idempotency. Answer right and the push
+proceeds; get it wrong and you "learn why, then try a new scenario." It integrates with
+Codex, Claude Code, Cursor, OpenCode and Pi (or plain git), runs through your existing
+agent, OpenRouter or any OpenAI-compatible endpoint, and states its privacy boundary
+plainly: your answers never reach the coding agent, and `.env` files are never opened.
+The escape hatch is honest too: `sphinx yolo` waves pushes through — and logs every skip.
+
+**Why it matters:** After the Claude Code team's risk-tiered review pipeline (Oct 17)
+and Doc2Harness (Oct 15), this is the individual-developer-scale version of the same
+ bet: making comprehension the merge gate instead of trusting the diff. The logged
+bypass is the right design — the tool measures understanding, it doesn't pretend to
+enforce it.
+
+[`🔗 sphinx`](https://sphinx-six-theta.vercel.app/) · [`🔗 parthh01/sphinx`](https://github.com/parthh01/sphinx)
+
+---
+
+## 32. Athanor: four Claude Opus 5.5 agents, 104 hours, eight GPUs each — and a base Qwen3-4B ends up matching its official instruct tune
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · listed today (2610.21055)
+- **Tags:** `post-training` `agents` `autonomous-research` `paper`
+
+Athanor is "an agent-native system for autonomous post-training research on real
+GPUs": agents get full research autonomy, engineering tools and starter code, then
+read datasets and eval results, construct training data, write and modify training
+algorithms, and tune hyperparameters themselves — inside a sandbox with frozen
+evaluation, decontaminated data, a persistent research record, and no external teacher
+models. In the headline run, four Claude Opus 5.5 agents (one 8-GPU node each, 104
+hours) took Qwen3-4B-Base from 15.9 → 67.3 on a six-task dev suite and 9.2 → 48.2 on
+the held-out suite — against 66.5 and 47.9 for the official Qwen3-4B-Instruct-2507.
+The campaign record shows how: SFT on public reasoning data, one agent's RL rollout
+modification, cross-agent weight merges, self-distillation rounds. The authors' own
+boundary: this is "a weaker form" of recursive self-improvement — recombining known
+techniques, not discovering new ones.
+
+**Why it matters:** Base model in, generalist out, no human in the research loop —
+the authors claim a first, and the honest "recombination" caveat is what makes the
+claim load-bearing. Next to Sakana's MASS (Oct 12), autonomous post-training now has
+a reproducible platform, not just a demo.
+
+[`🔗 arXiv 2610.21055`](https://arxiv.org/abs/2610.21055) · [`🔗 HTML full text`](https://arxiv.org/html/2610.21055v1)
+
+---
+
+## 33. Estonia's internet-voting source is on GitHub — and the repo says exactly what it is: a published snapshot, not a development project
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 216+ pts · 33h ago (~11:18 UTC+8 Oct 17)
+- **Tags:** `elections` `open-source` `government` `estonia`
+
+valimised/ivxv (468★) publishes the source of IVXV, the system behind Estonia's
+legally binding internet voting — ~20 components spanning core election services
+(collector, storage, processor, auditor), identity integration (Mobile-ID, Smart-ID,
+Web-eID), the voter-facing verification app, and Debian packaging with systemd
+services, maintained under the State Electoral Office. The repo's own framing is the
+honest part: it exists "to make source code of the Estonian online voting system
+available for public review," is "not used for active development," and is kept up to
+date as a snapshot of the code actually used in elections — 13 commits on the
+`published` branch, no conventional releases.
+
+**Why it matters:** One of the few national internet-voting codebases anyone can read,
+and the publication model is itself the design decision: transparency artifact, not
+open development. The snapshot framing pre-answers the HN reflex of treating every
+public repo as an abandoned project.
+
+[`🔗 valimised/ivxv`](https://github.com/valimised/ivxv) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50127586)
+
+---
+
+## 34. MLExpert: a 35B MoE post-trained for autonomous ML engineering — MLE-Bench Lite medal rate 37.9% → 72.7%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · listed today (2610.22344)
+- **Tags:** `agents` `mle-bench` `post-training` `paper`
+
+MLExpert is a 35B mixture-of-experts model post-trained for long-horizon machine
+learning engineering, via three pieces: a Kaggle-MLE Factory that constructs
+executable tasks, hierarchical agentic SFT that transfers general tool-use into the
+MLE domain, and Windowed Interaction RL — which treats the multi-turn decisions
+between experiment results as one execution window under a shared outcome reward, and
+collects asynchronously so policy updates land before trajectories finish. On
+MLE-Bench Lite it lifts the base model's average medal rate from 37.9% to 72.7%,
+claimed comparable to larger frontier models such as Kimi-K3 and GLM-5.3, with
+additional gains on NatureBench Lite. The abstract carries no limitations section —
+the hedging lives in the verbs ("suggesting" capability transfer rather than
+demonstrating it).
+
+**Why it matters:** The agent-model specialization wave (GLM-Legal Oct 13, DeepSeek's
+Terminal-Bench checkpoint Oct 17) now has an ML-engineering entrant with an open
+35B-parameter claim. Read the number next to Athanor (above): one paper builds the
+autonomous research platform, this one trains the specialist that would run on it —
+and the missing limitations section is the tell for which paper did its caveats.
+
+[`🔗 arXiv 2610.22344`](https://arxiv.org/abs/2610.22344) · [`🔗 cs.AI new listings`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 35. The Self-Improvement Problem: a proof that no terminating gate can both approve real improvements and never block a good one
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · listed today (2610.21646)
+- **Tags:** `theory` `safety` `self-improvement` `paper`
+
+Moser, Frolov, Nauen, Raue and Dengel formalize self-improving agents as programs and
+prove an impossibility: no terminating procedure — approval gate or search — can be
+simultaneously **reliable** (never accepting a non-improvement) and **non-conservative**
+(never missing an available improvement); self-referential constructions break any
+such gate, and randomized gates with bounded error hit the same wall. The escape is a
+decidable regime — bounded evaluation plus a finite proposal budget — where exhaustive
+simulation recovers both guarantees. But the paper's sharpest clause is in that regime:
+a chain of accepted updates can raise the bounded score every round **while the true
+score falls**.
+
+**Why it matters:** The formal backbone for this week's empirical pattern — OpenAI's
+graders that paid out on cheating (item 3), Sakana's self-improving research
+communities. "Your reward model cannot be made fully trustworthy in general" is now a
+theorem with named assumptions, and the Goodhart-divergence clause is the sentence
+governance reviews should quote.
+
+[`🔗 arXiv 2610.21646`](https://arxiv.org/abs/2610.21646) · [`🔗 cs.AI new listings`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 36. jasna: GPU mosaic-censorship restoration with live playback — the Lada lineage gets a fast GUI, and publishes its limits
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +115★ today (~2.2k★ total)
+- **Tags:** `video` `restoration` `gpu` `agpl`
+
+jasna (Kruk2/jasna, AGPL-3.0, v0.11.2 yesterday) detects and restores mosaic-censored
+regions in video while leaving the rest of the frame untouched — GUI and CLI, with
+live playback of restored video without writing a file. The pipeline is fully GPU:
+rfdetr-v6 detection, BasicVSR++ restoration (free tier, 256×256 clips), NVDEC/NVENC
+encode-decode. Supporter unlocks ($15/$25, three-PC licenses) add UNet 4× sharpening,
+SD 1.5 for stills and an LTX diffusion pass — NVIDIA-only. The README benchmarks
+itself at 3.4–4.7× Lada 0.11.0 on an RTX 5090, credits Lada (Codeberg) as inspiration
+and partial basis, and carries a genuinely specific limits table: GTX 16-series
+minimum ("GTX 10-series and older don't work"), AMD RX 7000/9000 experimental,
+non-English paths unsupported, LTX needing 8 GB VRAM.
+
+**Why it matters:** The mosaic-restoration lineage is contentious by nature, and jasna
+is its most polished implementation yet — but what makes it a feed item is the
+packaging pattern: a tool that states its hardware floor, its paid tiers and its
+benchmark methodology in the README, so the claims arrive already scoped.
+
+[`🔗 Kruk2/jasna`](https://github.com/Kruk2/jasna) · [`🔗 v0.11.2 release`](https://github.com/Kruk2/jasna/releases/latest)
+
+---
+
+## 37. The NVD window has no new 9.0s — but VulnCheck's batch lands patch-worthy bugs in Fleet, Coder and FreeRDP
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / VulnCheck · published Oct 17–18
+- **Tags:** `cve` `self-hosted` `devops` `patch`
+
+No CVSS ≥9.0 and no KEV additions in the last 24 hours — but the VulnCheck-scored
+batch hitting NVD deserves a patch pass on self-hosted infra. **Fleet** (device
+management): unbounded recursion in Apple MDM enrollment plist parsing — a ~150-byte
+binary plist crashes the server (CVE-2026-111923, 8.7, fixed 4.89.0) — plus a gzip
+memory-exhaustion DoS on unauthenticated endpoints (CVE-2026-111924, 8.7, fixed
+4.83.0). **Coder** (workspaces): `GetWorkspaceProxyByHostname` validates hostnames
+with a SIMILAR TO **prefix** match, so any prefix-domain is trusted as a workspace
+proxy — an attacker-owned domain can capture a victim's `application_connect` API key
+via a crafted auth-redirect (CVE-2026-111927, 8.7, fixed 2.29.20/2.33.12/2.34.8/2.35.4).
+**FreeRDP**: heap out-of-bounds write in the server NTLM hash-callback path — a
+crafted AUTHENTICATE_MESSAGE with a backward MIC offset writes 16 zero bytes past the
+allocation (CVE-2026-111880, 8.3, fixed 3.32.0). Score provenance on all: **assigned
+by VulnCheck (disclosure@vulncheck.com); NVD records in Received status — not
+NVD-analyzed, no independent NVD score**. The same batch carries a Vikunja CORS
+localhost-trust account takeover (7.2) and eight more phpMyFAQ CVEs beside item 24's.
+All three repos are alive with fixes shipped: Fleet v4.93.0, Coder v2.37.4, FreeRDP
+3.32.2.
+
+**Why it matters:** None of these clears the feed's 9.0 bar alone, but together they
+are the week's realistic patch list for anyone running MDM, cloud workspaces or RDP
+gateways — and the Coder bug is a reminder that hostname allowlists fail the moment
+the match is a prefix, not an identity.
+
+[`🔗 NVD: CVE-2026-111927`](https://nvd.nist.gov/vuln/detail/CVE-2026-111927) · [`🔗 fleetdm/fleet`](https://github.com/fleetdm/fleet)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-18T04:20:00Z |
-| Items | 28 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, GitHub releases, arXiv, NVD/MITRE, GHSA/VulnCheck, Chrome platform docs, OpenJDK, Hugging Face, LWN, vendor blogs, security research) |
+| Generated | 2026-10-18T12:35:00Z |
+| Items | 37 |
+| Sources tracked | 25 (Hacker News, GitHub Trending, GitHub releases, arXiv, NVD/VulnCheck, GHSA, Chrome platform docs, OpenJDK, Hugging Face, LWN, Anthropic research, DeepSeek API docs, vendor blogs, security research) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

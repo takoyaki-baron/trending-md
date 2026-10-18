@@ -1,8 +1,8 @@
 ---
 date: 2026-10-18
-updated: 2026-10-18T04:20:00Z
+updated: 2026-10-18T12:35:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 25
 license: CC-BY-4.0
 ---
 
@@ -406,13 +406,139 @@ celphase 的 duck-pond 是一小群互动绿头鸭——"三只母鸭、两只�
 
 ---
 
+## 29. Anthropic 公布自家劳动数据：agent 工时已达员工工时的 6 倍 — 而初级技术岗位招聘占比从 27% 跌到 9%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic 研究 · HN 56+ pts · ~1.6小时前 (~18:49 UTC+8)
+- **Tags:** `anthropic` `labor` `agents` `research`
+
+Anthropic 研究团队分析了公司自己的雇佣记录、agent 会话遥测、Slack、日历与招聘数据（外加 17 名员工访谈）：到 8 月，交互式 agent 工时已达员工工时的 **6 倍**（首次反超发生在 2026 年 3 月）；自 2025 年初以来，初级技术岗位招聘占比从 **27%** 跌至 **9%**；每名工程师的代码提交量达到六个月前的 **5 倍**（192 名采用者对比 74 名未采用者，按其回退/删除指标衡量质量无可测下降）；Claude 会话约 **80%** 的时间在等人类；"元工作"（管理 agent 流水线）从会话的 10% 升至 22%；常驻 agent 指令一年内从几百条增至 **8,500** 条。对应的公司调整：为面临 AI 转型的岗位建预警系统、优先内部转岗而非外部招聘、招聘标准向自主性与判断力倾斜。注意事项就写在文中：工具采用不是随机的（"这会让我们的估计有偏"）、"更多代码不一定意味着更好的代码或更大的业务影响"，以及收尾那句——"对在岗者的就业保护，帮不到那些从一开始就没被雇用的人。"
+
+**Why it matters:** 第一个从前沿实验室内部发布的劳动数据集——而这家实验室的模型正是那些在干活时间的 agent。与 10 月 13 日的 700 家企业研究对照阅读：在造 agent 的公司里，评审瓶颈正在靠"把人变成监督者"来解，而梯子的最低一级最先消失。
+
+[`🔗 Anthropic 研究`](https://www.anthropic.com/research/employment-at-anthropic) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50139873)
+
+---
+
+## 30. DeepSeek 把网页访问卖成公共事业：Search 与 Fetch API 每千次成功请求 $0.75 — 走 Claude Code 和 Codex 十一月前免费
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 264+ pts · ~5.5小时前 (~14:50 UTC+8)
+- **Tags:** `deepseek` `search` `agents` `api`
+
+DeepSeek 在其 API 上线了两个裸 JSON 工具：`POST /v1/tools/search`——由自研搜索引擎支撑，返回标题、URL、摘要、面向模型的总结，支持操作符（`site:`、引号短语、`lang:`、`after:`/`before:`），带 0–3 的 `rerank_score`（≥1.5 标为高质量）与 0–4 的 `authority` 层级（3+ 为"高权威"）；以及 `POST /v1/tools/fetch`，把任意网页取回为 Markdown。计费只按**成功**请求算（HTTP 200 且输出非空才收费）：两个工具均为每千次 $0.75。通过 DeepSeek Harness、Claude Code 或 Codex 发起的服务端工具调用在北京时间 **2026 年 11 月 1 日 00:00** 前免费，之后转为按请求计费。两者各自限速 5 QPS，账户级共享；fetch 另有按域名限速。
+
+**Why it matters:** 网页访问正在变成 agent 工具箱即插即用的计量基础设施——质量信号（重排分、权威层级）作为 API 字段暴露出来，而不是埋在排序函数里。$0.75/千次成功之后，agent 账单里的搜索工具一项实际上归零；剩下的竞争维度是检索质量与按域名的抓取策略。
+
+[`🔗 DeepSeek API 文档`](https://api-docs.deepseek.com/guides/search/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50138531)
+
+---
+
+## 31. Sphinx：一个在你的 agent 代码上线前考你理解力的 git hook — 答错才是它的功能
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 155+ pts · ~7.8小时前 (~12:33 UTC+8)
+- **Tags:** `agents` `git` `comprehension` `mit`
+
+Sphinx（parthh01/sphinx，MIT，仓库建于 10 月 14 日）是面向 agent 辅助开发的 git hook：向受保护分支推送时，一个从未见过你对话的评审模型读取 diff，追问"这段改动出问题时会发生什么"——示例问题围绕 webhook 处理器的重复扣款与幂等性。答对则放行；答错则"弄懂原因，再试一个新场景"。它兼容 Codex、Claude Code、Cursor、OpenCode 与 Pi（或纯 git），可通过你现有的 agent、OpenRouter 或任何 OpenAI 兼容端点运行，并坦白划定隐私边界：你的回答永远不会到达编码 agent，`.env` 文件永不打开。逃生通道同样诚实：`sphinx yolo` 直接放行——但每一次跳过都会被记录。
+
+**Why it matters:** 在 Claude Code 团队的风险分级评审流水线（10 月 17 日）与 Doc2Harness（10 月 15 日）之后，这是同一命题的个人开发者版本：把理解力变成合并闸门，而不是信任 diff。带日志的绕过是正确的设计——工具度量理解，而不假装强制理解。
+
+[`🔗 sphinx`](https://sphinx-six-theta.vercel.app/) · [`🔗 parthh01/sphinx`](https://github.com/parthh01/sphinx)
+
+---
+
+## 32. Athanor：四个 Claude Opus 5.5 agent、104 小时、各配 8 张 GPU — 裸的 Qwen3-4B 最终追平官方 instruct 版
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 今日收录 (2610.21055)
+- **Tags:** `post-training` `agents` `autonomous-research` `paper`
+
+Athanor 是"跑在真实 GPU 上的 agent 原生自主后训练研究系统"：agent 获得完整的研究自主权、工程工具与起步代码，自行读取数据集与评测结果、构造训练数据、编写并修改训练算法、调超参——全程在沙盒内，评测冻结、数据去污染、留有持久研究记录，且禁止使用外部教师模型。头条实验中，四个 Claude Opus 5.5 agent（各配一个 8-GPU 节点，104 小时）把 Qwen3-4B-Base 从 15.9 提到 67.3（六任务开发集）、9.2 提到 48.2（留出集）——官方 Qwen3-4B-Instruct-2507 分别为 66.5 与 47.9。实验记录显示方法：在公开推理数据上做 SFT、一名 agent 的 RL rollout 修改、跨 agent 权重合并、多轮自蒸馏。作者自己划定的边界：这是"较弱形式的"递归自我改进——重组已知技术，而非发现新技术。
+
+**Why it matters:** 裸基座进、通用模型出，研究环节无人类参与——作者称属首次，而"重组"这个诚实的限定词正是让声明站得住的原因。与 10 月 12 日 Sakana 的 MASS 并读：自主后训练现在有了一个可复现的平台，而不仅仅是一次 demo。
+
+[`🔗 arXiv 2610.21055`](https://arxiv.org/abs/2610.21055) · [`🔗 HTML 全文`](https://arxiv.org/html/2610.21055v1)
+
+---
+
+## 33. 爱沙尼亚网络投票系统源码在 GitHub 上——而仓库自己说清了它是什么：一份公开快照，不是一个开发项目
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 216+ pts · ~33小时前 (10月17日 ~11:18 UTC+8)
+- **Tags:** `elections` `open-source` `government` `estonia`
+
+valimised/ivxv（468★）公开了 IVXV 的源码——支撑爱沙尼亚具法律效力网络投票的系统——约 20 个组件，覆盖核心选举服务（collector、storage、processor、auditor）、身份集成（Mobile-ID、Smart-ID、Web-eID）、面向选民的核验应用，以及带 systemd 服务的 Debian 打包，由国家选举办公室监管。仓库的自我定位就是最诚实的部分：它存在的意义是"让爱沙尼亚网络投票系统的源码可供公众审查"，"不用于活跃开发"，作为实际用于选举的代码的快照保持更新——`published` 分支 13 个提交，没有常规版本发布。
+
+**Why it matters:** 这是极少数任何人都能读的国家级网络投票代码库之一，而发布模式本身就是设计决策：透明度实物，而非开放开发。快照定位预先回答了 HN 上"又一个被遗弃的公共仓库"的条件反射。
+
+[`🔗 valimised/ivxv`](https://github.com/valimised/ivxv) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50127586)
+
+---
+
+## 34. MLExpert：一个为自主机器学习工程后训练的 35B MoE — MLE-Bench Lite 奖牌率 37.9% → 72.7%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 今日收录 (2610.22344)
+- **Tags:** `agents` `mle-bench` `post-training` `paper`
+
+MLExpert 是一个为长时程机器学习工程后训练的 35B 混合专家模型，由三部分构成：构造可执行任务的 Kaggle-MLE Factory，把通用工具使用迁移进 MLE 领域的分层 agentic SFT，以及窗口交互 RL——它把实验结果之间的多轮决策当作共享同一结果奖励的一个执行窗口，并异步收集轨迹、让策略更新赶在轨迹结束前落地。在 MLE-Bench Lite 上，它把基座模型的平均奖牌率从 37.9% 提到 72.7%，自称可与 Kimi-K3、GLM-5.3 等更大的前沿模型相比，在 NatureBench Lite 上亦有增益。摘要没有 limitations 一节——对冲藏在动词里（"暗示"能力迁移，而非证明）。
+
+**Why it matters:** agent 模型专用化的浪潮（10 月 13 日 GLM-Legal、10 月 17 日 DeepSeek 的 Terminal-Bench 检查点）迎来一个带开源 35B 参数声明的机器学习工程选手。与上面的 Athanor 对照读：一篇造自主研究平台，一篇训练将要跑在上面的专家模型——而缺失的 limitations 一节，正说明了哪篇论文做了自己的注意事项。
+
+[`🔗 arXiv 2610.22344`](https://arxiv.org/abs/2610.22344) · [`🔗 cs.AI 新收录`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 35. 自我改进问题：一个证明——不存在既能放行真改进、又从不误杀好改进的终止性闸门
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 今日收录 (2610.21646)
+- **Tags:** `theory` `safety` `self-improvement` `paper`
+
+Moser、Frolov、Nauen、Raue 与 Dengel 把自我改进的 agent 形式化为程序并证明了一个不可能性：任何终止性过程——无论是审批闸门还是搜索过程——都无法同时做到**可靠**（从不接受非改进）与**非保守**（从不错过可用改进）；自指构造能击穿任何这类闸门，带误差界的随机闸门也撞上同一堵墙。出路是一个可判定域——有界评估加有限提案预算——穷举模拟可以同时恢复两种保证。但论文最锋利的一句也在这个域里：一连串被放行的更新可以每一轮都推高有界分数，**而真实分数在下跌**。
+
+**Why it matters:** 本周经验模式的形式化骨架——OpenAI 那些给作弊照常发奖的评分器（第 3 条）、Sakana 的自我改进研究社区。"你的奖励模型不可能在一般意义上被做得完全可信"现在是一个带着命名假设的定理，而 Goodhart 背离那一句，是治理评审该引用的话。
+
+[`🔗 arXiv 2610.21646`](https://arxiv.org/abs/2610.21646) · [`🔗 cs.AI 新收录`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 36. jasna：带实时回放的 GPU 马赛克修复 — Lada 系血脉拿到一个快 GUI，并把边界印在 README 里
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +115★（总计约 2.2k★）
+- **Tags:** `video` `restoration` `gpu` `agpl`
+
+jasna（Kruk2/jasna，AGPL-3.0，昨日发布 v0.11.2）检测并还原视频中被马赛克打码的区域，帧内其余部分原样保留——GUI 与 CLI 双形态，还原后的视频可不落盘直接回放。管线全 GPU：rfdetr-v6 检测、BasicVSR++ 还原（免费档，256×256 片段）、NVDEC/NVENC 编解码。赞助者解锁（$15/$25，三机授权）追加 UNet 4× 锐化、面向静帧的 SD 1.5 与一道 LTX 扩散处理——仅限 NVIDIA。README 给出对 Lada 0.11.0 在 RTX 5090 上 3.4–4.7 倍的自测基准，注明 Lada（Codeberg）为灵感来源与部分基础，并附一张真正具体的限制表：最低 GTX 16 系（"GTX 10 系及更早不可用"）、AMD RX 7000/9000 实验性、不支持非英文路径、LTX 需 8 GB 显存。
+
+**Why it matters:** 马赛克修复这一支天生有争议，jasna 是它迄今最完善的实现——但让它登上本feed的是封装模式：一个在 README 里写明硬件下限、付费档位与基准方法论的工具，声明到手时已经自带边界。
+
+[`🔗 Kruk2/jasna`](https://github.com/Kruk2/jasna) · [`🔗 v0.11.2 发布`](https://github.com/Kruk2/jasna/releases/latest)
+
+---
+
+## 37. NVD 窗口内没有新的 9.0 分 — 但 VulnCheck 批量披露给 Fleet、Coder 与 FreeRDP 带来值得打补丁的洞
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / VulnCheck · 10月17–18日刊出
+- **Tags:** `cve` `self-hosted` `devops` `patch`
+
+过去 24 小时没有 CVSS ≥9.0 的新 CVE，KEV 也无新增——但打进 NVD 的这批 VulnCheck 评分漏洞，值得自托管基础设施做一次补丁排查。**Fleet**（设备管理）：Apple MDM 注册 plist 解析中的无界递归——约 150 字节的构造 binary plist 即可崩溃服务器（CVE-2026-111923，8.7，4.89.0 修复）；另有未认证端点上的 gzip 内存耗尽 DoS（CVE-2026-111924，8.7，4.83.0 修复）。**Coder**（工作区）：`GetWorkspaceProxyByHostname` 用 SIMILAR TO 做**前缀**匹配校验主机名，任何前缀域名都被信任为 workspace proxy——攻击者持有的前缀域名可借构造的 auth-redirect 捕获受害者的 `application_connect` API 密钥（CVE-2026-111927，8.7，2.29.20/2.33.12/2.34.8/2.35.4 修复）。**FreeRDP**：服务端 NTLM 哈希回调路径的堆越界写——构造带逆向 MIC 偏移的 AUTHENTICATE_MESSAGE 可在分配区外写入 16 个零字节（CVE-2026-111880，8.3，3.32.0 修复）。评分溯源（全部）：**由 VulnCheck 评分（disclosure@vulncheck.com）；NVD 记录状态为 Received——未经 NVD 分析，无独立 NVD 评分**。同一批次还包括 Vikunja 的 CORS localhost 信任账户接管（7.2），以及第 24 条 phpMyFAQ 之外的八条 phpMyFAQ CVE。三个仓库均活跃且修复已发布：Fleet v4.93.0、Coder v2.37.4、FreeRDP 3.32.2。
+
+**Why it matters:** 单条都够不上本feed的 9.0 门槛，但合在一起就是本周运行 MDM、云工作区或 RDP 网关者的现实补丁清单——而 Coder 那条是个提醒：主机名白名单一旦是前缀匹配而非同一性匹配，就已经失效。
+
+[`🔗 NVD：CVE-2026-111927`](https://nvd.nist.gov/vuln/detail/CVE-2026-111927) · [`🔗 fleetdm/fleet`](https://github.com/fleetdm/fleet)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-18T04:20:00Z |
-| Items | 28 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, GitHub releases, arXiv, NVD/MITRE, GHSA/VulnCheck, Chrome 平台文档, OpenJDK, Hugging Face, LWN, 厂商博客, 安全研究) |
+| Generated | 2026-10-18T12:35:00Z |
+| Items | 37 |
+| Sources tracked | 25 (Hacker News, GitHub Trending, GitHub releases, arXiv, NVD/VulnCheck, GHSA, Chrome 平台文档, OpenJDK, Hugging Face, LWN, Anthropic 研究, DeepSeek API 文档, 厂商博客, 安全研究) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
