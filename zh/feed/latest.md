@@ -1,8 +1,8 @@
 ---
 date: 2026-10-18
-updated: 2026-10-17T20:20:00Z
+updated: 2026-10-18T04:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 22
 license: CC-BY-4.0
 ---
 
@@ -266,13 +266,153 @@ GNOME 宣布了 GNOME OS 的 Preview 版（10 月 16 日，Adrian Vovk）：与 
 
 ---
 
+## 19. 继 10 月 12 日我们报道时的 13.2 万★：rea 四天内连发 6.5.0 与 6.6.0，星数涨到 31 万 — Kuna 静态分析接入，Ghidra 支持延伸到 Windows ARM PE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 共 30.97万★ · 6.6.0 今日发布 (~11:40 UTC+8)
+- **Tags:** `reverse-engineering` `agents` `release` `ghidra`
+
+自我们 10 月 12 日以 13.2 万星、v6.4 的 Android ADB 与 JEB 反编译报道 rea（morluto/rea）以来，这个"用 agent 逆向任何东西"的项目已连发两版，星数涨到 30.97 万。v6.6.0（今日）新增 Kuna 作为调用方自备的静态分析提供方——过程清单、伪代码、汇编、精确地址 xref 与缓存字符串搜索，并把记录到的覆盖范围谨慎地限定为"Kuna 1.833 on Linux；Windows、PE 与 universal Mach-O 不支持"——此外保留 JavaScript 事实查询与多 locale APK 表查询，Ghidra 分析扩展到 Windows ARM PE 目标与裸 m68k 镜像。v6.5.0（10 月 14 日）加入了作用域受限的 JavaScript 源选择与跨 bundle 恢复，并保证分析失败时 Evidence 仍可用。
+
+**Why it matters:** 四天两版、星数翻三倍的节奏本身是信号：agent 驱动的逆向工程正在长成有可插拔分析提供方的真工具链，而不是一次性 demo。provider 指南里窄口径的"记录到的覆盖范围"说明，与本上午 esp32sim 展示的测试范围诚实是同一种品质。
+
+[`🔗 morluto/rea`](https://github.com/morluto/rea) · [`🔗 6.6.0 发布说明`](https://github.com/morluto/rea/releases/tag/rea-agents-6.6.0)
+
+---
+
+## 20. XSLT 在 Chromium 的最后一个月：Chrome 158 将于 11 月 17 日移除它 — 两个 API 一起走，WASM polyfill 是退路
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 101+ pts · ~8.0小时前 (~04:07 UTC+8)
+- **Tags:** `web` `chrome` `xslt` `deprecation`
+
+Chrome 的 XSLT 移除时间线将在四周后撞上 Stable 截止点：Chrome 158（2026 年 11 月 17 日）起，两个 API——`XSLTProcessor` JavaScript 类与 `<?xml-stylesheet?>` 处理指令——对除 Origin Trial 与 Enterprise Policy 参与者外的所有用户停止工作，最终截止在 Chrome 176（2027 年 8 月 17 日）。Google 的理由：libxslt "以内存安全漏洞著称"，"XSLT 是近期多起高知名度安全利用的根源"，而如今只有约 0.02% 的页面加载用到 XSLT。XML 本身保留——CSS 样式化的 XML 继续可用，Chrome 还计划把 XML 解析从 libxml2 迁到 Rust 解析器。迁移路径：服务端渲染、Saxon-JS，或 WASM 版 `XSLTProcessor` polyfill（附带一行 script 标签方案和一个面向嵌入式设备等不可改源站的浏览器扩展）。Firefox 与 WebKit 也已表态同向。
+
+**Why it matters:** 浏览器内样式化的 RSS 查看器、sitemap 预览、企业门户与嵌入式设备管理页面对人类会"视觉性坏死"——而底下的原始 XML 照常流转。检测用 `ReportingObserver`（`report.body.id === "XSLT"`）；新闻是截止日期，不是弃用本身。
+
+[`🔗 Chrome：移除 XSLT`](https://developer.chrome.com/docs/web-platform/deprecating-xslt) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50134617)
+
+---
+
+## 21. 四个 Gemini 4 Argon agent 击败《我的世界》末影龙 — 27 小时 14 分、自写 2,783 个程序、死亡 605 次 — 论文自己的注意事项才是细读点
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 10月16日收录 (2610.22319)
+- **Tags:** `agents` `benchmark` `gemini` `paper`
+
+Faldor、Singh 与 Raileanu 把四个 Gemini 4 Argon agent 放进一个沙盒化的 Minecraft 生存世界，目标只有一个：末影龙。每个 agent 通过原版 Mineflayer 库操控一名玩家，用游戏内聊天与共享记忆协调——没有分配角色，没有人类写的游戏逻辑。团队写下 2,783 个程序，27 小时 14 分击杀末影龙，死亡 605 次；作者称之为首次端到端自主通关 Minecraft，"只用标准 Mineflayer 库，没有预踩点的种子或人类写的游戏专用工具"。论文的 Limitations 一节做了诚实的活：Mineflayer 暴露"固体岩石背后的方块和龙的内部状态"——人类玩家永远拿不到的 API 级感知；世界跑在简单难度；模型在预训练里早就认识 Minecraft；22% 的程序以报错收场；服务器中断重启六次；而且这是"单次运行，我们试的第一次"。
+
+**Why it matters:** 值得带走的说法是作者自己收窄后的版本——一个通用编程 agent 能把预训练知识变成能跑的程序和跨一天的团队协作——而不是"AI 通关了 Minecraft"。对照昨天的《星际争霸：母巢之战》一小时 bot，这是同一问题的长时程一端：当运行时长超过上下文窗口时，agent 会做什么。
+
+[`🔗 arXiv 2610.22319`](https://arxiv.org/abs/2610.22319) · [`🔗 HTML 全文`](https://arxiv.org/html/2610.22319v1)
+
+---
+
+## 22. Lean 自带经验证的内核 — 其中一个用 Lean 写成、证明了一致性的内核由 Claude 在督导下实现
+
+- **Velocity:** ▮▮ rising
+- **Source:** Leonardo de Moura 博客 · 10月15日 (HN: 48+ pts)
+- **Tags:** `lean` `formal-methods` `kernels` `claude`
+
+Lean v4.35.0 带来了 `lake check`：导出一个开发项目，用独立内核重检——`--paranoid` 会跑遍全部。随版附四个外部内核：nanoda、lean4lean、con-leche 与 con-ron。最亮眼的是：con-leche 是"首个用 Lean 写成并证明了一致性的 Lean 内核"，且按 de Moura 的说法，它"由 Claude（Fable 与 Opus）在 Lean FRO 的 Joachim Breitner 重度督导下实现并证明一致性"。con-ron 是 con-leche 的 Rust 翻译，用 Aeneas 验证为对其检查算法的精化；在完整 Mathlib 导出上，con-leche 以官方内核 0.69× 的指令数运行（八线程约 100 秒）。动机是八月的两次内核健全性缺陷复盘。帖子自己给出的限制：con-leche "并非刀枪不入，因为构建它的编译器与运行时可能有缺陷"；一致性证明假设集合论成立；外部内核尚未扩展到 5,000 万行级开发。
+
+**Why it matters:** 证明助手正在采纳多版本交叉检查——而交叉检查的逻辑与 con-ron 存在的理由相同："同一个 bug 同时存在于 Rust 编译器或运行时的可能性非常低。" 一个 AI 实现、AI 证明的内核，在有名有姓的人类督导下，进了支撑 FLT 级数学的工具链——这是当下形式化方法工作方式的里程碑。
+
+[`🔗 de Moura：Lean 自带经验证的内核`](https://leodemoura.github.io/blog/2026-10-15-lean-now-ships-with-verified-kernels/) · [`🔗 lean4 v4.35.0`](https://github.com/leanprover/lean4/releases/tag/v4.35.0)
+
+---
+
+## 23. JDK 28 的轮廓：Value Objects 预览、结构化并发、Simple JSON API — macOS/x64 走向移除
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 87+ pts · ~6.5小时前 (~05:37 UTC+8)
+- **Tags:** `java` `jdk` `openjdk` `release`
+
+OpenJDK 的 JDK 28 页面（10 月 15 日更新）目前列出了十个已定向的 JEP，这一组格外有时代印记：401 Value Objects（预览）——Valhalla 的首次落地；543 结构化并发（未带预览标签）；544 AOT 代码编译；540 Simple JSON API（孵化器）；542 密码学对象的 PEM 编码；535 Shenandoah 默认分代；545/546 ZGC 启动与自适应堆；539 严格字段初始化（预览）；以及 541 弃用 macOS/x64 移植以待移除。页面注明清单仍在扩充；JDK 28 将是 Java SE 28（JSR 403）的参考实现。
+
+**Why it matters:** Value Objects 加结构化并发为 JVM 接下来十年的服务端惯用法定调，标准 JSON 库终于补上 Java 最奇怪的缺口。macOS/x64 弃用是最安静的一条：苹果 2020 年就停售 x64 Mac——这是走形式，但走形式也会弄坏谁的 CI runner。
+
+[`🔗 JDK 28`](https://openjdk.org/projects/jdk/28/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50135379)
+
+---
+
+## 24. phpMyFAQ 的 WebAuthn 注册曾能把 passkey 挂到任意账户上 — CVE-2026-111911，VulnCheck 评分 9.8，4.1.9 已修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / MITRE · 10月17日发布
+- **Tags:** `cve` `webauthn` `authentication` `passkeys`
+
+phpMyFAQ 4.0.0 至 4.1.9 之前的版本存在认证绕过："WebAuthn 注册端点在无认证、无 challenge 校验的情况下把凭据挂到任意账户上"：攻击者先占住受害者的用户名，提交伪造的 `fmt=none` attestation 注册自己的 passkey，然后登录——密码与 TOTP 一并绕过。评分溯源：9.8（CVSS 3.1）为 **VulnCheck 评分**——不存在 CNA 评分，NVD 记录为 **Deferred（未经 NVD 分析）**；VulnCheck 还发布了 CVSS 4.0 的 9.3。引用的修复见 GHSA-g6cq-6rqg-6c9p 与 GHSA-rg9h-f29v-xhxr；仓库活跃（10 月 17 日有推送）。
+
+**Why it matters:** 三天前本feed刚发过《Passkeys 不是陷阱》，这是实现层面的反例：协议没问题——仪式出了问题。注册时不认证既有账户、不绑定 challenge，就把抗钓鱼因子变成了接管工具。升级到 4.1.9。
+
+[`🔗 CVE 记录`](https://cveawg.mitre.org/api/cve/CVE-2026-111911) · [`🔗 VulnCheck 公告`](https://www.vulncheck.com/advisories/phpmyfaq-4.0.0-before-4.1.9-authentication-bypass-via-webauthn-credential-injection)
+
+---
+
+## 25. Amazon 的 Atlas 给仓库打工会风险分 — 法庭披露文件把两个英国站点列入 Tier 1；Amazon 称这只是楼宇级、且"目前未在英国使用"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 152+ pts · ~12.0小时前 (~00:05 UTC+8)
+- **Tags:** `ai` `labor` `surveillance` `amazon`
+
+openDemocracy（10 月 16 日）报道了在工会 Unifor 加拿大诉讼中披露的内部文件——该案导致英属哥伦比亚劳工关系局裁定 Amazon "违反了多项当地劳动法"——文件把 Amazon 自研预测 AI Atlas 描述为预测"其美国、加拿大和英国仓库员工组建工会、静坐或发动其他'破坏性劳工事件'的可能性"。系统从包括 Reddit 发帖与内部问卷回应在内的数百个数据点为站点打 100–900 分；16 个站点处于 Tier 1（"未来活动迫在眉睫"），其中包括英国的 Sutton Coldfield（EMA4）与考文垂附近（BHX4）仓库。Amazon 拒绝"把 Atlas 描述为'对个别员工的监控'"（"这只是站点/楼宇层面的活动"），并表示"名为 Atlas 的框架目前未在英国使用"——对于类似系统是否换名运行则未予回答。
+
+**Why it matters:** 文件是经由劳工仲裁案浮出水面的，不是泄露——诉讼作为已部署 AI 系统的披露渠道，正在成为值得跟踪的模式。无论解释之争如何，功能清单已经公开：用社交媒体与问卷数据给物理站点打风险分。
+
+[`🔗 openDemocracy`](https://www.opendemocracy.net/amazon-ai-surveillance-monitor-union-activity-uk-warehouses-birmingham-coventry-atlas-sutton-coldfield/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50132278)
+
+---
+
+## 26. Decision 3.0：vLLM-SR 的 d3 宣称登顶 Jev Decision Index — 一个不生成文本、直接给答案的 26B 多模态决策模型
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face · trending · 卡片10月17日更新
+- **Tags:** `decision-models` `inference` `vllm` `open-weights`
+
+d3（vllm-sr/d3，Apache-2.0）是 Decision 3.0 的基础决策模型，共 26.09B 参数（含 0.46B 视觉编码器），属于 vLLM Semantic Router 项目（6.2k★，"面向模型与算力的开放可编程决策层"）。给它文本、JSON、图像或视频加选择/是否/打分问题，它一次调用返回每个选项的概率，不生成文本。指标均为自测：Jev Decision Index 0.3.2 得分 66.3，"官方文本榜第一"，较 Decision 2.0 提升 10.4；Perception Test 视频 QA 77.4（内部评估）；单张 AMD Instinct MI325X 上文本中位 54.4ms、图像 290ms、10 秒视频 500ms；批处理下 27 req/s、p99 低于 1 秒。
+
+**Why it matters:** 本feed经由 Jev 的 DIY 指南（10 月 15 日）与 Danger Zone（10 月 17 日）跟踪的"决策模型"层级，如今有了开源权重、多模态、AMD 实测的榜首挑战者。自报数据的警示照旧适用——但真正会复利的是服务栈模式：由一个路由模型决定哪些请求根本轮不到生成模型。
+
+[`🔗 vllm-sr/d3 模型卡`](https://huggingface.co/vllm-sr/d3) · [`🔗 vllm-project/semantic-router`](https://github.com/vllm-project/semantic-router)
+
+---
+
+## 27. FDE-Gym：95 个带脚本化利益相关者的交付任务 — agent 的评分点在模糊的最后一公里，不在工单
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 10月16日收录 (2610.22350)
+- **Tags:** `benchmark` `agents` `evaluation` `paper`
+
+现有 agent 基准评估的是规格良好的任务——issue 报告、规格说明、工单。FDE-Gym 模拟的则是前置部署工程（forward-deployed engineering）：95 个端到端交付任务，来自 18 个行业的 20 个客户场景，每个都由业界专家从真实交付项目改编。agent 在带脚本化利益相关者、可修改客户系统的模拟客户环境里工作——必须澄清模糊需求、在类生产系统上操作，并挖出没人写下来的隐性约束。
+
+**Why it matters:** 前置部署工程师是 AI 部署中未被自动化的那部分——把模型产出缝进客户烂摊子的人。为这个角色做基准，就是给 agentic 收入真正所在的地方做代理指标；它与今天的 RealtimeBench 与转录评测论文并列：评测正从"能不能解出"转向"能不能运转"。
+
+[`🔗 arXiv 2610.22350`](https://arxiv.org/abs/2610.22350) · [`🔗 cs.AI 新收录`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 28. 鸭子池塘：每一声嘎嘎都是实时合成的 — 无采样，声音随你站的位置而变
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 106+ pts · ~14.6小时前 (10月17日 ~21:28 UTC+8)
+- **Tags:** `audio` `synthesis` `webaudio` `rust`
+
+celphase 的 duck-pond 是一小群互动绿头鸭——"三只母鸭、两只公鸭和两窝小鸭"——带着一条硬约束："无录音。每一声嘎嘎都是即时合成的，并且从你在岸边站的位置被听见。" 声音相对你的视点定位（5、10、20、40 米距离环），有耳机模式，还能扔豌豆（`p`）。MIT 许可的 Rust 源码随 HN 帖子一同公开。
+
+**Why it matters:** 与本周的软件渲染 Quake、Furifont 的字体即运行时是同一种押注：在表现层合成，而不是搬运素材。作为 Show HN，它也是一套紧凑易读的代码库，适合教程序化音频——骗过首页的那声嘎嘎，是几千字节的数学。
+
+[`🔗 duck-pond`](https://celphase.github.io/duck-pond/) · [`🔗 celphase/duck-pond`](https://github.com/celphase/duck-pond)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-17T20:20:00Z |
-| Items | 18 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, arXiv, NVD/MITRE, LWN, 厂商博客, 安全研究) |
+| Generated | 2026-10-18T04:20:00Z |
+| Items | 28 |
+| Sources tracked | 22 (Hacker News, GitHub Trending, GitHub releases, arXiv, NVD/MITRE, GHSA/VulnCheck, Chrome 平台文档, OpenJDK, Hugging Face, LWN, 厂商博客, 安全研究) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

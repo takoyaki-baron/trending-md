@@ -1,8 +1,8 @@
 ---
 date: 2026-10-18
-updated: 2026-10-17T20:20:00Z
+updated: 2026-10-18T04:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 22
 license: CC-BY-4.0
 ---
 
@@ -266,13 +266,153 @@ GNOME は GNOME OS の Preview エディションを発表した（10 月 16 日
 
 ---
 
+## 19. 10 月 12 日の 13.2万★ から：rea が 4 日で 6.5.0 と 6.6.0 をリリースし、星は 31万 へ — Kuna 静的解析を統合、Ghidra は Windows ARM PE へ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 合計 30.97万★ · 6.6.0 本日リリース (~11:40 UTC+8)
+- **Tags:** `reverse-engineering` `agents` `release` `ghidra`
+
+10 月 12 日に 13.2万星、v6.4 の Android ADB と JEB 逆コンパイルとして rea（morluto/rea）を取り上げてから、「エージェントで何でもリバースエンジニアリングする」このプロジェクトは 2 リリースを積み上げ、30.97万星まで伸びた。v6.6.0（本日）は、Kuna を呼び出し側が用意する静的解析プロバイダとして追加する——プロシージャ一覧、疑似コード、アセンブリ、正確なアドレスの xref、キャッシュされた文字列検索。記録済みカバレッジは「Kuna 1.833 on Linux。Windows、PE、universal Mach-O は未対応」と慎重に限定的に明記される。加えて JavaScript ファクトの保持と複数ロケール APK テーブルの照会、そして Ghidra 解析を Windows ARM PE ターゲットと素の m68k イメージへ拡張。v6.5.0（10 月 14 日）はスコープ限定の JavaScript ソース選択とクロスバンドル復元を加え、解析が失敗しても Evidence を利用可能に保った。
+
+**Why it matters:** 4 日で 2 リリース、星は 3 倍——このペース自体がシグナルだ：エージェント駆動のリバースエンジニアリングは、解析プロバイダを差し替えられる本物のツールチェーンへ統合されつつあり、一回きりのデモではない。プロバイダガイドの狭い「記録済みカバレッジ」の注記は、今朝の esp32sim が見せたテスト範囲の正直さと同型だ。
+
+[`🔗 morluto/rea`](https://github.com/morluto/rea) · [`🔗 6.6.0 リリースノート`](https://github.com/morluto/rea/releases/tag/rea-agents-6.6.0)
+
+---
+
+## 20. Chromium における XSLT の最後の 1 ヶ月：Chrome 158 が 11 月 17 日に削除 — 両 API が対象、WASM ポリフィルが逃げ道
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 101+ pts · 約8.0時間前 (~04:07 UTC+8)
+- **Tags:** `web` `chrome` `xslt` `deprecation`
+
+Chrome の XSLT 削除は 4 週間後に Stable の締切を迎える：Chrome 158（2026 年 11 月 17 日）から、2 つの API——`XSLTProcessor` JavaScript クラスと `<?xml-stylesheet?>` 処理命令——は、Origin Trial と Enterprise Policy 参加者を除く全ユーザーで動作しなくなり、最終締切は Chrome 176（2027 年 8 月 17 日）。Google の根拠：libxslt は「メモリ安全性の脆弱性に著しく弱い」ことで知られ、「XSLT は近年の目立つセキュリティ悪用の発生源」だが、XSLT を使うページロードは全体の約 0.02% にとどまる。XML 自体は残る——CSS でスタイルされた XML は引き続き機能し、Chrome は XML パースを libxml2 から Rust 製パーサへ移す計画を明記している。移行先は：サーバ側レンダリング、Saxon-JS、あるいは WASM 製 `XSLTProcessor` ポリフィル（1 行の script タグ方式と、組み込み機器など改変不能なソース向けのブラウザ拡張が付属）。Firefox と WebKit も同方向を示唆している。
+
+**Why it matters:** ブラウザ内でスタイルされていた RSS ビューア、サイトマッププレビュー、エンタープライズポータル、組み込み機器の管理画面は、人間には「見た目が壊れた」状態になる——その下の生 XML は流れ続けるのに。検出は `ReportingObserver`（`report.body.id === "XSLT"`）。ニュースは非推奨化ではなく、この締切日だ。
+
+[`🔗 Chrome：XSLT の削除`](https://developer.chrome.com/docs/web-platform/deprecating-xslt) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50134617)
+
+---
+
+## 21. Gemini 4 Argon エージェント 4 体がマインクラフトのエンダードラゴンを撃破 — 27時間14分、自己作成プログラム 2,783、死亡 605 — 論文自身の注意書きが肝
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 10月16日掲載 (2610.22319)
+- **Tags:** `agents` `benchmark` `gemini` `paper`
+
+Faldor、Singh、Raileanu は、Gemini 4 Argon エージェント 4 体をサンドボックス化されたマインクラフトのサバイバルワールドに置き、目標をエンダードラゴン一つに定めた。各エージェントはストックの Mineflayer ライブラリでプレイヤーを操作し、ゲーム内チャットと共有メモリで協調——ロール割り当てなし、人間が書いたゲームロジックなし。チームは 2,783 個のプログラムを書き、27時間14分でドラゴンを倒し、605 回死亡した。著者らはこれを、「事前偵察なしのシードも、人間が書いたゲーム固有ツールも使わず、標準の Mineflayer ライブラリのみ」による、初のエンドツーエンドの自律的マインクラフト完成と呼ぶ。論文の Limitations 節が正直な仕事をしている：Mineflayer は「固体の岩の向こうのブロックやドラゴンの内部状態」まで見せる——人間プレイヤーが決して得られない API レベルの知覚だ。ワールドはイージー難度。モデルは事前学習でマインクラフトをすでに知っている。プログラムの 22% がエラーで終わった。サーバは 6 回再起動した。そしてこれは「単一のラン、最初に試した 1 回」だ。
+
+**Why it matters:** 持ち帰るべき主張は、著者自身が狭めた版——「汎用コーディングエージェントが、事前学習の知識を実動するプログラムと 1 日に及ぶチーム協調へ変換できる」——であって、「AI がマインクラフトをクリア」ではない。昨日のブルードウォー 1 時間ボットと比べると、これは同じ問いの長時間ホライズン側だ：ランがコンテキストウィンドウを超えて続くとき、エージェントは何をするか。
+
+[`🔗 arXiv 2610.22319`](https://arxiv.org/abs/2610.22319) · [`🔗 HTML 全文`](https://arxiv.org/html/2610.22319v1)
+
+---
+
+## 22. Lean が検証済みカーネルを同梱する時代に — Lean で書かれ一致性が証明されたカーネルは、Claude が監督下で実装した
+
+- **Velocity:** ▮▮ rising
+- **Source:** Leonardo de Moura ブログ · 10月15日 (HN: 48+ pts)
+- **Tags:** `lean` `formal-methods` `kernels` `claude`
+
+Lean v4.35.0 は `lake check` を同梱する。開発をエクスポートし、独立したカーネルで再検証するもので、`--paranoid` はそのすべてを実行する。外部カーネル 4 つが付属する：nanoda、lean4lean、con-leche、con-ron。際立つのは con-leche で、「Lean で書かれ一致性が証明された初の Lean カーネル」であり、de Moura によれば「Lean FRO の Joachim Breitner の強い監督のもと、Claude（Fable と Opus）が実装し一致性を証明した」。con-ron は con-leche の Rust への翻訳で、Aeneas で検証されそのチェックアルゴリズムを精化する関係にある。Mathlib 全体のエクスポートでは、con-leche は公式カーネルの 0.69 倍の命令数で動く（8 スレッドで約 100 秒）。動機は 8 月のカーネル健全性バグ検証報告 2 件。投稿自身の限界：con-leche は「絶対安全ではない。それを構築するコンパイラとランタイムにバグがあるかもしれない」。一致性証明は集合論を仮定する。外部カーネルはまだ 5,000 万行級の開発にはスケールしない。
+
+**Why it matters:** 証明支援系は N バージョン検証を採用しつつある——そして交差検証の論理は、con-ron が存在する理由と同じだ：「同じバグが Rust コンパイラやランタイムにも存在する可能性は非常に低い」。AI が実装し AI が証明したカーネルが、名前のある人間の監督付きで、FLT 級の数学を支えるツールチェーンに入ったことは、今の形式手法の作られ方の一つの画期だ。
+
+[`🔗 de Moura：Lean が検証済みカーネルを同梱`](https://leodemoura.github.io/blog/2026-10-15-lean-now-ships-with-verified-kernels/) · [`🔗 lean4 v4.35.0`](https://github.com/leanprover/lean4/releases/tag/v4.35.0)
+
+---
+
+## 23. JDK 28 の輪郭：Value Objects プレビュー、構造化並行、Simple JSON API — そして macOS/x64 は削除へ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 87+ pts · 約6.5時間前 (~05:37 UTC+8)
+- **Tags:** `java` `jdk` `openjdk` `release`
+
+OpenJDK の JDK 28 ページ（10 月 15 日更新）は、現時点で 10 個のターゲット JEP を列挙しており、その顔ぶれは時代を刻む内容だ：401 Value Objects（プレビュー）——Valhalla の初上陸。543 構造化並行（プレビュータグなしで掲載）。544 AOT コードコンパイル。540 Simple JSON API（インキュベータ）。542 暗号オブジェクトの PEM エンコーディング。535 Shenandoah のデフォルトジェネレーショナル化。545/546 ZGC の起動と適応ヒープ。539 厳格フィールド初期化（プレビュー）。そして 541、macOS/x64 ポートの削除に向けた非推奨化。ページはリストがまだ成長途中だと注記する。JDK 28 は Java SE 28（JSR 403）のリファレンス実装となる。
+
+**Why it matters:** Value Objects と構造化並行は、今後 10 年の JVM サーバのイディオムを決め、標準 JSON ライブラリはついに Java 最悪の欠落を埋める。macOS/x64 の非推奨化は最も静かな項目だ：Apple は 2020 年に x64 Mac を出荷止めにした——形式上の話だが、形式上の話でも誰かの CI ランナーは壊れる。
+
+[`🔗 JDK 28`](https://openjdk.org/projects/jdk/28/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50135379)
+
+---
+
+## 24. phpMyFAQ の WebAuthn 登録は任意のアカウントにパスキーを付けられた — CVE-2026-111911、VulnCheck 採点 9.8、4.1.9 で修正
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / MITRE · 10月17日公開
+- **Tags:** `cve` `webauthn` `authentication` `passkeys`
+
+phpMyFAQ 4.0.0 から 4.1.9 未満には認証バイパスが含まれる：「WebAuthn 登録エンドポイントが、認証もチャレンジ検証もなしに、任意のアカウントへ資格情報を結び付ける」。攻撃者は被害者のユーザー名を先に確保し、偽造した `fmt=none` アテステーションを提出して自分のパスキーを登録し、そのままログインする——パスワードと TOTP の両方を迂回する。スコアの出所：9.8（CVSS 3.1）は **VulnCheck による採点**——CNA スコアは存在せず、NVD レコードは **Deferred（NVD 未分析）**。VulnCheck は CVSS 4.0 の 9.3 も公表している。参照される修正は GHSA-g6cq-6rqg-6c9p と GHSA-rg9h-f29v-xhxr。リポジトリは生きている（10 月 17 日にプッシュ）。
+
+**Why it matters:** このフィードが 3 日前に「パスキーは罠ではない」を取り上げたばかりのところに、実装次第という反例が来た：プロトコルは正しかった——式（セレモニー）が間違っていた。既存アカウントの認証なしに登録でき、チャレンジが束縛されなければ、フィッシング耐性のあるはずの要素が乗っ取りの道具に変わる。4.1.9 へのアップグレードを。
+
+[`🔗 CVE レコード`](https://cveawg.mitre.org/api/cve/CVE-2026-111911) · [`🔗 VulnCheck アドバイザリ`](https://www.vulncheck.com/advisories/phpmyfaq-4.0.0-before-4.1.9-authentication-bypass-via-webauthn-credential-injection)
+
+---
+
+## 25. Amazon の Atlas は倉庫に労組リスクをスコアリングしていた — 法廷開示文書は英国 2 拠点を Tier 1 に；Amazon は「ビル単位」で「現在は英国未使用」と回答
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 152+ pts · 約12.0時間前 (~00:05 UTC+8)
+- **Tags:** `ai` `labor` `surveillance` `amazon`
+
+openDemocracy（10 月 16 日）が報じたところによると、労組 Unifor のカナダでの法的挑戦——その結果、ブリティッシュコロンビア州労働関係委員会は Amazon が「現地の複数の労働法に違反した」と認定した——で開示された内部文書は、Amazon 自社の予測 AI「Atlas」が「米国、カナダ、英国の倉庫スタッフが労組を結成しようとする、座り込みを起こす、その他の『破壊的労働イベント』を実行する可能性」を予測するものだと描く。Reddit への投稿や社内サーベイの回答を含む数百のデータポイントから 100〜900 のスコアを付け、16 拠点が Tier 1（「今後の活動が切迫」）に位置し、その中に英国の Sutton Coldfield（EMA4）とコヴェントリー近郊（BHX4）の倉庫が含まれる。Amazon は「Atlas を『個々の従業員の監視』と描写すること」を拒否し（「これはサイト/ビルレベルの活動のみ」）、「Atlas という枠組みは現在英国では使用されていない」と述べた——同種のシステムが別名で動いているかについては答えていない。
+
+**Why it matters:** 文書はリークではなく労働審判の訴訟を通じて表面化した——展開済み AI システムの開示チャネルとしての訴訟は、追跡する価値のあるパターンになりつつある。解釈をめぐる争いはともかく、機能一覧は公になった：ソーシャルメディアとサーベイデータから物理サイトへのリスクスコアリングだ。
+
+[`🔗 openDemocracy`](https://www.opendemocracy.net/amazon-ai-surveillance-monitor-union-activity-uk-warehouses-birmingham-coventry-atlas-sutton-coldfield/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50132278)
+
+---
+
+## 26. Decision 3.0：vLLM-SR の d3 が Jev Decision Index の首位を主張 — テキストを生成せずに答える 26B マルチモーダル決定モデル
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face · トレンド中 · カードは10月17日更新
+- **Tags:** `decision-models` `inference` `vllm` `open-weights`
+
+d3（vllm-sr/d3、Apache-2.0）は、vLLM Semantic Router プロジェクト（6.2k★、「モデルと計算のためのオープンでプログラマブルな決定レイヤー」）の Decision 3.0 を担う基盤決定モデルで、26.09B パラメータ（0.46B のビジョンエンコーダを含む）。テキスト、JSON、画像、動画に選択/はい・いいえ/スコアの質問を与えると、生成なしに 1 回の呼び出しで全選択肢の確率を返す。数値はすべて自己計測：Jev Decision Index 0.3.2 で 66.3、「公式テキストボードの首位」、Decision 2.0 比 +10.4。Perception Test 動画 QA 77.4（内部評価）。AMD Instinct MI325X 1 基でテキスト中央値 54.4ms、画像 290ms、10 秒動画 500ms。バッチングで 27 req/s、p99 1 秒未満。
+
+**Why it matters:** このフィードが Jev の DIY ガイド（10 月 15 日）と Danger Zone（10 月 17 日）で追ってきた「決定モデル」層に、オープンウェイト、マルチモーダル、AMD 実測の首位挑戦者が現れた。自己申告の注意はそのまま当てはまる——しかし複利で効くのはサービングスタックのパターンのほうだ：どのリクエストを生成モデルがそもそも見るかを、ルーターモデルが決める。
+
+[`🔗 vllm-sr/d3 モデルカード`](https://huggingface.co/vllm-sr/d3) · [`🔗 vllm-project/semantic-router`](https://github.com/vllm-project/semantic-router)
+
+---
+
+## 27. FDE-Gym：スクリプト化されたステークホルダー付き 95 のデリバリータスク — エージェントの採点対象はチケットではなく曖昧なラストワンマイル
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 10月16日掲載 (2610.22350)
+- **Tags:** `benchmark` `agents` `evaluation` `paper`
+
+既存のエージェントベンチマークが評価するのは、仕様の明確なタスク——issue 報告、仕様書、チケットだ。FDE-Gym がシミュレートするのはフォワードデプロイ エンジニアリング：18 セクターの 20 の顧客シナリオから引き出された 95 のエンドツーエンド デリバリータスクで、それぞれが実務家によって実プロジェクトから改変されている。エージェントは、スクリプト化されたステークホルダーと改変可能な顧客システムを備えたシミュレート環境で動く——曖昧な要件を明確化し、実運用に近いシステムを操作し、誰も書き留めていない暗黙の制約を掘り起こさねばならない。
+
+**Why it matters:** フォワードデプロイ エンジニアは、AI デプロイの中で自動化されなかった部分だ——モデルの出力を顧客の泥沼に縫い付ける人間。この役割のためのベンチマークは、エージェントの収益が実際にある場所の代理指標になる。今日の RealtimeBench やトランスクリプト評価の論文と並べると見える：評価は「解けるか」から「運用できるか」へ移りつつある。
+
+[`🔗 arXiv 2610.22350`](https://arxiv.org/abs/2610.22350) · [`🔗 cs.AI 新着`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 28. ダックポンド：一鳴きごとにライブ合成 — 録音なし、音は岸辺の立ち位置ごとに聞こえ方が変わる
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 106+ pts · 約14.6時間前 (10月17日 ~21:28 UTC+8)
+- **Tags:** `audio` `synthesis` `webaudio` `rust`
+
+celphase の duck-pond は小さなインタラクティブなマガモの群れ——「3 羽のメス、2 羽のオス、2 群の雛」——で、厳しい制約を掲げる：「録音は一切なし。すべてのコアカップはその場で合成され、あなたが岸辺に立つその位置から聞こえる」。音は視点からの相対位置で配置され（5、10、20、40m の距離リング）、ヘッドホンモードがあり、エンドウ豆を投げることもできる（`p`）。MIT ライセンスの Rust ソースは HN 投稿とともに公開された。
+
+**Why it matters:** 今週のソフトウェアレンダリングの Quake、Furifont のフォント即ランタイムと同じ賭けだ：アセットを運ぶのではなく、表現レイヤーで合成する。Show HN としては、プロシージャルオーディオを教える誰かにとっても、コンパクトで読めるコードベースでもある——フロントページを騙した一鳴きは、数キロバイトの数学だ。
+
+[`🔗 duck-pond`](https://celphase.github.io/duck-pond/) · [`🔗 celphase/duck-pond`](https://github.com/celphase/duck-pond)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-17T20:20:00Z |
-| Items | 18 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, arXiv, NVD/MITRE, LWN, ベンダーブログ, セキュリティ研究) |
+| Generated | 2026-10-18T04:20:00Z |
+| Items | 28 |
+| Sources tracked | 22 (Hacker News, GitHub Trending, GitHub releases, arXiv, NVD/MITRE, GHSA/VulnCheck, Chrome プラットフォームドキュメント, OpenJDK, Hugging Face, LWN, ベンダーブログ, セキュリティ研究) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

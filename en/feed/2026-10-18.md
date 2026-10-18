@@ -1,8 +1,8 @@
 ---
 date: 2026-10-18
-updated: 2026-10-17T20:20:00Z
+updated: 2026-10-18T04:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 22
 license: CC-BY-4.0
 ---
 
@@ -433,13 +433,273 @@ contamination-resistant — and it revalues every saturated leaderboard as a cor
 
 ---
 
+## 19. Since our Oct 12 note at 132k★: rea ships 6.5.0 and 6.6.0 in four days and triples to 310k★ — Kuna static analysis in, Ghidra reaches Windows ARM PE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 309.7k★ total · 6.6.0 released today (~11:40 UTC+8)
+- **Tags:** `reverse-engineering` `agents` `release` `ghidra`
+
+Since we covered rea (morluto/rea) on Oct 12 at 132k stars with v6.4's Android ADB and
+JEB decompilation, the "reverse engineer anything with agents" project has shipped two
+releases and grown to 309.7k stars. v6.6.0 (today) adds Kuna as a caller-supplied
+static-analysis provider — procedure listings, pseudocode, assembly, exact-address
+xrefs and cached string searches, with recorded coverage stated narrowly as "Kuna 1.833
+on Linux; Windows, PE and universal Mach-O are unsupported" — plus retained JavaScript
+facts and multi-locale APK table queries, and extends its Ghidra analysis to Windows
+ARM PE targets and raw m68k images. v6.5.0 (Oct 14) added scoped JavaScript source
+selection and cross-bundle recovery, and kept Evidence available when analysis fails.
+
+**Why it matters:** The pace — two releases in four days while tripling in stars — is
+the signal: agent-driven reverse engineering is consolidating into a real toolchain
+with pluggable analysis providers, not a one-off demo. The provider guide's narrow
+"recorded coverage" note is the same test-scope honesty esp32sim showed this morning.
+
+[`🔗 morluto/rea`](https://github.com/morluto/rea) · [`🔗 6.6.0 release notes`](https://github.com/morluto/rea/releases/tag/rea-agents-6.6.0)
+
+---
+
+## 20. XSLT's last month in Chromium: Chrome 158 removes it on Nov 17 — both APIs, with a WASM polyfill as the escape hatch
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 101+ pts · 8.0h ago (~04:07 UTC+8)
+- **Tags:** `web` `chrome` `xslt` `deprecation`
+
+Chrome's XSLT removal reaches its Stable cutoff in four weeks: in Chrome 158 (Nov 17,
+2026) both APIs — the `XSLTProcessor` JavaScript class and the
+`<?xml-stylesheet?>` processing instruction — stop functioning for all users except
+Origin Trial and Enterprise Policy participants, with the final cutoff in Chrome 176
+(Aug 17, 2027). Google's rationale: libxslt is "notoriously susceptible to memory
+safety vulnerabilities" and "XSLT is the source of several recent high-profile
+security exploits," while only ~0.02% of page loads use XSLT at all. XML itself stays
+— CSS-styled XML keeps working, and Chrome plans to move XML parsing from libxml2 to
+a Rust parser. Migration paths: render server-side, Saxon-JS, or a WASM
+`XSLTProcessor` polyfill (shipped with a one-line script tag and a browser extension
+for unmodifiable sources like embedded-device feeds). Firefox and WebKit have
+signaled the same direction.
+
+**Why it matters:** RSS viewers, sitemap previews, enterprise portals and
+embedded-device admin panels styled in-browser will go visually broken for humans —
+while the raw XML beneath keeps flowing. Detection is a `ReportingObserver` with
+`report.body.id === "XSLT"`; the deadline is the news, not the deprecation.
+
+[`🔗 Chrome: Removing XSLT`](https://developer.chrome.com/docs/web-platform/deprecating-xslt) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50134617)
+
+---
+
+## 21. Four Gemini 4 Argon agents defeat Minecraft's Ender Dragon — 27h14m, 2,783 self-written programs, 605 deaths — and the paper's own caveats are the fine print
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · listed Oct 16 (2610.22319)
+- **Tags:** `agents` `benchmark` `gemini` `paper`
+
+Faldor, Singh and Raileanu placed four Gemini 4 Argon agents in a sandboxed Minecraft
+survival world with one goal: the Ender Dragon. Each agent controlled a player through
+the stock Mineflayer library and coordinated via in-game chat and shared memory — no
+roles assigned, no game logic written by humans. The team wrote 2,783 programs and
+killed the dragon in 27h14m, dying 605 times; the authors call it the first
+end-to-end autonomous Minecraft completion "using only the standard Mineflayer
+library without pre-scouted seeds or other game-specific tools written by humans."
+Their Limitations section does the honest work: Mineflayer exposes "blocks behind
+solid rock and the dragon's internal state" — API-level perception a human player
+never gets; the world ran on Easy difficulty; the model already knew Minecraft from
+pretraining; 22% of programs errored; the server restarted six times; and it is "a
+single run, the first launch we tried."
+
+**Why it matters:** The claim worth carrying is the authors' own narrowed version —
+that a general-purpose coding agent can turn pretraining knowledge into working
+programs and team coordination over a day-long task — not "AI beats Minecraft."
+Against yesterday's Brood War hour-long bots, this is the long-horizon end of the
+same question: what agents do when the run outlasts the context window.
+
+[`🔗 arXiv 2610.22319`](https://arxiv.org/abs/2610.22319) · [`🔗 HTML full text`](https://arxiv.org/html/2610.22319v1)
+
+---
+
+## 22. Lean ships with verified kernels — one kernel written in Lean and proven consistent was implemented by Claude under supervision
+
+- **Velocity:** ▮▮ rising
+- **Source:** Leonardo de Moura's blog · Oct 15 (HN: 48+ pts)
+- **Tags:** `lean` `formal-methods` `kernels` `claude`
+
+Lean v4.35.0 ships `lake check`, which exports a development and rechecks it with
+independent kernels — `--paranoid` runs all of them. Four external kernels ship
+alongside: nanoda, lean4lean, con-leche and con-ron. The standout: con-leche is "the
+first kernel for Lean written in Lean and proven consistent," and per de Moura was
+"implemented and proven consistent by Claude (Fable and Opus), under heavy
+supervision by Joachim Breitner at the Lean FRO." Con-ron is a Rust translation of
+con-leche, verified with Aeneas to refine its algorithm; on the full Mathlib export
+con-leche runs at 0.69× the official kernel's instructions (~100s on eight threads).
+Motivation: two kernel soundness bug postmortems in August. The post's own limits:
+con-leche "is not bulletproof, because there might be bugs in the compiler and
+runtime used to build it," the consistency proof assumes set theory, and external
+kernels don't yet scale to 50M+ line developments.
+
+**Why it matters:** Proof assistants are adopting N-version checking — and the
+cross-checking logic is the same one justifying con-ron: "very unlikely that the same
+bug also exists in the Rust compiler or runtime." That an AI-implemented,
+AI-proved kernel shipped into the toolchain behind FLT-scale mathematics, with a
+named human supervisor, is a milestone for how formal-methods work gets done now.
+
+[`🔗 de Moura: Lean now ships with verified kernels`](https://leodemoura.github.io/blog/2026-10-15-lean-now-ships-with-verified-kernels/) · [`🔗 lean4 v4.35.0`](https://github.com/leanprover/lean4/releases/tag/v4.35.0)
+
+---
+
+## 23. JDK 28's shape: Value Objects preview, Structured Concurrency, a Simple JSON API — and macOS/x64 heads for removal
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 87+ pts · 6.5h ago (~05:37 UTC+8)
+- **Tags:** `java` `jdk` `openjdk` `release`
+
+OpenJDK's JDK 28 page (updated Oct 15) lists ten targeted JEPs so far, and the set is
+unusually era-marking: 401 Value Objects (Preview) — Valhalla's first landing — 543
+Structured Concurrency (listed without a preview tag), 544 Ahead-of-Time Code
+Compilation, 540 Simple JSON API (Incubator), 542 PEM encodings of cryptographic
+objects, 535 Shenandoah generational by default, 545/546 ZGC startup and adaptive
+heap sizing, 539 Strict Field Initialization (Preview), and 541 deprecating the
+macOS/x64 port for removal. The page notes the list is a work in progress; JDK 28
+will be the Reference Implementation for Java SE 28 (JSR 403).
+
+**Why it matters:** Value Objects plus structured concurrency set the JVM's server
+idiom for the next decade, and a standard JSON library finally closes Java's oddest
+gap. The macOS/x64 deprecation is the quiet one: Apple stopped shipping x64 Macs in
+2020 — it's formality, but a formality that will break someone's CI runner.
+
+[`🔗 JDK 28`](https://openjdk.org/projects/jdk/28/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50135379)
+
+---
+
+## 24. phpMyFAQ's WebAuthn registration would attach a passkey to any account — CVE-2026-111911, VulnCheck-scored 9.8, fixed in 4.1.9
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / MITRE · published Oct 17
+- **Tags:** `cve` `webauthn` `authentication` `passkeys`
+
+phpMyFAQ 4.0.0 before 4.1.9 contains an authentication bypass in which "WebAuthn
+registration endpoints attach credentials to any account without authentication or
+challenge validation": an attacker stages a victim username, submits a forged
+`fmt=none` attestation to register their own passkey, then logs in — bypassing both
+password and TOTP. Score provenance: the 9.8 (CVSS 3.1) is **VulnCheck-assigned** —
+no CNA score exists, and the NVD record is **Deferred (not NVD-analyzed)**; VulnCheck
+also publishes a CVSS 4.0 9.3. The referenced fixes are GHSA-g6cq-6rqg-6c9p and
+GHSA-rg9h-f29v-xhxr; the repo is alive (pushed Oct 17).
+
+**Why it matters:** Three days after this feed carried "Passkeys are not a trap,"
+here's the implementation-flavored counterpoint: the protocol was fine — the
+ceremony wasn't. Registration that doesn't authenticate the existing account and
+doesn't bind the challenge turns the phishing-resistant factor into the takeover
+tool. Upgrade to 4.1.9.
+
+[`🔗 CVE record`](https://cveawg.mitre.org/api/cve/CVE-2026-111911) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/phpmyfaq-4.0.0-before-4.1.9-authentication-bypass-via-webauthn-credential-injection)
+
+---
+
+## 25. Amazon's Atlas scored warehouses for union risk — court-disclosed documents put two UK sites in Tier 1; Amazon says it's building-level and "not currently used in the UK"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 152+ pts · 12.0h ago (~00:05 UTC+8)
+- **Tags:** `ai` `labor` `surveillance` `amazon`
+
+openDemocracy (Oct 16) reports on internal documents disclosed in a Canadian legal
+challenge by union Unifor — which led British Columbia's Labour Board to rule Amazon
+"had violated multiple local labour laws" — describing Atlas, Amazon's in-house
+forecasting AI, as predicting "how likely its warehouse staff in the US, Canada and
+the UK are to attempt to form a union, stage a sit-in, or conduct other 'disruptive
+labour events.'" Sites are scored 100–900 from hundreds of data points including
+Reddit posts and internal survey responses; 16 sites hold Tier 1 ("future activity is
+imminent"), among them the UK's Sutton Coldfield (EMA4) and Coventry-area (BHX4)
+warehouses. Amazon rejected "the characterisation of Atlas as 'individual employee
+monitoring or surveillance'" ("this is site/building level activity only") and says
+"a framework called Atlas is not currently used in the UK" — it had not answered
+whether a similar system runs under a different name.
+
+**Why it matters:** The documents surfaced through a labor-board case, not a leak —
+litigation as the disclosure channel for deployed AI systems is becoming a pattern
+worth tracking. Whatever the interpretation fight, the feature list is now public:
+risk scoring of physical sites from social-media and survey data.
+
+[`🔗 openDemocracy`](https://www.opendemocracy.net/amazon-ai-surveillance-monitor-union-activity-uk-warehouses-birmingham-coventry-atlas-sutton-coldfield/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50132278)
+
+---
+
+## 26. Decision 3.0: vLLM-SR's d3 claims the top of the Jev Decision Index — a 26B multimodal decision model that answers without generating text
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face · trending · card updated Oct 17
+- **Tags:** `decision-models` `inference` `vllm` `open-weights`
+
+d3 (vllm-sr/d3, Apache-2.0) is the 26.09B-parameter foundation decision model —
+including a 0.46B vision encoder — of Decision 3.0, the decision layer of the vLLM
+Semantic Router project (6.2k★, "an open, programmable decision layer for models and
+compute"). Give it text, JSON, images or video plus choice/yes-no/score questions and
+it returns a probability for every option in one call, without generating. Claims,
+all self-measured: Jev Decision Index 0.3.2 of 66.3, "first on the official text
+board," +10.4 over Decision 2.0; Perception Test video QA 77.4 (internal); medians of
+54.4ms text, 290ms image, 500ms 10-second video on one AMD Instinct MI325X; 27
+req/s at p99 under 1s with batching.
+
+**Why it matters:** The "decision model" tier this feed has tracked through Jev's
+DIY guide (Oct 15) and Danger Zone (Oct 17) now has an open-weights, multimodal,
+AMD-benchmarked claimant to the top of its own index. The self-reporting caveat
+applies — but the serving-stack pattern is what compounds: a router model deciding
+which requests a generative model ever sees.
+
+[`🔗 vllm-sr/d3 model card`](https://huggingface.co/vllm-sr/d3) · [`🔗 vllm-project/semantic-router`](https://github.com/vllm-project/semantic-router)
+
+---
+
+## 27. FDE-Gym: 95 delivery tasks with scripted stakeholders — agents graded on the ambiguous last mile, not the ticket
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · listed Oct 16 (2610.22350)
+- **Tags:** `benchmark` `agents` `evaluation` `paper`
+
+Existing agent benchmarks evaluate well-specified tasks — issue reports, specs,
+tickets. FDE-Gym instead simulates forward-deployed engineering: 95 end-to-end
+delivery tasks drawn from 20 customer scenarios across 18 sectors, each adapted by
+industry experts from real-world delivery projects. Agents work in simulated customer
+environments with scripted stakeholders and modifiable customer systems — they must
+clarify ambiguous requirements, operate on production-like systems, and uncover
+unstated constraints nobody wrote down.
+
+**Why it matters:** The forward-deployed engineer is the part of AI deployment that
+didn't automate — the human stitching a model's output into a customer's mess. A
+benchmark for it is a proxy for where agentic revenue actually is, and it sits
+beside today's RealtimeBench and transcript-eval papers: evaluation is moving from
+"can it solve" to "can it operate."
+
+[`🔗 arXiv 2610.22350`](https://arxiv.org/abs/2610.22350) · [`🔗 cs.AI new listings`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 28. The Duck Pond: every quack synthesized live — no recordings, spatialized from where you stand on the bank
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 106+ pts · 14.6h ago (~21:28 UTC+8 Oct 17)
+- **Tags:** `audio` `synthesis` `webaudio` `rust`
+
+celphase's duck-pond is a small interactive mallard flock — "three hens, two drakes
+and two broods of ducklings" — with a strict constraint: "No recordings. Every quack
+is synthesized as it happens and heard from where you stand on the bank." Sound is
+positioned relative to your vantage point (distance rings at 5, 10, 20 and 40m),
+with a headphone mode and peas to throw (`p`). The MIT-licensed Rust source went
+public alongside the HN post.
+
+**Why it matters:** Same bet as this week's software-rendered Quake and Furifont's
+font-as-runtime: synthesize at the presentation layer instead of shipping assets.
+As a Show HN it's also a compact, readable codebase for anyone teaching procedural
+audio — the quack that fooled the front page is a few kilobytes of math.
+
+[`🔗 duck-pond`](https://celphase.github.io/duck-pond/) · [`🔗 celphase/duck-pond`](https://github.com/celphase/duck-pond)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-17T20:20:00Z |
-| Items | 18 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, arXiv, NVD/MITRE, LWN, vendor blogs, security research) |
+| Generated | 2026-10-18T04:20:00Z |
+| Items | 28 |
+| Sources tracked | 22 (Hacker News, GitHub Trending, GitHub releases, arXiv, NVD/MITRE, GHSA/VulnCheck, Chrome platform docs, OpenJDK, Hugging Face, LWN, vendor blogs, security research) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
