@@ -90,6 +90,31 @@
       "id": "CVE-2026-111880",
       "why": "FreeRDP heap OOB write in server NTLM hash-callback path (backward MIC offset writes 16 zero bytes past allocation); VulnCheck-assigned, NVD Received. Fixed 3.32.0. Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 37.",
       "seeded": "2026-10-18 [Received] 3.1 Primary/disclosure@vulncheck.com 7.4, 4.0 Secondary/disclosure@vulncheck.com 8.3, CWE-787, published 2026-10-17"
+    },
+    {
+      "id": "CVE-2026-112006",
+      "why": "OpenTelemetry Python OTLP http exporter, empty cert env disables TLS verification; Primary disclosure@vulncheck.com 6.5 (3.1), Secondary 8.3 (4.0), status Received — watch for NVD analysis or score",
+      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 6.5, 4.0 Secondary 8.3, CWE-295, published 10-18"
+    },
+    {
+      "id": "CVE-2026-111998",
+      "why": "Vanus hardcoded admin token, unauth cluster-admin via gateway; Primary disclosure@vulncheck.com 9.8 (3.1); repo vanus-labs/vanus dormant since 2024-03 — watch for NVD analysis",
+      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary 9.3, CWE-1392, published 10-18"
+    },
+    {
+      "id": "CVE-2026-112005",
+      "why": "WhoDB DuckDB filesystem escape via query editor; Primary disclosure@vulncheck.com 7.7 (3.1), Secondary 9.2 (4.0), fixed 0.135.0 — watch for NVD analysis",
+      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 7.7, 4.0 Secondary 9.2, published 10-18"
+    },
+    {
+      "id": "CVE-2026-112051",
+      "why": "Xinference Windows path traversal via model_name; Primary disclosure@vulncheck.com 6.5 (3.1), Secondary 8.3 (4.0) — watch for NVD analysis",
+      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 6.5, 4.0 Secondary 8.3, CWE-22, published 10-18"
+    },
+    {
+      "id": "CVE-2026-112021",
+      "why": "snac2 heap overflow via \\u0000 in ActivityPub JSON parsed pre-signature-check; Primary disclosure@vulncheck.com 7.5 (3.1), Secondary 8.7 (4.0), fixed 2.93 — watch for NVD analysis",
+      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary 8.7, published 10-18"
     }
   ]
 }
