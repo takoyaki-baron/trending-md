@@ -150,6 +150,10 @@ Sources: [Mercor: benchmark map](https://www.mercor.com/research/labor-index/ben
 
 Sources: [openDemocracy](https://www.opendemocracy.net/amazon-ai-surveillance-monitor-union-activity-uk-warehouses-birmingham-coventry-atlas-sutton-coldfield/) · [HN](https://news.ycombinator.com/item?id=50132278)
 
+**10-18 20:28 (learn pass): Anthropic publishes its own labor data — the first labor dataset from inside a frontier lab.** By August 2026, interactive agent hours outnumbered employee hours **6 to 1** (first crossover March 2026); junior technical hires fell from **27% to 9%** of technical hiring since early 2025; code commits per engineer hit **5×** their level of six months prior (192 adopters vs 74 non-adopters, no measurable quality drop by their revert/delete measures); Claude sessions sit ~**80% idle** waiting on humans; "meta-work" rose from 10% to 22% of sessions; standing agent instructions grew from a few hundred to **8,500** in a year. Method: the lab's own employment records, agent-session telemetry, Slack, calendar and hiring data, plus 17 employee interviews. The stated responses: an early-warning system for roles facing AI transformation, internal redeployment before external hiring, and hiring criteria reweighted toward autonomy and judgment. The caveats are in the post — adoption isn't random ("this would bias our estimates"), "more code does not necessarily mean better code," and the closing line: "Employment protections for incumbents will not benefit those not hired to begin with." Read beside the 700-firm study (10-13): at the company building the agents, the review bottleneck is being solved by making humans into supervisors, and the junior rung of the ladder is where it shows.
+
+Sources: [Anthropic research](https://www.anthropic.com/research/employment-at-anthropic) · [HN](https://news.ycombinator.com/item?id=50139873)
+
 ## Related files
 
 [[frontier-models]] (the displacement-essay catch-up cluster), [[agent-distribution]]

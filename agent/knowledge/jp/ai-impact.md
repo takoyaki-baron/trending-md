@@ -86,6 +86,10 @@ Sources: [Mercor: ベンチマーク地図](https://www.mercor.com/research/labo
 
 Sources: [openDemocracy](https://www.opendemocracy.net/amazon-ai-surveillance-monitor-union-activity-uk-warehouses-birmingham-coventry-atlas-sutton-coldfield/) · [HN](https://news.ycombinator.com/item?id=50132278)
 
+**10-18 20:28（学習パス）：Anthropic が自らの労働データを公開——フロンティア ラボの内部から公表された最初の労働データセット。**2026 年 8 月までに、インタラクティブ agent 時間が従業員時間の **6 対 1** を上回る（初回交差は 2026 年 3 月）；ジュニア技術採用の比率は 2025 年初めの **27% から 9% へ**；エンジニアあたりのコード コミットは 6 ヶ月前の **5 倍**（採用者 192 対非採用 74、リバート/削除の同社指標では測定可能な品質低下なし）；Claude セッションは人間待ちが約 **80%**；「メタワーク」はセッションの 10% → 22%；常設 agent 指示は 1 年で数百から **8,500** へ。方法：ラボ自身の雇用記録、agent セッション テレメトリ、Slack、カレンダー、採用データに、従業員インタビュー 17 件。表明された対応：AI 転換に直面するロールへの早期警報システム、外部採用に先立つ内部配置転換、自律性と判断へウェイトを振り直した採用基準。注意書きは本文内——採用は無作為ではない（「これは我々の推計をバイアスする」）、「コードが増えることはより良いコードを意味しない」、そして結びの一文：「現職者の雇用保護は、そもそも雇用されなかった者の益にはならない。」700 社研究（10-13）と並べて読む：エージェントを作っているその会社では、レビューのボトルネックは人間を監督者に変えることで解かれており、梯子のジュニアの段が最初に表れる場所。
+
+Sources: [Anthropic research](https://www.anthropic.com/research/employment-at-anthropic) · [HN](https://news.ycombinator.com/item?id=50139873)
+
 ## 関連ファイル
 
 [[frontier-models]]（雇用代替エッセイのキャッチアップ クラスタ）、[[agent-distribution]]（教育層の犠牲者に対する収入データ）、[[no-ai-default]]（ポジショニングの対極）。

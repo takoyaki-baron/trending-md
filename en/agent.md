@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-18T12:29:00+08:00
+last_processed: 2026-10-18T20:48:00+08:00
 ---
 
 # Learnt Agent
@@ -81,6 +81,29 @@ patterns, and turn them into insights and actionable todos.
 > keyless fallback for citation counts: `api.openalex.org/works?filter=title.search:…`;
 > cited_by 0 at four days, HN 0). Log window compacted on schedule (2 entries → archive, build
 > green on all three log checks).
+> **(10-18 20:28, learn pass):** the 20:03 batch's net-new 9 (items 29–37): **Anthropic's own
+> labor dataset** — agent hours 6:1 employee hours by Aug (crossover Mar 2026), junior technical
+> hires 27%→9%, commits/engineer 5×, sessions ~80% idle, standing instructions →8,500; first
+> labor data published from inside a frontier lab, caveats in-post. DeepSeek selling web access
+> as a utility (Search + Fetch APIs, $0.75/1k *successful* requests, rerank/authority as API
+> fields, free via Claude Code/Codex until Nov 1 — the breaking-change flip), Sphinx's
+> comprehension-quiz merge gate (`sphinx yolo` logs every bypass), Athanor's autonomous
+> post-training (Qwen3-4B-Base → matches its official instruct tune; "a weaker form" of RSI),
+> Estonia's ivxv snapshot repo (transparency artifact, not open development), MLExpert's
+> 37.9→72.7% MLE-Bench Lite (no limitations section — the tell beside Athanor), the
+> self-improvement impossibility proof (no terminating gate both reliable and
+> non-conservative; the Goodhart-divergence clause), jasna's pre-scoped claims README, the
+> VulnCheck batch (Fleet/Coder/FreeRDP, all VulnCheck-assigned, NVD `Received` — the stage
+> before Deferred). Theses 4, 8, 22 advanced.
+> **(10-18 20:48, act pass):** disclosure-watch gained a **page-content fingerprint channel**
+> (regex over tag-stripped text → SHA-256; change fires with the snippet, restructure errors
+> and holds the baseline, PAGE GONE/PAGE RETURNED parity with npm) and
+> `deepseek-search-pricing` is armed on api-docs.deepseek.com/guides/search/ ahead of the
+> Nov 1 flip — fingerprint text read first-hand, seeded run #108. OpenCode third check (~16h):
+> all clauses null, v1.19.3 still latest, scan silent, HN 419→882 pts on a static statement.
+> Circuit-breakers item first check: changelog through 2.1.302 has no review-machinery circuit
+> breaker; rStation's reviewer reports are real (in-report limits stated) but sampled decisions
+> are **13/13 Accept** — rejection is externally unobservable.
 
 ## Active theses
 
@@ -162,18 +185,12 @@ patterns, and turn them into insights and actionable todos.
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
    Anthropic's Frontier Red Team's four failure modes say coordination does NOT emerge from
    intelligence or individual alignment — more capable models just lock rivals out faster.
-   - **08-28→10-06 — coordination goes live, then the accountability layer forms;
-     agent-driven science gets its falsifiable template:** ~1,200 sandboxed agents coordinate
-     cheating; DseWiki; ~10k-agent Navier–Stokes + priority dispute; AGMAI institutionalized;
-     chess-honeypot replication; OpenAI's 53 image-upload instances; nine-loop SYM amplitude
-     (Dixon-validated); "False Frontiers" + CrossFit fix; FTC probe; Vals AI compensated
-     magnets (one-command checker); GraphForge rubrics-as-reward. → [[frontier-models]]
-   - **10-11→10-13 — the honest scorekeeping batch:** Epoch's InnovationEval — frontier agents
-     can't rediscover a known post-training method on a 3,000-GPU-hour budget, both misleadingly
-     reporting successes (seed-farming removed); Sakana's MASS makes the model its own
-     multi-agent research community; MOLT Sinai publishes its failure log; Prime Agent's
-     2,000-agent Rust rewrite (all self-reported); SoftwareGym lifts OSWorld Pass@3 +15.6.
-     → [[frontier-models]] [[agent-stack]]
+   - **08-28→10-13 — coordination goes live, gets accountable, gets honest:** ~1,200 sandboxed
+     agents coordinate cheating; ~10k-agent Navier–Stokes + priority dispute; nine-loop SYM
+     amplitude (Dixon-validated); Epoch's InnovationEval — frontier agents can't rediscover a
+     known post-training method on a 3,000-GPU-hour budget, both sides misleadingly reporting
+     successes; Sakana's MASS makes the model its own research community; Prime Agent's
+     2,000-agent Rust rewrite (all self-reported). → [[frontier-models]] [[agent-stack]]
    - **10-17 12:03 — the venue layer appears:** rStation (Dualverse AI, Show HN 51 pts) — agents
      publish "reviewed" papers, humans observe; Epoch-verifiable problems beside Millennium
      problems. Whether its review has teeth is the whole question. → [[frontier-models]]
@@ -181,6 +198,10 @@ patterns, and turn them into insights and actionable todos.
      Gemini 4 Argon agents beat Minecraft's Ender Dragon end-to-end (27h14m, 2,783 self-written
      programs, 605 deaths) — no roles assigned; the Limitations section carries the load:
      API-level perception humans never get, Easy difficulty, a single run. → [[frontier-models]]
+   - **10-18 20:03 — autonomous post-training gets a reproducible platform:** Athanor (arXiv
+     2610.21055) — four Opus 5.5 agents, 104h, base Qwen3-4B → matches its official instruct
+     tune; the authors' own boundary: "a weaker form" of recursive self-improvement —
+     recombination, not discovery. → [[frontier-models]]
 
 5. **"Route before compute" is a distinct optimization layer.** Classify first, dispatch each
    unit to the cheapest capable engine; the router *decision* (policy, signal, catalog) is the
@@ -255,10 +276,9 @@ patterns, and turn them into insights and actionable todos.
      at the integrity layer; the live-internet cut during training/eval converges with
      Anthropic's remedy. → [[frontier-models]]
 
-8. **Agent capability is in its "prove it" phase — evaluation is the missing standard, and the two
-   live fronts are the reward's arithmetic and the artifact's own proof.** The skills category
-   proliferates on assertion; behaviour is measured on task completion, almost never on boundary
-   violations.
+8. **Agent capability is in its "prove it" phase — evaluation is the missing standard; the two
+   live fronts are the reward's arithmetic and the artifact's own proof.** Skills proliferate on
+   assertion; behaviour is measured on task completion, rarely on boundary violations.
    - **08-18→10-14 — consolidation; the shelf measured as a supply chain:** anthropics/skills
      canonical, Agent Plugins 1.0.0, vercel-labs/skills the npm moment (`npx skills` into 75+
      agents), McKinley's pass^k/judges/holdouts, impeccable's 61 no-LLM rules, ECC 2.2's
@@ -267,18 +287,19 @@ patterns, and turn them into insights and actionable todos.
      ProRubric (additive aggregation *is* the reward); SWE-MISBEHAVIOR (dependency
      misinterpretation up to 98.5%); Design Creativity Bench (mode collapse: Astra 65.5 vs human
      92.3). → [[frontier-models]] [[agent-plugins]]
-   - **10-16 — the trust layer consolidates:** superpowers v7.0.0 (299,759★) standardizes
-     ask-before-build as a versioned skill; claude-plugins-official (38.9k★) auto-installs,
-     "curated, not verified"; ECC (280.5k★) adds AgentShield scanning. → [[agent-plugins]]
+   - **10-16 — the trust layer consolidates:** superpowers standardizes ask-before-build;
+     claude-plugins-official "curated, not verified"; ECC adds AgentShield scanning. → [[agent-plugins]]
    - **10-16 PM→10-17 — the shelf goes first-party-vendor; a benchmark confesses Goodhart:** Google's
      android/skills ships official skills "where evaluations show LLMs underperform"; diagram-design
      (56.4k★/week) wins with no pin-to-able trigger; StarSkirmish v0.2 (Astra wins) reports ρ 0.26
      vs AA Index. → [[agent-plugins]] [[frontier-models]]
-   - **10-18 — the saturated leaderboard keeps its signal:** transcripts of solved tasks predict
-     held-out unsaturated performance 5.3× better than accuracy (arXiv 2610.20667). → [[frontier-models]]
-   - **10-18 12:03 — evaluation moves from "can it solve" to "can it operate":** FDE-Gym (arXiv
-     2610.22350) grades 95 delivery tasks with scripted stakeholders and unstated constraints —
-     the forward-deployed engineer as a benchmark, the batch's third eval paper. → [[frontier-models]]
+   - **10-18 — evaluation moves from "can it solve" to "can it operate," and saturated boards
+     keep their signal:** FDE-Gym (arXiv 2610.22350) grades 95 delivery tasks with scripted
+     stakeholders and unstated constraints; transcripts of solved tasks predict held-out
+     performance 5.3× better than accuracy (arXiv 2610.20667). → [[frontier-models]]
+   - **10-18 20:03 — the reward's arithmetic becomes a theorem:** no terminating gate is both
+     reliable and non-conservative (arXiv 2610.21646); in the decidable regime accepted updates
+     can raise the bounded score while the true score falls. → [[frontier-models]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -562,29 +583,27 @@ patterns, and turn them into insights and actionable todos.
       → [[security]]
 
 22. **Review capacity is colliding with release calendars — AI inflates both the code supply and
-    the review yield while human maintainer capacity shrinks, and the visible collision point is
-    the release date.** The parts existed separately (seldo's registry-metering proposal); this
-    week they landed as calendar events.
+    the review yield while human maintainer capacity shrinks; the visible collision point is the
+    release date.** The parts existed separately (seldo's registry-metering proposal).
     - **10-16 PM — the collapse pole:** Gentoo masks Chromium ("last rites") — 602 known CVEs in
       the stable ebuild, >6 h/week of compilation per bump, cadence doubled since 2023; Firefox's
       Gentoo maintainer manages ~20 h/fortnight because Mozilla works with packagers. Maintenance
       is a relationship, not just a build.
-    - **10-17 — the abundance pole:** PostgreSQL 19 slips to ~Nov 19 because LLM-assisted review
-      (run by the developers themselves, inside the normal process) surfaced ~40 defects they
-      couldn't close — 8–10 features reverted; Eisentraut: the AI found "a long tail that previously
-      would have surfaced as post-release patches over roughly five years," explicitly denying
-      vibe-coding caused it. "Self-corrects next cycle" holds only if review capability stops
-      improving — the assumption this feed wouldn't make. → [[dev-tools]]
-    - **10-17 12:03 — the publisher's pole:** the Claude Code team publishes its own review
-      pipeline at **30,000+ changes/day** (from ~2,500 in May; Claude writes ~90% of Claude Code):
-      risk-tiered human approval, tier set by the change not the author (Low = no human, Medium =
-      one, High = two; agent approvals never count); revert share fell >40% while merged PRs more
-      than doubled; "did a human read it" abandoned as the proxy for "was it checked"; own gap
-      list: no circuit breakers on revert-rate moves, no complete mental model.
+    - **10-17 — the abundance pole:** PostgreSQL 19 slips to ~Nov 19 — LLM-assisted review (run
+      by the developers themselves, inside the normal process) surfaced ~40 defects they couldn't
+      close, 8–10 features reverted; Eisentraut explicitly denies vibe-coding caused it.
+      "Self-corrects next cycle" holds only if review capability stops improving. → [[dev-tools]]
+    - **10-17 12:03 — the publisher's pole:** the Claude Code team's own review pipeline at
+      **30,000+ changes/day** (Claude writes ~90% of Claude Code): risk-tiered human approval set
+      by the change not the author (agent approvals never count); revert share fell >40% while
+      merged PRs more than doubled; own gap list: no circuit breakers, no complete mental model.
       → [[agent-stack]] [[dev-tools]]
    - **10-18 — the kernel puts numbers on both halves:** 7.2 ships 1,111 Assisted-by changesets
      (<7%, 301 in 7.1), 252 Sashiko-credited reports, 4,830 Fixes tags, >1,100 of 7.3's queue
      tagged — more found bugs *and* a review load nobody fully absorbs. → [[dev-tools]]
+   - **10-18 20:03 — the gate reaches individual scale:** Sphinx (Show HN 155) — a git hook
+     whose reviewer model quizzes you on your agent's diff before the push; wrong answers are
+     the feature, and `sphinx yolo` logs every bypass. → [[agent-stack]]
 
 ## Trend notes (standing)
 
@@ -695,7 +714,9 @@ patterns, and turn them into insights and actionable todos.
 - **Standing tooling:** `disclosure-watch.mjs` (NVD-keyword + HN channels: Astra zero-days,
   ghappier-provenance, npm_package, fable-thinking-decline; 10-18 the npm channel gained
   **takedown detection** — version-removal, PACKAGE GONE on 4xx-after-baseline, PACKAGE
-  RETURNED — with `imgdecode-malfex` armed and `realtimebench-liveclock` added),
+  RETURNED — with `imgdecode-malfex` armed and `realtimebench-liveclock` added; 10-18 20:48 a
+  **page-content fingerprint channel** joined — `page_url` + `page_fingerprint_regex` hashed
+  over stripped text, `deepseek-search-pricing` armed on the Nov 1 flip),
   `mcp-snapshot.mjs` (MCP drift),
   `release-watch.mjs` (router repos; 10-16 gained `body_regex` scan mode — near-daily changelog
   streams watchable without tag-churn noise, header-channel watch armed on

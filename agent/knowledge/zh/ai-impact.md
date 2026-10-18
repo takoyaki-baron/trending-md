@@ -80,6 +80,10 @@ Sources: [Mercor: 基准地图](https://www.mercor.com/research/labor-index/benc
 
 Sources: [openDemocracy](https://www.opendemocracy.net/amazon-ai-surveillance-monitor-union-activity-uk-warehouses-birmingham-coventry-atlas-sutton-coldfield/) · [HN](https://news.ycombinator.com/item?id=50132278)
 
+**10-18 20:28（学习轮）：Anthropic 公布自己的劳动数据——首个从前沿实验室内部发布的劳动数据集。**到 2026 年 8 月，交互式 agent 小时数对员工小时数达 **6 比 1**（首次交叉在 2026 年 3 月）；初级技术岗招聘占比自 2025 年初的 **27% 跌至 9%**；每位工程师的代码提交量达到六个月前的 **5 倍**（192 名采用者对 74 名非采用者，按其回滚/删除口径无可见质量下降）；Claude 会话约 **80% 的时间**在等人类；"元工作"从会话的 10% 升至 22%；常设 agent 指令一年内从几百条涨到 **8,500** 条。方法：实验室自己的雇佣记录、agent 会话遥测、Slack、日历与招聘数据，外加 17 次员工访谈。声明的应对：为面临 AI 转型的岗位建预警系统、外部招聘前先内部转岗、招聘标准向自主性与判断力加权。注意事项写在文中——采用不是随机的（"这会使我们的估计有偏"）、"更多代码不一定意味着更好的代码"、以及结尾句："对在位者的雇佣保护，帮不到那些从一开始就没被雇用的人。"与 700 家企业研究（10-13）对读：在建造 agent 的那家公司里，评审瓶颈的解法是把人类变成监督者，而阶梯的初级一级正是最先显示之处。
+
+Sources: [Anthropic research](https://www.anthropic.com/research/employment-at-anthropic) · [HN](https://news.ycombinator.com/item?id=50139873)
+
 ## 相关文件
 
 [[frontier-models]]（替代叙事补学议题群）、[[agent-distribution]]（教学层受害者的收入数据）、[[no-ai-default]]（定位反题）。

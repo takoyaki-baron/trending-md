@@ -21,6 +21,7 @@
 // non-fatal.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
+import { createHash } from 'node:crypto';
 
 const arg = (name) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -219,6 +220,71 @@ for (const item of manifest.watch) {
       } else {
         errors.push(`${item.id}/npm: ${String(err.message || err).split('\n')[0]}`);
       }
+    }
+  }
+
+  // 6. Page-content fingerprint — watches a vendor page whose own TEXT is the current data
+  //    point (added 2026-10-18, DeepSeek's Search/Fetch pricing: free via Claude Code/Codex
+  //    until a date-certain flip on 11-01, and a manual re-check on the day rots exactly like
+  //    every manual re-check before it — the free window could also quietly extend BEFORE the
+  //    date, which a re-check on the date would never notice). The `page_fingerprint_regex`
+  //    is matched (global) against tag-stripped, whitespace-collapsed text; the joined matches
+  //    are SHA-256-hashed. Seed records silently; a hash change fires with the new snippet;
+  //    zero matches after a baseline = the page restructured and the channel needs re-aiming
+  //    (an error, and the OLD baseline is held — a restructure must not read as "no change");
+  //    a 4xx after a baseline fires PAGE GONE once, steady-gone stays quiet, and a fetch that
+  //    succeeds again fires PAGE RETURNED instead of silently re-seeding (npm-channel parity).
+  if (item.page_url) {
+    const finishPage = (joined) => {
+      const hash = createHash('sha256').update(joined).digest('hex').slice(0, 16);
+      if (prev.page_gone) {
+        changes.push(`${item.id} page: PAGE RETURNED — fingerprint now "${joined.slice(0, 300)}" ${item.page_url}`);
+      } else if (prev.page_hash && prev.page_hash !== hash) {
+        changes.push(`${item.id} page: CONTENT CHANGED (${prev.page_hash} → ${hash}) — now reads: "${joined.slice(0, 300)}" ${item.page_url}`);
+      }
+      observed.page_hash = hash;
+      observed.page_snippet = joined.slice(0, 400);
+      observed.page_gone = false;
+    };
+    try {
+      const res = await fetch(item.page_url, {
+        headers: { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) trending-md-disclosure-watch/1.0' },
+        signal: AbortSignal.timeout(30_000),
+      });
+      if (!res.ok) {
+        const status = String(res.status);
+        if (/^4/.test(status) && (prev.page_hash || prev.page_gone)) {
+          if (prev.page_hash) {
+            changes.push(`${item.id} page: PAGE GONE (${status}) — fingerprint was "${String(prev.page_snippet ?? '').slice(0, 200)}" ${item.page_url}`);
+            delete observed.page_hash; // pruned once announced; a returning page is the next event
+          }
+          observed.page_gone = true; // steady state: later 4xxs stay quiet instead of erroring per run
+        } else {
+          throw new Error(`${res.status} ${item.page_url.slice(0, 80)}`);
+        }
+      } else {
+        const text = (await res.text())
+          .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+          .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&nbsp;/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        const matches = text.match(new RegExp(item.page_fingerprint_regex ?? '[\\s\\S]+', 'g'));
+        if (!matches || !matches.length) {
+          // restructure, not a null: hold the old baseline so the restructure can't masquerade
+          // as "no change", and surface the channel itself as needing re-aiming
+          errors.push(`${item.id}/page: fingerprint matched nothing — page restructured? re-aim ${item.page_url.slice(0, 80)}`);
+          observed.page_hash = prev.page_hash;
+          observed.page_snippet = prev.page_snippet;
+          observed.page_gone = prev.page_gone;
+        } else {
+          finishPage(matches.join('\n---\n'));
+        }
+      }
+    } catch (err) {
+      errors.push(`${item.id}/page: ${String(err.message || err).split('\n')[0]}`);
     }
   }
 
