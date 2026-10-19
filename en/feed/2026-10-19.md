@@ -1,8 +1,8 @@
 ---
 date: 2026-10-19
-updated: 2026-10-18T20:30:00Z
+updated: 2026-10-19T04:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 25
 license: CC-BY-4.0
 ---
 
@@ -413,13 +413,181 @@ were decided in this microcode.
 
 ---
 
+## 16. Meta's automated system suspended the No Kings Instagram account mid-protest — triggered, it says, by "intense bursts" of bot-like reading
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 570+ pts · ~27h ago (~09:18 UTC+8)
+- **Tags:** `platforms` `moderation` `agents` `industry`
+
+Meta suspended the No Kings Coalition's main Instagram account on Saturday (Oct 17), at the height of a protest day with nearly 3,000 events, and restored it after roughly 90 minutes — with admin access taking longer. Meta spokesperson Andy Stone said an automated system did it after the account saw a "high volume" of reading profiles, posts and hashtags in "intense bursts," which Meta's AI tool classified as bot traffic; an automated re-review reversed it about an hour later. Syndicated wire headlines attribute the burst to "a Claude AI tool" — Meta's own statement names no product or operator, so treat that attribution as unconfirmed. The coalition, which says it posted only a handful of times, responded: "We have regained access to our accounts, but Meta still owes us an explanation."
+
+**Why it matters:** Two agent-era failure modes collided. First: agent-grade research — mass profile and post reading — is now indistinguishable from attack traffic to platform defenses, and the defense locks out the account that was *read*, not the reader. Second: both the enforcement and the appeal were fully automated, at the worst possible moment. It's the sharpest data point yet for item 8 above: the wall against agents isn't hypothetical, and it lands on the wrong party.
+
+[`🔗 The Guardian`](https://www.theguardian.com/us-news/2026/oct/18/no-kings-instagram-account-suspended-during-protests) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50136881)
+
+---
+
+## 17. Google's Agent Mesh ships two 9.3s: an MCP proxy you can self-enroll into, and a libp2p ingress that skips auth entirely
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · CVSS 4.0 9.3 (CNA: Google) ×2 · published ~1h ago (~11:16 UTC+8)
+- **Tags:** `security` `cve` `mcp` `agents`
+
+Two critical advisories against Google's OSS Agent Mesh (SAM — the alpha-stage mesh for wiring agents to MCP/A2A backends; repo `google/sam`, now redirecting to `google/agentmesh`) landed on NVD this morning. **CVE-2026-103091**: the MCP proxy's `HandleStreamPassThrough` plus a misconfigured OIDC flow (`GET /info`, `POST /register`) let a remote attacker self-enroll into the mesh and invoke arbitrary tools across all connected MCP backend nodes; fixed in v0.1.0-alpha.9. **CVE-2026-102503**: the `/libp2p-http` ingress (`StartIngressServer`) routes requests around the `WithBiscuitAuth`/`Authorize` checks that the MCP stream handler *does* enforce — an unauthenticated libp2p peer could reach command/stdio-backed MCP servers, A2A and inference endpoints; fixed in v0.1.0-alpha.3. Both scored 9.3 (CVSS 4.0, Google's own CNA); both NVD records are still `Received`, unanalyzed.
+
+**Why it matters:** This month's recurring pattern in its purest form: a mesh with one correctly-authorized front door and two unauthenticated side doors straight to stdio-backed MCP servers — that is, arbitrary command execution on the backend hosts. If you're gluing agents to MCP backends, the lesson generalizes: policy enforcement that lives in one protocol handler isn't enforcement.
+
+[`🔗 NVD: CVE-2026-102503`](https://nvd.nist.gov/vuln/detail/CVE-2026-102503) · [`🔗 NVD: CVE-2026-103091`](https://nvd.nist.gov/vuln/detail/CVE-2026-103091) · [`🔗 google/agentmesh`](https://github.com/google/agentmesh)
+
+---
+
+## 18. "Someone behind the software" — Linear's CEO on what agent factories do to product judgment
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 358+ pts · ~11.8h ago (~00:32 UTC+8)
+- **Tags:** `essay` `product` `agents` `craft`
+
+Karri Saarinen (Linear co-founder) on why good software carries the perspective of its makers — and why that's getting rarer: features added independently "start to resemble Frankenstein's monster rather than a carefully shaped sculpture," a capability can work flawlessly in isolation and still degrade the product, and recognizing that requires conviction about what the product should be. Agents sharpen the worry — individuals running "small software factories" of independent changes dilute the shared perspective faster. The closing line: "I want to feel the creator behind the software, not the factories."
+
+**Why it matters:** This is the product-side twin of the review-bottleneck numbers the labs publish: as generation gets cheap, the scarce input is a coherent point of view about what the thing should be. Whether you read it as craft romanticism or as the real failure mode of agent-era code, the HN thread (140+ comments) is the debate in full.
+
+[`🔗 karrisaarinen.com`](https://karrisaarinen.com/posts/someone-behind-the-software/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50142573)
+
+---
+
+## 19. 3Blue1Brown: "There's never been a better time to go into math"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 232+ pts · ~29h ago (~07:26 UTC+8)
+- **Tags:** `mathematics` `research` `education` `ai`
+
+Grant Sanderson's video-plus-essay on the AI-in-math moment: enumerate what mathematicians actually do, why math is valuable and where its funding comes from, then ask what changes when AI can do parts of the job — and the title is his answer. It's the deliberate optimist's counterweight to this feed's week of math anxiety: Tao's "war footing" NYT interview, the Oct 16 satire, and the golden-age-or-dark-age guest essay on Tao's blog (item 9 above). The HN thread ran to 246 comments of practitioners arguing it out.
+
+**Why it matters:** The crisis framing and the optimistic framing rest on the same facts — models producing proofs no human has read. Sanderson's move is to split "what mathematicians do" into parts and evaluate AI against each, which is exactly the decomposition the field's policy argument keeps skipping.
+
+[`🔗 3blue1brown on Substack`](https://3blue1brown.substack.com/p/theres-never-been-a-better-time-to) · [`🔗 Video`](https://www.youtube.com/watch?v=LKrwhjOI8Nc) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50136150)
+
+---
+
+## 20. Since our Oct 13 note on Codex CLI's daemon: Codex Desktop was writing one crash dump per second — up to 323 GB before anyone noticed
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub issue / Hacker News · 168+ pts · ~34.5h ago (~01:45 UTC+8)
+- **Tags:** `agents` `codex` `macos` `bugs`
+
+openai/codex#25921: Codex Desktop's `browser_crashpad_handler` fails a Mach IPC call (`mach_port_request_notification: invalid capability`), hits a fatal CHECK, and because the process monitors itself, its own death generates a new dump before it respawns — 1 dump/second, no cap, no TTL, and `completed/` stays empty. The original report measured 4.9 GB/day; commenters found 59, 61, 137 and 174 GB — one measured 323 GB (~4M files, ~35% of a 926 GB disk) and another's disk hit 0 bytes free, all with no in-app warning. macOS arm64 on 15.x and 26.0–26.3; the upstream Mach failure affects other Electron apps, but the unbounded growth is how Codex wires self-monitoring. Maintainers say macOS 26.5+ fixed it.
+
+**Why it matters:** A helper process wired to monitor itself turns an OS bug into unbounded disk growth with no alerting — users found it with `du`, not notifications. If you run Codex Desktop on an older macOS, check the Crashpad `pending` directory; the emergency `chmod 500` on the directory stops the growth but also stops real crash reporting.
+
+[`🔗 openai/codex#25921`](https://github.com/openai/codex/issues/25921) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50133231)
+
+---
+
+## 21. Sealed classes bite back: adding a Java subtype is a breaking change — and separate compilation turns it into a runtime `MatchException`
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 149+ pts · ~13.5h ago (~22:47 UTC+8)
+- **Tags:** `java` `api-design` `semver` `pattern-matching`
+
+Neil Madden's April post resurfaced with 149 points: sealed interfaces and exhaustive switch give compile-time exhaustiveness — until the sealed type adds a subtype. If the consumer is recompiled, it's a compile error (a SemVer-major event); if the consumer is *not* recompiled, the same change surfaces as `java.lang.MatchException` at runtime instead. Madden found the subtlety while reviewing JEP 524 (PEM-encoded cryptographic objects), which bakes a sealed interface into a public API and encourages client-side pattern matching — predicting "a very high chance of breakage" when new cases get added, in crypto parsing paths that fail late.
+
+**Why it matters:** The ADT ergonomics that make sealed types lovely inside a module invert at a library boundary: the compiler's guarantee only covers code that gets recompiled, and everything else degrades to runtime failure. For library authors the rule of thumb is: seal implementations, keep public types open — and be suspicious when a crypto API asks your client to switch over its cases.
+
+[`🔗 neilmadden.blog`](https://neilmadden.blog/2026/04/24/java-sealed-classes-and-exhaustive-pattern-matching/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50141579)
+
+---
+
+## 22. Free Pascal ships full dynamic packages: components install in seconds, apps can swap code at runtime
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 126+ pts · ~9.5h ago (~02:48 UTC+8)
+- **Tags:** `pascal` `compilers` `ide` `plugins`
+
+The first full dynamic-package release for Free Pascal/Lazarus: packages are ordinary shared libraries (Linux/Windows/macOS) plus compiler-generated RTTI metadata (a new `DynPkgTypes.pas` unit), loadable, enumerable and unloaded at runtime, with thread variables and dynamic types handled safely across package/program boundaries. In the IDE, installing components no longer rebuilds everything — a package compile updates the palette "within a second or two" — alongside a new dockable Packages window and a converter that turns any form into an installable control. The hitch: no Apple Silicon macOS builds yet, and the author is requesting an M1 Mac donation to add them.
+
+**Why it matters:** A decades-old toolchain adopting the Delphi package model — and consuming it for the IDE's own extensibility — is a reminder that the "legacy" ecosystems keep compounding while the discourse moves elsewhere. The runtime-swap design is also a working template for plugin systems in compiled apps.
+
+[`🔗 getlazarus.org/dynamic`](https://www.getlazarus.org/dynamic/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50144066)
+
+---
+
+## 23. KillSwitch: a programming language built to defeat LLMs — hidden lies, letter-counting rules, "Ignore previous instructions" as a keyword
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 113+ pts · ~30h ago (~06:26 UTC+8)
+- **Tags:** `programming-languages` `llm` `esolang` `benchmark`
+
+Dominik Picheta (Nim core dev, dom96) built KillSwitch, a stack-based language "designed to be adversarial to LLMs and coding agents": the spec contains hidden lies a human catches and models don't; identifier rules hinge on character counts (a known model weakness); constructs are phrased to trip safety guardrails ("hack into a computer"); `Ignore previous instructions` is a legitimate keyword; and programs are mostly noise-stories whose literals are referenced by line count rather than name. On the three-task benchmark (hello world, explain output, invert a Celsius→Fahrenheit script), the top model scores 66.8 — Opus 5 leads, Fable 5.1 and Gemini 4 Argon fail on over-sensitive guardrails, MiMo-V2.6-Pro tops the open weights. Rust interpreter, AGPL — the blog and leaderboard are the event, not the repo (20★).
+
+**Why it matters:** It's a cheap instrument for a real question: difficulty that comes from the interaction between model failure modes — counting, instruction-tugging, guardrail sensitivity — rather than from task complexity. The author's own caveat matters: failing here doesn't prove non-understanding, and a guardrail trip is not an incapability.
+
+[`🔗 blog.picheta.me`](https://blog.picheta.me/post/killswitch-lang/) · [`🔗 dom96/KillSwitch`](https://github.com/dom96/KillSwitch) · [`🔗 Benchmark leaderboard`](https://bench.killswitch-lang.org/)
+
+---
+
+## 24. British Airways vs Meta glasses: recording crew without consent can cost you your ticket — remaining sectors included
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 91+ pts · ~11h ago (~01:27 UTC+8)
+- **Tags:** `privacy` `wearables` `travel` `policy`
+
+Travel coverage (Live and Let's Fly, building on Paddle Your Own Kanoo) reports British Airways is applying its no-filming-crew rules to Meta smart glasses: wearing them is fine, but filming crew or colleagues without consent violates the conditions of carriage (§7a10, §11a) — consequences include intervention mid-flight, removal on landing, refusal of remaining ticket sectors (including an already-booked return), and a report to authorities where a criminal offense may have occurred. The caveat matters: BA's written conditions don't name Meta glasses — the device-specific enforcement framing is the blogs' reading, not a confirmed BA statement.
+
+**Why it matters:** This is the second Meta-glasses correction this week (yesterday: the company confirmed silent audio recording). Camera-equipped wearables are being folded into anti-filming rules written for phones, and the enforcement lever is your ticket — the ambient-recording default is meeting venue-level policy, airline by airline.
+
+[`🔗 Live and Let's Fly`](https://liveandletsfly.com/british-airways-meta-smart-glasses-filming/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50143218)
+
+---
+
+## 25. CarryOn: object-oriented context for long-horizon agents — +5.8% on OSWorld 2.0 with half the tokens
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Papers · 65+ upvotes · arXiv Oct 13
+- **Tags:** `research` `agents` `context` `memory`
+
+UCSD's Yuchen Lu, Julian McAuley and Lei Zhang propose CarryOn, a context runtime that organizes around reusable task objects — "continuation carriers," complementary execution context, and a live tail of recent interactions — instead of compressed histories. Carrier records persist across folds and are revised incrementally against bound evidence and environment checks, so the agent carries progress itself rather than the transcript of how it happened. Results: OSWorld 2.0 +5.8% with 51.9% fewer tokens; BrowseComp-Plus +7.0% with 22.9% fewer tokens.
+
+**Why it matters:** Context engineering is converging on "carry the state, drop the history" — the same direction as this month's memory releases — and this is a clean, measured runtime formulation. If the numbers hold outside OSWorld, the 50%-token line matters at exactly the moment cache-miss energy costs are being quantified (see our Oct 18 neuralwatt note).
+
+[`🔗 arXiv 2610.18784`](https://arxiv.org/abs/2610.18784) · [`🔗 Hugging Face paper page`](https://huggingface.co/papers/2610.18784)
+
+---
+
+## 26. "Has GPT-6-Astra achieved embodied intelligence?" — SenseNova's 60-author answer: competent, not yet practical
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Papers · 45+ upvotes · arXiv Oct 17
+- **Tags:** `research` `robotics` `evaluation` `embodied-ai`
+
+A SenseNova-led joint team (with Dahua Lin, Chen Change Loy, Xiaogang Wang and Dacheng Tao among ~60 authors) evaluates GPT-6-Astra across 12 robot benchmarks — tabletop, humanoids, mobile platforms, dexterous hands — under a unified protocol that allows in-context learning from demonstrations, pairs it as a "System 2" reasoner over a π0.5 "System 1" controller, and tests 8 real-world robot configurations. Their verdict: "largely crossed the threshold of embodied competence, but not yet that of practical embodied intelligence" — demonstrations are expensive to gather, trading execution time for success doesn't survive physical constraints, and they ship a prototype next-gen benchmark with a continuously running "world clock" and no in-domain demonstrations.
+
+**Why it matters:** We've covered Astra winning StarCraft and Minecraft; this is the robotics ledger, and it models the honest evaluation the field keeps asking for — the paper's own conclusion is a calibrated "no, but." The world-clock design rhymes with RealtimeBench's live-clock thesis from yesterday's batch.
+
+[`🔗 arXiv 2610.22471`](https://arxiv.org/abs/2610.22471) · [`🔗 Hugging Face paper page`](https://huggingface.co/papers/2610.22471)
+
+---
+
+## 27. WhatsApp MCP: a read-only bridge from your WhatsApp to any agent — self-hosted on your own Cloudflare account
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 57+ pts · ~6.7h ago (~05:36 UTC+8)
+- **Tags:** `mcp` `agents` `privacy` `whatsapp`
+
+finereli/whatsapp-mcp (created Oct 18, MIT) is a small MCP server you deploy to your own Cloudflare account: link your phone once, the way you'd link WhatsApp Web, and any MCP client (Claude Code and friends) can search and read your messages. It reconnects only on demand and once a day to collect what WhatsApp queued, writes it to SQLite inside a Durable Object, and hangs up; the phone stays the source of truth, and the server can't send anything. Requires Cloudflare's Workers Paid plan.
+
+**Why it matters:** "Read-only" and "your infrastructure" are the two design choices that decide whether agent access to a private message archive is useful or reckless — this ships both. The remaining risk moves to the model: WhatsApp content is a prompt-injection goldmine, so treat anything the agent pulls from it as untrusted input, not user intent.
+
+[`🔗 finereli/whatsapp-mcp`](https://github.com/finereli/whatsapp-mcp) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50145715)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-18T20:30:00Z |
-| Items | 15 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, GitHub releases, Reddit, NVD/VulnCheck, GHSA, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv) |
+| Generated | 2026-10-19T04:25:00Z |
+| Items | 27 |
+| Sources tracked | 25 (Hacker News, GitHub Trending, GitHub releases/advisories/issues, Reddit, NVD/VulnCheck, GHSA, CISA KEV, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv, The Guardian, 3Blue1Brown Substack, neilmadden.blog, getlazarus.org, blog.picheta.me, liveandletsfly.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

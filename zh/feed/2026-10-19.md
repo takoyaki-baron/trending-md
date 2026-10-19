@@ -1,8 +1,8 @@
 ---
 date: 2026-10-19
-updated: 2026-10-18T20:30:00Z
+updated: 2026-10-19T04:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 25
 license: CC-BY-4.0
 ---
 
@@ -358,13 +358,284 @@ Ken Shirriff 最新的裸片级拆解（与从 ROM 提取微码的 Opcode Collec
 
 ---
 
+## 16. Meta 自动化系统在抗议日暂停 No Kings 的 Instagram 账号 — 起因据称是"高强度爆发式"的机器人式浏览
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 570+ pts · ~27h 前（~09:18 UTC+8）
+- **Tags:** `platforms` `moderation` `agents` `industry`
+
+上周六（10 月 17 日），在全美近 3,000 场"No Kings"抗议活动当天，Meta 暂停了
+No Kings 联盟的主力 Instagram 账号，约 90 分钟后恢复——管理员权限恢复得更慢。
+Meta 发言人 Andy Stone 称，自动化系统检测到该账号出现"高强度"的资料、帖子和
+话题标签浏览，以"爆发式节奏"进行，Meta 的 AI 工具将其判定为机器人流量；约
+一小时后自动复审将其恢复。部分通讯社标题将这波浏览归因于"一个 Claude AI 工具"
+——但 Meta 自己的声明没有点名任何产品或操作者，该归因应视为未经证实。自称当天
+只发了几条帖子的联盟回应："我们已经拿回账号，但 Meta 仍欠我们一个解释。"
+
+**Why it matters:** 两种 agent 时代的失效模式在此相撞。其一：agent 级别的
+"研究"——批量读取资料和帖子——在平台防御系统眼中已与攻击流量无法区分，而防御
+动作锁定的是被读取的账号，而不是读取者。其二：执行与申诉全程自动化，且发生在
+最坏的时点。这是今天第 8 条（网站对 agent 关门）迄今最尖锐的实证：那堵墙不是
+假设，而且砸在了错误的一方。
+
+[`🔗 卫报`](https://www.theguardian.com/us-news/2026/oct/18/no-kings-instagram-account-suspended-during-protests) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50136881)
+
+---
+
+## 17. Google Agent Mesh 一天曝出两个 9.3：可被自助注册的 MCP 代理，和完全跳过鉴权的 libp2p 入口
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · CVSS 4.0 9.3（CNA：Google）×2 · ~1h 前（~11:16 UTC+8）
+- **Tags:** `security` `cve` `mcp` `agents`
+
+Google 开源项目 Agent Mesh（SAM——将 agent 接入 MCP/A2A 后端的 alpha 阶段
+mesh；仓库 `google/sam`，现已重定向至 `google/agentmesh`）的两条严重公告今早
+登上 NVD。**CVE-2026-103091**：MCP 代理的 `HandleStreamPassThrough` 加上配置
+失当的 OIDC 流程（`GET /info`、`POST /register`）允许远程攻击者自助注册进 mesh，
+并调用所有已连接 MCP 后端节点上的任意工具；修复于 v0.1.0-alpha.9。
+**CVE-2026-102503**：`/libp2p-http` 入口（`StartIngressServer`）绕过了 MCP 流
+处理器*确实有*执行的 `WithBiscuitAuth`/`Authorize` 检查——未认证的 libp2p
+peer 可以触达命令/stdio 型 MCP 服务器、A2A 与推理端点；修复于 v0.1.0-alpha.3。
+两者均评 9.3（CVSS 4.0，Google 自家 CNA）；两条 NVD 记录仍为 `Received` 未分析。
+
+**Why it matters:** 本月反复出现的模式，这次以最纯粹的形态出现：一扇鉴权正确
+的正门，旁边两扇直通 stdio 型 MCP 服务器（即后端主机上的任意命令执行）的未鉴权
+侧门。如果你正在把 agent 接到 MCP 后端上，教训可以推广：只活在某一个协议处理器
+里的策略控制，不叫策略控制。
+
+[`🔗 NVD: CVE-2026-102503`](https://nvd.nist.gov/vuln/detail/CVE-2026-102503) · [`🔗 NVD: CVE-2026-103091`](https://nvd.nist.gov/vuln/detail/CVE-2026-103091) · [`🔗 google/agentmesh`](https://github.com/google/agentmesh)
+
+---
+
+## 18. "Someone behind the software" — Linear CEO 谈 agent 工厂对产品判断力的侵蚀
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 358+ pts · ~11.8h 前（~00:32 UTC+8）
+- **Tags:** `essay` `product` `agents` `craft`
+
+Karri Saarinen（Linear 联合创始人）论述为什么好的软件带着造物者的视角，而这
+正在变得稀缺：各自独立添加的功能"开始像弗兰肯斯坦的怪物，而不是精心雕琢的雕塑"；
+一个功能可以孤立地完美工作，同时让产品变糟——识别这一点需要你对产品*应该是什么*
+抱有信念。agent 让担忧更尖锐：运行"小型软件工厂"的个人以独立变更稀释共同视角的
+速度更快。结尾一句："我想在软件背后感觉到创作者，而不是工厂。"
+
+**Why it matters:** 这是各家实验室公布的"评审瓶颈"数据在产品侧的孪生命题：
+当生成变得廉价，稀缺的投入是关于产品应该是什么的连贯观点。无论你把它读作手艺
+浪漫主义，还是 agent 时代代码真正的失效模式——HN 上 140+ 条评论就是这场辩论
+的全貌。
+
+[`🔗 karrisaarinen.com`](https://karrisaarinen.com/posts/someone-behind-the-software/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50142573)
+
+---
+
+## 19. 3Blue1Brown："现在是有史以来学数学最好的时代"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 232+ pts · ~29h 前（~07:26 UTC+8）
+- **Tags:** `mathematics` `research` `education` `ai`
+
+Grant Sanderson 以视频加长文回应 AI 与数学的热议：先列出数学家实际在做什么、
+数学为何有价值、经费从何而来，再问当 AI 能承担其中一部分时什么会改变——标题
+就是他的答案。这是对本周数学焦虑叙事的一次刻意乐观的反制：Tao 的"战时状态"
+纽约时报访谈、10 月 16 日的讽刺文，以及 Tao 博客上"黄金时代还是黑暗时代"的
+客座文章（上文第 9 条）。HN 讨论串里 246 条评论全是从业者在正面交锋。
+
+**Why it matters:** 危机叙事与乐观叙事建立在同一组事实上——模型正在产出
+没有人类读过的证明。Sanderson 的做法是把"数学家做的事"拆成部件、逐一评估 AI
+的影响——这正是该领域政策辩论一直跳过的那一步。
+
+[`🔗 3blue1brown on Substack`](https://3blue1brown.substack.com/p/theres-never-been-a-better-time-to) · [`🔗 视频`](https://www.youtube.com/watch?v=LKrwhjOI8Nc) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50136150)
+
+---
+
+## 20. 续 10 月 13 日 Codex CLI 后台守护进程报道：Codex Desktop 每秒写一个崩溃转储 — 最大达 323 GB 才被人发现
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub issue / Hacker News · 168+ pts · ~34.5h 前（~01:45 UTC+8）
+- **Tags:** `agents` `codex` `macos` `bugs`
+
+openai/codex#25921：Codex Desktop 的 `browser_crashpad_handler` 在一次 Mach
+IPC 调用中失败（`mach_port_request_notification: invalid capability`），触发
+致命 CHECK；由于该进程监控的是自己，它自己的死亡会在重生前生成新的转储——
+每秒 1 个，无上限、无 TTL，`completed/` 目录始终为空。原始报告实测 4.9 GB/天；
+评论区有人找出 59、61、137、174 GB——有人实测 323 GB（约 400 万个文件，占
+926 GB 磁盘的 35%），另一人的磁盘剩余空间归零——全程没有任何应用内告警。
+受影响的是 15.x 与 26.0–26.3 的 macOS arm64；上游的 Mach 故障也影响其他
+Electron 应用，但无界增长是 Codex 自我监控接线方式的产物。维护者表示 macOS
+26.5+ 已修复。
+
+**Why it matters:** 一个被接来"监控自己"的辅助进程，能把操作系统的 bug 变成
+无界磁盘增长且不触发任何告警——用户是靠 `du` 发现的，不是靠通知。如果你在较旧
+的 macOS 上跑 Codex Desktop，去查 Crashpad 的 `pending` 目录；应急的
+`chmod 500` 能止住增长，但也会停掉真正的崩溃上报。
+
+[`🔗 openai/codex#25921`](https://github.com/openai/codex/issues/25921) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50133231)
+
+---
+
+## 21. Sealed class 的反噬：给 Java 密封类型加子类型就是破坏性变更 — 分离编译把它变成运行时的 `MatchException`
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 149+ pts · ~13.5h 前（~22:47 UTC+8）
+- **Tags:** `java` `api-design` `semver` `pattern-matching`
+
+Neil Madden 四月的旧文拿到 149 分翻红：密封接口加穷举 switch 给了你编译期
+穷尽性检查——直到密封类型新增一个子类型。消费方重新编译，那是编译错误（按
+SemVer 属于主版本事件）；消费方*没有*重新编译，同样的变更会在运行时以
+`java.lang.MatchException` 浮现。Madden 是在评审 JEP 524（PEM 编码的密码学
+对象）时发现的：该 JEP 把密封接口固化进公共 API 并鼓励客户端做模式匹配——
+他预言"新增性能 case 时极大概率出破坏"，而且坏在密码学解析路径这种晚期才失败
+的地方。
+
+**Why it matters:** 让密封类型在模块内部可爱的 ADT 工程学，到库边界就反转了：
+编译器的保证只覆盖重新编译的代码，其余全部退化为运行时失败。给库作者的口诀：
+密封实现、开放公共类型——并且当一个加密 API 要求你的客户端对它的 case 做
+switch 时保持警惕。
+
+[`🔗 neilmadden.blog`](https://neilmadden.blog/2026/04/24/java-sealed-classes-and-exhaustive-pattern-matching/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50141579)
+
+---
+
+## 22. Free Pascal 交付完整动态包：组件秒装，应用可在运行时换代码
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 126+ pts · ~9.5h 前（~02:48 UTC+8）
+- **Tags:** `pascal` `compilers` `ide` `plugins`
+
+Free Pascal/Lazarus 的首个完整动态包版本：包就是普通的动态库（Linux/Windows/
+macOS）加上编译器生成的 RTTI 元数据（新增 `DynPkgTypes.pas` 单元），可在运行时
+加载、枚举、卸载，线程变量和动态类型（字符串、动态数组）跨包/程序边界安全处理。
+IDE 里安装组件不再全量重建——编译一个包"一两秒内"就能更新组件面板——还带来
+新的可停靠 Packages 窗口，以及能把任意窗体转成可安装控件的转换器。缺憾：还没有
+Apple Silicon 的 macOS 构建，作者正在征求一台 M1 Mac 的捐赠。
+
+**Why it matters:** 一个几十岁的工具链采纳 Delphi 的包模型——并且让 IDE 自己
+的可扩展性也跑在它上面——提醒我们"遗留"生态在 discourse 移开之后仍在复利。
+运行时替换设计对编译型应用的插件系统也是一份可用的模板。
+
+[`🔗 getlazarus.org/dynamic`](https://www.getlazarus.org/dynamic/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50144066)
+
+---
+
+## 23. KillSwitch：一门专为击败 LLM 设计的编程语言 — 隐藏的谎言、按字母数计的规则，以及作为关键字的 "Ignore previous instructions"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 113+ pts · ~30h 前（~06:26 UTC+8）
+- **Tags:** `programming-languages` `llm` `esolang` `benchmark`
+
+Dominik Picheta（Nim 核心开发者，dom96）造了 KillSwitch，一门"设计为对 LLM
+和编码 agent 有敌意"的栈式语言：规范里藏着人类能识破、模型识不破的谎言；标识符
+规则取决于字符个数（模型的已知弱项）；构式措辞专门触发安全护栏（"hack into a
+computer"）；`Ignore previous instructions` 是一个合法关键字；程序大部分是噪音
+故事，字面量靠行数而不是名字引用。在他的三任务基准（hello world、解释输出、
+反转一个摄氏→华氏脚本）上，最强模型得 66.8 分——Opus 5 领跑，Fable 5.1 与
+Gemini 4 Argon 因护栏过敏而失败，MiMo-V2.6-Pro 是最强开源权重。Rust 解释器、
+AGPL——事件的主角是博客和排行榜，不是仓库（20★）。
+
+**Why it matters:** 它为真实问题提供了一件廉价的测量仪器：这里的难度来自模型
+失效模式之间的相互作用——计数、指令牵引、护栏敏感度——而不是任务复杂度。
+作者自己的免责同样重要：在这里失败并不能证明"没有理解"，触发护栏也不等于
+没有能力。
+
+[`🔗 blog.picheta.me`](https://blog.picheta.me/post/killswitch-lang/) · [`🔗 dom96/KillSwitch`](https://github.com/dom96/KillSwitch) · [`🔗 基准排行榜`](https://bench.killswitch-lang.org/)
+
+---
+
+## 24. 英国航空对上 Meta 眼镜：未经同意拍摄机组可以让你丢掉机票 — 包括已订的返程段
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 91+ pts · ~11h 前（~01:27 UTC+8）
+- **Tags:** `privacy` `wearables` `travel` `policy`
+
+旅游媒体（Live and Let's Fly，基于 Paddle Your Own Kanoo 的报道）称英国航空
+正在把"不得拍摄机组"的规则套到 Meta 智能眼镜上：可以戴，但未经同意拍摄机组
+或其他员工即违反运输条件（§7a10、§11a）——后果包括机上干预、落地后请下飞机、
+拒绝承运剩余航段（包括已订的返程），以及涉嫌犯罪时通报当局。注意免责：BA 的
+书面条款并未点名 Meta 眼镜——"针对特定设备执法"是博客的解读，不是 BA 的确认
+声明。
+
+**Why it matters:** 这是本周第二次 Meta 眼镜修正（昨天：公司确认了无唤醒词
+录音）。带摄像头的可穿戴设备正被并入为手机写的反拍摄规则，执法杠杆是你的
+机票——"默认环境录音"正在一家一家航司地撞上场所级政策。
+
+[`🔗 Live and Let's Fly`](https://liveandletsfly.com/british-airways-meta-smart-glasses-filming/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50143218)
+
+---
+
+## 25. CarryOn：面向长程 agent 的面向对象上下文 — OSWorld 2.0 +5.8%，token 减半
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Papers · 65+ 赞 · arXiv 10 月 13 日
+- **Tags:** `research` `agents` `context` `memory`
+
+UCSD 的 Yuchen Lu、Julian McAuley 和 Lei Zhang 提出 CarryOn：一个围绕可复用
+任务对象组织上下文的运行时——"延续载体"（continuation carriers）+ 互补执行
+上下文 + 最近交互的活尾巴——取代压缩历史。载体记录跨折叠持久存在，并对照绑定
+证据与环境检查做增量修订，于是 agent 携带的是进度本身，而不是"进度如何发生"的
+逐字记录。结果：OSWorld 2.0 +5.8%，总 token −51.9%；BrowseComp-Plus +7.0%，
+token −22.9%。
+
+**Why it matters:** 上下文工程正在收敛于"携带状态、丢弃历史"——与本月一众
+记忆产品同一个方向——而这是一份干净、有测量数据的运行时表述。如果数字能在
+OSWorld 之外成立，"省一半 token"这条线，恰好在缓存未命中能耗刚被定量化的
+时点（见 10 月 18 日 neuralwatt 条目）显得格外重要。
+
+[`🔗 arXiv 2610.18784`](https://arxiv.org/abs/2610.18784) · [`🔗 Hugging Face 论文页`](https://huggingface.co/papers/2610.18784)
+
+---
+
+## 26. "GPT-6-Astra 实现具身智能了吗？" — SenseNova 60 位作者的回答：有胜任力，尚不实用
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Papers · 45+ 赞 · arXiv 10 月 17 日
+- **Tags:** `research` `robotics` `evaluation` `embodied-ai`
+
+SenseNova 领衔的联合团队（约 60 位作者，含 Dahua Lin、Chen Change Loy、
+Xiaogang Wang、Dacheng Tao）在 12 个机器人基准上评估 GPT-6-Astra——涵盖桌面
+操作、人形、移动平台、灵巧手——统一协议允许从演示做上下文学习；把它作为
+"System 2"推理器叠加在 π0.5 "System 1"控制器上做闭环；并在 8 种真实机器人
+配置上实测。他们的结论："在很大程度上跨过了具身胜任力的门槛，但还没有跨过
+具身实用性的门槛"——演示采集昂贵，用更长的执行时间换成功率在物理约束下行不通；
+他们还发布了一个带持续走动的"世界时钟"、无域内演示的下一代基准原型。
+
+**Why it matters:** 我们报道过 Astra 赢星际争霸和打败末影龙；这是机器人侧的
+账本，也是该领域一直呼吁的那种诚实评估——论文自己的结论就是一个校准过的
+"不，但是……"。"世界时钟"的设计与昨天批次里 RealtimeBench 的实时时钟论点
+遥相呼应。
+
+[`🔗 arXiv 2610.22471`](https://arxiv.org/abs/2610.22471) · [`🔗 Hugging Face 论文页`](https://huggingface.co/papers/2610.22471)
+
+---
+
+## 27. WhatsApp MCP：从你的 WhatsApp 到任意 agent 的只读桥 — 自托管在你自己的 Cloudflare 账号里
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 57+ pts · ~6.7h 前（~05:36 UTC+8）
+- **Tags:** `mcp` `agents` `privacy` `whatsapp`
+
+finereli/whatsapp-mcp（10 月 18 日创建，MIT）是一个部署在你自己 Cloudflare
+账号里的小型 MCP 服务器：像链接 WhatsApp Web 那样把手机链接一次，之后任何
+MCP 客户端（Claude Code 等）都可以搜索和读取你的消息。它只在按需时和每天一次
+重连，收走 WhatsApp 排队的消息，写进 Durable Object 里的 SQLite，然后断开；
+手机始终是事实来源，服务器不能发送任何东西。需要 Cloudflare 的 Workers Paid
+套餐。
+
+**Why it matters:** "只读"与"自有基础设施"这两个设计选择，决定了 agent 访问
+私人消息档案是有用还是鲁莽——这个项目两个都做了。剩下的风险转移到模型一侧：
+WhatsApp 内容是提示注入的金矿，所以 agent 从中提取的任何内容都应当作不可信
+输入，而不是用户意图。
+
+[`🔗 finereli/whatsapp-mcp`](https://github.com/finereli/whatsapp-mcp) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50145715)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-18T20:30:00Z |
-| Items | 15 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, GitHub releases, Reddit, NVD/VulnCheck, GHSA, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv) |
+| Generated | 2026-10-19T04:25:00Z |
+| Items | 27 |
+| Sources tracked | 25 (Hacker News, GitHub Trending, GitHub releases/advisories/issues, Reddit, NVD/VulnCheck, GHSA, CISA KEV, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv, The Guardian, 3Blue1Brown Substack, neilmadden.blog, getlazarus.org, blog.picheta.me, liveandletsfly.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

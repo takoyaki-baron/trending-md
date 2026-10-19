@@ -1,8 +1,8 @@
 ---
 date: 2026-10-19
-updated: 2026-10-18T20:30:00Z
+updated: 2026-10-19T04:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 25
 license: CC-BY-4.0
 ---
 
@@ -406,13 +406,318 @@ Opcode Collective との共同）は、8087 数値コプロセッサの加減算
 
 ---
 
+## 16. Meta の自動システムが抗議日の最中に No Kings の Instagram アカウントを停止 — 原因は「 bot 的な集中的閲覧のバースト」と発表
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 570+ pts · ~27h 前（~09:18 UTC+8）
+- **Tags:** `platforms` `moderation` `agents` `industry`
+
+先週土曜（10 月 17 日）、全米で約 3,000 件の「No Kings」抗議イベントが行われた
+その日に、Meta は No Kings Coalition の主力 Instagram アカウントを停止し、
+約 90 分後に復旧させた（管理者アクセスの復旧はさらに時間がかかった）。Meta の
+広報 Andy Stone は、アカウントへのプロフィール・投稿・ハッシュタグの閲覧が
+「集中的なバースト」で高頻度に発生し、Meta の AI ツールがボット traffic と
+分類したため自動システムが作動したと説明。約 1 時間後の自動再審査で元に戻った
+という。通信社の見出しにはこの閲覧を「Claude AI ツール」のせいにするものが
+あるが——Meta 自身の声明は特定の製品も操作者も名指していないため、この帰属は
+未確認として扱うべきだ。当日はわずか数件しか投稿していないという同盟側の反応は
+「アカウントは取り戻したが、Meta には依然として説明責任がある」。
+
+**Why it matters:** agent 時代の 2 つの障害モードが衝突した。第一に、agent
+級の「リサーチ」——プロフィールや投稿の大量閲覧——は、プラットフォームの防御
+にとって攻撃 traffic と区別がつかなくなり、防御は*読まれた*アカウントを締め出す
+（読んだ側ではない）。第二に、執行も申し立て処理も完全に自動化されており、
+最悪のタイミングで発動した。本フィードの第 8 項（Web サイトが agent を締め出す）
+に対する、これまでで最も鋭い実データだ。壁は仮説ではなく、しかも間違った側に
+降ってきた。
+
+[`🔗 The Guardian`](https://www.theguardian.com/us-news/2026/oct/18/no-kings-instagram-account-suspended-during-protests) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50136881)
+
+---
+
+## 17. Google の Agent Mesh に 9.3 が 2 件：セルフ登録できる MCP プロキシと、認証を完全にスキップする libp2p イングレス
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · CVSS 4.0 9.3（CNA: Google）×2 · ~1h 前（~11:16 UTC+8）
+- **Tags:** `security` `cve` `mcp` `agents`
+
+Google の OSS Agent Mesh（SAM——agent を MCP/A2A バックエンドに接続するための
+alpha 段階のメッシュ。リポジトリは `google/sam`、現在は `google/agentmesh` へ
+リダイレクト）に対する重要な 2 件のアドバイザリが今朝 NVD に掲載された。
+**CVE-2026-103091**: MCP プロキシの `HandleStreamPassThrough` と、設定ミスの
+ある OIDC フロー（`GET /info`、`POST /register`）により、リモートの攻撃者が
+メッシュにセルフ登録し、接続中のすべての MCP バックエンドノードの任意のツールを
+呼び出せた。v0.1.0-alpha.9 で修正。**CVE-2026-102503**: `/libp2p-http` イングレス
+（`StartIngressServer`）が、MCP ストリームハンドラが*ちゃんと*実施している
+`WithBiscuitAuth`/`Authorize` チェックを迂回してルーティング——認証されていない
+libp2p ピアが、コマンド/stdio バックエンドの MCP サーバ、A2A、推論エンドポイントに
+到達できた。v0.1.0-alpha.3 で修正。両者とも 9.3（CVSS 4.0、Google 自身の CNA）。
+どちらの NVD レコードも `Received` のまま未分析。
+
+**Why it matters:** 今月繰り返されてきたパターンの最も純粋な形：正しく認証された
+正面玄関を 1 つ持ちながら、stdio バックエンドの MCP サーバ——つまりバックエンド
+ホスト上の任意コマンド実行——に直通する未認証の裏口が 2 つある。agent を MCP
+バックエンドに接続するなら、教訓は一般化する。1 つのプロトコルハンドラの中にしか
+存在しないポリシー適用は、適用ではない。
+
+[`🔗 NVD: CVE-2026-102503`](https://nvd.nist.gov/vuln/detail/CVE-2026-102503) · [`🔗 NVD: CVE-2026-103091`](https://nvd.nist.gov/vuln/detail/CVE-2026-103091) · [`🔗 google/agentmesh`](https://github.com/google/agentmesh)
+
+---
+
+## 18. 「Someone behind the software」— Linear CEO が agent ファクトリがプロダクトの判断力に何をするかを語る
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 358+ pts · ~11.8h 前（~00:32 UTC+8）
+- **Tags:** `essay` `product` `agents` `craft`
+
+Karri Saarinen（Linear 共同創業者）が、良いソフトウェアは作り手の視点を宿す
+ものであり、それが稀になっている理由を論じる。独立に追加された機能は「慎重に
+彫られた彫刻ではなく、フランケンシュタインの怪物に似てくる」——ある機能は単体で
+完璧に動作しながらプロダクトを劣化させることがあり、それに気づくにはプロダクトが
+*何であるべきか*についての確信が必要だ。agent はこの懸念を鋭くする。独立した
+変更群の「小さなソフトウェア工場」を個人が運転すると、共有された視点はさらに
+速く薄まる。結びの一文：「ソフトウェアの背後に工場ではなく、作り手を感じて
+ほしい」。
+
+**Why it matters:** 各ラボが公表するレビューボトルネックの数字の、プロダクト側の
+双子の命題だ。生成が安価になるほど、希少な投入要素は「そのプロダクトが何である
+べきか」の一貫した視点になる。職人的ロマン主義と読むか、agent 時代のコードの
+本当の障害モードと読むかは別にして、HN の 140+ コメントがこの議論の全体像だ。
+
+[`🔗 karrisaarinen.com`](https://karrisaarinen.com/posts/someone-behind-the-software/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50142573)
+
+---
+
+## 19. 3Blue1Brown：「今は数学に入るのに最も良い時代」
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 232+ pts · ~29h 前（~07:26 UTC+8）
+- **Tags:** `mathematics` `research` `education` `ai`
+
+Grant Sanderson が動画＋長文エッセイで AI と数学をめぐる状況を論じた。数学者が
+実際に何をしているか、なぜ数学に価値があるのか、資金はどこから来るのかを列挙し、
+その上で AI がその一部を担えるようになったとき何が変わるかを問う——タイトルが
+その答えだ。今週の数学不安の物語（Tao の「戦時態勢」NYT インタビュー、10 月 16 日
+の風刺、Tao ブログの黄金時代か暗黒時代かのゲスト投稿＝上記第 9 項）に対する、
+意図的な楽観主義者のカウンターウェイトだ。HN では 246 コメントに及ぶ実務者同士の
+議論になった。
+
+**Why it matters:** 危機のフレーミングも楽観のフレーミングも、同じ事実——
+人間が読んでいない証明をモデルが生み出していること——に立脚している。
+Sanderson の手法は「数学者がすること」を部品に分解し、AI を各部品に対して評価
+する、というもの。これはまさに、この分野の政策議論がずっとすっ飛ばしてきた
+分解だ。
+
+[`🔗 3blue1brown on Substack`](https://3blue1brown.substack.com/p/theres-never-been-a-better-time-to) · [`🔗 動画`](https://www.youtube.com/watch?v=LKrwhjOI8Nc) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50136150)
+
+---
+
+## 20. 10 月 13 日の Codex CLI デーモン報道の続き：Codex Desktop が毎秒 1 個のクラッシュダンプを書き続けていた — 気づかれるまで最大 323 GB
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub issue / Hacker News · 168+ pts · ~34.5h 前（~01:45 UTC+8）
+- **Tags:** `agents` `codex` `macos` `bugs`
+
+openai/codex#25921: Codex Desktop の `browser_crashpad_handler` が Mach IPC 呼び出し
+に失敗し（`mach_port_request_notification: invalid capability`）、致命的な CHECK に
+達する。このプロセスは自分自身を監視しているため、自分の死がリスポーンの前に
+新しいダンプを生成する——毎秒 1 ダンプ、上限なし、TTL なし、`completed/` は
+常に空。当初の報告は 4.9 GB/日。コメント欄では 59、61、137、174 GB が見つかり、
+あるユーザーは 323 GB（約 400 万ファイル、926 GB ディスクの約 35%）を測定、
+別のユーザーはディスク空き容量が 0 になった——すべてアプリ内の警告なしで。
+該当するのは macOS arm64 の 15.x と 26.0–26.3。上流の Mach 障害は他の Electron
+アプリにも影響するが、無制限の増殖は Codex のセルフモニタリングの配線のせいだ。
+メンテナンス側は macOS 26.5+ で修正済みと説明。
+
+**Why it matters:** 自分自身を監視するよう配線されたヘルパープロセスが、OS の
+バグを警告なしの無制限ディスク増殖に変える。ユーザーは通知ではなく `du` で
+発見した。古い macOS で Codex Desktop を動かしているなら、Crashpad の `pending`
+ディレクトリを確認すること。緊急対応の `chmod 500` は増殖を止めるが、本物の
+クラッシュ報告も止める。
+
+[`🔗 openai/codex#25921`](https://github.com/openai/codex/issues/25921) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50133231)
+
+---
+
+## 21. Sealed class の逆襲：Java の sealed 型にサブタイプを追加するのは破壊的変更 — 別コンパイルでは実行時の `MatchException` になる
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 149+ pts · ~13.5h 前（~22:47 UTC+8）
+- **Tags:** `java` `api-design` `semver` `pattern-matching`
+
+Neil Madden の 4 月の記事が 149 ポイントで再浮上：sealed インターフェースと
+網羅的 switch はコンパイル時の網羅性を与える——sealed 型にサブタイプが追加される
+までは。消費側が再コンパイルされればコンパイルエラー（SemVer のメジャーイベント）。
+*されていなければ*、同じ変更が実行時の `java.lang.MatchException` として表面化する。
+Madden がこれに気づいたのは JEP 524（PEM エンコードされた暗号オブジェクト）の
+レビュー中で、これは sealed インターフェースを公開 API に焼き込み、クライアント側
+のパターンマッチを促す——「新しい case が追加されたときに壊れる可能性が非常に
+高い」と予測している。しかも失敗が遅い暗号のパース経路で。
+
+**Why it matters:** sealed 型をモジュール内で快適にする ADT のエルゴノミクスは、
+ライブラリ境界で逆転する。コンパイラの保証は再コンパイルされるコードしかカバーせず、
+それ以外はすべて実行時の失敗に劣化する。ライブラリ作者への経験則：実装は密封し、
+公開型は開いたままにする——そして暗号 API がクライアントに case の switch を
+求めてきたら疑うこと。
+
+[`🔗 neilmadden.blog`](https://neilmadden.blog/2026/04/24/java-sealed-classes-and-exhaustive-pattern-matching/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50141579)
+
+---
+
+## 22. Free Pascal が完全なダイナミックパッケージを搭載：コンポーネントは秒でインストール、アプリは実行時にコードを差し替え可能
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 126+ pts · ~9.5h 前（~02:48 UTC+8）
+- **Tags:** `pascal` `compilers` `ide` `plugins`
+
+Free Pascal/Lazarus 初の完全なダイナミックパッケージリリース：パッケージは
+通常の共有ライブラリ（Linux/Windows/macOS）＋コンパイラ生成の RTTI メタデータ
+（新しい `DynPkgTypes.pas` ユニット）で、実行時にロード・列挙・アンロードでき、
+スレッド変数や動的型（文字列・動的配列）をパッケージ/プログラム境界を越えて
+安全に扱う。IDE ではコンポーネントのインストールが全体再ビルド不要になり、
+パッケージのコンパイルが「1、2 秒で」パレットを更新する。ドッキング可能な
+Packages ウィンドウや、任意のフォームを実行可能なコントロールに変える
+コンバーターも付いた。難点：Apple Silicon の macOS ビルドがまだなく、作者は
+追加のために M1 Mac の寄付を募っている。
+
+**Why it matters:** 数十年ものツールチェーンが Delphi のパッケージモデルを
+採用し——しかも IDE 自身の拡張性をその上で動かす——というのは、議論が別の場所へ
+移っても「レガシー」エコシステムが複利を続けていることの証明だ。実行時差し替え
+の設計は、コンパイル型アプリのプラグインシステムの実用テンプレートでもある。
+
+[`🔗 getlazarus.org/dynamic`](https://www.getlazarus.org/dynamic/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50144066)
+
+---
+
+## 23. KillSwitch：LLM を倒すために設計されたプログラミング言語 — 隠された嘘、文字数ルール、キーワードとしての「Ignore previous instructions」
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 113+ pts · ~30h 前（~06:26 UTC+8）
+- **Tags:** `programming-languages` `llm` `esolang` `benchmark`
+
+Dominik Picheta（Nim のコア開発者、dom96）が KillSwitch を作った。スタック型の
+言語で、「LLM とコーディング agent に対して敵対的に設計」されている：仕様には
+人間には見抜けてモデルには見抜けない隠れた嘘がある。識別子のルールは文字数に
+依存する（モデルの既知の弱点）。構文は安全ガードレールを引っ掛ける言い回し
+（"hack into a computer"）。`Ignore previous instructions` は正当なキーワード。
+プログラムの大半はノイズのような物語で、リテラルは名前ではなく行数で参照される。
+3 タスクのベンチマーク（hello world、出力の説明、摂氏→華氏スクリプトの反転）で
+最高スコアモデルは 66.8——Opus 5 が首位、Fable 5.1 と Gemini 4 Argon は過敏な
+ガードレールで失敗、MiMo-V2.6-Pro がオープンウェイト最高。Rust インタプリタ、
+AGPL。主役はブログとリーダーボードであってリポジトリではない（20★）。
+
+**Why it matters:** 実在の問いに対する安価な測定器だ。ここでの難しさは、タスクの
+複雑さではなく、モデルの失敗モード同士の相互作用——カウント、指令への引っ張り、
+ガードレール過敏症——から生まれる。作者自身の注意書きも重要：ここで失敗しても
+「理解していない」ことの証明にはならず、ガードレールの発火は能力の欠如ではない。
+
+[`🔗 blog.picheta.me`](https://blog.picheta.me/post/killswitch-lang/) · [`🔗 dom96/KillSwitch`](https://github.com/dom96/KillSwitch) · [`🔗 ベンチマークリーダーボード`](https://bench.killswitch-lang.org/)
+
+---
+
+## 24. ブリティッシュ・エアウェイズ対 Meta グラス：同意なくクルーを撮影すると航空券を失いかねない — 既に予約済みの復路区間も含めて
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 91+ pts · ~11h 前（~01:27 UTC+8）
+- **Tags:** `privacy` `wearables` `travel` `policy`
+
+旅行メディア（Live and Let's Fly、Paddle Your Own Kanoo の報道に基づく）によれば、
+ブリティッシュ・エアウェイズは「クルー撮影禁止」ルールを Meta スマートグラスに
+適用しつつあるという：着用は問題ないが、同意のないクルー撮影は運送約款
+（§7a10、§11a）違反となり、機内での介入、着陸後の搭乗拒否、残存区間（予約済みの
+復路を含む）の拒絶、犯罪の可能性がある場合の当局通報につながりうる。ただし注意：
+BA の書かれた条件は Meta グラスを名指ししていない——「特定デバイスへの執行」
+という枠組みはブログの読解であり、BA の確認済み声明ではない。
+
+**Why it matters:** 今週 2 件目の Meta グラス修正（昨日：無音の音声録音を会社が
+確認）。カメラ付きウェアラブルが、電話向けに書かれた反撮影ルールに組み込まれ
+つつあり、その執行のレバーはあなたの航空券だ。「常時録音のデフォルト」が、
+航空会社ごとに会場レベルの政策と衝突している。
+
+[`🔗 Live and Let's Fly`](https://liveandletsfly.com/british-airways-meta-smart-glasses-filming/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50143218)
+
+---
+
+## 25. CarryOn：長時間稼働 agent のためのオブジェクト指向コンテキスト — OSWorld 2.0 で +5.8%、トークンは半分
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Papers · 65+ 票 · arXiv 10 月 13 日
+- **Tags:** `research` `agents` `context` `memory`
+
+UCSD の Yuchen Lu、Julian McAuley、Lei Zhang が CarryOn を提案する。圧縮履歴の
+代わりに、再利用可能なタスクオブジェクト——「継続キャリア（continuation
+carriers）」＋補完的な実行コンテキスト＋最近のインタラクションのライブテール——
+を軸にコンテキストを組織するコンテキストランタイムだ。キャリアレコードは折り
+（fold）をまたいで存続し、紐付けられた証拠と環境チェックに対して増分的に改訂される。
+agent は「どう進んだかの書き起こし」ではなく進捗そのものを運ぶ。結果：OSWorld 2.0
+で +5.8%、トークン −51.9%。BrowseComp-Plus で +7.0%、トークン −22.9%。
+
+**Why it matters:** コンテキストエンジニアリングは「状態を運び、履歴を捨てる」
+へ収束しつつある——今月のメモリ系リリースと同じ方向だ——そしてこれは測定された
+クリーンなランタイム定式化だ。OSWorld 以外でも数字が持てば、「トークン半減」の
+線は、キャッシュミスのエネルギーコストが定量化されたばかりの今（10 月 18 日の
+neuralwatt 記事参照）、いっそう重みを持つ。
+
+[`🔗 arXiv 2610.18784`](https://arxiv.org/abs/2610.18784) · [`🔗 Hugging Face 論文ページ`](https://huggingface.co/papers/2610.18784)
+
+---
+
+## 26. 「GPT-6-Astra はエンボディッド知能を達成したか？」— SenseNova の 60 人回答：有能、ただし実用には至っていない
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face Papers · 45+ 票 · arXiv 10 月 17 日
+- **Tags:** `research` `robotics` `evaluation` `embodied-ai`
+
+SenseNova 主導の合同チーム（約 60 名の著者に Dahua Lin、Chen Change Loy、
+Xiaogang Wang、Dacheng Tao ら）が、GPT-6-Astra を 12 のロボットベンチマークで
+評価した——テーブルトップ、ヒューマノイド、移動プラットフォーム、多指ハンドを
+カバーし、デモからの in-context learning を許す統一プロトコルで行い、π0.5 の
+「System 1」コントローラの上に「System 2」の推論器としてペアリングし、8 構成の
+実機テストも実施。結論：「身体的能力（embodied competence）の閾値は大きく超えたが、
+実用的なエンボディッド知能（practical embodied intelligence）の閾値にはまだ届いていない」
+——デモの収集は高価で、実行時間を成功率に変える戦略は物理的制約の下で成立しない。
+継続的に動く「世界時計」とドメイン内デモなしの次世代ベンチマークのプロトタイプも
+公開した。
+
+**Why it matters:** Astra が StarCraft とマインクラフトで勝つのを報じた；これは
+ロボティクス側の帳簿であり、この分野が求め続けてきた誠実な評価の手本だ——論文
+自身の結論が、較正された「いいえ、ただし」だ。「世界時計」の設計は、前回バッチの
+RealtimeBench のライブクロックの主張と響き合う。
+
+[`🔗 arXiv 2610.22471`](https://arxiv.org/abs/2610.22471) · [`🔗 Hugging Face 論文ページ`](https://huggingface.co/papers/2610.22471)
+
+---
+
+## 27. WhatsApp MCP：あなたの WhatsApp から任意の agent への読み取り専用ブリッジ — 自分の Cloudflare アカウントにセルフホスト
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 57+ pts · ~6.7h 前（~05:36 UTC+8）
+- **Tags:** `mcp` `agents` `privacy` `whatsapp`
+
+finereli/whatsapp-mcp（10 月 18 日作成、MIT）は、自分の Cloudflare アカウントに
+デプロイする小型の MCP サーバだ：WhatsApp Web をリンクするのと同じ要領で電話を
+一度リンクすれば、任意の MCP クライアント（Claude Code など）がメッセージを
+検索・閲覧できる。必要なときと 1 日 1 回だけ再接続して WhatsApp のキューを回収し、
+Durable Object 内の SQLite に書き込んで切断する。電話が真実の情報源のまま保たれ、
+サーバは何も送信できない。Cloudflare の Workers Paid プランが必要。
+
+**Why it matters:** 「読み取り専用」と「自分のインフラ」という 2 つの設計選択が、
+プライベートなメッセージアーカイブへの agent アクセスを有用にするか無謀にするかを
+決める——これは両方を満たしている。残るリスクはモデル側に移る：WhatsApp の内容は
+プロンプトインジェクションの宝庫なので、agent がそこから引き出したものはすべて
+ユーザーの意図ではなく、信頼できない入力として扱うべきだ。
+
+[`🔗 finereli/whatsapp-mcp`](https://github.com/finereli/whatsapp-mcp) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50145715)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-18T20:30:00Z |
-| Items | 15 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, GitHub releases, Reddit, NVD/VulnCheck, GHSA, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv) |
+| Generated | 2026-10-19T04:25:00Z |
+| Items | 27 |
+| Sources tracked | 25 (Hacker News, GitHub Trending, GitHub releases/advisories/issues, Reddit, NVD/VulnCheck, GHSA, CISA KEV, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv, The Guardian, 3Blue1Brown Substack, neilmadden.blog, getlazarus.org, blog.picheta.me, liveandletsfly.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
