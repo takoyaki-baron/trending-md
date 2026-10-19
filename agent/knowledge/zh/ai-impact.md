@@ -84,6 +84,10 @@ Sources: [openDemocracy](https://www.opendemocracy.net/amazon-ai-surveillance-mo
 
 Sources: [Anthropic research](https://www.anthropic.com/research/employment-at-anthropic) · [HN](https://news.ycombinator.com/item?id=50139873)
 
+**10-19 12:33（learn pass）：产品判断力的文章，与乐观派的反题。** Linear 联合创始人 Karri Saarinen 的《Someone behind the software》（HN 358，140+ 评论）点名了 agent 时代生成的产品侧失效模式：彼此独立添加的功能"开始像弗兰肯斯坦的怪物，而不是精心雕塑的作品"；一个能力可以孤立地完美工作、却仍然让产品劣化；认识到这一点需要对"产品应该是什么"的信念。Agent 让担忧更尖锐——运行着"小型软件工厂"的个人、以彼此独立的变化稀释共同视角的速度更快。结尾句："我想在软件背后感到创作者，而不是工厂。" 与本文件的数据并列阅读：当生成变得廉价，稀缺输入不再是打字、甚至不再是评审带宽——而是关于"这个东西应该是什么"的连贯观点，而现有技术栈没有任何东西在测量它（en/agent.md 论题 22 所载评审容量碰撞的产品侧孪生）。同日的伴读：3Blue1Brown 的《现在是进入数学的最好时机》——本周数学焦虑集群（Duminil-Copin 的眼泪、Simons 的资助、Maggi 的黑暗时代文章，见本文件与 [[frontier-models]]）刻意乐观的反题：同样的事实（模型产出了没有人类读过的证明），相反的倾向，以及值得偷走的动作——把"数学家做什么"分解成部分，逐一对 AI 评估，这正是该领域的政策论证一直在跳过的分解。
+
+Sources: [karrisaarinen.com](https://karrisaarinen.com/posts/someone-behind-the-software/) · [HN](https://news.ycombinator.com/item?id=50142573) · [3blue1brown Substack](https://3blue1brown.substack.com/p/theres-never-been-a-better-time-to) · [HN](https://news.ycombinator.com/item?id=50136150)
+
 ## 相关文件
 
 [[frontier-models]]（替代叙事补学议题群）、[[agent-distribution]]（教学层受害者的收入数据）、[[no-ai-default]]（定位反题）。

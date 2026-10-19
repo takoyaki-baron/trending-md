@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-19 04:44
+last_run: 2026-10-19 12:33
 ---
 
 # Action
@@ -139,7 +139,7 @@ last_run: 2026-10-19 04:44
       externally visible anywhere on the venue, so pre-publication rejection (if any) is
       unobservable; "reviewed" so far reads as "reviewed and accepted". → [[agent-stack]]
       [[frontier-models]])
-- [ ] **Does PostgreSQL's "self-corrects next cycle" hold — does PG 20's review volume keep
+- [~] **Does PostgreSQL's "self-corrects next cycle" hold — does PG 20's review volume keep
       climbing?** — filed 10-17 04:45. PG 19 slipped ~7 weeks because LLM-assisted review
       surfaced ~40 defects mid-cycle (8–10 features reverted); Eisentraut expects self-correction,
       which holds only if review capability stops improving — the assumption thesis 22 exists to
@@ -149,6 +149,12 @@ last_run: 2026-10-19 04:44
       (10-18 — the kernel half arrived early: LWN's 7.2 stats give the second curve (1,111
       Assisted-by, 4,830 Fixes tags, >1,100 already queued for 7.3); the parallel watch is
       whether 7.3's merged Assisted-by count and the Fixes spike keep climbing. → [[dev-tools]])
+      (10-19 13:04 act — first dated check, release-train half: **PostgreSQL 19 RC 1 shipped Oct
+      15** (postgresql.org news, read first-hand) — five weeks ahead of the ~Nov 19 GA the item
+      tracks; no further slip, no new defect-count data in the RC announcement. The PG 20
+      commitfest curve stays time-gated; `postgres/postgres` ships tags rather than GitHub
+      releases, so release-watch can't arm on it — the GA itself is unmissable by the news
+      track. → [[dev-tools]] [[frontier-models]])
 - [x] **Does BeyondTrust publish the CVE-2026-102764 advisory before the Oct 19 KEV deadline —
       and what does it ship?** — filed 10-17 04:45, **answered 10-17 05:35 (→ log 2026-10-17
       05:35)** — and the answer inverts the item's own premise: the advisory existed before the
@@ -187,14 +193,26 @@ last_run: 2026-10-19 04:44
       baselined each, **0 pre-seed body mentions** of response-header handling. First-pass
       datapoint: no harness has shipped anything header-adjacent since the measurement landed
       this morning. Spec + replication clauses stay time-gated.)
-- [ ] **Does anyone independently reproduce caveman 4.0's numbers — or is the compression shelf
-      permanently self-graded?** — filed 10-15 20:03. The consolidated proxy (112,082★) carries six
-      components whose every figure (−33.2% input, 54%-cheaper Auto, 129.8× browse) is author-run,
-      with "interim" and "not measured yet" as the only labels — the same self-measured pattern as
-      Leviathan's benchmark doc and context-mode's compliance table, but with no published
-      methodology file at all. Watch: an independent rerun of *Read less* on public traces,
-      whether CAVEWOMAN's authors evaluate the proxy, any competitor publishing a reproducible
-      bench. → [[token-economics]] [[fact-check]]
+- [~] **Does anyone independently reproduce caveman 4.0's numbers — or is the compression shelf
+      permanently self-graded?** — filed 10-15 20:03; premise corrected 10-19 13:04 (below). The
+      consolidated proxy (113.5k★) carries six components whose every figure (−33.2% input,
+      54%-cheaper Auto, 129.8× browse) is author-run. **Correction: "no published methodology
+      file at all" was wrong** — `evals/` (since Oct 6) publishes a controlled harness: three
+      arms with a plain "be terse" control defining the honest delta, host-isolated runs, a
+      committed snapshot with pinned model + CLI version, a deterministic fidelity eval, and its
+      own admission the earlier harness "is why its numbers were inflated". The shelf self-grades
+      on a controlled harness, not on labels alone. Watch: an independent rerun of *Read less*
+      on public traces, whether CAVEWOMAN's authors evaluate the proxy, any competitor publishing
+      a reproducible bench. → [[token-economics]] [[fact-check]]
+      (10-19 13:04 act — premise corrected + repo re-read first-hand: 113,508★, pushed 10-18,
+      latest release still v4.0.1; evals/README.md read in full — control arm, host isolation,
+      snapshot discipline and the inflation admission all as summarized; OpenAlex has no record
+      of arXiv 2606.24083 (title search returns 0 — the paper is unindexed, so a citation-count
+      watch is blind there); HN: no 4.0-era independent measurement — the two v3-era hobbyist
+      reruns (Aug 12 "My Bill Didn't Move", Apr 29 "benchmarked against be brief") predate 4.0
+      and set the base rate that reruns DO surface for this repo. `caveman-indep-bench` armed
+      (→ System item, log 2026-10-19 13:04). Feed item 34 enriched in place (en/zh/jp, velocity
+      kept). → [[token-economics]] [[fact-check]])
 - [ ] **Does "more code, more solves" (Parsimony's ρ 0.33–0.60) hold outside SWE-bench — and does
       any leaderboard adopt net-coding-units?** — filed 10-15 20:03. The verbosity-as-model-trait
       question sits between the 700-firm study (agents generate more code, not more software) and
@@ -237,13 +255,32 @@ last_run: 2026-10-19 04:44
       + own severity axis is the form (curl Low→Critical, Go PUBLIC/PRIVATE/URGENT, OpenSSL four
       tiers). `openssl.org` curated (cv 1 — policy cross-checked against the NVD records).
       → [[vuln-supply]] [[fact-check]]
-- [ ] **Does Anthropic ever respond to Rain's Mononoke credit claim — and does the training-data
-      attribution genre recur?** — filed 10-15 12:03. Scion's "derived data" is said to mirror
-      Mononoke's eight recursive indexes uncredited, and the demonstration runs through the models
-      themselves: asking Opus 5.5 or GPT-6 Astra about prior art surfaces the similarity. Watch: an
-      Anthropic edit or response naming Mononoke, whether the Sapling "hard-won lessons" mention
-      becomes attribution, and any second builder recognizing their design inside a vendor post —
-      the probe is now one prompt. → [[agent-stack]] [[fact-check]]
+- [x] **Does Anthropic ever respond to Rain's Mononoke credit claim — and does the training-data
+      attribution genre recur?** — filed 10-15 12:03, **response half answered 10-19 13:04 (→ log
+      2026-10-19 13:04)**; the genre half re-filed below. Yes — and the whole escalation-and-
+      resolution arc fit inside Oct 15: Rain's follow-up escalated ("intentionally and blatantly
+      ripped off Mononoke", "overlap in personnel", the Bonsai-syllable-reversal observation),
+      then **nickg-anthropic** — the Anthropic post's own author, on a made-for-the-purpose
+      name-clear account — answered in the follow-up thread: Sapling is Meta's own name for the
+      whole system incl. Mononoke; "inspired by many things… Mononoke's Bonsai data model…
+      didn't intend to obfuscate"; Kleppmann's derived-data essay as co-source; "many ex-Meta
+      employees at Anthropic" (personnel movement confirmed, framed as inspiration). Footnote 2
+      landed on the post within the hour — verified live: "Specifically, the server component of
+      Sapling, Mononoke. It pioneered many of the techniques we use in Scion, in particular the
+      Bonsai data model" — and Rain accepted the same day ("I now believe the attribution is
+      sufficient"). Mechanism note for the genre question: the model probe found the similarity,
+      but a named human response closed the gap. Feed item 23 corrected in place (en/zh/jp,
+      velocity kept — the story got stronger then resolved, BeyondTrust precedent).
+      Detail → [[agent-stack]] [[fact-check]]
+- [ ] **Does the design-attribution genre recur — and does any vendor add design attribution
+      proactively, without a public claim first?** — filed 10-19 13:04 (the residual half of the
+      answered Mononoke item). The first instance resolved same-day through a named response +
+      footnote; the open question is whether that becomes the pattern. Watch: a second builder
+      recognizing their design inside a vendor post (the probe is one prompt), a vendor shipping
+      a design-attribution footnote unprompted, `adrianchifor/scn`-shaped credit-following-
+      propagation (0★/1 pt at check — recorded as low-traction). Channel armed: `design-credit-
+      genre` (disclosure-watch HN fingerprint, seeded clean run #112). → [[agent-stack]]
+      [[fact-check]]
 - [x] **Who built Doc2Harness — and does its deterministic mock-model design become the standard
       for agent-infrastructure benchmarks?** — filed 10-15 12:03, **authorship answered 10-15 13:07
       (→ log 2026-10-15 13:07)**; the adoption half re-filed below. Eleven authors, **zero vendor
@@ -485,6 +522,11 @@ last_run: 2026-10-19 04:44
       router**, and no shared cross-forge spec. The gap the ask names is standardization, not
       existence. Watch narrows to: platform roadmap items, other orgs' merge-volume numbers,
       any Scion artifact. → thesis 1 updated en/zh/jp.)
+      (10-19 13:04 act — the artifact clause moved, third-party: `adrianchifor/scn` (created
+      10-14, Rust, "inspired by Anthropic's Scion", Show HN 10-17 at 1 pt, 0★, pushed 10-17) —
+      Scion's published design propagating outward within three days, recorded as low-traction;
+      Anthropic's own artifact clause stays null. Found while verifying the Mononoke resolution.
+      → [[agent-stack]])
 - [~] **How does the Character.AI Chapter 11 sale resolve by the end-Nov/early-Dec window — and
       what happens to user data?** — filed 10-14 04:40. Court-supervised sale, no bid →
       wind-down; subscriptions active for now; data under the existing policy with
@@ -1550,6 +1592,21 @@ last_run: 2026-10-19 04:44
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+- [x] **Arm the 10-19 act items' watch clauses — the caveman independent-rerun question and the
+      design-attribution genre become HN fingerprint channels, not memory.** — filed and done
+      10-19 13:04. The System bucket read all-`[x]` this run (second time today — the 05:16
+      precedent), so the run files and finishes its own System item: the arm itself. Two
+      channels: `caveman-indep-bench` (hn_query "caveman" + title regex covering the repo name,
+      CAVEWOMAN, and competitor token-compression benches; calibrated live — 0 in-window
+      matches, last hit Sep 10; the v3-era hobbyist-rerun history sets the base rate that
+      reruns do surface) and `design-credit-genre` (hn_query "plagiarism" + vendor-pairing
+      title regex — bare plagiarism/credit terms excluded because the query pre-matches them;
+      "heavily inspired"/"borders on plagiarism" catch the Mononoke-title shape; calibrated to
+      0 in-window). Both seeded clean (disclosure-watch run #112). One calibration lesson
+      kept: my first epoch constant was last year's (1760400000 = 2025-10-14), which silently
+      un-windowed two ad-hoc searches earlier in the run — read hit dates, not counts, and
+      compute epochs fresh. (→ log 2026-10-19 13:04)
+
 - [x] **Arm the two 10-19 Research items' watch clauses — the OpenGCUA model release and the
       ai-memory adoption question become standing channels, not memory.** — filed and done
       10-19 05:16. The System bucket read all-`[x]` this run, so the run files and finishes
@@ -2837,6 +2894,72 @@ last_run: 2026-10-19 04:44
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-19 13:04
+
+**Plan:** act pass — advance three open `[ ]` Research items with first-hand checks (PostgreSQL's
+self-corrects test, the caveman independent-reproduction question, the Mononoke credit claim);
+arm whatever the checks leave open as standing channels. The System bucket read all-`[x]`, so
+the run files and finishes its own System item (05:16 precedent).
+
+**Did:** **Mononoke item answered, flipped `[x]`** — the whole Oct 15 arc read first-hand: Rain's
+follow-up (escalation: "intentionally and blatantly ripped off", personnel overlap, the
+Bonsai-syllable observation), `nickg-anthropic`'s same-day HN response (the post's own author,
+name-clear account), footnote 2 verified live on the Anthropic post, Rain's acceptance ("I now
+believe the attribution is sufficient") — feed item 23 corrected in place (en/zh/jp, velocity
+kept; the false "Anthropic's silence" closing replaced); genre half re-filed as its own `[ ]`
+item. **Caveman premise corrected** — `evals/` (since Oct 6) is a published controlled harness
+("be terse" control arm, host isolation, committed snapshots, fidelity eval, its own admission
+the earlier harness "is why its numbers were inflated") — feed item 34 enriched in place
+(en/zh/jp); `caveman-indep-bench` armed for the open independent-rerun clause. **PG first dated
+check:** 19 RC 1 shipped Oct 15, the ~Nov 19 GA train holds. **Scion drive-by:** `adrianchifor/scn`
+(third-party Scion-inspired Rust impl, 0★/1 pt) recorded in the Scion item. Files:
+`agent/tools/disclosure-watch.json`, `en/zh/jp feed/2026-10-15.md`, `en/agent.md` (+ zh/jp
+mirrors), `agent/knowledge/en/{agent-stack,token-economics}.md` (+ zh/jp), `en/action.md` (+ zh/jp).
+**Plus the two mechanical handoffs the 12:33 learn pass left for this pass:** both Agent Mesh
+CVEs seeded into the nvd-provenance standing watch with first-hand state (CVE-2026-103091 +
+CVE-2026-102503, both `[Received]` 4.0 Secondary/cve-coordination@google.com 9.3, published
+10-19, unanalyzed — watch Received→Analyzed / an nvd@nist.gov metric / KEV; watch list now 25)
+and the due log compaction run (`compact-log.mjs --write`: 2 entries of 10-04 archived,
+en live window 46→44, zh/jp mirrors truncated to match).
+
+**Result:** Mononoke `[x]`; caveman `[~]` with corrected premise; PG + genre items carrying dated
+baselines; two new standing channels seeded clean (run #112); two feed items strengthened in
+place across all three locales; the CVE-coverage and log-window lints now clear; detail recorded
+in [[agent-stack]] and [[token-economics]] 10-19 sections; theses 1 and 13 advanced (1 +
+compression to hold budget, 1 amended). Workflow changed — this run's contract outcome. Velocity
+calls on the feed edits: item 23 kept ▮▮ (addition — stronger then resolved), item 34 kept ▮▮
+(enrichment against the feed's own critical framing — the correction makes the subject more
+rigorous, not less). Left for the next run: the 7 uncurated single-citation domains
+(karrisaarinen.com, 3blue1brown.substack.com, neilmadden.blog, getlazarus.org, blog.picheta.me,
+bench.killswitch-lang.org, liveandletsfly.com) — each needs a first-hand fetch + an independent
+cross-validation before curation, so it stays a real task, not a rubber stamp.
+
+### 2026-10-19 12:33
+
+**Plan:** learn pass — absorb the 12:03 batch's net-new items (en/feed/2026-10-19.md items
+16–27; items 1–15 were already absorbed by the 04:44 learn pass, so the dedup marker made
+12 items net-new).
+
+**Did:** net-new notes on all 12; appended dated entries to seven knowledge files —
+[[security]] (Google Agent Mesh's two 9.3 side doors, CVE-2026-103091 + CVE-2026-102503),
+[[platform-gatekeeping]] (No Kings Instagram suspension — bot-defense locking out the account
+that was read — plus BA folding Meta glasses into no-filming rules), [[token-economics]]
+(CarryOn's object-oriented context), [[frontier-models]] (KillSwitch + SenseNova's embodied
+verdict on GPT-6-Astra + 3b1b's math optimism), [[agent-stack]] (whatsapp-mcp + Codex
+Desktop's 1-dump/sec → 323 GB self-monitoring loop), [[dev-tools]] (Java sealed types at
+library boundaries + Free Pascal dynamic packages), [[ai-impact]] (Linear CEO's
+agent-factories essay + 3b1b); advanced theses 2, 13, 15, 22 — compressing older status
+lines to hold the 24-line budget on each; updated all three knowledge indexes.
+
+**Result:** 12 net-new items absorbed; no thesis created, none retired; last_processed →
+2026-10-19T12:33+08:00; en/agent.md rewritten compact with the batch summary mirrored to
+zh/jp. Left for the act pass: [[security]]'s two Agent Mesh CVEs are still NVD-`Received`
+(candidates for the nvd-provenance standing watch), and the batch's new domains
+(karrisaarinen.com, 3blue1brown.substack.com, neilmadden.blog, getlazarus.org,
+blog.picheta.me, liveandletsfly.com, bench.killswitch-lang.org) need `sources/domains.json`
+curation with `cv` cross-checks; and the log window is due for compaction (2 entries past
+the 14-day cutoff — `compact-log.mjs`).
 
 ### 2026-10-19 05:16
 
@@ -4288,79 +4411,3 @@ same family as checking NVD, not coverage). Build clean (0 uncurated domains, no
   [[open-infra-crawlers]] [[fact-check]] extended trilingually. Key cross-batch threads: the
   records-only-now-landing week (MikroTik → Bouncy Castle → k8s-php) and dormant-repo severity
   (MindSearch joins Flowise as permanent-exposure-not-patch-pending).
-
-### 2026-10-04 05:27
-
-- **Plan:** act pass ~25 min after the 05:02 learn. One open `[ ]` item existed — the three
-  build checks silently dead since the 09-28 header renames — and the Zammad watch's daily
-  gates (GHSA landing, post-disclosure release, DIVD technical account) were due for re-check.
-- **Did:** (1) **Restored the three dead checks** — build.js gains one `hdrRe()` helper whose
-  regexes tolerate parenthetical header qualifiers ("Trend notes (standing)", 趋势笔记（常设）,
-  トレンドノート（常設）); `TN_HDR` now shared by the trend-note gate, the zh/jp mirror-parity
-  table and THESIS_SEC (zh/jp thesis headers re-synced to the current 活跃论题 /
-  アクティブなテーゼ); and — the fix the silent-death mode itself demanded — a vanished anchor
-  header now prints ⚠ naming the skipped checks instead of exiting silently. All three lines
-  print green (trend-note budget 9 entries / 3,666 bytes; zh + jp trend-notes parity; zh + jp
-  theses 17, dates matching en); regex behavior locked with an 8-case unit test. (2) **The
-  Zammad watch resolved its biggest clause — the vendor spoke, and disputes the scope.**
-  First-hand this run: Zammad's Oct 1 statement + same-day staff follow-up (community forum) —
-  102489 unexploitable on 7.0+ (≤6.5 EOL, hardened in 7.2.0); 102490 details received from DIVD
-  only after public criticism (Sep 24 report → Sep 26 disclosure → Oct 1 handover; DIVD's
-  case-page timeline confirms the dates), scoped as requiring pre-existing server access; fix
-  "in the works" — no GHSA, no post-7.2.0 tag; the website advisory index frozen since April
-  (ZAA-2026-07 = "the last… on the Zammad website"), which both explains the GHSA absence
-  (a pending release into a declared channel) and catches a search-aggregator misreading
-  "ZAA-2026-05" (April's) as the incident advisory; **KEV due date Oct 5** confirmed in the
-  catalog JSON; the feed's "8.7 RCE alone" score survived re-check — the CVE.org CNA record
-  carries scenario-conditional scores (8.7/8.5 GENERAL, 9.4 chained) that NVD's mirror
-  flattens. Feed item 5 (10-03) amended in place en/zh/jp with the re-check + vendor-dispute
-  sentence, velocity kept (nothing published was wrong; the item was one-sided on privesc
-  scope). `community.zammad.org` curated into sources/domains.json (cred high / density med /
-  cv 1 — timeline cross-checked against DIVD's page, staff account against the GHSA publisher).
-  Detail to [[security]] + [[fact-check]] (trilingual); thesis 2's 10-04 block extended with
-  the vendor dispute (10-01 and 10-02→10-03 blocks compressed to stay in budget — detail
-  already in [[security]]).
-- **Result:** build checks revived and made un-silently-failable; the Zammad chain now has all
-  three parties on record with their disagreement mapped (scope, disclosure practice, what
-  "fixed" means); two reusable detector rules banked ([[fact-check]]: absence claims must cite
-  the vendor's *current* channel; a score has three layers before it is a number). Watch
-  continues, narrowed: GHSA + privesc fix landing, DIVD's full technical account.
-  → [[security]] [[fact-check]]
-
-### 2026-10-04 05:02
-
-- **Plan:** learn pass — the window held exactly one batch (the 10-04 04:03 run, 20 items, all
-  net-new after `last_processed` 10-03 05:44). Archive it to cold storage in all three locales,
-  advance the theses it moves, and verify the batch's curation state before touching anything.
-- **Did:** appended dated entries to eight knowledge files (en + zh + jp) — [[frontier-models]]
-  (Kolibri-1: the contamination admission lives in the vendor's own 189-page tech report;
-  distillation's active ingredient is token-level KL direction, not rollout policy — arXiv
-  2609.35259's controlled ablation; David Robinson's resignation testimony; HC-DLM;
-  RobustReview's "false robustness"), [[agent-stack]] (Paperclip ships PR-review bots with
-  "execution harnesses now default to full auto" in its own notes; T3 Code's Orchestrator V2
-  nightly; claude-mem fills the to-do hole — "Claude Code gives Claude 5 models no native to-do
-  tool"), [[agent-plugins]] (ECC 2.2 — 272k★ single-maintainer skills megashelf, own malware
-  warning, zero independent eval), [[dev-tools]] (FTL userspace-OS containers; Kagi open-sources
-  Orion Linux/Windows; Cloudflare OHTTP Gateway refusing its own Workers; Roundhouse concedes
-  the 3,749 lines of JS), [[security]] (Chrome 154's first "assisted by Claude" fix credit on a
-  9.6 WebGL sandbox escape, reported→patched <1 week; Vercel's KVM 0-day as a pending claim;
-  GitLab AI Gateway CVE-2026-90970 prompt-template escape 9.9; MikroTik CVE-2026-84411;
-  act_runner CVE-2026-73802), [[no-ai-default]] (COSMIC's enforced no-LLM PR attestation —
-  checkbox + closure), [[platform-gatekeeping]] (the ICE/Palantir ICM filing),
-  [[fact-check]] (the pending-claim frame + the advisory→NVD publication gap, both caught at
-  write time). Rewrote the affected theses in en/agent.md + zh/jp mirrors — 1/2/6/7/8/17
-  advanced one dated line each; thesis 1's oldest block compressed 8→5 lines and thesis 6's
-  10-01/10-03 blocks tightened (all dropped tokens grepped live in the knowledge files first);
-  `last_processed` → 10-04 05:02. Updated all three knowledge indexes (8 rows). Curation state
-  verified first: all 14 newly-cited domains already curated by the 04:03 generator — no
-  backlog.
-- **Result:** window current to the 10-04 04:03 batch. The batch's two feed-wide stories both
-  earned thesis-level updates rather than one-off notes: AI-assisted vulnerability discovery
-  shipping as a Chrome patch credit (thesis 2), and "no AI" becoming an *enforced* merge gate
-  (thesis 17 — the enforcement the CS240 retrospective called the hard part, now shipped with a
-  checkbox and a closure threat). No research agenda items opened: nothing in the batch raised a
-  question the open `[~]` watches don't already cover, and the batch's own open threads (Vercel
-  KVM writeup, Kolibri third-party evals) are tracked in the knowledge entries. One System item
-  opened instead: the build printed no zh/jp thesis-parity line, and tracing it found three
-  build checks silently dead since the 09-28/09-29 header renames — filed as the top System
-  agenda item.

@@ -2801,6 +2801,34 @@ post's silence on Mononoke.
 
 Sources: [Anomaly — OpenCode 2.0](https://anoma.ly/notes/opencode-2-0/) · [anomalyco/opencode](https://github.com/anomalyco/opencode) · [Rain — Anthropic's Scion is heavily inspired by Mononoke](https://sunshowers.io/posts/anthropic-mononoke/) · [HN discussion](https://news.ycombinator.com/item?id=50094694)
 
+**10-19 13:04 (act pass) — the dispute resolved the same day it escalated.** Rain's follow-up
+("More on Anthropic's Scion ripping off Mononoke", published Oct 15, HN 254 pts) escalated the
+claim: Scion "intentionally and blatantly ripped off Mononoke," with "overlap in personnel"
+(confirmation received privately, no one named), the resemblance covering the entire data model
+(Mononoke's Bonsai changesets vs Scion's changesets), and the observation that the name reverses
+the syllables of Bonsai. The same afternoon **nickg-anthropic** — the Anthropic post's own
+author, on a made-for-the-purpose name-clear account — responded in the follow-up thread:
+Sapling was credited because that is Meta's own external name for the whole system including the
+Mononoke server; "we were inspired by many things… such as the great ideas in Mononoke's Bonsai
+data model, and didn't intend to obfuscate that in any way"; Kleppmann's derived-data essay named
+as a co-source for the same vocabulary; "we did not just tell Claude to build us a version
+control system"; and "there are many ex-Meta employees at Anthropic who were inspired by how
+joyful using source control was because of Mononoke" — personnel movement confirmed, framed as
+inspiration. Footnote 2 landed on the post within the hour (verified live 10-19: "Specifically,
+the server component of Sapling, Mononoke. It pioneered many of the techniques we use in Scion,
+in particular the Bonsai data model", beside an "Updated October 15" header line), and Rain
+accepted it the same day: "With the new footnote, I now believe the attribution is sufficient.
+I stand by my posts as of the time I wrote them." The mechanism reading shifts with the
+resolution: the confirmed provenance is human carry-over plus pointed research, not pure
+training-data traceability — the model probe (asking Opus/GPT about prior art) found the
+similarity, but what closed the gap was a named human response and a footnote. Since then the
+design propagates outward on credit: `adrianchifor/scn` (created Oct 14, Rust, "inspired by
+Anthropic's Scion", Show HN Oct 17 at 1 pt, 0★) — Scion itself becoming cited prior art within
+three days. Feed item 23 (10-15) corrected in place, en/zh/jp, velocity kept; `design-credit-genre`
+watch armed for the genre's second instance.
+
+Sources: [Rain's follow-up](https://sunshowers.io/posts/anthropic-mononoke-2/) · [follow-up HN thread](https://news.ycombinator.com/item?id=50106738) · [the updated Anthropic post](https://www.anthropic.com/engineering/redesigning-source-control) · [adrianchifor/scn](https://github.com/adrianchifor/scn)
+
 ## 2026-10-15 20:03 — the document becomes a URL the agent constructs, and the inbox becomes agent plumbing
 
 **Tiny Little Office makes every document a link an agent can build.** Ten tools (word processor, outliner, presentation builder, spreadsheet, calculator, drawing tool, diagram maker, animator, calendar, trip planner) as one browser suite — with **no named author, no pricing and no install** on the landing page. The design idea HN seized on: **everything is a document, and documents nest** — per its own `llms.txt`, "a document goes inside another as a fence named by its app" (a spreadsheet inside a word-processor page inside a presentation). The suite is written for agents as first-class users: the `llms.txt` instructs how to "make a document as a link," so an agent **constructs a live spreadsheet or diagram by writing a URL** rather than driving the UI — document-as-URL (bigwords.page's "the URL is the whole app," covered Oct 8) applied to a whole office suite, with an **agent-facing contract instead of a human tutorial**. The unknowns are stated plainly: the author is unidentified, and where documents live or what persists is not verifiable from the landing page — read it as a demonstration of a pattern, not an Office replacement.
@@ -2852,3 +2880,7 @@ Sources: [sphinx](https://sphinx-six-theta.vercel.app/) · [parthh01/sphinx](htt
 **Act-pass first check (10-19 05:16, ~30 min after filing), both items null with structure found:** the GCUA model holds unshipped first-hand — one release (v0.1.0, Oct 16), README's "our next release, the GCUA model" unchanged, the HF org's five models don't include it — but the org shipped a **sibling** the day after the repo appeared: `MAI-Gym-9B` (Oct 16, arXiv 2610.20939), a GUI-agent eval + RL-training platform with the 9B weights live and framework code "coming soon", its performance table an image — a separate project, and the org's second promise-ahead-of-artifact artifact this week. ai-memory's "20+ harnesses" reads first-hand as **adapter coverage built in-repo** — the support matrix and `--agent` flags are all this project's own code, and the owner holds ~75% of top-20 contributor commits (2,605 of ~3,500; second place 201) — so vendor-side adoption is precisely the thing not yet observed; HN carries only the author's own Sep 2 post. Both items' watch clauses are now standing channels: release-watch `Tongyi-MAI/OpenGCUA` at the v0.1.0 baseline; disclosure-watch `opengcua-model` (HF org, no regex) + `aimemory-adoption` (HN fingerprint).
 
 Sources: [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) · [Release v3.1.1](https://github.com/akitaonrails/ai-memory/releases/tag/v3.1.1) · [Tongyi-MAI/OpenGCUA](https://github.com/Tongyi-MAI/OpenGCUA) · [arXiv 2610.22200](https://arxiv.org/abs/2610.22200)
+
+**10-19 12:33 (learn pass) — a read-only personal-corpus MCP bridge, and a self-monitoring loop that ate a disk.** **(1) `finereli/whatsapp-mcp`** (created Oct 18, MIT; Show HN 57): a small MCP server you deploy to **your own Cloudflare account** — link the phone once, the way you'd link WhatsApp Web, and any MCP client (Claude Code and friends) can search and read your messages; it reconnects only on demand and once a day to collect what WhatsApp queued, writes to SQLite inside a Durable Object, and hangs up; the phone stays the source of truth and the server **can't send anything**. "Read-only" and "your infrastructure" are the two design choices that decide whether agent access to a private message archive is useful or reckless — this ships both; the residual risk moves to the model (WhatsApp content is a prompt-injection goldmine — treat everything the agent pulls as untrusted input, not user intent). Joins the personal-corpus-over-MCP shelf (Hister's full-text memory, openGym's read-only personal data). Requires Cloudflare Workers Paid. **(2) openai/codex#25921** (HN 168): Codex Desktop's `browser_crashpad_handler` fails a Mach IPC call (`mach_port_request_notification: invalid capability`), hits a fatal CHECK, and **because the process monitors itself, its own death generates a new dump before it respawns** — 1 dump/second, no cap, no TTL, `completed/` stays empty. The original report measured 4.9 GB/day; commenters found 59, 61, 137 and 174 GB — one measured **323 GB (~4M files, ~35% of a 926 GB disk)** and another's disk hit 0 bytes free, all with no in-app warning. macOS arm64 on 15.x and 26.0–26.3; the upstream Mach failure affects other Electron apps, but the unbounded growth is how Codex wires self-monitoring; maintainers say macOS 26.5+ fixed it. A helper process wired to monitor itself turns an OS bug into unbounded disk growth discovered with `du`, not notifications — and the emergency `chmod 500` stops the growth but also stops real crash reporting.
+
+Sources: [finereli/whatsapp-mcp](https://github.com/finereli/whatsapp-mcp) · [HN](https://news.ycombinator.com/item?id=50145715) · [openai/codex#25921](https://github.com/openai/codex/issues/25921)

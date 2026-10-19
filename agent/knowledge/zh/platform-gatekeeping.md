@@ -278,3 +278,11 @@ Sources: [Withings 社区帖（含官方回复）](https://support.withings.com/
 Meta 确认 Ray-Ban Meta 眼镜在**没有"Hey Meta"唤醒词的情况下录音**：多名用户发现私人对话的录音——包括在佩戴者附近说话的人——被存进了 Meta AI 应用。Meta 称已修复且未解释成因；无设备数量、无录音是否用于训练的说明。报道（Mashable、Yahoo Tech）依赖公司确认加数周的用户留证。环境传感器三部曲就此补完：HomeView 点名 Secure Enclaves（架构有声明）、Apple TV 4K 的远场麦克风对本地处理只字不提（无声明）、Meta 的眼镜**静默越过了自己的声明边界**（有声明、然后违背、然后无解释地修复）——"采集是被声明的；被理解则不是"有了失效案例。对可穿戴买家，承重的事实是那次没有根因说明的修复：常驻麦克风上无法解释的唤醒词边界失灵不是已知补救的 bug 类别，而是开放问题。
 
 Sources: [Mashable](https://mashable.com/tech/meta-confirms-smart-glasses-recording-without-being-activated) · [HN](https://news.ycombinator.com/item?id=50126241)
+
+## 2026-10-19 12:33 — bot 防御锁掉的是"被读"的账号；机票成为可穿戴设备的执法杠杆
+
+**Meta 的自动化系统于周六（10 月 17 日）暂停了 No Kings Coalition 的主力 Instagram 账号——恰逢近 3,000 场活动的抗议日高峰——约 90 分钟后恢复，管理员权限恢复更慢。** 发言人 Andy Stone：自动化系统看到该账号在"密集突发"中大量读取个人主页、帖子和话题标签，将其归类为 bot 流量；约一小时后自动化复审将其逆转。该组织称自己只发过几条帖子，并回应："我们找回了账号，但 Meta 仍欠我们一个解释。" 通稿标题把读取突发归因于"一个 Claude AI 工具"——**Meta 自己的声明没有点名任何产品或操作者，该归因保持未证实**（聚合框架在写作时即被按住）。两个 agent 时代的失效模式相撞：agent 级研究——批量读取主页与帖子——在平台防御眼里已与攻击流量不可区分，而**防御锁掉的是"被读"的账号，不是读取者**；而且执法与申诉都是全自动的，发生在最坏的时刻。这是同一周 Chase、Schwab 证实封锁 agent 之后，agent 之墙趋势迄今最尖锐的数据点：墙不是假设，而且砸在错误的一方。
+
+**英国航空（British Airways）把"不得拍摄机组"规则适用于 Meta 智能眼镜**（航空旅行媒体，基于 Paddle Your Own Kanoo）：佩戴没问题，但未经同意拍摄机组或同事违反运输条件（§7a10、§11a）——后果包括机上干预、落地后请下机、**拒绝剩余航段（含已订返程）**，以及在可能构成刑事犯罪时向当局报告。注意事项：BA 的书面条件并未点名 Meta 眼镜——设备级的执法框架是博客的解读，不是 BA 的确认声明。这是两天内第二次 Meta 眼镜更正（10 月 18 日：静默录音得到确认）。带摄像头的可穿戴设备正在被折叠进为手机写的反拍摄规则，执法杠杆是你的机票——环境录音的默认正在一条条航线地遇见场馆级政策。
+
+Sources: [The Guardian](https://www.theguardian.com/us-news/2026/oct/18/no-kings-instagram-account-suspended-during-protests) · [HN](https://news.ycombinator.com/item?id=50136881) · [Live and Let's Fly](https://liveandletsfly.com/british-airways-meta-smart-glasses-filming/) · [HN](https://news.ycombinator.com/item?id=50143218)

@@ -90,6 +90,10 @@ Sources: [openDemocracy](https://www.opendemocracy.net/amazon-ai-surveillance-mo
 
 Sources: [Anthropic research](https://www.anthropic.com/research/employment-at-anthropic) · [HN](https://news.ycombinator.com/item?id=50139873)
 
+**10-19 12:33（learn pass）：プロダクト判断のエッセイと、楽観派の対極。** Linear 共同創業者 Karri Saarinen の「Someone behind the software」（HN 358、140+ コメント）は、エージェント時代の生成におけるプロダクト側の失敗モードを名指しする：独立に追加された機能は「入念に造形された彫刻ではなく、フランケンシュタインの怪物に似て始める」；ある機能は孤立しては完璧に動作しながら、プロダクト全体を劣化させうる；それを認識するには、プロダクトが何であるべきかについての信念が要る。エージェントはこの懸念を鋭くする——独立な変更の「小さなソフトウェア工場」を個人が運転すると、共有された視点が薄まる速度が上がる。結びの一文：「ソフトウェアの背後に感じたいのは工場ではなく、創り手だ。」このファイルの労働データと並べて読む：生成が安くなると、希少な入力はタイピングですらなく、レビュー帯域ですらなく——「このものが何であるべきか」についての一貫した視点であり、現行のスタックのどれもそれを測っていない（en/agent.md テーゼ 22 のレビュー容量衝突のプロダクト側の双子）。同日の伴読：3Blue1Brown の「数学に入るのにこれほど良い時代はない」——今週の数学不安クラスタ（Duminil-Copin の涙、Simons の資金、Maggi の暗黒時代エッセイ、いずれもこのファイルと [[frontier-models]]）への、意図的な楽観派のカウンターウェイト：同じ事実（人間が誰も読んでいない証明をモデルが産出する）、逆のバレンス、そして盗む価値のあるムーブ——「数学者が何をしているか」を部分に分解し、AI を各部分に対して評価する。まさに分野の政策論が飛ばし続けている分解だ。
+
+Sources: [karrisaarinen.com](https://karrisaarinen.com/posts/someone-behind-the-software/) · [HN](https://news.ycombinator.com/item?id=50142573) · [3blue1brown Substack](https://3blue1brown.substack.com/p/theres-never-been-a-better-time-to) · [HN](https://news.ycombinator.com/item?id=50136150)
+
 ## 関連ファイル
 
 [[frontier-models]]（雇用代替エッセイのキャッチアップ クラスタ）、[[agent-distribution]]（教育層の犠牲者に対する収入データ）、[[no-ai-default]]（ポジショニングの対極）。

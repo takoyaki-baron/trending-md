@@ -180,6 +180,22 @@
    "nvd_since": "2026-10-19T00:00:00.000",
    "hn_query": "ai-memory",
    "hn_title_regex": "akitaonrails|hand ?off|cross.?harness|ai.?memory.*(codex|claude|cursor|switch|harness)"
+  },
+  {
+   "id": "caveman-indep-bench",
+   "why": "Research agenda (filed 10-15 20:03, armed 10-19 13:04 act) — caveman 4.0's six figures (-33.2% Read less, 54%-cheaper Auto, 129.8x Browse) are all author-run; the item's original 'no published methodology file at all' premise was CORRECTED 10-19 (evals/ harness exists since Oct 6: three arms with a plain 'be terse' control, host isolation, committed snapshots with pinned model+CLI version, deterministic fidelity eval, and its own admission that the earlier harness 'is why its numbers were inflated'). Watch: an INDEPENDENT rerun of any 4.0 figure, the CAVEWOMAN authors (arXiv 2606.24083) evaluating the proxy, or a competitor publishing a reproducible bench. Calibration at seed: 0 in-window matches; the v3-era base rate shows hobbyist measurements do surface (Aug 12 'My Bill Didn't Move', Apr 29 'benchmarked against be brief').",
+   "nvd_keywords": [],
+   "nvd_since": "2026-10-19T00:00:00.000",
+   "hn_query": "caveman",
+   "hn_title_regex": "caveman|cavewoman|read.?less.*(token|compress)|token.*compress.*(bench|reproduc|independent)"
+  },
+  {
+   "id": "design-credit-genre",
+   "why": "Research agenda (filed 10-19 13:04, re-filed from the answered Mononoke item) — the training-data/design attribution genre: a builder alleging an AI vendor's product or post lifted their design uncredited. First instance resolved same-day (Mononoke/Scion: nickg-anthropic answered on HN 10-15 17:59Z, footnote 2 added to the post, claimant accepted as sufficient). Watch: a SECOND instance — does the genre recur, and do vendors start adding design-attribution footnotes proactively? Regex requires the vendor pairing (bare plagiarism/credit noise filtered); 'heavily inspired' catches the Mononoke-title shape.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-10-19T00:00:00.000",
+   "hn_query": "plagiarism",
+   "hn_title_regex": "(anthropic|openai|google|meta|claude|gpt|gemini|copilot|codex|llm).*(plagiar|uncredit|rip.?off|attribution|credit)|(plagiar|uncredit|rip.?off|attribution).*(anthropic|openai|google|meta|claude|gpt|gemini|copilot|codex|llm)|heavily inspired|borders on plagiarism"
   }
  ]
 }

@@ -2695,87 +2695,114 @@
     },
     "https://news.ycombinator.com/item?id=50141076": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-18T21:35:29.848Z",
-      "last_seen": "2026-10-18T21:35:29.848Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
       "feeds": [
         "2026-10-19.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50141909": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-18T21:35:29.848Z",
-      "last_seen": "2026-10-18T21:35:29.848Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
       "feeds": [
         "2026-10-19.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50142866": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-18T21:35:29.848Z",
-      "last_seen": "2026-10-18T21:35:29.848Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
       "feeds": [
         "2026-10-19.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50141429": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-18T21:35:29.848Z",
-      "last_seen": "2026-10-18T21:35:29.848Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
       "feeds": [
         "2026-10-19.md"
       ]
     },
     "https://www.niemanlab.org/2026/10/legal-experts-warn-metas-new-terms-still-grant-broad-scraping-permissions-despite-language-changes/": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-18T21:35:29.848Z",
-      "last_seen": "2026-10-18T21:35:29.848Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
       "feeds": [
         "2026-10-19.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50140462": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-18T21:35:29.848Z",
-      "last_seen": "2026-10-18T21:35:29.848Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
       "feeds": [
         "2026-10-19.md"
       ]
     },
     "https://www.politico.com/news/2026/10/16/anthropic-ai-safety-01124654": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-18T21:35:29.848Z",
-      "last_seen": "2026-10-18T21:35:29.848Z",
-      "feeds": [
-        "2026-10-19.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50142449": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-18T21:35:29.848Z",
-      "last_seen": "2026-10-18T21:35:29.848Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
       "feeds": [
         "2026-10-19.md"
       ]
     },
     "https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropics-proposed-ai-safety-bill-only-kicks-in-if-50-deaths-or-usd1b-in-damages": {
       "verdict": "dead",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-18T21:35:29.848Z",
-      "last_seen": "2026-10-18T21:35:29.848Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
+      "feeds": [
+        "2026-10-19.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50136881": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-19T05:46:26.329Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
+      "feeds": [
+        "2026-10-19.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50142573": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-19T05:46:26.329Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
+      "feeds": [
+        "2026-10-19.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50133231": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-19T05:46:26.329Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
+      "feeds": [
+        "2026-10-19.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50143218": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-19T05:46:26.329Z",
+      "last_seen": "2026-10-19T05:46:26.329Z",
       "feeds": [
         "2026-10-19.md"
       ]
     }
   },
-  "runs": 66,
+  "runs": 67,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-18T21:35:29.848Z"
+  "last_run": "2026-10-19T05:46:26.329Z"
 }

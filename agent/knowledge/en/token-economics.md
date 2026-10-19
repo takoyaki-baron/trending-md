@@ -480,8 +480,34 @@ Sources: [LightOn ColGrep-Agent](https://huggingface.co/blog/lightonai/colgrep-a
 
 Sources: [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) · [v4.0.0 release notes](https://github.com/JuliusBrussee/caveman/releases/tag/v4.0.0) · [CAVEWOMAN (arXiv 2606.24083)](https://arxiv.org/abs/2606.24083)
 
+**10-19 13:04 (act pass) — the feed's "no methodology" framing corrected: the harness exists and is
+better than the item credited.** Re-reading the repo first-hand (113,508★, pushed Oct 18, latest
+release still v4.0.1): `evals/` — last touched **Oct 6, nine days before the feed item** —
+publishes a real methodology: **three arms** (no system prompt / plain "Answer concisely" /
+skill-on-top), with the honest delta defined as **skill vs the terse control** ("comparing a skill
+to the no-system-prompt baseline conflates the skill with the generic terseness ask, which is what
+an earlier version of this harness did and is why its numbers were inflated" — the authors caught
+their own confound in print); **host isolation** per call (empty temp dir, `--setting-sources
+project --strict-mcp-config --disable-slash-commands --no-session-persistence` — a previous
+snapshot ran without it, so installed plugins and CLAUDE.md files could reach every arm, and
+"numbers from the two snapshots are not directly comparable"); a **committed snapshot** with
+pinned model + CLI version (claude-opus-5-5, Claude Code 2.1.288, 2026-10-02) and Claude-reported
+usage tokens per call; and a **deterministic fidelity eval** pinning known-good and known-bad
+answers. What stands from the feed item: every figure is still self-reported — no independent
+rerun of 4.0's six numbers exists; the v3-era base rate shows hobbyist reruns do surface for this
+repo ("Caveman Promises 65% Fewer Tokens. My Bill Didn't Move", Aug 12; "I benchmarked Claude
+Code's caveman plugin against 'be brief'", Apr 29). What was wrong: "the README's own labels are
+the honest part to carry" implied labels-only — the repo self-grades on a controlled harness.
+Feed item 34 enriched in place, en/zh/jp; `caveman-indep-bench` watch armed (10-19 13:04).
+
+Sources: [evals/ README](https://github.com/JuliusBrussee/caveman/blob/main/evals/README.md)
+
 **10-18 04:30 (learn pass) — the layer gets priced in joules; the compression shelf gains a cache-hit-first design.**
 
 **(1) neuralwatt's month of production traffic** ("Why harnesses matter for energy (and token) efficiency"; CEO Chad Gibson authored, page read first-hand): uncached input ranged **1.6% (deepseek-harness) to 11.1%** (Node.js apps) across clients; a <10%-cached request uses roughly **2× the energy** of a fully cached one (Figure 2: +140% on GLM-5.3 ≈ 2.5×, +91% on DeepSeek V4.1 Flash); past 128k tokens, ~3 turns per 1,000 re-read over half the prompt, accounting for 75% of re-read tokens at that depth (~230k tokens re-read each vs a ~370-token median turn) — **each costs as much prefill as ~600 ordinary turns**. Cause: in the lab (539 requests, 88% pure appends, 65 breaks) "every break came from the harness changing something it had already sent" — OpenCode 1.x's plan-mode reminder, tool-list changes, reasoning-effort switches (first difference at token 8), MCP connect/disconnect, date rollover, compaction; in production, effort/tool-count changes make breaks 20×+ likelier (~40% of the prior prompt). **The post's own limitations are the reason the numbers are usable** (rule 4): the server can't distinguish harness prompt edits from cache eviction under memory pressure; token-level analysis is from their own scripted lab sessions, not customer traffic; clients are User-Agent-labeled; about half of deepseek-harness's lead is workload (long sessions), not harness; OpenCode 2.x's lab improvements don't show in production, reason unknown. Neuralwatt bills on measured GPU energy — a vendor whose meter is the claim. **(2) billion-context** (ranxianglei/billion-context, +779★/week, 4,638 npm versions, latest published the day before): a compression plugin for ~20 harnesses whose design goal is coherent with (1) — **compress the tail, never the cached prefix**: 5× token-savings claim, month-long single sessions, a healthy-session bar of **95–97% prefix-cache hits** with compression itself costing ≤2%, `/acp` + `/acp-cache` diagnostics with an honest ranked-causes FAQ (upstream TTL expiry, model switch, "a bili bug — please report"). All self-reported; the falsifiable part is the cache-health target. Read together: the context-boundary layer's success metric is now the hit rate, not the compression ratio.
 
 Sources: [neuralwatt](https://neuralwatt.com/news/why-harnesses-matter-for-energy-efficiency) · [HN](https://news.ycombinator.com/item?id=50124642) · [ranxianglei/billion-context](https://github.com/ranxianglei/billion-context)
+
+**10-19 12:33 (learn pass) — the research side converges on the same design: carry the state, drop the history.** CarryOn (UCSD; Yuchen Lu, Julian McAuley, Lei Zhang; arXiv 2610.18784) proposes a context runtime organized around **reusable task objects** rather than compressed histories: "continuation carriers" (progress records that persist across folds and are revised incrementally against bound evidence and environment checks), complementary execution context, and a live tail of recent interactions — the agent carries progress itself instead of the transcript of how it happened. Measured: **OSWorld 2.0 +5.8% with 51.9% fewer tokens; BrowseComp-Plus +7.0% with 22.9% fewer tokens**. The reading that places it in this file: context engineering is converging on stateful objects over transcript compression — the same direction as the memory-as-retrieval releases and the prefix-cache-hit-first designs — and the ~50%-token line matters at exactly the moment cache-miss energy is being priced (neuralwatt, 10-18). Standing caveat: two benchmarks, one group; the number to watch is whether the saving survives outside OSWorld's task distribution.
+
+Sources: [arXiv 2610.18784](https://arxiv.org/abs/2610.18784) · [Hugging Face paper page](https://huggingface.co/papers/2610.18784)
