@@ -88,6 +88,12 @@ Sources: [Anthropic research](https://www.anthropic.com/research/employment-at-a
 
 Sources: [karrisaarinen.com](https://karrisaarinen.com/posts/someone-behind-the-software/) · [HN](https://news.ycombinator.com/item?id=50142573) · [3blue1brown Substack](https://3blue1brown.substack.com/p/theres-never-been-a-better-time-to) · [HN](https://news.ycombinator.com/item?id=50136150)
 
+**10-19 20:31（学习轮）——教育公地拿到它的先修图，以及一张决定谁能在其上构建的许可证。**
+
+Marble 的 os-taxonomy（withmarbleapp/os-taxonomy，当日 +427★，总计 5,854）：一个关于儿童学什么 的开放分类——**1,590 个微主题**（各带平实语言描述、掌握证据标准、类型与年龄段）接进一张 **3,221 条边的有向无环先修图**，每条边标 `hard`/`soft` 并附一行理由，对齐 NGSS、Common Core 与英国国家课程；UTF-8 JSON 加 JSON Schema 与带校验和的清单；交互式 3D 可视化在 withmarble.com/curriculum。点星之前的两条诚实注记：该仓库是一份数据集、7 月 8 日以来未动——**是再发现，不是开发**——且它**不是 OSI 开放**（数据 © Generative Spark, Inc.、要求署名）。它为何属于本文件：先修结构是多数教育数据集缺的那块、也正是导师型 agent 最需要的那块——"鉴于该学习者已掌握的，我现在能教什么"是一次图查询、不是一次查找。一个开放、对齐标准的版本是真正的公地；许可证只是决定谁能商业地构建其上。
+
+Sources: [withmarbleapp/os-taxonomy](https://github.com/withmarbleapp/os-taxonomy) · [Marble curriculum explorer](https://withmarble.com/curriculum)
+
 ## 相关文件
 
 [[frontier-models]]（替代叙事补学议题群）、[[agent-distribution]]（教学层受害者的收入数据）、[[no-ai-default]]（定位反题）。

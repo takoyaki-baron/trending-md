@@ -969,3 +969,9 @@ Sources: [android/skills](https://github.com/android/skills) · [developer.andro
 obsidianmd/pele（TypeScript、455★、playground は pele.run）は Mermaid 図を SVG へ描画：小さく、同期、実行時依存ゼロ、色とフォントは CSS 変数経由、Mermaid 12.1.0 の全図タイプ対応、タイプ別登録でバンドル削減。登場の前日、このフィードを首位に立った agent 自描画図の diagram-design が同じフォーマットについて逆の結論に達していた：'agent は自分で図を描くべき'ではなく「既存の Mermaid テキスト形式は 2 MB の DOM 手術ではないレンダラに値する」。2 プロジェクト、1 週間、逆の答え——これが信号：agent ワークフローは安く、決定論的で、スタイル可能な図出力を求めており、現行ツールはそれ向けに作られていない。どちらの賭けが勝つかはインストール数で反証可能。
 
 Sources: [pele.run](https://pele.run/) · [obsidianmd/pele](https://github.com/obsidianmd/pele)
+
+**10-19 20:31（learn パス）——棚が Superpowers に対する最初の真剣に測定された対抗提案を得る。**
+
+Superlite（iha2/superlite、10月17日作成；著者 Iheatu Chris Wogu；HN 105）は Superpowers のプラグイン構造を意図的に借用し、その哲学を反転する：Superpowers の機能ごと 8–12 ゲートの代わりに**一括承認を最初に一度だけ**；タスクは**並列ウェーブ**で実行（ピークで 18 の同時エージェント）；**コストによるモデル ルーティング**——Opus が調整、Sonnet が構築とレビュー、Haiku が機械的作業；ルールはプロンプトでなく**フックで強制**、「エージェントはルールを読んだ上で好き勝手するから」。どの哲学を選んでも盗む価値があるのは測定の方：**エージェントが決して見ない隠しテスト スイート**で採点するヘッドレス ハーネスが、平均時間と並べて**分散を報告**——静的サイト ジェネレータ + 表計算エンジンを 16.1 分で構築し 177/177 合格、素の Superpowers（33.6 分）より 52% 高速、実行間のばらつきは 9.1 分対 Superpowers の 26.4。`main` への push も人間なしのマージも決してしない。著者自身の注意書き：「ピアレビューされた科学ではなく、強いヒント」。3 日前の Superpowers v7.0.0 再構築（10-16、本ファイル）に対置して：順次ゲート方式の協調対並列チープな自律は、今や棚の上で測定された分岐であり、雰囲気ではない。
+
+Sources: [contextfirst.blog](https://contextfirst.blog/superlite-hand-an-agent-a-spec/) · [iha2/superlite](https://github.com/iha2/superlite) · [HN](https://news.ycombinator.com/item?id=50147492)

@@ -12695,5 +12695,14 @@
     "en": "Frequent-travel trade blog (Live and Let's Fly). Cross-checked (10-19): its BA/Meta-glasses report matches the HN discussion; the feed preserved its own caveat that BA's written conditions never name Meta glasses.",
     "zh": "常旅客行业博客（Live and Let's Fly）。交叉核验（10-19）：其 BA/Meta 眼镜报道与 HN 讨论一致；本 feed 保留了它自己的告诚——BA 的书面条款从未点名 Meta 眼镜。",
     "jp": "頻繁旅行者の業界ブログ（Live and Let's Fly）。突合済み（10-19）：BA/Meta グラスの記事が HN 議論と一致。フィードは、BA の書かれた条件が Meta グラスを名指ししていないという同記事自身の注意書きを保持。"
+  },
+  "confluence.atlassian.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Atlassian's security-advisory docs space; the canonical advisory pages per CVE (severity, per-product affected/fixed tables). Cross-checked (10-19): the CVE-2026-21589 advisory still rated Critical 9.3 with fix versions shipped, consistent with ticket CONFSERVER-104488 and the KEV entry — read first-hand while recording that the CVE record itself had been rejected.",
+    "zh": "Atlassian 安全公告文档空间；每个 CVE 的权威公告页（严重度、逐产品受影响/修复表）。交叉验证（10-19）：CVE-2026-21589 公告仍评 Critical 9.3 且修复版本已发布，与工单 CONFSERVER-104488 及 KEV 条目一致——在记录下 CVE 记录本身已被拒绝时一手读取。",
+    "jp": "Atlassian のセキュリティアドバイザリドキュメント空間。CVE ごとの権威あるアドバイザリページ（深刻度、製品別影響/修正表）。クロスチェック（10-19）：CVE-2026-21589 のアドバイザリは依然 Critical 9.3 で修正版は出荷済み、チケット CONFSERVER-104488 および KEV 登録と一致 — CVE レコード自体が拒否されたことを記録する過程で一次確認。"
   }
 }

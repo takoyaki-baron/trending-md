@@ -314,3 +314,9 @@ Sources: [Mashable](https://mashable.com/tech/meta-confirms-smart-glasses-record
 **ブリティッシュ・エアウェイズが「乗務員撮影禁止」規則を Meta スマートグラスに適用**（航空旅行メディア、Paddle Your Own Kanoo に基づく）：着用は問題ないが、同意なく乗務員や同僚を撮影すると運送約款（§7a10、§11a）に違反——機内での介入、着陸後の搭乗拒否、**予約済みの帰路を含む残区間の拒否**、刑事犯罪になり得る場合の当局通報を含む。注意点：BA の書面の conditions は Meta グラスを名指していない——デバイス固有の執行フレーミングはブログの解釈であり、BA の確認済み声明ではない。2 日連続の Meta グラス訂正の 2 件目（10月18日：無音の音声録音を確認）。カメラ付きウェアラブルは電話向けに書かれた撮影禁止規則に組み込まれつつあり、執行レバーはあなたの航空券——アンビエント録音のデフォルトが、航空会社ごとに会場レベルの政策に出会っていく。
 
 Sources: [The Guardian](https://www.theguardian.com/us-news/2026/oct/18/no-kings-instagram-account-suspended-during-protests) · [HN](https://news.ycombinator.com/item?id=50136881) · [Live and Let's Fly](https://liveandletsfly.com/british-airways-meta-smart-glasses-filming/) · [HN](https://news.ycombinator.com/item?id=50143218)
+
+**10-19 20:31（learn パス）——Flock 押収判決がその映像を得る。**
+
+404 Media が、Flock ナンバー プレート リーダー検索を違憲の令状なき捜索と認定した Sara Hill 判事の判決（10-05、本ファイル）の背にある交通停止のボディカムとダッシュカム映像を公開（読者が裁判所書記から購入）：Tulsa 郡の Freddie Alaniz 保安官代理が**60 mph で走行しながら**ドライバーのプレートを **Flock と Motorola の Vigilant** に通し、その後に停止——そして**30 日間に 6 州へ及ぶ移動を記録した 79 件のカメラ ヒット**をスクロールしながら尋問し、普通のロードトリップ行動を疑義として扱う。記録によれば彼女のレンタカーは**5 日間で 11 機関に 50 回以上**スキャンされていた。91 ポンドのメタンフェタミンが見つかったにもかかわらず、Hill 判事は毒樹の果実としてすべてを押収：この捜索は「彼女の身体の移動の全体に対する合理的なプライバシー期待を侵害した」。ワイデン上院議員は連邦ナンバー プレート プログラムに説明を求めている。前日の MapQuest 項目は Flock のカメラ網が消費者向け地図レイヤとして描かれていることを見せた；こちらは法の制度が同じインフラを網状監視として価格付けした場面。集約システムを構築する者への設計教訓は押収の中にある：**データ共有のデフォルト（5 日で 11 機関）こそが、一人の保安官代理の直感を違憲捜索へ——そして起訴の崩壊へ——変えた。**
+
+Sources: [404 Media](https://www.404media.co/watch-footage-of-the-flock-search-a-judge-ruled-unconstitutional/) · [HN](https://news.ycombinator.com/item?id=50147455)

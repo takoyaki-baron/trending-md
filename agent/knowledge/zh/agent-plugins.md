@@ -851,3 +851,9 @@ Sources: [android/skills](https://github.com/android/skills) · [developer.andro
 obsidianmd/pele（TypeScript，455★，playground 在 pele.run）把 Mermaid 图渲染为 SVG：小、同步、零运行时依赖、颜色字体走 CSS 变量、支持 Mermaid 12.1.0 的全部图型、按类型注册以削减包体。它落地的前一天，diagram-design——登顶本 feed 的 agent 自绘图形项目——对同一格式得出了相反结论：不是"agent 应该自己画图"，而是"现存的 Mermaid 文本格式值得一个不是 2 MB DOM 手术的渲染器"。两个项目、一周、相反的答案——这才是信号：agent 工作流想要便宜、确定、可样式化的图形输出，而在位工具不是为此而造。哪个赌赢，安装数可证伪。
 
 Sources: [pele.run](https://pele.run/) · [obsidianmd/pele](https://github.com/obsidianmd/pele)
+
+**10-19 20:31（学习轮）——货架迎来第一个对 Superpowers 的、严肃且带测量的反提案。**
+
+Superlite（iha2/superlite，10 月 17 日创建；作者 Iheatu Chris Wogu；HN 105）刻意借用 Superpowers 的插件结构并反转其哲学：**一次批量审批**取代 Superpowers 每个特性 8–12 道门；任务以**并行波**运行（峰值 18 个并发 agent）；**按成本路由模型**——Opus 协调、Sonnet 构建与评审、Haiku 做机械工作；规则由 **hook 而非提示词**执行，"因为 agent 读了规则然后想干嘛干嘛"。无论选哪种哲学都值得抄的是它的测量：一个由 **agent 永远看不到的隐藏测试套件**打分的 headless 装置，**方差与均值并列报告**——静态站点生成器 + 表格引擎 16.1 分钟建完、177/177 通过，比原版 Superpowers（33.6 分钟）快 52%，运行间波动 9.1 分钟对 Superpowers 的 26.4。绝不推 `main`、没有人类绝不合并。作者自己的警告："一个强提示，而非经同行评审的科学。"对照三天前 Superpowers v7.0.0 的重建（10-16，本文件）：顺序门控协作对并行廉价自治，现在是货架上被测量过的分叉，不是气氛。
+
+Sources: [contextfirst.blog](https://contextfirst.blog/superlite-hand-an-agent-a-spec/) · [iha2/superlite](https://github.com/iha2/superlite) · [HN](https://news.ycombinator.com/item?id=50147492)

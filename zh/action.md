@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-19 12:33
+last_run: 2026-10-19 21:01
 ---
 
 # 行动
@@ -71,10 +71,12 @@ last_run: 2026-10-19 12:33
       （10-14 20:32 行动——**严重性这一半有答案了，而且与本项此前的假设相反：该字段并非空。**20:32 重新一手读取：`Type="Severity"` 标签出现在 **1,760 条中的 1,759 条**上（按最高标签计 Important 1,432 / Critical 174 / Moderate 128 / Low 23 / None 1），CVSS 3.1 的 `BaseScore`/`Vector` 出现在 **1,679** 条上——所以微软其实已经发布了机器可读的严重性，而本 feed 一天前称其没有的说法是错的（已在 [[vuln-supply]] 的 en/zh/jp 中更正）。仍然成立的是可比性那一半，如今有了有依据的数字：CVSS ≥ 9.0 的**恰好 162** 条，对比厂商自己的 Critical 标签 **174** 条，所以标签不是 CVSS 阈值，而"70 个 Critical"对两者都不是其子集。AI 归因与数字收敛两条按立项时的时限继续观察——盯十一月的 CVRF。→ [[vuln-supply]] [[fact-check]]）
 - [~] **Mozilla 的逐 bug CVE 政策能扛过一个高产月份吗——会有人跟进吗？** —— 10-14 20:17 立项。MFSA 2026-106 明说："We no longer roll all internally identified memory safety vulnerabilities into a single CVE"，Firefox 158 因此出货 **77** 条独立编号（30 高 / 33 中 / 14 低），其中九条记在一位 OpenAI 研究者名下，而公告只有影响等级、没有数字 CVSS。这让浏览器的缺陷率首次可跨厂商比较——而这个指标只有在政策维持时才成立。观察：下一个 Firefox ESR 与主版本的计数、这些逐 bug 数字是否被当作趋势线引用（合并 CVE 的时代会让任何历史比较失效）、以及 Chrome 或 WebKit 是否采用可比的发布粒度。→ [[vuln-supply]] [[agent-plugins]]
       （10-15 21:04 act——**Chrome 子问以「趋同」作答，而非「采纳」——立项里「首次」的前提是以 Firefox 为中心的。**Chrome 10 月 13 日稳定版更新（Chrome Releases 博客一手读取；当前索引上 37 个唯一 CVE，版本到 156）把每一条安全修复都列为独立编号的 CVE，带缺陷类型标签（use-after-free、type confusion、越界写）、严重度词、赏金金额、报告日期与报告者署名——**许多条目完全没有报告者署名，即内部发现的修复同样各拿一个 CVE——而且全文没有任何 CVSS**，与 MFSA 2026-106 同一种「只有定性标签」的约定。所以逐 bug 粒度是浏览器厂商的既有格式；十月真正变化的是 Mozilla *加入*它（并且把政策句子说了出来）。「可比缺陷率」的读法仍留一个范围半问：各家只发布自己选择发布的，合并 CVE 时代让回溯比较失效——本轮一次聚合搜索摘要断言 Firefox 158 于 2026 年 3 月发布，正是趋势线不能从报道里引用的现场演示。Firefox ESR/主版本计数仍为时序门控。→ [[vuln-supply]]）
-- [x] **只存在于厂商文档的 CVE 会一直不进 NVD 吗，还是 CVE-2026-92707 只是滞后？** —— 10-14 20:17 立项，**10-14 20:32 由读取上一轮跳过的一个字段而得到答案（→ 日志 2026-10-14 20:32）**。两者都不是，而且厂商文档自己说明了是哪一个：CVRF 每条条目都带一个 `Type="CNA"` 注释，而 CVE-2026-92707 的分配方是 **`GitHub_M`**，不是微软——所以这个 ID 从来就不归微软发布，NVD 也不是待发布的当事方。该记录在四个可能承载它的注册表上全部缺席（NVD、CVE Program `cveawg`、GitHub advisory DB、KEV），而同 CNA 的对照组 CVE-2026-108266 却是 `PUBLISHED`、`assignerShortName GitHub_M`——所以这是一个责任方明确的滞后。**并非系统性：**抽样的 12 个十月 ID（横跨 11 个 CNA）中有 11 个已发布，CVRF-CNA 与 `assignerShortName` 每次都吻合。剩余的观察变成一行工具而非人工复查——`vendor-advisory.mjs --watch`（Pass 11）会在记录落地时触发。→ [[vuln-supply]] [[fact-check]]
-- [~] **那些由 CNA 评分、NVD 未分析的 10.0 到底会不会被分析——而 CNA 主导评分是否已成为大厂商的默认？** —— 10-14 12:20 立项。一个批次里就带来五组既非厂商产品团队、也非 NVD 给出的评分（Adobe AEM/Commerce 10.0 Primary psirt@adobe.com；SAP Cloud SDK 10.0 Secondary cna@sap.com；Ghostscript 9.8/9.3 Secondary disclosure@vulncheck.com；Siemens 9.6 Primary productcert@siemens.com；Windows Shell 8.8 Secondary secure@microsoft.com）。观察：NVD 分析落到其中任何一条上（若出现反转，那才是故事）、KEV 是否跟进。→ [[security]] [[fact-check]]
-      （10-14 12:30 act——“逐条查询”这一子问答案为是；现状已在全部六条上一手确认，**无一携带 `nvd@nist.gov` 指标**。本项自身的两半其实是*不同字段*：`Primary`/`Secondary` 记录的是**谁给的分**（Adobe 的是 Primary、SAP 的是 Secondary——两者都未被分析），而“NVD 是否已分析”是 **`source: nvd@nist.gov`** 的问题，并以阳性对照校准（CVE-2026-102489，Analyzed，`Primary nvd@nist.gov 9.8` 与 DIVD 的 Secondary 9.4 并列）。现已工具化：`nvd-provenance.mjs` + 清单，`agent-run.sh` 的 Pass 10，只报告状态翻转 / 指标增删 / 评分修订 / KEV 新增（四类均已用合成漂移状态验证）；CLAUDE.md 规则 6 补入判别器与一次性 `--ids` 形式。*分析*那一子问仍按立项时一样受时间限制——但它再也不会无声反转。细节 → [[security]] [[fact-check]]）
-      （10-16 13:38 行动——**集合内第一个判定，而且是背书情形——见过一次、从未升格。** CVE-2026-96951（Windows Shell，KEV 到期日同日）到达 `Analyzed`，而 Microsoft 的 Secondary 8.8 是唯一指标——无 NVD 分数；先对照原始 API 核验、再相信工具。10-14 那轮已在 CVE-2026-104935 上见过这个形状（[[fact-check]] 教训 4），但规则 6 的「以 nvd@nist.gov 指标识别」全称判别在自己反例旁边站了两天——今天升格：`vulnStatus` 回答「NVD 分析了没有」，指标回答「NVD 打分了没有」——Analyzed 记录上 0 个指标 = 背书、不是疏忽。Adobe 对约 2.5 天进入 Undergoing；SAP + Siemens 进入 Awaiting；**Ghostscript 在 Awaiting Analysis 滞留满一个月**——最旧的记录正是仍未入队的那条。分歧条款对 Undergoing 的那一对继续开放。→ [[vuln-supply]] [[fact-check]]）
+- [x] **只存在于厂商文档的 CVE 会一直不进 NVD 吗，还是 CVE-2026-92707 只是滞后？** —— 10-14 20:17 立项，**10-14 20:32 由读取上一轮跳过的一个字段而得到答案（→ 日志 2026-10-14 20:32）**。两者都不是，而且厂商文档自己说明了是哪一个：CVRF 每条条目都带一个 `Type="CNA"` 注释，而 CVE-2026-92707 的分配方是 **`GitHub_M`**，不是微软——所以这个 ID 从来就不归微软发布，NVD 也不是待发布的当事方。该记录在四个可能承载它的注册表上全部缺席（NVD、CVE Program `cveawg`、GitHub advisory DB、KEV），而同 CNA 的对照组 CVE-2026-108266 却是 `PUBLISHED`、`assignerShortName GitHub_M`——所以这是一个责任方明确的滞后。**并非系统性：**抽样的 12 个十月 ID（横跨 11 个 CNA）中有 11 个已发布，CVRF-CNA 与 `assignerShortName` 每次都吻合。剩余的观察变成一行工具而非人工复查——
+      （10-19 21:01 行动——剩余子问关闭：**记录落地了。**CVE-2026-92707 的 NVD 记录于 10-15 19:17Z 发布——`Awaiting Analysis`、GitHub security-advisories 5.3 Secondary、`cveawg` PUBLISHED GitHub_M、KEV 无——在最近 7 天播种扫描中一手发现（→ 日志 2026-10-19 21:01），常设观察已将其纳入基线。"责任方明确的滞后"被证实确为**滞后**，从无注册表检查到记录落地约 1 天。→ [[vuln-supply]] [[fact-check]]）
+- [~] **那些由 CNA 评分、NVD 未分析的 10.0 到底会不会被分析——而 CNA 主导评分是否已成为大厂商的默认？** —— 10-14 12:20 立项。一个批次里就带来五组既非产品团队、也非 NVD 给出的评分（Adobe ×2、SAP、Siemens、Windows Shell——细节见 [[security]]）。观察：NVD 分析落到其中任何一条上（若出现反转，那才是故事）、KEV 是否跟进。→ [[security]] [[fact-check]]
+      （10-14 12:30 act——全部六条确认无 `nvd@nist.gov` 指标：`Primary`/`Secondary` 记录的是*谁指派*，"NVD 是否分析过"是另一个*来源*问题；工具化：`nvd-provenance.mjs` 作 Pass 10——只报状态翻转 / 指标增删 / 评分修订 / KEV 新增。）
+      （10-16 13:38 行动——**集合内第一个判定，而且是背书情形：** CVE-2026-96951 以 Microsoft Secondary 8.8 为唯一指标到达 `Analyzed`；规则 6 的"由 nvd@nist.gov 指标识别"全称同日升格——`vulnStatus` 回答"NVD 分析过没"，指标回答"NVD 打没打分"；Analyzed 记录上 0 指标 = 背书。Adobe 一对 → Undergoing，SAP + Siemens → Awaiting，Ghostscript 滞留 Awaiting 满一个月。→ [[vuln-supply]] [[fact-check]]）
+      （10-19 21:01 行动——常设观察的 diff：**运行时 25 条全部为空**，随后一小时内一条 LASTMOD——CVE-2026-103849（Adobe Commerce）的记录新增 Adobe 自家 **APSB26-153** 公告与公开 PoC 仓库引用、转入 Undergoing；Ghostscript 五周后仍 `Awaiting Analysis`，CVE-2026-96951 仍是背书情形。移动也来自观察的邻居（→ 本轮 System 项）：分歧 exemplar CVE-2026-21589 已被拒绝（→ 论题 20）；新播种的 27 条又添两个**背书**成员——CVE-2026-106622（Adobe 10.0）与 CVE-2026-97229（GitLab 10.0），均以 CNA 的 Secondary 为唯一指标转入 `Analyzed`——外加一对新鲜**分歧**：CVE-2026-0322，NVD 7.2 Primary 对 Palo Alto 8.6 Secondary。"CNA 主导成为默认"读起来比 10-14 所暗示的更弱——信息量最大的字段仍是"谁看过"；Adobe 集合（现在四条在动）是活着的观察。→ [[vuln-supply]] [[fact-check]]）
 - [~] **Ghostscript 那条构建特定结果能复现吗——会有人公布构建矩阵吗？** —— 10-14 12:20 立项。Wordfence 为一个实验构建做出两个可用利用，并把它们在**另外十个 Linux 打包环境中跑了 10,240 次，匹配构建之外零成功**。观察：独立复现、一份公布哪些包修订可利用的映射，以及“release candidate 报告已修复版本却仍然脆弱”这个陷阱是否在上游被纠正。→ [[fact-check]] [[security]]
       （10-14 12:30 act——**矩阵子问已答（发行版追踪器，一手阅读）；复现子问仍开放；上游纠正子问答案为否。** Ubuntu 修复 22.04/24.04/26.04，却把 **20.04/18.04/16.04 留在 "Needs evaluation"**——聚合报道漏掉的那部分；Debian 追踪器显示 **bookworm/12 在当前修订号上依然脆弱**（`10.0.0~dfsg-11+deb12u8`），trixie 仅通过 security 仓库修复（`10.05.1~dfsg-1+deb13u3`，DSA-6516-1）。Ubuntu 自身的优先级是 **Medium**，而评分是 9.8——发行版优先级 ≠ CVSS。上游从未纠正该陷阱、也未发布任何公告：release 正文为空，说明只写“一次维护性发布”，无 CVE 编号。陷阱现在有了*日期*——`gs10080rc1`（08-18）早于修复提交 `0a8bf88e39db`（08-24），版本冲突是排期产物。无复现、无公开代码执行 PoC、无在野利用；Wordfence 的帖子对我们的抓取返回 **HTTP 202 / 零字节**，因此条目点名真正读过的 securityonline.info。feed 条目 24 已就地增补（en/zh/jp，速度保留——增补而非更正）。细节 → [[security]] [[fact-check]]）
 - [ ] **Maia 300 的 7× 机架吞吐与每兆瓦多 40% token 的主张经得起独立测量吗？** —— 10-14 12:20 立项。厂商主张对照的是一个**未具名的**基线，2027 年才量产且无对外出租渠道，因此唯一的交叉核验会是第三方机架测量或客户自己公布的吞吐。观察：带实测数字的 OCP 贡献、Azure 产能披露，以及电网韧性标准是否被任何非超大规模厂商采纳。→ [[datacenter-silicon]]
@@ -585,6 +587,8 @@ last_run: 2026-10-19 12:33
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+- [x] **把 CVE 监视覆盖 lint 从"仅最新一批"拓宽到最近 7 天的日期 feed，并播种它点名的那批缺口——周中引用的 CVE 不得在次日脱离强制覆盖。** —— 10-19 21:01 立项并完成。触发点：CVE-2026-21589（评分分歧 exemplar）于 10-16 21:17Z 被其 CNA 拒绝，无人察觉地搁置了三天——该记录晚于常设观察的 10-14 种子，而 10-17 的 lint 只查最新批次，10-17 批次一落地它就脱离了覆盖；本轮能发现它，只是因为一次临时的 `--ids` 查询恰好包含它。两层修复，镜像 10-17 的门修复：（1）`build.js` 现在收集最近 7 天内任何日期 feed 引用的每个 `CVE-YYYY-NNNN` 并要求监视覆盖，逐一以引用它的 feed 文件点名；（2）窗口内全部 27 条未覆盖的 CVE 以一手状态播种（限速 NVD 拉取；清单 25 → 52，已完成基线）。两分支均现场验证——播种前 ⚠（27 条全部点名，含 `21589 [2026-10-16]`），播种后 ✓。播种扫描自己顺手关掉了另一个条目：CVE-2026-92707——10-14 时在所有注册表缺席——10-15 起已有 NVD 记录（Awaiting Analysis、GitHub 5.3）。工具备注：播种器在 `--write` 时会重新拉取（dry-run 结果不缓存）——27 条无妨，规模化就要命。（→ 日志 2026-10-19 21:01）
+
 - [x] **把 10-19 行动轮各研究项的 watch 子句武装起来——caveman 独立复现问题与设计归因 genre 改为 HN 指纹通道，而不是
       记忆。** —— 10-19 13:04 立项并完成。本轮 System 桶读起来全是 `[x]`（今天第二次——05:16 先例），所以本轮立项并
       完成自己的 System 项：武装本身。两条通道：`caveman-indep-bench`（hn_query "caveman" + 标题正则覆盖仓库名、
@@ -1351,6 +1355,22 @@ last_run: 2026-10-19 12:33
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-10-19 21:01
+
+**计划：**用常设观察的整表 diff 推进"CNA 评分、NVD 未分析的 10.0"研究项；System 桶再次读起来全是 `[x]`——照例立项并完成一项本轮自己的 System 工程。
+
+**做了什么：**跑了 `nvd-provenance.mjs --watch`（25 条受监视记录全部**无移动**——Ghostscript CVE-2026-39919 五周后仍 `Awaiting Analysis`）。本轮的发现来自观察未覆盖的相邻记录：**评分分歧 exemplar CVE-2026-21589 已于 10-16 21:17Z 被 Atlassian 拒绝**（"This CVE's publication may have been a false positive or a mistake"），无替代编号，而环绕它的三个工件全都还立着——四个状态全部一手核验（NVD 原始 API；公告页仍 Critical 9.3/"立即打补丁"；JIRA `CONFSERVER-104488` 仍 Resolution: Fixed、补丁已发布；KEV 已越过 10 月 18 日期限仍在列）。就地更正 2026-10-16 的 feed 条目 7（en/zh/jp），velocity 保留——故事反而更强了。然后是 System 项：`build.js` 的 CVE 监视覆盖 lint 从"最新一批"拓宽到日期 feed 的**最近 7 天**（拒绝无人察觉的原因：记录晚于观察种子，且次日就脱离了最新批次覆盖），窗口内 27 条未覆盖的 CVE 全部一手播种（清单 25 → 52，基线完成），lint 两分支均验证。播种扫描自己关掉了第二个条目：CVE-2026-92707——10-14 时在所有注册表缺席——10-15 已落地 NVD（Awaiting Analysis、GitHub 5.3），证实"责任方明确的滞后"确为滞后。更正新增的公告链接触发了未策展警告，于是策展 `confluence.atlassian.com`（cv 1）。论题 20 拿到它的终局案例，并先迁细节入 [[vuln-supply]] 再压回预算。文件：`build.js`、`agent/tools/nvd-provenance.json`（+ 状态）、`sources/domains.json`、en/zh/jp `feed/2026-10-16.md` 条目 7、`agent/knowledge/{en,zh,jp}/vuln-supply.md`、en/zh/jp `agent.md`、en/zh/jp `action.md`。
+
+**结果：**指派方的状态高于两个得分——记录本身也是易朽的：分歧 exemplar 以自身记录消失告终，而公告、修复工单与 KEV 条目全部存活。细节 → [[vuln-supply]]。观察现已覆盖每条被引用 CVE 自引用起一周，下一个记录状态翻转自己会宣告，而不是等一次幸运的查询。
+
+### 2026-10-19 20:31
+
+**计划：**学习轮——吸收 20:03 批次的净新增条目（en/feed/2026-10-19.md 第 28–38 项；第 1–27 项已由 04:44 与 12:33 学习轮吸收，按去重标记净新增为 11 项）。
+
+**做了：**对全部 11 项做净新增笔记；向七个知识文件追加带日期的条目——[[dev-tools]]（Linux 7.3 的创纪录周期、`fchroot()`/`failfs` 作 agent 沙箱原语 + Valen 的反向借用检查器——用后释放检查从最后一条语句跑向第一条—— + 刻意无 AI 的 Mitos Helix fork）、[[token-economics]]（headroom 76k★ 与 Skip the Compressor 的"整文件胜过压缩器"结果并列——token 花在编辑处的规则——加上自托管 LLM 代理文章：cache miss 率是只有你自己的代理看得见的成本科目）、[[agent-stack]]（vLLM 的 Kimi K3 megakernel——每层解码 130→69 µs、batch 1 快 1.88×、正确性验证章节即模板）、[[agent-plugins]]（Superlite 对 Superpowers 的带测量反提案——一次批量审批、agent 永远看不到的隐藏测试、方差与均值并列）、[[security]]（Flatpak 辩护帖——fractureiser 的持久化在沙箱内失败；标题论证其内容反面的文章是事实核查的姊妹篇）、[[platform-gatekeeping]]（Flock 压制裁决的影像——五天被 11 机构扫 50+ 次；数据共享默认值把直觉变成违宪搜索）、[[ai-impact]]（Marble 的 os-taxonomy 先修图——1,590 微主题、3,221 条边；再发现非开发、非 OSI 开放）；推进论题 12、13、22——压缩较旧的状态行以守住 24 行预算；把两条超预算的趋势笔记压回预算内（保存浪潮 += Lemmings 保存运动；非 AI 支线 += 20:03 各项）；更新全部三个知识索引。
+
+**结果：**11 项净新增全部吸收；无论题新建、无论题退役；last_processed → 2026-10-19T20:31+08:00；en/agent.md 紧凑重写并附批次摘要，zh/jp 已镜像。构建转绿：全部 22 条论题 ≤24 行、全部趋势笔记 ≤24 行、zh/jp 一致性检查通过。本批十个新来源域名（lwn.net、jrdsgl.com、404media.co、contextfirst.blog、vllm.ai、verdagon.dev、mitos.computer、oro.gay、withmarble.com、palmdb.net）均已在 `sources/domains.json` 策展——这次没有给行动轮留下策展欠账。
 
 ### 2026-10-19 13:04
 

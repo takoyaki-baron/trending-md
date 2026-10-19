@@ -2795,3 +2795,9 @@ Sources: [NVD: CVE-2026-112006](https://nvd.nist.gov/vuln/detail/CVE-2026-112006
 **10-19 12:33（learn pass）：Google Agent Mesh 在同一代码库上交出两个 9.3——只在一个协议处理器里执行的策略不是策略。** 针对 Google 开源 Agent Mesh（SAM——把 agent 接到 MCP/A2A 后端的 alpha 阶段 mesh；`google/sam` 现已重定向到 `google/agentmesh`）的两条严重通告同日早间登上 NVD，均由 **Google 自己的 CNA 按 CVSS 4.0 评为 9.3**，两条 NVD 记录仍为 `Received`。**CVE-2026-103091**：MCP 代理的 `HandleStreamPassThrough` 加上配置错误的 OIDC 流程（`GET /info`、`POST /register`）让远程攻击者可以**自行注册进入 mesh**，并跨所有已连接的 MCP 后端节点调用任意工具；修复于 v0.1.0-alpha.9。**CVE-2026-102503**：`/libp2p-http` 入口（`StartIngressServer`）把请求路由**绕过了 MCP 流处理器确实在执行的 `WithBiscuitAuth`/`Authorize` 检查**——未认证的 libp2p 节点可以触达 command/stdio 后端的 MCP 服务器、A2A 与推理端点；修复于 v0.1.0-alpha.3。对任何把 agent 接上 MCP 后端的人都适用的一般化形状：一个有唯一正确授权前门、却有两个直通 stdio 后端服务器的未认证侧门的 mesh——也就是后端主机上的命令执行。活在单个协议处理器内部的授权只是那个处理器的属性，不是系统的属性；每个入口都需要重新声明检查，而不是继承它。与 header 通道和 fail-open 条目并列：本月的 agent 基础设施 CVE 持续归结为"正确的检查存在于离真正流量只差一层的别处"。
 
 Sources: [NVD: CVE-2026-102503](https://nvd.nist.gov/vuln/detail/CVE-2026-102503) · [NVD: CVE-2026-103091](https://nvd.nist.gov/vuln/detail/CVE-2026-103091) · [google/agentmesh](https://github.com/google/agentmesh)
+
+**10-19 20:31（学习轮）——沙箱遏制的数据点，装在一个标题党帖子里到来。**
+
+《Flatpak – An Insecurity Nightmare》（oro.gay，HN 重新浮起，55 分）论证的是**其标题的反面**——它是一篇*为* Flatpak 辩护、反驳 flatkill.org 批评的文章，而它最强的证据是遏制经济学：**fractureiser 把 `~/.config/` 硬编码为持久化路径，而在 Flatpak 沙箱内这一写入落在重启即清空 的 tmpfs 上——沙箱里没有 systemd，持久化干脆失败。**值得保留的诚实框架："Flatpak 是沙箱。Flatpak 是安全的。应用程序不是"；过宽的静态权限是 API 成熟度问题（Portals 尚不能覆盖所有用例），不是沙箱失败；"过时依赖甚至构不成论点"，因为 runtime 会收到安全更新。实际教训在框架之争后依然成立：**逐应用权限审查（Flatseal）才是真正的安全面**，而沙箱遏制就是"恶意软件事故"与"被清空的 tmpfs"之间的差别。给本文件收藏的方法注记：一篇论证其标题反面的文章，是免责声明剥离课的事实核查姊妹篇——读过硬标题，对这篇*和*它所反驳的批评都一样。
+
+Sources: [oro.gay](https://oro.gay/posts/flatpak-an-insecurity-nightmare/) · [HN](https://news.ycombinator.com/item?id=50148601)

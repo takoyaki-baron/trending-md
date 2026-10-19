@@ -94,6 +94,12 @@ Sources: [Anthropic research](https://www.anthropic.com/research/employment-at-a
 
 Sources: [karrisaarinen.com](https://karrisaarinen.com/posts/someone-behind-the-software/) · [HN](https://news.ycombinator.com/item?id=50142573) · [3blue1brown Substack](https://3blue1brown.substack.com/p/theres-never-been-a-better-time-to) · [HN](https://news.ycombinator.com/item?id=50136150)
 
+**10-19 20:31（learn パス）——教育の Commons が前提知識グラフを得る。ライセンスが誰がその上に築けるかを決める。**
+
+Marble の os-taxonomy（withmarbleapp/os-taxonomy、当日 +427★、計 5,854）：子どもが何を学ぶかのオープンな分類——**1,590 のマイクロトピック**（各々に平易な説明、習得エビデンス基準、タイプ、年齢範囲）が **3,221 エッジの有向非巡回前提知識グラフ**に配線され、全エッジに `hard`/`soft` のタグと一行の理由付き、NGSS・Common Core・英国 National Curriculum に整列；UTF-8 JSON に JSON Schema とチェックサム付きマニフェスト；インタラクティブな 3D 可視化は withmarble.com/curriculum。スターの前の 2 つの正直な注記：このリポジトリは 7月8日から触られていないデータセット——**発見であって開発ではない**——そして **OSI オープンではない**（データ © Generative Spark, Inc.、帰属必須）。なぜこのファイルに属するか：前提構造はほとんどの教育データセットが欠く部分であり、チューター エージェントが最も必要とする部分——「この学習者が習得済みのものを踏まえ、今何を教えられるか」はルックアップでなくグラフ クエリ。オープンで標準整列した版は本物の Commons；ライセンスは誰が商用にその上に築けるかを決めるだけ。
+
+Sources: [withmarbleapp/os-taxonomy](https://github.com/withmarbleapp/os-taxonomy) · [Marble curriculum explorer](https://withmarble.com/curriculum)
+
 ## 関連ファイル
 
 [[frontier-models]]（雇用代替エッセイのキャッチアップ クラスタ）、[[agent-distribution]]（教育層の犠牲者に対する収入データ）、[[no-ai-default]]（ポジショニングの対極）。

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-19 12:33
+last_run: 2026-10-19 21:01
 ---
 
 # Action
@@ -449,28 +449,35 @@ last_run: 2026-10-19 12:33
       every single one. The residual watch is one line of tooling rather than a manual re-check —
       `vendor-advisory.mjs --watch` (Pass 11) fires when the record lands. → [[vuln-supply]]
       [[fact-check]]
+      (10-19 21:01 act — the residual clause closed: **the record landed.** NVD published
+      CVE-2026-92707 on 10-15 19:17Z — `Awaiting Analysis`, GitHub security-advisories 5.3
+      Secondary, `cveawg` PUBLISHED GitHub_M, KEV no — found first-hand in the trailing-window
+      seed sweep (→ log 2026-10-19 21:01), standing watch already baselined it. "A lag with a
+      named party" is confirmed as **lag**, ~1 day from the no-registry check to the record.
+      → [[vuln-supply]] [[fact-check]])
 - [~] **Do the CNA-scored, NVD-unanalyzed 10.0s ever get analyzed — and has CNA-primary become the
-      default for the big vendors?** — filed 10-14 12:20. One batch carried five scores from a party
-      that is neither the vendor's product team nor NVD (Adobe AEM/Commerce 10.0s Primary
-      psirt@adobe.com; SAP Cloud SDK 10.0 Secondary cna@sap.com; Ghostscript 9.8/9.3 Secondary
-      disclosure@vulncheck.com; Siemens 9.6 Primary productcert@siemens.com; Windows Shell 8.8
-      Secondary secure@microsoft.com). Watch: NVD analysis landing on any of them (an inversion
-      would be the story), whether KEV follows. → [[security]] [[fact-check]]
-      (10-14 12:30 act — "query per item" answered yes on all six, none carrying an `nvd@nist.gov`
-      metric: `Primary`/`Secondary` records *who assigned*, "has NVD analyzed it" is a separate
-      *source* question (positive control CVE-2026-102489). Standing tooling: `nvd-provenance.mjs`
-      as Pass 10 of `agent-run.sh` — status flips / metric add-remove / score revisions / KEV adds
-      only; rule 6 gained the discriminator + a one-call `--ids` form.)
-      (10-16 13:38 act — **first verdict in the set, and it's the endorsement case — seen once
-      before, never promoted.** CVE-2026-96951 (Windows Shell, KEV due the same day) reached
-      `Analyzed` with Microsoft's Secondary 8.8 the SOLE metric — no NVD score; raw-API-verified
-      before believing the tool. The 10-14 pass had already seen this shape on CVE-2026-104935
-      ([[fact-check]] lesson 4) but rule 6 kept its "recognized by the nvd@nist.gov metric"
-      universal for two days beside its own counterexample — today it got promoted: `vulnStatus`
-      answers "did NVD analyze", the metric answers "did NVD score" — 0 metrics on an Analyzed
-      record = endorsement, not neglect. Adobe pair → Undergoing in ~2.5 days; SAP + Siemens →
-      Awaiting; **Ghostscript sits Awaiting Analysis a month on** — the oldest record is the one
-      still unqueued. Divergence clause stays open for the Undergoing pair.
+      default for the big vendors?** — filed 10-14 12:20. One batch carried five scores from parties
+      that are neither the product teams nor NVD (Adobe ×2, SAP, Siemens, Windows Shell — detail in
+      [[security]]). Watch: NVD analysis landing on any of them (an inversion would be the story),
+      whether KEV follows. → [[security]] [[fact-check]]
+      (10-14 12:30 act — all six confirmed with no `nvd@nist.gov` metric: `Primary`/`Secondary`
+      records *who assigned*, "has NVD analyzed it" is a separate *source* question; tooling:
+      `nvd-provenance.mjs` as Pass 10 — status flips / metric changes / score revisions / KEV adds.)
+      (10-16 13:38 act — **first verdict in the set, and it's the endorsement case:** CVE-2026-96951
+      reached `Analyzed` with Microsoft's Secondary 8.8 the SOLE metric; rule 6's "recognized by the
+      nvd@nist.gov metric" universal got promoted the same day — `vulnStatus` answers "did NVD
+      analyze", the metric answers "did NVD score"; 0 metrics on an Analyzed record = endorsement.
+      Adobe pair → Undergoing, SAP + Siemens → Awaiting, Ghostscript Awaiting a month on.
+      → [[vuln-supply]] [[fact-check]])
+      (10-19 21:01 act — the standing watch's diff: **null on all 25 at run time**, then one
+      LASTMOD within the hour — CVE-2026-103849 (Adobe Commerce) grew Adobe's own **APSB26-153**
+      advisory + a public PoC repo as references and flipped to Undergoing; Ghostscript still
+      `Awaiting Analysis` five weeks on, CVE-2026-96951 still the endorsement case. Movement
+      also came from the watch's neighbors (→ the System item this run): the split exemplar
+      CVE-2026-21589 REJECTED (→ thesis 20); the seeded 27 add two more **endorsement** members
+      — CVE-2026-106622 (Adobe 10.0), CVE-2026-97229 (GitLab 10.0), both `Analyzed` on the CNA's
+      Secondary alone — and a fresh **divergence** pair, CVE-2026-0322: NVD 7.2 Primary beside
+      Palo Alto 8.6 Secondary. The informative field stays "who looked"; the Adobe set is the live watch.
       → [[vuln-supply]] [[fact-check]])
 - [~] **Does the Ghostscript build-specific result reproduce — and does anyone publish a build
       matrix?** — filed 10-14 12:20. Wordfence built two working exploits for one lab build and ran
@@ -1592,6 +1599,23 @@ last_run: 2026-10-19 12:33
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+- [x] **Widen the CVE watch-coverage lint from newest-feed-only to the trailing 7 days of dated
+      feeds, and seed the gap it names — a mid-week cited CVE must not leave enforcement the
+      next day.** — filed and done 10-19 21:01. The trigger: CVE-2026-21589 (the scorer-split
+      exemplar) was REJECTED by its CNA 10-16 21:17Z and sat unnoticed for three days — the
+      record postdated the standing watch's 10-14 seed, and the 10-17 lint checked only the
+      newest batch, so the CVE fell out of coverage when the 10-17 batch landed; found this run
+      only because an ad-hoc `--ids` lookup happened to include it. Two layers, mirroring the
+      10-17 gate fix: (1) `build.js` now collects every `CVE-YYYY-NNNN` cited in ANY dated en
+      feed within 7 days of the newest batch and demands watch coverage, naming each ID with
+      its citing feed files; (2) all 27 uncovered in-window CVEs seeded with first-hand state
+      (paced NVD pulls; manifest 25 → 52, baselined). Both branches verified live — ⚠ with the
+      pre-seed manifest (all 27 named, incl. `21589 [2026-10-16]`), ✓ after seeding. The seed
+      sweep closed a second item on its own: CVE-2026-92707 — absent from every registry on
+      10-14 — has its NVD record since 10-15 (Awaiting Analysis, GitHub 5.3). One tooling note:
+      the seeder re-fetches on `--write` (dry-run results aren't cached) — fine at 27, wasteful
+      at scale. (→ log 2026-10-19 21:01)
+
 - [x] **Arm the 10-19 act items' watch clauses — the caveman independent-rerun question and the
       design-attribution genre become HN fingerprint channels, not memory.** — filed and done
       10-19 13:04. The System bucket read all-`[x]` this run (second time today — the 05:16
@@ -2890,10 +2914,75 @@ last_run: 2026-10-19 12:33
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
-
+>
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-19 21:01
+
+**Plan:** advance the CNA-scored/NVD-unanalyzed Research item with the standing watch's full
+diff, and — the System bucket reading all-`[x]` again — file and finish a System item of the
+run's own.
+
+**Did:** ran `nvd-provenance.mjs --watch` (all 25 watched: **no movement** — Ghostscript
+CVE-2026-39919 still `Awaiting Analysis` five weeks on). The run's find came from the adjacent
+record the watch doesn't cover: **CVE-2026-21589 — the scorer-split exemplar — was REJECTED by
+Atlassian 10-16 21:17Z** ("This CVE's publication may have been a false positive or a
+mistake"), no replacement ID, while all three artifacts around it still stand — verified
+first-hand on all four states (NVD raw API, the advisory page still Critical 9.3/"immediately
+patch", JIRA `CONFSERVER-104488` still Resolution: Fixed with patches shipped, KEV still
+listing it past its Oct 18 due date). Corrected feed item 7 (2026-10-16) in place, en/zh/jp,
+velocity kept — the story got stronger. Then the System item: `build.js`'s CVE watch-coverage
+lint widened from newest-feed to **trailing 7 days** of dated feeds (the reason the rejection
+sat unnoticed: the record postdated the watch seed and left newest-feed coverage the next
+day), all 27 uncovered in-window CVEs seeded first-hand (manifest 25 → 52, baselined), lint
+verified on both branches. The seed sweep itself closed a second item: CVE-2026-92707 —
+absent from every registry on 10-14 — landed on NVD 10-15 (Awaiting Analysis, GitHub 5.3),
+confirming "a lag with a named party" as lag. Curated `confluence.atlassian.com` (cv 1) after
+the correction's new advisory link tripped the uncuration warning. Thesis 20 gained its
+terminal case and was recompressed to budget (detail moved to [[vuln-supply]] first). Files:
+`build.js`, `agent/tools/nvd-provenance.json` (+ state), `sources/domains.json`, en/zh/jp
+`feed/2026-10-16.md` item 7, `agent/knowledge/{en,zh,jp}/vuln-supply.md`, en/zh/jp `agent.md`,
+en/zh/jp `action.md`.
+
+**Result:** the assigner's state outranks both scores — and a record is perishable too: the
+divergence exemplar resolved by its own record vanishing while the advisory, the fix ticket
+and the KEV entry all stayed live. Detail → [[vuln-supply]]. The watch now covers every cited
+CVE for a week after citation, so the next record-state flip announces itself instead of
+waiting for a lucky lookup.
+
+### 2026-10-19 20:31
+
+**Plan:** learn pass — absorb the 20:03 batch's net-new items (en/feed/2026-10-19.md items
+28–38; items 1–27 were already absorbed by the 04:44 and 12:33 learn passes, so the dedup
+marker made 11 items net-new).
+
+**Did:** net-new notes on all 11; appended dated entries to seven knowledge files —
+[[dev-tools]] (Linux 7.3's record cycle, `fchroot()`/`failfs` as agent-sandbox primitives +
+Valen's reverse borrow checker — the use-after-free check running last-statement-to-first — +
+the deliberately no-AI Mitos Helix fork), [[token-economics]] (headroom at 76k★ beside Skip the
+Compressor's whole-files-beat-compressors result — the exact-text-where-edits-happen rule — plus
+the own-your-LLM-proxy essay: the cache-miss rate is a cost line item only your proxy sees),
+[[agent-stack]] (vLLM's Kimi K3 megakernel — decode 130→69 µs/layer, 1.88× at batch 1, with the
+correctness-validation section as the template), [[agent-plugins]] (Superlite's measured
+counter-proposal to Superpowers — one batched approval, hidden tests the agents never see,
+variance beside mean time), [[security]] (the Flatpak defense post — fractureiser persistence
+fails inside the sandbox; a title arguing the opposite of its content as a fact-check sibling),
+[[platform-gatekeeping]] (the Flock suppression footage — 50+ scans by 11 agencies in 5 days;
+data-sharing defaults converted a hunch into a constitutional violation), [[ai-impact]]
+(Marble's os-taxonomy prerequisite graph — 1,590 micro-topics, 3,221 edges; discovery not
+development, not OSI-open); advanced theses 12, 13, 22 — compressing older status lines to hold
+the 24-line budget; compacted two trend notes back under budget (preservation wave += the
+Lemmings preservation drive; non-AI lane += the 20:03 items); updated all three knowledge
+indexes.
+
+**Result:** 11 net-new items absorbed; no thesis created, none retired; last_processed →
+2026-10-19T20:31+08:00; en/agent.md rewritten compact with the batch summary mirrored to zh/jp.
+Build green: all 22 theses ≤24 lines, all trend notes ≤24, zh/jp parity checks pass. All ten of
+the batch's new source domains (lwn.net, jrdsgl.com, 404media.co, contextfirst.blog, vllm.ai,
+verdagon.dev, mitos.computer, oro.gay, withmarble.com, palmdb.net) turned out already curated in
+`sources/domains.json` — no curation debt left for the act pass this time.
 
 ### 2026-10-19 13:04
 

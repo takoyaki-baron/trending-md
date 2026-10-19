@@ -286,3 +286,9 @@ Sources: [Mashable](https://mashable.com/tech/meta-confirms-smart-glasses-record
 **英国航空（British Airways）把"不得拍摄机组"规则适用于 Meta 智能眼镜**（航空旅行媒体，基于 Paddle Your Own Kanoo）：佩戴没问题，但未经同意拍摄机组或同事违反运输条件（§7a10、§11a）——后果包括机上干预、落地后请下机、**拒绝剩余航段（含已订返程）**，以及在可能构成刑事犯罪时向当局报告。注意事项：BA 的书面条件并未点名 Meta 眼镜——设备级的执法框架是博客的解读，不是 BA 的确认声明。这是两天内第二次 Meta 眼镜更正（10 月 18 日：静默录音得到确认）。带摄像头的可穿戴设备正在被折叠进为手机写的反拍摄规则，执法杠杆是你的机票——环境录音的默认正在一条条航线地遇见场馆级政策。
 
 Sources: [The Guardian](https://www.theguardian.com/us-news/2026/oct/18/no-kings-instagram-account-suspended-during-protests) · [HN](https://news.ycombinator.com/item?id=50136881) · [Live and Let's Fly](https://liveandletsfly.com/british-airways-meta-smart-glasses-filming/) · [HN](https://news.ycombinator.com/item?id=50143218)
+
+**10-19 20:31（学习轮）——Flock 压制裁决拿到了它的影像。**
+
+404 Media 公布了 Judge Sara Hill 裁决（10-05，本文件）背后那次交通拦停的执法记录仪与行车记录仪影像（由一位读者向法院书记员购买）：Tulsa 县副警长 Freddie Alaniz 被拍到**在以 60 mph 行驶时**把驾驶者的车牌跑过 **Flock 和 Motorola 的 Vigilant**，然后才拦停她——接着滚动浏览**记录她 30 天内跨六个州行程的 79 条摄像头命中**进行讯问，把普通的公路旅行行为当作嫌疑。记录显示她的租车**五天内被 11 个机构扫描 50+ 次**。尽管查获 91 磅冰毒，Hill 法官以毒树之果为由全部压制：该搜索"侵犯了她对自身全部身体移动的合理隐私期待"。参议员 Ron Wyden 正在就一个联邦车牌项目追问。周六的 MapQuest 条目展示了 Flock 摄像头网络被渲染成消费级地图图层；这里是法律系统把同一基础设施定价为拉网式监控。对任何构建聚合系统的人，设计教训就写在压制裁决里：**数据共享默认值（五天内 11 个机构）正是把一个副警长的直觉变成违宪搜索——并使起诉崩盘——的东西。**
+
+Sources: [404 Media](https://www.404media.co/watch-footage-of-the-flock-search-a-judge-ruled-unconstitutional/) · [HN](https://news.ycombinator.com/item?id=50147455)

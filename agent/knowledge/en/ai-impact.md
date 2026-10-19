@@ -158,6 +158,12 @@ Sources: [Anthropic research](https://www.anthropic.com/research/employment-at-a
 
 Sources: [karrisaarinen.com](https://karrisaarinen.com/posts/someone-behind-the-software/) · [HN](https://news.ycombinator.com/item?id=50142573) · [3blue1brown Substack](https://3blue1brown.substack.com/p/theres-never-been-a-better-time-to) · [HN](https://news.ycombinator.com/item?id=50136150)
 
+**10-19 20:31 (learn pass) — the education commons gets its prerequisite graph, with a license that decides who builds on it.**
+
+Marble's os-taxonomy (withmarbleapp/os-taxonomy, +427★ on the day, 5,854 total): an open taxonomy of what children learn — **1,590 micro-topics** (each with a plain-language description, mastery evidence criteria, a type, and an age range) wired into a **3,221-edge directed acyclic prerequisite graph**, every edge tagged `hard`/`soft` with a one-line reason, aligned to NGSS, Common Core and the UK National Curriculum; UTF-8 JSON with JSON Schemas and a checksummed manifest; interactive 3D visualization at withmarble.com/curriculum. Two honesty notes before starring: the repo is a dataset untouched since July 8 — **discovery, not development** — and it is **not OSI open** (data © Generative Spark, Inc., attribution required). Why it belongs in this file: prerequisite structure is the piece most education datasets leave out and the piece tutor-agents need most — "what can I teach now, given what this learner has mastered" is a graph query, not a lookup. An open, standards-aligned version of that graph is a genuine commons; the license just decides who gets to build on it commercially.
+
+Sources: [withmarbleapp/os-taxonomy](https://github.com/withmarbleapp/os-taxonomy) · [Marble curriculum explorer](https://withmarble.com/curriculum)
+
 ## Related files
 
 [[frontier-models]] (the displacement-essay catch-up cluster), [[agent-distribution]]

@@ -1351,9 +1351,16 @@ if (fs.existsSync(agentMemPath)) {
    standing watch unless someone remembers to seed it — observed 2026-10-17: the 12:03 batch's
    two CVEs (MoviePilot CVE-2026-77931, pfSense CVE-2026-110908) were both unseeded until the
    act pass caught it, same "manual re-checks rot" class as the Legcord find. Closes it the same
-   way the batch-coverage check closes its gap: every CVE-YYYY-NNNN cited in the newest dated en
-   feed must appear in the watch list. build.js runs after agent-run.sh inside generate-feed.sh,
-   so a compliant run is always clean here — a warning means a cited CVE is not being watched. */
+   way the batch-coverage check closes its gap.
+   Extended 2026-10-19 21:01 — newest-feed-only coverage was too narrow: a CVE cited mid-week
+   left enforcement the very next day. CVE-2026-21589 (the scorer-split exemplar, KEV'd 10-15)
+   was REJECTED by its CNA on 10-16 21:17Z ("may have been a false positive or a mistake") and
+   no channel noticed — the record postdated the watch seed (10-14) and fell out of lint
+   coverage when the 10-17 batch became newest; it was found four days later only because an
+   ad-hoc --ids lookup happened to include it. Every CVE-YYYY-NNNN cited in ANY dated en feed
+   within the trailing 7 days of the newest batch must appear in the watch list. build.js runs
+   after agent-run.sh inside generate-feed.sh, so a compliant run is always clean here — a
+   warning means a recently cited CVE is not being watched. */
 {
   const watchPath = path.join(ROOT, 'agent', 'tools', 'nvd-provenance.json');
   const feedDir = path.join(ROOT, 'en', 'feed');
@@ -1363,12 +1370,23 @@ if (fs.existsSync(agentMemPath)) {
     try {
       const watch = JSON.parse(fs.readFileSync(watchPath, 'utf8')).watch || [];
       const watched = new Set(watch.map(w => w.id));
-      const cited = [...new Set(fs.readFileSync(path.join(feedDir, newest), 'utf8').match(/\bCVE-\d{4}-\d{4,7}\b/g) || [])];
+      const newestMs = Date.parse(newest.replace(/\.md$/, ''));
+      const cutoffMs = newestMs - 6 * 86400e3;   // trailing 7 days, ending at the newest batch
+      const inWindow = dated.filter(f => {
+        const ms = Date.parse(f.replace(/\.md$/, ''));
+        return Number.isFinite(ms) && ms >= cutoffMs && ms <= newestMs;
+      });
+      const citedByFile = {};
+      for (const f of inWindow) {
+        for (const id of (fs.readFileSync(path.join(feedDir, f), 'utf8').match(/\bCVE-\d{4}-\d{4,7}\b/g) || []))
+          (citedByFile[id] = citedByFile[id] || new Set()).add(f.replace(/\.md$/, ''));
+      }
+      const cited = Object.keys(citedByFile).sort();
       const unwatched = cited.filter(id => !watched.has(id));
       if (unwatched.length) {
-        console.log(`  ⚠ ${unwatched.length} CVE(s) cited in en/feed/${newest} but absent from agent/tools/nvd-provenance.json — the standing NVD watch does not cover them: ${unwatched.join(', ')}`);
+        console.log(`  ⚠ ${unwatched.length} CVE(s) cited in the trailing-7d feeds (${inWindow[0]}..${newest}) but absent from agent/tools/nvd-provenance.json — the standing NVD watch does not cover them: ${unwatched.map(id => `${id} [${[...citedByFile[id]].join(',')}]`).join('; ')}`);
       } else {
-        console.log(`  ✓ CVE watch coverage: all ${cited.length} CVE(s) cited in en/feed/${newest} are watched (watch list: ${watched.size})`);
+        console.log(`  ✓ CVE watch coverage: all ${cited.length} CVE(s) cited in the trailing-7d feeds (${inWindow[0]}..${newest}) are watched (watch list: ${watched.size})`);
       }
     } catch (e) {
       console.log(`  ⚠ CVE watch coverage check failed to run: ${e.message}`);

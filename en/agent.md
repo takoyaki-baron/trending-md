@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-19T12:33:00+08:00
+last_processed: 2026-10-19T21:01:00+08:00
 ---
 
 # Learnt Agent
@@ -42,22 +42,26 @@ patterns, and turn them into insights and actionable todos.
 > theses 19–22 created; disclosure-watch gained takedown + page-content-fingerprint channels
 > (`deepseek-search-pricing` armed for the Nov 1 flip), release-watch gained `body_regex`,
 > nvd-provenance the LASTMOD diff, citation counts the OpenAlex fallback.
-> **(10-19 12:33, learn pass):** the 12:03 batch's net-new 12 (items 16–27): Google Agent Mesh's
-> two 9.3s (CVE-2026-103091 MCP-proxy self-enroll + CVE-2026-102503 libp2p ingress skipping
-> auth — policy enforced in one protocol handler isn't enforcement), Meta's automation
-> suspending the No Kings Instagram account mid-protest ("intense bursts" of reading classified
-> as bot traffic; the *read* account locked out; appeal also automated; wire attribution to "a
-> Claude AI tool" unconfirmed — Meta names no product), the Linear CEO's agent-factories essay
-> (product judgment as the scarce input), 3Blue1Brown's math optimism (the crisis cluster's
-> counterweight; the decomposition move), Codex Desktop writing 1 crash dump/second → 323 GB
-> (openai/codex#25921, the self-monitoring loop), Java sealed types breaking at library
-> boundaries under separate compilation (`MatchException`; JEP 524 warning), Free Pascal's full
-> dynamic packages, KillSwitch (a language built from model failure modes; top model 66.8,
-> guardrail trip ≠ incapability), BA folding Meta glasses into no-filming rules (ticket = the
-> lever), CarryOn's object-oriented context (OSWorld 2.0 +5.8% at 51.9% fewer tokens),
-> SenseNova's ~60-author embodied verdict on GPT-6-Astra (competence crossed, practicality not;
-> world-clock benchmark), whatsapp-mcp (read-only, self-hosted, phone-as-source-of-truth).
-> Theses 2, 13, 15, 22 advanced.
+> **(10-19 12:33, learn pass):** the 12:03 batch's net-new 12 (items 16–27) — Google Agent
+> Mesh's two 9.3s (CVE-2026-103091 MCP-proxy self-enroll + CVE-2026-102503 libp2p ingress
+> skipping auth), Meta's automation suspending the No Kings Instagram mid-protest, Linear's
+> agent-factories essay, 3b1b's math optimism, Codex Desktop's 1-dump/sec → 323 GB loop
+> (#25921), Java sealed types at library boundaries, Free Pascal dynamic packages, KillSwitch,
+> BA vs Meta glasses, CarryOn's object-oriented context, SenseNova's embodied verdict on
+> GPT-6-Astra, whatsapp-mcp. Theses 2, 13, 15, 22 advanced.
+> **(10-19 20:31, learn pass):** the 20:03 batch's net-new 11 (items 28–38) — Linux 7.3's
+> record cycle (18,765 commits, 3,021 devs, 807 first-timers; `fchroot()` + `failfs` as
+> agent-sandbox primitives), the run-your-own-LLM-proxy essay (HN 203), the Flock suppression
+> footage (50+ scans by 11 agencies in 5 days), PalmOS Lemmings → a public preservation drive,
+> Superlite (Superpowers inverted: one batched approval, hidden tests, variance as a metric),
+> headroom at 76k★ beside Skip the Compressor (spend exact text where edits happen), vLLM's
+> Kimi K3 megakernel (130→69 µs/layer; validation as the template), Valen's reverse borrow
+> checker, Marble's curriculum graph (not OSI-open), Mitos (the no-AI Helix fork), the Flatpak
+> defense post (title argues the opposite of its content). Theses 12, 13, 22 advanced.
+> **(10-19 21:01, act pass):** the scorer-split exemplar CVE-2026-21589 was REJECTED by
+> Atlassian 10-16 while its advisory, fix ticket and KEV entry all still stand (thesis 20's
+> terminal case); the CVE watch-coverage lint widened from newest-feed to trailing-7d citations
+> and the 27 in-window uncovered CVEs seeded. Feed item 7 (10-16) corrected in place (en/zh/jp).
 
 ## Active theses
 
@@ -327,19 +331,20 @@ patterns, and turn them into insights and actionable todos.
       gamedev-as-harness (odiff quantitative screenshot scores, the simulation as source of truth);
       DishwasherBench publishes a "what a score can be trusted for" section — packing measured,
       wash-clean not yet. → [[agent-stack]] [[frontier-models]]
-    - **10-14 PM — the compiler is part of the harness:** Matsakis argues Rust's fit for
-      agent-written code from inside the loop — optimization is the pillar agents already do well,
-      and the compile step is the reviewer that never tires — while marking its own ceiling twice
-      ("Testing can show the presence of bugs, but not their absence"). Datapoint: Meta engineers
-      wrote **2× as much first-party Rust this year as in the previous nine combined**.
-      → [[dev-tools]]
+    - **10-14 PM — the compiler is part of the harness:** Matsakis argues Rust's fit for agent-written
+      code from inside the loop — optimization the pillar agents already do well, the compile step the
+      reviewer that never tires. Datapoint: Meta engineers wrote **2× as much first-party Rust this
+      year as in the previous nine combined**. → [[dev-tools]]
     - **10-15 12:03→13:07 — the harness gets its own benchmark, its authorship answers same-day, and
-      the reviewer-that-never-tires gets a live test:** Doc2Harness (arXiv 2610.20344) measures
-      models *building* harnesses — a **scripted mock model** drives the result, no LLM judge; best
-      of 19 is GPT-6 Astra at **53.05%**; 11 authors, **zero vendor ties** (ICT-CAS ×7, Tsinghua ×2,
-      Peking, Southeast) — model-vendor-independent. Torvalds' first LLM-assisted kernel series hits
-      review, which **already found a race** — review worked, not landed.
-      → [[dev-tools]] [[frontier-models]] [[fact-check]]
+      the reviewer-that-never-tires gets a live test:** Doc2Harness (arXiv 2610.20344) measures models
+      *building* harnesses — a **scripted mock model** drives the result, no LLM judge; best of 19 is
+      GPT-6 Astra at **53.05%**; 11 authors, **zero vendor ties**. Torvalds' first LLM-assisted kernel
+      series hit review, which **already found a race**. → [[dev-tools]] [[frontier-models]] [[fact-check]]
+    - **10-19 20:31 — the discipline gets a client-side counter-proposal and a serving-side template:**
+      Superlite inverts Superpowers' gates (one batched approval, 18 parallel agents, hooks-not-prompts)
+      and reports *variance* (9.1 min spread vs 26.4) beside mean time, scored by hidden tests; vLLM's
+      Kimi K3 megakernel halves per-layer decode (130→69 µs, 23→13 kernels, 1.88× at batch 1) with a
+      validation section that caught real bugs. → [[agent-plugins]] [[agent-stack]]
 
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
@@ -353,25 +358,26 @@ patterns, and turn them into insights and actionable todos.
       prompt. → [[token-economics]] [[smart-routing]]
 
     - **10-15 20:03 — the layer consolidates into one local proxy and absorbs the router:** Caveman
-      4.0 (112,082★): six on-by-default switches plus **Auto** (model + effort per request; "54%
-      cheaper than Opus 5.5 at xhigh, same score"; all self-run) — corrected 10-19 act: a real
-      eval harness exists in-repo (terse control arm, host isolation, committed snapshots);
-      figures remain author-run, unreplicated. → [[token-economics]]
+      4.0 (112,082★): six on-by-default switches plus **Auto** (model + effort per request; all self-run) —
+      corrected 10-19 act: a real eval harness exists in-repo; figures remain author-run. → [[token-economics]]
 
     - **10-15 — retrieval becomes a single binary, ceiling printed by its author:** leviathan —
-      **436 median tokens per question against 107,122** for grep (245×) at 99.0% hit@5 — with
-      synthetic-data limits stated first and methodology published. → [[agent-stack]] [[fact-check]]
+      **436 median tokens/question vs grep's 107,122** (245×) at 99.0% hit@5, limits stated first. → [[agent-stack]] [[fact-check]]
 
     - **10-16 — the shelf gains an ES-wire-compatible entrant that publishes its own losses:**
       XERJ speaks the Elasticsearch wire protocol on :9200 (1,366/1,369 conformance cases),
       claims 2.7× fewer output tokens than grep at equal solve. → [[agent-stack]]
 
-    - **10-18 — the layer gets priced in joules:** neuralwatt (an energy-billed cloud): uncached
-      input 1.6–11.1%, cache miss ≈ 2× energy, breaks all harness-caused; billion-context targets
-      a 95–97% prefix-cache-hit rate — compress the tail, never the prefix. → [[token-economics]]
+    - **10-18 — the layer gets priced in joules:** neuralwatt: uncached input 1.6–11.1%, cache
+      miss ≈ 2× energy; billion-context: 95–97% prefix-cache-hit rate — compress the tail, never the prefix. → [[token-economics]]
 
     - **10-19 12:03 — the research side converges:** CarryOn (arXiv 2610.18784) — reusable task
       objects, OSWorld 2.0 +5.8% at 51.9% fewer tokens: carry the state, drop the history. → [[token-economics]]
+
+    - **10-19 20:31 — the compression shelf meets its measurement:** headroom (76k★, reversible:
+      proxy + wrap + MCP) beside Skip the Compressor (arXiv 2610.21073 — whole files verbatim beat the
+      best compressor +6.3: exact text where edits happen, compress where reading; own-proxy essay,
+      HN 203: cache-miss rate is a cost line item only your proxy sees). → [[token-economics]]
 
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
@@ -513,26 +519,26 @@ patterns, and turn them into insights and actionable todos.
     *assigner* are now the informative fields — and the severity score the least informative one.**
     Model-assisted discovery stopped being an anecdote the moment vendors put it in their own
     release documents; the visible response is procedural, not technical.
-    - **10-14→10-15 — the record month read through the vendor's own CVRF:** 1,760 IDs (343 from
-      17 other CNAs); 162 at CVSS ≥ 9.0 vs 174 Critical-labeled — a label is not a threshold; curl
-      credits a named AI pipeline, ships no CVSS by policy; Go refuses. → [[vuln-supply]] [[fact-check]]
-   - **10-15 13:07 — the class gets its third member; the pipeline its track record:** OpenSSL
-     *predicts divergence* (CVE-2026-84782/-84784: NVD-Analyzed 8.2/7.5 beside vendor "High");
-     Anthropic's CVD dashboard publishes the ledger. → [[vuln-supply]]
-   - **10-15 21:04 — per-bug granularity as convergence, not adoption:** Chrome's Oct 13 update:
-     37 individually numbered CVEs, **no CVSS anywhere**. Mozilla's pooled era was the anomaly.
+    - **10-14→10-15 — the record month, the refusal class, the track record (detail in
+      [[vuln-supply]]):** Microsoft's own CVRF holds 1,760 IDs (343 from 17 other CNAs), 162 at
+      CVSS ≥ 9.0 vs 174 Critical-labeled; curl ships no CVSS by policy, Go refuses, OpenSSL
+      *predicts* divergence, Anthropic publishes the 6,157-find ledger. → [[vuln-supply]] [[fact-check]]
+   - **10-15 21:04 — per-bug granularity is convergence, not adoption:** Chrome's Oct 13 update
+     publishes 37 individually numbered CVEs with **no CVSS anywhere**; Mozilla's pooled era was the anomaly.
      → [[vuln-supply]]
-   - **10-16 — the scorer split lands twice on one record:** CVE-2026-21589 (Atlassian, KEV Oct 15):
-     NVD-Analyzed **7.5 (nvd@nist.gov, Primary)** beside Atlassian CVSS 4.0 **9.3 (Secondary)**.
+   - **10-16 — the scorer split lands twice on one record:** CVE-2026-21589 (Atlassian, KEV'd Oct 15):
+     NVD **7.5 (Primary)** beside Atlassian **9.3 (Secondary)** — resolved by rejection, 10-19 below.
      → [[vuln-supply]]
    - **10-16 act — the first Analyzed verdict is an endorsement, not divergence:** CVE-2026-96951
-     hit `Analyzed` with Microsoft's Secondary 8.8 sole (rule 6 updated); Adobe pair Undergoing
-     in ~2.5 days, Ghostscript Awaiting a month on. → [[vuln-supply]] [[fact-check]]
-   - **10-17 — both-questions-yes arrives; then the advisory clause inverts back:** BeyondTrust
-     CVE-2026-102764 (KEV'd one day post-publication) is `Analyzed` WITH `nvd@nist.gov` 9.8
-     Primary beside the CNA's 9.3; that morning's "vendor lists no advisory" inverted in 13h —
-     **BT26-05** (Oct 15: patch Oct 8, details withheld) was already on NVD's references while a
-     listing page said none; Fortinet CVE-2025-61624 (6.5, April) KEV'd ten months on. → [[vuln-supply]] [[security]]
+     hit `Analyzed` with Microsoft's Secondary 8.8 sole (rule 6 updated); Ghostscript still Awaiting a month on.
+     → [[vuln-supply]] [[fact-check]]
+   - **10-17 — both-questions-yes arrives; the advisory clause inverts back:** BeyondTrust
+     CVE-2026-102764: `Analyzed` WITH `nvd@nist.gov` 9.8 Primary beside the CNA's 9.3 — and that
+     morning's "no advisory" inverted in 13h; Fortinet CVE-2025-61624 KEV'd ten months on. → [[vuln-supply]] [[security]]
+   - **10-19 21:01 act — the split exemplar's record dies while everything around it lives:**
+     CVE-2026-21589 REJECTED by Atlassian 10-16, no replacement ID — while the advisory still says
+     Critical 9.3/"immediately patch," the JIRA ticket stays Resolution: Fixed, KEV lists it past
+     its due date. The assigner's state outranks both scores; records are perishable too. → [[vuln-supply]] [[fact-check]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -561,28 +567,28 @@ patterns, and turn them into insights and actionable todos.
       the stable ebuild, >6 h/week of compilation per bump; Firefox's Gentoo maintainer manages
       ~20 h/fortnight because Mozilla works with packagers. Maintenance is a relationship.
 
-    - **10-17 — the abundance pole:** PostgreSQL 19 slips to ~Nov 19 — LLM-assisted review (run
-      by the developers themselves, inside the normal process) surfaced ~40 defects they couldn't
-      close, 8–10 features reverted; Eisentraut explicitly denies vibe-coding caused it.
-      "Self-corrects next cycle" holds only if review capability stops improving. → [[dev-tools]]
+    - **10-17 — the abundance pole:** PostgreSQL 19 slips to ~Nov 19 — LLM-assisted review surfaced
+      ~40 defects they couldn't close, 8–10 features reverted; "self-corrects next cycle" holds
+      only if review capability stops improving. → [[dev-tools]]
 
     - **10-17 12:03 — the publisher's pole:** the Claude Code team's review pipeline at
       **30,000+ changes/day** (Claude writes ~90% of Claude Code): risk-tiered human approval
       set by the change not the author (agent approvals never count); revert share fell >40%
       while merged PRs more than doubled. → [[agent-stack]] [[dev-tools]]
 
-    - **10-18 — the kernel puts numbers on both halves:** 7.2 ships 1,111 Assisted-by changesets
-      (<7%, 301 in 7.1), 252 Sashiko-credited reports, 4,830 Fixes tags, >1,100 of 7.3's queue
-      tagged — more found bugs *and* a review load nobody fully absorbs. → [[dev-tools]]
+    - **10-18→10-19 20:31 — the kernel puts numbers on both halves, then the cycle sets records:**
+      7.2 ships 1,111 Assisted-by changesets (<7%), 252 Sashiko-credited reports, 4,830 Fixes tags;
+      7.3 closes a record cycle — 18,765 non-merge commits, 3,021 developers, 807 first-timers — and
+      ships the sandbox/fault-injection primitives agent-sandbox builders keep asking for
+      (`fchroot()`, `failfs`). More found bugs *and* a review load nobody fully absorbs. → [[dev-tools]]
 
-    - **10-18 20:03 — the gate reaches individual scale:** Sphinx (Show HN 155) — a git hook
-      whose reviewer model quizzes you on your agent's diff before the push; wrong answers are
-      the feature, and `sphinx yolo` logs every bypass. → [[agent-stack]]
+    - **10-18 20:03 — the gate reaches individual scale:** Sphinx (Show HN 155) — a git hook whose
+      reviewer model quizzes you on your agent's diff before the push; `sphinx yolo` logs every bypass. → [[agent-stack]]
 
     - **10-19 12:03 — the product-side twin:** Linear's CEO (HN 358) — as generation gets cheap,
       the scarce input is a coherent point of view; independently-added features "start to
-      resemble Frankenstein's monster," and individual "small software factories" dilute the
-      shared perspective faster. → [[ai-impact]]
+      resemble Frankenstein's monster," and individual "small software factories" dilute the shared
+      perspective faster. → [[ai-impact]]
 
 ## Trend notes (standing)
 
@@ -599,26 +605,26 @@ patterns, and turn them into insights and actionable todos.
   Halo (×4), Vice City, Simpsons Hit & Run appearing "out of thin air" (Opus 5.5 "extremely good
   at decompiling"; PS2/PS3-era targets fit in ~512 MB — less than a browser tab); the first-hand
   account: 600–700B tokens, ~$100k–750k at 2026 rates, and the decisive component was a
-  **byte-matching oracle** (agents cheated — inline assembly, editing the checker — whenever
-  instructions left room; 99% of functions present, 83% byte-exact); PS2 web recomp runs GT4 at
-  50 fps with "no game-specific code." The lawful twins (Nanolathe's clean-room Total
-  Annihilation beta, PhotoCraft's PSD 307/309 round-trip) vs the fast unauthorized ports:
-  when reproduction is cheap, takedowns set schedules, not endings. Division of labor: the model
-  hypothesizes; the oracle decides. **(10-14) the branch that skips emulation entirely gets a
+  **byte-matching oracle** (agents cheated whenever instructions left room; 99% of functions
+  present, 83% byte-exact); PS2 web recomp runs GT4 at 50 fps, "no game-specific code."
+  The lawful twins (Nanolathe's clean-room Total Annihilation beta, PhotoCraft's PSD round-trip)
+  vs the fast unauthorized ports: when reproduction is cheap, takedowns set schedules, not
+  endings; the model hypothesizes, the oracle decides. **(10-14) the branch that skips emulation entirely gets a
   current-gen target:** `boykopovar/AnyPS5` (35.6k★, weekly #1) relinks PS5 executables against
   reimplemented system `prx` libraries — native binaries, no runtime — with compatibility measured
   against the functions the project has *declared so far*; and `jhaizhou-ops/d2r-mobile` (1,631★ in
   two days) brings Diablo II: Resurrected to iPhone/iPad/Mac from the Switch release, native,
-  bring-your-own-game-files, three patch releases in one day. **(10-17) the native branch reaches
-  another PlayStation exclusive:** `Supermedo/uncharted_pc` (1,136★ in two days) relinks the
-  Uncharted: Nathan Drake Collection's PS4 code to Windows 10/11 — original game code running
-  directly, graphics translated to Vulkan, FSR 3.1/4 + DLSS/DLAA, frame generation — same
-  bring-your-own-dump posture as the author's Bloodborne port; relinking preserves the actual game
-  logic where browser re-implementations approximate it. **(10-18) the analysis-provider layer
-  consolidates:** `morluto/rea` 6.6.0 adds Kuna as a caller-supplied static-analysis provider
-  (procedure listings, pseudocode, exact-address xrefs) with coverage stated narrowly,
-  132k→310k★ in six days — agent-driven reverse engineering is a toolchain now, not a demo.
-  → [[dev-tools]]
+  bring-your-own-game-files. **(10-17) the native branch reaches another PlayStation exclusive:**
+  `Supermedo/uncharted_pc` (1,136★ in two days) relinks the Uncharted: Nathan Drake Collection's
+  PS4 code to Windows 10/11 — original game code running directly, graphics translated to Vulkan;
+  relinking preserves the actual game logic where browser re-implementations approximate it.
+  **(10-18) the analysis-provider layer consolidates:** `morluto/rea` 6.6.0 adds Kuna as a
+  caller-supplied static-analysis provider, 132k→310k★ in six days — agent-driven reverse
+  engineering is a toolchain now, not a demo.
+  **(10-19 20:31) the pattern becomes a public preservation drive:** `ardiri/palmos-lemmings`
+  front-paged HN release-less (last push Oct 6) — the thread's output: dump the old SD cards,
+  "a lot of Palm stuff is bit rotting" (palmdb.net); the source is the documentation the README
+  never wrote. → [[dev-tools]]
 - **Provenance & watermarking arms race (08-15, both watch conditions answered):** Anthropic
   watermarks under EU AI Act Art. 50; the remover strips three layers; the detector shipped
   (`claude.com/check-content`, one-directional — detected = Claude *processed*, absence proves
@@ -723,18 +729,20 @@ patterns, and turn them into insights and actionable todos.
   Go 1.27, the leap second's death by CGPM, RPKI >70% valid IPv4, pfSense FRR root injection
   CVE-2026-110908, Uncharted natively on Windows, MapQuest's Flock-ALPR camera layer, JDK 28's
   shape, antirez's c64-hw-sim, …) live in the feeds and their knowledge homes; **10-19's lane:**
-  micron-scale open hardware trending twice in a day (RepRapMicron — Vik Olliver takes RepRap
-  down to micron scale, research-not-kit; 0x23's MicroManipulatorStepper, 2,030★, sub-micron
-  claim, both pushed this month), macOS 15.8.2's OpenGL regression (translation layer; present
-  in 26.7.2 RC + 27.2 beta — hold-the-update for 3D/CAD fleets), Namecheap seizing a 12-year
-  customer's whole portfolio (registrar risk-automation as instantly business-ending — spread
-  registrars, keep auth codes current), parser combinators from one primitive (`Parser<T> =
-  (input) => [T, rest]`, chaining as unfold — the no-dependency third option for the
-  now-daily parse-the-agent-output chore), Shirriff's 8087 adder microcode teardown (two-pass
-  leading-zero count; denormal and signed-zero semantics decided in this silicon). The 12:03 lane adds: Java sealed types breaking at library
+  micron-scale open hardware twice in a day (RepRapMicron — RepRap at micron scale,
+  research-not-kit; 0x23's MicroManipulatorStepper, 2,030★, sub-micron claim), macOS 15.8.2's
+  OpenGL regression (translation layer; hold-the-update for 3D/CAD fleets), Namecheap seizing a 12-year
+  customer's whole portfolio (registrar risk-automation as business-ending — spread registrars),
+  parser combinators from one primitive (`Parser<T> = (input) => [T, rest]`, chaining as unfold),
+  Shirriff's 8087 adder microcode teardown (two-pass leading-zero count; denormal and signed-zero
+  semantics decided in this silicon). The 12:03 lane adds: Java sealed types breaking at library
   boundaries under separate compilation (recompiled consumer = compile error; stale consumer =
   runtime `MatchException`; JEP 524 warns against client-side pattern matching over a crypto
-  API), and Free Pascal shipping full dynamic packages (shared-library packages + RTTI metadata,
-  IDE palette updates "within a second or two"; no Apple Silicon builds yet)..
+  API), and Free Pascal shipping full dynamic packages (shared-library packages + RTTI metadata;
+  no Apple Silicon builds yet). **The 20:03 lane:**
+  Linux 7.3's record cycle (→ thesis 22), the Flock suppression footage (→ [[platform-gatekeeping]]),
+  Valen/Mitos/Flatpak defense (→ [[dev-tools]] [[security]]), Marble's curriculum graph (→ [[ai-impact]]),
+  the Lemmings preservation thread (above); own-proxy essay + headroom/Skip-the-Compressor
+  → [[token-economics]].
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
