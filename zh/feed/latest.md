@@ -1,8 +1,8 @@
 ---
 date: 2026-10-19
-updated: 2026-10-19T04:25:00Z
+updated: 2026-10-19T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 25
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -629,13 +629,280 @@ WhatsApp 内容是提示注入的金矿，所以 agent 从中提取的任何内�
 
 ---
 
+## 28. Linux 7.3 打破纪录：18,765 次提交、3,021 位开发者、其中 807 位是首次贡献者
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 293+ pts · 5h 前（~15:23 UTC+8）
+- **Tags:** `linux` `kernel` `release` `open-source`
+
+Linus Torvalds 周日发布了 7.3 内核，LWN 称这个周期"在所有维度上都破了纪录"：
+18,765 次非合并提交，来自 3,021 位开发者，其中 807 位是首次向内核贡献代码。功能
+亮点：扩展的 `binfmt_misc`、面向大型系统的组调度改进、故意让所有操作失败的
+`failfs`（测试文件系统）、新的 `fchroot()` 系统调用、BPF 程序的全局 per-CPU
+数据、`sched_ext` 子调度器特性完成、虚拟机工作集跟踪、ntfs3 的备用数据流，以及
+一长串 SMB 服务器改进。发布过程毫无波澜——"过去这一周似乎没什么特别的事"——
+Linus 在年度家庭假期中完成了发布，说要在发布日"大部分时间在船上和水下"，之后
+才打开 7.4 合并窗口。
+
+**Why it matters:** 尺寸纪录正落在争论之中：昨天对 7.2 的统计数出了 1,111 个
+Assisted-by 标签和 Fixes 标签的激增，而 7.3 的 807 位首次贡献者说明管道同时在
+变宽。功能列表也悄悄与 agent 基础设施相关——`fchroot()` 和 `failfs` 正是沙箱
+与故障注入原语，恰是 agent 沙箱构建者一直向内核要的那种旋钮。
+
+> 一位评论者对 Linus 在假期中发布内核的评语：这是合并窗口之前的"潜水的窗口"
+> （submerge window）。
+
+[`🔗 LWN：Linux 7.3 发布`](https://lwn.net/Articles/1101143/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50149392)
+
+---
+
+## 29. "不自己跑一个 LLM 代理，你怎么知道发生了什么？" — 203 个赞的共鸣
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 203+ pts · 15.2h 前（~05:09 UTC+8）
+- **Tags:** `llm` `proxy` `observability` `agents`
+
+Jared Siegel 撰文反对信任厂商侧的分析面板：厂商仪表盘和聊天内 token 计数器
+"是一种消遣。那不是给工程师用的、带时间序列数据的 token 用量统计"。自托管代理
+给他厂商给不了的东西：请求级日志（哪个 key 在什么时间用哪个客户端调了哪个模型、
+状态如何）、经由单一端点即时切换厂商/模型、按 agent 发放的虚拟 API key（主 key
+不再散落到每个 harness 里），以及编码会话中"手工 20 秒内"定位缓存未命中的能力。
+他刻意不点名任何产品——"我不会建议你去用哪家代理服务，只建议你把它跑在你控制
+的某个地方"——并把 OpenTelemetry 导出斥为不完整的答案（"行吧，算是吧"）。
+
+**Why it matters:** Agent 舰队把 API 流量变成了生产级工作负载，但可观测性的
+叙事还停留在"一个人同一个模型聊天"。周六 neuralwatt 的发现——缓存未命中会让
+单次请求能耗翻倍——把这点变成了定量问题：缓存命中率是一条成本线，而只有你自己的
+代理看得见它。数据路径不归你，厂商的仪表盘就是你唯一的仪表。
+
+> "Own your infrastructure, your application visibility, data pathing, and
+> storage." ——文章的收尾立场，写于他在某厂商分析面板里一无所获之后。
+
+[`🔗 jrdsgl.com`](https://jrdsgl.com/if-you-dont-run-your-own-llm-proxy-how-the-fuck-do-you-even-know-whats-going-on/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50145507)
+
+---
+
+## 30. 被法官称为"无差别大规模监控"的 Flock 搜查——以及证明它的录像
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** 404 Media · 120+ HN pts · 10.4h 前（~09:55 UTC+8）
+- **Tags:** `surveillance` `privacy` `legal` `flock`
+
+404 Media 公布了执法记录仪与行车录像（由一位读者向法院书记官购买），内容是
+Sara Hill 法官裁定为"违宪的无证搜查"的那次 Flock 车牌识别搜查。塔尔萨县副警长
+Freddie Alaniz 被拍到在以 60 英里时速行驶时就把驾驶人车牌跑了一遍 Flock 和
+摩托罗拉 Vigilant，之后才拦停车辆——然后翻着 79 条摄像头命中记录审问她：这些
+记录完整刻画了她 30 天内跨越 6 个州的行程，把普通的公路旅行行为当成嫌疑。尽管
+车上搜出了 91 磅甲基苯丙胺，Hill 法官仍将全部证据作为"毒树之果"排除：这次搜查
+"侵犯了她对自己全部身体移动的合理隐私预期"。记录显示她的租车在 5 天内被 11 个
+机构扫描了 50 多次；参议员 Ron Wyden 正在追问一个联邦车牌项目。
+
+**Why it matters:** 周六的 MapQuest 条目展示的是 Flock 摄像头网络被渲染成消费级
+地图图层；这份裁定展示的是同一套基础设施在司法体系里被定价为"拉网式监控"。
+对所有构建聚合系统的人，教训写在证据排除里：共享默认值（5 天 11 个机构）把一个
+副警长的直觉变成了违宪侵权——以及一起崩塌的起诉。
+
+[`🔗 404 Media`](https://www.404media.co/watch-footage-of-the-flock-search-a-judge-ruled-unconstitutional/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50147455)
+
+---
+
+## 31. PalmOS 版 Lemmings 冲上 HN 首页——讨论串变成了一场保存运动
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 136+ pts · 18.4h 前（~01:56 UTC+8）
+- **Tags:** `retro` `palmos` `games` `preservation`
+
+ardiri/palmos-lemmings——一个完整的经典 Palm OS 版 Lemmings 移植，源码"按原样
+提供、仅供教育目的"——在没有任何新发布的情况下登上了 HN 首页；仓库最后一次
+推送是 10 月 6 日，README 只有三行文字加两张截图。讨论串才是内容本身：评论者
+认出作者 Aaron Ardiri 是"PalmOS 传奇"（他的 Deity3D 引擎后来支撑了 Master
+Thief 3D），交换 #palmchat 时代和破解他程序的往事，并提到任天堂曾要求他下架
+其他克隆——不过 `palmos-maryobros` 还活着。结尾是一场保存动员：一位用户翻出了
+2005 年的存有 Palm 游戏的 SD 卡，讨论串的回答是"把它们传到什么地方去……大量
+Palm 软件正在 bit rot"——指向 palmdb.net。
+
+**Why it matters:** 又一次"发现而非开发"模式——但这次理由是健康的：作品是
+完整的，关注度是社区在公开场合做保存分诊。68K 时代的手工调优移植也是一个不再
+出货的物种；这份源码就是 README 从未写出的文档。
+
+[`🔗 ardiri/palmos-lemmings`](https://github.com/ardiri/palmos-lemmings) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50143536) · [`🔗 palmdb.net`](https://palmdb.net)
+
+---
+
+## 32. Superlite：把规格书丢给一个 Claude Code 插件，16 分钟拿到 177/177 隐藏测试——只需一次批准
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 105+ pts · 10.3h 前（~10:01 UTC+8）
+- **Tags:** `agents` `claude-code` `plugins` `benchmarks`
+
+Iheatu Chris Wogu 的 Superlite（仓库 `iha2/superlite`，10 月 17 日创建）是一个
+刻意借用 Superpowers 结构、又反转其哲学的 Claude Code 插件：预先一次性批量提问、
+单次批准，取代 Superpowers 每个功能 8–12 道关卡；任务以并行波次运行（峰值 18 个
+并发 agent）；按成本路由模型——Opus 协调，Sonnet 构建和评审，Haiku 干机械活。
+规则用 hook 而不是提示词来执行，"因为 agent 读了规则，然后照样我行我素"。它的
+无头评测由 agent 从未见过的隐藏测试套件打分：静态站点生成器加电子表格引擎，
+16.1 分钟建成，177/177 通过——比原版 Superpowers（33.6 分钟）快 52%，且运行间
+波动为 9.1 分钟对 26.4 分钟。未经人类许可，它绝不推 `main`、绝不合并。作者自己的
+告诚："这是一个强烈的提示，而不是经同行评审的科学。"
+
+**Why it matters:** 自 10 月 16 日我们报道 Superpowers v7.0.0 重建以来，这是
+该货架上第一份认真的、带测量的反提案：串行把关的协作 vs 并行廉价的自主——而且
+把方差而不仅是平均耗时作为报告指标。无论你选哪种哲学，那套隐藏测试 harness 都
+值得照抄。
+
+[`🔗 contextfirst.blog`](https://contextfirst.blog/superlite-hand-an-agent-a-spec/) · [`🔗 iha2/superlite`](https://github.com/iha2/superlite) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50147492)
+
+---
+
+## 33. 76k★ 的 pre-LLM 压缩层 headroom——以及那篇说"跳过压缩器"的论文
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +317★ · 总 75,986
+- **Tags:** `context` `tokens` `agents` `benchmark`
+
+headroom（Apache-2.0，Python + TypeScript，10 月 17 日有推送，v0.41.0 于 10 月
+14 日）在 agent 读取的一切——工具输出、日志、RAG 分块、文件、历史——进入模型
+之前做压缩：`compress()` 库、零代码改动的代理（`headroom proxy --port 8787`）、
+面向十多个 harness 的 `headroom wrap`、MCP 服务器，以及可逆压缩（原文本地缓存、
+按需取回）。它的演示：10,144 token 的日志压到 1,260，而 `FATAL` 行逐字节保留。
+同一周，arXiv 2610.21073（10 月 15 日）对编辑类上下文测出了相反的策略：在 300
+个 SWE-rebench 问题上、同等 token 预算下，逐字选取*完整文件*比三个压缩器中最好
+的高 +6.3 分，比最好检索器高 +9.3–12.7 分（GPT-5.6 解决 43.7%，Opus 5 解决
+46.7%）——因为压缩器"留对了文件，却改动了文本，能打上的补丁变少了"。
+
+**Why it matters:** 压缩货架继续扩张（昨天是 billion-context，今天是 76k★ 的
+headroom）——而且已经开始被测量。两组结果并不互为否证：headroom 针对的是观察
+噪声（日志、工具喷吐），论文针对的是 agent 必须逐字编辑的代码。但它们共同锐化
+了真正的设计准则：在发生编辑的地方花 token 买精确文本，在只读的地方压缩——
+同时记住论文的局限（两个模型、一个基准）。
+
+[`🔗 headroomlabs-ai/headroom`](https://github.com/headroomlabs-ai/headroom) · [`🔗 Skip the Compressor（arXiv 2610.21073）`](https://arxiv.org/abs/2610.21073) · [`🔗 headroom 文档`](https://docs.headroomlabs.ai/docs)
+
+---
+
+## 34. vLLM 的 Kimi K3 "megakernel"：每层从 130 µs / 23 个内核降到 69 µs / 13 个——batch 1 提升 1.88×
+
+- **Velocity:** ▮ steady
+- **Source:** vLLM 博客 · HN 29 pts · 23.2h 前（10 月 18 日 ~21:08 UTC+8）
+- **Tags:** `inference` `vllm` `gpu` `performance`
+
+vLLM 团队把 Kimi K3 的整条解码路径在 Blackwell 上重建成统一的 CuTe DSL
+megakernel：每层解码从 23 个内核的 130 µs 降到 13 个内核的 69 µs。在 GB300 上：
+batch 1 超过原版 vLLM 1.88×（256.4 tok/s，TP16），batch 16–64 提升 1.62–1.71×，
+加投机解码后到 842 tok/s——AgentX 工作负载的 P90 交互性提升 1.8×（403.2 对
+223.7 tok/s/user）。技术包括：按形状调优的小 GEMM、注意力输出经无 fence 的
+NVLink 交换与 all-reduce 及残差相加融合、router 分数分片而非复制、以及旁路流的
+权重预取。这篇博文对流程异常诚实：改动刻意隔离在模型专属代码里，范围有界
+（GB300、TP8/16、batch ≤64），正确性验证抓到了真 bug——编译器把激活读取提升到
+同步等待之前，以及内核测试看不见的长上下文数值问题。
+
+**Why it matters:** 解码延迟就是 agent 交互性的瓶颈，而这是"前沿开放模型版"
+的解法——通过 `decode_backend: latency_specialized` 选择性启用，同一模式已在
+扩展到 DeepSeek-V4.1-Flash（PR #61868）和早期超过 950 tok/s/user 的 Muse Spark
+Open 结果。验证部分才是模板：是活过 MRCR/AIME25 的速度声明，而不只是内核测试。
+
+[`🔗 vLLM 博客`](https://vllm.ai/blog/2026-10-16-kimi-k3-megakernel) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50140784)
+
+---
+
+## 35. 继 10 月 12 日的 Valen 条目：一个倒着走函数的借用检查器
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 96+ pts · 24.1h 前（10 月 18 日 ~20:11 UTC+8）
+- **Tags:** `programming-languages` `memory-safety` `compilers` `rust`
+
+Evan Ovadia（verdagon）公布了 Valen——我们 10 月 12 日报道过的组借用语言——
+背后的安全检查设计，而且是一次真正的倒置：use-after-free 检查从*最后一条语句
+走向第一条*，维护一个 `pending` 列表——USE 把变量加进去，MUTATE 校验列表中没有
+东西会失效，DECLARE 把它移除。循环不需要不动点迭代：每循环的
+`mutations_after_this`/`revived_after_this` 列表让一次 LOOP START 检查就足够。
+新检查器约 3,600 行，v0.1 目标定在 2 月；博文的声明范围划得诚实（还不是 O(n)——
+MUTATE 要扫描整个 pending 列表；尚不支持 break/continue、闭包和关联组），作者
+认为 Valen 是"唯一一个安全检查倒着走的借用检查器"。
+
+**Why it matters:** 所有主流检查器（Rust 的 NLL/Polonius）都是在区域推断之上做
+正向冲突检查。一个能跑通的反向替代方案——接受内存安全的可变别名、还能跨边界
+调用 Rust 函数——是借用检查器设计空间多年来第一条真正的竞争轴，而且出自一个
+一直在公开构建它的人。
+
+[`🔗 verdagon.dev`](https://verdagon.dev/blog/reverse-borrow-checking) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50140383)
+
+---
+
+## 36. Marble 的课程图谱以 +427★/天登上趋势：1,590 个微主题、3,221 条先修边——上次更新在 7 月
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +427★ · 总 5,854
+- **Tags:** `dataset` `education` `ai` `open-data`
+
+os-taxonomy 是 Marble 开放的"儿童学什么"分类法：1,590 个微主题（每个都有通俗
+描述、掌握证据标准、类型和年龄段），接进一张 3,221 条边的有向无环先修图——每条
+边都标注 `hard`/`soft` 并附一行理由——并对齐 NGSS、Common Core 和英国国家课程。
+数据以 UTF-8 JSON 发布，带 JSON Schema 和带校验和的 manifest；可交互的 3D 可视化
+在 withmarble.com/curriculum。点星之前有两句实话：这是一个数据集，7 月 8 日后
+再无更新——这是发现，不是开发；而且它*不是* OSI 意义上的开源：数据版权归
+Generative Spark, Inc. 并要求署名，想拿它做产品前先读许可。
+
+**Why it matters:** 先修结构正是大多数教育数据集缺的那块、也是教学 agent 最需要
+的那块——"给定这个学习者已掌握的内容，我现在能教什么"是一个图查询，不是查表。
+这张图的开放、对齐标准的版本是真正的公共品；只是许可证决定了谁能把它商业化。
+
+[`🔗 withmarbleapp/os-taxonomy`](https://github.com/withmarbleapp/os-taxonomy) · [`🔗 Marble 课程浏览器`](https://withmarble.com/curriculum)
+
+---
+
+## 37. Mitos：一个押注选区与多光标的 Helix 分叉——发布节奏比上游更快
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 70+ pts · 19h 前（~01:19 UTC+8）
+- **Tags:** `editors` `terminal` `helix` `fork`
+
+Mitos（"为现在与明天准备的文本编辑器"）是 Helix 终端编辑器的分叉，MPL-2.0，
+保留 Helix 的模态基础，把模型重新锚定在选区上："先选文本，再施加操作"，配合
+tree-sitter 文本对象的多重选区。它叠加了完整的 LSP 支持（补全、诊断、重命名、
+代码操作）、带断点与单步的 DAP 调试、文件浏览器、工作区搜索，以及直接在终端里
+的图片预览。网站承认 Helix 打下了"坚实的基础"，并把分叉定位成更快节奏的实验
+场——"预期更少的稳定性和偶尔的破坏性变更"。显著缺席：任何 AI 功能。
+
+**Why it matters:** 编辑器分叉通常是 AI 赌注；这个分叉的全部卖点却是编辑机制与
+节奏——在终端里，全程没有一个模型在场。它是一个有用的对照组，检验"每个分叉都
+需要内置一个 agent"的默认假设。分叉能否留住 Helix 没能转化的社区，才是真正值得
+看的实验。
+
+[`🔗 mitos.computer`](https://mitos.computer/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50143132)
+
+---
+
+## 38. "Flatpak – An Insecurity Nightmare"是一篇立场与标题相反的文章
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 55+ pts · 7.2h 前（~13:11 UTC+8）
+- **Tags:** `flatpak` `linux` `security` `sandboxing`
+
+一个值得标记的"标题对抗内容"陷阱：今天在 HN 以"Flatpak – An Insecurity
+Nightmare"之名重新流传的这篇文章，实际是在*为 Flatpak 辩护*，反驳 flatkill.org
+的批评。它的论点："Flatpak 是沙箱。Flatpak 是安全的。不安全的是应用"——批评者
+专挑最差的样本，过宽的静态权限是 API 成熟度问题（Portals 还覆盖不了所有用例），
+而"依赖过期根本不算一个论点"，因为运行时会收到安全更新。它最有力的证据是
+fractureiser 恶意软件：它硬编码 `~/.config/` 做持久化，而在 Flatpak 沙箱里这会
+写到重启即清空的 tmpfs 上——沙箱里又没有 systemd，持久化直接失败。今天 HN 上
+47 条评论把这一切重新吵了一遍。
+
+**Why it matters:** 撇开框架之争，实操结论依然成立：按应用做权限审查（Flatseal）
+才是真正的安全界面，沙箱隔离就是"恶意软件事件"与"清空一个 tmpfs"之间的差别。
+把标题读穿——对这篇文章和它回应的批评都一样。
+
+[`🔗 oro.gay`](https://oro.gay/posts/flatpak-an-insecurity-nightmare/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50148601)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-19T04:25:00Z |
-| Items | 27 |
-| Sources tracked | 25 (Hacker News, GitHub Trending, GitHub releases/advisories/issues, Reddit, NVD/VulnCheck, GHSA, CISA KEV, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv, The Guardian, 3Blue1Brown Substack, neilmadden.blog, getlazarus.org, blog.picheta.me, liveandletsfly.com) |
+| Generated | 2026-10-19T12:20:00Z |
+| Items | 38 |
+| Sources tracked | 36 (Hacker News, GitHub Trending, GitHub releases/advisories/issues, Reddit, NVD/VulnCheck, GHSA, CISA KEV, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv, The Guardian, 3Blue1Brown Substack, neilmadden.blog, getlazarus.org, blog.picheta.me, liveandletsfly.com, LWN, jrdsgl.com, 404 Media, contextfirst.blog, vLLM blog, verdagon.dev, mitos.computer, oro.gay, headroom docs, withmarble.com, palmdb.net) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

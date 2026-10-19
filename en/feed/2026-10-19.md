@@ -1,8 +1,8 @@
 ---
 date: 2026-10-19
-updated: 2026-10-19T04:25:00Z
+updated: 2026-10-19T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 25
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -581,13 +581,320 @@ finereli/whatsapp-mcp (created Oct 18, MIT) is a small MCP server you deploy to 
 
 ---
 
+## 28. Linux 7.3 is a record-breaker: 18,765 commits, 3,021 developers, 807 of them first-timers
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 293+ pts · 5h ago (~15:23 UTC+8)
+- **Tags:** `linux` `kernel` `release` `open-source`
+
+Linus Torvalds released kernel 7.3 on Sunday, closing a cycle LWN describes as "a
+record-breaker on all fronts": 18,765 non-merge commits from 3,021 developers, 807 of
+whom are first-time kernel contributors. Feature highlights: extended `binfmt_misc`,
+group-scheduling work for large systems, the deliberately-always-failing `failfs`
+(test filesystem), a new `fchroot()` system call, global per-CPU data for BPF
+programs, completion of the `sched_ext` subscheduler feature, working-set tracking for
+VMs, alternate data streams in ntfs3, and a long list of SMB server improvements. The
+timing was uneventful — "nothing very special seems to have happened this last week" —
+and Linus shipped it from his annual family vacation, promising to spend the release
+day "on a boat and under water" before opening the 7.4 merge window.
+
+**Why it matters:** The size records land mid-debate: yesterday's 7.2 analysis counted
+1,111 Assisted-by tags and a Fixes-tag spike, and 7.3's 807 first-timers show the
+pipeline widening at the same time. The feature list is also quietly
+agent-infrastructure-relevant — `fchroot()` and `failfs` are sandboxing and
+fault-injection primitives, exactly the knobs agent-sandbox builders keep asking the
+kernel for.
+
+> A commenter's verdict on Linus releasing from vacation: it makes for a "submerge
+> window" before the merge window.
+
+[`🔗 LWN: Linux 7.3 released`](https://lwn.net/Articles/1101143/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50149392)
+
+---
+
+## 29. "If you don't run your own LLM proxy, how do you know what's going on?" — 203 points of agreement
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 203+ pts · 15.2h ago (~05:09 UTC+8)
+- **Tags:** `llm` `proxy` `observability` `agents`
+
+Jared Siegel's essay against trusting provider-side analytics: vendor dashboards and
+in-chat token counters are "a distraction. That is not token usage statistics with
+time series data meant for engineers." What a self-hosted proxy gives him that the
+dashboards don't: request-level logs (which key called which model from which client
+with what status), instant provider/model pivots through one endpoint, virtual API
+keys per agent so his main key stops leaking into every harness, and cache-miss
+diagnosis "in 20 seconds by hand" during a coding session. He deliberately names no
+product — "I'm not going to suggest a proxy provider for you to use, only that you
+run it yourself somewhere you control" — and dismisses OpenTelemetry export as a
+partial answer ("Cool, I guess").
+
+**Why it matters:** Agent fleets turned API traffic into a production workload, but
+the observability story still assumes a human chatting with one model. Saturday's
+neuralwatt finding that cache misses double a request's power draw makes the point
+quantitative: the cache-miss rate is a cost line item, and only your own proxy can
+see it. Own the data path, or the vendor's dashboard is the only instrument you get.
+
+> "Own your infrastructure, your application visibility, data pathing, and storage."
+> — the essay's closing position, written after finding nothing usable in a provider
+> analytics panel.
+
+[`🔗 jrdsgl.com`](https://jrdsgl.com/if-you-dont-run-your-own-llm-proxy-how-the-fuck-do-you-even-know-whats-going-on/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50145507)
+
+---
+
+## 30. The Flock search a judge called "indiscriminate mass surveillance" — and the footage to prove it
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** 404 Media · 120+ HN pts · 10.4h ago (~09:55 UTC+8)
+- **Tags:** `surveillance` `privacy` `legal` `flock`
+
+404 Media published body-cam and dashcam footage (purchased from the court clerk by a
+reader) of the traffic stop behind Judge Sara Hill's ruling that a Flock
+license-plate-reader search was an unconstitutional warrantless search. Tulsa County
+deputy Freddie Alaniz is shown running a driver's plate through Flock and Motorola's
+Vigilant *while driving 60 mph*, before pulling her over — then interrogating her by
+scrolling through 79 camera hits documenting her travel across six states over 30
+days, treating ordinary road-trip behavior as suspicion. Despite the 91 pounds of
+meth found, Judge Hill suppressed everything as fruit of the poisonous tree: the
+search "intruded on her reasonable expectation of privacy in the whole of her
+physical movements." The records show her rental car was scanned 50+ times by 11
+agencies in five days; Sen. Ron Wyden is pressing a federal license-plate program for
+answers.
+
+**Why it matters:** Saturday's MapQuest item showed Flock's camera network rendered as
+a consumer map layer; this ruling shows the legal system pricing the same
+infrastructure as a dragnet. For anyone building aggregation systems, the design
+lesson is in the suppression: data-sharing defaults (11 agencies in five days) are
+what converted one deputy's hunch into a constitutional violation — and a collapsed
+prosecution.
+
+[`🔗 404 Media`](https://www.404media.co/watch-footage-of-the-flock-search-a-judge-ruled-unconstitutional/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50147455)
+
+---
+
+## 31. PalmOS Lemmings front-paged HN — and the thread became a preservation appeal
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 136+ pts · 18.4h ago (~01:56 UTC+8)
+- **Tags:** `retro` `palmos` `games` `preservation`
+
+ardiri/palmos-lemmings — a complete Lemmings port for classic Palm OS, source
+"PROVIDED AS-IS FOR EDUCATIONAL PURPOSES" — hit the HN front page with no new
+release; the repo was last pushed October 6 and its README is three lines and two
+screenshots. The thread is the content: commenters identify author Aaron Ardiri as a
+"PalmOS legend" (his Deity3D engine later powered Master Thief 3D), swap stories of
+the #palmchat era and cracking his programs, and note Nintendo had him remove other
+clones — though `palmos-maryobros` survives. It ends in a preservation drive: one
+user dug out a 2005 SD card of Palm games, and the thread's answer was "dump them
+somewhere... a lot of Palm stuff is bit rotting" — pointing at palmdb.net.
+
+**Why it matters:** The discover-not-develop pattern again — but for a healthy
+reason: the artifact is complete, and the attention is the community doing
+preservation triage in public. The 68K-era hand-tuned port is also a genre that no
+longer ships; the source is the documentation the README never wrote.
+
+[`🔗 ardiri/palmos-lemmings`](https://github.com/ardiri/palmos-lemmings) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50143536) · [`🔗 palmdb.net`](https://palmdb.net)
+
+---
+
+## 32. Superlite: hand a Claude Code plugin a spec, get 177/177 hidden tests in 16 minutes — with one approval
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 105+ pts · 10.3h ago (~10:01 UTC+8)
+- **Tags:** `agents` `claude-code` `plugins` `benchmarks`
+
+Iheatu Chris Wogu's Superlite (repo `iha2/superlite`, created Oct 17) is a Claude Code
+plugin that deliberately borrows Superpowers' structure and inverts its philosophy:
+one batched approval up front instead of Superpowers' 8–12 gates per feature, tasks
+run in parallel waves (peaking at 18 concurrent agents), and model routing by cost —
+Opus coordinates, Sonnet builds and reviews, Haiku does mechanical work. Rules are
+enforced by hooks rather than prompts, "because agents read rules and then do what
+they like." Its headless harness, scored by hidden test suites the agents never see:
+a static site generator plus spreadsheet engine built in 16.1 minutes passing 177/177
+— 52% faster than stock Superpowers (33.6 min), with a run-to-run spread of 9.1
+minutes vs 26.4. It never pushes to `main` or merges without a human. The author's
+own caveat: "a strong hint rather than peer-reviewed science."
+
+**Why it matters:** Since we covered Superpowers' v7.0.0 rebuild on Oct 16, this is
+the shelf's first serious measured counter-proposal: sequential-gated collaboration
+vs parallel-cheap autonomy, with variance — not just mean time — as the reported
+metric. The hidden-test harness is the part worth copying regardless of which
+philosophy you pick.
+
+[`🔗 contextfirst.blog`](https://contextfirst.blog/superlite-hand-an-agent-a-spec/) · [`🔗 iha2/superlite`](https://github.com/iha2/superlite) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50147492)
+
+---
+
+## 33. headroom, the 76k★ pre-LLM compression layer — and the paper that says skip the compressor
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +317★ today · 75,986 total
+- **Tags:** `context` `tokens` `agents` `benchmark`
+
+headroom (Apache-2.0, Python + TypeScript, pushed Oct 17, v0.41.0 on Oct 14) compresses
+everything an agent reads — tool outputs, logs, RAG chunks, files, history — before it
+reaches the model: a `compress()` library, a zero-code-change proxy (`headroom proxy
+--port 8787`), `headroom wrap` for a dozen-plus harnesses, an MCP server, and
+reversible compression (originals cached locally, retrieved on demand). Its demo:
+a 10,144-token log compressed to 1,260 with the `FATAL` line preserved byte-for-byte.
+The same week, arXiv 2610.21073 (Oct 15) measured the opposite policy for edit
+contexts: at equal token budgets on 300 SWE-rebench issues, selecting *whole files*
+verbatim beat the best of three compressors by +6.3 points and the best retrievers by
++9.3–12.7 (GPT-5.6 43.7%, Opus 5 46.7% resolved) — because compressors "retain the
+right files but alter their text, so fewer patches apply."
+
+**Why it matters:** The compression shelf keeps growing (billion-context yesterday,
+headroom at 76k★ today) — and is now being measured against. The two results aren't a
+refutation: headroom targets observation noise (logs, tool spew), the paper targets
+the code an agent must edit verbatim. But they sharpen the actual design rule: spend
+tokens on exact text where edits happen, compress where reading happens — and the
+paper's caveats hold (two models, one benchmark).
+
+[`🔗 headroomlabs-ai/headroom`](https://github.com/headroomlabs-ai/headroom) · [`🔗 Skip the Compressor (arXiv 2610.21073)`](https://arxiv.org/abs/2610.21073) · [`🔗 headroom docs`](https://docs.headroomlabs.ai/docs)
+
+---
+
+## 34. vLLM's Kimi K3 "megakernel": 130 µs and 23 kernels per layer down to 69 µs and 13 — 1.88× at batch 1
+
+- **Velocity:** ▮ steady
+- **Source:** vLLM blog · HN 29 pts · 23.2h ago (~21:08 UTC+8 Oct 18)
+- **Tags:** `inference` `vllm` `gpu` `performance`
+
+vLLM's team rebuilt Kimi K3's entire decode path as a unified CuTe DSL megakernel for
+Blackwell: per-layer decode drops from 130 µs across 23 kernels to 69 µs across 13.
+On GB300: 1.88× over stock vLLM at batch 1 (256.4 tok/s, TP16), 1.62–1.71× at batches
+16–64, and 842 tok/s with speculative decoding — plus 1.8× higher P90 interactivity on
+their AgentX workload (403.2 vs 223.7 tok/s/user). The techniques: shape-tuned small
+GEMMs, attention output fused with all-reduce and residual via fence-less NVLink
+exchange, router scores sharded instead of duplicated, and side-stream weight
+prefetch. The post is unusually honest about process: changes are deliberately
+isolated to model-specific code, scope is bounded (GB300, TP8/16, batches ≤64), and
+correctness validation caught real bugs — a compiler hoisting activation reads ahead
+of a sync, and long-context numerical issues invisible to kernel tests.
+
+**Why it matters:** Decode latency is the agent-interactivity bottleneck, and this is
+the frontier-open-model version of the fix — opt-in via `decode_backend:
+latency_specialized`, with the same pattern already extending to DeepSeek-V4.1-Flash
+(PR #61868) and early Muse Spark Open results above 950 tok/s/user. The validation
+section is the template: speed claims that survive MRCR/AIME25, not just kernel tests.
+
+[`🔗 vLLM blog`](https://vllm.ai/blog/2026-10-16-kimi-k3-megakernel) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50140784)
+
+---
+
+## 35. Since our Oct 12 note on Valen: the borrow checker that walks functions backwards
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 96+ pts · 24.1h ago (~20:11 UTC+8 Oct 18)
+- **Tags:** `programming-languages` `memory-safety` `compilers` `rust`
+
+Evan Ovadia (verdagon) has published the safety-check design behind Valen — the
+group-borrowing language we covered on Oct 12 — and it's a genuine inversion: the
+use-after-free check runs from the *last statement to the first*, maintaining a
+`pending` list where a USE adds a variable, a MUTATE verifies nothing pending gets
+invalidated, and a DECLARE removes it. Loops need no fixpoint iteration — per-loop
+`mutations_after_this`/`revived_after_this` lists make a single LOOP START check
+sufficient. The new checker is ~3,600 lines with v0.1 targeted for February; the
+post's claims are scoped honestly (not O(n) yet — MUTATE scans the whole pending
+list; no break/continue, closures, or associated groups yet), and the author believes
+Valen is "the only borrow checker whose safety check goes backwards."
+
+**Why it matters:** Every mainstream checker (Rust's NLL/Polonius) does forward
+conflict checking over region inference. A worked backward alternative — that
+accepts memory-safe mutable aliasing and calls Rust functions across the boundary —
+is the first real competing axis in the borrow-checker design space in years, from
+the person who has been building it in public.
+
+[`🔗 verdagon.dev`](https://verdagon.dev/blog/reverse-borrow-checking) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50140383)
+
+---
+
+## 36. Marble's curriculum graph trends at +427★/day: 1,590 micro-topics, 3,221 prerequisite edges — last touched in July
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +427★ today · 5,854 total
+- **Tags:** `dataset` `education` `ai` `open-data`
+
+os-taxonomy is Marble's open taxonomy of what children learn: 1,590 micro-topics (each
+with a plain-language description, mastery evidence criteria, a type, and an age
+range) wired into a 3,221-edge directed acyclic prerequisite graph — every edge tagged
+`hard`/`soft` with a one-line reason — and aligned to NGSS, Common Core and the UK
+National Curriculum. Data ships as UTF-8 JSON with JSON Schemas and a checksummed
+manifest; the interactive 3D visualization lives at withmarble.com/curriculum. Two
+honesty notes before you star it: the repo is a dataset, untouched since July 8 —
+this is discovery, not development — and it is *not* OSI open: the data is ©
+Generative Spark, Inc. with an attribution requirement, so read the license before
+building a product on it.
+
+**Why it matters:** Prerequisite structure is the piece most education datasets leave
+out and the piece tutor-agents need most — "what can I teach now, given what this
+learner has mastered" is a graph query, not a lookup. An open, standards-aligned
+version of that graph is a genuine commons; the license just decides who gets to
+build on it commercially.
+
+[`🔗 withmarbleapp/os-taxonomy`](https://github.com/withmarbleapp/os-taxonomy) · [`🔗 Marble curriculum explorer`](https://withmarble.com/curriculum)
+
+---
+
+## 37. Mitos: a Helix fork that bets on selections, multi-cursor — and a faster release cadence than upstream
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 70+ pts · 19h ago (~01:19 UTC+8)
+- **Tags:** `editors` `terminal` `helix` `fork`
+
+Mitos ("text editor for now and tomorrow") is a fork of the Helix terminal editor,
+MPL-2.0, that keeps Helix's modal foundation and re-centers the model on selections:
+"select text, then apply an operation," with multiple selections over tree-sitter
+text objects. It layers full LSP support (completion, diagnostics, rename, code
+actions), DAP debugging with breakpoints and stepping, a file explorer, workspace
+search, and image previews straight in the terminal. The site credits Helix with "a
+strong foundation" and frames the fork as a way to experiment at a faster pace —
+"expect less stability and occasional breaking changes." Notably absent: any AI
+feature at all.
+
+**Why it matters:** Editor forks are usually AI gambits; this one's whole pitch is
+editing mechanics and pace, in a terminal, with no model in sight — a useful control
+group for the assumption that every fork needs an agent in it. Whether a fork can
+hold a community Helix hasn't converted is the actual experiment to watch.
+
+[`🔗 mitos.computer`](https://mitos.computer/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50143132)
+
+---
+
+## 38. "Flatpak – An Insecurity Nightmare" is a post that argues the opposite of its title
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 55+ pts · 7.2h ago (~13:11 UTC+8)
+- **Tags:** `flatpak` `linux` `security` `sandboxing`
+
+A title-vs-content trap worth flagging: the post resurfacing on HN today under
+"Flatpak – An Insecurity Nightmare" is actually a *defense* of Flatpak against
+flatkill.org's critique. Its argument: "Flatpak is a sandbox. And Flatpak is secure.
+The applications are not" — critics cherry-pick the worst offenders, over-broad
+static permissions are an API-maturity problem (Portals can't yet cover every use
+case), and "outdated dependencies isn't even an argument" because runtimes receive
+security updates. Its strongest evidence is the fractureiser malware: it hardcodes
+`~/.config/` for persistence, which inside a Flatpak sandbox writes to a tmpfs that's
+wiped on restart — and with no systemd in the sandbox, persistence simply fails. The
+HN thread spent its 47 comments relitigating all of it today.
+
+**Why it matters:** The practical takeaway survives the framing fight: per-app
+permission review (Flatseal) is the actual security surface, and sandbox containment
+is the difference between a malware incident and a wiped tmpfs. Read past the title —
+on both this post and the critique it answers.
+
+[`🔗 oro.gay`](https://oro.gay/posts/flatpak-an-insecurity-nightmare/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50148601)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-19T04:25:00Z |
-| Items | 27 |
-| Sources tracked | 25 (Hacker News, GitHub Trending, GitHub releases/advisories/issues, Reddit, NVD/VulnCheck, GHSA, CISA KEV, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv, The Guardian, 3Blue1Brown Substack, neilmadden.blog, getlazarus.org, blog.picheta.me, liveandletsfly.com) |
+| Generated | 2026-10-19T12:20:00Z |
+| Items | 38 |
+| Sources tracked | 36 (Hacker News, GitHub Trending, GitHub releases/advisories/issues, Reddit, NVD/VulnCheck, GHSA, CISA KEV, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv, The Guardian, 3Blue1Brown Substack, neilmadden.blog, getlazarus.org, blog.picheta.me, liveandletsfly.com, LWN, jrdsgl.com, 404 Media, contextfirst.blog, vLLM blog, verdagon.dev, mitos.computer, oro.gay, headroom docs, withmarble.com, palmdb.net) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

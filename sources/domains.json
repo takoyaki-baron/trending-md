@@ -12560,5 +12560,140 @@
     "en": "Engineering blog of t3.at, a Vienna software shop (Flo/Florian Schindler); long-form tutorials with complete runnable code. Cross-checked 2026-10-19: the parser-combinators tutorial's type signature, pSeq/pMap/pRepeat builds and ping-output parser all match what the HN thread (50139067) quotes and the author confirms in-reply.",
     "jp": "ウィーンのソフトウェア企業t3.atのエンジニアリングブログ（Flo/Florian Schindler）。動くコード까지載った長文チュートリアル。2026-10-19に突合済み:パーサーコンビネータ解説の型シグネチャ、pSeq/pMap/pRepeat、ping出力パーサーはHNスレッド（50139067）の引用と本人の返信と一致。",
     "zh": "维也纳软件公司 t3.at 的工程博客（Flo/Florian Schindler）；长篇教程附完整可运行代码。已于 2026-10-19 交叉核验：解析组合子教程的类型签名、pSeq/pMap/pRepeat 构造与 ping 输出解析器，与 HN 讨论串（50139067）引用内容及作者本人回复一致。"
+  },
+  "jrdsgl.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Jared Siegel's personal engineering blog (agent infrastructure, LLM ops). Cross-checked (10-19): the self-hosted-LLM-proxy essay's quotes and claims match its 203-point HN discussion; author names no vendor, which the item preserves.",
+    "zh": "Jared Siegel 的个人工程博客（agent 基础设施、LLM 运维）。交叉核验（10-19）：自托管 LLM 代理一文中的引文与主张与其 203 分的 HN 讨论一致；作者不点名任何厂商，条目保留了这一点。",
+    "jp": "Jared Siegel の個人エンジニアリングブログ（agent インフラ、LLM 運用）。突合済み（10-19）：セルフホスト LLM プロキシ essay の引用と主張が 203 ポイントの HN 議論と一致。作者はベンダーを名指さず、項目もそれを維持。"
+  },
+  "palmdb.net": {
+    "cat": "data",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Community archive of Palm OS software, built against bit-rot. Cross-checked (10-19): cited in the palmos-lemmings HN thread as the preservation drop-off point; hosting role confirmed by thread participants.",
+    "zh": "对抗 bit rot 的 Palm OS 软件社区档案库。交叉核验（10-19）：在 palmos-lemmings 的 HN 讨论串中被指为保存提交点；由讨论串参与者确认其托管角色。",
+    "jp": "bit rot に対抗する Palm OS ソフトウェアのコミュニティアーカイブ。突合済み（10-19）：palmos-lemmings の HN スレッドで保存先として指され、参加者がその役割を確認。"
+  },
+  "contextfirst.blog": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Project blog for Superlite, a Claude Code plugin. Cross-checked (10-19): the benchmark claims (16.1 min, 177/177 hidden tests, 9.1 vs 26.4 min spread) are the author's own; the referenced repo iha2/superlite exists on GitHub with a matching description — claims verified as self-reported, not independent.",
+    "zh": "Superlite（Claude Code 插件）的项目博客。交叉核验（10-19）：基准声明（16.1 分钟、177/177 隐藏测试、9.1 对 26.4 分钟波动）为作者自报；其引用的仓库 iha2/superlite 在 GitHub 上存在且描述吻合——已验证为自报数据，非独立复现。",
+    "jp": "Claude Code プラグイン Superlite のプロジェクトブログ。突合済み（10-19）：ベンチマーク主張（16.1 分、177/177 隠しテスト、9.1 対 26.4 分のばらつき）は作者自身の数値で、参照先リポジトリ iha2/superlite が GitHub に実在し説明も一致——自己申告として検証済み、独立再現ではない。"
+  },
+  "docs.headroomlabs.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Official docs for headroom, the pre-LLM context compression layer. Cross-checked (10-19): the proxy port (8787), wrap/MCP surface and reversible-compression claims in the docs match the repo README fetched from raw.githubusercontent.com.",
+    "zh": "headroom（pre-LLM 上下文压缩层）的官方文档。交叉核验（10-19）：文档中的代理端口（8787）、wrap/MCP 接口与可逆压缩声明，与从 raw.githubusercontent.com 抓取的仓库 README 一致。",
+    "jp": "pre-LLM コンテキスト圧縮レイヤー headroom の公式ドキュメント。突合済み（10-19）：プロキシポート（8787）、wrap/MCP の提供面、可逆圧縮の主張が raw.githubusercontent.com から取得したリポジトリ README と一致。"
+  },
+  "vllm.ai": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Engineering blog of the vLLM inference project — kernel-level optimization posts with published caveats. Cross-checked (10-19): the Kimi K3 megakernel numbers (130 to 69 µs, 1.88x at batch 1) and its own validation-caught-bugs section match the HN discussion.",
+    "zh": "vLLM 推理项目的工程博客——带公开告诚的内核级优化文章。交叉核验（10-19）：Kimi K3 megakernel 的数字（130→69 µs、batch 1 提升 1.88×）及其验证抓 bug 的章节与 HN 讨论一致。",
+    "jp": "vLLM 推論プロジェクトのエンジニアリングブログ——注意書きを公開するカーネルレベル最適化の投稿。突合済み（10-19）：Kimi K3 megakernel の数値（130→69 µs、batch 1 で 1.88×）と検証がバグを捉えた節が HN 議論と一致。"
+  },
+  "oro.gay": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal blog of Yves Auxier (Linux desktop). Cross-checked (10-19): the Flatpak post's content — a defense arguing that Flatpak is a sandbox and the applications are not secure, with the fractureiser tmpfs evidence — matches the HN discussion it resurfaced into. Note: title argues the opposite of the body.",
+    "zh": "Yves Auxier 的个人博客（Linux 桌面）。交叉核验（10-19）：Flatpak 文章的内容——主张 Flatpak 是沙箱、不安全的是应用，并给出 fractureiser tmpfs 证据的辩护——与其重新流传的 HN 讨论一致。注意：标题与正文立场相反。",
+    "jp": "Yves Auxier の個人ブログ（Linux デスクトップ）。突合済み（10-19）：Flatpak 記事の内容——「Flatpak はサンドボックス。安全でないのはアプリ」とする擁護と fractureiser tmpfs の証拠——に、再浮上した HN 議論が一致。注意：タイトルは本文と逆の主張。"
+  },
+  "mitos.computer": {
+    "cat": "code",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Official site of Mitos, an MPL-2.0 fork of the Helix terminal editor. Cross-checked (10-19): the fork-of-Helix claim, selection-first model and expect-less-stability framing match the HN discussion.",
+    "zh": "Mitos 官网——Helix 终端编辑器的 MPL-2.0 分叉。交叉核验（10-19）：Helix 分叉的定位、选区优先模型与「预期更少稳定性」的说法与 HN 讨论一致。",
+    "jp": "Helix ターミナルエディタの MPL-2.0 フォーク Mitos の公式サイト。突合済み（10-19）：Helix フォークであること、セレクション優先のモデル、「安定性は少なく」という姿勢が HN 議論と一致。"
+  },
+  "withmarble.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Marble's product site; hosts the interactive curriculum explorer for its open skill taxonomy. Cross-checked (10-19): the explorer's taxonomy (1,590 micro-topics, 3,221 prerequisite edges) matches the withmarbleapp/os-taxonomy repo README and JSON manifest.",
+    "zh": "Marble 的产品官网；承载其开放技能分类法的交互式课程浏览器。交叉核验（10-19）：浏览器中的分类法数据（1,590 个微主题、3,221 条先修边）与 withmarbleapp/os-taxonomy 仓库 README 及 JSON manifest 一致。",
+    "jp": "Marble の製品サイト。オープンスキルタクソノミーのインタラクティブなカリキュラムエクスプローラをホスト。突合済み（10-19）：エクスプローラのタクソノミー（1,590 マイクロトピック、3,221 前提エッジ）が withmarbleapp/os-taxonomy の README と JSON manifest と一致。"
+  },
+  "karrisaarinen.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Linear co-founder Karri Saarinen's personal blog. Cross-checked (10-19): the 'Someone behind the software' essay matches its 358-point HN discussion (140+ comments); the quoted closing line is confirmed in-thread.",
+    "zh": "Linear 联合创始人 Karri Saarinen 的个人博客。交叉核验（10-19）：Someone behind the software 一文与其 358 分的 HN 讨论（140+ 评论）一致；引用的结尾句已在讨论串中核实。",
+    "jp": "Linear 共同創業者 Karri Saarinen の個人ブログ。突合済み（10-19）：'Someone behind the software' essay が 358 ポイントの HN 議論（140+ コメント）と一致。引用された結語はスレッド内で確認。"
+  },
+  "3blue1brown.substack.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Grant Sanderson (3Blue1Brown) on Substack — math exposition with video companions. Cross-checked (10-19): the essay mirrors the same-titled YouTube video, and the HN discussion (404 points) treats both.",
+    "zh": "Grant Sanderson（3Blue1Brown）的 Substack——配有视频的数学讲解。交叉核验（10-19）：文章与同名 YouTube 视频互为镜像，HN 讨论（404 分）两者都涉及。",
+    "jp": "Grant Sanderson（3Blue1Brown）の Substack——動画を伴う数学解説。突合済み（10-19）：essay は同名の YouTube 動画と呼応し、HN 議論（404 ポイント）が両方を扱う。"
+  },
+  "neilmadden.blog": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Neil Madden's security/cryptography blog (Java, API design, JEP review). Cross-checked (10-19): the sealed-classes post's claims — a recompiled consumer breaks at compile time, an unrecompiled one at runtime via MatchException — match the HN discussion; the JEP 524 reference is checkable in the OpenJDK sources.",
+    "zh": "Neil Madden 的安全/密码学博客（Java、API 设计、JEP 评审）。交叉核验（10-19）：sealed 类文章的论点——重新编译的消费方在编译期破坏、未重编译的退化为运行时 MatchException——与 HN 讨论一致；JEP 524 的引用可在 OpenJDK 源码中核实。",
+    "jp": "Neil Madden のセキュリティ/暗号ブログ（Java、API 設計、JEP レビュー）。突合済み（10-19）：sealed クラス記事の主張——再コンパイルすればコンパイルエラー、そうでなければ実行時 MatchException——が HN 議論と一致。JEP 524 の参照は OpenJDK ソースで確認可能。"
+  },
+  "getlazarus.org": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Official site of the Lazarus IDE / Free Pascal project. Cross-checked (10-19): the dynamic-packages page (runtime load/unload, DynPkgTypes.pas, sub-second palette updates) matches the HN discussion.",
+    "zh": "Lazarus IDE / Free Pascal 项目官网。交叉核验（10-19）：动态包页面（运行时加载/卸载、DynPkgTypes.pas、秒级调色板更新）与 HN 讨论一致。",
+    "jp": "Lazarus IDE / Free Pascal プロジェクトの公式サイト。突合済み（10-19）：ダイナミックパッケージのページ（実行時ロード/アンロード、DynPkgTypes.pas、秒単位のパレット更新）が HN 議論と一致。"
+  },
+  "blog.picheta.me": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Dominik Picheta's blog (Nim core developer). Cross-checked (10-19): the KillSwitch post's adversarial-design claims match the project leaderboard (top score 66.8) and the HN discussion.",
+    "zh": "Dominik Picheta 的博客（Nim 核心开发者）。交叉核验（10-19）：KillSwitch 文章的对抗性设计主张与项目排行榜（最高分 66.8）及 HN 讨论一致。",
+    "jp": "Dominik Picheta のブログ（Nim コア開発者）。突合済み（10-19）：KillSwitch 記事の敵対的設計の主張がプロジェクトのリーダーボード（最高スコア 66.8）と HN 議論と一致。"
+  },
+  "bench.killswitch-lang.org": {
+    "cat": "data",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Leaderboard for the KillSwitch adversarial-language benchmark. Cross-checked (10-19): the top score (66.8, Opus 5 leading) quoted on HN matches the leaderboard the blog links.",
+    "zh": "KillSwitch 对抗性语言基准的排行榜。交叉核验（10-19）：HN 上引用的最高分（66.8，Opus 5 领先）与博客所链的排行榜一致。",
+    "jp": "KillSwitch の敵対的言語ベンチマークのリーダーボード。突合済み（10-19）：HN で引用された最高スコア（66.8、Opus 5 が首位）がブログのリンク先リーダーボードと一致。"
+  },
+  "liveandletsfly.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Frequent-travel trade blog (Live and Let's Fly). Cross-checked (10-19): its BA/Meta-glasses report matches the HN discussion; the feed preserved its own caveat that BA's written conditions never name Meta glasses.",
+    "zh": "常旅客行业博客（Live and Let's Fly）。交叉核验（10-19）：其 BA/Meta 眼镜报道与 HN 讨论一致；本 feed 保留了它自己的告诚——BA 的书面条款从未点名 Meta 眼镜。",
+    "jp": "頻繁旅行者の業界ブログ（Live and Let's Fly）。突合済み（10-19）：BA/Meta グラスの記事が HN 議論と一致。フィードは、BA の書かれた条件が Meta グラスを名指ししていないという同記事自身の注意書きを保持。"
   }
 }

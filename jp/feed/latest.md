@@ -1,8 +1,8 @@
 ---
 date: 2026-10-19
-updated: 2026-10-19T04:25:00Z
+updated: 2026-10-19T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 25
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -711,13 +711,322 @@ Durable Object 内の SQLite に書き込んで切断する。電話が真実の
 
 ---
 
+## 28. Linux 7.3 は記録破り：18,765 コミット、3,021 人の開発者、うち 807 人が初参加
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 293+ pts · 5h 前（~15:23 UTC+8）
+- **Tags:** `linux` `kernel` `release` `open-source`
+
+Linus Torvalds が日曜日にカーネル 7.3 をリリースした。LWN はこのサイクルを
+「あらゆる面で記録破り」と呼ぶ：3,021 人の開発者による 18,765 の非マージコミット、
+うち 807 人は初めてカーネルに貢献した人々。機能のハイライト：拡張された
+`binfmt_misc`、大規模システム向けのグループスケジューリング、すべての操作を
+故意に失敗させる `failfs`（テスト用ファイルシステム）、新しい `fchroot()`
+システムコール、BPF プログラム向けのグローバル per-CPU データ、`sched_ext`
+サブスケジューラ機能の完了、VM のワーキングセット追跡、ntfs3 の代替データ
+ストリーム、そして長い SMB サーバ改善リスト。リリース自体は波乱なく——「この
+最後の 1 週間、特別なことは何も起きていないように見える」——Linus は恒例の家族
+バケーションからリリースし、リリース日を「ボートの上と水中で過ごし」てから
+7.4 のマージウィンドウを開けると述べた。
+
+**Why it matters:** 記録の更新は議論の真っ最中に起きた：昨日の 7.2 分析は
+Assisted-by タグ 1,111 件と Fixes タグの急増を数えたが、7.3 の初参加 807 人は
+パイプラインが同時に広がっていることを示す。機能リストも静かに agent インフラ
+に関係する——`fchroot()` と `failfs` はサンドボックスと fault injection の
+プリミティブで、まさに agent サンドボックス作りがカーネルに求め続けている
+ノブだ。
+
+> バケーション中のリリースについてあるコメント者の総括：マージウィンドウ前の
+> 「submerge window（潜水ウィンドウ）」になる、と。
+
+[`🔗 LWN：Linux 7.3 リリース`](https://lwn.net/Articles/1101143/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50149392)
+
+---
+
+## 29. 「自分の LLM プロキシを運用していないなら、何が起きているかをどう知るのか？」——203 points の同意
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 203+ pts · 15.2h 前（~05:09 UTC+8）
+- **Tags:** `llm` `proxy` `observability` `agents`
+
+Jared Siegel が、プロバイダ側アナリティクスを信頼することへの反論を書いた：
+ベンダーのダッシュボードやチャット内トークンカウンタは「目の吸い物だ。時系列
+データを持つ、エンジニア向けのトークン使用統計ではない」。セルフホスト プロキシ
+が彼に与えるもの：リクエストレベルのログ（どのキーが、どのクライアントから、
+いつ、どのモデルを呼び、ステータスは何か）、単一エンドポイントを通じた
+プロバイダ/モデルの即時切替、agent ごとの仮想 API キー（メインキーがあらゆる
+ハーネスに散らばらない）、そしてコーディングセッション中のキャッシュミスを
+「手で 20 秒」で突き止める能力。彼は意図的に製品名を挙げない——「どのプロキシ
+プロバイダを使うべきかは提案しない。自分が管理する場所で自分で動かせとしか言わ
+ない」——OpenTelemetry エクスポートも部分的な答えとして退ける（「ふーん、って
+感じ」）。
+
+**Why it matters:** Agent フリートは API トラフィックを本番ワークロードに変えた
+のに、可観測性の物語は「一人の人間が一つのモデルとチャットする」前提のままだ。
+土曜の neuralwatt の発見——キャッシュミスがリクエストの消費電力を倍増させる——
+はこれを定量的にした：キャッシュヒット率はコストの行項目であり、それが見えるのは
+自分のプロキシだけだ。データパスを所有しなければ、ベンダーのダッシュボードが
+唯一の計器になる。
+
+> 「Own your infrastructure, your application visibility, data pathing, and
+> storage.」——プロバイダのアナリティクスパネルで使えるものを何も見つけられなかった
+> 後に書かれた、エッセイの結語。
+
+[`🔗 jrdsgl.com`](https://jrdsgl.com/if-you-dont-run-your-own-llm-proxy-how-the-fuck-do-you-even-know-whats-going-on/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50145507)
+
+---
+
+## 30. 裁判官が「無差別の大量監視」と呼んだ Flock 捜索——そしてそれを証明する映像
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** 404 Media · 120+ HN pts · 10.4h 前（~09:55 UTC+8）
+- **Tags:** `surveillance` `privacy` `legal` `flock`
+
+404 Media が、Sara Hill 判事が「違憲の令状なき捜索」と認定した Flock
+ナンバープレート読み取り捜索のボディカム・ドライブレコーダー映像を公開した
+（読者が裁判所書記官から購入）。映像には、Tulsa 郡の副保安官 Freddie Alaniz が
+時速 60 マイルで運転しながら Flock と Motorola Vigilant でドライバーのナンバーを
+照会し、その後に止めている様子が映る——そして、30 日間で 6 州にわたる移動を記録した
+79 件のカメラヒットをスクロールしながら尋問し、普通のロードトリップの振る舞いを
+疑わしさとして扱う様子も。91 ポンドのメスフェタミンが見つかったにもかかわらず、
+Hill 判事はすべてを「毒樹の実」として除外した：この捜索は「彼女の身体移動全体に
+対する合理的なプライバシー期待を侵害した」。記録によれば彼女のレンタカーは
+5 日間で 11 機関に 50 回以上スキャンされていた。Ron Wyden 上院議員は連邦の
+ナンバープレートプログラムに説明を求めている。
+
+**Why it matters:** 土曜の MapQuest 記事は Flock のカメラネットワークが消費者向け
+地図レイヤーとして描かれた姿を見せた。この判決は、同じインフラが司法制度の中で
+「網を張る監視（dragnet）」として値付けられた姿を見せる。集約システムを作るすべての
+人への教訓は証拠除外の中にある：共有のデフォルト（5 日で 11 機関）が、副保安官の
+直感を違憲侵害と崩壊した起訴に変えたのだ。
+
+[`🔗 404 Media`](https://www.404media.co/watch-footage-of-the-flock-search-a-judge-ruled-unconstitutional/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50147455)
+
+---
+
+## 31. PalmOS 版 Lemmings が HN フロントページに——スレッドは保存の訴えになった
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 136+ pts · 18.4h 前（~01:56 UTC+8）
+- **Tags:** `retro` `palmos` `games` `preservation`
+
+ardiri/palmos-lemmings——クラシック Palm OS 向けの完全な Lemmings ポートで、
+ソースは「教育目的で AS-IS 提供」——が、新しいリリースなしで HN フロントページに
+乗った。リポジトリの最終 push は 10 月 6 日で、README は 3 行とスクリーンショット
+2 枚だけ。スレッドこそが中身だ：コメント者たちは作者 Aaron Ardiri を「PalmOS の
+伝説」と認め（彼の Deity3D エンジンは後に Master Thief 3D を支えた）、#palmchat
+時代や彼のプログラムをクラックした思い出を語り、任天堂に他のクローンの削除を
+求められた件に触れる——ただし `palmos-maryobros` は生き残っている。締めくくりは
+保存活動への呼びかけ：あるユーザーが 2005 年の Palm ゲーム入り SD カードを掘り出し、
+スレッドの答えは「どこかにアップロードしてくれ……Palm のソフトはどんどん bit rot
+している」——palmdb.net を指して。
+
+**Why it matters:** またの「発見であって開発ではない」パターン——ただし今回は
+健全な理由がある：成果物は完成しており、注目はコミュニティが公開の場で保存の
+トリアージをしているのだ。68K 時代の手作業チューニングのポートは、もう出荷されない
+ジャンルでもある。このソースこそ、README が書かなかったドキュメントだ。
+
+[`🔗 ardiri/palmos-lemmings`](https://github.com/ardiri/palmos-lemmings) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50143536) · [`🔗 palmdb.net`](https://palmdb.net)
+
+---
+
+## 32. Superlite：Claude Code プラグインに仕様を渡し、16 分で隠しテスト 177/177——承認は 1 回だけ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 105+ pts · 10.3h 前（~10:01 UTC+8）
+- **Tags:** `agents` `claude-code` `plugins` `benchmarks`
+
+Iheatu Chris Wogu の Superlite（リポジトリ `iha2/superlite`、10 月 17 日作成）は、
+Superpowers の構造を借りつつその哲学を逆転させる Claude Code プラグインだ：
+Superpowers の機能あたり 8–12 のゲートの代わりに、最初にまとめて質問して承認は
+1 回。タスクは並列ウェーブで走り（最大 18 の同時 agent）、モデルはコストで
+ルーティングする——Opus が調整し、Sonnet が構築・レビューし、Haiku が機械的な
+作業を担う。ルールはプロンプトではなく hook で強制する。「agent はルールを読んだ上で、
+好き勝手にやる」からだ。エージェントが決して見ない隠しテストスイートで探点する
+ヘッドレスハーネスの結果：静的サイトジェネレータ＋スプレッドシートエンジンを
+16.1 分で構築し 177/177 合格——ストックの Superpowers（33.6 分）より 52% 高速で、
+実行間のばらつきは 9.1 分対 26.4 分。人間の許可なく `main` に push したりマージ
+したりすることはない。作者自身の注意：「同僚審査された科学ではなく、強い示唆」。
+
+**Why it matters:** 10 月 16 日に Superpowers v7.0.0 の再構築を報じたばかりだが、
+これはその棚で初の本気の測定付き対抗案だ：逐次ゲート方式の協調 vs 並列の安い
+自律——そして平均時間だけでなく分散を報告指標にしている。どの哲学を選ぶにせよ、
+隠しテストハーネスの部分はそのまま真似する価値がある。
+
+[`🔗 contextfirst.blog`](https://contextfirst.blog/superlite-hand-an-agent-a-spec/) · [`🔗 iha2/superlite`](https://github.com/iha2/superlite) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50147492)
+
+---
+
+## 33. 76k★ の pre-LLM 圧縮レイヤー headroom——そして「コンプレッサーをスキップせよ」という論文
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +317★ · 累計 75,986
+- **Tags:** `context` `tokens` `agents` `benchmark`
+
+headroom（Apache-2.0、Python + TypeScript、10 月 17 日に push、v0.41.0 は 10 月
+14 日）は、agent が読むすべて——ツール出力、ログ、RAG チャンク、ファイル、履歴——を
+モデルに届く前に圧縮する：`compress()` ライブラリ、コード変更不要のプロキシ
+（`headroom proxy --port 8787`）、十数ハーネスを wrap する `headroom wrap`、
+MCP サーバ、そして可逆圧縮（元データはローカルにキャッシュし、必要時に取り出す）。
+デモでは 10,144 トークンのログを 1,260 まで圧縮しつつ `FATAL` 行をバイト単位で
+保存する。同じ週、arXiv 2610.21073（10 月 15 日）は編集コンテキストに関して逆の
+方針を測った：300 の SWE-rebench 問題で等トークン予算の下、*ファイル丸ごと*を
+逐語的に選ぶ方が、3 つのコンプレッサーの最良比で +6.3 ポイント、リトリーバーの
+最良比で +9.3–12.7 ポイント勝った（GPT-5.6 は 43.7%、Opus 5 は 46.7% 解決）——
+コンプレッサーは「正しいファイルを残しながらテキストを改変するため、適用できる
+パッチが減る」からだ。
+
+**Why it matters:** 圧縮の棚は拡大し続けている（昨日は billion-context、今日は
+76k★ の headroom）——そして今や測定対象になっている。2 つの結果は反証ではない：
+headroom が狙うは観測ノイズ（ログ、ツールの出力垂れ流し）で、論文が狙うは agent が
+逐語的に編集すべきコードだ。ただし本当の設計規則は両者で研ぎ澄まされる：編集が
+起きる場所にはトークンで正確なテキストを買い、読むだけの場所は圧縮する——そして
+論文の限界（2 モデル、1 ベンチマーク）も忘れないこと。
+
+[`🔗 headroomlabs-ai/headroom`](https://github.com/headroomlabs-ai/headroom) · [`🔗 Skip the Compressor（arXiv 2610.21073）`](https://arxiv.org/abs/2610.21073) · [`🔗 headroom ドキュメント`](https://docs.headroomlabs.ai/docs)
+
+---
+
+## 34. vLLM の Kimi K3「megakernel」：レイヤーあたり 130 µs / 23 カーネルが 69 µs / 13 に——batch 1 で 1.88×
+
+- **Velocity:** ▮ steady
+- **Source:** vLLM ブログ · HN 29 pts · 23.2h 前（10 月 18 日 ~21:08 UTC+8）
+- **Tags:** `inference` `vllm` `gpu` `performance`
+
+vLLM チームは Kimi K3 のデコードパス全体を Blackwell 向けの統一 CuTe DSL
+megakernel として再構築した：レイヤーあたりのデコードは 23 カーネルの 130 µs から
+13 カーネルの 69 µs へ。GB300 上で：batch 1 でストック vLLM 比 1.88×（256.4
+tok/s、TP16）、batch 16–64 で 1.62–1.71×、投機的デコード併用で 842 tok/s——
+AgentX ワークロードでは P90 インタラクティビティが 1.8×（403.2 対 223.7
+tok/s/user）。技術は：形状チューニングした小行列 GEMM、fence レスの NVLink 交換に
+よる attention 出力と all-reduce・残差加算の融合、複製ではなくシャーディングされた
+router スコア、サイドストリームの重みプリフェッチ。投稿はプロセスについて
+異例ほど正直だ：変更は意図的にモデル固有コードへ隔離され、スコープは有界
+（GB300、TP8/16、batch ≤64）、そして正しさの検証が実際のバグを捉えた——コンパイラが
+同期待ちの前にアクティベーション読み出しを繰り上げた件と、カーネルテストでは
+見えない長コンテキストの数値問題。
+
+**Why it matters:** デコードレイテンシは agent インタラクティビティのボトルネック
+であり、これはフロンティアオープンモデル版の修正だ——`decode_backend:
+latency_specialized` でオプトインでき、同じパターンはすでに DeepSeek-V4.1-Flash
+（PR #61868）と、950 tok/s/user を超えた初期の Muse Spark Open に広がっている。
+検証セクションこそテンプレートだ：カーネルテストだけでなく MRCR/AIME25 を生き
+延びた速度主張。
+
+[`🔗 vLLM ブログ`](https://vllm.ai/blog/2026-10-16-kimi-k3-megakernel) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50140784)
+
+---
+
+## 35. 10 月 12 日の Valen ノートに続報：関数を逆方向に歩く借用チェッカー
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 96+ pts · 24.1h 前（10 月 18 日 ~20:11 UTC+8）
+- **Tags:** `programming-languages` `memory-safety` `compilers` `rust`
+
+Evan Ovadia（verdagon）が、10 月 12 日に取り上げたグループ借用言語 Valen の
+背後にある安全性チェックの設計を公開した。それは本物の逆転だ：use-after-free
+チェックが*最後の文から最初の文へ*走り、`pending` リストを管理する——USE は
+変数を追加し、MUTATE は pending の何も無効化されないことを検証し、DECLARE は
+取り除く。ループは不動点反復を必要としない——ループごとの
+`mutations_after_this`/`revived_after_this` リストのおかげで、LOOP START の
+チェック 1 回で足りる。新しいチェッカーは約 3,600 行で、v0.1 は 2 月を目標にする。
+投稿の主張は誠実にスコープされている（まだ O(n) ではない——MUTATE は pending
+リスト全体を走査する。break/continue、クロージャ、関連グループは未対応）。そして
+作者は、Valen は「安全性チェックが逆方向に走る唯一の借用チェッカー」だと考えている。
+
+**Why it matters:** すべての主流チェッカー（Rust の NLL/Polonius）は、リージョン
+推論の上に前方の衝突チェックを行う。動く後方代替——メモリ安全な可変エイリアスを
+受け入れ、境界を越えて Rust 関数を呼べる——は、借用チェッカー設計空間に何年も
+ぶりに現れた本物の競合軸であり、公開しながら作り続けている本人によるものだ。
+
+[`🔗 verdagon.dev`](https://verdagon.dev/blog/reverse-borrow-checking) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50140383)
+
+---
+
+## 36. Marble のカリキュラムグラフが +427★/日でトレンドに：1,590 のマイクロトピック、3,221 の前提エッジ——最終更新は 7 月
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +427★ · 累計 5,854
+- **Tags:** `dataset` `education` `ai` `open-data`
+
+os-taxonomy は Marble のオープンな「子どもが何を学ぶか」のタクソノミーだ：
+1,590 のマイクロトピック（各々に平易な説明、習得の証拠基準、タイプ、年齢幅）が
+3,221 エッジの有向非巡回前提グラフに結線される——すべてのエッジには `hard`/
+`soft` のタグと一行の理由が付く——そして NGSS、Common Core、英国 National
+Curriculum にアラインされている。データは UTF-8 JSON で、JSON Schema とチェック
+サム付き manifest が付く。インタラクティブな 3D 可視化は withmarble.com/curriculum
+にある。スターを押す前の正直な注意を 2 つ：これはリポジトリというよりデータセットで、
+7 月 8 日から無更新——これは発見であって開発ではない。そして OSI 意味での
+オープンではない：データは Generative Spark, Inc. の著作物で帰属表示が要求されるため、
+製品に使う前にライセンスを読むこと。
+
+**Why it matters:** 前提構造こそ、ほとんどの教育データセットが欠いていて、チューター
+agent が最も必要とするものだ——「この学習者が習得済みのものを踏まえ、今何を教えられるか」
+はルックアップではなくグラフクエリだ。そのグラフのオープンで標準アライン版は本物の
+コモンズになる。ライセンスは、誰が商業的に其の上に建てられるかを決めるだけだ。
+
+[`🔗 withmarbleapp/os-taxonomy`](https://github.com/withmarbleapp/os-taxonomy) · [`🔗 Marble カリキュラムエクスプローラ`](https://withmarble.com/curriculum)
+
+---
+
+## 37. Mitos：セレクションとマルチカーソルに賭ける Helix フォーク——リリースのテンポは上流より速い
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 70+ pts · 19h 前（~01:19 UTC+8）
+- **Tags:** `editors` `terminal` `helix` `fork`
+
+Mitos（「今と明日のためのテキストエディタ」）は Helix ターミナルエディタの
+フォークで、MPL-2.0。Helix のモーダル基盤を保ちながら、モデルをセレクション中心に
+再構築する：「テキストを選び、操作を適用する」。tree-sitter のテキストオブジェクトに
+渡る複数セレクションにも対応。LSP の完全サポート（補完、診断、リネーム、コード
+アクション）、ブレークポイントとステップ実行のできる DAP デバッグ、ファイル
+エクスプローラ、ワークスペース検索、ターミナルに直接画像プレビューを重ねる。
+サイトは Helix に「強固な基盤」を認めた上で、フォークをより速いテンポで実験する場と
+位置づける——「安定性は少なく、時折破壊的変更があると期待してほしい」。顕著な欠落：
+AI 機能がまったくないこと。
+
+**Why it matters:** エディタのフォークはたいてい AI 賭けだ。これの売りはすべてが
+編集のメカニクスとテンポで、ターミナルの中、モデルなしで完結している——「すべての
+フォークに agent が必要」という前提に対する有用な対照群だ。フォークが Helix が
+取り込めなかったコミュニティを維持できるか、それが本当に見るべき実験だ。
+
+[`🔗 mitos.computer`](https://mitos.computer/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50143132)
+
+---
+
+## 38. 「Flatpak – An Insecurity Nightmare」はタイトルと逆の主張をする記事だ
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 55+ pts · 7.2h 前（~13:11 UTC+8）
+- **Tags:** `flatpak` `linux` `security` `sandboxing`
+
+ 印を付けておきたい「タイトル対コンテンツ」の罠：今日 HN に「Flatpak – An Insecurity
+Nightmare」として再浮上したこの記事は、実際には flatkill.org の批判に*反論する*
+Flatpak 擁護だ。その論点：「Flatpak はサンドボックスだ。Flatpak は安全だ。安全で
+ないのはアプリの方だ」——批判者は最悪の事例を選び放題で、過剰に広い静的パーミッションは
+API の成熟度の問題（Portals はまだ全ユースケースを覆えない）であり、「依存関係の
+陳腐化は最初から論点にならない」——ランタイムはセキュリティアップデートを受け取る
+からだ。最も強い証拠は fractureiser マルウェアだ：`~/.config/` をハードコードして
+永続化しようとするが、Flatpak サンドボックス内では再起動で消える tmpfs への書き込みに
+なり——サンドボックス内に systemd はないので——永続化はそもそも失敗する。今日の
+HN では 47 のコメントがこの全部を再燃させた。
+
+**Why it matters:** 枠組みの争いを別にすれば、実務的な結論は残る：アプリごとの
+パーミッション見直し（Flatseal）こそが実際のセキュリティ表面であり、サンドボックス
+隔離が「マルウェア被害」と「消えた tmpfs」の差だ。タイトルの先を読むこと——この
+記事についても、それが答える批判についても。
+
+[`🔗 oro.gay`](https://oro.gay/posts/flatpak-an-insecurity-nightmare/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50148601)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-19T04:25:00Z |
-| Items | 27 |
-| Sources tracked | 25 (Hacker News, GitHub Trending, GitHub releases/advisories/issues, Reddit, NVD/VulnCheck, GHSA, CISA KEV, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv, The Guardian, 3Blue1Brown Substack, neilmadden.blog, getlazarus.org, blog.picheta.me, liveandletsfly.com) |
+| Generated | 2026-10-19T12:20:00Z |
+| Items | 38 |
+| Sources tracked | 36 (Hacker News, GitHub Trending, GitHub releases/advisories/issues, Reddit, NVD/VulnCheck, GHSA, CISA KEV, Codeberg, KiCad & Slicer forums, Politico, Nieman Lab, The Verge, Tom's Hardware, Terry Tao's blog, t3.at, righto.com, vals.ai, Hugging Face, arXiv, The Guardian, 3Blue1Brown Substack, neilmadden.blog, getlazarus.org, blog.picheta.me, liveandletsfly.com, LWN, jrdsgl.com, 404 Media, contextfirst.blog, vLLM blog, verdagon.dev, mitos.computer, oro.gay, headroom docs, withmarble.com, palmdb.net) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
