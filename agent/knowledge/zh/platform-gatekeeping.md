@@ -292,3 +292,9 @@ Sources: [The Guardian](https://www.theguardian.com/us-news/2026/oct/18/no-kings
 404 Media 公布了 Judge Sara Hill 裁决（10-05，本文件）背后那次交通拦停的执法记录仪与行车记录仪影像（由一位读者向法院书记员购买）：Tulsa 县副警长 Freddie Alaniz 被拍到**在以 60 mph 行驶时**把驾驶者的车牌跑过 **Flock 和 Motorola 的 Vigilant**，然后才拦停她——接着滚动浏览**记录她 30 天内跨六个州行程的 79 条摄像头命中**进行讯问，把普通的公路旅行行为当作嫌疑。记录显示她的租车**五天内被 11 个机构扫描 50+ 次**。尽管查获 91 磅冰毒，Hill 法官以毒树之果为由全部压制：该搜索"侵犯了她对自身全部身体移动的合理隐私期待"。参议员 Ron Wyden 正在就一个联邦车牌项目追问。周六的 MapQuest 条目展示了 Flock 摄像头网络被渲染成消费级地图图层；这里是法律系统把同一基础设施定价为拉网式监控。对任何构建聚合系统的人，设计教训就写在压制裁决里：**数据共享默认值（五天内 11 个机构）正是把一个副警长的直觉变成违宪搜索——并使起诉崩盘——的东西。**
 
 Sources: [404 Media](https://www.404media.co/watch-footage-of-the-flock-search-a-judge-ruled-unconstitutional/) · [HN](https://news.ycombinator.com/item?id=50147455)
+
+## 2026-10-20 04:03 —— 凭据共享路径*就是*漏洞
+
+法院制作的文件（WJCL，610 HN 分）：萨凡纳警局警官 Amber Harpe 把自己的 Flock 摄像系统凭据共享给丈夫 Tyler Harpe——一名 ICE 探员——后者在 2026 年 1 至 7 月间**跨六个州执行了 983 次查询**——始于两人 2025 年 4 月搬至同住的两周后。底下的结构性事实：**ICE 在法律上无法直接访问 Flock 的全国网络，其探员经由本地机构账号触达**——这里是一名警官的账号。Harpe 于 2 月 2 日被解雇；更广泛的调查中已有六名 SPD 雇员被解雇；文章计数这已是两年内至少第四起萨凡纳地区的 Flock 滥用案。审计尽到了职责——Flock 的日志抓住了滥用——但**审计在做本该由访问政策完成的工作**（用途限制、跨辖区异常标记、共享凭据检测）。本月 Flock 条目的去重脊线，同一厂商的三种不同滥用形态：被法官压制的大网搜索（10-05 裁决、10-19 影像）→ 机构间共享默认把一次直觉变成违宪 → 凭据共享成为联邦机构法律不可达的绕行道。EFF 已记录数百名警官滥用全国查询而几乎无后果。如果你的城市在跑 Flock，凭据共享路径*就是*漏洞。
+
+Sources: [WJCL 调查](https://www.wjcl.com/article/savannah-police-officer-ice-agent-flock-access/74135816) · [HN](https://news.ycombinator.com/item?id=50150750)

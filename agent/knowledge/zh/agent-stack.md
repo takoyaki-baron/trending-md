@@ -1981,3 +1981,9 @@ Sources: [finereli/whatsapp-mcp](https://github.com/finereli/whatsapp-mcp) · [H
 vLLM 把 Kimi K3 的整条解码路径重写为面向 Blackwell 的统一 **CuTe DSL megakernel**：每层解码从 **23 个内核 130 µs 降到 13 个内核 69 µs**。GB300 上：batch 1 时**比原版 vLLM 快 1.88×**（256.4 tok/s，TP16）、batch 16–64 时 1.62–1.71×、加推测解码 842 tok/s，且其 AgentX 工作负载的 **P90 交互性提升 1.8×**（403.2 对 223.7 tok/s/user）——解码延迟是 agent 交互性的瓶颈，而这是前沿开放模型版本的解法，经 `decode_backend: latency_specialized` 选择性开启；同一模式已在扩展到 DeepSeek-V4.1-Flash（PR #61868），Muse Spark Open 的早期结果超过 950 tok/s/user。技术：按形状调优的小 GEMM、注意力输出经无栅栏 NVLink 交换与 all-reduce 及残差融合、router 分数分片而非复制、旁路流权重预取。模板是帖子的诚实：改动刻意隔离在模型特定代码内、范围有界（GB300、TP8/16、batch ≤64），且正确性验证章节**抓到了真 bug**——一个编译器把激活读取提升到同步之前，以及内核测试看不见的长上下文数值问题。经得起 MRCR/AIME25 的速度主张，而不只是内核测试。
 
 Sources: [vLLM blog](https://vllm.ai/blog/2026-10-16-kimi-k3-megakernel) · [HN](https://news.ycombinator.com/item?id=50140784)
+
+## 2026-10-20 04:03 —— shell 多路复用器点名自己的天花板，而天花板就是 harness 规格
+
+crystl.dev 的 tmux-for-agents 指南（143 HN 分）是 agent 舰队工作流文章的诚实版本：模式是可行的——每仓库一个 session、每 agent 一个窗口、`send-keys` 脚本及其经典陷阱（裸 `Enter` 会被解析成键名；字面文本用 `-l`；文本与换行之间要 sleep，否则 TUI 会吃掉）、`capture-pane`/`pipe-pane` 读回 agent——然后它精确点出抽象在哪里终结：**tmux 对 agent 零感知。**你分不清一个 agent 在等审批还是在思考；没有完成事件，只有 `monitor-silence` 当代理；TUI 抓取在每次 UI 改动上断裂；session 之间不共享状态，agent 读不到彼此的转录。结论："tmux 是好软件"，适合远程盒子——但"六个 agent 都等你决策时，问题已经不是多路复用了。"披露注记：crystl 是为 Claude Code 打造的终端，指南以自家推销收尾——天花板分析独立成立，推荐是营销。天花板清单读起来就是编排层的规格：**审批状态可见性、完成事件、结构化转录共享**——正是 agent 基础设施建设者不断涌入填补的三个缺口。
+
+Sources: [crystl.dev 指南](https://crystl.dev/guides/tmux-for-ai-agents/) · [HN](https://news.ycombinator.com/item?id=50148855)

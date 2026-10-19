@@ -73,3 +73,9 @@ Sources: [The Register — NetBSD's AI-free role](https://www.theregister.com/os
 五天内第三个硬禁令（QGIS 10-12、Libreboot、Current Affairs）。执行机制光谱现在是：合并门复选框（COSMIC）→ 贡献禁令（QGIS、Libreboot）→ 合同条款（Current Affairs）——一级比一级更难悄悄违反。
 
 Sources: [Libreboot 26.10 release notes](https://libreboot.org/news/libreboot2610.html) · [HN](https://news.ycombinator.com/item?id=50102923) · [Why We're Banning AI](https://www.currentaffairs.org/news/why-were-banning-ai) · [HN](https://news.ycombinator.com/item?id=50108131)
+
+## 2026-10-20 —— 退场极：一位维护者归档一切并点名 AI 为原因
+
+Paul Battley（threedaymonk，资深的 Ruby gem 维护者）归档了自己的 gem 并写下原因——而这不是通常意义的倦怠。他的论证：Ruby 建立在 Matz 的"程序员开心 / 为人类而非机器"的信条上，而"为人类做事的这个时代已经过去"。Ruby 如今"实质上用 LLM agent 开发"，Matz 把语言重新定位为"AI 时代的编程语言"，Rails 的掌门人在主题演讲里展示用 agent 生成 Rust 而不审读输出。他拒绝"继续为一个正被大公司竭泽而渔的公地做贡献——喂养那些机器，而机器不假思索的输出正在污染它"，并署名收尾："想要改动？去问你的 agent 吧……我退了。"使这条区别于本文件所有融资/倦怠故事的地方：他点名的失去是*目的*——人与人的连接——而非时间或金钱。本文件追踪的执行光谱（合并门复选框 → 贡献禁令 → 工会合同条款）获得其终局立场：**归档并离开**。下一个要看的信号：归档是否聚集在领导层最显眼转向 AI 的语言与社区里。
+
+Sources: [po-ru.com](https://po-ru.com/2026/10/18/why-im-no-longer-updating-this-repository) · [HN](https://news.ycombinator.com/item?id=50154518)

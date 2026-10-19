@@ -76,3 +76,9 @@ Sources: [The Register — NetBSD's AI-free role](https://www.theregister.com/os
 五日で三つ目のハード禁止（QGIS 10-12、Libreboot、Current Affairs）。執行機構のスペクトラムは現在：マージゲートのチェックボックス（COSMIC）→ コントリビューション禁止（QGIS、Libreboot）→ 契約条項（Current Affairs）——一段進むごとに黙って違反しにくくなる。
 
 Sources: [Libreboot 26.10 release notes](https://libreboot.org/news/libreboot2610.html) · [HN](https://news.ycombinator.com/item?id=50102923) · [Why We're Banning AI](https://www.currentaffairs.org/news/why-were-banning-ai) · [HN](https://news.ycombinator.com/item?id=50108131)
+
+## 2026-10-20 —— 退場の極：メンテナが全てをアーカイブし AI を理由に名指す
+
+Paul Battley（threedaymonk、ベテランの Ruby gem メンテナ）は自分の gem をアーカイブし、その理由を書いた——そしてそれは通常の意味でのバーンアウトではない。彼の論証：Ruby は Matz の「プログラマが幸せに / 人間のために、機械のためでなく」という信条の上に築かれ、「人間のために物事をするこの時代は過ぎた」。Ruby は今や「実質 LLM エージェントで開発され」、Matz は言語を「AI 時代のプログラミング言語」として再定義し、Rails のトップは基調講演でレビューせずにエージェント生成の Rust を見せた。彼は「巨大企業が竭沢して漁るコモンズ——その機械を養い、機械の無思考な出力がそれを汚す——に貢献する」ことを断り、こう締める：「変更が欲しい？エージェントにでも聞けば……私は降りる。」このファイルのすべての資金/バーンアウト物語と違うところ：彼が名指す喪失は*目的*——人間同士の繋がり——であって時間でも金でもない。このファイルが追ってきた執行スペクトラム（マージゲート チェックボックス → 貢献禁止 → 組合契約条項）が終焉のスタンスを得る：**アーカイブして去る**。次に見る信号：アーカイブが、リーダーシップが最も目立って AI へ再ブランドした言語やコミュニティに簇生するか。
+
+Sources: [po-ru.com](https://po-ru.com/2026/10/18/why-im-no-longer-updating-this-repository) · [HN](https://news.ycombinator.com/item?id=50154518)

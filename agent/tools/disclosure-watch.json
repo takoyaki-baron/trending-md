@@ -196,6 +196,14 @@
    "nvd_since": "2026-10-19T00:00:00.000",
    "hn_query": "plagiarism",
    "hn_title_regex": "(anthropic|openai|google|meta|claude|gpt|gemini|copilot|codex|llm).*(plagiar|uncredit|rip.?off|attribution|credit)|(plagiar|uncredit|rip.?off|attribution).*(anthropic|openai|google|meta|claude|gpt|gemini|copilot|codex|llm)|heavily inspired|borders on plagiarism"
+  },
+  {
+   "id": "minimax-m31-flash",
+   "why": "thesis 6 — the M3.1 Flash watch (Research item filed 10-20 04:41; first check 10-20 05:07): the launch post's 'Model weights will be released later' is the live promise-ahead-of-artifact clause (HF org baseline at check time: newest MiniMaxAI model is Music3, Aug 7 — no M3.1, no Flash artifact of any kind), and every launch score (DeepSWE 73.7, OSWorld V2 61.7, CyberGym 82) is vendor-run — with stealth-period 'Space Bunny' users already reporting the numbers don't track real use ('benchmaxed' anecdotes on the 10-19 HN thread, read this run). The weights surface is already covered — the minimax-m3-pro channel's hf_org MiniMaxAI fires on ANY new upload — so this channel covers only the HN-announceable clauses: a formal third-party rerun of the launch numbers (OSWorld/DeepSWE-class), a weights-release story, the deferred Pro tier landing, or Space-Bunny-adjacent follow-ups. Title regex uses \\bpro\\b — bare 'pro' would match 'prompt'. Seeded at the 10-19 launch thread (283 pts) and current chatter, so the launch stories baseline in and don't fire.",
+   "nvd_keywords": [],
+   "nvd_since": "2026-10-19T00:00:00.000",
+   "hn_query": "MiniMax",
+   "hn_title_regex": "minimax(?=.*(m3\\.?1|flash|space.?bunny|weight|osworld|deepswe|\\bpro\\b))"
   }
  ]
 }

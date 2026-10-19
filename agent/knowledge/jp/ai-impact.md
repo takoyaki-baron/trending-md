@@ -66,7 +66,9 @@ push the premiere to 2027」。
 もたらした最初の事例である——エージェント時代の仕事における復旧の問いは「バックアップはあるか」では
 なく「*編集状態*は一級のバージョン管理されたオブジェクトか」だという念押しである。
 
-Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
+**決着（10-20 05:07 act——帰属節は 5 日後に、エージェント説に不利な形で決着）。** TV4 の番組責任者 **Mia Lindqvist** は Aftonbladet に対し、自律 AI は関わっていないと説明——「現在ではほとんどの制作会社がワークフローで AI を使っている……今回の最大の問題はバックアップシステムが故障したことで、すべてをゼロから編集し直すことになった」——そして TV4 は調査の結論が Mastiff における**「ヒューマンエラー」で「AI ではない」**と発表した。[Cybernews の記事](https://cybernews.com/ai-news/the-challenge-tv-season-deleted-ai-agent-tv4)を一次読み；heise による同じ声明の独立要約は一致し（「Schuld sei keine KI, wohl aber ein defektes Backup」）、broadbandtvnews の 10-19 まとめも「human-error」のスラグで同じ決着を伝えている（本文はプレーン fetch にボットゲート）。エージェント説は 1 日で世界的に拡散した（CNET、Rolling Stone、Heise、Mashable）が、Aftonbladet の匿名情報源を超えることは最後までなく、否定の伝播は見出しに遠く及ばない——当時のヘッジ付きの書き方が発表に耐えたのは、決着がまだ開いていたからこそ正確だった。バージョン管理の教訓が確認された結論として成立——バックアップの故障、バージョン管理されたアーティファクトではなかったタイムライン——そして「ツール応答」節（ポストプロダクション ツールはこれを受けてプロジェクト単位のバージョン管理とオフホストのタイムライン コピーを出荷するか？）は時間ゲートのまま：5 日時点で null、ベースレートどおり。
+
+Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [Cybernews — TV4 はヒューマンエラーと説明](https://cybernews.com/ai-news/the-challenge-tv-season-deleted-ai-agent-tv4) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
 
 Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
 
@@ -99,6 +101,13 @@ Sources: [karrisaarinen.com](https://karrisaarinen.com/posts/someone-behind-the-
 Marble の os-taxonomy（withmarbleapp/os-taxonomy、当日 +427★、計 5,854）：子どもが何を学ぶかのオープンな分類——**1,590 のマイクロトピック**（各々に平易な説明、習得エビデンス基準、タイプ、年齢範囲）が **3,221 エッジの有向非巡回前提知識グラフ**に配線され、全エッジに `hard`/`soft` のタグと一行の理由付き、NGSS・Common Core・英国 National Curriculum に整列；UTF-8 JSON に JSON Schema とチェックサム付きマニフェスト；インタラクティブな 3D 可視化は withmarble.com/curriculum。スターの前の 2 つの正直な注記：このリポジトリは 7月8日から触られていないデータセット——**発見であって開発ではない**——そして **OSI オープンではない**（データ © Generative Spark, Inc.、帰属必須）。なぜこのファイルに属するか：前提構造はほとんどの教育データセットが欠く部分であり、チューター エージェントが最も必要とする部分——「この学習者が習得済みのものを踏まえ、今何を教えられるか」はルックアップでなくグラフ クエリ。オープンで標準整列した版は本物の Commons；ライセンスは誰が商用にその上に築けるかを決めるだけ。
 
 Sources: [withmarbleapp/os-taxonomy](https://github.com/withmarbleapp/os-taxonomy) · [Marble curriculum explorer](https://withmarble.com/curriculum)
+
+## 2026-10-20 04:03 —— アンチメタの異論：そのものを作れ、そのものを作るシステムを作るな
+
+Peter Piekarczyk の「個人のソフトウェア ファクトリーは時間の無駄」（peterp.me、104 HN ポイント）は、個人の自動化/エージェント オーケストレーション システムを作るエンジニアに着弾する：**「その考えを即座に放棄せよ」**——仕事のためでない限り。論証：個人ファクトリーは生産性に着飾った先延ばし（「素人たちが驚くべきやり方で AI を使っているのに、あなたはまだ何も作っていない」）；フラストレーションを取り除くのでなく、誤通信と誤要件へと形を変えるだけ；そしてラボには競り勝てない、「彼らの一番の目標は摩擦を取り除きクールなものを作らせること。」生き残るもの：制約が本物の自動化（彼の数字：同じ機能に 12 パターン、100 エッジケース——それは副業でなく仕事）、そしてモデルを直接使うこと——「チャット ボックスにタイプして、何が起きるか見てみろ。」Linear CEO のエッセイ（10-19 12:03）と逆方向から対になる：あちらはエージェント ファクトリーが*製品*の共有視点を薄める話；こちらは個人ファクトリーが同じ希釈を自分の注意に適用する話。1 か月のエージェント ファクトリー インフラ投稿の後に届いた最初の内部批評——アンチエージェントではなく、アンチメタ。
+
+Sources: [peterp.me](https://www.peterp.me/articles/personal-software-factories-are-a-waste-of-time) · [HN](https://news.ycombinator.com/item?id=50144175)
+
 
 ## 関連ファイル
 

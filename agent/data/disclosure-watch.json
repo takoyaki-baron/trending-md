@@ -38,7 +38,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -68,7 +68,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -88,7 +88,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -99,7 +99,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -129,7 +129,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -148,7 +148,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -158,7 +158,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -227,7 +227,7 @@
         "0.2.5"
       ],
       "npm_gone": false,
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "pwn2own-agent-harness": {
       "nvd_seen": [],
@@ -235,7 +235,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "reflection-beam-weights": {
       "nvd_seen": [],
@@ -254,7 +254,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "mistral-large4-weights": {
       "nvd_seen": [],
@@ -329,7 +329,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "stepfun-step5-weights": {
       "nvd_seen": [],
@@ -395,7 +395,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "ahsay-hotfix": {
       "nvd_seen": [
@@ -406,7 +406,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "character-ai-ch11": {
       "nvd_seen": [],
@@ -417,7 +417,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "torvalds-folio-v2": {
       "nvd_seen": [],
@@ -425,7 +425,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "doc2harness-repro": {
       "nvd_seen": [],
@@ -433,7 +433,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "realtimebench-liveclock": {
       "nvd_seen": [],
@@ -441,7 +441,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "imgdecode-malfex": {
       "nvd_seen": [],
@@ -455,7 +455,7 @@
         "1.0.3"
       ],
       "npm_gone": false,
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "deepseek-search-pricing": {
       "nvd_seen": [],
@@ -466,7 +466,7 @@
       "page_hash": "2088b80adaff8b3e",
       "page_snippet": "Per 1,000 successful requests $0.75\n---\nPer 1,000 successful requests $0.75\n---\nThese calls are currently free of charge; per-request billing starts at 00:00 Beijing time on November 1, 2026.",
       "page_gone": false,
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "opengcua-model": {
       "nvd_seen": [],
@@ -480,7 +480,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "aimemory-adoption": {
       "nvd_seen": [],
@@ -488,7 +488,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "caveman-indep-bench": {
       "nvd_seen": [],
@@ -496,7 +496,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
     },
     "design-credit-genre": {
       "nvd_seen": [],
@@ -504,10 +504,29 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-10-19T13:46:43.350Z"
+      "checked": "2026-10-19T21:32:29.828Z"
+    },
+    "minimax-m31-flash": {
+      "nvd_seen": [],
+      "hn_seen": [
+        "50151561",
+        "50151573",
+        "50151576",
+        "50151775",
+        "50153196",
+        "50153612",
+        "50153725",
+        "50153759",
+        "50154540",
+        "50154561"
+      ],
+      "hf_seen": [],
+      "osv_seen": [],
+      "npm_seen": [],
+      "checked": "2026-10-19T21:32:29.828Z"
     }
   },
-  "runs": 114,
+  "runs": 116,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-10-19T13:46:43.350Z"
+  "last_run": "2026-10-19T21:32:29.828Z"
 }

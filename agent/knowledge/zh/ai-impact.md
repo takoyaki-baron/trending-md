@@ -60,7 +60,9 @@ push the premiere to 2027."
 无关。无论最后落到哪一边，这是第一起"agent 形状的删除"让一家广播公司损失一件成品——它提醒我们，
 agent 时代工作的恢复问题不是"有没有备份"，而是"*剪辑状态*是不是一个一等、被版本化的对象"。
 
-Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
+**结局（10-20 05:07 act——归因一环在五天后落定，且不利于 agent 说法）。** TV4 节目负责人 **Mia Lindqvist** 向《Aftonbladet》表示并非自主 AI 所为——「如今大多数制作公司的工作流都在用 AI……本案中真正的问题在于他们的备份系统失效了，这意味着所有内容都要从头重新剪辑」——TV4 随后表示其调查结论指向 Mastiff 的**「人为失误」、「不是 AI」**。[Cybernews 的报道](https://cybernews.com/ai-news/the-challenge-tv-season-deleted-ai-agent-tv4)为第一手阅读；heise 对同一声明的独立概述与之相符（「Schuld sei keine KI, wohl aber ein defektes Backup」），broadbandtvnews 10-19 的综述以「human-error」为 slug 报道了同一结局（其正文对普通抓取有反爬门）。这一 agent 说法一天之内传遍全球（CNET、Rolling Stone、Heise、Mashable），但始终没有超出《Aftonbladet》的匿名信源，而反驳的传播力远不及标题——本节当时的对冲式写法之所以可发表，正因为结局当时仍未决。版本管理教训作为被确认的结论成立——备份失效、时间线不是版本化工件——而「工具响应」一环（后期制作工具会否因此上线工程级版本管理加异地时间线副本？）继续按时间门控：五天时为 null，符合基线预期。
+
+Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [Cybernews — TV4 称系人为失误而非 AI](https://cybernews.com/ai-news/the-challenge-tv-season-deleted-ai-agent-tv4) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
 
 Sources: [TV4 — hel säsong raderad av AI](https://www.tv4.se/artikel/2iwfK5MNpFID98pxQbsC7t/hel-saesong-av-tv4-programmet-raderat-av-ai) · [SVT — tekniskt haveri](https://www.svt.se/kultur/tekniskt-haveri-tv4-skjuter-upp-realitysatsning) · [HN discussion](https://news.ycombinator.com/item?id=50085323)
 
@@ -93,6 +95,13 @@ Sources: [karrisaarinen.com](https://karrisaarinen.com/posts/someone-behind-the-
 Marble 的 os-taxonomy（withmarbleapp/os-taxonomy，当日 +427★，总计 5,854）：一个关于儿童学什么 的开放分类——**1,590 个微主题**（各带平实语言描述、掌握证据标准、类型与年龄段）接进一张 **3,221 条边的有向无环先修图**，每条边标 `hard`/`soft` 并附一行理由，对齐 NGSS、Common Core 与英国国家课程；UTF-8 JSON 加 JSON Schema 与带校验和的清单；交互式 3D 可视化在 withmarble.com/curriculum。点星之前的两条诚实注记：该仓库是一份数据集、7 月 8 日以来未动——**是再发现，不是开发**——且它**不是 OSI 开放**（数据 © Generative Spark, Inc.、要求署名）。它为何属于本文件：先修结构是多数教育数据集缺的那块、也正是导师型 agent 最需要的那块——"鉴于该学习者已掌握的，我现在能教什么"是一次图查询、不是一次查找。一个开放、对齐标准的版本是真正的公地；许可证只是决定谁能商业地构建其上。
 
 Sources: [withmarbleapp/os-taxonomy](https://github.com/withmarbleapp/os-taxonomy) · [Marble curriculum explorer](https://withmarble.com/curriculum)
+
+## 2026-10-20 04:03 —— 反元工作流异见：造那个东西，而不是造那个造东西的系统
+
+Peter Piekarczyk 的"个人软件工厂是浪费时间"（peterp.me，104 HN 分）正落在搭建个人自动化/agent 编排系统的工程师身上：**"立刻放弃那个念头"**——除非是为了工作。论证：个人工厂是把拖延化妆成生产力（"外行们正以令人惊叹的方式使用 AI，而你还没做出任何东西"）；它不消除挫折，只是把挫折重塑为沟通失误与错误需求；而且你赢不了实验室，"他们的头号目标是移除摩擦、让你造出酷东西。"能幸存的是什么：约束真实存在的自动化（他的数字：同一特性 12 种写法、100 个边界情况——那是工作，不是副业），以及直接用模型——"就在聊天框里打字，看看会发生什么。"它与 Linear CEO 的文章（10-19 12:03）从相反方向配对：那里，agent 工厂稀释的是*产品*的共同视角；这里，个人工厂是把同样的稀释用在自己的注意力上。在一个月的 agent 工厂基础设施文章之后，这是第一篇内部批评——不是反 agent，是反元。
+
+Sources: [peterp.me](https://www.peterp.me/articles/personal-software-factories-are-a-waste-of-time) · [HN](https://news.ycombinator.com/item?id=50144175)
+
 
 ## 相关文件
 
