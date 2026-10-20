@@ -849,11 +849,59 @@
           "path": "caveman/docs/technical/product-model.md",
           "html_url": "https://github.com/navigotechsolutions-labs/claude-agent-skills-hub/blob/193a2379f848c05436831c982f5d40c370dacc81/caveman/docs/technical/product-model.md",
           "found": "2026-10-16T21:53:02.984Z"
+        },
+        "JUICEWRLD998/myskills::plugins/caveman__caveman/docs/WRAP-BENCHMARK.md": {
+          "repo": "JUICEWRLD998/myskills",
+          "path": "plugins/caveman__caveman/docs/WRAP-BENCHMARK.md",
+          "html_url": "https://github.com/JUICEWRLD998/myskills/blob/25faf5cd4736246bd1fe7346a5ab39572cb6c55b/plugins/caveman__caveman/docs/WRAP-BENCHMARK.md",
+          "found": "2026-10-20T13:39:06.666Z"
+        },
+        "JUICEWRLD998/myskills::plugins/caveman__caveman/README.md": {
+          "repo": "JUICEWRLD998/myskills",
+          "path": "plugins/caveman__caveman/README.md",
+          "html_url": "https://github.com/JUICEWRLD998/myskills/blob/25faf5cd4736246bd1fe7346a5ab39572cb6c55b/plugins/caveman__caveman/README.md",
+          "found": "2026-10-20T13:39:06.666Z"
+        },
+        "JUICEWRLD998/myskills::plugins/caveman__caveman/docs/technical/product-model.md": {
+          "repo": "JUICEWRLD998/myskills",
+          "path": "plugins/caveman__caveman/docs/technical/product-model.md",
+          "html_url": "https://github.com/JUICEWRLD998/myskills/blob/25faf5cd4736246bd1fe7346a5ab39572cb6c55b/plugins/caveman__caveman/docs/technical/product-model.md",
+          "found": "2026-10-20T13:39:06.666Z"
+        },
+        "hefenglim/invest-portfolio::docs/spec/2026-10-18-settlement-store.md": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "docs/spec/2026-10-18-settlement-store.md",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/ce7267e273932f64605975d28571bd3bfbd151e5/docs/spec/2026-10-18-settlement-store.md",
+          "found": "2026-10-20T13:39:06.666Z"
+        },
+        "JUICEWRLD998/myskills::plugins/caveman__caveman/docs/technical/accounting-and-evidence.md": {
+          "repo": "JUICEWRLD998/myskills",
+          "path": "plugins/caveman__caveman/docs/technical/accounting-and-evidence.md",
+          "html_url": "https://github.com/JUICEWRLD998/myskills/blob/25faf5cd4736246bd1fe7346a5ab39572cb6c55b/plugins/caveman__caveman/docs/technical/accounting-and-evidence.md",
+          "found": "2026-10-20T13:39:06.666Z"
+        },
+        "hefenglim/invest-portfolio::portfolio_dash/portfolio/settle_worker.py": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "portfolio_dash/portfolio/settle_worker.py",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/ce7267e273932f64605975d28571bd3bfbd151e5/portfolio_dash/portfolio/settle_worker.py",
+          "found": "2026-10-20T13:39:06.666Z"
+        },
+        "JUICEWRLD998/myskills::plugins/caveman__caveman/benchmarks/render_charts.py": {
+          "repo": "JUICEWRLD998/myskills",
+          "path": "plugins/caveman__caveman/benchmarks/render_charts.py",
+          "html_url": "https://github.com/JUICEWRLD998/myskills/blob/25faf5cd4736246bd1fe7346a5ab39572cb6c55b/plugins/caveman__caveman/benchmarks/render_charts.py",
+          "found": "2026-10-20T13:39:06.666Z"
+        },
+        "hefenglim/invest-portfolio::docs/superpowers/plans/2026-10-18-settlement-store.md": {
+          "repo": "hefenglim/invest-portfolio",
+          "path": "docs/superpowers/plans/2026-10-18-settlement-store.md",
+          "html_url": "https://github.com/hefenglim/invest-portfolio/blob/ce7267e273932f64605975d28571bd3bfbd151e5/docs/superpowers/plans/2026-10-18-settlement-store.md",
+          "found": "2026-10-20T13:39:06.666Z"
         }
       },
-      "runs": 86,
+      "runs": 87,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-10-20T05:28:04.193Z",
+      "last_run": "2026-10-20T13:39:06.666Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -1609,25 +1657,25 @@
           "found": "2026-10-19T21:29:46.328Z"
         }
       },
-      "runs": 34,
+      "runs": 35,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-20T05:28:04.193Z",
+      "last_run": "2026-10-20T13:39:06.666Z",
       "last_total": 100
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 73,
+      "runs": 74,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-20T05:28:04.193Z",
+      "last_run": "2026-10-20T13:39:06.666Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 73,
+      "runs": 74,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-20T05:28:04.193Z",
+      "last_run": "2026-10-20T13:39:06.666Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-10-20T05:28:04.193Z"
+  "last_run": "2026-10-20T13:39:06.666Z"
 }

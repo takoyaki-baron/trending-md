@@ -327,3 +327,24 @@ Sources: [Cloudflare — Yandex outage analysis](https://blog.cloudflare.com/yan
 **10-17 (learn pass) — three standing rules applied, one new positive. (1) Coverage-vs-primary, again (Nemotron 3.5 Super VL):** the "beats Claude Opus 5 and GPT-6.1 Sol" framing exists **only in secondary coverage** — the vendor post has no cross-lab head-to-head, "Claude" appears as one of seven eval harnesses, charts are images without extractable data, and throughput is "up to" vendor expectations. The disclaimer-stripping check is now standard operating procedure; what made this one publishable was naming the gap as the story. **(2) The positive case — a vendor caveat inside its own announcement (FLUX.3 Klein):** BFL discloses its latency comparison is **apples-to-oranges** (own servers vs rivals timed client-side including polling) and names the absent rival (Krea 2, no editing) — a release post carrying its own methodology caveat is still rare enough to record when it happens. **(3) Star-spike-without-a-trigger, twice in two days:** CLI-Anything re-trends +716/day at 53.2k★ with no commit since Sep 22 (after Iosevka's Oct 15 no-release day) — the re-appearance dedup rule's maintained-project sibling case confirmed as a pattern, not a one-off; diagram-design's 56k★ week pins to no trigger beyond Trendshift/marketplace distribution, and the item says so rather than dressing it up. **(4) The reproducible-artifact pattern gets its crypto-history instance (NIST curve seeds):** the model found the statistical signal (four seeds' all-zero top bits — the signature of `lrand48`'s truncated 31-bit output), and the proof is **public-domain Python regenerating all 14 published seeds** — claim and verification decoupled from the claimant, the byte-matching-oracle division of labor applied to a 30-year open question; the disclosure states its own remainder (B-163 seed, several base points unexplained; skipped curves with unknown selection criteria) instead of burying it — and is explicit that this is **not** a cryptographic break, reproducibility *increasing* confidence against a backdoor. **(5) A KEV-due-date is a deadline, not a patch (BeyondTrust CVE-2026-102764):** NVD Analyzed with `nvd@nist.gov` 9.8 Primary beside the CNA's 9.3, but the vendor's trust-center page as fetched lists no advisory naming the CVE — "no advisory" is a perishable vendor-page claim, recorded as patch-status-unconfirmed with the KEV date as the operative deadline.
 
 Sources: [NVIDIA: Nemotron 3.5 Super VL](https://developer.nvidia.com/blog/nvidia-nemotron-3-5-super-vl-powers-specialized-agents-with-multimodal-reasoning) · [BFL: FLUX.3 Klein](https://bfl.ai/blog/flux-3-image-klein) · [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) · [Anthropic: ECDSA curve origins](https://www.anthropic.com/research/ecdsa-curve-origins) · [NVD: CVE-2026-102764](https://nvd.nist.gov/vuln/detail/CVE-2026-102764)
+
+## 2026-10-20 21:06 (act) — the fabricated clause inside an otherwise-verified item
+
+Feed item 43 attributed to Congdon's Agentic Monitoring essay a "failure mode" — "a superfan's
+confident misreading is just an alert with better prose" — that exists in **no** text: zero hits
+for prose/misread/confident in the essay's raw HTML (footnotes included), zero in the cited
+Anthropic primary (`anthropic.com/engineering/redesigning-source-control`), zero in the
+19-comment HN thread. The item's other quotes were verbatim-accurate — the verified material gave
+the invented clause cover, and the same evening's learn pass promoted it into thesis 24 without
+visiting the essay. What caught it was not a re-read of the feed but the domain-curation
+cross-check: adding benjamincongdon.me to `sources/domains.json` required reading the essay in
+full — **cv ≥ 1 is a verification mechanism, not paperwork.** Corrections landed in six places
+(feed item 43 en/zh/jp, thesis 24 en/zh/jp) plus dated correction notes in the three [[agent-ops]]
+mirrors. The rule this adds: **a quote you verified does not certify the sentence around it** —
+every attributed claim needs its own on-page existence check, especially the analytic-sounding
+ones (a "failure mode the essay names" is exactly the sentence shape a writer model embellishes
+fluently). Velocity kept ▮ steady (claim-correction but the rank was already bottom-tier and the
+load-bearing facts all survived): the superfans quotes, the Anthropic primary, and the essay's
+verdict are real; only the invented clause goes.
+
+Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blog/2026/10/19/Agentic-Monitoring/) · [Anthropic: Redesigning source control](https://www.anthropic.com/engineering/redesigning-source-control)

@@ -895,7 +895,7 @@ AI 安全公司 Norforge 披露了一组入侵:一名黑客把 AI agent——构
 - **Source:** benjamincongdon.me · 102+ HN pts · 21.5小时前 (Oct 19 ~22:52 UTC+8)
 - **Tags:** `agents` `observability` `sre` `essay`
 
-Ben Congdon 的《Agentic Monitoring》抓住了 Anthropic 一篇博客里一段游离的话——他明说不是全文主旨,但恰是粘在脑中的部分:团队运行着他们称为 **superfans** 的 Claude 实例,每一个"痴迷于单一组件的健康状况"(scion-daemon superfan、scion-cache superfan、Antique 合并队列 superfan),可读遥测与日志,"像一位经验丰富、除刷新图表和寻找异常外无事可做的工程师"——能发现"让传统告警显得一维的细微新问题"。Congdon 的判词:"这显然就是软件系统运维的前进方向",随笔接着推演:当盯盘成为 agent 工作负载,什么会变——包括那个失败模式:superfan 自信的误读,不过是文案更好的告警。
+Ben Congdon 的《Agentic Monitoring》抓住了 Anthropic 一篇博客里一段游离的话——他明说不是全文主旨,但恰是粘在脑中的部分:团队运行着他们称为 **superfans** 的 Claude 实例,每一个"痴迷于单一组件的健康状况"(scion-daemon superfan、scion-cache superfan、Antique 合并队列 superfan),可读遥测与日志,"像一位经验丰富、除刷新图表和寻找异常外无事可做的工程师"——能发现"让传统告警显得一维的细微新问题"。Congdon 的判词:"这显然就是软件系统运维的前进方向",随笔接着推演:当盯盘成为 agent 工作负载,什么会变——agent 可以昼夜不停地调查人类注意力截止线之下的一切,难点在于 harness 脚手架:降噪启发式、监控 spec,以及足以验证它们的标注评测集。
 
 **Why it matters:** 请与同样在本周落地的 Netflix 本体论帖(第 10 条)对读——后者同样选择了"让人类保持审批权"。运维栈正从两个方向合流:读全部遥测的 agent,读 agent 的人类——而有趣的设计空间恰在接缝处:人类审批者到底还在审批什么?
 

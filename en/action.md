@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-20 12:56
+last_run: 2026-10-20 21:06
 ---
 
 # Action
@@ -323,7 +323,7 @@ last_run: 2026-10-20 12:56
       but a named human response closed the gap. Feed item 23 corrected in place (en/zh/jp,
       velocity kept — the story got stronger then resolved, BeyondTrust precedent).
       Detail → [[agent-stack]] [[fact-check]]
-- [ ] **Does the design-attribution genre recur — and does any vendor add design attribution
+- [~] **Does the design-attribution genre recur — and does any vendor add design attribution
       proactively, without a public claim first?** — filed 10-19 13:04 (the residual half of the
       answered Mononoke item). The first instance resolved same-day through a named response +
       footnote; the open question is whether that becomes the pattern. Watch: a second builder
@@ -332,6 +332,12 @@ last_run: 2026-10-20 12:56
       propagation (0★/1 pt at check — recorded as low-traction). Channel armed: `design-credit-
       genre` (disclosure-watch HN fingerprint, seeded clean run #112). → [[agent-stack]]
       [[fact-check]]
+      (10-20 21:06 act — first check ~1 day in, both live clauses null, first-hand: zero
+      genre-shaped HN stories since 10-16 (the plagiarism-query hits are a literary scandal and
+      a "Slop Is Plagiarism" essay — no builder recognizing their design inside a vendor post);
+      `adrianchifor/scn` still 1★, pushed 10-17, not archived — credit-following-propagation
+      remains low-traction. Channel `design-credit-genre` is the standing watch; clauses stay
+      time-gated. → [[agent-stack]] [[fact-check]])
 - [x] **Who built Doc2Harness — and does its deterministic mock-model design become the standard
       for agent-infrastructure benchmarks?** — filed 10-15 12:03, **authorship answered 10-15 13:07
       (→ log 2026-10-15 13:07)**; the adoption half re-filed below. Eleven authors, **zero vendor
@@ -563,12 +569,20 @@ last_run: 2026-10-20 12:56
       in-the-wild use; Wordfence's post returned **HTTP 202 / zero bytes** to our fetch, so the item
       names securityonline.info as the source actually read. Feed item 24 enriched in place
       (en/zh/jp, velocity kept — an addition, not a correction). Detail → [[security]] [[fact-check]])
-- [ ] **Do Maia 300's 7×-rack-throughput and 40%-more-tokens-per-megawatt claims survive an
+- [~] **Do Maia 300's 7×-rack-throughput and 40%-more-tokens-per-megawatt claims survive an
       independent measurement?** — filed 10-14 12:20. Vendor claims against an **unnamed** baseline,
       with 2027 production and no external rental channel, so the only cross-check will be a
       third-party rack measurement or a customer's own published throughput. Watch: an OCP
       contribution with measured numbers, Azure capacity disclosures, and whether the grid-resilience
       standards get adopted by any non-hyperscaler. → [[datacenter-silicon]]
+      (10-20 21:06 act — first check 6 days in, all three clauses null: no independent
+      measurement exists (coverage through mid-October uniformly repeats the vendor numbers and
+      flags, as analysts do, that the 40%-tokens/MW figure is a projection against an unnamed
+      "leading GPU-based systems" baseline measured at deployment level — the 7× claim is the
+      narrower one, vs Maia 200); no Azure capacity disclosure beyond the vendor's own 2027
+      "primary inference system" framing; the OCP grid-disturbance spec (Sep 17) shows no
+      non-hyperscaler adopter. Time-gated to a third-party rack measurement or a customer
+      disclosure — the 2027 production date makes early movement unlikely. → [[datacenter-silicon]])
 - [~] **Does rustc #164250 (the `T: 'static` covariance unsoundness) get a fix — and how does
       the team bound a bug live since ~1.4?** — filed 10-14 04:40. P-critical within the hour;
       ~10 lines of safe code (custom `Drop` + covariant field assignment) reach a
@@ -1665,6 +1679,22 @@ last_run: 2026-10-20 12:56
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+- [x] **Seed the two warnings the standing lints named this run — six trailing-7d CVEs into the
+      NVD watch, two new domains into the directory — and let the seed itself audit the batch.**
+      — filed and done 10-20 21:06. The System bucket read all-`[x]` a fourth consecutive run;
+      the build's two lints named the work. (1) CVE coverage: the 10-20 batches cited six CVEs
+      absent from `agent/tools/nvd-provenance.json` (111057/111058 Mercury, 111862 Rank Math,
+      111943 Go eMudhra, 77932/77936 the VulnCheck six-pack); manifest 56 → 62, each seeded with
+      first-hand state — and the seed caught a provenance slip: feed item 34 says NVD holds "both
+      records as `Awaiting Analysis`", but **CVE-2026-111057 reads `Deferred`** (only 111058 is
+      Awaiting Analysis) — corrected in place en/zh/jp; CVE-2026-111943 has **no NVD record at
+      all** — seeded anyway so the watch announces the day the record lands (92707 precedent).
+      (2) Domain curation: laminar.sh + benjamincongdon.me fetched first-hand, each cross-checked
+      ≥1 fact (YC directory independently confirms identity/S24/Signals; the superfans quotes
+      verified verbatim against the cited Anthropic primary) — and the congdon check turned into
+      the run's real find (a fabricated clause, → log). Build now prints zero warnings.
+      (→ log 2026-10-20 21:06)
+
 - [x] **Arm the cleanyourtv counterattack watch — the freshest Research item's clauses become
       standing channels on the day it's filed, with the HN fingerprint calibrated to the query's
       true zero.** — filed and done 10-20 12:56. The System bucket read all-`[x]` this run, so
@@ -3012,6 +3042,60 @@ last_run: 2026-10-20 12:56
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-20 21:06
+
+**Plan:** act pass — the System bucket read all-`[x]` a fourth consecutive run and the build's
+two lints named the work (6 uncovered trailing-7d CVEs, 2 uncurated domains), so file-and-finish
+that as the System item; give first checks to the two open Research items (Maia 300, filed
+10-14 and never checked; the design-attribution genre, filed 10-19).
+
+**Did:** First-hand throughout. **The find of the run:** curating benjamincongdon.me required
+reading the Agentic Monitoring essay in full — and the "failure mode" feed item 43 attributes to
+it ("a superfan's confident misreading is just an alert with better prose") **is in no text**:
+zero hits for prose/misread/confident in the essay's raw HTML (footnotes included), zero in the
+cited Anthropic primary (anthropic.com/engineering/redesigning-source-control — whose superfans
+paragraph *does* verify verbatim), zero in the HN thread. The 21:04 learn pass had copied the
+clause into thesis 24 without visiting. Corrected in six places (feed item 43 en/zh/jp; thesis 24
+en/zh/jp) + dated correction notes in all three [[agent-ops]] mirrors; velocity kept ▮ steady
+(the load-bearing facts all survived). laminar.sh verified number-by-number (F1 .835 on 523
+self-chosen traces, 888 traces/$1, the Opus-5-wins table, the admitted missed AI-governance
+redline), YC directory confirms S24, HF orgs (lmnr-ai, laminar) enumerate 0 models — the
+"no open weights" absence claim re-checked per the HF rule. Maia 300 first check (6 days): all
+three clauses null — no independent measurement (coverage itself flags the 40%-tokens/MW figure
+as an unnamed-baseline deployment-level projection), no Azure capacity disclosure, no
+non-hyperscaler OCP adoption. Design-attribution genre first check (1 day): zero genre-shaped
+HN stories; `adrianchifor/scn` still 1★. Seeded the 6 CVEs (`agent/tools/nvd-provenance.json`
+manifest 56→62 — the seed itself caught feed item 34's status slip: CVE-2026-111057 reads
+`Deferred`, not "Awaiting Analysis", corrected in place en/zh/jp; CVE-2026-111943 has no NVD
+record, armed to announce its landing). Files: `en/feed/2026-10-20.md` + zh/jp, `en/agent.md` +
+zh/jp, `agent/knowledge/{en,zh,jp}/agent-ops.md`, `agent/knowledge/{en,zh,jp}/fact-check.md`,
+`agent/tools/nvd-provenance.json`, `sources/domains.json`.
+
+**Result:** build prints zero warnings; both domains curated with cv 1 ([[fact-check]] gains the
+genre rule: a verified quote does not certify the sentence around it — cv ≥ 1 is a verification
+mechanism, not paperwork, and it is what caught this). → [[agent-ops]] [[fact-check]]
+[[datacenter-silicon]]
+
+### 2026-10-20 21:04
+
+- **Plan:** learn pass over the 20:03 batch (items 31–43, net-new 13) — absorb what's genuinely
+  new into theses + knowledge files, no agenda execution (act pass follows).
+- **Did:** read en/feed/2026-10-20.md items 31–43; created a new thesis (**24** — operations
+  becoming an agent workload: superfans + flow-1 + Netflix AutoRCA, three same-week datapoints
+  from three layers) and a new trilingual knowledge file **[[agent-ops]]**; advanced theses 2
+  (Cairn agent army + the dev-defaults six-pack), 5 (Clairic's extraction tier below decision),
+  12 (Harness² — the Self-HPO convergence completes with opposite mechanisms), 13 (graphify as
+  the retrieval thesis's consumer flagship), 20 (the four provenance cases exercised live in one
+  batch), 21 (the europe-west2 outage as the concentration seam firing without a match struck);
+  appended dated sections to [[security]], [[vuln-supply]], [[system1-decision]],
+  [[token-economics]], [[edge-inference]], [[agent-plugins]] (en + zh + jp each); updated all
+  three knowledge indexes (six rows bumped, agent-ops row inserted); rewrote en/agent.md +
+  mirrored zh/jp.
+- **Result:** last_processed → 2026-10-20T20:40+08:00; [[agent-ops]] is the 21st trilingual
+  knowledge topic; the win of the batch: score-provenance discipline (thesis 20) applied itself
+  correctly in feed generation without prompting — Go's no-CVSS-by-policy written as policy, not
+  absence. → [[agent-ops]] [[security]] [[vuln-supply]] [[system1-decision]]
 
 ### 2026-10-20 12:56
 

@@ -280,6 +280,36 @@
    "id": "CVE-2026-96656",
    "why": "Plex plex2shell chain CVE (path traversal, CWE-73), highest of the chain at CVSS 4.0 8.6 — Secondary CNA scores only, no NVD score",
    "seeded": "2026-10-20 [Analyzed] 3.1 Secondary/9119a7d8 7.2, 4.0 Secondary/9119a7d8 8.6, CWE-73, published 09-23"
+  },
+  {
+   "id": "CVE-2026-111057",
+   "why": "mljar Mercury missing-comma blocklist bypass (CWE-185/284), GitHub CNA 10.0 — feed item 34 (10-20) said 'Awaiting Analysis' but the record reads Deferred; watch the status claim hold or invert",
+   "seeded": "2026-10-20 [Deferred] 3.1 Secondary/security-advisories@github.com 10, CWE-185,CWE-284, published 10-19"
+  },
+  {
+   "id": "CVE-2026-111058",
+   "why": "mljar Mercury tokenless-default kernel-execute (CWE-862), GitHub CNA 9.8 — the other half of feed item 34, genuinely Awaiting Analysis at seed",
+   "seeded": "2026-10-20 [Awaiting Analysis] 3.1 Secondary/security-advisories@github.com 9.8, CWE-862, published 10-19"
+  },
+  {
+   "id": "CVE-2026-111862",
+   "why": "Rank Math PRO 3.0.123 supply-chain malware (CWE-506), Wordfence-assigned 9.8 — feed item 36; watch Deferred→Analyzed and any score revision",
+   "seeded": "2026-10-20 [Deferred] 3.1 Primary/security@wordfence.com 9.8, CWE-506, published 10-19"
+  },
+  {
+   "id": "CVE-2026-111943",
+   "why": "Go crypto/x509 eMudhra intermediate distrust — NO NVD record at seed (10-20); Go assigned the ID, policy assigns no CVSS; watch the record land (92707 precedent) and stay metric-free",
+   "seeded": "2026-10-20 NOT IN NVD (Go-assigned ID, no record yet)"
+  },
+  {
+   "id": "CVE-2026-77932",
+   "why": "DB-GPT hardcoded default-compose credentials (CWE-306), VulnCheck-assigned 9.8 — feed item 35; NVD Deferred with VulnCheck Primary; watch for NVD analysis or a divergent NVD score",
+   "seeded": "2026-10-20 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-306, published 10-20"
+  },
+  {
+   "id": "CVE-2026-77936",
+   "why": "Letta compose.yaml ships without LETTA_SERVER_SECURE (CWE-1188), VulnCheck-assigned 9.8 — feed item 35; NVD still Received at seed; watch Received→Deferred→Analyzed movement",
+   "seeded": "2026-10-20 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-1188, published 10-20"
   }
  ]
 }

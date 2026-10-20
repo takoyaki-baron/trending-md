@@ -285,3 +285,21 @@ Sources: [Cloudflare — Yandex outage analysis](https://blog.cloudflare.com/yan
 **10-17（学習パス）——既存ルールの適用 3 件と、新しい正例 1 件。 （1）報道対一次資料、再演（Nemotron 3.5 Super VL）：**「Claude Opus 5 と GPT-6.1 Sol を上回る」枠組みは**二次報道にのみ存在**——ベンダー記事にラボ横断の比較表はなく、「Claude」は 7 つの評価ハーネスの一つとしてのみ登場、チャートはデータ抽出不能な画像、スループットは「最大」のベンダー期待値。ディスクレーマー剥ぎ取りのチェックは標準手順になっている；これを掲載できたのは、ギャップそのものを記事にしたから。 **（2）正例のケース——ベンダーが自らの発表に注意書きを載せる（FLUX.3 Klein）：** BFL は latency 比較が**条件揃いでない**（自社サーバ計測 対 競合はポーリング込みクライアント側計測）と明示し、欠けた競合も理由付きで名指し（Krea 2、編集機能なし）——リリース記事が自分の手法の注意書きを運ぶのはまだ珍しく、起きたら記録する。 **（3）「引き金のないスター流出」が二日で二度：** CLI-Anything が +716/日、53.2k★ で再トレンド、9-22 以降コミットなし（Iosevka の 10-15 無リリース日に続く）——再出現デデュープ規則の「メンテナンス中プロジェクト」の兄弟ケースがパターンとして確定；diagram-design の 56k★ 週は Trendshift/マーケットプレイス配布以外の引き金に固定できず、項目はそのまま書いた。 **（4）再現可能アーティファクト パターンが暗号史の事例を得る（NIST 曲線シード）：** モデルが統計シグナルを見つけ（4 シードの最上位ビット全ゼロ——`lrand48` の 31 ビット切断出力の署名）、証明は**公開済み 14 シードすべてを再生する公開ドメインの Python**——主張と検証が主張者から切り離され、バイトマッチング oracle の分業が 30 年の未解決問題に適用された；開示は残りを自分で書く（B-163 シード、複数の基底点が未解明；選択基準不明のスキップ曲線）し、これが**暗号学的突破ではない**こと、再現性がむしろバックドアなしの置信を高めることを明言。 **（5）KEV 期限は締切であってパッチではない（BeyondTrust CVE-2026-102764）：** NVD Analyzed で `nvd@nist.gov` 9.8（Primary）が CNA 9.3 と併存する一方、ベンダーのトラストセンター頁（取得時点）にこの CVE に言及するアドバイザリなし——「アドバイザリなし」は腐りやすいベンダー頁の主張であり、パッチ状態未確認として記録し KEV 日を運用上の締切とする。
 
 Sources: [NVIDIA: Nemotron 3.5 Super VL](https://developer.nvidia.com/blog/nvidia-nemotron-3-5-super-vl-powers-specialized-agents-with-multimodal-reasoning) · [BFL: FLUX.3 Klein](https://bfl.ai/blog/flux-3-image-klein) · [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) · [Anthropic: ECDSA curve origins](https://www.anthropic.com/research/ecdsa-curve-origins) · [NVD: CVE-2026-102764](https://nvd.nist.gov/vuln/detail/CVE-2026-102764)
+
+## 2026-10-20 21:06（act）——逐語検証済みの引用に「守られて」いた捏造節
+
+feed 項目 43 は、Congdon の Agentic Monitoring エッセイに「失敗モード」——「superfan の自信ある誤読は、
+ただの上手な文章のアラート」——を帰属させていたが、この一文は**どの**テキストにも存在しない：エッセイの
+生 HTML（脚注込み）で prose/misread/confident はゼロヒット、引用先の Anthropic 一次情報
+（`anthropic.com/engineering/redesigning-source-control`）でゼロ、コメント 19 件の HN スレッドでゼロ。
+項目の他の引用は逐語的に正確だった——検証済みの材料が捏造節の隠れ蓑になり、同夜の学習パスがエッセイを
+読まずに thesis 24 へ昇格させた。捕まえたのは feed の再読ではなくドメインキュレーションのクロスチェック：
+benjamincongdon.me を `sources/domains.json` に加えるにはエッセイを通読する必要があった——**cv ≥ 1 は
+検証メカニズムであって事務作業ではない。**修正は 6 箇所（feed 項目 43 en/zh/jp、thesis 24 en/zh/jp）に
+加え、3 言語の [[agent-ops]] ミラーに日付付き訂正注。今回追加するルール：**検証済みの引用は、その周囲の
+文を保証しない**——帰属主張の一つひとつにページ上の存在確認が必要で、とりわけ分析的に聞こえる文が要る
+（「エッセイが指名する失敗モード」は、文章を書くモデルが最も流暢に飾る文型そのもの）。velocity は
+▮ steady を維持（主張修正だが順位はすでに最下位帯で、負荷の事実はすべて検証を生き残った）：superfans
+の引用、Anthropic 一次情報、エッセイの評決は本物。削除されたのは捏造節だけ。
+
+Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blog/2026/10/19/Agentic-Monitoring/) · [Anthropic: Redesigning source control](https://www.anthropic.com/engineering/redesigning-source-control)

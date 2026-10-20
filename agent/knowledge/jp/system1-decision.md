@@ -346,3 +346,9 @@ Sources: [arXiv 2610.20665](https://arxiv.org/abs/2610.20665)
 **d3**（vllm-sr/d3、Apache-2.0；HF カードは 10月17日更新）は Decision 3.0 の 26.09B パラメータ基盤決定モデル——0.46B ビジョンエンコーダを含む——で、vLLM Semantic Router プロジェクト（vllm-project/semantic-router、6.2k★、「モデルと計算のためのオープンでプログラマブルな決定レイヤー」）の決定レイヤー。入力：テキスト・JSON・画像・動画に choice/yes-no/score の質問。出力：生成なしの 1 回の呼び出しで全選択肢の確率。主張はすべて自己計測：Jev Decision Index 0.3.2 で 66.3、「公式テキストボード首位」、Decision 2.0 比 +10.4；Perception Test 動画 QA 77.4（内部）；AMD Instinct MI325X 1 基でテキスト中央値 54.4ms / 画像 290ms / 10 秒動画 500ms；バッチングで 27 req/s、p99 1 秒未満。自己申告の注意は全数値に適用される——だが複利で効くのはサービングスタックのパターン：どのリクエストを生成モデルに見せるかをルーターモデルが決める、いまやオープンウェイト・マルチモーダル入力・AMD 実測レイテンシ表付き。クラスの指数がオープン参加者の「登頂」主張の対象になること自体が統合のシグナル——敗北行を公開したまま Jev 指数を頂いた Cloudflare Clef（10-02）と同型で、公開された敗北だけが欠けている。
 
 Sources: [vllm-sr/d3 モデルカード](https://huggingface.co/vllm-sr/d3) · [vllm-project/semantic-router](https://github.com/vllm-project/semantic-router)
+
+## 2026-10-20 20:03 —— 分類体系が決定層の下にもう一段を制度化：Cloudflare Clairic、抽出モデル
+
+Cloudflare の **Clairic**（`@cf/cloudflare/clairic`、Workers AI プレビュー）が自社のモデル分類に第三のクラスを名指しした：**決定モデル（Jev、Clef）が確率を返す**のに対し、Clairic は**値**を返す——非構造化テキストとリクエストあたり最大 4 枚の画像から、抽出スパン、計算された数値・日付、推定と短期予測を、**単一の並列フォワードパスでトークン生成なしに**返す。**入力トークンのみで課金**；オープンウェイトは「soon」（未提供）。GLM-5.3 全 LLM パイプラインに対するベンダー実測：クレーム処理 61.7s→19.3s、100 万件あたり $11,740→$6,032；21 日間の TSA 検査場予測は平均誤差 3.3%、21 日中 17 日が 80% 区間内。記事は自ら数値を削る——多段算術は弱い（「長い計算はコードに」）、推定には入力内のエビデンスが要る、キャリブレーションは「測定はしたが保証しない」、整形された回答は正しいとは限らない。このファイルに収める理由：**抽出 → 決定 → 文章生成**のパイプライン分類が、初めて端から端まで名前と価格を持つ階層になり、入力のみ課金の値モデルは生成モデルと根本的に異なるコスト曲線を持つ。数値はベンダー実測でウェイトは未公開だが、この形（較正された不確実性付きの安価な型付き出力がルータに流れる）は、エージェントパイプラインがプロンプトで手作りし続けてきたもの。いつもの三点を監視：独立実行、同一ハーネスの数値、「オープンウェイト soon」が成果物になるか（Step-5/Ultramarine 型）。
+
+Sources: [Cloudflare: Clairic](https://blog.cloudflare.com/clairic-extraction-model/) · [Workers AI モデルページ](https://developers.cloudflare.com/workers-ai/models/clairic/)

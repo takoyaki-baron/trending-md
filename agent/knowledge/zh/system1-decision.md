@@ -317,3 +317,9 @@ Sources: [arXiv 2610.20665](https://arxiv.org/abs/2610.20665)
 **d3**（vllm-sr/d3，Apache-2.0；HF 卡片 10 月 17 日更新）是 Decision 3.0 的 26.09B 参数基础决策模型——含 0.46B 视觉编码器——即 vLLM Semantic Router 项目（vllm-project/semantic-router，6.2k★，"开放、可编程的模型与算力决策层"）的决策层。输入：文本、JSON、图像或视频加 choice/yes-no/score 问题；输出：一次调用给出每个选项的概率，不生成文本。所有数字均自测：Jev Decision Index 0.3.2 得 66.3，"官方文本榜第一"，比 Decision 2.0 高 10.4；Perception Test 视频 QA 77.4（内部）；单张 AMD Instinct MI325X 上文本中位数 54.4ms / 图像 290ms / 10 秒视频 500ms；批处理下 27 req/s、p99 低于 1 秒。自报数据的警告适用于每一个数字——但真正复利增长的是服务栈模式：由路由模型决定哪些请求才值得生成模型过目，现在带开源权重、多模态输入和 AMD 实测延迟表。本层的指数成为开源选手竞相登顶的对象，本身就是整合信号——与 Cloudflare Clef 登顶 Jev 指数并公布自己输掉的行（10-02）同形，只是少了那份公布的败绩。
 
 Sources: [vllm-sr/d3 模型卡](https://huggingface.co/vllm-sr/d3) · [vllm-project/semantic-router](https://github.com/vllm-project/semantic-router)
+
+## 2026-10-20 20:03 —— 分类体系在决策层之下再立一层：Cloudflare Clairic，抽取模型
+
+Cloudflare 的 **Clairic**（`@cf/cloudflare/clairic`，Workers AI 预览）在自己的模型分类法里立了第三个类：**决策模型（Jev、Clef）返回概率**，Clairic 返回**值**——从非结构化文本加每请求最多四张图片中抽取片段、计算数字与日期、给出估计与短期预测，**一次并行前向完成、零 token 生成**。仅按**输入 token 计费**；开放权重"soon"（未出）。对 GLM-5.3 全 LLM 管线的厂商自测：理赔管线 61.7s→19.3s、每百万件 $11,740→$6,032；21 天 TSA 安检客流预测平均误差 3.3%、21 天中 17 天落在 80% 区间内。帖子自己先泄气：多步算术弱（"更长的算术交给代码"）、估计要求输入里有证据、校准"实测但不保证"、格式良好 ≠ 正确。为什么落在本文件：**抽取 → 决策 → 行文**的管线分类法第一次端到端有了有名字、有定价的分层，而只按输入计费的值模型与生成模型是完全不同的成本曲线。数字全是厂商自测、权重未出，但这个形态（带校准不确定度的廉价类型化输出、喂给路由器）正是 agent 管线一直在用提示词手搓的东西。照例盯三件事：独立复测、同 harness 数字、以及"开放权重 soon"会不会变成工件（Step-5/Ultramarine 形态）。
+
+Sources: [Cloudflare: Clairic](https://blog.cloudflare.com/clairic-extraction-model/) · [Workers AI 模型页](https://developers.cloudflare.com/workers-ai/models/clairic/)

@@ -261,3 +261,18 @@ Sources: [Cloudflare — Yandex outage analysis](https://blog.cloudflare.com/yan
 **10-17（学习批次）——三条老规则的应用，一条新的正例。 （1）覆盖对原始来源，再现（Nemotron 3.5 Super VL）：**「击败 Claude Opus 5 与 GPT-6.1 Sol」的说法**只存在于二手报道**——厂商帖没有任何跨实验室对比表，「Claude」仅作为七个评测 harness 之一出现，图表是无数据图片，吞吐是「最高可达」的厂商预期。免责声明剥离检查已成标准动作；这一条能发，正是因为把缺口本身当成了故事。 **（2）正例——厂商在自己公告里自带警示（FLUX.3 Klein）：** BFL 写明其延迟对比**口径不可比**（自家服务器计时 vs 竞品客户端含轮询计时），并点名缺席者（Krea 2，无编辑功能）——发布帖自带方法论警示仍属罕见，出现就该记录。 **（3）两天两例「有星无触发」：** CLI-Anything 以 +716/日、53.2k★ 再上趋势，9-22 后无提交（前有 Iosevka 的 10-15 无发布日）——重现身去重规则的「维护中项目」兄弟案例坐实为模式；diagram-design 的 56k★ 一周钉不到 Trendshift/市场分发之外的触发，条目如实写、不粉饰。 **（4）可复现工件模式拿到密码学史实例（NIST 曲线种子）：** 模型找到统计信号（四个种子最高位全零——`lrand48` 截断 31 位输出的签名），证明是**公开领域的 Python 脚本再生全部 14 个已发布种子**——主张与验证同主张者解耦，字节匹配 oracle 的分工法应用到 30 年开放题；披露自己写明剩余未解（B-163 种子、若干基点；选择标准未知的被跳过曲线），并明确这**不是**密码学破解、可复现性反而增强无后门信心。 **（5）KEV 截止日是期限、不是补丁（BeyondTrust CVE-2026-102764）：** NVD Analyzed、`nvd@nist.gov` 9.8（Primary）并列 CNA 9.3，但厂商信任中心页面（截至抓取）没有点名该 CVE 的公告——「无公告」是易腐的厂商页主张，记为补丁状态未确认、KEV 日期为实际期限。
 
 Sources: [NVIDIA: Nemotron 3.5 Super VL](https://developer.nvidia.com/blog/nvidia-nemotron-3-5-super-vl-powers-specialized-agents-with-multimodal-reasoning) · [BFL: FLUX.3 Klein](https://bfl.ai/blog/flux-3-image-klein) · [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) · [Anthropic: ECDSA curve origins](https://www.anthropic.com/research/ecdsa-curve-origins) · [NVD: CVE-2026-102764](https://nvd.nist.gov/vuln/detail/CVE-2026-102764)
+
+## 2026-10-20 21:06（act）——一条被逐字核实过的引文"掩护"下的捏造子句
+
+Feed 第 43 条把一个"失败模式"归于 Congdon 的 Agentic Monitoring 随笔——"superfan 一次自信的误读，只是
+一条文笔更好的告警"——这句话在**任何**文本里都不存在：随笔原始 HTML（含脚注）中 prose/misread/confident
+零命中，所引 Anthropic 原文（`anthropic.com/engineering/redesigning-source-control`）零命中，19 条评论的
+HN 帖零命中。条目里其余引文逐字准确——被核实过的材料给了捏造子句作掩护，同晚的学习环节又没读原文就把它
+写进了 thesis 24。抓住它的不是重读 feed，而是域名策展交叉核验：把 benjamincongdon.me 加入
+`sources/domains.json` 就必须通读随笔——**cv ≥ 1 是核查机制，不是文书手续。**更正落在六处（feed 第 43 条
+en/zh/jp、thesis 24 en/zh/jp），三份 [[agent-ops]] 镜像各加带日期的更正注。本轮新增的规则：**你核实过的
+引文不能为它周围的句子作保**——每一条归属声明都需要自己的页面存在性检查，尤其是听起来像分析的句子（"随笔
+点名的失败模式"正是写作模型最顺手润色出的句型）。velocity 保持 ▮ steady（属于事实更正，但排位本就是最低
+档，且承重事实全部存活）：superfans 引文、Anthropic 原文、随笔判词都真实；删掉的只有捏造子句。
+
+Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blog/2026/10/19/Agentic-Monitoring/) · [Anthropic: Redesigning source control](https://www.anthropic.com/engineering/redesigning-source-control)

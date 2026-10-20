@@ -1187,8 +1187,10 @@ experienced engineer who has nothing better to do than to refresh charts and
 look for anything strange" — detecting "subtle and novel issues that make
 [traditional] alerts seem one-dimensional." Congdon's verdict: "so obviously the
 path forward for software systems operations," and the essay works through what
-changes when watching becomes an agent workload — including the failure mode
-where a superfan's confident misreading is just an alert with better prose.
+changes when watching becomes an agent workload — agents can investigate
+everything below the human attention cutline around the clock, and the hard part
+is harness scaffolding: noise-reduction heuristics, monitor specs, and a labeled
+eval set to validate them.
 
 **Why it matters:** Read it next to Netflix's ontology post (item 10), which
 also landed this week and also chose "keep humans as approvers." The ops stack is

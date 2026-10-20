@@ -12911,5 +12911,23 @@
     "en": "WordPress SEO plugin vendor; its security-incident KB (PRO 3.0.123) is the first-hand disclosure for the Oct 15–16 supply-chain window. Vendor self-report — cross-checked against Wordfence's CVE-2026-111862 record.",
     "zh": "WordPress SEO 插件厂商；其安全事件 KB（PRO 3.0.123）是 10 月 15–16 日供应链投毒窗口的一手披露。厂商自述——已与 Wordfence 的 CVE-2026-111862 记录交叉核对。",
     "jp": "WordPress SEO プラグインベンダー。セキュリティインシデント KB（PRO 3.0.123）は 10 月 15–16 日のサプライチェーン窓の一次開示。ベンダー自己報告——Wordfence の CVE-2026-111862 レコードとクロスチェック済み。"
+  },
+  "laminar.sh": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Laminar's product blog (YC S24, open-source agent observability) — primary for the flow-1 launch. Read first-hand 10-20: F1 .835 on 523 self-chosen traces, $0.05/$0.30 per M tokens, 888 traces/$1, the Opus-5-wins table and the admitted missed AI-governance redline all on-page. Cross-checked (10-20): YC's directory independently confirms identity, the S24 batch and the Signals/observability product; the benchmark is self-run with no third-party rerun yet, and HF orgs (lmnr-ai, laminar) enumerate 0 models — the API-only/no-weights absence claim holds as of 10-20.",
+    "zh": "Laminar 产品博客（YC S24，开源 agent 可观测性）—— flow-1 发布的一手来源。10-20 一手阅读：523 条自选轨迹上 F1 .835、每百万 token $0.05/$0.30、888 条轨迹/$1、Opus 5 领先的诚实表格、以及承认漏掉 AI 治理红线，均在页面上。交叉核验（10-20）：YC 目录独立确认公司身份、S24 批次与 Signals/可观测性产品；基准为自测、暂无第三方复跑，HF 组织（lmnr-ai、laminar）枚举为 0 个模型——API-only/无权重的缺失声明截至 10-20 成立。",
+    "jp": "Laminar の製品ブログ（YC S24、オープンソースのエージェント・オブザーバビリティ）—— flow-1 発表の一次情報。10-20 に一次確認：523 本の自選トレースで F1 .835、100万トークンあたり $0.05/$0.30、$1 で 888 トレース、Opus 5 が上位という正直な表、AI ガバナンスの赤線を見逃した失敗例の自認、すべてページ上にあり。クロスチェック（10-20）：YC の企業ディレクトリが社名・S24 バッチ・Signals/オブザーバビリティ製品を独立に裏付け。ベンチマークは自己実施で第三者再実行はまだなく、HF 組織（lmnr-ai、laminar）の列挙は 0 モデル——API 専用/ウェイト非公開の不在主張は 10-20 時点で成立。"
+  },
+  "benjamincongdon.me": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Ben Congdon's personal engineering blog — practitioner essays that quote their sources verbatim. Read first-hand 10-20 (the Agentic Monitoring essay): the superfans quotes verified verbatim against the cited Anthropic primary (anthropic.com/engineering/redesigning-source-control) — and the same check caught our own feed attributing a 'confident misreading is just an alert with better prose' failure mode the essay does not contain (corrected in place, en/zh/jp). What it actually argues: agents track everything 24/7 below the human attention cutline; the secret sauce is noise-reduction heuristics, monitor specs and a labeled eval set.",
+    "zh": "Ben Congdon 的个人工程博客——逐字引用来源的实践者随笔。10-20 一手阅读（Agentic Monitoring 一文）：superfans 引文与所引 Anthropic 原文（anthropic.com/engineering/redesigning-source-control）逐字相符——同一核查还抓到本 feed 把文中并不存在的“superfan 自信误读不过是措辞更好的告警”失效模式归于该文（已在 en/zh/jp 原位更正）。文章实际论点：agent 在人类注意力截止线之下 7×24 追踪一切；秘诀在于降噪启发式、监控 spec 和带标注的评测集。",
+    "jp": "Ben Congdon の個人エンジニアリングブログ——出典を逐語引用する実践者のエッセイ。10-20 に一次確認（Agentic Monitoring）：superfans の引用が引用先の Anthropic 一次情報（anthropic.com/engineering/redesigning-source-control）と逐語一致——同じ照合で、本フィードが記事に存在しない「superfan の自信ある誤読はただの上手な文章のアラート」という失敗モードを帰属させていたことを捕捉（en/zh/jp で原位修正）。実際の主張：エージェントが人間の注意カットライン以下を 24 時間追跡し、秘訣はノイズ低減ヒューリスティクス・監視 spec・ラベル付き評価セット。"
   }
 }
